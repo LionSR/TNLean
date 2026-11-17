@@ -21,6 +21,8 @@ This proves the return measurement on the literal correlated bond sum, not
 that a prescribed complete geometric braid produces that sum. See
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix ComplexOrder
 namespace TNLean.PEPS

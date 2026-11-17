@@ -12,6 +12,8 @@ import TNLean.PEPS.RegularEdgeChargeContraction
 Source: SCP10, arXiv:1001.3807, diagonal charge insertion, lines 2432–2453,
 and `eq:anyons:chargeon-move-setting`, lines 2489–2507.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

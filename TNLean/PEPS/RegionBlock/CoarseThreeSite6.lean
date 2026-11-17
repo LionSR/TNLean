@@ -32,6 +32,8 @@ acts on the whole red-to-blue crossing bundle rather than a single boundary edge
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

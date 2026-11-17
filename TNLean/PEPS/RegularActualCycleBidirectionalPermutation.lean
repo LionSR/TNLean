@@ -16,6 +16,8 @@ lines 2271–2305. This is an auxiliary chosen-tree statement, not the
 complete prescribed braid or a parent-Hamiltonian assertion.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS

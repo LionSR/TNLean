@@ -43,7 +43,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace SquareLatticeVertex)
 
 namespace TNLean.PEPS.Approximation
 

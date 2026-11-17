@@ -32,6 +32,8 @@ adjoint is divided by that factor. This convention is documented in
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

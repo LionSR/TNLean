@@ -42,6 +42,8 @@ are recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix ComplexOrder
 namespace TNLean.PEPS
 
@@ -162,7 +164,7 @@ of a native plaquette. The ordered edge receives `g` or `g⁻¹` according to it
 orientation; every other edge receives the identity. Source: SCP10,
 fluxon strings, lines 2181–2197, and Theorem 6.15, lines 2217–2267. -/
 def torusPlaquetteFluxInsertion (v : X) (g : G) (e : Edge (Γₜ)) : G :=
-  if e = Edge.ofAdj (torusGraph_adj_right v.1 v.2) then
+  if e = ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 v.2) then
     if v < (v.1 + 1, v.2) then g else g⁻¹
   else 1
 
@@ -178,16 +180,16 @@ theorem regularWalkHolonomy_torusPlaquetteFluxInsertion (v : X) (g : G) :
   let h₁ := torusGraph_adj_up (v.1 + 1) v.2
   let h₂ := (torusGraph_adj_right v.1 (v.2 + 1)).symm
   let h₃ := (torusGraph_adj_up v.1 v.2).symm
-  have hne₁ : Edge.ofAdj h₁ ≠ Edge.ofAdj h₀ :=
-    Edge.ofAdj_ne_of_endpoint_coordinates h₁ h₀ Prod.snd rfl (Or.inr hy)
-  have hne₂ : Edge.ofAdj h₂ ≠ Edge.ofAdj h₀ :=
-    Edge.ofAdj_ne_of_endpoint_coordinates h₂ h₀ Prod.snd rfl (Or.inl hy)
-  have hne₃ : Edge.ofAdj h₃ ≠ Edge.ofAdj h₀ :=
-    Edge.ofAdj_ne_of_endpoint_coordinates h₃ h₀ Prod.snd rfl (Or.inl hy)
+  have hne₁ : ManyBody.Edge.ofAdj h₁ ≠ ManyBody.Edge.ofAdj h₀ :=
+    ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates h₁ h₀ Prod.snd rfl (Or.inr hy)
+  have hne₂ : ManyBody.Edge.ofAdj h₂ ≠ ManyBody.Edge.ofAdj h₀ :=
+    ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates h₂ h₀ Prod.snd rfl (Or.inl hy)
+  have hne₃ : ManyBody.Edge.ofAdj h₃ ≠ ManyBody.Edge.ofAdj h₀ :=
+    ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates h₃ h₀ Prod.snd rfl (Or.inl hy)
   have hfirst : regularDirectedTransport (torusPlaquetteFluxInsertion v g) h₀ = g := by
     unfold regularDirectedTransport torusPlaquetteFluxInsertion
     split_ifs <;> simp_all
-  have hrest {x y : X} (h : (Γₜ).Adj x y) (hne : Edge.ofAdj h ≠ Edge.ofAdj h₀) :
+  have hrest {x y : X} (h : (Γₜ).Adj x y) (hne : ManyBody.Edge.ofAdj h ≠ ManyBody.Edge.ofAdj h₀) :
       regularDirectedTransport (torusPlaquetteFluxInsertion v g) h = 1 := by
     simp [regularDirectedTransport, torusPlaquetteFluxInsertion, hne]
   rw [regularWalkHolonomy_torusPlaquetteWalk]
@@ -331,25 +333,25 @@ def torusPlaquetteSide (v : X) (i : Fin 4) :
     ⟨((v.1, v.2 + 1), v), (torusGraph_adj_up v.1 v.2).symm⟩] i
 
 private theorem plaquette_side_edge_injective (v : X) :
-    Function.Injective (fun i : Fin 4 => Edge.ofAdj (torusPlaquetteSide v i).2) := by
+    Function.Injective (fun i : Fin 4 => ManyBody.Edge.ofAdj (torusPlaquetteSide v i).2) := by
   have hx : v.1 + 1 ≠ v.1 := by simp
   have hy : v.2 + 1 ≠ v.2 := by simp
   let h₀ := torusGraph_adj_right v.1 v.2
   let h₁ := torusGraph_adj_up (v.1 + 1) v.2
   let h₂ := (torusGraph_adj_right v.1 (v.2 + 1)).symm
   let h₃ := (torusGraph_adj_up v.1 v.2).symm
-  have h₁₀ : Edge.ofAdj h₁ ≠ Edge.ofAdj h₀ :=
-    Edge.ofAdj_ne_of_endpoint_coordinates h₁ h₀ Prod.snd rfl (Or.inr hy)
-  have h₂₀ : Edge.ofAdj h₂ ≠ Edge.ofAdj h₀ :=
-    Edge.ofAdj_ne_of_endpoint_coordinates h₂ h₀ Prod.snd rfl (Or.inl hy)
-  have h₃₀ : Edge.ofAdj h₃ ≠ Edge.ofAdj h₀ :=
-    Edge.ofAdj_ne_of_endpoint_coordinates h₃ h₀ Prod.snd rfl (Or.inl hy)
-  have h₂₁ : Edge.ofAdj h₂ ≠ Edge.ofAdj h₁ :=
-    Edge.ofAdj_ne_of_endpoint_coordinates h₂ h₁ Prod.fst rfl (Or.inr (Ne.symm hx))
-  have h₃₁ : Edge.ofAdj h₃ ≠ Edge.ofAdj h₁ :=
-    Edge.ofAdj_ne_of_endpoint_coordinates h₃ h₁ Prod.fst rfl (Or.inl (Ne.symm hx))
-  have h₃₂ : Edge.ofAdj h₃ ≠ Edge.ofAdj h₂ :=
-    Edge.ofAdj_ne_of_endpoint_coordinates h₃ h₂ Prod.snd rfl (Or.inr (Ne.symm hy))
+  have h₁₀ : ManyBody.Edge.ofAdj h₁ ≠ ManyBody.Edge.ofAdj h₀ :=
+    ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates h₁ h₀ Prod.snd rfl (Or.inr hy)
+  have h₂₀ : ManyBody.Edge.ofAdj h₂ ≠ ManyBody.Edge.ofAdj h₀ :=
+    ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates h₂ h₀ Prod.snd rfl (Or.inl hy)
+  have h₃₀ : ManyBody.Edge.ofAdj h₃ ≠ ManyBody.Edge.ofAdj h₀ :=
+    ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates h₃ h₀ Prod.snd rfl (Or.inl hy)
+  have h₂₁ : ManyBody.Edge.ofAdj h₂ ≠ ManyBody.Edge.ofAdj h₁ :=
+    ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates h₂ h₁ Prod.fst rfl (Or.inr (Ne.symm hx))
+  have h₃₁ : ManyBody.Edge.ofAdj h₃ ≠ ManyBody.Edge.ofAdj h₁ :=
+    ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates h₃ h₁ Prod.fst rfl (Or.inl (Ne.symm hx))
+  have h₃₂ : ManyBody.Edge.ofAdj h₃ ≠ ManyBody.Edge.ofAdj h₂ :=
+    ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates h₃ h₂ Prod.snd rfl (Or.inr (Ne.symm hy))
   intro i j hij
   fin_cases i <;> fin_cases j <;>
     simp_all [torusPlaquetteSide]
@@ -358,7 +360,7 @@ private theorem plaquette_side_edge_injective (v : X) :
 The ordered edge carries `g` or its inverse according to the traversal direction.
 Source: SCP10, Theorem 6.15, lines 2262–2267. -/
 def torusPlaquetteSideInsertion (v : X) (i : Fin 4) (g : G) (e : Edge (Γₜ)) : G :=
-  if e = Edge.ofAdj (torusPlaquetteSide v i).2 then
+  if e = ManyBody.Edge.ofAdj (torusPlaquetteSide v i).2 then
     if (torusPlaquetteSide v i).1.1 < (torusPlaquetteSide v i).1.2 then g else g⁻¹
   else 1
 
@@ -376,8 +378,8 @@ theorem regularWalkHolonomy_torusPlaquetteSideInsertion (v : X) (i : Fin 4) (g :
   have hother (j : Fin 4) (hji : j ≠ i) :
       regularDirectedTransport (torusPlaquetteSideInsertion v i g)
         (torusPlaquetteSide v j).2 = 1 := by
-    have he : Edge.ofAdj (torusPlaquetteSide v j).2 ≠
-        Edge.ofAdj (torusPlaquetteSide v i).2 :=
+    have he : ManyBody.Edge.ofAdj (torusPlaquetteSide v j).2 ≠
+        ManyBody.Edge.ofAdj (torusPlaquetteSide v i).2 :=
       fun h => hji (plaquette_side_edge_injective v h)
     simp [regularDirectedTransport, torusPlaquetteSideInsertion, he]
   change (((1 * regularDirectedTransport (torusPlaquetteSideInsertion v i g)

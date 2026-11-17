@@ -36,6 +36,8 @@ single-boundary-edge comparison machinery as the landed three-block route.
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 

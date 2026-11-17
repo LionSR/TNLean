@@ -28,6 +28,8 @@ union closure for the second tensor's host block; no single-vertex injectivity i
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

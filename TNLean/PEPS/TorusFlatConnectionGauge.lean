@@ -18,6 +18,8 @@ This is the group-valued form of the closure-string deformation in
 Schuch, Cirac, and Pérez-García, arXiv:1001.3807, `eq:2d:move-strings`.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {G : Type*} [Group G]
@@ -137,7 +139,7 @@ theorem torusNativeRightTransport_closure (g h : G) (v : TorusVertex width heigh
   · have hlt : ¬v < (v.1 + 1, v.2) := by
       intro he
       have hh := torusRightEdge_head_of_wrap v hv
-      rw [torusRightEdge, Edge.ofAdj_of_lt (torusGraph_adj_right v.1 v.2) he] at hh
+      rw [torusRightEdge, ManyBody.Edge.ofAdj_of_lt (torusGraph_adj_right v.1 v.2) he] at hh
       exact (ne_of_lt he) hh.symm
     rw [ite_eq_right hlt]
     simp [torusHorizontalClosureElement, hv]
@@ -156,7 +158,7 @@ theorem torusNativeUpTransport_closure (g h : G) (v : TorusVertex width height) 
   · have hlt : ¬v < (v.1, v.2 + 1) := by
       intro he
       have hh := torusUpEdge_head_of_wrap v hv
-      rw [torusUpEdge, Edge.ofAdj_of_lt (torusGraph_adj_up v.1 v.2) he] at hh
+      rw [torusUpEdge, ManyBody.Edge.ofAdj_of_lt (torusGraph_adj_up v.1 v.2) he] at hh
       exact (ne_of_lt he) hh.symm
     rw [ite_eq_right hlt]
     simp [torusVerticalClosureElement, hv]

@@ -19,6 +19,8 @@ Source: SCP10, arXiv:1001.3807, Theorems 5.5 and 5.7. Both native simple-graph
 torus periods are at least three.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS

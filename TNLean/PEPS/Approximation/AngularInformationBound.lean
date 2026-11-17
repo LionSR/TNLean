@@ -44,6 +44,8 @@ use the proposition as a premise independently of its proof.
   accuracy `L^{-60}`, `06-geometry.tex`, lines 440–445.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation

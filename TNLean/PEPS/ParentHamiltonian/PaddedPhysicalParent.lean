@@ -17,6 +17,8 @@ zero extension therefore recover the entire physical vector, with no assumed
 local-image condition and no discarded part of the ambient kernel.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS
 open TNLean.Lattice

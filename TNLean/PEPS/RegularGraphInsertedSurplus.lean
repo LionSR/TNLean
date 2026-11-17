@@ -21,6 +21,8 @@ Source: SCP10, arXiv:1001.3807, Observations 6.5–6.6, lines 1840–1909,
 and the oriented insertions in equation `eq:2d:peps-with-ug-uh`, lines 1515–1525.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

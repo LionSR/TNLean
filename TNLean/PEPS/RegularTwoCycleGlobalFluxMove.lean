@@ -35,6 +35,8 @@ parent-Hamiltonian membership assertion is made; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix Kronecker
 namespace TNLean.PEPS

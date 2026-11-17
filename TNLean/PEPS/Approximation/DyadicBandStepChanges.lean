@@ -28,6 +28,8 @@ guides before and after it, conditional on Proposition 3.4 through `IsAngularSca
   `05-frames.tex`.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 open Set Metric Filter Topology

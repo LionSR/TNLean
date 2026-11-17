@@ -22,6 +22,8 @@ Source: polynomial-PEPS manuscript, Proposition 3.4,
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace)

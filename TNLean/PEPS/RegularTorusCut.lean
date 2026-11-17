@@ -31,6 +31,8 @@ require parallel bonds; see `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
@@ -88,7 +90,7 @@ theorem torusRightEdge_head_of_wrap (v : TorusVertex width height) (hv : v.1 + 1
     change toLex ((v.1 + 1).val, v.2.val) < toLex (v.1.val, v.2.val)
     rw [Prod.Lex.toLex_lt_toLex, hv, ZMod.val_zero]
     exact Or.inl (ZMod.val_pos.mpr hv0)
-  rw [torusRightEdge, Edge.ofAdj_of_gt (torusGraph_adj_right v.1 v.2) hcmp]
+  rw [torusRightEdge, ManyBody.Edge.ofAdj_of_gt (torusGraph_adj_right v.1 v.2) hcmp]
 
 /-- The ordered head of a vertical seam is its native upward origin. -/
 theorem torusUpEdge_head_of_wrap (v : TorusVertex width height) (hv : v.2 + 1 = 0) :
@@ -100,7 +102,7 @@ theorem torusUpEdge_head_of_wrap (v : TorusVertex width height) (hv : v.2 + 1 = 
     change toLex (v.1.val, (v.2 + 1).val) < toLex (v.1.val, v.2.val)
     rw [Prod.Lex.toLex_lt_toLex, hv, ZMod.val_zero]
     exact Or.inr ⟨rfl, ZMod.val_pos.mpr hv0⟩
-  rw [torusUpEdge, Edge.ofAdj_of_gt (torusGraph_adj_up v.1 v.2) hcmp]
+  rw [torusUpEdge, ManyBody.Edge.ofAdj_of_gt (torusGraph_adj_up v.1 v.2) hcmp]
 
 /-- Horizontal and vertical regular labels describe each actual torus edge once. -/
 noncomputable def torusRegularBondConfigEquiv :

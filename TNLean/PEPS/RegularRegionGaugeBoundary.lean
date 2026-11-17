@@ -25,6 +25,8 @@ arbitrary internal operators or of an entropy formula is made here.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped Matrix
 
 namespace TNLean.PEPS

@@ -50,6 +50,8 @@ physical dimension `q^(L^2)` of a core.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+
 open Matrix QuantumCircuit
 
 open ManyBody (IsGapped groundSpace)

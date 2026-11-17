@@ -28,6 +28,8 @@ September 24, 2026, `02-information.tex`, lines 416–424 and 513–524,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+
 open Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator
 

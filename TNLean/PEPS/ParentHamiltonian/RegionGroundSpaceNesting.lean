@@ -24,6 +24,8 @@ construction, rather than a separately stated theorem in the source.
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean.PEPS

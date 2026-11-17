@@ -24,6 +24,8 @@ least four. All positions and periodic seams are allowed. These are elementary
 route operations, not the complete prescribed braid. See
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS
@@ -171,28 +173,28 @@ private theorem transportTable (horizontal : Bool) (p : X) (u : Edge Γₜ → G
       cases horizontal <;> norm_num [offset, next, add_assoc]
 
 private theorem chord_zero (horizontal : Bool) (p : X) :
-    Edge.ofAdj (mappedAdj horizontal p (by decide : twoPlaquetteGraph.Adj 0 5)) =
+    ManyBody.Edge.ofAdj (mappedAdj horizontal p (by decide : twoPlaquetteGraph.Adj 0 5)) =
       (chord horizontal p 0).1.1 := by
   cases horizontal
   · rw [show (chord false p 0).1.1 = _ from verticalTwoPlaquetteCycleBond_eq_right p 0]
-    apply Edge.ofAdj_eq_ofAdj _ _
+    apply ManyBody.Edge.ofAdj_eq_ofAdj _ _
     apply Or.inl
     constructor <;> rw [coordinates] <;> norm_num [offset]
   · rw [show (chord true p 0).1.1 = _ from translatedTwoPlaquetteCycleBond_eq_up p 0]
-    apply Edge.ofAdj_eq_ofAdj _ _
+    apply ManyBody.Edge.ofAdj_eq_ofAdj _ _
     apply Or.inl
     constructor <;> rw [coordinates] <;> norm_num [offset]
 
 private theorem chord_one (horizontal : Bool) (p : X) :
-    Edge.ofAdj (mappedAdj horizontal p (by decide : twoPlaquetteGraph.Adj 1 4)) =
+    ManyBody.Edge.ofAdj (mappedAdj horizontal p (by decide : twoPlaquetteGraph.Adj 1 4)) =
       (chord horizontal p 1).1.1 := by
   cases horizontal
   · rw [show (chord false p 1).1.1 = _ from verticalTwoPlaquetteCycleBond_eq_right p 1]
-    apply Edge.ofAdj_eq_ofAdj _ _
+    apply ManyBody.Edge.ofAdj_eq_ofAdj _ _
     apply Or.inl
     constructor <;> rw [coordinates] <;> norm_num [offset]
   · rw [show (chord true p 1).1.1 = _ from translatedTwoPlaquetteCycleBond_eq_up p 1]
-    apply Edge.ofAdj_eq_ofAdj _ _
+    apply ManyBody.Edge.ofAdj_eq_ofAdj _ _
     apply Or.inl
     constructor <;> rw [coordinates] <;> norm_num [offset]
 
@@ -386,9 +388,10 @@ theorem torusActualRouteFluxMove_transport_of_vacancy (horizontal reverse : Bool
     exact H
 
 private theorem middleChord (horizontal : Bool) (p : X) :
-    (chord horizontal p 1).1.1 = Edge.ofAdj (step horizontal (offset horizontal p 1 0)) := by
+    (chord horizontal p 1).1.1 =
+        ManyBody.Edge.ofAdj (step horizontal (offset horizontal p 1 0)) := by
   rw [← chord_one horizontal p]
-  apply Edge.ofAdj_eq_ofAdj _ _
+  apply ManyBody.Edge.ofAdj_eq_ofAdj _ _
   apply Or.inl
   constructor <;> rw [coordinates] <;> cases horizontal <;>
     norm_num [offset, next, add_assoc]
@@ -403,7 +406,7 @@ theorem torusActualRouteFluxMove_eq_update_of_vacancy (horizontal reverse : Bool
     torusActualRouteFluxMove horizontal reverse p u =
       torusActualRouteFluxUpdate horizontal reverse p u := by
   funext e
-  by_cases he : e = Edge.ofAdj (step horizontal (offset horizontal p 1 0))
+  by_cases he : e = ManyBody.Edge.ofAdj (step horizontal (offset horizontal p 1 0))
   · subst e
     apply regularDirectedTransport_injective_on_edge
       (step horizontal (offset horizontal p 1 0))

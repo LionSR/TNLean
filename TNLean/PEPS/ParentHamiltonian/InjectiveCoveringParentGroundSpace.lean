@@ -40,6 +40,8 @@ the closed PEPS vector is zero. Documented in
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]

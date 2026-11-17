@@ -32,6 +32,8 @@ as recorded in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

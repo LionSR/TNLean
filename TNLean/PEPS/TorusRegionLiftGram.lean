@@ -33,6 +33,8 @@ and 1935–2072.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped Matrix
 
 namespace TNLean.PEPS

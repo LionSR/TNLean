@@ -26,6 +26,8 @@ is a term on the entire graph; no nearest-neighbour uniqueness theorem is assert
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators ComplexOrder Matrix MatrixOrder
 
 namespace TNLean.PEPS

@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.SquareLatticeGraph
+import QICLean.ManyBody.Sites.Lattice.Square
+import TNLean.PEPS.NormalBlocking
 import TNLean.Circuit.LocalCircuit
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
@@ -34,6 +35,8 @@ the normalized global vector, with a freely chosen phase.
 
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
+
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
 
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 

@@ -27,7 +27,7 @@ realized as conjugation by an invertible gauge matrix.
 The geometry layer builds its blocking data over the canonical product decidable
 equality on `Fin width × Fin height`, whereas the gauge interface synthesizes a
 decidable equality from the lattice's linear order.  These now coincide
-definitionally (`TNLean.PEPS.instLinearOrderSquareLatticeVertex` pins its
+definitionally (`ManyBody.instLinearOrderSquareLatticeVertex` pins its
 `toDecidableEq` field to the product instance), so the interior data feed the gauge
 interface directly.
 
@@ -47,6 +47,8 @@ steps above this interior gauge family, recorded in the same note.
   states generating the same state*, arXiv:1804.04964, Section 3, proof of Theorem 3,
   lines 1449--1500 of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
+
+open ManyBody (Edge squareLatticeGraph)
 
 open scoped BigOperators Matrix
 
@@ -317,18 +319,18 @@ theorem exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge
   have heh : yStart + 3 ≤ height := by omega
   let φ := squareLatticeCoordinateSwap (width := width) (height := height)
   let e := normalSquareVerticalTranslatedEdge xStart yStart hew heh
-  let e' := Edge.map φ e
+  let e' := ManyBody.Edge.map φ e
   have hbond' : (A.transport φ).bondDim = (B.transport φ).bondDim := by
     funext g
     simp only [Tensor.transport_bondDim]
     rw [hbond]
   have hposA' : ∀ g : Edge (squareLatticeGraph height width),
-      0 < (A.transport φ).bondDim g := fun g => hposA (Edge.map φ.symm g)
+      0 < (A.transport φ).bondDim g := fun g => hposA (ManyBody.Edge.map φ.symm g)
   have hposB' : ∀ g : Edge (squareLatticeGraph height width),
-      0 < (B.transport φ).bondDim g := fun g => hposB (Edge.map φ.symm g)
+      0 < (B.transport φ).bondDim g := fun g => hposB (ManyBody.Edge.map φ.symm g)
   have he' : e' = normalSquareHorizontalTranslatedEdge yStart xStart heh hew := by
     dsimp only [e', e, φ]
-    exact Edge.map_squareLatticeCoordinateSwap_verticalTranslatedEdge hew heh
+    exact ManyBody.Edge.map_squareLatticeCoordinateSwap_verticalTranslatedEdge hew heh
   have hGauge := exists_regionEdgeGauge_normalSquareHorizontalTranslatedEdge
     (width := height) (height := width) (A.transport φ) (B.transport φ)
     (hA.transportCoordinateSwap A) (hUA.transportCoordinateSwap A)
@@ -337,11 +339,11 @@ theorem exists_regionEdgeGauge_normalSquareVerticalTranslatedEdge
   have hAedge : (A.transport φ).bondDim e' = A.bondDim e := by
     simp only [e', φ, Tensor.transport_bondDim,
       squareLatticeCoordinateSwap_symm,
-      Edge.map_squareLatticeCoordinateSwap_map]
+      ManyBody.Edge.map_squareLatticeCoordinateSwap_map]
   have hBedge : (B.transport φ).bondDim e' = B.bondDim e := by
     simp only [e', φ, Tensor.transport_bondDim,
       squareLatticeCoordinateSwap_symm,
-      Edge.map_squareLatticeCoordinateSwap_map]
+      ManyBody.Edge.map_squareLatticeCoordinateSwap_map]
   rw [hAedge, hBedge] at hGauge
   simpa only [e] using hGauge
 

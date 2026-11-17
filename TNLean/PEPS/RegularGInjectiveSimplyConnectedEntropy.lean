@@ -35,6 +35,8 @@ Corollary 6.10, local source lines 2074–2090.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix ComplexOrder
 namespace TNLean.PEPS
 

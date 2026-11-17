@@ -32,6 +32,8 @@ as in `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
@@ -52,7 +54,8 @@ noncomputable def torusEdgeWinding (e : Edge (torusGraph width height)) : ℤ ×
 the walk crosses it. Source: SCP10, seam deformation, lines 1622–1647. -/
 noncomputable def torusDirectedWinding {v w : TorusVertex width height}
     (h : (torusGraph width height).Adj v w) : ℤ × ℤ :=
-  if v < w then torusEdgeWinding (Edge.ofAdj h) else -torusEdgeWinding (Edge.ofAdj h)
+  if v < w then torusEdgeWinding (ManyBody.Edge.ofAdj h) else -torusEdgeWinding
+      (ManyBody.Edge.ofAdj h)
 
 /-- The integer seam crossing numbers of an actual native torus walk.
 Source: SCP10, complement cycle argument, lines 1935–1990. -/
@@ -82,7 +85,7 @@ theorem torusDirectedWinding_right (v : TorusVertex width height) :
   · have hlt : ¬v < (v.1 + 1, v.2) := by
       intro h
       have hh := torusRightEdge_head_of_wrap v hv
-      rw [torusRightEdge, Edge.ofAdj_of_lt (torusGraph_adj_right v.1 v.2) h] at hh
+      rw [torusRightEdge, ManyBody.Edge.ofAdj_of_lt (torusGraph_adj_right v.1 v.2) h] at hh
       exact (ne_of_lt h) hh.symm
     simp only [ite_eq_right hlt, ite_eq_left hv, Prod.neg_mk, neg_neg, neg_zero]
   · simp [hv]
@@ -108,7 +111,7 @@ theorem torusDirectedWinding_up (v : TorusVertex width height) :
   · have hlt : ¬v < (v.1, v.2 + 1) := by
       intro h
       have hh := torusUpEdge_head_of_wrap v hv
-      rw [torusUpEdge, Edge.ofAdj_of_lt (torusGraph_adj_up v.1 v.2) h] at hh
+      rw [torusUpEdge, ManyBody.Edge.ofAdj_of_lt (torusGraph_adj_up v.1 v.2) h] at hh
       exact (ne_of_lt h) hh.symm
     simp only [ite_eq_right hlt, ite_eq_left hv, Prod.neg_mk, neg_neg, neg_zero]
   · simp [hv]
@@ -120,9 +123,9 @@ theorem torusDirectedWinding_symm {v w : TorusVertex width height}
   unfold torusDirectedWinding
   rcases lt_or_gt_of_ne a.ne with hvw | hwv
   · simp only [ite_eq_left hvw, ite_eq_right (not_lt.mpr hvw.le),
-      Edge.ofAdj_of_lt a hvw, Edge.ofAdj_of_gt a.symm hvw]
+      ManyBody.Edge.ofAdj_of_lt a hvw, ManyBody.Edge.ofAdj_of_gt a.symm hvw]
   · simp only [ite_eq_left hwv, ite_eq_right (not_lt.mpr hwv.le),
-      Edge.ofAdj_of_gt a hwv, Edge.ofAdj_of_lt a.symm hwv, neg_neg]
+      ManyBody.Edge.ofAdj_of_gt a hwv, ManyBody.Edge.ofAdj_of_lt a.symm hwv, neg_neg]
 
 /-- Concatenating actual walks adds their seam crossing numbers. -/
 theorem torusWalkWinding_append {v w z : TorusVertex width height}

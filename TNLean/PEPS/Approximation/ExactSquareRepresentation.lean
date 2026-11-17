@@ -21,6 +21,8 @@ September 24, 2026, `07-assembly.tex`, lines 203–214, at immutable manuscript
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open ManyBody (SquareLatticeVertex squareLatticeGraph)
+
 noncomputable section
 
 namespace TNLean.PEPS.ExactTreeRepresentation

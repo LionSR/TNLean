@@ -87,13 +87,13 @@ and F9; F14 lands before the pin move that brings in QICLean's circuit core.
 
 | | TNLean notion | QICLean replacement | Modules |
 |---|---|---|---|
-| F1 | `Edge` | `ManyBody.Edge` | 486 |
-| F2 | `SquareLatticeVertex`, `PEPS/SquareLatticeGraph` | `ManyBody.SquareLatticeVertex`, `ManyBody.squareLatticeGraph` | 55 / 39 |
+| F1 | `Edge` | `ManyBody.Edge` | 486 (done in #10861) |
+| F2 | `SquareLatticeVertex`, `PEPS/SquareLatticeGraph` | `ManyBody.SquareLatticeVertex`, `ManyBody.squareLatticeGraph` | 55 / 39 (done in #10861) |
 | F3 | `MPS.AreaLaw.interval` | `ManyBody.interval` | 347 |
 | F4 | `IsChainSupport`, `ChainSupport` | `ManyBody.IsChainSupport`, `ManyBody.ChainSupport` | 29 |
 | F5 | `sitePos`, the MPS `domainGraph`, `DomainSupport` | `ManyBody.sitePos`, `ManyBody.lineDomainGraph`, `ManyBody.DomainSupport` | 4 / 10 / 8 |
 | F6 | `Lattice.domainGraph`, `AdmissibleSupport` | `ManyBody.planeDomainGraph`, `ManyBody.AdmissibleSupport` | 111 / 82; done in #10858 |
-| F7 | the `RectangleInteraction` and `SquareInteraction` index types, `ForwardEdge`, `ForwardAdjacent`, `forwardSquareEdgeEquiv` | `ManyBody.SquareLatticeSiteOrEdge` | 12 |
+| F7 | the `RectangleInteraction` and `SquareInteraction` index types, `ForwardEdge`, `ForwardAdjacent`, `forwardSquareEdgeEquiv` | `ManyBody.SquareLatticeSiteOrEdge` | 12 (done in #10861) |
 | F8 | `ChainHamiltonian`, `DomainHamiltonian`, `LocalHamiltonian`, `RectangularHamiltonian`, `SquareHamiltonian` | `ManyBody.ChainInteraction`, `DomainInteraction`, `PlaneInteraction`, `RectangleInteraction`, `SquareInteraction`, with the former fields (Hermiticity, norm bounds) as hypotheses; one pull request each | 80 / 9 / 108 / 3 / 32 |
 | F9 | `SquareHamiltonian.hermitianTerm`, `RectangularHamiltonian.hermitianTerm` and their lemmas | `ManyBody.Interaction.hermitianPart` | 5 |
 | F10 | `Lattice.groundEigenspace` | `ManyBody.groundSpace` | 25; done in #10860 |

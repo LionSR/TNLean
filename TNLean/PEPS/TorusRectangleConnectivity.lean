@@ -34,6 +34,8 @@ replace the source's assertion for every topologically trivial block.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
@@ -300,7 +302,7 @@ theorem torusRightEdge_not_incident_rectangle_of_wrap
     simp only [mem_torusContiguousRectangle, hwrap, ZMod.val_zero]
     omega
   unfold IsRegionIncidentEdge torusRightEdge
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨ha, hb⟩ | ⟨ha, hb⟩ <;>
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨ha, hb⟩ | ⟨ha, hb⟩ <;>
     simp only [ha, hb, h₁, h₂, or_self, not_false_eq_true]
 
 /-- A vertical wrap bond has no endpoint in a strictly interior coordinate
@@ -321,7 +323,7 @@ theorem torusUpEdge_not_incident_rectangle_of_wrap
     simp only [mem_torusContiguousRectangle, hwrap, ZMod.val_zero]
     omega
   unfold IsRegionIncidentEdge torusUpEdge
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨ha, hb⟩ | ⟨ha, hb⟩ <;>
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨ha, hb⟩ | ⟨ha, hb⟩ <;>
     simp only [ha, hb, h₁, h₂, or_self, not_false_eq_true]
 
 
@@ -354,7 +356,7 @@ theorem nonempty_boundaryEdge_torusRectangle
     omega
   refine ⟨⟨torusRightEdge v, ?_⟩⟩
   unfold IsRegionBoundaryEdge torusRightEdge
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨ha, hb⟩ | ⟨ha, hb⟩ <;>
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨ha, hb⟩ | ⟨ha, hb⟩ <;>
     simp only [ha, hb, h₁, h₂, not_false_eq_true, not_true_eq_false, and_self,
       false_or, or_false]
 

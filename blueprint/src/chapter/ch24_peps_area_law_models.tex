@@ -427,7 +427,7 @@ state the two models separately following
 
 \begin{definition}[Original interaction labels]
     \label{def:square_interaction_labels}
-    \lean{TNLean.PEPS.Approximation.SquareInteraction}
+    \lean{ManyBody.SquareLatticeSiteOrEdge}
     \leanok
     \uses{def:polynomial_peps_model}
     Let $\mathcal I_L$ be the disjoint union of the vertices of the open
@@ -438,12 +438,26 @@ state the two models separately following
 
 \begin{definition}[Designated interaction supports]
     \label{def:square_interaction_support}
-    \lean{TNLean.PEPS.Approximation.squareInteractionSupport}
+    \lean{ManyBody.squareLatticeSiteOrEdgeSupport}
     \leanok
     \uses{def:square_interaction_labels}
     For $i\in\mathcal I_L$, define its support $S_i=\{v\}$ if $i=v$ and
     $S_i=\{v,w\}$ if $i=(v,w)$.
 \end{definition}
+
+\begin{lemma}[Distinct interactions have distinct supports]
+    \label{thm:square_interaction_support_injective}
+    \lean{TNLean.PEPS.AreaLaw.squareLatticeSiteOrEdgeSupport_injective}
+    \leanok
+    \uses{def:square_interaction_support}
+    On the sites and edges of a rectangular square lattice of any width and
+    height, the map $i\mapsto S_i$ is injective.
+\end{lemma}
+\begin{proof}\leanok
+    A site has a one-point support and an edge a two-point support, since the
+    endpoints of an edge are distinct. An edge is determined by the unordered
+    pair of its endpoints, so two edges with the same support coincide.
+\end{proof}
 
 \begin{definition}[Hermitian local terms]
     \label{def:square_hermitian_term}
@@ -535,7 +549,8 @@ state the two models separately following
     \label{thm:square_area_law_support_injective}
     \lean{TNLean.PEPS.Approximation.squareAreaLawSupport_injective}
     \leanok
-    \uses{def:square_area_law_support,thm:square_area_law_support_admissible}
+    \uses{def:square_area_law_support,thm:square_area_law_support_admissible,
+        thm:square_interaction_support_injective}
     The map $i\mapsto X_i$ on $\mathcal I_L$ is injective.
 \end{lemma}
 \begin{proof}\leanok

@@ -68,6 +68,8 @@ arbitrary coordinates of the two replicas, and the polar step
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+
 open Matrix MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator NNReal ComplexOrder
 open TNLean.Lattice
