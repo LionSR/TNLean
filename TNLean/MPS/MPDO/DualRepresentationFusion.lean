@@ -21,14 +21,14 @@ implies arbitrary-boundary closedness. The existing representation theorem
 then constructs exact biorthogonal fusion tensors. Faithfulness supplies the
 simultaneous one-letter inverse, without physical blocking.
 
-Cosemisimplicity is essential here: the source assumes it in Section 4.2.
+Cosemisimplicity is essential here: the source assumes it in Section 4.1.
 The final existence theorem obtains the matrix-block decomposition from
 Mathlib's Wedderburn--Artin theorem. No fusion tensors, left inverses, or
 counit witnesses are hypotheses.
 
 ## References
 
-* Molnár et al., arXiv:2204.05940, Section 4.2, lines 1640--1658,
+* Molnár et al., arXiv:2204.05940, Section 4.1, lines 1640--1658,
   equations `eq:irrep_product_decomposition` and `eq:splitting_algebraic`.
 -/
 
@@ -44,7 +44,7 @@ variable {H : Type*} [Ring H] [Algebra ℂ H] [PreBialgebra ℂ H]
 
 /-- A faithful dual representation of a pre-bialgebra is closed under products
 with one output boundary for all positive lengths. Source: arXiv:2204.05940,
-Section 4.1. No semisimplicity or physical faithfulness is needed here. -/
+Section 4. No semisimplicity or physical faithfulness is needed here. -/
 theorem isBoundaryClosed_ofDualRepresentation
     (φ : H →ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ)
     (ψ : WithConv (H →ₗ[ℂ] ℂ) →ₐ[ℂ] Matrix (Fin D) (Fin D) ℂ)
@@ -60,7 +60,7 @@ namespace DualRepresentationFusion
 variable {δ : Fin r → ℕ}
 
 /-- The direct sum of the simple dual representations, in flattened bond
-coordinates. Source: arXiv:2204.05940, Section 3.2 and Section 4.2. -/
+coordinates. Source: arXiv:2204.05940, Section 3.1 and Section 4.1. -/
 def totalRepresentation
     (ψ : WithConv (H →ₗ[ℂ] ℂ) ≃ₐ[ℂ] ∀ c, Matrix (Fin (δ c)) (Fin (δ c)) ℂ) :
     WithConv (H →ₗ[ℂ] ℂ) →ₐ[ℂ]
@@ -84,7 +84,7 @@ theorem totalRepresentation_injective
     (Matrix.blockDiagonal'_injective.comp ψ.injective)
 
 /-- The one-site block letters obtained by evaluating physical coefficients
-in each simple dual representation. Source: arXiv:2204.05940, Sections 3.2, 4.2. -/
+in each simple dual representation. Source: arXiv:2204.05940, Sections 3.1, 4.1. -/
 def tensor (φ : H →ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ)
     (ψ : WithConv (H →ₗ[ℂ] ℂ) ≃ₐ[ℂ] ∀ c, Matrix (Fin (δ c)) (Fin (δ c)) ℂ)
     (c : Fin r) : MPOTensor p (δ c) :=
@@ -92,7 +92,7 @@ def tensor (φ : H →ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ)
 
 /-- Faithfulness of the physical representation gives simultaneous spanning
 at length one, not merely individual block injectivity. Source:
-arXiv:2204.05940, Section 3.2, lines 1180--1184. -/
+arXiv:2204.05940, Section 3.1, lines 1180--1184. -/
 theorem wordTupleSpanTop_tensor
     (φ : H →ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ) (hφ : Function.Injective φ)
     (ψ : WithConv (H →ₗ[ℂ] ℂ) ≃ₐ[ℂ] ∀ c, Matrix (Fin (δ c)) (Fin (δ c)) ℂ) :
@@ -139,7 +139,7 @@ theorem totalRepresentation_tensor
 /-- Construct the full zipper family from the abstract algebra data. All
 multiplicities, fusion tensors and their independent left inverses are chosen
 from the proved representation decomposition; the simultaneous letter inverse
-is derived from physical faithfulness. Source: arXiv:2204.05940, Section 4.2,
+is derived from physical faithfulness. Source: arXiv:2204.05940, Section 4.1,
 `eq:splitting_algebraic`. -/
 def family
     (φ : H →ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ) (hφ : Function.Injective φ)
@@ -163,7 +163,7 @@ theorem family_tensor
 
 /-- The constructed family's boundary pre-bialgebra uses the counit already
 constructed from the unital physical representation. Source:
-arXiv:2204.05940, Section 4.2. -/
+arXiv:2204.05940, Section 4, lines 1419--1421. -/
 @[instance_reducible]
 def toPreBialgebra
     (φ : H →ₐ[ℂ] Matrix (Fin p) (Fin p) ℂ) (hφ : Function.Injective φ)
@@ -179,7 +179,7 @@ end DualRepresentationFusion
 /-- A finite-dimensional cosemisimple pre-bialgebra with a faithful unital
 physical representation gives a complete zipper fusion family with exactly
 its physical coefficient letters. Cosemisimplicity is the source's explicit
-hypothesis in arXiv:2204.05940, Section 4.2, lines 1642--1658. The matrix
+hypothesis in arXiv:2204.05940, Section 4.1, lines 1642--1658. The matrix
 blocks are derived by Wedderburn--Artin; fusion maps and simultaneous letter
 inverses are derived by `DualRepresentationFusion.family`. -/
 theorem exists_completeZipperFusionFamily_of_cosemisimple
