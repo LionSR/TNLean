@@ -31,7 +31,7 @@ site of the chain, with no encoded holes.
 
 | Note statement | Formal statement | Status |
 |---|---|---|
-| Setting: the chain of `L` sites, intervals, supports, Hamiltonians (`eq:ham`, `eq:gap`) | `MPS.AreaLaw.interval`, `MPS.AreaLaw.IsChainSupport`, `MPS.AreaLaw.ChainHamiltonian`, `Matrix.IsGappedGroundState` | Definitions. |
+| Setting: the chain of `L` sites, intervals, supports, Hamiltonians (`eq:ham`, `eq:gap`) | `ManyBody.interval`, `MPS.AreaLaw.IsChainSupport`, `MPS.AreaLaw.ChainHamiltonian`, `Matrix.IsGappedGroundState` | Definitions. |
 | Lemma 3.1 (marginal tail bound) at a cut | `MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le` with the budget `MPS.AreaLaw.cutLogBudget` | Proved, from the QICLean core. |
 | Rényi entropies near one (`rem:renyi`) | `MPS.AreaLaw.ChainHamiltonian.near_one_renyi_entropy_interval_bounds` | Proved on the full closed order interval `[1-u₀, 1]`, with the linear coefficient `512e` and uniform bound `16e √((1 + J/Δ) B_R)`. The statement includes order one, zero eigenvalues and the spectral power formula. |
 | `eq:count`, `eq:BR`: split interactions and cut budget of an interval | `MPS.AreaLaw.card_crossingTerms_interval_le` (`N_R = 2·2^{2R}`), `MPS.AreaLaw.cutLogBudget_interval_le` (`B_R = 1 + N_R log²(e q^{R+1})`) | Proved; the constants are those of the note. |
