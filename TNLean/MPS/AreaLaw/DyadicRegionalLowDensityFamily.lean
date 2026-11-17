@@ -31,7 +31,7 @@ after `w = mu/(3*log n)`. Boundary and short intervals remain separate;
 see `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
 -/
 
-open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator TensorProduct
 
 namespace TNLean.MPS.AreaLaw
 
@@ -49,10 +49,29 @@ its exact collar cost fits the same count envelope used in the suppression
 bound. Every word of length `a` in the family improves the upper target to
 the lower one with the suppression raised to the power `a`, as in the
 repeated filter of Theorem `t:alg1`, lines 1777–1817, used by Theorem
-`t:alg2`, lines 1869–1878. ALVV, arXiv:1602.08828v2,
+`t:alg2`, lines 1869–1878. Any consequence `Q` of this word improvement is
+recorded in its place, so that its instances need not repeat the
+construction. ALVV, arXiv:1602.08828v2,
 Theorem `t:aisgapless`, lines 1027–1041, and Proposition 5.7, lines 1311–1333. -/
-theorem exists_fixed_bandwidth_regional_dyadic_low_energy_word_family
-    (etaLD : ℝ) (hLD : 0 < etaLD) :
+theorem exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause
+    (etaLD : ℝ) (hLD : 0 < etaLD)
+    (Q : ∀ (L q : ℕ) (J : Finset (Fin L)) (N : ℕ),
+      (Fin N → Matrix (J → Fin q) (J → Fin q) ℂ) →
+      Submodule ℂ (EuclideanSpace ℂ (J → Fin q) ⊗[ℂ] EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) →
+      Submodule ℂ (EuclideanSpace ℂ (J → Fin q) ⊗[ℂ] EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) →
+      ℝ → Prop)
+    (hQ : ∀ (L q : ℕ) (J : Finset (Fin L)) (N : ℕ)
+      (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ)
+      (hi lo : Submodule ℂ (EuclideanSpace ℂ (J → Fin q) ⊗[ℂ] EuclideanSpace ℂ (↥(Jᶜ) → Fin q)))
+      (Delta : ℝ),
+      (∀ (a : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (delta : ℝ),
+        Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) delta S hi → delta < 1 →
+        let grow := ⨆ v : Fin a → Fin N, S.map ((List.ofFn (fun j ↦
+          Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W (v j)))).prod : _ →ₗ[ℂ] _)
+        Module.finrank ℂ grow ≤ N ^ a * Module.finrank ℂ S ∧
+          Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+            (Delta ^ a / (1 - delta) ^ 2) grow lo) →
+      Q L q J N W hi lo Delta) :
     ∃ C : ℝ, 100 ≤ C ∧ 19 + etaLD ≤ C ∧
       ∀ (L q m a b i : ℕ) (w : ℝ), 2 ≤ q → q ≤ m → 0 < w →
       let mi := m * 2 ^ i
@@ -125,16 +144,8 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_word_family
               ∑ j, TensorProduct.mapL
                 (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j))
                 (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := ↥(Jᶜ) → Fin q) (M j)) ∧
-            ∀ (a : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (delta : ℝ),
-              Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) delta S
-                (higher.map Tm.toLinearEquiv.toLinearMap) → delta < 1 →
-              let grow := ⨆ v : Fin a → Fin N, S.map ((List.ofFn (fun j ↦
-                Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W (v j)))).prod :
-                  _ →ₗ[ℂ] _)
-              Module.finrank ℂ grow ≤ N ^ a * Module.finrank ℂ S ∧
-                Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
-                  (Delta ^ a / (1 - delta) ^ 2) grow
-                  (lower.map Tm.toLinearEquiv.toLinearMap) := by
+            Q L q J N W (higher.map Tm.toLinearEquiv.toLinearMap)
+              (lower.map Tm.toLinearEquiv.toLinearMap) Delta := by
   classical
   obtain ⟨C, hC, hCeta, hparams⟩ :=
     Real.exists_fixed_bandwidth_low_density_filter_parameters etaLD hLD
@@ -255,7 +266,8 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_word_family
       nlinarith only [mul_nonneg (sq_nonneg (ell : ℝ)) (sub_nonneg.mpr hsqrt)]
     apply (mul_le_mul_of_nonneg_left hDelta (by positivity)).trans
     simpa only [neg_mul] using htrade _ hR hRup
-  · simpa only [Delta,
+  · refine hQ L q J N W _ _ Delta ?_
+    simpa only [Delta,
       show (E0 + eta - w) - (E0 + eta - 2 * w) = w by ring] using himprove
 
 end TNLean.MPS.AreaLaw

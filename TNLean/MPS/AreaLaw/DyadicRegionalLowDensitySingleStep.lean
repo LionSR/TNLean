@@ -20,14 +20,12 @@ is retained, as in the word-family theorem; see
 `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
 -/
 
-open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator TensorProduct
 
 namespace TNLean.MPS.AreaLaw
 
 open Matrix
 
-set_option maxHeartbeats 800000 in
--- The tensor decompositions involve several dependent finite configuration types.
 /-- The actual fixed-bandwidth physical filter family on any prescribed
 region whose symmetric difference with the native retained interval contains
 at most `2*ell` sites. The scalar bounds are chosen before geometry and the
@@ -118,26 +116,20 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_family
                 (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j)).toLinearMap
               Module.finrank ℂ grow ≤ N * Module.finrank ℂ S ∧
                 Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
-                  (Delta / (1 - delta) ^ 2) grow (lower.map Tm.toLinearEquiv.toLinearMap) := by
-  obtain ⟨C, hC, hCeta, hword⟩ :=
-    exists_fixed_bandwidth_regional_dyadic_low_energy_word_family etaLD hLD
-  refine ⟨C, hC, hCeta, ?_⟩
-  intro L q m a b i w hq hqm hw mi g u ell D nu
-  obtain ⟨hell, hlogD, hrest⟩ := hword L q m a b i w hq hqm hw
-  refine ⟨hell, hlogD, ?_⟩
-  intro hab hbL Jtarget hcollar h hs h0 h1 k A Cross Y K B
-  obtain ⟨e, E0, x, z, hO, hC, h1x, h2x, h3x, h4x, h5x, h6x, h7x, h8x, h9x, h10x, hfamily⟩ :=
-    hrest hab hbL Jtarget hcollar h hs h0 h1
-  refine ⟨e, E0, x, z, hO, hC, h1x, h2x, h3x, h4x, h5x, h6x, h7x, h8x, h9x, h10x, ?_⟩
-  intro J beta tau U Phi Tm
-  obtain ⟨N, W, hN, hfilters⟩ := hfamily
-  refine ⟨N, W, hN, fun eta hbuffer hetaLD ↦ ?_⟩
-  obtain ⟨hnest, hupper, hlower, htrade, p, hp, hp0, M, hM, hwords⟩ :=
-    hfilters eta hbuffer hetaLD
-  refine ⟨hnest, hupper, hlower, htrade, p, hp, hp0, M, hM, fun S delta hS hdelta ↦ ?_⟩
-  obtain ⟨hdim, hviable⟩ := hwords 1 S delta hS hdelta
-  rw [Submodule.iSup_map_ofFn_prod_fin_one
-    (fun j ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j)) S] at hdim hviable
-  exact ⟨by simpa only [pow_one] using hdim, by simpa only [pow_one] using hviable⟩
+                  (Delta / (1 - delta) ^ 2) grow (lower.map Tm.toLinearEquiv.toLinearMap) :=
+  exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause etaLD hLD
+    (fun L q J N W hi lo Delta ↦
+      ∀ (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (delta : ℝ),
+        Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) delta S hi → delta < 1 →
+        let grow := ⨆ j : Fin N, S.map
+          (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j)).toLinearMap
+        Module.finrank ℂ grow ≤ N * Module.finrank ℂ S ∧
+          Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
+            (Delta / (1 - delta) ^ 2) grow lo)
+    fun L q J N W hi lo Delta hwords S delta hS hdelta ↦ by
+      obtain ⟨hdim, hviable⟩ := hwords 1 S delta hS hdelta
+      rw [Submodule.iSup_map_ofFn_prod_fin_one
+        (fun j ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W j)) S] at hdim hviable
+      exact ⟨by simpa only [pow_one] using hdim, by simpa only [pow_one] using hviable⟩
 
 end TNLean.MPS.AreaLaw
