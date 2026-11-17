@@ -78,7 +78,7 @@ Module counts are of `origin/main` at `868d2c9`, by word match of the
 identifiers; for the generic words `Edge` and `interval`, which also occur in
 prose and in unrelated names, they are the counts of the TNLean declarations'
 uses from the tracker. Each follow-up recounts. Order: F1 first; F8 needs F4–F7
-and F9.
+and F9; F14 lands before the pin move that brings in QICLean's circuit core.
 
 | | TNLean notion | QICLean replacement | Modules |
 |---|---|---|---|
@@ -95,3 +95,4 @@ and F9.
 | F11 | `Matrix.IsGappedGroundState` | `ManyBody.IsGapped` with `groundSpace = span {Ω}`, through `ManyBody.isGapped_and_groundSpace_eq_span_iff` | 186 |
 | F12 | `QuantumCircuit.siteExpectation`; with it the transitional bridge `QuantumCircuit.siteExpectation_eq_regionExpectation`, the corollaries through it `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le` and `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`, its uses in `MPS/AreaLaw/Hastings/BoundaryLocalization`, `MPS/AreaLaw/Huang/GridPropagation`, `MPS/AreaLaw/SupportedGaussianIntegral`, `MPS/AreaLaw/DomainSupportedGaussianIntegral` and `PEPS/AreaLaw/SupportedGaussianIntegral`, and `QuantumCircuit.norm_sub_siteExpectation_le` | `ManyBody.regionExpectation`, `ManyBody.norm_sub_regionExpectation_le` | 53 |
 | F13 | `Entropy.crossingTerms` (QICLean's temporary export) | `ManyBody.crossingTerms` | 35 |
+| F14 | `QuantumCircuit.Layer`, the ring abbreviation `BondLayer d ringBond` (`Circuit/LocalCircuit`), which collides with the `QuantumCircuit.Layer` of QICLean's circuit core (step 3C.1) | renamed `QuantumCircuit.RingLayer`, with no alias, before the pin move that brings in the core; the modules that open `QuantumCircuit` are checked for unqualified `Circuit`, `Geometry`, `GateFamily`, `Interpretation` and `KrausGate` | 13 |

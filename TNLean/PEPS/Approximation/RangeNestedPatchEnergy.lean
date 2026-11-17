@@ -87,8 +87,9 @@ theorem sum_crossingTerms_rangeNestedPatch_le {Λ : Finset (ℤ × ℤ)} (q R : 
   set D := AreaLaw.Geometry.rangeNestedPatch Λ c R u j
   set C := Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) D
   set N := AreaLaw.Geometry.squareLayer Λ c (AreaLaw.Geometry.rangeNestedPatchRadius R u j) R
-  have hmemC : ∀ X ∈ C, (∃ v ∈ X.1, v ∈ D) ∧ ∃ v ∈ X.1, v ∉ D := fun X hX ↦
-    (Finset.mem_filter.mp hX).2
+  have hmemC : ∀ X ∈ C, (∃ v ∈ X.1, v ∈ D) ∧ ∃ v ∈ X.1, v ∉ D := fun X hX ↦ by
+    simp only [C, ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
+    exact hX
   -- Each split support has an inside dimension at most `q ^ (v_R - 1)`.
   have hdim : ∀ X ∈ C, (Fintype.card (Entropy.InnerConfig (fun _ : Site Λ ↦ q) D X.1) : ℝ)
       ≤ (q : ℝ) ^ (2 * R * (R + 1)) := by
@@ -204,7 +205,7 @@ theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy
   have hunit : ∀ j, IsUnit (K j).det := fun j ↦
     (Matrix.isUnit_iff_isUnit_det _).mp (((hx j).1.add_smul_one_posDef hb).rpow _).isUnit
   have ha₁ : ∀ j, a j ≤ 1 := fun _ ↦
-    (div_nat_le_self_of_nonnneg hκ.le m).trans hκ₁
+    (div_nat_le_self_of_nonneg hκ.le m).trans hκ₁
   have hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j := fun _ _ hij ↦ hregions hij
   have hφpatch := dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput
     (n := fun _ : Lattice.Site Λ ↦ q) (fun j : Fin m ↦ D j) a b Ψᵤ x
