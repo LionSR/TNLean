@@ -402,6 +402,69 @@ tensors are in canonical form.
     hypotheses on $u_p$ and $Y_p$.
 \end{proof}
 
+The source states its symmetrization of parent terms for operators that
+represent a weak Hopf algebra:
+\begin{quote}
+    ``The previous symmetrization can be generalized to MPO representations
+    of ${C}^*$-weak Hopf algebras''
+\end{quote}
+\cite[Section~5 and Appendix~B]{GarreRubio2023MPOSym}. Section~5 does not
+construct such a representation for the common operator $\widetilde T$,
+and the examples of \cite{gap:glm23_mixed_path_parent_commutation}, in
+which the two-site boundary range is not closed under the adjoint, show
+that none need exist. The following restricted statement assumes
+one.
+
+\begin{lemma}[Commutation of the path under a weak-Hopf representation]
+    \label{thm:mpo_arbitrary_parent_commutation_weak_hopf}
+    \lean{MPSTensor.MPOSymmetry.exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq_of_weakHopf,
+        MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_weakHopf,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_weakHopf,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_weakHopf,
+        MPSTensor.MPOSymmetry.toEuclideanLin_arbitraryPhysicalMixedInteraction_eq_one_sub_weakHopfAverage}
+    \leanok
+    \uses{thm:mpo_arbitrary_mixed_action,def:glm_wha_representation,
+        def:glm_wha_average}
+    Assume the hypotheses of Lemma~\ref{thm:mpo_arbitrary_mixed_action},
+    that $D_0,D_1>0$, and that $A_0,A_1$ are one-site injective. Assume in
+    addition, as a restriction not made by Section~5 of the source, that
+    $\widetilde T$ is the operator tensor of a weak-Hopf representation with
+    average $E_2$. Then $\mathcal R_2(\widetilde T)^*=\mathcal R_2(\widetilde
+    T)$, and the conclusions of
+    Lemma~\ref{thm:mpo_arbitrary_parent_commutation_adjoint_closed} hold.
+    Moreover, for $0<\gamma<1$ the symmetrized parent term coincides with the
+    canonical one: $\widetilde h_\gamma=\Id-E_2(P_\gamma)$, where $P_\gamma$
+    is the orthogonal projection onto the two-site ground space of
+    $\widetilde A(\gamma)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_wha_integral_normalization,
+        thm:mpo_arbitrary_parent_commutation_adjoint_closed,
+        thm:mpo_arbitrary_tensor_continuity,
+        lem:one_block_injective_of_injective,
+        thm:glm_wha_parent_average,
+        thm:spt_parent_hamiltonian_symmetry,
+        thm:mpo_arbitrary_interior_parent}
+    The star structure of the representation makes the boundary range
+    closed under the adjoint at every length, by
+    Lemma~\ref{thm:glm_wha_integral_normalization}, so
+    Lemma~\ref{thm:mpo_arbitrary_parent_commutation_adjoint_closed}
+    applies. For $0<\gamma<1$ the tensor $\widetilde A(\gamma)$ is
+    one-site injective by Lemma~\ref{thm:mpo_arbitrary_tensor_continuity},
+    hence one-block injective by
+    Lemma~\ref{lem:one_block_injective_of_injective}, and it is compatible
+    with $\widetilde T$ by Lemma~\ref{thm:mpo_arbitrary_mixed_action}.
+    Lemma~\ref{thm:glm_wha_parent_average} gives $\Id-E_2(P_\gamma)=\Id-P_\gamma$,
+    which is the matrix of the canonical parent term by
+    Lemma~\ref{thm:spt_parent_hamiltonian_symmetry}, and this equals
+    $\widetilde h_\gamma$ by Lemma~\ref{thm:mpo_arbitrary_interior_parent}.
+\end{proof}
+
+The weak-Hopf route therefore yields the canonical parent together with
+adjoint closure derived from the star structure; it does not remove the
+closure hypothesis, but moves it into the existence of the representation.
+
 The fusion hypotheses and the equality of $L$ matrices are not needed for
 this commutation. The construction for degenerate ground spaces is the
 subject of Section~\ref{sec:mpo_block_mixed_path}.
