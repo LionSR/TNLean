@@ -77,7 +77,7 @@ noncomputable def ChainHamiltonian.ofNearestNeighborPositive {L q : ℕ}
   term := Function.extend nearestNeighborChainSupport h (fun _ ↦ 0)
   supported := forall_nearestNeighborExtension h
     (fun X M ↦ Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) M X.val)
-    (fun _ ↦ (zero_mem _)) hs
+    (fun X ↦ zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) X.val)) hs
   hermitian := forall_nearestNeighborExtension h (fun _ M ↦ M.IsHermitian)
     (fun _ ↦ isHermitian_zero)
     (fun i ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian)
