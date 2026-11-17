@@ -446,13 +446,29 @@ depth $O(q)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    The common-period reduction gives primitive irreducible left-canonical
-    blocks with nonzero weights. Group their phase-equivalence classes and
-    absorb the phases into the copy weights. Trace invariance under the
-    within-class similarities gives (\ref{eq:ldp_arbitrary_blocked_sectors}).
-    Irreducibility and trace preservation give the faithful stationary
-    matrices. Normality and inequivalence give the strict mixed-transfer
-    bounds.
+    Lemma~\ref{thm:cpsv_canonical_form_representative_after_blocking}
+    gives left-canonical normal blocks $C_{j,k}$ with weights $\lambda_{j,k}$.
+    By Lemma~\ref{thm:cpsv_canonical_form_bnt_refinement}, choose one
+    representative $B_j$ per phase class and invertible gauges $X_{j,k}$ such that
+    \[
+        C_{j,k}^{i}=z_{j,k}X_{j,k}B_j^{i}X_{j,k}^{-1},
+        \qquad |z_{j,k}|=1,\qquad \mu_{j,k}=\lambda_{j,k}z_{j,k}.
+    \]
+    For a word $i_1\cdots i_M$, cancellation of adjacent gauges and cyclicity
+    of the trace give
+    \[
+        \lambda_{j,k}^{M}\operatorname{tr}
+        (C_{j,k}^{i_1}\cdots C_{j,k}^{i_M})
+        =\mu_{j,k}^{M}\operatorname{tr}
+        (X_{j,k}B_j^{i_1}\cdots B_j^{i_M}X_{j,k}^{-1})
+        =\mu_{j,k}^{M}\operatorname{tr}(B_j^{i_1}\cdots B_j^{i_M}).
+    \]
+    Summing over the copies proves (\ref{eq:ldp_arbitrary_blocked_sectors}).
+    The representatives remain left-canonical and normal. Their irreducible
+    trace-preserving transfer maps have faithful stationary density matrices,
+    $\mathcal E_j(\sigma_j)=\sigma_j>0$ and $\operatorname{tr}\sigma_j=1$.
+    Lemma~\ref{thm:ldp_inequivalent_mixed_gap} gives
+    $|z|<1$ for every mixed-transfer eigenvalue between distinct representatives.
 \end{proof}
 
 \begin{lemma}[Measurement preparation from a normal-sector expansion]
@@ -473,11 +489,46 @@ depth $O(q)$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Use the unweighted direct sum of the $B_j$ and normalize the coefficients
-    by $(\sum_j|\beta_j(N)|^2)^{1/2}$. The overlapping-sector error bound is
-    uniform in these amplitudes. A partition with lengths between $q$ and
-    $2q$, where $q$ is of logarithmic size, gives the stated bound. Exact
-    preparation of the whole chain handles accuracy scales exceeding $N$.
+    Use the unweighted direct sum of the $B_j$, of bond dimension
+    $D'=\sum_j D_j$. Nonvanishing of the target implies $\beta(N)\ne0$, so set
+    \[
+        w=\sum_j|\beta_j(N)|^2>0,\qquad
+        \alpha_j=\beta_j(N)/\sqrt w,\qquad \sum_j|\alpha_j|^2=1.
+    \]
+    Choose $0<t<1$ by Lemma~\ref{lem:ldp_common_mixed_gap} and put
+    $r=-\tfrac14\log t>0$. Let $K>0$ be the constant of
+    Lemma~\ref{thm:ldp_overlapping_unequal_blocks_error} at $\gamma=1/4$.
+    If $L_0$ is the injectivity threshold of
+    Lemma~\ref{lem:ldp_overlapping_block_injectivity} and $L_p$ the threshold
+    of Lemma~\ref{thm:ldp_injective_on_measurement}, set
+    \[
+        L_{\min}=L_0+L_p+3D'+1,\quad a=1/r,\quad
+        b'=\max(\log K,0)/r+L_{\min},\quad
+        Q=a\log(N/\varepsilon)+b',\quad q=\lceil Q\rceil.
+    \]
+    The constants $t,K,L_{\min},a,b'$ are independent of $\beta(N)$, $N$, and $\varepsilon$.
+    When $q\leq N$, use $m=\lfloor N/q\rfloor$ blocks, the first $m-1$
+    of length $q$ and the last of length $q+(N\bmod q)<2q$.
+    All blocked maps are injective on the sector bond pairs. The normalized
+    isometric state with amplitudes $\alpha_j$ has overlap error bounded by
+    Lemma~\ref{thm:ldp_overlapping_unequal_blocks_error} as
+    \[
+        1-|\langle\psi,\widehat\phi_N(A)\rangle|
+        \leq Km e^{-rq}\leq KN e^{-rq}\leq\varepsilon.
+    \]
+    The last inequality is Lemma~\ref{lem:ldp_log_threshold_error}, since
+    $rq\geq\log K+\log N-\log\varepsilon$.
+    Lemma~\ref{thm:ldp_injective_on_measurement} prepares this state in
+    depth $2C_pq$. With $c_0=a+b'/\log2$, we have
+    $Q\leq c_0\log(N/\varepsilon)$ and $q<Q+1\leq2Q$,
+    hence $2C_pq\leq4C_pc_0\log(N/\varepsilon)$.
+    If $L_{\min}\leq N<q$, then $N<Q$ and
+    Lemma~\ref{lem:ldp_overlapping_one_block_chain} writes the normalized
+    target as one isometric block. Theorem~\ref{thm:ldp_chain_depth} prepares
+    it exactly in depth $C_eN\leq C_ec_0\log(N/\varepsilon)$.
+    For $N<L_{\min}$, Lemma~\ref{thm:ldp_short_chain_preparation} gives
+    exact preparation in bounded depth $K_s\leq(K_s/\log2)\log(N/\varepsilon)$.
+    Adding these three depth constants yields a uniform logarithmic bound.
 \end{proof}
 
 \begin{lemma}[Arbitrary tensors on grouped sites]
