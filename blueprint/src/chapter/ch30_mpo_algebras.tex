@@ -797,43 +797,12 @@ and~\ref{lem:mpug_permuted_block_l_gauge}.
 % Source anchor: arXiv:2203.12563, lines 698--726 (F1group, pentagongroups,
 %   gdgroup).
 
-\begin{theorem}[No invariant injective state under a nontrivial algebra]%
-    \label{thm:mpoalg_no_symmetric_normal}
-    \notready
-    % Group-like case formalized as thm:mpug_anomaly_obstruction (ch29),
-    %   which carries the Lean tags.
-    \uses{def:mpoalg_fusion_tensors, def:mpoalg_action_tensors,
-        rem:mpoalg_f_symbols, thm:mpug_anomaly_obstruction}
-    Let $(T_a)_{a\in I}$ be a fusion algebra of normal tensors satisfying the
-    standing assumptions of \cite[Section~2]{GarreRubio2023MPOSym}, so that
-    its fusion and action tensors decompose the stacked tensors exactly and
-    its $F$-symbols (Remark~\ref{rem:mpoalg_f_symbols}) are defined. Let $A$
-    be an injective tensor of positive bond dimension forming a symmetric
-    family with a single block and no multiplicity, $M_{a,A}^A=1$, that is,
-    $O_a^{(N)}\ket{V^{(N)}(A)}=\ket{V^{(N)}(A)}$ for all $a\in I$ and
-    $N\geq1$. Then the $F$-symbols are gauge equivalent to $1$. Hence no such
-    tensor exists when the $F$-symbols are not gauge trivial
-    \cite[Section~3.2]{GarreRubio2023MPOSym}; for group-like algebras this
-    goes back to \cite{ChenLiuWen2011CZX}. For group-like algebras, with
-    normal in place of injective and without the exactness assumption, this
-    is Theorem~\ref{thm:mpug_anomaly_obstruction}.
-    % Source anchor: arXiv:2203.12563, lines 607--636 (statement and
-    %   proof); lines 361--391 and 459--490 (exact fusion and action tensors
-    %   of the standing assumptions); line 634 (group case, Chen et al.).
-\end{theorem}
-
-\begin{proof}
-    \uses{thm:mpoalg_action_tensors_exist, thm:mpug_anomaly_obstruction}
-    Since $M_{a,A}^A=1$, the composite action tensor of $T_aT_b\cdot A$
-    through a fusion channel $(c,\mu)$ and the composite of two successive
-    actions reduce onto the same single block, and they agree up to a nonzero
-    scalar $\lambda_{ab}^{c,\mu}$. Inserting these scalars into the coupled
-    pentagon equation for a single block writes the $F$-symbols as the
-    coboundary of $\lambda$ \cite[Section~3.2]{GarreRubio2023MPOSym}. For
-    group-like algebras $\lambda$ is the $L$-symbol, the coupled pentagon
-    equation is (\ref{eq:mpug_l_compatibility}), and this is the proof of
-    Theorem~\ref{thm:mpug_anomaly_obstruction}.
-\end{proof}
+The obstruction of \cite[Section~3.2]{GarreRubio2023MPOSym}, that a single
+injective block without multiplicity forces the $F$-symbols to be gauge
+equivalent to $1$, is Theorem~\ref{thm:glm_single_block_obstruction}; for
+group-like algebras with normal blocks it is
+Theorem~\ref{thm:mpug_anomaly_obstruction}.
+% Source anchor: arXiv:2203.12563, lines 607--636.
 
 %% ---------------------------------------------------------
 \section{Weak Hopf algebras, dualities, and density operators}%
