@@ -172,3 +172,117 @@ of~\cite{Arad2016RigorousRG}.
     (\ref{eq:alvv_two_window_chebyshev_rank}), and
     Lemma~\ref{thm:alvv_two_window_interior_cut_rank} gives the last item.
 \end{proof}
+
+\begin{lemma}[Hard truncation of three bulks]
+    \label{lem:alvv_three_bulk_hard_truncation_spectral_comparison}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_three_bulk_hard_truncation_spectral_comparison}
+    \leanok
+    \uses{lem:five_region_independent_residual,lem:canonical_spectral_span}
+    Let $0\le h_i\le1$ be the nearest-neighbour terms of a chain of $L$ sites
+    of dimension $q$, let $\ell\ge1$, $a+2\ell\le b$, $b+2\ell\le L-1$ and
+    $t\ge0$.
+    \begin{itemize}
+        \item Cut the chain into three bulks and two windows: the window
+              about the left cut holds the $2\ell$ bonds starting at bond $a$,
+              and the window about the right cut those starting at bond $b$.
+        \item Both $H$ and $\tilde H$ are centred at the sum of the five
+              regional ground energies. $H$ is the original Hamiltonian, and
+              $\tilde H$ truncates each bulk at height $t$ above its own ground
+              energy.
+    \end{itemize}
+    Then there are a unit vector that is a ground vector of all five regional
+    Hamiltonians and a ground energy $0\le E_0\le4$ of $H$, with the
+    following properties.
+    \begin{itemize}
+        \item $\tilde H\le H$ and $\|\tilde H\|\le3t+4\ell$.
+        \item $\tilde H$ is the sum of the $2\ell$ two-site terms of each
+              window and of three operators supported on the three bulks,
+              which is the form required by
+              Lemma~\ref{thm:alvv_two_window_chebyshev_projector}.
+    \end{itemize}
+    For every $\eta\ge0$ with $19+\eta\le t$ put
+    $\xi=288e^{11/8}e^{-(t-\eta)/8}$. Let $E_0'$ be the ground energy of
+    $\tilde H$. Then:
+    \begin{itemize}
+        \item every ordered eigenvalue of $\tilde H$ at most $E_0+\eta$ lies
+              below the corresponding eigenvalue of $H$, by at most $\xi$;
+        \item $E_0'\le E_0\le E_0'+\xi$;
+        \item if $\eta>0$, then for every $\delta>0$, with
+              $\eta'=\eta+\xi+2\xi\sqrt{\lceil\eta/(2\xi)\rceil/\delta}$, the
+              span of the eigenvectors of $\tilde H$ with eigenvalue at most
+              $E_0'+\eta'$ is $\delta$-close to that of $H$ with eigenvalue at
+              most $E_0+\eta$; and the span for $H$ at $E_0+\eta'$ is
+              $\delta$-close to that for $\tilde H$ at $E_0'+\eta$.
+    \end{itemize}
+    This is the spectral part of Corollary~4.6 of~\cite{Arad2016RigorousRG},
+    with explicit constants.
+    \begin{itemize}
+        \item The cutoff $19+\eta\le t$ replaces the asymptotic conditions,
+              and some cutoff is needed: with $t>\eta$ alone the estimate on
+              the truncated side fails
+              \cite{gap:alvv16_hard_truncation_windows}.
+        \item The closeness window uses the ceiling count of the same note.
+    \end{itemize}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:five_region_independent_residual,lem:canonical_spectral_span}
+    \begin{itemize}
+        \item Truncating a bulk lowers it, so $\tilde H\le H$.
+        \item The three-bulk residual bounds the restricted error by $\xi$ on
+              the low spaces of $H$ and of $\tilde H$. It applies to any
+              eigenbasis of either operator.
+        \item The ground vector identifies $E_0$ with the last ordered
+              eigenvalue of $H$.
+        \item From $\tilde H\le H$ and the error on the low space of
+              $\tilde H$: the eigenvalue comparison and the ground-energy
+              shift.
+        \item From both errors and the relative spectral-window comparison:
+              the closeness statements.
+        \item Grouping the bonds of each window with the two crossing bonds
+              at its ends gives the two-window form.
+    \end{itemize}
+\end{proof}
+
+\begin{lemma}[A good projector after hard truncation]
+    \label{cor:alvv_good_projector_hard_truncation}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_two_window_chebyshev_projector_degree_sq}
+    \leanok
+    \uses{thm:alvv_two_window_chebyshev_projector,
+        lem:alvv_three_bulk_hard_truncation_spectral_comparison}
+    Let $H$ be a Hermitian Hamiltonian of the two-window form of
+    Lemma~\ref{thm:alvv_two_window_chebyshev_projector}, with $q\ge1$,
+    $\|H\|\le u$ and $\eta_0<\eta_1\le u$. There is a real polynomial $p$ of
+    degree $\ell^2$ with $p(\eta_0)=1$ such that $K=p(H)$:
+    \begin{itemize}
+        \item satisfies the first two items of
+              Lemma~\ref{thm:alvv_two_window_chebyshev_projector} with
+              $k=\ell^2$, that is with
+              $\Delta=4\exp\bigl(-4\ell^2\sqrt{(\eta_1-\eta_0)/(u-\eta_0)}\bigr)$;
+        \item has operator Schmidt rank at most
+              $(q\ell^2)^{17(\ell+\lfloor\ell/2\rfloor)}\le(q\ell)^{68\ell}$ across
+              both middle cuts.
+    \end{itemize}
+    The truncated Hamiltonian of
+    Lemma~\ref{lem:alvv_three_bulk_hard_truncation_spectral_comparison} has
+    this form with $u=3t+4\ell$. For it, therefore,
+    \[
+        D=(q\ell)^{O(\ell)}
+        \quad\text{and}\quad
+        \Delta=e^{-\Omega(\ell^2\sqrt{\eta_1-\eta_0}/\sqrt{t+\ell})}
+    \]
+    whenever $\eta_0\ge0$. Together with that lemma, this is Corollary~4.6
+    of~\cite{Arad2016RigorousRG}, with explicit constants. The spectral
+    conditions, the slope near $\eta_0$ and the word count are those of
+    Lemma~\ref{thm:alvv_two_window_chebyshev_projector}
+    \cite{gap:alvv16_spectral_projector_boundary,
+        gap:alvv16_chebyshev_filter_positivity,
+        gap:alvv16_chebyshev_near_ground_slope,
+        gap:aklv13_interpolation_and_word_count}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:alvv_two_window_chebyshev_projector}
+    Every eigenvalue of $H$ is at most $\|H\|\le u$. Apply
+    Lemma~\ref{thm:alvv_two_window_chebyshev_projector} with $k=\ell^2$.
+    Since $q\ell^2\le(q\ell)^2$ and $\lfloor\ell^2/(2\ell)\rfloor\le\ell$, the
+    rank bound is at most $((q\ell)^2)^{34\ell}$.
+\end{proof}
