@@ -46,7 +46,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Matrix
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport card_le_diamond_of_walks
+  latticeL1Distance_le_one_of_planeDomainGraph_adj planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -86,7 +87,7 @@ theorem card_crossingTerms_le_edgeBoundary (Λ : Finset (ℤ × ℤ)) (R : ℕ)
       Finset.univ.filter fun v ↦ ∃ p : (planeDomainGraph Λ).Walk x v, p.length ≤ R
     have hball : ball.card ≤ 1 + 2 * R * (R + 1) :=
       card_le_diamond_of_walks Subtype.val ball Subtype.val_injective
-        (fun _ _ h ↦ latticeL1Distance_le_one_of_adj h) x R
+        (fun _ _ ↦ latticeL1Distance_le_one_of_planeDomainGraph_adj) x R
         fun v hv ↦ (Finset.mem_filter.mp hv).2
     have hsub : near s(x, y) ⊆
         ball.biUnion fun v ↦ Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1 := by

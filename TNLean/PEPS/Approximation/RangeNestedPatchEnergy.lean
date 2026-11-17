@@ -102,8 +102,8 @@ theorem sum_crossingTerms_rangeNestedPatch_le {Λ : Finset (ℤ × ℤ)} (q R : 
       Finset.card_lt_card ⟨Finset.inter_subset_left, fun h ↦ hwD
         (Finset.mem_inter.mp (h hwX)).2⟩
     have hdiam := AreaLaw.card_support_le_diamond (G := planeDomainGraph Λ) Subtype.val
-      Subtype.val_injective (fun _ _ h ↦ AreaLaw.latticeL1Distance_le_one_of_adj h) X.1 R
-      X.2.2
+      Subtype.val_injective (fun _ _ ↦ ManyBody.latticeL1Distance_le_one_of_planeDomainGraph_adj)
+      X.1 R X.2.2
     have hle : (X.1 ∩ D).card ≤ 2 * R * (R + 1) := by omega
     rw [hcard, Nat.cast_pow]
     rcases Nat.eq_zero_or_pos q with hq | hq

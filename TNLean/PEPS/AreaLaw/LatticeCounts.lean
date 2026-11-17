@@ -40,7 +40,8 @@ disconnected components included, from the ambient diamond count `eq:ball-count`
 open scoped Matrix.Norms.L2Operator
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport card_le_diamond_of_edist_le
+  latticeL1Distance_le_one_of_planeDomainGraph_adj planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -54,7 +55,7 @@ theorem card_graphBall_domainGraph_le (x : Site Λ) (d : ℕ) :
     ((ManyBody.graphBall (planeDomainGraph Λ) x d).card : ℝ) ≤ 2 * ((d : ℝ) + 1) ^ 2 := by
   have h := card_le_diamond_of_edist_le (G := planeDomainGraph Λ) Subtype.val
     (ManyBody.graphBall (planeDomainGraph Λ) x d) Subtype.val_injective
-    (fun _ _ => latticeL1Distance_le_one_of_domainGraph_adj) x d (fun y hy =>
+    (fun _ _ => latticeL1Distance_le_one_of_planeDomainGraph_adj) x d (fun y hy =>
         ManyBody.mem_graphBall.mp hy)
   have h' : ((ManyBody.graphBall (planeDomainGraph Λ) x d).card : ℝ) ≤ 1 + 2 * d * (d + 1) := by
     exact_mod_cast h

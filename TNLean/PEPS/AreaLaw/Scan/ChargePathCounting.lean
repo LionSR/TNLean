@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.FiniteDomain
-import TNLean.PEPS.AreaLaw.GraphLatticeDiamond
+import QICLean.ManyBody.Sites.Lattice.Diamond
 import Mathlib.Data.List.Chain
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Data.Finset.Union
@@ -24,7 +24,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
-open ManyBody (planeDomainGraph)
+open ManyBody (card_le_diamond_of_edist_le latticeL1Distance planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 

@@ -52,7 +52,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open scoped Matrix.Norms.L2Operator Nat
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport IsAdmissibleSupport exists_walk_length_le_iff_edist_le
+open ManyBody (AdmissibleSupport IsAdmissibleSupport card_le_diamond_of_edist_le
+  exists_walk_length_le_iff_edist_le latticeL1Distance_le_one_of_planeDomainGraph_adj
   planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw
@@ -60,14 +61,6 @@ namespace TNLean.PEPS.AreaLaw
 open QuantumCircuit
 
 /-! ### Geometry of the induced domain graph -/
-
-/-- Adjacent sites of the induced domain graph have ambient lattice displacement one.
-Source: area law, `01-preliminaries.tex`, lines 81–84. -/
-theorem latticeL1Distance_le_one_of_domainGraph_adj {Λ : Finset (ℤ × ℤ)} {x y : Site Λ}
-    (hxy : (planeDomainGraph Λ).Adj x y) : latticeL1Distance x.1 y.1 ≤ 1 := by
-  simp only [planeDomainGraph] at hxy
-  unfold latticeL1Distance
-  rcases hxy with ⟨h1, h2 | h2⟩ | ⟨h1, h2 | h2⟩ <;> omega
 
 /-- The sites at induced-graph distance exactly `d` from a site number at most
 `2 (d + 1)²`. Source: area law, `03-quasilocal.tex`, lines 124–126, using the diamond
@@ -77,7 +70,7 @@ theorem card_domainGraph_sphere_le (Λ : Finset (ℤ × ℤ)) (x : Site Λ) (d :
       2 * ((d : ℝ) + 1) ^ 2 := by
   have hcard := card_le_diamond_of_edist_le Subtype.val
     (Finset.univ.filter fun y => (planeDomainGraph Λ).edist x y = d) Subtype.val_injective
-    (fun _ _ => latticeL1Distance_le_one_of_domainGraph_adj) x d
+    (fun _ _ => latticeL1Distance_le_one_of_planeDomainGraph_adj) x d
     (fun y hy => (Finset.mem_filter.mp hy).2.le)
   have hreal : ((Finset.univ.filter fun y => (planeDomainGraph Λ).edist x y = d).card : ℝ) ≤
       ((1 + 2 * d * (d + 1) : ℕ) : ℝ) := by exact_mod_cast hcard
@@ -85,26 +78,6 @@ theorem card_domainGraph_sphere_le (Λ : Finset (ℤ × ℤ)) (x : Site Λ) (d :
   nlinarith
 
 end TNLean.PEPS.AreaLaw
-
-namespace ManyBody.IsAdmissibleSupport
-
-open TNLean.PEPS.AreaLaw QuantumCircuit
-
-variable {Λ : Finset (ℤ × ℤ)} {R : ℕ} {X : Finset (Site Λ)}
-
-/-- An admissible support has induced-graph diameter at most `R`.
-Source: area law, `eq:hamiltonian` and `03-quasilocal.tex`, line 16. -/
-theorem edist_le (hX : IsAdmissibleSupport Λ R X) :
-    ∀ x ∈ X, ∀ z ∈ X, (planeDomainGraph Λ).edist x z ≤ R := fun x hx z hz =>
-  (exists_walk_length_le_iff_edist_le Λ R x z).mp (hX.2 x hx z hz)
-
-/-- An admissible support has at most `v_R = 1 + 2R(R + 1)` sites.
-Source: area law, `eq:quasilocal-budget` (`03-quasilocal.tex`, lines 31–39). -/
-theorem card_le (hX : IsAdmissibleSupport Λ R X) : X.card ≤ 1 + 2 * R * (R + 1) :=
-  card_support_le_diamond Subtype.val Subtype.val_injective
-    (fun _ _ => latticeL1Distance_le_one_of_domainGraph_adj) X R hX.2
-
-end ManyBody.IsAdmissibleSupport
 
 /-! ### The interaction budget -/
 
@@ -130,7 +103,7 @@ theorem sum_norm_term_containing_le (h : LocalHamiltonian Λ q R J) (hJ : 0 ≤ 
       (2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) * J := by
   classical
   have hcard := card_supports_containing_le_diamond Subtype.val Subtype.val_injective
-    (fun _ _ => latticeL1Distance_le_one_of_domainGraph_adj)
+    (fun _ _ => latticeL1Distance_le_one_of_planeDomainGraph_adj)
     ((Finset.univ : Finset (AdmissibleSupport Λ R)).map (Function.Embedding.subtype _)) R
     (fun Y hY => by
       obtain ⟨Z, -, rfl⟩ := Finset.mem_map.mp hY

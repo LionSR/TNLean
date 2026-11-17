@@ -105,13 +105,6 @@ theorem subset_or_disjoint_of_edgeBoundary_eq_empty (hA : edgeBoundary Λ A = �
     obtain ⟨w, -⟩ := hwalk x₀ hx₀ y hy
     exact h ((mem_iff_of_walk_of_edgeBoundary_eq_empty hA w).mpr hyA)
 
-/-- **Every admissible support lies in one connected component.** -/
-theorem _root_.ManyBody.IsAdmissibleSupport.reachable {R : ℕ} {X : Finset (Site Λ)}
-    (hX : IsAdmissibleSupport Λ R X) {x y : Site Λ} (hx : x ∈ X) (hy : y ∈ X) :
-    (planeDomainGraph Λ).Reachable x y :=
-  let ⟨w, _⟩ := hX.2 x hx y hy
-  ⟨w⟩
-
 open scoped Classical in
 /-- **A union of connected components has no crossing edge.** For a set `s` of
 components of the induced domain graph, the set of sites in components of `s`
