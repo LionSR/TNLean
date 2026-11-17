@@ -368,12 +368,7 @@ Then there is one real polynomial `p` of degree `ℓ²` with `p(η₀) = 1` such
 * has operator Schmidt rank across both middle cuts at most `(qℓ²)^{17(ℓ + ⌊ℓ²/(2ℓ)⌋)}`, and
   hence at most `(qℓ)^{68ℓ}`. This is the bound `D = (dℓ)^{O(ℓ)}`.
 
-**Local fix (closed spectral conditions, positivity, slope, word count):** inherited from
-`exists_two_window_chebyshev_spectral_projector`; see
-https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf,
-https://sirui-lu.com/QICLean/paper-gaps/alvv16_chebyshev_filter_positivity.pdf,
-https://sirui-lu.com/QICLean/paper-gaps/alvv16_chebyshev_near_ground_slope.pdf and
-https://sirui-lu.com/QICLean/paper-gaps/aklv13_interpolation_and_word_count.pdf. -/
+The spectral conditions, the slope and the word count are those of the module's local fix. -/
 theorem exists_two_window_chebyshev_projector_degree_sq
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
