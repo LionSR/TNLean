@@ -206,10 +206,7 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
       simp only [hT, hθ, hs, hξ', hm, hℓn, hk] at hν hcard ⊢
       gcongr
       all_goals first
-        | exact hcard
-        | exact hν
         | exact chainLRPrefactor_nonneg R J
-        | positivity
         | exact mul_nonneg (chainLRPrefactor_nonneg R J) (by positivity)
     · exact mul_le_mul_of_nonneg_right (add_le_add (le_max_left _ _) le_rfl) (exp_pos _).le
 
