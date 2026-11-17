@@ -51,17 +51,16 @@ original prefix from a viable witness.
     \lean{QuantumCircuit.siteBasisPenalty_posSemidef,
         QuantumCircuit.siteBasisPenalty_le_one,
         QuantumCircuit.productBasisPenalty_eq_diagonal,
-        QuantumCircuit.productBasisPenalty_gap,
-        QuantumCircuit.productBasisPenalty_mulVec}
+        QuantumCircuit.isHermitian_productBasisPenalty,
+        QuantumCircuit.isGapped_productBasisPenalty,
+        QuantumCircuit.groundSpace_productBasisPenalty}
     \leanok
     \uses{def:lvv_product_basis_penalty}
     Each $P_v$ is a positive contraction. In the full configuration basis,
     $A_b$ is diagonal with entry $\#\{v:x_v\ne b_v\}$ at configuration $x$.
-    Consequently
-    \begin{align*}
-        A_b|b\rangle & =0, & A_b & \ge I-|b\rangle\langle b|.
-    \end{align*}
-    These assertions also hold for the empty set of sites.
+    Consequently $A_b$ is gapped at energy zero with gap one, and its
+    zero-energy space is the line through $|b\rangle$. These assertions also
+    hold for the empty set of sites.
 \end{lemma}
 \begin{proof}
     \leanok
@@ -222,39 +221,31 @@ original prefix from a viable witness.
     using the prefix-coordinate identification.
 \end{definition}
 
-\begin{lemma}[A projector gap for the actual padded chain]
+\begin{lemma}[A gap for the actual padded chain]
     \label{thm:lvv_padding_ground_gap}
     \lean{TNLean.MPS.AreaLaw.norm_paddedGroundVector,
         TNLean.MPS.AreaLaw.isGapped_paddedInteraction}
     \leanok
     \uses{def:lvv_padded_ground_vector,thm:lvv_padding_tensor_coordinates,
         thm:lvv_product_basis_penalty,thm:lvv_right_basis_extension}
-    Suppose $\Gamma$ is a unit vector, $H\Gamma=E\Gamma$, and
-    $H-EI\ge\Delta(I-|\Gamma\rangle\langle\Gamma|)$ for $\Delta>0$.
+    Suppose $\Gamma$ is a unit vector and $H$ is gapped at $E$ with gap
+    $\Delta>0$, with ground space the line through $\Gamma$.
     Set $g=\min\{\Delta,1\}$.
-    The actual padded interaction has unit ground vector
-    $\widehat\Gamma$ at energy $E$, with
-    \begin{align*}
-        \widehat H-EI\ge g(I-|\widehat\Gamma\rangle
-        \langle\widehat\Gamma|).
-    \end{align*}
-    This is a lower bound for the projector gap.
+    The actual padded interaction $\widehat H$ is gapped at $E$ with gap $g$,
+    and its ground space is the line through the unit vector $\widehat\Gamma$.
 \end{lemma}
 \begin{proof}
     \leanok
     In the coordinates of Lemma~\ref{thm:lvv_padding_tensor_coordinates},
     $\widehat H=H\otimes I+I\otimes A_b$ and
-    $\widehat\Gamma=\Gamma\otimes|b\rangle$.
-    Both factors have projector gap at least $g$.
-    Write $P=|\Gamma\rangle\langle\Gamma|$ and
-    $Q=|b\rangle\langle b|$. The defect is the sum of the positive matrices
-    \begin{align*}
-         & (H-EI-g(I-P))\otimes I
-        +I\otimes(A_b-g(I-Q))\notag         \\
-         & \hspace{4em}+g(I-P)\otimes(I-Q).
-    \end{align*}
-    The eigen-equation follows by applying the two factors separately.
-    The coordinate identifications preserve positivity and normalization.
+    $\widehat\Gamma=\Gamma\otimes|b\rangle$. By
+    Lemma~\ref{thm:lvv_product_basis_penalty}, $A_b$ is gapped at zero with
+    gap one and ground space the line through $|b\rangle$. The eigenvalues of
+    $\widehat H$ are the sums $\lambda+\mu$ of eigenvalues of $H$ and $A_b$.
+    Such a sum equals $E$ only when $\lambda=E$ and $\mu=0$, and is otherwise
+    at least $E+g$; the eigenspace at $E$ is the tensor product of the two
+    ground spaces, the line through $\Gamma\otimes|b\rangle$. The coordinate
+    identifications preserve the spectrum, the eigenspaces and normalization.
 \end{proof}
 
 \begin{lemma}[A phase-aligned prefix MPS]

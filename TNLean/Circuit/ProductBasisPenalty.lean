@@ -6,12 +6,13 @@ Authors: TNLean contributors
 import TNLean.Circuit.Gates.Controlled
 import TNLean.Circuit.SiteEmbeddingOrder
 import TNLean.Circuit.EntropySupport
+import QICLean.ManyBody.Hamiltonian.KroneckerSum
 
 /-!
 # On-site penalties selecting a prescribed product basis vector
 
-The sum of the actual penalties on all sites has the specified product basis
-vector at energy zero and projector gap at least one. The construction also
+The sum of the actual penalties on all sites is gapped at energy zero with gap one, and its
+zero-energy space is the line through the specified product basis vector. The construction also
 covers the empty site family, where its orthogonal complement is zero.
 
 Source: algebraic product-ancilla padding of the LVV13 successive construction,
@@ -69,54 +70,67 @@ theorem productBasisPenalty_eq_diagonal (b : ι → Fin q) :
     simp only [Matrix.sum_apply, diagonal_apply_eq]
   · simp [Matrix.sum_apply, hxy]
 
-omit [DecidableEq ι] in
-private theorem productBasis_outer (b : ι → Fin q) :
-    vecMulVec (Pi.single b (1 : ℂ)) (star (Pi.single b (1 : ℂ))) =
-      diagonal (fun x ↦ if x = b then (1 : ℂ) else 0) := by
-  classical
-  ext x y
-  by_cases hx : x = b
-  · subst x
-    by_cases hy : y = b
-    · subst y
-      simp [vecMulVec_apply]
-    · have hby : b ≠ y := Ne.symm hy
-      simp [vecMulVec_apply, hy, hby]
-  · simp [vecMulVec_apply, hx, Matrix.diagonal_apply]
-
-/-- The sum of the actual on-site penalties has projector gap at least one
-above its specified product basis vector, including the empty-site case. -/
-theorem productBasisPenalty_gap (b : ι → Fin q) :
-    (productBasisPenalty b -
-      (1 - vecMulVec (Pi.single b (1 : ℂ)) (star (Pi.single b (1 : ℂ))))).PosSemidef := by
-  classical
-  rw [productBasisPenalty_eq_diagonal, productBasis_outer,
-    ← Matrix.diagonal_one, Matrix.diagonal_sub, Matrix.diagonal_sub]
-  apply PosSemidef.diagonal
-  intro x
-  change (0 : ℂ) ≤ (∑ v, if x v = b v then (0 : ℂ) else 1) -
-    (1 - if x = b then 1 else 0)
-  by_cases hx : x = b
-  · subst x
-    simp
-  · obtain ⟨v, hv⟩ : ∃ v, x v ≠ b v := by
-      by_contra h
-      push Not at h
-      exact hx (funext h)
-    have hcount : (1 : ℂ) ≤ ∑ w, if x w = b w then (0 : ℂ) else 1 := by
-      have h := Finset.single_le_sum
-        (fun w _ ↦ (show (0 : ℂ) ≤ if x w = b w then 0 else 1 by
-          split_ifs <;> norm_num)) (Finset.mem_univ v)
-      simpa only [hv, ite_false] using h
-    simp only [hx, ite_false, sub_zero]
-    exact sub_nonneg.mpr hcount
-
-/-- The prescribed product basis vector is an actual zero-energy vector. -/
-theorem productBasisPenalty_mulVec (b : ι → Fin q) :
-    productBasisPenalty b *ᵥ Pi.single b (1 : ℂ) = 0 := by
-  classical
+/-- The product penalty as the diagonal matrix of the real count of sites differing from the
+target. -/
+private theorem productBasisPenalty_eq_diagonal_real (b : ι → Fin q) :
+    productBasisPenalty b =
+      diagonal fun x ↦ ((∑ v, if x v = b v then (0 : ℝ) else 1 : ℝ) : ℂ) := by
   rw [productBasisPenalty_eq_diagonal]
-  ext x
-  by_cases hx : x = b <;> simp [Matrix.mulVec_diagonal, hx]
+  congr 1
+  funext x
+  rw [Complex.ofReal_sum]
+  exact Finset.sum_congr rfl fun v _ ↦ by split_ifs <;> simp
+
+omit [DecidableEq ι] in
+/-- A configuration other than the target differs from it at some site. -/
+private theorem one_le_count_of_ne {b x : ι → Fin q} (hx : x ≠ b) :
+    1 ≤ ∑ v, if x v = b v then (0 : ℝ) else 1 := by
+  obtain ⟨v, hv⟩ : ∃ v, x v ≠ b v := by
+    by_contra h
+    push Not at h
+    exact hx (funext h)
+  have h := Finset.single_le_sum
+    (fun w _ ↦ (show (0 : ℝ) ≤ if x w = b w then 0 else 1 by split_ifs <;> norm_num))
+    (Finset.mem_univ v)
+  simpa only [hv, ite_false] using h
+
+/-- The sum of the on-site penalties is Hermitian. -/
+theorem isHermitian_productBasisPenalty (b : ι → Fin q) : (productBasisPenalty b).IsHermitian := by
+  rw [productBasisPenalty_eq_diagonal_real]
+  exact isHermitian_diagonal_of_self_adjoint _ (funext fun x ↦ Complex.conj_ofReal _)
+
+/-- The sum of the on-site penalties is gapped at energy zero with gap one, including the
+empty-site case. -/
+theorem isGapped_productBasisPenalty (b : ι → Fin q) :
+    ManyBody.IsGapped (productBasisPenalty b) 0 1 := by
+  rw [productBasisPenalty_eq_diagonal_real, ManyBody.isGapped_diagonal_iff]
+  refine ⟨⟨b, by simp⟩, fun x ↦ ?_⟩
+  by_cases hx : x = b
+  · exact Or.inl (by simp [hx])
+  · exact Or.inr (by simpa only [zero_add] using one_le_count_of_ne hx)
+
+/-- The zero-energy space of the sum of the on-site penalties is the line through the
+prescribed product basis vector. -/
+theorem groundSpace_productBasisPenalty (b : ι → Fin q) :
+    ManyBody.groundSpace (productBasisPenalty b) 0 =
+      Submodule.span ℂ {WithLp.toLp 2 (Pi.single b (1 : ℂ))} := by
+  ext ψ
+  rw [productBasisPenalty_eq_diagonal_real, ManyBody.mem_groundSpace_diagonal_iff,
+    Submodule.mem_span_singleton]
+  constructor
+  · intro h
+    refine ⟨ψ b, ?_⟩
+    ext x
+    by_cases hx : x = b
+    · subst hx
+      simp
+    · have hne : ((∑ v, if x v = b v then (0 : ℝ) else 1 : ℝ) : ℂ) ≠ ((0 : ℝ) : ℂ) :=
+        Complex.ofReal_injective.ne (one_pos.trans_le (one_le_count_of_ne hx)).ne'
+      simp [hx, h x hne]
+  · rintro ⟨c, rfl⟩ x hx
+    have hxb : x ≠ b := by
+      rintro rfl
+      exact hx (by simp)
+    simp [hxb]
 
 end QuantumCircuit
