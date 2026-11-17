@@ -357,9 +357,11 @@
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:mpdo_commuting_bond_positive_eta_decomposition, thm:mpdo_eta_pair_bond_cyclic_product_transport}
+    \uses{thm:mpdo_commuting_bond_positive_eta_decomposition,
+        thm:mpdo_eta_pair_bond_cyclic_product_transport, lem:mpdo_tensor_power_laws}
     Choosing the unitary $U$ and the neighboring operators $\eta_{q,h}$ from
-    the commuting-bond positive $\eta$-decomposition, conjugation by
+    the commuting-bond positive $\eta$-decomposition, the identities of
+    Lemma~\ref{lem:mpdo_tensor_power_laws} show that conjugation by
     $(U^*)^{\otimes N}$ carries the product of the bond translates to the
     product of the conjugated two-site bonds, which then expands into the
     displayed direct sum. Applying both transformations to

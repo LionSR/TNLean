@@ -68,3 +68,18 @@ for the existing focused and strict CI checks on this repair head.
 
 Full exact-head CI and fresh proof and blueprint reviews remain merge gates.
 The earlier temporary-tree checks do not establish those gates.
+
+## Blueprint review follow-up, 2026-11-17
+
+The three review findings on `ef188899` concern dependencies on tensor powers
+and their adjoint law. Each declaration must keep one blueprint owner: adding
+its `\lean{}` tag at every consumer recreates the duplicate-tag failure
+previously fixed in this PR. `Matrix.tensorPower` remains on
+`def:mpdo_sitewise_physical_matrix`. The generic product, adjoint and identity
+laws now share the supporting entry `lem:mpdo_tensor_power_laws`, without
+the unrelated spectral assumptions of the former shared-estimates entry.
+
+The gate-sufficiency and cyclic neighboring-operator proofs cite that lemma
+through `\uses` and mathematical references. The non-normal pair-state
+definition cites the tensor-power definition. The shared overlap estimates
+also depend on the generic laws and retain all their mathematical statements. No Lean declaration, theorem statement or proof is changed.
