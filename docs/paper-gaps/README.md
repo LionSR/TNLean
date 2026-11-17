@@ -839,13 +839,19 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   invariance, derives integrality of the action coefficients from it, and
   formalizes the single-block obstruction only in its fusion-ring form, not
   the cohomological form of the source.
-- `glm23_mixed_path_parent_commutation.tex` (scope restriction, open) records
+- `glm23_mixed_path_parent_commutation.tex` (false source claim, open) records
   that Section 5 takes the canonical parent along the mixed path without
   showing that it commutes with the common operators, gives an explicit
   non-unitary involutive on-site symmetry with every action, fusion and
   equal-L-matrix hypothesis satisfied for which the canonical parent does not
-  commute, and formalizes commutation along the closed interval under adjoint
-  closure of the two-site boundary range.
+  commute, and a second example with `Z₂` acting by one unitary on-site
+  representation on two different injective endpoint tensors, one in a gauge
+  whose action gauge is not proportional to a Hermitian matrix, for which the
+  two-site boundary range of the common operator is not closed under the
+  adjoint and the canonical parent does not commute either (checked by
+  `scripts/check_glm23_unitary_mixed_adjoint_closure.py`); it formalizes
+  commutation along the closed interval under adjoint closure of the two-site
+  boundary range.
 - `glm23_block_injective_mixed_path.tex` (scope restriction, open) records
   that the block-injective interpolation of Section 5 uses no commutation of
   the path Hamiltonians, so its exact action and fusion are formalized without
