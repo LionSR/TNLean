@@ -110,7 +110,8 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
 
 \begin{lemma}[A witness tree with a target on every interval]
     \label{lem:sampled_interval_witness_tree_targets}
-    \lean{TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree_of_targets}
+    \lean{TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree_of_targets_power,
+        TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree_of_targets}
     \leanok
     \uses{thm:sampled_interval_witness_tree,lem:balanced_interval_invariant_midpoint}
     The conclusion of Lemma~\ref{thm:sampled_interval_witness_tree} holds
@@ -118,7 +119,11 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     node events are required only at cuts satisfying a prescribed condition
     that holds at the midpoint. Child spaces are then viable for the targets
     of the child intervals, and every recursive space is viable for the
-    target of its own interval.
+    target of its own interval. More generally, any word length $k$ and node
+    budget $M$ with $M^2\le D^{12}s^6$ and $D^{2k}s\le M$ may replace
+    $k=\lceil\log_D(D^2s)\rceil$ and $M=D^6s^3$; with a single target and no
+    condition on the cuts this is the corresponding statement for one global
+    target.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:balanced_interval_invariant_midpoint}
