@@ -28,7 +28,7 @@ spectral gap*, Theorem 1.1 and Corollary 1.2. Source revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open ManyBody (SquareLatticeSiteOrEdge squareLatticeGraph squareLatticeSiteOrEdgeSupport)
+open ManyBody (SquareLatticeSiteOrEdge squareLatticeSiteOrEdgeSupport)
 
 open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
@@ -38,53 +38,6 @@ noncomputable section
 open TNLean.Lattice
 
 namespace TNLean.PEPS.Approximation
-
-private theorem squareLatticeSiteOrEdgeSupport_injective (L : ℕ) :
-    Function.Injective (squareLatticeSiteOrEdgeSupport (width := L) (height := L)) := by
-  intro i j hij
-  unfold squareLatticeSiteOrEdgeSupport at hij
-  cases i with
-  | inl v =>
-    cases j with
-    | inl w =>
-      exact congrArg Sum.inl (Finset.singleton_inj.mp hij)
-    | inr e =>
-      dsimp only at hij
-      have h₁ : e.val.1 = v := by
-        have := hij.symm ▸ (Finset.mem_insert_self e.val.1 {e.val.2})
-        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_singleton] using this
-      have h₂ : e.val.2 = v := by
-        have := hij.symm ▸ (Finset.mem_insert_of_mem (Finset.mem_singleton_self e.val.2))
-        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_singleton] using this
-      exact False.elim ((squareLatticeGraph L L).ne_of_adj e.property.2 (h₁.trans h₂.symm))
-  | inr e =>
-    cases j with
-    | inl v =>
-      dsimp only at hij
-      have h₁ : e.val.1 = v := by
-        have := hij ▸ (Finset.mem_insert_self e.val.1 {e.val.2})
-        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_singleton] using this
-      have h₂ : e.val.2 = v := by
-        have := hij ▸ (Finset.mem_insert_of_mem (Finset.mem_singleton_self e.val.2))
-        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_singleton] using this
-      exact False.elim ((squareLatticeGraph L L).ne_of_adj e.property.2 (h₁.trans h₂.symm))
-    | inr f =>
-      dsimp only at hij
-      have h₁ : e.val.1 = f.val.1 ∨ e.val.1 = f.val.2 := by
-        have := hij ▸ (Finset.mem_insert_self e.val.1 {e.val.2})
-        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_insert,
-            Finset.mem_singleton] using this
-      have h₂ : e.val.2 = f.val.1 ∨ e.val.2 = f.val.2 := by
-        have := hij ▸ (Finset.mem_insert_of_mem (Finset.mem_singleton_self e.val.2))
-        simpa only [squareLatticeSiteOrEdgeSupport, Finset.mem_insert,
-            Finset.mem_singleton] using this
-      rcases h₁ with h₁ | h₁ <;> rcases h₂ with h₂ | h₂
-      · exact False.elim ((squareLatticeGraph L L).ne_of_adj e.property.2 (h₁.trans h₂.symm))
-      · exact congrArg Sum.inr (Subtype.ext (Prod.ext h₁ h₂))
-      · exact congrArg Sum.inr ((ManyBody.Edge.ofAdj_eq_of_endpoints e.property.2 e
-          (Or.inl ⟨rfl, rfl⟩)).symm.trans
-            (ManyBody.Edge.ofAdj_eq_of_endpoints e.property.2 f (Or.inr ⟨h₁, h₂⟩)))
-      · exact False.elim ((squareLatticeGraph L L).ne_of_adj e.property.2 (h₁.trans h₂.symm))
 
 /-- Each original site or forward edge determines its actual admissible
 range-one support in the integer rectangle. Source: area-law Corollary 1.2
@@ -108,7 +61,7 @@ Source: polynomial-PEPS `eq:model`, one term per site and nearest-neighbor edge.
 theorem squareAreaLawSupport_injective (L : ℕ) :
     Function.Injective (squareAreaLawSupport L) := by
   intro i j hij
-  apply squareLatticeSiteOrEdgeSupport_injective L
+  apply AreaLaw.squareLatticeSiteOrEdgeSupport_injective L L
   exact Finset.image_injective (AreaLaw.rectangleSiteEquiv L L).injective
     (congrArg Subtype.val hij)
 
