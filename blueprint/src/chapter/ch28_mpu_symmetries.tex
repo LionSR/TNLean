@@ -2947,18 +2947,33 @@
 
 \begin{lemma}[Conjugation class and the MPS sign]
     \label{prop:mps-class-eq-mpu-class-for-conjugation}
-    \notready
+    \lean{MPOTensor.equivalentUnderSymmetry_conjugation_iff_mps_sign}
+    \leanok
     \discussion{5714}
-    \uses{lem:mpu_mps_sign_conjugation_case, cor:equiv-under-conjugation}
+    % **Local fix (missing argument):** uses the "only if" direction of
+    % Lemma cor:equiv-under-conjugation. Documented in
+    % docs/paper-gaps/mpu_symmetry_path_criterion_blocking.tex.
+    \uses{lem:mpu_mps_sign_conjugation_case, cor:equiv-under-conjugation,
+        cor:all-equivalent-under-conjugation}
     For a conjugation-invariant MPU, the MPS sign
     $G\overline G=\pm\Id$ agrees with Case I and Case II, respectively, of
     Lemma~\ref{corconj}, that is, with the two possible phases under
-    equivalence. The correspondence of the sign with the two cases is
-    Lemma~\ref{lem:mpu_mps_sign_conjugation_case}; the identification of the
-    two cases with the two phases is Lemma~\ref{cor:equiv-under-conjugation}.
-    This is \cite[Proposition~VI.12]{Cirac2017MPU}.
+    equivalence: two simple conjugation-invariant tensors in canonical form II
+    on the same physical dimension, whose standard forms have the same ranks,
+    are equivalent under conjugation symmetry if and only if their signs
+    $G\overline G$ agree. This is \cite[Proposition~VI.12]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 1791--1805.
 \end{lemma}
+
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:mpu_mps_sign_conjugation_case}, Case I holds exactly when
+    $G\overline G=\Id$ and Case II exactly when $G\overline G=-\Id$. If both
+    ranks are even, Lemma~\ref{cor:equiv-under-conjugation} identifies the
+    phases with the cases. If one rank is odd, only Case I occurs, so both
+    signs are $\Id$, and all such MPUs are equivalent by
+    Lemma~\ref{cor:all-equivalent-under-conjugation}.
+\end{proof}
 
 \begin{lemma}[The double layer of a simple MPU squares to its fixed pair]
     \label{lem:mpu_double_layer_square_fixed_pair}
