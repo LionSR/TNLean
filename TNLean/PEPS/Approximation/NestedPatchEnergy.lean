@@ -95,7 +95,7 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
   have hunit : ∀ j, IsUnit (K j).det := fun j ↦
     (Matrix.isUnit_iff_isUnit_det _).mp (((hx j).1.add_smul_one_posDef hb).rpow _).isUnit
   have ha₁ : ∀ j, a j ≤ 1 := fun _ ↦
-    (div_nat_le_self_of_nonnneg hκ.le m).trans hκ₁
+    (div_nat_le_self_of_nonneg hκ.le m).trans hκ₁
   have hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j := fun _ _ hij ↦ hregions hij
   have hφpatch := dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput
     (n := fun _ : Lattice.Site Λ ↦ q) (fun j : Fin m ↦ D j) a b Ωᵤ x
@@ -123,7 +123,9 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     have hc (l : Fin m) (hl : l ∈ Entropy.splitIndices
         (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m) :
         i ∈ Entropy.crossingTerms (AreaLaw.nearestNeighborSupport (Λ := Λ)) (D l) :=
-      Finset.mem_filter.mpr ⟨Finset.mem_univ i, Entropy.mem_splitIndices.mp hl⟩
+      by
+        simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
+        exact Entropy.mem_splitIndices.mp hl
     cases i with
     | inl v => exact False.elim (AreaLaw.inl_not_mem_crossingTerms (D j) v (hc j hj))
     | inr e =>

@@ -30,6 +30,7 @@ namespace TNLean.PEPS.AreaLaw
 
 variable {V : Type*} [Fintype V] [DecidableEq V]
 
+omit [DecidableEq V] in
 /-- An on-site designated support never meets both sides of a cut. -/
 theorem not_mem_crossingTerms_singleton (A : Finset V) (v : V) :
     v ∉ Entropy.crossingTerms (fun w : V ↦ {w}) A := by
