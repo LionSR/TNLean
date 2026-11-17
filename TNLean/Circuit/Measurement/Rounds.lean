@@ -85,7 +85,7 @@ first apply a depth-`ℓ` circuit ... Then, we sequentially measure each ancilla
 transformations). -/
 structure MeasurementRound (d N : ℕ) [NeZero N] where
   /-- The local circuit of the round. -/
-  circuit : List (Layer d N)
+  circuit : List (RingLayer d N)
   /-- The sites measured in the computational basis after the circuit. -/
   measured : Finset (Fin N)
   /-- The unitary applied at the site `i` after the outcome `m`. -/

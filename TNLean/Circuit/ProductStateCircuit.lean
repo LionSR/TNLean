@@ -174,7 +174,7 @@ private theorem disjoint_bond_of_mem_evenBonds {k l : Fin N} (hk : k ∈ evenBon
 /-- The layer of the gates `u_k ⊗ u_{k+1}` on the pairs `{k, k + 1}` with `k` even and
 `k + 1 < N`. -/
 private noncomputable def evenLayer (u : Fin N → Matrix (Fin d) (Fin d) ℂ)
-    (hu : ∀ i, u i ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) : Layer d N where
+    (hu : ∀ i, u i ∈ unitary (Matrix (Fin d) (Fin d) ℂ)) : RingLayer d N where
   bonds := evenBonds N
   gate k := siteOp u {k, k + 1}
   gate_mem_unitary _ _ := siteOp_mem_unitary hu _

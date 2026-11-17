@@ -133,7 +133,7 @@ carrying `|0⟩` at the sites `e`, `f` of `back`. Then every output of the round
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements". -/
 theorem exists_eq_smul_of_mem_outputs_conj {there back : List (TeleportHop N)}
-    (hthere : Valid there) (hback : Valid back) (G : Layer d N) {v : (Fin N → Fin d) → ℂ}
+    (hthere : Valid there) (hback : Valid back) (G : RingLayer d N) {v : (Fin N → Fin d) → ℂ}
     (hv : IsZeroOn (pairSites there) v)
     (hGv : IsZeroOn (pairSites back) (G.op *ᵥ (chainPerm there *ᵥ v)))
     {w : (Fin N → Fin d) → ℂ}
@@ -142,7 +142,7 @@ theorem exists_eq_smul_of_mem_outputs_conj {there back : List (TeleportHop N)}
   have h₁ := isImplementationOn_round (d := d) [] hthere
   have h₂ := isImplementationOn_round [G] hback
   obtain ⟨c, u, hu, rfl⟩ := h₁.exists_mem_outputs (by simpa [circuitOp] using hv) hw
-  have hGv' : (chainPerm there * circuitOp ([] : List (Layer d N))) *ᵥ v ∈
+  have hGv' : (chainPerm there * circuitOp ([] : List (RingLayer d N))) *ᵥ v ∈
       {v | IsZeroOn (pairSites back) (circuitOp [G] *ᵥ v)} := by
     simpa [circuitOp] using hGv
   obtain ⟨c', u', hu', rfl⟩ := h₂.exists_mem_outputs hGv' hu

@@ -326,7 +326,7 @@ theorem pairwise_disjoint_bond :
   hgs.imp fun {g g'} h => h.mono g.bond_near_subset_span g'.bond_near_subset_span
 
 /-- The layer of the gates `u` on the neighbouring pairs `{a + 2L, a + 2L + 1}`. -/
-noncomputable def localLayer : Layer d N :=
+noncomputable def localLayer : RingLayer d N :=
   layerOfList gs near localGate (pairwise_disjoint_bond hgs)
     (fun g _ => g.localGate_mem_unitary) fun g _ => g.localGate_mem_supportedOperators
 

@@ -473,7 +473,7 @@ noncomputable def backRounds (gs : List (RegisterGate d N s))
 applying the gates `X` to the consecutive sites, and the backward teleportations.
 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements". -/
-noncomputable def rounds (Ls : List (Layer d N)) : List (MeasurementRound d N) :=
+noncomputable def rounds (Ls : List (RingLayer d N)) : List (MeasurementRound d N) :=
   thereRounds gs hgs s le_rfl ++ round Ls [] valid_nil :: backRounds gs hgs s le_rfl
 
 theorem sum_depth_thereRounds : ∀ (t : ℕ) (ht : t ≤ s),
@@ -495,7 +495,7 @@ theorem sum_depth_backRounds : ∀ (t : ℕ) (ht : t ≤ s),
 
 /-- The rounds have depth `4s + K + 2` for a circuit `Ls` of `K` layers, whatever the distances
 and the number of gates. -/
-theorem sum_depth_rounds (Ls : List (Layer d N)) :
+theorem sum_depth_rounds (Ls : List (RingLayer d N)) :
     ((rounds hgs Ls).map MeasurementRound.depth).sum = 4 * s + Ls.length + 2 := by
   rw [rounds, List.map_append, List.sum_append, List.map_cons, List.sum_cons,
     sum_depth_thereRounds, sum_depth_backRounds, depth_round]
@@ -526,12 +526,12 @@ theorem isRoundsImplementationOn_thereRounds : ∀ (t : ℕ) (ht : t ≤ s),
       (d := d)).isRoundsImplementationOn
     have hE : ∀ v ∈ {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs (t + 1)) v},
         v ∈ {v | IsZeroOn (TeleportHop.pairSites (thereAll gs t))
-          (circuitOp ([] : List (Layer d N)) *ᵥ v)} :=
+          (circuitOp ([] : List (RingLayer d N)) *ᵥ v)} :=
         fun v hv => by
       simpa [circuitOp] using (show IsZeroOn (zoneAll gs (t + 1)) v from hv).mono
         (pairSites_thereAll_subset t)
     have hmap : ∀ v ∈ {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs (t + 1)) v},
-        (chainPerm (thereAll gs t) * circuitOp ([] : List (Layer d N))) *ᵥ v ∈
+        (chainPerm (thereAll gs t) * circuitOp ([] : List (RingLayer d N))) *ᵥ v ∈
           {v | IsZeroOn (zoneAll gs t) v} :=
       fun v hv => by
         simpa [circuitOp] using isZeroOn_chainPerm_thereAll hgs (by omega) hv
@@ -568,7 +568,7 @@ theorem isRoundsImplementationOn_backRounds : ∀ (t : ℕ) (ht : t ≤ s),
       (d := d)).isRoundsImplementationOn
     have hE : ∀ v ∈ {v : (Fin N → Fin d) → ℂ | IsZeroOn (zoneAll gs t) v},
         v ∈ {v | IsZeroOn (TeleportHop.pairSites (backAll gs t))
-          (circuitOp ([] : List (Layer d N)) *ᵥ v)} :=
+          (circuitOp ([] : List (RingLayer d N)) *ᵥ v)} :=
         fun v hv => by
       simpa [circuitOp] using (show IsZeroOn (zoneAll gs t) v from hv).mono
         (pairSites_backAll_subset t)
@@ -652,7 +652,7 @@ Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("Isomet
 a constant number of sites which, although spatially separated, can be teleported at
 neighboring registers with a constant overhead ... Therefore every isometry ... takes constant
 time using measurement"). -/
-theorem isRoundsImplementationOn_rounds {Ls : List (Layer d N)}
+theorem isRoundsImplementationOn_rounds {Ls : List (RingLayer d N)}
     (hLs : circuitOp Ls = localProd gs) :
     MeasurementRound.IsRoundsImplementationOn (rounds hgs Ls)
       {v | ∀ g ∈ gs, IsZeroOn g.interior v} (gs.map op).prod := by

@@ -357,7 +357,7 @@ the pair `{k, k + 1}`, for `k` in a finite set `bonds` of pairwise disjoint pair
 
 Source: arXiv:2307.01696, main text before Theorem 1 ("depth-`T` local quantum circuits");
 the pairs are neighbouring sites of the ring. -/
-abbrev Layer (d N : ℕ) [NeZero N] := BondLayer d (ringBond (N := N))
+abbrev RingLayer (d N : ℕ) [NeZero N] := BondLayer d (ringBond (N := N))
 
 /-- A *local circuit of depth `T`* on the ring of `N` sites: a product of `T` layers, each a
 product of unitaries on pairwise disjoint pairs of neighbouring sites.

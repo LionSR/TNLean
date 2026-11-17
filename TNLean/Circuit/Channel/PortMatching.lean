@@ -138,7 +138,7 @@ private theorem swap_mem_supportedOperators (i : Fin N) :
 
 /-- One physical layer, containing a SWAP on every selected neighboring bond. -/
 def layer (d : ℕ) (K : Finset (Fin N))
-    (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) : Layer d N where
+    (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) : RingLayer d N where
   bonds := K
   gate i := permOp (Equiv.swap i (i + 1))
   gate_mem_unitary _i _ := permOp_mem_unitary _

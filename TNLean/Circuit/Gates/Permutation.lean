@@ -52,7 +52,7 @@ variable {N : ℕ} [NeZero N]
 `{k, k + 1}`, `k ∈ K`. -/
 noncomputable def permLayer (K : Finset (Fin N)) (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond)
     (τ : Fin N → Equiv.Perm (Fin N → Fin d)) (hτ : ∀ k ∈ K, IsLocalPerm (ringBond k) (τ k)) :
-    Layer d N where
+    RingLayer d N where
   bonds := K
   gate k := (τ k).permMatrix ℂ
   gate_mem_unitary _ _ := Equiv.Perm.permMatrix_mem_unitaryGroup _
