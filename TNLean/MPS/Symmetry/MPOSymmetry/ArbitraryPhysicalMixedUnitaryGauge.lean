@@ -10,20 +10,20 @@ import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedParentCommutation
 
 Let a group `G` act at both endpoints of the arbitrary-alphabet mixed path by
 unitary on-site representations `u_{p,g}`, with one-dimensional operator
-bonds and action multiplicity one, and write `T̃_g` for the common operator
+bonds and action multiplicity one, and write `O_g` for the common operator
 of the label `g`. Suppose every action gauge `Y_{p,g}`, the synthesis map
 read as a square matrix, is a nonzero multiple of a unitary matrix, and the
 endpoint tensors are injective. Then the adjoint of every boundary operator
-of `T̃_g` is a boundary operator of `T̃_{g⁻¹}`, at every length: the union
+of `O_g` is a boundary operator of `O_{g⁻¹}`, at every length: the union
 of the boundary ranges over all labels is closed under the adjoint. The
 range of one label need not be: for a label with `u_g²` not scalar its
 adjoint fails already in the sector of the first endpoint. Hence the
-mixed-path parent, which preserves the union, commutes with every `T̃_g`.
+mixed-path parent, which preserves the union, commutes with every `O_g`.
 
 The proof rests on two facts. First, by injectivity the gauges of `g` and
 `g⁻¹` multiply to a scalar, so `Y_{p,g⁻¹}` is a multiple of `Y_{p,g}⁻¹`, and
 for a multiple of a unitary `Y_{p,g}⁻¹` is a multiple of `Y_{p,g}ᴴ`. Second,
-the physical adjoint of `T̃_g` is then the common operator of the inverse
+the physical adjoint of `O_g` is then the common operator of the inverse
 label, conjugated by a diagonal bond similarity.
 
 The gauge condition holds for endpoint tensors in canonical form: for an
