@@ -392,11 +392,9 @@ operators be on-site with Hermitian on-site matrices `u_p`, as for unitary
 `ℤ₂` symmetries, and let both action gauges be proportional to Hermitian
 matrices. Then at every length the adjoint of every boundary operator of the
 common operator of the arbitrary-alphabet mixed path is again a boundary
-operator of it. Injectivity is not needed.
-
-**Scope restriction (Z2, unitary on-site endpoints, Hermitian action gauges):**
-see `docs/paper-gaps/glm23_mixed_path_parent_commutation.tex`, paragraph
-"When closure holds". Source: arXiv:2203.12563, lines 1600–1631. -/
+operator of it. Injectivity is not needed. Source: arXiv:2203.12563,
+lines 1600–1631, and `docs/paper-gaps/glm23_mixed_path_parent_commutation.tex`,
+paragraph "When closure holds". -/
 theorem exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq
     (hu₀ : (physicalSlice T₀ 0 0).IsHermitian) (hu₁ : (physicalSlice T₁ 0 0).IsHermitian)
     (h₀ : IsBiorthogonalDecomposition (MPOTensor.actTensor T₀ A₀)
