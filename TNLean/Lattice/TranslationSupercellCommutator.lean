@@ -101,7 +101,7 @@ theorem norm_groundCompression_commutator_le_of_momenta [NeZero d]
     exists_mem_supercell_lt_edist hN hden G π hπ e he (2 * R + l) hl i j
   have hsep := disjoint_biUnion_graphBall_of_lt_edist G X id hX R hDiam
     (g • j) i l hfar
-  have hmain := norm_groundCompression_commutator_le_of_supercell_separation G X id hX h hHerm
+  have hmain := norm_groundCompression_commutator_le_of_supercell_separation G X h hHerm
     hSupport R hDiam vR hCard b₀ hBudget hcov Kg kg hGrowth hr hq hΔE hH hgap
     (supercell Γ d (∑ k, h k) E₀)
     (fun g hg v hv ↦ sitePermMatrix_mulVec_eq_of_mem_supercell hInv hg v hv) hg i j l hsep hT
@@ -263,7 +263,7 @@ theorem norm_groundCompression_commutator_le_of_momenta_exp [NeZero d]
       rw [Nat.cast_sub hsize]
       push_cast
       ring
-    have hmain := norm_groundCompression_commutator_le_exp G X id hX h hHerm hSupport R
+    have hmain := norm_groundCompression_commutator_le_exp G X id h hHerm hSupport R
       hDiam vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap (g • j) i l hsep
     rw [← groundCompression_commutator_eq_of_mem_supercell r ΔE hInv hH hcov
       (supercell Γ d (∑ k, h k) E₀)

@@ -187,14 +187,14 @@ end Support
 section Graph
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
-  (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+  (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
   (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
 
-include ha hHerm hSupport hDiam hCard hBudget
+include hHerm hSupport hDiam hCard hBudget
 
 /-- **Lieb–Robinson bound against an operator on several sites.** Let `A` act on `S` and `B` on
 a finite set `Y` with every site of `Y` at graph distance at least `m` from every site of `S`.
@@ -297,7 +297,7 @@ theorem norm_commutator_sub_truncated_le [NeZero d] [DecidableEq κ] (s : Finset
     split_ifs with hd
     · rw [(commute_of_mem_supportedOperators (Finset.disjoint_coe.mpr hd) (hSupport k)
         hAK).eq, sub_self, norm_zero]
-    · have hLR := norm_commutator_heisenbergEvolution_le_graphDistance_finset G X a ha h'
+    · have hLR := norm_commutator_heisenbergEvolution_le_graphDistance_finset G X h'
         hHerm' hSupport' R hDiam vR hCard b₀ hBudget' S hW (X k) (hSupport k) μ hμ m
         (hm k hk hd) u
       rw [hA] at hLR
@@ -350,7 +350,7 @@ theorem norm_gaussianFilteredTerm_sub_truncated_le_sum [NeZero d] [DecidableEq �
           hermitianUnitaryPath (∑ k ∈ s, h k) u * W *
               hermitianUnitaryPath (∑ k ∈ s, h k) (-u) * ((∑ k, h k) - ∑ k ∈ s, h k)‖ ≤
         F * Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * T - μ * m) := by
-    refine (norm_commutator_sub_truncated_le G X a ha h hHerm hSupport R hDiam vR hCard b₀
+    refine (norm_commutator_sub_truncated_le G X h hHerm hSupport R hDiam vR hCard b₀
       hBudget s K hsK S hSK hW μ hμ m hm u).trans ?_
     rw [hF]
     gcongr
@@ -383,7 +383,7 @@ theorem norm_gaussianFilteredTerm_sub_truncated_le [NeZero d] [DecidableEq κ] {
           ((sᶜ.filter (fun k => ¬Disjoint (X k) K)).card : ℝ) * T *
           Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * T - μ * m) +
         2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
-  refine (norm_gaussianFilteredTerm_sub_truncated_le_sum G X a ha h hHerm hSupport R hDiam vR
+  refine (norm_gaussianFilteredTerm_sub_truncated_le_sum G X h hHerm hSupport R hDiam vR
     hCard b₀ hBudget hq s K hsK S hSK hW μ hμ m hm hT).trans ?_
   have hsum : ∑ k ∈ sᶜ.filter (fun k => ¬Disjoint (X k) K), ‖h k‖ ≤
       J * ((sᶜ.filter (fun k => ¬Disjoint (X k) K)).card : ℝ) := by
@@ -420,7 +420,7 @@ theorem truncated_approx_gaussianFilteredTerm [NeZero d] [DecidableEq κ] {q ΔE
   exact ⟨gaussianFilteredTerm_mem_supportedOperators q ΔE hHsK
     (supportedOperators_mono (Finset.coe_subset.mpr hSK) hW),
     norm_gaussianFilteredTerm_le q ΔE hHs W, isHermitian_gaussianFilteredTerm q ΔE hHs,
-    norm_gaussianFilteredTerm_sub_truncated_le G X a ha h hHerm hSupport R hDiam vR hCard b₀
+    norm_gaussianFilteredTerm_sub_truncated_le G X h hHerm hSupport R hDiam vR hCard b₀
       hBudget hq s K hsK S hSK hW J hJ μ hμ m hm hT⟩
 
 end Graph

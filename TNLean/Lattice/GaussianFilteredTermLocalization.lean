@@ -81,14 +81,14 @@ namespace TNLean.Lattice
 section Graph
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
-  (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+  (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
   (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
 
-include ha hHerm hSupport hDiam hCard hBudget
+include hHerm hSupport hDiam hCard hBudget
 
 /-- **Locality of a filtered term on a finite graph.** Let `W` act on `S` and `B` on one site
 `y` at graph distance at least `l` from every site of `S`. For every `μ ≥ 0` and `T ≥ 0`,
@@ -194,7 +194,7 @@ theorem exists_local_approx_gaussianFilteredTerm [NeZero d] (Kg : ℝ) (kg : ℕ
     ((ManyBody.norm_regionExpectation_le _)).trans (norm_gaussianFilteredTerm_le q ΔE hH W),
     fun hW' => (ManyBody.isHermitian_regionExpectation (isHermitian_gaussianFilteredTerm q ΔE hH
         hW')),
-    norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood G X a ha h hHerm
+    norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood G X h hHerm
       hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth hq S hW l hT⟩
 
 end Graph
