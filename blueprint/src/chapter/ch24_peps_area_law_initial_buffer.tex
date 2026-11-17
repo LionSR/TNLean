@@ -57,8 +57,8 @@ lengths, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
     \input{figures/area_law_buffer_contours}
 \end{lemma}
 \begin{proof}\leanok
-    \lean{ManyBody.latticeL1Distance_le_one_of_planeDomainGraph_adj,
-        TNLean.PEPS.AreaLaw.supDist_le_latticeL1Distance,
+    \uses{lem:area_domain_graph_counts}
+    \lean{TNLean.PEPS.AreaLaw.supDist_le_latticeL1Distance,
         TNLean.PEPS.AreaLaw.supDist_le_of_walk,
         TNLean.PEPS.AreaLaw.Splits,
         TNLean.PEPS.AreaLaw.exists_of_splits_rectRegion,
