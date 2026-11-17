@@ -20,7 +20,7 @@ regions imply a polynomially small mutual information between sufficiently
 deep cores. The proof constructs the physical-buffer filter, its supported
 localization and polar correction from the original ground-state data.
 
-The argument is carried out once, on the sites `Fin L` of any finite system, from a
+The argument is carried out once, on the sites of any finite system, from a
 supported localization of the truncated Gaussian filter at every natural radius and a
 separation of its support from the cores. The contiguous chain and the finite integer
 domains supply these two inputs, with chain distances and with intrinsic extended graph
@@ -69,33 +69,33 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
     (R : ℕ) (Δ : ℝ) (hΔ : 0 < Δ) (p : ℝ) (hp : 0 < p) (Cint v : ℝ) (hCint : 0 < Cint)
     (hv : 0 < v) :
     ∃ (Cp : ℝ) (L₀ : ℕ), 0 < Cp ∧ 1 ≤ L₀ ∧
-      ∀ (L : ℕ), L₀ ≤ L →
-      ∀ (H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
+      ∀ (ι : Type*) [Fintype ι] [DecidableEq ι], L₀ ≤ Fintype.card ι →
+      ∀ (H : Matrix (ι → Fin q) (ι → Fin q) ℂ)
+        (Ω : EuclideanSpace ℂ (ι → Fin q)) (E₀ : ℝ),
         Matrix.IsGappedGroundState H E₀ Ω Δ →
-        ∀ (D C R₀ C₀ : Finset (Fin L)), Disjoint D C → R₀ ⊆ D → C₀ ⊆ C →
+        ∀ (D C R₀ C₀ : Finset (ι)), Disjoint D C → R₀ ⊆ D → C₀ ⊆ C →
         ∀ b : ℝ,
-          FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω D C ≤ b →
-          let w := Cp * (1 + b + Real.log (L : ℝ))
-          let e := sitePairConfigurationEquiv (Fin L) q q
+          FiniteProduct.mutualInformation (fun _ : ι ↦ Fin q) Ω D C ≤ b →
+          let w := Cp * (1 + b + Real.log (Fintype.card ι : ℝ))
+          let e := sitePairConfigurationEquiv (ι) q q
           let F := Matrix.reindex e e (sheetSwapOp q D)
           let K := Matrix.reindex e e (doubledHamiltonian H)
           let K' := F * K * Fᴴ
-          ∀ (N : ℕ → Finset (Fin L) → Finset (Fin L)) (Z : Finset (Fin L)),
-          (∀ ℓ : ℕ, ∃ path : ℝ → Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ,
-            ∀ (Q : Finset (Fin L))
-              (W : Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ),
-              W ∈ supportedOperators (q * q) (Q : Set (Fin L)) →
+          ∀ (N : ℕ → Finset (ι) → Finset (ι)) (Z : Finset (ι)),
+          (∀ ℓ : ℕ, ∃ path : ℝ → Matrix (ι → Fin (q * q)) (ι → Fin (q * q)) ℂ,
+            ∀ (Q : Finset (ι))
+              (W : Matrix (ι → Fin (q * q)) (ι → Fin (q * q)) ℂ),
+              W ∈ supportedOperators (q * q) (Q : Set (ι)) →
               ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
                 let M := ∫ t : ℝ in Set.Icc (-T) T,
                   siteExpectation (q * q) (N ℓ Q) (ManyBody.heisenbergEvolution K' t W) *
                     path t ∂gaussianReal 0 η
-                M ∈ supportedOperators (q * q) (N ℓ (Q ∪ Z) : Set (Fin L)) ∧
+                M ∈ supportedOperators (q * q) (N ℓ (Q ∪ Z) : Set (ι)) ∧
                 ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K W‖ ≤
-                  ‖W‖ * Cint * (L : ℝ) ^ 2 * (1 + T) * Real.exp (v * T - ℓ / 2)) →
+                  ‖W‖ * Cint * (Fintype.card ι : ℝ) ^ 2 * (1 + T) * Real.exp (v * T - ℓ / 2)) →
           (∀ ℓ : ℕ, (ℓ : ℝ) + R ≤ w → Disjoint (N ℓ ((D ∪ C)ᶜ ∪ Z)) (R₀ ∪ C₀)) →
-          FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω R₀ C₀ ≤
-            (L : ℝ) ^ (-p) := by
+          FiniteProduct.mutualInformation (fun _ : ι ↦ Fin q) Ω R₀ C₀ ≤
+            (Fintype.card ι : ℝ) ^ (-p) := by
   classical
   let r := 2 * p + 10
   have hr : 0 ≤ r := by dsimp [r]; linarith
@@ -108,7 +108,8 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
   have hCp : 0 < Cp := by positivity
   let L₀ := max 1 ⌈8 * Real.sqrt 8 * (1 + Real.log (q : ℝ))⌉₊
   refine ⟨Cp, L₀, hCp, le_max_left _ _, ?_⟩
-  intro L hL H Ω E₀ hgs D C R₀ C₀ hDC hR₀ hC₀ b hI w e F K K' N Z hlocal hsep
+  intro ι _ _ hL H Ω E₀ hgs D C R₀ C₀ hDC hR₀ hC₀ b hI w e F K K' N Z hlocal hsep
+  set L := Fintype.card ι with hLdef
   have hLn : 1 ≤ L := (le_max_left _ _).trans hL
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hLn
   have hLthreshold : 8 * Real.sqrt 8 * (1 + Real.log (q : ℝ)) ≤ (L : ℝ) :=
@@ -177,14 +178,14 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
       _ = ε := one_mul _
   let Q := (D ∪ C)ᶜ
   let Pconf := Fin (Fintype.card (D → Fin q)) × Fin (Fintype.card (C → Fin q))
-  let s := FiniteProduct.splitTwoRegionsEquiv (fun _ : Fin L ↦ Fin q) D C hDC
+  let s := FiniteProduct.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) D C hDC
   let g := (s.prodCongr s).trans (Equiv.doubledRegroup Pconf (Q → Fin q))
   let ψ := fun c ↦ Ω (e.symm c).1 * Ω (e.symm c).2
   obtain ⟨hψn, hφn, W, z, hW, hz, hgauss⟩ :=
     hfilter q D C hDC e H E₀ Ω b hgs hb hI
   let V := Matrix.reindex (g.symm.trans e) (g.symm.trans e)
     ((1 : Matrix (Pconf × Pconf) (Pconf × Pconf) ℂ) ⊗ₖ W)
-  have hVsupp : V ∈ supportedOperators (q * q) (Q : Set (Fin L)) := by
+  have hVsupp : V ∈ supportedOperators (q * q) (Q : Set (ι)) := by
     have hs := siteLift_mem_supportedOperators Q
       (Matrix.reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
     rw [← reindex_physicalBuffer_eq_siteLift q D C hDC W] at hs
@@ -244,8 +245,7 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
       (one_le_pow₀ hq1))
   · have hq1 : (1 : ℝ) ≤ q := by exact_mod_cast hq
     have hlogq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg hq1
-    have hcardNat : R₀.card ≤ L := by
-      simpa only [Fintype.card_fin] using Finset.card_le_univ R₀
+    have hcardNat : R₀.card ≤ L := Finset.card_le_univ R₀
     have hcard : (R₀.card : ℝ) ≤ (L : ℝ) ^ 2 := by
       have hc : (R₀.card : ℝ) ≤ L := by exact_mod_cast hcardNat
       have hsq : (L : ℝ) ≤ (L : ℝ) ^ 2 := le_self_pow₀ hL1 (by decide)
@@ -283,7 +283,9 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
       (sitePairConfigurationEquiv (Fin L) q q) (doubledHamiltonian h.operator) =
         h.doubled.operator := h.doubled_operator.symm
   let Z := (Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D).biUnion (fun X ↦ X.1)
-  refine hreset L hL h.operator Ω E₀ hgs D C R₀ C₀ hDC hR₀ hC₀ b hI
+  have hreset' := hreset (Fin L) (by simpa only [Fintype.card_fin] using hL)
+  simp only [Fintype.card_fin] at hreset'
+  refine hreset' h.operator Ω E₀ hgs D C R₀ C₀ hDC hR₀ hC₀ b hI
     (fun ℓ A ↦ chainNeighborhood A (ℓ : ℝ)) Z (fun ℓ ↦ ?_)
     (fun ℓ hℓ ↦ (chain_reset_support_separation D C R₀ C₀ hDC w hRw hCw).2 (ℓ : ℝ) hℓ)
   obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq L h D (ℓ : ℝ) (Nat.cast_nonneg _)
@@ -325,7 +327,9 @@ theorem DomainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
       (sitePairConfigurationEquiv (Fin Λ.card) q q) (doubledHamiltonian h.operator) =
         h.doubled.operator := h.doubled_operator.symm
   let Z := (Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).biUnion (fun X ↦ X.1)
-  refine hreset Λ.card hL h.operator Ω E₀ hgs D C R₀ C₀ hDC hR₀ hC₀ b hI
+  have hreset' := hreset (Fin Λ.card) (by simpa only [Fintype.card_fin] using hL)
+  simp only [Fintype.card_fin] at hreset'
+  refine hreset' h.operator Ω E₀ hgs D C R₀ C₀ hDC hR₀ hC₀ b hI
     (fun ℓ A ↦ A.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x ℓ)) Z
     (fun ℓ ↦ ?_) (fun ℓ hℓ ↦ ?_)
   · obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq Λ h D ℓ
