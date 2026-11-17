@@ -245,8 +245,9 @@ theorem operatorSchmidtRank_physicalFrustrationFreeTruncation_le
       exact Subsingleton.elim _ _
   rw [hzero]
   have hz : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ 0)
-      (0 : Matrix (Fin L → Fin 0) (Fin L → Fin 0) ℂ) ∅ :=
-    (zero_mem _)
+      (0 : Matrix (Fin L → Fin 0) (Fin L → Fin 0) ℂ) ∅ := by
+    show _ ∈ ManyBody.supportedOperators _ _
+    exact (zero_mem _)
   exact (hz.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
     (Or.inl (Finset.empty_subset _))).trans (by decide : 1 ≤ 0 ^ 2 + 3)
 

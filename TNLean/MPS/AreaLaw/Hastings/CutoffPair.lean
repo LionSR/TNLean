@@ -127,6 +127,7 @@ theorem ChainHamiltonian.isSupportedOn_localizedPart
     {P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {D : Finset (Fin L)}
     (hP : Entropy.IsSupportedOn (n := fun _ ↦ q) P D) (K : Finset (Fin L)) :
     Entropy.IsSupportedOn (n := fun _ ↦ q) (h.localizedPart Ω s ΔE P K) (D ∪ K) := by
+  show _ ∈ ManyBody.supportedOperators _ _
   refine (add_mem ?_ ?_)
   · exact ManyBody.supportedOperators_mono (by simp)
       (hP.groundCentered Ω)
