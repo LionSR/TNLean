@@ -394,8 +394,8 @@ If the transfer kernel `transferCoeff` has the incident-matrix coupling form of 
 single matrix `N` on the boundary bond `f`, then the first tensor's region-inserted
 coefficient of `M` equals the second tensor's of `N`. This is the block-frame
 replacement of `regionInsertedCoeff_eq_of_transferCoeff_form`
-(`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`), built on the block-frame double factorization
-above. -/
+(`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`), built on the block-frame double
+factorization above. -/
 
 open scoped Classical in
 /-- **Block-frame coefficient transfer from the incident-matrix form.** If there is a

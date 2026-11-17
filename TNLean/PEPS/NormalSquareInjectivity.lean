@@ -123,7 +123,7 @@ namespace PEPS
 
 variable {width height : ℕ}
 variable {G : SimpleGraph (SquareLatticeVertex width height)} [DecidableRel G.Adj]
-variable {A : Tensor G d}
+variable {d : ℕ} {A : Tensor G d}
 
 /-- **Region `R` is injective from rectangular injectivity alone.** If a normal
 square-lattice PEPS tensor has positive bond dimensions and every contiguous
