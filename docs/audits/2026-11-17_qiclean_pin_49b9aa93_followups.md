@@ -108,3 +108,11 @@ state their Kronecker sums with `ManyBody.IsGapped.kronecker_add` and
 `ManyBody.groundSpace_kronecker_add_eq_span` (QICLean `1af32a2`). `Lattice/ProductGroundState`
 proves the converse, that a gapped Kronecker sum with a one-dimensional ground space has gapped
 factors; QICLean has no statement of it, and the proof keeps the positive-semidefinite form.
+
+Third-pin candidate for QICLean (`ManyBody/Hamiltonian/KroneckerSum`), the converse of
+`groundSpace_kronecker_add_eq_span`: for Hermitian `A`, `B` and `0 < Δ`, if
+`IsGapped (A ⊗ₖ 1 + 1 ⊗ₖ B) E₀ Δ` and the ground space of `A ⊗ₖ 1 + 1 ⊗ₖ B` at `E₀` is the line
+through a unit vector `Ω`, then there are `a + b = E₀` and unit vectors `u`, `v` with
+`Ω p = u p.1 * v p.2`, `IsGapped A a Δ`, `IsGapped B b Δ`, `groundSpace A a = span {u}` and
+`groundSpace B b = span {v}`. It is `TNLean.Lattice.exists_isGapped_factors_of_kronecker_sum`,
+whose proof would then shrink to the eigenvalue description of the Kronecker sum.
