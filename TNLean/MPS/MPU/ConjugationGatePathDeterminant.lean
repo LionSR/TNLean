@@ -149,8 +149,8 @@ theorem kronFactorDet_mul_det_eq_one_or_neg_one (hℓ : Even ℓ) (hr : Even r)
     rw [Matrix.det_kronecker, Fintype.card_fin, Fintype.card_fin]
   refine ⟨?_, ?_⟩
   · have hu' : ((U ⊗ₖ V) * u).IsUnitaryBetween :=
-      ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr (Matrix.kronecker_mem_unitary hU hV)).mul
-        _ _ hu
+      ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr
+        (Matrix.kronecker_mem_unitary hU hV)).mul _ _ hu
     have h := det_submatrix_eq_one_or_neg_one_of_map_star_eq_mul hu'
       (by rw [Matrix.det_kronecker, hΛ, hΛ₂, one_pow, one_pow, one_mul])
       (Matrix.map_star_gaugeLeft_eq_of_congruence hU hV hxU hyV hcu) e
@@ -231,7 +231,8 @@ theorem kronFactorDet_mul_det_eq_of_path (hℓ : Even ℓ) (hr : Even r) [NeZero
       exact kronFactorDet_eq_local hℓ hr _ _ hq
     refine (ContinuousAt.congr ?_ hev.symm)
     exact ((continuousOn_kronFactorDet_local a a' s s').continuousAt
-      ((isOpen_ne_fun (continuous_id.matrix_elem (a, s) (a', s')) continuous_const).mem_nhds (by change _ ≠ 0; rwa [hKeq p]))).comp hK.continuousAt
+      ((isOpen_ne_fun (continuous_id.matrix_elem (a, s) (a', s')) continuous_const).mem_nhds
+        (by change _ ≠ 0; rwa [hKeq p]))).comp hK.continuousAt
   have hdu : Continuous fun p ↦ ((u p).submatrix id e).det :=
     Continuous.matrix_det (continuous_pi fun i ↦ continuous_pi fun j ↦
       (continuous_apply (e j)).comp ((continuous_apply i).comp hucont))
