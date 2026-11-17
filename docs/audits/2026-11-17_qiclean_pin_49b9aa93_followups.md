@@ -106,6 +106,7 @@ and F9; F14 lands before the pin move that brings in QICLean's circuit core.
 After F11, three Kronecker-sum sites still go through TNLean's positive-semidefinite
 gap lemmas (`Matrix.PosSemidef.tensorSum_gap`, `doubled_gap`) and convert once with
 `ManyBody.isGapped_and_groundSpace_eq_span_iff`: `Lattice/ProductGroundState`,
-`MPS/AreaLaw/ChainPaddingGroundState` and `MPS/AreaLaw/SwappedDoubledHamiltonian`. The next
-pin brings `ManyBody.IsGapped.kronecker_add` and `ManyBody.groundSpace_kronecker_add_eq_span`,
-which state these directly.
+`MPS/AreaLaw/ChainPaddingGroundState` and `MPS/AreaLaw/SwappedDoubledHamiltonian`. The second
+pin (QICLean `1af32a2`) brings `ManyBody.IsGapped.kronecker_add` and
+`ManyBody.groundSpace_kronecker_add_eq_span`, which state these directly; moving the three
+sites onto them is a follow-up.
