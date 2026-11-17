@@ -61,7 +61,8 @@ jobs:
   # The print volumes and the web pages share no build output, so they are
   # built on separate runners at once; the site job below joins them.
   pdf:
-    runs-on: ubuntu-latest
+    # Pinned: on ubuntu-26.04 Playwright has no chromium and the TeX diagram tools are missing.
+    runs-on: ubuntu-24.04
     name: Build blueprint PDFs
     env:
       PRINT_AUX_FILES: |
@@ -210,7 +211,8 @@ jobs:
           retention-days: 1
 
   web:
-    runs-on: ubuntu-latest
+    # Pinned: on ubuntu-26.04 Playwright has no chromium and the TeX diagram tools are missing.
+    runs-on: ubuntu-24.04
     name: Build blueprint web pages
     steps:
       - name: Checkout project
@@ -364,7 +366,8 @@ jobs:
 
   site:
     needs: [pdf, web]
-    runs-on: ubuntu-latest
+    # Pinned: on ubuntu-26.04 Playwright has no chromium and the TeX diagram tools are missing.
+    runs-on: ubuntu-24.04
     name: Build blueprint site components
     steps:
       - name: Checkout project
