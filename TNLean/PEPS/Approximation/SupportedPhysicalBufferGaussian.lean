@@ -119,7 +119,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
   classical
   intro L h hh hhJ R C₀ hRC Q P s g p Λ a e K F K' boundary Z W V l B
   have hC : 0 < squareLocalizationPrefactor := squareLocalizationPrefactor_pos
-  obtain ⟨gH, _, hgOperator⟩ := h.exists_swapped_doubled_localHamiltonian hJ R
+  obtain ⟨gH, _, hgOperator⟩ := h.exists_swapped_doubled_localHamiltonian hh hhJ hJ R
   have hK' : gH.operator = K' := by
     simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
       Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using! hgOperator
@@ -142,12 +142,12 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
     simpa only [hK', a, K', F, K, AreaLaw.embedOp_rectangular_eq_reindex, Finset.coe_image,
       Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_sub,
       Pi.sub_apply, Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using!
-      embedOp_mem_supportedOperators_image a.injective (h.swapped_doubled_boundary_bound R).1
+      embedOp_mem_supportedOperators_image a.injective (h.swapped_doubled_boundary_bound hh hhJ R).1
   have hDn : ‖K' - K‖ ≤ 8 * J * (L : ℝ) ^ 2 := by
     simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
       Matrix.submatrix_sub, Pi.sub_apply, Matrix.submatrix_mul_equiv,
       Matrix.submatrix_submatrix] using!
-      (Matrix.l2_opNorm_reindex_equiv e _).trans_le (h.swapped_doubled_boundary_bound R).2
+      (Matrix.l2_opNorm_reindex_equiv e _).trans_le (h.swapped_doubled_boundary_bound hh hhJ R).2
   have hVn : ‖V‖ ≤ ‖W‖ :=
     (Matrix.l2_opNorm_reindex_equiv (g.symm.trans (p.trans e)) _).trans_le
       (Matrix.l2_opNorm_one_kronecker_le W)

@@ -88,7 +88,7 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
     AreaLaw.Geometry.nestedPatch_mono Λ center u hij
   have hcl := exists_clipped_filter_of_isMinOn_regularizedPatchObjective
     (n := fun _ : Lattice.Site Λ ↦ q) regions hregions a ha hb Ωᵤ hΩᵤ x hx hmin
-  obtain ⟨T, hsupp, hherm, hTnorm, hTsum⟩ := h.exists_nearestNeighbor_terms
+  obtain ⟨T, hsupp, hherm, hTnorm, hTsum⟩ := h.exists_nearestNeighbor_terms hh hhJ
   let D : ℕ → Finset (Lattice.Site Λ) := AreaLaw.Geometry.nestedPatch Λ center u
   let K : (j : Fin m) → Matrix (Entropy.RegionConfig (fun _ : Lattice.Site Λ ↦ q) (D j))
       (Entropy.RegionConfig (fun _ : Lattice.Site Λ ↦ q) (D j)) ℂ :=

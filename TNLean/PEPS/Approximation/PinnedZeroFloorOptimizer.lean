@@ -220,7 +220,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelit
           (canonicalRegions X j) → i = j := by
     simpa only [canonicalRegions_fin] using rectangle_singleCrossing X hsingle
   obtain ⟨K, hK, hmax, hresult⟩ :=
-    h.exists_zero_floor_maximizer_energy_fidelity hΩ (canonicalRegions X) hD hsep a ha ha1
+    h.exists_zero_floor_maximizer_energy_fidelity hh hhJ hΩ (canonicalRegions X) hD hsep a ha ha1
   have hbudget : (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 *
       (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (canonicalRegions X j)).card =
       (q : ℝ) ^ 2 * J * ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 := by

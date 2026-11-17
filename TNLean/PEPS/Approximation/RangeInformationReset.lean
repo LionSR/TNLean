@@ -49,6 +49,8 @@ soon as `ℓ + R ≤ w`; at range one the offset is `1`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (SquareLatticeVertex)
 
 open Matrix QuantumCircuit

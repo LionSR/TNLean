@@ -6,6 +6,8 @@ Authors: TNLean contributors
 import QICLean.Entropy.MovementEtaRegional
 import QICLean.Entropy.RegionCovariance
 import TNLean.PEPS.AreaLaw.RectangularHamiltonian
+import TNLean.PEPS.Approximation.Basic
+import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.PEPS.AreaLaw.TwoFamilies
@@ -183,7 +185,7 @@ Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–58),
 area-law Theorem 1.1 and Corollary 1.2. -/
 theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
     (hbound : ∀ Λ : Finset (ℤ × ℤ), ∀ h : Lattice.LocalHamiltonian Λ q 1 J, ∀ E₀ : ℝ,
-      ∀ Ω : Lattice.StateSpace Λ q, Lattice.IsGappedGroundState Λ q h.hamiltonian E₀ Ω Δ →
+      ∀ Ω : Lattice.StateSpace Λ q, Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
         ∀ A : Finset (Lattice.Site Λ),
           Lattice.regionalEntropy Λ q Ω A ≤ C * (Lattice.edgeBoundary Λ A).card)
     {L : ℕ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
@@ -208,6 +210,7 @@ theorem _root_.TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw
     (harea : AreaLaw.UniformAreaLaw) : SquareEntropyAreaLaw := by
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q (by omega) 1 J Δ hJ hΔ
-  exact ⟨C, hC, fun _ _ ⟨h, _, hΩ⟩ A ↦ finiteProductEntropy_le_of_areaLawBound hbound h hΩ A⟩
+  exact ⟨C, hC, fun _ _ ⟨h, hh, hhJ, _, hΩ⟩ A ↦
+    finiteProductEntropy_le_of_areaLawBound hbound h hh hhJ hΩ A⟩
 
 end TNLean.PEPS.Approximation

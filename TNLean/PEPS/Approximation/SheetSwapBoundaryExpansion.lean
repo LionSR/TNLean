@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.Basic
+import TNLean.Circuit.EntropySupport
 import TNLean.Lattice.RegionalSwapSupport
 import TNLean.PEPS.RegionBlock.Basic
 
@@ -59,7 +60,9 @@ theorem _root_.ManyBody.SquareInteraction.sheetSwapOp_conj_doubled_operator_sub_
   have hcancel {S : Finset (SquareLatticeVertex L L)}
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
       (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
-      (hS : (S : Set _) ⊆ (R : Set _) ∨ Disjoint (S : Set _) (R : Set _)) : δ A = 0 :=
+      (hS : (S : Set (SquareLatticeVertex L L)) ⊆ (R : Set (SquareLatticeVertex L L)) ∨
+        Disjoint (S : Set (SquareLatticeVertex L L)) (R : Set (SquareLatticeVertex L L))) :
+      δ A = 0 :=
     sub_eq_zero.mpr
       (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
         (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hA) hS)

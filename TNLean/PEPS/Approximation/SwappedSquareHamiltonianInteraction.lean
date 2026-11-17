@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RectangularHamiltonian
+import TNLean.PEPS.Approximation.Basic
+import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.Lattice.Sheet.SwapCorrection
 import TNLean.Lattice.RegionalSwapSupport
 import TNLean.Circuit.SitewiseTensorSupport
@@ -105,7 +107,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonia
       Matrix.doubledHamiltonian (h.hermitianPart.term i)) =
       Matrix.doubledHamiltonian h.hamiltonian := by
     change (∑ i : SquareLatticeSiteOrEdge L L, D (h.hermitianPart.term i)) = D h.hamiltonian
-    rw [← map_sum D, (h.hamiltonian_hermitianPart hh)]
+    rw [← map_sum D, ← h.hamiltonian_hermitianPart hh]; rfl
   -- The actual interaction family sums exactly to the swapped doubled total, since
   -- the conjugation and the bond reindexing are additive.
   have key : (∑ i : SquareLatticeSiteOrEdge L L, B i) = F * K * Fᴴ := by

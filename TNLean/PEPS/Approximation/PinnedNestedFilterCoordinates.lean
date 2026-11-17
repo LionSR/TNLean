@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PinnedNestedFilters
 import TNLean.PEPS.AreaLaw.RectangularHamiltonian
+import TNLean.PEPS.Approximation.Basic
+import TNLean.PEPS.Approximation.SquareGridContraction
 import QICLean.Entropy.FilterOutputCovariance
 import QICLean.Entropy.RegionUnion
 

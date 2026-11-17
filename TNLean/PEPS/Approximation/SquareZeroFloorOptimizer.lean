@@ -94,7 +94,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
             a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
   classical
-  obtain ⟨T, hT, hTH, hTJ, hsum⟩ := h.exists_nearestNeighbor_terms
+  obtain ⟨T, hT, hTH, hTJ, hsum⟩ := h.exists_nearestNeighbor_terms hh hhJ
   have hgs := h.isGappedGroundState_toAreaLawHamiltonian hhJ hh hΩ
   have hΩ0 : AreaLaw.rectangleAreaLawState Ω ≠ 0 := fun h0 ↦ by
     have hnorm := hgs.1

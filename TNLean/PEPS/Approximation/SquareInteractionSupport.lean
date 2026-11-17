@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RectangularHamiltonian
+import TNLean.PEPS.Approximation.Basic
+import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.AreaLaw.EdgeCrossingBudget
 import TNLean.PEPS.IsoTransport
 
