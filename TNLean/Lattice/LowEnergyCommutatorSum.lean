@@ -311,6 +311,7 @@ private theorem gaussian_error_prefactor (a w b n g c e : ℝ) :
 
 include ha hHerm hSupport hDiam hCard hBudget
 
+omit ha in
 set_option maxHeartbeats 400000 in
 -- The explicit Gaussian prefactor comparison expands several nested products and real casts.
 set_option backward.isDefEq.respectTransparency false in
@@ -344,7 +345,7 @@ theorem norm_groundCompression_observables_commutator_le_exp [NeZero d]
   have hT0 : 0 ≤ T := by positivity
   set q : ℝ := T * ΔE with hq
   have hq0 : 0 ≤ q := by positivity
-  have hb := norm_groundCompression_commutator_le_graphNeighborhood G X a ha h hHerm hSupport R
+  have hb := norm_groundCompression_commutator_le_graphNeighborhood G X h hHerm hSupport R
     hDiam vR hCard b₀ hBudget |Kg| kg hGrowthAbs hq0 hΔE hH hgap S hW l Y hY hB hT0
   set A : ℝ := 2 + 4 * |b₀| * Real.exp (2 * R)
   set Ck : ℝ := 2 ^ kg * kg ! * Real.exp (1 / 2) / (1 - Real.exp (-(1 / 2)))
@@ -390,6 +391,7 @@ theorem norm_groundCompression_observables_commutator_le_exp [NeZero d]
         exact gaussian_error_prefactor A ‖W‖ ‖B‖ vObs |Kg| Ck E
 
 
+omit ha in
 set_option backward.isDefEq.respectTransparency false in
 /-- Exponential decay between arbitrary local observables in the distance between
 anchors. The velocity uses the Hamiltonian generator parameters `R,vR`; the observable
@@ -419,11 +421,13 @@ theorem norm_groundCompression_observables_commutator_le_exp_edist [NeZero d]
   apply le_anchorDecay_of_separated_exp hγ hC (norm_nonneg _) (norm_nonneg _)
     Robs (G.edist (c j) (c i)) (norm_groundCompression_commutator_le_two_mul _ _ _ _)
   intro l hlt
-  exact norm_groundCompression_observables_commutator_le_exp G X a ha h hHerm hSupport R
+  exact norm_groundCompression_observables_commutator_le_exp G X h hHerm hSupport R
     hDiam vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap (Y j) (hW j) vObs (hYCard j)
     l (Y i : Set ι)
     (disjoint_biUnion_graphBall_of_lt_edist G Y c hc Robs hYDiam i j l hlt) (hW i)
 
+omit ha in
+include a in
 /-- **Eq. `blecm` with an exponential rate.** Let every eigenvalue of `H = ∑ₖ hₖ` equal `E₀` or
 be at least `E₀ + ΔE`, and let `X_i` be disjoint from the sites within graph distance `l` of
 `X_j`. Then `‖[P h_j P, P h_i P]‖ ≤ C ‖h_j‖ ‖h_i‖ e^{-γ l}`, with `C = commutatorConst` and
@@ -445,7 +449,7 @@ theorem norm_groundCompression_commutator_le_exp [NeZero d] (Kg : ℝ) (kg : ℕ
     simp only [CharP.cast_eq_zero, zero_add, one_pow, mul_one] at this
     exact (Nat.cast_nonneg _).trans this
   simpa only [abs_of_nonneg hKg] using
-    norm_groundCompression_observables_commutator_le_exp G X a ha h hHerm hSupport R hDiam vR
+    norm_groundCompression_observables_commutator_le_exp G X h hHerm hSupport R hDiam vR
       hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap (X j) (hSupport j) vR (hCard j) l (X i) hY
       (hSupport i)
 
@@ -469,7 +473,7 @@ theorem norm_groundCompression_commutator_le_exp_edist [NeZero d] (Kg : ℝ) (kg
     simp only [CharP.cast_eq_zero, zero_add, one_pow, mul_one] at this
     exact (Nat.cast_nonneg _).trans this
   simpa only [abs_of_nonneg hKg] using
-    norm_groundCompression_observables_commutator_le_exp_edist G X a ha h hHerm hSupport R hDiam
+    norm_groundCompression_observables_commutator_le_exp_edist G X h hHerm hSupport R hDiam
       vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap X a ha h hSupport R hDiam vR hCard i j
 
 /-- **The sum of the low-energy commutators over all terms.** Let every eigenvalue of

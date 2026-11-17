@@ -95,7 +95,7 @@ theorem exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_truncated_le [NeZ
   refine exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_le_of_commutator_le G X id hX h M
     hMherm hMnorm b₀ hBudget Kg kg hGrowth _ E₀ hγ hC fun i j ↦ ?_
   refine (norm_groundSpaceCompression_commutator_le _ _ _ _).trans ?_
-  refine (norm_groundCompression_observables_commutator_le_exp_edist G X id hX h hHerm
+  refine (norm_groundCompression_observables_commutator_le_exp_edist G X h hHerm
     hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap
     K id (fun i ↦ hXK i (hX i)) M hMsupp Robs hKDiam vObs hKCard j i).trans ?_
   change C * ‖M i‖ * ‖M j‖ * _ ≤ C * ‖h i‖ * ‖h j‖ * _
