@@ -24,7 +24,7 @@
       "status": "open",
       "paper": "cpsv17",
       "result": "Theorem IndexTh, the index theorem, and the other results that name the source cuts of an arbitrary MPU tensor",
-      "issue": 6136,
+      "issue": 5704,
       "title": "Source cuts of an arbitrary tensor are not carried to its reduced form",
       "summary": "Read literally, “every MPU tensor is normal” fails for tensors padded with unused bond directions. The reduced representative the paper intends is constructed and Theorem III.8 is proved for it, but the singular value data of an arbitrary tensor are not yet carried over to that representative, so several later results remain restricted.",
       "context": "Proposition III.1 says that the transfer matrix of an MPU tensor, the map ρ ↦ (1/<i>d</i>) Σ<sub><i>ij</i></sub> <i>U</i><sup><i>ij</i></sup>ρ<i>U</i><sup><i>ij</i>†</sup> on bond matrices, has a single nonzero eigenvalue, equal to one, so that the tensor is normal. The paper then assumes canonical form II: one block filling the bond space, left fixed point the identity, right fixed point a positive diagonal ρ of trace one. The two source cuts, the matrices obtained by grouping the four legs of the tensor in two ways, have ranks <i>r</i> and ℓ; they enter the standard form, the index (1/2)(log<sub>2</sub> <i>r</i> − log<sub>2</sub> ℓ) and the symmetry classification.",

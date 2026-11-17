@@ -39,14 +39,14 @@ open scoped Matrix.Norms.L2Operator
 namespace TNLean.Lattice
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
-  (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+  (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
   (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
 
-include ha hHerm hSupport hDiam hCard hBudget
+include hHerm hSupport hDiam hCard hBudget
 
 /-- **The low-energy commutator is small when a supercell translate is far away.** Let the
 terms be covariant under the action of `Γ`, `h_{g•k} = P_g h_k P_g†` (Hastings,
@@ -87,7 +87,7 @@ theorem norm_groundCompression_commutator_le_of_supercell_separation [NeZero d]
     exact groundCompression_sitePermMatrix_conj S hS hg _
   rw [groundCompression_gaussianFilteredTerm hr hH, groundCompression_gaussianFilteredTerm hr hH,
     ← hj]
-  exact norm_groundCompression_commutator_le_graphNeighborhood G X a ha h hHerm hSupport R hDiam
+  exact norm_groundCompression_commutator_le_graphNeighborhood G X h hHerm hSupport R hDiam
     vR hCard b₀ hBudget Kg kg hGrowth hq hΔE hH hgap (X i) (hSupport i) l _ hsep
     (hSupport (g • j)) hT
 

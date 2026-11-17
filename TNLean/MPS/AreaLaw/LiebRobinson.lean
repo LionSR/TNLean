@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.ChainNeighborhood
 import TNLean.MPS.AreaLaw.DomainGraphGeometry
-import TNLean.Algebra.PathGraphDistance
+import QICLean.ManyBody.Sites.Lattice.PathGraph
 import TNLean.Circuit.EntropySupport
 import TNLean.Circuit.SiteExpectationGraphLocalization
 
@@ -63,7 +63,7 @@ TNLean note, `part2a_mps_information.tex`, lines 260–273; at infinite distance
 vanishes by the closed-region argument of OpenAI, *A two-dimensional area law from a global
 spectral gap*, Lemma 4.1 (`03-quasilocal.tex`, lines 63 and 113–114). -/
 theorem norm_heisenberg_commutator_le_graphDistance_inf
-    (G : SimpleGraph ι) (T : κ → Finset ι) (hT : ∀ k, (T k).Nonempty)
+    (G : SimpleGraph ι) (T : κ → Finset ι)
     (hDiam : ∀ k, ∀ x ∈ T k, ∀ z ∈ T k, G.edist x z ≤ R)
     (hCard : ∀ k, (T k).card ≤ R + 1)
     (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
@@ -92,7 +92,7 @@ theorem norm_heisenberg_commutator_le_graphDistance_inf
     rw [hΦ] at hComm
     simp only [hComm, norm_zero, ite_eq_left hδ, mul_zero, le_refl]
   have hGraph := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset
-    G Φ (fun k ↦ (hT k).choose) (fun k ↦ (hT k).choose_spec) hHerm R hDiam (R + 1) hCard
+    G Φ hHerm R hDiam (R + 1) hCard
     b₀ hBudget S hA y hB 1 (by norm_num) δ.toNat
     (fun x hx ↦ (ENat.natCast_toNat_le_self δ).trans (Finset.inf_le hx)) t
   simp only [hΦ, mul_one, one_mul, Nat.cast_add, Nat.cast_one, ite_eq_right hδ] at hGraph ⊢
@@ -111,7 +111,7 @@ theorem norm_heisenberg_commutator_le_graphDistance_inf
 have at most two sites, onto the union of the balls of radius `⌊ℓ⌋` about the initial support.
 TNLean note, `part2a_mps_information.tex`, lines 274–280. -/
 theorem norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_two
-    (G : SimpleGraph ι) (T : κ → Finset ι) (hT : ∀ k, (T k).Nonempty)
+    (G : SimpleGraph ι) (T : κ → Finset ι)
     (hDiam : ∀ k, ∀ x ∈ T k, ∀ z ∈ T k, G.edist x z ≤ R)
     (hCard : ∀ k, (T k).card ≤ R + 1)
     (hSphere : ∀ x : ι, ∀ d : ℕ, (Finset.univ.filter fun y ↦ G.edist x y = d).card ≤ 2)
@@ -138,7 +138,7 @@ theorem norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_tw
     exact_mod_cast hSphere x d
   let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin q) T := ⟨h, hSupport⟩
   have hGraph := QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le
-    G Φ (fun k ↦ (hT k).choose) (fun k ↦ (hT k).choose_spec) hHerm R hDiam (R + 1) hCard
+    G Φ hHerm R hDiam (R + 1) hCard
     b₀ hBudget 2 0 hGrowth S hA ⌊ℓ⌋₊ t
   simp only [pow_zero, Nat.factorial_zero, Nat.cast_one, mul_one, Nat.cast_add] at hGraph
   have hRound :
@@ -202,7 +202,7 @@ theorem norm_heisenberg_commutator_le_chainDistance
         Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t|) *
         (if δ = ⊤ then 0 else Real.exp (-((δ.toNat : ℝ) / 2))) :=
   norm_heisenberg_commutator_le_graphDistance_inf (SimpleGraph.pathGraph L) (fun k ↦ (X k).1)
-    (fun k ↦ (X k).2.1) (fun k ↦ (X k).edist_le) (fun k ↦ (X k).2.card_le)
+    (fun k ↦ (X k).edist_le) (fun k ↦ (X k).2.card_le)
     h hHerm hSupport b₀ hBudget S hA y hB t
 
 /-- Contiguous-chain specialization of Lemma lem:LR, real-radius localization.
@@ -235,7 +235,7 @@ theorem norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
       mem_chainNeighborhood]
   rw [← hN]
   exact norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_two
-    (SimpleGraph.pathGraph L) (fun k ↦ (X k).1) (fun k ↦ (X k).2.1) (fun k ↦ (X k).edist_le)
+    (SimpleGraph.pathGraph L) (fun k ↦ (X k).1) (fun k ↦ (X k).edist_le)
     (fun k ↦ (X k).2.card_le) (SimpleGraph.pathGraph_card_sphere_le_two L)
     h hHerm hSupport b₀ hBudget S hA ℓ t
 
@@ -264,7 +264,7 @@ theorem norm_heisenberg_commutator_le_domainDistance
         Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t|) *
         (if δ = ⊤ then 0 else Real.exp (-((δ.toNat : ℝ) / 2))) :=
   norm_heisenberg_commutator_le_graphDistance_inf (domainGraph Λ) (fun k ↦ (X k).1)
-    (fun k ↦ (X k).2.1) (fun k ↦ (X k).2.2) (fun k ↦ (X k).2.isChainSupport.card_le)
+    (fun k ↦ (X k).2.2) (fun k ↦ (X k).2.isChainSupport.card_le)
     h hHerm hSupport b₀ hBudget S hA y hB t
 
 /-- Real-radius localization on a finite induced integer domain, extending the chain
@@ -291,7 +291,7 @@ theorem norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
         (1 - Real.exp (-(1 / 2)))) * (S.card : ℝ) ^ 2 * ‖A‖ *
           Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t| - ℓ / 2) :=
   norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_two
-    (domainGraph Λ) (fun k ↦ (X k).1) (fun k ↦ (X k).2.1) (fun k ↦ (X k).2.2)
+    (domainGraph Λ) (fun k ↦ (X k).1) (fun k ↦ (X k).2.2)
     (fun k ↦ (X k).2.isChainSupport.card_le) (domainGraph_card_sphere_le_two Λ)
     h hHerm hSupport b₀ hBudget S hA ℓ t
 

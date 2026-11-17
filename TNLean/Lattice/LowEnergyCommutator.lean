@@ -203,14 +203,14 @@ end Ground
 section Graph
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
-  (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+  (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
   (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
 
-include ha hHerm hSupport hDiam hCard hBudget
+include hHerm hSupport hDiam hCard hBudget
 
 /-- **The commutator of a filtered term with a separated operator, eq. `lc`.** Let `W` act on
 `S`, and let `B` act on a set `Y` disjoint from the set of sites within graph distance `l` of
@@ -234,7 +234,7 @@ theorem norm_commutator_gaussianFilteredTerm_le_of_disjoint [NeZero d] (Kg : ℝ
           2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q))) := by
   set F := gaussianFilteredTerm q ΔE (∑ k, h k) W
   set M := siteExpectation d (S.biUnion fun x => ManyBody.graphBall G x l) F
-  have hloc := norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood G X a ha h
+  have hloc := norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood G X h
     hHerm hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth (ΔE := ΔE) hq S hW l hT
   have hcomm : Commute M B :=
     commute_of_mem_supportedOperators hY (siteExpectation_mem_supportedOperators _ _) hB
@@ -273,7 +273,7 @@ theorem norm_groundCompression_commutator_le_graphNeighborhood [NeZero d] (Kg : 
             2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q))) +
         2 * ‖W‖ * ‖B‖ * Real.exp (-q / 2) :=
   (norm_groundCompression_commutator_le hq hΔE hH hgap W B).trans <| add_le_add_left
-    (norm_commutator_gaussianFilteredTerm_le_of_disjoint G X a ha h hHerm hSupport R hDiam vR
+    (norm_commutator_gaussianFilteredTerm_le_of_disjoint G X h hHerm hSupport R hDiam vR
       hCard b₀ hBudget Kg kg hGrowth hq S hW l Y hY hB hT) _
 
 end Graph

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ComponentReduction
 import TNLean.Algebra.IntegerHasseGraph
 import TNLean.Algebra.GraphDistanceTransport
-import TNLean.Algebra.PathGraphDistance
+import QICLean.ManyBody.Sites.Lattice.PathGraph
 
 /-!
 # Spheres in a finite integer domain

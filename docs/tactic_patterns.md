@@ -9028,7 +9028,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** all four equations use one local arbitrary-matrix transport
   lemma, itself an application of
   `Matrix.toEuclideanLin_reindex_piLpCongrLeft` in
-  `Algebra/MatrixReindexGap.lean`.
+  `QICLean/Algebra/MatrixReindexEuclidean.lean` (QICLean dependency).
 - **Notes:** the four applications occur in one module. A shared scalar-eigenvalue
   corollary is appropriate if the same conversion occurs in another module;
   the underlying matrix-action identity is already shared.
@@ -10375,18 +10375,6 @@ there is no need for a new tactic.
   `Matrix.reindexLinearEquiv_mul` with all three equivalences explicit,
   together with `Matrix.conjTranspose_reindex`; no new reindex algebra is built.
 
-### Transport finite buffering before comparing completed actions — candidate (2026-10-29)
-
-- **Seen:** `MPS/MPU/SuppliedWindowCoordinates.lean` and
-  `MPS/MPU/SuppliedQuasiLocalAction.lean`.
-- **Pattern:** Prove that a sitewise physical bijection commutes with finite
-  prefix/window/suffix concatenation and identity buffering; then reindex
-  the actual periodic matrix equality before applying the named finite
-  evaluation theorem.
-- **Reuse:** Existing finite unitary reindexing and the canonical interval
-  inclusion theorem supply the algebraic steps. The complete window head
-  coordinate bijections are promoted at their existing owner and reused.
-- **Notes:** No second quasi-local relabelling or action structure is added.
 ### Cyclic local interaction in its defining coordinates — promoted
 - **Pattern:** expose a translated arbitrary interaction by applying the
   active-block isometry, then cancel the inverse isometry.
