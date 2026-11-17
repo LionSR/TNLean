@@ -403,6 +403,8 @@ tensors are in canonical form.
     hypotheses on $u_p$ and $Y_p$.
 \end{proof}
 
+% Source passages: GLM23, REsubmission.tex, lines 1600--1631 (the common
+% operator and its crossed blocks) and lines 1687--1692 (the canonical parent).
 For a group the hypothesis of
 Lemma~\ref{thm:mpo_arbitrary_parent_commutation_adjoint_closed}, imposed
 label by label, fails for unitary on-site symmetries as soon as some
@@ -429,7 +431,11 @@ operator of the label $g$.
         def:mpdo_physical_adjoint,def:injective,thm:glm_boundary_physical_adjoint,
         thm:mpo_arbitrary_hermitian_gauge_adjoint_closure,
         thm:mpo_arbitrary_canonical_hermitian_gauge}
-    Suppose that $A_0,A_1$ are one-site injective and that every action
+    This concerns the common operator $T_a$ of
+    \cite[Section~5]{GarreRubio2023MPOSym}, with its crossed blocks
+    $T^{0,1}_a$ and $T^{1,0}_a$. Suppose that $A_0,A_1$ are one-site
+    injective and, as a restriction not made by the source
+    \cite{gap:glm23_mixed_path_parent_commutation}, that every action
     gauge $Y_{p,g}$ is a nonzero multiple of a unitary matrix. Then for
     every $g\in G$, every $N$ and every $X$ there is an $X'$ with
     $(O^N_{\widetilde T_g,X})^*=O^N_{\widetilde T_{g^{-1}},X'}$. Hence the
@@ -476,8 +482,11 @@ operator of the label $g$.
     for every label, restricted to unitary on-site endpoint representations
     of a group $G$ with $m=1$ as above, that $D_0,D_1>0$, and that
     $A_0,A_1$ are one-site injective. Assume, as a restriction not made by
-    the source, that every action gauge $Y_{p,g}$ is a nonzero multiple of a
-    unitary matrix. Then for every $g\in G$, every $\gamma\in[0,1]$ and
+    the source \cite{gap:glm23_mixed_path_parent_commutation}, that every
+    action gauge $Y_{p,g}$ is a nonzero multiple of a unitary matrix. The
+    canonical parent $\widetilde h_\gamma=\Id-\Pi_{S_\gamma}$ is that of
+    \cite[Section~5]{GarreRubio2023MPOSym}. Then for every $g\in G$,
+    every $\gamma\in[0,1]$ and
     every $X$, $[\widetilde h_\gamma,O^2_{\widetilde T_g,X}]=0$.
     Consequently, for every $N\geq2$ and every
     $X\in\mathcal C(\widetilde T_g)$,
@@ -485,7 +494,8 @@ operator of the label $g$.
     $[\widetilde H_{\gamma,N},O^{(N)}_{\widetilde T_g}]=0$. The gauge
     hypothesis holds when both endpoint tensors satisfy
     $\E_{A_p}(\Id)=\Id$ and have positive definite fixed points of
-    $\E_{A_p}^\dagger$.
+    $\E_{A_p}^\dagger$, by
+    \cite[Lemma~1 and Theorem~2]{PerezGarcia2008StringOrder}.
 \end{lemma}
 \begin{proof}
     \leanok
