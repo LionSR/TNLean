@@ -11,9 +11,10 @@ import TNLean.MPS.MPU.PhysicalTransposeSourceFactors
 # Time-reversal and transposition phases of the swap-transformed shifts
 
 Proposition `prop:U2-U3-trivial-tr-transpose` of arXiv:1703.09188 (lines 2136--2155) states
-that the MPUs `Ũ₂^{(N)} = 𝕊^{⊗N} (T^{(N)†} ⊗ T^{(N)})` and
-`Ũ₃^{(N)} = 𝕊^{⊗N} (T^{(N)} ⊗ T^{(N)†})` are in the same phase under both time reversal and
-transposition. The source proof conjugates the physical legs of the tensor of `Ũ₂` by a
+that the MPUs `tilde U₂^{(N)} = 𝕊^{⊗N} (T^{(N)†} ⊗ T^{(N)})` and
+`tilde U₃^{(N)} = 𝕊^{⊗N} (T^{(N)} ⊗ T^{(N)†})` are in the same phase under both time reversal
+and
+transposition. The source proof conjugates the physical legs of the tensor of `tilde U₂` by a
 continuous unitary path `𝕊(x)` from the identity to the swap, using `𝕊(x)^†` for time reversal
 and `𝕊(x)^T` for transposition.
 
@@ -52,8 +53,10 @@ theorem swapMatrix_mul_swapPath (x : ℝ) :
 /-- Every point of the swap path is a symmetric matrix. -/
 theorem transpose_swapPath (x : ℝ) : (swapPath d x)ᵀ = swapPath d x := by
   have hS : (swapMatrix d)ᵀ = swapMatrix d := by
-    ext p q
-    simp [swapMatrix_apply, and_comm]
+    ext ⟨p₁, p₂⟩ ⟨q₁, q₂⟩
+    simp only [transpose_apply, swapMatrix]
+    congr 1
+    exact propext ⟨fun h ↦ ⟨h.2.symm, h.1.symm⟩, fun h ↦ ⟨h.2.symm, h.1.symm⟩⟩
   simp only [swapPath, swapAntisymmetricProjection, swapSymmetricProjection, transpose_add,
     transpose_smul, transpose_sub, transpose_one, hS]
 
@@ -83,8 +86,16 @@ theorem mpo_braRightMul (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ) (N 
   rw [braRightMul_eq, mpo_physicalTransposeTensor, mpo_ketLeftMul,
     mpo_physicalTransposeTensor, Matrix.transpose_mul, Matrix.transpose_transpose]
   congr 1
-  ext s t
-  simp [sitewisePhysicalMatrix]
+
+/-- Physical conjugation multiplies the output leg by `U` and the input leg by `U†`. -/
+private theorem conjugatePhysical_eq_ketLeftMul_braRightMul (K : MPOTensor d D)
+    (U : Matrix (Fin d) (Fin d) ℂ) :
+    conjugatePhysical K U = (K.ketLeftMul U).braRightMul Uᴴ := by
+  funext i j
+  ext β α
+  simp only [conjugatePhysical, physicalSlice, ketLeftMul, braRightMul, Matrix.mul_apply,
+    Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, Finset.sum_mul, Finset.mul_sum]
+  exact Finset.sum_congr rfl fun _ _ ↦ Finset.sum_congr rfl fun _ _ ↦ by ring
 
 private theorem ketLeftMul_one (M : MPOTensor d D) : M.ketLeftMul 1 = M := by
   funext i j
@@ -114,6 +125,15 @@ private theorem sitewisePhysicalMatrix_mem_unitaryGroup {V : Matrix (Fin d) (Fin
 
 /-! ### The swap and the swap path -/
 
+private theorem shiftPhysicalSwap_conjTranspose' (d : ℕ) :
+    (shiftPhysicalSwap d)ᴴ = shiftPhysicalSwap d := by
+  have h := mem_unitaryGroup_iff'.mp (shiftPhysicalSwap_mem_unitaryGroup d)
+  rw [star_eq_conjTranspose] at h
+  calc (shiftPhysicalSwap d)ᴴ =
+        (shiftPhysicalSwap d)ᴴ * (shiftPhysicalSwap d * shiftPhysicalSwap d) := by
+        rw [shiftPhysicalSwap_mul_self, Matrix.mul_one]
+    _ = shiftPhysicalSwap d := by rw [← Matrix.mul_assoc, h, Matrix.one_mul]
+
 /-- The local swap is the endpoint of the swap path. -/
 private theorem shiftPhysicalSwap_eq_swapPathFin_one (d : ℕ) :
     shiftPhysicalSwap d = swapPathFin d 1 := by
@@ -138,8 +158,10 @@ private theorem shiftPhysicalSwap_transpose (d : ℕ) :
 
 /-- The sitewise swap and the sitewise path commute. -/
 private theorem sitewise_swap_commute (d N : ℕ) (x : ℝ) :
-    sitewisePhysicalMatrix (shiftPhysicalSwap d) N * sitewisePhysicalMatrix (swapPathFin d x) N =
-      sitewisePhysicalMatrix (swapPathFin d x) N * sitewisePhysicalMatrix (shiftPhysicalSwap d) N := by
+    sitewisePhysicalMatrix (shiftPhysicalSwap d) N *
+        sitewisePhysicalMatrix (swapPathFin d x) N =
+      sitewisePhysicalMatrix (swapPathFin d x) N *
+        sitewisePhysicalMatrix (shiftPhysicalSwap d) N := by
   rw [sitewisePhysicalMatrix_mul, sitewisePhysicalMatrix_mul,
     shiftPhysicalSwap_commute_swapPathFin]
 
@@ -154,37 +176,26 @@ private theorem mpo_shiftExampleU₂_conjTranspose (d N : ℕ) [NeZero N] :
 /-- `U₂^{(N)}` is a real matrix, so its transpose is its adjoint. -/
 private theorem mpo_shiftExampleU₂_transpose (d N : ℕ) [NeZero N] :
     (mpo (shiftExampleU₂ d) N)ᵀ = (mpo (shiftExampleU₂ d) N)ᴴ := by
-  have hreal : ∀ σ : Equiv.Perm (Fin N → Fin d),
-      (Equiv.Perm.permMatrix ℂ σ).map star = Equiv.Perm.permMatrix ℂ σ := fun σ ↦ by
+  have hP : ∀ σ : Equiv.Perm (Fin N → Fin d),
+      (Equiv.Perm.permMatrix ℂ σ)ᴴ = (Equiv.Perm.permMatrix ℂ σ)ᵀ := fun σ ↦ by
     ext a b
-    simp only [map_apply, Equiv.Perm.permMatrix, PEquiv.toMatrix_apply]
+    simp only [conjTranspose_apply, transpose_apply, Equiv.Perm.permMatrix,
+      PEquiv.toMatrix_apply]
     split <;> simp
-  have hmap : (mpo (shiftExampleU₂ d) N).map star = mpo (shiftExampleU₂ d) N := by
-    rw [mpo_shiftExampleU₂]
-    ext a b
-    simp only [map_apply, reindex_apply, submatrix_apply, kroneckerMap_apply, star_mul']
-    rw [← map_apply (f := star) (Equiv.Perm.permMatrix ℂ (rotateConfig N d)), hreal,
-      ← conjTranspose_map star_star, ← map_apply (f := star) ((Equiv.Perm.permMatrix ℂ
-        (rotateConfig N d))ᴴ), conjTranspose_map star_star]
-    simp only [← conjTranspose_apply, conjTranspose_map star_star, hreal]
-  rw [conjTranspose, hmap.symm.trans (by rw [hmap]) ▸ rfl]
-  ext a b
-  have := congrFun (congrFun hmap b) a
-  simp only [map_apply] at this
-  simp [this]
+  rw [mpo_shiftExampleU₂, transpose_reindex, conjTranspose_reindex, conjTranspose_kronecker,
+    ← kroneckerMap_transpose, conjTranspose_conjTranspose, hP, transpose_transpose]
 
 private theorem swap_mul_mpo_shiftExampleU₃_mul_swap (d N : ℕ) [NeZero N] :
     sitewisePhysicalMatrix (shiftPhysicalSwap d) N * mpo (shiftExampleU₃ d) N *
         sitewisePhysicalMatrix (shiftPhysicalSwap d) N = mpo (shiftExampleU₂ d) N := by
+  have h := mpo_shiftExampleTildeU₃_eq_swap_mul_tildeU₂_mul_swap d N
+  rw [shiftExampleTildeU₃, shiftExampleTildeU₂, mpo_ketLeftMul, mpo_ketLeftMul] at h
   set P := sitewisePhysicalMatrix (shiftPhysicalSwap d) N
   have hP : P * P = 1 := by
     rw [sitewisePhysicalMatrix_mul, shiftPhysicalSwap_mul_self, sitewisePhysicalMatrix_one]
-  have h := mpo_shiftExampleTildeU₃_eq_swap_mul_tildeU₂_mul_swap d N
-  rw [shiftExampleTildeU₃, shiftExampleTildeU₂, mpo_ketLeftMul, mpo_ketLeftMul] at h
-  calc P * mpo (shiftExampleU₃ d) N * P = P * (P * (P * mpo (shiftExampleU₂ d) N) * P) * P := by
-        rw [← h]
-    _ = mpo (shiftExampleU₂ d) N := by
-        simp only [← Matrix.mul_assoc, hP, Matrix.one_mul, Matrix.mul_assoc, Matrix.mul_one]
+  have h2 : P * mpo (shiftExampleU₃ d) N = mpo (shiftExampleU₂ d) N * P := by
+    rw [h, ← Matrix.mul_assoc, hP, Matrix.one_mul]
+  rw [h2, Matrix.mul_assoc, hP, Matrix.mul_one]
 
 /-! ### Invariance along the physical paths -/
 
@@ -198,14 +209,14 @@ private theorem swapDagger_invariant_of_conj {N : ℕ}
         sitewisePhysicalMatrix (shiftPhysicalSwap d) N = A * M * Aᴴ := by
   set P := sitewisePhysicalMatrix (shiftPhysicalSwap d) N
   have hPh : Pᴴ = P := by
-    rw [sitewisePhysicalMatrix_conjTranspose, shiftPhysicalSwap_conjTranspose]
+    rw [sitewisePhysicalMatrix_conjTranspose, shiftPhysicalSwap_conjTranspose']
   have hA' : Aᴴ * P = P * Aᴴ := by
     have := congrArg conjTranspose hA
     rwa [conjTranspose_mul, conjTranspose_mul, hPh] at this
   rw [conjTranspose_mul, conjTranspose_mul, conjTranspose_conjTranspose]
-  calc P * (A * (Mᴴ * Aᴴ)) * P = A * (P * Mᴴ * P) * Aᴴ := by
-        simp only [← Matrix.mul_assoc, hA]
-        simp only [Matrix.mul_assoc, hA']
+  calc P * (A * (Mᴴ * Aᴴ)) * P = (P * A) * Mᴴ * (Aᴴ * P) := by simp only [Matrix.mul_assoc]
+    _ = (A * P) * Mᴴ * (P * Aᴴ) := by rw [hA, hA']
+    _ = A * (P * Mᴴ * P) * Aᴴ := by simp only [Matrix.mul_assoc]
     _ = A * M * Aᴴ := by rw [hM]
 
 private theorem swapTranspose_invariant_of_sandwich {N : ℕ}
@@ -218,9 +229,10 @@ private theorem swapTranspose_invariant_of_sandwich {N : ℕ}
         sitewisePhysicalMatrix (shiftPhysicalSwap d) N = A * M * A := by
   set P := sitewisePhysicalMatrix (shiftPhysicalSwap d) N
   rw [transpose_mul, transpose_mul, hAt]
-  calc P * (A * Mᵀ * A) * P = A * (P * Mᵀ * P) * A := by
-        simp only [← Matrix.mul_assoc, hA]
-        simp only [Matrix.mul_assoc, hA]
+  have hA' : A * P = P * A := hA.symm
+  calc P * (A * (Mᵀ * A)) * P = (P * A) * Mᵀ * (A * P) := by simp only [Matrix.mul_assoc]
+    _ = (A * P) * Mᵀ * (P * A) := by rw [hA, hA']
+    _ = A * (P * Mᵀ * P) * A := by simp only [Matrix.mul_assoc]
     _ = A * M * A := by rw [hM]
 
 private theorem shiftExampleU₂_swapDagger_fixed (d N : ℕ) [NeZero N] :
@@ -294,10 +306,10 @@ theorem shiftExampleU₂_strictlyEquivalentUnderSymmetry_shiftSwapDagger (d : �
       rfl
     · rintro _ ⟨x, -, rfl⟩
       exact ⟨hQ₂.conjugatePhysical _ (swapPathFin_mem_unitaryGroup d x), hinv x⟩
-  · have h := joinedIn_bond_step d (S := shiftSwapDaggerSymmetry d)
-      (by rw [← swapPathFin_one, ← conjugatePhysical_permMatrix, ← swapPathFin_one]
-          exact ⟨hP, hinv 1⟩)
-    rwa [← swapPathFin_one, ← conjugatePhysical_permMatrix, ← swapPathFin_one] at h
+  · rw [swapPathFin_one, conjugatePhysical_permMatrix]
+    refine joinedIn_bond_step d (S := shiftSwapDaggerSymmetry d) ?_
+    rw [← conjugatePhysical_permMatrix, ← swapPathFin_one]
+    exact ⟨hP, hinv 1⟩
 
 /-- **`U₂` and `U₃` under swap-combined transposition.** The tensors `U₂ = T† ⊗ T` and
 `U₃ = T ⊗ T†` are strictly equivalent under `X ↦ 𝕊^{⊗N} X^T 𝕊^{⊗N}` on every ring of positive
@@ -332,19 +344,12 @@ theorem shiftExampleU₂_strictlyEquivalentUnderSymmetry_shiftSwapTranspose (d :
         (by rw [sitewisePhysicalMatrix_transpose, transpose_swapPathFin])
         (sitewise_swap_commute d N x) (shiftExampleU₂_swapTranspose_fixed d N)
   have h1 : W 1 = reindexPhysical (siteSwap d) (shiftExampleU₂ d) := by
+    have hs : (swapPathFin d 1)ᴴ = swapPathFin d 1 := by
+      rw [← shiftPhysicalSwap_eq_swapPathFin_one, shiftPhysicalSwap_conjTranspose']
     rw [← conjugatePhysical_permMatrix, ← swapPathFin_one, hW]
-    funext i j
-    ext β α
-    simp only [ketLeftMul, braRightMul, conjugatePhysical, physicalSlice, Matrix.mul_apply,
-      Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, Matrix.conjTranspose_apply]
-    have hs : ∀ a b, star (swapPathFin d 1 a b) = swapPathFin d 1 b a := fun a b ↦ by
-      have := congrFun (congrFun (transpose_swapPathFin d 1) a) b
-      rw [← swapPathFin_one, ← shiftPhysicalSwap_eq_swapPathFin_one] at this ⊢
-      rw [← conjTranspose_apply, shiftPhysicalSwap_conjTranspose]
-      simpa using this.symm
-    simp only [hs, Finset.sum_mul]
-    rw [Finset.sum_comm]
-    exact Finset.sum_congr rfl fun _ _ ↦ Finset.sum_congr rfl fun _ _ ↦ by ring
+    simp only
+    nth_rewrite 2 [← hs]
+    exact (conjugatePhysical_eq_ketLeftMul_braRightMul _ _).symm
   refine JoinedIn.trans (y := W 1) ?_ ?_
   · refine JoinedIn.ofLine (f := W)
       ((continuous_ketLeftMul_braRightMul _).comp (continuous_swapPathFin d)).continuousOn
@@ -359,8 +364,9 @@ theorem shiftExampleU₂_strictlyEquivalentUnderSymmetry_shiftSwapTranspose (d :
 
 /-! ### The proposition -/
 
-/-- **Proposition `prop:U2-U3-trivial-tr-transpose`, time reversal.** The MPUs `Ũ₂` and `Ũ₃`
-are strictly equivalent under time reversal, imposed as `X^† = X` on every ring of positive
+/-- **Proposition `prop:U2-U3-trivial-tr-transpose`, time reversal.** The swap-transformed
+MPUs `tilde U₂` and `tilde U₃` are strictly equivalent under time reversal, imposed as
+`X^† = X` on every ring of positive
 length.
 
 Source: arXiv:1703.09188, Proposition `prop:U2-U3-trivial-tr-transpose`, lines 2136--2155. -/
@@ -370,8 +376,9 @@ theorem shiftExampleTildeU₂_strictlyEquivalentUnderSymmetry_dagger (d : ℕ) [
   (strictlyEquivalentUnderSymmetry_shiftSwapDagger_iff _ _).mp
     (shiftExampleU₂_strictlyEquivalentUnderSymmetry_shiftSwapDagger d)
 
-/-- **Proposition `prop:U2-U3-trivial-tr-transpose`, transposition.** The MPUs `Ũ₂` and `Ũ₃`
-are strictly equivalent under transposition, imposed as `X^T = X` on every ring of positive
+/-- **Proposition `prop:U2-U3-trivial-tr-transpose`, transposition.** The swap-transformed
+MPUs `tilde U₂` and `tilde U₃` are strictly equivalent under transposition, imposed as
+`X^T = X` on every ring of positive
 length.
 
 Source: arXiv:1703.09188, Proposition `prop:U2-U3-trivial-tr-transpose`, lines 2136--2155. -/
