@@ -1,19 +1,11 @@
 #!/usr/bin/env bash
 # Source only in the full-build step. No build command runs here.
-# No numeric-PID signalling or wait: Bash may reap an early-exiting sampler,
-# and its old PID may later belong to an unrelated process.
+# Never signal or wait on a stored numeric PID: Bash may already have reaped it.
+# All optional filesystem initialization runs in the background watchdog process.
 trap 'exit 130' INT
 trap 'exit 143' TERM
-_ci_resource_dir=''
-if [[ -n "${RUNNER_TEMP:-}" ]]; then
-  if _ci_resource_dir="$(mktemp -d "$RUNNER_TEMP/lean-resources.XXXXXXXX")"; then
-    # A new mode-0700 directory cannot contain a previous run's output.
-    # Publication separately verifies the sampler's closed-file receipt.
-    if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
-      printf 'resource_directory=%s\n' "$_ci_resource_dir" >> "$GITHUB_OUTPUT" || true
-    fi
-    python3 "${BASH_SOURCE[0]%/*}/ci_resource_diagnostics.py" sample \
-      --output "$_ci_resource_dir/samples.jsonl" --parent-pid "$$" &
-    _ci_resource_pid=$!  # For fixtures only; never used to signal a process.
-  fi
+if [[ -n "${RUNNER_TEMP:-}" && -n "${GITHUB_OUTPUT:-}" ]]; then
+  python3 "${BASH_SOURCE[0]%/*}/ci_resource_diagnostics.py" sample \
+    --temp-root "$RUNNER_TEMP" --github-output "$GITHUB_OUTPUT" --parent-pid "$$" &
+  _ci_resource_pid=$!  # For fixtures only; never used to signal a process.
 fi

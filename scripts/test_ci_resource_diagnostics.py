@@ -204,9 +204,7 @@ class ShellTest(unittest.TestCase):
         self.assertEqual(self.run_build().returncode, 11)
 
     def test_diagnostic_output_unavailable_does_not_change_success_or_failure(self):
-        file = self.bin / "mktemp"
-        file.write_text("#!/bin/bash\nexit 1\n")
-        file.chmod(0o755)
+        self.env['GITHUB_OUTPUT'] = str(self.root)  # Directory, not an appendable file.
         for code in (0, 7):
             with self.subTest(code=code):
                 self.fake_lake(f'sleep 0.1\nexit {code}\n')
@@ -247,6 +245,85 @@ class ShellTest(unittest.TestCase):
         self.assertEqual(old.read_text(), 'PRIVATE_SENTINEL')
         self.assertEqual(json.loads(result.read_text().splitlines()[-1])['phase'], 'final')
 
+    def test_hanging_external_mktemp_is_never_invoked(self):
+        file = self.bin / 'mktemp'
+        file.write_text('#!/bin/bash\necho called > "$RUNNER_TEMP/mktemp-called"\nexec sleep 30\n')
+        file.chmod(0o755)
+        self.assertEqual(self.run_build().returncode, 0)
+        self.assertFalse((self.root / 'mktemp-called').exists())
+
+    def test_blocked_background_initialization_does_not_delay_build_or_exit(self):
+        import sys
+        for boundary in ('github-output', 'mkdtemp'):
+            for code in (0, 42, signal.SIGINT, signal.SIGTERM):
+                with self.subTest(boundary=boundary, code=code):
+                    fifo = self.root / 'fifo'
+                    fifo.unlink(missing_ok=True)
+                    os.mkfifo(fifo)
+                    entered = self.root / 'entered'
+                    entered.unlink(missing_ok=True)
+                    pidfile = self.root / 'pid'
+                    marker = self.root / 'build-started'
+                    marker.unlink(missing_ok=True)
+                    shim = self.bin / 'python3'
+                    shim.write_text(f"#!{sys.executable}\n" + r"""
+import sys, os
+from pathlib import Path
+sys.path.insert(0, 'scripts')
+import ci_resource_diagnostics as d
+root = Path(os.environ['RUNNER_TEMP'])
+if os.environ['FAULT'] == 'mkdtemp':
+    def blocked(*args, **kwargs):
+        (root / 'entered').touch()
+        with (root / 'fifo').open() as f: f.read()
+    d.tempfile.mkdtemp = blocked
+else:
+    original_open = Path.open
+    def opened(path, *args, **kwargs):
+        if path == root / 'fifo': (root / 'entered').touch()
+        return original_open(path, *args, **kwargs)
+    Path.open = opened
+sys.argv = sys.argv[1:]
+d.main()
+""")
+                    shim.chmod(0o755)
+                    env = dict(self.env, FAULT=boundary,
+                               GITHUB_OUTPUT=str(fifo if boundary == 'github-output' else self.root / 'outputs'))
+                    script = ('set -eo pipefail\nsource scripts/ci_resource_diagnostics.sh\n'
+                              'echo "$_ci_resource_pid" > "$RUNNER_TEMP/pid"\n'
+                              'touch "$RUNNER_TEMP/build-started"\n')
+                    if isinstance(code, signal.Signals):
+                        script += 'while :; do sleep 0.02; done\n'
+                    else:
+                        script += f'sleep 0.3\nexit {code}\n'
+                    p = subprocess.Popen(['bash', '-c', script], cwd=ROOT, env=env,
+                                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                                         start_new_session=True)
+                    sampler = None
+                    try:
+                        deadline = time.monotonic() + 1
+                        while not marker.exists() and time.monotonic() < deadline:
+                            time.sleep(0.01)
+                        self.assertTrue(marker.exists(), 'diagnostics blocked build startup')
+                        sampler = int(pidfile.read_text())
+                        while not entered.exists() and time.monotonic() < deadline:
+                            time.sleep(0.01)
+                        self.assertTrue(entered.exists())
+                        if isinstance(code, signal.Signals):
+                            os.killpg(p.pid, code)
+                        self.assertEqual(p.wait(timeout=1), 128 + code if isinstance(code, signal.Signals) else code)
+                        deadline = time.monotonic() + 3.2
+                        while time.monotonic() < deadline:
+                            state = diagnostics.process(Path('/proc') / str(sampler))
+                            if state is None or state['state'] == 'Z': break
+                            time.sleep(0.02)
+                        else:
+                            self.fail('blocked initializer survived watchdog')
+                    finally:
+                        with contextlib.suppress(ProcessLookupError): os.killpg(p.pid, signal.SIGKILL)
+                        p.wait(timeout=1)
+                    shim.unlink()
+
     def test_blocked_console_write_terminates_only_sampler(self):
         import sys
         code = ("import os,sys; from pathlib import Path; "
@@ -268,12 +345,11 @@ class ShellTest(unittest.TestCase):
         for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGKILL):
             with self.subTest(signal=sig):
                 pidfile = self.root / "sampler.pid"
-                output = self.root / "directory"
+                output = self.root / "outputs"
                 output.unlink(missing_ok=True)
                 script = ('set -eo pipefail\n'
                           'source scripts/ci_resource_diagnostics.sh\n'
                           'echo "$_ci_resource_pid" > "$RUNNER_TEMP/sampler.pid"\n'
-                          'echo "$_ci_resource_dir" > "$RUNNER_TEMP/directory"\n'
                           'while :; do sleep 0.05; done\n')
                 p = subprocess.Popen(["bash", "-c", script], cwd=ROOT, env=self.env,
                                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
@@ -282,8 +358,8 @@ class ShellTest(unittest.TestCase):
                 try:
                     deadline = time.monotonic() + 5
                     while time.monotonic() < deadline:
-                        if (pidfile.exists() and output.exists() and
-                                (Path(output.read_text().strip()) / "samples.jsonl").exists()):
+                        if (pidfile.exists() and output.exists() and "=" in output.read_text() and
+                                (Path(output.read_text().strip().split("=", 1)[1]) / "samples.jsonl").exists()):
                             sampler = int(pidfile.read_text())
                             break
                         time.sleep(0.02)

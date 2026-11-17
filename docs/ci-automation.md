@@ -217,7 +217,9 @@ shared memory more than once and is not the cgroup's memory usage.
 
 Collection stops at 720 samples or 4 MiB, whichever comes first, and artifacts
 expire after seven days. A two-second sampler-only watchdog covers initialization,
-parent polling, metric collection, output writes and closing. The build shell
+temporary-directory creation, Actions output publication, parent polling, metric
+collection, output writes and closing. All optional initialization runs in the
+background sampler; the build shell only launches it. The build shell
 never signals or waits for a saved numeric sampler PID: Bash may already have
 reaped it and the PID may have been reused. Parent PID/start-time polling stops
 sampling after shell exit; INT/TERM remain nonzero for the build shell.
@@ -227,8 +229,11 @@ storage. Only a successfully closed sample receives an exclusive receipt with
 its device/inode, size and digest. A separate optional publication step validates
 owned regular files without following symlinks and copies matching bytes into a
 second exclusive directory. Only that validated copy is eligible for upload;
-pre-existing fixed paths and incomplete samples are never uploaded. Publication
-allows three seconds for the receipt and has a five-second watchdog. Temporary
+pre-existing fixed paths and incomplete samples are never uploaded by this flow.
+The receipt checks consistency, not authenticity or a content allowlist: an
+active same-UID process can forge both bytes and a matching receipt, just as it
+can modify the scripts or Actions outputs. This is not a same-UID security boundary.
+Publication allows three seconds for the receipt and has a five-second watchdog. Temporary
 sample/copy storage is at most 8 MiB plus small metadata.
 
 Watchdogs terminate interruptible blocking I/O, including the tested FIFO faults.

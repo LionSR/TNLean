@@ -244,7 +244,7 @@ def owned_file(directory_fd: int, name: str, limit: int) -> tuple[bytes, os.stat
 
 
 def publish(directory: Path, temp_root: Path, github_output: Path) -> Path | None:
-    """Validate a closed sample, then publish a new copy, never the input path."""
+    """Check closed-file consistency and copy; this is not same-UID authentication."""
     signal.alarm(5)
     try:
         fd = os.open(directory, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
@@ -283,11 +283,25 @@ def publish(directory: Path, temp_root: Path, github_output: Path) -> Path | Non
         signal.alarm(0)
 
 
+def start_sample(temp_root: Path, github_output: Path, pid: int, stop_requested=lambda: False) -> None:
+    # Include directory creation and Actions output open/write/close in the
+    # background watchdog. None of these operations runs in the build shell.
+    signal.alarm(SNAPSHOT_SECONDS)
+    try:
+        directory = Path(tempfile.mkdtemp(prefix="lean-resources-", dir=temp_root))
+        with github_output.open("a", encoding="utf-8") as stream:
+            stream.write(f"resource_directory={directory}\n")
+        monitor(directory / "samples.jsonl", pid, stop_requested=stop_requested)
+    finally:
+        signal.alarm(0)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
     sampler = commands.add_parser("sample")
-    sampler.add_argument("--output", type=Path, required=True)
+    sampler.add_argument("--temp-root", type=Path, required=True)
+    sampler.add_argument("--github-output", type=Path, required=True)
     sampler.add_argument("--parent-pid", type=int, required=True)
     publisher = commands.add_parser("publish")
     publisher.add_argument("--directory", type=Path, required=True)
@@ -304,7 +318,8 @@ def main() -> None:
     signal.signal(signal.SIGINT, stop)
     try:
         if args.command == "sample":
-            monitor(args.output, args.parent_pid, stop_requested=lambda: stopping)
+            start_sample(args.temp_root, args.github_output, args.parent_pid,
+                         stop_requested=lambda: stopping)
         else:
             publish(args.directory, args.temp_root, args.github_output)
     except Exception:
