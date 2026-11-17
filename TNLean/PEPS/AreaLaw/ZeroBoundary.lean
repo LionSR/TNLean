@@ -38,8 +38,8 @@ vanishes for every unit vector.
 * `regionalEntropy_eq_zero_of_edgeBoundary_eq_empty`: Lemma 2.2.
 * `regionalEntropy_eq_zero_of_range_eq_zero`: the range-zero case.
 * `regionalEntropy_eq_zero_of_q_eq_one`, `regionalEntropy_eq_zero_of_domain_eq_empty`.
-* `IsAdmissibleSupport.reachable`, `edgeBoundary_connectedComponent_eq_empty`:
-  supports lie in one component, and components have no crossing edge.
+* `edgeBoundary_connectedComponent_eq_empty`: components have no crossing edge; with
+  `ManyBody.IsAdmissibleSupport.reachable` (supports lie in one component).
 
 ## References
 
