@@ -359,12 +359,33 @@ symmetric canonical path remains unformalized.
 \begin{enumerate}
     \item The adjoint-closed commutation above is formalized and is the
           scope-restricted replacement for the canonical path.
-    \item Replace the canonical parent by the symmetrized parent of
-          lines 1290--1320 once the weak-Hopf averaging route is
-          formalized and the common operators are shown to represent a
-          $C^*$-weak Hopf algebra; see the separate review of support
-          averaging versus ambient completion,
-          \texttt{glm23\_wha\_parent\_completion.tex}.
+    \item The weak-Hopf symmetrization of lines 1279--1320 and
+          Appendix~B, lines 2463--2466, does not remove the closure
+          hypothesis. The source states it for operators that are given
+          as an MPO representation of a $C^*$-weak Hopf algebra
+          (``The previous symmetrization can be generalized to MPO
+          representations of ${C}^*$-weak Hopf algebras'', line 1279), and
+          the definition \texttt{defphase}, lines 1252 and 1259, assumes
+          $C^*$-weak Hopf algebras only at the endpoints. Section~5 never
+          constructs such a representation for the common operator
+          $\widetilde T$. If one is supplied, its symmetrized parent term
+          $\mathbb 1-E(\Pi_{S_\gamma})$ equals the canonical parent
+          $h_\gamma$ on the open interval, and adjoint closure of the
+          boundary range follows from the star structure of the
+          representation, so the formal boundary above applies. The
+          weak-Hopf route thus reduces to the canonical parent together
+          with adjoint closure, and the examples above, where closure
+          fails, admit no weak-Hopf representation of $\widetilde T$.
+          Constructing the representation for $\widetilde T$ is itself a
+          gap of the source, not a step it carries out.%
+          \footnote{\leanid{MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_weakHopf}
+              and
+              \leanid{MPSTensor.MPOSymmetry.toEuclideanLin_arbitraryPhysicalMixedInteraction_eq_one_sub_weakHopfAverage},
+              in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedWeakHopf};
+              the support average itself is reviewed in
+              \texttt{glm23\_wha\_parent\_completion.tex}.}
+          For unitary $\mathbb Z_2$ endpoints, closure is instead derived
+          directly from Hermitian action gauges, as in the next item.
     \item Adjoint closure does not follow from unitary on-site endpoint
           symmetries alone, since it depends on the virtual gauge of the
           endpoint tensors. For $\mathbb Z_2$ it holds exactly when both
