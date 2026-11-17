@@ -1,0 +1,74 @@
+{
+  "Matrix.l2_opNorm_kronecker_le": {
+    "TN": [
+      "TNLean/Algebra/MatrixKroneckerContraction.lean:67"
+    ],
+    "QIC": [
+      "QICLean/Analysis/KroneckerOperatorNorm.lean:61"
+    ],
+    "present_at_old_qic_pin": false
+  },
+  "MatrixEvolution.hasDerivAt_ordered_prod_of_commute": {
+    "TN": [
+      "TNLean/Circuit/DisjointRelativeEvolution.lean:32"
+    ],
+    "QIC": [
+      "QICLean/Analysis/UnitaryEvolution.lean:236"
+    ],
+    "present_at_old_qic_pin": false
+  },
+  "finite_rectangular_volterra_zero_le_weight_mul_exp_sub_one": {
+    "TN": [
+      "TNLean/Circuit/LiebRobinson/Volterra.lean:211"
+    ],
+    "QIC": [
+      "QICLean/Analysis/Volterra.lean:210"
+    ],
+    "present_at_old_qic_pin": false
+  },
+  "finite_volterra_le_weight_mul_exp": {
+    "TN": [
+      "TNLean/Circuit/LiebRobinson/Volterra.lean:86"
+    ],
+    "QIC": [
+      "QICLean/Analysis/Volterra.lean:85"
+    ],
+    "present_at_old_qic_pin": false
+  },
+  "finite_volterra_zero_le_weight_mul_exp_sub_one": {
+    "TN": [
+      "TNLean/Circuit/LiebRobinson/Volterra.lean:151"
+    ],
+    "QIC": [
+      "QICLean/Analysis/Volterra.lean:150"
+    ],
+    "present_at_old_qic_pin": false
+  },
+  "le_mul_exp_of_le_const_add_integral": {
+    "TN": [
+      "TNLean/Circuit/LiebRobinson/Volterra.lean:43"
+    ],
+    "QIC": [
+      "QICLean/Analysis/Volterra.lean:42"
+    ],
+    "present_at_old_qic_pin": false
+  },
+  "norm_commutator_le": {
+    "TN": [
+      "TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean:131"
+    ],
+    "QIC": [
+      "QICLean/ManyBody/Dynamics/CommutatorRecursion.lean:129"
+    ],
+    "present_at_old_qic_pin": false
+  },
+  "norm_exp_commutator_eq": {
+    "TN": [
+      "TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean:191"
+    ],
+    "QIC": [
+      "QICLean/ManyBody/Dynamics/CommutatorRecursion.lean:189"
+    ],
+    "present_at_old_qic_pin": false
+  }
+}
