@@ -401,32 +401,16 @@ theorem isHermitian_sum_factorOperator {ι : Type*} [Fintype ι] [DecidableEq ι
     (hH : ∀ i, (H i).IsHermitian) : (∑ i, factorOperator i (H i)).IsHermitian :=
   isHermitian_sum _ fun i _ ↦ isHermitian_factorOperator i (hH i)
 
-/-- Relabelling the coordinates along an equivalence preserves a gapped Hermitian matrix whose
-ground space is the line through a unit vector, with the same energy and gap. -/
+/-- Relabelling the coordinates along an equivalence preserves a gapped matrix whose ground
+space is the line through a unit vector, with the same energy and gap. -/
 theorem isGapped_submatrix {m n : Type*} [Fintype m] [DecidableEq m] [Fintype n]
-    [DecidableEq n] {H : Matrix n n ℂ} {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ n} (hΔ : 0 < Δ)
-    (hH : H.IsHermitian) (hn : ‖Ω‖ = 1) (hgs : IsGapped H E₀ Δ)
+    [DecidableEq n] {H : Matrix n n ℂ} {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ n}
+    (hn : ‖Ω‖ = 1) (hgs : IsGapped H E₀ Δ)
     (hspan : groundSpace H E₀ = Submodule.span ℂ {Ω}) (e : m ≃ n) :
     ‖WithLp.toLp 2 fun x ↦ Ω (e x)‖ = 1 ∧ IsGapped (H.submatrix e e) E₀ Δ ∧
-      groundSpace (H.submatrix e e) E₀ = Submodule.span ℂ {WithLp.toLp 2 fun x ↦ Ω (e x)} := by
-  have hev := mulVec_eq_of_groundSpace_eq_span hspan
-  have hgap := hgs.posSemidef_sub_smul_one hH hn hspan
-  have hn' : ‖WithLp.toLp 2 fun x ↦ Ω (e x)‖ = 1 := by
-    rw [← hn, EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
-    congr 1
-    exact e.sum_comp fun x ↦ ‖Ω x‖ ^ 2
-  refine ((isGapped_and_groundSpace_eq_span_iff hΔ _).mp ⟨hn', ?_, ?_⟩).2
-  · apply toEuclideanCLM_toLp_eq_smul
-    rw [submatrix_mulVec_equiv]
-    have hΩ : ((fun x ↦ Ω (e x)) ∘ e.symm) = WithLp.ofLp Ω := by
-      funext y
-      simp
-    rw [hΩ, hev]
-    funext x
-    simp
-  · convert hgap.submatrix e using 1
-    ext x y
-    simp [vecMulVec_apply, Matrix.one_apply, e.apply_eq_iff_eq]
+      groundSpace (H.submatrix e e) E₀ = Submodule.span ℂ {WithLp.toLp 2 fun x ↦ Ω (e x)} :=
+  ⟨((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e.symm).norm_map Ω).trans hn,
+    (ManyBody.isGapped_submatrix_iff e).mpr hgs, ManyBody.groundSpace_submatrix_eq_span e hspan⟩
 
 /-- Under the splitting `∀ i, σ i ≃ σ 0 × ∀ j, σ (succ j)`, a sum of factor operators becomes
 `H_0 ⊗ 1 + 1 ⊗ ∑_j H_{j+1}`. -/
@@ -502,7 +486,7 @@ theorem exists_isGapped_factors_of_sum_factorOperator :
   | 0, σ, _, _, H, hH, E₀, Δ, Ω, hΔ, hn, hgs, hspan => by
     let e : σ 0 ≃ ∀ i, σ i :=
       (Equiv.prodUnique (σ 0) (∀ j : Fin 0, σ j.succ)).symm.trans (Fin.consEquiv σ)
-    have h0 := isGapped_submatrix hΔ (isHermitian_sum_factorOperator hH) hn hgs hspan e
+    have h0 := isGapped_submatrix hn hgs hspan e
     have hsum : (∑ i, factorOperator i (H i)).submatrix e e = H 0 := by
       ext a b
       simp [e, factorOperator, Fin.forall_fin_one, Fin.consEquiv]
@@ -519,8 +503,8 @@ theorem exists_isGapped_factors_of_sum_factorOperator :
       rw [Fin.fin_one_eq_zero i]
       simpa using h0
   | n + 1, σ, _, _, H, hH, E₀, Δ, Ω, hΔ, hn, hgs, hspan => by
-    obtain ⟨hn', hgs', hspan'⟩ := isGapped_submatrix hΔ (isHermitian_sum_factorOperator hH) hn
-      hgs hspan (Fin.consEquiv σ)
+    obtain ⟨hn', hgs', hspan'⟩ := isGapped_submatrix hn hgs hspan
+      (Fin.consEquiv σ)
     rw [submatrix_consEquiv_sum_factorOperator] at hgs' hspan'
     have hrest : (∑ j : Fin (n + 1),
         factorOperator (σ := fun j : Fin (n + 1) ↦ σ j.succ) j (H j.succ)).IsHermitian :=

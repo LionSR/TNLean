@@ -413,7 +413,7 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
   have hdist' (x y : ℤ × ℤ) :
       Scan.ambientSupDistance (x + -c) (y + -c) = Scan.ambientSupDistance x y := by
     rw [hdist, neg_add_cancel_right]
-  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hΔ hΩ hgap hspan
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hΩ hgap hspan
   have h := hmain u hu (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian E₀
     (squareAreaLawState Ω) hΩ' hgap' hspan'
     (T.image fun t ↦ t + -c) (hT.translate (-c))

@@ -189,7 +189,7 @@ with its Hermitian interaction parts, and the ground vector, gap, entropies, and
 edges are transported along the coordinate bijection.
 Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–58), derived from
 area-law Theorem 1.1 and Corollary 1.2. -/
-theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ} (hΔ : 0 < Δ)
+theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
     (hbound : ∀ Λ : Finset (ℤ × ℤ), ∀ h : Lattice.LocalHamiltonian Λ q 1 J, ∀ E₀ : ℝ,
       ∀ Ω : Lattice.StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
       groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
@@ -200,7 +200,7 @@ theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ} (hΔ : 
     (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Vertex L)) :
     FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
       C * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e} := by
-  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hΔ hΩ hgap hspan
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hΩ hgap hspan
   have := hbound (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian E₀
     (squareAreaLawState Ω) hΩ' hgap' hspan' (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
   rw [Lattice.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
@@ -218,6 +218,6 @@ theorem _root_.TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q (by omega) 1 J Δ hJ hΔ
   exact ⟨C, hC, fun _ _ ⟨h, _, hΩ, hgap, hspan⟩ A ↦
-    finiteProductEntropy_le_of_areaLawBound hΔ hbound h hΩ hgap hspan A⟩
+    finiteProductEntropy_le_of_areaLawBound hbound h hΩ hgap hspan A⟩
 
 end TNLean.PEPS.Approximation

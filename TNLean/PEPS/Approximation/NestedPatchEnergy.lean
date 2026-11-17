@@ -50,7 +50,7 @@ eq:patch-single-crossing, eq:patch-one-term-energy and eq:patch-energy-bound;
 00-introduction.tex, eq:model and eq:global-gap. -/
 theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     {L q : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J)
-    (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (hJ : 0 ≤ J) (_hΔ : 0 < Δ)
     (Ω : StateSpace L q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
     (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (center : ℝ × ℝ) (u κ b : ℝ)
@@ -110,7 +110,7 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     Entropy.liftProdInv_mul_liftProd_of_isUnit fun p hp ↦
       (List.mem_map.mp hp).elim fun i hi ↦ hi.2 ▸ hunit i
   have heig := Entropy.toEuclideanLin_conj_apply_eq
-    (ManyBody.mem_groundSpace_iff.mp ((h.isGapped_toAreaLawHamiltonian hΔ hΩ hgap hspan).2.2 ▸
+    (ManyBody.mem_groundSpace_iff.mp ((h.isGapped_toAreaLawHamiltonian hΩ hgap hspan).2.2 ▸
       Submodule.mem_span_singleton_self _)) hinv
     (((‖Matrix.toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
       (squareAreaLawState Ω)‖⁻¹ : ℝ) : ℂ))

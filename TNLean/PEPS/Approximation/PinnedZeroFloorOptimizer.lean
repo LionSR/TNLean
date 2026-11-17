@@ -187,12 +187,12 @@ private theorem fromCanonical_physical_estimates
 energy bound and the original full-system gap-weighted fidelity bound.
 
 The filters are the attributed adapted source type. Only the total original
-Hamiltonian must be Hermitian. The sign of `J`, positive local dimension and a
-chosen order on integer-domain sites are not premises.
+Hamiltonian must be Hermitian. The sign of `J`, positive local dimension, a
+positive gap and a chosen order on integer-domain sites are not premises.
 Source: `EnergyOptimizer.lean`, lines 62–109, at the revision cited above. -/
 theorem SquareHamiltonian.exists_pinned_maximizer_energy_fidelity
     {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J)
-    (hΔ : 0 < Δ) {Ω : Pinned.State L q} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    {Ω : Pinned.State L q} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
     (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (X : Fin m → Finset (Vertex L)) (hX : Monotone X)
     (hsingle : ∀ e : ForwardEdge L, ∀ i j : Fin m,
@@ -219,7 +219,7 @@ theorem SquareHamiltonian.exists_pinned_maximizer_energy_fidelity
           (canonicalRegions X j) → i = j := by
     simpa only [canonicalRegions_fin] using rectangle_singleCrossing X hsingle
   obtain ⟨K, hK, hmax, hresult⟩ :=
-    h.exists_zero_floor_maximizer_energy_fidelity hΔ hΩ hgap hspan (canonicalRegions X) hD
+    h.exists_zero_floor_maximizer_energy_fidelity hΩ hgap hspan (canonicalRegions X) hD
       hsep a ha ha1
   have hbudget : (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 *
       (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (canonicalRegions X j)).card =
