@@ -25,6 +25,8 @@ Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`,
 Claim `c:errorreduction`, lines 580–592, and Corollary `c:agsp`, lines 626–649.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped Matrix.Norms.L2Operator ComplexOrder MatrixOrder Kronecker
 

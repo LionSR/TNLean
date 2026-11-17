@@ -42,6 +42,8 @@ The matrix-product-operator bond dimensions and the running time of the construc
 (Proposition `prop:Cheby-AGSP-eff`, lines 1311–1333) are separate assertions.
 -/
 
+open ManyBody (interval)
+
 open Polynomial Matrix TNLean.Lattice TNLean.Lattice.Sheet QuantumCircuit
 
 noncomputable section

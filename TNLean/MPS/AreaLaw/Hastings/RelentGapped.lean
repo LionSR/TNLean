@@ -30,6 +30,8 @@ and the reciprocal-length convention.
 are recorded in `docs/paper-gaps/hastings07_relent_constants.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 
 namespace TNLean.MPS.AreaLaw.Hastings

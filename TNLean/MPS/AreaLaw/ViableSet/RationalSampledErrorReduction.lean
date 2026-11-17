@@ -30,6 +30,8 @@ The rational-output statement is an auxiliary finite-precision consequence
 at positive cuts.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator Kronecker
 

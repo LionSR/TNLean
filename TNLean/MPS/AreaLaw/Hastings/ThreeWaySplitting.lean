@@ -60,6 +60,8 @@ through the Lieb–Robinson localization.
   763–790 (the splitting).
 -/
 
+open ManyBody (card_interval_le interval mem_interval)
+
 open Matrix
 open scoped ComplexOrder Matrix.Norms.L2Operator InnerProductSpace
 

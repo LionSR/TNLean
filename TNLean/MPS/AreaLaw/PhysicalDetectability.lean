@@ -9,8 +9,7 @@ import QICLean.Analysis.ComplementProdPartition
 import QICLean.Analysis.ProjectionGeometry
 import TNLean.Algebra.GappedGroundState
 import TNLean.Circuit.EntropySupport
-import TNLean.MPS.AreaLaw.Basic
-
+import QICLean.ManyBody.Sites.Lattice.Chain
 /-!
 # Detectability for a physical nearest-neighbour projection chain
 
@@ -25,6 +24,8 @@ at lines 1457–1460. The reduction from arbitrary positive contractions is prov
 `PhysicalRangeDetectability.lean`. The regional truncated-Hamiltonian
 conclusions are separate.
 -/
+
+open ManyBody (interval mem_interval)
 
 open Matrix
 open scoped BigOperators InnerProductSpace

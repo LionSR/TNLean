@@ -22,6 +22,8 @@ or running-time claim is made; see `docs/paper-gaps/alvv16_cluster_approximation
 `docs/paper-gaps/alvv16_soft_regional_residuals.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

@@ -22,6 +22,8 @@ Source: the one-dimensional note, `part1_arealaw.tex`, Remark `rem:renyi`, lines
 with the moment estimate `eq:mgf` and parameter `eq:theta`, lines 152–166.
 -/
 
+open ManyBody (interval)
+
 noncomputable section
 
 namespace TNLean.MPS.AreaLaw

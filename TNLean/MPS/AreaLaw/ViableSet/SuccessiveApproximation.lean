@@ -27,6 +27,8 @@ the mathematical construction and its cardinality and bond bounds; no computatio
 running-time statement is asserted.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder
 

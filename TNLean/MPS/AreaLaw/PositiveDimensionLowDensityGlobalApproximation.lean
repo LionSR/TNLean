@@ -21,6 +21,8 @@ data; the capped-width comparison is recorded in
 `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace Matrix
 
 namespace TNLean.MPS.AreaLaw

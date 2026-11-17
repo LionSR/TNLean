@@ -19,6 +19,8 @@ Source: Osborne, arXiv:quant-ph/0508031v2, Figure 2 and equations (12)--(13), an
 arXiv:1406.6355v6, Section 5.4, Lemma 19.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder MatrixOrder
 

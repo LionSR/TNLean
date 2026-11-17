@@ -27,6 +27,8 @@ ALVV, arXiv:1602.08828v2, final extraction in Figure `fig:algo1`, lines
 replaced by an extra excited-value hypothesis in such a formulation.
 -/
 
+open ManyBody (interval)
+
 open scoped InnerProductSpace Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

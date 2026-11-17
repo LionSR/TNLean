@@ -21,6 +21,8 @@ is the literal corrected parent, including its terminal image and trim;
 see https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

@@ -32,6 +32,8 @@ Source: TNLean one-dimensional note, `part1_arealaw.tex`, `eq:count`, lines
 geometric and does not assert a partial-swap operator decomposition.
 -/
 
+open ManyBody (card_interval_le interval mem_interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- A support split by a region lies in a window about one of its

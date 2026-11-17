@@ -27,6 +27,8 @@ The underlying construction retains the trimming corrections and Gaussian
 error-reduction scope documented in `SuccessiveApproximation`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder
 

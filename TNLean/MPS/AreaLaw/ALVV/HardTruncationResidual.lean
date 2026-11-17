@@ -26,6 +26,8 @@ acceptance gates for the physical prerequisites are recorded in
 `docs/audits/2026-10-29_single_region_hard_truncation.md`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

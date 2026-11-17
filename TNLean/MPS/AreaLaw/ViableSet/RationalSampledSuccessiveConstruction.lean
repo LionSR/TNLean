@@ -38,6 +38,8 @@ The ground-energy dependence is recorded in
 `docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder Kronecker Matrix.Norms.L2Operator
 

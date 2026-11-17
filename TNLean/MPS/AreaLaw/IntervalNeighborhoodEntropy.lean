@@ -26,6 +26,8 @@ Source: TNLean one-dimensional note, Lemma `lem:logsep`,
 `part2a_mps_information.tex`, lines 458–461 and 482–487.
 -/
 
+open ManyBody (interval interval_eq_empty mem_interval)
+
 open TNLean.Lattice
 
 namespace TNLean.MPS.AreaLaw

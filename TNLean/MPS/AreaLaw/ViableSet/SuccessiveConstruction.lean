@@ -27,6 +27,8 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, the induction at lines 652--678,
 using Huang, arXiv:1406.6355v6, Section 5.4, Lemmas 18--19 for error reduction.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped ComplexOrder MatrixOrder
 

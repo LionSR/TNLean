@@ -54,6 +54,8 @@ The same argument applies to the right part. For the buffer part,
   P08024, arXiv:0705.2024v4, `law16.tex`, line 794.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix
 open scoped Matrix.Norms.L2Operator
 

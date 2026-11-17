@@ -9985,8 +9985,8 @@ there is no need for a new tactic.
   `SelectedCoefficientDecomposition.lean`, `SelectedMiddleData.lean`,
   `SelectedMiddleMPOFamily.lean` (twice), `ThreeRegionSupport.lean` and
   `TwoWindowOperatorForms.lean`; two further uses in `Hastings/Window.lean`.
-- **Abstraction:** `TNLean.MPS.AreaLaw.disjoint_interval_interval` in
-  `MPS/AreaLaw/Basic.lean`. The proof applies
+- **Abstraction:** `ManyBody.disjoint_interval_interval` in
+  `QICLean/ManyBody/Sites/Lattice/Chain.lean` (QICLean dependency). The proof applies
   `Finset.Ico_disjoint_Ico_consecutive` to the natural-number positions.
 - **Notes:** The statement needs no ordering of the endpoints and no positivity
   of the chain length. The Mathlib theorem is already imported. The former

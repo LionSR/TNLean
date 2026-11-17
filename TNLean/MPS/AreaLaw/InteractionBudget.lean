@@ -19,6 +19,8 @@ related to the per-site hypothesis before Lemma `lem:LR`
 (`part2a_mps_information.tex`, lines 260–265).
 -/
 
+open ManyBody (card_interval_le interval mem_interval)
+
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

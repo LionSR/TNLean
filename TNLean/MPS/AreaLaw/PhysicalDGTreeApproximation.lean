@@ -33,6 +33,8 @@ energy. It is not identified with the count printed in the source.
 See `docs/paper-gaps/alvv16_final_filter_gain.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

@@ -61,6 +61,8 @@ parameter corrections are recorded in
   P08024, arXiv:0705.2024v4, `law16.tex`, lines 246–267 and 766–1003.
 -/
 
+open ManyBody (card_interval_le interval mem_interval)
+
 open GaussianFilter Matrix QuantumCircuit TNLean.Lattice Real
 open scoped Matrix.Norms.L2Operator InnerProductSpace NNReal ComplexOrder
 

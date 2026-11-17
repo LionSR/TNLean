@@ -28,6 +28,8 @@ domain; recorded in `docs/paper-gaps/tnlean_one_dimensional_discount_constants.t
 section "Full consecutive windows".
 -/
 
+open ManyBody (interval)
+
 open TNLean.Lattice
 
 namespace TNLean.MPS.AreaLaw

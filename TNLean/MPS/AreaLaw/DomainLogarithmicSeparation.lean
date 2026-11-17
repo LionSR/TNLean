@@ -20,6 +20,8 @@ Extension of the chain lemma in the TNLean one-dimensional note, `lem:logsep`,
 `part0_preamble.tex`, lines 191–215.
 -/
 
+open ManyBody (interval)
+
 open QuantumCircuit
 
 namespace TNLean.MPS.AreaLaw

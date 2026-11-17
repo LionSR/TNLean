@@ -27,6 +27,8 @@ The polynomial quantitative scope is the conservative one stated in
 `docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace Kronecker ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

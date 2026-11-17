@@ -17,6 +17,8 @@ These are the whole-region coordinates of ALVV, arXiv:1602.08828v2,
 Definition `d:vs`, lines 433–440, and `t:alg1`, lines 1777–1817.
 -/
 
+open ManyBody (interval interval_zero_eq_univ)
+
 namespace TNLean.MPS.AreaLaw
 
 private def fullIntervalConfigurationEquiv (L q : ℕ) :

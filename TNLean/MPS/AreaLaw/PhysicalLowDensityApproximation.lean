@@ -29,6 +29,8 @@ retains `q ≥ 2` and one coefficient for each fixed bandwidth. See
 `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
 -/
 
+open ManyBody (card_interval_le interval)
+
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace
   Matrix.Norms.L2Operator
 

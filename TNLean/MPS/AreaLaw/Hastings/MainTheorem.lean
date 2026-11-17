@@ -84,6 +84,8 @@ No other constant differs from the source.
   P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 124–232.
 -/
 
+open ManyBody (card_interval_le interval mem_interval)
+
 open TNLean.Lattice
 
 namespace TNLean.MPS.AreaLaw.Hastings

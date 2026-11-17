@@ -37,6 +37,8 @@ procedure. This distinction is recorded in
 `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

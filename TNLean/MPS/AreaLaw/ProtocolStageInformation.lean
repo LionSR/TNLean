@@ -31,6 +31,8 @@ and `prop:sweep`, proof, lines 365–374; Part II, `lem:logsep`, lines
 width choice.
 -/
 
+open ManyBody (interval mem_interval)
+
 noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep

@@ -18,6 +18,8 @@ Huang, arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. This identification change
 the physical operator nor the spectral hypotheses used by the two constructions.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator ComplexOrder MatrixOrder
 

@@ -50,6 +50,8 @@ Documented in `docs/paper-gaps/hastings07_filtered_part_localization.tex`.
   P08024, arXiv:0705.2024v4, `law16.tex`, appendix, lines 766–842.
 -/
 
+open ManyBody (interval mem_interval)
+
 open GaussianFilter Matrix QuantumCircuit TNLean.Lattice
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 

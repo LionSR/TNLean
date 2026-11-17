@@ -15,6 +15,8 @@ This supplies an alternative proof of the truncation lemma in AKLV,
 arXiv:1301.1162v1, Lemma 6.7, with explicit constants.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 noncomputable section

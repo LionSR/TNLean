@@ -76,6 +76,8 @@ see `docs/paper-gaps/lvv13_power_expansion_padding.tex`.
   (2012), Theorem 1.6.
 -/
 
+open ManyBody (interval)
+
 open Matrix MeasureTheory ProbabilityTheory
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

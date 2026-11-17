@@ -26,6 +26,8 @@ Lemma lem:logsep, lines 472–488.
 The information exponent is 24, as in the source's logarithmic width choice.
 -/
 
+open ManyBody (interval mem_interval)
+
 noncomputable section
 
 open TNLean.Lattice

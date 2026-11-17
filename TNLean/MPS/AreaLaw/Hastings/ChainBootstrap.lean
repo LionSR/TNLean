@@ -28,6 +28,8 @@ Lemma 2 for a gapped chain once the factorization is supplied.
 * `TNLean.MPS.AreaLaw.Hastings.regionEntropy_interval_eq`: the entropy of the first `j` sites
   as the entropy of `C Cᴴ` for the cut matrix `C`.
 -/
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder
 

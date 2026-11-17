@@ -16,6 +16,8 @@ construction, lines 1662–1677, and its induction, lines 1777–1817. It assert
 neither measurable dependence on the children nor an adaptive probability.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- Successful choices for each valid pair of children construct one actual

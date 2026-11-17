@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.Algebra.GappedGroundState
 import QICLean.Entropy.LocalLift
 import TNLean.Lattice.RegionEntropyInequalities
@@ -42,6 +42,8 @@ the chain model instantiates it directly, with the cut budget
   Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 34–69.
   Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
+
+open ManyBody (interval mem_interval)
 
 open Matrix
 open scoped ComplexOrder Matrix.Norms.L2Operator

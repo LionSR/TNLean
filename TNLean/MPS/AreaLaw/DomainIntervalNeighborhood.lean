@@ -28,6 +28,8 @@ and the interval-neighborhood argument in `part2a_mps_information.tex`,
 lines 472–488.
 -/
 
+open ManyBody (interval)
+
 open SimpleGraph QuantumCircuit
 
 namespace TNLean.MPS.AreaLaw

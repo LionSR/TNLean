@@ -61,6 +61,8 @@ constants and propagate to `C_int` and `C₀` in `TNLean.MPS.AreaLaw.AreaLaw`. D
   logarithmic energy estimate.
 -/
 
+open ManyBody (card_interval_le interval interval_mono mem_interval)
+
 open Matrix
 open scoped Matrix.Norms.L2Operator
 

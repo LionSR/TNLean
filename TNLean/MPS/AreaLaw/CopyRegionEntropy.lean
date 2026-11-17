@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.CopyProduct
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.Entropy.RegionSplit
 import QICLean.Entropy.MovementEtaRegional
 import QICLean.Entropy.OrderedEntropyAlgebra
@@ -19,6 +19,8 @@ region by the contributions of its at most two partially intersected copies.
 Source: Schuch, Wolf, Verstraete, and Cirac, arXiv:0705.0292v2,
 `paper_v2.tex`, lines 421–479.
 -/
+
+open ManyBody (interval mem_interval)
 
 noncomputable section
 

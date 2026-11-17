@@ -19,6 +19,8 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 482–4
 and the interval area-law estimate in Part I.
 -/
 
+open ManyBody (interval)
+
 open SimpleGraph QuantumCircuit
 
 namespace TNLean.MPS.AreaLaw

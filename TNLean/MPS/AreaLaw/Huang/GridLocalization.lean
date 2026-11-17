@@ -18,6 +18,8 @@ Source: Osborne, arXiv:quant-ph/0508031v2, equations (6)--(12), and Huang,
 arXiv:1406.6355v6, Section 5.4, Lemma 19.
 -/
 
+open ManyBody (card_interval_le interval mem_interval)
+
 open Matrix QuantumCircuit
 open scoped BigOperators Matrix.Norms.L2Operator
 

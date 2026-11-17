@@ -25,6 +25,8 @@ least energy of the final convex program into the overlap bound.
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, proof of Theorem 1, lines 652--678.
 -/
 
+open ManyBody (interval)
+
 open Matrix Cslib
 open scoped InnerProductSpace ComplexOrder MatrixOrder
 

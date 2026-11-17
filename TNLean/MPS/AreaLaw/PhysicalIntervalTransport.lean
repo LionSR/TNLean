@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.RetainedCoreFamilies
 import TNLean.MPS.AreaLaw.TraceCoreSlices
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.EntropySupport
 import QICLean.Entropy.LocalLift
@@ -32,6 +32,8 @@ configurations exist. These are coordinate and contraction identities
 supporting ALVV, arXiv:1602.08828v2, equation H-mid-cut and Proposition 5.7,
 lines 810–821 and 1324–1333.
 -/
+
+open ManyBody (card_interval_le interval interval_mono mem_interval)
 
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix

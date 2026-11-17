@@ -27,6 +27,8 @@ Source: TNLean one-dimensional note, Lemma `lem:logsep`,
 `part2a_mps_information.tex`, lines 472–488.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- A union of at most `k₀` intervals has polynomially small mutual information

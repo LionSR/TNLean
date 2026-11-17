@@ -21,6 +21,8 @@ LVV13, arXiv:1307.5143v1, final induction, lines 652--678. This is an algebraic
 physical reduction; it asserts no computational running time.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

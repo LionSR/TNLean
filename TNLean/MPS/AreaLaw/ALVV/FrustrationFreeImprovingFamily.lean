@@ -49,6 +49,8 @@ viability error `δ < 1`, where `Δ / (1 - δ)²` is defined; see
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf.
 -/
 
+open ManyBody (card_interval_le interval interval_mono mem_interval)
+
 open scoped InnerProductSpace TensorProduct Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator
 open Matrix

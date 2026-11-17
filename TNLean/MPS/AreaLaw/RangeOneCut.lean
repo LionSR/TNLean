@@ -17,6 +17,8 @@ This is the Hamiltonian decomposition used by Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `References/1307.5143/algo53.tex`, lines 283 and 409–410.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix
 open scoped Matrix.Norms.L2Operator ComplexOrder MatrixOrder
 

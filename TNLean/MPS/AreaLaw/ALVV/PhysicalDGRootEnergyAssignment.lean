@@ -25,6 +25,8 @@ not identified with literal soft Generate, and no running time is asserted.
 See `docs/paper-gaps/alvv16_soft_regional_energy_centering.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct InnerProductSpace ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator

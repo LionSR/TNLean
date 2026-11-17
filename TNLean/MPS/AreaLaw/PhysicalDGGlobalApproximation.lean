@@ -31,6 +31,8 @@ The distinct spectral values express Assumption (DG) of the source,
 lines 275–279, which requires a second smallest eigenvalue.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace Matrix
 
 namespace TNLean.MPS.AreaLaw

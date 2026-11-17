@@ -16,6 +16,8 @@ in the ALVV probability estimate, arXiv:1602.08828v2,
 Figure `fig:algo1` and lines 1777–1817.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- The true parent section uses exactly the same two child spaces and

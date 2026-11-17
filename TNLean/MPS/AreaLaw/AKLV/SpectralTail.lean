@@ -22,6 +22,8 @@ at half the identity recovers coefficient 2: scalar matrices have zero
 off-diagonal block. See `docs/paper-gaps/aklv13_robustness_constants.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 noncomputable section

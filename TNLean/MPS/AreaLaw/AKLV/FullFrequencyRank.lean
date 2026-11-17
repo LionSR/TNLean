@@ -18,6 +18,8 @@ Source: AKLV, arXiv:1301.1162v1, Lemma 4.2 (`l:agsp`), lines 626--662.
 https://sirui-lu.com/QICLean/paper-gaps/aklv13_interpolation_and_word_count.pdf.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators
 

@@ -32,6 +32,8 @@ See `docs/paper-gaps/hastings07_relent_constants.tex`,
 `docs/paper-gaps/hastings07_schmidt_tail_constant.tex`.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw
 
 open Hastings Matrix TNLean.Lattice Real

@@ -35,6 +35,8 @@ bounds; see `docs/paper-gaps/lvv13_constant_bond.tex`.
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--216.
 -/
 
+open ManyBody (interval)
+
 open Matrix Cslib
 open scoped InnerProductSpace ComplexOrder MatrixOrder
 

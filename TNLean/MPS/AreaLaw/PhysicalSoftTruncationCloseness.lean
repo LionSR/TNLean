@@ -23,6 +23,8 @@ are not asserted. See
 `docs/paper-gaps/alvv16_soft_truncation_energy_estimate.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

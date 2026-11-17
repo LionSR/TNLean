@@ -32,6 +32,8 @@ The robustness comparison uses the corrected spectral-window estimate at
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_hard_truncation_windows.pdf.
 -/
 
+open ManyBody (interval)
+
 open Matrix Polynomial
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

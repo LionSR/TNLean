@@ -32,6 +32,8 @@ Source: Hastings, arXiv:0705.2024v4, Lemma 3, eq. `fwdback`, lines 627–692;
 Lemma 1, lines 246–267; note added, lines 912–1003.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder MatrixOrder
 

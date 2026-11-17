@@ -21,6 +21,8 @@ Source: Hastings, arXiv:0705.2024v4, main theorem, eqs. `entbd` and `smd`,
 lines 124–144, and the doubling iteration, lines 197–231.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw.Hastings
 
 open Real

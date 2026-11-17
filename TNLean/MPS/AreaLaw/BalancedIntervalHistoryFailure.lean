@@ -20,6 +20,8 @@ is explicit. A later application must use the literal stopped sampling history,
 not infer that history from final retained-space viability alone.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- Simultaneous failure of the retained property or a literal listed history
