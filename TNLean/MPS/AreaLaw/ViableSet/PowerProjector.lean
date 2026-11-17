@@ -114,7 +114,9 @@ noncomputable def ChainHamiltonian.ofBonds
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1) : ChainHamiltonian L q 1 1 where
   term X := ∑ i, if bondSupport i = X then h i else 0
-  supported X := sum_mem fun i _ ↦ by
+  supported X := by
+    show _ ∈ ManyBody.supportedOperators _ _
+    refine sum_mem fun i _ ↦ ?_
     split_ifs with hX
     · rw [← hX]
       exact hs i
