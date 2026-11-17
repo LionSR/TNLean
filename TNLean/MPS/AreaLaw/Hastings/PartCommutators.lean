@@ -262,10 +262,8 @@ theorem ChainHamiltonian.isSupportedOn_commutator_termSum_inner (h : ChainHamilt
   obtain ⟨σ₀⟩ := hne
   change _ ∈ ManyBody.supportedOperators _ _
   rw [h.commutator_termSum_inner_eq_sum]
-  change _ ∈ ManyBody.supportedOperators _ _
   refine sum_mem fun X hX ↦ ?_
   rw [h.term_commutator_termSum_eq]
-  change _ ∈ ManyBody.supportedOperators _ _
   refine sum_mem fun Y hY ↦ ?_
   obtain ⟨hYS, hYX⟩ := Finset.mem_filter.mp hY
   obtain ⟨hXW, hYW⟩ := hW X hX Y (Finset.mem_filter.mp hYS).2 hYX
@@ -416,7 +414,6 @@ theorem ChainHamiltonian.isSupportedOn_commutator_bufferPart (h : ChainHamiltoni
       (interval L (j - m - 2 * R) (j - m + R) ∪ interval L (j + m - R) (j + m + 2 * R)) := by
   change _ ∈ ManyBody.supportedOperators _ _
   rw [h.commutator_bufferPart_eq]
-  change _ ∈ ManyBody.supportedOperators _ _
   exact neg_mem (add_mem
     ((h.isSupportedOn_commutator_leftPart j m).mono Finset.subset_union_left)
     ((h.isSupportedOn_commutator_rightPart j m).mono Finset.subset_union_right))

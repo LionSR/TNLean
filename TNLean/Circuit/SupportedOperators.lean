@@ -50,6 +50,7 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-! ### Product operators -/
 
+omit [DecidableEq ι] in
 /-- On sites of local dimension `d`, the product operator `⊗ᵢ mᵢ` of the many-body system is
 `rectKronecker m`. -/
 theorem prodOp_eq_rectKronecker (m : ι → Matrix (Fin d) (Fin d) ℂ) :
@@ -68,12 +69,14 @@ theorem finKronecker_mem_supportedOperators {N : ℕ} {S : Finset (Fin N)}
     finKronecker m ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
   rectKronecker_mem_supportedOperators hm
 
+omit [DecidableEq ι] in
 /-- Two linear maps on the operators of the sites `ι` agree once they agree on the product
 operators `⊗ᵢ mᵢ`. -/
 theorem linearMap_ext_rectKronecker {M : Type*} [AddCommMonoid M] [Module ℂ M]
     (Φ Ψ : Matrix (ι → Fin d) (ι → Fin d) ℂ →ₗ[ℂ] M)
     (h : ∀ m : ι → Matrix (Fin d) (Fin d) ℂ, Φ (rectKronecker m) = Ψ (rectKronecker m)) :
     Φ = Ψ := by
+  classical
   apply LinearMap.ext
   intro X
   have hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Finset.univ := by simp

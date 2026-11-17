@@ -391,7 +391,7 @@ theorem projProd_mem_supportedOperators :
         projProd l ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (footprint l)
   | [] => by
     rw [footprint_nil]
-    simpa [projProd] using (one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) (∅ : Finset ι)))
+    simp [projProd]
   | p :: l => by
     rw [projProd, List.map_cons, List.prod_cons, footprint_cons]
     exact mul_mem

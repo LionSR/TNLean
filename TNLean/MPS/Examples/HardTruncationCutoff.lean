@@ -219,8 +219,7 @@ theorem bondTerm_supported (K : ℕ) (i : Fin (K + 1)) :
       (interval (K + 2) i.val (i.val + 2)) := by
   change _ ∈ ManyBody.supportedOperators _ _
   refine Fin.cases ?_ (fun j ↦ ?_) i
-  · change _ ∈ ManyBody.supportedOperators _ _
-    change boundary K ∈ _
+  · change boundary K ∈ _
     rw [boundary_formula]
     apply mul_mem
     · change _ ∈ ManyBody.supportedOperators _ _
@@ -229,8 +228,7 @@ theorem bondTerm_supported (K : ℕ) (i : Fin (K + 1)) :
     · change _ ∈ ManyBody.supportedOperators _ _
       exact sub_mem (one_mem (ManyBody.supportedOperators _ _))
         (oneSite_mem 1 _ (by simp [interval]))
-  · change _ ∈ ManyBody.supportedOperators _ _
-    change internalTerm K j ∈ _
+  · change internalTerm K j ∈ _
     rw [internal_formula]
     split_ifs with hj
     · apply SMulMemClass.smul_mem
