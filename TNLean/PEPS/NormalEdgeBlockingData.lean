@@ -115,7 +115,7 @@ structure NormalEdgeBlockingHypotheses (G : SimpleGraph V) where
 
 namespace NormalEdgeBlockingHypotheses
 
-variable {ι}
+variable {ι} {G : SimpleGraph V}
 
 /-- The first injective block around each edge. -/
 def red (h : NormalEdgeBlockingHypotheses ι G) (e : Edge G) : Finset V :=
