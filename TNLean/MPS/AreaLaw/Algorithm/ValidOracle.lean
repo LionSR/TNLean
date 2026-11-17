@@ -107,7 +107,7 @@ structure LinearAlgebraQuery.IsValidOracle (o : {ι : Type} → LinearAlgebraQue
   gaussianFilterFactors_admissible : ∀ (L i : ℕ) (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ j, 0 ≤ h j)
     (c Delta : ℝ),
-    IsAdmissibleFilterFactors hq h h0 c Delta i
+    IsAdmissibleFilterFactors h h0 c Delta i
       (o (LinearAlgebraQuery.gaussianFilterFactors L i hq h h0 c Delta))
   gaussianFilterFactors_card : ∀ (L i : ℕ) (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -159,7 +159,7 @@ theorem LinearAlgebraQuery.isValidOracle_honestOracle :
   leadingVector _ _ _ _ HL m η := isAdmissibleLeadingVector_boundaryLeadingVector _ HL m η
   schmidtTrim _ _ _ _ _ _ := rfl
   gaussianFilterFactors_admissible _ i hq h h0 c Delta :=
-    isAdmissibleFilterFactors_gaussianFilterFactors hq h h0 c Delta i
+    isAdmissibleFilterFactors_gaussianFilterFactors h h0 c Delta i
   gaussianFilterFactors_card _ _ hq h hs h0 h1 _ _ hc hDelta :=
     card_gaussianFilterFactors_le hq h hs h0 h1 hc hDelta
   gaussianFilterFactors_rank _ _ hq h hs h0 h1 _ _ hc hDelta hi _ hA k hki :=

@@ -86,7 +86,7 @@ noncomputable def lvvSweepStep (hq : 2 ≤ q)
     (Delta : ℝ) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     Finset (LeftBlockVector L q (i + 1)) :=
   successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Delta L))
-    (gaussianFilterFactors (Nat.le_of_lt hq) h h0 (lvvSuccessiveError Delta) Delta (i + 1)) id
+    (gaussianFilterFactors h h0 (lvvSuccessiveError Delta) Delta (i + 1)) id
     ((ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1).sizeTrimmingSelection hq Delta
       (AreaLaw.extend (i + 1) S))
 
@@ -99,7 +99,7 @@ theorem card_lvvSweepStep_le (hq : 2 ≤ q)
     {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     (lvvSweepStep hq h hs h0 h1 Delta hi S).card ≤ lvvSuccessiveCardBound q Delta L := by
   calc
-    _ ≤ (gaussianFilterFactors (Nat.le_of_lt hq) h h0 (lvvSuccessiveError Delta) Delta
+    _ ≤ (gaussianFilterFactors h h0 (lvvSuccessiveError Delta) Delta
           (i + 1)).card *
         ((ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1).sizeTrimmingSelection hq Delta
           (AreaLaw.extend (i + 1) S)).card := card_successiveStep_le hi _ _ id _

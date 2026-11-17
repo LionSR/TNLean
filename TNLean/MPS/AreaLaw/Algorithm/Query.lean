@@ -169,7 +169,7 @@ noncomputable def LinearAlgebraQuery.honestOracle : {ι : Type} → LinearAlgebr
       boundaryLeadingVector (S : Set (LeftBlockVector _ q _)) HL m η X
   | _, .schmidtTrim _ _ hi _ m u => leftSchmidtTrim hi m u
   | _, .gaussianFilterFactors _ i hq h h0 c Delta =>
-      AreaLaw.gaussianFilterFactors hq h h0 c Delta i
+      AreaLaw.gaussianFilterFactors h h0 c Delta i
   | _, .sampledFactors _ i h E₀ _ _ _ I => AreaLaw.sampledFactors h E₀ I i
   | _, .applyFactor _ _ _ _ A s => toEuclideanLin A s
   | _, .energyMinimizer _ _ H S => AreaLaw.energyMinimizer H S
@@ -212,7 +212,7 @@ theorem LinearAlgebraQuery.honestOracle_gaussianFilterFactors (L i : ℕ) (hq : 
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ j, 0 ≤ h j)
     (c Delta : ℝ) :
     honestOracle (LinearAlgebraQuery.gaussianFilterFactors L i hq h h0 c Delta) =
-      AreaLaw.gaussianFilterFactors hq h h0 c Delta i := rfl
+      AreaLaw.gaussianFilterFactors h h0 c Delta i := rfl
 
 @[simp]
 theorem LinearAlgebraQuery.honestOracle_sampledFactors (L i : ℕ)

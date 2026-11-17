@@ -45,9 +45,9 @@ theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2
         (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
           (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1),
       (∀ i : ℕ, i ≤ L →
-        (gaussianFilterFactors (Nat.le_of_lt hq) h h0 (lvvSuccessiveError Delta) Delta i).card ≤
+        (gaussianFilterFactors h h0 (lvvSuccessiveError Delta) Delta i).card ≤
           P * (L + 1) ^ d ∧
-        ∀ A ∈ gaussianFilterFactors (Nat.le_of_lt hq) h h0 (lvvSuccessiveError Delta) Delta i,
+        ∀ A ∈ gaussianFilterFactors h h0 (lvvSuccessiveError Delta) Delta i,
           ∀ k, k < i → operatorSchmidtRank
             (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
               (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ P * (L + 1) ^ d) ∧
