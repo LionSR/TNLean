@@ -52,7 +52,7 @@ theorem exists_finiteSetTruncation_schmidtBellPrevector_of_gap
         (∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀) →
         (∀ x (d : ℕ),
           ((Finset.univ.filter fun y => G.edist x y = d).card : ℝ) ≤ Kg * ((d : ℝ) + 1) ^ kg) →
-        (∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
+        (∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
         (∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) →
         (∀ k, ‖h k‖ ≤ J) →
         ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (ι → Fin q)), ‖Ω‖ = 1 →

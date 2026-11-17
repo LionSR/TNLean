@@ -106,8 +106,8 @@ private theorem designatedSupport_not_near_far_domainGraph
       y, hyD, by simp [receiving, hyσ]⟩
   have heq : designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) =
       S.ball i := by
-    simpa only [QuantumCircuit.graphBall, ball] using
-      (truncationRadius_eq_of_mem_crossingLabels hnear hcross).2.2
+    exact (truncationRadius_eq_of_mem_crossingLabels hnear hcross).2.2.trans
+      (Finset.ext fun _ ↦ by simp [ball, ManyBody.mem_graphBall])
   rw [heq] at hxD hyD
   have hxcompact := Finset.mem_filter.mp (hnear hxP)
   have hball := ball_subset_of_mem_ball_domainGraph hT S hgraph hdepth hclear hxD

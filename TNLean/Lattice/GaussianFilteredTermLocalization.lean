@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.LiebRobinson.GraphLocalization
+import TNLean.Algebra.MatrixHermitianSum
+import TNLean.Circuit.SiteExpectationGraphLocalization
 import TNLean.Circuit.SiteExpectationOrder
 import TNLean.Lattice.GaussianFilteredGround
 import TNLean.Lattice.GaussianFilteredLocality
@@ -53,7 +54,7 @@ metric spaces in `GaussianFilteredMetricTruncation`, without polynomial growth; 
 `docs/paper-gaps/hastings05_geometric_growth_scope.tex`.
 
 The constants of the Lieb–Robinson bound are those of
-`QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset` and
+`ManyBody.norm_heisenberg_commutator_le_graphDistance_finset` and
 `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`. These provide
 analogues of the source's localization terms; the support-radius conversion above must be made
 before comparing them. The statements here keep `q` and `T` free.
@@ -106,8 +107,12 @@ theorem norm_commutator_gaussianFilteredTerm_le_graphDistance {q ΔE : ℝ} (hq 
         2 * ‖W‖ * ‖B‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
   have hH : (∑ k, h k).IsHermitian := isHermitian_sum _ fun k _ => hHerm k
   refine norm_commutator_gaussianFilteredTerm_le hq hH W B hT (by positivity) fun t ht => ?_
-  have hLR := norm_heisenberg_commutator_le_graphDistance_finset G X a ha h hHerm hSupport R
-    hDiam vR hCard b₀ hBudget S hW y hB μ hμ l hl t
+  let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
+    ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
+  have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset G Φ a ha hHerm R
+    hDiam vR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hW) y
+    (isSupportedOn_of_mem_supportedOperators (S := {y}) (by rwa [Finset.coe_singleton])) μ hμ l
+    hl t
   refine hLR.trans (mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr ?_) (by positivity))
   have hv : 0 ≤ 2 * vR * |b₀| * Real.exp (2 * μ * R) + 1 := by positivity
   have htT : |t| ≤ T := abs_le.mpr ht
@@ -129,7 +134,7 @@ theorem norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood [NeZe
     {q ΔE : ℝ} (hq : 0 ≤ q) (S : Finset ι) {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hW : W ∈ supportedOperators d (S : Set ι)) (l : ℕ) {T : ℝ} (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q ΔE (∑ k, h k) W -
-        siteExpectation d (S.biUnion fun x => graphBall G x l)
+        siteExpectation d (S.biUnion fun x => ManyBody.graphBall G x l)
           (gaussianFilteredTerm q ΔE (∑ k, h k) W)‖ ≤
       (2 + 4 * |b₀| * Real.exp (2 * R)) * (S.card : ℝ) ^ 2 * ‖W‖ * Kg *
           (2 ^ kg * kg.factorial * Real.exp (1 / 2) / (1 - Real.exp (-(1 / 2)))) *
@@ -152,8 +157,10 @@ theorem norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood [NeZe
   have hv : 0 ≤ v := by positivity
   refine norm_sub_siteExpectation_gaussianFilteredTerm_le hq hH W _ hT (by positivity)
     fun t ht => ?_
-  have hLR := norm_heisenberg_sub_siteExpectation_graphNeighborhood_le G X a ha h hHerm
-    hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth S hW l t
+  let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
+    ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
+  have hLR := norm_heisenberg_sub_siteExpectation_graphNeighborhood_le G Φ a ha hHerm
+    R hDiam vR hCard b₀ hBudget Kg kg hGrowth S (isSupportedOn_of_mem_supportedOperators hW) l t
   refine hLR.trans (mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr ?_) hP)
   have htT : |t| ≤ T := abs_le.mpr ht
   nlinarith
@@ -172,7 +179,8 @@ theorem exists_local_approx_gaussianFilteredTerm [NeZero d] (Kg : ℝ) (kg : ℕ
     {q ΔE : ℝ} (hq : 0 ≤ q) (S : Finset ι) {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hW : W ∈ supportedOperators d (S : Set ι)) (l : ℕ) {T : ℝ} (hT : 0 ≤ T) :
     ∃ M : Matrix (ι → Fin d) (ι → Fin d) ℂ,
-      M ∈ supportedOperators d ((S.biUnion fun x => graphBall G x l : Finset ι) : Set ι) ∧
+      M ∈ supportedOperators d
+        ((S.biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) ∧
       ‖M‖ ≤ ‖W‖ ∧ (W.IsHermitian → M.IsHermitian) ∧
       ‖gaussianFilteredTerm q ΔE (∑ k, h k) W - M‖ ≤
         (2 + 4 * |b₀| * Real.exp (2 * R)) * (S.card : ℝ) ^ 2 * ‖W‖ * Kg *

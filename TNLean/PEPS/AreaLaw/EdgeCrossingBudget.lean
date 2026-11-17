@@ -28,6 +28,7 @@ namespace TNLean.PEPS.AreaLaw
 
 variable {V : Type*} [Fintype V] [DecidableEq V]
 
+omit [DecidableEq V] in
 /-- An on-site designated support never meets both sides of a cut. -/
 theorem not_mem_crossingTerms_singleton (A : Finset V) (v : V) :
     v ∉ Entropy.crossingTerms (fun w : V ↦ {w}) A := by
@@ -69,7 +70,8 @@ theorem inl_not_mem_crossingTerms (A : Finset (Site Λ))
     (v : Site Λ) : Sum.inl v ∉ Entropy.crossingTerms nearestNeighborSupport A := by
   classical
   intro h
-  have h' := (Finset.mem_filter.mp h).2
+  have h' := h
+  simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at h'
   change (∃ w ∈ ({v} : Finset (Site Λ)), w ∈ A) ∧
     (∃ w ∈ ({v} : Finset (Site Λ)), w ∉ A) at h'
   simp only [Finset.mem_singleton, exists_eq_left, and_not_self] at h'
@@ -82,7 +84,8 @@ theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
   classical
   constructor
   · intro h
-    have h' := (Finset.mem_filter.mp h).2
+    have h' := h
+    simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at h'
     change (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∈ A) ∧
       (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∉ A) at h'
     obtain ⟨⟨x, hx, hxA⟩, y, hy, hyA⟩ := h'
@@ -94,8 +97,7 @@ theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
       first | exact absurd hxA hyA | rfl | exact Sym2.eq_swap
   · intro h
     obtain ⟨x, hxA, y, hyA, hxy⟩ := (Finset.mem_filter.mp h).2
-    apply Finset.mem_filter.mpr
-    refine ⟨Finset.mem_univ _, ?_⟩
+    simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
     change (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∈ A) ∧
       (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∉ A)
     rcases Sym2.eq_iff.mp hxy with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;>
@@ -111,7 +113,8 @@ theorem card_nearestNeighbor_insideConfig (q : ℕ)
   | inl v => exact False.elim (inl_not_mem_crossingTerms A v hi)
   | inr e =>
     apply card_pair_insideConfig_of_crossing
-    exact (Finset.mem_filter.mp hi).2
+    simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hi
+    exact hi
 
 /-- Forgetting the canonical endpoint order counts each unordered boundary edge once. -/
 theorem card_crossingTerms_nearestNeighbor

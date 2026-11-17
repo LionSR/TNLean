@@ -119,7 +119,7 @@ theorem integrable_and_integral_siteOscillation_le_graphChannelEventKernel
     (hk : ∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x})
     {C c α v : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (hv : 0 ≤ v) (N : ℕ) (hN : ∀ i, Finset.univ.sup (G.dist (a i)) ≤ N)
-    (hε : ∀ i l, l ≤ N → ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+    (hε : ∀ i l, l ≤ N → ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α)))
     (hrow : ∀ y, (∑ z,
       graphChannelEventKernel G a (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))

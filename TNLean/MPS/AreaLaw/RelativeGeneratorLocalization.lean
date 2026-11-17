@@ -47,7 +47,7 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
     let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
     let Z := C.biUnion (fun X ↦ X.1)
     let B := chainNeighborhood Z ℓ
-    let G := QuantumCircuit.heisenbergEvolution K' t (K' - K)
+    let G := ManyBody.heisenbergEvolution K' t (K' - K)
     let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * (2 * J)
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
       (1 - Real.exp (-(1 / 2)))
@@ -62,7 +62,7 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
   let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
   let Z := C.biUnion (fun X ↦ X.1)
   let B := chainNeighborhood Z ℓ
-  let G := heisenbergEvolution K' t (K' - K)
+  let G := ManyBody.heisenbergEvolution K' t (K' - K)
   let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * (2 * J)
   let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
     (1 - Real.exp (-(1 / 2)))
@@ -75,9 +75,9 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
   have hloc (S : Finset (Fin L))
       (A : Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ)
       (hA : Entropy.IsSupportedOn (n := fun _ ↦ q * q) A S) :
-      ‖heisenbergEvolution K' t A - siteExpectation (q * q)
+      ‖ManyBody.heisenbergEvolution K' t A - siteExpectation (q * q)
         (chainNeighborhood S ℓ)
-        (heisenbergEvolution K' t A)‖ ≤
+        (ManyBody.heisenbergEvolution K' t A)‖ ≤
           a * (S.card : ℝ) ^ 2 * ‖A‖ * Real.exp (v * |t| - ℓ / 2) := by
     exact norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
       (fun X : ChainSupport L R ↦ X) g.term g.hermitian g.supported b₀
@@ -85,8 +85,8 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
   have hcommon (S : Finset (Fin L)) (hS : S ⊆ Z)
       (A : Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ)
       (hA : Entropy.IsSupportedOn (n := fun _ ↦ q * q) A S) :
-      ‖heisenbergEvolution K' t A - siteExpectation (q * q) B
-        (heisenbergEvolution K' t A)‖ ≤
+      ‖ManyBody.heisenbergEvolution K' t A - siteExpectation (q * q) B
+        (ManyBody.heisenbergEvolution K' t A)‖ ≤
           2 * (a * (S.card : ℝ) ^ 2 * ‖A‖ * Real.exp (v * |t| - ℓ / 2)) := by
     let N := chainNeighborhood S ℓ
     have hNB : N ⊆ B := by
@@ -94,9 +94,10 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le
       obtain ⟨x, hx, hxy⟩ := (Finset.mem_filter.mp hy).2
       exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, x, hS hx, hxy⟩
     exact (norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators B
-      (heisenbergEvolution K' t A) (siteExpectation (q * q) N (heisenbergEvolution K' t A))
+      (ManyBody.heisenbergEvolution K' t A) (siteExpectation (q * q) N
+          (ManyBody.heisenbergEvolution K' t A))
       (supportedOperators_mono (Finset.coe_subset.mpr hNB)
-        (siteExpectation_mem_supportedOperators N (heisenbergEvolution K' t A)))).trans
+        (siteExpectation_mem_supportedOperators N (ManyBody.heisenbergEvolution K' t A)))).trans
           (mul_le_mul_of_nonneg_left (hloc S A hA) (by norm_num))
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (sheetSwapOp q D)
