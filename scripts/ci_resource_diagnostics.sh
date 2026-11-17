@@ -1,24 +1,19 @@
 #!/usr/bin/env bash
-# Source only in the full-build step's shell. No build command runs here.
-# Preserve both the original pipeline result and cancellation as non-success.
-_ci_resource_cleanup() {
-  local status="$1" attempt
-  trap - EXIT
-  if [[ -n "${_ci_resource_pid:-}" ]]; then
-    kill -TERM "$_ci_resource_pid" 2>/dev/null || true
-    # A stuck diagnostic write must not hold up the build's original status.
-    for attempt in {1..20}; do
-      kill -0 "$_ci_resource_pid" 2>/dev/null || break
-      sleep 0.1 || break
-    done
-    kill -KILL "$_ci_resource_pid" 2>/dev/null || true
-    wait "$_ci_resource_pid" 2>/dev/null || true
-  fi
-  exit "$status"
-}
-trap '_ci_resource_cleanup $?' EXIT
+# Source only in the full-build step. No build command runs here.
+# No numeric-PID signalling or wait: Bash may reap an early-exiting sampler,
+# and its old PID may later belong to an unrelated process.
 trap 'exit 130' INT
 trap 'exit 143' TERM
-python3 "${BASH_SOURCE[0]%/*}/ci_resource_diagnostics.py" \
-  --output "$1" --parent-pid "$$" &
-_ci_resource_pid=$!
+_ci_resource_dir=''
+if [[ -n "${RUNNER_TEMP:-}" ]]; then
+  if _ci_resource_dir="$(mktemp -d "$RUNNER_TEMP/lean-resources.XXXXXXXX")"; then
+    # A new mode-0700 directory cannot contain a previous run's output.
+    # Publication separately verifies the sampler's closed-file receipt.
+    if [[ -n "${GITHUB_OUTPUT:-}" ]]; then
+      printf 'resource_directory=%s\n' "$_ci_resource_dir" >> "$GITHUB_OUTPUT" || true
+    fi
+    python3 "${BASH_SOURCE[0]%/*}/ci_resource_diagnostics.py" sample \
+      --output "$_ci_resource_dir/samples.jsonl" --parent-pid "$$" &
+    _ci_resource_pid=$!  # For fixtures only; never used to signal a process.
+  fi
+fi

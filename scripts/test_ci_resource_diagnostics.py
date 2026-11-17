@@ -129,6 +129,7 @@ class SamplesTest(unittest.TestCase):
         self.assertEqual(len(lines), 3)
         self.assertTrue(all(json.loads(line)["utc"] for line in lines))
         out.unlink()
+        (self.root / "closed.json").unlink()
         with contextlib.redirect_stdout(io.StringIO()):
             diagnostics.monitor(out, 123, self.proc, self.cg, self.root, max_bytes=1)
         self.assertEqual(out.stat().st_size, 0)
@@ -164,7 +165,7 @@ class ShellTest(unittest.TestCase):
         self.bin.mkdir()
         self.env = dict(os.environ, RUNNER_TEMP=str(self.root),
                         PATH=str(self.bin) + os.pathsep + os.environ["PATH"],
-                        CALLS=str(self.root / "calls"))
+                        CALLS=str(self.root / "calls"), GITHUB_OUTPUT=str(self.root / "outputs"))
         self.fake_lake('echo "$*" >> "$CALLS"\nexit 0\n')
 
     def fake_lake(self, body):
@@ -203,7 +204,9 @@ class ShellTest(unittest.TestCase):
         self.assertEqual(self.run_build().returncode, 11)
 
     def test_diagnostic_output_unavailable_does_not_change_success_or_failure(self):
-        (self.root / "lean-resources.jsonl").mkdir()
+        file = self.bin / "mktemp"
+        file.write_text("#!/bin/bash\nexit 1\n")
+        file.chmod(0o755)
         for code in (0, 7):
             with self.subTest(code=code):
                 self.fake_lake(f'sleep 0.1\nexit {code}\n')
@@ -217,31 +220,32 @@ class ShellTest(unittest.TestCase):
             self.fake_lake(f'exit {code}\n')
             self.assertEqual(self.run_build().returncode, code)
 
-    def test_normal_success_and_failure_reap_sampler(self):
-        for code in (0, 7):
-            with self.subTest(code=code):
-                self.fake_lake(f'sleep 0.1\nexit {code}\n')
-                script = BUILD.replace('\n{\n', '\necho "$_ci_resource_pid" > "$RUNNER_TEMP/sampler.pid"\n{\n')
-                result = self.run_build(script)
-                self.assertEqual(result.returncode, code)
-                pid = int((self.root / "sampler.pid").read_text())
-                self.assertIsNone(diagnostics.process(Path('/proc') / str(pid)))
-                rows = [json.loads(line) for line in (self.root / 'lean-resources.jsonl').read_text().splitlines()]
-                self.assertEqual(rows[-1]['phase'], 'final')
-                (self.root / 'lean-resources.jsonl').unlink()
-
-    def test_unresponsive_sampler_cannot_mask_build_failure(self):
-        import sys
+    def test_early_reaped_sampler_never_signalled_and_status_preserved(self):
         file = self.bin / "python3"
-        file.write_text(f"#!{sys.executable}\nimport signal,time\nsignal.signal(signal.SIGTERM, signal.SIG_IGN)\nwhile True: time.sleep(1)\n")
+        file.write_text("#!/bin/bash\nexit 0\n")
         file.chmod(0o755)
-        self.fake_lake('sleep 0.1\nexit 7\n')
-        script = BUILD.replace('\n{\n', '\necho "$_ci_resource_pid" > "$RUNNER_TEMP/sampler.pid"\n{\n')
-        start = time.monotonic()
-        self.assertEqual(self.run_build(script).returncode, 7)
-        self.assertLess(time.monotonic() - start, 5)
-        pid = int((self.root / 'sampler.pid').read_text())
-        self.assertIsNone(diagnostics.process(Path('/proc') / str(pid)))
+        for code in (0, 1, 2, 42, 125, 126, 127, 128, 130, 137, 143, 255):
+            with self.subTest(code=code):
+                script = ('source scripts/ci_resource_diagnostics.sh\n'
+                          'while [[ -e /proc/$_ci_resource_pid ]]; do sleep 0.01; done\n'
+                          'kill() { echo unexpected >> "$CALLS"; }; '
+                          f'exit {code}\n')
+                self.assertEqual(self.run_build(script).returncode, code)
+        self.assertEqual(self.calls(), [])
+
+    def test_preexisting_fixed_output_is_never_selected(self):
+        old = self.root / 'lean-resources.jsonl'
+        old.write_text('PRIVATE_SENTINEL')
+        self.fake_lake('sleep 0.2\nexit 0\n')
+        self.assertEqual(self.run_build().returncode, 0)
+        directory = Path((self.root / 'outputs').read_text().strip().split('=', 1)[1])
+        self.assertNotEqual(directory, self.root)
+        self.assertEqual(directory.stat().st_mode & 0o777, 0o700)
+        result = diagnostics.publish(directory, self.root, self.root / 'artifact-output')
+        self.assertIsNotNone(result)
+        self.assertNotIn('PRIVATE_SENTINEL', result.read_text())
+        self.assertEqual(old.read_text(), 'PRIVATE_SENTINEL')
+        self.assertEqual(json.loads(result.read_text().splitlines()[-1])['phase'], 'final')
 
     def test_blocked_console_write_terminates_only_sampler(self):
         import sys
@@ -264,11 +268,12 @@ class ShellTest(unittest.TestCase):
         for sig in (signal.SIGINT, signal.SIGTERM, signal.SIGKILL):
             with self.subTest(signal=sig):
                 pidfile = self.root / "sampler.pid"
-                output = self.root / "lean-resources.jsonl"
+                output = self.root / "directory"
                 output.unlink(missing_ok=True)
                 script = ('set -eo pipefail\n'
-                          'source scripts/ci_resource_diagnostics.sh "$RUNNER_TEMP/lean-resources.jsonl"\n'
+                          'source scripts/ci_resource_diagnostics.sh\n'
                           'echo "$_ci_resource_pid" > "$RUNNER_TEMP/sampler.pid"\n'
+                          'echo "$_ci_resource_dir" > "$RUNNER_TEMP/directory"\n'
                           'while :; do sleep 0.05; done\n')
                 p = subprocess.Popen(["bash", "-c", script], cwd=ROOT, env=self.env,
                                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
@@ -277,7 +282,8 @@ class ShellTest(unittest.TestCase):
                 try:
                     deadline = time.monotonic() + 5
                     while time.monotonic() < deadline:
-                        if pidfile.exists() and output.exists() and output.stat().st_size:
+                        if (pidfile.exists() and output.exists() and
+                                (Path(output.read_text().strip()) / "samples.jsonl").exists()):
                             sampler = int(pidfile.read_text())
                             break
                         time.sleep(0.02)
@@ -306,10 +312,109 @@ class ShellTest(unittest.TestCase):
                     pidfile.unlink(missing_ok=True)
 
 
+class PublicationTest(unittest.TestCase):
+    setUp = SamplesTest.setUp
+    write = SamplesTest.write
+
+    def ready(self):
+        with contextlib.redirect_stdout(io.StringIO()):
+            diagnostics.monitor(self.root / 'samples.jsonl', 123, self.proc, self.cg,
+                                self.root, max_samples=1)
+
+    def test_closed_output_copied_and_original_change_cannot_affect_upload(self):
+        self.ready()
+        dest = diagnostics.publish(self.root, self.root, self.root / 'outputs')
+        self.assertIsNotNone(dest)
+        original = dest.read_bytes()
+        (self.root / 'samples.jsonl').write_text('PRIVATE_SENTINEL')
+        self.assertEqual(dest.read_bytes(), original)
+
+    def test_reject_symlink_directory_files_and_changed_content(self):
+        self.ready()
+        link = self.root / 'directory-link'
+        link.symlink_to(self.root, target_is_directory=True)
+        with self.assertRaises(OSError):
+            diagnostics.publish(link, self.root, self.root / 'outputs')
+        for name in ('samples.jsonl', 'closed.json'):
+            file = self.root / name
+            saved = file.read_bytes()
+            file.unlink()
+            file.symlink_to(self.root / 'private')
+            (self.root / 'private').write_text('PRIVATE_SENTINEL')
+            with self.assertRaises(OSError):
+                diagnostics.publish(self.root, self.root, self.root / 'outputs')
+            file.unlink()
+            file.write_bytes(saved)
+        (self.root / 'samples.jsonl').write_text('PRIVATE_SENTINEL')
+        self.assertIsNone(diagnostics.publish(self.root, self.root, self.root / 'outputs'))
+        self.assertFalse((self.root / 'outputs').exists())
+
+    def test_rejected_existing_output_has_no_receipt_or_upload(self):
+        (self.root / 'samples.jsonl').write_text('PRIVATE_SENTINEL')
+        with self.assertRaises(FileExistsError):
+            self.ready()
+        with patch.object(diagnostics.time, 'monotonic', side_effect=[0, 4]):
+            self.assertIsNone(diagnostics.publish(self.root, self.root, self.root / 'outputs'))
+        self.assertFalse((self.root / 'outputs').exists())
+
+
+class WatchdogTest(unittest.TestCase):
+    def test_initialization_polling_and_close_block_after_parent_death(self):
+        import sys
+        # Blocking FIFO opens are interruptible kernel I/O. Each injected fault
+        # runs in its own real sampler process so SIGALRM cannot kill the tests.
+        for boundary in ('process', 'cgroup_dir', 'open', 'parent_alive', 'close'):
+            with self.subTest(boundary=boundary), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                os.mkfifo(root / 'fifo')
+                parent = subprocess.Popen(['sleep', '30'])
+                code = r"""
+import sys, os
+from pathlib import Path
+sys.path.insert(0, 'scripts')
+import ci_resource_diagnostics as d
+root, boundary, pid = Path(sys.argv[1]), sys.argv[2], int(sys.argv[3])
+def block(*a, **kw):
+    (root / 'entered').touch()
+    with (root / 'fifo').open() as f: f.read()
+if boundary in ('process', 'cgroup_dir', 'parent_alive'):
+    setattr(d, boundary, block)
+else:
+    original = Path.open
+    class Stream:
+        def __init__(self, stream): self.stream = stream
+        def __enter__(self): return self.stream
+        def __exit__(self, *args): block()
+    def opened(path, *args, **kw):
+        if path == root / 'samples.jsonl':
+            if boundary == 'open': return block()
+            return Stream(original(path, *args, **kw))
+        return original(path, *args, **kw)
+    Path.open = opened
+d.monitor(root / 'samples.jsonl', pid, max_samples=1)
+"""
+                sampler = subprocess.Popen([sys.executable, '-c', code, tmp, boundary, str(parent.pid)],
+                                           cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+                try:
+                    deadline = time.monotonic() + 3
+                    while not (root / 'entered').exists() and time.monotonic() < deadline:
+                        time.sleep(0.01)
+                    self.assertTrue((root / 'entered').exists())
+                    parent.kill()
+                    parent.wait(timeout=1)
+                    self.assertEqual(sampler.wait(timeout=3.2), -signal.SIGALRM)
+                    self.assertFalse((root / 'closed.json').exists())
+                finally:
+                    if parent.poll() is None: parent.kill()
+                    parent.wait()
+                    if sampler.poll() is None: sampler.kill()
+                    sampler.communicate(timeout=1)
+
+
 class WorkflowTest(unittest.TestCase):
     def test_original_build_pipeline_and_required_steps(self):
         self.assertEqual(BUILD.replace(
-            'source scripts/ci_resource_diagnostics.sh "$RUNNER_TEMP/lean-resources.jsonl"\n', ''),
+            'source scripts/ci_resource_diagnostics.sh\n', ''),
             'set -eo pipefail\n{\n  lake build\n  lake build lint_style\n} 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"\n')
         names = [s.get("name") for s in STEPS]
         ordered = ["Check directly changed Lean sources and tests strictly",
@@ -328,10 +433,10 @@ class WorkflowTest(unittest.TestCase):
 
     def test_diagnostic_artifact_is_bounded_optional_and_runs_on_failure(self):
         step = next(s for s in STEPS if s.get('name') == 'Upload build resource diagnostics')
-        self.assertEqual(step['if'], 'always()')
+        self.assertEqual(step['if'], "always() && steps.resource-diagnostics.outputs.artifact_path != ''")
         self.assertTrue(step['continue-on-error'])
         self.assertEqual(step['timeout-minutes'], 2)
-        self.assertEqual(step['with']['path'], '${{ runner.temp }}/lean-resources.jsonl')
+        self.assertEqual(step['with']['path'], '${{ steps.resource-diagnostics.outputs.artifact_path }}')
         self.assertEqual(step['with']['retention-days'], 7)
         self.assertEqual(step['with']['if-no-files-found'], 'ignore')
 

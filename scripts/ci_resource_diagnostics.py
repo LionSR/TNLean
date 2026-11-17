@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
 """Bounded Linux resource samples, never build output or process arguments.
 
-The shell helper owns cleanup. Parent identity polling also stops the sampler
-when the shell is killed before its EXIT trap (including SIGKILL).
+The sampler exits on parent death or cancellation without shell PID signalling.
+A watchdog covers initialization, polling, sampling and close. Only closed,
+owned output is eligible for the separate artifact publication step.
 """
 from __future__ import annotations
 
 import argparse
 import datetime
+import hashlib
 import json
 import os
 import signal
+import stat
+import tempfile
 from pathlib import Path
 import time
 
@@ -150,7 +154,7 @@ def notice(message: str) -> None:
         pass
 
 
-def monitor(output: Path, pid: int, proc: Path = Path("/proc"),
+def _monitor(output: Path, pid: int, proc: Path = Path("/proc"),
             cgroup_root: Path = Path("/sys/fs/cgroup"), workspace: Path = Path("."),
             interval: float = INTERVAL, max_samples: int = MAX_SAMPLES,
             max_bytes: int = MAX_BYTES, stop_requested=lambda: False) -> None:
@@ -160,6 +164,8 @@ def monitor(output: Path, pid: int, proc: Path = Path("/proc"),
     cgroup = cgroup_dir(proc, pid, cgroup_root)
     # Exclusive creation: do not follow or overwrite a pre-existing artifact.
     with output.open("x", encoding="ascii") as stream:
+        identity = os.fstat(stream.fileno())
+        digest = hashlib.sha256()
         written = 0
         next_sample = time.monotonic()
         count = 0
@@ -180,6 +186,7 @@ def monitor(output: Path, pid: int, proc: Path = Path("/proc"),
                     return False
                 stream.write(encoded)
                 stream.flush()
+                digest.update(encoded.encode("ascii"))
                 written += len(encoded)
                 count += 1
                 notice(f"Resource sample {count} ({phase}): utc={row['utc']} "
@@ -189,25 +196,103 @@ def monitor(output: Path, pid: int, proc: Path = Path("/proc"),
                        f"build_processes={row['observed_build_processes']}")
                 return True
             finally:
-                signal.alarm(0)
+                signal.alarm(SNAPSHOT_SECONDS)
 
-        while not stop_requested() and parent_alive(proc, pid, parent["start_ticks"]):
+        while True:
+            # Reset before polling too: a blocked /proc read must not orphan us.
+            signal.alarm(SNAPSHOT_SECONDS)
+            if stop_requested() or not parent_alive(proc, pid, parent["start_ticks"]):
+                write_sample("final")
+                break
             now = time.monotonic()
             if now >= next_sample:
                 if not write_sample("periodic") or count >= max_samples:
-                    return
+                    break
                 next_sample = now + interval
             time.sleep(min(1, max(0, next_sample - time.monotonic())))
-        # Capture counters after a failed build, not just before a possible OOM.
-        # Subject to the same file/sample limits; hard runner termination can
-        # still prevent this final snapshot or artifact upload.
-        write_sample("final")
+        signal.alarm(SNAPSHOT_SECONDS)
+    # This receipt is created only after our exclusively created stream closes.
+    # Rejected pre-existing output, failed writes/close and watchdog termination
+    # cannot leave an upload-eligible file. Never overwrite an existing receipt.
+    receipt = {"version": 1, "device": identity.st_dev, "inode": identity.st_ino,
+               "bytes": written, "sha256": digest.hexdigest()}
+    with (output.parent / "closed.json").open("x", encoding="ascii") as stream:
+        json.dump(receipt, stream)
+
+
+def monitor(*args, **kwargs) -> None:
+    # Armed before the first parent/cgroup read and kept armed through close.
+    # SIGALRM terminates only this process; no handler turns it into success.
+    signal.alarm(SNAPSHOT_SECONDS)
+    try:
+        _monitor(*args, **kwargs)
+    finally:
+        signal.alarm(0)
+
+
+def owned_file(directory_fd: int, name: str, limit: int) -> tuple[bytes, os.stat_result]:
+    fd = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=directory_fd)
+    with os.fdopen(fd, "rb") as stream:
+        info = os.fstat(stream.fileno())
+        if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or
+                info.st_uid != os.getuid() or info.st_size > limit):
+            raise ValueError("not a bounded owned regular file")
+        data = stream.read(limit + 1)
+        if len(data) > limit:
+            raise ValueError("file exceeds limit")
+        return data, info
+
+
+def publish(directory: Path, temp_root: Path, github_output: Path) -> Path | None:
+    """Validate a closed sample, then publish a new copy, never the input path."""
+    signal.alarm(5)
+    try:
+        fd = os.open(directory, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+        try:
+            info = os.fstat(fd)
+            if info.st_uid != os.getuid() or stat.S_IMODE(info.st_mode) != 0o700:
+                return None
+            # The build shell never waits for the sidecar. Allow its normal
+            # parent-death detection/final snapshot to finish, with a hard cap.
+            deadline = time.monotonic() + 3
+            while True:
+                try:
+                    receipt_data, _ = owned_file(fd, "closed.json", 2048)
+                    break
+                except FileNotFoundError:
+                    if time.monotonic() >= deadline:
+                        return None
+                    time.sleep(0.1)
+            receipt = json.loads(receipt_data)
+            data, sample_stat = owned_file(fd, "samples.jsonl", MAX_BYTES)
+            expected = {"version": 1, "device": sample_stat.st_dev, "inode": sample_stat.st_ino,
+                        "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()}
+            if receipt != expected or not data:
+                return None
+            # Upload a closed snapshot in another exclusive directory, so a
+            # change to the original sample after validation cannot be uploaded.
+            destination = Path(tempfile.mkdtemp(prefix="lean-resources-upload-", dir=temp_root)) / "samples.jsonl"
+            with destination.open("xb") as stream:
+                stream.write(data)
+            with github_output.open("a", encoding="utf-8") as stream:
+                stream.write(f"artifact_path={destination}\n")
+            return destination
+        finally:
+            os.close(fd)
+    finally:
+        signal.alarm(0)
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--parent-pid", type=int, required=True)
+    commands = parser.add_subparsers(dest="command", required=True)
+    sampler = commands.add_parser("sample")
+    sampler.add_argument("--output", type=Path, required=True)
+    sampler.add_argument("--parent-pid", type=int, required=True)
+    publisher = commands.add_parser("publish")
+    publisher.add_argument("--directory", type=Path, required=True)
+    publisher.add_argument("--temp-root", type=Path, required=True)
+    publisher.add_argument("--github-output", type=Path, required=True)
     args = parser.parse_args()
     stopping = False
 
@@ -218,7 +303,10 @@ def main() -> None:
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
     try:
-        monitor(args.output, args.parent_pid, stop_requested=lambda: stopping)
+        if args.command == "sample":
+            monitor(args.output, args.parent_pid, stop_requested=lambda: stopping)
+        else:
+            publish(args.directory, args.temp_root, args.github_output)
     except Exception:
         # Do not print exceptions: they may contain paths or arbitrary file text.
         signal.alarm(SNAPSHOT_SECONDS)
