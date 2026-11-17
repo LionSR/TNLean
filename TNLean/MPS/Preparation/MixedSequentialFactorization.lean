@@ -282,7 +282,7 @@ theorem eval_mixedChain {l r : ℕ} (L : MPSChainTensor d D l) (A : MPSTensor d 
 noncomputable def mixedPolarIsoMatrix {l r : ℕ} (L : MPSChainTensor d D l)
     (A : MPSTensor d D) (R : MPSChainTensor d D r) :
     Matrix ((Fin l → Fin d) × Fin d × (Fin r → Fin d)) (Fin (D * D)) ℂ :=
-  Matrix.reindex ((MPSTensor.decodeBlockEquiv d (l + (r + 1))).trans
+  Matrix.reindex ((Kraus.decodeBlockEquiv d (l + (r + 1))).trans
     (mixedConfigurationEquiv d l r).symm) (Equiv.refl _)
       (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor (mixedChain L A R)))
 
@@ -303,7 +303,7 @@ theorem mixedPolarIsoMatrix_eq_mixedProductMap {l r : ℕ} (L : MPSChainTensor d
           (virtualPairEquiv D) (virtualPairEquiv D)) := by
   ext σ x
   change MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor (mixedChain L A R))
-      ((MPSTensor.decodeBlockEquiv d (l + (r + 1))).symm
+      ((Kraus.decodeBlockEquiv d (l + (r + 1))).symm
         (mixedConfigurationEquiv d l r σ)) x = _
   rw [polarIsoMatrix_chainBlockTensor_eq_sum _ hB, mixedProductMap_apply, eval_mixedChain]
 
@@ -327,7 +327,7 @@ theorem exists_mixed_sequential_polarIsoMatrix_of_split {l r : ℕ} (hD : 0 < D)
     HasMixedSequentialFactorization hD (mixedPolarIsoMatrix L A R) := by
   have hV : (mixedPolarIsoMatrix L A R).IsIsometry :=
     (MPSTensor.isIsometry_polarIsoMatrix_of_isInjective hB).reindex _
-      ((MPSTensor.decodeBlockEquiv d (l + (r + 1))).trans
+      ((Kraus.decodeBlockEquiv d (l + (r + 1))).trans
         (mixedConfigurationEquiv d l r).symm) (Equiv.refl _)
   rw [mixedPolarIsoMatrix_eq_mixedProductMap L A R hB] at hV ⊢
   exact exists_mixed_isometric_factorization hD L A R _ hV
@@ -364,7 +364,7 @@ theorem exists_mixed_sequential_polarIsoMatrix {l r : ℕ} (hD : 0 < D)
     (A : MPSChainTensor d D (l + (r + 1)))
     (hB : Kraus.IsInjective (MPSChainTensor.blockTensor A)) :
     HasMixedSequentialFactorization hD
-      (Matrix.reindex ((MPSTensor.decodeBlockEquiv d (l + (r + 1))).trans
+      (Matrix.reindex ((Kraus.decodeBlockEquiv d (l + (r + 1))).trans
         (mixedConfigurationEquiv d l r).symm) (Equiv.refl _)
           (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A))) := by
   obtain ⟨L, M, R, hA⟩ := exists_eq_mixedChain A

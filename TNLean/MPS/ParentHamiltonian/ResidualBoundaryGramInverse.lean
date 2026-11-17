@@ -32,6 +32,7 @@ they do not assert the three-interval projection defect or a spectral gap.
 -/
 
 open scoped Kronecker Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
+open Kraus (blockPhysDim)
 namespace MPSTensor
 variable {d D E L : ℕ}
 

@@ -23,6 +23,7 @@ transfer iterates therefore forces the physical density overlaps to zero.
 
 open scoped Matrix BigOperators Kronecker ComplexOrder MatrixOrder Topology
 open Filter
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

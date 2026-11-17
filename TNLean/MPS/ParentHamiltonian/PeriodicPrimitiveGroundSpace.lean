@@ -32,6 +32,7 @@ this corrected period is one.
 -/
 
 open scoped ComplexOrder
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

@@ -101,14 +101,14 @@ coordinates of the complete zipper family.
 Source: arXiv:1511.08090, equation `zippercondition` at lines 198--200. -/
 theorem blockedFusionAnalysis_mul_pairLetter
     {g L : ℕ} (Fam : BNTFusionIsometryFamily (Fin g) p)
-    (α β : Fin g) (I J : Fin (MPSTensor.blockPhysDim p L))
+    (α β : Fin g) (I J : Fin (Kraus.blockPhysDim p L))
     (hzipper : Fam.fusionIsometry α β *
           mulTensor (blockTensor (Fam.tensor α) L)
             (blockTensor (Fam.tensor β) L) I J =
         Fam.blockedUnweightedDirectSumLetter L α β I J *
           Fam.fusionIsometry α β) :
     Fam.blockedFusionAnalysis α β *
-        (∑ K : Fin (MPSTensor.blockPhysDim p L),
+        (∑ K : Fin (Kraus.blockPhysDim p L),
           blockTensor (Fam.tensor α) L I K ⊗ₖ
             blockTensor (Fam.tensor β) L K J) =
       Fam.blockedUnweightedDirectSumLetter L α β I J *
@@ -119,7 +119,7 @@ theorem blockedFusionAnalysis_mul_pairLetter
   calc
     (∑ xy : Fin (Fam.bondDim α) × Fin (Fam.bondDim β),
       Fam.fusionIsometry α β x (finProdFinEquiv xy) *
-        (∑ K : Fin (MPSTensor.blockPhysDim p L),
+        (∑ K : Fin (Kraus.blockPhysDim p L),
           blockTensor (Fam.tensor α) L I K ⊗ₖ
             blockTensor (Fam.tensor β) L K J) xy y) =
         ∑ q : Fin (Fam.bondDim α * Fam.bondDim β),
@@ -146,13 +146,13 @@ of the complete zipper family.
 Source: arXiv:1511.08090, equation `zippercondition` at lines 193--196. -/
 theorem pairLetter_mul_blockedFusionSynthesis
     {g L : ℕ} (Fam : BNTFusionIsometryFamily (Fin g) p)
-    (α β : Fin g) (I J : Fin (MPSTensor.blockPhysDim p L))
+    (α β : Fin g) (I J : Fin (Kraus.blockPhysDim p L))
     (hzipper : mulTensor (blockTensor (Fam.tensor α) L)
           (blockTensor (Fam.tensor β) L) I J *
         (Fam.fusionIsometry α β)ᴴ =
       (Fam.fusionIsometry α β)ᴴ *
         Fam.blockedUnweightedDirectSumLetter L α β I J) :
-    (∑ K : Fin (MPSTensor.blockPhysDim p L),
+    (∑ K : Fin (Kraus.blockPhysDim p L),
         blockTensor (Fam.tensor α) L I K ⊗ₖ
           blockTensor (Fam.tensor β) L K J) *
         Fam.blockedFusionSynthesis α β =
@@ -163,7 +163,7 @@ theorem pairLetter_mul_blockedFusionSynthesis
   simp only [blockedFusionSynthesis, Matrix.mul_apply]
   calc
     (∑ xy : Fin (Fam.bondDim α) × Fin (Fam.bondDim β),
-      (∑ K : Fin (MPSTensor.blockPhysDim p L),
+      (∑ K : Fin (Kraus.blockPhysDim p L),
         blockTensor (Fam.tensor α) L I K ⊗ₖ
           blockTensor (Fam.tensor β) L K J) x xy *
         (Fam.fusionIsometry α β)ᴴ (finProdFinEquiv xy) y) =
@@ -191,13 +191,13 @@ the paired product-bond coordinates.
 Source: arXiv:1511.08090, equation `inversegaugeone` at lines 181--191. -/
 theorem pairLetter_eq_blockedFusionSynthesis_mul_directSum_mul_analysis
     {g L : ℕ} (Fam : BNTFusionIsometryFamily (Fin g) p)
-    (α β : Fin g) (I J : Fin (MPSTensor.blockPhysDim p L))
+    (α β : Fin g) (I J : Fin (Kraus.blockPhysDim p L))
     (hreconstruct : mulTensor (blockTensor (Fam.tensor α) L)
           (blockTensor (Fam.tensor β) L) I J =
         (Fam.fusionIsometry α β)ᴴ *
           Fam.blockedUnweightedDirectSumLetter L α β I J *
             Fam.fusionIsometry α β) :
-    (∑ K : Fin (MPSTensor.blockPhysDim p L),
+    (∑ K : Fin (Kraus.blockPhysDim p L),
       blockTensor (Fam.tensor α) L I K ⊗ₖ
         blockTensor (Fam.tensor β) L K J) =
       Fam.blockedFusionSynthesis α β *
@@ -233,7 +233,7 @@ theorem exists_blocked_completeZipperFusionFamily
     (hLI : c.LengthIndependent) :
     ∃ L : ℕ, 0 < L ∧
       ∃ Fus : CompleteZipperFusionFamily
-          (Fin g) (MPSTensor.blockPhysDim p L),
+          (Fin g) (Kraus.blockPhysDim p L),
         Fus.bondDim = Fam.bondDim ∧
         Fus.fusionMultiplicity = Fam.chi.dim ∧
         (∀ γ, HEq (Fus.tensor γ) (blockTensor (Fam.tensor γ) L)) ∧
@@ -251,7 +251,7 @@ theorem exists_blocked_completeZipperFusionFamily
       Fam.fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent
         hBNT c hχ hLI α β
   let Fus : CompleteZipperFusionFamily
-      (Fin g) (MPSTensor.blockPhysDim p L) :=
+      (Fin g) (Kraus.blockPhysDim p L) :=
     { bondDim := Fam.bondDim
       bondDim_pos := hBNT.blocks_dim_pos
       tensor := fun γ ↦ blockTensor (Fam.tensor γ) L

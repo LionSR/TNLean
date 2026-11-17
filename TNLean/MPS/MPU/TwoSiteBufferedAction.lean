@@ -111,12 +111,12 @@ theorem finiteChainLocalObservable_originalSiteHeisenbergWindow
     {d D ℓ r : ℕ} {U : MPOTensor d D} (hU : U.IsMPU) (k p s : ℕ)
     (hN : 1 < p + (3 * (2 * k) + s)) (a : ℤ)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
-    (A : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    (A : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ) :
     finiteChainLocalObservable hU hN (a - p)
       (show finiteChainRegion a (3 * (2 * k)) ⊆
         finiteChainRegion (a - p) (p + (3 * (2 * k) + s)) by
@@ -153,8 +153,8 @@ formula applies to every observable there. Source: arXiv:1703.09188,
 StandardForm and eq:appendix-1, lines 603--622 and 2300--2306. -/
 theorem intervalCoordinates_centralInclusion_originalSiteHeisenbergInputWindow
     (d k : ℕ) (a : ℤ)
-    (A : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    (A : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ) :
     intervalCoordinates d a (3 * (2 * k))
       (localInclusion (show finiteChainRegion (a + (2 * k : ℕ)) (2 * k) ⊆
         finiteChainRegion a (3 * (2 * k)) by
@@ -196,8 +196,8 @@ here to one complete central interval. -/
 theorem exists_finiteChainLocalObservable_central_interval
     {d D ℓ r : ℕ} {U : MPOTensor d D} (hU : U.IsMPU) (k : ℕ) (a : ℤ)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
     (B : LocalAlgebra d (finiteChainRegion (a + (2 * k : ℕ)) (2 * k))) :
@@ -270,8 +270,8 @@ private theorem localAlgebraHom_ext_singletons {d : ℕ} [NeZero d] {Λ : Finset
 private theorem exists_central_interval_output_of_bounds
     {d D ℓ r : ℕ} {U : MPOTensor d D} (hU : U.IsMPU) (k : ℕ) (a : ℤ)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
     (B : LocalAlgebra d (finiteChainRegion (a + (2 * k : ℕ)) (2 * k))) :
@@ -302,8 +302,8 @@ separate. Source: arXiv:1703.09188, eq:appendix-1, lines 2300--2306. -/
 theorem finiteChainLocalObservable_eq_of_twoSiteStandardForm_buffers
     {d D ℓ r : ℕ} {U : MPOTensor d D} (hU : U.IsMPU) (k : ℕ) (hk : 0 < k)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
     (Λ : Finset ℤ) (b₁ b₂ : ℤ) (N₁ N₂ : ℕ) (hN₁ : 1 < N₁) (hN₂ : 1 < N₂)
@@ -316,7 +316,7 @@ theorem finiteChainLocalObservable_eq_of_twoSiteStandardForm_buffers
   have hd : d ≠ 0 := by
     intro hd
     have hpos := S.phys_pos
-    simp [MPSTensor.blockPhysDim_eq_pow, hd, hk.ne'] at hpos
+    simp [Kraus.blockPhysDim_eq_pow, hd, hk.ne'] at hpos
   let : NeZero d := ⟨hd⟩
   apply localAlgebraHom_ext_singletons
   intro x hx A

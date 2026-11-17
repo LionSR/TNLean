@@ -135,14 +135,14 @@ theorem eventually_exists_gate_gauge_sub_mem_of_path {D : ℕ} {P : Type*}
     [TopologicalSpace P] [FirstCountableTopology P]
     {U : P → MPOTensor d D} (hU : Continuous U) (k : ℕ)
     (u : P → Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ)
-    (v : P → Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ)
+    (v : P → Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ)
-    (hrep : ∀ q, ∃ (D' : ℕ) (V : MPOTensor (MPSTensor.blockPhysDim d k) D'),
+    (hrep : ∀ q, ∃ (D' : ℕ) (V : MPOTensor (Kraus.blockPhysDim d k) D'),
       (∀ N : ℕ, 0 < N → mpo V N = mpo (blockTensor (U q) k) N) ∧
         Nonempty (TwoSiteStandardFormData (MPOTensor.blockTwo V) (u q) (v q)))
     (p : P) {W : Set (Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ)}
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ)}
     (hW : W ∈ 𝓝 0) :
     ∀ᶠ q in 𝓝 p, ∃ (x : Matrix.unitaryGroup (Fin ℓ) ℂ) (y : Matrix.unitaryGroup (Fin r) ℂ),
       u q - ((x : Matrix (Fin ℓ) (Fin ℓ) ℂ) ⊗ₖ (y : Matrix (Fin r) (Fin r) ℂ)) * u p ∈ W := by

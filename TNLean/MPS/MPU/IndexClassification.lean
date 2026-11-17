@@ -79,20 +79,20 @@ theorem IsMPU.exists_joinedIn_standardFormTensorOfGates [NeZero c] [NeZero D]
     (hcf : MPSTensor.IsMPUCanonicalForm W.toMPSTensor) {m : ℕ} (hm : D * D ≤ m) :
     ∃ (ℓ r : ℕ) (_ : NeZero ℓ) (_ : NeZero r)
       (u : Matrix (Fin ℓ × Fin r)
-        (Fin (MPSTensor.blockPhysDim c m) × Fin (MPSTensor.blockPhysDim c m)) ℂ)
-      (v : Matrix (Fin (MPSTensor.blockPhysDim c m) × Fin (MPSTensor.blockPhysDim c m))
+        (Fin (Kraus.blockPhysDim c m) × Fin (Kraus.blockPhysDim c m)) ℂ)
+      (v : Matrix (Fin (Kraus.blockPhysDim c m) × Fin (Kraus.blockPhysDim c m))
         (Fin r × Fin ℓ) ℂ),
       u.IsUnitaryBetween ∧ v.IsUnitaryBetween ∧ r * ℓ = c ^ (2 * m) ∧
         hW.index = (1 / 2 : ℝ) * (Real.logb 2 r - Real.logb 2 ℓ) ∧
         JoinedIn {X | IsMPU X}
-          (MPOTensor.padBond (MPOTensor.blockTensor W (2 * m)) (D + MPSTensor.blockPhysDim c m * r)
+          (MPOTensor.padBond (MPOTensor.blockTensor W (2 * m)) (D + Kraus.blockPhysDim c m * r)
             (Nat.le_add_right _ _))
           (MPOTensor.reindexPhysical (twoSiteDirectBlockEquiv c m)
             (MPOTensor.padBond (standardFormTensorOfGates u v)
-              (D + MPSTensor.blockPhysDim c m * r) (Nat.le_add_left _ _))) := by
+              (D + Kraus.blockPhysDim c m * r) (Nat.le_add_left _ _))) := by
   have hm0 : 0 < m := lt_of_lt_of_le (Nat.mul_pos (NeZero.pos D) (NeZero.pos D)) hm
-  have : NeZero (MPSTensor.blockPhysDim c m) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  have : NeZero (Kraus.blockPhysDim c m) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero m (NeZero.ne c)⟩
   obtain ⟨X, ⟨hY⟩⟩ := hW.exists_gauge_isMPUCanonicalFormII_of_isMPUCanonicalForm hcf
   set Y := MPOTensor.virtualSandwich (X : Matrix (Fin D) (Fin D) ℂ) W
@@ -114,10 +114,10 @@ theorem IsMPU.exists_joinedIn_standardFormTensorOfGates [NeZero c] [NeZero D]
   · have hC := JoinedIn.reindexPhysical (twoSiteDirectBlockEquiv c m) (S.joinedIn_padBond S')
     have hleft : MPOTensor.reindexPhysical (twoSiteDirectBlockEquiv c m)
         (MPOTensor.padBond (blockTwo (MPOTensor.blockTensor Y m))
-          (D + MPSTensor.blockPhysDim c m * r[MPOTensor.blockTensor Y m])
+          (D + Kraus.blockPhysDim c m * r[MPOTensor.blockTensor Y m])
           (Nat.le_add_right _ _)) =
         MPOTensor.padBond (MPOTensor.blockTensor Y (2 * m))
-          (D + MPSTensor.blockPhysDim c m * r[MPOTensor.blockTensor Y m])
+          (D + Kraus.blockPhysDim c m * r[MPOTensor.blockTensor Y m])
           (Nat.le_add_right _ _) := by
       rw [← reindexPhysical_blockTwo_blockTensor_two_mul Y m]
       rfl
@@ -126,7 +126,7 @@ theorem IsMPU.exists_joinedIn_standardFormTensorOfGates [NeZero c] [NeZero D]
       (Matrix.isUnit_iff_isUnit_det _).mp X.isUnit
     have hG := JoinedIn.padBond
       ((hW.blockTensor (2 * m) (by omega)).joinedIn_virtualSandwich hdet)
-      (D + MPSTensor.blockPhysDim c m * r[MPOTensor.blockTensor Y m]) (Nat.le_add_right _ _)
+      (D + Kraus.blockPhysDim c m * r[MPOTensor.blockTensor Y m]) (Nat.le_add_right _ _)
     have hYk : MPOTensor.virtualSandwich (X : Matrix (Fin D) (Fin D) ℂ)
         (MPOTensor.blockTensor W (2 * m)) (X : Matrix (Fin D) (Fin D) ℂ)⁻¹ =
         MPOTensor.blockTensor Y (2 * m) := by
@@ -169,13 +169,13 @@ theorem IsMPU.strictlyEquivalent_blockTensor_of_index_eq {c₁ c₂ D₁ D₂ : 
     (hcf₂ : MPSTensor.IsMPUCanonicalForm W₂.toMPSTensor)
     (hc : c₁ = c₂) (hidx : h₁.index = h₂.index) {m : ℕ}
     (hm₁ : D₁ * D₁ ≤ m) (hm₂ : D₂ * D₂ ≤ m)
-    (hphys : MPSTensor.blockPhysDim c₁ (2 * m) = MPSTensor.blockPhysDim c₂ (2 * m)) :
+    (hphys : Kraus.blockPhysDim c₁ (2 * m) = Kraus.blockPhysDim c₂ (2 * m)) :
     StrictlyEquivalent (MPOTensor.blockTensor W₁ (2 * m)) (MPOTensor.blockTensor W₂ (2 * m))
       hphys := by
   subst hc
   have hm0 : 0 < m := lt_of_lt_of_le (Nat.mul_pos (NeZero.pos D₁) (NeZero.pos D₁)) hm₁
-  have : NeZero (MPSTensor.blockPhysDim c₁ m) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  have : NeZero (Kraus.blockPhysDim c₁ m) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero m (NeZero.ne c₁)⟩
   obtain ⟨ℓ₁, r₁, _, _, u₁, v₁, hu₁, hv₁, hprod₁, hi₁, hP₁⟩ :=
     h₁.exists_joinedIn_standardFormTensorOfGates hcf₁ hm₁
@@ -184,9 +184,9 @@ theorem IsMPU.strictlyEquivalent_blockTensor_of_index_eq {c₁ c₂ D₁ D₂ : 
   obtain ⟨rfl, rfl⟩ := rank_eq_of_index_eq (NeZero.pos ℓ₁) (NeZero.pos r₁)
     (NeZero.pos ℓ₂) (NeZero.pos r₂) (hprod₁.trans hprod₂.symm) (hi₁.symm.trans
       (hidx.trans hi₂))
-  set D' := D₁ + D₂ + MPSTensor.blockPhysDim c₁ m * r₁
-  have hle₁ : D₁ + MPSTensor.blockPhysDim c₁ m * r₁ ≤ D' := by omega
-  have hle₂ : D₂ + MPSTensor.blockPhysDim c₁ m * r₁ ≤ D' := by omega
+  set D' := D₁ + D₂ + Kraus.blockPhysDim c₁ m * r₁
+  have hle₁ : D₁ + Kraus.blockPhysDim c₁ m * r₁ ≤ D' := by omega
+  have hle₂ : D₂ + Kraus.blockPhysDim c₁ m * r₁ ≤ D' := by omega
   refine ⟨h₁.isMPUCanonicalForm_blockTensor hcf₁ (by omega),
     h₂.isMPUCanonicalForm_blockTensor hcf₂ (by omega), D', by omega, by omega, ?_⟩
   rw [reindexPhysical_finCongr_refl']
@@ -194,8 +194,8 @@ theorem IsMPU.strictlyEquivalent_blockTensor_of_index_eq {c₁ c₂ D₁ D₂ : 
   have hQ₂ := JoinedIn.padBond hP₂ D' hle₂
   have hG := JoinedIn.reindexPhysical (twoSiteDirectBlockEquiv c₁ m)
     (JoinedIn.padBond (joinedIn_standardFormTensorOfGates hu₁ hu₂ hv₁ hv₂) D' (by omega))
-  have hpad : ∀ {D₀ E : ℕ} (X : MPOTensor (MPSTensor.blockPhysDim c₁ m *
-      MPSTensor.blockPhysDim c₁ m) D₀) (ha : D₀ ≤ E) (hb : E ≤ D'),
+  have hpad : ∀ {D₀ E : ℕ} (X : MPOTensor (Kraus.blockPhysDim c₁ m *
+      Kraus.blockPhysDim c₁ m) D₀) (ha : D₀ ≤ E) (hb : E ≤ D'),
       MPOTensor.padBond (MPOTensor.reindexPhysical (twoSiteDirectBlockEquiv c₁ m)
         (MPOTensor.padBond X E ha)) D' hb =
       MPOTensor.reindexPhysical (twoSiteDirectBlockEquiv c₁ m)

@@ -32,6 +32,7 @@ compressed blocks are separate from these algebraic identities.
 
 open scoped Matrix BigOperators
 open Fin.NatCast
+open Kraus (blockPhysDim wordOfBlock length_wordOfBlock blockTensor)
 
 namespace MPSTensor
 

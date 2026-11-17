@@ -29,6 +29,7 @@ matrix product states, canonical form, irreducibility, gauge-phase equivalence
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder Kraus
 open Filter
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

@@ -103,18 +103,18 @@ theorem TwoSiteStandardFormData.timeReversalSign_blocking_parity {d D : ℕ} {V 
     {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
     (S : TwoSiteStandardFormData (blockTwo V) u v)
     (hTR : ∀ N : ℕ, 1 < N → Even N → mpo (blockTwo V) N = (mpo (blockTwo V) N)ᴴ)
-    {u₂ v₂ : Matrix (Fin (MPSTensor.blockPhysDim d 2) × Fin (MPSTensor.blockPhysDim d 2))
-      (Fin (MPSTensor.blockPhysDim d 2) × Fin (MPSTensor.blockPhysDim d 2)) ℂ}
+    {u₂ v₂ : Matrix (Fin (Kraus.blockPhysDim d 2) × Fin (Kraus.blockPhysDim d 2))
+      (Fin (Kraus.blockPhysDim d 2) × Fin (Kraus.blockPhysDim d 2)) ℂ}
     (S₂ : TwoSiteStandardFormData (blockTwo (MPOTensor.blockTensor V 2)) u₂ v₂)
     (k : ℕ) (hk : 0 < k)
-    {uₖ vₖ : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
+    {uₖ vₖ : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
     (Sₖ : TwoSiteStandardFormData (blockTwo (MPOTensor.blockTensor V k)) uₖ vₖ) :
     (Odd k → timeReversalSign uₖ vₖ = timeReversalSign u v) ∧
       (Even k → timeReversalSign uₖ vₖ = timeReversalSign u₂ v₂) := by
   have : NeZero D := ⟨S.bond_pos.ne'⟩
-  have : NeZero (MPSTensor.blockPhysDim d 2) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  have : NeZero (Kraus.blockPhysDim d 2) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero _ S.phys_pos.ne'⟩
   -- The two-site block is the length-two blocking after relabelling each physical index.
   have hW : blockTwo V = reindexPhysical (twoSiteBlockEquiv d) (MPOTensor.blockTensor V 2) :=
@@ -136,9 +136,9 @@ theorem TwoSiteStandardFormData.timeReversalSign_blocking_parity {d D : ℕ} {V 
       (MPOTensor.blockTensor (MPOTensor.blockTensor V 2) n) =
         intrinsicTimeReversalSign (MPOTensor.blockTensor V (2 * n)) := fun n ↦ by
     rw [← reindexPhysical_blockTensor_blockTensor V 2 n, intrinsicTimeReversalSign_reindexPhysical]
-  have hsign : ∀ (n : ℕ) {a b : Matrix (Fin (MPSTensor.blockPhysDim d n) ×
-      Fin (MPSTensor.blockPhysDim d n)) (Fin (MPSTensor.blockPhysDim d n) ×
-      Fin (MPSTensor.blockPhysDim d n)) ℂ},
+  have hsign : ∀ (n : ℕ) {a b : Matrix (Fin (Kraus.blockPhysDim d n) ×
+      Fin (Kraus.blockPhysDim d n)) (Fin (Kraus.blockPhysDim d n) ×
+      Fin (Kraus.blockPhysDim d n)) ℂ},
       TwoSiteStandardFormData (blockTwo (MPOTensor.blockTensor V n)) a b →
         timeReversalSign a b = intrinsicTimeReversalSign (MPOTensor.blockTensor V (2 * n)) := by
     intro n a b T

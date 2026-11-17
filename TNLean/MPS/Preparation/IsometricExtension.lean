@@ -41,6 +41,7 @@ open Matrix MPSTensor
 open MPSChainTensor (eval)
 open scoped BigOperators ComplexOrder
 open QuantumCircuit
+open Kraus (blockPhysDim decodeBlockEquiv)
 
 /-! ### A basis adapted to a projector -/
 

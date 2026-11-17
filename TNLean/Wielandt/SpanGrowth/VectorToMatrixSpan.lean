@@ -16,6 +16,7 @@ they use the tensor-network blocking operation.
 -/
 
 open scoped Matrix
+open Kraus (blockTensor flattenBlockedWord evalWord_blockTensor length_flattenBlockedWord)
 
 namespace MPSTensor
 

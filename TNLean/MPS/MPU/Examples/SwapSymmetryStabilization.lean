@@ -75,7 +75,7 @@ on all positive blocked chain lengths even when the blocking length is zero.
 Source: arXiv:1703.09188, `SSymmetries-dagger`, with the specified extension
 \(Q_x=\mathbb S\otimes I_x\). -/
 noncomputable def ancillaSwapDaggerSymmetry (d x k : ℕ) :
-    FiniteChainOperatorSymmetry (MPSTensor.blockPhysDim (d * d * x) k) :=
+    FiniteChainOperatorSymmetry (Kraus.blockPhysDim (d * d * x) k) :=
   .blockedDaggerWithPhysicalMatrix (ancillaSwapMatrix d x) k
 
 /-- Canonical blocking of swap-combined transposition, with the same
@@ -83,7 +83,7 @@ positive-chain convention at blocking length zero as the explicit matrix.
 Source: arXiv:1703.09188, `SSymmetries-transpose`, with the specified extension
 \(Q_x=\mathbb S\otimes I_x\). -/
 noncomputable def ancillaSwapTransposeSymmetry (d x k : ℕ) :
-    FiniteChainOperatorSymmetry (MPSTensor.blockPhysDim (d * d * x) k) :=
+    FiniteChainOperatorSymmetry (Kraus.blockPhysDim (d * d * x) k) :=
   .blockedTransposeWithPhysicalMatrix (ancillaSwapMatrix d x) k
 
 /-- For each fixed common ancilla and blocking length, the specified

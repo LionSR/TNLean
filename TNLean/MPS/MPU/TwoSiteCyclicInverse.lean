@@ -97,8 +97,8 @@ theorem finiteChainConjugation_symm_mem_range_ringNeighbourhood
     {d D ℓ r N : ℕ} [NeZero N] {U : MPOTensor d D} (hU : U.IsMPU)
     (k : ℕ) (hk : 0 < k) (hN : 3 * (2 * k) ≤ N) (a : ℤ)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : MPOTensor.TwoSiteStandardFormData
       (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
@@ -110,7 +110,7 @@ theorem finiteChainConjugation_symm_mem_range_ringNeighbourhood
   have hd : d ≠ 0 := by
     intro hd
     have hpos := S.phys_pos
-    simp only [MPSTensor.blockPhysDim_eq_pow, hd, zero_pow hk.ne'] at hpos
+    simp only [Kraus.blockPhysDim_eq_pow, hd, zero_pow hk.ne'] at hpos
     omega
   let : NeZero d := ⟨hd⟩
   let E := finiteChainSiteEquiv a N

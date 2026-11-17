@@ -33,6 +33,7 @@ conclusion of arXiv:1708.00029, Lemma `lem:blocking-arbitrary`.
 
 open scoped Matrix BigOperators
 open Fin.NatCast
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

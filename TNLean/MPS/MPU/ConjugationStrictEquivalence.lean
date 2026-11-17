@@ -448,7 +448,7 @@ theorem strictlyEquivalentUnderSymmetry_conjugation_of_gate_path
           ((x : Matrix (Fin ℓ) (Fin ℓ) ℂ) ⊗ₖ (y : Matrix (Fin r) (Fin r) ℂ)) * u p ∧
         (v p).map (starRingEnd ℂ) =
           v p * (star (y : Matrix (Fin r) (Fin r) ℂ) ⊗ₖ star (x : Matrix (Fin ℓ) (Fin ℓ) ℂ))) :
-    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (MPSTensor.blockPhysDim d 2))
+    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (Kraus.blockPhysDim d 2))
       (blockTensor 𝒰₁ 2) (blockTensor 𝒰₂ 2) rfl := by
   have : NeZero d := h₁.neZero_phys
   have : NeZero ℓ := ⟨S₁.left_pos.ne'⟩
@@ -497,7 +497,7 @@ theorem strictlyEquivalentUnderSymmetry_conjugation_of_det_mul_eq
     (hodd : Odd ℓ ∨ Odd r)
     (hdet : ((u₁ * v₁).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det =
       ((u₂ * v₂).submatrix id (Equiv.prodComm (Fin ℓ) (Fin r))).det) :
-    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (MPSTensor.blockPhysDim d 2))
+    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (Kraus.blockPhysDim d 2))
       (blockTensor 𝒰₁ 2) (blockTensor 𝒰₂ 2) rfl := by
   have : NeZero d := h₁.neZero_phys
   have : NeZero ℓ := ⟨S₁.left_pos.ne'⟩
@@ -592,7 +592,7 @@ theorem strictlyEquivalentUnderSymmetry_conjugation_of_det_eq_of_even
     (hu : (u₁.submatrix id e).det = (u₂.submatrix id e).det)
     (hv : (v₁.submatrix id (e.symm.trans (Equiv.prodComm (Fin ℓ) (Fin r)))).det =
       (v₂.submatrix id (e.symm.trans (Equiv.prodComm (Fin ℓ) (Fin r)))).det) :
-    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (MPSTensor.blockPhysDim d 2))
+    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (Kraus.blockPhysDim d 2))
       (blockTensor 𝒰₁ 2) (blockTensor 𝒰₂ 2) rfl := by
   set f := e.symm.trans (Equiv.prodComm (Fin ℓ) (Fin r))
   rcases hcase with ⟨hu₁, hv₁, hu₂, hv₂⟩ | ⟨hu₁, hv₁, hu₂, hv₂⟩

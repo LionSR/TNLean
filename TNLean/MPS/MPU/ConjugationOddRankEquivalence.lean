@@ -85,11 +85,11 @@ theorem StrictlyEquivalentUnderSymmetry.reindexPhysical_conjugation {d' D₁ D�
 /-- The physical identification of the twice-blocked two-site block with the block
 of four sites. -/
 private noncomputable def fourSiteEquiv (d : ℕ) :
-    Fin (MPSTensor.blockPhysDim (d * d) 2) ≃ Fin (MPSTensor.blockPhysDim d 4) :=
+    Fin (Kraus.blockPhysDim (d * d) 2) ≃ Fin (Kraus.blockPhysDim d 4) :=
   (twoSiteBlockEquiv (d * d)).symm.trans
     ((finProdFinEquiv.symm.trans ((Equiv.prodCongr (twoSiteBlockEquiv d)
       (twoSiteBlockEquiv d)).trans finProdFinEquiv)).trans
-    ((twoSiteBlockEquiv (MPSTensor.blockPhysDim d 2)).trans
+    ((twoSiteBlockEquiv (Kraus.blockPhysDim d 2)).trans
       (MPSTensor.directIteratedBlockEquiv d 2 2).symm))
 
 theorem reindexPhysical_symm_reindexPhysical {n n' E : ℕ} (σ : Fin n ≃ Fin n')
@@ -154,10 +154,10 @@ theorem tensorPhysicalId_one {D : ℕ} (U : MPOTensor d D) :
 physical index along an equality of dimensions. -/
 theorem strictlyEquivalentUnderSymmetry_conjugation_finCongr_iff {n : ℕ} (h : n = d) (k : ℕ)
     {U₁ : MPOTensor d D₁} {U₂ : MPOTensor d D₂} :
-    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (MPSTensor.blockPhysDim n k))
+    StrictlyEquivalentUnderSymmetry (conjugationSymmetry (Kraus.blockPhysDim n k))
         (blockTensor (reindexPhysical (finCongr h) U₁) k)
         (blockTensor (reindexPhysical (finCongr h) U₂) k) rfl ↔
-      StrictlyEquivalentUnderSymmetry (conjugationSymmetry (MPSTensor.blockPhysDim d k))
+      StrictlyEquivalentUnderSymmetry (conjugationSymmetry (Kraus.blockPhysDim d k))
         (blockTensor U₁ k) (blockTensor U₂ k) rfl := by
   subst h
   have hrefl : ∀ {E : ℕ} (W : MPOTensor n E), reindexPhysical (finCongr rfl) W = W :=
@@ -184,7 +184,7 @@ theorem equivalentUnderSymmetry_conjugation_of_blockTensor_blockTwo
     {𝒰₁ : MPOTensor d D₁} {𝒰₂ : MPOTensor d D₂}
     (h₁ : IsMPUCanonicalFormII 𝒰₁) (h₂ : IsMPUCanonicalFormII 𝒰₂)
     (H : StrictlyEquivalentUnderSymmetry
-      (conjugationSymmetry (MPSTensor.blockPhysDim (d * d) 2))
+      (conjugationSymmetry (Kraus.blockPhysDim (d * d) 2))
       (blockTensor (blockTwo 𝒰₁) 2) (blockTensor (blockTwo 𝒰₂) 2) rfl) :
     EquivalentUnderSymmetry conjugationSymmetryFamily 𝒰₁ 𝒰₂ := by
   have : NeZero d := h₁.neZero_phys
@@ -271,7 +271,7 @@ theorem equivalentUnderSymmetry_conjugation_of_odd
     ⟨by rw [doubledU_map_star, hU, hV], by rw [doubledV_map_star, hV]⟩
   -- Strict equivalence of the blocks of four sites, in doubled coordinates.
   have H : StrictlyEquivalentUnderSymmetry
-      (conjugationSymmetry (MPSTensor.blockPhysDim (d * d) 2))
+      (conjugationSymmetry (Kraus.blockPhysDim (d * d) 2))
       (blockTensor (blockTwo 𝒰₁) 2) (blockTensor (blockTwo 𝒰₂) 2) rfl := by
     rcases Nat.even_or_odd d with hd | hd
     · -- `d` even: Theorem `prop:conjsym-strict-equiv`, Case I.

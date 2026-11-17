@@ -396,7 +396,7 @@ theorem neZero_phys {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) : NeZero d
 end IsMPUCanonicalFormII
 
 private theorem sqrt_blockPhysDim (d p : ℕ) :
-    Real.sqrt (MPSTensor.blockPhysDim d p) = Real.sqrt d ^ p := by
+    Real.sqrt (Kraus.blockPhysDim d p) = Real.sqrt d ^ p := by
   suffices Real.sqrt ((d ^ p : ℕ) : ℝ) = Real.sqrt d ^ p by
     simpa only [Kraus.blockPhysDim_eq_pow] using this
   induction p with
@@ -416,7 +416,7 @@ Source: arXiv:1703.09188, definition `blocking`, equation `MPUblock`, equation
 theorem normalizedFlattening_blockTensor (U : MPOTensor d D) (p : ℕ) :
     (MPOTensor.blockTensor U p).normalizedFlattening =
       Kraus.reindexPhysical (blockedDoubledIndexEquiv d p)
-        (MPSTensor.blockTensor U.normalizedFlattening p) := by
+        (Kraus.blockTensor U.normalizedFlattening p) := by
   funext ij
   rw [normalizedFlattening, toMPSTensor_blockTensor]
   simp only [Kraus.reindexPhysical]

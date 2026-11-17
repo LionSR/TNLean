@@ -73,8 +73,8 @@ Source: arXiv:1703.09188, Definition `def:equivalent-symmetry`, lines 1356--1366
 theorem timeReversalSymmetryFamily_block_selfAdjoint (m k : ℕ) (hk : 0 < k) (N : ℕ) (hN : 0 < N)
     (h4 : 4 ∣ N) :
     N ∈ ((timeReversalSymmetryFamily.at m).block k).applicable ∧
-      ∀ X : Matrix (Fin N → Fin (MPSTensor.blockPhysDim m k))
-        (Fin N → Fin (MPSTensor.blockPhysDim m k)) ℂ,
+      ∀ X : Matrix (Fin N → Fin (Kraus.blockPhysDim m k))
+        (Fin N → Fin (Kraus.blockPhysDim m k)) ℂ,
         ((timeReversalSymmetryFamily.at m).block k).action X = X → X = Xᴴ := by
   refine ⟨⟨Nat.mul_pos hN hk, Dvd.dvd.mul_right h4 k⟩, fun X hX ↦ ?_⟩
   rw [FiniteChainOperatorSymmetry.block_action] at hX
@@ -95,8 +95,8 @@ theorem IsMPU.intrinsicTimeReversalSign_blockTensor_four_mul [NeZero d] [NeZero 
     (k : ℕ) (hk : 0 < k) :
     intrinsicTimeReversalSign (MPOTensor.blockTensor V (2 * (2 * k))) =
       intrinsicTimeReversalSign (MPOTensor.blockTensor V (2 * 2)) := by
-  have : NeZero (MPSTensor.blockPhysDim d 2) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  have : NeZero (Kraus.blockPhysDim d 2) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero _ (NeZero.ne d)⟩
   have hU : MPOTensor.blockTensor V 2 =
       MPOTensor.reindexPhysical (twoSiteBlockEquiv d).symm (MPOTensor.blockTwo V) := by
@@ -149,7 +149,7 @@ Source: arXiv:1703.09188, corollary after Proposition `prop:sigma1-and-sigma2-eq
 theorem timeReversalSign_eq_of_blocked_ancilla_strictlyEquivalent {da db Da Db : ℕ}
     {V₁ : MPOTensor da Da} {V₂ : MPOTensor db Db}
     (hV₁ : IsMPU V₁) (hV₂ : IsMPU V₂) {k pa pb : ℕ} (hk : 0 < k) (hpa : 0 < pa) (hpb : 0 < pb)
-    {hdim : MPSTensor.blockPhysDim (da * pa) k = MPSTensor.blockPhysDim (db * pb) k}
+    {hdim : Kraus.blockPhysDim (da * pa) k = Kraus.blockPhysDim (db * pb) k}
     (hstrict : StrictlyEquivalentUnderSymmetry ((timeReversalSymmetryFamily.at (db * pb)).block k)
       (MPOTensor.blockTensor (tensorPhysicalId V₁ pa) k)
       (MPOTensor.blockTensor (tensorPhysicalId V₂ pb) k) hdim)
@@ -157,22 +157,22 @@ theorem timeReversalSign_eq_of_blocked_ancilla_strictlyEquivalent {da db Da Db :
       mpo (MPOTensor.blockTwo V₁) N = (mpo (MPOTensor.blockTwo V₁) N)ᴴ)
     (hTR₂ : ∀ N : ℕ, 1 < N → Even N →
       mpo (MPOTensor.blockTwo V₂) N = (mpo (MPOTensor.blockTwo V₂) N)ᴴ)
-    {a₁ b₁ : Matrix (Fin (MPSTensor.blockPhysDim da 2) × Fin (MPSTensor.blockPhysDim da 2))
-      (Fin (MPSTensor.blockPhysDim da 2) × Fin (MPSTensor.blockPhysDim da 2)) ℂ}
-    {a₂ b₂ : Matrix (Fin (MPSTensor.blockPhysDim db 2) × Fin (MPSTensor.blockPhysDim db 2))
-      (Fin (MPSTensor.blockPhysDim db 2) × Fin (MPSTensor.blockPhysDim db 2)) ℂ}
+    {a₁ b₁ : Matrix (Fin (Kraus.blockPhysDim da 2) × Fin (Kraus.blockPhysDim da 2))
+      (Fin (Kraus.blockPhysDim da 2) × Fin (Kraus.blockPhysDim da 2)) ℂ}
+    {a₂ b₂ : Matrix (Fin (Kraus.blockPhysDim db 2) × Fin (Kraus.blockPhysDim db 2))
+      (Fin (Kraus.blockPhysDim db 2) × Fin (Kraus.blockPhysDim db 2)) ℂ}
     (T₁ : TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor V₁ 2)) a₁ b₁)
     (T₂ : TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor V₂ 2)) a₂ b₂) :
     timeReversalSign a₁ b₁ = timeReversalSign a₂ b₂ := by
-  have hd : ∀ {m : ℕ}, 0 < MPSTensor.blockPhysDim m 2 → NeZero m := fun hm ↦ ⟨by
+  have hd : ∀ {m : ℕ}, 0 < Kraus.blockPhysDim m 2 → NeZero m := fun hm ↦ ⟨by
     rintro rfl
-    simp [MPSTensor.blockPhysDim_eq_pow] at hm⟩
+    simp [Kraus.blockPhysDim_eq_pow] at hm⟩
   have : NeZero da := hd T₁.phys_pos
   have : NeZero db := hd T₂.phys_pos
   have : NeZero Da := ⟨T₁.bond_pos.ne'⟩
   have : NeZero Db := ⟨T₂.bond_pos.ne'⟩
-  have : NeZero (MPSTensor.blockPhysDim (db * pb) k) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  have : NeZero (Kraus.blockPhysDim (db * pb) k) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero _ (mul_ne_zero (NeZero.ne db) hpb.ne')⟩
   have hcore := (StrictlyEquivalentUnderSymmetry.intrinsicTimeReversalSign_eq
     (timeReversalSymmetryFamily_block_selfAdjoint (db * pb) k hk) hstrict).2
@@ -200,10 +200,10 @@ theorem EquivalentUnderSymmetry.timeReversalSign_eq {da db Da Db : ℕ}
       mpo (MPOTensor.blockTwo V₁) N = (mpo (MPOTensor.blockTwo V₁) N)ᴴ)
     (hTR₂ : ∀ N : ℕ, 1 < N → Even N →
       mpo (MPOTensor.blockTwo V₂) N = (mpo (MPOTensor.blockTwo V₂) N)ᴴ)
-    {a₁ b₁ : Matrix (Fin (MPSTensor.blockPhysDim da 2) × Fin (MPSTensor.blockPhysDim da 2))
-      (Fin (MPSTensor.blockPhysDim da 2) × Fin (MPSTensor.blockPhysDim da 2)) ℂ}
-    {a₂ b₂ : Matrix (Fin (MPSTensor.blockPhysDim db 2) × Fin (MPSTensor.blockPhysDim db 2))
-      (Fin (MPSTensor.blockPhysDim db 2) × Fin (MPSTensor.blockPhysDim db 2)) ℂ}
+    {a₁ b₁ : Matrix (Fin (Kraus.blockPhysDim da 2) × Fin (Kraus.blockPhysDim da 2))
+      (Fin (Kraus.blockPhysDim da 2) × Fin (Kraus.blockPhysDim da 2)) ℂ}
+    {a₂ b₂ : Matrix (Fin (Kraus.blockPhysDim db 2) × Fin (Kraus.blockPhysDim db 2))
+      (Fin (Kraus.blockPhysDim db 2) × Fin (Kraus.blockPhysDim db 2)) ℂ}
     (T₁ : TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor V₁ 2)) a₁ b₁)
     (T₂ : TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor V₂ 2)) a₂ b₂) :
     timeReversalSign a₁ b₁ = timeReversalSign a₂ b₂ := by

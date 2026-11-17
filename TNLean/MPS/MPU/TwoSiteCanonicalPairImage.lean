@@ -105,8 +105,8 @@ private theorem bipartite_output_eq_interval (b : ℕ) [NeZero b]
 variable {d D ℓ r : ℕ} [NeZero d] {U : MPOTensor d D}
   (hU : U.IsMPU) (k : ℕ) (hk : 0 < k) [NeZero k]
   {u : Matrix (Fin ℓ × Fin r)
-    (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-  {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+    (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+  {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
     (Fin r × Fin ℓ) ℂ}
   (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
 
@@ -115,10 +115,10 @@ private theorem actual_evenPairLocalImage_zero :
       (blocked_bufferedMPUQuasiLocalAut_propagatesWithin hU k hk S) 0 =
       (MPOTensor.twoLinkOutputMap u v S.u_unitary S.v_unitary).range.map
         (Matrix.matrixReindexStarAlgEquiv
-          ((leftPairZeroConfigEquiv (MPSTensor.blockPhysDim d k)).prodCongr
-            (rightPairZeroConfigEquiv (MPSTensor.blockPhysDim d k)))).toStarAlgHom := by
+          ((leftPairZeroConfigEquiv (Kraus.blockPhysDim d k)).prodCongr
+            (rightPairZeroConfigEquiv (Kraus.blockPhysDim d k)))).toStarAlgHom := by
   classical
-  let b := MPSTensor.blockPhysDim d k
+  let b := Kraus.blockPhysDim d k
   let ω := blockedAutomorphism d k (bufferedMPUQuasiLocalAut hU k hk S)
   let E₂ := (finTwoArrowEquiv (Fin b)).symm
   let F := (quasiLocalIntervalObservable b 0 2).comp
@@ -209,7 +209,7 @@ Source: arXiv:1703.09188, Appendix eq:original-index, lines 2329–2334. -/
 theorem coe_gnvwIndex_blocked_bufferedMPUQuasiLocalAut :
     (PropagatesWithin.gnvwIndex
       (blocked_bufferedMPUQuasiLocalAut_propagatesWithin hU k hk S) : ℚ) =
-        (ℓ : ℚ) / (MPSTensor.blockPhysDim d k : ℚ) :=
+        (ℓ : ℚ) / (Kraus.blockPhysDim d k : ℚ) :=
   PropagatesWithin.coe_gnvwIndex_eq_of_evenSupportAlgebra_equiv
     (blocked_bufferedMPUQuasiLocalAut_propagatesWithin hU k hk S) 0
     (blocked_bufferedMPUQuasiLocalAut_evenSupportEquiv_zero hU k hk S)
@@ -220,7 +220,7 @@ Definition def:index and Appendix, lines 681–688 and 2329–2334. -/
 theorem coe_gnvwIndex_blocked_bufferedMPUQuasiLocalAut_eq_phys_div_right :
     (PropagatesWithin.gnvwIndex
       (blocked_bufferedMPUQuasiLocalAut_propagatesWithin hU k hk S) : ℚ) =
-        (MPSTensor.blockPhysDim d k : ℚ) / (r : ℚ) := by
+        (Kraus.blockPhysDim d k : ℚ) / (r : ℚ) := by
   rw [coe_gnvwIndex_blocked_bufferedMPUQuasiLocalAut hU k hk S]
   exact S.left_div_phys_eq_phys_div_right
 

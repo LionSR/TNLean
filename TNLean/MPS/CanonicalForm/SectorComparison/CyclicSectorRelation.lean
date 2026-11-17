@@ -36,6 +36,7 @@ iteration lemmas below.
 matrix product states, cyclic sectors, peripheral spectrum, blocking
 -/
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

@@ -335,7 +335,7 @@ theorem IsMPU.residualSlice_doubleLayerTensor_blockTensor_single_mem_threeFormSu
     (hE : normalizedDiagonal (doubleLayerTensor U) = Matrix.vecMulVec ρ Φ)
     (hEidem : normalizedDiagonal (doubleLayerTensor U) *
       normalizedDiagonal (doubleLayerTensor U) = normalizedDiagonal (doubleLayerTensor U))
-    (I J : Fin (MPSTensor.blockPhysDim d (D * D))) :
+    (I J : Fin (Kraus.blockPhysDim d (D * D))) :
     residualSlice
         (doubleLayerTensor (MPOTensor.blockTensor U (D * D))) (Matrix.single J I 1) ∈
       threeFormSubmodule (normalizedDiagonal (doubleLayerTensor U)) (residualAlgebra U) := by
@@ -410,8 +410,8 @@ theorem IsMPU.residualSlice_doubleLayerTensor_blockTensor_mem_threeFormSubmodule
     (hE : normalizedDiagonal (doubleLayerTensor U) = Matrix.vecMulVec ρ Φ)
     (hEidem : normalizedDiagonal (doubleLayerTensor U) *
       normalizedDiagonal (doubleLayerTensor U) = normalizedDiagonal (doubleLayerTensor U))
-    (X : Matrix (Fin (MPSTensor.blockPhysDim d (D * D)))
-      (Fin (MPSTensor.blockPhysDim d (D * D))) ℂ) :
+    (X : Matrix (Fin (Kraus.blockPhysDim d (D * D)))
+      (Fin (Kraus.blockPhysDim d (D * D))) ℂ) :
     residualSlice (doubleLayerTensor (MPOTensor.blockTensor U (D * D))) X ∈
       threeFormSubmodule (normalizedDiagonal (doubleLayerTensor U)) (residualAlgebra U) := by
   classical

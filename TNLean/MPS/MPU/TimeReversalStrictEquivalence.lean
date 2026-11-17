@@ -94,8 +94,8 @@ theorem IsMPU.intrinsicTimeReversalSign_eq_one_or_neg_one [NeZero d] [NeZero D]
     refine mpo_blockTwo_selfAdjoint (mpo_blockTensor_selfAdjoint (hTR _ ?_ ?_))
     · nlinarith
     · exact ⟨N * D ^ 4, by ring⟩
-  have : NeZero (MPSTensor.blockPhysDim d (D ^ 4)) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  have : NeZero (Kraus.blockPhysDim d (D ^ 4)) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero _ (NeZero.ne d)⟩
   have hsign := hS.intrinsicTimeReversalSign_blockTwo_eq_one_or_neg_one hTRb
   rw [← intrinsicTimeReversalSign_reindexPhysical (twoSiteDirectBlockEquiv d (D ^ 4)),
@@ -159,8 +159,8 @@ theorem StrictlyEquivalentUnderSymmetry.intrinsicTimeReversalSign_eq {da db Da D
   obtain ⟨-, -, D', ha, hb, hpath⟩ := h
   have : NeZero D' := ⟨by have := NeZero.pos Da; omega⟩
   have : NeZero (da * da) := ⟨mul_ne_zero (NeZero.ne da) (NeZero.ne da)⟩
-  have : NeZero (MPSTensor.blockPhysDim da 2 * MPSTensor.blockPhysDim da 2) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  have : NeZero (Kraus.blockPhysDim da 2 * Kraus.blockPhysDim da 2) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact mul_ne_zero (pow_ne_zero _ (NeZero.ne da)) (pow_ne_zero _ (NeZero.ne da))⟩
   set s := {W : MPOTensor da D' | IsMPU W ∧ IsInvariantUnderSymmetry S W}
   have hTRs : ∀ W ∈ s, ∀ N : ℕ, 0 < N → 4 ∣ N → mpo W N = (mpo W N)ᴴ := by
@@ -192,7 +192,7 @@ theorem StrictlyEquivalentUnderSymmetry.intrinsicTimeReversalSign_eq {da db Da D
       · omega
       · obtain ⟨m, rfl⟩ := heven
         exact ⟨m, by ring⟩
-  · have hj := hpath.map ((continuous_blockTwo (d := MPSTensor.blockPhysDim da 2)
+  · have hj := hpath.map ((continuous_blockTwo (d := Kraus.blockPhysDim da 2)
       (D := D')).comp (continuous_blockTensor (d := da) (D := D') 2)).continuousOn
     have hconst := intrinsicTimeReversalSign_eq_of_joinedIn ?_ hj
     · rw [← intrinsicTimeReversalSign_eq_of_mpo_two_eq
@@ -230,8 +230,8 @@ theorem StrictlyEquivalentUnderSymmetry.timeReversalSign_eq {D₁ D₂ : ℕ}
     {u₁ v₁ u₂ v₂ : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
     (S₁ : TwoSiteStandardFormData (MPOTensor.blockTwo V₁) u₁ v₁)
     (S₂ : TwoSiteStandardFormData (MPOTensor.blockTwo V₂) u₂ v₂)
-    {a₁ b₁ a₂ b₂ : Matrix (Fin (MPSTensor.blockPhysDim d 2) × Fin (MPSTensor.blockPhysDim d 2))
-      (Fin (MPSTensor.blockPhysDim d 2) × Fin (MPSTensor.blockPhysDim d 2)) ℂ}
+    {a₁ b₁ a₂ b₂ : Matrix (Fin (Kraus.blockPhysDim d 2) × Fin (Kraus.blockPhysDim d 2))
+      (Fin (Kraus.blockPhysDim d 2) × Fin (Kraus.blockPhysDim d 2)) ℂ}
     (T₁ : TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor V₁ 2)) a₁ b₁)
     (T₂ : TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor V₂ 2)) a₂ b₂) :
     timeReversalSign u₁ v₁ = timeReversalSign u₂ v₂ ∧

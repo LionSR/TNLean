@@ -48,6 +48,7 @@ The overlap of the approximating state with the target reduces to entries of `P`
 
 open scoped BigOperators Matrix ComplexOrder MatrixOrder
 open Matrix
+open Kraus (blockPhysDim blockTensor evalWord_blockTensor)
 
 namespace Matrix
 

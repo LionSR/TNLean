@@ -46,15 +46,15 @@ If `B` denotes `quasiLocalBlocking d L`, then this is the blocked-chain automorp
 Source: arXiv:1703.09188, Appendix, line 2308. -/
 noncomputable def blockedAutomorphism (d L : ℕ) [NeZero d] [NeZero L]
     (ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d) :
-    QuasiLocalAlgebra (MPSTensor.blockPhysDim d L) ≃⋆ₐ[ℂ]
-      QuasiLocalAlgebra (MPSTensor.blockPhysDim d L) :=
+    QuasiLocalAlgebra (Kraus.blockPhysDim d L) ≃⋆ₐ[ℂ]
+      QuasiLocalAlgebra (Kraus.blockPhysDim d L) :=
   ((quasiLocalBlocking d L).trans ω).trans (quasiLocalBlocking d L).symm
 
 /-- Evaluation of the blocked automorphism displays the conjugation orientation explicitly. -/
 @[simp]
 lemma blockedAutomorphism_apply (d L : ℕ) [NeZero d] [NeZero L]
     (ω : QuasiLocalAlgebra d ≃⋆ₐ[ℂ] QuasiLocalAlgebra d)
-    (A : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L)) :
+    (A : QuasiLocalAlgebra (Kraus.blockPhysDim d L)) :
     blockedAutomorphism d L ω A =
       (quasiLocalBlocking d L).symm (ω (quasiLocalBlocking d L A)) :=
   rfl

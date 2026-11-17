@@ -18,6 +18,7 @@ map multiplies by `16`, so it has no channel square root. See
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

@@ -29,8 +29,8 @@ namespace SpinChain
 variable {d D ℓ r : ℕ} [NeZero d] {U : MPOTensor d D}
   (hU : U.IsMPU) (k : ℕ) (hk : 0 < k)
   {u : Matrix (Fin ℓ × Fin r)
-    (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-  {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+    (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+  {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
     (Fin r × Fin ℓ) ℂ}
   (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
 
@@ -40,8 +40,8 @@ buffers for every site of the entire input interval.
 Source: arXiv:1703.09188, eq:appendix-1, lines 2300–2306. -/
 theorem bufferedMPUQuasiLocalAut_central_interval
     (a : ℤ)
-    (A : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    (A : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ) :
     bufferedMPUQuasiLocalAut hU k hk S
       (quasiLocalIntervalObservable d (a + (2 * k : ℕ)) (2 * k)
         (Matrix.reindex (MPOTensor.originalSiteHeisenbergCentreEquiv d k)
@@ -89,8 +89,8 @@ finite-image equation is supplied as a premise.
 Source: arXiv:1703.09188, Appendix, lines 2300–2334. -/
 theorem bufferedMPUQuasiLocalAut_central_interval_four_output
     (a : ℤ)
-    (A : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    (A : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ) :
     bufferedMPUQuasiLocalAut hU k hk S
       (quasiLocalIntervalObservable d (a + (2 * k : ℕ)) (2 * k)
         (Matrix.reindex (MPOTensor.originalSiteHeisenbergCentreEquiv d k)
@@ -112,26 +112,26 @@ finite identity and blocking coordinate equations derive the action.
 Source: arXiv:1703.09188, Appendix, lines 2313–2334. -/
 theorem blocked_bufferedMPUQuasiLocalAut_pair_interval [NeZero k]
     (a : ℤ)
-    (A : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    (A : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ) :
     blockedAutomorphism d k (bufferedMPUQuasiLocalAut hU k hk S)
-      (quasiLocalIntervalObservable (MPSTensor.blockPhysDim d k) a 2
-        (Matrix.reindex (finTwoArrowEquiv (Fin (MPSTensor.blockPhysDim d k))).symm
-          (finTwoArrowEquiv (Fin (MPSTensor.blockPhysDim d k))).symm A)) =
-      quasiLocalIntervalObservable (MPSTensor.blockPhysDim d k) (a - 1) 4
+      (quasiLocalIntervalObservable (Kraus.blockPhysDim d k) a 2
+        (Matrix.reindex (finTwoArrowEquiv (Fin (Kraus.blockPhysDim d k))).symm
+          (finTwoArrowEquiv (Fin (Kraus.blockPhysDim d k))).symm A)) =
+      quasiLocalIntervalObservable (Kraus.blockPhysDim d k) (a - 1) 4
         (Matrix.reindex (MPOTensor.originalSiteHeisenbergOutputBlockEquiv
-          (MPSTensor.blockPhysDim d k))
-          (MPOTensor.originalSiteHeisenbergOutputBlockEquiv (MPSTensor.blockPhysDim d k))
+          (Kraus.blockPhysDim d k))
+          (MPOTensor.originalSiteHeisenbergOutputBlockEquiv (Kraus.blockPhysDim d k))
           (MPOTensor.twoLinkOutputObservable u v A)) := by
-  have hE₂ : (finTwoArrowEquiv (Fin (MPSTensor.blockPhysDim d k))).symm.trans
+  have hE₂ : (finTwoArrowEquiv (Fin (Kraus.blockPhysDim d k))).symm.trans
       (MPSTensor.blockedConfigEquiv d 2 k) = MPOTensor.originalSiteHeisenbergCentreEquiv d k := by
     apply Equiv.ext
     intro c
     exact (MPOTensor.originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv d k c).symm
   have hInput : Matrix.reindex (MPSTensor.blockedConfigEquiv d 2 k)
       (MPSTensor.blockedConfigEquiv d 2 k)
-      (Matrix.reindex (finTwoArrowEquiv (Fin (MPSTensor.blockPhysDim d k))).symm
-        (finTwoArrowEquiv (Fin (MPSTensor.blockPhysDim d k))).symm A) =
+      (Matrix.reindex (finTwoArrowEquiv (Fin (Kraus.blockPhysDim d k))).symm
+        (finTwoArrowEquiv (Fin (Kraus.blockPhysDim d k))).symm A) =
       Matrix.reindex (MPOTensor.originalSiteHeisenbergCentreEquiv d k)
         (MPOTensor.originalSiteHeisenbergCentreEquiv d k) A := by
     rw [← hE₂]
@@ -139,8 +139,8 @@ theorem blocked_bufferedMPUQuasiLocalAut_pair_interval [NeZero k]
   have hOutput : Matrix.reindex (MPSTensor.blockedConfigEquiv d 4 k)
       (MPSTensor.blockedConfigEquiv d 4 k)
       (Matrix.reindex (MPOTensor.originalSiteHeisenbergOutputBlockEquiv
-        (MPSTensor.blockPhysDim d k))
-        (MPOTensor.originalSiteHeisenbergOutputBlockEquiv (MPSTensor.blockPhysDim d k))
+        (Kraus.blockPhysDim d k))
+        (MPOTensor.originalSiteHeisenbergOutputBlockEquiv (Kraus.blockPhysDim d k))
         (MPOTensor.twoLinkOutputObservable u v A)) =
       Matrix.reindex (MPOTensor.originalSiteHeisenbergOutputCentreEquiv d k)
         (MPOTensor.originalSiteHeisenbergOutputCentreEquiv d k)
@@ -160,22 +160,22 @@ theorem blocked_bufferedMPUQuasiLocalAut_pair_interval [NeZero k]
 sites, for every observable in the complete input-pair algebra.
 Source: arXiv:1703.09188, Appendix, lines 2313–2318. -/
 theorem blocked_bufferedMPUQuasiLocalAut_pair_supportedIn [NeZero k]
-    (a : ℤ) {X : QuasiLocalAlgebra (MPSTensor.blockPhysDim d k)}
+    (a : ℤ) {X : QuasiLocalAlgebra (Kraus.blockPhysDim d k)}
     (hX : QuasiLocalSupportedIn X (finiteChainRegion a 2)) :
     QuasiLocalSupportedIn
       (blockedAutomorphism d k (bufferedMPUQuasiLocalAut hU k hk S) X)
       (finiteChainRegion (a - 1) 4) := by
   classical
   obtain ⟨B, rfl⟩ := hX
-  let E := (finTwoArrowEquiv (Fin (MPSTensor.blockPhysDim d k))).symm
+  let E := (finTwoArrowEquiv (Fin (Kraus.blockPhysDim d k))).symm
   let A := Matrix.reindex E.symm E.symm
-    (intervalCoordinates (MPSTensor.blockPhysDim d k) a 2 B)
+    (intervalCoordinates (Kraus.blockPhysDim d k) a 2 B)
   have hA : Matrix.reindex E E A =
-      intervalCoordinates (MPSTensor.blockPhysDim d k) a 2 B := by
+      intervalCoordinates (Kraus.blockPhysDim d k) a 2 B := by
     ext row col
     simp only [A, Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_symm,
       Equiv.apply_symm_apply]
-  have hinput : quasiLocalIntervalObservable (MPSTensor.blockPhysDim d k) a 2
+  have hinput : quasiLocalIntervalObservable (Kraus.blockPhysDim d k) a 2
       (Matrix.reindex E E A) = quasiLocalObservable _ (finiteChainRegion a 2) B := by
     rw [hA, quasiLocalIntervalObservable_apply, StarAlgEquiv.symm_apply_apply]
   have h := blocked_bufferedMPUQuasiLocalAut_pair_interval hU k hk S a A
@@ -188,7 +188,7 @@ theorem blocked_bufferedMPUQuasiLocalAut_pair_supportedIn [NeZero k]
 nearest-neighbour support for every blocked singleton.
 Source: arXiv:1703.09188, Appendix, lines 2313–2318. -/
 theorem blocked_bufferedMPUQuasiLocalAut_singleton_supportedIn [NeZero k]
-    (x : ℤ) {X : QuasiLocalAlgebra (MPSTensor.blockPhysDim d k)}
+    (x : ℤ) {X : QuasiLocalAlgebra (Kraus.blockPhysDim d k)}
     (hX : QuasiLocalSupportedIn X {x}) :
     QuasiLocalSupportedIn
       (blockedAutomorphism d k (bufferedMPUQuasiLocalAut hU k hk S) X)
@@ -220,7 +220,7 @@ theorem blocked_bufferedMPUQuasiLocalAut_propagatesWithin [NeZero k] :
   classical
   intro Λ X hX
   obtain ⟨A, rfl⟩ := hX
-  let b := MPSTensor.blockPhysDim d k
+  let b := Kraus.blockPhysDim d k
   let ω := blockedAutomorphism d k (bufferedMPUQuasiLocalAut hU k hk S)
   let K := regionSumset Λ (Finset.Icc (-1) 1)
   let T := (quasiLocalObservable b K).range.comap
