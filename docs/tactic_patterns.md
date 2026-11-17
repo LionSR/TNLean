@@ -5538,14 +5538,14 @@ three-plaquette output measurement, and the routed reunion measurement.
   the region and its translate and count the union.
 - **Seen:** `MPS/AreaLaw/NearestNeighbourImaginaryTime.lean`
   (`card_bonds_meeting_enlarged_interval_le`, clipped linear intervals, by
-  injection) and `MPS/Preparation/FiniteRingLiebRobinson.lean`
-  (`card_bonds_meeting_le`, cyclic ring bonds, by a union cover); two
-  occurrences across two files with different ambient index sets.
+  injection). The ring occurrence (`card_bonds_meeting_le` in
+  `MPS/Preparation/FiniteRingLiebRobinson.lean`) was deleted when that estimate
+  became a corollary of the graph bound; its site budget now counts the two bonds
+  `{x, x - 1}` meeting one site. One occurrence remains.
 - **Abstraction:** A shared counting lemma in `TNLean/Algebra/`, stated for
   bonds `{i, i + 1}` meeting a finite set of sites, from which both the
   clipped-interval and ring bounds follow.
-- **Notes:** Below the rule-of-three threshold. A third occurrence would
-  justify the shared lemma.
+- **Notes:** Below the rule-of-three threshold.
 
 ### Local residuals over a bounded assignment fibre — candidate (2026-10-28)
 

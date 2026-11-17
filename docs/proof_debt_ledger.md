@@ -1177,35 +1177,6 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
 - **First PR**: merge the local round into the backward rounds of
   `RegisterGate.rounds`, then restate `LongRangeGate.rounds` through it.
 
-## D19. Finite-ring Lieb–Robinson estimate re-runs the commutator recursion instead of specializing the graph bound  —  duplication, impact 3/10, effort 4/10
-- **Status**: open (candidate, recorded with the merge of the chain and domain Lieb–Robinson estimates)
-- **Evidence**: `MPS/Preparation/FiniteRingLiebRobinson.lean` (514 lines) proves
-  `MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint` and
-  `MPSTensor.norm_interactionHamiltonian_commutator_le_exp_abs_of_disjoint` from its
-  own ring distance `ringSupportDistance`, bond counting and weighted Volterra
-  comparison (`ringCommutatorNorm_le_exp_of_disjoint`, lines 310–420, through
-  `ManyBody.heisenbergCommutatorNorm_le_integral`). QICLean's
-  `ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric` states the
-  two-support graph bound for any graph; on `cycleGraph N` with nearest-neighbour
-  supports it is the same estimate. Consumers: `FiniteRingGaussianFilter`,
-  `FiniteRingNegativeFrequencyLocality`, `Symmetry/ExactGroundPathGaussianCorrelation`
-  and one blueprint entry in `ch12_symmetry_spt_compact_limits.tex`.
-- **Remediation**: derive the ring estimate from `_finsets_numeric` on
-  `cycleGraph N`, identifying `ringSupportDistance` with the least cycle-graph
-  distance. The constants differ: the ring bound is
-  `2 |X| ‖A‖ ‖B‖ e^{-a d} (e^{8 e^a |t|} - 1)`, vanishing at `t = 0`, while the
-  graph bound is `4 |X| ‖A‖ ‖B‖ e^{4 v_R b₀ e^{2a} |t| - a d}`. The ring form is the
-  source's (Hastings–Koma, Theorem A.2), so the honest route is a QICLean graph
-  theorem in that form, for disjoint supports with factor `e^{2s|t|} - 1` under
-  `∀ x, Σ_{j ∋ x} |T_j| ‖h_j‖ e^{a diam T_j} ≤ s`; this is
-  `ManyBody.norm_heisenberg_commutator_le_graphDistance_of_disjoint` in
-  LionSR/QICLean#1094. On the ring `diam T_j = 1`, `|T_j| ≤ 2`, two bonds meet
-  each site and `‖h_j‖ ≤ 1`, so `s = 4 e^a` and `2s = 8 e^a`: the ring bound is
-  exactly its `cycleGraph N` corollary.
-- **First PR**: LionSR/QICLean#1094 (the graph theorem); then, at the
-  next pin, a TNLean PR proving `ringSupportDistance` equals the cycle-graph
-  support distance and deleting the ring recursion.
-
 ## Honorable mentions (ranks 11-12)
 
 - **D11 (plumbing tax)** — 486 `finCongr`/`Fin.cast` sites in 91 files;
@@ -1250,4 +1221,12 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
 
 ## Burned down / retired
 
-(none yet)
+### D19. Finite-ring Lieb–Robinson estimate re-ran the commutator recursion  —  burned down (net −240 lines)
+
+- **Outcome**: `MPS/Preparation/FiniteRingLiebRobinson.lean` now derives
+  `MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint` from
+  `ManyBody.norm_heisenberg_commutator_le_graphDistance_of_disjoint` (QICLean#1094,
+  Hastings–Koma, Theorem A.2) on `cycleGraph N`, with bond diameter one and site budget
+  `s = 4 e^a`, so `2s = 8 e^a` and the constants are unchanged. The new
+  `ringSupportDistance_le_edist` compares the ring distance with the cycle-graph distance.
+  The private recursion, bond-counting and weighted-row lemmas are deleted.
