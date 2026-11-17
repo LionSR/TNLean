@@ -1176,7 +1176,8 @@
 \begin{proof}\leanok
     \uses{lem:mpu_supplied_standard_form_adjoint_zero_index,
         lem:mpu_supplied_four_spin_source_comparison,
-        lem:mpu_normalized_source_forward_adjoint_certificate}
+        lem:mpu_normalized_source_forward_adjoint_certificate,
+        lem:mpu_local_time_reversal_certificate}
     Derive $r=\ell=d$ and choose the actual normalized source factors of $W$.
     Write $A=v_{23}(u\otimes u)$ and $B=v_{23}$.
     Their normalized gates satisfy
@@ -1187,9 +1188,12 @@
     Multiply by $X^\dagger\otimes Y^\dagger$ to obtain the displayed equation
     with $x=X^\dagger zY$. All coordinate changes are the actual source-rank
     and physical-pair identifications, and no further blocking is used.
-    For the converse, the inverse comparison gives a normalized source
-    certificate with unitary $z=XxY^\dagger$. Its actual even-ring
-    contraction yields the asserted periodic adjoint symmetry.
+    For the converse, the two-site block of $W$ has the doubled standard
+    form with gates $A$ and $B$, so the displayed equation is the local
+    equation of Lemma~\ref{lem:mpu_local_time_reversal_certificate} for
+    that block. That lemma gives adjoint symmetry of the block on every ring,
+    which is adjoint symmetry of $W$ on every even ring; canonical form is
+    not used.
 \end{proof}
 
 \begin{lemma}[Local certificate for time reversal without canonical form]
@@ -1204,7 +1208,7 @@
         MPOTensor.mpo_standardFormTensorOfGates_even_eq_adjoint_of_timeReversal_certificate}
     \leanok
     \discussion{10781}
-    \uses{PropChiral, def:mpu_tensor_from_two_gates, thm:mpu_supplied_two_site_periodic_circuit}
+    \uses{def:mpu_tensor_from_two_gates, thm:mpu_supplied_two_site_periodic_circuit}
     Let $V$ be a tensor whose two-site block has a standard form with gates
     $A,B$ of equal intermediate dimensions $q$, and suppose
     \begin{align}
@@ -1476,19 +1480,16 @@
 \begin{proof}\leanok
     \uses{lem:mpu_canonical_forward_local_time_reversal,
         lem:mpu_standard_form_from_normalized_source_factors,
-        lem:mpu_normalized_physical_adjoint_source_factors, FundamentalMPU}
+        lem:mpu_local_time_reversal_certificate}
     The forward implication is the preceding construction. For the converse,
-    write $A=v_{23}(u\otimes u)$ and $B=v_{23}$. The local equation
-    $A=\sigma(x\otimes x^\dagger)B^\dagger$ gives
-    $B^\dagger=(X\otimes Y)A$ and
-    $A^\dagger=B(Y^\dagger\otimes X^\dagger)$ with
-    $X=x^\dagger$ and $Y=\sigma x$. Both are unitary since $\sigma^2=1$.
-    The actual normalized source and adjoint factors provide standard forms
-    with gates $A,B$ and $B^\dagger,A^\dagger$, respectively. Close the two
-    gate relations on each positive blocked ring by cancelling the internal
-    unitaries. These are precisely the even rings of $W$. The explicit
-    coordinate dictionary transports the given four-original-spin equation
-    to these gate relations without enlarging its local antecedent.
+    the normalized source factors give a standard form of the two-site block
+    with gates $A=v_{23}(u\otimes u)$ and $B=v_{23}$, and the local equation
+    reads $A=\sigma(x\otimes x^\dagger)B^\dagger$.
+    Lemma~\ref{lem:mpu_local_time_reversal_certificate} turns this into
+    adjoint symmetry of the two-site block on every ring, which is adjoint
+    symmetry of $W$ on every even ring. The explicit coordinate dictionary
+    transports the given four-original-spin equation without enlarging its
+    local antecedent.
 \end{proof}
 
 \begin{lemma}[Physical transposition of normalized source factors]
@@ -1597,16 +1598,16 @@
 \begin{proof}\leanok
     \uses{lem:mpu_canonical_source_transposition_phase,
         lem:mpu_standard_form_from_normalized_source_factors,
-        lem:mpu_physical_transpose_source_factors, FundamentalMPU}
-    For the converse write $A=c(x\otimes x^T)B^T$ and put
-    $X=x^\dagger$, $Y=\overline c\,\overline x$. Since $|c|=1$, both
-    matrices are unitary and satisfy $B^T=(X\otimes Y)A$ and
-    $A^T=B(Y^\dagger\otimes X^\dagger)$. Use the actual source and transpose
-    factor normalizations to construct standard forms with gates $A,B$ and
-    $B^T,A^T$, respectively. Closing the two gauge relations cancels each
-    internal unitary and gives equality on the even rings of the original
-    tensor. The four-spin dictionary transports the given local equation
-    without enlarging its antecedent.
+        lem:mpu_local_transposition_certificate}
+    The forward direction is
+    Lemma~\ref{lem:mpu_canonical_source_transposition_phase}. For the
+    converse, the normalized source factors give a standard form of the
+    two-site block with gates $A,B$, and the local equation reads
+    $A=c(x\otimes x^T)B^T$. Lemma~\ref{lem:mpu_local_transposition_certificate}
+    turns this into transpose symmetry of the two-site block on every ring,
+    which is transpose symmetry of the original tensor on every even ring.
+    The four-spin dictionary transports the given local equation without
+    enlarging its antecedent.
 \end{proof}
 
 \begin{lemma}[Local transposition for any supplied standard form in a canonical ambient tensor]
@@ -1631,7 +1632,9 @@
     The phase can be written $c=e^{i\phi}$ with a pointwise chosen real
     $\phi$. The local equation is preserved under any common coordinate
     relabeling of the pair spaces. No normalization of the supplied half
-    factors is required. Every standard form in the sense of
+    factors is required. The converse direction needs no canonical form
+    (Lemma~\ref{lem:mpu_local_transposition_certificate}). Every standard form
+    in the sense of
     \cite[Definition~III.9]{Cirac2017MPU} is of this kind
     \cite{gap:mpu_standard_form_canonical_convention}, so this gives the
     source criterion \cite[lines~1258--1288]{Cirac2017MPU}, which is
@@ -1640,7 +1643,7 @@
 \begin{proof}\leanok
     \uses{lem:mpu_supplied_four_spin_source_comparison,
         lem:mpu_canonical_source_transposition_phase,
-        lem:mpu_canonical_even_transposition_iff}
+        lem:mpu_local_transposition_certificate}
     Even-family comparison with the actual transposed tensor exchanges
     the actual source ranks. The supplied cut-rank identities therefore
     give $r=\ell=d$. Choose the actual normalized source factors and
@@ -1648,11 +1651,59 @@
     $\widetilde A=(X\otimes Y)A$ and
     $\widetilde B=B(Y^\dagger\otimes X^\dagger)$.
     The normalized transpose certificate with unitary $z$ transports to
-    the displayed equation with $x=X^\dagger z\overline Y$.
-    Conversely the inverse comparison gives the normalized certificate
-    with $z=XxY^T$, whose actual even-ring contraction proves transpose
-    symmetry. The argument of the resulting unit complex phase gives
-    its displayed exponential form. No further physical blocking is used.
+    the displayed equation with $x=X^\dagger z\overline Y$, and the
+    argument of the resulting unit complex phase gives its displayed
+    exponential form. Conversely, the two-site block of $W$ has the doubled
+    standard form with gates $v_{23}(u\otimes u)$ and $v_{23}$, so the
+    displayed equation is the local equation of
+    Lemma~\ref{lem:mpu_local_transposition_certificate} for that block.
+    That lemma gives transpose symmetry of the block on every ring, which is
+    transpose symmetry of $W$ on every even ring; canonical form is not used.
+\end{proof}
+
+\begin{lemma}[Local certificate for transposition without canonical form]
+    \label{lem:mpu_local_transposition_certificate}
+    \lean{MPOTensor.twoSiteCircuit_transpose,
+        MPOTensor.transpose_gate_gauges_of_local_phase,
+        MPOTensor.TwoSiteStandardFormData.mpo_blockTwo_eq_transpose_of_local_phase,
+        MPOTensor.mpo_even_eq_transpose_of_blockTwo,
+        MPOTensor.mpo_standardFormTensorOfGates_even_eq_transpose_of_transposition_certificate}
+    \leanok
+    \discussion{5714}
+    \uses{def:mpu_tensor_from_two_gates,
+        thm:mpu_supplied_two_site_periodic_circuit,
+        lem:mpu_local_time_reversal_certificate}
+    Let $V$ be a tensor whose two-site block has a standard form with gates
+    $A,B$ of equal intermediate dimensions $q$, and suppose
+    \begin{align}
+        A & =c(x\otimes x^T)B^T
+    \end{align}
+    for a unitary $x$ and $|c|=1$. Then the operators of the two-site block of
+    $V$ equal their transposes on every ring, so the operators of $V$ equal
+    their transposes on every ring of an even number of sites. No canonical
+    form of $V$ is assumed. In particular, if square unitary gates $u,v$
+    satisfy
+    \begin{align}
+        v_{23}(u\otimes u) & =c(x\otimes x^T)v_{23}^T,
+    \end{align}
+    then the tensor in standard form built from $u$ and $v$ generates
+    transpose-invariant operators on every ring of an even number of
+    standard-form sites.
+    % Source lines: paper_v2.tex 1266--1282.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_supplied_two_site_periodic_circuit,
+        lem:mpu_local_time_reversal_certificate}
+    As in Lemma~\ref{lem:mpu_local_time_reversal_certificate}, the operator of
+    the two-site block on $N$ sites is the circuit $C(A,B)$. Its transpose is
+    the circuit $C(B^T,A^T)$ read on the chain translated by one site of $V$.
+    The local equation gives unitaries $X=x^\dagger$ and $Y=\overline c\,\overline x$
+    with $B^T=(X\otimes Y)A$ and $A^T=B(Y^\dagger\otimes X^\dagger)$, a gauge of
+    the gates, so $C(B^T,A^T)=C(A,B)$. Invariance of the operator of a two-site
+    block under the translation by one site gives $C(A,B)^T=C(A,B)$. For gates
+    $u,v$, the two-site block of the tensor in standard form has the doubled
+    standard form with gates $v_{23}(u\otimes u)$ and $v_{23}$.
 \end{proof}
 
 \begin{lemma}[Continuous removal of the local transposition phase]
