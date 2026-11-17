@@ -3482,6 +3482,48 @@ completion from compatible forward and inverse finite-local actions.
     circuit identity. Both layers are unitary, and their product is unitary.
 \end{proof}
 
+\begin{lemma}[A tensor in canonical form for given standard-form gates]
+    \label{thm:mpu_standard_form_canonical_representative}
+    \lean{MPOTensor.exists_isMPUCanonicalForm_twoSiteStandardFormData,
+        MPOTensor.shiftedGateCut,
+        MPSTensor.isMPUCanonicalForm_of_isIrreducibleFamily,
+        MPSTensor.IsMPUCanonicalBlock.isMPUCanonicalForm,
+        Kraus.isIrreducibleFamily_of_isInjective}
+    \leanok
+    \uses{def:mpu_tensor_from_two_gates, lem:mpu_tensor_from_gates_periodic_circuit,
+        def:mpu_canonical_form}
+    Let $d,\ell,r>0$ and let $u,v$ be unitary gates as in
+    Definition~\ref{def:mpu_tensor_from_two_gates}. There is a tensor $W$ on
+    ordered pairs of sites, in canonical form, with a standard form whose gates
+    are exactly $u$ and $v$, whose periodic operators are those of the circuit
+    of $u$ on unshifted pairs and $v$ on shifted pairs at every positive length.
+    Its bond dimension is the rank $K$ of $v$ read as a matrix with rows
+    $(i_1,s)$ and columns $(i_2,t)$.
+    % Source lines: paper_v2.tex 258--267, 603--622.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Factor $v_{(i_1,i_2),(s,t)}=\sum_{k=1}^K(X_1)_{(i_1,k),s}(X_2)_{(k,i_2),t}$
+    with the vectors $x_{i,t}=((X_2)_{(k,i),t})_k$ spanning $\mathbb C^K$ and the
+    vectors $y_{i,s}=((X_1)_{(i,k),s})_k$ spanning its dual, which is possible at
+    the rank $K$. The tensor contracted through $u$ has letters
+    \begin{align}
+        W^{(i_1,i_2),j}=\sum_{t,s}u_{(t,s),j}\,x_{i_1,t}y_{i_2,s}^{\mathsf T}.
+    \end{align}
+    Pairing with the conjugate rows of the unitary $u$ isolates every outer
+    product $x_{i_1,t}y_{i_2,s}^{\mathsf T}$, so the letters span all
+    $K\times K$ matrices. An invariant projection $P$ would satisfy
+    $(\Id-P)XP=0$ for every matrix $X$, which forces $P\in\{0,\Id\}$; so the
+    letters are irreducible. The transfer map of a nonzero irreducible family has
+    a positive eigenvalue $\lambda$ with a positive-definite eigenvector, and
+    $\lambda^{-1/2}W$ is irreducible with transfer spectral radius one. Thus $W$
+    is in canonical form with one block of weight $\lambda^{1/2}$. Its periodic
+    operators are those of the circuit, by
+    Lemma~\ref{lem:mpu_tensor_from_gates_periodic_circuit}, since both tensors
+    have standard forms with the gates $u,v$.
+\end{proof}
+
 \begin{lemma}[Changing the intermediate bases preserves the circuit]
     \label{lem:mpu_tensor_from_gates_basis_freedom}
     \lean{MPOTensor.mpo_standardFormTensorOfGates_eq_of_gate_gauges}
