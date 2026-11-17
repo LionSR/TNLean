@@ -269,6 +269,7 @@ import TNLean.MPS.MPU.TimeReversalMPSClass
 import TNLean.MPS.MPU.TimeReversalSign
 import TNLean.MPS.MPU.TimeReversalSignIntrinsic
 import TNLean.MPS.MPU.TimeReversalSignInvariance
+import TNLean.MPS.MPU.TimeReversalStrictEquivalence
 import TNLean.MPS.MPU.TimeReversalTraceGauge
 import TNLean.MPS.MPU.TimeReversalTwistedTransfer
 import TNLean.MPS.MPU.TransferMatrix
