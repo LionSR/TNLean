@@ -208,6 +208,7 @@ import TNLean.MPS.AreaLaw.PhysicalGroundReference
 import TNLean.MPS.AreaLaw.PhysicalGroundReferencePolynomial
 import TNLean.MPS.AreaLaw.PhysicalGroundReferenceTrimming
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
+import TNLean.MPS.AreaLaw.PhysicalLDTree
 import TNLean.MPS.AreaLaw.PhysicalLowDensityApproximation
 import TNLean.MPS.AreaLaw.PhysicalLowDensityGlobalApproximation
 import TNLean.MPS.AreaLaw.PhysicalLowDensitySharpApproximation

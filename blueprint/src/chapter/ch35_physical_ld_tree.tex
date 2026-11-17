@@ -1,0 +1,86 @@
+\section{A merge tree for a low-density spectrum}
+\label{sec:physical_ld_tree}
+
+The interval families of Lemma~\ref{lem:dyadic_interval_low_energy_family}
+compare two different low-energy windows: viability for the upper window
+of width $\eta$ is carried to viability for the lower window of width
+$\eta-3w$. A merge tree built from them therefore uses one window per
+level, shortened by the buffer $3w$ at each of its levels, as in the
+condition $\eta_1\ge2\mu/\log n$ and the buffer $w=\mu/(3\log n)$
+of~\cite[Theorem~\texttt{t:aisgapless}, lines 1027--1041]{Arad2016RigorousRG}.
+The statement below is the viability induction of the merge tree
+of~\cite[Theorem~\texttt{t:alg2}, lines 1869--1878]{Arad2016RigorousRG}.
+It is restricted to long nodes that keep the whole family image of the
+merged child spaces: no random sampling, collective trimming, bound on
+the node dimensions, final refinement or matrix product state bound of
+the output is asserted, and no running time. The constant depends on the
+fixed bandwidth, as recorded in~\cite{gap:alvv16_low_energy_family_scope}.
+
+\begin{lemma}[Midpoint induction for the interval recursion]
+    \label{lem:balanced_interval_invariant_midpoint}
+    \lean{TNLean.MPS.AreaLaw.balancedIntervalSpace_invariant_of_midpoint}
+    \leanok
+    \uses{def:balanced_interval_spaces}
+    Any property of interval spaces that holds at the short leaves, and is
+    preserved by the parent operation applied at the actual midpoint
+    $k=p+\lfloor(r-p)/2\rfloor$ of a long interval $[p,r)$, holds at every
+    recursively constructed space.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the interval length, as in
+    Lemma~\ref{lem:balanced_interval_invariant}, retaining that the cut of
+    a long interval is its midpoint.
+\end{proof}
+
+\begin{lemma}[Viability at every level of the low-density merge tree]
+    \label{lem:physical_ld_interval_tree}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_ld_interval_tree}
+    \leanok
+    \uses{lem:dyadic_interval_low_energy_family,
+        lem:balanced_interval_invariant_midpoint,
+        thm:actual_adjacent_interval_merge,
+        lem:full_interval_viability}
+    Fix $\eta_{\rm LD}>0$. There is a constant $C\ge\max\{100,19+\eta_{\rm LD}\}$
+    with the following property. Let $q\ge2$, $m\ge q$ and $w>0$, put
+    $g=\min\{w,1\}$, $u=1+\log m+\log(1/g)$,
+    $\ell=\lceil Cu^2/g\rceil$ and $D=(m\ell^2)^{22\ell}$. Let
+    $H=\sum_ih_i$ be a nearest-neighbour chain of length $L$ and local
+    dimension $q$ with $0\le h_i\le\Id$, and let $G(\eta)$ be the span of
+    the eigenvectors of $H$ with energy at most $E_0+\eta$, where $E_0$ is
+    the ground energy. Then $\ell\ge21$, $\log D$ obeys the bound of
+    Lemma~\ref{lem:dyadic_interval_low_energy_family}, and there are
+    operators $A_{J,1},\dots,A_{J,D^2}$ on every interval $J$ with the
+    following property. In the balanced recursion with leaf width
+    $4\ell$, let a long node $J=[p,r)$ with children $S_1,S_2$ retain
+    \[
+        \sum_{i=1}^{D^2}A_{J,i}\,(S_1\otimes S_2).
+    \]
+    If $r-p\le4\ell\,2^k$ and $3w(k+1)\le\eta_{\rm LD}$, the space on $J$ is
+    $3/200$-viable for $G(\eta_{\rm LD}-3wk)$. In particular, if
+    $3w(\lceil\log_2L\rceil+1)\le\eta_{\rm LD}$, the space at the root is
+    $3/200$-close to $G(\eta_{\rm LD}-3w\lceil\log_2L\rceil)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:dyadic_interval_low_energy_family,
+        lem:balanced_interval_invariant_midpoint,
+        thm:actual_adjacent_interval_merge,
+        lem:full_interval_viability}
+    Take the family of Lemma~\ref{lem:dyadic_interval_low_energy_family}
+    on every interval, at the index zero, so that its comparison loss is
+    $1/200$ and its suppression satisfies $\Delta\le D^{12}\Delta\le10^{-5}$.
+    Induct over the recursion with
+    Lemma~\ref{lem:balanced_interval_invariant_midpoint}. A leaf retains
+    the full local space, which is viable for every target. A long node of
+    length at most $4\ell\,2^{k+1}$ has children of length at most
+    $4\ell\,2^k$, which are $3/200$-viable for $G(\eta)$ with
+    $\eta=\eta_{\rm LD}-3wk\ge6w$. By
+    Lemma~\ref{thm:actual_adjacent_interval_merge}, their merge is
+    $3/100$-viable for $G(\eta)$, hence $7/100$-viable for the upper window
+    of the family, which is $1/200$-close to it. The family image is then
+    $\Delta/(1-7/100)^2$-viable for the lower window, which is
+    $1/200$-close to $G(\eta-3w)$. The resulting error
+    $2\bigl(\Delta/(93/100)^2+1/200\bigr)$ is at most $3/200$. At the root,
+    $L\le2^{\lceil\log_2L\rceil}$, and
+    Lemma~\ref{lem:full_interval_viability} turns viability on the whole
+    chain into closeness.
+\end{proof}
