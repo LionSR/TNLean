@@ -37,6 +37,9 @@ on:
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/ci_lean_checks.py'
       - 'scripts/test_ci_lean_checks.py'
+      - 'scripts/ci_resource_diagnostics.py'
+      - 'scripts/ci_resource_diagnostics.sh'
+      - 'scripts/test_ci_resource_diagnostics.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/test_pr_ci_base_snapshot.py'
       - 'scripts/lake_build_locked.sh'
@@ -145,6 +148,9 @@ on:
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/ci_lean_checks.py'
       - 'scripts/test_ci_lean_checks.py'
+      - 'scripts/ci_resource_diagnostics.py'
+      - 'scripts/ci_resource_diagnostics.sh'
+      - 'scripts/test_ci_resource_diagnostics.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/test_pr_ci_base_snapshot.py'
       - 'scripts/lake_build_locked.sh'
@@ -304,6 +310,9 @@ jobs:
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/ci_lean_checks.py'
               - 'scripts/test_ci_lean_checks.py'
+              - 'scripts/ci_resource_diagnostics.py'
+              - 'scripts/ci_resource_diagnostics.sh'
+              - 'scripts/test_ci_resource_diagnostics.py'
               - 'scripts/test_lake_build_hotspots.py'
               - 'scripts/test_pr_ci_base_snapshot.py'
               - 'scripts/lake_build_locked.sh'
@@ -595,10 +604,23 @@ jobs:
       - name: Build Lean project and capture timings
         run: |
           set -eo pipefail
+          source scripts/ci_resource_diagnostics.sh "$RUNNER_TEMP/lean-resources.jsonl"
           {
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Upload build resource diagnostics
+        if: always()
+        continue-on-error: true
+        timeout-minutes: 2
+        uses: actions/upload-artifact@v7
+        with:
+          name: lean-resources-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/lean-resources.jsonl
+          if-no-files-found: ignore
+          retention-days: 7
+          compression-level: 6
 
       # Elaborate changed production files and every affected
       # scripts/*_regression.lean file with warnings as errors. A regression is
@@ -804,6 +826,11 @@ jobs:
 
       - name: Test changed-file Lean check selection
         run: python3 scripts/test_ci_lean_checks.py
+
+      - name: Test build resource diagnostics
+        run: |
+          bash -n scripts/ci_resource_diagnostics.sh
+          python3 scripts/test_ci_resource_diagnostics.py
 
       - name: Check local cache-seeding shell syntax
         run: |

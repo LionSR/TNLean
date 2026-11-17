@@ -194,6 +194,37 @@ separate `compile-time` job.
 
 ---
 
+### Full-build resource diagnostics
+
+The full-build shell starts `scripts/ci_resource_diagnostics.py` alongside the
+unchanged `lake build` and `lake build lint_style` pipeline. Every 30 seconds it
+writes a UTC-stamped JSON line and a short console heartbeat, with a final
+snapshot on normal cleanup to capture counters after a failed build. The
+`lean-resources-<run-id>-<attempt>` artifact is uploaded after that step, including
+on failure or cancellation when the runner can still execute the upload. A
+forcibly terminated runner may not upload an artifact or finish its final line.
+
+Samples contain host CPU counters, load averages, available memory and swap,
+workspace filesystem capacity/inodes, and available cgroup-v2 memory/OOM and CPU
+throttling counters. Compare consecutive counters for activity or OOM events;
+an absolute event count alone does not attribute an OOM to this build. Unavailable
+metrics are `null`. Process details include only numeric PID/start time, elapsed
+and CPU seconds, RSS, and a fixed allowlist of build-tool names. No command
+arguments, environment variables, cgroup paths, or user-file contents are saved.
+The process scan is capped at 4096 entries; the artifact includes observed
+allowlisted totals and at most 16 cumulative CPU leaders. Summed RSS may count
+shared memory more than once and is not the cgroup's memory usage.
+
+Collection stops at 720 samples or 4 MiB, whichever comes first, and artifacts
+expire after seven days. Each snapshot has a two-second sampler-only watchdog;
+cleanup also bounds the TERM grace period before killing an unresponsive sampler.
+The EXIT trap reaps the sampler without replacing the
+pipeline's status; INT/TERM remain nonzero. Parent identity polling stops sampling
+if the shell dies before cleanup. Collection and upload failures do not bypass
+build checks. These samples add observability only: they neither change Lake
+arguments/timeouts/cache provenance nor establish that a build is faster. The
+current cache is still saved only after all required build-job checks succeed.
+
 ### Changed-File Lean Checks (`pr-ci.yml`, `build` job)
 
 The `build` job derives its focused Lean checks from the change set, using
