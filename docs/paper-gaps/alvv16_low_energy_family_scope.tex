@@ -218,7 +218,20 @@ $\langle P_Rg,g\rangle=\|P_Rg\|^2$. The Ritz space of $H$ compressed to $R$
 of the same dimension is controlled by min--max against the projected
 window: every one of its vectors has energy at most
 $E_0+((1+1/\rho)(\eta-3w)+(1+\rho)\|H-E_0\|\delta)/(1-\delta)$ for every
-$\rho>0$. The Ritz space is not claimed to be close to the window, since the
+$\rho>0$. \emph{The buffer.} The source takes $w=\mu/(3\log n)$ on a chain of $n=L\ge2$
+sites, so that the window shrinks by $3w=\mu/\log n$ per level. The balanced
+tree here has $\lceil\log_2L\rceil$ levels and the refinement uses one more,
+so the condition used is $3w(\lceil\log_2L\rceil+2)\le\eta_{\rm LD}$. With the
+source's buffer it reads $\mu(\lceil\log_2n\rceil+2)/\log n\le\eta_{\rm LD}$.
+Since $\lceil\log_2n\rceil<\log_2n+1$ and $\log n\ge\log2$, it holds whenever
+$\mu\le(\log2/4)\,\eta_{\rm LD}$ if $\log$ is the natural logarithm, and
+whenever $\mu\le\eta_{\rm LD}/4$ if it is the binary one; the base is not
+recorded in the repository. The total shrinkage $3w(\lceil\log_2L\rceil+1)$ is
+then at most a constant multiple of $\mu$, as in the source. This is a
+\emph{local fix}: the condition on $\mu$ is stricter than requiring only that
+the shortened window be nonempty, by a constant factor coming from the binary
+level count and the two extra levels.
+The Ritz space is not claimed to be close to the window, since the
 window need not have a gap at its edge, and (LD) supplies none. The
 energy-output and number-of-states clause of lines 1869--1878 is not verified
 against the source: its text is not recorded in the repository and the

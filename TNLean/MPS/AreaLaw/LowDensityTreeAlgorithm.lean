@@ -37,6 +37,13 @@ controlled only in energy, because the window has no gap at its edge. The
 energy-output and number-of-states clause of lines 1869–1878 is not verified
 against the source, whose text is not in the repository; no hypothesis is drawn
 from a paraphrase of it. See `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
+
+**Local fix (buffer and levels):** The buffer `w` is free, subject to
+`3w (clog₂ L + 2) ≤ etaLD`. With the source's buffer `w = μ / (3 log n)` this
+holds once `μ` is at most a fixed fraction of `etaLD` (`log 2 / 4` for the
+natural logarithm, `1/4` for the binary one), a constant factor stricter than
+a nonempty shortened window. See
+`docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
 -/
 
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator InnerProductSpace
