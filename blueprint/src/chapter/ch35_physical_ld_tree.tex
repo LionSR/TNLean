@@ -187,3 +187,73 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     Lemma~\ref{thm:interval_trimming_reference}. At the root, apply
     Lemmas~\ref{lem:full_interval_viability} and~\ref{lem:full_interval_mps_span}.
 \end{proof}
+
+\begin{lemma}[Refining a close space on the whole chain]
+    \label{lem:physical_ld_root_refinement}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_ld_root_refinement}
+    \leanok
+    \uses{lem:dyadic_long_interval_low_energy_word_family,
+        thm:low_energy_orthonormal_mps_basis,
+        thm:interval_trimming_reference,
+        lem:full_interval_viability,
+        lem:full_interval_mps_span}
+    Fix $\eta_{\rm LD}>0$, and let $C$ be the constant of
+    Lemma~\ref{lem:dyadic_long_interval_low_energy_word_family} and $K$ that
+    of Theorem~\ref{thm:low_energy_orthonormal_mps_basis}. Let $6w\le\eta\le
+    \eta_{\rm LD}$, and let $S_0$ be a space on the whole chain of dimension at
+    most $M_0$ that is $3/200$-close to $G(\eta)$. For $0<\delta\le1$ put
+    $i=\lceil\log_{16}\lceil1/\delta\rceil\rceil$ and
+    $a=\lceil\log_2\lceil32/\delta\rceil\rceil$, and let $\ell_i$ and $D_i$ be
+    the scale and count of the family at the index $i$. There is a reference
+    factor $B$ with the logarithmic bound of
+    Theorem~\ref{thm:low_energy_orthonormal_mps_basis} at accuracy
+    $\delta/48$ and deficit $\eta_{\rm LD}-\eta+3w$; put
+    $D_{\rm ref}=\dim G(\eta-3w)\dim G(\eta_{\rm LD})B$,
+    $\xi=\delta/(16D_{\rm ref}\sqrt{L+1})$ and
+    $M=\max\{q^{4\ell_i},D_i^{2a}M_0\}$. Then there is a space $R$ that is
+    $\delta$-close to $G(\eta-3w)$ and is spanned by at most $M$ vectors $u_k$
+    with $\xi^2\operatorname{SR}(u_k)\le M$ at every cut, each of whose vectors
+    is a matrix product state of bond dimension at most
+    $M\lceil256D_{\rm ref}^2(L+1)M/\delta^2\rceil$. If $L\le4\ell_i$, then $R$
+    is the whole local space; otherwise $R$ is the collective trim at the
+    threshold $\xi$ of the span of all images of $S_0$ under the words of
+    length $a$ of a family of at most $D_i^2$ operators.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:dyadic_long_interval_low_energy_word_family,
+        thm:low_energy_orthonormal_mps_basis,
+        thm:interval_trimming_reference,
+        lem:full_interval_viability,
+        lem:full_interval_mps_span}
+    The index $i$ makes each comparison loss at most $\delta/200$. The space
+    $S_0$ is $1/25$-viable for the upper target of the family on the whole
+    chain, and its word image is $\Delta^a/(24/25)^2$-viable for the lower
+    target, with $\Delta^a\le2^{-a}\le\delta/32$. Hence the image is
+    $\delta/8$-viable for $G(\eta-3w)$. The reference of
+    Theorem~\ref{thm:low_energy_orthonormal_mps_basis} is $\delta/48$-close to
+    $G(\eta-3w)$ in both directions, and the trim at threshold $\xi$ adds at
+    most $\delta/4$ by Lemma~\ref{thm:interval_trimming_reference}, so the
+    error is at most $4\delta/8+6\delta/48+\delta/4<\delta$. For a short chain
+    the whole local space has the stated rank bounds. The matrix product bound
+    follows from Lemma~\ref{lem:full_interval_mps_span}.
+\end{proof}
+
+\begin{lemma}[A refined approximation from the low-density tree]
+    \label{lem:physical_ld_tree_refined_approximation}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_ld_tree_refined_approximation}
+    \leanok
+    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement}
+    In the setting of Lemma~\ref{lem:physical_ld_sampled_interval_tree}, take
+    the failure parameter $\beta=1/2$ and the node bound $M_0=D^6s^3$, and
+    suppose $3w(\lceil\log_2L\rceil+2)\le\eta_{\rm LD}$. Then for every
+    $0<\delta\le1$ there is a space on the whole chain that is $\delta$-close
+    to $G(\eta_{\rm LD}-3w\lceil\log_2L\rceil-3w)$ and consists of matrix
+    product states of the bond dimension of
+    Lemma~\ref{lem:physical_ld_root_refinement}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement}
+    Apply Lemma~\ref{lem:physical_ld_root_refinement} to the root of the tree,
+    with $\eta=\eta_{\rm LD}-3w\lceil\log_2L\rceil$; the hypothesis gives
+    $6w\le\eta$.
+\end{proof}
