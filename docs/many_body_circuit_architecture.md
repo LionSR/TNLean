@@ -86,8 +86,8 @@ flowchart BT
 | Layer | Objects | Defining types | Now | After the move | May import |
 |---|---|---|---|---|---|
 | Sites | a finite tensor product `⊗_v ℂ^{X_v}` and its regions | a system `X : V → Type` of finite basis types, its configurations and those of a region; `supportedOperators X D`; the placement `K ↦ K ⊗ 1`; the partial trace onto a region; product vectors | QICLean `Entropy`, `Representation`, `Analysis` (86 modules using `SiteConfig`); 25 modules of `TNLean/Circuit`, among them `RegionSplit` and `RegionalSwap`; `Lattice/RegionalSwapSupport` | `QICLean/ManyBody/Sites` | matrices, channels |
-| Dynamics | a family of Hermitian terms with supports, and the evolution it generates | Heisenberg evolution, commutator bounds on a graph | `TNLean/Circuit/LiebRobinson`; `Circuit/ProjectedRelativeEvolution`, `DisjointRelativeEvolution`, `SupportedGaussianIntegral` | `QICLean/ManyBody/Dynamics` | Sites |
-| Hamiltonians | an interaction on a finite set of sites | one structure: bounded Hermitian terms with given supports; spectral and Gaussian filters, truncation, low-energy bases | `TNLean/Lattice` (root, `ClusterExpansion`); five separate structures | `QICLean/ManyBody/Hamiltonian` | Sites, Dynamics |
+| Dynamics | a family of Hermitian terms with supports, and the evolution it generates | `Interaction X S` (terms `term i ∈ supportedOperators X (S i)`, supports a parameter) and its `hamiltonian`; the evolution is `Matrix.hermitianUnitaryPath`, with the Heisenberg picture, commutator bounds on a graph and `graphBall` | `TNLean/Circuit/LiebRobinson`; `Circuit/ProjectedRelativeEvolution`, `DisjointRelativeEvolution`, `SupportedGaussianIntegral` | `QICLean/ManyBody/Dynamics` | Sites |
+| Hamiltonians | spectral properties of an interaction on a finite set of sites | `groundSpace` and the one gap predicate `IsGapped`, stated for any matrix; spectral and Gaussian filters, truncation, low-energy bases; the models as choices of sites and supports | `TNLean/Lattice` (root, `ClusterExpansion`); five separate structures | `QICLean/ManyBody/Hamiltonian` | Sites, Dynamics |
 | Gates | unitaries on a finite basis, with no sites | two-level and Givens words, controlled elements, permutation matrices, dilations, amplification | parts of `TNLean/Circuit/Gates`, eight root modules of `TNLean/Circuit` | `QICLean/Circuit/Gate` | matrices |
 | Circuits | a geometry of cells on a set of sites, and operations layered on it | `Layer`, `Circuit`, its Kraus family, depth and gate count | `TNLean/Circuit` (the rest) | `QICLean/Circuit` | Sites, Gates |
 | Party calculus | registers with owners | one syntax of local maps, sources and gates | `TNLean/Lattice/PartyCircuit`, `Compression`, `Sheet` | reusable part: `QICLean/Circuit/Party`; proof-specific part stays in TNLean | Sites, Circuits |
@@ -95,6 +95,28 @@ flowchart BT
 Circuits and Hamiltonians are siblings. A circuit statement never needs an
 interaction, and a Hamiltonian statement never needs a layer; the permutation
 of sites and the site-supported projections that both use belong to Sites.
+
+The structure `Interaction` lives in Dynamics, not in Hamiltonians, so that
+every statement about the evolution and every statement about the spectrum
+spells the Hamiltonian the same way, as `Φ.hamiltonian`. A lemma stated at
+the bare sum `∑ i, h i` would be a second spelling that `rw` cannot match
+against the first. Hermiticity, norm bounds, range and degree are hypotheses,
+not fields. A gap is `IsGapped H E₀ Δ`, whose ground space is nonzero. The
+eigenvalue dichotomy and the unique gapped ground state
+(`Matrix.IsGappedGroundState`, swept in step 4.0) are theorems about it, not
+further predicates. An eigenvalue bound that does not assert a ground state is
+a hypothesis, not a gap.
+
+Quantum simulation and many-body theory are stated over these layers.
+
+- Ground states, gaps, frustration-freeness, thermal states and the models
+  (Heisenberg, transverse-field Ising, AKLT) go in Hamiltonians, as
+  instances of `Interaction`.
+- Time evolution, quasi-adiabatic continuation and the consequences of the
+  Lieb–Robinson bound go in Dynamics.
+- Product formulas, simulation error bounds and simulation by circuits go on
+  the circuit side, which imports Hamiltonians and Dynamics, so that imports
+  keep pointing one way.
 
 ### Generality
 
@@ -142,8 +164,10 @@ Read the statement, not the proof, and take the first line that applies:
 2. It mentions a layer, a depth, a gate count, a measurement outcome or a
    register owner → Circuits, or the Party calculus if it has owners and no
    geometry.
-3. It mentions an interaction, an energy, a gap or a time evolution →
-   Hamiltonians, or Dynamics if it needs only the terms and their supports.
+3. It mentions an energy, a ground space or a gap → Hamiltonians; it
+   mentions an interaction or a time evolution and needs only the terms and
+   their supports → Dynamics. A statement comparing a circuit with an
+   evolution → Circuits.
 4. It mentions sites, regions or supports → Sites.
 5. Otherwise it is about matrices on arbitrary finite index types → the
    existing QICLean directories (or Gates for unitary words).

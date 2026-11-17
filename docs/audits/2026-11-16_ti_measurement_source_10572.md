@@ -235,3 +235,34 @@ checking, and whitespace checks. QICLean remains pinned and checked out at
 checks/web/PDF rendering were not rerun on this review base. The PR is prepared
 as a draft pending hosted CI and mathematical review. Historical no-publication
 statements above describe the earlier stages before publication was authorized.
+
+## External auto-fix and latest-main reconciliation (2026-11-17)
+
+Remote #10814 advanced externally from `8eb78de8e` to
+`bea9be99753dfe170a8756910503f49e29dac66f`. Its commit and PR comment identify
+Claude's auto-fix of the old `sitewisePhysicalMatrix` API in
+`MPU/Examples/ShiftTildeSymmetricPhases`. The same repair subsequently landed on
+main through #10813, merge `95f5970db777f4c2fd1e16d1ac36281b84f46aff`.
+
+The reconciliation starts from the external head and merges that exact main,
+preserving the external commit as an ancestor. The only conflict is three proof
+details in `ShiftTildeSymmetricPhases`; resolve them to the exact merged #10813
+file, whose hosted build passed. The tensorPower migration is retained, without
+carrying a second version of the same unrelated repair in the campaign diff.
+The campaign's four proof modules and its mathematical scope remain unchanged.
+
+Run `44079410999` for the external head is completed with `action_required`,
+triggered by `github-actions[bot]`, with zero jobs and zero check runs. The API
+exposes no more specific approval reason; this is not a Lean elaboration result.
+No workflow approval, rerun, policy change, or merge of the PR was requested.
+
+Local reconciliation validation passes: the two campaign aggregates plus
+`TNLean.MPS.MPU.Examples.ShiftTildeSymmetricPhases` build (20,387 jobs); strict
+checks against main `95f5970db777f4c2fd1e16d1ac36281b84f46aff` pass all six
+campaign Lean files, and the reconciled MPU file separately passes the same
+strict flags. Its contents match main byte-for-byte. All four campaign proof
+modules match reviewed head `8eb78de8e` byte-for-byte. Whitespace checks pass.
+Full-root and blueprint builds were not rerun locally in this reconciliation.
+Remote main and PR head were rechecked unchanged before the normal fast-forward
+push. The existing action-required run is left untouched; fresh-head hosted
+acceptance remains required. This pass does not merge or mark ready the PR.

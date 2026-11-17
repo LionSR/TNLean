@@ -115,7 +115,7 @@ private theorem continuous_ketLeftMul_braRightMul (M : MPOTensor d D) :
 private theorem tensorPower_transpose (V : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
     (Matrix.tensorPower N V)ᵀ = Matrix.tensorPower N Vᵀ := by
   ext s t
-  simp [Matrix.tensorPower_apply]
+  simp
 
 /-! ### The swap and the swap path -/
 
@@ -184,10 +184,9 @@ private theorem swap_mul_mpo_shiftExampleU₃_mul_swap (d N : ℕ) [NeZero N] :
         Matrix.tensorPower N (shiftPhysicalSwap d) = mpo (shiftExampleU₂ d) N := by
   have h := mpo_shiftExampleTildeU₃_eq_swap_mul_tildeU₂_mul_swap d N
   rw [shiftExampleTildeU₃, shiftExampleTildeU₂, mpo_ketLeftMul, mpo_ketLeftMul] at h
-  have hP : Matrix.tensorPower N (shiftPhysicalSwap d) *
-      Matrix.tensorPower N (shiftPhysicalSwap d) = 1 := by
-    rw [Matrix.tensorPower_mul, shiftPhysicalSwap_mul_self, Matrix.tensorPower_one]
   set P := Matrix.tensorPower N (shiftPhysicalSwap d)
+  have hP : P * P = 1 := by
+    rw [Matrix.tensorPower_mul, shiftPhysicalSwap_mul_self, Matrix.tensorPower_one]
   have h2 : P * mpo (shiftExampleU₃ d) N = mpo (shiftExampleU₂ d) N * P := by
     rw [h, ← Matrix.mul_assoc, hP, Matrix.one_mul]
   rw [h2, Matrix.mul_assoc, hP, Matrix.mul_one]
@@ -202,10 +201,9 @@ private theorem swapDagger_invariant_of_conj {N : ℕ}
       Matrix.tensorPower N (shiftPhysicalSwap d) = M) :
     Matrix.tensorPower N (shiftPhysicalSwap d) * (A * M * Aᴴ)ᴴ *
         Matrix.tensorPower N (shiftPhysicalSwap d) = A * M * Aᴴ := by
-  have hPh : (Matrix.tensorPower N (shiftPhysicalSwap d))ᴴ =
-      Matrix.tensorPower N (shiftPhysicalSwap d) := by
-    rw [Matrix.conjTranspose_tensorPower, shiftPhysicalSwap_conjTranspose']
   set P := Matrix.tensorPower N (shiftPhysicalSwap d)
+  have hPh : Pᴴ = P := by
+    rw [Matrix.conjTranspose_tensorPower, shiftPhysicalSwap_conjTranspose']
   have hA' : Aᴴ * P = P * Aᴴ := by
     have := congrArg conjTranspose hA
     rwa [conjTranspose_mul, conjTranspose_mul, hPh] at this

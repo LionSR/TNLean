@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.SuppliedFourSpinSourceComparison
 import TNLean.MPS.MPU.TranspositionLocalSufficiency
+import TNLean.MPS.MPU.StandardFormFromGates
 
 /-!
 # Transposition for arbitrary supplied standard forms
@@ -15,8 +16,11 @@ Its two independent comparison unitaries combine into one unitary in the
 literal four-spin equation. No normalization of the supplied half factors
 or chosen gauge witness is required.
 
-Ambient canonical form II is explicit; minimal cut ranks do not eliminate
-virtual padding. This is no restriction relative to the source, whose
+The sufficiency direction needs no canonical form: it holds for every
+supplied square standard form, and in particular for the tensor in standard
+form built from any two unitary gates. The necessity direction keeps ambient
+canonical form II explicit; minimal cut ranks do not eliminate virtual padding.
+This is no restriction relative to the source, whose
 standard forms are those of canonical tensors, and the source proposition is
 `MPOTensor.IsMPUCanonicalFormII.standardForm_even_transposition_iff`; see
 `docs/paper-gaps/mpu_standard_form_canonical_convention.tex`. The finite-chain
@@ -183,14 +187,16 @@ theorem exists_transposition_certificate
 
 
 /-- A supplied square standard form's literal four-spin phase equation
-implies transpose symmetry on every positive even standard-form ring in the
-explicit ambient canonical scope. All normalized factors and comparison
-gauges are derived internally. Source: CPSV17, `prop:local-char-transposition`,
-`UUtransposetrick`, lines 1266–1288. -/
+implies transpose symmetry on every positive even standard-form ring. No
+canonical form of the ambient tensor is needed: the doubled standard form
+of the two-site block carries the local certificate
+(`TwoSiteStandardFormData.mpo_blockTwo_eq_transpose_of_local_phase`).
+Source: CPSV17, `prop:local-char-transposition`, `UUtransposetrick`,
+lines 1266–1288. -/
 theorem mpo_even_eq_transpose_of_transposition_certificate
     {d D : ℕ} {W : MPOTensor (d * d) D}
     {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
-    (S : TwoSiteStandardFormData W u v) (hW : IsMPUCanonicalFormII W)
+    (S : TwoSiteStandardFormData W u v)
     (c : ℂ) (hc : ‖c‖ = 1)
     (x : Matrix.unitaryGroup (Fin d × Fin d) ℂ)
     (hlocal : staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u) =
@@ -199,58 +205,18 @@ theorem mpo_even_eq_transpose_of_transposition_certificate
         (staircaseMiddle (A := Fin d) (E := Fin d) v)ᵀ)
     (N : ℕ) (hN : 1 < N) (heven : Even N) : mpo W N = (mpo W N)ᵀ := by
   classical
-  let T := sourceFactors W hW.ρ hW.ρ_posDef
-  have hr : r[W] = d * d := S.sourceRanks_eq.1
-  have hl : ℓ[W] = d * d := S.sourceRanks_eq.2
-  let A := Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr))
-    (Equiv.refl _) (SourceFactors.sourceU W T)
-  let B := Matrix.reindex (Equiv.refl _)
-    (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV W T)
   let e : (Fin d × Fin d) ≃ Fin (d * d) := finProdFinEquiv
-  let p := Equiv.prodCongr e e
   let x' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
     ⟨Matrix.reindex e e x, Matrix.reindex_mem_unitaryGroup e _ x.property⟩
-  let A₀ := Matrix.reindex p p
-    (staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u))
-  let B₀ := Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v)
-  have hraw : A₀ = c •
+  have hraw : doubledU u v = c •
       ((x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
-          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᵀ) * B₀ᵀ := by
+          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᵀ) * (doubledV v)ᵀ := by
+    rw [doubledU_eq_reindex_staircase, doubledV_eq_reindex_staircase]
     exact Matrix.reindex_transposition_certificate e hlocal
-  obtain ⟨X, Y, hu, hv⟩ := S.exists_fourSpin_selected_source_gate_gauges_of_square_ranks hW
-  have hXY := (Matrix.isUnitaryBetween_coe_unitaryGroup X).kronecker _ _
-    (Matrix.isUnitaryBetween_coe_unitaryGroup Y)
-  have hYX := (Matrix.isUnitaryBetween_coe_unitaryGroup Y).kronecker _ _
-    (Matrix.isUnitaryBetween_coe_unitaryGroup X)
-  have hAcancel : ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
-      (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * A = A₀ := by
-    change ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
-        (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) *
-      Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr))
-        (Equiv.refl _) (SourceFactors.sourceU W T) = A₀
-    rw [hu, ← Matrix.mul_assoc, ← Matrix.conjTranspose_kronecker, hXY.1, Matrix.one_mul]
-  have hBcancel : B *
-      ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) =
-          B₀ := by
-    change Matrix.reindex (Equiv.refl _)
-      (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV W T) *
-        ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) =
-            B₀
-    rw [hv, Matrix.mul_assoc, ← Matrix.conjTranspose_kronecker, hYX.1, Matrix.mul_one]
-  have hraw' : ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
-      (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * A =
-      c • ((x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
-          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᵀ) *
-        (B * ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
-            (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)))ᵀ := by
-    rw [hAcancel, hBcancel]
-    exact hraw
-  obtain ⟨z, hz⟩ := transpose_certificate_of_unitary_gate_transport A B
-    (star X) (star Y) x' c (by
-      simpa only [Unitary.coe_star, Matrix.star_eq_conjTranspose,
-        Matrix.conjTranspose_conjTranspose] using hraw')
-  exact hW.mpo_even_eq_transpose_of_source_local_certificate
-    (S.isMPUSimple hW) T hr hl c hc z hz N hN heven
+  rcases heven with ⟨m, rfl⟩
+  have : NeZero m := ⟨by omega⟩
+  exact mpo_even_eq_transpose_of_blockTwo
+    (S.doubled.mpo_blockTwo_eq_transpose_of_local_phase c hc x' hraw m)
 
 /-- The literal local criterion for ANY supplied standard form in an
 explicit canonical ambient tensor, at exactly the even standard-form
@@ -277,7 +243,7 @@ theorem even_transposition_iff_exists_certificate
   · exact S.exists_transposition_certificate hW
   · rintro ⟨hr, hl, c, x, hc, hlocal⟩ N hN heven
     have S₀ := S.reindexRanks (finCongr hl) (finCongr hr)
-    exact S₀.mpo_even_eq_transpose_of_transposition_certificate hW c hc x hlocal N hN heven
+    exact S₀.mpo_even_eq_transpose_of_transposition_certificate c hc x hlocal N hN heven
 
 
 /-- The literal exponential-phase certificate of the source for any
@@ -309,5 +275,25 @@ theorem exists_transposition_exponential_certificate
   exact ⟨hr, hl, Complex.arg c, x, by simpa only [hphase] using hlocal⟩
 
 end TwoSiteStandardFormData
+
+/-- **Gate-level local certificate for transposition.** For square unitary gates `u, v`, the
+four-spin phase equation `v₂₃ u₁₂ u₃₄ = c (x ⊗ xᵀ) v₂₃ᵀ` with `|c| = 1` implies that the tensor
+in standard form built from `u, v` generates transpose-invariant operators on every ring of an
+even number of standard-form sites. As for time reversal, the equation is the four-spin one on
+two standard-form sites. Source: CPSV17, `prop:local-char-transposition`, `UUtransposetrick`,
+lines 1266–1288. -/
+theorem mpo_standardFormTensorOfGates_even_eq_transpose_of_transposition_certificate
+    {d : ℕ} [NeZero d] {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
+    (hu : u.IsUnitaryBetween) (hv : v.IsUnitaryBetween)
+    (c : ℂ) (hc : ‖c‖ = 1)
+    (x : Matrix.unitaryGroup (Fin d × Fin d) ℂ)
+    (hlocal : staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u) =
+      c • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᵀ) *
+        (staircaseMiddle (A := Fin d) (E := Fin d) v)ᵀ)
+    (N : ℕ) (hN : 1 < N) (heven : Even N) :
+    mpo (standardFormTensorOfGates u v) N = (mpo (standardFormTensorOfGates u v) N)ᵀ :=
+  (standardFormTensorOfGatesData u v hu hv).mpo_even_eq_transpose_of_transposition_certificate
+    c hc x hlocal N hN heven
 
 end MPOTensor
