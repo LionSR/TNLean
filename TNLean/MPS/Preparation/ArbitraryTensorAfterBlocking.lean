@@ -14,8 +14,8 @@ stationary matrices and mixed gaps, then apply the overlapping-sector preparatio
 The blocking length and depth constants are chosen before the chain length and accuracy.
 There is no supplied canonical form, period, transfer gap or injectivity assumption.
 
-**Scope restriction:** circuits act on grouped sites of dimension `d ^ p`, and the target is
-`blockTensor A p` on `M` grouped sites. Thus the represented physical lengths are `p * M`.
+**Scope restriction (grouped sites):** circuits act on sites of dimension `d ^ p`.
+The target is `blockTensor A p` on `M` grouped sites. Thus the represented physical lengths are `p * M`.
 Transport to circuits on the original sites and lengths not divisible by `p` remains open;
 these results do not close the unrestricted source theorem. See
 `docs/paper-gaps/mswc24_measurement_preparation_scope.tex`.
