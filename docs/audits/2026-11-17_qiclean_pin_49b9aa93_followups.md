@@ -102,9 +102,3 @@ and F9; F14 lands before the pin move that brings in QICLean's circuit core.
 | F13 | `Entropy.crossingTerms` (QICLean's temporary export) | `ManyBody.crossingTerms` | 35 |
 | F14 | `QuantumCircuit.Layer`, the ring abbreviation `BondLayer d ringBond` (`Circuit/LocalCircuit`), which collides with the `QuantumCircuit.Layer` of QICLean's circuit core (step 3C.1) | renamed `QuantumCircuit.RingLayer`, with no alias, before the pin move that brings in the core; the modules that open `QuantumCircuit` are checked for unqualified `Circuit`, `Geometry`, `GateFamily`, `Interpretation` and `KrausGate` | 13 |
 | F15 | `Matrix.toEuclideanLin_reindex_piLpCongrLeft` (`Algebra/MatrixReindexGap`), the statement of `ManyBody.toEuclideanLin_reindex_piLpCongrLeft` (LionSR/QICLean#1095) under another namespace | `ManyBody.toEuclideanLin_reindex_piLpCongrLeft` | 3 |
-
-After F7, `SquareHamiltonian L q J` and `RectangularHamiltonian L L q J` are the same structure,
-field for field, so F8 deletes the square-grid copies in
-`PEPS/Approximation/SquareAreaLawHamiltonian` and `SquareHamiltonianHermitianTerms` (about 360
-lines) in favour of the rectangular ones, as QICLean's
-`SquareInteraction L q := RectangleInteraction L L q` already does.
