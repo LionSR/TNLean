@@ -14,7 +14,11 @@ Extract binary configuration operations into `MPS/Chain/BinaryPhase` and the ide
 
 Extract GHZ tensor/sectors into `MPS/Core/GHZ` and binary-group algebra into `Algebra/ZMod2Representation`. The three CZX consumers import those shared interfaces and the identity MPU introduced by the preceding partition.
 
-At this point in the series, the checker records 12 example-import edges and 58 mutual-directory pairs. Each unit removes only entries that its source changes resolve.
+### preparation
+
+GHZSectorParent imports the shared GHZ tensor/sectors from the preceding partition.
+
+At this point in the series, the checker records 11 example-import edges and 57 mutual-directory pairs. Each unit removes only entries that its source changes resolve.
 
 ## Compatibility semantics
 
