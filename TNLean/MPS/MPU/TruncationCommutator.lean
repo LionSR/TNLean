@@ -118,7 +118,7 @@ theorem onSiteTruncation_univ (u : Matrix ι ι ℂ) :
 /-- A truncation of an on-site symmetry with `u† u = 1` satisfies the same relation. -/
 theorem onSiteTruncation_conjTranspose_mul_self {u : Matrix ι ι ℂ} (hu : uᴴ * u = 1)
     (S : Finset (Fin N)) : (onSiteTruncation u S)ᴴ * onSiteTruncation u S = 1 := by
-  rw [onSiteTruncation, finKronecker_conjTranspose, finKronecker_mul]
+  rw [onSiteTruncation, finKronecker_conjTranspose, ← finKronecker_mul]
   convert finKronecker_one (α := fun _ : Fin N ↦ ι) using 2
   funext k
   split_ifs <;> simp [hu]
@@ -131,7 +131,7 @@ theorem groupCommutator_onSiteTruncation {u : Matrix ι ι ℂ} (hu : uᴴ * u =
     (S₁ S₂ : Finset (Fin N)) :
     groupCommutator (onSiteTruncation u S₁) (onSiteTruncation u S₂) = 1 := by
   rw [groupCommutator, onSiteTruncation, onSiteTruncation, finKronecker_conjTranspose,
-    finKronecker_conjTranspose, finKronecker_mul, finKronecker_mul, finKronecker_mul]
+    finKronecker_conjTranspose, ← finKronecker_mul, ← finKronecker_mul, ← finKronecker_mul]
   convert finKronecker_one (α := fun _ : Fin N ↦ ι) using 2
   funext k
   split_ifs <;> simp [hu, Matrix.mul_assoc]
@@ -185,7 +185,7 @@ theorem groupCommutator_dressed_onSiteTruncation_pauliX {S₁ S₂ : Finset (Fin
     (hj₁ : j₁ ∈ S₂) (hj₂ : j₂ ∉ S₁) (hj : j₁ ≠ j₂) :
     groupCommutator (onSiteTruncation σZ {j₁} * onSiteTruncation σX S₁)
         (onSiteTruncation σZ {j₂} * onSiteTruncation σX S₂) = -1 := by
-  simp only [groupCommutator, onSiteTruncation, finKronecker_mul, finKronecker_conjTranspose]
+  simp only [groupCommutator, onSiteTruncation, ← finKronecker_mul, finKronecker_conjTranspose]
   rw [← neg_one_smul ℂ (1 : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ),
     ← finKronecker_ite_smul_one (α := fun _ ↦ Fin 2) j₁]
   congr 1
