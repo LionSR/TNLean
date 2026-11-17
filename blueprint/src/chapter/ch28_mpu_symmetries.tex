@@ -2878,53 +2878,64 @@
 
 \begin{corollary}[Necessary time-reversal invariants]
     \label{cor:sigma-equivalence-necessary}
-    \notready
-    \discussion{5714}
-    \uses{prop:sigma1-and-sigma2-equal, def:strictly-equivalent-symmetry, def:equivalent-symmetry,
-        thm:mpu_sigma_strict_equivalence_necessary}
-    Strictly equivalent time-reversal-invariant MPUs have the same
-    $\sigma^{(1)}$ and $\sigma^{(2)}$. Equivalent time-reversal-invariant MPUs
-    have the same $\sigma^{(2)}$.
-    % Source lines: paper_v2.tex 1735--1743.
-\end{corollary}
-
-\begin{lemma}[The time-reversal signs are invariants of strict equivalence]
-    \label{thm:mpu_sigma_strict_equivalence_necessary}
     \lean{MPOTensor.StrictlyEquivalentUnderSymmetry.timeReversalSign_eq,
+        MPOTensor.StrictlyEquivalentUnderSymmetry.intrinsicTimeReversalSign_eq,
+        MPOTensor.timeReversalSign_eq_of_blocked_ancilla_strictlyEquivalent,
+        MPOTensor.EquivalentUnderSymmetry.timeReversalSign_eq,
+        MPOTensor.timeReversalSymmetryFamily,
+        MPOTensor.conjTranspose_tensorPhysicalIdOperator,
+        MPOTensor.timeReversalSymmetryFamily_block_selfAdjoint,
         MPOTensor.IsMPU.intrinsicTimeReversalSign_eq_one_or_neg_one,
         MPOTensor.intrinsicTimeReversalSign_eq_of_joinedIn,
+        MPOTensor.IsMPU.intrinsicTimeReversalSign_blockTensor_four_mul,
+        MPOTensor.timeReversalPeriodicTrace_tensorProduct,
+        MPOTensor.intrinsicTimeReversalSign_tensorProduct,
+        MPOTensor.intrinsicTimeReversalSign_eq_one_of_mpo_two_eq_one,
+        MPOTensor.intrinsicTimeReversalSign_blockTensor_tensorPhysicalId,
         MPOTensor.IsMPU.blockTwo, MPOTensor.mpo_blockTensor_selfAdjoint,
         MPOTensor.mpo_blockTwo_selfAdjoint}
     \leanok
-    \uses{def:strictly-equivalent-symmetry, eq:sigma-from-trace,
-        prop:sigma-well-defined, lem:mpu_canonical_intrinsic_blocking_parity}
-    Let $\mathcal U_1$ and $\mathcal U_2$ be MPUs in standard form, and let
-    $\sigma^{(1)}$ and $\sigma^{(2)}$ be the signs of standard forms of their
-    two-site blocks and of the two-site blocks of their blockings by two sites.
-    If $\mathcal U_1$ and $\mathcal U_2$ are strictly equivalent under a
-    symmetry whose invariant operators are self-adjoint on every ring whose
-    length is a positive multiple of four, such as time reversal, then
-    $\sigma^{(1)}(\mathcal U_1)=\sigma^{(1)}(\mathcal U_2)$ and
-    $\sigma^{(2)}(\mathcal U_1)=\sigma^{(2)}(\mathcal U_2)$. The tensors of the
-    connecting path need not be simple or in canonical form. This is the first
-    sentence of Corollary~\ref{cor:sigma-equivalence-necessary}; its second
-    sentence uses Definition~\ref{def:equivalent-symmetry} and remains open.
-    % Source lines: paper_v2.tex 1735--1740, first sentence.
-\end{lemma}
+    \discussion{5714}
+    \uses{prop:sigma1-and-sigma2-equal, def:strictly-equivalent-symmetry, def:equivalent-symmetry}
+    Strictly equivalent time-reversal-invariant MPUs have the same
+    $\sigma^{(1)}$ and $\sigma^{(2)}$. Equivalent time-reversal-invariant MPUs
+    have the same $\sigma^{(2)}$.
+
+    Here an MPU in standard form is read as in Lemma~\ref{PropChiral}: the
+    signs are those of standard forms of the two-site block and of the
+    two-site block of the blocking by two sites, and time reversal is
+    self-adjointness on the rings of an even number of standard-form sites
+    \cite{gap:mpu_standard_form_parity_gap}. Equivalence is
+    Definition~\ref{def:equivalent-symmetry}, with time reversal acting by the
+    adjoint at the enlarged physical dimension; the adjoint commutes with
+    adjoining identity ancillas, so the coherence required in
+    \cite{gap:mpu_symmetry_ancilla_transport} holds for it. The ancilla
+    dimensions need not be coprime, and the physical dimensions of the two
+    MPUs need not agree.
+    % Source lines: paper_v2.tex 1735--1743.
+\end{corollary}
 
 \begin{proof}\leanok
-    \uses{lem:mpu_source_time_reversal_sign_independent,
-        lem:mpu_intrinsic_blocking_parity}
+    \uses{prop:sigma-well-defined, lem:mpu_source_time_reversal_sign_independent,
+        lem:mpu_intrinsic_blocking_parity, lem:mpu_canonical_intrinsic_blocking_parity}
     Every MPU whose operators are self-adjoint on the rings of even length has
     intrinsic trace sign $\pm1$: for a canonical representative the blocked
     traces are $\eta^kC$ with $\eta=\pm1$, and at the even length $2D^4$ the
     blocked tensor is simple, so its trace is a standard-form sign and
-    $C=\pm1$. Along the connecting path the operators of the two-site blocks,
-    and of the two-site blocks of the blockings by two sites, are self-adjoint
-    on the rings of even length. The two intrinsic signs are continuous and
-    take values $\pm1$, so they are constant on the path. At its endpoints they
-    are $\sigma^{(1)}$ and $\sigma^{(2)}$ of $\mathcal U_1$ and $\mathcal U_2$,
-    since a sign depends only on the operator on a ring of two sites.
+    $C=\pm1$. Along a path of strict equivalence the operators of the
+    two-site blocks, and of the two-site blocks of the blockings by two sites,
+    are self-adjoint on the rings of even length; the two intrinsic signs are
+    continuous with values $\pm1$, hence constant, and at the endpoints they
+    are $\sigma^{(1)}$ and $\sigma^{(2)}$. This proves the first sentence.
+
+    For the second, strict equivalence of
+    $(\mathcal U_1^{(p_a)})_k$ and $(\mathcal U_2^{(p_b)})_k$ gives equality of
+    their second signs. The trace sign is multiplicative under independent
+    tensor products and an identity ancilla has sign $1$, so the second sign of
+    $(\mathcal U^{(p)})_k$ is the sign of the blocking of $\mathcal U$ by $4k$
+    sites. By Theorem~\ref{prop:sigma1-and-sigma2-equal}, applied to the
+    two-site block, this is the sign of the blocking by four sites, namely
+    $\sigma^{(2)}(\mathcal U)$.
 \end{proof}
 
 \begin{lemma}[Local comparison of the conjugation signs]

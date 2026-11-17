@@ -22,8 +22,8 @@ a multiple of four, which are the rings of an even number of standard-form sites
 (`docs/paper-gaps/mpu_standard_form_parity_gap.tex`). The symmetry of strict equivalence is
 any finite-chain symmetry that imposes this, such as `daggerSymmetry`.
 
-The second sentence of the corollary, for equivalence after blocking and ancillas, uses
-Definition `def:equivalent-symmetry`, which is not formalized; it is not stated here.
+The second sentence of the corollary, for equivalence after blocking and identity ancillas, is
+`EquivalentUnderSymmetry.timeReversalSign_eq` in `TimeReversalEquivalence.lean`.
 
 ## Main results
 
@@ -32,8 +32,10 @@ Definition `def:equivalent-symmetry`, which is not formalized; it is not stated 
   canonical form is assumed.
 * `MPOTensor.intrinsicTimeReversalSign_eq_of_joinedIn`: the intrinsic sign is constant along a
   path of such MPUs.
+* `MPOTensor.StrictlyEquivalentUnderSymmetry.intrinsicTimeReversalSign_eq`: strict equivalence
+  fixes both intrinsic signs, between tensors of equal physical dimension.
 * `MPOTensor.StrictlyEquivalentUnderSymmetry.timeReversalSign_eq`: the corollary for strict
-  equivalence.
+  equivalence, for the gates of supplied standard forms.
 -/
 
 open scoped Matrix Kronecker
@@ -135,6 +137,74 @@ theorem IsMPU.blockTwo {X : MPOTensor d D} (hX : IsMPU X) : IsMPU (blockTwo X) :
   rw [blockTwo_eq_blockTensor_reindex]
   exact (hX.blockTensor 2 (by norm_num)).reindexPhysical (twoSiteBlockEquiv d)
 
+/-- **Strict equivalence under time reversal fixes both intrinsic signs.** If `U` and `V` are
+strictly equivalent under a symmetry that imposes self-adjointness on every ring whose length is a
+positive multiple of four, the intrinsic signs of their two-site blocks agree, and so do those of
+the two-site blocks of their blockings by two. The physical dimensions are equal but need not be
+equal by definition.
+
+Source: arXiv:1703.09188, corollary after Proposition `prop:sigma1-and-sigma2-equal`, lines
+1735--1740, with Definition `def:strictly-equivalent-symmetry`, lines 1345--1354. -/
+theorem StrictlyEquivalentUnderSymmetry.intrinsicTimeReversalSign_eq {da db Da Db : ℕ}
+    [NeZero db] [NeZero Da] {S : FiniteChainOperatorSymmetry db}
+    (hS : ∀ N : ℕ, 0 < N → 4 ∣ N → N ∈ S.applicable ∧
+      ∀ X : Matrix (Fin N → Fin db) (Fin N → Fin db) ℂ, S.action X = X → X = Xᴴ)
+    {U : MPOTensor da Da} {V : MPOTensor db Db} {hphys : da = db}
+    (h : StrictlyEquivalentUnderSymmetry S U V hphys) :
+    intrinsicTimeReversalSign (MPOTensor.blockTwo U) =
+        intrinsicTimeReversalSign (MPOTensor.blockTwo V) ∧
+      intrinsicTimeReversalSign (MPOTensor.blockTwo (MPOTensor.blockTensor U 2)) =
+        intrinsicTimeReversalSign (MPOTensor.blockTwo (MPOTensor.blockTensor V 2)) := by
+  subst hphys
+  obtain ⟨-, -, D', ha, hb, hpath⟩ := h
+  have : NeZero D' := ⟨by have := NeZero.pos Da; omega⟩
+  have : NeZero (da * da) := ⟨mul_ne_zero (NeZero.ne da) (NeZero.ne da)⟩
+  have : NeZero (Kraus.blockPhysDim da 2 * Kraus.blockPhysDim da 2) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
+    exact mul_ne_zero (pow_ne_zero _ (NeZero.ne da)) (pow_ne_zero _ (NeZero.ne da))⟩
+  set s := {W : MPOTensor da D' | IsMPU W ∧ IsInvariantUnderSymmetry S W}
+  have hTRs : ∀ W ∈ s, ∀ N : ℕ, 0 < N → 4 ∣ N → mpo W N = (mpo W N)ᴴ := by
+    intro W hW N hN h4
+    obtain ⟨happ, hsa⟩ := hS N hN h4
+    exact hsa _ (hW.2 happ)
+  have hX : reindexPhysical (finCongr (rfl : da = da)).symm (padBond U D' ha) =
+      padBond U D' ha := rfl
+  rw [hX] at hpath
+  have hpad : ∀ {E : ℕ} (W : MPOTensor da E) (hE : E ≤ D') (N : ℕ), 0 < N →
+      mpo (padBond W D' hE) N = mpo W N := by
+    intro E W hE N hN
+    have : NeZero N := ⟨hN.ne'⟩
+    exact mpo_padBond W hE N
+  have hpad₂ : ∀ {E : ℕ} (W : MPOTensor da E) (hE : E ≤ D') (N : ℕ), 0 < N →
+      mpo (MPOTensor.blockTensor (padBond W D' hE) 2) N =
+        mpo (MPOTensor.blockTensor W 2) N := by
+    intro E W hE N hN
+    rw [mpo_blockTensor_eq_reindex, mpo_blockTensor_eq_reindex, hpad W hE _ (by omega)]
+  constructor
+  · have hj := hpath.map (continuous_blockTwo (d := da) (D := D')).continuousOn
+    have hconst := intrinsicTimeReversalSign_eq_of_joinedIn ?_ hj
+    · rw [← intrinsicTimeReversalSign_eq_of_mpo_two_eq
+          (mpo_blockTwo_eq_of_mpo_eq (hpad U ha) 2 (by norm_num)), hconst,
+        intrinsicTimeReversalSign_eq_of_mpo_two_eq
+          (mpo_blockTwo_eq_of_mpo_eq (hpad V hb) 2 (by norm_num))]
+    · rintro _ ⟨W, hW, rfl⟩
+      refine ⟨hW.1.blockTwo, fun N hN heven ↦ mpo_blockTwo_selfAdjoint (hTRs W hW _ ?_ ?_)⟩
+      · omega
+      · obtain ⟨m, rfl⟩ := heven
+        exact ⟨m, by ring⟩
+  · have hj := hpath.map ((continuous_blockTwo (d := Kraus.blockPhysDim da 2)
+      (D := D')).comp (continuous_blockTensor (d := da) (D := D') 2)).continuousOn
+    have hconst := intrinsicTimeReversalSign_eq_of_joinedIn ?_ hj
+    · rw [← intrinsicTimeReversalSign_eq_of_mpo_two_eq
+          (mpo_blockTwo_eq_of_mpo_eq (hpad₂ U ha) 2 (by norm_num))]
+      exact hconst.trans (intrinsicTimeReversalSign_eq_of_mpo_two_eq
+        (mpo_blockTwo_eq_of_mpo_eq (hpad₂ V hb) 2 (by norm_num)))
+    · rintro _ ⟨W, hW, rfl⟩
+      refine ⟨(hW.1.blockTensor 2 (by norm_num)).blockTwo, fun N hN heven ↦
+        mpo_blockTwo_selfAdjoint (mpo_blockTensor_selfAdjoint (hTRs W hW _ ?_ ?_))⟩
+      · omega
+      · exact ⟨N, by ring⟩
+
 /-- **The time-reversal signs are invariants of strict equivalence.** Let `𝒰₁ = V₁` and
 `𝒰₂ = V₂` be MPUs in standard form, with standard-form gates `u₁, v₁` and `u₂, v₂` of their
 two-site blocks and `a₁, b₁` and `a₂, b₂` of the two-site blocks of their blockings by two
@@ -166,62 +236,10 @@ theorem StrictlyEquivalentUnderSymmetry.timeReversalSign_eq {D₁ D₂ : ℕ}
     (T₂ : TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor V₂ 2)) a₂ b₂) :
     timeReversalSign u₁ v₁ = timeReversalSign u₂ v₂ ∧
       timeReversalSign a₁ b₁ = timeReversalSign a₂ b₂ := by
-  obtain ⟨-, -, D', ha, hb, hpath⟩ := h
   have : NeZero d := ⟨S₁.phys_pos.ne'⟩
-  have : NeZero D' := ⟨by have := S₁.bond_pos; omega⟩
-  have : NeZero (d * d) := ⟨mul_ne_zero (NeZero.ne d) (NeZero.ne d)⟩
-  have : NeZero (Kraus.blockPhysDim d 2) := ⟨by
-    rw [Kraus.blockPhysDim_eq_pow]
-    exact pow_ne_zero _ (NeZero.ne d)⟩
-  have : NeZero (Kraus.blockPhysDim d 2 * Kraus.blockPhysDim d 2) :=
-    ⟨mul_ne_zero (NeZero.ne _) (NeZero.ne _)⟩
-  set s := {W : MPOTensor d D' | IsMPU W ∧ IsInvariantUnderSymmetry S W}
-  -- Invariance under `S` is time reversal on rings whose length is a multiple of four.
-  have hTRs : ∀ W ∈ s, ∀ N : ℕ, 0 < N → 4 ∣ N → mpo W N = (mpo W N)ᴴ := by
-    intro W hW N hN h4
-    obtain ⟨happ, hsa⟩ := hS N hN h4
-    exact hsa _ (hW.2 happ)
-  -- The endpoints of the path have the operators of `V₁` and `V₂`.
-  have hX : reindexPhysical (finCongr (rfl : d = d)).symm (padBond V₁ D' ha) =
-      padBond V₁ D' ha := rfl
-  rw [hX] at hpath
-  have hpad : ∀ {E : ℕ} (V : MPOTensor d E) (hE : E ≤ D') (N : ℕ), 0 < N →
-      mpo (padBond V D' hE) N = mpo V N := by
-    intro E V hE N hN
-    have : NeZero N := ⟨hN.ne'⟩
-    exact mpo_padBond V hE N
-  have hpad₂ : ∀ {E : ℕ} (V : MPOTensor d E) (hE : E ≤ D') (N : ℕ), 0 < N →
-      mpo (MPOTensor.blockTensor (padBond V D' hE) 2) N =
-        mpo (MPOTensor.blockTensor V 2) N := by
-    intro E V hE N hN
-    rw [mpo_blockTensor_eq_reindex, mpo_blockTensor_eq_reindex, hpad V hE _ (by omega)]
-  constructor
-  · -- The first sign is constant along the two-site blocks of the path.
-    have hj := hpath.map (continuous_blockTwo (d := d) (D := D')).continuousOn
-    have hconst := intrinsicTimeReversalSign_eq_of_joinedIn ?_ hj
-    · rw [S₁.timeReversalSign_eq_intrinsic, S₂.timeReversalSign_eq_intrinsic,
-        ← intrinsicTimeReversalSign_eq_of_mpo_two_eq
-          (mpo_blockTwo_eq_of_mpo_eq (hpad V₁ ha) 2 (by norm_num)), hconst,
-        intrinsicTimeReversalSign_eq_of_mpo_two_eq
-          (mpo_blockTwo_eq_of_mpo_eq (hpad V₂ hb) 2 (by norm_num))]
-    · rintro _ ⟨W, hW, rfl⟩
-      refine ⟨hW.1.blockTwo, fun N hN heven ↦ mpo_blockTwo_selfAdjoint (hTRs W hW _ ?_ ?_)⟩
-      · omega
-      · obtain ⟨m, rfl⟩ := heven
-        exact ⟨m, by ring⟩
-  · -- The second sign is constant along the two-site blocks of the blocked path.
-    have hj := hpath.map ((continuous_blockTwo (d := Kraus.blockPhysDim d 2)
-      (D := D')).comp (continuous_blockTensor (d := d) (D := D') 2)).continuousOn
-    have hconst := intrinsicTimeReversalSign_eq_of_joinedIn ?_ hj
-    · rw [T₁.timeReversalSign_eq_intrinsic, T₂.timeReversalSign_eq_intrinsic,
-        ← intrinsicTimeReversalSign_eq_of_mpo_two_eq
-          (mpo_blockTwo_eq_of_mpo_eq (hpad₂ V₁ ha) 2 (by norm_num))]
-      exact hconst.trans (intrinsicTimeReversalSign_eq_of_mpo_two_eq
-        (mpo_blockTwo_eq_of_mpo_eq (hpad₂ V₂ hb) 2 (by norm_num)))
-    · rintro _ ⟨W, hW, rfl⟩
-      refine ⟨(hW.1.blockTensor 2 (by norm_num)).blockTwo, fun N hN heven ↦
-        mpo_blockTwo_selfAdjoint (mpo_blockTensor_selfAdjoint (hTRs W hW _ ?_ ?_))⟩
-      · omega
-      · exact ⟨N, by ring⟩
+  have : NeZero D₁ := ⟨S₁.bond_pos.ne'⟩
+  obtain ⟨h₁, h₂⟩ := h.intrinsicTimeReversalSign_eq hS
+  exact ⟨by rw [S₁.timeReversalSign_eq_intrinsic, S₂.timeReversalSign_eq_intrinsic, h₁],
+    by rw [T₁.timeReversalSign_eq_intrinsic, T₂.timeReversalSign_eq_intrinsic, h₂]⟩
 
 end MPOTensor

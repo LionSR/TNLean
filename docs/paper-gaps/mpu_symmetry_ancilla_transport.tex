@@ -56,6 +56,21 @@ The symmetry family supplies the condition in
     \leanid{MPOTensor.EquivalentUnderSymmetry} defines the
     coherent-family equivalence.}
 
+\section{Canonical actions}
+
+For conjugation and time reversal the source fixes the action at every
+physical dimension: entrywise complex conjugation in the computational basis,
+and the adjoint \cite[lines~965--973]{Cirac2017MPU}. These actions are defined
+on the full enlarged operator algebra, and they satisfy
+(\ref{eq:mpu_symmetry_ancilla_transport_semiconjugacy}) as a theorem, since
+$I_{x^N}$ is real and self-adjoint. For these two families the coherent-family
+definition is therefore the source definition with the source's own action,
+apart from the coprimality of the ancilla dimensions discussed next.\footnote{Formal
+    declarations: \leanid{MPOTensor.conjugationSymmetryFamily} and
+    \leanid{MPOTensor.timeReversalSymmetryFamily}. The corollary on the
+    time-reversal signs is also stated without coprimality, in
+    \leanid{MPOTensor.timeReversalSign_eq_of_blocked_ancilla_strictlyEquivalent}.}
+
 \section{Additional common ancillas}
 
 The preliminary equivalence convention chooses positive coprime ancilla
