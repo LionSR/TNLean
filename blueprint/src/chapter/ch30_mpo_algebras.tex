@@ -1120,11 +1120,16 @@ Theorem~\ref{thm:mpug_anomaly_obstruction}.
     $N_{ab}^c$ and biorthogonal maps $V_{ab}^{c\mu},W_{ab}^{c\mu}$ with
     \begin{align}
         \sum_j T_a^{ij}\otimes T_b^{jk}
-         & =\sum_{c,\mu}V_{ab}^{c\mu}T_c^{ik}W_{ab}^{c\mu},
-         & W_{ab}^{c\mu}V_{ab}^{e\nu}
+         & =\sum_{c,\mu}W_{ab}^{c\mu}T_c^{ik}V_{ab}^{c\mu},
+         & V_{ab}^{c\mu}W_{ab}^{e\nu}
          & =\delta_{ce}\delta_{\mu\nu}\Id.
         \label{eq:mpoalg_cosemisimple_fusion}
     \end{align}
+    Here $V_{ab}^{c\mu}:\C^{D_a}\otimes\C^{D_b}\to\C^{D_c}$ is the
+    analysis map, and $W_{ab}^{c\mu}:\C^{D_c}\to\C^{D_a}\otimes\C^{D_b}$
+    is the synthesis map. For $c=e$, the identity in
+    (\ref{eq:mpoalg_cosemisimple_fusion}) acts on $\C^{D_c}$; for $c\ne e$,
+    the right side is the zero map from $\C^{D_e}$ to $\C^{D_c}$.
     Both zipper identities and a simultaneous one-letter inverse hold
     without physical blocking. The boundary algebra has the fusion
     pre-bialgebra structure with counit $\psi(f)\mapsto f(\Id)$.
