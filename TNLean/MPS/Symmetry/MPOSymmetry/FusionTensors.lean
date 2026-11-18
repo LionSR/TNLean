@@ -44,6 +44,16 @@ periodic-boundary relation `O_a ψ_{A_x} = ∑_y M_{a,x}^y ψ_{A_y}` (lines 567-
 * `MPOTensor.IsMPOFusionAlgebra.exists_fusionTensors`: the same for a matrix product operator
   fusion algebra.
 * `MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum`: action tensors with multiplicity.
+* `MPSTensor.NilpotentBiorthogonalReductions`: biorthogonal reductions onto a finite family of
+  blocks with a nilpotent remainder, and
+  `MPSTensor.MultiBlockCompression.toNilpotentBiorthogonalReductions`, which reads one off a
+  multi-block compression.
+* `MPOTensor.FusionTensors`, `MPOTensor.ActionTensors`: the fusion tensors of a pair of labels
+  and the action tensors of a label on a block, as such reductions.
+* `MPOTensor.IsMPOFusionAlgebra.nonempty_fusionTensors`: every pair of labels of a fusion
+  algebra of normal tensors of positive bond dimension has fusion tensors.
+* `MPOTensor.nonempty_actionTensors_of_mpo_mulVec_eq_sum`: action tensors exist under a
+  periodic action with nonnegative integer multiplicities.
 * `MPOTensor.exists_boundary_dressed_proportional_of_mpo_mul_eq`: the gauge freedom of the
   fusion tensors of a multiplicity-free single fusion channel is one nonzero scalar, after
   sufficiently long words.
