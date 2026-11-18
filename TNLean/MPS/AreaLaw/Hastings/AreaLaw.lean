@@ -58,7 +58,9 @@ printed `2^{ξ' ln q}` of eq. `smd`. Documented in
   478–503.
 -/
 
-open ManyBody (interval)
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (interval ChainInteraction)
 
 open TNLean.Lattice
 
