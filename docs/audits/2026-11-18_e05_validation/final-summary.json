@@ -1,0 +1,40 @@
+{
+  "production_head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+  "qic_pin": "1af32a2bf77670e4fc01a7727828bcbd49d35de3",
+  "fixture_head": "207cc00e5e8e83447d0c965a12b1cc2de8f4f1e7",
+  "status": "complete",
+  "reverse": {
+    "total": 658,
+    "build_passed": 657,
+    "strict_passed": 656,
+    "strict_failed": 1,
+    "blocked": 1,
+    "unattempted": 0
+  },
+  "build_seconds": 6429.7795374700145,
+  "strict_process_seconds": 4025.228977436018,
+  "resume_wall_seconds": 1809.946581,
+  "last_batches": [
+    {
+      "label": "reverse658-080",
+      "exit": 0,
+      "seconds": 330.3211118479958
+    },
+    {
+      "label": "reverse658-081",
+      "exit": 0,
+      "seconds": 680.8181525930122
+    },
+    {
+      "label": "reverse658-082",
+      "exit": 1,
+      "seconds": 758.7357048720005
+    },
+    {
+      "label": "reverse658-082-single0",
+      "exit": 0,
+      "seconds": 6.007764344001771
+    }
+  ],
+  "disk_free_bytes": 2319626240
+}

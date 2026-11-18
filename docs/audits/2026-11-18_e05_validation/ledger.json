@@ -3458,6 +3458,108 @@
       "free_after": 1263484928,
       "stop_reason": null,
       "log": "logs/reverse658-079.build.log"
+    },
+    {
+      "label": "reverse658-080",
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "files": [
+        "TNLean/PEPS/Approximation/DyadicExchangeChange.lean",
+        "TNLean/PEPS/Approximation/DyadicTreatedFrameBoundary.lean",
+        "TNLean/PEPS/Approximation/DyadicChangeChains.lean",
+        "TNLean/PEPS/Approximation/DyadicSheetOperationChains.lean",
+        "TNLean/PEPS/Approximation/DyadicBulkOperationChains.lean",
+        "TNLean/PEPS/Approximation/DyadicEdgeOperationChains.lean",
+        "TNLean/MPS/MPU.lean",
+        "TNLean/PEPS/Approximation/DyadicEdgeConstructionChain.lean"
+      ],
+      "command": [
+        "lake",
+        "build",
+        "TNLean.PEPS.Approximation.DyadicExchangeChange",
+        "TNLean.PEPS.Approximation.DyadicTreatedFrameBoundary",
+        "TNLean.PEPS.Approximation.DyadicChangeChains",
+        "TNLean.PEPS.Approximation.DyadicSheetOperationChains",
+        "TNLean.PEPS.Approximation.DyadicBulkOperationChains",
+        "TNLean.PEPS.Approximation.DyadicEdgeOperationChains",
+        "TNLean.MPS.MPU",
+        "TNLean.PEPS.Approximation.DyadicEdgeConstructionChain"
+      ],
+      "exit": 0,
+      "seconds": 330.3211118479958,
+      "free_before": 5564145664,
+      "free_after": 4397289472,
+      "stop_reason": null,
+      "log": "logs/reverse658-080.build.log"
+    },
+    {
+      "label": "reverse658-081",
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "files": [
+        "TNLean/MPS.lean",
+        "TNLean/PEPS/Approximation/DyadicLargeRepaintingChain.lean",
+        "TNLean/PEPS/Approximation/DyadicLargeRepaintingSegment.lean",
+        "TNLean/PEPS/Approximation/DyadicProtocolFrozenFrames.lean",
+        "TNLean/PEPS/Approximation/DyadicProtocolConsequences.lean",
+        "TNLean/PEPS/Approximation/PolynomialPEPSExplicitConstant.lean",
+        "TNLean/PEPS/Approximation/RangePolynomialPEPSClosedConstant.lean",
+        "TNLean/PEPS/Approximation/PolynomialPEPSTheorem.lean"
+      ],
+      "command": [
+        "lake",
+        "build",
+        "TNLean.MPS",
+        "TNLean.PEPS.Approximation.DyadicLargeRepaintingChain",
+        "TNLean.PEPS.Approximation.DyadicLargeRepaintingSegment",
+        "TNLean.PEPS.Approximation.DyadicProtocolFrozenFrames",
+        "TNLean.PEPS.Approximation.DyadicProtocolConsequences",
+        "TNLean.PEPS.Approximation.PolynomialPEPSExplicitConstant",
+        "TNLean.PEPS.Approximation.RangePolynomialPEPSClosedConstant",
+        "TNLean.PEPS.Approximation.PolynomialPEPSTheorem"
+      ],
+      "exit": 0,
+      "seconds": 680.8181525930122,
+      "free_before": 4397277184,
+      "free_after": 1966534656,
+      "stop_reason": null,
+      "log": "logs/reverse658-081.build.log"
+    },
+    {
+      "label": "reverse658-082",
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "files": [
+        "TNLean/PEPS/Approximation.lean",
+        "TNLean/PEPS.lean"
+      ],
+      "command": [
+        "lake",
+        "build",
+        "TNLean.PEPS.Approximation",
+        "TNLean.PEPS"
+      ],
+      "exit": 1,
+      "seconds": 758.7357048720005,
+      "free_before": 1966522368,
+      "free_after": 2320330752,
+      "stop_reason": null,
+      "log": "logs/reverse658-082.build.log"
+    },
+    {
+      "label": "reverse658-082-single0",
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "files": [
+        "TNLean/PEPS/Approximation.lean"
+      ],
+      "command": [
+        "lake",
+        "build",
+        "TNLean.PEPS.Approximation"
+      ],
+      "exit": 0,
+      "seconds": 6.007764344001771,
+      "free_before": 2320330752,
+      "free_after": 2319634432,
+      "stop_reason": null,
+      "log": "logs/reverse658-082-single0.build.log"
     }
   ],
   "results": {
@@ -19100,9 +19202,444 @@
         "seconds": 3.8940056469946285,
         "log": "logs/TNLean__PEPS__Approximation__DyadicCentralBirthChange.lean.strict.log"
       }
+    },
+    "TNLean/PEPS/Approximation/DyadicExchangeChange.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-080",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation/DyadicExchangeChange.lean"
+        ],
+        "exit": 0,
+        "seconds": 6.389098520987318,
+        "log": "logs/TNLean__PEPS__Approximation__DyadicExchangeChange.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS/Approximation/DyadicTreatedFrameBoundary.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-080",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation/DyadicTreatedFrameBoundary.lean"
+        ],
+        "exit": 0,
+        "seconds": 4.512356302002445,
+        "log": "logs/TNLean__PEPS__Approximation__DyadicTreatedFrameBoundary.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS/Approximation/DyadicChangeChains.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-080",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation/DyadicChangeChains.lean"
+        ],
+        "exit": 0,
+        "seconds": 3.8556753559969366,
+        "log": "logs/TNLean__PEPS__Approximation__DyadicChangeChains.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS/Approximation/DyadicSheetOperationChains.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-080",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation/DyadicSheetOperationChains.lean"
+        ],
+        "exit": 0,
+        "seconds": 3.61955659200612,
+        "log": "logs/TNLean__PEPS__Approximation__DyadicSheetOperationChains.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS/Approximation/DyadicBulkOperationChains.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-080",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation/DyadicBulkOperationChains.lean"
+        ],
+        "exit": 0,
+        "seconds": 3.1495800920092734,
+        "log": "logs/TNLean__PEPS__Approximation__DyadicBulkOperationChains.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS/Approximation/DyadicEdgeOperationChains.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-080",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation/DyadicEdgeOperationChains.lean"
+        ],
+        "exit": 0,
+        "seconds": 3.421412715993938,
+        "log": "logs/TNLean__PEPS__Approximation__DyadicEdgeOperationChains.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/MPU.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-080",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/MPU.lean"
+        ],
+        "exit": 0,
+        "seconds": 4.4706552470015595,
+        "log": "logs/TNLean__MPS__MPU.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS/Approximation/DyadicEdgeConstructionChain.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-080",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation/DyadicEdgeConstructionChain.lean"
+        ],
+        "exit": 0,
+        "seconds": 3.493827204001718,
+        "log": "logs/TNLean__PEPS__Approximation__DyadicEdgeConstructionChain.lean.strict.log"
+      }
+    },
+    "TNLean/MPS.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-081",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS.lean"
+        ],
+        "exit": 0,
+        "seconds": 6.304834673996083,
+        "log": "logs/TNLean__MPS.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS/Approximation/DyadicLargeRepaintingChain.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-081",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation/DyadicLargeRepaintingChain.lean"
+        ],
+        "exit": 0,
+        "seconds": 4.192726212000707,
+        "log": "logs/TNLean__PEPS__Approximation__DyadicLargeRepaintingChain.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS/Approximation/DyadicLargeRepaintingSegment.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-081",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation/DyadicLargeRepaintingSegment.lean"
+        ],
+        "exit": 0,
+        "seconds": 4.707648399999016,
+        "log": "logs/TNLean__PEPS__Approximation__DyadicLargeRepaintingSegment.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS/Approximation/DyadicProtocolFrozenFrames.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-081",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation/DyadicProtocolFrozenFrames.lean"
+        ],
+        "exit": 0,
+        "seconds": 3.7122204640036216,
+        "log": "logs/TNLean__PEPS__Approximation__DyadicProtocolFrozenFrames.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS/Approximation/DyadicProtocolConsequences.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-081",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation/DyadicProtocolConsequences.lean"
+        ],
+        "exit": 0,
+        "seconds": 8.70994164799049,
+        "log": "logs/TNLean__PEPS__Approximation__DyadicProtocolConsequences.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS/Approximation/PolynomialPEPSExplicitConstant.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-081",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation/PolynomialPEPSExplicitConstant.lean"
+        ],
+        "exit": 0,
+        "seconds": 4.744879474994377,
+        "log": "logs/TNLean__PEPS__Approximation__PolynomialPEPSExplicitConstant.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS/Approximation/RangePolynomialPEPSClosedConstant.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-081",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation/RangePolynomialPEPSClosedConstant.lean"
+        ],
+        "exit": 0,
+        "seconds": 5.307670200010762,
+        "log": "logs/TNLean__PEPS__Approximation__RangePolynomialPEPSClosedConstant.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS/Approximation/PolynomialPEPSTheorem.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-081",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation/PolynomialPEPSTheorem.lean"
+        ],
+        "exit": 0,
+        "seconds": 5.4442458740086295,
+        "log": "logs/TNLean__PEPS__Approximation__PolynomialPEPSTheorem.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS/Approximation.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-082-single0",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Approximation.lean"
+        ],
+        "exit": 0,
+        "seconds": 5.299006683999323,
+        "log": "logs/TNLean__PEPS__Approximation.lean.strict.log"
+      }
+    },
+    "TNLean/PEPS.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "blocked_by_source_error",
+      "batch": "reverse658-082",
+      "errors": [
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean",
+        "TNLean/PEPS/Examples/HoneycombCluster.lean"
+      ]
     }
   },
-  "status": "running",
-  "completed_phase": "pending39",
-  "resume_utc": "2026-11-18T14:02:24.312585+00:00"
+  "status": "complete",
+  "completed_phase": "reverse658",
+  "resume_utc": "2026-11-18T14:02:24.312585+00:00",
+  "finished_utc": "2026-11-18T14:32:34.259166+00:00"
 }

@@ -858,5 +858,45 @@
     "requested_cache_validated": 5,
     "all_rebuilt": 183,
     "mathlib_rebuilt": []
+  },
+  {
+    "batch": "reverse658-080",
+    "exit": 0,
+    "seconds": 330.3211118479958,
+    "requested": 8,
+    "requested_rebuilt": 1,
+    "requested_cache_validated": 7,
+    "all_rebuilt": 235,
+    "mathlib_rebuilt": []
+  },
+  {
+    "batch": "reverse658-081",
+    "exit": 0,
+    "seconds": 680.8181525930122,
+    "requested": 8,
+    "requested_rebuilt": 3,
+    "requested_cache_validated": 5,
+    "all_rebuilt": 513,
+    "mathlib_rebuilt": []
+  },
+  {
+    "batch": "reverse658-082",
+    "exit": 1,
+    "seconds": 758.7357048720005,
+    "requested": 2,
+    "requested_rebuilt": 1,
+    "requested_cache_validated": null,
+    "all_rebuilt": 756,
+    "mathlib_rebuilt": []
+  },
+  {
+    "batch": "reverse658-082-single0",
+    "exit": 0,
+    "seconds": 6.007764344001771,
+    "requested": 1,
+    "requested_rebuilt": 0,
+    "requested_cache_validated": 1,
+    "all_rebuilt": 0,
+    "mathlib_rebuilt": []
   }
 ]
