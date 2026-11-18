@@ -1,0 +1,14 @@
+{
+  "head": "dccc85e5607077b51822664e9d475287d300d607",
+  "pin": "729428582b78ab7529b3796099193649f947354a",
+  "manifest_sha256": "3be76199efe06cb13187899782b42b42e831e05517493585005152c9abd19d7a",
+  "targets": 77,
+  "project_closure": 1139,
+  "reused_or_previously_built": 745,
+  "pending_build": 394,
+  "cache": "/tmp/interaction-mps77-olean",
+  "old_cache_not_in_LEAN_PATH": true,
+  "workers": 1,
+  "lean_threads": 2,
+  "disk_stop_bytes": 1073741824
+}

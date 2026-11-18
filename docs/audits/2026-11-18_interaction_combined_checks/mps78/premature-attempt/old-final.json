@@ -1,0 +1,85 @@
+{
+  "time": "2026-11-18T17:33:28.953096+00:00",
+  "passed": 746,
+  "remaining": 119,
+  "historical_failures": [
+    {
+      "source_head": "6b7fb2e27dbc6856091e593e4226d350403beb8a",
+      "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+      "file": "TNLean/MPS/AreaLaw/Hastings/SpectralCutoff.lean",
+      "phase": "strict",
+      "command": [
+        "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DautoImplicit=false",
+        "-DwarningAsError=true",
+        "TNLean/MPS/AreaLaw/Hastings/SpectralCutoff.lean"
+      ],
+      "started_utc": "2026-11-18T15:07:39.826186+00:00",
+      "seconds": 8.82547666800383,
+      "exit_code": 1,
+      "method": "direct Lean (not lake build)",
+      "role": "shard_target",
+      "source_sha256": "9be907baf1d85dfc611f65611f81a784aea01878578b49633ce5bee39c4aff41"
+    },
+    {
+      "source_head": "ef098ad32a728e847957320f9cf79ddcfce5245a",
+      "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+      "file": "TNLean/MPS/AreaLaw/EntropyScaling/RenyiApproximation.lean",
+      "phase": "strict",
+      "command": [
+        "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DautoImplicit=false",
+        "-DwarningAsError=true",
+        "TNLean/MPS/AreaLaw/EntropyScaling/RenyiApproximation.lean"
+      ],
+      "started_utc": "2026-11-18T15:22:53.248673+00:00",
+      "seconds": 4.543080738003482,
+      "exit_code": 1,
+      "method": "direct Lean (not lake build)",
+      "role": "shard_target",
+      "source_sha256": "6feb5e58a671ac2d69669f32b0588f2ba303e6a9c68fc51276f8bb98d0be35ac"
+    },
+    {
+      "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+      "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+      "file": "TNLean/MPS/AreaLaw/Algorithm/Query.lean",
+      "phase": "build",
+      "command": [
+        "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-o",
+        "/tmp/pin729-mps-olean/TNLean/MPS/AreaLaw/Algorithm/Query.olean",
+        "TNLean/MPS/AreaLaw/Algorithm/Query.lean"
+      ],
+      "started_utc": "2026-11-18T16:38:39.244717+00:00",
+      "seconds": 0.09395829601271544,
+      "exit_code": 1,
+      "method": "direct Lean (not lake build)",
+      "role": "shard_target",
+      "source_sha256": "6953e1193c8b0755c1c523091ef5ced189e399218af4b02f90f72510a9271a3b"
+    }
+  ],
+  "results_sha256": "5e1a1846f503881814db420c3b7ac73d4d9f76abe9795588ac4a4581dd02a2a5",
+  "old_processes": [],
+  "runner_tail": [
+    "PASS 740 TNLean.MPS.AreaLaw.PhysicalLowDensityGlobalApproximation",
+    "PASS 741 TNLean.MPS.AreaLaw.PositiveDimensionLowDensityEntropy",
+    "PASS 742 TNLean.MPS.AreaLaw.PositiveDimensionLowDensityApproximation",
+    "PASS 743 TNLean.MPS.AreaLaw.PositiveDimensionLowDensityGlobalApproximation",
+    "PASS 744 TNLean.MPS.AreaLaw.LowDensityDesignatedApproximation",
+    "PASS 745 TNLean.MPS.AreaLaw.LowEnergyMPSBasis",
+    "PASS 746 TNLean.MPS.AreaLaw.PhysicalLDTree",
+    "CHECKPOINT {\"checkpoint\": 7, \"passed\": 746, \"remaining\": 119, \"failed_commands\": 3, \"build_seconds\": 8602.596861526079, \"strict_seconds\": 3770.0136176457163, \"stop\": null, \"free_bytes\": 12008955904}"
+  ]
+}

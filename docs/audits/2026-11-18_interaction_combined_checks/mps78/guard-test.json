@@ -1,0 +1,17 @@
+{
+  "old_runner_detected": true,
+  "active": [
+    {
+      "pid": 412863,
+      "cmd": "python3 docs/audits/2026-11-18_pin729_mps_shard/resume.py"
+    },
+    {
+      "pid": 466682,
+      "cmd": "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -o /tmp/pin729-mps-olean/TNLean/MPS/AreaLaw/PhysicalDGCanonicalApproximation.olean TNLean/MPS/AreaLaw/PhysicalDGCanonicalApproximation.lean"
+    },
+    {
+      "pid": 466690,
+      "cmd": "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DautoImplicit=false -DwarningAsError=true TNLean/MPS/AreaLaw/ALVV/FrustrationFreeTree.lean"
+    }
+  ]
+}

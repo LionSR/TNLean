@@ -1,0 +1,10 @@
+{
+  "time": "2026-11-18T17:34:29.393717+00:00",
+  "error": "cwd/exe PermissionError was swallowed and incorrectly treated as no process; corrected to readable cmdline, known PID failure closed, conservative all-Lean wait",
+  "old_queue_interrupted": false,
+  "premature_new_queue_stopped": true,
+  "premature_results_counted": false,
+  "old_final_marker_invalidated": true,
+  "quarantine": "premature-attempt; /tmp/interaction-mps77-premature-cache",
+  "new_queue_restart_requires": "verified old writer exit using corrected detector"
+}

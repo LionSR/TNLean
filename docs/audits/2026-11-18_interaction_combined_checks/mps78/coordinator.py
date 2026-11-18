@@ -15,13 +15,19 @@ def rows(path):return [json.loads(x) for x in path.read_text().splitlines()] if 
 def append(path,data):
  with path.open('a') as f:f.write(json.dumps(data)+'\n');f.flush();os.fsync(f.fileno())
 def old_processes():
+ # cmdline is readable here; cwd/exe symlinks can be denied by sandbox.
+ # Conservatively wait for any existing Lean writer before a new serial command.
  found=[]
  for p in Path('/proc').iterdir():
   if not p.name.isdigit() or int(p.name)==os.getpid():continue
   try:
-   cmd=(p/'cmdline').read_bytes().replace(b'\0',b' ').decode();cwd=os.readlink(p/'cwd');exe=os.path.basename(os.readlink(p/'exe'))
-   if ('python' in exe and '2026-11-18_pin729_mps_shard/resume.py' in cmd) or (exe=='lean' and (cwd==str(OLD) or str(OLD_CACHE) in cmd or (cwd==str(ROOTS['QICLean']) and str(CACHE) not in cmd))):found.append({'pid':int(p.name),'cmd':cmd})
-  except (FileNotFoundError,PermissionError,ProcessLookupError):pass
+   raw=(p/'cmdline').read_bytes();args=[x.decode() for x in raw.split(b'\0') if x]
+   if not args:continue
+   exe=os.path.basename(args[0]);cmd=' '.join(args)
+   if ('python' in exe and '2026-11-18_pin729_mps_shard/resume.py' in cmd) or exe=='lean':found.append({'pid':int(p.name),'cmd':cmd})
+  except (FileNotFoundError,ProcessLookupError):pass
+  except PermissionError:
+   if p.name=='412863':found.append({'pid':412863,'cmd':'known old runner unreadable; fail closed'})
  return found
 def publish(repo,paths,message):
  log=OUT/'publication.log'

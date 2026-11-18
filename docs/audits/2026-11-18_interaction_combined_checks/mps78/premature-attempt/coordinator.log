@@ -1,0 +1,28 @@
+{"selected": 865, "build_and_strict_passed": 746, "not_completed": 119, "historical_failed_commands": 3, "unresolved_failed_targets": 0, "build_commands": 2366, "strict_commands": 748, "build_seconds": 8820.394992816102, "strict_seconds": 3770.0136176457163, "production_edit_seconds": null, "production_edit_note": "Two authorized lines changed in separate isolated fix commits; edit time not separately measured. Prior validation phase had zero production edits.", "state": "running; resume.py continues bounded batches", "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b"}
+{
+  "head": "dccc85e5607077b51822664e9d475287d300d607",
+  "production_head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "manifest_sha256": "e44f7a56247de8b4583cfaa8676114189a01e9a0f0f68ff4b420012488ea488e",
+  "selected": 78,
+  "excluded_prior_passes": 8,
+  "project_closure": 1887,
+  "reusable": 761,
+  "requires_compile": 1126,
+  "reasons": {
+    "source changed or no completed-source evidence": 1084,
+    "exact source/artifact and all project dependencies match": 761,
+    "transitive dependency cannot be reused": 42
+  },
+  "cache_action": "read-only inspection only; independent overlay not populated while old queue remains active",
+  "package_manifest_identical": true,
+  "toolchain_identical": true,
+  "old_queue_pid": 412863,
+  "new_compiler_started": false,
+  "handoff_condition": "old queue finishes/drains all compiler writers; then refresh hash plan and copy only eligible completed artifacts to independent overlay. Retain 1 GiB disk guard; do not add workers to existing 2-worker queue."
+}
+{"time": "2026-11-18T17:33:34.699855+00:00", "coordinator_pid": 466361, "state": "compiling", "module": "QICLean.ManyBody.Hamiltonian.Models", "compiler_pid": 466516, "passed": 0, "remaining": 77}
+{"time": "2026-11-18T17:33:36.637746+00:00", "coordinator_pid": 466361, "state": "compiling", "module": "TNLean.MPS.AreaLaw.Hamiltonian", "compiler_pid": 466536, "passed": 0, "remaining": 77}
+{"time": "2026-11-18T17:33:38.910564+00:00", "coordinator_pid": 466361, "state": "compiling", "module": "TNLean.MPS.AreaLaw.DoubledHamiltonian", "compiler_pid": 466549, "passed": 0, "remaining": 77}
+{"time": "2026-11-18T17:33:41.756184+00:00", "coordinator_pid": 466361, "state": "strict", "module": "TNLean.MPS.AreaLaw.DoubledHamiltonian", "compiler_pid": 466567, "passed": 0, "remaining": 77}
+{"time": "2026-11-18T17:33:44.526966+00:00", "coordinator_pid": 466361, "state": "compiling", "module": "TNLean.MPS.AreaLaw.RangeOneCut", "compiler_pid": 466580, "passed": 1, "remaining": 76}

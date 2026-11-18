@@ -2331,8 +2331,8 @@
     "dependencies": [
       "QICLean.Analysis.MatrixSqrt"
     ],
-    "reusable": false,
-    "reason": "source changed or no completed-source evidence"
+    "reusable": true,
+    "reason": "exact source/artifact and all project dependencies match"
   },
   {
     "module": "QICLean.Analysis.ResolventMellin",
