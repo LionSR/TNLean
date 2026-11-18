@@ -1,0 +1,13 @@
+{
+  "production_head": "a28f35a6b916ee5a24d3836a31d13d74f832e11f",
+  "pin": "729428582b78ab7529b3796099193649f947354a",
+  "resume_passed": 27,
+  "total_in_591_passed": 151,
+  "remaining": 440,
+  "failures": [],
+  "runner_pid": 113318,
+  "session": 71491,
+  "still_running": true,
+  "free_GiB": 3.3174896240234375,
+  "pending_after_closure": "TNLean.PEPS root build and strict in this warm environment; not started"
+}
