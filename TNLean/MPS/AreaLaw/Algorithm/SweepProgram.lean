@@ -27,7 +27,7 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, algorithm steps 1--4, lines 379-
 456--487, 549--559 and 572--592, and the proof of Theorem 1, lines 652--668.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval ChainInteraction)
 
 open Matrix Cslib
 open scoped ComplexOrder MatrixOrder
@@ -111,7 +111,7 @@ the net of boundary contractions, and at every feasible net point solve the size
 convex program and keep the left columns of the leading eigenvector of its solution. The
 family `S` consists of `b`-bounded matrix product states. LVV13, `algo53.tex`, lines
 456--487. -/
-noncomputable def sizeTrimmingProgram (L k b : ℕ) (h : ChainHamiltonian L q 1 1)
+noncomputable def sizeTrimmingProgram (L k b : ℕ) (h : ChainInteraction L q 1)
     (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
     LVVProgram q (Finset (LeftBlockVector L q k)) :=
   haveI : NeZero q := ⟨by omega⟩
@@ -149,14 +149,14 @@ theorem eval_feasible_ite (L k b m : ℕ) (S : Finset (LeftBlockVector L q k))
       FreeM.eval_pure]
 
 /-- With the honest oracle, step 2 computes the size-trimming selection. -/
-theorem eval_sizeTrimmingProgram (L k b : ℕ) (h : ChainHamiltonian L q 1 1)
+theorem eval_sizeTrimmingProgram (L k b : ℕ) (h : ChainInteraction L q 1)
     (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
     FreeM.eval honestOracle (sizeTrimmingProgram L k b h hq Δ S) =
       h.sizeTrimmingSelection hq Δ S := by
   classical
   let : NeZero q := ⟨by omega⟩
-  simp only [sizeTrimmingProgram, ChainHamiltonian.sizeTrimmingSelection,
-    ChainHamiltonian.sizeTrimmingSelectionWith, eval_unionOver, List.toFinset_finRange,
+  simp only [sizeTrimmingProgram, ManyBody.ChainInteraction.sizeTrimmingSelection,
+    ManyBody.ChainInteraction.sizeTrimmingSelectionWith, eval_unionOver, List.toFinset_finRange,
     FreeM.eval_liftBind, honestOracle_boundaryNet, Finset.toList_toFinset, boundaryFamily,
     leftColumns_eq_biUnion]
   refine Finset.biUnion_congr rfl fun m _ ↦ ?_
@@ -233,7 +233,7 @@ declared for the vectors handled. LVV13, `algo53.tex`, algorithm steps 1--4, lin
 noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     LVVProgram q (Finset (LeftBlockVector L q (i + 1))) :=
   let b := lvvSuccessiveBondBound q Delta L
@@ -242,7 +242,7 @@ noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
   do
     let S₁ ← extensionProgram L (i + 1) b S
     let S₂ ← sizeTrimmingProgram L (i + 1) b
-      (ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1) hq Delta S₁
+      (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs) hq Delta S₁
     let S₃ ← bondTrimmingProgram L (i + 1) hi b m S₂
     let F ← FreeM.lift
       (LinearAlgebraQuery.gaussianFilterFactors L (i + 1) (Nat.le_of_lt hq) h h0 c Delta)
@@ -252,10 +252,10 @@ noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
 theorem eval_sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
-    FreeM.eval honestOracle (sweepStepProgram hq h hs h0 h1 Delta hi S) =
-      lvvSweepStep hq h hs h0 h1 Delta hi S := by
+    FreeM.eval honestOracle (sweepStepProgram hq h hs h0 Delta hi S) =
+      lvvSweepStep hq h hs h0 Delta hi S := by
   simp only [sweepStepProgram, FreeM.eval_bind, FreeM.eval_lift,
     honestOracle_gaussianFilterFactors, eval_extensionProgram, eval_sizeTrimmingProgram,
     eval_bondTrimmingProgram, eval_errorReductionProgram, lvvSweepStep, successiveStep]
@@ -271,7 +271,7 @@ noncomputable def sweepProgram {L : ℕ} (hq : 2 ≤ q)
   | i + 1 =>
     if hi : i + 1 ≤ L then do
       let S ← sweepProgram hq h hs h0 h1 Delta i
-      sweepStepProgram hq h hs h0 h1 Delta hi S
+      sweepStepProgram hq h hs h0 Delta hi S
     else pure ∅
 
 /-- With the honest oracle, the program computes the sweep at every cut. -/

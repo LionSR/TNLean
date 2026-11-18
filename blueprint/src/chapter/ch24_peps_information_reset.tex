@@ -150,8 +150,8 @@ This subsection extends Lemma~\ref{thm:peps_information_reset_explicit} from $R=
 
 \begin{lemma}[Information reset at range $R$]
     \label{thm:peps_information_reset_range}
-    \lean{TNLean.Lattice.LocalHamiltonian.information_reset_of_card_le,
-        TNLean.Lattice.LocalHamiltonian.information_reset_of_rangeResetThreshold_le}
+    \lean{ManyBody.PlaneInteraction.information_reset_of_card_le,
+        ManyBody.PlaneInteraction.information_reset_of_rangeResetThreshold_le}
     \leanok
     \uses{def:area_law_hamiltonian,def:peps_reset_width_range}
     Fix integers $q\ge1$, $R\ge0$ and real $J\ge0$, $\Delta>0$, $p>0$, and set $(C_p,L_0)=(C_{p,R}(J,\Delta,p),L_{0,R}(q,J,\Delta,p))$ from (\ref{eq:peps_reset_width_range}). For $L\ge L_0$, any range-$R$ Hamiltonian $H$ on a finite domain $\Lambda$ with $|\Lambda|\le L^2$ (in particular $\Lambda_L$) and Hermitian terms of norm $\le J$, any unit ground vector $\Omega$ with full-system gap $\Delta$, and any disjoint $A,C\subseteq\Lambda$ with $I_\Omega(A:C)\le b$ ($b\ge0$) and cores $A_0\subseteq A$, $C_0\subseteq C$ at $\ell_\infty$-distance $>C_p(1+b+\log L)$ from $A^c$ and $C^c$, one has
@@ -170,7 +170,7 @@ This subsection extends Lemma~\ref{thm:peps_information_reset_explicit} from $R=
 
 \begin{lemma}[Information reset at range $R$, existence of the constants]
     \label{thm:peps_information_reset_range_exists}
-    \lean{TNLean.Lattice.LocalHamiltonian.information_reset}
+    \lean{ManyBody.PlaneInteraction.information_reset}
     \leanok
     \uses{def:area_law_hamiltonian}
     Fix integers $q\ge1$, $R\ge0$ and real $J\ge0$, $\Delta>0$, $p>0$. There exist $C_p>0$ and $L_0$ such that for every $L\ge L_0$, the conclusion of Lemma~\ref{thm:peps_information_reset_range} holds on the $L\times L$ square.

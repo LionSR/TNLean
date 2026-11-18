@@ -23,9 +23,11 @@ The whole-domain estimate in `SwappedLocalHamiltonian` remains available.
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator
 
-open ManyBody (AdmissibleSupport)
+open ManyBody (AdmissibleSupport PlaneInteraction)
 
-namespace TNLean.Lattice.LocalHamiltonian
+namespace ManyBody.PlaneInteraction
+
+open TNLean.Lattice
 
 /-- The edge-boundary norm estimate for the actual swapped doubled Hamiltonian.
 This finite-range extension combines polynomial-PEPS `02-information.tex`,
@@ -34,32 +36,32 @@ lines 416–424 and 513–524, with the area-law crossing-support count in
 `v_R = 1 + 2 R (R + 1)`. -/
 theorem swapped_doubled_boundary_bound_edgeBoundary
     {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
-    (h : LocalHamiltonian Λ q R J) (hJ : 0 ≤ J)
+    (h : PlaneInteraction Λ q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 ≤ J)
     (A : Finset (Site Λ)) :
     let p := sitePairConfigurationEquiv (Site Λ) q q
-    let K := Matrix.reindex p p (doubledHamiltonian h.operator)
+    let K := Matrix.reindex p p (doubledHamiltonian h.hamiltonian)
     let F := Matrix.reindex p p (sheetSwapOp q A)
     ‖F * K * Fᴴ - K‖ ≤
       swapBoundaryCoefficient R * ((1 + 2 * R * (R + 1) : ℕ) : ℝ) *
         J * ((edgeBoundary Λ A).card : ℝ) := by
   intro p K F
   classical
-  have hsum := h.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing A
+  have hsum := h.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing A
   have hpaired : ‖F * K * Fᴴ - K‖ =
-      ‖sheetSwapOp q A * doubledHamiltonian h.operator * (sheetSwapOp q A)ᴴ -
-        doubledHamiltonian h.operator‖ := by
+      ‖sheetSwapOp q A * doubledHamiltonian h.hamiltonian * (sheetSwapOp q A)ᴴ -
+        doubledHamiltonian h.hamiltonian‖ := by
     simpa only [Matrix.reindex_apply, Matrix.submatrix_sub, Pi.sub_apply,
       ← Matrix.submatrix_mul_equiv (e₂ := p.symm), ← Matrix.conjTranspose_submatrix] using!
       Matrix.l2_opNorm_reindex_equiv p
-        (sheetSwapOp q A * doubledHamiltonian h.operator * (sheetSwapOp q A)ᴴ -
-          doubledHamiltonian h.operator)
+        (sheetSwapOp q A * doubledHamiltonian h.hamiltonian * (sheetSwapOp q A)ᴴ -
+          doubledHamiltonian h.hamiltonian)
   rw [hpaired, hsum]
   refine (norm_sum_le _ _).trans ?_
   have hterm (X : AdmissibleSupport Λ R) :
       ‖sheetSwapOp q A * doubledHamiltonian (h.term X) * (sheetSwapOp q A)ᴴ -
         doubledHamiltonian (h.term X)‖ ≤ 4 * J :=
     (TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le A (h.term X)).trans
-      (mul_le_mul_of_nonneg_left (h.norm_le X) (by norm_num))
+      (mul_le_mul_of_nonneg_left (hhJ X) (by norm_num))
   refine (Finset.sum_le_card_nsmul _ _ (4 * J) (fun X _ ↦ hterm X)).trans ?_
   have hcard : ((Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card : ℝ) ≤
       ((edgeBoundary Λ A).card : ℝ) *
@@ -75,4 +77,4 @@ theorem swapped_doubled_boundary_bound_edgeBoundary
       simp only [swapBoundaryCoefficient, Nat.cast_mul]
       ring
 
-end TNLean.Lattice.LocalHamiltonian
+end ManyBody.PlaneInteraction

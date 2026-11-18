@@ -36,11 +36,13 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 lines 475–490, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
@@ -72,11 +74,12 @@ theorem exists_sourceTarget_selected_actualCharge_source_density
         ∀ Ce : ℝ, 0 ≤ Ce →
         ∃ Cδ Clδ : ℝ, 0 < Cδ ∧ 0 ≤ Clδ ∧ ∃ N : ℕ, 2 ≤ N ∧
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = F.m S.n → S.D = F.D S.n → S.K = F.K S.n →
@@ -107,8 +110,8 @@ theorem exists_sourceTarget_selected_actualCharge_source_density
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
-              groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -136,7 +139,7 @@ theorem exists_sourceTarget_selected_actualCharge_source_density
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
             let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-            let energy := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+            let energy := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
             ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
               let pre : (k : ℕ) → Config k (fun v ↦ Fin (dims v)) → ℂ := fun k ↦
                 replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
@@ -224,14 +227,14 @@ theorem exists_sourceTarget_selected_actualCharge_source_density
   refine ⟨4 * (C₁ + 1) * (6 * Ce + 13 + 6 * Real.log q + 2 * Ct) * Cscale,
     Clt, by positivity, hClt, max Nb (max Ns (max Ng Nt)),
     hNb.trans (le_max_left _ _), ?_⟩
-  intro Λ T _ hT h S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
+  intro Λ T _ hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix
   obtain ⟨hrD, hDpos, hDm, hbands, hKL⟩ :
       2 * S.r₀ ≤ S.D ∧ 1 ≤ S.D ∧ 4 * S.D ≤ S.m ∧
         8 ≤ S.K ∧ 8 * S.K * S.m ≤ F.L S.n := by
     simpa only [hr, hmScale, hDScale, hKScale, roundedLogRadius] using
       hgeom S.n (by omega)
-  obtain ⟨hm, hM, hdata⟩ := hsource Λ T hT h S E₀ Ω hΩ hgap hspan hgraph hanchor (by omega)
+  obtain ⟨hm, hM, hdata⟩ := hsource Λ T hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor (by omega)
     hr hmScale hDScale hKScale hCeq hsize hdepth hrows hmult hclear
     Ce F.e hprefix hrD hDpos hDm
   refine ⟨hrD, hDpos, hDm, hm, hM, ?_⟩
