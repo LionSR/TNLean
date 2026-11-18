@@ -2438,6 +2438,7 @@ The finite-leaf estimates below follow the charge-energy argument in
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph_of_finiteFamilyTransportBound,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundHistory_length_add_one_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_isAdmissible,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_logDim_move_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_finiteFamilyTransportBound}
     \leanok
     \uses{def:al_scan_actual_round_family,def:al_scan_actual_energy_terms,
@@ -2532,8 +2533,15 @@ The finite-leaf estimates below follow the charge-energy argument in
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_entropy_integral_le_domainGraph,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_crossBandCommute}
     \leanok
-    \uses{def:al_scan_actual_round_family,def:al_scan_physical_dimension_cap}
-    Under the hypotheses of Lemma~\ref{thm:al_scan_actual_round_transport},
+    \uses{def:al_scan_actual_round_family,def:al_scan_physical_dimension_cap,
+        def:al_scan_finite_family_transport_bound}
+    Let $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}},C_{\mathrm{en}},e_{\mathrm{en}}$
+    satisfy the finite-family transport bound. Take a scanner on a finite
+    $\Lambda\subset\mathbb Z^2$ with the induced nearest-neighbor graph, with
+    $0<n$, $1\le D$, $4D\le m$ and $0<C_1$, auxiliary dimensions
+    $d_C,d_R\ge1$, and $a>0$ with $a\ell\le c_0$ for $\ell=\ell_q(r_0)$.
+    No Hamiltonian enters: the estimate is the entropy part of the transport
+    bound, which holds for the empty family of energy terms. Then
     every $k\ge0$ and nonzero $\xi\in\operatorname{Sym}^k(\mathcal V)$ satisfy
     \begin{align}
         ka\sum_{j=0}^{2nm-1}\int_0^1
@@ -2548,8 +2556,12 @@ The finite-leaf estimates below follow the charge-energy argument in
 \begin{proof}\leanok
     \uses{thm:al_scan_actual_round_transport,thm:al_scan_actual_round_telescope,
         thm:al_scan_nested_band_metrics}
-    Sum~(\ref{eq:al_scan_transport_int_bound}) for $\mathscr D_j$ on $[0,1]$
-    over $0\le j<2nm$ and telescope the right-hand side via
+    Apply the finite-family transport bound to the rounds $\mathscr D_j$ with
+    no energy terms, so that every energy hypothesis holds vacuously; its
+    entropy part is~(\ref{eq:al_scan_transport_int_bound}), with admissibility
+    and the move dimension bound as in
+    Lemma~\ref{thm:al_scan_actual_round_transport}. Sum it on $[0,1]$ over
+    $0\le j<2nm$ and telescope the right-hand side via
     (\ref{eq:al_scan_actual_telescope}).
 \end{proof}
 

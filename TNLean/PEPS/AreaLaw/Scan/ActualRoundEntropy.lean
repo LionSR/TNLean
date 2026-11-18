@@ -212,17 +212,7 @@ theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBou
   -- The entropy estimate of the transport bound does not involve the energy terms: take the
   -- empty family, for which every energy hypothesis holds vacuously.
   let E₀ : EnergyTerms (Site Λ ⊕ Bool) n Empty := ⟨Empty.elim, Empty.elim⟩
-  have hmove : ∀ j hist c g, logDim n ((D j).move hist c g).subsystem ≤ ℓ := by
-    intro j
-    refine S.actualRoundData_induction hm hM j
-      (fun _ _ _ D => ∀ hist c g, logDim n (D.move hist c g).subsystem ≤ ℓ) ?_ ?_
-    · intro _
-      exact S.chargeTransportData_logDim_move_le_domainGraph hgraph
-          (historyMeanTree S.K S.m S.M hm hM (j.val / 2))
-          (fun _ => chargeChoiceTree S.K S.M hM) n hq (fun _ => rfl)
-    · intro _
-      exact S.fillTransportData_logDim_move_le
-          (historyMeanTree S.K S.m S.M hm hM (j.val / 2)) n hq (fun _ => rfl)
+  have hmove := actualRoundData_logDim_move_le (q := q) aux S hgraph hm hM
   obtain ⟨β, rem, Cβ, hCβ, hβ0, hrem0, hβ, hrem, hround⟩ := htransport n D E₀
     (S.actualRoundData_isAdmissible hm hM) (fun i ↦ i.elim) (fun i ↦ i.elim) (fun i ↦ i.elim)
     (fun _ ↦ by intro _ i; exact i.elim) ha (one_le_transportLogDimBound hq S.r₀) haℓ
