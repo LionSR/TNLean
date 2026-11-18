@@ -64,7 +64,7 @@ def main():
     q=dest.parent/p.name;h=sha(p);shutil.copy2(p,q);assert sha(q)==h==sha(p);artifactlog.append({'module':m,'path':str(q.relative_to(CACHE)),'sha256':h,'origin':str(p)})
   built.add(m)
  write('reused-artifacts.json',artifactlog)
- previous=read(OUT/'results.jsonl');failed={r['module'] for r in previous if r['exit_code']!=0};passed={r['module'] for r in previous if r['phase']=='strict' and r['exit_code']==0}
+ previous=read(OUT/'results.jsonl');failed={r['module'] for r in previous if r['exit_code']!=0};build_failed={r['module'] for r in previous if r['phase']=='build' and r['exit_code']!=0};passed={r['module'] for r in previous if r['phase']=='strict' and r['exit_code']==0}
  for r in previous:
   if r['exit_code']==0:
    assert hashes[r['module']]==r['source_sha256']
@@ -88,16 +88,18 @@ def main():
   if phase=='build' and code==0:r['olean_sha256']=sha(dest)
   append('results.jsonl',r)
   if code:
-   failed.add(m);raise RuntimeError(f'{m} {phase} exit {code}')
+   failed.add(m)
+   if phase=='build':build_failed.add(m)
+   raise RuntimeError(f'{m} {phase} exit {code}')
   if phase=='build':built.add(m)
   else:passed.add(m)
  def build(m):
   if m in built:return
   for d in sorted(graph[m]):build(d)
   run(m,'build')
- pending=targets-passed-large;done=0
+ pending=targets-passed-large-failed;done=0
  while pending:
-  blocked={m for m in pending if closure(m)&failed};pending-=blocked
+  blocked={m for m in pending if closure(m)&build_failed};pending-=blocked
   if not pending:break
   m=min(pending,key=lambda n:(0 if n=='TNLean.MPS.AreaLaw.Hastings.BoundaryFactorization' else 1 if n in affected else 2,len(closure(n)-built),n))
   try:build(m);run(m,'strict')
@@ -109,7 +111,7 @@ def main():
  deferred={}
  for m in ['TNLean.MPS.AreaLaw','TNLean.MPS','TNLean']:
   missing=closure(m)-built
-  if missing-{m} or closure(m)&failed:deferred[m]=sorted(missing| (closure(m)&failed));continue
+  if missing-{m} or closure(m)&build_failed:deferred[m]=sorted(missing| (closure(m)&build_failed));continue
   build(m);run(m,'strict')
  write('aggregate-not-run.json',deferred);write('summary.json',{'head':HEAD,'passed_or_provenance_reused':sorted(passed),'remaining':sorted(targets-passed),'state':'finished narrow checks; aggregate gaps recorded'})
  write('status.json',{'state':'finished','head':HEAD,'passed':len(passed),'not_run':sorted(targets-passed),'failed':sorted(failed),'axiom_audit':'not-run; compilation/strict only'})

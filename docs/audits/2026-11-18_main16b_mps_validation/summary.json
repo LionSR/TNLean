@@ -53,8 +53,22 @@
     "TNLean.MPS.AreaLaw.ViableSet.BondTrimmingReference",
     "TNLean.MPS.AreaLaw.ViableSet.ConstantRankCut",
     "TNLean.MPS.AreaLaw.ViableSet.PowerProjector",
+    "TNLean.MPS.AreaLaw.ViableSet.RationalBondTrimming",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeBondTrimming",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.ApproximateCertificates",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.CanonicalSearch",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.CompressedSolutions",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.LeadingVectorPrecision",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.PowerIteration",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.RationalSearch",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.Selection",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.UniformCertificates",
     "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingVector",
     "TNLean.MPS.AreaLaw.ViableSet.ViableTrimmedWitness"
+  ],
+  "failed": [
+    "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds",
+    "verification.area-law.Solution"
   ],
   "remaining": [
     "TNLean",
@@ -69,22 +83,12 @@
     "TNLean.MPS.AreaLaw.Algorithm.ValidOracleCost",
     "TNLean.MPS.AreaLaw.Algorithm.ValidOracleSampled",
     "TNLean.MPS.AreaLaw.Algorithm.ValidOracleSampledCost",
-    "TNLean.MPS.AreaLaw.ViableSet.RationalBondTrimming",
     "TNLean.MPS.AreaLaw.ViableSet.RationalSampledSuccessiveConstruction",
     "TNLean.MPS.AreaLaw.ViableSet.SampledSuccessiveConstruction",
-    "TNLean.MPS.AreaLaw.ViableSet.SizeBondTrimming",
-    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.ApproximateCertificates",
-    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.CanonicalSearch",
-    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.CompressedSolutions",
-    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.LeadingVectorPrecision",
-    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.PowerIteration",
-    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.RationalSearch",
-    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.Selection",
-    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.UniformCertificates",
     "TNLean.MPS.AreaLaw.ViableSet.SuccessiveConstruction",
     "TNLean.MPS.AreaLaw.ViableSet.SuccessiveStep",
     "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds",
     "verification.area-law.Solution"
   ],
-  "state": "finished narrow checks; aggregate gaps recorded"
+  "state": "running with retained source failures"
 }
