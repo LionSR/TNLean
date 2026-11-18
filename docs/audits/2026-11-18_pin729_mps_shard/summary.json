@@ -4,12 +4,12 @@
   "not_completed": 119,
   "historical_failed_commands": 3,
   "unresolved_failed_targets": 0,
-  "build_commands": 2366,
+  "build_commands": 2384,
   "strict_commands": 748,
-  "build_seconds": 8820.394992816102,
+  "build_seconds": 8909.41557112214,
   "strict_seconds": 3770.0136176457163,
   "production_edit_seconds": null,
   "production_edit_note": "Two authorized lines changed in separate isolated fix commits; edit time not separately measured. Prior validation phase had zero production edits.",
-  "state": "old writers exited; final handoff snapshot",
+  "state": "running; prior handoff final marker was premature, old queue remained active",
   "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b"
 }

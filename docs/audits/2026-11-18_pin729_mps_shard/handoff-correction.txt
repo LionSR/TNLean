@@ -1,0 +1,1 @@
+The prior resume-final.log was an interim snapshot, not a final queue result. Coordinator process detection was corrected; old runner PID412863 was never stopped. Final evidence will be snapshotted after confirmed writer exit.
