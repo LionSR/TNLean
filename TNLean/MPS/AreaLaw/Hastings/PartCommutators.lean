@@ -414,7 +414,7 @@ Hastings, arXiv:0705.2024v4, appendix, `law16.tex`, line 794: "Let `b_L = [H, H_
 that `‖b_L‖ ≤ J²`", applied to the buffer part. The explicit constant replaces the printed
 bound `J²`, which is stated for nearest-neighbour terms, for terms of range `R`. -/
 theorem _root_.ManyBody.ChainInteraction.norm_commutator_bufferPart_le (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (j m : ℕ) :
     ‖h.hamiltonian * h.bufferPart j m - h.bufferPart j m * h.hamiltonian‖ ≤
       2 * (partCommutatorConst R * J ^ 2) := by

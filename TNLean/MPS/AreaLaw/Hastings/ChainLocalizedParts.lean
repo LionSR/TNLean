@@ -248,8 +248,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_bufferPart_su
           (Real.sqrt (2 * (q' / ΔE ^ 2).toNNReal / Real.pi) *
             Real.exp (-T ^ 2 / (2 * (q' / ΔE ^ 2).toNNReal))) := by
   refine h.norm_gaussianFilteredTerm_sub_localized_le_of_commutator hh hhJ hq q' ΔE _ _ _ _
-    (h.isSupportedOn_commutator_bufferPart j m) ?_
-        (h.norm_commutator_bufferPart_le hh hhJ j m) hℓ hT
+    (h.isSupportedOn_commutator_bufferPart j m) ?_ (h.norm_commutator_bufferPart_le hhJ j m) hℓ hT
   refine (Finset.card_union_le _ _).trans ?_
   have h1 := card_interval_le (L := L) (j - m - 2 * R) (j - m + R)
   have h2 := card_interval_le (L := L) (j + m - R) (j + m + 2 * R)
