@@ -138,6 +138,85 @@ theorem exists_multiplicityReductions_of_isNormal (B : MPSTensor d DB)
     exact Finset.sum_le_sum fun s _ => hD s.1
   omega
 
+section NilpotentBiorthogonalReductions
+
+variable {κ : Type*} [Fintype κ] {δ : κ → ℕ}
+
+/-- **Biorthogonal reductions with a nilpotent remainder** onto a finite family of blocks: maps
+`V s : ℂ^{D_B} → ℂ^{δ s}` and `W s : ℂ^{δ s} → ℂ^{D_B}`, one pair for each block `C s`, such that
+
+* each pair is a reduction of `B` onto `C s`: `V s B^w W s = C_s^w` for every word `w`,
+  including the empty word, so `V s W s = 1`;
+* distinct pairs are biorthogonal: `V s W t = 0` for `s ≠ t`;
+* the remainder `B^i - ∑_s W s C_s^i V s` is nilpotent: for some `ℓ`, its products of at least
+  `ℓ` letters vanish.
+
+This is the periodic-boundary decomposition of Garre-Rubio--Lootens--Molnár, arXiv:2203.12563,
+`REsubmission.tex`.  For the fusion tensors (lines 1001--1028) the source states: "In Ref.
+\cite{Molnar18B}, the authors proved that $U_g U_h = U_{gh}$ with $T_g$ injective implies the
+existence of fusion tensors that decompose the product of two tensors locally for any length
+$n$" (equation `fusiontensorG2`, `V_{g,h} (T_g T_h)^{⊗ n} W_{g,h} = T_{gh}^{⊗ n}`); "In
+particular, for $n=0$, this results in the orthogonality relations for the fusion tensors";
+"in general, there will be off-diagonal blocks in the product of two MPO tensors. These
+off-diagonal blocks will disappear after a finite number of concatenation: we denote by $\ell$
+the nilpotent length associated to that".  For the action tensors (lines 1065--1091): "there
+are action tensors that decompose locally the action of the MPO tensor on the MPS tensor for
+any length $n$" (equation `mpoMPSsten`) and "there is a number $\ell'$ such that after blocking
+$\ell'$ tensors, there are no off-diagonal blocks present in the product of the MPO and MPS
+tensors".  The family of blocks indexed by `κ` carries the multiplicity copies of the
+fusion-algebra form of lines 361--391 (`eq:orthoW`) and 459--490 (`eq:orthoV`). -/
+structure NilpotentBiorthogonalReductions (B : MPSTensor d DB) (C : ∀ s : κ, MPSTensor d (δ s))
+    where
+  /-- the compression onto the block `C s` -/
+  V : ∀ s, Matrix (Fin (δ s)) (Fin DB) ℂ
+  /-- the embedding of the block `C s` -/
+  W : ∀ s, Matrix (Fin DB) (Fin (δ s)) ℂ
+  /-- each pair reduces `B` onto its block, at every length (source equations `fusiontensorG2`
+  and `mpoMPSsten`) -/
+  isReduction : ∀ s, IsReduction B (C s) (V s) (W s)
+  /-- distinct pairs are biorthogonal (source equations `eq:orthoW` and `eq:orthoV`) -/
+  orthogonal : ∀ s t, s ≠ t → V s * W t = 0
+  /-- the off-diagonal remainder vanishes after finitely many sites (source lines 1028 and
+  1091) -/
+  nilpotent : ∃ ℓ : ℕ, ∀ w : List (Fin d), ℓ ≤ w.length →
+    Kraus.evalWord (fun i => B i - ∑ s, W s * C s i * V s) w = 0
+
+/-- The full biorthogonality relations `V s W t = δ_{st} 1`, the `n = 0` case of the source
+equation `fusiontensorG2` together with `eq:orthoW`. -/
+theorem NilpotentBiorthogonalReductions.V_mul_W_self {B : MPSTensor d DB}
+    {C : ∀ s : κ, MPSTensor d (δ s)} (F : NilpotentBiorthogonalReductions B C) (s : κ) :
+    F.V s * F.W s = 1 :=
+  (F.isReduction s).mul_eq_one
+
+end NilpotentBiorthogonalReductions
+
+/-- **A multi-block compression gives biorthogonal reductions with a nilpotent remainder**: its
+compression pairs `(left s, right s)` (P5 note, Theorem 7.7(iv)--(vi)), with nilpotency length
+the number of blocks. -/
+noncomputable def MultiBlockCompression.toNilpotentBiorthogonalReductions {ι : Type*}
+    [DecidableEq ι] {D : ι → ℕ} {B : MPSTensor d DB} {S : Finset ι} {C : ∀ s, MPSTensor d (D s)}
+    (P : MultiBlockCompression B S C) :
+    NilpotentBiorthogonalReductions (δ := fun s : {s // s ∈ S} => D s.1) B fun s => C s.1 where
+  V := P.left
+  W := P.right
+  isReduction := P.isReduction
+  orthogonal _ _ hst := P.left_mul_right_of_ne hst
+  nilpotent := ⟨S.card + P.z, P.evalWord_remainder_eq_zero⟩
+
+omit [DecidableEq L] in
+/-- **Existence of biorthogonal reductions onto blocks with multiplicity**: under the hypotheses
+of `MPSTensor.exists_multiplicityReductions_of_isNormal`, the copies `(c, μ)`, `μ < N_c`, of the
+blocks `C_c` carry biorthogonal reductions of `B` with a nilpotent remainder. -/
+theorem nonempty_nilpotentBiorthogonalReductions_sigma_of_isNormal (B : MPSTensor d DB)
+    (C : ∀ c, MPSTensor d (D c)) (N : L → ℕ) (hC : ∀ c, Kraus.IsNormal (C c))
+    (hD : ∀ c, 0 < D c)
+    (hmpv : ∀ n : ℕ, 0 < n → ∀ σ : Fin n → Fin d,
+      mpv B σ = ∑ c, (N c : ℂ) * mpv (C c) σ) :
+    Nonempty (NilpotentBiorthogonalReductions (δ := fun s : Σ c, Fin (N c) => D s.1) B
+      fun s => C s.1) := by
+  obtain ⟨V, W, hred, horth, hnil⟩ := exists_multiplicityReductions_of_isNormal B C N hC hD hmpv
+  exact ⟨⟨V, W, hred, horth, ⟨DB, hnil⟩⟩⟩
+
 namespace IsReduction
 
 variable {DA : ℕ} {B : MPSTensor d DB} {A : MPSTensor d DA}
@@ -258,6 +337,56 @@ theorem exists_actionTensors_of_mpo_mulVec_eq_sum {κ : Type*} [Fintype κ]
   classical
   exact MPSTensor.exists_multiplicityReductions_of_isNormal _ A M hA hD fun n hn σ =>
     congrFun ((mpo_mulVec_mpv T Ax n).symm.trans (hact n hn)) σ
+
+/-- **Fusion tensors** of the pair `(a, b)` (Garre-Rubio--Lootens--Molnár, arXiv:2203.12563,
+lines 1001--1028, in the multiplicity form of lines 361--391): biorthogonal reductions
+`(V_{ab}^{c,μ}, W_{ab}^{c,μ})`, one for each copy `(c, μ)`, `μ < N_{ab}^c`, of the stacked product
+`T_a T_b` onto the tensors `T_c`, with a nilpotent remainder.  The source states: "fusion
+tensors that decompose the product of two tensors locally for any length $n$" (equation
+`fusiontensorG2`), and "These off-diagonal blocks will disappear after a finite number of
+concatenation: we denote by $\ell$ the nilpotent length associated to that". -/
+abbrev FusionTensors {χ : L → ℕ} (O : ∀ c, MPOTensor d (χ c)) (N : L → L → L → ℕ) (a b : L) :=
+  MPSTensor.NilpotentBiorthogonalReductions (δ := fun s : Σ c, Fin (N a b c) => χ s.1)
+    (mulTensor (O a) (O b)).toMPSTensor fun s => (O s.1).toMPSTensor
+
+omit [Fintype L] in
+/-- **Action tensors** of the pair `(a, x)` (arXiv:2203.12563, lines 1062--1091, in the
+multiplicity form of lines 459--490): biorthogonal reductions `(V_{ax}^{y,i}, W_{ax}^{y,i})`, one
+for each copy `(y, i)`, `i < M_{a,x}^y`, of the tensor `T_a · A_x` onto the tensors `A_y`, with a
+nilpotent remainder.  The source states: "there are action tensors that decompose locally the
+action of the MPO tensor on the MPS tensor for any length $n$" (equation `mpoMPSsten`), and
+"there is a number $\ell'$ such that after blocking $\ell'$ tensors, there are no off-diagonal
+blocks present in the product of the MPO and MPS tensors". -/
+abbrev ActionTensors {K : Type*} [Fintype K] {χ : L → ℕ} {D : K → ℕ} (O : ∀ a, MPOTensor d (χ a))
+    (A : ∀ x, MPSTensor d (D x)) (M : L → K → K → ℕ) (a : L) (x : K) :=
+  MPSTensor.NilpotentBiorthogonalReductions (δ := fun s : Σ y, Fin (M a x y) => D s.1)
+    (actTensor (O a) (A x)) fun s => A s.1
+
+/-- **Existence of fusion tensors** for a pair of labels of a matrix product operator fusion
+algebra of normal tensors of positive bond dimension (arXiv:2203.12563, lines 1001--1028), from
+`MPOTensor.IsMPOFusionAlgebra.exists_fusionTensors`. -/
+theorem IsMPOFusionAlgebra.nonempty_fusionTensors {χ : L → ℕ} {O : ∀ c, MPOTensor d (χ c)}
+    {N : L → L → L → ℕ} (hF : IsMPOFusionAlgebra O N)
+    (hO : ∀ c, Kraus.IsNormal (O c).toMPSTensor) (hχ : ∀ c, 0 < χ c) (a b : L) :
+    Nonempty (FusionTensors O N a b) := by
+  obtain ⟨V, W, hred, horth, hnil⟩ := hF.exists_fusionTensors hO hχ a b
+  exact ⟨⟨V, W, hred, horth, ⟨_, hnil⟩⟩⟩
+
+omit [Fintype L] in
+/-- **Existence of action tensors** (arXiv:2203.12563, lines 1062--1091): if the periodic
+operator of `T_a` acts on the periodic vector of `A_x` as `∑_y M_{a,x}^y ψ_{A_y}` at every positive
+length, with normal tensors `A_y` of positive bond dimension, then `(a, x)` has action tensors;
+from `MPOTensor.exists_actionTensors_of_mpo_mulVec_eq_sum`. -/
+theorem nonempty_actionTensors_of_mpo_mulVec_eq_sum {K : Type*} [Fintype K] {χ : L → ℕ}
+    {D : K → ℕ} (O : ∀ a, MPOTensor d (χ a)) (A : ∀ x, MPSTensor d (D x)) (M : L → K → K → ℕ)
+    (hA : ∀ y, Kraus.IsNormal (A y)) (hD : ∀ y, 0 < D y) (a : L) (x : K)
+    (hact : ∀ n : ℕ, 0 < n →
+      mpo (O a) n *ᵥ (fun τ : Fin n → Fin d => MPSTensor.mpv (A x) τ) =
+        fun σ : Fin n → Fin d => ∑ y, (M a x y : ℂ) * MPSTensor.mpv (A y) σ) :
+    Nonempty (ActionTensors O A M a x) := by
+  obtain ⟨V, W, hred, horth, hnil⟩ :=
+    exists_actionTensors_of_mpo_mulVec_eq_sum (O a) (A x) A (M a x) hA hD hact
+  exact ⟨⟨V, W, hred, horth, ⟨_, hnil⟩⟩⟩
 
 /-- **Gauge freedom of a multiplicity-free fusion channel** (arXiv:2203.12563, line 361: the
 fusion tensors are unique up to a gauge; line 416 describes the gauge for exact

@@ -13,8 +13,10 @@ This module constructs the canonical-form representative stated after the
 canonical-form definition in Cirac--Pérez-García--Schuch--Verstraete,
 arXiv:1606.00608, lines 249--251.
 
-## Main statement
+## Main statements
 
+* `exists_leftCanonical_cpsvCanonicalFormData_after_blocking` retains the
+  displayed blocks and their left-canonical identities.
 * `exists_cpsvCanonicalForm_representative_after_blocking` gives, after a
   positive blocking length, a tensor in literal CPSV canonical form with the same
   positive-length MPV family as the blocked input tensor.
@@ -37,7 +39,7 @@ variable {d D : ℕ}
 
 /-- After a positive blocking length, every tensor has a possibly different
 representative in literal CPSV canonical form which generates the same
-positive-length MPV family.
+positive-length MPV family, with left-canonical displayed normal blocks.
 
 The representative is the weighted direct sum of the primitive irreducible
 left-canonical blocks. It need not equal the blocked input tensor in the
@@ -45,12 +47,13 @@ input tensor's original bond coordinates.
 
 Source: arXiv:1606.00608, lines 214--251, especially eqs. `II_Aiplusk1` and
 `II_CF1` and the proposition at lines 249--251. -/
-theorem exists_cpsvCanonicalForm_representative_after_blocking
+theorem exists_leftCanonical_cpsvCanonicalFormData_after_blocking
     (A : MPSTensor d D) :
     ∃ p : ℕ, 0 < p ∧
       ∃ D' : ℕ, ∃ B : MPSTensor (blockPhysDim d p) D',
-        IsCPSVCanonicalForm B ∧
-        SameMPV₂Pos (blockTensor A p) B := by
+        ∃ data : CPSVCanonicalFormData B,
+          (∀ j, IsLeftCanonical (data.blocks j)) ∧
+          SameMPV₂Pos (blockTensor A p) B := by
   have hRefl : SameMPV₂Pos A A := by
     intro N _hN σ
     rfl
@@ -68,8 +71,27 @@ theorem exists_cpsvCanonicalForm_representative_after_blocking
       (isNormal_of_tp_primitive_irreducible (blocksA k)
         (hLeftA k) (hPrimitiveA k) (hIrreducibleA k))
       (hLeftA k)
-  refine ⟨p, hp, ∑ k : Fin rA, dimA k, B, ?_, ?_⟩
-  · exact (CPSVCanonicalFormData.ofBlocks hDimA μA hμA blocksA hNormalA).isCPSVCanonicalForm
-  · exact hABlocks
+  exact ⟨p, hp, ∑ k : Fin rA, dimA k, B,
+    CPSVCanonicalFormData.ofBlocks hDimA μA hμA blocksA hNormalA, hLeftA, hABlocks⟩
+
+/-- After a positive blocking length, every tensor has a possibly different
+representative in literal CPSV canonical form which generates the same
+positive-length MPV family.
+
+The representative is the weighted direct sum of the primitive irreducible
+left-canonical blocks. It need not equal the blocked input tensor in the
+input tensor's original bond coordinates.
+
+Source: arXiv:1606.00608, lines 214--251, especially eqs. `II_Aiplusk1` and
+`II_CF1` and the proposition at lines 249--251. -/
+theorem exists_cpsvCanonicalForm_representative_after_blocking
+    (A : MPSTensor d D) :
+    ∃ p : ℕ, 0 < p ∧
+      ∃ D' : ℕ, ∃ B : MPSTensor (blockPhysDim d p) D',
+        IsCPSVCanonicalForm B ∧
+        SameMPV₂Pos (blockTensor A p) B := by
+  obtain ⟨p, hp, D', B, data, _, heq⟩ :=
+    exists_leftCanonical_cpsvCanonicalFormData_after_blocking A
+  exact ⟨p, hp, D', B, data.isCPSVCanonicalForm, heq⟩
 
 end MPSTensor

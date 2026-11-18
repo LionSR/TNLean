@@ -351,18 +351,29 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
     kernel the spectral values are at least $\gamma$, so
     $\gamma\|y\|^2\le\operatorname{Re}\langle y,Hy\rangle$ there, which is the
     hypothesis of Lemma~\ref{lem:alvv_ff_improving_family_words}. That lemma is
-    stated in the splitting with the complement of $J$ first; exchanging the two
-    tensor factors gives the splitting with $J$ first, and viability is
-    transported along this isometry.
+    stated in the splitting with the complement of $J$ first. Write
+    $E_J:\mathcal H\to\mathcal H_{J^c}\otimes\mathcal H_J$ for that
+    isometry, $R_J:\mathcal H\to\mathcal H_J\otimes\mathcal H_{J^c}$ for
+    the region-first isometry, and $\tau_J(x\otimes y)=y\otimes x$. On
+    configuration basis vectors, and hence on all vectors,
+    \begin{align}
+        R_J                             & =\tau_J E_J,\nonumber         \\
+        R_J(\mathbb C\Gamma)            & =\tau_J E_J(\mathbb C\Gamma),
+        \label{eq:alvv_ff_region_coordinate_swap}                       \\
+        \tau_J(\Id\otimes W)\tau_J^{-1} & =W\otimes\Id.
+        \label{eq:alvv_ff_region_operator_swap}
+    \end{align}
+    Thus the target and every word image agree in the two descriptions;
+    the isometry preserves the distances defining viability.
 \end{proof}
 
 \begin{lemma}[The merge tree with the frustration-free family]
+    % Preserve the published label despite its legacy prefix.
     \label{thm:alvv_unique_ground_state_tree}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_pos_mem_spectrum_of_unique_ground_state,
         TNLean.MPS.AreaLaw.ALVV.merge_rounds_bounds,
         TNLean.MPS.AreaLaw.ALVV.merge_sample_overlap_lower,
         TNLean.MPS.AreaLaw.ALVV.merge_power_error_le,
-        TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree_of_power,
         TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_tree_ritz_approximation}
     \leanok
     \uses{lem:alvv_ff_family_region_coordinates,lem:unique_ground_state_spectral_span,
@@ -391,7 +402,7 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
         1829--1855]{Arad2016RigorousRG}, not that theorem itself. The source
     takes $\lceil\log_{\mathcal D}s\rceil/2$ applications, which need not be an
     integer, and obtains $\mathcal Ds^2$: when $\lceil\log_{\mathcal D}s\rceil$
-    is even the bound above equals the source's $\mathcal Ds^2$, and otherwise
+    is even the sharper bound $\mathcal Ds^2$ follows, and otherwise
     it is up to a factor $\mathcal D$ weaker, $\mathcal D^2s^2$. In the odd
     case no integer number of rounds $j$ satisfies both
     $\mathcal D^{2j}\le\mathcal Ds$ and the condition $s\le\mathcal D^{2j}$ of
@@ -415,7 +426,8 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
     $\mathbb C\Gamma$. Since $\mathcal D^{2(k-1)}<s\le\mathcal D^{2k}$, the
     node bound $n=\mathcal D^{2k}s$ satisfies $s^2\le n\le\mathcal D^2s^2$. At a
     long parent the merged space has dimension $Q\le n^2$ and is
-    $1/4$-viable. A random subspace of dimension $s$ has overlap at least
+    $1/4$-viable. Sample a subspace of dimension $\min(s,Q)$, taking the
+    whole merged space when $Q\le s$. Its overlap is at least
     $3/(32\mathcal D^{4k}s)$ with $\mathbb C\Gamma$ outside an event of small
     probability, as in Lemma~\ref{thm:physical_dg_sampled_node}, and its images
     under the products of length $k$ of the family, at most $\mathcal D^{2k}s$
@@ -424,6 +436,14 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
     which is at most $(1024/9)\cdot10^{-5}<1/400$, using $s^2\le\mathcal D^{4k}$.
     Collective trimming at a threshold below
     the bound of the refinement keeps it $3/200$-viable. The recursion of
-    Lemma~\ref{thm:sampled_interval_witness_tree} assembles the tree, and the
-    refinement of its root gives the line.
+    Lemma~\ref{thm:sampled_interval_witness_tree} applies with
+    $r_G=1$, $a=k$, $M=n$ and $w=4\ell$: indeed,
+    \begin{align}
+        n^2              & \le\mathcal D^4s^4\le\mathcal D^{12}s^6,\nonumber \\
+        \mathcal D^{2k}s & =n,\nonumber                                      \\
+        q^{4\ell}        & \le\mathcal D\le\mathcal D^{2k}s=n.
+        \label{eq:alvv_ff_tree_count_hypotheses}
+    \end{align}
+    Choose the trimming threshold also at most one. The lemma constructs
+    the tree, and refinement of its root gives the line.
 \end{proof}

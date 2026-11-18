@@ -199,7 +199,7 @@ theorem norm_groundCompression_commutator_le_finite_translation_exp
         ((D - 2 * ρ : ℕ) : ℕ∞) ≤ G.edist x y :=
       finiteOrbit_support_separation G hsep (hSrad x hx)
         (by simpa only [G.edist_comm] using hYg y hy)
-    have hp := norm_groundCompression_commutator_le_graphSeparation G X id hX h hHerm
+    have hp := norm_groundCompression_commutator_le_graphSeparation G X h hHerm
       hSupport R hDiam vR hvR hCard b₀ hBudget hΔ hH hgap S Yg hW hBg
       (D - 2 * ρ) hseps
     rw [norm_sitePermMatrix_mul_mul_conjTranspose] at hp

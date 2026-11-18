@@ -81,7 +81,7 @@ variable {d : ℕ} {ι κ : Type*} [Fintype ι] [DecidableEq ι] [Fintype κ]
 /-- Finite-support propagation in the distance between two anchors, with zero kernel
 between components. Hastings, arXiv:cond-mat/0508554v3, lines 1469–1505. -/
 theorem norm_commutator_heisenbergEvolution_le_anchor_kernel
-    (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+    (G : SimpleGraph ι) (X : κ → Finset ι)
     (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
     (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ y ∈ X k, G.edist x y ≤ R)
@@ -128,8 +128,8 @@ theorem norm_commutator_heisenbergEvolution_le_anchor_kernel
       exact (not_le_of_gt hl) hz
     let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
       ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
-    have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric G Φ a ha
-      hHerm R hDiam vR hvR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hW) Y
+    have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric G Φ
+      hHerm R hDiam vR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hW) Y
       (isSupportedOn_of_mem_supportedOperators hB) μ hμ.le l hd t
     calc _ = ‖ManyBody.heisenbergEvolution (∑ k, h k) t W * B -
           B * ManyBody.heisenbergEvolution (∑ k, h k) t W‖ := norm_sub_rev _ _
@@ -182,8 +182,7 @@ theorem norm_gaussianFilteredTerm_sub_truncated_le_anchor_sum [DecidableEq κ]
         (hermitianUnitaryPath (∑ j ∈ s, h j) t * W *
           hermitianUnitaryPath (∑ j ∈ s, h j) (-t)) * h k‖ ≤ A * w k := by
     have hb := norm_commutator_heisenbergEvolution_le_anchor_kernel G
-      (fun j : s ↦ X j) (fun j : s ↦ a j) (fun j ↦ ha j)
-      (fun j : s ↦ h j) (fun j ↦ hHerm j) (fun j ↦ hSupport j)
+      (fun j : s ↦ X j) (fun j : s ↦ h j) (fun j ↦ hHerm j) (fun j ↦ hSupport j)
       R (fun j ↦ hDiam j) vR hvR (fun j ↦ hCard j) b₀ hBudget'
       z S hSrad hW (a k) (X k) (fun y hy ↦ hDiam k y hy (a k) (ha k)) (hSupport k) hμ t
     rw [Finset.sum_coe_sort] at hb

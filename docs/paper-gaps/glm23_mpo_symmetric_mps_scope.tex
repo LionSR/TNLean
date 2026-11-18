@@ -478,13 +478,18 @@ then supplies every crossed matrix unit in the three-letter span;
 diagonal units can be padded to the same length. This argument has no
 one-letter crossed-span conclusion.
 
-The one-site assertion remains a separate obligation: determine what
-the full aligned fusion/action hypotheses imply about the crossed
-one-letter spans. An example satisfying only the isolated biorthogonal
-assumptions cannot refute that stronger source setting. The three-site
-normality result is an independent sufficient input for later normal
-operator-family arguments, which must still verify all their other
-hypotheses, including physical adjoint compatibility where required.
+The one-site assertion is false in the full aligned setting. For
+$\operatorname{Rep}(A_4)$ with two injective endpoint states, injective
+endpoint operators, common fusion tensors, $F^0=F^1$ and $L^0=L^1$, the
+crossed corners of the three-dimensional object are not spanned by their
+letters, for every gauge of the action tensors that preserves the
+$L$-symbols; see
+\texttt{glm23\_mixed\_operator\_one\_site\_injectivity.tex}. With
+multiplicity one, in particular for groups, the assertion holds. The
+three-site normality result is the formalized substitute and an
+independent sufficient input for later normal operator-family arguments,
+which must still verify all their other hypotheses, including physical
+adjoint compatibility where required.
 
 \section{The symmetric path in arbitrary physical alphabets}
 
@@ -520,9 +525,9 @@ of its other data shows that the canonical parent need not commute; see
     in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedParentCommutation}.}
 The source-faithful symmetric path remains open. For the block-injective
 construction for degenerate ground spaces (lines 1695 onwards), the exact
-action and fusion of the common operators are formalized, while the
-injectivity of these operators and the ground space of the path
-Hamiltonians remain open; see
+action and fusion of the common operators are formalized, the one-site
+injectivity of these operators fails already for one block, and the
+ground space of the path Hamiltonians remains open; see
 \texttt{glm23\_block\_injective\_mixed\_path.tex}.
 
 \section{Elimination plan}

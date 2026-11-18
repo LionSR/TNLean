@@ -127,7 +127,7 @@ theorem norm_groundCompression_truncatedTerm_commutator_le_of_momenta [NeZero d]
     rw [hMg]
     exact groundCompression_sitePermMatrix_conj (supercell Γ d (∑ k, h k) E₀)
       (fun g hg v hv ↦ sitePermMatrix_mulVec_eq_of_mem_supercell hInv hg v hv) hg _
-  have hmain := norm_groundCompression_commutator_le_graphNeighborhood G X id hX h hHerm
+  have hmain := norm_groundCompression_commutator_le_graphNeighborhood G X h hHerm
     hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth hq hΔE hH hgap (K i) (hMsupp i) l _ hsep
     (hMsupp (g • j)) hT
   rwa [hcomp, hMg, Matrix.norm_sitePermMatrix_mul_mul_conjTranspose] at hmain

@@ -853,40 +853,78 @@ finite product of samples; the same estimate applies.
     dimension, and an orthonormal basis spans it.
 \end{proof}
 
-\begin{lemma}[A recursive witness tree from fixed-input node events]
+\begin{lemma}[A recursive witness tree with prescribed word length and node count]
+    % Preserve the published label despite its legacy prefix.
     \label{thm:sampled_interval_witness_tree}
-    \lean{TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree}
+    \lean{TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree_of_power,
+        TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree}
     \leanok
     \uses{lem:balanced_interval_invariant,lem:interval_recorded_generator_bounds}
-    Fix the same arbitrary global target $G$ at every interval. Suppose
-    a family of at most $D^2$ operators is fixed at each long parent,
-    before choosing the child spaces and the sampling size. Let $r_G\ge1$,
-    $D\ge2$, $0<\beta<1$, and choose
-    \[
-        A=1+\log r_G+\log D+\log(1/\beta),\quad
-        s=\lceil4096r_GA\rceil,\quad M=D^6s^3.
-    \]
-    Assume $q^w\le M$ and $0<\xi\le1$.
-    Suppose that, for every pair of $3/200$-viable child spaces of
-    dimensions at most $M$, the actual sampled-word image and final
-    collective trim is $3/200$-viable on a fixed-input Haar event with
-    the corrected failure bound above.
+    Let $L\ge0$, $q,w,r_G\ge1$ and $D\ge2$ be integers, let $0<\beta<1$
+    and $0<\xi\le1$, and fix an arbitrary global subspace
+    $G\subseteq(\mathbb C^q)^{\otimes L}$. Set
+    \begin{align}
+        A & =1+\log r_G+\log D+\log(1/\beta),\nonumber \\
+        s & =\lceil4096r_GA\rceil.
+        \label{eq:sampled_tree_sample_size}
+    \end{align}
+    At each interval $J=[p,r)\subseteq[0,L)$ with $r-p>w$, fix
+    $N_J\le D^2$ operators $F_{J,j}$ on its local space, independently of
+    the child spaces. Let $a,M\ge0$ be integers satisfying
+    \begin{align}
+        M^2     & \le D^{12}s^6,\nonumber \\
+        D^{2a}s & \le M,\nonumber         \\
+        q^w     & \le M.
+        \label{eq:sampled_tree_count_hypotheses}
+    \end{align}
+    For every split $p\le k\le r$ and every pair of $3/200$-viable child
+    spaces for the regional images of $G$, each of dimension at most $M$,
+    let $W$ be their adjacent tensor product and $Q=\dim W$. Suppose there
+    is a set $\mathcal E\subseteq U(Q)$ such that its complement has Haar
+    measure at most $f(Q)$, where
+    \begin{align}
+        f(Q) & =\begin{cases}
+                    0,          & Q\le s, \\
+                    \left(1+\dfrac{2}{\sqrt{3s/(32Q)}}\right)^{2r_G}
+                    Qe^{-s/16}, & Q>s,
+                \end{cases}
+        \label{eq:sampled_tree_failure}
+    \end{align}
+    and every $U\in\mathcal E$ gives a $3/200$-viable space after sampling
+    $\min(s,Q)$ vectors in $W$, applying all words of length $a$ in
+    $F_{J,j}$, and collectively trimming at threshold $\xi$.
     Then one operation can be selected whose values on all such inputs
-    are literal sampled and trimmed outputs for actual unitaries.
-    Its actual balanced recursion is $3/200$-viable for the same $G$ at
-    every interval, has dimension at most $M$, and retains at most $M$
-    generators with $\xi^2\operatorname{SR}(u_i)\le M$.
-    This auxiliary theorem assumes the certified node events; it does
-    not assume final viable spaces or assert an adaptive probability.
+    are these sampled and trimmed spaces for actual unitaries. Its balanced
+    recursion, with full spaces on leaves of width at most $w$, is
+    $3/200$-viable for the same $G$ on every interval $[p,r)$ with
+    $0\le p\le r\le L$. Each resulting space has dimension at most $M$
+    and is spanned by at most $M$ vectors $u_i$ satisfying
+    $\xi^2\operatorname{SR}(u_i)\le M$ at every internal cut.
+    No dimension bound on $G$ is an additional hypothesis: the fixed-input
+    event estimate is assumed explicitly. The conclusion asserts existence,
+    not measurable selection or an adaptive success probability.
+
+    The cubic-count case takes
+    $a=\lceil\log_D(D^2s)\rceil$ and $M=D^6s^3$; then the first two
+    inequalities in~(\ref{eq:sampled_tree_count_hypotheses}) hold automatically.
 \end{lemma}
 \begin{proof}\leanok
-    The actual merged dimension is at most $M^2=D^{12}s^6$. The uniform
-    failure bound is at most $\beta<1$, hence every certified Haar event
-    contains a unitary. Choose such a unitary for each admissible input.
-    The resulting parent space is the literal sampled-word image and
-    collective trim. At the leaves the full local dimension is at most
-    $q^w\le M$. The preceding induction proves all three bounds for the
-    actual recursion.
+    \uses{lem:balanced_interval_invariant,lem:interval_recorded_generator_bounds}
+    The sample-size estimate gives $f(Q)<1$ for $Q\le D^{12}s^6$.
+    The merged dimension obeys $Q\le M^2\le D^{12}s^6$, so every assumed
+    good set contains a unitary. Choose one for each admissible input.
+    Before trimming, the word image has dimension at most
+    \begin{align}
+        N_J^a\min(s,Q) & \le D^{2a}s\le M.
+        \label{eq:sampled_tree_word_count}
+    \end{align}
+    Lemma~\ref{lem:interval_recorded_generator_bounds} gives the retained
+    generator and rank bounds after trimming. At a short leaf the full
+    space has dimension at most $q^w\le M$; it is viable and satisfies
+    the same rank bound since $\xi\le1$. Apply
+    Lemma~\ref{lem:balanced_interval_invariant} to these three properties.
+    For the cubic-count case, $D^a\le D^3s$, whence
+    $D^{2a}s\le D^6s^3=M$ and $M^2=D^{12}s^6$.
 \end{proof}
 
 \begin{lemma}[An actual recursive tree for the physical ground space]
