@@ -9563,10 +9563,10 @@
   },
   {
     "file": "TNLean/MPS/AreaLaw/EntropyScaling/RenyiApproximation.lean",
-    "source_head": "ef098ad32a728e847957320f9cf79ddcfce5245a",
-    "source_sha256": "6feb5e58a671ac2d69669f32b0588f2ba303e6a9c68fc51276f8bb98d0be35ac",
-    "olean_sha256": "95d0f1129d9057991e872376377e662c9dae3e93e6e6324c5c853746f218a4f6",
-    "olean_bytes": 1180128
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "d8ad1e9ec2aae516a0b901b462e205cc479ead28e596bb9b626c1bbd2052a7c7",
+    "olean_sha256": "47035965b922097dc53745b5f971fc4b2b62907268424969cf531a659d0f2d91",
+    "olean_bytes": 1179248
   },
   {
     "file": "TNLean/MPS/AreaLaw/Hastings/ChainBootstrap.lean",
@@ -9574,5 +9574,929 @@
     "source_sha256": "592453bea9d9e70fad287c200d5866e93baa5e623821a00807e211d9f3fb7ab8",
     "olean_sha256": "89786e0119d61f3d3974bfce919eb76f77bc58815776adb97101ab8ea17285e6",
     "olean_bytes": 747096
+  },
+  {
+    "file": "QICLean/Algebra/PositiveSemidefiniteNormalization.lean",
+    "source_head": "729428582b78ab7529b3796099193649f947354a",
+    "source_sha256": "ef0176e4f300f7b985cd6b5b95b7aaf49ac731ab4f928abc61b3c4bb238be9ff",
+    "olean_sha256": "c3da9dfcaac8c1dcbe59da77618b4e9f27ae36c16f2effdbcd9691bd01880e6c",
+    "olean_bytes": 147040
+  },
+  {
+    "file": "QICLean/Algebra/ProjectionRangeIsometry.lean",
+    "source_head": "729428582b78ab7529b3796099193649f947354a",
+    "source_sha256": "511aee2b4d23a396da1a36fef5ad647915f1224ec371d8c6e0b122ef01c23469",
+    "olean_sha256": "1664706b6d91ffb7ee4e35f13a4c1f658da617794d2ec91a9cbd45c0e81f80f7",
+    "olean_bytes": 68848
+  },
+  {
+    "file": "QICLean/Analysis/RectangularTraceNormTopology.lean",
+    "source_head": "729428582b78ab7529b3796099193649f947354a",
+    "source_sha256": "f0f2ecae7d1ce9896d226733cd4e29de2663a97fefb1cdd307644925452d5314",
+    "olean_sha256": "2e6856db5afeaecd7c74cf22a445486874e00456e748a4fd2bcf8f3487e526e5",
+    "olean_bytes": 50440
+  },
+  {
+    "file": "QICLean/Analysis/DensityMaxEigenvector.lean",
+    "source_head": "729428582b78ab7529b3796099193649f947354a",
+    "source_sha256": "cbf3909d8b07488441a5fef18649439c07d296eafc2194d3976280131bfe9797",
+    "olean_sha256": "5bda409902f08fe31e1f74ff8c673819fa8685f18639a22082944d6e5db91abf",
+    "olean_bytes": 159232
+  },
+  {
+    "file": "QICLean/Channel/BoundaryDensityMinimizer.lean",
+    "source_head": "729428582b78ab7529b3796099193649f947354a",
+    "source_sha256": "9328734edcec162880f3bfd64fda65d8d24dfa4eeefdf5ed1fd9462324ba4d16",
+    "olean_sha256": "20953f66186c27ad03d8aade60c206b7141ba701ff4cb4b643d63f3d58015abe",
+    "olean_bytes": 309744
+  },
+  {
+    "file": "QICLean/Entropy/Renyi/VonNeumannBound.lean",
+    "source_head": "729428582b78ab7529b3796099193649f947354a",
+    "source_sha256": "84ee005427ed17977d21b6d30442a38915199460159bfb8975714bfd109d2a6f",
+    "olean_sha256": "858eb0443bc71ed4d115f3668c64a3eb808a89f37cca27efcfb889da016a9a31",
+    "olean_bytes": 221912
+  },
+  {
+    "file": "TNLean/Algebra/MatrixProjectionReindex.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "8eb6798a16e2b2b9ecda3894ba7d15285577f64dcf628c0892d7735f7cfc05af",
+    "olean_sha256": "ba4e976060201d0b2ff3d4a22e33f7c3b8a35896c8aa2304108c2ef20512fe30",
+    "olean_bytes": 20168
+  },
+  {
+    "file": "QICLean/Channel/BoundaryDensitySelection.lean",
+    "source_head": "729428582b78ab7529b3796099193649f947354a",
+    "source_sha256": "42d5c96446ddfb6ccb279088b649302df6a9e742b795b97fed40ea4e4af7fce0",
+    "olean_sha256": "531ac38c44ef3f4878992436230fa321fe45b63bbfe298831e2510ed6873789a",
+    "olean_bytes": 275840
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/EntropyScaling.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "7a266e60167554c3f69eec4032ce3b65be6880cf151b0b6aef3a565e74a88680",
+    "olean_sha256": "2452b30b8f5dcd4b85adb2eb38b4d1d737b4e16a1ab3bf5fcae06d0effb44b42",
+    "olean_bytes": 3248
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/BootstrapLemma.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "31caca2553de5289a76f405a91a1a459c2a68c568773d75b7e7d98d5e4041d34",
+    "olean_sha256": "914646e217de4587686e98c75e53455a20921b894decaf078f5658b09deb0ac1",
+    "olean_bytes": 369192
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/RelentFromBootstrap.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "e5d4de1e8da65563f6cf30527a8d3307dfe7a2b57f6317e1f3e8d2e77ba7ade6",
+    "olean_sha256": "daa9657004c55d8c4c7a9252c98210fe3662ad30b3ebce21beb7d4a2e58fd3be",
+    "olean_bytes": 672544
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/SchmidtTailConstraint.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "fdd47e9460d13c2c8dd5254762034202c35a606f374393e4ea1df7b8eb740bd0",
+    "olean_sha256": "73c0a6c942a33409b62b2231a2eda1d982951173f350309e614ae806e0b1dacb",
+    "olean_bytes": 843616
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "f7d8e52de647bd4275cbcce07ec438f218942b7edf24d5511bb96df2c30372c2",
+    "olean_sha256": "1dd476f1472e8c1357180d373101d70f4852f2c7428eb25a5190c7b1805d8f99",
+    "olean_bytes": 614552
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "1de3d46ed78497636ec8af4cc180561f4fe6ff8a90932bf20e9f48b61972e15b",
+    "olean_sha256": "4a2f978819ba175ecb1bab77cfc443695e29c0270dfacb9e63a6582e4b1823a8",
+    "olean_bytes": 267664
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/MPSFromEntropy.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "f217878f07eb0d2dbf2adc1c40b51f8efadd325e48b4736f494b0231788e08a5",
+    "olean_sha256": "cd86e04373976804d30cf3a73dceee97e943c06b20ccdccb84ae356c4a466ee6",
+    "olean_bytes": 328872
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/PrintedAreaLaw.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "e3133c5324b07aed08b623ca82765221a0e5c9cdb904a7065990815052cc7a62",
+    "olean_sha256": "63346bf1b7a3ebd00b609f7862e048e74d3218aee156a3ffb73d66b9ec2b22d1",
+    "olean_bytes": 1028928
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "2259e259a3f56451c757ef04e8dd79cbcb10ac80145ff4eff88bd0b66a9e80f7",
+    "olean_sha256": "433e9b8a62e1bd21c5478152ba2257671911c267f4b27b2c3c3e998f0aad6b7a",
+    "olean_bytes": 215432
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/PrintedAreaLawSource.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "96f0097e814dc9a712de987f0d49787e5df0a26c649e6039b7eeb7ce6ebb3798",
+    "olean_sha256": "b751386c77bf325cbba45a24f93b15a2fa02ce9de4ee5abd0e0e1f10d08e904a",
+    "olean_bytes": 219320
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/RelentGapped.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "578ef02247c15543d8c09208262d1d794a8d537f691a31ae2031974b64472278",
+    "olean_sha256": "e21f483eb0d2b98f70702cff6f70093b0a7b95f778454411118d2bd43ad6a83d",
+    "olean_bytes": 307176
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/CorrelationLemma.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "f7b8fffa41affb69344eee1c3aedf49c5097a8fe534476f8d988e5936a1e1481",
+    "olean_sha256": "21e03288969290e6b70cea86c81b0968e1ec364ec0293307769e7ea5ad820e62",
+    "olean_bytes": 648864
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/SourceLength.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "d4e10a9c8f9685ea17e98a6c569e01b55bce2ea24cd31c8bac4523833151a34a",
+    "olean_sha256": "25e6cac8161ff787a643dd58c56dc4835bf5adb8850455ed68e92f861fb264f4",
+    "olean_bytes": 229600
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/TailRenyiEntropy.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "9cce7b03a3342b3f73f1cc3e8de2ed920444d828d26c97da07276ee424d7346e",
+    "olean_sha256": "2733295b005cdd2dc30aedabd4da9df210c9d7838e1f2e9dd07f273e5fea6536",
+    "olean_bytes": 534880
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/SchmidtRankRenyiBootstrap.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "56b67142c68ed96e572764a4aa1d08f98c80f1f750774676cbc00d8eeba36ea1",
+    "olean_sha256": "46fa56b1baff6d7480ccc9da8fc5caecac0c4326768929875855242a1129f6d3",
+    "olean_bytes": 237904
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/PhysicalDGFilterIteration.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "72cba3e102f1cf78a757275e38ca8db021188632b9427a0f05c9d13d886a546a",
+    "olean_sha256": "a933c57b99f00490d7b41c1fad9c62b6b40a888eedb153b44e9e441b45e978e8",
+    "olean_bytes": 499504
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "c151d247d1d815cdf1d4303cc0d76433d007d8aa1302ecba2dd6ccd6d04ccbf6",
+    "olean_sha256": "ced55a6fda5ec2aa428a9fdf96401920884b944f0f4151a3dcdd3e99fe7202f0",
+    "olean_bytes": 793648
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/PhysicalFlatGroundRitz.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "0d7c577b0377434a210d81ff683d45d0859eb074c8399a4eeac11ac938915937",
+    "olean_sha256": "62ce0357505a5057616b1947cbaf6c16bf0ce073a1f341264b1a22ce2d167991",
+    "olean_bytes": 443264
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/StripApproximation.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "62f98e9a7c9e1ccc9f13f839655b9198c3c4598f5d0697b0546962943026277e",
+    "olean_sha256": "b661587cc8c4c219b16a03ede33528ee2c74a4ef8e5c099711d7d84386fa2449",
+    "olean_bytes": 1597456
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BondTrimmingReference.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "7c5118bea149b92c9ab38863734d75d8457ba95c4f1e1b3d7c21df6d2730f206",
+    "olean_sha256": "13cbe2c2db02b409db1c63946b54a9568dc05ed154ac6a2b978e415258321189",
+    "olean_bytes": 316592
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BondTrimmingBound.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "d9d9d27c71491b303d8590c9109b5d9aa4df49d757099392aea3ecda821c62d9",
+    "olean_sha256": "d7c178dbd20ff23477e160e7fce3f21f7089b6022d5b680bb46da8ef12813a1e",
+    "olean_bytes": 164880
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/ChainPaddingGroundState.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "cedd3b42e034b11c8cd310fb0900d03aec42ab2472c102642ce99b3ee0528aa6",
+    "olean_sha256": "09335f759279ae69d72d921ce8a6b2187b821ac952581d1766f362863ae80545",
+    "olean_bytes": 283944
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/ConstantRankCut.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "ef0f9db930f3c1abe2736a24fbb634e987e7edf7f9038a0562407a4423a126f8",
+    "olean_sha256": "6d50f7a746104f24d69b7e3c41ed2a4079c59ca03db5fa475ec80203239b0aec",
+    "olean_bytes": 1295840
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/FiniteBoundarySelection.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "3a82e971b9928b08c40ebae35cdc7f56075d43021ac9bb0e102a5fdfdeb098a5",
+    "olean_sha256": "4607a8a6594576e52d4f68cf501d87c63385a3b02bc3633d24729c3613a71d6e",
+    "olean_bytes": 1883464
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/PrefixMPS.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "00064f02146030af590b602f2637a3c2a0c5cad4abbc9c286bbb6bac9718d08b",
+    "olean_sha256": "ce89913facad12df5cc584aa36b2a323639b87d18efc3408257a36fea3a69f24",
+    "olean_bytes": 295000
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SampledCutDecomposition.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "31f20d7cb54c98db13402b3758f9eace25db08f991f04a739f9afdbca370eeae",
+    "olean_sha256": "f8160a244fbfba1544aa8cf42c001313b25271888ce4ea06797c22198317be0c",
+    "olean_bytes": 322536
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SampledErrorReduction.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "3e2a5d4d6b0a9ff09c66e260fd40a1e4421813a9ebc8ef9e7fc808ff2ad8854b",
+    "olean_sha256": "1de44a276ce9e53087c8dcb3c33e4848a8dda04be7b2ad35b5be902f6c7d44b4",
+    "olean_bytes": 339216
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SampledFactors.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "ddce7d812fe55a70bff4f33ec85efce661259a99b5454ae573d1f6c54127fe92",
+    "olean_sha256": "b6375221ec39329df26bd256bde3c5fc82a39191fc893c37d304c48a81375944",
+    "olean_bytes": 482592
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/TrimmingConstants.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "9b91abf8e32f1f5566444a16b09b316d769d410afa1c621e2002e2e826c38c8b",
+    "olean_sha256": "3847ce37feab953998bc5a6f59c8fd945a8b9ff82981fe9312b651e6aebe8135",
+    "olean_bytes": 532528
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/TrimmedWitness.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "11d4211242a67e43e58b392ddc0ba538ceea9d98ac28f492ec09d3c102a171e9",
+    "olean_sha256": "2d608b8d76938b575fcc2883c3a8df11fd90b107c0353f641da00c3e1c331773",
+    "olean_bytes": 1052960
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "538c53144e3228ed82856a34e812738bc69b6969ee01e0200d451b928278c8de",
+    "olean_sha256": "537049865eb4f067840037371ce24540bc06d7337a687de9ae1b3e525216b10b",
+    "olean_bytes": 1246552
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "52388faec60deedd40e995d922a9d0f5128610e8214ecbdfda1456c3d24b1462",
+    "olean_sha256": "98c462f2ba85b482d1ff22d5fb93b97d6218a063188260d5ea8fb36a25e77f8c",
+    "olean_bytes": 2864656
+  },
+  {
+    "file": "QICLean/ManyBody/Sites/Lattice/Edge.lean",
+    "source_head": "729428582b78ab7529b3796099193649f947354a",
+    "source_sha256": "c3b262fd5c346607e10b75ce920b6be56134f32f89e53dc4f7a8042345e0894e",
+    "olean_sha256": "20d8cceff3395dfb1f06d938050870eab18ee25ff6bac16c603ab7b3dc7270cb",
+    "olean_bytes": 113656
+  },
+  {
+    "file": "TNLean/Algebra/FinsetNormSumCauchySchwarz.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "0e019ca5eea397e283fac716a3430a39cbbc5c17e80671f9c9ba0c3c596d15cc",
+    "olean_sha256": "f628951ff0be90a1ddfa7d18048ce4616addba380d2ee79f9bb2f3b84c21dc4c",
+    "olean_bytes": 30000
+  },
+  {
+    "file": "QICLean/ManyBody/Sites/Lattice/Square.lean",
+    "source_head": "729428582b78ab7529b3796099193649f947354a",
+    "source_sha256": "56b7201a1b2b1e26654078a86ca18f30fe39e552d6ea6451cd14c8d6d77bd304",
+    "olean_sha256": "355634fa2514eec1756f55a197880f8bf7adc3a9e355cccb63e00f7758e6e4dc",
+    "olean_bytes": 315496
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/SnakeGridParameters.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "6fea33d476ab39aa5fd95e1dec849adb0c5da7a408e25bc7edb3d21dc372e527",
+    "olean_sha256": "3e12f47116ee906f7e4a5f4aefb01544b9ad72174e69f91504530bbda3e86756",
+    "olean_bytes": 251304
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings/SourceConsequences.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "9d84c29c73810d2eb4fabf3dab8ef309e81e2bd7fb20cc1399a4a3cc185640d0",
+    "olean_sha256": "3e37434dcd17f30d601d0b805943248ac9040154608b3f8a33e7702f8f94cdea",
+    "olean_bytes": 725992
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/Basic.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "feca2560dce49fec476fe470faf0998d03748b91f0dfe5545bb4b62f6782d507",
+    "olean_sha256": "811da25267f39f97af4e53f658c1e80bed101b1e27cf0ada064a5c9b09c7c089",
+    "olean_bytes": 986136
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/Hastings.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "bc95deb6204cf9c0dfe4c8827e90b48401f568b330e48eab060a0e70dbd24657",
+    "olean_sha256": "15a4988140318369e1cf3b04cc2987a48706ccf62895156b1983dc3231a55942",
+    "olean_bytes": 7488
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalCoordinates.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "ff389a6fa460292bae1873fee1a8eaf33122023344acc1cc7d90d644d1350dba",
+    "olean_sha256": "a6db6ec3e7bad078efe56e7aadf8ff73ee6df9184630757aa93068202aa3af38",
+    "olean_bytes": 550664
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalCertificateTests.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "c60ab42b0403029704466c902fe272696270e689f424b7b7236a322a825885db",
+    "olean_sha256": "767b2a8e3e980b4faa39be7ae62e9e66842f64fc4a8f69378268bef777656995",
+    "olean_bytes": 676360
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "23c295291fa1880d33f98818c01c8bcd42347064f6e89d728ffe36d3feab84a7",
+    "olean_sha256": "3ab8844933bdc214f5cbf95f23a1a1654a5698b9f1863ab7ac869811a86f0163",
+    "olean_bytes": 5020488
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalMatrixHeights.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "97361719d54af29955e0d392de980958802e13338c5208d0d7cadf7d879b85d4",
+    "olean_sha256": "774973d241d4794aeab17fbb281e5010fbd19e30051b728de0606db075883b2d",
+    "olean_bytes": 196320
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalMatrixCodes.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "0a691a226eb9de169315ddce88552af1b55fd975beed1bb827bdd7aa835fa3d7",
+    "olean_sha256": "22ccdaace39b528727f0dad25f9b726f579b8b671f24829b65751cfe83056e4a",
+    "olean_bytes": 832632
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/LeadingResidual.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "1a5db0a84530bbc17b7e9a8a60a4589288e17e6cdcc03dcffb215fa6cf60a56d",
+    "olean_sha256": "13933a29356091297becd0b317954293c468a7513fc9458e15ce3072cec72727",
+    "olean_bytes": 881504
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalMatrixMeshes.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "9485260934b36cdf26019b25660aa283db842f3af02f904560195737afaa72ab",
+    "olean_sha256": "0285fcad91fcbd19f32598205f6baa505b38ce809368e1ecc54a831db6e15d1d",
+    "olean_bytes": 1163120
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/LeadingPower.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "cb5446ead57183678ff3af752b2b59cacf3b14de6956418a4e2cad1db9ef273c",
+    "olean_sha256": "7cbbc6e3dc14837d285742ac59125daf44c48845c20ef41a0645634738d7bc0f",
+    "olean_bytes": 1379520
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/GramMeshes.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "760e70ee0563aa3b9de456ebdd9087ef419ce635e98c09992898013d12cbba63",
+    "olean_sha256": "67d8b284d5f24d26880db1ea9016e7b80aa3c5e61fa841c67730c3c6e5216d7c",
+    "olean_bytes": 1083240
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/SupportCoordinates.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "30532379f7fcf635f31d4fe3153bc2c7442cb5297f11cf5eac9257043222acb4",
+    "olean_sha256": "5b2ee97d12a1c0dc8aa18b85b0948a5714768cc1589aace1373c2c11dcdb263b",
+    "olean_bytes": 380640
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/SemidefiniteRepair.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "9ed885a1538f4e2ef4fd7b2145436f47eb1af8288a821c45a251616c917e5f86",
+    "olean_sha256": "da0f0036333207bd8f2a877d0519fdad28cea0c6a3316d3fbbc388b53e5ac260",
+    "olean_bytes": 1479648
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/ApproximateCertificates.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "84c9030bdc397c3d60b54ba3e0cf6f0dcbda96dea1b9187804024f19d74c64fc",
+    "olean_sha256": "b2108e4a119f78596a3edb74308c6d52478c1663f5d15d3191edfec651c0556f",
+    "olean_bytes": 1561720
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/CertificateRounding.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "b437d137628b7923a6619d6ff3503d29c5a297a50f1045636fec57c8e520f438",
+    "olean_sha256": "ebd4697247c01a6cece78666b9a891f8ecaab0f82cda6bd97091c1a61d3de3a6",
+    "olean_bytes": 857960
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/CertificateSearch.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "710a63e96a180fffd2610271254a75e3f16671b7d1c2e08f9ae244297a7ace68",
+    "olean_sha256": "10031ef6986a521fd0bc142e5c45ff25b27295885d926fc3935a8d64b1b10c8d",
+    "olean_bytes": 562512
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/ErrorBudgets.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "8edab84f1b1b2872b617d91d9cf6b8e4d8b5b7c1809f6c09ccb28fa4ba76f5b9",
+    "olean_sha256": "6adb264f98ae43cffcd3c256029e76e4b16ca6749b35d8d541f19bfc80c4abf8",
+    "olean_bytes": 945792
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/InputEncoding.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "720176c4c850080ea75847009e3bc458dfafa4853645d2951c4e9c090008c05a",
+    "olean_sha256": "db6bddf02d93fb0390a831b654ad9aaa39498cbbe846467fc00395c52cd9db67",
+    "olean_bytes": 1325664
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/TensorParameters.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "943bde8080d605dd22cfaca9c91884a373a2ff58832e8ccd1fe527606109f6ce",
+    "olean_sha256": "a4348a906e2517491c3c3efcbbd56795a32da8ecd58773f504523ff49d99ee07",
+    "olean_bytes": 544344
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalTensorApproximation.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "0e214848263ff52fdd9d09705e135f00c6d6f69ef907ead4da671f46d4817819",
+    "olean_sha256": "8f383891cd14dcd3a3524da7025f1a5c9205e4e54da417098d9bb8bf24fedb78",
+    "olean_bytes": 951016
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/Selection.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "c07ac3f14e7f74171762031b043e630c5b4df1b44def481de18692df90bf0d9b",
+    "olean_sha256": "fbf51570f0db952a20d52e7078532f9e2c68af8166e23a206adaad8b10bdb2a2",
+    "olean_bytes": 2070336
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/CommonDenominator.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "7c025256f360e2f2c05caf43133ba6ade6eda39ada3db6da3c6a150b219b917f",
+    "olean_sha256": "98297b8065b4b9e7e1cc8aa28fd2b1b43376133404bd63c40a0697f555f45cb0",
+    "olean_bytes": 362240
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/DyadicPrecision.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "7245128067cfb059d6fe3458d421354c9a9d478d829e8e742c775032f8e0955c",
+    "olean_sha256": "06263c7556f485952fc04fc7f607682eeff595a895e09e9aa5911b5a75193f91",
+    "olean_bytes": 88176
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/PolynomialPrecision.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "64a6035b44f56eae508f87f85f69d6cd57d33e059f68d6bf9516baf46423c732",
+    "olean_sha256": "3cb1ffbb87dd5c76d317f6e04317420492e941a1294f63accc7df17bc972f849",
+    "olean_bytes": 553568
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalContraction.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "07bef1b0bba7817ab45d0c03af27f86bc3ddf29b3cd346eda6fb7f0ea2337c95",
+    "olean_sha256": "47526236c93beefd6e19f036e588aad2766cfca83b3f4e0a7ae6d1f5b2ad31cb",
+    "olean_bytes": 238768
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalContractionCost.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "7e39deb480933c6983780ae55529da307cdaf103701966a4ed822a15d34164ad",
+    "olean_sha256": "ed33ef6df61a35c1dac5a620e88fbadd3c7d914c398468b10f0806de5d58fb7e",
+    "olean_bytes": 325104
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalRepresentationBounds.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "ebb2882f69dfe994a5313f1121862380ae92d241d9666595f782f47bce53b0be",
+    "olean_sha256": "4bcdc0fff2678b7db150afea5c3b8e80d04a3c76c3404951c95fd9e4479e3148",
+    "olean_bytes": 71736
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/TailParameter.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "6725d0b62d6a92a866fe447e200edd76d9c60cc14969593affaf7288c57e871c",
+    "olean_sha256": "ec02e15547c4f824478b61404a2fd79c7aae785316af4e9a1ac6cb4f8085ba3f",
+    "olean_bytes": 502512
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalStorage.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "147729674391684c753ac6dd3a4331df4a4262a87f068b4acda38fe31151df17",
+    "olean_sha256": "83b7ec77f962de6291c09f0f9f13bb391c8904143c3abd0f7790f517c6a8f805",
+    "olean_bytes": 328896
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/TheoremStatements.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "41360bbaf216e97a1cba7264701a22f76c20bc5c636f89dd95ef2686be1284cd",
+    "olean_sha256": "21b13ae454b53c36ee987997a8323a9214869da933a9ecd199eafd857dcadae9",
+    "olean_bytes": 28408
+  },
+  {
+    "file": "TNLean/PEPS/Defs.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "6d5686d68070e798b64fa07b30a40052f9264da3d39ea0e09a6413aebe5e0a86",
+    "olean_sha256": "c97da898158810d74fd5c9d095581b1306d4e0cd134b8238f51589ff8dbe8deb",
+    "olean_bytes": 168120
+  },
+  {
+    "file": "TNLean/PEPS/InjectiveRegion.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "e6206316071a086dac32f2aeae1df2a38f5bbf9d733c3d843bf7ce389911a666",
+    "olean_sha256": "df3eea3449720305bea748980be056d5828ea1ab31470fa990258e5858ed609c",
+    "olean_bytes": 641064
+  },
+  {
+    "file": "TNLean/PEPS/NormalEdgeBlockingData.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "89459a220e8a98c9dccfd574fb5235dde5776aa7a9e3bee039024c41146b7f64",
+    "olean_sha256": "1f5cbb6dc970c9bca1b2c02f94986675e3dbd7f77e0bdafa2d9ad776c350f475",
+    "olean_bytes": 287464
+  },
+  {
+    "file": "TNLean/PEPS/NormalBlocking.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "372bbaa8493740f3c9388af135c5f97bc9d4556a9b08948026f781f879781a7b",
+    "olean_sha256": "97a5e31a07adf0bd7d94eb28a6d6c5728a0f6fa4eb6ed7a3cdfc4c7e67fa548f",
+    "olean_bytes": 797512
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/RectangularDomain.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "bbc8e5d3c33cc512dccbf60f73888b0aa82603d329e418b8e9c989c23d8a3f5a",
+    "olean_sha256": "2237e043f7f693bd193f9bde98293bf53cd66ebe705ec5408a0e02eccd8c58fa",
+    "olean_bytes": 118832
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/SnakeGridGeometry.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "3821b2beb60d210b7afbfeb26e38611ffcde0fd1595a19e596b900b9f180442a",
+    "olean_sha256": "84a42da9cbdb66961d3042d089405b62d65e10b37be508fc8d2c45e21cd00f6e",
+    "olean_bytes": 713824
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/SnakeGridApproximation.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "1cadebd45885398babcf6689bbdb32f7621304b610cedc2fff7e215266185775",
+    "olean_sha256": "900010a5383f6f176d13a6ed5db0535c20a8af71d61d5eadf4321df8fb582af8",
+    "olean_bytes": 931240
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/ContractionHeights.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "93a2c172a45563cd561ce36fdb49a7f62de1f2e221502827f26caf245d9a05be",
+    "olean_sha256": "39b1737e0d6332fa3292265a53b47efec197a52af2b7ec8ee9ede375b845d824",
+    "olean_bytes": 360944
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/OrthonormalInput.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "bda369d18095bba78f1b9b8791874337bdead5e490b0140a3011cb7cf9702028",
+    "olean_sha256": "dc10ef2899330f0cc9d0d9c333f7613dc855d97b27bd7091cc8077a7e82f65e6",
+    "olean_bytes": 1439704
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalCodeHeights.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "ea91eccdecb8f2bec0f5b6739beaab156645f3505f7b32ffc0d72c7408a65eb8",
+    "olean_sha256": "31f1babf98dff51399440ecf02dffdb48be3049704503edfac620403eecc6ea0",
+    "olean_bytes": 103312
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalViableFamilies.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "b7e5e8b6dd6a8e9fdea708859ba4e8d96b31fce865533fa3844225b4795746bf",
+    "olean_sha256": "f031110585f2ed5c4f12e742c8d477efd28f8e28fe6ec74397199cda133d3d40",
+    "olean_bytes": 589072
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/ContractionIntermediateBounds.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "681dbb8b69bf6d6955833001bed441d58c8c27b32e20dd0435ead7132dd3e3e6",
+    "olean_sha256": "ccf33233f7da7d34d0a1ae1afee142f90be00ee7ec9fc044326d0c919645d598",
+    "olean_bytes": 237080
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/SearchCost.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "70d4ed0b9d62921beafb81da74b695f02657117483dddef8455e47529d1b8899",
+    "olean_sha256": "a5c4c831fc1580099ca9bedce8977b904c06ca0a0f60bd299ed4954e460c205f",
+    "olean_bytes": 546576
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/SpanEncodings.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "474e1f75661065ff2b813c8665dd98f4df5dc98c0d6db452207c15631a4bcb1b",
+    "olean_sha256": "52c0a489491b8198031e65ac688d122333138526e6cd24aafd8c775ab9d89937",
+    "olean_bytes": 1097544
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/ViabilityStability.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "5a870e2e8bad29b36ffcd1301fabfe9d5fcea426d1386fbdc93797fd947c68e3",
+    "olean_sha256": "7080f564847e2762d6883349b5c485cee9e3b8bb22f955869788eb251e394cf6",
+    "olean_bytes": 961144
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/SearchCompleteness.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "03420e52fc7d214dd674aedd487af02bd4d2bb0e88b991e90984f680e716caeb",
+    "olean_sha256": "6535f9dcfa27c150dc7417352ef5d1a1b8b43705e993e44fecf4648efd7e3406",
+    "olean_bytes": 2379056
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/CanonicalSearch.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "a71f6b6ed623b5cd263368cff6ced1e605a5afb16390a5f06d2371b2ed2eaf23",
+    "olean_sha256": "97239fe5f57a449976b500091c2ad9c3a6232339e8ca651db692f3812780642d",
+    "olean_bytes": 347656
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalOutput.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "2eeb3f78081cba4e790438756815952bd2d9931b8bcfabaa614d80b9821025ee",
+    "olean_sha256": "50ac0541f9ab06d588acb5bbb724910b697379a4c1ea2c8ccd614edb900e4c49",
+    "olean_bytes": 904120
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/WeightedTransferBinaryBounds.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "15e9949c963c217c54e74963df08891a0296560265818766f995a79d8b127b97",
+    "olean_sha256": "af9cf7f7ebca36fb31239408ef217c15376eb61d90e8c131a95fa4522e4add6f",
+    "olean_bytes": 148656
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/SearchSoundness.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "c7bb3c4436f188def74380687f90a4d0a392533894fd5b5f62913192a4e90883",
+    "olean_sha256": "312f71eddad75c5cedbc7dfecfa7887e12a183934f523848a25bce39fa1116d7",
+    "olean_bytes": 644896
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/OrthonormalRounding.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "9b09ce9a167214bb0464f7ba57f9a6b6e71baeb70c63878dfda614bec8fcba1d",
+    "olean_sha256": "b7d3d9464fc44d6f35c4962c40fe45bb801695edb36d3a9e62fda73ccb890b9c",
+    "olean_bytes": 254432
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/RationalOrthonormalFamily.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "2897f9ba4bf963a76e22189bc006ba7c64327cee48ddfb3ccc8d26c71139e9f1",
+    "olean_sha256": "fb5ec5b20f1b28a923aaf41ce05a6eacd71acfbde5e493b0340414a5ef982bdb",
+    "olean_bytes": 279136
+  },
+  {
+    "file": "TNLean/MPS/Chain/WeightedOverlap.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "1a9a901f00d25e82acd41496736670df0626a367e5fb0b703ed7a72151d951b0",
+    "olean_sha256": "ee77dccb765a412a003d7948f2a38cea2e20690e3cd082971002d082d876143d",
+    "olean_bytes": 198536
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalGramContraction.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "db9cc068a6c7187f5441f531f7e5455a60171a5ed20f2efd331ceda6da88c50a",
+    "olean_sha256": "4025c15dd327cf507438496bbb067306c7c393b1ba32b0bee5a6b886e74a14bf",
+    "olean_bytes": 419104
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/RationalSampledErrorReduction.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "878c218d4f91de355ee18d8c0ff2158b47ec7146c703eee2239f4e6858c3fff8",
+    "olean_sha256": "31d6e7244703e8e48342adcb86dcce2f417ffe2726e875fb26163910658bdb18",
+    "olean_bytes": 416440
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalGramContractionCost.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "3f1ed78094a1e236949e7fd7b04509f465d5058f9acbc13d72bb91f1e32b485c",
+    "olean_sha256": "51c366291e53aa2d3ef6d07abda8398110103c1a8702c65ece90a9e5f122f069",
+    "olean_bytes": 402416
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/ComplexArithmeticHeights.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "37b9b68a1acb7e13c1589ad17a4c8cbc70ac7b93b06a1efd08304b48f08487b8",
+    "olean_sha256": "52e29e3dac2625201f0576ee284960f155e8ddbc14c8c6cb99280215a7b0eee1",
+    "olean_bytes": 112552
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalAccumulationBounds.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "edcdbf050ea02f16665af44e673b2bb19b5230ca093955ec62363dc6d60d1927",
+    "olean_sha256": "afe66237a1a7b3964c84ba489e31156debd9b85c7a046e2ce8ff2351e352d5e8",
+    "olean_bytes": 62600
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalArithmeticTrace.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "f9eda0f2753574c8672be6e70bd02f076150c917dc4ad7dce141a366074746ce",
+    "olean_sha256": "8291984f775d0ac1044bd85182b1334aad953014669a93ccd7ef55928f7357d6",
+    "olean_bytes": 252808
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalArithmeticTraceCost.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "4aae7e5ba638cf68c9057ee2566c483c4d6e4eadd5ec2a0ced8eb315c778b2b2",
+    "olean_sha256": "0e2d6ac329d1850a0fd375169fd2821894c61c5e9042e9ef1fd9f27a72045727",
+    "olean_bytes": 86416
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalArithmeticTraceHeights.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "2cbdfabd557fc4ac1ec1b89a783d4af387b0a35cd327927769524ae85652f51d",
+    "olean_sha256": "d190462bcf3e1ee2b4b23ce2219c58857d749bf550cd8937821f26c957015858",
+    "olean_bytes": 177128
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalContractionTrace.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "0c2987486de8435f2c86fff4800a5c2f6f62787adb029fd68d83f3e11a13c319",
+    "olean_sha256": "f00dea1d2a10f069a149ae197889d9543d2cdd22ee44c53f3e75878093f064b3",
+    "olean_bytes": 229552
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalLocalEnergy.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "6fd4d7dcf68994711e6b36ace23640c0b1af12432df72310d966ac35d3b7c1d2",
+    "olean_sha256": "d6fe81852cb3bcddb69010b070be9252c9e5027dcc96c7f5e0425d7820a7e2d2",
+    "olean_bytes": 314408
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalLocalEnergyCost.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "f7269ccfe5941b064f692742c275ba80aaef7828937b2dabb89e22e0f3165fd9",
+    "olean_sha256": "b565128b693180feddc00be10d03ed3ad0ad99bc1c08ecfbfc01f3d6f6e4b573",
+    "olean_bytes": 158104
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/WeightedTransferBounds.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "6d9e5648d7833043a464ff6990c5d358b19409dcbf5442e8d55a9ca1c254e539",
+    "olean_sha256": "97e3833f0c88ccacb63bd43270c75d50becc7b9ebf1c9b0b8f812fa905146b73",
+    "olean_bytes": 214400
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalGramInputBounds.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "8d435eba444c45d3b2644110df54603d09ddb624dd4a574c72f510c2ed0f1e8e",
+    "olean_sha256": "fe9ae0948376fef350769b279adccac0e7814f5e1426017e0bd593976a1df83c",
+    "olean_bytes": 383680
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalLocalEnergyInputBounds.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "709974fc16a9146b47057eb088a1aa406c2a52774e5b1dc0382016dcf0ec40ab",
+    "olean_sha256": "b4363c3e1deff1f6f19406536830e7e7b393f3c82cc6054b47552dc9ad5ef09c",
+    "olean_bytes": 228408
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/WeightedOverlapBounds.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "ff503a84bcbd08302aa395d90927faa64b97bc2d54b230c3201ecc0cd94ea28c",
+    "olean_sha256": "440272a426f48124daee46b90786e586509b1b33d7103a1f158c51c4c5a249e6",
+    "olean_bytes": 103184
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/WeightedTransferAccumulationBounds.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "7b692db04f3595ff76e527bec5bdbf7a9562151002123a0b7d9b1222c0470f2a",
+    "olean_sha256": "7e5205737d70761042a6e4d95fb7eabac6a1c14343dfece1c96bb0c2068b42f9",
+    "olean_bytes": 109056
+  },
+  {
+    "file": "TNLean/Algebra/NatPolynomialBound.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "03969eaf862fb26e31c955169f337d7e7c521a4be80685257f2a3861907c4cfd",
+    "olean_sha256": "87309d53b83b204d7d793bb8538e95ddadfc1627fb3d6f4ec33714de7116c8c8",
+    "olean_bytes": 136968
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/LocalEnergyBinaryBounds.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "aaab6ab91f415b6fd263e945a197987b37be382d45c601dbf295c0e2e29fe378",
+    "olean_sha256": "f7d4635195927c658ab5739e9f0e8c4184aebcedf2c91d3d85fa6894466ec5b2",
+    "olean_bytes": 133288
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundaryTraceNormSDP.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "72582e4a3fcda2d6fad5efeafb5692117ba6fdc04966683d160663f95ab68f65",
+    "olean_sha256": "68bb71eccbf710f207c42f7b1ba923f87d4e77988293e74f1159aa19054d4918",
+    "olean_bytes": 4456
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalLocalEnergyBounds.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "0d86ba0c46a979beeb2f86e34cfec869562ecd4562b4a9819c3765c7aab3246a",
+    "olean_sha256": "fbbbb4c2c85aec988eff2180bea6e19dafbee335f03a9702e5816ed2da4ed84d",
+    "olean_bytes": 279640
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP/RationalLocalEnergyHeights.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "353ba80dd86b439efb2abb744c03ea98a775b9a0bd99b0e8c444aa17ecac9c3e",
+    "olean_sha256": "96627c9bc3e11a5078e2b254f58826ea5e593935da1fb1d1619a34aa65350c2f",
+    "olean_bytes": 214632
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "31c2d5ad7b9cdd42aa6b3c7d302515a2c2145010ecaa93250c424ed3e75b9f95",
+    "olean_sha256": "0a338177e22e3c5e74ac7fb0765d74f06158fb4ae632e4e97aebaf2855c6ef3a",
+    "olean_bytes": 1854352
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/BoundarySDP.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "b3d6d69e89b0b37f17c7d0467fe896f812bcc8a37ef8a9dd628592d7168edeee",
+    "olean_sha256": "6660f87907e052abbc1e25fcb12718a301ea7bff7f923305aec28f256838c7a2",
+    "olean_bytes": 8040
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "961301a1a38413b92d13a70eaac971b4dffedc7e73dabf6bb9d7beca8fba7b48",
+    "olean_sha256": "8094e52e35bb070956a0d2d0da8fe5d807f2a634bd5cf17931996857c5768d52",
+    "olean_bytes": 1053496
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "ef711dfc6bbdeda244fa11e0b5bbfb722ffb8ba57fdcfbfe6360645cca6d011c",
+    "olean_sha256": "4ef2b26c9e72abaab24eebe66b26ca77ee15f7b6ad330e2c0a13cb5632eb6864",
+    "olean_bytes": 2099008
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "7c04aa74a03bd44e216d944ec8b757564f719893bfef963c5a50067fc99389a0",
+    "olean_sha256": "f00d68032ae2e69dd4bc4d96878517a9ee96c4dab94bed0bd8727ba849c1a4c7",
+    "olean_bytes": 1474432
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "d84b8eaec9d34637662ecf43506f2993a913c406f1c6ea3d1ade460c22d4aaa9",
+    "olean_sha256": "8588caf5e1a0b85ba3df825f91db9b2c28f86e14a958ef5e5ec9e599cb36dcdf",
+    "olean_bytes": 1963840
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/PowerIteration.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "19f9c2be462bdfbfd2a79df0fbae4df89a22ddc77fe4df9b203d5bc4b3672a69",
+    "olean_sha256": "fe71128508994573527c8cda0811b26cfbe2734a361bcebfa230c8d9a81dcea8",
+    "olean_bytes": 2405208
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/UniformCertificates.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "29f6f5053a25d3916d5b2c56b7108517e012e4adb5da451f09e4ae3f77f6eba6",
+    "olean_sha256": "1173534f01f7f78622125dda219cc8a869851b76889efda03b1415f44cfe4dd2",
+    "olean_bytes": 1141064
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "fc9825fc3fa89fb0f88c248ef6b3f3f12c151efb3b61075b5a73bcfa91bc977a",
+    "olean_sha256": "3c59ee07d037435ecc89ca87775f6535793027d16bffe15d2e852bcda393c2d6",
+    "olean_bytes": 2336
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SizeBondTrimming.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "58cf9b2cd602572772847acaa6ee3a9ae2bc71f2b2476c88a7d4202c9930b24f",
+    "olean_sha256": "6519d9b2aa63b0569ba5fe596529281dafa080ba848108d17cd5ca65b09a8e8f",
+    "olean_bytes": 453240
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/RationalBondTrimming.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "aec205ee95456646e26c5b5af58cfd41f17fe8dc1b6c5f1edf88f46875a323fb",
+    "olean_sha256": "62aa5158f4a73544acc76fcebbd32644322825c20a5a9628fe6620d814cea0aa",
+    "olean_bytes": 510712
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SuccessiveBudgets.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "41fe812cfeb2bbfab116b2cfc25cde42c3ab77f90d913e7d89b3850b0775869f",
+    "olean_sha256": "b3bfd6c304b7cd104c04403f90f0e230f26c48563a5284fd72cc6b1410038294",
+    "olean_bytes": 228624
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/SuccessiveStep.lean",
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "source_sha256": "4d1acdbe005c2f7d1c436617c330e54b470ee7f1640663985e559c5d1a7ac436",
+    "olean_sha256": "73577ef58d24d3914c40096c997fde0fb62dd625fcc7655dd5c74ecc3d0bc88c",
+    "olean_bytes": 191280
   }
 ]

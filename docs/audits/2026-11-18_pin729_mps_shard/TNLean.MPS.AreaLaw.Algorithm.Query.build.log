@@ -1,0 +1,15 @@
+TNLean/MPS/AreaLaw/Algorithm/Query.lean:6:0: error: unknown module prefix 'Cslib'
+
+No directory 'Cslib' or file 'Cslib.olean' in the search path entries:
+/tmp/pin729-mps-olean
+/workspace/QICLean/.lake/packages/mathlib/.lake/build/lib/lean
+/workspace/QICLean/.lake/packages/Gametheory/.lake/build/lib/lean
+/workspace/QICLean/.lake/packages/checkdecls/.lake/build/lib/lean
+/workspace/QICLean/.lake/packages/plausible/.lake/build/lib/lean
+/workspace/QICLean/.lake/packages/LeanSearchClient/.lake/build/lib/lean
+/workspace/QICLean/.lake/packages/importGraph/.lake/build/lib/lean
+/workspace/QICLean/.lake/packages/proofwidgets/.lake/build/lib/lean
+/workspace/QICLean/.lake/packages/aesop/.lake/build/lib/lean
+/workspace/QICLean/.lake/packages/Qq/.lake/build/lib/lean
+/workspace/QICLean/.lake/packages/batteries/.lake/build/lib/lean
+/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/lib/lean

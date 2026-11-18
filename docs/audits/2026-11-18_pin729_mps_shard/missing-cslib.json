@@ -1,0 +1,39 @@
+{
+  "package": {
+    "url": "https://github.com/leanprover/cslib.git",
+    "type": "git",
+    "subDir": null,
+    "scope": "",
+    "rev": "acab13b776722f5efa897c780d6fa1a3069d709e",
+    "name": "cslib",
+    "manifestFile": "lake-manifest.json",
+    "inputRev": "acab13b776722f5efa897c780d6fa1a3069d709e",
+    "inherited": false,
+    "configFile": "lakefile.toml"
+  },
+  "required_module": "Cslib.Algorithms.Lean.Query.Bounds",
+  "failing_file": "TNLean/MPS/AreaLaw/Algorithm/Query.lean",
+  "record": {
+    "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+    "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+    "file": "TNLean/MPS/AreaLaw/Algorithm/Query.lean",
+    "phase": "build",
+    "command": [
+      "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-o",
+      "/tmp/pin729-mps-olean/TNLean/MPS/AreaLaw/Algorithm/Query.olean",
+      "TNLean/MPS/AreaLaw/Algorithm/Query.lean"
+    ],
+    "started_utc": "2026-11-18T16:38:39.244717+00:00",
+    "seconds": 0.09395829601271544,
+    "exit_code": 1,
+    "method": "direct Lean (not lake build)",
+    "role": "shard_target",
+    "source_sha256": "6953e1193c8b0755c1c523091ef5ced189e399218af4b02f90f72510a9271a3b"
+  },
+  "action": "Stop and report under instructions for other errors. No dependency fetch/build or source edit performed. Next minimal action is exact-pin CSLib Query dependency setup, not a full-library rebuild."
+}

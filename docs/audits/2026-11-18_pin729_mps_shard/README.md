@@ -121,3 +121,26 @@ Renyi failure and first SpectralCutoff failure remain historical evidence.
 The repaired target gets separate fixed build/strict logs. Remaining queue
 resumes with 435 untouched targets plus the one build-only target, without
 recompiling completed targets. New TN source provenance is ec6168f62.
+
+## Third stop: missing CSLib dependency
+
+Current trial includes exactly two one-line proof simplifications, in commits
+ef098ad32 and ec6168f62. The second fixed target passed direct build/strict in
+17.74/3.41 seconds. Both original linter failures are preserved and resolved
+for this isolated source tree; completed targets were hash-checked and reused.
+
+The continuation reached 535 passed targets, one build failure and 329 untouched
+targets. Algorithm/Query.lean could not import Cslib.Algorithms.Lean.Query.Bounds:
+unknown module prefix Cslib. This environment has no CSLib directory/artifact in
+its recorded LEAN_PATH. The candidate pins CSLib to
+acab13b776722f5efa897c780d6fa1a3069d709e. This is not a proven source defect.
+The queue stopped as instructed for errors other than unnecessarySimpa.
+No dependency fetch/build workaround or mathematical change was attempted.
+Next action is narrowly supplying that exact CSLib Query closure, then resuming
+the failed target plus untouched targets. MPS root remains an extra unverified
+target. All compiler processes stopped; approximately 13 GiB disk remains.
+
+Original SpectralCutoff fixed-run logs were already pushed in 9630ab7e; their
+zero length records successful diagnostic-free executions, not missing logs.
+spectralcutoff-fixed-verification.json indexes the two complete command records
+with exact source SHA, pin, exit code, elapsed time and source/artifact hashes.
