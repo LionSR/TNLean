@@ -148,9 +148,9 @@ with exact source SHA, pin, exit code, elapsed time and source/artifact hashes.
 ## Narrow CSLib environment repair
 
 535 previously passed target hashes were rechecked. The pinned official CSLib
-checkout was genuinely absent, not merely missing from LEAN_PATH. Only the
-eight-module transitive closure of Query.Bounds was checked out at
-acab13b776722f5efa897c780d6fa1a3069d709e and compiled, with matching Lean
+checkout was genuinely absent, not merely missing from LEAN_PATH. The official repository was checked out at
+acab13b776722f5efa897c780d6fa1a3069d709e; only the eight-module transitive
+closure of Query.Bounds was compiled, with matching Lean
 v4.36.0-rc1 and the candidate's resolved external dependencies. The existing
 cache root is already on LEAN_PATH; no pin or production source changed.
 
