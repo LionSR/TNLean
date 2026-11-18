@@ -93,11 +93,12 @@ outer-band space is then fixed before the accuracy. The actual polynomial
 images of this same space give normalized cut approximations. Their rank
 satisfies, with $u=1+\log q+\log(1/g)$ and
 $a=16+\log(1/g)+\log(1/\delta)$,
-\begin{align*}
+\begin{align}
  \log\operatorname{SR}(\phi)
  \le\log\dim G(\eta_{\rm LD})+
  K_{\eta_{\rm LD}}\bigl(u^3/g+g^{-1/4}a^{3/4}u\bigr)(1+\log a).
-\end{align*}
+    \label{eq:ld_scope_schmidt_rank_bound}
+\end{align}
 The two comparison losses are each $\delta/100$; they are transferred
 individually by the canonical identities, without assuming original-band
 invariance. At accuracy $\delta/[16(L+1)]$, the missing marginal masses
@@ -267,11 +268,12 @@ dimension strictly below the preceding minimum $p$; the companion
 sampling note records the correction\footnote{\url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_low_density_sampling.pdf}}.
 Choosing the numerical count base $m=q\lceil e^{100}\rceil$ before
 the physical construction gives
-\begin{align*}
+\begin{align}
  \dim W\le\dim G(\eta_{\rm LD})\exp\!\left[
  \frac{K_{\eta_{\rm LD}}}{v}
  \bigl(1+\log q+\log(1+1/v)\bigr)^3\right],
-\end{align*}
+    \label{eq:ld_scope_dimension_bound}
+\end{align}
 where $K_{\eta_{\rm LD}}$ precedes the chain, local dimension,
 interactions, interval and deficit. For $0<v\le\eta_{\rm LD}$,
 the cap satisfies $v/2\le\min(v,\eta_{\rm LD}/2)$; larger deficits
@@ -279,10 +281,11 @@ give the zero target. Thus the logarithmic count estimate introduces
 no additional upper bound on the requested positive deficit.
 The accurate interval families now give, for every unit vector
 $\psi\in G(\eta_{\rm LD}-v)$, the actual regional entropy bound
-\begin{align*}
+\begin{align}
  S(\psi_J)\le\log\dim G(\eta_{\rm LD})+\frac{K_{\eta_{\rm LD}}}{v}
  \bigl(1+\log q+\log(1+1/v)\bigr)^3.
-\end{align*}
+    \label{eq:ld_scope_regional_entropy_bound}
+\end{align}
 The coefficient on the full-band logarithmic dimension is exactly one.
 The proof fixes one viable outer-band space before all accuracy choices,
 then controls tails of one actual reduced state by its image spaces.
