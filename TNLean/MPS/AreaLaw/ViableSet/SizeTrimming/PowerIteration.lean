@@ -139,7 +139,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approximate_den
         le_add_of_nonneg_right (mul_nonneg (mul_nonneg (by norm_num) hLreal.le) hζ0)
       _ ≤ Δ / 2028 := hcombined
   obtain ⟨ρ, u, μ, hρ, hρtr, hρP, -, hu, huρ, -, hbounds⟩ :=
-    h.exists_leading_vector_of_approximate_compressed_boundary_solution hL hq hΔ
+    h.exists_leading_vector_of_approximate_compressed_boundary_solution hh hhJ hL hq hΔ
       HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ x₀ τ σ
         hτtrace hσpsd hclose hτenergy hτboundary hdensity
   dsimp only at hbounds
@@ -212,7 +212,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approximate_den
       exact hres
     have hres' : ‖toEuclideanLin ρ u' - (μ : ℂ) • u'‖ ≤ (11 / 24) * ζ :=
       residual_precision_of_lvv_vector_tolerance hL hresambient
-    exact h.nearby_glued_vector_viable_of_density_and_vector_residual hL hq hΔ hΩ hgap hspan
+    exact h.nearby_glued_vector_viable_of_density_and_vector_residual hh hhJ hL hq hΔ hΩ hgap hspan
       W hW hρ hρtr u u' hu hu' huρ hμ hu'P hE ha hres' hcombined
   refine ⟨σ₀, ρ, u, z₀, μ, hσ₀, hσ₀tr, hρexpand, hρ, hρtr, hu, huρ, hμ,
     hz₀, hz₀eig, hZz₀, hv₀unit, hv₀overlap, hcertificate, ?_⟩
@@ -298,7 +298,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_approxi
           (1 / 12) S (spanColumnFamily S m c)) := by
   obtain ⟨σ₀, ρ, u, z₀, μ, hσ₀, hσ₀tr, hρexpand, hρ, hρtr, hu, huρ, hμ,
       hz₀, hz₀eig, hZz₀, hv₀unit, hv₀overlap, hcertificate, hpower⟩ :=
-    h.exists_viable_vector_of_approximate_density_and_eigenresidual hL hq hΔ
+    h.exists_viable_vector_of_approximate_density_and_eigenresidual hh hhJ hL hq hΔ
       HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ x₀ τ σ
         hτtrace hσpsd hclose hτenergy hτboundary hε
   exact exists_rationalSpanViableMPSData_of_leadingCoordinates hL hΔ hε S hS hΩ

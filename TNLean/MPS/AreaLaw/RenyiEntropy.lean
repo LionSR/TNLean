@@ -147,7 +147,7 @@ theorem _root_.ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds
         simpa only [S, Entropy.regionEntropy, vonNeumannEntropy, p, mul_comm] using
           mul_entropy_le_log_surprisalMoment hp hpSum u)
     have hcut := cutLogBudget_interval_le (L := L) (R := R) hq l r
-    have hmoment := h.log_surprisalMoment_region_le hJ hΔ hΩ hgap hspan (interval L l r)
+    have hmoment := h.log_surprisalMoment_region_le hh hhJ hJ hΔ hΩ hgap hspan (interval L l r)
       ((abs_of_pos hu0).le.trans (hu.trans
         (tailRadius_anti_budget hθ (one_le_cutLogBudget L q R (interval L l r)) hcut)))
     have hlog : Real.log (Entropy.surprisalMoment p u) ≤ u * S +

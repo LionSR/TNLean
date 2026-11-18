@@ -435,7 +435,7 @@ theorem _root_.ManyBody.ChainInteraction.nearby_unit_vector_energy_and_overlap_b
       h.hamiltonian hΓ hv hv' hE ha hdist
   refine ⟨henergy.trans ?_, hoverlap⟩
   have hop : ‖h.hamiltonian‖ ≤ 2 * L := by
-    simpa only [mul_one] using h.norm_hamiltonian_le_of_range_one
+    simpa only [mul_one] using h.norm_hamiltonian_le_of_range_one hh hhJ
   have hζ : 0 ≤ ζ := (norm_nonneg (v' - v)).trans hdist
   nlinarith only [hop, hζ]
 
@@ -594,7 +594,7 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_bounds
       WithLp.toLp 2 ((J *ᵥ WithLp.ofLp u) ∘ gluingCut L q k)‖ ≤ ζ
     rw [norm_glued_vectors_sub_eq W hW u u']
     exact hdist
-  have hbounds := h.nearby_unit_vector_energy_and_overlap_bounds
+  have hbounds := h.nearby_unit_vector_energy_and_overlap_bounds hh hhJ
     hΓ hv hv' hE ha hvdist
   exact ⟨hv', hv'S, hbounds⟩
 
@@ -633,7 +633,7 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_bounds
     ‖v'‖ = 1 ∧ v' ∈ leftSupportSubmodule S ∧
       (⟪v', toEuclideanLin h.hamiltonian v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
-  obtain ⟨hv', hv'S, henergy, hoverlap⟩ := h.nearby_glued_vector_bounds
+  obtain ⟨hv', hv'S, henergy, hoverlap⟩ := h.nearby_glued_vector_bounds hh hhJ
     hΓ W hW u u' hu hu' hu'P hE ha hdist
   refine ⟨hv', hv'S, ?_, ?_⟩
   · linarith only [henergy]
@@ -710,7 +710,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_uniform_leading_bounds_of_isViab
     (spanProjection S)
   obtain ⟨_, _, w, m, W, x, -, -, -, -, hw, hwS, hwD, hwE, hW, hmD,
       hwx, hxnorm, hxP, -⟩ :=
-    h.exists_boundary_minimizer_leading_vector_of_isViable hpos hL hq hΔ hΩ hgap hspan hviable
+    h.exists_boundary_minimizer_leading_vector_of_isViable hh hhJ hpos hL hq hΔ hΩ
+        hgap hspan hviable
   refine ⟨w, m, W, x, hw, hwS, hwD, hwE, hW, hmD,
     hwx, hxnorm, hxP, ?_⟩
   intro X hX σ hσ htr hσP hσX hmin u μ hu huσ hmax
@@ -743,7 +744,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_uniform_leading_bounds_of_isViab
           rectangularTraceNorm (X - partialTraceFirst ρx) := rectangularTraceNorm_add_le _ _
       _ ≤ 2 * η := by rw [hneg]; linarith only [hσX, hX]
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
   have hsqrt : √c = Δ / 169 := Real.sqrt_sq (div_nonneg hΔ.le (by norm_num))
   have hcr : 2 * c ≤ √c := by
     rw [hsqrt]
@@ -899,7 +900,7 @@ theorem _root_.ManyBody.ChainInteraction.leading_bounds_of_approximate_boundary_
           rectangularTraceNorm (X - partialTraceFirst ρx) := rectangularTraceNorm_add_le _ _
       _ ≤ 2 * η + δ := by rw [hneg]; linarith only [hσX, hX]
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
   have hsqrt : √c = Δ / 169 := Real.sqrt_sq (div_nonneg hΔ.le (by norm_num))
   have hcr : 2 * c ≤ √c := by
     rw [hsqrt]

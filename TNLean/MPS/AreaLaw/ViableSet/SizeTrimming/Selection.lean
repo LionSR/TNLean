@@ -119,7 +119,7 @@ theorem _root_.ManyBody.ChainInteraction.sizeTrimmingSelection_subset_span {L q 
         (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
     (h.sizeTrimmingSelection hq Δ S : Set (LeftBlockVector L q k)) ⊆
       Submodule.span ℂ (S : Set (LeftBlockVector L q k)) :=
-  h.sizeTrimmingSelectionWith_subset_span hq Δ S _ fun m ↦
+  h.sizeTrimmingSelectionWith_subset_span hh hhJ hq Δ S _ fun m ↦
     isAdmissibleLeadingVector_boundaryLeadingVector _ _ m _
 
 /-- Every retained column has norm at most one, since it is a column of a unit leading
@@ -177,7 +177,7 @@ theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelection_le {L q k : 
   have hc : 0 < c := sq_pos_of_pos (div_pos hΔ (by norm_num))
   have hη : 0 < c / (2 * L) :=
     div_pos hc (mul_pos (by norm_num) (by exact_mod_cast hL))
-  exact h.card_sizeTrimmingSelectionWith_le hq Δ S _ fun m hm ↦
+  exact h.card_sizeTrimmingSelectionWith_le hh hhJ hq Δ S _ fun m hm ↦
     card_boundary_rectangularTraceNormNet_le (by omega) hη hm
 
 /-- The selection of nets with the standard point bound has explicit polynomial cardinality
@@ -204,7 +204,7 @@ theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelectionWith_le_polyn
   have hnet' := boundaryNet_card_bound_le_polynomial (q := q) (D := D) (c := c)
     (by omega : 1 ≤ L) (sq_pos_of_pos (div_pos hΔ (by norm_num)))
   simpa only [C, Nat.mul_assoc] using
-    (h.card_sizeTrimmingSelectionWith_le hq Δ S sol hnet).trans
+    (h.card_sizeTrimmingSelectionWith_le hh hhJ hq Δ S sol hnet).trans
       (Nat.mul_le_mul_left ((D + 1) * D) hnet')
 
 /-- The selection has explicit polynomial cardinality in the chain length, with coefficient
@@ -224,7 +224,7 @@ theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomia
   have hc : 0 < c := sq_pos_of_pos (div_pos hΔ (by norm_num))
   have hη : 0 < c / (2 * L) :=
     div_pos hc (mul_pos (by norm_num) (by exact_mod_cast hL))
-  exact h.card_sizeTrimmingSelectionWith_le_polynomial hL hq hΔ S _ fun m hm ↦
+  exact h.card_sizeTrimmingSelectionWith_le_polynomial hh hhJ hL hq hΔ S _ fun m hm ↦
     card_boundary_rectangularTraceNormNet_le (by omega) hη hm
 
 /-- **Size trimming with any admissible nets and solver is chosen before the ground state.**
@@ -277,10 +277,10 @@ theorem _root_.ManyBody.ChainInteraction.isViable_sizeTrimmingSelectionWith {L q
       Finset.univ.biUnion fun m : Fin (D + 1) ↦
       T m.val := rfl
   obtain ⟨_, m, W, x, -, -, -, -, hW, hmD, -, hxnorm, hxP, huniform⟩ :=
-    h.exists_uniform_leading_bounds_of_isViable hpos hL hq hΔ
-      (h.cutLeftPart k) (h.cutBoundaryPart k) (h.cutLeftPart_add_cutBoundaryPart k)
-      (h.cutLeftPart_isSupportedOn k) (h.cutBoundaryPart_isSupportedOn k)
-      (h.norm_cutBoundaryPart_le k) hΩ hgap hspan hviable
+    h.exists_uniform_leading_bounds_of_isViable hh hhJ hpos hL hq hΔ
+      (h.cutLeftPart k) (h.cutBoundaryPart k) (h.cutLeftPart_add_cutBoundaryPart hh hhJ k)
+      (h.cutLeftPart_isSupportedOn hh hhJ k) (h.cutBoundaryPart_isSupportedOn hh hhJ k)
+      (h.norm_cutBoundaryPart_le hh hhJ k) hΩ hgap hspan hviable
   let ρx := vecMulVec x (star x)
   have hρxp : ρx.PosSemidef := posSemidef_vecMulVec_self_star x
   have hρxt : ρx.trace = 1 := by
@@ -364,7 +364,7 @@ theorem _root_.ManyBody.ChainInteraction.isViable_sizeTrimmingSelection {L q k :
   have hc : 0 < (Δ / 169) ^ 2 := sq_pos_of_pos (div_pos hΔ (by norm_num))
   have hη : 0 < (Δ / 169) ^ 2 / (2 * L) :=
     div_pos hc (mul_pos (by norm_num) (by exact_mod_cast hL))
-  exact h.isViable_sizeTrimmingSelectionWith hpos hL hq hΔ S
+  exact h.isViable_sizeTrimmingSelectionWith hh hhJ hpos hL hq hΔ S
     (fun _ _ Y hY ↦ exists_mem_rectangularTraceNormNet hη Y hY)
     (fun m ↦ isAdmissibleLeadingVector_boundaryLeadingVector _ _ m _) E₀ Γ hΩ hgap hspan hviable
 

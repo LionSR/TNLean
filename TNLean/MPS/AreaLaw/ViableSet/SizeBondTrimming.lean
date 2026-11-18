@@ -63,9 +63,9 @@ theorem _root_.ManyBody.ChainInteraction.isViable_bondTrimSet_sizeTrimmingSelect
       (h.sizeTrimmingSelectionWith hq Δ S net sol) : Set (LeftBlockVector L q i)) := by
   classical
   obtain ⟨_, r, W, u, hW, _, hu, hcols, hΓu⟩ :=
-    h.isViable_sizeTrimmingSelectionWith hpos hL hq hΔ S hnet hsol E₀ Γ hΩ hgap hspan hviable
+    h.isViable_sizeTrimmingSelectionWith hh hhJ hpos hL hq hΔ S hnet hsol E₀ Γ hΩ hgap hspan hviable
   obtain ⟨v, hv, hvMPS, hΓv⟩ :=
-    exists_bond_trimming_reference (by omega) hΔ (by omega) h hΩ hgap hspan
+    exists_bond_trimming_reference (by omega) hΔ (by omega) h hh hhJ hΩ hgap hspan
   have hΓu' : 1 - 1 / 12 ≤ ‖⟪Γ, (blockSplit L q i).symm (rightApply W u)⟫_ℂ‖ := by
     rw [blockSplit_symm_eq]
     exact hΓu
@@ -96,9 +96,9 @@ theorem _root_.ManyBody.ChainInteraction.isViable_bondTrimSet_sizeTrimmingSelect
       (h.sizeTrimmingSelection hq Δ S) : Set (LeftBlockVector L q i)) := by
   classical
   obtain ⟨_, r, W, u, hW, _, hu, hcols, hΓu⟩ :=
-    h.isViable_sizeTrimmingSelection hpos hL hq hΔ S E₀ Γ hΩ hgap hspan hviable
+    h.isViable_sizeTrimmingSelection hh hhJ hpos hL hq hΔ S E₀ Γ hΩ hgap hspan hviable
   obtain ⟨v, hv, hvMPS, hΓv⟩ :=
-    exists_bond_trimming_reference (by omega) hΔ (by omega) h hΩ hgap hspan
+    exists_bond_trimming_reference (by omega) hΔ (by omega) h hh hhJ hΩ hgap hspan
   have hΓu' : 1 - 1 / 12 ≤ ‖⟪Γ, (blockSplit L q i).symm (rightApply W u)⟫_ℂ‖ := by
     rw [blockSplit_symm_eq]
     exact hΓu
@@ -122,7 +122,7 @@ theorem _root_.ManyBody.ChainInteraction.isViable_bondTrimSet_sizeTrimmingSelect
     IsViable Γ (1 / 2) (bondTrimSet hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
       (h.sizeTrimmingSelection hq Δ S) : Set (LeftBlockVector L q i)) := by
   obtain ⟨z, hz, hoverlap, hsupport⟩ :=
-    h.isViable_bondTrimSet_sizeTrimmingSelection_with_reserve hpos hL hq hi hΔ S E₀ Γ
+    h.isViable_bondTrimSet_sizeTrimmingSelection_with_reserve hh hhJ hpos hL hq hi hΔ S E₀ Γ
       hΩ hgap hspan hviable
   exact ⟨z, hz, by linarith, hsupport⟩
 
@@ -151,9 +151,11 @@ theorem _root_.ManyBody.ChainInteraction.exists_size_bond_trimmed_family_polynom
         IsViable Γ (1 / 2) (T : Set (LeftBlockVector L q i)) := by
   intro c D p A C m
   exact ⟨bondTrimSet hi m (h.sizeTrimmingSelection hq Δ S),
-    (card_bondTrimSet_le hi m _).trans (h.card_sizeTrimmingSelection_le_polynomial hL hq hΔ S),
+    (card_bondTrimSet_le hi m _).trans
+        (h.card_sizeTrimmingSelection_le_polynomial hh hhJ hL hq hΔ S),
     fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m _ hv,
     fun E₀ Γ hΩ hgap hspan hviable ↦
-      h.isViable_bondTrimSet_sizeTrimmingSelection hpos hL hq hi hΔ S E₀ Γ hΩ hgap hspan hviable⟩
+      h.isViable_bondTrimSet_sizeTrimmingSelection hh hhJ hpos hL hq hi hΔ S E₀ Γ hΩ
+          hgap hspan hviable⟩
 
 end TNLean.MPS.AreaLaw
