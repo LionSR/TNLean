@@ -233,8 +233,8 @@ theorem bondTerm_supported (K : ℕ) (i : Fin (K + 1)) :
   · change internalTerm K j ∈ _
     rw [internal_formula]
     split_ifs with hj
-    · apply Submodule.smul_mem
-      apply Submodule.add_mem
+    · apply SMulMemClass.smul_mem
+      apply add_mem
       · exact oneSite_mem _ _ (by simp only [interval, Finset.mem_filter,
           Finset.mem_univ, true_and, Fin.val_succ]; omega)
       · exact oneSite_mem _ _ (by simp only [interval, Finset.mem_filter,

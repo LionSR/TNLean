@@ -136,7 +136,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonia
       rw [AreaLaw.embedOp_rectangular_eq_reindex] at hs
       simpa only [AreaLaw.rectangleAreaLawSupport, Finset.coe_image] using hs
     · rw [Function.extend_apply' _ _ _ hx]
-      exact Submodule.zero_mem _
+      change _ ∈ ManyBody.supportedOperators _ _
+      exact zero_mem _
   · intro X
     by_cases hx : ∃ i, AreaLaw.rectangleAreaLawSupport L L i = X
     · obtain ⟨i, rfl⟩ := hx
