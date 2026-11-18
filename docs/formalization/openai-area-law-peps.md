@@ -247,7 +247,8 @@ one. Its physical intersection `rectRegion A Q` may be empty, even on a nonempty
 domain. Thus scale zero has no admissible rectangles, whereas an empty physical
 cut at a positive scale is an ordinary admissible example.
 
-The box-power bridge is conditional on `0 < 1 + e` and the uniform hypothesis
-`∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ p r ≤ C * (r : ℝ) ^ (1 + e)`.
+For the fixed safety parameter `D₀ : ℕ`, the box-power bridge is conditional on
+`0 < 1 + e` and the uniform hypothesis
+`∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ C * (r : ℝ) ^ (1 + e)`.
 It concludes the same upper bound for the regional entropy at `Q.size`; it does
 not prove this uniform hypothesis at zero or negative gap.
