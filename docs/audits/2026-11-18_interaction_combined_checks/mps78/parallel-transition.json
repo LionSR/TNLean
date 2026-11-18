@@ -1,0 +1,15 @@
+{
+  "old_coordinator_stopped": 468831,
+  "old_runner_untouched": 412863,
+  "only_new_writer_lock": "/tmp/interaction-mps77-coordinator.lock",
+  "head": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+  "workers": 1,
+  "lean_threads": 1,
+  "memory_limit_MiB": 4096,
+  "launch_memory_guard_GiB": 6,
+  "terminate_new_child_only_below_available_GiB": 1,
+  "cache": "/tmp/interaction-mps77-olean",
+  "reuse": "completed successful source/artifact and recursive hash records only; copied into independent cache with source hash checked before and after copy; no old cache in LEAN_PATH",
+  "priority": "three changed owners then affected21 then remaining77",
+  "old_ledger_not_finalized": true
+}
