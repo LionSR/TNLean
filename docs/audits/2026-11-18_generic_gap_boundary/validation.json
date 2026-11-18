@@ -485,5 +485,107 @@
       "Classical.choice",
       "Quot.sound"
     ]
+  },
+  "policy_before_final_documentation": [
+    {
+      "command": [
+        "python3",
+        "scripts/generate_import_aggregators.py",
+        "--check"
+      ],
+      "exit": 0,
+      "seconds": 2.141231184999924
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check_import_layers.py",
+        "--base-ref",
+        "b61f2bce4a934184b5acaa67ef640f7069c38ca2"
+      ],
+      "exit": 0,
+      "seconds": 9.152049443000578
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check_pass_through_declarations.py",
+        "--base-ref",
+        "b61f2bce4a934184b5acaa67ef640f7069c38ca2"
+      ],
+      "exit": 0,
+      "seconds": 11.104107482002291
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check_forbidden_lean_tokens.py",
+        "--base-ref",
+        "b61f2bce4a934184b5acaa67ef640f7069c38ca2"
+      ],
+      "exit": 0,
+      "seconds": 0.05477774100290844
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/blueprint_lean_sync.py",
+        "--ci",
+        "--report-duplicate-tags"
+      ],
+      "exit": 0,
+      "seconds": 95.88199197500217
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/blueprint_roles.py",
+        "--check"
+      ],
+      "exit": 0,
+      "seconds": 0.890485310999793
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check_reader_facing_prose.py",
+        "--diff-base",
+        "b61f2bce4a934184b5acaa67ef640f7069c38ca2"
+      ],
+      "exit": 0,
+      "seconds": 1.0625917129946174
+    }
+  ],
+  "ci_selection": {
+    "command": [
+      "python3",
+      "scripts/ci_lean_checks.py",
+      "list",
+      "--base",
+      "b61f2bce4a934184b5acaa67ef640f7069c38ca2"
+    ],
+    "early_sources": 19,
+    "strict_sources": 19,
+    "regressions": [
+      "scripts/generic_gap_boundary_regression.lean"
+    ]
+  },
+  "final_documentation_sync": {
+    "command": [
+      "python3",
+      "scripts/blueprint_lean_sync.py",
+      "--ci",
+      "--report-duplicate-tags",
+      "--update-lean-decls"
+    ],
+    "exit": 0,
+    "seconds": 94.67496781400405
+  },
+  "final_documentation_checks": {
+    "blueprint_roles": "passed",
+    "reader_facing_prose": "passed",
+    "forbidden_tokens": "passed",
+    "diff_check": "passed",
+    "projectorGap_toAreaLawHamiltonian_resolution": "passed"
   }
 }

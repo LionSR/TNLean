@@ -44,6 +44,9 @@ amplification statements without a uniqueness hypothesis. The existing generic
 CI selector includes this regression by filename and dependency closure.
 
 This change does not assert an unconditional area law at zero or negative gap.
+For negative Δ, the restored algebraic hypotheses need not make E₀ the lowest
+energy: the canonical subspace at E₀ is its eigenspace, as in the historical
+condition. No extra spectral-minimum assumption is added.
 It does not validate the separate geometry, configuration or core gap batches.
 
 The necessary call-site changes additionally cover `PhysicalCollarInformation`,
@@ -92,3 +95,24 @@ transport dependencies were not all warm. No full-library build was requested.
 The full reverse import closure, combined A/B/core-gap snapshot, PDF/web rendering,
 and remote full CI were not run here. This is bounded source validation of the
 listed production consumers and the persistent boundary regression.
+
+The persistent zero-gap fixture directly exercises the four generic collar and
+amplification predicates, with its imports tied to `CollarInformation` and
+`AmplificationCutClearance`. It is not a zero-gap regression for every restored
+owner. In particular it does not establish range-square, rectangular-coordinate
+transport, zero-floor, box-entropy, or ThreeWaySplitting boundary coverage.
+Those owners need their own direct boundary fixtures; passing the consumer
+builds is not a substitute for those examples.
+
+The rectangular Blueprint entry additionally tags the existing arbitrary-Δ
+`projectorGap_toAreaLawHamiltonian` theorem. The glossary states the actual
+`BondLayer` input as `β → Finset ι`; the general set-valued geometry interface
+remains separate.
+
+Final document verification passed: full Blueprint/source synchronization with
+duplicate-tag checking (94.67 seconds), declaration resolution for the newly
+referenced coordinate-transport theorem, Blueprint roles, reader-facing prose,
+forbidden-token scanning, and whitespace checks. Import layers, generated
+aggregators and the pass-through ratchet also passed. CI selection reports
+19 changed production sources and the new regression script; the local strict
+run additionally checked the unchanged direct consumer.

@@ -1808,7 +1808,7 @@ in `MPS/Preparation/` uses it.
 
 #### `QuantumCircuit.BondLayer` and `QuantumCircuit.RingLayer`
 
-- **Declarations:** `structure QuantumCircuit.BondLayer (d : ℕ) (bond : β → Set ι)`,
+- **Declarations:** `structure QuantumCircuit.BondLayer (d : ℕ) (bond : β → Finset ι)`,
   with fields `bonds : Finset β`, `gate : β → Matrix (ι → Fin d) (ι → Fin d) ℂ`,
   and the conditions that every gate of a bond is unitary and supported on
   that bond, and that the bonds carrying gates are
