@@ -106,3 +106,9 @@ Bounded cache exporter probes: QIC refused a missing ZModCyclicSums artifact;
 TN refused its historical baseline toolchain mismatch. Neither check was bypassed
 and no transfer or extra cache build was started. Workers must validate their
 own exact-pin source/artifact provenance.
+
+HoneycombCluster additionally passed new-pin build (7.51s) and strict (4.28s).
+This is separate evidence for the owner of the historical root-PEPS failure;
+it does not retroactively certify the old-pin closure or the root aggregator.
+PEPS queue excludes the five overlap consumers and HoneycombCluster: 585 remain.
+The root TNLean.PEPS check belongs to the other shard after prerequisites are ready.

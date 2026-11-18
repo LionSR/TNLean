@@ -1,0 +1,37 @@
+[
+  {
+    "file": "TNLean/PEPS/Examples/HoneycombCluster.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.Examples.HoneycombCluster"
+    ],
+    "exit": 0,
+    "seconds": 7.509114742279053,
+    "log": "TNLean_PEPS_Examples_HoneycombCluster.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/Examples/HoneycombCluster.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/Examples/HoneycombCluster.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.269268989562988,
+    "log": "TNLean_PEPS_Examples_HoneycombCluster.lean.strict.log",
+    "editing_seconds": 0
+  }
+]
