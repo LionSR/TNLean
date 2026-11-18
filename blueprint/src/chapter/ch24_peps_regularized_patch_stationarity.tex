@@ -120,17 +120,15 @@ with marginals taken in the final normalized vector of
     Linearity of $H\mapsto\widehat H_{X_j}$ and the Leibniz rule on (\ref{eq:peps_patch_radius_output}) yield (\ref{eq:peps_patch_radius_derivative}).
 \end{proof}
 
-\begin{definition}[Canonical global coordinates and marginals]
+\begin{definition}[Regional marginals of the patch state]
     \label{def:peps_patch_canonical_marginal}
-    \lean{TNLean.PEPS.dependentGlobalConfigEquiv,
-        TNLean.PEPS.normalizedRegularizedPatchMarginal}
+    \lean{TNLean.PEPS.normalizedRegularizedPatchMarginal}
     \leanok
     \uses{def:peps_regularized_patch_minimum}
-    Let $J$ be the unitary coordinate identification induced by forgetting the redundant membership condition $v\in V$ on configurations indexed by $V$.
     For $\phi=\widehat\Psi(x)$ from Definition~\ref{def:peps_regularized_patch_minimum} and $X\subseteq V$, define
     \begin{align}
         \rho_X=\operatorname{Tr}_{V\setminus X}
-        \ketbra{J\phi}{J\phi}.
+        \ketbra{\phi}{\phi}.
         \label{eq:peps_canonical_marginal}
     \end{align}
 \end{definition}
@@ -166,26 +164,25 @@ with marginals taken in the final normalized vector of
     Entrywise map commutes with list reversal, matching $(D_j,K_j)$ at each index $j$.
 \end{proof}
 
-\begin{lemma}[Canonical coordinates for the ordered output]
+\begin{lemma}[The ordered output as a list product]
     \label{thm:peps_ordered_patch_output_coordinates}
     \lean{TNLean.PEPS.regularizedPatchOutput_eq_patchOutput,
         TNLean.PEPS.regularizedPatchObjective_eq_norm_patchOutput}
     \leanok
     \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal,
         def:peps_regularized_patch_objective}
-    With $J$ as in Definition~\ref{def:peps_patch_canonical_marginal}, $b\in\R$, $\Omega\in\mathcal H_V$, and $K_j=(x_j+bI)^{-a_j/2}$, let $\widehat K_j$ and $\widetilde K_j$ be the identity extensions in the two coordinate spaces. Then
+    For $b\in\R$, $\Omega\in\mathcal H_V$, and $K_j=(x_j+bI)^{-a_j/2}$ with identity extensions $\widehat K_j$, write $P_b(\mathcal L)$ for the ordered product of the extended filters of a factor list $\mathcal L$. Then
     \begin{align}
-        J(\widehat K_{m-1}\cdots\widehat K_0\Omega)
-         & =\widetilde K_{m-1}\cdots\widetilde K_0(J\Omega),\notag
+        \widehat K_{m-1}\cdots\widehat K_0\Omega
+         & =P_b(\mathcal L(x))\Omega,\notag
     \end{align}
-    and the two ordered outputs have equal norm, identifying the two coordinate descriptions in the
+    and the objective is $F(x)=\|P_b(\mathcal L(x))\Omega\|$, identifying the two descriptions of the ordered output in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L68-L99}{regularized patch problem}.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_regional_basis_relabelling}
-    Lemma~\ref{thm:peps_regional_basis_relabelling} gives
-    $J\widehat K_jJ^{-1}=\widetilde K_j$ for each $j$; multiplying in order, applying to $J\Omega$, and using unitarity of $J$ gives the claims.
+    \uses{thm:peps_patch_factor_chain_list}
+    By Lemma~\ref{thm:peps_patch_factor_chain_list}, the filters of $\mathcal L(x)$ are $K_{m-1},\ldots,K_0$ on $X_{m-1},\ldots,X_0$, so both sides are the same ordered product of identity extensions applied to $\Omega$; taking norms gives the objective.
 \end{proof}
 
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 68--99 and 130--205.
@@ -197,7 +194,7 @@ with marginals taken in the final normalized vector of
     \uses{def:peps_ordered_patch_factor_list,def:peps_regularized_patch_objective}
     Fix $X_0,\ldots,X_{m-1}\subseteq V$, $a_j,b\in\R$, $\Omega\in\mathcal H_V$, and $x_j\in\operatorname{End}(\mathcal H_{X_j})$ with $F(x)\le F(y)$ for all $y\in\mathcal D$.
     Writing $P_b(\mathcal L)$ for the ordered product of extended filters of a factor list $\mathcal L$, every list $\mathcal L'$ of density-matrix factors with the same regions and exponents as $\mathcal L(x)$ satisfies
-    $\|P_b(\mathcal L(x))J\Omega\|\le\|P_b(\mathcal L')J\Omega\|$.
+    $\|P_b(\mathcal L(x))\Omega\|\le\|P_b(\mathcal L')\Omega\|$.
     This is the ordered-list form of minimization in the
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L68-L99}{regularized patch problem}.
 \end{lemma}
@@ -205,37 +202,37 @@ with marginals taken in the final normalized vector of
     \leanok
     \uses{thm:peps_ordered_patch_output_coordinates}
     Reversing $\mathcal L'$ identifies $\mathcal L'=\mathcal L(y)$ for some $y\in\mathcal D$. By Lemma~\ref{thm:peps_ordered_patch_output_coordinates},
-    $\|P_b(\mathcal L(x))J\Omega\|=F(x)\le F(y)=\|P_b(\mathcal L')J\Omega\|$.
+    $\|P_b(\mathcal L(x))\Omega\|=F(x)\le F(y)=\|P_b(\mathcal L')\Omega\|$.
 \end{proof}
 
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 91--99.
-\begin{lemma}[Canonical coordinates for the normalized output]
+\begin{lemma}[The normalized output as a list state]
     \label{thm:peps_ordered_patch_normalized_coordinates}
     \lean{TNLean.PEPS.normalizedRegularizedPatchOutput_eq_patchState}
     \leanok
     \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal,
         def:peps_regularized_patch_minimum}
-    For the ordered outputs $\Psi$ and $\widetilde\Psi=J\Psi$, their normalizations $\widehat\Psi=\|\Psi\|^{-1}\Psi$ and $\widehat{\widetilde\Psi}=\|\widetilde\Psi\|^{-1}\widetilde\Psi$ (set to $0$ when the output vanishes) satisfy $J\widehat\Psi=\widehat{\widetilde\Psi}$.
+    The normalization $\widehat\Psi=\|\Psi\|^{-1}\Psi$ of the ordered output $\Psi=\widehat K_{m-1}\cdots\widehat K_0\Omega$ (set to $0$ when the output vanishes) is the normalization of $P_b(\mathcal L(x))\Omega$.
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{thm:peps_ordered_patch_output_coordinates}
-    By Lemma~\ref{thm:peps_ordered_patch_output_coordinates}, $\|\widetilde\Psi\|=\|\Psi\|$, so $J(\|\Psi\|^{-1}\Psi)=\|\widetilde\Psi\|^{-1}\widetilde\Psi$.
+    By Lemma~\ref{thm:peps_ordered_patch_output_coordinates}, $\Psi=P_b(\mathcal L(x))\Omega$; normalize both sides.
 \end{proof}
 
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 91--99 and 130--205.
-\begin{lemma}[Regional marginals in the ordered coordinates]
+\begin{lemma}[Regional marginals of the list state]
     \label{thm:peps_ordered_patch_marginal_coordinates}
     \lean{TNLean.PEPS.normalizedRegularizedPatchMarginal_eq_regionState_patchState}
     \leanok
     \uses{thm:peps_ordered_patch_normalized_coordinates,def:peps_patch_canonical_marginal}
     For every $R\subseteq V$, the canonical marginal (\ref{eq:peps_canonical_marginal}) satisfies
-    $\rho_R=\operatorname{Tr}_{V\setminus R}\ketbra{\widehat{\widetilde\Psi}}{\widehat{\widetilde\Psi}}$.
+    $\rho_R=\operatorname{Tr}_{V\setminus R}\ketbra{\widehat\Psi}{\widehat\Psi}$, the marginal of the normalization of $P_b(\mathcal L(x))\Omega$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_ordered_patch_normalized_coordinates,thm:peps_patch_basis_relabelling}
-    Substitute $J\widehat\Psi=\widehat{\widetilde\Psi}$ from Lemma~\ref{thm:peps_ordered_patch_normalized_coordinates} into (\ref{eq:peps_canonical_marginal}).
+    \uses{thm:peps_ordered_patch_normalized_coordinates}
+    Substitute $\phi=\widehat\Psi$ from Lemma~\ref{thm:peps_ordered_patch_normalized_coordinates} into (\ref{eq:peps_canonical_marginal}).
 \end{proof}
 
 \begin{lemma}[Regional expectation and density properties]
@@ -250,7 +247,7 @@ with marginals taken in the final normalized vector of
     \begin{align}
         \langle\xi,\widehat K_X\xi\rangle
          & =\tr\left(\operatorname{Tr}_{V\setminus X}
-        \ketbra{J\xi}{J\xi}\,K\right).
+        \ketbra{\xi}{\xi}\,K\right).
         \label{eq:peps_complex_expectation}
     \end{align}
     In particular, $\langle\phi,\widehat K_X\phi\rangle=\tr(\rho_XK)$ and $\rho_X\ge0$; if $a_j\ge0$, $b>0$,
@@ -259,7 +256,7 @@ with marginals taken in the final normalized vector of
 \begin{proof}
     \leanok
     \uses{thm:peps_regularized_patch_minimum}
-    Under $J$, $\widehat K_X$ corresponds to $K\otimes I_{V\setminus X}$, so $\tr(\operatorname{Tr}_{V\setminus X}(P)K)=\tr(P(K\otimes I))$ for $P=\ketbra{J\xi}{J\xi}$ gives (\ref{eq:peps_complex_expectation}). Partial trace preserves positivity and trace, and $\|\phi\|=1$ by Lemma~\ref{thm:peps_regularized_patch_minimum}.
+    In the splitting of configurations into those on $X$ and on $V\setminus X$, $\widehat K_X$ is $K\otimes I_{V\setminus X}$, so $\tr(\operatorname{Tr}_{V\setminus X}(P)K)=\tr(P(K\otimes I))$ for $P=\ketbra{\xi}{\xi}$ gives (\ref{eq:peps_complex_expectation}). Partial trace preserves positivity and trace, and $\|\phi\|=1$ by Lemma~\ref{thm:peps_regularized_patch_minimum}.
 \end{proof}
 
 \begin{lemma}[Relabelling the final-state marginal]
