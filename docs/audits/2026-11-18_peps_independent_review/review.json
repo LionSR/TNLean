@@ -1,0 +1,2962 @@
+{
+  "base": "b2c72008326f3166d3bcdc9e79013443142b0aa8",
+  "head": "5cef6f44c4334b7dd09acb47cf96eb2df7067d20",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "production_examined": 107,
+  "fixtures_examined": 3,
+  "unexamined": 0,
+  "lean_runs": 0,
+  "mathematical_narrowing_findings": 0,
+  "architecture_findings": 1,
+  "style_issue_paths": 4,
+  "files": [
+    {
+      "index": 0,
+      "path": "TNLean/PEPS/Approximation/CellConditionalInformation.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Generic conditional cell theorem retains PSD/member at arbitrary gap; positive-gap wrapper supplies canonical bridge.",
+      "changed_declaration_candidates": [
+        {
+          "name": "cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt",
+          "line": 114
+        },
+        {
+          "name": "exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound",
+          "line": 258
+        }
+      ],
+      "head_sha256": "aa4ae41ae180a1e1ca73a4322e2abec9bd69bbcded00da0952c2307525b110dc",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 1,
+      "path": "TNLean/PEPS/Approximation/CellConditionalInformationFromGap.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "cell_conditionalMutualInformation_le_closed",
+          "line": 77
+        }
+      ],
+      "head_sha256": "93397d2e8a3fe23617769fd6a2376263de6798a733d3d1e283cb4c47704b1d6b",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 2,
+      "path": "TNLean/PEPS/Approximation/CoarseInformation.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Coarse bound forwards explicit term data into both collar and amplification; square wrapper derives term data from Hermitian-part conversion, not stronger input.",
+      "changed_declaration_candidates": [
+        {
+          "name": "coarse_mutualInformation_le_of_sublinearCollarBoundAt",
+          "line": 135
+        },
+        {
+          "name": "coarse_mutualInformation_le_of_sublinearCollarBound",
+          "line": 355
+        },
+        {
+          "name": "coarse_mutualInformation_le_square_of_sublinearCollarBound",
+          "line": 402
+        }
+      ],
+      "head_sha256": "e9e8c6619539329f00b47c021157e17061a1dc590a9c46c1fd533328163f8367",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 3,
+      "path": "TNLean/PEPS/Approximation/CoarseInformationFromGap.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "sublinearCollarBoundAt_closed",
+          "line": 79
+        },
+        {
+          "name": "coarse_mutualInformation_le_closed",
+          "line": 117
+        },
+        {
+          "name": "coarse_mutualInformation_le",
+          "line": 147
+        }
+      ],
+      "head_sha256": "63267cfbf7e17e910a7314ba01acb2ee952a051fee889e989ead54e5f77ae569",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 4,
+      "path": "TNLean/PEPS/Approximation/NestedPatchEnergy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "_root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le",
+          "line": 53
+        }
+      ],
+      "head_sha256": "90a0e75fdf5c9dbfe5b8fd78102be6e3a9fdc7f1ad527d950fc84c230633a1bf",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 5,
+      "path": "TNLean/PEPS/Approximation/NestedPatchMarginalCloseness.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "nestedPatch_minimizer_marginal_closeness",
+          "line": 49
+        }
+      ],
+      "head_sha256": "d4587f343f375e5898070126e59961742113720cff8b5e7bc2352cd366b22b29",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 6,
+      "path": "TNLean/PEPS/Approximation/PinnedZeroFloorOptimizer.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Pinned optimizer keeps total Hermitian, arbitrary J/gap, m=0, norm/maximality and gap-weighted fidelity; private coordinate helper drops unused norm premise.",
+      "changed_declaration_candidates": [
+        {
+          "name": "fromCanonical_physical_estimates",
+          "line": 156
+        },
+        {
+          "name": "_root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelity",
+          "line": 199
+        }
+      ],
+      "head_sha256": "bac3e4fe3da33d8e95b20c0311103a920524db5707957a93ec8fe4b20795d5f4",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 7,
+      "path": "TNLean/PEPS/Approximation/RangeAngularInformation.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "IsRangeSquareGroundState.squareCellInformationBound",
+          "line": 68
+        },
+        {
+          "name": "IsRangeSquareGroundState.squareResetBound",
+          "line": 98
+        }
+      ],
+      "head_sha256": "63c53d3235dc8d7b6e85f215247c27e189552c05cd7d98600fcc6c0d7181470a",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 8,
+      "path": "TNLean/PEPS/Approximation/RangeInformationReset.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "notMem_rangeResetSupport",
+          "line": 104
+        },
+        {
+          "name": "information_reset_of_card_le",
+          "line": 158
+        },
+        {
+          "name": "information_reset_of_rangeResetThreshold_le",
+          "line": 217
+        },
+        {
+          "name": "information_reset",
+          "line": 244
+        }
+      ],
+      "head_sha256": "0de0181432539fb54cf8bf7e468fb8633e7a15a0f2ad9657087bfff1627b9666",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 9,
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "SquareEntropyAreaLawAt.uniform_rangeNestedPatch_cylinders",
+          "line": 97
+        }
+      ],
+      "head_sha256": "3c02e370f59f15caa25dc89e5d1a4d0dac039c6ff83aaa4a7d7de8cb66a8efdf",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 10,
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "_root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le",
+          "line": 153
+        }
+      ],
+      "head_sha256": "5007e41f55e523c216c5544788430f2ea035e0a766e261785a302da5c9fbaf83",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 11,
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "rangeNestedPatch_minimizer_marginal_closeness",
+          "line": 48
+        },
+        {
+          "name": "exists_uniform_rangeNestedPatch_minimizer_marginal_closeness",
+          "line": 109
+        }
+      ],
+      "head_sha256": "54ccc32492de362aab4d285dd423ca72e9a69e9aff811712aab883b3c8c051d1",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 12,
+      "path": "TNLean/PEPS/Approximation/RangeResetUnitary.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "rangeResetUnitaryPrefactor_pos",
+          "line": 99
+        },
+        {
+          "name": "reset_localized_filter",
+          "line": 124
+        },
+        {
+          "name": "reset_unitary",
+          "line": 222
+        }
+      ],
+      "head_sha256": "a9fa595056ed4d3dfd7d56f1581bdd84d7fcb5f1bbb39e6bb82e823f643bb08e",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 13,
+      "path": "TNLean/PEPS/Approximation/RangeSquareGroundState.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Existential PlaneInteraction carries exactly old term Hermitian/norm fields before E0. Square conversion uses total Hermitian projector transport and separate term estimates.",
+      "changed_declaration_candidates": [
+        {
+          "name": "IsRangeSquareGroundState",
+          "line": 54
+        },
+        {
+          "name": "IsRangeSquareGroundState.norm_eq_one",
+          "line": 64
+        },
+        {
+          "name": "IsSquareGroundState.isRangeSquareGroundState",
+          "line": 74
+        },
+        {
+          "name": "squareEntropyAreaLawAt_range_of_areaLawBound",
+          "line": 97
+        }
+      ],
+      "head_sha256": "3167acb58cdc58f1be39113c4acf3176508ae5afbfd47c9de31a95c755c23b8f",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 14,
+      "path": "TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "finiteProductEntropy_le_of_areaLawBound",
+          "line": 189
+        },
+        {
+          "name": "_root_.TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw",
+          "line": 219
+        }
+      ],
+      "head_sha256": "fc7ed0857eea20d99ecc076b8eb98f038b073b4c6157b855bcc11a12ad0ae2e2",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 15,
+      "path": "TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Square cell helper calls broad projector transport using total Hermitian; no positive-gap or singleton premise added.",
+      "changed_declaration_candidates": [
+        {
+          "name": "cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt",
+          "line": 171
+        }
+      ],
+      "head_sha256": "48942671491f35e32a8cbb66b79087a09f05cc636e08a432f636279dc7dcdcac",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 16,
+      "path": "TNLean/PEPS/Approximation/SquareInteractionTerms.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "_root_.ManyBody.SquareInteraction.exists_nearestNeighbor_terms",
+          "line": 29
+        }
+      ],
+      "head_sha256": "22bfacccc11f1072f5fc2873447b8ba22aa8c1f7de9149333a6ebf69dc956b3a",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 17,
+      "path": "TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Canonical zero-floor optimizer retains arbitrary J/gap, m and q, explicit maximality, positive output norm, normalization, energy error and gap-weighted fidelity.",
+      "changed_declaration_candidates": [
+        {
+          "name": "_root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fidelity",
+          "line": 66
+        }
+      ],
+      "head_sha256": "f69524b5b4b89468f28e98c0ccdbada17ac73df14f3b3c5dacd59cf7cf7f5324",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 18,
+      "path": "TNLean/PEPS/Approximation/SupportedPhysicalBufferGaussian.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "_root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral",
+          "line": 75
+        }
+      ],
+      "head_sha256": "0e72048ae22cb3cd0376ffc3f6d40c27e29035e78274f026bd7685f161c077f4",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 19,
+      "path": "TNLean/PEPS/Approximation/SwappedDoubledEdgeBoundary.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "swapped_doubled_boundary_bound_edgeBoundary",
+          "line": 37
+        }
+      ],
+      "head_sha256": "acc42c6ed1a021f0319d98da34ca35f62d60e250aeef602cb2f4a6740c7b7200",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 20,
+      "path": "TNLean/PEPS/Approximation/SwappedLocalHamiltonian.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Swap/doubling is now a canonical constructor; Hermitian and norm facts separated. Algebraic identities lose unused bounds; norm inequalities keep old hJ.",
+      "changed_declaration_candidates": [
+        {
+          "name": "card_admissibleSupport_le",
+          "line": 67
+        },
+        {
+          "name": "swapBoundaryCoefficient_nonneg",
+          "line": 80
+        },
+        {
+          "name": "doubledHamiltonian_isHermitian",
+          "line": 92
+        },
+        {
+          "name": "swappedDoubled",
+          "line": 101
+        },
+        {
+          "name": "isHermitian_swappedDoubled_term",
+          "line": 115
+        },
+        {
+          "name": "norm_swappedDoubled_term_le",
+          "line": 123
+        },
+        {
+          "name": "swappedDoubled_hamiltonian",
+          "line": 153
+        },
+        {
+          "name": "sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing",
+          "line": 171
+        },
+        {
+          "name": "swapped_doubled_boundary_bound",
+          "line": 207
+        },
+        {
+          "name": "supported_buffer_gaussian_integral",
+          "line": 289
+        }
+      ],
+      "head_sha256": "bf5c6fa165ea55befea6771134334a7f4842840d8fce85bcdf9cfc948e9f6f85",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 21,
+      "path": "TNLean/PEPS/Approximation/SwappedSquareHamiltonianInteraction.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Existential canonical swapped interaction carries Hermitian/norm conjuncts formerly in the bundle; original hJ for zero extension retained.",
+      "changed_declaration_candidates": [
+        {
+          "name": "_root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonian",
+          "line": 50
+        }
+      ],
+      "head_sha256": "f8ce3a366c96593dbde5a2dc1460aad7a3b65ce1e95bf41a241852e0e4e00570",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 22,
+      "path": "TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Generic positive-constraint implication retains arbitrary gap PSD/member; stronger explicit wrappers use hDelta only at canonical uniqueness bridge.",
+      "changed_declaration_candidates": [
+        {
+          "name": "latticeConstraintWord_truncation_of_positiveConstraints",
+          "line": 411
+        },
+        {
+          "name": "latticeConstraintWord_truncation_explicit",
+          "line": 473
+        },
+        {
+          "name": "exists_latticeConstraintWord_truncation",
+          "line": 525
+        }
+      ],
+      "head_sha256": "697b049859609b349e9649afce849da27b4f04ed556dbb2071feb8122d6e442c",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 23,
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelPoissonGrowth.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_latticeChannelWord_spatial_growth",
+          "line": 49
+        }
+      ],
+      "head_sha256": "a9be555270e2aeff46a87e448389bff6028d1a1d2166ffd5c318e2f649033dab",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 24,
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelPoissonThinning.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_latticeChannelWord_filter_spatial_growth",
+          "line": 43
+        }
+      ],
+      "head_sha256": "e16d95086662c4cac56907748d4a5427df6cc2dd1f46ff02d904c88b5af2a7da",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 25,
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [
+        "S1: newly added source lines exceed 100 characters: 391,487"
+      ],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Generic omission implication retains PSD/member, finite spectator assumptions unchanged; stronger locality wrappers retain existing positive gap and J premises.",
+      "changed_declaration_candidates": [
+        {
+          "name": "latticeConstraintWord_omission_of_positiveConstraints",
+          "line": 281
+        },
+        {
+          "name": "latticeConstraintWord_omission_of_locality",
+          "line": 347
+        },
+        {
+          "name": "latticeConstraintWord_omission_explicit",
+          "line": 406
+        },
+        {
+          "name": "exists_latticeConstraintWord_omission",
+          "line": 457
+        }
+      ],
+      "head_sha256": "8557db991491d11da9fd2b39c540a1c96a9c2f11ebb92f0b90f22af23298460c",
+      "changed": true,
+      "overlong_added_lines": [
+        {
+          "line": 391,
+          "length": 102
+        },
+        {
+          "line": 487,
+          "length": 104
+        }
+      ]
+    },
+    {
+      "index": 26,
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelWeightedRow.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_latticeChannelEventKernel_bounds",
+          "line": 57
+        }
+      ],
+      "head_sha256": "0b77198d7b98ac74a0ac8e26f80252a69a1150fd9fcf5138422fb666de87f722",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 27,
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeExcitedDecay.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "latticeConstraintWord_excitedProjection_decay",
+          "line": 46
+        }
+      ],
+      "head_sha256": "b205a188e20c05d87579a5fb5ba931b3c54695df0f0938cec5369b20569c9139",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 28,
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeRestoring.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_restoringOperator_estimates",
+          "line": 696
+        }
+      ],
+      "head_sha256": "ff321f8e4d0d48cb8dbbdc2d0aeb748a8f3c3a3781c0c44ffabee9ea52b1f356",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 29,
+      "path": "TNLean/PEPS/AreaLaw/Amplification/TypicalProjectors.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "typicalProjection_failure_le_stretchedExp",
+          "line": 141
+        },
+        {
+          "name": "exists_typicalProjection_failure_le_stretchedExp",
+          "line": 194
+        },
+        {
+          "name": "typicalProjection_failure_le_inv_pow_of_threshold_le",
+          "line": 225
+        },
+        {
+          "name": "exists_typicalProjection_failure_le_inv_pow",
+          "line": 247
+        },
+        {
+          "name": "typicalProjectors_three_cuts_of_threshold_le",
+          "line": 269
+        },
+        {
+          "name": "exists_typicalProjectors_three_cuts",
+          "line": 311
+        }
+      ],
+      "head_sha256": "5c6a3229c3328615cda608e2428bceadadce8a93ec095eb38b6779c8c3088433",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 30,
+      "path": "TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Radius output premise and AmplificationBound quantify term data in the same position as old bundle; geometry and constants unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "amplificationBound_of_radius_output",
+          "line": 106
+        }
+      ],
+      "head_sha256": "a34b0c8cfb204ec6895d1eb5a0bafd2af11ffa21971bdedfc76182eb5230e54c",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 31,
+      "path": "TNLean/PEPS/AreaLaw/AmplificationProof.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Positive-gap amplification keeps its q=0 or J<0 empty-domain branch, deriving J nonneg only from a real singleton support in the nonempty case.",
+      "changed_declaration_candidates": [
+        {
+          "name": "amplificationBound_of_locality",
+          "line": 170
+        },
+        {
+          "name": "amplificationBound_explicit",
+          "line": 625
+        },
+        {
+          "name": "amplificationBoundAt_explicit",
+          "line": 679
+        }
+      ],
+      "head_sha256": "4b5ab9ea9d4d9728d946000c01dd341c92b41b038ff5817521b38ef87c8b0f31",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 32,
+      "path": "TNLean/PEPS/AreaLaw/AreaLawElementaryConstant.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "uniformAreaLaw_elementary",
+          "line": 93
+        }
+      ],
+      "head_sha256": "8a559b70b986c072e203c4db68e1444f413d473ea154105676336e48607d6e0c",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 33,
+      "path": "TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "uniformAreaLaw_explicit_of_le",
+          "line": 107
+        },
+        {
+          "name": "uniformAreaLaw_explicit",
+          "line": 156
+        },
+        {
+          "name": "uniformAreaLaw_closed",
+          "line": 190
+        },
+        {
+          "name": "uniformAreaLaw_closed_of_le",
+          "line": 238
+        }
+      ],
+      "head_sha256": "6db4f2f707c743e3c2cee0ee6787900be52e0e56b96c402bea97aa98dc1d7d0a",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 34,
+      "path": "TNLean/PEPS/AreaLaw/AreaLawTheorem.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "uniformAreaLaw_vertex_boundary_bounds",
+          "line": 63
+        }
+      ],
+      "head_sha256": "e5add1df08cb482b0b6dbde9870aec334db89427db03493433d9cd455a33eca0",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 35,
+      "path": "TNLean/PEPS/AreaLaw/BoundaryTheorem.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [
+        "S1: newly added source lines exceed 100 characters: 427"
+      ],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Four generic definitions retain constant/threshold quantifier order, arbitrary gap PSD/member, and unchanged geometric/entropy conclusions.",
+      "changed_declaration_candidates": [
+        {
+          "name": "SublinearCollarBound",
+          "line": 79
+        },
+        {
+          "name": "AmplificationBound",
+          "line": 118
+        },
+        {
+          "name": "SublinearCollarBoundAt",
+          "line": 163
+        },
+        {
+          "name": "AmplificationBoundAt",
+          "line": 203
+        },
+        {
+          "name": "regionalEntropy_le_of_collar_amplification_twoFamilies_constants",
+          "line": 336
+        }
+      ],
+      "head_sha256": "4715e6d69cf707f473f7f134c6710cb9d499194fe7284e70045213d8007a932a",
+      "changed": true,
+      "overlong_added_lines": [
+        {
+          "line": 427,
+          "length": 102
+        }
+      ]
+    },
+    {
+      "index": 36,
+      "path": "TNLean/PEPS/AreaLaw/CollarInformation.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Both collar helpers preserve conditional PSD/member premises and geometric bounds; old term data explicitly forwarded.",
+      "changed_declaration_candidates": [
+        {
+          "name": "sublinearCollarBound_of_mutualInformation_le_at",
+          "line": 354
+        },
+        {
+          "name": "sublinearCollarBound_of_mutualInformation_le",
+          "line": 427
+        }
+      ],
+      "head_sha256": "3c0619c14883a006e57d23854479bab24b016eeb2bba23383613d96129e10d72",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 37,
+      "path": "TNLean/PEPS/AreaLaw/GraphPropagation.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [
+        "A1: unnecessary canonical-to-canonical private interaction adapter at 126-128; four callers can take h directly."
+      ],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "NormBound_nonneg still needs an actual support; pure disconnected commutator drops unnecessary Hermitian/norm assumptions. Redundant private identity adapter remains (A1).",
+      "changed_declaration_candidates": [
+        {
+          "name": "card_domainGraph_sphere_le",
+          "line": 71
+        },
+        {
+          "name": "normBound_nonneg",
+          "line": 98
+        },
+        {
+          "name": "sum_norm_term_containing_le",
+          "line": 106
+        },
+        {
+          "name": "interaction",
+          "line": 126
+        },
+        {
+          "name": "norm_commutator_le_graphDistance",
+          "line": 165
+        },
+        {
+          "name": "commutator_eq_zero_of_edist_eq_top",
+          "line": 192
+        },
+        {
+          "name": "norm_sub_regionExpectation_graphBall_le",
+          "line": 215
+        },
+        {
+          "name": "exists_quasilocal_lieb_robinson",
+          "line": 257
+        }
+      ],
+      "head_sha256": "421dc7ed25b751cad0720d04d5d794354bb0fc1329833a83e7132a4a967c8d10",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 38,
+      "path": "TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [
+        "S1: newly added source lines exceed 100 characters: 137,299"
+      ],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Box value set replaces bundle by existential term data; normalization, PSD/member, safe rectangle and size bound unchanged. Positive-gap bootstrap bridge remains conditional.",
+      "changed_declaration_candidates": [
+        {
+          "name": "boxEntropyValues",
+          "line": 72
+        },
+        {
+          "name": "le_of_mem_boxEntropyValues",
+          "line": 101
+        },
+        {
+          "name": "nonneg_of_mem_boxEntropyValues",
+          "line": 114
+        },
+        {
+          "name": "regionalEntropy_le_boxEntropy",
+          "line": 129
+        },
+        {
+          "name": "boxEntropy_mono",
+          "line": 140
+        },
+        {
+          "name": "boxEntropy_antitone",
+          "line": 149
+        },
+        {
+          "name": "regionalEntropy_rectRegion_le_of_children",
+          "line": 206
+        },
+        {
+          "name": "boxEntropy_le_of_scale",
+          "line": 378
+        },
+        {
+          "name": "boxEntropy_le_initialBoxRatio_mul",
+          "line": 508
+        }
+      ],
+      "head_sha256": "b201ee68ae9e9f5affdae541033b354075d71d77a57c130fac33b254fcd1a6a0",
+      "changed": true,
+      "overlong_added_lines": [
+        {
+          "line": 137,
+          "length": 104
+        },
+        {
+          "line": 299,
+          "length": 101
+        }
+      ]
+    },
+    {
+      "index": 39,
+      "path": "TNLean/PEPS/AreaLaw/InitialBuffer.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "condEntropy_le_initialBuffer_of_constants",
+          "line": 135
+        },
+        {
+          "name": "condEntropy_le_initialBufferConst",
+          "line": 443
+        },
+        {
+          "name": "exists_condEntropy_le_initialBuffer",
+          "line": 479
+        }
+      ],
+      "head_sha256": "5a556707fe0609741a8b60ddc74aaff2701b13b1c2ed08f1fe3df8a32ab091c7",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 40,
+      "path": "TNLean/PEPS/AreaLaw/InitialBufferReal.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_condEntropy_le_initialBuffer_real",
+          "line": 43
+        }
+      ],
+      "head_sha256": "ef161c696c0d555d16cf7b5f34bef468341ae9b0c2169ce6a61d3fbb4bcfe8ee",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 41,
+      "path": "TNLean/PEPS/AreaLaw/InitialRoundedCollarEntropy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_regionalEntropy_initial_rounded_collar_le_rpow",
+          "line": 44
+        }
+      ],
+      "head_sha256": "43928e1bdedb8d805d9c25c53989f97b40076bf06bb20cdc83637fa5d3c686af",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 42,
+      "path": "TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_regionalEntropy_safe_rect_le_rpow",
+          "line": 41
+        }
+      ],
+      "head_sha256": "b65d344f543e55b136711baf4ade69b093648c6ac0d754be7f135269c22bfed1",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 43,
+      "path": "TNLean/PEPS/AreaLaw/InitialWeakRectangleShellEntropy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_regionalEntropy_weak_rectangle_shell_le_rpow",
+          "line": 49
+        }
+      ],
+      "head_sha256": "b6cf74d93c51d54ff9a6e07c04927312dcf3ea14c34801b3ac254b588be7da4f",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 44,
+      "path": "TNLean/PEPS/AreaLaw/LatticeConstraints.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Constraint/replacement/truncation wrappers preserve old positive-gap/nonnegative-budget/NeZero assumptions and all spectral/locality output bounds.",
+      "changed_declaration_candidates": [
+        {
+          "name": "latticePositiveConstraints_of_locality",
+          "line": 72
+        },
+        {
+          "name": "latticePositiveConstraints_explicit",
+          "line": 187
+        },
+        {
+          "name": "exists_latticePositiveConstraints",
+          "line": 228
+        },
+        {
+          "name": "exists_latticeQuasilocalRoots",
+          "line": 267
+        },
+        {
+          "name": "latticeFiniteSetTruncation_of_locality",
+          "line": 345
+        },
+        {
+          "name": "latticeFiniteSetTruncation_explicit",
+          "line": 428
+        },
+        {
+          "name": "exists_latticeFiniteSetTruncation",
+          "line": 475
+        },
+        {
+          "name": "exists_latticeFiniteSetTruncation_eigenspace_eq_span",
+          "line": 515
+        }
+      ],
+      "head_sha256": "67a46e1a90362f15adff88e0c426b326e3570e3c6e1653513e35f35e2a7ff7db",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 45,
+      "path": "TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "sublinearCollarBound_real_of_boxEntropy_explicit",
+          "line": 68
+        },
+        {
+          "name": "sublinearCollarBound_real_of_boxEntropy",
+          "line": 149
+        },
+        {
+          "name": "sublinearCollarBound_real_of_initial",
+          "line": 199
+        },
+        {
+          "name": "sublinearCollarBound_real",
+          "line": 261
+        },
+        {
+          "name": "sublinearCollarBound_real_explicit",
+          "line": 289
+        }
+      ],
+      "head_sha256": "ca6cf8069989569caf57651314ebd8764352c834f4838da242bfd7472dff6bf9",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 46,
+      "path": "TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_regionalEntropy_safe_rect_le_boxError",
+          "line": 51
+        }
+      ],
+      "head_sha256": "e0dbb7aa948d3f8bf3cd07f6082b05b79937dabe55e263aeefbba2430a1abbf4",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 47,
+      "path": "TNLean/PEPS/AreaLaw/RectangularSpecialization.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Rectangle theorem retains total-Hermitian original input; separate Hermitian-part term estimates feed uniform plane bound.",
+      "changed_declaration_candidates": [
+        {
+          "name": "UniformAreaLaw.rectangularEntropyAreaLaw",
+          "line": 81
+        }
+      ],
+      "head_sha256": "bffaf207d94a72c4aeafe1c0bc1d65432923e75c67e42c02962c955f709f9750",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 48,
+      "path": "TNLean/PEPS/AreaLaw/RegionOperatorLocalization.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "quasilocal_region_localization",
+          "line": 78
+        },
+        {
+          "name": "exists_quasilocal_region_localization",
+          "line": 181
+        }
+      ],
+      "head_sha256": "2060b8187aad80829150955dd22c644686426b122c65fa90a11f6d540f826a92",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 49,
+      "path": "TNLean/PEPS/AreaLaw/SafeRectangleAreaLaw.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Safe rectangle theorem reuses h with a larger norm proof rather than rebuilding a bundle; constants and original sign premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_regionalEntropy_safe_rect_le_linear",
+          "line": 63
+        },
+        {
+          "name": "exists_initialBuffer_and_real_boxEntropy_recurrence",
+          "line": 103
+        }
+      ],
+      "head_sha256": "0e1e93176c7ad9966ec8c6f64a5ec16a7ba3748bcef8438dab74815656dd92ef",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 50,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyBound.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualCharge_energyError_le_domainGraph",
+          "line": 51
+        }
+      ],
+      "head_sha256": "6c662e2a4ec0cc24aab0ea99554c7148ba6b14a8556783acf5c61c901368aaae",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 51,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyCoefficients.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualCharge_energy_coefficients_of_threshold_le",
+          "line": 134
+        },
+        {
+          "name": "exists_actualCharge_energy_coefficients",
+          "line": 277
+        }
+      ],
+      "head_sha256": "a132aebf3c571da638f2f81cb0c4c2c1855830a9c6448ac459c70f32e1f5b498",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 52,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyDecay.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualCharge_energy_of_badOldHistoryThreshold_le",
+          "line": 46
+        },
+        {
+          "name": "exists_actualCharge_energy_threshold",
+          "line": 126
+        }
+      ],
+      "head_sha256": "9c9eb4bf237633eb2bdf8847a4824cc702b5eb50b426ebaf1a48ffb02ff69831",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 53,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEntropySum.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound",
+          "line": 164
+        },
+        {
+          "name": "actualCharges_integral_bound_domainGraph",
+          "line": 230
+        }
+      ],
+      "head_sha256": "528aa1b6031ee8f8b33ef6e08c68f9cfe30d69d8f4e4ccea3dc6927c9a8f587a",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 54,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeParameterBound.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualCharge_integral_bound_domainGraph",
+          "line": 67
+        }
+      ],
+      "head_sha256": "119178738dea94eba2e96ac9ad346d37a5be1bd5253e105f78068ea0130d5f75",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 55,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeSelectionBound.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualCharges_selection_domainGraph_of_finiteFamilyTransportBound",
+          "line": 41
+        },
+        {
+          "name": "actualCharges_selection_domainGraph",
+          "line": 105
+        }
+      ],
+      "head_sha256": "982c3792a57c01ee012e83c338f5097889089341eefea536029381c2e068c7bf",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 56,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualEnergyTerms.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "J is explicit in positiveTerm/truncatedEnergyTerm/actualEnergyTerms because normalization depends on it. Spectral/support lemmas receive only the previously bundled data they use.",
+      "changed_declaration_candidates": [
+        {
+          "name": "augmentOperator_isSupportedOn",
+          "line": 121
+        },
+        {
+          "name": "_root_.ManyBody.PlaneInteraction.positiveTerm",
+          "line": 172
+        },
+        {
+          "name": "truncatedEnergyTerm",
+          "line": 186
+        },
+        {
+          "name": "actualEnergyTerms",
+          "line": 193
+        },
+        {
+          "name": "truncatedEnergyTerm_mem_Icc",
+          "line": 201
+        },
+        {
+          "name": "isHermitian_sum_truncatedEnergyTerm",
+          "line": 215
+        },
+        {
+          "name": "truncatedEnergyTerm_isSupportedOn",
+          "line": 224
+        },
+        {
+          "name": "actualEnergyTerms_spec",
+          "line": 241
+        },
+        {
+          "name": "sum_actualEnergyTerms",
+          "line": 256
+        },
+        {
+          "name": "replicaEnergy_actualEnergyTerms",
+          "line": 263
+        }
+      ],
+      "head_sha256": "61fbcfbae4aae2a7720417e2ae95c4ae87272f28b6b742ea378251eace01dd1e",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 57,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualGlobalReplicaEnergy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualFillScanRound_meanEnergy_eq_globalReplicaMeanHamiltonian",
+          "line": 49
+        },
+        {
+          "name": "actualChargeScanRound_meanEnergy_eq_globalReplicaMeanHamiltonian",
+          "line": 72
+        }
+      ],
+      "head_sha256": "304fe927bbdcfa236b2a13789bf31ccdd66830fbea2ef301e015a13b33b12e97",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 58,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualMarginalTails.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "log_surprisalMoment_truncated_reducedState_le",
+          "line": 62
+        },
+        {
+          "name": "surprisalTail_truncated_reducedState_le",
+          "line": 100
+        },
+        {
+          "name": "truncated_reducedState_moment_tail_bounds_of_locality",
+          "line": 143
+        },
+        {
+          "name": "truncated_reducedState_moment_tail_bounds_explicit",
+          "line": 241
+        },
+        {
+          "name": "exists_truncated_reducedState_moment_tail_bounds",
+          "line": 296
+        }
+      ],
+      "head_sha256": "0992bf5f1b1a73573020456f4519c780567e06a0c296f178e1ab276155eed8a8",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 59,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualReplicaDefect.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualChargeScanRound_globalLowDefectProjection_mass_ge",
+          "line": 77
+        }
+      ],
+      "head_sha256": "a9cd188c7447d36ba1788c9e6d1d45789625d3dd838de1a9768d060f6ece713b",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 60,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoughLower.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_actualScan_rough_lower_norm_of_weight",
+          "line": 41
+        },
+        {
+          "name": "exists_actualScan_rough_lower_norm",
+          "line": 340
+        }
+      ],
+      "head_sha256": "088f628b307996558f6e293b1cc6d4cea1774a4b7229a60e7acc4181ec0f3c58",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 61,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoughLowerPrevector.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_actualScan_suppliedPrevector_rough_lower_of_weight",
+          "line": 46
+        },
+        {
+          "name": "exists_actualScan_suppliedPrevector_rough_lower",
+          "line": 145
+        }
+      ],
+      "head_sha256": "a4335914c4a463d3ea7f9dee373a47509fb78bcfc3495887b7a2502b6930d896",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 62,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoundEntropy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound",
+          "line": 174
+        },
+        {
+          "name": "actualRounds_entropy_integral_le_domainGraph",
+          "line": 264
+        }
+      ],
+      "head_sha256": "15c86279a1cee3041a4c98dfae85401adc3128656491f158c8394a87cb0a065d",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 63,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoundTransport.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualRounds_transport_domainGraph_of_finiteFamilyTransportBound",
+          "line": 224
+        },
+        {
+          "name": "actualRounds_transport_domainGraph",
+          "line": 351
+        }
+      ],
+      "head_sha256": "5bfa01e395e3451d3cf56b599bc99c9e351cbd041e9872c847aedb11f740c578",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 64,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanMeasures.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualChargeScanRound_chargeDefect",
+          "line": 159
+        },
+        {
+          "name": "actualFillScanRound_meanEnergy",
+          "line": 189
+        },
+        {
+          "name": "actualChargeScanRound_meanEnergy",
+          "line": 203
+        }
+      ],
+      "head_sha256": "617fcea6af8103e6d8bbba73c29197fa39809d19b08f4632de16e048fe00c4a3",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 65,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanTransportInputs.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_scanTransportInputs_actualScan",
+          "line": 354
+        }
+      ],
+      "head_sha256": "ddecb60a7f3c53af32e1f4b32ee5ffc824a58fe9361d1805f7391cda11217510",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 66,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedChargeDensityEnergy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualCharge_defect_le_of_density_energy_bound",
+          "line": 75
+        }
+      ],
+      "head_sha256": "92fe84f6ff2dee8641c32e8295b79ac906e95318574d080020d641a765de4817",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 67,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedChargeEnergy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualCharges_selection_energy_domainGraph_of_finiteFamilyTransportBound",
+          "line": 48
+        },
+        {
+          "name": "actualCharges_selection_energy_domainGraph",
+          "line": 167
+        }
+      ],
+      "head_sha256": "bcb705370a712d97aff3001836fe804189233d3f56131e778ca258617cb8c1f9",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 68,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedSharpComparison.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "eventually_exists_selected_actualCharge_sharp_comparison",
+          "line": 50
+        }
+      ],
+      "head_sha256": "4497e9acaf4f9790b76fbd4fa9d7e94f4c5dfe756f929bd27206cf1dfb815ed3",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 69,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpComparison.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "eventually_actualCharge_suppliedPrevector_sharp_comparison",
+          "line": 52
+        }
+      ],
+      "head_sha256": "9ce34a49150390ea7197d336085bf21771f358a003332bc6336ab5bc5ef4035b",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 70,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpLower.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_actualScan_sharp_lower_norm",
+          "line": 89
+        }
+      ],
+      "head_sha256": "b2d8bdad88fca0b67c2230abdded644afdbc2550880940868d1063681fd46542",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 71,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpLowerPrevector.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_actualScan_suppliedPrevector_sharp_lower",
+          "line": 196
+        }
+      ],
+      "head_sha256": "a44ec307a17df6ca9a68920fbae5be5002b8940618778c323850e2f04a3b4653",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 72,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualTransportEstimates.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualFill_transport_domainGraph",
+          "line": 52
+        },
+        {
+          "name": "actualCharge_transport_domainGraph",
+          "line": 144
+        }
+      ],
+      "head_sha256": "31d1b592f4eaf2945392af8b85dbab171b4e30a4d09419448251a18049393f3b",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 73,
+      "path": "TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "boxEntropy_power_le_of_succ_clearance",
+          "line": 48
+        }
+      ],
+      "head_sha256": "25d2fb6440767d3def9a63907659920832570b432cd82d4428e7ae96adf7dccc",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 74,
+      "path": "TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Box power bridge retains he and hbox and explicit entropy target for arbitrary gap; large-rectangle constant is chosen before scale and physical data.",
+      "changed_declaration_candidates": [
+        {
+          "name": "regionalEntropy_le_of_boxEntropy_power",
+          "line": 34
+        },
+        {
+          "name": "boxEntropy_power_le_of_large_rectangles",
+          "line": 58
+        }
+      ],
+      "head_sha256": "ebf75d3e4126e0c9333a2b4ca050b288c6d1178a15c9bde57777cf7d8ebbc2ae",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 75,
+      "path": "TNLean/PEPS/AreaLaw/Scan/GenericChargeEnergy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "generic_actualCharge_energy_of_threshold_le",
+          "line": 128
+        },
+        {
+          "name": "ScannerExponents.actualCharge_energy_coefficients_of_threshold_le",
+          "line": 254
+        },
+        {
+          "name": "ScannerExponents.exists_actualCharge_energy_coefficients",
+          "line": 384
+        }
+      ],
+      "head_sha256": "e7061b5f555b560251a835e329073b6257e7720440d4b8397dfba8951d2e838c",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 76,
+      "path": "TNLean/PEPS/AreaLaw/Scan/GenericSelectedChargeEnergy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "actualCharge_defect_le_of_density_energy_bound_at_exponent",
+          "line": 75
+        }
+      ],
+      "head_sha256": "64d8ed2fe378e49289a2bf71c25775caa62707463d255aec86f323658eb9c22a",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 77,
+      "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "uniform_boxEntropy_improvement_explicit",
+          "line": 80
+        }
+      ],
+      "head_sha256": "64044a638580b516e971152a5bed7a91cf31f77b2e5f0de8948bb921856e542a",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 78,
+      "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalScanner.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "scanner_estimate_actualScan",
+          "line": 122
+        }
+      ],
+      "head_sha256": "27b1e3a3213a5b19886163dab01d7739e3694f75578cf47cd6137957f1caa236",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 79,
+      "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalTemplateInformation.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_template_final_mutualInformation",
+          "line": 51
+        }
+      ],
+      "head_sha256": "75b7ce36eb932f871feac447e9c7f47b69c79afce64028029ebf666f096d87d1",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 80,
+      "path": "TNLean/PEPS/AreaLaw/Scan/ScanTruncationInputs.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_scanTruncation",
+          "line": 141
+        }
+      ],
+      "head_sha256": "7f26185f4cc9d9272b83f565e71236d5b52544d8122ea80dfbcf8c9386e8c8aa",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 81,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceActualInformation.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "sourceTarget_actual_mutualInformation_bound_explicit",
+          "line": 55
+        },
+        {
+          "name": "exists_sourceTarget_actual_mutualInformation_bound_of_threshold_le",
+          "line": 280
+        },
+        {
+          "name": "exists_sourceTarget_actual_mutualInformation_bound",
+          "line": 428
+        }
+      ],
+      "head_sha256": "e5f71f33cd959c535ce97777d1165a3afd4884ba27ee661de585db6a5f72bd20",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 82,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceBootstrapEntropy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "sourceBootstrap_entropy_improvement_explicit",
+          "line": 146
+        },
+        {
+          "name": "exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound",
+          "line": 413
+        },
+        {
+          "name": "exists_sourceBootstrap_entropy_improvement_of_threshold_le",
+          "line": 464
+        },
+        {
+          "name": "exists_sourceBootstrap_entropy_improvement",
+          "line": 511
+        }
+      ],
+      "head_sha256": "0a1b8b447e6de5c2a7a0d3368ae98902a176bb1d7ae2503c20573f98e357a32c",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 83,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceChargeSelection.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_sourceTarget_selected_actualCharge_density_energy",
+          "line": 59
+        }
+      ],
+      "head_sha256": "62854621196cf42e94cfa86bac548dc8a31309d6626508625d24d19ca22b0f5b",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 84,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceFinalInformation.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "sourceTarget_finalScale_mutualInformation_explicit",
+          "line": 84
+        },
+        {
+          "name": "exists_sourceTarget_finalScale_mutualInformation_of_threshold_le",
+          "line": 235
+        },
+        {
+          "name": "exists_sourceTarget_finalScale_mutualInformation",
+          "line": 298
+        }
+      ],
+      "head_sha256": "139a11b9bf2e3755b439b1dcc64da52ea9975435ab0c6181bb060a862a97f49d",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 85,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceRoughSelection.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "sourceTarget_selected_actualCharge_rough_comparison_explicit",
+          "line": 73
+        },
+        {
+          "name": "exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFamilyTransportBound",
+          "line": 333
+        },
+        {
+          "name": "exists_sourceTarget_selected_actualCharge_rough_comparison_of_threshold_le",
+          "line": 477
+        },
+        {
+          "name": "exists_sourceTarget_selected_actualCharge_rough_comparison",
+          "line": 616
+        }
+      ],
+      "head_sha256": "2f2b06abe8cfe78b6f4210eb79f55c89e0afd2cb08a99961e0f40af8c7bb1800",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 86,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceRoundedInformation.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "sourceTarget_finalScale_mutualInformation_of_rounded_scales_explicit",
+          "line": 67
+        },
+        {
+          "name": "exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales_of_threshold_le",
+          "line": 137
+        },
+        {
+          "name": "exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales",
+          "line": 197
+        }
+      ],
+      "head_sha256": "a69607f7b9617b43e326e69e01ab5b27d20eba920a0b702a6c5759634e80f868",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 87,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "ScannerHypotheses retains projectorGap and canonical member fields, not singleton; ScannerStatement adds explicit bundle fields and propagates identical J into truncated terms.",
+      "changed_declaration_candidates": [
+        {
+          "name": "ScannerHypotheses",
+          "line": 95
+        },
+        {
+          "name": "ScannerStatement",
+          "line": 174
+        },
+        {
+          "name": "scannerStatement",
+          "line": 314
+        }
+      ],
+      "head_sha256": "7811fca0a783e1b2ea72f790d7680b5121e2e35d1a0533910e46e3863cc51a40",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 88,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedDensity.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_sourceTarget_selected_actualCharge_source_density",
+          "line": 67
+        }
+      ],
+      "head_sha256": "51a9689b552d1dec65aa5a7ff7b70f327316635758b55ca224556334eb042521",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 89,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedEnergy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_sourceTarget_selected_actualCharge_source_density_energy",
+          "line": 63
+        }
+      ],
+      "head_sha256": "cc8179d1a76f4de780dd463cf6115cc73b91590335fc6e8ab2b2b8d842dd8dd4",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 90,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpComparison.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "sourceTarget_selected_actualCharge_sharp_comparison_explicit",
+          "line": 68
+        },
+        {
+          "name": "exists_sourceTarget_selected_actualCharge_sharp_comparison_of_finiteFamilyTransportBound",
+          "line": 345
+        },
+        {
+          "name": "exists_sourceTarget_selected_actualCharge_sharp_comparison_of_threshold_le",
+          "line": 517
+        },
+        {
+          "name": "exists_sourceTarget_selected_actualCharge_sharp_comparison",
+          "line": 692
+        }
+      ],
+      "head_sha256": "ab702b4e54435576c8dec7ff34589ea279958716def82b2dec30b0c08cbdd1df",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 91,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpDensity.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_sourceTarget_selected_actualCharge_sharp_density",
+          "line": 62
+        }
+      ],
+      "head_sha256": "299c6e22892423bbf6d15d9f2298e10883b1871a0715c23836f0059845bfb74b",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 92,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpEnergy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "sourceTarget_selected_actualCharge_sharp_energy_explicit",
+          "line": 81
+        },
+        {
+          "name": "exists_sourceTarget_selected_actualCharge_sharp_energy_of_threshold_le",
+          "line": 401
+        },
+        {
+          "name": "exists_sourceTarget_selected_actualCharge_sharp_energy",
+          "line": 575
+        }
+      ],
+      "head_sha256": "5c070743a4393f9721c2df5bff6784e1b080dc2e9456b1573ec1fe25fb2cd599",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 93,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceStatusMarginalMoments.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_source_statusMarginal_moment_bounds",
+          "line": 52
+        }
+      ],
+      "head_sha256": "5f0729282ffa5cebfb3e45c9513f5a7ad44fbbe769bff3070fdcd4fcbc692501",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 94,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpMoments.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "truncated_target_sharp_moments_explicit",
+          "line": 64
+        },
+        {
+          "name": "exists_truncated_target_sharp_moments_of_targetSharpMomentThreshold_le",
+          "line": 243
+        },
+        {
+          "name": "exists_truncated_target_sharp_moments",
+          "line": 347
+        }
+      ],
+      "head_sha256": "332becc3ec36fac3ec2fb8815ad283d3d3b10c52405e22ccc048fbb471735496",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 95,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpUpper.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_truncated_target_actualSharpUpper",
+          "line": 66
+        }
+      ],
+      "head_sha256": "6db84f07ed22e6193fc6529609f56135537e11c4650ad82fdaabb0b313f308af",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 96,
+      "path": "TNLean/PEPS/AreaLaw/Scan/StatusMarginalMoments.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "tailRadius_eq_div_sqrt",
+          "line": 47
+        },
+        {
+          "name": "log_surprisalMoment_truncated_reducedState_le_common",
+          "line": 64
+        },
+        {
+          "name": "exists_truncated_statusMarginal_moment_bounds",
+          "line": 101
+        }
+      ],
+      "head_sha256": "2a7b053207a33d9fe7be1fc7a5367cfbb276f1822fda59016f03ca63e97b5eef",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 97,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetNormAttachment.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_suppliedTarget_actualCharge_norm_bounds",
+          "line": 52
+        }
+      ],
+      "head_sha256": "e844962572d187a06a486cc91e59688bfe9409c2044256c68d53cd2d856d9be8",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 98,
+      "path": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetStatusMoments.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "exists_suppliedTarget_statusMarginal_moment_bounds",
+          "line": 41
+        }
+      ],
+      "head_sha256": "19e135e17c2b713a50d51be27eb5433a3f9e74af55245dbcac395a62ec45b38b",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 99,
+      "path": "TNLean/PEPS/AreaLaw/Scan/TargetTypicalWindow.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "truncated_target_typical_window_explicit",
+          "line": 133
+        },
+        {
+          "name": "exists_truncated_target_typical_window_of_targetTypicalWindowThreshold_le",
+          "line": 245
+        },
+        {
+          "name": "exists_truncated_target_typical_window_uniform_in_q",
+          "line": 323
+        },
+        {
+          "name": "exists_truncated_target_typical_window",
+          "line": 389
+        }
+      ],
+      "head_sha256": "e2cb55798e1c01bb54381a3d86985c2f30254ee1ee690f3f78e9f6ad5e55083b",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 100,
+      "path": "TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: scanner data and conclusions preserved; old term fields are explicit where consumed, and explicit normalization J is forwarded consistently. Existing gap/spectator/geometric premises unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "template_final_mutualInformation_of_boxEntropy_explicit",
+          "line": 126
+        },
+        {
+          "name": "exists_template_final_mutualInformation_of_boxEntropy_of_threshold_le",
+          "line": 215
+        },
+        {
+          "name": "exists_template_final_mutualInformation_of_boxEntropy",
+          "line": 254
+        }
+      ],
+      "head_sha256": "58ad54ecdc2e5e8b381fe94673e66c1e2ee3fe671ad6da6df6a3cdc5d365820b",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 101,
+      "path": "TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Both template entropy helpers retain arbitrary gap projector condition/member and conditional box bound; actual call uses Q.one_le_size.",
+      "changed_declaration_candidates": [
+        {
+          "name": "template_final_source_entropy_bounds_of_boxEntropy",
+          "line": 193
+        },
+        {
+          "name": "exists_template_final_source_entropy_bounds_of_boxEntropy",
+          "line": 236
+        }
+      ],
+      "head_sha256": "9142d90fffe17edf63c91110b7d20b7b9d6ade41fce6cd0b0e43587f908de3f9",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 102,
+      "path": "TNLean/PEPS/AreaLaw/SupportedGaussianIntegral.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Supported Gaussian estimates keep original time/integral and norm constants; term Hermitian data provides Hermitian sum, original separate total-Hermitian comparison H unchanged.",
+      "changed_declaration_candidates": [
+        {
+          "name": "supported_gaussian_integral_of_localization",
+          "line": 45
+        },
+        {
+          "name": "supported_gaussian_integral",
+          "line": 115
+        },
+        {
+          "name": "exists_supported_gaussian_integral",
+          "line": 149
+        }
+      ],
+      "head_sha256": "915179220529618080a11b29fc5409fb16f809e29b315fc06afe262bcea6808b",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 103,
+      "path": "TNLean/PEPS/AreaLaw/TailParameter.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "_root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_edgeBoundary",
+          "line": 208
+        }
+      ],
+      "head_sha256": "3f70a77c2e7bb797ce95d159b29913897d5ef89a48eb4dce1b294ebe0b7877ed",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 104,
+      "path": "TNLean/PEPS/AreaLaw/TheoremStatements.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "UniformAreaLaw preserves q/R/J/gap and constant quantifier order; only old bundle fields are exposed.",
+      "changed_declaration_candidates": [
+        {
+          "name": "UniformAreaLaw",
+          "line": 41
+        }
+      ],
+      "head_sha256": "cccaa7ccf3c6120ca1398864fb605917ccce30c22792f4f61458beb2dcce3cec",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 105,
+      "path": "TNLean/PEPS/AreaLaw/VertexBoundaryCorollaries.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Examined changed declaration/proof hunks: canonical representation and explicit old term fields preserve the original quantifier ordering, bounds and domain/gap restrictions. Call sites forward the separated data or use canonical Hermitian-part transport.",
+      "changed_declaration_candidates": [
+        {
+          "name": "UniformAreaLaw.vertex_boundary_bounds",
+          "line": 70
+        }
+      ],
+      "head_sha256": "79c713263f353496a1ecbcab959f34987a974fafccc0aa578ca28f68e4e2fad2",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 106,
+      "path": "TNLean/PEPS/AreaLaw/ZeroBoundary.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Zero-boundary theorems keep positive-gap/uniqueness premise and remove unused norm budget; support/Hermitian arguments forwarded without new restrictions.",
+      "changed_declaration_candidates": [
+        {
+          "name": "`TNLean.Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint`,",
+          "line": 25
+        },
+        {
+          "name": "regionalEntropy_eq_zero_of_forall_subset_or_disjoint",
+          "line": 149
+        },
+        {
+          "name": "regionalEntropy_eq_zero_of_edgeBoundary_eq_empty",
+          "line": 167
+        },
+        {
+          "name": "regionalEntropy_eq_zero_of_range_eq_zero",
+          "line": 179
+        },
+        {
+          "name": "regionalEntropy_connectedComponents_eq_zero",
+          "line": 227
+        }
+      ],
+      "head_sha256": "f2db667bc1b8a913c43bb0ecb80f2a0b7e87e6ea9999dd062127c4fea771037b",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 107,
+      "path": "scripts/range_square_zero_gap_regression.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Unchanged fixture uses actual square-to-range conversion at one site q=2 gap=0 with explicit IsRangeSquareGroundState target.",
+      "changed_declaration_candidates": [],
+      "head_sha256": "73fa9d483160da883c4bc3dff69dcd946bc430acadb516353a4d5f2ed225a149",
+      "changed": false,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 108,
+      "path": "scripts/box_supremum_zero_gap_regression.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Migrated zero constructor and actual box calls retain size-one rectangle with empty physical intersection, empty r=0 value set, hbox, positive exponent and explicit entropy target.",
+      "changed_declaration_candidates": [
+        {
+          "name": "zeroHamiltonian",
+          "line": 15
+        },
+        {
+          "name": "zeroHermitian",
+          "line": 18
+        },
+        {
+          "name": "zeroNorm",
+          "line": 21
+        },
+        {
+          "name": "projector_gap",
+          "line": 31
+        },
+        {
+          "name": "omega_mem",
+          "line": 37
+        },
+        {
+          "name": "actual_value_mem",
+          "line": 43
+        },
+        {
+          "name": "values_at_zero_empty",
+          "line": 55
+        }
+      ],
+      "head_sha256": "865f4b10e7651f59aa78f3c31b7e62d44729c741de6153cad3f1157fd4179178",
+      "changed": true,
+      "overlong_added_lines": []
+    },
+    {
+      "index": 109,
+      "path": "scripts/generic_gap_boundary_regression.lean",
+      "examined": true,
+      "review_method": "before/after declaration and proof-hunk comparison; sensitive statement and caller source reads; no Lean elaboration",
+      "issues": [
+        "S1: newly added source lines exceed 100 characters: 75"
+      ],
+      "blocked": [
+        "exact-pin elaboration and strict not run (read-only review)"
+      ],
+      "scope_assessment": "no mathematical narrowing found in inspected migration delta",
+      "notes": "Migrated zero constructor retains nonempty q=2 domain and independent-vector non-singleton proof; all four generic bounds remain conditionally exercised. Line 75 exceeds style limit.",
+      "changed_declaration_candidates": [
+        {
+          "name": "zeroHamiltonian",
+          "line": 25
+        },
+        {
+          "name": "zeroHermitian",
+          "line": 29
+        },
+        {
+          "name": "zeroNorm",
+          "line": 32
+        },
+        {
+          "name": "omega_mem",
+          "line": 40
+        },
+        {
+          "name": "zero_projector_bound",
+          "line": 43
+        },
+        {
+          "name": "groundSpace_not_span",
+          "line": 49
+        }
+      ],
+      "head_sha256": "bfcfc1cd59ead1a7b4c95f3ce4ad71c6dcc164da6564794fc2c0c6909240292c",
+      "changed": true,
+      "overlong_added_lines": [
+        {
+          "line": 75,
+          "length": 108
+        }
+      ]
+    }
+  ],
+  "additional_unchanged_helper": "TNLean/PEPS/Approximation/AngularWholeCellInformationFromCollar.lean: broad helper and positive-gap wrapper inspected; total Hermitian and arbitrary-gap PSD/member preserved"
+}
