@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.GappedGroundState
-import TNLean.Algebra.MatrixReindexGap
+import QICLean.Algebra.MatrixReindexEuclidean
 import QICLean.Analysis.RegionalLowDefectProjection
 import QICLean.Analysis.RegionalRoughLowerNorm
 import QICLean.Analysis.RegionalSharpLowerNorm

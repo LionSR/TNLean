@@ -9025,7 +9025,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** all four equations use one local arbitrary-matrix transport
   lemma, itself an application of
   `Matrix.toEuclideanLin_reindex_piLpCongrLeft` in
-  `Algebra/MatrixReindexGap.lean`.
+  `QICLean/Algebra/MatrixReindexEuclidean.lean` (QICLean dependency).
 - **Notes:** the four applications occur in one module. A shared scalar-eigenvalue
   corollary is appropriate if the same conversion occurs in another module;
   the underlying matrix-action identity is already shared.

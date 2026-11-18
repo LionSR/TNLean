@@ -293,6 +293,8 @@ theorem disjoint_biUnion_graphBall_of_lt_edist (i j : κ) (l : ℕ)
 
 include ha hHerm hSupport hDiam hCard hBudget
 
+omit ha in
+include a in
 /-- **Eq. `blecm` with an exponential rate.** Let every eigenvalue of `H = ∑ₖ hₖ` equal `E₀` or
 be at least `E₀ + ΔE`, and let `X_i` be disjoint from the sites within graph distance `l` of
 `X_j`. Then `‖[P h_j P, P h_i P]‖ ≤ C ‖h_j‖ ‖h_i‖ e^{-γ l}`, with `C = commutatorConst` and
@@ -320,7 +322,7 @@ theorem norm_groundCompression_commutator_le_exp [NeZero d] (Kg : ℝ) (kg : ℕ
   have hT0 : 0 ≤ T := by positivity
   set q : ℝ := T * ΔE with hq
   have hq0 : 0 ≤ q := by positivity
-  have hb := norm_groundCompression_commutator_le_graphNeighborhood G X a ha h hHerm hSupport R
+  have hb := norm_groundCompression_commutator_le_graphNeighborhood G X h hHerm hSupport R
     hDiam vR hCard b₀ hBudget Kg kg hGrowth hq0 hΔE hH hgap (X j) (hSupport j) l (X i : Set ι)
     hY (hSupport i) hT0
   set A : ℝ := 2 + 4 * |b₀| * Real.exp (2 * R)
@@ -407,7 +409,7 @@ theorem norm_groundCompression_commutator_le_exp_edist [NeZero d] (Kg : ℝ) (kg
     groundCompression (∑ k, h k) E₀ (h i) * groundCompression (∑ k, h k) E₀ (h j)‖
   have hpair (l : ℕ) (hlt : ((2 * R + l : ℕ) : ℕ∞) < G.edist (a j) (a i)) :
       N ≤ C * ‖h j‖ * ‖h i‖ * Real.exp (-(γ * l)) :=
-    norm_groundCompression_commutator_le_exp G X a ha h hHerm hSupport R hDiam vR hCard b₀
+    norm_groundCompression_commutator_le_exp G X a h hHerm hSupport R hDiam vR hCard b₀
       hBudget Kg kg hGrowth hΔE hH hgap i j l
       (disjoint_biUnion_graphBall_of_lt_edist G X a ha R hDiam i j l hlt)
   have hW := norm_nonneg (h j)
