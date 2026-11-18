@@ -23,6 +23,8 @@ conditions and `min γ 1`; the event is for fixed children. See
 `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open MeasureTheory

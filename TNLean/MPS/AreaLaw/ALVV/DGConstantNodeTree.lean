@@ -36,6 +36,8 @@ recursive witness, with no joint sampling probability; leaves are full blocks of
 `g = min γ 1`. See `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
