@@ -252,7 +252,7 @@ noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
 theorem eval_sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     FreeM.eval honestOracle (sweepStepProgram hq h hs h0 Delta hi S) =
       lvvSweepStep hq h hs h0 Delta hi S := by
