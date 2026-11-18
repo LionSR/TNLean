@@ -1,0 +1,18 @@
+{
+  "fixture_head": "207cc00e5e8e83447d0c965a12b1cc2de8f4f1e7",
+  "production_head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+  "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DautoImplicit=false",
+    "-DrelaxedAutoImplicit=false",
+    "-Dpp.unicode.fun=true",
+    "-DmaxSynthPendingDepth=3",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DwarningAsError=true",
+    "/workspace/shared/combined-e05-validation/fixtures/final207cc/zero_gap_tn_wrappers_regression.lean"
+  ],
+  "exit": 0,
+  "seconds": 4.390798225002072
+}

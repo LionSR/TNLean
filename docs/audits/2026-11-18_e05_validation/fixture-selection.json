@@ -1,0 +1,78 @@
+{
+  "head": "207cc00e5e8e83447d0c965a12b1cc2de8f4f1e7",
+  "cases": [
+    {
+      "change": [
+        "scripts/zero_gap_tn_wrappers_regression.lean"
+      ],
+      "selected_requested_fixtures": [
+        "scripts/zero_gap_tn_wrappers_regression.lean"
+      ]
+    },
+    {
+      "change": [
+        "scripts/range_square_zero_gap_regression.lean"
+      ],
+      "selected_requested_fixtures": [
+        "scripts/range_square_zero_gap_regression.lean"
+      ]
+    },
+    {
+      "change": [
+        "scripts/box_supremum_zero_gap_regression.lean"
+      ],
+      "selected_requested_fixtures": [
+        "scripts/box_supremum_zero_gap_regression.lean"
+      ]
+    },
+    {
+      "change": [
+        "TNLean/PEPS/AreaLaw/RectangularHamiltonian.lean"
+      ],
+      "selected_requested_fixtures": [
+        "scripts/zero_gap_tn_wrappers_regression.lean",
+        "scripts/range_square_zero_gap_regression.lean"
+      ]
+    },
+    {
+      "change": [
+        "TNLean/PEPS/Approximation/PinnedZeroFloorOptimizer.lean"
+      ],
+      "selected_requested_fixtures": [
+        "scripts/zero_gap_tn_wrappers_regression.lean"
+      ]
+    },
+    {
+      "change": [
+        "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean"
+      ],
+      "selected_requested_fixtures": [
+        "scripts/zero_gap_tn_wrappers_regression.lean"
+      ]
+    },
+    {
+      "change": [
+        "TNLean/PEPS/Approximation/RangeSquareGroundState.lean"
+      ],
+      "selected_requested_fixtures": [
+        "scripts/range_square_zero_gap_regression.lean"
+      ]
+    },
+    {
+      "change": [
+        "TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean"
+      ],
+      "selected_requested_fixtures": [
+        "scripts/box_supremum_zero_gap_regression.lean"
+      ]
+    },
+    {
+      "change": [
+        "TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean"
+      ],
+      "selected_requested_fixtures": [
+        "scripts/box_supremum_zero_gap_regression.lean"
+      ]
+    }
+  ]
+}

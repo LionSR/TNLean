@@ -1,0 +1,10 @@
+{
+  "production_head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+  "command": [
+    "lake",
+    "build",
+    "TNLean.PEPS.Approximation.PinnedZeroFloorOptimizer"
+  ],
+  "exit": 0,
+  "seconds": 11.704078520997427
+}
