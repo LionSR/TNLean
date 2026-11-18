@@ -276,8 +276,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState (d s c 
     refine (isZeroOn_pairLayerOp_mulVec_productVector hN hr _).mono ?_
     intro x hx
     obtain ⟨b, y, hy1, hy2, rfl⟩ := mem_treeCentralSites.mp hx
-    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, b, y, hy1,
-      by have := (hT b).le; omega, rfl⟩)
+    exact ⟨b, y, hy1, by have := (hT b).le; omega, rfl⟩)
   have hprep := hall.isPreparedWithMeasurementRoundsInDepth hv₀ rfl
   have hdepth : (([round Ls [] valid_nil] ++ Rs).map MeasurementRound.depth).sum ≤
       (K + C + 2) * (h + 1) := by
