@@ -109,3 +109,15 @@ source and transitive dependencies rather than infer cache hits from metadata.
 Production change is exactly the single authorized SpectralCutoff line; no
 shared PR or external branch was modified. Timing for that edit was not
 separately measured. All verification processes have completed or stopped.
+
+## Second isolated repair and continued queue
+
+Authorized Renyi unnecessarySimpa correction is a separate commit
+ec6168f62952ad7c7e0dbb48758f3736b33af88b on the existing isolated repair
+branch. Only line 229 changes to `simp`; no mathematical assumptions change.
+428 prior target source hashes and every recorded latest artifact were checked.
+None of the 428 passed targets depends on RenyiApproximation. The original
+Renyi failure and first SpectralCutoff failure remain historical evidence.
+The repaired target gets separate fixed build/strict logs. Remaining queue
+resumes with 435 untouched targets plus the one build-only target, without
+recompiling completed targets. New TN source provenance is ec6168f62.
