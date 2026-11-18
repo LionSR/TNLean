@@ -1,10 +1,10 @@
 {
-  "checkpoint": 4,
-  "passed": 428,
-  "remaining": 437,
+  "checkpoint": 1,
+  "passed": 459,
+  "remaining": 406,
   "failed_commands": 2,
-  "build_seconds": 4362.275556851891,
-  "strict_seconds": 1639.3501937859546,
-  "stop": "TNLean.MPS.AreaLaw.EntropyScaling.RenyiApproximation strict failed (1)",
-  "free_bytes": 13034532864
+  "build_seconds": 4507.875480685834,
+  "strict_seconds": 1748.0630247489898,
+  "stop": null,
+  "free_bytes": 13009833984
 }

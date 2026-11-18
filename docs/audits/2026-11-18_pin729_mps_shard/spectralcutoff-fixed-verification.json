@@ -1,0 +1,49 @@
+[
+  {
+    "source_head": "ef098ad32a728e847957320f9cf79ddcfce5245a",
+    "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+    "file": "TNLean/MPS/AreaLaw/Hastings/SpectralCutoff.lean",
+    "phase": "build",
+    "command": [
+      "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-o",
+      "/tmp/pin729-mps-olean/TNLean/MPS/AreaLaw/Hastings/SpectralCutoff.olean",
+      "TNLean/MPS/AreaLaw/Hastings/SpectralCutoff.lean"
+    ],
+    "started_utc": "2026-11-18T15:11:58.004168+00:00",
+    "seconds": 11.669930103002116,
+    "exit_code": 0,
+    "method": "direct Lean (not lake build)",
+    "role": "shard_target",
+    "source_sha256": "f9c2b1255fb2add8d3c1a3e8c270ae39ebeda2b4acc36d28f2d3d38796a63d13",
+    "fix_validation": true,
+    "olean_sha256": "4fb69f425495dd2412b2a96a2c10cfcdb53e9309d313ce9e20964f483ec28979"
+  },
+  {
+    "source_head": "ef098ad32a728e847957320f9cf79ddcfce5245a",
+    "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+    "file": "TNLean/MPS/AreaLaw/Hastings/SpectralCutoff.lean",
+    "phase": "strict",
+    "command": [
+      "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DautoImplicit=false",
+      "-DwarningAsError=true",
+      "TNLean/MPS/AreaLaw/Hastings/SpectralCutoff.lean"
+    ],
+    "started_utc": "2026-11-18T15:12:09.676701+00:00",
+    "seconds": 7.655999943992356,
+    "exit_code": 0,
+    "method": "direct Lean (not lake build)",
+    "role": "shard_target",
+    "source_sha256": "f9c2b1255fb2add8d3c1a3e8c270ae39ebeda2b4acc36d28f2d3d38796a63d13",
+    "fix_validation": true
+  }
+]
