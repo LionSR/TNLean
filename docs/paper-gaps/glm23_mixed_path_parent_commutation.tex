@@ -61,21 +61,23 @@ adjoint-closed symmetries this is automatic; covariance alone does not
 supply it.
 
 \paragraph{Explicit data.} Take $d=4$, bond dimension $2$, and the tensor
-\[
+\begin{align}
     A^1=E_{11},\qquad A^2=E_{12},\qquad A^3=E_{21},\qquad
     A^4=\mathbb 1_2,
-\]
+    \label{eq:glm23_parent_commutation_tensor_letters}
+\end{align}
 which is one-site injective since its letters span $\mathcal M_2$. Put
-\[
+\begin{align}
     V=\begin{pmatrix}1&2\\0&-1\end{pmatrix},\qquad V^2=\mathbb 1,
     \qquad
     u=\begin{pmatrix}
-        1 & 2  & 0  & 0  \\
-        0 & -1 & 0  & 0  \\
-        4 & 4  & -1 & -2 \\
-        0 & 0  & 0  & 1
-    \end{pmatrix}.
-\]
+          1 & 2  & 0  & 0  \\
+          0 & -1 & 0  & 0  \\
+          4 & 4  & -1 & -2 \\
+          0 & 0  & 0  & 1
+      \end{pmatrix}.
+    \label{eq:glm23_parent_commutation_gauge_and_symmetry}
+\end{align}
 Then $\sum_l u_{kl}A^l=VA^kV^{-1}$ for every $k$; for instance
 $VE_{11}V=E_{11}+2E_{12}$ is the first row. Also $u^2=\mathbb 1$, but $u$ is
 not unitary.
@@ -96,20 +98,22 @@ $(u\otimes u)s_X=s_{VXV}$, so $S$ is invariant. Let $w=e_2\otimes e_1$.
 Since $A^2A^1=E_{12}E_{11}=0$, every $(s_X)_{21}=0$, so $w\in S^\perp$.
 Put $a=ue_2=(2,-1,4,0)$ and $b=ue_1=(1,0,4,0)$, the second and first
 columns of $u$, so that $(u\otimes u)w=a\otimes b$. All data are real, so
-\[
+\begin{align}
     \langle s_{E_{11}},(u\otimes u)w\rangle
     =\Bigl(\bigl(\textstyle\sum_ka_kA^k\bigr)
     \bigl(\textstyle\sum_lb_lA^l\bigr)\Bigr)_{11}
     =\left[\begin{pmatrix}2&-1\\4&0\end{pmatrix}
         \begin{pmatrix}1&0\\4&0\end{pmatrix}\right]_{11}
     =-2\neq0.
-\]
+    \label{eq:glm23_parent_commutation_perp_overlap}
+\end{align}
 Hence $(u\otimes u)S^\perp\not\subset S^\perp$, and
 $[h,u\otimes u]\neq0$. The Gram matrix of the basis
 $s_{E_{11}},s_{E_{12}},s_{E_{21}},s_{E_{22}}$ is
-\[
+\begin{align}
     \begin{pmatrix}5&0&0&1\\0&3&0&0\\0&0&3&0\\1&0&0&2\end{pmatrix},
-\]
+    \label{eq:glm23_parent_commutation_support_gram}
+\end{align}
 so $P$ and $h$ have rational entries. The periodic Hamiltonian
 $H=\sum_ih_i$ on three sites has the rational commutator entry
 $\langle 111|[H,u^{\otimes3}]|112\rangle=2/9$, so the global
@@ -150,16 +154,18 @@ operator $T_g$ has bond $\mathbb C^2$, with basis vectors labelled by the
 endpoints $0,1$. On a
 site in the physical sector $\mathbb C^{D_a}\otimes\mathbb C^{D_b}$ it
 carries the bond from $a$ to $b$ and acts by $T^{ab}$, where
-\[
+\begin{align}
     T^{00}=u_0,\qquad T^{11}=u_1,\qquad
     T^{01}=W_0^{\mathsf T}\otimes V_1,\qquad
     T^{10}=W_1^{\mathsf T}\otimes V_0 ,
-\]
+    \label{eq:glm23_parent_commutation_operator_sectors}
+\end{align}
 the last two being the crossed blocks $T^{0,1}_g$ and $T^{1,0}_g$ of the
 source. Hence the two-site boundary operator is the direct sum
-\[
+\begin{align}
     O^2_X=\bigoplus_{a,b,c\in\{0,1\}}X_{ca}\,T^{ab}\otimes T^{bc}
-\]
+    \label{eq:glm23_parent_commutation_boundary_operator}
+\end{align}
 over the sectors $(\mathbb C^{D_a}\otimes\mathbb C^{D_b})\otimes
     (\mathbb C^{D_b}\otimes\mathbb C^{D_c})$, and it vanishes on the other
 two-site sectors.
@@ -171,9 +177,10 @@ matrix. Then the action maps are $W_p=\lambda_pH_p$ and
 $V_p=\lambda_p^{-1}H_p$ with $\lambda_p\neq0$, $H_p$ Hermitian and
 $H_p^2=\mathbb 1$. With
 $\rho=\lambda_0/\lambda_1$ and $t=\bar\rho/\rho$,
-\[
+\begin{align}
     (T^{01})^*=t\,T^{01},\qquad (T^{10})^*=t^{-1}T^{10},
-\]
+    \label{eq:glm23_parent_commutation_crossed_adjoint}
+\end{align}
 so $(O^2_X)^*=O^2_{X'}$ with $X'_{00}=\bar X_{00}$, $X'_{11}=\bar X_{11}$,
 $X'_{10}=t\bar X_{10}$ and $X'_{01}=t^{-1}\bar X_{01}$. Conversely, if
 $(O^2_{E_{00}})^*$ lies in the range, comparing the sectors with $a=c=0$
@@ -189,11 +196,12 @@ form, the gauge of a unitary on-site symmetry is unitary
 \cite[Lemma~1 and Theorem~2]{PerezGarcia2008StringOrder}.
 
 \paragraph{The canonical gauge: closure holds.} Take
-\[
+\begin{align}
     A_0^{\rm c}=\tfrac12\bigl(\mathbb 1,\ \sigma_x,\ J,\ \sigma_z\bigr),\qquad
     A_1^{\rm c}=\tfrac15\bigl(\mathbb 1,\ 2\sigma_x,\ 2J,\ 4\sigma_z\bigr),
     \qquad J=\begin{pmatrix}0&1\\-1&0\end{pmatrix},
-\]
+    \label{eq:glm23_parent_commutation_canonical_tensors}
+\end{align}
 with $u=\operatorname{diag}(1,-1,-1,1)$ at both endpoints. Each letter is
 a scalar multiple of an orthogonal matrix, and the squared scalars sum to
 one, so $\sum_k(A_p^k)^*A_p^k=\sum_kA_p^k(A_p^k)^*=\mathbb 1$: both tensors
@@ -215,17 +223,19 @@ and do not refute the source.
 \paragraph{Explicit data.} Take $D_0=D_1=2$, write $e_1,e_2$ and
 $f_1,f_2$ for the bases of $\mathbb C^{D_0}$ and $\mathbb C^{D_1}$, and
 order the letters $(1,1),(1,2),(2,1),(2,2)$. Put
-\[
+\begin{align}
     Z=\begin{pmatrix}1&1\\0&1\end{pmatrix},\qquad
     Y_0=Z\sigma_zZ^{-1}=\begin{pmatrix}1&-2\\0&-1\end{pmatrix},
-\]
-\[
+    \label{eq:glm23_parent_commutation_noncanonical_gauge}
+\end{align}
+\begin{align}
     A_0=\bigl(\mathbb 1,\ Z\sigma_xZ^{-1},\ ZJZ^{-1},\ Y_0\bigr)
     =\left(\mathbb 1,\begin{pmatrix}1&0\\1&-1\end{pmatrix},
     \begin{pmatrix}-1&2\\-1&1\end{pmatrix},
     \begin{pmatrix}1&-2\\0&-1\end{pmatrix}\right),\qquad
     A_1=\bigl(\mathbb 1,\ 2\sigma_x,\ J,\ \sigma_z\bigr).
-\]
+    \label{eq:glm23_parent_commutation_noncanonical_tensors}
+\end{align}
 Both tensors are one-site injective, since their letters span
 $\mathcal M_2$, and they generate different states. At both endpoints let
 $g$ act by the real diagonal unitary $u=\operatorname{diag}(1,-1,-1,1)$,
@@ -244,12 +254,13 @@ $Y_0$ is not proportional to a Hermitian matrix.
 is the transpose. Let $\tau=(e_1\otimes f_1)\otimes(f_1\otimes e_1)$ and
 $\sigma=(e_2\otimes f_1)\otimes(f_1\otimes e_1)$, both in the sector
 $(a,b,c)=(0,1,0)$. Then
-\[
+\begin{align}
     \langle\sigma|O^2_X|\tau\rangle
     =X_{00}\,(Y_0)_{12}(\sigma_z)_{11}\cdot(\sigma_z)_{11}(Y_0)_{11}
     =-2X_{00},\qquad
     \langle\tau|O^2_X|\sigma\rangle=X_{00}\,(Y_0)_{21}=0,
-\]
+    \label{eq:glm23_parent_commutation_closure_failure_entries}
+\end{align}
 and on the letter $(e_1\otimes e_1)^{\otimes2}$ the diagonal entry of
 $O^2_X$ is $X_{00}u_{11}^2=X_{00}$. If $(O^2_{E_{00}})^*=O^2_X$, the
 diagonal entry gives $X_{00}=1$, and then
@@ -262,43 +273,47 @@ boundary range is not closed under the adjoint.
 support $S_\gamma$ is the orthogonal direct sum of its parts in the
 sectors with fixed outer labels $a,c$. In the part with $a=c=0$, the
 weights $W(\gamma)$ give
-\[
+\begin{align}
     S_\gamma\cap\bigl(\mathcal H_0^{\otimes2}\oplus
     (\mathbb C^{D_0}\otimes\mathbb C^{D_1})\otimes
     (\mathbb C^{D_1}\otimes\mathbb C^{D_0})\bigr)
     =\bigl\{(1-\gamma)^2t_X\oplus\gamma(1-\gamma)\varphi_X:
     X\in\mathcal M_{D_0}\bigr\},
-\]
+    \label{eq:glm23_parent_commutation_support_sector}
+\end{align}
 with $(t_X)_{kl}=\operatorname{tr}(A_0^kA_0^lX)$ and
 $(\varphi_X)_{r_1s_1r_2s_2}=\delta_{s_1r_2}X_{s_2r_1}$. Each component
 determines $X$, the first because the products $A_0^kA_0^l$ span
 $\mathcal M_{D_0}$. On this sector the periodic two-site operator
 $O_2=O^2_{\mathbb 1}$ is $u\otimes u\oplus T^{01}\otimes T^{10}$. Direct
 computation, using $V_1W_1=W_1V_1=\mathbb 1$, gives
-\[
+\begin{align}
     (u\otimes u)\,t_X=t_{Y_0^{-1}XY_0},\qquad
     (T^{01}\otimes T^{10})\,\varphi_X=\varphi_{Y_0^{-1}XY_0},\qquad
     (T^{01}\otimes T^{10})^{\mathsf T}\varphi_X
     =\varphi_{Y_0^{-\mathsf T}XY_0^{\mathsf T}},
-\]
+    \label{eq:glm23_parent_commutation_sector_covariance}
+\end{align}
 and $(u\otimes u)^{\mathsf T}=u\otimes u$. So $O_2$ preserves $S_\gamma$,
 as covariance requires, but $O_2^*$ maps the vector of
 $X=E_{11}\in\mathcal M_{D_0}$ into
 $S_\gamma$ only if $Y_0E_{11}Y_0=Y_0^{\mathsf T}E_{11}Y_0^{\mathsf T}$,
 and
-\[
+\begin{align}
     Y_0E_{11}Y_0=\begin{pmatrix}1&-2\\0&0\end{pmatrix}\neq
     \begin{pmatrix}1&0\\-2&0\end{pmatrix}
     =Y_0^{\mathsf T}E_{11}Y_0^{\mathsf T}.
-\]
+    \label{eq:glm23_parent_commutation_e11_comparison}
+\end{align}
 Thus $O_2^*S_\gamma\not\subset S_\gamma$, and the canonical term
 $h_\gamma=\mathbb 1-\Pi_{S_\gamma}$ does not commute with $O_2$, at every
 $\gamma\in(0,1)$. The periodic Hamiltonian on three sites does not
 commute with the periodic common operator either: at $\gamma=1/2$,
-\[
+\begin{align}
     \langle e_1e_1,e_1e_1,e_2e_2|\,[H(\tfrac12),O_3]\,|
     e_1e_1,e_1e_1,e_1e_2\rangle=-\tfrac{4}{75}.
-\]
+    \label{eq:glm23_parent_commutation_three_site_commutator}
+\end{align}
 The script \path{scripts/check_glm23_unitary_mixed_adjoint_closure.py}
 checks the covariance, the exact action, the failure of closure, both
 commutators, and this entry in exact rational arithmetic. With
@@ -332,11 +347,12 @@ conjugation by $Y_{p,g}Y_{p,g^{-1}}$ fixes every letter $A_p^k$, so by
 injectivity $Y_{p,g}Y_{p,g^{-1}}=\kappa_{p,g}\mathbb 1$ with
 $\kappa_{p,g}\neq0$. Since $Y_{p,g}^*=|c_{p,g}|^2Y_{p,g}^{-1}$, this
 gives
-\[
+\begin{align}
     Y_{p,g}^*=\omega_{p,g}Y_{p,g^{-1}},\qquad
     \omega_{p,g}=|c_{p,g}|^2/\kappa_{p,g},\qquad
     u_{p,g}^*=u_{p,g^{-1}} .
-\]
+    \label{eq:glm23_parent_commutation_group_gauge_adjoint}
+\end{align}
 The computation of the paragraph ``When closure holds'', now with the
 data of $g^{-1}$ on the right, gives
 $(O^N_{\widetilde T_g,X})^*=O^N_{\widetilde T_{g^{-1}},X'}$ for every
@@ -354,11 +370,12 @@ multiple of a unitary \cite[Lemma~1 and
 
 \paragraph{A $\mathbb Z_3$ instance.} Let $\zeta$ be a primitive cube root
 of unity, $D_0=D_1=2$, and
-\[
+\begin{align}
     A_0=(E_{11},E_{12},E_{21},E_{22}),\qquad
     A_1=(E_{11},2E_{12},E_{21},E_{22}),\qquad
     Y=\operatorname{diag}(1,\zeta).
-\]
+    \label{eq:glm23_parent_commutation_z3_tensors}
+\end{align}
 Both tensors are one-site injective and generate different states. Since
 $YE_{rs}Y^{-1}=\zeta^{r-s}E_{rs}$, the group $\mathbb Z_3=\{e,g,g^2\}$
 acts at both endpoints by
