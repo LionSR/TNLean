@@ -5,6 +5,7 @@ The edge lists are parameters: identifying them with all the incidences of a
 honeycomb face is a separate geometric step. -/
 
 open scoped BigOperators
+open ManyBody (Edge)
 
 namespace TNLean.PEPS
 
