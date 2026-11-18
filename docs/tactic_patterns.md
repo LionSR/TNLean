@@ -8540,7 +8540,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Choose one inside vector for each outside configuration and
   reconstruct the global vector by composing with the regional configuration
   equivalence. Applying a slice reduces to the equivalence's inverse law.
-- **Seen:** `range_dependentRegionOperatorLift` and the two summands in
+- **Seen:** `range_place` and the two summands in
   `dependentRegionCylinder_sup`, all in `PEPS/AreaLaw/Cylinder`.
 - **Abstraction:** None yet; these three occurrences are in one file. Reuse the
   existing configuration equivalence before introducing another reconstruction

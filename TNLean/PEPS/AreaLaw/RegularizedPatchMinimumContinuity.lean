@@ -31,7 +31,7 @@ open Set Matrix
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*} [∀ v, Fintype (Out v)]
+variable {Out : V → Type*} [∀ v, DecidableEq (Out v)] [∀ v, Fintype (Out v)]
 variable {m : ℕ} (regions : Fin m → Finset V)
 
 /-- The original regularized norm minimum is continuous in the radius, for
@@ -39,7 +39,7 @@ arbitrary real weights and input vector. Compactness of the same feasible set
 replaces any choice of a continuous family of minimizers.
 Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 421–451. -/
 theorem continuous_regularizedPatchMinimum_exp_neg (a : Fin m → ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) :
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v)) :
     Continuous (fun R : ℝ ↦ regularizedPatchMinimum regions a (Real.exp (-R)) Ω) := by
   classical
   let K := ↥(regularizedPatchDomain (Out := Out) regions)
@@ -53,7 +53,7 @@ theorem continuous_regularizedPatchMinimum_exp_neg (a : Fin m → ℝ)
           (1 : Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)) :=
       ((continuous_apply j).comp (continuous_subtype_val.comp continuous_snd)).add
         ((Real.continuous_exp.comp continuous_fst.neg).smul continuous_const)
-    exact (continuous_dependentRegionOperatorLift (regions j)).comp
+    exact (continuous_place (regions j)).comp
       ((CFC.continuousOn_rpow (-(a j) / 2)).comp_continuous hshift fun z ↦
         ((z.2.property j).1.add_smul_one_posDef (Real.exp_pos (-z.1))).isStrictlyPositive)
   have hoperator : Continuous (fun z : ℝ × K ↦
@@ -62,8 +62,8 @@ theorem continuous_regularizedPatchMinimum_exp_neg (a : Fin m → ℝ)
       Function.id_def, Function.comp_def] using
       continuous_list_prod (List.ofFn (id : Fin m → Fin m)).reverse
         (fun j _ ↦ hfilter j)
-  have heval : Continuous (fun M : Matrix ((v : (Finset.univ : Finset V)) → Out v.1)
-      ((v : (Finset.univ : Finset V)) → Out v.1) ℂ ↦ WithLp.toLp 2 (M *ᵥ Ω)) :=
+  have heval : Continuous (fun M : Matrix ((v : V) → Out v)
+      ((v : V) → Out v) ℂ ↦ WithLp.toLp 2 (M *ᵥ Ω)) :=
     (PiLp.continuous_toLp _ _).comp (continuous_id.matrix_mulVec continuous_const)
   have hobjective : Continuous (fun z : ℝ × K ↦
       regularizedPatchObjective regions a (Real.exp (-z.1)) Ω z.2.val) :=
@@ -88,7 +88,7 @@ radius. The densities, weights, regions and original unit vector are unchanged.
 Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 421–451. -/
 theorem continuous_log_regularizedPatchMinimum_exp_neg
     (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (hΩ : ‖Ω‖ = 1) :
     Continuous (fun R : ℝ ↦ Real.log
       (regularizedPatchMinimum regions a (Real.exp (-R)) Ω)) :=

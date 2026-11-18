@@ -41,30 +41,6 @@ identity on the remaining sites.
     (\ref{eq:peps_region_embedding_entries}) for both operators.
 \end{proof}
 
-\begin{lemma}[Full-region coordinate identification]
-    \label{thm:peps_region_embedding_coordinates}
-    \lean{TNLean.PEPS.dependentRegionOperatorLift_eq_reindex_embedOp}
-    \leanok
-    Let $\widetilde X_V=\prod_{v\in V}A_q$ and
-    $\theta_q:X_V\to\widetilde X_V$ be the bijection
-    $\theta_q(\sigma)=(\sigma(v))_{v\in V}$.
-    Write $D_R(H)$ for $H\otimes I_{V\setminus R}$ after splitting this
-    indexed product into its regional and complementary factors.
-    For every $\alpha,\beta\in\widetilde X_V$,
-    \begin{align}
-        D_R(H)_{\alpha,\beta}
-         & =(E_{j_R}(H))_{\theta_q^{-1}(\alpha),\theta_q^{-1}(\beta)}.
-        \label{eq:peps_region_embedding_coordinates}
-    \end{align}
-\end{lemma}
-\begin{proof}
-    \leanok
-    The restrictions of $\theta_q^{-1}(\alpha)$ and
-    $\theta_q^{-1}(\beta)$ select the same coordinates as the two indexed
-    product factors. Both sides are $H$ at the regional coordinates when
-    the complementary coordinates agree, and zero otherwise.
-\end{proof}
-
 \begin{remark}[Boundary cases]
     For $R=\varnothing$, $X_R$ is a singleton and $L_\varnothing([c])=cI$;
     for $R=V$, $L_V(H)=H$; and for $q=1$, every configuration set is a

@@ -47,10 +47,10 @@ The physical local interaction is $h_R=I-\Pi_{\mathcal S_R}$.
 
 \begin{definition}[Extension of regional operators]%
     \label{def:peps_regional_operator_extension}
-    \lean{TNLean.PEPS.dependentRegionOperatorLift,
-        TNLean.PEPS.dependentSubregionOperatorLift,
-        TNLean.PEPS.dependentRegionOperatorLift_assemble,
-        TNLean.PEPS.dependentRegionOperatorLift_apply}
+    \lean{ManyBody.place,
+        ManyBody.subregionPlace,
+        TNLean.PEPS.place_cutEquiv_symm_apply,
+        ManyBody.place_apply}
     \leanok
     For finite coordinate sets $X_v$, put $X_R=\prod_{v\in R}X_v$,
     $\mathcal H_R=\C^{X_R}$, and write $(\alpha,\tau)\in X_R\times X_{V\setminus R}$.
@@ -68,15 +68,13 @@ notation below.
 % adc7f1241b42e322a6451854ab7e4b4c146bf78a; no new source theorem is asserted.
 \begin{lemma}[Local basis relabelling]
     \label{thm:peps_regional_basis_relabelling}
-    \lean{
-        TNLean.PEPS.dependentRegionFinEquiv,
+    \lean{TNLean.PEPS.dependentRegionFinEquiv,
         TNLean.PEPS.dependentGlobalFinEquiv,
         TNLean.PEPS.dependentGlobalFinIsometry,
         TNLean.PEPS.dependentGlobalFinIsometry_apply,
-        TNLean.PEPS.reindex_dependentRegionOperatorLift,
-        TNLean.PEPS.dependentGlobalFinIsometry_lift,
-        TNLean.PEPS.reindex_reducedPure_eq_regionState
-    }
+        TNLean.PEPS.reindex_place,
+        TNLean.PEPS.dependentGlobalFinIsometry_place,
+        TNLean.PEPS.reindex_reducedPure_eq_regionState}
     \leanok
     \uses{def:peps_regional_operator_extension}
     Let $V$ be any finite ordered site set with finite alphabets $Y_v$,
@@ -179,18 +177,18 @@ notation below.
 
 \begin{lemma}[Algebra and slices of regional extensions]%
     \label{thm:peps_regional_extension_algebra}
-    \lean{TNLean.PEPS.dependentRegionOperatorLift_one,
-        TNLean.PEPS.dependentRegionOperatorLift_mul,
-        TNLean.PEPS.dependentRegionOperatorLift_conjTranspose,
-        TNLean.PEPS.dependentRegionOperatorLift_isStarProjection,
-        TNLean.PEPS.dependentRegionOperatorLift_sub,
-        TNLean.PEPS.dependentRegionSlice_mulVec_dependentRegionOperatorLift,
-        TNLean.PEPS.dependentRegionOperatorLift_mulVec_eq_self_iff,
-        TNLean.PEPS.dependentRegionOperatorLift_subregion,
-        TNLean.PEPS.exists_dependentRegionOperatorLift_of_subset,
-        TNLean.PEPS.exists_dependentRegionOperatorLift_mul_union,
-        TNLean.PEPS.exists_dependentRegionOperatorLift_sub_union,
-        TNLean.PEPS.exists_dependentRegionOperatorLift_commutator_union}
+    \lean{ManyBody.place_one,
+        ManyBody.place_mul,
+        ManyBody.place_conjTranspose,
+        TNLean.PEPS.isStarProjection_place,
+        ManyBody.place_sub,
+        TNLean.PEPS.placeSlice_mulVec_place,
+        TNLean.PEPS.place_mulVec_eq_self_iff,
+        ManyBody.place_subregionPlace,
+        ManyBody.exists_place_eq_place_of_subset,
+        TNLean.PEPS.exists_place_mul_union,
+        TNLean.PEPS.exists_place_sub_union,
+        TNLean.PEPS.exists_place_commutator_union}
     \leanok
     \uses{def:peps_regional_operator_extension}
     The map $K\mapsto\widehat K_R$ is a unital $*$-algebra homomorphism
@@ -213,8 +211,8 @@ notation below.
 
 \begin{lemma}[Continuity and norm bound for regional extensions]%
     \label{thm:peps_regional_extension_norm}
-    \lean{TNLean.PEPS.norm_dependentRegionOperatorLift_mulVec_le,
-        TNLean.PEPS.continuous_dependentRegionOperatorLift}
+    \lean{TNLean.PEPS.norm_place_mulVec_le,
+        TNLean.PEPS.continuous_place}
     \leanok
     \uses{def:peps_regional_operator_extension}
     For every region $R$, $K\mapsto\widehat K_R$ is continuous and
@@ -238,12 +236,9 @@ notation below.
 
 \begin{lemma}[Product maps and complementary cancellation]%
     \label{thm:peps_regional_product_cancellation}
-    \lean{TNLean.PEPS.regionPhysicalProductMatrix_univ_eq_reindex_kronecker,
-        TNLean.PEPS.dependentRegionOperatorLift_intertwine,
-        TNLean.PEPS.dependentRegionOperatorLift_mul_regionPhysicalProductMatrix,
-        TNLean.PEPS.dependentRegion_reindex_kronecker_eq_zero_iff,
-        TNLean.PEPS.dependentRegionOperatorLift_mul_product_eq_zero_iff,
-        TNLean.PEPS.dependentRegionOperatorLift_eq_zero_of_mul_product_eq_zero,
+    \lean{ManyBody.reindex_cutEquiv_prodMatrix,
+        ManyBody.prodMatrix_mul_place,
+        ManyBody.place_mul_prodMatrix_eq_zero_iff,
         TNLean.PEPS.regionPhysicalProductMatrix_ne_zero}
     \leanok
     \uses{def:peps_regional_operator_extension}
@@ -324,7 +319,7 @@ notation below.
         TNLean.PEPS.regularGlobalRegionConstraint_mulVec_eq_self_iff_mem_range,
         TNLean.PEPS.range_regularGlobalRegionConstraint,
         TNLean.PEPS.regularCanonicalRegionRangeProjector,
-        TNLean.PEPS.dependentRegionOperatorLift_regularCanonicalRegionRangeProjector,
+        TNLean.PEPS.place_regularCanonicalRegionRangeProjector,
         TNLean.PEPS.regularCanonicalRegionRangeProjector_lifts_commute}
     \leanok
     \uses{def:peps_ambient_regular_range,def:peps_coordinate_projector,
@@ -424,8 +419,9 @@ notation below.
 
 \begin{definition}[Products of site-image projections]%
     \label{def:peps_site_image_products}
-    \lean{TNLean.PEPS.productSiteMask,TNLean.PEPS.globalProductSiteMask,
-        TNLean.PEPS.globalProductSiteMask_eq_lift,
+    \lean{TNLean.PEPS.productSiteMask,
+        TNLean.PEPS.globalProductSiteMask,
+        TNLean.PEPS.globalProductSiteMask_eq_place,
         TNLean.PEPS.globalProductSiteMask_mul,
         TNLean.PEPS.productSiteMask_isStarProjection,
         TNLean.PEPS.regionPhysicalProductMatrix_isStarProjection,
@@ -440,10 +436,10 @@ notation below.
 
 \begin{lemma}[Support under products of site projections]%
     \label{thm:peps_site_image_support}
-    \lean{TNLean.PEPS.dependentRegionOperatorLift_commute_globalProductSiteMask,
+    \lean{TNLean.PEPS.place_commute_globalProductSiteMask,
         TNLean.PEPS.regionPhysicalProductMatrix_mul_supported_right,
-        TNLean.PEPS.dependentRegionOperatorLift_mul_globalProductSiteMask_self,
-        TNLean.PEPS.dependentRegionOperatorLift_mul_absorbs_union}
+        TNLean.PEPS.place_mul_globalProductSiteMask_self,
+        TNLean.PEPS.place_mul_absorbs_union}
     \leanok
     \uses{def:peps_site_image_products,def:peps_regional_operator_extension}
     If $H_R^2=H_R=H_R^*$ and $J_RH_R=H_R$, then $H_RJ_R=H_R$,
@@ -461,7 +457,7 @@ notation below.
 
 \begin{lemma}[Commutation through rectangular product maps]%
     \label{thm:peps_product_transport_commutation}
-    \lean{TNLean.PEPS.commute_dependentRegionOperatorLift_of_productSiteTransport}
+    \lean{TNLean.PEPS.commute_place_of_productSiteTransport}
     \leanok
     \uses{def:peps_site_image_products,def:peps_regional_operator_extension}
     Let $A_vL_v=J_v$ with $J_v^2=J_v=J_v^*\ne0$. If orthogonal projectors
@@ -489,9 +485,7 @@ notation below.
 \begin{lemma}[Canonical interactions are complementary projections]%
     \label{thm:peps_canonical_complement_projection}
     \lean{TNLean.PEPS.canonicalRegionParentInteraction_isStarProjection,
-        TNLean.PEPS.canonicalRegionParentInteraction_eq_one_sub_rangeProjector,
-        TNLean.PEPS.place_eq_dependentRegionOperatorLift,
-        TNLean.PEPS.dependentRegionOperatorLift_one_sub}
+        TNLean.PEPS.canonicalRegionParentInteraction_eq_one_sub_rangeProjector}
     \leanok
     \uses{def:peps_coordinate_projector,def:peps_regional_operator_extension}
     For any graph PEPS tensor, the canonical regional interaction

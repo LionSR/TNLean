@@ -42,8 +42,8 @@ theorem exists_squarePatch_of_mem_iSup_dependentRegionCylinder
     (hur : ∀ j, u ≤ r j) (hru : ∀ j, r j ≤ 2 * u)
     (S : (j : Fin m) →
       Submodule ℂ ((squareSample pos z (r j) → Fin q) → ℂ))
-    (Ω v : EuclideanSpace ℂ ((w : (Finset.univ : Finset V)) → Fin q))
-    (hv : (v : (((w : (Finset.univ : Finset V)) → Fin q) → ℂ)) ∈
+    (Ω v : EuclideanSpace ℂ ((v : V) → Fin q))
+    (hv : (v : (((v : V) → Fin q) → ℂ)) ∈
       (⨆ j, dependentRegionCylinder (Out := fun _ : V ↦ Fin q)
         (squareSample pos z (r j)) (S j))) :
     ∃ (P : SquarePatch pos q) (hn : P.n = m),
@@ -51,19 +51,8 @@ theorem exists_squarePatch_of_mem_iSup_dependentRegionCylinder
       (∀ j, P.radius (Fin.cast hn.symm j) = r j) ∧
       (∑ j, P.dim j) ≤ ∑ j, Module.finrank ℂ (S j) ∧
       ‖act (1 - P.cylSum)
-        (dependentGlobalConfigIsometry (Out := fun _ : V ↦ Fin q) Ω)‖ ≤ ‖Ω - v‖ := by
+        (Ω)‖ ≤ ‖Ω - v‖ := by
   classical
-  have hLift (R : Finset V) (K : Matrix (R → Fin q) (R → Fin q) ℂ) :
-      Matrix.reindex (dependentGlobalConfigEquiv (Out := fun _ : V ↦ Fin q))
-        (dependentGlobalConfigEquiv (Out := fun _ : V ↦ Fin q))
-        (dependentRegionOperatorLift (Out := fun _ : V ↦ Fin q) R K) = ManyBody.place R K := by
-    ext σ τ
-    simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-      dependentRegionOperatorLift_apply, dependentGlobalConfigEquiv,
-      QuantumCircuit.place_eq_embedOp,
-      QuantumCircuit.embedOp_apply]
-    congr 1
-    simp [QuantumCircuit.AgreeOff]
   let R : Fin m → Finset V := fun j ↦ squareSample pos z (r j)
   have hR : Monotone R := fun i j hij ↦ squareSample_mono pos z (hr hij)
   let T := nestedCylinderInnovation (Out := fun _ : V ↦ Fin q) R hR S
@@ -75,7 +64,7 @@ theorem exists_squarePatch_of_mem_iSup_dependentRegionCylinder
   let C (j : Fin m) := dependentRegionCylinder (Out := fun _ : V ↦ Fin q) (R j) (T j)
   have hzero (i j : Fin m) (hij : i ≠ j) :
       coordinateRangeProjector (C i) * coordinateRangeProjector (C j) = 0 := by
-    let : DecidableEq ((w : (Finset.univ : Finset V)) → Fin q) := Classical.decEq _
+    let : DecidableEq ((v : V) → Fin q) := Classical.decEq _
     apply Matrix.toEuclideanLin.injective
     rw [Matrix.toLpLin_mul 2 2 2]
     simp only [coordinateRangeProjector, LinearEquiv.apply_symm_apply, map_zero]
@@ -90,15 +79,15 @@ theorem exists_squarePatch_of_mem_iSup_dependentRegionCylinder
     rw [rankOne, Matrix.mul_vecMulVec,
       (coordinateRangeProjector_mulVec_eq_self_iff (T j) _).mpr (hbmem j ℓ)]
   let B (j : Fin m) (ℓ : Fin (d j)) :=
-    dependentRegionOperatorLift (Out := fun _ : V ↦ Fin q) (R j) (rankOne (b j ℓ))
+    ManyBody.place (X := fun _ : V ↦ Fin q) (R j) (rankOne (b j ℓ))
   have hBfix (j : Fin m) (ℓ : Fin (d j)) :
       coordinateRangeProjector (C j) * B j ℓ = B j ℓ := by
     dsimp only [C, B]
     rw [coordinateRangeProjector_dependentRegionCylinder (Out := fun _ : V ↦ Fin q),
-      ← dependentRegionOperatorLift_mul (Out := fun _ : V ↦ Fin q), hfix]
+      ← ManyBody.place_mul (X := fun _ : V ↦ Fin q), hfix]
   have hBstar (j : Fin m) (ℓ : Fin (d j)) : star (B j ℓ) = B j ℓ := by
     simp only [B, Matrix.star_eq_conjTranspose,
-      dependentRegionOperatorLift_conjTranspose (Out := fun _ : V ↦ Fin q),
+      ← ManyBody.place_conjTranspose (X := fun _ : V ↦ Fin q),
       rankOne_conjTranspose]
   have hBfixr (j : Fin m) (ℓ : Fin (d j)) :
       B j ℓ * coordinateRangeProjector (C j) = B j ℓ := by
@@ -120,10 +109,10 @@ theorem exists_squarePatch_of_mem_iSup_dependentRegionCylinder
   have hsame (j : Fin m) (i ℓ : Fin (d j)) (hiℓ : i ≠ ℓ) :
       B j i * B j ℓ = 0 := by
     dsimp only [B]
-    rw [← dependentRegionOperatorLift_mul (Out := fun _ : V ↦ Fin q),
+    rw [← ManyBody.place_mul (X := fun _ : V ↦ Fin q),
       rankOne, rankOne, Matrix.vecMulVec_mul_vecMulVec, hinner j i ℓ hiℓ,
       zero_smul, Matrix.vecMulVec_zero]
-    simp [dependentRegionOperatorLift]
+    simp [ManyBody.place]
   have hBorth (s s' : (j : Fin m) × Fin (d j)) (hss' : s ≠ s') :
       B s.1 s.2 * B s'.1 s'.2 = 0 := by
     rcases s with ⟨i, hi⟩
@@ -132,15 +121,13 @@ theorem exists_squarePatch_of_mem_iSup_dependentRegionCylinder
     · subst j
       exact hsame i hi hj (fun h ↦ hss' (congrArg (Sigma.mk i) h))
     · exact hcross i j hi hj hij
-  let e := dependentGlobalConfigEquiv (Out := fun _ : V ↦ Fin q)
-  let F := Matrix.reindexRingEquiv ℂ e
   have hFB (j : Fin m) (ℓ : Fin (d j)) :
-      F (B j ℓ) = ManyBody.place (X := fun _ ↦ Fin _) (R j) (rankOne (b j ℓ)) :=
-    hLift (R j) (rankOne (b j ℓ))
+      B j ℓ = ManyBody.place (X := fun _ ↦ Fin _) (R j) (rankOne (b j ℓ)) :=
+    rfl
   have horth (s s' : (j : Fin m) × Fin (d j)) (hss' : s ≠ s') :
       ManyBody.place (X := fun _ ↦ Fin _) (R s.1) (rankOne (b s.1 s.2)) *
         ManyBody.place (X := fun _ ↦ Fin _) (R s'.1) (rankOne (b s'.1 s'.2)) = 0 := by
-    simpa only [map_mul, map_zero, hFB] using congrArg F (hBorth s s' hss')
+    exact hBorth s s' hss'
   let P : SquarePatch pos q :=
     { center := z
       scale := u
@@ -158,12 +145,12 @@ theorem exists_squarePatch_of_mem_iSup_dependentRegionCylinder
   · simpa only [P, d, finrank_coordinateSubspaceES] using
       sum_finrank_nestedCylinderInnovation_le (Out := fun _ : V ↦ Fin q) R hR S
   · have hsumj (j : Fin m) : (∑ ℓ, B j ℓ) =
-        dependentRegionOperatorLift (Out := fun _ : V ↦ Fin q) (R j)
+        ManyBody.place (X := fun _ : V ↦ Fin q) (R j)
           (coordinateRangeProjector (T j)) := by
       rw [coordinateRangeProjector_eq_sum_basis _
         (holeEncoderBasis (Out := fun _ : V ↦ Fin q) R hR S j)]
       ext α β
-      simp [B, b, rankOne, dependentRegionOperatorLift, Matrix.reindex_apply,
+      simp [B, b, rankOne, ManyBody.place, Matrix.reindex_apply,
         Matrix.sum_apply, Finset.sum_mul]
       rfl
     let W := ⨆ j, dependentRegionCylinder (Out := fun _ : V ↦ Fin q) (R j) (S j)
@@ -172,8 +159,8 @@ theorem exists_squarePatch_of_mem_iSup_dependentRegionCylinder
       rw [Fintype.sum_sigma]
       simp_rw [hsumj]
       exact (nestedCylinderInnovation_projector_sum (Out := fun _ : V ↦ Fin q) R hR S).symm
-    have hPsum : P.cylSum = F (coordinateRangeProjector W) := by
-      rw [← hsum, map_sum]
+    have hPsum : P.cylSum = coordinateRangeProjector W := by
+      rw [← hsum]
       simp only [hFB, SquarePatch.cylSum, SquarePatch.sample, P, R]
     let U := coordinateSubspaceES W
     have hvU : v ∈ U := by
@@ -186,20 +173,14 @@ theorem exists_squarePatch_of_mem_iSup_dependentRegionCylinder
         _ ≤ ‖Ω - v‖ := Uᗮ.norm_starProjection_apply_le _
     have hproj : WithLp.toLp 2 (coordinateRangeProjector W *ᵥ Ω.ofLp) =
         U.starProjection Ω := by
-      let : DecidableEq ((w : (Finset.univ : Finset V)) → Fin q) := Classical.decEq _
+      let : DecidableEq ((v : V) → Fin q) := Classical.decEq _
       change Matrix.toEuclideanLin (coordinateRangeProjector W) Ω = _
       rw [coordinateRangeProjector, LinearEquiv.apply_symm_apply]
       rfl
-    have hact : act (F (coordinateRangeProjector W))
-        (dependentGlobalConfigIsometry (Out := fun _ : V ↦ Fin q) Ω) =
-        dependentGlobalConfigIsometry (Out := fun _ : V ↦ Fin q) (U.starProjection Ω) := by
+    have hact : act (coordinateRangeProjector W) Ω = U.starProjection Ω := by
       rw [← hproj]
-      ext σ
-      change (Matrix.submatrix (coordinateRangeProjector W) e.symm e.symm *ᵥ
-        (Ω.ofLp ∘ e.symm)) σ = (coordinateRangeProjector W *ᵥ Ω.ofLp) (e.symm σ)
-      rw [Matrix.submatrix_mulVec_equiv]
-      simp [Function.comp_def]
-    rw [hPsum, act_sub, act_one, hact, ← map_sub, LinearIsometryEquiv.norm_map]
+      rfl
+    rw [hPsum, act_sub, act_one, hact]
     exact hres
 
 end TNLean.PEPS.EncodedFrame

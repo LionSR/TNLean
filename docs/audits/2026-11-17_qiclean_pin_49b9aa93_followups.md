@@ -122,3 +122,19 @@ through a unit vector `Ω`, then there are `a + b = E₀` and unit vectors `u`, 
 `Ω p = u p.1 * v p.2`, `IsGapped A a Δ`, `IsGapped B b Δ`, `groundSpace A a = span {u}` and
 `groundSpace B b = span {v}`. It is `TNLean.Lattice.exists_isGapped_factors_of_kronecker_sum`,
 whose proof would then shrink to the eigenvalue description of the Kronecker sum.
+
+F12c, the placement of regional operators, uses two QICLean additions of LionSR/QICLean#1108
+(`ManyBody/Sites/Placement` and `ManyBody/Sites/Subregion`), which the third pin brings in:
+
+* rectangular products of site maps. TNLean's `ManyBody.prodMatrix` in
+  `Algebra/ProductMatrixPlacement.lean` is #1108's rectangular `prodOp`, with the same lemma
+  names and signatures after `prodMatrix` → `prodOp`: `prodOp_mul`, `reindex_cutEquiv_prodOp`,
+  `prodOp_mul_place`, and the three statements requested for #1108, `prodOp_ne_zero`,
+  `prodOp_eq_place` and `place_mul_prodOp_eq_zero_iff`. At the pin, delete the module and
+  rename the call sites;
+* nested placement, TNLean's `ManyBody.subregionPlace` in `Algebra/SubregionPlacement.lean`,
+  with `place_subregionPlace`, under #1108's names. At the pin, delete the module.
+
+`TNLean.PEPS.place_eq_regionConfigEquiv` (`PEPS/ParentHamiltonian/RegionParentHamiltonian`)
+stays in TNLean. It compares the placement with TNLean's uniform-dimension
+`regionConfigEquiv`, so it is not a pure `ManyBody` statement.

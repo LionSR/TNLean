@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.ParentHamiltonian.DependentRegionOperatorLift
+import TNLean.PEPS.ParentHamiltonian.VertexVirtualParentTransport
+import TNLean.PEPS.ParentHamiltonian.RegionPlacement
 import QICLean.Analysis.ShiftedDensityPowers
 import Mathlib.Topology.Order.Compact
 
@@ -27,7 +28,7 @@ open Matrix
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*} [∀ v, Fintype (Out v)]
+variable {Out : V → Type*} [∀ v, Fintype (Out v)] [∀ v, DecidableEq (Out v)]
 
 variable {m : ℕ} (regions : Fin m → Finset V)
 
@@ -43,54 +44,55 @@ Source: OpenAI `03-patches.tex`, lines 68–99. -/
 noncomputable def regularizedPatchFilter (a : Fin m → ℝ) (b : ℝ)
     (x : ∀ j, Matrix ((v : regions j) → Out v.1)
       ((v : regions j) → Out v.1) ℂ) (j : Fin m) :
-    Matrix ((v : (Finset.univ : Finset V)) → Out v.1)
-      ((v : (Finset.univ : Finset V)) → Out v.1) ℂ := by
+    Matrix ((v : V) → Out v)
+      ((v : V) → Out v) ℂ := by
   classical
-  exact dependentRegionOperatorLift (regions j) ((x j + b • 1) ^ (-(a j) / 2))
+  exact ManyBody.place (regions j) ((x j + b • 1) ^ (-(a j) / 2))
 
 /-- The ordered matrix product `L_(m-1) ⋯ L_0`.
 Source: OpenAI `03-patches.tex`, lines 68–99. -/
 noncomputable def regularizedPatchOperator (a : Fin m → ℝ) (b : ℝ)
     (x : ∀ j, Matrix ((v : regions j) → Out v.1)
       ((v : regions j) → Out v.1) ℂ) :
-    Matrix ((v : (Finset.univ : Finset V)) → Out v.1)
-      ((v : (Finset.univ : Finset V)) → Out v.1) ℂ := by
+    Matrix ((v : V) → Out v)
+      ((v : V) → Out v) ℂ := by
   classical
   exact ((List.ofFn fun j ↦ regularizedPatchFilter regions a b x j).reverse).prod
 
 /-- The filtered vector in the Euclidean configuration space.
 Source: OpenAI `03-patches.tex`, lines 68–99. -/
 noncomputable def regularizedPatchOutput (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1)
       ((v : regions j) → Out v.1) ℂ) :
-    EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1) :=
+    EuclideanSpace ℂ ((v : V) → Out v) :=
   WithLp.toLp 2 (regularizedPatchOperator regions a b x *ᵥ Ω)
 
 /-- The norm minimized over independent regional densities.
 Source: OpenAI `03-patches.tex`, lines 68–99. -/
 noncomputable def regularizedPatchObjective (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1)
       ((v : regions j) → Out v.1) ℂ) : ℝ :=
   ‖regularizedPatchOutput regions a b Ω x‖
 
-omit [Fintype V] in
+omit [Fintype V] [∀ v, DecidableEq (Out v)] in
 /-- The feasible space of independent regional densities is compact. -/
 theorem isCompact_regularizedPatchDomain :
     IsCompact (regularizedPatchDomain (Out := Out) regions) :=
   isCompact_pi_infinite fun _ ↦ Matrix.isCompact_setOf_posSemidef_trace_eq_one
 
+omit [∀ v, DecidableEq (Out v)] in
 /-- A unit global vector supplies a configuration in every region, so the
 feasible space is nonempty without an extra local-dimension hypothesis. -/
 theorem regularizedPatchDomain_nonempty
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1) :
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v)) (hΩ : ‖Ω‖ = 1) :
     (regularizedPatchDomain (Out := Out) regions).Nonempty := by
   have hΩne : Ω ≠ 0 := norm_ne_zero_iff.mp (hΩ.trans_ne one_ne_zero)
   obtain ⟨σ, _⟩ := Function.ne_iff.mp (show (Ω : _ → ℂ) ≠ 0 from by
     intro h; apply hΩne; simpa using congrArg (WithLp.toLp 2) h)
   have hn (j : Fin m) : Nonempty ((v : regions j) → Out v.1) :=
-    ⟨fun v ↦ σ ⟨v.1, Finset.mem_univ _⟩⟩
+    ⟨fun v ↦ σ v.1⟩
   choose x hx using fun j ↦ @Matrix.setOf_posSemidef_trace_eq_one_nonempty
     ((v : regions j) → Out v.1) inferInstance (hn j)
   exact ⟨x, hx⟩
@@ -101,13 +103,13 @@ theorem continuousOn_regularizedPatchFilter (a : Fin m → ℝ) {b : ℝ} (hb : 
     ContinuousOn (fun x ↦ regularizedPatchFilter (Out := Out) regions a b x j)
       (regularizedPatchDomain regions) := by
   classical
-  exact (continuous_dependentRegionOperatorLift (regions j)).comp_continuousOn
+  exact (continuous_place (regions j)).comp_continuousOn
     ((Matrix.continuousOn_add_smul_one_rpow hb (-(a j) / 2)).comp
       (continuous_apply j).continuousOn fun x hx ↦ (hx j).1)
 
 /-- The norm objective is continuous on the density-matrix feasible set. -/
 theorem continuousOn_regularizedPatchObjective (a : Fin m → ℝ) {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) :
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v)) :
     ContinuousOn (regularizedPatchObjective regions a b Ω) (regularizedPatchDomain regions) := by
   classical
   have hp : ContinuousOn (regularizedPatchOperator (Out := Out) regions a b)
@@ -117,15 +119,15 @@ theorem continuousOn_regularizedPatchObjective (a : Fin m → ℝ) {b : ℝ} (hb
       Function.id_def, Function.comp_def] using
       continuousOn_list_prod (List.ofFn (id : Fin m → Fin m)).reverse
         (fun j _ ↦ continuousOn_regularizedPatchFilter regions a hb j)
-  have hc : Continuous (fun M : Matrix ((v : (Finset.univ : Finset V)) → Out v.1)
-      ((v : (Finset.univ : Finset V)) → Out v.1) ℂ ↦ WithLp.toLp 2 (M *ᵥ Ω)) :=
+  have hc : Continuous (fun M : Matrix ((v : V) → Out v)
+      ((v : V) → Out v) ℂ ↦ WithLp.toLp 2 (M *ᵥ Ω)) :=
     (PiLp.continuous_toLp _ _).comp (continuous_id.matrix_mulVec continuous_const)
   exact hc.norm.comp_continuousOn hp
 
 /-- The feasible minimum exists; continuity and nonemptiness are proved,
 not assumed. Source: OpenAI `03-patches.tex`, lines 68–99. -/
 theorem exists_isMinOn_regularizedPatchObjective (a : Fin m → ℝ) {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1) :
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v)) (hΩ : ‖Ω‖ = 1) :
     ∃ x ∈ regularizedPatchDomain regions,
       IsMinOn (regularizedPatchObjective regions a b Ω) (regularizedPatchDomain regions) x :=
   (isCompact_regularizedPatchDomain regions).exists_isMinOn
@@ -138,7 +140,7 @@ theorem regularizedPatchFilter_norm_bounds (a : Fin m → ℝ) (ha : ∀ j, 0 �
     {b : ℝ} (hb : 0 < b)
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
     (hx : x ∈ regularizedPatchDomain regions) (j : Fin m)
-    (ξ : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) :
+    (ξ : EuclideanSpace ℂ ((v : V) → Out v)) :
     (1 + b) ^ (-a j / 2) * ‖ξ‖ ≤
         ‖WithLp.toLp 2 (regularizedPatchFilter regions a b x j *ᵥ ξ)‖ ∧
       ‖WithLp.toLp 2 (regularizedPatchFilter regions a b x j *ᵥ ξ)‖ ≤
@@ -149,25 +151,25 @@ theorem regularizedPatchFilter_norm_bounds (a : Fin m → ℝ) (ha : ∀ j, 0 �
     (div_nonneg (ha j) (by norm_num) : 0 ≤ a j / 2)
   have hn := (hx j).1.l2_opNorm_add_smul_one_rpow_le_of_nonpos (hx j).2 hb
     (div_nonpos_of_nonpos_of_nonneg (neg_nonpos.mpr (ha j)) (by norm_num) : -a j / 2 ≤ 0)
-  have hcancel : dependentRegionOperatorLift (regions j) ((x j + b • 1) ^ (a j / 2)) *
+  have hcancel : ManyBody.place (regions j) ((x j + b • 1) ^ (a j / 2)) *
       regularizedPatchFilter regions a b x j = 1 := by
-    rw [regularizedPatchFilter, ← dependentRegionOperatorLift_mul,
+    rw [regularizedPatchFilter, ← ManyBody.place_mul,
       neg_div, CFC.rpow_mul_rpow_neg _ hd.isStrictlyPositive]
-    exact dependentRegionOperatorLift_one (Out := Out) _
-  have hinv := (norm_dependentRegionOperatorLift_mulVec_le (regions j)
+    exact ManyBody.place_one (X := Out)
+  have hinv := (norm_place_mulVec_le (regions j)
     ((x j + b • 1) ^ (a j / 2))
     (WithLp.toLp 2 (regularizedPatchFilter regions a b x j *ᵥ ξ))).trans
       (mul_le_mul_of_nonneg_right hp (norm_nonneg _))
-  have heq : dependentRegionOperatorLift (regions j) ((x j + b • 1) ^ (a j / 2)) *ᵥ
+  have heq : ManyBody.place (regions j) ((x j + b • 1) ^ (a j / 2)) *ᵥ
       (regularizedPatchFilter regions a b x j *ᵥ ξ) = ξ := by
     rw [Matrix.mulVec_mulVec, hcancel, Matrix.one_mulVec]
-  change ‖WithLp.toLp 2 (dependentRegionOperatorLift (regions j)
+  change ‖WithLp.toLp 2 (ManyBody.place (regions j)
     ((x j + b • 1) ^ (a j / 2)) *ᵥ (regularizedPatchFilter regions a b x j *ᵥ ξ))‖ ≤ _ at hinv
   rw [heq] at hinv
   constructor
   · rw [neg_div, Real.rpow_neg (by positivity)]
     exact (inv_mul_le_iff₀ (Real.rpow_pos_of_pos (by positivity) _)).mpr hinv
-  · exact (norm_dependentRegionOperatorLift_mulVec_le (regions j) _ ξ).trans
+  · exact (norm_place_mulVec_le (regions j) _ ξ).trans
       (mul_le_mul_of_nonneg_right hn (norm_nonneg _))
 
 open Classical in
@@ -175,7 +177,7 @@ private theorem regularizedPatchProduct_norm_bounds (a : Fin m → ℝ)
     (ha : ∀ j, 0 ≤ a j) {b : ℝ} (hb : 0 < b)
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
     (hx : x ∈ regularizedPatchDomain regions) (l : List (Fin m))
-    (ξ : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) :
+    (ξ : EuclideanSpace ℂ ((v : V) → Out v)) :
     (1 + b) ^ (l.map (fun j ↦ -a j / 2)).sum * ‖ξ‖ ≤
         ‖WithLp.toLp 2 ((l.map (regularizedPatchFilter regions a b x)).prod *ᵥ ξ)‖ ∧
       ‖WithLp.toLp 2 ((l.map (regularizedPatchFilter regions a b x)).prod *ᵥ ξ)‖ ≤
@@ -199,7 +201,7 @@ order, including repeated regions and noncommuting filters.
 Source: OpenAI `03-patches.tex`, lines 80–99. -/
 theorem regularizedPatchObjective_bounds (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
     {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1)
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v)) (hΩ : ‖Ω‖ = 1)
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
     (hx : x ∈ regularizedPatchDomain regions) :
     (1 + b) ^ (-(∑ j, a j) / 2) ≤ regularizedPatchObjective regions a b Ω x ∧
@@ -214,12 +216,12 @@ theorem regularizedPatchObjective_bounds (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ 
 /-- The common minimum value of the norm objective.
 Source: OpenAI `03-patches.tex`, lines 68–99. -/
 noncomputable def regularizedPatchMinimum (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) : ℝ :=
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v)) : ℝ :=
   sInf (regularizedPatchObjective regions a b Ω '' regularizedPatchDomain regions)
 
 /-- Every feasible minimizer has exactly the same minimum value. -/
 theorem regularizedPatchObjective_eq_minimum (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
     (hx : x ∈ regularizedPatchDomain regions)
     (hmin : IsMinOn (regularizedPatchObjective regions a b Ω) (regularizedPatchDomain regions) x) :
@@ -233,7 +235,7 @@ theorem regularizedPatchObjective_eq_minimum (a : Fin m → ℝ) (b : ℝ)
 /-- The attained minimum satisfies the same quantitative bounds as every feasible tuple. -/
 theorem regularizedPatchMinimum_bounds (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
     {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1) :
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v)) (hΩ : ‖Ω‖ = 1) :
     (1 + b) ^ (-(∑ j, a j) / 2) ≤ regularizedPatchMinimum regions a b Ω ∧
       regularizedPatchMinimum regions a b Ω ≤ b ^ (-(∑ j, a j) / 2) := by
   obtain ⟨x, hx, hmin⟩ := exists_isMinOn_regularizedPatchObjective regions a hb Ω hΩ
@@ -243,7 +245,7 @@ theorem regularizedPatchMinimum_bounds (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a 
 /-- Every feasible filtered output is nonzero, including outputs from singular densities. -/
 theorem regularizedPatchObjective_pos (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
     {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1)
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v)) (hΩ : ‖Ω‖ = 1)
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
     (hx : x ∈ regularizedPatchDomain regions) :
     0 < regularizedPatchObjective regions a b Ω x :=
@@ -253,7 +255,7 @@ theorem regularizedPatchObjective_pos (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j
 /-- The minimum is strictly positive. -/
 theorem regularizedPatchMinimum_pos (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
     {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1) :
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v)) (hΩ : ‖Ω‖ = 1) :
     0 < regularizedPatchMinimum regions a b Ω :=
   (Real.rpow_pos_of_pos (by positivity) _).trans_le
     (regularizedPatchMinimum_bounds regions a ha hb Ω hΩ).1
@@ -261,15 +263,15 @@ theorem regularizedPatchMinimum_pos (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
 /-- Normalize a filtered vector by its positive norm.
 Source: OpenAI `03-patches.tex`, lines 68–99. -/
 noncomputable def normalizedRegularizedPatchOutput (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ) :
-    EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1) :=
+    EuclideanSpace ℂ ((v : V) → Out v) :=
   (regularizedPatchObjective regions a b Ω x)⁻¹ • regularizedPatchOutput regions a b Ω x
 
 /-- Normalization gives a unit Euclidean vector for every feasible density tuple. -/
 theorem norm_normalizedRegularizedPatchOutput (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
     {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1)
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v)) (hΩ : ‖Ω‖ = 1)
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
     (hx : x ∈ regularizedPatchDomain regions) :
     ‖normalizedRegularizedPatchOutput regions a b Ω x‖ = 1 := by
@@ -279,7 +281,7 @@ theorem norm_normalizedRegularizedPatchOutput (a : Fin m → ℝ) (ha : ∀ j, 0
 
 /-- At every minimizer, normalization can equivalently use the common minimum value. -/
 theorem normalizedRegularizedPatchOutput_eq_minimum_smul (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
     (hx : x ∈ regularizedPatchDomain regions)
     (hmin : IsMinOn (regularizedPatchObjective regions a b Ω) (regularizedPatchDomain regions) x) :
@@ -291,7 +293,7 @@ theorem normalizedRegularizedPatchOutput_eq_minimum_smul (a : Fin m → ℝ) (b 
 all feasible tuples, for every real `R`.
 Source: OpenAI `03-patches.tex`, lines 80–99. -/
 theorem regularizedPatchObjective_exp_bounds (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
-    (R : ℝ) (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1)
+    (R : ℝ) (Ω : EuclideanSpace ℂ ((v : V) → Out v)) (hΩ : ‖Ω‖ = 1)
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
     (hx : x ∈ regularizedPatchDomain regions) :
     (1 + Real.exp (-R)) ^ (-(∑ j, a j) / 2) ≤
@@ -308,7 +310,7 @@ theorem regularizedPatchObjective_exp_bounds (a : Fin m → ℝ) (ha : ∀ j, 0 
 bound and the source exponential upper bound. -/
 theorem regularizedPatchMinimum_exp_bounds (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
     {R : ℝ} (hR : 0 ≤ R)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1) :
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v)) (hΩ : ‖Ω‖ = 1) :
     (2 : ℝ) ^ (-(∑ j, a j) / 2) ≤ regularizedPatchMinimum regions a (Real.exp (-R)) Ω ∧
       regularizedPatchMinimum regions a (Real.exp (-R)) Ω ≤
         Real.exp (R * (∑ j, a j) / 2) := by

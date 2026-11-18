@@ -4,15 +4,14 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.SiteEmbedding
-import TNLean.PEPS.ParentHamiltonian.DependentRegionOperatorLift
 
 /-!
 # Regional operators as circuit embeddings
 
-For a constant physical dimension, extending a regional matrix by the identity
-is the circuit embedding along the inclusion of the region. The same embedding,
-reindexed by the existing equivalence for full-region configurations, is the
-dependent regional lift. These identities hold for arbitrary complex matrices,
+For a constant physical dimension, agreement of two configurations outside the inclusion of a
+region is agreement at every vertex outside the region. With it, the placement of a regional
+matrix is its circuit embedding along the inclusion of the region
+(`QuantumCircuit.place_eq_embedOp`). The identity holds for arbitrary complex matrices,
 including zero physical dimension and empty regions or ambient vertex sets.
 
 This is an original identification of the existing operator conventions for
@@ -37,18 +36,5 @@ theorem agreeOff_region_iff (R : Finset V) (σ τ : V → Fin d) :
     exact h v fun w hw => hv (hw ▸ w.2)
   · intro h v hv
     exact h v fun hvR => hv ⟨v, hvR⟩ rfl
-
-/-- In constant physical dimension, the dependent regional lift is the circuit
-embedding reindexed by full-region configurations. -/
-theorem dependentRegionOperatorLift_eq_reindex_embedOp (R : Finset V)
-    (H : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ) :
-    dependentRegionOperatorLift (Out := fun _ => Fin d) R H =
-      Matrix.reindex (fullRegionConfigEquiv d) (fullRegionConfigEquiv d)
-        (QuantumCircuit.embedOp (Subtype.val : R → V) H) := by
-  classical
-  ext σ τ
-  rw [dependentRegionOperatorLift_apply]
-  simp [Matrix.reindex_apply, QuantumCircuit.embedOp_apply, agreeOff_region_iff,
-    fullRegionConfigEquiv, Function.comp_def]
 
 end TNLean.PEPS
