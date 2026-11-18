@@ -129,8 +129,8 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
   have hV₀ : reindex (g.symm.trans p) (g.symm.trans p)
       ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) ∈
         ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q :=
-    (TNLean.Lattice.reindex_physicalBuffer_eq_siteLift q R C₀ hRC W).symm ▸
-      TNLean.Lattice.siteLift_mem_supportedOperators Q
+    (TNLean.Lattice.reindex_physicalBuffer_eq_place q R C₀ hRC W).symm ▸
+      ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _)
         (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
   have hV : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
       (Q.image a : Finset (Lattice.Site Λ)) := by

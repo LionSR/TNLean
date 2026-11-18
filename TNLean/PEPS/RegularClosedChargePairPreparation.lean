@@ -97,18 +97,18 @@ theorem exists_unitary_regularClosedChargePairPreparation
     (χ : G → ℂ) (hχ : χ ∈ regularChargeLabels (G := G)) (p : G) :
     ∃ W : Matrix ({v : V // v ∈ R} → Fin d) ({v : V // v ∈ R} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup _ ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup _ ℂ ∧
-      regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor a) =
+      ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup _ ℂ ∧
+      ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor a) =
         regularCorrelatedChargeState a (fun _ => 1) e₀.1 e₁.1 χ p 1 := by
   classical
   obtain ⟨W, hW, hcols⟩ := exists_unitary_regularPhysicalChargePairCreation
     a ha R T hT htree o e₀ e₁ hne χ hχ p
-  refine ⟨W, hW, regionLocalTerm_mem_unitaryGroup R W hW, ?_⟩
+  refine ⟨W, hW, place_mem_unitaryGroup R W hW, ?_⟩
   rw [regularCorrelatedChargeState]
   symm
   rw [← Finset.sum_congr rfl (fun q _ => (one_smul ℂ _))]
   symm
-  apply regionLocalTerm_mulVec_stateCoeff_sum_of_openColumns R a
+  apply place_mulVec_stateCoeff_sum_of_openColumns R a
     (fun q => regularEdgeCharacterSite
       (regularEdgeCharacterSite (regularTwistedSite a (fun _ => 1)) e₀.1
         (fun t => χ (p * q⁻¹ * 1 * t)) 1)
@@ -166,13 +166,14 @@ theorem regularClosedChargePairPreparation_normSq_ne_zero
   classical
   obtain ⟨W, _, hW, hact⟩ := exists_unitary_regularClosedChargePairPreparation
     a ha R T hT htree o e₀ e₁ hne χ hχ p
-  have hgram : (regionLocalTerm R W)ᴴ * regionLocalTerm R W = 1 :=
+  have hgram : (ManyBody.place (X := fun _ ↦ Fin _) R W)ᴴ * ManyBody.place
+      (X := fun _ ↦ Fin _) R W = 1 :=
     Matrix.mem_unitaryGroup_iff'.mp hW
   constructor
   · rw [← hact, Matrix.star_dotProduct_mulVec, Matrix.mulVec_mulVec,
       hgram, Matrix.one_mulVec]
   · intro hz
-    have hback := congrArg (fun ψ => (regionLocalTerm R W)ᴴ *ᵥ ψ) hact
+    have hback := congrArg (fun ψ => (ManyBody.place (X := fun _ ↦ Fin _) R W)ᴴ *ᵥ ψ) hact
     rw [Matrix.mulVec_mulVec, hgram, Matrix.one_mulVec, hz, Matrix.mulVec_zero] at hback
     apply stateCoeff_regularTwistedSite_ne_zero_of_isGInjective a
       (fun v => (ha v).toIsGInjective) (fun _ => 1)

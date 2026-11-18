@@ -310,9 +310,9 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
   have hDK : K.IsHermitian :=
     (doubledHamiltonian_isHermitian h.operator_isHermitian).reindex p
   have hV : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q := by
-    have hlift := siteLift_mem_supportedOperators Q
+    have hlift := ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _)
       (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
-    rw [← reindex_physicalBuffer_eq_siteLift q A C hAC W] at hlift
+    rw [← reindex_physicalBuffer_eq_place q A C hAC W] at hlift
     exact hlift
   obtain ⟨hDs, hDn⟩ := h.swapped_doubled_boundary_bound hJ A
   have hD : gH.operator - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Z := by

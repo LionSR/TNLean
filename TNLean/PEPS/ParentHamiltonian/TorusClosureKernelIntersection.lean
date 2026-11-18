@@ -94,8 +94,9 @@ theorem IsGInjective.exists_torusClosureCommutationFilter
       (∀ (P : Matrix (RegionPhysicalConfig (d := d) R₀)
           (RegionPhysicalConfig (d := d) R₀) ℂ) (Ψ : (X → Fin d) → ℂ),
         IsRegionParentInteraction (groupBondTensor (torusIncidentSite a)) R₀ P →
-        regionLocalTerm R₀ P *ᵥ Ψ = 0 → regionLocalTerm R₀ Q *ᵥ Ψ = Ψ) ∧
-      ∀ g h : G, regionLocalTerm R₀ Q *ᵥ
+        ManyBody.place («X» := fun _ ↦ Fin _) R₀ P *ᵥ Ψ = 0 →
+            ManyBody.place («X» := fun _ ↦ Fin _) R₀ Q *ᵥ Ψ = Ψ) ∧
+      ∀ g h : G, ManyBody.place («X» := fun _ ↦ Fin _) R₀ Q *ᵥ
         torusGClosure (width := width) (height := height) (leftRegularMatrix G) a g h =
           if Commute g h then
             torusGClosure (width := width) (height := height)
@@ -147,13 +148,13 @@ theorem IsGInjective.inf_parentKernel_span_torusGClosureClass_eq_commutingSpan
     torusGClosure (width := width) (height := height) (leftRegularMatrix G) a p.1.1 p.1.2))
   obtain ⟨P, hfix, heigen⟩ := ha.exists_torusClosureCommutationFilter
     (width := width) (height := height)
-  let E := Matrix.mulVecLin (regionLocalTerm R₀ P)
+  let E := Matrix.mulVecLin (ManyBody.place («X» := fun _ ↦ Fin _) R₀ P)
   have hmap : Submodule.span ℂ (Set.range (torusGClosureClass
       (width := width) (height := height) (leftRegularMatrix G) a ha.invariant)) ≤ S.comap E := by
     apply Submodule.span_le.mpr
     rintro Ψ ⟨C, rfl⟩
     refine Quotient.inductionOn C (fun p => ?_)
-    change regionLocalTerm R₀ P *ᵥ torusGClosure
+    change ManyBody.place («X» := fun _ ↦ Fin _) R₀ P *ᵥ torusGClosure
       (width := width) (height := height) (leftRegularMatrix G) a p.1 p.2 ∈ S
     rw [heigen]
     split_ifs with hp
@@ -163,16 +164,16 @@ theorem IsGInjective.inf_parentKernel_span_torusGClosureClass_eq_commutingSpan
   · intro Ψ hΨ
     have hlocal := (regionParentHamiltonian_mulVec_eq_zero_iff R Q
       (fun i => (hQ i).1) Ψ).mp hΨ.1 i₀
-    have hslices := (regionLocalTerm_mulVec_eq_zero_iff
+    have hslices := (place_mulVec_eq_zero_iff
       (groupBondTensor (torusIncidentSite a)) (R i₀) (hQ i₀) Ψ).mp hlocal
     rw [hi₀] at hslices
-    have hcorner := (regionLocalTerm_mulVec_eq_zero_iff
+    have hcorner := (place_mulVec_eq_zero_iff
       (groupBondTensor (torusIncidentSite a)) R₀
       (isRegionParentInteraction_canonical _ R₀) Ψ).mpr hslices
     have hfixed := hfix _ Ψ (isRegionParentInteraction_canonical _ R₀) hcorner
     have hmem := hmap hΨ.2
     change E Ψ ∈ S at hmem
-    change regionLocalTerm R₀ P *ᵥ Ψ ∈ S at hmem
+    change ManyBody.place («X» := fun _ ↦ Fin _) R₀ P *ᵥ Ψ ∈ S at hmem
     rwa [hfixed] at hmem
   · refine le_inf (ha.span_torusGClosure_commuting_le_parentKernel R hR hSC Q hQ) ?_
     apply Submodule.span_le.mpr

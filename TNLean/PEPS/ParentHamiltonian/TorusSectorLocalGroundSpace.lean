@@ -111,7 +111,7 @@ theorem torusGClosure_sum_slice_mem_regionGroundSpace_interior_rectangle
 /-- Every original parent interaction on a strict interior rectangle
 annihilates every coherent closure superposition. Source: SCP10, local
 parent constraints on the closure span in Theorem 5.5, lines 1440–1545. -/
-theorem regionLocalTerm_torusGClosure_sum_eq_zero_interior_rectangle
+theorem place_torusGClosure_sum_eq_zero_interior_rectangle
     {I : Type*} [Fintype I]
     (a : G → G → G → G → Fin d → ℂ) (pairs : I → G × G) (μ : I → ℂ)
     (xStart yStart xLen yLen : ℕ) (hxStart : 0 < xStart) (hyStart : 0 < yStart)
@@ -119,10 +119,10 @@ theorem regionLocalTerm_torusGClosure_sum_eq_zero_interior_rectangle
     let R : Finset X := torusContiguousRectangle xStart yStart xLen yLen
     ∀ hR : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ,
       IsRegionParentInteraction (groupBondTensor (torusIncidentSite a)) R hR →
-      regionLocalTerm R hR *ᵥ
+      ManyBody.place («X» := fun _ ↦ Fin _) R hR *ᵥ
         (∑ i, μ i • torusGClosure (leftRegularMatrix G) a (pairs i).1 (pairs i).2) = 0 := by
   intro R hR hh
-  exact (regionLocalTerm_mulVec_eq_zero_iff _ R hh _).mpr
+  exact (place_mulVec_eq_zero_iff _ R hh _).mpr
     (torusGClosure_sum_slice_mem_regionGroundSpace_interior_rectangle
       a pairs μ xStart yStart xLen yLen hxStart hyStart hxEnd hyEnd)
 

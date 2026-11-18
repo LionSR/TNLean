@@ -60,9 +60,7 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
         let regions : Fin m → Finset (Lattice.Site Λ) :=
           fun j ↦ AreaLaw.Geometry.rangeNestedPatch Λ center R u j
         let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
-        let U := dependentGlobalConfigIsometry
-          (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-        let Ψᵤ := U.symm Ψ
+        let Ψᵤ := Ψ
         ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
           x ∈ regularizedPatchDomain
             (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
@@ -76,7 +74,7 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
                 (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ψᵤ x X -
                 Entropy.regionState (n := fun _ : Lattice.Site Λ ↦ q) X Ψ)).trace.re ≤
               (1 / 16 : ℝ) := by
-  intro Λ H E₀ Ψ hΩ hgap hspan center u b hu hb m regions a U Ψᵤ x hx hmin X
+  intro Λ H E₀ Ψ hΩ hgap hspan center u b hu hb m regions a Ψᵤ x hx hmin X
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   have henergy := (H.rangeNestedPatch_minimizer_energy_le hR hJ Ψ hΩ
     (hspan ▸ Submodule.mem_span_singleton_self Ψ) center u κ b
@@ -84,17 +82,17 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
   have hnorm := norm_normalizedRegularizedPatchOutput
     (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a
     (fun _ ↦ div_nonneg hκ.le (Nat.cast_nonneg m)) hb Ψᵤ
-    ((U.symm.norm_map _).trans hΩ) hx
+    (hΩ) hx
   have hgap := FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy
     (fun _ : Lattice.Site Λ ↦ Fin q) H.operator_isHermitian hΩ hgap hspan hΔ
-    ((U.norm_map _).trans hnorm) henergy X
+    (hnorm) henergy X
   have hρ := reindex_reducedPure_eq_regionState
     (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) X Ψᵤ
   simp only [dependentRegionFinEquiv, Equiv.piCongrRight_refl,
     Matrix.reindex_refl_refl] at hρ
   have hU : dependentGlobalFinIsometry
-      (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) Ψᵤ = U Ψᵤ := rfl
-  have hΨeq : dependentGlobalConfigIsometry Ψᵤ = Ψ := U.apply_symm_apply _
+      (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) Ψᵤ = Ψᵤ := rfl
+  have hΨeq : Ψᵤ = Ψ := rfl
   rw [hU, hΨeq] at hρ
   simpa only [normalizedRegularizedPatchMarginal, hρ] using hgap
 
@@ -120,9 +118,7 @@ theorem exists_uniform_rangeNestedPatch_minimizer_marginal_closeness
           let regions : Fin m → Finset (Lattice.Site Λ) :=
             fun j ↦ AreaLaw.Geometry.rangeNestedPatch Λ center R u j
           let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
-          let U := dependentGlobalConfigIsometry
-            (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-          let Ψᵤ := U.symm Ψ
+          let Ψᵤ := Ψ
           ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
             x ∈ regularizedPatchDomain
               (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →

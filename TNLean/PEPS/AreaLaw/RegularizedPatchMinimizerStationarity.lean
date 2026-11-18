@@ -39,7 +39,7 @@ Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 130–205. -/
 theorem normalizedRegularizedPatchMarginal_stationarity_of_isMinOn
     (regions : Fin m → Finset V) (hnested : Monotone regions)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Fin (n v.1)))
+    (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
     (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
       (Entropy.RegionConfig n (regions j)) ℂ)
     (hx : x ∈ regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions)
@@ -81,7 +81,7 @@ Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 130–168. -/
 theorem commute_filter_normalizedRegularizedPatchMarginal_of_isMinOn
     (regions : Fin m → Finset V) (hnested : Monotone regions)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Fin (n v.1)))
+    (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
     (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
       (Entropy.RegionConfig n (regions j)) ℂ)
     (hx : x ∈ regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions)

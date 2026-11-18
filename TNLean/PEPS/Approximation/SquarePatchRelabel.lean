@@ -22,7 +22,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open scoped BigOperators Matrix
-open TNLean.Lattice (siteLift)
 
 namespace TNLean.PEPS.EncodedFrame
 open TNLean.Lattice.Sheet
@@ -54,13 +53,14 @@ theorem SquarePatch.exists_relabel (e : V ≃ W) {pos : V → ℝ × ℝ}
     (Equiv.arrowCongr (R r) (Equiv.refl (Fin q)))
   let E := Matrix.reindexAlgEquiv ℂ ℂ (Equiv.arrowCongr e (Equiv.refl (Fin q)))
   have hlift (r : ℝ) (v : EuclideanSpace ℂ (squareSample pos P.center r → Fin q)) :
-      siteLift (squareSample (fun w ↦ pos (e.symm w)) P.center r) (rankOne (U r v)) =
-        E (siteLift (squareSample pos P.center r) (rankOne v)) := by
+      ManyBody.place (X := fun _ ↦ Fin _) (squareSample (fun w ↦ pos (e.symm w)) P.center r)
+          (rankOne (U r v)) =
+        E (ManyBody.place (X := fun _ ↦ Fin _) (squareSample pos P.center r) (rankOne v)) := by
     have hrank : rankOne (U r v) =
         Matrix.reindex (Equiv.arrowCongr (R r) (Equiv.refl (Fin q)))
           (Equiv.arrowCongr (R r) (Equiv.refl (Fin q))) (rankOne v) := rfl
     simp only [hrank, E, Matrix.coe_reindexAlgEquiv,
-      ← QuantumCircuit.embedOp_equiv_eq_reindex, siteLift,
+      ← QuantumCircuit.embedOp_equiv_eq_reindex, QuantumCircuit.place_eq_embedOp,
       QuantumCircuit.embedOp_embedOp Subtype.val_injective,
       QuantumCircuit.embedOp_embedOp e.injective]
     rfl

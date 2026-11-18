@@ -68,8 +68,8 @@ private theorem step_exists
       (∃ W : Matrix ({x : X // x ∈ stepRegion v i} → Fin d)
           ({x : X // x ∈ stepRegion v i} → Fin d) ℂ,
         W ∈ Matrix.unitaryGroup ({x : X // x ∈ stepRegion v i} → Fin d) ℂ ∧
-          (M = regionLocalTerm (stepRegion v i) W ∨
-            M = (regionLocalTerm (stepRegion v i) W).conjTranspose)) ∧
+          (M = ManyBody.place («X» := fun _ ↦ Fin _) (stepRegion v i) W ∨
+            M = (ManyBody.place («X» := fun _ ↦ Fin _) (stepRegion v i) W).conjTranspose)) ∧
       ∀ g h : G,
         M *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
           (torusSweptPhysicalRouteOperators v g h i.val))) =
@@ -109,9 +109,11 @@ theorem IsGIsometric.exists_unitary_torusSweptPhysicalRoute
           ({x : X // x ∈ torusVacantPlaquetteMoveRegion (sweptPhysicalBRouteDirection i)
             (torusSweptPhysicalBRouteVertex v i.castSucc)} → Fin d) ℂ,
         W ∈ Matrix.unitaryGroup _ ℂ ∧
-          (M i = regionLocalTerm (torusVacantPlaquetteMoveRegion (sweptPhysicalBRouteDirection i)
+          (M i = ManyBody.place («X» := fun _ ↦ Fin _)
+              (torusVacantPlaquetteMoveRegion (sweptPhysicalBRouteDirection i)
               (torusSweptPhysicalBRouteVertex v i.castSucc)) W ∨
-            M i = (regionLocalTerm (torusVacantPlaquetteMoveRegion (sweptPhysicalBRouteDirection i)
+            M i = (ManyBody.place («X» := fun _ ↦ Fin _)
+                (torusVacantPlaquetteMoveRegion (sweptPhysicalBRouteDirection i)
               (torusSweptPhysicalBRouteVertex v i.castSucc)) W).conjTranspose)) ∧
       (∀ (i : Fin 12) (g h : G),
         M i *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a

@@ -83,7 +83,7 @@ theorem exists_unitary_regularActualCyclePhysicalPermutation {d : ℕ}
     (hφ : ∀ z x, φ (fun e => x * z e * x⁻¹) = fun e => x * φ z e * x⁻¹) :
     ∃ W : Matrix ({v : V // v ∈ R} → Fin d) ({v : V // v ∈ R} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({v : V // v ∈ R} → Fin d) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
+      ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
       (∀ (u : Edge Γ → G) (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a u)) R
           (fun f => Fintype.equivFin G (θ f)) =
@@ -91,7 +91,8 @@ theorem exists_unitary_regularActualCyclePhysicalPermutation {d : ℕ}
           (regularActualCyclePermutation R T hT htree o φ u))) R
           (fun f => Fintype.equivFin G (θ f))) ∧
       ∀ u : Edge Γ → G,
-        regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a u)) =
+        ManyBody.place (X :=
+            fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a u)) =
         stateCoeff (groupBondTensor (regularTwistedSite a
           (regularActualCyclePermutation R T hT htree o φ u))) := by
   obtain ⟨W, hW, hglobal, hlocal, hact⟩ :=

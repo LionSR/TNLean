@@ -15,7 +15,7 @@ import TNLean.Lattice.Sheet.Operators
 A *sheet* has one raw register `ℂ^q` at every site of a finite lattice `Λ`, and an owner for
 every register. Its raw configurations are the functions `Λ → Fin q`, and a vector on the
 sheet is a vector of `EuclideanSpace ℂ (Λ → Fin q)`. An operator `X` on the sites of a set
-`D ⊆ Λ` acts on the sheet as `X ⊗ 1` (`TNLean.Lattice.siteLift`).
+`D ⊆ Λ` acts on the sheet as `X ⊗ 1` (`ManyBody.place`).
 
 Around a center `c` in the plane and at scale `h > 0`, the inner and outer squares
 `Q^±(c, h)` are the closed sup-norm balls of radii `h` and `2h`; their physical samples are the
@@ -79,7 +79,6 @@ disjointness of their physical samples, which it implies; `Frame` records the la
 
 open Matrix QuantumCircuit
 open scoped BigOperators Matrix.Norms.L2Operator
-open TNLean.Lattice (siteLift siteLift_conjTranspose siteLift_mem_supportedOperators siteLift_mul)
 
 noncomputable section
 
@@ -139,8 +138,10 @@ structure SquarePatch (pos : ι → ℝ × ℝ) (q : ℕ) where
   norm_vec : ∀ j ℓ, ‖vec j ℓ‖ = 1
   /-- The cylinder projectors have mutually orthogonal ranges. -/
   orthogonal : ∀ s s' : (j : Fin n) × Fin (dim j), s ≠ s' →
-    siteLift (squareSample pos center (radius s.1)) (rankOne (vec s.1 s.2)) *
-      siteLift (squareSample pos center (radius s'.1)) (rankOne (vec s'.1 s'.2)) = 0
+    ManyBody.place (X := fun _ ↦ Fin _) (squareSample pos center (radius s.1))
+        (rankOne (vec s.1 s.2)) *
+      ManyBody.place (X := fun _ ↦ Fin _) (squareSample pos center (radius s'.1))
+        (rankOne (vec s'.1 s'.2)) = 0
 
 namespace SquarePatch
 
@@ -177,7 +178,7 @@ abbrev Tag : Type :=
 the identity tag of an empty outer sample. -/
 def cyl : p.Tag → Matrix (ι → Fin q) (ι → Fin q) ℂ
   | .inl _ => 1
-  | .inr s => siteLift (p.sample s.1.1) (rankOne (p.vec s.1.1 s.1.2))
+  | .inr s => ManyBody.place (X := fun _ ↦ Fin _) (p.sample s.1.1) (rankOne (p.vec s.1.1 s.1.2))
 
 /-- The projector `P_{c,h} = ∑_{j,ℓ} |v_{jℓ}⟩⟨v_{jℓ}|_{D_j} ⊗ 1`; it is the identity when the
 outer sample is empty. -/
@@ -187,7 +188,7 @@ def proj : Matrix (ι → Fin q) (ι → Fin q) ℂ := ∑ s, p.cyl s
 the identity at the identity tag of an empty outer sample. -/
 def branch [NeZero q] : p.Tag → Matrix (ι → Fin q) (ι → Fin q) ℂ
   | .inl _ => 1
-  | .inr s => siteLift (p.sample s.1.1)
+  | .inr s => ManyBody.place (X := fun _ ↦ Fin _) (p.sample s.1.1)
       (vecMulVec (zeroVec (p.sample s.1.1)) (star ⇑(p.vec s.1.1 s.1.2)))
 
 /-- The selected square of a tag: the sample `D_j` at a tag `(j, ℓ)`, and the empty set at the
@@ -228,12 +229,12 @@ theorem proj_of_outer_eq_empty (h : p.outer = ∅) : p.proj = 1 := by
 theorem cyl_conjTranspose (s : p.Tag) : (p.cyl s)ᴴ = p.cyl s := by
   cases s with
   | inl _ => exact conjTranspose_one
-  | inr s => rw [cyl, siteLift_conjTranspose, rankOne_conjTranspose]
+  | inr s => rw [cyl, ← ManyBody.place_conjTranspose, rankOne_conjTranspose]
 
 theorem cyl_mul_self (s : p.Tag) : p.cyl s * p.cyl s = p.cyl s := by
   cases s with
   | inl _ => exact mul_one _
-  | inr s => rw [cyl, siteLift_mul, rankOne_mul_self (p.norm_vec _ _)]
+  | inr s => rw [cyl, ← ManyBody.place_mul, rankOne_mul_self (p.norm_vec _ _)]
 
 theorem cyl_mul_cyl_of_ne {s s' : p.Tag} (h : s ≠ s') : p.cyl s * p.cyl s' = 0 := by
   rcases s with s | s <;> rcases s' with s' | s'
@@ -262,7 +263,7 @@ theorem branch_conjTranspose_mul_self [NeZero q] (s : p.Tag) :
     (p.branch s)ᴴ * p.branch s = p.cyl s := by
   rcases s with s | s
   · simp [branch, cyl]
-  rw [branch, siteLift_conjTranspose, siteLift_mul, conjTranspose_vecMulVec,
+  rw [branch, ← ManyBody.place_conjTranspose, ← ManyBody.place_mul, conjTranspose_vecMulVec,
     Matrix.vecMulVec_mul_vecMulVec, star_star, star_zeroVec_dotProduct_zeroVec, one_smul, cyl,
     rankOne]
 
@@ -271,14 +272,14 @@ theorem cyl_mem_supportedOperators (s : p.Tag) :
   rcases s with s | s
   · exact (one_mem (ManyBody.supportedOperators _ _))
   · exact ManyBody.supportedOperators_mono (Finset.coe_subset.mpr (p.sample_subset_outer s.1.1))
-      (siteLift_mem_supportedOperators _ _)
+      (ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _) _)
 
 theorem branch_mem_supportedOperators [NeZero q] (s : p.Tag) :
     p.branch s ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) p.outer := by
   rcases s with s | s
   · exact (one_mem (ManyBody.supportedOperators _ _))
   · exact ManyBody.supportedOperators_mono (Finset.coe_subset.mpr (p.sample_subset_outer s.1.1))
-      (siteLift_mem_supportedOperators _ _)
+      (ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _) _)
 
 theorem proj_mem_supportedOperators :
     p.proj ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) p.outer :=

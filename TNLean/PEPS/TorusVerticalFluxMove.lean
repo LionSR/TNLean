@@ -145,7 +145,7 @@ theorem IsGIsometric.exists_unitary_torusVerticalFluxMove
     (ha : IsGIsometric (torusLegRep (leftRegularMatrix G)) (siteMap a)) (v : X) :
     ∃ W : Matrix (RV v → Fin d) (RV v → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV v → Fin d) ℂ ∧
-      regionLocalTerm (R v) W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) (R v) W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (reverse : Bool) (g : G) (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (R v) e} → G),
         (if reverse then W.conjTranspose else W) *ᵥ
           openRegionWeight (groupBondTensor (regularTwistedSite
@@ -157,8 +157,9 @@ theorem IsGIsometric.exists_unitary_torusVerticalFluxMove
           (torusVerticalFluxAssignment v (!reverse) g))) (R v)
           (fun f => Fintype.equivFin G (θ f))) ∧
       ∀ (reverse : Bool) (g : G) (u : Edge Γₜ → G),
-        (if reverse then (regionLocalTerm (R v) W).conjTranspose
-          else regionLocalTerm (R v) W) *ᵥ stateCoeff (groupBondTensor (regularTwistedSite
+        (if reverse then (ManyBody.place («X» := fun _ ↦ Fin _) (R v) W).conjTranspose
+          else ManyBody.place («X» := fun _ ↦ Fin _)
+              (R v) W) *ᵥ stateCoeff (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a)
           (regularRegionBondExtension (R v) (torusVerticalFluxAssignment v reverse g) u))) =
         stateCoeff (groupBondTensor (regularTwistedSite

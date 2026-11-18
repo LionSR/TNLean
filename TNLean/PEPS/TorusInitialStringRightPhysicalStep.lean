@@ -195,7 +195,7 @@ theorem IsGIsometric.exists_unitary_torusInitialStringRightPhysicalStep
     let R := translatedTwoPlaquetteRegion (v.1 + 1, v.2 + 1)
     ∃ W : Matrix ({x : X // x ∈ R} → Fin d) ({x : X // x ∈ R} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({x : X // x ∈ R} → Fin d) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (g h : G) (u : Edge Γₜ → G)
         (θ : {e : Edge Γₜ // IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite
@@ -207,7 +207,7 @@ theorem IsGIsometric.exists_unitary_torusInitialStringRightPhysicalStep
           (regularRegionBondExtension R (torusSweptStringRightStepOperators v g h) u))) R
           (fun f => Fintype.equivFin G (θ f))) ∧
       ∀ (g h : G) (u : Edge Γₜ → G),
-        regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite
+        ManyBody.place («X» := fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a)
           (regularRegionBondExtension R (torusSweptStringInitialOperators v g h) u))) =
         stateCoeff (groupBondTensor (regularTwistedSite

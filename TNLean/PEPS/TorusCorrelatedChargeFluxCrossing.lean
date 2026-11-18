@@ -74,10 +74,10 @@ theorem IsGIsometric.exists_unitary_torusCorrelatedChargeFluxCrossing_global {d 
     ∃ W : Matrix ({w : X // w ∈ torusChargeFluxCrossingRegion v} → Fin d)
         ({w : X // w ∈ torusChargeFluxCrossingRegion v} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({w : X // w ∈ torusChargeFluxCrossingRegion v} → Fin d) ℂ ∧
-      regionLocalTerm (torusChargeFluxCrossingRegion v) W ∈
+      ManyBody.place («X» := fun _ ↦ Fin _) (torusChargeFluxCrossingRegion v) W ∈
         Matrix.unitaryGroup (X → Fin d) ℂ ∧
       ∀ (k : G) (χ : G → ℂ) (p : G),
-        regionLocalTerm (torusChargeFluxCrossingRegion v) W *ᵥ
+        ManyBody.place («X» := fun _ ↦ Fin _) (torusChargeFluxCrossingRegion v) W *ᵥ
           regularCorrelatedChargeState (torusIncidentSite a)
             (torusSweptStringInitialOperators v k 1)
             (torusSweptStringChargeEdge v) (torusChargeFluxPartnerEdge v) χ p 1 =
@@ -85,9 +85,9 @@ theorem IsGIsometric.exists_unitary_torusCorrelatedChargeFluxCrossing_global {d 
             (torusSweptStringInitialOperators v k 1)
             (torusSweptStringChargeEdge v) (torusChargeFluxPartnerEdge v) χ p k⁻¹ := by
   obtain ⟨W,hW,hact⟩ := IsGIsometric.exists_unitary_torusCorrelatedChargeFluxCrossing a ha v
-  refine ⟨W,hW,regionLocalTerm_mem_unitaryGroup _ W hW,?_⟩
+  refine ⟨W,hW,place_mem_unitaryGroup _ W hW,?_⟩
   intro k χ p
-  apply regionLocalTerm_mulVec_regularCorrelatedChargeState
+  apply place_mulVec_regularCorrelatedChargeState
     (torusIncidentSite a) (torusChargeFluxCrossingRegion v)
     (torusSweptStringInitialOperators v k 1)
     (torusSweptStringChargeEdge v) (torusChargeFluxPartnerEdge v)

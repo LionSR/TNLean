@@ -204,9 +204,9 @@ theorem IsGIsometric.exists_unitary_torusTranslatedGlobalFluxMove
     ∃ W : Matrix (RV v → Fin d)
         (RV v → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV v → Fin d) ℂ ∧
-      regionLocalTerm (R v) W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) (R v) W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       ∀ (g : G) (u : Edge Γₜ → G),
-        regionLocalTerm (R v) W *ᵥ stateCoeff
+        ManyBody.place («X» := fun _ ↦ Fin _) (R v) W *ᵥ stateCoeff
           (groupBondTensor (regularTwistedSite
             (torusIncidentSite (width := width) (height := height) a)
             (regularRegionBondExtension (R v)

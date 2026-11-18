@@ -3733,7 +3733,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   lie in the inside subspace `S`; in tensor notation, `S ⊗ H_(V\R)`.
 - **Source:** the September 24, 2026 polynomial-PEPS manuscript,
   [`03-patches.tex`, lines 563–603](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L563-L603).
-- **Sanctioned identifications:** `range_dependentRegionOperatorLift` identifies
+- **Sanctioned identifications:** `range_place` identifies
   the range of an identity extension with a cylinder;
   `coordinateRangeProjector_dependentRegionCylinder` identifies the orthogonal
   projector. The `sup`, `iSup`, `subregion`, and `map` theorems give finite-sum,

@@ -161,29 +161,27 @@ theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy
     let regions : Fin m → Finset (Lattice.Site Λ) :=
       fun j ↦ AreaLaw.Geometry.rangeNestedPatch Λ center R u j
     let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
-    let U := dependentGlobalConfigIsometry
-      (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-    let Ψᵤ := U.symm Ψ
+    let Ψᵤ := Ψ
     ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
       x ∈ regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
       IsMinOn
         (regularizedPatchObjective (Out := fun _ : Lattice.Site Λ ↦ Fin q)
           regions a b Ψᵤ)
         (regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions) x →
-      let φ : Lattice.StateSpace Λ q := U
+      let φ : Lattice.StateSpace Λ q :=
         (normalizedRegularizedPatchOutput (Out := fun _ : Lattice.Site Λ ↦ Fin q)
           regions a b Ψᵤ x)
       (inner ℂ φ (Matrix.toEuclideanLin H.operator φ)).re - E₀ ≤
         rangePatchEnergyConstant q R J * κ ^ 2 := by
-  intro m regions a U Ψᵤ x hx hmin φ
+  intro m regions a Ψᵤ x hx hmin φ
   have hm : (0 : ℝ) < m :=
     Nat.cast_pos.mpr (AreaLaw.Geometry.rangeNestedPatchCount_pos R u)
   have ha : ∀ j, 0 < a j := fun _ ↦ div_pos hκ hm
-  have hΨᵤ : ‖Ψᵤ‖ = 1 := (U.symm.norm_map _).trans hΩ
+  have hΨᵤ : ‖Ψᵤ‖ = 1 := hΩ
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   have hnorm := norm_normalizedRegularizedPatchOutput
     (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ψᵤ hΨᵤ hx
-  have hφ : ‖φ‖ = 1 := (U.norm_map _).trans hnorm
+  have hφ : ‖φ‖ = 1 := hnorm
   have hregions : Monotone regions := fun i j hij ↦
     AreaLaw.Geometry.rangeNestedPatch_mono Λ center R u hij
   have hcl := exists_clipped_filter_of_isMinOn_regularizedPatchObjective
@@ -202,11 +200,11 @@ theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy
   have ha₁ : ∀ j, a j ≤ 1 := fun _ ↦
     (div_nat_le_self_of_nonneg hκ.le m).trans hκ₁
   have hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j := fun _ _ hij ↦ hregions hij
-  have hφpatch := dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput
+  have hφpatch := normalizedRegularizedPatchOutput_eq_patchState
     (n := fun _ : Lattice.Site Λ ↦ q) (fun j : Fin m ↦ D j) a b Ψᵤ x
   change φ = Entropy.patchState b (regularizedPatchFactorList (fun j : Fin m ↦ D j) a x)
-    (U (U.symm Ψ)) at hφpatch
-  simp only [U.apply_symm_apply, Entropy.patchState, Entropy.patchOutput,
+    (Ψ) at hφpatch
+  simp only [Entropy.patchState, Entropy.patchOutput,
     map_filter_regularizedPatchFactorList_eq_chainList] at hφpatch
   have hinv : Entropy.liftProdInv (Entropy.chainList D K fun _ ↦ True) *
       Entropy.liftProd (Entropy.chainList D K fun _ ↦ True) = 1 :=
