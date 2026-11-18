@@ -1,0 +1,6 @@
+QICLean/Topology/BrouwerProduct.lean:33:36: warning: `stdSimplexHomeomorphUnitInterval` has been deprecated: Use `Convexity.StdSimplex.homeomorphI` instead
+
+Note: The updated constant has a different type:
+  Convexity.StdSimplex ℝ (Fin 2) ≃ₜ ↑unitInterval
+instead of
+  ↑(stdSimplex ℝ (Fin 2)) ≃ₜ ↑unitInterval

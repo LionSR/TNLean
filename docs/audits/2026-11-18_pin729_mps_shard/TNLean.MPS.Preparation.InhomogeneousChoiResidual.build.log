@@ -1,0 +1,6 @@
+TNLean/MPS/Preparation/InhomogeneousChoiResidual.lean:177:100: warning: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
+TNLean/MPS/Preparation/InhomogeneousChoiResidual.lean:179:100: warning: This line exceeds the 100 character limit, please shorten it!
+
+Note: This linter can be disabled with `set_option linter.style.longLine false`
