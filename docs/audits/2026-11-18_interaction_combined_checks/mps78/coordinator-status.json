@@ -1,20 +1,6 @@
 {
-  "time": "2026-11-18T17:41:14.962032+00:00",
-  "coordinator_pid": 466870,
-  "state": "waiting_for_old_writers",
-  "old_passed": 767,
-  "old_processes": [
-    {
-      "pid": 412863,
-      "cmd": "python3 docs/audits/2026-11-18_pin729_mps_shard/resume.py"
-    },
-    {
-      "pid": 468458,
-      "cmd": "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -o /tmp/pin729-mps-olean/TNLean/MPS/Preparation/DepthLowerBound.olean TNLean/MPS/Preparation/DepthLowerBound.lean"
-    },
-    {
-      "pid": 468462,
-      "cmd": "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -o /tmp/pin729-mps-olean/TNLean/MPS/Preparation/FiniteRingGaussianFilter.olean TNLean/MPS/Preparation/FiniteRingGaussianFilter.lean"
-    }
-  ]
+  "time": "2026-11-18T18:29:46.517093+00:00",
+  "coordinator_pid": 481024,
+  "state": "blocked",
+  "error": "RuntimeError('TNLean.MPS.AreaLaw.Hastings.BoundaryFactorization build failed exit -6; original log retained')"
 }
