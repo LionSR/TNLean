@@ -43,6 +43,8 @@ in `TNLean.MPS.AreaLaw.ComponentReduction`.
   and Section 2 (reductions).
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (ChainSupport interval ChainInteraction)
 
 open TNLean.Lattice

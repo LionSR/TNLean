@@ -34,6 +34,8 @@ produces the matrix product state.
   Proposition 7.1 and Theorem 7.2.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (ChainSupport interval ChainInteraction)
 
 open Matrix
