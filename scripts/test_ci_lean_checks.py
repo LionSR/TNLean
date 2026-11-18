@@ -646,6 +646,79 @@ class FocusedRunnerTest(unittest.TestCase):
         self.assertTrue(all(call.args[2] == 0 for call in build.call_args_list))
         return code, build, runner
 
+    def run_budgeted(self, sources, tests, graph, budget, build, strict):
+        """Run with a fake clock that `build` and `strict` advance."""
+        self.clock = 0.0
+        with mock.patch.object(ci.time, "monotonic", side_effect=lambda: self.clock), \
+                mock.patch.object(ci, "build_until", side_effect=build) as builder, \
+                mock.patch.object(ci, "run_batch", side_effect=strict) as runner:
+            code = ci.focused_checks(sources, tests, graph, 3, 240, None, budget)
+        return code, builder, runner
+
+    def test_budget_spent_in_preparation_defers_every_target(self):
+        def build(modules, log, budget):
+            self.assertEqual(budget, 100)
+            return None  # stopped at its budget, even if the clock lags behind
+
+        code, builder, runner = self.run_budgeted(
+            ["TNLean/A.lean", "TNLean/B.lean"], ["scripts/a_regression.lean"],
+            {"scripts.a_regression": {"TNLean.A"}, "TNLean.A": set()}, 100,
+            build, lambda paths, jobs, timeout: [])
+        self.assertEqual(code, 0)
+        self.assertEqual(builder.call_count, 1)
+        runner.assert_not_called()
+
+    def test_budget_spent_in_strict_checks_defers_the_rest(self):
+        def build(modules, log, budget):
+            self.clock += 10
+            return 0
+
+        def strict(paths, jobs, timeout):
+            self.clock += 100
+            return []
+
+        sources = [f"TNLean/M{i}.lean" for i in range(7)]
+        code, _, runner = self.run_budgeted(sources, [], {}, 60, build, strict)
+        self.assertEqual(code, 0)
+        self.assertEqual([c.args[0] for c in runner.call_args_list], [sources[:3]])
+
+    def test_failure_before_the_budget_is_spent_remains_nonzero(self):
+        def build(modules, log, budget):
+            self.clock += 30
+            return 3 if "TNLean.Bad" in modules else 0
+
+        code, builder, runner = self.run_budgeted(
+            ["TNLean/Bad.lean", "TNLean/Good.lean"], [], {}, 60, build,
+            lambda paths, jobs, timeout: [])
+        self.assertEqual(code, 1)
+        # Joint build, then `Bad` alone; the budget ends before `Good`.
+        self.assertEqual([c.args[0] for c in builder.call_args_list],
+                         [["TNLean.Bad", "TNLean.Good"], ["TNLean.Bad"]])
+        runner.assert_not_called()
+
+    def test_joint_build_failure_survives_a_budget_spent_in_the_fallback(self):
+        def build(modules, log, budget):
+            if len(modules) > 1:
+                self.clock += 50
+                return 3
+            self.clock += 10
+            return 3 if modules == ["TNLean.Zbad"] else 0
+
+        code, builder, runner = self.run_budgeted(
+            ["TNLean/Agood.lean", "TNLean/Zbad.lean"], [], {}, 60, build,
+            lambda paths, jobs, timeout: [])
+        self.assertEqual(code, 1)
+        # The fallback prepares `Agood` and the budget ends before `Zbad`.
+        self.assertEqual([c.args[0] for c in builder.call_args_list],
+                         [["TNLean.Agood", "TNLean.Zbad"], ["TNLean.Agood"]])
+
+    def test_strict_failure_within_the_budget_remains_nonzero(self):
+        code, _, _ = self.run_budgeted(
+            ["TNLean/A.lean", "TNLean/B.lean"], [], {}, 600,
+            lambda modules, log, budget: 0,
+            lambda paths, jobs, timeout: ["TNLean/B.lean"])
+        self.assertEqual(code, 1)
+
     def test_build_failure_skips_only_failed_source_and_remains_nonzero(self):
         code, build, runner = self.run_checks(
             ["TNLean/Bad.lean", "TNLean/Good.lean"], [], {}, {"TNLean.Bad": 3})
@@ -861,6 +934,20 @@ class EarlyBuildTest(unittest.TestCase):
             code = ci.early_build(["TNLean.Core"], self.log, 1)
         self.assertEqual(code, 0)
         self.assertIn("::warning::Early build stopped after 1s", out.getvalue())
+
+    def test_focused_preparation_stopped_at_the_budget_skips_strict_checks(self) -> None:
+        # The build ends at the budget; the strict runner must not see targets
+        # whose dependencies were never prepared, however the clock rounds.
+        self.lake("sleep 30\n")
+        import io
+        from contextlib import redirect_stdout
+        out = io.StringIO()
+        with redirect_stdout(out), mock.patch.object(ci, "run_batch") as runner:
+            code = ci.focused_checks(
+                ["TNLean/A.lean", "TNLean/B.lean"], [], {}, 3, 240, self.log, 2)
+        self.assertEqual(code, 0)
+        runner.assert_not_called()
+        self.assertIn("::warning::Focused checks stopped at their 2s budget", out.getvalue())
 
 
 if __name__ == "__main__":
