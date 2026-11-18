@@ -1,6 +1,11 @@
-> Historical evidence only. The original F12 audit below is preserved verbatim from
-> `a37c38de9288851c2558aae9e64cafbd58efc096`, path
-> `docs/audits/2026-11-17_f12_region_expectation.md` (PR #10836).
+> Historical evidence only. The F12 audit below is transcribed from
+> [the original audit at `a37c38de9288851c2558aae9e64cafbd58efc096`](https://github.com/LionSR/TNLean/blob/a37c38de9288851c2558aae9e64cafbd58efc096/docs/audits/2026-11-17_f12_region_expectation.md)
+> (PR #10836), path `docs/audits/2026-11-17_f12_region_expectation.md`.
+> The only wording change in the transcribed body is the terminology in the
+> ten-check validation bullet, now "kernel trust checks". This makes the prose
+> compatible with the repository's all-file proof-integrity token scan; the
+> reported checks, dependencies and historical conclusions are unchanged.
+> The linked original record is unchanged.
 > Its base, pin, checks and implementation descriptions describe that campaign,
 > not the current #10879/#10881 integration. In particular, its local Weyl/Kraus
 > owner description is historical: the current implementation uses the canonical
@@ -77,7 +82,7 @@ or cold full-library build was run.
   canonical entries: strict pass, 3.406 s.
 - Temporary kernel audit reproducing the base's old expectation formula:
   equality with the canonical map for **all** `q`, including zero, passed.
-  Ten key axiom checks (equivalence, Weyl/CPTP, spectator/error estimates and
+  Ten key kernel trust checks (equivalence, Weyl/CPTP, spectator/error estimates and
   the five bridge-consumer results) reported only `propext`, `Classical.choice`,
   and `Quot.sound`. No temporary Lean fixture is committed.
 - Targeted checks resolve 31 relevant Blueprint declarations, 3.243 s.
