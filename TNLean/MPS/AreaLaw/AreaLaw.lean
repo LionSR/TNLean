@@ -373,7 +373,7 @@ theorem chainAreaLaw_of_consecutive_terms
     (fun X ↦ h.mem X.val) (fun X ↦ hh X.val) (fun X ↦ hhJ X.val)
     (2 * R) (one_le_windowBudgetConst q R)
     (h.card_crossingTerms_interval_le_of_consecutive_terms hh hhJ hwindow)
-    (h.cutLogBudget_interval_le_of_consecutive_terms hh hhJ hq hwindow) hΩ hgap hspan a b
+    (h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow) hΩ hgap hspan a b
 
 /-- The interval entropy estimate with the original polynomial source constants.
 Source: one-dimensional note, part1_arealaw.tex, eq:final, lines674–679. -/

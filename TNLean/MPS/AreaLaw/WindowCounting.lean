@@ -217,7 +217,7 @@ theorem _root_.ManyBody.ChainInteraction.log_surprisalMoment_interval_le_of_cons
   let B : ℝ := windowBudgetConst q R
   let budget := Entropy.cutLogBudget C (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ D)
   have hbudget : budget ≤ B :=
-    h.cutLogBudget_interval_le_of_consecutive_terms hh hhJ hq hwindow l r
+    h.cutLogBudget_interval_le_of_consecutive_terms hq hh hhJ hwindow l r
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   have hbudget1 : 1 ≤ budget := Entropy.one_le_cutLogBudget _ _
   have hradius : Entropy.tailRadius (J / Δ) B ≤

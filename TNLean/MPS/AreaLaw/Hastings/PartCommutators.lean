@@ -203,7 +203,7 @@ theorem _root_.ManyBody.ChainInteraction.commutator_termSum_inner_eq (h : ChainI
       ext X
       simp only [C, Entropy.crossingTerms, Finset.mem_filter, Finset.mem_sdiff,
         Finset.mem_univ, true_and, not_and, not_exists]
-      exact ⟨fun h hh hhJ ↦ h.2, fun hXA ↦ ⟨fun _ v hv hvA ↦ hvA (hXA hv), hXA⟩⟩
+      exact ⟨fun h ↦ h.2, fun hXA ↦ ⟨fun _ v hv hvA ↦ hvA (hXA hv), hXA⟩⟩
     rw [hfilt, ← key, hHA, sub_self, zero_add]
     refine Finset.sum_eq_zero fun X hX ↦ ?_
     obtain ⟨hXC, hXA⟩ := Finset.mem_filter.mp hX
