@@ -856,12 +856,23 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   `scripts/check_glm23_unitary_mixed_adjoint_closure.py`); it formalizes
   commutation along the closed interval under adjoint closure of the two-site
   boundary range.
+- `glm23_mixed_operator_one_site_injectivity.tex` (false source claim,
+  resolved) records that the one-site injectivity of the common operator of
+  the Section 5 interpolation fails in the full aligned setting: for
+  `Rep(A₄)`, two injective endpoint states with injective endpoint operators,
+  common fusion tensors and equal F- and L-symbols, the crossed corners of the
+  three-dimensional object are not spanned, for every gauge of the action
+  tensors preserving the L-symbols (checked by
+  `scripts/check_glm23_mixed_operator_one_site_injectivity.py`); the claim
+  holds with multiplicity one, and three-site normality is the formalized
+  substitute.
 - `glm23_block_injective_mixed_path.tex` (scope restriction, open) records
   that the block-injective interpolation of Section 5 uses no commutation of
   the path Hamiltonians, so its exact action and fusion are formalized without
   adjoint closure, while any commutation statement inherits the one-block
-  counterexample; the injectivity of the common operators and the claimed
-  ground space of the path Hamiltonians remain open.
+  counterexample; the one-site injectivity of the common operators fails
+  already for one block, and the claimed ground space of the path
+  Hamiltonians remains open.
 - `glm23_fibonacci_module_rank_scope.tex` records that the source's claim that
   the Fibonacci algebra has only the two-block invariant subspace is
   formalized for at most two blocks, where the nonnegative integer
@@ -1135,7 +1146,11 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   assuming `K N^k exp(-r q)` at every scale `1 ≤ q ≤ N` for some partition
   with lengths between `q` and `2q` is proved separately, including exact linear-depth preparation
   when the selected block length exceeds the ring length.
-- `mswc24_measurement_preparation_scope.tex` records the scope of the
+- `mswc24_measurement_preparation_scope.tex` (scope restriction, open) records
+  the remaining original-site and all-length obligations for arbitrary tensors.
+  A fixed positive blocking now gives normal sectors and both measurement depth
+  bounds without supplied canonical data, on grouped sites. The note also records
+  the scope of the
   preparation with measurements of a tensor that is not normal (paragraph
   "Long-range MPS using measurements"). The first formal statement takes
   orthogonal `q`-site states of distinct blocks, block lengths dividing `N`, and

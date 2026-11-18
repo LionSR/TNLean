@@ -12541,3 +12541,16 @@ length-one word indices is needed.
 - **Decision:** Separate the numerical/physical argument from the common
   interval selection argument. No second recursion, target approximation or
   repeated matrix-coordinate proof is introduced.
+
+### Faithful stationary matrices for normal canonical blocks — candidate (2026-11-17)
+
+- **Seen:** `MPSTensor.exists_blockTensor_normal_sectors_fixedPoints` (`hfixed`)
+  in `TNLean/MPS/CanonicalForm/BlockedNormalSectors.lean`, and
+  `MPSTensor.IsBNTCanonicalForm.exists_basisFixedPoint` in
+  `TNLean/MPS/Preparation/CanonicalFixedPoint.lean` (two occurrences).
+- **Pattern:** Apply `IsChannel.exists_unique_density_fixedPoint_of_irreducible`
+  to the Kraus transfer map, obtaining the channel from left canonicity and
+  irreducibility from the normal tensor; retain positive definiteness, trace one
+  and the stationary equation.
+- **Candidate status:** Below the three-occurrence promotion threshold. Record
+  a possible shared mathematical lemma; no abstraction or new tactic yet.

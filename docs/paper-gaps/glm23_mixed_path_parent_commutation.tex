@@ -321,6 +321,68 @@ tensor still commutes with such a $u_g$, because $u_g^*=u_{g^{-1}}$ is
 again a symmetry. A natural hypothesis for groups is closure of the
 union of the boundary ranges over all labels.
 
+\paragraph{Unitary groups.} Let a group $G$ act at both endpoints by
+unitary on-site representations $g\mapsto u_{p,g}$ with action gauges
+$Y_{p,g}$, so that $\sum_l(u_{p,g})_{kl}A_p^l=Y_{p,g}A_p^kY_{p,g}^{-1}$,
+and write $\widetilde T_g$ for the common operator of the label $g$.
+Suppose that both endpoint tensors are injective and that every gauge is
+a nonzero multiple of a unitary matrix, $Y_{p,g}=c_{p,g}U_{p,g}$.
+Applying the action identities of $g^{-1}$ and of $g$ in turn shows that
+conjugation by $Y_{p,g}Y_{p,g^{-1}}$ fixes every letter $A_p^k$, so by
+injectivity $Y_{p,g}Y_{p,g^{-1}}=\kappa_{p,g}\mathbb 1$ with
+$\kappa_{p,g}\neq0$. Since $Y_{p,g}^*=|c_{p,g}|^2Y_{p,g}^{-1}$, this
+gives
+\[
+    Y_{p,g}^*=\omega_{p,g}Y_{p,g^{-1}},\qquad
+    \omega_{p,g}=|c_{p,g}|^2/\kappa_{p,g},\qquad
+    u_{p,g}^*=u_{p,g^{-1}} .
+\]
+The computation of the paragraph ``When closure holds'', now with the
+data of $g^{-1}$ on the right, gives
+$(O^N_{\widetilde T_g,X})^*=O^N_{\widetilde T_{g^{-1}},X'}$ for every
+$N$ and $X$, with $X'=\Delta^{-1}\bar X\Delta$,
+$\Delta=\operatorname{diag}(1,t)$ and $t=\omega_{1,g}/\omega_{0,g}$.
+Hence the union $\bigcup_g\mathcal R_N(\widetilde T_g)$ is closed under
+the adjoint, although a single range need not be. The
+orthogonal-reduction argument needs only a set of operators that is
+closed under the adjoint and preserves the support $S_\gamma$; the union
+is such a set, so $h_\gamma$ commutes with every $O^2_{\widetilde T_g,X}$
+on the open interval, and by continuity on the closed one. For endpoint
+tensors in canonical form the gauge of a unitary on-site symmetry is a
+multiple of a unitary \cite[Lemma~1 and
+    Theorem~2]{PerezGarcia2008StringOrder}, so the hypothesis holds there.
+
+\paragraph{A $\mathbb Z_3$ instance.} Let $\zeta$ be a primitive cube root
+of unity, $D_0=D_1=2$, and
+\[
+    A_0=(E_{11},E_{12},E_{21},E_{22}),\qquad
+    A_1=(E_{11},2E_{12},E_{21},E_{22}),\qquad
+    Y=\operatorname{diag}(1,\zeta).
+\]
+Both tensors are one-site injective and generate different states. Since
+$YE_{rs}Y^{-1}=\zeta^{r-s}E_{rs}$, the group $\mathbb Z_3=\{e,g,g^2\}$
+acts at both endpoints by
+$u_{g^n}=\operatorname{diag}(1,\zeta^{-n},\zeta^n,1)$ with action gauge
+$Y_{p,g^n}=Y^n$, which is unitary. Here
+$u_g^2=\operatorname{diag}(1,\zeta,\zeta^2,1)$ is not a scalar.
+\emph{Per-label closure fails.} In the sector $a=b=c=0$,
+$O^2_{\widetilde T_g,X}=X_{00}\,u_g\otimes u_g$, whose diagonal entries at
+$E_{11}\otimes E_{11}$ and $E_{12}\otimes E_{11}$ are $X_{00}$ and
+$X_{00}\zeta^2$. The same entries of $(O^2_{\widetilde T_g,E_{00}})^*$ are
+$1$ and $\bar\zeta^2=\zeta$. Equality with some $O^2_{\widetilde T_g,X}$
+would force $X_{00}=1$ and then $\zeta^2=\zeta$, which is false, so
+$\mathcal R_2(\widetilde T_g)$ is not closed under the adjoint.
+\emph{Union closure holds.} Since $Y^*=Y^{-1}=Y^2$ and
+$u_g^*=u_{g^2}$, all scalars above equal one, and
+$(O^N_{\widetilde T_g,X})^*=O^N_{\widetilde T_{g^2},\bar X}$ for every $X$.
+The script \path{scripts/check_glm23_unitary_mixed_group_adjoint_closure.py}
+checks, in exact arithmetic over $\mathbb Q(\zeta)$, the covariance, the
+exact action of every $\widetilde T_{g^n}$, both entries above, the
+failure of per-label closure, the identity
+$(O^2_{\widetilde T_{g^n},E_{ij}})^*=O^2_{\widetilde T_{g^{-n}},E_{ij}}$
+for all $n,i,j$, and $[h_\gamma,O^2_{\widetilde T_{g^n},E_{ij}}]=0$ for all
+$n,i,j$ at $\gamma=1/2$ and $\gamma=1/3$.
+
 \paragraph{Classification.} In the unitary on-site case this is a scope
 restriction, not a false source claim. The construction of Section~5 is
 under-determined by the virtual gauge of the endpoint tensors, and the
@@ -402,10 +464,24 @@ symmetric canonical path remains unformalized.
               and
               \leanid{MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_canonical}
               in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedParentCommutation}.}
-          For general groups,
-          replace the per-label hypothesis by closure of the union of the
-          boundary ranges over all labels, and derive it from endpoint
-          tensors in a gauge in which the action gauges are unitary.
+    \item For unitary on-site representations of a group, the per-label
+          hypothesis fails as soon as some $u_g^2$ is not a scalar, as in
+          the $\mathbb Z_3$ instance above. It is replaced by closure of
+          the union of the boundary ranges over all labels, which follows
+          when every action gauge is a nonzero multiple of a unitary, in
+          particular for endpoint tensors in canonical form. This is
+          formalized as a further scope-restricted statement, together
+          with the commutation of the canonical parent with a star-closed
+          family of compatible operators.\footnote{\leanid{MPSTensor.MPOSymmetry.exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_inv_eq}
+              and
+              \leanid{MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_mpo_of_unitary_canonical},
+              in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedUnitaryGauge},
+              with the family form
+              \leanid{MPOTensor.parentInteractionES_commute_mpoWithBoundary_of_forall_isBoundaryCompatible}
+              in \doclink{TNLean/MPS/Symmetry/BoundaryParentCommutation}.}
+          The source's unrestricted claim, for gauges that are not
+          multiples of unitaries and for symmetries that are not on-site,
+          remains unformalized.
 \end{enumerate}
 
 \bibliographystyle{alpha}
