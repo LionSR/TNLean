@@ -80,7 +80,7 @@ TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean	gap	b61f2bce4a934184b5acaa67ef640f7069c
 TNLean/PEPS/AreaLaw/RectangularHamiltonian.lean	gap	b61f2bce4a934184b5acaa67ef640f7069c38ca2
 TNLean/PEPS/AreaLaw/RectangularSpecialization.lean	generic	8b6023e4af295464c305daba2e73c63a3241f433
 TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean	gap	b61f2bce4a934184b5acaa67ef640f7069c38ca2
-TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean	gap	b61f2bce4a934184b5acaa67ef640f7069c38ca2
+TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean	generic-doc	1218a519833b694a08aa49ff07229751c799273c
 TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean	gap	b61f2bce4a934184b5acaa67ef640f7069c38ca2
 TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean	gap	b61f2bce4a934184b5acaa67ef640f7069c38ca2
 TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean	generic	8b6023e4af295464c305daba2e73c63a3241f433
