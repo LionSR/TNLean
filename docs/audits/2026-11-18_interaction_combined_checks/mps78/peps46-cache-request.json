@@ -1,0 +1,487 @@
+{
+  "head": "dccc85e5607077b51822664e9d475287d300d607",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "toolchain": "leanprover/lean4:v4.36.0-rc1",
+  "modules": [
+    {
+      "module": "TNLean.PEPS.AreaLaw.Amplification.ConstraintWordTruncation",
+      "source_sha256": "697b049859609b349e9649afce849da27b4f04ed556dbb2071feb8122d6e442c",
+      "direct_dependencies": [
+        "QICLean.Analysis.ContractionWordDecay",
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "QICLean.Probability.PoissonWordPartition",
+        "QICLean.Probability.PoissonWordRealOccupation",
+        "TNLean.PEPS.AreaLaw.LatticeConstraints",
+        "TNLean.PEPS.AreaLaw.LatticeCounts"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Amplification.LatticeExcitedDecay",
+      "source_sha256": "b205a188e20c05d87579a5fb5ba931b3c54695df0f0938cec5369b20569c9139",
+      "direct_dependencies": [
+        "QICLean.Analysis.PoissonContractionDecay",
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.LatticeConstraints"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Amplification.LatticeRestoring",
+      "source_sha256": "ff321f8e4d0d48cb8dbbdc2d0aeb748a8f3c3a3781c0c44ffabee9ea52b1f356",
+      "direct_dependencies": [
+        "QICLean.Entropy.RestoringGroundComponent",
+        "QICLean.Entropy.RestoringNorm",
+        "QICLean.Entropy.RestoringVectors",
+        "QICLean.Entropy.SchmidtPinning",
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.Amplification.TypicalProjectors",
+        "TNLean.PEPS.AreaLaw.TwoFamilies"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Amplification.TypicalProjectors",
+      "source_sha256": "5c6a3229c3328615cda608e2428bceadadce8a93ec095eb38b6779c8c3088433",
+      "direct_dependencies": [
+        "QICLean.Entropy.TypicalDensity",
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.Algebra.ExplicitThresholds",
+        "TNLean.PEPS.AreaLaw.TailParameter",
+        "TNLean.PEPS.AreaLaw.ZeroBoundary"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.AmplificationProof",
+      "source_sha256": "4b5ab9ea9d4d9728d946000c01dd341c92b41b038ff5817521b38ef87c8b0f31",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.Lattice.EntropyComparison",
+        "TNLean.PEPS.AreaLaw.Amplification.ConstraintWordLists",
+        "TNLean.PEPS.AreaLaw.Amplification.ConstraintWordTruncation",
+        "TNLean.PEPS.AreaLaw.Amplification.LatticeAncillaSites",
+        "TNLean.PEPS.AreaLaw.Amplification.LatticeChannelSpatialOmission",
+        "TNLean.PEPS.AreaLaw.Amplification.LatticeExcitedDecay",
+        "TNLean.PEPS.AreaLaw.Amplification.RadiusBound",
+        "TNLean.PEPS.AreaLaw.Amplification.SupportedPolarCorrection",
+        "TNLean.PEPS.AreaLaw.AmplificationCutClearance",
+        "TNLean.PEPS.AreaLaw.AmplificationProofSteps",
+        "TNLean.PEPS.AreaLaw.Geometry.TemplateRows"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.AreaLawExplicitConstant",
+      "source_sha256": "6db4f2f707c743e3c2cee0ee6787900be52e0e56b96c402bea97aa98dc1d7d0a",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.BoundaryTheoremFromTwoFamilies",
+        "TNLean.PEPS.AreaLaw.Geometry.TwoFamilyAssembly",
+        "TNLean.PEPS.AreaLaw.RectangularSpecialization",
+        "TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.AreaLawTheorem",
+      "source_sha256": "e5add1df08cb482b0b6dbde9870aec334db89427db03493433d9cd455a33eca0",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.AreaLawExplicitConstant"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.PhysicalCollarInformation",
+      "source_sha256": "ca6cf8069989569caf57651314ebd8764352c834f4838da242bfd7472dff6bf9",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.CollarInformation",
+        "TNLean.PEPS.AreaLaw.Scan.BoxClearanceComparison",
+        "TNLean.PEPS.AreaLaw.Scan.PhysicalBoxBootstrap",
+        "TNLean.PEPS.AreaLaw.Scan.TemplateFinalInformation"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.RectangularSpecialization",
+      "source_sha256": "bffaf207d94a72c4aeafe1c0bc1d65432923e75c67e42c02962c955f709f9750",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.Approximation.SquareAreaLawSpecialization",
+        "TNLean.PEPS.AreaLaw.RectangularBoundary",
+        "TNLean.PEPS.AreaLaw.RectangularHamiltonian",
+        "TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyBound",
+      "source_sha256": "6c662e2a4ec0cc24aab0ea99554c7148ba6b14a8556783acf5c61c901368aaae",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.ActualRoundSplits",
+        "TNLean.PEPS.AreaLaw.Scan.EnergyBalance",
+        "TNLean.PEPS.AreaLaw.Scan.SplitCounting",
+        "TNLean.PEPS.AreaLaw.Scan.SplitEntropyBound",
+        "TNLean.PEPS.AreaLaw.Scan.TransportDimension"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyCoefficients",
+      "source_sha256": "a132aebf3c571da638f2f81cb0c4c2c1855830a9c6448ac459c70f32e1f5b498",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyDecay",
+        "TNLean.PEPS.AreaLaw.Scan.Budgets",
+        "TNLean.PEPS.AreaLaw.Scan.SharpMomentScale",
+        "TNLean.PEPS.AreaLaw.Scan.SubsystemDimensionScale"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyDecay",
+      "source_sha256": "9c9eb4bf237633eb2bdf8847a4824cc702b5eb50b426ebaf1a48ffb02ff69831",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyBound",
+        "TNLean.PEPS.AreaLaw.Scan.BadOldHistoryDecay"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualChargeEntropySum",
+      "source_sha256": "528aa1b6031ee8f8b33ef6e08c68f9cfe30d69d8f4e4ccea3dc6927c9a8f587a",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.ActualParameterIntegral",
+        "TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualChargeSelectionBound",
+      "source_sha256": "982c3792a57c01ee012e83c338f5097889089341eefea536029381c2e068c7bf",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.ActualChargeEntropySum",
+        "TNLean.PEPS.AreaLaw.Scan.ActualChargeSelection"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms",
+      "source_sha256": "61fbcfbae4aae2a7720417e2ae95c4ae87272f28b6b742ea378251eace01dd1e",
+      "direct_dependencies": [
+        "QICLean.Representation.ReplicaTransport.Setup",
+        "TNLean.Algebra.MatrixHermitianSum",
+        "TNLean.Lattice.MarginalTails",
+        "TNLean.PEPS.AreaLaw.FiniteSetTruncationGap",
+        "TNLean.PEPS.AreaLaw.Scan.DesignatedSampling"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualGlobalReplicaEnergy",
+      "source_sha256": "304fe927bbdcfa236b2a13789bf31ccdd66830fbea2ef301e015a13b33b12e97",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.ActualScanMeasures",
+        "TNLean.PEPS.AreaLaw.Scan.GlobalReplicaEnergyCoordinates"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualMarginalTails",
+      "source_sha256": "0992bf5f1b1a73573020456f4519c780567e06a0c296f178e1ab276155eed8a8",
+      "direct_dependencies": [
+        "QICLean.Analysis.RootChannel",
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.LatticeConstraints",
+        "TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualRoughLower",
+      "source_sha256": "088f628b307996558f6e293b1cc6d4cea1774a4b7229a60e7acc4181ec0f3c58",
+      "direct_dependencies": [
+        "QICLean.Algebra.ProjectionRangeIsometry",
+        "QICLean.Analysis.RegionalRoughLowerNorm",
+        "QICLean.Analysis.RoughLowerCoefficient",
+        "TNLean.PEPS.AreaLaw.Scan.ActualGlobalReplicaEnergy",
+        "TNLean.PEPS.AreaLaw.Scan.ActualTerminalPartitions",
+        "TNLean.PEPS.AreaLaw.Scan.AugmentedRootCompression"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualRoughLowerPrevector",
+      "source_sha256": "a4335914c4a463d3ea7f9dee373a47509fb78bcfc3495887b7a2502b6930d896",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.ActualRoughLower",
+        "TNLean.PEPS.AreaLaw.Scan.ActualRoughLowerRemainder",
+        "TNLean.PEPS.AreaLaw.Scan.AugmentedReplicaPrevectorProperties",
+        "TNLean.PEPS.AreaLaw.TwoFamilies"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy",
+      "source_sha256": "15c86279a1cee3041a4c98dfae85401adc3128656491f158c8394a87cb0a065d",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport",
+        "TNLean.PEPS.AreaLaw.Scan.FillTransportEndpoints"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport",
+      "source_sha256": "5bfa01e395e3451d3cf56b599bc99c9e351cbd041e9872c847aedb11f740c578",
+      "direct_dependencies": [
+        "QICLean.Representation.ReplicaTransport.FiniteFamily",
+        "TNLean.PEPS.AreaLaw.Scan.ActualTransportEstimates",
+        "TNLean.PEPS.AreaLaw.Scan.Defs"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualScanMeasures",
+      "source_sha256": "617fcea6af8103e6d8bbba73c29197fa39809d19b08f4632de16e048fe00c4a3",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms",
+        "TNLean.PEPS.AreaLaw.Scan.ActualEntropySampling",
+        "TNLean.PEPS.AreaLaw.Scan.FillTransport",
+        "TNLean.PEPS.AreaLaw.Scan.TransportRoundEnergy"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualSelectedChargeDensityEnergy",
+      "source_sha256": "92fe84f6ff2dee8641c32e8295b79ac906e95318574d080020d641a765de4817",
+      "direct_dependencies": [
+        "QICLean.Representation.ReplicaTransport.Energy",
+        "TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyCoefficients",
+        "TNLean.PEPS.AreaLaw.Scan.ActualSelectedChargeEnergy"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualSelectedChargeEnergy",
+      "source_sha256": "bcb705370a712d97aff3001836fe804189233d3f56131e778ca258617cb8c1f9",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.ActualChargeSelectionBound",
+        "TNLean.PEPS.AreaLaw.Scan.ActualGlobalReplicaEnergy",
+        "TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualSelectedSharpComparison",
+      "source_sha256": "4497e9acaf4f9790b76fbd4fa9d7e94f4c5dfe756f929bd27206cf1dfb815ed3",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.ActualSelectedChargeDensityEnergy",
+        "TNLean.PEPS.AreaLaw.Scan.ActualSharpComparison"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualSharpComparison",
+      "source_sha256": "9ce34a49150390ea7197d336085bf21771f358a003332bc6336ab5bc5ef4035b",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.ActualSharpLowerPrevector",
+        "TNLean.PEPS.AreaLaw.Scan.ActualSharpUpper",
+        "TNLean.PEPS.AreaLaw.Scan.SharpComparisonSubtraction"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualSharpLower",
+      "source_sha256": "b2d8bdad88fca0b67c2230abdded644afdbc2550880940868d1063681fd46542",
+      "direct_dependencies": [
+        "QICLean.Algebra.ProjectionRangeIsometry",
+        "QICLean.Analysis.RegionalSharpLowerNorm",
+        "TNLean.PEPS.AreaLaw.Scan.ActualGlobalReplicaEnergy",
+        "TNLean.PEPS.AreaLaw.Scan.ActualTerminalPartitions",
+        "TNLean.PEPS.AreaLaw.Scan.AugmentedRootCompression"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualSharpLowerPrevector",
+      "source_sha256": "a44ec307a17df6ca9a68920fbae5be5002b8940618778c323850e2f04a3b4653",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.ActualSharpLower",
+        "TNLean.PEPS.AreaLaw.Scan.ActualSharpLowerRemainder",
+        "TNLean.PEPS.AreaLaw.Scan.AugmentedReplicaPrevectorProperties",
+        "TNLean.PEPS.AreaLaw.Scan.StatusMarginalMoments",
+        "TNLean.PEPS.AreaLaw.TwoFamilies"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualTransportEstimates",
+      "source_sha256": "31d1b592f4eaf2945392af8b85dbab171b4e30a4d09419448251a18049393f3b",
+      "direct_dependencies": [
+        "QICLean.Representation.ReplicaTransport.Transport",
+        "TNLean.PEPS.AreaLaw.Scan.ActualChargeData",
+        "TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms",
+        "TNLean.PEPS.AreaLaw.Scan.FillSupportCompatibility",
+        "TNLean.PEPS.AreaLaw.Scan.TransportDimension"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.BoxClearanceComparison",
+      "source_sha256": "25d2fb6440767d3def9a63907659920832570b432cd82d4428e7ae96adf7dccc",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.BoxEntropySupremum"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.GenericChargeEnergy",
+      "source_sha256": "e7061b5f555b560251a835e329073b6257e7720440d4b8397dfba8951d2e838c",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyCoefficients"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.GenericSelectedChargeEnergy",
+      "source_sha256": "64d8ed2fe378e49289a2bf71c25775caa62707463d255aec86f323658eb9c22a",
+      "direct_dependencies": [
+        "QICLean.Representation.ReplicaTransport.Energy",
+        "TNLean.PEPS.AreaLaw.Scan.ActualSelectedChargeEnergy",
+        "TNLean.PEPS.AreaLaw.Scan.GenericChargeEnergy"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.PhysicalBoxBootstrap",
+      "source_sha256": "64044a638580b516e971152a5bed7a91cf31f77b2e5f0de8948bb921856e542a",
+      "direct_dependencies": [
+        "TNLean.PEPS.AreaLaw.Scan.BoxEntropySupremum",
+        "TNLean.PEPS.AreaLaw.Scan.ExponentBootstrap",
+        "TNLean.PEPS.AreaLaw.Scan.RectangleBootstrapGeometry",
+        "TNLean.PEPS.AreaLaw.Scan.RectangleSourceEntropy",
+        "TNLean.PEPS.AreaLaw.Scan.SourceBootstrapEntropy"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceActualInformation",
+      "source_sha256": "e5f71f33cd959c535ce97777d1165a3afd4884ba27ee661de585db6a5f72bd20",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.Scan.ActualSelectedCollarInformation",
+        "TNLean.PEPS.AreaLaw.Scan.SharpInformationScalar",
+        "TNLean.PEPS.AreaLaw.Scan.SourceActualTerminalEntropy",
+        "TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpEnergy"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceBootstrapEntropy",
+      "source_sha256": "0a1b8b447e6de5c2a7a0d3368ae98902a176bb1d7ae2503c20573f98e357a32c",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.Scan.BootstrapScannerExponents",
+        "TNLean.PEPS.AreaLaw.Scan.BootstrapSelectedEnergy",
+        "TNLean.PEPS.AreaLaw.Scan.BootstrapTypicalBudget",
+        "TNLean.PEPS.AreaLaw.Scan.FixedWeightTransportSmallness",
+        "TNLean.PEPS.AreaLaw.Scan.RoughSelectedDensity",
+        "TNLean.PEPS.AreaLaw.Scan.ScannerRoundedAdmissibility",
+        "TNLean.PEPS.AreaLaw.Scan.SourceRoughSelection",
+        "TNLean.PEPS.AreaLaw.Scan.TypicalReplicaAbsorption"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceFinalInformation",
+      "source_sha256": "139a11b9bf2e3755b439b1dcc64da52ea9975435ab0c6181bb060a862a97f49d",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.Scan.FinalSharpErrorPower",
+        "TNLean.PEPS.AreaLaw.Scan.FinalSharpTransportSmallness",
+        "TNLean.PEPS.AreaLaw.Scan.PhysicalInformationDimension",
+        "TNLean.PEPS.AreaLaw.Scan.SourceActualInformation"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceRoughSelection",
+      "source_sha256": "2f2b06abe8cfe78b6f4210eb79f55c89e0afd2cb08a99961e0f40af8c7bb1800",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.GlobalSchmidtBellPrevector",
+        "TNLean.PEPS.AreaLaw.Scan.ActualRoughLowerPrevector",
+        "TNLean.PEPS.AreaLaw.Scan.BandCountGrowth",
+        "TNLean.PEPS.AreaLaw.Scan.GenericSelectedChargeEnergy",
+        "TNLean.PEPS.AreaLaw.Scan.RoughSelectionBudget",
+        "TNLean.PEPS.AreaLaw.Scan.SourceEndpointRoughBudget",
+        "TNLean.PEPS.AreaLaw.Scan.TargetTypicalWindow"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceRoundedInformation",
+      "source_sha256": "a69607f7b9617b43e326e69e01ab5b27d20eba920a0b702a6c5759634e80f868",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.Scan.FinalScannerAdmissibility",
+        "TNLean.PEPS.AreaLaw.Scan.SourceFinalInformation"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpComparison",
+      "source_sha256": "ab702b4e54435576c8dec7ff34589ea279958716def82b2dec30b0c08cbdd1df",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.GlobalSchmidtBellPrevector",
+        "TNLean.PEPS.AreaLaw.Scan.ActualSelectedSharpComparison",
+        "TNLean.PEPS.AreaLaw.Scan.RoughSelectionBudget",
+        "TNLean.PEPS.AreaLaw.Scan.SourceEndpointRoughBudget",
+        "TNLean.PEPS.AreaLaw.Scan.SourceTargetSharpMoments"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpEnergy",
+      "source_sha256": "5c070743a4393f9721c2df5bff6784e1b080dc2e9456b1573ec1fe25fb2cd599",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.Scan.SourceSelectedEnergyPower",
+        "TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpComparison",
+        "TNLean.PEPS.AreaLaw.Scan.StrongSelectedDensityPower",
+        "TNLean.PEPS.AreaLaw.Scan.SubsystemDimensionScale",
+        "TNLean.PEPS.AreaLaw.SelectedSchmidtEntropyBounds"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceTargetSharpMoments",
+      "source_sha256": "332becc3ec36fac3ec2fb8815ad283d3d3b10c52405e22ccc048fbb471735496",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.Scan.SharpMomentScale",
+        "TNLean.PEPS.AreaLaw.Scan.StatusMarginalMoments",
+        "TNLean.PEPS.AreaLaw.Scan.StatusScaleSeparation",
+        "TNLean.PEPS.AreaLaw.Scan.TargetTypicalWindow"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.StatusMarginalMoments",
+      "source_sha256": "2a7b053207a33d9fe7be1fc7a5367cfbb276f1822fda59016f03ca63e97b5eef",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.Scan.ActualMarginalTails",
+        "TNLean.PEPS.AreaLaw.Scan.StatusMarginalBudget"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.TargetTypicalWindow",
+      "source_sha256": "e2cb55798e1c01bb54381a3d86985c2f30254ee1ee690f3f78e9f6ad5e55083b",
+      "direct_dependencies": [
+        "QICLean.Analysis.TypicalTailScales",
+        "QICLean.Entropy.TypicalStateFromTail",
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.Algebra.ExplicitThresholds",
+        "TNLean.PEPS.AreaLaw.Scan.ActualMarginalTails",
+        "TNLean.PEPS.AreaLaw.Scan.TargetGeometry",
+        "TNLean.PEPS.AreaLaw.ZeroBoundary"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.TemplateFinalInformation",
+      "source_sha256": "58ad54ecdc2e5e8b381fe94673e66c1e2ee3fe671ad6da6df6a3cdc5d365820b",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.LatticeCounts",
+        "TNLean.PEPS.AreaLaw.Scan.SourceRoundedInformation",
+        "TNLean.PEPS.AreaLaw.Scan.TemplateScanner",
+        "TNLean.PEPS.AreaLaw.Scan.TemplateSourceEntropy"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.TemplateSourceEntropy",
+      "source_sha256": "9142d90fffe17edf63c91110b7d20b7b9d6ade41fce6cd0b0e43587f908de3f9",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.Geometry.Exponents",
+        "TNLean.PEPS.AreaLaw.Geometry.TemplateBoxEntropy",
+        "TNLean.PEPS.AreaLaw.InitialBoxEstimate",
+        "TNLean.PEPS.AreaLaw.Scan.ActualHistory",
+        "TNLean.PEPS.AreaLaw.Scan.PrefixBoundary"
+      ]
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries",
+      "source_sha256": "79c713263f353496a1ecbcab959f34987a974fafccc0aa578ca28f68e4e2fad2",
+      "direct_dependencies": [
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.PEPS.AreaLaw.BoundaryConventions",
+        "TNLean.PEPS.AreaLaw.TheoremStatements"
+      ]
+    }
+  ],
+  "requirements": "Provide exact-source successful build records, all olean/private/server/ir sidecars and artifact hashes, plus transitive dependency source/artifact hashes. Do not assume shared disks. Import only via authorized transfer. This worker does not compile these 46 owners.",
+  "assignment": "695c is sole SnakeGridAreaLaw target owner; MPS77 worker will not compile Snake or these PEPS owners. This is source/provenance handoff, not a request for duplicate builds."
+}
