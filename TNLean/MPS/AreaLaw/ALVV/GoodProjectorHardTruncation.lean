@@ -176,9 +176,12 @@ theorem exists_three_bulk_hard_truncation_spectral_comparison
         (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L))) ∧
       (∀ r, F (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
         (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L))) ∧
-      F (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L 0 (a + 1) : Finset (Fin L)) ∧
-      F (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L (a + 2 * ell) (b + 1) : Finset (Fin L)) ∧
-      F (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L (b + 2 * ell) L : Finset (Fin L)) ∧
+      F (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (interval L 0 (a + 1) : Finset (Fin L)) ∧
+      F (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (interval L (a + 2 * ell) (b + 1) : Finset (Fin L)) ∧
+      F (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (interval L (b + 2 * ell) L : Finset (Fin L)) ∧
       ∃ (hH : H.IsHermitian) (hHt : Ht.IsHermitian),
         let bH := (isSymmetric_toEuclideanLin_iff.mpr hH).eigenvectorBasis
           finrank_euclideanSpace
@@ -303,17 +306,19 @@ theorem exists_three_bulk_hard_truncation_spectral_comparison
         (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L))) ∧
       (∀ r, F (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
         (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L))) ∧
-      F (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L 0 (a + 1) : Finset (Fin L)) ∧
-      F (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L (a + 2 * ell) (b + 1) : Finset (Fin L)) ∧
-      F (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L (b + 2 * ell) L : Finset (Fin L)) := by
+      F (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (interval L 0 (a + 1) : Finset (Fin L)) ∧
+      F (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (interval L (a + 2 * ell) (b + 1) : Finset (Fin L)) ∧
+      F (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (interval L (b + 2 * ell) L : Finset (Fin L)) := by
     have hbulk (j : Fin 5) (c : ℝ) (lo hi : ℕ)
         (hR : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (A j) (interval L lo hi)) :
         cfc (fun r : ℝ ↦ min r (e j + t)) (A j) - (c : ℂ) • 1 ∈
           ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L lo hi : Finset (Fin L)) :=
       sub_mem (ManyBody.cfc_mem_supportedOperators _ hR)
         (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
-    exact ⟨fun r ↦ (hs _),
-      fun r ↦ (hs _),
+    exact ⟨fun r ↦ hs ⟨a + r.val, _⟩, fun r ↦ hs ⟨b + r.val, _⟩,
       hbulk 0 _ _ _ (hAs 0), hbulk 2 _ _ _ (hAs 2), hbulk 4 _ _ _ (hAs 4)⟩
   beta_reduce at hnorm
   refine ⟨hxunit, hx, hlo, hdecomp, hsupp.1, hsupp.2.1, hsupp.2.2.1, hsupp.2.2.2.1,
