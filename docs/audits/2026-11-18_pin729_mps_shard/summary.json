@@ -1,15 +1,15 @@
 {
   "selected": 865,
-  "build_and_strict_passed": 742,
-  "not_completed": 123,
+  "build_and_strict_passed": 746,
+  "not_completed": 119,
   "historical_failed_commands": 3,
   "unresolved_failed_targets": 0,
-  "build_commands": 2287,
-  "strict_commands": 744,
-  "build_seconds": 8558.605896233072,
-  "strict_seconds": 3715.560899678734,
+  "build_commands": 2366,
+  "strict_commands": 748,
+  "build_seconds": 8820.394992816102,
+  "strict_seconds": 3770.0136176457163,
   "production_edit_seconds": null,
   "production_edit_note": "Two authorized lines changed in separate isolated fix commits; edit time not separately measured. Prior validation phase had zero production edits.",
-  "state": "running; resume.py continues bounded batches",
+  "state": "old writers exited; final handoff snapshot",
   "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b"
 }

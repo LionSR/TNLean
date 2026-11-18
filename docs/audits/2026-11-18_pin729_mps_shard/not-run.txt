@@ -2,17 +2,13 @@ TNLean/MPS/AreaLaw.lean
 TNLean/MPS/AreaLaw/ALVV.lean
 TNLean/MPS/AreaLaw/ALVV/FrustrationFreeTree.lean
 TNLean/MPS/AreaLaw/CompressedBlockColumn.lean
-TNLean/MPS/AreaLaw/LowDensityDesignatedApproximation.lean
 TNLean/MPS/AreaLaw/LowDensityTreeAlgorithm.lean
-TNLean/MPS/AreaLaw/LowEnergyMPSBasis.lean
 TNLean/MPS/AreaLaw/PhysicalDGCanonicalApproximation.lean
 TNLean/MPS/AreaLaw/PhysicalDGCanonicalEnergyApproximation.lean
 TNLean/MPS/AreaLaw/PhysicalDGInterleavedApproximation.lean
 TNLean/MPS/AreaLaw/PhysicalDGInterleavedPolynomialBond.lean
 TNLean/MPS/AreaLaw/PhysicalLDSampledTree.lean
-TNLean/MPS/AreaLaw/PhysicalLDTree.lean
 TNLean/MPS/AreaLaw/PhysicalLDTreeRefinement.lean
-TNLean/MPS/AreaLaw/PositiveDimensionLowDensityGlobalApproximation.lean
 TNLean/MPS/AreaLaw/ProtocolMPSApproximation.lean
 TNLean/MPS/AreaLaw/SharpChainCompression.lean
 TNLean/MPS/AreaLaw/SharpPhysicalCompression.lean
