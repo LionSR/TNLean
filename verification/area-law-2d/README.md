@@ -18,7 +18,7 @@ frustration-free assumption is added.
 The extracted statement is `TNLean.PEPS.AreaLaw.UniformAreaLaw`, from
 `TNLean/PEPS/AreaLaw/TheoremStatements.lean`. The interaction and boundary
 conventions follow `TNLean/Lattice/FiniteDomain.lean` and
-`TNLean/Lattice/LocalHamiltonian.lean`. No TNLean or QICLean import is needed.
+`TNLean/Lattice/StateSpace.lean`. No TNLean or QICLean import is needed.
 
 The package contains no reference solution, proof bundle or `Solution.lean`.
 The final `sorry` in the challenge is intentional. A candidate supplies a

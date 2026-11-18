@@ -170,14 +170,14 @@ end Roots
 
 /-- The actual-round entropy telescope at any constants `c₀, C_ent, e_ent, C_en, e_en`
 satisfying the finite-family transport bound, such as QICLean's universal transport constants,
-which depend on none of `q, R, J, Δ`. Source: `08-scanner.tex`, lines 442–457. -/
+which depend on none of `q, R, J, Δ`. The bound involves no Hamiltonian: the error pair of the
+transport estimate does not depend on the interaction, so the proof takes it at the zero
+interaction. Source: `08-scanner.tex`, lines 442–457. -/
 theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound
     {c₀ Cent eent Cen een : ℝ} (htransport : FiniteFamilyTransportBound c₀ Cent eent Cen een) :
-    ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
+    ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {Δ : ℝ}
       [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
-      (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-      (_h : PlaneInteraction Λ q R) (_ : ∀ X, (_h.term X).IsHermitian) (_ : ∀ X, ‖_h.term X‖ ≤ J)
-          (Ω : StateSpace Λ q)
+      (aux : Bool → ℕ) [∀ b, NeZero (aux b)] (Ω : StateSpace Λ q)
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
       S.graph = planeDomainGraph Λ →
       S.depth = (fun x => ambientDepth T hT x.val) →
@@ -208,7 +208,7 @@ theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBou
               (2 * S.n * S.m : ℕ) *
                 (Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k) := by
   classical
-  intro Λ T q R J Δ _ _ aux _ h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ
+  intro Λ T q R Δ _ _ aux _ Ω S hT hgraph hdepth hanchor hΔ hΩ
     L hn hr hDpos hD hL hC hrows hclear a ha haℓ
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
@@ -216,7 +216,9 @@ theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBou
   let D := S.actualRoundData hm hM
   let ℓ := transportLogDimBound q S.r₀
   obtain ⟨β, rem, Cβ, hCβ, hβ0, hrem0, hβ, hrem, hround⟩ :=
-    actualRounds_transport_domainGraph_of_finiteFamilyTransportBound htransport aux h hh hhJ Ω S hT
+    actualRounds_transport_domainGraph_of_finiteFamilyTransportBound htransport (J := 0) aux
+      (⟨fun _ ↦ 0, fun _ ↦ zero_mem _⟩ : PlaneInteraction Λ q R) (fun _ ↦ isHermitian_zero)
+      (fun _ ↦ by simp) Ω S hT
       hgraph hdepth hanchor hΔ hΩ hn hr hDpos hD hL hC
       hrows hclear ha haℓ
   refine ⟨β, Cβ, hCβ, hβ0, hβ, ?_⟩
@@ -263,11 +265,9 @@ norm difference plus exactly `2 * S.n * S.m` copies of the common error
 no physical prevector, energy identification or norm comparison is required. -/
 theorem actualRounds_entropy_integral_le_domainGraph :
     ∃ c₀ Cent eent : ℝ, 0 < c₀ ∧
-      ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
+      ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
-        (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-        (_h : PlaneInteraction Λ q R) (_ : ∀ X, (_h.term X).IsHermitian) (_ : ∀ X, ‖_h.term X‖ ≤ J)
-            (Ω : StateSpace Λ q)
+        (aux : Bool → ℕ) [∀ b, NeZero (aux b)] (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →

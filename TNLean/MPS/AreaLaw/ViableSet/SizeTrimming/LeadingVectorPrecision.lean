@@ -145,7 +145,7 @@ theorem exists_leading_vector_of_approximate_compressed_boundary_solution
     have hKn : ‖K‖ ≤ ‖Hleft‖ := l2_opNorm_isometricCompression_le Z hZ Hleft
     have hε0 : 0 ≤ ε := (rectangularTraceNorm_nonneg _).trans hclose
     have hHleft : ‖Hleft‖ ≤ 4 * L :=
-      (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
+      (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2
     have hsum : ‖Hleft‖ + ‖B‖ ≤ 6 * L := by linarith only [hHleft, hBn]
     calc
       2 * (2 * ‖K‖ * ε + ‖B‖ * (2 * ε)) = 4 * (‖K‖ + ‖B‖) * ε := by ring
@@ -288,7 +288,7 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_of_density_a
     apply ha.trans'
     field_simp [ne_of_gt hΔ]
     nlinarith only [hscaled, hΔ]
-  exact h.nearby_glued_vector_viable_bounds hh hhJ hΩ W hW u u' hu hu' hu'P
+  exact h.nearby_glued_vector_viable_bounds hhJ hΩ W hW u u' hu hu' hu'P
     hEreserve hareserve hdist
 
 /-- The finite-precision LVV conclusion depends only on the ray of the exact leading
