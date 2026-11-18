@@ -185,7 +185,7 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
   intro L hL h hh hhJ Ω E₀ hΩ hgap hspan
   have hLreal : (1 : ℝ) ≤ L := by exact_mod_cast (show 1 ≤ L by omega)
   by_cases hlarge : L₀ ≤ L
-  · let i : ι := ⟨⟨L, h, Ω, E₀⟩, hlarge, hΩ, hgap, hspan⟩
+  · let i : ι := ⟨⟨L, h, Ω, E₀⟩, hlarge, hh, hhJ, hΩ, hgap, hspan⟩
     let w := ⌈D * Real.log (L : ℝ)⌉₊
     have herrors := protocol_error_bounds hL
     obtain ⟨Gate, hGateFinite, hGateDecidable, participants, root, hroot,
