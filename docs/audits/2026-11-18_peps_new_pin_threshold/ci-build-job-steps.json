@@ -1,0 +1,231 @@
+{
+  "id": 134879110163,
+  "status": "in_progress",
+  "conclusion": null,
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 1,
+      "started_at": "2026-11-18T14:38:44Z",
+      "completed_at": "2026-11-18T14:38:46Z"
+    },
+    {
+      "name": "Run actions/checkout@v7",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 2,
+      "started_at": "2026-11-18T14:38:46Z",
+      "completed_at": "2026-11-18T14:38:59Z"
+    },
+    {
+      "name": "Restore Lean build cache",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 3,
+      "started_at": "2026-11-18T14:38:59Z",
+      "completed_at": "2026-11-18T14:39:00Z"
+    },
+    {
+      "name": "Report exact-input cache lookup",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 4,
+      "started_at": "2026-11-18T14:39:00Z",
+      "completed_at": "2026-11-18T14:39:00Z"
+    },
+    {
+      "name": "Select compatible main cache configuration",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 5,
+      "started_at": "2026-11-18T14:39:00Z",
+      "completed_at": "2026-11-18T14:39:20Z"
+    },
+    {
+      "name": "Look up compatible main cache without restoring",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 6,
+      "started_at": "2026-11-18T14:39:20Z",
+      "completed_at": "2026-11-18T14:39:20Z"
+    },
+    {
+      "name": "Select a validated exact compatible cache",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 7,
+      "started_at": "2026-11-18T14:39:20Z",
+      "completed_at": "2026-11-18T14:39:20Z"
+    },
+    {
+      "name": "Run leanprover/lean-action@v1",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 8,
+      "started_at": "2026-11-18T14:39:20Z",
+      "completed_at": "2026-11-18T14:40:55Z"
+    },
+    {
+      "name": "Restore validated compatible cache by exact key",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 9,
+      "started_at": "2026-11-18T14:40:55Z",
+      "completed_at": "2026-11-18T14:40:55Z"
+    },
+    {
+      "name": "Discard unvalidated cross-commit artifacts",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 10,
+      "started_at": "2026-11-18T14:40:55Z",
+      "completed_at": "2026-11-18T14:40:55Z"
+    },
+    {
+      "name": "Prepare verified coherent QIC prerequisites",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 11,
+      "started_at": "2026-11-18T14:40:55Z",
+      "completed_at": "2026-11-18T14:40:55Z"
+    },
+    {
+      "name": "Export coherent QIC prerequisites",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 12,
+      "started_at": "2026-11-18T14:40:55Z",
+      "completed_at": "2026-11-18T14:40:55Z"
+    },
+    {
+      "name": "Prepare verified coherent TN prerequisites",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 13,
+      "started_at": "2026-11-18T14:40:55Z",
+      "completed_at": "2026-11-18T14:40:55Z"
+    },
+    {
+      "name": "Export coherent TN prerequisites",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 14,
+      "started_at": "2026-11-18T14:40:55Z",
+      "completed_at": "2026-11-18T14:40:55Z"
+    },
+    {
+      "name": "Check directly changed Lean sources and tests strictly",
+      "status": "in_progress",
+      "conclusion": null,
+      "number": 15,
+      "started_at": "2026-11-18T14:40:55Z",
+      "completed_at": null
+    },
+    {
+      "name": "Build changed Lean modules early",
+      "status": "pending",
+      "conclusion": null,
+      "number": 16,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "name": "Build Lean project and capture timings",
+      "status": "pending",
+      "conclusion": null,
+      "number": 17,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "name": "Validate closed resource diagnostics for upload",
+      "status": "pending",
+      "conclusion": null,
+      "number": 18,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "name": "Upload build resource diagnostics",
+      "status": "pending",
+      "conclusion": null,
+      "number": 19,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "name": "Check changed Lean files and affected tests strictly",
+      "status": "pending",
+      "conclusion": null,
+      "number": 20,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "name": "Check changed Lean compilation times",
+      "status": "pending",
+      "conclusion": null,
+      "number": 21,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "name": "Run text-based style linter",
+      "status": "pending",
+      "conclusion": null,
+      "number": 22,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "name": "Generate Blueprint Lean declaration list",
+      "status": "pending",
+      "conclusion": null,
+      "number": 23,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "name": "Check Blueprint Lean declarations",
+      "status": "pending",
+      "conclusion": null,
+      "number": 24,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "name": "Generate paper-gap Lean declaration list",
+      "status": "pending",
+      "conclusion": null,
+      "number": 25,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "name": "Check paper-gap Lean declarations",
+      "status": "pending",
+      "conclusion": null,
+      "number": 26,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "name": "Save Lean build cache (main only)",
+      "status": "pending",
+      "conclusion": null,
+      "number": 27,
+      "started_at": null,
+      "completed_at": null
+    },
+    {
+      "name": "Post Run actions/checkout@v7",
+      "status": "pending",
+      "conclusion": null,
+      "number": 54,
+      "started_at": null,
+      "completed_at": null
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "production_head": "a28f35a6b916ee5a24d3836a31d13d74f832e11f",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "original_pid": 85524,
+  "original_session": 38476,
+  "queue_exited": true,
+  "stop_reason": "disk below 1 GiB at target boundary",
+  "free_GiB": 0.9861030578613281,
+  "passed_in_591": 124,
+  "remaining_in_591": 467,
+  "additional_passed_outside_manifest": [
+    "TNLean/PEPS/Examples/HoneycombCluster.lean"
+  ],
+  "unresolved_compile_failures": [],
+  "interrupted_not_compile_failure": "initial path-sorted Approximation aggregator stopped to use dependency order; raw log retained",
+  "manifests": {
+    "passed_this_queue": {
+      "count": 119,
+      "sha256": "6dbe93f38e63774851aa5caeb72227613de10db2887a6018c4f5ee0bfe7e41b9"
+    },
+    "passed_prior": {
+      "count": 5,
+      "sha256": "76c6299fef09b7540d92c29ed00f3362f3e5299cb5e4f6ac7ec0814cf32c9347"
+    },
+    "remaining": {
+      "count": 467,
+      "sha256": "de4021245915534449a563ac81964f9817209f13d8327d36d0353e7fe478f8aa"
+    }
+  },
+  "ci_run": 44326484230,
+  "ci_build_job": 134879110163,
+  "ci_checkout_commit": null,
+  "ci_BASE_SHA": null,
+  "ci_PR_HEAD_SHA": null,
+  "ci_actual_first_parent": null,
+  "ci_log_boundary": "gh run view refuses running-job logs; direct endpoint Forbidden; dynamic REST base not used as checkout proof"
+}
