@@ -260,9 +260,21 @@ from the norm perturbation $\|G-\widehat G\|\leq\xi$. The family improves
 viability from the window at $c_1$ to the window at $c_0$ with contraction
 $(2e^{-2k\sqrt{(c_1-c_0)/(M-c_0)}})^2$, $M=3t(1+\log m)+4\ell+34+\xi$. This is
 \leanid{TNLean.MPS.AreaLaw.ALVV.exists_efficient_soft_low_density_family}.
-The parameters are not chosen: a calibration making the losses and the
-contraction small before the chain length, the source's parameter choice and
-the running time are not formalized.
+For fixed $q\geq2$ and buffer $0<w\leq1$, the calibration of the gapped family
+at the gap $g=w^2/2$ chooses $u$ before the chain length, with $\ell=u^8$,
+$m=u^{10}$, $t=3m$, $k=u^{16}$, $T=u^9$ and precision
+$\xi=\min\{1,\tau g^2/(20000(M+g+8))\}$. With the window resolution
+$h=w^2/(1000(8\eta+24))$, for every band width $3w\leq\eta\leq34$ both losses are at
+most $1/200$, the residual scale is at most $w^2/(2\cdot10^6)$, and the
+contraction satisfies $D^{12}\Delta\leq10^{-5}$; the member bond is bounded by a
+natural polynomial in the chain length. This is
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_efficient_soft_low_density_family}.
+Two restrictions remain. The band width is at most $34$, because the
+calibrated residual floor $156+2g$ must cover $2(\eta+44)$. The parameters
+depend on $w$: in the source's use the buffer is $\mu/(3\log n)$, so the
+parameters then depend on the chain length and the bond is no longer polynomial
+for fixed parameters. The source's parameter choice and the running time are
+not formalized.
 \section{The source's parameter choices: what is checked here}
 The source text is not available to this formalization, so the printed
 parameter choices of Proposition \texttt{prop:Cheby-AGSP-eff} and Theorems

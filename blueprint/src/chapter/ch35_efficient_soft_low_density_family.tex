@@ -155,7 +155,71 @@ than for the source's parameter choice.
 
 For fixed $m$, $k$ and $\ell$, the bond $\max\{1,D_0\}^{2k}$ is polynomial in
 $N$ and $1/\xi$, since the cluster order $r$ is logarithmic in $N^2t2^{m+1}/\xi$.
-The theorem does not choose the parameters. A calibration that makes the
-losses and $\Delta$ small before the chain length, as for the gapped family,
-is not formalized; nor is the source's own parameter choice or a running-time
-bound.
+The next two statements choose the parameters.
+
+\begin{lemma}[Scalar budgets for the low-density calibration]
+    \label{lem:soft_low_density_calibration_budgets}
+    \lean{TNLean.MPS.AreaLaw.ALVV.soft_residual_le_of_floor_le,
+        TNLean.MPS.AreaLaw.ALVV.soft_window_loss_le,
+        TNLean.MPS.AreaLaw.ALVV.softWindowPerturbationLoss_le,
+        TNLean.MPS.AreaLaw.ALVV.soft_low_density_contraction_le,
+        TNLean.MPS.AreaLaw.ALVV.exists_soft_low_density_calibration_data,
+        TNLean.MPS.AreaLaw.ALVV.soft_low_density_calibrated_losses}
+    \leanok
+
+    \uses{lem:soft_low_density_window_closeness}
+    Let $q\geq2$ and $0<w\leq1$, and put $g=w^2/2$. There is an integer $u\geq2$
+    such that $\ell=u^8$, $m=u^{10}$, $t=3m$, $k=u^{16}$ and $T=u^9$, with the
+    count $D$, the ceiling $M=3t(1+\log m)+4\ell+34$, $\tau=(D^{24}M^{10})^{-1}$ and
+    $\xi=\min\{1,\tau g^2/(20000(M+g+8))\}$, satisfy the following for every
+    $3w\leq\eta\leq34$, every $-30\leq\mu\leq E\leq4$, every crossing count
+    $C\leq4$ and every $R\leq M+2$. With the window resolution
+    $h=w^2/(1000(8\eta+24))$, every residual scale is at most $w^2/(2\cdot10^6)$,
+    the conditions of Lemma~\ref{thm:efficient_soft_low_density_family} hold,
+    $2(L_2+\delta_R(c_1))\leq1/200$, $2(\delta_R(c_0-w/2)+L_1)\leq1/200$ and
+    $D^{12}\Delta\leq10^{-5}$. The member bond is at most $C_{\mathrm{pol}}(N+1)^{p}$
+    for natural constants chosen before $N$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:soft_low_density_window_closeness}
+    The calibration of the gapped family at the gap $g$ gives the residual bound
+    $\tau g/10^6\leq w^2/(2\cdot10^6)$ at the floor $156+2g\geq2(\eta+44)$, and
+    every residual scale with a smaller floor and at most four crossing terms is
+    smaller. With $\rho\leq h$ and $\lceil x\rceil\leq x+1$, each windowed loss is
+    at most $(8h\eta+24h^2)/w^2\leq1/1000$. The precision satisfies
+    $\xi\leq w^4/(80000(M+8))$, which bounds each perturbation loss by
+    $(M+74)w^2/(10^4(M+8))\leq1/1000$. The two windows are separated by at least
+    $w/2$, and $c_0\geq-30$, so the exponent of $\Delta$ is at least that of the
+    calibrated contraction at the gap $g$, which is at most $(D^{12}M^{10})^{-1}$.
+\end{proof}
+
+\begin{lemma}[The calibrated efficient soft family for low-density spectra]
+    \label{lem:calibrated_efficient_soft_low_density_family}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_efficient_soft_low_density_family}
+    \leanok
+
+    \uses{thm:efficient_soft_low_density_family,
+        lem:soft_low_density_calibration_budgets}
+    Let $q\geq2$ and $0<w\leq1$. The parameters of
+    Lemma~\ref{lem:soft_low_density_calibration_budgets} and a polynomial bound
+    $C_{\mathrm{pol}}(N+1)^{p}$ for the member bond are chosen before the chain
+    length. For every chain and every estimate, and every band width
+    $3w\leq\eta\leq34$, the windows of $\widehat G$ at $c_1$ and $c_0$ satisfy:
+    the window of $H$ at $E+\eta$ is $1/200$-close to the window at $c_1$, the
+    window at $c_0$ is $1/200$-close to the window of $H$ at $E+\eta-3w$, and the
+    family improves viability from the first window to the second with
+    $D^{12}\Delta\leq10^{-5}$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:efficient_soft_low_density_family,
+        lem:soft_low_density_calibration_budgets}
+    Apply Lemma~\ref{thm:efficient_soft_low_density_family} at these parameters,
+    with $T=u^9$ and the window resolution $h$, and bound its losses by
+    Lemma~\ref{lem:soft_low_density_calibration_budgets}.
+\end{proof}
+
+The band width is at most $34$ and the parameters depend on the buffer $w$. In
+the source's use $w$ shrinks with the chain length, and then the bond is no
+longer polynomial for fixed parameters; this is recorded
+in~\cite{gap:alvv16_soft_regional_residuals}. The source's own parameter choice
+and a running-time bound are not formalized.
