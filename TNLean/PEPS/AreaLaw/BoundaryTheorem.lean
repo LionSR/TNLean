@@ -424,8 +424,10 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
     (le_max_right _ _).trans (le_max_right _ _)
   have h2 := two_le_uniformAreaLawScale N₁ N₂ C₂
   intro Λ h hh hhJ E₀ Ω hΩ hgap hspan A
-  have hpsd := hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan
-  have hmem : Ω ∈ groundSpace h.hamiltonian E₀ := hspan ▸ Submodule.mem_span_singleton_self _
+  have hpsd := hgap.posSemidef_sub_smul_one
+    (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan
+  have hmem : Ω ∈ groundSpace h.hamiltonian E₀ :=
+    hspan ▸ Submodule.mem_span_singleton_self _
   rcases Nat.eq_zero_or_pos (edgeBoundary Λ A).card with hb | hb
   · rw [regionalEntropy_eq_zero_of_edgeBoundary_eq_empty h hh hΔ hΩ hgap hspan
       (Finset.card_eq_zero.mp hb), hb]
