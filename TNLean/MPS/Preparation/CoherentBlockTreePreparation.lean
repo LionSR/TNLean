@@ -147,7 +147,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_sum_blockIsometryState
       (fun j => by simpa using hω j j) hW α).mono ?_
     intro x hx
     obtain ⟨k, y, hy₁, hy₂, rfl⟩ := mem_treeCentralSites.mp hx
-    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, k, y, hy₁, by have := (hT k).le; omega, rfl⟩
+    exact ⟨k, y, hy₁, by have := (hT k).le; omega, rfl⟩
   have hseed : IsPreparedWithMeasurementRoundsInDepth CG seed := by
     apply hCG ℓ hN hr hℓ
     rw [sum_extend_zero hdig₀ α (fun _ a => star a * a) (by simp)]
