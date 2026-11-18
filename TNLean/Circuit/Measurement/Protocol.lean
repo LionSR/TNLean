@@ -189,7 +189,7 @@ structure MeasurementProtocol (d N : ℕ) [NeZero N] where
   /-- The site vectors of the product vector the protocol starts from. -/
   initial : Fin N → Fin d → ℂ
   /-- The local circuit applied before the measurement. -/
-  first : List (Layer d N)
+  first : List (RingLayer d N)
   /-- The sites measured in the computational basis. -/
   measured : Finset (Fin N)
   /-- The unitary applied at the site `i` after the outcome `m`; it may depend on the whole

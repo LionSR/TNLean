@@ -80,7 +80,7 @@ theorem layerOfListGate_key {i : ι} (hi : i ∈ l) : layerOfListGate l key G (k
 
 /-- The layer of the gates `G i` on the pairs `{key i, key i + 1}` for `i` in the list `l`, the
 pairs being pairwise disjoint. -/
-noncomputable def layerOfList : Layer d N where
+noncomputable def layerOfList : RingLayer d N where
   bonds := by classical exact (l.map key).toFinset
   gate := layerOfListGate l key G
   gate_mem_unitary k hk := by
@@ -231,13 +231,13 @@ theorem pairwise_disjoint_two : ∀ {hs : List (TeleportHop N)}, Valid hs →
 variable [NeZero d]
 
 /-- The first layer of a valid list of hops: the gates preparing the entangled pairs. -/
-noncomputable def layerOne (hs : List (TeleportHop N)) (hv : Valid hs) : Layer d N :=
+noncomputable def layerOne (hs : List (TeleportHop N)) (hv : Valid hs) : RingLayer d N :=
   layerOfList hs TeleportHop.k₁ TeleportHop.gate₁ (pairwise_disjoint_one hv)
     (fun h _ => h.gate₁_mem_unitary) fun h _ => h.bond_k₁ ▸ h.gate₁_mem_supportedOperators
 
 /-- The second layer of a valid list of hops: the gates of the measurements in the basis of
 maximally entangled pairs. -/
-noncomputable def layerTwo (hs : List (TeleportHop N)) (hv : Valid hs) : Layer d N :=
+noncomputable def layerTwo (hs : List (TeleportHop N)) (hv : Valid hs) : RingLayer d N :=
   layerOfList hs TeleportHop.k₂ TeleportHop.gate₂ (pairwise_disjoint_two hv)
     (fun h _ => h.gate₂_mem_unitary) fun h _ => h.bond_k₂ ▸ h.gate₂_mem_supportedOperators
 
@@ -465,7 +465,7 @@ the first layers of all hops, the second layers of all hops, the measurement of 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("creating
 nearest-neighbor entangled pairs, then performing simultaneous measurements, and correcting
 (without postselection) based on the measurement outcomes"). -/
-noncomputable def round (pre : List (Layer d N)) (hs : List (TeleportHop N)) (hv : Valid hs) :
+noncomputable def round (pre : List (RingLayer d N)) (hs : List (TeleportHop N)) (hv : Valid hs) :
     MeasurementRound d N where
   circuit := pre ++ [layerOne hs hv, layerTwo hs hv]
   measured := measuredSites hs
@@ -474,7 +474,7 @@ noncomputable def round (pre : List (Layer d N)) (hs : List (TeleportHop N)) (hv
 
 /-- The teleportation round has depth `2` after the circuit `pre`, whatever the number and the
 lengths of the chains. -/
-theorem depth_round (pre : List (Layer d N)) (hs : List (TeleportHop N)) (hv : Valid hs) :
+theorem depth_round (pre : List (RingLayer d N)) (hs : List (TeleportHop N)) (hv : Valid hs) :
     (round pre hs hv).depth = pre.length + 2 := by
   simp [round, MeasurementRound.depth]
 
@@ -487,7 +487,7 @@ hops, of any length, in depth `2`.
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("Isometries ... act on
 a constant number of sites which, although spatially separated, can be teleported at
 neighboring registers with a constant overhead"). -/
-theorem isImplementationOn_round (pre : List (Layer d N)) {hs : List (TeleportHop N)}
+theorem isImplementationOn_round (pre : List (RingLayer d N)) {hs : List (TeleportHop N)}
     (hv : Valid hs) :
     (round pre hs hv).IsImplementationOn {v | IsZeroOn (pairSites hs) (circuitOp pre *ᵥ v)}
       (chainPerm hs * circuitOp pre) := by

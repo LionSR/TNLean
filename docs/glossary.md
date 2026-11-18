@@ -1806,13 +1806,13 @@ in `MPS/Preparation/` uses it.
   both are nonempty it fails as soon as `N ≤ 2s + 1`, since the offsets
   `|m| ≤ s` then reach every site of the ring.
 
-#### `QuantumCircuit.BondLayer` and `QuantumCircuit.Layer`
+#### `QuantumCircuit.BondLayer` and `QuantumCircuit.RingLayer`
 
 - **Declarations:** `structure QuantumCircuit.BondLayer (d : ℕ) (bond : β → Set ι)`,
   with fields `bonds : Finset β`, `gate : β → Matrix (ι → Fin d) (ι → Fin d) ℂ`,
   and the conditions that every gate of a bond is unitary and lies in
   `supportedOperators d (bond b)`, and that the bonds carrying gates are
-  pairwise disjoint; `QuantumCircuit.Layer (d N : ℕ) [NeZero N]` abbreviates
+  pairwise disjoint; `QuantumCircuit.RingLayer (d N : ℕ) [NeZero N]` abbreviates
   `BondLayer d ringBond` on `Fin N`.
 - **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
 - **Meaning:** one layer of a local circuit: unitaries on pairwise disjoint
@@ -2083,7 +2083,7 @@ in `MPS/Preparation/` uses it.
   `QuantumCircuit.exists_permLayer_op_mulVec` (a layer of such gates on
   disjoint pairs acts as one permutation of the configurations).
 - **Caveat:** only permutations of the computational basis are covered; a
-  general gate is a `QuantumCircuit.Layer` gate.
+  general gate is a `QuantumCircuit.RingLayer` gate.
 
 #### `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth`
 

@@ -212,12 +212,12 @@ private theorem isLocalPerm_secondShift (k : Fin (M * 2)) :
     rw [h (k + 1) ((by simp [ringBond]))]
 
 /-- The first layer of controlled shifts. -/
-private noncomputable def firstLayer : Layer b (M * 2) :=
+private noncomputable def firstLayer : RingLayer b (M * 2) :=
   permLayer firstBonds firstBonds_pairwiseDisjoint firstShift
     fun k _ => isLocalPerm_firstShift k
 
 /-- The second layer of controlled shifts. -/
-private noncomputable def secondLayer : Layer b (M * 2) :=
+private noncomputable def secondLayer : RingLayer b (M * 2) :=
   permLayer secondBonds secondBonds_pairwiseDisjoint secondShift
     fun k _ => isLocalPerm_secondShift k
 

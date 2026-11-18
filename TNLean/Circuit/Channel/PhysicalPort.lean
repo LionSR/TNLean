@@ -56,7 +56,7 @@ inductive IsPhysicalPortUnitary (P : PhysicalPortLayout N W) : ℕ →
   | onsitePermutation (π : Equiv.Perm (Fin W)) (hπ : ∀ x, P.site (π x) = P.site x) :
       IsPhysicalPortUnitary P 0 (permOp π)
   /-- Count one nearest-neighbor layer on the physical ports alone. -/
-  | layer (L : Layer d N) : IsPhysicalPortUnitary P 1 (embedOp P.port L.op)
+  | layer (L : RingLayer d N) : IsPhysicalPortUnitary P 1 (embedOp P.port L.op)
   /-- Multiplying circuit operators adds their physical depths. -/
   | mul {T S : ℕ} {U V} (hU : IsPhysicalPortUnitary P T U)
       (hV : IsPhysicalPortUnitary P S V) : IsPhysicalPortUnitary P (T + S) (U * V)
