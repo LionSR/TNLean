@@ -562,6 +562,9 @@ jobs:
 
       # Diagnose the PR's direct edits before the full dependency build. Selection
       # uses the explicit feature head, while checks use this merged checkout.
+      # The step is a shortcut: a failure it finds fails the job, but past its
+      # 50-minute budget (a cold dependency cache after a pin change, or a
+      # change near the bottom of the import graph) it stops with a warning.
       # The root build and complete strict suite below remain mandatory.
       - name: Check directly changed Lean sources and tests strictly
         if: github.event_name == 'pull_request'
@@ -580,7 +583,7 @@ jobs:
             git cat-file -e "$revision^{commit}"
           done
           python3 scripts/ci_lean_checks.py focused \
-            --base "$BASE_SHA" --head "$PR_HEAD_SHA" --jobs 3 \
+            --base "$BASE_SHA" --head "$PR_HEAD_SHA" --jobs 3 --budget 3000 \
             --log "$RUNNER_TEMP/lake-build.log"
 
       # Build the changed production modules before the full library so a

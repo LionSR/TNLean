@@ -259,6 +259,15 @@ would not fix the selection. An unverifiable merge checkout falls back to all
 tests. Pushes and local invocations without a PR-head SHA retain their explicit
 base revision (the previous head for pushes).
 
+- **Focused checks** (pull requests, before the early build): the directly
+  changed production files and regression scripts are prepared by one
+  `lake build` and elaborated with the strict flags, so that an error in the
+  pull request's own edits surfaces before the root build. It is a shortcut
+  with a 50-minute budget inside a 60-minute step: a failure it finds fails
+  the step, but targets not prepared or not checked within the budget (a cold
+  dependency cache after a pin change, or a change near the bottom of the
+  import graph) are left, with a warning, to the root build and the strict
+  checks after it.
 - **Early build** (pull requests, before the root build): a fail-fast
   `lake build` of the changed production modules, logged with the root build
   for the compilation-time gate. It is a shortcut with a 20-minute budget: a
