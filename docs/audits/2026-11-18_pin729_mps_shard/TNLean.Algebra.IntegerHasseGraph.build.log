@@ -1,0 +1,4 @@
+TNLean/Algebra/IntegerHasseGraph.lean:7:0: warning: 
+'Mathlib.Data.Int.SuccPred' has been deprecated: please replace this import by
+
+import Mathlib.Order.SuccPred.Int

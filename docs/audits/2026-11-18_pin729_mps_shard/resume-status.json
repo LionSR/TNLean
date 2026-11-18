@@ -1,10 +1,10 @@
 {
-  "checkpoint": 8,
-  "passed": 260,
-  "remaining": 605,
+  "checkpoint": 10,
+  "passed": 320,
+  "remaining": 545,
   "failed_commands": 0,
-  "build_seconds": 2813.157203051873,
-  "strict_seconds": 908.9951835669053,
+  "build_seconds": 3324.455522114862,
+  "strict_seconds": 1165.7399552929564,
   "stop": null,
-  "free_bytes": 13457371136
+  "free_bytes": 13371691008
 }
