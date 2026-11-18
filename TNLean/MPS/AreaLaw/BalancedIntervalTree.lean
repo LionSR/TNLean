@@ -65,17 +65,20 @@ theorem balancedIntervalSpace_of_short {L q width p r : ℕ}
   · contradiction
 
 /-- A leaf and parent invariant holds for every actual recursively selected
-space. Supporting ALVV, arXiv:1602.08828v2, merge algorithm,
-lines 1662–1677. The conclusion concerns the defined recursion, rather than
-a supplied family of final viable spaces. -/
-theorem balancedIntervalSpace_invariant {L q width : ℕ}
+space, when the parent step may use that the cut is the actual midpoint.
+Supporting ALVV, arXiv:1602.08828v2, merge algorithm, lines 1662–1677.
+The midpoint lets an invariant depend on the level of a node through its
+length, as for the shrinking low-density windows of `t:alg2`, lines 1869–1878. -/
+theorem balancedIntervalSpace_invariant_of_midpoint {L q width : ℕ}
     (operation : IntervalMergeOperation L q) (hwidth : 1 ≤ width)
     (P : ∀ p r : ℕ, Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q)) → Prop)
     (hleaf : ∀ (p r : ℕ), p ≤ r → r ≤ L → r - p ≤ width → P p r ⊤)
-    (hnode : ∀ (p k r : ℕ) (hpk : p ≤ k) (hkr : k ≤ r), r ≤ L → width < r - p →
-      ∀ (S1 : Submodule ℂ (EuclideanSpace ℂ (interval L p k → Fin q)))
-        (S2 : Submodule ℂ (EuclideanSpace ℂ (interval L k r → Fin q))),
-      P p k S1 → P k r S2 → P p r (operation p k r hpk hkr S1 S2))
+    (hnode : ∀ (p r : ℕ) (hpk : p ≤ p + (r - p) / 2) (hkr : p + (r - p) / 2 ≤ r),
+      r ≤ L → width < r - p →
+      ∀ (S1 : Submodule ℂ (EuclideanSpace ℂ (interval L p (p + (r - p) / 2) → Fin q)))
+        (S2 : Submodule ℂ (EuclideanSpace ℂ (interval L (p + (r - p) / 2) r → Fin q))),
+      P p (p + (r - p) / 2) S1 → P (p + (r - p) / 2) r S2 →
+        P p r (operation p (p + (r - p) / 2) r hpk hkr S1 S2))
     (p r : ℕ) (hpr : p ≤ r) (hrL : r ≤ L) :
     P p r (balancedIntervalSpace operation width hwidth p r) := by
   suffices ∀ n p r : ℕ, r - p = n → p ≤ r → r ≤ L →
@@ -88,22 +91,37 @@ theorem balancedIntervalSpace_invariant {L q width : ℕ}
     by_cases hshort : r - p ≤ width
     · rw [balancedIntervalSpace_of_short operation hwidth hshort]
       exact hleaf p r hpr hrL hshort
-    · let k := p + (r - p) / 2
-      have hpk : p ≤ k := by dsimp only [k]; omega
-      have hkr : k ≤ r := by dsimp only [k]; omega
-      have hleft : k - p < n := by dsimp only [k]; omega
-      have hright : r - k < n := by dsimp only [k]; omega
-      have hS1 := ih (k - p) hleft p k rfl hpk (hkr.trans hrL)
-      have hS2 := ih (r - k) hright k r rfl hkr hrL
+    · have hpk : p ≤ p + (r - p) / 2 := by omega
+      have hkr : p + (r - p) / 2 ≤ r := by omega
+      have hS1 := ih (p + (r - p) / 2 - p) (by omega) p (p + (r - p) / 2) rfl hpk
+        (hkr.trans hrL)
+      have hS2 := ih (r - (p + (r - p) / 2)) (by omega) (p + (r - p) / 2) r rfl hkr hrL
       have hdef : balancedIntervalSpace operation width hwidth p r =
-          operation p k r hpk hkr
-            (balancedIntervalSpace operation width hwidth p k)
-            (balancedIntervalSpace operation width hwidth k r) := by
+          operation p (p + (r - p) / 2) r hpk hkr
+            (balancedIntervalSpace operation width hwidth p (p + (r - p) / 2))
+            (balancedIntervalSpace operation width hwidth (p + (r - p) / 2) r) := by
         rw [balancedIntervalSpace]
         split
         · contradiction
         · rfl
       rw [hdef]
-      exact hnode p k r hpk hkr hrL (by omega) _ _ hS1 hS2
+      exact hnode p r hpk hkr hrL (by omega) _ _ hS1 hS2
+
+/-- A leaf and parent invariant holds for every actual recursively selected
+space. Supporting ALVV, arXiv:1602.08828v2, merge algorithm,
+lines 1662–1677. The conclusion concerns the defined recursion, rather than
+a supplied family of final viable spaces. -/
+theorem balancedIntervalSpace_invariant {L q width : ℕ}
+    (operation : IntervalMergeOperation L q) (hwidth : 1 ≤ width)
+    (P : ∀ p r : ℕ, Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q)) → Prop)
+    (hleaf : ∀ (p r : ℕ), p ≤ r → r ≤ L → r - p ≤ width → P p r ⊤)
+    (hnode : ∀ (p k r : ℕ) (hpk : p ≤ k) (hkr : k ≤ r), r ≤ L → width < r - p →
+      ∀ (S1 : Submodule ℂ (EuclideanSpace ℂ (interval L p k → Fin q)))
+        (S2 : Submodule ℂ (EuclideanSpace ℂ (interval L k r → Fin q))),
+      P p k S1 → P k r S2 → P p r (operation p k r hpk hkr S1 S2))
+    (p r : ℕ) (hpr : p ≤ r) (hrL : r ≤ L) :
+    P p r (balancedIntervalSpace operation width hwidth p r) :=
+  balancedIntervalSpace_invariant_of_midpoint operation hwidth P hleaf
+    (fun p r hpk hkr hrL hlong ↦ hnode p _ r hpk hkr hrL hlong) p r hpr hrL
 
 end TNLean.MPS.AreaLaw

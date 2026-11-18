@@ -78,6 +78,8 @@ import TNLean.MPS.AreaLaw.DoubledHamiltonian
 import TNLean.MPS.AreaLaw.DyadicIntervalLowDensityFamily
 import TNLean.MPS.AreaLaw.DyadicLongIntervalLowDensityFamily
 import TNLean.MPS.AreaLaw.DyadicRegionalLowDensityFamily
+import TNLean.MPS.AreaLaw.DyadicRegionalLowDensitySingleStep
+import TNLean.MPS.AreaLaw.DyadicRegionalLowDensityWordFamily
 import TNLean.MPS.AreaLaw.EntropyInequalities
 import TNLean.MPS.AreaLaw.EntropyScaling
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
@@ -151,6 +153,7 @@ import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.MPSReferenceSpace
 import TNLean.MPS.AreaLaw.NativeIntervalMPOApproximation
 import TNLean.MPS.AreaLaw.NearestNeighbourImaginaryTime
+import TNLean.MPS.AreaLaw.NestedChebyshevWordViability
 import TNLean.MPS.AreaLaw.NormalizedSequentialApproximation
 import TNLean.MPS.AreaLaw.NormalizedVariableTruncation
 import TNLean.MPS.AreaLaw.OpenMPS
@@ -203,6 +206,8 @@ import TNLean.MPS.AreaLaw.PhysicalGroundReference
 import TNLean.MPS.AreaLaw.PhysicalGroundReferencePolynomial
 import TNLean.MPS.AreaLaw.PhysicalGroundReferenceTrimming
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
+import TNLean.MPS.AreaLaw.PhysicalLDTree
+import TNLean.MPS.AreaLaw.PhysicalLDTreeRefinement
 import TNLean.MPS.AreaLaw.PhysicalLowDensityApproximation
 import TNLean.MPS.AreaLaw.PhysicalLowDensityGlobalApproximation
 import TNLean.MPS.AreaLaw.PhysicalLowDensitySharpApproximation
