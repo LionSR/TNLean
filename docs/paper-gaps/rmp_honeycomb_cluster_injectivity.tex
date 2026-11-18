@@ -56,9 +56,13 @@ tensor and for the uniform two-site tensor to which the source applies the
 fundamental theorem.
 
 \section{The corrected claim}
-The PEPS becomes injective after blocking over hexagonal plaquettes, so it is
-normal in the sense of the review, with plaquettes in place of rectangles. A
-plaquette has six sites, each with exactly one bond leaving the plaquette.
+On the concrete $6\times4$ torus, four hexagonal faces partition the sites.
+For each face the actual open-region coefficient matrix has Gram matrix
+$I_{64}/64$, so its open-region map is injective.
+\footnote{\leanid{TNLean.PEPS.HoneycombFace.Cell.actual_columnGram},
+    \leanid{TNLean.PEPS.HoneycombFace.Cell.injective_partition}, in
+    \doclink{TNLean/PEPS/Examples/HoneycombFacePartition}.}
+Each of these plaquettes has six sites, each with exactly one bond leaving the plaquette.
 With the boundary indices $\beta$ fixed, the blocked tensor sends $\beta$ to
 \begin{align}
     \prod_{\text{inner bonds}}CZ\;\bigotimes_{u}M_u\ket{\beta_u},
@@ -67,20 +71,13 @@ With the boundary indices $\beta$ fixed, the blocked tensor sends $\beta$ to
 up to normalization, where each $M_u$ is the identity or $H$ according to the
 side on which the bond matrix of the leaving bond is placed. Both maps in
 (\ref{eq:rmp_honeycomb_cluster_injectivity_plaquette_block}) are invertible, so
-the blocked tensor is injective. The honeycomb vertex set is
-partitioned by every third plaquette, on a torus whose dimensions are
-compatible with this pattern, and the blocked network is a triangular lattice
-of injective tensors. The fundamental theorem for normal tensors applies to
-this blocked network.
+the blocked tensor is injective. The finite result establishes plaquette blocking on this torus.
 
 \section{Elimination plan}
-\begin{enumerate}
-    \item Formalize injectivity of the plaquette-blocked tensor and the
-          partition of the honeycomb torus into plaquettes.
-    \item State the corrected claim, that the honeycomb cluster PEPS is
-          injective after plaquette blocking. No injectivity of the
-          honeycomb PEPS is asserted until then.
-\end{enumerate}
+For general torus sizes, characterize when the hexagonal blocking partitions
+the sites, prove injectivity of the blocked tensors and identify the blocked
+network. The rectangular blocking needed for normality as defined by the
+review, and the application of its fundamental theorem, remain open.
 
 \bibliographystyle{alpha}
 \bibliography{references}

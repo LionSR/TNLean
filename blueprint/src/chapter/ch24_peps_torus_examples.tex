@@ -368,8 +368,8 @@ over all sites applied to the cluster state. The parent Hamiltonian below is
 $-\sum_iX_iZ_jZ_kZ_l$ \cite{gap:rmp_honeycomb_cluster_peps}. The claim that
 the PEPS is injective is false as printed: the vertex tensor maps a virtual
 space of dimension eight to a qubit, and the tensor of two blocked sites maps
-a space of dimension sixteen to one of dimension four. Injectivity holds after
-blocking over hexagonal plaquettes \cite{gap:rmp_honeycomb_cluster_injectivity}.
+a space of dimension sixteen to one of dimension four. Lemma~\ref{lem:peps_honeycomb_concrete_partition} proves injectivity after
+blocking the $6\times4$ torus over hexagonal plaquettes \cite{gap:rmp_honeycomb_cluster_injectivity}.
 The brick wall is the honeycomb on tori of even width and height
 \cite{gap:rmp_peps_examples_small_torus}.
 
@@ -459,6 +459,35 @@ The brick wall is the honeycomb on tori of even width and height
     column, so the vertical bond of every site is shared with exactly one
     neighbour; for $w\geq3$ the horizontal neighbours $(x+1,y)$ and
     $(x-1,y)$ differ. The origin has the two neighbours $(1,0)$ and $(0,1)$.
+\end{proof}
+
+\begin{lemma}[Injective hexagonal blocks on the $6\times4$ torus]
+    \label{lem:peps_honeycomb_concrete_partition}
+    \lean{TNLean.PEPS.HoneycombFace.cellPartition,
+        TNLean.PEPS.HoneycombFace.Cell.actual_columnGram,
+        TNLean.PEPS.HoneycombFace.Cell.injective_partition}
+    \leanok
+    \uses{def:peps_honeycomb_cluster, def:peps_open_region_contraction}
+    The translates of the six-site face by $(0,0)$, $(0,2)$, $(3,1)$ and
+    $(3,3)$ partition the sites of the $6\times4$ brick-wall torus. For each
+    face, the open-region matrix $M$ has physical assignments as rows and
+    crossing-bond assignments as columns. Its Gram matrix satisfies
+    \begin{align}
+        M^\dagger M &= \frac{1}{64}I_{64}.
+        \label{eq:peps_honeycomb_concrete_gram}
+    \end{align}
+    In particular, each open-region map is injective.
+\end{lemma}
+
+\begin{proof}\leanok
+    The checked cell and site indices enumerate the torus bijectively.
+    Regrouping the vertex factors by edge gives one normalized Hadamard
+    entry per internal bond. Its sign cancels in a column inner product,
+    leaving a factor $1/2$ per bond. Each site has one crossing edge;
+    its leg is an identity or Hadamard column according to the ordered
+    endpoints. Summing over the six physical bits gives the product of
+    the six boundary Kronecker deltas. The six internal bonds contribute
+    $2^{-6}$, giving \eqref{eq:peps_honeycomb_concrete_gram}.
 \end{proof}
 
 \section{The CZX model}%
