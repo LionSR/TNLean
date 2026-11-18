@@ -26,7 +26,7 @@ namespace SpectatorBoundaryRegression
 
 -- Matrix-level block equality, with no positivity, Hermiticity or nonemptiness.
 theorem blockwise {q : ℕ} {ι Aux : Type*} [Fintype ι] [DecidableEq ι]
-    [Fintype Aux] [DecidableEq Aux] (K : Finset ι)
+    (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) (a b : Aux) :
     (spectatorSiteExpectation q K B).submatrix (fun σ => (σ, a)) (fun τ => (τ, b)) =
       ManyBody.regionExpectation K (B.submatrix (fun σ => (σ, a)) (fun τ => (τ, b))) := by
@@ -35,7 +35,7 @@ theorem blockwise {q : ℕ} {ι Aux : Type*} [Fintype ι] [DecidableEq ι]
 
 -- Each output block belongs to the canonical retained physical algebra.
 theorem block_supported {q : ℕ} {ι Aux : Type*} [Fintype ι] [DecidableEq ι]
-    [Fintype Aux] [DecidableEq Aux] (K : Finset ι)
+    (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) (a b : Aux) :
     (spectatorSiteExpectation q K B).submatrix (fun σ => (σ, a)) (fun τ => (τ, b)) ∈
       ManyBody.supportedOperators (fun _ : ι => Fin q) K := by
@@ -43,14 +43,14 @@ theorem block_supported {q : ℕ} {ι Aux : Type*} [Fintype ι] [DecidableEq ι]
   exact ManyBody.regionExpectation_mem_supportedOperators _ _
 
 -- When there are no physical sites, every matrix is fixed, even when q = 0.
-theorem empty_sites {q : ℕ} {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
+theorem empty_sites {q : ℕ} {Aux : Type*}
     (B : Matrix ((Fin 0 → Fin q) × Aux) ((Fin 0 → Fin q) × Aux) ℂ) :
     spectatorSiteExpectation q (∅ : Finset (Fin 0)) B = B := by
   have h : (∅ : Finset (Fin 0)) = Finset.univ := by ext i; exact Fin.elim0 i
   rw [h, spectatorSiteExpectation_univ]
 
 -- Nonempty physical sites at q = 0 instead give an empty matrix index.
-theorem zero_dimension {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
+theorem zero_dimension {Aux : Type*}
     (K : Finset Unit) (B : Matrix ((Unit → Fin 0) × Aux) ((Unit → Fin 0) × Aux) ℂ) :
     spectatorSiteExpectation 0 K B = B := by
   ext ⟨σ, _⟩

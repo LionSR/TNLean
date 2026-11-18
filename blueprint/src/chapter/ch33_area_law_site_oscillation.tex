@@ -146,12 +146,28 @@ means using $K=I\setminus Q$.
     \lean{QuantumCircuit.spectatorSiteExpectation,
         QuantumCircuit.spectatorBasis, QuantumCircuit.spectatorConfigEquiv}
     \leanok
-    Regard the spectator as one more site $\ast$ carrying the space
-    $\mathcal K=\C^J$, so that $\mathcal H\otimes\mathcal K$ is the space of
-    the sites $I\sqcup\{\ast\}$. Define $E_K^{\mathcal K}=E_{K\cup\{\ast\}}$,
-    the normalized partial-trace expectation of this system onto the retained
-    physical sites and the spectator site.
+    For each pair of spectator labels $a,b\in J$, apply $E_K$ to the
+    physical block $B_{ab}$, whose entries are
+    $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
+    The resulting blocks define $E_K^{\mathcal K}(B)$.
 \end{definition}
+
+\begin{lemma}[Spectator as an additional site]
+    \label{thm:qc_spectator_coordinates}
+    \uses{def:qc_spectator_expectation,def:qc_site_expectation}
+    \lean{QuantumCircuit.spectatorSiteExpectation_eq_reindex}
+    \leanok
+    Regard the finite spectator as one more site $\ast$ carrying $\mathcal K$.
+    Under the identification of configurations with pairs of physical and
+    spectator labels, $E_K^{\mathcal K}=E_{K\cup\{\ast\}}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:qc_spectator_expectation,def:qc_site_expectation}
+    The sites outside $K\cup\{\ast\}$ are exactly the physical sites outside
+    $K$. The two expectations therefore sum over the same configurations
+    with the same normalization, leaving both spectator labels unchanged.
+\end{proof}
 
 \begin{lemma}[Spectator blocks]
     \label{thm:qc_spectator_blocks}
