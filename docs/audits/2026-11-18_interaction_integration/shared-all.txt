@@ -1,0 +1,6 @@
+TNLean/Lattice/LocalHamiltonian.lean
+TNLean/Lattice/MarginalTails.lean
+TNLean/Lattice/ProductForm.lean
+TNLean/MPS/AreaLaw/ComponentReduction.lean
+TNLean/MPS/AreaLaw/Hamiltonian.lean
+TNLean/PEPS/AreaLaw/RectangularHamiltonian.lean
