@@ -162,7 +162,10 @@ theorem exists_five_region_physical_low_energy_filter_family
   have :=
     exists_chebyshev_nested_viability_of_polynomial_family
       (B t e K) hC hC.eigenvectorBasis hC.eigenvalues heigen W Tm
-      (fun Q hQ ↦ (hdecomp Q hQ).imp fun M hM ↦ hM.2)
+      (fun Q hQ ↦ (hdecomp Q hQ).imp fun M hM ↦ by
+        -- The two tensor coordinates agree after reducible unfolding only.
+        have hconj := hM.2
+        with_reducible exact hconj)
       (E0 + eta - 2 * w) (E0 + eta - w) (3 * t + 4 * (ell : ℝ))
       (by linarith only [hw])
       (by linarith only [hE04, hcut, ht, (Nat.cast_nonneg ell : (0 : ℝ) ≤ ell), hw, hbuffer]) hnorm

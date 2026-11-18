@@ -194,10 +194,16 @@ theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 
           let S0 := balancedIntervalSpace operation width hwidth 0 L
           Q L q m w hq h h0 count Dref S0) := by
   classical
-  obtain ⟨C, hC, hCeta, hlong⟩ :=
-    exists_fixed_bandwidth_long_interval_dyadic_low_energy_word_family etaLD hLD
-  obtain ⟨_Kref, _hKref, hbasis⟩ :=
-    exists_fixed_bandwidth_low_energy_orthonormal_mps_basis etaLD hLD
+  -- Eliminate existentials and project conjunctions, rather than destructuring them, so
+  -- that the large goal is not re-checked at every step.
+  refine (exists_fixed_bandwidth_long_interval_dyadic_low_energy_word_family etaLD hLD).elim
+    fun C hlong ↦ ?_
+  have hC := hlong.1
+  have hCeta := hlong.2.1
+  have hlong := hlong.2.2
+  refine (exists_fixed_bandwidth_low_energy_orthonormal_mps_basis etaLD hLD).elim
+    fun _Kref hbasis ↦ ?_
+  have hbasis := hbasis.2
   refine ⟨C, hC, hCeta, ?_⟩
   intro L q m w hq hqm hw mi g u ell D h hsupp h0 h1 config H hRaw G rG
   let : Nonempty (Fin L → Fin q) := config
@@ -206,7 +212,9 @@ theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 
     have hfam := hlong L q m p r 2 w hq hqm hpr hrL hw h hsupp h0 h1
     rw [hm4, show (1 / 200 : ℝ) / 2 ^ (4 * 2) = 1 / 51200 by norm_num] at hfam
     exact hfam
-  obtain ⟨hell, hlogD, -⟩ := hfamily 0 0 le_rfl (Nat.zero_le L)
+  have hfamily0 := hfamily 0 0 le_rfl (Nat.zero_le L)
+  have hell := hfamily0.1
+  have hlogD := hfamily0.2.1
   refine ⟨hell, hlogD, ?_⟩
   intro width hwidth target
   have hell1 : 1 ≤ ell := (by decide : 1 ≤ 21).trans hell
@@ -260,8 +268,9 @@ theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 
   have hDref : 1 ≤ Dref := (hDK 0).trans (hDK_le 0 (Nat.zero_le _))
   refine ⟨Dref, hDref, ?_⟩
   intro xi beta hbeta hbeta1 A s count
-  obtain ⟨hs, hscount, htail, _hfailure⟩ :=
-    Real.viable_node_uniform_sampling_size hD hrG hbeta hbeta1.le
+  have hsize := Real.viable_node_uniform_sampling_size hD hrG hbeta hbeta1.le
+  have hs := hsize.1
+  have hscount := hsize.2.1
   have hxi : 0 < xi :=
     (Real.viable_node_trimming_radius_budget (L := L) (cuts := 0) (Nat.zero_le L) hDref).1
   have hxi1 : xi ≤ 1 := by
@@ -273,7 +282,7 @@ theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 
     apply (div_le_iff₀ (by positivity)).mpr
     nlinarith only [hprod]
   have hleaf : q ^ width ≤ count := Nat.viable_tree_leaf_count_le hqmi hmi2 hell1 hs
-  obtain ⟨operation, hliteral, htree⟩ :=
+  have htreeSpec :=
     exists_balanced_sampled_interval_tree_of_targets hwidth (by omega) hD hrG target
       (fun p k r ↦ k = p + (r - p) / 2) (fun _ _ ↦ rfl) hxi hxi1 N F hN hbeta hbeta1 hleaf (by
     intro J k hpk hkr hmid S1 S2 hS1 hS2 hd1 hd2 W
@@ -281,9 +290,12 @@ theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 
     dsimp only at hpk hkr hmid S1 S2 hS1 hS2 hd1 hd2 W ⊢
     subst hmid
     -- The level of the parent and the window of its children.
-    obtain ⟨hleft, hright⟩ := clog_half_lt (n := r - p) (by omega)
-    obtain ⟨K, hK⟩ : ∃ K, Nat.clog 2 (r - p) = K + 1 :=
-      ⟨Nat.clog 2 (r - p) - 1, by omega⟩
+    -- Projections and local definitions avoid re-checking the large node goal.
+    have hhalf := clog_half_lt (n := r - p) (by omega)
+    have hleft := hhalf.1
+    have hright := hhalf.2
+    let K := Nat.clog 2 (r - p) - 1
+    have hK : Nat.clog 2 (r - p) = K + 1 := by omega
     have hKL : ((K : ℝ) + 1) ≤ Nat.clog 2 L := by
       have := hlevel p r hpr hrL
       rw [hK] at this
@@ -309,8 +321,14 @@ theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 
       (by simpa only [show r - (p + (r - p) / 2) = (r - p) - (r - p) / 2 by omega]
         using hright)))
     -- The low-density words of the parent at this window.
-    obtain ⟨Tlo, Thi, Delta, _hnest, hupper, hlower, hDelta, htrade, himprove⟩ :=
-      hwords ⟨(p, r), hpr, hrL, hlongJ⟩ eta hbuffer hetaLD
+    have hwordsJ := hwords ⟨(p, r), hpr, hrL, hlongJ⟩ eta hbuffer hetaLD
+    refine hwordsJ.elim fun Tlo hwordsJ ↦ hwordsJ.elim fun Thi hwordsJ ↦
+      hwordsJ.elim fun Delta hwordsJ ↦ ?_
+    have hupper := hwordsJ.2.1
+    have hlower := hwordsJ.2.2.1
+    have hDelta := hwordsJ.2.2.2.1
+    have htrade := hwordsJ.2.2.2.2.1
+    have himprove := hwordsJ.2.2.2.2.2
     let RC := Entropy.regionTensorCoordinates q (interval L p r)
     have hlower' : Submodule.IsCloseTo (1 / 51200) Tlo (G (eta - 3 * w)) := by
       simpa only [G, add_sub_assoc] using hlower
@@ -325,11 +343,13 @@ theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 
       dsimp only [RC] at hS ⊢
       rw [Entropy.regionTensorCoordinates_eq_exteriorFirst] at hS ⊢
       exact (himprove a S delta hS hdelta).2
-    obtain ⟨Good, _hGood, hbad, _hprob, himages⟩ :=
-      exists_measurable_interval_word_image_event_of_nested hpk hkr hD hs
+    have hevent := exists_measurable_interval_word_image_event_of_nested hpk hkr hD hs
         (G eta) (G (eta - 3 * w)) Thi Tlo (hGne (by linarith only [hbuffer, hw]))
         (by norm_num) (by norm_num) hupper hlower' hDelta.le htrade
         (F ⟨(p, r), hpr, hrL, hlongJ⟩) (hN _) himprove' S1 S2 hS1' hS2' hd1 hd2
+    refine hevent.elim fun Good hGood ↦ ?_
+    have hbad := hGood.2.1
+    have himages := hGood.2.2.2
     dsimp only [W]
     refine ⟨Good, ?_, ?_⟩
     · -- The event's failure bound with the dimension of the upper target.
@@ -339,7 +359,7 @@ theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 
       exact hbad.trans (ENNReal.ofReal_le_ofReal (sampling_failure_mono hdimThi))
     · -- Trimming against the reference space of the parent's window.
       intro U hU
-      obtain ⟨_hdimV, hV⟩ := himages U hU
+      have hV := (himages U hU).2
       have hsR : (1 : ℝ) ≤ (s : ℝ) := Nat.one_le_cast.mpr hs
       have hden : (1 : ℝ) ≤ (s : ℝ) ^ 2 := one_le_pow₀ hsR
       have hratio : (1024 / 9 : ℝ) * (1 / 100000) / (s : ℝ) ^ 2 ≤
@@ -353,7 +373,10 @@ theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 
         push_cast
         ring
       have hKL' : K + 1 ≤ Nat.clog 2 L := by exact_mod_cast hKL
-      obtain ⟨hGU, hUG, hUMPS⟩ := hUref (K + 1) (by omega)
+      have hUrefK := hUref (K + 1) (by omega)
+      have hGU := hUrefK.1
+      have hUG := hUrefK.2.1
+      have hUMPS := hUrefK.2.2
       have hcutK : etaLD - 3 * w * ((K + 1 : ℕ) : ℝ) = eta - 3 * w := by
         dsimp only [eta]
         push_cast
@@ -377,6 +400,9 @@ theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 
         hradius.2
       unfold sampledIntervalTrim
       exact Submodule.IsCloseTo.of_le htrim (by linarith only [hb]))
+  refine htreeSpec.elim fun operation htreeSpec ↦ ?_
+  have hliteral := htreeSpec.1
+  have htree := htreeSpec.2
   refine ⟨hscount, operation, fun J k hpk hkr hmid ↦ hliteral J k hpk hkr hmid, htree, ?_⟩
   intro S0
   obtain ⟨hroot, hdim0, n, hn, vectors, hspan, hranks⟩ := htree 0 L (Nat.zero_le L) le_rfl

@@ -204,7 +204,10 @@ theorem exists_sharp_regional_family_of_scalar_budgets
       3 * t + 4 * (ell : ℝ) := by linarith only [hE0, hbuffer, hw]
   have hpolynomial := exists_nested_polynomial_with_recorded_gap
     (degree := ell ^ 2) (B t e K) hC W Tm
-    (fun Q hQ ↦ (hdecomp Q hQ).imp fun M hM ↦ hM.2)
+    (fun Q hQ ↦ (hdecomp Q hQ).imp fun M hM ↦ by
+      -- The two tensor coordinates agree after reducible unfolding only.
+      have hconj := hM.2
+      with_reducible exact hconj)
     (E0 + eta - 2 * w) (E0 + eta - w) (3 * t + 4 * (ell : ℝ)) w
     (by ring) (by linarith only [hw]) hupper hnorm
   refine ⟨hnest, hupperClose, hlowerClose, ?_, hpolynomial⟩

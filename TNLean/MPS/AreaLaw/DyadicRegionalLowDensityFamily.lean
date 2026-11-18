@@ -250,7 +250,10 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause
   have :=
     exists_chebyshev_nested_word_viability_of_polynomial_family
       (B (ell : ℝ) e K) hC hC.eigenvectorBasis hC.eigenvalues heigen W Tm
-      (fun Q hQ ↦ (hdecomp Q hQ).imp fun M hM ↦ by have h2 := hM.2; with_reducible exact h2)
+      (fun Q hQ ↦ (hdecomp Q hQ).imp fun M hM ↦ by
+        -- The two tensor coordinates agree after reducible unfolding only.
+        have hconj := hM.2
+        with_reducible exact hconj)
       (E0 + eta - 2 * w) (E0 + eta - w) (7 * (ell : ℝ))
       (by linarith only [hw]) hupper hnorm
   obtain ⟨p, hpdegree, hp0, M, hM, himprove⟩ := this
