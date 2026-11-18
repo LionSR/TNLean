@@ -7,6 +7,20 @@ supersedes the "Migration policy" section of `circuit_channel_architecture.md`.
 The directories `TNLean/Circuit` and `TNLean/Lattice` are split along the
 layers below, redesigned, and moved to QICLean.
 
+Integration update (2026-11-18): the source scaffold at `b2c72008326f3166d3bcdc9e79013443142b0aa8`
+uses QICLean's single `ManyBody.Interaction`, with `ChainInteraction`,
+`DomainInteraction`, `PlaneInteraction`, `RectangleInteraction` and
+`SquareInteraction` as geometry-specific abbreviations. The fields are `term`
+and supported-operator membership `mem`; the sum is `Interaction.hamiltonian`.
+Term Hermiticity and real norm bounds are explicit hypotheses when needed.
+This scaffold is not a compiled or merge-ready consumer migration.
+
+The audit counts, old structure names and F12 account below describe the
+historical tree and migration plan. They are retained as historical evidence,
+not assertions that the removed bundled structures still exist. In particular,
+the planned 3H.2 objects now specialize the same canonical interaction, rather
+than introducing five new structures or compatibility shims.
+
 ## Architecture
 
 ### Principles

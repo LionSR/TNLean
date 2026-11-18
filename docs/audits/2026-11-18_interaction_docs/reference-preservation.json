@@ -1,0 +1,206 @@
+[
+  {
+    "path": "blueprint/src/chapter/ch24_peps_area_law_marginal_tails.tex",
+    "before_sha256": "52d7d446df78a93b1e4094b7f4e1d96ed1426d0655af27f04a3392bab9a39251",
+    "after_sha256": "4c79328dbe1d5b03bf98556210304507f778fbaa61f759698f9f41a0871b48e3",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_peps_area_law_models.tex",
+    "before_sha256": "e80e9be2e3ea1aa0252e8053e7a57475abdf7fa4e81640cb632e38dd8bd522fb",
+    "after_sha256": "23de51600327b6ad095e3a9f9d7f7ae473e19ea6578f3dffe1213450876f3aac",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_peps_area_law_scan_histories.tex",
+    "before_sha256": "898c0b403ac020650857e0ccc16b740707d8c156777bb4dea866c1968def014a",
+    "after_sha256": "7341abc62f9b6670c28c738c6bb118ac2b23803173abafaf7f471e259c5aba26",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_peps_information_reset.tex",
+    "before_sha256": "6a5e98bab2dec5e59ba1e9e144a6f866593cb973eced5725d321e811e6c6805a",
+    "after_sha256": "2166df9b15dcaffaecdcb09e035d0d4233b4d84dcbfa1475575bef8afac70dcb",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_peps_rectangular_specialization.tex",
+    "before_sha256": "a74f33ac62a524efa1cfcb6d656eca90e2a6776ce62bef0e123d7595490923ed",
+    "after_sha256": "bce4935e93150c31ffe0ef771d551de050c94596ea765291f0fb541cb98dab8b",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_peps_regularized_patch_stationarity.tex",
+    "before_sha256": "72a2fc9d6afa18f7195e2e764b5a646e4d2484fb1236f62577d4d7e9d5567b29",
+    "after_sha256": "a413a7afcd1eee02c7c4d78cc08e971c01d28a83b5b6546789e3a76d0c303b1f",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_peps_reset_unitary.tex",
+    "before_sha256": "6143bb25f20a08454ce239db29120447595eaadd95a8c5c455787b1b05c63f05",
+    "after_sha256": "c3688ee6da5e29e587cbf5aeee796cecd6c52e9626bc9f89803f485f84000f57",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_supported_physical_buffer_gaussian.tex",
+    "before_sha256": "d420d22b5f7276671639607f1a092b56fc81199dea42e539ae55a173fb825f53",
+    "after_sha256": "ffd06275eae733fcfb3a7c84dcb8514d2af00ef36a79924434f12faa39e8a76a",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch34_area_law_graph_propagation.tex",
+    "before_sha256": "4860b2c0fcff3d8cc1e2308dbd8d72856cdccb1a062b586ed79f3231f5362650",
+    "after_sha256": "198a5c4f611246bf3411c5ef59eed99981305873246abda24a7b5eae936f354d",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_chain_gluing.tex",
+    "before_sha256": "e06ae7f6156bd5f0ecbd925b5c50dcfae983a628591a85ac66517d9b02b9c385",
+    "after_sha256": "a1a6aa97a05f9ad1b7cc62f34f980acefbf8355e84f3f4258fe117537ddd9c40",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_chain_trimming.tex",
+    "before_sha256": "ee144a8b19bf1e0041f8fd26b526f116fce84ce8a6f9f06cfeb065a06d24df97",
+    "after_sha256": "04b2b6980472e695621737811224f3b15a1e14ec0c11bbe83263881f90431e92",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_hastings_boundary_factorization.tex",
+    "before_sha256": "51ccd8f95ab494bb346b365097dafbb209026f5812c54f391165c0deb01668fb",
+    "after_sha256": "6cb5652d86759e60c1cfd67cf9de1dc692820ec8fb196a1d496bb069f691495d",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_hastings_lemma1.tex",
+    "before_sha256": "3b2eabdeb8397f9f69709062fd6832426afd0685848303d754a43f0d07d9a56b",
+    "after_sha256": "1380f9b13d0b3b4a004422c7fead829d4e40d920a1723bf397f3d2d6de3e68eb",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_hastings_product_form.tex",
+    "before_sha256": "dd2d8a4057a6f738e3d8d4b8d4b3b12f9019a9d893dae7e0437da337b546b930",
+    "after_sha256": "9f664ebeaa4b5ffcfef659d9ee671e784e965f48a8142c7ea710c6b66d419b14",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_hastings_source_length.tex",
+    "before_sha256": "0c7ddca515fc61b41b51185736cb67731e4592ad5a70152c9510b27475a27f8f",
+    "after_sha256": "6855de80996d555e84cc6c1e15fdb8d0a1bf454fb022b4a0ca1e4316277f146e",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_hastings_three_way_splitting.tex",
+    "before_sha256": "ea3e5c9ecd56495eabc6a171421c1019ef0df8b08a59d782633274b1a8a6dc49",
+    "after_sha256": "936b084e7f5ba5efb751f6fcc561f5a7682f49cf04b922f07034cc0a9b1167c0",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_huang_positive_chain.tex",
+    "before_sha256": "212ac4870f6137c85e79df806aa6f7da552c87add080359e327cfecdcd02b0f5",
+    "after_sha256": "05bf84fe357c81436aa9b1f348936864aa1f4d0b046bdb3bb489d8ae41b4b5c8",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_lvv_power_projector.tex",
+    "before_sha256": "b622aa8cceb33c7d0d8f1f8978e588222f1ff34a29a46a1386c0da39ab2db996",
+    "after_sha256": "bf5e1abd3e16f9eb156988110f0582e8c3552d12227aa807410f503dd92711f0",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_lvv_size_trimming.tex",
+    "before_sha256": "603efa51f668b2f90ccec12e6129bff943fafc3942ba40dffb4d9c9296819a9f",
+    "after_sha256": "d4f93fbfc824630bdd7c0f2b598d78cd87d7e752e28320440f585ee2a2dcfa6e",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_lvv_successive_trimming.tex",
+    "before_sha256": "6bbf7a9b97037f4ca6e7f3ce71536aafaa6bb42e3dae018524ba51fb5a9abd3e",
+    "after_sha256": "190a3b7179fd02d82008b46868cdf41bc78b35f6faa304b2af6429f60f0f0e84",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_one_dimensional_chain.tex",
+    "before_sha256": "4ab609f3afff4cc5597ec4153d5212ca566051844b7de35143be72c16f5ff734",
+    "after_sha256": "b7b4513adcf018dbdbb3bc73cda67e3cb15649c63bb956e439bb929a587259be",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_one_dimensional_preliminaries.tex",
+    "before_sha256": "a62b8b1a6747660988a3b609e189ea436ab0cde345b4157e87f333e93544a13a",
+    "after_sha256": "328a66d9bb33c97c8a8f852d5c6a17371ff593344031fcf94bba8bf0bc5ddc38",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "docs/formalization/one-dimensional-chain.md",
+    "before_sha256": "4982db192d23864b3a9fc3255883eefcd3f59ae472147b63ea492dabb7f4eb84",
+    "after_sha256": "ae6379e47db71278bfaab03992c1f86dd54a03170d83f35d796067b8f7817ac5",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "docs/formalization/openai-area-law-peps.md",
+    "before_sha256": "9174f7517ba0cf264ea4429f441a9af2a4fdb0c6d55ffa79cd36482369b9882b",
+    "after_sha256": "5d51671e209b73f54b9144454a9190d705e3e43a5bbdaebfa08ddd8fb1fb74d2",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "docs/glossary.md",
+    "before_sha256": "c5ae156f9d36455fc1075a8e3780fa9f5c598d199dcab416e5e581cfc5611181",
+    "after_sha256": "1397ddd51039692198f30ebccfc55a5e0a54aab2a0beadd7642f1b4c7442255b",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "docs/many_body_circuit_architecture.md",
+    "before_sha256": "cb3006dcde144ba92f0b7baaeaf3a6b08bf2b4c31b99a9fcdf946d8d66875c28",
+    "after_sha256": "43c35fb9e73a39565522bf34822b4eee8829cc233d8d5a2f3e2ca1d93f37d9d1",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex",
+    "before_sha256": "93759ca11ce592b6a635c505bdf8f3d567c4b550dcabca36e176353723038617",
+    "after_sha256": "e046fa8427d7635303b188b35fb403d03452ace3c4cd0a8bd4fdffa9e1267041",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "docs/paper-gaps/hastings07_commutator_constant.tex",
+    "before_sha256": "f38e036ac59d76183a32499ee2d00d97b59251da6bdedbb8b4e674f45fd97528",
+    "after_sha256": "7d99e3bf9f21b0b1e08dfb84cfc0522b575e58903746834a8fb590488fbceb31",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "docs/paper-gaps/hastings07_lemma1_decay_length.tex",
+    "before_sha256": "7a93b347cb0d96f41c477e48d51a8c613cb881d00bb8570cee88ee70b283284a",
+    "after_sha256": "ead0392dafcfcea2d30ce6e488ff5c6aa1fa310d04567a1b4177ccbe23f52077",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "docs/paper-gaps/lvv13_constant_bond.tex",
+    "before_sha256": "dd7210c858ca04783b2cbba70612214765fbb555331006c2ece1f5776c0f9f2b",
+    "after_sha256": "73ebd6ef35e1c433f9dab39bd9050edd8d76189a73e36e08e6df96f4ef035186",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "docs/paper-gaps/lvv13_leading_net_point.tex",
+    "before_sha256": "3a484d7dd91c1e07a6a6f0ffb82e20e6d07e576ef9bba2e79372d3e4310cc76e",
+    "after_sha256": "9d5a16d4415b63380d9b78b54e5a034f5fc3041805e5ea5a1c747d102e3e37ae",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "docs/paper-gaps/lvv13_runtime_ground_energy.tex",
+    "before_sha256": "0280b8b563db9a9bc51a08628eb852852c8fe913115b0d46e3795e886703846a",
+    "after_sha256": "3e6b29f8d445967d810608abb9785289d0a0a19a6f71464b94872ab428472579",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex",
+    "before_sha256": "832762b65e92e26122885fa38f447586b331322949d9caa3a8bcb440498ceeed",
+    "after_sha256": "04b0cbd897ecc79c1250721582117ed81928395158c21fdeaa2776ef69c525e2",
+    "labels_refs_uses_cites_unchanged": true
+  },
+  {
+    "path": "docs/tactic_patterns.md",
+    "before_sha256": "958a8e50b536c12ef588c44bc35db29245fab438648d2b7b059843c477f380d7",
+    "after_sha256": "7e98f054d39d575491df70ebc3c36a62e9a265ba289daf8b5b27ea72d096796c",
+    "labels_refs_uses_cites_unchanged": true
+  }
+]
