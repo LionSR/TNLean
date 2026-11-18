@@ -125,7 +125,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_rational_search
       (κ : ℝ) (ε : ℝ) (εb : ℝ) δ'
       c.1.decode c.2.1.decode c.2.2.1.decode := by
     convert hexact using 1 <;> dsimp [eη, eK, Ephys, δ', r, C] <;> ring
-  apply h.exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack hh hhJ
+  apply h.exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack
     hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ hcert
   · exact heη
   · simpa only [eη, eK, Ephys, δ', r, C, K] using hbudget
@@ -252,7 +252,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_rationa
         ((rectangularTraceNorm_nonneg _).trans hcert.hresidual))
       hrepair0
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hleadingExact :
@@ -295,7 +295,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_rationa
           2 * L * (2 * (((Δ / 169) ^ 2) / (2 * L)) + boundaryError)) / Δ +
             2 * ξrat := by ring
       _ ≤ 1 / 12 := hrational'
-  apply h.exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack hh hhJ
+  apply h.exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack
     hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan S hS W hW x hwx hwE X hX Z hZ hZZ
       hcert hleadingExact hξrat hξrat1
   simpa only [K, Hleft, repair, boundaryError] using hrationalExact
@@ -424,7 +424,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalCoordinateData_of_ration
         ((rectangularTraceNorm_nonneg _).trans hcert.hresidual))
       hrepair0
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hleadingExact :
@@ -467,7 +467,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalCoordinateData_of_ration
           2 * L * (2 * (((Δ / 169) ^ 2) / (2 * L)) + boundaryError)) / Δ +
             2 * ξrat := by ring
       _ ≤ 1 / 12 := hrational'
-  apply h.exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slack hh hhJ
+  apply h.exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slack
     hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan S D W hW x hwx hwE X hX Z hZ hZZ
       hcert hleadingExact hξrat hξrat1
   simpa only [K, Hleft, repair, boundaryError] using hrationalExact

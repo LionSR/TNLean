@@ -155,7 +155,7 @@ variable {Λ : Finset ℤ} {q R : ℕ} {J : ℝ}
 /-- An interaction on `Λ` as a finite-range interaction on the chain of `|Λ|` sites, with zero
 terms on the chain supports that straddle a gap of `Λ`. TNLean note, `part0_preamble.tex`,
 `eq:ham`. -/
-noncomputable def _root_.ManyBody.DomainInteraction.toChain :
+noncomputable def _root_.ManyBody.DomainInteraction.toChain (h : ManyBody.DomainInteraction Λ q R) :
     ManyBody.ChainInteraction Λ.card q R where
   term Y := if hY : IsDomainSupport Λ R Y.1 then h.term ⟨Y.1, hY⟩ else 0
   mem Y := by
@@ -306,8 +306,9 @@ theorem regionEntropy_le_mul_card_domainBoundaryEdges (hq : 1 ≤ q) (hJ : 0 ≤
     Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ≤
       chainIntervalEntropyBound q R J Δ * (domainBoundaryEdges Λ A).card := by
   obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hh hhJ hΔ hΩ hgap hspan A
-  rw [← h.toChain_hamiltonian hJ] at hgap hspan
-  have hchain := regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ (h.toChain) hΩ hgap hspan A'
+  rw [← h.toChain_hamiltonian] at hgap hspan
+  have hchain := regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ (h.toChain)
+      (h.isHermitian_toChain_term hh) (h.norm_toChain_term_le hhJ hJ) hΩ hgap hspan A'
   simpa only [hS, hB] using hchain
 
 /-- **The one-dimensional area law** (Theorem A). For every local dimension `q ≥ 1`, range

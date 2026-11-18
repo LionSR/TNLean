@@ -210,7 +210,7 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_boundary_spec
   let T (X : ChainSupport L R) (b : Bool) := Matrix.reindex e e
     (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
-  obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing hh hhJ D
+  obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing D
   change K = ∑ X ∈ C, ∑ b : Bool, (F * T X b * Fᴴ - T X b) at hsum
   have hsupp : Entropy.IsSupportedOn (n := fun _ ↦ q * q) K Z := by
     apply isSupportedOn_of_mem_supportedOperators
@@ -222,7 +222,7 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_boundary_spec
     apply supportedOperators_mono
       (Finset.coe_subset.mpr (Finset.subset_biUnion_of_mem (fun X ↦ X.1) hXC))
     exact mem_supportedOperators_of_isSupportedOn
-      (h.partialSwap_term_difference_spec hh hhJ D X b).1
+      (h.partialSwap_term_difference_spec D X b).1
   have hnorm : ‖K‖ ≤ (C.card : ℝ) * (2 * (2 * J)) := by
     rw [hsum]
     calc
@@ -232,7 +232,7 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_boundary_spec
       _ ≤ ∑ _X ∈ C, ∑ _b : Bool, 2 * J := by
         apply Finset.sum_le_sum
         intro X _
-        exact Finset.sum_le_sum (fun b _ ↦ (h.partialSwap_term_difference_spec hh hhJ D X b).2.2)
+        exact Finset.sum_le_sum (fun b _ ↦ (h.partialSwap_term_difference_spec D X b).2.2)
       _ = _ := by simp
   refine ⟨hsupp, hzone, ?_⟩
   by_cases hL : L = 0
@@ -244,7 +244,7 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_boundary_spec
       omega
     simpa only [hc, Nat.cast_zero, zero_mul, hb, Finset.card_empty, mul_zero] using hnorm
   · let x : Fin L := ⟨0, Nat.pos_of_ne_zero hL⟩
-    have hJ : 0 ≤ J := h.norm_bound_nonneg hh hhJ x
+    have hJ : 0 ≤ J := h.norm_bound_nonneg x
     have hc : (C.card : ℝ) * 2 ≤
         (chainCrossConst R : ℝ) * ((boundaryEdges L D).card : ℝ) := by
       exact_mod_cast hcount

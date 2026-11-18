@@ -322,7 +322,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_canonical_ratio
   · simpa only [K] using hKclose
   · simpa only [r, K, Et, Dt] using hfind
   · simpa only [r, K, Et, Dt] using hexact
-  apply h.exists_viable_vector_of_rational_search_result hh hhJ hL hq hΔ HL B hsplit
+  apply h.exists_viable_vector_of_rational_search_result hL hq hΔ HL B hsplit
     hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hXphysical Z hZ hZZ
     η κ ε εb ρ QZ QK QX ε εb (η + ρ) Et (κ + ρ) (ε + ρ) (εb + ρ)
     ((r : ℚ) ^ 2 * Dt) Dt
@@ -454,10 +454,10 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_canonic
   have hleading := fullyApproxSDP_errors_with_trace_energy_slack_fit_lvv_margin
     hL hΔ.le hκfit hεfit hεbfit hδfit' heηfit heKfit'
   have hΔ₄ : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
   have hrational := canonical_search_rationalization_overlap_budget hL hΔ hΔ₄
     hκfit hεfit hεbfit hδfit' heηfit heKfit'
-  apply h.exists_rationalViableMPSData_of_rational_search_result hh hhJ hL hq hΔ
+  apply h.exists_rationalViableMPSData_of_rational_search_result hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan S hS W hW x hwx hwE X hXphysical Z hZ hZZ
     η κ ε εb ρ QZ QK QX ε εb (η + ρ) Et (κ + ρ) (ε + ρ) (εb + ρ)
     ((r : ℚ) ^ 2 * Dt) Dt
@@ -594,10 +594,10 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalCoordinateData_of_canoni
   have hleading := fullyApproxSDP_errors_with_trace_energy_slack_fit_lvv_margin
     hL hΔ.le hκfit hεfit hεbfit hδfit' heηfit heKfit'
   have hΔ₄ : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
   have hrational := canonical_search_rationalization_overlap_budget hL hΔ hΔ₄
     hκfit hεfit hεbfit hδfit' heηfit heKfit'
-  apply h.exists_rationalCoordinateData_of_rational_search_result hh hhJ hL hq hΔ
+  apply h.exists_rationalCoordinateData_of_rational_search_result hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan S D W hW x hwx hwE X hXphysical Z hZ hZZ
     η κ ε εb ρ QZ QK QX ε εb (η + ρ) Et (κ + ρ) (ε + ρ) (εb + ρ)
     ((r : ℚ) ^ 2 * Dt) Dt

@@ -47,8 +47,7 @@ theorem _root_.ManyBody.ChainInteraction.re_inner_sub_le_of_overlap_of_range_one
     (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re - E₀ ≤ 8 * L * δ := by
   let B := toEuclideanCLM (𝕜 := ℂ) h.hamiltonian
   have hB : ‖B‖ ≤ 2 * L := by
-    simpa only [B, l2_opNorm_toEuclideanCLM, mul_one] using
-        h.norm_hamiltonian_le_of_range_one hh hhJ
+    simpa only [B, l2_opNorm_toEuclideanCLM, mul_one] using h.norm_hamiltonian_le_of_range_one
   have heig : B Ω = (E₀ : ℂ) • Ω :=
     ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _)
   have hE₀ : ‖(E₀ : ℂ)‖ ≤ ‖B‖ := by
@@ -81,7 +80,7 @@ theorem _root_.ManyBody.ChainInteraction.re_inner_le_of_overlap_div_of_range_one
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (hL : 0 < L) (hv : ‖v‖ = 1) (hover : 1 - c / L ≤ ‖⟪Ω, v⟫_ℂ‖) :
     (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + 8 * c := by
-  have henergy := h.re_inner_sub_le_of_overlap_of_range_one hh hhJ hΩ hspan hv hover
+  have henergy := h.re_inner_sub_le_of_overlap_of_range_one hΩ hspan hv hover
   have hL0 : (L : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hL.ne'
   have hcancel : (8 : ℝ) * L * (c / L) = 8 * c := by field_simp [hL0]
   rw [hcancel] at henergy

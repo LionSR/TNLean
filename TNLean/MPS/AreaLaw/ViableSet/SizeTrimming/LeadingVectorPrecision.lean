@@ -142,7 +142,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_leading_vector_of_approximate_co
     have hKn : ‖K‖ ≤ ‖Hleft‖ := l2_opNorm_isometricCompression_le Z hZ Hleft
     have hε0 : 0 ≤ ε := (rectangularTraceNorm_nonneg _).trans hclose
     have hHleft : ‖Hleft‖ ≤ 4 * L :=
-      (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
+      (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
     have hsum : ‖Hleft‖ + ‖B‖ ≤ 6 * L := by linarith only [hHleft, hBn]
     calc
       2 * (2 * ‖K‖ * ε + ‖B‖ * (2 * ε)) = 4 * (‖K‖ + ‖B‖) * ε := by ring
@@ -154,14 +154,14 @@ theorem _root_.ManyBody.ChainInteraction.exists_leading_vector_of_approximate_co
         exact mul_le_mul_of_nonneg_right hscaled hε0
   have herr : 2 * (2 * ‖K‖ * ε + ‖B‖ * (2 * ε)) ≤ Δ / 2028 :=
     hnum.trans hprecision
-  have hbounds := h.leading_bounds_of_approximate_boundary_solution hh hhJ hL hq hΔ
+  have hbounds := h.leading_bounds_of_approximate_boundary_solution hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX herr hρpsd hρtrace hρP
       hρboundary hρenergy u μ hu huρ hmax
   have hbase : 2 * (6 * (Δ / 169) + ‖B‖ *
       (2 * (((Δ / 169) ^ 2) / (2 * L)))) ≤ 14 * (Δ / 169) := by
     have hL0 : (L : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hL.ne'
     have hΔ4 : Δ ≤ 4 := by
-      simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
+      simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
     have hcr : 2 * (Δ / 169) ^ 2 ≤ Δ / 169 := by
       nlinarith only [mul_nonneg hΔ.le (sub_nonneg.mpr hΔ4), hΔ]
     have hBτ : ‖B‖ * (2 * (((Δ / 169) ^ 2) / (2 * L))) ≤
@@ -255,7 +255,7 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_of_density_a
       (⟪v', toEuclideanLin h.hamiltonian v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
   have hζ0 : 0 ≤ ζ := (norm_nonneg (u' - u)).trans hdist
   have hΔL : Δ * ζ ≤ 4 * L * ζ := by
     have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hL
@@ -281,7 +281,7 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_of_density_a
     apply ha.trans'
     field_simp [ne_of_gt hΔ]
     nlinarith only [hscaled, hΔ]
-  exact h.nearby_glued_vector_viable_bounds hh hhJ hΩ W hW u u' hu hu' hu'P
+  exact h.nearby_glued_vector_viable_bounds hΩ W hW u u' hu hu' hu'P
     hEreserve hareserve hdist
 
 /-- The finite-precision LVV conclusion depends only on the ray of the exact leading
@@ -349,7 +349,7 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_of_phase_dis
           gluingCut L q k)⟫_ℂ‖ := by
     rw [show c = Complex.exp (θ * Complex.I) from rfl, hinv.2]
     exact ha
-  exact h.nearby_glued_vector_viable_of_density_and_vector_precision hh hhJ hL hq hΔ hΩ hgap hspan
+  exact h.nearby_glued_vector_viable_of_density_and_vector_precision hL hq hΔ hΩ hgap hspan
     W hW (c • u) u' hcu hu' hu'P hEθ haθ hθ hprecision
 
 /-- A normalized numerical vector may be supplied by an eigensolver through its
@@ -404,7 +404,7 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_of_density_a
     nlinarith only [hscaled]
   obtain ⟨θ, hθ⟩ := Matrix.PosSemidef.exists_phase_distance_le_of_residual_le
     hρ hρtr hu hu' huρ hμ hζ hres
-  exact h.nearby_glued_vector_viable_of_phase_distance hh hhJ hL hq hΔ hΩ hgap hspan W hW u u'
+  exact h.nearby_glued_vector_viable_of_phase_distance hL hq hΔ hΩ hgap hspan W hW u u'
     hu hu' hu'P hE ha ⟨θ, hθ⟩ hprecision
 
 /-- Splitting the unused LVV margin equally between the density approximation and the

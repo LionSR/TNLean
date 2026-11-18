@@ -63,8 +63,9 @@ theorem _root_.ManyBody.DomainInteraction.regionEntropy_neighborhood_biUnion_int
         (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)) Ω ≤
           (s.card : ℝ) * chainIntervalEntropyBound q R J Δ := by
   exact regionEntropy_domainNeighborhood_biUnion_intervals_le hΩ
-    (fun u v ↦ regionEntropy_interval_le hq hJ hΔ (h.toChain)
-      hΩ (by simpa only [h.toChain_hamiltonian hJ] using hgap)
-      (by simpa only [h.toChain_hamiltonian hJ] using hspan) u v) s a b m
+    (fun u v ↦ regionEntropy_interval_le hq hJ hΔ (h.toChain) (h.isHermitian_toChain_term hh)
+        (h.norm_toChain_term_le hhJ hJ)
+      hΩ (by simpa only [h.toChain_hamiltonian] using hgap)
+      (by simpa only [h.toChain_hamiltonian] using hspan) u v) s a b m
 
 end TNLean.MPS.AreaLaw

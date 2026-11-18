@@ -168,7 +168,7 @@ theorem _root_.ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive
   let B : ℝ := 1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
   let budget := Entropy.cutLogBudget C (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ D)
   have hcard : (C.card : ℝ) ≤ (2 * R : ℕ) := by
-    exact_mod_cast h.card_crossingTerms_interval_le_of_consecutive_terms hh hhJ hwindow l r
+    exact_mod_cast h.card_crossingTerms_interval_le_of_consecutive_terms hwindow l r
   have hdim (X : A) :
       Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) (D X) : ℝ)) ^ 2 ≤
         Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2 := by
@@ -217,7 +217,7 @@ theorem _root_.ManyBody.ChainInteraction.log_surprisalMoment_interval_le_of_cons
   let B : ℝ := windowBudgetConst q R
   let budget := Entropy.cutLogBudget C (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ D)
   have hbudget : budget ≤ B :=
-    h.cutLogBudget_interval_le_of_consecutive_terms hq hh hhJ hwindow l r
+    h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow l r
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   have hbudget1 : 1 ≤ budget := Entropy.one_le_cutLogBudget _ _
   have hradius : Entropy.tailRadius (J / Δ) B ≤

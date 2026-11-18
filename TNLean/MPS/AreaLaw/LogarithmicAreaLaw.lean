@@ -378,8 +378,9 @@ theorem domainAreaLaw_of_consecutive_terms_polynomial_range :
   refine ⟨Cabs, hCabs, hCeq, ?_⟩
   intro q R J Δ hq hJ hΔ Λ h hh hhJ hwindow E₀ Ω hΩ hgap hspan A
   obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hh hhJ hΔ hΩ hgap hspan A
-  rw [← h.toChain_hamiltonian hJ] at hgap hspan
-  have hbound := hchain q R J Δ hq hJ hΔ Λ.card (h.toChain)
+  rw [← h.toChain_hamiltonian] at hgap hspan
+  have hbound := hchain q R J Δ hq hJ hΔ Λ.card (h.toChain) (h.isHermitian_toChain_term hh)
+    (h.norm_toChain_term_le hhJ hJ)
     (h.toChain_consecutive_terms hh hhJ hJ hwindow) E₀ Ω hΩ hgap hspan A'
   simpa only [hS, hB] using hbound
 

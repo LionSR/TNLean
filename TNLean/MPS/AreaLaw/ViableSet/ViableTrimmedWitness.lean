@@ -73,7 +73,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_trimmed_witness_of_isViable
   classical
   let c : ℝ := (Δ / 169) ^ 2
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
   obtain ⟨hc0, hc, -⟩ := lvv_trimming_constant_bounds hΔ hΔ4
   change 0 < c at hc0
   change c ≤ 1 / 1600 at hc
@@ -83,12 +83,12 @@ theorem _root_.ManyBody.ChainInteraction.exists_trimmed_witness_of_isViable
   have hΓψ : 1 - c / L ≤ ‖⟪Γ, ψ⟫_ℂ‖ := by
     rw [norm_inner_symm]
     exact hψΓ
-  have hE := h.re_inner_le_of_overlap_div_of_range_one hh hhJ hΩ hspan hL hψ hΓψ
+  have hE := h.re_inner_le_of_overlap_div_of_range_one hΩ hspan hL hψ hΓψ
   let D := constantCutBond q 1 1 Δ c
   obtain ⟨PΓ, hPΓ⟩ := exists_isTrimmingProjection
     (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Γ) D
   let u := ‖chainTrim Γ k PΓ‖⁻¹ • chainTrim Γ k PΓ
-  have hB := h.one_sub_le_re_inner_chainTrim hh hhJ (by omega : 1 ≤ q) (by norm_num)
+  have hB := h.one_sub_le_re_inner_chainTrim (by omega : 1 ≤ q) (by norm_num)
     hΔ hΩ hgap hspan hc0 k hPΓ
   have hu : ‖u‖ = 1 := norm_normalized_chainTrim_eq_one (by linarith : c < 1) hB
   have huD : (cutMatrix u k).rank ≤ D := rank_cutMatrix_normalized_chainTrim_le hPΓ
@@ -99,7 +99,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_trimmed_witness_of_isViable
       (hcdiv.trans (by linarith : c ≤ 1)) huΓ hψΓ
     linarith
   obtain ⟨HL, HR, K, hsplit, hHL, hHR, hK0, hK1⟩ :=
-    h.exists_cut_decomposition_of_range_one hh hhJ hpos k
+    h.exists_cut_decomposition_of_range_one hpos k
   have hblock : interval L 0 k = leftBlock L k := by
     ext i
     simp [interval, leftBlock]
