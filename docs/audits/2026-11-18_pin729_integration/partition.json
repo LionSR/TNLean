@@ -1,0 +1,36 @@
+{
+  "source_head": "6b7fb2e27dbc6856091e593e4226d350403beb8a",
+  "source_tree": "b535ccb984038d4b8f8d47bb874bc17035ab5f03",
+  "tn_changed_vs_012eb9cc": 113,
+  "tn_changed_vs_e06": 119,
+  "extra_MergeRounds_in_affected_set": false,
+  "manifests": {
+    "existing_affected": {
+      "count": 1668,
+      "sha256": "f07468ff1f34fd68f8c5817aff1308532d4daac7e23484dd97b0faab8449333b"
+    },
+    "mps": {
+      "count": 864,
+      "sha256": "c2845a21540301e5513a76de21ff5b521bd05cc7b096cf24d29f561fbf8b97b0"
+    },
+    "peps": {
+      "count": 591,
+      "sha256": "d74b70d64cc1eef9d8dd8773ce8a4ad608c488a377638d4281191e99c370ddb4"
+    },
+    "other": {
+      "count": 213,
+      "sha256": "1f4bd46fccef6467f0c98ec2266c0fd0594f9f47788e49f14e9dd5be01cccff8"
+    }
+  },
+  "partition_assertions": "pairwise disjoint; union equals existing_affected; all paths exist",
+  "peps_reserved_five": {
+    "status": "build in progress; zero completed; do not duplicate",
+    "paths": [
+      "TNLean/PEPS/Approximation/AdaptivePatchConstraintFromAreaLaw.lean",
+      "TNLean/PEPS/Approximation/NestedPatchApproximation.lean",
+      "TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean",
+      "TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean",
+      "TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean"
+    ]
+  }
+}

@@ -50,8 +50,10 @@ The separate QIC checkout has no imported old QIC/TN build products.
 Any placement-owner build result is recorded separately; it does not validate
 the five combined TN consumers or the regression fixtures.
 
-impact.json records 113 directly changed TN files, 29 changed QIC modules,
-1669 transitively affected TNLean/ modules and 11 affected fixtures. Old-pin
+impact.json records 113 directly changed TN files relative to 012eb9cc6
+(119 relative to e06a33e5), 29 changed QIC modules, 1668 existing affected
+TNLean/ modules and 11 affected fixtures. The removed local lift path is excluded.
+MergeRounds is an additional delta relative to e06a33e5 outside this closure. Old-pin
 passes cannot be relabelled as new-pin success. Prioritize the five overlap
 consumers, the retained zero-gap and arbitrary-label fixtures, then the full
 recorded affected set after independent review. The unrelated old-pin consumer
@@ -69,3 +71,23 @@ no old QIC or TN build artifacts were reused. This proves neither the combined
 TN consumers nor the eleven fixtures at this pin. validation.json records the
 exact command and boundary. All four DG sources now match 75fc2228 exactly,
 with one canonical interval open each; the formatting file matches 5f9d620b.
+
+## Shared history and partition checkpoint
+
+Candidate 6b7fb2e27dbc6856091e593e4226d350403beb8a merges the complete
+shared history through 70db80c3928565d8b9741aa2b7400c293cdd9211. The only
+new shared commit adds the Edge open already supplied by main; its duplicate
+automatic insertion was removed. Both this merge and b63e6f6c have tree
+b535ccb984038d4b8f8d47bb874bc17035ab5f03. Subsequent partition files are
+audit-only and do not change production sources or dependencies.
+
+partition.json records sorted UTF-8 LF manifests and SHA256 hashes: MPS 864,
+PEPS 591, other 213; their disjoint union contains 1668 existing paths.
+The five overlap consumers are reserved here, not yet certified at this checkpoint.
+MergeRounds is separately assigned to the MPS worker as an extra delta.
+
+The repository provides export_coherent_qic_prerequisites.py and
+export_coherent_tn_prerequisites.py. They verify exact dependency pins, toolchain
+and clean source provenance; the TN exporter additionally requires its recorded
+baseline configuration and source closure. These are bounded prerequisite sets,
+not full-closure caches. No cross-environment cache transfer is assumed or done.

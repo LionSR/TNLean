@@ -1659,7 +1659,6 @@
     "TNLean/PEPS/ParentHamiltonian/CycleParentGroundSpace.lean",
     "TNLean/PEPS/ParentHamiltonian/CyclePhysicalDeformation.lean",
     "TNLean/PEPS/ParentHamiltonian/DependentRegionCoordinates.lean",
-    "TNLean/PEPS/ParentHamiltonian/DependentRegionOperatorLift.lean",
     "TNLean/PEPS/ParentHamiltonian/GInjectiveParentTransport.lean",
     "TNLean/PEPS/ParentHamiltonian/GIsometricRegionParentHamiltonian.lean",
     "TNLean/PEPS/ParentHamiltonian/GraphBondPhysicalCoordinates.lean",
@@ -1828,5 +1827,12 @@
     "scripts/spectator_boundary_regression.lean",
     "scripts/spectator_site_expectation_regression.lean",
     "scripts/zero_gap_tn_wrappers_regression.lean"
+  ],
+  "tn_changed_base": "012eb9cc62456e13829144b0b45d8f888fb9bc1c",
+  "deleted_affected_paths": [
+    "TNLean/PEPS/ParentHamiltonian/DependentRegionOperatorLift.lean"
+  ],
+  "additional_delta_from_e06": [
+    "TNLean/MPS/AreaLaw/ALVV/MergeRounds.lean"
   ]
 }
