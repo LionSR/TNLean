@@ -500,11 +500,12 @@ space.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_sampled_inter
 When $c=\lceil\log_Ds\rceil$ is even, $k=c/2$ is the source's number of rounds
 and $M\le Ds^2$, the printed bound.
 
-When $c$ is odd the printed bound $Ds^2$ is not attained by the source's
-merge argument with an integer number of rounds. The node bound after $j$
+When $c$ is odd and $s<D^c$, no integer number of rounds
+satisfies both the printed count bound and the sufficient condition used
+in the following error estimate. The node bound after $j$
 rounds is $D^{2j}s$, so $D^{2j}s\le Ds^2$ means $D^{2j}\le Ds$. The error
-estimate of the merge needs $s\le D^{2j}$: a merged space has dimension
-$Q\le(D^{2j}s)^2$, a sample of dimension $s$ overlaps the target by at least
+estimate used here assumes $s\le D^{2j}$: a merged space has dimension
+$Q\le(D^{2j}s)^2$, a sample of dimension $\min(s,Q)$ overlaps the target by at least
 $3/(32D^{4j}s)$, and the error after $j$ rounds is at most
 $(1024/9)\Delta^jD^{8j}s^2$, which the budget $D^{12}\Delta\le10^{-5}$
 bounds by $(1024/9)(D^{12}\Delta)^j$ only when $s^2\le D^{4j}$. If $s<D^c$,
@@ -513,7 +514,9 @@ $2j\le c$, hence $2j\le c-1$ and $D^{2j}\le D^{c-1}<s$; in particular $c=1$
 leaves only $j=0$, with no improvement at
 all.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.merge_rounds_lt_of_odd}.}
 Only when $s=D^c$ does $j=(c+1)/2$ give $M=Ds^2$. The odd case is therefore
-a printed rounding gap, not a missing argument, and the formalized bound is
+a rounding obstruction for this pair of sufficient inequalities. It does not
+exclude a sharper error estimate or another construction attaining $Ds^2$.
+The formalized bound is
 $M\le D^2s^2$, at most a factor $D$ above the source's: indeed
 $M/(Ds^2)=D^c/s<D$. For the parameters used, $D=(m\ell^2)^{22\ell}$ with
 $\ell\ge21$ is far larger than $s$ unless $r$ or $1/\beta$ is enormous, so

@@ -93,8 +93,9 @@ $\mathcal D^{2k}\ge s$. Since $2k\le m+1$,
 The formalized conclusion is~(\ref{eq:alvv16_unique_rounded_count}); the even case
 admits the sharper estimate~(\ref{eq:alvv16_unique_even_count}). For odd $m$ the
 bound is up to a factor $\mathcal D$ weaker than the source's, and this is a
-printed rounding gap: no integer number of rounds attains the source's bound
-in that case, as shown below.
+rounding obstruction to satisfying the two inequalities used below when
+$s<\mathcal D^m$. It is not an impossibility result for other error
+estimates or constructions attaining the printed node bound.
 
 The condition $s\le\mathcal D^{2k}$ also controls the error. A merged space
 of dimension $Q$ and its sampled overlap $\alpha$ satisfy
@@ -121,14 +122,14 @@ $a=\lceil\log_{\mathcal D}(\mathcal D^2s)\rceil$, for which
 Now suppose $m$ is odd and
 $s<\mathcal D^m$. The node bound after $j$ rounds is $\mathcal D^{2j}s$, so
 the source's bound $\mathcal Ds^2$ requires $\mathcal D^{2j}\le\mathcal Ds$,
-while the error estimate above requires $s\le\mathcal D^{2j}$: with
+while the sufficient error estimate above assumes $s\le\mathcal D^{2j}$: with
 $\mathcal D^{2j}<s$ the bound $(1024/9)\Delta^j\mathcal D^{8j}s^2$ is not
 controlled by $(\mathcal D^{12}\Delta)^j$. The two are incompatible, since
 $\mathcal D^{2j}\le\mathcal Ds<\mathcal D^{m+1}$ forces $2j\le m-1$ and then
 $\mathcal D^{2j}\le\mathcal D^{m-1}<s$; for $m=1$ only $j=0$ remains, which
 does not improve the sample at
 all.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.merge_rounds_lt_of_odd}.}
-Only for $s=\mathcal D^m$ does $j=(m+1)/2$ attain $\mathcal Ds^2$. The
+Under these two conditions, only for $s=\mathcal D^m$ does $j=(m+1)/2$ attain $\mathcal Ds^2$. The
 formalized bound exceeds the source's by the factor
 $\mathcal D^m/s<\mathcal D$. For the parameters of Theorem~t:aisff,
 $\mathcal D=(d\ell^2)^{22\ell}$ is far larger than
@@ -161,7 +162,8 @@ The remaining differences from the source are:
 \end{enumerate}
 The conclusions are mathematically correct as stated, and narrower than the
 source in the items listed. The factor $\mathcal D$ in the odd case is the local
-fix above, not a further deviation.
+rounding choice above; whether another argument recovers the printed
+node bound is not settled by this arithmetic obstruction.
 
 \paragraph{Elimination plan.}
 A reference space for collective trimming whose Schmidt ranks are bounded
