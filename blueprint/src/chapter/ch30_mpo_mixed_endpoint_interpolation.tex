@@ -58,6 +58,17 @@ $W_\gamma$ denotes $W(\gamma)$.
     \end{tenkz}
 \end{tenkzequation}
 
+The source asserts \cite[Section~5]{GarreRubio2023MPOSym}:
+\begin{quote}
+    ``It is clear that the tensor $A(\gamma)$ defined in Eq.~(defAgamma)
+    is injective for $\gamma \in (0,1)$, so that the parent Hamiltonian
+    $H_{A(\gamma)} \equiv H(\gamma)$ is gapped and has as unique ground
+    state $|\psi_{A(\gamma)} \rangle$ within that region.''
+\end{quote}
+Its first assertion is the last conclusion of the following lemma, whose
+only hypotheses are the injectivity of the endpoint tensors $A_0,A_1$ in
+physical-support coordinates and $0<\gamma<1$.
+
 \begin{lemma}[Interior injectivity]
     \label{thm:mpo_mixed_interior}
     \lean{MPSTensor.MPOSymmetry.span_mixedEndpointLetter_eq_top,

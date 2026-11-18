@@ -55,7 +55,7 @@ theorem norm_heisenberg_commutator_le_domainDistance
   have hBound (n : ℕ)
       (hn : ∀ x ∈ S, (n : ℕ∞) ≤ (domainGraph Λ).edist x y) :=
     ManyBody.norm_heisenberg_commutator_le_graphDistance_finset
-      (domainGraph Λ) Φ a ha hHerm R (fun k x hx z hz ↦ (X k).2.2 x hx z hz)
+      (domainGraph Λ) Φ hHerm R (fun k x hx z hz ↦ (X k).2.2 x hx z hz)
       (R + 1) (fun k ↦ (X k).2.isChainSupport.card_le) b₀ hBudget S hA y hB
       1 (by norm_num) n hn t
   dsimp only
@@ -119,7 +119,7 @@ theorem norm_heisenberg_sub_regionExpectation_domainNeighborhood_le
     exact_mod_cast domainGraph_card_sphere_le_two Λ x d
   let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin q) (fun k ↦ (X k).1) := ⟨h, hSupport⟩
   have hGraph := ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le
-    (domainGraph Λ) Φ a ha hHerm R (fun k x hx z hz ↦ (X k).2.2 x hx z hz)
+    (domainGraph Λ) Φ hHerm R (fun k x hx z hz ↦ (X k).2.2 x hx z hz)
     (R + 1) (fun k ↦ (X k).2.isChainSupport.card_le) b₀ hBudget 2 0 hGrowth S hA ⌊ℓ⌋₊ t
   simp only [pow_zero, Nat.factorial_zero, Nat.cast_one, mul_one, Nat.cast_add] at hGraph
   have hRound :

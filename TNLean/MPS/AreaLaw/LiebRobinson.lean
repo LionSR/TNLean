@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.ChainNeighborhood
-import TNLean.Algebra.PathGraphDistance
+import QICLean.ManyBody.Sites.Lattice.PathGraph
 import TNLean.Circuit.EntropySupport
 import QICLean.ManyBody.Dynamics.GraphLocalization
 
@@ -80,7 +80,7 @@ theorem norm_heisenberg_commutator_le_chainDistance
   have hBound (n : ℕ)
       (hn : ∀ x ∈ S, (n : ℕ∞) ≤ (SimpleGraph.pathGraph L).edist x y) :=
     ManyBody.norm_heisenberg_commutator_le_graphDistance_finset
-      (SimpleGraph.pathGraph L) Φ a ha hHerm R (fun k x hx z hz ↦ (X k).edist_le x hx z hz)
+      (SimpleGraph.pathGraph L) Φ hHerm R (fun k x hx z hz ↦ (X k).edist_le x hx z hz)
       (R + 1) (fun k ↦ (X k).2.card_le) b₀ hBudget S hA y hB 1 (by norm_num) n hn t
   simp only [hΦ] at hBound
   dsimp only
@@ -144,7 +144,7 @@ theorem norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
     exact_mod_cast SimpleGraph.pathGraph_card_sphere_le_two L x d
   let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) (fun k ↦ (X k).1) := ⟨h, hSupport⟩
   have hGraph := ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le
-    (SimpleGraph.pathGraph L) Φ a ha hHerm R (fun k x hx z hz ↦ (X k).edist_le x hx z hz)
+    (SimpleGraph.pathGraph L) Φ hHerm R (fun k x hx z hz ↦ (X k).edist_le x hx z hz)
     (R + 1) (fun k ↦ (X k).2.card_le) b₀ hBudget 2 0 hGrowth S hA ⌊ℓ⌋₊ t
   have hN : (S.biUnion fun x ↦
       ManyBody.graphBall (SimpleGraph.pathGraph L) x ⌊ℓ⌋₊) =

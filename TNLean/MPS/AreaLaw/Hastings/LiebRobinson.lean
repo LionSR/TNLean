@@ -52,9 +52,8 @@ theorem ChainHamiltonian.norm_heisenberg_commutator_le_numeric
     ⟨h.term, h.supported⟩
   have hBound := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric
     (SimpleGraph.pathGraph L) Φ
-    (fun Z ↦ Classical.choose Z.2.1) (fun Z ↦ Classical.choose_spec Z.2.1)
     h.hermitian R (fun Z x hx y hy ↦ Z.edist_le x hx y hy)
-    (R + 1) (by omega) (fun Z ↦ Z.2.card_le)
+    (R + 1) (fun Z ↦ Z.2.card_le)
     (((2 ^ (2 * R + 1) : ℕ) : ℝ) * J) h.sum_norm_terms_containing_le X hA Y hB 1 (by norm_num) d
     (fun x hx y hy ↦ by
       simpa only [SimpleGraph.pathGraph_edist, ENat.natCast_le_natCast] using hd x hx y hy) t

@@ -36,17 +36,19 @@ momenta of bounded denominator, is `norm_groundCompression_commutator_le_of_mome
 open Matrix GaussianFilter QuantumCircuit
 open scoped Matrix.Norms.L2Operator
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
-  (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+  (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
   (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
 
-include ha hHerm hSupport hDiam hCard hBudget
+include hHerm hSupport hDiam hCard hBudget
 
 /-- **The low-energy commutator is small when a supercell translate is far away.** Let the
 terms be covariant under the action of `Γ`, `h_{g•k} = P_g h_k P_g†` (Hastings,
@@ -65,7 +67,7 @@ theorem norm_groundCompression_commutator_le_of_supercell_separation [NeZero d]
     {r q ΔE : ℝ} (hr : 0 ≤ r) (hq : 0 ≤ q) (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian)
     {E₀ : ℝ} (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
     (S : Subgroup Γ)
-    (hS : ∀ g ∈ S, ∀ v ∈ groundEigenspace (∑ k, h k) E₀,
+    (hS : ∀ g ∈ S, ∀ v ∈ groundSpace (∑ k, h k) E₀,
       sitePermMatrix d g *ᵥ WithLp.ofLp v = WithLp.ofLp v)
     {g : Γ} (hg : g ∈ S) (i j : κ) (l : ℕ)
     (hsep : Disjoint (((X i).biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι)
@@ -87,7 +89,7 @@ theorem norm_groundCompression_commutator_le_of_supercell_separation [NeZero d]
     exact groundCompression_sitePermMatrix_conj S hS hg _
   rw [groundCompression_gaussianFilteredTerm hr hH, groundCompression_gaussianFilteredTerm hr hH,
     ← hj]
-  exact norm_groundCompression_commutator_le_graphNeighborhood G X a ha h hHerm hSupport R hDiam
+  exact norm_groundCompression_commutator_le_graphNeighborhood G X h hHerm hSupport R hDiam
     vR hCard b₀ hBudget Kg kg hGrowth hq hΔE hH hgap (X i) (hSupport i) l _ hsep
     (hSupport (g • j)) hT
 

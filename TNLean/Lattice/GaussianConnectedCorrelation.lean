@@ -25,6 +25,8 @@ noncomputable section
 open MeasureTheory ProbabilityTheory Matrix GaussianFilter Filter
 open scoped Matrix.Norms.L2Operator InnerProductSpace NNReal Topology
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
@@ -41,8 +43,8 @@ theorem norm_centered_ground_correlation_le_gaussian
     (hC : 0 ≤ C) (hv : 0 ≤ v)
     {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
     (hgap : ∀ i, hH.eigenvalues i = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues i)
-    {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundEigenspace H E₀)
-    (hline : groundEigenspace H E₀ = Submodule.span ℂ {ψ})
+    {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundSpace H E₀)
+    (hline : groundSpace H E₀ = Submodule.span ℂ {ψ})
     (A B : Matrix n n ℂ) (hcenter : ⟪ψ, L A ψ⟫_ℂ = 0)
     (hLR : ∀ t : ℝ,
       ‖hermitianUnitaryPath H t * A * hermitianUnitaryPath H (-t) * B -

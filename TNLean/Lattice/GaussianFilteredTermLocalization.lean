@@ -77,19 +77,21 @@ accuracy.
 open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 section Graph
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
-  (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+  (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
   (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
 
-include ha hHerm hSupport hDiam hCard hBudget
+include hHerm hSupport hDiam hCard hBudget
 
 /-- **Locality of a filtered term on a finite graph.** Let `W` act on `S` and `B` on one site
 `y` at graph distance at least `l` from every site of `S`. For every `μ ≥ 0` and `T ≥ 0`,
@@ -111,7 +113,7 @@ theorem norm_commutator_gaussianFilteredTerm_le_graphDistance {q ΔE : ℝ} (hq 
   refine norm_commutator_gaussianFilteredTerm_le hq hH W B hT (by positivity) fun t ht => ?_
   let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
     ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
-  have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset G Φ a ha hHerm R
+  have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset G Φ hHerm R
     hDiam vR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hW) y
     (isSupportedOn_of_mem_supportedOperators (S := {y}) (by rwa [Finset.coe_singleton])) μ hμ l
     hl t
@@ -161,7 +163,7 @@ theorem norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood [Ne
     fun t ht => ?_
   let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
     ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
-  have hLR := ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le G Φ a ha hHerm
+  have hLR := ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le G Φ hHerm
     R hDiam vR hCard b₀ hBudget Kg kg hGrowth S (isSupportedOn_of_mem_supportedOperators hW) l t
   refine hLR.trans (mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr ?_) hP)
   have htT : |t| ≤ T := abs_le.mpr ht
@@ -196,7 +198,7 @@ theorem exists_local_approx_gaussianFilteredTerm [NeZero d] (Kg : ℝ) (kg : ℕ
       W),
     fun hW' => (ManyBody.isHermitian_regionExpectation (D := _)) (isHermitian_gaussianFilteredTerm
       q ΔE hH hW'),
-    norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood G X a ha h hHerm
+    norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood G X h hHerm
       hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth hq S hW l hT⟩
 
 end Graph
@@ -214,10 +216,10 @@ inequality before eq. `facld` (lines 322–348); with `M` as in
 theorem norm_sub_starProjection_apply_le_of_gaussianFilteredTerm {q ΔE : ℝ} (hq : 0 ≤ q)
     (hΔE : 0 < ΔE) {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
-    (W M : Matrix n n ℂ) {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundEigenspace H E₀) :
-    ‖toEuclideanLin M ψ - (groundEigenspace H E₀).starProjection (toEuclideanLin M ψ)‖ ≤
+    (W M : Matrix n n ℂ) {ψ : EuclideanSpace ℂ n} (hψ : ψ ∈ groundSpace H E₀) :
+    ‖toEuclideanLin M ψ - (groundSpace H E₀).starProjection (toEuclideanLin M ψ)‖ ≤
       (‖W‖ * Real.exp (-q / 2) + ‖gaussianFilteredTerm q ΔE H W - M‖) * ‖ψ‖ := by
-  set K := groundEigenspace H E₀
+  set K := groundSpace H E₀
   set x := toEuclideanLin (gaussianFilteredTerm q ΔE H W) ψ
   set z := toEuclideanLin (M - gaussianFilteredTerm q ΔE H W) ψ
   have hMxz : toEuclideanLin M ψ = x + z := by
@@ -247,8 +249,8 @@ theorem norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm {q ΔE : ℝ} (hq :
     ‖toEuclideanLin M Ω - ⟪Ω, toEuclideanLin M Ω⟫_ℂ • Ω‖ ≤
       ‖W‖ * Real.exp (-q / 2) + ‖gaussianFilteredTerm q ΔE H W - M‖ := by
   obtain ⟨hH, hgap⟩ := eigenvalues_eq_or_le_of_isGappedGroundState hgs hΔE
-  have hspan : groundEigenspace H E₀ = Submodule.span ℂ {Ω} := hgs.eigenspace_eq_span hΔE
-  have hΩ : Ω ∈ groundEigenspace H E₀ := by
+  have hspan : groundSpace H E₀ = Submodule.span ℂ {Ω} := hgs.eigenspace_eq_span hΔE
+  have hΩ : Ω ∈ groundSpace H E₀ := by
     rw [hspan]; exact Submodule.mem_span_singleton_self Ω
   have h := norm_sub_starProjection_apply_le_of_gaussianFilteredTerm hq hΔE hH hgap W M hΩ
   rwa [hspan, Submodule.starProjection_unit_singleton ℂ hgs.1, hgs.1, mul_one] at h
