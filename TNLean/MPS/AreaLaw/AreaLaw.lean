@@ -100,7 +100,7 @@ theorem regionEntropy_interval_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (a b : ℕ) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a b) Ω ≤
       chainIntervalEntropyBound q R J Δ := by
-  have hdisc := two_mul_condEntropy_interval_le hq hJ hΔ h hΩ hgap hspan a b
+  have hdisc := two_mul_condEntropy_interval_le hq hJ hΔ h hh hhJ hΩ hgap hspan a b
   have hAL := regionEntropy_le_union_add hΩ (disjoint_interval_chainBuffer L q R J Δ a b)
   have hT := regionEntropy_le_card_mul_log hΩ (chainBuffer L q R J Δ a b)
   have hcard : (((chainBuffer L q R J Δ a b).card : ℕ) : ℝ) ≤
@@ -212,7 +212,7 @@ theorem regionEntropy_le_mul_card_boundaryEdges (hq : 1 ≤ q) (hJ : 0 ≤ J) (h
       chainIntervalEntropyBound q R J Δ * (boundaryEdges L A).card :=
   regionEntropy_le_mul_card_boundaryEdges_of_intervals hΩ
     (chainIntervalEntropyBound_nonneg hq hJ hΔ)
-    (fun a b ↦ regionEntropy_interval_le hq hJ hΔ h hΩ hgap hspan a b) A
+    (fun a b ↦ regionEntropy_interval_le hq hJ hΔ h hh hhJ hΩ hgap hspan a b) A
 
 /-- **The one-dimensional area law.** For every local dimension `q ≥ 1`, range `R`, term
 norm `J ≥ 0` and gap `Δ > 0` there is a constant, namely `C₀(q, R) (1 + J/Δ)`, such that
@@ -230,7 +230,7 @@ theorem chainAreaLaw (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
   have h0 := chainIntervalEntropyBound_nonneg (q := q) (R := R) hq hJ hΔ
   refine ⟨chainAreaLawConst q R * (1 + J / Δ), h0.trans hle, rfl, ?_⟩
   intro L h hh hhJ E₀ Ω hΩ hgap hspan A
-  refine (regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ h hΩ hgap hspan A).trans ?_
+  refine (regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ h hh hhJ hΩ hgap hspan A).trans ?_
   exact mul_le_mul_of_nonneg_right hle (Nat.cast_nonneg _)
 
 open scoped Matrix.Norms.L2Operator in
@@ -373,7 +373,7 @@ theorem chainAreaLaw_of_consecutive_terms
     (fun X ↦ h.mem X.val) (fun X ↦ hh X.val) (fun X ↦ hhJ X.val)
     (2 * R) (one_le_windowBudgetConst q R)
     (h.card_crossingTerms_interval_le_of_consecutive_terms hh hhJ hwindow)
-    (h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow) hΩ hgap hspan a b
+    (h.cutLogBudget_interval_le_of_consecutive_terms hq hh hhJ hwindow) hΩ hgap hspan a b
 
 /-- The interval entropy estimate with the original polynomial source constants.
 Source: one-dimensional note, part1_arealaw.tex, eq:final, lines674–679. -/
@@ -392,7 +392,7 @@ theorem regionEntropy_interval_le_polynomial
       8 * (m : ℝ) * R * Real.log q + 1 + 2 * C_E / Δ := by
   intro C_E m
   let T := interval L (l - m * R) (r + m * R) \ interval L l r
-  have hdisc := two_mul_condEntropy_interval_le_polynomial hq hJ hΔ h hΩ hgap hspan l r
+  have hdisc := two_mul_condEntropy_interval_le_polynomial hq hJ hΔ h hh hhJ hΩ hgap hspan l r
   change 2 * (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r ∪ T) Ω -
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω) ≤
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +

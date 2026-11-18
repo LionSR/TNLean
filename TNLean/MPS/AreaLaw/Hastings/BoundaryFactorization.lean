@@ -114,7 +114,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundaryOperator_factorization (
   have hdiff : h.hamiltonian - H₀₂ = H' - H₀ := by rw [hH₀₂, hH']; abel
   -- the localization of `P_B` near the cut, lines 898–901
   obtain ⟨OB, hOBs, hOB1, hOB⟩ :=
-    exists_supported_interactionAverage_approx_exp hq h hH₀₂h hH₀₂h hB Z (hdiff ▸ hZ) η hℓ'
+    exists_supported_interactionAverage_approx_exp hq h hh hhJ hH₀₂h hH₀₂h hB Z (hdiff ▸ hZ) η hℓ'
   refine ⟨OB, hOBs, hOB1, ?_⟩
   set PB := interactionAverage η H₀ (H' - H₀)
   have hloc : ‖PB - OB‖ ≤ √(η : ℝ) * (chainLRPrefactor R J * (Z.card : ℝ) ^ 2 *

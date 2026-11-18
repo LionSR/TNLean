@@ -32,6 +32,8 @@ Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, Claim `c:2
 lines 325–328, is used only to estimate the overlap lost during the actual column trimmings.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder
 
@@ -63,7 +65,7 @@ theorem _root_.ManyBody.ChainInteraction.isViable_bondTrimSet_sizeTrimmingSelect
   obtain ⟨_, r, W, u, hW, _, hu, hcols, hΓu⟩ :=
     h.isViable_sizeTrimmingSelectionWith hh hhJ hpos hL hq hΔ S hnet hsol E₀ Γ hΩ hgap hspan hviable
   obtain ⟨v, hv, hvMPS, hΓv⟩ :=
-    exists_bond_trimming_reference (by omega) hΔ (by omega) h hΩ hgap hspan
+    exists_bond_trimming_reference (by omega) hΔ (by omega) h hh hhJ hΩ hgap hspan
   have hΓu' : 1 - 1 / 12 ≤ ‖⟪Γ, (blockSplit L q i).symm (rightApply W u)⟫_ℂ‖ := by
     rw [blockSplit_symm_eq]
     exact hΓu
@@ -96,7 +98,7 @@ theorem _root_.ManyBody.ChainInteraction.isViable_bondTrimSet_sizeTrimmingSelect
   obtain ⟨_, r, W, u, hW, _, hu, hcols, hΓu⟩ :=
     h.isViable_sizeTrimmingSelection hh hhJ hpos hL hq hΔ S E₀ Γ hΩ hgap hspan hviable
   obtain ⟨v, hv, hvMPS, hΓv⟩ :=
-    exists_bond_trimming_reference (by omega) hΔ (by omega) h hΩ hgap hspan
+    exists_bond_trimming_reference (by omega) hΔ (by omega) h hh hhJ hΩ hgap hspan
   have hΓu' : 1 - 1 / 12 ≤ ‖⟪Γ, (blockSplit L q i).symm (rightApply W u)⟫_ℂ‖ := by
     rw [blockSplit_symm_eq]
     exact hΓu

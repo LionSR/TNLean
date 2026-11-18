@@ -82,6 +82,8 @@ constants and the printed bound `ε₀ + 6 √δ` does not follow from it. The b
   systems*, arXiv:1301.1162.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open Matrix
 open scoped Kronecker InnerProductSpace ComplexOrder
 

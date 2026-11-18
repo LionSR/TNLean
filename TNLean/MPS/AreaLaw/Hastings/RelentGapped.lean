@@ -31,6 +31,8 @@ and the reciprocal-length convention.
 are recorded in `docs/paper-gaps/hastings07_relent_constants.tex`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (interval ChainInteraction)
 
 open Matrix

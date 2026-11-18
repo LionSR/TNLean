@@ -23,6 +23,8 @@ lines 325–328, and Claim `c:trim`, lines 549–559. The source explicitly perm
 rank bound for this use, in place of the sharper sub-polynomial estimate.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open scoped InnerProductSpace
 
 open ManyBody (IsGapped groundSpace ChainInteraction)
@@ -57,7 +59,7 @@ theorem exists_bond_trimming_reference (hq : 1 ≤ q) (hΔ : 0 < Δ) (hL : 1 ≤
     apply (div_le_one (by positivity)).mpr
     nlinarith
   obtain ⟨v, hv, hvMPS, hvdist⟩ :=
-    exists_isOpenMPS_norm_sub_le_of_error hq (by norm_num) hΔ hL h hΩ hgap hspan hε hε1
+    exists_isOpenMPS_norm_sub_le_of_error hq (by norm_num) hΔ hL h hh hhJ hΩ hgap hspan hε hε1
   have heq : 2 * (L : ℝ) * tailPrefactorRoot / ε =
       2 * ((48 * L : ℕ) : ℝ) ^ 2 * tailPrefactorRoot := by
     dsimp only [ε]

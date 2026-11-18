@@ -21,6 +21,8 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 482–4
 and the interval area-law estimate in Part I.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (interval lineDomainGraph DomainInteraction)
 
 open SimpleGraph QuantumCircuit

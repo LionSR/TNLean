@@ -29,6 +29,8 @@ domain; recorded in `docs/paper-gaps/tnlean_one_dimensional_discount_constants.t
 section "Full consecutive windows".
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (ChainSupport DomainSupport IsDomainSupport interval sitePos ChainInteraction
   DomainInteraction)
 
@@ -152,7 +154,7 @@ theorem regionEntropy_le_log_cube_mul_card_boundaryEdges (hq : 1 ≤ q)
   · have hθ : 0 ≤ 1 + J / Δ := by positivity
     have hbound := (chainIntervalEntropyBound_le (q := q) (R := R) hq hJ hΔ).trans
       (mul_le_mul_of_nonneg_right (chainAreaLawConst_le_mul_log_cube (R := R) hq2) hθ)
-    refine (regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ h hΩ hgap hspan A).trans
+    refine (regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ h hh hhJ hΩ hgap hspan A).trans
       ((mul_le_mul_of_nonneg_right hbound (Nat.cast_nonneg _)).trans_eq ?_)
     ring
   · have hqeq : q = 1 := by omega

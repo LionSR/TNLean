@@ -32,6 +32,8 @@ and `prop:sweep`, proof, lines 365–374; Part II, `lem:logsep`, lines
 width choice.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (interval mem_interval ChainInteraction)
 
 noncomputable section

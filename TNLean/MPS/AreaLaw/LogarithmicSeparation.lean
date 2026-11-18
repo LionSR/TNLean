@@ -28,6 +28,8 @@ Source: TNLean one-dimensional note, Lemma `lem:logsep`,
 `part2a_mps_information.tex`, lines 472–488.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (interval IsGapped groundSpace ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw
@@ -114,7 +116,8 @@ theorem _root_.ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_sep
   have hJ : 0 ≤ J := h.norm_bound_nonneg hh hhJ ⟨0, hLn⟩
   have hI : ∀ a z : ℕ,
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a z) Ω ≤ c :=
-    fun a z ↦ (regionEntropy_interval_le hq hJ hΔ h hΩ hgap hspan a z).trans (le_max_right _ _)
+    fun a z ↦ (regionEntropy_interval_le hq hJ hΔ h hh hhJ hΩ hgap hspan a z).trans
+        (le_max_right _ _)
   have hD : Entropy.regionEntropy (n := fun _ : Fin L ↦ q) D Ω ≤ (k₀ : ℝ) * c := by
     obtain ⟨n, a, z, hn, hT⟩ := hT
     have hbound := regionEntropy_chainNeighborhood_biUnion_intervals_le hΩ hI

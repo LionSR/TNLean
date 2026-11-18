@@ -35,6 +35,8 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 219 and 484--487 (the solv
 polynomial-time solver of the convex programs), and the proof of Theorem 1, lines 652--678.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (interval ChainInteraction)
 
 open Matrix Cslib

@@ -60,6 +60,8 @@ positive semidefinite, and the positive form of Lemma 1 decays at half the rate,
   Lemma 1 at the printed rate `ξ' = 6ζ`, with `C₁ = K ζ³`, and its positive form.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open Matrix Real
 
 open ManyBody (IsGapped groundSpace ChainInteraction)

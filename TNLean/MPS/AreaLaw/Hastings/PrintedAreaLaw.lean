@@ -22,6 +22,8 @@ Source: Hastings, arXiv:0705.2024v4, main theorem, eqs. `entbd` and `smd`,
 lines 124–144, and the doubling iteration, lines 197–231.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (interval ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw.Hastings

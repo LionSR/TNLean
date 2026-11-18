@@ -56,6 +56,8 @@ recorded in `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
   P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 124–144.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (interval ChainInteraction)
 
 open TNLean.Lattice
@@ -88,7 +90,7 @@ theorem exists_regionEntropy_prefix_le (R : ℕ) :
   have hξ0 : 0 < 6 * lemmaOneEndpointLength R J ΔE := by
     rw [lemmaOneEndpointLength_eq]
     exact mul_pos (by norm_num) (mul_pos (by norm_num) (lemmaOneLength_pos R _ 1))
-  refine regionEntropy_prefix_le_of_factorization h hΩ hgap hspan hξ0 (le_max_right _ _)
+  refine regionEntropy_prefix_le_of_factorization h hh hhJ hΩ hgap hspan hξ0 (le_max_right _ _)
     (fun c l _ ↦ ?_) i
   obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hΩ hgap hspan c l
   exact ⟨OB, OL, OR, hf.mono

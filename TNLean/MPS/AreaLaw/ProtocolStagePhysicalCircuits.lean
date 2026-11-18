@@ -33,6 +33,8 @@ The selected constant gives information at exponent 24 and local circuit
 error at exponent 12.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep

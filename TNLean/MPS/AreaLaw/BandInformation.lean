@@ -27,6 +27,8 @@ Lemma lem:logsep, lines 472–488.
 The information exponent is 24, as in the source's logarithmic width choice.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (interval mem_interval ChainInteraction)
 
 noncomputable section

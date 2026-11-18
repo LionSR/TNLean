@@ -328,7 +328,7 @@ theorem domainAreaLaw (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
   have h0 := chainIntervalEntropyBound_nonneg (q := q) (R := R) hq hJ hΔ
   refine ⟨chainAreaLawConst q R * (1 + J / Δ), h0.trans hle, rfl, ?_⟩
   intro Λ h hh hhJ E₀ Ω hΩ hgap hspan A
-  refine (regionEntropy_le_mul_card_domainBoundaryEdges hq hJ hΔ h hΩ hgap hspan A).trans ?_
+  refine (regionEntropy_le_mul_card_domainBoundaryEdges hq hJ hΔ h hh hhJ hΩ hgap hspan A).trans ?_
   exact mul_le_mul_of_nonneg_right hle (Nat.cast_nonneg _)
 
 end TheoremA

@@ -29,6 +29,8 @@ See `docs/paper-gaps/hastings07_lemma1_decay_length.tex` for the physical
 rescaling and the reciprocal-length convention of the printed bound.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (interval ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw.Hastings

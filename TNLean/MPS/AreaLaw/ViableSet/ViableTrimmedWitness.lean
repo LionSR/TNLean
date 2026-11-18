@@ -30,6 +30,8 @@ quantitative dependence `exp(O(Δ⁻¹ log³ q log(1/c)))` is not established he
 `docs/paper-gaps/lvv13_nontrivial_chain.tex` and `docs/paper-gaps/lvv13_constant_bond.tex`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (interval ChainInteraction)
 
 open Matrix

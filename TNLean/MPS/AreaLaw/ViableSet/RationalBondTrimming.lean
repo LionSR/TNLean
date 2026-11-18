@@ -33,6 +33,8 @@ positive length and the local dimension is at least two. The constant-cut bond
 and matrix-net bounds are those recorded in `docs/paper-gaps/lvv13_constant_bond.tex`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder
 
@@ -88,7 +90,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_rational_size_bond_trimmed_famil
   obtain ⟨_, r, W, u, hW, hrD, hu, hcols, hΓu⟩ :=
     h.isViable_sizeTrimmingSelection hh hhJ hpos hL hq hΔ S E₀ Γ hΩ hgap hspan hviable
   obtain ⟨v, hv, hvMPS, hΓv⟩ :=
-    exists_bond_trimming_reference (by omega) hΔ (by omega) h hΩ hgap hspan
+    exists_bond_trimming_reference (by omega) hΔ (by omega) h hh hhJ hΩ hgap hspan
   have hΓu' : 1 - 1 / 12 ≤
       ‖⟪Γ, (blockSplit L q (n + 1)).symm (rightApply W u)⟫_ℂ‖ := by
     rw [blockSplit_symm_eq]

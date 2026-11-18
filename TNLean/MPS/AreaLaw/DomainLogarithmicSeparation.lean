@@ -21,6 +21,8 @@ Extension of the chain lemma in the TNLean one-dimensional note, `lem:logsep`,
 `part0_preamble.tex`, lines 191–215.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open ManyBody (interval lineDomainGraph sitePos sitePos_sub_val_of_walk DomainInteraction)
 
 open QuantumCircuit

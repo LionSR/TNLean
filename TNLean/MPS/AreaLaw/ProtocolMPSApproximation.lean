@@ -34,6 +34,8 @@ proof of `thm:B`, lines 574–615. The crossing bound is at most 1280,
 and hence satisfies the printed upper bound 1600 used in the bond estimate.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep

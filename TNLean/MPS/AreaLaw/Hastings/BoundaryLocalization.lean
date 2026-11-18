@@ -255,7 +255,7 @@ theorem exists_supported_interactionAverage_approx_exp {L q R : ℕ} {J : ℝ} (
           4 * Real.exp (-ℓ ^ 2 / (32 * v ^ 2 * (η : ℝ))) := by
   intro b₀ a v
   have hv : 0 < v := by positivity
-  obtain ⟨O, hO, hOn, hOB⟩ := exists_supported_interactionAverage_approx hq h hH₀ hA hB Z hZ
+  obtain ⟨O, hO, hOn, hOB⟩ := exists_supported_interactionAverage_approx hq h hh hhJ hH₀ hA hB Z hZ
     η hℓ (T := ℓ / (4 * v)) (by positivity)
   refine ⟨O, hO, hOn, hOB.trans_eq ?_⟩
   have h1 : v * (ℓ / (4 * v)) - ℓ / 2 = -(ℓ / 4) := by field_simp; ring

@@ -36,6 +36,8 @@ constant is selected for information exponent 24 before the physical data
 and may be enlarged to satisfy the geometric width bounds.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
