@@ -53,6 +53,26 @@ theorem IsBoundaryCompatible.parentInteraction_matrix_commute_mpoWithBoundary
   simpa only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same,
     Module.End.mul_eq_comp] using hES.eq
 
+/-- The matrix of the canonical local parent commutes with every boundary
+operator of a family of compatible operator tensors, when the union of their
+boundary ranges is adjoint-closed. Source: GLM23, arXiv:2203.12563v3,
+Section 5, lines 1276--1320. -/
+theorem parentInteraction_matrix_commute_mpoWithBoundary_of_forall_isBoundaryCompatible
+    {ι : Type*} {T : ι → MPOTensor d D₁} (h : ∀ i, IsBoundaryCompatible (T i) A)
+    (hL : 0 < L)
+    (hstar : ∀ i (X : Matrix (Fin D₁) (Fin D₁) ℂ), ∃ j, ∃ Y : Matrix (Fin D₁) (Fin D₁) ℂ,
+      (mpoWithBoundary (T i) X L)ᴴ = mpoWithBoundary (T j) Y L)
+    (i : ι) (X : Matrix (Fin D₁) (Fin D₁) ℂ) :
+    Commute (LinearMap.toMatrix' (MPSTensor.parentInteraction A L))
+      (mpoWithBoundary (T i) X L) := by
+  have hES := parentInteractionES_commute_mpoWithBoundary_of_forall_isBoundaryCompatible
+    h hL hstar i X
+  rw [MPSTensor.parentInteractionES_eq_toEuclideanLin_parentMatrix] at hES
+  apply (commute_iff_eq _ _).2
+  apply Matrix.toEuclideanLin.injective
+  simpa only [Matrix.toEuclideanLin, Matrix.toLpLin_mul_same,
+    Module.End.mul_eq_comp] using hES.eq
+
 /-- Every cyclic translate, including a wrapping window, of the canonical local
 parent commutes with each globally commuting-boundary MPO. Source: GLM23,
 arXiv:2203.12563v3, Section 5, lines 1276--1320, with adjoint closure explicit. -/

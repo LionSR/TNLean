@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.MPSApproximation
 import TNLean.MPS.AreaLaw.OpenMPSCutRank
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # A polynomial-rank reference for bond trimming
@@ -22,7 +23,11 @@ lines 325–328, and Claim `c:trim`, lines 549–559. The source explicitly perm
 rank bound for this use, in place of the sharper sub-polynomial estimate.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open scoped InnerProductSpace
+
+open ManyBody (IsGapped groundSpace ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -37,9 +42,11 @@ noncomputable def lvvReferenceBond (q : ℕ) (Δ : ℝ) (L : ℕ) : ℕ :=
 LVV13, `algo53.tex`, Claim `c:trim`, lines 549–559. Its polynomial bond bound is chosen before
 the ground vector; the construction reuses the chain approximation theorem. -/
 theorem exists_bond_trimming_reference (hq : 1 ≤ q) (hΔ : 0 < Δ) (hL : 1 ≤ L)
-    (h : ChainHamiltonian L q 1 1) {E₀ : ℝ}
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) {E₀ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Γ Δ) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) :
     ∃ v : EuclideanSpace ℂ (Fin L → Fin q), ‖v‖ = 1 ∧
       IsOpenMPS L q (lvvReferenceBond q Δ L) (fun x ↦ v x) ∧
       1 - 1 / 48 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
@@ -52,7 +59,7 @@ theorem exists_bond_trimming_reference (hq : 1 ≤ q) (hΔ : 0 < Δ) (hL : 1 ≤
     apply (div_le_one (by positivity)).mpr
     nlinarith
   obtain ⟨v, hv, hvMPS, hvdist⟩ :=
-    exists_isOpenMPS_norm_sub_le_of_error hq (by norm_num) hΔ hL h hgs hε hε1
+    exists_isOpenMPS_norm_sub_le_of_error hq (by norm_num) hΔ hL h hh hhJ hΩ hgap hspan hε hε1
   have heq : 2 * (L : ℝ) * tailPrefactorRoot / ε =
       2 * ((48 * L : ℕ) : ℝ) ^ 2 * tailPrefactorRoot := by
     dsimp only [ε]
@@ -66,10 +73,10 @@ theorem exists_bond_trimming_reference (hq : 1 ≤ q) (hΔ : 0 < Δ) (hL : 1 ≤
     nlinarith
   have hin : ‖⟪Γ, v - Γ⟫_ℂ‖ ≤ ε := by
     refine (norm_inner_le_norm (𝕜 := ℂ) Γ (v - Γ)).trans ?_
-    rw [hgs.1, one_mul]
+    rw [hΩ, one_mul]
     exact hvdist
   have hΓΓ : ⟪Γ, Γ⟫_ℂ = 1 := by
-    rw [inner_self_eq_norm_sq_to_K, hgs.1]
+    rw [inner_self_eq_norm_sq_to_K, hΩ]
     norm_num
   have he : ⟪Γ, v⟫_ℂ - ⟪Γ, v - Γ⟫_ℂ = 1 := by
     rw [inner_sub_right, hΓΓ]

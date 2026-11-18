@@ -23,6 +23,8 @@ identify a prescribed six-site region, a decomposition of the physical state,
 or a completed geometric braid (lines 2560–2615). See
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix Kronecker
 namespace TNLean.PEPS

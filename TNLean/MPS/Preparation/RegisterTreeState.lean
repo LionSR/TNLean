@@ -48,6 +48,7 @@ The proof follows the tree from the root: after the depths `0, …, j` the regis
 open Matrix MPSTensor
 open scoped BigOperators
 open QuantumCircuit
+open Kraus (blockPhysDim decodeBlock decodeBlockEquiv decodeBlock_decodeBlockEquiv_symm blockTensor)
 
 namespace MPSPreparation
 

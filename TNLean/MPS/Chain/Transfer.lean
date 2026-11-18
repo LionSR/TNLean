@@ -60,7 +60,7 @@ theorem transferMap_blockTensor (A : MPSChainTensor d D n) :
   classical
   ext X : 1
   rw [prod_transferMap_apply, Kraus.transferMap_apply]
-  exact Fintype.sum_equiv (MPSTensor.decodeBlockEquiv d n)
+  exact Fintype.sum_equiv (Kraus.decodeBlockEquiv d n)
     (fun t => blockTensor A t * X * (blockTensor A t)ᴴ)
     (fun s => eval A s * X * (eval A s)ᴴ) (fun _ => rfl)
 

@@ -17,6 +17,7 @@ blocking used in arXiv:1010.3732, lines 575--597 and Appendix A.
 -/
 
 open scoped BigOperators
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

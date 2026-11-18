@@ -110,6 +110,8 @@ Three consequences are proved for every protocol satisfying the bounds:
   Lean code is copied or adapted.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation

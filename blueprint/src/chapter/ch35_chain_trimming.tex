@@ -113,7 +113,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
 \begin{lemma}[Trimming the ground state to a constant bond dimension]
     \label{thm:chain_constant_bond_overlap}
     \lean{
-        TNLean.MPS.AreaLaw.ChainHamiltonian.one_sub_le_re_inner_chainTrim,
+        ManyBody.ChainInteraction.one_sub_le_re_inner_chainTrim,
         TNLean.MPS.AreaLaw.inner_normalized_chainTrim,
         TNLean.MPS.AreaLaw.cutVector_normalized_chainTrim,
         TNLean.MPS.AreaLaw.regionState_leftBlock_eq_leftMarginal
@@ -149,10 +149,10 @@ smaller trimming error recovers the energy bound of the source's corollary.
     \label{thm:chain_trim_energy}
     \lean{
         TNLean.MPS.AreaLaw.re_inner_normalized_chainTrim_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_normalized_chainTrim_le,
+        ManyBody.ChainInteraction.re_inner_normalized_chainTrim_le,
         TNLean.MPS.AreaLaw.rank_cutMatrix_normalized_chainTrim_le,
         TNLean.MPS.AreaLaw.norm_normalized_chainTrim_eq_one,
-        Matrix.IsGappedGroundState.posSemidef_sub_smul_one
+        ManyBody.IsGapped.posSemidef_sub_ground
     }
     \leanok
     \uses{def:chain_trim, thm:chain_constant_bond_overlap}
@@ -193,7 +193,7 @@ smaller trimming error recovers the energy bound of the source's corollary.
 
 \begin{lemma}[A state of constant rank across one cut]
     \label{thm:chain_constant_rank_state}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rank_cutMatrix_le_constantCutBond}
+    \lean{ManyBody.ChainInteraction.exists_rank_cutMatrix_le_constantCutBond}
     \leanok
     \uses{def:chain_constant_bond}
     Let $\Omega$ be a gapped ground vector, with energy $E_0$ and gap

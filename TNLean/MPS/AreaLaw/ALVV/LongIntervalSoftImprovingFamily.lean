@@ -30,6 +30,8 @@ https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_chebyshev_filter_positivity.pdf
 -/
 
+open ManyBody (interval)
+
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker TensorProduct Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 namespace TNLean.MPS.AreaLaw.ALVV

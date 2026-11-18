@@ -42,6 +42,8 @@ The matrix-product-operator bond dimensions and the running time of the construc
 (Proposition `prop:Cheby-AGSP-eff`, lines 1311–1333) are separate assertions.
 -/
 
+open ManyBody (interval)
+
 open Polynomial Matrix TNLean.Lattice TNLean.Lattice.Sheet QuantumCircuit
 
 noncomputable section
@@ -77,16 +79,16 @@ theorem exists_two_window_chebyshev_spectral_projector
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ supportedOperators q
-      (interval L (a + r.val) (a + r.val + 2) : Set (Fin L)))
-    (hright : ∀ r, F (Sum.inl (Sum.inr r)) ∈ supportedOperators q
-      (interval L (b + r.val) (b + r.val + 2) : Set (Fin L)))
-    (hL : F (Sum.inr 0) ∈ supportedOperators q
-      (interval L 0 (a + 1) : Set (Fin L)))
-    (hM : F (Sum.inr 1) ∈ supportedOperators q
-      (interval L (a + 2 * ℓ) (b + 1) : Set (Fin L)))
-    (hR : F (Sum.inr 2) ∈ supportedOperators q
-      (interval L (b + 2 * ℓ) L : Set (Fin L)))
+    (hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L)))
+    (hright : ∀ r, F (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L)))
+    (hL : F (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L 0 (a + 1) : Finset (Fin L)))
+    (hM : F (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (a + 2 * ℓ) (b + 1) : Finset (Fin L)))
+    (hR : F (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (b + 2 * ℓ) L : Finset (Fin L)))
     (hab : a + 2 * ℓ ≤ b) (hb : b + 2 * ℓ ≤ L - 1) (hℓ : 1 ≤ ℓ)
     (hH : (∑ α, F α).IsHermitian)
     (k : ℕ) (hk : 1 ≤ k) {η₀ η₁ u : ℝ} (h01 : η₀ < η₁) (h1u : η₁ ≤ u)

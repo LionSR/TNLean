@@ -36,6 +36,7 @@ qualitative finite-correlation definition. See
 open Matrix MPSTensor
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Kronecker
   Matrix.Norms.L2Operator
+open Kraus (blockPhysDim decodeBlockEquiv)
 
 namespace MPSPreparation
 

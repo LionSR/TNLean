@@ -73,6 +73,8 @@ single sum over the merged configuration, which is the blue coefficient for
   sketch at lines 2296--2445](https://arxiv.org/abs/1804.04964).
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

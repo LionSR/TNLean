@@ -35,7 +35,7 @@ variable {d Da Db : ℕ}
 private theorem blockKron_unitary (Q : Matrix (Fin d) (Fin d) ℂ)
     (hQ : Q ∈ Matrix.unitaryGroup (Fin d) ℂ) (k : ℕ) :
     MPSTensor.blockKron k Q ∈
-      Matrix.unitaryGroup (Fin (MPSTensor.blockPhysDim d k)) ℂ := by
+      Matrix.unitaryGroup (Fin (Kraus.blockPhysDim d k)) ℂ := by
   rw [Matrix.mem_unitaryGroup_iff, Matrix.star_eq_conjTranspose]
   exact MPSTensor.blockKron_mul_conjTranspose k Q
     (by simpa only [Matrix.star_eq_conjTranspose] using Matrix.mem_unitaryGroup_iff.mp hQ)
@@ -55,13 +55,13 @@ private theorem blockKron_map_star (Q : Matrix (Fin d) (Fin d) ℂ) (k : ℕ) :
   simp only [Matrix.map_apply, MPSTensor.blockKron, map_prod]
 
 private theorem sitewise_transpose (Q : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
-    (sitewisePhysicalMatrix Q N)ᵀ = sitewisePhysicalMatrix Qᵀ N := rfl
+    (Matrix.tensorPower N Q)ᵀ = Matrix.tensorPower N Qᵀ := rfl
 
 private theorem sitewise_map_star (Q : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
-    (sitewisePhysicalMatrix Q N).map (starRingEnd ℂ) =
-      sitewisePhysicalMatrix (Q.map (starRingEnd ℂ)) N := by
+    (Matrix.tensorPower N Q).map (starRingEnd ℂ) =
+      Matrix.tensorPower N (Q.map (starRingEnd ℂ)) := by
   ext σ τ
-  simp only [Matrix.map_apply, sitewisePhysicalMatrix, map_prod]
+  simp only [Matrix.map_apply, Matrix.tensorPower_apply, map_prod]
 
 private theorem dagger_invariance_iff (Q : Matrix (Fin d) (Fin d) ℂ)
     (hQQ : Q * Q = 1) (hH : Qᴴ = Q) {E : ℕ} (W : MPOTensor d E) :
@@ -73,8 +73,8 @@ private theorem dagger_invariance_iff (Q : Matrix (Fin d) (Fin d) ℂ)
   change _ ↔ (mpo (W.ketLeftMul Q) N)ᴴ = _
   rw [mpo_ketLeftMul]
   apply Matrix.swapCombined_fixed_iff_leftMul _ _
-    (by rw [sitewisePhysicalMatrix_mul, hQQ, sitewisePhysicalMatrix_one])
-  rw [Matrix.conjTranspose_mul, sitewisePhysicalMatrix_conjTranspose, hH]
+    (by rw [Matrix.tensorPower_mul, hQQ, Matrix.tensorPower_one])
+  rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_tensorPower, hH]
 
 private theorem transpose_invariance_iff (Q : Matrix (Fin d) (Fin d) ℂ)
     (hQQ : Q * Q = 1) (hT : Qᵀ = Q) {E : ℕ} (W : MPOTensor d E) :
@@ -86,7 +86,7 @@ private theorem transpose_invariance_iff (Q : Matrix (Fin d) (Fin d) ℂ)
   change _ ↔ (mpo (W.ketLeftMul Q) N)ᵀ = _
   rw [mpo_ketLeftMul]
   apply Matrix.swapCombined_fixed_iff_leftMul _ _
-    (by rw [sitewisePhysicalMatrix_mul, hQQ, sitewisePhysicalMatrix_one])
+    (by rw [Matrix.tensorPower_mul, hQQ, Matrix.tensorPower_one])
   rw [Matrix.transpose_mul, sitewise_transpose, hT]
 
 private theorem conjugation_invariance_iff (Q : Matrix (Fin d) (Fin d) ℂ)
@@ -100,12 +100,12 @@ private theorem conjugation_invariance_iff (Q : Matrix (Fin d) (Fin d) ℂ)
     (mpo (W.ketLeftMul Q) N).map (starRingEnd ℂ) = _
   rw [mpo_ketLeftMul, Matrix.map_mul, sitewise_map_star, hR]
   constructor
-  · exact congrArg (fun X ↦ sitewisePhysicalMatrix Q N * X)
+  · exact congrArg (fun X ↦ Matrix.tensorPower N Q * X)
   · intro h
-    have hQN : sitewisePhysicalMatrix Q N * sitewisePhysicalMatrix Q N = 1 := by
-      rw [sitewisePhysicalMatrix_mul, hQQ, sitewisePhysicalMatrix_one]
+    have hQN : Matrix.tensorPower N Q * Matrix.tensorPower N Q = 1 := by
+      rw [Matrix.tensorPower_mul, hQQ, Matrix.tensorPower_one]
     simpa only [← Matrix.mul_assoc, hQN, Matrix.one_mul] using
-      congrArg (fun X ↦ sitewisePhysicalMatrix Q N * X) h
+      congrArg (fun X ↦ Matrix.tensorPower N Q * X) h
 
 /-- An arbitrary self-adjoint unitary involution identifies blocked sandwich
 adjunction with ordinary adjunction of the transformed tensors. Every natural

@@ -40,9 +40,10 @@ theorem norm_covariance_sq_le_overlap_error_of_isPreparedInDepth {T : ℕ}
     {ψ φ : (Fin N → Fin 2) → ℂ} (hprep : IsPreparedInDepth T ψ)
     (hψ : ‖(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Fin N → Fin 2))‖ = 1)
     (hφ : ‖(WithLp.toLp 2 φ : EuclideanSpace ℂ (Fin N → Fin 2))‖ = 1)
-    {X Y : Set (Fin N)} (hXY : IsSeparatedBy X Y (2 * T))
+    {X Y : Finset (Fin N)} (hXY : IsSeparatedBy X Y (2 * T))
     {A B : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ}
-    (hA : A ∈ supportedOperators 2 X) (hB : B ∈ supportedOperators 2 Y)
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) Y)
     (hAu : A ∈ unitary _) (hBu : B ∈ unitary _) :
     ‖expect φ (A * B) - expect φ A * expect φ B‖ ^ 2 ≤
       72 * (1 - ‖⟪(WithLp.toLp 2 ψ : EuclideanSpace ℂ (Fin N → Fin 2)),
@@ -89,7 +90,7 @@ theorem weightedGHZ_infidelity_lower_bound_of_isPreparedInDepth {T : ℕ}
     congr 1
     funext σ
     split_ifs with h <;> simp [h]
-  have hZs (l : Fin N) : Z l ∈ supportedOperators 2 {l} :=
+  have hZs (l : Fin N) : Z l ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) {l} :=
     diagonal_comp_eval_mem_supportedOperators l (fun x => if x = 0 then 1 else -1)
   have hZφ (l : Fin N) :
       expect (ghzState (M := N) ![a, b]) (Z l) = star a * a - star b * b := by

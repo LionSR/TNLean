@@ -60,7 +60,7 @@ arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 609–628 and 668–685. -/
 theorem isStarProjection_supersiteHierarchy (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
       compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
-    (hMsupp : ∀ m k, M m k ∈ supportedOperators d (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) : ∀ m k, IsStarProjection (P m k) :=
   isStarProjection_hierarchy P M c x hP0 hstep
     (commute_supersiteHierarchy blk P M c x hP0 hstep hMsupp) hM
@@ -72,7 +72,7 @@ lines 609–628 and 668–720. -/
 theorem abs_re_inner_supersiteHierarchySum_sub_le (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
       compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
-    (hMsupp : ∀ m k, M m k ∈ supportedOperators d (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) :
     ∀ m k {φ : EuclideanSpace ℂ (ι → Fin d)}, toEuclideanLin (P m k) φ = φ →
       |(⟪φ, toEuclideanLin (hierarchySum M m k) φ⟫_ℂ).re - hierarchySum c m k * ‖φ‖ ^ 2| ≤
@@ -88,7 +88,7 @@ theorem re_inner_supersiteHierarchySum_le_add (hP0 : ∀ k, P 0 k = 1)
     {Ψ : EuclideanSpace ℂ (ι → Fin d)}
     (hstep : ∀ m k, P (m + 1) k = compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
       (M m k) (⟪Ψ, toEuclideanLin (M m k) Ψ⟫_ℂ).re (x m))
-    (hMsupp : ∀ m k, M m k ∈ supportedOperators d (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) (m k : ℕ)
     {φ : EuclideanSpace ℂ (ι → Fin d)} (hφ1 : ‖φ‖ = 1) (hφ : toEuclideanLin (P m k) φ = φ) :
     (⟪φ, toEuclideanLin (hierarchySum M m k) φ⟫_ℂ).re ≤
@@ -105,7 +105,7 @@ theorem card_le_two_mul_re_trace_of_supersiteHierarchy (hP0 : ∀ k, P 0 k = 1)
     {Ψ : EuclideanSpace ℂ (ι → Fin d)}
     (hstep : ∀ m k, P (m + 1) k = compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
       (M m k) (⟪Ψ, toEuclideanLin (M m k) Ψ⟫_ℂ).re (x m))
-    (hMsupp : ∀ m k, M m k ∈ supportedOperators d (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) (h : ℕ)
     {P₀ : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hP₀ : IsStarProjection P₀) {E₀ ΔE : ℝ}
     (hΔ : 0 < ΔE)
@@ -126,7 +126,7 @@ arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 609–628 and 668–707. -/
 theorem norm_sub_supersiteClosingLinkWindow_le (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
       compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
-    (hMsupp : ∀ m k, M m k ∈ supportedOperators d (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 < x m)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {ε K : ℝ}
     (hres : ∀ m k, ‖toEuclideanLin (M m k - (c m k : ℂ) • 1) ψ‖ ≤ ε)
@@ -147,7 +147,7 @@ theorem re_inner_supersiteHierarchySum_add_le_add (hP0 : ∀ k, P 0 k = 1)
     {Ψ : EuclideanSpace ℂ (ι → Fin d)}
     (hstep : ∀ m k, P (m + 1) k = compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
       (M m k) (⟪Ψ, toEuclideanLin (M m k) Ψ⟫_ℂ).re (x m))
-    (hMsupp : ∀ m k, M m k ∈ supportedOperators d (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) (h : ℕ)
     {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W.IsHermitian) {xW : ℝ} (hxW : 0 ≤ xW)
     {φ : EuclideanSpace ℂ (ι → Fin d)} (hφ1 : ‖φ‖ = 1)
@@ -167,7 +167,7 @@ theorem card_le_two_mul_re_trace_of_supersiteClosingLink (hP0 : ∀ k, P 0 k = 1
     {Ψ : EuclideanSpace ℂ (ι → Fin d)}
     (hstep : ∀ m k, P (m + 1) k = compressedWindowProjection (P m (2 * k) * P m (2 * k + 1))
       (M m k) (⟪Ψ, toEuclideanLin (M m k) Ψ⟫_ℂ).re (x m))
-    (hMsupp : ∀ m k, M m k ∈ supportedOperators d (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 ≤ x m) (h : ℕ)
     {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W.IsHermitian) {xW : ℝ} (hxW : 0 ≤ xW)
     {P₀ : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hP₀ : IsStarProjection P₀) {E₀ ΔE : ℝ}

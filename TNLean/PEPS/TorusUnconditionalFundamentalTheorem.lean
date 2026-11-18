@@ -66,6 +66,8 @@ the positivity from them.  Documented in `docs/paper-gaps/peps_injective_ft_sect
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

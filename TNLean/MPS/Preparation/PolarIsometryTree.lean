@@ -20,6 +20,7 @@ the physical leaf bound is independent of the total length and the requested acc
 -/
 
 open Matrix MPSTensor
+open Kraus (blockTensor)
 
 namespace MPSPreparation
 

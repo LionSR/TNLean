@@ -175,23 +175,23 @@ theorem embedLocalOperator_isometry_intertwiner {d m N : ℕ}
     (A : MPOTensor.ChainOperator d 2) (hA : A.IsHermitian)
     (hN : 2 ≤ N) (i : Fin N) :
     MPOTensor.embedLocalOperator 2 N hN i
-        (singleKrausMap (MPOTensor.sitewisePhysicalMatrix E 2) A) *
-        MPOTensor.sitewisePhysicalMatrix E N =
-      MPOTensor.sitewisePhysicalMatrix E N *
+        (singleKrausMap (Matrix.tensorPower 2 E) A) *
+        Matrix.tensorPower N E =
+      Matrix.tensorPower N E *
         MPOTensor.embedLocalOperator 2 N hN i A := by
   have h := MPOTensor.singleKrausMap_embedLocalOperator_eq_range_mul_lift
     E hE hN i A
   have hAdj := congrArg Matrix.conjTranspose h
-  have hLocal : (MPOTensor.sitewisePhysicalMatrix E 2 * A *
-      (MPOTensor.sitewisePhysicalMatrix E 2)ᴴ).IsHermitian :=
+  have hLocal : (Matrix.tensorPower 2 E * A *
+      (Matrix.tensorPower 2 E)ᴴ).IsHermitian :=
     Matrix.isHermitian_mul_mul_conjTranspose _ hA
   simp only [singleKrausMap_apply, Matrix.conjTranspose_mul,
     Matrix.conjTranspose_conjTranspose, Matrix.mul_one,
     (MPOTensor.embedLocalOperator_isHermitian 2 N hN i hA).eq,
     (MPOTensor.embedLocalOperator_isHermitian 2 N hN i hLocal).eq] at hAdj
-  have hMul := congrArg (fun M => M * MPOTensor.sitewisePhysicalMatrix E N) hAdj
+  have hMul := congrArg (fun M => M * Matrix.tensorPower N E) hAdj
   simpa only [singleKrausMap_apply, Matrix.mul_assoc,
-    MPOTensor.sitewisePhysicalMatrix_isometry E hE N,
+    MPOTensor.tensorPower_isometry E hE N,
     Matrix.mul_one] using hMul.symm
 
 /-- Extend a two-site interaction through a physical isometry and give
@@ -202,7 +202,7 @@ equation eq:1d-sym:jointsym, physical endpoint embeddings. -/
 noncomputable def isometricInteractionExtension {d m : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (A : MPOTensor.ChainOperator d 2) :
     MPOTensor.ChainOperator m 2 :=
-  1 - singleKrausMap (MPOTensor.sitewisePhysicalMatrix E 2) (1 - A)
+  1 - singleKrausMap (Matrix.tensorPower 2 E) (1 - A)
 
 /-- Adding the unused-state penalty preserves the intertwining identity
 on the included chain. Source context: arXiv:1010.3732, Section II.F.2,
@@ -212,21 +212,21 @@ theorem embed_isometricInteractionExtension_intertwiner {d m N : ℕ}
     (A : MPOTensor.ChainOperator d 2) (hA : A.IsHermitian)
     (hN : 2 ≤ N) (i : Fin N) :
     MPOTensor.embedLocalOperator 2 N hN i (isometricInteractionExtension E A) *
-        MPOTensor.sitewisePhysicalMatrix E N =
-      MPOTensor.sitewisePhysicalMatrix E N *
+        Matrix.tensorPower N E =
+      Matrix.tensorPower N E *
         MPOTensor.embedLocalOperator 2 N hN i A := by
   have h := embedLocalOperator_isometry_intertwiner E hE (1 - A)
     (Matrix.isHermitian_one.sub hA) hN i
   change (MPOTensor.embedLocalOperatorAlgHom (d := m) 2 N hN i)
-      (singleKrausMap (MPOTensor.sitewisePhysicalMatrix E 2) (1 - A)) *
-      MPOTensor.sitewisePhysicalMatrix E N =
-    MPOTensor.sitewisePhysicalMatrix E N *
+      (singleKrausMap (Matrix.tensorPower 2 E) (1 - A)) *
+      Matrix.tensorPower N E =
+    Matrix.tensorPower N E *
       (MPOTensor.embedLocalOperatorAlgHom (d := d) 2 N hN i) (1 - A) at h
-  have hSub := congrArg (fun M => MPOTensor.sitewisePhysicalMatrix E N - M) h
+  have hSub := congrArg (fun M => Matrix.tensorPower N E - M) h
   change (MPOTensor.embedLocalOperatorAlgHom (d := m) 2 N hN i)
-      (1 - singleKrausMap (MPOTensor.sitewisePhysicalMatrix E 2) (1 - A)) *
-      MPOTensor.sitewisePhysicalMatrix E N =
-    MPOTensor.sitewisePhysicalMatrix E N *
+      (1 - singleKrausMap (Matrix.tensorPower 2 E) (1 - A)) *
+      Matrix.tensorPower N E =
+    Matrix.tensorPower N E *
       (MPOTensor.embedLocalOperatorAlgHom (d := d) 2 N hN i) A
   simpa only [map_sub, map_one, Matrix.sub_mul, Matrix.mul_sub,
     Matrix.one_mul, Matrix.mul_one, sub_sub_cancel] using hSub
@@ -238,8 +238,8 @@ theorem interactionHamiltonian_isometricInteractionExtension_intertwiner
     {d m N : ℕ} (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     (A : MPOTensor.ChainOperator d 2) (hA : A.IsHermitian) (hN : 2 ≤ N) :
     interactionHamiltonian (isometricInteractionExtension E A) hN *
-        MPOTensor.sitewisePhysicalMatrix E N =
-      MPOTensor.sitewisePhysicalMatrix E N * interactionHamiltonian A hN := by
+        Matrix.tensorPower N E =
+      Matrix.tensorPower N E * interactionHamiltonian A hN := by
   simpa only [interactionHamiltonian, Matrix.sum_mul, Matrix.mul_sum] using
     Finset.sum_congr rfl (fun i _ =>
       embed_isometricInteractionExtension_intertwiner E hE A hA hN i)
@@ -253,18 +253,18 @@ theorem isometricInteractionExtension_zero_mode {d m N : ℕ}
     (A : MPOTensor.ChainOperator d 2) (hA : A.IsHermitian) (hN : 2 ≤ N)
     (ψ : Cfg d N → ℂ) (hψ : ψ ≠ 0)
     (hzero : (interactionHamiltonian A hN).mulVec ψ = 0) :
-    (MPOTensor.sitewisePhysicalMatrix E N).mulVec ψ ≠ 0 ∧
+    (Matrix.tensorPower N E).mulVec ψ ≠ 0 ∧
       (interactionHamiltonian (isometricInteractionExtension E A) hN).mulVec
-        ((MPOTensor.sitewisePhysicalMatrix E N).mulVec ψ) = 0 := by
+        ((Matrix.tensorPower N E).mulVec ψ) = 0 := by
   have h := congrArg (fun M => M.mulVec ψ)
     (interactionHamiltonian_isometricInteractionExtension_intertwiner E hE A hA hN)
   simp only [← Matrix.mulVec_mulVec, hzero, Matrix.mulVec_zero] at h
   refine ⟨?_, h⟩
   exact fun h0 => hψ (by
     simpa only [Matrix.mulVec_mulVec,
-      MPOTensor.sitewisePhysicalMatrix_isometry E hE N, Matrix.one_mulVec,
+      MPOTensor.tensorPower_isometry E hE N, Matrix.one_mulVec,
       Matrix.mulVec_zero] using
-      congrArg (fun v => (MPOTensor.sitewisePhysicalMatrix E N)ᴴ.mulVec v) h0)
+      congrArg (fun v => (Matrix.tensorPower N E)ᴴ.mulVec v) h0)
 
 /-- A nontrivial original zero mode gives zero in the spectrum of the
 isometrically enlarged periodic Hamiltonian. Source context:

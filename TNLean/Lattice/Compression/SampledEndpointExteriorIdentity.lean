@@ -66,11 +66,11 @@ theorem sampledEndpointInputWord_none_eval_heq_id
       (sources_sampledEndpointInputWord w k lam E F ξ ζ j ω)).eval
       (ContinuousLinearMap.id ℂ ℂ) := by
   unfold sampledEndpointInputWord
-  have hc := congrArg Word.eval (Word.restrict_castLayouts Option.isNone
+  have hc := congrArg Circuit.eval (Word.restrict_castLayouts Option.isNone
     (sampledEndpointWord w k lam E F ξ ζ j ω)
     (List.append_nil _).symm (List.append_nil _).symm
     (sources_sampledEndpointWord w k lam E F ξ ζ j ω))
-  exact (heq_of_eq hc).trans ((Word.eval_castLayouts_heq _ _ _).trans
+  exact (heq_of_eq hc).trans ((Circuit.eval_castLayouts_heq _ _ _).trans
     (sampledEndpointWord_none_eval_heq_id w k lam E F ξ ζ j ω))
 
 end Lattice.PartyCircuit.SourceCircuit

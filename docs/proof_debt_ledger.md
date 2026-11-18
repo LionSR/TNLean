@@ -816,6 +816,12 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
   have been deleted, together with the admissible continuous choice of
   standard form, now subsumed by `coruvSF`; see the superseded-entries
   subsection of `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
+  The last nine path-datum entries, including
+  `def:mpu_admissible_equivalence_datum` and
+  `def:mpu_reduced_full_support_source_datum`, were deleted on 2026-11-17
+  without a continuous-selection theorem: they restated open source results
+  under an unconstructed hypothesis, and their source-labelled counterparts
+  keep their status. No Chapter 28 entry now carries the path datum.
   Other open work includes the `HasFullSupport` deletion
   (still consumed by the physical-adjoint, identity-ancilla, and
   tensor-product transports and by the reduced-representative construction),
@@ -1215,4 +1221,12 @@ compounding cost; D13 precedes D14 because every new MPU statement pays it.
 
 ## Burned down / retired
 
-(none yet)
+### D19. Finite-ring Lieb–Robinson estimate re-ran the commutator recursion  —  burned down (net −240 lines)
+
+- **Outcome**: `MPS/Preparation/FiniteRingLiebRobinson.lean` now derives
+  `MPSPreparation.norm_heisenberg_commutator_le_exp_abs_of_disjoint` from
+  `ManyBody.norm_heisenberg_commutator_le_graphDistance_of_disjoint` (QICLean#1094,
+  Hastings–Koma, Theorem A.2) on `cycleGraph N`, with bond diameter one and site budget
+  `s = 4 e^a`, so `2s = 8 e^a` and the constants are unchanged. The new
+  `ringSupportDistance_le_edist` compares the ring distance with the cycle-graph distance.
+  The private recursion, bond-counting and weighted-row lemmas are deleted.

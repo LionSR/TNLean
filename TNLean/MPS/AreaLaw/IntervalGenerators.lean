@@ -15,6 +15,8 @@ lines 646–697, and the degenerate-ground-space construction,
 lines 1777–1817.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- A space has at most `count` recorded generators whose internal-cut

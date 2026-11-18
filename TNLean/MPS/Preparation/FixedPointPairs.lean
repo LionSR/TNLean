@@ -36,6 +36,7 @@ results.
 
 open scoped Kronecker Matrix ComplexOrder MatrixOrder BigOperators Matrix.Norms.Operator
 open Matrix Finset Filter
+open Kraus (blockTensor)
 
 attribute [local instance 1001]
   ContinuousLinearMap.toNormedAddCommGroup

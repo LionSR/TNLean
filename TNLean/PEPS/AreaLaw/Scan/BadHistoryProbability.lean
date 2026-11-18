@@ -25,6 +25,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open scoped BigOperators
@@ -54,7 +56,7 @@ bounds are derived. The sole multiplicity premise counts labels at each anchor.
 The time-window cardinality includes its final endpoint. -/
 theorem sum_chargePathWeight_bad_endpoint_domainGraph_le
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     {k L μ : ℕ} (offsets : Fin S.K → Fin S.m) (g : Fin S.K) (side : Bool)
     (x : Site Λ) (hxA : x ∈ S.A) (hn : 0 < S.n) (hM : 0 < S.M)

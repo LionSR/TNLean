@@ -64,6 +64,7 @@ theorem joiningPacketSites_range_subset_interval {d D N : ℕ}
     (hjm : j < (internalCutEmbedding N c).val)
     (hmk : (internalCutEmbedding N c).val < k) :
     Set.range (joiningPacketSites d D N c) ⊆ intervalConsecutiveSupport d D N j k := by
+  rw [coe_intervalConsecutiveSupport]
   rintro s ⟨i, rfl⟩
   exact ⟨_, joiningPacketLogicalSites_mem_interval c hjm hmk i, rfl⟩
 

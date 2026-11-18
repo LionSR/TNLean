@@ -31,6 +31,8 @@ https://sirui-lu.com/QICLean/paper-gaps/alvv16_random_sampling_net_count.pdf.
 They do not identify the printed fourth-order choice or sharp gap dependence.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder ENNReal
 
 namespace TNLean.MPS.AreaLaw.ALVV

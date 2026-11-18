@@ -114,7 +114,7 @@ abbrev oldFrame : Frame pos q Party := ⟨R.ownerOld, R.untouched ++ R.oldAffect
 abbrev newFrame : Frame pos q Party := ⟨R.ownerNew, R.untouched ++ R.newAffected, R.disjoint_new⟩
 
 /-- The physical outer footprints of the untouched holes. -/
-def untouchedFootprint : Set ι := footprint (R.untouched.map Hole.patch)
+def untouchedFootprint : Finset ι := footprint (R.untouched.map Hole.patch)
 
 /-- **The four conditions of Lemma 6.3.**
 
@@ -132,15 +132,15 @@ The patches may overlap, and old affected holes may overlap new affected holes.
 Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 193–207. -/
 structure Conditions : Prop where
   /-- Condition (i), for the patches. -/
-  patch_avoid : ∀ P ∈ R.patches, Disjoint (P.outer : Set ι) R.untouchedFootprint
+  patch_avoid : ∀ P ∈ R.patches, Disjoint P.outer R.untouchedFootprint
   /-- Condition (i), for the affected old and new holes. -/
   affected_avoid : ∀ h ∈ R.oldAffected ++ R.newAffected,
-    Disjoint (h.patch.outer : Set ι) R.untouchedFootprint
+    Disjoint h.patch.outer R.untouchedFootprint
   /-- Condition (ii), for the sites whose raw owner changes. -/
   changed_mem : ∀ x, R.ownerOld x ≠ R.ownerNew x → x ∈ innerUnion R.patches
   /-- Condition (ii), for the outer footprints of the affected holes. -/
   affected_subset : ∀ h ∈ R.oldAffected ++ R.newAffected,
-    (h.patch.outer : Set ι) ⊆ innerUnion R.patches
+    h.patch.outer ⊆ innerUnion R.patches
   /-- Condition (iii), old owners. -/
   old_owners : ∀ P ∈ R.patches, ∃ S : Finset Party, S.card ≤ 2 ∧
     ∀ x ∈ P.outer, x ∉ R.oldFrame.innerHoles → R.ownerOld x ∈ S
@@ -156,9 +156,9 @@ structure Conditions : Prop where
 
 /-- Condition (i) alone: the patches and the affected holes avoid the untouched footprints. -/
 structure AvoidsUntouched : Prop where
-  patch_avoid : ∀ P ∈ R.patches, Disjoint (P.outer : Set ι) R.untouchedFootprint
+  patch_avoid : ∀ P ∈ R.patches, Disjoint P.outer R.untouchedFootprint
   affected_avoid : ∀ h ∈ R.oldAffected ++ R.newAffected,
-    Disjoint (h.patch.outer : Set ι) R.untouchedFootprint
+    Disjoint h.patch.outer R.untouchedFootprint
 
 theorem Conditions.avoidsUntouched {R : SmallPatchRewrite pos q Party} (h : R.Conditions) :
     R.AvoidsUntouched :=
@@ -227,10 +227,12 @@ theorem commute_untouched [NeZero q] (hR : R.AvoidsUntouched) (u : TagSpace R.un
       exact hR.affected_avoid h (List.mem_append_left _ hh)).symm
   have hpatch : Disjoint R.untouchedFootprint (footprint R.patches) :=
     (disjoint_footprint_of_forall hR.patch_avoid).symm
-  refine ((commute_of_mem_supportedOperators hnew hU
-    (rawProd_mem_supportedOperators _ a)).mul_right
-    (commute_of_mem_supportedOperators hpatch hU (projProd_mem_supportedOperators _))).mul_right
-    (commute_of_mem_supportedOperators hold hU (projProd_mem_supportedOperators _))
+  refine ((ManyBody.commute_of_mem_supportedOperators_of_disjoint hU
+      (rawProd_mem_supportedOperators _ a) hnew).mul_right
+    (ManyBody.commute_of_mem_supportedOperators_of_disjoint hU (projProd_mem_supportedOperators _)
+        hpatch)).mul_right
+    (ManyBody.commute_of_mem_supportedOperators_of_disjoint hU
+        (projProd_mem_supportedOperators _) hold)
 
 /-- The encoding of a frame `untouched ++ affected`, in the coordinates with the untouched tags
 as the outer factor. -/

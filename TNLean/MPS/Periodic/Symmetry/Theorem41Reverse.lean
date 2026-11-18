@@ -17,6 +17,7 @@ The remaining root-selection problem is recorded in
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim blockPhysDim_eq_pow blockTensor)
 
 namespace MPSTensor
 

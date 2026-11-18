@@ -73,8 +73,8 @@ Source: arXiv:1703.09188, Appendix, lines 2292–2295. -/
 theorem bufferedWindowMatrix_mem_supportedOperators
     (d n p s : ℕ) (hn : 0 < n)
     (A : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) :
-    bufferedWindowMatrix d n p s A ∈ QuantumCircuit.supportedOperators d
-      {i : Fin (p + (n + s)) | p ≤ i.val ∧ i.val < p + n} := by
+    bufferedWindowMatrix d n p s A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.univ.filter fun (i : Fin (p + (n + s))) ↦ p ≤ i.val ∧ i.val < p + n) := by
   rw [bufferedWindowMatrix_eq_chainWindowOperator d n p s hn]
   exact MPSTensor.chainWindowOperator_mem_supportedOperators (by omega) (by omega) A
 
@@ -87,17 +87,18 @@ theorem mpo_bufferedWindow_conjugation_mem_supportedOperators
     {d D ℓ r : ℕ} {U : MPOTensor d D} (hU : U.IsMPU)
     (k p s : ℕ) (hk : 0 < k) (hN : 1 < p + (3 * (2 * k) + s))
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
-    (A : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    (A : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ) :
     mpo U (p + (3 * (2 * k) + s)) *
         bufferedWindowMatrix d (3 * (2 * k)) p s (originalSiteHeisenbergInputWindow d k A) *
         (mpo U (p + (3 * (2 * k) + s)))ᴴ ∈
-      QuantumCircuit.supportedOperators d
-        {i : Fin (p + (3 * (2 * k) + s)) | p ≤ i.val ∧ i.val < p + 3 * (2 * k)} := by
+      ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦
+            p ≤ i.val ∧ i.val < p + 3 * (2 * k)) := by
   rw [mpo_bufferedWindow_conjugation hU k p s hN S A]
   exact bufferedWindowMatrix_mem_supportedOperators d (3 * (2 * k)) p s (by omega)
     (originalSiteHeisenbergOutputWindow k u v A)
@@ -107,8 +108,8 @@ inclusion of its complete central interval. Source: arXiv:1703.09188,
 StandardForm and eq:appendix-1, lines 603–622 and 2300–2306. -/
 theorem originalSiteHeisenbergInputWindow_eq_chainWindowOperator
     (d k : ℕ) (hk : 0 < k)
-    (A : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    (A : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ) :
     originalSiteHeisenbergInputWindow d k A =
       MPSTensor.chainWindowOperator (3 * (2 * k)) (2 * k)
         (Matrix.reindex (originalSiteHeisenbergCentreEquiv d k)
@@ -137,16 +138,17 @@ theorem mpo_chainWindow_conjugation_mem_supportedOperators
     {d D ℓ r : ℕ} {U : MPOTensor d D} (hU : U.IsMPU)
     (k p s : ℕ) (hk : 0 < k)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
     (C : Matrix (Fin (2 * k) → Fin d) (Fin (2 * k) → Fin d) ℂ) :
     mpo U (p + (3 * (2 * k) + s)) *
         MPSTensor.chainWindowOperator (p + (3 * (2 * k) + s)) (p + 2 * k) C *
         (mpo U (p + (3 * (2 * k) + s)))ᴴ ∈
-      QuantumCircuit.supportedOperators d
-        {i : Fin (p + (3 * (2 * k) + s)) | p ≤ i.val ∧ i.val < p + 3 * (2 * k)} := by
+      ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦
+            p ≤ i.val ∧ i.val < p + 3 * (2 * k)) := by
   classical
   let E := originalSiteHeisenbergCentreEquiv d k
   let A := Matrix.reindex E.symm E.symm C
@@ -175,18 +177,19 @@ theorem mpo_conjugation_mem_supportedOperators_central
     {d D ℓ r : ℕ} {U : MPOTensor d D} (hU : U.IsMPU)
     (k p s : ℕ) (hk : 0 < k)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
     {A : Matrix (Fin (p + (3 * (2 * k) + s)) → Fin d)
       (Fin (p + (3 * (2 * k) + s)) → Fin d) ℂ}
-    (hA : A ∈ QuantumCircuit.supportedOperators d
-      {i : Fin (p + (3 * (2 * k) + s)) |
-        p + 2 * k ≤ i.val ∧ i.val < (p + 2 * k) + 2 * k}) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦
+          p + 2 * k ≤ i.val ∧ i.val < (p + 2 * k) + 2 * k)) :
     mpo U (p + (3 * (2 * k) + s)) * A * (mpo U (p + (3 * (2 * k) + s)))ᴴ ∈
-      QuantumCircuit.supportedOperators d
-        {i : Fin (p + (3 * (2 * k) + s)) | p ≤ i.val ∧ i.val < p + 3 * (2 * k)} := by
+      ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun (i : Fin (p + (3 * (2 * k) + s))) ↦
+            p ≤ i.val ∧ i.val < p + 3 * (2 * k)) := by
   obtain ⟨C, rfl⟩ := MPSTensor.exists_chainWindowOperator_eq_of_mem_supportedOperators
     (by omega : p + 2 * k < p + (3 * (2 * k) + s))
     (by omega : (p + 2 * k) + 2 * k ≤ p + (3 * (2 * k) + s)) hA

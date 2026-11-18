@@ -40,7 +40,8 @@ The rate is fixed explicitly; the counterexample does not assert failure of an
 eventual estimate with a tensor-dependent prefactor. -/
 theorem exists_dimensionFour_counterexample :
     ∃ (A : MPSTensor 16 4) (ρ : Matrix (Fin 4) (Fin 4) ℂ),
-      Kraus.IsInjective A ∧ IsPrimitiveMPS A ρ ∧ ρ.PosDef ∧ Matrix.trace ρ = 1 ∧
+      Kraus.IsInjective A ∧ Kraus.HasComplementaryFixedPointGap A ρ ∧ ρ.PosDef ∧
+      Matrix.trace ρ = 1 ∧
       Kraus.transferMap A ρ = ρ ∧
       0 < (1 / 1000 : ℝ) ∧ (1 / 1000 : ℝ) < 1 ∧
       (∀ ν : ℂ, Module.End.HasEigenvalue (fnwTransferMap A) ν → ν ≠ 1 →
@@ -52,7 +53,7 @@ theorem exists_dimensionFour_counterexample :
             (leftBoundaryMapES A 3 1).range.starProjection -
           (groundSpaceES A 4).starProjection‖ := by
   refine ⟨markovTensor, markovDensity, markovTensor_isInjective,
-    markovTensor_isPrimitiveMPS, markovDensity_posDef, markovDensity_trace,
+    markovTensor_hasComplementaryFixedPointGap, markovDensity_posDef, markovDensity_trace,
     markovDensity_fixed, by norm_num, by norm_num, ?_,
     dimensionFour_coefficient_lt.1, ?_⟩
   · intro ν hν hν1

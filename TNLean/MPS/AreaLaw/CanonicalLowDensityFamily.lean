@@ -28,6 +28,8 @@ see `docs/paper-gaps/alvv16_low_energy_family_scope.tex`. Extension to a
 fixed arbitrary physical interval as the scale grows remains separate.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
@@ -136,12 +138,18 @@ theorem exists_fixed_bandwidth_five_region_canonical_low_energy_family
   obtain ⟨C, hC, hCeta, hfamily⟩ :=
     exists_fixed_bandwidth_five_region_low_energy_family etaLD hLD
   refine ⟨C, hC, hCeta, ?_⟩
-  intro L q m a b w hq hqm hw g u ell D hab hbL h hs h0 h1 config H hRaw
-  let : Nonempty (Fin L → Fin q) := config
+  intro L q m a b w hq hqm hw
+  -- Normalize the statement abbreviations before transporting the family, so
+  -- identical tensor-coordinate types do not require repeated unfolding.
+  dsimp only
+  intro hab hbL h hs h0 h1
+  let : Nonempty (Fin L → Fin q) :=
+    ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
+  have hRaw : (∑ i, h i).IsHermitian :=
+    (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
   obtain ⟨hell, hlogD, hdata⟩ :=
     hfamily L q m a b w hq hqm hw hab hbL h hs h0 h1
   refine ⟨hell, hlogD, ?_⟩
-  intro k A Cross Y K B
   obtain ⟨e, E0, x, z, hO, hClip, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0, hE04, hnorm, htargets⟩ := hdata
   obtain ⟨hminimum, hidentity⟩ :=
@@ -149,18 +157,17 @@ theorem exists_fixed_bandwidth_five_region_canonical_low_energy_family
       hcenter hzunit hz hE0low
   refine ⟨e, E0, x, z, hO, hClip, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0, hE04, hminimum, hidentity, hnorm, ?_⟩
-  intro J beta tau U Phi Tm
   obtain ⟨N, W, hN, hfilters⟩ := htargets
   refine ⟨N, W, hN, ?_⟩
-  intro eta hbuffer hetaLD lower higher Delta
-  obtain ⟨hnest, hupperClose, hlowerClose, htrade, p, hpdegree, hp0, M, hM, himprove⟩ :=
+  intro eta hbuffer hetaLD
+  obtain ⟨hnest, hupperClose, hlowerClose, htrade, hpolynomial⟩ :=
     hfilters eta hbuffer hetaLD
   have hidentityLower :
       Submodule.spectralSpanLE hO.eigenvectorBasis hO.eigenvalues (E0 + eta - 3 * w) =
         Submodule.spectralSpanLE hRaw.eigenvectorBasis hRaw.eigenvalues
           (minEigenvalue hRaw + eta - 3 * w) := by
     simpa only [add_sub_assoc] using hidentity (eta - 3 * w)
-  refine ⟨hnest, ?_, ?_, htrade, p, hpdegree, hp0, M, hM, himprove⟩
+  refine ⟨hnest, ?_, ?_, htrade, hpolynomial⟩
   · simpa only [hidentity eta] using hupperClose
   · simpa only [hidentityLower] using hlowerClose
 

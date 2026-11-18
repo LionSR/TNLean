@@ -34,6 +34,7 @@ matrix product states, canonical form, common sectors, blocking
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

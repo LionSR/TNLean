@@ -67,7 +67,7 @@
 
 \begin{lemma}[A square-grid maximizing family with controlled energy]
     \label{thm:square_zero_floor_maximizer_energy}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity}
+    \lean{ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fidelity}
     \leanok
     \uses{def:polynomial_peps_model,def:area_law_nearest_neighbor_support,
         def:square_area_law_hamiltonian}
@@ -94,7 +94,6 @@
 \begin{definition}[Positive regional filters and ascending output]
     \label{def:pinned_square_filters}
     \lean{
-        TNLean.PEPS.Approximation.Pinned.liftLocal,
         TNLean.PEPS.Approximation.Pinned.asMap,
         TNLean.PEPS.Approximation.Pinned.NestedFilter.PositiveFilter,
         TNLean.PEPS.Approximation.Pinned.NestedFilter.tracePower,
@@ -106,7 +105,7 @@
         TNLean.PEPS.Approximation.Pinned.NestedFilter.PositiveFilter.ext
     }
     \leanok
-    \uses{def:peps_pinned_regional_matrix}
+    \uses{def:peps_pinned_regional_matrix, def:peps_regional_operator_extension}
     On $V_L=\{0,\ldots,L-1\}^2$ with integers $q,m\ge0$ and regions $X_j\subseteq V_L$ ($0\le j<m$), a positive regional filter $F_j\ge0$ is a positive semidefinite matrix on $\{0,\ldots,q-1\}^{X_j}$ with lift
     \begin{align}
         (\widehat F_j)_{x,y}
@@ -159,7 +158,6 @@
 \begin{lemma}[Ascending output and global maximality]
     \label{thm:pinned_filter_output_maximum}
     \lean{
-        TNLean.PEPS.Approximation.Pinned.liftLocal_eq_localLift,
         TNLean.PEPS.Approximation.Pinned.NestedFilter.squareAreaLawState_eq_relabelVector,
         TNLean.PEPS.Approximation.Pinned.NestedFilter.squareAreaLawState_output,
         TNLean.PEPS.Approximation.Pinned.NestedFilter.squareAreaLawState_normalizedOutput,
@@ -210,7 +208,7 @@
 
 \begin{lemma}[An original-grid maximizing family with energy and fidelity bounds]
     \label{thm:pinned_square_maximizer_energy}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_pinned_maximizer_energy_fidelity}
+    \lean{ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelity}
     \leanok
     \uses{def:polynomial_peps_model,def:pinned_square_filters,def:pinned_filter_crossings}
     Let $H$ be an original square-grid Hamiltonian with real interaction bound $J$, and let $\|\Omega\|=1$ satisfy $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$ ($E_0,\Delta\in\mathbb R$). For nested regions $X_0\subseteq\cdots\subseteq X_{m-1}\subseteq V_L$ such that each forward edge crosses at most one $X_j$, and weights $0<a_j\le1$, there exists a maximizing admissible family $F$ whose output $\psi=\psi(F,\Omega)$ and normalization $\phi=\phi(F,\Omega)$ from (\ref{eq:pinned_filter_output}) satisfy

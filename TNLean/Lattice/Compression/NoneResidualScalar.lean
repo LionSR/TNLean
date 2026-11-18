@@ -50,6 +50,7 @@ private theorem restrict_sources_partialWord_all_eq_nil {a b : Layout P}
     (slotLayout_partialSlots_eq (fun _ : P ↦ true) w ξ)).symm.trans
       (restrict_allResidualSourceLayout_isNone w)
 
+set_option maxHeartbeats 400000 in -- comparing party layouts unfolds the shared circuit syntax
 /-- The literal restriction of the actual all-party hoisted branch to the grouped
 owner `none` is precisely the product of its empty-participant coefficient sums.
 Source: polynomial-PEPS, `04-compression.tex`, lines 24–28, 246–251 and 351–417. -/

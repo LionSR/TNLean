@@ -31,6 +31,7 @@ lines 1394--1483.
 
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d D R : ℕ}
 
@@ -74,7 +75,7 @@ theorem exists_parentGroundStateFace_classification_of_leftCanonical_of_posDef_f
         let _ : ∀ j, NeZero (bdim j) := fun j => ⟨Nat.ne_of_gt (hdim j)⟩
         ∃ (B : ∀ j, MPSTensor (blockPhysDim d L) (bdim j))
           (σ : ∀ j, Matrix (Fin (bdim j)) (Fin (bdim j)) ℂ)
-          (hP : ∀ j, IsPrimitiveMPS (B j) (σ j)),
+          (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (σ j)),
           (∀ j, (σ j).PosDef) ∧ BlocksNotGaugePhaseEquiv B ∧
           (∀ N, groundSpaceES (blockTensor A L) N =
             groundSpaceES (toTensorFromBlocks (fun _ => 1) B) N) ∧

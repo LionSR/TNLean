@@ -116,7 +116,7 @@ the residual prefix, flattened complete blocks, and residual suffix. -/
 noncomputable def anchoredResidualConfig (d N L p m s : ℕ) (a : ℤ)
     (hN : N = p + (m * L + s))
     (i₀ : Fin p → Fin d)
-    (i₁ : Fin m → Fin (MPSTensor.blockPhysDim d L))
+    (i₁ : Fin m → Fin (Kraus.blockPhysDim d L))
     (i₂ : Fin s → Fin d) : Config d (finiteChainRegion a N) :=
   finiteChainConfigEquiv d N a
     (fun k =>
@@ -127,7 +127,7 @@ noncomputable def anchoredResidualConfig (d N L p m s : ℕ) (a : ℤ)
 give all configurations on the anchored interval, without repetition. -/
 noncomputable def anchoredResidualConfigEquiv
     (d N L p m s : ℕ) (a : ℤ) (hN : N = p + (m * L + s)) :
-    (((Fin p → Fin d) × (Fin m → Fin (MPSTensor.blockPhysDim d L))) ×
+    (((Fin p → Fin d) × (Fin m → Fin (Kraus.blockPhysDim d L))) ×
       (Fin s → Fin d)) ≃ Config d (finiteChainRegion a N) :=
   ((Equiv.prodCongr
       (Equiv.prodCongr (Equiv.refl _) (MPSTensor.blockedConfigEquiv d m L))
@@ -142,7 +142,7 @@ noncomputable def anchoredResidualConfigEquiv
 theorem anchoredResidualConfigEquiv_apply
     (d N L p m s : ℕ) (a : ℤ) (hN : N = p + (m * L + s))
     (i₀ : Fin p → Fin d)
-    (i₁ : Fin m → Fin (MPSTensor.blockPhysDim d L))
+    (i₁ : Fin m → Fin (Kraus.blockPhysDim d L))
     (i₂ : Fin s → Fin d) :
     anchoredResidualConfigEquiv d N L p m s a hN ((i₀, i₁), i₂) =
       anchoredResidualConfig d N L p m s a hN i₀ i₁ i₂ := by
@@ -153,7 +153,7 @@ theorem anchoredResidualConfigEquiv_apply
 theorem anchoredResidualConfig_apply_site (d N L p m s : ℕ) (a : ℤ)
     (hN : N = p + (m * L + s))
     (i₀ : Fin p → Fin d)
-    (i₁ : Fin m → Fin (MPSTensor.blockPhysDim d L))
+    (i₁ : Fin m → Fin (Kraus.blockPhysDim d L))
     (i₂ : Fin s → Fin d) (k : Fin (p + (m * L + s))) :
     anchoredResidualConfig d N L p m s a hN i₀ i₁ i₂
         (finiteChainSiteEquiv a N (Fin.cast hN.symm k)) =
@@ -200,7 +200,7 @@ theorem finiteChainMPOMatrix_apply_anchoredResidualConfig
     {d D : ℕ} (U : MPOTensor d D)
     (a : ℤ) (N L p m s : ℕ) (hN : N = p + (m * L + s))
     (i₀ j₀ : Fin p → Fin d)
-    (i₁ j₁ : Fin m → Fin (MPSTensor.blockPhysDim d L))
+    (i₁ j₁ : Fin m → Fin (Kraus.blockPhysDim d L))
     (i₂ j₂ : Fin s → Fin d) :
     finiteChainMPOMatrix U N a
         (anchoredResidualConfig d N L p m s a hN i₀ i₁ i₂)
@@ -222,7 +222,7 @@ theorem finiteChainMPOMatrix_anchoredResidualTrace
     {d D : ℕ} (U : MPOTensor d D)
     (a : ℤ) (L p m s : ℕ)
     (i₀ j₀ : Fin p → Fin d)
-    (i₁ j₁ : Fin m → Fin (MPSTensor.blockPhysDim d L))
+    (i₁ j₁ : Fin m → Fin (Kraus.blockPhysDim d L))
     (i₂ j₂ : Fin s → Fin d) :
     finiteChainMPOMatrix U (p + (m * L + s)) a
         (anchoredResidualConfig d (p + (m * L + s)) L p m s a rfl i₀ i₁ i₂)
@@ -240,7 +240,7 @@ theorem finiteChainMPOMatrix_anchoredResidualTrace
 blocked word. This notation retains both residual matrix factors. -/
 noncomputable def anchoredResidualWordTrace {d D : ℕ} (U : MPOTensor d D) (L : ℕ)
     {p m s : ℕ}
-    (i j : ((Fin p → Fin d) × (Fin m → Fin (MPSTensor.blockPhysDim d L))) ×
+    (i j : ((Fin p → Fin d) × (Fin m → Fin (Kraus.blockPhysDim d L))) ×
       (Fin s → Fin d)) : ℂ :=
   Matrix.trace
     (MPOTensor.evalWord U (List.ofFn i.1.1) (List.ofFn j.1.1) *
@@ -252,7 +252,7 @@ noncomputable def anchoredResidualWordTrace {d D : ℕ} (U : MPOTensor d D) (L :
 trace, including when the complete-block word is empty. -/
 theorem finiteChainMPOMatrix_anchoredResidualConfigEquiv
     {d D : ℕ} (U : MPOTensor d D) (a : ℤ) (L p m s : ℕ)
-    (i j : ((Fin p → Fin d) × (Fin m → Fin (MPSTensor.blockPhysDim d L))) ×
+    (i j : ((Fin p → Fin d) × (Fin m → Fin (Kraus.blockPhysDim d L))) ×
       (Fin s → Fin d)) :
     finiteChainMPOMatrix U (p + (m * L + s)) a
         (anchoredResidualConfigEquiv d (p + (m * L + s)) L p m s a rfl i)
@@ -302,14 +302,14 @@ theorem finiteChainConjugation_localInclusion_anchoredResidualTrace
     (a : ℤ) (L p m s : ℕ) (hN : 1 < p + (m * L + s))
     {Λ : Finset ℤ} (hΛ : Λ ⊆ finiteChainRegion a (p + (m * L + s)))
     (A : LocalAlgebra d Λ)
-    (i j : ((Fin p → Fin d) × (Fin m → Fin (MPSTensor.blockPhysDim d L))) ×
+    (i j : ((Fin p → Fin d) × (Fin m → Fin (Kraus.blockPhysDim d L))) ×
       (Fin s → Fin d)) :
     let e := anchoredResidualConfigEquiv d (p + (m * L + s)) L p m s a rfl
     (finiteChainConjugation hU hN a (localInclusion hΛ A)) (e i) (e j) =
       ∑ w : ((Fin p → Fin d) ×
-          (Fin m → Fin (MPSTensor.blockPhysDim d L))) × (Fin s → Fin d),
+          (Fin m → Fin (Kraus.blockPhysDim d L))) × (Fin s → Fin d),
         (∑ z : ((Fin p → Fin d) ×
-            (Fin m → Fin (MPSTensor.blockPhysDim d L))) × (Fin s → Fin d),
+            (Fin m → Fin (Kraus.blockPhysDim d L))) × (Fin s → Fin d),
           anchoredResidualWordTrace U L i z *
             (A (Config.restrict hΛ (e z)) (Config.restrict hΛ (e w)) *
               if (Config.splitEquiv hΛ (e z)).2 =

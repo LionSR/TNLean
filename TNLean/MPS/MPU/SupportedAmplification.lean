@@ -26,24 +26,25 @@ open Matrix MPSTensor QuantumCircuit
 
 namespace MPSPreparation
 
-variable {d n : ℕ} {S : Set (Fin n)}
+variable {d n : ℕ} {S : Finset (Fin n)}
 
 /-- Reflection about a supported matrix preserves its support. Source:
 initialized and success reflections in Section 5 of the circuit audit. -/
 theorem subspaceReflection_mem_supportedOperators
-    {P : Matrix (Cfg d n) (Cfg d n) ℂ} (hP : P ∈ supportedOperators d S) :
-    Matrix.subspaceReflection P ∈ supportedOperators d S :=
-  (supportedOperators d S).sub_mem (one_mem_supportedOperators S)
-    ((supportedOperators d S).smul_mem (2 : ℂ) hP)
+    {P : Matrix (Cfg d n) (Cfg d n) ℂ} (hP : P ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
+    Matrix.subspaceReflection P ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
+  sub_mem (one_mem (ManyBody.supportedOperators _ S))
+    (SMulMemClass.smul_mem (2 : ℂ) hP)
 
 /-- Powers do not enlarge logical support. Source: repeated amplification
 in Section 5 of the circuit audit. -/
 theorem pow_mem_supportedOperators
-    {X : Matrix (Cfg d n) (Cfg d n) ℂ} (hX : X ∈ supportedOperators d S) (ℓ : ℕ) :
-    X ^ ℓ ∈ supportedOperators d S := by
+    {X : Matrix (Cfg d n) (Cfg d n) ℂ}
+    (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (ℓ : ℕ) :
+    X ^ ℓ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
   induction ℓ with
-  | zero => simpa only [pow_zero] using one_mem_supportedOperators S
-  | succ ℓ ih => simpa only [pow_succ] using mul_mem_supportedOperators ih hX
+  | zero => simpa only [pow_zero] using (one_mem (ManyBody.supportedOperators _ S))
+  | succ ℓ ih => simpa only [pow_succ] using mul_mem ih hX
 
 /-- Conjugating an initialized reflection by a supported unitary preserves
 support on every logical input. Source: `Matrix.subspaceReflection_image`
@@ -52,13 +53,14 @@ theorem subspaceReflection_image_mem_supportedOperators
     {m : Type*} [Fintype m]
     (Z : Matrix (Cfg d n) (Cfg d n) ℂ) (E : Matrix (Cfg d n) m ℂ)
     (hZ : Z ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ))
-    (hZS : Z ∈ supportedOperators d S)
-    (hR : Matrix.subspaceReflection (E * Eᴴ) ∈ supportedOperators d S) :
-    Matrix.subspaceReflection ((Z * E) * (Z * E)ᴴ) ∈ supportedOperators d S := by
+    (hZS : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    (hR : Matrix.subspaceReflection (E * Eᴴ) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
+    Matrix.subspaceReflection ((Z * E) * (Z * E)ᴴ) ∈ ManyBody.supportedOperators
+        (fun _ ↦ Fin d) S := by
   rw [Matrix.subspaceReflection_image Z E hZ]
-  have hstar : Zᴴ ∈ supportedOperators d S := by
-    simpa only [Matrix.star_eq_conjTranspose] using star_mem_supportedOperators hZS
-  exact mul_mem_supportedOperators (mul_mem_supportedOperators hZS hR) hstar
+  have hstar : Zᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
+    simpa only [Matrix.star_eq_conjTranspose] using star_mem hZS
+  exact mul_mem (mul_mem hZS hR) hstar
 
 /-- Both logical reflections and the scalar minus sign in one amplification
 round preserve the same support. Source: phase-exact amplification in
@@ -68,12 +70,13 @@ theorem postselectionAmplificationStep_mem_supportedOperators
     (Z : Matrix (Cfg d n) (Cfg d n) ℂ) (E : Matrix (Cfg d n) m ℂ)
     (P : Matrix (Cfg d n) (Cfg d n) ℂ)
     (hZ : Z ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ))
-    (hZS : Z ∈ supportedOperators d S)
-    (hR : Matrix.subspaceReflection (E * Eᴴ) ∈ supportedOperators d S)
-    (hP : Matrix.subspaceReflection P ∈ supportedOperators d S) :
-    Matrix.postselectionAmplificationStep (Z * E) P ∈ supportedOperators d S :=
-  (supportedOperators d S).neg_mem
-    (mul_mem_supportedOperators
+    (hZS : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    (hR : Matrix.subspaceReflection (E * Eᴴ) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    (hP : Matrix.subspaceReflection P ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
+    Matrix.postselectionAmplificationStep (Z * E) P ∈ ManyBody.supportedOperators
+        (fun _ ↦ Fin d) S :=
+  neg_mem
+    (mul_mem
       (subspaceReflection_image_mem_supportedOperators Z E hZ hZS hR) hP)
 
 /-- The complete logical amplification operator has the original support,
@@ -84,11 +87,12 @@ theorem postselectionAmplification_mem_supportedOperators
     (Z : Matrix (Cfg d n) (Cfg d n) ℂ) (E : Matrix (Cfg d n) m ℂ)
     (P : Matrix (Cfg d n) (Cfg d n) ℂ)
     (hZ : Z ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ))
-    (hZS : Z ∈ supportedOperators d S)
-    (hR : Matrix.subspaceReflection (E * Eᴴ) ∈ supportedOperators d S)
-    (hP : Matrix.subspaceReflection P ∈ supportedOperators d S) (ℓ : ℕ) :
-    Matrix.postselectionAmplificationStep (Z * E) P ^ ℓ * Z ∈ supportedOperators d S :=
-  mul_mem_supportedOperators
+    (hZS : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    (hR : Matrix.subspaceReflection (E * Eᴴ) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    (hP : Matrix.subspaceReflection P ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (ℓ : ℕ) :
+    Matrix.postselectionAmplificationStep (Z * E) P ^ ℓ * Z ∈ ManyBody.supportedOperators
+        (fun _ ↦ Fin d) S :=
+  mul_mem
     (pow_mem_supportedOperators
       (postselectionAmplificationStep_mem_supportedOperators Z E P hZ hZS hR hP) ℓ) hZS
 
@@ -101,10 +105,11 @@ theorem postselectionAmplification_mem_supportedOperators_of_projection_support
     (Z : Matrix (Cfg d n) (Cfg d n) ℂ) (E : Matrix (Cfg d n) m ℂ)
     (P : Matrix (Cfg d n) (Cfg d n) ℂ)
     (hZ : Z ∈ unitary (Matrix (Cfg d n) (Cfg d n) ℂ))
-    (hZS : Z ∈ supportedOperators d S)
-    (hE : E * Eᴴ ∈ supportedOperators d S)
-    (hP : P ∈ supportedOperators d S) (ℓ : ℕ) :
-    Matrix.postselectionAmplificationStep (Z * E) P ^ ℓ * Z ∈ supportedOperators d S :=
+    (hZS : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    (hE : E * Eᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    (hP : P ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (ℓ : ℕ) :
+    Matrix.postselectionAmplificationStep (Z * E) P ^ ℓ * Z ∈ ManyBody.supportedOperators
+        (fun _ ↦ Fin d) S :=
   postselectionAmplification_mem_supportedOperators Z E P hZ hZS
     (subspaceReflection_mem_supportedOperators hE)
     (subspaceReflection_mem_supportedOperators hP) ℓ

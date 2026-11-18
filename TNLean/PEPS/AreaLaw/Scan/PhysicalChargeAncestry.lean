@@ -20,6 +20,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 variable {I : Type*} [Fintype I] [LinearOrder I]
@@ -32,7 +34,7 @@ Containment of all predecessor sites, including far-side predecessors, follows
 from the domain graph and the source clearance condition. -/
 theorem bandState_has_chargeAncestry_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (g : Fin S.K) (r : Fin S.m) (choices : ℕ → Bool × Fin S.M)
     {L : ℕ} (hL : 8 * S.K * S.m ≤ L)
@@ -75,7 +77,7 @@ ancestry inside a short pair-time window. Ambient depth variation and all
 ancestry existence hypotheses are discharged from the physical domain graph. -/
 theorem bad_bandState_has_long_chargeAncestry_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (g : Fin S.K) (r : Fin S.m) (choices : ℕ → Bool × Fin S.M)
     {L : ℕ} (hL : 8 * S.K * S.m ≤ L) (hn : 0 < S.n)

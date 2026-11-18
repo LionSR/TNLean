@@ -22,6 +22,8 @@ prescribed four-endpoint string braid or compare different crossing
 presentations. No coefficient, Gram or parent-Hamiltonian hypothesis is used.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS
@@ -97,7 +99,7 @@ theorem exists_unitary_regularGaugedCyclePhysicalPermutation {d : ℕ}
     (hφ : ∀ z x, φ (fun e => x * z e * x⁻¹) = fun e => x * φ z e * x⁻¹) :
     ∃ W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
+      ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
       (∀ (k : RV R → G) (ω : RC (Γ := Γ) R T → G) (u : Edge Γ → G)
         (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a
@@ -107,7 +109,7 @@ theorem exists_unitary_regularGaugedCyclePhysicalPermutation {d : ℕ}
           (regularRegionBondExtension R (regularGaugedTreeCycleAssignment R T k (φ ω)) u))) R
           (fun f => Fintype.equivFin G (θ f))) ∧
       ∀ (k : RV R → G) (ω : RC (Γ := Γ) R T → G) (u : Edge Γ → G),
-        regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
+        ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
           (regularRegionBondExtension R (regularGaugedTreeCycleAssignment R T k ω) u))) =
         stateCoeff (groupBondTensor (regularTwistedSite a
           (regularRegionBondExtension R (regularGaugedTreeCycleAssignment R T k (φ ω)) u))) := by
@@ -127,9 +129,9 @@ theorem exists_unitary_regularGaugedCyclePhysicalPermutation {d : ℕ}
     rw [openRegionWeight_regularGaugedTreeCycleBondExtension R T a hinv,
       openRegionWeight_regularGaugedTreeCycleBondExtension R T a hinv]
     exact hperm ω (regularRegionBoundaryTransport R k u θ)
-  refine ⟨W, hW, regionLocalTerm_mem_unitaryGroup R W hW, hcols, ?_⟩
+  refine ⟨W, hW, place_mem_unitaryGroup R W hW, hcols, ?_⟩
   intro k ω u
-  apply regionLocalTerm_mulVec_stateCoeff_of_openColumns
+  apply place_mulVec_stateCoeff_of_openColumns
   · intro μ
     let θ := fun f => (Fintype.equivFin G).symm (μ f)
     simpa only [θ, Equiv.apply_symm_apply] using hcols k ω u θ

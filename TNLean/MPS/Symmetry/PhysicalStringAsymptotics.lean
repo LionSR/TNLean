@@ -69,7 +69,7 @@ theorem canonical_transfer_pow_sub_stationary_le_geometric
     spectralRadius_compl_lt_one_of_primitive_fixedPoint_of_irreducible_channel
       (Kraus.transferMap B) (Kraus.isChannel_mapLM B hBnorm) hIrrB hPrimB
       Λ hΛpos.posSemidef hΛne hΛfix
-  have hP : IsPrimitiveMPS B Λ :=
+  have hP : Kraus.HasComplementaryFixedPointGap B Λ :=
     ⟨hBnorm, hΛne, hΛpos.posSemidef, hΛfix, hgap⟩
   let P := fnwLimitMap Λ hP.trace_ne_zero
   have hFnw : fnwTransferMap B = Kraus.transferMap A := by

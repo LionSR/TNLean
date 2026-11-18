@@ -18,6 +18,8 @@ arXiv:1602.08828v2, `def:soft-trunc` and `t:aisefficient`, lines 1178–1185 and
 It supplies neither a residual estimate nor the complete efficient-filter theorem.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

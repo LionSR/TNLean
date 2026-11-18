@@ -30,6 +30,8 @@ site factor allowed by `IsGIsometric`, as documented in
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

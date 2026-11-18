@@ -82,8 +82,8 @@ theorem slotCount_eq_choose {a b : Layout P} (w : SourceCircuit a b)
     | inr g => exact ihv g
   | localMap => exact nomatch g
   | @gate C ι _ _ owner a b c G tail =>
-      simpa only [slotCount, participants, Finset.card_map, Finset.card_univ]
-        using G.length_slots
+      simpa only [slotCount, participants, PreparedGate.gateFamily_participants,
+        PreparedGate.participants, Finset.card_map, Finset.card_univ] using G.length_slots
   | swap => exact nomatch g
   | frame t w ih => exact ih g
 

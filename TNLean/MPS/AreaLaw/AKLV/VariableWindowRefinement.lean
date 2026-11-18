@@ -24,6 +24,8 @@ No approximation sequence, scalar degree optimization or final MPS estimate is
 asserted here.
 -/
 
+open ManyBody (interval)
+
 open Matrix Polynomial
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

@@ -38,6 +38,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph PlaneInteraction)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open TensorPower TensorPower.ReplicaTransport
@@ -224,9 +226,10 @@ theorem actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
     ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
       [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
       (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-      (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+      (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+          (Ω : StateSpace Λ q)
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
-      S.graph = domainGraph Λ →
+      S.graph = planeDomainGraph Λ →
       S.depth = (fun x => ambientDepth T hT x.val) →
       (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
       ∀ {L : ℕ} (hn : 0 < S.n), S.r₀ ≤ S.D →
@@ -241,10 +244,10 @@ theorem actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
       let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
       let n := augmentedDimensions (V := Site Λ) q aux
       let D := S.actualRoundData hm hM
-      let E := S.actualEnergyTerms h Ω Δ L aux
+      let E := S.actualEnergyTerms h Ω J Δ L aux
       let ℓ := transportLogDimBound q S.r₀
       let Hbar := fun k => copyMean n k
-        (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ L i))
+        (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω J Δ L i))
       ∃ (β rem : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
         (∀ k, 0 ≤ β k) ∧ (∀ k, 0 ≤ rem k) ∧
         (∀ k, β k ≤ Cβ * Real.log (k + 2)) ∧ Tendsto rem atTop (𝓝 0) ∧
@@ -268,17 +271,17 @@ theorem actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
               Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p₀) pre) -
                 Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k p₁) pre) := by
   classical
-  intro Λ T q R J Δ _ _ aux _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
+  intro Λ T q R J Δ _ _ aux _ h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ
     L hn hr hDpos hD hL hC hrows hclear a ha haℓ
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
   let n := augmentedDimensions (V := Site Λ) q aux
   let D := S.actualRoundData hm hM
-  let E := S.actualEnergyTerms h Ω Δ L aux
+  let E := S.actualEnergyTerms h Ω J Δ L aux
   let Hbar := fun k => copyMean n k
-    (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ L i))
+    (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω J Δ L i))
   have hq : 1 ≤ q := NeZero.pos q
-  have hE := S.actualEnergyTerms_spec h Ω hgraph hanchor hΔ hΩ L aux
+  have hE := S.actualEnergyTerms_spec h hh hhJ Ω hgraph hanchor hΔ hΩ L aux
   have hcompat : ∀ j, (D j).SupportCompatible E := by
     intro j
     have hs := S.actualRoundHistory_length_add_one_le j
@@ -350,9 +353,10 @@ theorem actualRounds_transport_domainGraph :
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+        (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+            (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
-        S.graph = domainGraph Λ →
+        S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
         ∀ {L : ℕ} (hn : 0 < S.n), S.r₀ ≤ S.D →
@@ -367,10 +371,10 @@ theorem actualRounds_transport_domainGraph :
         let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
         let n := augmentedDimensions (V := Site Λ) q aux
         let D := S.actualRoundData hm hM
-        let E := S.actualEnergyTerms h Ω Δ L aux
+        let E := S.actualEnergyTerms h Ω J Δ L aux
         let ℓ := transportLogDimBound q S.r₀
         let Hbar := fun k => copyMean n k
-          (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ L i))
+          (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω J Δ L i))
         ∃ (β rem : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
           (∀ k, 0 ≤ β k) ∧ (∀ k, 0 ≤ rem k) ∧
           (∀ k, β k ≤ Cβ * Real.log (k + 2)) ∧ Tendsto rem atTop (𝓝 0) ∧

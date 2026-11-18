@@ -11,6 +11,7 @@ import TNLean.MPS.AreaLaw.ViableSet.LeadingPower
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.CompressedSolutions
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Approximate semidefinite certificates and viable vectors
@@ -35,21 +36,25 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
 
+open ManyBody (IsGapped groundSpace ChainInteraction)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- A fully approximate numerical semidefinite certificate, at the independent precision
 targets of `fullyApproxSDP_errors_fit_lvv_margin`, produces the physical LVV viable
 vector.  This composes spectral repair of all cone variables, trace repair, the inexact
 boundary equation, support expansion, and the leading-vector argument. -/
-theorem ChainHamiltonian.exists_viable_vector_of_all_spectral_approx_sdp_certificate
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q)
+theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_all_spectral_approx_sdp_certificate
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -57,7 +62,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_all_spectral_approx_sdp_certifi
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -88,7 +93,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_all_spectral_approx_sdp_certifi
     (hδbound : δ ≤ Δ / (64896 * L)) :
     ∃ v : EuclideanSpace ℂ (Fin L → Fin q),
       ‖v‖ = 1 ∧ v ∈ leftSupportSubmodule S ∧
-      (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+      (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
   classical
   let Hleft := leftCutOperator k HL ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)
@@ -106,7 +111,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_all_spectral_approx_sdp_certifi
     dsimp only [boundaryError]
     positivity
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have harith := fullyApproxSDP_errors_fit_lvv_margin hL
@@ -116,8 +121,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_all_spectral_approx_sdp_certifi
     gcongr
   have herr : 2 * (‖K‖ * repair + ‖B‖ * boundaryError) ≤ Δ / 2028 :=
     hnum.trans (by simpa only [repair, boundaryError, add_assoc] using harith)
-  apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
+  apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hh hhJ hL hq hΔ
+    HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
     (ξ := ‖K‖ * repair) (δ := boundaryError)
   · simpa only [K, Hleft, repair] using hσenergy
   · simpa only [η, boundaryError, repair, add_assoc] using hσboundary
@@ -127,15 +132,17 @@ theorem ChainHamiltonian.exists_viable_vector_of_all_spectral_approx_sdp_certifi
 its total repaired energy and boundary error fits the available margin.  This form is
 suited to certificates transferred from rational approximations of the fixed matrices,
 whose rounding losses need not be assigned to one of the four original tolerances. -/
-theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q)
+theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_error_budget
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -143,7 +150,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -165,7 +172,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget
         (κ + 2 * n * ε))) ≤ Δ / 2028) :
     ∃ v : EuclideanSpace ℂ (Fin L → Fin q),
       ‖v‖ = 1 ∧ v ∈ leftSupportSubmodule S ∧
-      (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+      (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
   classical
   let Hleft := leftCutOperator k HL ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)
@@ -184,7 +191,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget
     exact add_nonneg
       (add_nonneg (mul_nonneg (by positivity) hcert.hεb) hδ0) hrepair0
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hnum : 2 * ((eK + ‖K‖ * repair) + ‖B‖ * boundaryError) ≤
@@ -195,25 +202,33 @@ theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget
       convert hbudget using 1
       simp only [repair, boundaryError]
       ring)
-  apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
+  apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hh hhJ hL hq hΔ
+    HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
     (ξ := eK + ‖K‖ * repair) (δ := boundaryError)
   · simpa only [K, Hleft, repair, add_assoc] using hσenergy
   · simpa only [η, boundaryError, repair, add_assoc] using hσboundary
   · exact herr
 
+end TNLean.MPS.AreaLaw
+
+namespace ManyBody.ChainInteraction
+
+open TNLean.MPS.AreaLaw
+
 /-- The error-budget theorem with an additional auxiliary-trace allowance.  A
 certificate with trace budget `η + eη` incurs the extra boundary error `eη`; this is the
 form needed for certificates obtained by finite rational search. -/
-theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q)
+theorem exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -221,7 +236,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget_with_tr
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -244,7 +259,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget_with_tr
         (κ + 2 * n * ε))) ≤ Δ / 2028) :
     ∃ v : EuclideanSpace ℂ (Fin L → Fin q),
       ‖v‖ = 1 ∧ v ∈ leftSupportSubmodule S ∧
-      (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+      (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
   classical
   let Hleft := leftCutOperator k HL ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)
@@ -264,7 +279,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget_with_tr
       (add_nonneg (add_nonneg heη (mul_nonneg (by positivity) hcert.hεb)) hδ0)
       hrepair0
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hnum : 2 * ((eK + ‖K‖ * repair) + ‖B‖ * boundaryError) ≤
@@ -275,26 +290,35 @@ theorem ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget_with_tr
       convert hbudget using 1
       simp only [repair, boundaryError]
       ring)
-  apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
+  apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hh hhJ hL hq hΔ
+    HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
     (ξ := eK + ‖K‖ * repair) (δ := boundaryError)
   · simpa only [K, Hleft, repair, add_assoc] using hσenergy
   · simpa only [η, boundaryError, repair, add_assoc] using hσboundary
   · exact herr
 
+end ManyBody.ChainInteraction
+
+
+namespace ManyBody.ChainInteraction
+
+open TNLean.MPS.AreaLaw
+
 /-- A repaired approximate semidefinite certificate produces rational viable MPS data
 once the sharp leading-vector deficit and the rationalization reserve fit the target.
 The statement includes the auxiliary trace slack used by the executable rational search.
 It is the certificate-level rational-output step of LVV13, `algo53.tex`, lines 493--527. -/
-theorem ChainHamiltonian.exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q)
+theorem exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     (S : Finset (LeftBlockVector L q k)) {b Hv : ℕ}
     (hS : ∀ u : S, RationalLeftOpenMPSRepresentationOfHeight Hv b u.1)
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
@@ -304,7 +328,7 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_approx_sdp_error_budget
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -350,8 +374,8 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_approx_sdp_error_budget
   let repair := κ + 2 * n * ε
   let boundaryError := eη + 2 * Fintype.card (CutSite L q k × Fin m) * εb + δ + repair
   obtain ⟨σ, hσ, hσtrace, _hclose, hσboundary, hσenergy⟩ := hcert.exists_density hZ
-  apply h.exists_rationalViableMPSData_of_compressed_boundary_solution_with_slack
-    hL hq hΔ HL B hsplit hHL hBS hBn hgs S hS W hW x hwx hwE X hX Z hZ hZZ
+  apply h.exists_rationalViableMPSData_of_compressed_boundary_solution_with_slack hh hhJ
+    hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan S hS W hW x hwx hwE X hX Z hZ hZZ
       σ hσ hσtrace (hξrat := hξrat) (hξrat1 := hξrat1)
       (ξ := eK + ‖K‖ * repair) (δ := boundaryError)
   · simpa only [K, Hleft, repair, add_assoc] using hσenergy
@@ -359,17 +383,26 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_approx_sdp_error_budget
   · simpa only [K, Hleft, repair, boundaryError] using hleading
   · simpa only [K, Hleft, repair, boundaryError] using hrational
 
+end ManyBody.ChainInteraction
+
+
+namespace ManyBody.ChainInteraction
+
+open TNLean.MPS.AreaLaw
+
 /-- A repaired approximate semidefinite certificate transports the compact
 coordinate-rational invariant from one LVV iteration to the next. -/
-theorem ChainHamiltonian.exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slack
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q)
+theorem exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slack
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     (S : Finset (LeftBlockVector L q k)) {s₀ b Hv : ℕ} {δin : ℝ}
     (D : RationalCoordinateViableMPSDataOfHeight Hv Γ s₀ b δin S)
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
@@ -379,7 +412,7 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_approx_sdp_error_budge
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -426,8 +459,8 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_approx_sdp_error_budge
   let repair := κ + 2 * n * ε
   let boundaryError := eη + 2 * Fintype.card (CutSite L q k × Fin m) * εb + δ + repair
   obtain ⟨σ, hσ, hσtrace, _hclose, hσboundary, hσenergy⟩ := hcert.exists_density hZ
-  apply h.exists_rationalCoordinateData_of_compressed_boundary_solution_with_slack
-    hL hq hΔ HL B hsplit hHL hBS hBn hgs S D W hW x hwx hwE X hX Z hZ hZZ
+  apply h.exists_rationalCoordinateData_of_compressed_boundary_solution_with_slack hh hhJ
+    hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan S D W hW x hwx hwE X hX Z hZ hZZ
       σ hσ hσtrace (hξrat := hξrat) (hξrat1 := hξrat1)
       (ξ := eK + ‖K‖ * repair) (δ := boundaryError)
   · simpa only [K, Hleft, repair, add_assoc] using hσenergy
@@ -435,4 +468,5 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_approx_sdp_error_budge
   · simpa only [K, Hleft, repair, boundaryError] using hleading
   · simpa only [K, Hleft, repair, boundaryError] using hrational
 
-end TNLean.MPS.AreaLaw
+end ManyBody.ChainInteraction
+

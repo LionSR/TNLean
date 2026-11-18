@@ -33,6 +33,8 @@ factor (a boundary edge); an edge with no endpoint in `R` contributes nothing.
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

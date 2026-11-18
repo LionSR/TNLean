@@ -140,8 +140,8 @@ theorem fnwTransferMap_sub_fnwLimitMap_pow (A : MPSTensor d D) (ρ : Mat)
 
 /-- A primitive MPS tensor supplies the trace nonvanishing, left-canonical
 normalization, and stationarity hypotheses for the FNW remainder identity. -/
-theorem IsPrimitiveMPS.fnwTransferMap_sub_fnwLimitMap_pow [NeZero D]
-    {A : MPSTensor d D} {ρ : Mat} (hP : IsPrimitiveMPS A ρ)
+theorem _root_.Kraus.HasComplementaryFixedPointGap.fnwTransferMap_sub_fnwLimitMap_pow [NeZero D]
+    {A : MPSTensor d D} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     {n : ℕ} (hn : 1 ≤ n) :
     (fnwTransferMap A - fnwLimitMap ρ hP.trace_ne_zero) ^ n =
       fnwTransferMap A ^ n - fnwLimitMap ρ hP.trace_ne_zero :=

@@ -70,7 +70,7 @@ noncomputable def componentFinset (G : SimpleGraph ι) (a : ι) : Finset ι := b
 noncomputable def designatedSupport (G : SimpleGraph ι) (S₀ : Finset ι) (r₀ : ℕ) (a : ι) :
     Finset ι :=
   if setDist G S₀ a = ⊤ then componentFinset G a
-  else graphBall G a (truncationRadius r₀ (setDist G S₀ a).toNat)
+  else ManyBody.graphBall G a (truncationRadius r₀ (setDist G S₀ a).toNat)
 
 /-- The labels whose designated support meets both `X` and its complement
 (`03-quasilocal.tex`, lines 436–438). -/
@@ -116,7 +116,7 @@ theorem truncationRadius_eq_of_mem_crossingLabels {κ : Type*} [Fintype κ]
     {G : SimpleGraph ι} {S₀ : Finset ι} {r₀ : ℕ} {a : κ → ι} {X : Finset ι} (hX : X ⊆ S₀)
     {i : κ} (hi : i ∈ crossingLabels G S₀ r₀ a X) :
     setDist G S₀ (a i) ≠ ⊤ ∧ truncationRadius r₀ (setDist G S₀ (a i)).toNat = r₀ ∧
-      designatedSupport G S₀ r₀ (a i) = graphBall G (a i) r₀ := by
+      designatedSupport G S₀ r₀ (a i) = ManyBody.graphBall G (a i) r₀ := by
   classical
   simp only [crossingLabels, Finset.mem_filter, Finset.mem_univ, true_and] at hi
   obtain ⟨⟨x, hxD, hxX⟩, -⟩ := hi
@@ -129,7 +129,7 @@ theorem truncationRadius_eq_of_mem_crossingLabels {κ : Type*} [Fintype κ]
     exact SimpleGraph.edist_ne_top_iff_reachable.mpr hxD this
   set d := (setDist G S₀ (a i)).toNat with hd
   have hdcoe : (d : ℕ∞) = setDist G S₀ (a i) := ENat.natCast_toNat hfin
-  simp only [designatedSupport, hfin, ite_false, mem_graphBall] at hxD
+  simp only [designatedSupport, hfin, ite_false, ManyBody.mem_graphBall] at hxD
   have hdle : (d : ℕ∞) ≤ G.edist (a i) x := by rw [hdcoe]; exact Finset.inf_le (hX hxX)
   have hr : truncationRadius r₀ d = r₀ := by
     refine max_eq_left (not_lt.mp fun hlt ↦ ?_)
@@ -145,7 +145,7 @@ if balls of radius `r` have at most `K_b (r + 1)²` sites and each site anchors 
 labels, then `|𝒞_X| ≤ 2 μ K_b (r₀ + 1)² b_X` for every `X ⊆ S₀`. -/
 theorem card_crossingLabels_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S₀ : Finset ι)
     (r₀ : ℕ) (a : κ → ι) {X : Finset ι} (hX : X ⊆ S₀) {Kb μ : ℝ} (hμ : 0 ≤ μ)
-    (hBall : ∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2)
+    (hBall : ∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2)
     (hMult : ∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) :
     ((crossingLabels G S₀ r₀ a X).card : ℝ) ≤
       2 * μ * Kb * ((r₀ : ℝ) + 1) ^ 2 * (cutEdges G X).card := by
@@ -156,7 +156,7 @@ theorem card_crossingLabels_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S
     simp [hE, crossingLabels]
   set E := cutEdges G X
   set P : Finset ι := E.image Prod.fst ∪ E.image Prod.snd
-  set T : Finset ι := P.biUnion fun u => graphBall G u r₀
+  set T : Finset ι := P.biUnion fun u => ManyBody.graphBall G u r₀
   -- Every crossing label has its anchor within `r₀` of an endpoint of a cut edge.
   have hsub : crossingLabels G S₀ r₀ a X ⊆ T.biUnion fun x =>
       Finset.univ.filter fun i => a i = x := by
@@ -164,7 +164,7 @@ theorem card_crossingLabels_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S
     obtain ⟨-, -, hsupp⟩ := truncationRadius_eq_of_mem_crossingLabels hX hi
     have hi' := hi
     simp only [crossingLabels, Finset.mem_filter, Finset.mem_univ, true_and, hsupp,
-      mem_graphBall] at hi'
+      ManyBody.mem_graphBall] at hi'
     obtain ⟨⟨x₁, hx₁, hx₁X⟩, ⟨x₂, hx₂, hx₂X⟩⟩ := hi'
     refine Finset.mem_biUnion.mpr ⟨a i, ?_, by simp⟩
     refine Finset.mem_biUnion.mpr ?_
@@ -174,18 +174,18 @@ theorem card_crossingLabels_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S
       · refine Finset.mem_union_left _ (Finset.mem_image.mpr ⟨(u, v), ?_, rfl⟩)
         simp only [Finset.mem_coe] at hu hv
         simp [E, cutEdges, huv, hu, hv]
-      · rw [mem_graphBall, SimpleGraph.edist_comm]; exact hau
+      · rw [ManyBody.mem_graphBall, SimpleGraph.edist_comm]; exact hau
     · obtain ⟨u, v, huv, hu, hv, hau⟩ :=
-        exists_cut_edge_near (S := ((X : Set ι)ᶜ)) ha (by simpa using hx₁X) hx₁
+        exists_cut_edge_near (S := (X : Set ι)ᶜ) ha (by simpa using hx₁X) hx₁
       refine ⟨u, ?_, ?_⟩
       · refine Finset.mem_union_right _ (Finset.mem_image.mpr ⟨(v, u), ?_, rfl⟩)
         simp only [Set.mem_compl_iff, Finset.mem_coe, not_not] at hu hv
         simp [E, cutEdges, huv.symm, hu, hv]
-      · rw [mem_graphBall, SimpleGraph.edist_comm]; exact hau
+      · rw [ManyBody.mem_graphBall, SimpleGraph.edist_comm]; exact hau
   have hKb : 0 ≤ Kb := by
     have := hBall x₀ 0
-    have h1 : (1 : ℝ) ≤ (graphBall G x₀ 0).card := by
-      exact_mod_cast Finset.card_pos.mpr ⟨x₀, mem_graphBall.mpr (by simp)⟩
+    have h1 : (1 : ℝ) ≤ (ManyBody.graphBall G x₀ 0).card := by
+      exact_mod_cast Finset.card_pos.mpr ⟨x₀, ManyBody.mem_graphBall.mpr (by simp)⟩
     nlinarith
   have hPcard : (P.card : ℝ) ≤ 2 * E.card := by
     rw [two_mul]
@@ -198,7 +198,7 @@ theorem card_crossingLabels_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S
         exact_mod_cast Finset.card_biUnion_le
     _ ≤ ∑ _x ∈ T, μ := Finset.sum_le_sum fun x _ => hMult x
     _ = T.card * μ := by rw [Finset.sum_const, nsmul_eq_mul]
-    _ ≤ (∑ u ∈ P, ((graphBall G u r₀).card : ℝ)) * μ := by
+    _ ≤ (∑ u ∈ P, ((ManyBody.graphBall G u r₀).card : ℝ)) * μ := by
         gcongr; exact_mod_cast Finset.card_biUnion_le
     _ ≤ (∑ _u ∈ P, Kb * ((r₀ : ℝ) + 1) ^ 2) * μ := by
         gcongr with u _; exact hBall u r₀
@@ -245,14 +245,14 @@ theorem one_le_cutBudget {κ : Type*} [Fintype κ] (q : ℕ) (G : SimpleGraph ι
 `03-quasilocal.tex`, lines 447–448): `log dᵢ = |Sᵢ| log q ≤ K_b (r₀ + 1)² log q`. -/
 theorem log_dim_le_of_mem_crossingLabels {κ : Type*} [Fintype κ] {q : ℕ} (hq : 1 ≤ q)
     {G : SimpleGraph ι} {S₀ : Finset ι} {r₀ : ℕ} {a : κ → ι} {X : Finset ι} (hX : X ⊆ S₀)
-    {Kb : ℝ} (hBall : ∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2)
+    {Kb : ℝ} (hBall : ∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2)
     {i : κ} (hi : i ∈ crossingLabels G S₀ r₀ a X) :
     Real.log ((q : ℝ) ^ (designatedSupport G S₀ r₀ (a i)).card) ≤
       Kb * Real.log q * ((r₀ : ℝ) + 1) ^ 2 := by
   obtain ⟨-, -, hsupp⟩ := truncationRadius_eq_of_mem_crossingLabels hX hi
   have hlq : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   rw [Real.log_pow, hsupp]
-  calc ((graphBall G (a i) r₀).card : ℝ) * Real.log q ≤
+  calc ((ManyBody.graphBall G (a i) r₀).card : ℝ) * Real.log q ≤
         Kb * ((r₀ : ℝ) + 1) ^ 2 * Real.log q :=
       mul_le_mul_of_nonneg_right (hBall _ _) hlq
     _ = Kb * Real.log q * ((r₀ : ℝ) + 1) ^ 2 := by ring
@@ -263,7 +263,7 @@ theorem log_dim_le_of_mem_crossingLabels {κ : Type*} [Fintype κ] {q : ℕ} (hq
 theorem cutBudget_le {κ : Type*} [Fintype κ] {q : ℕ} (hq : 1 ≤ q) (G : SimpleGraph ι)
     (S₀ : Finset ι) (r₀ : ℕ) (a : κ → ι) {X : Finset ι} (hX : X ⊆ S₀) {Kb μ : ℝ}
     (hKb : 0 ≤ Kb) (hμ : 0 ≤ μ)
-    (hBall : ∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2)
+    (hBall : ∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2)
     (hMult : ∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) :
     cutBudget q G S₀ r₀ a X ≤
       max 1 (2 * μ * Kb * (1 + Kb * Real.log q) ^ 2) * (1 + (cutEdges G X).card) *
@@ -374,20 +374,20 @@ theorem truncatedConstraint_of_setDist_eq_top {q : ℕ} {G : SimpleGraph ι} {S�
     truncatedConstraint q G S₀ r₀ a k = k := by
   simp [truncatedConstraint, ha]
 
+open Classical in
 /-- **The truncated constraint acts on its designated support** (`03-quasilocal.tex`,
 lines 419–424): the ball expectation acts on the ball, and a retained constraint acting on
 the component of its anchor acts on the designated component. -/
-theorem truncatedConstraint_mem_supportedOperators {q : ℕ} [NeZero q] (G : SimpleGraph ι)
+theorem truncatedConstraint_mem_supportedOperators {q : ℕ} (G : SimpleGraph ι)
     (S₀ : Finset ι) (r₀ : ℕ) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hk : k ∈ supportedOperators q {x | G.Reachable a x}) :
+    (hk : k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (Finset.univ.filter fun x ↦ G.Reachable a x)) :
     truncatedConstraint q G S₀ r₀ a k ∈
-      supportedOperators q (designatedSupport G S₀ r₀ a : Set ι) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q) (designatedSupport G S₀ r₀ a : Finset ι) := by
   classical
   unfold truncatedConstraint designatedSupport
   split_ifs with h
-  · have hc : ((componentFinset G a : Finset ι) : Set ι) = {x | G.Reachable a x} := by
-      ext x; simp [componentFinset]
-    rw [hc]; exact hk
-  · exact siteExpectation_mem_supportedOperators _ k
+  · exact hk
+  · exact (ManyBody.regionExpectation_mem_supportedOperators _ k)
 
 end TNLean.PEPS.AreaLaw

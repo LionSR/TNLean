@@ -28,6 +28,8 @@ retains `q ≥ 2` and a coefficient for each fixed positive bandwidth. See
 capped explicitly; the source comparison uses `0 < v ≤ etaLD`.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace Matrix
 
 namespace TNLean.MPS.AreaLaw

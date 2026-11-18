@@ -56,10 +56,9 @@ not the matrix-power function at a varying matrix.
 
 ## One final state and the existing partial trace
 
-`RegularizedPatchMarginal.lean` uses the explicit equivalence between a
-configuration on the univ subtype and the corresponding global dependent
-configuration. `dependentGlobalConfigIsometry` is the induced linear isometry.
-This coordinate identification does not introduce another physical state model.
+`RegularizedPatchMarginal.lean` states the patch output on the global
+configurations `(v : V) → Out v`, the same space as the physical state, so no
+coordinate identification between two state spaces is needed.
 
 For the existing normalized output `φ = normalizedRegularizedPatchOutput …`,
 the regional matrix is exactly the existing `FiniteProduct.reducedPure`

@@ -68,8 +68,8 @@ theorem Word.mapSourceSlots_spec (R : SourceInventory P)
     obtain ⟨hta, hts⟩ := ih (fun i ↦ U i.succ) (fun i ↦ V i.succ)
       (fun i ↦ U' i.succ) (fun i ↦ V' i.succ) (fun i ↦ f i.succ)
       (fun i ↦ g i.succ) (fun i ↦ hf i.succ) (fun i ↦ hg i.succ)
-    simp only [Word.mapSourceSlots, Word.isAllowed_castLayouts,
-      Word.sources_castLayouts, Word.IsAllowed, Word.sources, hs, hts,
+    simp only [Word.mapSourceSlots, Circuit.isAllowed_castLayouts,
+      Word.sources_castLayouts, Circuit.IsAllowed, Word.sources, hs, hts,
       List.nil_append]
     exact ⟨⟨ha, hta⟩, trivial⟩
 
@@ -98,7 +98,7 @@ theorem Word.eval_mapSourceSlots_prepareSlots (R : SourceInventory P)
       _ _ (prepareSlots_cons_eval_heq r R U V η ℓ x)).trans ?_
     refine (heq_of_eq ?_).trans (prepareSlots_cons_eval_heq r R U' V'
       (fun i ↦ TensorProduct.mapL (f i) (g i) (η i)) ℓ x).symm
-    simp only [Word.eval_comp, comp_apply]
+    simp only [Circuit.eval_comp, comp_apply]
     rw [← comp_apply (Word.mapPair r.left r.right (f 0) (g 0) _).eval,
       Word.eval_mapPair_source, PairSource.eval_frame_frame_source]
     rw [← comp_apply (Word.mapSourceSlots R (fun i ↦ U i.succ) (fun i ↦ V i.succ)

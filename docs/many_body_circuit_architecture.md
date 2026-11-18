@@ -86,8 +86,8 @@ flowchart BT
 | Layer | Objects | Defining types | Now | After the move | May import |
 |---|---|---|---|---|---|
 | Sites | a finite tensor product `⊗_v ℂ^{X_v}` and its regions | a system `X : V → Type` of finite basis types, its configurations and those of a region; `supportedOperators X D`; the placement `K ↦ K ⊗ 1`; the partial trace onto a region; product vectors | QICLean `Entropy`, `Representation`, `Analysis` (86 modules using `SiteConfig`); 25 modules of `TNLean/Circuit`, among them `RegionSplit` and `RegionalSwap`; `Lattice/RegionalSwapSupport` | `QICLean/ManyBody/Sites` | matrices, channels |
-| Dynamics | a family of Hermitian terms with supports, and the evolution it generates | Heisenberg evolution, commutator bounds on a graph | `TNLean/Circuit/LiebRobinson`; `Circuit/ProjectedRelativeEvolution`, `DisjointRelativeEvolution`, `SupportedGaussianIntegral` | `QICLean/ManyBody/Dynamics` | Sites |
-| Hamiltonians | an interaction on a finite set of sites | one structure: bounded Hermitian terms with given supports; spectral and Gaussian filters, truncation, low-energy bases | `TNLean/Lattice` (root, `ClusterExpansion`); five separate structures | `QICLean/ManyBody/Hamiltonian` | Sites, Dynamics |
+| Dynamics | a family of Hermitian terms with supports, and the evolution it generates | `Interaction X S` (terms `term i ∈ supportedOperators X (S i)`, supports a parameter) and its `hamiltonian`; the evolution is `Matrix.hermitianUnitaryPath`, with the Heisenberg picture, commutator bounds on a graph and `graphBall` | `QICLean/ManyBody/Dynamics` (moved, #10718); `TNLean/Circuit/SiteExpectationGraphLocalization` keeps the two site-expectation localization estimates until `siteExpectation` is replaced | `QICLean/ManyBody/Dynamics` | Sites |
+| Hamiltonians | spectral properties of an interaction on a finite set of sites | `groundSpace` and the one gap predicate `IsGapped`, stated for any matrix; spectral and Gaussian filters, truncation, low-energy bases; the models as choices of sites and supports | `TNLean/Lattice` (root, `ClusterExpansion`); five separate structures | `QICLean/ManyBody/Hamiltonian` | Sites, Dynamics |
 | Gates | unitaries on a finite basis, with no sites | two-level and Givens words, controlled elements, permutation matrices, dilations, amplification | parts of `TNLean/Circuit/Gates`, eight root modules of `TNLean/Circuit` | `QICLean/Circuit/Gate` | matrices |
 | Circuits | a geometry of cells on a set of sites, and operations layered on it | `Layer`, `Circuit`, its Kraus family, depth and gate count | `TNLean/Circuit` (the rest) | `QICLean/Circuit` | Sites, Gates |
 | Party calculus | registers with owners | one syntax of local maps, sources and gates | `TNLean/Lattice/PartyCircuit`, `Compression`, `Sheet` | reusable part: `QICLean/Circuit/Party`; proof-specific part stays in TNLean | Sites, Circuits |
@@ -95,6 +95,29 @@ flowchart BT
 Circuits and Hamiltonians are siblings. A circuit statement never needs an
 interaction, and a Hamiltonian statement never needs a layer; the permutation
 of sites and the site-supported projections that both use belong to Sites.
+
+The structure `Interaction` lives in Dynamics, not in Hamiltonians, so that
+every statement about the evolution and every statement about the spectrum
+spells the Hamiltonian the same way, as `Φ.hamiltonian`. A lemma stated at
+the bare sum `∑ i, h i` would be a second spelling that `rw` cannot match
+against the first. Hermiticity, norm bounds, range and degree are hypotheses,
+not fields. A gap is `IsGapped H E₀ Δ`, whose ground space is nonzero. The
+eigenvalue dichotomy and the unique gapped ground state (the hypotheses
+`‖Ω‖ = 1`, `IsGapped H E₀ Δ` and `groundSpace H E₀ = span {Ω}`, which replaced
+TNLean's `Matrix.IsGappedGroundState` in step 4.0) are theorems about it, not
+further predicates. An eigenvalue bound that does not assert a ground state is
+a hypothesis, not a gap.
+
+Quantum simulation and many-body theory are stated over these layers.
+
+- Ground states, gaps, frustration-freeness, thermal states and the models
+  (Heisenberg, transverse-field Ising, AKLT) go in Hamiltonians, as
+  instances of `Interaction`.
+- Time evolution, quasi-adiabatic continuation and the consequences of the
+  Lieb–Robinson bound go in Dynamics.
+- Product formulas, simulation error bounds and simulation by circuits go on
+  the circuit side, which imports Hamiltonians and Dynamics, so that imports
+  keep pointing one way.
 
 ### Generality
 
@@ -106,7 +129,7 @@ special structure is not stated with it.
 
 | Axis | Required generality | What is hard-coded today |
 |---|---|---|
-| Sites | any finite type `V` | `Fin N` (389 of the 1,541 declarations of `TNLean/Circuit`, 1,304 of the 4,371 of `MPS/AreaLaw`), `Finset (ℤ × ℤ)` (1,024 of the 3,425 declarations of `PEPS/AreaLaw`, and `Lattice.LocalHamiltonian` itself), `Finset ℤ` |
+| Sites | any finite type `V` | `Fin N` (389 of the 1,541 declarations of `TNLean/Circuit`, 1,304 of the 4,371 of `MPS/AreaLaw`), `Finset (ℤ × ℤ)` (1,024 of the 3,425 declarations of `PEPS/AreaLaw`, and `ManyBody.PlaneInteraction` itself), `Finset ℤ` |
 | Local spaces | any finite basis type at each site, `X : V → Type` | one `Fin d` for all sites in TNLean; `Fin (n v)` in QICLean. Composite local spaces are then written `Fin (d * a)`, `Fin (d ^ k)`, `Fin (a + b)` and unpacked by index arithmetic: 170 declarations in `Circuit`, 226 in `MPS/Preparation`, 285 in `MPS/MPU`, 214 in `MPS/AreaLaw` |
 | Regions | any finite set of sites, as one type `Finset V` | `Set` in one support notion, `Finset` in the other |
 | Geometry | any family of cells, any graph | the ring: 130 declarations of `Circuit` and every channel, measurement and adaptive model; the open chain for gate counts |
@@ -142,8 +165,10 @@ Read the statement, not the proof, and take the first line that applies:
 2. It mentions a layer, a depth, a gate count, a measurement outcome or a
    register owner → Circuits, or the Party calculus if it has owners and no
    geometry.
-3. It mentions an interaction, an energy, a gap or a time evolution →
-   Hamiltonians, or Dynamics if it needs only the terms and their supports.
+3. It mentions an energy, a ground space or a gap → Hamiltonians; it
+   mentions an interaction or a time evolution and needs only the terms and
+   their supports → Dynamics. A statement comparing a circuit with an
+   evolution → Circuits.
 4. It mentions sites, regions or supports → Sites.
 5. Otherwise it is about matrices on arbitrary finite index types → the
    existing QICLean directories (or Gates for unitary words).
@@ -185,7 +210,8 @@ cannot be admitted by recording it. The 17 imports recorded when the check was
 introduced were repaired by step 0.3, and the set is empty:
 
 - nine site and dynamics modules imported `Circuit/LocalCircuit` for
-  `supportedOperators`, now defined in `Circuit/SupportedOperators`;
+  `supportedOperators`, which was defined in `Circuit/SupportedOperators` and
+  was replaced by QICLean's `ManyBody.supportedOperators` in follow-up F12;
 - four modules of the Sites and Hamiltonian layers imported gate modules for
   `siteOp`, `ctrlProj` and local permutations, now in `Circuit/SiteOperators`
   and `Circuit/SitePermutation`;
@@ -194,13 +220,46 @@ introduced were repaired by step 0.3, and the set is empty:
 - `SiteExpectationOrder` imported `LiebRobinson/CommutatorRecursion` for one
   lemma on the Heisenberg evolution, now stated beside its definition;
   `ProjectedRelativeEvolution`, `DisjointRelativeEvolution` and
-  `SupportedGaussianIntegral`, which state results about that evolution, are
-  dynamics modules and are listed as such in the checker;
+  `SupportedGaussianIntegral`, which state results about that evolution, were
+  dynamics modules; they and `Circuit/LiebRobinson` are now QICLean's
+  `ManyBody/Dynamics` (tracker #10718); the one TNLean dynamics module left by
+  that move, `Circuit/SiteExpectationGraphLocalization`, was deleted with
+  `siteExpectation` in follow-up F12;
 - two modules of `Lattice/Sheet` imported `RegionSplit` and `RegionalSwap`,
   site notions that were kept among the Hamiltonian modules and are now
   modules of `TNLean/Circuit`.
 
-The same check is added to QICLean when the layers arrive there, where
+Three further ratchets of the same kind cover every module of TNLean, not only
+the layers above. Each records what the tree has now in a set that may only
+shrink, compared with the base revision in the same way: a new entry fails,
+and an entry that no longer holds must be removed in the change that repairs
+it.
+
+- `MUTUAL_DIRECTORIES`, in the same script, lists the pairs of directories
+  that import each other, with directories taken at depth two below
+  `TNLean/MPS` and `TNLean/PEPS` and at depth one elsewhere. It recorded 59
+  pairs when introduced, such as `MPS/MPDO` and `MPS/ParentHamiltonian`. A
+  new import that makes two directories depend on each other fails, so the
+  directories that are layers today stay layers.
+- `EXAMPLES_IMPORTS`, in the same script, lists the imports of a module inside
+  an `Examples` directory by a module outside every such directory. It
+  recorded 17 when introduced and is now empty under the checker's expanded
+  dependency interpretation. Shared interfaces live in library modules;
+  concrete demonstrations live under `Examples`. Seven historical import-only
+  compatibility paths still literally import examples; the checker expands
+  them when checking declaration-bearing callers. See
+  `audits/2026-11-17_examples_import_extraction.md` for the inventory and scope.
+- `PASS_THROUGH`, in `scripts/check_pass_through_declarations.py`, lists the
+  declarations whose whole body applies the declaration of the same name in
+  another namespace to their own explicit arguments in order, as in
+  `lemma blockPhysDim_eq_pow (d L : ℕ) : … := Kraus.blockPhysDim_eq_pow d L`.
+  It recorded 25 when introduced. The rule is lexical and narrow, and is
+  stated in full at the head of that script; a forwarding declaration of
+  another shape is not detected and is removed by review.
+
+Both scripts run in the same step of the module-policy job.
+
+The layer check is added to QICLean when the layers arrive there, where
 directories are not layers today: every pair among `Algebra`, `Analysis`,
 `Channel`, `Entropy` and `Representation` that is related at all is related in
 both directions, and `Analysis` holds 530 modules at its top level.
@@ -235,7 +294,9 @@ else.
   entries, with site-dependent dimensions `n : V → ℕ` and `D : Finset V` (311
   TNLean modules, 29 QICLean modules). 61 modules use both. The two bridge
   lemmas in `Circuit/EntropySupport` are each applied in about 50 modules and
-  exist only for one local dimension.
+  exist only for one local dimension. Follow-up F12 deleted the first predicate
+  and the bridges: supports are now `ManyBody.supportedOperators`, whose carrier
+  is the entry condition.
 - The algebra of `Entropy.IsSupportedOn` (`add`, `neg`, `sub`, `smul`,
   `conjTranspose`, finite sums, `exp`) is proved in TNLean area-law modules
   under the QICLean namespace, not in QICLean. Its product and commutation
@@ -301,7 +362,7 @@ other directories.
 - One placement of a regional matrix as `K ⊗ 1`, along a region or along an
   injection of sites; the nine constructions above become this one or
   specializations of it by definition.
-- One partial trace onto a region (`siteExpectation`), one product vector, one
+- One partial trace onto a region (`ManyBody.regionExpectation`), one product vector, one
   expectation.
 - Lieb–Robinson bounds for a family of supported Hermitian terms on a graph,
   moved unchanged.
@@ -421,9 +482,9 @@ Sites layer has. It holds three unrelated things:
   declarations.
 - `TreeBasisCounterexample`.
 
-The structure `Lattice.LocalHamiltonian`, described as shared by the one- and
+The structure `ManyBody.PlaneInteraction`, described as shared by the one- and
 two-dimensional area laws, is defined on `Λ : Finset (ℤ × ℤ)`. The chain uses
-`ChainHamiltonian` and `DomainHamiltonian` in `MPS/AreaLaw`, and the squares
+`ManyBody.ChainInteraction` and `ManyBody.DomainInteraction` in `MPS/AreaLaw`, and the squares
 and rectangles of `PEPS` use two more structures. Namespaces vary inside the
 directory (`TNLean.Lattice`, `TNLean.Lattice.PartyCircuit`,
 `Lattice.PartyCircuit`, and bare `Word`, `EffectCircuit`).
@@ -510,8 +571,8 @@ Wave 3, two tracks that share no file:
 
 - **3H.1** (QICLean). `Interaction`; the Hamiltonian part of `Lattice` (127
   modules) restated on it and moved.
-- **3H.2** (TNLean, pin move 2). `ChainHamiltonian`, `DomainHamiltonian`,
-  `Lattice.LocalHamiltonian`, `SquareHamiltonian` and `RectangularHamiltonian`
+- **3H.2** (TNLean, pin move 2). `ManyBody.ChainInteraction`, `ManyBody.DomainInteraction`,
+  `ManyBody.PlaneInteraction`, `SquareHamiltonian` and `RectangularHamiltonian`
   become instances; `Lattice/RegionalEntropyBridge` is deleted.
 - **3A** (both). The generic modules of `TNLean/Algebra` move to QICLean,
   merged into topical modules: 40 used by two or more directories, up to 131
@@ -570,8 +631,9 @@ Follow-on projects, each started after wave 2 with its own audit:
 - **F3** `QICLean/Analysis` (530 top-level modules) and the mutual imports of
   QICLean's directories.
 - **F4** One definition per notion, one glossary section at a time, starting
-  with primitivity (done except for the name `IsPrimitiveMPS`); then the layering inside `MPS` and between `MPS`, `PEPS`
-  and `QCA`.
+  with primitivity (done: `_root_.IsPrimitive`, `Kraus.IsNormal` and
+  `Kraus.HasComplementaryFixedPointGap`); then the layering inside `MPS` and
+  between `MPS`, `PEPS` and `QCA`.
 
 A directory with both a sweep in wave 4 and a restructuring in a follow-on gets
 them together, so its modules are rewritten once.
@@ -600,7 +662,9 @@ model is ported.
 - A new declaration goes where "Where a declaration goes" puts it. A module
   that mentions no layer, gate or depth is not added to `TNLean/Circuit`; until
   step 1.2 it goes in QICLean beside `Entropy.IsSupportedOn`.
-- No entry is added to `DEBT` in `scripts/check_import_layers.py`.
+- No entry is added to `DEBT`, `MUTUAL_DIRECTORIES` or `EXAMPLES_IMPORTS` in
+  `scripts/check_import_layers.py`, nor to `PASS_THROUGH` in
+  `scripts/check_pass_through_declarations.py`.
 - No new pass-through declaration, translating lemma between two formulations,
   or predicate for a notion that already has one. A new predicate states which
   existing notion it differs from and what separates them.

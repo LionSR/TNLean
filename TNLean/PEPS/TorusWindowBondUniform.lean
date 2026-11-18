@@ -45,6 +45,8 @@ chain and the per-step transports glue into a single common-state family.
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964); the filled-in derivation
   in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 1.
 -/
+
+open ManyBody (Edge)
 open scoped Matrix
 
 open scoped BigOperators
@@ -70,9 +72,9 @@ read at the preimage edge, the round trip `Edge.map φ (Edge.map φ.symm e') = e
 image action. -/
 theorem isRegionBoundaryEdge_map' (φ : G ≃g G') (R : Finset V) (e' : Edge G') :
     IsRegionBoundaryEdge (G := G') (Region.map φ R) e' ↔
-      IsRegionBoundaryEdge (G := G) R (Edge.map φ.symm e') := by
-  have h := isRegionBoundaryEdge_map φ R (Edge.map φ.symm e')
-  rwa [Edge.map_map_symm] at h
+      IsRegionBoundaryEdge (G := G) R (ManyBody.Edge.map φ.symm e') := by
+  have h := isRegionBoundaryEdge_map φ R (ManyBody.Edge.map φ.symm e')
+  rwa [ManyBody.Edge.map_map_symm] at h
 
 /-- **The interior-bond product of an image region.**  The interior-bond product of
 `Region.map φ R` is the product over the interior (non-boundary) edges of `R` of the bond dimension
@@ -85,21 +87,22 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1500 of
 theorem regionInteriorBondProd_map (A' : Tensor G' d) (φ : G ≃g G') (R : Finset V) :
     regionInteriorBondProd (G := G') A' (Region.map φ R) =
       ∏ e ∈ Finset.univ.filter (fun e : Edge G => ¬ IsRegionBoundaryEdge (G := G) R e),
-        A'.bondDim (Edge.map φ e) := by
+        A'.bondDim (ManyBody.Edge.map φ e) := by
   classical
   rw [regionInteriorBondProd]
-  refine Finset.prod_nbij' (fun e' => Edge.map φ.symm e') (fun e => Edge.map φ e) ?_ ?_ ?_ ?_ ?_
+  refine Finset.prod_nbij' (fun e' => ManyBody.Edge.map φ.symm e')
+      (fun e => ManyBody.Edge.map φ e) ?_ ?_ ?_ ?_ ?_
   · intro e' he'
     simp only [Finset.mem_filter, Finset.mem_univ, true_and] at he' ⊢
     rwa [isRegionBoundaryEdge_map'] at he'
   · intro e he
     simp only [Finset.mem_filter, Finset.mem_univ, true_and] at he ⊢
-    rw [isRegionBoundaryEdge_map', Edge.map_symm_map]; exact he
-  · intro e' _; simp [Edge.map_map_symm]
-  · intro e _; simp [Edge.map_symm_map]
+    rw [isRegionBoundaryEdge_map', ManyBody.Edge.map_symm_map]; exact he
+  · intro e' _; simp [ManyBody.Edge.map_map_symm]
+  · intro e _; simp [ManyBody.Edge.map_symm_map]
   · intro e' he'
     simp only [Finset.mem_filter, Finset.mem_univ, true_and] at he'
-    rw [Edge.map_map_symm]
+    rw [ManyBody.Edge.map_map_symm]
 
 end General
 

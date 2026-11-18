@@ -32,7 +32,7 @@ open Matrix
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*} [∀ v, Fintype (Out v)]
+variable {Out : V → Type*} [∀ v, Fintype (Out v)] [∀ v, DecidableEq (Out v)]
 variable {m : ℕ} (regions : Fin m → Finset V)
 
 open Classical in
@@ -47,7 +47,7 @@ Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 123–154,
 The identity holds for arbitrary input vectors and real weights. -/
 theorem inner_regularizedPatchInsertion_eq_trace_of_outer_commute
     (hnested : Monotone regions) (a : Fin m → ℝ) {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (x : ∀ k, Matrix ((v : regions k) → Out v.1) ((v : regions k) → Out v.1) ℂ)
     (hx : ∀ k, (x k).PosSemidef) (j : Fin m)
     (houter : ∀ k : Fin m, j < k →
@@ -68,7 +68,7 @@ theorem inner_regularizedPatchInsertion_eq_trace_of_outer_commute
   have hins (K : Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ) :
       regularizedPatchInsertion regions a b Ω x j K = WithLp.toLp 2
         ((((ell.take (ell.idxOf j)).map L).prod *
-          dependentRegionOperatorLift (regions j) K *
+          ManyBody.place (regions j) K *
           ((ell.drop (ell.idxOf j + 1)).map L).prod) *ᵥ Ω) := by
     rw [regularizedPatchInsertion_apply, List.ofFn_eq_map, ← List.map_reverse,
       hnodup.map_update, ite_eq_left hj, List.prod_set]
@@ -101,9 +101,9 @@ theorem inner_regularizedPatchInsertion_eq_trace_of_outer_commute
           hl.2 ▸ hnested (le_of_lt ((List.pairwise_cons.mp ht).1 l hl.1)),
         ih (List.pairwise_cons.mp ht).2 (fun l hl ↦ hg l (List.mem_cons_of_mem k hl))⟩
   have hchain := hchain_aux (ell.take (ell.idxOf j)) hdesc.take hgreater
-  have hU (M : Matrix ((v : (Finset.univ : Finset V)) → Out v.1)
-      ((v : (Finset.univ : Finset V)) → Out v.1) ℂ)
-      (ξ : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) :
+  have hU (M : Matrix ((v : V) → Out v)
+      ((v : V) → Out v) ℂ)
+      (ξ : EuclideanSpace ℂ ((v : V) → Out v)) :
       dependentGlobalFinIsometry e (WithLp.toLp 2 (M *ᵥ ξ)) =
         Matrix.toEuclideanLin
           (Matrix.reindexAlgEquiv ℂ ℂ (dependentGlobalFinEquiv e) M)
@@ -121,7 +121,7 @@ theorem inner_regularizedPatchInsertion_eq_trace_of_outer_commute
         Entropy.liftProd (t.map F) := by
     simpa only [Entropy.liftProd, List.map_map, Function.comp_def, L,
       regularizedPatchFilter, Matrix.coe_reindexAlgEquiv,
-      reindex_dependentRegionOperatorLift, F] using
+      reindex_place, F] using
       map_list_prod (Matrix.reindexAlgEquiv ℂ ℂ (dependentGlobalFinEquiv e)) (t.map L)
   have hinsU (K : Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ) :
       dependentGlobalFinIsometry e (regularizedPatchInsertion regions a b Ω x j K) =
@@ -133,7 +133,7 @@ theorem inner_regularizedPatchInsertion_eq_trace_of_outer_commute
           (dependentGlobalFinIsometry e Ω) := by
     rw [hins, hU, map_mul (Matrix.reindexAlgEquiv ℂ ℂ (dependentGlobalFinEquiv e)),
       map_mul (Matrix.reindexAlgEquiv ℂ ℂ (dependentGlobalFinEquiv e)), hprod, hprod,
-      Matrix.coe_reindexAlgEquiv, reindex_dependentRegionOperatorLift,
+      Matrix.coe_reindexAlgEquiv, reindex_place,
       Matrix.coe_reindexAlgEquiv]
   have houtU := (congrArg (dependentGlobalFinIsometry e)
     (regularizedPatchInsertion_self regions a b Ω x j)).symm.trans (hinsU _)
@@ -194,7 +194,7 @@ theorem inner_regularizedPatchInsertion_eq_trace_of_outer_commute
   simp only [hscale, map_smul, inner_smul_left, inner_smul_right, Complex.conj_ofReal]
   rw [hstrip]
   simp only [φ, Matrix.coe_reindexAlgEquiv]
-  rw [← dependentGlobalFinIsometry_lift,
+  rw [← dependentGlobalFinIsometry_place,
     (dependentGlobalFinIsometry e).inner_map_map,
     inner_normalizedRegularizedPatchOutput_lift_eq_trace]
   simp only [pow_two, mul_assoc]

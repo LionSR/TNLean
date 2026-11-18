@@ -25,7 +25,7 @@ Appendix C.4, lines 1952--2017. -/
 theorem mpo_apply_prefix_blockTensor_suffix
     {d D : ℕ} (U : MPOTensor d D) (L p m s : ℕ)
     (i₀ j₀ : Fin p → Fin d)
-    (i₁ j₁ : Fin m → Fin (MPSTensor.blockPhysDim d L))
+    (i₁ j₁ : Fin m → Fin (Kraus.blockPhysDim d L))
     (i₂ j₂ : Fin s → Fin d) :
     mpo U (p + (m * L + s))
         (Fin.append i₀ (Fin.append (MPSTensor.blockedConfigEquiv d m L i₁) i₂))

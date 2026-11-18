@@ -23,6 +23,8 @@ lines 248–276, especially the retained auxiliary registers at lines 271–272;
 con:sweep, lines 329–342, and the terminal register distinction in Proposition prop:sweep.
 -/
 
+open ManyBody (interval mem_interval)
+
 noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep

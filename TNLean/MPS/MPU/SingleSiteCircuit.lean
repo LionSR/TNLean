@@ -49,12 +49,12 @@ theorem singleSitePaddedOperator_isNeighbourGate
     {U : Matrix (Cfg d 1) (Cfg d 1) ℂ}
     (hU : U ∈ unitary (Matrix (Cfg d 1) (Cfg d 1) ℂ)) :
     IsNeighbourGate (singleSitePaddedOperator U) := by
-  have hpair : ({0, 1} : Set (Fin 2)) = Set.univ := by
+  have hpair : ({0, 1} : Finset (Fin 2)) = Finset.univ := by
     ext i
     fin_cases i <;> simp
   refine ⟨singleSitePaddedOperator_mem_unitary hU, 0, 1, by decide, ?_⟩
   rw [hpair]
-  exact mem_supportedOperators_univ _
+  exact (by simp)
 
 /-- A single-site unitary therefore has a one-gate neighboring-pair
 implementation on two qudits. Source: the single-site endpoint in Section 5

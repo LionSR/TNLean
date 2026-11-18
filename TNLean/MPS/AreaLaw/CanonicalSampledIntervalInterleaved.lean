@@ -22,6 +22,8 @@ current space with the larger integer count recorded in
 `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped Matrix.Norms.L2Operator
 

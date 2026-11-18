@@ -1481,7 +1481,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
 
 \begin{definition}[The size-trimming selection]
     \label{def:lvv_size_trimming_selection}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sizeTrimmingSelection}
+    \lean{ManyBody.ChainInteraction.sizeTrimmingSelection}
     \leanok
     \uses{def:chain_model,def:chain_constant_bond,def:chain_boundary_trace_norm_net,
         def:lvv_finite_boundary_selection,def:chain_gluing_hamiltonian_parts}
@@ -1514,10 +1514,10 @@ a function of the Hamiltonian, the gap parameter and the input set.
 
 \begin{lemma}[The size-trimming selection is viable before the ground state]
     \label{thm:lvv_size_trimmed_family}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sizeTrimmingSelection_subset_span,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_le_one_of_mem_sizeTrimmingSelection,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.card_sizeTrimmingSelection_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.isViable_sizeTrimmingSelection}
+    \lean{ManyBody.ChainInteraction.sizeTrimmingSelection_subset_span,
+        ManyBody.ChainInteraction.norm_le_one_of_mem_sizeTrimmingSelection,
+        ManyBody.ChainInteraction.card_sizeTrimmingSelection_le,
+        ManyBody.ChainInteraction.isViable_sizeTrimmingSelection}
     \leanok
     \uses{def:lvv_size_trimming_selection,def:lvv_viable_set,def:lvv_viable_mps}
     Let $L\ge1$ and $q\ge2$, and let $H$ have positive semidefinite terms of
@@ -1602,7 +1602,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
         TNLean.MPS.AreaLaw.exists_boundarySupportedVectorDensityCompression,
         TNLean.MPS.AreaLaw.isometricDensityExpansion_trace_and_energy,
         TNLean.MPS.AreaLaw.l2_opNorm_isometricCompression_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.leftObjective_norm_bounds,
+        ManyBody.ChainInteraction.leftObjective_norm_bounds,
         TNLean.MPS.AreaLaw.isometricDensityExpansion_eigenvector_coordinates,
         TNLean.MPS.AreaLaw.isometricDensityExpansion_eigenresidual_norm,
         TNLean.MPS.AreaLaw.exists_boundarySupportedDensity_eigenvector_coordinates,
@@ -2221,22 +2221,22 @@ a function of the Hamiltonian, the gap parameter and the input set.
         TNLean.MPS.AreaLaw.fullyApproxSDP_scaled_errors_of_order_bounds,
         TNLean.MPS.AreaLaw.fullyApproxSDP_errors_fit_lvv_margin_of_order_bounds,
         TNLean.MPS.AreaLaw.chain_fullyApproxSDP_errors_fit_lvv_margin_of_support_bounds,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_compressed_boundary_solution_with_slack,
+        ManyBody.ChainInteraction.exists_viable_vector_of_compressed_boundary_solution_with_slack,
         TNLean.MPS.AreaLaw.lvvFiniteDensityMesh,
         TNLean.MPS.AreaLaw.lvvFiniteDensityMesh_pos,
         TNLean.MPS.AreaLaw.lvvFiniteDensityMesh_fits,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_finite_density_search_viable_vector,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_coordinate_finite_density_search_viable_vector,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_canonical_coordinate_finite_density_search_viable_vector,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_all_spectral_approx_sdp_certificate,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_rational_search_result,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_canonical_rational_search,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_rational_fixed_data_sdp_certificate,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_uniformly_approx_sdp_certificate,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_uniform_approx_sdp_feasible,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_boundary_coordinates_with_uniform_approx_sdp_soundness,
+        ManyBody.ChainInteraction.exists_finite_density_search_viable_vector,
+        ManyBody.ChainInteraction.exists_coordinate_finite_density_search_viable_vector,
+        ManyBody.ChainInteraction.exists_canonical_coordinate_finite_density_search_viable_vector,
+        ManyBody.ChainInteraction.exists_viable_vector_of_all_spectral_approx_sdp_certificate,
+        ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_error_budget,
+        ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack,
+        ManyBody.ChainInteraction.exists_viable_vector_of_rational_search_result,
+        ManyBody.ChainInteraction.exists_viable_vector_of_canonical_rational_search,
+        ManyBody.ChainInteraction.exists_viable_vector_of_rational_fixed_data_sdp_certificate,
+        ManyBody.ChainInteraction.exists_viable_vector_of_uniformly_approx_sdp_certificate,
+        ManyBody.ChainInteraction.exists_viable_vector_of_uniform_approx_sdp_feasible,
+        ManyBody.ChainInteraction.exists_boundary_coordinates_with_uniform_approx_sdp_soundness,
         TNLean.MPS.AreaLaw.exists_boundary_coordinates_with_zero_error_sdp_certificate}
     \leanok
     Let $S$ be the retained finite family on the left block and let $m$ be
@@ -2778,7 +2778,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
         TNLean.MPS.AreaLaw.exists_leading_eigenvector_chain_with_objective_slack,
         TNLean.MPS.AreaLaw.leading_eigenvector_bounds_chain_with_objective_slack,
         TNLean.MPS.AreaLaw.nearby_unit_vector_energy_and_overlap_bounds,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.nearby_unit_vector_energy_and_overlap_bounds,
+        ManyBody.ChainInteraction.nearby_unit_vector_energy_and_overlap_bounds,
         TNLean.MPS.AreaLaw.norm_glued_vectors_sub_eq,
         TNLean.MPS.AreaLaw.Matrix.PosSemidef.one_sub_energyExcess_div_gap_le_maxEigenvalue,
         TNLean.MPS.AreaLaw.Matrix.PosSemidef.twentyThree_div_twentyFour_le_maxEigenvalue,
@@ -2815,27 +2815,27 @@ a function of the Hamiltonian, the gap parameter and the input set.
         TNLean.MPS.AreaLaw.gluedVector_phase_invariants,
         TNLean.MPS.AreaLaw.maxEigenvalue_lower_bound_of_gluing_with_objective_slack,
         TNLean.MPS.AreaLaw.maxEigenvalue_lower_bound_chain_with_objective_slack,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.nearby_glued_vector_bounds,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.nearby_glued_vector_viable_bounds,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.leading_bounds_of_approximate_boundary_solution,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_leading_vector_of_approximate_compressed_boundary_solution,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_precision,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.nearby_glued_vector_viable_of_phase_distance,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_residual,
+        ManyBody.ChainInteraction.nearby_glued_vector_bounds,
+        ManyBody.ChainInteraction.nearby_glued_vector_viable_bounds,
+        ManyBody.ChainInteraction.leading_bounds_of_approximate_boundary_solution,
+        ManyBody.ChainInteraction.exists_leading_vector_of_approximate_compressed_boundary_solution,
+        ManyBody.ChainInteraction.nearby_glued_vector_viable_of_density_and_vector_precision,
+        ManyBody.ChainInteraction.nearby_glued_vector_viable_of_phase_distance,
+        ManyBody.ChainInteraction.nearby_glued_vector_viable_of_density_and_vector_residual,
         TNLean.MPS.AreaLaw.density_and_vector_precision_of_separate_bounds,
         TNLean.MPS.AreaLaw.density_and_rationalization_overlap_budget,
         TNLean.MPS.AreaLaw.canonical_search_rationalization_overlap_budget,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalViableMPSData_of_compressed_boundary_solution_with_slack,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalCoordinateData_of_compressed_boundary_solution_with_slack,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slack,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalViableMPSData_of_rational_search_result,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalCoordinateData_of_rational_search_result,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalViableMPSData_of_canonical_rational_search,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalCoordinateData_of_canonical_rational_search,
+        ManyBody.ChainInteraction.exists_rationalViableMPSData_of_compressed_boundary_solution_with_slack,
+        ManyBody.ChainInteraction.exists_rationalCoordinateData_of_compressed_boundary_solution_with_slack,
+        ManyBody.ChainInteraction.exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack,
+        ManyBody.ChainInteraction.exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slack,
+        ManyBody.ChainInteraction.exists_rationalViableMPSData_of_rational_search_result,
+        ManyBody.ChainInteraction.exists_rationalCoordinateData_of_rational_search_result,
+        ManyBody.ChainInteraction.exists_rationalViableMPSData_of_canonical_rational_search,
+        ManyBody.ChainInteraction.exists_rationalCoordinateData_of_canonical_rational_search,
         TNLean.MPS.AreaLaw.exists_rationalSpanViableMPSData_of_leadingCoordinates,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_viable_vector_of_approximate_density_and_eigenresidual,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rationalViableMPSData_of_approximate_density}
+        ManyBody.ChainInteraction.exists_viable_vector_of_approximate_density_and_eigenresidual,
+        ManyBody.ChainInteraction.exists_rationalViableMPSData_of_approximate_density}
     \leanok
     In the leading-vector lemma, suppose that the left-energy objective of
     the density matrix exceeds that of the comparison state by at most
@@ -3091,7 +3091,7 @@ a function of the Hamiltonian, the gap parameter and the input set.
 
 \begin{lemma}[Polynomial size of the size-trimming selection]
     \label{thm:lvv_size_trimmed_family_polynomial}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.card_sizeTrimmingSelection_le_polynomial}
+    \lean{ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomial}
     \leanok
     \uses{def:lvv_size_trimming_selection}
     Let $L\ge1$ and $q\ge2$. In the setting of
@@ -3118,13 +3118,13 @@ a function of the Hamiltonian, the gap parameter and the input set.
 
 \begin{lemma}[Size trimming with any admissible nets and solver]
     \label{thm:lvv_size_trimming_selection_with}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sizeTrimmingSelectionWith,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.IsAdmissibleNet,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.IsAdmissibleSolver,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.sizeTrimmingSelectionWith_subset_span,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.card_sizeTrimmingSelectionWith_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.card_sizeTrimmingSelectionWith_le_polynomial,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.isViable_sizeTrimmingSelectionWith}
+    \lean{ManyBody.ChainInteraction.sizeTrimmingSelectionWith,
+        ManyBody.ChainInteraction.IsAdmissibleNet,
+        ManyBody.ChainInteraction.IsAdmissibleSolver,
+        ManyBody.ChainInteraction.sizeTrimmingSelectionWith_subset_span,
+        ManyBody.ChainInteraction.card_sizeTrimmingSelectionWith_le,
+        ManyBody.ChainInteraction.card_sizeTrimmingSelectionWith_le_polynomial,
+        ManyBody.ChainInteraction.isViable_sizeTrimmingSelectionWith}
     \leanok
     \uses{def:lvv_size_trimming_selection, def:lvv_boundary_program_solution,
         thm:lvv_uniform_leading_bounds_library_bond,

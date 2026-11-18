@@ -22,6 +22,8 @@ explicit; comparison with the source variable uses its stated range
 `0 < v ≤ etaLD`. No original-band gap or invariance is assumed.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace
   Matrix.Norms.L2Operator
 

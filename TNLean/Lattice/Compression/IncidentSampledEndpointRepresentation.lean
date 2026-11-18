@@ -44,6 +44,7 @@ private theorem eval_heq_filtered_endpointRegisterWord_of_eq
   cases hD
   exact h
 
+set_option maxHeartbeats 400000 in -- comparing party layouts unfolds the shared circuit syntax
 /-- Removing the canonical layout and owner identifications from the incident
 word leaves its ordered filtered endpoint data. The original incident labels
 and local samples are arbitrary.

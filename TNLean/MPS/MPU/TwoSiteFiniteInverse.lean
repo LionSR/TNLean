@@ -51,8 +51,8 @@ theorem finiteChainConjugation_symm_mem_range_of_twoSiteStandardForm_buffers
     {d D ℓ r N : ℕ} {U : MPOTensor d D} (hU : U.IsMPU)
     (k : ℕ) (hk : 0 < k) (hN : 1 < N) (a : ℤ)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : MPOTensor.TwoSiteStandardFormData
       (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
@@ -68,7 +68,7 @@ theorem finiteChainConjugation_symm_mem_range_of_twoSiteStandardForm_buffers
   have hd : d ≠ 0 := by
     intro hd
     have hpos := S.phys_pos
-    simp only [MPSTensor.blockPhysDim_eq_pow, hd, zero_pow hk.ne'] at hpos
+    simp only [Kraus.blockPhysDim_eq_pow, hd, zero_pow hk.ne'] at hpos
     omega
   let : NeZero d := ⟨hd⟩
   apply inverse_mem_range_localInclusion_of_forward_support hJ hK
@@ -124,8 +124,8 @@ theorem finiteChainConjugation_symm_mem_range_bufferedRegion
     {d D ℓ r N : ℕ} {U : MPOTensor d D} (hU : U.IsMPU)
     (k : ℕ) (hk : 0 < k) (hN : 1 < N) (a b : ℤ) (L : ℕ)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : MPOTensor.TwoSiteStandardFormData
       (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)

@@ -50,6 +50,7 @@ the periodic chain.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (decodeBlockEquiv)
 
 namespace MPSTensor
 

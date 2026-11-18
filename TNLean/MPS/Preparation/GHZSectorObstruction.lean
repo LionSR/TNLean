@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 import TNLean.Circuit.RingSeparation
 import TNLean.Circuit.WeightedGHZ
 import TNLean.MPS.Preparation.StateApproximationError
@@ -72,7 +72,7 @@ theorem ghz_sector_weight_infidelity_lower_bound {T : ℕ}
     congr 1
     funext σ
     split_ifs with h <;> simp [h]
-  have hZs (l : Fin N) : Z l ∈ supportedOperators 2 {l} :=
+  have hZs (l : Fin N) : Z l ∈ ManyBody.supportedOperators (fun _ ↦ Fin 2) {l} :=
     diagonal_comp_eval_mem_supportedOperators l (fun x => if x = 0 then 1 else -1)
   have hcov := norm_covariance_mulVec_ghzState_two_le hU hsep ⟨k, hk⟩
     (hZs i) (hZs j) (hZu i) (hZu j) hab

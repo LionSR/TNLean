@@ -27,6 +27,8 @@ the exponent; the printed improvement with a single factor `r` is not proved.
 Documented in `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw.ALVV

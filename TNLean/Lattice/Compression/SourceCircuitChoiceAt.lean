@@ -39,7 +39,7 @@ def choiceAt (A : P → Bool) : {a b : Layout P} → (w : SourceCircuit a b) →
       | inl g => exact choiceAt A w ξ.1 g h
       | inr g => exact choiceAt A v ξ.2 g h
   | _, _, .localMap .., _, g, _ => nomatch g
-  | _, _, @SourceCircuit.gate _ C ι _ _ owner a b c G tail, ξ, g, h => by
+  | _, _, Circuit.gate (@PreparedGate.mk _ C ι _ _ owner a b c G tail), ξ, g, h => by
       classical
       cases g
       have ht := (isTouched_gate_iff A owner G tail).mp h
@@ -58,7 +58,7 @@ def sourceVectorAt : {a b : Layout P} → (w : SourceCircuit a b) →
       | inl g => exact sourceVectorAt w ⟨g, i⟩
       | inr g => exact sourceVectorAt v ⟨g, i⟩
   | _, _, .localMap .., e => nomatch e.1
-  | _, _, @SourceCircuit.gate _ _ _ _ _ _ _ _ _ G _, e => fun ξ ↦ G.vector ξ e.2
+  | _, _, Circuit.gate (@PreparedGate.mk _ _ _ _ _ _ _ _ _ G _), e => fun ξ ↦ G.vector ξ e.2
   | _, _, .swap .., e => nomatch e.1
   | _, _, .frame _ w, e => sourceVectorAt w e
 

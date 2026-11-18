@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.InitialBoxEstimate
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Uniform entropy of physical safe rectangles
@@ -24,7 +25,11 @@ real-clearance physical conclusion is proved in `PhysicalSafeBox.lean`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -37,9 +42,11 @@ theorem exists_regionalEntropy_safe_rect_le_rpow
     (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ C e₀ : ℝ, 0 ≤ C ∧ 0 < e₀ ∧ e₀ < 1 ∧
       ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
-        ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+        ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+            (_ : ∀ X, ‖h.term X‖ ≤ J)
           (E₀ : ℝ) (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
             regionalEntropy Λ q Ω (rectRegion A Q) ≤
               C * (Q.size : ℝ) ^ (1 + e₀) := by
@@ -48,8 +55,8 @@ theorem exists_regionalEntropy_safe_rect_le_rpow
     simpa only [Nat.cast_one, Real.one_rpow, mul_one] using
       (boxEntropy_nonneg (q := q) (R := R) (J := J) (Δ := Δ) (D₀ := 2 * R + 11) 1).trans
         (hbox (2 * R + 11) (Nat.lt_succ_self (2 * R + 10)) 1 le_rfl)
-  refine ⟨C₀, e₀, hC₀, he₀, he₀', fun D₀ hD₀ Λ h E₀ Ω hgs A Q hsafe ↦ ?_⟩
-  exact (regionalEntropy_le_boxEntropy hq h hgs hsafe le_rfl).trans
+  refine ⟨C₀, e₀, hC₀, he₀, he₀', fun D₀ hD₀ Λ h hh hhJ E₀ Ω hΩ hgap hspan A Q hsafe ↦ ?_⟩
+  exact (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe le_rfl).trans
     (hbox D₀ hD₀ Q.size Q.one_le_size)
 
 end TNLean.PEPS.AreaLaw

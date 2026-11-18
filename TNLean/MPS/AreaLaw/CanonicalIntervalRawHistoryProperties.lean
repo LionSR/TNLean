@@ -14,6 +14,8 @@ projection, so membership in this history gives initial viability directly.
 Supporting ALVV, arXiv:1602.08828v2, lines 749–755 and 1777–1817.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

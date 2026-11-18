@@ -121,7 +121,16 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   and RVB tensors are placed on the simple torus graph, on which a torus of width or
   height two has a single edge between neighbouring sites, so their state
   formulas are stated for tori of width and height at least three; the GHZ
-  example holds on every torus.
+  example holds on every torus. It also records the brick-wall honeycomb of the
+  cluster state, which has three distinct neighbours per site for even height and
+  width at least three.
+- `rmp_honeycomb_cluster_peps.tex` (local correction, resolved) records that
+  the printed honeycomb parent Hamiltonian, the sum of the terms `X Z Z Z`, has
+  the common `-1` eigenvector as ground state, so the sign is reversed.
+- `rmp_honeycomb_cluster_injectivity.tex` (false source claim, open) records
+  that the honeycomb cluster PEPS, called injective by the source, has
+  non-injective vertex tensors and a non-injective two-site blocked tensor,
+  while blocking over hexagonal plaquettes gives injectivity (not formalized).
 - `rmp_peps_czx_bond_orientation.tex` (false source claim) records that the
   printed CZX tensor, contracted with equal labels at the two ends of each
   bond, gives GHZ states on diagonal loops rather than the plaquette state,
@@ -132,8 +141,10 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   contraction has a faithful effective plaquette-spin basis, intertwines the
   physical symmetry with the printed CZX operator, and has the same support
   as the actual reduced density, of rank `2^(2*w+2*h)` even after trace
-  normalization. Nonzero spectral values, entropy, isometric normalization
-  and general nonrectangular regions remain open.
+  normalization. It also records the two-site blocking under which this
+  boundary symmetry is a `ℤ₂` representation with nonzero anomaly class, since
+  the printed operator squares to `(-1)^N`. Nonzero spectral values, entropy,
+  isometric normalization and general nonrectangular regions remain open.
 - `rmp_peps_quantum_double_g_isometry.tex` records that the formal notions of
   `G`-injectivity and `G`-isometry of arXiv:1001.3807 take the representation
   as a parameter and allow a positive factor in the isometry, because the
@@ -167,6 +178,9 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
 
 For the MPU index of arXiv:1703.09188:
 
+- `mpu_conjugation_example_r_side.tex` (local correction, resolved) puts the
+  matrix `R` on the input of the shifted gate `v'` of the all-phases example
+  under conjugation, as in Corollary `cor:sympl-to-orthogonal`.
 - `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
   normalized-Hadamard CZX tensor, and distinguishes the unnormalized blue
   tensors and physical Z gates of the 2025 diagram. The corrected
@@ -205,6 +219,11 @@ For the MPU index of arXiv:1703.09188:
   direct local cross-section of the local-unitary action on the gates, built
   from the nearest Kronecker product and the polar factor; the continuity of
   the second gate is read off the circuits on two and three blocks.
+- `mpu_time_reversal_blocking_parity_route.tex` (local correction, resolved)
+  records that the blocking parity of the time-reversal sign is proved, for
+  arbitrary standard forms of the blocked tensors, through the intrinsic trace
+  of the blocked periodic operators instead of the source's unwinding of its
+  explicit blocked gates.
 - `mpu_canonical_form_full_support.tex` (scope restriction, partly superseded)
   records that the reduced canonical-form-II representative must be
   constructed rather than inferred from bare canonical form, and the
@@ -227,6 +246,13 @@ For the MPU index of arXiv:1703.09188:
   Theorem: a blocked tensor is joined through MPU tensors to the tensor built
   from its own standard-form gates, by a path of virtual gauges to canonical
   form II and an interpolation of half factors that keeps the gates fixed.
+- `mpu_symmetry_path_criterion_blocking.tex` (scope restriction, open)
+  records that Lemma `lem:equivalent-symmetry` uses the same `U^(N)` in both
+  directions, while its proof through Corollary `coruvSF` yields gates only
+  after blocking `2k₀` sites. The reverse direction is formalized for every
+  blocking length, including the standard-form chain; the forward direction
+  is formalized after the extra blocking, and the unblocked forward claim is
+  open.
 - `mpu_conjugation_symplectic_uniqueness_transpose.tex` (local correction,
   resolved) records that the Case II uniqueness clause of Proposition
   `corconj` prints `v'' = v' (S_rᵀ ⊗ S_ℓᵀ)`, while the Fundamental Theorem gives
@@ -825,6 +851,41 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   invariance, derives integrality of the action coefficients from it, and
   formalizes the single-block obstruction only in its fusion-ring form, not
   the cohomological form of the source.
+- `glm23_mixed_path_parent_commutation.tex` (scope restriction, open) records
+  that Section 5 takes the canonical parent along the mixed path without
+  showing that it commutes with the common operators, gives an explicit
+  non-unitary involutive on-site symmetry with every action, fusion and
+  equal-L-matrix hypothesis satisfied for which the canonical parent does not
+  commute, and shows that for `Z₂` acting by unitary on-site representations
+  the outcome depends on the virtual gauge of the endpoint tensors, which the
+  source does not fix: in a canonical gauge the two-site boundary range of the
+  common operator is closed under the adjoint and the canonical path commutes,
+  while in a gauge whose action gauge is not proportional to a Hermitian
+  matrix both fail (checked by
+  `scripts/check_glm23_unitary_mixed_adjoint_closure.py`); it formalizes
+  commutation along the closed interval under adjoint closure of the two-site
+  boundary range.
+- `glm23_mixed_operator_one_site_injectivity.tex` (false source claim,
+  resolved) records that the one-site injectivity of the common operator of
+  the Section 5 interpolation fails in the full aligned setting: for
+  `Rep(A₄)`, two injective endpoint states with injective endpoint operators,
+  common fusion tensors and equal F- and L-symbols, the crossed corners of the
+  three-dimensional object are not spanned, for every gauge of the action
+  tensors preserving the L-symbols (checked by
+  `scripts/check_glm23_mixed_operator_one_site_injectivity.py`); the claim
+  holds with multiplicity one, and three-site normality is the formalized
+  substitute.
+- `glm23_block_injective_mixed_path.tex` (scope restriction, open) records
+  that the block-injective interpolation of Section 5 uses no commutation of
+  the path Hamiltonians, so its exact action and fusion are formalized without
+  adjoint closure, while any commutation statement inherits the one-block
+  counterexample. In the open interval the periodic ground space of the
+  two-site canonical parent is spanned by the linearly independent block
+  states, its projection is continuous, and compact subintervals have a gap
+  uniform over all ring lengths; the ground projections converge to the span
+  of the block states at the endpoints. The one-site injectivity of the common
+  operators fails already for one block; the endpoint Hamiltonians and the
+  derivation of sector-separated blocks remain open.
 - `glm23_fibonacci_module_rank_scope.tex` records that the source's claim that
   the Fibonacci algebra has only the two-block invariant subspace is
   formalized for at most two blocks, where the nonnegative integer
@@ -1098,7 +1159,11 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   assuming `K N^k exp(-r q)` at every scale `1 ≤ q ≤ N` for some partition
   with lengths between `q` and `2q` is proved separately, including exact linear-depth preparation
   when the selected block length exceeds the ring length.
-- `mswc24_measurement_preparation_scope.tex` records the scope of the
+- `mswc24_measurement_preparation_scope.tex` (scope restriction, open) records
+  the remaining original-site and all-length obligations for arbitrary tensors.
+  A fixed positive blocking now gives normal sectors and both measurement depth
+  bounds without supplied canonical data, on grouped sites. The note also records
+  the scope of the
   preparation with measurements of a tensor that is not normal (paragraph
   "Long-range MPS using measurements"). The first formal statement takes
   orthogonal `q`-site states of distinct blocks, block lengths dividing `N`, and

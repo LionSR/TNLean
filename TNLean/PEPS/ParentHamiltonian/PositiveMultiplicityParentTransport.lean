@@ -18,6 +18,8 @@ range, and the entire parent kernel is controlled by internal edge coverage.
 Source: SCP10, arXiv:1001.3807, Section 4.1 and Theorem 5.7.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS

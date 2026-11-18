@@ -22,6 +22,8 @@ unitaries is not asserted. See
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
@@ -39,7 +41,7 @@ Source: SCP10, `eq:anyons:chargeon-move-setting`, lines 2489–2507. -/
 def torusPlaquetteChargeMotionBond (v : X) (upper : Bool) :
     {e : Edge Γₜ // e.1.1 ∈ torusPlaquetteRegion v ∧ e.1.2 ∈ torusPlaquetteRegion v} := by
   let y := if upper then v.2 + 1 else v.2
-  let e := Edge.ofAdj (torusGraph_adj_right v.1 y)
+  let e := ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 y)
   have hleft : (v.1,y) ∈ torusPlaquetteRegion v := by
     cases upper <;>
       simp [y, torusPlaquetteRegion, torusPlaquetteWalk, SimpleGraph.Walk.support]
@@ -47,7 +49,7 @@ def torusPlaquetteChargeMotionBond (v : X) (upper : Bool) :
     cases upper <;>
       simp [y, torusPlaquetteRegion, torusPlaquetteWalk, SimpleGraph.Walk.support]
   refine ⟨e,?_⟩
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right v.1 y) with h | h
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 y) with h | h
   · exact ⟨by simpa only [e,h.1] using hleft, by simpa only [e,h.2] using hright⟩
   · exact ⟨by simpa only [e,h.1] using hright, by simpa only [e,h.2] using hleft⟩
 
@@ -55,7 +57,7 @@ def torusPlaquetteChargeMotionBond (v : X) (upper : Bool) :
 reverses a periodic seam. Source: SCP10, lines 2489–2507. -/
 theorem torusPlaquetteChargeMotionBond_val (v : X) (upper : Bool) :
     (torusPlaquetteChargeMotionBond v upper).val =
-      Edge.ofAdj (torusGraph_adj_right v.1 (if upper then v.2 + 1 else v.2)) := rfl
+      ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 (if upper then v.2 + 1 else v.2)) := rfl
 
 /-- The two bonds of the charge-motion square are genuinely distinct.
 Source: SCP10, `eq:anyons:chargeon-move-setting`, lines 2489–2507. -/
@@ -63,10 +65,10 @@ theorem torusPlaquetteChargeMotionBond_ne (v : X) :
     torusPlaquetteChargeMotionBond v true ≠ torusPlaquetteChargeMotionBond v false := by
   intro h
   have he := congrArg Subtype.val h
-  change Edge.ofAdj (torusGraph_adj_right v.1 (v.2 + 1)) =
-    Edge.ofAdj (torusGraph_adj_right v.1 v.2) at he
+  change ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 (v.2 + 1)) =
+    ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 v.2) at he
   have hn : v.2 + 1 ≠ v.2 := by simp
-  exact (Edge.ofAdj_ne_of_endpoint_coordinates
+  exact (ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates
     (torusGraph_adj_right v.1 (v.2 + 1)) (torusGraph_adj_right v.1 v.2)
     Prod.snd rfl (Or.inl hn)) he
 

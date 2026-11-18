@@ -47,6 +47,8 @@ one-site-different region pair is an `insert`.
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 
@@ -148,9 +150,9 @@ theorem nonempty_regionBoundaryEdge_of_connected (hconn : G.Connected)
     p.exists_boundary_dart (↑R : Set V) (by simpa using hu) (by simpa using hw)
   have hd1' : dart.fst ∈ R := by simpa using hd1
   have hd2' : dart.snd ∉ R := by simpa using hd2
-  rcases Edge.ofAdj_endpoints dart.adj with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · exact ⟨⟨Edge.ofAdj dart.adj, Or.inl ⟨h1.symm ▸ hd1', h2.symm ▸ hd2'⟩⟩⟩
-  · exact ⟨⟨Edge.ofAdj dart.adj, Or.inr ⟨h1.symm ▸ hd2', h2.symm ▸ hd1'⟩⟩⟩
+  rcases ManyBody.Edge.ofAdj_endpoints dart.adj with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  · exact ⟨⟨ManyBody.Edge.ofAdj dart.adj, Or.inl ⟨h1.symm ▸ hd1', h2.symm ▸ hd2'⟩⟩⟩
+  · exact ⟨⟨ManyBody.Edge.ofAdj dart.adj, Or.inr ⟨h1.symm ▸ hd2', h2.symm ▸ hd1'⟩⟩⟩
 
 /-! ### The one-site comparison pair as an `insert` -/
 

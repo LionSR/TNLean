@@ -38,7 +38,7 @@ def prependWord (w : Word a b) (M : PartyChain b c) : PartyChain a c := by
 /-- Prepending applies the original word before the original monomial. -/
 theorem eval_prependWord (w : Word a b) (M : PartyChain b c) :
     (prependWord w M).toEffectChain.eval = M.toEffectChain.eval ∘L w.eval := by
-  cases M <;> simp only [prependWord, toEffectChain, EffectChain.eval, Word.eval_comp,
+  cases M <;> simp only [prependWord, toEffectChain, EffectChain.eval, Circuit.eval_comp,
     comp_assoc]
 
 /-- An allowed word may precede an allowed monomial. -/

@@ -9,6 +9,7 @@ import QICLean.Representation.ReplicaPrevector
 import TNLean.PEPS.AreaLaw.Scan.SuppliedTargetNormAttachment
 import TNLean.PEPS.AreaLaw.Scan.ActualRoughUpper
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedEnergy
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The scanner estimate and four norm comparisons
@@ -65,13 +66,19 @@ lines 399–533; scales and geometry, lines 21–59; Proposition 8.1
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open Filter Topology Set Matrix
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -86,15 +93,21 @@ depth, anchors in their supports, `r₀ = ⌈C_tr log² n⌉` (line 49) and char
 `C₁` (lines 127–130); the test geometry `scanner:test-geometry` (lines 43–48); and the entropy
 inputs `scanner:entropy-input` with constant `C_e` (lines 353–357). -/
 structure ScannerHypotheses (X : ScannerExponents) (R : ℕ) (J Δ CT Ctr C₁ Ce : ℝ) (n : ℕ)
-    {q : ℕ} (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+    {q : ℕ} (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (h : PlaneInteraction Λ q R)
+        (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ) (Ω : StateSpace Λ q) :
     Prop where
-  /-- `Ω` is a ground vector of `h` with gap `Δ`: the original ground vector of the standing
-  setting (`01-preliminaries.tex`, lines 4–5), to which the entropy inputs refer
+  /-- `Ω` is a unit vector: the original ground vector of the standing setting
+  (`01-preliminaries.tex`, lines 4–5), to which the entropy inputs refer
   (`08-scanner.tex`, lines 343–347). -/
-  groundState : IsGappedGroundState Λ q h.operator E₀ Ω Δ
+  norm_eq_one : ‖Ω‖ = 1
+  /-- `h` is gapped at `E₀` with gap `Δ` (`01-preliminaries.tex`, lines 4–5). -/
+  isGapped : IsGapped h.hamiltonian E₀ Δ
+  /-- The ground space of `h` at `E₀` is the line through `Ω` (`01-preliminaries.tex`,
+  lines 4–5). -/
+  groundSpace_eq : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}
   /-- Interaction supports use the graph metric of `Λ` (lines 15–16). -/
-  graph_eq : S.graph = domainGraph Λ
+  graph_eq : S.graph = planeDomainGraph Λ
   /-- Depth is the ambient sup-norm distance to the target (lines 14–15). -/
   depth_eq : S.depth = fun x ↦ ambientDepth T hT x.val
   /-- Every designated support contains its anchor: `a_i ∈ X_i` (`03-quasilocal.tex`,
@@ -163,16 +176,18 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
     ∃ C₁ Cb Clb C Cl Cδ Clδ ca : ℝ,
       0 < C₁ ∧ 0 < C ∧ 0 < Cδ ∧ 0 < ca ∧ ∀ᶠ n : ℕ in atTop,
     ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
-      (h : LocalHamiltonian Λ q R J) (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+      (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
+      (hhJ : ∀ X, ‖h.term X‖ ≤ J) (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
       (E₀ : ℝ) (Ω : StateSpace Λ q),
-      ScannerHypotheses X R J Δ CT Ctr C₁ Ce n Λ T hT h S E₀ Ω →
+      ScannerHypotheses X R J Δ CT Ctr C₁ Ce n Λ T hT h hh hhJ S E₀ Ω →
       let g : ℝ := Δ / positiveNormalization 1 (Δ / 2) J
       let C₀ := 512 * Real.exp 1 * (2 / g)
       let c₀ := 1 / (32 * Real.sqrt (1 + 2 / g))
       let B : Finset (Site Λ) → ℝ :=
         fun Y ↦ cutBudget q S.graph (S.truncationSet (X.L n)) S.r₀ S.anchor Y
       ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-        IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ (X.L n) i) e Ωt (g / 2) ∧
+        (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e (g / 2) ∧
+          groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e = Submodule.span ℂ {Ωt}) ∧
         0 ≤ e ∧ e ≤ (n : ℝ) ^ (-1000 : ℝ) ∧
         Matrix.traceDistance
             (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -196,7 +211,7 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
           (∀ k, 0 < k → scanPrevector q d Ωt ell k ≠ 0 ∧
             ‖WithLp.toLp 2 (scanPrevector q d Ωt ell k)‖ ≤ 1) ∧
           let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-          let energy := S.actualEnergyTerms h Ω Δ (X.L n) (fun _ ↦ d)
+          let energy := S.actualEnergyTerms h Ω J Δ (X.L n) (fun _ ↦ d)
           let pre := scanPrevector q d Ωt ell
           let σ := terminalPartition S (S.n * S.m)
           let Qpre := fun j band ↦ receiving (σ j band) false
@@ -321,7 +336,7 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
       (Δ / positiveNormalization 1 (Δ / 2) J) (CT + 1) hg)
   refine ⟨3 * (μ : ℝ) + 1, Cb, 12, Cδ, Clδ, Cδ, Clδ, c, hC₁, hCδ, hCδ, hc, ?_⟩
   filter_upwards [eventually_ge_atTop (max N Ne)] with n hn
-  intro Λ T _ hT h S E₀ Ω hyp g C₀ c₀ B
+  intro Λ T _ hT h hh hhJ S E₀ Ω hyp g C₀ c₀ B
   rcases hyp.n_eq with rfl
   have hprefix_eq_shell (j : ℕ) :
       positiveDepthPrefix S.A S.depth (j : ℤ) = S.shell T j := by
@@ -338,7 +353,8 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
       (hyp.entropy_shell j hj).trans
         (mul_le_mul_of_nonneg_right (le_max_left Ce 1) (by positivity))
   obtain ⟨hrD, hDpos, hDm, hm, hM, hphysical⟩ :=
-    henergy Λ T hT h S E₀ Ω hyp.groundState hyp.graph_eq hyp.anchor_mem (by omega)
+    henergy Λ T hT h hh hhJ S E₀ Ω hyp.norm_eq_one hyp.isGapped hyp.groundSpace_eq hyp.graph_eq
+      hyp.anchor_mem (by omega)
       hyp.r₀_eq hyp.m_eq hyp.D_eq hyp.K_eq hyp.C₁_eq hyp.card_le hyp.depth_eq hyp.rows_le
       (fun x ↦ card_anchor_fiber_le S.anchor hyp.anchor_mem x) hyp.clearance htarget hsource
   obtain ⟨hK, hKL, hcard, hX, e, Ωt, htrgs, he0, he, htrace, hBX, htail,
@@ -377,7 +393,7 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian.spectralRestrictionMass E :=
     hzEq.symm ▸ hwindow.2.2.1
   obtain ⟨hroughLower, hsharp⟩ :=
-    hnorm h Ω hΔ hyp.groundState.1 e Ωt htrgs E hd hz ell
+    hnorm h hh hhJ Ω hΔ hyp.norm_eq_one e Ωt htrgs.1 htrgs.2.1 htrgs.2.2 E hd hz ell
       hpre hmass hdim W hW (hasmall'.trans hchalf)
   simp only [← ha_eq] at hroughLower hsharp hselect
   let Bmarg := Cb * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ (12 : ℕ))
@@ -433,19 +449,18 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
     div_pos (zero_lt_one.trans_le hW) (Nat.cast_pos.mpr (by omega))
   have hWa : a * (S.K : ℝ) = W := by
     rw [ha_eq, div_mul_cancel₀ _ (Nat.cast_ne_zero.mpr (show S.K ≠ 0 by omega))]
-  have htr := Matrix.isGappedGroundState_iff.mp htrgs
   have hsh : ∀ j : Fin (X.L S.n + 1),
       FiniteProduct.entropy β Ωt
         (positiveDepthPrefix S.A S.depth (j.val : ℤ)) ≤ Bsh := fun j ↦ by
     simpa only [regionalEntropy_eq_finiteProduct] using
-      hprefix S.n ((le_max_right N Ne).trans hn) Λ Ω Ωt hyp.groundState.1 htr.1
+      hprefix S.n ((le_max_right N Ne).trans hn) Λ Ω Ωt hyp.norm_eq_one htrgs.1
         S.A S.depth (X.L S.n) hcard htrace
         (max Ce 1) X.e hsource j.val (Nat.le_of_lt_succ j.isLt)
   obtain ⟨cEnd, hcEnd, hlimEnd, hupperEnd⟩ :=
     eventually_actualScan_suppliedPrevector_rough_upper hT S
       hyp.graph_eq hyp.depth_eq hm hM a ha
       (show 0 < S.n by omega) (show S.r₀ ≤ S.D by omega)
-      hDpos hDm (X.L S.n) hKL hyp.rows_le Ωt htr.1 E ell Bsh hsh hz hmass
+      hDpos hDm (X.L S.n) hKL hyp.rows_le Ωt htrgs.1 E ell Bsh hsh hz hmass
   simp only [hWa] at hupperEnd
   let Bnorm : ℝ := CBnorm * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
   classical
@@ -541,8 +556,8 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
           2 * (1 / 4) * W * (2 * Bsh / z + 2 * Bexc) +
           Real.bellOverlapRemainder d cEnd S.K k := by ring
   refine ⟨Bsh, Bexc, Bmarg, hBsh, hBexc, hBnorm.trans hBnorm_le, hBmarg_upper,
-    (fun Y u hu ↦ S.log_surprisalMoment_truncated_reducedState_le h Ω
-      hyp.graph_eq hyp.anchor_mem hΔ hyp.groundState.1 (X.L S.n) htrgs Y hu),
+    (fun Y u hu ↦ S.log_surprisalMoment_truncated_reducedState_le h hh hhJ Ω
+      hyp.graph_eq hyp.anchor_mem hΔ hyp.norm_eq_one (X.L S.n) htrgs.1 htrgs.2.1 htrgs.2.2 Y hu),
     hstatus, hendpoint, (fun k ↦ ρD k + ρE k), cRU, cRL, CfRL, cSU, cSL, CfSL,
     hρSumLimit, hcRU, hcRL, hCfRL, hcSU, hcSL, hCfSL,
     hRULimit, hRLLimit, hSULimit, hSLLimit, ?_⟩

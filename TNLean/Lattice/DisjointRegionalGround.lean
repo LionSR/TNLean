@@ -12,7 +12,9 @@ import QICLean.Algebra.MatrixAux
 import QICLean.Analysis.EnergyTruncation
 import QICLean.Analysis.GroundEnergyBounds
 import TNLean.Algebra.KroneckerLeastEigenvalue
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import TNLean.Circuit.RegionSplit
 
 /-!
@@ -134,11 +136,10 @@ private theorem exists_product_ground_of_complementary_support
   have : Nonempty (S → Fin q) := ⟨a₀⟩
   have : Nonempty (↥Sᶜ → Fin q) := ⟨b₀⟩
   obtain ⟨A₀, hAe⟩ := TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators
-    (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hAS)
-  have hdisj : Disjoint (↑Sᶜ : Set V) (↑S : Set V) := by
-    exact Set.disjoint_left.mpr fun _ hv hvS ↦ (Finset.mem_compl.mp hv) hvS
+    hAS
+  have hdisj : Disjoint Sᶜ S := disjoint_compl_left
   obtain ⟨B₀, hBe⟩ := TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators hdisj
-    (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hBS)
+    hBS
   have hA₀ : A₀.IsHermitian := by
     refine IsHermitian.ext fun i j ↦ ?_
     have h := (hA.submatrix (TNLean.Lattice.sheetSplit q S).symm).apply (i, b₀) (j, b₀)
@@ -315,16 +316,14 @@ private theorem exists_common_unit_fixed_ground_of_disjoint_family
     let S : Finset V := s.biUnion R
     let B : Matrix (V → Fin q) (V → Fin q) ℂ :=
       ∑ i ∈ s, (A i - (e i : ℂ) • 1)
-    have hBS : Entropy.IsSupportedOn (n := fun _ : V ↦ q) B S := by
-      apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-      apply (QuantumCircuit.supportedOperators q (S : Set V)).sum_mem
+    have hBS : B ∈ ManyBody.supportedOperators (fun _ : V ↦ Fin q) S := by
+      apply sum_mem
       intro i hi
-      apply Submodule.sub_mem
-      · apply QuantumCircuit.mem_supportedOperators_of_isSupportedOn
-        apply (hsupp i (Finset.mem_insert_of_mem hi)).mono
+      apply sub_mem
+      · apply (hsupp i (Finset.mem_insert_of_mem hi)).mono
         intro z hz
         exact Finset.mem_biUnion.mpr ⟨i, hi, hz⟩
-      · exact Submodule.smul_mem _ _ (QuantumCircuit.one_mem_supportedOperators _)
+      · exact SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _))
     have hBpos : B.PosSemidef :=
       posSemidef_sum s (fun i hi ↦ hlow i (Finset.mem_insert_of_mem hi))
     have hvB : B *ᵥ v = (0 : ℂ) • v := by
@@ -469,10 +468,7 @@ theorem exists_disjoint_regional_clipping_structure
       (V → Fin q) ℂ) ≤ A i := le_iff.mpr (helowall i)
   have hcomm : Pairwise fun i j ↦ Commute (A i) (A j) := by
     intro i j hij
-    exact QuantumCircuit.commute_of_mem_supportedOperators
-      (Finset.disjoint_coe.mpr (hdisj hij))
-      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hsupp i))
-      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hsupp j))
+    exact ManyBody.commute_of_mem_supportedOperators_of_disjoint (hsupp i) (hsupp j) (hdisj hij)
   refine ⟨e, x, hxunit, hxall, helowall, ?_⟩
   intro t ht T X
   obtain ⟨hXpos, hXzero⟩ :=

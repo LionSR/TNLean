@@ -14,6 +14,8 @@ This is the support step in ALVV, arXiv:1602.08828v2, `thm:FF-tH`,
 lines 1543–1568. No commutation or projection hypothesis is required.
 -/
 
+open ManyBody (interval mem_interval)
+
 namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}
@@ -29,18 +31,18 @@ theorem isSupportedOn_physicalParityProduct
     (hs : ∀ i, i.val % 2 = p → Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) D) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       ((T).symm (physicalParityProduct h p)) D := by
-  apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
+  change _ ∈ ManyBody.supportedOperators _ _
   apply QuantumCircuit.mem_supportedOperators_complementProd
   intro k hk
   change (T).symm (if hk' : k < L - 1 then
       if k % 2 = p then T (h ⟨k, hk'⟩) else 0 else 0) ∈
-    QuantumCircuit.supportedOperators q (D : Set (Fin L))
+    ManyBody.supportedOperators (fun _ ↦ Fin q) D
   rw [dite_eq_left hk]
   split_ifs with hp
-  · simpa only [StarAlgEquiv.symm_apply_apply] using
-      QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs ⟨k, hk⟩ hp)
+  · rw [StarAlgEquiv.symm_apply_apply]
+    exact hs ⟨k, hk⟩ hp
   · simpa only [map_zero] using
-      (QuantumCircuit.supportedOperators q (D : Set (Fin L))).zero_mem
+      (zero_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) D))
 
 /-- The actual parity product of the interval-restricted family is supported
 on that same site interval. The support is derived from the original
@@ -52,6 +54,7 @@ theorem isSupportedOn_regionalParityProduct
       (h i) (interval L i.val (i.val + 2))) (a b p : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       ((T).symm (physicalParityProduct (intervalBondRestriction a b h) p)) (interval L a b) := by
+  change _ ∈ ManyBody.supportedOperators _ _
   classical
   apply isSupportedOn_physicalParityProduct
   intro i _
@@ -61,6 +64,7 @@ theorem isSupportedOn_regionalParityProduct
     intro v hv
     simp only [mem_interval] at *
     omega
-  · exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)
+  · change _ ∈ ManyBody.supportedOperators _ _
+    exact zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)
 
 end TNLean.MPS.AreaLaw

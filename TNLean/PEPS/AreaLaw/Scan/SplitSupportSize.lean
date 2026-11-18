@@ -58,8 +58,8 @@ private theorem designatedSupport_eq_ball_of_not_constant {L : ℕ}
     apply Finset.mem_filter.mpr
     refine ⟨Finset.mem_univ _, ⟨x, hxD, by simp⟩, y, hyD, ?_⟩
     simpa using (fun he : y = x ↦ hy (congrArg σ he))
-  simpa only [QuantumCircuit.graphBall, ball] using
-    (truncationRadius_eq_of_mem_crossingLabels (Finset.singleton_subset_iff.mpr hxT) hcross).2.2
+  exact (truncationRadius_eq_of_mem_crossingLabels (Finset.singleton_subset_iff.mpr hxT)
+    hcross).2.2.trans (Finset.ext fun _ ↦ by simp [ball, ManyBody.mem_graphBall])
 
 /-- At a completed status, any designated support not contained in one physical
 part equals the radius-`r₀` ball. No support-classification assumption is needed. -/

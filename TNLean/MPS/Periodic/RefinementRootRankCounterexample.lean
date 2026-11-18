@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.KrausSpanRank
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 import TNLean.MPS.Periodic.Defs
 import QICLean.Channel.KrausMap
 import QICLean.Kraus.MapIterate
@@ -143,7 +143,7 @@ theorem root_isTP : Kraus.IsTP root := by
     fin_cases b <;>
       (rw [Finset.sum_filter]
        rw [Fintype.sum_prod_type]
-       simp +decide [Fin.sum_univ_succ, sector] <;> norm_num)
+       simp +decide [Fin.sum_univ_succ, sector, show (2 : ℂ)⁻¹ + 2⁻¹ = 1 by norm_num])
   · have h : ∀ x : Fin 7, ¬(x = b ∧ x = c) := by
       intro x hx
       exact hbc (hx.1.symm.trans hx.2)
@@ -179,7 +179,7 @@ theorem square_isTP : Kraus.IsTP square := by
     fin_cases b <;>
       (rw [Finset.sum_filter]
        rw [Fintype.sum_prod_type]
-       simp +decide [Fin.sum_univ_succ, sector] <;> norm_num)
+       simp +decide [Fin.sum_univ_succ, sector, show (2 : ℂ)⁻¹ + 2⁻¹ = 1 by norm_num])
   · have h : ∀ x : Fin 7, ¬(x = b ∧ x = c) := by
       intro x hx
       exact hbc (hx.1.symm.trans hx.2)

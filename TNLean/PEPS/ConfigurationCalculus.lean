@@ -20,6 +20,8 @@ final lemma groups a finite sum by its merged configuration and collapses fibers
 cardinality.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean

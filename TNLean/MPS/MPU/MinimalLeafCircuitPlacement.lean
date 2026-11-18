@@ -154,7 +154,8 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_circuits_of_un
             embedOp (leafConsecutiveSites d D N i) Z ∈ unitary
               (Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ) ∧
             embedOp (leafConsecutiveSites d D N i) Z ∈
-              supportedOperators d (intervalConsecutiveSupport d D N i.val (i.val + 1)) := by
+              ManyBody.supportedOperators (fun _ ↦ Fin d)
+                  (intervalConsecutiveSupport d D N i.val (i.val + 1)) := by
   obtain ⟨B, hB0, hBN, P, hP, hIntervals, h0, hlast, hfull, hLeaves⟩ :=
     exists_normalized_minimalInterval_family_with_leaf_circuits_of_unitary
       hd (by omega : 0 < N) U hU hbound

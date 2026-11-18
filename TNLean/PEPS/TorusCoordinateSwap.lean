@@ -72,11 +72,11 @@ theorem torusCoordinateSwap_translate (a : ZMod width) (b : ZMod height) :
   ext v <;> rfl
 
 /-- Coordinate exchange sends a right edge to the corresponding up edge. -/
-theorem Edge.map_torusCoordinateSwap_rightEdge (p : TorusVertex width height) :
-    Edge.map torusCoordinateSwap (torusRightEdge p) = torusUpEdge (p.2, p.1) := by
+theorem _root_.ManyBody.Edge.map_torusCoordinateSwap_rightEdge (p : TorusVertex width height) :
+    ManyBody.Edge.map torusCoordinateSwap (torusRightEdge p) = torusUpEdge (p.2, p.1) := by
   unfold torusRightEdge
-  apply Edge.ofAdj_eq_ofAdj
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2) with ⟨h₁,h₂⟩ | ⟨h₁,h₂⟩
+  apply ManyBody.Edge.ofAdj_eq_ofAdj
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2) with ⟨h₁,h₂⟩ | ⟨h₁,h₂⟩
   · exact Or.inl ⟨by rw [h₁]; rfl, by rw [h₂]; rfl⟩
   · exact Or.inr ⟨by rw [h₁]; rfl, by rw [h₂]; rfl⟩
 

@@ -8,6 +8,7 @@ import TNLean.PEPS.AreaLaw.Scan.StrongSelectedDensityPower
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedEnergyPower
 import TNLean.PEPS.AreaLaw.Scan.SubsystemDimensionScale
 import TNLean.PEPS.AreaLaw.SelectedSchmidtEntropyBounds
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Paper-rate energy at the same source-selected charge point
@@ -29,13 +30,19 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -81,11 +88,13 @@ theorem sourceTarget_selected_actualCharge_sharp_energy_explicit
     {Ctr : ℝ} (hCtrEq : Ctr = latticeTruncationRadiusConstant R J Δ (C_T + 1)) :
       ∀ Ce : ℝ, 0 ≤ Ce →
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceSelectedSharpEnergyThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr Cent eent Cen een ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -126,7 +135,8 @@ theorem sourceTarget_selected_actualCharge_sharp_energy_explicit
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -154,7 +164,7 @@ theorem sourceTarget_selected_actualCharge_sharp_energy_explicit
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
             let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-            let energy := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+            let energy := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
             let σ := terminalPartition S (S.n * S.m)
             let near := fun j band ↦ receiving (σ j band) false
             let middleRegion := fun j band ↦ middle (σ j band)
@@ -258,11 +268,11 @@ theorem sourceTarget_selected_actualCharge_sharp_energy_explicit
   have hdensity := fun n (hn : finalSelectedDensityThreshold q Ce C₁ Ct Clt ≤ n) =>
     final_selectedDensity_le_eightNu_of_finalSelectedDensityThreshold_le hq Ce C₁ Ct Clt
       hCe hC₁ (zero_le_one.trans hCt) hn
-  intro Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
+  intro Λ T _ hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix hrD hDpos hDm
   simp only [sourceSelectedSharpEnergyThreshold, max_le_iff] at hn
   obtain ⟨hnB, hnD, hnE, hnT, hnI, hnLog⟩ := hn
-  obtain ⟨hm, hM, hdata⟩ := hsource Λ T hT h S E₀ Ω hgs hgraph hanchor hnB
+  obtain ⟨hm, hM, hdata⟩ := hsource Λ T hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hnB
     hr hmScale hDScale hKScale hCeq hsize hdepth hrows hmult hclear
     Ce (Exponents.boxError : ℝ) hprefix hrD hDpos hDm
   refine ⟨hm, hM, ?_⟩
@@ -275,10 +285,10 @@ theorem sourceTarget_selected_actualCharge_sharp_energy_explicit
   refine ⟨hwindow, hd, ?_⟩
   have : NeZero E.card := NeZero.of_pos hd
   intro d ΩX ψ Sent dims energy σ near middleRegion gpre gpost gaps gmax tree Gpre Gpost
-  have hΩt : ‖Ωt‖ = 1 := (Matrix.isGappedGroundState_iff.mp htrgs).1
+  have hΩt : ‖Ωt‖ = 1 := htrgs.1
   have hXcard : (X.card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 :=
     (Nat.cast_le.mpr (Finset.card_le_card hX)).trans hcard
-  have hcont := htarget S.n hnT Λ Ω Ωt hgs.1 hΩt X hXcard htrace
+  have hcont := htarget S.n hnT Λ Ω Ωt hΩ hΩt X hXcard htrace
   have hSt : regionalEntropy Λ q Ωt X ≤
       Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) +
         (S.n : ℝ) ^ (-247 : ℝ) := by
@@ -397,11 +407,13 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy_of_threshold_le
     ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
       ∀ Ce : ℝ, 0 ≤ Ce →
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceSelectedSharpEnergyThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr Cent eent Cen een ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -442,7 +454,8 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy_of_threshold_le
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -470,7 +483,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy_of_threshold_le
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
             let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-            let energy := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+            let energy := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
             let σ := terminalPartition S (S.n * S.m)
             let near := fun j band ↦ receiving (σ j band) false
             let middleRegion := fun j band ↦ middle (σ j band)
@@ -569,11 +582,13 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
       0 < Ctr ∧ 0 < Ctarget ∧ 0 < CB ∧ 0 < ct ∧ 1 ≤ C ∧ 0 ≤ Cl ∧
       ∀ Ce : ℝ, 0 ≤ Ce → ∃ N : ℕ, 2 ≤ N ∧
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = ⌊(S.n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
           S.D = ⌈(S.n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →
@@ -611,7 +626,8 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -639,7 +655,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
             let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-            let energy := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+            let energy := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
             let σ := terminalPartition S (S.n * S.m)
             let near := fun j band ↦ receiving (σ j band) false
             let middleRegion := fun j band ↦ middle (σ j band)

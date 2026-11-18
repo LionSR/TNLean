@@ -28,6 +28,7 @@ lines 2442--2531, and Section 6, lines 2649--2675.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d D : ℕ}
 
@@ -69,7 +70,7 @@ theorem exists_commonBlock_primitive_sector_resolution_of_isPeriodic
       ∃ (B : ∀ s, MPSTensor (blockPhysDim d L) (sdim s))
         (V : ∀ s, Matrix (Fin (∑ j, dim j)) (Fin (sdim s)) ℂ)
         (ρ : ∀ s, Matrix (Fin (sdim s)) (Fin (sdim s)) ℂ),
-        (∀ s, IsPrimitiveMPS (B s) (ρ s)) ∧ (∀ s, (ρ s).PosDef) ∧
+        (∀ s, Kraus.HasComplementaryFixedPointGap (B s) (ρ s)) ∧ (∀ s, (ρ s).PosDef) ∧
         (∀ s t, s ≠ t → ∀ e : sdim t = sdim s, ¬ GaugePhaseEquiv (e ▸ B t) (B s)) ∧
         (∀ s, (V s)ᴴ * V s = 1) ∧ (∑ s, V s * (V s)ᴴ) = 1 ∧
         (∀ s i, blockTensor (toTensorFromBlocks (fun _ => 1) A) L i * V s = V s * B s i) ∧

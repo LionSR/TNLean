@@ -31,6 +31,8 @@ energy estimates or running time is asserted. See
 `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

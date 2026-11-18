@@ -27,15 +27,15 @@ variable {d : ℕ}
 /-- Regrouping a sitewise physical matrix along the canonical blocking
 equivalence gives the sitewise power of its local blocked matrix.
 Source: arXiv:1703.09188, blocking at lines 297--305. -/
-theorem sitewisePhysicalMatrix_blockKron_reindex
+theorem tensorPower_blockKron_reindex
     (Q : Matrix (Fin d) (Fin d) ℂ) (N k : ℕ) :
     Matrix.reindex (MPSTensor.blockedConfigEquiv d N k).symm
-        (MPSTensor.blockedConfigEquiv d N k).symm (sitewisePhysicalMatrix Q (N * k)) =
-      sitewisePhysicalMatrix (MPSTensor.blockKron k Q) N := by
+        (MPSTensor.blockedConfigEquiv d N k).symm (Matrix.tensorPower (N * k) Q) =
+      Matrix.tensorPower N (MPSTensor.blockKron k Q) := by
   classical
   symm
   exact Matrix.ext fun σ τ => by
-    simpa [sitewisePhysicalMatrix, MPSTensor.blockKron, Matrix.reindex_apply,
+    simpa [Matrix.tensorPower_apply, MPSTensor.blockKron, Matrix.reindex_apply,
       MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp,
       Fintype.prod_prod_type] using
       (finProdFinEquiv.prod_comp (fun v : Fin (N * k) =>
@@ -77,7 +77,7 @@ rather than taking the inverse image of the original applicable lengths.
 Source: arXiv:1703.09188, `SSymmetries-dagger` and `def:equivalent-symmetry`. -/
 noncomputable def blockedDaggerWithPhysicalMatrix
     (Q : Matrix (Fin d) (Fin d) ℂ) (k : ℕ) :
-    FiniteChainOperatorSymmetry (MPSTensor.blockPhysDim d k) :=
+    FiniteChainOperatorSymmetry (Kraus.blockPhysDim d k) :=
   { (daggerWithPhysicalMatrix Q).block k with applicable := {N | 0 < N} }
 
 /-- The canonically blocked transposition action, with the same positive-chain
@@ -85,7 +85,7 @@ convention at blocking length zero as the explicit blocked local matrix.
 Source: arXiv:1703.09188, `SSymmetries-transpose` and `def:equivalent-symmetry`. -/
 noncomputable def blockedTransposeWithPhysicalMatrix
     (Q : Matrix (Fin d) (Fin d) ℂ) (k : ℕ) :
-    FiniteChainOperatorSymmetry (MPSTensor.blockPhysDim d k) :=
+    FiniteChainOperatorSymmetry (Kraus.blockPhysDim d k) :=
   { (transposeWithPhysicalMatrix Q).block k with applicable := {N | 0 < N} }
 
 /-- The positive-chain blocked action is exactly the sandwich action of the
@@ -99,7 +99,7 @@ theorem blockedDaggerWithPhysicalMatrix_eq
   · rfl
   · intro N X
     simp only [blockedDaggerWithPhysicalMatrix, block, daggerWithPhysicalMatrix,
-      reindex_mul, sitewisePhysicalMatrix_blockKron_reindex,
+      reindex_mul, tensorPower_blockKron_reindex,
       Matrix.conjTranspose_reindex]
     congr 2
     ext σ τ
@@ -115,7 +115,7 @@ theorem blockedTransposeWithPhysicalMatrix_eq
   · rfl
   · intro N X
     simp only [blockedTransposeWithPhysicalMatrix, block, transposeWithPhysicalMatrix,
-      reindex_mul, sitewisePhysicalMatrix_blockKron_reindex]
+      reindex_mul, tensorPower_blockKron_reindex]
     congr 2
     ext σ τ
     simp [Matrix.reindex_apply, Matrix.transpose_apply]
@@ -156,7 +156,7 @@ theorem transposeWithPhysicalMatrix_block (Q : Matrix (Fin d) (Fin d) ℂ)
   apply symmetry_eq (daggerWithPhysicalMatrix (1 : Matrix (Fin d) (Fin d) ℂ))
     (daggerSymmetry d) rfl
   intro N X
-  simp [daggerWithPhysicalMatrix, daggerSymmetry, sitewisePhysicalMatrix_one]
+  simp [daggerWithPhysicalMatrix, daggerSymmetry, Matrix.tensorPower_one]
 
 /-- The identity physical matrix gives ordinary transposition. -/
 @[simp] theorem transposeWithPhysicalMatrix_one (d : ℕ) :
@@ -164,7 +164,7 @@ theorem transposeWithPhysicalMatrix_block (Q : Matrix (Fin d) (Fin d) ℂ)
   apply symmetry_eq (transposeWithPhysicalMatrix (1 : Matrix (Fin d) (Fin d) ℂ))
     (transposeSymmetry d) rfl
   intro N X
-  simp [transposeWithPhysicalMatrix, transposeSymmetry, sitewisePhysicalMatrix_one]
+  simp [transposeWithPhysicalMatrix, transposeSymmetry, Matrix.tensorPower_one]
 
 end FiniteChainOperatorSymmetry
 
@@ -172,7 +172,7 @@ end FiniteChainOperatorSymmetry
 Source: arXiv:1703.09188, `def:equivalent-symmetry`, line 1366. -/
 theorem conjugationSymmetry_block {k : ℕ} (hk : 0 < k) :
     (conjugationSymmetry d).block k =
-      conjugationSymmetry (MPSTensor.blockPhysDim d k) := by
+      conjugationSymmetry (Kraus.blockPhysDim d k) := by
   apply symmetry_eq
   · exact block_applicable_pos _ rfl hk
   · intro N X

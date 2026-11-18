@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.GaussianFilter.LocalizationParameters
 import TNLean.PEPS.Approximation.SwappedLocalHamiltonian
 import TNLean.Lattice.RegionalReset
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The supported unitary of the information reset at interaction range `R`
@@ -26,15 +27,15 @@ The constants are named and depend only on `R, J, Δ, r`:
 
 The polynomial-PEPS manuscript treats only site and nearest-neighbour terms on the open square,
 which is range one; the statements here extend its reset to range `R`. The range-one
-statements on the open square, `SquareHamiltonian.reset_localized_filter` and
-`SquareHamiltonian.reset_unitary` with `resetRadius` and `resetUnitaryPrefactor`, are
+statements on the open square, `ManyBody.SquareInteraction.reset_localized_filter` and
+`ManyBody.SquareInteraction.reset_unitary` with `resetRadius` and `resetUnitaryPrefactor`, are
 unchanged.
 
 ## Main statements
 
-* `TNLean.Lattice.LocalHamiltonian.reset_localized_filter`: the localized two-sided filter of
+* `ManyBody.PlaneInteraction.reset_localized_filter`: the localized two-sided filter of
   `eq:info-local-two-sided` at range `R`.
-* `TNLean.Lattice.LocalHamiltonian.reset_unitary`: the unitary of `eq:info-reset-unitary` at
+* `ManyBody.PlaneInteraction.reset_unitary`: the unitary of `eq:info-reset-unitary` at
   range `R`.
 
 ## References
@@ -49,6 +50,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open Matrix QuantumCircuit
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped Kronecker Matrix.Norms.L2Operator
 
 noncomputable section
@@ -99,7 +102,9 @@ theorem rangeResetUnitaryPrefactor_pos (R : ℕ) {J Δ r : ℝ} (hJ : 0 ≤ J) (
 
 end TNLean.PEPS.Approximation
 
-namespace TNLean.Lattice.LocalHamiltonian
+namespace ManyBody.PlaneInteraction
+
+open TNLean.Lattice
 
 open TNLean.PEPS.Approximation
 
@@ -117,8 +122,10 @@ of radius `⌈K B⌉` of the buffer `(A ∪ C)ᶜ` and of the sites of the suppo
 The manuscript treats range one only; this extends its estimate to range `R`.
 Source: `02-information.tex`, lines 355–562, with `K_loc` at lines 551–554. -/
 theorem reset_localized_filter (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ)
-    (hr : 0 ≤ r) {L : ℕ} (hL : 1 ≤ L) (hΛ : Λ.card ≤ L ^ 2) (h : LocalHamiltonian Λ q R J)
-    (E₀ : ℝ) (Ω : StateSpace Λ q) (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ)
+    (hr : 0 ≤ r) {L : ℕ} (hL : 1 ≤ L) (hΛ : Λ.card ≤ L ^ 2) (h : PlaneInteraction Λ q R)
+        (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (E₀ : ℝ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A C : Finset (Site Λ)) (hAC : Disjoint A C) (b : ℝ) (hb : 0 ≤ b)
     (hI : FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b) :
     let p := sitePairConfigurationEquiv (Site Λ) q q
@@ -129,29 +136,30 @@ theorem reset_localized_filter (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ :
     ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
     ∃ (z : ℝ) (M : Matrix (Configuration Λ (q * q)) (Configuration Λ (q * q)) ℂ),
       Real.exp (-2 * b) ≤ z ∧
-      M ∈ supportedOperators (q * q) (B : Set (Site Λ)) ∧ ‖M‖ ≤ 1 ∧
+      M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧ ‖M‖ ≤ 1 ∧
       ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
         rangeResetFilterPrefactor R J Δ r * Real.exp (-10 * b) * (L : ℝ) ^ (-r) ∧
       ‖WithLp.toLp 2 (Mᴴ *ᵥ (F *ᵥ ψ)) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
         rangeResetFilterPrefactor R J Δ r * Real.exp (-10 * b) * (L : ℝ) ^ (-r) := by
   intro p F ψ B
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hL
-  set Cg := 2 * PEPS.AreaLaw.graphBallLocalizationPrefactor R with hCgdef
-  set v := PEPS.AreaLaw.graphBallLocalizationVelocity R (2 * J) with hvdef
+  set Cg := 2 * TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor R with hCgdef
+  set v := TNLean.PEPS.AreaLaw.graphBallLocalizationVelocity R (2 * J) with hvdef
   set T₀ := resetCutoff Δ r with hT₀def
   set K := rangeResetRadius R J Δ r with hKdef
   set c := swapBoundaryCoefficient R with hcdef
   have hcoef : v * T₀ + 15 + r ≤ 1 / 2 * K := by
     rw [hKdef, rangeResetRadius]; apply le_of_eq; ring
-  have hCg : 0 < Cg := mul_pos two_pos (PEPS.AreaLaw.graphBallLocalizationPrefactor_pos R)
+  have hCg : 0 < Cg := mul_pos two_pos (TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor_pos R)
   have hT₀ : 0 < T₀ := resetCutoff_pos hΔ hr
   have hc : 0 ≤ c := swapBoundaryCoefficient_nonneg R
   have hcJ : 0 ≤ c * J := mul_nonneg hc hJ
   obtain ⟨hψn, hφn, W, z, hW, hz, hfil⟩ :=
-    regional_physicalBuffer_filter.{0, 0} hΔ hr q A C hAC p h.operator E₀ Ω b hgs hb hI
+    regional_physicalBuffer_filter.{0, 0} hΔ hr q A C hAC p h.hamiltonian E₀ Ω b
+      (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hgap hspan hb hI
   obtain ⟨hT, hfwd, hrev⟩ := hfil L hL1
   obtain ⟨U, -, -, -, -, hM⟩ :=
-    h.supported_buffer_gaussian_integral hq hJ A C hAC W ⌈K * (1 + b + Real.log L)⌉₊
+    h.supported_buffer_gaussian_integral hq hJ hh hhJ A C hAC W ⌈K * (1 + b + Real.log L)⌉₊
   obtain ⟨hMsupp, hMnorm, hMerr⟩ := hM (Real.toNNReal (resetVariance Δ r * (1 + b + Real.log L)))
     (T₀ * (1 + b + Real.log L)) hT
   have hlocb := GaussianFilter.localization_error_bound_of_parameter_constant (L := (L : ℝ))
@@ -212,8 +220,10 @@ The manuscript treats range one only; this extends its reset to range `R`.
 Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-errors` and
 `eq:info-reset-unitary`. -/
 theorem reset_unitary (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r)
-    {L : ℕ} (hL : 1 ≤ L) (hΛ : Λ.card ≤ L ^ 2) (h : LocalHamiltonian Λ q R J)
-    (E₀ : ℝ) (Ω : StateSpace Λ q) (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ)
+    {L : ℕ} (hL : 1 ≤ L) (hΛ : Λ.card ≤ L ^ 2) (h : PlaneInteraction Λ q R)
+        (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (E₀ : ℝ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A C : Finset (Site Λ)) (hAC : Disjoint A C) (b : ℝ) (hb : 0 ≤ b)
     (hI : FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b) :
     let p := sitePairConfigurationEquiv (Site Λ) q q
@@ -224,14 +234,14 @@ theorem reset_unitary (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) 
     ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
     ∃ U : Matrix (Configuration Λ (q * q)) (Configuration Λ (q * q)) ℂ,
       U ∈ unitaryGroup (Configuration Λ (q * q)) ℂ ∧
-      U ∈ supportedOperators (q * q) (B : Set (Site Λ)) ∧
+      U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
       ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
         rangeResetUnitaryPrefactor R J Δ r * (L : ℝ) ^ (-r) := by
   intro p F ψ B
   obtain ⟨hψn, hφn, z, M, hz, hMsupp, -, hfwd, hrev⟩ :=
-    h.reset_localized_filter hq hJ hΔ hr hL hΛ E₀ Ω hgs A C hAC b hb hI
+    h.reset_localized_filter hq hJ hΔ hr hL hΛ hh hhJ E₀ Ω hΩ hgap hspan A C hAC b hb hI
   obtain ⟨U, hU, hUsupp, hUerr⟩ := exists_supported_unitary_of_two_sided B hMsupp hb hz hfwd hrev
     (rangeResetFilterPrefactor_pos R hJ hΔ hr).le (by positivity)
   exact ⟨hψn, hφn, U, hU, hUsupp, hUerr.trans_eq (by rw [rangeResetUnitaryPrefactor])⟩
 
-end TNLean.Lattice.LocalHamiltonian
+end ManyBody.PlaneInteraction

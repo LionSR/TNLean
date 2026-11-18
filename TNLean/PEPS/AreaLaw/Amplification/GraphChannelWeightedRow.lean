@@ -56,7 +56,7 @@ noncomputable def graphChannelEventKernel (G : SimpleGraph ι) (a : κ → ι)
   classical
   exact D * ∑ l ∈ Finset.range (N + 1), Real.exp (-(b * (l : ℝ) ^ α)) *
     ((Finset.univ.filter fun i : κ =>
-      y ∈ graphBall G (a i) l ∧ z ∈ graphBall G (a i) l).card : ℝ)
+      y ∈ ManyBody.graphBall G (a i) l ∧ z ∈ ManyBody.graphBall G (a i) l).card : ℝ)
 
 /-- A nonnegative prefactor gives a nonnegative graph-ball incidence kernel,
 without restrictions on the decay parameters or cutoff. -/
@@ -69,12 +69,13 @@ theorem graphChannelEventKernel_nonneg (G : SimpleGraph ι) (a : κ → ι)
 
 omit [DecidableEq ι] in
 private theorem edist_le_two_mul_of_mem_graphBall {G : SimpleGraph ι} {x y z : ι}
-    {l : ℕ} (hy : y ∈ graphBall G x l) (hz : z ∈ graphBall G x l) :
+    {l : ℕ} (hy : y ∈ ManyBody.graphBall G x l) (hz : z ∈ ManyBody.graphBall G x l) :
     G.edist y z ≤ (2 * l : ℕ) := by
   calc
     G.edist y z ≤ G.edist y x + G.edist x z := G.edist_triangle
     _ ≤ (l : ℕ∞) + l := add_le_add
-      (by simpa only [G.edist_comm] using mem_graphBall.mp hy) (mem_graphBall.mp hz)
+      (by simpa only [G.edist_comm] using ManyBody.mem_graphBall.mp hy) (ManyBody.mem_graphBall.mp
+          hz)
     _ = (2 * l : ℕ) := by simp [two_mul]
 
 /-- Distinct graph components have no common ball incidence. In particular,
@@ -86,7 +87,7 @@ theorem graphChannelEventKernel_eq_zero_of_not_reachable
     (hyz : ¬ G.Reachable y z) : graphChannelEventKernel G a D b α N y z = 0 := by
   classical
   have hempty (l : ℕ) : (Finset.univ.filter fun i : κ =>
-      y ∈ graphBall G (a i) l ∧ z ∈ graphBall G (a i) l) = ∅ := by
+      y ∈ ManyBody.graphBall G (a i) l ∧ z ∈ ManyBody.graphBall G (a i) l) = ∅ := by
     apply Finset.eq_empty_iff_forall_notMem.mpr
     intro i hi
     obtain ⟨hy, hz⟩ := (Finset.mem_filter.mp hi).2
@@ -102,22 +103,22 @@ weighted-row estimate. -/
 theorem card_graphBall_anchors_le (G : SimpleGraph ι) (a : κ → ι)
     {μ : ℝ} (hfiber : ∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ)
     (y : ι) (l : ℕ) :
-    ((Finset.univ.filter fun i : κ => y ∈ graphBall G (a i) l).card : ℝ) ≤
-      μ * (graphBall G y l).card := by
+    ((Finset.univ.filter fun i : κ => y ∈ ManyBody.graphBall G (a i) l).card : ℝ) ≤
+      μ * (ManyBody.graphBall G y l).card := by
   classical
-  have hcount := Finset.sum_card_fiberwise_eq_card_filter Finset.univ (graphBall G y l) a
-  have hsymm (i : κ) : (y ∈ graphBall G (a i) l) ↔ a i ∈ graphBall G y l := by
-    simp only [mem_graphBall, G.edist_comm]
+  have hcount := Finset.sum_card_fiberwise_eq_card_filter Finset.univ (ManyBody.graphBall G y l) a
+  have hsymm (i : κ) : (y ∈ ManyBody.graphBall G (a i) l) ↔ a i ∈ ManyBody.graphBall G y l := by
+    simp only [ManyBody.mem_graphBall, G.edist_comm]
   simp_rw [hsymm]
   rw [← hcount, Nat.cast_sum]
   calc
-    _ ≤ ∑ _x ∈ graphBall G y l, μ := Finset.sum_le_sum fun x _ => hfiber x
+    _ ≤ ∑ _x ∈ ManyBody.graphBall G y l, μ := Finset.sum_le_sum fun x _ => hfiber x
     _ = _ := by simp [mul_comm]
 
 omit [DecidableEq ι] in
 private theorem weighted_graphBall_term_le (G : SimpleGraph ι)
     {b α : ℝ} (hb : 0 < b) (hα : 0 < α) {x y z : ι} {l : ℕ}
-    (hy : y ∈ graphBall G x l) (hz : z ∈ graphBall G x l) :
+    (hy : y ∈ ManyBody.graphBall G x l) (hz : z ∈ ManyBody.graphBall G x l) :
     Real.exp (-(b * (l : ℝ) ^ α)) *
         Real.exp (b / (2 * (2 : ℝ) ^ α) * (G.dist y z : ℝ) ^ α) ≤
       Real.exp (-(b / 2 * (l : ℝ) ^ α)) := by
@@ -144,7 +145,7 @@ sum. Source: area law, `09-amplification.tex`, lines 146–160. -/
 theorem sum_graphChannelEventKernel_mul_exp_le
     (G : SimpleGraph ι) (a : κ → ι) {D K μ b α : ℝ}
     (hD : 0 ≤ D) (hK : 0 ≤ K) (hμ : 0 ≤ μ) (hb : 0 < b) (hα : 0 < α)
-    (hball : ∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
+    (hball : ∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
     (hfiber : ∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ)
     (N : ℕ) (y : ι) :
     (∑ z, graphChannelEventKernel G a D b α N y z *
@@ -157,37 +158,38 @@ theorem sum_graphChannelEventKernel_mul_exp_le
   let d (z : ι) := Real.exp (b / (2 * (2 : ℝ) ^ α) * (G.dist y z : ℝ) ^ α)
   have hrow : (∑ z, graphChannelEventKernel G a D b α N y z * d z) =
       D * ∑ i, ∑ l ∈ (Finset.range (N + 1)).filter
-        (fun l : ℕ => G.edist (a i) y ≤ l), w l * ∑ z ∈ graphBall G (a i) l, d z := by
+        (fun l : ℕ => G.edist (a i) y ≤ l), w l * ∑ z ∈ ManyBody.graphBall G (a i) l, d z := by
     rw [sum_graphBall_shell_eq_sum_card]
     simp only [graphChannelEventKernel, mul_assoc, Finset.sum_mul, Finset.mul_sum]
     rw [Finset.sum_comm]
   have hevent (i : κ) (l : ℕ) (hl : G.edist (a i) y ≤ l) :
-      w l * ∑ z ∈ graphBall G (a i) l, d z ≤ v l := by
+      w l * ∑ z ∈ ManyBody.graphBall G (a i) l, d z ≤ v l := by
     calc
-      _ = ∑ z ∈ graphBall G (a i) l, w l * d z := Finset.mul_sum ..
-      _ ≤ ∑ _z ∈ graphBall G (a i) l, Real.exp (-(b / 2 * (l : ℝ) ^ α)) :=
-        Finset.sum_le_sum fun z hz => weighted_graphBall_term_le G hb hα (mem_graphBall.mpr hl) hz
-      _ = Real.exp (-(b / 2 * (l : ℝ) ^ α)) * (graphBall G (a i) l).card := by
+      _ = ∑ z ∈ ManyBody.graphBall G (a i) l, w l * d z := Finset.mul_sum ..
+      _ ≤ ∑ _z ∈ ManyBody.graphBall G (a i) l, Real.exp (-(b / 2 * (l : ℝ) ^ α)) :=
+        Finset.sum_le_sum fun z hz => weighted_graphBall_term_le G hb hα
+            (ManyBody.mem_graphBall.mpr hl) hz
+      _ = Real.exp (-(b / 2 * (l : ℝ) ^ α)) * (ManyBody.graphBall G (a i) l).card := by
         simp [mul_comm]
       _ ≤ v l := by
         dsimp [v]
         nlinarith [hball (a i) l, Real.exp_pos (-(b / 2 * (l : ℝ) ^ α))]
   have hanchors (l : ℕ) :
-      ((Finset.univ.filter fun i : κ => y ∈ graphBall G (a i) l).card : ℝ) ≤
+      ((Finset.univ.filter fun i : κ => y ∈ ManyBody.graphBall G (a i) l).card : ℝ) ≤
         μ * K * ((l : ℝ) + 1) ^ 2 := by
     calc
-      _ ≤ μ * (graphBall G y l).card := card_graphBall_anchors_le G a hfiber y l
+      _ ≤ μ * (ManyBody.graphBall G y l).card := card_graphBall_anchors_le G a hfiber y l
       _ ≤ μ * (K * ((l : ℝ) + 1) ^ 2) := mul_le_mul_of_nonneg_left (hball y l) hμ
       _ = _ := by ring
   calc
     _ = D * ∑ i, ∑ l ∈ (Finset.range (N + 1)).filter
-        (fun l : ℕ => G.edist (a i) y ≤ l), w l * ∑ z ∈ graphBall G (a i) l, d z := hrow
+        (fun l : ℕ => G.edist (a i) y ≤ l), w l * ∑ z ∈ ManyBody.graphBall G (a i) l, d z := hrow
     _ ≤ D * ∑ i, ∑ l ∈ (Finset.range (N + 1)).filter
         (fun l : ℕ => G.edist (a i) y ≤ l), v l := by
       gcongr with i _ l hl
       exact hevent i l (Finset.mem_filter.mp hl).2
     _ = D * ∑ l ∈ Finset.range (N + 1), v l *
-        ((Finset.univ.filter fun i : κ => y ∈ graphBall G (a i) l).card : ℝ) := by
+        ((Finset.univ.filter fun i : κ => y ∈ ManyBody.graphBall G (a i) l).card : ℝ) := by
       simp_rw [Finset.sum_filter]
       rw [Finset.sum_comm]
       congr 1
@@ -196,7 +198,7 @@ theorem sum_graphChannelEventKernel_mul_exp_le
       rw [Finset.natCast_card_filter, Finset.mul_sum]
       apply Finset.sum_congr rfl
       intro i _
-      simp only [mem_graphBall]
+      simp only [ManyBody.mem_graphBall]
       split_ifs <;> simp
     _ ≤ D * ∑ l ∈ Finset.range (N + 1), v l * (μ * K * ((l : ℝ) + 1) ^ 2) := by
       gcongr with l _
@@ -225,7 +227,7 @@ cutoff with quadratic ball growth and anchor fibers bounded by `μ`. Source: are
 theorem sum_graphChannelEventKernel_mul_exp_le_graphChannelRowConstant
     (G : SimpleGraph ι) (a : κ → ι) {D K μ b α : ℝ}
     (hD : 0 ≤ D) (hK : 0 ≤ K) (hμ : 0 ≤ μ) (hb : 0 < b) (hα : 0 < α)
-    (hball : ∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
+    (hball : ∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
     (hfiber : ∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ)
     (N : ℕ) (y : ι) :
     (∑ z, graphChannelEventKernel G a D b α N y z *
@@ -249,7 +251,7 @@ theorem exists_graphChannelEventKernel_weighted_row_le {D K μ b α : ℝ}
     (hD : 0 ≤ D) (hK : 0 ≤ K) (hμ : 0 ≤ μ) (hb : 0 < b) (hα : 0 < α) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ (ι κ : Type*) [Fintype ι] [DecidableEq ι] [Fintype κ]
       (G : SimpleGraph ι) (a : κ → ι),
-      (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
+      (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
       ∀ (N : ℕ) (y : ι),
         (∑ z, graphChannelEventKernel G a D b α N y z *
@@ -260,6 +262,7 @@ theorem exists_graphChannelEventKernel_weighted_row_le {D K μ b α : ℝ}
 
 variable {q : ℕ} [NeZero q] {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
 
+open Classical in
 /-- The actual summed full-channel oscillation increments are dominated by
 the finite graph-ball event kernel. The coefficient is the one derived from
 the actual localization tails, including its factor of two. This is only a
@@ -268,10 +271,11 @@ finite reordering of the event-family estimate. Source: area law,
 theorem sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel
     (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (hk₀ : ∀ i, 0 ≤ k i) (hk₁ : ∀ i, k i ≤ 1)
-    (hk : ∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x})
+    (hk : ∀ i, k i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (Finset.univ.filter fun x ↦ G.Reachable (a i) x))
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (N : ℕ) (hN : ∀ i, Finset.univ.sup (G.dist (a i)) ≤ N)
-    (hε : ∀ i l, l ≤ N → ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+    (hε : ∀ i l, l ≤ N → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α)))
     (y : ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     (∑ i, (siteOscillation q y (spectatorRootChannel (k i) B) -
@@ -296,6 +300,7 @@ theorem channelEventRowConstant_nonneg {μ : ℝ} (hμ : 0 ≤ μ) (C K c α : �
     0 ≤ channelEventRowConstant C K μ c α :=
   graphChannelRowConstant_nonneg (by positivity) hμ _ _
 
+open Classical in
 /-- **Uniform weighted rows and channel-increment domination, with an explicit row
 constant.** For an actual finite family of component-supported effects, the weighted rows of
 the event kernel are at most `channelEventRowConstant C K μ c α`, and the summed channel
@@ -308,11 +313,12 @@ theorem graphChannelEventKernel_bounds_of_component_support {C K μ c α : ℝ}
       [Fintype Aux] [DecidableEq Aux] (q : ℕ) [NeZero q]
       (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ),
       (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
-      (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) →
-      (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
+      (∀ i, k i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (Finset.univ.filter fun x ↦ G.Reachable (a i) x)) →
+      (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
       ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
-      (∀ i l, l ≤ N → ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+      (∀ i l, l ≤ N → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
       (∀ y, (∑ z,
         graphChannelEventKernel G a (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))
@@ -339,6 +345,7 @@ theorem graphChannelEventKernel_bounds_of_component_support {C K μ c α : ℝ}
   · exact sum_siteOscillation_spectatorRootChannel_sub_le_graphChannelEventKernel
       G a k hk₀ hk₁ hk hC hc hα hα₁ N hN hε
 
+open Classical in
 /-- Uniform weighted rows and literal channel-increment domination for an
 actual finite family of component-supported effects. If
 `A = 2 + 8 * sqrt C * exp (c / 2)`, the kernel uses `D = 2 * A`, `b = c / 2`,
@@ -354,11 +361,12 @@ theorem exists_graphChannelEventKernel_bounds_of_component_support {C K μ c α 
         [Fintype Aux] [DecidableEq Aux] (q : ℕ) [NeZero q]
         (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
-        (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) →
-        (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
+        (∀ i, k i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+            (Finset.univ.filter fun x ↦ G.Reachable (a i) x)) →
+        (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
         ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
-        (∀ i l, l ≤ N → ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+        (∀ i l, l ≤ N → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         (∀ y, (∑ z,
           graphChannelEventKernel G a (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2)))

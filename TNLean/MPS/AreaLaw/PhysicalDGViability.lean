@@ -10,7 +10,7 @@ import QICLean.Analysis.ViableSubspaceCoordinates
 import QICLean.Analysis.ViableSubspaceDimension
 import QICLean.Analysis.ViableSubspaceOrder
 import TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.FiveRegionTruncationResidual
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.PolynomialFilterParameters
@@ -27,6 +27,8 @@ a clipped spectral cluster; short intervals use configuration matrix units.
 These results support ALVV, arXiv:1602.08828v2,
 `def:hard-trunc`, lines 873–886, and Theorem `t:ais`, lines 1010–1024.
 -/
+
+open ManyBody (card_interval_le interval)
 
 section
 
@@ -505,9 +507,9 @@ private theorem exists_accuracy_long_middle_actual_dg_family :
   let xi : ℝ := g / (1000000 * (m : ℝ))
   let scale : ℝ := 1 / (m : ℝ)
   have hmR : (2 : ℝ) ≤ (m : ℝ) := by exact_mod_cast (hq.trans hqm)
-  have hmRpos : 0 < (m : ℝ) := by linarith
+  have hmRpos : 0 < (m : ℝ) := by linarith only [hmR]
   have hscale0 : 0 < scale := one_div_pos.mpr hmRpos
-  have hscale1 : scale ≤ 1 := (div_le_iff₀ hmRpos).2 (by linarith)
+  have hscale1 : scale ≤ 1 := (div_le_iff₀ hmRpos).2 (by linarith only [hmR])
   have hxi : xi = scale * g / 1000000 := by
     dsimp only [xi, scale]
     rw [div_mul_eq_mul_div, one_mul, div_div, mul_comm (m : ℝ) 1000000]

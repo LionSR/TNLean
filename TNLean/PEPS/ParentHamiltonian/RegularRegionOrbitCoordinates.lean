@@ -16,6 +16,8 @@ Source: SCP10, arXiv:1001.3807, accessible regular coordinates,
 lines 1765–1920, and the two-dimensional commutation claim, lines 2131–2153.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]

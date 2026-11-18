@@ -63,12 +63,12 @@ theorem IsHorizontalCF.blockTwo {M : MPOTensor d D}
     simpa [X] using hX i
   intro i
   rw [toMPSTensor_blockTwo]
-  change MPSTensor.blockTensor M.toMPSTensor 2 (e i) =
+  change Kraus.blockTensor M.toMPSTensor 2 (e i) =
     (X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
-      MPSTensor.blockTensor S.toTensor 2 (e i) *
+      Kraus.blockTensor S.toTensor 2 (e i) *
         (((X)⁻¹ : GL (Fin S.totalDim) ℂ) :
           Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)
   exact MPSTensor.evalWord_gauge X hGauge
-    (MPSTensor.wordOfBlock (d * d) 2 (e i))
+    (Kraus.wordOfBlock (d * d) 2 (e i))
 
 end MPOTensor

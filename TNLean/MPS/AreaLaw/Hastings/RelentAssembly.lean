@@ -44,6 +44,8 @@ eq. `LU` on the chain, the monotonicity of the binary relative entropy, and
   916–925.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix
 open scoped ComplexOrder InnerProductSpace Kronecker Matrix.Norms.L2Operator MatrixOrder
 

@@ -25,6 +25,7 @@ unreported ancillary state or trace-out.
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
+open Kraus (decodeBlockEquiv blockTensor)
 
 namespace MPSPreparation
 variable {d : ℕ} [NeZero d]
@@ -169,7 +170,7 @@ theorem exists_isLocalCircuitOfDepth_registerCfg_of_pairProductState_supported
   -- The same pair-window unitary is used for every sector.
   obtain ⟨W, hWu, hW⟩ := exists_pairFamilyUnitary hdig hdig₀ ω hω
   -- The coherent circuit.
-  have hcirc : IsCircuitOn Set.univ (KW + Cb * L)
+  have hcirc : IsCircuitOn Finset.univ (KW + Cb * L)
       (blockLayerOp hN U * pairLayerOp hN hr fun _ => W) :=
     (isCircuitOn_pairLayerOp hN hr fun _ => hKW W hWu).mul
       (isCircuitOn_blockLayerOp hN (K := Cb * L) fun k =>

@@ -46,13 +46,13 @@ theorem exists_finiteSetTruncation_schmidtBellPrevector_of_gap
       ∀ {q : ℕ} [NeZero q] {ι : Type} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
         (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι), (∀ k, a k ∈ X k) →
         ∀ (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ), (∀ k, (h k).IsHermitian) →
-        (∀ k, h k ∈ supportedOperators q (X k : Set ι)) →
+        (∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (X k : Finset ι)) →
         (∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R) →
         (∀ k, (X k).card ≤ vR) →
         (∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀) →
         (∀ x (d : ℕ),
           ((Finset.univ.filter fun y => G.edist x y = d).card : ℝ) ≤ Kg * ((d : ℝ) + 1) ^ kg) →
-        (∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
+        (∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
         (∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) →
         (∀ k, ‖h k‖ ≤ J) →
         ∀ (E₀ : ℝ) (Ω : EuclideanSpace ℂ (ι → Fin q)), ‖Ω‖ = 1 →
@@ -69,7 +69,8 @@ theorem exists_finiteSetTruncation_schmidtBellPrevector_of_gap
         let ε := min (n ^ (-1000 : ℝ)) (g / 4)
         let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
         (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
-          supportedOperators q (designatedSupport G S₀ r₀ (a i) : Set ι)) ∧
+          ManyBody.supportedOperators (fun _ ↦ Fin q)
+              (designatedSupport G S₀ r₀ (a i) : Finset ι)) ∧
         (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
           truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
         ‖Ht - ∑ i, k i‖ ≤ ε ∧

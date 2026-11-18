@@ -25,6 +25,8 @@ crossing presentations or establish the prescribed four-endpoint braid. See
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS
@@ -73,7 +75,8 @@ theorem IsGIsometric.exists_unitary_torusRouteSteps
       ∀ (horizontal : Bool) (p : X),
         W horizontal p ∈
         Matrix.unitaryGroup (RV horizontal p → Fin d) ℂ ∧
-      regionLocalTerm (R horizontal p) (W horizontal p) ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) (R horizontal p) (W horizontal p) ∈ Matrix.unitaryGroup
+          (X → Fin d) ℂ ∧
       (∀ (k : RV horizontal p → G) (reverse : Bool) (g : G) (u : Edge Γₜ → G)
         (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (R horizontal p) e} → G),
         (if reverse then (W horizontal p).conjTranspose else W horizontal p) *ᵥ
@@ -88,8 +91,9 @@ theorem IsGIsometric.exists_unitary_torusRouteSteps
             (torusRouteStepAssignment horizontal p k (!reverse) g) u))) (R horizontal p)
           (fun f => Fintype.equivFin G (θ f))) ∧
       ∀ (k : RV horizontal p → G) (reverse : Bool) (g : G) (u : Edge Γₜ → G),
-        (if reverse then (regionLocalTerm (R horizontal p) (W horizontal p)).conjTranspose
-          else regionLocalTerm (R horizontal p) (W horizontal p)) *ᵥ
+        (if reverse then
+            (ManyBody.place («X» := fun _ ↦ Fin _) (R horizontal p) (W horizontal p)).conjTranspose
+          else ManyBody.place («X» := fun _ ↦ Fin _) (R horizontal p) (W horizontal p)) *ᵥ
           stateCoeff (groupBondTensor (regularTwistedSite
             (torusIncidentSite (width := width) (height := height) a)
             (regularRegionBondExtension (R horizontal p)

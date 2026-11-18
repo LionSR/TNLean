@@ -30,6 +30,8 @@ open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport PlaneInteraction)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open Classical in
@@ -77,11 +79,11 @@ theorem actualChargeScanRound_globalLowDefectProjection_mass_ge
     [LinearOrder (AdmissibleSupport Λ R)]
     (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
     (hm : 0 < S.m) (hM : 0 < S.M) (s : ℕ)
-    (h : LocalHamiltonian Λ q R J)
+    (h : PlaneInteraction Λ q R)
     (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
     (Ωt : StateSpace Λ q) (e₀ g : ℝ)
     (hΩt : ‖Ωt‖ = 1)
-    (hgap : ((∑ i, S.truncatedEnergyTerm h Ω Δ L i) - (e₀ : ℂ) • 1 -
+    (hgap : ((∑ i, S.truncatedEnergyTerm h Ω J Δ L i) - (e₀ : ℂ) • 1 -
       (g : ℂ) • (1 - Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef)
     (hg : 0 < g) (a : ℝ) (ha : 0 ≤ a)
     (pre : (k : ℕ) → Config k
@@ -99,7 +101,7 @@ theorem actualChargeScanRound_globalLowDefectProjection_mass_ge
     labelProj (subsystemPerm k ι₀ {some none}) ellC *ᵥ vO = vO.ofLp →
     labelProj (subsystemPerm k ι₀ {none}) ellR *ᵥ vO = vO.ofLp →
     1 - ((S.actualChargeScanRound hm hM s n
-        (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p - e₀) / g / τ ≤
+        (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p - e₀) / g / τ ≤
       (star vO ⬝ᵥ
         (Matrix.globalReplicaLowDefectProjection β (Fin d) (Fin d) Ωt.ofLp
           k ellC ellR τ *ᵥ vO)).re := by

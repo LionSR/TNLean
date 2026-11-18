@@ -19,16 +19,18 @@ open Matrix
 
 namespace QuantumCircuit
 
-variable {d : ℕ} {ι : Type*} [Fintype ι]
+variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-- Permuting the sites permutes the support of an operator. Source context:
 Hastings–Koma, arXiv:math-ph/0507008, Appendix A, finite-volume local interactions. -/
-theorem supportedOperators_submatrix_siteEquiv {S : Set ι} (p : Equiv.Perm ι)
-    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d S) :
-    A.submatrix (fun σ ↦ σ ∘ p) (fun σ ↦ σ ∘ p) ∈ supportedOperators d (p '' S) := by
-  induction hA using Submodule.span_induction with
-  | mem A hA =>
-    obtain ⟨m, hm, rfl⟩ := hA
+theorem supportedOperators_submatrix_siteEquiv {S : Finset ι} (p : Equiv.Perm ι)
+    {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
+    A.submatrix (fun σ ↦ σ ∘ p) (fun σ ↦ σ ∘ p) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (S.image p) := by
+  induction hA using ManyBody.supportedOperators_induction with
+  | prod m hm =>
+    rw [prodOp_eq_rectKronecker]
     have heq : (rectKronecker m).submatrix (fun σ ↦ σ ∘ p) (fun σ ↦ σ ∘ p) =
         rectKronecker (fun k ↦ m (p.symm k)) := by
       ext σ τ
@@ -37,9 +39,8 @@ theorem supportedOperators_submatrix_siteEquiv {S : Set ι} (p : Equiv.Perm ι)
         (fun k ↦ m (p.symm k) (σ k) (τ k)) (by simp))
     rw [heq]
     exact rectKronecker_mem_supportedOperators fun k hk ↦ hm _ (by
-      intro h; exact hk ⟨p.symm k, h, p.apply_symm_apply k⟩)
-  | zero => simp
-  | add A B _ _ hA hB => exact Submodule.add_mem _ hA hB
-  | smul c A _ hA => exact Submodule.smul_mem _ c hA
+      intro h; exact hk (Finset.mem_image.mpr ⟨p.symm k, h, p.apply_symm_apply k⟩))
+  | add A B _ _ hA hB => rw [Matrix.submatrix_add]; exact add_mem hA hB
+  | smul c A _ hA => rw [Matrix.submatrix_smul]; exact SMulMemClass.smul_mem c hA
 
 end QuantumCircuit

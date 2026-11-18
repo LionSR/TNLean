@@ -13,7 +13,6 @@ import TNLean.Algebra.BinaryCharacterSum
 import TNLean.Algebra.BinaryProjectionFamily
 import TNLean.Algebra.BlockDiagonalGauge
 import TNLean.Algebra.BlockTriangularWord
-import TNLean.Algebra.BlockingSignParity
 import TNLean.Algebra.CStarSqrtHolder
 import TNLean.Algebra.CStarSqrtLipschitz
 import TNLean.Algebra.CeilScaling
@@ -36,7 +35,6 @@ import TNLean.Algebra.CompactGapBounds
 import TNLean.Algebra.CompactKernelGap
 import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing
-import TNLean.Algebra.ComplexSqrt
 import TNLean.Algebra.ConjClassesConjugation
 import TNLean.Algebra.ConjugateProjectiveRepresentation
 import TNLean.Algebra.ConjugateRegularRepresentation
@@ -83,7 +81,6 @@ import TNLean.Algebra.FlatDensityEntropy
 import TNLean.Algebra.FlatDensityRenyiEntropy
 import TNLean.Algebra.FrequencyCounts
 import TNLean.Algebra.FunctionalWordComparison
-import TNLean.Algebra.GappedGroundState
 import TNLean.Algebra.GaussProjector
 import TNLean.Algebra.GaussRepresentation
 import TNLean.Algebra.GeneralLinearJoined
@@ -126,16 +123,17 @@ import TNLean.Algebra.MatrixEntryNorm
 import TNLean.Algebra.MatrixEntrywiseDeriv
 import TNLean.Algebra.MatrixFactorExchange
 import TNLean.Algebra.MatrixFixedSection
+import TNLean.Algebra.MatrixFrameDeriv
 import TNLean.Algebra.MatrixGramLeftInverse
 import TNLean.Algebra.MatrixHermitianSum
 import TNLean.Algebra.MatrixIdempotentFactorization
 import TNLean.Algebra.MatrixInvolutionConjugation
 import TNLean.Algebra.MatrixKroneckerContraction
 import TNLean.Algebra.MatrixL2Contraction
+import TNLean.Algebra.MatrixLinearODE
 import TNLean.Algebra.MatrixProjectionReindex
 import TNLean.Algebra.MatrixRankOfFactor
 import TNLean.Algebra.MatrixRealignment
-import TNLean.Algebra.MatrixReindexGap
 import TNLean.Algebra.MatrixScalarIdentity
 import TNLean.Algebra.MatrixSingleSpan
 import TNLean.Algebra.MatrixStarEquivSpatial
@@ -166,7 +164,6 @@ import TNLean.Algebra.OrthogonalKernelGap
 import TNLean.Algebra.OrthogonalResolution
 import TNLean.Algebra.OrthogonalSkewNormalForm
 import TNLean.Algebra.OrthogonalSymplecticKroneckerDeterminant
-import TNLean.Algebra.PathGraphDistance
 import TNLean.Algebra.PermutationMatrixCommutation
 import TNLean.Algebra.PiMatrixRepresentation
 import TNLean.Algebra.PiMulSingleInduction
@@ -274,4 +271,5 @@ import TNLean.Algebra.UnitaryVectorSwap
 import TNLean.Algebra.WeightedLowRestriction
 import TNLean.Algebra.WordAlgebra
 import TNLean.Algebra.WordAlgebraNilpotent
+import TNLean.Algebra.ZMod2Representation
 import TNLean.Algebra.ZModSmallDifference

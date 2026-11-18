@@ -48,6 +48,7 @@ configuration-basis identification implicit in this blocking convention.
 -/
 
 open scoped Matrix.Norms.Frobenius
+open Kraus (blockPhysDim blockTensor evalWord_blockTensor)
 
 namespace MPSTensor
 

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.AreaLaw
 import TNLean.MPS.AreaLaw.Hastings.LemmaOneConstant
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Hastings' area law for gapped chains
@@ -55,7 +56,13 @@ recorded in `docs/paper-gaps/hastings07_gaussian_average_exponent.tex`.
   P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 124–144.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (interval ChainInteraction)
+
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -71,19 +78,21 @@ corrections of the module docstring. The printed value of `S_max` at a larger ad
 length is proved in `Hastings/PrintedAreaLawSource.lean`. -/
 theorem exists_regionEntropy_prefix_le (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, Matrix.IsGappedGroundState h.operator E₀ Ω ΔE →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ i : ℕ, Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
         areaLawBound (6 * lemmaOneEndpointLength R J ΔE)
           (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) q := by
   obtain ⟨K, hK0, hF⟩ := exists_projectorFactorization_endpoint R
-  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h E₀ Ω hgs i ↦ ?_⟩
+  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h hh hhJ E₀ Ω hΩ hgap hspan i ↦ ?_⟩
   have hξ0 : 0 < 6 * lemmaOneEndpointLength R J ΔE := by
     rw [lemmaOneEndpointLength_eq]
     exact mul_pos (by norm_num) (mul_pos (by norm_num) (lemmaOneLength_pos R _ 1))
-  refine regionEntropy_prefix_le_of_factorization h hgs hξ0 (le_max_right _ _)
+  refine regionEntropy_prefix_le_of_factorization h hh hhJ hΩ hgap hspan hξ0 (le_max_right _ _)
     (fun c l _ ↦ ?_) i
-  obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hgs c l
+  obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan c l
   exact ⟨OB, OL, OR, hf.mono
     (mul_le_mul_of_nonneg_right (le_max_left _ _) (Real.exp_pos _).le)⟩
 
@@ -129,9 +138,11 @@ theorem exists_regionEntropy_prefix_le_with_log_constant (R : ℕ) :
         Real.log (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) ≤
           a * Real.log (6 * lemmaOneEndpointLength R J ΔE)) ∧
       ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-        ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
+        ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+            (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
         {Ω : EuclideanSpace ℂ (Fin L → Fin q)},
-        Matrix.IsGappedGroundState h.operator E₀ Ω ΔE →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ i : ℕ, Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
           areaLawBound (6 * lemmaOneEndpointLength R J ΔE)
             (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) q := by

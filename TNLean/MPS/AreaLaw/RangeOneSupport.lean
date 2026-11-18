@@ -12,6 +12,8 @@ A nonempty support of diameter at most one is a singleton or a pair of adjacent 
 Consequently a chain of `L` sites has at most `2L` such supports.
 -/
 
+open ManyBody (ChainSupport interval mem_interval ChainInteraction)
+
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
@@ -72,8 +74,9 @@ theorem card_chainSupport_range_one_le (L : ℕ) : Fintype.card (ChainSupport L 
 /-- The operator norm of a range-one chain Hamiltonian is at most `2LJ`.
 This follows from the interaction convention in the one-dimensional note, Section 1,
 `eq:ham`, and the support count above. -/
-theorem ChainHamiltonian.norm_operator_le_of_range_one {L q : ℕ} {J : ℝ}
-    (h : ChainHamiltonian L q 1 J) : ‖h.operator‖ ≤ 2 * L * J := by
+theorem _root_.ManyBody.ChainInteraction.norm_hamiltonian_le_of_range_one {L q : ℕ} {J : ℝ}
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) :
+        ‖h.hamiltonian‖ ≤ 2 * L * J := by
   classical
   by_cases hL : L = 0
   · subst L
@@ -81,11 +84,11 @@ theorem ChainHamiltonian.norm_operator_le_of_range_one {L q : ℕ} {J : ℝ}
       have := card_chainSupport_range_one_le 0
       omega
     let := Fintype.card_eq_zero_iff.mp hcard
-    simp [ChainHamiltonian.operator]
-  · have hJ := h.norm_bound_nonneg ⟨0, by omega⟩
+    simp [ManyBody.Interaction.hamiltonian]
+  · have hJ := h.norm_bound_nonneg hhJ ⟨0, by omega⟩
     calc
-      ‖h.operator‖ ≤ ∑ X, ‖h.term X‖ := norm_sum_le _ _
-      _ ≤ ∑ _ : ChainSupport L 1, J := Finset.sum_le_sum fun X _ ↦ h.norm_le X
+      ‖h.hamiltonian‖ ≤ ∑ X, ‖h.term X‖ := norm_sum_le _ _
+      _ ≤ ∑ _ : ChainSupport L 1, J := Finset.sum_le_sum fun X _ ↦ hhJ X
       _ = (Fintype.card (ChainSupport L 1) : ℝ) * J := by simp
       _ ≤ (2 * L : ℝ) * J :=
         mul_le_mul_of_nonneg_right (by exact_mod_cast card_chainSupport_range_one_le L) hJ

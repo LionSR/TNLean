@@ -31,6 +31,8 @@ allowed only for this interior cut. No parent-Hamiltonian or ground-space assert
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix ComplexOrder
 open Matrix LinearMap
 
@@ -110,11 +112,11 @@ theorem torusClosureEdgeAssignment_eq_one_of_nonseam (g h : G)
   · change torusClosureEdgeAssignment g h (torusRightEdge v) = 1
     rw [torusClosureEdgeAssignment_right]
     change (torusNonseamGraph width height).Adj
-      (Edge.ofAdj (torusGraph_adj_right v.1 v.2)).1.1
-      (Edge.ofAdj (torusGraph_adj_right v.1 v.2)).1.2 at hf
+      (ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 v.2)).1.1
+      (ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 v.2)).1.2 at hf
     by_cases hw : v.1 + 1 = 0
     · have hv : (torusNonseamGraph width height).Adj v (v.1 + 1, v.2) := by
-        rcases Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩
+        rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩
         · simpa only [h1, h2] using hf
         · simpa only [h1, h2] using hf.symm
       exact False.elim (torusNonseamGraph_not_horizontal_wrap Fact.out v hw hv)
@@ -122,11 +124,11 @@ theorem torusClosureEdgeAssignment_eq_one_of_nonseam (g h : G)
   · change torusClosureEdgeAssignment g h (torusUpEdge v) = 1
     rw [torusClosureEdgeAssignment_up]
     change (torusNonseamGraph width height).Adj
-      (Edge.ofAdj (torusGraph_adj_up v.1 v.2)).1.1
-      (Edge.ofAdj (torusGraph_adj_up v.1 v.2)).1.2 at hf
+      (ManyBody.Edge.ofAdj (torusGraph_adj_up v.1 v.2)).1.1
+      (ManyBody.Edge.ofAdj (torusGraph_adj_up v.1 v.2)).1.2 at hf
     by_cases hw : v.2 + 1 = 0
     · have hv : (torusNonseamGraph width height).Adj v (v.1, v.2 + 1) := by
-        rcases Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩
+        rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩
         · simpa only [h1, h2] using hf
         · simpa only [h1, h2] using hf.symm
       exact False.elim (torusNonseamGraph_not_vertical_wrap Fact.out v hw hv)

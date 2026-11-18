@@ -30,18 +30,18 @@ representatives with the same local ground spaces and the same inequivalence.
 Here equivalence allows both a virtual gauge and any nonzero complex scalar.
 The normalization is that of Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.1)--(3.2b), lines 1394--1435. -/
-theorem exists_isPrimitiveMPS_family_of_isNormal
+theorem exists_hasComplementaryFixedPointGap_family_of_isNormal
     (A : ∀ i, MPSTensor d (D i)) (hNormal : ∀ i, Kraus.IsNormal (A i))
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) :
     ∃ (B : ∀ i, MPSTensor d (D i))
       (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ),
-      (∀ i, IsPrimitiveMPS (B i) (ρ i)) ∧ (∀ i, (ρ i).PosDef) ∧
+      (∀ i, Kraus.HasComplementaryFixedPointGap (B i) (ρ i)) ∧ (∀ i, (ρ i).PosDef) ∧
       (∀ i L, groundSpace (A i) L = groundSpace (B i) L) ∧
       (∀ i j, i ≠ j → ∀ h : D j = D i, ¬ GaugePhaseEquiv (h ▸ B j) (B i)) := by
   classical
   choose B ζ ρ hζ hGauge _hmpv hP hρ hGS _hPI _hCGS using
-    fun i ↦ exists_isPrimitiveMPS_gauge_of_isNormal (hNormal i)
+    fun i ↦ exists_hasComplementaryFixedPointGap_gauge_of_isNormal (hNormal i)
   refine ⟨B, ρ, hP, hρ, hGS, fun i j hij h hGP ↦ ?_⟩
   exact hDistinct i j hij h (by
     simpa only [eqRec_eq_cast] using

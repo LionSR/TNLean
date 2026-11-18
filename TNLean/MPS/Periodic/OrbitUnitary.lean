@@ -27,6 +27,7 @@ The source's displayed peripheral root set omits the exponent `p`; see
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

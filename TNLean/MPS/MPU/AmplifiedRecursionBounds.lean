@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.BondRegisterBounds
-import TNLean.Circuit.ExactAmplificationBudget
+import QICLean.Circuit.Gate.ExactAmplificationBudget
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 

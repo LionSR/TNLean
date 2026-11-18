@@ -27,6 +27,8 @@ open Matrix
 open scoped BigOperators
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open ActualTerminals
@@ -42,7 +44,7 @@ theorem source_actualTerminal_preEntropy_bounds_of_truncationEntropyThreshold_le
     (hthr : truncationEntropyThreshold q gap Cvol ≤ n) :
     ∀ (I : Type) [Fintype I] [LinearOrder I] (Λ T : Finset (ℤ × ℤ))
       (hT : T.Nonempty) (S : CollarScan (Site Λ) I),
-    S.n = n → S.graph = domainGraph Λ →
+    S.n = n → S.graph = planeDomainGraph Λ →
     S.depth = (fun x ↦ ambientDepth T hT x.val) →
     0 < S.n → 0 < S.K → S.r₀ ≤ S.D → 1 ≤ S.D → 4 * S.D ≤ S.m →
     ∀ L : ℕ, 8 * S.K * S.m ≤ L →
@@ -97,7 +99,7 @@ theorem eventually_source_actualTerminal_preEntropy_bounds
     ∀ᶠ n : ℕ in atTop,
       ∀ (I : Type) [Fintype I] [LinearOrder I] (Λ T : Finset (ℤ × ℤ))
         (hT : T.Nonempty) (S : CollarScan (Site Λ) I),
-      S.n = n → S.graph = domainGraph Λ →
+      S.n = n → S.graph = planeDomainGraph Λ →
       S.depth = (fun x ↦ ambientDepth T hT x.val) →
       0 < S.n → 0 < S.K → S.r₀ ≤ S.D → 1 ≤ S.D → 4 * S.D ≤ S.m →
       ∀ L : ℕ, 8 * S.K * S.m ≤ L →

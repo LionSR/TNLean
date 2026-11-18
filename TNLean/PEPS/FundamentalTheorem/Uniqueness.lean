@@ -15,6 +15,8 @@ family. Split out of `TNLean.PEPS.FundamentalTheorem` to keep file lengths
 bounded; the existence clause and the gauge-action infrastructure live there.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

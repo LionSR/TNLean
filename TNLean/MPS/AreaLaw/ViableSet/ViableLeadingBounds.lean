@@ -8,6 +8,7 @@ import TNLean.MPS.AreaLaw.ViableSet.GluingBounds
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalEnergy
 import QICLean.Analysis.DensityMaxEigenvector
 import QICLean.Analysis.DominantEigenvectorUniqueness
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Every minimizing boundary state and its top eigenvector
@@ -30,6 +31,8 @@ space. No finite-net cardinality assertion is made; see
 
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -319,7 +322,9 @@ theorem maxEigenvalue_lower_bound_chain_with_objective_slack [NeZero q]
     {D : Finset (Fin L)} (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ ξ μ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
-    (hgs : IsGappedGroundState (HL + K) E₀ Γ Δ) {m : ℕ}
+    (hH : (HL + K).IsHermitian) (hΩ : ‖Γ‖ = 1)
+    (hgap : IsGapped (HL + K) E₀ Δ)
+    (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -348,7 +353,8 @@ theorem maxEigenvalue_lower_bound_chain_with_objective_slack [NeZero q]
       ((CutLeft L q k × CutSite L q k) × CutRight L q k) :=
     WithLp.toLp 2 (WithLp.ofLp Γ ∘ E.symm)
   have hsplit := reindex_gluingCut_eq hHL hK hDA
-  obtain ⟨hΓ, -, hgap⟩ := isGappedGroundState_iff.mp hgs
+  have hΓ := hΩ
+  have hgap := hgap.posSemidef_sub_smul_one hH hΩ hspan
   have hΓ' : ‖Γ'‖ = 1 :=
     ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ E).norm_map Γ).trans hΓ
   have hgap' : (reindex E E (HL + K) - (E₀ : ℂ) • 1 -
@@ -415,20 +421,21 @@ theorem nearby_unit_vector_energy_and_overlap_bounds
 
 /-- For a range-one chain Hamiltonian, perturbing a unit witness by distance at most `ζ`
 costs at most `4 L ζ` in energy and `ζ` in ground-state overlap. -/
-theorem ChainHamiltonian.nearby_unit_vector_energy_and_overlap_bounds
-    {L q : ℕ} (h : ChainHamiltonian L q 1 1)
+theorem _root_.ManyBody.ChainInteraction.nearby_unit_vector_energy_and_overlap_bounds
+    {L q : ℕ} (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     {Γ v v' : EuclideanSpace ℂ (Fin L → Fin q)} {E a ζ : ℝ}
     (hΓ : ‖Γ‖ = 1) (hv : ‖v‖ = 1) (hv' : ‖v'‖ = 1)
-    (hE : (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E)
+    (hE : (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E)
     (ha : a ≤ ‖⟪Γ, v⟫_ℂ‖) (hdist : ‖v' - v‖ ≤ ζ) :
-    (⟪v', toEuclideanLin h.operator v'⟫_ℂ).re ≤ E + 4 * L * ζ ∧
+    (⟪v', toEuclideanLin h.hamiltonian v'⟫_ℂ).re ≤ E + 4 * L * ζ ∧
       a - ζ ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
   obtain ⟨henergy, hoverlap⟩ :=
     TNLean.MPS.AreaLaw.nearby_unit_vector_energy_and_overlap_bounds
-      h.operator hΓ hv hv' hE ha hdist
+      h.hamiltonian hΓ hv hv' hE ha hdist
   refine ⟨henergy.trans ?_, hoverlap⟩
-  have hop : ‖h.operator‖ ≤ 2 * L := by
-    simpa only [mul_one] using h.norm_operator_le_of_range_one
+  have hop : ‖h.hamiltonian‖ ≤ 2 * L := by
+    simpa only [mul_one] using h.norm_hamiltonian_le_of_range_one hh hhJ
   have hζ : 0 ≤ ζ := (norm_nonneg (v' - v)).trans hdist
   nlinarith only [hop, hζ]
 
@@ -518,8 +525,9 @@ theorem gluedVector_phase_invariants {L q k m : ℕ}
 left-supported unit vector.  Its distance from the exact physical witness is the original
 compressed distance, so its range-one energy and ground-state overlap incur only the
 corresponding perturbation losses. -/
-theorem ChainHamiltonian.nearby_glued_vector_bounds
-    {L q k m : ℕ} (h : ChainHamiltonian L q 1 1)
+theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_bounds
+    {L q k m : ℕ} (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΓ : ‖Γ‖ = 1)
     {S : Set (LeftBlockVector L q k)}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
@@ -535,7 +543,7 @@ theorem ChainHamiltonian.nearby_glued_vector_bounds
         ((((1 : Matrix (CutLeft L q k × CutSite L q k)
           (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘
             gluingCut L q k),
-        toEuclideanLin h.operator (WithLp.toLp 2
+        toEuclideanLin h.hamiltonian (WithLp.toLp 2
           ((((1 : Matrix (CutLeft L q k × CutSite L q k)
             (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘
               gluingCut L q k))⟫_ℂ).re ≤ E)
@@ -549,7 +557,7 @@ theorem ChainHamiltonian.nearby_glued_vector_bounds
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u') ∘
           gluingCut L q k)
     ‖v'‖ = 1 ∧ v' ∈ leftSupportSubmodule S ∧
-      (⟪v', toEuclideanLin h.operator v'⟫_ℂ).re ≤ E + 4 * L * ζ ∧
+      (⟪v', toEuclideanLin h.hamiltonian v'⟫_ℂ).re ≤ E + 4 * L * ζ ∧
       a - ζ ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
   classical
   let P := reindex
@@ -586,14 +594,15 @@ theorem ChainHamiltonian.nearby_glued_vector_bounds
       WithLp.toLp 2 ((J *ᵥ WithLp.ofLp u) ∘ gluingCut L q k)‖ ≤ ζ
     rw [norm_glued_vectors_sub_eq W hW u u']
     exact hdist
-  have hbounds := h.nearby_unit_vector_energy_and_overlap_bounds
+  have hbounds := h.nearby_unit_vector_energy_and_overlap_bounds hh hhJ
     hΓ hv hv' hE ha hvdist
   exact ⟨hv', hv'S, hbounds⟩
 
 /-- With the perturbation losses reserved in advance, a nearby compressed numerical vector
 has the original LVV viability bounds `Δ / 12` and `1 / 12`. -/
-theorem ChainHamiltonian.nearby_glued_vector_viable_bounds
-    {L q k m : ℕ} (h : ChainHamiltonian L q 1 1)
+theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_bounds
+    {L q k m : ℕ} (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     {E₀ Δ ζ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΓ : ‖Γ‖ = 1)
     {S : Set (LeftBlockVector L q k)}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
@@ -608,7 +617,7 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_bounds
         ((((1 : Matrix (CutLeft L q k × CutSite L q k)
           (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘
             gluingCut L q k),
-        toEuclideanLin h.operator (WithLp.toLp 2
+        toEuclideanLin h.hamiltonian (WithLp.toLp 2
           ((((1 : Matrix (CutLeft L q k × CutSite L q k)
             (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘
               gluingCut L q k))⟫_ℂ).re ≤ E₀ + Δ / 12 - 4 * L * ζ)
@@ -622,9 +631,9 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_bounds
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u') ∘
           gluingCut L q k)
     ‖v'‖ = 1 ∧ v' ∈ leftSupportSubmodule S ∧
-      (⟪v', toEuclideanLin h.operator v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+      (⟪v', toEuclideanLin h.hamiltonian v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
-  obtain ⟨hv', hv'S, henergy, hoverlap⟩ := h.nearby_glued_vector_bounds
+  obtain ⟨hv', hv'S, henergy, hoverlap⟩ := h.nearby_glued_vector_bounds hh hhJ
     hΓ W hW u u' hu hu' hu'P hE ha hdist
   refine ⟨hv', hv'S, ?_, ?_⟩
   · linarith only [henergy]
@@ -633,16 +642,18 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_bounds
 /-- Viability supplies cut data valid for every feasible global minimizer and every unit top
 eigenvector. Auxiliary library-bond form of LVV13, `algo53.tex`, equation `eq:conv`,
 lines 472–476, Lemma `l:leading`, lines 493–505, and Lemma `l:within`, lines 509–515. -/
-theorem ChainHamiltonian.exists_uniform_leading_bounds_of_isViable
-    (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
+theorem _root_.ManyBody.ChainInteraction.exists_uniform_leading_bounds_of_isViable
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+        (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     {S : Set (LeftBlockVector L q k)}
     (hviable : IsViable Γ (((Δ / 169) ^ 2) / L) S) :
     let : NeZero q := ⟨by omega⟩
@@ -657,7 +668,7 @@ theorem ChainHamiltonian.exists_uniform_leading_bounds_of_isViable
       (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ),
       ‖w‖ = 1 ∧ w ∈ leftSupportSubmodule S ∧
       (cutMatrix w k).rank ≤ D ∧
-      (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √c ∧
+      (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √c ∧
       Wᴴ * W = 1 ∧ m ≤ D ∧
       WithLp.ofLp w ∘ (gluingCut L q k).symm =
         ((1 : Matrix (CutLeft L q k × CutSite L q k)
@@ -687,7 +698,7 @@ theorem ChainHamiltonian.exists_uniform_leading_bounds_of_isViable
             1 / 2 < μ ∧
             (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u = WithLp.ofLp u ∧
             ‖v‖ = 1 ∧ v ∈ leftSupportSubmodule S ∧
-            (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+            (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
             1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
   classical
   let : NeZero q := ⟨by omega⟩
@@ -699,7 +710,8 @@ theorem ChainHamiltonian.exists_uniform_leading_bounds_of_isViable
     (spanProjection S)
   obtain ⟨_, _, w, m, W, x, -, -, -, -, hw, hwS, hwD, hwE, hW, hmD,
       hwx, hxnorm, hxP, -⟩ :=
-    h.exists_boundary_minimizer_leading_vector_of_isViable hpos hL hq hΔ hgs hviable
+    h.exists_boundary_minimizer_leading_vector_of_isViable hh hhJ hpos hL hq hΔ hΩ
+        hgap hspan hviable
   refine ⟨w, m, W, x, hw, hwS, hwD, hwE, hW, hmD,
     hwx, hxnorm, hxP, ?_⟩
   intro X hX σ hσ htr hσP hσX hmin u μ hu huσ hmax
@@ -732,7 +744,7 @@ theorem ChainHamiltonian.exists_uniform_leading_bounds_of_isViable
           rectangularTraceNorm (X - partialTraceFirst ρx) := rectangularTraceNorm_add_le _ _
       _ ≤ 2 * η := by rw [hneg]; linarith only [hσX, hX]
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hgs
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
   have hsqrt : √c = Δ / 169 := Real.sqrt_sq (div_nonneg hΔ.le (by norm_num))
   have hcr : 2 * c ≤ √c := by
     rw [hsqrt]
@@ -751,20 +763,25 @@ theorem ChainHamiltonian.exists_uniform_leading_bounds_of_isViable
   have hgood : 14 * √c < Δ / 12 := by rw [hsqrt]; linarith only [hΔ]
   have h4 : 4 * (6 * √c + ‖B‖ * (2 * η)) < Δ := by
     linarith only [htwo, hgood, hΔ]
-  have hgs' : IsGappedGroundState (HL + B) E₀ Γ Δ := by rw [← hsplit]; exact hgs
+  have hHC : (HL + B).IsHermitian := by rw [← hsplit]; exact
+      (ManyBody.Interaction.isHermitian_hamiltonian hh)
+  have hgapC : IsGapped (HL + B) E₀ Δ := by rw [← hsplit]; exact hgap
+  have hspanC : groundSpace (HL + B) E₀ = Submodule.span ℂ {Γ} := by
+    rw [← hsplit]; exact hspan
   have hwE' : (⟪w, toEuclideanLin (HL + B) w⟫_ℂ).re ≤ E₀ + 6 * √c := by
     rw [← hsplit]
     exact hwE
   obtain ⟨u₀, ν, hu₀, hu₀σ, hν, -, -⟩ :=
     exists_leading_eigenvector_chain (L := L) (q := q) (k := k) (e := 6 * √c) (τ := 2 * η)
-      hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ h4
+      hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ h4
   have hu₀0 : u₀ ≠ 0 := by
     intro hz
     simp only [hz, norm_zero, zero_ne_one] at hu₀
   have hμ : 1 / 2 < μ := hν.trans_le (hmax ν u₀ hu₀0 hu₀σ)
   obtain ⟨huE, huov⟩ :=
     leading_eigenvector_bounds_chain (L := L) (q := q) (k := k) (e := 6 * √c) (τ := 2 * η)
-      hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ h4 u μ hu huσ hμ
+      hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ h4
+      u μ hu huσ hμ
   have hμ0 : (μ : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr (by linarith only [hμ])
   have hQu : (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u =
       WithLp.ofLp u := by
@@ -802,21 +819,23 @@ the combined objective and boundary errors fit in the unused constant margin.  H
 the additive left-energy error and `δ` is the enlargement of the boundary tolerance.  The
 condition `2 * (ξ + ‖B‖ * δ) ≤ Δ / 2028` is exactly the margin between
 `14 * (Δ / 169)` and `Δ / 12`. -/
-theorem ChainHamiltonian.leading_bounds_of_approximate_boundary_solution [NeZero q]
-    (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q)
+theorem _root_.ManyBody.ChainInteraction.leading_bounds_of_approximate_boundary_solution [NeZero q]
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+        (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)} (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -846,9 +865,9 @@ theorem ChainHamiltonian.leading_bounds_of_approximate_boundary_solution [NeZero
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘ gluingCut L q k)
     1 / 2 < μ ∧ (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u = WithLp.ofLp u ∧
       ‖v‖ = 1 ∧ v ∈ leftSupportSubmodule S ∧
-      (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+      (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ ∧
-      (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ +
+      (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ +
         2 * (6 * (Δ / 169) + ξ + ‖B‖ *
           (2 * (((Δ / 169) ^ 2) / (2 * L)) + δ)) ∧
       1 - 2 * (6 * (Δ / 169) + ξ + ‖B‖ *
@@ -881,7 +900,7 @@ theorem ChainHamiltonian.leading_bounds_of_approximate_boundary_solution [NeZero
           rectangularTraceNorm (X - partialTraceFirst ρx) := rectangularTraceNorm_add_le _ _
       _ ≤ 2 * η + δ := by rw [hneg]; linarith only [hσX, hX]
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hgs
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
   have hsqrt : √c = Δ / 169 := Real.sqrt_sq (div_nonneg hΔ.le (by norm_num))
   have hcr : 2 * c ≤ √c := by
     rw [hsqrt]
@@ -905,24 +924,28 @@ theorem ChainHamiltonian.leading_bounds_of_approximate_boundary_solution [NeZero
       _ = Δ / 12 := by rw [hsqrt]; ring
   have h4 : 4 * (6 * √c + ξ + ‖B‖ * (2 * η + δ)) < Δ := by
     nlinarith only [htotal, hΔ]
-  have hgs' : IsGappedGroundState (HL + B) E₀ Γ Δ := by rw [← hsplit]; exact hgs
+  have hHC : (HL + B).IsHermitian := by rw [← hsplit]; exact
+      (ManyBody.Interaction.isHermitian_hamiltonian hh)
+  have hgapC : IsGapped (HL + B) E₀ Δ := by rw [← hsplit]; exact hgap
+  have hspanC : groundSpace (HL + B) E₀ = Submodule.span ℂ {Γ} := by
+    rw [← hsplit]; exact hspan
   have hwE' : (⟪w, toEuclideanLin (HL + B) w⟫_ℂ).re ≤ E₀ + 6 * √c := by
     rw [← hsplit]
     exact hwE
   obtain ⟨u₀, ν, hu₀, hu₀σ, hν, -, -⟩ :=
     exists_leading_eigenvector_chain_with_objective_slack
       (L := L) (q := q) (k := k) (e := 6 * √c) (τ := 2 * η + δ) (ξ := ξ)
-      hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ h4
+      hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ h4
   have hu₀0 : u₀ ≠ 0 := by
     intro hz
     simp only [hz, norm_zero, zero_ne_one] at hu₀
   have hμ : 1 / 2 < μ := hν.trans_le (hmax ν u₀ hu₀0 hu₀σ)
   have hμquant := maxEigenvalue_lower_bound_chain_with_objective_slack
-    hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ hmax
+    hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ hmax
   obtain ⟨huE, huov⟩ :=
     leading_eigenvector_bounds_chain_with_objective_slack
       (L := L) (q := q) (k := k) (e := 6 * √c) (τ := 2 * η + δ) (ξ := ξ)
-      hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ h4
+      hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ h4
       u μ hu huσ hμ
   have hμ0 : (μ : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr (by linarith only [hμ])
   have hQu : (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u =

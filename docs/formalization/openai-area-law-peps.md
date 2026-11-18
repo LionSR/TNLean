@@ -27,14 +27,14 @@ Source: [Theorem 1.1 and Corollary 1.2](https://github.com/openai/math/blob/adc7
 | Fixed integer `R ≥ 0` | `R : ℕ`, quantified before `C` | Includes range zero. |
 | Fixed `J, Δ > 0` | Explicit positivity hypotheses before `∃ C` | No dependence on the physical instance. |
 | A finite `Λ ⊆ ℤ²` | `Λ : Finset (ℤ × ℤ)` | No connectedness, shape, or nonemptiness hypothesis. |
-| The induced nearest-neighbor graph | `domainGraph Λ` | Paths remain within the domain. Holes and disconnected components are allowed. |
+| The induced nearest-neighbor graph | `ManyBody.planeDomainGraph Λ` | Paths remain within the domain. Holes and disconnected components are allowed. |
 | Site space `ℂ^q` | `StateSpace Λ q = EuclideanSpace ℂ (Site Λ → Fin q)` | Exactly `q ^ Λ.card` configuration coordinates. |
-| One term per nonempty support of graph diameter at most `R` | `AdmissibleSupport Λ R` and `LocalHamiltonian.term` | The index is a subtype of finite supports, not a family with unrestricted multiplicity. Zero terms are allowed. |
-| Support on `X` | `QuantumCircuit.supportedOperators q X` | The existing site-operator algebra; `localLift` uses the existing placement `embedOp`. |
+| One term per nonempty support of graph diameter at most `R` | `AdmissibleSupport Λ R` and `ManyBody.PlaneInteraction.term` | The index is a subtype of finite supports, not a family with unrestricted multiplicity. Zero terms are allowed. |
+| Support on `X` | `ManyBody.supportedOperators (fun _ ↦ Fin q) X` | The QICLean site-operator algebra; `localLift` uses the existing placement `embedOp`. |
 | `h_X = h_X*` and `‖h_X‖ ≤ J` | The `hermitian` and `norm_le` fields | The norm is the Euclidean induced operator norm. |
-| `H = ∑_X h_X` | `LocalHamiltonian.operator` | The sum is Hermitian by `operator_isHermitian`. |
-| A unit ground vector at real energy `E₀` | Unit-norm and eigenvector clauses of `IsGappedGroundState` | The positive projector-gap clause forces this eigenvalue to be minimal when `Δ > 0`. The checked equivalence is part of #8739. |
-| Unique ground vector up to phase and `H − E₀I ≥ Δ(I − |Ω⟩⟨Ω|)` | The positive-semidefinite clause of `IsGappedGroundState` | With the unit and eigenvector clauses and `Δ > 0`, this implies a one-dimensional ground eigenspace. The corresponding QICLean theorem is tracked in #8739. No gap for a restriction is assumed. |
+| `H = ∑_X h_X` | `ManyBody.Interaction.hamiltonian` | The sum is Hermitian by `operator_isHermitian`. |
+| A unit ground vector at real energy `E₀` | `‖Ω‖ = 1` and `groundSpace h.operator E₀ = span {Ω}` | For `Δ > 0`, `ManyBody.isGapped_and_groundSpace_eq_span_iff` identifies these hypotheses with the printed eigen-equation and projector-gap inequality. |
+| Unique ground vector up to phase and `H − E₀I ≥ Δ(I − |Ω⟩⟨Ω|)` | `ManyBody.IsGapped h.operator E₀ Δ` with `groundSpace h.operator E₀ = span {Ω}` | For `Δ > 0` the QICLean theorem `ManyBody.isGapped_and_groundSpace_eq_span_iff` is the equivalence with the printed inequality. No gap for a restriction is assumed. |
 | Any `A ⊆ Λ` | `A : Finset (Site Λ)` after all physical data | Includes empty, full, and disconnected cuts. |
 | `∂Λ A` consists of unordered crossing edges | `edgeBoundary Λ A : Finset (Sym2 (Site Λ))` | Each edge occurs once; empty and full cuts have empty boundary. |
 | `ρ_A = Tr_(Λ∖A) |Ω⟩⟨Ω|` | `reducedState` | Uses `Matrix.partialTraceRight` after Mathlib's configuration splitting. |
@@ -64,9 +64,9 @@ Source: [Theorem 1.1](https://github.com/openai/math/blob/adc7f1241b42e322a64518
 |---|---|---|
 | Fixed `q ≥ 2`, `J, Δ > 0` | Parameters before `∃ C c` in `PolynomialPEPSApproximation` | Constants depend only on these parameters. |
 | Every open `L × L` grid, `L ≥ 2` | `squareLatticeGraph L L` | No periodic edges or extra routing vertices. |
-| One supported term per site and edge, norm at most `J` | `SquareHamiltonian.siteTerm`, `edgeTerm`, support and norm fields | Individual summands are not required to be Hermitian. |
-| Hermitian total `H` | `SquareHamiltonian.hermitian` | Refers to the sum of the site terms plus the sum of the edge terms. |
-| Unique unit ground vector and full-system projector gap | `SquareHamiltonian.IsGappedGroundState` | Same coordinates and operator inequality as above; equivalences belong to #8739. |
+| One supported term per site and edge, norm at most `J` | `h : ManyBody.SquareInteraction L q` (its `term` and `mem`) with the hypothesis `∀ i, ‖h.term i‖ ≤ J` | Individual summands are not required to be Hermitian. |
+| Hermitian total `H` | the hypothesis `h.hamiltonian.IsHermitian` | Refers to the sum of the site terms plus the sum of the edge terms. |
+| Unique unit ground vector and full-system projector gap | `‖Ω‖ = 1`, `ManyBody.IsGapped h.hamiltonian E₀ Δ` and `ManyBody.groundSpace h.hamiltonian E₀ = span {Ω}` in `IsSquareGroundState` | Same coordinates; for `Δ > 0`, `ManyBody.isGapped_and_groundSpace_eq_span_iff` identifies these conditions with the printed operator inequality. |
 | PEPS on the same grid | `A : Tensor (squareLatticeGraph L L) q` | Uses TNLean's existing edge-dependent tensor family. |
 | Positive bond dimensions and `Dmax ≤ C L^c` | Both universal edge clauses of `HasPEPSApproximation` | Each original edge is bounded; dimensions need not be equal. |
 | Nonzero contraction `Φ` | `pepsVector A ≠ 0` | Nonvanishing is required before normalization. |
@@ -197,9 +197,9 @@ hypothesis to the printed one.
 
 | Appendix A statement | Formal statement | Status on `main` |
 |---|---|---|
-| Model: domain, range-`R` Hermitian terms, unit ground vector with projector gap, natural logarithms | `LocalHamiltonian`, `IsGappedGroundState`, `regionalEntropy`; uniqueness by `Matrix.IsGappedGroundState.eigenspace_eq_span` | Definitions; uniqueness proved. |
+| Model: domain, range-`R` Hermitian terms, unit ground vector with projector gap, natural logarithms | `ManyBody.PlaneInteraction`, `ManyBody.IsGapped` with `groundSpace = span {Ω}`, `regionalEntropy`; equivalence with the projector gap by `ManyBody.isGapped_and_groundSpace_eq_span_iff` | Definitions; equivalence proved. |
 | Area-law Theorem 1.1 and Corollary 1.2 | `UniformAreaLaw`, `RectangularEntropyAreaLaw` | Proved (`uniformAreaLaw`, `rectangularEntropyAreaLaw`, `uniformAreaLaw_vertex_boundary_bounds`). |
-| Proposition 2.1 at `Γ = Λ_L`, `R = 1` | `SquareEntropyAreaLaw`, `UniformAreaLaw.squareEntropyAreaLaw`, `RectangularEntropyAreaLaw.squareEntropyAreaLaw`, `SquareHamiltonian.sum_hermitianTerm` | Proved (`AreaLaw.squareEntropyAreaLaw`). |
+| Proposition 2.1 at `Γ = Λ_L`, `R = 1` | `SquareEntropyAreaLaw`, `UniformAreaLaw.squareEntropyAreaLaw`, `RectangularEntropyAreaLaw.squareEntropyAreaLaw`, `ManyBody.Interaction.hamiltonian_hermitianPart` | Proved (`AreaLaw.squareEntropyAreaLaw`). |
 | Positive replacement (area-law Proposition 4.3) | `exists_latticePositiveConstraints`, `card_anchor_fiber_le` | Proved; constants depend on `p, R, J, Δ` only, and `J ≥ 0` suffices. |
 | Template (Definition 9.3) | `Geometry.Template`, `Template.IsSeparated` | Definition. Polygons are read as nondegenerate ([paper-gap note](../paper-gaps/arealaw2d_nondegenerate_templates.tex)). |
 | Sublinear collar bound (Proposition 9.6) | `SublinearCollarBound`, `sublinearCollarBound_real` | Proved for every real `D₀ > 2R + 10` and `C_tpl ≥ 24`. |

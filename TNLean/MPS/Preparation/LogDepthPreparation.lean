@@ -44,13 +44,14 @@ normal tensors at small `N`, and holds for every `N ≥ N₀`. Documented in
 
 The tensor is not assumed to be in the gauge of eq. (5) of the source: a normal tensor is brought
 into it by a gauge transformation and a rescaling
-(`MPSTensor.exists_isPrimitiveMPS_gauge_of_isNormal`), which change the normalized state
-`|φ_N⟩` only by a phase.
+(`MPSTensor.exists_hasComplementaryFixedPointGap_gauge_of_isNormal`), which change the normalized
+state `|φ_N⟩` only by a phase.
 -/
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
+open Kraus (blockTensor)
 
 namespace MPSPreparation
 

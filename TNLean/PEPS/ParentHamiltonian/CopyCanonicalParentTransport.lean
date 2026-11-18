@@ -19,6 +19,8 @@ Source: SCP10, arXiv:1001.3807, Theorem 5.7 and Section 7,
 lines 2977–3019, with arbitrary positive block multiplicities.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix BigOperators
 namespace TNLean.PEPS

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.PairProduct
 import TNLean.Circuit.SiteOperators
-import TNLean.Circuit.Gates.TwoLevel
+import QICLean.Circuit.Gate.Controlled
 
 /-!
 # Controlled single-site operations
@@ -14,14 +14,11 @@ On a finite set of sites `ι`, the operation "apply `u` at the site `t` when the
 are in the configuration `c`" is `C(p, U) = p U + (1 - p)`, where `p` is the projection onto
 the configurations agreeing with `c` on `S` and `U = u` at `t`. This file develops the algebra
 of these operations used to write a unitary on a constant number of sites as a product of
-two-site gates:
-
-* in any ring, for commuting idempotents `p₁`, `p₂` and invertible `v`, `w` commuting with
-  them, `C(p₁ p₂, v w v⁻¹ w⁻¹) = C(p₁, v) C(p₂, w) C(p₁, v⁻¹) C(p₂, w⁻¹)`
-  (`QuantumCircuit.ctrlElem_commutator`), which lowers the number of control sites by one;
-* the controlled operators on a finite set of sites, with their supports and unitarity; the
-  projections and single-site operators they are built from are in
-  `TNLean.Circuit.SiteOperators`.
+two-site gates: the controlled operators on a finite set of sites, with their supports and
+unitarity. The projections and single-site operators they are built from are in
+`TNLean.Circuit.SiteOperators`. The identities of controlled elements in any ring, among them
+the commutator identity `QuantumCircuit.ctrlElem_commutator` that lowers the number of control
+sites by one, are in `QICLean.Circuit.Gate.Controlled`.
 
 The decomposition of gates acting on a constant number of sites into two-site gates is the
 step "can be further expressed with a low-depth circuit of local gates" of arXiv:2307.01696
@@ -32,95 +29,6 @@ open Matrix
 open scoped BigOperators
 
 namespace QuantumCircuit
-
-/-! ### Controlled elements of a ring -/
-
-section Ring
-
-variable {R : Type*} [Ring R]
-
-/-- The controlled element `C(p, x) = p x + (1 - p)`. -/
-def ctrlElem (p x : R) : R := p * x + (1 - p)
-
-theorem ctrlElem_one (p : R) : ctrlElem p 1 = 1 := by
-  simp [ctrlElem]
-
-theorem ctrlElem_ctrlElem (p₁ p₂ w : R) :
-    ctrlElem p₁ (ctrlElem p₂ w) = ctrlElem (p₁ * p₂) w := by
-  simp only [ctrlElem]; noncomm_ring
-
-/-- For `p` idempotent and commuting with `x`, `C(p, x) C(p, y) = C(p, x y)`. -/
-theorem ctrlElem_mul {p x y : R} (hp : IsIdempotentElem p) (hx : Commute p x) :
-    ctrlElem p x * ctrlElem p y = ctrlElem p (x * y) := by
-  have h1 : p * x * (p * y) = p * (x * y) := by
-    rw [mul_assoc, ← mul_assoc x p y, ← hx.eq, mul_assoc, ← mul_assoc p p, hp.eq]
-  have h2 : p * x * (1 - p) = 0 := by
-    rw [mul_assoc, mul_sub, mul_one, ← hx.eq, mul_sub, ← mul_assoc p p x, hp.eq, sub_self]
-  have h3 : (1 - p) * (p * y) = 0 := by
-    rw [← mul_assoc, hp.one_sub_mul_self, zero_mul]
-  have h4 : (1 - p) * (1 - p) = 1 - p := by
-    rw [sub_mul, one_mul, hp.mul_one_sub_self, sub_zero]
-  calc ctrlElem p x * ctrlElem p y
-      = p * x * (p * y) + p * x * (1 - p) + (1 - p) * (p * y) + (1 - p) * (1 - p) := by
-        simp only [ctrlElem]; noncomm_ring
-    _ = ctrlElem p (x * y) := by rw [h1, h2, h3, h4, ctrlElem]; abel
-
-/-- Conjugating a controlled element by an invertible element commuting with the control. -/
-theorem conj_ctrlElem {p v v' : R} (w : R) (hv : Commute p v) (hvv : v * v' = 1) :
-    v * ctrlElem p w * v' = ctrlElem p (v * w * v') := by
-  have h : p * v * v' = p := by rw [mul_assoc, hvv, mul_one]
-  calc v * ctrlElem p w * v' = v * p * w * v' + v * v' - v * p * v' := by
-        simp only [ctrlElem]; noncomm_ring
-    _ = ctrlElem p (v * w * v') := by
-        rw [← hv.eq, h, hvv, ctrlElem]; noncomm_ring
-
-theorem commute_ctrlElem {p q x : R} (hpq : Commute p q) (hpx : Commute p x) :
-    Commute p (ctrlElem q x) :=
-  (hpq.mul_right hpx).add_right ((Commute.one_right p).sub_right hpq)
-
-/-- **Controlled commutators.** For commuting idempotents `p₁`, `p₂` and elements `v`, `w`
-with right inverses `v'`, `w'`, where `p₁` commutes with `v`, `w` and `p₂` with `v`, `v'`, `w`,
-`C(p₁ p₂, v w v' w') = C(p₁, v) C(p₂, w) C(p₁, v') C(p₂, w')`. -/
-theorem ctrlElem_commutator {p₁ p₂ v v' w w' : R} (hp₁ : IsIdempotentElem p₁)
-    (hp₂ : IsIdempotentElem p₂) (h12 : Commute p₁ p₂) (h1v : Commute p₁ v)
-    (h1w : Commute p₁ w) (h2v : Commute p₂ v) (h2v' : Commute p₂ v')
-    (h2w : Commute p₂ w) (hvv : v * v' = 1) (hww : w * w' = 1) :
-    ctrlElem p₁ v * ctrlElem p₂ w * ctrlElem p₁ v' * ctrlElem p₂ w' =
-      ctrlElem (p₁ * p₂) (v * w * v' * w') := by
-  set A := ctrlElem p₁ v
-  set A' := ctrlElem p₁ v'
-  have hAA : A * A' = 1 := by rw [ctrlElem_mul hp₁ h1v, hvv, ctrlElem_one]
-  have h2A : Commute p₂ A := commute_ctrlElem h12.symm h2v
-  have h2A' : Commute p₂ A' := commute_ctrlElem h12.symm h2v'
-  -- `A w A' = p₁ (v w v') + (1 - p₁) w`.
-  have hAw : A * w * A' = p₁ * (v * w * v') + (1 - p₁) * w := by
-    have e1 : p₁ * v * w * (p₁ * v') = p₁ * (v * w * v') := by
-      rw [mul_assoc (p₁ * v) w, ← mul_assoc w p₁, ← h1w.eq, mul_assoc p₁ w v', ← mul_assoc,
-        mul_assoc p₁ v p₁, ← h1v.eq, ← mul_assoc p₁ p₁, hp₁.eq]
-      simp only [mul_assoc]
-    have e2 : p₁ * v * w * (1 - p₁) = 0 := by
-      rw [mul_sub, mul_one, mul_assoc (p₁ * v) w p₁, ← h1w.eq, ← mul_assoc, mul_assoc p₁ v p₁,
-        ← h1v.eq, ← mul_assoc p₁ p₁, hp₁.eq, sub_self]
-    have e3 : (1 - p₁) * w * (p₁ * v') = 0 := by
-      rw [mul_assoc (1 - p₁) w, ← mul_assoc w p₁, ← h1w.eq, mul_assoc, ← mul_assoc (1 - p₁),
-        hp₁.one_sub_mul_self, zero_mul]
-    have e4 : (1 - p₁) * w * (1 - p₁) = (1 - p₁) * w := by
-      rw [mul_assoc, mul_sub, mul_one, ← h1w.eq, mul_sub, ← mul_assoc (1 - p₁) p₁ w,
-        hp₁.one_sub_mul_self, zero_mul, sub_zero]
-    calc A * w * A' = p₁ * v * w * (p₁ * v') + p₁ * v * w * (1 - p₁) +
-          (1 - p₁) * w * (p₁ * v') + (1 - p₁) * w * (1 - p₁) := by
-          simp only [A, A', ctrlElem]; noncomm_ring
-      _ = p₁ * (v * w * v') + (1 - p₁) * w := by rw [e1, e2, e3, e4]; abel
-  have hAwA : A * w * A' * w' = ctrlElem p₁ (v * w * v' * w') := by
-    rw [hAw, add_mul, mul_assoc (1 - p₁), hww, mul_one, mul_assoc p₁, ctrlElem]
-  have h2u : Commute p₂ (A * w * A') := (h2A.mul_right h2w).mul_right h2A'
-  calc A * ctrlElem p₂ w * A' * ctrlElem p₂ w'
-      = ctrlElem p₂ (A * w * A') * ctrlElem p₂ w' := by rw [conj_ctrlElem w h2A hAA]
-    _ = ctrlElem p₂ (ctrlElem p₁ (v * w * v' * w')) := by
-        rw [ctrlElem_mul hp₂ h2u, hAwA]
-    _ = ctrlElem (p₁ * p₂) (v * w * v' * w') := by rw [ctrlElem_ctrlElem, h12.eq]
-
-end Ring
 
 /-! ### Controlled operators on sites -/
 
@@ -163,14 +71,14 @@ theorem ctrlOp_mem_unitary {S : Finset ι} {t : ι} (ht : t ∉ S) (c : ι → F
 
 theorem ctrlOp_mem_supportedOperators (S : Finset ι) (c : ι → Fin d) (t : ι)
     (u : Matrix (Fin d) (Fin d) ℂ) :
-    ctrlOp S c t u ∈ supportedOperators d (insert t (S : Set ι)) := by
-  have hp := supportedOperators_mono (Set.subset_insert t (S : Set ι))
+    ctrlOp S c t u ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (insert t S) := by
+  have hp := ManyBody.supportedOperators_mono (Finset.subset_insert t S)
     (ctrlProj_mem_supportedOperators (d := d) S c)
-  have hs := supportedOperators_mono (Set.singleton_subset_iff.mpr
-    (Set.mem_insert t (S : Set ι)))
+  have hs := ManyBody.supportedOperators_mono
+      (Finset.singleton_subset_iff.mpr (Finset.mem_insert_self t S))
     (siteOp_mem_supportedOperators (d := d) t u)
-  exact Submodule.add_mem _ (mul_mem_supportedOperators hp hs)
-    (Submodule.sub_mem _ (one_mem_supportedOperators _) hp)
+  exact add_mem (mul_mem hp hs)
+    (sub_mem (one_mem (ManyBody.supportedOperators _ _)) hp)
 
 /-- **Controlled commutator on the sites.** Removing one control site `s` from the controls of
 a commutator `v w v† w†` at the site `t`. -/

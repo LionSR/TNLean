@@ -36,6 +36,7 @@ Positive blocking preserves the full predicate `IsBNTCanonicalForm`.
 
 open scoped Matrix BigOperators
 open Filter
+open Kraus (blockPhysDim length_wordOfBlock evalWord_blockTensor)
 
 namespace MPSTensor.SectorDecomposition
 
@@ -144,7 +145,7 @@ noncomputable def blockTensor (P : SectorDecomposition d) (p : ℕ) :
     SectorDecomposition (blockPhysDim d p) where
   basisCount := P.basisCount
   basisDim := P.basisDim
-  basis := fun j ↦ MPSTensor.blockTensor (P.basis j) p
+  basis := fun j ↦ Kraus.blockTensor (P.basis j) p
   sectors :=
     { copies := P.copies
       copies_pos := P.copies_pos
@@ -154,7 +155,7 @@ noncomputable def blockTensor (P : SectorDecomposition d) (p : ℕ) :
 @[simp]
 theorem blockTensor_basis (P : SectorDecomposition d) (p : ℕ)
     (j : Fin P.basisCount) :
-    (P.blockTensor p).basis j = MPSTensor.blockTensor (P.basis j) p :=
+    (P.blockTensor p).basis j = Kraus.blockTensor (P.basis j) p :=
   rfl
 
 @[simp]
@@ -192,7 +193,7 @@ theorem blockTensor_flatWeight (P : SectorDecomposition d) (p : ℕ)
 @[simp]
 theorem blockTensor_flatBasis (P : SectorDecomposition d) (p : ℕ)
     (s : Fin P.totalCopies) :
-    (P.blockTensor p).flatBasis s = MPSTensor.blockTensor (P.flatBasis s) p :=
+    (P.blockTensor p).flatBasis s = Kraus.blockTensor (P.flatBasis s) p :=
   rfl
 
 /-- Blocking a block-diagonal sector tensor is exactly the block-diagonal
@@ -200,12 +201,12 @@ tensor of the blocked representatives with powered copy weights.
 
 Source: arXiv:1606.00608, canonical-form blocking at lines 317--345. -/
 theorem blockTensor_toTensor (P : SectorDecomposition d) (p : ℕ) :
-    MPSTensor.blockTensor P.toTensor p = (P.blockTensor p).toTensor := by
-  change MPSTensor.blockTensor
+    Kraus.blockTensor P.toTensor p = (P.blockTensor p).toTensor := by
+  change Kraus.blockTensor
       (toTensorFromBlocks (d := d) P.flatWeight P.flatBasis) p =
     toTensorFromBlocks (d := blockPhysDim d p)
       (fun s ↦ (P.flatWeight s) ^ p)
-      (fun s ↦ MPSTensor.blockTensor (P.flatBasis s) p)
+      (fun s ↦ Kraus.blockTensor (P.flatBasis s) p)
   funext i
   change Kraus.evalWord
       (toTensorFromBlocks (d := d) P.flatWeight P.flatBasis)
@@ -241,14 +242,14 @@ The two-layer expansion is arXiv:1606.00608, `eq:II_ABasicTensors` and
 planned formal proof of Appendix C.3, Lemma L, lines 1835--1858. -/
 theorem sameMPV₂_blockTensor_toTensor (P : SectorDecomposition d) (p : ℕ) :
     SameMPV₂
-      (MPSTensor.blockTensor P.toTensor p)
+      (Kraus.blockTensor P.toTensor p)
       (P.blockTensor p).toTensor := by
   change SameMPV₂
-    (MPSTensor.blockTensor
+    (Kraus.blockTensor
       (toTensorFromBlocks (d := d) P.flatWeight P.flatBasis) p)
     (toTensorFromBlocks (d := blockPhysDim d p)
       (fun s ↦ (P.flatWeight s) ^ p)
-      (fun s ↦ MPSTensor.blockTensor (P.flatBasis s) p))
+      (fun s ↦ Kraus.blockTensor (P.flatBasis s) p))
   exact sameMPV₂_blockTensor_toTensorFromBlocks P.flatWeight P.flatBasis p
 
 /-- Positive physical blocking preserves BNT canonical form.
@@ -280,12 +281,12 @@ theorem IsBNTCanonicalForm.blockTensor
     refine ⟨N₀, ?_⟩
     intro N hN
     change LinearIndependent ℂ (fun j : Fin P.basisCount ↦
-      mpvState (MPSTensor.blockTensor (P.basis j) p) N)
+      mpvState (Kraus.blockTensor (P.basis j) p) N)
     let e := blockedConfigEquiv d N p
     apply linearIndependent_mpvState_of_configEquiv e
-      (fun j ↦ MPSTensor.blockTensor (P.basis j) p) P.basis
+      (fun j ↦ Kraus.blockTensor (P.basis j) p) P.basis
     · intro j σ
-      change mpv (MPSTensor.blockTensor (P.basis j) p) (e.symm σ) =
+      change mpv (Kraus.blockTensor (P.basis j) p) (e.symm σ) =
         mpv (P.basis j) σ
       simp only [mpv, MPSTensor.coeff, evalWord_blockTensor]
       rw [← ofFn_blockedConfigEquiv d N p (e.symm σ)]
@@ -311,8 +312,8 @@ theorem IsBNTCanonicalForm.blockTensor
     exact leftCanonical_blockTensor (P.basis j) p (hCF.basis_left_canonical j)
   · change ∀ j : Fin P.basisCount,
       Tendsto (fun N : ℕ ↦ mpvOverlap
-        (MPSTensor.blockTensor (P.basis j) p)
-        (MPSTensor.blockTensor (P.basis j) p) N) atTop (nhds 1)
+        (Kraus.blockTensor (P.basis j) p)
+        (Kraus.blockTensor (P.basis j) p) N) atTop (nhds 1)
     intro j
     let : NeZero (P.basisDim j) := ⟨(hCF.basis_dim_pos j).ne'⟩
     have hMul : Tendsto (fun a : ℕ ↦ a * p) atTop atTop := by

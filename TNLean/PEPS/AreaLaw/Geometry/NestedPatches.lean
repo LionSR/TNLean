@@ -33,6 +33,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Geometry
 
 open scoped BigOperators
@@ -92,7 +94,7 @@ theorem edgeBoundary_support_disjoint_of_add_one_le {Λ : Finset (ℤ × ℤ)}
     Disjoint e.toFinset (closedSquareSample Λ c s) := by
   classical
   obtain ⟨hedge, x, hx, y, hy, rfl⟩ := Finset.mem_filter.mp he
-  have hxy : (domainGraph Λ).Adj x y := by simpa using hedge
+  have hxy : (planeDomainGraph Λ).Adj x y := by simpa using hedge
   rw [Sym2.toFinset_mk_eq, Finset.disjoint_left]
   intro z hz hzs
   simp only [Finset.mem_insert, Finset.mem_singleton] at hz
@@ -107,7 +109,7 @@ theorem edgeBoundary_support_subset_of_add_one_le {Λ : Finset (ℤ × ℤ)}
     e.toFinset ⊆ closedSquareSample Λ c s := by
   classical
   obtain ⟨hedge, x, hx, y, hy, rfl⟩ := Finset.mem_filter.mp he
-  have hxy : (domainGraph Λ).Adj x y := by simpa using hedge
+  have hxy : (planeDomainGraph Λ).Adj x y := by simpa using hedge
   rw [Sym2.toFinset_mk_eq]
   simp only [Finset.insert_subset_iff, Finset.singleton_subset_iff]
   exact ⟨closedSquareSample_mono Λ c (by linarith) hx,

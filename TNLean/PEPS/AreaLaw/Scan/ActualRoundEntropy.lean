@@ -30,6 +30,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph PlaneInteraction)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open TensorPower TensorPower.ReplicaTransport
@@ -174,9 +176,10 @@ theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBou
     ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
       [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
       (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-      (_h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+      (_h : PlaneInteraction Λ q R) (_ : ∀ X, (_h.term X).IsHermitian) (_ : ∀ X, ‖_h.term X‖ ≤ J)
+          (Ω : StateSpace Λ q)
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
-      S.graph = domainGraph Λ →
+      S.graph = planeDomainGraph Λ →
       S.depth = (fun x => ambientDepth T hT x.val) →
       (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
       ∀ {L : ℕ} (hn : 0 < S.n), S.r₀ ≤ S.D →
@@ -205,7 +208,7 @@ theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBou
               (2 * S.n * S.m : ℕ) *
                 (Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k) := by
   classical
-  intro Λ T q R J Δ _ _ aux _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
+  intro Λ T q R J Δ _ _ aux _ h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ
     L hn hr hDpos hD hL hC hrows hclear a ha haℓ
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
@@ -213,7 +216,7 @@ theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBou
   let D := S.actualRoundData hm hM
   let ℓ := transportLogDimBound q S.r₀
   obtain ⟨β, rem, Cβ, hCβ, hβ0, hrem0, hβ, hrem, hround⟩ :=
-    actualRounds_transport_domainGraph_of_finiteFamilyTransportBound htransport aux h Ω S hT
+    actualRounds_transport_domainGraph_of_finiteFamilyTransportBound htransport aux h hh hhJ Ω S hT
       hgraph hdepth hanchor hΔ hΩ hn hr hDpos hD hL hC
       hrows hclear ha haℓ
   refine ⟨β, Cβ, hCβ, hβ0, hβ, ?_⟩
@@ -263,9 +266,10 @@ theorem actualRounds_entropy_integral_le_domainGraph :
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-        (_h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+        (_h : PlaneInteraction Λ q R) (_ : ∀ X, (_h.term X).IsHermitian) (_ : ∀ X, ‖_h.term X‖ ≤ J)
+            (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
-        S.graph = domainGraph Λ →
+        S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
         ∀ {L : ℕ} (hn : 0 < S.n), S.r₀ ≤ S.D →

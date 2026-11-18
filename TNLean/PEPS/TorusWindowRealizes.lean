@@ -67,6 +67,8 @@ operation by the Lemma 5 converse (`paper_normal.tex`, lines 2368--2444).
   `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Circuit.SupportedOperators
+import QICLean.Entropy.RegionUnion
 
 /-!
 # Operators on a subset of the sites
@@ -203,55 +204,32 @@ theorem embedOp_rectKronecker {e : κ → ι} (he : Function.Injective e)
   simp only [h1, h2, Function.comp_apply]
   split_ifs <;> simp
 
-omit [DecidableEq ι] in
-/-- Every operator acts on the set of all sites. -/
-theorem mem_supportedOperators_univ (X : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
-    X ∈ supportedOperators d (Set.univ : Set ι) := by
-  classical
-  rw [matrix_eq_sum_single X]
-  refine Submodule.sum_mem _ fun a _ => Submodule.sum_mem _ fun b _ => ?_
-  have : single a b (X a b) = X a b • rectKronecker fun i => single (a i) (b i) (1 : ℂ) := by
-    ext x y
-    simp only [Matrix.smul_apply, rectKronecker_apply, single_apply, smul_eq_mul]
-    by_cases hx : a = x
-    · by_cases hy : b = y
-      · subst hx hy; simp
-      · obtain ⟨i, hi⟩ := Function.ne_iff.mp hy
-        rw [Finset.prod_eq_zero (Finset.mem_univ i) (by simp [hi])]
-        simp [hy]
-    · obtain ⟨i, hi⟩ := Function.ne_iff.mp hx
-      rw [Finset.prod_eq_zero (Finset.mem_univ i) (by simp [hi])]
-      simp [hx]
-  rw [this]
-  exact Submodule.smul_mem _ _ (rectKronecker_mem_supportedOperators fun i hi => absurd trivial hi)
-
-omit [DecidableEq κ] in
 /-- An operator acting on the sites `S` of the placed sites acts, as `X ⊗ 1`, on the sites
 `e '' S`. -/
 theorem embedOp_mem_supportedOperators_image {e : κ → ι} (he : Function.Injective e)
-    {S : Set κ} {X : Matrix (κ → Fin d) (κ → Fin d) ℂ}
-    (hX : X ∈ supportedOperators d S) :
-    embedOp e X ∈ supportedOperators d (e '' S) := by
-  induction hX using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨A, hA, rfl⟩ := hx
+    {S : Finset κ} {X : Matrix (κ → Fin d) (κ → Fin d) ℂ}
+    (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
+    embedOp e X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image e) := by
+  induction hX using ManyBody.supportedOperators_induction with
+  | prod A hA =>
+    rw [prodOp_eq_rectKronecker]
     rw [embedOp_rectKronecker he]
     refine rectKronecker_mem_supportedOperators fun i hi => ?_
     by_cases h : ∃ j, e j = i
     · obtain ⟨j, rfl⟩ := h
       rw [he.extend_apply]
-      exact hA j fun hj => hi ⟨j, hj, rfl⟩
+      exact hA j fun hj => hi (Finset.mem_image_of_mem e hj)
     · rw [Function.extend_apply' _ _ _ h, Pi.one_apply]
-  | zero => rw [embedOp_zero]; exact Submodule.zero_mem _
-  | add x y _ _ hx hy => rw [embedOp_add]; exact Submodule.add_mem _ hx hy
-  | smul c x _ hx => rw [embedOp_smul]; exact Submodule.smul_mem _ _ hx
+  | add x y _ _ hx hy => rw [embedOp_add]; exact add_mem hx hy
+  | smul c x _ hx => rw [embedOp_smul]; exact SMulMemClass.smul_mem _ hx
 
 omit [DecidableEq κ] in
 /-- `X ⊗ 1` acts on the range of `e`. -/
 theorem embedOp_mem_supportedOperators {e : κ → ι} (he : Function.Injective e)
     (X : Matrix (κ → Fin d) (κ → Fin d) ℂ) :
-    embedOp e X ∈ supportedOperators d (Set.range e) := by
-  simpa using embedOp_mem_supportedOperators_image he (mem_supportedOperators_univ X)
+    embedOp e X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.image e) := by
+  classical
+  simpa using embedOp_mem_supportedOperators_image he (X := X) (S := Finset.univ) (by simp)
 
 /-! ### Placed operators on placed operators -/
 
@@ -343,5 +321,21 @@ theorem embedOp_mulVec_apply {e : κ → ι} (he : Function.Injective e)
   by_cases h : AgreeOff e x z
   · rw [ite_eq_left h, ite_eq_left h, ← eq_extend_of_agreeOff he h]
   · rw [ite_eq_right h, ite_eq_right h, zero_mul]
+
+/-- The placement `K ⊗ 1` of a regional matrix is its embedding along the inclusion of
+the region. This identifies the tensor-factor and matrix-entry descriptions of a supported
+operator, including an empty region. -/
+theorem place_eq_embedOp {q : ℕ} (S : Finset ι)
+    (K : Matrix (S → Fin q) (S → Fin q) ℂ) :
+    ManyBody.place (X := fun _ ↦ Fin q) S K = embedOp (Subtype.val : S → ι) K := by
+  ext σ τ
+  rw [ManyBody.place_apply, embedOp_apply]
+  congr 1
+  simp only [AgreeOff, eq_iff_iff]
+  constructor
+  · intro h v hv
+    exact h v fun hvS ↦ hv ⟨v, hvS⟩ rfl
+  · intro h v hv
+    exact h v fun w hw ↦ hv (hw ▸ w.2)
 
 end QuantumCircuit

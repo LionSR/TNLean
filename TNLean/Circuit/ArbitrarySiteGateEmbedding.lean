@@ -49,6 +49,7 @@ theorem IsPairProduct.embedOp_injective (hd : 0 < d) {e : Fin m → Fin n}
     omega
   apply isPairProduct_of_mem_supportedOperators_pair hd (fun h ↦ hne (he h))
     (embedOp_mem_unitary he hu)
-  simpa only [Set.image_pair] using embedOp_mem_supportedOperators_image he hS
+  simpa only [Finset.image_insert, Finset.image_singleton] using
+    embedOp_mem_supportedOperators_image he hS
 
 end QuantumCircuit

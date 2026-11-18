@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.OriginalNestedPatchEntropy
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Ground states of range-`R` Hamiltonians on the square
@@ -33,7 +34,11 @@ revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.Approximation
 
@@ -45,16 +50,17 @@ whose terms have supports of diameter at most `R` and norms at most `J`.
 Source: polynomial-PEPS `eq:model` and `eq:global-gap` (`00-introduction.tex`, lines 36–49),
 read with interactions of range `R` as in area-law Theorem 1.1. -/
 def IsRangeSquareGroundState (q R : ℕ) (J Δ : ℝ) (L : ℕ) (Ω : StateSpace L q) : Prop :=
-  ∃ (H : Lattice.LocalHamiltonian (AreaLaw.rectangularDomain L L) q R J) (E₀ : ℝ),
-    Lattice.IsGappedGroundState (AreaLaw.rectangularDomain L L) q H.operator E₀
-      (squareAreaLawState Ω) Δ
+  ∃ (H : PlaneInteraction (AreaLaw.rectangularDomain L L) q R) (_ : ∀ X, (H.term X).IsHermitian)
+      (_ : ∀ X, ‖H.term X‖ ≤ J) (E₀ : ℝ),
+    (‖AreaLaw.rectangleAreaLawState Ω‖ = 1 ∧ IsGapped H.hamiltonian E₀ Δ ∧
+      groundSpace H.hamiltonian E₀ = Submodule.span ℂ {AreaLaw.rectangleAreaLawState Ω})
 
 /-- A ground vector of the range-`R` family is a unit vector.
 Source: polynomial-PEPS `eq:global-gap` (`00-introduction.tex`, lines 46–49). -/
 theorem IsRangeSquareGroundState.norm_eq_one {q R : ℕ} {J Δ : ℝ} {L : ℕ}
     {Ω : StateSpace L q} (hΩ : IsRangeSquareGroundState q R J Δ L Ω) : ‖Ω‖ = 1 := by
-  obtain ⟨_, _, hgap⟩ := hΩ
-  exact (norm_squareAreaLawState Ω).symm.trans hgap.1
+  obtain ⟨_, _, _, _, hgap⟩ := hΩ
+  exact (AreaLaw.norm_rectangleAreaLawState Ω).symm.trans hgap.1
 
 /-- Every gapped ground vector of a square-grid Hamiltonian belongs to the range-one family:
 the Hamiltonian is placed on the integer square with its Hermitian interaction parts at the
@@ -64,8 +70,9 @@ Corollary 1.2. -/
 theorem IsSquareGroundState.isRangeSquareGroundState {q : ℕ} {J Δ : ℝ}
     {L : ℕ} {Ω : StateSpace L q} (hΩ : IsSquareGroundState q J Δ L Ω) :
     IsRangeSquareGroundState q 1 J Δ L Ω := by
-  obtain ⟨h, E₀, hgap⟩ := hΩ
-  exact ⟨h.toAreaLawHamiltonian, E₀, h.isGappedGroundState_toAreaLawHamiltonian hgap⟩
+  obtain ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ := hΩ
+  exact ⟨h.toAreaLawHamiltonian, h.isHermitian_toAreaLawHamiltonian_term,
+    h.norm_toAreaLawHamiltonian_term_le hhJ, E₀, h.isGapped_toAreaLawHamiltonian hh hΩ hgap hspan⟩
 
 /-- The square-grid area law passes to a smaller family of states at the same constant.
 Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–52). -/
@@ -83,14 +90,17 @@ entropies and the crossing edges are transported along the coordinate bijection.
 Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–58), read with
 interactions of range `R`, derived from area-law Theorem 1.1 and Corollary 1.2. -/
 theorem squareEntropyAreaLawAt_range_of_areaLawBound {q R : ℕ} {J Δ C : ℝ} (hC : 0 ≤ C)
-    (hbound : ∀ Λ : Finset (ℤ × ℤ), ∀ H : Lattice.LocalHamiltonian Λ q R J,
+    (hbound : ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
+        (∀ X, ‖H.term X‖ ≤ J) →
       ∀ E₀ : ℝ, ∀ Ω : Lattice.StateSpace Λ q,
-        Lattice.IsGappedGroundState Λ q H.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ A : Finset (Lattice.Site Λ),
           Lattice.regionalEntropy Λ q Ω A ≤ C * (Lattice.edgeBoundary Λ A).card) :
     SquareEntropyAreaLawAt q (IsRangeSquareGroundState q R J Δ) C := by
-  refine ⟨hC, fun L Ω ⟨H, E₀, hgap⟩ A ↦ ?_⟩
-  have := hbound (AreaLaw.rectangularDomain L L) H E₀ (squareAreaLawState Ω) hgap
+  refine ⟨hC, fun L Ω ⟨H, hH, hHJ, E₀, hΩ, hgap, hspan⟩ A ↦ ?_⟩
+  have := hbound (AreaLaw.rectangularDomain L L) H hH hHJ E₀
+      (AreaLaw.rectangleAreaLawState Ω) hΩ hgap hspan
     (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
   rw [Lattice.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
   exact (finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω A).symm.trans_le

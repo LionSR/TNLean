@@ -26,6 +26,7 @@ equations (3.10)--(3.15), and Lemma commutation (ii), lines 2458--2465.
 -/
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
+open Kraus (blockPhysDim blockTensor evalWord_blockTensor)
 namespace MPSTensor
 variable {d D L : ℕ}
 /-- The blocked original left window equals the reindexed original prefix boundary map.

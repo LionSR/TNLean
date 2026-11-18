@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBoxBootstrap
 import TNLean.PEPS.AreaLaw.Scan.TemplateFinalInformation
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Original-template information from the physical safe-box bootstrap
@@ -28,9 +29,13 @@ conclusion of Proposition 9.6, lines 808--944, revision
 Independently proved by composition; no upstream Lean proof text reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -48,9 +53,11 @@ theorem exists_template_final_mutualInformation
     {J Δ Ctpl : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hCtpl : 24 ≤ Ctpl) :
     ∃ C : ℝ, 0 < C ∧ ∃ N : ℕ, 2 ≤ N ∧
       ∀ n s₀ : ℕ, N ≤ n →
-        ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+        ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+            (_ : ∀ X, ‖h.term X‖ ≤ J)
           (E₀ : ℝ) (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ (A : Finset (Site Λ)) (T : Template Ctpl n s₀),
             T.IsSeparated D₀ (boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ ≤ s₀ →

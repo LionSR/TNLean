@@ -27,6 +27,8 @@ mathematical obligations".
   Section 3, Lemma lem:injective_union and Theorem 3]
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 namespace TNLean
 namespace PEPS
 

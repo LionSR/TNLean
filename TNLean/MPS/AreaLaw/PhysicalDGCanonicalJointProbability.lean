@@ -30,6 +30,8 @@ current-space assignment and larger integer round count documented in
 `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped ENNReal TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

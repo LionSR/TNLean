@@ -10,6 +10,15 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.ALVV.BalancedRegionalEnergy
 import TNLean.MPS.AreaLaw.ALVV.CalibratedRootEnergy
+import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeEvent
+import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeParent
+import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeTree
+import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeTreeApproximation
+import TNLean.MPS.AreaLaw.ALVV.EfficientSoftLowDensityCalibration
+import TNLean.MPS.AreaLaw.ALVV.EfficientSoftLowDensityCore
+import TNLean.MPS.AreaLaw.ALVV.EfficientSoftLowDensityFamily
+import TNLean.MPS.AreaLaw.ALVV.EfficientSoftLowDensityParameters
+import TNLean.MPS.AreaLaw.ALVV.EfficientSoftLowDensityWindows
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftClusters
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftNorm
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftRepresentation
@@ -22,11 +31,15 @@ import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeGap
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeImprovingFamily
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeRank
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeThreeRegion
+import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeTree
+import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeTreeFamily
+import TNLean.MPS.AreaLaw.ALVV.GoodProjectorHardTruncation
 import TNLean.MPS.AreaLaw.ALVV.GroundGapUpperBound
 import TNLean.MPS.AreaLaw.ALVV.HardTruncation
 import TNLean.MPS.AreaLaw.ALVV.HardTruncationResidual
 import TNLean.MPS.AreaLaw.ALVV.LargeGapComparison
 import TNLean.MPS.AreaLaw.ALVV.LongIntervalSoftImprovingFamily
+import TNLean.MPS.AreaLaw.ALVV.MergeRounds
 import TNLean.MPS.AreaLaw.ALVV.NativeLongIntervalSoftFamily
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGRootEnergyAssignment
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGTreeEnergyAssignment
@@ -41,6 +54,7 @@ import TNLean.MPS.AreaLaw.ALVV.RegionalSlices
 import TNLean.MPS.AreaLaw.ALVV.SelectedSoftTerminalNodeEnergy
 import TNLean.MPS.AreaLaw.ALVV.SoftClusterPrecision
 import TNLean.MPS.AreaLaw.ALVV.SoftFamilyResiduals
+import TNLean.MPS.AreaLaw.ALVV.SoftFourthOrderBudget
 import TNLean.MPS.AreaLaw.ALVV.SoftGeneratedMiddleApproximation
 import TNLean.MPS.AreaLaw.ALVV.SoftParentEnergy
 import TNLean.MPS.AreaLaw.ALVV.SoftParentStructure
@@ -49,6 +63,7 @@ import TNLean.MPS.AreaLaw.ALVV.SoftTerminalEnergyEstimate
 import TNLean.MPS.AreaLaw.ALVV.SoftTerminalNodeEnergy
 import TNLean.MPS.AreaLaw.ALVV.SoftTruncationOriginalResidual
 import TNLean.MPS.AreaLaw.ALVV.SoftTruncationReverseResidual
+import TNLean.MPS.AreaLaw.ALVV.SoftTruncationScaleFreeBond
 import TNLean.MPS.AreaLaw.ALVV.SoftWordEnergyEstimate
 import TNLean.MPS.AreaLaw.ALVV.SoftWordNodeEnergy
 import TNLean.MPS.AreaLaw.ALVV.SpectralProjector

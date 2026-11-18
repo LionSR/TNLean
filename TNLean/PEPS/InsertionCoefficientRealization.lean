@@ -18,6 +18,8 @@ Source: arXiv:1804.04964, Section 3, Lemma \(\mathrm{inj\_isomorph}\), lines
 254--582 of `Papers/1804.04964/paper_normal.tex`.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 

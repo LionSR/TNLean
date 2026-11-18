@@ -3,14 +3,18 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.SiteExpectationOrder
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Sites.Twirl
 import QICLean.Analysis.RootChannel
 
 /-!
 # Local root channels and their shells, with spectators
 
 For a positive contraction `k`, the local channel on `K` has Kraus operators
-`sqrt (1 - siteExpectation q K k)` and `sqrt (siteExpectation q K k)`. Each is tensored
+`sqrt (1 - ManyBody.regionExpectation K k)` and `sqrt (ManyBody.regionExpectation K
+    k)`. Each is tensored
 with the identity on an arbitrary finite auxiliary system. The actual expectation error
 controls the difference from the full channel, uniformly in the auxiliary dimension.
 
@@ -53,7 +57,7 @@ noncomputable def localRootChannel (K : Finset ι)
     (k : Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ :=
-  spectatorRootChannel (siteExpectation q K k) B
+  spectatorRootChannel (ManyBody.regionExpectation K k) B
 
 /-- The root channel is linear under subtraction, for arbitrary spectator observables. -/
 theorem spectatorRootChannel_sub (k : Matrix (ι → Fin q) (ι → Fin q) ℂ)
@@ -79,73 +83,86 @@ theorem norm_spectatorRootChannel_le {k : Matrix (ι → Fin q) (ι → Fin q) �
 
 /-- The actual local root channel is contractive, uniformly in the spectator dimension
 (`09-amplification.tex`, lines 101–107). -/
-theorem norm_localRootChannel_le [NeZero q] (K : Finset ι)
+theorem norm_localRootChannel_le (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     ‖localRootChannel K k B‖ ≤ ‖B‖ :=
-  norm_spectatorRootChannel_le (siteExpectation_nonneg K hk₀) (siteExpectation_le_one K hk₁) B
+  norm_spectatorRootChannel_le
+    (Matrix.nonneg_iff_posSemidef.mpr
+      (ManyBody.posSemidef_regionExpectation (Matrix.nonneg_iff_posSemidef.mp hk₀)))
+    ((ManyBody.regionExpectation_mono hk₁).trans_eq ManyBody.regionExpectation_one) B
 
 /-- The actual error `‖k - E_K(k)‖ ≤ ε` gives the completely bounded root-channel
 estimate `4 sqrt ε`, expressed for every spectator system and every observable
 (`03-quasilocal.tex`, `eq:quasilocal-channel-tail`, lines 365–368). -/
-theorem norm_spectatorRootChannel_sub_localRootChannel_le [NeZero q] (K : Finset ι)
+theorem norm_spectatorRootChannel_sub_localRootChannel_le (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1) {ε : ℝ}
-    (hε : ‖k - siteExpectation q K k‖ ≤ ε)
+    (hε : ‖k - ManyBody.regionExpectation K k‖ ≤ ε)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     ‖spectatorRootChannel k B - localRootChannel K k B‖ ≤ 4 * Real.sqrt ε * ‖B‖ := by
-  have hl₀ := siteExpectation_nonneg K hk₀
-  have hl₁ := siteExpectation_le_one K hk₁
+  have hl₀ := Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation (D := K)
+      (Matrix.nonneg_iff_posSemidef.mp hk₀))
+  have hl₁ := (ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
+      ManyBody.regionExpectation_one
   have hsqrt {a : Matrix (ι → Fin q) (ι → Fin q) ℂ} (ha : a ≤ 1) : ‖CFC.sqrt a‖ ≤ 1 :=
     norm_le_one_of_nonneg_of_le_one (CFC.sqrt_nonneg _) (sqrt_le_one ha)
   have hG := hsqrt (sub_le_self 1 hk₀)
   have hKr := hsqrt hk₁
   have hGl := hsqrt (sub_le_self 1 hl₀)
   have hKl := hsqrt hl₁
-  have htG : ‖CFC.sqrt (1 - k) - CFC.sqrt (1 - siteExpectation q K k)‖ ≤ Real.sqrt ε :=
+  have htG : ‖CFC.sqrt (1 - k) - CFC.sqrt (1 - ManyBody.regionExpectation K k)‖ ≤ Real.sqrt ε :=
     (norm_sqrt_one_sub_sub_le hk₁ hl₁).trans (Real.sqrt_le_sqrt hε)
-  have htK : ‖CFC.sqrt k - CFC.sqrt (siteExpectation q K k)‖ ≤ Real.sqrt ε :=
+  have htK : ‖CFC.sqrt k - CFC.sqrt (ManyBody.regionExpectation K k)‖ ≤ Real.sqrt ε :=
     (norm_sqrt_sub_le hk₀ hl₀).trans (Real.sqrt_le_sqrt hε)
   refine (norm_rootChannel_kronecker_sub_le _ _ _ _ B).trans ?_
-  have h₁ : (‖CFC.sqrt (1 - k)‖ + ‖CFC.sqrt (1 - siteExpectation q K k)‖) *
-      ‖CFC.sqrt (1 - k) - CFC.sqrt (1 - siteExpectation q K k)‖ ≤ 2 * Real.sqrt ε :=
+  have h₁ : (‖CFC.sqrt (1 - k)‖ + ‖CFC.sqrt (1 - ManyBody.regionExpectation K k)‖) *
+      ‖CFC.sqrt (1 - k) - CFC.sqrt (1 - ManyBody.regionExpectation K k)‖ ≤ 2 * Real.sqrt ε :=
     mul_le_mul (by linarith) htG (norm_nonneg _) (by norm_num)
-  have h₂ : (‖CFC.sqrt k‖ + ‖CFC.sqrt (siteExpectation q K k)‖) *
-      ‖CFC.sqrt k - CFC.sqrt (siteExpectation q K k)‖ ≤ 2 * Real.sqrt ε :=
+  have h₂ : (‖CFC.sqrt k‖ + ‖CFC.sqrt (ManyBody.regionExpectation K k)‖) *
+      ‖CFC.sqrt k - CFC.sqrt (ManyBody.regionExpectation K k)‖ ≤ 2 * Real.sqrt ε :=
     mul_le_mul (by linarith) htK (norm_nonneg _) (by norm_num)
   exact mul_le_mul_of_nonneg_right (by linarith) (norm_nonneg B)
 
 /-- The local channel fixes the commutant of all physical operators on `K`, also for
 observables acting on spectators (`09-amplification.tex`, lines 107–110 and 120). -/
-theorem localRootChannel_eq_self_of_forall_commute [NeZero q] (K : Finset ι)
+theorem localRootChannel_eq_self_of_forall_commute (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     {B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ}
-    (hB : ∀ A ∈ supportedOperators q (K : Set ι),
+    (hB : ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) K,
       Commute (A ⊗ₖ (1 : Matrix Aux Aux ℂ)) B) : localRootChannel K k B = B := by
-  have hl₀ := siteExpectation_nonneg K hk₀
-  have hl₁ := siteExpectation_le_one K hk₁
-  have hlK := siteExpectation_mem_supportedOperators K k
+  have hl₀ := Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation (D := K)
+      (Matrix.nonneg_iff_posSemidef.mp hk₀))
+  have hl₁ := (ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
+      ManyBody.regionExpectation_one
+  have hlK := ManyBody.regionExpectation_mem_supportedOperators K k
   refine rootChannel_eq_self_of_commute
     (rootChannel_kronecker_hyp (sqrt_one_sub_mul_add_sqrt_mul hl₀ hl₁)) ?_ ?_
-  · exact hB _ (sqrt_mem_supportedOperators K (sub_nonneg.mpr hl₁)
-      ((supportedOperators q (K : Set ι)).sub_mem (one_mem_supportedOperators _) hlK))
-  · exact hB _ (sqrt_mem_supportedOperators K hl₀ hlK)
+  · exact hB _ (ManyBody.sqrt_mem_supportedOperators
+      (sub_mem
+          (one_mem (ManyBody.supportedOperators _ _)) hlK))
+  · exact hB _ (ManyBody.sqrt_mem_supportedOperators
+      hlK)
 
 /-- The local channel intertwines commutators with any operator in the physical
 regional commutant, with spectators (`09-amplification.tex`, lines 122–127). -/
-theorem localRootChannel_commutator_of_forall_commute [NeZero q] (K : Finset ι)
+theorem localRootChannel_commutator_of_forall_commute (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     {A : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ}
-    (hA : ∀ C ∈ supportedOperators q (K : Set ι),
+    (hA : ∀ C ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) K,
       Commute (C ⊗ₖ (1 : Matrix Aux Aux ℂ)) A)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     A * localRootChannel K k B - localRootChannel K k B * A =
       localRootChannel K k (A * B - B * A) := by
-  have hl₀ := siteExpectation_nonneg K hk₀
-  have hl₁ := siteExpectation_le_one K hk₁
-  have hlK := siteExpectation_mem_supportedOperators K k
-  have hG := hA _ (sqrt_mem_supportedOperators K (sub_nonneg.mpr hl₁)
-    ((supportedOperators q (K : Set ι)).sub_mem (one_mem_supportedOperators _) hlK))
-  have hKr := hA _ (sqrt_mem_supportedOperators K hl₀ hlK)
+  have hl₀ := Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation (D := K)
+      (Matrix.nonneg_iff_posSemidef.mp hk₀))
+  have hl₁ := (ManyBody.regionExpectation_mono (D := K) hk₁).trans_eq
+      ManyBody.regionExpectation_one
+  have hlK := ManyBody.regionExpectation_mem_supportedOperators K k
+  have hG := hA _ (ManyBody.sqrt_mem_supportedOperators
+      (sub_mem
+          (one_mem (ManyBody.supportedOperators _ _)) hlK))
+  have hKr := hA _ (ManyBody.sqrt_mem_supportedOperators
+      hlK)
   have hleft (R : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
       (hR : Commute R A) : R * (A * B) * R = A * (R * B * R) := by
     rw [hR.left_comm, mul_assoc]
@@ -162,7 +179,7 @@ local channel. In particular this applies to every on-site unitary outside `K`
 theorem localRootChannel_commutator [NeZero q] (K : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     {U : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hU : U ∈ supportedOperators q ((K : Set ι)ᶜ))
+    (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Kᶜ)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) * localRootChannel K k B -
         localRootChannel K k B * (U ⊗ₖ 1) =
@@ -171,7 +188,7 @@ theorem localRootChannel_commutator [NeZero q] (K : Finset ι)
   intro C hC
   change (C ⊗ₖ 1) * (U ⊗ₖ 1) = (U ⊗ₖ 1) * (C ⊗ₖ 1)
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
-    (commute_of_mem_supportedOperators disjoint_compl_right hC hU).eq]
+    (ManyBody.commute_of_mem_supportedOperators_of_disjoint hC hU disjoint_compl_right).eq]
 
 /-- The zeroth shell has norm at most two, including with spectators
 (`09-amplification.tex`, lines 101–106, the case `l = 0`). -/
@@ -189,7 +206,8 @@ theorem norm_localRootChannel_sub_self_le [NeZero q] (K : Finset ι)
 The estimate holds without nesting the regions (`09-amplification.tex`, lines 101–106). -/
 theorem norm_localRootChannel_sub_localRootChannel_le [NeZero q] (K L : Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1) {εK εL : ℝ}
-    (hK : ‖k - siteExpectation q K k‖ ≤ εK) (hL : ‖k - siteExpectation q L k‖ ≤ εL)
+    (hK : ‖k - ManyBody.regionExpectation K k‖ ≤ εK) (hL : ‖k - ManyBody.regionExpectation L k‖ ≤
+        εL)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     ‖localRootChannel K k B - localRootChannel L k B‖ ≤
       4 * (Real.sqrt εK + Real.sqrt εL) * ‖B‖ := by
@@ -236,8 +254,8 @@ the spectator dimension (`09-amplification.tex`, `eq:amplification-channel-shell
 theorem norm_localRootChannelShell_succ_le [NeZero q] (regions : ℕ → Finset ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     (l : ℕ) {εNext εPrev : ℝ}
-    (hNext : ‖k - siteExpectation q (regions (l + 1)) k‖ ≤ εNext)
-    (hPrev : ‖k - siteExpectation q (regions l) k‖ ≤ εPrev)
+    (hNext : ‖k - ManyBody.regionExpectation (regions (l + 1)) k‖ ≤ εNext)
+    (hPrev : ‖k - ManyBody.regionExpectation (regions l) k‖ ≤ εPrev)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     ‖localRootChannelShell regions k (l + 1) B‖ ≤
       4 * (Real.sqrt εNext + Real.sqrt εPrev) * ‖B‖ :=
@@ -249,17 +267,17 @@ theorem localRootChannelShell_eq_zero_of_forall_commute [NeZero q]
     (regions : ℕ → Finset ι) (hregions : Monotone regions)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1) (l : ℕ)
     {B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ}
-    (hB : ∀ A ∈ supportedOperators q (regions l : Set ι),
+    (hB : ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (regions l : Finset ι),
       Commute (A ⊗ₖ (1 : Matrix Aux Aux ℂ)) B) :
     localRootChannelShell regions k l B = 0 := by
   cases l with
   | zero =>
     exact sub_eq_zero.mpr (localRootChannel_eq_self_of_forall_commute _ hk₀ hk₁ hB)
   | succ l =>
-    have hPrev : ∀ A ∈ supportedOperators q (regions l : Set ι),
+    have hPrev : ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (regions l : Finset ι),
         Commute (A ⊗ₖ (1 : Matrix Aux Aux ℂ)) B := by
       intro A hA
-      exact hB A (supportedOperators_mono (by exact hregions (Nat.le_succ l)) hA)
+      exact hB A (ManyBody.supportedOperators_mono (by exact hregions (Nat.le_succ l)) hA)
     simp only [localRootChannelShell,
       localRootChannel_eq_self_of_forall_commute _ hk₀ hk₁ hB,
       localRootChannel_eq_self_of_forall_commute _ hk₀ hk₁ hPrev, sub_self]

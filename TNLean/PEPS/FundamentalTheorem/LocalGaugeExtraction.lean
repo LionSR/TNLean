@@ -30,6 +30,8 @@ comparison used to construct the global gauge in the PEPS Fundamental Theorem
 `localGauge_exists_of_factorizedLocalGauge` in `PEPS/LocalGauge`.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

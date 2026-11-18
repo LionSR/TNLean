@@ -26,6 +26,8 @@ parent-Hamiltonian assertion is made. See
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS
 variable {width height : ℕ} [NeZero width] [NeZero height]
@@ -47,9 +49,9 @@ variable {G : Type*} [Group G]
 Auxiliary to SCP10, braiding passage, lines 2380–2415. -/
 def torusThreePlaquetteFluxAssignment (v : X) (t : Fin 3 → G) (e : Edge Γₜ) : G :=
   let ordered := fun g : G => if v.2.val < (v.2 + 1).val then g else g⁻¹
-  if e = Edge.ofAdj (torusGraph_adj_up v.1 v.2) then ordered (t 0)
-  else if e = Edge.ofAdj (torusGraph_adj_up (v.1 + 1) v.2) then ordered (t 1)
-  else if e = Edge.ofAdj (torusGraph_adj_up (v.1 + 2) v.2) then ordered (t 2)
+  if e = ManyBody.Edge.ofAdj (torusGraph_adj_up v.1 v.2) then ordered (t 0)
+  else if e = ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1 + 1) v.2) then ordered (t 1)
+  else if e = ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1 + 2) v.2) then ordered (t 2)
   else 1
 
 /-- The literal assignment is exactly the actual tree-cycle assignment.
@@ -113,7 +115,8 @@ theorem torusThreePlaquetteFluxAssignment_up_transport (v : X) (t : Fin 3 → G)
       (torusGraph_adj_up (v.1 + (i.val : ZMod width)) v.2) =
       ![t 0, t 1, t 2, 1] i := by
   have hup (x x' : ZMod width) :
-      Edge.ofAdj (torusGraph_adj_up x v.2) = Edge.ofAdj (torusGraph_adj_up x' v.2) ↔
+      ManyBody.Edge.ofAdj (torusGraph_adj_up x v.2) =
+          ManyBody.Edge.ofAdj (torusGraph_adj_up x' v.2) ↔
         x = x' := by
     constructor
     · intro h
@@ -138,13 +141,13 @@ private theorem horizontal_transport (v : X) (t : Fin 3 → G)
     (x : ZMod width) (y : ZMod height) :
     regularDirectedTransport (torusThreePlaquetteFluxAssignment v t)
       (torusGraph_adj_right x y) = 1 := by
-  have h₀ : Edge.ofAdj (torusGraph_adj_right x y) ≠
-      Edge.ofAdj (torusGraph_adj_up v.1 v.2) := torusRightEdge_ne_torusUpEdge (x, y) v
-  have h₁ : Edge.ofAdj (torusGraph_adj_right x y) ≠
-      Edge.ofAdj (torusGraph_adj_up (v.1 + 1) v.2) :=
+  have h₀ : ManyBody.Edge.ofAdj (torusGraph_adj_right x y) ≠
+      ManyBody.Edge.ofAdj (torusGraph_adj_up v.1 v.2) := torusRightEdge_ne_torusUpEdge (x, y) v
+  have h₁ : ManyBody.Edge.ofAdj (torusGraph_adj_right x y) ≠
+      ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1 + 1) v.2) :=
     torusRightEdge_ne_torusUpEdge (x, y) (v.1 + 1, v.2)
-  have h₂ : Edge.ofAdj (torusGraph_adj_right x y) ≠
-      Edge.ofAdj (torusGraph_adj_up (v.1 + 2) v.2) :=
+  have h₂ : ManyBody.Edge.ofAdj (torusGraph_adj_right x y) ≠
+      ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1 + 2) v.2) :=
     torusRightEdge_ne_torusUpEdge (x, y) (v.1 + 2, v.2)
   simp [regularDirectedTransport, torusThreePlaquetteFluxAssignment, h₀, h₁, h₂]
 

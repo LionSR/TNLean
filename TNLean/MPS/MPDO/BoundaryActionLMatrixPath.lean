@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixEntrywiseDeriv
+import TNLean.Algebra.MatrixFrameDeriv
+import TNLean.Algebra.MatrixLinearODE
 import TNLean.MPS.MPDO.BoundaryActionLMatrixGauge
 
 /-!
@@ -17,9 +19,14 @@ Molnár, Section 5.2 ("MPSs with inequivalent L-symbols belong to different
 phases").
 
 The source's conclusion at line 1551, that the gauge class of the
-L-symbols is constant along the path, is not proved here. It requires
-integrating the first-order law along the path, which the source does not
-carry out; see `docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`.
+L-symbols is constant along the path, is proved here with the same
+hypotheses at every point of a connected open parameter set. The source
+does not integrate its first-order law; the integration below needs no
+continuity of the generators. Along the path the action analysis maps move
+by invertible changes of basis, since near each parameter their trace
+pairings `Q` against the synthesis maps there satisfy `Q' = X Q` and
+`Q⁻¹ V` is locally constant. See
+`docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`.
 
 The source fixes a point `γ` of the path and writes, after a basis change
 of the action multiplicity spaces, `V(γ + dγ) = V(γ) + ∑ X V(γ) dγ`
@@ -53,6 +60,9 @@ The index convention is that of `actionLMatrix_regauge`: the source's
   lines 1387--1551.
 * `MPOTensor.hasDerivAt_actionLMatrix_gaugeCurve`: the same expression is
   the velocity of the gauge orbit `t ↦` (gauge law with `1 + t X`).
+* `MPOTensor.exists_actionLMatrix_regauge_of_hasDerivAt`: the L matrices at
+  any two points of the path are related by the gauge law with invertible
+  gauges, GLM23 line 1551.
 
 ## References
 
@@ -279,7 +289,8 @@ The hypotheses are the source's:
 Differentiability of the left inverses is not assumed; the source's
 claim that the `L'`-symbols are differentiable (line 1440) is derived.
 The conclusion is first order. The source's final step, that the class of
-the L-symbols is constant along the path (line 1551), is not asserted. -/
+the L-symbols is constant along the path (line 1551), is
+`exists_actionLMatrix_regauge_of_hasDerivAt`. -/
 theorem hasDerivAt_actionLMatrix
     (hF : ∀ a b,
       MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
@@ -421,5 +432,220 @@ theorem hasDerivAt_actionLMatrix_gaugeCurve {a b : Fin r} {x y : Fin s}
     simp only [one_smul, neg_smul, sub_eq_add_neg]
   · simp [Matrix.one_apply, add_mul, mul_add, ite_mul, mul_ite, Finset.sum_add_distrib,
       Finset.sum_ite_irrel, sub_eq_add_neg, mul_comm]
+
+/-- Products of the exact action maps of one block are the identity on equal
+multiplicity labels and zero otherwise. -/
+private theorem actionAnalysis_mul_synthesis
+    {A : ∀ x, MPSTensor d (D x)}
+    {VA : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ}
+    {WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ}
+    (hA : ∀ a x,
+      MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A x))
+        (fun q : (y : Fin s) × Fin (M a x y) ↦ A q.1)
+        (fun q ↦ VA a x q.1 q.2) (fun q ↦ WA a x q.1 q.2))
+    (a : Fin r) (x y : Fin s) (i k : Fin (M a x y)) :
+    VA a x y i * WA a x y k = if i = k then 1 else 0 := by
+  split_ifs with h
+  · subst h
+    exact (hA a x).retract ⟨y, i⟩
+  · exact (hA a x).orthogonal ⟨y, i⟩ ⟨y, k⟩ fun h' ↦ h (by simpa using h')
+
+/-- **The class of the L-symbols is constant along a symmetric path.**
+Fix the operator blocks `O`, the exact fusion maps `VF, WF`, and positive
+bond dimensions `D`. On a connected open parameter set `U`, let the state
+blocks `A γ` be injective and pairwise inequivalent with exact action maps
+`VA γ, WA γ`, and let the analysis maps be differentiable at every `γ ∈ U`
+with derivative in the span of the action tensors at `γ`,
+`dV^i = ∑_{i'} X(γ)[i,i'] V^{i'}(γ)`. Then for any `γ₀, γ ∈ U` there are
+invertible multiplicity gauges `G` with
+
+`L(γ)^{z,ij}_{c,kμ} = ∑ G^y_{az}[i,i'] G^z_{bx}[j,j'] (G^y_{cx})⁻¹[k',k]`
+`L(γ₀)^{z,i'j'}_{c,k'μ}`,
+
+the gauge law `actionLMatrix_regauge` with transposed inverse synthesis
+gauge and trivial fusion gauge.
+
+Source: GLM23, `REsubmission.tex`, line 1551:
+
+"which means that the ${L}'$-symbol is in the same class as the
+${L}$-symbol since they are related by a (differentiable) gauge
+transformation."
+
+The hypotheses are those of `hasDerivAt_actionLMatrix`, the source's, at
+every point of the path: fixed operators and fusion maps (line 1359), exact
+action tensors along the whole path (lines 1269--1272), injective blocks
+orthogonal between each other (lines 317 and 1332), a fixed bond dimension
+(line 1361), and the span assumption on the derivative of the action
+tensors at every point (lines 1387--1405). The last two are the source's
+assumptions at line 1361, "we assume for now that the bond dimension does
+not change", and at lines 1387--1405: "Let us absorb this basis change and
+assume [...] that the action tensors are differentiable", followed by the
+displayed expansion `V(γ + dγ)^i = V(γ)^i + ∑_{i'} (X_{ax}^y)_{i'}^i V(γ)^{i'} dγ`
+(lines 1388--1404), "where we have spanned the term in $d\gamma$ using the
+orthogonal set of action tensors" (line 1405). No continuity of the generators
+`X` is assumed. The source gives no integration argument; here, near each
+parameter the pairing matrices `Q` of the analysis maps against the
+synthesis maps there satisfy `Q' = X Q`, so `Q⁻¹ V` is locally constant,
+and the parameter set is connected (`Matrix.exists_eq_sum_smul_of_hasDerivAt`).
+The source's extensions to action tensors that are only continuous and to a
+growing bond dimension (line 1551) are not covered. -/
+theorem exists_actionLMatrix_regauge_of_hasDerivAt
+    (hF : ∀ a b,
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
+        (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+        (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
+    {U : Set ℝ} (hUo : IsOpen U) (hUc : IsPreconnected U)
+    (hA : ∀ γ ∈ U, ∀ a x,
+      MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A γ x))
+        (fun q : (y : Fin s) × Fin (M a x y) ↦ A γ q.1)
+        (fun q ↦ VA γ a x q.1 q.2) (fun q ↦ WA γ a x q.1 q.2))
+    (hInj : ∀ γ ∈ U, ∀ x, Kraus.IsInjective (A γ x))
+    (hne : ∀ γ ∈ U, MPSTensor.BlocksNotGaugePhaseEquiv (A γ))
+    (hD : ∀ x, 0 < D x)
+    (X : ℝ → ∀ a x y, Matrix (Fin (M a x y)) (Fin (M a x y)) ℂ)
+    (hdV : ∀ γ ∈ U, ∀ a x y i u v, HasDerivAt (fun γ' ↦ VA γ' a x y i u v)
+      ((∑ i', X γ a x y i i' • VA γ a x y i') u v) γ)
+    {γ₀ γ : ℝ} (hγ₀ : γ₀ ∈ U) (hγ : γ ∈ U) :
+    ∃ G : ∀ a x y, GL (Fin (M a x y)) ℂ,
+      ∀ (a b c : Fin r) (x y z : Fin s) (i : Fin (M a z y)) (j : Fin (M b x z))
+        (k : Fin (M c x y)) (μ : Fin (N a b c)),
+        actionLMatrix WF (VA γ) (WA γ) a b x y ⟨z, i, j⟩ ⟨c, k, μ⟩ =
+          ∑ i', ∑ j', ∑ k',
+            (↑(G a z y) : Matrix (Fin (M a z y)) (Fin (M a z y)) ℂ) i i' *
+              (↑(G b x z) : Matrix (Fin (M b x z)) (Fin (M b x z)) ℂ) j j' *
+              (↑((G c x y)⁻¹) : Matrix (Fin (M c x y)) (Fin (M c x y)) ℂ) k' k *
+              actionLMatrix WF (VA γ₀) (WA γ₀) a b x y ⟨z, i', j'⟩ ⟨c, k', μ⟩ := by
+  have hDy : ∀ y, (D y : ℂ) ≠ 0 := fun y ↦ by exact_mod_cast (hD y).ne'
+  -- The action analysis maps at `γ` are an invertible change of basis of those at `γ₀`.
+  choose G hG using fun a x y ↦ Matrix.exists_eq_sum_smul_of_hasDerivAt hUo hUc
+    (V := fun γ ↦ VA γ a x y) (X := fun γ ↦ X γ a x y) (fun s hs ↦ hdV s hs a x y)
+    (fun s hs ↦ ⟨WA s a x y, (D y : ℂ)⁻¹, fun i k ↦ by
+      rw [actionAnalysis_mul_synthesis (hA s hs) a x y i k]
+      split_ifs <;> simp [hDy y]⟩) hγ₀ hγ
+  refine ⟨G, fun a b c x y z i j k μ ↦ ?_⟩
+  -- Synthesis maps dual to the transported analysis maps.
+  set WA' : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ :=
+    fun a x y k ↦ ∑ k', (↑((G a x y)⁻¹) : Matrix (Fin (M a x y)) (Fin (M a x y)) ℂ) k' k •
+      WA γ₀ a x y k' with hWA'
+  have hprod : ∀ (c : Fin r) (k₁ k₂ : Fin (M c x y)),
+      VA γ c x y k₁ * WA' c x y k₂ =
+        (if k₁ = k₂ then 1 else 0 : Matrix (Fin (D y)) (Fin (D y)) ℂ) := by
+    intro c k₁ k₂
+    have hGG := Units.mul_inv (G c x y)
+    have hentry := congrFun (congrFun hGG k₁) k₂
+    rw [Matrix.mul_apply, Matrix.one_apply] at hentry
+    simp only [hG c x y k₁, hWA', Matrix.sum_mul, Matrix.mul_sum, Matrix.smul_mul,
+      Matrix.mul_smul, actionAnalysis_mul_synthesis (hA γ₀ hγ₀), smul_smul, smul_ite,
+      smul_zero, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
+    rw [← Finset.sum_smul]
+    simp_rw [mul_comm _ ((↑(G c x y) : Matrix (Fin (M c x y)) (Fin (M c x y)) ℂ) k₁ _)]
+    rw [hentry]
+    split_ifs <;> simp
+  -- With these synthesis maps the fusion-then-action pairing is the identity.
+  have hfus : fusionPairing VF WF (VA γ) WA' a b x y = 1 := by
+    ext ⟨c₁, k₁, μ₁⟩ ⟨c₂, k₂, μ₂⟩
+    simp only [fusionPairing, Matrix.of_apply, fusionThenActionAnalysis,
+      fusionThenActionSynthesis]
+    rw [Matrix.mul_assoc, ← Matrix.mul_assoc (kronId _ _), kronId_mul]
+    by_cases hcμ : (⟨c₁, μ₁⟩ : (c : Fin r) × Fin (N a b c)) = ⟨c₂, μ₂⟩
+    · obtain ⟨rfl, hμ⟩ := Sigma.mk.inj_iff.1 hcμ
+      obtain rfl := eq_of_heq hμ
+      have hret := (hF a b).retract ⟨c₁, μ₁⟩
+      simp only at hret
+      rw [hret, kronId_one, Matrix.one_mul, hprod, Matrix.one_apply]
+      split_ifs with h₁ h₂ h₂
+      · simp [hDy y]
+      · exact absurd (by rw [h₁]) h₂
+      · exact absurd (by simpa using h₂) h₁
+      · simp
+    · have horth := (hF a b).orthogonal ⟨c₁, μ₁⟩ ⟨c₂, μ₂⟩ hcμ
+      simp only at horth
+      rw [horth, Matrix.one_apply, ite_eq_right fun h ↦ hcμ (by
+        simp only [Sigma.mk.inj_iff] at h ⊢
+        obtain ⟨rfl, h⟩ := h
+        simpa using (Prod.ext_iff.1 (eq_of_heq h)).2)]
+      simp [kronId]
+  have hseq := sequentialPairing_eq_mul VF WF (WA₀ := WA') hF (hA γ hγ) (hInj γ hγ)
+    (hne γ hγ) hD a b x y
+  rw [hfus, Matrix.mul_one] at hseq
+  have hL : actionLMatrix WF (VA γ) (WA γ) a b x y ⟨z, i, j⟩ ⟨c, k, μ⟩ =
+      actionLMatrix WF (VA γ) WA' a b x y ⟨z, i, j⟩ ⟨c, k, μ⟩ := by
+    rw [← hseq]
+    rfl
+  rw [hL, actionLMatrix_regauge
+    (X := fun a x y ↦ (↑(G a x y) : Matrix (Fin (M a x y)) (Fin (M a x y)) ℂ))
+    (Xh := fun a x y k k' ↦ (↑((G a x y)⁻¹) : Matrix (Fin (M a x y)) (Fin (M a x y)) ℂ) k' k)
+    (Yh := fun _ _ _ ↦ 1) (WF := WF) (WF' := WF) (WA := WA γ₀) (WA' := WA')
+    (fun a x y i ↦ hG a x y i) (fun _ _ _ _ ↦ rfl)
+    (fun a b c μ ↦ by simp [Matrix.one_apply])]
+  simp only [Matrix.one_apply, mul_ite, mul_one, mul_zero, ite_mul, zero_mul,
+    Finset.sum_ite_eq, Finset.mem_univ, ite_true]
+
+/-- **Constancy of the L-symbol gauge class along an interval.**
+Assume the first-order path hypotheses at every point of `[α, β]`, and
+continuous span coefficients `X`. Given fundamental solutions
+`g' = X g`, `g γ₀ = 1` on the action multiplicity spaces, they are
+invertible everywhere on the interval and implement exactly the gauge law
+of `actionLMatrix_regauge`, with fixed fusion gauge and synthesis gauge
+`(g⁻¹)ᵀ`.
+
+**Scope restriction (continuous generators and given ODE solutions):**
+This integrates the infinitesimal law of GLM23, `REsubmission.tex`, lines
+1387--1551. Continuity of the generators is an additional assumption not
+stated in the source; existence of the fundamental solutions is explicit.
+See `docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`. No regularity of the
+synthesis maps is assumed. The unrestricted source claim, including merely
+continuous paths and changing bond dimensions, is not asserted here. -/
+theorem actionLMatrix_gaugeEquiv_of_continuous
+    (hF : ∀ a b,
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
+        (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+        (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
+    {α β γ₀ : ℝ} (hγ₀ : γ₀ ∈ Set.Icc α β)
+    (hA : ∀ t ∈ Set.Icc α β, ∀ᶠ γ in 𝓝 t, ∀ a x,
+      MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A γ x))
+        (fun q : (y : Fin s) × Fin (M a x y) ↦ A γ q.1)
+        (fun q ↦ VA γ a x q.1 q.2) (fun q ↦ WA γ a x q.1 q.2))
+    (hInj : ∀ t ∈ Set.Icc α β, ∀ᶠ γ in 𝓝 t, ∀ x, Kraus.IsInjective (A γ x))
+    (hne : ∀ t ∈ Set.Icc α β, ∀ᶠ γ in 𝓝 t, MPSTensor.BlocksNotGaugePhaseEquiv (A γ))
+    (hD : ∀ x, 0 < D x)
+    (X g : ℝ → ∀ a x y, Matrix (Fin (M a x y)) (Fin (M a x y)) ℂ)
+    (hX : ∀ a x y, ContinuousOn (fun t ↦ X t a x y) (Set.Icc α β))
+    (hdV : ∀ t ∈ Set.Icc α β, ∀ a x y i u v,
+      HasDerivAt (fun γ ↦ VA γ a x y i u v)
+        ((∑ i', X t a x y i i' • VA t a x y i') u v) t)
+    (hg₀ : ∀ a x y, g γ₀ a x y = 1)
+    (hg : ∀ t ∈ Set.Icc α β, ∀ a x y i j,
+      HasDerivAt (fun γ ↦ g γ a x y i j) ((X t a x y * g t a x y) i j) t)
+    {t : ℝ} (ht : t ∈ Set.Icc α β) :
+    (∀ a x y, IsUnit (g t a x y)) ∧
+      ∀ (a b c : Fin r) (x y z : Fin s) (i : Fin (M a z y)) (j : Fin (M b x z))
+        (k : Fin (M c x y)) (μ : Fin (N a b c)),
+        actionLMatrix WF (VA t) (WA t) a b x y ⟨z, i, j⟩ ⟨c, k, μ⟩ =
+          ∑ i', ∑ j', ∑ k', g t a z y i i' * g t b x z j j' * (g t c x y)⁻¹ k' k *
+            actionLMatrix WF (VA γ₀) (WA γ₀) a b x y ⟨z, i', j'⟩ ⟨c, k', μ⟩ := by
+  have hg' (a : Fin r) (x y : Fin s) (u : ℝ) (hu : u ∈ Set.Icc α β) :
+      HasDerivAt (fun γ ↦ g γ a x y) (X u a x y * g u a x y) u :=
+    hasDerivAt_pi.mpr fun i ↦ hasDerivAt_pi.mpr fun j ↦ hg u hu a x y i j
+  refine ⟨fun a x y ↦ Matrix.isUnit_of_hasDerivAt_mul
+    (hX a x y) (hg' a x y) hγ₀ (hg₀ a x y) ht, ?_⟩
+  intro a b c x y z i j k μ
+  let L : ℝ → Matrix (Fin (M a z y) × Fin (M b x z)) (Fin (M c x y)) ℂ :=
+    fun u p q ↦ actionLMatrix WF (VA u) (WA u) a b x y ⟨z, p.1, p.2⟩ ⟨c, q, μ⟩
+  have hL := Matrix.eq_kronecker_mul_initial_mul_inv_of_hasDerivAt (L := L)
+    (hX a z y) (hX b x z) (hX c x y) (hg' a z y) (hg' b x z) (hg' c x y)
+    (fun u hu i j k ↦ hasDerivAt_actionLMatrix VF WF hF (hA u hu) (hInj u hu)
+      (hne u hu) hD (X u) (hdV u hu) a b c x y z i j k μ)
+    hγ₀ (hg₀ a z y) (hg₀ b x z) (hg₀ c x y) ht
+  have heq := congrFun (congrFun hL (i, j)) k
+  change L t (i, j) k = _
+  rw [heq]
+  simp only [Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kronecker_apply, Finset.sum_mul]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun i' _ ↦ ?_
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun j' _ ↦ Finset.sum_congr rfl fun k' _ ↦ ?_
+  dsimp only [L]
+  ring
 
 end MPOTensor

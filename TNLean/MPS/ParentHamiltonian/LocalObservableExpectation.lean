@@ -136,17 +136,17 @@ theorem observableInsertionExpectation_one_appendObservable (A : MPSTensor d D)
 
 /-- A normalized primitive tensor has normalized local expectations. Source:
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
-theorem IsPrimitiveMPS.observableInsertionExpectation_one [NeZero D]
+theorem _root_.Kraus.HasComplementaryFixedPointGap.observableInsertionExpectation_one [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (k : ℕ) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (k : ℕ) :
     observableInsertionExpectation A ρ (1 : Matrix (Cfg d k) (Cfg d k) ℂ) = 1 :=
   MPSTensor.observableInsertionExpectation_one A ρ hP.fixedPoint_is_fixed hP.trace_ne_zero k
 
 /-- A normalized primitive tensor has positive local expectations. Source:
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
-theorem IsPrimitiveMPS.observableInsertionExpectation_nonneg [NeZero D]
+theorem _root_.Kraus.HasComplementaryFixedPointGap.observableInsertionExpectation_nonneg [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) {k : ℕ} {X : Matrix (Cfg d k) (Cfg d k) ℂ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) {k : ℕ} {X : Matrix (Cfg d k) (Cfg d k) ℂ}
     (hX : X.PosSemidef) : 0 ≤ observableInsertionExpectation A ρ X :=
   MPSTensor.observableInsertionExpectation_nonneg A hP.fixedPoint_psd hX
 

@@ -25,6 +25,8 @@ a trivial middle residual. The complete prescribed braid remains separate.
 See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS
@@ -140,7 +142,7 @@ theorem torusActualHorizontalFluxMove_up_transport_of_vacancy (p : X)
     (regularRegionTreeCycleResidual_middle_eq_one_iff_rightPlaquette p u).mpr hv
   have hA (z : RegionCycleEdge (Γ := Γₜ) R T → G) (i : Fin 2) :
       regularTreeCycleAssignment R T z
-        (Edge.ofAdj (torusGraph_adj_up (p.1 + (i.val : ZMod width)) p.2)) =
+        (ManyBody.Edge.ofAdj (torusGraph_adj_up (p.1 + (i.val : ZMod width)) p.2)) =
       z (translatedTwoPlaquetteCycleBond p i) := by
     rw [← translatedTwoPlaquetteCycleBond_eq_up]
     change regularTreeCycleAssignment (translatedTwoPlaquetteRegion p)
@@ -238,7 +240,7 @@ theorem IsGIsometric.exists_unitary_torusActualHorizontalFluxMove {d : ℕ}
     ∃ W : Matrix ({v : X // v ∈ translatedTwoPlaquetteRegion p} → Fin d)
         ({v : X // v ∈ translatedTwoPlaquetteRegion p} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({v : X // v ∈ translatedTwoPlaquetteRegion p} → Fin d) ℂ ∧
-      regionLocalTerm (translatedTwoPlaquetteRegion p) W ∈
+      ManyBody.place («X» := fun _ ↦ Fin _) (translatedTwoPlaquetteRegion p) W ∈
         Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (u : Edge Γₜ → G)
           (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (translatedTwoPlaquetteRegion p) e} → G),
@@ -248,7 +250,7 @@ theorem IsGIsometric.exists_unitary_torusActualHorizontalFluxMove {d : ℕ}
           (torusActualHorizontalFluxMove p u))) (translatedTwoPlaquetteRegion p)
           (fun f => Fintype.equivFin G (θ f))) ∧
       ∀ u : Edge Γₜ → G,
-        regionLocalTerm (translatedTwoPlaquetteRegion p) W *ᵥ
+        ManyBody.place («X» := fun _ ↦ Fin _) (translatedTwoPlaquetteRegion p) W *ᵥ
           stateCoeff (groupBondTensor (regularTwistedSite a u)) =
         stateCoeff (groupBondTensor (regularTwistedSite a (torusActualHorizontalFluxMove p u))) :=
   exists_unitary_regularActualCyclePhysicalPermutation (translatedTwoPlaquetteRegion p)

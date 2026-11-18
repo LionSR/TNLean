@@ -1,41 +1,5 @@
 \section{Standard form and index}
 
-\begin{definition}[Reduced full-support source datum]
-    \label{def:mpu_reduced_full_support_source_datum}
-    \notready
-    % **Scope restriction (source data for the same tensor):** this datum is an
-    % explicit hypothesis, not a construction of a reduced representative.
-    % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:mpu, def:mpu_normalized_flattening, def:cpsv_cfii, def:mpu_full_support, thm:mpu_reduced_cfii_transfer_stabilization, thm:mpu_normalized_transfer_fin_one}
-    Let $\widetilde{\mathcal U}=d^{-1/2}\mathcal U$ be the normalized
-    flattening, and let $E$ be its transfer matrix. A reduced full-support source
-    datum for $\mathcal U$, with physical dimension $d>0$ and positive bond
-    dimension, consists of an integer $J>0$, a diagonal positive definite matrix
-    $\rho$ with $\tr(\rho)=1$, and
-    $(\Phi\rvert=\operatorname{vec}(\Id_D)^{\mathsf T}$ such that
-    \begin{align}
-        E^J & =\lvert\rho)(\Phi\rvert.
-    \end{align}
-    The one-dimensional case is immediate: if $D=1$, take $J=1$
-    and $\rho=\Id_1$ using
-    Lemma~\ref{thm:mpu_normalized_transfer_fin_one}. If $D>1$, chosen
-    canonical-form-II data with full support give a positive trace-one ambient
-    fixed point with $J=D^2-1$ by
-    Lemma~\ref{thm:mpu_reduced_cfii_transfer_stabilization}. Diagonality of
-    this ambient fixed point is an additional hypothesis: the theorem gives a
-    diagonal matrix in the unique block coordinates, but conjugation into the
-    ambient coordinates need not preserve diagonality.
-    For $D>1$, this states the fixed-pair convention in
-    \cite[equations labelled~\texttt{Erightleft} and~\texttt{II\_UTransfer}, and
-        proof of Proposition~III.2(ii)]{Cirac2017MPU}. The $D=1$ branch is the direct
-    one-dimensional specialization. When $\mathcal U$ is an MPU,
-    Lemma~\ref{thm:mpu_canonical_form_ii_stabilization_converse} gives a
-    canonical-form-II presentation of this same tensor whose ambient fixed
-    matrix is the given $\rho$; it makes no assertion about continuous
-    choices along a path.
-    % Source lines: paper_v2.tex 269--280 and 397--405.
-\end{definition}
-
 \begin{lemma}[Staggered Gram expansion of the source tensor $u$]
     \label{thm:mpu_source_u_staggered_gram}
     \lean{MPOTensor.SourceFactors.sourceU_gram_eq_staggered_four_u}
@@ -1204,7 +1168,7 @@
     \label{FundamentalMPU}
     \notready
     \discussion{6020}
-    \uses{SF}
+    \uses{SF, thm:mpu_fundamental_half_factors}
     Let $\mathcal U$ and $\mathcal V$ be simple tensors written in standard
     form, with source unitaries $(u_{\mathcal U},v_{\mathcal U})$ and
     $(u_{\mathcal V},v_{\mathcal V})$. They generate the same MPU for every
@@ -1231,8 +1195,10 @@
     operators at every length is equivalent to a unitary conjugation of the
     letters, the gate relations follow from it, and the gate relations give
     equality of the operators on rings of even length only.
-    % The source's converse from the half-factor relations alone has no
-    % formal counterpart; this entry therefore keeps \notready.
+    The half-factor relations themselves, with the same $x$, $y$, $z$, and
+    their converse on rings of two-site blocks are
+    Lemma~\ref{thm:mpu_fundamental_half_factors}.
+    % The unblocked converse is false; this entry therefore keeps \notready.
     % Source label: FundamentalMPU. Source lines: paper_v2.tex 624--648.
 \end{theorem}
 
@@ -1287,8 +1253,7 @@
     \lean{MPOTensor.TwoSiteStandardFormData.mpo_eq_of_gate_gauges,
         MPOTensor.IsMPUCanonicalFormII.mpo_two_mul_eq_of_source_gate_gauges,
         MPOTensor.IsMPUCanonicalFormII.mpo_blockTwo_eq_of_source_gate_gauges,
-        MPOTensor.TwoSiteStandardFormData.reindexRanks,
-        MPOTensor.siteProduct}
+        MPOTensor.TwoSiteStandardFormData.reindexRanks}
     \leanok
     \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_source_uv}
     Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II
@@ -1302,9 +1267,10 @@
     % forms; the parity obstruction limits it to even lengths.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpu_standard_form_parity_obstruction}
-    Expressing both operators as the two-layer circuit of the standard form shows that in
-    the circuit of $\mathcal V$ the unitary placed on the internal leg of
+    \uses{thm:mpu_standard_form_parity_obstruction, lem:mpdo_tensor_power_laws}
+    Using Lemma~\ref{lem:mpdo_tensor_power_laws}, express both operators as
+    the two-layer circuits of their standard forms. In the circuit of
+    $\mathcal V$ the unitary placed on the internal leg of
     each site by the layer of $u$ meets its adjoint placed there by the layer
     of $v$, so the circuits coincide. The relabelling of the rank spaces is
     carried through the standard-form data.
@@ -1355,6 +1321,52 @@
     entry with $w_{pq}\neq0$, and the ring of two blocks at mixed
     configurations then gives $v'=w$. The converse is
     Lemma~\ref{thm:mpu_fundamental_gates_sufficiency}.
+\end{proof}
+
+\begin{lemma}[Fundamental theorem of MPU, half factors]
+    \label{thm:mpu_fundamental_half_factors}
+    \lean{MPOTensor.IsMPUCanonicalFormII.exists_half_factor_gauges_of_mpo_eq,
+        MPOTensor.TwoSiteStandardFormData.eq_virtualSandwich_of_half_factor_gauges,
+        MPOTensor.TwoSiteStandardFormData.mpo_eq_of_half_factor_gauges,
+        MPOTensor.SourceFactors.sourceU_eq_of_factor_gauges}
+    \leanok
+    \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_source_uv,
+        def:mpu_supplied_two_site_standard_form, thm:mpu_fundamental_letters}
+    Let $\mathcal U$ and $\mathcal V$ be simple tensors in canonical form II,
+    of bond dimensions $D_1$ and $D_2$, with $U^{(N)}=V^{(N)}$ for every
+    $N\ge2$. Build their factors from any compact decompositions of the two
+    source cuts. Then $D_1=D_2$, and after identifying the rank spaces there
+    are unitaries $z$ on $\mathbb C^{D_1}$, $x$ on $\mathbb C^{\ell}$ and $y$
+    on $\mathbb C^{r}$ with
+    \begin{align}
+        u_{\mathcal V}  & =(x\otimes y)u_{\mathcal U},               \\
+        X_2(\mathcal V) & =(z\otimes I)X_2(\mathcal U)x^\dagger,     \\
+        X_1(\mathcal V) & =(I\otimes\bar z)X_1(\mathcal U)y^\dagger.
+    \end{align}
+    Conversely, if two two-site tensors in standard form have gates and
+    half factors related in this way, they are letterwise conjugate by $z$,
+    and hence generate the same operators on every ring of two-site blocks.
+    This is the source's theorem with its equations (SFuu) and (SFvv), with
+    the converse restricted to the two-site blocks, as recorded in
+    \cite{gap:mpu_standard_form_parity_gap}.
+    % Source: paper_v2.tex 624--648, equations SFuu and SFvv; factors 479--502.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_fundamental_letters, thm:mpu_source_factors_virtual_unitary_gauge,
+        thm:mpu_source_factors_change_of_svd}
+    By Lemma~\ref{thm:mpu_fundamental_letters}, $D_1=D_2$ and
+    $\mathcal V=z\,\mathcal U\,z^\dagger$ letterwise. The factors of the
+    conjugate differ from the transported factors of $\mathcal U$ by unitaries
+    $W_1$, $W_2$ on the two rank spaces, because the canonical-form
+    normalizations $X_1^\dagger(I\otimes\rho)X_1=I$ and $X_2^\dagger X_2=I$
+    fix them up to such unitaries. Put $x=W_2^\dagger$ and $y=W_1^\dagger$;
+    contracting the second factors gives the relation for $u$. These
+    normalizations are needed: replacing $(X_1,X_2)$ by $(cX_1,c^{-1}X_2)$
+    with $|c|\ne1$ leaves the tensor and both gates unchanged, but no unitaries
+    relate the two pairs. For the converse, substitute the relations into the
+    standard form: $x^\dagger x$ and $y^\dagger y$ cancel on the internal legs,
+    and $z$ and $z^\dagger$ remain on the two virtual legs.
 \end{proof}
 
 \begin{lemma}[The gate statements hold for every decomposition]
@@ -2049,18 +2061,30 @@
 
 \begin{lemma}[Tensor-product additivity]
     \label{lem:mpu_index_tensor}
-    \notready
+    \lean{MPOTensor.IsMPU.index_tensorProduct}
+    \leanok
     \discussion{6015}
-    \uses{def:index, index-well-defined, thm:mpu_tensor_product_source_ranks}
-    For MPU tensors under the source's standing canonical-form convention,
+    \uses{def:index, def:mpu_reduced_representative_index,
+        def:mpu_independent_tensor_product}
+    Let $\mathcal U$ and $\mathcal V$ be MPU tensors of positive physical and
+    bond dimensions. Then
     \begin{align}
         \operatorname{ind}(\mathcal U\otimes\mathcal V)
          & =\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal V).
     \end{align}
-    In \cite[Theorem~IV.6(ii)]{Cirac2017MPU}, this additivity identity is the unrestricted tensor-product
-    statement.
+    This is the tensoring clause of \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
+    The index is that of
+    Definition~\ref{def:mpu_reduced_representative_index}, which agrees with
+    the index of Definition~\ref{def:index} for tensors in canonical form; no
+    canonical form is assumed here.
     % Source lines: paper_v2.tex 824--833.
 \end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_representative_index_tensor_product}
+    This is the first assertion of
+    Lemma~\ref{thm:mpu_representative_index_tensor_product}.
+\end{proof}
 
 \begin{lemma}[Tensor-product additivity in canonical form II]
     \label{thm:mpu_admissible_index_tensor}
@@ -2117,8 +2141,7 @@
 
 \begin{lemma}[Tensor-product additivity of the representative index]
     \label{thm:mpu_representative_index_tensor_product}
-    \lean{MPOTensor.IsMPU.index_tensorProduct,
-        MPOTensor.IsMPU.index_identityMPUTensor,
+    \lean{MPOTensor.IsMPU.index_identityMPUTensor,
         MPOTensor.IsMPU.index_tensorProduct_identityMPUTensor}
     \leanok
     \uses{def:mpu_reduced_representative_index,
@@ -2328,20 +2351,34 @@
 
 \begin{lemma}[Composition additivity]
     \label{lem:mpu_index_composition}
-    \notready
+    \lean{MPOTensor.IsMPU.index_mulTensor}
+    \leanok
     \discussion{6016}
-    \uses{SF, def:index, index-well-defined, lem:mpu_four_site_composition_source_rank_bounds}
-    Let $\mathcal W$ generate the composition of the MPUs generated by
-    $\mathcal U$ and $\mathcal U'$. Under the source's standing canonical-form
-    convention,
+    \uses{def:index, def:mpu_reduced_representative_index,
+        def:mpdo_operator_product}
+    Let $\mathcal U$ and $\mathcal U'$ be MPU tensors with a common positive
+    physical dimension and positive bond dimensions, and let $\mathcal W$ be
+    the tensor with doubled auxiliary indices that generates the composition
+    of the MPUs generated by $\mathcal U$ and $\mathcal U'$. Then
     \begin{align}
         \operatorname{ind}(\mathcal W)
          & =\operatorname{ind}(\mathcal U)+\operatorname{ind}(\mathcal U').
     \end{align}
-    In \cite[Theorem~IV.6(ii)]{Cirac2017MPU}, this additivity formula is the unrestricted composition
-    statement.
+    This is the composition clause of \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
+    The index is that of
+    Definition~\ref{def:mpu_reduced_representative_index}, which agrees with
+    the index of Definition~\ref{def:index} for tensors in canonical form; no
+    canonical form is assumed here.
     % Source lines: paper_v2.tex 833--845.
 \end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_admissible_index_composition,
+        lem:mpu_four_site_composition_source_rank_bounds}
+    This is the first assertion of
+    Lemma~\ref{thm:mpu_admissible_index_composition}, whose proof follows the
+    source's rank-saturation argument on the blocking of length $4k$.
+\end{proof}
 
 \begin{lemma}[Reduction to a canonical representative]
     \label{thm:mpu_canonical_representative_reduction}
@@ -2404,8 +2441,7 @@
 
 \begin{lemma}[Composition additivity of the representative index]
     \label{thm:mpu_admissible_index_composition}
-    \lean{MPOTensor.IsMPU.index_mulTensor,
-        MPOTensor.IsMPUCanonicalFormII.index_eq_add_of_mpo_eq_mulTensor}
+    \lean{MPOTensor.IsMPUCanonicalFormII.index_eq_add_of_mpo_eq_mulTensor}
     \leanok
     \uses{def:mpu_reduced_representative_index, def:mpdo_operator_product,
         def:mpo_family}
@@ -2478,6 +2514,38 @@
     % when $D_a\neq D_b$; its canonical form admits the adjoined directions and
     % ours does not. Documented in docs/paper-gaps/mpu_equivalence_fixed_bond.tex.
 \end{definition}
+
+\begin{lemma}[Discarding the off-diagonal blocks of a block-triangular tensor]
+    \label{lem:mpu_level_triangular_reduction}
+    \lean{MPOTensor.levelScale, MPOTensor.levelDiag, MPOTensor.IsLevelTriangular,
+        MPOTensor.levelScale_one, MPOTensor.levelScale_zero,
+        MPOTensor.continuous_levelScale, MPOTensor.mpo_levelScale,
+        MPOTensor.joinedIn_sameMPOSet_levelDiag,
+        MPOTensor.joinedIn_sameMPOSet_padBond_of_levelDiag_eq}
+    \leanok
+    \uses{def:strictly-equivalent-tensors}
+    Grade the virtual directions of a tensor $\mathcal W$ of bond dimension $D$
+    by levels $w\colon\{1,\ldots,D\}\to\mathbb N$, and suppose that every letter
+    vanishes from a higher level to a lower one:
+    $(\mathcal W^{ij})_{\beta\alpha}=0$ whenever $w(\beta)<w(\alpha)$. Let
+    $\mathcal W_0$ keep only the entries with $w(\beta)=w(\alpha)$. Then
+    $\mathcal W$ and $\mathcal W_0$ are joined by a continuous path of tensors
+    whose periodic operators $W^{(N)}$ are those of $\mathcal W$ at every
+    $N\geq1$. In particular, if $\mathcal W_0$ is a smaller tensor with
+    adjoined unused directions, the path ends at that tensor.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    For $s\in\mathbb C$ multiply the entry $(\beta,\alpha)$ of every letter by
+    $s^{w(\beta)-w(\alpha)}$; this is a polynomial in $s$ because the entries
+    with $w(\beta)<w(\alpha)$ vanish. For $s\neq0$ it is the conjugation of
+    every letter by $\operatorname{diag}(s^{w(\beta)})$, which leaves every
+    trace of a product of letters, hence every $W^{(N)}$, unchanged. The
+    periodic operators are continuous in $s$, so they are also unchanged at
+    $s=0$, where the scaled tensor is $\mathcal W_0$. The path is $s=1-t$,
+    $t\in[0,1]$.
+\end{proof}
 
 \begin{lemma}[Normalized transfer data under identity ancillas]
     \label{thm:mpu_identity_ancilla_reduced_cfii}
@@ -2569,48 +2637,6 @@
     \end{align}
     As in \cite[lines~716--724]{Cirac2017MPU}, canonical form of the blocked
     tensors with ancilla is a condition of the definition.
-\end{definition}
-
-\begin{definition}[Admissible equivalence and path datum]
-    \label{def:mpu_admissible_equivalence_datum}
-    \notready
-    % **Scope restriction (no existence or preservation theorem):** this datum
-    % records every reduced source hypothesis needed along a chosen path. It does
-    % not assert preservation under blocking, ancillas, products, composition, or
-    % continuous variation. Documented in
-    % docs/paper-gaps/mpu_canonical_form_full_support.tex.
-    \uses{def:strictly-equivalent-tensors, def:equivalent-tensors, def:mpu_reduced_full_support_source_datum}
-    An admissible strict-equivalence datum for a path
-    $[0,1]\ni p\mapsto\mathcal W(p)$ consists of a common positive blocking
-    length $m$ such that the blocked path tensor $\mathcal W(p)_m$ itself is
-    simple and carries a reduced full-support source datum for every $p$. The
-    blocked tensors and their source data vary continuously with $p$, after
-    fixed identifications of the finite-dimensional spaces involved. No
-    equivalent or reduced representative may replace $\mathcal W(p)_m$. In
-    particular, the blocked endpoint tensors themselves carry their own source data.
-
-    When the path is used under a specified symmetry $\mathcal S$, the datum also
-    includes continuously varying reduced full-support source data for the fixed
-    family of comparison paths
-    \begin{align}
-        \overline{\mathcal W(p)_m},\qquad
-        \mathcal W(p)_m^\sharp,\qquad
-        \mathcal W(p)_m^{\mathsf T},\qquad
-        \mathcal S[\mathcal W(p)_m].
-    \end{align}
-    Every tensor in this family is simple. This requirement is part of the datum
-    independently of which comparisons a later proof uses; no preservation under
-    conjugation, physical adjoint, transposition, or $\mathcal S$ is assumed.
-
-    Two tensors are admissibly strictly equivalent if their strict equivalence
-    is realized by such a path. They are admissibly equivalent if the blocked,
-    ancilla-enlarged endpoints in Definition~\ref{def:equivalent-tensors} are
-    joined by an admissible strict-equivalence path. The source arguments
-    motivating these additional path hypotheses are Proposition~IV.5,
-    Theorem~IV.6, Corollary~IV.7, and the lemma following the
-    symmetry-equivalence definitions in \cite{Cirac2017MPU}; the datum itself is
-    introduced here and has no source-labelled counterpart.
-    % Source lines: paper_v2.tex 733--910 and 1366--1380.
 \end{definition}
 
 \begin{lemma}[Generic two-projection angle block]
@@ -4100,8 +4126,8 @@
     \discussion{6023}
     \uses{def:index, def:mpu_reduced_representative_index,
         thm:mpu_representative_index_blocking_adjoint,
-        thm:mpu_representative_index_tensor_product,
-        thm:mpu_admissible_index_composition, thm:mpu_path_index_constant,
+        lem:mpu_index_tensor, lem:mpu_index_composition,
+        thm:mpu_path_index_constant,
         def:equivalent-tensors, thm:mpu_equivalent_of_index_eq}
     For MPU tensors under the source's standing canonical-form convention, take
     the index defined from any simple blocking. This index has the following
@@ -4125,13 +4151,13 @@
 
 \begin{proof}\leanok
     \uses{thm:mpu_representative_index_blocking_adjoint,
-        thm:mpu_representative_index_tensor_product,
-        thm:mpu_admissible_index_composition, thm:mpu_path_index_constant,
+        lem:mpu_index_tensor, lem:mpu_index_composition,
+        thm:mpu_path_index_constant,
         thm:mpu_equivalent_of_index_eq}
     Clauses (i)--(iii) are
     Lemmas~\ref{thm:mpu_representative_index_blocking_adjoint},
-    \ref{thm:mpu_representative_index_tensor_product},
-    \ref{thm:mpu_admissible_index_composition}
+    \ref{lem:mpu_index_tensor},
+    \ref{lem:mpu_index_composition}
     and~\ref{thm:mpu_path_index_constant}. Clause (iv) is
     Lemma~\ref{thm:mpu_equivalent_of_index_eq}.
 \end{proof}

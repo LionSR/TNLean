@@ -8,6 +8,7 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundaryNetPolynomial
 import TNLean.MPS.AreaLaw.ViableSet.FiniteBoundarySelection
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The size-trimming selection, chosen before the ground state
@@ -33,6 +34,8 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
 
+open ManyBody (IsGapped groundSpace ChainInteraction)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- **The size-trimming selection of a net and a solver.** For every bond dimension `m ≤ D`,
@@ -40,8 +43,8 @@ take the boundary set `net m` and at each of its feasible points the left column
 leading vector `sol m X`. The selection depends only on the Hamiltonian, the gap parameter,
 the family `S`, the nets and the solver; no ground pair enters. LVV13, `algo53.tex`,
 equation `eq:conv`, lines 472–478, and Claim `c:2`, lines 520–527. -/
-noncomputable def ChainHamiltonian.sizeTrimmingSelectionWith {L q k : ℕ}
-    (_h : ChainHamiltonian L q 1 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
+noncomputable def _root_.ManyBody.ChainInteraction.sizeTrimmingSelectionWith {L q k : ℕ}
+    (_h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
     (net : (m : ℕ) → Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ))
     (sol : (m : ℕ) → Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
       EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) :
@@ -59,8 +62,8 @@ energy supported on `span S`. The selection depends only on the Hamiltonian, the
 parameter and the family `S`; no ground pair enters. LVV13, `algo53.tex`, equation
 `eq:conv`, lines 472–478, and Claim `c:2`, lines 520–527, using all actual bond dimensions
 up to the uniform cut bound. -/
-noncomputable def ChainHamiltonian.sizeTrimmingSelection {L q k : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
+noncomputable def _root_.ManyBody.ChainInteraction.sizeTrimmingSelection {L q k : ℕ}
+    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
     Finset (LeftBlockVector L q k) :=
   haveI : NeZero q := ⟨by omega⟩
   h.sizeTrimmingSelectionWith hq Δ S
@@ -70,7 +73,8 @@ noncomputable def ChainHamiltonian.sizeTrimmingSelection {L q k : ℕ}
 
 /-- The nets are admissible when each covers the boundary densities within `c / (2L)`
 and has at most `K` points up to the uniform cut bound. -/
-def ChainHamiltonian.IsAdmissibleNet {L q k : ℕ} (_h : ChainHamiltonian L q 1 1) (Δ : ℝ)
+def _root_.ManyBody.ChainInteraction.IsAdmissibleNet {L q k : ℕ}
+    (_h : ChainInteraction L q 1) (Δ : ℝ)
     (net : (m : ℕ) → Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)) :
     Prop :=
   let c : ℝ := (Δ / 169) ^ 2
@@ -80,7 +84,8 @@ def ChainHamiltonian.IsAdmissibleNet {L q k : ℕ} (_h : ChainHamiltonian L q 1 
 
 /-- The solver is admissible when at every bond dimension it returns admissible leading
 vectors for the left part of the Hamiltonian at tolerance `c / (2L)`. -/
-def ChainHamiltonian.IsAdmissibleSolver {L q k : ℕ} (h : ChainHamiltonian L q 1 1) (hq : 2 ≤ q)
+def _root_.ManyBody.ChainInteraction.IsAdmissibleSolver {L q k : ℕ}
+    (h : ChainInteraction L q 1) (hq : 2 ≤ q)
     (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
     (sol : (m : ℕ) → Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
       EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) : Prop :=
@@ -90,8 +95,8 @@ def ChainHamiltonian.IsAdmissibleSolver {L q k : ℕ} (h : ChainHamiltonian L q 
 
 /-- The selection of an admissible solver lies in the span of the input family.
 LVV13, `algo53.tex`, Claim `c:2`, line 526. -/
-theorem ChainHamiltonian.sizeTrimmingSelectionWith_subset_span {L q k : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
+theorem _root_.ManyBody.ChainInteraction.sizeTrimmingSelectionWith_subset_span {L q k : ℕ}
+    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
     (net : (m : ℕ) → Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ))
     {sol : (m : ℕ) → Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
       EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)}
@@ -100,15 +105,16 @@ theorem ChainHamiltonian.sizeTrimmingSelectionWith_subset_span {L q k : ℕ}
       Submodule.span ℂ (S : Set (LeftBlockVector L q k)) := by
   classical
   intro v hv
-  simp only [ChainHamiltonian.sizeTrimmingSelectionWith, Finset.mem_coe, Finset.mem_biUnion,
+  simp only [ManyBody.ChainInteraction.sizeTrimmingSelectionWith, Finset.mem_coe,
+      Finset.mem_biUnion,
     Finset.mem_univ, true_and] at hv
   obtain ⟨m, hm⟩ := hv
   exact boundaryFamily_subset_span _ _ _ _ _ (hsol m.val) hm
 
 /-- The selection lies in the span of the input family.
 LVV13, `algo53.tex`, Claim `c:2`, line 526. -/
-theorem ChainHamiltonian.sizeTrimmingSelection_subset_span {L q k : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
+theorem _root_.ManyBody.ChainInteraction.sizeTrimmingSelection_subset_span {L q k : ℕ}
+    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
     (h.sizeTrimmingSelection hq Δ S : Set (LeftBlockVector L q k)) ⊆
       Submodule.span ℂ (S : Set (LeftBlockVector L q k)) :=
   h.sizeTrimmingSelectionWith_subset_span hq Δ S _ fun m ↦
@@ -117,13 +123,14 @@ theorem ChainHamiltonian.sizeTrimmingSelection_subset_span {L q k : ℕ}
 /-- Every retained column has norm at most one, since it is a column of a unit leading
 vector. This bound depends on no ground pair or viability assumption.
 LVV13, `algo53.tex`, column extraction, lines 477–478. -/
-theorem ChainHamiltonian.norm_le_one_of_mem_sizeTrimmingSelection {L q k : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hq : 2 ≤ q) (Δ : ℝ)
+theorem _root_.ManyBody.ChainInteraction.norm_le_one_of_mem_sizeTrimmingSelection {L q k : ℕ}
+    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ)
     (S : Finset (LeftBlockVector L q k)) {v : LeftBlockVector L q k}
     (hv : v ∈ h.sizeTrimmingSelection hq Δ S) : ‖v‖ ≤ 1 := by
   classical
   let : NeZero q := ⟨by omega⟩
-  simp only [ChainHamiltonian.sizeTrimmingSelection, ChainHamiltonian.sizeTrimmingSelectionWith,
+  simp only [ManyBody.ChainInteraction.sizeTrimmingSelection,
+      ManyBody.ChainInteraction.sizeTrimmingSelectionWith,
     Finset.mem_biUnion, Finset.mem_univ, true_and] at hv
   obtain ⟨m, hm⟩ := hv
   exact norm_le_one_of_mem_boundaryMinimizerFamily
@@ -131,8 +138,8 @@ theorem ChainHamiltonian.norm_le_one_of_mem_sizeTrimmingSelection {L q k : ℕ}
 
 /-- The selection of nets with at most `K` points each has at most `(D + 1) D K` members.
 LVV13, `algo53.tex`, Claim `c:2`, lines 520–527. -/
-theorem ChainHamiltonian.card_sizeTrimmingSelectionWith_le {L q k : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
+theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelectionWith_le {L q k : ℕ}
+    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
     {net : (m : ℕ) → Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)}
     (sol : (m : ℕ) → Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
       EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) {K : ℕ}
@@ -146,13 +153,14 @@ theorem ChainHamiltonian.card_sizeTrimmingSelectionWith_le {L q k : ℕ}
       ((Δ / 169) ^ 2 / (2 * L)) (net m.val) (sol m.val)).card ≤ D * K :=
     (card_boundaryFamily_le _ _ _ _ _).trans
       (Nat.mul_le_mul (Nat.le_of_lt_succ m.isLt) (hnet m.val (Nat.le_of_lt_succ m.isLt)))
-  simpa only [ChainHamiltonian.sizeTrimmingSelectionWith, Finset.card_univ, Fintype.card_fin,
+  simpa only [ManyBody.ChainInteraction.sizeTrimmingSelectionWith, Finset.card_univ,
+      Fintype.card_fin,
     Nat.mul_assoc] using Finset.card_biUnion_le_card_mul Finset.univ _ (D * K) fun m _ ↦ hm m
 
 /-- The selection has at most `(D + 1) * D * K` members, with `K` the net bound.
 LVV13, `algo53.tex`, Claim `c:2`, lines 520–527. -/
-theorem ChainHamiltonian.card_sizeTrimmingSelection_le {L q k : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
+theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelection_le {L q k : ℕ}
+    (h : ChainInteraction L q 1) (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q k)) :
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
@@ -170,8 +178,8 @@ theorem ChainHamiltonian.card_sizeTrimmingSelection_le {L q k : ℕ}
 /-- The selection of nets with the standard point bound has explicit polynomial cardinality
 in the chain length, with coefficient and degree independent of that length. LVV13,
 `algo53.tex`, Claim `c:2`, lines 520–527. -/
-theorem ChainHamiltonian.card_sizeTrimmingSelectionWith_le_polynomial {L q k : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
+theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelectionWith_le_polynomial {L q k : ℕ}
+    (h : ChainInteraction L q 1) (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q k))
     {net : (m : ℕ) → Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)}
     (sol : (m : ℕ) → Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
@@ -195,8 +203,8 @@ theorem ChainHamiltonian.card_sizeTrimmingSelectionWith_le_polynomial {L q k : �
 
 /-- The selection has explicit polynomial cardinality in the chain length, with coefficient
 and degree independent of that length. LVV13, `algo53.tex`, Claim `c:2`, lines 520–527. -/
-theorem ChainHamiltonian.card_sizeTrimmingSelection_le_polynomial {L q k : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
+theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomial {L q k : ℕ}
+    (h : ChainInteraction L q 1) (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q k)) :
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
@@ -218,8 +226,9 @@ selection is `1 / 12`-viable for it, with a witness given by an isometry `W` on 
 dimension `m ≤ D` and a unit vector `u` all of whose columns belong to the selection.
 Library-bond version of LVV13, `algo53.tex`, Claim `c:2`, lines 520–527, for every solver
 of the convex program returning optimal solutions. -/
-theorem ChainHamiltonian.isViable_sizeTrimmingSelectionWith {L q k : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
+theorem _root_.ManyBody.ChainInteraction.isViable_sizeTrimmingSelectionWith {L q k : ℕ}
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+        (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q k))
     {net : (m : ℕ) → Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)}
@@ -228,7 +237,8 @@ theorem ChainHamiltonian.isViable_sizeTrimmingSelectionWith {L q k : ℕ}
       EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)}
     (hsol : h.IsAdmissibleSolver hq Δ S sol)
     (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     (hviable : IsViable Γ ((Δ / 169) ^ 2 / L) (S : Set (LeftBlockVector L q k))) :
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
@@ -260,10 +270,10 @@ theorem ChainHamiltonian.isViable_sizeTrimmingSelectionWith {L q k : ℕ}
       Finset.univ.biUnion fun m : Fin (D + 1) ↦
       T m.val := rfl
   obtain ⟨_, m, W, x, -, -, -, -, hW, hmD, -, hxnorm, hxP, huniform⟩ :=
-    h.exists_uniform_leading_bounds_of_isViable hpos hL hq hΔ
+    h.exists_uniform_leading_bounds_of_isViable hh hhJ hpos hL hq hΔ
       (h.cutLeftPart k) (h.cutBoundaryPart k) (h.cutLeftPart_add_cutBoundaryPart k)
       (h.cutLeftPart_isSupportedOn k) (h.cutBoundaryPart_isSupportedOn k)
-      (h.norm_cutBoundaryPart_le k) hgs hviable
+      (h.norm_cutBoundaryPart_le hhJ k) hΩ hgap hspan hviable
   let ρx := vecMulVec x (star x)
   have hρxp : ρx.PosSemidef := posSemidef_vecMulVec_self_star x
   have hρxt : ρx.trace = 1 := by
@@ -325,11 +335,13 @@ theorem ChainHamiltonian.isViable_sizeTrimmingSelectionWith {L q k : ℕ}
 for it, with a witness given by an isometry `W` on a bond of dimension `m ≤ D` and a unit
 vector `u` all of whose columns belong to the selection. Library-bond version of LVV13,
 `algo53.tex`, Claim `c:2`, lines 520–527. -/
-theorem ChainHamiltonian.isViable_sizeTrimmingSelection {L q k : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
+theorem _root_.ManyBody.ChainInteraction.isViable_sizeTrimmingSelection {L q k : ℕ}
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+        (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q k)) (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     (hviable : IsViable Γ ((Δ / 169) ^ 2 / L) (S : Set (LeftBlockVector L q k))) :
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
@@ -345,8 +357,8 @@ theorem ChainHamiltonian.isViable_sizeTrimmingSelection {L q k : ℕ}
   have hc : 0 < (Δ / 169) ^ 2 := sq_pos_of_pos (div_pos hΔ (by norm_num))
   have hη : 0 < (Δ / 169) ^ 2 / (2 * L) :=
     div_pos hc (mul_pos (by norm_num) (by exact_mod_cast hL))
-  exact h.isViable_sizeTrimmingSelectionWith hpos hL hq hΔ S
+  exact h.isViable_sizeTrimmingSelectionWith hh hhJ hpos hL hq hΔ S
     (fun _ _ Y hY ↦ exists_mem_rectangularTraceNormNet hη Y hY)
-    (fun m ↦ isAdmissibleLeadingVector_boundaryLeadingVector _ _ m _) E₀ Γ hgs hviable
+    (fun m ↦ isAdmissibleLeadingVector_boundaryLeadingVector _ _ m _) E₀ Γ hΩ hgap hspan hviable
 
 end TNLean.MPS.AreaLaw

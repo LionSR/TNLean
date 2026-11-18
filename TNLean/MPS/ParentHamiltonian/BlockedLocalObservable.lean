@@ -19,6 +19,7 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, site regrouping at lines
 -/
 
 open SpinChain MPSTensor
+open Kraus (blockPhysDim)
 namespace SpinChain
 variable {d L : ℕ} [NeZero d] [NeZero L]
 /-- An arbitrary positive-length original interval observable is the

@@ -19,6 +19,8 @@ Source: SCP10, arXiv:1001.3807, Theorems 5.7 and 5.9. Both periods are at least
 three so that the four virtual legs are distinct edges of the native graph.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS.NativeTorus
 open TNLean.Lattice

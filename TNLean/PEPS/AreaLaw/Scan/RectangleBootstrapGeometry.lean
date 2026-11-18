@@ -34,6 +34,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 private theorem rectangleBootstrap_nonempty (Q : IntRect) : Q.toFinset.Nonempty :=
@@ -86,7 +88,7 @@ Source: `08-scanner.tex`, lines 32--58, 83--154 and 705--729, adc7f124. -/
 def rectangleBootstrapScanner {Λ : Finset (ℤ × ℤ)}
     (Q : IntRect) (A : Finset (Site Λ)) (R : ℕ) (F : ScannerExponents)
     (Cr C₁ : ℝ) : CollarScan (Site Λ) (AdmissibleSupport Λ R) where
-  graph := domainGraph Λ
+  graph := planeDomainGraph Λ
   A := A
   depth := fun x ↦ ambientDepth Q.toFinset (rectangleBootstrap_nonempty Q) x.val
   anchor := fun i ↦ i.property.1.choose
@@ -109,7 +111,7 @@ theorem rectangleBootstrapScanner_geometry_of_threshold_le (F : ScannerExponents
     (hQN : roundedClearanceThreshold 24 Cr F.ell ≤ Q.size) (hsafe : IsSafe Λ A D₀ Q) :
     let S := rectangleBootstrapScanner Q A R F Cr C₁
     ∃ hT : Q.toFinset.Nonempty,
-      S.graph = domainGraph Λ ∧ S.A = A ∧
+      S.graph = planeDomainGraph Λ ∧ S.A = A ∧
       S.n = 24 * Q.size ∧ Q.size ≤ S.n ∧
       S.depth = (fun x ↦ ambientDepth Q.toFinset hT x.val) ∧
       (∀ i, S.anchor i ∈ i.val) ∧
@@ -169,7 +171,7 @@ theorem exists_rectangleBootstrapScanner_geometry (F : ScannerExponents)
       1 ≤ D₀ → N ≤ Q.size → IsSafe Λ A D₀ Q →
       let S := rectangleBootstrapScanner Q A R F Cr C₁
       ∃ hT : Q.toFinset.Nonempty,
-        S.graph = domainGraph Λ ∧ S.A = A ∧
+        S.graph = planeDomainGraph Λ ∧ S.A = A ∧
         S.n = 24 * Q.size ∧ Q.size ≤ S.n ∧
         S.depth = (fun x ↦ ambientDepth Q.toFinset hT x.val) ∧
         (∀ i, S.anchor i ∈ i.val) ∧

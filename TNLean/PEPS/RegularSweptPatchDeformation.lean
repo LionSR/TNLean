@@ -20,6 +20,8 @@ four endpoints and partner strings are not instantiated here; no prescribed
 braiding transformation or parent-Hamiltonian assertion is made.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
