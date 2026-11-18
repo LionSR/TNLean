@@ -55,7 +55,9 @@ example : boxEntropy 2 1 0 0 0 0 = 0 := by
 
 -- This is a conditional wrapper call, not a claim of a nonpositive-gap area law.
 example (C e : ℝ) (he : 0 < 1 + e)
-    (hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy 2 1 0 0 0 r ≤ C * (r : ℝ) ^ (1 + e)) :=
+    (hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy 2 1 0 0 0 r ≤ C * (r : ℝ) ^ (1 + e)) :
+    regionalEntropy domain 2 omega (rectRegion ∅ rectangle) ≤
+      C * (rectangle.size : ℝ) ^ (1 + e) :=
   regionalEntropy_le_of_boxEntropy_power (by decide : 1 ≤ (2 : ℕ)) he hbox
     zeroHamiltonian omega_norm projector_gap omega_mem ∅ rectangle safe_empty
 
