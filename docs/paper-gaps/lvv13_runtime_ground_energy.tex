@@ -1872,10 +1872,29 @@ has schoolbook charge at most \(8(8nD^2+6)(4k+3)^2\), by
 \leanid{TNLean.MPS.AreaLaw.RationalContractionTrace.coefficient\_schoolbookCharge\_le}.
 At each site all partial sums use the same denominator as the completed
 row. The bound includes the final scalar cap and the empty chain.
-The corresponding recorded evaluations for weighted overlaps and local
-energy sums remain to be constructed. The existing schoolbook charge is a mathematical cost
-model; it is not a proved runtime bound for integer multiplication,
-division, greatest common divisors, or reduced-rational normalization.
+
+For a matrix element of a sum of \(m\) two-site terms between two rational
+chains, let \(h\) bound the input coordinate bit exponent, so that the
+height of every cap, tensor and operator coordinate is at most \(2^h\).
+Put
+\[
+\begin{aligned}
+P &= 2+nq(D_a^2+D_b^2)+mq^4,\\
+T &= m\bigl[q^4\bigl(n(15q^2+8)(D_aD_b)^2+21\bigr)+2\bigr],\\
+B &= (84n+74)(2Ph+h+1)+28n(D_a+D_b+2q)+28q+2m+15.
+\end{aligned}
+\]
+The evaluator records exactly \(T\) primitive rational operations. Each
+matrix-unit summand evaluates its weighted overlap once, including both
+caps, before multiplying by the local coefficient. A common input denominator
+\(M\) gives denominator \(M^{3n+3}\) for every summand and both levels of
+prefix sums. Every recorded operand and result has height at most \(2^B\).
+The resulting schoolbook charge is at most \(8T(B+2)^2\), by
+\leanid{TNLean.MPS.AreaLaw.RationalArithmeticTrace.localTerms\_polynomial\_schoolbookCharge}.
+An empty family returns zero with no operations. For an empty chain, the
+required site indices force the family to be empty.
+The cost model leaves the implementation costs of integer multiplication,
+division, greatest common divisors and reduced-rational normalization open.
 Those implementation bounds and the numerical routines that construct
 the retained bases and solve the semidefinite programs remain open.
 
