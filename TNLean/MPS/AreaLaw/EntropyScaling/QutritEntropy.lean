@@ -242,7 +242,8 @@ theorem regionEntropy_qutritState_le {N : ℕ} (hN : 0 < N)
   have hmix : Entropy.regionEntropy A (qutritState N p) ≤
       (1 - p) * Entropy.regionEntropy A (qutritState N 0) + Real.negMulLog (1 - p) +
         (p * Entropy.regionEntropy A (qutritState N 1) + Real.negMulLog p) := by
-    simpa only [Entropy.regionEntropy, regionState_qutritState_decomposition hA hp hp']
+    simpa only [Entropy.regionEntropy, ManyBody.regionEntropy,
+      regionState_qutritState_decomposition hA hp hp']
       using hadd
   rw [regionEntropy_qutritState_zero hN A, mul_zero, zero_add] at hmix
   have hbound := mul_le_mul_of_nonneg_left (regionEntropy_qutritState_one_le hN A) hp
