@@ -9930,8 +9930,8 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Apply closure under powers and list products, unpack membership in a mapped
   list, and prove the factor supported using closure under scalar multiplication and exponentials.
 - **Seen:** Two occurrences in `TNLean/Lattice/ProductForm.lean`, in
-  `hasProductForm_trotterProduct_of_radius` and
-  `ManyBody.PlaneInteraction.hasProductForm_trotterProduct`.
+  `hasProductForm_lie_of_radius` and
+  `ManyBody.PlaneInteraction.hasProductForm_lie`.
 - **Abstraction:** None yet; the two proofs have different support hypotheses and are below
   the promotion threshold. The supported expansion is shared through
   `hasProductForm_of_mem_supportedOperators_radius`; the diameter theorem is its corollary.
