@@ -122,6 +122,12 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   height two has a single edge between neighbouring sites, so their state
   formulas are stated for tori of width and height at least three; the GHZ
   example holds on every torus.
+- `rmp_honeycomb_cluster_peps.tex` (local correction, open) records that the
+  printed honeycomb parent Hamiltonian, the sum of the terms `X Z Z Z`, has the
+  common `-1`
+  eigenvector as ground state, so the sign is reversed; that the vertex tensor
+  of the honeycomb cluster PEPS is not injective, while plaquette blocking
+  gives injectivity (not formalized); and the brick-wall torus used.
 - `rmp_peps_czx_bond_orientation.tex` (false source claim) records that the
   printed CZX tensor, contracted with equal labels at the two ends of each
   bond, gives GHZ states on diagonal loops rather than the plaquette state,
@@ -870,9 +876,13 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   that the block-injective interpolation of Section 5 uses no commutation of
   the path Hamiltonians, so its exact action and fusion are formalized without
   adjoint closure, while any commutation statement inherits the one-block
-  counterexample; the one-site injectivity of the common operators fails
-  already for one block, and the claimed ground space of the path
-  Hamiltonians remains open.
+  counterexample. In the open interval the periodic ground space of the
+  two-site canonical parent is spanned by the linearly independent block
+  states, its projection is continuous, and compact subintervals have a gap
+  uniform over all ring lengths; the ground projections converge to the span
+  of the block states at the endpoints. The one-site injectivity of the common
+  operators fails already for one block; the endpoint Hamiltonians and the
+  derivation of sector-separated blocks remain open.
 - `glm23_fibonacci_module_rank_scope.tex` records that the source's claim that
   the Fibonacci algebra has only the two-block invariant subspace is
   formalized for at most two blocks, where the nonnegative integer

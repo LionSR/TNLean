@@ -157,6 +157,183 @@ private lemma graphNeighborSign_eq_prod (a b : E → V) (h : ∀ e, a e ≠ b e)
   have hn : ¬(a e = v ∧ b e = v) := fun he => h e (he.1.trans he.2.symm)
   split_ifs <;> simp_all
 
+section Hamiltonian
+
+/-- A single-site flip is an involution. -/
+theorem graphFlip_graphFlip (v : V) (s : V → Fin 2) : graphFlip v (graphFlip v s) = s := by
+  funext u
+  by_cases hu : u = v
+  · subst hu
+    simp only [graphFlip, Function.update_self]
+    generalize s u = x
+    fin_cases x <;> rfl
+  · simp [graphFlip, Function.update_of_ne hu]
+
+/-- Flips at two sites commute. -/
+theorem graphFlip_comm (v w : V) (s : V → Fin 2) :
+    graphFlip v (graphFlip w s) = graphFlip w (graphFlip v s) := by
+  by_cases hvw : v = w
+  · rw [hvw]
+  · funext u
+    by_cases hu : u = v
+    · subst hu
+      simp [graphFlip, Function.update_apply, hvw]
+    · by_cases hu' : u = w
+      · subst hu'
+        simp [graphFlip, Function.update_apply, Ne.symm hvw]
+      · simp [graphFlip, Function.update_apply, hu, hu']
+
+/-- A graph stabilizer is the single-site flip conjugated by the controlled-Z
+circuit sign. -/
+theorem graphStabilizer_apply_eq (a b : E → V) (h : ∀ e, a e ≠ b e) (v : V)
+    (ψ : (V → Fin 2) → ℂ) (s : V → Fin 2) :
+    graphStabilizer a b v ψ s =
+      graphCircuitSign a b s * graphCircuitSign a b (graphFlip v s) * ψ (graphFlip v s) := by
+  rw [graphStabilizer, graphCircuitSign_flip a b h]
+  calc graphNeighborSign a b v s * ψ (graphFlip v s) =
+      graphNeighborSign a b v s * (graphCircuitSign a b s * graphCircuitSign a b s) *
+        ψ (graphFlip v s) := by rw [graphCircuitSign_sq, mul_one]
+    _ = _ := by ring
+
+/-- The graph stabilizers commute pairwise. Source: arXiv:2011.12127, line 1445,
+"the commuting parent Hamiltonian". -/
+theorem graphStabilizer_comm (a b : E → V) (h : ∀ e, a e ≠ b e) (v w : V)
+    (ψ : (V → Fin 2) → ℂ) :
+    graphStabilizer a b v (graphStabilizer a b w ψ) =
+      graphStabilizer a b w (graphStabilizer a b v ψ) := by
+  funext s
+  simp only [graphStabilizer_apply_eq a b h, graphFlip_comm w v]
+  have hv := graphCircuitSign_sq a b (graphFlip v s)
+  have hw := graphCircuitSign_sq a b (graphFlip w s)
+  calc _ = graphCircuitSign a b s *
+        (graphCircuitSign a b (graphFlip v s) * graphCircuitSign a b (graphFlip v s)) *
+        graphCircuitSign a b (graphFlip v (graphFlip w s)) *
+        ψ (graphFlip v (graphFlip w s)) := by ring
+    _ = graphCircuitSign a b s *
+        (graphCircuitSign a b (graphFlip w s) * graphCircuitSign a b (graphFlip w s)) *
+        graphCircuitSign a b (graphFlip v (graphFlip w s)) *
+        ψ (graphFlip v (graphFlip w s)) := by rw [hv, hw]
+    _ = _ := by ring
+
+/-- A graph stabilizer squares to the identity. -/
+theorem graphStabilizer_graphStabilizer (a b : E → V) (h : ∀ e, a e ≠ b e) (v : V)
+    (ψ : (V → Fin 2) → ℂ) : graphStabilizer a b v (graphStabilizer a b v ψ) = ψ := by
+  funext s
+  simp only [graphStabilizer_apply_eq a b h, graphFlip_graphFlip]
+  have hs := graphCircuitSign_sq a b s
+  have hf := graphCircuitSign_sq a b (graphFlip v s)
+  calc _ = (graphCircuitSign a b s * graphCircuitSign a b s) *
+      (graphCircuitSign a b (graphFlip v s) * graphCircuitSign a b (graphFlip v s)) * ψ s := by
+        ring
+    _ = ψ s := by rw [hs, hf, one_mul, one_mul]
+
+omit [DecidableEq V] in
+private lemma star_graphCircuitSign (a b : E → V) (s : V → Fin 2) :
+    star (graphCircuitSign a b s) = graphCircuitSign a b s := by
+  change (starRingEnd ℂ) _ = _
+  simp [graphCircuitSign, map_prod]
+
+variable [Fintype V]
+
+/-- A graph stabilizer is symmetric for the coefficient inner product. -/
+theorem sum_star_mul_graphStabilizer (a b : E → V) (h : ∀ e, a e ≠ b e) (v : V)
+    (φ ψ : (V → Fin 2) → ℂ) :
+    ∑ s, star (φ s) * graphStabilizer a b v ψ s =
+      ∑ s, star (graphStabilizer a b v φ s) * ψ s := by
+  let f : (V → Fin 2) ≃ (V → Fin 2) :=
+    ⟨graphFlip v, graphFlip v, graphFlip_graphFlip v, graphFlip_graphFlip v⟩
+  rw [← f.sum_comp]
+  refine Finset.sum_congr rfl fun s _ => ?_
+  simp only [f, Equiv.coe_fn_mk, graphStabilizer_apply_eq a b h, graphFlip_graphFlip,
+    star_mul, star_graphCircuitSign]
+  ring
+
+/-- The stabilizer Hamiltonian `-∑ᵥ Kᵥ` of a graph, with `Kᵥ` the stabilizer
+`X` at `v` times `Z` at its neighbours. Source: arXiv:2011.12127, line 1445,
+with the sign of the printed `∑ X Z Z Z` reversed; see the honeycomb example. -/
+def graphHamiltonian (a b : E → V) (ψ : (V → Fin 2) → ℂ) : (V → Fin 2) → ℂ :=
+  -∑ v, graphStabilizer a b v ψ
+
+/-- Energy identity of the stabilizer Hamiltonian: its expectation exceeds
+`-|V|` by half the summed squared defects `|ψ - Kᵥ ψ|²`. -/
+theorem sum_star_mul_graphHamiltonian (a b : E → V) (h : ∀ e, a e ≠ b e)
+    (ψ : (V → Fin 2) → ℂ) :
+    ∑ s, star (ψ s) * graphHamiltonian a b ψ s =
+      -(Fintype.card V : ℂ) * ∑ s, star (ψ s) * ψ s +
+        2⁻¹ * ∑ v, ∑ s, star (ψ s - graphStabilizer a b v ψ s) *
+          (ψ s - graphStabilizer a b v ψ s) := by
+  have hv (v : V) : ∑ s, star (ψ s - graphStabilizer a b v ψ s) *
+      (ψ s - graphStabilizer a b v ψ s) =
+      2 * (∑ s, star (ψ s) * ψ s - ∑ s, star (ψ s) * graphStabilizer a b v ψ s) := by
+    have h1 := sum_star_mul_graphStabilizer a b h v ψ ψ
+    have h2 := sum_star_mul_graphStabilizer a b h v (graphStabilizer a b v ψ) ψ
+    rw [graphStabilizer_graphStabilizer a b h] at h2
+    simp only [star_sub, sub_mul, mul_sub, Finset.sum_sub_distrib]
+    rw [← h1, h2]
+    ring
+  have hsum : ∑ s, star (ψ s) * graphHamiltonian a b ψ s =
+      -∑ v, ∑ s, star (ψ s) * graphStabilizer a b v ψ s := by
+    simp only [graphHamiltonian, Pi.neg_apply, Finset.sum_apply, mul_neg, Finset.mul_sum,
+      Finset.sum_neg_distrib]
+    rw [Finset.sum_comm]
+  rw [hsum, Finset.sum_congr rfl fun v _ => hv v, ← Finset.mul_sum, Finset.sum_sub_distrib,
+    Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+  ring
+
+omit [DecidableEq V] in
+private lemma star_mul_self_eq (z : ℂ) : star z * z = (Complex.normSq z : ℂ) :=
+  Complex.normSq_eq_conj_mul_self.symm
+
+private lemma re_energy (c : ℝ) (f : V → (V → Fin 2) → ℂ) (ψ : (V → Fin 2) → ℂ) :
+    (-(c : ℂ) * ∑ s, star (ψ s) * ψ s + 2⁻¹ * ∑ v, ∑ s, star (f v s) * f v s).re =
+      -c * ∑ s, Complex.normSq (ψ s) + 2⁻¹ * ∑ v, ∑ s, Complex.normSq (f v s) := by
+  simp only [star_mul_self_eq, ← Complex.ofReal_sum, ← Complex.ofReal_neg, ← Complex.ofReal_mul]
+  norm_num [Complex.add_re, Complex.mul_re]
+
+/-- The stabilizer Hamiltonian is bounded below by `-|V|`. -/
+theorem neg_card_mul_le_re_sum_star_mul_graphHamiltonian (a b : E → V)
+    (h : ∀ e, a e ≠ b e) (ψ : (V → Fin 2) → ℂ) :
+    -(Fintype.card V : ℝ) * ∑ s, Complex.normSq (ψ s) ≤
+      (∑ s, star (ψ s) * graphHamiltonian a b ψ s).re := by
+  rw [sum_star_mul_graphHamiltonian a b h, ← Complex.ofReal_natCast, re_energy]
+  have : 0 ≤ (2 : ℝ)⁻¹ * ∑ v, ∑ s, Complex.normSq (ψ s - graphStabilizer a b v ψ s) :=
+    mul_nonneg (by norm_num) (Finset.sum_nonneg fun _ _ =>
+      Finset.sum_nonneg fun _ _ => Complex.normSq_nonneg _)
+  linarith
+
+/-- The eigenvalue `-|V|` of the stabilizer Hamiltonian is attained exactly on
+the common fixed space of the stabilizers. -/
+theorem graphHamiltonian_eq_neg_card_smul_iff (a b : E → V) (h : ∀ e, a e ≠ b e)
+    (ψ : (V → Fin 2) → ℂ) :
+    graphHamiltonian a b ψ = -(Fintype.card V : ℂ) • ψ ↔ ∀ v, graphStabilizer a b v ψ = ψ := by
+  constructor
+  · intro hψ v
+    have he := sum_star_mul_graphHamiltonian a b h ψ
+    rw [hψ] at he
+    have he' : ∑ v, ∑ s, star (ψ s - graphStabilizer a b v ψ s) *
+        (ψ s - graphStabilizer a b v ψ s) = 0 := by
+      simp only [Pi.smul_apply, smul_eq_mul] at he
+      have : ∑ s, star (ψ s) * (-(Fintype.card V : ℂ) * ψ s) =
+          -(Fintype.card V : ℂ) * ∑ s, star (ψ s) * ψ s := by
+        rw [Finset.mul_sum]
+        exact Finset.sum_congr rfl fun _ _ => by ring
+      rw [this] at he
+      have h2 : (2⁻¹ : ℂ) ≠ 0 := by norm_num
+      exact (mul_eq_zero.mp (left_eq_add.mp he)).resolve_left h2
+    simp only [star_mul_self_eq, ← Complex.ofReal_sum, Complex.ofReal_eq_zero] at he'
+    have hzero := (Finset.sum_eq_zero_iff_of_nonneg (fun _ _ =>
+      Finset.sum_nonneg fun _ _ => Complex.normSq_nonneg _)).1 he' v (Finset.mem_univ _)
+    funext s
+    have := (Finset.sum_eq_zero_iff_of_nonneg (fun _ _ => Complex.normSq_nonneg _)).1
+      hzero s (Finset.mem_univ _)
+    rw [Complex.normSq_eq_zero, sub_eq_zero] at this
+    exact this.symm
+  · intro hψ
+    funext s
+    simp [graphHamiltonian, hψ, Finset.sum_const, Finset.card_univ]
+
+end Hamiltonian
+
 section Torus
 
 variable (width height : ℕ) [NeZero width] [NeZero height]
