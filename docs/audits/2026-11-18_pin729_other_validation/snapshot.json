@@ -1,18 +1,17 @@
 {
-  "at": "2026-11-18T15:02:14.460884+00:00",
-  "build_pass": 208,
-  "strict_pass": 208,
+  "at": "2026-11-18T15:09:05.691115+00:00",
+  "build_pass": 209,
+  "strict_pass": 209,
   "failed": [],
-  "blocked": [],
-  "remaining": [
+  "blocked": [
     "TNLean/Lattice.lean",
     "TNLean/MPS.lean",
     "TNLean/PEPS.lean",
-    "TNLean/QCA.lean",
-    "TNLean/QCA/IntervalSupport.lean"
+    "TNLean/QCA.lean"
   ],
-  "build_seconds": 1425.352228780088,
-  "strict_seconds": 708.0136982148979,
-  "free_disk_GiB": 3.535877227783203,
+  "remaining": [],
+  "build_seconds": 2083.9521360510844,
+  "strict_seconds": 710.9947763158998,
+  "free_disk_GiB": 3.2301063537597656,
   "production_source_edits": 0
 }

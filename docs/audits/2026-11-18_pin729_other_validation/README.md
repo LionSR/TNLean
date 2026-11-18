@@ -27,3 +27,19 @@ Build/strict execution durations include compiler work and command waits; no
 separate CPU-time measurement is claimed. Preparation and monitoring are outside
 those totals. Production proof/source editing time is zero. This is compilation
 evidence, not a new mathematical review or whole-library validation.
+
+## Final outcome
+
+The original queue completed: 209 targets passed both build and strict; 4 root
+aggregators remain unverified. There are no observed Lean source errors.
+Lattice hit the 600-second command limit. MPS and PEPS were not launched.
+QCA was stopped after 49.34 seconds: the automatic cwd-based guard could not
+read /proc process cwd, so manual scoped termination was required. Its raw
+nonzero status is preserved and is not a source-failure diagnosis. No root
+strict command ran for these four targets. No second queue or retry was started.
+
+See final-summary.json for exact timing and classifications. The driver returned
+0 after recording all outcomes; that is not a claim that all 213 targets passed.
+All selected source hashes and the pin/toolchain/lakefile were checked against
+the fixed source commit. There are no active Lake/Lean/driver/guard processes.
+Four defunct child-process entries remain under PID 1, with no executing work.

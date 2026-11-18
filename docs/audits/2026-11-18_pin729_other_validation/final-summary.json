@@ -1,0 +1,24 @@
+{
+  "validated_source_head": "6b7fb2e27dbc6856091e593e4226d350403beb8a",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "completed_build_and_strict": 209,
+  "source_compile_failures": 0,
+  "blocked": {
+    "TNLean/Lattice.lean": "build timeout 124 at 600.024589s; strict not run",
+    "TNLean/MPS.lean": "build and strict not run: missing large warm closure",
+    "TNLean/PEPS.lean": "build and strict not run: missing large warm closure; external Honeycomb owner pass not substituted",
+    "TNLean/QCA.lean": "build manually stopped (-15) after 49.341787s; strict not run; automated guard could not inspect /proc cwd"
+  },
+  "unaccounted_targets": 0,
+  "batch_start": "2026-11-18T14:21:47.664087+00:00",
+  "batch_end": "2026-11-18T15:08:23.003394+00:00",
+  "build_seconds": 2083.9521360510844,
+  "strict_seconds": 710.9947763158998,
+  "production_source_edits": 0,
+  "source_pin_hash_checks": "passed for all 213 source paths and manifest/toolchain/lakefile",
+  "session_89069": "completed exit 0 (driver completion; does not mean every target passed)",
+  "guard_monitor": "stopped",
+  "active_lake_or_lean_processes": 0,
+  "process_note": "Four defunct Lean entries reparented to PID 1 remain; no active compiler or queue.",
+  "compiler_error_lines": []
+}

@@ -1,0 +1,12 @@
+{
+  "time": "2026-11-18T15:08:22.949722+00:00",
+  "pid": 79868,
+  "children": [
+    80206,
+    80211
+  ],
+  "action": "SIGTERM root build and direct compiler children",
+  "target": "TNLean.QCA",
+  "reason": "Missing matching warm cross-family closure; no cold root expansion",
+  "note": "Automated /proc cwd-based guard failed to match; manually stopped after observing root active about 40 seconds. Some narrow QCA dependencies compiled. Not a source failure."
+}
