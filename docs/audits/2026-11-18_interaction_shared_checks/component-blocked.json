@@ -1,0 +1,18 @@
+{
+  "pending_closure": [
+    "TNLean.MPS.AreaLaw.Counting",
+    "TNLean.Algebra.TailRadiusWeights",
+    "QICLean.Entropy.FilterChainEnergy",
+    "QICLean.Entropy.FilterPrefix",
+    "QICLean.Entropy.FilterPower",
+    "QICLean.Entropy.FilterZeroFloor",
+    "QICLean.Entropy.BufferDiscount",
+    "TNLean.MPS.AreaLaw.BufferDiscount",
+    "TNLean.MPS.AreaLaw.EntropyInequalities",
+    "TNLean.Algebra.FinsetSubtypeSum",
+    "TNLean.MPS.AreaLaw.WindowCounting",
+    "TNLean.MPS.AreaLaw.AreaLaw",
+    "TNLean.MPS.AreaLaw.ComponentReduction"
+  ],
+  "reason": "MPS consumer migration pending; do not compile stale bundled-owner callers or edit MPS lane"
+}
