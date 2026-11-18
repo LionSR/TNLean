@@ -10,7 +10,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOAction
 # The block-injective mixed path and the action of its common MPO
 
 GLM23 extends the interpolation between two MPO-symmetric states to systems
-with ground-state degeneracy (`REsubmission.tex`, lines 1695--1775):
+with ground-state degeneracy (`REsubmission.tex`, lines 1695--1777):
 
 > We now deal with the case of systems with ground state degeneracy. We want
 > to connect two block-injective MPSs (with the same number of blocks) that
@@ -51,7 +51,7 @@ with the common MPO are not asserted. See
 `docs/paper-gaps/glm23_block_injective_mixed_path.tex`.
 
 Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563v3, `REsubmission.tex`,
-lines 1695--1775, with `defAgamma` and `Agammasym`.
+lines 1695--1777, with `defAgamma` and `Agammasym`.
 -/
 
 open scoped Matrix BigOperators Kronecker
@@ -444,7 +444,7 @@ theorem continuous_blockMixedInterpolation
 
 /-- Every block of the path is injective in the open interval when the
 corresponding endpoint blocks are injective. Source: GLM23,
-`REsubmission.tex`, line 1773: "The injectivity of every block of
+`REsubmission.tex`, line 1777: "The injectivity of every block of
 $A(\gamma)$ [...] is justified in the same way as in the previous case." -/
 theorem isInjective_blockMixedInterpolation
     (A₀ : ∀ x, MPSTensor (D₀ x * D₀ x) (D₀ x)) (A₁ : ∀ x, MPSTensor (D₁ x * D₁ x) (D₁ x))

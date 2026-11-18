@@ -11,7 +11,7 @@ import TNLean.MPS.ParentHamiltonian.CompactBlockParentGap
 # The ground space of the block-injective mixed path
 
 GLM23 closes the block-injective interpolation with (`REsubmission.tex`,
-lines 1773--1775):
+line 1777):
 
 > The injectivity of every block of $A(\gamma)$ and the injectivity of $T_a$
 > is justified in the same way as in the previous case. Moreover, $H(\gamma)$
@@ -19,7 +19,7 @@ lines 1773--1775):
 > $\{ |\psi_{A_x(\gamma)}\rangle\}$.
 
 Here `H(γ)` is the two-site canonical parent Hamiltonian of
-`A(γ) = ⊕ₓ A_x(γ)`, as in the injective case (line 1690:
+`A(γ) = ⊕ₓ A_x(γ)`, as in the injective case (line 1691:
 "the parent Hamiltonian $H_{A(\gamma)} \equiv H(\gamma)$"). For every
 parameter in the open interval and every ring of length at least two:
 
@@ -54,7 +54,7 @@ not asserted; it needs the restrictions of
 `docs/paper-gaps/glm23_block_injective_mixed_path.tex`.
 
 Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563v3, `REsubmission.tex`,
-lines 1690 and 1695--1775.
+lines 1691 and 1695--1777.
 -/
 
 open scoped Matrix BigOperators Topology
@@ -129,7 +129,7 @@ private theorem neZero_blockMixedPhysicalDim [NeZero s] [∀ x, NeZero (D₀ x)]
   positivity
 
 /-- In the open interval the blocks of the path have full simultaneous
-one-letter span. Source: GLM23, `REsubmission.tex`, line 1773. -/
+one-letter span. Source: GLM23, `REsubmission.tex`, line 1777. -/
 theorem wordTupleSpanTop_blockMixedInterpolation
     (h₀ : ∀ x, Kraus.IsInjective (A₀ x)) (h₁ : ∀ x, Kraus.IsInjective (A₁ x))
     {γ : ℝ} (hγ : γ ∈ Set.Ioo (0 : ℝ) 1) :
@@ -139,7 +139,7 @@ theorem wordTupleSpanTop_blockMixedInterpolation
 
 /-- On the closed interval the block states of the path are linearly
 independent at every ring of length at least two, including both endpoints.
-Source: GLM23, `REsubmission.tex`, lines 1697--1704 and 1773--1775. -/
+Source: GLM23, `REsubmission.tex`, lines 1696--1701 and 1777. -/
 theorem blockPeriodicMpvMapES_blockMixedInterpolation_injective
     [∀ x, NeZero (D₀ x)] [∀ x, NeZero (D₁ x)]
     (h₀ : ∀ x, Kraus.IsInjective (A₀ x)) (h₁ : ∀ x, Kraus.IsInjective (A₁ x))
@@ -151,7 +151,7 @@ theorem blockPeriodicMpvMapES_blockMixedInterpolation_injective
 /-- In the open interval, the periodic ground space of the two-site canonical
 parent Hamiltonian of `A(γ) = ⊕ₓ A_x(γ)` is spanned by the block states
 `|ψ_{A_x(γ)}⟩`, for every ring of length at least two. Source: GLM23,
-`REsubmission.tex`, line 1775: "its ground space is spanned by
+`REsubmission.tex`, line 1777: "its ground space is spanned by
 $\{ |\psi_{A_x(\gamma)}\rangle\}$". -/
 theorem ker_parentHamiltonianES_blockMixedTensor
     [NeZero s] [∀ x, NeZero (D₀ x)]
@@ -171,7 +171,7 @@ theorem ker_parentHamiltonianES_blockMixedTensor
 interval, at every ring of length at least two. With
 `ker_parentHamiltonianES_blockMixedTensor` they form a basis of the periodic
 ground space in the open interval. Source: GLM23, `REsubmission.tex`,
-line 1775. -/
+line 1777. -/
 theorem linearIndependent_mpv_blockMixedInterpolation
     [∀ x, NeZero (D₀ x)] [∀ x, NeZero (D₁ x)]
     (h₀ : ∀ x, Kraus.IsInjective (A₀ x)) (h₁ : ∀ x, Kraus.IsInjective (A₁ x))
@@ -192,7 +192,7 @@ theorem linearIndependent_mpv_blockMixedInterpolation
 
 /-- In the open interval the ground projection of the two-site canonical
 parent Hamiltonian depends continuously on the parameter, for every ring of
-length at least two. Source: GLM23, `REsubmission.tex`, line 1775:
+length at least two. Source: GLM23, `REsubmission.tex`, line 1777:
 "$H(\gamma)$ is well-behaved in the whole path". -/
 theorem continuous_blockMixed_groundSpace_starProjection
     [NeZero s] [∀ x, NeZero (D₀ x)]
@@ -211,7 +211,7 @@ theorem continuous_blockMixed_groundSpace_starProjection
 /-- On every compact subset of the open interval, the two-site canonical
 parent Hamiltonians of the path have one positive gap bound, uniform over the
 subset and over all rings of length at least two. Source: GLM23,
-`REsubmission.tex`, line 1775: "$H(\gamma)$ is well-behaved in the whole
+`REsubmission.tex`, line 1777: "$H(\gamma)$ is well-behaved in the whole
 path"; the compactness argument is arXiv:1010.3732, Appendix A,
 lines 2575--2578. -/
 theorem exists_uniform_blockMixed_parentHamiltonianES_gap
@@ -239,8 +239,8 @@ interval, in particular to either endpoint, the ground projections of the
 two-site canonical parent Hamiltonians converge to the projection onto the
 span of the block states at that point. At an endpoint these are the periodic
 states of the endpoint blocks, embedded in the enlarged physical space.
-Source: GLM23, `REsubmission.tex`, line 1775, with the endpoint limit of the
-injective case at lines 1690--1692. -/
+Source: GLM23, `REsubmission.tex`, line 1777, with the endpoint limit of the
+injective case at line 1692. -/
 theorem tendsto_blockMixed_groundSpace_starProjection
     [NeZero s] [∀ x, NeZero (D₀ x)] [∀ x, NeZero (D₁ x)]
     (h₀ : ∀ x, Kraus.IsInjective (A₀ x)) (h₁ : ∀ x, Kraus.IsInjective (A₁ x))

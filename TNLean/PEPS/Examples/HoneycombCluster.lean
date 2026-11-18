@@ -36,19 +36,19 @@ nearest neighbours of the source.
 $+\sum X_iZ_jZ_kZ_l$ has as unique ground state the common $-1$ eigenvector of the
 stabilizers, which is $\prod_i Z_i$ applied to the cluster state, not the cluster state.
 The Hamiltonian here is $-\sum X_iZ_jZ_kZ_l$, the stabilizer convention under which the
-source's claim holds.
+source's claim holds. Documented in `docs/paper-gaps/rmp_honeycomb_cluster_peps.tex`.
 
-**Scope restriction (single-site injectivity):** the source calls the PEPS injective. The
-vertex tensor, read as a map from its virtual legs to the qubit, has rank two, so a vertex
-with at least two bonds is not injective (`not_isVertexInjective_honeycombClusterPEPS`).
-Injectivity holds only after blocking, for instance over hexagonal plaquettes; this is not
-formalized, and no injectivity of the honeycomb PEPS is asserted.
+**False source (injectivity):** the source calls the PEPS injective, and the review defines
+injectivity tensor by tensor (line 1929). The vertex tensor, read as a map from its virtual
+legs to the qubit, has rank two, so a vertex with at least two bonds is not injective
+(`not_isVertexInjective_honeycombClusterPEPS`); the source's two-site blocking maps a space
+of dimension sixteen to one of dimension four. Injectivity holds after blocking over
+hexagonal plaquettes; this is not formalized, and no injectivity of the honeycomb PEPS is
+asserted. Documented in `docs/paper-gaps/rmp_honeycomb_cluster_injectivity.tex`.
 
 **Scope restriction (torus size):** the brick wall on a `width × height` torus is the
-honeycomb when both sides are even; the three neighbours are distinct for width at least
-three. As for the square-lattice cluster state, small tori are excluded where bonds would
-coincide. Documented, with the two previous items, in
-`docs/paper-gaps/rmp_honeycomb_cluster_peps.tex`.
+honeycomb when both sides are even; the three neighbours are distinct for even height and
+width at least three. Documented in `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
 ## References
 

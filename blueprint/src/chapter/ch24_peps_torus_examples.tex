@@ -365,9 +365,13 @@ honeycomb lattice:
 The printed Hamiltonian has the wrong sign for this claim: its unique ground
 state is the common $-1$ eigenvector of the stabilizers, the product of $Z$
 over all sites applied to the cluster state. The parent Hamiltonian below is
-$-\sum_iX_iZ_jZ_kZ_l$. The vertex tensor is not injective: it maps a virtual
-space of dimension eight to a qubit. Injectivity holds after blocking over
-hexagonal plaquettes \cite{gap:rmp_honeycomb_cluster_peps}.
+$-\sum_iX_iZ_jZ_kZ_l$ \cite{gap:rmp_honeycomb_cluster_peps}. The claim that
+the PEPS is injective is false as printed: the vertex tensor maps a virtual
+space of dimension eight to a qubit, and the tensor of two blocked sites maps
+a space of dimension sixteen to one of dimension four. Injectivity holds after
+blocking over hexagonal plaquettes \cite{gap:rmp_honeycomb_cluster_injectivity}.
+The brick wall is the honeycomb on tori of even width and height
+\cite{gap:rmp_peps_examples_small_torus}.
 
 \begin{definition}[Graph-state PEPS and the brick-wall honeycomb]
     \label{def:peps_honeycomb_cluster}
