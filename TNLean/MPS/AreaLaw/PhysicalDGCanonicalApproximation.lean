@@ -195,10 +195,10 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
   refine ⟨C, hC, k, ?_⟩
   intro L h hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G rG
     g0 m0 w v ell D s a tau epsilon t Delta
+  have hfactoryL := hfactory L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   obtain ⟨hell, hD2, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff,
     Btree, hBtree, hlogBtree, Utree, hdimUtree, hUtreeMPS, hxiMax,
-    hwidth, T, N, F, hN, htargets, hxiFamily⟩ :=
-    hfactory L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hwidth, T, N, F, hN, htargets, hxiFamily⟩ := hfactoryL
   refine ⟨hell, hD2, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff, ?_⟩
   intro u0 bref
   refine ⟨Btree, hBtree, hlogBtree, Utree, hdimUtree, hUtreeMPS, ?_⟩
