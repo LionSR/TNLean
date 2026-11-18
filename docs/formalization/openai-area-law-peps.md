@@ -29,10 +29,10 @@ Source: [Theorem 1.1 and Corollary 1.2](https://github.com/openai/math/blob/adc7
 | A finite `Λ ⊆ ℤ²` | `Λ : Finset (ℤ × ℤ)` | No connectedness, shape, or nonemptiness hypothesis. |
 | The induced nearest-neighbor graph | `ManyBody.planeDomainGraph Λ` | Paths remain within the domain. Holes and disconnected components are allowed. |
 | Site space `ℂ^q` | `StateSpace Λ q = EuclideanSpace ℂ (Site Λ → Fin q)` | Exactly `q ^ Λ.card` configuration coordinates. |
-| One term per nonempty support of graph diameter at most `R` | `AdmissibleSupport Λ R` and `LocalHamiltonian.term` | The index is a subtype of finite supports, not a family with unrestricted multiplicity. Zero terms are allowed. |
+| One term per nonempty support of graph diameter at most `R` | `AdmissibleSupport Λ R` and `ManyBody.PlaneInteraction.term` | The index is a subtype of finite supports, not a family with unrestricted multiplicity. Zero terms are allowed. |
 | Support on `X` | `ManyBody.supportedOperators (fun _ ↦ Fin q) X` | The QICLean site-operator algebra; `localLift` uses the existing placement `embedOp`. |
 | `h_X = h_X*` and `‖h_X‖ ≤ J` | The `hermitian` and `norm_le` fields | The norm is the Euclidean induced operator norm. |
-| `H = ∑_X h_X` | `LocalHamiltonian.operator` | The sum is Hermitian by `operator_isHermitian`. |
+| `H = ∑_X h_X` | `ManyBody.Interaction.hamiltonian` | The sum is Hermitian by `operator_isHermitian`. |
 | A unit ground vector at real energy `E₀` | `‖Ω‖ = 1` and `groundSpace h.operator E₀ = span {Ω}` | For `Δ > 0`, `ManyBody.isGapped_and_groundSpace_eq_span_iff` identifies these hypotheses with the printed eigen-equation and projector-gap inequality. |
 | Unique ground vector up to phase and `H − E₀I ≥ Δ(I − |Ω⟩⟨Ω|)` | `ManyBody.IsGapped h.operator E₀ Δ` with `groundSpace h.operator E₀ = span {Ω}` | For `Δ > 0` the QICLean theorem `ManyBody.isGapped_and_groundSpace_eq_span_iff` is the equivalence with the printed inequality. No gap for a restriction is assumed. |
 | Any `A ⊆ Λ` | `A : Finset (Site Λ)` after all physical data | Includes empty, full, and disconnected cuts. |
@@ -197,7 +197,7 @@ hypothesis to the printed one.
 
 | Appendix A statement | Formal statement | Status on `main` |
 |---|---|---|
-| Model: domain, range-`R` Hermitian terms, unit ground vector with projector gap, natural logarithms | `LocalHamiltonian`, `ManyBody.IsGapped` with `groundSpace = span {Ω}`, `regionalEntropy`; equivalence with the projector gap by `ManyBody.isGapped_and_groundSpace_eq_span_iff` | Definitions; equivalence proved. |
+| Model: domain, range-`R` Hermitian terms, unit ground vector with projector gap, natural logarithms | `ManyBody.PlaneInteraction`, `ManyBody.IsGapped` with `groundSpace = span {Ω}`, `regionalEntropy`; equivalence with the projector gap by `ManyBody.isGapped_and_groundSpace_eq_span_iff` | Definitions; equivalence proved. |
 | Area-law Theorem 1.1 and Corollary 1.2 | `UniformAreaLaw`, `RectangularEntropyAreaLaw` | Proved (`uniformAreaLaw`, `rectangularEntropyAreaLaw`, `uniformAreaLaw_vertex_boundary_bounds`). |
 | Proposition 2.1 at `Γ = Λ_L`, `R = 1` | `SquareEntropyAreaLaw`, `UniformAreaLaw.squareEntropyAreaLaw`, `RectangularEntropyAreaLaw.squareEntropyAreaLaw`, `ManyBody.Interaction.hamiltonian_hermitianPart` | Proved (`AreaLaw.squareEntropyAreaLaw`). |
 | Positive replacement (area-law Proposition 4.3) | `exists_latticePositiveConstraints`, `card_anchor_fiber_le` | Proved; constants depend on `p, R, J, Δ` only, and `J ≥ 0` suffices. |

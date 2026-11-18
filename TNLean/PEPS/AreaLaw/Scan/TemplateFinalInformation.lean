@@ -34,7 +34,7 @@ noncomputable section
 
 open Matrix
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -133,10 +133,11 @@ theorem template_final_mutualInformation_of_boxEntropy_explicit
     (htransport : CollarScan.FiniteFamilyTransportBound ct Cent eent Cen een) :
       ∀ n s₀ : ℕ, collarThreshold q R J Δ Cbox (latticeTruncationRadiusConstant R J Δ 10) ct Cent
           eent Cen een ≤ n →
-        ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+        ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+            (_ : ∀ X, ‖h.term X‖ ≤ J)
           (E₀ : ℝ) (Ω : StateSpace Λ q),
-          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ (A : Finset (Site Λ)) (T : Template Ctpl n s₀),
             T.IsSeparated D₀ (boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ ≤ s₀ →
@@ -163,7 +164,7 @@ theorem template_final_mutualInformation_of_boxEntropy_explicit
       (by norm_num [hCtrDef])
   have hentropy := template_final_source_entropy_bounds_of_boxEntropy q R D₀ hq hD₀ hCbox hbox
   have hbound := hsource _ (templateSourceEntropyConstant_nonneg q (Exponents.boxError : ℝ) Cbox)
-  intro n s₀ hn Λ h E₀ Ω hΩ hgap hspan A T hsep hL
+  intro n s₀ hn Λ h hh hhJ E₀ Ω hΩ hgap hspan A T hsep hL
   let : LinearOrder (AdmissibleSupport Λ R) :=
     LinearOrder.lift' (Fintype.equivFin (AdmissibleSupport Λ R))
       (Fintype.equivFin (AdmissibleSupport Λ R)).injective
@@ -192,8 +193,8 @@ theorem template_final_mutualInformation_of_boxEntropy_explicit
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z :=
     template_scanner_clearance T hsep (by exact_mod_cast hD₀) hL
       hscales.1 hscales.2.2.1 hscales.2.2.2.1 hscales.2.2.2.2
-  obtain ⟨htarget, hprefix⟩ := hentropy Λ h E₀ Ω hΩ hgap hspan S T hCtpl hsep rfl L hLpos hL
-  have hinfo := hbound Λ T.points T.nonempty h S E₀ Ω hΩ hgap hspan rfl hanchor hnS
+  obtain ⟨htarget, hprefix⟩ := hentropy Λ h hh hhJ E₀ Ω hΩ hgap hspan S T hCtpl hsep rfl L hLpos hL
+  have hinfo := hbound Λ T.points T.nonempty h hh hhJ S E₀ Ω hΩ hgap hspan rfl hanchor hnS
     rfl rfl rfl rfl rfl (template_target_volume T hCtpl) rfl
     hrows hmult hclear htarget hprefix
   have htrunc (r : ℕ) : S.truncationSet r =
@@ -217,10 +218,11 @@ theorem exists_template_final_mutualInformation_of_boxEntropy_of_threshold_le
       Cbox * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ))) :
     ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
       ∀ n s₀ : ℕ, collarThreshold q R J Δ Cbox Ctr ct Cent eent Cen een ≤ n →
-        ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+        ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+            (_ : ∀ X, ‖h.term X‖ ≤ J)
           (E₀ : ℝ) (Ω : StateSpace Λ q),
-          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ (A : Finset (Site Λ)) (T : Template Ctpl n s₀),
             T.IsSeparated D₀ (boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ ≤ s₀ →
@@ -255,10 +257,11 @@ theorem exists_template_final_mutualInformation_of_boxEntropy
       Cbox * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ))) :
     ∃ C : ℝ, 0 < C ∧ ∃ N : ℕ, 2 ≤ N ∧
       ∀ n s₀ : ℕ, N ≤ n →
-        ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+        ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+            (_ : ∀ X, ‖h.term X‖ ≤ J)
           (E₀ : ℝ) (Ω : StateSpace Λ q),
-          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ (A : Finset (Site Λ)) (T : Template Ctpl n s₀),
             T.IsSeparated D₀ (boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ ≤ s₀ →

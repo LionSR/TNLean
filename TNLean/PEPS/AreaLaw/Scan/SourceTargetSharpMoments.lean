@@ -34,7 +34,7 @@ noncomputable section
 
 open Matrix Filter
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -67,11 +67,12 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
       ∀ (F : ScannerExponents) (ω : ℝ),
         ω + (1 + F.kappa) / 2 < 1 - F.ell - F.mu →
           ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-            (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+            (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+                (_ : ∀ X, ‖h.term X‖ ≤ J)
             (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
             (E₀ : ℝ) (Ω : StateSpace Λ q),
-            ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-            groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+            ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+            groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
             targetSharpMomentThreshold q R Ctr (Δ / positiveNormalization 1 (Δ / 2) J) F ω ≤
               S.n →
@@ -100,8 +101,8 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
             ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
             X ⊆ S.truncationSet L ∧ (edgeBoundary Λ X).card ≤ 4 * S.n ∧
             ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-              (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
-                groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
+              (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+                groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
               0 ≤ e ∧ e ≤ ε ∧
               (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤
                 2 * Real.sqrt (ε / g)) ∧
@@ -171,7 +172,7 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
   let Ns := statusScaleSeparationThreshold Ctr F.kappa F.mu
   have hNs := fun n (hn : Ns ≤ n) => status_scale_separation_of_threshold_le
     (ell := F.ell) hCtr.le F.kappa_pos F.kappa_lt_mu hn
-  intro Λ T _ hT h S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hm hD hK hsize hdepth
+  intro Λ T _ hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hm hD hK hsize hdepth
     hrows hclear L X g ε w δ B C₀ c₀
   replace hn : max Nt (max Na Ns) ≤ S.n := hn
   have hnT : Nt ≤ S.n := (le_max_left _ _).trans hn
@@ -196,7 +197,7 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
     hrD hDpos hDm hKL hrows hclear
   obtain ⟨hcard, hX, hboundary, e, Ωt, htrgs, he0, he, hphase, htrace,
       hmoment, halltail, hBX, htail, hwindow⟩ :=
-    htarget Λ h S E₀ Ω F T hT hΩ hgap hspan hgraph hanchor hnT hr hsize hdepth hrows hclear
+    htarget Λ h hh hhJ S E₀ Ω F T hT hΩ hgap hspan hgraph hanchor hnT hr hsize hdepth hrows hclear
   refine ⟨hKpos, hmpos, hKL, hB, by dsimp [C₀, g]; positivity, hc₀,
     hcard, hX, hboundary, e, Ωt, htrgs, he0, he, hphase, htrace,
     hmoment, halltail, hBX, htail, ?_⟩
@@ -205,10 +206,10 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
   · intro s hist band
     constructor
     · intro hs Q hQ u hu
-      exact S.log_surprisalMoment_truncated_reducedState_le_common h Ω
+      exact S.log_surprisalMoment_truncated_reducedState_le_common h hh hhJ Ω
         hgraph hanchor hΔ hΩ L htrgs.1 htrgs.2.1 htrgs.2.2 Q ((hcut s hist band).1 hs Q hQ) hu
     · intro hs Q hQ u hu
-      exact S.log_surprisalMoment_truncated_reducedState_le_common h Ω
+      exact S.log_surprisalMoment_truncated_reducedState_le_common h hh hhJ Ω
         hgraph hanchor hΔ hΩ L htrgs.1 htrgs.2.1 htrgs.2.2 Q ((hcut s hist band).2 hs Q hQ) hu
   · intro W hW hWle a
     have hBupper : B ≤ CB * (S.n : ℝ) * (F.D S.n : ℝ) *
@@ -247,11 +248,12 @@ theorem exists_truncated_target_sharp_moments_of_targetSharpMomentThreshold_le {
       ∀ (F : ScannerExponents) (ω : ℝ),
         ω + (1 + F.kappa) / 2 < 1 - F.ell - F.mu →
           ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-            (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+            (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+                (_ : ∀ X, ‖h.term X‖ ≤ J)
             (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
             (E₀ : ℝ) (Ω : StateSpace Λ q),
-            ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-            groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+            ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+            groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
             targetSharpMomentThreshold q R Ctr (Δ / positiveNormalization 1 (Δ / 2) J) F ω ≤
               S.n →
@@ -280,8 +282,8 @@ theorem exists_truncated_target_sharp_moments_of_targetSharpMomentThreshold_le {
             ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
             X ⊆ S.truncationSet L ∧ (edgeBoundary Λ X).card ≤ 4 * S.n ∧
             ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-              (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
-                groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
+              (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+                groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
               0 ≤ e ∧ e ≤ ε ∧
               (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤
                 2 * Real.sqrt (ε / g)) ∧
@@ -350,11 +352,12 @@ theorem exists_truncated_target_sharp_moments {q : ℕ} [NeZero q]
         ω + (1 + F.kappa) / 2 < 1 - F.ell - F.mu →
         ∃ N : ℕ, 2 ≤ N ∧
           ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-            (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+            (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+                (_ : ∀ X, ‖h.term X‖ ≤ J)
             (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
             (E₀ : ℝ) (Ω : StateSpace Λ q),
-            ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-            groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+            ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+            groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
             S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
             S.m = ⌊(S.n : ℝ) ^ F.mu⌋₊ →
@@ -380,8 +383,8 @@ theorem exists_truncated_target_sharp_moments {q : ℕ} [NeZero q]
             ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
             X ⊆ S.truncationSet L ∧ (edgeBoundary Λ X).card ≤ 4 * S.n ∧
             ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-              (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
-                groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
+              (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+                groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
               0 ≤ e ∧ e ≤ ε ∧
               (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤
                 2 * Real.sqrt (ε / g)) ∧

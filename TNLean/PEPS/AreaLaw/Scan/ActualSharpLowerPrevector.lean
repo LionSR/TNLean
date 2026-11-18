@@ -23,13 +23,15 @@ Source: OpenAI area-law manuscript, `07-comparators.tex`, lines 130--153,
 255--281 and 550--651; `08-scanner.tex`, lines 400--474, adc7f124.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder Topology
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport)
+open ManyBody (AdmissibleSupport PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -196,9 +198,10 @@ theorem exists_actualScan_suppliedPrevector_sharp_lower
     [LinearOrder (AdmissibleSupport Λ R)]
     (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
     (hm : 0 < S.m) (hM : 0 < S.M)
-    (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
+    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
     (Ωt : StateSpace Λ q) (e₀ gap : ℝ) (hΩt : ‖Ωt‖ = 1)
-    (hgap : ((∑ i, S.truncatedEnergyTerm h Ω Δ L i) - (e₀ : ℂ) • 1 -
+    (hgap : ((∑ i, S.truncatedEnergyTerm h Ω J Δ L i) - (e₀ : ℂ) • 1 -
       (gap : ℂ) • (1 - vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef)
     (hgap_pos : 0 < gap)
     (a Kmom rMom : ℝ) (ha : 0 < a) (har : 10 * a ≤ rMom)
@@ -264,12 +267,12 @@ theorem exists_actualScan_suppliedPrevector_sharp_lower
             (Transport.filteredVector (Dfill.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
           lower (Transport.filteredNormSq (Dfill.rootPath n (a / 2) k p) (pre k))
             ((S.actualFillScanRound hm hM s.val n
-              (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p) Tfill) ∧
+              (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p) Tfill) ∧
         (‖WithLp.toLp 2
             (Transport.filteredVector (Dcharge.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
           lower (Transport.filteredNormSq (Dcharge.rootPath n (a / 2) k p) (pre k))
             ((S.actualChargeScanRound hm hM s.val n
-              (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p) Tcharge) := by
+              (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p) Tcharge) := by
   classical
   intro β n pre σ Q Y entropyGap gaps gmax
   obtain ⟨c, Cf, hc, hCf, hlower⟩ :=
@@ -281,7 +284,7 @@ theorem exists_actualScan_suppliedPrevector_sharp_lower
   obtain ⟨hprenonzero, hprenorm, hsym, hC, hR⟩ :=
     sharpLower_suppliedPrevector_properties q d k Ωt (ell k) (hpre k hk)
   obtain ⟨⟨hfnorm, hfpos, hfδ, hf⟩, ⟨hcnorm, hcpos, hcδ, hcharge⟩⟩ :=
-    hlower S hm hM (S.n * S.m) h Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos
+    hlower S hm hM (S.n * S.m) h hh hhJ Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos
       Kmom rMom hmomQ har haone hK pre k hk hprenonzero hprenorm hsym
       (ell k) (ell k) Sent (sharpLowerLabelDefect ell Sent k) hC hR
       (sharpLowerLabelDefect_label_bound ell Sent k).2 s p

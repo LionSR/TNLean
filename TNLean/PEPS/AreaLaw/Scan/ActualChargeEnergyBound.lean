@@ -32,6 +32,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 416–440 and 492–511, at `openai/math@adc7f124`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open scoped BigOperators Matrix
 open MeasureTheory Set TensorPower TensorPower.ReplicaTransport Entropy
 
@@ -39,7 +41,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -55,7 +57,8 @@ theorem actualCharge_energyError_le_domainGraph
     (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-    (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ)
+    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (Ω : StateSpace Λ q) (Δ : ℝ)
     {s L μ : ℕ} (hn : 2 ≤ S.n) (hs : s + 1 ≤ S.n * S.m)
     (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D)
     (hmargin : 4 * (S.D + 2 * S.r₀) ≤ S.m)
@@ -74,7 +77,7 @@ theorem actualCharge_energyError_le_domainGraph
     let hm : 0 < S.m := by omega
     let hM : 0 < S.M := chargeSlotCount_pos hC (by omega) hDpos
     let n := augmentedDimensions (V := Site Λ) q aux
-    let E := S.actualEnergyTerms h Ω Δ L aux
+    let E := S.actualEnergyTerms h Ω J Δ L aux
     let A : ℝ := 10 * S.K * S.n * S.D * μ
     let ℓ := transportLogDimBound q S.r₀
     let b := ∑ hist : History S.K S.m S.M s,
@@ -87,7 +90,7 @@ theorem actualCharge_energyError_le_domainGraph
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hC (by omega) hDpos
   let n := augmentedDimensions (V := Site Λ) q aux
-  let E := S.actualEnergyTerms h Ω Δ L aux
+  let E := S.actualEnergyTerms h Ω J Δ L aux
   let D := S.actualChargeData hm hM s
   let Rd := S.actualChargeScanRound hm hM s n E a pre
   let A : ℝ := 10 * S.K * S.n * S.D * μ

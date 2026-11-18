@@ -77,7 +77,7 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
       let φ : Lattice.StateSpace Λ q := U
         (normalizedRegularizedPatchOutput (Out := fun _ : Lattice.Site Λ ↦ Fin q)
           regions a b Ωᵤ x)
-      (inner ℂ φ (Matrix.toEuclideanLin (h.toAreaLawHamiltonian hhJ).operator φ)).re - E₀ ≤
+      (inner ℂ φ (Matrix.toEuclideanLin h.toAreaLawHamiltonian.hamiltonian φ)).re - E₀ ≤
         36 * (q : ℝ) ^ 2 * J * κ ^ 2 := by
   intro Λ m regions a U Ωᵤ x hx hmin φ
   have hm : (0 : ℝ) < m := Nat.cast_pos.mpr (AreaLaw.Geometry.nestedPatchCount_pos u)
@@ -113,7 +113,7 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
     Entropy.liftProdInv_mul_liftProd_of_isUnit fun p hp ↦
       (List.mem_map.mp hp).elim fun i hi ↦ hi.2 ▸ hunit i
   have heig := Entropy.toEuclideanLin_conj_apply_eq
-    (ManyBody.mem_groundSpace_iff.mp ((h.isGapped_toAreaLawHamiltonian hhJ hh hΩ hgap hspan).2.2 ▸
+    (ManyBody.mem_groundSpace_iff.mp ((h.isGapped_toAreaLawHamiltonian hh hΩ hgap hspan).2.2 ▸
       Submodule.mem_span_singleton_self _)) hinv
     (((‖Matrix.toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
       (AreaLaw.rectangleAreaLawState Ω)‖⁻¹ : ℝ) : ℂ))

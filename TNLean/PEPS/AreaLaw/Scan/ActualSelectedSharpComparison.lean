@@ -25,6 +25,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
@@ -33,7 +35,7 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport)
+open ManyBody (AdmissibleSupport PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -52,7 +54,8 @@ theorem eventually_exists_selected_actualCharge_sharp_comparison
     [LinearOrder (AdmissibleSupport Λ R)]
     (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
     (hm : 0 < S.m) (hM : 0 < S.M) (hKpos : 0 < S.K)
-    (h : LocalHamiltonian Λ q R J) (Ω Ωt : StateSpace Λ q) (L : ℕ)
+    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (Ω Ωt : StateSpace Λ q) (L : ℕ)
     (hΔ : 0 < Δ) (a : ℝ) (ha : 0 < a)
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)))
     (Sent e₀ Kmom z Cen een C Cl P cU cL Cf p₀ p₁ : ℝ)
@@ -61,7 +64,7 @@ theorem eventually_exists_selected_actualCharge_sharp_comparison
     let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
     let pre : (k : ℕ) → Config k (fun v ↦ Fin (dims v)) → ℂ := fun k ↦
       replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
-    let E := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+    let E := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
     let ℓ := transportLogDimBound q S.r₀
     let g := Δ / positiveNormalization 1 (Δ / 2) J
     let W := a * (S.K : ℝ)
@@ -132,7 +135,7 @@ theorem eventually_exists_selected_actualCharge_sharp_comparison
   filter_upwards [hcomparison, eventually_gt_atTop 0] with k hcomparisonK hk
   obtain ⟨s, p, hp, hQ, henergy⟩ := hselected k hk
   have hcap : δ k s p ≤ (e₀ + cap k s p + rem k) / (g / 2) := by
-    have hbound := S.actualCharge_defect_le_of_density_energy_bound hm hM s.val h Ω L
+    have hbound := S.actualCharge_defect_le_of_density_energy_bound hm hM s.val h hh hhJ Ω L
       hΔ W Cen een C Cl P (rem k) e₀ hW.le pre k p
     simp only [hweight] at hbound
     exact hbound henergy (hcoefficient k hk s p hp)

@@ -25,11 +25,11 @@ cut.
 
 ## Main results
 
-* `TNLean.Lattice.LocalHamiltonian.log_surprisalMoment_reducedState_le`:
+* `ManyBody.PlaneInteraction.log_surprisalMoment_reducedState_le`:
   `eq:initial-tail-mgf` for the regional state.
-* `TNLean.Lattice.LocalHamiltonian.surprisalTail_reducedState_le`:
+* `ManyBody.PlaneInteraction.surprisalTail_reducedState_le`:
   `eq:initial-tail-probability` for the regional state.
-* `TNLean.Lattice.LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState`: the
+* `ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedState`: the
   typical marginal spectrum at the concentration width `concentrationWidth`.
 
 ## References
@@ -45,7 +45,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Matrix
 open scoped ComplexOrder Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace mem_groundSpace_iff AdmissibleSupport)
+open ManyBody (IsGapped groundSpace mem_groundSpace_iff AdmissibleSupport PlaneInteraction)
 
 namespace TNLean.Lattice
 
@@ -72,42 +72,46 @@ ground vector `Ω` with gap `Δ > 0` of a finite-range Hamiltonian with term nor
 `log E e^{uK} ≤ u S(A) + 512 e (J/Δ) ℬ u²` for `|u| ≤ 1/(32 √((1 + J/Δ) ℬ))`.
 Area-law manuscript, Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 34–63,
 `eq:initial-tail-mgf`. -/
-theorem LocalHamiltonian.log_surprisalMoment_reducedState_le (h : LocalHamiltonian Λ q R J)
+theorem _root_.ManyBody.PlaneInteraction.log_surprisalMoment_reducedState_le
+    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q} (hΔ : 0 < Δ)
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ)) {u : ℝ}
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ)) {u : ℝ}
     (hu : |u| ≤ Entropy.tailRadius (J / Δ) (cutLogBudget Λ q R A)) :
     Real.log (Entropy.surprisalMoment (reducedState_isHermitian Λ q Ω A).eigenvalues u) ≤
       u * regionalEntropy Λ q Ω A +
         512 * Real.exp 1 * (J / Δ) * cutLogBudget Λ q R A * u ^ 2 := by
-  have heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω :=
+  have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
     mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   exact Entropy.log_surprisalMoment_cut_le (n := fun _ ↦ q) (B := A)
-    (fun X ↦ (h.supported X))
-    h.hermitian hJ h.norm_le hΩ hΔ heig
-    (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan) (partialTraceRight_cutVector Ω A)
+    (fun X ↦ (h.mem X))
+    hh hJ hhJ hΩ hΔ heig
+    (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+        (partialTraceRight_cutVector Ω A)
     (reducedState_isHermitian Λ q Ω A) hu
 
 /-- **Lemma 3.1 for a finite-range lattice Hamiltonian, tail bound.** Under the hypotheses
-of `LocalHamiltonian.log_surprisalMoment_reducedState_le`, for every real `w` (the
+of `ManyBody.PlaneInteraction.log_surprisalMoment_reducedState_le`, for every real `w` (the
 manuscript states `w ≥ 0`),
 `Pr {|K - S(A)| > w} ≤ min {1, 2 e^{e/2} exp (-w / (32 √((1 + J/Δ) ℬ)))}`.
 Area-law manuscript, Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 64–69,
 `eq:initial-tail-probability`. -/
-theorem LocalHamiltonian.surprisalTail_reducedState_le (h : LocalHamiltonian Λ q R J)
+theorem _root_.ManyBody.PlaneInteraction.surprisalTail_reducedState_le (h : PlaneInteraction Λ q R)
+    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q} (hΔ : 0 < Δ)
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ)) (w : ℝ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ)) (w : ℝ) :
     Entropy.surprisalTail (reducedState_isHermitian Λ q Ω A).eigenvalues
         (regionalEntropy Λ q Ω A) w ≤
       min 1 (2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A))))) := by
-  have heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω :=
+  have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
     mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   exact Entropy.surprisalTail_cut_le (n := fun _ ↦ q) (B := A)
-    (fun X ↦ (h.supported X))
-    h.hermitian hJ h.norm_le hΩ hΔ heig
-    (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan) (partialTraceRight_cutVector Ω A)
+    (fun X ↦ (h.mem X))
+    hh hJ hhJ hΩ hΔ heig
+    (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+        (partialTraceRight_cutVector Ω A)
     (reducedState_isHermitian Λ q Ω A) w
 
 /-- The concentration width `32 √((1 + J/Δ) ℬ_A) (M log (n + 2) + e/2 + log 2)` at which
@@ -122,10 +126,11 @@ surprisal lies within the concentration width of `S_Ω(A)` carry mass at least
 `1 - (n + 2)^{-M}`.
 Area-law manuscript, `02-initial.tex`, lines 209–219, the concentration statement after
 Lemma 3.1, before the lattice budget `ℬ_A ≤ C (1 + |∂_Λ A|)` is inserted. -/
-theorem LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState
-    (h : LocalHamiltonian Λ q R J) (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q} (hΔ : 0 < Δ)
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedState
+    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q} (hΔ : 0 < Δ)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A : Finset (Site Λ)) (n : ℕ) (M : ℝ) :
     1 - ((n : ℝ) + 2) ^ (-M) ≤
       Entropy.typicalMass (reducedState_isHermitian Λ q Ω A).eigenvalues
@@ -149,7 +154,7 @@ theorem LocalHamiltonian.one_sub_rpow_le_typicalMass_reducedState
     simp only [Complex.one_re, Complex.re_sum] at h2
     rw [h2]
     exact Finset.sum_congr rfl fun i _ ↦ by simp
-  have htail := h.surprisalTail_reducedState_le hJ hΔ hΩ hgap hspan A
+  have htail := h.surprisalTail_reducedState_le hh hhJ hJ hΔ hΩ hgap hspan A
     (concentrationWidth Λ q R J Δ A n M)
   have hmass := Entropy.one_sub_surprisalTail_le_typicalMass hp hs (regionalEntropy Λ q Ω A)
     (concentrationWidth Λ q R J Δ A n M)

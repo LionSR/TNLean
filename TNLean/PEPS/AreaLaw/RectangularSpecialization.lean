@@ -83,8 +83,9 @@ theorem UniformAreaLaw.rectangularEntropyAreaLaw (harea : UniformAreaLaw) :
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q hq 1 J Δ hJ hΔ
   refine ⟨C, hC, fun width height h hH hΦ E₀ Ω hΩ hgap hspan A ↦ ?_⟩
-  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hΦ hH hΩ hgap hspan
-  have h := hbound (rectangularDomain width height) (h.toAreaLawHamiltonian hΦ) E₀
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hH hΩ hgap hspan
+  have h := hbound (rectangularDomain width height) h.toAreaLawHamiltonian
+    h.isHermitian_toAreaLawHamiltonian_term (h.norm_toAreaLawHamiltonian_term_le hΦ) E₀
     (rectangleAreaLawState Ω) hΩ' hgap' hspan' (A.map (rectangleSiteEquiv width height).toEmbedding)
   have hi := regionalEntropy_le_four_mul_innerBoundary_card hC h
   have he := regionalEntropy_le_two_mul_endpointBoundary_card hC h

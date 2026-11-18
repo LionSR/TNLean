@@ -25,6 +25,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open scoped BigOperators Matrix
 open Filter MeasureTheory Set TensorPower TensorPower.ReplicaTransport Entropy
 
@@ -32,7 +34,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -145,7 +147,8 @@ private theorem generic_actualCharge_energy_of_threshold_le
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
       ∃ (hm : 0 < S.m) (hM : 0 < S.M),
         ∀ (q : ℕ) [NeZero q] (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-          (J : ℝ) (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ)
+          (J : ℝ) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : StateSpace Λ q) (Δ : ℝ)
           (s : ℕ), s + 1 ≤ S.n * S.m →
           ∀ (a : ℝ), 0 ≤ a → ∀ (k : ℕ)
           (pre : (r : ℕ) → Config r
@@ -154,7 +157,7 @@ private theorem generic_actualCharge_energy_of_threshold_le
             (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) →
           pre k ≠ 0 → ∀ p ∈ Ioo (0 : ℝ) 1,
           let dims := augmentedDimensions (V := Site Λ) q aux
-          let E := S.actualEnergyTerms h Ω Δ
+          let E := S.actualEnergyTerms h Ω J Δ
             ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ aux
           let A : ℝ := 10 * S.K * S.n * S.D * multiplicity
           let ℓ := transportLogDimBound q S.r₀
@@ -173,9 +176,9 @@ private theorem generic_actualCharge_energy_of_threshold_le
   have hCpos : 0 < S.C₁ := by simpa only [hC] using hC1
   have hM : 0 < S.M := chargeSlotCount_pos hCpos (by omega) hDpos
   refine ⟨hm, hM, ?_⟩
-  intro q _ aux _ J h Ω Δ s hs a ha k pre hsym hpre p hp
+  intro q _ aux _ J h hh hhJ Ω Δ s hs a ha k pre hsym hpre p hp
   let dims := augmentedDimensions (V := Site Λ) q aux
-  let E := S.actualEnergyTerms h Ω Δ
+  let E := S.actualEnergyTerms h Ω J Δ
     ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ aux
   let A : ℝ := 10 * S.K * S.n * S.D * multiplicity
   let ℓ := transportLogDimBound q S.r₀
@@ -191,7 +194,7 @@ private theorem generic_actualCharge_energy_of_threshold_le
           (S.actualChargeEntropyDefect hm hM s dims E
             (a / 2) k (pre k) p) ^ (1 / 8 : ℝ) +
           A * (2 * ℓ) ^ (1 / 8 : ℝ) / 2 * ((1 - p) * b + p)) :=
-      S.actualCharge_energyError_le_domainGraph hT hgraph hdepth aux h Ω Δ
+      S.actualCharge_energyError_le_domainGraph hT hgraph hdepth aux h hh hhJ Ω Δ
         hnS hs hrS hDpos hmargin hL hCpos hrows hmult hclear ha k pre hsym hpre hp
     _ ≤ _ :=
       mul_le_mul_of_nonneg_left
@@ -270,7 +273,8 @@ theorem ScannerExponents.actualCharge_energy_coefficients_of_threshold_le
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
       ∃ (hm : 0 < S.m) (hM : 0 < S.M),
         ∀ (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-          (J : ℝ) (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ)
+          (J : ℝ) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : StateSpace Λ q) (Δ : ℝ)
           (s : ℕ), s + 1 ≤ S.n * S.m →
           ∀ (W : ℝ), 0 ≤ W → ∀ (k : ℕ)
           (pre : (r : ℕ) → Config r
@@ -280,7 +284,7 @@ theorem ScannerExponents.actualCharge_energy_coefficients_of_threshold_le
           pre k ≠ 0 → ∀ p ∈ Ioo (0 : ℝ) 1,
           let a := W / (S.K : ℝ)
           let dims := augmentedDimensions (V := Site Λ) q aux
-          let E := S.actualEnergyTerms h Ω Δ
+          let E := S.actualEnergyTerms h Ω J Δ
             ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ aux
           let ℓ := transportLogDimBound q S.r₀
           |Cen| * a ^ 2 * ℓ ^ een *
@@ -319,10 +323,10 @@ theorem ScannerExponents.actualCharge_energy_coefficients_of_threshold_le
       Cs * (n : ℝ) ^ F.ell * (S.D : ℝ) ^ 2 := by
     simpa only [hmX, hKX, hDX] using hF.coefficient_le
   refine ⟨hm, hM, ?_⟩
-  intro aux _ J h Ω Δ s hs W hW k pre hsym hpre p hp
+  intro aux _ J h hh hhJ Ω Δ s hs W hW k pre hsym hpre p hp
   let a := W / (S.K : ℝ)
   let dims := augmentedDimensions (V := Site Λ) q aux
-  let E := S.actualEnergyTerms h Ω Δ
+  let E := S.actualEnergyTerms h Ω J Δ
     ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ aux
   let ℓ := transportLogDimBound q S.r₀
   let Q := S.actualChargeEntropyDefect hm hM s dims E (a / 2) k (pre k) p
@@ -354,7 +358,7 @@ theorem ScannerExponents.actualCharge_energy_coefficients_of_threshold_le
           Q ^ (1 / 8 : ℝ) + (10 * S.K * n * S.D * multiplicity : ℝ) *
           (2 * ℓ) ^ (1 / 8 : ℝ) / 2 * Z)) := by
       exact mul_le_mul_of_nonneg_left
-        (by simpa only [hSn] using henergy q aux J h Ω Δ s hs a ha k pre hsym hpre p hp)
+        (by simpa only [hSn] using henergy q aux J h hh hhJ Ω Δ s hs a ha k pre hsym hpre p hp)
         (by positivity)
     _ = W ^ 2 * ((n : ℝ) * (S.D : ℝ) ^ 2 / (S.m * S.K : ℝ)) *
         ((10 * (10 * (multiplicity : ℝ)) ^ (7 / 8 : ℝ) * |Cen| * ℓ ^ een) * U +
@@ -399,7 +403,8 @@ theorem ScannerExponents.exists_actualCharge_energy_coefficients
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
       ∃ (hm : 0 < S.m) (hM : 0 < S.M),
         ∀ (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-          (J : ℝ) (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ)
+          (J : ℝ) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : StateSpace Λ q) (Δ : ℝ)
           (s : ℕ), s + 1 ≤ S.n * S.m →
           ∀ (W : ℝ), 0 ≤ W → ∀ (k : ℕ)
           (pre : (r : ℕ) → Config r
@@ -409,7 +414,7 @@ theorem ScannerExponents.exists_actualCharge_energy_coefficients
           pre k ≠ 0 → ∀ p ∈ Ioo (0 : ℝ) 1,
           let a := W / (S.K : ℝ)
           let dims := augmentedDimensions (V := Site Λ) q aux
-          let E := S.actualEnergyTerms h Ω Δ
+          let E := S.actualEnergyTerms h Ω J Δ
             ⌊(n : ℝ) ^ (1 - F.ell)⌋₊ aux
           let ℓ := transportLogDimBound q S.r₀
           |Cen| * a ^ 2 * ℓ ^ een *

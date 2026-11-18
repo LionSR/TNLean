@@ -120,18 +120,18 @@ theorem SquareEntropyAreaLawAt.uniform_rangeNestedPatch_cylinders
               (Out := fun _ : Lattice.Site Λ ↦ Fin q) (regions j) (S j)) ∧
           ‖Ωᵤ - v‖ ≤ (L : ℝ) ^ (-p) := by
   intro L hL Ω hΩ center u hu huL
-  obtain ⟨H, E₀, hgs⟩ := hΩ
+  obtain ⟨H, hH, hHJ, E₀, hgs⟩ := hΩ
   have hκ := rangePatchFilterExponent_pos hq hR hJ hΔ
   exact exists_closedSquare_cylinders_of_marginal_closeness hL hB₀ hp hκ
     (lt_of_lt_of_le zero_lt_one (le_max_left 1 (16 * C_A))) (AreaLaw.rectangleAreaLawState Ω) hgs.1
     center hu huL (AreaLaw.Geometry.rangeNestedPatchCount_pos R u)
     (fun j ↦ AreaLaw.Geometry.rangeNestedPatchRadius R u j.val)
     (fun _ _ hij ↦ AreaLaw.Geometry.rangeNestedPatchRadius_mono R u hij)
-    (fun j ↦ hA.rangeNestedPatch_entropy_le R L Ω ⟨H, E₀, hgs⟩ center u hu j)
+    (fun j ↦ hA.rangeNestedPatch_entropy_le R L Ω ⟨H, hH, hHJ, E₀, hgs⟩ center u hu j)
     (fun b hb ↦ rangeNestedPatch_minimizer_marginal_closeness q R hR hJ.le hΔ hκ
       (rangePatchFilterExponent_le_half q R J Δ)
       (mul_sq_le_div_1024_of_le_rangePatchFilterExponent hJ.le hΔ.le hκ.le le_rfl)
-      _ H E₀ _ hgs.1 hgs.2.1 hgs.2.2 center u b hu hb)
+      _ H hH hHJ E₀ _ hgs.1 hgs.2.1 hgs.2.2 center u b hu hb)
 
 /-- A square entropy area law at the constant `C_A` for the range-`R` family supplies adaptive
 square patches with at most `C L ^ c` cylinder terms, where `C = adaptivePatchPrefactor q B₀`

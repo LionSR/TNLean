@@ -7727,7 +7727,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   and close with `GaussianFilter.localization_error_bound_of_parameter_constant`.
 - **Seen:** 2 occurrences, `ManyBody.SquareInteraction.reset_localized_filter` in
   `PEPS/Approximation/ResetUnitary.lean` (lines 167–221) and
-  `LocalHamiltonian.reset_localized_filter` in `PEPS/Approximation/RangeResetUnitary.lean`
+  `ManyBody.PlaneInteraction.reset_localized_filter` in `PEPS/Approximation/RangeResetUnitary.lean`
   (lines 144–201). The two blocks differ only in the constants: `L ^ 2` versus `Λ.card`, the
   crossing coefficient `8` versus `swapBoundaryCoefficient R`, the prefactor
   `squareLocalizationPrefactor` versus `2 * graphBallLocalizationPrefactor R`, and the
@@ -9919,7 +9919,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   list, and prove the factor supported using closure under scalar multiplication and exponentials.
 - **Seen:** Two occurrences in `TNLean/Lattice/ProductForm.lean`, in
   `hasProductForm_trotterProduct_of_radius` and
-  `LocalHamiltonian.hasProductForm_trotterProduct`.
+  `ManyBody.PlaneInteraction.hasProductForm_trotterProduct`.
 - **Abstraction:** None yet; the two proofs have different support hypotheses and are below
   the promotion threshold. The supported expansion is shared through
   `hasProductForm_of_mem_supportedOperators_radius`; the diameter theorem is its corollary.
