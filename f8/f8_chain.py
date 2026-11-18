@@ -219,12 +219,21 @@ def process_text(t):
             for x in ('J',):
                 body = re.sub(rf"\{{([^{{}}]*?)\b{x}\b([^{{}}]*?) : ℝ\}}", "", chunk, count=1)
                 body = re.sub(r"/-.*?-/|--[^\n]*", "", body, flags=re.S)
-                if not re.search(rf"(?<![\w']){x}(?![\w'])", body):
+                # the energy terms take the bound as an argument, inserted after this pass
+                if not re.search(rf"(?<![\w']){x}(?![\w'])|\b(?:truncatedEnergyTerm|actualEnergyTerms|positiveTerm)\b", body):
                     def strip(m):
                         names = [n for n in m[1].split() if n != x]
                         return f"{{{' '.join(names)} : ℝ}}" if names else ''
                     chunk = re.sub(rf"\{{((?:[\w']+ )*{x}(?: [\w']+)*) : ℝ\}}", strip, chunk, count=1)
                     chunk = re.sub(r"(?<=\S) {2,}(?=\()", " ", chunk)
+                    chunk = re.sub(r"[ \t]+\n", "\n", chunk)
+            # a bound that the dropped hypothesis bound automatically, still used elsewhere
+            head2 = chunk[:len(h.group(0)) + len(signature(chunk, h.end()))] if h else ''
+            code = re.sub(r"/-.*?-/|--[^\n]*", "", chunk, flags=re.S)
+            bound = re.search(r"[{(][^(){}]*(?<![\w'])J(?![\w'])[^(){}]*: ℝ[)}]", head2)
+            if h and kind in ('theorem', 'lemma') and not bound and re.search(r"(?<![\w'.])J(?![\w'])", code):
+                chunk = re.sub(r"\((\w+'*) : (?:ManyBody\.)?(?:ChainInteraction|DomainInteraction|PlaneInteraction) ",
+                               lambda m: "{J : ℝ} " + m[0], chunk, count=1)
         out.append(chunk)
     return ''.join(out)
 
@@ -350,6 +359,18 @@ def thread_local_hypotheses(chunk, v, H, HJ):
         head = m[1]
         if head in (v, H, HJ) or not re.search(
                 rf"(?:\(|⟨|, |\bintro [^\n]*|\bfun [^\n]*)(?<![\w']){re.escape(head)}(?:\s*:|⟩|,|\s)", chunk):
+            return m[0]
+        # the hypothesis must head its application, not be an argument of another one
+        before = m.string[:m.start()].rstrip()
+        prev = re.search(r"([\w'₀-₉.]+)$", before)
+        if before and before[-1] not in "(⟨,=▸↦!|$;" and not (prev and prev[1] in (
+                'exact', 'apply', 'refine', 'using', 'by', 'from', 'have', 'show', 'at', 'in', 'then', 'else')):
+            return m[0]
+        # a hypothesis with a visible type must quantify over interactions
+        b = re.search(rf"\((?:[\w'₀-₉]+ )*{re.escape(head)}(?: [\w'₀-₉]+)* :((?:[^()]|\((?:[^()]|\([^()]*\))*\))*)\)", chunk)
+        if (b and not re.search(r"(?:Chain|Domain|Plane)Interaction\b|[∀→]", b[1])
+                and re.search(r"[=≤<∈]", b[1])
+                and not re.search(rf"[⟨,]\s*{re.escape(head)}\s*[,⟩]", chunk)):
             return m[0]
         return f"{m[1]}{m[2]}{m[m.re.groups]}{v} {H} {HJ}"
     return re.sub(rf"(?<![\w.'])(h[\w'₀-₉]*)((?:[ \t]+(?!{V}\b){ARG})*?)([ \t]+|\n[ \t]+){V}(?![\w.'])(?!\s+{re.escape(H)}\b)"

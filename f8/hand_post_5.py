@@ -48,3 +48,11 @@ for p in glob.glob(P + 'Approximation/*.lean'):
         "obtain ⟨H, E₀, hgap⟩ := hΩ", "obtain ⟨H, hH, hHJ, E₀, hgap⟩ := hΩ")
     if t != s:
         open(p, 'w').write(t)
+
+# the zero term of the swapped square interaction is already a supported operator
+s = open(SW).read()
+s = s.replace("""    · rw [Function.extend_apply' _ _ _ hx]
+      change _ ∈ ManyBody.supportedOperators _ _
+      exact zero_mem _""", """    · rw [Function.extend_apply' _ _ _ hx]
+      exact zero_mem _""", 1)
+open(SW, 'w').write(s)

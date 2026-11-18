@@ -3,7 +3,9 @@ scanner targets `htr Λ h S`, and the rectangular interaction placed on the latt
 import glob, re
 for p in glob.glob('TNLean/PEPS/**/*.lean', recursive=True):
     s = open(p).read()
-    t = re.sub(r"\b(htr|htarget|henergy|hsource|ht|hbound)((?: [\w'₀-₉.]+)*? Λ(?: [\w'₀-₉.]+){0,2}) h S ", r"\1\2 h hh hhJ S ", s)
+    t = s.replace("ScannerHypotheses X R J Δ CT Ctr C₁ Ce n Λ T hT h S E₀ Ω",
+                  "ScannerHypotheses X R J Δ CT Ctr C₁ Ce n Λ T hT h hh hhJ S E₀ Ω")
+    t = re.sub(r"\b(htr|htarget|henergy|hsource|ht|hbound)((?: [\w'₀-₉.]+)*? Λ(?: [\w'₀-₉.]+){0,2}) h S ", r"\1\2 h hh hhJ S ", t)
     t = re.sub(r"\b(hnorm|hentropy)( Λ)? h (E₀|Ω) ", r"\1\2 h hh hhJ \3 ", t)
     t = t.replace("""      (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
@@ -28,5 +30,11 @@ for p in glob.glob('TNLean/PEPS/**/*.lean', recursive=True):
     t = re.sub(r"(\b(?:hcell|hmain|hbound)\b[^\n]*?) h\.toAreaLawHamiltonian E₀",
                r"\1 h.toAreaLawHamiltonian\n      h.isHermitian_toAreaLawHamiltonian_term"
                r" (h.norm_toAreaLawHamiltonian_term_le hhJ) E₀", t)
+    if t != s:
+        open(p, 'w').write(t); print(p)
+# a bound no hypothesis of the callee determines any more
+for p in glob.glob('TNLean/PEPS/AreaLaw/Scan/*.lean'):
+    s = open(p).read()
+    t = re.sub(r"(:= S\.actualCharge_defect_le_of_density_energy_bound) hm hM", r"\1 (J := J) hm hM", s)
     if t != s:
         open(p, 'w').write(t); print(p)

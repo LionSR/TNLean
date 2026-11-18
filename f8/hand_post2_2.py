@@ -70,7 +70,7 @@ for p in glob.glob(P + 'AreaLaw/Scan/*.lean'):
         open(p, 'w').write(t_)
 # calls the threading cannot read: an argument with a projection, and histories named `h`
 soft(P + 'AreaLaw/SupportedGaussianIntegral.lean', "(graphBallLocalizationVelocity_nonneg R hJ) g\n",
-     "(graphBallLocalizationVelocity_nonneg R hJ) g hg hgJ\n")
+     "(graphBallLocalizationVelocity_nonneg R hJ) g hg\n")
 LC = P + 'AreaLaw/LatticeConstraints.lean'
 soft(LC, "sum_norm_term_containing_le hJ)", "sum_norm_term_containing_le hhJ hJ)")
 soft(LC, "PlaneInteraction.sum_norm_term_containing_le h hJ", "PlaneInteraction.sum_norm_term_containing_le h hhJ hJ")
@@ -124,4 +124,14 @@ for p in glob.glob('TNLean/**/*.lean', recursive=True):
     if t != s:
         open(p, 'w').write(t)
 # --- the Trotter product does not depend on a bound
-sub('TNLean/Lattice/ProductForm.lean', "trotterProduct {R : ℕ} {J : ℝ}\n", "trotterProduct {R : ℕ}\n")
+sub('TNLean/Lattice/ProductForm.lean', "def _root_.ManyBody.PlaneInteraction.trotterProduct {R : ℕ} {J : ℝ}\n",
+    "def _root_.ManyBody.PlaneInteraction.trotterProduct {R : ℕ}\n")
+# the placed rectangular interaction needs no bound, so the transport helper takes none
+PZ = P + 'Approximation/PinnedZeroFloorOptimizer.lean'
+sub(PZ, """    {L q m : ℕ} {J E₀ Δ B : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+        (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+    {Ω : StateSpace L q} {X : Fin m → Finset (Vertex L)}
+    (a : Fin m → ℝ)""", """    {L q m : ℕ} {E₀ Δ B : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+    {Ω : StateSpace L q} {X : Fin m → Finset (Vertex L)}
+    (a : Fin m → ℝ)""")
+sub(PZ, "fromCanonical_physical_estimates h hh hhJ a ha", "fromCanonical_physical_estimates h hh a ha")

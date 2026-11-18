@@ -1,4 +1,20 @@
 {
+ "actualChargeScanRound_globalLowDefectProjection_mass_ge": [
+  "hh",
+  "hhJ"
+ ],
+ "actualCharge_defect_le_of_density_energy_bound": [
+  "hh",
+  "hhJ"
+ ],
+ "actualCharge_defect_le_of_density_energy_bound_at_exponent": [
+  "hh",
+  "hhJ"
+ ],
+ "actualCharge_energyError_le_domainGraph": [
+  "hh",
+  "hhJ"
+ ],
  "bufferPart_isHermitian": [
   "hhJ"
  ],
@@ -85,6 +101,10 @@
   "hh",
   "hhJ"
  ],
+ "eventually_exists_selected_actualCharge_sharp_comparison": [
+  "hh",
+  "hhJ"
+ ],
  "exists_cut_decomposition_of_range_one": [
   "hh"
  ],
@@ -103,6 +123,10 @@
   "hhJ"
  ],
  "hamiltonian_eq_leftPart_add_bufferPart_add_rightPart": [
+  "hh",
+  "hhJ"
+ ],
+ "hasProductForm_trotterProduct": [
   "hh",
   "hhJ"
  ],
@@ -216,10 +240,23 @@
  "regionEntropy_eq_zero_of_range_zero": [
   "hhJ"
  ],
+ "regionalEntropy_connectedComponents_eq_zero": [
+  "hhJ"
+ ],
+ "regionalEntropy_eq_zero_of_edgeBoundary_eq_empty": [
+  "hhJ"
+ ],
  "regionalEntropy_eq_zero_of_forall_subset_or_disjoint": [
   "hhJ"
  ],
+ "regionalEntropy_eq_zero_of_range_eq_zero": [
+  "hhJ"
+ ],
  "rightPart_isHermitian": [
+  "hhJ"
+ ],
+ "sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing": [
+  "hh",
   "hhJ"
  ],
  "sizeTrimmingSelectionWith_subset_span": [
@@ -236,9 +273,18 @@
  "sum_norm_terms_containing_le": [
   "hh"
  ],
+ "supported_gaussian_integral_of_localization": [
+  "hgJ"
+ ],
  "swappedDoubled_hamiltonian": [
   "hh",
   "hhJ"
+ ],
+ "swapped_doubled_boundary_bound": [
+  "hh"
+ ],
+ "swapped_doubled_boundary_bound_edgeBoundary": [
+  "hh"
  ],
  "termSum_commutator_eq_sum": [
   "hh",
