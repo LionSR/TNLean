@@ -422,7 +422,7 @@ theorem nearby_unit_vector_energy_and_overlap_bounds
 /-- For a range-one chain Hamiltonian, perturbing a unit witness by distance at most `ζ`
 costs at most `4 L ζ` in energy and `ζ` in ground-state overlap. -/
 theorem _root_.ManyBody.ChainInteraction.nearby_unit_vector_energy_and_overlap_bounds
-    {L q : ℕ} (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+    {L q : ℕ} (h : ChainInteraction L q 1) (_hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     {Γ v v' : EuclideanSpace ℂ (Fin L → Fin q)} {E a ζ : ℝ}
     (hΓ : ‖Γ‖ = 1) (hv : ‖v‖ = 1) (hv' : ‖v'‖ = 1)

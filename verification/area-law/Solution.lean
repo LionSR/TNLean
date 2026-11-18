@@ -107,6 +107,8 @@ theorem hastings_area_law : AreaLawComparator.Statement := by
     (max (K * lemmaOneEndpointLength R J Δ ^ 3) 1) q) 0, le_max_right _ _,
     fun L term hs hh hn E₀ Ω hΩ heig hgap i ↦ ?_⟩
   have : NeZero q := ⟨Nat.ne_of_gt (lt_of_lt_of_le Nat.zero_lt_one hq)⟩
-  simpa only [entropy_eq, interval, Nat.zero_le, true_and] using
-    (hK hJ hΔ (⟨term, hs, hh, hn⟩ : ChainHamiltonian L q R J)
-      ⟨hΩ, heig, hgap⟩ i).trans (le_max_left _ 0)
+  obtain ⟨_, _, hgap', hspan⟩ :=
+    (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp ⟨hΩ, heig, hgap⟩
+  simpa only [entropy_eq, ManyBody.interval, Nat.zero_le, true_and] using
+    (hK hJ hΔ (⟨term, hs⟩ : ManyBody.ChainInteraction L q R) hh hn
+      hΩ hgap' hspan i).trans (le_max_left _ 0)
