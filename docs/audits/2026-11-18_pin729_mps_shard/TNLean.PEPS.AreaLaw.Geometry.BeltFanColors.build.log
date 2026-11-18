@@ -1,0 +1,4 @@
+TNLean/PEPS/AreaLaw/Geometry/BeltFanColors.lean:8:0: warning: 
+'Mathlib.Data.Prod.Lex' has been deprecated: please replace this import by
+
+import Mathlib.Order.Prod.Lex.Basic

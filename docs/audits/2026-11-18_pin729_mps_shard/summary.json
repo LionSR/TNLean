@@ -1,15 +1,15 @@
 {
   "selected": 865,
-  "build_and_strict_passed": 836,
-  "not_completed": 29,
+  "build_and_strict_passed": 865,
+  "not_completed": 0,
   "historical_failed_commands": 3,
   "unresolved_failed_targets": 0,
-  "build_commands": 3244,
-  "strict_commands": 838,
-  "build_seconds": 11936.941708183062,
-  "strict_seconds": 4384.0273435267445,
+  "build_commands": 5159,
+  "strict_commands": 867,
+  "build_seconds": 19946.490692735053,
+  "strict_seconds": 4514.42726336178,
   "production_edit_seconds": null,
   "production_edit_note": "Two authorized lines changed in separate isolated fix commits; edit time not separately measured. Prior validation phase had zero production edits.",
-  "state": "running; resume.py continues bounded batches",
+  "state": "complete: all 865 direct Lean compilation + strict passed on original candidate plus two isolated simp fixes",
   "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b"
 }

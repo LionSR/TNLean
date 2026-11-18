@@ -1,0 +1,12 @@
+TNLean/MPS/Periodic/ProportionalOverlap.lean:72:5: warning: Variable name `hneA` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hneA
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+TNLean/MPS/Periodic/ProportionalOverlap.lean:72:35: warning: Variable name `hneB` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _hneB
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
