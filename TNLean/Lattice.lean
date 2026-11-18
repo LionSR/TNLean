@@ -48,6 +48,7 @@ import TNLean.Lattice.GraphDegreeTail
 import TNLean.Lattice.HardTruncation
 import TNLean.Lattice.HeisenbergDuhamel
 import TNLean.Lattice.IntegerLatticeBallCount
+import TNLean.Lattice.InteractionBudgetImaginaryTime
 import TNLean.Lattice.LocalHamiltonian
 import TNLean.Lattice.LowEnergyBasis
 import TNLean.Lattice.LowEnergyBasisConstruction
