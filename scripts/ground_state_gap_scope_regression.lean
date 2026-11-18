@@ -52,29 +52,32 @@ theorem zeroGap_isGapped :
     have he' : μ • v = 0 := by simpa using he.symm
     exact Or.inl (by simpa using (smul_eq_zero.mp he').resolve_right hv.2)
 
-noncomputable def zeroChain := TNLean.MPS.AreaLaw.ChainHamiltonian.zero 1 2 1 1 (by norm_num)
+noncomputable def zeroChain : ManyBody.ChainInteraction 1 2 1 where
+  term _ := 0
+  mem _ := zero_mem _
 noncomputable def chainOmega : EuclideanSpace ℂ (Fin 1 → Fin 2) :=
   EuclideanSpace.single (fun _ ↦ 0) 1
 
 example :
-    (⟪chainOmega, Matrix.toEuclideanLin zeroChain.operator chainOmega⟫_ℂ).re - 0 ≤
+    (⟪chainOmega, Matrix.toEuclideanLin zeroChain.hamiltonian chainOmega⟫_ℂ).re - 0 ≤
       8 * (1 : ℝ) * 0 := by
   simpa using zeroChain.re_inner_sub_le_of_overlap_of_range_one
     (Ω := chainOmega) (v := chainOmega) (E₀ := 0) (δ := 0)
+    (by simp [zeroChain, ManyBody.Interaction.hamiltonian])
+    (by intro X; norm_num [zeroChain])
     (by simp [chainOmega])
     (by simp [ManyBody.groundSpace, zeroChain,
-      TNLean.MPS.AreaLaw.ChainHamiltonian.operator, TNLean.MPS.AreaLaw.ChainHamiltonian.zero])
+      ManyBody.Interaction.hamiltonian])
     (by simp [chainOmega]) (by simp [chainOmega])
 
 example : (0 : ℝ) ≤ 4 * 1 := by
   apply zeroChain.gap_le_four_mul_of_range_one (Ω := chainOmega) (E₀ := 0)
-      (by decide) (by decide)
+      (by intro X; norm_num [zeroChain]) (by decide) (by decide)
   · simp [chainOmega]
-  · simpa [zeroChain, TNLean.MPS.AreaLaw.ChainHamiltonian.operator,
-      TNLean.MPS.AreaLaw.ChainHamiltonian.zero] using
+  · simpa [zeroChain, ManyBody.Interaction.hamiltonian] using
       (Matrix.PosSemidef.zero : (0 : Matrix (Fin 1 → Fin 2) (Fin 1 → Fin 2) ℂ).PosSemidef)
   · simp [ManyBody.groundSpace, zeroChain,
-      TNLean.MPS.AreaLaw.ChainHamiltonian.operator, TNLean.MPS.AreaLaw.ChainHamiltonian.zero]
+      ManyBody.Interaction.hamiltonian]
 
 noncomputable def zeroSquare : ManyBody.SquareInteraction 1 2 where
   term _ := 0
