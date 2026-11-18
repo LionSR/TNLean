@@ -126,13 +126,52 @@ this reading the first item asks for a bound
 \end{align}
 for all $n\geq3$, with $C$ depending only on $d$, $\eta$ and $\mu$.
 
+\section{What the printed proof supports}
+
+The following are findings about the printed proof, not refutations of
+Theorem~5.9.
+
+\paragraph{The bond bound.} The formalized calibration chooses one natural
+number $u$ from the local dimension and the effective gap $g=w^2/2$ of the
+buffer $w$, and sets
+\begin{align}
+ \ell=u^8,\qquad m=u^{10},\qquad k=u^{16},
+ \label{eq:alvv16_eld_agsp_calibration}
+\end{align}
+where $m$ is the soft-truncation order and $k$ the filter degree. The member
+bond is $\bigl(2(m+1)\,o^2q^{o}\bigr)^{2k}$, where the cluster order $o$ grows
+like $\log N$ in the number $N$ of bonds, so its logarithm is of order
+$u^{16}\log N$. At the source's buffer $w=\mu/(3\log n)$ the number $u$ grows
+like a power of $\log n/\mu$, and the logarithm of the bond is a power of
+$\log n$ larger than three; the bond is quasi-polynomial, but not
+$e^{\tilde O(\log^3n)}$. The printed bound needs the parameters
+(\ref{eq:alvv16_eld_agsp_parameters}), in particular the fourth-order truncation
+$t'=4$, and
+\leanid{TNLean.MPS.AreaLaw.ALVV.not_soft_fourth_order_residual_budget} shows that
+the fourth order fails the residual budget of the formalized calibration.
+Recovering the printed bound therefore needs a sharper residual estimate than
+the one formalized.
+
+\paragraph{The energy estimate.} The proof derives
+$|\varepsilon_M-\tilde\varepsilon_M|<1/2$ in one sentence, at line~1445:
+``The claim on the ground state energies of $H_M$ and $\tilde H_M$ follows
+directly from Lemma~\texttt{lem:exp-approx} as well.'' The first estimate of that
+lemma, equation \texttt{eq:exp-approx-0} at lines 1195--1201, is shown false in
+its uniform reading in
+\href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_soft_truncation_energy_estimate.pdf}{the
+soft-truncation energy note}, for every fixed admissible order and scale. Only a
+corrected comparison for one interval is formalized. The energy clause therefore
+needs its own argument; the printed one does not establish it.
+
 \section{Verdict}
 
 Scope restriction, open. The formalized families prove restricted versions of
 the window and improvement clauses for a fixed buffer. Theorem~5.9 itself, with
 its shrinking buffer, its bond and norm bounds and its energy estimate, is not
 formalized. The lower bound $\eta_1\geq2\mu/\log n$ is not added as a
-hypothesis.
+hypothesis. The analysis of the printed proof in the preceding section records
+why the bond bound and the energy estimate are not reached by the formalized
+families; it does not decide whether they hold.
 
 \bibliographystyle{plain}
 \bibliography{references}
