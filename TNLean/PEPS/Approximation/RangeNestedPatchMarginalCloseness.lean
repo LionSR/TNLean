@@ -31,7 +31,7 @@ Independently formalized from the manuscripts; no upstream Lean text is reused.
 
 open Matrix
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -49,10 +49,11 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
     (q R : ℕ) (hR : 1 ≤ R) {J Δ κ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hκ : 0 < κ) (hκhalf : κ ≤ 1 / 2)
     (hsmall : rangePatchEnergyConstant q R J * κ ^ 2 ≤ Δ / 1024) :
-    ∀ (Λ : Finset (ℤ × ℤ)) (H : LocalHamiltonian Λ q R J) (E₀ : ℝ)
+    ∀ (Λ : Finset (ℤ × ℤ)) (H : PlaneInteraction Λ q R) (_ : ∀ X, (H.term X).IsHermitian)
+        (_ : ∀ X, ‖H.term X‖ ≤ J) (E₀ : ℝ)
       (Ψ : Lattice.StateSpace Λ q),
-      ‖Ψ‖ = 1 → IsGapped H.operator E₀ Δ →
-      groundSpace H.operator E₀ = Submodule.span ℂ {Ψ} →
+      ‖Ψ‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
+      groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ψ} →
       ∀ (center : ℝ × ℝ) (u b : ℝ), 0 ≤ u → 0 < b →
         letI : LinearOrder (Lattice.Site Λ) :=
           (Fintype.equivFin (Lattice.Site Λ)).linearOrder
@@ -74,9 +75,9 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
                 (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ψᵤ x X -
                 Entropy.regionState (n := fun _ : Lattice.Site Λ ↦ q) X Ψ)).trace.re ≤
               (1 / 16 : ℝ) := by
-  intro Λ H E₀ Ψ hΩ hgap hspan center u b hu hb m regions a Ψᵤ x hx hmin X
+  intro Λ H hH hHJ E₀ Ψ hΩ hgap hspan center u b hu hb m regions a Ψᵤ x hx hmin X
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
-  have henergy := (H.rangeNestedPatch_minimizer_energy_le hR hJ Ψ hΩ
+  have henergy := (H.rangeNestedPatch_minimizer_energy_le hH hHJ hR hJ Ψ hΩ
     (hspan ▸ Submodule.mem_span_singleton_self Ψ) center u κ b
     hu hκ (hκhalf.trans (by norm_num)) hb x hx hmin).trans hsmall
   have hnorm := norm_normalizedRegularizedPatchOutput
@@ -84,7 +85,8 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
     (fun _ ↦ div_nonneg hκ.le (Nat.cast_nonneg m)) hb Ψᵤ
     (hΩ) hx
   have hgap := FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy
-    (fun _ : Lattice.Site Λ ↦ Fin q) H.operator_isHermitian hΩ hgap hspan hΔ
+    (fun _ : Lattice.Site Λ ↦ Fin q) (ManyBody.Interaction.isHermitian_hamiltonian hH)
+        hΩ hgap hspan hΔ
     (hnorm) henergy X
   have hρ := reindex_reducedPure_eq_regionState
     (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) X Ψᵤ
@@ -107,10 +109,11 @@ Extension of polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 335–365,
 theorem exists_uniform_rangeNestedPatch_minimizer_marginal_closeness
     (q R : ℕ) (hR : 1 ≤ R) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ κ : ℝ, 0 < κ ∧ κ ≤ 1 / 2 ∧
-      ∀ (Λ : Finset (ℤ × ℤ)) (H : LocalHamiltonian Λ q R J) (E₀ : ℝ)
+      ∀ (Λ : Finset (ℤ × ℤ)) (H : PlaneInteraction Λ q R) (_ : ∀ X, (H.term X).IsHermitian)
+          (_ : ∀ X, ‖H.term X‖ ≤ J) (E₀ : ℝ)
         (Ψ : Lattice.StateSpace Λ q),
-        ‖Ψ‖ = 1 → IsGapped H.operator E₀ Δ →
-        groundSpace H.operator E₀ = Submodule.span ℂ {Ψ} →
+        ‖Ψ‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ψ} →
         ∀ (center : ℝ × ℝ) (u b : ℝ), 0 ≤ u → 0 < b →
           letI : LinearOrder (Lattice.Site Λ) :=
             (Fintype.equivFin (Lattice.Site Λ)).linearOrder

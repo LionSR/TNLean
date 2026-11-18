@@ -154,8 +154,7 @@ private theorem squareAreaLawState_operator {L q : ℕ}
 /-- Transport supplied canonical conclusions for the explicitly pulled-back
 family. This helper makes no optimizer choice. -/
 private theorem fromCanonical_physical_estimates
-    {L q m : ℕ} {J E₀ Δ B : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
-        (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+    {L q m : ℕ} {E₀ Δ B : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
     {Ω : StateSpace L q} {X : Fin m → Finset (Vertex L)}
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
     (K : CanonicalFamily q X) (hK : ∀ j, Entropy.IsFeasibleFilter 0 (a j) (K j))
@@ -171,7 +170,7 @@ private theorem fromCanonical_physical_estimates
         (Entropy.chainList (canonicalRegions X) K fun _ ↦ True)) (AreaLaw.rectangleAreaLawState Ω)
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
-        |(⟪φ, toEuclideanLin (h.toAreaLawHamiltonian hhJ).operator φ⟫_ℂ).re - E₀| ≤ B ∧
+        |(⟪φ, toEuclideanLin h.toAreaLawHamiltonian.hamiltonian φ⟫_ℂ).re - E₀| ≤ B ∧
         Δ * (1 - ‖⟪AreaLaw.rectangleAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤ B) :
     IsMaximizer Ω a (fromCanonical K hK) ∧
       0 < ‖output (fromCanonical K hK) Ω‖ ∧
@@ -183,7 +182,7 @@ private theorem fromCanonical_physical_estimates
   have hnorm := squareAreaLawState_normalizedOutput (fromCanonical K hK) Ω
   rw [canonicalMatrices_fromCanonical] at hout hnorm
   dsimp only at hnorm hresult
-  rw [← hnorm, ← hout, h.toAreaLawHamiltonian_operator hhJ hh,
+  rw [← hnorm, ← hout, h.toAreaLawHamiltonian_hamiltonian hh,
     ← squareAreaLawState_operator] at hresult
   simp only [AreaLaw.norm_rectangleAreaLawState, squareAreaLawState_inner] at hresult
   refine ⟨?_, hresult⟩
@@ -237,6 +236,6 @@ theorem _root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelit
   dsimp only at hresult
   rw [hbudget] at hresult
   exact ⟨fromCanonical K hK,
-    fromCanonical_physical_estimates h hh hhJ a ha K hK hmax hresult⟩
+    fromCanonical_physical_estimates h hh a ha K hK hmax hresult⟩
 
 end TNLean.PEPS.Approximation

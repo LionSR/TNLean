@@ -40,9 +40,11 @@ information bounds.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 open scoped ComplexOrder
 
@@ -104,10 +106,11 @@ Proposition 10.2. Source: `09-amplification.tex`, lines 261–296 and 563–575.
 theorem amplificationBound_of_radius_output {q R : ℕ} {J Δ : ℝ}
     (h : ∀ C₀ : ℝ, 0 < C₀ → ∀ M : ℕ, 1 ≤ M →
       ∃ C : ℝ, ∃ N : ℕ, ∀ n : ℕ, 2 ≤ n → N ≤ n →
-        ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+        ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
+        (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
+          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
             (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
-          Ω ∈ groundSpace h.operator E₀ →
+          Ω ∈ groundSpace h.hamiltonian E₀ →
             ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
               ((A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
@@ -135,9 +138,9 @@ theorem amplificationBound_of_radius_output {q R : ℕ} {J Δ : ℝ}
   intro C₀ hC₀ M hM
   obtain ⟨C, N₁, hC⟩ := h C₀ hC₀ M hM
   obtain ⟨N₂, hN₂⟩ := exists_threshold_graphNeighborhood_collar_subset C
-  refine ⟨C, max N₁ N₂, fun n hn2 hn Λ hH E₀ Ω hΩ hgap hspan A T hcard hX hY hS hI ↦ ?_⟩
+  refine ⟨C, max N₁ N₂, fun n hn2 hn Λ hH hhH hhHJ E₀ Ω hΩ hgap hspan A T hcard hX hY hS hI ↦ ?_⟩
   obtain ⟨r, hr, hout⟩ :=
-    hC n hn2 (le_of_max_le_left hn) Λ hH E₀ Ω hΩ hgap hspan A T hcard hX hY hS hI
+    hC n hn2 (le_of_max_le_left hn) Λ hH hhH hhHJ E₀ Ω hΩ hgap hspan A T hcard hX hY hS hI
   exact ⟨r, hr, hout, hN₂ n (le_of_max_le_right hn) r hr Λ A T⟩
 
 end TNLean.PEPS.AreaLaw

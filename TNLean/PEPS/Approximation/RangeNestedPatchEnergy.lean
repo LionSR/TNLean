@@ -42,7 +42,7 @@ Independently formalized from the manuscripts; no upstream Lean text is reused.
 
 open Matrix
 
-open ManyBody (groundSpace)
+open ManyBody (groundSpace PlaneInteraction)
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -150,10 +150,11 @@ the weights are exactly `κ / m`. At `R = 1` the squares are the source squares.
 
 Extension of polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 213–336,
 `eq:patch-energy-bound`, to interactions of range `R` (area-law `eq:hamiltonian`). -/
-theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy_le
-    {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J E₀ : ℝ} (H : LocalHamiltonian Λ q R J)
+theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
+    {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J E₀ : ℝ} (H : PlaneInteraction Λ q R)
+        (hH : ∀ X, (H.term X).IsHermitian) (hHJ : ∀ X, ‖H.term X‖ ≤ J)
     (hR : 1 ≤ R) (hJ : 0 ≤ J) (Ψ : Lattice.StateSpace Λ q)
-    (hΩ : ‖Ψ‖ = 1) (hmem : Ψ ∈ groundSpace H.operator E₀)
+    (hΩ : ‖Ψ‖ = 1) (hmem : Ψ ∈ groundSpace H.hamiltonian E₀)
     (center : ℝ × ℝ) (u κ b : ℝ) (hu : 0 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
     letI : LinearOrder (Lattice.Site Λ) :=
       (Fintype.equivFin (Lattice.Site Λ)).linearOrder
@@ -171,7 +172,7 @@ theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy
       let φ : Lattice.StateSpace Λ q :=
         (normalizedRegularizedPatchOutput (Out := fun _ : Lattice.Site Λ ↦ Fin q)
           regions a b Ψᵤ x)
-      (inner ℂ φ (Matrix.toEuclideanLin H.operator φ)).re - E₀ ≤
+      (inner ℂ φ (Matrix.toEuclideanLin H.hamiltonian φ)).re - E₀ ≤
         rangePatchEnergyConstant q R J * κ ^ 2 := by
   intro m regions a Ψᵤ x hx hmin φ
   have hm : (0 : ℝ) < m :=
@@ -190,7 +191,7 @@ theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy
       Matrix (Lattice.Configuration Λ q) (Lattice.Configuration Λ q) ℂ := H.term
   let S : AdmissibleSupport Λ R → Finset (Lattice.Site Λ) := fun X ↦ X.1
   have hsupp : ∀ X, Entropy.IsSupportedOn (n := fun _ : Lattice.Site Λ ↦ q) (T X) (S X) :=
-    fun X ↦ (H.supported X)
+    fun X ↦ (H.mem X)
   let D : ℕ → Finset (Lattice.Site Λ) := AreaLaw.Geometry.rangeNestedPatch Λ center R u
   let K : (j : Fin m) → Matrix (Entropy.RegionConfig (fun _ : Lattice.Site Λ ↦ q) (D j))
       (Entropy.RegionConfig (fun _ : Lattice.Site Λ ↦ q) (D j)) ℂ :=
@@ -210,7 +211,7 @@ theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy
       Entropy.liftProd (Entropy.chainList D K fun _ ↦ True) = 1 :=
     Entropy.liftProdInv_mul_liftProd_of_isUnit fun p hp ↦
       (List.mem_map.mp hp).elim fun i hi ↦ hi.2 ▸ hunit i
-  have hop : H.operator = ∑ X, T X := rfl
+  have hop : H.hamiltonian = ∑ X, T X := rfl
   have heig₀ : Matrix.toEuclideanLin (∑ X, T X) Ψ = (E₀ : ℂ) • Ψ := by
     rw [← hop]
     exact ManyBody.mem_groundSpace_iff.mp hmem
@@ -229,7 +230,7 @@ theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy
         AreaLaw.Geometry.abs_squareRadius_sub_le_of_isAdmissibleSupport center X.2 hy hz)
       (Entropy.mem_splitIndices.mp hj) (Entropy.mem_splitIndices.mp hk))
   have henergy := Entropy.re_inner_sub_le_of_chain_sharp D hD K hunit hφ a ha₁ hcl
-    T S hsupp H.hermitian σ₀ H.norm_le hsingle heig
+    T S hsupp hH σ₀ hHJ hsingle heig
   have hbudget : ∀ j : Fin m,
       a j ^ 2 * ∑ X ∈ Entropy.crossingTerms S (D j),
         (Fintype.card (Entropy.InnerConfig (fun _ : Lattice.Site Λ ↦ q) (D j) (S X)) : ℝ) ^ 2 *

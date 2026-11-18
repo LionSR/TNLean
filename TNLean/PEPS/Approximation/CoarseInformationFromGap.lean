@@ -32,7 +32,7 @@ open scoped Matrix.Norms.L2Operator
 
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace SquareInteraction)
+open ManyBody (IsGapped groundSpace SquareInteraction PlaneInteraction)
 
 namespace TNLean.PEPS.Approximation
 
@@ -80,14 +80,14 @@ theorem sublinearCollarBoundAt_closed {q R : ℕ} (hq : 1 ≤ q) {J Δ D₀ : �
     (hΔ : 0 < Δ) (hD₀ : 2 * (R : ℝ) + 10 < D₀) :
     AreaLaw.SublinearCollarBoundAt q R J Δ D₀ 24 (collarConstantClosed q R J Δ)
       (collarThresholdClosed q R J Δ) := by
-  intro n s hn Λ h E₀ Ω hΩ hpsd hmem
+  intro n s hn Λ h hh hhJ E₀ Ω hΩ hpsd hmem
   obtain ⟨-, -, hgap, hspan⟩ :=
     (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
       ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
   exact AreaLaw.sublinearCollarBound_real_explicit (D₀ := D₀) (Ctpl := 24) q R hq hJ hΔ hD₀
     (by norm_num) _ _ _ _ _ TensorPower.ReplicaTransport.transportThreshold_pos
     AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit
-    n s hn Λ h E₀ Ω hΩ hgap hspan
+    n s hn Λ h hh hhJ E₀ Ω hΩ hgap hspan
 
 /-- The constant of Proposition 3.1 at range `R` at closed-form constants: the amplification
 constant of Proposition 10.2 at the collar constant `collarConstantClosed q R J Δ`, made
@@ -117,10 +117,11 @@ induced domains and interaction range. -/
 theorem coarse_mutualInformation_le_closed {q R : ℕ} (hq : 1 ≤ q) {J Δ : ℝ}
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) (N₀ : ℕ) (A₀ : ℝ) :
     ∀ u : ℝ, coarseInformationThresholdClosed q R J Δ N₀ A₀ ≤ u →
-      ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J) (E₀ : ℝ)
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
         (Ω : Lattice.StateSpace Λ q),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
@@ -131,10 +132,10 @@ theorem coarse_mutualInformation_le_closed {q R : ℕ} (hq : 1 ≤ q) {J Δ : �
               coarseInformationConstantClosed q R J Δ := by
   have hcol := sublinearCollarBoundAt_closed (R := R) (D₀ := 2 * (R : ℝ) + 11) hq hJ hΔ
     (by linarith)
-  intro u hu Λ h E₀ Ω hΩ hgap hspan
+  intro u hu Λ h hh hhJ E₀ Ω hΩ hgap hspan
   exact coarse_mutualInformation_le_of_sublinearCollarBoundAt hcol
-    (amplificationBoundAt_collarAmplification hΔ _) N₀ A₀ u hu Λ h E₀ Ω hΩ
-    (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+    (amplificationBoundAt_collarAmplification hΔ _) N₀ A₀ u hu Λ h hh hhJ E₀ Ω hΩ
+    (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
     (hspan ▸ Submodule.mem_span_singleton_self _)
 
 /-- Coarse mutual information on any finite induced domain, from the original
@@ -146,10 +147,11 @@ induced domains and interaction range. -/
 theorem coarse_mutualInformation_le {q R : ℕ} (hq : 1 ≤ q) {J Δ : ℝ}
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) (N₀ : ℕ) (A₀ : ℝ) :
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
-      ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J) (E₀ : ℝ)
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
         (Ω : Lattice.StateSpace Λ q),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),

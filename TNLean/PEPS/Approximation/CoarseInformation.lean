@@ -64,7 +64,7 @@ open scoped Matrix.Norms.L2Operator
 open TNLean.PEPS.AreaLaw
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace SquareInteraction)
+open ManyBody (IsGapped groundSpace SquareInteraction PlaneInteraction)
 
 open scoped ComplexOrder
 
@@ -137,11 +137,12 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
     (hcol : SublinearCollarBoundAt q R J Δ D₀ Ctpl C N)
     (hamp : AmplificationBoundAt q R J Δ (max C 1) 1 Ca Na) (N₀ : ℕ) (A₀ : ℝ) :
     ∀ u : ℝ, coarseInformationThreshold Ctpl N₀ A₀ N Ca Na ≤ u →
-      ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J) (E₀ : ℝ)
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
         (Ω : Lattice.StateSpace Λ q),
-        ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+        ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
           (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
-        Ω ∈ groundSpace h.operator E₀ →
+        Ω ∈ groundSpace h.hamiltonian E₀ →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
@@ -177,7 +178,7 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
       (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) + 2 * r <
         η * (n : ℝ) ^ (Exponents.beta : ℝ) :=
     fun _ hn r hr ↦ Exponents.collar_radius_lt_of_collarRadiusThreshold_le hηpos hn r hr
-  intro u hu Λ h E₀ Ω hΩ hgap hspan T hT hdiam X hX E hE
+  intro u hu Λ h hh hhJ E₀ Ω hΩ hgap hspan T hT hdiam X hX E hE
   have huN : ((max (max N Na) (max N₃ 2) : ℕ) : ℝ) ≤ u := (le_max_left _ _).trans hu
   have huK : K ^ ε⁻¹ ≤ u := (le_max_right _ _).trans hu
   have hu2 : (2 : ℝ) ≤ u := le_trans (by exact_mod_cast (by omega :
@@ -247,14 +248,15 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
     rw [boundaryEndpoints_univ] at hz
     simp at hz
   obtain ⟨hI, hXcut, hScut, hYcut, hcard⟩ :=
-    hcol n s₀ ((le_max_left _ _).trans ((le_max_left _ _).trans hnN)) Λ h E₀ Ω hΩ hgap hspan
+    hcol n s₀ ((le_max_left _ _).trans ((le_max_left _ _).trans hnN)) Λ h hh hhJ E₀ Ω hΩ hgap hspan
       Finset.univ Tt hsep hℓ
   have hn0' : (0 : ℝ) ≤ n := Nat.cast_nonneg n
   have hle (x : ℝ) (hx : 0 ≤ x) : C * x ≤ C₀ * x :=
     mul_le_mul_of_nonneg_right (le_max_left _ _) hx
   -- Amplification.
   obtain ⟨r, hr, hout, -⟩ :=
-    hamp n hn2 ((le_max_right _ _).trans ((le_max_left _ _).trans hnN)) Λ h E₀ Ω hΩ hgap hspan
+    hamp n hn2 ((le_max_right _ _).trans ((le_max_left _ _).trans hnN)) Λ h hh hhJ E₀
+        Ω hΩ hgap hspan
       Finset.univ Tt.points (hcard.trans (hle _ (by positivity)))
       (hXcut.trans (hle _ hn0')) (hYcut.trans (hle _ hn0')) (hScut.trans (hle _ hn0'))
       (hI.trans (hle _ (by positivity)))
@@ -353,10 +355,11 @@ Proposition 3.1, `02-information.tex` lines 91–145. -/
 theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D₀ Ctpl : ℝ}
     (hΔ : 0 < Δ) (hcol : SublinearCollarBound q R J Δ D₀ Ctpl) (N₀ : ℕ) (A₀ : ℝ) :
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
-      ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J) (E₀ : ℝ)
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
         (Ω : Lattice.StateSpace Λ q),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
@@ -367,10 +370,10 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D�
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
   exact ⟨_, beta_lt_one, _, _,
     by
-      intro u hu Λ h E₀ Ω hΩ hgap hspan
+      intro u hu Λ h hh hhJ E₀ Ω hΩ hgap hspan
       exact coarse_mutualInformation_le_of_sublinearCollarBoundAt hcol hamp N₀ A₀
-        u hu Λ h E₀ Ω hΩ
-        (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+        u hu Λ h hh hhJ E₀ Ω hΩ
+        (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
         (hspan ▸ Submodule.mem_span_singleton_self _)⟩
 
 /-- Mutual information is unchanged by relabeling the sites along a bijection, once both
@@ -424,8 +427,9 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
   have hdist' (x y : ℤ × ℤ) :
       Scan.ambientSupDistance (x + -c) (y + -c) = Scan.ambientSupDistance x y := by
     rw [hdist, neg_add_cancel_right]
-  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hhJ hh hΩ hgap hspan
-  have h := hmain u hu (AreaLaw.rectangularDomain L L) (h.toAreaLawHamiltonian hhJ) E₀
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hh hΩ hgap hspan
+  have h := hmain u hu (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian
+    h.isHermitian_toAreaLawHamiltonian_term (h.norm_toAreaLawHamiltonian_term_le hhJ) E₀
     (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap' hspan'
     (T.image fun t ↦ t + -c) (hT.translate (-c))
     (by

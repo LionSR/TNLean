@@ -22,32 +22,37 @@ namespace GenericGapBoundaryRegression
 
 def domain : Finset (ℤ × ℤ) := {(0, 0)}
 
-def zeroHamiltonian : LocalHamiltonian domain 2 1 0 where
+def zeroHamiltonian : ManyBody.PlaneInteraction domain 2 1 where
   term _ := 0
-  supported _ := zero_mem _
-  hermitian _ := Matrix.isHermitian_zero
-  norm_le _ := by simp
+  mem _ := zero_mem _
+
+theorem zeroHermitian : ∀ X, (zeroHamiltonian.term X).IsHermitian :=
+  fun _ ↦ Matrix.isHermitian_zero
+
+theorem zeroNorm : ∀ X, ‖zeroHamiltonian.term X‖ ≤ (0 : ℝ) := by
+  intro X
+  simp [zeroHamiltonian]
 
 def omega : StateSpace domain 2 := EuclideanSpace.single (fun _ ↦ 0) 1
 
 theorem norm_omega : ‖omega‖ = 1 := by simp [omega]
 
-theorem omega_mem : omega ∈ ManyBody.groundSpace zeroHamiltonian.operator 0 := by
-  simp [ManyBody.groundSpace, zeroHamiltonian, LocalHamiltonian.operator]
+theorem omega_mem : omega ∈ ManyBody.groundSpace zeroHamiltonian.hamiltonian 0 := by
+  simp [ManyBody.groundSpace, zeroHamiltonian, ManyBody.Interaction.hamiltonian]
 
 theorem zero_projector_bound :
-    (zeroHamiltonian.operator - (0 : ℂ) • 1 - (0 : ℂ) •
+    (zeroHamiltonian.hamiltonian - (0 : ℂ) • 1 - (0 : ℂ) •
       (1 - Matrix.vecMulVec (fun x ↦ omega x) (star (fun x ↦ omega x)))).PosSemidef := by
-  simpa [zeroHamiltonian, LocalHamiltonian.operator] using
+  simpa [zeroHamiltonian, ManyBody.Interaction.hamiltonian] using
     (Matrix.PosSemidef.zero : (0 : Matrix (Configuration domain 2) _ ℂ).PosSemidef)
 
 theorem groundSpace_not_span :
-    ManyBody.groundSpace zeroHamiltonian.operator 0 ≠ Submodule.span ℂ {omega} := by
+    ManyBody.groundSpace zeroHamiltonian.hamiltonian 0 ≠ Submodule.span ℂ {omega} := by
   classical
   intro h
   have hv : EuclideanSpace.single (fun _ : Site domain ↦ (1 : Fin 2)) (1 : ℂ) ∈
-      ManyBody.groundSpace zeroHamiltonian.operator 0 := by
-    simp [ManyBody.groundSpace, zeroHamiltonian, LocalHamiltonian.operator]
+      ManyBody.groundSpace zeroHamiltonian.hamiltonian 0 := by
+    simp [ManyBody.groundSpace, zeroHamiltonian, ManyBody.Interaction.hamiltonian]
   rw [h, Submodule.mem_span_singleton] at hv
   obtain ⟨c, hc⟩ := hv
   have hne : (fun _ : Site domain ↦ (0 : Fin 2)) ≠ fun _ ↦ 1 := by
@@ -67,7 +72,7 @@ example {D Ctpl C : ℝ} {N n s : ℕ}
       (A.filter fun x ↦ x.val ∈ ambientDilation T.points
         ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
       C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) :=
-  (hb n s hn domain zeroHamiltonian 0 omega norm_omega zero_projector_bound omega_mem
+  (hb n s hn domain zeroHamiltonian zeroHermitian zeroNorm 0 omega norm_omega zero_projector_bound omega_mem
     A T hsep hL).1
 
 example {D Ctpl : ℝ} (hb : SublinearCollarBound 2 1 0 0 D Ctpl) :
@@ -77,7 +82,7 @@ example {D Ctpl : ℝ} (hb : SublinearCollarBound 2 1 0 0 D Ctpl) :
 example {C : ℝ} {N n : ℕ} (hb : AmplificationBoundAt 2 1 0 0 1 1 C N)
     (hn : 2 ≤ n) (hN : N ≤ n) :
     ∃ r : ℕ, (r : ℝ) ≤ C * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) := by
-  obtain ⟨r, hr, -⟩ := hb n hn hN domain zeroHamiltonian 0 omega
+  obtain ⟨r, hr, -⟩ := hb n hn hN domain zeroHamiltonian zeroHermitian zeroNorm 0 omega
     norm_omega zero_projector_bound omega_mem ∅ ∅
     (by simp) (by simp) (by simp) (by simp)
     (by

@@ -94,7 +94,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
         (AreaLaw.rectangleAreaLawState Ω)
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
-        |(⟪φ, toEuclideanLin (h.toAreaLawHamiltonian hhJ).operator φ⟫_ℂ).re - E₀| ≤
+        |(⟪φ, toEuclideanLin h.toAreaLawHamiltonian.hamiltonian φ⟫_ℂ).re - E₀| ≤
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
             a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card ∧
         Δ * (1 - ‖⟪AreaLaw.rectangleAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤
@@ -102,7 +102,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
             a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
   classical
   obtain ⟨T, hT, hTH, hTJ, hsum⟩ := h.exists_nearestNeighbor_terms hh hhJ
-  obtain ⟨hΩ, hgs, hmem⟩ := h.projectorGap_toAreaLawHamiltonian hhJ hh hΩn hΩg hΩmem
+  obtain ⟨hΩ, hgs, hmem⟩ := h.projectorGap_toAreaLawHamiltonian hh hΩn hΩg hΩmem
   have hΩ0 : AreaLaw.rectangleAreaLawState Ω ≠ 0 := fun h0 ↦ by
     have hnorm := hΩ
     simp [h0] at hnorm

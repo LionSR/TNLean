@@ -39,7 +39,7 @@ open scoped BigOperators Kronecker ENNReal NNReal Matrix.Norms.L2Operator Matrix
 
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace AdmissibleSupport graphBall planeDomainGraph)
+open ManyBody (IsGapped groundSpace AdmissibleSupport graphBall planeDomainGraph PlaneInteraction)
 
 open scoped ComplexOrder
 
@@ -280,18 +280,20 @@ positive constraints, in the form of Proposition 4.3. Then the bound of
 `v = latticeOmissionRate R C c p` and `γ = latticeOmissionExponent c p`. -/
 theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 ≤ p) (R : ℕ)
     {J Δ C c : ℝ} (hC : 0 ≤ C) (hc : 0 < c)
-    (hpos : ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+    (hpos : ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
+        (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
           (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
-        Ω ∈ groundSpace h.operator E₀ →
+        Ω ∈ groundSpace h.hamiltonian E₀ →
         let cs := positiveNormalization p (Δ / 2) J
-        let k := fun i => positiveConstraint cs (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+        let k := fun i => positiveConstraint cs
+            (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
         0 < cs ∧
         (∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0) ∧
-        cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
+        cs⁻¹ • (h.hamiltonian - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
         ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
-          cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
+          cs⁻¹ • (h.hamiltonian - (E₀ : ℂ) • 1) ∧
         ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
           ∑ i, k i ∧
         (∀ i (l : ℕ), 0 ≤ ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k i)
@@ -301,11 +303,12 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
         (∀ i, k i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Finset.univ.filter fun x ↦
             (planeDomainGraph Λ).Reachable (a i) x))) :
-    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
+        (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
         (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
-      Ω ∈ groundSpace h.operator E₀ →
+      Ω ∈ groundSpace h.hamiltonian E₀ →
       ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
         (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
@@ -313,7 +316,7 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
           let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
           let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
-            (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+            (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
           let D := fun u : List (AdmissibleSupport Λ R) =>
             ((u.reverse.map fun i => CFC.sqrt (1 - k i)).prod ⊗ₖ (1 : Matrix Aux Aux ℂ)) *ᵥ
               (B *ᵥ fun x => WithLp.ofLp Ω x.1 * ξ x.2)
@@ -325,8 +328,8 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
             latticeOmissionPrefactor R C c p * t * S.card * ‖B‖ *
               Real.exp (latticeOmissionRate R C c p * t -
                 latticeOmissionExponent c p * (r : ℝ) ^ kernelExponent p) := by
-  intro q _ Λ h a ha E₀ Ω hΩ hgap hspan Aux _ _ S B hB ξ hξ r t
-  obtain ⟨-, hk, -, -, -, htail, -⟩ := hpos Λ h a ha E₀ Ω hΩ hgap hspan
+  intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan Aux _ _ S B hB ξ hξ r t
+  obtain ⟨-, hk, -, -, -, htail, -⟩ := hpos Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
   exact domainConstraintWord_omission hC (μ := ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ))
     (Nat.cast_nonneg _) hc (kernelExponent_pos hp) (kernelExponent_le_one p) Λ
     (AdmissibleSupport Λ R) a _ (fun i => (hk i).1) (fun i => (hk i).2.1)
@@ -360,10 +363,11 @@ theorem latticeConstraintWord_omission_of_locality {p : ℕ} (hp : 1 ≤ p) (R :
           L (positiveConstraint (positiveNormalization p (Δ / 2) J)
             (centeredFilter p (Δ / 2) H Ω h))‖ ≤
         C₃ * Real.exp (-(c₃ * l ^ kernelExponent p))) :
-    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
+        (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
         (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
@@ -371,7 +375,7 @@ theorem latticeConstraintWord_omission_of_locality {p : ℕ} (hp : 1 ≤ p) (R :
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
           let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
           let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
-            (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+            (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
           let D := fun u : List (AdmissibleSupport Λ R) =>
             ((u.reverse.map fun i => CFC.sqrt (1 - k i)).prod ⊗ₖ (1 : Matrix Aux Aux ℂ)) *ᵥ
               (B *ᵥ fun x => WithLp.ofLp Ω x.1 * ξ x.2)
@@ -383,15 +387,15 @@ theorem latticeConstraintWord_omission_of_locality {p : ℕ} (hp : 1 ≤ p) (R :
             latticeOmissionPrefactor R C₃ c₃ p * t * S.card * ‖B‖ *
               Real.exp (latticeOmissionRate R C₃ c₃ p * t -
                 latticeOmissionExponent c₃ p * (r : ℝ) ^ kernelExponent p) := by
-  intro q _ Λ h a ha E₀ Ω hΩ hgap hspan
-  refine latticeConstraintWord_omission_of_positiveConstraints hp R hC₃ hc₃ ?_ Λ h a ha E₀ Ω hΩ
-    (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+  intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
+  refine latticeConstraintWord_omission_of_positiveConstraints hp R hC₃ hc₃ ?_ Λ h hh hhJ a ha E₀ Ω hΩ
+    (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
     (hspan ▸ Submodule.mem_span_singleton_self _)
-  intro q _ Λ h a ha E₀ Ω hΩ hpsd hmem
+  intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hpsd hmem
   obtain ⟨-, -, hgap, hspan⟩ :=
       (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
         ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
-  exact latticePositiveConstraints_of_locality hp R hJ hΔ htail Λ h a ha E₀ Ω hΩ hgap hspan
+  exact latticePositiveConstraints_of_locality hp R hJ hΔ htail Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
 
 /-- **Omission of distant events for the exact positive constraints, at the named constants**
 (Lemma 10.1, `eq:amplification-product-omission`; `09-amplification.tex`, lines 42–72 and
@@ -401,10 +405,11 @@ theorem latticeConstraintWord_omission_of_locality {p : ℕ} (hp : 1 ≤ p) (R :
 `C₃ = latticePositiveConstraintConst R J Δ p` and `c₃ = latticePositiveConstraintRate R J Δ p`. -/
 theorem latticeConstraintWord_omission_explicit {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ : ℝ}
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
-    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
+        (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
         (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
@@ -412,7 +417,7 @@ theorem latticeConstraintWord_omission_explicit {p : ℕ} (hp : 1 ≤ p) (R : �
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
           let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
           let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
-            (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+            (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
           let D := fun u : List (AdmissibleSupport Λ R) =>
             ((u.reverse.map fun i => CFC.sqrt (1 - k i)).prod ⊗ₖ (1 : Matrix Aux Aux ℂ)) *ᵥ
               (B *ᵥ fun x => WithLp.ofLp Ω x.1 * ξ x.2)
@@ -427,17 +432,17 @@ theorem latticeConstraintWord_omission_explicit {p : ℕ} (hp : 1 ≤ p) (R : �
                   (latticePositiveConstraintRate R J Δ p) p * t -
                 latticeOmissionExponent (latticePositiveConstraintRate R J Δ p) p *
                   (r : ℝ) ^ kernelExponent p) := by
-  intro q _ Λ h a ha E₀ Ω hΩ hgap hspan
+  intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
   refine latticeConstraintWord_omission_of_positiveConstraints hp R
     (latticePositiveConstraintConst_nonneg R J Δ p) (latticePositiveConstraintRate_pos hp R J hΔ)
-    ?_ Λ h a ha E₀ Ω hΩ
-    (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+    ?_ Λ h hh hhJ a ha E₀ Ω hΩ
+    (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
     (hspan ▸ Submodule.mem_span_singleton_self _)
-  intro q _ Λ h a ha E₀ Ω hΩ hpsd hmem
+  intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hpsd hmem
   obtain ⟨-, -, hgap, hspan⟩ :=
     (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
       ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
-  exact latticePositiveConstraints_explicit hp R hJ hΔ Λ h a ha E₀ Ω hΩ hgap hspan
+  exact latticePositiveConstraints_explicit hp R hJ hΔ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
 
 /-- **Omission of distant events for the exact positive constraints**
 (Lemma 10.1, `eq:amplification-product-omission`, applied to the constraints
@@ -452,10 +457,11 @@ the spectator, and unit spectator vector `ξ`, the expected norm of
 theorem exists_latticeConstraintWord_omission {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ : ℝ}
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ A v γ : ℝ, 0 ≤ A ∧ 0 < v ∧ 0 < γ ∧
-      ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
+          (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
           (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
@@ -463,7 +469,7 @@ theorem exists_latticeConstraintWord_omission {p : ℕ} (hp : 1 ≤ p) (R : ℕ)
           ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
             let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
             let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
-              (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+              (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
             let D := fun u : List (AdmissibleSupport Λ R) =>
               ((u.reverse.map fun i => CFC.sqrt (1 - k i)).prod ⊗ₖ (1 : Matrix Aux Aux ℂ)) *ᵥ
                 (B *ᵥ fun x => WithLp.ofLp Ω x.1 * ξ x.2)
@@ -477,14 +483,14 @@ theorem exists_latticeConstraintWord_omission {p : ℕ} (hp : 1 ≤ p) (R : ℕ)
   exact ⟨_, _, _, channelOmissionPrefactor_nonneg (Nat.cast_nonneg _) C 2 c _,
     channelOmissionRate_pos (Nat.cast_nonneg _) C 2 c _, channelOmissionExponent_pos hc _,
     by
-      intro q _ Λ h a ha E₀ Ω hΩ hgap hspan
-      refine latticeConstraintWord_omission_of_positiveConstraints hp R hC hc ?_ Λ h a ha E₀ Ω hΩ
-        (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+      intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
+      refine latticeConstraintWord_omission_of_positiveConstraints hp R hC hc ?_ Λ h hh hhJ a ha E₀ Ω hΩ
+        (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
         (hspan ▸ Submodule.mem_span_singleton_self _)
-      intro q _ Λ h a ha E₀ Ω hΩ hpsd hmem
+      intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hpsd hmem
       obtain ⟨-, -, hgap, hspan⟩ :=
           (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
             ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
-      exact hpos Λ h a ha E₀ Ω hΩ hgap hspan⟩
+      exact hpos Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan⟩
 
 end TNLean.PEPS.AreaLaw

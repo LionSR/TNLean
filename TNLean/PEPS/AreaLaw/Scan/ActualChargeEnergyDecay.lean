@@ -25,6 +25,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open scoped BigOperators Matrix
 open MeasureTheory Set TensorPower TensorPower.ReplicaTransport Entropy
 
@@ -32,7 +34,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -62,7 +64,8 @@ theorem actualCharge_energy_of_badOldHistoryThreshold_le {Cr C1 Ct : ℝ}
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
       ∃ (hm : 0 < S.m) (hM : 0 < S.M),
         ∀ (q : ℕ) [NeZero q] (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-          (J : ℝ) (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ)
+          (J : ℝ) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : StateSpace Λ q) (Δ : ℝ)
           (s : ℕ), s + 1 ≤ S.n * S.m →
           ∀ (a : ℝ), 0 ≤ a → ∀ (k : ℕ)
           (pre : (r : ℕ) → Config r
@@ -71,7 +74,7 @@ theorem actualCharge_energy_of_badOldHistoryThreshold_le {Cr C1 Ct : ℝ}
             (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) →
           pre k ≠ 0 → ∀ p ∈ Ioo (0 : ℝ) 1,
           let dims := augmentedDimensions (V := Site Λ) q aux
-          let E := S.actualEnergyTerms h Ω Δ
+          let E := S.actualEnergyTerms h Ω J Δ
             ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ aux
           let A : ℝ := 10 * S.K * S.n * S.D * multiplicity
           let ℓ := transportLogDimBound q S.r₀
@@ -90,9 +93,9 @@ theorem actualCharge_energy_of_badOldHistoryThreshold_le {Cr C1 Ct : ℝ}
   have hCpos : 0 < S.C₁ := by simpa only [hC] using hC1
   have hM : 0 < S.M := chargeSlotCount_pos hCpos (by omega) hDpos
   refine ⟨hm, hM, ?_⟩
-  intro q _ aux _ J h Ω Δ s hs a ha k pre hsym hpre p hp
+  intro q _ aux _ J h hh hhJ Ω Δ s hs a ha k pre hsym hpre p hp
   let dims := augmentedDimensions (V := Site Λ) q aux
-  let E := S.actualEnergyTerms h Ω Δ
+  let E := S.actualEnergyTerms h Ω J Δ
     ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ aux
   let A : ℝ := 10 * S.K * S.n * S.D * multiplicity
   let ℓ := transportLogDimBound q S.r₀
@@ -140,7 +143,8 @@ theorem exists_actualCharge_energy_threshold {Cr C1 Ct : ℝ}
       (∀ y, (Finset.univ.filter fun i ↦ S.anchor i = y).card ≤ multiplicity) →
       ∃ (hm : 0 < S.m) (hM : 0 < S.M),
         ∀ (q : ℕ) [NeZero q] (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-          (J : ℝ) (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ)
+          (J : ℝ) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : StateSpace Λ q) (Δ : ℝ)
           (s : ℕ), s + 1 ≤ S.n * S.m →
           ∀ (a : ℝ), 0 ≤ a → ∀ (k : ℕ)
           (pre : (r : ℕ) → Config r
@@ -149,7 +153,7 @@ theorem exists_actualCharge_energy_threshold {Cr C1 Ct : ℝ}
             (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) →
           pre k ≠ 0 → ∀ p ∈ Ioo (0 : ℝ) 1,
           let dims := augmentedDimensions (V := Site Λ) q aux
-          let E := S.actualEnergyTerms h Ω Δ
+          let E := S.actualEnergyTerms h Ω J Δ
             ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ aux
           let A : ℝ := 10 * S.K * S.n * S.D * multiplicity
           let ℓ := transportLogDimBound q S.r₀

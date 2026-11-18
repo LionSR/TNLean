@@ -60,20 +60,21 @@ same lower bound `1/N` on the frequency of the buffer event.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-open scoped ComplexOrder
+open scoped ComplexOrder Matrix.Norms.L2Operator
 
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
 
 /-- The values `S_Ω(A ∩ Q)` entering `F_box(r)`. -/
 def boxEntropyValues (q R : ℕ) (J Δ : ℝ) (D₀ r : ℕ) : Set ℝ :=
-  {s | ∃ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J) (E₀ : ℝ) (Ω : StateSpace Λ q)
-    (A : Finset (Site Λ)) (Q : IntRect), ‖Ω‖ = 1 ∧ (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+  {s | ∃ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
+      (hhJ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace Λ q)
+    (A : Finset (Site Λ)) (Q : IntRect), ‖Ω‖ = 1 ∧ (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
       (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef ∧
-      Ω ∈ groundSpace h.operator E₀ ∧
+      Ω ∈ groundSpace h.hamiltonian E₀ ∧
       IsSafe Λ A D₀ Q ∧ Q.size ≤ r ∧ s = regionalEntropy Λ q Ω (rectRegion A Q)}
 
 /-- **The safe-box entropy** `F_box(r)`: the supremum of `S_Ω(A ∩ Q)` over all admissible
@@ -99,7 +100,7 @@ theorem card_rectRegion_le {Λ : Finset (ℤ × ℤ)} (A : Finset (Site Λ)) (Q 
 /-- `F_box(r) ≤ r² log q` on its values. -/
 theorem le_of_mem_boxEntropyValues (hq : 1 ≤ q) {r : ℕ} {s : ℝ}
     (hs : s ∈ boxEntropyValues q R J Δ D₀ r) : s ≤ (r : ℝ) ^ 2 * Real.log q := by
-  obtain ⟨Λ, h, E₀, Ω, A, Q, hΩ, hgap, hmem, -, hQ, rfl⟩ := hs
+  obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hmem, -, hQ, rfl⟩ := hs
   refine (regionalEntropy_le_card_mul_log Λ q Ω hΩ _).trans ?_
   have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   have : ((rectRegion A Q).card : ℝ) ≤ (r : ℝ) ^ 2 := by
@@ -112,7 +113,7 @@ theorem bddAbove_boxEntropyValues (hq : 1 ≤ q) (r : ℕ) :
 
 theorem nonneg_of_mem_boxEntropyValues {r : ℕ} {s : ℝ}
     (hs : s ∈ boxEntropyValues q R J Δ D₀ r) : 0 ≤ s := by
-  obtain ⟨Λ, h, E₀, Ω, A, Q, hΩ, hgap, hmem, -, -, rfl⟩ := hs
+  obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hmem, -, -, rfl⟩ := hs
   exact regionalEntropy_nonneg Λ q Ω hΩ _
 
 theorem boxEntropy_nonneg (r : ℕ) : 0 ≤ boxEntropy q R J Δ D₀ r :=
@@ -126,20 +127,21 @@ theorem boxEntropy_le_sq_mul_log (hq : 1 ≤ q) (r : ℕ) :
 
 /-- Every safe-box entropy is at most `F_box(r)`. -/
 theorem regionalEntropy_le_boxEntropy (hq : 1 ≤ q) {Λ : Finset (ℤ × ℤ)}
-    (h : LocalHamiltonian Λ q R J) {E₀ : ℝ} {Ω : StateSpace Λ q}
-    (hΩ : ‖Ω‖ = 1) (hgap : (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
+      (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ} {Ω : StateSpace Λ q}
+    (hΩ : ‖Ω‖ = 1) (hgap : (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
       (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef)
-    (hmem : Ω ∈ groundSpace h.operator E₀) {A : Finset (Site Λ)} {Q : IntRect}
+    (hmem : Ω ∈ groundSpace h.hamiltonian E₀) {A : Finset (Site Λ)} {Q : IntRect}
     (hsafe : IsSafe Λ A D₀ Q) {r : ℕ} (hQ : Q.size ≤ r) :
     regionalEntropy Λ q Ω (rectRegion A Q) ≤ boxEntropy q R J Δ D₀ r :=
-  le_csSup (bddAbove_boxEntropyValues hq r) ⟨Λ, h, E₀, Ω, A, Q, hΩ, hgap, hmem, hsafe, hQ, rfl⟩
+  le_csSup (bddAbove_boxEntropyValues hq r) ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hmem, hsafe, hQ, rfl⟩
 
 /-- `F_box` is nondecreasing. -/
 theorem boxEntropy_mono (hq : 1 ≤ q) : Monotone (boxEntropy q R J Δ D₀) := by
   intro r r' hrr
   refine Real.sSup_le (fun s hs ↦ ?_) (boxEntropy_nonneg r')
-  obtain ⟨Λ, h, E₀, Ω, A, Q, hΩ, hgap, hmem, hsafe, hQ, rfl⟩ := hs
-  exact regionalEntropy_le_boxEntropy hq h hΩ hgap hmem hsafe (hQ.trans hrr)
+  obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hmem, hsafe, hQ, rfl⟩ := hs
+  exact regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hmem hsafe (hQ.trans hrr)
 
 /-- The safe-box entropy decreases with the safety parameter. Increasing the threshold
 in the safety condition (`02-initial.tex`, lines 220–228) reduces the collection of
@@ -148,8 +150,8 @@ theorem boxEntropy_antitone (hq : 1 ≤ q) (r : ℕ) :
     Antitone (fun D₀ : ℕ => boxEntropy q R J Δ D₀ r) := by
   intro D₀ D₁ hD
   refine Real.sSup_le (fun s hs ↦ ?_) (boxEntropy_nonneg (D₀ := D₀) r)
-  obtain ⟨Λ, h, E₀, Ω, A, Q, hΩ, hgap, hmem, hsafe, hQ, rfl⟩ := hs
-  exact regionalEntropy_le_boxEntropy hq h hΩ hgap hmem
+  obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hmem, hsafe, hQ, rfl⟩ := hs
+  exact regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hmem
     (fun e he z hz p hp ↦
       (Nat.mul_le_mul_right Q.size hD).trans_lt (hsafe e he z hz p hp)) hQ
 
@@ -203,10 +205,11 @@ For a safe parent `Q` of size at most `M r`, with `P = 2 C_pad + 1`, `N = P²` a
 Source: `02-initial.tex`, lines 606–646. -/
 theorem regionalEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {Cbuf : ℝ}
     (hCbuf : 0 ≤ Cbuf)
-    (hbuf : ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J) (E₀ : ℝ)
-      (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+    (hbuf : ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
+      (hhJ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
+      (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
       (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
-      Ω ∈ groundSpace h.operator E₀ →
+      Ω ∈ groundSpace h.hamiltonian E₀ →
       ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
       ∀ r : ℕ, 1 ≤ r → ∀ Q₀ : IntRect, Q₀.size ≤ r →
         (Q₀.dilate (Cpad * r)).toFinset ⊆ Q.toFinset →
@@ -214,10 +217,11 @@ theorem regionalEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {C
             (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀)) -
           regionalEntropy Λ q Ω (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀) ≤
         regionalEntropy Λ q Ω (rectRegion A Q₀) / 2 + Cbuf * r)
-    {Λ : Finset (ℤ × ℤ)} (h : LocalHamiltonian Λ q R J) {E₀ : ℝ} {Ω : StateSpace Λ q}
-    (hΩ : ‖Ω‖ = 1) (hgap : (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+    {Λ : Finset (ℤ × ℤ)} (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
+      (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ} {Ω : StateSpace Λ q}
+    (hΩ : ‖Ω‖ = 1) (hgap : (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
       (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef)
-    (hmem : Ω ∈ groundSpace h.operator E₀) {A : Finset (Site Λ)} {Q : IntRect}
+    (hmem : Ω ∈ groundSpace h.hamiltonian E₀) {A : Finset (Site Λ)} {Q : IntRect}
     (hsafe : IsSafe Λ A D₀ Q) {M r : ℕ} (hr : 1 ≤ r) (hQ : Q.size ≤ M * r) :
     regionalEntropy Λ q Ω (rectRegion A Q) ≤
       ((1 - 1 / (2 * ((2 * Cpad + 1) ^ 2 : ℕ))) * M ^ 2 +
@@ -285,14 +289,14 @@ theorem regionalEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {C
       regionalEntropy Λ q Ω (Xs i) / 2 + Cbuf * r := by
     intro i hi
     simp only [good, Finset.mem_filter, Finset.mem_univ, true_and] at hi
-    exact hbuf Λ h E₀ Ω hΩ hgap hmem A Q hsafe r hr (ch i) (IntRect.size_child_le _ _ hr)
+    exact hbuf Λ h hh hhJ E₀ Ω hΩ hgap hmem A Q hsafe r hr (ch i) (IntRect.size_child_le _ _ hr)
       (IntRect.child_dilate_subset hr hi.1.2 hi.2.2 hi.1.1 hi.2.1)
   have key := regionalEntropy_biUnion_le_rotations Ω hΩ Xs hdisj col hcol good T
     (Cbuf * r) hT hbuf'
   rw [hunion] at key
   -- bounds on the children
   have hXF : ∀ i, regionalEntropy Λ q Ω (Xs i) ≤ F := fun i ↦
-    regionalEntropy_le_boxEntropy hq h hΩ hgap hmem (hchsafe i) (IntRect.size_child_le _ _ hr)
+    regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hmem (hchsafe i) (IntRect.size_child_le _ _ hr)
   have hX0 : ∀ i, 0 ≤ regionalEntropy Λ q Ω (Xs i) := fun i ↦
     regionalEntropy_nonneg Λ q Ω hΩ _
   have hcard : (Finset.univ : Finset ι).card ≤ M ^ 2 := by
@@ -372,10 +376,11 @@ theorem regionalEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {C
 `F_box(M r) ≤ ((1 - p) M² + p · 2 (2 C_pad + 1) M) F_box(r) + C_buf M² r` for `r ≥ 1`, where
 `p = 1/(2 (2 C_pad + 1)²)`. Source: `02-initial.tex`, lines 629–646. -/
 theorem boxEntropy_le_of_scale (hq : 1 ≤ q) {Cpad : ℕ} {Cbuf : ℝ} (hCbuf : 0 ≤ Cbuf)
-    (hbuf : ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J) (E₀ : ℝ)
-      (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+    (hbuf : ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
+      (hhJ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
+      (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
       (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
-      Ω ∈ groundSpace h.operator E₀ →
+      Ω ∈ groundSpace h.hamiltonian E₀ →
       ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
       ∀ r : ℕ, 1 ≤ r → ∀ Q₀ : IntRect, Q₀.size ≤ r →
         (Q₀.dilate (Cpad * r)).toFinset ⊆ Q.toFinset →
@@ -389,8 +394,8 @@ theorem boxEntropy_le_of_scale (hq : 1 ≤ q) {Cpad : ℕ} {Cbuf : ℝ} (hCbuf :
         1 / (2 * ((2 * Cpad + 1) ^ 2 : ℕ)) * (2 * (2 * Cpad + 1) * M)) *
           boxEntropy q R J Δ D₀ r + Cbuf * M ^ 2 * r := by
   refine Real.sSup_le (fun s hs ↦ ?_) ?_
-  · obtain ⟨Λ, h, E₀, Ω, A, Q, hΩ, hgap, hmem, hsafe, hQ, rfl⟩ := hs
-    exact regionalEntropy_rectRegion_le_of_children hq hCbuf hbuf h hΩ hgap hmem hsafe hr hQ
+  · obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hmem, hsafe, hQ, rfl⟩ := hs
+    exact regionalEntropy_rectRegion_le_of_children hq hCbuf hbuf h hh hhJ hΩ hgap hmem hsafe hr hQ
   · have hF := boxEntropy_nonneg (q := q) (R := R) (J := J) (Δ := Δ) (D₀ := D₀) r
     have hp : (0 : ℝ) ≤ 1 / (2 * ((2 * Cpad + 1) ^ 2 : ℕ)) := by positivity
     have hp1 : 1 / (2 * (((2 * Cpad + 1) ^ 2 : ℕ) : ℝ)) ≤ 1 := by
@@ -510,11 +515,11 @@ theorem boxEntropy_le_initialBoxRatio_mul (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0
   set p := initialBoxProb q R J Δ
   set M := initialBoxScale q R J Δ
   refine (boxEntropy_le_of_scale hq (initialBufferConst_nonneg q R hJ hΔ)
-    (fun _ h _ Ω hΩ hgap hmem _ _ hsafe _ hr _ hQ₀ hpad ↦ by
+    (fun _ h hh hhJ _ Ω hΩ hgap hmem _ _ hsafe _ hr _ hQ₀ hpad ↦ by
       obtain ⟨-, -, hgap, hunique⟩ :=
         (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
           ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hgap⟩
-      exact condEntropy_le_initialBufferConst q R hq hJ hΔ hD₀ h hΩ hgap hunique
+      exact condEntropy_le_initialBufferConst q R hq hJ hΔ hD₀ h hh hhJ hΩ hgap hunique
         hsafe hr hQ₀ hpad) M
         hr).trans ?_
   have hF0 := boxEntropy_nonneg (q := q) (R := R) (J := J) (Δ := Δ) (D₀ := D₀) r

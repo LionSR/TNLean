@@ -56,7 +56,7 @@ open scoped BigOperators NNReal Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport exists_walk_length_le_iff_edist_le graphBall
-  planeDomainGraph)
+  planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -410,18 +410,20 @@ the positive constraints, in the form of Proposition 4.3, with rate `c`. Then th
 `c_t = c / 2`. -/
 theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : ℕ) {J Δ C c : ℝ}
     (hC : 0 ≤ C)
-    (hpos : ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+    (hpos : ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
+        (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
           (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
-        Ω ∈ groundSpace h.operator E₀ →
+        Ω ∈ groundSpace h.hamiltonian E₀ →
         let cs := positiveNormalization p (Δ / 2) J
-        let k := fun i => positiveConstraint cs (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+        let k := fun i => positiveConstraint cs
+            (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
         0 < cs ∧
         (∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0) ∧
-        cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
+        cs⁻¹ • (h.hamiltonian - (E₀ : ℂ) • 1) ≤ ∑ i, k i ∧
         ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
-          cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
+          cs⁻¹ • (h.hamiltonian - (E₀ : ℂ) • 1) ∧
         ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
           ∑ i, k i ∧
         (∀ i (l : ℕ), 0 ≤ ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k i)
@@ -431,15 +433,16 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
         (∀ i, k i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Finset.univ.filter fun x ↦
             (planeDomainGraph Λ).Reachable (a i) x))) :
-    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
+        (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
         (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
-      Ω ∈ groundSpace h.operator E₀ →
+      Ω ∈ groundSpace h.hamiltonian E₀ →
       ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
       let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
       let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
-        (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+        (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
       let kr := fun i : {i // P i} =>
         ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i)
       let D := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
@@ -455,8 +458,8 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
       ∀ w, ‖L w‖ ≤ 1 ∧
         L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
             (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
-  intro q _ Λ h a ha E₀ Ω hΩ hgap hspan S r t
-  obtain ⟨-, hk, -, -, -, htail, -⟩ := hpos Λ h a ha E₀ Ω hΩ hgap hspan
+  intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan S r t
+  obtain ⟨-, hk, -, -, -, htail, -⟩ := hpos Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
   exact domainConstraintWord_truncation hC (Nat.cast_nonneg _) Λ (AdmissibleSupport Λ R) a _
     (fun i => (hk i).1) (fun i => (hk i).2.1)
     (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) (fun i l => (htail i l).2.2) S r t
@@ -469,14 +472,15 @@ of `exists_latticeConstraintWord_truncation` holds with
 `C₃ = latticePositiveConstraintConst R J Δ p` and `c₃ = latticePositiveConstraintRate R J Δ p`. -/
 theorem latticeConstraintWord_truncation_explicit {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ : ℝ}
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
-    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+    ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
+        (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
       let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
       let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
-        (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+        (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
       let kr := fun i : {i // P i} =>
         ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i)
       let D := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
@@ -493,16 +497,16 @@ theorem latticeConstraintWord_truncation_explicit {p : ℕ} (hp : 1 ≤ p) (R : 
       ∀ w, ‖L w‖ ≤ 1 ∧
         L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
             (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
-  intro q _ Λ h a ha E₀ Ω hΩ hgap hspan
+  intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
   refine latticeConstraintWord_truncation_of_positiveConstraints R
-    (latticePositiveConstraintConst_nonneg R J Δ p) ?_ Λ h a ha E₀ Ω hΩ
-    (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+    (latticePositiveConstraintConst_nonneg R J Δ p) ?_ Λ h hh hhJ a ha E₀ Ω hΩ
+    (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
     (hspan ▸ Submodule.mem_span_singleton_self _)
-  intro q _ Λ h a ha E₀ Ω hΩ hpsd hmem
+  intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hpsd hmem
   obtain ⟨-, -, hgap, hspan⟩ :=
       (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
         ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
-  exact latticePositiveConstraints_explicit hp R hJ hΔ Λ h a ha E₀ Ω hΩ hgap hspan
+  exact latticePositiveConstraints_explicit hp R hJ hΔ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
 
 /-- **Truncation of the retained constraint product** (Lemma 10.1,
 `lem:amplification-local-products`, `eq:amplification-product-truncation`,
@@ -521,14 +525,15 @@ The source assumes `S` nonempty and `r ≥ 1`; neither is needed here. -/
 theorem exists_latticeConstraintWord_truncation {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ : ℝ}
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ C c : ℝ, 0 ≤ C ∧ 0 < c ∧
-      ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
+          (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
         let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
         let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
-          (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
+          (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
         let kr := fun i : {i // P i} =>
           ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i)
         let D := fun w : PoissonWord.Word (AdmissibleSupport Λ R) =>
@@ -547,15 +552,15 @@ theorem exists_latticeConstraintWord_truncation {p : ℕ} (hp : 1 ≤ p) (R : �
   obtain ⟨C, c, hC, hc, hpos⟩ := exists_latticePositiveConstraints hp R hJ hΔ
   exact ⟨_, _, constraintWordTruncationPrefactor_nonneg (Nat.cast_nonneg _) C, half_pos hc,
     by
-      intro q _ Λ h a ha E₀ Ω hΩ hgap hspan
-      refine latticeConstraintWord_truncation_of_positiveConstraints R hC ?_ Λ h a ha E₀ Ω hΩ
-        (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+      intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
+      refine latticeConstraintWord_truncation_of_positiveConstraints R hC ?_ Λ h hh hhJ a ha E₀ Ω hΩ
+        (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
         (hspan ▸ Submodule.mem_span_singleton_self _)
-      intro q _ Λ h a ha E₀ Ω hΩ hpsd hmem
+      intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hpsd hmem
       obtain ⟨-, -, hgap, hspan⟩ :=
           (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
             ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
-      exact hpos Λ h a ha E₀ Ω hΩ hgap hspan⟩
+      exact hpos Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan⟩
 
 end Lattice
 

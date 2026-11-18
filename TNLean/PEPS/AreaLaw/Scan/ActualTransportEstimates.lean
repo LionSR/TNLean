@@ -40,7 +40,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -54,7 +54,8 @@ theorem actualFill_transport_domainGraph :
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+        (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+            (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
@@ -71,10 +72,10 @@ theorem actualFill_transport_domainGraph :
         let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
         let n := augmentedDimensions (V := Site Λ) q aux
         let D := S.actualFillData hm hM s
-        let E := S.actualEnergyTerms h Ω Δ L aux
+        let E := S.actualEnergyTerms h Ω J Δ L aux
         let ℓ := transportLogDimBound q S.r₀
         let Hbar := fun r => copyMean n r
-          (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ L i))
+          (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω J Δ L i))
         ∃ β ε : ℕ → ℝ, (β =O[atTop] fun r : ℕ => Real.log (r + 1)) ∧
           Tendsto ε atTop (𝓝 0) ∧
           ∀ (r : ℕ) (pre : Config r (fun v => Fin (n v)) → ℂ),
@@ -98,17 +99,17 @@ theorem actualFill_transport_domainGraph :
   classical
   obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := transport
   refine ⟨c₀, Cent, eent, Cen, een, hc₀, ?_⟩
-  intro Λ T q R J Δ _ _ aux _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
+  intro Λ T q R J Δ _ _ aux _ h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ
     s L hn hs hr hDpos hD hL hC hrows hclear a ha haℓ
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
   let n := augmentedDimensions (V := Site Λ) q aux
   let D := S.actualFillData hm hM s
-  let E := S.actualEnergyTerms h Ω Δ L aux
+  let E := S.actualEnergyTerms h Ω J Δ L aux
   let Hbar := fun r => copyMean n r
-    (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ L i))
+    (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω J Δ L i))
   have hq : 1 ≤ q := NeZero.pos q
-  have hE := S.actualEnergyTerms_spec h Ω hgraph hanchor hΔ hΩ L aux
+  have hE := S.actualEnergyTerms_spec h hh hhJ Ω hgraph hanchor hΔ hΩ L aux
   have hcompat : D.SupportCompatible E :=
     S.fillTransportData_supportCompatible_domainGraph hT hgraph hdepth
       (historyMeanTree S.K S.m S.M hm hM s)
@@ -145,7 +146,8 @@ theorem actualCharge_transport_domainGraph :
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+        (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+            (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
@@ -162,10 +164,10 @@ theorem actualCharge_transport_domainGraph :
         let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
         let n := augmentedDimensions (V := Site Λ) q aux
         let D := S.actualChargeData hm hM s
-        let E := S.actualEnergyTerms h Ω Δ L aux
+        let E := S.actualEnergyTerms h Ω J Δ L aux
         let ℓ := transportLogDimBound q S.r₀
         let Hbar := fun r => copyMean n r
-          (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ L i))
+          (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω J Δ L i))
         ∃ β ε : ℕ → ℝ, (β =O[atTop] fun r : ℕ => Real.log (r + 1)) ∧
           Tendsto ε atTop (𝓝 0) ∧
           ∀ (r : ℕ) (pre : Config r (fun v => Fin (n v)) → ℂ),
@@ -189,17 +191,17 @@ theorem actualCharge_transport_domainGraph :
   classical
   obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := transport
   refine ⟨c₀, Cent, eent, Cen, een, hc₀, ?_⟩
-  intro Λ T q R J Δ _ _ aux _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
+  intro Λ T q R J Δ _ _ aux _ h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ
     s L hn hs hr hDpos hD hL hC hrows hclear a ha haℓ
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
   let n := augmentedDimensions (V := Site Λ) q aux
   let D := S.actualChargeData hm hM s
-  let E := S.actualEnergyTerms h Ω Δ L aux
+  let E := S.actualEnergyTerms h Ω J Δ L aux
   let Hbar := fun r => copyMean n r
-    (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ L i))
+    (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω J Δ L i))
   have hq : 1 ≤ q := NeZero.pos q
-  have hE := S.actualEnergyTerms_spec h Ω hgraph hanchor hΔ hΩ L aux
+  have hE := S.actualEnergyTerms_spec h hh hhJ Ω hgraph hanchor hΔ hΩ L aux
   have hcompat : D.SupportCompatible E :=
     S.chargeTransportData_supportCompatible_domainGraph hT hgraph hdepth
       (historyMeanTree S.K S.m S.M hm hM s)

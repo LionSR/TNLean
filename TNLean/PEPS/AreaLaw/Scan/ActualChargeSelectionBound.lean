@@ -22,9 +22,11 @@ OpenAI, *A two-dimensional area law from a global spectral gap*, September 24,
 `08-scanner.tex`, lines 442–490.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -41,7 +43,8 @@ theorem actualCharges_selection_domainGraph_of_finiteFamilyTransportBound
     ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
       [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
       (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-      (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+      (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+          (Ω : StateSpace Λ q)
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
       S.graph = planeDomainGraph Λ →
       S.depth = (fun x => ambientDepth T hT x.val) →
@@ -58,7 +61,7 @@ theorem actualCharges_selection_domainGraph_of_finiteFamilyTransportBound
       let hm : 0 < S.m := by omega
       let hM : 0 < S.M := chargeSlotCount_pos hCpos (Nat.le_trans (by decide) hn) hDpos
       let n := augmentedDimensions (V := Site Λ) q aux
-      let E := S.actualEnergyTerms h Ω Δ L aux
+      let E := S.actualEnergyTerms h Ω J Δ L aux
       let ℓ := transportLogDimBound q S.r₀
       ∃ (β : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
         (∀ k, 0 ≤ β k) ∧ (∀ k, β k ≤ Cβ * Real.log (k + 2)) ∧
@@ -76,10 +79,11 @@ theorem actualCharges_selection_domainGraph_of_finiteFamilyTransportBound
             ∃ s : Fin (S.n * S.m), ∃ p ∈ Icc p₀ p₁,
               S.actualChargeEntropyDefect hm hM s.val n E (a / 2) k pre p ≤
                 B / (ρ * ((S.n * S.m : ℕ) : ℝ) * (p₁ - p₀)) := by
-  intro Λ T q R J Δ _ _ aux _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
+  intro Λ T q R J Δ _ _ aux _ h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ
     L μ hn hr hDpos hD hL hCpos hC hrows hmult hclear a ha haℓ hm hM n E ℓ
   obtain ⟨β, Cβ, hCβ, hβ0, hβ, hsum⟩ :=
-    actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound htransport aux h Ω S
+    actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound htransport
+        aux h hh hhJ Ω S
       hT hgraph hdepth hanchor hΔ hΩ hn hr hDpos hD hL hCpos hC
       hrows hmult hclear ha haℓ
   refine ⟨β, Cβ, hCβ, hβ0, hβ, fun k pre hk hpre hne p₀ p₁ h0 h01 h1 ↦ ?_⟩
@@ -103,7 +107,8 @@ theorem actualCharges_selection_domainGraph :
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+        (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+            (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
@@ -120,7 +125,7 @@ theorem actualCharges_selection_domainGraph :
         let hm : 0 < S.m := by omega
         let hM : 0 < S.M := chargeSlotCount_pos hCpos (Nat.le_trans (by decide) hn) hDpos
         let n := augmentedDimensions (V := Site Λ) q aux
-        let E := S.actualEnergyTerms h Ω Δ L aux
+        let E := S.actualEnergyTerms h Ω J Δ L aux
         let ℓ := transportLogDimBound q S.r₀
         ∃ (β : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
           (∀ k, 0 ≤ β k) ∧ (∀ k, β k ≤ Cβ * Real.log (k + 2)) ∧

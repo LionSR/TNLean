@@ -27,7 +27,7 @@ open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport)
+open ManyBody (AdmissibleSupport PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -45,10 +45,11 @@ theorem exists_actualScan_rough_lower_norm_of_weight
     ∃ c Cf : ℝ, 0 ≤ c ∧ 0 ≤ Cf ∧
       ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)), S.K = Kband →
       ∀ (hm : 0 < S.m) (hM : 0 < S.M) (Horizon : ℕ)
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
+        (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+            (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
         (Ωt : StateSpace Λ q) (e₀ gap : ℝ),
       ‖Ωt‖ = 1 →
-      ((∑ i, S.truncatedEnergyTerm h Ω Δ L i) - (e₀ : ℂ) • 1 -
+      ((∑ i, S.truncatedEnergyTerm h Ω J Δ L i) - (e₀ : ℂ) • 1 -
         (gap : ℂ) • (1 - vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef →
       0 < gap →
       let W := a * (Kband : ℝ)
@@ -80,19 +81,19 @@ theorem exists_actualScan_rough_lower_norm_of_weight
             (Transport.filteredVector (Dfill.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
           lower (Transport.filteredNormSq (Dfill.rootPath n (a / 2) k p) (pre k))
             ((S.actualFillScanRound hm hM s.val n
-              (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p)) ∧
+              (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p)) ∧
         (‖WithLp.toLp 2
             (Transport.filteredVector (Dcharge.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
           lower (Transport.filteredNormSq (Dcharge.rootPath n (a / 2) k p) (pre k))
             ((S.actualChargeScanRound hm hM s.val n
-              (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p)) := by
+              (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p)) := by
   classical
   obtain ⟨c, Cf, hc, hCf, hlower⟩ :=
     exists_replicaMetric_symProj_bandProduct_rough_lower_norm
       (fun _ : Site Λ => Fin q) (Fin d) (Fin d)
       (div_pos ha zero_lt_two) (by linarith only [haSmall])
   refine ⟨c, Cf, hc, hCf, ?_⟩
-  intro S hSK hm hM Horizon h Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos W n
+  intro S hSK hm hM Horizon h hh hhJ Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos W n
     pre k hk hpre hprenorm hsym ell Sent ε β ι₀ e hC hR hlabel r remainder lower
     s p Dfill Dcharge
   subst Kband
@@ -171,7 +172,7 @@ theorem exists_actualScan_rough_lower_norm_of_weight
       let φ := (‖w‖⁻¹ : ℂ) • w
       let v := toEuclideanLin ZO φ
       let δ := ((star v ⬝ᵥ (globalReplicaMeanHamiltonian β (Fin d) (Fin d)
-        (∑ i, S.truncatedEnergyTerm h Ω Δ L i) k *ᵥ v)).re - e₀) / gap
+        (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) k *ᵥ v)).re - e₀) / gap
       w ≠ 0 ∧ ‖v‖ = 1 ∧ 0 ≤ δ ∧
         ∀ τ : ℝ, 0 < τ → τ ≤ 1 / 2 →
           (W / 4) *
@@ -180,7 +181,7 @@ theorem exists_actualScan_rough_lower_norm_of_weight
             -Real.log (‖w‖ ^ 2) / (k : ℝ) := by
     intro metric leftRegion F E A B M w φ v δ
     have hraw :=
-      hlower k N hk (∑ i, S.truncatedEnergyTerm h Ω Δ L i) Ωt.ofLp e₀ gap
+      hlower k N hk (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) Ωt.ofLp e₀ gap
         hgap hΩt hgap_pos ZO hZO hZOZO
         (terminalFamily S.K S.m S.M Horizon) S.K Q Y hdisj hnest
         T ell ell Sent ε (1 / 4 : ℝ) hlabel (by norm_num)
@@ -238,7 +239,7 @@ theorem exists_actualScan_rough_lower_norm_of_weight
         let v := Transport.filteredVector (D.rootPath n (a / 2) k p) (pre k)
         let vO := v ∘ e
         (star vO ⬝ᵥ (globalReplicaMeanHamiltonian β (Fin d) (Fin d)
-          (∑ i, S.truncatedEnergyTerm h Ω Δ L i) k *ᵥ vO)).re) :
+          (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) k *ᵥ vO)).re) :
       ‖WithLp.toLp 2
           (Transport.filteredVector (D.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
         lower (Transport.filteredNormSq (D.rootPath n (a / 2) k p) (pre k)) μ := by
@@ -291,7 +292,7 @@ theorem exists_actualScan_rough_lower_norm_of_weight
       rfl
     have henergyO : μ =
         (star vO ⬝ᵥ (globalReplicaMeanHamiltonian β (Fin d) (Fin d)
-          (∑ i, S.truncatedEnergyTerm h Ω Δ L i) k *ᵥ vO)).re := by
+          (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) k *ᵥ vO)).re := by
       rw [henergy]
       dsimp only
       rw [hvO]
@@ -342,10 +343,11 @@ theorem exists_actualScan_rough_lower_norm
     ∃ c Cf : ℝ, 0 ≤ c ∧ 0 ≤ Cf ∧
       ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)), S.K = Kband →
       ∀ (hm : 0 < S.m) (hM : 0 < S.M) (Horizon : ℕ)
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
+        (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+            (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
         (Ωt : StateSpace Λ q) (e₀ gap : ℝ),
       ‖Ωt‖ = 1 →
-      ((∑ i, S.truncatedEnergyTerm h Ω Δ L i) - (e₀ : ℂ) • 1 -
+      ((∑ i, S.truncatedEnergyTerm h Ω J Δ L i) - (e₀ : ℂ) • 1 -
         (gap : ℂ) • (1 - vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef →
       0 < gap →
       let a := 4 / (Kband : ℝ)
@@ -376,12 +378,12 @@ theorem exists_actualScan_rough_lower_norm
             (Transport.filteredVector (Dfill.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
           lower (Transport.filteredNormSq (Dfill.rootPath n (a / 2) k p) (pre k))
             ((S.actualFillScanRound hm hM s.val n
-              (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p)) ∧
+              (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p)) ∧
         (‖WithLp.toLp 2
             (Transport.filteredVector (Dcharge.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
           lower (Transport.filteredNormSq (Dcharge.rootPath n (a / 2) k p) (pre k))
             ((S.actualChargeScanRound hm hM s.val n
-              (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p)) := by
+              (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p)) := by
   have hKpos : (0 : ℝ) < Kband := by
     exact_mod_cast (lt_of_lt_of_le (by decide : 0 < 8) hKband)
   have ha : 0 < (4 : ℝ) / Kband := div_pos (by norm_num) hKpos

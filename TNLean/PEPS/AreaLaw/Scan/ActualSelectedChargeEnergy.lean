@@ -33,7 +33,7 @@ open TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -49,7 +49,8 @@ theorem actualCharges_selection_energy_domainGraph_of_finiteFamilyTransportBound
     {c₀ Cent eent Cen een : ℝ} (htransport : FiniteFamilyTransportBound c₀ Cent eent Cen een) :
     ∀ {Λ T : Finset (ℤ × ℤ)} {q d R : ℕ} {J Δ : ℝ}
       [NeZero q] [NeZero d] [LinearOrder (AdmissibleSupport Λ R)]
-      (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+      (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+          (Ω : StateSpace Λ q)
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
       S.graph = planeDomainGraph Λ →
       S.depth = (fun x ↦ ambientDepth T hT x.val) →
@@ -67,11 +68,11 @@ theorem actualCharges_selection_energy_domainGraph_of_finiteFamilyTransportBound
       let hm : 0 < S.m := by omega
       let hM : 0 < S.M := chargeSlotCount_pos hCpos (Nat.le_trans (by decide) hn) hDpos
       let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-      let E := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+      let E := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
       let ℓ := transportLogDimBound q S.r₀
       let g := Δ / positiveNormalization 1 (Δ / 2) J
       let Hbar := fun k ↦ copyMean dims k
-        (augmentOperator q (fun _ ↦ d) (∑ i, S.truncatedEnergyTerm h Ω Δ L i))
+        (augmentOperator q (fun _ ↦ d) (∑ i, S.truncatedEnergyTerm h Ω J Δ L i))
       ∃ (β rem : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
         (∀ k, 0 ≤ β k) ∧ (∀ k, β k ≤ Cβ * Real.log (k + 2)) ∧
         (∀ k, 0 ≤ rem k) ∧ Tendsto rem atTop (𝓝 0) ∧
@@ -98,14 +99,16 @@ theorem actualCharges_selection_energy_domainGraph_of_finiteFamilyTransportBound
                   (S.actualChargeData hm hM s.val).energyError E (a / 2) k (pre k) p +
                   rem k) / (g / 2) := by
   classical
-  intro Λ T q d R J Δ _ _ _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
+  intro Λ T q d R J Δ _ _ _ h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ
     L multiplicity hn hr hDpos hD hL hCpos hC hrows hmult hclear a ha hasmall
     hm hM dims E ℓ g Hbar
   obtain ⟨β, Cβ, hCβ, hβ0, hβ, hselected⟩ :=
-    actualCharges_selection_domainGraph_of_finiteFamilyTransportBound htransport (fun _ ↦ d) h
+    actualCharges_selection_domainGraph_of_finiteFamilyTransportBound htransport
+        (fun _ ↦ d) h hh hhJ
       Ω S hT hgraph hdepth hanchor hΔ hΩ hn hr hDpos hD hL hCpos hC hrows hmult hclear ha hasmall
   obtain ⟨_, rem, _, _, _, hrem0, _, hrem, hround⟩ :=
-    actualRounds_transport_domainGraph_of_finiteFamilyTransportBound htransport (fun _ ↦ d) h Ω
+    actualRounds_transport_domainGraph_of_finiteFamilyTransportBound htransport
+        (fun _ ↦ d) h hh hhJ Ω
       S hT hgraph hdepth hanchor hΔ hΩ (show 0 < S.n by omega) (show S.r₀ ≤ S.D by omega) hDpos
       hD hL hCpos hrows hclear ha hasmall
   refine ⟨β, rem, Cβ, hCβ, hβ0, hβ, hrem0, hrem, ?_⟩
@@ -165,7 +168,8 @@ theorem actualCharges_selection_energy_domainGraph :
     ∃ c₀ Cent eent Cen een : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q d R : ℕ} {J Δ : ℝ}
         [NeZero q] [NeZero d] [LinearOrder (AdmissibleSupport Λ R)]
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+        (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+            (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
@@ -183,11 +187,11 @@ theorem actualCharges_selection_energy_domainGraph :
         let hm : 0 < S.m := by omega
         let hM : 0 < S.M := chargeSlotCount_pos hCpos (Nat.le_trans (by decide) hn) hDpos
         let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-        let E := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+        let E := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
         let ℓ := transportLogDimBound q S.r₀
         let g := Δ / positiveNormalization 1 (Δ / 2) J
         let Hbar := fun k ↦ copyMean dims k
-          (augmentOperator q (fun _ ↦ d) (∑ i, S.truncatedEnergyTerm h Ω Δ L i))
+          (augmentOperator q (fun _ ↦ d) (∑ i, S.truncatedEnergyTerm h Ω J Δ L i))
         ∃ (β rem : ℕ → ℝ) (Cβ : ℝ), 0 ≤ Cβ ∧
           (∀ k, 0 ≤ β k) ∧ (∀ k, β k ≤ Cβ * Real.log (k + 2)) ∧
           (∀ k, 0 ≤ rem k) ∧ Tendsto rem atTop (𝓝 0) ∧
