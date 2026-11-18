@@ -44,6 +44,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace)
 
+open scoped ComplexOrder
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- **The cut-clearance clause of Proposition 10.2, with an explicit threshold.** For every
@@ -103,8 +105,9 @@ theorem amplificationBound_of_radius_output {q R : ℕ} {J Δ : ℝ}
     (h : ∀ C₀ : ℝ, 0 < C₀ → ∀ M : ℕ, 1 ≤ M →
       ∃ C : ℝ, ∃ N : ℕ, ∀ n : ℕ, 2 ≤ n → N ≤ n →
         ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+            (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+          Ω ∈ groundSpace h.operator E₀ →
             ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
               ((A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤

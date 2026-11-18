@@ -249,9 +249,6 @@ theorem angularInformationBound_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 �
   have hcell : SquareCellInformationBound q (IsSquareGroundState q J Δ) c
       (cellInformationConstant q c Ctpl N Ca Na) (cellInformationExponent c Ctpl N Ca Na) :=
     fun s hs o m₀ A hm₀ L Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ ↦ by
-      obtain ⟨-, -, hgap, hspan⟩ :=
-        (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
-          ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hspan, hgap⟩
       exact cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc
         s hs o m₀ A hm₀ L h hh hhJ E₀ Ω hΩ hgap hspan
   intro L hL h hh hhJ E₀ Ω hΩ hgap hspan

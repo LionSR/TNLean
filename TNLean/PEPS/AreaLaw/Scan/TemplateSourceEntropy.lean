@@ -39,6 +39,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport)
 
+open scoped ComplexOrder
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open Geometry
@@ -193,8 +195,9 @@ theorem template_final_source_entropy_bounds_of_boxEntropy
       Cbox * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ))) :
     ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
       (E₀ : ℝ) (Ω : StateSpace Λ q),
-      ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+        (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+      Ω ∈ groundSpace h.operator E₀ →
       ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
         {Ctpl : ℝ} {s₀ : ℕ} (T : Template Ctpl S.n s₀),
         24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ S.A) →
@@ -215,8 +218,7 @@ theorem template_final_source_entropy_bounds_of_boxEntropy
         Cbox * (Q.size : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
     intro Q hsafe
     exact (regionalEntropy_le_boxEntropy hq h hΩ
-      (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
-      (hspan ▸ Submodule.mem_span_singleton_self _) hsafe le_rfl).trans
+      hgap hspan hsafe le_rfl).trans
       (hbox Q.size Q.one_le_size)
   obtain ⟨hcore, hprefix⟩ := hsource Λ Ω hΩ S.A D₀ hD T hC hsep hrect
   refine ⟨hcore, ?_⟩
@@ -236,8 +238,9 @@ theorem exists_template_final_source_entropy_bounds_of_boxEntropy
     ∃ Ce : ℝ, 0 ≤ Ce ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (E₀ : ℝ) (Ω : StateSpace Λ q),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+          (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+        Ω ∈ groundSpace h.operator E₀ →
         ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
           {Ctpl : ℝ} {s₀ : ℕ} (T : Template Ctpl S.n s₀),
           24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ S.A) →
