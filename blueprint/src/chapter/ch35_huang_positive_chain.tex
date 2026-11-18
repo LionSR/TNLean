@@ -22,7 +22,9 @@ chain model. The following identification preserves its operator exactly.
 
 \begin{definition}[Embedding the positive adjacent-pair interaction]
     \label{def:huang_positive_chain_hamiltonian}
-    \lean{ManyBody.ChainInteraction.ofNearestNeighborPositive}
+    \lean{ManyBody.ChainInteraction.ofNearestNeighborPositive,
+        ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term,
+        ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le}
     \leanok
     \uses{thm:huang_adjacent_supports}
     Let $h_i$ be supported on sites $i,i+1$, with $0\le h_i\le I$.

@@ -90,7 +90,7 @@ theorem exists_regionEntropy_prefix_le (R : ℕ) :
   have hξ0 : 0 < 6 * lemmaOneEndpointLength R J ΔE := by
     rw [lemmaOneEndpointLength_eq]
     exact mul_pos (by norm_num) (mul_pos (by norm_num) (lemmaOneLength_pos R _ 1))
-  refine regionEntropy_prefix_le_of_factorization h hh hhJ hΩ hgap hspan hξ0 (le_max_right _ _)
+  refine regionEntropy_prefix_le_of_factorization h hΩ hgap hspan hξ0 (le_max_right _ _)
     (fun c l _ ↦ ?_) i
   obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan c l
   exact ⟨OB, OL, OR, hf.mono
