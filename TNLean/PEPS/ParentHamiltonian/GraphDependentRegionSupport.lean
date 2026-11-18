@@ -219,8 +219,8 @@ theorem graphDependentNetwork_slice_mem_regionGroundSpace_of_internal_eq_one
         Finset.sum_congr rfl fun ξ _ ↦ hv ξ ζ σ
       _ = _ := by rw [← Finset.mul_sum, openRegionWeight_eq_sum_internal]
   rw [heq]
-  apply sum_mem
+  apply Submodule.sum_mem
   intro ζ _
-  exact SMulMemClass.smul_mem _ (openRegionWeight_mem_regionGroundSpace A R _)
+  exact Submodule.smul_mem _ _ (openRegionWeight_mem_regionGroundSpace A R _)
 
 end TNLean.PEPS

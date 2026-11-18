@@ -89,14 +89,14 @@ theorem torusPlaquetteParentGroundSpace_le_nativeCommutingClosureSpan [Finite G]
   have hspan : ξ ∈ NativeTorus.commutingClosureSpan (graphBondAlphabet A) U
       (DependentBondNetwork.averagingSite graphEdgeTail graphEdgeHead (graphBondAlphabet A) U) := by
     rw [← hfixed, hexpand, map_sum]
-    apply sum_mem
+    apply Submodule.sum_mem
     intro p _
     rw [map_smul]
     by_cases hn : bondCoefficientExtraction graphEdgeTail graphEdgeHead (graphBondAlphabet A)
         U p ξ = 0
     · rw [hn, zero_smul]
-      exact zero_mem _
-    apply SMulMemClass.smul_mem
+      exact Submodule.zero_mem _
+    apply Submodule.smul_mem
     have hp : IsTorusFlat (torusNativeRightTransport p) (torusNativeUpTransport p) := by
       intro v
       apply (torusPlaquetteHolonomy_eq_one_iff_squareTransport p v).mp

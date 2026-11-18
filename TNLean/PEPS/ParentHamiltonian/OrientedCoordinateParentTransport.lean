@@ -101,7 +101,7 @@ theorem regionOperatorBlock_graphNumberedBondFamilyMatrix_oriented_coordinates_m
     simp only [Matrix.smul_apply, smul_eq_mul, Matrix.submatrix_apply, c, mul_assoc]
   rintro _ ⟨ψ, hψ, rfl⟩
   rw [hblock, Matrix.mulVecLin_apply, Matrix.smul_mulVec]
-  apply SMulMemClass.smul_mem
+  apply Submodule.smul_mem
   apply (regionBondPhysicalEquiv_mem_graphOrientedOpenBondSpace_iff _ _
     (fun _ => Commute.one_left _) o eY R _).mp
   have hs := (regionBondPhysicalEquiv_mem_graphOrientedOpenBondSpace_iff _ _

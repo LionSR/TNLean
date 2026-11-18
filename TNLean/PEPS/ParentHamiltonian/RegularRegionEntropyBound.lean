@@ -101,7 +101,7 @@ theorem range_normalizedRegionReducedDensity_eq
   · rintro x ⟨y, rfl⟩
     change ((regionReducedDensity A R).trace⁻¹ • regionReducedDensity A R) *ᵥ y ∈ _
     rw [Matrix.smul_mulVec]
-    exact SMulMemClass.smul_mem _ ⟨y, rfl⟩
+    exact Submodule.smul_mem _ _ ⟨y, rfl⟩
   · rintro x ⟨y, rfl⟩
     refine ⟨(regionReducedDensity A R).trace • y, ?_⟩
     change ((regionReducedDensity A R).trace⁻¹ • regionReducedDensity A R) *ᵥ

@@ -170,14 +170,14 @@ theorem mem_regularProjectorOpenRegionRange_of_invariant_flat (R : Finset V)
     f ∈ (Matrix.mulVecLin (regularProjectorOpenRegionMatrix (G := G) R)).range := by
   classical
   rw [eq_sum_regularProjectorTwistedRegionMatrix_of_invariant R f hleft hright]
-  apply sum_mem
+  apply Submodule.sum_mem
   intro u _
-  apply sum_mem
+  apply Submodule.sum_mem
   intro θ _
   by_cases hc : f (regularRegionHalfEdgesOfBonds R u (regularRegionCanonicalReferences R θ)) = 0
   · rw [hc, zero_smul]
-    exact zero_mem _
-  apply SMulMemClass.smul_mem
+    exact Submodule.zero_mem _
+  apply Submodule.smul_mem
   have hflat : IsRegularRegionHalfEdgeFlat R
       (regularRegionHalfEdgesOfBonds R u (regularRegionCanonicalReferences R θ)) := by
     by_contra h

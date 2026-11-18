@@ -101,8 +101,8 @@ theorem torusGClosure_sum_slice_mem_regionGroundSpace_interior_rectangle
   intro R τ
   have hs (i : I) := torusGClosure_slice_mem_regionGroundSpace_interior_rectangle
     a (pairs i).1 (pairs i).2 xStart yStart xLen yLen hxStart hyStart hxEnd hyEnd τ
-  have hsum := sum_mem (regionGroundSpace (groupBondTensor (torusIncidentSite a)) R)
-    (fun i (_ : i ∈ Finset.univ) => SMulMemClass.smul_mem (μ i) (hs i))
+  have hsum := Submodule.sum_mem (regionGroundSpace (groupBondTensor (torusIncidentSite a)) R)
+    (fun i (_ : i ∈ Finset.univ) => Submodule.smul_mem _ (μ i) (hs i))
   convert hsum using 1
   ext σ
   simp only [Finset.sum_apply, Pi.smul_apply]

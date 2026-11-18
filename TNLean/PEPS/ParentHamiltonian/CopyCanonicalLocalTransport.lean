@@ -91,7 +91,7 @@ theorem graphRegionCopyMatrix_adjoint_maps_openBondSpace
     graphOpenBondCoordinates (blockMultiplicityRepresentation d m D) 1 R θ ∈
       graphOpenBondSpace (blockMatrixRepresentation d D) (blockMultiplicityRootWeight d m) R
   rw [graphRegionCopyMatrix_adjoint_open d m D hm]
-  exact SMulMemClass.smul_mem _ (Submodule.subset_span ⟨_, rfl⟩)
+  exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨_, rfl⟩)
 
 /-- The actual numbered regional spaces are carried forward by the explicit
 regional multiplicity matrix. -/

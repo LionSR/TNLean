@@ -300,8 +300,8 @@ theorem blockTransferRow_mem_range (A B : Tensor G d) (R : Finset V)
         rw [Pi.smul_apply, ite_eq_right (Ne.symm hne), smul_zero]
       · intro hσ; exact absurd (Finset.mem_univ σ) hσ
   rw [hexpand]
-  refine sum_mem (fun σ' _ => ?_)
-  exact SMulMemClass.smul_mem _ (hmem σ')
+  refine Submodule.sum_mem _ (fun σ' _ => ?_)
+  exact Submodule.smul_mem _ _ (hmem σ')
 
 /-- **Block-frame complement read-off.** The region-transferred row coordinate, as a
 function of the complement physical configuration, is the second tensor's complement

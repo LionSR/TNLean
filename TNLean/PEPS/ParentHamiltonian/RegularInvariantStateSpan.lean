@@ -293,9 +293,9 @@ theorem mem_span_supported_regularProjectorClosedState_of_invariant
       (Set.range (fun u : {u : Edge Γ → G // P u} => regularProjectorClosedState u.1)) := by
   classical
   rw [eq_sum_supported_regularProjectorClosedState_of_invariant P f hleft hright hsupport]
-  apply sum_mem
+  apply Submodule.sum_mem
   intro u _
-  exact SMulMemClass.smul_mem _ (Submodule.subset_span (Set.mem_range_self u))
+  exact Submodule.smul_mem _ _ (Submodule.subset_span (Set.mem_range_self u))
 
 /-- The closed projector vector is the full-region column of the existing
 canonical inserted-region contraction, in global half-edge coordinates.

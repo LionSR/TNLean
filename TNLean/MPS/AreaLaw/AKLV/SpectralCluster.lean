@@ -202,7 +202,7 @@ theorem exists_aklv_cut_scaled_low_cluster {L q a s l r : ℕ} (hq : 0 < q)
       change a0 j ≤ E0 at hj
       rcases hdich j with h | h
       · rw [h.2]
-        exact SMulMemClass.smul_mem _ (Submodule.subset_span (Set.mem_singleton Ω))
+        exact Submodule.smul_mem _ _ (Submodule.subset_span (Set.mem_singleton Ω))
       · exfalso
         linarith [h.1]
     · apply (Submodule.span_singleton_le_iff_mem _ _).mpr

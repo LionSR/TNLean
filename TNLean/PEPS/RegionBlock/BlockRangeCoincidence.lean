@@ -231,8 +231,8 @@ theorem regionPartialState_mem_span_regionBlockedWeight (A : Tensor G d) (R : Fi
     exact_mod_cast hpos.ne'
   rw [← Submodule.smul_mem_iff _ hne,
     regionInteriorBondProd_smul_regionPartialState (G := G) A R τ]
-  refine sum_mem (fun μ _ => ?_)
-  exact SMulMemClass.smul_mem _ (Submodule.subset_span ⟨μ, rfl⟩)
+  refine Submodule.sum_mem _ (fun μ _ => ?_)
+  exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨μ, rfl⟩)
 
 /-! ### The blocked-region weights lie in the span of the partial states
 
@@ -347,8 +347,8 @@ theorem regionBlockedWeight_mem_span_regionPartialState (A : Tensor G d) (R : Fi
     · intro μ' _ hμ'; rw [Pi.single_eq_of_ne hμ', zero_mul]
     · intro h; exact absurd (Finset.mem_univ μ) h
   rw [hweight]
-  refine sum_mem (fun τ _ => ?_)
-  exact SMulMemClass.smul_mem _ (Submodule.subset_span ⟨τ, rfl⟩)
+  refine Submodule.sum_mem _ (fun τ _ => ?_)
+  exact Submodule.smul_mem _ _ (Submodule.subset_span ⟨τ, rfl⟩)
 
 /-! ### The range of the blocked-region tensor map is the span of the partial states
 

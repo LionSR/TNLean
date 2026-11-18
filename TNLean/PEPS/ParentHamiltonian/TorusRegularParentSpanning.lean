@@ -107,11 +107,11 @@ theorem IsGInjective.torusParentKernel_le_commutingClosureSpan
     simpa only [Finset.sum_apply, Pi.smul_apply, f, fullRegionHalfEdgeConfigEquiv,
       Equiv.coe_fn_mk] using h
   rw [← hrec, hfull, map_sum]
-  apply sum_mem
+  apply Submodule.sum_mem
   intro u _
   rw [map_smul, globalRegularTensorMap_regularProjectorClosedState
     (torusIncidentSite a) (fun v => ha.isGInjective_torusIncidentSite v)]
-  exact SMulMemClass.smul_mem _
+  exact Submodule.smul_mem _ _
     (ha.stateCoeff_mem_commutingClosureSpan_of_flat u.1 u.2)
 
 end TNLean.PEPS
