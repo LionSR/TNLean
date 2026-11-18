@@ -1,0 +1,2 @@
+A	docs/audits/2026-11-18_area_law_scan_dimension_dependence.md
+M	docs/many_body_circuit_architecture.md

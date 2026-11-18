@@ -1,0 +1,131 @@
+Auto-merging TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean
+Auto-merging TNLean/MPS/AreaLaw/Algorithm/SampledCost.lean
+Auto-merging TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean
+Auto-merging TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean
+Auto-merging TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean
+Auto-merging TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampledCost.lean
+Auto-merging TNLean/MPS/AreaLaw/BoundaryGap.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/BoundaryGap.lean
+Auto-merging TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean
+Auto-merging TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean
+Auto-merging TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean
+Auto-merging TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean
+Auto-merging TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean
+Auto-merging TNLean/MPS/AreaLaw/OverlapEnergy.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/OverlapEnergy.lean
+Auto-merging TNLean/MPS/AreaLaw/RangeOneSupport.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/RangeOneSupport.lean
+Auto-merging TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean
+Auto-merging TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/RationalSampledSuccessiveConstruction.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/SampledSuccessiveConstruction.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean
+Auto-merging TNLean/PEPS/Approximation/AdaptivePatchConstraintFromAreaLaw.lean
+Auto-merging TNLean/PEPS/Approximation/CellConditionalInformation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/CellConditionalInformation.lean
+Auto-merging TNLean/PEPS/Approximation/CellConditionalInformationFromGap.lean
+Auto-merging TNLean/PEPS/Approximation/CoarseInformation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/CoarseInformation.lean
+Auto-merging TNLean/PEPS/Approximation/CoarseInformationFromGap.lean
+Auto-merging TNLean/PEPS/Approximation/NestedPatchApproximation.lean
+Auto-merging TNLean/PEPS/Approximation/PinnedZeroFloorOptimizer.lean
+Auto-merging TNLean/PEPS/Approximation/RangeAngularInformation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/RangeAngularInformation.lean
+Auto-merging TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean
+Auto-merging TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean
+Auto-merging TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean
+Auto-merging TNLean/PEPS/Approximation/RangeSquareGroundState.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/RangeSquareGroundState.lean
+Auto-merging TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean
+Auto-merging TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean
+Auto-merging TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean
+Auto-merging TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean
+Auto-merging TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean
+Auto-merging TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean
+Auto-merging TNLean/PEPS/AreaLaw/AmplificationProof.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/AmplificationProof.lean
+Auto-merging TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean
+Auto-merging TNLean/PEPS/AreaLaw/BoundaryTheorem.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/BoundaryTheorem.lean
+Auto-merging TNLean/PEPS/AreaLaw/CollarInformation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/CollarInformation.lean
+Auto-merging TNLean/PEPS/AreaLaw/GraphPropagation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/GraphPropagation.lean
+Auto-merging TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean
+Auto-merging TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean
+Auto-merging TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean
+Auto-merging TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean
+Auto-merging TNLean/PEPS/AreaLaw/RectangularHamiltonian.lean
+Auto-merging TNLean/PEPS/AreaLaw/RectangularSpecialization.lean
+Auto-merging TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean
+Auto-merging TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean
+Auto-merging TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean
+Auto-merging TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean
+Auto-merging TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean
+Auto-merging TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean
+Auto-merging blueprint/src/chapter/ch24_peps_area_law_models.tex
+CONFLICT (content): Merge conflict in blueprint/src/chapter/ch24_peps_area_law_models.tex
+Auto-merging blueprint/src/chapter/ch24_peps_edge_crossing_budget.tex
+Auto-merging blueprint/src/chapter/ch24_peps_rectangular_specialization.tex
+CONFLICT (content): Merge conflict in blueprint/src/chapter/ch24_peps_rectangular_specialization.tex
+Auto-merging blueprint/src/chapter/ch35_hastings_lemma1.tex
+CONFLICT (content): Merge conflict in blueprint/src/chapter/ch35_hastings_lemma1.tex
+Auto-merging blueprint/src/chapter/ch35_hastings_three_way_splitting.tex
+Auto-merging docs/audits/2026-11-17_qiclean_pin_49b9aa93_followups.md
+Auto-merging docs/formalization/one-dimensional-chain.md
+Auto-merging docs/formalization/openai-area-law-peps.md
+CONFLICT (content): Merge conflict in docs/formalization/openai-area-law-peps.md
+Auto-merging docs/glossary.md
+CONFLICT (content): Merge conflict in docs/glossary.md
+Auto-merging docs/many_body_circuit_architecture.md
+Auto-merging docs/paper-gaps/polypeps_square_zero_floor_optimizer_scope.tex
+Auto-merging docs/tactic_patterns.md
+CONFLICT (content): Merge conflict in docs/tactic_patterns.md
+Automatic merge failed; fix conflicts and then commit the result.

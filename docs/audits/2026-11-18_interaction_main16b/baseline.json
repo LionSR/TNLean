@@ -1,0 +1,51 @@
+{
+  "final_head": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+  "main": "16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931",
+  "merge_base": "7376dab08421ab99afcc5373be11104c76cc8a50",
+  "branch": "integrate/10881-main16b-final",
+  "worktree": "/workspace/tn-interaction-main16b",
+  "conflicts": 56,
+  "automatic_changed_paths": 2,
+  "lanes": {
+    "MPS": {
+      "conflicts": {
+        "count": 23,
+        "sha256": "1ed5f9b7f3ef6a9f550c54b1555d738e76078f9f348f5e489657bcc933ceb6c2"
+      },
+      "automatic": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "PEPS": {
+      "conflicts": {
+        "count": 27,
+        "sha256": "e09c8958306140791438168576be44d377b76d9e6b42a4dfdca1ac09d83d8533"
+      },
+      "automatic": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "shared": {
+      "conflicts": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "automatic": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "docs": {
+      "conflicts": {
+        "count": 6,
+        "sha256": "87d4457e6ab7e37cf3aea5074c78f46ad934b8b4200228eb51dc3305ebc94255"
+      },
+      "automatic": {
+        "count": 2,
+        "sha256": "60f48f5ca2bfef0c34ae26f6f7fdcbf3f9d382dd40d75799f8ae9cf9d0a4fb1a"
+      }
+    }
+  }
+}

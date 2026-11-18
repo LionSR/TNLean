@@ -1,0 +1,6 @@
+blueprint/src/chapter/ch24_peps_area_law_models.tex
+blueprint/src/chapter/ch24_peps_rectangular_specialization.tex
+blueprint/src/chapter/ch35_hastings_lemma1.tex
+docs/formalization/openai-area-law-peps.md
+docs/glossary.md
+docs/tactic_patterns.md

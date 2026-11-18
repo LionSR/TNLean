@@ -1,0 +1,13 @@
+# Main16b integration partition baseline
+
+Final source 42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d; exact main 16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931; merge base 7376dab08421ab99afcc5373be11104c76cc8a50. Main includes #10905 squash0b469c1e and #10908 audit. Do not apply the old10905 migration again.
+
+Independent branch integrate/10881-main16b-final at42c4, worktree /workspace/tn-interaction-main16b. Actual merge is in progress, with 56 unresolved files. No merge commit or conflict-resolution edits yet. Original validation trees/caches were not changed.
+
+Reproduce exactly in a fresh worktree from42c4: git -c rerere.enabled=false merge --no-commit --no-ff 16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931. Expected exit1 and 56 unresolved paths. The complete stage1/base, stage2/final42c4 and stage3/main blob IDs are in unmerged-index.txt. Lists are UTF-8 byte-path sorted, LF with final newline; empty lists are zero bytes. SHA256 and counts are in baseline.json.
+
+Mutually exclusive lanes: MPS owns all TNLean/MPS/ conflicts (23); PEPS owns all TNLean/PEPS/ conflicts (27); docs owns remaining six conflicts plus two automatically changed documentation files; coordinator owns shared TNLean/Circuit and TNLean/Lattice owners, cross-lane fixture preservation and final composition (zero conflicts). Each worker must operate in its own worktree and return only its assigned paths, not an entire independently merged tree. Any additional required path must be allocated before editing. Conflict lists are exhaustive, not semantic clearance. The 50 Lean conflicts and six docs conflicts are unresolved and unreviewed as merge results.
+
+Automatic merge relative to42c4 changes exactly two paths: new docs/audits/2026-11-18_area_law_scan_dimension_dependence.md (main audit), and docs/many_body_circuit_architecture.md. Full automatic patch/name-status attached. All other nonconflicting index paths are unchanged relative to42c4. Seven shared Circuit/Lattice paths and five fixtures have explicit matching index/42c4 blob evidence in shared-fixture-preservation.json. This is preservation evidence, not new compilation.
+
+Resolution constraints: retain one canonical Interaction implementation; arbitrary real gap norm/PSD/groundSpace membership, arbitrary J without gratuitous nonnegativity, total-Hamiltonian Hermitian without strengthening to each term, empty-domain and nonsingleton zero-H examples. Keep all five fixture files and their selector obligations. Preserve genuine main fixes and dimension audit. Never resolve by blanket ours/theirs; compare actual signatures/proofs. Do not disturb old MPS77 or PEPS cache/writers. No shared PR/branch update until independent conflict review and hash-based targeted validation of the final merge result.

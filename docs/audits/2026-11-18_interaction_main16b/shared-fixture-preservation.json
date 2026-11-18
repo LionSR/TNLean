@@ -1,0 +1,74 @@
+[
+  {
+    "path": "TNLean/Lattice/LocalHamiltonian.lean",
+    "head_blob": "13b7788871c5c4f9fe48e90fdf381fe4052d3ffe",
+    "index_blob": "13b7788871c5c4f9fe48e90fdf381fe4052d3ffe",
+    "unchanged": true
+  },
+  {
+    "path": "TNLean/Lattice/MarginalTails.lean",
+    "head_blob": "0630f82e2f0953ed4f85f165a6e97fb6d631c355",
+    "index_blob": "0630f82e2f0953ed4f85f165a6e97fb6d631c355",
+    "unchanged": true
+  },
+  {
+    "path": "TNLean/Lattice/PhysicalBufferCoordinates.lean",
+    "head_blob": "f0ff0932d969500fa32582431ae0baecd0e0144b",
+    "index_blob": "f0ff0932d969500fa32582431ae0baecd0e0144b",
+    "unchanged": true
+  },
+  {
+    "path": "TNLean/Lattice/ProductForm.lean",
+    "head_blob": "fdd28bc3c93387e61d4254012158c30a4ecbca78",
+    "index_blob": "fdd28bc3c93387e61d4254012158c30a4ecbca78",
+    "unchanged": true
+  },
+  {
+    "path": "TNLean/Lattice/RegionalEntropyBridge.lean",
+    "head_blob": "8397c095dd1b83165799c2d7a79736d7e8141656",
+    "index_blob": "8397c095dd1b83165799c2d7a79736d7e8141656",
+    "unchanged": true
+  },
+  {
+    "path": "TNLean/Circuit/RegionSplit.lean",
+    "head_blob": "f7f97cdd6f68f04c9d361a8336dcb3ee6cf488f7",
+    "index_blob": "f7f97cdd6f68f04c9d361a8336dcb3ee6cf488f7",
+    "unchanged": true
+  },
+  {
+    "path": "TNLean/Circuit/SiteEmbedding.lean",
+    "head_blob": "e33c37a0c9c1fd9055c820b5b205b13885cfabd3",
+    "index_blob": "e33c37a0c9c1fd9055c820b5b205b13885cfabd3",
+    "unchanged": true
+  },
+  {
+    "path": "scripts/ground_state_gap_scope_regression.lean",
+    "head_blob": "88d5f852ac0b47c176edd24dff4edd472daa035d",
+    "index_blob": "88d5f852ac0b47c176edd24dff4edd472daa035d",
+    "unchanged": true
+  },
+  {
+    "path": "scripts/generic_gap_boundary_regression.lean",
+    "head_blob": "9998976ee15a2a39aa50d3ce6653c9276b85186e",
+    "index_blob": "9998976ee15a2a39aa50d3ce6653c9276b85186e",
+    "unchanged": true
+  },
+  {
+    "path": "scripts/zero_gap_tn_wrappers_regression.lean",
+    "head_blob": "a479b6b9799c572c61e426a457703188358a3abc",
+    "index_blob": "a479b6b9799c572c61e426a457703188358a3abc",
+    "unchanged": true
+  },
+  {
+    "path": "scripts/range_square_zero_gap_regression.lean",
+    "head_blob": "fb8ff503110b61fab7363c3b12e06562c10d23a4",
+    "index_blob": "fb8ff503110b61fab7363c3b12e06562c10d23a4",
+    "unchanged": true
+  },
+  {
+    "path": "scripts/box_supremum_zero_gap_regression.lean",
+    "head_blob": "0e99c28f10bf7030641350073a12d7d7194e41e5",
+    "index_blob": "0e99c28f10bf7030641350073a12d7d7194e41e5",
+    "unchanged": true
+  }
+]
