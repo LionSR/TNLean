@@ -161,8 +161,8 @@ theorem ChainHamiltonian.exists_leading_vector_of_approximate_compressed_boundar
     have hL0 : (L : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hL.ne'
     have hΔ4 : Δ ≤ 4 := by
       simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ
-      (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
-      (hspan ▸ Submodule.mem_span_singleton_self _)
+        (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+        (hspan ▸ Submodule.mem_span_singleton_self _)
     have hcr : 2 * (Δ / 169) ^ 2 ≤ Δ / 169 := by
       nlinarith only [mul_nonneg hΔ.le (sub_nonneg.mpr hΔ4), hΔ]
     have hBτ : ‖B‖ * (2 * (((Δ / 169) ^ 2) / (2 * L))) ≤
