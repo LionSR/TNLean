@@ -278,7 +278,7 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     space of the compression of $H$ to $R$ of the same dimension lies in $R$,
     and every vector $x$ in it satisfies, for every $\rho>0$,
     \[
-        \langle x,Hx\rangle\le\Bigl(E_0+
+        \operatorname{Re}\langle x,Hx\rangle\le\Bigl(E_0+
         \frac{(1+1/\rho)c+(1+\rho)\|H-E_0\|\delta}{1-\delta}\Bigr)\|x\|^2.
     \]
 \end{lemma}
@@ -286,11 +286,40 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     For $g\in G(c)$ the vector $P_Rg$ lies in $V$, and $\langle P_Rg,g\rangle=
         \|P_Rg\|^2$; the Cauchy--Schwarz inequality for the projections onto $V$
     and onto $G(c)$ gives both closeness bounds. Projection into $R$ is
-    injective on $G(c)$, so $V$ has the dimension of $G(c)$. The energy of
-    $H-E_0\ge0$ on $V$ is controlled by its energy on $G(c)$ and the
-    projection loss, and the min--max characterization of the Ritz space
-    compares it with the trial space $V$. No gap at the edge of the window
-    is used.
+    injective on $G(c)$, so $V$ has the dimension of $G(c)$.
+    Put $A=H-E_0I\ge0$, $h=P_Rg$ and $e=h-g$. For $\rho>0$,
+    positivity applied to $g-\rho e$ gives the weighted AM--GM bound
+    \begin{align}
+        2\operatorname{Re}\langle g,Ae\rangle
+         & \le \rho^{-1}\operatorname{Re}\langle g,Ag\rangle
+        +\rho\operatorname{Re}\langle e,Ae\rangle,
+        \label{eq:ld_window_weighted_cross}                   \\
+        \operatorname{Re}\langle h,Ah\rangle
+         & \le (1+1/\rho)\operatorname{Re}\langle g,Ag\rangle
+        +(1+\rho)\|A\|\,\|g-h\|^2.
+        \label{eq:ld_window_projected_energy}
+    \end{align}
+    The window bound and orthogonal projection give
+    \begin{align}
+        \operatorname{Re}\langle g,Ag\rangle & \le c\|g\|^2,\nonumber            \\
+        \|g-h\|^2                            & =\|g\|^2-\|h\|^2\le\delta\|g\|^2,
+        \label{eq:ld_window_projection_loss}                                     \\
+        (1-\delta)\|g\|^2                    & \le\|h\|^2.
+        \label{eq:ld_window_retained_norm}
+    \end{align}
+    Since $0\le\delta<1$ and $c\ge0$, these inequalities imply
+    \begin{align}
+        \operatorname{Re}\langle h,Hh\rangle
+         & =E_0\|h\|^2+\operatorname{Re}\langle h,Ah\rangle\nonumber \\
+         & \le\left(E_0+
+        \frac{(1+1/\rho)c+(1+\rho)\|A\|\delta}{1-\delta}\right)\|h\|^2.
+        \label{eq:ld_window_trial_energy}
+    \end{align}
+    Every $h\in V$ has this form. The min--max characterization therefore
+    gives the same energy bound on the Ritz space of dimension $\dim G(c)$,
+    using $V\subseteq R$ as the trial space. This energy conclusion requires
+    no gap at the edge of the window and does not assert mutual closeness
+    of the Ritz space and $G(c)$.
 \end{proof}
 
 \begin{lemma}[The merge-tree algorithm for a low-density spectrum]

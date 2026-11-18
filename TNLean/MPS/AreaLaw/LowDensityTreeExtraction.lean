@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Analysis.QuadraticScalarShift
 import QICLean.Analysis.ProjectedPositiveEnergy
 import QICLean.Analysis.ProjectedTrialSpaceEnergy
 import QICLean.Analysis.RitzCompression
@@ -104,16 +105,6 @@ namespace TNLean.MPS.AreaLaw
 
 open Matrix
 
-/-- Shifting a matrix by a scalar shifts its Euclidean action by the same
-scalar. Supporting ALVV, arXiv:1602.08828v2, the canonical energy shift of
-Theorem `t:aisgapless`, lines 1027–1041. -/
-private theorem toEuclideanCLM_sub_smul_one_apply {σ : Type*} [Fintype σ] [DecidableEq σ]
-    (H : Matrix σ σ ℂ) (c : ℂ) (x : EuclideanSpace ℂ σ) :
-    Matrix.toEuclideanCLM (𝕜 := ℂ) (n := σ) (H - c • 1) x =
-      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := σ) H x - c • x := by
-  apply WithLp.ofLp_injective 2
-  simp
-
 /-- A space `R` that is `δ`-close to the original window `G(c)` contains the
 projection of the window, of the same dimension and `δ`-close to the window in
 both directions, and the Ritz space of the Hamiltonian compressed to `R` of
@@ -151,13 +142,10 @@ theorem window_extraction_of_isCloseTo {σ : Type*} [Fintype σ] [DecidableEq σ
   have hshift (y : EuclideanSpace ℂ σ) :
       RCLike.re ⟪H0 y, y⟫_ℂ = (inner ℂ y (Matrix.toEuclideanLin H y)).re -
         minEigenvalue hH * ‖y‖ ^ 2 := by
-    rw [← inner_re_symm]
-    change (inner ℂ y (H0 y)).re = _
-    rw [toEuclideanCLM_sub_smul_one_apply, inner_sub_right, inner_smul_right,
-      inner_self_eq_norm_sq_to_K, Complex.sub_re]
-    have hre : ((minEigenvalue hH : ℂ) * ((‖y‖ : ℂ) ^ 2)).re = minEigenvalue hH * ‖y‖ ^ 2 := by
-      rw [← Complex.ofReal_pow, ← Complex.ofReal_mul, Complex.ofReal_re]
-    exact congrArg₂ (· - ·) rfl hre
+    change (inner ℂ (H0 y) y).re = _
+    rw [Matrix.re_inner_toEuclideanCLM_sub_ofReal_smul_one]
+    exact congrArg (fun t : ℝ ↦ t - minEigenvalue hH * ‖y‖ ^ 2)
+      (inner_re_symm (𝕜 := ℂ) (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := σ) H y) y)
   have hpos : H0.IsPositive :=
     (ContinuousLinearMap.isPositive_toLinearMap_iff H0).mp
       (Matrix.isPositive_toEuclideanLin_iff.mpr (sub_minEigenvalue_smul_one_posSemidef hH))
