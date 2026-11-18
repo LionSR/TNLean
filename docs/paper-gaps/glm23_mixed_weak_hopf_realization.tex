@@ -1,0 +1,135 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{./command}
+\title{Weak-Hopf Averaging of the Mixed Path on its Active Physical Space}
+\author{}
+\date{2026-11-16}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source assertion}
+Garre-Rubio, Lootens and Moln\'ar symmetrize parent interactions using a
+canonical weak-Hopf integral in Section 5, lines 1276--1320, of
+arXiv:2203.12563v3 \cite[Section~5]{GarreRubio2023MPOSym}.
+Appendix B, lines 2463--2466, averages the support projection $P$, with
+$E(P)=P$ and $E(I)=Q=\rho_2(1)$. Thus the literal average of the parent
+is $Q-P$, whereas its ambient completion is $I-P$.
+The distinction and the Bell-pair example with $Q=P$ are explained in
+\href{https://sirui-lu.com/TNLean/paper-gaps/glm23_wha_parent_completion.pdf}
+{Weak-Hopf Parent Terms: Support Averaging and Ambient Completion}.
+The mixed interpolation of Section 5, lines 1584--1692, requires applying
+this construction to its common symmetry.
+
+\section{A unital realization cannot equal the enlarged tensor}
+Write $a=(D_0+D_1)^2$ and let
+$J:\mathbb C^a\longrightarrow\mathbb C^{a+d_0+d_1}$ include the first
+summand. The common enlarged operator tensor is
+$\widetilde T^{ij}_{\beta\alpha}=(J T_{\beta\alpha}J^*)_{ij}$.
+Every physical row in either unused summand vanishes. In particular,
+$\widetilde T^{ii}=0$ for such an $i$.
+
+Suppose instead that $\widetilde T^{ij}=\psi(f_{ij})$, where
+$f_{ij}(x)=\phi(x)_{ij}$, $\phi$ is a unital physical representation,
+and $\psi$ is faithful on the convolution dual. Faithfulness would imply
+$f_{ii}=0$, but $f_{ii}(1)=\phi(1)_{ii}=1$. This is a contradiction whenever
+$d_0+d_1>0$. It uses neither fusion data nor any property of the integral.
+It also does not concern adjoint closure: extension by zero can preserve
+adjoint closure while destroying physical unitality.\footnote{
+    The obstruction is stated in
+    \leanid{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedMPO_ne_weakHopfTensor},
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/MixedWeakHopfRealizationObstruction}.
+    The literal enlarged realization requested by \ghissue{10762} must therefore
+    be changed. The independent adjoint-closure question \ghissue{10763} is not
+    settled here.}
+
+The conditional enlarged-space theorems in
+\doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedWeakHopf}
+assume precisely the equality excluded above. For their parent-commutation
+statements, injectivity and nonzero endpoint bond dimensions imply
+$d_0,d_1>0$. Hence these hypotheses are incompatible: the conditional
+implications are vacuous, rather than their conclusions contradicting a
+proved result. No realization witness is constructed there. The weaker
+boundary-closure and support-average statements are excluded by this
+obstruction whenever either physical dimension is positive; the case
+$d_0=d_1=0$ is not decided by this obstruction alone.
+
+\section{The conditional construction on the active space}
+Assume the two endpoint tensors are injective, their bond dimensions are
+positive, and their actions have exact biorthogonal decompositions into
+the same number of copies. Compress the endpoints to their polar support
+coordinates and assemble the active mixed operator $T$.
+Assume, additionally, that this actual $T$ has a weak-Hopf realization:
+a complex coalgebra with multiplicative, star-preserving coproduct, a
+unital physical star representation, a faithful convolution-dual
+representation, and integral data normalized by
+\begin{align}
+    \sum\Delta(\Omega_{(1)})\Delta(T_\Omega(\Omega_{(2)})) & =\Delta(1).
+    \label{eq:mixed_wha_normalization}
+\end{align}
+Here $T_\Omega$ denotes the specified linear pulling-through map; full
+antipode axioms are not needed. No independent adjoint-closure hypothesis
+is imposed. Neither existence of these data nor their construction from
+F-symbols is asserted.
+
+Let $h_\gamma$ be the continuous extended two-site interaction on the
+active space, including its limiting values at $0$ and $1$. In the
+interior it is $I-P_\gamma$ for the injective mixed tensor. Compatibility
+and the normalized average give
+\begin{align}
+    E(h_\gamma)                          & =Q-I+h_\gamma, &
+    \widehat h_\gamma:=E(h_\gamma)+(I-Q) & =h_\gamma.
+    \label{eq:mixed_wha_completion}
+\end{align}
+The average is a finite sum of fixed left and right multiplications,
+so it is continuous. Both identities in~(\ref{eq:mixed_wha_completion})
+therefore extend to $[0,1]$ by density of $(0,1)$.
+If the weak-Hopf algebra is finite dimensional, every boundary operator
+is represented by an algebra element. Hence $Q$ commutes with it, and
+the literal active average also commutes with every boundary operator. This argument does not
+identify the limiting support at either endpoint with that endpoint
+tensor's canonical support.
+
+For $J_2=J\otimes J$, the completed enlarged interaction is
+\begin{align}
+    \widetilde h_\gamma
+     & =I-J_2(I-\widehat h_\gamma)J_2^*
+    =I-J_2J_2^*+J_2\widehat h_\gamma J_2^*.
+    \label{eq:mixed_wha_enlargement}
+\end{align}
+By~(\ref{eq:mixed_wha_completion}), this is exactly the existing enlarged
+mixed interaction, hence positive, continuous, and uniformly gapped on
+periodic rings of all lengths $N\ge2$. The same equality preserves its
+already established ground spaces. Only the completed interaction is
+covered by these claims; the literal uncompleted average can have extra
+zero-energy states.
+
+Adjoint closure on the active space follows from the realization.
+The same adjoint boundary works after inclusion, since
+$O_{\widetilde T,X}^N=J_N O_{T,X}^N J_N^*$.
+Compatibility then gives local commutation in the interior; continuity
+extends it to the endpoints. Local commutation implies commutation of the
+periodic sum with the periodic common MPO at every $N\ge2$.\footnote{
+    The conditional average identities and active-space commutation are in
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/MixedWeakHopfAverage}.
+    The enlarged construction, positivity, continuity, periodic commutation and
+    uniform gap are in
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedWeakHopfParent}.
+    The gap is transferred by exact equality with the previously proved path,
+    not by claiming that averaging preserves a spectral gap.}
+
+\section{Remaining reconstruction problem}
+The enlarged-space unital realization is impossible as specified, not
+merely unproved. A corrected program must construct the normalized
+realization on the active space from suitably admissible fusion and
+star data, or formulate and justify a nonunital physical representation
+on the enlarged space. The former realization is still an additional
+hypothesis here. General exact action and fusion decompositions alone
+do not supply physical star data. This note does not assert a
+counterexample to the source's phase-classification theorem, nor close
+the reconstruction issue.
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
