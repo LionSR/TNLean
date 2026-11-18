@@ -321,7 +321,8 @@ theorem angularInformationBound_of_sublinearCollarBound {q : ℕ} (hq : 1 ≤ q)
   intro a A₀ ha _hA₀ m₀ p hp
   obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
-  refine ⟨_, _, fun L hL h hh hhJ E₀ Ω hΩ hgap hmem ↦ ?_⟩
+  refine ⟨angularScale J Δ a p, angularThreshold q J Δ a A₀ m₀ p Ctpl N Ca Na,
+    fun L hL h hh hhJ E₀ Ω hΩ hgap hmem ↦ ?_⟩
   obtain ⟨-, -, hgap, hspan⟩ :=
     (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
       ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hgap⟩
