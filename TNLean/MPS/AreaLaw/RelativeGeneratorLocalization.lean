@@ -29,9 +29,9 @@ neighborhoods retain disconnected components.
 
 * `norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le`: localization of an
   evolved sum of local perturbations on a graph.
-* `ChainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le`: localization of the
+* `ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpectation_le`: localization of the
   generator on the chain, with an error linear in `L`.
-* `DomainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le`: the natural-radius
+* `ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpectation_le`: the natural-radius
   localization on a finite integer domain, with the same constants.
 
 **Source convention (contiguous chains):** The note fixes a contiguous chain in
@@ -44,7 +44,7 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 380–4
 This estimate does not construct a Gaussian filter or an information reset.
 -/
 
-open ManyBody (ChainSupport DomainSupport lineDomainGraph)
+open ManyBody (ChainSupport DomainSupport lineDomainGraph ChainInteraction DomainInteraction)
 
 open Matrix QuantumCircuit
 open scoped Kronecker Matrix.Norms.L2Operator
@@ -131,11 +131,12 @@ end Graph
 /-- The relative-evolution generator is exponentially close to its
 expectation on the neighborhood of the crossing supports, with error linear
 in the chain length. Source: TNLean note, `part2a_mps_information.tex`, lines 380–400. -/
-theorem ChainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le
-    {L q R : ℕ} {J : ℝ} (h : ChainHamiltonian L q R J)
+theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpectation_le
+    {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (D : Finset (Fin L)) (hq : 1 ≤ q) (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
-    let K := h.doubled.operator
-    let K' := (h.swappedDoubled D).operator
+    let K := h.doubled.hamiltonian
+    let K' := (h.swappedDoubled D).hamiltonian
     let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
     let Z := C.biUnion (fun X ↦ X.1)
     let B := chainNeighborhood Z ℓ
@@ -152,7 +153,7 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le
   have : NeZero (q * q) := ⟨Nat.pos_iff_ne_zero.mp (Nat.mul_pos hq hq)⟩
   let g := h.swappedDoubled D
   let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin (q * q)) (fun X : ChainSupport L R ↦ X.1) :=
-    ⟨g.term, g.supported⟩
+    ⟨g.term, g.mem⟩
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
   let T (X : ChainSupport L R) (b : Bool) := Matrix.reindex e e
@@ -161,16 +162,18 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le
   let A (p : ChainSupport L R × Bool) := F * T p.1 p.2 * Fᴴ - T p.1 p.2
   obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing D
   have hdiff : K' - K = ∑ p ∈ C ×ˢ Finset.univ, A p := by
-    rw [Finset.sum_product, show K' = F * h.doubled.operator * Fᴴ from
-      h.swappedDoubled_operator D]
+    rw [Finset.sum_product, show K' = F * h.doubled.hamiltonian * Fᴴ from
+      h.swappedDoubled_hamiltonian D]
     exact hsum
   have hgen := norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
     (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
-    (fun X ↦ ManyBody.ChainSupport.edist_le X) (fun X ↦ X.2.card_le) g.hermitian b₀
-    g.sum_norm_terms_containing_le (C ×ˢ Finset.univ) (fun p ↦ p.1.1) Z
+    (fun X ↦ ManyBody.ChainSupport.edist_le X) (fun X ↦ X.2.card_le)
+        (h.isHermitian_swappedDoubled_term hh D) b₀
+    (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ)
+        (fun p ↦ p.1.1) Z
     (fun p hp ↦ Finset.subset_biUnion_of_mem (fun X ↦ X.1) (Finset.mem_product.mp hp).1)
-    (fun p _ ↦ p.1.2.card_le) A (fun p _ ↦ (h.partialSwap_term_difference_spec D p.1 p.2).1)
-    (2 * |J|) (fun p _ ↦ (h.partialSwap_term_difference_spec D p.1 p.2).2.2.trans
+    (fun p _ ↦ p.1.2.card_le) A (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).1)
+    (2 * |J|) (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).2.2.trans
       (mul_le_mul_of_nonneg_left (le_abs_self J) (by norm_num))) ℓ t
   dsimp only at hgen
   rw [biUnion_graphBall_pathGraph_eq_chainNeighborhood Z hℓ, ← hdiff] at hgen
@@ -195,11 +198,12 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le
 actual finite integer domain. This extends the chain localization argument of
 TNLean note, part2a_mps_information.tex, lines 380–400, to the finite domains of
 part0_preamble.tex, lines 191–215. No spectral gap or reset conclusion is asserted. -/
-theorem DomainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le
-    {Λ : Finset ℤ} {q R : ℕ} {J : ℝ} (h : DomainHamiltonian Λ q R J)
+theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpectation_le
+    {Λ : Finset ℤ} {q R : ℕ} {J : ℝ} (h : DomainInteraction Λ q R)
+        (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (D : Finset (Fin Λ.card)) (hq : 1 ≤ q) (m : ℕ) (t : ℝ) :
-    let K := h.doubled.operator
-    let K' := (h.swappedDoubled D).operator
+    let K := h.doubled.hamiltonian
+    let K' := (h.swappedDoubled D).hamiltonian
     let C := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
     let Z := C.biUnion (fun X ↦ X.1)
     let B := Z.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)
@@ -216,7 +220,7 @@ theorem DomainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le
   have : NeZero (q * q) := ⟨Nat.pos_iff_ne_zero.mp (Nat.mul_pos hq hq)⟩
   let g := h.swappedDoubled D
   let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin (q * q))
-      (fun X : DomainSupport Λ R ↦ X.1) := ⟨g.term, g.supported⟩
+      (fun X : DomainSupport Λ R ↦ X.1) := ⟨g.term, g.mem⟩
   let e := sitePairConfigurationEquiv (Fin Λ.card) q q
   let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
   let T (X : DomainSupport Λ R) (b : Bool) := Matrix.reindex e e
@@ -229,12 +233,13 @@ theorem DomainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le
     exact hsum
   have hgen := norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
     (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) Φ
-    (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) g.hermitian b₀
-    g.sum_norm_terms_containing_le (C ×ˢ Finset.univ) (fun p ↦ p.1.1) Z
+    (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) (h.isHermitian_swappedDoubled_term hh D) b₀
+    (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ)
+        (fun p ↦ p.1.1) Z
     (fun p hp ↦ Finset.subset_biUnion_of_mem (fun X ↦ X.1) (Finset.mem_product.mp hp).1)
     (fun p _ ↦ p.1.2.isChainSupport.card_le) A
-    (fun p _ ↦ (h.partialSwap_term_difference_spec D p.1 p.2).1)
-    (2 * |J|) (fun p _ ↦ (h.partialSwap_term_difference_spec D p.1 p.2).2.2.trans
+    (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).1)
+    (2 * |J|) (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).2.2.trans
       (mul_le_mul_of_nonneg_left (le_abs_self J) (by norm_num))) (m : ℝ) t
   dsimp only at hgen
   rw [Nat.floor_natCast, ← hdiff] at hgen
