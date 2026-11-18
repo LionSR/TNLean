@@ -154,7 +154,7 @@ private theorem surprisalTail_leftBlock_le_of_consecutive_terms
     (fun X ↦ h.mem X.val) (fun X ↦ hh X.val) hJ
     (fun X ↦ hhJ X.val) hΔ hΩ hgap hspan (leftBlock L k) ?_ w hw
   rw [leftBlock_eq_interval]
-  exact h.cutLogBudget_interval_le_of_consecutive_terms hq hh hhJ hwindow 0 k
+  exact h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow 0 k
 
 open scoped ComplexOrder in
 /-- At every prefix cut, the spectral projection of the actual reduced ground

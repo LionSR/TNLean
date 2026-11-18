@@ -185,7 +185,7 @@ theorem exists_regionEntropy_prefix_le_printed (R : ℕ) :
       (log_max_cubic_le hK (by linarith only [hζ]) hξ (by linarith only [hζ])) hq
     change 2 * ζ ≤ s at hs
     have hlogq : 0 ≤ log q := log_nonneg (by exact_mod_cast (by omega : 1 ≤ q))
-    refine (hbound hJ hΔ h hΩ hgap hspan i).trans (hscalar.trans ?_)
+    refine (hbound hJ hΔ h hh hhJ hΩ hgap hspan i).trans (hscalar.trans ?_)
     change c₀ * (6 * ζ) * log (6 * ζ) * log q * (2 : ℝ) ^ (2 * (6 * ζ * log q)) ≤ _
     have hzs : 6 * ζ ≤ 6 * s := by linarith only [hs, hζ]
     have hs0 : 0 ≤ s := by linarith only [hs, hζ]

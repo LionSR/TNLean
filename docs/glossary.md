@@ -2564,7 +2564,7 @@ lift, for correctness, the honest-oracle restriction recorded in
   the `leadingVector` field of `LinearAlgebraQuery.IsValidOracle`.
 - **Caveat:** nothing is asserted at infeasible boundary points.
 
-### `TNLean.MPS.AreaLaw.ChainHamiltonian.IsAdmissibleNet` and `IsAdmissibleSolver`
+### `ManyBody.ChainInteraction.IsAdmissibleNet` and `IsAdmissibleSolver`
 
 - **Defined in:** `TNLean/MPS/AreaLaw/ViableSet/SizeTrimming.lean`.
 - **Meaning:** `IsAdmissibleNet` says that for every bond dimension `m` up to the
@@ -2574,7 +2574,7 @@ lift, for correctness, the honest-oracle restriction recorded in
   Hamiltonian at tolerance `c / (2L)`.
 - **Source:** LVV13, `algo53.tex`, equation `eq:conv`, lines 472–478, and Claim
   `c:2`, lines 520–527.
-- **Sanctioned bridges:** `ChainHamiltonian.sizeTrimmingSelectionWith_subset_span`
+- **Sanctioned bridges:** `ManyBody.ChainInteraction.sizeTrimmingSelectionWith_subset_span`
   (the selection of an admissible solver lies in the span of the input family);
   `isAdmissibleNet_oracleNets` and `isAdmissibleSolver_oracleSolver` (a valid
   oracle supplies both).

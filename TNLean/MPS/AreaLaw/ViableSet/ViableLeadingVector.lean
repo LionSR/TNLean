@@ -113,7 +113,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundary_minimizer_leading_vecto
     h.exists_trimmed_witness_of_isViable hh hhJ hpos hL hq hΔ hΩ hgap hspan hviable
   change (cutMatrix w k).rank ≤ D at hwD
   change m ≤ D at hmD
-  obtain ⟨HL, B, hsplit, hHL, hBS, hBn⟩ := h.exists_gluing_decomposition_of_range_one hh hhJ k
+  obtain ⟨HL, B, hsplit, hHL, hBS, hBn⟩ := h.exists_gluing_decomposition_of_range_one hhJ k
   have hblock (i : ℕ) : interval L 0 i = leftBlock L i := by
     ext j
     simp [interval, leftBlock]

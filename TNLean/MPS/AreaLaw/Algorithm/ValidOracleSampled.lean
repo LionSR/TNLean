@@ -137,15 +137,11 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
     (oracleSolver o L (i + 1) b (AreaLaw.extend (i + 1) S)
       (leftCutOperator (i + 1) (chain.cutLeftPart (i + 1))) ((Δ / 169) ^ 2 / (2 * L))) with hT₀
   have hnet := isAdmissibleNet_oracleNets hv (k := i + 1) hL chain hΔ
-  have hsol := isAdmissibleSolver_oracleSolver hv chain
-      (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
-      (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hq Δ b (AreaLaw.extend (i + 1) S)
+  have hsol := isAdmissibleSolver_oracleSolver hv chain hq Δ b (AreaLaw.extend (i + 1) S)
   have hT : IsViableMPS Γ (lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ) m'
       (1 / 2) (bondTrimSet hi m' T₀) :=
     ⟨(card_bondTrimSet_le hi m' T₀).trans
-      (chain.card_sizeTrimmingSelectionWith_le_polynomial
-          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
-          (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hL hq hΔ _ _
+      (chain.card_sizeTrimmingSelectionWith_le_polynomial hL hq hΔ _ _
         (card_oracleNets_le hv hL hq hΔ)),
       fun v hv' ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m' T₀ hv',
       chain.isViable_bondTrimSet_sizeTrimmingSelectionWith

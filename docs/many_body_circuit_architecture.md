@@ -481,7 +481,7 @@ Sites layer has. It holds three unrelated things:
 
 The structure `Lattice.LocalHamiltonian`, described as shared by the one- and
 two-dimensional area laws, is defined on `Λ : Finset (ℤ × ℤ)`. The chain uses
-`ChainHamiltonian` and `DomainHamiltonian` in `MPS/AreaLaw`, and the squares
+`ManyBody.ChainInteraction` and `ManyBody.DomainInteraction` in `MPS/AreaLaw`, and the squares
 and rectangles of `PEPS` use two more structures. Namespaces vary inside the
 directory (`TNLean.Lattice`, `TNLean.Lattice.PartyCircuit`,
 `Lattice.PartyCircuit`, and bare `Word`, `EffectCircuit`).
@@ -568,7 +568,7 @@ Wave 3, two tracks that share no file:
 
 - **3H.1** (QICLean). `Interaction`; the Hamiltonian part of `Lattice` (127
   modules) restated on it and moved.
-- **3H.2** (TNLean, pin move 2). `ChainHamiltonian`, `DomainHamiltonian`,
+- **3H.2** (TNLean, pin move 2). `ManyBody.ChainInteraction`, `ManyBody.DomainInteraction`,
   `Lattice.LocalHamiltonian`, `SquareHamiltonian` and `RectangularHamiltonian`
   become instances; `Lattice/RegionalEntropyBridge` is deleted.
 - **3A** (both). The generic modules of `TNLean/Algebra` move to QICLean,

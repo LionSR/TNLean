@@ -43,7 +43,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Marginal moment and tail bounds at a cut]
     \label{lem:chain_marginal_tail}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le,
+    \lean{ManyBody.ChainInteraction.surprisalTail_regionState_le,
         Entropy.log_surprisalMoment_cut_le}
     \leanok
     \uses{def:chain_model}
@@ -78,7 +78,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{definition}[Doubled chain Hamiltonian]
     \label{def:chain_doubled_hamiltonian}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.doubled}
+    \lean{ManyBody.ChainInteraction.doubled}
     \leanok
     \uses{def:chain_model,def:qc_site_pair_coordinates}
     Let $L,q,R$ be natural numbers, let $J$ be real, and let
@@ -115,7 +115,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Operator of the doubled Hamiltonian]
     \label{lem:chain_doubled_operator}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.doubled_operator}
+    \lean{ManyBody.ChainInteraction.doubled_hamiltonian}
     \leanok
     \uses{def:chain_doubled_hamiltonian}
     Under the hypotheses of Definition~\ref{def:chain_doubled_hamiltonian},
@@ -134,8 +134,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{definition}[Regionally swapped doubled Hamiltonian]
     \label{def:chain_swapped_doubled_hamiltonian}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.swappedDoubled,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.swappedDoubled_operator}
+    \lean{ManyBody.ChainInteraction.swappedDoubled,
+        ManyBody.ChainInteraction.swappedDoubled_hamiltonian}
     \leanok
     \uses{def:chain_doubled_hamiltonian,def:peps_frame_sheet_swap}
     Let $H=\sum_Xh_X$ be a range-$R$ Hamiltonian on the contiguous chain
@@ -175,7 +175,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[The ground vectors of the doubled and swapped chains]
     \label{thm:chain_doubled_swapped_ground_gap}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.doubled_swappedDoubled_isGapped}
+    \lean{ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped}
     \leanok
     \uses{def:chain_model,def:chain_swapped_doubled_hamiltonian}
     In the setting of Definition~\ref{def:chain_swapped_doubled_hamiltonian},
@@ -276,7 +276,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 % Source: part1_arealaw.tex:706--709, with eq:theta and eq:mgf:152--166.
 \begin{lemma}[Consecutive-window interactions split by an interval]
     \label{thm:chain_consecutive_window_count}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.card_crossingTerms_interval_le_of_consecutive_terms}
+    \lean{ManyBody.ChainInteraction.card_crossingTerms_interval_le_of_consecutive_terms}
     \leanok
     \uses{def:chain_model}
     Let $L,q,R$ be natural numbers, let $J$ be real, and let
@@ -305,7 +305,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[The cut budget for consecutive-window interactions]
     \label{thm:chain_window_cut_budget}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.cutLogBudget_interval_le_of_consecutive_terms}
+    \lean{ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive_terms}
     \leanok
     \uses{thm:chain_consecutive_window_count}
     Let $q\ge1$, and suppose that every nonzero interaction is assigned to
@@ -329,7 +329,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Marginal moments for consecutive-window interactions]
     \label{thm:chain_consecutive_window_moment}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms}
+    \lean{ManyBody.ChainInteraction.log_surprisalMoment_interval_le_of_consecutive_terms}
     \leanok
     \uses{def:chain_model}
     Let $L,R$ be natural numbers, let $q\ge1$ be an integer, and let
@@ -448,7 +448,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 % Source: part1_arealaw.tex:280--287, rem:renyi.
 \begin{lemma}[Rényi entropies near order one]
     \label{thm:chain_renyi_near_one}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.near_one_renyi_entropy_interval_bounds}
+    \lean{ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds}
     \leanok
     \uses{def:chain_model,lem:chain_crossing_count,lem:chain_marginal_tail}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
@@ -556,9 +556,9 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[The boundary perturbation of a doubled chain]
     \label{thm:chain_partial_swap_boundary}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.partialSwap_term_difference_spec,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.partialSwap_difference_eq_sum_crossing,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.partialSwap_boundary_spec}
+    \lean{ManyBody.ChainInteraction.partialSwap_term_difference_spec,
+        ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing,
+        ManyBody.ChainInteraction.partialSwap_boundary_spec}
     \leanok
     \uses{def:chain_model,def:chain_doubled_hamiltonian,
         def:qc_site_pair_coordinates,def:peps_frame_sheet_swap,
@@ -655,8 +655,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 % Source: TNLean2026OneDimensional, eq:ham; setting before lem:LR.
 \begin{lemma}[Interaction norm budget at a site]
     \label{lem:chain_site_norm_budget}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sum_norm_terms_containing_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_bound_nonneg}
+    \lean{ManyBody.ChainInteraction.sum_norm_terms_containing_le,
+        ManyBody.ChainInteraction.norm_bound_nonneg}
     \leanok
     \uses{def:chain_model}
     Let $L,q,R$ be natural numbers and $J\in\mathbb R$. On the chain of $L$
@@ -721,7 +721,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Localization of the relative-evolution generator]
     \label{thm:chain_relative_generator_localization}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le}
+    \lean{ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpectation_le}
     \leanok
     \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
         def:qc_site_expectation}
@@ -982,7 +982,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Information reset on a contiguous chain]
     \label{thm:chain_information_reset}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}
+    \lean{ManyBody.ChainInteraction.information_reset}
     \leanok
     \uses{def:chain_model}
     Fix a natural local dimension $q\ge1$, a natural range $R$, a real
@@ -1620,11 +1620,11 @@ Theorem~B a second way, by a sequential preparation protocol.
         ManyBody.IsDomainSupport.exists_walk,
         ManyBody.IsDomainSupport.isChainSupport,
         ManyBody.IsDomainSupport.subset_or_disjoint_of_gap,
-        TNLean.MPS.AreaLaw.DomainHamiltonian,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.operator,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.operator_isHermitian,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.toChain,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.toChain_operator,
+        ManyBody.DomainInteraction,
+        ManyBody.Interaction.hamiltonian,
+        ManyBody.Interaction.isHermitian_hamiltonian,
+        ManyBody.DomainInteraction.toChain,
+        ManyBody.DomainInteraction.toChain_hamiltonian,
         TNLean.MPS.AreaLaw.domainBoundaryEdges,
         TNLean.MPS.AreaLaw.domainRegion,
         TNLean.MPS.AreaLaw.IsDomainEdge,
@@ -1656,9 +1656,9 @@ Theorem~B a second way, by a sequential preparation protocol.
     \lean{TNLean.MPS.AreaLaw.IsDomainSupport.singleton,
         ManyBody.DomainSupport.toChainSupport,
         ManyBody.DomainSupport.toChainSupport_injective,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.toChain_term,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.norm_bound_nonneg,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.sum_norm_terms_containing_le}\leanok
+        ManyBody.DomainInteraction.toChain_term,
+        ManyBody.DomainInteraction.norm_bound_nonneg,
+        ManyBody.DomainInteraction.sum_norm_terms_containing_le}\leanok
     \uses{def:domain_model}
     In the setting of Definition~\ref{def:domain_model}, every site $x$ satisfies
     $J\ge0$ and
@@ -1706,10 +1706,10 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{definition}[Doubled domain interactions and regional swaps]
     \label{def:domain_doubled_swapped_hamiltonian}
-    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.doubled,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.doubled_operator,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.swappedDoubled,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.swappedDoubled_operator}\leanok
+    \lean{ManyBody.DomainInteraction.doubled,
+        ManyBody.DomainInteraction.doubled_hamiltonian,
+        ManyBody.DomainInteraction.swappedDoubled,
+        ManyBody.DomainInteraction.swappedDoubled_hamiltonian}\leanok
     \uses{def:domain_model,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     Let $H=\sum_Xh_X$ be an admissible domain Hamiltonian and let
     $D\subseteq V=\{0,\ldots,|\Lambda|-1\}$. Let $p$ pair the two replica
@@ -1741,8 +1741,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Crossing decomposition for a domain regional swap]
     \label{thm:domain_partial_swap_crossing}
-    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.partialSwap_term_difference_spec,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.partialSwap_difference_eq_sum_crossing}\leanok
+    \lean{ManyBody.DomainInteraction.partialSwap_term_difference_spec,
+        ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing}\leanok
     \uses{def:domain_doubled_swapped_hamiltonian,lem:domain_crossing_count}
     With the notation of Definition~\ref{def:domain_doubled_swapped_hamiltonian},
     put $T_{X,0}=p_*(h_X\otimes\mathbb 1)$,
@@ -1775,7 +1775,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Relative-generator localization on a finite integer domain]
     \label{thm:domain_relative_generator_localization}
-    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le}
+    \lean{ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpectation_le}
     \leanok
     \uses{def:domain_doubled_swapped_hamiltonian,thm:domain_partial_swap_crossing,
         def:qc_site_expectation,thm:domain_interval_neighborhood}
@@ -1917,7 +1917,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Information reset on a finite integer domain]
     \label{thm:domain_information_reset}
-    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.information_reset}\leanok
+    \lean{ManyBody.DomainInteraction.information_reset}\leanok
     \uses{def:domain_model}
     Fix $q\ge1$, a natural range $R$, a real interaction bound $J$, a gap
     $\Delta>0$ and an exponent $p>0$. There exist $C_p>0$ and a natural
@@ -2021,7 +2021,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{lemma}[Entropy of intrinsic neighborhoods of interval unions]
     \label{thm:domain_interval_neighborhood_entropy}
     \lean{TNLean.MPS.AreaLaw.regionEntropy_domainNeighborhood_biUnion_intervals_le,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.regionEntropy_neighborhood_biUnion_intervals_le}
+        ManyBody.DomainInteraction.regionEntropy_neighborhood_biUnion_intervals_le}
     \leanok
     \uses{def:domain_model}
     Let $\Omega$ be a normalized vector on the finite domain of
@@ -2063,7 +2063,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Information at logarithmic physical separation on a finite domain]
     \label{thm:domain_logarithmic_separation}
-    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.mutualInformation_le_of_logarithmic_separation}
+    \lean{ManyBody.DomainInteraction.mutualInformation_le_of_logarithmic_separation}
     \leanok
     \uses{def:domain_model,def:chain_model}
     Fix $q\ge1$, a natural range $R$, a real interaction bound $J$, a gap
@@ -2305,7 +2305,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Zero entropy for on-site interactions]
     \label{thm:chain_range_zero_entropy}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.regionEntropy_eq_zero_of_range_zero}
+    \lean{ManyBody.ChainInteraction.regionEntropy_eq_zero_of_range_zero}
     \leanok
     \uses{def:chain_model,lem:zero_entropy_cut}
     Let $\Omega$ be a gapped ground vector, with positive gap, of a
@@ -2378,7 +2378,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Removing boundary cuts across gaps]
     \label{thm:domain_entropy_boundary_reduction}
-    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.exists_regionEntropy_eq_card_boundaryEdges_eq}
+    \lean{ManyBody.DomainInteraction.exists_regionEntropy_eq_card_boundaryEdges_eq}
     \leanok
     \uses{def:domain_model}
     Let $\Lambda=\{x_0<\cdots<x_{L-1}\}\subset\mathbb Z$ be finite.
@@ -2575,7 +2575,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Information at logarithmic separation on a contiguous chain]
     \label{thm:chain_logarithmic_separation}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}
+    \lean{ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_separation}
     \leanok
     \uses{def:chain_model}
     Fix a natural local dimension $q\ge1$, a natural range $R$, a real
@@ -2666,7 +2666,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Spectral truncation at a prefix cut]
     \label{thm:chain_prefix_spectral_bounds}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.spectralProjectionGE_leftBlock_bounds}
+    \lean{ManyBody.ChainInteraction.spectralProjectionGE_leftBlock_bounds}
     \leanok
     \uses{def:chain_model}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a

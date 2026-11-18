@@ -114,8 +114,7 @@ theorem _root_.ManyBody.ChainInteraction.sizeTrimmingSelectionWith_subset_span {
 /-- The selection lies in the span of the input family.
 LVV13, `algo53.tex`, Claim `c:2`, line 526. -/
 theorem _root_.ManyBody.ChainInteraction.sizeTrimmingSelection_subset_span {L q k : ℕ}
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
-        (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
+    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
     (h.sizeTrimmingSelection hq Δ S : Set (LeftBlockVector L q k)) ⊆
       Submodule.span ℂ (S : Set (LeftBlockVector L q k)) :=
   h.sizeTrimmingSelectionWith_subset_span hq Δ S _ fun m ↦
@@ -161,8 +160,7 @@ theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelectionWith_le {L q 
 /-- The selection has at most `(D + 1) * D * K` members, with `K` the net bound.
 LVV13, `algo53.tex`, Claim `c:2`, lines 520–527. -/
 theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelection_le {L q k : ℕ}
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
-        (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
+    (h : ChainInteraction L q 1) (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q k)) :
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
@@ -181,8 +179,7 @@ theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelection_le {L q k : 
 in the chain length, with coefficient and degree independent of that length. LVV13,
 `algo53.tex`, Claim `c:2`, lines 520–527. -/
 theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelectionWith_le_polynomial {L q k : ℕ}
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
-        (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
+    (h : ChainInteraction L q 1) (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q k))
     {net : (m : ℕ) → Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)}
     (sol : (m : ℕ) → Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
@@ -221,7 +218,7 @@ theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomia
   have hc : 0 < c := sq_pos_of_pos (div_pos hΔ (by norm_num))
   have hη : 0 < c / (2 * L) :=
     div_pos hc (mul_pos (by norm_num) (by exact_mod_cast hL))
-  exact h.card_sizeTrimmingSelectionWith_le_polynomial hh hhJ hL hq hΔ S _ fun m hm ↦
+  exact h.card_sizeTrimmingSelectionWith_le_polynomial hL hq hΔ S _ fun m hm ↦
     card_boundary_rectangularTraceNormNet_le (by omega) hη hm
 
 /-- **Size trimming with any admissible nets and solver is chosen before the ground state.**

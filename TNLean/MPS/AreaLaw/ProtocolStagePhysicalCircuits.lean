@@ -98,10 +98,10 @@ theorem local_stage_circuits_of_logarithmic_separation
     (Nat.le_div_iff_mul_le (by omega : 0 < 20 * w)).1 hdiv
   have hgeometry : 3 * (20 * w) ≤ L := by omega
   obtain ⟨hRem, hBlock, hBoundary⟩ :=
-    hstage L hLs h Ω E₀ hΩ hgap hspan w hw hwidthStage k
+    hstage L hLs h hh hhJ Ω E₀ hΩ hgap hspan w hw hwidthStage k
   have hleftOwners := left_band_owners hw k
   have hleft (hk : 0 < k.val) :=
-    hband L hLb h Ω E₀ hΩ hgap hspan (Party L w)
+    hband L hLb h hh hhJ Ω E₀ hΩ hgap hspan (Party L w)
       (afterBlockBirth L w k).owner
       (Sum.inl k.castSucc) (Sum.inr k)
       (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w)))
@@ -117,7 +117,7 @@ theorem local_stage_circuits_of_logarithmic_separation
   rw [← leftBandMain_eq_afterLeftTransfer hw k]
     at hrightOwners
   have hright :=
-    hband L hLb h Ω E₀ hΩ hgap hspan (Party L w)
+    hband L hLb h hh hhJ Ω E₀ hΩ hgap hspan (Party L w)
       (leftBandMain L w k).owner
       (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k)
       ((k.val + 1) * (20 * w)) w (by simp) (by simp)

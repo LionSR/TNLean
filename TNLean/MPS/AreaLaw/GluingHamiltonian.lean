@@ -90,8 +90,7 @@ supported from the boundary site onward, whose norm is at most `2L`: the existen
 of the named decomposition `cutLeftPart` plus `cutBoundaryPart`.
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 409–410. -/
 theorem _root_.ManyBody.ChainInteraction.exists_gluing_decomposition_of_range_one
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (k : ℕ) :
+    (h : ChainInteraction L q 1) (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (k : ℕ) :
     ∃ HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       h.hamiltonian = HL + B ∧
       Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (interval L 0 k) ∧

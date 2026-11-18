@@ -168,7 +168,7 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt_source (
   refine ⟨K, hK, ?_⟩
   intro J ΔE hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan α hα j k r hk w ψ hw hrank hnorm P hP hPdef
   exact (renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt hΩ j hα).trans
-    (hL2 hJ hΔ h hΩ hgap hspan j hk w ψ hw hrank hnorm hP hPdef)
+    (hL2 hJ hΔ h hh hhJ hΩ hgap hspan j hk w ψ hw hrank hnorm hP hPdef)
 
 namespace Hastings
 
@@ -257,7 +257,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_source (R : ℕ) :
   · obtain ⟨OB, OL, OR, hfac⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan j m
     exact ⟨OB, OL, OR, hfac.mono
       (mul_le_mul_of_nonneg_right (le_max_left _ _) (exp_pos _).le)⟩
-  · have hj := hS hJ hΔ h hΩ hgap hspan j
+  · have hj := hS hJ hΔ h hh hhJ hΩ hgap hspan j
     rw [← leftBlock_eq_interval] at hj
     calc exp (2 * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) / 2
         ≤ exp (2 * Smax) / 2 := by gcongr

@@ -80,7 +80,7 @@ theorem exists_projectorFactorization_posSemidef_sourceLength (R : ℕ) :
           Real.exp (-(l / (6 * hastingsLRLength R J Δ)))) OB OL OR := by
   obtain ⟨K, hK, hbound⟩ := exists_projectorFactorization_posSemidef_endpoint R
   refine ⟨K, hK, fun {J Δ} hJ hΔ {L q} _ h hh hhJ E₀ Ω hΩ hgap hspan c l ↦ ?_⟩
-  obtain ⟨OB, OL, OR, hOB, hF⟩ := hbound hJ hΔ h hΩ hgap hspan c l
+  obtain ⟨OB, OL, OR, hOB, hF⟩ := hbound hJ hΔ h hh hhJ hΩ hgap hspan c l
   refine ⟨OB, OL, OR, hOB, hF.mono ?_⟩
   have hsize : 2 * lemmaOneEndpointLength R J Δ ≤ hastingsLRLength R J Δ :=
     two_mul_lemmaOneEndpointLength_le_sourceLength R hJ hΔ
@@ -108,7 +108,7 @@ theorem Hastings.exists_regionEntropy_prefix_le_sourceLength (R : ℕ) :
             Real.log q * (2 : ℝ) ^ ((6 * hastingsLRLength R J Δ) * Real.log q) := by
   obtain ⟨c₀, hc₀, hbound⟩ := Hastings.exists_regionEntropy_prefix_le_printed R
   exact ⟨c₀, hc₀, fun {J Δ} hJ hΔ {L q} _ h hh hhJ E₀ Ω hΩ hgap hspan i ↦
-    hbound hJ hΔ h hΩ hgap hspan (hastingsLRLength R J Δ)
+    hbound hJ hΔ h hh hhJ hΩ hgap hspan (hastingsLRLength R J Δ)
       (two_mul_lemmaOneEndpointLength_le_sourceLength R hJ hΔ) i⟩
 
 end TNLean.MPS.AreaLaw

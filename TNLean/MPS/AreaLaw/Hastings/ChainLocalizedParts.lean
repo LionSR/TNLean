@@ -263,7 +263,7 @@ theorem _root_.ManyBody.ChainInteraction.isHermitian_leftPart_localized (h : Cha
     (h.leftPart j m + ManyBody.regionExpectation K
       (gaussianFilteredTerm q' ΔE h.hamiltonian (h.leftPart j m) - h.leftPart j m)).IsHermitian :=
   isHermitian_localized q' ΔE (ManyBody.Interaction.isHermitian_hamiltonian hh)
-      (h.leftPart_isHermitian hh hhJ j m) K
+      (h.leftPart_isHermitian hh j m) K
 
 /-- The localized right part `M_R` is Hermitian.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
@@ -273,7 +273,7 @@ theorem _root_.ManyBody.ChainInteraction.isHermitian_rightPart_localized
     (h.rightPart j m + ManyBody.regionExpectation K
       (gaussianFilteredTerm q' ΔE h.hamiltonian (h.rightPart j m) - h.rightPart j m)).IsHermitian :=
   isHermitian_localized q' ΔE (ManyBody.Interaction.isHermitian_hamiltonian hh)
-      (h.rightPart_isHermitian hh hhJ j m) K
+      (h.rightPart_isHermitian hh j m) K
 
 /-- The localized buffer part `M_B` is Hermitian.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
@@ -284,7 +284,7 @@ theorem _root_.ManyBody.ChainInteraction.isHermitian_bufferPart_localized
       (gaussianFilteredTerm q' ΔE h.hamiltonian (h.bufferPart j m) -
         h.bufferPart j m)).IsHermitian :=
   isHermitian_localized q' ΔE (ManyBody.Interaction.isHermitian_hamiltonian hh)
-      (h.bufferPart_isHermitian hh hhJ j m) K
+      (h.bufferPart_isHermitian hh j m) K
 
 /-- The left part vanishes when `j ≤ m`: the region `[0, j - m)` is then empty, and no
 support, being nonempty, is contained in it.

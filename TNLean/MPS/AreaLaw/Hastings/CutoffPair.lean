@@ -169,7 +169,6 @@ noncomputable def leftWindow (L R c m k : ℕ) : Finset (Fin L) :=
 noncomputable def rightWindow (L R c m k : ℕ) : Finset (Fin L) :=
   chainNeighborhood (interval L (c + m - R) (c + m + 2 * R)) (k : ℝ)
 
-include hh hhJ in
 /-- **The localized left part acts left of the cut.** If `R + k ≤ m`, then `M_L` is supported on
 the sites `i < c`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 816–842. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c m k : ℕ}
@@ -180,20 +179,20 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c
   · rw [h.leftPart_eq_zero_of_le hcm, h.localizedPart_zero]
     change _ ∈ ManyBody.supportedOperators _ _
     exact zero_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) _)
-  refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_leftPart hh hhJ c m) _).mono ?_
+  refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_leftPart c m) _).mono ?_
   refine Finset.union_subset (fun x hx ↦ ?_) ((chainNeighborhood_interval_subset _ _ _).trans
     fun x hx ↦ ?_)
   · rw [mem_interval] at hx; rw [mem_leftBlock]; omega
   · rw [mem_interval] at hx; rw [mem_leftBlock]; omega
 
-include hh hhJ in
+include hh in
 /-- **The localized right part acts right of the cut.** If `R + k ≤ m`, then `M_R` is supported
 on the sites `i ≥ c`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 816–842. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_rightPart {c m k : ℕ}
     (hmk : R + k ≤ m) :
     Entropy.IsSupportedOn (n := fun _ ↦ q)
       (h.localizedPart Ω s ΔE (h.rightPart c m) (rightWindow L R c m k)) (leftBlock L c)ᶜ := by
-  refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_rightPart hh hhJ c m) _).mono ?_
+  refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_rightPart c m) _).mono ?_
   refine Finset.union_subset (fun x hx ↦ ?_) ((chainNeighborhood_interval_subset _ _ _).trans
     fun x hx ↦ ?_)
   · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_leftBlock]; omega
@@ -284,14 +283,14 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   set KR := rightWindow L R c m k
   set ML := h.localizedPart Ω s ΔE PL KL
   set MR := h.localizedPart Ω s ΔE PR KR
-  have hPL : PL.IsHermitian := h.leftPart_isHermitian hh hhJ c m
-  have hPR : PR.IsHermitian := h.rightPart_isHermitian hh hhJ c m
+  have hPL : PL.IsHermitian := h.leftPart_isHermitian hh c m
+  have hPR : PR.IsHermitian := h.rightPart_isHermitian hh c m
   have hML : ML.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPL KL
   have hMR : MR.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPR KR
   have hsL : Entropy.IsSupportedOn (n := fun _ ↦ q) ML (leftBlock L c) :=
-    h.isSupportedOn_localizedPart_leftPart hh hhJ Ω s ΔE hmk
+    h.isSupportedOn_localizedPart_leftPart Ω s ΔE hmk
   have hsR : Entropy.IsSupportedOn (n := fun _ ↦ q) MR (leftBlock L c)ᶜ :=
-    h.isSupportedOn_localizedPart_rightPart hh hhJ Ω s ΔE hmk
+    h.isSupportedOn_localizedPart_rightPart Ω s ΔE hmk
   let σ₀ : Entropy.SiteConfig (fun _ : Fin L ↦ q) := fun _ ↦ ⟨0, NeZero.pos q⟩
   have hcomm : Commute (spectralCutoff ML θ) (spectralCutoff MR θ) :=
     commute_spectralCutoff_of_isSupportedOn disjoint_compl_right hML hMR hsL hsR σ₀ θ θ
@@ -334,8 +333,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   · rw [hrem]
     change _ ∈ ManyBody.supportedOperators _ _
     refine sub_mem (sub_mem ?_ ?_) ?_
-    · refine ManyBody.supportedOperators_mono ?_
-        ((h.isSupportedOn_bufferPart hh hhJ c m).groundCentered Ω)
+    · refine ManyBody.supportedOperators_mono ?_ ((h.isSupportedOn_bufferPart c m).groundCentered Ω)
       intro x hx
       simp only [mem_interval] at hx ⊢
       omega

@@ -154,7 +154,7 @@ theorem _root_.ManyBody.DomainInteraction.mutualInformation_le_of_logarithmic_se
     rw [← Entropy.regionEntropy_eq_entropy] at hbound
     dsimp only [b]
     nlinarith only [hbound, hD, mul_nonneg hk₀r hc]
-  exact hreset Λ ((le_max_left _ _).trans hL) h Ω E₀ hΩ hgap hspan
+  exact hreset Λ ((le_max_left _ _).trans hL) h hh hhJ Ω E₀ hΩ hgap hspan
     D C T E hDC hTD hEC b hMI hmarginT hmarginE
 
 end TNLean.MPS.AreaLaw

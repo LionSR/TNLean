@@ -304,7 +304,7 @@ theorem primitive_information_of_logarithmic_separation
     have hT : ∃ (n : ℕ) (a z : Fin n → ℕ), n ≤ 1 ∧
         interval L b c = Finset.univ.biUnion (fun i ↦ interval L (a i) (z i)) :=
       ⟨1, fun _ ↦ b, fun _ ↦ c, le_rfl, by simp⟩
-    have hi := hlogsep L hL h Ω E₀ hΩ hgap hspan (interval L b c) E hT
+    have hi := hlogsep L hL h hh hhJ Ω E₀ hΩ hgap hspan (interval L b c) E hT
       (fun x hx y hy ↦ hwidth.trans (by exact_mod_cast hd x hx y hy))
     have hexponent : -(24 : ℝ) = ((-24 : ℤ) : ℝ) := by norm_num
     rw [hexponent, Real.rpow_intCast] at hi

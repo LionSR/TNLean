@@ -73,7 +73,7 @@ theorem exists_projectorFactorization_posSemidef_source (R : ℕ) :
   obtain ⟨K, hK, hbound⟩ := exists_projectorFactorization_posSemidef_endpoint R
   refine ⟨K, hK, ?_⟩
   intro J Δ hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan s c l
-  obtain ⟨OB, OL, OR, hOB, hfac⟩ := hbound hJ hΔ h hΩ hgap hspan c l
+  obtain ⟨OB, OL, OR, hOB, hfac⟩ := hbound hJ hΔ h hh hhJ hΩ hgap hspan c l
   refine ⟨OB, OL, OR, hOB, hfac.mono ?_⟩
   have hs : 2 * lemmaOneEndpointLength R J Δ ≤ s :=
     two_mul_lemmaOneEndpointLength_le_sourceLength R hJ hΔ
@@ -103,7 +103,7 @@ theorem exists_projectorFactorization_source (R : ℕ) :
   obtain ⟨K, hK, hbound⟩ := exists_projectorFactorization_posSemidef_source R
   refine ⟨K, hK, ?_⟩
   intro J Δ hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan s c l
-  obtain ⟨OB, OL, OR, -, hfac⟩ := hbound hJ hΔ h hΩ hgap hspan c l
+  obtain ⟨OB, OL, OR, -, hfac⟩ := hbound hJ hΔ h hh hhJ hΩ hgap hspan c l
   exact ⟨OB, OL, OR, hfac⟩
 
 namespace Hastings
@@ -125,7 +125,8 @@ theorem exists_regionEntropy_prefix_le_source (R : ℕ) :
   obtain ⟨c₀, hc₀, hbound⟩ := exists_regionEntropy_prefix_le_printed R
   refine ⟨c₀, hc₀, ?_⟩
   intro J Δ hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan
-  exact hbound hJ hΔ h hΩ hgap hspan _ (two_mul_lemmaOneEndpointLength_le_sourceLength R hJ hΔ)
+  exact hbound hJ hΔ h hh hhJ hΩ hgap hspan _
+      (two_mul_lemmaOneEndpointLength_le_sourceLength R hJ hΔ)
 
 end Hastings
 

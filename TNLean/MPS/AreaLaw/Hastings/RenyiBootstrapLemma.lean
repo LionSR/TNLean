@@ -147,7 +147,7 @@ namespace TNLean.MPS.AreaLaw
 
 open Hastings Matrix TNLean.Lattice
 open ManyBody (IsGapped groundSpace)
-open scoped InnerProductSpace ComplexOrder
+open scoped InnerProductSpace ComplexOrder Matrix.Norms.L2Operator
 
 /-- **Hastings' bootstrap lemma for Rényi entropies (Lemma 2, lines 392–410).** There is a constant
 `K ≥ 1`, depending only on the range `R`, with the following property. Let `H` be a chain
@@ -238,6 +238,6 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt (R : ℕ
       hnorm P hP hPdef ↦
     ?_⟩
   exact (renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt hΩ j hα).trans
-    (hL2 hJ hΔ h hΩ hgap hspan j hk w ψ hw hrank hnorm hP hPdef)
+    (hL2 hJ hΔ h hh hhJ hΩ hgap hspan j hk w ψ hw hrank hnorm hP hPdef)
 
 end TNLean.MPS.AreaLaw

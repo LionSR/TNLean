@@ -149,8 +149,7 @@ theorem _root_.ManyBody.ChainInteraction.card_crossingTerms_interval_le_of_conse
 /-- The cut logarithmic budget of the actual nonzero consecutive-window terms.
 Source: the one-dimensional note, `rem:sharper`, lines 706–734. -/
 theorem _root_.ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive_terms
-    (hq : 1 ≤ q) (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hq : 1 ≤ q) (h : ChainInteraction L q R)
     (hwindow : ∀ X : ChainSupport L R, h.term X ≠ 0 →
       ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) (l r : ℕ) :
     Entropy.cutLogBudget
@@ -217,7 +216,7 @@ theorem _root_.ManyBody.ChainInteraction.log_surprisalMoment_interval_le_of_cons
   let B : ℝ := windowBudgetConst q R
   let budget := Entropy.cutLogBudget C (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ D)
   have hbudget : budget ≤ B :=
-    h.cutLogBudget_interval_le_of_consecutive_terms hq hh hhJ hwindow l r
+    h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow l r
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   have hbudget1 : 1 ≤ budget := Entropy.one_le_cutLogBudget _ _
   have hradius : Entropy.tailRadius (J / Δ) B ≤

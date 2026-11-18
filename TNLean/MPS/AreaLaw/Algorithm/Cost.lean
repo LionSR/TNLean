@@ -32,8 +32,6 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--219 (Theorem 1) and 6
 `docs/paper-gaps/lvv13_cost_model.tex`.
 -/
 
-open scoped Matrix.Norms.L2Operator
-
 open ManyBody (interval ChainInteraction)
 
 open Matrix Cslib
@@ -108,8 +106,7 @@ theorem cost_feasible_ite_le (L k b m : ℕ) (S : Finset (LeftBlockVector L q k)
 
 /-- Step 2 issues, for every bond dimension up to the uniform cut bound, one net query and
 at most two convex-program queries per net point. -/
-theorem cost_sizeTrimmingProgram_le (L k b : ℕ) (h : ChainInteraction L q 1)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L)
+theorem cost_sizeTrimmingProgram_le (L k b : ℕ) (h : ChainInteraction L q 1) (hL : 0 < L)
     (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ) (S : Finset (LeftBlockVector L q k)) :
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
@@ -230,9 +227,7 @@ theorem cost_sweepStepProgram_le {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
   have hcardF : F.card ≤ E * Rk :=
     card_gaussianFilterFactors_le (Nat.le_of_lt hq) h hs h0 h1 hc hDelta
   have h₁ := cost_extensionProgram_le L (i + 1) b S
-  have h₂ := cost_sizeTrimmingProgram_le L (i + 1) b chain
-      (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-      (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hL hq hDelta S₁
+  have h₂ := cost_sizeTrimmingProgram_le L (i + 1) b chain hL hq hDelta S₁
   have h₃ := cost_bondTrimmingProgram_le L (i + 1) hi b m S₂
   have h₅ := cost_errorReductionProgram_le L (i + 1) Rk (max 1 m) F S₃
   dsimp only at h₂

@@ -293,7 +293,7 @@ theorem _root_.ManyBody.ChainInteraction.information_reset (q : ℕ) (hq : 1 ≤
       D C R₀ C₀ hDC hR₀ hC₀ b hI
     (fun ℓ A ↦ chainNeighborhood A (ℓ : ℝ)) Z (fun ℓ ↦ ?_)
     (fun ℓ hℓ ↦ (chain_reset_support_separation D C R₀ C₀ hDC w hRw hCw).2 (ℓ : ℝ) hℓ)
-  obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq L h D (ℓ : ℝ) (Nat.cast_nonneg _)
+  obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq L h hh hhJ D (ℓ : ℝ) (Nat.cast_nonneg _)
   refine ⟨path, fun Q W hW η T hT ↦ ?_⟩
   obtain ⟨hs, -, herr⟩ := hint Q W hW η T hT
   rw [hK, ← h.swappedDoubled_hamiltonian D]
@@ -339,7 +339,7 @@ theorem _root_.ManyBody.DomainInteraction.information_reset (q : ℕ) (hq : 1 �
       D C R₀ C₀ hDC hR₀ hC₀ b hI
     (fun ℓ A ↦ A.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x ℓ)) Z
     (fun ℓ ↦ ?_) (fun ℓ hℓ ↦ ?_)
-  · obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq Λ h D ℓ
+  · obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq Λ h hh hhJ D ℓ
     refine ⟨path, fun Q W hW η T hT ↦ ?_⟩
     obtain ⟨hs, -, herr⟩ := hint Q W hW η T hT
     rw [hK, ← h.swappedDoubled_hamiltonian D]

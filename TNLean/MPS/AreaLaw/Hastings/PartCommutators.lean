@@ -127,7 +127,6 @@ theorem _root_.ManyBody.ChainInteraction.term_mul_comm_of_disjoint (h : ChainInt
 /-- The commutator of a term `h_X` with a sum of terms involves only the terms whose
 supports meet `X`. Hastings, arXiv:0705.2024v4, `law16.tex`, line 794. -/
 theorem _root_.ManyBody.ChainInteraction.term_commutator_termSum_eq (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (X : ChainSupport L R) (S : Finset (ChainSupport L R)) :
     h.term X * h.termSum S - h.termSum S * h.term X =
       ∑ Y ∈ S.filter (fun Y ↦ ¬Disjoint Y.1 X.1),
@@ -158,7 +157,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_term_commutator_termSum_le
     (X : ChainSupport L R) (S : Finset (ChainSupport L R)) :
     ‖h.term X * h.termSum S - h.termSum S * h.term X‖ ≤
       ((R + 1) * 2 ^ (2 * R + 1) : ℕ) * (2 * J ^ 2) := by
-  rw [h.term_commutator_termSum_eq hh hhJ]
+  rw [h.term_commutator_termSum_eq]
   refine (norm_sum_le _ _).trans ?_
   refine (Finset.sum_le_card_nsmul _ _ _ fun Y _ ↦ h.norm_term_commutator_le hhJ X Y).trans ?_
   rw [nsmul_eq_mul]
@@ -180,7 +179,6 @@ theorem _root_.ManyBody.ChainInteraction.termSum_commutator_eq_sum (h : ChainInt
 region `A`, `[H, H_A] = [C, H_A]`, with `C` the sum of the terms meeting both `A` and its
 complement. Hastings, arXiv:0705.2024v4, `law16.tex`, line 794. -/
 theorem _root_.ManyBody.ChainInteraction.commutator_termSum_inner_eq (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (A : Finset (Fin L)) :
     h.hamiltonian * h.termSum (Finset.univ.filter fun X ↦ X.1 ⊆ A) -
         h.termSum (Finset.univ.filter fun X ↦ X.1 ⊆ A) * h.hamiltonian =
@@ -225,7 +223,7 @@ theorem _root_.ManyBody.ChainInteraction.commutator_termSum_inner_eq_sum
       ∑ X ∈ Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) A,
         (h.term X * h.termSum (Finset.univ.filter fun X ↦ X.1 ⊆ A) -
           h.termSum (Finset.univ.filter fun X ↦ X.1 ⊆ A) * h.term X) := by
-  rw [h.commutator_termSum_inner_eq hh hhJ, h.termSum_commutator_eq_sum]
+  rw [h.commutator_termSum_inner_eq, h.termSum_commutator_eq_sum]
 
 /-- The commutator `[H, H_A]` has norm at most `|C| (R + 1) 2^{2R+1} · 2 J²`, with `|C|` the
 number of split terms. Hastings, arXiv:0705.2024v4, `law16.tex`, line 794. -/
@@ -275,7 +273,7 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_commutator_termSum_inner
   change _ ∈ ManyBody.supportedOperators _ _
   rw [h.commutator_termSum_inner_eq_sum hh hhJ]
   refine sum_mem fun X hX ↦ ?_
-  rw [h.term_commutator_termSum_eq hh hhJ]
+  rw [h.term_commutator_termSum_eq]
   refine sum_mem fun Y hY ↦ ?_
   obtain ⟨hYS, hYX⟩ := Finset.mem_filter.mp hY
   obtain ⟨hXW, hYW⟩ := hW X hX Y (Finset.mem_filter.mp hYS).2 hYX
@@ -296,7 +294,7 @@ theorem _root_.ManyBody.ChainInteraction.commutator_leftPart_eq (h : ChainIntera
         h.leftPart j m *
           h.termSum (Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1)
             (interval L 0 (j - m))) :=
-  h.commutator_termSum_inner_eq hh hhJ _
+  h.commutator_termSum_inner_eq _
 
 /-- **The norm of `b_L`.** `‖[H, H_L]‖ ≤ partCommutatorConst R * J²`.
 Hastings, arXiv:0705.2024v4, appendix, `law16.tex`, line 794: "Let `b_L = [H, H_L]`. Note
@@ -351,7 +349,7 @@ theorem _root_.ManyBody.ChainInteraction.commutator_rightPart_eq (h : ChainInter
         h.rightPart j m *
           h.termSum (Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1)
             (interval L (j + m) L)) :=
-  h.commutator_termSum_inner_eq hh hhJ _
+  h.commutator_termSum_inner_eq _
 
 /-- **The norm of `b_R`.** `‖[H, H_R]‖ ≤ partCommutatorConst R * J²`.
 Hastings, arXiv:0705.2024v4, appendix, `law16.tex`, line 794: "Let `b_L = [H, H_L]`. Note
@@ -400,8 +398,8 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_commutator_rightPart
 `H = H_L + H_B + H_R` and `[H, H] = 0`.
 Hastings, arXiv:0705.2024v4, appendix, `law16.tex`, line 794 (the commutator
 `b_L = [H, H_L]`), applied to the buffer part. -/
-theorem _root_.ManyBody.ChainInteraction.commutator_bufferPart_eq (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (j m : ℕ) :
+theorem _root_.ManyBody.ChainInteraction.commutator_bufferPart_eq
+    (h : ChainInteraction L q R) (j m : ℕ) :
     h.hamiltonian * h.bufferPart j m - h.bufferPart j m * h.hamiltonian =
       -((h.hamiltonian * h.leftPart j m - h.leftPart j m * h.hamiltonian) +
         (h.hamiltonian * h.rightPart j m - h.rightPart j m * h.hamiltonian)) := by
@@ -420,7 +418,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_commutator_bufferPart_le (h : Chai
     (j m : ℕ) :
     ‖h.hamiltonian * h.bufferPart j m - h.bufferPart j m * h.hamiltonian‖ ≤
       2 * (partCommutatorConst R * J ^ 2) := by
-  rw [h.commutator_bufferPart_eq hh hhJ, norm_neg]
+  rw [h.commutator_bufferPart_eq, norm_neg]
   refine (norm_add_le _ _).trans ?_
   linarith [h.norm_commutator_leftPart_le hh hhJ j m, h.norm_commutator_rightPart_le hh hhJ j m]
 
@@ -435,7 +433,7 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_commutator_bufferPart
       (h.hamiltonian * h.bufferPart j m - h.bufferPart j m * h.hamiltonian)
       (interval L (j - m - 2 * R) (j - m + R) ∪ interval L (j + m - R) (j + m + 2 * R)) := by
   change _ ∈ ManyBody.supportedOperators _ _
-  rw [h.commutator_bufferPart_eq hh hhJ]
+  rw [h.commutator_bufferPart_eq]
   exact neg_mem (add_mem
     ((h.isSupportedOn_commutator_leftPart hh hhJ j m).mono Finset.subset_union_left)
     ((h.isSupportedOn_commutator_rightPart hh hhJ j m).mono Finset.subset_union_right))

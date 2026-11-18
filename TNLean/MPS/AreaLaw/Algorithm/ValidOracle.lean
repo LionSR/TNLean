@@ -35,8 +35,6 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 219 and 484--487 (the solv
 polynomial-time solver of the convex programs), and the proof of Theorem 1, lines 652--678.
 -/
 
-open scoped Matrix.Norms.L2Operator
-
 open ManyBody (interval ChainInteraction)
 
 open Matrix Cslib
@@ -232,8 +230,7 @@ noncomputable def oracleSolver (o : {ι : Type} → LinearAlgebraQuery q ι → 
 /-- Under a valid oracle, step 2 computes the size-trimming selection of the oracle's nets
 and solver. -/
 theorem eval_sizeTrimmingProgram_of_valid (hv : IsValidOracle o) (L k b : ℕ)
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
-        (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
+    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
     FreeM.eval o (sizeTrimmingProgram L k b h hq Δ S) =
       haveI : NeZero q := ⟨by omega⟩
       h.sizeTrimmingSelectionWith hq Δ S (oracleNets o L k ((Δ / 169) ^ 2 / (2 * L)))
@@ -314,8 +311,7 @@ theorem eval_sweepStepProgram_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
 
 /-- The nets of a valid oracle are admissible. -/
 theorem isAdmissibleNet_oracleNets (hv : IsValidOracle o) {L k : ℕ} (hL : 0 < L)
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
-        {Δ : ℝ} (hΔ : 0 < Δ) :
+    (h : ChainInteraction L q 1) {Δ : ℝ} (hΔ : 0 < Δ) :
     h.IsAdmissibleNet Δ (oracleNets o L k ((Δ / 169) ^ 2 / (2 * L))) := by
   intro m _ Y hY
   have hη : 0 < (Δ / 169) ^ 2 / (2 * L) :=
@@ -324,8 +320,7 @@ theorem isAdmissibleNet_oracleNets (hv : IsValidOracle o) {L k : ℕ} (hL : 0 < 
 
 /-- The solver of a valid oracle is admissible. -/
 theorem isAdmissibleSolver_oracleSolver (hv : IsValidOracle o) {L k : ℕ}
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
-        (hq : 2 ≤ q) (Δ : ℝ) (b : ℕ)
+    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (b : ℕ)
     (S : Finset (LeftBlockVector L q k)) :
     haveI : NeZero q := ⟨by omega⟩
     h.IsAdmissibleSolver hq Δ S (oracleSolver o L k b S (leftCutOperator k (h.cutLeftPart k))
@@ -376,10 +371,7 @@ theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
           (leftCutOperator (i + 1) (chain.cutLeftPart (i + 1))) ((Delta / 169) ^ 2 / (2 * L)))) :=
     eval_sweepStepProgram_of_valid hv hq h hs h0 h1 Delta hi S
   have hnet := isAdmissibleNet_oracleNets hv (k := i + 1) hL chain hDelta
-  have hsol := isAdmissibleSolver_oracleSolver hv chain
-      (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-      (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hq Delta
-      (lvvSuccessiveBondBound q Delta L)
+  have hsol := isAdmissibleSolver_oracleSolver hv chain hq Delta (lvvSuccessiveBondBound q Delta L)
     (AreaLaw.extend (i + 1) S)
   have hcardF := hv.gaussianFilterFactors_card L (i + 1) (Nat.le_of_lt hq) h hs h0 h1 _ _ hc
     hDelta
@@ -396,10 +388,7 @@ theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
             huangFilterRankBound q (lvvSuccessiveError Delta) Delta L) *
           (lvvSizeTrimmingCoefficient q Delta * L ^ lvvSizeTrimmingDegree q Delta) :=
           Nat.mul_le_mul hcardF
-            (chain.card_sizeTrimmingSelectionWith_le_polynomial
-                (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-                (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
-                hL hq hDelta _ _
+            (chain.card_sizeTrimmingSelectionWith_le_polynomial hL hq hDelta _ _
               (card_oracleNets_le hv hL hq hDelta))
       _ = lvvSuccessiveCardBound q Delta L := by
         dsimp only [lvvSuccessiveCardBound]

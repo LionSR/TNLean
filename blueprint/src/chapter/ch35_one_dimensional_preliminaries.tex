@@ -25,10 +25,10 @@ is proved in Chapter~\ref{ch:one_dimensional_chain}.
         ManyBody.IsChainSupport.card_le,
         TNLean.MPS.AreaLaw.supportDim_le,
         TNLean.MPS.AreaLaw.one_le_supportDim,
-        TNLean.MPS.AreaLaw.ChainHamiltonian,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.operator,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.operator_isHermitian,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.zero,
+        ManyBody.ChainInteraction,
+        ManyBody.Interaction.hamiltonian,
+        ManyBody.Interaction.isHermitian_hamiltonian,
+        ManyBody.ChainInteraction.zero,
         TNLean.MPS.AreaLaw.cutLogBudget,
         TNLean.MPS.AreaLaw.one_le_cutLogBudget
     }
@@ -213,7 +213,7 @@ is proved in Chapter~\ref{ch:one_dimensional_chain}.
     \label{thm:chain_range_one_support_count}
     \lean{
         TNLean.MPS.AreaLaw.card_chainSupport_range_one_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_operator_le_of_range_one
+        ManyBody.ChainInteraction.norm_hamiltonian_le_of_range_one
     }
     \leanok
     \uses{def:chain_model}
@@ -235,7 +235,7 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
 
 \begin{lemma}[An upper bound on the gap of a range-one chain]
     \label{thm:chain_range_one_gap_upper}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.gap_le_four_mul_of_range_one}
+    \lean{ManyBody.ChainInteraction.gap_le_four_mul_of_range_one}
     \leanok
     \uses{def:chain_model}
     Let $L\ge1$, $q\ge2$ and $J\in\mathbb R$, and let $H=\sum_Xh_X$ be a
@@ -294,7 +294,7 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
 
 \begin{lemma}[The Hamiltonian at one cut]
     \label{thm:chain_range_one_cut_decomposition}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_cut_decomposition_of_range_one}
+    \lean{ManyBody.ChainInteraction.exists_cut_decomposition_of_range_one}
     \leanok
     \uses{def:chain_model}
     Let $H=\sum_Xh_X$ be a range-one Hamiltonian whose terms are positive
@@ -327,12 +327,12 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
 
 \begin{definition}[The left and boundary parts at a cut]
     \label{def:chain_gluing_hamiltonian_parts}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.cutLeftPart,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.cutBoundaryPart,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.cutLeftPart_add_cutBoundaryPart,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.cutLeftPart_isSupportedOn,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.cutBoundaryPart_isSupportedOn,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_cutBoundaryPart_le}
+    \lean{ManyBody.ChainInteraction.cutLeftPart,
+        ManyBody.ChainInteraction.cutBoundaryPart,
+        ManyBody.ChainInteraction.cutLeftPart_add_cutBoundaryPart,
+        ManyBody.ChainInteraction.cutLeftPart_isSupportedOn,
+        ManyBody.ChainInteraction.cutBoundaryPart_isSupportedOn,
+        ManyBody.ChainInteraction.norm_cutBoundaryPart_le}
     \leanok
     \uses{def:chain_model}
     Let $H=\sum_Xh_X$ be a range-one Hamiltonian on $L$ sites with
@@ -346,7 +346,7 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
 
 \begin{lemma}[Decomposition for boundary gluing]
     \label{thm:chain_gluing_hamiltonian_decomposition}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_gluing_decomposition_of_range_one}
+    \lean{ManyBody.ChainInteraction.exists_gluing_decomposition_of_range_one}
     \leanok
     \uses{def:chain_model}
     Let $H=\sum_Xh_X$ be a range-one Hamiltonian on $L$ sites with
@@ -379,8 +379,8 @@ comparison in~\cite[lines 291--293 and 509--515]{Landau2015Polynomial}.
 
 \begin{lemma}[Energy from ground-state overlap for a range-one chain]
     \label{thm:chain_range_one_overlap_energy}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_sub_le_of_overlap_of_range_one,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_le_of_overlap_div_of_range_one}
+    \lean{ManyBody.ChainInteraction.re_inner_sub_le_of_overlap_of_range_one,
+        ManyBody.ChainInteraction.re_inner_le_of_overlap_div_of_range_one}
     \leanok
     \uses{def:chain_model}
     Let $H$ be a range-one Hamiltonian on a chain of $L$ sites, with each

@@ -90,8 +90,7 @@ lemma _root_.ManyBody.ChainInteraction.swappedDoubled_hamiltonian
 have doubled energy and the original positive lower-gap bound.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
 theorem _root_.ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped
-    {L q R : ℕ} {J E₀ Δ : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    {L q R : ℕ} {E₀ Δ : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
     (D : Finset (Fin L)) {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 < Δ) :
