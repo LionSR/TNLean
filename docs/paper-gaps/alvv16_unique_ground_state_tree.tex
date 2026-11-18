@@ -122,9 +122,10 @@ $a=\lceil\log_{\mathcal D}(\mathcal D^2s)\rceil$, for which
 Now suppose $m$ is odd and
 $s<\mathcal D^m$. The node bound after $j$ rounds is $\mathcal D^{2j}s$, so
 the source's bound $\mathcal Ds^2$ requires $\mathcal D^{2j}\le\mathcal Ds$,
-while the sufficient error estimate above assumes $s\le\mathcal D^{2j}$: with
-$\mathcal D^{2j}<s$ the bound $(1024/9)\Delta^j\mathcal D^{8j}s^2$ is not
-controlled by $(\mathcal D^{12}\Delta)^j$. The two are incompatible, since
+while the error estimate above uses the sufficient condition
+$s^2\le\mathcal D^{4j}$ to bound $(1024/9)\Delta^j\mathcal D^{8j}s^2$
+by $(1024/9)(\mathcal D^{12}\Delta)^j$. The count condition and
+$s\le\mathcal D^{2j}$ are incompatible, since
 $\mathcal D^{2j}\le\mathcal Ds<\mathcal D^{m+1}$ forces $2j\le m-1$ and then
 $\mathcal D^{2j}\le\mathcal D^{m-1}<s$; for $m=1$ only $j=0$ remains, which
 does not improve the sample at

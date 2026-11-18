@@ -507,8 +507,9 @@ rounds is $D^{2j}s$, so $D^{2j}s\le Ds^2$ means $D^{2j}\le Ds$. The error
 estimate used here assumes $s\le D^{2j}$: a merged space has dimension
 $Q\le(D^{2j}s)^2$, a sample of dimension $\min(s,Q)$ overlaps the target by at least
 $3/(32D^{4j}s)$, and the error after $j$ rounds is at most
-$(1024/9)\Delta^jD^{8j}s^2$, which the budget $D^{12}\Delta\le10^{-5}$
-bounds by $(1024/9)(D^{12}\Delta)^j$ only when $s^2\le D^{4j}$. If $s<D^c$,
+$(1024/9)\Delta^jD^{8j}s^2$. This proof uses the sufficient condition
+$s^2\le D^{4j}$ to bound this by $(1024/9)(D^{12}\Delta)^j$, then applies
+the budget $D^{12}\Delta\le10^{-5}$. If $s<D^c$,
 the two conditions are incompatible: $D^{2j}\le Ds<D^{c+1}$ gives
 $2j\le c$, hence $2j\le c-1$ and $D^{2j}\le D^{c-1}<s$; in particular $c=1$
 leaves only $j=0$, with no improvement at
