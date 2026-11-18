@@ -47,7 +47,7 @@ to be Hermitian. No ground-state or gap hypothesis is needed.
 
 Source: polynomial-PEPS `eq:model` and `02-information.tex`, lines 416–424,
 where pairing the two replicas at each site preserves range one. -/
-theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonian
+theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_planeInteraction
     {L q : ℕ} {J : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
         (hhJ : ∀ i, ‖h.term i‖ ≤ J) (hJ : 0 ≤ J)
     (R : Finset (SquareLatticeVertex L L)) :

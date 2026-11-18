@@ -118,7 +118,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
   classical
   intro L h hh hhJ R C₀ hRC Q P s g p Λ a e K F K' boundary Z W V l B
   have hC : 0 < squareLocalizationPrefactor := squareLocalizationPrefactor_pos
-  obtain ⟨gH, hgH, hgHJ, _, hgOperator⟩ := h.exists_swapped_doubled_localHamiltonian hh hhJ hJ R
+  obtain ⟨gH, hgH, hgHJ, _, hgOperator⟩ := h.exists_swapped_doubled_planeInteraction hh hhJ hJ R
   have hK' : gH.hamiltonian = K' := by
     simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
       Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using! hgOperator

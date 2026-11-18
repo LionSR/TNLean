@@ -129,7 +129,7 @@ special structure is not stated with it.
 
 | Axis | Required generality | What is hard-coded today |
 |---|---|---|
-| Sites | any finite type `V` | `Fin N` (389 of the 1,541 declarations of `TNLean/Circuit`, 1,304 of the 4,371 of `MPS/AreaLaw`), `Finset (ℤ × ℤ)` (1,024 of the 3,425 declarations of `PEPS/AreaLaw`, and `ManyBody.PlaneInteraction` itself), `Finset ℤ` |
+| Sites | any finite type `V` | `Fin N` (389 of the 1,541 declarations of `TNLean/Circuit`, 1,304 of the 4,371 of `MPS/AreaLaw`), `Finset (ℤ × ℤ)` (1,024 of the 3,425 declarations of `PEPS/AreaLaw`, and `Lattice.LocalHamiltonian` itself), `Finset ℤ` |
 | Local spaces | any finite basis type at each site, `X : V → Type` | one `Fin d` for all sites in TNLean; `Fin (n v)` in QICLean. Composite local spaces are then written `Fin (d * a)`, `Fin (d ^ k)`, `Fin (a + b)` and unpacked by index arithmetic: 170 declarations in `Circuit`, 226 in `MPS/Preparation`, 285 in `MPS/MPU`, 214 in `MPS/AreaLaw` |
 | Regions | any finite set of sites, as one type `Finset V` | `Set` in one support notion, `Finset` in the other |
 | Geometry | any family of cells, any graph | the ring: 130 declarations of `Circuit` and every channel, measurement and adaptive model; the open chain for gate counts |
@@ -483,10 +483,11 @@ Sites layer has. It holds three unrelated things:
   declarations.
 - `TreeBasisCounterexample`.
 
-The structure `ManyBody.PlaneInteraction`, described as shared by the one- and
+The structure `Lattice.LocalHamiltonian`, described as shared by the one- and
 two-dimensional area laws, is defined on `Λ : Finset (ℤ × ℤ)`. The chain uses
-`ManyBody.ChainInteraction` and `ManyBody.DomainInteraction` in `MPS/AreaLaw`, and the squares
-and rectangles of `PEPS` use two more structures. Namespaces vary inside the
+`ChainHamiltonian` and `DomainHamiltonian` in `MPS/AreaLaw`, and the squares
+and rectangles of `PEPS` use two more structures. (Item 3H.2 replaced all five by
+instances of QICLean's `ManyBody.Interaction`.) Namespaces vary inside the
 directory (`TNLean.Lattice`, `TNLean.Lattice.PartyCircuit`,
 `Lattice.PartyCircuit`, and bare `Word`, `EffectCircuit`).
 
@@ -572,12 +573,12 @@ Wave 3, two tracks that share no file:
 
 - **3H.1** (QICLean). `Interaction`; the Hamiltonian part of `Lattice` (127
   modules) restated on it and moved.
-- **3H.2** (TNLean, pin move 2). `ManyBody.ChainInteraction`, `ManyBody.DomainInteraction`,
-  `ManyBody.PlaneInteraction`, `SquareHamiltonian` and `RectangularHamiltonian`
-  become instances; `Lattice/RegionalEntropyBridge` is deleted. Partly done:
-  F8 phase 2, in the third pin move (#10905), replaced the chain, domain and
-  lattice Hamiltonian structures by the three interactions;
-  `RectangularHamiltonian` and `Lattice/RegionalEntropyBridge` remain.
+- **3H.2** (TNLean, pin move 2; done in #10905 by F8 phase 2 and its follow-up
+  #10910, apart from the deletion of `Lattice/RegionalEntropyBridge`). `ChainHamiltonian`, `DomainHamiltonian`,
+  `Lattice.LocalHamiltonian`, `SquareHamiltonian` and `RectangularHamiltonian`
+  become instances (`ManyBody.ChainInteraction`, `ManyBody.DomainInteraction`,
+  `ManyBody.PlaneInteraction`, `ManyBody.SquareInteraction` and
+  `ManyBody.RectangleInteraction`); `Lattice/RegionalEntropyBridge` is deleted.
 - **3A** (both). The generic modules of `TNLean/Algebra` move to QICLean,
   merged into topical modules: 40 used by two or more directories, up to 131
   used by one; 44 used nowhere outside the directory are reviewed for deletion;

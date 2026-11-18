@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.GaussianFilter.LocalizationParameters
-import TNLean.PEPS.Approximation.SwappedLocalHamiltonian
+import TNLean.PEPS.Approximation.SwappedPlaneInteraction
 import TNLean.Lattice.RegionalReset
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 

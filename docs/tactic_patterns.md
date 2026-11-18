@@ -184,7 +184,7 @@ abstracted — record why, so it is not re-proposed).
 
 ### Left compressed Hamiltonian norm bound — promoted (2026-11-04)
 
-- **Pattern:** From `h.operator = HL + B`, `‖h.operator‖ ≤ 2L`, and `‖B‖ ≤ 2L`,
+- **Pattern:** From `h.hamiltonian = HL + B`, `‖h.hamiltonian‖ ≤ 2L`, and `‖B‖ ≤ 2L`,
   derive `‖HL‖ ≤ 4L` and pass the bound through restriction to the left cut,
   tensoring with the bond identity, and isometric compression.
 - **Helper:** `ManyBody.ChainInteraction.leftObjective_norm_bounds` in
