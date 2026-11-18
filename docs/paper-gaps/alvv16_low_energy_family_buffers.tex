@@ -185,9 +185,10 @@ No separate short-region matrix-unit construction is introduced.
 
 The cap is absorbed explicitly. Put $M=\max\{1,\eta_{\mathrm{LD}}/6\}$.
 Since $w\le\eta_{\mathrm{LD}}/6$, one has
-\begin{align*}
+\begin{align}
     1/g&\le M/w,& \log(1/g)&=\max\{\log(1/w),0\}.
-\end{align*}
+    \label{eq:ld_cap_absorption}
+\end{align}
 For $K=22(A+1)[6+2\log(A+1)]$, the actual joint count therefore obeys
 \begin{align}
     \log D\le 3KM\frac{\log L}{\mu}
@@ -205,10 +206,11 @@ that error is distinct from the improving-family parameter $\Delta$.
 For the dyadic dimension argument, the numerical count base may be chosen
 larger than the physical local dimension before choosing the degree.
 For an integer $m\ge q$, set
-\begin{align*}
+\begin{align}
  u&=1+\log m+\log(1/g),&
  \ell&=\lceil Au^2/g\rceil,& D&=(m\ell^2)^{22\ell}.
-\end{align*}
+    \label{eq:ld_common_count_parameters}
+\end{align}
 The scalar constant may additionally satisfy $A\ge100$.
 The physical filter is constructed at this degree on the original
 $q$-dimensional chain. Its actual count is at most $D^2$, and the scalar
