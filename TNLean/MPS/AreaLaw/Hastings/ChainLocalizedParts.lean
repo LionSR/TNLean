@@ -258,7 +258,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_bufferPart_su
 /-- The localized left part `M_L` is Hermitian.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_leftPart_localized (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hh : ∀ X, (h.term X).IsHermitian)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
     (h.leftPart j m + ManyBody.regionExpectation K
       (gaussianFilteredTerm q' ΔE h.hamiltonian (h.leftPart j m) - h.leftPart j m)).IsHermitian :=
@@ -268,7 +268,7 @@ theorem _root_.ManyBody.ChainInteraction.isHermitian_leftPart_localized (h : Cha
 /-- The localized right part `M_R` is Hermitian.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_rightPart_localized
-    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
     (h.rightPart j m + ManyBody.regionExpectation K
       (gaussianFilteredTerm q' ΔE h.hamiltonian (h.rightPart j m) - h.rightPart j m)).IsHermitian :=
@@ -278,7 +278,7 @@ theorem _root_.ManyBody.ChainInteraction.isHermitian_rightPart_localized
 /-- The localized buffer part `M_B` is Hermitian.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_bufferPart_localized
-    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
     (h.bufferPart j m + ManyBody.regionExpectation K
       (gaussianFilteredTerm q' ΔE h.hamiltonian (h.bufferPart j m) -

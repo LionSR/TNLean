@@ -88,9 +88,7 @@ theorem cost_sampledSweepStepProgram_le_of_valid (hv : IsValidOracle o) (hL : 0 
   have hcard₃ : S₃.card ≤ S₂.card := card_bondTrimSet_le hi m' S₂
   have hF : F.card ≤ ℓ * D := (hv.sampledFactors L (i + 1) h E₀ ℓ m D I hrank).2.1
   have h₁ := cost_extensionProgram_le_of_valid (o := o) L (i + 1) b S
-  have h₂ := cost_sizeTrimmingProgram_le_of_valid hv L (i + 1) b chain
-      (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
-      (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hL hq hΔ S₁
+  have h₂ := cost_sizeTrimmingProgram_le_of_valid hv L (i + 1) b chain hL hq hΔ S₁
   have h₃ := cost_bondTrimmingProgram_le_of_valid (o := o) L (i + 1) hi b m' S₂
   have h₅ := cost_errorReductionProgram_le_of_valid (o := o) L (i + 1) D (max 1 m') F S₃
   dsimp only at h₂

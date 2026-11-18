@@ -204,8 +204,7 @@ theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelectionWith_le_polyn
 /-- The selection has explicit polynomial cardinality in the chain length, with coefficient
 and degree independent of that length. LVV13, `algo53.tex`, Claim `c:2`, lines 520–527. -/
 theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomial {L q k : ℕ}
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
-        (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
+    (h : ChainInteraction L q 1) (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q k)) :
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c

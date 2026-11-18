@@ -31,6 +31,8 @@ Source: the one-dimensional note, Part II, `prop:sweep`, lines 350–396 and
 Theorem 5.2, `04-compression.tex`, lines 137–175.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep

@@ -29,8 +29,6 @@ not the printed quantitative bounds; see `docs/paper-gaps/lvv13_constant_bond.te
 <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
 -/
 
-open scoped Matrix.Norms.L2Operator
-
 open ManyBody (interval ChainInteraction)
 
 open Matrix Cslib
@@ -44,8 +42,7 @@ open LinearAlgebraQuery
 
 /-- Step 2 under a valid oracle costs at most the honest budget. -/
 theorem cost_sizeTrimmingProgram_le_of_valid (hv : IsValidOracle o) (L k b : ℕ)
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
-        (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
+    (h : ChainInteraction L q 1) (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q k)) :
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
@@ -163,9 +160,7 @@ theorem cost_sweepStepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL :
   have hcardF : F.card ≤ E * Rk :=
     hv.gaussianFilterFactors_card L (i + 1) (Nat.le_of_lt hq) h hs h0 h1 _ _ hc hDelta
   have h₁ := cost_extensionProgram_le_of_valid (o := o) L (i + 1) b S
-  have h₂ := cost_sizeTrimmingProgram_le_of_valid hv L (i + 1) b chain
-      (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-      (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hL hq hDelta S₁
+  have h₂ := cost_sizeTrimmingProgram_le_of_valid hv L (i + 1) b chain hL hq hDelta S₁
   have h₃ := cost_bondTrimmingProgram_le_of_valid (o := o) L (i + 1) hi b m S₂
   have h₅ := cost_errorReductionProgram_le_of_valid (o := o) L (i + 1) Rk (max 1 m) F S₃
   dsimp only at h₂

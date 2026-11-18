@@ -289,7 +289,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   have hML : ML.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPL KL
   have hMR : MR.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPR KR
   have hsL : Entropy.IsSupportedOn (n := fun _ ↦ q) ML (leftBlock L c) :=
-    h.isSupportedOn_localizedPart_leftPart Ω s ΔE hmk
+    h.isSupportedOn_localizedPart_leftPart hh Ω s ΔE hmk
   have hsR : Entropy.IsSupportedOn (n := fun _ ↦ q) MR (leftBlock L c)ᶜ :=
     h.isSupportedOn_localizedPart_rightPart hh Ω s ΔE hmk
   let σ₀ : Entropy.SiteConfig (fun _ : Fin L ↦ q) := fun _ ↦ ⟨0, NeZero.pos q⟩
@@ -312,7 +312,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   have hE : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω := by
     rw [← coe_toEuclideanCLM_eq_toEuclideanLin]
     exact ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _)
-  have hsum := h.groundCentered_parts_sum_of_eigen hh hhJ hΩ hE c m
+  have hsum := h.groundCentered_parts_sum_of_eigen hΩ hE c m
   set DL := gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω PL) - groundCentered Ω PL
   set DR := gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω PR) - groundCentered Ω PR
   have hrem : h.hamiltonian - (E₀ : ℂ) • 1 - (ML + MR) =
@@ -365,7 +365,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
     rw [hrem]
     refine (norm_sub_le _ _).trans ?_
     refine (add_le_add (norm_sub_le _ _) le_rfl).trans ?_
-    have hB := h.norm_groundCentered_bufferPart_le hh hhJ hJ hΩ c m
+    have hB := h.norm_groundCentered_bufferPart_le hhJ hJ hΩ c m
     have hL := hD PL hPL (h.norm_commutator_leftPart_le hh hhJ c m) KL
     have hR := hD PR hPR (h.norm_commutator_rightPart_le hh hhJ c m) KR
     linarith

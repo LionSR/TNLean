@@ -23,6 +23,8 @@ Source: one-dimensional note, Part II, proof of Theorem B,
 part2b_mps_protocol.tex:587–614 and order of constants:626–632.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 namespace TNLean.MPS.AreaLaw.ChainSweep
 open QuantumCircuit TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet

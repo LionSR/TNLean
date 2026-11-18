@@ -182,9 +182,7 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
   have hT : IsViableMPS Γ (lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ) m'
       (1 / 2) (bondTrimSet hi m' T₀) :=
     ⟨(card_bondTrimSet_le hi m' T₀).trans
-      (chain.card_sizeTrimmingSelection_le_polynomial
-          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
-          (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hL hq hΔ _),
+      (chain.card_sizeTrimmingSelection_le_polynomial hL hq hΔ _),
       fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m' T₀ hv,
       chain.isViable_bondTrimSet_sizeTrimmingSelection
           (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)

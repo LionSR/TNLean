@@ -151,8 +151,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_size_bond_trimmed_family_polynom
         IsViable Γ (1 / 2) (T : Set (LeftBlockVector L q i)) := by
   intro c D p A C m
   exact ⟨bondTrimSet hi m (h.sizeTrimmingSelection hq Δ S),
-    (card_bondTrimSet_le hi m _).trans
-        (h.card_sizeTrimmingSelection_le_polynomial hh hhJ hL hq hΔ S),
+    (card_bondTrimSet_le hi m _).trans (h.card_sizeTrimmingSelection_le_polynomial hL hq hΔ S),
     fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m _ hv,
     fun E₀ Γ hΩ hgap hspan hviable ↦
       h.isViable_bondTrimSet_sizeTrimmingSelection hh hhJ hpos hL hq hi hΔ S E₀ Γ hΩ

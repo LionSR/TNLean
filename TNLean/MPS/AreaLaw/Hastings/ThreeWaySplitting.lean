@@ -357,7 +357,7 @@ centered parts, each of expectation zero in `Ψ₀`, sum to `H - E₀ 1`. With t
 convention that the ground energy is zero, this is `H = H_L + H_B + H_R` for the centered
 parts. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 766–767 and 779–782. -/
 theorem _root_.ManyBody.ChainInteraction.groundCentered_parts_sum_of_eigen
-    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (h : ChainInteraction L q R)
     {Ψ : EuclideanSpace ℂ (Fin L → Fin q)} (hΨ : ‖Ψ‖ = 1) {E₀ : ℝ}
     (hE : toEuclideanLin h.hamiltonian Ψ = (E₀ : ℂ) • Ψ) (j m : ℕ) :
     groundCentered Ψ (h.leftPart j m) + groundCentered Ψ (h.bufferPart j m) +
@@ -378,7 +378,7 @@ theorem _root_.ManyBody.ChainInteraction.isGapped_groundCentered_parts_sum
         groundCentered Ω (h.rightPart j m)) 0 = Submodule.span ℂ {Ω} := by
   have hE : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
     ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
-  rw [h.groundCentered_parts_sum_of_eigen hh hhJ hΩ hE]
+  rw [h.groundCentered_parts_sum_of_eigen hΩ hE]
   exact ⟨hΩ, hgap.sub_smul_one_self, (ManyBody.groundSpace_sub_smul_one_self _ _).trans hspan⟩
 
 /-- The left part is supported on the sites `i < j - m`, at distance at least `m` from the
@@ -414,7 +414,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_bufferPart_le (h : ChainInteractio
 /-- The centered buffer part has norm at most `4 (m + R) 2^{2R+1} J`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 777 and 781–782. -/
 theorem _root_.ManyBody.ChainInteraction.norm_groundCentered_bufferPart_le
-    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (h : ChainInteraction L q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (hJ : 0 ≤ J) {Ψ : EuclideanSpace ℂ (Fin L → Fin q)} (hΨ : ‖Ψ‖ = 1) (j m : ℕ) :
     ‖groundCentered Ψ (h.bufferPart j m)‖ ≤ 2 * ((2 * (m + R) * 2 ^ (2 * R + 1) : ℕ) * J) :=
   (norm_groundCentered_le _ hΨ).trans

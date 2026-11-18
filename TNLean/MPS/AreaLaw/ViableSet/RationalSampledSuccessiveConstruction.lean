@@ -139,9 +139,7 @@ theorem exists_rational_sampled_viable_successor_polynomial
   let T₀ := chain.sizeTrimmingSelection hq Δ (AreaLaw.extend (n + 1) S)
   have htrim : IsViableMPS Γ (F * L ^ k) m (1 / 2) (bondTrimSet hi m T₀) :=
     ⟨(card_bondTrimSet_le hi m T₀).trans
-      (chain.card_sizeTrimmingSelection_le_polynomial
-          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
-          (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) (by omega) hq hΔ _),
+      (chain.card_sizeTrimmingSelection_le_polynomial (by omega) hq hΔ _),
       fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m T₀ hv,
       chain.isViable_bondTrimSet_sizeTrimmingSelection
           (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
