@@ -1,0 +1,21 @@
+{
+  "source_sha": "6b7fb2e27dbc6856091e593e4226d350403beb8a",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "build_commands_passed": 9,
+  "root_strict_passed": 1,
+  "build_seconds": 48.06529377300467,
+  "strict_seconds": 4.007865156992921,
+  "wall_seconds": 52.07315892999759,
+  "disk_free_bytes": 3447046144,
+  "production_source_edits": 0,
+  "original_209_targets_repeated": 0,
+  "combined_213_manifest_passed_build_and_strict": 210,
+  "combined_remaining_roots": [
+    "TNLean.MPS",
+    "TNLean.PEPS",
+    "TNLean.QCA"
+  ],
+  "old_timeout_evidence": "unchanged in 2026-11-18_pin729_other_validation",
+  "QCA_work": "planning only; no QCA or MPS target executed",
+  "active_jobs": 0
+}
