@@ -1,0 +1,34 @@
+{
+  "head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9",
+  "cases": {
+    "TNLean/Lattice/LocalHamiltonian.lean": [
+      "scripts/generic_gap_boundary_regression.lean",
+      "scripts/zero_gap_tn_wrappers_regression.lean",
+      "scripts/range_square_zero_gap_regression.lean",
+      "scripts/box_supremum_zero_gap_regression.lean"
+    ],
+    "TNLean/MPS/AreaLaw/Hamiltonian.lean": [
+      "scripts/ground_state_gap_scope_regression.lean",
+      "scripts/zero_gap_tn_wrappers_regression.lean"
+    ],
+    "TNLean/PEPS/AreaLaw/RectangularHamiltonian.lean": [
+      "scripts/zero_gap_tn_wrappers_regression.lean",
+      "scripts/range_square_zero_gap_regression.lean"
+    ],
+    "scripts/ground_state_gap_scope_regression.lean": [
+      "scripts/ground_state_gap_scope_regression.lean"
+    ],
+    "scripts/generic_gap_boundary_regression.lean": [
+      "scripts/generic_gap_boundary_regression.lean"
+    ],
+    "scripts/zero_gap_tn_wrappers_regression.lean": [
+      "scripts/zero_gap_tn_wrappers_regression.lean"
+    ],
+    "scripts/range_square_zero_gap_regression.lean": [
+      "scripts/range_square_zero_gap_regression.lean"
+    ],
+    "scripts/box_supremum_zero_gap_regression.lean": [
+      "scripts/box_supremum_zero_gap_regression.lean"
+    ]
+  }
+}

@@ -21,10 +21,12 @@ Six shared owner files have been ported from the read-only merge result:
 
 The three bundled structures are removed; no old-owner alias, operator alias,
 or second support/evolution/ground-state implementation is introduced. QIC's
-existing Interaction is the sole object. This is an intentionally incomplete
-source checkpoint: 227 delta files have NOT been ported. Existing consumers and
-fixtures still referring to removed APIs must be migrated before the repository
-can compile. Do not interpret a clean git status/diff check as Lean validation.
+existing Interaction is the sole object. The allocated MPS, PEPS and documentation
+source lanes have now been received, including all five preserved fixtures.
+The original 227-unported source gate is superseded by the combined audit in
+`../2026-11-18_interaction_combined_checks/README.md`. Verification remains
+incomplete: 6 shared, 8 MPS and 17 PEPS files and five fixtures passed the
+recorded direct Lean checks; this is not a whole-library pass.
 
 The auto-merged rectangular projector-gap theorem retained old call arity and
 .operator references despite having no textual conflict. These were repaired

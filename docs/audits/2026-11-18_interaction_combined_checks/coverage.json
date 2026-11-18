@@ -1,0 +1,1594 @@
+[
+  {
+    "lane": "shared",
+    "path": "TNLean/Lattice/LocalHamiltonian.lean",
+    "compile": "PASS exact source",
+    "compile_head": "b2c72008326f3166d3bcdc9e79013443142b0aa8",
+    "strict": "PASS exact source",
+    "strict_head": "b2c72008326f3166d3bcdc9e79013443142b0aa8"
+  },
+  {
+    "lane": "shared",
+    "path": "TNLean/Lattice/MarginalTails.lean",
+    "compile": "PASS exact source",
+    "compile_head": "b992c791dc35580cb84e1161150b98b9963284bb",
+    "strict": "PASS exact source",
+    "strict_head": "b992c791dc35580cb84e1161150b98b9963284bb"
+  },
+  {
+    "lane": "shared",
+    "path": "TNLean/Lattice/ProductForm.lean",
+    "compile": "PASS exact source",
+    "compile_head": "b992c791dc35580cb84e1161150b98b9963284bb",
+    "strict": "PASS exact source",
+    "strict_head": "b992c791dc35580cb84e1161150b98b9963284bb"
+  },
+  {
+    "lane": "shared",
+    "path": "TNLean/MPS/AreaLaw/ComponentReduction.lean",
+    "compile": "PASS exact source",
+    "compile_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec",
+    "strict": "PASS exact source",
+    "strict_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec"
+  },
+  {
+    "lane": "shared",
+    "path": "TNLean/MPS/AreaLaw/Hamiltonian.lean",
+    "compile": "PASS exact source",
+    "compile_head": "b2c72008326f3166d3bcdc9e79013443142b0aa8",
+    "strict": "PASS exact source",
+    "strict_head": "b2c72008326f3166d3bcdc9e79013443142b0aa8"
+  },
+  {
+    "lane": "shared",
+    "path": "TNLean/PEPS/AreaLaw/RectangularHamiltonian.lean",
+    "compile": "PASS exact source",
+    "compile_head": "b992c791dc35580cb84e1161150b98b9963284bb",
+    "strict": "PASS exact source",
+    "strict_head": "b992c791dc35580cb84e1161150b98b9963284bb"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/Cost.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SampledCost.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SweepProgram.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleCost.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampledCost.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/AreaLaw.lean",
+    "compile": "PASS exact source",
+    "compile_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec",
+    "strict": "PASS exact source",
+    "strict_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/BandInformation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/BoundaryGap.lean",
+    "compile": "PASS exact source",
+    "compile_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec",
+    "strict": "PASS exact source",
+    "strict_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/BufferDiscount.lean",
+    "compile": "PASS exact source",
+    "compile_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec",
+    "strict": "PASS exact source",
+    "strict_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/DomainInteractionBudget.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/DomainIntervalNeighborhoodEntropy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/DomainLogarithmicSeparation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/DomainPartialSwap.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/DoubledHamiltonian.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/GluingHamiltonian.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/BootstrapLemma.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/BoundaryFactorization.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/BoundaryLocalization.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/ChainLocalizedParts.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/CorrelationLemma.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/CutoffPair.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/LemmaOneConstant.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/PartCommutators.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/PrintedAreaLaw.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/PrintedAreaLawSource.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/ProjectorFactorization.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/ProjectorFactorizationScaling.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/RelentGapped.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/SourceConsequences.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/SourceLength.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean",
+    "compile": "PASS exact source",
+    "compile_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec",
+    "strict": "PASS exact source",
+    "strict_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Huang/PositiveChainHamiltonian.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/InformationReset.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/InteractionBudget.lean",
+    "compile": "PASS exact source",
+    "compile_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec",
+    "strict": "PASS exact source",
+    "strict_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/LogarithmicAreaLaw.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/LogarithmicSeparation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/MPSApproximation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/OverlapEnergy.lean",
+    "compile": "PASS exact source",
+    "compile_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec",
+    "strict": "PASS exact source",
+    "strict_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/PartialSwap.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ProtocolMPSApproximation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ProtocolPhysicalPreparation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ProtocolStageInformation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ProtocolStagePhysicalCircuits.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ProtocolUniformPreparation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/RangeOneCut.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/RangeOneSupport.lean",
+    "compile": "PASS exact source",
+    "compile_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec",
+    "strict": "PASS exact source",
+    "strict_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/RenyiEntropy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/SharpPhysicalCompression.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/SnakeGridApproximation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/SnakeGridAreaLaw.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/StripApproximation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/StripBufferDiscount.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/StripGeometry.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/SwappedDoubledHamiltonian.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/BondTrimmingReference.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ConstantRankCut.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/RationalBondTrimming.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/RationalSampledSuccessiveConstruction.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SampledSuccessiveConstruction.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeBondTrimming.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/PowerIteration.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/Selection.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/UniformCertificates.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SuccessiveConstruction.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SuccessiveStep.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/WindowCounting.lean",
+    "compile": "PASS exact source",
+    "compile_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec",
+    "strict": "PASS exact source",
+    "strict_head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/CellConditionalInformation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/CellConditionalInformationFromGap.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/CoarseInformation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/CoarseInformationFromGap.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/NestedPatchEnergy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/NestedPatchMarginalCloseness.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/PinnedZeroFloorOptimizer.lean",
+    "compile": "PASS exact source",
+    "compile_head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9",
+    "strict": "PASS exact source",
+    "strict_head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/RangeAngularInformation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/RangeInformationReset.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/RangeResetUnitary.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/RangeSquareGroundState.lean",
+    "compile": "PASS exact source",
+    "compile_head": "2bed3635b38509b9be16a038373a4f390ab2fd4e",
+    "strict": "PASS exact source",
+    "strict_head": "2bed3635b38509b9be16a038373a4f390ab2fd4e"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean",
+    "compile": "PASS exact source",
+    "compile_head": "2bed3635b38509b9be16a038373a4f390ab2fd4e",
+    "strict": "PASS exact source",
+    "strict_head": "4d517117a18f34d5735cfccd80a6e465c4b6f4da"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SquareInteractionTerms.lean",
+    "compile": "PASS exact source",
+    "compile_head": "2bed3635b38509b9be16a038373a4f390ab2fd4e",
+    "strict": "PASS exact source",
+    "strict_head": "2bed3635b38509b9be16a038373a4f390ab2fd4e"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean",
+    "compile": "PASS exact source",
+    "compile_head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9",
+    "strict": "PASS exact source",
+    "strict_head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SupportedPhysicalBufferGaussian.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SwappedDoubledEdgeBoundary.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SwappedLocalHamiltonian.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SwappedSquareHamiltonianInteraction.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelPoissonGrowth.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelPoissonThinning.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean",
+    "compile": "PASS exact source",
+    "compile_head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9",
+    "strict": "PASS exact source",
+    "strict_head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelWeightedRow.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeExcitedDecay.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeRestoring.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/TypicalProjectors.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean",
+    "compile": "PASS exact source",
+    "compile_head": "a3a85244f80236fd3ef7be255cd84f12290edadc",
+    "strict": "PASS exact source",
+    "strict_head": "a3a85244f80236fd3ef7be255cd84f12290edadc"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/AmplificationProof.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/AreaLawElementaryConstant.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/AreaLawTheorem.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/BoundaryTheorem.lean",
+    "compile": "PASS exact source",
+    "compile_head": "a3a85244f80236fd3ef7be255cd84f12290edadc",
+    "strict": "PASS exact source",
+    "strict_head": "a3a85244f80236fd3ef7be255cd84f12290edadc"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/CollarInformation.lean",
+    "compile": "PASS exact source",
+    "compile_head": "a3a85244f80236fd3ef7be255cd84f12290edadc",
+    "strict": "PASS exact source",
+    "strict_head": "a3a85244f80236fd3ef7be255cd84f12290edadc"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/GraphPropagation.lean",
+    "compile": "PASS exact source",
+    "compile_head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9",
+    "strict": "PASS exact source",
+    "strict_head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean",
+    "compile": "PASS exact source",
+    "compile_head": "4d517117a18f34d5735cfccd80a6e465c4b6f4da",
+    "strict": "PASS exact source",
+    "strict_head": "4d517117a18f34d5735cfccd80a6e465c4b6f4da"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/InitialBuffer.lean",
+    "compile": "PASS exact source",
+    "compile_head": "2bed3635b38509b9be16a038373a4f390ab2fd4e",
+    "strict": "PASS exact source",
+    "strict_head": "a3a85244f80236fd3ef7be255cd84f12290edadc"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/InitialBufferReal.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/InitialRoundedCollarEntropy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/InitialWeakRectangleShellEntropy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/LatticeConstraints.lean",
+    "compile": "PASS exact source",
+    "compile_head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9",
+    "strict": "PASS exact source",
+    "strict_head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/RectangularSpecialization.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/RegionOperatorLocalization.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/SafeRectangleAreaLaw.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyBound.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyCoefficients.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyDecay.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEntropySum.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeParameterBound.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeSelectionBound.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualEnergyTerms.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualGlobalReplicaEnergy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualMarginalTails.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualReplicaDefect.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoughLower.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoughLowerPrevector.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoundEntropy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoundTransport.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanMeasures.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanTransportInputs.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedChargeDensityEnergy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedChargeEnergy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedSharpComparison.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpComparison.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpLower.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpLowerPrevector.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualTransportEstimates.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean",
+    "compile": "PASS exact source",
+    "compile_head": "4d517117a18f34d5735cfccd80a6e465c4b6f4da",
+    "strict": "PASS exact source",
+    "strict_head": "4d517117a18f34d5735cfccd80a6e465c4b6f4da"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/GenericChargeEnergy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/GenericSelectedChargeEnergy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalScanner.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalTemplateInformation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ScanTruncationInputs.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceActualInformation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceBootstrapEntropy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceChargeSelection.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceFinalInformation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceRoughSelection.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceRoundedInformation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedDensity.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedEnergy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpComparison.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpDensity.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpEnergy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceStatusMarginalMoments.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpMoments.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpUpper.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/StatusMarginalMoments.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetNormAttachment.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetStatusMoments.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/TargetTypicalWindow.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/SupportedGaussianIntegral.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/TailParameter.lean",
+    "compile": "PASS exact source",
+    "compile_head": "2bed3635b38509b9be16a038373a4f390ab2fd4e",
+    "strict": "PASS exact source",
+    "strict_head": "2bed3635b38509b9be16a038373a4f390ab2fd4e"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/TheoremStatements.lean",
+    "compile": "PASS exact source",
+    "compile_head": "2bed3635b38509b9be16a038373a4f390ab2fd4e",
+    "strict": "PASS exact source",
+    "strict_head": "2bed3635b38509b9be16a038373a4f390ab2fd4e"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/VertexBoundaryCorollaries.lean",
+    "compile": "NOT VERIFIED",
+    "compile_head": null,
+    "strict": "NOT VERIFIED",
+    "strict_head": null
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/ZeroBoundary.lean",
+    "compile": "PASS exact source",
+    "compile_head": "2bed3635b38509b9be16a038373a4f390ab2fd4e",
+    "strict": "PASS exact source",
+    "strict_head": "2bed3635b38509b9be16a038373a4f390ab2fd4e"
+  }
+]
