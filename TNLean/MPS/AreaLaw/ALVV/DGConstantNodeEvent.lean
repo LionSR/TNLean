@@ -24,6 +24,8 @@ explicit scalar tail and filter conditions, and `min γ 1` in place of `γ`; the
 children. See `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open MeasureTheory
