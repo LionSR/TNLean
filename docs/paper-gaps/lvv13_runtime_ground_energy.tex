@@ -1866,10 +1866,14 @@ For an actual operation list of length \(N\), maximum operand-and-result
 height at most \(2^B\) gives total schoolbook charge at most
 \(8N(B+2)^2\), by
 \leanid{TNLean.MPS.AreaLaw.RationalArithmeticTrace.schoolbookCharge\_le\_of\_maxHeight\_le\_two\_pow}.
-The remaining composition must bound all operations in the full
-coefficient record from the stored-row and partial-sum estimates, and
-extend the same recorded evaluation to weighted overlaps and local
-energy sums. The existing schoolbook charge is a mathematical cost
+For cap and tensor parameter coordinates of height at most \(2^h\), let
+\(b=2hnqD^2\) and \(k=(b+D+h+1)(n+1)\). The full coefficient record
+has schoolbook charge at most \(8(8nD^2+6)(4k+3)^2\), by
+\leanid{TNLean.MPS.AreaLaw.RationalContractionTrace.coefficient\_schoolbookCharge\_le}.
+At each site all partial sums use the same denominator as the completed
+row. The bound includes the final scalar cap and the empty chain.
+The corresponding recorded evaluations for weighted overlaps and local
+energy sums remain to be constructed. The existing schoolbook charge is a mathematical cost
 model; it is not a proved runtime bound for integer multiplication,
 division, greatest common divisors, or reduced-rational normalization.
 Those implementation bounds and the numerical routines that construct
