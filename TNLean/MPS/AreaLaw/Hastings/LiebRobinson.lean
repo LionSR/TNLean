@@ -51,10 +51,8 @@ theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_numeric
       4 * (X.card : ℝ) * ‖A‖ * ‖B‖ *
         Real.exp (2 * (chainLRVelocity R J - 1) * |t| - d) := by
   classical
-  let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) (fun Z : ChainSupport L R ↦ Z.1) :=
-    ⟨h.term, h.mem⟩
   have hBound := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric
-    (SimpleGraph.pathGraph L) Φ
+    (SimpleGraph.pathGraph L) h
     hh R (fun Z x hx y hy ↦ ManyBody.ChainSupport.edist_le Z x hx y hy)
     (R + 1) (fun Z ↦ Z.2.card_le)
     (((2 ^ (2 * R + 1) : ℕ) : ℝ) * J) (h.sum_norm_terms_containing_le hhJ) X hA Y hB 1
