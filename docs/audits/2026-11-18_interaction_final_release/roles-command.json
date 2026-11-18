@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python",
+    "scripts/blueprint_roles.py",
+    "--check"
+  ],
+  "cwd": "/workspace/tn-interaction-final",
+  "exit_code": 0,
+  "seconds": 1.2099440059973858,
+  "sha256": "ad3249b444b1a55ed35b7c507156da9ec158647696fe440b17ff9d90a3e9cd56"
+}

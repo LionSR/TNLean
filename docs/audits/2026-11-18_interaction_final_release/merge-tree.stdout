@@ -1,0 +1,300 @@
+024e74981a79a1846c5ff5d410384eb14b3de11f
+100644 850e50ae486cefdcb79d706a347b766ea5065f42 1	TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean
+100644 6ebc43be909caa3cfa9ddc23f0f410e5fd387ee7 2	TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean
+100644 aff44b53cd8ba67eb7b071ddb118dfff810e765c 3	TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean
+100644 398f71bb4f89603bcac8edef641cee8f9f707b11 1	TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean
+100644 4d38e2c730021921722ff28e4c4c65e3c0bf2aad 2	TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean
+100644 e894190a0a5f18cc8e31048f482f1cf44dffdfc9 3	TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean
+100644 d54daa029073f6e72c87fbab7792ef0cada936e2 1	TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean
+100644 84c8d6bd8582fc18f7be2785942950abc003db94 2	TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean
+100644 a7276b43051ff807cac68ffe99ed3d0998512ce8 3	TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean
+100644 948dbe58676e99a4faf3907dc0a644b541ffc5e9 1	TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean
+100644 37e73df25e916a9ea2c1faf451d04110edc4f69d 2	TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean
+100644 89672af27ae2b67aecfe98da520d5f8cd8c038c6 3	TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean
+100644 92c7bb95e0fb8f89d7b943cfe2309b68e4cd7982 1	TNLean/MPS/AreaLaw/BoundaryGap.lean
+100644 adbf563330db00b20d5b464ad3b14689c9fea541 2	TNLean/MPS/AreaLaw/BoundaryGap.lean
+100644 e5e837e1896b1ad13f49adfa15231b08aed0ff4d 3	TNLean/MPS/AreaLaw/BoundaryGap.lean
+100644 30950f9b289a22f4b7895a3bd1a3366d585e93eb 1	TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean
+100644 c10c3f44d274ab4ad427deebe304dbc662ea7195 2	TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean
+100644 054520c47203527da1d111859850c38b972bb3cf 3	TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean
+100644 977f1c4e9d7f3d3f8d7ef35d639128ece873a871 1	TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean
+100644 bab7aa24600a236df09c32f5743f79cfd6611281 2	TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean
+100644 7207e4fa353fa80da965135b5df0bee3427753e2 3	TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean
+100644 e7d84cf208275252b8aedaaa20ed2f18abe0167c 1	TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean
+100644 c1e284db08f005ad553c2374a86952b08318428e 2	TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean
+100644 ca249b1174f5f379472c5ce127b3b14d9ed6f64b 3	TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean
+100644 ffc421a31ec86e0b4efe2e54985739e9c7e77f78 1	TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean
+100644 3f6c64db2c0a880d3120bf36810de00d165671b9 2	TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean
+100644 a3f8d24bb9bca1568ac9fb4bb3c9175923feaed0 3	TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean
+100644 ed5c3c6646c873f4bbe7e26fb8d4028afcd6fbac 1	TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean
+100644 1cd3178c077f9058908e5a6d60e1d3d02c68309b 2	TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean
+100644 0d7b97bf05d85ef22315219fab7186ff19872fba 3	TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean
+100644 3093cdc730966b56b2fc893eaef8d19a56e54be8 1	TNLean/MPS/AreaLaw/OverlapEnergy.lean
+100644 a7dff7e5be255bb45f84f089798a4c5ac338b801 2	TNLean/MPS/AreaLaw/OverlapEnergy.lean
+100644 694a31579342219331adeab8e902b788a42217ad 3	TNLean/MPS/AreaLaw/OverlapEnergy.lean
+100644 f92bc1c86daf3462a82ecc48e383f50387b8d046 1	TNLean/MPS/AreaLaw/RangeOneSupport.lean
+100644 da712ba4d1d2cd2b7e6e6e50f1068ec16723fd55 2	TNLean/MPS/AreaLaw/RangeOneSupport.lean
+100644 9ec50ded92be7158835e756fd8ea4bed913d1a33 3	TNLean/MPS/AreaLaw/RangeOneSupport.lean
+100644 121c751f9d156f686d40b1883072abde50d8c8d9 1	TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean
+100644 ab8803788800b5dde9846dcc852d6262634435ab 2	TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean
+100644 8e14210c3269a2fd0f5f25bc3c7d35d381f0a9a3 3	TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean
+100644 2e964474a0cc8b97ab0664edceaac3a0b62b28eb 1	TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean
+100644 3630dcf0baf8989ebbf29b4cad98770680d7a115 2	TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean
+100644 598aa2a8797439eb36845944fe2252c89c50ddfe 3	TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean
+100644 b75a1d18172d7306946a3ac0e484b1b077f2eeb3 1	TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean
+100644 f2a542a1b3dff0d725d786933c18018e388ee6c7 2	TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean
+100644 7bc21c18a21bd7b0f44b657a77f3a1e4a79f9fde 3	TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean
+100644 31a79f95d47d7290bde0a704243a26b9f4f18d1e 1	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean
+100644 2dd243f8eda87f4fa21ec1c887d15b8373f17140 2	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean
+100644 af5e49aba312aad37047116665de7944bf011e35 3	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean
+100644 7dfe29215560df0e7a4f3def144399b8feb6a479 1	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean
+100644 447d1970e6efe2e4d6ed629f5fb836a3017bd4d3 2	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean
+100644 6088d6c5868a11cbdf2637bb7554c6494f92d507 3	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean
+100644 5dd625919246e81d052a2e77184a3cc86dcc5621 1	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean
+100644 5ba4efe9379f1c0cc619f411d12d2d4c764df894 2	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean
+100644 9277ec01a55f6e352435ef7fa257910d0c1e7b76 3	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean
+100644 0c8321c0e30c1fc7c398e00141008ccb33bdcac7 1	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean
+100644 4e45ef14816dc7c6a5d49c96c0a3de624078bece 2	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean
+100644 12e8fa120aa597b7f2c47ff9d6f268d722872707 3	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean
+100644 92bb39fa65890feec929b99f98121ca851527329 1	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean
+100644 f6e62ad29a6cbd934b303a2265c51673959a560f 2	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean
+100644 c7641b350a6f6ebd3e4d72fbd92de3173c00aa43 3	TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean
+100644 450ac1387a5736b32febc9bd79788aad005e3cae 1	TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean
+100644 79ea2e65e8047ed843ce564cde74431b5c72a39a 2	TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean
+100644 e83953906917012f36405b6410272bc816ad96cc 3	TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean
+100644 49649dd799e0137d0d219f4880afa892eaba777a 1	TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean
+100644 62d1f21caa2cd84739322fa51afe49d538c1e6c7 2	TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean
+100644 b0b8ee53cae19c587d0a13100844d7a4b3cacc1c 3	TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean
+100644 3b82a9251f018238b2aad3c454439ae554d8cb0e 1	TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean
+100644 a67d289e75c71c2e8624b57f9579f5c94523fbe0 2	TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean
+100644 60afeabe36f3f5196ab25aa2e09b4f0497f31ed1 3	TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean
+100644 dca74114d21811d06b40a84ee8c0da8fd88e95fc 1	TNLean/PEPS/Approximation/CellConditionalInformation.lean
+100644 060e6fd3f357e45be8873b70908ee44628fbc61e 2	TNLean/PEPS/Approximation/CellConditionalInformation.lean
+100644 b935285b46c2002750a7ccfb032cba3ce62e082d 3	TNLean/PEPS/Approximation/CellConditionalInformation.lean
+100644 8e920163a0d9cfe4ea005ff4844012b2729ef000 1	TNLean/PEPS/Approximation/CoarseInformation.lean
+100644 3ff5f5fec534ccf5aa81b3f0cc9d4c9675c9303d 2	TNLean/PEPS/Approximation/CoarseInformation.lean
+100644 75c706957b642639c7bea4f466dedbcc590620dc 3	TNLean/PEPS/Approximation/CoarseInformation.lean
+100644 03b135d8113b5af1ce81edb5f6c42f2dd1fb7011 1	TNLean/PEPS/Approximation/RangeAngularInformation.lean
+100644 6500a639b63f81d679320a91765ff75fca2e1261 2	TNLean/PEPS/Approximation/RangeAngularInformation.lean
+100644 dc3e669875d8c952c9d993098157a539c900375b 3	TNLean/PEPS/Approximation/RangeAngularInformation.lean
+100644 14cb2d13a280e329607f2faa285b3413eac52cc1 1	TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean
+100644 02743548a4ed5dc449264a6ab0987d0f64b4ccbd 2	TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean
+100644 9a4d434a1293a65cd82a1acee0a496042b18bef4 3	TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean
+100644 182af0c02734735b1e6acd55f7d9f3f302ea316d 1	TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean
+100644 39a6f9329b57387c3c5da4a5df5ef6fadc04d754 2	TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean
+100644 75dc56dc5e7276157ce6ad04fcb60213edfbe6d2 3	TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean
+100644 45f3333e9c957195b4fbfaa9c36ee7e7f514325b 1	TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean
+100644 c5f81497ce139c490128f2bf8ba29a710f413025 2	TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean
+100644 1d4234cb879fd701154778f82a477b1419a281e7 3	TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean
+100644 3eb78fc2465581f32e22629c3a8da1159793d8cd 1	TNLean/PEPS/Approximation/RangeSquareGroundState.lean
+100644 272610cffbb2b5702ed1d2a184726f7eb638eebf 2	TNLean/PEPS/Approximation/RangeSquareGroundState.lean
+100644 04f74e8a4b7e3a316c011007d5e5a18bfc85a912 3	TNLean/PEPS/Approximation/RangeSquareGroundState.lean
+100644 a7d1d8912c98d145dd0cab563131b695cdeaa659 1	TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean
+100644 5a556935d0f75a56f35f50e1b0020a5900a2a32b 2	TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean
+100644 fe11db76d4133909c9cf2c5f401964b05edb9fd7 3	TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean
+100644 3251c670c4d27f6147c362f7d6869bd6fa85d811 1	TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean
+100644 d3866f51677dd140657564eda68dc89bea37777d 2	TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean
+100644 dc48d070b2dfc7ebbcfa9fd3f7b2c81a57a6ab0f 3	TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean
+100644 0f3dc7b1595ce26be0ae423057e51ebc8d2efac9 1	TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean
+100644 346e97d2794d27fdd24152bec6c1c4454e634453 2	TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean
+100644 c8cfb86e232d00554f30292620d7619f907d91ee 3	TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean
+100644 7d87fc08ad23064581327b4e60a954a7bbe170a0 1	TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean
+100644 2bd5fc71355883f5e91b8c1e9da145f7c9f34737 2	TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean
+100644 cf971fe09effbc8b15f33ee1538e96b4598dbd59 3	TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean
+100644 c726a39f14fe22bd39bfb421f081764fbd7b11c6 1	TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean
+100644 6c0f660b112adc46d89c87074efaa05860272495 2	TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean
+100644 156b782a18836cf389344155a4f29b5a1934c323 3	TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean
+100644 23d374f35ef704b5b31e3186ab1ef03bf6649ca7 1	TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean
+100644 7a2b034619b0ac1f928ec9a92effda6c473bcb70 2	TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean
+100644 164f42016b4ecb45787c9d907813ab09074cf516 3	TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean
+100644 a3dbe2eb859effa42a00878889d014724869ed47 1	TNLean/PEPS/AreaLaw/AmplificationProof.lean
+100644 7dfc05dd2a5226e5a64546618d5f08515593fc14 2	TNLean/PEPS/AreaLaw/AmplificationProof.lean
+100644 f9a822a27b940821e10485ad284683c2d31346c8 3	TNLean/PEPS/AreaLaw/AmplificationProof.lean
+100644 186c4535210f6484d935c2d319a3275516d68f94 1	TNLean/PEPS/AreaLaw/BoundaryTheorem.lean
+100644 d20120a8d32d94714f6725ce1e4a498751122bad 2	TNLean/PEPS/AreaLaw/BoundaryTheorem.lean
+100644 280bb79417d50667ac21f9e50fb7de1738bfd070 3	TNLean/PEPS/AreaLaw/BoundaryTheorem.lean
+100644 7336c57294c9bc14c53f00b97dceed6ae52056d7 1	TNLean/PEPS/AreaLaw/CollarInformation.lean
+100644 421699af3b92c63d6964c1c009faccece65719d6 2	TNLean/PEPS/AreaLaw/CollarInformation.lean
+100644 ae67311fc2ae3c7524cf0989fdd3a9966bff7056 3	TNLean/PEPS/AreaLaw/CollarInformation.lean
+100644 5da096beedd7dadc10f6038f4e38c54b8e222a49 1	TNLean/PEPS/AreaLaw/GraphPropagation.lean
+100644 6d1df95923bb9ef7df7fd62899890de9dc7f0947 2	TNLean/PEPS/AreaLaw/GraphPropagation.lean
+100644 151d6362067e400388cd933b5bf0d8d8228cdf59 3	TNLean/PEPS/AreaLaw/GraphPropagation.lean
+100644 63fd465b61f573dccf0f8c63e144ce9f400a7a55 1	TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean
+100644 73c56255544cf6ac1841160e0cded30ee0292f84 2	TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean
+100644 20582967ff7d1bcd250adeb0b359e96fa06c6e62 3	TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean
+100644 2bf7f949de2898c36fad3ded0a80b2cc5af01469 1	TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean
+100644 e05d27f7462c49094847e87dc410afab01d90b49 2	TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean
+100644 3a64ccbba36609193ab47e72286e6381f2b86466 3	TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean
+100644 e2c5d26bc95284737ea200bb785c598950fe96fe 1	TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean
+100644 1ac8f1d39499182db4cb39951c755ab4859c2f34 2	TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean
+100644 442b296df9420dc055e504e8c788816ebbbde91f 3	TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean
+100644 dbec97718234f968d17a932651439b5c6915fc27 1	TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean
+100644 cd3fbd69fa9d7ad2fa6e7fc97ca8f6edc8aacb99 2	TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean
+100644 c313f157b8ceceeb7b9c62934c823429d3e03802 3	TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean
+100644 301a9f92d6cdbcd3aa339a6d0c0c6661c64e5b60 1	TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean
+100644 e39fa615566bf864a102299e1a03a6eaf6d2e2b7 2	TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean
+100644 820f0bf4f216a222fff45e551afbe1d93cbf0543 3	TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean
+100644 1cf5dd9c3da8a3cb429446dbf8f28a3d9e1828a0 1	TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean
+100644 37ec5452365ccf4fed7967c7549dd0dbd201904f 2	TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean
+100644 03fe31c9beee509d6abc6a21e80891a1d5e21d06 3	TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean
+100644 39dbdafb761839eaebf8e9cb1f09a3adbb7f5494 1	TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean
+100644 8622d0c6194913b068a9404a345c2fc62b735fb7 2	TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean
+100644 c82b928f520ca8233c05db8b5f67e130f93719bd 3	TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean
+100644 00fc5165ecc817c96da1a28ae1dc95e2027a0138 1	TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean
+100644 c551391b853347c3f147b55f7de23c157d93394e 2	TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean
+100644 24c34c2d4ac0ed6f38843fa5ea9d0e2063a65de5 3	TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean
+100644 37eb2215eb34bfc7e651424079823fe3369b956c 1	TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean
+100644 f3072173c030a419631db7c4c2962300470324fc 2	TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean
+100644 184004a20eb30aca8fdc75b5892e8eba6c8c4a47 3	TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean
+100644 7be96928afd0e737604b371cd175b2c2fede21ca 1	TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean
+100644 e9db25d6ac568072c93a3c9060e060563b269f5f 2	TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean
+100644 1f5629c5b8aca836bcd7078a3a117cc024e9ed29 3	TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean
+100644 f19f02cda592c5e921eff20d9d082f506c45cbf2 1	blueprint/src/chapter/ch24_peps_area_law_models.tex
+100644 a1e80b34f502d0ec7b914db4e71622f0e131c6f9 2	blueprint/src/chapter/ch24_peps_area_law_models.tex
+100644 969bd27fe9b7210981f7521746e447145b05b2ad 3	blueprint/src/chapter/ch24_peps_area_law_models.tex
+100644 1b86edb32084ebe827afe3e7da3f478d34346175 1	blueprint/src/chapter/ch24_peps_rectangular_specialization.tex
+100644 dc5ec5cfa3e75e7e910eeaa352a96be82c8c531b 2	blueprint/src/chapter/ch24_peps_rectangular_specialization.tex
+100644 95dcacd8a7fb8ef5c68ac8b2bd404b5b1b1289d5 3	blueprint/src/chapter/ch24_peps_rectangular_specialization.tex
+100644 d9d273e20114b24385950b5c6bb0b5b7f1fc4f6b 1	blueprint/src/chapter/ch35_hastings_lemma1.tex
+100644 24829d99aca05bd633ab148bac27e1bb167baacc 2	blueprint/src/chapter/ch35_hastings_lemma1.tex
+100644 55b594d1a3179a015a04b81cbd12efb9bac5fbf0 3	blueprint/src/chapter/ch35_hastings_lemma1.tex
+100644 5545115ff055622c80b473a27727fc6ccde4e3ca 1	docs/formalization/openai-area-law-peps.md
+100644 613c97bb6b0ccc74b4fbfc0b22a2a0f678daf06d 2	docs/formalization/openai-area-law-peps.md
+100644 81959435862b9936f0f9040a128bc293f11bfd91 3	docs/formalization/openai-area-law-peps.md
+100644 2fa682908ea2b5756ffb7e65c1528924ebcd995b 1	docs/glossary.md
+100644 d344235426a629adfc51386cbbe13e4552b92cf2 2	docs/glossary.md
+100644 0b89bf629bdc524aa06d7f2314a0fa8a6010ad81 3	docs/glossary.md
+100644 91cdb746966aa08075d022f003c8445b8241b105 1	docs/tactic_patterns.md
+100644 baf156e1cbe62f3e5e1e8bd85f12358bda6110f1 2	docs/tactic_patterns.md
+100644 d34773d34dcc82efbb20cc5a80cd8ec93860c7eb 3	docs/tactic_patterns.md
+
+Auto-merging TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean
+Auto-merging TNLean/MPS/AreaLaw/Algorithm/SampledCost.lean
+Auto-merging TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean
+Auto-merging TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean
+Auto-merging TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean
+Auto-merging TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampledCost.lean
+Auto-merging TNLean/MPS/AreaLaw/BoundaryGap.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/BoundaryGap.lean
+Auto-merging TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean
+Auto-merging TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean
+Auto-merging TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean
+Auto-merging TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean
+Auto-merging TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean
+Auto-merging TNLean/MPS/AreaLaw/OverlapEnergy.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/OverlapEnergy.lean
+Auto-merging TNLean/MPS/AreaLaw/RangeOneSupport.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/RangeOneSupport.lean
+Auto-merging TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean
+Auto-merging TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/RationalSampledSuccessiveConstruction.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/SampledSuccessiveConstruction.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean
+Auto-merging TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean
+CONFLICT (content): Merge conflict in TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean
+Auto-merging TNLean/PEPS/Approximation/AdaptivePatchConstraintFromAreaLaw.lean
+Auto-merging TNLean/PEPS/Approximation/CellConditionalInformation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/CellConditionalInformation.lean
+Auto-merging TNLean/PEPS/Approximation/CellConditionalInformationFromGap.lean
+Auto-merging TNLean/PEPS/Approximation/CoarseInformation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/CoarseInformation.lean
+Auto-merging TNLean/PEPS/Approximation/CoarseInformationFromGap.lean
+Auto-merging TNLean/PEPS/Approximation/NestedPatchApproximation.lean
+Auto-merging TNLean/PEPS/Approximation/PinnedZeroFloorOptimizer.lean
+Auto-merging TNLean/PEPS/Approximation/RangeAngularInformation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/RangeAngularInformation.lean
+Auto-merging TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean
+Auto-merging TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean
+Auto-merging TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean
+Auto-merging TNLean/PEPS/Approximation/RangeSquareGroundState.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/RangeSquareGroundState.lean
+Auto-merging TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean
+Auto-merging TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean
+Auto-merging TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean
+Auto-merging TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean
+Auto-merging TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean
+Auto-merging TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean
+Auto-merging TNLean/PEPS/AreaLaw/AmplificationProof.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/AmplificationProof.lean
+Auto-merging TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean
+Auto-merging TNLean/PEPS/AreaLaw/BoundaryTheorem.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/BoundaryTheorem.lean
+Auto-merging TNLean/PEPS/AreaLaw/CollarInformation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/CollarInformation.lean
+Auto-merging TNLean/PEPS/AreaLaw/GraphPropagation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/GraphPropagation.lean
+Auto-merging TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean
+Auto-merging TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean
+Auto-merging TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean
+Auto-merging TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean
+Auto-merging TNLean/PEPS/AreaLaw/RectangularHamiltonian.lean
+Auto-merging TNLean/PEPS/AreaLaw/RectangularSpecialization.lean
+Auto-merging TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean
+Auto-merging TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean
+Auto-merging TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean
+Auto-merging TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean
+Auto-merging TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean
+Auto-merging TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean
+CONFLICT (content): Merge conflict in TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean
+Auto-merging blueprint/src/chapter/ch24_peps_area_law_models.tex
+CONFLICT (content): Merge conflict in blueprint/src/chapter/ch24_peps_area_law_models.tex
+Auto-merging blueprint/src/chapter/ch24_peps_edge_crossing_budget.tex
+Auto-merging blueprint/src/chapter/ch24_peps_rectangular_specialization.tex
+CONFLICT (content): Merge conflict in blueprint/src/chapter/ch24_peps_rectangular_specialization.tex
+Auto-merging blueprint/src/chapter/ch35_hastings_lemma1.tex
+CONFLICT (content): Merge conflict in blueprint/src/chapter/ch35_hastings_lemma1.tex
+Auto-merging blueprint/src/chapter/ch35_hastings_three_way_splitting.tex
+Auto-merging docs/audits/2026-11-17_qiclean_pin_49b9aa93_followups.md
+Auto-merging docs/formalization/one-dimensional-chain.md
+Auto-merging docs/formalization/openai-area-law-peps.md
+CONFLICT (content): Merge conflict in docs/formalization/openai-area-law-peps.md
+Auto-merging docs/glossary.md
+CONFLICT (content): Merge conflict in docs/glossary.md
+Auto-merging docs/many_body_circuit_architecture.md
+Auto-merging docs/paper-gaps/polypeps_square_zero_floor_optimizer_scope.tex
+Auto-merging docs/tactic_patterns.md
+CONFLICT (content): Merge conflict in docs/tactic_patterns.md

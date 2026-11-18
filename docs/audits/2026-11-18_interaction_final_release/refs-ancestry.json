@@ -1,0 +1,18 @@
+{
+  "refs": {
+    "HEAD": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+    "origin/main": "16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931",
+    "origin/review-10905": "592a46e4e442f87205c407720acbb487db0d2fcf",
+    "origin/review-10881": "fa9a40e22fa6384ba4a723e8bf675bb2cd20c5e7"
+  },
+  "checks": {
+    "origin/review-10881 ancestor HEAD": true,
+    "7376dab0 ancestor HEAD": true,
+    "origin/main ancestor HEAD": false,
+    "592a46e4 ancestor HEAD": false,
+    "shared_changed_paths": 304,
+    "main_changed_paths": 216,
+    "delta_changed_paths": 3,
+    "merge_tree_exit": 1
+  }
+}
