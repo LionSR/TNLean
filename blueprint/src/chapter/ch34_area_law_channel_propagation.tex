@@ -40,7 +40,9 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
     \uses{def:qc_spectator_expectation,def:qc_local_circuit}
     \lean{QuantumCircuit.spectatorSiteExpectation_eq_self_iff}
     \leanok
-    For every $S\subseteq I$ and arbitrary spectator index set $J$,
+    This algebraic equivalence holds for any $q\in\N$, finite physical site set
+    $I$, every $S\subseteq I$, and arbitrary spectator index set $J$, with
+    matrices interpreted entrywise as in Definition~\ref{def:qc_spectator_expectation}:
     \begin{align}
         E_S^{\mathcal K}(B)=B
          & \quad\Longleftrightarrow\quad
@@ -55,6 +57,9 @@ physical block $B_{ab}$ by $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
     to $E_S(B_{ab})=B_{ab}$ for all $a,b\in J$, which holds if and only if
     $B_{ab}\in\mathcal A_S$ by Lemma~\ref{lem:qc_site_expectation_properties}.
 \end{proof}
+
+For the following oscillation and norm estimates, return to the finite
+spectator setting fixed at the start of this section.
 
 \begin{lemma}[Vanishing oscillation outside the physical support]
     \label{thm:al_spectator_support_oscillation_zero}

@@ -38,6 +38,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace SquareInteraction)
 
+open scoped ComplexOrder
+
 namespace TNLean.PEPS.Approximation
 
 open TNLean.PEPS.AreaLaw
@@ -174,8 +176,9 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
       m₀ ∉ A →
       ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
           (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
-        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+          (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+        Ω ∈ groundSpace h.hamiltonian E₀ →
         let G : Finset (Vertex L) :=
           Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
         let B : Finset (Vertex L) := Finset.univ.filter
@@ -188,7 +191,7 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
               (1 + Real.log s) ^ cellInformationExponent c Ctpl N Ca Na := by
   have hcell := cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt hcol hamp hc
   intro s hs o m₀ A hm₀ L h hh hhJ E₀ Ω hΩ hgap hspan
-  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hhJ hh hΩ hgap hspan
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.projectorGap_toAreaLawHamiltonian hhJ hh hΩ hgap hspan
   exact cell_conditionalMutualInformation_le_square_of_rectangle Ω o m₀ A
     (hcell s hs (o - (1, 1)) m₀ A hm₀ (rectangularDomain L L) (h.toAreaLawHamiltonian hhJ) E₀
       (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap' hspan')
@@ -225,9 +228,12 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_ex
               (collarAmplificationThreshold q 1 J Δ C) *
               (1 + Real.log s) ^ cellInformationExponent c Ctpl N
                 (collarAmplificationConstant q 1 J Δ C)
-                (collarAmplificationThreshold q 1 J Δ C) :=
-  cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol
-    (amplificationBoundAt_collarAmplification hΔ C) hc
+                (collarAmplificationThreshold q 1 J Δ C) := by
+  intro s hs o m₀ A hm₀ L h hh hhJ E₀ Ω hΩ hgap hspan
+  exact cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol
+    (amplificationBoundAt_collarAmplification hΔ C) hc s hs o m₀ A hm₀ L h hh hhJ E₀ Ω hΩ
+      (hgap.posSemidef_sub_smul_one hh hΩ hspan)
+      (hspan ▸ Submodule.mem_span_singleton_self _)
 
 open Classical in
 /-- The cell conditional-information bound on the original open square, with
@@ -264,6 +270,11 @@ theorem exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBou
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
   exact ⟨_, _, cellInformationConstant_pos q c Ctpl N Ca Na,
     (cellInformationExponent_pos c Ctpl N Ca Na).le,
-    cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc⟩
+    by
+      intro s hs o m₀ A hm₀ L h hh hhJ E₀ Ω hΩ hgap hspan
+      exact cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc
+        s hs o m₀ A hm₀ L h hh hhJ E₀ Ω hΩ
+        (hgap.posSemidef_sub_smul_one hh hΩ hspan)
+        (hspan ▸ Submodule.mem_span_singleton_self _)⟩
 
 end TNLean.PEPS.Approximation

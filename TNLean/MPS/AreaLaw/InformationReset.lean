@@ -51,10 +51,8 @@ open ManyBody (ChainSupport DomainSupport lineDomainGraph)
 
 open Matrix QuantumCircuit MeasureTheory ProbabilityTheory
 open scoped Kronecker Matrix.Norms.L2Operator NNReal
-open TNLean.Lattice (exists_regional_physicalBuffer_filter
-  exists_supported_unitary_of_two_sided norm_two_sided_le_of_norm_sub_le
-  reindex_physicalBuffer_eq_siteLift reset_entropy_scalar sheetSwapOp
-  siteLift_mem_supportedOperators)
+open TNLean.Lattice (exists_regional_physicalBuffer_filter exists_supported_unitary_of_two_sided
+  norm_two_sided_le_of_norm_sub_le reindex_physicalBuffer_eq_place reset_entropy_scalar sheetSwapOp)
 
 open ManyBody (IsGapped groundSpace)
 
@@ -189,9 +187,9 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
   let V := Matrix.reindex (g.symm.trans e) (g.symm.trans e)
     ((1 : Matrix (Pconf × Pconf) (Pconf × Pconf) ℂ) ⊗ₖ W)
   have hVsupp : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q := by
-    have hs := siteLift_mem_supportedOperators Q
+    have hs := ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _)
       (Matrix.reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
-    rw [← reindex_physicalBuffer_eq_siteLift q D C hDC W] at hs
+    rw [← reindex_physicalBuffer_eq_place q D C hDC W] at hs
     exact hs
   have hV : ‖V‖ ≤ 1 :=
     ((Matrix.l2_opNorm_reindex_equiv (g.symm.trans e) _).trans_le

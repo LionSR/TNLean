@@ -210,7 +210,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
   have hΦ : Φ.hamiltonian = g.operator := rfl
   have hgen := exists_supported_gaussian_integral_graphNeighborhood
     (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
-    (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le) g.hermitian b₀
+    (fun X ↦ ManyBody.ChainSupport.edist_le X) (fun X ↦ X.2.card_le) g.hermitian b₀
     g.sum_norm_terms_containing_le h.doubled.operator_isHermitian Z ℓ d hd (fun s ↦ by
       rw [hΦ, biUnion_graphBall_pathGraph_eq_chainNeighborhood Z hℓ, Fintype.card_fin]
       exact h.norm_relativeGenerator_sub_regionExpectation_le D hq ℓ hℓ s)

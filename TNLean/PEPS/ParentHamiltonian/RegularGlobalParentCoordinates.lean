@@ -191,7 +191,7 @@ theorem dependentRegionSlice_regularInverse_halfEdgeRightMul
     (hr : ∀ e, IsRegionBoundaryEdge R e → r e = 1)
     (P : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (hP : IsRegionParentInteraction (groupBondTensor a) R P)
-    (Ψ : (V → Fin d) → ℂ) (hΨ : regionLocalTerm R P *ᵥ Ψ = 0)
+    (Ψ : (V → Fin d) → ℂ) (hΨ : ManyBody.place (X := fun _ ↦ Fin _) R P *ᵥ Ψ = 0)
     (τ : RegionHalfEdgeConfig (Γ := Γ) G (Finset.univ \ R))
     (α : RegionHalfEdgeConfig (Γ := Γ) G R) :
     dependentRegionSlice (Out := fun v => IncidentEdge Γ v → G) R τ (globalDependentPhysicalMap F Ψ)
@@ -218,7 +218,7 @@ theorem dependentRegionSlice_regularInverse_apply_eq_zero_of_cycle_ne_one
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
     (P : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (hP : IsRegionParentInteraction (groupBondTensor a) R P)
-    (Ψ : (V → Fin d) → ℂ) (hΨ : regionLocalTerm R P *ᵥ Ψ = 0)
+    (Ψ : (V → Fin d) → ℂ) (hΨ : ManyBody.place (X := fun _ ↦ Fin _) R P *ᵥ Ψ = 0)
     (τ : RegionHalfEdgeConfig (Γ := Γ) G (Finset.univ \ R))
     (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o) (hc : c.2.2.2 ≠ 1) :
     dependentRegionSlice (Out := fun v => IncidentEdge Γ v → G) R τ (globalDependentPhysicalMap F Ψ)
@@ -241,7 +241,7 @@ theorem globalDependentPhysicalMap_regularInverse_singleEdgeRightMul
     (R : Finset V) (e : Edge Γ) (he : e.1.1 ∈ R ∧ e.1.2 ∈ R) (g : G)
     (P : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (hP : IsRegionParentInteraction (groupBondTensor a) R P)
-    (Ψ : (V → Fin d) → ℂ) (hΨ : regionLocalTerm R P *ᵥ Ψ = 0)
+    (Ψ : (V → Fin d) → ℂ) (hΨ : ManyBody.place (X := fun _ ↦ Fin _) R P *ᵥ Ψ = 0)
     (α : RegularHalfEdgeConfig Γ G) :
     globalDependentPhysicalMap F Ψ
         (fun w => regularHalfEdgeRightMul (Function.update 1 e g) α w.1) =
@@ -297,7 +297,7 @@ theorem globalDependentPhysicalMap_regularInverse_rightMul
     (P : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hP : ∀ i, IsRegionParentInteraction (groupBondTensor a) (R i) (P i))
-    (Ψ : (V → Fin d) → ℂ) (hΨ : ∀ i, regionLocalTerm (R i) (P i) *ᵥ Ψ = 0)
+    (Ψ : (V → Fin d) → ℂ) (hΨ : ∀ i, ManyBody.place (X := fun _ ↦ Fin _) (R i) (P i) *ᵥ Ψ = 0)
     (r : Edge Γ → G) (α : RegularHalfEdgeConfig Γ G) :
     globalDependentPhysicalMap F Ψ (fun w => regularHalfEdgeRightMul r α w.1) =
       globalDependentPhysicalMap F Ψ (fun w => α w.1) := by
@@ -338,7 +338,7 @@ theorem globalDependentPhysicalMap_regularInverse_eq_zero_of_holonomy_ne_one
     (o : {v : V // v ∈ R}) (p : (Γ.induce (R : Set V)).Walk o o)
     (P : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (hP : IsRegionParentInteraction (groupBondTensor a) R P)
-    (Ψ : (V → Fin d) → ℂ) (hΨ : regionLocalTerm R P *ᵥ Ψ = 0)
+    (Ψ : (V → Fin d) → ℂ) (hΨ : ManyBody.place (X := fun _ ↦ Fin _) R P *ᵥ Ψ = 0)
     (α : RegularHalfEdgeConfig Γ G)
     (hhol : regularWalkHolonomy
       (regularRegionInternalOperators R (regularHalfEdgeOperators α)) p ≠ 1) :

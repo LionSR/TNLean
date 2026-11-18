@@ -53,18 +53,17 @@ namespace TNLean.MPS.AreaLaw.Hastings
 variable {L q R : ℕ} {J : ℝ}
 
 /-- **Matrix product state approximation of the gapped ground state, from Lemma 1 (stage
-theorem).** Let `Ω` be a gapped ground vector of a finite-range Hamiltonian `h` on the chain
-of `L` sites with local dimension `q ≥ 1`, around which Lemma 1 holds with constants `ξ' > 0`
+theorem).** Let `Ω` be a unit vector on a chain of `L` sites with local dimension `q ≥ 1`,
+around which Lemma 1 holds with constants `ξ' > 0`
 and `C₁ ≥ 1`. With `k₀ = ⌈exp(2 S_max)/2⌉` for the area-law bound
 `S_max = areaLawBound ξ' C₁ q`, for every `k' ≥ k₀` the truncation `Φ` onto the `k'` leading
 eigenvectors at every cut is an open-boundary matrix product state of bond dimension at most
 `k'` with
 `‖Φ - Ω‖² ≤ (L - 1) 4 C₁² e^{2/ξ'} (k'/k₀)^{-1/(ξ' log q)}`.
 Hastings, arXiv:0705.2024v4, lines 505–557, with the constants of the module docstring. -/
-theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState [NeZero q] (h : ChainHamiltonian L q R J)
-    {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState [NeZero q]
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hΩ : ‖Ω‖ = 1)
     {ξ' C₁ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 ≤ C₁)
     (hfact : ∀ c l : ℕ, c + l ≤ L → ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       IsFactorizationAt Ω c l (C₁ * Real.exp (-(l / ξ'))) OB OL OR)
@@ -81,7 +80,7 @@ theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState [NeZero q] (h : ChainHamil
   refine isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy hΩ hξ'
     (fun j _ m hm ↦ hfact j m hm) (fun j _ ↦ ?_) hk'
   -- The area law bounds the entropy of every initial segment by `S_max`.
-  have hS := regionEntropy_prefix_le_of_factorization h hΩ hgap hspan hξ' hC₁ hfact j
+  have hS := regionEntropy_prefix_le_of_factorization hΩ hξ' hC₁ hfact j
   rw [← leftBlock_eq_interval] at hS
   calc Real.exp (2 * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) / 2
       ≤ Real.exp (2 * areaLawBound ξ' C₁ q) / 2 := by gcongr
@@ -120,7 +119,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped (R : ℕ) {κ : ℝ} (hκ : 
   refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h {E₀} {Ω} hΩ hgap hspan {k'} hk' ↦ ?_⟩
   have hξ'0 : 0 < κ * lemmaOneLength R (J / ΔE) 1 :=
     mul_pos (by linarith) (lemmaOneLength_pos R _ 1)
-  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hΩ hgap hspan hξ'0 (le_max_right _ _)
+  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState hΩ hξ'0 (le_max_right _ _)
     (fun c l _ ↦ ?_) hk'
   obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hΩ hgap hspan c l
   exact ⟨OB, OL, OR, hf.mono
@@ -155,7 +154,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_endpoint (R : ℕ) :
   refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h {E₀} {Ω} hΩ hgap hspan {k'} hk' ↦ ?_⟩
   have hζ0 : 0 < 6 * lemmaOneEndpointLength R J ΔE := by
     rw [lemmaOneEndpointLength_eq]; linarith [lemmaOneLength_pos R (J / ΔE) 1]
-  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hΩ hgap hspan hζ0 (le_max_right _ _)
+  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState hΩ hζ0 (le_max_right _ _)
     (fun c l _ ↦ ?_) hk'
   obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hΩ hgap hspan c l
   exact ⟨OB, OL, OR, hf.mono

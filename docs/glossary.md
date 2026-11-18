@@ -1724,7 +1724,7 @@ channels) are stated for any finite type of sites `ι`. Layers, circuits and
 light cones are stated for a bond geometry `bond : β → Set ι` on such a type
 (`TNLean/Circuit/Geometry.lean`), with the ring `ringBond k = {k, k + 1}` on
 `Fin N` (addition modulo `N`), the open chain `openBond`, and the edges of a
-simple graph `edgeBond G` as instances; the ring-facing names (`Layer`,
+simple graph `edgeBond G` as instances; the ring-facing names (`RingLayer`,
 `IsLocalCircuitOfDepth`, `IsPreparedInDepth`, `IsCircuitOn`, `ChannelLayer`,
 `IsChannelPreparedInDepth`) abbreviate the general notions for `ringBond`.
 Measurement protocols and teleportation remain stated on the ring. The blueprint chapter is
@@ -1808,12 +1808,14 @@ in `MPS/Preparation/` uses it.
 
 #### `QuantumCircuit.BondLayer` and `QuantumCircuit.RingLayer`
 
-- **Declarations:** `structure QuantumCircuit.BondLayer (d : ℕ) (bond : β → Set ι)`,
+- **Declarations:** `structure QuantumCircuit.BondLayer (d : ℕ) (bond : β → Finset ι)`,
   with fields `bonds : Finset β`, `gate : β → Matrix (ι → Fin d) (ι → Fin d) ℂ`,
-  and the conditions that every gate of a bond is unitary and lies in
-  `supportedOperators d (bond b)`, and that the bonds carrying gates are
+  and the conditions that every gate of a bond is unitary and supported on
+  that bond, and that the bonds carrying gates are
   pairwise disjoint; `QuantumCircuit.RingLayer (d N : ℕ) [NeZero N]` abbreviates
-  `BondLayer d ringBond` on `Fin N`.
+  `BondLayer d ringBond` on `Fin N`. Operator support uses the canonical
+  `ManyBody.supportedOperators (fun _ ↦ Fin d) S` for a finite support
+  `S : Finset ι`; a set-valued bond geometry is a separate interface.
 - **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
 - **Meaning:** one layer of a local circuit: unitaries on pairwise disjoint
   bonds; on the ring, pairs of neighbouring sites. Its operator
@@ -3731,7 +3733,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   lie in the inside subspace `S`; in tensor notation, `S ⊗ H_(V\R)`.
 - **Source:** the September 24, 2026 polynomial-PEPS manuscript,
   [`03-patches.tex`, lines 563–603](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex#L563-L603).
-- **Sanctioned identifications:** `range_dependentRegionOperatorLift` identifies
+- **Sanctioned identifications:** `range_place` identifies
   the range of an identity extension with a cylinder;
   `coordinateRangeProjector_dependentRegionCylinder` identifies the orthogonal
   projector. The `sup`, `iSup`, `subregion`, and `map` theorems give finite-sum,

@@ -18,7 +18,7 @@ identity on the remaining sites.
 \begin{lemma}[Equality of regional and site embeddings]
     \label{thm:peps_region_site_embedding}
     \lean{TNLean.PEPS.agreeOff_region_iff,
-        TNLean.PEPS.regionLocalTerm_eq_embedOp}
+        QuantumCircuit.place_eq_embedOp}
     \leanok
     For every $\sigma,\tau\in X_V$,
     \begin{align}
@@ -39,30 +39,6 @@ identity on the remaining sites.
     $\delta_{\sigma|_{V\setminus R},\tau|_{V\setminus R}}$.
     Multiplying it by $H_{\sigma|_R,\tau|_R}$ gives
     (\ref{eq:peps_region_embedding_entries}) for both operators.
-\end{proof}
-
-\begin{lemma}[Full-region coordinate identification]
-    \label{thm:peps_region_embedding_coordinates}
-    \lean{TNLean.PEPS.dependentRegionOperatorLift_eq_reindex_embedOp}
-    \leanok
-    Let $\widetilde X_V=\prod_{v\in V}A_q$ and
-    $\theta_q:X_V\to\widetilde X_V$ be the bijection
-    $\theta_q(\sigma)=(\sigma(v))_{v\in V}$.
-    Write $D_R(H)$ for $H\otimes I_{V\setminus R}$ after splitting this
-    indexed product into its regional and complementary factors.
-    For every $\alpha,\beta\in\widetilde X_V$,
-    \begin{align}
-        D_R(H)_{\alpha,\beta}
-         & =(E_{j_R}(H))_{\theta_q^{-1}(\alpha),\theta_q^{-1}(\beta)}.
-        \label{eq:peps_region_embedding_coordinates}
-    \end{align}
-\end{lemma}
-\begin{proof}
-    \leanok
-    The restrictions of $\theta_q^{-1}(\alpha)$ and
-    $\theta_q^{-1}(\beta)$ select the same coordinates as the two indexed
-    product factors. Both sides are $H$ at the regional coordinates when
-    the complementary coordinates agree, and zero otherwise.
 \end{proof}
 
 \begin{remark}[Boundary cases]

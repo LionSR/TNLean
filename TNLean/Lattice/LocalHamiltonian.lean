@@ -74,20 +74,4 @@ noncomputable def LocalHamiltonian.zero (Λ : Finset (ℤ × ℤ)) (q R : ℕ)
   hermitian _ := Matrix.isHermitian_zero
   norm_le _ := by simpa using hJ
 
-/-- Place a local matrix on a region, with identity on its complement.
-This is the existing circuit embedding specialized to the domain sites.
-Source: area-law Section 1, the definition of a supported operator. -/
-noncomputable def localLift (Λ : Finset (ℤ × ℤ)) (q : ℕ) (X : Finset (Site Λ))
-    (K : Matrix (↥X → Fin q) (↥X → Fin q) ℂ) :
-    Matrix (Configuration Λ q) (Configuration Λ q) ℂ :=
-  QuantumCircuit.embedOp (fun x : ↥X ↦ x.val) K
-
-/-- A placed local matrix belongs to the existing supported-operator algebra. -/
-theorem localLift_mem_supportedOperators (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (X : Finset (Site Λ)) (K : Matrix (↥X → Fin q) (↥X → Fin q) ℂ) :
-    localLift Λ q X K ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X := by
-  simpa [localLift] using
-    QuantumCircuit.embedOp_mem_supportedOperators
-      (e := fun x : ↥X ↦ x.val) Subtype.val_injective K
-
 end TNLean.Lattice

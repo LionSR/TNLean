@@ -85,6 +85,10 @@ and~(\ref{eq:polypeps_square_zero_floor_fidelity_bound}) for the original
 $H$, $\Omega$ and $\Delta$. The conversion does not choose another optimizer.
 The boundary count is exactly the original once-counted forward-edge count.
 No regional gap, factor loss or extra termwise Hermiticity premise is added.
+The algebraic bounds hold for every real $\Delta$. In particular,
+$H=0$, $E_0=\Delta=0$ and any unit vector are admissible, even when
+the zero eigenspace has dimension greater than one. Uniqueness follows
+from the projector inequality only when $\Delta>0$.
 \footnote{Declaration:
 \leanid{ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelity}.}
 
@@ -106,6 +110,15 @@ cases distinct. No positivity of $\Delta$ is needed for the weighted fidelity
 bound; no uniqueness assertion for nonpositive $\Delta$ is made.
 
 \section{Status}
+
+The restriction is one of setting, not of hypotheses. The source states its
+selection on the companion code's own filter, state and coordinate types.
+The Lean result states it on TNLean's square-grid coordinates and the adapted
+filter definitions of the second section, which are compared with the
+canonical families entry by entry. It does not assert the source's lemma on
+the companion code's types themselves. Within that setting the hypotheses are
+the source's: no hypothesis is added, and the cases $J<0$ and $q=0$ are
+covered as the previous section describes.
 
 The result is a standalone adaptation of a lemma of the companion Lean code
 of~\cite{OpenAI2026PolynomialPEPS}. The proofs of the area law and of the

@@ -98,11 +98,11 @@ structure ScannerHypotheses (X : ScannerExponents) (R : ℕ) (J Δ CT Ctr C₁ C
   (`01-preliminaries.tex`, lines 4–5), to which the entropy inputs refer
   (`08-scanner.tex`, lines 343–347). -/
   norm_eq_one : ‖Ω‖ = 1
-  /-- `h` is gapped at `E₀` with gap `Δ` (`01-preliminaries.tex`, lines 4–5). -/
-  isGapped : IsGapped h.operator E₀ Δ
-  /-- The ground space of `h` at `E₀` is the line through `Ω` (`01-preliminaries.tex`,
-  lines 4–5). -/
-  groundSpace_eq : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}
+  /-- The projector gap inequality (`01-preliminaries.tex`, lines 4–5), for any real `Δ`. -/
+  projectorGap : (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef
+  /-- The distinguished vector belongs to the eigenspace at `E₀` (lines 4–5). -/
+  mem_groundSpace : Ω ∈ groundSpace h.operator E₀
   /-- Interaction supports use the graph metric of `Λ` (lines 15–16). -/
   graph_eq : S.graph = planeDomainGraph Λ
   /-- Depth is the ambient sup-norm distance to the target (lines 14–15). -/
@@ -333,6 +333,9 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
   refine ⟨3 * (μ : ℝ) + 1, Cb, 12, Cδ, Clδ, Cδ, Clδ, c, hC₁, hCδ, hCδ, hc, ?_⟩
   filter_upwards [eventually_ge_atTop (max N Ne)] with n hn
   intro Λ T _ hT h S E₀ Ω hyp g C₀ c₀ B
+  obtain ⟨-, -, hgap, hspan⟩ :=
+    (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+      ⟨hyp.norm_eq_one, ManyBody.mem_groundSpace_iff.mp hyp.mem_groundSpace, hyp.projectorGap⟩
   rcases hyp.n_eq with rfl
   have hprefix_eq_shell (j : ℕ) :
       positiveDepthPrefix S.A S.depth (j : ℤ) = S.shell T j := by
@@ -349,7 +352,7 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
       (hyp.entropy_shell j hj).trans
         (mul_le_mul_of_nonneg_right (le_max_left Ce 1) (by positivity))
   obtain ⟨hrD, hDpos, hDm, hm, hM, hphysical⟩ :=
-    henergy Λ T hT h S E₀ Ω hyp.norm_eq_one hyp.isGapped hyp.groundSpace_eq hyp.graph_eq
+    henergy Λ T hT h S E₀ Ω hyp.norm_eq_one hgap hspan hyp.graph_eq
       hyp.anchor_mem (by omega)
       hyp.r₀_eq hyp.m_eq hyp.D_eq hyp.K_eq hyp.C₁_eq hyp.card_le hyp.depth_eq hyp.rows_le
       (fun x ↦ card_anchor_fiber_le S.anchor hyp.anchor_mem x) hyp.clearance htarget hsource

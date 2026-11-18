@@ -25,7 +25,7 @@ open Matrix
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*} [∀ v, Fintype (Out v)]
+variable {Out : V → Type*} [∀ v, DecidableEq (Out v)] [∀ v, Fintype (Out v)]
 variable {m : ℕ} (regions : Fin m → Finset V)
 
 open Classical in
@@ -43,7 +43,7 @@ open Classical in
 /-- The squared norm of the original ordered product after one diagonal change.
 Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 170–178. -/
 noncomputable def regularizedPatchDiagonalObjective (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
     (j : Fin m)
     (U : unitary (Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ))
@@ -57,7 +57,7 @@ Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 170–191.
 Neither commutation of filters nor nonsingularity of a density is needed. -/
 theorem isMinOn_regularizedPatchDiagonalObjective
     (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
     (hx : x ∈ regularizedPatchDomain regions)
     (hmin : IsMinOn (regularizedPatchObjective regions a b Ω)

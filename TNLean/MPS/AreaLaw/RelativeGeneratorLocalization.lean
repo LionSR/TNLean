@@ -166,7 +166,7 @@ theorem ChainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le
     exact hsum
   have hgen := norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
     (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
-    (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le) g.hermitian b₀
+    (fun X ↦ ManyBody.ChainSupport.edist_le X) (fun X ↦ X.2.card_le) g.hermitian b₀
     g.sum_norm_terms_containing_le (C ×ˢ Finset.univ) (fun p ↦ p.1.1) Z
     (fun p hp ↦ Finset.subset_biUnion_of_mem (fun X ↦ X.1) (Finset.mem_product.mp hp).1)
     (fun p _ ↦ p.1.2.card_le) A (fun p _ ↦ (h.partialSwap_term_difference_spec D p.1 p.2).1)

@@ -582,8 +582,9 @@ theorem exists_physical_selected_window_fixed_middle_data
       (interval L 0 (a + 1) : Finset (Fin L)) := by
     rw [hF₀left]
     exact zero_mem _
-  have hPmid : Pmid ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) K :=
-    TNLean.Lattice.siteLift_mem_supportedOperators K M
+  have hPmid : Pmid ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) K := by
+    rw [show Pmid = _ from (QuantumCircuit.place_eq_embedOp K M).symm]
+    exact ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _) M
   have hFmiddleBulk : F₀ (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval L (a + 2 * ℓ) (b + 1) : Finset (Fin L)) := by
     rw [hF₀middle]

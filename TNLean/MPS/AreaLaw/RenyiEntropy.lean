@@ -142,7 +142,8 @@ theorem ChainHamiltonian.near_one_renyi_entropy_interval_bounds
         (Entropy.regionState_isHermitian (interval L l r) Ω)
     have hlo : S ≤ Real.log (Entropy.surprisalMoment p u) / u :=
       (le_div_iff₀ hu0).mpr (by
-        simpa only [S, Entropy.regionEntropy, vonNeumannEntropy, p, mul_comm] using
+        simpa only [S, Entropy.regionEntropy, ManyBody.regionEntropy, vonNeumannEntropy, p,
+          mul_comm] using
           mul_entropy_le_log_surprisalMoment hp hpSum u)
     have hcut := cutLogBudget_interval_le (L := L) (R := R) hq l r
     have hmoment := h.log_surprisalMoment_region_le hJ hΔ hΩ hgap hspan (interval L l r)

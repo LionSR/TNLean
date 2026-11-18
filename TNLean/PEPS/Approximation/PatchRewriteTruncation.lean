@@ -62,7 +62,6 @@ the manuscript; no upstream Lean proof text was reused.
 
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator
-open TNLean.Lattice (siteLift siteLift_conjTranspose)
 
 noncomputable section
 
@@ -194,8 +193,8 @@ def patchStep (t : p.Tag) : Step ι q := ⟨p.tagSample t, some (p.tagVec t), so
 /-- The step `|v⟩⟨0|` of a hole decoding at a cylinder term. -/
 def decStep (t : p.Tag) : Step ι q := ⟨p.tagSample t, some (p.tagVec t), none⟩
 
-theorem siteLift_empty_zeroVec :
-    siteLift (∅ : Finset ι)
+theorem place_empty_zeroVec :
+    ManyBody.place (X := fun _ ↦ Fin _) (∅ : Finset ι)
       (vecMulVec (zeroVec (q := q) (∅ : Finset ι))
         (star (zeroVec (q := q) (∅ : Finset ι)))) = 1 := by
   have h : vecMulVec (zeroVec (q := q) (∅ : Finset ι))
@@ -205,20 +204,21 @@ theorem siteLift_empty_zeroVec :
     have ha0 : a = 0 := funext fun x => absurd x.2 (Finset.notMem_empty _)
     subst hab ha0
     simp [vecMulVec_apply, zeroVec]
-  rw [h, siteLift, embedOp_one]
+  rw [h, QuantumCircuit.place_eq_embedOp, embedOp_one]
 
 theorem branch_eq_op (t : p.Tag) : p.branch t = (p.encStep t).op := by
   rcases t with t | t
-  · exact siteLift_empty_zeroVec.symm
+  · exact place_empty_zeroVec.symm
   · rfl
 
 theorem cyl_eq_op (t : p.Tag) : p.cyl t = (p.patchStep t).op := by
   rcases t with t | t
-  · exact siteLift_empty_zeroVec.symm
+  · exact place_empty_zeroVec.symm
   · rfl
 
 theorem branch_conjTranspose_eq_op (t : p.Tag) : (p.branch t)ᴴ = (p.decStep t).op := by
-  rw [branch_eq_op, Step.op, Step.op, siteLift_conjTranspose, conjTranspose_vecMulVec, star_star]
+  rw [branch_eq_op, Step.op, Step.op, ← ManyBody.place_conjTranspose, conjTranspose_vecMulVec,
+    star_star]
   rfl
 
 end SquarePatch

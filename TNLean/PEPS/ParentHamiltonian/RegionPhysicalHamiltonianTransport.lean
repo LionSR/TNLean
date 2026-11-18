@@ -42,34 +42,35 @@ theorem regionSliceMap_ext (R : Finset V) {ψ φ : (V → Fin d) → ℂ}
   exact congrFun (h τ) σ
 
 /-- A regional interaction acts on each slice by its local matrix. -/
-theorem regionSliceMap_regionLocalTerm (R : Finset V)
+theorem regionSliceMap_place (R : Finset V)
     (h : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (ψ : (V → Fin d) → ℂ)
     (τ : RegionPhysicalConfig (d := d) (Finset.univ \ R)) :
-    regionSliceMap R τ (regionLocalTerm R h *ᵥ ψ) = h *ᵥ regionSliceMap R τ ψ := by
+    regionSliceMap R τ
+        (ManyBody.place (X := fun _ ↦ Fin _) R h *ᵥ ψ) = h *ᵥ regionSliceMap R τ ψ := by
   funext σ
-  exact regionLocalTerm_mulVec_assemble R h ψ σ τ
+  exact place_mulVec_assemble R h ψ σ τ
 
 /-- A local intertwining identity extends to the full graph under the product
 physical map. No positivity or invertibility assumption is required. -/
-theorem globalPhysicalMap_regionLocalTerm (R : Finset V)
+theorem globalPhysicalMap_place (R : Finset V)
     (F : V → Matrix (Fin e) (Fin d) ℂ)
     (h : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (k : Matrix (RegionPhysicalConfig (d := e) R) (RegionPhysicalConfig (d := e) R) ℂ)
     (hF : k * regionPhysicalProductMatrix R F = regionPhysicalProductMatrix R F * h)
     (ψ : (V → Fin d) → ℂ) :
-    globalPhysicalMap F (regionLocalTerm R h *ᵥ ψ) =
-      regionLocalTerm R k *ᵥ globalPhysicalMap F ψ := by
+    globalPhysicalMap F (ManyBody.place (X := fun _ ↦ Fin _) R h *ᵥ ψ) =
+      ManyBody.place (X := fun _ ↦ Fin _) R k *ᵥ globalPhysicalMap F ψ := by
   apply regionSliceMap_ext R
   intro τ
-  rw [regionSliceMap_globalPhysicalMap, regionSliceMap_regionLocalTerm,
+  rw [regionSliceMap_globalPhysicalMap, regionSliceMap_place,
     regionSliceMap_globalPhysicalMap]
   change _ = Matrix.mulVecLin k _
   simp only [map_sum, map_smul]
   apply Finset.sum_congr rfl
   intro β _
   congr 1
-  rw [regionSliceMap_regionLocalTerm]
+  rw [regionSliceMap_place]
   change regionPhysicalProductMatrix R F *ᵥ (h *ᵥ regionSliceMap R β ψ) =
     k *ᵥ (regionPhysicalProductMatrix R F *ᵥ regionSliceMap R β ψ)
   rw [Matrix.mulVec_mulVec, Matrix.mulVec_mulVec, hF]
@@ -170,7 +171,7 @@ theorem globalPhysicalMap_regionParentHamiltonian (R : ι → Finset V)
       regionParentHamiltonian R k *ᵥ globalPhysicalMap F ψ := by
   simp only [regionParentHamiltonian, Matrix.sum_mulVec, map_sum]
   exact Finset.sum_congr rfl fun i _ =>
-    globalPhysicalMap_regionLocalTerm (R i) F (h i) (k i) (hF i) ψ
+    globalPhysicalMap_place (R i) F (h i) (k i) (hF i) ψ
 
 /-- Regional matrix intertwining identities extend to the full Hamiltonian matrices. -/
 theorem globalPhysicalMatrix_regionParentHamiltonian (R : ι → Finset V)

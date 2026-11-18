@@ -112,8 +112,15 @@ theorem sublinearCollarBound_real_of_boxEntropy_explicit
     simpa only [d, Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat] using hD₀
   have hD₀1 : (1 : ℝ) ≤ D₀ := by
     linarith [show (0 : ℝ) ≤ (R : ℝ) from Nat.cast_nonneg R]
+  intro n s₀ hn Λ h E₀ Ω hΩ hgap hspan
   refine sublinearCollarBound_of_mutualInformation_le_at hCtpl hD₀1 _ _ ?_
-  intro n s₀ hn Λ h E₀ Ω hΩ hgap hspan A T hsep hL
+    n s₀ hn Λ h E₀ Ω hΩ
+    (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+    (hspan ▸ Submodule.mem_span_singleton_self _)
+  intro n s₀ hn Λ h E₀ Ω hΩ hpsd hmem A T hsep hL
+  obtain ⟨-, -, hgap, hspan⟩ :=
+    (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+      ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
   have hsep' : T.IsSeparated (d : ℝ) (Geometry.boundaryEndpoints Λ A) := by
     intro t ht z hz
     exact lt_of_le_of_lt
@@ -252,9 +259,15 @@ theorem sublinearCollarBound_real
     (hCtpl : 24 ≤ Ctpl) :
     SublinearCollarBound q R J Δ D₀ Ctpl := by
   obtain ⟨Cb, hCb, hbox⟩ := Scan.exists_boxEntropy_le_boxError q R hq hJ hΔ
-  obtain ⟨_, _, _, _, _, _, _, _, hcol⟩ :=
+  obtain ⟨Ctr, ct, Cent, eent, Cen, een, -, -, hcol⟩ :=
     sublinearCollarBound_real_of_boxEntropy q R hq hJ hΔ hD₀ hCtpl hCb.le (hbox _ (by omega))
-  exact ⟨_, _, hcol⟩
+  refine ⟨sublinearCollarConstant q J Δ Cb,
+    sublinearCollarThreshold q R J Δ Cb Ctr ct Cent eent Cen een, ?_⟩
+  intro n s₀ hn Λ h E₀ Ω hΩ hpsd hmem
+  obtain ⟨-, -, hgap, hspan⟩ :=
+    (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+      ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
+  exact hcol n s₀ hn Λ h E₀ Ω hΩ hgap hspan
 
 /-- **Proposition 9.6 at explicit constants.** For every real clearance `D₀ > 2R + 10` and every
 template constant `Ctpl ≥ 24`, all assertions of the sublinear collar bound

@@ -54,7 +54,7 @@
 - **Pattern:** Compare the entries of a regional local lift with placement
   along the inclusion of the same sites, then identify the exterior matching
   condition with agreement away from the inclusion.
-- **Helper:** `QuantumCircuit.localLift_eq_embedOp` in `Circuit/SiteEmbedding.lean`.
+- **Helper:** `QuantumCircuit.place_eq_embedOp` in `Circuit/SiteEmbedding.lean`.
 - **Decision:** The existing coordinate identity is stated once and reused;
   the support characterization and selected singleton calculation retain their
   mathematical statements.
@@ -378,14 +378,16 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** Convert the range condition of `ChainSupport L R` to an upper
   bound on the path-graph distance between two sites of the support.
-- **Defined in:** `TNLean/MPS/AreaLaw/LiebRobinson.lean`,
-  `ChainSupport.edist_le`.
-- **Refactored occurrences:** the existing propagation and localization proofs
-  in that file and the finite-support numerical propagation proof in
-  `MPS/AreaLaw/Hastings/LiebRobinson.lean`.
-- **Notes:** The existing private proof is now a public theorem; the new
-  propagation estimate uses it instead of repeating the conversion to natural
-  distance. The mathematical range condition is unchanged.
+- **Defined in:** `QICLean/ManyBody/Sites/Lattice/Chain.lean`,
+  `ManyBody.ChainSupport.edist_le` (QICLean dependency).
+- **Refactored occurrences:** `MPS/AreaLaw/LiebRobinson.lean`,
+  `MPS/AreaLaw/Hastings/LiebRobinson.lean`,
+  `MPS/AreaLaw/RelativeGeneratorLocalization.lean` and
+  `MPS/AreaLaw/SupportedGaussianIntegral.lean`.
+- **Notes:** Originally promoted from a private proof in TNLean; the local
+  copy was removed on 2026-11-18 in favor of the QICLean owner. The five
+  propagation and localization calls use it directly. The mathematical range
+  condition is unchanged.
 
 ### Eventual equality of scalar cocycle classes — promoted (2026-10-29)
 
@@ -8540,7 +8542,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Choose one inside vector for each outside configuration and
   reconstruct the global vector by composing with the regional configuration
   equivalence. Applying a slice reduces to the equivalence's inverse law.
-- **Seen:** `range_dependentRegionOperatorLift` and the two summands in
+- **Seen:** `range_place` and the two summands in
   `dependentRegionCylinder_sup`, all in `PEPS/AreaLaw/Cylinder`.
 - **Abstraction:** None yet; these three occurrences are in one file. Reuse the
   existing configuration equivalence before introducing another reconstruction
@@ -9612,7 +9614,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 ### Agreement outside a finite support — candidate (2026-10-17)
 
 - **Pattern:** Identify agreement outside a finite support with agreement off its subtype inclusion when comparing two local lifts.
-- **Seen:** Two proofs, in `Circuit/EntropySupport.lean`, `mem_supportedOperators_of_isSupportedOn` (both since deleted), and `PEPS/AreaLaw/RegionalEntropyBridge.lean`, `localLift_eq_entropyLocalLift`.
+- **Seen:** Two proofs, in `Circuit/EntropySupport.lean`, `mem_supportedOperators_of_isSupportedOn`, and `PEPS/AreaLaw/RegionalEntropyBridge.lean`, `localLift_eq_entropyLocalLift` (all since deleted).
 - **Possible abstraction:** A lemma identifying these two agreement conditions if a third use appears. The current two occurrences do not require a new public lemma.
 - **Notes:** Both comparisons reuse the existing local-lift entry formula. The Circuit result imports no PEPS or MPS module.
 

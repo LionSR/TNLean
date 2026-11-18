@@ -187,10 +187,11 @@ theorem IsGIsometric.exists_unitary_torusTranslatedGlobalFluxCreation
     ∃ W : Matrix ({x : TorusVertex width height // x ∈ R v} → Fin d)
         ({x : TorusVertex width height // x ∈ R v} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({x : TorusVertex width height // x ∈ R v} → Fin d) ℂ ∧
-      regionLocalTerm (R v) W ∈ Matrix.unitaryGroup
+      ManyBody.place (X := fun _ ↦ Fin _) (R v) W ∈ Matrix.unitaryGroup
         (TorusVertex width height → Fin d) ℂ ∧
       ∀ u : Edge (torusGraph width height) → G,
-        regionLocalTerm (R v) W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite
+        ManyBody.place (X := fun _ ↦ Fin _)
+            (R v) W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a)
           (regularRegionBondExtension (R v) (fun _ => 1) u))) =
         (Real.sqrt ((Fintype.card G : ℝ) *

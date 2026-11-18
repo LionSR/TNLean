@@ -412,8 +412,9 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
     (hC : 0 ≤ C)
     (hpos : ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+          (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+        Ω ∈ groundSpace h.operator E₀ →
         let cs := positiveNormalization p (Δ / 2) J
         let k := fun i => positiveConstraint cs (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
         0 < cs ∧
@@ -432,8 +433,9 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
             (planeDomainGraph Λ).Reachable (a i) x))) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+        (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+      Ω ∈ groundSpace h.operator E₀ →
       ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
       let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
       let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
@@ -490,9 +492,17 @@ theorem latticeConstraintWord_truncation_explicit {p : ℕ} (hp : 1 ≤ p) (R : 
           Real.exp (-(latticePositiveConstraintRate R J Δ p / 2 * (r : ℝ) ^ kernelExponent p)) ∧
       ∀ w, ‖L w‖ ≤ 1 ∧
         L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
-            (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) :=
-  latticeConstraintWord_truncation_of_positiveConstraints R
-    (latticePositiveConstraintConst_nonneg R J Δ p) (latticePositiveConstraints_explicit hp R hJ hΔ)
+            (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
+  intro q _ Λ h a ha E₀ Ω hΩ hgap hspan
+  refine latticeConstraintWord_truncation_of_positiveConstraints R
+    (latticePositiveConstraintConst_nonneg R J Δ p) ?_ Λ h a ha E₀ Ω hΩ
+    (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+    (hspan ▸ Submodule.mem_span_singleton_self _)
+  intro q _ Λ h a ha E₀ Ω hΩ hpsd hmem
+  obtain ⟨-, -, hgap, hspan⟩ :=
+      (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+        ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
+  exact latticePositiveConstraints_explicit hp R hJ hΔ Λ h a ha E₀ Ω hΩ hgap hspan
 
 /-- **Truncation of the retained constraint product** (Lemma 10.1,
 `lem:amplification-local-products`, `eq:amplification-product-truncation`,
@@ -536,7 +546,16 @@ theorem exists_latticeConstraintWord_truncation {p : ℕ} (hp : 1 ≤ p) (R : �
               (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
   obtain ⟨C, c, hC, hc, hpos⟩ := exists_latticePositiveConstraints hp R hJ hΔ
   exact ⟨_, _, constraintWordTruncationPrefactor_nonneg (Nat.cast_nonneg _) C, half_pos hc,
-    latticeConstraintWord_truncation_of_positiveConstraints R hC hpos⟩
+    by
+      intro q _ Λ h a ha E₀ Ω hΩ hgap hspan
+      refine latticeConstraintWord_truncation_of_positiveConstraints R hC ?_ Λ h a ha E₀ Ω hΩ
+        (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+        (hspan ▸ Submodule.mem_span_singleton_self _)
+      intro q _ Λ h a ha E₀ Ω hΩ hpsd hmem
+      obtain ⟨-, -, hgap, hspan⟩ :=
+          (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+            ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
+      exact hpos Λ h a ha E₀ Ω hΩ hgap hspan⟩
 
 end Lattice
 

@@ -89,9 +89,7 @@ theorem exists_closedSquare_cylinders_of_marginal_closeness
       let regions : Fin m → Finset (Lattice.Site Λ) :=
         fun j ↦ AreaLaw.Geometry.closedSquareSample Λ center (r j)
       let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
-      let U := dependentGlobalConfigIsometry
-        (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-      let Ψᵤ := U.symm Ψ
+      let Ψᵤ := Ψ
       ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
         x ∈ regularizedPatchDomain
           (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
@@ -109,32 +107,30 @@ theorem exists_closedSquare_cylinders_of_marginal_closeness
       (Fintype.equivFin (Lattice.Site Λ)).linearOrder
     let regions : Fin m → Finset (Lattice.Site Λ) :=
       fun j ↦ AreaLaw.Geometry.closedSquareSample Λ center (r j)
-    let U := dependentGlobalConfigIsometry
-      (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-    let Ψᵤ := U.symm Ψ
+    let Ψᵤ := Ψ
     ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
       (v : EuclideanSpace ℂ
-        ((w : (Finset.univ : Finset (Lattice.Site Λ))) → Fin q)),
+        ((v : Lattice.Site Λ) → Fin q)),
       (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤
         (L : ℝ) ^ regularizedPatchRadiusExponent (16 * C + Real.log 8) B₀ p κ) ∧
-      (v : (((w : (Finset.univ : Finset (Lattice.Site Λ))) → Fin q) → ℂ)) ∈
+      (v : (((v : Lattice.Site Λ) → Fin q) → ℂ)) ∈
         (⨆ j, dependentRegionCylinder
           (Out := fun _ : Lattice.Site Λ ↦ Fin q) (regions j) (S j)) ∧
       ‖Ψᵤ - v‖ ≤ (L : ℝ) ^ (-p) := by
-  intro regions U Ψᵤ
+  intro regions Ψᵤ
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
   let R : ℝ := regularizedPatchRadiusExponent (16 * C + Real.log 8) B₀ p κ * Real.log L
   have hdata : (0 : ℝ) < m ∧ ‖Ψᵤ‖ = 1 ∧ Monotone regions :=
-    ⟨Nat.cast_pos.mpr hm, (U.symm.norm_map _).trans hΨ,
+    ⟨Nat.cast_pos.mpr hm, hΨ,
       fun i j hij ↦ AreaLaw.Geometry.closedSquareSample_mono Λ center (hr hij)⟩
   have ha : (∀ j, 0 < a j) ∧ ∑ j, a j = κ :=
     ⟨fun _ ↦ div_pos hκ hdata.1, by simp [a, div_eq_mul_inv, mul_left_comm, hdata.1.ne']⟩
   have hbounds := regularizedPatchRadiusExponent_bounds (C₀ := 16 * C + Real.log 8)
     (L := (L : ℝ)) (by positivity) hB₀.le hp.le hκ (by exact_mod_cast hL) huL
-  have hΨeq : dependentGlobalConfigIsometry Ψᵤ = Ψ := U.apply_symm_apply _
+  have hΨeq : Ψᵤ = Ψ := rfl
   have hS' (j : Fin m) : Entropy.regionEntropy (n := fun _ : Lattice.Site Λ ↦ q) (regions j)
-      (dependentGlobalConfigIsometry Ψᵤ) ≤ C * (1 + u) := by
+      (Ψᵤ) ≤ C * (1 + u) := by
     simpa only [hΨeq] using hS j
   have hgrowth := log_regularizedPatchMinimum_exp_neg_le_of_entropy_distance
     (n := fun _ : Lattice.Site Λ ↦ q) regions hdata.2.2 a ha.1 Ψᵤ hdata.2.1
@@ -193,15 +189,13 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
           let m := AreaLaw.Geometry.nestedPatchCount u
           let regions : Fin m → Finset (Lattice.Site Λ) :=
             fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j.val
-          let U := dependentGlobalConfigIsometry
-            (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-          let Ωᵤ := U.symm (AreaLaw.rectangleAreaLawState Ω)
+          let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
           ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
             (v : EuclideanSpace ℂ
-              ((w : (Finset.univ : Finset (Lattice.Site Λ))) → Fin q)),
+              ((v : Lattice.Site Λ) → Fin q)),
             (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤
               (L : ℝ) ^ nestedPatchRadiusExponent q J Δ B₀ p C_A) ∧
-            (v : (((w : (Finset.univ : Finset (Lattice.Site Λ))) → Fin q) → ℂ)) ∈
+            (v : (((v : Lattice.Site Λ) → Fin q) → ℂ)) ∈
               (⨆ j, dependentRegionCylinder
                 (Out := fun _ : Lattice.Site Λ ↦ Fin q) (regions j) (S j)) ∧
             ‖Ωᵤ - v‖ ≤ (L : ℝ) ^ (-p) := by
@@ -214,7 +208,9 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
     (fun j ↦ AreaLaw.Geometry.nestedPatchRadius u j.val)
     (fun i j hij ↦ add_le_add_right (mul_le_mul_of_nonneg_left (Nat.cast_le.mpr hij)
       (by norm_num : (0 : ℝ) ≤ 2)) u)
-    (fun j ↦ hA.nestedPatch_entropy_le L Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ center u
+    (fun j ↦ hA.nestedPatch_entropy_le L Ω ⟨h, hh, hhJ, E₀, hΩ,
+      hgap.posSemidef_sub_smul_one hh hΩ hspan,
+      hspan ▸ Submodule.mem_span_singleton_self Ω⟩ center u
         (by linarith) j)
     (fun b hb ↦ nestedPatch_minimizer_marginal_closeness q hJ.le hΔ hκ
       (patchFilterExponent_le_half q J Δ) (mul_patchFilterExponent_sq_le hJ.le hΔ.le)
@@ -249,14 +245,12 @@ theorem SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders
             let m := AreaLaw.Geometry.nestedPatchCount u
             let regions : Fin m → Finset (Lattice.Site Λ) :=
               fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j.val
-            let U := dependentGlobalConfigIsometry
-              (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-            let Ωᵤ := U.symm (AreaLaw.rectangleAreaLawState Ω)
+            let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
             ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
               (v : EuclideanSpace ℂ
-                ((w : (Finset.univ : Finset (Lattice.Site Λ))) → Fin q)),
+                ((v : Lattice.Site Λ) → Fin q)),
               (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤ (L : ℝ) ^ R₀) ∧
-              (v : (((w : (Finset.univ : Finset (Lattice.Site Λ))) → Fin q) → ℂ)) ∈
+              (v : (((v : Lattice.Site Λ) → Fin q) → ℂ)) ∈
                 (⨆ j, dependentRegionCylinder
                   (Out := fun _ : Lattice.Site Λ ↦ Fin q) (regions j) (S j)) ∧
               ‖Ωᵤ - v‖ ≤ (L : ℝ) ^ (-p) := by

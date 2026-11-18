@@ -89,8 +89,8 @@ theorem isZeroOn_regCentralSites_pairLayerOp_mulVec (hN : ∑ _ : Fin M, s * 2 ^
     (hr : ∀ _ : Fin M, s + s ≤ s * 2 ^ (k + 1))
     (W : Fin M → Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ) :
     IsZeroOn (regCentralSites (k := k) (s := s) hN)
-      (pairLayerOp hN hr W *ᵥ productVector fun _ => Pi.single ⟨0, NeZero.pos d⟩ 1) :=
-  isZeroOn_pairLayerOp_mulVec_productVector hN hr W
+      (pairLayerOp hN hr W *ᵥ productVector fun _ => Pi.single ⟨0, NeZero.pos d⟩ 1) := by
+  simpa [regCentralSites] using isZeroOn_pairLayerOp_mulVec_productVector hN hr W
 
 end Pairs
 

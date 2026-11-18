@@ -44,7 +44,7 @@ use the proposition as a premise independently of its proof.
   accuracy `L^{-60}`, `06-geometry.tex`, lines 440–445.
 -/
 
-open scoped Matrix.Norms.L2Operator
+open scoped Matrix.Norms.L2Operator ComplexOrder
 
 open ManyBody (SquareLatticeVertex SquareInteraction)
 
@@ -83,8 +83,9 @@ def AngularInformationBound (q : ℕ) (J Δ : ℝ) : Prop :=
     ∃ D L₀ : ℝ, ∀ L : ℕ, L₀ ≤ L →
       ∀ h : SquareInteraction L q, h.hamiltonian.IsHermitian → (∀ i, ‖h.term i‖ ≤ J) → ∀ E₀ : ℝ,
           ∀ Ω : StateSpace L q,
-        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+          (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+        Ω ∈ groundSpace h.hamiltonian E₀ →
         ∀ V : Finset (ℝ × ℝ), V.card ≤ m₀ →
         ∀ X E : Finset (SquareLatticeVertex L L), Disjoint X E →
         ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →

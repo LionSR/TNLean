@@ -30,7 +30,7 @@ open Matrix
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*} [∀ v, Fintype (Out v)]
+variable {Out : V → Type*} [∀ v, Fintype (Out v)] [∀ v, DecidableEq (Out v)]
 variable {m : ℕ} (regions : Fin m → Finset V)
 
 open Classical in
@@ -41,7 +41,7 @@ are arbitrary. Repeated regions and the empty product are retained.
 Source: polynomial-PEPS manuscript, 03-patches.tex, lines 425–437. -/
 theorem hasDerivAt_regularizedPatchOutput_exp_neg
     (a : Fin m → ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
     (hx : ∀ j, (x j).PosSemidef) (R : ℝ) :
     HasDerivAt
@@ -53,34 +53,32 @@ theorem hasDerivAt_regularizedPatchOutput_exp_neg
     (hx j).hasDerivAt_add_exp_neg_smul_one_rpow R (-(a j) / 2)
   let liftR (S : Finset V) :
       Matrix ((v : S) → Out v.1) ((v : S) → Out v.1) ℂ →L[ℝ]
-        Matrix ((v : (Finset.univ : Finset V)) → Out v.1)
-          ((v : (Finset.univ : Finset V)) → Out v.1) ℂ :=
-    let e := dependentRegionConfigEquiv (Out := Out) S
-    ((Matrix.reindexLinearEquiv ℝ ℂ e.symm e.symm).toLinearMap.comp
-      ((Matrix.kroneckerBilinear (R := ℝ) (α := ℂ)).flip 1)).toContinuousLinearMap
+        Matrix ((v : V) → Out v)
+          ((v : V) → Out v) ℂ :=
+    ((ManyBody.placeHom (X := Out) S).toLinearMap.restrictScalars ℝ).toContinuousLinearMap
   have hfilter (j : Fin m) :=
     (liftR (regions j)).hasFDerivAt.comp_hasDerivAt R (hlocal j)
   let P := (ContinuousMultilinearMap.mkPiAlgebraFin ℝ m
-    (Matrix ((v : (Finset.univ : Finset V)) → Out v.1)
-      ((v : (Finset.univ : Finset V)) → Out v.1) ℂ)).domDomCongr Fin.revPerm
+    (Matrix ((v : V) → Out v)
+      ((v : V) → Out v) ℂ)).domDomCongr Fin.revPerm
   have hprod := (P.hasFDerivAt _).comp_hasDerivAt R (hasDerivAt_pi.mpr hfilter)
   let evalΩ :
-      Matrix ((v : (Finset.univ : Finset V)) → Out v.1)
-        ((v : (Finset.univ : Finset V)) → Out v.1) ℂ →L[ℝ]
-      EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1) :=
+      Matrix ((v : V) → Out v)
+        ((v : V) → Out v) ℂ →L[ℝ]
+      EuclideanSpace ℂ ((v : V) → Out v) :=
     LinearMap.toContinuousLinearMap
       (((LinearMap.applyₗ Ω).comp Matrix.toEuclideanLin.toLinearMap).restrictScalars ℝ)
   have houtput := evalΩ.hasFDerivAt.comp_hasDerivAt R hprod
-  have hP (F : Fin m → Matrix ((v : (Finset.univ : Finset V)) → Out v.1)
-      ((v : (Finset.univ : Finset V)) → Out v.1) ℂ) :
+  have hP (F : Fin m → Matrix ((v : V) → Out v)
+      ((v : V) → Out v) ℂ) :
       P F = ((List.ofFn F).reverse).prod := by
     simp [P, List.ofFn_reverse, Function.comp_def]
-  have heval (K : Matrix ((v : (Finset.univ : Finset V)) → Out v.1)
-      ((v : (Finset.univ : Finset V)) → Out v.1) ℂ) :
+  have heval (K : Matrix ((v : V) → Out v)
+      ((v : V) → Out v) ℂ) :
       evalΩ K = WithLp.toLp 2 (K *ᵥ Ω) := rfl
   have hlift (S : Finset V)
       (K : Matrix ((v : S) → Out v.1) ((v : S) → Out v.1) ℂ) :
-      liftR S K = dependentRegionOperatorLift S K := rfl
+      liftR S K = ManyBody.place S K := rfl
   simp only [ContinuousMultilinearMap.linearDeriv_apply, map_sum] at houtput
   convert! houtput using 1
   · simp only [Function.comp_def, hP, heval, hlift, regularizedPatchOutput,
@@ -97,7 +95,7 @@ commutations. No differentiable choice of minimizing tuples is assumed.
 Source: polynomial-PEPS manuscript, 03-patches.tex, lines 453–466. -/
 theorem hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute
     (hnested : Monotone regions) (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (hΩ : ‖Ω‖ = 1)
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
     (hx : x ∈ regularizedPatchDomain (Out := Out) regions) (R : ℝ)
@@ -111,7 +109,7 @@ theorem hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute
           (normalizedRegularizedPatchMarginal regions a (Real.exp (-R)) Ω x (regions j) *
             (Real.exp (-R) • (x j + Real.exp (-R) • 1) ^ (-1 : ℝ)))).re) R := by
   let := InnerProductSpace.rclikeToReal ℂ
-    (EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (EuclideanSpace ℂ ((v : V) → Out v))
   have hb : 0 < Real.exp (-R) := Real.exp_pos _
   have hxpsd (j : Fin m) : (x j).PosSemidef := (hx j).1
   have hp := regularizedPatchObjective_pos regions a ha hb Ω hΩ hx
@@ -142,7 +140,7 @@ Source: polynomial-PEPS manuscript, 03-patches.tex, lines 433–451,
 eq:patch-uniform-local-lipschitz. -/
 theorem exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform
     (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (hΩ : ‖Ω‖ = 1) (T : ℝ) (hT : 0 ≤ T) :
     let κ : ℝ := ∑ j, a j
     ∀ x ∈ regularizedPatchDomain (Out := Out) regions,
@@ -166,9 +164,9 @@ theorem exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform
   simp_rw [Real.rpow_sub_one hb.ne', mul_assoc, mul_div_cancel₀ _ hb.ne'] at hD
   have hlift (S : Finset V)
       (K : Matrix ((v : S) → Out v.1) ((v : S) → Out v.1) ℂ) :
-      ‖dependentRegionOperatorLift S K‖ ≤ ‖K‖ :=
+      ‖ManyBody.place S K‖ ≤ ‖K‖ :=
     Matrix.l2_opNorm_le_of_forall (norm_nonneg K)
-      (fun v ↦ norm_dependentRegionOperatorLift_mulVec_le S K (WithLp.toLp 2 v))
+      (fun v ↦ norm_place_mulVec_le S K (WithLp.toLp 2 v))
   have hF (j : Fin m) : ‖regularizedPatchFilter regions a b x j‖ ≤ b ^ (-(a j) / 2) :=
     Matrix.l2_opNorm_le_of_forall (Real.rpow_nonneg hb.le _)
       (fun v ↦ (regularizedPatchFilter_norm_bounds regions a ha hb hx j
@@ -176,16 +174,16 @@ theorem exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform
   let D (j : Fin m) := (a j / 2 * b) • (x j + b • 1) ^ (-(a j) / 2 - 1)
   have hU (j : Fin m) :
       (norm ∘ Function.update (regularizedPatchFilter regions a b x) j
-        (dependentRegionOperatorLift (regions j) (D j))) ≤
+        (ManyBody.place (regions j) (D j))) ≤
         Function.update (fun i ↦ b ^ (-(a i) / 2)) j (a j / 2 * b ^ (-(a j) / 2)) := by
     simpa only [Function.comp_update] using
       (update_le_update_iff.mpr ⟨(hlift _ _).trans (hD j), fun i _ ↦ hF i⟩ :
         Function.update (norm ∘ regularizedPatchFilter regions a b x) j
-          ‖dependentRegionOperatorLift (regions j) (D j)‖ ≤
+          ‖ManyBody.place (regions j) (D j)‖ ≤
           Function.update (fun i ↦ b ^ (-(a i) / 2)) j (a j / 2 * b ^ (-(a j) / 2)))
   have hprod (j : Fin m)
-      (F : Fin m → Matrix ((v : (Finset.univ : Finset V)) → Out v.1)
-        ((v : (Finset.univ : Finset V)) → Out v.1) ℂ) :
+      (F : Fin m → Matrix ((v : V) → Out v)
+        ((v : V) → Out v) ℂ) :
       ‖((List.ofFn F).reverse).prod‖ ≤ ∏ i, ‖F i‖ := by
     simpa only [List.map_reverse, List.prod_reverse, List.map_ofFn, List.prod_ofFn,
       Function.comp_apply] using (List.norm_prod_le' (l := (List.ofFn F).reverse) (by
@@ -197,7 +195,7 @@ theorem exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform
       PiLp.coe_symm_continuousLinearEquiv] using
       (Matrix.l2_opNorm_mulVec
         ((List.ofFn (Function.update (regularizedPatchFilter regions a b x) j
-          (dependentRegionOperatorLift (regions j) (D j)))).reverse).prod Ω).trans
+          (ManyBody.place (regions j) (D j)))).reverse).prod Ω).trans
         (mul_le_mul_of_nonneg_right ((hprod j _).trans
           (Finset.prod_le_prod₀ (fun i _ ↦ norm_nonneg _) (fun i _ ↦ hU j i))) (norm_nonneg Ω))
   have huprod (r : Fin m → ℝ) (c : ℝ) (j : Fin m) :
@@ -211,7 +209,7 @@ theorem exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform
     simpa only [← Finset.sum_mul, ← Finset.sum_div] using
       (norm_sum_le _ _).trans (Finset.sum_le_sum (fun j _ ↦ hI j))
   let := InnerProductSpace.rclikeToReal ℂ
-    (EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (EuclideanSpace ℂ ((v : V) → Out v))
   have hp := regularizedPatchObjective_pos regions a ha hb Ω hΩ hx
   have hlog := ((hasDerivAt_regularizedPatchOutput_exp_neg regions a Ω x
     (fun j ↦ (hx j).1) R).norm_sq.log (pow_ne_zero 2 hp.ne')).div_const 2

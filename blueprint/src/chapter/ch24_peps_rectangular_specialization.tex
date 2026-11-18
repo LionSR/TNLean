@@ -80,15 +80,18 @@ rectangular and vertex-boundary implication in
         TNLean.PEPS.AreaLaw.embedOp_rectangular_eq_reindex,
         ManyBody.RectangleInteraction.toAreaLawHamiltonian,
         ManyBody.RectangleInteraction.toAreaLawHamiltonian_operator,
-        ManyBody.RectangleInteraction.isGapped_toAreaLawHamiltonian}
+        ManyBody.RectangleInteraction.isGapped_toAreaLawHamiltonian,
+        ManyBody.RectangleInteraction.projectorGap_toAreaLawHamiltonian}
     \leanok
     \uses{thm:square_interaction_support_injective}
     Let $U$ identify the native configuration basis with the basis of the
     corresponding integer lattice domain. For every real $J$, placing $Uk_iU^*$
     at its singleton or pair support, and zero at unused admissible supports,
     gives a range-one interaction family with bound $J$ and total $UHU^*$.
-    The vector $U\Omega$ has the same norm and ground energy, and satisfies
-    the same global projector gap with parameter $\Delta$.
+    For every real $\Delta$, a unit eigenvector $\Omega$ with eigenvalue $E_0$
+    is carried to $U\Omega$ with the same norm and eigenvalue, preserving
+    $H-E_0I\succeq\Delta(I-|\Omega\rangle\langle\Omega|)$.
+    This transport requires no one-dimensional eigenspace assumption.
 \end{lemma}
 \begin{proof}
     \leanok

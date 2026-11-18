@@ -41,14 +41,14 @@ energy inference in LVV, arXiv:1307.5143v1, `algo53.tex`, proof of Lemma `l:with
 lines 509–515. -/
 theorem ChainHamiltonian.re_inner_sub_le_of_overlap_of_range_one
     (h : ChainHamiltonian L q 1 1) (hΩ : ‖Ω‖ = 1)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+    (hmem : Ω ∈ groundSpace h.operator E₀)
     (hv : ‖v‖ = 1) (hover : 1 - δ ≤ ‖⟪Ω, v⟫_ℂ‖) :
     (⟪v, toEuclideanLin h.operator v⟫_ℂ).re - E₀ ≤ 8 * L * δ := by
   let B := toEuclideanCLM (𝕜 := ℂ) h.operator
   have hB : ‖B‖ ≤ 2 * L := by
     simpa only [B, l2_opNorm_toEuclideanCLM, mul_one] using h.norm_operator_le_of_range_one
   have heig : B Ω = (E₀ : ℂ) • Ω :=
-    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _)
+    ManyBody.mem_groundSpace_iff.mp hmem
   have hE₀ : ‖(E₀ : ℂ)‖ ≤ ‖B‖ := by
     simpa only [heig, norm_smul, hΩ, mul_one] using B.le_opNorm Ω
   have hshift : ‖B - (E₀ : ℂ) • ContinuousLinearMap.id ℂ _‖ ≤ 4 * L := by
@@ -74,10 +74,10 @@ at most `8c`. This is an auxiliary bound for LVV, arXiv:1307.5143v1, `algo53.tex
 Lemma `l:within`, lines 509–515. -/
 theorem ChainHamiltonian.re_inner_le_of_overlap_div_of_range_one
     (h : ChainHamiltonian L q 1 1) (hΩ : ‖Ω‖ = 1)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+    (hmem : Ω ∈ groundSpace h.operator E₀)
     (hL : 0 < L) (hv : ‖v‖ = 1) (hover : 1 - c / L ≤ ‖⟪Ω, v⟫_ℂ‖) :
     (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + 8 * c := by
-  have henergy := h.re_inner_sub_le_of_overlap_of_range_one hΩ hspan hv hover
+  have henergy := h.re_inner_sub_le_of_overlap_of_range_one hΩ hmem hv hover
   have hL0 : (L : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hL.ne'
   have hcancel : (8 : ℝ) * L * (c / L) = 8 * c := by field_simp [hL0]
   rw [hcancel] at henergy

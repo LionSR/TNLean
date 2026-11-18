@@ -226,7 +226,7 @@ private theorem isOpenMPS_bond_pow_succ {L q : ℕ} (ψ : EuclideanSpace ℂ (Fi
   gcongr
   · omega
   · omega
-  · simpa using Finset.card_le_univ (leftBlock L k)
+  · simp
 
 private theorem isEfficientlyApproximableByMPS_of_eventually
     {q : ℕ} {lengths : Set ℕ}

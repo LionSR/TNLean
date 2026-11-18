@@ -46,6 +46,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace)
 
+open scoped ComplexOrder
+
 namespace TNLean.PEPS.Approximation
 
 open TNLean.PEPS.AreaLaw
@@ -115,8 +117,9 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
       m₀ ∉ A →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J)
         (E₀ : ℝ) (Ω : Lattice.StateSpace Λ q),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+          (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+        Ω ∈ groundSpace h.operator E₀ →
         let G : Finset (Site Λ) :=
           Finset.univ.filter (fun x ↦ x.val ∈ CellPartition.cellSample o s m₀)
         let B : Finset (Site Λ) := Finset.univ.filter
@@ -272,6 +275,11 @@ theorem exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
   exact ⟨_, _, cellInformationConstant_pos q c Ctpl N Ca Na,
     (cellInformationExponent_pos c Ctpl N Ca Na).le,
-    cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt hcol hamp hc⟩
+    by
+      intro s hs o m₀ A hm₀ Λ h E₀ Ω hΩ hgap hspan
+      exact cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt hcol hamp hc
+        s hs o m₀ A hm₀ Λ h E₀ Ω hΩ
+        (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+        (hspan ▸ Submodule.mem_span_singleton_self _)⟩
 
 end TNLean.PEPS.Approximation

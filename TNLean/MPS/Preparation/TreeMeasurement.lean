@@ -254,7 +254,7 @@ private theorem mod_two_pow_eq_of_succ_dvd {i k x : ℕ} (hik : i ≤ k)
 finer levels `0, …, k - 1`. -/
 theorem isZeroOn_levelOp_mulVec (k : ℕ) {v : Cfg d N → ℂ}
     (hv : IsZeroOn (treeInterior N (k + 1)) v) :
-    IsZeroOn (treeInterior N k) (levelOp u hu k *ᵥ v) := by
+    IsZeroOn (treeInterior N k : Set (Fin N)) (levelOp u hu k *ᵥ v) := by
   refine (hv.mono (treeInterior_mono (Nat.le_succ k))).mulVec_of_mem_supportedOperators
     disjoint_compl_right (list_prod_mem_supportedOperators _ fun A hA => ?_)
   obtain ⟨g, hg, rfl⟩ := List.mem_map.mp hA
@@ -303,7 +303,7 @@ Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("every 
 eq. (16) takes constant time using measurement"). -/
 theorem isRoundsImplementationOn_treeRounds (k : ℕ) :
     MeasurementRound.IsRoundsImplementationOn (treeRounds u hu k)
-      {v | IsZeroOn (treeInterior N k) v} (treeOp u hu k) := by
+      {v | IsZeroOn (treeInterior N k : Set (Fin N)) v} (treeOp u hu k) := by
   induction k with
   | zero =>
     exact MeasurementRound.isRoundsImplementationOn_nil _

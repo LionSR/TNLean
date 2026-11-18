@@ -99,6 +99,6 @@ theorem exists_rounds_blockLayerOp_treeBlockOp (d s c : ℕ) [NeZero d] [NeZero 
       List.sum_cons, List.sum_nil, depth_round, hLl]
     nlinarith
   · exact fun m => hall.exists_history_scalar
-      (E := zeroOnSubmodule (treeCentralSites h s hN w)) hunitary m
+      (E := zeroOnSubmodule (d := d) (treeCentralSites h s hN w : Set (Fin N))) hunitary m
 
 end MPSPreparation

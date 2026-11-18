@@ -26,7 +26,7 @@ open Matrix
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*}
+variable {Out : V → Type*} [∀ v, DecidableEq (Out v)]
 
 variable [∀ v, Fintype (Out v)]
 
@@ -35,15 +35,15 @@ variable {m : ℕ} (regions : Fin m → Finset V)
 /-- The canonical regional density of the same normalized vector used in the
 regularized patch minimum problem. Source: OpenAI `03-patches.tex`, lines 68–99. -/
 noncomputable def normalizedRegularizedPatchMarginal (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
     (R : Finset V) : Matrix ((v : R) → Out v.1) ((v : R) → Out v.1) ℂ :=
   FiniteProduct.reducedPure Out
-    (dependentGlobalConfigIsometry (normalizedRegularizedPatchOutput regions a b Ω x)) R
+    ((normalizedRegularizedPatchOutput regions a b Ω x)) R
 
 /-- Canonical regularized patch marginals are positive semidefinite. -/
 theorem normalizedRegularizedPatchMarginal_posSemidef (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
     (R : Finset V) :
     (normalizedRegularizedPatchMarginal regions a b Ω x R).PosSemidef :=
@@ -53,32 +53,31 @@ theorem normalizedRegularizedPatchMarginal_posSemidef (a : Fin m → ℝ) (b : �
 including the marginal on the empty region. -/
 theorem trace_normalizedRegularizedPatchMarginal (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
     {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1)
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v)) (hΩ : ‖Ω‖ = 1)
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
     (hx : x ∈ regularizedPatchDomain regions) (R : Finset V) :
     (normalizedRegularizedPatchMarginal regions a b Ω x R).trace = 1 := by
   apply FiniteProduct.trace_reducedPure
-  rw [dependentGlobalConfigIsometry.norm_map]
   exact norm_normalizedRegularizedPatchOutput regions a ha hb Ω hΩ hx
 
 /-- Regional expectations in the normalized regularized output are precisely
 the complex trace pairings with its canonical reduced state. -/
 theorem inner_normalizedRegularizedPatchOutput_lift_eq_trace (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
     (R : Finset V) (K : Matrix ((v : R) → Out v.1) ((v : R) → Out v.1) ℂ) :
     inner ℂ (normalizedRegularizedPatchOutput regions a b Ω x)
-        (WithLp.toLp 2 (dependentRegionOperatorLift R K *ᵥ
+        (WithLp.toLp 2 (ManyBody.place R K *ᵥ
           normalizedRegularizedPatchOutput regions a b Ω x)) =
       Matrix.trace (normalizedRegularizedPatchMarginal regions a b Ω x R * K) :=
-  inner_dependentRegionOperatorLift_eq_trace_reducedPure R K _
+  inner_place_eq_trace_reducedPure R K _
 
 /-- Relabelling the actual normalized final-state marginal gives the QIC
 regional state of that same normalized output. No optimizer or commutation
 hypothesis is involved. -/
 theorem reindex_normalizedRegularizedPatchMarginal {n : V → ℕ}
     (e : ∀ v, Out v ≃ Fin (n v)) (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
     (R : Finset V) :
     Matrix.reindex (dependentRegionFinEquiv e R) (dependentRegionFinEquiv e R)

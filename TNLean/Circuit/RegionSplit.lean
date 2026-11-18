@@ -18,7 +18,6 @@ on a geometry of the sites, so the one-dimensional chain and the square lattice 
 
 * `TNLean.Lattice.sheetSplit`: the configurations of `ι` as pairs of configurations on `S` and
   on `Sᶜ`.
-* `TNLean.Lattice.siteLift`: the operator `X_D ⊗ 1_{ι ∖ D}`.
 
 ## Main results
 
@@ -118,29 +117,6 @@ theorem exists_one_kronecker_of_mem_supportedOperators {S : Finset ι} {D : Fins
   | smul c x _ hx =>
     obtain ⟨X, hX⟩ := hx
     exact ⟨c • X, by rw [kronecker_smul, ← hX]; rfl⟩
-
-/-! ### Operators on a set of sites -/
-
-/-- The operator `X_D ⊗ 1_{Λ ∖ D}` on the raw registers of a sheet, for an operator `X` on the
-sites of `D`. -/
-noncomputable def siteLift (D : Finset ι) (X : Matrix (D → Fin q) (D → Fin q) ℂ) :
-    Matrix (ι → Fin q) (ι → Fin q) ℂ :=
-  embedOp (Subtype.val : D → ι) X
-
-theorem siteLift_mul (D : Finset ι) (X Y : Matrix (D → Fin q) (D → Fin q) ℂ) :
-    siteLift D X * siteLift D Y = siteLift D (X * Y) :=
-  embedOp_mul Subtype.val_injective X Y
-
-theorem siteLift_conjTranspose (D : Finset ι) (X : Matrix (D → Fin q) (D → Fin q) ℂ) :
-    (siteLift D X)ᴴ = siteLift D Xᴴ :=
-  embedOp_conjTranspose _ X
-
-/-- An operator lifted from `D` acts on the sites of `D`. -/
-theorem siteLift_mem_supportedOperators (D : Finset ι)
-    (X : Matrix (D → Fin q) (D → Fin q) ℂ) :
-    siteLift D X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D := by
-  have h := embedOp_mem_supportedOperators (d := q) (Subtype.val_injective (p := (· ∈ D))) X
-  rwa [show Finset.univ.image Subtype.val = D by ext; simp] at h
 
 end TNLean.Lattice
 

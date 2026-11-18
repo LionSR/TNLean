@@ -240,7 +240,7 @@ theorem IsGIsometric.exists_unitary_torusActualHorizontalFluxMove {d : ℕ}
     ∃ W : Matrix ({v : X // v ∈ translatedTwoPlaquetteRegion p} → Fin d)
         ({v : X // v ∈ translatedTwoPlaquetteRegion p} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({v : X // v ∈ translatedTwoPlaquetteRegion p} → Fin d) ℂ ∧
-      regionLocalTerm (translatedTwoPlaquetteRegion p) W ∈
+      ManyBody.place («X» := fun _ ↦ Fin _) (translatedTwoPlaquetteRegion p) W ∈
         Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (u : Edge Γₜ → G)
           (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (translatedTwoPlaquetteRegion p) e} → G),
@@ -250,7 +250,7 @@ theorem IsGIsometric.exists_unitary_torusActualHorizontalFluxMove {d : ℕ}
           (torusActualHorizontalFluxMove p u))) (translatedTwoPlaquetteRegion p)
           (fun f => Fintype.equivFin G (θ f))) ∧
       ∀ u : Edge Γₜ → G,
-        regionLocalTerm (translatedTwoPlaquetteRegion p) W *ᵥ
+        ManyBody.place («X» := fun _ ↦ Fin _) (translatedTwoPlaquetteRegion p) W *ᵥ
           stateCoeff (groupBondTensor (regularTwistedSite a u)) =
         stateCoeff (groupBondTensor (regularTwistedSite a (torusActualHorizontalFluxMove p u))) :=
   exists_unitary_regularActualCyclePhysicalPermutation (translatedTwoPlaquetteRegion p)
