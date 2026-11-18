@@ -135,6 +135,13 @@ and use $[A,B]=AB-BA$.
 \subsection{Averaging physical sites}
 \label{sec:qc_spectator_expectation}
 
+For the blockwise definition and the algebraic block and factor identities below,
+$J$ may be an arbitrary set and $q$ any natural number, including zero.
+In that generality, matrices are arrays of complex entries indexed by
+$(\{0,\ldots,q-1\}^{I}\times J)^2$; no norm on an infinite spectator is asserted.
+The additional-site coordinate formula, matrix products involving spectators,
+and all norm and oscillation estimates retain the finite-$J$ assumption.
+
 For $K\subseteq I$, let $E_K$ be the normalized partial-trace expectation
 of Definition~\ref{def:qc_site_expectation}. The set $K$ consists of the
 retained physical sites. Thus averaging over a set $Q\subseteq I$
@@ -164,9 +171,40 @@ means using $K=I\setminus Q$.
 \begin{proof}
     \leanok
     \uses{def:qc_spectator_expectation,def:qc_site_expectation}
-    The sites outside $K\cup\{\ast\}$ are exactly the physical sites outside
-    $K$. The two expectations therefore sum over the same configurations
-    with the same normalization, leaving both spectator labels unchanged.
+    Put $Q=I\setminus K$, $\Omega_q=\{0,\ldots,q-1\}$, and let
+    $X_i=\Omega_q$ for $i\in I$, while $X_\ast=J$.
+    Restriction to physical sites gives a bijection
+    \[
+        \phi:\prod_{o\in(I\sqcup\{\ast\})\setminus(K\cup\{\ast\})}X_o
+        \longrightarrow \Omega_q^Q,\qquad
+        \phi(\rho')_i=\rho'_i.
+    \]
+    Its inverse assigns $\rho_i$ to the physical site $i\in Q$; there is no
+    spectator coordinate in either complement. Consequently both complement
+    configuration sets have cardinality $c=|\Omega_q^Q|=q^{|Q|}$.
+    Let $e(\sigma,a)$ be the configuration equal to $\sigma$ on $I$ and to $a$
+    at $\ast$. For arbitrary spectator labels $a,b$,
+    \[
+        \bigl(\forall o\notin K\cup\{\ast\},\ e(\sigma,a)_o=e(\tau,b)_o\bigr)
+        \quad\Longleftrightarrow\quad \sigma|_Q=\tau|_Q.
+    \]
+    No equality between $a$ and $b$ is required. Writing $u\sqcup\rho$ for
+    gluing configurations on $K$ and $Q$, the summands satisfy
+    \[
+        e(\sigma,a)|_{K\cup\{\ast\}}\sqcup\rho'
+        =e(\sigma|_K\sqcup\phi(\rho'),a).
+    \]
+    Thus, after the coordinate identification, both expectations have entry
+    \[
+        c^{-1}\mathbf1_{\{\sigma|_Q=\tau|_Q\}}
+        \sum_{\rho\in\Omega_q^Q}
+        B_{(\sigma|_K\sqcup\rho,a),(\tau|_K\sqcup\rho,b)}.
+    \]
+    Here the reciprocal is taken in $\C$ with $0^{-1}=0$, so the formula
+    also covers an empty complement configuration set. If $q=0$ and $I$
+    is nonempty, there are no physical configurations and hence no matrix
+    entries to compare. If $I$ is empty, then $Q$ is empty, $c=1$ (also for
+    $q=0$), and the formula returns the unchanged spectator entry $B_{ab}$.
 \end{proof}
 
 \begin{lemma}[Spectator blocks]
@@ -174,7 +212,7 @@ means using $K=I\setminus Q$.
     \uses{def:qc_spectator_expectation}
     \lean{QuantumCircuit.spectatorSiteExpectation_apply}
     \leanok
-    For $a,b\in J$, let $B_{ab}$ be the physical matrix whose entries are
+    For arbitrary $J$, $q\in\N$, and $a,b\in J$, let $B_{ab}$ be the physical matrix whose entries are
     $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$. Then
     \begin{align}
         \bigl(E_K^{\mathcal K}(B)\bigr)_{(\sigma,a),(\tau,b)}
@@ -208,7 +246,8 @@ means using $K=I\setminus Q$.
         QuantumCircuit.spectatorSiteExpectation_one_kronecker,
         QuantumCircuit.spectatorSiteExpectation_univ}
     \leanok
-    Suppose $q>0$. For physical operators $A$ and spectator operators $S$,
+    For any $q\in\N$ and arbitrary spectator index set $J$, let $A$ be a
+    physical matrix and $S\in\C^{J\times J}$ a spectator matrix. Then
     \begin{align}
         E_K^{\mathcal K}(A\otimes S) & =E_K(A)\otimes S,
         \label{eq:qc_spectator_tensor}

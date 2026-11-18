@@ -8,8 +8,8 @@ import TNLean.Circuit.SpectatorOscillationSupport
 /-!
 # Arbitrary spectator labels and finite Option coordinates
 
-The algebraic API accepts an infinite spectator without
-adding a second expectation definition. Norm results keep finite spectators.
+The blockwise expectation and its algebraic identities allow arbitrary spectator
+index sets. Norm estimates concern finite spectators.
 -/
 
 set_option relaxedAutoImplicit false
