@@ -252,7 +252,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_rationa
         ((rectangularTraceNorm_nonneg _).trans hcert.hresidual))
       hrepair0
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hleadingExact :
@@ -424,7 +424,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalCoordinateData_of_ration
         ((rectangularTraceNorm_nonneg _).trans hcert.hresidual))
       hrepair0
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hleadingExact :
