@@ -222,7 +222,12 @@ theorem cost_sweepStepProgram_le {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
   set size := lvvSizeTrimmingCoefficient q Delta * L ^ lvvSizeTrimmingDegree q Delta with hsize
   have hcard₁ : S₁.card ≤ q * S.card := card_extend_le (i + 1) S
   have hcard₂ : S₂.card ≤ size :=
-    ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomial chain hL hq hDelta S₁
+    ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomial chain
+        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
+        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
+        hL hq hDelta S₁
   have hcard₃ : S₃.card ≤ S₂.card := card_bondTrimSet_le hi m S₂
   have hcardF : F.card ≤ E * Rk :=
     card_gaussianFilterFactors_le (Nat.le_of_lt hq) h hs h0 h1 hc hDelta

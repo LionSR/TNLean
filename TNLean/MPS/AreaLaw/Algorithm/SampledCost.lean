@@ -89,7 +89,11 @@ theorem cost_sampledSweepStepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
   set size := lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ with hsize
   have hcard₁ : S₁.card ≤ q * S.card := card_extend_le (i + 1) S
   have hcard₂ : S₂.card ≤ size :=
-    ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomial chain hL hq hΔ S₁
+    ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomial chain
+        (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
+        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1)
+        (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
+        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hL hq hΔ S₁
   have hcard₃ : S₃.card ≤ S₂.card := card_bondTrimSet_le hi m' S₂
   have h₁ := cost_extensionProgram_le L (i + 1) b S
   have h₂ := cost_sizeTrimmingProgram_le L (i + 1) b chain hL hq hΔ S₁

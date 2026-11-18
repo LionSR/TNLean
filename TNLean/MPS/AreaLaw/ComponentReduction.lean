@@ -308,6 +308,7 @@ theorem regionEntropy_le_mul_card_domainBoundaryEdges (hq : 1 ≤ q) (hJ : 0 ≤
   obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hh hhJ hΔ hΩ hgap hspan A
   rw [← h.toChain_hamiltonian] at hgap hspan
   have hchain := regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ (h.toChain)
+      (h.isHermitian_toChain_term hh) (h.norm_toChain_term_le hhJ hJ)
       (h.isHermitian_toChain_term hh) (h.norm_toChain_term_le hhJ hJ) hΩ hgap hspan A'
   simpa only [hS, hB] using hchain
 

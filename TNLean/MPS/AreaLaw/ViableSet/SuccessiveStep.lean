@@ -115,7 +115,12 @@ theorem card_lvvSweepStep_le (hq : 2 ≤ q)
         (card_gaussianFilterFactors_le (Nat.le_of_lt hq) h hs h0 h1
           (lvvSuccessiveError_pos hDelta) hDelta)
         (ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomial
-          (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs) (by omega) hq hDelta _)
+          (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs)
+              (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+              (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
+              (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+              (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
+              (by omega) hq hDelta _)
     _ = lvvSuccessiveCardBound q Delta L := by
       dsimp only [lvvSuccessiveCardBound]
       ring
@@ -164,7 +169,12 @@ theorem isViable_lvvSweepStep (hq : 2 ≤ q)
     (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hspan
   exact isViable_errorReductionSet_gaussianFilterFactors (Nat.le_of_lt hq) h hs h0 h1
     (lvvSuccessiveError_pos hDelta) hDelta (by omega) E₀ Γ hΓ hEig hgap _
-    (chain.isViable_bondTrimSet_sizeTrimmingSelection hpos (by omega) hq hi hDelta
+    (chain.isViable_bondTrimSet_sizeTrimmingSelection
+        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
+        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hpos
+        (by omega) hq hi hDelta
       (AreaLaw.extend (i + 1) S) E₀ Γ hΩ hgapC hspanC (hviable.extend (by omega) hi))
 
 /-- The actual extension, size trimming, independent bond trimming and Gaussian error

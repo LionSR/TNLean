@@ -182,9 +182,17 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
   have hT : IsViableMPS Γ (lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ) m'
       (1 / 2) (bondTrimSet hi m' T₀) :=
     ⟨(card_bondTrimSet_le hi m' T₀).trans
-      (chain.card_sizeTrimmingSelection_le_polynomial hL hq hΔ _),
+      (chain.card_sizeTrimmingSelection_le_polynomial
+          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
+          (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1)
+          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
+          (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hL hq hΔ _),
       fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m' T₀ hv,
       chain.isViable_bondTrimSet_sizeTrimmingSelection
+          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
+          (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1)
+          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
+          (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1)
         (ManyBody.ChainInteraction.posSemidef_ofBonds_term h hs h0 h1) hL hq hi hΔ
         (AreaLaw.extend (i + 1) S) E₀ Γ hΩ hgapC hspanC hext⟩
   have hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
@@ -392,7 +400,11 @@ theorem sampledGroundStateProgram_spec (hL : 0 < L) (hq : 2 ≤ q)
         h j := ManyBody.ChainInteraction.ofBonds_hamiltonian h hs h0 h1
     have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
-    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hΩ hspanC hw'norm hover'
+    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
+        (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
+        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1)
+        (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
+        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hΩ hspanC hw'norm hover'
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E₀ ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E₀).trans henergy

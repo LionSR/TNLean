@@ -376,7 +376,12 @@ theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
           (leftCutOperator (i + 1) (chain.cutLeftPart (i + 1))) ((Delta / 169) ^ 2 / (2 * L)))) :=
     eval_sweepStepProgram_of_valid hv hq h hs h0 h1 Delta hi S
   have hnet := isAdmissibleNet_oracleNets hv (k := i + 1) hL chain hDelta
-  have hsol := isAdmissibleSolver_oracleSolver hv chain hq Delta (lvvSuccessiveBondBound q Delta L)
+  have hsol := isAdmissibleSolver_oracleSolver hv chain
+      (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+      (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
+      (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+      (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hq Delta
+      (lvvSuccessiveBondBound q Delta L)
     (AreaLaw.extend (i + 1) S)
   have hcardF := hv.gaussianFilterFactors_card L (i + 1) (Nat.le_of_lt hq) h hs h0 h1 _ _ hc
     hDelta
@@ -393,7 +398,12 @@ theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
             huangFilterRankBound q (lvvSuccessiveError Delta) Delta L) *
           (lvvSizeTrimmingCoefficient q Delta * L ^ lvvSizeTrimmingDegree q Delta) :=
           Nat.mul_le_mul hcardF
-            (chain.card_sizeTrimmingSelectionWith_le_polynomial hL hq hDelta _ _
+            (chain.card_sizeTrimmingSelectionWith_le_polynomial
+                (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+                (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
+                (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+                (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
+                hL hq hDelta _ _
               (card_oracleNets_le hv hL hq hDelta))
       _ = lvvSuccessiveCardBound q Delta L := by
         dsimp only [lvvSuccessiveCardBound]
@@ -418,7 +428,12 @@ theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
     exact isViable_errorReductionSet_of_isAdmissibleFilterFactors (Nat.le_of_lt hq) h hs h0 h1
       hc hDelta (by omega) E₀ Γ hΓ hEig hgap
       (hv.gaussianFilterFactors_admissible L (i + 1) (Nat.le_of_lt hq) h h0 _ Delta) _
-      (chain.isViable_bondTrimSet_sizeTrimmingSelectionWith hpos hL hq hi hDelta
+      (chain.isViable_bondTrimSet_sizeTrimmingSelectionWith
+          (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+          (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
+          (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+          (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hpos
+          hL hq hi hDelta
         (AreaLaw.extend (i + 1) S) hnet hsol E₀ Γ hΩ hgapC hspanC (hviable.extend (by omega) hi))
 
 /-- **The sweep program is correct under every valid oracle**: at every cut its output is
@@ -533,7 +548,12 @@ theorem groundStateProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 
       ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian h hs h0 h1
     have hspanC : groundSpace chain.operator E = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
-    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hΩ hspanC hw'norm hover
+    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
+        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
+        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hΩ
+        hspanC hw'norm hover
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E).trans henergy

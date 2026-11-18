@@ -112,6 +112,7 @@ theorem _root_.ManyBody.ChainInteraction.gaussianFilteredTerm_groundCentered_sub
   exact gaussianFilteredTerm_sub_smul_one_sub s ΔE
       (ManyBody.Interaction.isHermitian_hamiltonian hh) P _
 
+include hh in
 /-- The localization error of the centered part equals that of the part. -/
 theorem _root_.ManyBody.ChainInteraction.gaussianFilteredTerm_groundCentered_sub_localizedPart
     (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (K : Finset (Fin L)) :
@@ -169,6 +170,7 @@ noncomputable def leftWindow (L R c m k : ℕ) : Finset (Fin L) :=
 noncomputable def rightWindow (L R c m k : ℕ) : Finset (Fin L) :=
   chainNeighborhood (interval L (c + m - R) (c + m + 2 * R)) (k : ℝ)
 
+include hh hhJ in
 /-- **The localized left part acts left of the cut.** If `R + k ≤ m`, then `M_L` is supported on
 the sites `i < c`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 816–842. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c m k : ℕ}
@@ -184,6 +186,7 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c
   · rw [mem_interval] at hx; rw [mem_leftBlock]; omega
   · rw [mem_interval] at hx; rw [mem_leftBlock]; omega
 
+include hh hhJ in
 /-- **The localized right part acts right of the cut.** If `R + k ≤ m`, then `M_R` is supported
 on the sites `i ≥ c`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 816–842. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_rightPart {c m k : ℕ}
@@ -197,6 +200,7 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_rightPart {
   · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_leftBlock]; omega
 
 omit [NeZero q] in
+include hh in
 /-- Centering does not change the commutator with `H`. -/
 theorem _root_.ManyBody.ChainInteraction.commutator_groundCentered
     (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
@@ -229,12 +233,12 @@ theorem _root_.ManyBody.ChainInteraction.norm_localizedPart_apply_le {E₀ : ℝ
     refine (norm_gaussianFilteredTerm_apply_le_commutator_of_isGapped hs hΔ
         (ManyBody.Interaction.isHermitian_hamiltonian hh)
       hgap hspan W (inner_groundCentered hP hΩ)).trans ?_
-    rw [h.commutator_groundCentered]
+    rw [h.commutator_groundCentered hh]
     gcongr
     exact (hop _).trans hc
   have hR : ‖toEuclideanLin (G - h.localizedPart Ω s ΔE P K) Ω‖ ≤ δ := by
     refine (hop _).trans ?_
-    rw [h.gaussianFilteredTerm_groundCentered_sub_localizedPart]
+    rw [h.gaussianFilteredTerm_groundCentered_sub_localizedPart hh]
     exact hδ
   rw [hsplit, map_sub, LinearMap.sub_apply]
   exact (norm_sub_le _ _).trans (add_le_add hG hR)
@@ -287,9 +291,9 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   have hML : ML.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPL KL
   have hMR : MR.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPR KR
   have hsL : Entropy.IsSupportedOn (n := fun _ ↦ q) ML (leftBlock L c) :=
-    h.isSupportedOn_localizedPart_leftPart Ω s ΔE hmk
+    h.isSupportedOn_localizedPart_leftPart hh hhJ Ω s ΔE hmk
   have hsR : Entropy.IsSupportedOn (n := fun _ ↦ q) MR (leftBlock L c)ᶜ :=
-    h.isSupportedOn_localizedPart_rightPart Ω s ΔE hmk
+    h.isSupportedOn_localizedPart_rightPart hh hhJ Ω s ΔE hmk
   let σ₀ : Entropy.SiteConfig (fun _ : Fin L ↦ q) := fun _ ↦ ⟨0, NeZero.pos q⟩
   have hcomm : Commute (spectralCutoff ML θ) (spectralCutoff MR θ) :=
     commute_spectralCutoff_of_isSupportedOn disjoint_compl_right hML hMR hsL hsR σ₀ θ θ

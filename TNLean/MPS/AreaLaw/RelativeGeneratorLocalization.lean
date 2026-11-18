@@ -152,7 +152,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_siteExpectat
   have : NeZero (q * q) := ⟨Nat.pos_iff_ne_zero.mp (Nat.mul_pos hq hq)⟩
   let g := h.swappedDoubled D
   let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin (q * q)) (fun X : ChainSupport L R ↦ X.1) :=
-    ⟨g.term, g.supported⟩
+    ⟨g.term, g.mem⟩
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
   let T (X : ChainSupport L R) (b : Bool) := Matrix.reindex e e
@@ -166,8 +166,10 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_siteExpectat
     exact hsum
   have hgen := norm_heisenberg_sum_sub_siteExpectation_graphNeighborhood_le
     (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
-    (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le) g.hermitian b₀
-    g.sum_norm_terms_containing_le (C ×ˢ Finset.univ) (fun p ↦ p.1.1) Z
+    (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le)
+        (h.isHermitian_swappedDoubled_term hh D) b₀
+    (g.sum_norm_terms_containing_le (h.isHermitian_swappedDoubled_term hh D)
+        (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ) (fun p ↦ p.1.1) Z
     (fun p hp ↦ Finset.subset_biUnion_of_mem (fun X ↦ X.1) (Finset.mem_product.mp hp).1)
     (fun p _ ↦ p.1.2.card_le) A (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).1)
     (2 * |J|) (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).2.2.trans
@@ -217,7 +219,7 @@ theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_siteExpecta
   have : NeZero (q * q) := ⟨Nat.pos_iff_ne_zero.mp (Nat.mul_pos hq hq)⟩
   let g := h.swappedDoubled D
   let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin (q * q))
-      (fun X : DomainSupport Λ R ↦ X.1) := ⟨g.term, g.supported⟩
+      (fun X : DomainSupport Λ R ↦ X.1) := ⟨g.term, g.mem⟩
   let e := sitePairConfigurationEquiv (Fin Λ.card) q q
   let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
   let T (X : DomainSupport Λ R) (b : Bool) := Matrix.reindex e e
@@ -230,8 +232,9 @@ theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_siteExpecta
     exact hsum
   have hgen := norm_heisenberg_sum_sub_siteExpectation_graphNeighborhood_le
     (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) Φ
-    (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) g.hermitian b₀
-    g.sum_norm_terms_containing_le (C ×ˢ Finset.univ) (fun p ↦ p.1.1) Z
+    (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) (h.isHermitian_swappedDoubled_term hh D) b₀
+    (g.sum_norm_terms_containing_le (h.isHermitian_swappedDoubled_term hh D)
+        (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ) (fun p ↦ p.1.1) Z
     (fun p hp ↦ Finset.subset_biUnion_of_mem (fun X ↦ X.1) (Finset.mem_product.mp hp).1)
     (fun p _ ↦ p.1.2.isChainSupport.card_le) A
     (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).1)
