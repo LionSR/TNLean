@@ -26,3 +26,13 @@ allocated owners; peps46-cache-request.json provides exact source hashes and
 provenance requirements. snake-source-closure.json includes all project imports
 and hashes so 695c can identify a minimal missing MPS prerequisite set without
 rebuilding the complete closure. This worker executes only manifest77.txt.
+
+## Superseding final-version plan
+
+Before any valid MPS77 writer started, the waiting coordinator was stopped alone.
+Only the three-file 42c4ed17 delta was applied; production files now match exact
+42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d. The old865 runner was not stopped.
+MPS77 now runs directly at that final version; the affected 21 are a subset,
+not a second queue. Source/recursive dependency checks invalidate all affected
+old artifacts. Prior dccc records and the quarantined premature attempt remain
+historical evidence, not final-version passes.

@@ -1,0 +1,15 @@
+{
+  "old_valid77_started": false,
+  "old865_runner_untouched": 412863,
+  "stopped_waiting_coordinator": 466870,
+  "new_source_head": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+  "changed_production_files": [
+    "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+    "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+    "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean"
+  ],
+  "production_tree_matches_exact_delta": true,
+  "manifest77_unchanged": true,
+  "intersection21_no_extra_queue": true,
+  "independent_closure_evidence": "464ea7dfe648771fd6ae20f71649218c3e665969"
+}

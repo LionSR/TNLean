@@ -5,7 +5,7 @@ hashfile=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 coverage=json.loads((out.parent/'coverage.json').read_text()); allm=[x for x in coverage if x['lane']=='mps'];pending=sorted(x['path'] for x in allm if x['compile']!='PASS exact source' or x['strict']!='PASS exact source');done=sorted(x['path'] for x in allm if x['path'] not in pending)
 assert len(allm)==86 and len(done)==8 and len(pending)==78
 (out/'manifest.txt').write_text('\n'.join(pending)+'\n');(out/'already-verified8.txt').write_text('\n'.join(done)+'\n')
-base='dccc85e5607077b51822664e9d475287d300d607';pin='729428582b78ab7529b3796099193649f947354a'
+base='42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d';pin='729428582b78ab7529b3796099193649f947354a'
 roots={'TNLean':root,'QICLean':Path('/tmp/qic729-mps'),'Cslib':Path('/tmp/pin729-cslib')};graph={};source={}
 def src(m):return roots[m.split('.')[0]]/(m.replace('.','/')+'.lean')
 def visit(m):
@@ -35,6 +35,6 @@ def check(m):
 for m in graph:check(m)
 manifest=json.loads((root/'lake-manifest.json').read_text());oldmanifest=json.loads((old/'lake-manifest.json').read_text());assert manifest==oldmanifest,'package manifest differs'
 assert (root/'lean-toolchain').read_bytes()==(old/'lean-toolchain').read_bytes()
-plan={'head':base,'production_head':'3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9','qic_pin':pin,'manifest_sha256':hashfile(out/'manifest.txt'),'selected':78,'excluded_prior_passes':8,'project_closure':len(graph),'reusable':sum(usable.values()),'requires_compile':sum(not v for v in usable.values()),'reasons':dict(collections.Counter(reason[m] for m in graph)),'cache_action':'read-only inspection only; independent overlay not populated while old queue remains active','package_manifest_identical':True,'toolchain_identical':True,'old_queue_pid':412863,'new_compiler_started':False,'handoff_condition':'old queue finishes/drains all compiler writers; then refresh hash plan and copy only eligible completed artifacts to independent overlay. Retain 1 GiB disk guard; do not add workers to existing 2-worker queue.'}
+plan={'head':base,'production_head':'42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d','qic_pin':pin,'manifest_sha256':hashfile(out/'manifest.txt'),'selected':78,'excluded_prior_passes':8,'project_closure':len(graph),'reusable':sum(usable.values()),'requires_compile':sum(not v for v in usable.values()),'reasons':dict(collections.Counter(reason[m] for m in graph)),'cache_action':'read-only inspection only; independent overlay not populated while old queue remains active','package_manifest_identical':True,'toolchain_identical':True,'old_queue_pid':412863,'new_compiler_started':False,'handoff_condition':'old queue finishes/drains all compiler writers; then refresh hash plan and copy only eligible completed artifacts to independent overlay. Retain 1 GiB disk guard; do not add workers to existing 2-worker queue.'}
 (out/'plan.json').write_text(json.dumps(plan,indent=2)+'\n');(out/'dependency-plan.json').write_text(json.dumps([{'module':m,'source_sha256':source[m],'dependencies':sorted(graph[m]),'reusable':usable[m],'reason':reason[m]} for m in sorted(graph)],indent=2)+'\n')
 print(json.dumps(plan,indent=2))

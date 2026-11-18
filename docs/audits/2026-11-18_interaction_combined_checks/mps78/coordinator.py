@@ -2,7 +2,7 @@
 import collections, datetime, fcntl, hashlib, json, os, shutil, subprocess, sys, time
 from pathlib import Path
 ROOT=Path('/tmp/interaction-mps78'); OLD=Path('/tmp/pin729-mps'); OUT=ROOT/'docs/audits/2026-11-18_interaction_combined_checks/mps78'; AUD=OLD/'docs/audits/2026-11-18_pin729_mps_shard'; CACHE=Path('/tmp/interaction-mps77-olean'); OLD_CACHE=Path('/tmp/pin729-mps-olean')
-HEAD='dccc85e5607077b51822664e9d475287d300d607'; PIN='729428582b78ab7529b3796099193649f947354a'; LEAN='/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean'
+HEAD='42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d'; PIN='729428582b78ab7529b3796099193649f947354a'; LEAN='/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean'
 ROOTS={'TNLean':ROOT,'QICLean':Path('/tmp/qic729-mps'),'Cslib':Path('/tmp/pin729-cslib')}
 OPTS=['-j2','-Dpp.unicode.fun=true','-DrelaxedAutoImplicit=false','-DmaxSynthPendingDepth=3','-Dlinter.mathlibStandardSet=true']
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
