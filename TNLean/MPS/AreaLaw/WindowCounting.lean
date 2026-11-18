@@ -139,11 +139,11 @@ theorem _root_.ManyBody.ChainInteraction.card_crossingTerms_interval_le_of_conse
     (hwindow : ∀ X : ChainSupport L R, h.term X ≠ 0 →
       ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) (l r : ℕ) :
     (Entropy.crossingTerms
-      (fun X : {X : ChainSupport L R // h hh hhJ.term X ≠ 0} ↦ X.val.1)
+      (fun X : {X : ChainSupport L R // h.term X ≠ 0} ↦ X.val.1)
       (interval L l r)).card ≤ 2 * R := by
   classical
   exact card_crossingTerms_consecutive_le
-    (fun X : {X : ChainSupport L R // h hh hhJ.term X ≠ 0} ↦ X.val)
+    (fun X : {X : ChainSupport L R // h.term X ≠ 0} ↦ X.val)
     Subtype.val_injective (fun X ↦ hwindow X.val X.property) l r
 
 /-- The cut logarithmic budget of the actual nonzero consecutive-window terms.
@@ -155,10 +155,10 @@ theorem _root_.ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive
       ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) (l r : ℕ) :
     Entropy.cutLogBudget
       (Entropy.crossingTerms
-        (fun X : {X : ChainSupport L R // h hh hhJ.term X ≠ 0} ↦ X.val.1)
+        (fun X : {X : ChainSupport L R // h.term X ≠ 0} ↦ X.val.1)
         (interval L l r))
       (Entropy.supportDim (fun _ : Fin L ↦ q) ∘
-        (fun X : {X : ChainSupport L R // h hh hhJ.term X ≠ 0} ↦ X.val.1)) ≤
+        (fun X : {X : ChainSupport L R // h.term X ≠ 0} ↦ X.val.1)) ≤
       windowBudgetConst q R := by
   classical
   unfold windowBudgetConst cutBudgetConst

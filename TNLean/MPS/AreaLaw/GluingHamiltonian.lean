@@ -29,16 +29,16 @@ variable {L q : ℕ}
 
 /-- The sum of the interactions wholly inside the first `k` sites.
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 409–410, the term `H_L`. -/
-noncomputable def _root_.ManyBody.ChainInteraction.cutLeftPart (h : ChainInteraction L q 1)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (k : ℕ) :
+noncomputable def _root_.ManyBody.ChainInteraction.cutLeftPart
+    (h : ChainInteraction L q 1) (k : ℕ) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   ∑ X ∈ Finset.univ.filter (fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k), h.term X
 
 /-- The sum of the interactions not wholly inside the first `k` sites: those acting on the
 boundary site `k - 1` and the right part of the chain.
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 409–410, the term `H_R + H_i`. -/
-noncomputable def _root_.ManyBody.ChainInteraction.cutBoundaryPart (h : ChainInteraction L q 1)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (k : ℕ) :
+noncomputable def _root_.ManyBody.ChainInteraction.cutBoundaryPart
+    (h : ChainInteraction L q 1) (k : ℕ) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   ∑ X ∈ Finset.univ.filter (fun X : ChainSupport L 1 ↦ ¬ X.1 ⊆ interval L 0 k), h.term X
 
@@ -55,7 +55,7 @@ theorem _root_.ManyBody.ChainInteraction.cutLeftPart_isSupportedOn (h : ChainInt
     (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutLeftPart k) (interval L 0 k) :=
   (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
-    (h.mem X).mono (Finset.mem_filter.mp hX).2
+    Entropy.IsSupportedOn.mono (h.mem X) (Finset.mem_filter.mp hX).2
 
 /-- The boundary part is supported from the boundary site onward. -/
 theorem _root_.ManyBody.ChainInteraction.cutBoundaryPart_isSupportedOn (h : ChainInteraction L q 1)
@@ -63,7 +63,7 @@ theorem _root_.ManyBody.ChainInteraction.cutBoundaryPart_isSupportedOn (h : Chai
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutBoundaryPart k)
       (interval L 0 (k - 1))ᶜ := by
   refine (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
-    (h.mem X).mono ?_
+    Entropy.IsSupportedOn.mono (h.mem X) ?_
   have hX' := (Finset.mem_filter.mp hX).2
   obtain ⟨y, hy, hyA⟩ := Finset.not_subset.mp hX'
   have hyk : k ≤ y.val := by simpa [mem_interval, not_lt] using hyA

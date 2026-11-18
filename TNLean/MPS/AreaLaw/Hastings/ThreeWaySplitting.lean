@@ -268,7 +268,6 @@ variable {L q R : ℕ} {J : ℝ}
 /-- The sum of the terms of `h` over a set `S` of supports.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 775–778. -/
 noncomputable def _root_.ManyBody.ChainInteraction.termSum (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (S : Finset (ChainSupport L R)) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   ∑ X ∈ S, h.term X
 
@@ -295,28 +294,27 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_termSum (h : ChainInterac
     {S : Finset (ChainSupport L R)} {D : Finset (Fin L)} (hS : ∀ X ∈ S, X.1 ⊆ D) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.termSum S) D :=
   (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
-    (h.mem X).mono (hS X hX)
+    Entropy.IsSupportedOn.mono (h.mem X) (hS X hX)
 
 /-! ### The parts `H_L`, `H_B`, `H_R` -/
 
 /-- The left part `H_L`: the terms supported on the sites `i < j - m`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, line 776. -/
-noncomputable def _root_.ManyBody.ChainInteraction.leftPart (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (j m : ℕ) :
+noncomputable def _root_.ManyBody.ChainInteraction.leftPart (h : ChainInteraction L q R) (j m : ℕ) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   h.termSum (leftSupports L R j m)
 
 /-- The buffer part `H_B`: the terms that are neither left nor right.
 Hastings, arXiv:0705.2024v4, `law16.tex`, line 777. -/
-noncomputable def _root_.ManyBody.ChainInteraction.bufferPart (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (j m : ℕ) :
+noncomputable def _root_.ManyBody.ChainInteraction.bufferPart
+    (h : ChainInteraction L q R) (j m : ℕ) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   h.termSum (bufferSupports L R j m)
 
 /-- The right part `H_R`: the terms supported on the sites `i ≥ j + m`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, line 778. -/
-noncomputable def _root_.ManyBody.ChainInteraction.rightPart (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (j m : ℕ) :
+noncomputable def _root_.ManyBody.ChainInteraction.rightPart
+    (h : ChainInteraction L q R) (j m : ℕ) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   h.termSum (rightSupports L R j m)
 

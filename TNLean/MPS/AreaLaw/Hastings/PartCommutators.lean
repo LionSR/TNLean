@@ -279,7 +279,8 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_commutator_termSum_inner
   refine (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun Y hY ↦ ?_
   obtain ⟨hYS, hYX⟩ := Finset.mem_filter.mp hY
   obtain ⟨hXW, hYW⟩ := hW X hX Y (Finset.mem_filter.mp hYS).2 hYX
-  exact ((h.mem X).mono hXW).commutator ((h.mem Y).mono hYW) σ₀
+  exact (Entropy.IsSupportedOn.mono (h.mem X) hXW).commutator
+      (Entropy.IsSupportedOn.mono (h.mem Y) hYW) σ₀
 
 /-! ### The left part -/
 

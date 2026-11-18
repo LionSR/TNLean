@@ -44,8 +44,7 @@ leading vector `sol m X`. The selection depends only on the Hamiltonian, the gap
 the family `S`, the nets and the solver; no ground pair enters. LVV13, `algo53.tex`,
 equation `eq:conv`, lines 472–478, and Claim `c:2`, lines 520–527. -/
 noncomputable def _root_.ManyBody.ChainInteraction.sizeTrimmingSelectionWith {L q k : ℕ}
-    (_h : ChainInteraction L q 1) (h_h : ∀ X, (_h.term X).IsHermitian) (h_hJ : ∀ X, ‖_h.term X‖ ≤ 1)
-        (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
+    (_h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
     (net : (m : ℕ) → Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ))
     (sol : (m : ℕ) → Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
       EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) :
@@ -64,8 +63,7 @@ parameter and the family `S`; no ground pair enters. LVV13, `algo53.tex`, equati
 `eq:conv`, lines 472–478, and Claim `c:2`, lines 520–527, using all actual bond dimensions
 up to the uniform cut bound. -/
 noncomputable def _root_.ManyBody.ChainInteraction.sizeTrimmingSelection {L q k : ℕ}
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
-        (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
+    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
     Finset (LeftBlockVector L q k) :=
   haveI : NeZero q := ⟨by omega⟩
   h.sizeTrimmingSelectionWith hq Δ S
@@ -75,8 +73,8 @@ noncomputable def _root_.ManyBody.ChainInteraction.sizeTrimmingSelection {L q k 
 
 /-- The nets are admissible when each covers the boundary densities within `c / (2L)`
 and has at most `K` points up to the uniform cut bound. -/
-def _root_.ManyBody.ChainInteraction.IsAdmissibleNet {L q k : ℕ} (_h : ChainInteraction L q 1)
-    (h_h : ∀ X, (_h.term X).IsHermitian) (h_hJ : ∀ X, ‖_h.term X‖ ≤ 1) (Δ : ℝ)
+def _root_.ManyBody.ChainInteraction.IsAdmissibleNet {L q k : ℕ}
+    (_h : ChainInteraction L q 1) (Δ : ℝ)
     (net : (m : ℕ) → Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)) :
     Prop :=
   let c : ℝ := (Δ / 169) ^ 2
@@ -86,8 +84,8 @@ def _root_.ManyBody.ChainInteraction.IsAdmissibleNet {L q k : ℕ} (_h : ChainIn
 
 /-- The solver is admissible when at every bond dimension it returns admissible leading
 vectors for the left part of the Hamiltonian at tolerance `c / (2L)`. -/
-def _root_.ManyBody.ChainInteraction.IsAdmissibleSolver {L q k : ℕ} (h : ChainInteraction L q 1)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hq : 2 ≤ q)
+def _root_.ManyBody.ChainInteraction.IsAdmissibleSolver {L q k : ℕ}
+    (h : ChainInteraction L q 1) (hq : 2 ≤ q)
     (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
     (sol : (m : ℕ) → Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
       EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) : Prop :=

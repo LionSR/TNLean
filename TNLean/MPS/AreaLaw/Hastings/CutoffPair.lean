@@ -78,7 +78,7 @@ noncomputable def partLocalizationError (R : ℕ) (J s ΔE T k : ℝ) : ℝ :=
 with `W = P - ⟨Ω, P Ω⟩` and `W_tilde` its Gaussian filter of variance `s / ΔE²`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 779–828. -/
 noncomputable def _root_.ManyBody.ChainInteraction.localizedPart [NeZero q]
-    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (h : ChainInteraction L q R)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (s ΔE : ℝ) (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (K : Finset (Fin L)) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   groundCentered Ω P +

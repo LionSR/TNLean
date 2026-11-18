@@ -112,7 +112,6 @@ convex program and keep the left columns of the leading eigenvector of its solut
 family `S` consists of `b`-bounded matrix product states. LVV13, `algo53.tex`, lines
 456--487. -/
 noncomputable def sizeTrimmingProgram (L k b : ℕ) (h : ChainInteraction L q 1)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
     LVVProgram q (Finset (LeftBlockVector L q k)) :=
   haveI : NeZero q := ⟨by omega⟩
