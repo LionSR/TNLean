@@ -36,7 +36,7 @@ and matrix-net bounds are those recorded in `docs/paper-gaps/lvv13_constant_bond
 open Matrix
 open scoped InnerProductSpace ComplexOrder
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -46,8 +46,9 @@ ground pair, has no more members than the size-trimming selection, and remains
 half-viable whenever the original family has the required small viability error.
 Source: LVV13, `algo53.tex`, Claim `c:trim`, lines 549–559, with the corrections
 and quantitative scope stated in the module docstring. -/
-theorem ChainHamiltonian.exists_rational_size_bond_trimmed_family
-    {L q n : ℕ} (h : ChainHamiltonian L q 1 1)
+theorem _root_.ManyBody.ChainInteraction.exists_rational_size_bond_trimmed_family
+    {L q n : ℕ} (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) (hi : n + 1 ≤ L) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q (n + 1))) :
@@ -65,8 +66,8 @@ theorem ChainHamiltonian.exists_rational_size_bond_trimmed_family
       (∀ v ∈ bondTrimSet hi m (h.sizeTrimmingSelection hq Δ S),
         ∃ w ∈ T, ‖v - w‖ ≤ θ) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-        ‖Γ‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Γ} →
+        ‖Γ‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ} →
         IsViable Γ (c / L) (S : Set (LeftBlockVector L q (n + 1))) →
         IsViable Γ (1 / 2) (T : Set (LeftBlockVector L q (n + 1))) := by
   classical
@@ -78,14 +79,14 @@ theorem ChainHamiltonian.exists_rational_size_bond_trimmed_family
     intro v hv
     obtain ⟨u, hu, rfl⟩ := Finset.mem_image.mp hv
     exact (norm_leftSchmidtTrim_le hi m u).trans
-      (h.norm_le_one_of_mem_sizeTrimmingSelection hq Δ S hu)
+      (h.norm_le_one_of_mem_sizeTrimmingSelection hh hhJ hq Δ S hu)
   obtain ⟨T, hcard, hdata, hcover⟩ :=
     exists_rational_leftFamily_approximation_of_norm_le_one B hi
       (fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m U hv) hBnorm hθ
   refine ⟨T, hcard.trans (card_bondTrimSet_le hi m U), hdata, hcover, ?_⟩
   intro E₀ Γ hΩ hgap hspan hviable
   obtain ⟨_, r, W, u, hW, hrD, hu, hcols, hΓu⟩ :=
-    h.isViable_sizeTrimmingSelection hpos hL hq hΔ S E₀ Γ hΩ hgap hspan hviable
+    h.isViable_sizeTrimmingSelection hh hhJ hpos hL hq hΔ S E₀ Γ hΩ hgap hspan hviable
   obtain ⟨v, hv, hvMPS, hΓv⟩ :=
     exists_bond_trimming_reference (by omega) hΔ (by omega) h hΩ hgap hspan
   have hΓu' : 1 - 1 / 12 ≤

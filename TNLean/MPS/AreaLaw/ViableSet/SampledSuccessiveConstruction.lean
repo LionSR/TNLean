@@ -86,7 +86,8 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
           (D * L ^ (sampledProjectorTotalDegree q a Δ B + r₀))
           (lvvViabilityPrecision Δ η / (L : ℝ) ^ a)
           (successiveStep hiL (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
-            (ChainHamiltonian.sizeTrimmingSelection (ChainHamiltonian.ofBonds h hs h0 h1) hq Δ
+            (ManyBody.ChainInteraction.sizeTrimmingSelection
+                (ManyBody.ChainInteraction.ofBonds h hs) hq Δ
               (AreaLaw.extend i S))) := by
   classical
   let α := lvvViabilityPrecision Δ η
@@ -110,11 +111,11 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
     have hδ : 0 < α / (L : ℝ) ^ a := div_pos hα (pow_pos hLp a)
     have hδ1 : α / (L : ℝ) ^ a ≤ 1 := (div_le_one (pow_pos hLp a)).mpr
       (hα1.trans (one_le_pow₀ (by exact_mod_cast hL)))
-    let chain := ChainHamiltonian.ofBonds h hs h0 h1
+    let chain := ManyBody.ChainInteraction.ofBonds h hs
     have hgapC : IsGapped chain.operator E₀ Δ := by
-      simpa only [chain, ChainHamiltonian.ofBonds_operator] using hgap
+      simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hgap
     have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
-      simpa only [chain, ChainHamiltonian.ofBonds_operator] using hspan
+      simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hspan
     have hsmall : IsViable Γ (c / L)
         (AreaLaw.extend i S : Set (LeftBlockVector L q i)) := by
       obtain ⟨v, hv, hoverlap, hsupport⟩ := hviable.extend hi0 hiL
@@ -133,7 +134,7 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
         (chain.card_sizeTrimmingSelection_le_polynomial (by omega) hq hΔ _),
         fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hiL m T₀ hv,
         chain.isViable_bondTrimSet_sizeTrimmingSelection
-          (ChainHamiltonian.posSemidef_ofBonds_term h hs h0 h1) (by omega) hq hiL hΔ
+          (ManyBody.ChainInteraction.posSemidef_ofBonds_term h hs h0 h1) (by omega) hq hiL hΔ
           (AreaLaw.extend i S) E₀ Γ hΩ hgapC hspanC hsmall⟩
     obtain ⟨I, hproj, hcuts⟩ := exists_sampled_errorReduction (show 1 ≤ q by omega)
       h hs h0 h1 hΩ hgap hspan hΔ hδ hδ1
@@ -189,7 +190,8 @@ theorem exists_sampled_viable_successor_polynomial {q : ℕ} (hq : 2 ≤ q) (a :
           (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         IsViableMPS Γ (C * L ^ p) (D * L ^ r) (lvvViabilityPrecision Δ η / (L : ℝ) ^ a)
           (successiveStep hiL (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
-            (ChainHamiltonian.sizeTrimmingSelection (ChainHamiltonian.ofBonds h hs h0 h1) hq Δ
+            (ManyBody.ChainInteraction.sizeTrimmingSelection
+                (ManyBody.ChainInteraction.ofBonds h hs) hq Δ
               (AreaLaw.extend i S))) := by
   obtain ⟨C, p₀, D, r₀, hC, hD, hstep⟩ :=
     exists_sampled_viable_successor_polynomial_explicit_energy_degree
@@ -226,8 +228,8 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
             Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (i + 1))
               (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
             S (i + 1) = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
-              Finset.univ A (ChainHamiltonian.sizeTrimmingSelection
-                (ChainHamiltonian.ofBonds h hs h0 h1) hq Δ (AreaLaw.extend (i + 1) (S i)))) ∧
+              Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
+                (ManyBody.ChainInteraction.ofBonds h hs) hq Δ (AreaLaw.extend (i + 1) (S i)))) ∧
         ∀ i : ℕ, i ≤ L →
           IsViableMPS Γ (C * L ^ (sampledProjectorTotalDegree q a Δ B + p₀))
             (D * L ^ (sampledProjectorTotalDegree q a Δ B + r₀))
@@ -263,7 +265,8 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
         Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (i + 1))
           (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         T = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
-          (ChainHamiltonian.sizeTrimmingSelection (ChainHamiltonian.ofBonds h hs h0 h1) hq Δ
+          (ManyBody.ChainInteraction.sizeTrimmingSelection
+              (ManyBody.ChainInteraction.ofBonds h hs) hq Δ
             (AreaLaw.extend (i + 1) S))
   have hadvance : ∀ (i : ℕ) (S : Finset (LeftBlockVector L q i)), (i ≤ L → P i S) →
       ∃ T : Finset (LeftBlockVector L q (i + 1)), (i + 1 ≤ L → P (i + 1) T) ∧ Step i S T := by
@@ -365,8 +368,8 @@ theorem exists_sampled_successive_viable_sets_polynomial {q : ℕ} (hq : 2 ≤ q
             Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (i + 1))
               (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
             S (i + 1) = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
-              Finset.univ A (ChainHamiltonian.sizeTrimmingSelection
-                (ChainHamiltonian.ofBonds h hs h0 h1) hq Δ (AreaLaw.extend (i + 1) (S i)))) ∧
+              Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
+                (ManyBody.ChainInteraction.ofBonds h hs) hq Δ (AreaLaw.extend (i + 1) (S i)))) ∧
         ∀ i : ℕ, i ≤ L →
           IsViableMPS Γ (C * L ^ p) (D * L ^ r)
             (lvvViabilityPrecision Δ η / (L : ℝ) ^ a) (S i) := by

@@ -58,7 +58,7 @@ printed `2^{ξ' ln q}` of eq. `smd`. Documented in
   478–503.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval ChainInteraction)
 
 open TNLean.Lattice
 
@@ -131,10 +131,11 @@ lines 148–232 and 478–503, with the quantitative changes recorded in the mod
 
 The assumption `C₁ ≥ 1` loses nothing, since enlarging `C₁` only weakens Lemma 1. The value
 of `S_max` carries the local fix of the module docstring. -/
-theorem regionEntropy_prefix_le_of_factorization (h : ChainHamiltonian L q R J)
+theorem regionEntropy_prefix_le_of_factorization (h : ChainInteraction L q R)
+    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     {ξ' C₁ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 ≤ C₁)
     (hfact : ∀ c l : ℕ, c + l ≤ L → ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       IsFactorizationAt Ω c l (C₁ * Real.exp (-(l / ξ'))) OB OL OR)

@@ -41,7 +41,7 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 381–4
 No gap, information bound or reset conclusion is assumed or asserted here.
 -/
 
-open ManyBody (ChainSupport DomainSupport lineDomainGraph)
+open ManyBody (ChainSupport DomainSupport lineDomainGraph ChainInteraction DomainInteraction)
 
 open MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped Matrix Matrix.Norms.L2Operator NNReal
@@ -167,10 +167,11 @@ Source: TNLean note, `part2a_mps_information.tex`, lines 381–402. -/
 theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
     ∃ C v : ℝ, 0 < C ∧ 0 < v ∧
       ∀ (q : ℕ), 1 ≤ q →
-      ∀ (L : ℕ) (h : ChainHamiltonian L q R J) (D : Finset (Fin L))
+      ∀ (L : ℕ) (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) (D : Finset (Fin L))
         (ℓ : ℝ), 0 ≤ ℓ →
-        let K := h.doubled.operator
-        let K' := (h.swappedDoubled D).operator
+        let K := h.doubled.hamiltonian
+        let K' := (h.swappedDoubled D).hamiltonian
         let crossing := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
         let Z := crossing.biUnion (fun X ↦ X.1)
         let N := fun S : Finset (Fin L) ↦
@@ -204,7 +205,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
     (sub_pos.mpr (Real.exp_lt_one_iff.mpr (by norm_num)))
   have hd : 0 ≤ d := by positivity
   refine ⟨a + d, 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1, by positivity, by positivity, ?_⟩
-  intro q hq L h D ℓ hℓ K K' crossing Z N
+  intro q hq L h hh hhJ D ℓ hℓ K K' crossing Z N
   let g := h.swappedDoubled D
   let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin (q * q)) (fun X : ChainSupport L R ↦ X.1) :=
     ⟨g.term, g.supported⟩
@@ -214,7 +215,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
     (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le) g.hermitian b₀
     g.sum_norm_terms_containing_le h.doubled.operator_isHermitian Z ℓ d hd (fun s ↦ by
       rw [hΦ, biUnion_graphBall_pathGraph_eq_chainNeighborhood Z hℓ, Fintype.card_fin]
-      exact h.norm_relativeGenerator_sub_siteExpectation_le D hq ℓ hℓ s)
+      exact h.norm_relativeGenerator_sub_siteExpectation_le hh hhJ D hq ℓ hℓ s)
   simp only [hΦ, biUnion_graphBall_pathGraph_eq_chainNeighborhood _ hℓ, Fintype.card_fin]
     at hgen
   exact hgen
@@ -227,10 +228,11 @@ part0_preamble.tex, lines 191–215. No gap or information-reset conclusion is a
 theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
     ∃ C v : ℝ, 0 < C ∧ 0 < v ∧
       ∀ (q : ℕ), 1 ≤ q →
-      ∀ (Λ : Finset ℤ) (h : DomainHamiltonian Λ q R J)
+      ∀ (Λ : Finset ℤ) (h : DomainInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J)
         (D : Finset (Fin Λ.card)) (m : ℕ),
-        let K := h.doubled.operator
-        let K' := (h.swappedDoubled D).operator
+        let K := h.doubled.hamiltonian
+        let K' := (h.swappedDoubled D).hamiltonian
         let crossing := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
         let Z := crossing.biUnion (fun X ↦ X.1)
         let N := fun S : Finset (Fin Λ.card) ↦
@@ -264,7 +266,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
     (sub_pos.mpr (Real.exp_lt_one_iff.mpr (by norm_num)))
   have hd : 0 ≤ d := by positivity
   refine ⟨a + d, 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1, by positivity, by positivity, ?_⟩
-  intro q hq Λ h D m K K' crossing Z N
+  intro q hq Λ h hh hhJ D m K K' crossing Z N
   let g := h.swappedDoubled D
   let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin (q * q))
       (fun X : DomainSupport Λ R ↦ X.1) := ⟨g.term, g.supported⟩
@@ -274,7 +276,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
     (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) g.hermitian b₀
     g.sum_norm_terms_containing_le h.doubled.operator_isHermitian Z (m : ℝ) d hd (fun s ↦ by
       rw [hΦ, Nat.floor_natCast, Fintype.card_fin]
-      exact h.norm_relativeGenerator_sub_siteExpectation_le D hq m s)
+      exact h.norm_relativeGenerator_sub_siteExpectation_le hh hhJ D hq m s)
   simp only [hΦ, Nat.floor_natCast, Fintype.card_fin] at hgen
   exact hgen
 

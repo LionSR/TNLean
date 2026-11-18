@@ -36,7 +36,7 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -49,23 +49,24 @@ viable vector with the original LVV energy and overlap bounds.  Isometric expans
 preserves its norm and residual and places it in the retained support.  The theorem also
 constructs such a vector by the normalized coordinate-start power method at the explicit
 polynomial iteration count `ceil (n / (11 Δ / (778752 L))²)`. -/
-theorem ChainHamiltonian.exists_viable_vector_of_approximate_density_and_eigenresidual
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1)
+theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approximate_density_and_eigenresidual
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -109,7 +110,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approximate_density_and_eigenre
             (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u') ∘
               gluingCut L q k)
         ‖v'‖ = 1 ∧ v' ∈ leftSupportSubmodule S ∧
-          (⟪v', toEuclideanLin h.operator v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+          (⟪v', toEuclideanLin h.hamiltonian v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
           1 - 1 / 12 ≤ ‖⟪Γ, v'⟫_ℂ‖) ∧
       let η := 11 * Δ / (778752 * L)
       let t := ⌈(n : ℝ) / η ^ 2⌉₊
@@ -124,7 +125,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approximate_density_and_eigenre
               (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u') ∘
                 gluingCut L q k)
           ‖z‖ = 1 ∧ ‖v'‖ = 1 ∧ v' ∈ leftSupportSubmodule S ∧
-            (⟪v', toEuclideanLin h.operator v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+            (⟪v', toEuclideanLin h.hamiltonian v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
             1 - 1 / 12 ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
   let ζ := Δ / (16224 * L)
   have hζ : ζ ≤ Δ / (16224 * L) := le_rfl
@@ -138,7 +139,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approximate_density_and_eigenre
         le_add_of_nonneg_right (mul_nonneg (mul_nonneg (by norm_num) hLreal.le) hζ0)
       _ ≤ Δ / 2028 := hcombined
   obtain ⟨ρ, u, μ, hρ, hρtr, hρP, -, hu, huρ, -, hbounds⟩ :=
-    h.exists_leading_vector_of_approximate_compressed_boundary_solution hL hq hΔ
+    h.exists_leading_vector_of_approximate_compressed_boundary_solution hh hhJ hL hq hΔ
       HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ x₀ τ σ
         hτtrace hσpsd hclose hτenergy hτboundary hdensity
   dsimp only at hbounds
@@ -187,7 +188,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approximate_density_and_eigenre
           (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u') ∘
             gluingCut L q k)
       ‖v'‖ = 1 ∧ v' ∈ leftSupportSubmodule S ∧
-        (⟪v', toEuclideanLin h.operator v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+        (⟪v', toEuclideanLin h.hamiltonian v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
         1 - 1 / 12 ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
     intro z hz hres
     let u' : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m) :=
@@ -211,7 +212,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approximate_density_and_eigenre
       exact hres
     have hres' : ‖toEuclideanLin ρ u' - (μ : ℂ) • u'‖ ≤ (11 / 24) * ζ :=
       residual_precision_of_lvv_vector_tolerance hL hresambient
-    exact h.nearby_glued_vector_viable_of_density_and_vector_residual hL hq hΔ hΩ hgap hspan
+    exact h.nearby_glued_vector_viable_of_density_and_vector_residual hh hhJ hL hq hΔ hΩ hgap hspan
       W hW hρ hρtr u u' hu hu' huρ hμ hu'P hE ha hres' hcombined
   refine ⟨σ₀, ρ, u, z₀, μ, hσ₀, hσ₀tr, hρexpand, hρ, hρtr, hu, huρ, hμ,
     hz₀, hz₀eig, hZz₀, hv₀unit, hv₀overlap, hcertificate, ?_⟩
@@ -225,7 +226,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approximate_density_and_eigenre
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u') ∘
           gluingCut L q k)
     ‖v'‖ = 1 ∧ v' ∈ leftSupportSubmodule S ∧
-      (⟪v', toEuclideanLin h.operator v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+      (⟪v', toEuclideanLin h.hamiltonian v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v'⟫_ℂ‖
   have hcert : ∀ z : EuclideanSpace ℂ (Fin n), ‖z‖ = 1 →
       ‖toEuclideanLin σ₀ z - (μ : ℂ) • z‖ ≤ 2 * η → P z := by
@@ -246,16 +247,17 @@ From an approximate compressed density at the standard trace-norm precision, it 
 the exact compressed leading coordinates and returns a compact rational MPS family that
 is directly `1/12`-viable.  Its coefficient height retains the mesh-independent support
 coordinate radius, whose polynomial control is the remaining runtime issue. -/
-theorem ChainHamiltonian.exists_rationalViableMPSData_of_approximate_density
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1)
+theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_approximate_density
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     (S : Finset (LeftBlockVector L q k)) {b Hv : ℕ}
     (hS : ∀ u : S, RationalLeftOpenMPSRepresentationOfHeight Hv b u.1)
     {m n : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
@@ -264,7 +266,7 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_approximate_density
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -296,7 +298,7 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_approximate_density
           (1 / 12) S (spanColumnFamily S m c)) := by
   obtain ⟨σ₀, ρ, u, z₀, μ, hσ₀, hσ₀tr, hρexpand, hρ, hρtr, hu, huρ, hμ,
       hz₀, hz₀eig, hZz₀, hv₀unit, hv₀overlap, hcertificate, hpower⟩ :=
-    h.exists_viable_vector_of_approximate_density_and_eigenresidual hL hq hΔ
+    h.exists_viable_vector_of_approximate_density_and_eigenresidual hh hhJ hL hq hΔ
       HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ x₀ τ σ
         hτtrace hσpsd hclose hτenergy hτboundary hε
   exact exists_rationalSpanViableMPSData_of_leadingCoordinates hL hΔ hε S hS hΩ

@@ -25,7 +25,7 @@ rank bound for this use, in place of the sharper sub-polynomial estimate.
 
 open scoped InnerProductSpace
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -40,10 +40,11 @@ noncomputable def lvvReferenceBond (q : ℕ) (Δ : ℝ) (L : ℕ) : ℕ :=
 LVV13, `algo53.tex`, Claim `c:trim`, lines 549–559. Its polynomial bond bound is chosen before
 the ground vector; the construction reuses the chain approximation theorem. -/
 theorem exists_bond_trimming_reference (hq : 1 ≤ q) (hΔ : 0 < Δ) (hL : 1 ≤ L)
-    (h : ChainHamiltonian L q 1 1) {E₀ : ℝ}
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) {E₀ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) :
     ∃ v : EuclideanSpace ℂ (Fin L → Fin q), ‖v‖ = 1 ∧
       IsOpenMPS L q (lvvReferenceBond q Δ L) (fun x ↦ v x) ∧
       1 - 1 / 48 ≤ ‖⟪Γ, v⟫_ℂ‖ := by

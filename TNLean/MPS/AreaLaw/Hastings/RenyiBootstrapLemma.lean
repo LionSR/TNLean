@@ -28,7 +28,7 @@ The distinction and the reciprocal-length convention are recorded in
 `docs/paper-gaps/hastings07_lemma1_decay_length.tex`.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -162,9 +162,10 @@ Hastings, arXiv:0705.2024v4, Lemma 2 (`ble`), lines 280–311 and 392–410, at 
 the restrictions of the module docstring. -/
 theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
     ∃ K : ℝ, 1 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ {α : ℝ}, 0 < α → α < 1 →
       ((q : ℝ) ^ 2) ^ (1 - α) * Real.exp (-(2 * α / (6 * lemmaOneEndpointLength R J ΔE))) < 1 →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
@@ -180,7 +181,8 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
               Real.exp (-(2 * α / (6 * lemmaOneEndpointLength R J ΔE)))) / (1 - α) := by
   obtain ⟨K, -, hF⟩ := exists_projectorFactorization_endpoint R
   refine ⟨max K 1, le_max_right _ _, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hΩ hgap hspan α hα0 hα1 hconv j k r hk w ψ hw hrank hnorm P hP hPdef
+  intro J ΔE hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan α hα0 hα1 hconv j k r hk w ψ hw hrank
+      hnorm P hP hPdef
   have h16 := (sixteen_le_lemmaOneLength_and_le R (div_nonneg hJ hΔ.le)).1
   have hζ : 20 ≤ lemmaOneEndpointLength R J ΔE := by
     rw [lemmaOneEndpointLength_eq]; linarith
@@ -217,9 +219,10 @@ Here the convergence condition of line 406 holds for every `α > 1`, and the fun
 with the restrictions of the module docstring. -/
 theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt (R : ℕ) :
     ∃ K : ℝ, 1 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ {α : ℝ}, 1 < α →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
@@ -231,7 +234,8 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt (R : ℕ
             Real.log (2 * (K * lemmaOneEndpointLength R J ΔE ^ 3) ^ 2 / P) * Real.log q +
             bootstrapRemainder (6 * lemmaOneEndpointLength R J ΔE) q := by
   obtain ⟨K, hK, hL2⟩ := exists_entropy_le_of_overlap_schmidtRank_mixture R
-  refine ⟨K, hK, fun hJ hΔ L q _ h E₀ Ω hΩ hgap hspan α hα j k r hk w ψ hw hrank hnorm P hP hPdef ↦
+  refine ⟨K, hK, fun hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan α hα j k r hk w ψ hw hrank
+      hnorm P hP hPdef ↦
     ?_⟩
   exact (renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt hΩ j hα).trans
     (hL2 hJ hΔ h hΩ hgap hspan j hk w ψ hw hrank hnorm hP hPdef)

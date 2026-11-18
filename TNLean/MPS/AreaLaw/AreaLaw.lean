@@ -43,7 +43,7 @@ in `TNLean.MPS.AreaLaw.ComponentReduction`.
   and Section 2 (reductions).
 -/
 
-open ManyBody (ChainSupport interval)
+open ManyBody (ChainSupport interval ChainInteraction)
 
 open TNLean.Lattice
 
@@ -94,9 +94,10 @@ The finite-family estimate below instead bounds both quantities by expressions l
 in `1 + J/Δ`, giving the coarser bound `C₀ (1 + J/Δ)`. That scalar relaxation does not
 recover the exact intermediate bound stated here. -/
 theorem regionEntropy_interval_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (h : ChainHamiltonian L q R J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (a b : ℕ) :
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (a b : ℕ) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a b) Ω ≤
       chainIntervalEntropyBound q R J Δ := by
   have hdisc := two_mul_condEntropy_interval_le hq hJ hΔ h hΩ hgap hspan a b
@@ -203,9 +204,10 @@ theorem chainIntervalEntropyBound_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ
 Hamiltonian on the chain of `L` sites, the entropy of every subset `A` is at most
 `C_int(q, R, J, Δ)` times its number of boundary edges. TNLean note, Theorem A. -/
 theorem regionEntropy_le_mul_card_boundaryEdges (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (h : ChainHamiltonian L q R J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Fin L)) :
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Fin L)) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
       chainIntervalEntropyBound q R J Δ * (boundaryEdges L A).card :=
   regionEntropy_le_mul_card_boundaryEdges_of_intervals hΩ
@@ -219,14 +221,15 @@ gapped ground vector `Ω`, every subset `A` satisfies `S_Ω(A) ≤ C |∂A|`. TN
 Theorem A, on the chain. -/
 theorem chainAreaLaw (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ C : ℝ, 0 ≤ C ∧ C = chainAreaLawConst q R * (1 + J / Δ) ∧
-      ∀ L : ℕ, ∀ h : ChainHamiltonian L q R J, ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (Fin L → Fin q),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Fin L),
+      ∀ L : ℕ, ∀ h : ChainInteraction L q R, (∀ X, (h.term X).IsHermitian) → (∀ X, ‖h.term X‖ ≤ J) →
+          ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (Fin L → Fin q),
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Fin L),
           Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤ C * (boundaryEdges L A).card := by
   have hle := chainIntervalEntropyBound_le (q := q) (R := R) hq hJ hΔ
   have h0 := chainIntervalEntropyBound_nonneg (q := q) (R := R) hq hJ hΔ
   refine ⟨chainAreaLawConst q R * (1 + J / Δ), h0.trans hle, rfl, ?_⟩
-  intro L h E₀ Ω hΩ hgap hspan A
+  intro L h hh hhJ E₀ Ω hΩ hgap hspan A
   refine (regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ h hΩ hgap hspan A).trans ?_
   exact mul_le_mul_of_nonneg_right hle (Nat.cast_nonneg _)
 
@@ -345,12 +348,12 @@ Source: the one-dimensional note, Remark `rem:sharper`, lines 706–745. -/
 theorem chainAreaLaw_of_consecutive_terms
     (q R : ℕ) (J Δ : ℝ) (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ C : ℝ, 0 ≤ C ∧ C = windowAreaLawConst q R * (1 + J / Δ) ∧
-      ∀ L : ℕ, ∀ h : ChainHamiltonian L q R J,
+      ∀ L : ℕ, ∀ h : ChainInteraction L q R, (∀ X, (h.term X).IsHermitian) → (∀ X, ‖h.term X‖ ≤ J) →
         (∀ X : ChainSupport L R, h.term X ≠ 0 →
           ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) →
         ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (Fin L → Fin q),
-          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ A : Finset (Fin L),
             Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
               C * (boundaryEdges L A).card := by
@@ -358,27 +361,28 @@ theorem chainAreaLaw_of_consecutive_terms
   have hC : 0 ≤ windowAreaLawConst q R * (1 + J / Δ) :=
     mul_nonneg (cutAreaLawConst_nonneg _ q R) (by have := div_nonneg hJ hΔ.le; linarith)
   refine ⟨_, hC, rfl, ?_⟩
-  intro L h hwindow E₀ Ω hΩ hgap hspan A
+  intro L h hh hhJ hwindow E₀ Ω hΩ hgap hspan A
   let I := {X : ChainSupport L R // h.term X ≠ 0}
   let g : I → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ h.term X.val
-  have hsum : (∑ X : I, g X) = h.operator :=
+  have hsum : (∑ X : I, g X) = h.hamiltonian :=
     (Finset.sum_eq_sum_subtype_ne_zero h.term h.term (fun _ hX ↦ hX)).symm
   rw [← hsum] at hgap hspan
   refine regionEntropy_le_mul_card_boundaryEdges_of_intervals hΩ hC
     (fun a b ↦ ?_) A
   exact regionEntropy_interval_le_of_family_budget hq hJ hΔ g (fun X ↦ X.val)
-    (fun X ↦ h.supported X.val) (fun X ↦ h.hermitian X.val) (fun X ↦ h.norm_le X.val)
+    (fun X ↦ h.mem X.val) (fun X ↦ hh X.val) (fun X ↦ hhJ X.val)
     (2 * R) (one_le_windowBudgetConst q R)
-    (h.card_crossingTerms_interval_le_of_consecutive_terms hwindow)
-    (h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow) hΩ hgap hspan a b
+    (h.card_crossingTerms_interval_le_of_consecutive_terms hh hhJ hwindow)
+    (h.cutLogBudget_interval_le_of_consecutive_terms hh hhJ hq hwindow) hΩ hgap hspan a b
 
 /-- The interval entropy estimate with the original polynomial source constants.
 Source: one-dimensional note, part1_arealaw.tex, eq:final, lines674–679. -/
 theorem regionEntropy_interval_le_polynomial
     (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (h : ChainHamiltonian L q R J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (l r : ℕ) :
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (l r : ℕ) :
     let C_E : ℝ := 8 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
     let m : ℕ :=
       ⌈max (max (max 4 (4 * C_E / Δ))

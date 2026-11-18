@@ -21,7 +21,7 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 482–4
 and the interval area-law estimate in Part I.
 -/
 
-open ManyBody (interval lineDomainGraph)
+open ManyBody (interval lineDomainGraph DomainInteraction)
 
 open SimpleGraph QuantumCircuit
 
@@ -48,20 +48,21 @@ theorem regionEntropy_domainNeighborhood_biUnion_intervals_le
 of a finite interval union.
 Source: TNLean note, `part2a_mps_information.tex`, lines 482–487, together with the
 interval area-law bound from Part I. -/
-theorem DomainHamiltonian.regionEntropy_neighborhood_biUnion_intervals_le
+theorem _root_.ManyBody.DomainInteraction.regionEntropy_neighborhood_biUnion_intervals_le
     {Λ : Finset ℤ} {q R : ℕ} {J Δ : ℝ} {κ : Type*}
-    (h : DomainHamiltonian Λ q R J) (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (h : DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (s : Finset κ) (a b : κ → ℕ) (m : ℕ) :
     Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
       ((s.biUnion (fun i ↦ interval Λ.card (a i) (b i))).biUnion
         (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)) Ω ≤
           (s.card : ℝ) * chainIntervalEntropyBound q R J Δ := by
   exact regionEntropy_domainNeighborhood_biUnion_intervals_le hΩ
-    (fun u v ↦ regionEntropy_interval_le hq hJ hΔ (h.toChain hJ)
-      hΩ (by simpa only [h.toChain_operator hJ] using hgap)
-      (by simpa only [h.toChain_operator hJ] using hspan) u v) s a b m
+    (fun u v ↦ regionEntropy_interval_le hq hJ hΔ (h.toChain)
+      hΩ (by simpa only [h.toChain_hamiltonian hJ] using hgap)
+      (by simpa only [h.toChain_hamiltonian hJ] using hspan) u v) s a b m
 
 end TNLean.MPS.AreaLaw

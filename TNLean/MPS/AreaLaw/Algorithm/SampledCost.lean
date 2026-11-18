@@ -78,7 +78,7 @@ theorem cost_sampledSweepStepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
   simp only [sampledSweepStepProgram, FreeM.cost_bind, FreeM.eval_lift, eval_extensionProgram,
     eval_sizeTrimmingProgram, eval_bondTrimmingProgram, honestOracle_sampledFactors,
     FreeM.cost_lift, queryCost_sampledFactors, sampledStepCostBound]
-  set chain := ChainHamiltonian.ofBonds h hs h0 h1 with hchain
+  set chain := ManyBody.ChainInteraction.ofBonds h hs with hchain
   set m' := bondTrimmingRadius L (lvvReferenceBond q Δ L) with hm'
   set c : ℝ := (Δ / 169) ^ 2 with hc
   set D' := constantCutBond q 1 1 Δ c with hD'
@@ -89,7 +89,7 @@ theorem cost_sampledSweepStepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
   set size := lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ with hsize
   have hcard₁ : S₁.card ≤ q * S.card := card_extend_le (i + 1) S
   have hcard₂ : S₂.card ≤ size :=
-    ChainHamiltonian.card_sizeTrimmingSelection_le_polynomial chain hL hq hΔ S₁
+    ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomial chain hL hq hΔ S₁
   have hcard₃ : S₃.card ≤ S₂.card := card_bondTrimSet_le hi m' S₂
   have h₁ := cost_extensionProgram_le L (i + 1) b S
   have h₂ := cost_sizeTrimmingProgram_le L (i + 1) b chain hL hq hΔ S₁

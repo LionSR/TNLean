@@ -65,7 +65,7 @@ Lieb–Robinson estimates used here; see
 `docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex`.
 -/
 
-open ManyBody (ChainSupport)
+open ManyBody (ChainSupport ChainInteraction)
 
 open Matrix MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped Matrix.Norms.L2Operator NNReal
@@ -122,9 +122,10 @@ the window `X_{j-2l/3,j+1+2l/3}` carrying `H - (M_L + M_R)` (line 899), and
 `η = q/ΔE²`. The source's `O(ΔE⁻¹ J √q e^{-l/6ξ})` follows by taking `ℓ` of order `l/3`
 and `T` of order `ℓ/v`. -/
 theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq : 1 ≤ q)
-    (h : ChainHamiltonian L q R J) {H₀ A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        {H₀ A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hH₀ : H₀.IsHermitian) (hA : A.IsHermitian) (hB : B.IsHermitian) (Z : Finset (Fin L))
-    (hZ : Entropy.IsSupportedOn (n := fun _ ↦ q) (h.operator - H₀) Z)
+    (hZ : Entropy.IsSupportedOn (n := fun _ ↦ q) (h.hamiltonian - H₀) Z)
     (η : ℝ≥0) {ℓ T : ℝ} (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
     let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
@@ -133,15 +134,15 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
     ∃ O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       O ∈ supportedOperators q (chainNeighborhood Z ℓ : Set (Fin L)) ∧ ‖O‖ ≤ 1 ∧
       ‖interactionAverage η A B - O‖ ≤
-        √(η : ℝ) * (‖A + B - h.operator‖ + ‖A - H₀‖ +
-          a * (Z.card : ℝ) ^ 2 * ‖h.operator - H₀‖ * Real.exp (v * T - ℓ / 2)) +
+        √(η : ℝ) * (‖A + B - h.hamiltonian‖ + ‖A - H₀‖ +
+          a * (Z.card : ℝ) ^ 2 * ‖h.hamiltonian - H₀‖ * Real.exp (v * T - ℓ / 2)) +
           4 * Real.exp (-T ^ 2 / (2 * (η : ℝ))) := by
   classical
   intro b₀ a v
   have : NeZero q := ⟨by omega⟩
-  set H := h.operator with hHdef
+  set H := h.hamiltonian with hHdef
   set N := chainNeighborhood Z ℓ with hNdef
-  have hH : H.IsHermitian := h.operator_isHermitian
+  have hH : H.IsHermitian := (ManyBody.Interaction.isHermitian_hamiltonian hh)
   have hden : 0 < 1 - Real.exp (-(1 / 2 : ℝ)) :=
     sub_pos.mpr (Real.exp_lt_one_iff.mpr (by norm_num))
   have ha : 0 ≤ a := (div_pos (by positivity) hden).le
@@ -155,8 +156,8 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
       ‖ManyBody.heisenbergEvolution H s (H - H₀) -
         siteExpectation q N (ManyBody.heisenbergEvolution H s (H - H₀))‖ ≤ E₃ := by
     have hloc := norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
-      (fun X : ChainSupport L R ↦ X) h.term h.hermitian h.supported b₀
-      h.sum_norm_terms_containing_le Z hZ ℓ hℓ s
+      (fun X : ChainSupport L R ↦ X) h.term hh h.mem b₀
+      h.sum_norm_terms_containing_le hh hhJ Z hZ ℓ hℓ s
     refine hloc.trans (mul_le_mul_of_nonneg_left
       (Real.exp_mul_sub_le_exp_mul_sub hv hs)
       (by positivity))
@@ -233,13 +234,14 @@ This is `exists_supported_interactionAverage_approx` with the time cutoff `T = �
 With `η = q/ΔE²`, `q` proportional to `l` (line 792) and `ℓ` proportional to `l`, the two
 terms depending on `ℓ` decay exponentially in `l`. The remaining term
 `√η (‖(A + B) - H‖ + ‖A - H₀‖)` does not depend on `ℓ`: it vanishes when `A = H₀` and
-`A + B = H`, as in `ChainHamiltonian.exists_boundaryOperator_factorization`, and in the
+`A + B = H`, as in `ManyBody.ChainInteraction.exists_boundaryOperator_factorization`, and in the
 source's application `A = M_L + M_R`, `B = M_B` it is exponentially small in `l`
 (lines 849–850). Together these give the source's `O(ΔE⁻¹ J √q e^{-l/6ξ})`. -/
 theorem exists_supported_interactionAverage_approx_exp {L q R : ℕ} {J : ℝ} (hq : 1 ≤ q)
-    (h : ChainHamiltonian L q R J) {H₀ A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        {H₀ A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hH₀ : H₀.IsHermitian) (hA : A.IsHermitian) (hB : B.IsHermitian) (Z : Finset (Fin L))
-    (hZ : Entropy.IsSupportedOn (n := fun _ ↦ q) (h.operator - H₀) Z)
+    (hZ : Entropy.IsSupportedOn (n := fun _ ↦ q) (h.hamiltonian - H₀) Z)
     (η : ℝ≥0) {ℓ : ℝ} (hℓ : 0 ≤ ℓ) :
     let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
@@ -248,8 +250,8 @@ theorem exists_supported_interactionAverage_approx_exp {L q R : ℕ} {J : ℝ} (
     ∃ O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       O ∈ supportedOperators q (chainNeighborhood Z ℓ : Set (Fin L)) ∧ ‖O‖ ≤ 1 ∧
       ‖interactionAverage η A B - O‖ ≤
-        √(η : ℝ) * (‖A + B - h.operator‖ + ‖A - H₀‖ +
-          a * (Z.card : ℝ) ^ 2 * ‖h.operator - H₀‖ * Real.exp (-(ℓ / 4))) +
+        √(η : ℝ) * (‖A + B - h.hamiltonian‖ + ‖A - H₀‖ +
+          a * (Z.card : ℝ) ^ 2 * ‖h.hamiltonian - H₀‖ * Real.exp (-(ℓ / 4))) +
           4 * Real.exp (-ℓ ^ 2 / (32 * v ^ 2 * (η : ℝ))) := by
   intro b₀ a v
   have hv : 0 < v := by positivity

@@ -42,7 +42,7 @@ namespace TNLean.MPS.AreaLaw.ChainSweep
 
 open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet ContinuousLinearMap
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace ChainInteraction)
 
 /-- An explicit uniform length cutoff controls the rounded logarithmic width
 and its physical dimensions. The prefactor retains the ceiling's additive one.
@@ -131,10 +131,10 @@ theorem exists_preparation_of_gappedGroundState
       ∀ (L : ℕ) (hsize : L₀ ≤ L),
         let w := ⌈D * Real.log (L : ℝ)⌉₊
         let hL : 0 < L := Nat.lt_of_lt_of_le Nat.zero_lt_one (hL₀.trans hsize)
-        ∀ (h : ChainHamiltonian L q R J)
+        ∀ (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
           (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
-          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         let Fs := initialFrames L w
         let holder : Sheet (Fin L) (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
         let H := fun p ↦ framesSpace (Sheet.regs q) (Fs.filter fun F ↦ holder F = p)
@@ -205,7 +205,7 @@ theorem exists_preparation_of_gappedGroundState
   refine ⟨D, (q : ℝ) ^ 80, ⌈80 * D * Real.log (q : ℝ)⌉₊, L₀, hL₀, hD, hK, ?_⟩
   intro L hsize
   dsimp only
-  intro h Ω E₀ hΩ hgap hspan
+  intro h hh hhJ Ω E₀ hΩ hgap hspan
   let w := ⌈D * Real.log (L : ℝ)⌉₊
   have hL : 0 < L := Nat.lt_of_lt_of_le Nat.zero_lt_one (hL₀.trans hsize)
   have hwidthCut : max 120 ⌈Real.logPowThreshold (60 * D) (1 / 2) 1 1⌉₊ ≤ L :=

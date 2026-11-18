@@ -32,7 +32,7 @@ and `prop:sweep`, proof, lines 365–374; Part II, `lem:logsep`, lines
 width choice.
 -/
 
-open ManyBody (interval mem_interval)
+open ManyBody (interval mem_interval ChainInteraction)
 
 noncomputable section
 
@@ -92,10 +92,10 @@ theorem birth_death_information_of_logarithmic_separation
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
     ∃ (D₂₄ : ℝ) (L₀ : ℕ), 0 < D₂₄ ∧ 1 ≤ L₀ ∧
       ∀ (L : ℕ), L₀ ≤ L →
-      ∀ (h : ChainHamiltonian L q R J)
+      ∀ (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (w : ℕ), 1 ≤ w →
         D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) →
       ∀ k : Fin (stageCount L w),
@@ -113,10 +113,10 @@ theorem birth_death_information_of_logarithmic_separation
             (L : ℝ) ^ (-24 : ℤ)) := by
   classical
   obtain ⟨D₂₄, L₀, hD, hL₀, hlogsep⟩ :=
-    ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
+    ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_separation
       q hq R J Δ hΔ 24 (by norm_num) 1 le_rfl
   refine ⟨D₂₄, L₀, hD, hL₀, ?_⟩
-  intro L hL h Ω E₀ hΩ hgap hspan w hw hwidth k
+  intro L hL h hh hhJ Ω E₀ hΩ hgap hspan w hw hwidth k
   obtain ⟨hd₁, hd₂, hd₃⟩ := birth_death_separation hw k
   have hinterval (b c : ℕ) (E : Finset (Fin L))
       (hd : ∀ x ∈ interval L b c, ∀ y ∈ E, w ≤ Nat.dist x.val y.val) :

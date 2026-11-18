@@ -29,7 +29,7 @@ not the printed quantitative bounds; see `docs/paper-gaps/lvv13_constant_bond.te
 <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval ChainInteraction)
 
 open Matrix Cslib
 open scoped ComplexOrder MatrixOrder
@@ -42,7 +42,8 @@ open LinearAlgebraQuery
 
 /-- Step 2 under a valid oracle costs at most the honest budget. -/
 theorem cost_sizeTrimmingProgram_le_of_valid (hv : IsValidOracle o) (L k b : ℕ)
-    (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+        (hL : 0 < L) (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q k)) :
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
@@ -136,7 +137,7 @@ theorem cost_sweepStepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL :
   simp only [sweepStepProgram, FreeM.cost_bind, FreeM.eval_lift, eval_extensionProgram_of_valid hv,
     eval_sizeTrimmingProgram_of_valid hv, eval_bondTrimmingProgram_of_valid hv, FreeM.cost_lift,
     queryCost_gaussianFilterFactors, sweepStepCostBound]
-  set chain := ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1 with hchain
+  set chain := ManyBody.ChainInteraction.ofNearestNeighborPositive h hs with hchain
   set b := lvvSuccessiveBondBound q Delta L with hb
   set m := bondTrimmingRadius L (lvvReferenceBond q Delta L) with hm
   set c := lvvSuccessiveError Delta with hcdef

@@ -69,7 +69,7 @@ theorem cost_sampledSweepStepProgram_le_of_valid (hv : IsValidOracle o) (hL : 0 
     eval_extensionProgram_of_valid hv, eval_sizeTrimmingProgram_of_valid hv,
     eval_bondTrimmingProgram_of_valid hv, FreeM.cost_lift, queryCost_sampledFactors,
     sampledStepCostBound]
-  set chain := ChainHamiltonian.ofBonds h hs h0 h1 with hchain
+  set chain := ManyBody.ChainInteraction.ofBonds h hs with hchain
   set m' := bondTrimmingRadius L (lvvReferenceBond q Δ L) with hm'
   set c : ℝ := (Δ / 169) ^ 2 with hc
   set D' := constantCutBond q 1 1 Δ c with hD'

@@ -22,7 +22,7 @@ Source: Hastings, arXiv:0705.2024v4, main theorem, eqs. `entbd` and `smd`,
 lines 124–144, and the doubling iteration, lines 197–231.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -154,9 +154,10 @@ is numerical. Hastings, arXiv:0705.2024v4, main theorem, eqs. `entbd` and `smd`,
 lines 124–144. The larger length absorbs the corrected fixed-length doubling exponent. -/
 theorem exists_regionEntropy_prefix_le_printed (R : ℕ) :
     ∃ c₀ : ℝ, 0 < c₀ ∧ ∀ {J Δ : ℝ}, 0 ≤ J → 0 < Δ →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ s : ℝ, 2 * lemmaOneEndpointLength R J Δ ≤ s → ∀ i : ℕ,
         Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
           c₀ * (6 * s) * log (6 * s) * log q * (2 : ℝ) ^ ((6 * s) * log q) := by
@@ -169,7 +170,7 @@ theorem exists_regionEntropy_prefix_le_printed (R : ℕ) :
   let c₀ := 6 * (2 * a + 5) * (2 : ℝ) ^ (9 / log 2 + 1) + 2 * a + 20
   have hc₀ : 0 < c₀ := by dsimp only [c₀]; positivity
   refine ⟨c₀, hc₀, ?_⟩
-  intro J Δ hJ hΔ L q _ h E₀ Ω hΩ hgap hspan s hs i
+  intro J Δ hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan s hs i
   by_cases hq : 2 ≤ q
   · let ζ := lemmaOneEndpointLength R J Δ
     have hζ : 20 ≤ ζ := by

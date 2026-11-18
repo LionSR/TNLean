@@ -167,9 +167,9 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
       (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hspan
     have hover : 1 - δ ≤ ‖⟪Γ, e.symm w⟫_ℂ‖ :=
       one_sub_le_norm_inner_of_norm_sub_sq_le hw'norm hΩ herror
-    let chain := ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1
+    let chain := ManyBody.ChainInteraction.ofNearestNeighborPositive h hs
     have hchain : chain.operator = ∑ j, h j :=
-      ChainHamiltonian.ofNearestNeighborPositive_operator h hs h0 h1
+      ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian h hs h0 h1
     have hspanC : groundSpace chain.operator E = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hΩ hspanC hw'norm hover

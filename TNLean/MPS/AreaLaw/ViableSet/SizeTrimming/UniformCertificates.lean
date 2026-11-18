@@ -37,7 +37,7 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -45,16 +45,17 @@ namespace TNLean.MPS.AreaLaw
 map, compressed objective, and boundary center transfers to the exact physical data and
 produces the LVV viable vector.  The hypotheses use the canonical fixed-data meshes and
 the explicit coordinate-map trace allowance. -/
-theorem ChainHamiltonian.exists_viable_vector_of_rational_fixed_data_sdp_certificate
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q)
+theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_rational_fixed_data_sdp_certificate
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -62,7 +63,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_rational_fixed_data_sdp_certifi
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X QX : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -99,7 +100,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_rational_fixed_data_sdp_certifi
         approxSDPDensityEntryBound n κ ε * (2 + θZ)) ≤ Δ / (64896 * L)) :
     ∃ v : EuclideanSpace ℂ (Fin L → Fin q),
       ‖v‖ = 1 ∧ v ∈ leftSupportSubmodule S ∧
-      (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+      (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
   let K := Zᴴ * (leftCutOperator k HL ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) * Z
   let C := approxSDPDensityEntryBound n κ ε
@@ -121,7 +122,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_rational_fixed_data_sdp_certifi
       hC hκbound hεbound hεbbound hδbound
         hθKbound hθXbound
     simpa only [ω, C] using hθZbound
-  apply h.exists_viable_vector_of_approx_sdp_error_budget hL hq hΔ
+  apply h.exists_viable_vector_of_approx_sdp_error_budget hh hhJ hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ hexact
   simpa only [K, C, eK, eX, ω, add_assoc] using hbudget
 
@@ -129,16 +130,18 @@ theorem ChainHamiltonian.exists_viable_vector_of_rational_fixed_data_sdp_certifi
 The density-cone tolerance is chosen using `|S| m`, and the two boundary-cone tolerances
 using `q m`; hence these precisions can be fixed before the support coordinates `Z` and
 their realized order `n` are constructed. -/
-theorem ChainHamiltonian.exists_viable_vector_of_uniformly_approx_sdp_certificate
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q)
+theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_uniformly_approx_sdp_certificate
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) (S : Finset (LeftBlockVector L q k))
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
+        (S : Finset (LeftBlockVector L q k))
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (hn : n ≤ S.card * m)
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
@@ -147,7 +150,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_uniformly_approx_sdp_certificat
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -178,7 +181,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_uniformly_approx_sdp_certificat
     (hδbound : δ ≤ Δ / (64896 * L)) :
     ∃ v : EuclideanSpace ℂ (Fin L → Fin q),
       ‖v‖ = 1 ∧ v ∈ leftSupportSubmodule (S : Set (LeftBlockVector L q k)) ∧
-      (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+      (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
   classical
   have hnpos : 0 < n := by
@@ -194,7 +197,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_uniformly_approx_sdp_certificat
     hL hnpos hrpos hn hr hε hεb
       (by simpa only [Nat.cast_mul] using hεbound)
       (by simpa only [Nat.cast_mul] using hεbbound)
-  apply h.exists_viable_vector_of_all_spectral_approx_sdp_certificate hL hq hΔ
+  apply h.exists_viable_vector_of_all_spectral_approx_sdp_certificate hh hhJ hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ A hA P N hP hN
       htrace hε hmin hεb hPmin hNmin hresidual htraces henergy hκbound
   · exact hεrealized
@@ -204,16 +207,18 @@ theorem ChainHamiltonian.exists_viable_vector_of_uniformly_approx_sdp_certificat
 /-- A fully approximate feasible compressed SDP certificate, expressed by the unified
 feasibility predicate and the a priori support-size tolerances, yields the physical LVV
 viable vector. -/
-theorem ChainHamiltonian.exists_viable_vector_of_uniform_approx_sdp_feasible
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q)
+theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_uniform_approx_sdp_feasible
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) (S : Finset (LeftBlockVector L q k))
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
+        (S : Finset (LeftBlockVector L q k))
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (hn : n ≤ S.card * m)
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
@@ -222,7 +227,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_uniform_approx_sdp_feasible
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -246,11 +251,11 @@ theorem ChainHamiltonian.exists_viable_vector_of_uniform_approx_sdp_feasible
     (hδbound : δ ≤ Δ / (64896 * L)) :
     ∃ v : EuclideanSpace ℂ (Fin L → Fin q),
       ‖v‖ = 1 ∧ v ∈ leftSupportSubmodule (S : Set (LeftBlockVector L q k)) ∧
-      (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+      (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
   rcases hcert with ⟨hA, hP, hN, htrace, hε, hmin, hεb, hPmin, hNmin,
     hresidual, htraces, henergy⟩
-  exact h.exists_viable_vector_of_uniformly_approx_sdp_certificate hL hq hΔ
+  exact h.exists_viable_vector_of_uniformly_approx_sdp_certificate hh hhJ hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan S hn W hW x hwx hwE X hX Z hZ hZZ
       A hA P N hP hN htrace hε hmin hεb hPmin hNmin hresidual htraces henergy
         hκbound hεbound hεbbound hδbound
@@ -260,16 +265,18 @@ coordinates containing an exact zero-error SDP certificate and in which every un
 accurate certificate is physically sound.  Thus the numerical solver need only return
 matrices in the nonempty coordinate problem constructed here; it does not need to supply
 or certify the support isometry itself. -/
-theorem ChainHamiltonian.exists_boundary_coordinates_with_uniform_approx_sdp_soundness
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q)
+theorem _root_.ManyBody.ChainInteraction.exists_boundary_coordinates_with_uniform_approx_sdp_soundness
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) (S : Finset (LeftBlockVector L q k))
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
+        (S : Finset (LeftBlockVector L q k))
     {m : ℕ} [Nonempty (CutSite L q k × Fin m)]
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -283,7 +290,7 @@ theorem ChainHamiltonian.exists_boundary_coordinates_with_uniform_approx_sdp_sou
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hXHermitian : X.IsHermitian)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
@@ -316,7 +323,7 @@ theorem ChainHamiltonian.exists_boundary_coordinates_with_uniform_approx_sdp_sou
         δ ≤ Δ / (64896 * L) →
         ∃ v : EuclideanSpace ℂ (Fin L → Fin q),
           ‖v‖ = 1 ∧ v ∈ leftSupportSubmodule (S : Set (LeftBlockVector L q k)) ∧
-          (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+          (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
           1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
   classical
   obtain ⟨n, Z, A₀, hnpos, hn, hZ, hZZ, hA₀, hA₀trace, hρexpand⟩ :=
@@ -343,7 +350,7 @@ theorem ChainHamiltonian.exists_boundary_coordinates_with_uniform_approx_sdp_sou
   refine ⟨n, hnonempty, Z, A₀, P₀, N₀, hnpos, hn, hZ, hZZ,
     by simpa only [K, E, ρ] using hzero, ?_⟩
   intro κ ε εb δ A P N hcert hκbound hεbound hεbbound hδbound
-  exact h.exists_viable_vector_of_uniform_approx_sdp_feasible hL hq hΔ
+  exact h.exists_viable_vector_of_uniform_approx_sdp_feasible hh hhJ hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan S hn W hW x hwx hwE X hX Z hZ hZZ
       hcert hκbound hεbound hεbbound hδbound
 

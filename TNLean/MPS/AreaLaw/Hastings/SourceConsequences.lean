@@ -33,7 +33,7 @@ See `docs/paper-gaps/hastings07_relent_constants.tex`,
 `docs/paper-gaps/hastings07_schmidt_tail_constant.tex`.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -46,9 +46,10 @@ open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder
 Hastings, arXiv:0705.2024v4, lines 280–311. -/
 theorem exists_entropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
     ∃ K : ℝ, 1 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
         (∀ i, (cutMatrix (ψ i) j).rank ≤ k) → ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
@@ -61,7 +62,7 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
             bootstrapRemainder (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)) q := by
   obtain ⟨K, -, hF⟩ := exists_projectorFactorization_source R
   refine ⟨max K 1, le_max_right _ _, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hΩ hgap hspan j k r hk w ψ hw hrank hnorm P hP hPdef
+  intro J ΔE hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan j k r hk w ψ hw hrank hnorm P hP hPdef
   have hs : 80 ≤ (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) := le_max_right _ _
   have hξ : 0 < 6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) := by linarith
   have hC₁ : 1 ≤ max K 1 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3 :=
@@ -89,9 +90,10 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
 Hastings, arXiv:0705.2024v4, lines 392–410. -/
 theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
     ∃ K : ℝ, 1 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ {α : ℝ}, 0 < α → α < 1 →
       ((q : ℝ) ^ 2) ^ (1 - α) *
         Real.exp (-(2 * α / (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)))) < 1 →
@@ -112,7 +114,8 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
               (1 - α) := by
   obtain ⟨K, -, hF⟩ := exists_projectorFactorization_source R
   refine ⟨max K 1, le_max_right _ _, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hΩ hgap hspan α hα0 hα1 hconv j k r hk w ψ hw hrank hnorm P hP hPdef
+  intro J ΔE hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan α hα0 hα1 hconv j k r hk w ψ hw hrank
+      hnorm P hP hPdef
   have hs : 80 ≤ (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) := le_max_right _ _
   have hξ : 0 < 6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) := by linarith
   have hC₁ : 1 ≤ max K 1 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3 :=
@@ -145,9 +148,10 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
 Hastings, arXiv:0705.2024v4, lines 392–410. -/
 theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt_source (R : ℕ) :
     ∃ K : ℝ, 1 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ {α : ℝ}, 1 < α →
       ∀ (j : ℕ) {k r : ℕ}, 1 ≤ k → ∀ (w : Fin r → ℝ)
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
@@ -162,7 +166,7 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt_source (
             bootstrapRemainder (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)) q := by
   obtain ⟨K, hK, hL2⟩ := exists_entropy_le_of_overlap_schmidtRank_mixture_source R
   refine ⟨K, hK, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hΩ hgap hspan α hα j k r hk w ψ hw hrank hnorm P hP hPdef
+  intro J ΔE hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan α hα j k r hk w ψ hw hrank hnorm P hP hPdef
   exact (renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt hΩ j hα).trans
     (hL2 hJ hΔ h hΩ hgap hspan j hk w ψ hw hrank hnorm hP hPdef)
 
@@ -173,9 +177,10 @@ namespace Hastings
 Hastings, arXiv:0705.2024v4, eq. `relent`, lines 234–242 and 413–503. -/
 theorem exists_relent_of_isGapped_source (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ c l : ℕ, c + l ≤ L →
       (l + 6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) *
           Real.log (K * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3)) * Real.log q +
@@ -192,7 +197,7 @@ theorem exists_relent_of_isGapped_source (R : ℕ) :
             relentConst := by
   obtain ⟨K₀, hK₀, hF⟩ := exists_projectorFactorization_source R
   refine ⟨K₀ + 1, by linarith, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hΩ hgap hspan c l hcl hS
+  intro J ΔE hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan c l hcl hS
   have hζ8 : 80 ≤ (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) := le_max_right _ _
   have hξ : 0 < 6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) := by linarith
   have hpow : 1 ≤ (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3 :=
@@ -223,9 +228,10 @@ lines 130–144 and 505–557. The squared error and the factor `exp(2/ξ')`
 have the local corrections described in the module docstring. -/
 theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_source (R : ℕ) :
     ∃ c₀ K : ℝ, 0 < c₀ ∧ 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       let s := max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80
       let ξ' := 6 * s
       let C₁ := max (K * s ^ 3) 1
@@ -243,7 +249,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_source (R : ℕ) :
   obtain ⟨c₀, hc₀, hS⟩ := exists_regionEntropy_prefix_le_source R
   obtain ⟨K, hK, hF⟩ := exists_projectorFactorization_source R
   refine ⟨c₀, K, hc₀, hK, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hΩ hgap hspan s ξ' C₁ Smax k' hk'
+  intro J ΔE hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan s ξ' C₁ Smax k' hk'
   have hs : 80 ≤ s := le_max_right _ _
   have hξ : 0 < ξ' := by dsimp [ξ']; linarith
   refine isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy hΩ hξ

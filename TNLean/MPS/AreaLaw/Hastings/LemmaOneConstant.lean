@@ -62,7 +62,7 @@ positive semidefinite, and the positive form of Lemma 1 decays at half the rate,
 
 open Matrix Real
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace ChainInteraction)
 open scoped ComplexOrder
 
 namespace TNLean.MPS.AreaLaw
@@ -215,20 +215,21 @@ Hastings, arXiv:0705.2024v4, Lemma 1, lines 246–267, with `C₁(ξ̂) = K ξ̂
 (lines 258–262) and the restrictions of the module docstring. -/
 theorem exists_projectorFactorization_pow (R : ℕ) {κ : ℝ} (hκ : 6 < κ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ c l : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
         IsFactorizationAt Ω c l (K * lemmaOneLength R (J / ΔE) 1 ^ 3 *
           exp (-(l / (κ * lemmaOneLength R (J / ΔE) 1)))) OB OL OR := by
   obtain ⟨K, hK0, hK⟩ := lemmaOneConst_le_pow R hκ
-  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h E₀ Ω hΩ hgap hspan c l ↦ ?_⟩
+  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h hh hhJ E₀ Ω hΩ hgap hspan c l ↦ ?_⟩
   have hx : 0 ≤ ΔE⁻¹ * J := mul_nonneg (inv_nonneg.mpr hΔ.le) hJ
   have hξ0 := lemmaOneLength_pos R (ΔE⁻¹ * J) 1
   have hgap' := hgap.smul (inv_pos.mpr hΔ)
-  have hspan' := (ManyBody.groundSpace_smul (inv_ne_zero hΔ.ne') h.operator E₀).trans hspan
-  rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_operator _ (inv_nonneg.mpr hΔ.le)] at hgap'
-  rw [← h.smul_operator _ (inv_nonneg.mpr hΔ.le)] at hspan'
+  have hspan' := (ManyBody.groundSpace_smul (inv_ne_zero hΔ.ne') h.hamiltonian E₀).trans hspan
+  rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_hamiltonian _ (inv_nonneg.mpr hΔ.le)] at hgap'
+  rw [← h.smul_hamiltonian _ (inv_nonneg.mpr hΔ.le)] at hspan'
   obtain ⟨OB, OL, OR, hF⟩ := exists_isFactorizationAt_lemmaOneConst R hx one_pos
     (ξ' := κ * lemmaOneLength R (ΔE⁻¹ * J) 1) (by nlinarith)
     (h.smul ΔE⁻¹ (inv_nonneg.mpr hΔ.le)) hΩ hgap' hspan' c l
@@ -244,20 +245,22 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, Lemma 1 (lines 246–267) and the note
 the restrictions of the module docstring. -/
 theorem exists_projectorFactorization_posSemidef_pow (R : ℕ) {κ : ℝ} (hκ : 6 < κ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ c l : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ, OB.PosSemidef ∧
         IsFactorizationAt Ω c l (K * lemmaOneLength R (J / ΔE) 1 ^ 3 *
           exp (-(l / (2 * (κ * lemmaOneLength R (J / ΔE) 1))))) OB OL OR := by
   obtain ⟨K, hK0, hK⟩ := lemmaOneConst_le_pow R hκ
-  refine ⟨(√2 + 4) * (K + 1), by positivity, fun {J ΔE} hJ hΔ {L q} _ h E₀ Ω hΩ hgap hspan c l ↦ ?_⟩
+  refine ⟨(√2 + 4) * (K + 1), by positivity,
+      fun {J ΔE} hJ hΔ {L q} _ h hh hhJ E₀ Ω hΩ hgap hspan c l ↦ ?_⟩
   have hx : 0 ≤ ΔE⁻¹ * J := mul_nonneg (inv_nonneg.mpr hΔ.le) hJ
   have hξ0 := lemmaOneLength_pos R (ΔE⁻¹ * J) 1
   have hgap' := hgap.smul (inv_pos.mpr hΔ)
-  have hspan' := (ManyBody.groundSpace_smul (inv_ne_zero hΔ.ne') h.operator E₀).trans hspan
-  rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_operator _ (inv_nonneg.mpr hΔ.le)] at hgap'
-  rw [← h.smul_operator _ (inv_nonneg.mpr hΔ.le)] at hspan'
+  have hspan' := (ManyBody.groundSpace_smul (inv_ne_zero hΔ.ne') h.hamiltonian E₀).trans hspan
+  rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_hamiltonian _ (inv_nonneg.mpr hΔ.le)] at hgap'
+  rw [← h.smul_hamiltonian _ (inv_nonneg.mpr hΔ.le)] at hspan'
   obtain ⟨OB, OL, OR, hOB, hF⟩ := exists_posSemidef_isFactorizationAt_of_sqrt_decay hΩ hξ0
     (ξ' := κ * lemmaOneLength R (ΔE⁻¹ * J) 1) (by nlinarith)
     (le_max_of_le_right (exp_pos _).le) (lemmaOneBudgetB_nonneg one_pos (by positivity))
@@ -311,14 +314,15 @@ lines 246–267, with `ξ' = 6ξ` (lines 141–142) for `ξ = ζ` and `C₁(ζ) 
 and the remaining restrictions of the module docstring. -/
 theorem exists_projectorFactorization_endpoint (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ c l : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
         IsFactorizationAt Ω c l (K * lemmaOneEndpointLength R J ΔE ^ 3 *
           exp (-(l / (6 * lemmaOneEndpointLength R J ΔE)))) OB OL OR := by
   obtain ⟨K, hK0, hF⟩ := exists_projectorFactorization_pow R (κ := 15 / 2) (by norm_num)
-  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h E₀ Ω hΩ hgap hspan c l ↦ ?_⟩
+  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h hh hhJ E₀ Ω hΩ hgap hspan c l ↦ ?_⟩
   obtain ⟨OB, OL, OR, hF'⟩ := hF hJ hΔ h hΩ hgap hspan c l
   have hξ0 := lemmaOneLength_pos R (J / ΔE) 1
   have hrate : 6 * lemmaOneEndpointLength R J ΔE = 15 / 2 * lemmaOneLength R (J / ΔE) 1 := by
@@ -337,15 +341,16 @@ and the note added (lines 912–1003), as recorded in
 docstring. -/
 theorem exists_projectorFactorization_posSemidef_endpoint (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ c l : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ, OB.PosSemidef ∧
         IsFactorizationAt Ω c l (K * lemmaOneEndpointLength R J ΔE ^ 3 *
           exp (-(l / (2 * (6 * lemmaOneEndpointLength R J ΔE))))) OB OL OR := by
   obtain ⟨K, hK0, hF⟩ :=
     exists_projectorFactorization_posSemidef_pow R (κ := 15 / 2) (by norm_num)
-  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h E₀ Ω hΩ hgap hspan c l ↦ ?_⟩
+  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h hh hhJ E₀ Ω hΩ hgap hspan c l ↦ ?_⟩
   obtain ⟨OB, OL, OR, hOB, hF'⟩ := hF hJ hΔ h hΩ hgap hspan c l
   have hξ0 := lemmaOneLength_pos R (J / ΔE) 1
   have hrate : 6 * lemmaOneEndpointLength R J ΔE = 15 / 2 * lemmaOneLength R (J / ΔE) 1 := by

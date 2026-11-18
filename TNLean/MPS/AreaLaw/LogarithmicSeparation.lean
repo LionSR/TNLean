@@ -28,22 +28,22 @@ Source: TNLean one-dimensional note, Lemma `lem:logsep`,
 `part2a_mps_information.tex`, lines 472–488.
 -/
 
-open ManyBody (interval IsGapped groundSpace)
+open ManyBody (interval IsGapped groundSpace ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
 /-- A union of at most `k₀` intervals has polynomially small mutual information
 with every region at logarithmic separation. Source: TNLean note,
 Lemma `lem:logsep`, `part2a_mps_information.tex:472–488`. -/
-theorem ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
+theorem _root_.ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_separation
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ)
     (p : ℝ) (hp : 0 < p) (k₀ : ℕ) (hk₀ : 1 ≤ k₀) :
     ∃ (Dp : ℝ) (L₀ : ℕ), 0 < Dp ∧ 1 ≤ L₀ ∧
       ∀ (L : ℕ), L₀ ≤ L →
-      ∀ (h : ChainHamiltonian L q R J)
+      ∀ (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ T E : Finset (Fin L),
           (∃ (n : ℕ) (a z : Fin n → ℕ), n ≤ k₀ ∧
             T = Finset.univ.biUnion (fun i ↦ interval L (a i) (z i))) →
@@ -58,10 +58,10 @@ theorem ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
   have hk₀r : 0 ≤ (k₀ : ℝ) := by exact_mod_cast (Nat.zero_le 1).trans hk₀
   have hb : 0 ≤ b := mul_nonneg (mul_nonneg (by norm_num) hk₀r) hc
   obtain ⟨Cp, Lreset, hCp, hLreset, hreset⟩ :=
-    ChainHamiltonian.information_reset q hq R J Δ hΔ p hp
+    ManyBody.ChainInteraction.information_reset q hq R J Δ hΔ p hp
   refine ⟨3 * Cp * (2 + b) + 3, max Lreset ⌈Real.exp 1⌉₊,
     by positivity, hLreset.trans (le_max_left _ _), ?_⟩
-  intro L hL h Ω E₀ hΩ hgap hspan T E hT hdist
+  intro L hL h hh hhJ Ω E₀ hΩ hgap hspan T E hT hdist
   have hLn : 1 ≤ L := hLreset.trans ((le_max_left _ _).trans hL)
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hLn
   have hLexp : Real.exp 1 ≤ (L : ℝ) :=
@@ -111,7 +111,7 @@ theorem ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
       exact_mod_cast (Nat.dist.triangle_inequality x.val y.val e.val).trans_eq
         (congrArg (Nat.dist x.val y.val + ·) (Nat.dist_comm y.val e.val))
     linarith only [htri, hxy, hsep, hdist x hx e he]
-  have hJ : 0 ≤ J := h.norm_bound_nonneg ⟨0, hLn⟩
+  have hJ : 0 ≤ J := h.norm_bound_nonneg hh hhJ ⟨0, hLn⟩
   have hI : ∀ a z : ℕ,
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a z) Ω ≤ c :=
     fun a z ↦ (regionEntropy_interval_le hq hJ hΔ h hΩ hgap hspan a z).trans (le_max_right _ _)

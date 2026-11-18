@@ -124,7 +124,7 @@ noncomputable def sampledSweepStep (hq : 2 ≤ q)
     Finset (LeftBlockVector L q (i + 1)) :=
   successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
     (sampledFactors h E₀ I (i + 1)) id
-    ((ChainHamiltonian.ofBonds h hs h0 h1).sizeTrimmingSelection hq Δ (AreaLaw.extend (i + 1) S))
+    ((ManyBody.ChainInteraction.ofBonds h hs).sizeTrimmingSelection hq Δ (AreaLaw.extend (i + 1) S))
 
 /-- **The sampled sweep** with the words `I i` at the step from cut `i` to cut `i + 1`.
 LVV13, `algo53.tex`, lines 652--668. -/
@@ -169,11 +169,11 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
       (q ^ (2 * κ) * max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L))) δ
       (sampledSweepStep hq h hs h0 h1 E₀ Δ I hi S) := by
   classical
-  let chain := ChainHamiltonian.ofBonds h hs h0 h1
+  let chain := ManyBody.ChainInteraction.ofBonds h hs
   have hgapC : IsGapped chain.operator E₀ Δ := by
-    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hgap
+    simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hgap
   have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
-    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hspan
+    simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hspan
   have hext : IsViable Γ ((Δ / 169) ^ 2 / L)
       (AreaLaw.extend (i + 1) S : Set (LeftBlockVector L q (i + 1))) :=
     (hS.extend (by omega) hi).mono hδc
@@ -185,7 +185,7 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
       (chain.card_sizeTrimmingSelection_le_polynomial hL hq hΔ _),
       fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m' T₀ hv,
       chain.isViable_bondTrimSet_sizeTrimmingSelection
-        (ChainHamiltonian.posSemidef_ofBonds_term h hs h0 h1) hL hq hi hΔ
+        (ManyBody.ChainInteraction.posSemidef_ofBonds_term h hs h0 h1) hL hq hi hΔ
         (AreaLaw.extend (i + 1) S) E₀ Γ hΩ hgapC hspanC hext⟩
   have hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
       (leftBlock L k) (bondComplementWord h (I t))) ≤ q ^ (2 * κ) := fun t k ↦
@@ -252,7 +252,7 @@ noncomputable def sampledSweepStepProgram (hq : 2 ≤ q)
   let r := bondTrimmingRadius L (lvvReferenceBond q Δ L)
   do
     let S₁ ← extensionProgram L (i + 1) b S
-    let S₂ ← sizeTrimmingProgram L (i + 1) b (ChainHamiltonian.ofBonds h hs h0 h1) hq Δ S₁
+    let S₂ ← sizeTrimmingProgram L (i + 1) b (ManyBody.ChainInteraction.ofBonds h hs) hq Δ S₁
     let S₃ ← bondTrimmingProgram L (i + 1) hi b r S₂
     let F ← FreeM.lift (LinearAlgebraQuery.sampledFactors L (i + 1) h E₀ ℓ m D I)
     errorReductionProgram L (i + 1) D (max 1 r) F S₃
@@ -387,8 +387,9 @@ theorem sampledGroundStateProgram_spec (hL : 0 < L) (hq : 2 ≤ q)
         rw [← e.inner_map_map, e.apply_symm_apply]
       rw [← norm_inner_symm, this]
       exact hover
-    let chain := ChainHamiltonian.ofBonds h hs h0 h1
-    have hchain : chain.operator = ∑ j, h j := ChainHamiltonian.ofBonds_operator h hs h0 h1
+    let chain := ManyBody.ChainInteraction.ofBonds h hs
+    have hchain : chain.operator = ∑ j,
+        h j := ManyBody.ChainInteraction.ofBonds_hamiltonian h hs h0 h1
     have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hΩ hspanC hw'norm hover'

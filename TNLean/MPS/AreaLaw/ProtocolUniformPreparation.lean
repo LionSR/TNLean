@@ -94,10 +94,11 @@ lines 587–615; polynomial-PEPS Theorem 5.2, `04-compression.tex:137–175`. -/
 theorem exists_uniform_preparation_family
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
     ∃ (D K : ℝ) (s L₀ : ℕ) (hL₀ : 2 ≤ L₀), 1 ≤ D ∧ 0 < K ∧
-      let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
+      let ι := {a : Σ L : ℕ, ManyBody.ChainInteraction L q R ×
           EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
-        L₀ ≤ a.1 ∧ ‖a.2.2.1‖ = 1 ∧ IsGapped a.2.1.operator a.2.2.2 Δ ∧
-          groundSpace a.2.1.operator a.2.2.2 = Submodule.span ℂ {a.2.2.1}}
+        L₀ ≤ a.1 ∧ (∀ X, (a.2.1.term X).IsHermitian) ∧ (∀ X, ‖a.2.1.term X‖ ≤ J) ∧ ‖a.2.2.1‖ = 1 ∧
+            IsGapped a.2.1.hamiltonian a.2.2.2 Δ ∧
+          groundSpace a.2.1.hamiltonian a.2.2.2 = Submodule.span ℂ {a.2.2.1}}
       let length := fun i : ι ↦ i.val.1
       let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
       let ground := fun i : ι ↦ i.val.2.2.1
@@ -154,10 +155,11 @@ theorem exists_uniform_preparation_family
   let L₀ := max N 2
   have hL₀ : 2 ≤ L₀ := le_max_right _ _
   refine ⟨D, K, s, L₀, hL₀, hD, hK, ?_⟩
-  let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
+  let ι := {a : Σ L : ℕ, ManyBody.ChainInteraction L q R ×
       EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
-    L₀ ≤ a.1 ∧ ‖a.2.2.1‖ = 1 ∧ IsGapped a.2.1.operator a.2.2.2 Δ ∧
-      groundSpace a.2.1.operator a.2.2.2 = Submodule.span ℂ {a.2.2.1}}
+    L₀ ≤ a.1 ∧ (∀ X, (a.2.1.term X).IsHermitian) ∧ (∀ X, ‖a.2.1.term X‖ ≤ J) ∧ ‖a.2.2.1‖ = 1 ∧
+        IsGapped a.2.1.hamiltonian a.2.2.2 Δ ∧
+      groundSpace a.2.1.hamiltonian a.2.2.2 = Submodule.span ℂ {a.2.2.1}}
   let length := fun i : ι ↦ i.val.1
   let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
   let ground := fun i : ι ↦ i.val.2.2.1

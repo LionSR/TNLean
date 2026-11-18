@@ -36,7 +36,7 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -45,23 +45,24 @@ LVV viable vector.  If the compressed trace-norm error is `ε`, normalization an
 produce objective error `2 ‖Zᴴ H_L Z‖ ε` and additional boundary error `2 ε`.
 The displayed precision condition places their combined contribution inside the exact
 ` Δ / 2028` margin of the viable-vector estimate. -/
-theorem ChainHamiltonian.exists_leading_vector_of_approximate_compressed_boundary_solution
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q)
+theorem _root_.ManyBody.ChainInteraction.exists_leading_vector_of_approximate_compressed_boundary_solution
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -103,9 +104,9 @@ theorem ChainHamiltonian.exists_leading_vector_of_approximate_compressed_boundar
           (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘ gluingCut L q k)
       1 / 2 < μ ∧ (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u = WithLp.ofLp u ∧
         ‖v‖ = 1 ∧ v ∈ leftSupportSubmodule S ∧
-        (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+        (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
         1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ ∧
-        (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤
+        (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤
           E₀ + 14 * (Δ / 169) + 24 * L * ε ∧
         1 - (14 * (Δ / 169) + 24 * L * ε) / Δ ≤ ‖⟪Γ, v⟫_ℂ‖ ∧
         1 - (7 * (Δ / 169) + 12 * L * ε) / Δ ≤ μ ∧
@@ -141,7 +142,7 @@ theorem ChainHamiltonian.exists_leading_vector_of_approximate_compressed_boundar
     have hKn : ‖K‖ ≤ ‖Hleft‖ := l2_opNorm_isometricCompression_le Z hZ Hleft
     have hε0 : 0 ≤ ε := (rectangularTraceNorm_nonneg _).trans hclose
     have hHleft : ‖Hleft‖ ≤ 4 * L :=
-      (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
+      (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
     have hsum : ‖Hleft‖ + ‖B‖ ≤ 6 * L := by linarith only [hHleft, hBn]
     calc
       2 * (2 * ‖K‖ * ε + ‖B‖ * (2 * ε)) = 4 * (‖K‖ + ‖B‖) * ε := by ring
@@ -153,14 +154,14 @@ theorem ChainHamiltonian.exists_leading_vector_of_approximate_compressed_boundar
         exact mul_le_mul_of_nonneg_right hscaled hε0
   have herr : 2 * (2 * ‖K‖ * ε + ‖B‖ * (2 * ε)) ≤ Δ / 2028 :=
     hnum.trans hprecision
-  have hbounds := h.leading_bounds_of_approximate_boundary_solution hL hq hΔ
+  have hbounds := h.leading_bounds_of_approximate_boundary_solution hh hhJ hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX herr hρpsd hρtrace hρP
       hρboundary hρenergy u μ hu huρ hmax
   have hbase : 2 * (6 * (Δ / 169) + ‖B‖ *
       (2 * (((Δ / 169) ^ 2) / (2 * L)))) ≤ 14 * (Δ / 169) := by
     have hL0 : (L : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hL.ne'
     have hΔ4 : Δ ≤ 4 := by
-      simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
+      simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
     have hcr : 2 * (Δ / 169) ^ 2 ≤ Δ / 169 := by
       nlinarith only [mul_nonneg hΔ.le (sub_nonneg.mpr hΔ4), hΔ]
     have hBτ : ‖B‖ * (2 * (((Δ / 169) ^ 2) / (2 * L))) ≤
@@ -215,12 +216,13 @@ theorem ChainHamiltonian.exists_leading_vector_of_approximate_compressed_boundar
 /-- The density precision `ε` and compressed-vector precision `ζ` share the unused LVV
 margin.  Under `24 L ε + 4 L ζ ≤ Δ / 2028`, the numerical physical vector retains the
 original energy, overlap, normalization, and left-support conclusions. -/
-theorem ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_precision
-    {L q k m : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1)
+theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_of_density_and_vector_precision
+    {L q k m : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ ε ζ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     {S : Set (LeftBlockVector L q k)}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (u u' : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m))
@@ -234,7 +236,7 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_precis
         ((((1 : Matrix (CutLeft L q k × CutSite L q k)
           (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘
             gluingCut L q k),
-        toEuclideanLin h.operator (WithLp.toLp 2
+        toEuclideanLin h.hamiltonian (WithLp.toLp 2
           ((((1 : Matrix (CutLeft L q k × CutSite L q k)
             (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘
               gluingCut L q k))⟫_ℂ).re ≤
@@ -250,10 +252,10 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_precis
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u') ∘
           gluingCut L q k)
     ‖v'‖ = 1 ∧ v' ∈ leftSupportSubmodule S ∧
-      (⟪v', toEuclideanLin h.operator v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+      (⟪v', toEuclideanLin h.hamiltonian v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
   have hζ0 : 0 ≤ ζ := (norm_nonneg (u' - u)).trans hdist
   have hΔL : Δ * ζ ≤ 4 * L * ζ := by
     have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hL
@@ -263,7 +265,7 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_precis
         ((((1 : Matrix (CutLeft L q k × CutSite L q k)
           (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘
             gluingCut L q k),
-        toEuclideanLin h.operator (WithLp.toLp 2
+        toEuclideanLin h.hamiltonian (WithLp.toLp 2
           ((((1 : Matrix (CutLeft L q k × CutSite L q k)
             (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘
               gluingCut L q k))⟫_ℂ).re ≤ E₀ + Δ / 12 - 4 * L * ζ := by
@@ -279,17 +281,18 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_precis
     apply ha.trans'
     field_simp [ne_of_gt hΔ]
     nlinarith only [hscaled, hΔ]
-  exact h.nearby_glued_vector_viable_bounds hΩ W hW u u' hu hu' hu'P
+  exact h.nearby_glued_vector_viable_bounds hh hhJ hΩ W hW u u' hu hu' hu'P
     hEreserve hareserve hdist
 
 /-- The finite-precision LVV conclusion depends only on the ray of the exact leading
 vector.  Thus a numerical vector may be close to any phase representative of it. -/
-theorem ChainHamiltonian.nearby_glued_vector_viable_of_phase_distance
-    {L q k m : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1)
+theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_of_phase_distance
+    {L q k m : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ ε ζ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     {S : Set (LeftBlockVector L q k)}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (u u' : EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m))
@@ -303,7 +306,7 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_phase_distance
         ((((1 : Matrix (CutLeft L q k × CutSite L q k)
           (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘
             gluingCut L q k),
-        toEuclideanLin h.operator (WithLp.toLp 2
+        toEuclideanLin h.hamiltonian (WithLp.toLp 2
           ((((1 : Matrix (CutLeft L q k × CutSite L q k)
             (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘
               gluingCut L q k))⟫_ℂ).re ≤
@@ -319,7 +322,7 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_phase_distance
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u') ∘
           gluingCut L q k)
     ‖v'‖ = 1 ∧ v' ∈ leftSupportSubmodule S ∧
-      (⟪v', toEuclideanLin h.operator v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+      (⟪v', toEuclideanLin h.hamiltonian v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
   obtain ⟨θ, hθ⟩ := hdist
   let c := Complex.exp (θ * Complex.I)
@@ -328,12 +331,12 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_phase_distance
     rw [Complex.norm_exp]
     norm_num
   have hcu : ‖c • u‖ = 1 := by rw [norm_smul, hc, hu, one_mul]
-  have hinv := gluedVector_phase_invariants W u θ h.operator Γ
+  have hinv := gluedVector_phase_invariants W u θ h.hamiltonian Γ
   have hEθ : (⟪WithLp.toLp 2
         ((((1 : Matrix (CutLeft L q k × CutSite L q k)
           (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp (c • u)) ∘
             gluingCut L q k),
-        toEuclideanLin h.operator (WithLp.toLp 2
+        toEuclideanLin h.hamiltonian (WithLp.toLp 2
           ((((1 : Matrix (CutLeft L q k × CutSite L q k)
             (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp (c • u)) ∘
               gluingCut L q k))⟫_ℂ).re ≤
@@ -346,19 +349,20 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_phase_distance
           gluingCut L q k)⟫_ℂ‖ := by
     rw [show c = Complex.exp (θ * Complex.I) from rfl, hinv.2]
     exact ha
-  exact h.nearby_glued_vector_viable_of_density_and_vector_precision hL hq hΔ hΩ hgap hspan
+  exact h.nearby_glued_vector_viable_of_density_and_vector_precision hh hhJ hL hq hΔ hΩ hgap hspan
     W hW (c • u) u' hcu hu' hu'P hEθ haθ hθ hprecision
 
 /-- A normalized numerical vector may be supplied by an eigensolver through its
 residual rather than through an a priori distance to the exact leading vector.  At
 the LVV spectral separation `μ ≥ 23 / 24`, residual at most `11 ζ / 24` gives the
 same physical viability conclusion. -/
-theorem ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_residual
-    {L q k m : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1)
+theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_of_density_and_vector_residual
+    {L q k m : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ ε ζ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     {S : Set (LeftBlockVector L q k)}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     {ρ : Matrix ((CutLeft L q k × CutSite L q k) × Fin m)
@@ -377,7 +381,7 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_residu
         ((((1 : Matrix (CutLeft L q k × CutSite L q k)
           (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘
             gluingCut L q k),
-        toEuclideanLin h.operator (WithLp.toLp 2
+        toEuclideanLin h.hamiltonian (WithLp.toLp 2
           ((((1 : Matrix (CutLeft L q k × CutSite L q k)
             (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘
               gluingCut L q k))⟫_ℂ).re ≤
@@ -393,14 +397,14 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_residu
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u') ∘
           gluingCut L q k)
     ‖v'‖ = 1 ∧ v' ∈ leftSupportSubmodule S ∧
-      (⟪v', toEuclideanLin h.operator v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+      (⟪v', toEuclideanLin h.hamiltonian v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
   have hζ : 0 ≤ ζ := by
     have hscaled : 0 ≤ (11 / 24) * ζ := (norm_nonneg _).trans hres
     nlinarith only [hscaled]
   obtain ⟨θ, hθ⟩ := Matrix.PosSemidef.exists_phase_distance_le_of_residual_le
     hρ hρtr hu hu' huρ hμ hζ hres
-  exact h.nearby_glued_vector_viable_of_phase_distance hL hq hΔ hΩ hgap hspan W hW u u'
+  exact h.nearby_glued_vector_viable_of_phase_distance hh hhJ hL hq hΔ hΩ hgap hspan W hW u u'
     hu hu' hu'P hE ha ⟨θ, hθ⟩ hprecision
 
 /-- Splitting the unused LVV margin equally between the density approximation and the

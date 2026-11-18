@@ -35,7 +35,7 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 219 and 484--487 (the solv
 polynomial-time solver of the convex programs), and the proof of Theorem 1, lines 652--678.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval ChainInteraction)
 
 open Matrix Cslib
 
@@ -230,7 +230,8 @@ noncomputable def oracleSolver (o : {ι : Type} → LinearAlgebraQuery q ι → 
 /-- Under a valid oracle, step 2 computes the size-trimming selection of the oracle's nets
 and solver. -/
 theorem eval_sizeTrimmingProgram_of_valid (hv : IsValidOracle o) (L k b : ℕ)
-    (h : ChainHamiltonian L q 1 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+        (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
     FreeM.eval o (sizeTrimmingProgram L k b h hq Δ S) =
       haveI : NeZero q := ⟨by omega⟩
       h.sizeTrimmingSelectionWith hq Δ S (oracleNets o L k ((Δ / 169) ^ 2 / (2 * L)))
@@ -238,7 +239,8 @@ theorem eval_sizeTrimmingProgram_of_valid (hv : IsValidOracle o) (L k b : ℕ)
           ((Δ / 169) ^ 2 / (2 * L))) := by
   classical
   let : NeZero q := ⟨by omega⟩
-  simp only [sizeTrimmingProgram, ChainHamiltonian.sizeTrimmingSelectionWith, eval_unionOver,
+  simp only [sizeTrimmingProgram, ManyBody.ChainInteraction.sizeTrimmingSelectionWith,
+      eval_unionOver,
     List.toFinset_finRange, FreeM.eval_liftBind, Finset.toList_toFinset, boundaryFamily,
     leftColumns_eq_biUnion, oracleNets, oracleSolver]
   refine Finset.biUnion_congr rfl fun m _ ↦ ?_
@@ -295,12 +297,12 @@ theorem eval_sweepStepProgram_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
       successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Delta L))
         (o (LinearAlgebraQuery.gaussianFilterFactors L (i + 1) (Nat.le_of_lt hq) h h0
           (lvvSuccessiveError Delta) Delta)) id
-        ((ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1).sizeTrimmingSelectionWith hq
+        ((ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).sizeTrimmingSelectionWith hq
           Delta (AreaLaw.extend (i + 1) S)
           (oracleNets o L (i + 1) ((Delta / 169) ^ 2 / (2 * L)))
           (oracleSolver o L (i + 1) (lvvSuccessiveBondBound q Delta L) (AreaLaw.extend (i + 1) S)
             (leftCutOperator (i + 1)
-              ((ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1).cutLeftPart (i + 1)))
+              ((ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).cutLeftPart (i + 1)))
             ((Delta / 169) ^ 2 / (2 * L)))) := by
   simp only [sweepStepProgram, FreeM.eval_bind, FreeM.eval_lift, eval_extensionProgram_of_valid hv,
     eval_sizeTrimmingProgram_of_valid hv, eval_bondTrimmingProgram_of_valid hv,
@@ -310,7 +312,8 @@ theorem eval_sweepStepProgram_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
 
 /-- The nets of a valid oracle are admissible. -/
 theorem isAdmissibleNet_oracleNets (hv : IsValidOracle o) {L k : ℕ} (hL : 0 < L)
-    (h : ChainHamiltonian L q 1 1) {Δ : ℝ} (hΔ : 0 < Δ) :
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+        {Δ : ℝ} (hΔ : 0 < Δ) :
     h.IsAdmissibleNet Δ (oracleNets o L k ((Δ / 169) ^ 2 / (2 * L))) := by
   intro m _ Y hY
   have hη : 0 < (Δ / 169) ^ 2 / (2 * L) :=
@@ -319,7 +322,8 @@ theorem isAdmissibleNet_oracleNets (hv : IsValidOracle o) {L k : ℕ} (hL : 0 < 
 
 /-- The solver of a valid oracle is admissible. -/
 theorem isAdmissibleSolver_oracleSolver (hv : IsValidOracle o) {L k : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hq : 2 ≤ q) (Δ : ℝ) (b : ℕ)
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+        (hq : 2 ≤ q) (Δ : ℝ) (b : ℕ)
     (S : Finset (LeftBlockVector L q k)) :
     haveI : NeZero q := ⟨by omega⟩
     h.IsAdmissibleSolver hq Δ S (oracleSolver o L k b S (leftCutOperator k (h.cutLeftPart k))
@@ -360,7 +364,7 @@ theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
   let : NeZero q := ⟨by omega⟩
   have hL : 0 < L := by omega
   have hc : 0 < lvvSuccessiveError Delta := lvvSuccessiveError_pos hDelta
-  let chain := ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1
+  let chain := ManyBody.ChainInteraction.ofNearestNeighborPositive h hs
   have hT : T = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Delta L))
       (o (LinearAlgebraQuery.gaussianFilterFactors L (i + 1) (Nat.le_of_lt hq) h h0
         (lvvSuccessiveError Delta) Delta)) id
@@ -399,11 +403,12 @@ theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
   · intro E₀ Γ hΩ hgap hspan hviable
     rw [hT]
     have hpos (X) : (chain.term X).PosSemidef :=
-      (ChainHamiltonian.ofNearestNeighborPositive_term_nonneg h hs h0 h1 X).posSemidef
+      (ManyBody.ChainInteraction.ofNearestNeighborPositive_term_nonneg h hs h0 h1 X).posSemidef
     have hgapC : IsGapped chain.operator E₀ Delta := by
-      simpa only [chain, ChainHamiltonian.ofNearestNeighborPositive_operator] using hgap
+      simpa only [chain, ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian] using hgap
     have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
-      simpa only [chain, ChainHamiltonian.ofNearestNeighborPositive_operator] using hspan
+      simpa only [chain, ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian] using
+          hspan
     have hΓ := hΩ
     have hEig := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
     have hgap := hgap.posSemidef_sub_smul_one
@@ -521,9 +526,9 @@ theorem groundStateProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 
       (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hspan
     have hover : 1 - δ ≤ ‖⟪Γ, e.symm w⟫_ℂ‖ :=
       one_sub_le_norm_inner_of_norm_sub_sq_le hw'norm hΩ herror
-    let chain := ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1
+    let chain := ManyBody.ChainInteraction.ofNearestNeighborPositive h hs
     have hchain : chain.operator = ∑ j, h j :=
-      ChainHamiltonian.ofNearestNeighborPositive_operator h hs h0 h1
+      ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian h hs h0 h1
     have hspanC : groundSpace chain.operator E = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hΩ hspanC hw'norm hover

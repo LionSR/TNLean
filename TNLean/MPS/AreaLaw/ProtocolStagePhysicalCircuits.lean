@@ -39,7 +39,7 @@ namespace TNLean.MPS.AreaLaw.ChainSweep
 
 open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace ChainInteraction)
 
 /-- The physical assumptions imply the actual eighteen local circuits at
 every stage, including the seven identity operations after the first direct
@@ -51,10 +51,10 @@ theorem local_stage_circuits_of_logarithmic_separation
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
     ∃ (D₂₄ : ℝ) (L₀ : ℕ), 0 < D₂₄ ∧ 1 ≤ L₀ ∧
       ∀ (L : ℕ), L₀ ≤ L →
-      ∀ (h : ChainHamiltonian L q R J)
+      ∀ (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (w : ℕ), 1 ≤ w →
         D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) →
       ∀ k : Fin (stageCount L w),
@@ -79,7 +79,7 @@ theorem local_stage_circuits_of_logarithmic_separation
     OneBand.primitive_information_of_logarithmic_separation q hq R J Δ hΔ
   refine ⟨max Dstage Dband, max Nstage Nband,
     hDstage.trans_le (le_max_left _ _), hNstage.trans (le_max_left _ _), ?_⟩
-  intro L hL h Ω E₀ hΩ hgap hspan w hw hwidth k
+  intro L hL h hh hhJ Ω E₀ hΩ hgap hspan w hw hwidth k
   have hLs : Nstage ≤ L := (le_max_left _ _).trans hL
   have hLb : Nband ≤ L := (le_max_right _ _).trans hL
   have hlog : 0 ≤ Real.log (L : ℝ) :=

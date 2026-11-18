@@ -62,7 +62,7 @@ parameter corrections are recorded in
   P08024, arXiv:0705.2024v4, `law16.tex`, lines 246–267 and 766–1003.
 -/
 
-open ManyBody (card_interval_le interval mem_interval)
+open ManyBody (card_interval_le interval mem_interval ChainInteraction)
 
 open GaussianFilter Matrix QuantumCircuit TNLean.Lattice Real
 
@@ -126,9 +126,10 @@ approximate factorization of `|Ω⟩⟨Ω|` with error `(a + b √l) e^{-l/(6ξ)
 depend on the length of the chain.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 766–907; the final bound is lines 903–907. -/
 theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < ΔE)
-    {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ ΔE)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+    {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ ΔE)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (c l : ℕ) : ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       IsFactorizationAt Ω c l ((lemmaOneSqrtA R J ΔE + lemmaOneSqrtB R J ΔE * √l) *
         exp (-(l / (6 * lemmaOneLength R J ΔE)))) OB OL OR := by
@@ -170,15 +171,16 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
   have hlk : 3 * R + 2 * k ≤ l := by omega
   set ℓn := l - 3 * R - 2 * k with hℓn
   obtain ⟨H₀, OL, OR, hH₀, hOL, hOR, hcomm, hsL, hsR, hθ', hη, hZ, hν⟩ :=
-    h.exists_cutoffPair hJ hΩ hgap hspan hΔ hs0 (c := c) (m := m) (k := k) (by omega) hθ0 hT0
+    h.exists_cutoffPair hh hhJ hJ hΩ hgap hspan hΔ hs0 (c := c) (m := m) (k := k) (by omega) hθ0 hT0
   have hE : ((E₀ : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)).IsHermitian := by
     simp [IsHermitian, conjTranspose_smul]
-  have hH' : (h.operator - (E₀ : ℂ) • 1).IsHermitian := h.operator_isHermitian.sub hE
+  have hH' : (h.hamiltonian - (E₀ : ℂ) • 1).IsHermitian :=
+      (ManyBody.Interaction.isHermitian_hamiltonian hh).sub hE
   have hmoved := norm_gaussianTimeAverage_mul_mul_sub_groundProjector_le hH' hH'
     hΩ hgap.sub_smul_one_self ((ManyBody.groundSpace_sub_smul_one_self _ _).trans hspan) hΔ hOL hOR
       hcomm s (δ := 0) (by simp) hη
   obtain ⟨OB, hOBs, hOB1, hOB⟩ :=
-    Hastings.ChainHamiltonian.exists_boundaryOperator_factorization hq1 h hH₀ E₀ _ hZ hOL hOR
+    ManyBody.ChainInteraction.exists_boundaryOperator_factorization hq1 h hH₀ E₀ _ hZ hOL hOR
       (timeAverageVariance s ΔE) (ℓ' := (ℓn : ℝ)) (Nat.cast_nonneg _) hθ' hmoved
   refine ⟨OB, OL, OR, hOL, hOR, hcomm, hOB1, ?_, hsL, hsR, ?_⟩
   · refine (isSupportedOn_of_mem_supportedOperators hOBs).mono
@@ -210,9 +212,10 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
 (lines 246–267), with the restrictions of the module docstring. -/
 theorem exists_isFactorizationAt_lemmaOneConst (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < ΔE)
     {ξ' : ℝ} (hξ' : 6 * lemmaOneLength R J ΔE < ξ') {L q : ℕ} [NeZero q]
-    (h : ChainHamiltonian L q R J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ ΔE)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (c l : ℕ) :
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ ΔE)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (c l : ℕ) :
     ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       IsFactorizationAt Ω c l (lemmaOneConst R J ΔE ξ' * exp (-(l / ξ'))) OB OL OR :=
   exists_isFactorizationAt_of_sqrt_decay (lemmaOneLength_pos R J ΔE) hξ'
@@ -230,12 +233,13 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, Lemma 1 (lines 246–267), with the de
 the positivity of `O_B` as in the module docstring. -/
 theorem exists_projectorFactorization (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < ΔE) {ξ' : ℝ}
     (hξ' : 6 * lemmaOneLength R J ΔE < ξ') :
-    ∃ C₁ : ℝ, 0 ≤ C₁ ∧ ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+    ∃ C₁ : ℝ, 0 ≤ C₁ ∧ ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R)
+        (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ c l : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
         IsFactorizationAt Ω c l (C₁ * exp (-(l / ξ'))) OB OL OR :=
-  ⟨lemmaOneConst R J ΔE ξ', lemmaOneConst_nonneg R hΔ ξ', fun h _ _ hΩ hgap hspan c l ↦
+  ⟨lemmaOneConst R J ΔE ξ', lemmaOneConst_nonneg R hΔ ξ', fun h hh hhJ _ _ hΩ hgap hspan c l ↦
     exists_isFactorizationAt_lemmaOneConst R hJ hΔ hξ' h hΩ hgap hspan c l⟩
 
 /-- **The positive version of Lemma 1.** Under the hypotheses of
@@ -244,12 +248,13 @@ theorem exists_projectorFactorization (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ J) (h�
 (lines 912–1003), as recorded in `docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`. -/
 theorem exists_projectorFactorization_posSemidef (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ J)
     (hΔ : 0 < ΔE) {ξ' : ℝ} (hξ' : 6 * lemmaOneLength R J ΔE < ξ') :
-    ∃ C : ℝ, 0 ≤ C ∧ ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+    ∃ C : ℝ, 0 ≤ C ∧ ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R)
+        (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ c l : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
         OB.PosSemidef ∧ IsFactorizationAt Ω c l (C * exp (-(l / (2 * ξ')))) OB OL OR := by
-  exact ⟨_, by positivity, fun h _ _ hΩ hgap hspan c l ↦
+  exact ⟨_, by positivity, fun h hh hhJ _ _ hΩ hgap hspan c l ↦
     exists_posSemidef_isFactorizationAt_of_sqrt_decay hΩ (lemmaOneLength_pos R J ΔE) hξ'
       (le_max_of_le_right (exp_pos _).le) (Hastings.lemmaOneBudgetB_nonneg hΔ (by positivity))
       (exists_isFactorizationAt_sqrt_decay R hJ hΔ h hΩ hgap hspan c l)⟩

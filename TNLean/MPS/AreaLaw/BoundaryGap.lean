@@ -23,7 +23,7 @@ normalization stated at the beginning of Section 5 of AKLV, arXiv:1301.1162v1,
 before equation (4).
 -/
 
-open ManyBody (ChainSupport interval mem_interval)
+open ManyBody (ChainSupport interval mem_interval ChainInteraction)
 
 open Matrix
 open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder MatrixOrder
@@ -37,9 +37,10 @@ variable {L q : ℕ} {J E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q
 /-- The full-system gap of a nonempty range-one chain with local dimension at least two is
 at most four times the interaction norm bound. The Hamiltonian and gap inequalities are those
 of the TNLean one-dimensional note, Section 1, `eq:ham` and `eq:gap`. -/
-theorem ChainHamiltonian.gap_le_four_mul_of_range_one (h : ChainHamiltonian L q 1 J)
-    (hL : 0 < L) (hq : 2 ≤ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) :
+theorem _root_.ManyBody.ChainInteraction.gap_le_four_mul_of_range_one (h : ChainInteraction L q 1)
+    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hL : 0 < L) (hq : 2 ≤ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) :
     Δ ≤ 4 * J := by
   classical
   let x : Fin L := ⟨0, hL⟩
@@ -63,11 +64,12 @@ theorem ChainHamiltonian.gap_le_four_mul_of_range_one (h : ChainHamiltonian L q 
   have horth : ⟪Ω, toEuclideanLin K Ω⟫_ℂ = 0 := by
     simpa only [K, Entropy.inner_localLift] using hU
   have hgap : Δ ≤
-      (⟪toEuclideanLin K Ω, toEuclideanLin h.operator (toEuclideanLin K Ω)⟫_ℂ).re - E₀ := by
+      (⟪toEuclideanLin K Ω, toEuclideanLin h.hamiltonian (toEuclideanLin K Ω)⟫_ℂ).re - E₀ := by
     simpa [hφ, horth] using
-      (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan).gap_le (toEuclideanLin K Ω)
-  have hE : (⟪Ω, toEuclideanLin h.operator Ω⟫_ℂ).re = E₀ := by
-    have heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := by
+      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ
+          hspan).gap_le (toEuclideanLin K Ω)
+  have hE : (⟪Ω, toEuclideanLin h.hamiltonian Ω⟫_ℂ).re = E₀ := by
+    have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω := by
       rw [← coe_toEuclideanCLM_eq_toEuclideanLin]
       exact (ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _))
     rw [heig, inner_smul_right, inner_self_eq_norm_sq_to_K, hΩ]
@@ -80,14 +82,14 @@ theorem ChainHamiltonian.gap_le_four_mul_of_range_one (h : ChainHamiltonian L q 
       _ ≤ ‖v‖ * ‖toEuclideanLin (h.term X) v‖ := norm_inner_le_norm _ _
       _ ≤ ‖v‖ * (‖h.term X‖ * ‖v‖) :=
         mul_le_mul_of_nonneg_left (Entropy.norm_toEuclideanLin_le _ _) (norm_nonneg _)
-      _ ≤ J := by simpa only [hv, mul_one, one_mul] using h.norm_le X
+      _ ≤ J := by simpa only [hv, mul_one, one_mul] using hhJ X
   have hsame (X : ChainSupport L 1) (hx : x ∉ X.1) :
       ⟪toEuclideanLin K Ω, toEuclideanLin (h.term X) (toEuclideanLin K Ω)⟫_ℂ =
         ⟪Ω, toEuclideanLin (h.term X) Ω⟫_ℂ := by
     have hc :=
       Entropy.commute_localLift_of_isSupportedOn (n := fun _ : Fin L ↦ q)
         (Q := {x}) (D := X.1) (c := h.term X)
-        (Finset.disjoint_singleton_left.mpr hx) (U : Matrix _ _ ℂ) (h.supported X)
+        (Finset.disjoint_singleton_left.mpr hx) (U : Matrix _ _ ℂ) (h.mem X)
         (fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩)
     rw [← LinearMap.adjoint_inner_right, ← toEuclideanLin_conjTranspose_eq_adjoint,
       ← Entropy.toEuclideanLin_mul_apply, ← Entropy.toEuclideanLin_mul_apply, Matrix.mul_assoc,
@@ -129,13 +131,13 @@ theorem ChainHamiltonian.gap_le_four_mul_of_range_one (h : ChainHamiltonian L q 
       (2 * J) ≤ 4 * J := by
     calc
       _ ≤ 2 * (2 * J) := mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
-        (mul_nonneg (by norm_num) (h.norm_bound_nonneg x))
+        (mul_nonneg (by norm_num) (h.norm_bound_nonneg hh hhJ x))
       _ = 4 * J := by ring
   have henergy :
-      (⟪toEuclideanLin K Ω, toEuclideanLin h.operator (toEuclideanLin K Ω)⟫_ℂ).re - E₀ ≤
+      (⟪toEuclideanLin K Ω, toEuclideanLin h.hamiltonian (toEuclideanLin K Ω)⟫_ℂ).re - E₀ ≤
         4 * J := by
     rw [← hE]
-    simpa only [ChainHamiltonian.operator, map_sum, LinearMap.sum_apply, inner_sum,
+    simpa only [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.sum_apply, inner_sum,
       Complex.re_sum, Finset.sum_sub_distrib] using hsum.trans hmul
   exact hgap.trans henergy
 
