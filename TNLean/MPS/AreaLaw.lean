@@ -149,6 +149,8 @@ import TNLean.MPS.AreaLaw.LowDensityEntropyBound
 import TNLean.MPS.AreaLaw.LowDensityFilterParameters
 import TNLean.MPS.AreaLaw.LowDensityLogDimension
 import TNLean.MPS.AreaLaw.LowDensityMinimumDimension
+import TNLean.MPS.AreaLaw.LowDensityTreeAlgorithm
+import TNLean.MPS.AreaLaw.LowDensityTreeExtraction
 import TNLean.MPS.AreaLaw.LowEnergyFilterParameters
 import TNLean.MPS.AreaLaw.LowEnergyIntervalFamily
 import TNLean.MPS.AreaLaw.LowEnergyMPSBasis
@@ -211,6 +213,7 @@ import TNLean.MPS.AreaLaw.PhysicalGroundReference
 import TNLean.MPS.AreaLaw.PhysicalGroundReferencePolynomial
 import TNLean.MPS.AreaLaw.PhysicalGroundReferenceTrimming
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
+import TNLean.MPS.AreaLaw.PhysicalLDSampledTree
 import TNLean.MPS.AreaLaw.PhysicalLDTree
 import TNLean.MPS.AreaLaw.PhysicalLDTreeRefinement
 import TNLean.MPS.AreaLaw.PhysicalLowDensityApproximation
