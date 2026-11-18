@@ -146,13 +146,15 @@ theorem dependentRegionCylinder_iSup {ι : Type*} [Finite ι] (R : Finset V)
   simpa only [Finset.sup_univ_eq_iSup, Function.comp_def] using
     map_finset_sup f Finset.univ S
 
+omit [Fintype V] in
 /-- A cylinder over a smaller region is also a cylinder over any containing region. -/
-theorem dependentRegionCylinder_subregion [∀ v, Fintype (Out v)]
+theorem dependentRegionCylinder_subregion [Finite V] [∀ v, Fintype (Out v)]
     (R U : Finset V) (hRU : R ⊆ U)
     (S : Submodule ℂ (((w : {w : V // w ∈ R}) → Out w.1) → ℂ)) :
     dependentRegionCylinder U
         (ManyBody.subregionPlace hRU (coordinateRangeProjector S)).mulVecLin.range =
       dependentRegionCylinder R S := by
+  have := Fintype.ofFinite V
   rw [← range_place, ManyBody.place_subregionPlace,
     range_place, range_coordinateRangeProjector]
 

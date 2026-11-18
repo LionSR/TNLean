@@ -31,12 +31,11 @@ regions below are finite.
 
 \begin{lemma}[Order-preserving regional extension]%
     \label{thm:peps_region_extension_order}
-    \lean{ManyBody.place_sub,
-        ManyBody.place_smul,
+    \lean{ManyBody.place_smul,
         ManyBody.place_le_place,
         TNLean.PEPS.regionParentHamiltonian_comparison}
     \leanok
-    \uses{def:peps_region_parent_hamiltonian}
+    \uses{def:peps_region_parent_hamiltonian, thm:peps_regional_extension_algebra}
     Extension by the identity on the complementary physical space
     is linear and preserves Loewner order. In particular, if two
     collections $(h_i)_{i\in I}$ and $(k_i)_{i\in I}$ on the same

@@ -37,13 +37,12 @@ tensors. Different interaction terms may act on different regions.
 \begin{definition}[Parent Hamiltonian of a finite family of regions]%
     \label{def:peps_region_parent_hamiltonian}
     \lean{TNLean.PEPS.regionConfigEquiv,
-        ManyBody.place,
         TNLean.PEPS.place_eq_regionConfigEquiv,
         TNLean.PEPS.regionSliceMap,
         TNLean.PEPS.regionParentGroundSpace,
         TNLean.PEPS.regionParentHamiltonian}
     \leanok
-    \uses{def:peps_region_parent_interaction}
+    \uses{def:peps_region_parent_interaction, def:peps_regional_operator_extension}
     Let $(R_i)_{i\in I}$ be a finite family of regions, and let $h_i$
     be a parent interaction on $R_i$. Its extension to the full graph
     and the parent Hamiltonian are

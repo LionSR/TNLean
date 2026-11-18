@@ -140,6 +140,7 @@ noncomputable def holeEncoderBasis (R : Fin n → Finset V) (hR : Monotone R)
       (coordinateSubspaceES (nestedCylinderInnovation R hR S j)) :=
   stdOrthonormalBasis ℂ _
 
+omit [Fintype V] in
 /-- The tag count is exactly the sum of inside innovation dimensions. -/
 theorem card_holeEncoderTag (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ)) :
@@ -147,8 +148,9 @@ theorem card_holeEncoderTag (R : Fin n → Finset V) (hR : Monotone R)
       ∑ j, Module.finrank ℂ (nestedCylinderInnovation R hR S j) := by
   simp [HoleEncoderTag, Fintype.card_sigma, finrank_coordinateSubspaceES]
 
+omit [Fintype V] in
 /-- Only inside ranks contribute to the tag bound; complementary raw dimensions do not. -/
-theorem card_holeEncoderTag_le (R : Fin n → Finset V) (hR : Monotone R)
+theorem card_holeEncoderTag_le [Finite V] (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ)) :
     Fintype.card (HoleEncoderTag R hR S) ≤ ∑ j, Module.finrank ℂ (S j) := by
   rw [card_holeEncoderTag]

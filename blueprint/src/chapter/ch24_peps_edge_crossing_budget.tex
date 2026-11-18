@@ -94,7 +94,6 @@
 \begin{definition}[Positive regional filters and ascending output]
     \label{def:pinned_square_filters}
     \lean{
-        ManyBody.place,
         TNLean.PEPS.Approximation.Pinned.asMap,
         TNLean.PEPS.Approximation.Pinned.NestedFilter.PositiveFilter,
         TNLean.PEPS.Approximation.Pinned.NestedFilter.tracePower,
@@ -106,7 +105,7 @@
         TNLean.PEPS.Approximation.Pinned.NestedFilter.PositiveFilter.ext
     }
     \leanok
-    \uses{def:peps_pinned_regional_matrix}
+    \uses{def:peps_pinned_regional_matrix, def:peps_regional_operator_extension}
     On $V_L=\{0,\ldots,L-1\}^2$ with integers $q,m\ge0$ and regions $X_j\subseteq V_L$ ($0\le j<m$), a positive regional filter $F_j\ge0$ is a positive semidefinite matrix on $\{0,\ldots,q-1\}^{X_j}$ with lift
     \begin{align}
         (\widehat F_j)_{x,y}

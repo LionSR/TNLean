@@ -54,10 +54,9 @@ preparation of matrix product states.
 \begin{lemma}[Matrix entries of a supported operator]
     \label{thm:area_law_supported_identity}
     \lean{ManyBody.mem_supportedOperators_iff,
-        ManyBody.supportedOperators_toSubmodule_eq_span,
-        QuantumCircuit.place_eq_embedOp}
+        ManyBody.supportedOperators_toSubmodule_eq_span}
     \leanok
-    \uses{def:qc_local_circuit}
+    \uses{def:qc_local_circuit, thm:peps_region_site_embedding}
     Let $I$ be a finite set, $q\in\mathbb N$, $S\subseteq I$, and $\mathcal C=\{0,\ldots,q-1\}^I$. A matrix $A\in\C^{\mathcal C\times\mathcal C}$ belongs to $\mathcal A_S=\operatorname{span}\{\bigotimes_{i\in I}m_i:m_i=\mathbb 1\text{ for }i\notin S\}$ if and only if:
     \begin{enumerate}
         \item $\sigma|_{S^c}\ne\tau|_{S^c}\implies A_{\sigma\tau}=0$;
