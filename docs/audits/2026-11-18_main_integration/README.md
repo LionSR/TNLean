@@ -1,7 +1,10 @@
-# Isolated integration with main 5a1b680f
+# Isolated integration with main 83108aec
 
 Candidate: 207cc00e5e8e83447d0c965a12b1cc2de8f4f1e7.
-Main: 5a1b680f6e1e627e3c5ebcb07523ba8f272fdc37.
+Initial main: 5a1b680f6e1e627e3c5ebcb07523ba8f272fdc37.
+Final main: 83108aec814ead604485848df1d0f6161ebd3a70.
+The final main advance changes only the ALVV campaign config (two lines);
+it adds no Lean, selector, blueprint or bibliography delta.
 Actual merge base: 34b883ede92ae61398238cfc6e69a7298bda087c.
 Main contains squash c727b509b of the 10879 refactor. No external branch or PR
 was modified by this integration. Validation checkpoint inspected:
