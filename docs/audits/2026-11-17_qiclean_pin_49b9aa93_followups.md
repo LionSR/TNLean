@@ -124,16 +124,13 @@ through a unit vector `Ω`, then there are `a + b = E₀` and unit vectors `u`, 
 whose proof would then shrink to the eigenvalue description of the Kronecker sum.
 
 F12c, the placement of regional operators, uses two QICLean additions of LionSR/QICLean#1108
-(`ManyBody/Sites/Placement` and `ManyBody/Sites/Subregion`), which the third pin brings in:
-
-* rectangular products of site maps. TNLean's `ManyBody.prodMatrix` in
-  `Algebra/ProductMatrixPlacement.lean` is #1108's rectangular `prodOp`, with the same lemma
-  names and signatures after `prodMatrix` → `prodOp`: `prodOp_mul`, `reindex_cutEquiv_prodOp`,
-  `prodOp_mul_place`, and the three statements requested for #1108, `prodOp_ne_zero`,
-  `prodOp_eq_place` and `place_mul_prodOp_eq_zero_iff`. At the pin, delete the module and
-  rename the call sites;
-* nested placement, TNLean's `ManyBody.subregionPlace` in `Algebra/SubregionPlacement.lean`,
-  with `place_subregionPlace`, under #1108's names. At the pin, delete the module.
+(`ManyBody/Sites/Placement` and `ManyBody/Sites/Subregion`), brought in by the third pin
+(QICLean `ac634435`). Done in the second integration base: TNLean's
+`Algebra/ProductMatrixPlacement.lean` and `Algebra/SubregionPlacement.lean` are deleted;
+`prodMatrix` and its lemmas are QICLean's rectangular `prodOp` (`prodOp_apply`, `prodOp_ne_zero`,
+`prodOp_mul`, `prodOp_eq_place`, `prodOp_mul_place`, `reindex_cutEquiv_prodOp`,
+`place_mul_prodOp_eq_zero_iff`), and `subregionPlace`, `place_subregionPlace` and
+`exists_place_eq_place_of_subset` are QICLean's under the same names.
 
 `TNLean.PEPS.place_eq_regionConfigEquiv` (`PEPS/ParentHamiltonian/RegionParentHamiltonian`)
 stays in TNLean. It compares the placement with TNLean's uniform-dimension

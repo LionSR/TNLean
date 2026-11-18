@@ -32,7 +32,7 @@ def productSiteMask [∀ v, DecidableEq (Out v)]
 def globalProductSiteMask [∀ v, DecidableEq (Out v)]
     (J : (v : V) → Matrix (Out v) (Out v) ℂ) (T : Finset V) :
     Matrix ((v : V) → Out v) ((v : V) → Out v) ℂ :=
-  ManyBody.prodMatrix (productSiteMask J T)
+  ManyBody.prodOp (productSiteMask J T)
 
 omit [Fintype V] [LinearOrder V] in
 /-- A product of nonzero site matrices is nonzero, also for an empty region. -/
@@ -56,7 +56,7 @@ theorem globalProductSiteMask_eq_place [∀ v, DecidableEq (Out v)]
       ManyBody.place R (regionPhysicalProductMatrix R J) := by
   classical
   rw [globalProductSiteMask,
-    ManyBody.prodMatrix_eq_place (D := R) _ fun v hv ↦ by simp [productSiteMask, hv]]
+    ManyBody.prodOp_eq_place (D := R) _ fun v hv ↦ by simp [productSiteMask, hv]]
   congr 1
   ext α β
   exact Finset.prod_congr rfl fun w _ ↦ by simp [productSiteMask, w.2]
@@ -67,7 +67,7 @@ theorem globalProductSiteMask_mul [∀ v, Fintype (Out v)] [∀ v, DecidableEq (
     (hJ : ∀ v, IsStarProjection (J v)) (R S : Finset V) :
     globalProductSiteMask J R * globalProductSiteMask J S =
       globalProductSiteMask J (R ∪ S) := by
-  rw [globalProductSiteMask, globalProductSiteMask, ManyBody.prodMatrix_mul]
+  rw [globalProductSiteMask, globalProductSiteMask, ManyBody.prodOp_mul]
   congr 1
   funext v
   by_cases hR : v ∈ R <;> by_cases hS : v ∈ S <;>
@@ -148,7 +148,7 @@ theorem place_commute_globalProductSiteMask
   have hHM : H * regionPhysicalProductMatrix R (productSiteMask J T) = H := by
     simpa only [star_mul, hM.isSelfAdjoint.star_eq, hH.isSelfAdjoint.star_eq] using
       congrArg star hMH
-  exact (ManyBody.prodMatrix_mul_place (productSiteMask J T)
+  exact (ManyBody.prodOp_mul_place (productSiteMask J T)
     (hMH.trans hHM.symm)).symm
 
 omit [Fintype V] [∀ v, DecidableEq (Out v)] in
@@ -239,12 +239,12 @@ theorem commute_place_of_productSiteTransport
   classical
   let P := ManyBody.place R H_R
   let Q := ManyBody.place S H_S
-  let B := ManyBody.prodMatrix A
+  let B := ManyBody.prodOp A
   let D := P * Q - Q * P
   have hPB : P * B = B * ManyBody.place R K_R :=
-    (ManyBody.prodMatrix_mul_place A hintertwine_R.symm).symm
+    (ManyBody.prodOp_mul_place A hintertwine_R.symm).symm
   have hQB : Q * B = B * ManyBody.place S K_S :=
-    (ManyBody.prodMatrix_mul_place A hintertwine_S.symm).symm
+    (ManyBody.prodOp_mul_place A hintertwine_S.symm).symm
   have hDB : D * B = 0 := by
     calc
       _ = P * (Q * B) - Q * (P * B) := by simp only [D, Matrix.sub_mul, Matrix.mul_assoc]
@@ -255,13 +255,13 @@ theorem commute_place_of_productSiteTransport
           ManyBody.place S K_S * ManyBody.place R K_R) := by
         rw [Matrix.mul_sub, Matrix.mul_assoc, Matrix.mul_assoc]
       _ = 0 := by rw [hcommute.eq, sub_self, Matrix.mul_zero]
-  have hBL : B * ManyBody.prodMatrix L = ManyBody.prodMatrix J := by
+  have hBL : B * ManyBody.prodOp L = ManyBody.prodOp J := by
     dsimp [B]
-    rw [ManyBody.prodMatrix_mul]
+    rw [ManyBody.prodOp_mul]
     congr 1
     funext v
     exact hAL v
-  have hDJ : D * ManyBody.prodMatrix J = 0 := by
+  have hDJ : D * ManyBody.prodOp J = 0 := by
     rw [← hBL, ← Matrix.mul_assoc, hDB, Matrix.zero_mul]
   have hPQ := place_mul_absorbs_union J hJ R S H_R H_S
     hH_R hH_S hsupport_R hsupport_S
@@ -275,8 +275,8 @@ theorem commute_place_of_productSiteTransport
   obtain ⟨E, hE⟩ := exists_place_commutator_union R S H_R H_S
   change D = ManyBody.place (R ∪ S) E at hE
   have hEJ : E * regionPhysicalProductMatrix (R ∪ S) J = 0 :=
-    (ManyBody.place_mul_prodMatrix_eq_zero_iff J E
-      (ManyBody.prodMatrix_ne_zero _ fun w ↦ hJ0 w)).mp (by rw [← hE]; exact hDJ)
+    (ManyBody.place_mul_prodOp_eq_zero_iff J E
+      (ManyBody.prodOp_ne_zero _ fun w ↦ hJ0 w)).mp (by rw [← hE]; exact hDJ)
   change P * Q = Q * P
   apply sub_eq_zero.mp
   change D = 0
