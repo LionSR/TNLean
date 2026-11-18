@@ -741,7 +741,7 @@ theorem ChainHamiltonian.exists_uniform_leading_bounds_of_isViable
   have hΔ4 : Δ ≤ 4 := by
     simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ
       (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
-      (hspan ▸ Submodule.mem_span_singleton_self Ω)
+      (hspan ▸ Submodule.mem_span_singleton_self _)
   have hsqrt : √c = Δ / 169 := Real.sqrt_sq (div_nonneg hΔ.le (by norm_num))
   have hcr : 2 * c ≤ √c := by
     rw [hsqrt]
@@ -897,7 +897,7 @@ theorem ChainHamiltonian.leading_bounds_of_approximate_boundary_solution [NeZero
   have hΔ4 : Δ ≤ 4 := by
     simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ
       (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
-      (hspan ▸ Submodule.mem_span_singleton_self Ω)
+      (hspan ▸ Submodule.mem_span_singleton_self _)
   have hsqrt : √c = Δ / 169 := Real.sqrt_sq (div_nonneg hΔ.le (by norm_num))
   have hcr : 2 * c ≤ √c := by
     rw [hsqrt]

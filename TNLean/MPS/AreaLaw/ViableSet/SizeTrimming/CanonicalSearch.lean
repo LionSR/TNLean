@@ -454,7 +454,7 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_canonical_rational_sear
   have hΔ₄ : Δ ≤ 4 := by
     simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ
       (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
-      (hspan ▸ Submodule.mem_span_singleton_self Ω)
+      (hspan ▸ Submodule.mem_span_singleton_self _)
   have hrational := canonical_search_rationalization_overlap_budget hL hΔ hΔ₄
     hκfit hεfit hεbfit hδfit' heηfit heKfit'
   apply h.exists_rationalViableMPSData_of_rational_search_result hL hq hΔ
@@ -595,7 +595,7 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_canonical_rational_sea
   have hΔ₄ : Δ ≤ 4 := by
     simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ
       (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
-      (hspan ▸ Submodule.mem_span_singleton_self Ω)
+      (hspan ▸ Submodule.mem_span_singleton_self _)
   have hrational := canonical_search_rationalization_overlap_budget hL hΔ hΔ₄
     hκfit hεfit hεbfit hδfit' heηfit heKfit'
   apply h.exists_rationalCoordinateData_of_rational_search_result hL hq hΔ

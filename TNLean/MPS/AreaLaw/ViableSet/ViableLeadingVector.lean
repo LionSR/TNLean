@@ -144,7 +144,7 @@ theorem ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable [N
   have hΔ4 : Δ ≤ 4 := by
     simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ
       (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
-      (hspan ▸ Submodule.mem_span_singleton_self Ω)
+      (hspan ▸ Submodule.mem_span_singleton_self _)
   obtain ⟨hc0, hc, -, hnum, -⟩ := lvv_trimming_constant_bounds hΔ hΔ4
   change 0 < c at hc0
   change c ≤ 1 / 1600 at hc
