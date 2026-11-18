@@ -29,7 +29,7 @@ argument and viable-set specialization are separate results.
 open Matrix
 open scoped InnerProductSpace Matrix.Norms.L2Operator
 
-open ManyBody (groundSpace)
+open ManyBody (groundSpace ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -39,14 +39,16 @@ variable {L q : ℕ} {E₀ Δ δ c : ℝ} {Ω v : EuclideanSpace ℂ (Fin L → 
 with interaction norms at most one. This is the general norm variant of the auxiliary
 energy inference in LVV, arXiv:1307.5143v1, `algo53.tex`, proof of Lemma `l:within`,
 lines 509–515. -/
-theorem ChainHamiltonian.re_inner_sub_le_of_overlap_of_range_one
-    (h : ChainHamiltonian L q 1 1) (hΩ : ‖Ω‖ = 1)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+theorem _root_.ManyBody.ChainInteraction.re_inner_sub_le_of_overlap_of_range_one
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hΩ : ‖Ω‖ = 1)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (hv : ‖v‖ = 1) (hover : 1 - δ ≤ ‖⟪Ω, v⟫_ℂ‖) :
-    (⟪v, toEuclideanLin h.operator v⟫_ℂ).re - E₀ ≤ 8 * L * δ := by
-  let B := toEuclideanCLM (𝕜 := ℂ) h.operator
+    (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re - E₀ ≤ 8 * L * δ := by
+  let B := toEuclideanCLM (𝕜 := ℂ) h.hamiltonian
   have hB : ‖B‖ ≤ 2 * L := by
-    simpa only [B, l2_opNorm_toEuclideanCLM, mul_one] using h.norm_operator_le_of_range_one
+    simpa only [B, l2_opNorm_toEuclideanCLM, mul_one] using
+        h.norm_hamiltonian_le_of_range_one hh hhJ
   have heig : B Ω = (E₀ : ℂ) • Ω :=
     ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _)
   have hE₀ : ‖(E₀ : ℂ)‖ ≤ ‖B‖ := by
@@ -61,10 +63,11 @@ theorem ChainHamiltonian.re_inner_sub_le_of_overlap_of_range_one
           (ContinuousLinearMap.norm_id_le (𝕜 := ℂ) (E := EuclideanSpace ℂ (Fin L → Fin q)))
           (norm_nonneg (E₀ : ℂ))).trans_eq (mul_one _))
       _ ≤ 4 * L := by linarith
-  have hsymm : (toEuclideanLin h.operator).IsSymmetric :=
-    (isSymmetric_toEuclideanLin_iff (A := h.operator)).mpr h.operator_isHermitian
+  have hsymm : (toEuclideanLin h.hamiltonian).IsSymmetric :=
+    (isSymmetric_toEuclideanLin_iff (A := h.hamiltonian)).mpr
+        (ManyBody.Interaction.isHermitian_hamiltonian hh)
   calc
-    (⟪v, toEuclideanLin h.operator v⟫_ℂ).re - E₀ ≤ 2 * (4 * L) * δ :=
+    (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re - E₀ ≤ 2 * (4 * L) * δ :=
       hsymm.re_inner_sub_eigenvalue_le_of_overlap (B := B) (e := E₀)
         (M := 4 * L) (δ := δ) hΩ hv heig hshift hover
     _ = 8 * L * δ := by ring
@@ -72,12 +75,13 @@ theorem ChainHamiltonian.re_inner_sub_le_of_overlap_of_range_one
 /-- At overlap tolerance `c/L`, the preceding general norm estimate gives excess energy
 at most `8c`. This is an auxiliary bound for LVV, arXiv:1307.5143v1, `algo53.tex`, proof of
 Lemma `l:within`, lines 509–515. -/
-theorem ChainHamiltonian.re_inner_le_of_overlap_div_of_range_one
-    (h : ChainHamiltonian L q 1 1) (hΩ : ‖Ω‖ = 1)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+theorem _root_.ManyBody.ChainInteraction.re_inner_le_of_overlap_div_of_range_one
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hΩ : ‖Ω‖ = 1)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (hL : 0 < L) (hv : ‖v‖ = 1) (hover : 1 - c / L ≤ ‖⟪Ω, v⟫_ℂ‖) :
-    (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + 8 * c := by
-  have henergy := h.re_inner_sub_le_of_overlap_of_range_one hΩ hspan hv hover
+    (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + 8 * c := by
+  have henergy := h.re_inner_sub_le_of_overlap_of_range_one hh hhJ hΩ hspan hv hover
   have hL0 : (L : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hL.ne'
   have hcancel : (8 : ℝ) * L * (c / L) = 8 * c := by field_simp [hL0]
   rw [hcancel] at henergy

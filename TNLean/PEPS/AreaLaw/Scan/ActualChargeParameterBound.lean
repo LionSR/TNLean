@@ -25,6 +25,8 @@ Proposition 7.4 of OpenAI, *A two-dimensional area law from a global spectral
 gap*, `06-transport.tex`, lines 377–434, at `openai/math@adc7f124`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open scoped BigOperators
 open Matrix Set Filter Topology MeasureTheory PermutationRepresentation Entropy
 
@@ -32,7 +34,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -67,7 +69,8 @@ theorem actualCharge_integral_bound_domainGraph :
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+        (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+            (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
         S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
@@ -85,7 +88,7 @@ theorem actualCharge_integral_bound_domainGraph :
         let hM : 0 < S.M := chargeSlotCount_pos hCpos (by omega) hDpos
         let n := augmentedDimensions (V := Site Λ) q aux
         let D := S.actualChargeData hm hM s
-        let E := S.actualEnergyTerms h Ω Δ L aux
+        let E := S.actualEnergyTerms h Ω J Δ L aux
         let ℓ := transportLogDimBound q S.r₀
         ∃ β : ℕ → ℝ, (β =O[atTop] fun r : ℕ => Real.log (r + 1)) ∧
           ∀ (r : ℕ) (pre : Config r (fun v => Fin (n v)) → ℂ),
@@ -100,16 +103,16 @@ theorem actualCharge_integral_bound_domainGraph :
   classical
   obtain ⟨c₀, Cent, eent, _, _, hc₀, htransport⟩ := actualCharge_transport_domainGraph
   refine ⟨c₀, Cent, eent, hc₀, ?_⟩
-  intro Λ T q R J Δ _ _ aux _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
+  intro Λ T q R J Δ _ _ aux _ h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ
     s L μ hn hs hr hDpos hD hL hCpos hC hrows hmult hclear a ha haℓ
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hCpos (by omega) hDpos
   let n := augmentedDimensions (V := Site Λ) q aux
   let D := S.actualChargeData hm hM s
-  let E := S.actualEnergyTerms h Ω Δ L aux
+  let E := S.actualEnergyTerms h Ω J Δ L aux
   have hn0 : 0 < S.n := by omega
   have hr' : S.r₀ ≤ S.D := by omega
-  obtain ⟨β, _, hβ, _, hresult⟩ := htransport aux h Ω S hT hgraph hdepth hanchor hΔ hΩ
+  obtain ⟨β, _, hβ, _, hresult⟩ := htransport aux h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ
     hn0 hs hr' hDpos hD hL hCpos hrows hclear ha haℓ
   refine ⟨β, hβ, ?_⟩
   intro r pre hpre hne p₀ p₁ h0 h01 h1

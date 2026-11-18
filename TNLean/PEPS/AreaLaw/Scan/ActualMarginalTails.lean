@@ -36,7 +36,7 @@ Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
 open Matrix
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 
 noncomputable section
@@ -51,8 +51,10 @@ open SpectralFilter
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ} [NeZero q]
     (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-    (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (Ω : StateSpace Λ q)
 
+include hh hhJ in
 /-- Lemma 3.1's moment bound for the actual truncated physical sum. The only
 ground-state premise concerns the sum, while positivity, Hermitian symmetry,
 norm and designated support are derived from the actual terms. The original
@@ -61,9 +63,9 @@ theorem log_surprisalMoment_truncated_reducedState_le
     (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) {e : ℝ} {Ωt : StateSpace Λ q}
     (hΩt : ‖Ωt‖ = 1)
-    (hgapt : IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e
+    (hgapt : IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e
       ((Δ / positiveNormalization 1 (Δ / 2) J) / 2))
-    (hspant : groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt})
+    (hspant : groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt})
     (X : Finset (Site Λ)) {u : ℝ}
     (hu : |u| ≤ Entropy.tailRadius (2 / (Δ / positiveNormalization 1 (Δ / 2) J))
       (cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X)) :
@@ -71,26 +73,27 @@ theorem log_surprisalMoment_truncated_reducedState_le
       u * regionalEntropy Λ q Ωt X +
         512 * Real.exp 1 * (2 / (Δ / positiveNormalization 1 (Δ / 2) J)) *
           cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X * u ^ 2 := by
-  have hc := fun i => S.truncatedEnergyTerm_mem_Icc h Ω hΔ hΩ L i
+  have hc := fun i => S.truncatedEnergyTerm_mem_Icc h hh hhJ Ω hΔ hΩ L i
   have hg : 0 < (Δ / positiveNormalization 1 (Δ / 2) J) / 2 :=
     half_pos (div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J))
   have hθ : (1 : ℝ) / ((Δ / positiveNormalization 1 (Δ / 2) J) / 2) =
       2 / (Δ / positiveNormalization 1 (Δ / 2) J) := by
     rw [div_div_eq_mul_div, one_mul]
   have hB := cutBudget_eq_cutLogBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
-  have heig : toEuclideanLin (∑ i, S.truncatedEnergyTerm h Ω Δ L i) Ωt = (e : ℂ) • Ωt :=
+  have heig : toEuclideanLin (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) Ωt = (e : ℂ) • Ωt :=
     ManyBody.mem_groundSpace_iff.mp (hspant ▸ Submodule.mem_span_singleton_self Ωt)
   have hgap := hgapt.posSemidef_sub_smul_one
-    (S.isHermitian_sum_truncatedEnergyTerm h Ω hΔ hΩ L) hΩt hspant
+    (S.isHermitian_sum_truncatedEnergyTerm h hh hhJ Ω hΔ hΩ L) hΩt hspant
   simpa only [hθ, ← hB, regionalEntropy] using
     (Entropy.log_surprisalMoment_cut_le (n := fun _ : Site Λ => q) (B := X)
-      (fun i => S.truncatedEnergyTerm_isSupportedOn h Ω hgraph hanchor hΔ L i)
+      (fun i => S.truncatedEnergyTerm_isSupportedOn h hh Ω hgraph hanchor hΔ L i)
       (fun i => (Matrix.nonneg_iff_posSemidef.mp (hc i).1).isHermitian)
       (show (0 : ℝ) ≤ 1 by norm_num)
       (fun i => Matrix.norm_le_one_of_nonneg_of_le_one (hc i).1 (hc i).2)
       hΩt hg heig hgap (partialTraceRight_cutVector Ωt X)
       (reducedState_isHermitian Λ q Ωt X) (by simpa only [hθ, ← hB] using hu))
 
+include hh hhJ in
 /-- Lemma 3.1's tail bound for every cut of the same actual truncated ground
 vector. The cut may meet retained components outside the truncation set, and
 the threshold may be any real number. Source: `08-scanner.tex`, lines 400–414. -/
@@ -98,9 +101,9 @@ theorem surprisalTail_truncated_reducedState_le
     (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) {e : ℝ} {Ωt : StateSpace Λ q}
     (hΩt : ‖Ωt‖ = 1)
-    (hgapt : IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e
+    (hgapt : IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e
       ((Δ / positiveNormalization 1 (Δ / 2) J) / 2))
-    (hspant : groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt})
+    (hspant : groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt})
     (X : Finset (Site Λ)) (w : ℝ) :
     Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
         (regionalEntropy Λ q Ωt X) w ≤
@@ -108,20 +111,20 @@ theorem surprisalTail_truncated_reducedState_le
         Real.exp (-(w / (32 * Real.sqrt
           ((1 + 2 / (Δ / positiveNormalization 1 (Δ / 2) J)) *
             cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X))))) := by
-  have hc := fun i => S.truncatedEnergyTerm_mem_Icc h Ω hΔ hΩ L i
+  have hc := fun i => S.truncatedEnergyTerm_mem_Icc h hh hhJ Ω hΔ hΩ L i
   have hg : 0 < (Δ / positiveNormalization 1 (Δ / 2) J) / 2 :=
     half_pos (div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J))
   have hθ : (1 : ℝ) / ((Δ / positiveNormalization 1 (Δ / 2) J) / 2) =
       2 / (Δ / positiveNormalization 1 (Δ / 2) J) := by
     rw [div_div_eq_mul_div, one_mul]
   have hB := cutBudget_eq_cutLogBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
-  have heig : toEuclideanLin (∑ i, S.truncatedEnergyTerm h Ω Δ L i) Ωt = (e : ℂ) • Ωt :=
+  have heig : toEuclideanLin (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) Ωt = (e : ℂ) • Ωt :=
     ManyBody.mem_groundSpace_iff.mp (hspant ▸ Submodule.mem_span_singleton_self Ωt)
   have hgap := hgapt.posSemidef_sub_smul_one
-    (S.isHermitian_sum_truncatedEnergyTerm h Ω hΔ hΩ L) hΩt hspant
+    (S.isHermitian_sum_truncatedEnergyTerm h hh hhJ Ω hΔ hΩ L) hΩt hspant
   simpa only [hθ, ← hB, regionalEntropy] using
     (Entropy.surprisalTail_cut_le (n := fun _ : Site Λ => q) (B := X)
-      (fun i => S.truncatedEnergyTerm_isSupportedOn h Ω hgraph hanchor hΔ L i)
+      (fun i => S.truncatedEnergyTerm_isSupportedOn h hh Ω hgraph hanchor hΔ L i)
       (fun i => (Matrix.nonneg_iff_posSemidef.mp (hc i).1).isHermitian)
       (show (0 : ℝ) ≤ 1 by norm_num)
       (fun i => Matrix.norm_le_one_of_nonneg_of_le_one (hc i).1 (hc i).2)
@@ -158,11 +161,11 @@ theorem truncated_reducedState_moment_tail_bounds_of_locality
             (centeredFilter 1 (Δ / 2) H Ω h))‖ ≤
         C₃ * Real.exp (-(c₃ * l ^ kernelExponent 1))) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ))
-      (h : LocalHamiltonian Λ q R J)
+      (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
       (E₀ : ℝ) (Ω : StateSpace Λ q),
-      ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       S.graph = planeDomainGraph Λ →
       (∀ i, S.anchor i ∈ i.val) →
       ∀ L : ℕ, 2 ≤ S.n →
@@ -173,8 +176,8 @@ theorem truncated_reducedState_moment_tail_bounds_of_locality
       let B : Finset (Site Λ) → ℝ :=
         fun X => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
       ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-        (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
-          groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
+        (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+          groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
         0 ≤ e ∧ e ≤ ε ∧
         (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
         Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
@@ -193,28 +196,29 @@ theorem truncated_reducedState_moment_tail_bounds_of_locality
               Real.exp (-(w / (32 * Real.sqrt ((1 + 2 / g) * B X)))))) := by
   classical
   set Ctr := latticeFiniteSetTruncationConstant R J Δ C₀ C₃ c₃
-  intro q _ Λ h S E₀ Ω hΩ hgap hspan hgraph hanchor L hn hr hcard
+  intro q _ Λ h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor L hn hr hcard
   obtain ⟨_, _, _, e, Ωt, hΩt, heig, he0, he, hgap, hphase, htrace⟩ :=
-    latticeFiniteSetTruncation_of_locality R hJ hΔ hC₀ hC₃ hc₃ htail Λ h S.anchor hanchor E₀ Ω hΩ
+    latticeFiniteSetTruncation_of_locality R hJ hΔ hC₀ hC₃ hc₃ htail Λ h hh hhJ S.anchor
+        hanchor E₀ Ω hΩ
       hgap hspan (S.n : ℝ) (by exact_mod_cast hn)
       (S.truncationSet L) hcard
   have hterm (i : AdmissibleSupport Λ R) :
-      S.truncatedEnergyTerm h Ω Δ L i =
+      S.truncatedEnergyTerm h Ω J Δ L i =
         truncatedConstraint q (planeDomainGraph Λ) (S.truncationSet L)
           ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ (S.anchor i)
           (positiveConstraint (positiveNormalization 1 (Δ / 2) J)
-            (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))) := by
-    rw [truncatedEnergyTerm, hgraph, hr, LocalHamiltonian.positiveTerm]
-  have hsum : (∑ i, S.truncatedEnergyTerm h Ω Δ L i) =
+            (centeredFilter 1 (Δ / 2) h.hamiltonian Ω (h.term i))) := by
+    rw [truncatedEnergyTerm, hgraph, hr, ManyBody.PlaneInteraction.positiveTerm]
+  have hsum : (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) =
       ∑ i, truncatedConstraint q (planeDomainGraph Λ) (S.truncationSet L)
         ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ (S.anchor i)
         (positiveConstraint (positiveNormalization 1 (Δ / 2) J)
-          (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))) :=
+          (centeredFilter 1 (Δ / 2) h.hamiltonian Ω (h.term i))) :=
     Finset.sum_congr rfl fun i _ => hterm i
   have htrgs : ‖Ωt‖ = 1 ∧
-      IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e
+      IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e
         ((Δ / positiveNormalization 1 (Δ / 2) J) / 2) ∧
-      groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt} := by
+      groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt} := by
     rw [hsum]
     refine ((ManyBody.isGapped_and_groundSpace_eq_span_iff
       (half_pos (div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J))) Ωt).mp
@@ -223,10 +227,10 @@ theorem truncated_reducedState_moment_tail_bounds_of_locality
     exact heig
   refine ⟨e, Ωt, htrgs, he0, he, hphase, htrace, ?_, ?_⟩
   · intro X u hu
-    exact S.log_surprisalMoment_truncated_reducedState_le h Ω hgraph hanchor hΔ hΩ L
+    exact S.log_surprisalMoment_truncated_reducedState_le h hh hhJ Ω hgraph hanchor hΔ hΩ L
       htrgs.1 htrgs.2.1 htrgs.2.2 X hu
   · intro X w
-    exact S.surprisalTail_truncated_reducedState_le h Ω hgraph hanchor hΔ hΩ L
+    exact S.surprisalTail_truncated_reducedState_le h hh hhJ Ω hgraph hanchor hΔ hΩ L
       htrgs.1 htrgs.2.1 htrgs.2.2 X w
 
 /-- **Both marginal estimates for one truncated ground vector, at the named base-radius
@@ -237,11 +241,11 @@ with `Ctr = latticeTruncationRadiusConstant R J Δ C₀`, which depends only on 
 theorem truncated_reducedState_moment_tail_bounds_explicit
     (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ))
-      (h : LocalHamiltonian Λ q R J)
+      (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
       (E₀ : ℝ) (Ω : StateSpace Λ q),
-      ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       S.graph = planeDomainGraph Λ →
       (∀ i, S.anchor i ∈ i.val) →
       ∀ L : ℕ, 2 ≤ S.n →
@@ -252,8 +256,8 @@ theorem truncated_reducedState_moment_tail_bounds_explicit
       let B : Finset (Site Λ) → ℝ :=
         fun X => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
       ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-        (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
-          groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
+        (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+          groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
         0 ≤ e ∧ e ≤ ε ∧
         (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
         Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
@@ -293,11 +297,11 @@ theorem exists_truncated_reducedState_moment_tail_bounds
     (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC₀ : 0 ≤ C₀) :
     ∃ Ctr : ℝ, 0 < Ctr ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ))
-        (h : LocalHamiltonian Λ q R J)
+        (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
         (E₀ : ℝ) (Ω : StateSpace Λ q),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         S.graph = planeDomainGraph Λ →
         (∀ i, S.anchor i ∈ i.val) →
         ∀ L : ℕ, 2 ≤ S.n →
@@ -308,8 +312,8 @@ theorem exists_truncated_reducedState_moment_tail_bounds
         let B : Finset (Site Λ) → ℝ :=
           fun X => cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-          (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
-            groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
+          (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+            groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
           0 ≤ e ∧ e ≤ ε ∧
           (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
           Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))

@@ -6,19 +6,21 @@ Authors: TNLean contributors
 import TNLean.Lattice.FiniteDomain
 import TNLean.Circuit.SiteEmbedding
 import Mathlib.Analysis.CStarAlgebra.Matrix
+import QICLean.ManyBody.Hamiltonian.Models
 
 /-!
 # Finite-range Hamiltonians on induced lattice domains
 
-The interaction family has one term for each nonempty support of bounded
-induced-graph diameter. A term may be zero. Support is expressed using the
+A finite-range Hamiltonian is an interaction `ManyBody.PlaneInteraction Λ q R`, with one term
+for each nonempty support of bounded induced-graph diameter, whose terms are Hermitian and of
+norm at most `J`; both are hypotheses of the statements that use them. A term may be zero. Support
+is expressed using the
 existing algebra of operators acting trivially outside a region. Norms are
 Euclidean operator norms, rather than entrywise matrix norms.
 
 ## Main definitions
 
-* `LocalHamiltonian`: the bounded Hermitian interaction family.
-* `LocalHamiltonian.operator`: its finite sum.
+* `StateSpace`: the physical Hilbert space in configuration coordinates.
 
 ## References
 
@@ -39,39 +41,5 @@ namespace TNLean.Lattice
 Source: area-law Section 1, the tensor product of the site spaces. -/
 abbrev StateSpace (Λ : Finset (ℤ × ℤ)) (q : ℕ) :=
   EuclideanSpace ℂ (Configuration Λ q)
-
-/-- One bounded Hermitian operator per nonempty admissible support.
-Source: area-law `eq:hamiltonian`. -/
-structure LocalHamiltonian (Λ : Finset (ℤ × ℤ)) (q R : ℕ) (J : ℝ) where
-  /-- The term assigned to each support; zero terms are permitted. -/
-  term : AdmissibleSupport Λ R → Matrix (Configuration Λ q) (Configuration Λ q) ℂ
-  /-- Each term acts trivially on the complementary sites. -/
-  supported : ∀ X, term X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1
-  /-- Each summand is Hermitian, as required by `eq:hamiltonian`. -/
-  hermitian : ∀ X, (term X).IsHermitian
-  /-- Each summand has Euclidean operator norm at most `J`. -/
-  norm_le : ∀ X, ‖term X‖ ≤ J
-
-/-- The finite sum over distinct admissible supports.
-Source: area-law `eq:hamiltonian`. -/
-noncomputable def LocalHamiltonian.operator {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
-    (h : LocalHamiltonian Λ q R J) : Matrix (Configuration Λ q) (Configuration Λ q) ℂ :=
-  ∑ X, h.term X
-
-/-- The interaction sum is Hermitian. -/
-theorem LocalHamiltonian.operator_isHermitian {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
-    (h : LocalHamiltonian Λ q R J) : h.operator.IsHermitian := by
-  change (∑ X, h.term X)ᴴ = ∑ X, h.term X
-  simp only [Matrix.conjTranspose_sum]
-  exact Finset.sum_congr rfl fun X _ ↦ h.hermitian X
-
-/-- The zero interaction family, which is also defined for empty domains.
-Source: area-law `eq:hamiltonian`, zero summands are permitted. -/
-noncomputable def LocalHamiltonian.zero (Λ : Finset (ℤ × ℤ)) (q R : ℕ)
-    (J : ℝ) (hJ : 0 ≤ J) : LocalHamiltonian Λ q R J where
-  term _ := 0
-  supported _ := zero_mem _
-  hermitian _ := Matrix.isHermitian_zero
-  norm_le _ := by simpa using hJ
 
 end TNLean.Lattice

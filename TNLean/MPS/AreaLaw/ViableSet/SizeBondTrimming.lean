@@ -32,10 +32,12 @@ Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, Claim `c:2
 lines 325–328, is used only to estimate the overlap lost during the actual column trimmings.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -43,8 +45,9 @@ namespace TNLean.MPS.AreaLaw
 `1 / 2`-viable whenever the input is `c / L`-viable. Library-bond version of LVV13,
 `algo53.tex`, Claims `c:2` and `c:trim`, lines 520–559, with the documented radius
 correction, for every solver of the convex program returning optimal solutions. -/
-theorem ChainHamiltonian.isViable_bondTrimSet_sizeTrimmingSelectionWith {L q i : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
+theorem _root_.ManyBody.ChainInteraction.isViable_bondTrimSet_sizeTrimmingSelectionWith {L q i : ℕ}
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+        (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) (hi : i ≤ L) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q i))
     {net : (m : ℕ) → Finset (Matrix (CutSite L q i × Fin m) (CutSite L q i × Fin m) ℂ)}
@@ -53,16 +56,16 @@ theorem ChainHamiltonian.isViable_bondTrimSet_sizeTrimmingSelectionWith {L q i :
       EuclideanSpace ℂ ((CutLeft L q i × CutSite L q i) × Fin m)}
     (hsol : h.IsAdmissibleSolver hq Δ S sol)
     (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     (hviable : IsViable Γ ((Δ / 169) ^ 2 / L) (S : Set (LeftBlockVector L q i))) :
     IsViable Γ (1 / 2) (bondTrimSet hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
       (h.sizeTrimmingSelectionWith hq Δ S net sol) : Set (LeftBlockVector L q i)) := by
   classical
   obtain ⟨_, r, W, u, hW, _, hu, hcols, hΓu⟩ :=
-    h.isViable_sizeTrimmingSelectionWith hpos hL hq hΔ S hnet hsol E₀ Γ hΩ hgap hspan hviable
+    h.isViable_sizeTrimmingSelectionWith hh hhJ hpos hL hq hΔ S hnet hsol E₀ Γ hΩ hgap hspan hviable
   obtain ⟨v, hv, hvMPS, hΓv⟩ :=
-    exists_bond_trimming_reference (by omega) hΔ (by omega) h hΩ hgap hspan
+    exists_bond_trimming_reference (by omega) hΔ (by omega) h hh hhJ hΩ hgap hspan
   have hΓu' : 1 - 1 / 12 ≤ ‖⟪Γ, (blockSplit L q i).symm (rightApply W u)⟫_ℂ‖ := by
     rw [blockSplit_symm_eq]
     exact hΓu
@@ -80,20 +83,22 @@ for approximation. The selection and its trimming are
 functions of the Hamiltonian, the gap parameter and the input family, fixed before every
 ground pair. This is the library-bond version of LVV13, `algo53.tex`, Claims `c:2` and
 `c:trim`, lines 520–559, with the documented radius correction. -/
-theorem ChainHamiltonian.isViable_bondTrimSet_sizeTrimmingSelection_with_reserve {L q i : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
+theorem _root_.ManyBody.ChainInteraction.isViable_bondTrimSet_sizeTrimmingSelection_with_reserve
+    {L q i : ℕ}
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+        (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) (hi : i ≤ L) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q i)) (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     (hviable : IsViable Γ ((Δ / 169) ^ 2 / L) (S : Set (LeftBlockVector L q i))) :
     IsViable Γ (5 / 12) (bondTrimSet hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
       (h.sizeTrimmingSelection hq Δ S) : Set (LeftBlockVector L q i)) := by
   classical
   obtain ⟨_, r, W, u, hW, _, hu, hcols, hΓu⟩ :=
-    h.isViable_sizeTrimmingSelection hpos hL hq hΔ S E₀ Γ hΩ hgap hspan hviable
+    h.isViable_sizeTrimmingSelection hh hhJ hpos hL hq hΔ S E₀ Γ hΩ hgap hspan hviable
   obtain ⟨v, hv, hvMPS, hΓv⟩ :=
-    exists_bond_trimming_reference (by omega) hΔ (by omega) h hΩ hgap hspan
+    exists_bond_trimming_reference (by omega) hΔ (by omega) h hh hhJ hΩ hgap hspan
   have hΓu' : 1 - 1 / 12 ≤ ‖⟪Γ, (blockSplit L q i).symm (rightApply W u)⟫_ℂ‖ := by
     rw [blockSplit_symm_eq]
     exact hΓu
@@ -106,17 +111,18 @@ theorem ChainHamiltonian.isViable_bondTrimSet_sizeTrimmingSelection_with_reserve
 /-- Size trimming followed by independent bond trimming gives `1 / 2`-viability.
 Source: LVV13, `algo53.tex`, Claims `c:2` and `c:trim`, lines 520–559, with the
 documented radius correction. -/
-theorem ChainHamiltonian.isViable_bondTrimSet_sizeTrimmingSelection {L q i : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
+theorem _root_.ManyBody.ChainInteraction.isViable_bondTrimSet_sizeTrimmingSelection {L q i : ℕ}
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+        (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) (hi : i ≤ L) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q i)) (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     (hviable : IsViable Γ ((Δ / 169) ^ 2 / L) (S : Set (LeftBlockVector L q i))) :
     IsViable Γ (1 / 2) (bondTrimSet hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
       (h.sizeTrimmingSelection hq Δ S) : Set (LeftBlockVector L q i)) := by
   obtain ⟨z, hz, hoverlap, hsupport⟩ :=
-    h.isViable_bondTrimSet_sizeTrimmingSelection_with_reserve hpos hL hq hi hΔ S E₀ Γ
+    h.isViable_bondTrimSet_sizeTrimmingSelection_with_reserve hh hhJ hpos hL hq hi hΔ S E₀ Γ
       hΩ hgap hspan hviable
   exact ⟨z, hz, by linarith, hsupport⟩
 
@@ -125,8 +131,9 @@ existence form of `isViable_bondTrimSet_sizeTrimmingSelection`, with the trimmed
 left unnamed. The family is fixed before every ground pair. This is the library-bond
 version of LVV13, `algo53.tex`, Claims `c:2` and `c:trim`, lines 520–559, with the
 documented radius correction. -/
-theorem ChainHamiltonian.exists_size_bond_trimmed_family_polynomial {L q i : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
+theorem _root_.ManyBody.ChainInteraction.exists_size_bond_trimmed_family_polynomial {L q i : ℕ}
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+        (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) (hi : i ≤ L) {Δ : ℝ} (hΔ : 0 < Δ)
     (S : Finset (LeftBlockVector L q i)) :
     let c : ℝ := (Δ / 169) ^ 2
@@ -138,8 +145,8 @@ theorem ChainHamiltonian.exists_size_bond_trimmed_family_polynomial {L q i : ℕ
     ∃ T : Finset (LeftBlockVector L q i),
       T.card ≤ C * L ^ p ∧ (∀ v ∈ T, IsLeftOpenMPS m v) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-        ‖Γ‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Γ} →
+        ‖Γ‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ} →
         IsViable Γ (c / L) (S : Set (LeftBlockVector L q i)) →
         IsViable Γ (1 / 2) (T : Set (LeftBlockVector L q i)) := by
   intro c D p A C m
@@ -147,6 +154,7 @@ theorem ChainHamiltonian.exists_size_bond_trimmed_family_polynomial {L q i : ℕ
     (card_bondTrimSet_le hi m _).trans (h.card_sizeTrimmingSelection_le_polynomial hL hq hΔ S),
     fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m _ hv,
     fun E₀ Γ hΩ hgap hspan hviable ↦
-      h.isViable_bondTrimSet_sizeTrimmingSelection hpos hL hq hi hΔ S E₀ Γ hΩ hgap hspan hviable⟩
+      h.isViable_bondTrimSet_sizeTrimmingSelection hh hhJ hpos hL hq hi hΔ S E₀ Γ hΩ
+          hgap hspan hviable⟩
 
 end TNLean.MPS.AreaLaw

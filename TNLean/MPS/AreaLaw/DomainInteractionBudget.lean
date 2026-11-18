@@ -20,7 +20,7 @@ and `part2a_mps_information.tex`, lines 260–265 and 355–363.
 -/
 
 open ManyBody (ChainSupport DomainSupport DomainSupport.toChainSupport
-    DomainSupport.toChainSupport_injective IsDomainSupport)
+  DomainSupport.toChainSupport_injective IsDomainSupport DomainInteraction)
 
 open scoped Matrix.Norms.L2Operator
 
@@ -30,10 +30,9 @@ variable {Λ : Finset ℤ} {q R : ℕ} {J : ℝ}
 
 /-- Zero extension preserves the interaction at each original domain support.
 Source: TNLean note, `part0_preamble.tex`, eq:ham, lines 191–201. -/
-@[simp] lemma DomainHamiltonian.toChain_term (h : DomainHamiltonian Λ q R J)
-    (hJ : 0 ≤ J) (X : DomainSupport Λ R) :
-    (h.toChain hJ).term X.toChainSupport = h.term X := by
-  simp [DomainHamiltonian.toChain, DomainSupport.toChainSupport, X.2]
+@[simp] lemma _root_.ManyBody.DomainInteraction.toChain_term (h : ManyBody.DomainInteraction Λ q R)
+    (X : DomainSupport Λ R) : h.toChain.term X.toChainSupport = h.term X := by
+  simp [ManyBody.DomainInteraction.toChain, DomainSupport.toChainSupport, X.2]
 
 /-- A single domain site is an admissible support at every range.
 Source: TNLean note, part0_preamble.tex, eq:ham, lines 191–201. -/
@@ -42,25 +41,28 @@ lemma IsDomainSupport.singleton (x : Fin Λ.card) : IsDomainSupport Λ R {x} := 
 
 /-- The interaction bound is nonnegative at every actual domain site.
 Source: TNLean note, part0_preamble.tex, eq:ham, lines 191–201. -/
-lemma DomainHamiltonian.norm_bound_nonneg (h : DomainHamiltonian Λ q R J)
+lemma _root_.ManyBody.DomainInteraction.norm_bound_nonneg {J : ℝ} (h : DomainInteraction Λ q R)
+    (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (x : Fin Λ.card) : 0 ≤ J := by
-  exact (norm_nonneg (h.term ⟨{x}, IsDomainSupport.singleton x⟩)).trans (h.norm_le _)
+  exact (norm_nonneg (h.term ⟨{x}, IsDomainSupport.singleton x⟩)).trans (hhJ _)
 
 /-- The original domain interactions satisfy the chain per-site norm budget.
 No sign or nonempty-domain hypothesis is added.
 Source: TNLean note, part2a_mps_information.tex, lines 260–265. -/
-lemma DomainHamiltonian.sum_norm_terms_containing_le (h : DomainHamiltonian Λ q R J)
+lemma _root_.ManyBody.DomainInteraction.sum_norm_terms_containing_le {J : ℝ}
+    (h : DomainInteraction Λ q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (x : Fin Λ.card) :
     (∑ X ∈ Finset.univ.filter (fun X : DomainSupport Λ R ↦ x ∈ X.1),
       ‖h.term X‖) ≤ ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J := by
   refine (Finset.sum_le_sum_of_injOn
-    (g := fun Y : ChainSupport Λ.card R ↦ ‖(h.toChain (h.norm_bound_nonneg x)).term Y‖)
+    (g := fun Y : ChainSupport Λ.card R ↦ ‖(h.toChain).term Y‖)
     DomainSupport.toChainSupport DomainSupport.toChainSupport_injective.injOn
     ?_ ?_ (fun _ _ _ ↦ norm_nonneg _)).trans
-      ((h.toChain (h.norm_bound_nonneg x)).sum_norm_terms_containing_le x)
+      ((h.toChain).sum_norm_terms_containing_le
+        (h.norm_toChain_term_le hhJ (h.norm_bound_nonneg hhJ x)) x)
   · exact fun Y hY ↦ (Finset.mem_image.mp hY).elim fun X hX ↦
       hX.2 ▸ Finset.mem_filter.mpr ⟨Finset.mem_univ _, (Finset.mem_filter.mp hX.1).2⟩
-  · exact fun X _ ↦ le_of_eq (congrArg norm (h.toChain_term (h.norm_bound_nonneg x) X).symm)
+  · exact fun X _ ↦ le_of_eq (congrArg norm (h.toChain_term X).symm)
 
 /-- The original domain crossing supports inject into the chain crossing supports.
 The chain boundary is used only as an upper counting bound.

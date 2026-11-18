@@ -41,9 +41,11 @@ The source statement of Proposition 9.2 is proved for the original physical syst
   manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open Filter Topology Set
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
@@ -124,10 +126,11 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
       C₀ ≤ κ.C → 4 ≤ κ.Cl → κ.c ≤ c₀ →
       ∃ Cb Clb C Cl Cδ : ℝ, ∀ᶠ n : ℕ in atTop,
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
-        (h : LocalHamiltonian Λ q R J) (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+        (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+            (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
         (E₀ : ℝ) (Ω : StateSpace Λ q),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) →
         S.n = n → S.m = X.m n → S.K = X.K n → S.D = X.D n →
@@ -143,8 +146,8 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
         let B : Finset (Site Λ) → ℝ :=
           fun Y ↦ cutBudget q S.graph (S.truncationSet (X.L n)) S.r₀ S.anchor Y
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-          (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ (X.L n) i) e (κ.g / 2) ∧
-            groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ (X.L n) i) e = Submodule.span ℂ {Ωt}) ∧
+          (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e (κ.g / 2) ∧
+            groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e = Submodule.span ℂ {Ωt}) ∧
           (∀ (Y : Finset (Site Λ)) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / κ.g) (B Y) →
             Real.log (Entropy.surprisalMoment
@@ -178,7 +181,7 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
               let round : Fin (X.rounds n) → ScanRound (AdmissibleSupport Λ R)
                   (CoherentSphere (SiteConfig (augmentedDimensions (V := Site Λ) q aux))) :=
                 fun r ↦ S.actualScanRound hm hM (augmentedDimensions (V := Site Λ) q aux)
-                  (S.actualEnergyTerms h Ω Δ (X.L n) aux) (X.a W n) pre r.val
+                  (S.actualEnergyTerms h Ω J Δ (X.L n) aux) (X.a W n) pre r.val
               ∀ I : ScanInputs X κ n Tr round W,
                 (I.Bsh ≤ Cb * (n * (X.L n : ℝ) ^ X.e + n) ∧ I.Bexc ≤ Cb * n * X.D n ∧
                   Tr.Bmarg ≤ Cb * n * X.D n * Real.log n ^ Clb) ∧
@@ -207,16 +210,18 @@ theorem scanner_estimate_actualScan (X : ScannerExponents) (R : ℕ) {J Δ CT : 
     hscan,
     (Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually_ge_atTop 1]
     with n htr hH hS hlog
-  intro Λ T _ hT h S E₀ Ω hΩ hgap hspan hgraph hdepth hanchor hSn hSm hSK hSD hSr hSC hsize hrows
+  intro Λ T _ hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hdepth hanchor hSn hSm hSK hSD hSr
+      hSC hsize hrows
       hclear
     hinX hinQ
   obtain ⟨e, Ωt, htrgs, hmom, Tr, hE0, hgap, hSX, hSXt, hSQ, hSQt, htd, hz, hdstar, hstat⟩ :=
-    htr Λ T hT h S E₀ Ω hΩ hgap hspan hgraph hdepth hanchor hSn hSm hSK hSD hSr hsize hrows hclear
+    htr Λ T hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hdepth hanchor hSn hSm hSK hSD hSr
+        hsize hrows hclear
       hinX hinQ
   refine ⟨e, Ωt, htrgs, hmom, Tr, hE0, hgap, hSX, hSXt, hSQ, hSQt, htd, hz, hdstar, hstat, ?_⟩
   intro hm hM aux _ W hW pre round I
   have hHist := hH Λ T hT S hm hM (augmentedDimensions (V := Site Λ) q aux)
-    (S.actualEnergyTerms h Ω Δ (X.L n) aux) (X.a W n) pre (fun _ ↦ rfl) (fun _ ↦ rfl)
+    (S.actualEnergyTerms h Ω J Δ (X.L n) aux) (X.a W n) pre (fun _ ↦ rfl) (fun _ ↦ rfl)
     hSn hSm hSK hSD hSr hSC hsize hgraph hdepth hanchor hrows hclear
   let SD : ScanData X κ n :=
     { toScanTruncation := Tr

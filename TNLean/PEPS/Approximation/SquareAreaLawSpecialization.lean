@@ -57,8 +57,8 @@ Independently formalized from the manuscripts; no upstream Lean proof text is re
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareLatticeSiteOrEdge
-  SquareInteraction)
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareLatticeSiteOrEdge SquareInteraction
+  PlaneInteraction)
 
 open scoped BigOperators ComplexOrder
 
@@ -187,9 +187,10 @@ edges are transported along the coordinate bijection.
 Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–58), derived from
 area-law Theorem 1.1 and Corollary 1.2. -/
 theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
-    (hbound : ∀ Λ : Finset (ℤ × ℤ), ∀ h : Lattice.LocalHamiltonian Λ q 1 J, ∀ E₀ : ℝ,
-      ∀ Ω : Lattice.StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+    (hbound : ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q 1, (∀ X, (h.term X).IsHermitian) →
+        (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
+      ∀ Ω : Lattice.StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ A : Finset (Lattice.Site Λ),
           Lattice.regionalEntropy Λ q Ω A ≤ C * (Lattice.edgeBoundary Λ A).card)
     {L : ℕ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
@@ -198,8 +199,9 @@ theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Vertex L)) :
     FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
       C * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e} := by
-  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hhJ hh hΩ hgap hspan
-  have := hbound (AreaLaw.rectangularDomain L L) (h.toAreaLawHamiltonian hhJ) E₀
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hh hΩ hgap hspan
+  have := hbound (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian
+    h.isHermitian_toAreaLawHamiltonian_term (h.norm_toAreaLawHamiltonian_term_le hhJ) E₀
     (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap' hspan'
         (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
   rw [Lattice.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this

@@ -55,12 +55,13 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonia
     let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
     let F := Matrix.reindex p p (TNLean.Lattice.sheetSwapOp q R)
     let K := Matrix.reindex p p (Matrix.doubledHamiltonian h.hamiltonian)
-    ∃ g : Lattice.LocalHamiltonian (AreaLaw.rectangularDomain L L) (q * q) 1 (2 * J),
-      g.term = Function.extend (AreaLaw.rectangleAreaLawSupport L L)
+    ∃ g : ManyBody.PlaneInteraction (AreaLaw.rectangularDomain L L) (q * q) 1,
+      (∀ X, (g.term X).IsHermitian) ∧ (∀ X, ‖g.term X‖ ≤ 2 * J) ∧ g.term =
+          Function.extend (AreaLaw.rectangleAreaLawSupport L L)
         (fun i : SquareLatticeSiteOrEdge L L =>
           Matrix.reindex e e
             (F * Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianPart.term i)) * Fᴴ)) 0 ∧
-      g.operator = Matrix.reindex e e (F * K * Fᴴ) := by
+      g.hamiltonian = Matrix.reindex e e (F * K * Fᴴ) := by
   classical
   intro p e F K
   let B (i : SquareLatticeSiteOrEdge L L) :=
@@ -124,9 +125,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonia
       _ = F * K * Fᴴ := by rw [hreindex]
   refine ⟨{ term := Function.extend (AreaLaw.rectangleAreaLawSupport L L)
               (fun i : SquareLatticeSiteOrEdge L L => Matrix.reindex e e (B i)) 0
-            supported := ?_
-            hermitian := ?_
-            norm_le := ?_ }, rfl, ?_⟩
+            mem := ?_ }, ?_, ?_, rfl, ?_⟩
   · intro X
     by_cases hx : ∃ i, AreaLaw.rectangleAreaLawSupport L L i = X
     · obtain ⟨i, rfl⟩ := hx
@@ -136,9 +135,9 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonia
       rw [AreaLaw.embedOp_rectangular_eq_reindex] at hs
       simpa only [AreaLaw.rectangleAreaLawSupport, Finset.coe_image] using hs
     · rw [Function.extend_apply' _ _ _ hx]
-      change _ ∈ ManyBody.supportedOperators _ _
       exact zero_mem _
   · intro X
+    dsimp only
     by_cases hx : ∃ i, AreaLaw.rectangleAreaLawSupport L L i = X
     · obtain ⟨i, rfl⟩ := hx
       rw [(AreaLaw.rectangleAreaLawSupport_injective L L).extend_apply]
@@ -146,6 +145,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonia
     · rw [Function.extend_apply' _ _ _ hx]
       exact Matrix.isHermitian_zero
   · intro X
+    dsimp only
     by_cases hx : ∃ i, AreaLaw.rectangleAreaLawSupport L L i = X
     · obtain ⟨i, rfl⟩ := hx
       rw [(AreaLaw.rectangleAreaLawSupport_injective L L).extend_apply]

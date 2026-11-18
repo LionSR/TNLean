@@ -10,7 +10,7 @@ import TNLean.PEPS.AreaLaw.InitialBuffer
 
 The strip is the rectangular induced lattice domain with sites equivalent to
 `Fin L × Fin w`. Interactions are the distinct admissible supports of
-`TNLean.Lattice.LocalHamiltonian`; columns are never blocked into larger physical sites.
+`ManyBody.PlaneInteraction`; columns are never blocked into larger physical sites.
 
 This is geometric input for a strip extension of the one-dimensional note,
 not a theorem stated in that note. Its counting argument is the

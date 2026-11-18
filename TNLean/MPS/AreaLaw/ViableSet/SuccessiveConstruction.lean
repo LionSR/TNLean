@@ -51,7 +51,7 @@ noncomputable def lvvSweep (hq : 2 ≤ q)
     (Delta : ℝ) : (i : ℕ) → Finset (LeftBlockVector L q i)
   | 0 => {emptyLeftVector L q}
   | i + 1 =>
-    if hi : i + 1 ≤ L then lvvSweepStep hq h hs h0 h1 Delta hi (lvvSweep hq h hs h0 h1 Delta i)
+    if hi : i + 1 ≤ L then lvvSweepStep hq h hs h0 Delta hi (lvvSweep hq h hs h0 h1 Delta i)
     else ∅
 
 /-- The sweep starts from the scalar singleton. LVV13, `algo53.tex`, line 655. -/
@@ -69,7 +69,7 @@ theorem lvvSweep_succ (hq : 2 ≤ q)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1) (Delta : ℝ)
     {i : ℕ} (hi : i + 1 ≤ L) :
     lvvSweep hq h hs h0 h1 Delta (i + 1) =
-      lvvSweepStep hq h hs h0 h1 Delta hi (lvvSweep hq h hs h0 h1 Delta i) := by
+      lvvSweepStep hq h hs h0 Delta hi (lvvSweep hq h hs h0 h1 Delta i) := by
   simp only [lvvSweep, hi, ↓reduceDIte]
 
 /-- **The sweep produces viable families of polynomial size and bond dimension.** Positive
@@ -127,7 +127,7 @@ theorem exists_positive_chain_successive_viable_sets (hq : 2 ≤ q)
     {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i),
       S 0 = {emptyLeftVector L q} ∧
-      (∀ i : ℕ, (hi : i + 1 ≤ L) → S (i + 1) = lvvSweepStep hq h hs h0 h1 Delta hi (S i)) ∧
+      (∀ i : ℕ, (hi : i + 1 ≤ L) → S (i + 1) = lvvSweepStep hq h hs h0 Delta hi (S i)) ∧
       ∀ i : ℕ, i ≤ L →
         (S i).card ≤ (if i = 0 then 1 else lvvSuccessiveCardBound q Delta L) ∧
         (∀ v ∈ S i, IsLeftOpenMPS

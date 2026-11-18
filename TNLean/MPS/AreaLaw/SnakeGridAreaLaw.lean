@@ -19,9 +19,11 @@ Section 1; the threshold and normalization argument is
 `part2a_mps_information.tex`, `sec:shortcut`, `thm:Bshort`, lines 73–92.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -35,10 +37,11 @@ Section 1, and the two-line route of `part2a_mps_information.tex`,
 theorem exists_snakeGridMPS (q : ℕ) (hq : 1 ≤ q) (R : ℕ)
     (J Δ : ℝ) (hJ : 0 < J) (hΔ : 0 < Δ) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ L : ℕ, 2 ≤ L →
-      ∀ H : LocalHamiltonian (PEPS.AreaLaw.rectangularDomain L L) q R J,
+      ∀ H : PlaneInteraction (PEPS.AreaLaw.rectangularDomain L L) q R,
+          (∀ X, (H.term X).IsHermitian) → (∀ X, ‖H.term X‖ ≤ J) →
       ∀ E₀ : ℝ, ∀ Ω : StateSpace (PEPS.AreaLaw.rectangularDomain L L) q,
-        ‖Ω‖ = 1 → IsGapped H.operator E₀ Δ →
-        groundSpace H.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∃ (D : ℕ) (Φ : StateSpace (PEPS.AreaLaw.rectangularDomain L L) q),
           ‖Φ‖ = 1 ∧ IsOpenMPS (L * L) q D (fun x ↦ snakeGridStateEquiv L q Φ x) ∧
           ‖Φ - Ω‖ ≤ 1 / (L : ℝ) ∧ (D : ℝ) ≤ Real.exp (C * L) :=

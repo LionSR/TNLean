@@ -29,11 +29,13 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
@@ -63,11 +65,12 @@ theorem exists_sourceTarget_selected_actualCharge_density_energy
       ∀ F : ScannerExponents, ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧
         ∃ N : ℕ, 2 ≤ N ∧
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = F.m S.n → S.D = F.D S.n → S.K = F.K S.n →
@@ -97,8 +100,8 @@ theorem exists_sourceTarget_selected_actualCharge_density_energy
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
-              groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -126,7 +129,7 @@ theorem exists_sourceTarget_selected_actualCharge_density_energy
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
             let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-            let energy := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+            let energy := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
             ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
               let pre : (k : ℕ) → Config k (fun v ↦ Fin (dims v)) → ℂ := fun k ↦
                 replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
@@ -203,7 +206,7 @@ theorem exists_sourceTarget_selected_actualCharge_density_energy
   obtain ⟨Ns, hNs⟩ := eventually_atTop.mp (hscales.and (F.eventually_le_K 8))
   refine ⟨C, Cl, hC, hCl, max Nt (max Nc (max Ne Ns)),
     hNt.trans (le_max_left _ _), ?_⟩
-  intro Λ T _ hT h S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
+  intro Λ T _ hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear Ce η hsource hrD hDpos hDm
   have hnT : Nt ≤ S.n := by omega
   have hnC : Nc ≤ S.n := by omega
@@ -227,7 +230,7 @@ theorem exists_sourceTarget_selected_actualCharge_density_energy
     simpa only [ScannerExponents.K, ← hmScale] using hKScale
   obtain ⟨hcard, hX, _, e, Ωt, htrgs, he0, he, _, htrace, _, _, hBX, htail,
       hwindow⟩ :=
-    htarget Λ h S E₀ Ω F T hT hΩ hgap hspan hgraph hanchor hnT hr hsize hdepth hrows hclear
+    htarget Λ h hh hhJ S E₀ Ω F T hT hΩ hgap hspan hgraph hanchor hnT hr hsize hdepth hrows hclear
   obtain ⟨_, _, hcoefficient⟩ := hc S.n hnC Λ T hT R S rfl hmScale hKScale'
     hDScale hr hCeq hsize hgraph hdepth hclear hrows hmult
   refine ⟨hK8, hKL, hcard, hX, e, Ωt, htrgs, he0, he, htrace, hBX, htail, ?_⟩
@@ -248,7 +251,7 @@ theorem exists_sourceTarget_selected_actualCharge_density_energy
     hzEq.symm ▸ hwindow.2.2.1
   have htrE := ManyBody.mulVec_eq_of_groundSpace_eq_span htrgs.2.2
   obtain ⟨ell, hphysical, hmass, hdim⟩ :=
-    exists_global_schmidtBellPrevector (∑ i, S.truncatedEnergyTerm h Ω Δ L i)
+    exists_global_schmidtBellPrevector (∑ i, S.truncatedEnergyTerm h Ω J Δ L i)
       Ωt e htrgs.1 htrE X E hz
   refine ⟨ell, ?_⟩
   intro pre
@@ -278,7 +281,7 @@ theorem exists_sourceTarget_selected_actualCharge_density_energy
       Ωt htrgs.1 E ell Bsh hsh hz (fun k hk ↦ (hpre k hk).2) hmass
   simp only [hzEq, hWa] at hend
   obtain ⟨b, rem, Cb, hCb, hb0, hb, hrem0, hrem, hselect⟩ :=
-    hselector (d := d) h Ω S hT hgraph hdepth hanchor hΔ hΩ hn2 hrD hDpos hDm
+    hselector (d := d) h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ hn2 hrD hDpos hDm
       hKL hCp hCm hrows hmult hclear ha hasmall
   refine ⟨b, rem, Cb, cU, cR, Ci, hCb, hcU, hcR, hCi,
     hb0, hb, hrem0, hrem, hlimU,
@@ -286,7 +289,7 @@ theorem exists_sourceTarget_selected_actualCharge_density_energy
   intro p₀ p₁ hp₀ hp₀₁ hp₁
   filter_upwards [hupper, hend, eventually_gt_atTop 0] with k hupperK hendK hk
   obtain ⟨hnonzero, hsym, heigen⟩ := augmented_prevector_properties_of_global
-    q d k Ωt (ell k) (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e
+    q d k Ωt (ell k) (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e
       (hphysical k hk).1 (hphysical k hk).2.2.1
   obtain ⟨s, p, hp, hQ, henergy⟩ :=
     hselect pre k hk hsym hnonzero e heigen p₀ p₁ hp₀ hp₀₁ hp₁
@@ -299,7 +302,7 @@ theorem exists_sourceTarget_selected_actualCharge_density_energy
       simpa only [hrate] using hQ)
   have hpInterior : p ∈ Set.Ioo (0 : ℝ) 1 :=
     ⟨hp₀.trans_le hp.1, hp.2.trans_lt hp₁⟩
-  have hcoeff := hcoefficient (fun _ ↦ d) J h Ω Δ s.val
+  have hcoeff := hcoefficient (fun _ ↦ d) J h hh hhJ Ω Δ s.val
     (Nat.succ_le_of_lt s.isLt) W hW.le k pre hsym hnonzero p hpInterior
   have hcap := S.actualCharge_defect_le_of_density_energy_bound_at_exponent
     hm hM s.val h Ω L hΔ F.ell W Cen een C Cl P (rem k) e hW.le

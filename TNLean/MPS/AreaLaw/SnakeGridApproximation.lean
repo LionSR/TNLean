@@ -26,9 +26,11 @@ Section 1, and the one-dimensional note,
 The older reference to Part IIb, Section 7, does not locate this argument.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open Matrix TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace AdmissibleSupport)
+open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -85,10 +87,11 @@ Section 1, using `part2a_mps_information.tex`,
 theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaLaw)
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hJ : 0 < J) (hΔ : 0 < Δ) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ L : ℕ, 2 ≤ L →
-      ∀ H : LocalHamiltonian (PEPS.AreaLaw.rectangularDomain L L) q R J,
+      ∀ H : PlaneInteraction (PEPS.AreaLaw.rectangularDomain L L) q R,
+          (∀ X, (H.term X).IsHermitian) → (∀ X, ‖H.term X‖ ≤ J) →
       ∀ E₀ : ℝ, ∀ Ω : StateSpace (PEPS.AreaLaw.rectangularDomain L L) q,
-        ‖Ω‖ = 1 → IsGapped H.operator E₀ Δ →
-        groundSpace H.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∃ (D : ℕ) (Φ : StateSpace (PEPS.AreaLaw.rectangularDomain L L) q),
           ‖Φ‖ = 1 ∧ IsOpenMPS (L * L) q D (fun x ↦ snakeGridStateEquiv L q Φ x) ∧
           ‖Φ - Ω‖ ≤ 1 / (L : ℝ) ∧ (D : ℝ) ≤ Real.exp (C * L) := by
@@ -112,7 +115,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     dsimp [C]
     positivity
   refine ⟨C, hC, ?_⟩
-  intro L hL H E₀ Ω hΩ hgap hspan
+  intro L hL H hH hHJ E₀ Ω hΩ hgap hspan
   have hLreal : (2 : ℝ) ≤ L := by exact_mod_cast hL
   have hLpos : (0 : ℝ) < L := by linarith
   have hN : 1 ≤ L * L := by nlinarith
@@ -151,7 +154,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     rw [show ρ k = Entropy.regionState (A k) Ω from reducedState_eq_regionState _ _]
     exact Entropy.regionState_relabel _ _ e (hA k) _ Ω
   have hS (k : ℕ) : S k ≤ C₀ * ((L : ℝ) + 1) := by
-    have h := harea _ H E₀ Ω hΩ hgap hspan (A k)
+    have h := harea _ H hH hHJ E₀ Ω hΩ hgap hspan (A k)
     have hc : ((edgeBoundary _ (A k)).card : ℝ) ≤ (L : ℝ) + 1 := by
       exact_mod_cast card_edgeBoundary_snakeGridPrefix_le L k
     exact h.trans (mul_le_mul_of_nonneg_left hc hC₀)
@@ -172,7 +175,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     rw [htrace]
     refine (Matrix.PosSemidef.trace_complement_spectralProjectionGE_le_surprisalTail
       (reducedState_posSemidef _ q Ω (A k)) (S k) w).trans ?_
-    refine (H.surprisalTail_reducedState_le hJ.le hΔ hΩ hgap hspan (A k) w |>.trans
+    refine (H.surprisalTail_reducedState_le hH hHJ hJ.le hΔ hΩ hgap hspan (A k) w |>.trans
       (min_le_right _ _)).trans ?_
     apply mul_le_mul_of_nonneg_left _ (by positivity)
     apply Real.exp_le_exp.mpr

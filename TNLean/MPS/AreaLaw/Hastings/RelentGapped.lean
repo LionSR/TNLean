@@ -31,7 +31,9 @@ and the reciprocal-length convention.
 are recorded in `docs/paper-gaps/hastings07_relent_constants.tex`.
 -/
 
-open ManyBody (interval)
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (interval ChainInteraction)
 
 open Matrix
 
@@ -55,9 +57,10 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, eq. `relent` (lines 234–242), proved
 lines 413–503, with the constants of the module docstring. -/
 theorem exists_relent_of_isGapped (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ c l : ℕ, c + l ≤ L →
       (l + 6 * lemmaOneEndpointLength R J ΔE *
           Real.log (K * lemmaOneEndpointLength R J ΔE ^ 3)) * Real.log q +
@@ -72,7 +75,7 @@ theorem exists_relent_of_isGapped (R : ℕ) :
           Real.log (2 * (K * lemmaOneEndpointLength R J ΔE ^ 3)) + relentConst := by
   obtain ⟨K₀, hK₀, hF⟩ := exists_projectorFactorization_endpoint R
   refine ⟨K₀ + 1, by linarith, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hΩ hgap hspan c l hcl hS
+  intro J ΔE hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan c l hcl hS
   have hζ8 : 8 ≤ lemmaOneEndpointLength R J ΔE := by
     unfold lemmaOneEndpointLength
     have := le_max_right (2 * (5 / 4 * chainLRVelocity R (J / ΔE))) (1 : ℝ)
@@ -92,7 +95,7 @@ theorem exists_relent_of_isGapped (R : ℕ) :
     exfalso
     linarith
   refine relent_of_projectorFactorization_of_le_entropy hq hΩ hcl hξ hC₁ (fun m _ ↦ ?_) hS
-  obtain ⟨OB, OL, OR, hF'⟩ := hF hJ hΔ h hΩ hgap hspan c m
+  obtain ⟨OB, OL, OR, hF'⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan c m
   refine ⟨OB, OL, OR, hF'.mono (mul_le_mul_of_nonneg_right ?_ (Real.exp_pos _).le)⟩
   nlinarith
 

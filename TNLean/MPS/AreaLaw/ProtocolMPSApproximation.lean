@@ -34,13 +34,15 @@ proof of `thm:B`, lines 574–615. The crossing bound is at most 1280,
 and hence satisfies the printed upper bound 1600 used in the bond estimate.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
 open TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace ChainInteraction)
 
 /-- The protocol's density error permits column extraction and the source's
 final phase error for every L≥2. Source: Part II, `thm:B`, lines 587–593. -/
@@ -139,10 +141,10 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
     ∃ (C : ℝ) (n : ℕ), 0 < C ∧ 0 < n ∧
       ∀ (L : ℕ), 2 ≤ L →
-        ∀ (h : ChainHamiltonian L q R J)
+        ∀ (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
           (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
-          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             ∃ (B : ℕ) (Φ : EuclideanSpace ℂ (Fin L → Fin q)),
               ‖Φ‖ = 1 ∧ Φ ≠ 0 ∧ IsOpenMPS L q B (fun x ↦ Φ x) ∧
                 (B : ℝ) ≤ C * (L : ℝ) ^ n ∧
@@ -150,10 +152,11 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
   classical
   obtain ⟨D, K, s, L₀, hL₀, hD, _hK, hfamily⟩ :=
     exists_uniform_preparation_family q hq R J Δ hΔ
-  let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
+  let ι := {a : Σ L : ℕ, ManyBody.ChainInteraction L q R ×
       EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
-    L₀ ≤ a.1 ∧ ‖a.2.2.1‖ = 1 ∧ IsGapped a.2.1.operator a.2.2.2 Δ ∧
-      groundSpace a.2.1.operator a.2.2.2 = Submodule.span ℂ {a.2.2.1}}
+    L₀ ≤ a.1 ∧ (∀ X, (a.2.1.term X).IsHermitian) ∧ (∀ X, ‖a.2.1.term X‖ ≤ J) ∧ ‖a.2.2.1‖ = 1 ∧
+        IsGapped a.2.1.hamiltonian a.2.2.2 Δ ∧
+      groundSpace a.2.1.hamiltonian a.2.2.2 = Submodule.span ℂ {a.2.2.1}}
   let length := fun i : ι ↦ i.val.1
   let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
   let ground := fun i : ι ↦ i.val.2.2.1
@@ -179,10 +182,10 @@ theorem exists_protocol_isOpenMPS_norm_sub_phase_le
   have hCfinal : 0 < Cfinal := hClarge.trans_le (le_max_left _ _)
   have hn : 0 < n := lt_of_lt_of_le Nat.zero_lt_one (le_max_left _ _)
   refine ⟨Cfinal, n, hCfinal, hn, ?_⟩
-  intro L hL h Ω E₀ hΩ hgap hspan
+  intro L hL h hh hhJ Ω E₀ hΩ hgap hspan
   have hLreal : (1 : ℝ) ≤ L := by exact_mod_cast (show 1 ≤ L by omega)
   by_cases hlarge : L₀ ≤ L
-  · let i : ι := ⟨⟨L, h, Ω, E₀⟩, hlarge, hΩ, hgap, hspan⟩
+  · let i : ι := ⟨⟨L, h, Ω, E₀⟩, hlarge, hh, hhJ, hΩ, hgap, hspan⟩
     let w := ⌈D * Real.log (L : ℝ)⌉₊
     have herrors := protocol_error_bounds hL
     obtain ⟨Gate, hGateFinite, hGateDecidable, participants, root, hroot,
