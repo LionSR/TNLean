@@ -70,8 +70,8 @@ namespace TNLean.PEPS.AreaLaw
 
 /-- The values `S_Ω(A ∩ Q)` entering `F_box(r)`. -/
 def boxEntropyValues (q R : ℕ) (J Δ : ℝ) (D₀ r : ℕ) : Set ℝ :=
-  {s | ∃ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
-      (hhJ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace Λ q)
+  {s | ∃ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_hh : ∀ X, (h.term X).IsHermitian)
+      (_hhJ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace Λ q)
     (A : Finset (Site Λ)) (Q : IntRect), ‖Ω‖ = 1 ∧ (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
       (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef ∧
       Ω ∈ groundSpace h.hamiltonian E₀ ∧
@@ -134,7 +134,8 @@ theorem regionalEntropy_le_boxEntropy (hq : 1 ≤ q) {Λ : Finset (ℤ × ℤ)}
     (hmem : Ω ∈ groundSpace h.hamiltonian E₀) {A : Finset (Site Λ)} {Q : IntRect}
     (hsafe : IsSafe Λ A D₀ Q) {r : ℕ} (hQ : Q.size ≤ r) :
     regionalEntropy Λ q Ω (rectRegion A Q) ≤ boxEntropy q R J Δ D₀ r :=
-  le_csSup (bddAbove_boxEntropyValues hq r) ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hmem, hsafe, hQ, rfl⟩
+  le_csSup (bddAbove_boxEntropyValues hq r)
+    ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hmem, hsafe, hQ, rfl⟩
 
 /-- `F_box` is nondecreasing. -/
 theorem boxEntropy_mono (hq : 1 ≤ q) : Monotone (boxEntropy q R J Δ D₀) := by
@@ -205,8 +206,8 @@ For a safe parent `Q` of size at most `M r`, with `P = 2 C_pad + 1`, `N = P²` a
 Source: `02-initial.tex`, lines 606–646. -/
 theorem regionalEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {Cbuf : ℝ}
     (hCbuf : 0 ≤ Cbuf)
-    (hbuf : ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
-      (hhJ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
+    (hbuf : ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_hh : ∀ X, (h.term X).IsHermitian)
+      (_hhJ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
       (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
       (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
       Ω ∈ groundSpace h.hamiltonian E₀ →
@@ -376,8 +377,8 @@ theorem regionalEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {C
 `F_box(M r) ≤ ((1 - p) M² + p · 2 (2 C_pad + 1) M) F_box(r) + C_buf M² r` for `r ≥ 1`, where
 `p = 1/(2 (2 C_pad + 1)²)`. Source: `02-initial.tex`, lines 629–646. -/
 theorem boxEntropy_le_of_scale (hq : 1 ≤ q) {Cpad : ℕ} {Cbuf : ℝ} (hCbuf : 0 ≤ Cbuf)
-    (hbuf : ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
-      (hhJ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
+    (hbuf : ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_hh : ∀ X, (h.term X).IsHermitian)
+      (_hhJ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
       (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
       (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
       Ω ∈ groundSpace h.hamiltonian E₀ →
