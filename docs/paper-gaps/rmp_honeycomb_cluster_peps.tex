@@ -35,9 +35,10 @@ For a finite simple graph with vertex set $V$ and edge set $E$, put a copy
 tensor $\ket{0\ldots0}+\ket{1\ldots1}$ at every vertex and the matrix
 $H=\frac1{\sqrt2}\left(\begin{smallmatrix}1&1\\1&-1\end{smallmatrix}\right)$
 on every bond. Contracting the network gives the coefficients
-\begin{equation*}
+\begin{align}
     \psi(\sigma)=2^{-|E|/2}\prod_{\{u,v\}\in E}(-1)^{\sigma_u\sigma_v},
-\end{equation*}
+    \label{eq:rmp_honeycomb_cluster_peps_coefficient}
+\end{align}
 which is $2^{(|V|-|E|)/2}$ times the controlled-$Z$ circuit applied to
 $\ket{+}^{\otimes V}$. In the formal tensor the bond matrix is absorbed into
 the leg at the smaller endpoint of each bond, which leaves the contraction
