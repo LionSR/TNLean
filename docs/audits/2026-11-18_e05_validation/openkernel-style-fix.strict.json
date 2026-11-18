@@ -1,0 +1,17 @@
+{
+  "base": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+  "command": [
+    "lake",
+    "env",
+    "lean",
+    "-DautoImplicit=false",
+    "-DrelaxedAutoImplicit=false",
+    "-Dpp.unicode.fun=true",
+    "-DmaxSynthPendingDepth=3",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DwarningAsError=true",
+    "/workspace/shared/combined-e05-evidence/TNLean/MPS/ParentHamiltonian/LocalParentExpectationFromOpenKernel.lean"
+  ],
+  "exit": 0,
+  "seconds": 10.887571591003507
+}
