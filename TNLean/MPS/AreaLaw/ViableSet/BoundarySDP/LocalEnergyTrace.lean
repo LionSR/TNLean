@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.WeightedOverlapTrace
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalLocalEnergyBounds
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalLocalEnergyInputBounds
 
 /-!
 # Recorded arithmetic for local two-site matrix elements
@@ -94,6 +95,8 @@ theorem localTerms_value_length {q Da Db n m : ℕ}
       x.run.2.length = m * (q ^ 4 * (n * (15 * q ^ 2 + 8) * (Da * Db) ^ 2 + 13 + 8) + 2) := by
   apply value_length_of_run_erase
   rw [erase_matrixElementOfLocalTerms, RationalLocalEnergyCost.run_matrixElementOfLocalTerms]
+
+section CommonData
 
 variable {q Da Db n M C : ℕ}
     (A : OBCChainTensor q Da n) (B : OBCChainTensor q Db n)
@@ -215,5 +218,52 @@ theorem localTerms_schoolbookCharge_le {m : ℕ} (p r : Fin m → Fin n)
     (localTerms_maxHeight_le A B capA capB PA PB hM hC hcapA hcapB hPA hPB
       hcapAnorm hcapBnorm hPAnorm hPBnorm p r K hK hnK)
   rwa [(localTerms_value_length A B capA capB PA PB p r K).2] at h
+
+end CommonData
+
+
+
+variable {q Da Db n m H : ℕ}
+    (A : OBCChainTensor q Da n) (B : OBCChainTensor q Db n)
+    (capA capB : ℚ × ℚ)
+    (PA : OBCChainTensor.ParameterIndex A → ℚ × ℚ)
+    (PB : OBCChainTensor.ParameterIndex B → ℚ × ℚ)
+    (p r : Fin m → Fin n)
+    (K : Fin m → RationalRectMatrixCode (Fin q × Fin q) (Fin q × Fin q))
+    (hcapA : HasRationalComplexCoordinatesOfHeight H (decodeRationalComplex capA))
+    (hcapB : HasRationalComplexCoordinatesOfHeight H (decodeRationalComplex capB))
+    (hPA : ∀ e, HasRationalComplexCoordinatesOfHeight H (decodeRationalComplex (PA e)))
+    (hPB : ∀ e, HasRationalComplexCoordinatesOfHeight H (decodeRationalComplex (PB e)))
+    (hK : ∀ i a b, HasRationalComplexCoordinatesOfHeight H (decodeRationalComplex (K i a b)))
+
+include hcapA hcapB hPA hPB hK
+
+/-- Input coordinate heights alone bound every record, with one common denominator
+chosen for both chains, both caps and all operator coefficients. -/
+theorem localTerms_maxHeight_of_inputHeight :
+    let P := 2 + n * q * Da ^ 2 + n * q * Db ^ 2 + m * q ^ 4
+    maxHeight (matrixElementOfLocalTerms A B capA capB PA PB p r K).run.2 ≤
+      localTermsHeight q Da Db n m (H ^ (2 * P)) (2 * H) := by
+  intro P
+  obtain ⟨M, hM, hbound, hcA, hcB, ha, hb, hk⟩ :=
+    OBCChainTensor.exists_common_localEnergy_parameter_denominator A B capA capB PA PB K
+      hcapA hcapB hPA hPB hK
+  have hH : 1 ≤ H := by
+    obtain ⟨x, _y, _hxy, hx, _hy⟩ := hcapA
+    exact x.den_pos.trans_le ((den_le_rationalHeight x).trans hx)
+  have hC : 1 ≤ 2 * H := by omega
+  have h := localTerms_maxHeight_le (C := 2 * H)
+    A B capA capB PA PB hM hC hcA hcB ha hb
+    (by simpa only [Nat.cast_mul, Nat.cast_ofNat] using hcapA.norm_le_two_mul)
+    (by simpa only [Nat.cast_mul, Nat.cast_ofNat] using hcapB.norm_le_two_mul)
+    (fun e ↦ by simpa only [Nat.cast_mul, Nat.cast_ofNat] using (hPA e).norm_le_two_mul)
+    (fun e ↦ by simpa only [Nat.cast_mul, Nat.cast_ofNat] using (hPB e).norm_le_two_mul)
+    p r K hk
+    (fun i s t ↦ by simpa only [Nat.cast_mul, Nat.cast_ofNat] using (hK i s t).norm_le_two_mul)
+  apply h.trans
+  have hle : M ≤ H ^ (2 * P) := hbound
+  unfold localTermsHeight localWeightedTermHeight weightedOverlapHeightBound
+  dsimp only
+  gcongr
 
 end TNLean.MPS.AreaLaw.RationalArithmeticTrace
