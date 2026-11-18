@@ -1,0 +1,1 @@
+TNLean/MPS/AreaLaw/SnakeGridGeometry.lean:6:0: error: object file '/workspace/reviews/interaction-final-validation/olean/TNLean/PEPS/AreaLaw/RectangularDomain.olean' of module TNLean.PEPS.AreaLaw.RectangularDomain does not exist

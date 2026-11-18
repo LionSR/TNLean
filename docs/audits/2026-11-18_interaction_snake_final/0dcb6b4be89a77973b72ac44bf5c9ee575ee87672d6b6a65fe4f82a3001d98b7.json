@@ -1,0 +1,27 @@
+{
+  "sources": {
+    "TNLean.MPS.AreaLaw.SnakeGridParameters": "6fea33d476ab39aa5fd95e1dec849adb0c5da7a408e25bc7edb3d21dc372e527"
+  },
+  "artifacts": {
+    "Mathlib.Analysis.SpecialFunctions.Pow.Real": {
+      "path": "/workspace/tn-pin729-other/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/Analysis/SpecialFunctions/Pow/Real.olean",
+      "sha256": "351f2c4f9fdd5a426267926a1c39729c45c82073e13e477f45ac5c254f3b18a3"
+    }
+  },
+  "packages": {
+    "qiclean": "729428582b78ab7529b3796099193649f947354a",
+    "cslib": "acab13b776722f5efa897c780d6fa1a3069d709e",
+    "mathlib": "625d8914199bc567cca9b91f90e8e5afafa5ae51",
+    "Gametheory": "439aaeb9caa7a7f943f9e72afc77751cbc5b0098",
+    "checkdecls": "3d425859e73fcfbef85b9638c2a91708ef4a22d4",
+    "plausible": "c2d7840c65673533e15b499f25beecdc6227f7d8",
+    "LeanSearchClient": "9d39f9bb0c30aa2f6200808805ff16e6ce950890",
+    "importGraph": "b3cc36c295aa5e3e3c0197b09a6556298e710447",
+    "proofwidgets": "17137fad38a2cc782ff00b323a13c3a991d085ab",
+    "aesop": "cbdde3aa2665915fb286c48bcd4cdf885c629511",
+    "Qq": "6d26f8bb4b2bb78f929ad160feac508866821316",
+    "batteries": "4453b52d2468f4c346a8711d728c0742e7483c9b",
+    "Cli": "34d2efffcb6dc8d5f3537cf6a7f88bfaa999ec49"
+  },
+  "lean_sha256": "db7f559d05795e7af52e42bc966c90240a39dcb9712161c54c97afa546e20c00"
+}

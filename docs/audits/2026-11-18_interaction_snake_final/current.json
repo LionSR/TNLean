@@ -1,0 +1,17 @@
+{
+  "module": "TNLean.MPS.AreaLaw.SnakeGridAreaLaw",
+  "phase": "strict",
+  "pid": 107778,
+  "pgid": 107778,
+  "command": [
+    "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+    "-DautoImplicit=false",
+    "-DrelaxedAutoImplicit=false",
+    "-Dpp.unicode.fun=true",
+    "-DmaxSynthPendingDepth=3",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DwarningAsError=true",
+    "TNLean/MPS/AreaLaw/SnakeGridAreaLaw.lean"
+  ],
+  "start": "2026-11-18T18:24:34.915768+00:00"
+}

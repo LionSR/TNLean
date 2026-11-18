@@ -1,0 +1,39 @@
+{
+  "sources": {
+    "TNLean.Algebra.FinSpanOfFinrank": "ead043a4d1269b5ee5bd4f3f6233de5c83fb38750a0c1da3cb998b0b2b04510c"
+  },
+  "artifacts": {
+    "Mathlib.LinearAlgebra.Basis.VectorSpace": {
+      "path": "/workspace/tn-pin729-other/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/LinearAlgebra/Basis/VectorSpace.olean",
+      "sha256": "53caeeaf87bae5b35113926764f8144a95695d472fc25ec97e2212d6fb5435a2"
+    },
+    "Mathlib.LinearAlgebra.Dimension.Constructions": {
+      "path": "/workspace/tn-pin729-other/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/LinearAlgebra/Dimension/Constructions.olean",
+      "sha256": "85fea2b1bcbe7af3179c5dbae423b8d291ef5ed9452f39f856b4ad9100d618f9"
+    },
+    "Mathlib.LinearAlgebra.FiniteDimensional.Defs": {
+      "path": "/workspace/tn-pin729-other/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/LinearAlgebra/FiniteDimensional/Defs.olean",
+      "sha256": "8e806b209e932d56ab6b9528a1213ed2959a62ef5c8fe656fc2c83060755618b"
+    },
+    "Mathlib.LinearAlgebra.Pi": {
+      "path": "/workspace/tn-pin729-other/.lake/packages/mathlib/.lake/build/lib/lean/Mathlib/LinearAlgebra/Pi.olean",
+      "sha256": "d9e474c8662c59a0441213d6c6377d9818296e932235e9eb7ee352c6007dcfbb"
+    }
+  },
+  "packages": {
+    "qiclean": "729428582b78ab7529b3796099193649f947354a",
+    "cslib": "acab13b776722f5efa897c780d6fa1a3069d709e",
+    "mathlib": "625d8914199bc567cca9b91f90e8e5afafa5ae51",
+    "Gametheory": "439aaeb9caa7a7f943f9e72afc77751cbc5b0098",
+    "checkdecls": "3d425859e73fcfbef85b9638c2a91708ef4a22d4",
+    "plausible": "c2d7840c65673533e15b499f25beecdc6227f7d8",
+    "LeanSearchClient": "9d39f9bb0c30aa2f6200808805ff16e6ce950890",
+    "importGraph": "b3cc36c295aa5e3e3c0197b09a6556298e710447",
+    "proofwidgets": "17137fad38a2cc782ff00b323a13c3a991d085ab",
+    "aesop": "cbdde3aa2665915fb286c48bcd4cdf885c629511",
+    "Qq": "6d26f8bb4b2bb78f929ad160feac508866821316",
+    "batteries": "4453b52d2468f4c346a8711d728c0742e7483c9b",
+    "Cli": "34d2efffcb6dc8d5f3537cf6a7f88bfaa999ec49"
+  },
+  "lean_sha256": "db7f559d05795e7af52e42bc966c90240a39dcb9712161c54c97afa546e20c00"
+}
