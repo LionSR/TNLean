@@ -35,10 +35,10 @@ soon as `ℓ + R ≤ w`; at range one the offset is `1`.
 * `TNLean.PEPS.Approximation.notMem_rangeResetSupport`: the reset support avoids both cores.
 * `TNLean.PEPS.Approximation.mutualInformation_cores_le_of_sites_reset_unitary`: the entropy
   comparison of the reset on any finite set of sites.
-* `TNLean.Lattice.LocalHamiltonian.information_reset_of_card_le`: the reset on a finite domain
+* `ManyBody.PlaneInteraction.information_reset_of_card_le`: the reset on a finite domain
   with at most `L²` sites.
-* `TNLean.Lattice.LocalHamiltonian.information_reset_of_rangeResetThreshold_le`,
-  `TNLean.Lattice.LocalHamiltonian.information_reset`: Lemma 3.3 at range `R` on the `L × L`
+* `ManyBody.PlaneInteraction.information_reset_of_rangeResetThreshold_le`,
+  `ManyBody.PlaneInteraction.information_reset`: Lemma 3.3 at range `R` on the `L × L`
   square.
 
 ## References
@@ -52,7 +52,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (SquareLatticeVertex)
+open ManyBody (SquareLatticeVertex PlaneInteraction)
 
 open Matrix QuantumCircuit
 
@@ -140,7 +140,9 @@ theorem notMem_rangeResetSupport {Λ : Finset (ℤ × ℤ)} {R : ℕ} {A C A₀ 
 
 end TNLean.PEPS.Approximation
 
-namespace TNLean.Lattice.LocalHamiltonian
+namespace ManyBody.PlaneInteraction
+
+open TNLean.Lattice
 
 open TNLean.PEPS.Approximation TNLean.PEPS.AreaLaw
 
@@ -155,9 +157,10 @@ square case, where `|Λ| = L²`, is `information_reset_of_rangeResetThreshold_le
 Source: `02-information.tex`, Lemma 3.3, lines 334–353, proof lines 355–630, at range `R`. -/
 theorem information_reset_of_card_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ)
     (hp : 0 < p) {L : ℕ} (hL : rangeResetThreshold q R J Δ p ≤ L) (hΛ : Λ.card ≤ L ^ 2)
-    (h : LocalHamiltonian Λ q R J) (E₀ : ℝ) (Ω : StateSpace Λ q)
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (E₀ : ℝ) (Ω : StateSpace Λ q)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A C A₀ C₀ : Finset (Site Λ)) (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A) (hC₀ : C₀ ⊆ C)
     (b : ℝ) (hb : 0 ≤ b) (hI : FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b)
     (hAw : ∀ x ∈ A₀, ∀ y, y ∉ A →
@@ -173,7 +176,8 @@ theorem information_reset_of_card_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} 
   have hL1 : (1 : ℝ) ≤ L := le_trans (le_max_left _ _) hL
   have hLn : 1 ≤ L := by exact_mod_cast hL1
   obtain ⟨-, -, U, hUu, hUs, hUerr⟩ :=
-    h.reset_unitary hq hJ hΔ (r := 2 * p + 10) (by linarith) hLn hΛ E₀ Ω hΩ hgap hspan A C hAC
+    h.reset_unitary hq hJ hΔ (r := 2 * p + 10) (by linarith) hLn hΛ hh hhJ E₀ Ω hΩ
+        hgap hspan A C hAC
       b hb hI
   have hB1 : 1 ≤ 1 + b + Real.log L := by linarith [Real.log_nonneg hL1]
   have hℓ : ((⌈rangeResetRadius R J Δ (2 * p + 10) * (1 + b + Real.log L)⌉₊ : ℕ) : ℝ) +
@@ -212,10 +216,11 @@ range-one statement is `ManyBody.SquareInteraction.information_reset_of_resetThr
 Source: `02-information.tex`, Lemma 3.3 (`lem:reset`), lines 334–353, proof lines 355–630. -/
 theorem information_reset_of_rangeResetThreshold_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ}
     (hΔ : 0 < Δ) (hp : 0 < p) {L : ℕ} (hL : rangeResetThreshold q R J Δ p ≤ L)
-    (h : LocalHamiltonian (rectangularDomain L L) q R J) (E₀ : ℝ)
+    (h : PlaneInteraction (rectangularDomain L L) q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
     (Ω : StateSpace (rectangularDomain L L) q)
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A C A₀ C₀ : Finset (Site (rectangularDomain L L))) (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A)
     (hC₀ : C₀ ⊆ C) (b : ℝ) (hb : 0 ≤ b)
     (hI : FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b)
@@ -224,7 +229,8 @@ theorem information_reset_of_rangeResetThreshold_le (hq : 1 ≤ q) (hJ : 0 ≤ J
     (hCw : ∀ x ∈ C₀, ∀ y, y ∉ C →
       rangeResetWidth R J Δ p * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) :
     FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A₀ C₀ ≤ (L : ℝ) ^ (-p) :=
-  h.information_reset_of_card_le hq hJ hΔ hp hL (card_rectangularDomain L).le E₀ Ω hΩ hgap hspan
+  h.information_reset_of_card_le hq hJ hΔ hp hL (card_rectangularDomain L).le hh hhJ E₀
+      Ω hΩ hgap hspan
     A C A₀ C₀ hAC hA₀ hC₀ b hb hI hAw hCw
 
 /-- **Lemma 3.3 (information reset) at range `R`.** Fix `q ≥ 1`, `J ≥ 0`, a gap `Δ > 0` and
@@ -237,19 +243,21 @@ range-one statement is `ManyBody.SquareInteraction.information_reset`.
 Source: `02-information.tex`, Lemma 3.3 (`lem:reset`), lines 334–353, proof lines 355–630. -/
 theorem information_reset (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∃ Cp L₀ : ℝ, 0 < Cp ∧
-      ∀ L : ℕ, L₀ ≤ L → ∀ (h : LocalHamiltonian (rectangularDomain L L) q R J) (E₀ : ℝ)
+      ∀ L : ℕ, L₀ ≤ L → ∀ (h : PlaneInteraction (rectangularDomain L L) q R)
+          (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
         (Ω : StateSpace (rectangularDomain L L) q),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (A C A₀ C₀ : Finset (Site (rectangularDomain L L))), Disjoint A C → A₀ ⊆ A →
         C₀ ⊆ C → ∀ b : ℝ, 0 ≤ b → FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b →
         (∀ x ∈ A₀, ∀ y, y ∉ A → Cp * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) →
         (∀ x ∈ C₀, ∀ y, y ∉ C → Cp * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) →
         FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A₀ C₀ ≤ (L : ℝ) ^ (-p) :=
   ⟨rangeResetWidth R J Δ p, rangeResetThreshold q R J Δ p, rangeResetWidth_pos R hJ hΔ hp,
-    fun _L hL h E₀ Ω hΩ hgap hspan A C A₀ C₀ hAC hA₀ hC₀ b hb hI hAw hCw ↦
-      h.information_reset_of_rangeResetThreshold_le hq hJ hΔ hp hL E₀ Ω hΩ hgap hspan A C A₀ C₀ hAC
+    fun _L hL h hh hhJ E₀ Ω hΩ hgap hspan A C A₀ C₀ hAC hA₀ hC₀ b hb hI hAw hCw ↦
+      h.information_reset_of_rangeResetThreshold_le hq hJ hΔ hp hL hh hhJ E₀ Ω hΩ hgap
+          hspan A C A₀ C₀ hAC
         hA₀
         hC₀ b hb hI hAw hCw⟩
 
-end TNLean.Lattice.LocalHamiltonian
+end ManyBody.PlaneInteraction

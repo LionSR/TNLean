@@ -27,7 +27,8 @@ open QuantumCircuit
 open scoped Matrix.Norms.L2Operator
 open TNLean.Lattice
 
-open ManyBody (exists_walk_length_le_iff_edist_le isAdmissibleSupport_singleton planeDomainGraph)
+open ManyBody (exists_walk_length_le_iff_edist_le isAdmissibleSupport_singleton planeDomainGraph
+  PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -75,12 +76,13 @@ time and averages over sites outside the graph neighbourhood of `S`; the region 
 Source: polynomial-PEPS `eq:info-operator-localization` (`02-information.tex`,
 lines 498–508), with the constants of OpenAI area law, Lemma 4.1. -/
 theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : ℝ)
-    (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J) (S : Finset (Site Λ))
+    (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J) (S : Finset (Site Λ))
     (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) (l : ℕ) (t : ℝ) :
-    ‖ManyBody.heisenbergEvolution h.operator t A -
+    ‖ManyBody.heisenbergEvolution h.hamiltonian t A -
         ManyBody.regionExpectation (graphNeighborhood Λ l S) (ManyBody.heisenbergEvolution
-            h.operator t A)‖ ≤
+            h.hamiltonian t A)‖ ≤
       ‖A‖ * min 2 (2 * graphBallLocalizationPrefactor R * (Λ.card : ℝ) *
         Real.exp (graphBallLocalizationVelocity R J * |t| - 1 / 2 * l)) := by
   classical
@@ -93,25 +95,25 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
       hy (Finset.mem_filter.mpr ⟨Finset.mem_univ y, x, hxS,
         (exists_walk_length_le_iff_edist_le Λ l x y).mpr
           (by simpa only [SimpleGraph.edist_comm] using (ManyBody.mem_graphBall.mp hxball))⟩)
-  have hK : Complex.I • h.operator ∈
+  have hK : Complex.I • h.hamiltonian ∈
       skewAdjoint (Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :=
-    h.operator_isHermitian.isSelfAdjoint.I_smul_mem_skewAdjoint (K := ℂ)
+    (ManyBody.Interaction.isHermitian_hamiltonian hh).isSelfAdjoint.I_smul_mem_skewAdjoint (K := ℂ)
   have hreverse (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
-      ‖ManyBody.heisenbergEvolution h.operator t A * U -
-        U * ManyBody.heisenbergEvolution h.operator t A‖ =
-      ‖A * ManyBody.heisenbergEvolution h.operator (-t) U -
-        ManyBody.heisenbergEvolution h.operator (-t) U * A‖ := by
+      ‖ManyBody.heisenbergEvolution h.hamiltonian t A * U -
+        U * ManyBody.heisenbergEvolution h.hamiltonian t A‖ =
+      ‖A * ManyBody.heisenbergEvolution h.hamiltonian (-t) U -
+        ManyBody.heisenbergEvolution h.hamiltonian (-t) U * A‖ := by
     simpa only [ManyBody.heisenbergEvolution_def, neg_neg] using
-      norm_exp_commutator_eq (Complex.I • h.operator) hK A U t
+      norm_exp_commutator_eq (Complex.I • h.hamiltonian) hK A U t
   have : NeZero q := ⟨by omega⟩
   have hnear (y : Site Λ) (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
       (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset (Site Λ)))
       (hUu : U ∈ unitary (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) :
-      ‖ManyBody.heisenbergEvolution h.operator (-t) U -
+      ‖ManyBody.heisenbergEvolution h.hamiltonian (-t) U -
         ManyBody.regionExpectation (ManyBody.graphBall (planeDomainGraph Λ) y l)
-          (ManyBody.heisenbergEvolution h.operator (-t) U)‖ ≤
+          (ManyBody.heisenbergEvolution h.hamiltonian (-t) U)‖ ≤
         C * Real.exp (v * |t| - 1 / 2 * l) := by
-    have hestimate := h.norm_sub_regionExpectation_graphBall_le
+    have hestimate := h.norm_sub_regionExpectation_graphBall_le hh hhJ
       ⟨{y}, isAdmissibleSupport_singleton Λ R y⟩ (Finset.mem_singleton_self y)
       (by simpa only [Finset.coe_singleton] using hU) l (-t)
     rw [CStarRing.norm_of_mem_unitary hUu, one_mul, abs_neg,
@@ -120,45 +122,47 @@ theorem quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
   have hcommute (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S)
       (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
       Commute A (ManyBody.regionExpectation (ManyBody.graphBall (planeDomainGraph Λ) y l)
-        (ManyBody.heisenbergEvolution h.operator (-t) U)) :=
+        (ManyBody.heisenbergEvolution h.hamiltonian (-t) U)) :=
     ManyBody.commute_of_mem_supportedOperators_of_disjoint hA
         (ManyBody.regionExpectation_mem_supportedOperators _ _) (hdisj y hy)
   have hε (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S)
       (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
       (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset (Site Λ)))
       (hUu : U ∈ unitary (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) :
-      ‖ManyBody.heisenbergEvolution h.operator t A * U -
-        U * ManyBody.heisenbergEvolution h.operator t A‖ ≤
+      ‖ManyBody.heisenbergEvolution h.hamiltonian t A * U -
+        U * ManyBody.heisenbergEvolution h.hamiltonian t A‖ ≤
         2 * (C * Real.exp (v * |t| - 1 / 2 * l)) * ‖A‖ := by
     simpa only [Matrix.mul_sub, Matrix.sub_mul, (hcommute y hy U).eq,
       sub_sub_sub_cancel_right, hreverse U] using
-      (norm_commutator_le A (ManyBody.heisenbergEvolution h.operator (-t) U -
+      (norm_commutator_le A (ManyBody.heisenbergEvolution h.hamiltonian (-t) U -
         ManyBody.regionExpectation (ManyBody.graphBall (planeDomainGraph Λ) y l)
-          (ManyBody.heisenbergEvolution h.operator (-t) U))).trans
+          (ManyBody.heisenbergEvolution h.hamiltonian (-t) U))).trans
         (mul_le_mul_of_nonneg_right
           (mul_le_mul_of_nonneg_left (hnear y U hU hUu) zero_le_two) (norm_nonneg A))
-  have hExp : ‖ManyBody.heisenbergEvolution h.operator t A -
-      ManyBody.regionExpectation (graphNeighborhood Λ l S) (ManyBody.heisenbergEvolution h.operator
+  have hExp : ‖ManyBody.heisenbergEvolution h.hamiltonian t A -
+      ManyBody.regionExpectation (graphNeighborhood Λ l S)
+          (ManyBody.heisenbergEvolution h.hamiltonian
           t A)‖ ≤
       ‖A‖ * (2 * C * (Λ.card : ℝ) * Real.exp (v * |t| - 1 / 2 * l)) := by
     simpa only [Finset.sum_const, Finset.card_univ, Fintype.card_coe, nsmul_eq_mul,
       mul_assoc, mul_comm, mul_left_comm] using
       (ManyBody.norm_sub_regionExpectation_le (graphNeighborhood Λ l S)
-        (ManyBody.heisenbergEvolution h.operator t A)
+        (ManyBody.heisenbergEvolution h.hamiltonian t A)
         (fun _ ↦ 2 * (C * Real.exp (v * |t| - 1 / 2 * l)) * ‖A‖) fun y hy U hU hUu ↦
           hε y hy U (by simpa using hU)
             hUu).trans
         (Finset.sum_le_univ_sum_of_nonneg (fun _ ↦ by positivity))
-  have hτnorm : ‖ManyBody.heisenbergEvolution h.operator t A‖ = ‖A‖ :=
+  have hτnorm : ‖ManyBody.heisenbergEvolution h.hamiltonian t A‖ = ‖A‖ :=
     letI : NormedAlgebra ℚ (Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :=
       .restrictScalars ℚ ℝ (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
     (CStarRing.norm_mul_mem_unitary
-      (NormedSpace.exp (t • (Complex.I • h.operator)) * A)
+      (NormedSpace.exp (t • (Complex.I • h.hamiltonian)) * A)
       (NormedSpace.exp_mem_unitary_of_mem_skewAdjoint (skewAdjoint.smul_mem (-t) hK))).trans
       (CStarRing.norm_mem_unitary_mul A
         (NormedSpace.exp_mem_unitary_of_mem_skewAdjoint (skewAdjoint.smul_mem t hK)))
-  have hTwo : ‖ManyBody.heisenbergEvolution h.operator t A -
-      ManyBody.regionExpectation (graphNeighborhood Λ l S) (ManyBody.heisenbergEvolution h.operator
+  have hTwo : ‖ManyBody.heisenbergEvolution h.hamiltonian t A -
+      ManyBody.regionExpectation (graphNeighborhood Λ l S)
+          (ManyBody.heisenbergEvolution h.hamiltonian
           t A)‖ ≤
       ‖A‖ * 2 := by
     refine (norm_sub_le _ _).trans ?_
@@ -177,18 +181,19 @@ cardinality is sufficient for its square-grid specialization. -/
 theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
     (R : ℕ) (J : ℝ) :
     ∃ C v c : ℝ, 0 < C ∧ 0 < v ∧ 0 < c ∧
-      ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J)
         (S : Finset (Site Λ)) (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
         A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S → ∀ (l : ℕ) (t : ℝ),
-        ‖ManyBody.heisenbergEvolution h.operator t A -
+        ‖ManyBody.heisenbergEvolution h.hamiltonian t A -
             ManyBody.regionExpectation (graphNeighborhood Λ l S)
-              (ManyBody.heisenbergEvolution h.operator t A)‖ ≤
+              (ManyBody.heisenbergEvolution h.hamiltonian t A)‖ ≤
           ‖A‖ * min 2 (C * (Λ.card : ℝ) * Real.exp (v * |t| - c * l)) := by
   refine ⟨2 * graphBallLocalizationPrefactor R, max (graphBallLocalizationVelocity R J) 1,
     1 / 2, mul_pos two_pos (graphBallLocalizationPrefactor_pos R),
-    lt_max_of_lt_right one_pos, one_half_pos, fun Λ h S A hA l t ↦ ?_⟩
+    lt_max_of_lt_right one_pos, one_half_pos, fun Λ h hh hhJ S A hA l t ↦ ?_⟩
   have hP := graphBallLocalizationPrefactor_pos R
-  refine (quasilocal_region_localization q hq R J Λ h S A hA l t).trans ?_
+  refine (quasilocal_region_localization q hq R J Λ h hh hhJ S A hA l t).trans ?_
   gcongr
   exact le_max_left _ _
 

@@ -118,8 +118,8 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
   classical
   intro L h hh hhJ R C₀ hRC Q P s g p Λ a e K F K' boundary Z W V l B
   have hC : 0 < squareLocalizationPrefactor := squareLocalizationPrefactor_pos
-  obtain ⟨gH, _, hgOperator⟩ := h.exists_swapped_doubled_localHamiltonian hh hhJ hJ R
-  have hK' : gH.operator = K' := by
+  obtain ⟨gH, hgH, hgHJ, _, hgOperator⟩ := h.exists_swapped_doubled_localHamiltonian hh hhJ hJ R
+  have hK' : gH.hamiltonian = K' := by
     simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
       Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using! hgOperator
   have hDK : (doubledHamiltonian h.hamiltonian).IsHermitian := by
@@ -137,7 +137,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
     simpa only [a, V, AreaLaw.embedOp_rectangular_eq_reindex, Finset.coe_image,
       Matrix.reindex_apply, Matrix.submatrix_submatrix] using!
       embedOp_mem_supportedOperators_image a.injective hV₀
-  have hD : gH.operator - K ∈
+  have hD : gH.hamiltonian - K ∈
       ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (Z.image a : Finset (Lattice.Site Λ)) := by
     simpa only [hK', a, K', F, K, AreaLaw.embedOp_rectangular_eq_reindex, Finset.coe_image,
       Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_sub,
@@ -157,7 +157,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
       congrArg (fun n : ℕ ↦ (n : ℝ)) (Fintype.card_congr a).symm
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
     AreaLaw.supported_gaussian_integral (q * q) (Nat.mul_le_mul hq hq) 1
-      (by linarith : (0 : ℝ) ≤ 2 * J) Λ gH K V (hDK.reindex (p.trans e))
+      (by linarith : (0 : ℝ) ≤ 2 * J) Λ gH hgH hgHJ K V (hDK.reindex (p.trans e))
       (Q.image a) (Z.image a) hV hD l
   rw [hK'] at hU hM
   refine ⟨U, hU0, hU, hunit, hsupport, fun η T hT ↦ ?_⟩

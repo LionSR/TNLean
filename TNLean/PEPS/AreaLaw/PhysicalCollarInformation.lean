@@ -31,9 +31,11 @@ revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -73,9 +75,10 @@ theorem sublinearCollarBound_real_of_boxEntropy_explicit
     (htr : Scan.CollarScan.FiniteFamilyTransportBound c₀ Cent eent Cen een) :
       ∀ n s₀ : ℕ, sublinearCollarThreshold q R J Δ Cbox (latticeTruncationRadiusConstant R J Δ 10)
           c₀ Cent eent Cen een ≤ n →
-        ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
+            (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
+          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
               T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
@@ -112,12 +115,12 @@ theorem sublinearCollarBound_real_of_boxEntropy_explicit
     simpa only [d, Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat] using hD₀
   have hD₀1 : (1 : ℝ) ≤ D₀ := by
     linarith [show (0 : ℝ) ≤ (R : ℝ) from Nat.cast_nonneg R]
-  intro n s₀ hn Λ h E₀ Ω hΩ hgap hspan
+  intro n s₀ hn Λ h hh hhJ E₀ Ω hΩ hgap hspan
   refine sublinearCollarBound_of_mutualInformation_le_at hCtpl hD₀1 _ _ ?_
-    n s₀ hn Λ h E₀ Ω hΩ
-    (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+    n s₀ hn Λ h hh hhJ E₀ Ω hΩ
+    (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
     (hspan ▸ Submodule.mem_span_singleton_self _)
-  intro n s₀ hn Λ h E₀ Ω hΩ hpsd hmem A T hsep hL
+  intro n s₀ hn Λ h hh hhJ E₀ Ω hΩ hpsd hmem A T hsep hL
   obtain ⟨-, -, hgap, hspan⟩ :=
     (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
       ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
@@ -127,7 +130,7 @@ theorem sublinearCollarBound_real_of_boxEntropy_explicit
       (mul_le_mul_of_nonneg_right
         (mul_le_mul_of_nonneg_left hdreal.le (by norm_num : (0 : ℝ) ≤ 4))
         (Nat.cast_nonneg s₀)) (hsep t ht z hz)
-  have hi := (hinfo n s₀ hn Λ h E₀ Ω hΩ hgap hspan A T hsep' hL).2
+  have hi := (hinfo n s₀ hn Λ h hh hhJ E₀ Ω hΩ hgap hspan A T hsep' hL).2
   dsimp only [Exponents.scannerEll, Exponents.amplificationEpsilon] at hi ⊢
   nlinarith only [hi]
 
@@ -151,9 +154,10 @@ theorem sublinearCollarBound_real_of_boxEntropy
       Cbox * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ))) :
     ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
       ∀ n s₀ : ℕ, sublinearCollarThreshold q R J Δ Cbox Ctr ct Cent eent Cen een ≤ n →
-        ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
+            (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
+          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
               T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
@@ -203,9 +207,10 @@ theorem sublinearCollarBound_real_of_initial
       ∀ n s₀ : ℕ, sublinearCollarThreshold q R J Δ
           (Scan.physicalBoxBootstrapConstant q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een C₀)
           Ctr' ct' Cent' eent' Cen' een' ≤ n →
-        ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
+            (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
+          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
               T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
@@ -263,11 +268,11 @@ theorem sublinearCollarBound_real
     sublinearCollarBound_real_of_boxEntropy q R hq hJ hΔ hD₀ hCtpl hCb.le (hbox _ (by omega))
   refine ⟨sublinearCollarConstant q J Δ Cb,
     sublinearCollarThreshold q R J Δ Cb Ctr ct Cent eent Cen een, ?_⟩
-  intro n s₀ hn Λ h E₀ Ω hΩ hpsd hmem
+  intro n s₀ hn Λ h hh hhJ E₀ Ω hΩ hpsd hmem
   obtain ⟨-, -, hgap, hspan⟩ :=
     (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
       ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
-  exact hcol n s₀ hn Λ h E₀ Ω hΩ hgap hspan
+  exact hcol n s₀ hn Λ h hh hhJ E₀ Ω hΩ hgap hspan
 
 /-- **Proposition 9.6 at explicit constants.** For every real clearance `D₀ > 2R + 10` and every
 template constant `Ctpl ≥ 24`, all assertions of the sublinear collar bound
@@ -289,9 +294,10 @@ theorem sublinearCollarBound_real_explicit
     ∀ n s₀ : ℕ, sublinearCollarThreshold q R J Δ
         (Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een)
         (latticeTruncationRadiusConstant R J Δ 10) c₀ Cent eent Cen een ≤ n →
-      ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
+          (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
+        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →

@@ -37,7 +37,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_nearestNeighbor_terms {L q : �
         (n := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
         (T i) (AreaLaw.nearestNeighborSupport i)) ∧
       (∀ i, (T i).IsHermitian) ∧ (∀ i, ‖T i‖ ≤ J) ∧
-      (∑ i, T i) = (h.toAreaLawHamiltonian hhJ).operator := by
+      (∑ i, T i) = h.toAreaLawHamiltonian.hamiltonian := by
   let e := Equiv.sumCongr (AreaLaw.rectangleSiteEquiv L L)
     (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
   let cfg := AreaLaw.rectangleConfigurationEquiv L L q
@@ -63,6 +63,6 @@ theorem _root_.ManyBody.SquareInteraction.exists_nearestNeighbor_terms {L q : �
         (map_sum (Matrix.reindexAlgEquiv ℂ ℂ cfg) h.hermitianPart.term Finset.univ).symm
       _ = Matrix.reindex cfg cfg h.hamiltonian :=
         congrArg (Matrix.reindex cfg cfg) (h.hamiltonian_hermitianPart hh)
-      _ = _ := (h.toAreaLawHamiltonian_operator hhJ hh).symm
+      _ = _ := (h.toAreaLawHamiltonian_hamiltonian hh).symm
 
 end TNLean.PEPS.Approximation
