@@ -572,12 +572,12 @@ s = s.replace("theorem sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing (",
 s = s.replace("(h.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing A)",
               "(h.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing A)")
 s = s.replace("h.swappedDoubled_operator A", "h.swappedDoubled_hamiltonian A")
-s = re.sub(r"(?<![\w.])PEPS\.(AreaLaw|EncodedFrame)\.", r"TNLean.PEPS.\1.", s)
+s = re.sub(r"(?<!(?:[\w.]))PEPS\.(AreaLaw|EncodedFrame)\.", r"TNLean.PEPS.\1.", s)
 open(SL, 'w').write(s)
 for p in ('TNLean/PEPS/Approximation/RangeResetUnitary.lean', 'TNLean/PEPS/Approximation/RangeInformationReset.lean',
           'TNLean/PEPS/Approximation/SwappedDoubledEdgeBoundary.lean', 'TNLean/PEPS/AreaLaw/GraphPropagation.lean'):
     s = open(p).read()
     i = s.find("namespace ManyBody.PlaneInteraction")
     if i >= 0:
-        s = s[:i] + re.sub(r"(?<![\w.])PEPS\.(AreaLaw|EncodedFrame|Approximation)\.", r"TNLean.PEPS.\1.", s[i:])
+        s = s[:i] + re.sub(r"(?<!(?:[\w.]))PEPS\.(AreaLaw|EncodedFrame|Approximation)\.", r"TNLean.PEPS.\1.", s[i:])
         open(p, 'w').write(s)

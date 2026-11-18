@@ -58,8 +58,8 @@ def per_var(chunk, v):
         (rf"\b{V}\.norm_le\b", HJ),
         # the two hypotheses follow the variable wherever it is introduced
         # (not a lone binder `fun h ↦`, `intro h`, which is a local name)
-        (rf"(\bintro\b[^\n:]*?(?<![⟨.])\b{V}\b)(?! {H}\b|,|'|\.)(?=[ \t]+\S)", rf"\1 {H} {HJ}"),
-        (rf"(\bfun\b[^\n↦:]*?(?<![⟨.])\b{V}\b)(?! {H}\b|,|'|\.| ↦)(?=[^\n↦]*↦)", rf"\1 {H} {HJ}"),
+        (rf"(\bintro\b[^\n:]*?(?<!(?:[⟨.]))\b{V}\b)(?! {H}\b|,|'|\.)(?=[ \t]+\S)", rf"\1 {H} {HJ}"),
+        (rf"(\bfun\b[^\n↦:]*?(?<!(?:[⟨.]))\b{V}\b)(?! {H}\b|,|'|\.| ↦)(?=[^\n↦]*↦)", rf"\1 {H} {HJ}"),
     ]
     for a, b in subs:
         chunk = re.sub(a, b, chunk)
@@ -139,7 +139,7 @@ GLOBAL = [
      r"L₀ ≤ a\.1 ∧) ", r"\1 (∀ X, (a.2.1.term X).IsHermitian) ∧ (∀ X, ‖a.2.1.term X‖ ≤ J) ∧ "),
     (r"\ba\.2\.1\.operator\b", "a.2.1.hamiltonian"),
     # the sums and constructions: the hypotheses of the former fields are gone from them
-    (rf"(?<![\w.]){QUAL}(?:ChainHamiltonian|DomainHamiltonian|LocalHamiltonian)\.operator\b(?!_)",
+    (rf"(?<!(?:[\w.])){QUAL}(?:ChainHamiltonian|DomainHamiltonian|LocalHamiltonian)\.operator\b(?!_)",
      "ManyBody.Interaction.hamiltonian"),
     (r"\b(ofBonds|ofNearestNeighborPositive) (\w+) (\w+) (\w+) (\w+)\b", r"\1 \2 \3"),
     (r"\.toChain (?!\(\w+'* :)(?:\((?:[^()]|\([^()]*\))*\)|\w[\w.']*)(?=[\s).,⟩])", ".toChain"),
@@ -171,7 +171,7 @@ def section_variables(t):
         out = [body[:starts[0]]]
         for a, b in zip(starts, starts[1:]):
             chunk = per_var(body[a:b], v)
-            used = [x for x in (H, HJ) if re.search(rf"(?<![\w']){re.escape(x)}(?![\w'])", chunk)]
+            used = [x for x in (H, HJ) if re.search(rf"(?<!(?:[\w'])){re.escape(x)}(?!(?:[\w']))", chunk)]
             if used and re.match(r"(?:@\[[^\n]*\]\s*)?(?:(?:private|protected)\s+)*(?:theorem|lemma)\b", chunk):
                 inc = f"include {' '.join(used)} in\n"
                 # before the docstring, which must stay next to the declaration
@@ -193,7 +193,7 @@ def process_text(t):
     for old, new in STRUCTS.items():
         t = re.sub(rf"(theorem|lemma|def) {old}\.([\w']+)",
                    lambda m: f"{m[1]} _root_.ManyBody.{new}.{hamName(m[2])}", t)
-        t = re.sub(rf"(?<![\w.]){QUAL}{old}\.([a-z][\w']*)",
+        t = re.sub(rf"(?<!(?:[\w.])){QUAL}{old}\.([a-z][\w']*)",
                    lambda m: f"ManyBody.{new}.{hamName(m[1])}", t)
     varre = re.compile(rf"(?:\(|∀ )(\w+'*) : {QUAL}(?:{'|'.join(STRUCTS)})\b")
     starts = [m.start() for m in DECL_START.finditer(t)] + [len(t)]
@@ -220,7 +220,7 @@ def process_text(t):
                 body = re.sub(rf"\{{([^{{}}]*?)\b{x}\b([^{{}}]*?) : ℝ\}}", "", chunk, count=1)
                 body = re.sub(r"/-.*?-/|--[^\n]*", "", body, flags=re.S)
                 # the energy terms take the bound as an argument, inserted after this pass
-                if not re.search(rf"(?<![\w']){x}(?![\w'])|\b(?:truncatedEnergyTerm|actualEnergyTerms|positiveTerm)\b", body):
+                if not re.search(rf"(?<!(?:[\w'])){x}(?!(?:[\w']))|\b(?:truncatedEnergyTerm|actualEnergyTerms|positiveTerm)\b", body):
                     def strip(m):
                         names = [n for n in m[1].split() if n != x]
                         return f"{{{' '.join(names)} : ℝ}}" if names else ''
@@ -230,8 +230,10 @@ def process_text(t):
             # a bound that the dropped hypothesis bound automatically, still used elsewhere
             head2 = chunk[:len(h.group(0)) + len(signature(chunk, h.end()))] if h else ''
             code = re.sub(r"/-.*?-/|--[^\n]*", "", chunk, flags=re.S)
-            bound = re.search(r"[{(][^(){}]*(?<![\w'])J(?![\w'])[^(){}]*: ℝ[)}]", head2)
-            if h and kind in ('theorem', 'lemma') and not bound and re.search(r"(?<![\w'.])J(?![\w'])", code):
+            bound = (re.search(r"[{(][^(){}]*(?<!(?:[\w']))J(?!(?:[\w']))[^(){}]*: ℝ[)}]", head2)
+                     or re.search(r"^variable(?:[^\n]|\n[ \t]+)*?[{(][^(){}]*(?<!(?:[\w']))J(?!(?:[\w']))[^(){}]*: ℝ[)}]",
+                                  t[:a], re.M))
+            if h and kind in ('theorem', 'lemma') and not bound and re.search(r"(?<!(?:[\w'.]))J(?!(?:[\w']))", code):
                 chunk = re.sub(r"\((\w+'*) : (?:ManyBody\.)?(?:ChainInteraction|DomainInteraction|PlaneInteraction) ",
                                lambda m: "{J : ℝ} " + m[0], chunk, count=1)
         out.append(chunk)
@@ -239,7 +241,7 @@ def process_text(t):
 
 
 def ensure_open(t):
-    needed = [n for n in STRUCTS.values() if re.search(rf"(?<![\w.]){n}\b(?!\.)", t)]
+    needed = [n for n in STRUCTS.values() if re.search(rf"(?<!(?:[\w.])){n}\b(?!\.)", t)]
     for n in needed:
         m = re.search(r"^open ManyBody \(([^)]*)\)\n", t, re.M)
         if m and n in m.group(1).split():
@@ -264,7 +266,7 @@ def ensure_open(t):
 
 
 def ensure_norm_scope(t):
-    scoped = re.search(r"^open scoped [^\n]*\bMatrix\.Norms\.L2Operator\b(?![^\n]* in$)", t, re.M)
+    scoped = re.search(r"^open scoped [^\n]*\bMatrix\.Norms\.L2Operator\b(?!(?:[^\n])* in$)", t, re.M)
     if not scoped and re.search(r"‖[\w.']+\.term X‖", t):
         d = re.search(r"^/-!.*?-/\n", t, re.M | re.S)
         return t[:d.end()] + '\nopen scoped Matrix.Norms.L2Operator\n' + t[d.end():]
@@ -341,12 +343,12 @@ def thread_receiver(chunk, r, rH, rJ, guard, table, ptable):
     ng = ''.join(rf"(?!\s+{re.escape(g)})" for g in tuple(guard) + (rH.split(' ')[0], rJ.split(' ')[0]))
     for name, (k, args) in table.items():
         pass_ = ' '.join(rH if x == 'H' else rJ for x in args)
-        chunk = re.sub(rf"(?<![\w.]){R_}\.({re.escape(name)}(?: {ARG}){{{k}}})(?![\w'])(?![\w']){ng}",
+        chunk = re.sub(rf"(?<!(?:[\w.])){R_}\.({re.escape(name)}(?: {ARG}){{{k}}})(?!(?:[\w']))(?!(?:[\w'])){ng}",
                        lambda m: threaded(m, f"{r}.{m[1]} {pass_}"), chunk)
     for name, (k, args) in ptable.items():
         pass_ = ' '.join(rH if x == 'H' else rJ for x in args)
-        chunk = re.sub(rf"(?<![\w.'])((?:[\w.]+\.)?{re.escape(name)}(?:\s+{ARG}){{{k}}})(\s+){R_}"
-                       rf"(?![\w.']){ng}",
+        chunk = re.sub(rf"(?<!(?:[\w.']))((?:[\w.]+\.)?{re.escape(name)}(?:\s+{ARG}){{{k}}})(\s+){R_}"
+                       rf"(?!(?:[\w.'])){ng}",
                        lambda m: f"{m[1]}{m[m.re.groups]}{r} {pass_}", chunk)
     return chunk
 
@@ -358,7 +360,7 @@ def thread_local_hypotheses(chunk, v, H, HJ):
     def rep(m):
         head = m[1]
         if head in (v, H, HJ) or not re.search(
-                rf"(?:\(|⟨|, |\bintro [^\n]*|\bfun [^\n]*)(?<![\w']){re.escape(head)}(?:\s*:|⟩|,|\s)", chunk):
+                rf"(?:\(|⟨|, |\bintro [^\n]*|\bfun [^\n]*)(?<!(?:[\w'])){re.escape(head)}(?:\s*:|⟩|,|\s)", chunk):
             return m[0]
         # the hypothesis must head its application, not be an argument of another one
         before = m.string[:m.start()].rstrip()
@@ -373,7 +375,7 @@ def thread_local_hypotheses(chunk, v, H, HJ):
                 and not re.search(rf"[⟨,]\s*{re.escape(head)}\s*[,⟩]", chunk)):
             return m[0]
         return f"{m[1]}{m[2]}{m[m.re.groups]}{v} {H} {HJ}"
-    return re.sub(rf"(?<![\w.'])(h[\w'₀-₉]*)((?:[ \t]+(?!{V}\b){ARG})*?)([ \t]+|\n[ \t]+){V}(?![\w.'])(?!\s+{re.escape(H)}\b)"
+    return re.sub(rf"(?<!(?:[\w.']))(h[\w'₀-₉]*)((?:[ \t]+(?!{V}\b){ARG})*?)([ \t]+|\n[ \t]+){V}(?!(?:[\w.']))(?!\s+{re.escape(H)}\b)"
                   rf"(?!\s+\({V}\.isHermitian)", rep, chunk)
 
 
@@ -451,11 +453,11 @@ def thread_hypotheses(files):
             # aliases of constructed interactions
             for m in re.finditer(r"\b(?:let|set) (\w+'*)(?: : [^\n]*?)? := (?:\(?\w+'*\.(?:doubled|swappedDoubled|toChain|smul)\b"
                                  r"|ManyBody\.ChainInteraction\.(?:ofBonds|ofNearestNeighborPositive)\b)", chunk):
-                chunk = re.sub(rf"(?<![\w.]){re.escape(m[1])}\.operator\b", f"{m[1]}.hamiltonian", chunk)
+                chunk = re.sub(rf"(?<!(?:[\w.])){re.escape(m[1])}\.operator\b", f"{m[1]}.hamiltonian", chunk)
             for r, rH, rJ, guard in bond_receivers(chunk):
                 chunk = thread_receiver(chunk, r, rH, rJ, guard, table, ptable)
             # interactions introduced together with their hypotheses, as in `intro Λ h hh hhJ`
-            intro_vars = {m[1] for m in re.finditer(r"(?<![\w.'])(?=([\w']+)(?: |, )([\w']+)(?: |, )([\w']+)(?![\w']))", chunk)
+            intro_vars = {m[1] for m in re.finditer(r"(?<!(?:[\w.']))(?=([\w']+)(?: |, )([\w']+)(?: |, )([\w']+)(?!(?:[\w'])))", chunk)
                           if m[1][0].isalpha() and hyp_names(m[1]) == (m[2], m[3])}
             for v in set(varre.findall(chunk)) | secvars | intro_vars:
                 # a declaration that binds the name to something else, such as a history `h`
@@ -476,9 +478,9 @@ def thread_hypotheses(files):
                 for m in re.finditer(rf"\b(?:let|set) (\w+'*)(?: : [^\n]*?)? := ({re.escape(v)}\.(doubled|swappedDoubled|toChain)((?: {ARG})*))\s*(?:with \w+)?\n", chunk):
                     rH, rJ = construction_hyps(v, m[3], m[4], H, HJ)
                     g = re.escape(m[1])
-                    chunk = re.sub(rf"(?<![\w.]){g}\.supported\b", f"{m[1]}.mem", chunk)
-                    chunk = re.sub(rf"(?<![\w.]){g}\.hermitian\b", rH, chunk)
-                    chunk = re.sub(rf"(?<![\w.]){g}\.norm_le\b", rJ, chunk)
+                    chunk = re.sub(rf"(?<!(?:[\w.])){g}\.supported\b", f"{m[1]}.mem", chunk)
+                    chunk = re.sub(rf"(?<!(?:[\w.])){g}\.hermitian\b", rH, chunk)
+                    chunk = re.sub(rf"(?<!(?:[\w.])){g}\.norm_le\b", rJ, chunk)
                     recv.append((m[1], rH, rJ, (rH,)))
                 for r, rH, rJ, guard in recv:
                     chunk = thread_receiver(chunk, r, rH, rJ, guard, table, ptable)
@@ -486,8 +488,8 @@ def thread_hypotheses(files):
                 if stable:
                     V = re.escape(v)
                     chunk = re.sub(
-                        rf"(?<![\w.'])((?:[\w.]+\.)?(?:{'|'.join(map(re.escape, sorted(stable)))})(?![\w'])"
-                        rf"(?:[ \t]+{ARG}|\n[ \t]+{ARG})*?)([ \t]+|\n[ \t]+){V}(?![\w.'])"
+                        rf"(?<!(?:[\w.']))((?:[\w.]+\.)?(?:{'|'.join(map(re.escape, sorted(stable)))})(?!(?:[\w']))"
+                        rf"(?:[ \t]+{ARG}|\n[ \t]+{ARG})*?)([ \t]+|\n[ \t]+){V}(?!(?:[\w.']))"
                         rf"(?!\s+{re.escape(H)}\b)(?!\s+_\b)(?!\s+\({V}\.isHermitian)",
                         lambda m: f"{m[1]}{m[m.re.groups]}{v} {H} {HJ}", chunk)
             out.append(chunk)
@@ -517,9 +519,9 @@ def fix_includes(t, v):
             have = d[2].split() if d and d[2] else []
             code = re.sub(r"/-.*?-/|--[^\n]*|^include [^\n]*$", "", chunk, flags=re.S | re.M)
             # a theorem whose statement quantifies over its own interaction rebinds the names
-            if re.search(rf"\b(?:intro|rintro|fun)(?: [\w'₀-₉]+)*? (?:{re.escape(v)} )?{re.escape(H)} {re.escape(HJ)}(?![\w'])", code):
+            if re.search(rf"\b(?:intro|rintro|fun)(?: [\w'₀-₉]+)*? (?:{re.escape(v)} )?{re.escape(H)} {re.escape(HJ)}(?!(?:[\w']))", code):
                 code = ''
-            used = [x for x in (H, HJ) if re.search(rf"(?<![\w']){re.escape(x)}(?![\w'])", code)]
+            used = [x for x in (H, HJ) if re.search(rf"(?<!(?:[\w'])){re.escape(x)}(?!(?:[\w']))", code)]
             want = [x for x in (H, HJ) if x in used]
             if want != have:
                 inc = f"include {' '.join(want)} in\n" if want else ''
@@ -538,12 +540,12 @@ def docs_pass():
             continue
         p = pathlib.Path(f); t = p.read_text(); u = t
         for old, new in STRUCTS.items():
-            u = re.sub(rf"(?<![\w.]){QUAL}{old}\.operator_isHermitian\b",
+            u = re.sub(rf"(?<!(?:[\w.])){QUAL}{old}\.operator_isHermitian\b",
                        "ManyBody.Interaction.isHermitian_hamiltonian", u)
-            u = re.sub(rf"(?<![\w.]){QUAL}{old}\.operator\b(?!_)", "ManyBody.Interaction.hamiltonian", u)
-            u = re.sub(rf"(?<![\w.]){QUAL}{old}\.([a-z][\w']*)",
+            u = re.sub(rf"(?<!(?:[\w.])){QUAL}{old}\.operator\b(?!_)", "ManyBody.Interaction.hamiltonian", u)
+            u = re.sub(rf"(?<!(?:[\w.])){QUAL}{old}\.([a-z][\w']*)",
                        lambda m, new=new: f"ManyBody.{new}.{hamName(m[1])}", u)
-            u = re.sub(rf"(?<![\w.]){QUAL}{old}\b", f"ManyBody.{new}", u)
+            u = re.sub(rf"(?<!(?:[\w.])){QUAL}{old}\b", f"ManyBody.{new}", u)
         if u != t:
             n += 1
             if WRITE:

@@ -11,7 +11,7 @@ s = open(P).read()
 import re
 i = s.index('variable {L q : ℕ}\n    (h : Fin (L - 1)')
 head, tail = s[:i], s[i:]
-tail = re.sub(r"(?<![\w.])(ofNearestNeighborPositive(?:_\w+)?)\b", r"ManyBody.ChainInteraction.\1", tail)
+tail = re.sub(r"(?<!(?:[\w.]))(ofNearestNeighborPositive(?:_\w+)?)\b", r"ManyBody.ChainInteraction.\1", tail)
 tail = tail.replace("theorem _root_.ManyBody.ChainInteraction.ManyBody.ChainInteraction.", "theorem _root_.ManyBody.ChainInteraction.")
 for name, hyp in (('nonneg', 'h0'), ('le_one', 'h1')):
     tail = re.sub(rf"(/--(?:(?!-/).)*-/\ntheorem _root_\.ManyBody\.ChainInteraction\.ofNearestNeighborPositive_term_{name}\b)",

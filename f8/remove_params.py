@@ -28,7 +28,7 @@ def strip_binders(t, start, params):
 def drop_args(t, name, params):
     """At each call `name a₁ a₂ ...`, drop the top-level arguments spelled as one of `params`."""
     out, i = [], 0
-    for m in re.finditer(rf"(?<![\w.'])(?:[\w.]+\.)?{re.escape(name)}(?![\w'])", t):
+    for m in re.finditer(rf"(?<!(?:[\w.']))(?:[\w.]+\.)?{re.escape(name)}(?!(?:[\w']))", t):
         if m.start() < i:
             continue
         line_start = t.rfind('\n', 0, m.start()) + 1
@@ -48,7 +48,7 @@ def drop_args(t, name, params):
             elif depth == 0 and (t.startswith(':=', k) or c == ','):
                 break
             if depth == 0 and c in ' \n':
-                w = re.match(r"\s+([\w'₀-₉]+)(?![\w'.])", t[k:])
+                w = re.match(r"\s+([\w'₀-₉]+)(?!(?:[\w'.]))", t[k:])
                 if w and w[1] in params:
                     k += len(w[0]); continue
             seg.append(c); k += 1
@@ -70,14 +70,14 @@ for f in files:
             g = re.search(r"\{((?:[\w']+ )*J(?: [\w']+)*) : ℝ\}", decl)
             if g:
                 rest = re.sub(r"/-.*?-/|--[^\n]*", "", decl.replace(g[0], '', 1), flags=re.S)
-                if not re.search(r"(?<![\w'])J(?![\w'])", rest):
+                if not re.search(r"(?<!(?:[\w']))J(?!(?:[\w']))", rest):
                     names = [x for x in g[1].split() if x != 'J']
                     new = f"{{{' '.join(names)} : ℝ}}" if names else ''
                     decl = decl.replace(g[0] + ('' if names else '\n'), new, 1) if not names and g[0] + '\n' in decl else decl.replace(g[0], new, 1)
                     decl = re.sub(r"(?<=\S) {2,}(?=[({])", " ", decl)
                     n = n[:m.start()] + decl + n[end:]
     for name, params in TABLE.items():
-        if re.search(rf"(?<![\w'])(?:[\w.]+\.)?{re.escape(name)}(?![\w'])", n):
+        if re.search(rf"(?<!(?:[\w']))(?:[\w.]+\.)?{re.escape(name)}(?!(?:[\w']))", n):
             n = drop_args(n, name, params)
     if n != t:
         f.write_text(n)
