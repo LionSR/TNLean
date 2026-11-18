@@ -1,0 +1,13 @@
+{
+  "production_head": "a28f35a6b916ee5a24d3836a31d13d74f832e11f",
+  "total_passed": 518,
+  "remaining": 73,
+  "failed": 0,
+  "old_pid": 173290,
+  "old_session": 90417,
+  "exited": true,
+  "stop_reason": "1 GiB guard",
+  "last_completed": "TNLean/PEPS/RegularGraphPhysicalBlocking.lean",
+  "remaining_sha256": "abb667ca2680f9ad3c90861da685cfd4424d2565ed919c64d813273e663be0cb",
+  "root_not_started": true
+}

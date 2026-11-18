@@ -1,0 +1,4657 @@
+[
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/TransportRoundParameterIntegral.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.TransportRoundParameterIntegral"
+    ],
+    "exit": 0,
+    "seconds": 23.97697401046753,
+    "log": "TNLean_PEPS_AreaLaw_Scan_TransportRoundParameterIntegral.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/TransportRoundParameterIntegral.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/TransportRoundParameterIntegral.lean"
+    ],
+    "exit": 0,
+    "seconds": 5.532530784606934,
+    "log": "TNLean_PEPS_AreaLaw_Scan_TransportRoundParameterIntegral.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/ActualRoundParameterIntegral.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.ActualRoundParameterIntegral"
+    ],
+    "exit": 0,
+    "seconds": 8.927758932113647,
+    "log": "TNLean_PEPS_AreaLaw_Scan_ActualRoundParameterIntegral.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/ActualRoundParameterIntegral.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/ActualRoundParameterIntegral.lean"
+    ],
+    "exit": 0,
+    "seconds": 5.617329835891724,
+    "log": "TNLean_PEPS_AreaLaw_Scan_ActualRoundParameterIntegral.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/ActualScanTransportInputs.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.ActualScanTransportInputs"
+    ],
+    "exit": 0,
+    "seconds": 15.897708415985107,
+    "log": "TNLean_PEPS_AreaLaw_Scan_ActualScanTransportInputs.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/ActualScanTransportInputs.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/ActualScanTransportInputs.lean"
+    ],
+    "exit": 0,
+    "seconds": 12.853498220443726,
+    "log": "TNLean_PEPS_AreaLaw_Scan_ActualScanTransportInputs.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/ActualSharpPrevector.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.ActualSharpPrevector"
+    ],
+    "exit": 0,
+    "seconds": 5.6678855419158936,
+    "log": "TNLean_PEPS_AreaLaw_Scan_ActualSharpPrevector.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/ActualSharpPrevector.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/ActualSharpPrevector.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.249432563781738,
+    "log": "TNLean_PEPS_AreaLaw_Scan_ActualSharpPrevector.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/AugmentedReceivingRegions.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.AugmentedReceivingRegions"
+    ],
+    "exit": 0,
+    "seconds": 3.70686936378479,
+    "log": "TNLean_PEPS_AreaLaw_Scan_AugmentedReceivingRegions.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/AugmentedReceivingRegions.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/AugmentedReceivingRegions.lean"
+    ],
+    "exit": 0,
+    "seconds": 2.559103488922119,
+    "log": "TNLean_PEPS_AreaLaw_Scan_AugmentedReceivingRegions.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/ComparatorData.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.ComparatorData"
+    ],
+    "exit": 0,
+    "seconds": 19.088002681732178,
+    "log": "TNLean_PEPS_AreaLaw_Scan_ComparatorData.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/ComparatorData.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/ComparatorData.lean"
+    ],
+    "exit": 0,
+    "seconds": 19.161375045776367,
+    "log": "TNLean_PEPS_AreaLaw_Scan_ComparatorData.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/ComparatorBounds.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.ComparatorBounds"
+    ],
+    "exit": 0,
+    "seconds": 11.740262508392334,
+    "log": "TNLean_PEPS_AreaLaw_Scan_ComparatorBounds.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/ComparatorBounds.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/ComparatorBounds.lean"
+    ],
+    "exit": 0,
+    "seconds": 18.746119260787964,
+    "log": "TNLean_PEPS_AreaLaw_Scan_ComparatorBounds.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/OriginalTruncation.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.OriginalTruncation"
+    ],
+    "exit": 0,
+    "seconds": 4.03535795211792,
+    "log": "TNLean_PEPS_AreaLaw_Scan_OriginalTruncation.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/OriginalTruncation.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/OriginalTruncation.lean"
+    ],
+    "exit": 0,
+    "seconds": 2.3716931343078613,
+    "log": "TNLean_PEPS_AreaLaw_Scan_OriginalTruncation.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/PhysicalBoxRoundBound.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.PhysicalBoxRoundBound"
+    ],
+    "exit": 0,
+    "seconds": 8.892610788345337,
+    "log": "TNLean_PEPS_AreaLaw_Scan_PhysicalBoxRoundBound.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/PhysicalBoxRoundBound.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/PhysicalBoxRoundBound.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.461406946182251,
+    "log": "TNLean_PEPS_AreaLaw_Scan_PhysicalBoxRoundBound.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/ScanTruncationInputs.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.ScanTruncationInputs"
+    ],
+    "exit": 0,
+    "seconds": 17.093904495239258,
+    "log": "TNLean_PEPS_AreaLaw_Scan_ScanTruncationInputs.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/ScanTruncationInputs.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/ScanTruncationInputs.lean"
+    ],
+    "exit": 0,
+    "seconds": 12.882890462875366,
+    "log": "TNLean_PEPS_AreaLaw_Scan_ScanTruncationInputs.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/PhysicalScanner.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.PhysicalScanner"
+    ],
+    "exit": 0,
+    "seconds": 15.230953931808472,
+    "log": "TNLean_PEPS_AreaLaw_Scan_PhysicalScanner.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/PhysicalScanner.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/PhysicalScanner.lean"
+    ],
+    "exit": 0,
+    "seconds": 6.369249105453491,
+    "log": "TNLean_PEPS_AreaLaw_Scan_PhysicalScanner.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/PhysicalTemplateInformation.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.PhysicalTemplateInformation"
+    ],
+    "exit": 0,
+    "seconds": 9.25607442855835,
+    "log": "TNLean_PEPS_AreaLaw_Scan_PhysicalTemplateInformation.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/PhysicalTemplateInformation.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/PhysicalTemplateInformation.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.106425046920776,
+    "log": "TNLean_PEPS_AreaLaw_Scan_PhysicalTemplateInformation.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/ScanHistories.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.ScanHistories"
+    ],
+    "exit": 0,
+    "seconds": 4.7752602100372314,
+    "log": "TNLean_PEPS_AreaLaw_Scan_ScanHistories.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/ScanHistories.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/ScanHistories.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.151472330093384,
+    "log": "TNLean_PEPS_AreaLaw_Scan_ScanHistories.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SelectedDensityDelta.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.SelectedDensityDelta"
+    ],
+    "exit": 0,
+    "seconds": 9.292749643325806,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SelectedDensityDelta.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SelectedDensityDelta.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/SelectedDensityDelta.lean"
+    ],
+    "exit": 0,
+    "seconds": 5.394468069076538,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SelectedDensityDelta.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceChargeSelection.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.SourceChargeSelection"
+    ],
+    "exit": 0,
+    "seconds": 13.140011310577393,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceChargeSelection.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceChargeSelection.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/SourceChargeSelection.lean"
+    ],
+    "exit": 0,
+    "seconds": 8.58076548576355,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceChargeSelection.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceComparators.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.SourceComparators"
+    ],
+    "exit": 0,
+    "seconds": 6.915648698806763,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceComparators.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceComparators.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/SourceComparators.lean"
+    ],
+    "exit": 0,
+    "seconds": 5.487436532974243,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceComparators.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetStatusMoments.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.SuppliedTargetStatusMoments"
+    ],
+    "exit": 0,
+    "seconds": 4.689042568206787,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SuppliedTargetStatusMoments.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetStatusMoments.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetStatusMoments.lean"
+    ],
+    "exit": 0,
+    "seconds": 2.618359327316284,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SuppliedTargetStatusMoments.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetNormAttachment.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.SuppliedTargetNormAttachment"
+    ],
+    "exit": 0,
+    "seconds": 11.376813411712646,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SuppliedTargetNormAttachment.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetNormAttachment.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetNormAttachment.lean"
+    ],
+    "exit": 0,
+    "seconds": 7.370264053344727,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SuppliedTargetNormAttachment.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedDensity.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.SourceSelectedDensity"
+    ],
+    "exit": 0,
+    "seconds": 15.859205961227417,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceSelectedDensity.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedDensity.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/SourceSelectedDensity.lean"
+    ],
+    "exit": 0,
+    "seconds": 11.491786003112793,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceSelectedDensity.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedEnergy.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.SourceSelectedEnergy"
+    ],
+    "exit": 0,
+    "seconds": 18.60178565979004,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceSelectedEnergy.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedEnergy.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/SourceSelectedEnergy.lean"
+    ],
+    "exit": 0,
+    "seconds": 12.797377347946167,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceSelectedEnergy.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.SourceScanner"
+    ],
+    "exit": 0,
+    "seconds": 23.779098510742188,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceScanner.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean"
+    ],
+    "exit": 0,
+    "seconds": 21.445616722106934,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceScanner.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpDensity.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpDensity"
+    ],
+    "exit": 0,
+    "seconds": 28.413501262664795,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceSelectedSharpDensity.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpDensity.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpDensity.lean"
+    ],
+    "exit": 0,
+    "seconds": 23.07221031188965,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceSelectedSharpDensity.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceStatusMarginalMoments.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.SourceStatusMarginalMoments"
+    ],
+    "exit": 0,
+    "seconds": 5.028801202774048,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceStatusMarginalMoments.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceStatusMarginalMoments.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/SourceStatusMarginalMoments.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.8551883697509766,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceStatusMarginalMoments.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpUpper.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan.SourceTargetSharpUpper"
+    ],
+    "exit": 0,
+    "seconds": 12.254326105117798,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceTargetSharpUpper.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpUpper.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpUpper.lean"
+    ],
+    "exit": 0,
+    "seconds": 7.880318880081177,
+    "log": "TNLean_PEPS_AreaLaw_Scan_SourceTargetSharpUpper.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.Scan"
+    ],
+    "exit": 0,
+    "seconds": 11.699219226837158,
+    "log": "TNLean_PEPS_AreaLaw_Scan.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/Scan.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/Scan.lean"
+    ],
+    "exit": 0,
+    "seconds": 5.070362567901611,
+    "log": "TNLean_PEPS_AreaLaw_Scan.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/WeakRectanglePartialRowEntropy.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw.WeakRectanglePartialRowEntropy"
+    ],
+    "exit": 0,
+    "seconds": 4.713294506072998,
+    "log": "TNLean_PEPS_AreaLaw_WeakRectanglePartialRowEntropy.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw/WeakRectanglePartialRowEntropy.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw/WeakRectanglePartialRowEntropy.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.7291996479034424,
+    "log": "TNLean_PEPS_AreaLaw_WeakRectanglePartialRowEntropy.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.AreaLaw"
+    ],
+    "exit": 0,
+    "seconds": 12.79080319404602,
+    "log": "TNLean_PEPS_AreaLaw.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/AreaLaw.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/AreaLaw.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.683114767074585,
+    "log": "TNLean_PEPS_AreaLaw.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/Examples/CZXRectangleDensity.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.Examples.CZXRectangleDensity"
+    ],
+    "exit": 0,
+    "seconds": 1.7946250438690186,
+    "log": "TNLean_PEPS_Examples_CZXRectangleDensity.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/Examples/CZXRectangleDensity.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/Examples/CZXRectangleDensity.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.97913122177124,
+    "log": "TNLean_PEPS_Examples_CZXRectangleDensity.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/Examples/CZXWrappingRectangle.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.Examples.CZXWrappingRectangle"
+    ],
+    "exit": 0,
+    "seconds": 5.242720603942871,
+    "log": "TNLean_PEPS_Examples_CZXWrappingRectangle.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/Examples/CZXWrappingRectangle.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/Examples/CZXWrappingRectangle.lean"
+    ],
+    "exit": 0,
+    "seconds": 18.233644485473633,
+    "log": "TNLean_PEPS_Examples_CZXWrappingRectangle.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/Examples/CZXBoundaryAnomaly.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.Examples.CZXBoundaryAnomaly"
+    ],
+    "exit": 0,
+    "seconds": 374.72615027427673,
+    "log": "TNLean_PEPS_Examples_CZXBoundaryAnomaly.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/Examples/CZXBoundaryAnomaly.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/Examples/CZXBoundaryAnomaly.lean"
+    ],
+    "exit": 0,
+    "seconds": 19.096370935440063,
+    "log": "TNLean_PEPS_Examples_CZXBoundaryAnomaly.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/Examples.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.Examples"
+    ],
+    "exit": 0,
+    "seconds": 99.16360020637512,
+    "log": "TNLean_PEPS_Examples.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/Examples.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/Examples.lean"
+    ],
+    "exit": 0,
+    "seconds": 6.98317813873291,
+    "log": "TNLean_PEPS_Examples.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GInjectivePhysicalMap.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GInjectivePhysicalMap"
+    ],
+    "exit": 0,
+    "seconds": 11.617089033126831,
+    "log": "TNLean_PEPS_GInjectivePhysicalMap.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GInjectivePhysicalMap.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GInjectivePhysicalMap.lean"
+    ],
+    "exit": 0,
+    "seconds": 6.0974860191345215,
+    "log": "TNLean_PEPS_GInjectivePhysicalMap.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GInjectivePhysicalEquivalence.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GInjectivePhysicalEquivalence"
+    ],
+    "exit": 0,
+    "seconds": 5.229686260223389,
+    "log": "TNLean_PEPS_GInjectivePhysicalEquivalence.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GInjectivePhysicalEquivalence.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GInjectivePhysicalEquivalence.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.105426073074341,
+    "log": "TNLean_PEPS_GInjectivePhysicalEquivalence.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GInjectivePhysicalNormalForm.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GInjectivePhysicalNormalForm"
+    ],
+    "exit": 0,
+    "seconds": 7.25597071647644,
+    "log": "TNLean_PEPS_GInjectivePhysicalNormalForm.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GInjectivePhysicalNormalForm.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GInjectivePhysicalNormalForm.lean"
+    ],
+    "exit": 0,
+    "seconds": 6.669459581375122,
+    "log": "TNLean_PEPS_GInjectivePhysicalNormalForm.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOpenSemiRegularSupport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphOpenSemiRegularSupport"
+    ],
+    "exit": 0,
+    "seconds": 48.13559818267822,
+    "log": "TNLean_PEPS_GraphOpenSemiRegularSupport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOpenSemiRegularSupport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphOpenSemiRegularSupport.lean"
+    ],
+    "exit": 0,
+    "seconds": 6.6655144691467285,
+    "log": "TNLean_PEPS_GraphOpenSemiRegularSupport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOpenBondFactors.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphOpenBondFactors"
+    ],
+    "exit": 0,
+    "seconds": 5.100662708282471,
+    "log": "TNLean_PEPS_GraphOpenBondFactors.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOpenBondFactors.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphOpenBondFactors.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.687917470932007,
+    "log": "TNLean_PEPS_GraphOpenBondFactors.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionOperatorBlocks.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegionOperatorBlocks"
+    ],
+    "exit": 0,
+    "seconds": 4.282795667648315,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionOperatorBlocks.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionOperatorBlocks.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegionOperatorBlocks.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.1499271392822266,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionOperatorBlocks.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphBondRegionBlocks.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphBondRegionBlocks"
+    ],
+    "exit": 0,
+    "seconds": 11.112318992614746,
+    "log": "TNLean_PEPS_GraphBondRegionBlocks.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphBondRegionBlocks.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphBondRegionBlocks.lean"
+    ],
+    "exit": 0,
+    "seconds": 5.489898204803467,
+    "log": "TNLean_PEPS_GraphBondRegionBlocks.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/GraphCanonicalBondCoordinates.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.GraphCanonicalBondCoordinates"
+    ],
+    "exit": 0,
+    "seconds": 5.4931511878967285,
+    "log": "TNLean_PEPS_ParentHamiltonian_GraphCanonicalBondCoordinates.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/GraphCanonicalBondCoordinates.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/GraphCanonicalBondCoordinates.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.667372703552246,
+    "log": "TNLean_PEPS_ParentHamiltonian_GraphCanonicalBondCoordinates.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphAveragingGInjective.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphAveragingGInjective"
+    ],
+    "exit": 0,
+    "seconds": 10.875268697738647,
+    "log": "TNLean_PEPS_GraphAveragingGInjective.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphAveragingGInjective.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphAveragingGInjective.lean"
+    ],
+    "exit": 0,
+    "seconds": 15.134570598602295,
+    "log": "TNLean_PEPS_GraphAveragingGInjective.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/GraphBondPhysicalCoordinates.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.GraphBondPhysicalCoordinates"
+    ],
+    "exit": 0,
+    "seconds": 5.043933868408203,
+    "log": "TNLean_PEPS_ParentHamiltonian_GraphBondPhysicalCoordinates.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/GraphBondPhysicalCoordinates.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/GraphBondPhysicalCoordinates.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.4643890857696533,
+    "log": "TNLean_PEPS_ParentHamiltonian_GraphBondPhysicalCoordinates.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphBondFamilyRegionBlocks.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphBondFamilyRegionBlocks"
+    ],
+    "exit": 0,
+    "seconds": 4.979828596115112,
+    "log": "TNLean_PEPS_GraphBondFamilyRegionBlocks.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphBondFamilyRegionBlocks.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphBondFamilyRegionBlocks.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.93738317489624,
+    "log": "TNLean_PEPS_GraphBondFamilyRegionBlocks.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOpenCopyTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphOpenCopyTransport"
+    ],
+    "exit": 0,
+    "seconds": 8.4178786277771,
+    "log": "TNLean_PEPS_GraphOpenCopyTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOpenCopyTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphOpenCopyTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 7.446147680282593,
+    "log": "TNLean_PEPS_GraphOpenCopyTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/CopyCanonicalLocalTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.CopyCanonicalLocalTransport"
+    ],
+    "exit": 0,
+    "seconds": 5.846200704574585,
+    "log": "TNLean_PEPS_ParentHamiltonian_CopyCanonicalLocalTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/CopyCanonicalLocalTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/CopyCanonicalLocalTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 6.666296720504761,
+    "log": "TNLean_PEPS_ParentHamiltonian_CopyCanonicalLocalTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOpenMultiplicityTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphOpenMultiplicityTransport"
+    ],
+    "exit": 0,
+    "seconds": 5.052002668380737,
+    "log": "TNLean_PEPS_GraphOpenMultiplicityTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOpenMultiplicityTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphOpenMultiplicityTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.550450563430786,
+    "log": "TNLean_PEPS_GraphOpenMultiplicityTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/SemiRegularCanonicalLocalTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.SemiRegularCanonicalLocalTransport"
+    ],
+    "exit": 0,
+    "seconds": 5.610553503036499,
+    "log": "TNLean_PEPS_ParentHamiltonian_SemiRegularCanonicalLocalTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/SemiRegularCanonicalLocalTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/SemiRegularCanonicalLocalTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.5810024738311768,
+    "log": "TNLean_PEPS_ParentHamiltonian_SemiRegularCanonicalLocalTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOpenBondCoordinateTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphOpenBondCoordinateTransport"
+    ],
+    "exit": 0,
+    "seconds": 7.832046031951904,
+    "log": "TNLean_PEPS_GraphOpenBondCoordinateTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOpenBondCoordinateTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphOpenBondCoordinateTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 10.987938642501831,
+    "log": "TNLean_PEPS_GraphOpenBondCoordinateTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphRepeatedParentSupport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphRepeatedParentSupport"
+    ],
+    "exit": 0,
+    "seconds": 8.5857834815979,
+    "log": "TNLean_PEPS_GraphRepeatedParentSupport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphRepeatedParentSupport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphRepeatedParentSupport.lean"
+    ],
+    "exit": 0,
+    "seconds": 5.671954154968262,
+    "log": "TNLean_PEPS_GraphRepeatedParentSupport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOpenBondRangeSupport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphOpenBondRangeSupport"
+    ],
+    "exit": 0,
+    "seconds": 6.400208234786987,
+    "log": "TNLean_PEPS_GraphOpenBondRangeSupport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOpenBondRangeSupport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphOpenBondRangeSupport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.934088706970215,
+    "log": "TNLean_PEPS_GraphOpenBondRangeSupport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOrientedAveragingBondState.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphOrientedAveragingBondState"
+    ],
+    "exit": 0,
+    "seconds": 7.309479713439941,
+    "log": "TNLean_PEPS_GraphOrientedAveragingBondState.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOrientedAveragingBondState.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphOrientedAveragingBondState.lean"
+    ],
+    "exit": 0,
+    "seconds": 6.878224611282349,
+    "log": "TNLean_PEPS_GraphOrientedAveragingBondState.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOrientedBondRangeSupport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphOrientedBondRangeSupport"
+    ],
+    "exit": 0,
+    "seconds": 5.379032850265503,
+    "log": "TNLean_PEPS_GraphOrientedBondRangeSupport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOrientedBondRangeSupport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphOrientedBondRangeSupport.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.130912780761719,
+    "log": "TNLean_PEPS_GraphOrientedBondRangeSupport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOrientedCoordinateTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphOrientedCoordinateTransport"
+    ],
+    "exit": 0,
+    "seconds": 7.038253545761108,
+    "log": "TNLean_PEPS_GraphOrientedCoordinateTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOrientedCoordinateTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphOrientedCoordinateTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 10.167038202285767,
+    "log": "TNLean_PEPS_GraphOrientedCoordinateTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOrientedCopyTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphOrientedCopyTransport"
+    ],
+    "exit": 0,
+    "seconds": 6.197805166244507,
+    "log": "TNLean_PEPS_GraphOrientedCopyTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOrientedCopyTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphOrientedCopyTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 9.244569063186646,
+    "log": "TNLean_PEPS_GraphOrientedCopyTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOrientedGInjective.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphOrientedGInjective"
+    ],
+    "exit": 0,
+    "seconds": 10.842398881912231,
+    "log": "TNLean_PEPS_GraphOrientedGInjective.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphOrientedGInjective.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphOrientedGInjective.lean"
+    ],
+    "exit": 0,
+    "seconds": 14.457103729248047,
+    "log": "TNLean_PEPS_GraphOrientedGInjective.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/GraphDependentCutCoordinates.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.GraphDependentCutCoordinates"
+    ],
+    "exit": 0,
+    "seconds": 5.062427282333374,
+    "log": "TNLean_PEPS_ParentHamiltonian_GraphDependentCutCoordinates.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/GraphDependentCutCoordinates.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/GraphDependentCutCoordinates.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.6663591861724854,
+    "log": "TNLean_PEPS_ParentHamiltonian_GraphDependentCutCoordinates.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphPhysicalPadding.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.GraphPhysicalPadding"
+    ],
+    "exit": 0,
+    "seconds": 12.794115543365479,
+    "log": "TNLean_PEPS_GraphPhysicalPadding.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/GraphPhysicalPadding.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/GraphPhysicalPadding.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.5541458129882812,
+    "log": "TNLean_PEPS_GraphPhysicalPadding.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/NativeTorusClosures.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.NativeTorusClosures"
+    ],
+    "exit": 0,
+    "seconds": 18.437994718551636,
+    "log": "TNLean_PEPS_NativeTorusClosures.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/NativeTorusClosures.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/NativeTorusClosures.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.042344808578491,
+    "log": "TNLean_PEPS_NativeTorusClosures.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/NativeTorusClosureIndependence.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.NativeTorusClosureIndependence"
+    ],
+    "exit": 0,
+    "seconds": 18.50966191291809,
+    "log": "TNLean_PEPS_NativeTorusClosureIndependence.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/NativeTorusClosureIndependence.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/NativeTorusClosureIndependence.lean"
+    ],
+    "exit": 0,
+    "seconds": 5.047022104263306,
+    "log": "TNLean_PEPS_NativeTorusClosureIndependence.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/NativeTorusClosureDimension.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.NativeTorusClosureDimension"
+    ],
+    "exit": 0,
+    "seconds": 4.80693793296814,
+    "log": "TNLean_PEPS_NativeTorusClosureDimension.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/NativeTorusClosureDimension.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/NativeTorusClosureDimension.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.3790109157562256,
+    "log": "TNLean_PEPS_NativeTorusClosureDimension.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/OrientedCopyParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.OrientedCopyParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 8.647365808486938,
+    "log": "TNLean_PEPS_ParentHamiltonian_OrientedCopyParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/OrientedCopyParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/OrientedCopyParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 7.934924602508545,
+    "log": "TNLean_PEPS_ParentHamiltonian_OrientedCopyParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/CopyWeightPhysicalTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.CopyWeightPhysicalTransport"
+    ],
+    "exit": 0,
+    "seconds": 5.49390721321106,
+    "log": "TNLean_PEPS_ParentHamiltonian_CopyWeightPhysicalTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/CopyWeightPhysicalTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/CopyWeightPhysicalTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.7155370712280273,
+    "log": "TNLean_PEPS_ParentHamiltonian_CopyWeightPhysicalTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/OrientedCopyWeightPhysicalTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.OrientedCopyWeightPhysicalTransport"
+    ],
+    "exit": 0,
+    "seconds": 4.360479116439819,
+    "log": "TNLean_PEPS_ParentHamiltonian_OrientedCopyWeightPhysicalTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/OrientedCopyWeightPhysicalTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/OrientedCopyWeightPhysicalTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.07659649848938,
+    "log": "TNLean_PEPS_ParentHamiltonian_OrientedCopyWeightPhysicalTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/OrientedPositiveMultiplicityParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.OrientedPositiveMultiplicityParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 4.247371673583984,
+    "log": "TNLean_PEPS_ParentHamiltonian_OrientedPositiveMultiplicityParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/OrientedPositiveMultiplicityParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/OrientedPositiveMultiplicityParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 2.721691608428955,
+    "log": "TNLean_PEPS_ParentHamiltonian_OrientedPositiveMultiplicityParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/CopyCanonicalParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.CopyCanonicalParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 4.584142208099365,
+    "log": "TNLean_PEPS_ParentHamiltonian_CopyCanonicalParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/CopyCanonicalParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/CopyCanonicalParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.3356781005859375,
+    "log": "TNLean_PEPS_ParentHamiltonian_CopyCanonicalParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/PositiveMultiplicityParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.PositiveMultiplicityParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 4.284566164016724,
+    "log": "TNLean_PEPS_ParentHamiltonian_PositiveMultiplicityParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/PositiveMultiplicityParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/PositiveMultiplicityParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.633892297744751,
+    "log": "TNLean_PEPS_ParentHamiltonian_PositiveMultiplicityParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/SemiRegularCanonicalParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.SemiRegularCanonicalParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 4.105669021606445,
+    "log": "TNLean_PEPS_ParentHamiltonian_SemiRegularCanonicalParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/SemiRegularCanonicalParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/SemiRegularCanonicalParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.0470128059387207,
+    "log": "TNLean_PEPS_ParentHamiltonian_SemiRegularCanonicalParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/OrientedCoordinateParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.OrientedCoordinateParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 5.57950758934021,
+    "log": "TNLean_PEPS_ParentHamiltonian_OrientedCoordinateParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/OrientedCoordinateParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/OrientedCoordinateParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.764998197555542,
+    "log": "TNLean_PEPS_ParentHamiltonian_OrientedCoordinateParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/GraphCoordinateCanonicalParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.GraphCoordinateCanonicalParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 4.697888374328613,
+    "log": "TNLean_PEPS_ParentHamiltonian_GraphCoordinateCanonicalParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/GraphCoordinateCanonicalParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/GraphCoordinateCanonicalParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.7205262184143066,
+    "log": "TNLean_PEPS_ParentHamiltonian_GraphCoordinateCanonicalParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/ArbitrarySemiRegularParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.ArbitrarySemiRegularParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 18.48085045814514,
+    "log": "TNLean_PEPS_ParentHamiltonian_ArbitrarySemiRegularParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/ArbitrarySemiRegularParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/ArbitrarySemiRegularParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.680901527404785,
+    "log": "TNLean_PEPS_ParentHamiltonian_ArbitrarySemiRegularParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/ArbitraryOrientedSemiRegularParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.ArbitraryOrientedSemiRegularParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 4.74314022064209,
+    "log": "TNLean_PEPS_ParentHamiltonian_ArbitraryOrientedSemiRegularParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/ArbitraryOrientedSemiRegularParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/ArbitraryOrientedSemiRegularParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.5717101097106934,
+    "log": "TNLean_PEPS_ParentHamiltonian_ArbitraryOrientedSemiRegularParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/CycleParentGroundSpace.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.CycleParentGroundSpace"
+    ],
+    "exit": 0,
+    "seconds": 25.270620822906494,
+    "log": "TNLean_PEPS_ParentHamiltonian_CycleParentGroundSpace.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/CycleParentGroundSpace.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/CycleParentGroundSpace.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.178450345993042,
+    "log": "TNLean_PEPS_ParentHamiltonian_CycleParentGroundSpace.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/CyclePhysicalDeformation.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.CyclePhysicalDeformation"
+    ],
+    "exit": 0,
+    "seconds": 25.044053554534912,
+    "log": "TNLean_PEPS_ParentHamiltonian_CyclePhysicalDeformation.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/CyclePhysicalDeformation.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/CyclePhysicalDeformation.lean"
+    ],
+    "exit": 0,
+    "seconds": 2.5905725955963135,
+    "log": "TNLean_PEPS_ParentHamiltonian_CyclePhysicalDeformation.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionGroundSpaceNesting.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegionGroundSpaceNesting"
+    ],
+    "exit": 0,
+    "seconds": 4.922512769699097,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionGroundSpaceNesting.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionGroundSpaceNesting.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegionGroundSpaceNesting.lean"
+    ],
+    "exit": 0,
+    "seconds": 6.180729150772095,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionGroundSpaceNesting.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionVertexImageSupport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegionVertexImageSupport"
+    ],
+    "exit": 0,
+    "seconds": 4.93847131729126,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionVertexImageSupport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionVertexImageSupport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegionVertexImageSupport.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.6313769817352295,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionVertexImageSupport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RangePhysicalParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RangePhysicalParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 6.503422975540161,
+    "log": "TNLean_PEPS_ParentHamiltonian_RangePhysicalParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RangePhysicalParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RangePhysicalParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 5.3113062381744385,
+    "log": "TNLean_PEPS_ParentHamiltonian_RangePhysicalParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/GInjectiveParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.GInjectiveParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 4.52568507194519,
+    "log": "TNLean_PEPS_ParentHamiltonian_GInjectiveParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/GInjectiveParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/GInjectiveParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.108184337615967,
+    "log": "TNLean_PEPS_ParentHamiltonian_GInjectiveParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionFlatness.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularRegionFlatness"
+    ],
+    "exit": 0,
+    "seconds": 22.672566890716553,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionFlatness.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionFlatness.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularRegionFlatness.lean"
+    ],
+    "exit": 0,
+    "seconds": 15.850076675415039,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionFlatness.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionBondRightInvariance.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularRegionBondRightInvariance"
+    ],
+    "exit": 0,
+    "seconds": 5.307931661605835,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionBondRightInvariance.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionBondRightInvariance.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularRegionBondRightInvariance.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.7260050773620605,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionBondRightInvariance.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionCommutingConstraints.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularRegionCommutingConstraints"
+    ],
+    "exit": 0,
+    "seconds": 13.837233543395996,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionCommutingConstraints.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionCommutingConstraints.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularRegionCommutingConstraints.lean"
+    ],
+    "exit": 0,
+    "seconds": 5.392751693725586,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionCommutingConstraints.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionOrbitCoordinates.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularRegionOrbitCoordinates"
+    ],
+    "exit": 0,
+    "seconds": 4.856338977813721,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionOrbitCoordinates.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionOrbitCoordinates.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularRegionOrbitCoordinates.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.591050863265991,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionOrbitCoordinates.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionInvariantSpan.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularRegionInvariantSpan"
+    ],
+    "exit": 0,
+    "seconds": 8.736245155334473,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionInvariantSpan.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionInvariantSpan.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularRegionInvariantSpan.lean"
+    ],
+    "exit": 0,
+    "seconds": 9.981539249420166,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionInvariantSpan.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularOverlappingConstraints.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularOverlappingConstraints"
+    ],
+    "exit": 0,
+    "seconds": 4.913576602935791,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularOverlappingConstraints.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularOverlappingConstraints.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularOverlappingConstraints.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.9485809803009033,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularOverlappingConstraints.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularConstraintProjectors.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularConstraintProjectors"
+    ],
+    "exit": 0,
+    "seconds": 4.923275709152222,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularConstraintProjectors.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularConstraintProjectors.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularConstraintProjectors.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.562192916870117,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularConstraintProjectors.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularConstraintFixedSpaces.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularConstraintFixedSpaces"
+    ],
+    "exit": 0,
+    "seconds": 4.757283687591553,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularConstraintFixedSpaces.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularConstraintFixedSpaces.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularConstraintFixedSpaces.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.181056976318359,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularConstraintFixedSpaces.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularLiftedRegionRange.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularLiftedRegionRange"
+    ],
+    "exit": 0,
+    "seconds": 4.554946422576904,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularLiftedRegionRange.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularLiftedRegionRange.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularLiftedRegionRange.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.8191256523132324,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularLiftedRegionRange.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionalProjectorRange.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularRegionalProjectorRange"
+    ],
+    "exit": 0,
+    "seconds": 5.7758469581604,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionalProjectorRange.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionalProjectorRange.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularRegionalProjectorRange.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.516663074493408,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionalProjectorRange.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularCanonicalRegionProjector.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularCanonicalRegionProjector"
+    ],
+    "exit": 0,
+    "seconds": 5.413048982620239,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularCanonicalRegionProjector.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularCanonicalRegionProjector.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularCanonicalRegionProjector.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.4154860973358154,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularCanonicalRegionProjector.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularIsometricRegionProjector.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularIsometricRegionProjector"
+    ],
+    "exit": 0,
+    "seconds": 6.587674140930176,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularIsometricRegionProjector.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularIsometricRegionProjector.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularIsometricRegionProjector.lean"
+    ],
+    "exit": 0,
+    "seconds": 5.155023813247681,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularIsometricRegionProjector.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularIsometricSiteImages.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularIsometricSiteImages"
+    ],
+    "exit": 0,
+    "seconds": 5.40868616104126,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularIsometricSiteImages.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularIsometricSiteImages.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularIsometricSiteImages.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.1008405685424805,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularIsometricSiteImages.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/ProductSiteProjectorCommutation.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.ProductSiteProjectorCommutation"
+    ],
+    "exit": 0,
+    "seconds": 4.749122619628906,
+    "log": "TNLean_PEPS_ParentHamiltonian_ProductSiteProjectorCommutation.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/ProductSiteProjectorCommutation.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/ProductSiteProjectorCommutation.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.9688804149627686,
+    "log": "TNLean_PEPS_ParentHamiltonian_ProductSiteProjectorCommutation.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/GIsometricRegionParentHamiltonian.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.GIsometricRegionParentHamiltonian"
+    ],
+    "exit": 0,
+    "seconds": 4.652987957000732,
+    "log": "TNLean_PEPS_ParentHamiltonian_GIsometricRegionParentHamiltonian.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/GIsometricRegionParentHamiltonian.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/GIsometricRegionParentHamiltonian.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.5260684490203857,
+    "log": "TNLean_PEPS_ParentHamiltonian_GIsometricRegionParentHamiltonian.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/GraphDependentRegionSupport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.GraphDependentRegionSupport"
+    ],
+    "exit": 0,
+    "seconds": 5.5766706466674805,
+    "log": "TNLean_PEPS_ParentHamiltonian_GraphDependentRegionSupport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/GraphDependentRegionSupport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/GraphDependentRegionSupport.lean"
+    ],
+    "exit": 0,
+    "seconds": 5.61913537979126,
+    "log": "TNLean_PEPS_ParentHamiltonian_GraphDependentRegionSupport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/VertexBondRegionConstraint.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.VertexBondRegionConstraint"
+    ],
+    "exit": 0,
+    "seconds": 9.827332973480225,
+    "log": "TNLean_PEPS_ParentHamiltonian_VertexBondRegionConstraint.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/VertexBondRegionConstraint.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/VertexBondRegionConstraint.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.072595834732056,
+    "log": "TNLean_PEPS_ParentHamiltonian_VertexBondRegionConstraint.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionParentComparison.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegionParentComparison"
+    ],
+    "exit": 0,
+    "seconds": 11.636402130126953,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionParentComparison.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionParentComparison.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegionParentComparison.lean"
+    ],
+    "exit": 0,
+    "seconds": 6.019659519195557,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionParentComparison.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionFullGroundSpace.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegionFullGroundSpace"
+    ],
+    "exit": 0,
+    "seconds": 4.656268358230591,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionFullGroundSpace.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionFullGroundSpace.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegionFullGroundSpace.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.629816770553589,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionFullGroundSpace.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/VertexBondState.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.VertexBondState"
+    ],
+    "exit": 0,
+    "seconds": 4.6140477657318115,
+    "log": "TNLean_PEPS_ParentHamiltonian_VertexBondState.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/VertexBondState.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/VertexBondState.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.98988676071167,
+    "log": "TNLean_PEPS_ParentHamiltonian_VertexBondState.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/InjectiveCoveringParentGroundSpace.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.InjectiveCoveringParentGroundSpace"
+    ],
+    "exit": 0,
+    "seconds": 4.4258832931518555,
+    "log": "TNLean_PEPS_ParentHamiltonian_InjectiveCoveringParentGroundSpace.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/InjectiveCoveringParentGroundSpace.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/InjectiveCoveringParentGroundSpace.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.048251152038574,
+    "log": "TNLean_PEPS_ParentHamiltonian_InjectiveCoveringParentGroundSpace.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/InjectiveNearestNeighborParent.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.InjectiveNearestNeighborParent"
+    ],
+    "exit": 0,
+    "seconds": 4.171630144119263,
+    "log": "TNLean_PEPS_ParentHamiltonian_InjectiveNearestNeighborParent.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/InjectiveNearestNeighborParent.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/InjectiveNearestNeighborParent.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.049048900604248,
+    "log": "TNLean_PEPS_ParentHamiltonian_InjectiveNearestNeighborParent.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/InjectiveRegionParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.InjectiveRegionParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 4.285231351852417,
+    "log": "TNLean_PEPS_ParentHamiltonian_InjectiveRegionParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/InjectiveRegionParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/InjectiveRegionParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.0543856620788574,
+    "log": "TNLean_PEPS_ParentHamiltonian_InjectiveRegionParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/InjectiveRegionSupport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.InjectiveRegionSupport"
+    ],
+    "exit": 0,
+    "seconds": 7.905061960220337,
+    "log": "TNLean_PEPS_ParentHamiltonian_InjectiveRegionSupport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/InjectiveRegionSupport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/InjectiveRegionSupport.lean"
+    ],
+    "exit": 0,
+    "seconds": 6.89850115776062,
+    "log": "TNLean_PEPS_ParentHamiltonian_InjectiveRegionSupport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/NativeTorusClosureMembership.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.NativeTorusClosureMembership"
+    ],
+    "exit": 0,
+    "seconds": 35.747026205062866,
+    "log": "TNLean_PEPS_ParentHamiltonian_NativeTorusClosureMembership.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/NativeTorusClosureMembership.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/NativeTorusClosureMembership.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.178467273712158,
+    "log": "TNLean_PEPS_ParentHamiltonian_NativeTorusClosureMembership.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionParentDependentCut.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegionParentDependentCut"
+    ],
+    "exit": 0,
+    "seconds": 13.645770072937012,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionParentDependentCut.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionParentDependentCut.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegionParentDependentCut.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.668548822402954,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionParentDependentCut.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/ThreeBlockPhysicalExtension.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.ThreeBlockPhysicalExtension"
+    ],
+    "exit": 0,
+    "seconds": 15.0270357131958,
+    "log": "TNLean_PEPS_ParentHamiltonian_ThreeBlockPhysicalExtension.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/ThreeBlockPhysicalExtension.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/ThreeBlockPhysicalExtension.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.484070539474487,
+    "log": "TNLean_PEPS_ParentHamiltonian_ThreeBlockPhysicalExtension.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionParentBondCoefficients.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegionParentBondCoefficients"
+    ],
+    "exit": 0,
+    "seconds": 7.000396251678467,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionParentBondCoefficients.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionParentBondCoefficients.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegionParentBondCoefficients.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.484001636505127,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionParentBondCoefficients.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularGlobalParentCoordinates.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularGlobalParentCoordinates"
+    ],
+    "exit": 0,
+    "seconds": 9.031181335449219,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularGlobalParentCoordinates.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularGlobalParentCoordinates.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularGlobalParentCoordinates.lean"
+    ],
+    "exit": 0,
+    "seconds": 7.353915691375732,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularGlobalParentCoordinates.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/TorusRegularParentCoordinates.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.TorusRegularParentCoordinates"
+    ],
+    "exit": 0,
+    "seconds": 11.780532836914062,
+    "log": "TNLean_PEPS_ParentHamiltonian_TorusRegularParentCoordinates.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/TorusRegularParentCoordinates.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/TorusRegularParentCoordinates.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.831603527069092,
+    "log": "TNLean_PEPS_ParentHamiltonian_TorusRegularParentCoordinates.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/TorusParentFlatness.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.TorusParentFlatness"
+    ],
+    "exit": 0,
+    "seconds": 4.88321328163147,
+    "log": "TNLean_PEPS_ParentHamiltonian_TorusParentFlatness.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/TorusParentFlatness.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/TorusParentFlatness.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.9354918003082275,
+    "log": "TNLean_PEPS_ParentHamiltonian_TorusParentFlatness.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/TorusDependentParentSeamCuts.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.TorusDependentParentSeamCuts"
+    ],
+    "exit": 0,
+    "seconds": 7.030968904495239,
+    "log": "TNLean_PEPS_ParentHamiltonian_TorusDependentParentSeamCuts.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/TorusDependentParentSeamCuts.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/TorusDependentParentSeamCuts.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.668750762939453,
+    "log": "TNLean_PEPS_ParentHamiltonian_TorusDependentParentSeamCuts.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/NativeTorusParentSpanning.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.NativeTorusParentSpanning"
+    ],
+    "exit": 0,
+    "seconds": 5.991588115692139,
+    "log": "TNLean_PEPS_ParentHamiltonian_NativeTorusParentSpanning.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/NativeTorusParentSpanning.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/NativeTorusParentSpanning.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.933553695678711,
+    "log": "TNLean_PEPS_ParentHamiltonian_NativeTorusParentSpanning.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/NativeTorusParentClassification.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.NativeTorusParentClassification"
+    ],
+    "exit": 0,
+    "seconds": 5.458509206771851,
+    "log": "TNLean_PEPS_ParentHamiltonian_NativeTorusParentClassification.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/NativeTorusParentClassification.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/NativeTorusParentClassification.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.509946346282959,
+    "log": "TNLean_PEPS_ParentHamiltonian_NativeTorusParentClassification.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/PaddedPhysicalParent.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.PaddedPhysicalParent"
+    ],
+    "exit": 0,
+    "seconds": 4.34239649772644,
+    "log": "TNLean_PEPS_ParentHamiltonian_PaddedPhysicalParent.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/PaddedPhysicalParent.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/PaddedPhysicalParent.lean"
+    ],
+    "exit": 0,
+    "seconds": 2.655444860458374,
+    "log": "TNLean_PEPS_ParentHamiltonian_PaddedPhysicalParent.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/TorusNonuniformParentSeamCuts.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.TorusNonuniformParentSeamCuts"
+    ],
+    "exit": 0,
+    "seconds": 5.10000467300415,
+    "log": "TNLean_PEPS_ParentHamiltonian_TorusNonuniformParentSeamCuts.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/TorusNonuniformParentSeamCuts.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/TorusNonuniformParentSeamCuts.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.8488874435424805,
+    "log": "TNLean_PEPS_ParentHamiltonian_TorusNonuniformParentSeamCuts.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/NonuniformNativeParentClassification.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.NonuniformNativeParentClassification"
+    ],
+    "exit": 0,
+    "seconds": 5.1875574588775635,
+    "log": "TNLean_PEPS_ParentHamiltonian_NonuniformNativeParentClassification.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/NonuniformNativeParentClassification.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/NonuniformNativeParentClassification.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.194704532623291,
+    "log": "TNLean_PEPS_ParentHamiltonian_NonuniformNativeParentClassification.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/OrientedSemiRegularGInjectiveParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.OrientedSemiRegularGInjectiveParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 4.456599473953247,
+    "log": "TNLean_PEPS_ParentHamiltonian_OrientedSemiRegularGInjectiveParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/OrientedSemiRegularGInjectiveParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/OrientedSemiRegularGInjectiveParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.281804323196411,
+    "log": "TNLean_PEPS_ParentHamiltonian_OrientedSemiRegularGInjectiveParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionSupport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularRegionSupport"
+    ],
+    "exit": 0,
+    "seconds": 13.371276378631592,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionSupport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionSupport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularRegionSupport.lean"
+    ],
+    "exit": 0,
+    "seconds": 5.697129726409912,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionSupport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionEntropyBound.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularRegionEntropyBound"
+    ],
+    "exit": 0,
+    "seconds": 8.304199695587158,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionEntropyBound.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionEntropyBound.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularRegionEntropyBound.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.7372946739196777,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionEntropyBound.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionEntanglementBound.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegionEntanglementBound"
+    ],
+    "exit": 0,
+    "seconds": 4.78669548034668,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionEntanglementBound.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionEntanglementBound.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegionEntanglementBound.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.5862178802490234,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionEntanglementBound.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionOperatorEmbedding.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegionOperatorEmbedding"
+    ],
+    "exit": 0,
+    "seconds": 3.6965694427490234,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionOperatorEmbedding.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionOperatorEmbedding.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegionOperatorEmbedding.lean"
+    ],
+    "exit": 0,
+    "seconds": 2.417517900466919,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionOperatorEmbedding.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionParentGapCriterion.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegionParentGapCriterion"
+    ],
+    "exit": 0,
+    "seconds": 6.906688451766968,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionParentGapCriterion.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionParentGapCriterion.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegionParentGapCriterion.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.343414545059204,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionParentGapCriterion.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionPhysicalHamiltonianTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegionPhysicalHamiltonianTransport"
+    ],
+    "exit": 0,
+    "seconds": 4.194427490234375,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionPhysicalHamiltonianTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegionPhysicalHamiltonianTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegionPhysicalHamiltonianTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.117805004119873,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegionPhysicalHamiltonianTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionIntersection.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularRegionIntersection"
+    ],
+    "exit": 0,
+    "seconds": 4.669569969177246,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionIntersection.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionIntersection.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularRegionIntersection.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.486165285110474,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionIntersection.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularLocalRegionIntersection.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularLocalRegionIntersection"
+    ],
+    "exit": 0,
+    "seconds": 4.564010381698608,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularLocalRegionIntersection.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularLocalRegionIntersection.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularLocalRegionIntersection.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.4250833988189697,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularLocalRegionIntersection.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionHolonomyFilter.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularRegionHolonomyFilter"
+    ],
+    "exit": 0,
+    "seconds": 5.389789819717407,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionHolonomyFilter.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularRegionHolonomyFilter.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularRegionHolonomyFilter.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.513508319854736,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularRegionHolonomyFilter.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularStateParentRigidity.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularStateParentRigidity"
+    ],
+    "exit": 0,
+    "seconds": 4.900593519210815,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularStateParentRigidity.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularStateParentRigidity.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularStateParentRigidity.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.91909122467041,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularStateParentRigidity.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/TorusRegularRegionSupport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.TorusRegularRegionSupport"
+    ],
+    "exit": 0,
+    "seconds": 4.773763179779053,
+    "log": "TNLean_PEPS_ParentHamiltonian_TorusRegularRegionSupport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/TorusRegularRegionSupport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/TorusRegularRegionSupport.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.264861106872559,
+    "log": "TNLean_PEPS_ParentHamiltonian_TorusRegularRegionSupport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularTorusRectangleEntropyBound.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.RegularTorusRectangleEntropyBound"
+    ],
+    "exit": 0,
+    "seconds": 5.1024675369262695,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularTorusRectangleEntropyBound.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/RegularTorusRectangleEntropyBound.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/RegularTorusRectangleEntropyBound.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.380666732788086,
+    "log": "TNLean_PEPS_ParentHamiltonian_RegularTorusRectangleEntropyBound.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/SemiRegularFourierCanonicalParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.SemiRegularFourierCanonicalParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 16.561836004257202,
+    "log": "TNLean_PEPS_ParentHamiltonian_SemiRegularFourierCanonicalParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/SemiRegularFourierCanonicalParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/SemiRegularFourierCanonicalParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.3582427501678467,
+    "log": "TNLean_PEPS_ParentHamiltonian_SemiRegularFourierCanonicalParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/SemiRegularGInjectiveParentTransport.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.SemiRegularGInjectiveParentTransport"
+    ],
+    "exit": 0,
+    "seconds": 4.295151233673096,
+    "log": "TNLean_PEPS_ParentHamiltonian_SemiRegularGInjectiveParentTransport.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/SemiRegularGInjectiveParentTransport.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/SemiRegularGInjectiveParentTransport.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.2900149822235107,
+    "log": "TNLean_PEPS_ParentHamiltonian_SemiRegularGInjectiveParentTransport.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/ThreeBlockGInjectiveIntersection.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.ThreeBlockGInjectiveIntersection"
+    ],
+    "exit": 0,
+    "seconds": 14.072920799255371,
+    "log": "TNLean_PEPS_ParentHamiltonian_ThreeBlockGInjectiveIntersection.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/ThreeBlockGInjectiveIntersection.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/ThreeBlockGInjectiveIntersection.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.6408727169036865,
+    "log": "TNLean_PEPS_ParentHamiltonian_ThreeBlockGInjectiveIntersection.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/ThreeBlockRegularIntersection.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.ThreeBlockRegularIntersection"
+    ],
+    "exit": 0,
+    "seconds": 4.2608559131622314,
+    "log": "TNLean_PEPS_ParentHamiltonian_ThreeBlockRegularIntersection.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/ThreeBlockRegularIntersection.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/ThreeBlockRegularIntersection.lean"
+    ],
+    "exit": 0,
+    "seconds": 3.64257550239563,
+    "log": "TNLean_PEPS_ParentHamiltonian_ThreeBlockRegularIntersection.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/TorusClosureParentConstraint.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.TorusClosureParentConstraint"
+    ],
+    "exit": 0,
+    "seconds": 12.700493574142456,
+    "log": "TNLean_PEPS_ParentHamiltonian_TorusClosureParentConstraint.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/TorusClosureParentConstraint.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/TorusClosureParentConstraint.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.01504921913147,
+    "log": "TNLean_PEPS_ParentHamiltonian_TorusClosureParentConstraint.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/TorusClosureKernelIntersection.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.ParentHamiltonian.TorusClosureKernelIntersection"
+    ],
+    "exit": 0,
+    "seconds": 4.919250011444092,
+    "log": "TNLean_PEPS_ParentHamiltonian_TorusClosureKernelIntersection.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/ParentHamiltonian/TorusClosureKernelIntersection.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/ParentHamiltonian/TorusClosureKernelIntersection.lean"
+    ],
+    "exit": 0,
+    "seconds": 4.181294679641724,
+    "log": "TNLean_PEPS_ParentHamiltonian_TorusClosureKernelIntersection.lean.strict.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/RegularGraphPhysicalBlocking.lean",
+    "kind": "build",
+    "command": [
+      "lake",
+      "--fail-fast",
+      "build",
+      "TNLean.PEPS.RegularGraphPhysicalBlocking"
+    ],
+    "exit": 0,
+    "seconds": 13.464435815811157,
+    "log": "TNLean_PEPS_RegularGraphPhysicalBlocking.lean.build.log",
+    "editing_seconds": 0
+  },
+  {
+    "file": "TNLean/PEPS/RegularGraphPhysicalBlocking.lean",
+    "kind": "strict",
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      "TNLean/PEPS/RegularGraphPhysicalBlocking.lean"
+    ],
+    "exit": 0,
+    "seconds": 7.565307855606079,
+    "log": "TNLean_PEPS_RegularGraphPhysicalBlocking.lean.strict.log",
+    "editing_seconds": 0
+  }
+]
