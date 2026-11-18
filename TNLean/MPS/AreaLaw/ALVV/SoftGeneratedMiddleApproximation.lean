@@ -9,7 +9,7 @@ import TNLean.MPS.AreaLaw.RetainedCoreFamilies
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
 import TNLean.MPS.AreaLaw.RegionalBondRestriction
 import TNLean.Circuit.SiteEmbeddingNorm
-import TNLean.Circuit.SupportedFunctionalCalculus
+import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.MPDO.TraceChainHermitian
 import QICLean.Analysis.PrincipalSubmatrixNorm
 
@@ -114,15 +114,14 @@ theorem exists_native_soft_middle_mpo_approximation {N q l r m : ℕ}
     MPOTensor.exists_hermitian_traceChainOperator_approximation (by omega) hP Aglobal hGlobalError
   have hPs : Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
       P (interval (N + 1) l r) := by
-    let V := QuantumCircuit.supportedOperators q
-      (interval (N + 1) l r : Set (Fin (N + 1)))
-    have hAs : A ∈ V := QuantumCircuit.mem_supportedOperators_of_isSupportedOn
-      (isSupportedOn_sum_internal_bonds (N + 1) q l r h hs)
+    change _ ∈ ManyBody.supportedOperators _ _
+    let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval (N + 1) l r : Finset (Fin (N + 1)))
+    have hAs : A ∈ V := isSupportedOn_sum_internal_bonds (N + 1) q l r h hs
     have hp : (p : ℂ) • (1 : Matrix (Fin (N + 1) → Fin q)
         (Fin (N + 1) → Fin q) ℂ) ∈ V :=
-      V.smul_mem _ (QuantumCircuit.one_mem_supportedOperators _)
-    exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-      (V.add_mem hp (QuantumCircuit.cfc_mem_supportedOperators _ (V.sub_mem hAs hp)))
+      SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _))
+    exact (add_mem hp (ManyBody.cfc_mem_supportedOperators _ (sub_mem hAs hp)))
   obtain ⟨Acore, C0, hZ, hZphys, hRecon, hNativeError, hPlacedError⟩ :=
     exists_native_interval_slice_of_mpo_approximation hq hlr hrL P hPs Ah hAh xi hAhError
   refine ⟨Acore, C0, hZ, ?_, ?_, hNativeError, ?_⟩

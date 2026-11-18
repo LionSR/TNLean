@@ -687,7 +687,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Localization of an evolved sum of local perturbations]
     \label{lem:graph_evolved_perturbation_localization}
-    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_sum_sub_siteExpectation_graphNeighborhood_le}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le}
     \leanok
     \uses{thm:graph_lieb_robinson_two_spheres,def:qc_site_expectation}
     Let $\Gamma$ be a finite graph on a vertex set $V$ whose spheres have at
@@ -721,7 +721,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Localization of the relative-evolution generator]
     \label{thm:chain_relative_generator_localization}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le}
+    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le}
     \leanok
     \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
         def:qc_site_expectation}
@@ -1775,7 +1775,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Relative-generator localization on a finite integer domain]
     \label{thm:domain_relative_generator_localization}
-    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le}
+    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le}
     \leanok
     \uses{def:domain_doubled_swapped_hamiltonian,thm:domain_partial_swap_crossing,
         def:qc_site_expectation,thm:domain_interval_neighborhood}
@@ -2241,7 +2241,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Localization on a finite integer domain]
     \label{thm:domain_lieb_robinson_localization}
-    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_domainNeighborhood_le}
     \leanok
     \uses{def:domain_model,def:qc_site_expectation}
     Let $\Lambda\subset\mathbb Z$ be finite, let $q,R\in\mathbb N$,

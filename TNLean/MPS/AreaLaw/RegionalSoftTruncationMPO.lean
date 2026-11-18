@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import TNLean.MPS.AreaLaw.SoftTruncatedHamiltonianMPO
 import TNLean.MPS.MPDO.TraceChainHermitian
 
@@ -81,9 +83,9 @@ theorem exists_regional_softTruncations_hermitian_mpo_of_accuracy {N q m s : ℕ
     (by omega) A (fun _ ↦ (1 : ℂ))
   simp only [one_smul] at hB
   let f := fun i : Fin N ↦ c • h i
-  have hf (i : Fin N) : Entropy.IsSupportedOn (f i) {i.castSucc, i.succ} :=
-    QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-      (Submodule.smul_mem _ c (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i)))
+  have hf (i : Fin N) : Entropy.IsSupportedOn (f i) {i.castSucc, i.succ} := by
+    change _ ∈ ManyBody.supportedOperators _ _
+    exact (SMulMemClass.smul_mem c (hs i))
   obtain ⟨C, hC⟩ := exists_local_sum_add_scalar_mpo hq f hf (z : ℂ)
   have hC0 : c • H + (z : ℂ) • 1 = MPOTensor.traceChainOperator C 1 := by
     simpa only [f, ← Finset.smul_sum] using hC

@@ -32,6 +32,7 @@ namespace TNLean.PEPS.AreaLaw
 variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] [NeZero q]
 variable {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
 
+open Classical in
 /-- The full component-supported root channel has an explicit finite
 stretched-exponential shell bound, with arbitrary finite spectators. Source:
 area law, `eq:amplification-oscillation-increment`, lines 124–139, using exact
@@ -39,10 +40,11 @@ component stabilization. The cutoff need only contain the anchor component. -/
 theorem siteOscillation_spectatorRootChannel_le_exp_of_component_support
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
-    (hk : k ∈ supportedOperators q {x | G.Reachable a x})
+    (hk : k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (Finset.univ.filter fun x ↦ G.Reachable a x))
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (n : ℕ) (hn : Finset.univ.sup (G.dist a) ≤ n)
-    (hε : ∀ l ≤ n, ‖k - siteExpectation q (ManyBody.graphBall G a l) k‖ ≤
+    (hε : ∀ l ≤ n, ‖k - ManyBody.regionExpectation (ManyBody.graphBall G a l) k‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α)))
     (y : ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     siteOscillation q y (spectatorRootChannel k B) ≤ siteOscillation q y B +

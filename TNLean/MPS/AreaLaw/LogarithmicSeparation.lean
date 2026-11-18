@@ -30,7 +30,7 @@ Source: TNLean one-dimensional note, Lemma `lem:logsep`,
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (interval IsGapped groundSpace ChainInteraction)
+open ManyBody (IsGapped groundSpace interval ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw
 

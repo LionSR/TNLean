@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeChain
 import TNLean.MPS.AreaLaw.ALVV.RegionalSlices
 
@@ -128,13 +130,15 @@ theorem regionTermMatrix_supported {h : ℕ → Matrix (Fin L → Fin q) (Fin L 
     (x y m : ℕ) (D : Finset (Fin L))
     (hD : ∀ i, x ≤ i → i < y → interval L i (i + 2) ⊆ D) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (regionTermMatrix h x y m) D := by
+  change _ ∈ ManyBody.supportedOperators _ _
   have hE := regionalProjectionMatrix_supported hq hh (evenBonds x y) m D fun i _ hi ↦ by
     obtain ⟨hi, -⟩ := Finset.mem_filter.mp hi
     exact hD i (Finset.mem_Ico.mp hi).1 (Finset.mem_Ico.mp hi).2
   have hO := regionalProjectionMatrix_supported hq hh (oddBonds x y) m D fun i _ hi ↦ by
     obtain ⟨hi, -⟩ := Finset.mem_filter.mp hi
     exact hD i (Finset.mem_Ico.mp hi).1 (Finset.mem_Ico.mp hi).2
-  exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).add_mem
+  change _ ∈ ManyBody.supportedOperators _ _
+  exact add_mem
     (sub_mem (Entropy.isSupportedOn_one D) hE) (sub_mem (Entropy.isSupportedOn_one D) hO)
 
 private theorem interval_edge_subset {x y i : ℕ} (hx : x ≤ i) (hy : i + 2 ≤ y ∨ L ≤ y) :
@@ -150,21 +154,22 @@ theorem threeRegionFamily_supported {h : Fin m → Matrix (Fin L → Fin q) (Fin
     (hq : 1 ≤ q)
     (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
     (a b ℓ : ℕ) :
-    (∀ r, threeRegionFamily h a b ℓ (Sum.inl (Sum.inl r)) ∈ QuantumCircuit.supportedOperators q
-      (interval L (a + r.val) (a + r.val + 2) : Set (Fin L))) ∧
-    (∀ r, threeRegionFamily h a b ℓ (Sum.inl (Sum.inr r)) ∈ QuantumCircuit.supportedOperators q
-      (interval L (b + r.val) (b + r.val + 2) : Set (Fin L))) ∧
-    threeRegionFamily h a b ℓ (Sum.inr 0) ∈ QuantumCircuit.supportedOperators q
-      (interval L 0 (a + 1) : Set (Fin L)) ∧
-    threeRegionFamily h a b ℓ (Sum.inr 1) ∈ QuantumCircuit.supportedOperators q
-      (interval L (a + 2 * ℓ) (b + 1) : Set (Fin L)) ∧
-    threeRegionFamily h a b ℓ (Sum.inr 2) ∈ QuantumCircuit.supportedOperators q
-      (interval L (b + 2 * ℓ) L : Set (Fin L)) := by
+    (∀ r, threeRegionFamily h a b ℓ
+        (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L))) ∧
+    (∀ r, threeRegionFamily h a b ℓ
+        (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L))) ∧
+    threeRegionFamily h a b ℓ (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L 0 (a + 1) : Finset (Fin L)) ∧
+    threeRegionFamily h a b ℓ (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (a + 2 * ℓ) (b + 1) : Finset (Fin L)) ∧
+    threeRegionFamily h a b ℓ (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (b + 2 * ℓ) L : Finset (Fin L)) := by
   have hext := bondTermExtension_supported hh
-  refine ⟨fun r ↦ QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hext _),
-    fun r ↦ QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hext _), ?_, ?_, ?_⟩ <;>
-  refine QuantumCircuit.mem_supportedOperators_of_isSupportedOn
-    (regionTermMatrix_supported hq hext _ _ m _ fun i hx hy ↦ interval_edge_subset hx ?_) <;>
+  refine ⟨fun r ↦ (hext _),
+    fun r ↦ (hext _), ?_, ?_, ?_⟩ <;>
+  refine (regionTermMatrix_supported hq hext _ _ m _ fun i hx hy ↦ interval_edge_subset hx ?_) <;>
   omega
 
 /-- The matrix regional term is the operator regional term. -/
@@ -578,7 +583,8 @@ theorem rank_regionTermMatrix_le {h : ℕ → Matrix (Fin L → Fin q) (Fin L �
   have hone : operatorSchmidtRank (Entropy.cutOperator (interval L 0 c)
       ((1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) + 1)) ≤ 1 :=
     Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one
-      ((ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).add_mem
+      ((Subalgebra.toSubmodule
+          (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) ∅).toSubalgebra).add_mem
         (Entropy.isSupportedOn_one (∅ : Finset (Fin L))) (Entropy.isSupportedOn_one _))
         (Or.inl (Finset.empty_subset _))
   have hsq (s : Finset ℕ) := rank_regionalProjectionMatrix_le_sq hq hh s m c

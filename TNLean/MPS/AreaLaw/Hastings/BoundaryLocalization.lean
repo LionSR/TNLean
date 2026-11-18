@@ -115,7 +115,7 @@ Let `H` be a chain Hamiltonian of range `R` and term norm `J`, let `H₀` be Her
 `‖P_B - O‖ ≤ √η (‖(A + B) - H‖ + ‖A - H₀‖ + a |Z|² ‖H - H₀‖ e^{vT - ℓ/2}) + 4 e^{-T²/2η}`,
 where `P_B = interactionAverage η A B`, `b₀ = 2^{2R+1} J`,
 `a = 2 (2 + 4 |b₀| e^{2R}) e / (1 - e^{-1/2})` and `v = 2 (R+1) |b₀| e^{2R} + 1` are the
-Lieb–Robinson constants of `norm_heisenberg_sub_siteExpectation_chainNeighborhood_le`.
+Lieb–Robinson constants of `norm_heisenberg_sub_regionExpectation_chainNeighborhood_le`.
 
 In the application `A = H₀ = M_L + M_R` and `B = M_B`, so `‖A - H₀‖ = 0`; `Z` is
 the window `X_{j-2l/3,j+1+2l/3}` carrying `H - (M_L + M_R)` (line 899), and
@@ -132,7 +132,8 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
       (1 - Real.exp (-(1 / 2)))
     let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
     ∃ O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      O ∈ supportedOperators q (chainNeighborhood Z ℓ : Set (Fin L)) ∧ ‖O‖ ≤ 1 ∧
+      O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainNeighborhood Z ℓ : Finset (Fin L)) ∧
+          ‖O‖ ≤ 1 ∧
       ‖interactionAverage η A B - O‖ ≤
         √(η : ℝ) * (‖A + B - h.hamiltonian‖ + ‖A - H₀‖ +
           a * (Z.card : ℝ) ^ 2 * ‖h.hamiltonian - H₀‖ * Real.exp (v * T - ℓ / 2)) +
@@ -154,8 +155,8 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
   have hE₃0 : 0 ≤ E₃ := by positivity
   have hgen (s : ℝ) (hs : |s| ≤ T) :
       ‖ManyBody.heisenbergEvolution H s (H - H₀) -
-        siteExpectation q N (ManyBody.heisenbergEvolution H s (H - H₀))‖ ≤ E₃ := by
-    have hloc := norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
+        ManyBody.regionExpectation N (ManyBody.heisenbergEvolution H s (H - H₀))‖ ≤ E₃ := by
+    have hloc := norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
       (fun X : ChainSupport L R ↦ X) h.term hh h.mem b₀
       (h.sum_norm_terms_containing_le hhJ) Z hZ ℓ hℓ s
     refine hloc.trans (mul_le_mul_of_nonneg_left
@@ -164,7 +165,6 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
   have hrel (t : ℝ) (ht : |t| ≤ T) :
       ‖hermitianUnitaryPath H t * hermitianUnitaryPath H₀ (-t) - U t‖ ≤ E₃ * |t| :=
     hcompare t E₃ (fun s hs ↦ by
-      rw [← siteExpectation_eq_regionExpectation]
       exact hgen s ((show |s| ≤ |t| by
         simpa only [sub_zero] using Set.abs_sub_left_of_mem_uIcc hs).trans ht))
   -- the pointwise estimate, with the Gaussian tail beyond `T`
@@ -202,21 +202,21 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
     unfold interactionPropagator
     simpa using this
   have habs : Integrable (fun t : ℝ ↦ |t|) (gaussianReal 0 η) :=
-    ((memLp_one_iff_integrable.1 (memLp_id_gaussianReal (μ := 0) (v := η) 1))).abs
+    (memLp_one_iff_integrable.1 (memLp_id_gaussianReal (μ := 0) (v := η) 1)).abs
   have hind : Integrable ((Set.Icc (-T) T)ᶜ.indicator (fun _ ↦ (2 : ℝ)))
       (gaussianReal 0 η) :=
     (integrable_const (2 : ℝ)).indicator measurableSet_Icc.compl
   have hgint : Integrable g (gaussianReal 0 η) := (habs.mul_const ε).add hind
   -- the operator `O_B`
   refine ⟨∫ t, U t ∂gaussianReal 0 η, ?_, ?_, ?_⟩
-  · have hfix (t : ℝ) : siteExpectation q N (U t) = U t :=
-      siteExpectation_of_mem_supportedOperators N
-        (mem_supportedOperators_of_isSupportedOn (hsupport t))
-    have hMint : siteExpectation q N (∫ t, U t ∂gaussianReal 0 η) =
+  · have hfix (t : ℝ) : ManyBody.regionExpectation N (U t) = U t :=
+      (ManyBody.regionExpectation_of_mem_supportedOperators (D := N)
+          (hsupport t))
+    have hMint : ManyBody.regionExpectation N (∫ t, U t ∂gaussianReal 0 η) =
         ∫ t, U t ∂gaussianReal 0 η :=
-      ((siteExpectationLM q N).toContinuousLinearMap.integral_comp_comm hUint).symm.trans
+      ((ManyBody.regionExpectationLM N).toContinuousLinearMap.integral_comp_comm hUint).symm.trans
         (integral_congr_ae (Filter.Eventually.of_forall hfix))
-    exact hMint ▸ siteExpectation_mem_supportedOperators N _
+    exact hMint ▸ (ManyBody.regionExpectation_mem_supportedOperators N _)
   · simpa using norm_integral_le_of_norm_le_const (μ := gaussianReal 0 η)
       (Filter.Eventually.of_forall fun t ↦ Matrix.l2_opNorm_unitary_le_one (hunit t))
   · rw [interactionAverage_eq_integral, ← integral_sub hPint hUint]
@@ -248,7 +248,8 @@ theorem exists_supported_interactionAverage_approx_exp {L q R : ℕ} {J : ℝ} (
       (1 - Real.exp (-(1 / 2)))
     let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
     ∃ O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      O ∈ supportedOperators q (chainNeighborhood Z ℓ : Set (Fin L)) ∧ ‖O‖ ≤ 1 ∧
+      O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainNeighborhood Z ℓ : Finset (Fin L)) ∧
+          ‖O‖ ≤ 1 ∧
       ‖interactionAverage η A B - O‖ ≤
         √(η : ℝ) * (‖A + B - h.hamiltonian‖ + ‖A - H₀‖ +
           a * (Z.card : ℝ) ^ 2 * ‖h.hamiltonian - H₀‖ * Real.exp (-(ℓ / 4))) +

@@ -6,7 +6,10 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Hastings.PartCommutators
 import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.Lattice.GaussianFilteredIncrement
-import TNLean.Circuit.SiteExpectationOrder
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Sites.Twirl
 import TNLean.Algebra.ExpMulSubMonotone
 
 /-!
@@ -99,17 +102,17 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828 (`M_L - H_L`
 the cut). -/
 theorem isSupportedOn_localized_sub_self (K : Finset ι)
     (W X : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
-    Entropy.IsSupportedOn (n := fun _ ↦ d) (W + siteExpectation d K X - W) K := by
+    Entropy.IsSupportedOn (n := fun _ ↦ d) (W + ManyBody.regionExpectation K X - W) K := by
   rw [add_sub_cancel_left]
-  exact isSupportedOn_of_mem_supportedOperators (siteExpectation_mem_supportedOperators K X)
+  exact (ManyBody.regionExpectation_mem_supportedOperators K X)
 
 /-- The localized operator `M = W + E_K(W_tilde - W)` of a Hermitian `W` is Hermitian.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
-theorem isHermitian_localized [NeZero d] (q' ΔE : ℝ) {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+theorem isHermitian_localized (q' ΔE : ℝ) {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     (hH : H.IsHermitian) (hW : W.IsHermitian) (K : Finset ι) :
-    (W + siteExpectation d K (gaussianFilteredTerm q' ΔE H W - W)).IsHermitian := by
-  exact hW.add (isHermitian_siteExpectation K
-    ((isHermitian_gaussianFilteredTerm q' ΔE hH hW).sub hW))
+    (W + ManyBody.regionExpectation K (gaussianFilteredTerm q' ΔE H W - W)).IsHermitian := by
+  exact hW.add (ManyBody.isHermitian_regionExpectation (D := K) ((isHermitian_gaussianFilteredTerm
+      q' ΔE hH hW).sub hW))
 
 end Localized
 
@@ -131,7 +134,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_sub_localized
     (hSn : S.card ≤ n) (hc : ‖h.hamiltonian * W - W * h.hamiltonian‖ ≤ c)
     {ℓ T : ℝ} (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q' ΔE h.hamiltonian W -
-        (W + siteExpectation q (chainNeighborhood S ℓ)
+        (W + ManyBody.regionExpectation (chainNeighborhood S ℓ)
           (gaussianFilteredTerm q' ΔE h.hamiltonian W - W))‖ ≤
       T * (chainLRPrefactor R J * (n : ℝ) ^ 2 * c *
           Real.exp (chainLRVelocity R J * T - ℓ / 2)) +
@@ -142,19 +145,19 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_sub_localized
   have hc0 : 0 ≤ c := (norm_nonneg _).trans hc
   have ha := chainLRPrefactor_nonneg R J
   have hv := chainLRVelocity_nonneg R J
-  have hA : Entropy.IsSupportedOn (n := fun _ ↦ q) (Complex.I • C) S :=
-    isSupportedOn_of_mem_supportedOperators
-      (Submodule.smul_mem _ _ (mem_supportedOperators_of_isSupportedOn hS))
+  have hA : Entropy.IsSupportedOn (n := fun _ ↦ q) (Complex.I • C) S := by
+    change _ ∈ ManyBody.supportedOperators _ _
+    exact (SMulMemClass.smul_mem _ hS)
   have hloc : ∀ s ∈ Set.Icc (-T) T,
       ‖hermitianUnitaryPath h.hamiltonian s * (Complex.I • C) *
           hermitianUnitaryPath h.hamiltonian (-s) -
-        siteExpectation q (chainNeighborhood S ℓ)
+        ManyBody.regionExpectation (chainNeighborhood S ℓ)
           (hermitianUnitaryPath h.hamiltonian s * (Complex.I • C) *
             hermitianUnitaryPath h.hamiltonian (-s))‖ ≤
         chainLRPrefactor R J * (n : ℝ) ^ 2 * c *
           Real.exp (chainLRVelocity R J * T - ℓ / 2) := by
     intro s hs
-    have hlr := norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
+    have hlr := norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
       (fun X : ChainSupport L R ↦ X) h.term hh h.mem _
       (h.sum_norm_terms_containing_le hhJ) S hA ℓ hℓ s
     have hsT : |s| ≤ T := abs_le.mpr hs
@@ -187,7 +190,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_leftPart_sub_
         (hq : 1 ≤ q) (j m : ℕ) (q' ΔE : ℝ) {ℓ T : ℝ}
     (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.leftPart j m) -
-        (h.leftPart j m + siteExpectation q
+        (h.leftPart j m + ManyBody.regionExpectation
           (chainNeighborhood (interval L (j - m - 2 * R) (j - m + R)) ℓ)
           (gaussianFilteredTerm q' ΔE h.hamiltonian (h.leftPart j m) - h.leftPart j m))‖ ≤
       T * (chainLRPrefactor R J * ((3 * R : ℕ) : ℝ) ^ 2 * (partCommutatorConst R * J ^ 2) *
@@ -211,7 +214,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_rightPart_sub
         (hq : 1 ≤ q) (j m : ℕ) (q' ΔE : ℝ) {ℓ T : ℝ}
     (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.rightPart j m) -
-        (h.rightPart j m + siteExpectation q
+        (h.rightPart j m + ManyBody.regionExpectation
           (chainNeighborhood (interval L (j + m - R) (j + m + 2 * R)) ℓ)
           (gaussianFilteredTerm q' ΔE h.hamiltonian (h.rightPart j m) - h.rightPart j m))‖ ≤
       T * (chainLRPrefactor R J * ((3 * R : ℕ) : ℝ) ^ 2 * (partCommutatorConst R * J ^ 2) *
@@ -234,7 +237,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_bufferPart_su
         (hq : 1 ≤ q) (j m : ℕ) (q' ΔE : ℝ) {ℓ T : ℝ}
     (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q' ΔE h.hamiltonian (h.bufferPart j m) -
-        (h.bufferPart j m + siteExpectation q
+        (h.bufferPart j m + ManyBody.regionExpectation
           (chainNeighborhood (interval L (j - m - 2 * R) (j - m + R) ∪
             interval L (j + m - R) (j + m + 2 * R)) ℓ)
           (gaussianFilteredTerm q' ΔE h.hamiltonian (h.bufferPart j m) - h.bufferPart j m))‖ ≤
@@ -257,7 +260,7 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_leftPart_localized (h : ChainInteraction L q R)
     (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
-    (h.leftPart j m + siteExpectation q K
+    (h.leftPart j m + ManyBody.regionExpectation K
       (gaussianFilteredTerm q' ΔE h.hamiltonian (h.leftPart j m) - h.leftPart j m)).IsHermitian :=
   isHermitian_localized q' ΔE (ManyBody.Interaction.isHermitian_hamiltonian hh)
       (h.leftPart_isHermitian hh hhJ j m) K
@@ -267,7 +270,7 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_rightPart_localized
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
-    (h.rightPart j m + siteExpectation q K
+    (h.rightPart j m + ManyBody.regionExpectation K
       (gaussianFilteredTerm q' ΔE h.hamiltonian (h.rightPart j m) - h.rightPart j m)).IsHermitian :=
   isHermitian_localized q' ΔE (ManyBody.Interaction.isHermitian_hamiltonian hh)
       (h.rightPart_isHermitian hh hhJ j m) K
@@ -277,7 +280,7 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_bufferPart_localized
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     [NeZero q] (j m : ℕ) (q' ΔE : ℝ) (K : Finset (Fin L)) :
-    (h.bufferPart j m + siteExpectation q K
+    (h.bufferPart j m + ManyBody.regionExpectation K
       (gaussianFilteredTerm q' ΔE h.hamiltonian (h.bufferPart j m) -
         h.bufferPart j m)).IsHermitian :=
   isHermitian_localized q' ΔE (ManyBody.Interaction.isHermitian_hamiltonian hh)

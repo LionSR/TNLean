@@ -83,14 +83,14 @@ between components. Hastings, arXiv:cond-mat/0508554v3, lines 1469–1505. -/
 theorem norm_commutator_heisenbergEvolution_le_anchor_kernel
     (G : SimpleGraph ι) (X : κ → Finset ι)
     (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+    (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ y ∈ X k, G.edist x y ≤ R)
     (vR : ℕ) (hvR : 1 ≤ vR) (hCard : ∀ k, (X k).card ≤ vR) (b₀ : ℝ)
     (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j ↦ x ∈ X j), ‖h j‖ ≤ b₀)
     (z : ι) (S : Finset ι) (hSrad : ∀ x ∈ S, G.edist z x ≤ R)
-    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d (S : Set ι))
+    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (b : ι) (Y : Finset ι) (hYrad : ∀ y ∈ Y, G.edist y b ≤ R)
-    {B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hB : B ∈ supportedOperators d (Y : Set ι))
+    {B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
     {μ : ℝ} (hμ : 0 < μ) (t : ℝ) :
     ‖B * ManyBody.heisenbergEvolution (∑ k, h k) t W -
         ManyBody.heisenbergEvolution (∑ k, h k) t W * B‖ ≤
@@ -127,10 +127,10 @@ theorem norm_commutator_heisenbergEvolution_le_anchor_kernel
           _ = ((2 * R + l : ℕ) : ℕ∞) := by push_cast; ring
       exact (not_le_of_gt hl) hz
     let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
-      ⟨h, fun k => isSupportedOn_of_mem_supportedOperators (hSupport k)⟩
+      ⟨h, fun k => (hSupport k)⟩
     have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric G Φ
-      hHerm R hDiam vR hCard b₀ hBudget S (isSupportedOn_of_mem_supportedOperators hW) Y
-      (isSupportedOn_of_mem_supportedOperators hB) μ hμ.le l hd t
+      hHerm R hDiam vR hCard b₀ hBudget S hW Y
+      hB μ hμ.le l hd t
     calc _ = ‖ManyBody.heisenbergEvolution (∑ k, h k) t W * B -
           B * ManyBody.heisenbergEvolution (∑ k, h k) t W‖ := norm_sub_rev _ _
       _ ≤ 4 * (S.card : ℝ) * ‖W‖ * ‖B‖ *
@@ -148,12 +148,12 @@ Hastings, arXiv:cond-mat/0508554v3, lines 1469–1505 and 1524–1533. -/
 theorem norm_gaussianFilteredTerm_sub_truncated_le_anchor_sum [DecidableEq κ]
     (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
     (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+    (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ y ∈ X k, G.edist x y ≤ R)
     (vR : ℕ) (hvR : 1 ≤ vR) (hCard : ∀ k, (X k).card ≤ vR) (b₀ : ℝ)
     (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j ↦ x ∈ X j), ‖h j‖ ≤ b₀)
     (s : Finset κ) (z : ι) (S : Finset ι) (hSrad : ∀ x ∈ S, G.edist z x ≤ R)
-    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d (S : Set ι))
+    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     {q ΔE μ T : ℝ} (hq : 0 ≤ q) (hμ : 0 < μ) (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q ΔE (∑ k, h k) W -
         gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W‖ ≤
@@ -210,14 +210,14 @@ theorem norm_gaussianFilteredTerm_sub_truncated_le_degree_tail
     (G : SimpleGraph ι) [DecidableRel G.Adj] (D : ℕ) (hD : ∀ x, G.degree x ≤ D)
     (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
     (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+    (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ y ∈ X k, G.edist x y ≤ R)
     (vR : ℕ) (hvR : 1 ≤ vR) (hCard : ∀ k, (X k).card ≤ vR) (b₀ : ℝ)
     (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j ↦ x ∈ X j), ‖h j‖ ≤ b₀)
     (B : ℝ) (hB : 0 ≤ B)
     (hAnchorBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j ↦ a j = x), ‖h j‖ ≤ B)
     (s : Finset κ) (z : ι) (S : Finset ι) (hSrad : ∀ x ∈ S, G.edist z x ≤ R)
-    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d (S : Set ι))
+    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (m : ℕ) (hsep : ∀ k ∉ s, (m : ℕ∞) ≤ G.edist z (a k))
     {q ΔE μ T : ℝ} (hq : 0 ≤ q) (hμ : Real.log (D + 1) < μ) (hT : 0 ≤ T) :
     let β := (μ - Real.log (D + 1)) / 2

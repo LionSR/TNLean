@@ -129,7 +129,7 @@ b₀, the explicit constants are C = 2 + 4|b₀| exp(2μR) and
 v = 2v_R|b₀| exp(2μR) + 1, for μ ≥ 0.
 
 For localization, under polynomial sphere growth K_g(d + 1)^k,
-`QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`
+`ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le`
 bounds the error of the normalized partial trace onto the union of the radius-ℓ
 balls about S by C |S|² ‖A‖ K_g T_k exp(v|t| − ℓ/2), for natural ℓ. Here
 C and v are the preceding constants at μ = 1, and
@@ -152,16 +152,15 @@ chain length. These statements include the empty chain and all natural
 radii. They concern the contiguous path; coordinate distance does not replace
 graph distance across holes in a disconnected domain.
 
-The matrix-entry condition for support is equivalent to membership in the
-supported-operator algebra by `QuantumCircuit.mem_supportedOperators_of_isSupportedOn`
-and its converse. The paired two-copy construction
+The matrix-entry condition for support is the carrier of the
+supported-operator algebra `ManyBody.supportedOperators` of QICLean. The paired two-copy construction
 `MPS.AreaLaw.ChainHamiltonian.doubled` keeps the same physical supports and
 has local dimension q² and term bound 2J. The equality
 `MPS.AreaLaw.ChainHamiltonian.doubled_operator` identifies its sum exactly
 with H⊗1+1⊗H in paired coordinates.
 
 On a contiguous chain, `MPS.AreaLaw.norm_heisenberg_commutator_le_chainDistance`
-and `MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_chainNeighborhood_le`
+and `MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_chainNeighborhood_le`
 prove both estimates with common decay exponent μ = 1/2 and velocity
 v = 2(R + 1)|b₀| exp(2R) + 1. The commutator coefficient is
 C = 2 + 4|b₀| exp(2R); the localization coefficient is
@@ -191,7 +190,7 @@ preservation under isomorphism and component inclusion, gives
 sphere has at most two sites; no distance is measured across a missing integer.
 
 With q ≥ 1, the extension
-`MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le`
+`MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_domainNeighborhood_le`
 gives localization on every finite integer domain with the same C′ and v
 as the contiguous chain. At a real radius ℓ ≥ 0 its neighborhood is exactly
 `S.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)`.
@@ -234,7 +233,7 @@ square Ψ and its swap image Φ. Both vectors are normalized, have energy
 and Δ > 0. No additional positivity or nonemptiness assumption is imposed.
 
 The theorem
-`MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le`
+`MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le`
 localizes the actual relative-evolution generator
 G(t) = exp(itK′)(K′−K)exp(−itK′) onto the exact radius-ℓ neighborhood of Z.
 Its error is bounded by 4|J| a (R+1)² N_R L exp(v|t|−ℓ/2), where a and v

@@ -210,7 +210,8 @@ cannot be admitted by recording it. The 17 imports recorded when the check was
 introduced were repaired by step 0.3, and the set is empty:
 
 - nine site and dynamics modules imported `Circuit/LocalCircuit` for
-  `supportedOperators`, now defined in `Circuit/SupportedOperators`;
+  `supportedOperators`, which was defined in `Circuit/SupportedOperators` and
+  was replaced by QICLean's `ManyBody.supportedOperators` in follow-up F12;
 - four modules of the Sites and Hamiltonian layers imported gate modules for
   `siteOp`, `ctrlProj` and local permutations, now in `Circuit/SiteOperators`
   and `Circuit/SitePermutation`;
@@ -221,8 +222,9 @@ introduced were repaired by step 0.3, and the set is empty:
   `ProjectedRelativeEvolution`, `DisjointRelativeEvolution` and
   `SupportedGaussianIntegral`, which state results about that evolution, were
   dynamics modules; they and `Circuit/LiebRobinson` are now QICLean's
-  `ManyBody/Dynamics` (tracker #10718), and the one TNLean dynamics module left,
-  `Circuit/SiteExpectationGraphLocalization`, is listed as such in the checker;
+  `ManyBody/Dynamics` (tracker #10718); the one TNLean dynamics module left by
+  that move, `Circuit/SiteExpectationGraphLocalization`, was deleted with
+  `siteExpectation` in follow-up F12;
 - two modules of `Lattice/Sheet` imported `RegionSplit` and `RegionalSwap`,
   site notions that were kept among the Hamiltonian modules and are now
   modules of `TNLean/Circuit`.
@@ -289,7 +291,9 @@ else.
   entries, with site-dependent dimensions `n : V → ℕ` and `D : Finset V` (311
   TNLean modules, 29 QICLean modules). 61 modules use both. The two bridge
   lemmas in `Circuit/EntropySupport` are each applied in about 50 modules and
-  exist only for one local dimension.
+  exist only for one local dimension. Follow-up F12 deleted the first predicate
+  and the bridges: supports are now `ManyBody.supportedOperators`, whose carrier
+  is the entry condition.
 - The algebra of `Entropy.IsSupportedOn` (`add`, `neg`, `sub`, `smul`,
   `conjTranspose`, finite sums, `exp`) is proved in TNLean area-law modules
   under the QICLean namespace, not in QICLean. Its product and commutation
@@ -355,7 +359,7 @@ other directories.
 - One placement of a regional matrix as `K ⊗ 1`, along a region or along an
   injection of sites; the nine constructions above become this one or
   specializations of it by definition.
-- One partial trace onto a region (`siteExpectation`), one product vector, one
+- One partial trace onto a region (`ManyBody.regionExpectation`), one product vector, one
   expectation.
 - Lieb–Robinson bounds for a family of supported Hermitian terms on a graph,
   moved unchanged.

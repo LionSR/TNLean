@@ -77,12 +77,11 @@ noncomputable def partLocalizationError (R : ℕ) (J s ΔE T k : ℝ) : ℝ :=
 /-- The centered localized part `M = W + E_K(W_tilde - W)` of a part `P` of the Hamiltonian,
 with `W = P - ⟨Ω, P Ω⟩` and `W_tilde` its Gaussian filter of variance `s / ΔE²`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 779–828. -/
-noncomputable def _root_.ManyBody.ChainInteraction.localizedPart [NeZero q]
-    (h : ChainInteraction L q R)
+noncomputable def _root_.ManyBody.ChainInteraction.localizedPart (h : ChainInteraction L q R)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (s ΔE : ℝ) (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (K : Finset (Fin L)) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   groundCentered Ω P +
-    siteExpectation q K (gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) -
+    ManyBody.regionExpectation K (gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) -
       groundCentered Ω P)
 
 /-- The `k`-neighbourhood of an interval lies in the interval widened by `k` on each side. -/
@@ -97,11 +96,10 @@ theorem chainNeighborhood_interval_subset (a b k : ℕ) :
 
 section Localized
 
-variable [NeZero q] (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
-    (hhJ : ∀ X, ‖h.term X‖ ≤ J) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
+variable (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (Ω : EuclideanSpace ℂ (Fin L → Fin q))
   (s ΔE : ℝ)
 
-omit [NeZero q] in
 include hh in
 /-- Centering does not change `W_tilde - W`. -/
 theorem _root_.ManyBody.ChainInteraction.gaussianFilteredTerm_groundCentered_sub
@@ -118,13 +116,13 @@ theorem _root_.ManyBody.ChainInteraction.gaussianFilteredTerm_groundCentered_sub
     (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (K : Finset (Fin L)) :
     gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - h.localizedPart Ω s ΔE P K =
       gaussianFilteredTerm s ΔE h.hamiltonian P -
-        (P + siteExpectation q K (gaussianFilteredTerm s ΔE h.hamiltonian P - P)) := by
+        (P + ManyBody.regionExpectation K (gaussianFilteredTerm s ΔE h.hamiltonian P - P)) := by
   set D := gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - groundCentered Ω P
   calc gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - h.localizedPart Ω s ΔE P K
-      = D - siteExpectation q K D := by
+      = D - ManyBody.regionExpectation K D := by
         rw [ManyBody.ChainInteraction.localizedPart]; simp only [D]; abel
     _ = (gaussianFilteredTerm s ΔE h.hamiltonian P - P) -
-          siteExpectation q K (gaussianFilteredTerm s ΔE h.hamiltonian P - P) := by
+          ManyBody.regionExpectation K (gaussianFilteredTerm s ΔE h.hamiltonian P - P) := by
         simp only [D, h.gaussianFilteredTerm_groundCentered_sub hh Ω s ΔE P]
     _ = _ := by abel
 
@@ -141,12 +139,13 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart
     {P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {D : Finset (Fin L)}
     (hP : Entropy.IsSupportedOn (n := fun _ ↦ q) P D) (K : Finset (Fin L)) :
     Entropy.IsSupportedOn (n := fun _ ↦ q) (h.localizedPart Ω s ΔE P K) (D ∪ K) := by
-  refine isSupportedOn_of_mem_supportedOperators (Submodule.add_mem _ ?_ ?_)
-  · exact supportedOperators_mono (by simp)
-      (mem_supportedOperators_of_isSupportedOn (hP.groundCentered Ω))
-  · exact supportedOperators_mono (by simp) (siteExpectation_mem_supportedOperators K _)
+  change _ ∈ ManyBody.supportedOperators _ _
+  refine (add_mem ?_ ?_)
+  · exact ManyBody.supportedOperators_mono (by simp)
+      (hP.groundCentered Ω)
+  · exact ManyBody.supportedOperators_mono (by simp)
+      (ManyBody.regionExpectation_mem_supportedOperators K _)
 
-omit [NeZero q] in
 /-- The centered part of `0` is `0`. -/
 theorem groundCentered_zero :
     groundCentered Ω (0 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) = 0 := by
@@ -159,7 +158,7 @@ theorem _root_.ManyBody.ChainInteraction.localizedPart_zero (K : Finset (Fin L))
       = 0 := by
     simp [gaussianFilteredTerm, gaussianIntertwiner]
   rw [ManyBody.ChainInteraction.localizedPart, groundCentered_zero, hG, sub_zero, zero_add,
-    ← siteExpectationLM_apply, map_zero]
+    ← ManyBody.regionExpectationLM_apply, map_zero]
 
 /-- The window of the left part: the `k`-neighbourhood of the sites within `2R` and `R` of the
 inner edge `c - m` of the left part, where `[H, H_L]` is supported. -/
@@ -179,7 +178,8 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c
       (h.localizedPart Ω s ΔE (h.leftPart c m) (leftWindow L R c m k)) (leftBlock L c) := by
   by_cases hcm : c ≤ m
   · rw [h.leftPart_eq_zero_of_le hcm, h.localizedPart_zero]
-    exact isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)
+    change _ ∈ ManyBody.supportedOperators _ _
+    exact zero_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) _)
   refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_leftPart hh hhJ c m) _).mono ?_
   refine Finset.union_subset (fun x hx ↦ ?_) ((chainNeighborhood_interval_subset _ _ _).trans
     fun x hx ↦ ?_)
@@ -199,7 +199,6 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_rightPart {
   · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_leftBlock]; omega
   · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_leftBlock]; omega
 
-omit [NeZero q] in
 include hh in
 /-- Centering does not change the commutator with `H`. -/
 theorem _root_.ManyBody.ChainInteraction.commutator_groundCentered
@@ -220,7 +219,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_localizedPart_apply_le {E₀ : ℝ
     {P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hP : P.IsHermitian) (K : Finset (Fin L))
     {cP δ : ℝ} (hc : ‖h.hamiltonian * P - P * h.hamiltonian‖ ≤ cP)
     (hδ : ‖gaussianFilteredTerm s ΔE h.hamiltonian P -
-      (P + siteExpectation q K (gaussianFilteredTerm s ΔE h.hamiltonian P - P))‖ ≤ δ) :
+      (P + ManyBody.regionExpectation K (gaussianFilteredTerm s ΔE h.hamiltonian P - P))‖ ≤ δ) :
     ‖toEuclideanLin (h.localizedPart Ω s ΔE P K) Ω‖ ≤
       ΔE⁻¹ * Real.exp (-s / 2) * cP + δ := by
   have hop (A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) : ‖toEuclideanLin A Ω‖ ≤ ‖A‖ := by
@@ -244,7 +243,6 @@ theorem _root_.ManyBody.ChainInteraction.norm_localizedPart_apply_le {E₀ : ℝ
   exact (norm_sub_le _ _).trans (add_le_add hG hR)
 
 end Localized
-
 
 /-! ### The cut-offs -/
 
@@ -318,8 +316,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   set DL := gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω PL) - groundCentered Ω PL
   set DR := gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω PR) - groundCentered Ω PR
   have hrem : h.hamiltonian - (E₀ : ℂ) • 1 - (ML + MR) =
-      groundCentered Ω (h.bufferPart c m) - siteExpectation q KL DL -
-        siteExpectation q KR DR := by
+      groundCentered Ω (h.bufferPart c m) - ManyBody.regionExpectation KL DL -
+        ManyBody.regionExpectation KR DR := by
     rw [← hsum]
     simp only [ML, MR, ManyBody.ChainInteraction.localizedPart, DL, DR, PL, PR]
     abel
@@ -334,30 +332,33 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
     rw [two_mul, add_div]
     gcongr
   · rw [hrem]
-    refine isSupportedOn_of_mem_supportedOperators (Submodule.sub_mem _
-      (Submodule.sub_mem _ ?_ ?_) ?_)
-    · refine supportedOperators_mono ?_ (mem_supportedOperators_of_isSupportedOn
-        ((h.isSupportedOn_bufferPart hh hhJ c m).groundCentered Ω))
+    change _ ∈ ManyBody.supportedOperators _ _
+    refine sub_mem (sub_mem ?_ ?_) ?_
+    · refine ManyBody.supportedOperators_mono ?_
+        ((h.isSupportedOn_bufferPart hh hhJ c m).groundCentered Ω)
       intro x hx
-      simp only [Finset.mem_coe, mem_interval] at hx ⊢
+      simp only [mem_interval] at hx ⊢
       omega
-    · refine supportedOperators_mono ?_ (siteExpectation_mem_supportedOperators KL DL)
+    · refine ManyBody.supportedOperators_mono ?_
+        (ManyBody.regionExpectation_mem_supportedOperators KL DL)
       intro x hx
       have := chainNeighborhood_interval_subset (L := L) _ _ k hx
-      simp only [Finset.mem_coe, mem_interval] at this ⊢
+      simp only [mem_interval] at this ⊢
       omega
-    · refine supportedOperators_mono ?_ (siteExpectation_mem_supportedOperators KR DR)
+    · refine ManyBody.supportedOperators_mono ?_
+        (ManyBody.regionExpectation_mem_supportedOperators KR DR)
       intro x hx
       have := chainNeighborhood_interval_subset (L := L) _ _ k hx
-      simp only [Finset.mem_coe, mem_interval] at this ⊢
+      simp only [mem_interval] at this ⊢
       omega
   · have hD (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (hP : P.IsHermitian)
         (hc : ‖h.hamiltonian * P - P * h.hamiltonian‖ ≤ partCommutatorConst R * J ^ 2)
         (K : Finset (Fin L)) :
-        ‖siteExpectation q K (gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) -
+        ‖ManyBody.regionExpectation K
+            (gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) -
           groundCentered Ω P)‖ ≤
           Real.sqrt (2 * (s / ΔE ^ 2).toNNReal / Real.pi) * (partCommutatorConst R * J ^ 2) := by
-      refine (norm_siteExpectation_le K _).trans ?_
+      refine (ManyBody.norm_regionExpectation_le (D := K) _).trans ?_
       rw [h.gaussianFilteredTerm_groundCentered_sub hh]
       exact (norm_gaussianFilteredTerm_sub_self_le s ΔE
           (ManyBody.Interaction.isHermitian_hamiltonian hh) P).trans

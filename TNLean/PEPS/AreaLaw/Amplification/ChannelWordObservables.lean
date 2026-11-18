@@ -98,6 +98,7 @@ theorem siteOscillation_spectatorRootChannelWord_bounds
   exact mul_le_mul_of_nonneg_left (norm_spectatorRootChannelWord_le k hk₀ hk₁ w B)
     (by norm_num)
 
+open Classical in
 /-- The literal summed append increments of the actual evolved observable are
 dominated by the graph-ball event kernel at that observable. Source: area law,
 `09-amplification.tex`, lines 139–173. -/
@@ -105,10 +106,11 @@ theorem sum_siteOscillation_spectatorRootChannelWord_append_sub_le_graphChannelE
     [Fintype κ] [NeZero q]
     (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (hk₀ : ∀ i, 0 ≤ k i) (hk₁ : ∀ i, k i ≤ 1)
-    (hk : ∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x})
+    (hk : ∀ i, k i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (Finset.univ.filter fun x ↦ G.Reachable (a i) x))
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (N : ℕ) (hN : ∀ i, Finset.univ.sup (G.dist (a i)) ≤ N)
-    (hε : ∀ i l, l ≤ N → ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
+    (hε : ∀ i l, l ≤ N → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α)))
     (w : List κ) (y : ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :

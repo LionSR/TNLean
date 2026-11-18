@@ -241,7 +241,7 @@ section Graph
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
   (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+  (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
@@ -285,14 +285,13 @@ include ha hDiam in
 is disjoint from the sites within distance `l` of the first. -/
 theorem disjoint_biUnion_graphBall_of_lt_edist (i j : κ) (l : ℕ)
     (hlt : ((2 * R + l : ℕ) : ℕ∞) < G.edist (a j) (a i)) :
-    Disjoint (((X j).biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) (X i) := by
-  rw [Set.disjoint_left]
+    Disjoint ((X j).biUnion fun x => ManyBody.graphBall G x l) (X i) := by
+  rw [Finset.disjoint_left]
   intro y hy hyi
-  simp only [Finset.coe_biUnion, Finset.mem_coe, Set.mem_iUnion, exists_prop] at hy
-  obtain ⟨x, hx, hxy⟩ := hy
+  obtain ⟨x, hx, hxy⟩ := Finset.mem_biUnion.mp hy
   have hxy' := ManyBody.mem_graphBall.mp hxy
   have h1 := hDiam j (a j) (ha j) x hx
-  have h2 := hDiam i y (Finset.mem_coe.mp hyi) (a i) (ha i)
+  have h2 := hDiam i y hyi (a i) (ha i)
   have htri : G.edist (a j) (a i) ≤ G.edist (a j) x + G.edist x y + G.edist y (a i) :=
     calc G.edist (a j) (a i) ≤ G.edist (a j) y + G.edist y (a i) := SimpleGraph.edist_triangle
       _ ≤ G.edist (a j) x + G.edist x y + G.edist y (a i) := by
@@ -325,10 +324,10 @@ theorem norm_groundCompression_observables_commutator_le_exp [NeZero d]
     {ΔE : ℝ} (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
     (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι)) (vObs : ℕ) (hSCard : S.card ≤ vObs)
-    (l : ℕ) (Y : Set ι)
-    (hY : Disjoint ((S.biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) Y)
-    (hB : B ∈ supportedOperators d Y) :
+    (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (vObs : ℕ) (hSCard : S.card ≤ vObs)
+    (l : ℕ) (Y : Finset ι)
+    (hY : Disjoint (S.biUnion fun x => ManyBody.graphBall G x l) Y)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) :
     ‖groundCompression (∑ k, h k) E₀ W * groundCompression (∑ k, h k) E₀ B -
       groundCompression (∑ k, h k) E₀ B * groundCompression (∑ k, h k) E₀ W‖ ≤
         commutatorConst R vObs b₀ |Kg| kg * ‖W‖ * ‖B‖ *
@@ -405,7 +404,7 @@ theorem norm_groundCompression_observables_commutator_le_exp_edist [NeZero d]
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
     {η : Type*} (Y : η → Finset ι) (c : η → ι) (hc : ∀ i, c i ∈ Y i)
     (W : η → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hW : ∀ i, W i ∈ supportedOperators d (Y i : Set ι))
+    (hW : ∀ i, W i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Y i : Finset ι))
     (Robs : ℕ) (hYDiam : ∀ i, ∀ x ∈ Y i, ∀ y ∈ Y i, G.edist x y ≤ Robs)
     (vObs : ℕ) (hYCard : ∀ i, (Y i).card ≤ vObs) (i j : η) :
     ‖groundCompression (∑ k, h k) E₀ (W j) * groundCompression (∑ k, h k) E₀ (W i) -
@@ -423,7 +422,7 @@ theorem norm_groundCompression_observables_commutator_le_exp_edist [NeZero d]
   intro l hlt
   exact norm_groundCompression_observables_commutator_le_exp G X h hHerm hSupport R
     hDiam vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap (Y j) (hW j) vObs (hYCard j)
-    l (Y i : Set ι)
+    l (Y i)
     (disjoint_biUnion_graphBall_of_lt_edist G Y c hc Robs hYDiam i j l hlt) (hW i)
 
 omit ha in
@@ -439,7 +438,7 @@ theorem norm_groundCompression_commutator_le_exp [NeZero d] (Kg : ℝ) (kg : ℕ
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {ΔE : ℝ} (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k) (i j : κ) (l : ℕ)
-    (hY : Disjoint (((X j).biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) (X i)) :
+    (hY : Disjoint ((X j).biUnion fun x => ManyBody.graphBall G x l) (X i)) :
     ‖groundCompression (∑ k, h k) E₀ (h j) * groundCompression (∑ k, h k) E₀ (h i) -
         groundCompression (∑ k, h k) E₀ (h i) * groundCompression (∑ k, h k) E₀ (h j)‖ ≤
       commutatorConst R vR b₀ Kg kg * ‖h j‖ * ‖h i‖ *

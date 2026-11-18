@@ -343,7 +343,7 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
     exact Finset.sdiff_subset_sdiff (rectRegion_dilate_mono A Q₀ (hdle j hj)) le_rfl
   -- the finite-dimensional discount
   have key := Entropy.two_mul_condEntropy_le (n := fun _ : Site Λ ↦ q) X T hT hdisj a ha0 ha2
-    hΩ h.term S (fun i ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.supported i))
+    hΩ h.term S (fun i ↦ (h.supported i))
     h.hermitian hJ h.norm_le hsingle hΔ heig hgap (by linarith) hE hu hmass
     Finset.disjoint_sdiff hTbuf
   -- the error terms

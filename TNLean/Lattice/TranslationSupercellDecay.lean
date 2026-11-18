@@ -43,7 +43,7 @@ namespace TNLean.Lattice
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
   (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+  (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
@@ -70,8 +70,7 @@ theorem norm_groundCompression_commutator_le_of_supercell_separation [NeZero d]
     (hS : ∀ g ∈ S, ∀ v ∈ groundSpace (∑ k, h k) E₀,
       sitePermMatrix d g *ᵥ WithLp.ofLp v = WithLp.ofLp v)
     {g : Γ} (hg : g ∈ S) (i j : κ) (l : ℕ)
-    (hsep : Disjoint (((X i).biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι)
-      (X (g • j) : Set ι))
+    (hsep : Disjoint ((X i).biUnion fun x => ManyBody.graphBall G x l) (X (g • j)))
     {T : ℝ} (hT : 0 ≤ T) :
     ‖groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm r ΔE (∑ k, h k) (h i)) *
           groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm r ΔE (∑ k, h k) (h j)) -

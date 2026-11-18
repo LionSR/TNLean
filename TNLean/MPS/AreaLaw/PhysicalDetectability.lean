@@ -8,7 +8,9 @@ import QICLean.Analysis.ComplementProdKernel
 import QICLean.Analysis.ComplementProdPartition
 import QICLean.Analysis.ProjectionGeometry
 import TNLean.Algebra.MatrixHermitianSum
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
@@ -67,13 +69,9 @@ private theorem commute_bonds_of_separated
       (h i) (interval L i.val (i.val + 2)))
     (i j : Fin (L - 1)) (hsep : i.val + 1 < j.val ∨ j.val + 1 < i.val) :
     Commute (h i) (h j) := by
-  refine QuantumCircuit.commute_of_mem_supportedOperators ?_
-    (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
-    (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs j))
-  rw [Set.disjoint_left]
+  refine ManyBody.commute_of_mem_supportedOperators_of_disjoint (hs i) (hs j) ?_
+  rw [Finset.disjoint_left]
   intro x hx hy
-  change x ∈ interval L i.val (i.val + 2) at hx
-  change x ∈ interval L j.val (j.val + 2) at hy
   rw [mem_interval] at hx hy
   omega
 

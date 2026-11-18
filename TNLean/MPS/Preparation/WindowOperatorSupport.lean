@@ -88,8 +88,8 @@ arXiv:2307.01696, supported local observables on consecutive blocks. -/
 theorem exists_chainWindowOperator_eq_of_mem_supportedOperators
     {L N a : ℕ} (ha : a < N) (haL : a + L ≤ N)
     {X : Matrix (Cfg d N) (Cfg d N) ℂ}
-    (hX : X ∈ QuantumCircuit.supportedOperators d
-      {i : Fin N | a ≤ i.val ∧ i.val < a + L}) :
+    (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.univ.filter fun (i : Fin N) ↦ a ≤ i.val ∧ i.val < a + L)) :
     ∃ Y : Matrix (Cfg d L) (Cfg d L) ℂ, X = chainWindowOperator N a Y := by
   classical
   let e : Fin L → Fin N := fun j => ⟨a + j.val, by omega⟩
@@ -99,8 +99,10 @@ theorem exists_chainWindowOperator_eq_of_mem_supportedOperators
     have hval := congrArg Fin.val hij
     dsimp [e] at hval
     omega
-  have hRange : Set.range e = {i : Fin N | a ≤ i.val ∧ i.val < a + L} := by
+  have hRange : Finset.univ.image e =
+      Finset.univ.filter fun i : Fin N ↦ a ≤ i.val ∧ i.val < a + L := by
     ext i
+    simp only [Finset.mem_image, Finset.mem_univ, true_and, Finset.mem_filter]
     constructor
     · rintro ⟨j, rfl⟩
       change a ≤ a + j.val ∧ a + j.val < a + L
@@ -111,7 +113,7 @@ theorem exists_chainWindowOperator_eq_of_mem_supportedOperators
       apply Fin.ext
       dsimp [e]
       omega
-  have hX' : X ∈ QuantumCircuit.supportedOperators d (Set.range e) := by
+  have hX' : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.image e) := by
     rw [hRange]
     exact hX
   obtain ⟨Y, hY⟩ := QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators he hX'
@@ -231,18 +233,19 @@ Theorem 1, is applied to. -/
 theorem chainWindowOperator_mem_supportedOperators {L N a : ℕ} (ha : a < N)
     (haL : a + L ≤ N) (X : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ) :
     chainWindowOperator N a X ∈
-      QuantumCircuit.supportedOperators d {k : Fin N | a ≤ k.val ∧ k.val < a + L} := by
+      ManyBody.supportedOperators (fun _ ↦ Fin d)
+          (Finset.univ.filter fun (k : Fin N) ↦ a ≤ k.val ∧ k.val < a + L) := by
   classical
-  set S : Set (Fin N) := {k : Fin N | a ≤ k.val ∧ k.val < a + L}
+  set S : Finset (Fin N) := Finset.univ.filter fun k : Fin N ↦ a ≤ k.val ∧ k.val < a + L
   have hunit : ∀ τ₀ σ₀ : Fin L → Fin d,
       chainWindowOperator N a (Matrix.single τ₀ σ₀ (1 : ℂ)) ∈
-        QuantumCircuit.supportedOperators d S := by
+        ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
     intro τ₀ σ₀
     let m : Fin N → Matrix (Fin d) (Fin d) ℂ := fun k ↦
       if h : a ≤ k.val ∧ k.val < a + L then
         Matrix.single (τ₀ ⟨k.val - a, by omega⟩) (σ₀ ⟨k.val - a, by omega⟩) 1
       else 1
-    have hm : ∀ k ∉ S, m k = 1 := fun k hk ↦ dite_eq_right hk
+    have hm : ∀ k ∉ S, m k = 1 := fun k hk ↦ dite_eq_right (by simpa [S] using hk)
     have heq : chainWindowOperator N a (Matrix.single τ₀ σ₀ (1 : ℂ)) = Matrix.finKronecker m := by
       ext τ σ
       rw [chainWindowOperator_apply ha haL, Matrix.finKronecker_apply]
@@ -321,10 +324,10 @@ theorem chainWindowOperator_mem_supportedOperators {L N a : ℕ} (ha : a < N)
     conv_lhs => rw [Matrix.matrix_eq_sum_single X]
     simp only [Matrix.smul_single, smul_eq_mul, mul_one]
   rw [hX, chainWindowOperator_eq_embedLocalOperatorAlgHom ha haL, map_sum]
-  refine Submodule.sum_mem _ fun τ₀ _ ↦ ?_
+  refine sum_mem fun τ₀ _ ↦ ?_
   rw [map_sum]
-  refine Submodule.sum_mem _ fun σ₀ _ ↦ ?_
+  refine sum_mem fun σ₀ _ ↦ ?_
   rw [map_smul, ← chainWindowOperator_eq_embedLocalOperatorAlgHom ha haL]
-  exact Submodule.smul_mem _ _ (hunit τ₀ σ₀)
+  exact SMulMemClass.smul_mem _ (hunit τ₀ σ₀)
 
 end MPSTensor

@@ -175,7 +175,8 @@ theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V
     {A C A₀ C₀ : Finset V} (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A) (hC₀ : C₀ ⊆ C)
     (B : Finset V) (hnot : ∀ v ∈ A₀ ∪ C₀, v ∉ B)
     {U : Matrix (V → Fin (q * q)) (V → Fin (q * q)) ℂ}
-    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ supportedOperators (q * q) (B : Set V)) {δ : ℝ} :
+    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B)
+    {δ : ℝ} :
     let p := sitePairConfigurationEquiv V q q
     let F := reindex p p (sheetSwapOp q A)
     let ψ : (V → Fin (q * q)) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
@@ -194,7 +195,7 @@ theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V
       (sheetSwap q A).permMatrix_mem_unitaryGroup) ψ).trans hψn
   set Pe := (Equiv.sumArrowEquivProdArrow V V (Fin q)).trans p with hPe
   set U' := reindex Pe.symm Pe.symm U with hU'
-  have hU's : U' ∈ supportedOperators q ((B.disjSum B : Finset (V ⊕ V)) : Set (V ⊕ V)) :=
+  have hU's : U' ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (B.disjSum B : Finset (V ⊕ V)) :=
     reindex_sumArrow_sitePair_mem_supportedOperators q hUs
   have hU'u : U'ᴴ * U' = 1 :=
     (Matrix.mem_unitaryGroup_iff').mp (reindex_mem_unitaryGroup Pe.symm U hUu)
@@ -219,11 +220,10 @@ theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V
     · simp only [Finset.inl_mem_disjSum] at hv hv'
       exact Finset.disjoint_left.mp hAC (hA₀ hv) (hC₀ hv')
     · simp at hv
-  have hS : Disjoint ((B.disjSum B : Finset (V ⊕ V)) : Set (V ⊕ V))
-      ((A₀.disjSum ∅ ∪ C₀.disjSum ∅ : Finset (V ⊕ V)) : Set (V ⊕ V)) := by
-    rw [Set.disjoint_left]
+  have hS : Disjoint (B.disjSum B : Finset (V ⊕ V)) (A₀.disjSum ∅ ∪ C₀.disjSum ∅) := by
+    rw [Finset.disjoint_left]
     rintro (v | v) hv hv'
-    · simp only [Finset.mem_coe, Finset.inl_mem_disjSum] at hv
+    · simp only [Finset.inl_mem_disjSum] at hv
       have hmem : v ∈ A₀ ∪ C₀ := by
         simpa [Finset.mem_union, Finset.inl_mem_disjSum] using hv'
       exact hnot v hmem hv
@@ -255,7 +255,8 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
     (hnot : ∀ v ∈ R₀ ∪ C₀, rectangleSiteEquiv L L v ∉ B)
     {U : Matrix (Lattice.Configuration (rectangularDomain L L) (q * q))
       (Lattice.Configuration (rectangularDomain L L) (q * q)) ℂ}
-    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ supportedOperators (q * q) (B : Set _)) {δ : ℝ} :
+    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B)
+    {δ : ℝ} :
     let pe := (sitePairConfigurationEquiv (SquareLatticeVertex L L) q q).trans
       (rectangleConfigurationEquiv L L (q * q))
     let F := reindex pe pe (TNLean.Lattice.sheetSwapOp q R)
@@ -268,11 +269,11 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
   set a := rectangleSiteEquiv L L
   set e := rectangleConfigurationEquiv L L (q * q)
   set S := B.image a.symm
-  have hU₀s : reindex e.symm e.symm U ∈ supportedOperators (q * q) (S : Set _) := by
+  have hU₀s : reindex e.symm e.symm U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
     have h₀ : reindex e.symm e.symm U = embedOp a.symm U := by
       rw [embedOp_equiv_eq_reindex]
       rfl
-    rw [h₀, Finset.coe_image]
+    rw [h₀]
     exact embedOp_mem_supportedOperators_image a.symm.injective hUs
   have hnot' : ∀ v ∈ R₀ ∪ C₀, v ∉ S := by
     intro v hv hvS

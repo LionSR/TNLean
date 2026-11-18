@@ -276,7 +276,6 @@ class ImportLayerPolicyTests(unittest.TestCase):
         self.assertEqual(layers.layer_of("TNLean.Algebra.FinKronecker"), "algebra")
         self.assertEqual(layers.layer_of("TNLean.Circuit.SiteEmbedding"), "sites")
         self.assertEqual(layers.layer_of("TNLean.Circuit.SiteEmbeddingNorm"), "sites")
-        self.assertEqual(layers.layer_of("TNLean.Circuit.SiteExpectationGraphLocalization"), "dynamics")
         self.assertEqual(layers.layer_of("TNLean.Circuit.LocalCircuit"), "circuit")
         self.assertEqual(layers.layer_of("TNLean.Lattice.PartyCircuit.PartyWord"), "party")
         self.assertEqual(layers.layer_of("TNLean.Lattice.LocalHamiltonian"), "hamiltonian")

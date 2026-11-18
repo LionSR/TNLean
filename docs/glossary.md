@@ -1733,29 +1733,28 @@ in `MPS/Preparation/` uses it.
 
 ### Local circuits and two-site gates
 
-#### `QuantumCircuit.supportedOperators`
+#### `ManyBody.supportedOperators` (QICLean)
 
 - **Declaration:**
-  `QuantumCircuit.supportedOperators {ι : Type*} [Fintype ι] (d : ℕ) (S : Set ι) : Submodule ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)`.
-- **Defined in:** `TNLean/Circuit/SupportedOperators.lean`.
-- **Meaning:** the complex span of the product operators
-  `Matrix.rectKronecker m = ⊗ᵢ mᵢ` with `mᵢ = 1` for every `i ∉ S`, that is
-  `M_d^{⊗ S} ⊗ 1`: the operators acting on the sites of `S` of a finite type
-  of `d`-level sites `ι`. The chain of `N` sites is `ι = Fin N`, where
-  `Matrix.rectKronecker m` is `Matrix.finKronecker m`.
+  `ManyBody.supportedOperators (X : V → Type*) (D : Finset V) : StarSubalgebra ℂ (Matrix (Config X) (Config X) ℂ)`.
+- **Defined in:** QICLean, `QICLean/ManyBody/Sites/Support.lean`. TNLean has no
+  copy; circuits on `d`-level sites use `ManyBody.supportedOperators (fun _ ↦ Fin d) S`.
+- **Meaning:** the operators acting on the sites of `D`, that is `M^{⊗ D} ⊗ 1`.
+  Its carrier is the matrix-entry condition `ManyBody.IsSupportedOn`
+  (`Entropy.IsSupportedOn` for dimensions `n : V → ℕ`), and
+  `ManyBody.supportedOperators_toSubmodule_eq_span` identifies it with the span of
+  the product operators `⊗ᵥ mᵥ` with `mᵥ = 1` off `D`.
 - **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
   operators `𝒪₁` and `𝒪'ₛ` acting on sites of the chain).
 - **Sanctioned bridges:** `QuantumCircuit.rectKronecker_mem_supportedOperators`
-  and its chain form `QuantumCircuit.finKronecker_mem_supportedOperators`,
-  `QuantumCircuit.supportedOperators_mono`,
-  `QuantumCircuit.one_mem_supportedOperators`,
-  `QuantumCircuit.mul_mem_supportedOperators`,
-  `QuantumCircuit.star_mem_supportedOperators`,
-  `QuantumCircuit.commute_of_mem_supportedOperators` (operators acting on
-  disjoint sets commute), and `QuantumCircuit.embedOp_mem_supportedOperators`
-  (an operator placed by an injective map acts on its range).
-- **Caveat:** membership says nothing about unitarity; for `S = ∅` the
-  submodule consists of the scalar multiples of the identity.
+  and its chain form `QuantumCircuit.finKronecker_mem_supportedOperators`
+  (with `QuantumCircuit.prodOp_eq_rectKronecker`), `ManyBody.supportedOperators_mono`,
+  `ManyBody.commute_of_mem_supportedOperators_of_disjoint`,
+  `ManyBody.supportedOperators_induction`, and
+  `QuantumCircuit.embedOp_mem_supportedOperators` (an operator placed by an
+  injective map acts on its range).
+- **Caveat:** membership says nothing about unitarity; for `D = ∅` the
+  subalgebra consists of the scalar multiples of the identity.
 
 #### `QuantumCircuit.bondNeighbourhood` and `QuantumCircuit.lightCone`
 
@@ -1807,13 +1806,13 @@ in `MPS/Preparation/` uses it.
   both are nonempty it fails as soon as `N ≤ 2s + 1`, since the offsets
   `|m| ≤ s` then reach every site of the ring.
 
-#### `QuantumCircuit.BondLayer` and `QuantumCircuit.Layer`
+#### `QuantumCircuit.BondLayer` and `QuantumCircuit.RingLayer`
 
 - **Declarations:** `structure QuantumCircuit.BondLayer (d : ℕ) (bond : β → Set ι)`,
   with fields `bonds : Finset β`, `gate : β → Matrix (ι → Fin d) (ι → Fin d) ℂ`,
   and the conditions that every gate of a bond is unitary and lies in
   `supportedOperators d (bond b)`, and that the bonds carrying gates are
-  pairwise disjoint; `QuantumCircuit.Layer (d N : ℕ) [NeZero N]` abbreviates
+  pairwise disjoint; `QuantumCircuit.RingLayer (d N : ℕ) [NeZero N]` abbreviates
   `BondLayer d ringBond` on `Fin N`.
 - **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
 - **Meaning:** one layer of a local circuit: unitaries on pairwise disjoint
@@ -2084,7 +2083,7 @@ in `MPS/Preparation/` uses it.
   `QuantumCircuit.exists_permLayer_op_mulVec` (a layer of such gates on
   disjoint pairs acts as one permutation of the configurations).
 - **Caveat:** only permutations of the computational basis are covered; a
-  general gate is a `QuantumCircuit.Layer` gate.
+  general gate is a `QuantumCircuit.RingLayer` gate.
 
 #### `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth`
 
@@ -2362,33 +2361,29 @@ in `MPS/Preparation/` uses it.
   budget `μ_R J`, and `TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson` is
   the resulting Lemma 4.1 of the area-law manuscript.
 
-#### `QuantumCircuit.siteExpectation`
+#### `ManyBody.regionExpectation`
 
 - **Declaration:**
-  `QuantumCircuit.siteExpectation (q : ℕ) (K : Finset ι) (B : Matrix (ι → Fin q) (ι → Fin q) ℂ)`,
-  with the linear map `QuantumCircuit.siteExpectationLM`.
-- **Defined in:** `TNLean/Circuit/SiteExpectation.lean`.
+  `ManyBody.regionExpectation (D : Finset V) (A : Matrix (Config X) (Config X) ℂ)`,
+  with the linear map `ManyBody.regionExpectationLM`; QICLean,
+  `QICLean/ManyBody/Sites/RegionExpectation.lean`. TNLean uses it at
+  `X := fun _ ↦ Fin q`; the former `QuantumCircuit.siteExpectation` was deleted in
+  follow-up F12 of `docs/audits/2026-11-17_qiclean_pin_49b9aa93_followups.md`.
 - **Meaning:** the normalized partial trace
-  `E_K(B) = q^{-|ι \ K|} Tr_{ι \ K}(B) ⊗ 1`, with the factors at their
+  `E_K(B) = |X_{V∖K}|⁻¹ Tr_{V∖K}(B) ⊗ 1`, with the factors at their
   original sites.
 - **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
   `eq:quasilocal-ce` (`03-quasilocal.tex`, lines 17–29).
-- **Sanctioned bridges:** `QuantumCircuit.siteExpectation_eq_average` (uniform
-  average over products of on-site Weyl operators outside `K`),
-  `siteExpectation_mem_supportedOperators`,
-  `siteExpectation_of_mem_supportedOperators`, `siteExpectation_one`,
-  `norm_siteExpectation_le`, `siteExpectationLM_isKrausCPTP`,
-  `norm_sub_siteExpectation_le` (error through on-site commutators), and
-  `norm_heisenberg_sub_siteExpectation_graphBall_le` (localization of the
-  dynamics onto graph balls under a sphere-growth hypothesis).
-- **Caveat:** the averaging formula and its consequences assume `q ≠ 0`.
+- **Sanctioned bridges:** none in TNLean. The spectator form
+  `QuantumCircuit.spectatorSiteExpectation` is the region expectation of the
+  system with one extra site carrying the spectator, by definition.
 
 #### Positive quasi-local constraints (`exists_positiveQuasilocalConstraints`)
 
 - **Declaration:** `TNLean.PEPS.AreaLaw.exists_positiveQuasilocalConstraints`, with the
   constraints `SpectralFilter.positiveConstraint c_* (SpectralFilter.centeredFilter p (Δ / 2) H Ω hᵢ)`
   from QICLean and their ball expectations
-  `QuantumCircuit.siteExpectation q (ManyBody.graphBall G aᵢ l) kᵢ`.
+  `ManyBody.regionExpectation (ManyBody.graphBall G aᵢ l) kᵢ`.
 - **Defined in:** `TNLean/PEPS/AreaLaw/PositiveConstraints.lean`; the root channels of
   Lemma 4.4 in `TNLean/PEPS/AreaLaw/QuasilocalRoots.lean`.
 - **Meaning:** `kᵢ = |Mᵢ| / c_*`, where `Mᵢ` is the term `hᵢ` filtered below the gap and

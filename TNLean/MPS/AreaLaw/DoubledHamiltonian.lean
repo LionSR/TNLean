@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hamiltonian
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import TNLean.Circuit.SitewiseTensorSupport
 import QICLean.Analysis.TraceMulBound
 
@@ -43,17 +45,16 @@ noncomputable def _root_.ManyBody.ChainInteraction.doubled (h : ManyBody.ChainIn
     (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)
       (h.term X ⊗ₖ 1 + 1 ⊗ₖ h.term X)
   mem X := by
-    apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
+    change _ ∈ ManyBody.supportedOperators _ _
     change (Matrix.reindexAddEquiv ℂ (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)
       (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)) (_ + _) ∈ _
     rw [map_add]
-    have hterm := QuantumCircuit.mem_supportedOperators_of_isSupportedOn (h.mem X)
-    have hone := QuantumCircuit.one_mem_supportedOperators (d := q) (X.1 : Set (Fin L))
+    have hterm := h.mem X
+    have hone := one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) X.1)
     have hleft := QuantumCircuit.reindex_kronecker_mem_supportedOperators hterm hone
     have hright := QuantumCircuit.reindex_kronecker_mem_supportedOperators hone hterm
-    simpa only [Set.union_self, Matrix.coe_reindexAddEquiv] using
-      (QuantumCircuit.supportedOperators (q * q)
-        ((X.1 : Set (Fin L)) ∪ (X.1 : Set (Fin L)))).add_mem hleft hright
+    simpa only [Finset.union_self, Matrix.coe_reindexAddEquiv] using
+      add_mem hleft hright
 
 /-- The paired terms of Hermitian terms are Hermitian.
 Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 355–360. -/

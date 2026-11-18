@@ -86,7 +86,7 @@ hole footprint, and let `E` and `U = Λ ∖ (T ∪ E)` be as in `eq:birth-partit
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 396–407; proof lines
 413–437 and 447–449. -/
 theorem birth_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
-    (hTH : Disjoint (T : Set ι) F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
+    (hTH : Disjoint T F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     {L : ℝ}
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
@@ -131,7 +131,7 @@ private contraction at `P∘`, one pair effect between `Q∘` and `P∘`, and a 
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 407–410; proof lines
 439–449. -/
 theorem death_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
-    (hTH : Disjoint (T : Set ι) F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
+    (hTH : Disjoint T F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     {L : ℝ}
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :

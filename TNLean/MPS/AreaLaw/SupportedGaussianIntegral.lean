@@ -71,7 +71,7 @@ theorem exists_supported_gaussian_integral_graphNeighborhood
     (hd : 0 ≤ d)
     (hgen : ∀ s : ℝ,
       ‖ManyBody.heisenbergEvolution Φ.hamiltonian s (Φ.hamiltonian - K) -
-        siteExpectation q (Z.biUnion fun x ↦ ManyBody.graphBall G x ⌊ℓ⌋₊)
+        ManyBody.regionExpectation (Z.biUnion fun x ↦ ManyBody.graphBall G x ⌊ℓ⌋₊)
           (ManyBody.heisenbergEvolution Φ.hamiltonian s (Φ.hamiltonian - K))‖ ≤
         d * (Fintype.card ι : ℝ) *
           Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |s| - ℓ / 2)) :
@@ -84,18 +84,18 @@ theorem exists_supported_gaussian_integral_graphNeighborhood
     ∃ U : ℝ → Matrix (ι → Fin q) (ι → Fin q) ℂ,
       U 0 = 1 ∧
       (∀ t, HasDerivAt U
-        ((Complex.I • siteExpectation q (N Z)
+        ((Complex.I • ManyBody.regionExpectation (N Z)
           (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
       (∀ t, U t ∈ Matrix.unitaryGroup (ι → Fin q) ℂ) ∧
-      (∀ t, U t ∈ supportedOperators q (N Z : Set ι)) ∧
+      (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (N Z : Finset ι)) ∧
       ∀ (Q : Finset ι) (W : Matrix (ι → Fin q) (ι → Fin q) ℂ),
-        W ∈ supportedOperators q (Q : Set ι) →
+        W ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Q →
         ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
           let B := N (Q ∪ Z)
           let M := ∫ t : ℝ in Set.Icc (-T) T,
-            siteExpectation q (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
+            ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
               ∂gaussianReal 0 η
-          M ∈ supportedOperators q (B : Set ι) ∧
+          M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) B ∧
           ‖M‖ ≤ ‖W‖ ∧
           ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K W‖ ≤
             ‖W‖ * (a + d) * n ^ 2 * (1 + T) * Real.exp (v * T - ℓ / 2) := by
@@ -109,22 +109,21 @@ theorem exists_supported_gaussian_integral_graphNeighborhood
   obtain ⟨U, hU0, hU, hunit, hsupport, haverage⟩ :=
     ManyBody.exists_supported_gaussian_integral_of_projection_bounds
       (ManyBody.Interaction.isHermitian_hamiltonian hHerm) hK (N Z)
-  simp only [← siteExpectation_eq_regionExpectation] at hU haverage
-  refine ⟨U, hU0, hU, hunit, fun t ↦ mem_supportedOperators_of_isSupportedOn (hsupport t), ?_⟩
+  refine ⟨U, hU0, hU, hunit, fun t ↦ (hsupport t), ?_⟩
   intro Q W hW η T hT B M
   have hgenT (s : ℝ) (hs : |s| ≤ T) :
       ‖ManyBody.heisenbergEvolution K' s (K' - K) -
-        siteExpectation q (N Z) (ManyBody.heisenbergEvolution K' s (K' - K))‖ ≤
+        ManyBody.regionExpectation (N Z) (ManyBody.heisenbergEvolution K' s (K' - K))‖ ≤
           d * n * Real.exp (v * T - ℓ / 2) :=
     (hgen s).trans (mul_le_mul_of_nonneg_left
       (Real.exp_mul_sub_le_exp_mul_sub hv.le hs) (mul_nonneg hd (Nat.cast_nonneg _)))
   have hnear (t : ℝ) (ht : |t| ≤ T) :
       ‖ManyBody.heisenbergEvolution K' t W -
-        siteExpectation q (N Q) (ManyBody.heisenbergEvolution K' t W)‖ ≤
+        ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t W)‖ ≤
           ‖W‖ * a * n ^ 2 * Real.exp (v * T - ℓ / 2) := by
-    have hloc := norm_heisenberg_sub_siteExpectation_graphNeighborhood_le_of_sphere_le_two
+    have hloc := norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_two
       G Y hDiam hCard hSphere Φ.term hHerm Φ.mem b₀ hBudget Q
-      (isSupportedOn_of_mem_supportedOperators hW) ℓ t
+      hW ℓ t
     have hc : (Q.card : ℝ) ≤ n := by
       change (Q.card : ℝ) ≤ (Fintype.card ι : ℝ)
       exact_mod_cast Finset.card_le_univ Q
@@ -145,7 +144,7 @@ theorem exists_supported_gaussian_integral_graphNeighborhood
     (a * n ^ 2 * Real.exp (v * T - ℓ / 2))
     (d * n * Real.exp (v * T - ℓ / 2)) (by positivity) (by positivity)
     (fun t ht ↦ by simpa only [mul_assoc] using hnear t ht) hgenT
-  refine ⟨mem_supportedOperators_of_isSupportedOn hMsupport, hMnorm, hMerror.trans ?_⟩
+  refine ⟨hMsupport, hMnorm, hMerror.trans ?_⟩
   have hnsq : n ≤ n ^ 2 := by
     change (Fintype.card ι : ℝ) ≤ (Fintype.card ι : ℝ) ^ 2
     exact_mod_cast (show Fintype.card ι ≤ Fintype.card ι ^ 2 by
@@ -179,19 +178,19 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
         ∃ U : ℝ → Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ,
           U 0 = 1 ∧
           (∀ t, HasDerivAt U
-            ((Complex.I • siteExpectation (q * q) (N Z)
+            ((Complex.I • ManyBody.regionExpectation (N Z)
               (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
           (∀ t, U t ∈ Matrix.unitaryGroup (Fin L → Fin (q * q)) ℂ) ∧
-          (∀ t, U t ∈ supportedOperators (q * q) (N Z : Set (Fin L))) ∧
+          (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (N Z : Finset (Fin L))) ∧
           ∀ (Q : Finset (Fin L))
             (W : Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ),
-            W ∈ supportedOperators (q * q) (Q : Set (Fin L)) →
+            W ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q →
             ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
               let B := N (Q ∪ Z)
               let M := ∫ t : ℝ in Set.Icc (-T) T,
-                siteExpectation (q * q) (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
+                ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
                   ∂gaussianReal 0 η
-              M ∈ supportedOperators (q * q) (B : Set (Fin L)) ∧
+              M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
               ‖M‖ ≤ ‖W‖ ∧
               ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K W‖ ≤
                 ‖W‖ * C * (L : ℝ) ^ 2 * (1 + T) *
@@ -218,7 +217,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
         (ManyBody.Interaction.isHermitian_hamiltonian (h.isHermitian_doubled_term hh)) Z ℓ
         d hd (fun s ↦ by
       rw [hΦ, biUnion_graphBall_pathGraph_eq_chainNeighborhood Z hℓ, Fintype.card_fin]
-      exact h.norm_relativeGenerator_sub_siteExpectation_le hh hhJ D hq ℓ hℓ s)
+      exact h.norm_relativeGenerator_sub_regionExpectation_le hh hhJ D hq ℓ hℓ s)
   simp only [hΦ, biUnion_graphBall_pathGraph_eq_chainNeighborhood _ hℓ, Fintype.card_fin]
     at hgen
   exact hgen
@@ -243,19 +242,20 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
         ∃ U : ℝ → Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ,
           U 0 = 1 ∧
           (∀ t, HasDerivAt U
-            ((Complex.I • siteExpectation (q * q) (N Z)
+            ((Complex.I • ManyBody.regionExpectation (N Z)
               (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
           (∀ t, U t ∈ Matrix.unitaryGroup (Fin Λ.card → Fin (q * q)) ℂ) ∧
-          (∀ t, U t ∈ supportedOperators (q * q) (N Z : Set (Fin Λ.card))) ∧
+          (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
+              (N Z : Finset (Fin Λ.card))) ∧
           ∀ (Q : Finset (Fin Λ.card))
             (W : Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ),
-            W ∈ supportedOperators (q * q) (Q : Set (Fin Λ.card)) →
+            W ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q →
             ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
               let B := N (Q ∪ Z)
               let M := ∫ t : ℝ in Set.Icc (-T) T,
-                siteExpectation (q * q) (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
+                ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
                   ∂gaussianReal 0 η
-              M ∈ supportedOperators (q * q) (B : Set (Fin Λ.card)) ∧
+              M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
               ‖M‖ ≤ ‖W‖ ∧
               ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K W‖ ≤
                 ‖W‖ * C * (Λ.card : ℝ) ^ 2 * (1 + T) *
@@ -281,7 +281,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
         (ManyBody.Interaction.isHermitian_hamiltonian (h.isHermitian_doubled_term hh)) Z (m : ℝ)
         d hd (fun s ↦ by
       rw [hΦ, Nat.floor_natCast, Fintype.card_fin]
-      exact h.norm_relativeGenerator_sub_siteExpectation_le hh hhJ D hq m s)
+      exact h.norm_relativeGenerator_sub_regionExpectation_le hh hhJ D hq m s)
   simp only [hΦ, Nat.floor_natCast, Fintype.card_fin] at hgen
   exact hgen
 

@@ -179,7 +179,7 @@ noncomputable def powerProjector {ι : Type*} [Fintype ι] [DecidableEq ι] (H :
 
 /-- With `L - 1` bonds, one more than their number is the number of sites. -/
 private theorem card_bonds_add_one (hL : 0 < L) :
-    (((Fintype.card (Fin (L - 1)) + 1 : ℕ) : ℝ)) = L := by
+    ((Fintype.card (Fin (L - 1)) + 1 : ℕ) : ℝ) = L := by
   rw [Fintype.card_fin, Nat.sub_add_cancel hL]
 
 /-- The three properties of `A` at line 602, from the QICLean estimate for sums of positive
@@ -408,7 +408,8 @@ private theorem isSupportedOn_bondComplement
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (bondComplement h i) (letterSupport L i) := by
   by_cases hi : i.val < L - 1
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_true, ite_true]
-    exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sub_mem
+    change _ ∈ ManyBody.supportedOperators _ _
+    exact sub_mem
       (Entropy.isSupportedOn_one _) (hs ⟨i, hi⟩)
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_false, ite_false, sub_zero]
     exact Entropy.isSupportedOn_one _

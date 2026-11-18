@@ -66,11 +66,11 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonia
   let B (i : SquareLatticeSiteOrEdge L L) :=
     F * Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianPart.term i)) * Fᴴ
   have hBsupport (i : SquareLatticeSiteOrEdge L L) : B i ∈
-      QuantumCircuit.supportedOperators (q * q)
-          (squareLatticeSiteOrEdgeSupport i : Set (Vertex L)) :=
+      ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
+          (squareLatticeSiteOrEdgeSupport i : Finset (Vertex L)) :=
     TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R
       (squareLatticeSiteOrEdgeSupport i)
-          (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (h.hermitianPart.mem i))
+          (h.hermitianPart.mem i)
   have hFn : ‖F‖ ≤ 1 :=
     (Matrix.l2_opNorm_reindex_equiv p (TNLean.Lattice.sheetSwapOp q R)).le.trans
       (TNLean.Lattice.norm_sheetSwapOp_le_one R)
@@ -79,9 +79,9 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonia
       J + J :=
     (norm_add_le _ _).trans (add_le_add
       ((Matrix.l2_opNorm_kronecker_one_le _).trans
-          (((h.norm_hermitianPart_term_le i).trans (hhJ i))))
+          ((h.norm_hermitianPart_term_le i).trans (hhJ i)))
       ((Matrix.l2_opNorm_one_kronecker_le _).trans
-          (((h.norm_hermitianPart_term_le i).trans (hhJ i)))))
+          ((h.norm_hermitianPart_term_le i).trans (hhJ i))))
   have hBn (i : SquareLatticeSiteOrEdge L L) : ‖B i‖ ≤ 2 * J := by
     simpa only [B, one_mul, mul_one, two_mul] using
       norm_mul_le_of_le
@@ -136,7 +136,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonia
       rw [AreaLaw.embedOp_rectangular_eq_reindex] at hs
       simpa only [AreaLaw.rectangleAreaLawSupport, Finset.coe_image] using hs
     · rw [Function.extend_apply' _ _ _ hx]
-      exact Submodule.zero_mem _
+      change _ ∈ ManyBody.supportedOperators _ _
+      exact zero_mem _
   · intro X
     by_cases hx : ∃ i, AreaLaw.rectangleAreaLawSupport L L i = X
     · obtain ⟨i, rfl⟩ := hx

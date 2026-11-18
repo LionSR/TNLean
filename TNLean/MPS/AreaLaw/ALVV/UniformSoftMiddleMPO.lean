@@ -7,7 +7,7 @@ import TNLean.MPS.AreaLaw.NativeIntervalMPOApproximation
 import TNLean.MPS.AreaLaw.SoftTruncationMPOAccuracy
 import TNLean.MPS.AreaLaw.RegionalBondRestriction
 import TNLean.MPS.MPDO.TraceChainHermitian
-import TNLean.Circuit.SupportedFunctionalCalculus
+import QICLean.ManyBody.Sites.Twirl
 import QICLean.Analysis.SoftTruncationHeatExpansion
 import Mathlib.Tactic.Module
 
@@ -131,16 +131,15 @@ theorem exists_uniform_native_soft_middle_mpo {N q l r m : ℕ}
   have hheatSupport (a : Fin (m + 1)) :
       Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
         (heat a) (interval (N + 1) l r) := by
-    let V := QuantumCircuit.supportedOperators q
-      (interval (N + 1) l r : Set (Fin (N + 1)))
-    have hAs : A ∈ V := QuantumCircuit.mem_supportedOperators_of_isSupportedOn
-      (isSupportedOn_sum_internal_bonds (N + 1) q l r h hs)
-    have hUs : U ∈ V := V.sub_mem hAs
-      (V.smul_mem _ (QuantumCircuit.one_mem_supportedOperators _))
+    change _ ∈ ManyBody.supportedOperators _ _
+    let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval (N + 1) l r : Finset (Fin (N + 1)))
+    have hAs : A ∈ V := isSupportedOn_sum_internal_bonds (N + 1) q l r h hs
+    have hUs : U ∈ V := sub_mem hAs
+      (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
     dsimp only [heat]
     rw [← neg_smul, hU.exp_smul_eq_cfc]
-    exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-      (QuantumCircuit.cfc_mem_supportedOperators _ hUs)
+    exact (ManyBody.cfc_mem_supportedOperators _ hUs)
   have hglobal (a : Fin (m + 1)) :
       ∃ B : Fin (N + 1) → MPOTensor q ((order ^ 2 * q ^ order) * 2),
         (MPOTensor.traceChainOperator B 1).IsHermitian ∧

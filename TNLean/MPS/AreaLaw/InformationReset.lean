@@ -89,12 +89,12 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
           (∀ ℓ : ℕ, ∃ path : ℝ → Matrix (ι → Fin (q * q)) (ι → Fin (q * q)) ℂ,
             ∀ (Q : Finset (ι))
               (W : Matrix (ι → Fin (q * q)) (ι → Fin (q * q)) ℂ),
-              W ∈ supportedOperators (q * q) (Q : Set (ι)) →
+              W ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q →
               ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
                 let M := ∫ t : ℝ in Set.Icc (-T) T,
-                  siteExpectation (q * q) (N ℓ Q) (ManyBody.heisenbergEvolution K' t W) *
+                  ManyBody.regionExpectation (N ℓ Q) (ManyBody.heisenbergEvolution K' t W) *
                     path t ∂gaussianReal 0 η
-                M ∈ supportedOperators (q * q) (N ℓ (Q ∪ Z) : Set (ι)) ∧
+                M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (N ℓ (Q ∪ Z) : Finset (ι)) ∧
                 ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K W‖ ≤
                   ‖W‖ * Cint * (Fintype.card ι : ℝ) ^ 2 * (1 + T) * Real.exp (v * T - ℓ / 2)) →
           (∀ ℓ : ℕ, (ℓ : ℝ) + R ≤ w → Disjoint (N ℓ ((D ∪ C)ᶜ ∪ Z)) (R₀ ∪ C₀)) →
@@ -188,7 +188,7 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
     hfilter q D C hDC e H E₀ Ω b hH hΩ hgap hspan hb hI
   let V := Matrix.reindex (g.symm.trans e) (g.symm.trans e)
     ((1 : Matrix (Pconf × Pconf) (Pconf × Pconf) ℂ) ⊗ₖ W)
-  have hVsupp : V ∈ supportedOperators (q * q) (Q : Set (ι)) := by
+  have hVsupp : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q := by
     have hs := siteLift_mem_supportedOperators Q
       (Matrix.reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
     rw [← reindex_physicalBuffer_eq_siteLift q D C hDC W] at hs
@@ -214,7 +214,7 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
   let S := N ℓ (Q ∪ Z)
   obtain ⟨path, hpathIntegral⟩ := hlocal ℓ
   let M := ∫ t : ℝ in Set.Icc (-(T₀ * B)) (T₀ * B),
-    siteExpectation (q * q) (N ℓ Q) (ManyBody.heisenbergEvolution K' t V) * path t
+    ManyBody.regionExpectation (N ℓ Q) (ManyBody.heisenbergEvolution K' t V) * path t
       ∂gaussianReal 0 η
   obtain ⟨hMs, hMerr⟩ := hpathIntegral Q V hVsupp η (T₀ * B) hT
   have hMclose : ‖M - M₀‖ ≤ ε := by

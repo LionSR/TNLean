@@ -177,7 +177,7 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
   have key := Entropy.two_mul_condEntropy_le_logarithmic
     (n := fun _ : Site (stripDomain L w) ↦ q) X T hmono
     (fun _ ↦ Finset.disjoint_sdiff) weights hweights hhalf hΩ h.term S
-    (fun Y ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.supported Y))
+    (fun Y ↦ (h.supported Y))
     h.hermitian hJ h.norm_le hsingle hΔ heig hgap (E := Δ / 2)
     (by linarith) henergy hu hmass Finset.disjoint_sdiff hbuf
   have herr : ∑ j ∈ Finset.range m, 1024 * Real.exp 1 * (J / Δ) *

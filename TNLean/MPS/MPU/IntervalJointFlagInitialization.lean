@@ -50,7 +50,7 @@ theorem joiningFlag_outside_childPackets {d D N : ℕ}
     have hq : logicalSiteEquivFin d D N s ∈
         Set.range (intervalPacketSites d D N j.val m.val) :=
       ⟨q, by simpa only [Fin.Embedding.coe_append, Fin.append_left] using hi⟩
-    rw [intervalPacketSites_range] at hq
+    rw [intervalPacketSites_range, coe_intervalConsecutiveSupport] at hq
     obtain ⟨s', hs', heq⟩ := hq
     have hh : s' = s := (logicalSiteEquivFin d D N).injective heq
     exact Set.disjoint_left.mp joiningFlagSupport_disjoint_left hs (hh ▸ hs')
@@ -58,7 +58,7 @@ theorem joiningFlag_outside_childPackets {d D N : ℕ}
     have hq : logicalSiteEquivFin d D N s ∈
         Set.range (intervalPacketSites d D N m.val k.val) :=
       ⟨q, by simpa only [Fin.Embedding.coe_append, Fin.append_right] using hi⟩
-    rw [intervalPacketSites_range] at hq
+    rw [intervalPacketSites_range, coe_intervalConsecutiveSupport] at hq
     obtain ⟨s', hs', heq⟩ := hq
     have hh : s' = s := (logicalSiteEquivFin d D N).injective heq
     exact Set.disjoint_left.mp joiningFlagSupport_disjoint_right hs (hh ▸ hs')

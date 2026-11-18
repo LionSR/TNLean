@@ -78,7 +78,7 @@ theorem mem_image_vertexZone_of_mem_outerHoles {κ : Type*} (F : Frame pos q Par
     {g : ℝ × ℝ → κ} {r : ℝ} {d : ℝ × ℝ}
     (hholes : ∀ h ∈ F.holes, IsTrueVertex g (h.patch.center - d) ∧ h.patch.scale ≤ r)
     {x : ι} (hx : x ∈ F.outerHoles) : pos x ∈ (· + d) '' vertexZone g (2 * r) := by
-  obtain ⟨p, hp, hxp⟩ := hx
+  obtain ⟨p, hp, hxp⟩ := mem_footprint.mp hx
   obtain ⟨h, hh, rfl⟩ := List.mem_map.1 hp
   refine mem_image_add_right_iff.2 ⟨_, (hholes h hh).1, ?_⟩
   rw [dist_sub_right]
@@ -142,7 +142,7 @@ theorem bandBirth_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L�
     (g : ℝ × ℝ → κ) (d : ℝ × ℝ) {n ε₀ : ℝ} (ht : 0 ≤ D * Real.log L)
     (htn : D * Real.log L ≤ n) (hnL : n ≤ A₀ * L) (hε : 2 * ε₀ ≤ angularConstant / 2)
     (F : Frame pos q Party) {T : Finset (SquareLatticeVertex L L)} {P Q : Party}
-    (hTP : ∀ x ∈ T, F.owner x = P) (hTH : Disjoint (T : Set _) F.outerHoles)
+    (hTP : ∀ x ∈ T, F.owner x = P) (hTH : Disjoint T F.outerHoles)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * n)
     (hT : ∀ x ∈ T, pos x - d ∈ closure {p |
       homogenize (edgeTreated n e (D * Real.log L)) op.label (bandUpdate n e op.before g) p ≠
@@ -174,7 +174,7 @@ theorem bandDeath_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L�
     (g : ℝ × ℝ → κ) (d : ℝ × ℝ) {n ε₀ : ℝ} (ht : 0 ≤ D * Real.log L)
     (htn : D * Real.log L ≤ n) (hnL : n ≤ A₀ * L) (hε : 2 * ε₀ ≤ angularConstant / 2)
     (F : Frame pos q Party) {T : Finset (SquareLatticeVertex L L)} {P Q : Party}
-    (hTP : ∀ x ∈ T, F.owner x = P) (hTH : Disjoint (T : Set _) F.outerHoles)
+    (hTP : ∀ x ∈ T, F.owner x = P) (hTH : Disjoint T F.outerHoles)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * n)
     (hT : ∀ x ∈ T, pos x - d ∈ closure {p |
       homogenize (edgeTreated n e (D * Real.log L)) op.label (bandUpdate n e op.before g) p ≠
@@ -209,7 +209,7 @@ theorem centralBirth_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : 
     {ε₀ : ℝ} (ht : 0 ≤ D * Real.log L) (htn : D * Real.log L ≤ R.n) (hnL : R.n ≤ A₀ * L)
     (hε : 2 * ε₀ ≤ angularConstant / 2)
     (F : Frame pos q Party) {T : Finset (SquareLatticeVertex L L)} {P Q : Party}
-    (hTP : ∀ x ∈ T, F.owner x = P) (hTH : Disjoint (T : Set _) F.outerHoles)
+    (hTP : ∀ x ∈ T, F.owner x = P) (hTH : Disjoint T F.outerHoles)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * R.n)
     (hT : ∀ x ∈ T, pos x - d ∈ closure {p |
       homogenize (cornerTreated R.n (D * Real.log L)) R.oldLabel R.guide p ≠
@@ -252,9 +252,9 @@ theorem edgeExchange_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : 
     (hY : ∀ x, x ∈ Y ↔ pos x - d ∈ edgeLens R.n e)
     (out : Hole pos q Party → Bool)
     (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true →
-      Disjoint (h.patch.outer : Set (SquareLatticeVertex L L)) Y)
+      Disjoint h.patch.outer Y)
     (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false →
-      (h.patch.outer : Set (SquareLatticeVertex L L)) ⊆ Y)
+      h.patch.outer ⊆ Y)
     (C : Party)
     (hdiam : ∀ x ∈ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).tSet C,
       ∀ y ∈ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).tSet C,

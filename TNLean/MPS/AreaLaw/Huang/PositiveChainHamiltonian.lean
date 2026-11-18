@@ -78,7 +78,7 @@ noncomputable def _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive {L 
   term := Function.extend nearestNeighborChainSupport h (fun _ ↦ 0)
   mem := forall_nearestNeighborExtension h
     (fun X M ↦ Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) M X.val)
-    (fun _ ↦ isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)) hs
+    (fun X ↦ zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) X.val)) hs
 
 /-- The terms of positive nearest-neighbor terms are Hermitian. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term {L q : ℕ}

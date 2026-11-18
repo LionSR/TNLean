@@ -39,18 +39,22 @@ from the last site to the first. Source context: arXiv:1010.3732, Appendix C,
 nearest-neighbour Hamiltonians on finite periodic chains. -/
 theorem embedLocalOperator_twoSite_mem_supportedOperators [NeZero N] (hN : 2 ≤ N) (j : Fin N)
     (A : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ) :
-    MPOTensor.embedLocalOperator 2 N hN j A ∈ supportedOperators d (ringBond j) := by
+    MPOTensor.embedLocalOperator 2 N hN j A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (ringBond j) := by
   classical
   apply Fin.cyclic_induction (P := fun j ↦
-    MPOTensor.embedLocalOperator 2 N hN j A ∈ supportedOperators d (ringBond j)) ?_ ?_ j
+    MPOTensor.embedLocalOperator 2 N hN j A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (ringBond j)) ?_ ?_ j
   · have h := MPSTensor.chainWindowOperator_mem_supportedOperators (d := d)
       (L := 2) (a := 0) (by omega : 0 < N) (by omega : 0 + 2 ≤ N) A
     rw [MPSTensor.chainWindowOperator_eq_embedLocalOperatorAlgHom
       (by omega : 0 < N) (by omega : 0 + 2 ≤ N)] at h
     change MPOTensor.embedLocalOperator 2 N hN 0 A ∈ _ at h
-    refine supportedOperators_mono (S := {k : Fin N | 0 ≤ k.val ∧ k.val < 0 + 2}) ?_ h
+    refine ManyBody.supportedOperators_mono (D := Finset.univ.filter fun k : Fin N ↦ 0 ≤ k.val ∧
+        k.val < 0 + 2) ?_ h
     intro k hk
-    have hk' : k.val = 0 ∨ k.val = 1 := by simp only [Set.mem_ofPred_eq] at hk; omega
+    have hk' : k.val = 0 ∨ k.val = 1 := by
+      simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hk; omega
     rcases hk' with hk' | hk'
     · have : k = 0 := Fin.ext (by simpa using hk')
       simp [ringBond, this]
@@ -58,13 +62,13 @@ theorem embedLocalOperator_twoSite_mem_supportedOperators [NeZero N] (hN : 2 ≤
       simp [ringBond, this]
   · intro i hi
     have h := supportedOperators_submatrix_siteEquiv (finRotate N) hi
-    have himage : (finRotate N) '' ringBond i = ringBond (i + 1) := by
+    have himage : (ringBond i).image (finRotate N) = ringBond (i + 1) := by
       ext k
-      simp [ringBond, Set.image_insert_eq, finRotate_apply, add_assoc]
+      simp [ringBond, finRotate_apply, add_assoc]
     rw [himage] at h
     have hrot : (MPOTensor.embedLocalOperator 2 N hN i A).submatrix
         (MPOTensor.rotateConfig N d) (MPOTensor.rotateConfig N d) ∈
-          supportedOperators d (ringBond (i + 1)) := by
+          ManyBody.supportedOperators (fun _ ↦ Fin d) (ringBond (i + 1)) := by
       have hrc : (MPOTensor.rotateConfig N d : Cfg d N → Cfg d N) =
           fun σ ↦ σ ∘ finRotate N := funext (MPOTensor.rotateConfig_apply N d)
       rw [hrc]

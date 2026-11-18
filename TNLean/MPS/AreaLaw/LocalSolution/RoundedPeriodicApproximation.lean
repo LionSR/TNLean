@@ -48,7 +48,8 @@ noncomputable def roundedPeriodicProjection {M d : ℕ} (ℓ : ℕ)
 Hastings, arXiv:cond-mat/0508554v3, Section II, lines 609–730. -/
 theorem exists_unit_mem_roundedPeriodicProjection {M ℓ d : ℕ} (hℓ : 0 < ℓ)
     (a : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ)
-    (hsupp : ∀ i, a i ∈ supportedOperators d {v | roundedPeriodicDistance i v ≤ ℓ})
+    (hsupp : ∀ i, a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ))
     (ha : ∀ i, (a i).IsHermitian) {ψ : EuclideanSpace ℂ (Fin M → Fin d)} (hψ : ‖ψ‖ = 1)
     {J η Δ r : ℝ} (hJ : 0 < J)
     (hr : hierarchyProjectionLength (finiteHierarchyDepth (roundedPeriodicBlockCount M ℓ))
@@ -87,7 +88,8 @@ terms and their truncated approximations; the unfiltered physical terms need not
 Hastings, arXiv:cond-mat/0508554v3, Section II, lines 609–730. -/
 theorem card_le_two_mul_re_trace_of_roundedPeriodicProjection {M ℓ d : ℕ} (hℓ : 0 < ℓ)
     (a g : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ)
-    (hsupp : ∀ i, a i ∈ supportedOperators d {v | roundedPeriodicDistance i v ≤ ℓ})
+    (hsupp : ∀ i, a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ))
     (ha : ∀ i, (a i).IsHermitian) (hg : ∀ i, (g i).IsHermitian)
     {ψ : EuclideanSpace ℂ (Fin M → Fin d)} (hψ : ‖ψ‖ = 1)
     {J η Δ r q : ℝ} (hJ : 0 < J) (hη : 0 < η) (hΔ : 0 < Δ)
@@ -221,8 +223,9 @@ Hastings, arXiv:cond-mat/0508554v3, Section II, lines 609–730. -/
 theorem exists_unit_mem_roundedPeriodicProjection_of_chosen_radius {M d : ℕ} (hM : 0 < M)
     {J η Δ : ℝ} (hJ : 0 < J) (hη : 0 < η)
     (a : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ)
-    (hsupp : ∀ i, a i ∈ supportedOperators d
-      {v | roundedPeriodicDistance i v ≤ roundedPeriodicProjectionRadius M J η Δ})
+    (hsupp : ∀ i, a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.univ.filter fun v ↦
+          roundedPeriodicDistance i v ≤ roundedPeriodicProjectionRadius M J η Δ))
     (ha : ∀ i, (a i).IsHermitian) {ψ : EuclideanSpace ℂ (Fin M → Fin d)} (hψ : ‖ψ‖ = 1)
     (hres : ∀ i, ‖toEuclideanLin
       (a i - ((⟪ψ, toEuclideanLin (a i) ψ⟫_ℂ).re : ℂ) • 1) ψ‖ ≤
@@ -250,8 +253,9 @@ Hastings, arXiv:cond-mat/0508554v3, Section II, lines 609–730. -/
 theorem card_le_two_mul_re_trace_of_roundedPeriodicProjection_of_chosen_radius
     {M d : ℕ} (hM : 0 < M) {J η Δ q : ℝ} (hJ : 0 < J) (hη : 0 < η) (hΔ : 0 < Δ)
     (a g : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ)
-    (hsupp : ∀ i, a i ∈ supportedOperators d
-      {v | roundedPeriodicDistance i v ≤ roundedPeriodicProjectionRadius M J η Δ})
+    (hsupp : ∀ i, a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.univ.filter fun v ↦
+          roundedPeriodicDistance i v ≤ roundedPeriodicProjectionRadius M J η Δ))
     (ha : ∀ i, (a i).IsHermitian) (hg : ∀ i, (g i).IsHermitian)
     {ψ : EuclideanSpace ℂ (Fin M → Fin d)} (hψ : ‖ψ‖ = 1)
     (herror : ∀ i, ‖TNLean.Lattice.gaussianFilteredTerm q Δ (∑ k, g k) (g i) - a i‖ ≤

@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.RegionalEntropy
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import QICLean.Entropy.SupportedMarginalTails
 import QICLean.Analysis.TypicalSet
 import QICLean.Algebra.TraceReindex
@@ -81,7 +83,7 @@ theorem LocalHamiltonian.log_surprisalMoment_reducedState_le (h : LocalHamiltoni
   have heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω :=
     mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   exact Entropy.log_surprisalMoment_cut_le (n := fun _ ↦ q) (B := A)
-    (fun X ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.supported X))
+    (fun X ↦ (h.supported X))
     h.hermitian hJ h.norm_le hΩ hΔ heig
     (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan) (partialTraceRight_cutVector Ω A)
     (reducedState_isHermitian Λ q Ω A) hu
@@ -103,7 +105,7 @@ theorem LocalHamiltonian.surprisalTail_reducedState_le (h : LocalHamiltonian Λ 
   have heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω :=
     mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   exact Entropy.surprisalTail_cut_le (n := fun _ ↦ q) (B := A)
-    (fun X ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.supported X))
+    (fun X ↦ (h.supported X))
     h.hermitian hJ h.norm_le hΩ hΔ heig
     (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan) (partialTraceRight_cutVector Ω A)
     (reducedState_isHermitian Λ q Ω A) w

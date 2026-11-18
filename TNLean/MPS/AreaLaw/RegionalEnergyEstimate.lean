@@ -89,7 +89,8 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
   let A := aklvRegionalHamiltonians l r h 1
   let K := A.submatrix g g
   have hAs : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) A J := by
-    apply (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem
+    change _ ∈ ManyBody.supportedOperators _ _
+    apply sum_mem
     intro i hi
     apply (hs i).mono
     intro v hv

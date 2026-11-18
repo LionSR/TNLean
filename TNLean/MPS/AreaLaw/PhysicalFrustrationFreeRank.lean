@@ -44,14 +44,14 @@ private theorem isSupportedOn_outsidePiece
     (P : Fin (L - 1) → Prop) (S : Finset (Fin L))
     (hside : ∀ i, P i → interval L i.val (i.val + 2) ⊆ S) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (outsidePiece h a b P) S := by
+  change _ ∈ ManyBody.supportedOperators _ _
   classical
-  apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
   unfold outsidePiece
-  apply Submodule.sum_mem
+  apply sum_mem
   intro i _
   split_ifs with hi
-  · exact QuantumCircuit.mem_supportedOperators_of_isSupportedOn ((hs i).mono (hside i hi.2))
-  · exact Submodule.zero_mem _
+  · exact ((hs i).mono (hside i hi.2))
+  · exact zero_mem _
 
 private theorem outside_sum_split
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (a b k : ℕ) :
@@ -127,19 +127,16 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
   let HR := outsidePiece h a b (fun i ↦ k ≤ i.val)
   let HC := outsidePiece h a b (fun i ↦ i.val + 1 = k)
   let Q := fun p ↦ (T).symm (physicalParityProduct (intervalBondRestriction a b h) p)
-  let U := QuantumCircuit.supportedOperators q (leftBlock L k : Set (Fin L))
-  let V := QuantumCircuit.supportedOperators q (((leftBlock L k)ᶜ : Finset (Fin L)) : Set (Fin L))
+  let U := ManyBody.supportedOperators (fun _ ↦ Fin q) (leftBlock L k : Finset (Fin L))
+  let V := ManyBody.supportedOperators (fun _ ↦ Fin q) ((leftBlock L k)ᶜ : Finset (Fin L))
   have hHL : HL ∈ U :=
-    QuantumCircuit.mem_supportedOperators_of_isSupportedOn (S := leftBlock L k)
-      (outside_left_supported h hs a b k)
+    (outside_left_supported h hs a b k)
   have hHR : HR ∈ V :=
-    QuantumCircuit.mem_supportedOperators_of_isSupportedOn (S := (leftBlock L k)ᶜ)
-      (outside_right_supported h hs a b k)
+    (outside_right_supported h hs a b k)
   have hU1 : (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ∈ U :=
-    QuantumCircuit.one_mem_supportedOperators (d := q) (leftBlock L k : Set (Fin L))
+    (one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) (leftBlock L k)))
   have hV1 : (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ∈ V :=
-    QuantumCircuit.one_mem_supportedOperators (d := q)
-      (((leftBlock L k)ᶜ : Finset (Fin L)) : Set (Fin L))
+    (one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) (leftBlock L k)ᶜ))
   have hdisjoint : Disjoint (leftBlock L k)ᶜ (leftBlock L k) :=
     Finset.disjoint_left.mpr (fun _ hv hw ↦ (Finset.mem_compl.mp hv) hw)
   have heq : physicalFrustrationFreeTruncation h a b =
@@ -152,13 +149,11 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
   · obtain ⟨i, hout, hik⟩ := hcross
     have hside : b ≤ k ∨ k ≤ a := by omega
     have hQleft (hb : b ≤ k) (p : ℕ) : Q p ∈ U := by
-      apply QuantumCircuit.mem_supportedOperators_of_isSupportedOn (S := leftBlock L k)
       apply (isSupportedOn_regionalParityProduct h hs a b p).mono
       intro v hv
       simp only [mem_interval, mem_leftBlock] at *
       omega
     have hQright (ha : k ≤ a) (p : ℕ) : Q p ∈ V := by
-      apply QuantumCircuit.mem_supportedOperators_of_isSupportedOn (S := (leftBlock L k)ᶜ)
       apply (isSupportedOn_regionalParityProduct h hs a b p).mono
       intro v hv
       simp only [Finset.mem_compl, mem_interval, mem_leftBlock] at *
@@ -168,7 +163,7 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
     have hX : X ∈ U := by
       dsimp only [X]
       split_ifs with hb
-      · exact U.sub_mem (U.sub_mem (U.add_mem (U.add_mem hHL hU1) hU1)
+      · exact sub_mem (sub_mem (add_mem (add_mem hHL hU1) hU1)
           (hQleft hb 0)) (hQleft hb 1)
       · exact hHL
     have hY : Y ∈ V := by
@@ -176,15 +171,15 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
       split_ifs with hb
       · exact hHR
       · have ha : k ≤ a := by omega
-        exact V.sub_mem (V.sub_mem (V.add_mem (V.add_mem hHR hV1) hV1)
+        exact sub_mem (sub_mem (add_mem (add_mem hHR hV1) hV1)
           (hQright ha 0)) (hQright ha 1)
     have hXrank : operatorSchmidtRank (cut X) ≤ 1 :=
       Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
-        (QuantumCircuit.isSupportedOn_of_mem_supportedOperators (S := leftBlock L k) hX)
+        hX
         (Or.inl (Finset.Subset.refl _))
     have hYrank : operatorSchmidtRank (cut Y) ≤ 1 :=
       Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
-        (QuantumCircuit.isSupportedOn_of_mem_supportedOperators (S := (leftBlock L k)ᶜ) hY)
+        hY
         (Or.inr hdisjoint)
     have hterm : operatorSchmidtRank (cut (h i)) ≤ q ^ 2 :=
       (hs i).operatorSchmidtRank_cutOperator_le_pow_card (A := leftBlock L k) hq |>.trans
@@ -201,14 +196,14 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
       (intervalBondRestriction a b h) (intervalBondRestriction_supported a b h hs) k
     change operatorSchmidtRank (cut (Q 0)) + operatorSchmidtRank (cut (Q 1)) ≤ q ^ 2 + 1 at hQ
     let X := HL + 1 + 1
-    have hX : X ∈ U := U.add_mem (U.add_mem hHL hU1) hU1
+    have hX : X ∈ U := add_mem (add_mem hHL hU1) hU1
     have hXrank : operatorSchmidtRank (cut X) ≤ 1 :=
       Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
-        (QuantumCircuit.isSupportedOn_of_mem_supportedOperators (S := leftBlock L k) hX)
+        hX
         (Or.inl (Finset.Subset.refl _))
     have hHRrank : operatorSchmidtRank (cut HR) ≤ 1 :=
       Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
-        (QuantumCircuit.isSupportedOn_of_mem_supportedOperators (S := (leftBlock L k)ᶜ) hHR)
+        hHR
         (Or.inr hdisjoint)
     have hdecomp : cut (physicalFrustrationFreeTruncation h a b) =
         cut X + cut HR + (-1 : ℂ) • cut (Q 0) + (-1 : ℂ) • cut (Q 1) := by
@@ -252,8 +247,9 @@ theorem operatorSchmidtRank_physicalFrustrationFreeTruncation_le
       exact Subsingleton.elim _ _
   rw [hzero]
   have hz : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ 0)
-      (0 : Matrix (Fin L → Fin 0) (Fin L → Fin 0) ℂ) ∅ :=
-    QuantumCircuit.isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)
+      (0 : Matrix (Fin L → Fin 0) (Fin L → Fin 0) ℂ) ∅ := by
+    change _ ∈ ManyBody.supportedOperators _ _
+    exact (zero_mem _)
   exact (hz.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
     (Or.inl (Finset.empty_subset _))).trans (by decide : 1 ≤ 0 ^ 2 + 3)
 

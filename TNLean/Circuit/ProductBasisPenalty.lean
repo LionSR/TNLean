@@ -5,7 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.Gates.Controlled
 import TNLean.Circuit.SiteEmbeddingOrder
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Hamiltonian.KroneckerSum
 
 /-!

@@ -151,7 +151,7 @@ theorem centralBirth_hasFrameChange_of (hD : IsAngularScale q G a A₀ m₀ 60 D
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
       rw [(hkey _ hx').1])
     (disjoint_outerHoles_guideFrame (g := fb) (V := Vb) (hV := hdb)
-      (T := (T : Set _)) fun z hz x hx => by
+      (T := T) fun z hz x hx => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
       simpa only [suppliedPatch_center, suppliedPatch_scale, mul_assoc] using
         hTfar z ((hmb z).1 hz) _ hx')

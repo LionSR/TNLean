@@ -139,14 +139,15 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_sum_blockIsometryState
     have := (TeleportHop.isImplementationOn_round (d := d) Ls
       (TeleportHop.valid_nil (N := N))).isRoundsImplementationOn
     rw [TeleportHop.chainPerm_nil, Matrix.one_mul, ← hLsW] at this
-    exact this.mono fun v _ => fun _ _ _ h => h.elim
+    exact this.mono fun v _ => fun _ _ _ h => by simp [TeleportHop.pairSites] at h
   have hall := hpair.append himpl fun v hv => by
     rw [Set.mem_singleton_iff] at hv
     subst v
     refine (isZeroOn_pairLayerOp_windowGHZState hN hr hdig hdig₀ ω
       (fun j => by simpa using hω j j) hW α).mono ?_
-    rintro x ⟨k, y, hy₁, hy₂, rfl⟩
-    exact ⟨k, y, hy₁, by have := (hT k).le; simp only at hy₂; omega, rfl⟩
+    intro x hx
+    obtain ⟨k, y, hy₁, hy₂, rfl⟩ := mem_treeCentralSites.mp hx
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, k, y, hy₁, by have := (hT k).le; omega, rfl⟩
   have hseed : IsPreparedWithMeasurementRoundsInDepth CG seed := by
     apply hCG ℓ hN hr hℓ
     rw [sum_extend_zero hdig₀ α (fun _ a => star a * a) (by simp)]

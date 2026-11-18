@@ -5,7 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RectangularDomain
 import TNLean.Lattice.LocalHamiltonian
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Hamiltonian.HermitianPart
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -135,11 +137,12 @@ def toAreaLawHamiltonian (Φ : RectangleInteraction width height q)
       rw [(rectangleAreaLawSupport_injective width height).extend_apply]
       have hs := QuantumCircuit.embedOp_mem_supportedOperators_image
         (rectangleSiteEquiv width height).injective
-        (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (Φ.hermitianPart.mem i))
+        (Φ.hermitianPart.mem i)
       rw [embedOp_rectangular_eq_reindex] at hs
       simpa only [T, e, rectangleAreaLawSupport, Finset.coe_image] using hs
     · rw [Function.extend_apply' _ _ _ hx]
-      exact Submodule.zero_mem _
+      change _ ∈ ManyBody.supportedOperators _ _
+      exact zero_mem _
   · intro X
     by_cases hx : ∃ i, rectangleAreaLawSupport width height i = X
     · obtain ⟨i, rfl⟩ := hx

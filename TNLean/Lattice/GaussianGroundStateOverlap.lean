@@ -288,7 +288,7 @@ theorem exists_metric_truncated_groundVector_projection {R J Δ : ℝ} (hR : 0 <
       ∀ {ι : Type*} [PseudoMetricSpace ι] [Fintype ι] [DecidableEq ι] {d : ℕ},
         ∀ (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
           (_hHerm : ∀ i, (h i).IsHermitian)
-          (_hSupport : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i R))
+          (_hSupport : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall R i))
           (_hNorm : ∀ i, ‖h i‖ ≤ J)
           (_hCard : ∀ i : ι, (metricRangeBall R i).card ≤ S)
           (hH : (∑ i, h i).IsHermitian) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (ι → Fin d)},
@@ -332,7 +332,7 @@ theorem exists_metric_truncated_groundVector_overlap {R J Δ : ℝ} (hR : 0 < R)
       ∀ {ι : Type*} [PseudoMetricSpace ι] [Fintype ι] [DecidableEq ι] {d : ℕ},
         ∀ (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
           (_hHerm : ∀ i, (h i).IsHermitian)
-          (_hSupport : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i R))
+          (_hSupport : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall R i))
           (_hNorm : ∀ i, ‖h i‖ ≤ J)
           (_hCard : ∀ i : ι, (metricRangeBall R i).card ≤ S)
           {E₀ : ℝ} {Ω : EuclideanSpace ℂ (ι → Fin d)}, ‖Ω‖ = 1 →

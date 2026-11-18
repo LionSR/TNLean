@@ -176,7 +176,7 @@ theorem card_crossingLabels_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S
         simp [E, cutEdges, huv, hu, hv]
       · rw [ManyBody.mem_graphBall, SimpleGraph.edist_comm]; exact hau
     · obtain ⟨u, v, huv, hu, hv, hau⟩ :=
-        exists_cut_edge_near (S := ((X : Set ι)ᶜ)) ha (by simpa using hx₁X) hx₁
+        exists_cut_edge_near (S := (X : Set ι)ᶜ) ha (by simpa using hx₁X) hx₁
       refine ⟨u, ?_, ?_⟩
       · refine Finset.mem_union_right _ (Finset.mem_image.mpr ⟨(v, u), ?_, rfl⟩)
         simp only [Set.mem_compl_iff, Finset.mem_coe, not_not] at hu hv
@@ -374,20 +374,20 @@ theorem truncatedConstraint_of_setDist_eq_top {q : ℕ} {G : SimpleGraph ι} {S�
     truncatedConstraint q G S₀ r₀ a k = k := by
   simp [truncatedConstraint, ha]
 
+open Classical in
 /-- **The truncated constraint acts on its designated support** (`03-quasilocal.tex`,
 lines 419–424): the ball expectation acts on the ball, and a retained constraint acting on
 the component of its anchor acts on the designated component. -/
-theorem truncatedConstraint_mem_supportedOperators {q : ℕ} [NeZero q] (G : SimpleGraph ι)
+theorem truncatedConstraint_mem_supportedOperators {q : ℕ} (G : SimpleGraph ι)
     (S₀ : Finset ι) (r₀ : ℕ) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hk : k ∈ supportedOperators q {x | G.Reachable a x}) :
+    (hk : k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (Finset.univ.filter fun x ↦ G.Reachable a x)) :
     truncatedConstraint q G S₀ r₀ a k ∈
-      supportedOperators q (designatedSupport G S₀ r₀ a : Set ι) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q) (designatedSupport G S₀ r₀ a : Finset ι) := by
   classical
   unfold truncatedConstraint designatedSupport
   split_ifs with h
-  · have hc : ((componentFinset G a : Finset ι) : Set ι) = {x | G.Reachable a x} := by
-      ext x; simp [componentFinset]
-    rw [hc]; exact hk
-  · exact siteExpectation_mem_supportedOperators _ k
+  · exact hk
+  · exact (ManyBody.regionExpectation_mem_supportedOperators _ k)
 
 end TNLean.PEPS.AreaLaw

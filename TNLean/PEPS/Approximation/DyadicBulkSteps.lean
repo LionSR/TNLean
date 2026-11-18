@@ -86,7 +86,7 @@ Source: `06-geometry.tex`, lines 357–387 and 440–445, applying Lemma 6.5 `le
 theorem bulkBirth_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
     (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hpos : ∀ v, pos v = sitePosition L v + c)
     (F : Frame pos q Party) {T : Finset (SquareLatticeVertex L L)} {P Q : Party}
-    (hTP : ∀ x ∈ T, F.owner x = P) (hTH : Disjoint (T : Set _) F.outerHoles)
+    (hTP : ∀ x ∈ T, F.owner x = P) (hTH : Disjoint T F.outerHoles)
     (hV : V.card ≤ m₀) (hn : D * Real.log L ≤ n) (hnL : n ≤ A₀ * L)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * n)
     (hsep : AngularSeparation (pos '' T) (pos '' F.birthEnv P) n (D * Real.log L) a V) :
@@ -110,7 +110,7 @@ Source: `06-geometry.tex`, lines 357–387 and 440–445, applying the reverse f
 theorem bulkDeath_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : L₀ ≤ L)
     (hΩ : G L Ω) (hΩ₁ : ‖Ω‖ = 1) (hpos : ∀ v, pos v = sitePosition L v + c)
     (F : Frame pos q Party) {T : Finset (SquareLatticeVertex L L)} {P Q : Party}
-    (hTP : ∀ x ∈ T, F.owner x = P) (hTH : Disjoint (T : Set _) F.outerHoles)
+    (hTP : ∀ x ∈ T, F.owner x = P) (hTH : Disjoint T F.outerHoles)
     (hV : V.card ≤ m₀) (hn : D * Real.log L ≤ n) (hnL : n ≤ A₀ * L)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * n)
     (hsep : AngularSeparation (pos '' T) (pos '' F.birthEnv P) n (D * Real.log L) a V) :
@@ -138,9 +138,9 @@ theorem lensExchange_step (hD : IsAngularScale q G a A₀ m₀ 60 D L₀) (hL : 
     (F₁ F₂ : Frame pos q Party) (Y : Finset (SquareLatticeVertex L L))
     (out : Hole pos q Party → Bool)
     (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true →
-      Disjoint (h.patch.outer : Set (SquareLatticeVertex L L)) Y)
+      Disjoint h.patch.outer Y)
     (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false →
-      (h.patch.outer : Set (SquareLatticeVertex L L)) ⊆ Y)
+      h.patch.outer ⊆ Y)
     (C : Party) (hV : V.card ≤ m₀) (hn : D * Real.log L ≤ n) (hnL : n ≤ A₀ * L)
     (hdiam : ∀ x ∈ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).tSet C,
       ∀ y ∈ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).tSet C,
@@ -178,9 +178,9 @@ theorem lensExchange_step_of_frontier (hD : IsAngularScale q G a A₀ m₀ 60 D 
     (F₁ F₂ : Frame pos q Party) (Y : Finset (SquareLatticeVertex L L))
     (out : Hole pos q Party → Bool)
     (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true →
-      Disjoint (h.patch.outer : Set (SquareLatticeVertex L L)) Y)
+      Disjoint h.patch.outer Y)
     (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false →
-      (h.patch.outer : Set (SquareLatticeVertex L L)) ⊆ Y)
+      h.patch.outer ⊆ Y)
     (C : Party) {K : Set (ℝ × ℝ)} (hY : ∀ x, x ∈ Y ↔ pos x ∈ K)
     (hV : V.card ≤ m₀) (hn : D * Real.log L ≤ n) (hnL : n ≤ A₀ * L)
     (hdiam : ∀ x ∈ (TwoSheetExchange.ofFrames F₁ F₂ Y out hout hin).tSet C,

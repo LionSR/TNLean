@@ -202,9 +202,10 @@ theorem sum_norm_sq_sub_physicalParityProduct_le_truncation
     split_ifs <;> first | exact IsStarProjection.zero _ | exact hp i
   have hgs (i : Fin (L - 1)) : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (g i) (interval L i.val (i.val + 2)) := by
+    change _ ∈ ManyBody.supportedOperators _ _
     dsimp only [g]
     split_ifs <;> first
-      | exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)
+      | exact (zero_mem _)
       | exact hs i
   have hP (p : ℕ) : IsStarProjection
       (physicalParityProduct (intervalBondRestriction a b h) p) :=

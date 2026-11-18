@@ -291,8 +291,9 @@ theorem _root_.ManyBody.ChainInteraction.norm_termSum_le (h : ChainInteraction L
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 88–89 (finite range). -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_termSum (h : ChainInteraction L q R)
     {S : Finset (ChainSupport L R)} {D : Finset (Fin L)} (hS : ∀ X ∈ S, X.1 ⊆ D) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.termSum S) D :=
-  (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
+    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.termSum S) D := by
+  change _ ∈ ManyBody.supportedOperators _ _
+  exact sum_mem fun X hX ↦
     Entropy.IsSupportedOn.mono (h.mem X) (hS X hX)
 
 /-! ### The parts `H_L`, `H_B`, `H_R` -/

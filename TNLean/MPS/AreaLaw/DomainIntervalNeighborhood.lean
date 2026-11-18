@@ -4,7 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ComponentReduction
-import TNLean.Circuit.SiteExpectationGraphLocalization
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Dynamics.GraphLocalization
 import Mathlib.Order.Interval.Set.OrdConnected
 
 /-!

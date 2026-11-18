@@ -52,8 +52,9 @@ theorem _root_.ManyBody.ChainInteraction.cutLeftPart_add_cutBoundaryPart
 /-- The left part is supported on the first `k` sites. -/
 theorem _root_.ManyBody.ChainInteraction.cutLeftPart_isSupportedOn
     (h : ChainInteraction L q 1) (k : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutLeftPart k) (interval L 0 k) :=
-  (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
+    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutLeftPart k) (interval L 0 k) := by
+  change _ ∈ ManyBody.supportedOperators _ _
+  exact sum_mem fun X hX ↦
     Entropy.IsSupportedOn.mono (h.mem X) (Finset.mem_filter.mp hX).2
 
 /-- The boundary part is supported from the boundary site onward. -/
@@ -61,7 +62,8 @@ theorem _root_.ManyBody.ChainInteraction.cutBoundaryPart_isSupportedOn
     (h : ChainInteraction L q 1) (k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutBoundaryPart k)
       (interval L 0 (k - 1))ᶜ := by
-  refine (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
+  change _ ∈ ManyBody.supportedOperators _ _
+  refine sum_mem fun X hX ↦
     Entropy.IsSupportedOn.mono (h.mem X) ?_
   have hX' := (Finset.mem_filter.mp hX).2
   obtain ⟨y, hy, hyA⟩ := Finset.not_subset.mp hX'

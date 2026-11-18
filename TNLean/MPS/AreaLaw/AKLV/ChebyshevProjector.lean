@@ -413,39 +413,39 @@ theorem normalized_chain_polynomial_rank {L q w : ℕ}
   classical
   let W : Fin (2 * w) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
     fun r ↦ h ⟨a.val + r.val, by omega⟩
-  have hW (r : Fin (2 * w)) : W r ∈ QuantumCircuit.supportedOperators q
-      (interval L (a.val + r.val) (a.val + r.val + 2) : Set (Fin L)) :=
-    QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs _)
-  have hX : leftCutBlock h a x ∈ QuantumCircuit.supportedOperators q
-      (interval L 0 (a.val + 1) : Set (Fin L)) := by
-    apply Submodule.sub_mem
-    · apply Submodule.sum_mem
+  have hW (r : Fin (2 * w)) : W r ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (a.val + r.val) (a.val + r.val + 2) : Finset (Fin L)) :=
+    hs ⟨a.val + r.val, by omega⟩
+  have hX : leftCutBlock h a x ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L 0 (a.val + 1) : Finset (Fin L)) := by
+    apply sub_mem
+    · apply sum_mem
       intro i hi
       simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi
-      exact QuantumCircuit.supportedOperators_mono
+      exact ManyBody.supportedOperators_mono
         (Finset.coe_subset.mpr (interval_mono (by omega) (by omega)))
-        (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
-    · exact Submodule.smul_mem _ _ (QuantumCircuit.one_mem_supportedOperators _)
-  have hY : rightCutBlock h b y ∈ QuantumCircuit.supportedOperators q
-      (interval L (a.val + 2 * w) L : Set (Fin L)) := by
-    apply Submodule.sub_mem
-    · apply Submodule.sum_mem
+        (hs i)
+    · exact SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _))
+  have hY : rightCutBlock h b y ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (a.val + 2 * w) L : Finset (Fin L)) := by
+    apply sub_mem
+    · apply sum_mem
       intro i hi
       simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi
-      exact QuantumCircuit.supportedOperators_mono
+      exact ManyBody.supportedOperators_mono
         (Finset.coe_subset.mpr (interval_mono (a := i.val) (b := i.val + 2)
           (a' := a.val + 2 * w) (b' := L) (by omega) (by omega)))
-        (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
-    · exact Submodule.smul_mem _ _ (QuantumCircuit.one_mem_supportedOperators _)
+        (hs i)
+    · exact SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _))
   let PL := Matrix.energyTruncation (leftCutBlock h a x) t - (m : ℂ) • 1
   let PR := Matrix.energyTruncation (rightCutBlock h b y) t
-  have hPL : PL ∈ QuantumCircuit.supportedOperators q
-      (interval L 0 (a.val + 1) : Set (Fin L)) :=
-    Submodule.sub_mem _ (QuantumCircuit.cfc_mem_supportedOperators _ hX)
-      (Submodule.smul_mem _ _ (QuantumCircuit.one_mem_supportedOperators _))
-  have hPR : PR ∈ QuantumCircuit.supportedOperators q
-      (interval L (a.val + 2 * w) L : Set (Fin L)) :=
-    QuantumCircuit.cfc_mem_supportedOperators _ hY
+  have hPL : PL ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L 0 (a.val + 1) : Finset (Fin L)) :=
+    sub_mem (ManyBody.cfc_mem_supportedOperators _ hX)
+      (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
+  have hPR : PR ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (a.val + 2 * w) L : Finset (Fin L)) :=
+    ManyBody.cfc_mem_supportedOperators _ hY
   have hHt : Ht = (∑ r, W r) + PL + PR := by
     dsimp [Ht, twoSidedEnergyTruncation, PL, PR]
     rw [middleCutBlock_window h a b hab hwindow m]

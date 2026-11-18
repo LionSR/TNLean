@@ -54,7 +54,7 @@ the positivity of `ρ(β, l_proj) = ρ(β/n, l_proj)^n`; the source states posit
 the module docstring. -/
 theorem hasProductForm_truncatedExp_pow_of_even [Nonempty σ] (acts : κ → Finset σ)
     (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ))
+    (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (acts k : Finset σ))
     (hherm : ∀ k, (h k).IsHermitian) (near : σ → σ → Prop) (hnear : ∀ i, near i i)
     (β : ℝ) {m : ℕ} (hm : Even m) :
     HasProductForm (fun _ ↦ q) near
@@ -67,7 +67,7 @@ theorem hasProductForm_truncatedExp_pow_of_even [Nonempty σ] (acts : κ → Fin
 matrix product form of range `l`. Hastings, arXiv:cond-mat/0508554v3, lines 1256–1279. -/
 theorem hasProductForm_truncatedExp_of_dist_le [PseudoMetricSpace σ] [Nonempty σ]
     (acts : κ → Finset σ) (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ))
+    (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (acts k : Finset σ))
     {l : ℝ} (hl : 0 ≤ l) (β : ℝ) :
     HasProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ l)
       (truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β) := by
@@ -84,7 +84,7 @@ form. Hastings, arXiv:cond-mat/0508554v3, eq. `mplt`, lines 1303–1317. -/
 theorem hasProductForm_truncatedExp_pow_of_even_of_dist_le
     [PseudoMetricSpace σ] [Nonempty σ] (acts : κ → Finset σ)
     (h : κ → Matrix (σ → Fin q) (σ → Fin q) ℂ)
-    (hh : ∀ k, h k ∈ supportedOperators q (acts k : Set σ))
+    (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (acts k : Finset σ))
     (hherm : ∀ k, (h k).IsHermitian) {l : ℝ} (hl : 0 ≤ l) (β : ℝ)
     {m : ℕ} (hm : Even m) :
     HasProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ l)

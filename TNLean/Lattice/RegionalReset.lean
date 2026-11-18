@@ -474,18 +474,19 @@ residuals are at most `C exp (-8 b) ε` because `z⁻¹ ≤ exp (2 b)`.
 Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-errors` and
 `eq:info-reset-unitary`. -/
 theorem exists_supported_unitary_of_two_sided (S : Finset ι)
-    {M : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hMsupp : M ∈ supportedOperators q (S : Set ι))
+    {M : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hMsupp : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
     {ψ φ : (ι → Fin q) → ℂ} {z b C ε : ℝ} (hb : 0 ≤ b) (hz : Real.exp (-2 * b) ≤ z)
     (hfwd : ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 φ‖ ≤ C * Real.exp (-10 * b) * ε)
     (hrev : ‖WithLp.toLp 2 (Mᴴ *ᵥ φ) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
       C * Real.exp (-10 * b) * ε)
     (hC : 0 ≤ C) (hε : 0 ≤ ε) :
     ∃ U : Matrix (ι → Fin q) (ι → Fin q) ℂ,
-      U ∈ unitaryGroup (ι → Fin q) ℂ ∧ U ∈ supportedOperators q (S : Set ι) ∧
+      U ∈ unitaryGroup (ι → Fin q) ℂ ∧ U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S ∧
       ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 φ‖ ≤ 2 * C * ε := by
   have hz0 : 0 < z := (Real.exp_pos _).trans_le hz
   obtain ⟨U, hU, hUsupp, hcorr⟩ := exists_supported_unitary_polar_correction S
-    (Submodule.smul_mem _ ((z : ℂ)⁻¹) hMsupp)
+    (SMulMemClass.smul_mem ((z : ℂ)⁻¹) hMsupp)
   refine ⟨U, hU, hUsupp, (hcorr ψ φ).trans ?_⟩
   have hzinv : (z : ℂ)⁻¹ = ((z⁻¹ : ℝ) : ℂ) := by push_cast; rfl
   have hstar : star ((z : ℂ)⁻¹) = (z : ℂ)⁻¹ := by

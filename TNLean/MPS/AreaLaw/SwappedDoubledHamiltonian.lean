@@ -48,9 +48,9 @@ noncomputable def _root_.ManyBody.ChainInteraction.swappedDoubled
     let F := Matrix.reindex e e (sheetSwapOp q D)
     F * h.doubled.term X * Fᴴ
   mem X := by
-    apply isSupportedOn_of_mem_supportedOperators
+    change _ ∈ ManyBody.supportedOperators _ _
     exact reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
-      D X.1 (mem_supportedOperators_of_isSupportedOn (h.mem X))
+      D X.1 (h.mem X)
 
 /-- The swapped doubled terms of Hermitian terms are Hermitian.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
