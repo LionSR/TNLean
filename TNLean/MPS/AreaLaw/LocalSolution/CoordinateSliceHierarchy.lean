@@ -121,6 +121,7 @@ def coordinateSliceOperator (z : ι → ℕ) (ℓ : ℕ) (hN : 0 < N)
     (a : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) : Fin N → Matrix (ι → Fin d) (ι → Fin d) ℂ :=
   edgePartition (fun i ↦ coordinateSliceEdge hN ℓ (z i)) a
 
+omit [DecidableEq ι] in
 /-- The coordinate grouping preserves the full sum of local terms. -/
 theorem sum_coordinateSliceOperator (z : ι → ℕ) (ℓ : ℕ) (hN : 0 < N)
     (a : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) :
@@ -165,6 +166,7 @@ theorem coordinateSliceOperator_mem_supportedOperators_of_metric [PseudoMetricSp
     (fun v hv ↦ Finset.mem_filter.mpr ⟨Finset.mem_univ _,
       natDist_coordinate_le_of_dist_le coord hcoord axis (Finset.mem_filter.mp hv).2⟩) (ha i)
 
+omit [DecidableEq ι] in
 /-- The actual coordinate-slice edge operators are Hermitian. -/
 theorem isHermitian_coordinateSliceOperator (z : ι → ℕ) (ℓ : ℕ) (hN : 0 < N)
     (a : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (ha : ∀ i, (a i).IsHermitian)

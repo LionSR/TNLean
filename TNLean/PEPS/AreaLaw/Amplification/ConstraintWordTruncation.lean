@@ -269,15 +269,19 @@ theorem contractionWord_regionExpectation_mem_supportedOperators {q : ℕ}
     ∀ (m : ℕ) (u : Fin m → {i // a i ∈ graphNeighborhood Λ r S}),
       contractionWord (fun i : {i // a i ∈ graphNeighborhood Λ r S} =>
           ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i))
-        m u ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
+        m u ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+            (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
   have hmem (i : {i // a i ∈ graphNeighborhood Λ r S}) :
       CFC.sqrt (1 - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) r) (k i)) ∈
-        ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
+        ManyBody.supportedOperators (fun _ ↦ Fin q)
+            (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
     set K := graphBall (planeDomainGraph Λ) (a i) r
     have hK : CFC.sqrt (1 - ManyBody.regionExpectation K (k i)) ∈
         ManyBody.supportedOperators (fun _ ↦ Fin q) K :=
       (ManyBody.sqrt_mem_supportedOperators
-          ((Subalgebra.toSubmodule (ManyBody.supportedOperators (fun _ ↦ Fin q) K).toSubalgebra).sub_mem (one_mem (ManyBody.supportedOperators _ _))
+          ((Subalgebra.toSubmodule
+              (ManyBody.supportedOperators (fun _ ↦ Fin q) K).toSubalgebra).sub_mem
+              (one_mem (ManyBody.supportedOperators _ _))
           (ManyBody.regionExpectation_mem_supportedOperators K (k i))))
     exact ManyBody.supportedOperators_mono
       (by exact_mod_cast graphBall_subset_graphNeighborhood_two_mul i.2) hK
@@ -424,7 +428,8 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
           ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k i) ≤ 1 ∧
           ‖k i - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
-        (∀ i, k i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Finset.univ.filter fun x ↦ (planeDomainGraph Λ).Reachable (a i) x))) :
+        (∀ i, k i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Finset.univ.filter fun x ↦
+            (planeDomainGraph Λ).Reachable (a i) x))) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
       ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
@@ -446,7 +451,8 @@ theorem latticeConstraintWord_truncation_of_positiveConstraints {p : ℕ} (R : �
         constraintWordTruncationPrefactor ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) C * t *
           S.card * (1 + (r : ℝ)) ^ 2 * Real.exp (-(c / 2 * (r : ℝ) ^ kernelExponent p)) ∧
       ∀ w, ‖L w‖ ≤ 1 ∧
-        L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
+        L w ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+            (graphNeighborhood Λ (2 * r) S : Finset (Site Λ)) := by
   intro q _ Λ h a ha E₀ Ω hΩ hgap hspan S r t
   obtain ⟨-, hk, -, -, -, htail, -⟩ := hpos Λ h a ha E₀ Ω hΩ hgap hspan
   exact domainConstraintWord_truncation hC (Nat.cast_nonneg _) Λ (AdmissibleSupport Λ R) a _

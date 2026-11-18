@@ -56,6 +56,7 @@ section Graph
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q R : ℕ} [NeZero q] {κ : Type*} [Fintype κ]
   {T : κ → Finset ι}
 
+omit [NeZero q] in
 /-- Localization of the Heisenberg evolution of a finite sum of local perturbations, on a
 finite graph whose spheres have at most two sites. Each perturbation `P c`, `c ∈ C`, is
 supported on a set `U c ⊆ Z` of at most `R + 1` sites and has norm at most `ε`; the

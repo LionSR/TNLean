@@ -240,7 +240,8 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
             ((Complex.I • ManyBody.regionExpectation (N Z)
               (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
           (∀ t, U t ∈ Matrix.unitaryGroup (Fin Λ.card → Fin (q * q)) ℂ) ∧
-          (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (N Z : Finset (Fin Λ.card))) ∧
+          (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
+              (N Z : Finset (Fin Λ.card))) ∧
           ∀ (Q : Finset (Fin Λ.card))
             (W : Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ),
             W ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q →

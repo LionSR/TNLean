@@ -149,7 +149,9 @@ theorem exists_periodicPhysicalHierarchy_of_isGapped {R J Δ : ℝ}
   obtain ⟨hℓ, hℓR⟩ := physicalPeriodicProjectionRadius_spec R M Jb Δ hη
   have hr := hierarchyProjectionLength_le_physicalPeriodicProjectionRadius hM R Jb Δ hη
   have ha (i : Fin M) := hdata hM g hg hsupp hnorm Ω E₀ hΩ hgap hspan ℓ hℓR i
-  have haSupp (i : Fin M) : a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) :=
+  have haSupp (i : Fin M) :
+      a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) :=
     (ha i).1
   have haHerm (i : Fin M) : (a i).IsHermitian := (ha i).2.1
   have haNorm (i : Fin M) : ‖a i‖ ≤ Jb := (ha i).2.2.1
