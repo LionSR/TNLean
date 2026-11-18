@@ -137,7 +137,7 @@ theorem regionState_qutritState_decomposition {N : ℕ}
   have hcross' := congrArg Matrix.conjTranspose hcross
   simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
     Matrix.conjTranspose_zero] at hcross'
-  simp only [Entropy.regionState, partialTraceRight_vecMulVec_eq]
+  simp only [Entropy.regionState]
   change regionalMatrix A (qutritState N p) * (regionalMatrix A (qutritState N p))ᴴ =
     ((1 - p : ℝ) : ℂ) •
         (regionalMatrix A (qutritState N 0) * (regionalMatrix A (qutritState N 0))ᴴ) +
