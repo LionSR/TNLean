@@ -72,7 +72,8 @@ example {D Ctpl C : ℝ} {N n s : ℕ}
       (A.filter fun x ↦ x.val ∈ ambientDilation T.points
         ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
       C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) :=
-  (hb n s hn domain zeroHamiltonian zeroHermitian zeroNorm 0 omega norm_omega zero_projector_bound omega_mem
+  (hb n s hn domain zeroHamiltonian zeroHermitian zeroNorm 0 omega norm_omega
+    zero_projector_bound omega_mem
     A T hsep hL).1
 
 example {D Ctpl : ℝ} (hb : SublinearCollarBound 2 1 0 0 D Ctpl) :

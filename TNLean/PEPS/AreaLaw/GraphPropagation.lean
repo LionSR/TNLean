@@ -122,11 +122,6 @@ theorem sum_norm_term_containing_le (h : PlaneInteraction Λ q R)
         (fun X _ => hhJ X)
     _ ≤ _ := mul_le_mul_of_nonneg_right (by exact_mod_cast hcard) hJ
 
-/-- The terms of `h` as an interaction on the sites of `Λ`, with Hamiltonian `h.hamiltonian`. -/
-private noncomputable def interaction (h : PlaneInteraction Λ q R) :
-    ManyBody.Interaction (fun _ : Site Λ ↦ Fin q) (fun X : AdmissibleSupport Λ R ↦ X.1) :=
-  ⟨h.term, fun X ↦ (h.mem X)⟩
-
 /-- An anchor family that takes the prescribed value `a` at `X` and an arbitrary site of
 every other support. -/
 private noncomputable def anchors (X : AdmissibleSupport Λ R) (a : Site Λ) :
@@ -175,7 +170,7 @@ theorem norm_commutator_le_graphDistance (h : PlaneInteraction Λ q R)
       2 * Real.exp (μ * R) * ‖A‖ * ‖B‖ *
         Real.exp (2 * (1 + 2 * R * (R + 1) : ℕ) *
           ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) * J) * Real.exp (2 * μ * R) * |t| - μ * n) :=
-  ManyBody.norm_heisenberg_commutator_le_graphDistance (planeDomainGraph Λ) h.interaction
+  ManyBody.norm_heisenberg_commutator_le_graphDistance (planeDomainGraph Λ) h
     (anchors X a) (anchors_mem ha) hh R
     (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
     (h.sum_norm_term_containing_le hhJ (h.normBound_nonneg hhJ X)) X
@@ -198,7 +193,7 @@ theorem commutator_eq_zero_of_edist_eq_top (h : PlaneInteraction Λ q R)
     ManyBody.heisenbergEvolution h.hamiltonian t A * B - B * ManyBody.heisenbergEvolution
         h.hamiltonian t
         A = 0 :=
-  ManyBody.heisenberg_commutator_eq_zero_of_edist_eq_top (planeDomainGraph Λ) h.interaction
+  ManyBody.heisenberg_commutator_eq_zero_of_edist_eq_top (planeDomainGraph Λ) h
     (anchors X a) (anchors_mem ha) R (fun Y => Y.2.edist_le) X
     hA y
     (by assumption)
@@ -226,7 +221,7 @@ theorem norm_sub_regionExpectation_graphBall_le (h : PlaneInteraction Λ q R)
           Real.exp (2 * (1 + 2 * R * (R + 1) : ℕ) *
             ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) * J) * Real.exp (2 * R) * |t| - l / 2)) := by
   have hBound := ManyBody.norm_heisenberg_sub_regionExpectation_graphBall_le
-    (planeDomainGraph Λ) h.interaction (anchors X a) (anchors_mem ha) hh
+    (planeDomainGraph Λ) h (anchors X a) (anchors_mem ha) hh
     R (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
     (h.sum_norm_term_containing_le hhJ (h.normBound_nonneg hhJ X)) 2 2
     (fun x d => card_domainGraph_sphere_le Λ x d) X
@@ -287,7 +282,7 @@ lemma exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
   intro Λ h hh hhJ X a ha A hA t
   have hJ := h.normBound_nonneg hhJ X
   refine ⟨fun y B hB => ?_, fun l => ?_⟩
-  · have hXY := hLR (planeDomainGraph Λ) h.interaction (ManyBody.PlaneInteraction.anchors X a)
+  · have hXY := hLR (planeDomainGraph Λ) h (ManyBody.PlaneInteraction.anchors X a)
       (ManyBody.PlaneInteraction.anchors_mem ha) hh
       (fun Y => Y.2.edist_le) (fun Y => Y.2.card_le)
       (h.sum_norm_term_containing_le hhJ hJ) X A B hA y

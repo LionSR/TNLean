@@ -388,7 +388,8 @@ theorem latticeConstraintWord_omission_of_locality {p : ℕ} (hp : 1 ≤ p) (R :
               Real.exp (latticeOmissionRate R C₃ c₃ p * t -
                 latticeOmissionExponent c₃ p * (r : ℝ) ^ kernelExponent p) := by
   intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
-  refine latticeConstraintWord_omission_of_positiveConstraints hp R hC₃ hc₃ ?_ Λ h hh hhJ a ha E₀ Ω hΩ
+  refine latticeConstraintWord_omission_of_positiveConstraints hp R hC₃ hc₃ ?_
+    Λ h hh hhJ a ha E₀ Ω hΩ
     (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
     (hspan ▸ Submodule.mem_span_singleton_self _)
   intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hpsd hmem
@@ -484,7 +485,8 @@ theorem exists_latticeConstraintWord_omission {p : ℕ} (hp : 1 ≤ p) (R : ℕ)
     channelOmissionRate_pos (Nat.cast_nonneg _) C 2 c _, channelOmissionExponent_pos hc _,
     by
       intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
-      refine latticeConstraintWord_omission_of_positiveConstraints hp R hC hc ?_ Λ h hh hhJ a ha E₀ Ω hΩ
+      refine latticeConstraintWord_omission_of_positiveConstraints hp R hC hc ?_
+        Λ h hh hhJ a ha E₀ Ω hΩ
         (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
         (hspan ▸ Submodule.mem_span_singleton_self _)
       intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hpsd hmem
