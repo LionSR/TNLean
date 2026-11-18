@@ -249,8 +249,11 @@ theorem sum_star_mul_graphStabilizer (a b : E → V) (h : ∀ e, a e ≠ b e) (v
   ring
 
 /-- The stabilizer Hamiltonian `-∑ᵥ Kᵥ` of a graph, with `Kᵥ` the stabilizer
-`X` at `v` times `Z` at its neighbours. Source: arXiv:2011.12127, line 1445,
-with the sign of the printed `∑ X Z Z Z` reversed; see the honeycomb example. -/
+`X` at `v` times `Z` at its neighbours. Source: arXiv:2011.12127, line 1445.
+
+**Local fix (sign):** the source prints `∑ X Z Z Z`, whose unique ground state is the
+common `-1` eigenvector `∏ Z |C⟩`, not the cluster state. The sign is reversed here.
+Documented in `docs/paper-gaps/rmp_honeycomb_cluster_peps.tex`. -/
 def graphHamiltonian (a b : E → V) (ψ : (V → Fin 2) → ℂ) : (V → Fin 2) → ℂ :=
   -∑ v, graphStabilizer a b v ψ
 
