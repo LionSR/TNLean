@@ -52,8 +52,6 @@ vanishes for every unit vector.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
-open scoped Matrix.Norms.L2Operator
-
 open Matrix
 
 open ManyBody (IsGapped groundSpace PlaneInteraction)
@@ -227,7 +225,7 @@ the regional entropy of the gapped ground vector vanishes on every union of
 connected components of the induced domain graph, in particular on each
 component of a disconnected domain. -/
 theorem regionalEntropy_connectedComponents_eq_zero (h : PlaneInteraction Λ q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hh : ∀ X, (h.term X).IsHermitian)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : StateSpace Λ q}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})

@@ -25,8 +25,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open scoped Matrix.Norms.L2Operator
-
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
@@ -54,8 +52,7 @@ theorem eventually_exists_selected_actualCharge_sharp_comparison
     [LinearOrder (AdmissibleSupport Λ R)]
     (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
     (hm : 0 < S.m) (hM : 0 < S.M) (hKpos : 0 < S.K)
-    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-        (Ω Ωt : StateSpace Λ q) (L : ℕ)
+    (h : PlaneInteraction Λ q R) (Ω Ωt : StateSpace Λ q) (L : ℕ)
     (hΔ : 0 < Δ) (a : ℝ) (ha : 0 < a)
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)))
     (Sent e₀ Kmom z Cen een C Cl P cU cL Cf p₀ p₁ : ℝ)

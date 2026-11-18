@@ -204,8 +204,8 @@ supported on the sites of the supports crossing `A`, and has norm at most `4 μ_
 requires; the bound uses only their norms.
 Source: polynomial-PEPS `02-information.tex`, lines 416–424 and 513–524, at range `R`, with the
 count of supports through a site of area-law `01-preliminaries.tex`, lines 95–102. -/
-theorem swapped_doubled_boundary_bound (h : PlaneInteraction Λ q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 ≤ J)
+theorem swapped_doubled_boundary_bound {J : ℝ} (h : PlaneInteraction Λ q R)
+    (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 ≤ J)
     (A : Finset (Site Λ)) :
     let p := sitePairConfigurationEquiv (Site Λ) q q
     let K := Matrix.reindex p p (doubledHamiltonian h.hamiltonian)
@@ -335,7 +335,7 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
       (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
     rw [← reindex_physicalBuffer_eq_place q A C hAC W] at hlift
     exact hlift
-  obtain ⟨hDs, hDn⟩ := h.swapped_doubled_boundary_bound hh hhJ hJ A
+  obtain ⟨hDs, hDn⟩ := h.swapped_doubled_boundary_bound hhJ hJ A
   have hD : gH.hamiltonian - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Z := by
     rw [hK']; exact hDs
   have hVn : ‖V‖ ≤ ‖W‖ :=

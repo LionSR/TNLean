@@ -36,8 +36,7 @@ lines 416–424 and 513–524, with the area-law crossing-support count in
 `v_R = 1 + 2 R (R + 1)`. -/
 theorem swapped_doubled_boundary_bound_edgeBoundary
     {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
-    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 ≤ J)
+    (h : PlaneInteraction Λ q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 ≤ J)
     (A : Finset (Site Λ)) :
     let p := sitePairConfigurationEquiv (Site Λ) q q
     let K := Matrix.reindex p p (doubledHamiltonian h.hamiltonian)

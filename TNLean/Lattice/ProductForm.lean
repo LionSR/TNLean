@@ -47,8 +47,6 @@ site-dependent dimensions are proved in `TNLean/Lattice/TrotterIndexCount.lean`.
   eq. `mpf`, lines 1024–1046, and the Trotter decomposition, lines 1048–1079.
 -/
 
-open scoped Matrix.Norms.L2Operator
-
 open Matrix QuantumCircuit
 open scoped BigOperators
 
@@ -353,9 +351,8 @@ noncomputable def _root_.ManyBody.PlaneInteraction.trotterProduct {R : ℕ}
 /-- **Trotter form.** Every Trotter product of a local Hamiltonian of range `R` has a matrix
 product form of range `R`, exactly.
 Source: Hastings, arXiv:cond-mat/0508554v3, lines 1053–1077. -/
-theorem _root_.ManyBody.PlaneInteraction.hasProductForm_trotterProduct {R : ℕ} {J : ℝ}
-    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-        (seq : List (AdmissibleSupport Λ R)) (β : ℝ) (n : ℕ) :
+theorem _root_.ManyBody.PlaneInteraction.hasProductForm_trotterProduct {R : ℕ}
+    (h : PlaneInteraction Λ q R) (seq : List (AdmissibleSupport Λ R)) (β : ℝ) (n : ℕ) :
     HasProductForm (fun _ ↦ q) (fun i j : Site Λ ↦
       ∃ p : (planeDomainGraph Λ).Walk i j, p.length ≤ R) (h.trotterProduct seq β n) := by
   refine HasProductForm.pow (hasProductForm_list_prod _ fun ρ hρ ↦ ?_) n
