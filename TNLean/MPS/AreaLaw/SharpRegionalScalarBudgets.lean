@@ -179,9 +179,10 @@ theorem exists_sharp_regional_family_of_scalar_budgets
     hE0, hE04, hnorm, ?_⟩
   intro J beta tau U Phi Tm
   have hdegree : 1 ≤ ell ^ 2 := hell.trans (Nat.le_self_pow (by decide) ell)
-  obtain ⟨N, W, hNraw, hdecomp⟩ :=
+  have :=
     exists_actual_regional_clipped_polynomial_family_fin
       L q a b ell (ell ^ 2) hell hq hdegree hab hbL h hs e t J
+  obtain ⟨N, W, hNraw, hdecomp⟩ := this
   have hN : N ≤ D ^ 2 := by
     apply hNraw.trans
     simpa only [Nat.mul_add] using
@@ -192,7 +193,8 @@ theorem exists_sharp_regional_family_of_scalar_budgets
         hq hqm hell hcollar le_rfl
   refine ⟨N, W, hN, ?_⟩
   intro eta hbuffer hetaLD lower higher Delta
-  obtain ⟨hnest, hupperClose, hlowerClose⟩ := htargets eta hbuffer hetaLD
+  have := htargets eta hbuffer hetaLD
+  obtain ⟨hnest, hupperClose, hlowerClose⟩ := this
   have hupper : E0 + eta - w ≤ 3 * t + 4 * (ell : ℝ) := by
     linarith only [hE04, ht, hetaLD, hw, ht0,
       (Nat.cast_nonneg ell : (0 : ℝ) ≤ ell)]

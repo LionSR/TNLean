@@ -139,14 +139,16 @@ theorem exists_fixed_bandwidth_sharp_regional_low_energy_family
                   Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
                     (Delta / (1 - delta) ^ 2) grow (lower.map Tm.toLinearEquiv.toLinearMap) := by
   classical
-  obtain ⟨C, hC, hscalar⟩ := Real.exists_sharp_low_density_scalar_parameters etaLD hLD
+  have := Real.exists_sharp_low_density_scalar_parameters etaLD hLD
+  obtain ⟨C, hC, hscalar⟩ := this
   refine ⟨C, hC, ?_⟩
   intro w epsilon hw hepsilon hepsilon1 g u t
   have hg : 0 < g := lt_min hw zero_lt_one
   have hg1 : g ≤ 1 := min_le_right _ _
   have hgw : g ≤ w := min_le_left _ _
-  obtain ⟨ell, hell, hbound, ht, hxi1, hsmallg, hfilter⟩ :=
+  have :=
     hscalar g epsilon hg hg1 hepsilon hepsilon1
+  obtain ⟨ell, hell, hbound, ht, hxi1, hsmallg, hfilter⟩ := this
   have hsmall : 2 * (6 + etaLD) * ((288 * Real.exp (11 / 8)) *
       Real.exp (-(t - etaLD) / 8)) ≤ (epsilon / 100) * w ^ 2 :=
     hsmallg.trans (mul_le_mul_of_nonneg_left (pow_le_pow_left₀ hg.le hgw 2)
@@ -161,9 +163,10 @@ theorem exists_fixed_bandwidth_sharp_regional_low_energy_family
     exists_sharp_regional_family_of_scalar_budgets ell t etaLD w epsilon g
       hell hw hepsilon hgw ht0 ht hxi1 hsmall hfilter
       L q m a b hq hqm hab hbL Jtarget hcollar h hs h0 h1
-  obtain ⟨hminimum, hidentity⟩ :=
+  have :=
     hRaw.spectralSpanLE_centered_ground_of_eq hO (∑ j, e j) E0 z
       hcenter hzunit hz hE0low
+  obtain ⟨hminimum, hidentity⟩ := this
   exact ⟨e, E0, x, z, hO, hC, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0, hE04, hnorm, hminimum, hidentity, hfamilies⟩
 

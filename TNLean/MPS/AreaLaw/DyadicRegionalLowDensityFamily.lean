@@ -149,23 +149,28 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause
             Q L q J N W (higher.map Tm.toLinearEquiv.toLinearMap)
               (lower.map Tm.toLinearEquiv.toLinearMap) Delta := by
   classical
-  obtain ⟨C, hC, hCeta, hparams⟩ :=
+  have :=
     Real.exists_fixed_bandwidth_low_density_filter_parameters etaLD hLD
+  obtain ⟨C, hC, hCeta, hparams⟩ := this
   refine ⟨C, hC, hCeta, ?_⟩
   intro L q m a b i w hq hqm hw mi g u ell D nu
   have hmmi : m ≤ mi := Nat.le_mul_of_pos_right m (pow_pos (by decide) i)
   have hqmi : q ≤ mi := hqm.trans hmmi
-  obtain ⟨hell, hcut, hlogD, hresBudget, htrade⟩ := hparams mi w (hq.trans hqmi) hw
+  have := hparams mi w (hq.trans hqmi) hw
+  obtain ⟨hell, hcut, hlogD, hresBudget, htrade⟩ := this
   have hell1 : 1 ≤ ell := (by decide : 1 ≤ 21).trans hell
   have haccuracy :
       (288 * Real.exp (11 / 8)) * Real.exp (-((ell : ℝ) - etaLD) / 8) ≤ 1 ∧
       2 * (6 + etaLD) * ((288 * Real.exp (11 / 8)) *
         Real.exp (-((ell : ℝ) - etaLD) / 8)) ≤ nu * w ^ 2 := by
-    obtain ⟨hxi1, _hsmallConstant⟩ := hresBudget etaLD hLD.le le_rfl
+    have := hresBudget etaLD hLD.le le_rfl
+    obtain ⟨hxi1, _hsmallConstant⟩ := this
     let u0 := 1 + Real.log (m : ℝ) + Real.log (1 / g)
     let ell0 : ℕ := ⌈C * u0 ^ 2 / g⌉₊
-    obtain ⟨_hell0, _hcut0, _hlogD0, hres0, _htrade0⟩ := hparams m w (hq.trans hqm) hw
-    obtain ⟨_hxi01, hsmall0⟩ := hres0 etaLD hLD.le le_rfl
+    have := hparams m w (hq.trans hqm) hw
+    obtain ⟨_hell0, _hcut0, _hlogD0, hres0, _htrade0⟩ := this
+    have := hres0 etaLD hLD.le le_rfl
+    obtain ⟨_hxi01, hsmall0⟩ := this
     have hg : 0 < g := lt_min hw zero_lt_one
     have hg1 : g ≤ 1 := min_le_right _ _
     have hmR : (2 : ℝ) ≤ m := by exact_mod_cast hq.trans hqm
@@ -215,9 +220,10 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause
   have hdegree : 1 ≤ ell ^ 2 := by
     rw [pow_two]
     simpa only [Nat.one_mul] using Nat.mul_le_mul hell1 hell1
-  obtain ⟨N, W, hNraw, hdecomp⟩ :=
+  have :=
     exists_actual_regional_clipped_polynomial_family_fin
       L q a b ell (ell ^ 2) hell1 hq hdegree hab hbL h hs e (ell : ℝ) J
+  obtain ⟨N, W, hNraw, hdecomp⟩ := this
   have hN : N ≤ D ^ 2 := by
     apply hNraw.trans
     simpa only [Nat.mul_add] using
@@ -228,7 +234,8 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause
         hq hqmi hell1 hcollar le_rfl
   refine ⟨N, W, hN, ?_⟩
   intro eta hbuffer hetaLD lower higher Delta
-  obtain ⟨hnest, hupperClose, hlowerClose⟩ := htargets eta hbuffer hetaLD
+  have := htargets eta hbuffer hetaLD
+  obtain ⟨hnest, hupperClose, hlowerClose⟩ := this
   have hupper : E0 + eta - w ≤ 7 * (ell : ℝ) := by
     linarith only [hE04, hcut, hetaLD, hw, (Nat.cast_nonneg ell : (0 : ℝ) ≤ ell)]
   have hR : 0 < 7 * (ell : ℝ) - (E0 + eta - 2 * w) := by
@@ -240,12 +247,13 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause
           (B (ell : ℝ) e K) (hC.eigenvectorBasis j) =
         (hC.eigenvalues j : ℂ) • hC.eigenvectorBasis j :=
     hC.toEuclideanCLM_eigenvectorBasis j
-  obtain ⟨p, hpdegree, hp0, M, hM, himprove⟩ :=
+  have :=
     exists_chebyshev_nested_word_viability_of_polynomial_family
       (B (ell : ℝ) e K) hC hC.eigenvectorBasis hC.eigenvalues heigen W Tm
-      (fun Q hQ ↦ (hdecomp Q hQ).imp fun M hM ↦ hM.2)
+      (fun Q hQ ↦ (hdecomp Q hQ).imp fun M hM ↦ by have h2 := hM.2; with_reducible exact h2)
       (E0 + eta - 2 * w) (E0 + eta - w) (7 * (ell : ℝ))
       (by linarith only [hw]) hupper hnorm
+  obtain ⟨p, hpdegree, hp0, M, hM, himprove⟩ := this
   refine ⟨hnest, hupperClose, hlowerClose, ?_, p, hpdegree, hp0, M, hM, ?_⟩
   · have hgs : 4 * g / 5 ≤ w := by
       have hg : 0 < g := lt_min hw zero_lt_one

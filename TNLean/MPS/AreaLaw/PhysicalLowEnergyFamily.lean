@@ -152,19 +152,21 @@ theorem exists_five_region_physical_low_energy_filter_family
   have hdegree : 1 ≤ ell ^ 2 := by
     rw [pow_two]
     simpa only [Nat.one_mul] using Nat.mul_le_mul hell hell
-  obtain ⟨N, W, hNraw, hdecomp⟩ :=
+  have :=
     exists_actual_regional_clipped_polynomial_family_fin
       L q a b ell (ell ^ 2) hell hq hdegree hab hbL h hs e t J
+  obtain ⟨N, W, hNraw, hdecomp⟩ := this
   have hN : N ≤ D ^ 2 := by
     simpa only [J, D, Finset.sdiff_self, Finset.card_empty, Nat.mul_zero, Nat.zero_add,
       pow_zero, mul_one] using hNraw
-  obtain ⟨p, hpdegree, hp0, M, hM, himprove⟩ :=
+  have :=
     exists_chebyshev_nested_viability_of_polynomial_family
       (B t e K) hC hC.eigenvectorBasis hC.eigenvalues heigen W Tm
       (fun Q hQ ↦ (hdecomp Q hQ).imp fun M hM ↦ hM.2)
       (E0 + eta - 2 * w) (E0 + eta - w) (3 * t + 4 * (ell : ℝ))
       (by linarith only [hw])
       (by linarith only [hE04, hcut, ht, (Nat.cast_nonneg ell : (0 : ℝ) ≤ ell), hw, hbuffer]) hnorm
+  obtain ⟨p, hpdegree, hp0, M, hM, himprove⟩ := this
   refine ⟨N, W, hN, p, hpdegree, hp0, M, hM, ?_⟩
   simpa only [Delta,
     show (E0 + eta - w) - (E0 + eta - 2 * w) = w by ring] using himprove

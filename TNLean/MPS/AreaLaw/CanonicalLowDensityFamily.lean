@@ -135,8 +135,9 @@ theorem exists_fixed_bandwidth_five_region_canonical_low_energy_family
               Module.finrank ℂ grow ≤ N * Module.finrank ℂ S ∧
                 Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
                   (Delta / (1 - delta) ^ 2) grow (lower.map Tm.toLinearEquiv.toLinearMap) := by
-  obtain ⟨C, hC, hCeta, hfamily⟩ :=
+  have :=
     exists_fixed_bandwidth_five_region_low_energy_family etaLD hLD
+  obtain ⟨C, hC, hCeta, hfamily⟩ := this
   refine ⟨C, hC, hCeta, ?_⟩
   intro L q m a b w hq hqm hw
   -- Normalize the statement abbreviations before transporting the family, so
@@ -147,21 +148,24 @@ theorem exists_fixed_bandwidth_five_region_canonical_low_energy_family
     ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
   have hRaw : (∑ i, h i).IsHermitian :=
     (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
-  obtain ⟨hell, hlogD, hdata⟩ :=
+  have :=
     hfamily L q m a b w hq hqm hw hab hbL h hs h0 h1
+  obtain ⟨hell, hlogD, hdata⟩ := this
   refine ⟨hell, hlogD, ?_⟩
   obtain ⟨e, E0, x, z, hO, hClip, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0, hE04, hnorm, htargets⟩ := hdata
-  obtain ⟨hminimum, hidentity⟩ :=
+  have :=
     hRaw.spectralSpanLE_centered_ground_of_eq hO (∑ j, e j) E0 z
       hcenter hzunit hz hE0low
+  obtain ⟨hminimum, hidentity⟩ := this
   refine ⟨e, E0, x, z, hO, hClip, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0, hE04, hminimum, hidentity, hnorm, ?_⟩
   obtain ⟨N, W, hN, hfilters⟩ := htargets
   refine ⟨N, W, hN, ?_⟩
   intro eta hbuffer hetaLD
-  obtain ⟨hnest, hupperClose, hlowerClose, htrade, hpolynomial⟩ :=
+  have :=
     hfilters eta hbuffer hetaLD
+  obtain ⟨hnest, hupperClose, hlowerClose, htrade, hpolynomial⟩ := this
   have hidentityLower :
       Submodule.spectralSpanLE hO.eigenvectorBasis hO.eigenvalues (E0 + eta - 3 * w) =
         Submodule.spectralSpanLE hRaw.eigenvectorBasis hRaw.eigenvalues

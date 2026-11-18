@@ -188,9 +188,10 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
   have hAlog : 0 ≤ Alog := by dsimp only [Alog]; positivity
   have hU17 : 0 ≤ U0 + 17 := by linarith only [hU0]
   have hKD : 0 ≤ KD := by dsimp only [KD]; positivity
-  obtain ⟨C, hC, _hlogC, k, _hk, hpoly⟩ :=
+  have :=
     Real.exists_interleaved_output_polynomial_bound_with_constants
       gamma g u Ktree Kfinal KD hgamma hg hg1 hu hKtree.le hKfinal.le hKD
+  obtain ⟨C, hC, _hlogC, k, _hk, hpoly⟩ := this
   refine ⟨C, hC, k, ?_⟩
   intro L h hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G rG
     g0 m0 w v ell D s a tau epsilon t Delta
@@ -228,16 +229,18 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
     apply (div_le_div_iff₀ (by positivity) (by positivity)).mpr
     have hb := mul_le_mul_of_nonneg_right haN (mul_pos hDref0 hroot).le
     nlinarith only [hb, (mul_pos hDref0 hroot).le]
-  obtain ⟨Bfinal, hBfinal, hlogBfinal, hfinal⟩ :=
+  have :=
     hauto L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       Dtree D hDtree hD1 eta heta
+  obtain ⟨Bfinal, hBfinal, hlogBfinal, hfinal⟩ := this
   refine ⟨Bfinal, hBfinal, hlogBfinal, ?_⟩
   intro b Dcommon Nfinal xi
   obtain ⟨Ufinal, hdimUfinal, hUG, hGU, hUfinalMPS, hxi, hxiCoarse,
     hxiSource, hterminal⟩ := hfinal
   have hxiTree : xi ≤ xiMax := hxiCoarse.trans hradius
   refine ⟨Ufinal, hdimUfinal, hUG, hGU, hUfinalMPS, hxi, hxiTree, hxiSource, ?_⟩
-  obtain ⟨hprofile, hGood⟩ := hxiFamily xi hxi hxiTree
+  have := hxiFamily xi hxi hxiTree
+  obtain ⟨hprofile, hGood⟩ := this
   refine ⟨hprofile, ?_⟩
   intro Good failureBound
   obtain ⟨hGoodMeasurable, hfailure, hsuccess⟩ := hGood
@@ -247,16 +250,19 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
   have hw : 1 ≤ w := by
     dsimp only [w]
     linarith only [Real.log_natCast_nonneg rG, Real.log_nonneg hL1]
-  obtain ⟨_hellCount, _hfirst, _hsecond, _hupper, _hbase, hrawLog⟩ :=
+  have :=
     Real.interleaved_filter_scale_count_bounds Cscale m g w
       hCscale (Nat.le_max_right q 50) hg hg1 hw
+  obtain ⟨_hellCount, _hfirst, _hsecond, _hupper, _hbase, hrawLog⟩ := this
   have hlogD : Real.log (D : ℝ) ≤ KD * w :=
     Real.interleaved_log_bound_le_linear Alog g U0 w (Real.log (D : ℝ))
       hAlog hg hU0 hw hrawLog
-  obtain ⟨_hwSample, _hsSample, hsUpper, _hsLog⟩ :=
+  have :=
     Real.interleaved_sample_size_bounds rG L D hrG hD2
-  obtain ⟨_hM, hA, hc, hc1, _hfix, _hKGo, _hhigh⟩ :=
+  obtain ⟨_hwSample, _hsSample, hsUpper, _hsLog⟩ := this
+  have :=
     physical_dg_normalized_ground_filter_spec h h0 mu nu gamma hgamma hmu hnu hmunu hgap
+  obtain ⟨_hM, hA, hc, hc1, _hfix, _hKGo, _hhigh⟩ := this
   change 0 < A at hA
   change 0 < c at hc
   change gamma / A ≤ 1 at hc1
