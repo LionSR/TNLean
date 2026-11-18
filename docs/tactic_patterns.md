@@ -1,5 +1,17 @@
 # Tactic Pattern Ledger
 
+### Extending mixed-path identities to the endpoints — candidate (2026-11-17)
+
+- **Seen:** The integral-average formula and local commutation in
+  `MPS/Symmetry/MPOSymmetry/MixedWeakHopfAverage.lean` hold first on `(0,1)`.
+- **Pattern:** Both sides are continuous, so `Set.EqOn.closure` and `closure_Ioo`
+  extend the identities to `[0,1]`. Use this existing Mathlib theorem instead of
+  separately constructing a closed equalizer and applying `closure_minimal` each time.
+- **Decision:** No custom tactic or new generic topological lemma is needed.
+- **Notes:** The older parent-commutation module has the same pattern and was
+  intentionally left unchanged during the concurrent #10763 work. The scoped
+  tactic-pattern scan reported only existing repetitions outside the new modules.
+
 ### Sitewise tensor powers of a one-site matrix — promoted (2026-11-16)
 
 - **Seen:** five local definitions of the configuration-indexed product
