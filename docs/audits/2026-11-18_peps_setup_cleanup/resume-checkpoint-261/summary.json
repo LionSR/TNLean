@@ -1,0 +1,19 @@
+{
+  "production_head": "a28f35a6b916ee5a24d3836a31d13d74f832e11f",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "resumed_passed": 261,
+  "total_in_591_passed": 385,
+  "remaining": 206,
+  "unresolved_failures": [],
+  "original_runner_pid": 113318,
+  "original_session": 71491,
+  "queue_continues": false,
+  "stop_reason": "disk below 1 GiB at target boundary",
+  "last_completed": "TNLean/PEPS/AreaLaw/Scan/ActualReplicaDefect.lean",
+  "free_GiB": 0.9952850341796875,
+  "sha256": {
+    "passed": "6068e0886a6418a9f981c00d2848328b55727505c3063bd038c02e9e7433ba02",
+    "remaining": "1afdedde2aa44efd9f629fcd5550fa9cd2df9d07a84c55584d6839fb14b6252f"
+  },
+  "root_aggregator": "not started; requires all 591 completed"
+}
