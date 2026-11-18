@@ -297,7 +297,8 @@ theorem regionalEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {C
   rw [hunion] at key
   -- bounds on the children
   have hXF : ∀ i, regionalEntropy Λ q Ω (Xs i) ≤ F := fun i ↦
-    regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hmem (hchsafe i) (IntRect.size_child_le _ _ hr)
+    regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hmem
+      (hchsafe i) (IntRect.size_child_le _ _ hr)
   have hX0 : ∀ i, 0 ≤ regionalEntropy Λ q Ω (Xs i) := fun i ↦
     regionalEntropy_nonneg Λ q Ω hΩ _
   have hcard : (Finset.univ : Finset ι).card ≤ M ^ 2 := by
