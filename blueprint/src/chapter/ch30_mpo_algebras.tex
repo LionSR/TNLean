@@ -51,14 +51,14 @@ decomposes the stacked tensor $T_aT_b$ into copies of the blocks $T_c$.
 
 \begin{definition}[Fusion tensors]%
     \label{def:mpoalg_fusion_tensors}
-    \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
-    %   MPOTensor.FusionTensors (structure).
-    \uses{def:mpo_fusion_algebra, def:mps_rectangular_reduction,
-        def:glm_boundary_decomposition}
-    Let $(T_a)_{a\in I}$ be a fusion algebra of normal tensors of positive
-    bond dimension. A family of \emph{fusion tensors} for the pair $(a,b)$
-    consists of maps
+    \lean{MPOTensor.FusionTensors,
+        MPSTensor.NilpotentBiorthogonalReductions}
+    \leanok
+    \uses{def:mps_rectangular_reduction, def:mpo_to_mps}
+    Let $(T_a)_{a\in I}$ be matrix product operator tensors and let
+    $N_{ab}^c$ be nonnegative integers, such as the structure constants of a
+    fusion algebra (Definition~\ref{def:mpo_fusion_algebra}). A family of
+    \emph{fusion tensors} for the pair $(a,b)$ consists of maps
     \begin{align}
         V_{ab}^{c,\mu} & \colon\C^{\chi_a}\otimes\C^{\chi_b}\to\C^{\chi_c}, &
         W_{ab}^{c,\mu} & \colon\C^{\chi_c}\to\C^{\chi_a}\otimes\C^{\chi_b},
@@ -73,8 +73,9 @@ decomposes the stacked tensor $T_aT_b$ into copies of the blocks $T_c$.
         \label{eq:mpoalg_fusion_reduction}
     \end{align}
     for every word $\mathbf w$ in the pair alphabet, and the remainder
-    $(T_aT_b)^{ij}-\sum_{c,\mu}W_{ab}^{c,\mu}T_c^{ij}V_{ab}^{c,\mu}$ generates
-    a nilpotent algebra. This is the decomposition of
+    $(T_aT_b)^{ij}-\sum_{c,\mu}W_{ab}^{c,\mu}T_c^{ij}V_{ab}^{c,\mu}$ is
+    nilpotent: for some $\ell$, every product of at least $\ell$ of its
+    matrices vanishes. This is the decomposition of
     \cite[Section~2]{GarreRubio2023MPOSym} and
     \cite{Bultinck2017Anyons}, with the nilpotent remainder of
     \cite[Section~4.4]{GarreRubio2023MPOSym} in place of an exact identity.
@@ -85,6 +86,12 @@ decomposes the stacked tensor $T_aT_b$ into copies of the blocks $T_c$.
     % Source anchor: arXiv:2203.12563, lines 361--391 (fusion tensors and
     %   orthogonality) and lines 1026--1030 (nilpotent off-diagonal blocks);
     %   arXiv:1511.08090, AnyonsPEPS.tex lines 237--251.
+    % Source, lines 1001--1028, verbatim: "fusion tensors that decompose the
+    %   product of two tensors locally for any length $n$" (equation
+    %   fusiontensorG2); "In particular, for $n=0$, this results in the
+    %   orthogonality relations for the fusion tensors"; "These off-diagonal
+    %   blocks will disappear after a finite number of concatenation: we
+    %   denote by $\ell$ the nilpotent length associated to that".
 \end{definition}
 
 \begin{center}
@@ -162,24 +169,31 @@ normal tensors this is Corollary~\ref{cor:asym_fusion_tensors_group}.
 
 \begin{definition}[Action tensors]%
     \label{def:mpoalg_action_tensors}
-    \notready
-    % Planned Lean: TNLean/MPS/Symmetry/MPOSymmetry/FusionTensors.lean,
-    %   MPOTensor.ActionTensors (structure).
-    \uses{def:mpo_symmetric_family, def:mps_rectangular_reduction,
-        def:glm_boundary_decomposition}
-    Let $(A_x)_{x\in K}$ be a symmetric family of normal tensors of positive
-    bond dimension whose coefficients $M_{a,x}^y$ are nonnegative integers. A
-    family of \emph{action tensors} for $(a,x)$ consists of maps
+    \lean{MPOTensor.ActionTensors}
+    \leanok
+    \uses{def:mps_rectangular_reduction, def:mpug_action_tensor}
+    Let $(T_a)_{a\in I}$ be matrix product operator tensors, let
+    $(A_x)_{x\in K}$ be matrix product state tensors, and let $M_{a,x}^y$ be
+    nonnegative integers, such as the coefficients of a symmetric family
+    (Definition~\ref{def:mpo_symmetric_family}). A family of
+    \emph{action tensors} for $(a,x)$ consists of maps
     $V_{ax}^{y,i}\colon\C^{\chi_a}\otimes\C^{D_x}\to\C^{D_y}$ and
     $W_{ax}^{y,i}\colon\C^{D_y}\to\C^{\chi_a}\otimes\C^{D_x}$, for $y\in K$
     and $1\leq i\leq M_{a,x}^y$, that are mutually biorthogonal reductions of
-    $T_a\cdot A_x$ onto the blocks $A_y$ with a nilpotent remainder.
+    $T_a\cdot A_x$ onto the blocks $A_y$ with a nilpotent remainder: for some
+    $\ell'$, every product of at least $\ell'$ matrices of
+    $(T_a\cdot A_x)^s-\sum_{y,i}W_{ax}^{y,i}A_y^sV_{ax}^{y,i}$ vanishes.
     With zero remainder, it is an exact biorthogonal decomposition of
     $T_a\cdot A_x$ onto the copies of the $A_y$
     (Definition~\ref{def:glm_boundary_decomposition}), the form of
     \cite[Section~3]{GarreRubio2023MPOSym}.
     % Source anchor: arXiv:2203.12563, lines 459--490 (action tensors and
     %   orthogonality) and lines 1062--1091 (periodic-boundary form).
+    % Source, lines 1065--1091, verbatim: "there are action tensors that
+    %   decompose locally the action of the MPO tensor on the MPS tensor for
+    %   any length $n$" (equation mpoMPSsten); "there is a number $\ell'$
+    %   such that after blocking $\ell'$ tensors, there are no off-diagonal
+    %   blocks present in the product of the MPO and MPS tensors".
 \end{definition}
 
 \begin{center}

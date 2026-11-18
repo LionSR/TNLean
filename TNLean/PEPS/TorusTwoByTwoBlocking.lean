@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.KitaevPeriodicTiling
 import TNLean.Algebra.FinSumPermutation
+import TNLean.PEPS.TorusOperatorString
 
 /-!
 # Geometric two-by-two blocking with arbitrary virtual and physical alphabets

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixEntrywiseDeriv
 import TNLean.Algebra.MatrixFrameDeriv
+import TNLean.Algebra.MatrixLinearODE
 import TNLean.MPS.MPDO.BoundaryActionLMatrixGauge
 
 /-!
@@ -579,5 +580,72 @@ theorem exists_actionLMatrix_regauge_of_hasDerivAt
     (fun a b c μ ↦ by simp [Matrix.one_apply])]
   simp only [Matrix.one_apply, mul_ite, mul_one, mul_zero, ite_mul, zero_mul,
     Finset.sum_ite_eq, Finset.mem_univ, ite_true]
+
+/-- **Constancy of the L-symbol gauge class along an interval.**
+Assume the first-order path hypotheses at every point of `[α, β]`, and
+continuous span coefficients `X`. Given fundamental solutions
+`g' = X g`, `g γ₀ = 1` on the action multiplicity spaces, they are
+invertible everywhere on the interval and implement exactly the gauge law
+of `actionLMatrix_regauge`, with fixed fusion gauge and synthesis gauge
+`(g⁻¹)ᵀ`.
+
+**Scope restriction (continuous generators and given ODE solutions):**
+This integrates the infinitesimal law of GLM23, `REsubmission.tex`, lines
+1387--1551. Continuity of the generators is an additional assumption not
+stated in the source; existence of the fundamental solutions is explicit.
+See `docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`. No regularity of the
+synthesis maps is assumed. The unrestricted source claim, including merely
+continuous paths and changing bond dimensions, is not asserted here. -/
+theorem actionLMatrix_gaugeEquiv_of_continuous
+    (hF : ∀ a b,
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
+        (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+        (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
+    {α β γ₀ : ℝ} (hγ₀ : γ₀ ∈ Set.Icc α β)
+    (hA : ∀ t ∈ Set.Icc α β, ∀ᶠ γ in 𝓝 t, ∀ a x,
+      MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A γ x))
+        (fun q : (y : Fin s) × Fin (M a x y) ↦ A γ q.1)
+        (fun q ↦ VA γ a x q.1 q.2) (fun q ↦ WA γ a x q.1 q.2))
+    (hInj : ∀ t ∈ Set.Icc α β, ∀ᶠ γ in 𝓝 t, ∀ x, Kraus.IsInjective (A γ x))
+    (hne : ∀ t ∈ Set.Icc α β, ∀ᶠ γ in 𝓝 t, MPSTensor.BlocksNotGaugePhaseEquiv (A γ))
+    (hD : ∀ x, 0 < D x)
+    (X g : ℝ → ∀ a x y, Matrix (Fin (M a x y)) (Fin (M a x y)) ℂ)
+    (hX : ∀ a x y, ContinuousOn (fun t ↦ X t a x y) (Set.Icc α β))
+    (hdV : ∀ t ∈ Set.Icc α β, ∀ a x y i u v,
+      HasDerivAt (fun γ ↦ VA γ a x y i u v)
+        ((∑ i', X t a x y i i' • VA t a x y i') u v) t)
+    (hg₀ : ∀ a x y, g γ₀ a x y = 1)
+    (hg : ∀ t ∈ Set.Icc α β, ∀ a x y i j,
+      HasDerivAt (fun γ ↦ g γ a x y i j) ((X t a x y * g t a x y) i j) t)
+    {t : ℝ} (ht : t ∈ Set.Icc α β) :
+    (∀ a x y, IsUnit (g t a x y)) ∧
+      ∀ (a b c : Fin r) (x y z : Fin s) (i : Fin (M a z y)) (j : Fin (M b x z))
+        (k : Fin (M c x y)) (μ : Fin (N a b c)),
+        actionLMatrix WF (VA t) (WA t) a b x y ⟨z, i, j⟩ ⟨c, k, μ⟩ =
+          ∑ i', ∑ j', ∑ k', g t a z y i i' * g t b x z j j' * (g t c x y)⁻¹ k' k *
+            actionLMatrix WF (VA γ₀) (WA γ₀) a b x y ⟨z, i', j'⟩ ⟨c, k', μ⟩ := by
+  have hg' (a : Fin r) (x y : Fin s) (u : ℝ) (hu : u ∈ Set.Icc α β) :
+      HasDerivAt (fun γ ↦ g γ a x y) (X u a x y * g u a x y) u :=
+    hasDerivAt_pi.mpr fun i ↦ hasDerivAt_pi.mpr fun j ↦ hg u hu a x y i j
+  refine ⟨fun a x y ↦ Matrix.isUnit_of_hasDerivAt_mul
+    (hX a x y) (hg' a x y) hγ₀ (hg₀ a x y) ht, ?_⟩
+  intro a b c x y z i j k μ
+  let L : ℝ → Matrix (Fin (M a z y) × Fin (M b x z)) (Fin (M c x y)) ℂ :=
+    fun u p q ↦ actionLMatrix WF (VA u) (WA u) a b x y ⟨z, p.1, p.2⟩ ⟨c, q, μ⟩
+  have hL := Matrix.eq_kronecker_mul_initial_mul_inv_of_hasDerivAt (L := L)
+    (hX a z y) (hX b x z) (hX c x y) (hg' a z y) (hg' b x z) (hg' c x y)
+    (fun u hu i j k ↦ hasDerivAt_actionLMatrix VF WF hF (hA u hu) (hInj u hu)
+      (hne u hu) hD (X u) (hdV u hu) a b c x y z i j k μ)
+    hγ₀ (hg₀ a z y) (hg₀ b x z) (hg₀ c x y) ht
+  have heq := congrFun (congrFun hL (i, j)) k
+  change L t (i, j) k = _
+  rw [heq]
+  simp only [Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kronecker_apply, Finset.sum_mul]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun i' _ ↦ ?_
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun j' _ ↦ Finset.sum_congr rfl fun k' _ ↦ ?_
+  dsimp only [L]
+  ring
 
 end MPOTensor

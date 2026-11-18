@@ -194,6 +194,57 @@ separate `compile-time` job.
 
 ---
 
+### Full-build resource diagnostics
+
+The full-build shell starts `scripts/ci_resource_diagnostics.py` alongside the
+unchanged `lake build` and `lake build lint_style` pipeline. Every 30 seconds it
+writes a UTC-stamped JSON line and a short console heartbeat, with a final
+snapshot when it observes the build shell exit to capture counters after a failed build. The
+`lean-resources-<run-id>-<attempt>` artifact is uploaded after that step, including
+on failure or cancellation when the runner can still execute the upload. A
+forcibly terminated runner may not upload an artifact or finish its final line.
+
+Samples contain host CPU counters, load averages, available memory and swap,
+workspace filesystem capacity/inodes, and available cgroup-v2 memory/OOM and CPU
+throttling counters. Compare consecutive counters for activity or OOM events;
+an absolute event count alone does not attribute an OOM to this build. Unavailable
+metrics are `null`. Process details include only numeric PID/start time, elapsed
+and CPU seconds, RSS, and a fixed allowlist of build-tool names. No command
+arguments, environment variables, cgroup paths, or user-file contents are saved.
+The process scan is capped at 4096 entries; the artifact includes observed
+allowlisted totals and at most 16 cumulative CPU leaders. Summed RSS may count
+shared memory more than once and is not the cgroup's memory usage.
+
+Collection stops at 720 samples or 4 MiB, whichever comes first, and artifacts
+expire after seven days. A two-second sampler-only watchdog covers initialization,
+temporary-directory creation, Actions output publication, parent polling, metric
+collection, output writes and closing. All optional initialization runs in the
+background sampler; the build shell only launches it. The build shell
+never signals or waits for a saved numeric sampler PID: Bash may already have
+reaped it and the PID may have been reused. Parent PID/start-time polling stops
+sampling after shell exit; INT/TERM remain nonzero for the build shell.
+
+Each invocation creates a private, exclusive directory under runner temporary
+storage. Only a successfully closed sample receives an exclusive receipt with
+its device/inode, size and digest. A separate optional publication step validates
+owned regular files without following symlinks and copies matching bytes into a
+second exclusive directory. Only that validated copy is eligible for upload;
+pre-existing fixed paths and incomplete samples are never uploaded by this flow.
+The receipt checks consistency, not authenticity or a content allowlist: an
+active same-UID process can forge both bytes and a matching receipt, just as it
+can modify the scripts or Actions outputs. This is not a same-UID security boundary.
+Publication allows three seconds for the receipt and has a five-second watchdog. Temporary
+sample/copy storage is at most 8 MiB plus small metadata.
+
+Watchdogs terminate interruptible blocking I/O, including the tested FIFO faults.
+Uninterruptible kernel I/O or runner termination can delay physical process exit
+or prevent collection/upload; these mechanisms do not guarantee cleanup under
+those conditions. The shell has no diagnostic cleanup wait that could extend its
+exit. Collection and upload failures do not bypass build checks. These samples
+add observability only: they neither change Lake arguments/timeouts/cache
+provenance nor establish that a build is faster. The current cache is still saved
+only after all required build-job checks succeed.
+
 ### Changed-File Lean Checks (`pr-ci.yml`, `build` job)
 
 The `build` job derives its focused Lean checks from the change set, using
@@ -208,6 +259,15 @@ would not fix the selection. An unverifiable merge checkout falls back to all
 tests. Pushes and local invocations without a PR-head SHA retain their explicit
 base revision (the previous head for pushes).
 
+- **Focused checks** (pull requests, before the early build): the directly
+  changed production files and regression scripts are prepared by one
+  `lake build` and elaborated with the strict flags, so that an error in the
+  pull request's own edits surfaces before the root build. It is a shortcut
+  with a 50-minute budget inside a 60-minute step: a failure it finds fails
+  the step, but targets not prepared or not checked within the budget (a cold
+  dependency cache after a pin change, or a change near the bottom of the
+  import graph) are left, with a warning, to the root build and the strict
+  checks after it.
 - **Early build** (pull requests, before the root build): a fail-fast
   `lake build` of the changed production modules, logged with the root build
   for the compilation-time gate. It is a shortcut with a 20-minute budget: a

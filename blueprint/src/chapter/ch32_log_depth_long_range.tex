@@ -425,6 +425,134 @@ depth $O(q)$.
     Lemma~\ref{lem:ldp_depth_log_window}.
 \end{proof}
 
+\begin{lemma}[Normal sectors after fixed blocking]
+    \label{lem:ldp_arbitrary_blocked_sectors}
+    \lean{MPSTensor.exists_blockTensor_normal_sectors, MPSTensor.exists_blockTensor_normal_sectors_fixedPoints}
+    \leanok
+    \uses{thm:cpsv_canonical_form_representative_after_blocking,
+        thm:cpsv_canonical_form_bnt_refinement, thm:ldp_inequivalent_mixed_gap}
+    For every tensor $A$, there are $p>0$ and a finite family of gauge-phase inequivalent
+    left-canonical normal tensors $B_j$, with nonzero copy weights
+    $\mu_{j,k}$, such that at every $M>0$,
+    \begin{align}
+        \ket{\phi_M(A^{[p]})}
+         & =\sum_j\left(\sum_k\mu_{j,k}^{M}\right)\ket{\phi_M(B_j)}.
+        \label{eq:ldp_arbitrary_blocked_sectors}
+    \end{align}
+    Each $B_j$ has a positive definite stationary matrix $\sigma_j$ with
+    $\operatorname{tr}\sigma_j=1$, and every eigenvalue of a mixed transfer
+    map between distinct representatives has modulus below one. The family
+    may be empty; individual power sums may vanish.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Lemma~\ref{thm:cpsv_canonical_form_representative_after_blocking}
+    gives left-canonical normal blocks $C_{j,k}$ with weights $\lambda_{j,k}$.
+    By Lemma~\ref{thm:cpsv_canonical_form_bnt_refinement}, choose one
+    representative $B_j$ per phase class and invertible gauges $X_{j,k}$ such that
+    \[
+        C_{j,k}^{i}=z_{j,k}X_{j,k}B_j^{i}X_{j,k}^{-1},
+        \qquad |z_{j,k}|=1,\qquad \mu_{j,k}=\lambda_{j,k}z_{j,k}.
+    \]
+    For a word $i_1\cdots i_M$, cancellation of adjacent gauges and cyclicity
+    of the trace give
+    \[
+        \lambda_{j,k}^{M}\operatorname{tr}
+        (C_{j,k}^{i_1}\cdots C_{j,k}^{i_M})
+        =\mu_{j,k}^{M}\operatorname{tr}
+        (X_{j,k}B_j^{i_1}\cdots B_j^{i_M}X_{j,k}^{-1})
+        =\mu_{j,k}^{M}\operatorname{tr}(B_j^{i_1}\cdots B_j^{i_M}).
+    \]
+    Summing over the copies proves (\ref{eq:ldp_arbitrary_blocked_sectors}).
+    The representatives remain left-canonical and normal. Their irreducible
+    trace-preserving transfer maps have faithful stationary density matrices,
+    $\mathcal E_j(\sigma_j)=\sigma_j>0$ and $\operatorname{tr}\sigma_j=1$.
+    Lemma~\ref{thm:ldp_inequivalent_mixed_gap} gives
+    $|z|<1$ for every mixed-transfer eigenvalue between distinct representatives.
+\end{proof}
+
+\begin{lemma}[Measurement preparation from a normal-sector expansion]
+    \label{lem:ldp_measurement_sector_expansion}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum}
+    \leanok
+    \uses{thm:ldp_injective_on_measurement, thm:ldp_overlapping_unequal_blocks_error,
+        lem:ldp_overlapping_block_injectivity, lem:ldp_overlapping_one_block_chain,
+        lem:ldp_common_mixed_gap, thm:ldp_chain_depth, thm:ldp_short_chain_preparation,
+        lem:ldp_log_threshold_error}
+    Suppose $\ket{\phi_N(A)}=\sum_j\beta_j(N)\ket{\phi_N(B_j)}$ at every
+    positive length, where the $B_j$ are normal and left-canonical, have
+    faithful trace-one stationary matrices, and their distinct mixed transfer
+    maps have all eigenvalues of modulus below one. Then the nonzero targets
+    at $N\geq2$ admit logarithmic-depth measurement preparation for every
+    $0<\varepsilon\leq1$. The coefficients $\beta_j(N)$ may be arbitrary
+    complex functions of length.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Use the unweighted direct sum of the $B_j$, of bond dimension
+    $D'=\sum_j D_j$. Nonvanishing of the target implies $\beta(N)\ne0$, so set
+    \[
+        w=\sum_j|\beta_j(N)|^2>0,\qquad
+        \alpha_j=\beta_j(N)/\sqrt w,\qquad \sum_j|\alpha_j|^2=1.
+    \]
+    Choose $0<t<1$ by Lemma~\ref{lem:ldp_common_mixed_gap} and put
+    $r=-\tfrac14\log t>0$. Let $K>0$ be the constant of
+    Lemma~\ref{thm:ldp_overlapping_unequal_blocks_error} at $\gamma=1/4$.
+    If $L_0$ is the injectivity threshold of
+    Lemma~\ref{lem:ldp_overlapping_block_injectivity} and $L_p$ the threshold
+    of Lemma~\ref{thm:ldp_injective_on_measurement}, set
+    \[
+        L_{\min}=L_0+L_p+3D'+1,\quad a=1/r,\quad
+        b'=\max(\log K,0)/r+L_{\min},\quad
+        Q=a\log(N/\varepsilon)+b',\quad q=\lceil Q\rceil.
+    \]
+    The constants $t,K,L_{\min},a,b'$ are independent of $\beta(N)$, $N$, and $\varepsilon$.
+    When $q\leq N$, use $m=\lfloor N/q\rfloor$ blocks, the first $m-1$
+    of length $q$ and the last of length $q+(N\bmod q)<2q$.
+    All blocked maps are injective on the sector bond pairs. The normalized
+    isometric state with amplitudes $\alpha_j$ has overlap error bounded by
+    Lemma~\ref{thm:ldp_overlapping_unequal_blocks_error} as
+    \[
+        1-|\langle\psi,\widehat\phi_N(A)\rangle|
+        \leq Km e^{-rq}\leq KN e^{-rq}\leq\varepsilon.
+    \]
+    The last inequality is Lemma~\ref{lem:ldp_log_threshold_error}, since
+    $rq\geq\log K+\log N-\log\varepsilon$.
+    Lemma~\ref{thm:ldp_injective_on_measurement} prepares this state in
+    depth $2C_pq$. With $c_0=a+b'/\log2$, we have
+    $Q\leq c_0\log(N/\varepsilon)$ and $q<Q+1\leq2Q$,
+    hence $2C_pq\leq4C_pc_0\log(N/\varepsilon)$.
+    If $L_{\min}\leq N<q$, then $N<Q$ and
+    Lemma~\ref{lem:ldp_overlapping_one_block_chain} writes the normalized
+    target as one isometric block. Theorem~\ref{thm:ldp_chain_depth} prepares
+    it exactly in depth $C_eN\leq C_ec_0\log(N/\varepsilon)$.
+    For $N<L_{\min}$, Lemma~\ref{thm:ldp_short_chain_preparation} gives
+    exact preparation in bounded depth $K_s\leq(K_s/\log2)\log(N/\varepsilon)$.
+    Adding these three depth constants yields a uniform logarithmic bound.
+\end{proof}
+
+\begin{lemma}[Arbitrary tensors on grouped sites]
+    \label{lem:ldp_arbitrary_blocked_measurement}
+    \lean{MPSPreparation.exists_isPreparedWithMeasurementsAndCircuitInDepth_blockTensor_le_log, MPSPreparation.exists_isPreparedWithMeasurementRoundsInDepth_blockTensor_le_log_log}
+    \leanok
+    \uses{lem:ldp_arbitrary_blocked_sectors, lem:ldp_measurement_sector_expansion,
+        thm:ldp_nonnormal_loglog}
+    For every tensor $A$, each of the following depth bounds holds after a
+    fixed positive blocking $p$: $O(\log(M/\varepsilon))$ with measurements
+    followed by a circuit, and $O(\log(1+\log(M/\varepsilon)))$ with
+    measurement rounds. The target is any nonzero
+    $\ket{\phi_M(A^{[p]})}$ with $M\geq2$ and $0<\varepsilon\leq1$.
+    The blocking length and constants depend only on $A$. Circuits act on
+    grouped sites of dimension $d^p$; the represented physical lengths are $pM$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply the two normal-sector preparation estimates to
+    (\ref{eq:ldp_arbitrary_blocked_sectors}), with its derived stationary
+    matrices and mixed gaps. All sector data and the blocking length are
+    fixed before $M$ and $\varepsilon$ are chosen.
+\end{proof}
+
 \begin{theorem}[All translation-invariant MPS with measurements]
     \label{thm:ldp_all_ti_measurement_source}
     \uses{thm:ldp_long_range_measurement_depth, thm:ldp_overlapping_measurement_depth}
@@ -448,6 +576,10 @@ depth $O(q)$.
     assisted by measurements; for normal tensors and every chain length this is
     Lemma~\ref{thm:ldp_loglog_depth_every_length}, and for direct sums of
     inequivalent normal blocks in canonical form it is
-    Lemma~\ref{thm:ldp_nonnormal_loglog}. The passage from an arbitrary
-    translation-invariant tensor to such a canonical form is not stated.
+    Lemma~\ref{thm:ldp_nonnormal_loglog}.
+    Lemma~\ref{lem:ldp_arbitrary_blocked_measurement} derives the
+    preparation of an arbitrary tensor after one fixed blocking. Circuits on
+    the original physical sites and lengths outside the multiples of this
+    blocking length remain to be treated; the grouped-site result does not
+    establish the unrestricted assertion.
 \end{theorem}
