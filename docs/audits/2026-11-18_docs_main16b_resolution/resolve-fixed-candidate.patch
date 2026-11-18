@@ -1,0 +1,60 @@
+--- a/blueprint/src/chapter/ch24_peps_area_law_models.tex
++++ b/blueprint/src/chapter/ch24_peps_area_law_models.tex
+@@ -60 +59,0 @@
+-<<<<<<< 42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d
+@@ -62,3 +60,0 @@
+-=======
+-    Fix an integer $R\ge0$ and $J>0$. For each nonempty $X\subseteq\Lambda$ with
+->>>>>>> 16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931
+--- a/blueprint/src/chapter/ch24_peps_rectangular_specialization.tex
++++ b/blueprint/src/chapter/ch24_peps_rectangular_specialization.tex
+@@ -82 +81,0 @@
+-<<<<<<< 42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d
+@@ -88,4 +86,0 @@
+-=======
+-        ManyBody.RectangleInteraction.toAreaLawHamiltonian_hamiltonian,
+-        ManyBody.RectangleInteraction.isGapped_toAreaLawHamiltonian}
+->>>>>>> 16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931
+--- a/blueprint/src/chapter/ch35_hastings_lemma1.tex
++++ b/blueprint/src/chapter/ch35_hastings_lemma1.tex
+@@ -40 +39,0 @@
+-<<<<<<< 42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d
+@@ -42,3 +40,0 @@
+-=======
+-    \lean{TNLean.MPS.AreaLaw.ChainSupport.edist_le,
+->>>>>>> 16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931
+--- a/docs/formalization/openai-area-law-peps.md
++++ b/docs/formalization/openai-area-law-peps.md
+@@ -32 +31,0 @@
+-<<<<<<< 42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d
+@@ -39,8 +37,0 @@
+-=======
+-| One term per nonempty support of graph diameter at most `R` | `AdmissibleSupport Λ R` and `ManyBody.PlaneInteraction.term` | The index is a subtype of finite supports, not a family with unrestricted multiplicity. Zero terms are allowed. |
+-| Support on `X` | `ManyBody.supportedOperators (fun _ ↦ Fin q) X` | The QICLean site-operator algebra; `localLift` uses the existing placement `embedOp`. |
+-| `h_X = h_X*` and `‖h_X‖ ≤ J` | The `hermitian` and `norm_le` fields | The norm is the Euclidean induced operator norm. |
+-| `H = ∑_X h_X` | `ManyBody.Interaction.hamiltonian` | The sum is Hermitian by `operator_isHermitian`. |
+-| A unit ground vector at real energy `E₀` | `‖Ω‖ = 1` and `groundSpace h.operator E₀ = span {Ω}` | For `Δ > 0`, `ManyBody.isGapped_and_groundSpace_eq_span_iff` identifies these hypotheses with the printed eigen-equation and projector-gap inequality. |
+-| Unique ground vector up to phase and `H − E₀I ≥ Δ(I − |Ω⟩⟨Ω|)` | `ManyBody.IsGapped h.operator E₀ Δ` with `groundSpace h.operator E₀ = span {Ω}` | For `Δ > 0` the QICLean theorem `ManyBody.isGapped_and_groundSpace_eq_span_iff` is the equivalence with the printed inequality. No gap for a restriction is assumed. |
+->>>>>>> 16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931
+@@ -218 +208,0 @@
+-<<<<<<< 42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d
+@@ -220,3 +209,0 @@
+-=======
+-| Model: domain, range-`R` Hermitian terms, unit ground vector with projector gap, natural logarithms | `ManyBody.PlaneInteraction`, `ManyBody.IsGapped` with `groundSpace = span {Ω}`, `regionalEntropy`; equivalence with the projector gap by `ManyBody.isGapped_and_groundSpace_eq_span_iff` | Definitions; equivalence proved. |
+->>>>>>> 16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931
+--- a/docs/glossary.md
++++ b/docs/glossary.md
+@@ -3482 +3481,0 @@
+-<<<<<<< 42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d
+@@ -3484,3 +3482,0 @@
+-=======
+-| `ManyBody.PlaneInteraction` | One supported, norm-bounded Hermitian term per admissible support | Area-law `eq:hamiltonian`; no unrestricted multiplicity of terms. |
+->>>>>>> 16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931
+--- a/docs/tactic_patterns.md
++++ b/docs/tactic_patterns.md
+@@ -5848 +5847,0 @@
+-<<<<<<< 42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d
+@@ -5850,3 +5848,0 @@
+-=======
+-  `MPS/AreaLaw/PartialSwap.lean`, and the norm field of
+->>>>>>> 16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931

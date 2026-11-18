@@ -1,0 +1,55 @@
+{
+  "base": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+  "main": "16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931",
+  "merge_candidate_tree": "4059286841126d67a51e1ec2a55f1950cd692d69",
+  "files": [
+    {
+      "path": "blueprint/src/chapter/ch24_peps_area_law_models.tex",
+      "conflicts": 1,
+      "resolution": "Retain arbitrary real J; reject main J>0 at the model definition. Canonical PlaneInteraction references from main are already retained.",
+      "adjacent_automatic_merge": "Entire resolved candidate equals42c4; no additional main-only content dropped.",
+      "final_sha256": "23de51600327b6ad095e3a9f9d7f7ae473e19ea6578f3dffe1213450876f3aac",
+      "equals_42c4": true
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_rectangular_specialization.tex",
+      "conflicts": 1,
+      "resolution": "Retain separate Hermitian/arbitrary-J norm lemmas and projectorGap transport omitted by main; keep main canonical RectangleInteraction owner.",
+      "adjacent_automatic_merge": "Entire resolved candidate equals42c4; no additional main-only content dropped.",
+      "final_sha256": "bce4935e93150c31ffe0ef771d551de050c94596ea765291f0fb541cb98dab8b",
+      "equals_42c4": true
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_hastings_lemma1.tex",
+      "conflicts": 1,
+      "resolution": "Retain ManyBody.ChainSupport.edist_le rather than removed TNLean forwarding name; main canonical ChainInteraction names already retained.",
+      "adjacent_automatic_merge": "Entire resolved candidate equals42c4; no additional main-only content dropped.",
+      "final_sha256": "1380f9b13d0b3b4a004422c7fead829d4e40d920a1723bf397f3d2d6de3e68eb",
+      "equals_42c4": true
+    },
+    {
+      "path": "docs/formalization/openai-area-law-peps.md",
+      "conflicts": 2,
+      "resolution": "Both tables retain explicit term hypotheses and norm/PSD/member; singleton equivalence restricted to positive Delta. Main canonical Hamiltonian and PlaneInteraction names retained.",
+      "adjacent_automatic_merge": "Entire resolved candidate equals42c4; no additional main-only content dropped.",
+      "final_sha256": "1c16c33eb0e576dfe63a607c09c711e5bb3d721aeee7c5a95a3540ec9d3054ae",
+      "equals_42c4": true
+    },
+    {
+      "path": "docs/glossary.md",
+      "conflicts": 1,
+      "resolution": "Pure supported terms, with Hermitian/norm explicit hypotheses rather than fields; main canonical model name retained.",
+      "adjacent_automatic_merge": "Entire resolved candidate equals42c4; no additional main-only content dropped.",
+      "final_sha256": "1397ddd51039692198f30ebccfc55a5e0a54aab2a0beadd7642f1b4c7442255b",
+      "equals_42c4": true
+    },
+    {
+      "path": "docs/tactic_patterns.md",
+      "conflicts": 1,
+      "resolution": "Term norm estimate wording rather than obsolete norm field; main canonical partialSwap/swappedDoubled names retained.",
+      "adjacent_automatic_merge": "Entire resolved candidate equals42c4; no additional main-only content dropped.",
+      "final_sha256": "7e98f054d39d575491df70ebc3c36a62e9a265ba289daf8b5b27ea72d096796c",
+      "equals_42c4": true
+    }
+  ]
+}
