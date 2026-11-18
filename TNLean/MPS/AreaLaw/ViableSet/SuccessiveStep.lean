@@ -118,8 +118,6 @@ theorem card_lvvSweepStep_le (hq : 2 ≤ q)
           (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs)
               (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
               (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
-              (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-              (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
               (by omega) hq hDelta _)
     _ = lvvSuccessiveCardBound q Delta L := by
       dsimp only [lvvSuccessiveCardBound]
@@ -170,8 +168,6 @@ theorem isViable_lvvSweepStep (hq : 2 ≤ q)
   exact isViable_errorReductionSet_gaussianFilterFactors (Nat.le_of_lt hq) h hs h0 h1
     (lvvSuccessiveError_pos hDelta) hDelta (by omega) E₀ Γ hΓ hEig hgap _
     (chain.isViable_bondTrimSet_sizeTrimmingSelection
-        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
         (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
         (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hpos
         (by omega) hq hi hDelta

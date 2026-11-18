@@ -141,15 +141,9 @@ theorem exists_rational_sampled_viable_successor_polynomial
     ⟨(card_bondTrimSet_le hi m T₀).trans
       (chain.card_sizeTrimmingSelection_le_polynomial
           (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
-          (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1)
-          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
           (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) (by omega) hq hΔ _),
       fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m T₀ hv,
       chain.isViable_bondTrimSet_sizeTrimmingSelection
-          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
-          (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1)
-          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
-          (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1)
         (ManyBody.ChainInteraction.posSemidef_ofBonds_term h hs h0 h1) (by omega) hq hi hΔ
         (AreaLaw.extend (n + 1) S) E₀ Γ hΩ hgapC hspanC hsmall⟩
   have hexact := exists_sampled_errorReduction (by omega : 1 ≤ q) h hs h0 h1 hΩ hgap hspan hΔ

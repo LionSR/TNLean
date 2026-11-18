@@ -225,8 +225,6 @@ theorem cost_sweepStepProgram_le {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
     ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomial chain
         (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
         (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
-        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
         hL hq hDelta S₁
   have hcard₃ : S₃.card ≤ S₂.card := card_bondTrimSet_le hi m S₂
   have hcardF : F.card ≤ E * Rk :=

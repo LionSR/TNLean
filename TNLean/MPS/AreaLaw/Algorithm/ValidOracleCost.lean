@@ -160,8 +160,6 @@ theorem cost_sweepStepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL :
     chain.card_sizeTrimmingSelectionWith_le_polynomial
         (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
         (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
-        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
         hL hq hDelta S₁ _
       (card_oracleNets_le hv hL hq hDelta)
   have hcard₃ : S₃.card ≤ S₂.card := card_bondTrimSet_le hi m S₂

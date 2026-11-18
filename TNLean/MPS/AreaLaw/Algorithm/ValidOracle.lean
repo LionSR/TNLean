@@ -378,8 +378,6 @@ theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
   have hnet := isAdmissibleNet_oracleNets hv (k := i + 1) hL chain hDelta
   have hsol := isAdmissibleSolver_oracleSolver hv chain
       (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-      (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
-      (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
       (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hq Delta
       (lvvSuccessiveBondBound q Delta L)
     (AreaLaw.extend (i + 1) S)
@@ -399,8 +397,6 @@ theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
           (lvvSizeTrimmingCoefficient q Delta * L ^ lvvSizeTrimmingDegree q Delta) :=
           Nat.mul_le_mul hcardF
             (chain.card_sizeTrimmingSelectionWith_le_polynomial
-                (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-                (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
                 (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
                 (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
                 hL hq hDelta _ _
@@ -429,8 +425,6 @@ theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 
       hc hDelta (by omega) E₀ Γ hΓ hEig hgap
       (hv.gaussianFilterFactors_admissible L (i + 1) (Nat.le_of_lt hq) h h0 _ Delta) _
       (chain.isViable_bondTrimSet_sizeTrimmingSelectionWith
-          (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-          (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
           (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
           (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hpos
           hL hq hi hDelta
@@ -549,8 +543,6 @@ theorem groundStateProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 
     have hspanC : groundSpace chain.operator E = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
-        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1)
         (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
         (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hΩ
         hspanC hw'norm hover
