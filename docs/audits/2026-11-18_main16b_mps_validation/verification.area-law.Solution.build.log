@@ -1,0 +1,2 @@
+verification/area-law/Solution.lean:110:26: error(lean.unknownIdentifier): Unknown identifier `interval`
+verification/area-law/Solution.lean:111:36: error(lean.unknownIdentifier): Unknown identifier `ChainHamiltonian`

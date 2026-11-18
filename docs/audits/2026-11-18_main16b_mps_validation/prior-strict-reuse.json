@@ -1,0 +1,64 @@
+[
+  {
+    "module": "TNLean.MPS.AreaLaw.RelativeGeneratorLocalization",
+    "original_head": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+    "original_record": {
+      "head": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+      "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+      "module": "TNLean.MPS.AreaLaw.RelativeGeneratorLocalization",
+      "phase": "strict",
+      "role": "target77",
+      "command": [
+        "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+        "-j1",
+        "-M4096",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DautoImplicit=false",
+        "-DwarningAsError=true",
+        "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean"
+      ],
+      "source_sha256": "b87f960c99a5ffd3a969a215a2ab96d9613cc47449d3bfd057bcfaf080c54d24",
+      "started_utc": "2026-11-18T18:28:53.187435+00:00",
+      "seconds": 4.004907716996968,
+      "exit_code": 0,
+      "log": "TNLean.MPS.AreaLaw.RelativeGeneratorLocalization.strict.log",
+      "method": "direct Lean overlay compilation + strict; not Lake build"
+    },
+    "reuse_for_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+    "reason": "unchanged complete project source/import closure and artifact hash validated"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.SupportedGaussianIntegral",
+    "original_head": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+    "original_record": {
+      "head": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+      "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+      "module": "TNLean.MPS.AreaLaw.SupportedGaussianIntegral",
+      "phase": "strict",
+      "role": "target77",
+      "command": [
+        "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+        "-j1",
+        "-M4096",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DautoImplicit=false",
+        "-DwarningAsError=true",
+        "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean"
+      ],
+      "source_sha256": "53d0b3c287ba8197a305711562b023f4944654f466372de72da813a284cac748",
+      "started_utc": "2026-11-18T18:29:05.223711+00:00",
+      "seconds": 9.052805783998338,
+      "exit_code": 0,
+      "log": "TNLean.MPS.AreaLaw.SupportedGaussianIntegral.strict.log",
+      "method": "direct Lean overlay compilation + strict; not Lake build"
+    },
+    "reuse_for_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+    "reason": "unchanged complete project source/import closure and artifact hash validated"
+  }
+]
