@@ -170,9 +170,9 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
       (sampledSweepStep hq h hs h0 h1 E₀ Δ I hi S) := by
   classical
   let chain := ManyBody.ChainInteraction.ofBonds h hs
-  have hgapC : IsGapped chain.operator E₀ Δ := by
+  have hgapC : IsGapped chain.hamiltonian E₀ Δ := by
     simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hgap
-  have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
+  have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
     simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hspan
   have hext : IsViable Γ ((Δ / 169) ^ 2 / L)
       (AreaLaw.extend (i + 1) S : Set (LeftBlockVector L q (i + 1))) :=
@@ -187,7 +187,7 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
           (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hL hq hΔ _),
       fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m' T₀ hv,
       chain.isViable_bondTrimSet_sizeTrimmingSelection
-        (ManyBody.ChainInteraction.posSemidef_ofBonds_term h hs h0 h1) hL hq hi hΔ
+        (ManyBody.ChainInteraction.posSemidef_ofBonds_term h hs h0) hL hq hi hΔ
         (AreaLaw.extend (i + 1) S) E₀ Γ hΩ hgapC hspanC hext⟩
   have hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
       (leftBlock L k) (bondComplementWord h (I t))) ≤ q ^ (2 * κ) := fun t k ↦
@@ -390,9 +390,8 @@ theorem sampledGroundStateProgram_spec (hL : 0 < L) (hq : 2 ≤ q)
       rw [← norm_inner_symm, this]
       exact hover
     let chain := ManyBody.ChainInteraction.ofBonds h hs
-    have hchain : chain.operator = ∑ j,
-        h j := ManyBody.ChainInteraction.ofBonds_hamiltonian h hs h0 h1
-    have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
+    have hchain : chain.hamiltonian = ∑ j, h j := ManyBody.ChainInteraction.ofBonds_hamiltonian h hs
+    have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
         (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)

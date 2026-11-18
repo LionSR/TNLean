@@ -230,8 +230,8 @@ theorem exists_projectorFactorization_pow (R : ℕ) {κ : ℝ} (hκ : 6 < κ) :
   have hξ0 := lemmaOneLength_pos R (ΔE⁻¹ * J) 1
   have hgap' := hgap.smul (inv_pos.mpr hΔ)
   have hspan' := (ManyBody.groundSpace_smul (inv_ne_zero hΔ.ne') h.hamiltonian E₀).trans hspan
-  rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_hamiltonian _ (inv_nonneg.mpr hΔ.le)] at hgap'
-  rw [← h.smul_hamiltonian _ (inv_nonneg.mpr hΔ.le)] at hspan'
+  rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_hamiltonian _] at hgap'
+  rw [← h.smul_hamiltonian _] at hspan'
   obtain ⟨OB, OL, OR, hF⟩ := exists_isFactorizationAt_lemmaOneConst R hx one_pos
     (ξ' := κ * lemmaOneLength R (ΔE⁻¹ * J) 1) (by nlinarith)
     (h.smul ΔE⁻¹ (inv_nonneg.mpr hΔ.le)) hΩ hgap' hspan' c l
@@ -261,8 +261,8 @@ theorem exists_projectorFactorization_posSemidef_pow (R : ℕ) {κ : ℝ} (hκ :
   have hξ0 := lemmaOneLength_pos R (ΔE⁻¹ * J) 1
   have hgap' := hgap.smul (inv_pos.mpr hΔ)
   have hspan' := (ManyBody.groundSpace_smul (inv_ne_zero hΔ.ne') h.hamiltonian E₀).trans hspan
-  rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_hamiltonian _ (inv_nonneg.mpr hΔ.le)] at hgap'
-  rw [← h.smul_hamiltonian _ (inv_nonneg.mpr hΔ.le)] at hspan'
+  rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_hamiltonian _] at hgap'
+  rw [← h.smul_hamiltonian _] at hspan'
   obtain ⟨OB, OL, OR, hOB, hF⟩ := exists_posSemidef_isFactorizationAt_of_sqrt_decay hΩ hξ0
     (ξ' := κ * lemmaOneLength R (ΔE⁻¹ * J) 1) (by nlinarith)
     (le_max_of_le_right (exp_pos _).le) (lemmaOneBudgetB_nonneg one_pos (by positivity))

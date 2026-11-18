@@ -111,7 +111,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_all_spectral_ap
     dsimp only [boundaryError]
     positivity
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have harith := fullyApproxSDP_errors_fit_lvv_margin hL
@@ -121,7 +121,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_all_spectral_ap
     gcongr
   have herr : 2 * (‖K‖ * repair + ‖B‖ * boundaryError) ≤ Δ / 2028 :=
     hnum.trans (by simpa only [repair, boundaryError, add_assoc] using harith)
-  apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hh hhJ hL hq hΔ
+  apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
     (ξ := ‖K‖ * repair) (δ := boundaryError)
   · simpa only [K, Hleft, repair] using hσenergy
@@ -191,7 +191,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_erro
     exact add_nonneg
       (add_nonneg (mul_nonneg (by positivity) hcert.hεb) hδ0) hrepair0
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hnum : 2 * ((eK + ‖K‖ * repair) + ‖B‖ * boundaryError) ≤
@@ -202,7 +202,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_erro
       convert hbudget using 1
       simp only [repair, boundaryError]
       ring)
-  apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hh hhJ hL hq hΔ
+  apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
     (ξ := eK + ‖K‖ * repair) (δ := boundaryError)
   · simpa only [K, Hleft, repair, add_assoc] using hσenergy
@@ -273,7 +273,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_erro
       (add_nonneg (add_nonneg heη (mul_nonneg (by positivity) hcert.hεb)) hδ0)
       hrepair0
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hnum : 2 * ((eK + ‖K‖ * repair) + ‖B‖ * boundaryError) ≤
@@ -284,7 +284,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_erro
       convert hbudget using 1
       simp only [repair, boundaryError]
       ring)
-  apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hh hhJ hL hq hΔ
+  apply h.exists_viable_vector_of_compressed_boundary_solution_with_slack hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ σ hσ hσtrace
     (ξ := eK + ‖K‖ * repair) (δ := boundaryError)
   · simpa only [K, Hleft, repair, add_assoc] using hσenergy
@@ -361,7 +361,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_approx_
   let repair := κ + 2 * n * ε
   let boundaryError := eη + 2 * Fintype.card (CutSite L q k × Fin m) * εb + δ + repair
   obtain ⟨σ, hσ, hσtrace, _hclose, hσboundary, hσenergy⟩ := hcert.exists_density hZ
-  apply h.exists_rationalViableMPSData_of_compressed_boundary_solution_with_slack hh hhJ
+  apply h.exists_rationalViableMPSData_of_compressed_boundary_solution_with_slack
     hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan S hS W hW x hwx hwE X hX Z hZ hZZ
       σ hσ hσtrace (hξrat := hξrat) (hξrat1 := hξrat1)
       (ξ := eK + ‖K‖ * repair) (δ := boundaryError)
@@ -439,7 +439,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalCoordinateData_of_approx
   let repair := κ + 2 * n * ε
   let boundaryError := eη + 2 * Fintype.card (CutSite L q k × Fin m) * εb + δ + repair
   obtain ⟨σ, hσ, hσtrace, _hclose, hσboundary, hσenergy⟩ := hcert.exists_density hZ
-  apply h.exists_rationalCoordinateData_of_compressed_boundary_solution_with_slack hh hhJ
+  apply h.exists_rationalCoordinateData_of_compressed_boundary_solution_with_slack
     hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan S D W hW x hwx hwE X hX Z hZ hZZ
       σ hσ hσtrace (hξrat := hξrat) (hξrat1 := hξrat1)
       (ξ := eK + ‖K‖ * repair) (δ := boundaryError)

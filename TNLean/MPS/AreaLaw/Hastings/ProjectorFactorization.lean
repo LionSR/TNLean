@@ -171,7 +171,7 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
   have hlk : 3 * R + 2 * k ≤ l := by omega
   set ℓn := l - 3 * R - 2 * k with hℓn
   obtain ⟨H₀, OL, OR, hH₀, hOL, hOR, hcomm, hsL, hsR, hθ', hη, hZ, hν⟩ :=
-    h.exists_cutoffPair hh hhJ hJ hΩ hgap hspan hΔ hs0 (c := c) (m := m) (k := k) (by omega) hθ0 hT0
+    h.exists_cutoffPair hJ hΩ hgap hspan hΔ hs0 (c := c) (m := m) (k := k) (by omega) hθ0 hT0
   have hE : ((E₀ : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)).IsHermitian := by
     simp [IsHermitian, conjTranspose_smul]
   have hH' : (h.hamiltonian - (E₀ : ℂ) • 1).IsHermitian :=
@@ -180,7 +180,7 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
     hΩ hgap.sub_smul_one_self ((ManyBody.groundSpace_sub_smul_one_self _ _).trans hspan) hΔ hOL hOR
       hcomm s (δ := 0) (by simp) hη
   obtain ⟨OB, hOBs, hOB1, hOB⟩ :=
-    ManyBody.ChainInteraction.exists_boundaryOperator_factorization hq1 h hh hhJ hH₀ E₀ _ hZ hOL hOR
+    ManyBody.ChainInteraction.exists_boundaryOperator_factorization hq1 h hH₀ E₀ _ hZ hOL hOR
       (timeAverageVariance s ΔE) (ℓ' := (ℓn : ℝ)) (Nat.cast_nonneg _) hθ' hmoved
   refine ⟨OB, OL, OR, hOL, hOR, hcomm, hOB1, ?_, hsL, hsR, ?_⟩
   · refine (isSupportedOn_of_mem_supportedOperators hOBs).mono
@@ -221,7 +221,7 @@ theorem exists_isFactorizationAt_lemmaOneConst (R : ℕ) {J ΔE : ℝ} (hJ : 0 �
   exists_isFactorizationAt_of_sqrt_decay (lemmaOneLength_pos R J ΔE) hξ'
     (le_max_of_le_right (exp_pos _).le)
     (Hastings.lemmaOneBudgetB_nonneg hΔ (by positivity))
-    (exists_isFactorizationAt_sqrt_decay R hJ hΔ h hh hhJ hΩ hgap hspan c l)
+    (exists_isFactorizationAt_sqrt_decay R hJ hΔ h hΩ hgap hspan c l)
 
 /-- **Lemma 1 of Hastings' area law, without positivity.** For a gapped ground state `Ω` of a
 chain Hamiltonian of range `R` and term norm `J ≥ 0`, with gap `ΔE > 0`, and every
@@ -240,7 +240,7 @@ theorem exists_projectorFactorization (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ J) (h�
       ∀ c l : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
         IsFactorizationAt Ω c l (C₁ * exp (-(l / ξ'))) OB OL OR :=
   ⟨lemmaOneConst R J ΔE ξ', lemmaOneConst_nonneg R hΔ ξ', fun h hh hhJ _ _ hΩ hgap hspan c l ↦
-    exists_isFactorizationAt_lemmaOneConst R hJ hΔ hξ' h hh hhJ hΩ hgap hspan c l⟩
+    exists_isFactorizationAt_lemmaOneConst R hJ hΔ hξ' h hΩ hgap hspan c l⟩
 
 /-- **The positive version of Lemma 1.** Under the hypotheses of
 `exists_projectorFactorization`, `O_B` can be taken positive semidefinite, at half the rate:
@@ -257,6 +257,6 @@ theorem exists_projectorFactorization_posSemidef (R : ℕ) {J ΔE : ℝ} (hJ : 0
   exact ⟨_, by positivity, fun h hh hhJ _ _ hΩ hgap hspan c l ↦
     exists_posSemidef_isFactorizationAt_of_sqrt_decay hΩ (lemmaOneLength_pos R J ΔE) hξ'
       (le_max_of_le_right (exp_pos _).le) (Hastings.lemmaOneBudgetB_nonneg hΔ (by positivity))
-      (exists_isFactorizationAt_sqrt_decay R hJ hΔ h hh hhJ hΩ hgap hspan c l)⟩
+      (exists_isFactorizationAt_sqrt_decay R hJ hΔ h hΩ hgap hspan c l)⟩
 
 end TNLean.MPS.AreaLaw

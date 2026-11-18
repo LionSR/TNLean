@@ -114,8 +114,8 @@ theorem exists_projectorFactorization_div (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ J)
   refine ⟨C₁, hC₁, fun h hh hhJ E₀ Ω hΩ hgap hspan c l ↦ ?_⟩
   have hgap' := hgap.smul (inv_pos.mpr hΔ)
   have hspan' := (ManyBody.groundSpace_smul (inv_ne_zero hΔ.ne') h.hamiltonian E₀).trans hspan
-  rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_hamiltonian _ (inv_nonneg.mpr hΔ.le)] at hgap'
-  rw [← h.smul_hamiltonian _ (inv_nonneg.mpr hΔ.le)] at hspan'
+  rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_hamiltonian _] at hgap'
+  rw [← h.smul_hamiltonian _] at hspan'
   exact hF (h.smul ΔE⁻¹ (inv_nonneg.mpr hΔ.le)) hΩ hgap' hspan' c l
 
 end TNLean.MPS.AreaLaw

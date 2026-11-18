@@ -131,12 +131,10 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
     let T₀ := chain.sizeTrimmingSelection hq Δ (AreaLaw.extend i S)
     have hT₁ : IsViableMPS Γ (F * L ^ k) m (1 / 2) (bondTrimSet hiL m T₀) :=
       ⟨(card_bondTrimSet_le hiL m T₀).trans
-        (chain.card_sizeTrimmingSelection_le_polynomial
-            (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
-            (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) (by omega) hq hΔ _),
+        (chain.card_sizeTrimmingSelection_le_polynomial (by omega) hq hΔ _),
         fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hiL m T₀ hv,
         chain.isViable_bondTrimSet_sizeTrimmingSelection
-          (ManyBody.ChainInteraction.posSemidef_ofBonds_term h hs h0 h1) (by omega) hq hiL hΔ
+          (ManyBody.ChainInteraction.posSemidef_ofBonds_term h hs h0) (by omega) hq hiL hΔ
           (AreaLaw.extend i S) E₀ Γ hΩ hgapC hspanC hsmall⟩
     obtain ⟨I, hproj, hcuts⟩ := exists_sampled_errorReduction (show 1 ≤ q by omega)
       h hs h0 h1 hΩ hgap hspan hΔ hδ hδ1

@@ -140,7 +140,7 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_term_difference_spec
     Entropy.IsSupportedOn (n := fun _ ↦ q * q) K X.1 ∧ K.IsHermitian ∧ ‖K‖ ≤ 2 * J := by
   have hs :=
     (h.toChain).partialSwap_term_difference_spec (h.isHermitian_toChain_term hh)
-        (h.norm_toChain_term_le hhJ (norm_bound_nonneg_of_support h hhJ X))
+        (h.norm_toChain_term_le hhJ hJ)
       D X.toChainSupport b
   simp only [ManyBody.DomainInteraction.toChain_term] at hs
   simpa only [DomainSupport.toChainSupport] using hs

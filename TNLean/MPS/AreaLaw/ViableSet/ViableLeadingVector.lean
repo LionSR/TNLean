@@ -110,10 +110,10 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundary_minimizer_leading_vecto
     (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
     (spanProjection S)
   obtain ⟨w, m, W, x, hw, hwS, hwD, hwE, hW, hmD, hwx, hxP⟩ :=
-    h.exists_trimmed_witness_of_isViable hh hhJ hpos hL hq hΔ hΩ hgap hspan hviable
+    h.exists_trimmed_witness_of_isViable hpos hL hq hΔ hΩ hgap hspan hviable
   change (cutMatrix w k).rank ≤ D at hwD
   change m ≤ D at hmD
-  obtain ⟨HL, B, hsplit, hHL, hBS, hBn⟩ := h.exists_gluing_decomposition_of_range_one hh hhJ k
+  obtain ⟨HL, B, hsplit, hHL, hBS, hBn⟩ := h.exists_gluing_decomposition_of_range_one k
   have hblock (i : ℕ) : interval L 0 i = leftBlock L i := by
     ext j
     simp [interval, leftBlock]
@@ -144,7 +144,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundary_minimizer_leading_vecto
     Matrix.exists_boundary_density_minimizer P (leftCutOperator k HL) X η
       (WithLp.toLp 2 x) hxnorm hxP hX
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
   obtain ⟨hc0, hc, -, hnum, -⟩ := lvv_trimming_constant_bounds hΔ hΔ4
   change 0 < c at hc0
   change c ≤ 1 / 1600 at hc

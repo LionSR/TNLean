@@ -285,7 +285,7 @@ theorem _root_.ManyBody.ChainInteraction.information_reset (q : ℕ) (hq : 1 ≤
   intro L hL h hh hhJ Ω E₀ hΩ hgap hspan D C R₀ C₀ hDC hR₀ hC₀ b hI w hRw hCw
   have hK : Matrix.reindex (sitePairConfigurationEquiv (Fin L) q q)
       (sitePairConfigurationEquiv (Fin L) q q) (doubledHamiltonian h.hamiltonian) =
-        h.doubled.hamiltonian := h.doubled_hamiltonian hh hhJ.symm
+        h.doubled.hamiltonian := h.doubled_hamiltonian.symm
   let Z := (Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D).biUnion (fun X ↦ X.1)
   have hreset' := hreset (Fin L) (by simpa only [Fintype.card_fin] using hL)
   simp only [Fintype.card_fin] at hreset'
@@ -296,7 +296,7 @@ theorem _root_.ManyBody.ChainInteraction.information_reset (q : ℕ) (hq : 1 ≤
   obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq L h D (ℓ : ℝ) (Nat.cast_nonneg _)
   refine ⟨path, fun Q W hW η T hT ↦ ?_⟩
   obtain ⟨hs, -, herr⟩ := hint Q W hW η T hT
-  rw [hK, ← h.swappedDoubled_hamiltonian hh hhJ D]
+  rw [hK, ← h.swappedDoubled_hamiltonian D]
   exact ⟨hs, herr⟩
 
 /-- Information reset on an actual finite induced integer domain, using its
@@ -331,7 +331,7 @@ theorem _root_.ManyBody.DomainInteraction.information_reset (q : ℕ) (hq : 1 �
   intro Λ hL h hh hhJ Ω E₀ hΩ hgap hspan D C R₀ C₀ hDC hR₀ hC₀ b hI w hRw hCw
   have hK : Matrix.reindex (sitePairConfigurationEquiv (Fin Λ.card) q q)
       (sitePairConfigurationEquiv (Fin Λ.card) q q) (doubledHamiltonian h.hamiltonian) =
-        h.doubled.hamiltonian := h.doubled_hamiltonian hh hhJ.symm
+        h.doubled.hamiltonian := h.doubled_hamiltonian.symm
   let Z := (Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).biUnion (fun X ↦ X.1)
   have hreset' := hreset (Fin Λ.card) (by simpa only [Fintype.card_fin] using hL)
   simp only [Fintype.card_fin] at hreset'
@@ -342,7 +342,7 @@ theorem _root_.ManyBody.DomainInteraction.information_reset (q : ℕ) (hq : 1 �
   · obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq Λ h D ℓ
     refine ⟨path, fun Q W hW η T hT ↦ ?_⟩
     obtain ⟨hs, -, herr⟩ := hint Q W hW η T hT
-    rw [hK, ← h.swappedDoubled_hamiltonian hh hhJ D]
+    rw [hK, ← h.swappedDoubled_hamiltonian D]
     exact ⟨hs, herr⟩
   · have hrad : ((ℓ + R : ℕ) : ℝ) ≤ w := by simpa only [Nat.cast_add] using hℓ
     exact ManyBody.reset_graphNeighborhood_disjoint_cores (lineDomainGraph Λ)

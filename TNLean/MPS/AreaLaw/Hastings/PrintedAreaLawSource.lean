@@ -52,7 +52,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings_
         B * ManyBody.heisenbergEvolution h.hamiltonian t A‖ ≤
       4 * (X.card : ℝ) * ‖A‖ * ‖B‖ * Real.exp (-(d / 80)) := by
   have hw := chainLRVelocity_sub_one_pos R hJ
-  exact h.norm_heisenberg_commutator_le_hastings hh hhJ
+  exact h.norm_heisenberg_commutator_le_hastings
     (mul_pos (by norm_num) hw) (by linarith only [hw]) (by norm_num) X Y hA hB d hd t ht
 
 /-- **The positive factorization at an admissible source length.** With velocity

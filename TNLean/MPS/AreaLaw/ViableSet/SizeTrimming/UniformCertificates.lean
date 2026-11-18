@@ -122,7 +122,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_rational_fixed_
       hC hκbound hεbound hεbbound hδbound
         hθKbound hθXbound
     simpa only [ω, C] using hθZbound
-  apply h.exists_viable_vector_of_approx_sdp_error_budget hh hhJ hL hq hΔ
+  apply h.exists_viable_vector_of_approx_sdp_error_budget hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ hexact
   simpa only [K, C, eK, eX, ω, add_assoc] using hbudget
 
@@ -197,7 +197,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_uniformly_appro
     hL hnpos hrpos hn hr hε hεb
       (by simpa only [Nat.cast_mul] using hεbound)
       (by simpa only [Nat.cast_mul] using hεbbound)
-  apply h.exists_viable_vector_of_all_spectral_approx_sdp_certificate hh hhJ hL hq hΔ
+  apply h.exists_viable_vector_of_all_spectral_approx_sdp_certificate hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ A hA P N hP hN
       htrace hε hmin hεb hPmin hNmin hresidual htraces henergy hκbound
   · exact hεrealized
@@ -255,7 +255,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_uniform_approx_
       1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
   rcases hcert with ⟨hA, hP, hN, htrace, hε, hmin, hεb, hPmin, hNmin,
     hresidual, htraces, henergy⟩
-  exact h.exists_viable_vector_of_uniformly_approx_sdp_certificate hh hhJ hL hq hΔ
+  exact h.exists_viable_vector_of_uniformly_approx_sdp_certificate hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan S hn W hW x hwx hwE X hX Z hZ hZZ
       A hA P N hP hN htrace hε hmin hεb hPmin hNmin hresidual htraces henergy
         hκbound hεbound hεbbound hδbound
@@ -350,7 +350,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundary_coordinates_with_unifor
   refine ⟨n, hnonempty, Z, A₀, P₀, N₀, hnpos, hn, hZ, hZZ,
     by simpa only [K, E, ρ] using hzero, ?_⟩
   intro κ ε εb δ A P N hcert hκbound hεbound hεbbound hδbound
-  exact h.exists_viable_vector_of_uniform_approx_sdp_feasible hh hhJ hL hq hΔ
+  exact h.exists_viable_vector_of_uniform_approx_sdp_feasible hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan S hn W hW x hwx hwE X hX Z hZ hZZ
       hcert hκbound hεbound hεbbound hδbound
 
