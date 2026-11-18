@@ -2978,6 +2978,70 @@
       "free_after": 3527495680,
       "stop_reason": null,
       "log": "logs/reverse658-064.build.log"
+    },
+    {
+      "label": "reverse658-065",
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "files": [
+        "TNLean/MPS/ParentHamiltonian/EventualKernelGroundStateSupport.lean",
+        "TNLean/MPS/ParentHamiltonian/MultiblockQuasiLocalFace.lean",
+        "TNLean/MPS/ParentHamiltonian/QuasiLocalEventualKernelGap.lean",
+        "TNLean/MPS/ParentHamiltonian/QuasiLocalMultiblockGap.lean",
+        "TNLean/MPS/ParentHamiltonian/StationaryLocalStateSupport.lean",
+        "TNLean/Lattice.lean",
+        "TNLean/MPS/AreaLaw/LowDensityLogDimension.lean",
+        "TNLean/MPS/AreaLaw/PhysicalDGAutomaticRefinement.lean"
+      ],
+      "command": [
+        "lake",
+        "build",
+        "TNLean.MPS.ParentHamiltonian.EventualKernelGroundStateSupport",
+        "TNLean.MPS.ParentHamiltonian.MultiblockQuasiLocalFace",
+        "TNLean.MPS.ParentHamiltonian.QuasiLocalEventualKernelGap",
+        "TNLean.MPS.ParentHamiltonian.QuasiLocalMultiblockGap",
+        "TNLean.MPS.ParentHamiltonian.StationaryLocalStateSupport",
+        "TNLean.Lattice",
+        "TNLean.MPS.AreaLaw.LowDensityLogDimension",
+        "TNLean.MPS.AreaLaw.PhysicalDGAutomaticRefinement"
+      ],
+      "exit": 0,
+      "seconds": 106.11005140199995,
+      "free_before": 3527491584,
+      "free_after": 3363815424,
+      "stop_reason": null,
+      "log": "logs/reverse658-065.build.log"
+    },
+    {
+      "label": "reverse658-066",
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "files": [
+        "TNLean/MPS/AreaLaw/PhysicalDGClippedReference.lean",
+        "TNLean/MPS/AreaLaw/PhysicalDGIntervalTrimming.lean",
+        "TNLean/MPS/AreaLaw/PhysicalDGReferenceTrimming.lean",
+        "TNLean/MPS/AreaLaw/PhysicalGroundReference.lean",
+        "TNLean/MPS/AreaLaw/ProtocolMPSApproximation.lean",
+        "TNLean/MPS/AreaLaw/SharpPhysicalCompression.lean",
+        "TNLean/MPS/ParentHamiltonian/Martingale/ResidueCoverGapCriterion.lean",
+        "TNLean/MPS/ParentHamiltonian/MultiblockQuasiLocalGroundStates.lean"
+      ],
+      "command": [
+        "lake",
+        "build",
+        "TNLean.MPS.AreaLaw.PhysicalDGClippedReference",
+        "TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming",
+        "TNLean.MPS.AreaLaw.PhysicalDGReferenceTrimming",
+        "TNLean.MPS.AreaLaw.PhysicalGroundReference",
+        "TNLean.MPS.AreaLaw.ProtocolMPSApproximation",
+        "TNLean.MPS.AreaLaw.SharpPhysicalCompression",
+        "TNLean.MPS.ParentHamiltonian.Martingale.ResidueCoverGapCriterion",
+        "TNLean.MPS.ParentHamiltonian.MultiblockQuasiLocalGroundStates"
+      ],
+      "exit": 0,
+      "seconds": 22.020854460999544,
+      "free_before": 3363807232,
+      "free_after": 3310841856,
+      "stop_reason": null,
+      "log": "logs/reverse658-066.build.log"
     }
   ],
   "results": {
@@ -15859,6 +15923,374 @@
         "exit": 0,
         "seconds": 8.669793708002544,
         "log": "logs/TNLean__MPS__ParentHamiltonian__BlockedQuasiLocalGap.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/ParentHamiltonian/EventualKernelGroundStateSupport.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-065",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/ParentHamiltonian/EventualKernelGroundStateSupport.lean"
+        ],
+        "exit": 0,
+        "seconds": 7.724709376001556,
+        "log": "logs/TNLean__MPS__ParentHamiltonian__EventualKernelGroundStateSupport.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/ParentHamiltonian/MultiblockQuasiLocalFace.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-065",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/ParentHamiltonian/MultiblockQuasiLocalFace.lean"
+        ],
+        "exit": 0,
+        "seconds": 9.335722859002999,
+        "log": "logs/TNLean__MPS__ParentHamiltonian__MultiblockQuasiLocalFace.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/ParentHamiltonian/QuasiLocalEventualKernelGap.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-065",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/ParentHamiltonian/QuasiLocalEventualKernelGap.lean"
+        ],
+        "exit": 0,
+        "seconds": 6.661554525999236,
+        "log": "logs/TNLean__MPS__ParentHamiltonian__QuasiLocalEventualKernelGap.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/ParentHamiltonian/QuasiLocalMultiblockGap.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-065",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/ParentHamiltonian/QuasiLocalMultiblockGap.lean"
+        ],
+        "exit": 0,
+        "seconds": 4.700416245999804,
+        "log": "logs/TNLean__MPS__ParentHamiltonian__QuasiLocalMultiblockGap.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/ParentHamiltonian/StationaryLocalStateSupport.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-065",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/ParentHamiltonian/StationaryLocalStateSupport.lean"
+        ],
+        "exit": 0,
+        "seconds": 5.066740344998834,
+        "log": "logs/TNLean__MPS__ParentHamiltonian__StationaryLocalStateSupport.lean.strict.log"
+      }
+    },
+    "TNLean/Lattice.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-065",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/Lattice.lean"
+        ],
+        "exit": 0,
+        "seconds": 2.6967196100013098,
+        "log": "logs/TNLean__Lattice.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/AreaLaw/LowDensityLogDimension.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-065",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/AreaLaw/LowDensityLogDimension.lean"
+        ],
+        "exit": 0,
+        "seconds": 6.327423209993867,
+        "log": "logs/TNLean__MPS__AreaLaw__LowDensityLogDimension.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/AreaLaw/PhysicalDGAutomaticRefinement.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-065",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/AreaLaw/PhysicalDGAutomaticRefinement.lean"
+        ],
+        "exit": 0,
+        "seconds": 6.808410985002411,
+        "log": "logs/TNLean__MPS__AreaLaw__PhysicalDGAutomaticRefinement.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/AreaLaw/PhysicalDGClippedReference.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-066",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/AreaLaw/PhysicalDGClippedReference.lean"
+        ],
+        "exit": 0,
+        "seconds": 5.754846928000916,
+        "log": "logs/TNLean__MPS__AreaLaw__PhysicalDGClippedReference.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/AreaLaw/PhysicalDGIntervalTrimming.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-066",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/AreaLaw/PhysicalDGIntervalTrimming.lean"
+        ],
+        "exit": 0,
+        "seconds": 5.910177690995624,
+        "log": "logs/TNLean__MPS__AreaLaw__PhysicalDGIntervalTrimming.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/AreaLaw/PhysicalDGReferenceTrimming.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-066",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/AreaLaw/PhysicalDGReferenceTrimming.lean"
+        ],
+        "exit": 0,
+        "seconds": 5.601019109002664,
+        "log": "logs/TNLean__MPS__AreaLaw__PhysicalDGReferenceTrimming.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/AreaLaw/PhysicalGroundReference.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-066",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/AreaLaw/PhysicalGroundReference.lean"
+        ],
+        "exit": 0,
+        "seconds": 5.444567999998981,
+        "log": "logs/TNLean__MPS__AreaLaw__PhysicalGroundReference.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/AreaLaw/ProtocolMPSApproximation.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-066",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/AreaLaw/ProtocolMPSApproximation.lean"
+        ],
+        "exit": 0,
+        "seconds": 5.466384932995425,
+        "log": "logs/TNLean__MPS__AreaLaw__ProtocolMPSApproximation.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/AreaLaw/SharpPhysicalCompression.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-066",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/AreaLaw/SharpPhysicalCompression.lean"
+        ],
+        "exit": 0,
+        "seconds": 4.607931578000716,
+        "log": "logs/TNLean__MPS__AreaLaw__SharpPhysicalCompression.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/ParentHamiltonian/Martingale/ResidueCoverGapCriterion.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-066",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/ParentHamiltonian/Martingale/ResidueCoverGapCriterion.lean"
+        ],
+        "exit": 0,
+        "seconds": 5.604401778000465,
+        "log": "logs/TNLean__MPS__ParentHamiltonian__Martingale__ResidueCoverGapCriterion.lean.strict.log"
+      }
+    },
+    "TNLean/MPS/ParentHamiltonian/MultiblockQuasiLocalGroundStates.lean": {
+      "head": "e05d7f8907e0a4ebbcf4ad960f48958664eb7d3f",
+      "phase": "reverse658",
+      "build": "passed",
+      "batch": "reverse658-066",
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/ParentHamiltonian/MultiblockQuasiLocalGroundStates.lean"
+        ],
+        "exit": 0,
+        "seconds": 5.1031194899987895,
+        "log": "logs/TNLean__MPS__ParentHamiltonian__MultiblockQuasiLocalGroundStates.lean.strict.log"
       }
     }
   },

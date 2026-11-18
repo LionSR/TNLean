@@ -708,5 +708,25 @@
     "requested_cache_validated": 3,
     "all_rebuilt": 22,
     "mathlib_rebuilt": []
+  },
+  {
+    "batch": "reverse658-065",
+    "exit": 0,
+    "seconds": 106.11005140199995,
+    "requested": 8,
+    "requested_rebuilt": 8,
+    "requested_cache_validated": 0,
+    "all_rebuilt": 81,
+    "mathlib_rebuilt": []
+  },
+  {
+    "batch": "reverse658-066",
+    "exit": 0,
+    "seconds": 22.020854460999544,
+    "requested": 8,
+    "requested_rebuilt": 8,
+    "requested_cache_validated": 0,
+    "all_rebuilt": 12,
+    "mathlib_rebuilt": []
   }
 ]
