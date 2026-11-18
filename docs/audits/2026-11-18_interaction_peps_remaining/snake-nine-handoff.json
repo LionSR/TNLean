@@ -1,0 +1,260 @@
+{
+  "mps_evidence_head": "9b7feb8c28230656e0bb714d27f18f6c62e080a1",
+  "source_head": "dccc85e5607077b51822664e9d475287d300d607",
+  "missing_local_mps_prerequisites": [
+    {
+      "module": "TNLean.MPS.AreaLaw.SnakeGridGeometry",
+      "warm_olean_exists": false,
+      "overlay_olean_exists": false,
+      "source_matches_warm_baseline": true,
+      "path": "TNLean/MPS/AreaLaw/SnakeGridGeometry.lean",
+      "in_manifest77": false,
+      "in_manifest77_dependency_plan": true,
+      "source_sha256": "3821b2beb60d210b7afbfeb26e38611ffcde0fd1595a19e596b900b9f180442a",
+      "direct_imports": [
+        "TNLean.PEPS.AreaLaw.RectangularDomain",
+        "Mathlib.Logic.Equiv.Fin.Basic",
+        "Mathlib.Data.Fin.Rev"
+      ],
+      "remote_plan_record": {
+        "module": "TNLean.MPS.AreaLaw.SnakeGridGeometry",
+        "source_sha256": "3821b2beb60d210b7afbfeb26e38611ffcde0fd1595a19e596b900b9f180442a",
+        "dependencies": [
+          "TNLean.PEPS.AreaLaw.RectangularDomain"
+        ],
+        "reusable": true,
+        "reason": "exact source/artifact and all project dependencies match"
+      }
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.SnakeGridParameters",
+      "warm_olean_exists": false,
+      "overlay_olean_exists": false,
+      "source_matches_warm_baseline": true,
+      "path": "TNLean/MPS/AreaLaw/SnakeGridParameters.lean",
+      "in_manifest77": false,
+      "in_manifest77_dependency_plan": true,
+      "source_sha256": "6fea33d476ab39aa5fd95e1dec849adb0c5da7a408e25bc7edb3d21dc372e527",
+      "direct_imports": [
+        "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+      ],
+      "remote_plan_record": {
+        "module": "TNLean.MPS.AreaLaw.SnakeGridParameters",
+        "source_sha256": "6fea33d476ab39aa5fd95e1dec849adb0c5da7a408e25bc7edb3d21dc372e527",
+        "dependencies": [],
+        "reusable": true,
+        "reason": "exact source/artifact and all project dependencies match"
+      }
+    },
+    {
+      "module": "TNLean.MPS.Chain.Defs",
+      "warm_olean_exists": false,
+      "overlay_olean_exists": false,
+      "source_matches_warm_baseline": true,
+      "path": "TNLean/MPS/Chain/Defs.lean",
+      "in_manifest77": false,
+      "in_manifest77_dependency_plan": true,
+      "source_sha256": "341da9ca5ff02bc7d8a338181fb6607f45f9e5f5eb1243a79726490aae29a324",
+      "direct_imports": [
+        "TNLean.MPS.Defs",
+        "Batteries.Data.Fin",
+        "Mathlib.Logic.Equiv.Fin.Rotate"
+      ],
+      "remote_plan_record": {
+        "module": "TNLean.MPS.Chain.Defs",
+        "source_sha256": "341da9ca5ff02bc7d8a338181fb6607f45f9e5f5eb1243a79726490aae29a324",
+        "dependencies": [
+          "TNLean.MPS.Defs"
+        ],
+        "reusable": true,
+        "reason": "exact source/artifact and all project dependencies match"
+      }
+    },
+    {
+      "module": "TNLean.MPS.Core.CyclicTrace",
+      "warm_olean_exists": false,
+      "overlay_olean_exists": false,
+      "source_matches_warm_baseline": true,
+      "path": "TNLean/MPS/Core/CyclicTrace.lean",
+      "in_manifest77": false,
+      "in_manifest77_dependency_plan": true,
+      "source_sha256": "67e8d968988035d212fe977e7b8f27fe46c0e5ebf411e8ba10ffd1fc6afc8010",
+      "direct_imports": [
+        "TNLean.MPS.Defs",
+        "Mathlib.Data.Fin.Basic"
+      ],
+      "remote_plan_record": {
+        "module": "TNLean.MPS.Core.CyclicTrace",
+        "source_sha256": "67e8d968988035d212fe977e7b8f27fe46c0e5ebf411e8ba10ffd1fc6afc8010",
+        "dependencies": [
+          "TNLean.MPS.Defs"
+        ],
+        "reusable": true,
+        "reason": "exact source/artifact and all project dependencies match"
+      }
+    },
+    {
+      "module": "TNLean.MPS.Chain.VaryingBondOBC",
+      "warm_olean_exists": false,
+      "overlay_olean_exists": false,
+      "source_matches_warm_baseline": true,
+      "path": "TNLean/MPS/Chain/VaryingBondOBC.lean",
+      "in_manifest77": false,
+      "in_manifest77_dependency_plan": true,
+      "source_sha256": "dbf71e907753a7b0f65318e20ff52fe803f63e7e2e57b7c13e288ca5f3a12963",
+      "direct_imports": [
+        "QICLean.Algebra.FinSum",
+        "TNLean.MPS.Chain.Defs",
+        "TNLean.MPS.Core.CyclicTrace"
+      ],
+      "remote_plan_record": {
+        "module": "TNLean.MPS.Chain.VaryingBondOBC",
+        "source_sha256": "dbf71e907753a7b0f65318e20ff52fe803f63e7e2e57b7c13e288ca5f3a12963",
+        "dependencies": [
+          "QICLean.Algebra.FinSum",
+          "TNLean.MPS.Chain.Defs",
+          "TNLean.MPS.Core.CyclicTrace"
+        ],
+        "reusable": true,
+        "reason": "exact source/artifact and all project dependencies match"
+      }
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.OpenMPS",
+      "warm_olean_exists": false,
+      "overlay_olean_exists": false,
+      "source_matches_warm_baseline": true,
+      "path": "TNLean/MPS/AreaLaw/OpenMPS.lean",
+      "in_manifest77": false,
+      "in_manifest77_dependency_plan": true,
+      "source_sha256": "9d9bf8509c514801cbda279d58ad1227da14306a2a2006e3b00e5a228dec9406",
+      "direct_imports": [
+        "QICLean.Entropy.LocalLift",
+        "QICLean.Channel.SchmidtRank",
+        "TNLean.MPS.Chain.VaryingBondOBC"
+      ],
+      "remote_plan_record": {
+        "module": "TNLean.MPS.AreaLaw.OpenMPS",
+        "source_sha256": "9d9bf8509c514801cbda279d58ad1227da14306a2a2006e3b00e5a228dec9406",
+        "dependencies": [
+          "QICLean.Channel.SchmidtRank",
+          "QICLean.Entropy.LocalLift",
+          "TNLean.MPS.Chain.VaryingBondOBC"
+        ],
+        "reusable": true,
+        "reason": "exact source/artifact and all project dependencies match"
+      }
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.OpenMPSRank",
+      "warm_olean_exists": false,
+      "overlay_olean_exists": false,
+      "source_matches_warm_baseline": true,
+      "path": "TNLean/MPS/AreaLaw/OpenMPSRank.lean",
+      "in_manifest77": false,
+      "in_manifest77_dependency_plan": true,
+      "source_sha256": "d530174c1e28ae23feebf9b7b1e2bf7ad5e0c2d7c6153caaecfc5cb48df7d079",
+      "direct_imports": [
+        "TNLean.MPS.AreaLaw.OpenMPS",
+        "TNLean.Algebra.FinSpanOfFinrank"
+      ],
+      "remote_plan_record": {
+        "module": "TNLean.MPS.AreaLaw.OpenMPSRank",
+        "source_sha256": "d530174c1e28ae23feebf9b7b1e2bf7ad5e0c2d7c6153caaecfc5cb48df7d079",
+        "dependencies": [
+          "TNLean.Algebra.FinSpanOfFinrank",
+          "TNLean.MPS.AreaLaw.OpenMPS"
+        ],
+        "reusable": true,
+        "reason": "exact source/artifact and all project dependencies match"
+      }
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.SequentialTruncation",
+      "warm_olean_exists": false,
+      "overlay_olean_exists": false,
+      "source_matches_warm_baseline": true,
+      "path": "TNLean/MPS/AreaLaw/SequentialTruncation.lean",
+      "in_manifest77": false,
+      "in_manifest77_dependency_plan": true,
+      "source_sha256": "ec3ac82e400e0f54c683898d6d7bd7cab0d05681dfaa382e830ea48f38d326fc",
+      "direct_imports": [
+        "TNLean.MPS.AreaLaw.OpenMPSRank",
+        "TNLean.Algebra.ToEuclideanLinApply",
+        "TNLean.Algebra.SubmoduleStarProjectionMatrix",
+        "QICLean.Entropy.FilterOptimizer",
+        "TNLean.Lattice.RegionEntropyInequalities",
+        "QICLean.Entropy.RegionEntropy",
+        "QICLean.Entropy.SpectralTail",
+        "QICLean.Analysis.KyFanNorm",
+        "QICLean.Representation.RelativePin"
+      ],
+      "remote_plan_record": {
+        "module": "TNLean.MPS.AreaLaw.SequentialTruncation",
+        "source_sha256": "ec3ac82e400e0f54c683898d6d7bd7cab0d05681dfaa382e830ea48f38d326fc",
+        "dependencies": [
+          "QICLean.Analysis.KyFanNorm",
+          "QICLean.Entropy.FilterOptimizer",
+          "QICLean.Entropy.RegionEntropy",
+          "QICLean.Entropy.SpectralTail",
+          "QICLean.Representation.RelativePin",
+          "TNLean.Algebra.SubmoduleStarProjectionMatrix",
+          "TNLean.Algebra.ToEuclideanLinApply",
+          "TNLean.Lattice.RegionEntropyInequalities",
+          "TNLean.MPS.AreaLaw.OpenMPSRank"
+        ],
+        "reusable": true,
+        "reason": "exact source/artifact and all project dependencies match"
+      }
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.SnakeGridApproximation",
+      "warm_olean_exists": false,
+      "overlay_olean_exists": false,
+      "source_matches_warm_baseline": false,
+      "path": "TNLean/MPS/AreaLaw/SnakeGridApproximation.lean",
+      "in_manifest77": true,
+      "in_manifest77_dependency_plan": true,
+      "source_sha256": "987094fd63438c9177d4b70a3a85b86fef730459e5eb5f19b5620bee2072f034",
+      "direct_imports": [
+        "TNLean.MPS.AreaLaw.SnakeGridGeometry",
+        "TNLean.MPS.AreaLaw.SnakeGridParameters",
+        "TNLean.MPS.AreaLaw.SequentialTruncation",
+        "TNLean.PEPS.AreaLaw.TailParameter",
+        "TNLean.PEPS.AreaLaw.TheoremStatements",
+        "QICLean.Entropy.RegionCovariance",
+        "QICLean.ManyBody.Hamiltonian.GroundSpace"
+      ],
+      "remote_plan_record": {
+        "module": "TNLean.MPS.AreaLaw.SnakeGridApproximation",
+        "source_sha256": "987094fd63438c9177d4b70a3a85b86fef730459e5eb5f19b5620bee2072f034",
+        "dependencies": [
+          "QICLean.Entropy.RegionCovariance",
+          "QICLean.ManyBody.Hamiltonian.GroundSpace",
+          "TNLean.MPS.AreaLaw.SequentialTruncation",
+          "TNLean.MPS.AreaLaw.SnakeGridGeometry",
+          "TNLean.MPS.AreaLaw.SnakeGridParameters",
+          "TNLean.PEPS.AreaLaw.TailParameter",
+          "TNLean.PEPS.AreaLaw.TheoremStatements"
+        ],
+        "reusable": false,
+        "reason": "source changed or no completed-source evidence"
+      }
+    }
+  ],
+  "current_owner": "PEPS worker owns Snake only; no transfer made",
+  "decision": "No duplicate MPS compilation; await exact matching artifacts or coordinated single-owner transfer",
+  "additional_transitive_gap": {
+    "module": "TNLean.Algebra.FinSpanOfFinrank",
+    "in_77_dependency_plan": true,
+    "source_sha256": "ead043a4d1269b5ee5bd4f3f6233de5c83fb38750a0c1da3cb998b0b2b04510c",
+    "remote_source_matches": true,
+    "remote_plan_record": {
+      "module": "TNLean.Algebra.FinSpanOfFinrank",
+      "source_sha256": "ead043a4d1269b5ee5bd4f3f6233de5c83fb38750a0c1da3cb998b0b2b04510c",
+      "dependencies": [],
+      "reusable": true,
+      "reason": "exact source/artifact and all project dependencies match"
+    }
+  }
+}

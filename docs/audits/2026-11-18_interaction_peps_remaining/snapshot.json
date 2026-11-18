@@ -1,14 +1,18 @@
 {
-  "time": "2026-11-18T18:05:53.194156+00:00",
+  "time": "2026-11-18T18:14:49.509388+00:00",
   "source_head": "dccc85e5607077b51822664e9d475287d300d607",
   "qic_pin": "729428582b78ab7529b3796099193649f947354a",
   "manifest_count": 90,
   "manifest_sha256": "0df13e249d214a9a7872539d4cd364ad69322dd64c2fdb56bde4aefe873362dd",
-  "compile_pass_commands": 421,
-  "target_compile_pass": 86,
-  "target_strict_pass": 86,
+  "compile_pass_commands": 506,
+  "target_compile_pass": 90,
+  "target_strict_pass": 90,
   "failures": 0,
-  "compiler_seconds": 1886.7350001189188,
-  "disk_free_bytes": 2465206272,
-  "status": "SAFE REPORT BOUNDARY; no active validation processes; 86/90 targets passed; four pending"
+  "compiler_seconds": 2146.6530443689553,
+  "disk_free_bytes": 2403520512,
+  "status": "COMPLETE: 90/90 compile+strict; original 17 preserved => 107/107 PEPS. Snake blocked on coordinated prerequisite artifacts.",
+  "aggregate_peps_pass": 107,
+  "active_validation_processes": 0,
+  "snake46_pass": 46,
+  "fingerprint_audit_mismatches": 0
 }

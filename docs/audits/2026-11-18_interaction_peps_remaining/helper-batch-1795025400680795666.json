@@ -1,0 +1,26 @@
+{
+  "head": "dccc85e5607077b51822664e9d475287d300d607",
+  "pin": "729428582b78ab7529b3796099193649f947354a",
+  "modules": [
+    "TNLean.PEPS.AreaLaw.Geometry.BirthSeparationNormalization",
+    "TNLean.PEPS.AreaLaw.Geometry.BirthSeparationStar",
+    "TNLean.PEPS.AreaLaw.Geometry.BirthSeparationRepair",
+    "TNLean.PEPS.AreaLaw.Geometry.BirthSeparationInitial",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairCurrentRetention",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegion",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairTermination",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairStabilization",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegionStabilization",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairInclusionComposition",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegionTransport",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairOrderedBirthSeparation",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairRegionDisjointness",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairNextRegionDisjointness",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairCurrentDisjointness",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairCurrentTerminalDisjointness",
+    "TNLean.PEPS.AreaLaw.Geometry.DyadicOrigin",
+    "TNLean.PEPS.AreaLaw.Geometry.InitialRegionBoundaries",
+    "TNLean.PEPS.AreaLaw.Geometry.InitialLatticePartition",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairHalfSideArithmetic"
+  ]
+}

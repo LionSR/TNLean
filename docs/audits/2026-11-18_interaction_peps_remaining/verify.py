@@ -83,6 +83,6 @@ for target in targets:
   if m in failed:break
   if m not in valid and run(m,'compile'):break
  if any(m in failed for m in plans[target]):record(dict(head=head,pin=pin,module=target,phase='blocked',exit_code=125,reason='failed compilation dependency'));continue
- run(target,'strict')
+ if run(target,'strict'):raise SystemExit(1)
 (o/'artifact-hashes.json').write_text(json.dumps(artifacts,indent=2)+'\n')
 print('FINISHED batch targets',attempted,'free bytes',shutil.disk_usage(r).free,flush=True)

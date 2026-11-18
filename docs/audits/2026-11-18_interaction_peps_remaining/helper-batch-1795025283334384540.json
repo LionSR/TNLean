@@ -1,0 +1,26 @@
+{
+  "head": "dccc85e5607077b51822664e9d475287d300d607",
+  "pin": "729428582b78ab7529b3796099193649f947354a",
+  "modules": [
+    "TNLean.PEPS.AreaLaw.Geometry.RepairInductionStatement",
+    "TNLean.PEPS.AreaLaw.Geometry.CellFanSlopes",
+    "TNLean.PEPS.AreaLaw.Geometry.PrimaryFineCellCover",
+    "TNLean.PEPS.AreaLaw.Geometry.FanFrontiers",
+    "TNLean.PEPS.AreaLaw.Geometry.NearMarkGeometry",
+    "TNLean.PEPS.AreaLaw.Geometry.CellSides",
+    "TNLean.PEPS.AreaLaw.Geometry.AllowedSlopeAffineLine",
+    "TNLean.PEPS.AreaLaw.Geometry.InitialStarFrontiers",
+    "TNLean.PEPS.AreaLaw.Geometry.InitialRegionInteriors",
+    "TNLean.PEPS.AreaLaw.Geometry.FanRegularity",
+    "TNLean.PEPS.AreaLaw.Geometry.InitialRegionRegularity",
+    "TNLean.PEPS.AreaLaw.Geometry.CellFanSectors",
+    "TNLean.PEPS.AreaLaw.Geometry.ConcentricFans",
+    "TNLean.PEPS.AreaLaw.Geometry.InitialSectorAssignment",
+    "TNLean.PEPS.AreaLaw.Geometry.FanSideContacts",
+    "TNLean.PEPS.AreaLaw.Geometry.BeltRunInterfaces",
+    "TNLean.PEPS.AreaLaw.Geometry.DummyRunInterfaces",
+    "TNLean.PEPS.AreaLaw.Geometry.InitialRegionInterfaces",
+    "TNLean.PEPS.AreaLaw.Geometry.InitialSectorColors",
+    "TNLean.PEPS.AreaLaw.Geometry.InitialSectorRuns"
+  ]
+}

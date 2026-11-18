@@ -41,6 +41,40 @@ source blob fingerprints and the unchanged dependency manifest for each target.
 It supports reuse for unchanged closures; it is not a claim of new execution at
 42c4ed17. Its three changed modules and 25-path closure require separate validation.
 
+## Final result
+
+All 90 remaining PEPS targets passed direct overlay compilation and strict at
+dccc85e5607077b51822664e9d475287d300d607. Together with the preserved 17 earlier
+passes, the PEPS allocation is 107/107. None of those original 17 was recompiled.
+There were 506 successful compilation commands (including prerequisites), 90
+successful target strict commands, and no Lean failures. The recorded compiler
+command time is 2146.653 seconds across this lane, not elapsed or editing time.
+
+The standard-library artifact lookup guard incident is retained separately;
+it happened before invoking Lean and was resolved by including the pinned
+compiler's lib/lean directory in fingerprint lookup. No source check was weakened.
+The final fingerprint audit reconstructed all 596 pre-command fingerprints:
+zero mismatches, 506 unique fingerprints and 1699 dependency artifacts.
+The underlying hash manifests are in dependency-fingerprints.tar.gz.
+
+All 46 Snake PEPS overlap targets passed. Snake itself was not compiled: nine
+MPS prerequisites plus TNLean.Algebra.FinSpanOfFinrank have no local artifact,
+and all ten belong to the MPS 77-target dependency plan with matching source
+hashes. snake-nine-handoff.json and snake-final-gap.json contain exact paths,
+direct imports and plan records. No cross-environment cache transfer or Snake
+owner transfer was attempted. The minimum next action is a coordinated exact
+artifact handoff, or an explicit single-owner Snake transfer to the MPS warm
+environment. Do not duplicate the queued MPS work here.
+
+final-reuse-all.json proves unchanged transitive TN source fingerprints for
+107 PEPS targets, six shared owners and five fixtures from dccc to 42c4ed17,
+with identical dependency manifest and toolchain. Execution records retain
+their original heads; this is hash-based reuse, not new compilation at 42c4.
+The 25 affected MPS/root paths are excluded and remain with the MPS owner.
+
+All validation processes have exited. No PR was modified, no whole-library or
+root aggregation build ran, and no existing source/cache was reset or cleaned.
+
 ## Reproducible documentation checks
 
 `source-sync-command.json` records a fresh source-sync invocation at dccc, with
@@ -55,5 +89,5 @@ coordinate definitions and dependency manifest, then each of the five fixtures.
 The result contains 22 cases: sixteen Lean owners, one manifest and five fixtures.
 This is source-level selection evidence; it does not replace Lean compilation.
 
-Consult the timestamped snapshot and live process report for current progress.
-An intermediate evidence commit is not whole-lane or merge clearance.
+Consult the final snapshot, target-status.json and process-checkpoint.json.
+This completes the PEPS lane only; it is not whole-library or merge clearance.

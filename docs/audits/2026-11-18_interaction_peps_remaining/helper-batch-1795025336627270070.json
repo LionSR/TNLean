@@ -1,0 +1,26 @@
+{
+  "head": "dccc85e5607077b51822664e9d475287d300d607",
+  "pin": "729428582b78ab7529b3796099193649f947354a",
+  "modules": [
+    "TNLean.PEPS.AreaLaw.Geometry.CellFanRays",
+    "TNLean.PEPS.AreaLaw.Geometry.InitialActiveRays",
+    "TNLean.PEPS.AreaLaw.Geometry.InitialStars",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairInduction",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairDescendantScales",
+    "TNLean.PEPS.AreaLaw.Geometry.DescendantCutClearance",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairCharacteristicLength",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairBirthRank",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairActualBirthTemplates",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairDescendantCounts",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairCurrentRegions",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairStageSites",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairBirthLatticePoint",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairCharacteristicLengthLowerBound",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairDummySites",
+    "TNLean.PEPS.AreaLaw.Geometry.BirthSeparationAngular",
+    "TNLean.PEPS.AreaLaw.Geometry.BeltFacetSeparation",
+    "TNLean.PEPS.AreaLaw.Geometry.BirthSeparationFan",
+    "TNLean.PEPS.AreaLaw.Geometry.BirthSeparationReplacement",
+    "TNLean.PEPS.AreaLaw.Geometry.BirthSeparationAtoms"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "source_head": "dccc85e5607077b51822664e9d475287d300d607",
+  "final_source_head": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+  "peps46_compile_strict_pass": 46,
+  "remaining_modules_topological": [
+    "TNLean.MPS.AreaLaw.SnakeGridGeometry",
+    "TNLean.MPS.AreaLaw.SnakeGridParameters",
+    "TNLean.MPS.Chain.Defs",
+    "TNLean.MPS.Core.CyclicTrace",
+    "TNLean.MPS.Chain.VaryingBondOBC",
+    "TNLean.MPS.AreaLaw.OpenMPS",
+    "TNLean.Algebra.FinSpanOfFinrank",
+    "TNLean.MPS.AreaLaw.OpenMPSRank",
+    "TNLean.MPS.AreaLaw.SequentialTruncation",
+    "TNLean.MPS.AreaLaw.SnakeGridApproximation",
+    "TNLean.MPS.AreaLaw.SnakeGridAreaLaw"
+  ],
+  "prerequisites": 10,
+  "target": 1,
+  "mps_prerequisites_in_77_dependency_plan": true,
+  "transfer_performed": false,
+  "execution_owner": "unchanged, pending coordinator decision",
+  "minimal_plan": "Use source/pin/dependency-matching MPS prerequisite artifacts if an allowed transfer is available; otherwise coordinate one explicit Snake owner in the MPS warm environment before executing. Do not duplicate the queued 77 or retry restricted cache export."
+}

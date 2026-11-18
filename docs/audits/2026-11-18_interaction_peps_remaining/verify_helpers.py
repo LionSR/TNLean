@@ -74,7 +74,7 @@ def run(m,phase):
  return rc
 limit=int(sys.argv[1])
 priority={p[:-5].replace('/','.') for p in (o/'snake-priority46.txt').read_text().splitlines()}
-remaining=[t for t in priority if (t,'strict') not in done]
+remaining=[t for t in plans if (t,'strict') not in done]
 chosen=[]
 for target in sorted(remaining,key=lambda t:len(set(plans[t])-valid)):
  for m in plans[target]:

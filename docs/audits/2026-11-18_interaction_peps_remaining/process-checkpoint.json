@@ -1,17 +1,11 @@
 {
-  "source_head": "dccc85e5607077b51822664e9d475287d300d607",
-  "state": "safe boundary, all queues exited; immediate report requested by coordinator",
+  "time": "2026-11-18T18:14:49.415145+00:00",
+  "head": "dccc85e5607077b51822664e9d475287d300d607",
+  "state": "PEPS complete; genuine Snake artifact/ownership gate",
   "active_validation_processes": 0,
-  "last_session": 34484,
-  "last_pid": 105804,
-  "last_exit_code": 0,
-  "next_command": [
-    "python3",
-    "/workspace/reviews/interaction-peps-remaining/verify_helpers.py",
-    "20"
-  ],
-  "snake": "not run; 44/46 PEPS overlap passed, nine absent MPS prerequisites await coordination",
-  "source_sync_exit": 0,
-  "selector_cases_passed": 22,
-  "cache_export": "no cross-environment cache transfer attempted"
+  "last_queue_session": 22347,
+  "queue_exit_code": 0,
+  "fingerprint_audit_session": 21232,
+  "fingerprint_audit_exit_code": 0,
+  "next_action": "Coordinator decides exact matching artifact handoff or explicit single-owner Snake transfer. No MPS compilation authorized here."
 }

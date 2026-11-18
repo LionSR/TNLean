@@ -151,20 +151,20 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/AreaLawElementaryConstant.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/AreaLawTheorem.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -217,8 +217,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/SafeRectangleAreaLaw.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
