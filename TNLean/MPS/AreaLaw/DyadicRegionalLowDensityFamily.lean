@@ -39,8 +39,6 @@ namespace TNLean.MPS.AreaLaw
 
 open Matrix
 
-set_option maxHeartbeats 800000 in
--- The tensor decompositions involve several dependent finite configuration types.
 /-- The actual fixed-bandwidth physical filter family on any prescribed
 region whose symmetric difference with the native retained interval contains
 at most `2*ell` sites. The scalar bounds are chosen before geometry and the
@@ -156,8 +154,14 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause
   intro L q m a b i w hq hqm hw mi g u ell D nu
   have hmmi : m ≤ mi := Nat.le_mul_of_pos_right m (pow_pos (by decide) i)
   have hqmi : q ≤ mi := hqm.trans hmmi
-  have := hparams mi w (hq.trans hqmi) hw
-  obtain ⟨hell, hcut, hlogD, hresBudget, htrade⟩ := this
+  -- Project the facts rather than destructuring them, so that the large statement is
+  -- not checked again at each step.
+  have hparamsMi := hparams mi w (hq.trans hqmi) hw
+  have hell := hparamsMi.1
+  have hcut := hparamsMi.2.1
+  have hlogD := hparamsMi.2.2.1
+  have hresBudget := hparamsMi.2.2.2.1
+  have htrade := hparamsMi.2.2.2.2
   have hell1 : 1 ≤ ell := (by decide : 1 ≤ 21).trans hell
   have haccuracy :
       (288 * Real.exp (11 / 8)) * Real.exp (-((ell : ℝ) - etaLD) / 8) ≤ 1 ∧
@@ -209,11 +213,23 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause
   refine ⟨hell, hlogD, ?_⟩
   intro hab hbL Jtarget hcollar h hs h0 h1 k A Cross Y K B
   obtain ⟨hxi1, hsmall⟩ := haccuracy
-  obtain ⟨e, E0, x, z, hO, hC, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
-    hE0, hE04, hnorm, htargets⟩ :=
+  have htargetData :=
     exists_five_region_low_energy_targets_of_residual_budget_at_error
       L q a b ell etaLD w nu hw (by dsimp only [nu]; positivity)
       hcut hxi1 hsmall hq hell1 hab hbL h hs h0 h1
+  refine htargetData.elim fun e hd ↦ hd.elim fun E0 hd ↦ hd.elim fun x hd ↦
+    hd.elim fun z hd ↦ hd.elim fun hO hd ↦ hd.elim fun hC hd ↦ ?_
+  have hxunit := hd.1
+  have hx := hd.2.1
+  have hlo := hd.2.2.1
+  have hcenter := hd.2.2.2.1
+  have hzunit := hd.2.2.2.2.1
+  have hz := hd.2.2.2.2.2.1
+  have hE0low := hd.2.2.2.2.2.2.1
+  have hE0 := hd.2.2.2.2.2.2.2.1
+  have hE04 := hd.2.2.2.2.2.2.2.2.1
+  have hnorm := hd.2.2.2.2.2.2.2.2.2.1
+  have htargets := hd.2.2.2.2.2.2.2.2.2.2
   refine ⟨e, E0, x, z, hO, hC, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0, hE04, hnorm, ?_⟩
   intro J beta tau U Phi Tm
@@ -223,7 +239,9 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause
   have :=
     exists_actual_regional_clipped_polynomial_family_fin
       L q a b ell (ell ^ 2) hell1 hq hdegree hab hbL h hs e (ell : ℝ) J
-  obtain ⟨N, W, hNraw, hdecomp⟩ := this
+  refine this.elim fun N hd ↦ hd.elim fun W hd ↦ ?_
+  have hNraw := hd.1
+  have hdecomp := hd.2
   have hN : N ≤ D ^ 2 := by
     apply hNraw.trans
     simpa only [Nat.mul_add] using
@@ -234,8 +252,10 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause
         hq hqmi hell1 hcollar le_rfl
   refine ⟨N, W, hN, ?_⟩
   intro eta hbuffer hetaLD lower higher Delta
-  have := htargets eta hbuffer hetaLD
-  obtain ⟨hnest, hupperClose, hlowerClose⟩ := this
+  have htargetsEta := htargets eta hbuffer hetaLD
+  have hnest := htargetsEta.1
+  have hupperClose := htargetsEta.2.1
+  have hlowerClose := htargetsEta.2.2
   have hupper : E0 + eta - w ≤ 7 * (ell : ℝ) := by
     linarith only [hE04, hcut, hetaLD, hw, (Nat.cast_nonneg ell : (0 : ℝ) ≤ ell)]
   have hR : 0 < 7 * (ell : ℝ) - (E0 + eta - 2 * w) := by
@@ -256,7 +276,12 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause
         with_reducible exact hconj)
       (E0 + eta - 2 * w) (E0 + eta - w) (7 * (ell : ℝ))
       (by linarith only [hw]) hupper hnorm
-  obtain ⟨p, hpdegree, hp0, M, hM, himprove⟩ := this
+  refine this.elim fun p hd ↦ ?_
+  have hpdegree := hd.1
+  have hp0 := hd.2.1
+  refine hd.2.2.elim fun M hd ↦ ?_
+  have hM := hd.1
+  have himprove := hd.2
   refine ⟨hnest, hupperClose, hlowerClose, ?_, p, hpdegree, hp0, M, hM, ?_⟩
   · have hgs : 4 * g / 5 ≤ w := by
       have hg : 0 < g := lt_min hw zero_lt_one

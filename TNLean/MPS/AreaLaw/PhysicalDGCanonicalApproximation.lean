@@ -35,8 +35,6 @@ open scoped ENNReal InnerProductSpace TensorProduct ComplexOrder MatrixOrder Mat
 
 namespace TNLean.MPS.AreaLaw
 
-set_option maxHeartbeats 400000 in
--- The final application matches the refined Ritz-space conclusion against the long statement.
 /-- The same successful canonical root is refined literally and its actual
 compressed Ritz space has a uniform polynomial all-span MPS bound. The
 physical family precedes accuracy and seeds; the polynomial coefficient
@@ -163,9 +161,13 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
           Submodule.IsCloseTo (eta / 2) G R ∧ Submodule.IsCloseTo (eta / 2) R G ∧
           ∀ z ∈ R, IsOpenMPS L q Bout (fun x ↦ z x) := by
   classical
-  obtain ⟨Ctail, Cscale, Ktree, hCtail, hCscale, hKtree, hfactory⟩ :=
-    exists_physical_dg_canonical_tree_joint_probability
-  obtain ⟨Kfinal, hKfinal, hauto⟩ := exists_physical_dg_automatic_same_candidate_refinement
+  refine exists_physical_dg_canonical_tree_joint_probability.elim fun Ctail hspec ↦
+    hspec.elim fun Cscale hspec ↦ hspec.elim fun Ktree hspec ↦ hspec.elim fun hCtail hspec ↦
+    hspec.elim fun hCscale hspec ↦ hspec.elim fun hKtree hspec ↦ ?_
+  have hfactory := hspec
+  refine exists_physical_dg_automatic_same_candidate_refinement.elim fun Kfinal hspec ↦
+    hspec.elim fun hKfinal hspec ↦ ?_
+  have hauto := hspec
   refine ⟨Ctail, Cscale, Ktree, Kfinal, hCtail, hCscale, hKtree, hKfinal, ?_⟩
   intro q gamma hgamma
   let g := min gamma 1
@@ -191,14 +193,22 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
   have :=
     Real.exists_interleaved_output_polynomial_bound_with_constants
       gamma g u Ktree Kfinal KD hgamma hg hg1 hu hKtree.le hKfinal.le hKD
-  obtain ⟨C, hC, _hlogC, k, _hk, hpoly⟩ := this
+  refine this.elim fun C hspec ↦ hspec.elim fun hC hspec ↦ hspec.elim fun _hlogC hspec ↦
+    hspec.elim fun k hspec ↦ hspec.elim fun _hk hspec ↦ ?_
+  have hpoly := hspec
   refine ⟨C, hC, k, ?_⟩
   intro L h hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G rG
     g0 m0 w v ell D s a tau epsilon t Delta
   have hfactoryL := hfactory L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
-  obtain ⟨hell, hD2, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff,
-    Btree, hBtree, hlogBtree, Utree, hdimUtree, hUtreeMPS, hxiMax,
-    hwidth, T, N, F, hN, htargets, hxiFamily⟩ := hfactoryL
+  refine hfactoryL.elim fun hell hspec ↦ hspec.elim fun hD2 hspec ↦ hspec.elim fun hs hspec ↦
+    hspec.elim fun ha hspec ↦ hspec.elim fun haSmall hspec ↦ hspec.elim fun hepsilon hspec ↦
+    hspec.elim fun hepsilon1 hspec ↦ hspec.elim fun ht hspec ↦ hspec.elim fun htail hspec ↦
+    hspec.elim fun htradeoff hspec ↦ hspec.elim fun Btree hspec ↦ hspec.elim fun hBtree hspec ↦
+    hspec.elim fun hlogBtree hspec ↦ hspec.elim fun Utree hspec ↦ hspec.elim fun hdimUtree hspec ↦
+    hspec.elim fun hUtreeMPS hspec ↦ hspec.elim fun hxiMax hspec ↦ hspec.elim fun hwidth hspec ↦
+    hspec.elim fun T hspec ↦ hspec.elim fun N hspec ↦ hspec.elim fun F hspec ↦
+    hspec.elim fun hN hspec ↦ hspec.elim fun htargets hspec ↦ ?_
+  have hxiFamily := hspec
   refine ⟨hell, hD2, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff, ?_⟩
   intro u0 bref
   refine ⟨Btree, hBtree, hlogBtree, Utree, hdimUtree, hUtreeMPS, ?_⟩
@@ -232,18 +242,24 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
   have :=
     hauto L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       Dtree D hDtree hD1 eta heta
-  obtain ⟨Bfinal, hBfinal, hlogBfinal, hfinal⟩ := this
+  refine this.elim fun Bfinal hspec ↦ hspec.elim fun hBfinal hspec ↦
+    hspec.elim fun hlogBfinal hspec ↦ ?_
+  have hfinal := hspec
   refine ⟨Bfinal, hBfinal, hlogBfinal, ?_⟩
   intro b Dcommon Nfinal xi
-  obtain ⟨Ufinal, hdimUfinal, hUG, hGU, hUfinalMPS, hxi, hxiCoarse,
-    hxiSource, hterminal⟩ := hfinal
+  refine hfinal.elim fun Ufinal hspec ↦ hspec.elim fun hdimUfinal hspec ↦
+    hspec.elim fun hUG hspec ↦ hspec.elim fun hGU hspec ↦ hspec.elim fun hUfinalMPS hspec ↦
+    hspec.elim fun hxi hspec ↦ hspec.elim fun hxiCoarse hspec ↦ hspec.elim fun hxiSource hspec ↦ ?_
+  have hterminal := hspec
   have hxiTree : xi ≤ xiMax := hxiCoarse.trans hradius
   refine ⟨Ufinal, hdimUfinal, hUG, hGU, hUfinalMPS, hxi, hxiTree, hxiSource, ?_⟩
   have := hxiFamily xi hxi hxiTree
-  obtain ⟨hprofile, hGood⟩ := this
+  refine this.elim fun hprofile hspec ↦ ?_
+  have hGood := hspec
   refine ⟨hprofile, ?_⟩
   intro Good failureBound
-  obtain ⟨hGoodMeasurable, hfailure, hsuccess⟩ := hGood
+  refine hGood.elim fun hGoodMeasurable hspec ↦ hspec.elim fun hfailure hspec ↦ ?_
+  have hsuccess := hspec
   refine ⟨hGoodMeasurable, hfailure, hsuccess, ?_⟩
   intro Bout
   have hL1 : (1 : ℝ) ≤ (L : ℝ) + 1 := le_add_of_nonneg_left (Nat.cast_nonneg L)
@@ -253,16 +269,22 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
   have :=
     Real.interleaved_filter_scale_count_bounds Cscale m g w
       hCscale (Nat.le_max_right q 50) hg hg1 hw
-  obtain ⟨_hellCount, _hfirst, _hsecond, _hupper, _hbase, hrawLog⟩ := this
+  refine this.elim fun _hellCount hspec ↦ hspec.elim fun _hfirst hspec ↦
+    hspec.elim fun _hsecond hspec ↦ hspec.elim fun _hupper hspec ↦ hspec.elim fun _hbase hspec ↦ ?_
+  have hrawLog := hspec
   have hlogD : Real.log (D : ℝ) ≤ KD * w :=
     Real.interleaved_log_bound_le_linear Alog g U0 w (Real.log (D : ℝ))
       hAlog hg hU0 hw hrawLog
   have :=
     Real.interleaved_sample_size_bounds rG L D hrG hD2
-  obtain ⟨_hwSample, _hsSample, hsUpper, _hsLog⟩ := this
+  refine this.elim fun _hwSample hspec ↦ hspec.elim fun _hsSample hspec ↦
+    hspec.elim fun hsUpper hspec ↦ ?_
+  have _hsLog := hspec
   have :=
     physical_dg_normalized_ground_filter_spec h h0 mu nu gamma hgamma hmu hnu hmunu hgap
-  obtain ⟨_hM, hA, hc, hc1, _hfix, _hKGo, _hhigh⟩ := this
+  refine this.elim fun _hM hspec ↦ hspec.elim fun hA hspec ↦ hspec.elim fun hc hspec ↦
+    hspec.elim fun hc1 hspec ↦ hspec.elim fun _hfix hspec ↦ hspec.elim fun _hKGo hspec ↦ ?_
+  have _hhigh := hspec
   change 0 < A at hA
   change 0 < c at hc
   change gamma / A ≤ 1 at hc1

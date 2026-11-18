@@ -36,8 +36,6 @@ namespace TNLean.MPS.AreaLaw
 
 open Matrix
 
-set_option maxHeartbeats 800000 in
--- The retained tensor decompositions involve dependent finite configuration types.
 /-- The actual physical low-energy family in one canonical raw-Hamiltonian
 normalization. The constant precedes the physical data; the middle family
 precedes every cutoff and viable subspace. All original spectral targets
@@ -137,7 +135,8 @@ theorem exists_fixed_bandwidth_five_region_canonical_low_energy_family
                   (Delta / (1 - delta) ^ 2) grow (lower.map Tm.toLinearEquiv.toLinearMap) := by
   have :=
     exists_fixed_bandwidth_five_region_low_energy_family etaLD hLD
-  obtain ⟨C, hC, hCeta, hfamily⟩ := this
+  refine this.elim fun C hspec ↦ hspec.elim fun hC hspec ↦ hspec.elim fun hCeta hspec ↦ ?_
+  have hfamily := hspec
   refine ⟨C, hC, hCeta, ?_⟩
   intro L q m a b w hq hqm hw
   -- Normalize the statement abbreviations before transporting the family, so
@@ -150,22 +149,32 @@ theorem exists_fixed_bandwidth_five_region_canonical_low_energy_family
     (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
   have :=
     hfamily L q m a b w hq hqm hw hab hbL h hs h0 h1
-  obtain ⟨hell, hlogD, hdata⟩ := this
+  refine this.elim fun hell hspec ↦ hspec.elim fun hlogD hspec ↦ ?_
+  have hdata := hspec
   refine ⟨hell, hlogD, ?_⟩
-  obtain ⟨e, E0, x, z, hO, hClip, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
-    hE0, hE04, hnorm, htargets⟩ := hdata
+  refine hdata.elim fun e hspec ↦ hspec.elim fun E0 hspec ↦ hspec.elim fun x hspec ↦
+    hspec.elim fun z hspec ↦ hspec.elim fun hO hspec ↦ hspec.elim fun hClip hspec ↦
+    hspec.elim fun hxunit hspec ↦ hspec.elim fun hx hspec ↦ hspec.elim fun hlo hspec ↦
+    hspec.elim fun hcenter hspec ↦ hspec.elim fun hzunit hspec ↦ hspec.elim fun hz hspec ↦
+    hspec.elim fun hE0low hspec ↦ hspec.elim fun hE0 hspec ↦ hspec.elim fun hE04 hspec ↦
+    hspec.elim fun hnorm hspec ↦ ?_
+  have htargets := hspec
   have :=
     hRaw.spectralSpanLE_centered_ground_of_eq hO (∑ j, e j) E0 z
       hcenter hzunit hz hE0low
-  obtain ⟨hminimum, hidentity⟩ := this
+  refine this.elim fun hminimum hspec ↦ ?_
+  have hidentity := hspec
   refine ⟨e, E0, x, z, hO, hClip, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0, hE04, hminimum, hidentity, hnorm, ?_⟩
-  obtain ⟨N, W, hN, hfilters⟩ := htargets
+  refine htargets.elim fun N hspec ↦ hspec.elim fun W hspec ↦ hspec.elim fun hN hspec ↦ ?_
+  have hfilters := hspec
   refine ⟨N, W, hN, ?_⟩
   intro eta hbuffer hetaLD
   have :=
     hfilters eta hbuffer hetaLD
-  obtain ⟨hnest, hupperClose, hlowerClose, htrade, hpolynomial⟩ := this
+  refine this.elim fun hnest hspec ↦ hspec.elim fun hupperClose hspec ↦
+    hspec.elim fun hlowerClose hspec ↦ hspec.elim fun htrade hspec ↦ ?_
+  have hpolynomial := hspec
   have hidentityLower :
       Submodule.spectralSpanLE hO.eigenvectorBasis hO.eigenvalues (E0 + eta - 3 * w) =
         Submodule.spectralSpanLE hRaw.eigenvectorBasis hRaw.eigenvalues

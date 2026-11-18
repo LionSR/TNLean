@@ -140,7 +140,8 @@ theorem exists_fixed_bandwidth_sharp_regional_low_energy_family
                     (Delta / (1 - delta) ^ 2) grow (lower.map Tm.toLinearEquiv.toLinearMap) := by
   classical
   have := Real.exists_sharp_low_density_scalar_parameters etaLD hLD
-  obtain ⟨C, hC, hscalar⟩ := this
+  refine this.elim fun C hspec ↦ hspec.elim fun hC hspec ↦ ?_
+  have hscalar := hspec
   refine ⟨C, hC, ?_⟩
   intro w epsilon hw hepsilon hepsilon1 g u t
   have hg : 0 < g := lt_min hw zero_lt_one
@@ -148,7 +149,9 @@ theorem exists_fixed_bandwidth_sharp_regional_low_energy_family
   have hgw : g ≤ w := min_le_left _ _
   have :=
     hscalar g epsilon hg hg1 hepsilon hepsilon1
-  obtain ⟨ell, hell, hbound, ht, hxi1, hsmallg, hfilter⟩ := this
+  refine this.elim fun ell hspec ↦ hspec.elim fun hell hspec ↦ hspec.elim fun hbound hspec ↦
+    hspec.elim fun ht hspec ↦ hspec.elim fun hxi1 hspec ↦ hspec.elim fun hsmallg hspec ↦ ?_
+  have hfilter := hspec
   have hsmall : 2 * (6 + etaLD) * ((288 * Real.exp (11 / 8)) *
       Real.exp (-(t - etaLD) / 8)) ≤ (epsilon / 100) * w ^ 2 :=
     hsmallg.trans (mul_le_mul_of_nonneg_left (pow_le_pow_left₀ hg.le hgw 2)
@@ -158,15 +161,22 @@ theorem exists_fixed_bandwidth_sharp_regional_low_energy_family
   intro L q m a b hq hqm D nu hab hbL Jtarget hcollar h hs h0 h1 config H hRaw
     k A Cross Y K B
   let : Nonempty (Fin L → Fin q) := config
-  obtain ⟨e, E0, x, z, hO, hC, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
-    hE0, hE04, hnorm, hfamilies⟩ :=
+  have hspec :=
     exists_sharp_regional_family_of_scalar_budgets ell t etaLD w epsilon g
       hell hw hepsilon hgw ht0 ht hxi1 hsmall hfilter
       L q m a b hq hqm hab hbL Jtarget hcollar h hs h0 h1
+  refine hspec.elim fun e hspec ↦ hspec.elim fun E0 hspec ↦ hspec.elim fun x hspec ↦
+    hspec.elim fun z hspec ↦ hspec.elim fun hO hspec ↦ hspec.elim fun hC hspec ↦
+    hspec.elim fun hxunit hspec ↦ hspec.elim fun hx hspec ↦ hspec.elim fun hlo hspec ↦
+    hspec.elim fun hcenter hspec ↦ hspec.elim fun hzunit hspec ↦ hspec.elim fun hz hspec ↦
+    hspec.elim fun hE0low hspec ↦ hspec.elim fun hE0 hspec ↦ hspec.elim fun hE04 hspec ↦
+    hspec.elim fun hnorm hspec ↦ ?_
+  have hfamilies := hspec
   have :=
     hRaw.spectralSpanLE_centered_ground_of_eq hO (∑ j, e j) E0 z
       hcenter hzunit hz hE0low
-  obtain ⟨hminimum, hidentity⟩ := this
+  refine this.elim fun hminimum hspec ↦ ?_
+  have hidentity := hspec
   exact ⟨e, E0, x, z, hO, hC, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0, hE04, hnorm, hminimum, hidentity, hfamilies⟩
 
