@@ -1,0 +1,175 @@
+{
+  "source": "592a46e4 plus four b2c72008 shared owner files; QIC729 sources; not compiled or final integration",
+  "files": [
+    {
+      "path": "blueprint/src/chapter/ch24_peps_area_law_marginal_tails.tex",
+      "new_or_changed_tags": 4,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_area_law_models.tex",
+      "new_or_changed_tags": 3,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_area_law_scan_histories.tex",
+      "new_or_changed_tags": 1,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_information_reset.tex",
+      "new_or_changed_tags": 3,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_rectangular_specialization.tex",
+      "new_or_changed_tags": 3,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_regularized_patch_stationarity.tex",
+      "new_or_changed_tags": 1,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_reset_unitary.tex",
+      "new_or_changed_tags": 2,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_supported_physical_buffer_gaussian.tex",
+      "new_or_changed_tags": 6,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch34_area_law_graph_propagation.tex",
+      "new_or_changed_tags": 5,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_chain_gluing.tex",
+      "new_or_changed_tags": 3,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_chain_trimming.tex",
+      "new_or_changed_tags": 3,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_hastings_boundary_factorization.tex",
+      "new_or_changed_tags": 1,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_hastings_lemma1.tex",
+      "new_or_changed_tags": 22,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_hastings_product_form.tex",
+      "new_or_changed_tags": 2,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_hastings_source_length.tex",
+      "new_or_changed_tags": 1,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_hastings_three_way_splitting.tex",
+      "new_or_changed_tags": 19,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_huang_positive_chain.tex",
+      "new_or_changed_tags": 7,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_lvv_power_projector.tex",
+      "new_or_changed_tags": 3,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_lvv_size_trimming.tex",
+      "new_or_changed_tags": 45,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_lvv_successive_trimming.tex",
+      "new_or_changed_tags": 4,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_one_dimensional_chain.tex",
+      "new_or_changed_tags": 37,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_one_dimensional_preliminaries.tex",
+      "new_or_changed_tags": 13,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "docs/formalization/one-dimensional-chain.md",
+      "new_or_changed_tags": 0,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "docs/formalization/openai-area-law-peps.md",
+      "new_or_changed_tags": 0,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "docs/glossary.md",
+      "new_or_changed_tags": 0,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "docs/many_body_circuit_architecture.md",
+      "new_or_changed_tags": 0,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex",
+      "new_or_changed_tags": 1,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "docs/paper-gaps/hastings07_commutator_constant.tex",
+      "new_or_changed_tags": 1,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "docs/paper-gaps/hastings07_lemma1_decay_length.tex",
+      "new_or_changed_tags": 3,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "docs/paper-gaps/lvv13_constant_bond.tex",
+      "new_or_changed_tags": 1,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "docs/paper-gaps/lvv13_leading_net_point.tex",
+      "new_or_changed_tags": 2,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "docs/paper-gaps/lvv13_runtime_ground_energy.tex",
+      "new_or_changed_tags": 20,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex",
+      "new_or_changed_tags": 6,
+      "missing_prospective_declarations": []
+    },
+    {
+      "path": "docs/tactic_patterns.md",
+      "new_or_changed_tags": 0,
+      "missing_prospective_declarations": []
+    }
+  ]
+}

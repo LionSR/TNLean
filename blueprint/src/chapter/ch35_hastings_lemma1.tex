@@ -38,8 +38,8 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 \begin{lemma}[The chain commutator bound with a numerical prefactor]
     \label{thm:hastings_chain_lieb_robinson}
     \lean{ManyBody.ChainSupport.edist_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_numeric,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings,
+        ManyBody.ChainInteraction.norm_heisenberg_commutator_le_numeric,
+        ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings,
         TNLean.MPS.AreaLaw.chainLRVelocity_sub_one_pos}
     \leanok
     \uses{def:chain_model,thm:qc_lr_finsets_numeric}
@@ -97,7 +97,7 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
     \lean{TNLean.MPS.AreaLaw.lemmaOneLength_eq_sourceLength,
         TNLean.MPS.AreaLaw.lemmaOneEndpointLength_eq_sourceLength,
         TNLean.MPS.AreaLaw.chainLRVelocity_gapRescaling,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings_rescaled,
+        ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings_rescaled,
         TNLean.MPS.AreaLaw.two_mul_lemmaOneEndpointLength_le_sourceLength}
     \leanok
     \uses{thm:hastings_chain_lieb_robinson}
@@ -278,12 +278,12 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 \begin{lemma}[Commutators of the parts with the Hamiltonian]
     \label{thm:hastings_part_commutators}
     \lean{
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_commutator_leftPart_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_commutator_rightPart_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.commutator_bufferPart_eq,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_commutator_bufferPart_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_commutator_leftPart,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_commutator_rightPart
+        ManyBody.ChainInteraction.norm_commutator_leftPart_le,
+        ManyBody.ChainInteraction.norm_commutator_rightPart_le,
+        ManyBody.ChainInteraction.commutator_bufferPart_eq,
+        ManyBody.ChainInteraction.norm_commutator_bufferPart_le,
+        ManyBody.ChainInteraction.isSupportedOn_commutator_leftPart,
+        ManyBody.ChainInteraction.isSupportedOn_commutator_rightPart
     }
     \leanok
     \uses{def:hastings_three_way_splitting}
@@ -307,12 +307,12 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 
 \begin{lemma}[Localized filtered parts]
     \label{thm:hastings_localized_parts}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_gaussianFilteredTerm_leftPart_sub_localized_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_gaussianFilteredTerm_rightPart_sub_localized_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_gaussianFilteredTerm_bufferPart_sub_localized_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.isHermitian_leftPart_localized,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.isHermitian_rightPart_localized,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.isHermitian_bufferPart_localized,
+    \lean{ManyBody.ChainInteraction.norm_gaussianFilteredTerm_leftPart_sub_localized_le,
+        ManyBody.ChainInteraction.norm_gaussianFilteredTerm_rightPart_sub_localized_le,
+        ManyBody.ChainInteraction.norm_gaussianFilteredTerm_bufferPart_sub_localized_le,
+        ManyBody.ChainInteraction.isHermitian_leftPart_localized,
+        ManyBody.ChainInteraction.isHermitian_rightPart_localized,
+        ManyBody.ChainInteraction.isHermitian_bufferPart_localized,
         TNLean.MPS.AreaLaw.isSupportedOn_localized_sub_self}
     \leanok
     \uses{thm:hastings_filtered_partial_trace, thm:hastings_part_commutators,
@@ -387,11 +387,11 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 
 \begin{lemma}[The cut-offs on the chain]
     \label{thm:hastings_cutoff_pair}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.exists_cutoffPair,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.localizedPart,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_localizedPart_leftPart,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_localizedPart_rightPart,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_localizedPart_apply_le,
+    \lean{ManyBody.ChainInteraction.exists_cutoffPair,
+        ManyBody.ChainInteraction.localizedPart,
+        ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart,
+        ManyBody.ChainInteraction.isSupportedOn_localizedPart_rightPart,
+        ManyBody.ChainInteraction.norm_localizedPart_apply_le,
         TNLean.MPS.AreaLaw.partLocalizationError,
         TNLean.MPS.AreaLaw.leftWindow, TNLean.MPS.AreaLaw.rightWindow,
         TNLean.MPS.AreaLaw.chainNeighborhood_interval_subset,
@@ -600,7 +600,7 @@ $X_{j-l+1,j+l}$.
     \label{thm:hastings_projector_factorization_scaled}
     \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_div,
         TNLean.MPS.AreaLaw.lemmaOneLength_div,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.smul,
+        ManyBody.ChainInteraction.smul,
         ManyBody.IsGapped.smul,
         ManyBody.groundSpace_smul}
     \leanok
@@ -769,7 +769,7 @@ Theorem~\ref{lem:hastings_lemma1} as printed.
 
 \begin{lemma}[An interaction-proportional Lieb--Robinson velocity]
     \label{thm:hastings_source_pair}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings_source}
+    \lean{ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings_source}
     \leanok
     \uses{thm:hastings_chain_lieb_robinson}
     Let $H$ be a range-$R$ chain Hamiltonian with interaction norms at most

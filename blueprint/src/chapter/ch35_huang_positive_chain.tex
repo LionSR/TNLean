@@ -22,7 +22,7 @@ chain model. The following identification preserves its operator exactly.
 
 \begin{definition}[Embedding the positive adjacent-pair interaction]
     \label{def:huang_positive_chain_hamiltonian}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive}
+    \lean{ManyBody.ChainInteraction.ofNearestNeighborPositive}
     \leanok
     \uses{thm:huang_adjacent_supports}
     Let $h_i$ be supported on sites $i,i+1$, with $0\le h_i\le I$.
@@ -39,11 +39,11 @@ chain model. The following identification preserves its operator exactly.
 
 \begin{lemma}[The interaction terms are preserved]
     \label{thm:huang_positive_chain_terms}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive_term,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive_term_eq_zero,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive_term_eq_zero_of_card_one,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive_term_nonneg,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive_term_le_one}
+    \lean{ManyBody.ChainInteraction.ofNearestNeighborPositive_term,
+        ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero,
+        ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero_of_card_one,
+        ManyBody.ChainInteraction.ofNearestNeighborPositive_term_nonneg,
+        ManyBody.ChainInteraction.ofNearestNeighborPositive_term_le_one}
     \leanok
     \uses{def:huang_positive_chain_hamiltonian}
     The term on each designated adjacent pair is the original $h_i$; all
@@ -62,7 +62,7 @@ chain model. The following identification preserves its operator exactly.
 
 \begin{lemma}[Equality of the Hamiltonian operators]
     \label{thm:huang_positive_chain_operator}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.ofNearestNeighborPositive_operator}
+    \lean{ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian}
     \leanok
     \uses{thm:huang_positive_chain_terms}
     The constructed finite-range operator is exactly

@@ -53,7 +53,7 @@ The numerical finite-support propagation estimate gives
 whenever every distance between a site of $X$ and a site of $Y$ is at least
 $d$. Both supports are arbitrary finite sets; there is no factor $|Y|$.
 The prefactor is independent of the interaction strength, local dimension
-and chain length.\footnote{\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_numeric}
+and chain length.\footnote{\leanid{ManyBody.ChainInteraction.norm_heisenberg_commutator_le_numeric}
     in \doclink{TNLean/MPS/AreaLaw/Hastings/LiebRobinson}.}
 If $v>0$, $v\ge8c_RJ$, $\xi_C\ge8$ and $|t|\le d/v$, then
 $2c_RJ|t|\le d/4$ and $d/\xi_C\le d/8$. Thus
@@ -63,7 +63,7 @@ $2c_RJ|t|\le d/4$ and $d/\xi_C\le d/8$. Thus
 \end{align}
 This proves the source's time-cone bound in the reciprocal-length
 convention, including monotonicity under increasing the positive velocity
-or the length scale.\footnote{\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings}.}
+or the length scale.\footnote{\leanid{ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings}.}
 The distance lower-bound formulation includes empty supports without
 assigning a finite distance to the empty set.
 
@@ -100,7 +100,7 @@ $\tau=\Delta E\,t$ agrees with evolution under $H$ at time $t$.%
 The same argument gives an admissible physical pair
 $(10\Delta E\,u_0,8)$ for the enlarged length
 $\tilde\xi=20u_0=\tfrac54\hat\xi$.%
-\footnote{\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_heisenberg_commutator_le_hastings_rescaled}
+\footnote{\leanid{ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings_rescaled}
     and \leanid{TNLean.MPS.AreaLaw.lemmaOneEndpointLength_eq_sourceLength}.}
 Since $6\tilde\xi=\tfrac{15}2\hat\xi$, the polynomial bound at
 $\kappa=15/2$ gives

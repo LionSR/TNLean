@@ -184,10 +184,10 @@ abstracted — record why, so it is not re-proposed).
 
 ### Left compressed Hamiltonian norm bound — promoted (2026-11-04)
 
-- **Pattern:** From `h.operator = HL + B`, `‖h.operator‖ ≤ 2L`, and `‖B‖ ≤ 2L`,
+- **Pattern:** From `h.hamiltonian = HL + B`, `‖h.hamiltonian‖ ≤ 2L`, and `‖B‖ ≤ 2L`,
   derive `‖HL‖ ≤ 4L` and pass the bound through restriction to the left cut,
   tensoring with the bond identity, and isometric compression.
-- **Helper:** `ChainHamiltonian.leftObjective_norm_bounds` in
+- **Helper:** `ManyBody.ChainInteraction.leftObjective_norm_bounds` in
   `MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean` returns the
   full-chain and cut-and-bond objective bounds. Existing
   `l2_opNorm_isometricCompression_le` gives the compressed bound.
@@ -560,7 +560,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** Bound the number of supports contained in a window of at most `n`
   sites by `2^n`.
 - **Seen:** `card_crossingTerms_interval_le`,
-  `ChainHamiltonian.sum_norm_terms_containing_le`, and
+  `ManyBody.ChainInteraction.sum_norm_terms_containing_le`, and
   `card_crossingTerms_le_mul_card_boundaryEdges` in the three chain counting modules.
 - **Abstraction:** `card_filter_subset_le_pow_of_card_le` in
   `MPS/AreaLaw/Counting.lean`, combining the powerset count with monotonicity of powers.
@@ -572,7 +572,7 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** Compare `log (exp 1 * d_X)^2` with
   `log (exp 1 * q^(R+1))^2` for a support of range `R`.
 - **Seen:** `cutLogBudget_interval_le` and
-  `ChainHamiltonian.cutLogBudget_interval_le_of_consecutive_terms`.
+  `ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive_terms`.
 - **Abstraction:** `log_sq_supportDim_le` in `MPS/AreaLaw/Counting.lean`.
 - **Notes:** Both the full support family and its nonzero-term subtype use this lemma.
 
@@ -592,14 +592,14 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** At an actual site, use its admissible singleton support and
   `norm_nonneg` followed by the interaction norm bound to derive `0 ≤ J`.
-- **Seen:** `ChainHamiltonian.sum_norm_terms_containing_le` in
+- **Seen:** `ManyBody.ChainInteraction.sum_norm_terms_containing_le` in
   `MPS/AreaLaw/InteractionBudget.lean`, the nonempty-chain branch of
-  `ChainHamiltonian.partialSwap_boundary_spec` in
+  `ManyBody.ChainInteraction.partialSwap_boundary_spec` in
   `MPS/AreaLaw/PartialSwap.lean`, and the logarithmic-separation proof in
   `MPS/AreaLaw/LogarithmicSeparation.lean`.
-- **Abstraction:** `ChainHamiltonian.norm_bound_nonneg` in
+- **Abstraction:** `ManyBody.ChainInteraction.norm_bound_nonneg` in
   `MPS/AreaLaw/Hamiltonian.lean`; all three arguments use this lemma.
-  For finite induced domains, `DomainHamiltonian.norm_bound_nonneg` in
+  For finite induced domains, `ManyBody.DomainInteraction.norm_bound_nonneg` in
   `MPS/AreaLaw/DomainInteractionBudget.lean` uses the admissible singleton
   and is reused by the domain per-site budget. The domain doubled, swapped
   and per-replica perturbation proofs also use it at a member of each
@@ -699,12 +699,12 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** At an actual site, use its admissible singleton support and
   `norm_nonneg` followed by the interaction norm bound to derive `0 ≤ J`.
-- **Seen:** `ChainHamiltonian.sum_norm_terms_containing_le` in
+- **Seen:** `ManyBody.ChainInteraction.sum_norm_terms_containing_le` in
   `MPS/AreaLaw/InteractionBudget.lean`, the nonempty-chain branch of
-  `ChainHamiltonian.partialSwap_boundary_spec` in
+  `ManyBody.ChainInteraction.partialSwap_boundary_spec` in
   `MPS/AreaLaw/PartialSwap.lean`, and the logarithmic-separation proof in
   `MPS/AreaLaw/LogarithmicSeparation.lean`.
-- **Abstraction:** `ChainHamiltonian.norm_bound_nonneg` in
+- **Abstraction:** `ManyBody.ChainInteraction.norm_bound_nonneg` in
   `MPS/AreaLaw/Hamiltonian.lean`; all three arguments use this lemma.
 - **Notes:** An actual site is essential. The empty-chain branch retains
   the original real interaction bound. No positivity hypothesis on the
@@ -5844,9 +5844,9 @@ no additional helper is proposed.
   `‖F‖ ≤ 1`, invariance of the norm under adjoints, and two applications
   of `norm_mul_le_of_le`.
 - **Seen:** Two chain occurrences: the common local argument in
-  `ChainHamiltonian.partialSwap_term_difference_spec` in
-  `MPS/AreaLaw/PartialSwap.lean`, and the norm field of
-  `ChainHamiltonian.swappedDoubled` in `MPS/AreaLaw/SwappedDoubledHamiltonian.lean`.
+  `ManyBody.ChainInteraction.partialSwap_term_difference_spec` in
+  `MPS/AreaLaw/PartialSwap.lean`, and the term norm estimate for
+  `ManyBody.ChainInteraction.swappedDoubled` in `MPS/AreaLaw/SwappedDoubledHamiltonian.lean`.
 - **Abstraction:** The standard norm inequalities suffice for these short
   arguments; no new lemma or tactic is introduced at two occurrences.
 - **Notes:** Contraction is enough for the local norm estimate; spectral
@@ -7741,7 +7741,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   and close with `GaussianFilter.localization_error_bound_of_parameter_constant`.
 - **Seen:** 2 occurrences, `ManyBody.SquareInteraction.reset_localized_filter` in
   `PEPS/Approximation/ResetUnitary.lean` (lines 167–221) and
-  `LocalHamiltonian.reset_localized_filter` in `PEPS/Approximation/RangeResetUnitary.lean`
+  `ManyBody.PlaneInteraction.reset_localized_filter` in `PEPS/Approximation/RangeResetUnitary.lean`
   (lines 144–201). The two blocks differ only in the constants: `L ^ 2` versus `Λ.card`, the
   crossing coefficient `8` versus `swapBoundaryCoefficient R`, the prefactor
   `squareLocalizationPrefactor` versus `2 * graphBallLocalizationPrefactor R`, and the
@@ -9834,8 +9834,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   compare the actual truncated Gaussian operator with its supported approximation;
   obtain a supported unitary from the two-sided vector estimates; apply the
   common finite-site entropy comparison to that same unitary.
-- **Seen:** `ChainHamiltonian.information_reset` and
-  `DomainHamiltonian.information_reset`, formerly in two modules.
+- **Seen:** `ManyBody.ChainInteraction.information_reset` and
+  `ManyBody.DomainInteraction.information_reset`, formerly in two modules.
 - **Existing reuse:** The Gaussian estimates,
   `exists_supported_unitary_of_two_sided`, and
   `mutualInformation_cores_le_of_reset_unitary` are shared already. The narrower
@@ -9853,9 +9853,9 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Bound the entropy of an interval neighborhood, choose a radius
   proportional to the logarithm of the number of sites, prove the two core
   complements are disjoint, and apply the regional information-reset estimate.
-- **Seen:** `ChainHamiltonian.mutualInformation_le_of_logarithmic_separation`
+- **Seen:** `ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_separation`
   in `MPS/AreaLaw/LogarithmicSeparation.lean` and
-  `DomainHamiltonian.mutualInformation_le_of_logarithmic_separation` in
+  `ManyBody.DomainInteraction.mutualInformation_le_of_logarithmic_separation` in
   `MPS/AreaLaw/DomainLogarithmicSeparation.lean`.
 - **Existing reuse:** Both proofs use the same interval entropy constant,
   numerical separation estimate and ceiling bounds. The narrower neighborhood
@@ -9871,7 +9871,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Apply conjugation minus the identity to the doubled Hamiltonian,
   cancel terms whose supports do not cross the exchanged region, and split the
   remaining pair sum over the two replicas.
-- **Seen:** `ChainHamiltonian.partialSwap_difference_eq_sum_crossing` in
+- **Seen:** `ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing` in
   `MPS/AreaLaw/PartialSwap.lean` and its finite-domain counterpart in
   `MPS/AreaLaw/DomainPartialSwap.lean`.
 - **Decision:** Two occurrences. A third use should share the common finite-sum
@@ -9933,7 +9933,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   list, and prove the factor supported using closure under scalar multiplication and exponentials.
 - **Seen:** Two occurrences in `TNLean/Lattice/ProductForm.lean`, in
   `hasProductForm_trotterProduct_of_radius` and
-  `LocalHamiltonian.hasProductForm_trotterProduct`.
+  `ManyBody.PlaneInteraction.hasProductForm_trotterProduct`.
 - **Abstraction:** None yet; the two proofs have different support hypotheses and are below
   the promotion threshold. The supported expansion is shared through
   `hasProductForm_of_mem_supportedOperators_radius`; the diameter theorem is its corollary.
