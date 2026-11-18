@@ -1,0 +1,6 @@
+QICLean/Representation/ReplicaTransport/CoherentLog.lean:378:8: warning: `isHermitian_coherentProj` does not use the following hypothesis in its type:
+  • [Fintype Ω] (#2)
+
+Consider replacing this hypothesis with the corresponding instance of `Finite` and using `Fintype.ofFinite` in the proof, or removing it entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
