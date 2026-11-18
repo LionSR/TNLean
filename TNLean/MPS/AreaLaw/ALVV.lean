@@ -41,6 +41,7 @@ import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeThreeRegion
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeTree
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeTreeFamily
 import TNLean.MPS.AreaLaw.ALVV.GoodProjectorHardTruncation
+import TNLean.MPS.AreaLaw.ALVV.GoodProjectorHardTruncationCorollary
 import TNLean.MPS.AreaLaw.ALVV.GroundGapUpperBound
 import TNLean.MPS.AreaLaw.ALVV.HardTruncation
 import TNLean.MPS.AreaLaw.ALVV.HardTruncationResidual
