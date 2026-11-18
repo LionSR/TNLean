@@ -107,6 +107,14 @@ After F12, move the general Lieb–Robinson statements (i) and (ii) to QICLean `
 
 F4 keeps three TNLean lemmas about QICLean's chain supports under their TNLean names and applies them explicitly instead of by dot notation: `TNLean.MPS.AreaLaw.IsChainSupport.exists_boundary_window_of_split` (`MPS/AreaLaw/BoundaryCounting`), `TNLean.MPS.AreaLaw.IsChainSupport.eq_interval_of_splits_of_range_one` (`MPS/AreaLaw/RangeOneCut`) and `TNLean.MPS.AreaLaw.ChainSupport.edist_le` (`MPS/AreaLaw/LiebRobinson`). They are chain geometry and move to QICLean `ManyBody/Sites/Lattice/Chain`; after that pin, delete the TNLean copies and restore dot notation.
 
+F4 follow-up (2026-11-18): the pinned QICLean `1af32a2` already owns
+`ManyBody.ChainSupport.edist_le`, with the same signature and proof as the
+TNLean copy described above. Delete `TNLean.MPS.AreaLaw.ChainSupport.edist_le`
+and migrate its five calls in `LiebRobinson`, `Hastings/LiebRobinson`,
+`RelativeGeneratorLocalization` and `SupportedGaussianIntegral` directly to
+that owner, together with the blueprint tag and tactic ledger. No alias or
+translating lemma remains; this follow-up does not change the other F4 items.
+
 After F11, `MPS/AreaLaw/ChainPaddingGroundState` and `MPS/AreaLaw/SwappedDoubledHamiltonian`
 state their Kronecker sums with `ManyBody.IsGapped.kronecker_add` and
 `ManyBody.groundSpace_kronecker_add_eq_span` (QICLean `1af32a2`). `Lattice/ProductGroundState`

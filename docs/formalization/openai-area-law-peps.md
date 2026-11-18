@@ -29,17 +29,26 @@ Source: [Theorem 1.1 and Corollary 1.2](https://github.com/openai/math/blob/adc7
 | A finite `Λ ⊆ ℤ²` | `Λ : Finset (ℤ × ℤ)` | No connectedness, shape, or nonemptiness hypothesis. |
 | The induced nearest-neighbor graph | `ManyBody.planeDomainGraph Λ` | Paths remain within the domain. Holes and disconnected components are allowed. |
 | Site space `ℂ^q` | `StateSpace Λ q = EuclideanSpace ℂ (Site Λ → Fin q)` | Exactly `q ^ Λ.card` configuration coordinates. |
-| One term per nonempty support of graph diameter at most `R` | `AdmissibleSupport Λ R` and `ManyBody.PlaneInteraction.term` | The index is a subtype of finite supports, not a family with unrestricted multiplicity. Zero terms are allowed. |
+| One term per nonempty support of graph diameter at most `R` | `AdmissibleSupport Λ R` and `ManyBody.Interaction.term` | The index is a subtype of finite supports, not a family with unrestricted multiplicity. Zero terms are allowed. |
 | Support on `X` | `ManyBody.supportedOperators (fun _ ↦ Fin q) X` | The QICLean site-operator algebra; `localLift` uses the existing placement `embedOp`. |
-| `h_X = h_X*` and `‖h_X‖ ≤ J` | The hypotheses `∀ X, (h.term X).IsHermitian` and `∀ X, ‖h.term X‖ ≤ J` | The norm is the Euclidean induced operator norm. |
-| `H = ∑_X h_X` | `ManyBody.Interaction.hamiltonian` | The sum is Hermitian by `ManyBody.Interaction.isHermitian_hamiltonian`. |
-| A unit ground vector at real energy `E₀` | `‖Ω‖ = 1` and `groundSpace h.hamiltonian E₀ = span {Ω}` | For `Δ > 0`, `ManyBody.isGapped_and_groundSpace_eq_span_iff` identifies these hypotheses with the printed eigen-equation and projector-gap inequality. |
+| `h_X = h_X*` and `‖h_X‖ ≤ J` | Explicit hypotheses `∀ X, (h.term X).IsHermitian` and `∀ X, ‖h.term X‖ ≤ J` | The norm is the Euclidean induced operator norm. |
+| `H = ∑_X h_X` | `ManyBody.Interaction.hamiltonian` | The sum is Hermitian by `ManyBody.Interaction.isHermitian_hamiltonian` under the termwise hypothesis. |
+| A unit ground vector at real energy `E₀` | `‖Ω‖ = 1` and `Ω ∈ ManyBody.groundSpace h.hamiltonian E₀` | These are normalization and the eigen-equation; alone they do not assert uniqueness. |
 | Unique ground vector up to phase and `H − E₀I ≥ Δ(I − |Ω⟩⟨Ω|)` | `ManyBody.IsGapped h.hamiltonian E₀ Δ` with `groundSpace h.hamiltonian E₀ = span {Ω}` | For `Δ > 0` the QICLean theorem `ManyBody.isGapped_and_groundSpace_eq_span_iff` is the equivalence with the printed inequality. No gap for a restriction is assumed. |
 | Any `A ⊆ Λ` | `A : Finset (Site Λ)` after all physical data | Includes empty, full, and disconnected cuts. |
 | `∂Λ A` consists of unordered crossing edges | `edgeBoundary Λ A : Finset (Sym2 (Site Λ))` | Each edge occurs once; empty and full cuts have empty boundary. |
 | `ρ_A = Tr_(Λ∖A) |Ω⟩⟨Ω|` | `reducedState` | Uses `Matrix.partialTraceRight` after Mathlib's configuration splitting. |
 | Natural logarithms and `0 log 0 = 0` | QICLean's `vonNeumannEntropy` | No independent entropy definition is introduced. Singular marginals are permitted. |
 | `∃ C`, uniformly over `Λ,H,E₀,Ω,A` | `UniformAreaLaw` | The constant precedes all physical data. Requiring `C ≥ 0` merely chooses a nonnegative bound. |
+
+The canonical interaction contains only `term` and its supported-operator membership
+`mem`. Hermiticity and the bound `J` are hypotheses of the results that use them,
+not fields or parameters of a second Hamiltonian structure. General projector-gap
+statements retain normalization, canonical ground-space membership and
+`(H - E₀ • 1 - Δ • (1 - |Ω⟩⟨Ω|)).PosSemidef` for every real `Δ`.
+The singleton formulation in the positive-gap row above is a bridge for `Δ > 0`,
+not an additional premise of those general statements. The area-law theorems
+retain their stated positive-gap assumptions.
 
 `exists_walk_length_le_iff_edist_le` identifies the support convention with
 Mathlib's extended graph metric. Disconnected pairs have distance infinity;
@@ -66,7 +75,7 @@ Source: [Theorem 1.1](https://github.com/openai/math/blob/adc7f1241b42e322a64518
 | Every open `L × L` grid, `L ≥ 2` | `squareLatticeGraph L L` | No periodic edges or extra routing vertices. |
 | One supported term per site and edge, norm at most `J` | `h : ManyBody.SquareInteraction L q` (its `term` and `mem`) with the hypothesis `∀ i, ‖h.term i‖ ≤ J` | Individual summands are not required to be Hermitian. |
 | Hermitian total `H` | the hypothesis `h.hamiltonian.IsHermitian` | Refers to the sum of the site terms plus the sum of the edge terms. |
-| Unique unit ground vector and full-system projector gap | `‖Ω‖ = 1`, `ManyBody.IsGapped h.hamiltonian E₀ Δ` and `ManyBody.groundSpace h.hamiltonian E₀ = span {Ω}` in `IsSquareGroundState` | Same coordinates; for `Δ > 0`, `ManyBody.isGapped_and_groundSpace_eq_span_iff` identifies these conditions with the printed operator inequality. |
+| Unique unit ground vector and full-system projector gap | `IsSquareGroundState` supplies normalization, the projector-gap PSD inequality and `Ω ∈ ManyBody.groundSpace h.hamiltonian E₀` | The predicate permits every real Δ. For the positive Δ assumed by the approximation theorem, the canonical bridge implies uniqueness; it is not an extra predicate premise. |
 | PEPS on the same grid | `A : Tensor (squareLatticeGraph L L) q` | Uses TNLean's existing edge-dependent tensor family. |
 | Positive bond dimensions and `Dmax ≤ C L^c` | Both universal edge clauses of `HasPEPSApproximation` | Each original edge is bounded; dimensions need not be equal. |
 | Nonzero contraction `Φ` | `pepsVector A ≠ 0` | Nonvanishing is required before normalization. |
@@ -197,7 +206,7 @@ hypothesis to the printed one.
 
 | Appendix A statement | Formal statement | Status on `main` |
 |---|---|---|
-| Model: domain, range-`R` Hermitian terms, unit ground vector with projector gap, natural logarithms | `ManyBody.PlaneInteraction`, `ManyBody.IsGapped` with `groundSpace = span {Ω}`, `regionalEntropy`; equivalence with the projector gap by `ManyBody.isGapped_and_groundSpace_eq_span_iff` | Definitions; equivalence proved. |
+| Model: domain, range-`R` Hermitian terms, unit ground vector with projector gap, natural logarithms | `ManyBody.PlaneInteraction` with explicit term Hermiticity and norm bound, normalization, projector PSD and canonical ground-space membership; `regionalEntropy` | Definitions; the singleton/spectral-gap equivalence is used only for positive Δ. |
 | Area-law Theorem 1.1 and Corollary 1.2 | `UniformAreaLaw`, `RectangularEntropyAreaLaw` | Proved (`uniformAreaLaw`, `rectangularEntropyAreaLaw`, `uniformAreaLaw_vertex_boundary_bounds`). |
 | Proposition 2.1 at `Γ = Λ_L`, `R = 1` | `SquareEntropyAreaLaw`, `UniformAreaLaw.squareEntropyAreaLaw`, `RectangularEntropyAreaLaw.squareEntropyAreaLaw`, `ManyBody.Interaction.hamiltonian_hermitianPart` | Proved (`AreaLaw.squareEntropyAreaLaw`). |
 | Positive replacement (area-law Proposition 4.3) | `exists_latticePositiveConstraints`, `card_anchor_fiber_le` | Proved; constants depend on `p, R, J, Δ` only, and `J ≥ 0` suffices. |
@@ -227,3 +236,19 @@ the pull request.
 Agent assistance: OpenAI Codex (GPT-6) produced the new definitions, elementary
 proofs, and accompanying documentation. Maintainer review of the mathematical
 choices remains pending under the contribution policy.
+
+## Generic box and collar scope
+
+The generic collar/amplification definitions and box-entropy comparison helpers
+retain the normalized projector-gap/member data for every real Δ; proving the
+physical area-law estimates still uses the positive-gap hypotheses stated above.
+An `IntRect` consists of two nonempty integer intervals and has size at least
+one. Its physical intersection `rectRegion A Q` may be empty, even on a nonempty
+domain. Thus scale zero has no admissible rectangles, whereas an empty physical
+cut at a positive scale is an ordinary admissible example.
+
+For the fixed safety parameter `D₀ : ℕ`, the box-power bridge is conditional on
+`0 < 1 + e` and the uniform hypothesis
+`∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ C * (r : ℝ) ^ (1 + e)`.
+It concludes the same upper bound for the regional entropy at `Q.size`; it does
+not prove this uniform hypothesis at zero or negative gap.

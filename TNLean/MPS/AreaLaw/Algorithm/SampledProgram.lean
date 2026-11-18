@@ -394,8 +394,10 @@ theorem sampledGroundStateProgram_spec (hL : 0 < L) (hq : 2 ≤ q)
     have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
-        (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
-        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hΩ hspanC hw'norm hover'
+        (ManyBody.Interaction.isHermitian_hamiltonian
+          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0))
+        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hΩ
+        (hspanC ▸ Submodule.mem_span_singleton_self _) hw'norm hover'
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E₀ ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E₀).trans henergy
@@ -631,7 +633,8 @@ theorem exists_sampledGroundStateProgram_success_polynomial (hq : 2 ≤ q) {Δ B
   refine ⟨C, p, hC, ?_⟩
   intro L _ h hs h0 h1 E₀ Γ hΩ hgap hspan hEB δ
   have hL : 1 ≤ L := Nat.pos_of_neZero L
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ
+    (hspan ▸ Submodule.mem_span_singleton_self _)
   obtain ⟨hδ0, hδ1, hδc, hover⟩ := sampledPrecision_spec hΔ hη hL
   refine (measureReal_sampledGroundStateProgram_success hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc
     (C * L ^ p) (sampledRankBound q L E₀ Δ δ)).trans (measureReal_mono fun I hI ↦ ?_)

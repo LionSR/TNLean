@@ -469,4 +469,3 @@ theorem exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slac
   · simpa only [K, Hleft, repair, boundaryError] using hrational
 
 end ManyBody.ChainInteraction
-

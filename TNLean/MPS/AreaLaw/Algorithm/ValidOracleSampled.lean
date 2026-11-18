@@ -264,8 +264,10 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
     have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
-        (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
-        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hΩ hspanC hw'norm hover'
+        (ManyBody.Interaction.isHermitian_hamiltonian
+          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0))
+        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hΩ
+        (hspanC ▸ Submodule.mem_span_singleton_self _) hw'norm hover'
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E₀ ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E₀).trans henergy

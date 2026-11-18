@@ -41,6 +41,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction)
 
+open scoped ComplexOrder
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open Geometry
@@ -196,8 +198,9 @@ theorem template_final_source_entropy_bounds_of_boxEntropy
     ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
         (_ : ∀ X, ‖h.term X‖ ≤ J)
       (E₀ : ℝ) (Ω : StateSpace Λ q),
-      ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+      ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+        (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+      Ω ∈ groundSpace h.hamiltonian E₀ →
       ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
         {Ctpl : ℝ} {s₀ : ℕ} (T : Template Ctpl S.n s₀),
         24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ S.A) →
@@ -217,7 +220,8 @@ theorem template_final_source_entropy_bounds_of_boxEntropy
       regionalEntropy Λ q Ω (rectRegion S.A Q) ≤
         Cbox * (Q.size : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
     intro Q hsafe
-    exact (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe le_rfl).trans
+    exact (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ
+      hgap hspan hsafe le_rfl).trans
       (hbox Q.size Q.one_le_size)
   obtain ⟨hcore, hprefix⟩ := hsource Λ Ω hΩ S.A D₀ hD T hC hsep hrect
   refine ⟨hcore, ?_⟩
@@ -238,8 +242,9 @@ theorem exists_template_final_source_entropy_bounds_of_boxEntropy
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J)
         (E₀ : ℝ) (Ω : StateSpace Λ q),
-        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+          (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+        Ω ∈ groundSpace h.hamiltonian E₀ →
         ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
           {Ctpl : ℝ} {s₀ : ℕ} (T : Template Ctpl S.n s₀),
           24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ S.A) →

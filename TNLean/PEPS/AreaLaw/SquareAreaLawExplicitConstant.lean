@@ -43,7 +43,10 @@ theorem squareEntropyAreaLawAt_range_closed (q R : ℕ) (hq : 1 ≤ q) {J Δ : �
     SquareEntropyAreaLawAt q (IsRangeSquareGroundState q R J Δ)
       (uniformAreaLawConstantClosed q R J Δ) :=
   squareEntropyAreaLawAt_range_of_areaLawBound (uniformAreaLaw_closed q R hq hJ hΔ).1
-    (uniformAreaLaw_closed q R hq hJ hΔ).2
+    (fun Λ H hH hHJ E₀ Ω hn hg hm ↦ by
+      obtain ⟨-, -, hg, hs⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+        ⟨hn, ManyBody.mem_groundSpace_iff.mp hm, hg⟩
+      exact (uniformAreaLaw_closed q R hq hJ hΔ).2 Λ H hH hHJ E₀ Ω hn hg hs)
 
 /-- **The square-grid area law at range `R` at the elementary constant.** For `q ≥ 1`,
 `J ≥ 0` and `Δ > 0`, the square-grid entropy area law holds for the unit gapped ground vectors
@@ -57,7 +60,10 @@ theorem squareEntropyAreaLawAt_range_elementary (q R : ℕ) (hq : 1 ≤ q) {J Δ
     SquareEntropyAreaLawAt q (IsRangeSquareGroundState q R J Δ)
       (uniformAreaLawConstantElementary q R J Δ) :=
   squareEntropyAreaLawAt_range_of_areaLawBound (uniformAreaLaw_elementary q R hq hJ hΔ).1
-    (uniformAreaLaw_elementary q R hq hJ hΔ).2
+    (fun Λ H hH hHJ E₀ Ω hn hg hm ↦ by
+      obtain ⟨-, -, hg, hs⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+        ⟨hn, ManyBody.mem_groundSpace_iff.mp hm, hg⟩
+      exact (uniformAreaLaw_elementary q R hq hJ hΔ).2 Λ H hH hHJ E₀ Ω hn hg hs)
 
 /-- **The square-grid area law at the closed-form constant.** For `q ≥ 1`, `J ≥ 0` and
 `Δ > 0`, the square-grid entropy area law holds at `q, J, Δ` with the constant

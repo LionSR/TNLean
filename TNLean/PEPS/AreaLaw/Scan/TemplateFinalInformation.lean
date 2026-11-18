@@ -193,7 +193,9 @@ theorem template_final_mutualInformation_of_boxEntropy_explicit
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z :=
     template_scanner_clearance T hsep (by exact_mod_cast hD₀) hL
       hscales.1 hscales.2.2.1 hscales.2.2.2.1 hscales.2.2.2.2
-  obtain ⟨htarget, hprefix⟩ := hentropy Λ h hh hhJ E₀ Ω hΩ hgap hspan S T hCtpl hsep rfl L hLpos hL
+  obtain ⟨htarget, hprefix⟩ := hentropy Λ h hh hhJ E₀ Ω hΩ
+    (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+    (hspan ▸ Submodule.mem_span_singleton_self _) S T hCtpl hsep rfl L hLpos hL
   have hinfo := hbound Λ T.points T.nonempty h hh hhJ S E₀ Ω hΩ hgap hspan rfl hanchor hnS
     rfl rfl rfl rfl rfl (template_target_volume T hCtpl) rfl
     hrows hmult hclear htarget hprefix

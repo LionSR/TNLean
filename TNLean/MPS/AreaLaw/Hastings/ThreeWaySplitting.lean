@@ -369,16 +369,20 @@ energy zero: the normalization of the source.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 766–767 and 779–782. -/
 theorem _root_.ManyBody.ChainInteraction.isGapped_groundCentered_parts_sum
     (h : ChainInteraction L q R) {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
-    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (j m : ℕ) :
-    ‖Ω‖ = 1 ∧ IsGapped (groundCentered Ω (h.leftPart j m) +
-      groundCentered Ω (h.bufferPart j m) + groundCentered Ω (h.rightPart j m)) 0 Δ ∧
-      groundSpace (groundCentered Ω (h.leftPart j m) + groundCentered Ω (h.bufferPart j m) +
-        groundCentered Ω (h.rightPart j m)) 0 = Submodule.span ℂ {Ω} := by
+    (hΩ : ‖Ω‖ = 1) (hgap : (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef)
+    (hmem : Ω ∈ groundSpace h.hamiltonian E₀) (j m : ℕ) :
+    ‖Ω‖ = 1 ∧ ((groundCentered Ω (h.leftPart j m) +
+      groundCentered Ω (h.bufferPart j m) + groundCentered Ω (h.rightPart j m)) - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef ∧
+      Ω ∈ groundSpace (groundCentered Ω (h.leftPart j m) +
+      groundCentered Ω (h.bufferPart j m) + groundCentered Ω (h.rightPart j m)) 0 := by
   have hE : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
-    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
+    ManyBody.mem_groundSpace_iff.mp hmem
   rw [h.groundCentered_parts_sum_of_eigen hΩ hE]
-  exact ⟨hΩ, hgap.sub_smul_one_self, (ManyBody.groundSpace_sub_smul_one_self _ _).trans hspan⟩
+  refine ⟨hΩ, ?_, ?_⟩
+  · exact hgap
+  · rwa [ManyBody.groundSpace_sub_smul_one_self]
 
 /-- The left part is supported on the sites `i < j - m`, at distance at least `m` from the
 cut. Hastings, arXiv:0705.2024v4, `law16.tex`, line 776. -/

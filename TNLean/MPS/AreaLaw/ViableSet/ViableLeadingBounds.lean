@@ -741,7 +741,9 @@ theorem _root_.ManyBody.ChainInteraction.exists_uniform_leading_bounds_of_isViab
           rectangularTraceNorm (X - partialTraceFirst ρx) := rectangularTraceNorm_add_le _ _
       _ ≤ 2 * η := by rw [hneg]; linarith only [hσX, hX]
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hhJ hL hq hΩ
+      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+      (hspan ▸ Submodule.mem_span_singleton_self _)
   have hsqrt : √c = Δ / 169 := Real.sqrt_sq (div_nonneg hΔ.le (by norm_num))
   have hcr : 2 * c ≤ √c := by
     rw [hsqrt]
@@ -897,7 +899,9 @@ theorem _root_.ManyBody.ChainInteraction.leading_bounds_of_approximate_boundary_
           rectangularTraceNorm (X - partialTraceFirst ρx) := rectangularTraceNorm_add_le _ _
       _ ≤ 2 * η + δ := by rw [hneg]; linarith only [hσX, hX]
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hhJ hL hq hΩ
+      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+      (hspan ▸ Submodule.mem_span_singleton_self _)
   have hsqrt : √c = Δ / 169 := Real.sqrt_sq (div_nonneg hΔ.le (by norm_num))
   have hcr : 2 * c ≤ √c := by
     rw [hsqrt]

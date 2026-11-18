@@ -164,7 +164,9 @@ theorem exists_leading_vector_of_approximate_compressed_boundary_solution
       (2 * (((Δ / 169) ^ 2) / (2 * L)))) ≤ 14 * (Δ / 169) := by
     have hL0 : (L : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hL.ne'
     have hΔ4 : Δ ≤ 4 := by
-      simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
+      simpa only [mul_one] using h.gap_le_four_mul_of_range_one hhJ hL hq hΩ
+        (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+        (hspan ▸ Submodule.mem_span_singleton_self _)
     have hcr : 2 * (Δ / 169) ^ 2 ≤ Δ / 169 := by
       nlinarith only [mul_nonneg hΔ.le (sub_nonneg.mpr hΔ4), hΔ]
     have hBτ : ‖B‖ * (2 * (((Δ / 169) ^ 2) / (2 * L))) ≤
@@ -262,7 +264,9 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_of_density_a
       (⟪v', toEuclideanLin h.hamiltonian v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hhJ hL hq hΩ
+      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+      (hspan ▸ Submodule.mem_span_singleton_self _)
   have hζ0 : 0 ≤ ζ := (norm_nonneg (u' - u)).trans hdist
   have hΔL : Δ * ζ ≤ 4 * L * ζ := by
     have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hL

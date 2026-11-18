@@ -1,0 +1,112 @@
+{
+  "source_head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "method": "direct Lean overlay with package flags and warningAsError; not Lake or whole library build",
+  "counts": {
+    "shared": {
+      "total": 6,
+      "compile": 6,
+      "strict": 6
+    },
+    "mps": {
+      "total": 86,
+      "compile": 8,
+      "strict": 8
+    },
+    "peps": {
+      "total": 107,
+      "compile": 17,
+      "strict": 17
+    }
+  },
+  "fixtures": [
+    {
+      "path": "scripts/ground_state_gap_scope_regression.lean",
+      "head": "61ae67896985126b72dc8c7eb1e694989345f8de",
+      "seconds": 3.4368602269969415,
+      "strict_exit": 0
+    },
+    {
+      "path": "scripts/generic_gap_boundary_regression.lean",
+      "head": "61ae67896985126b72dc8c7eb1e694989345f8de",
+      "seconds": 2.9431823549966794,
+      "strict_exit": 0
+    },
+    {
+      "path": "scripts/zero_gap_tn_wrappers_regression.lean",
+      "head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9",
+      "seconds": 4.127645896995091,
+      "strict_exit": 0
+    },
+    {
+      "path": "scripts/range_square_zero_gap_regression.lean",
+      "head": "61ae67896985126b72dc8c7eb1e694989345f8de",
+      "seconds": 2.7329618030053098,
+      "strict_exit": 0
+    },
+    {
+      "path": "scripts/box_supremum_zero_gap_regression.lean",
+      "head": "61ae67896985126b72dc8c7eb1e694989345f8de",
+      "seconds": 2.7258917590079363,
+      "strict_exit": 0
+    }
+  ],
+  "all_compiler_command_seconds_including_previous_shared_checks": 600.1608916929108,
+  "compiler_failures_preserved": [
+    {
+      "head": "b2c72008326f3166d3bcdc9e79013443142b0aa8",
+      "module": "QICLean.ManyBody.Hamiltonian.Models",
+      "phase": "compile",
+      "exit_code": 1,
+      "log": "low-05.log"
+    },
+    {
+      "head": "2bed3635b38509b9be16a038373a4f390ab2fd4e",
+      "module": "TNLean.PEPS.AreaLaw.Scan.BoxEntropySupremum",
+      "phase": "strict",
+      "exit_code": 1,
+      "log": "peps-range-57.log"
+    },
+    {
+      "head": "46caa6b2cd69108c2c521a97ff1f520aff2686ec",
+      "module": "TNLean.PEPS.AreaLaw.BoundaryTheorem",
+      "phase": "strict",
+      "exit_code": 1,
+      "log": "run-1795022271116212622.log"
+    },
+    {
+      "head": "a3a85244f80236fd3ef7be255cd84f12290edadc",
+      "module": "TNLean.PEPS.AreaLaw.InitialBoxEstimate",
+      "phase": "strict",
+      "exit_code": 1,
+      "log": "run-1795022361931463425.log"
+    },
+    {
+      "head": "3696f4c19eb340a0bb240eda7b0f6a7f34b3c343",
+      "module": "TNLean.PEPS.AreaLaw.InitialBoxEstimate",
+      "phase": "strict",
+      "exit_code": 1,
+      "log": "run-1795022392812250440.log"
+    }
+  ],
+  "source_sync": {
+    "exit_code": 0,
+    "missing": 0,
+    "leanok_missing": 0,
+    "duplicate_tags": 0,
+    "refs": 35615,
+    "decls": 307809
+  },
+  "selector_tests": {
+    "command": "python3 scripts/test_ci_lean_checks.py",
+    "tests": 84,
+    "exit_code": 0
+  },
+  "roles_exit": 0,
+  "prose_exit": 0,
+  "production_edits": "wrapper migration; private adapter removal; unused nested binder names and line wrapping only after lane intake",
+  "editing_wall_time": "not separately instrumented; no inferred duration",
+  "merge_ready": false,
+  "background_lean_queues_remaining": false,
+  "remaining": "See coverage.json for every unverified consumer. No full build, PDF/web or compiled checkdecls."
+}

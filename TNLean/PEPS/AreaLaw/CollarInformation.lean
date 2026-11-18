@@ -355,9 +355,10 @@ theorem sublinearCollarBound_of_mutualInformation_le_at {q R : ℕ} {J Δ D₀ C
     (hC : 24 ≤ Ctpl) (hD : 1 ≤ D₀) (C : ℝ) (N : ℕ)
     (hI : ∀ n s₀ : ℕ, N ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
-          (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
+        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+          (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+        Ω ∈ groundSpace h.hamiltonian E₀ →
           ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
@@ -368,9 +369,10 @@ theorem sublinearCollarBound_of_mutualInformation_le_at {q R : ℕ} {J Δ D₀ C
               C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))) :
     ∀ n s₀ : ℕ, N ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
-          (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
+        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+          (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+        Ω ∈ groundSpace h.hamiltonian E₀ →
           ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
@@ -426,9 +428,10 @@ theorem sublinearCollarBound_of_mutualInformation_le {q R : ℕ} {J Δ D₀ Ctpl
     (hC : 24 ≤ Ctpl) (hD : 1 ≤ D₀)
     (hinfo : ∃ C : ℝ, ∃ N : ℕ, ∀ n s₀ : ℕ, N ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
-          (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
+        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+          (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+        Ω ∈ groundSpace h.hamiltonian E₀ →
           ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →

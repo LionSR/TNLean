@@ -1,0 +1,28 @@
+{
+  "acceptance_read_complete": true,
+  "acceptance_commit": "f8e80bac711a4644b6a023715f6686f9fb67b4b7",
+  "acceptance_path": "docs/audits/2026-11-18_interaction_docs/FIXTURE_ACCEPTANCE.md",
+  "acceptance_sha256": "fa509e124eb21bc05fa15db135fde553b0c6060919a2c00dedd496b61efe565f",
+  "peps_head": "5cef6f44c4334b7dd09acb47cf96eb2df7067d20",
+  "peps_production_paths": 107,
+  "peps_author_compiles": 0,
+  "peps_author_strict": 0,
+  "mps_head": "550b63ccb49e4784cd42949d53996197fd0ce073",
+  "mps_production_paths": 85,
+  "mps_author_compiles": 0,
+  "mps_author_strict": 0,
+  "mps_commits_taken": [
+    "54ab66ae0",
+    "42229ed94",
+    "550b63ccb"
+  ],
+  "shared_duplicate_skipped": "81e70a7d401a928dbd987e8c3cc3e55c6ad80453",
+  "shared_patch_id": "ffd92d3018eabd9dde0ce736364cec94e6a3c614",
+  "docs_not_integrated": false,
+  "docs_pending_fix": "boxEntropy fifth parameter is D\u2080 : \u2115, not p",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "merge_ready": false,
+  "docs_head": "e740d046791bf4159a5d756eef7043dd71e11992",
+  "docs_fix_verified": true,
+  "combined_source_head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9"
+}

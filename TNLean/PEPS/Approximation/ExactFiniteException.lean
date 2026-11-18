@@ -99,9 +99,15 @@ theorem polynomialPEPSApproximation_iff_sufficiently_large :
     obtain ⟨C', hC', _, hall⟩ :=
       exists_uniform_approximation_of_sufficiently_large (G := IsSquareGroundState q J Δ)
         (fun _ _ hΩ ↦ hΩ.norm_eq_one) (by omega) hc.le
-        fun L hL hL₀ Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ ↦ htail L hL hL₀ h hh hhJ E₀
+        fun L hL hL₀ Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ ↦ by
+          obtain ⟨-, -, hgap, hspan⟩ :=
+            (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+              ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hspan, hgap⟩
+          exact htail L hL hL₀ h hh hhJ E₀
             Ω hΩ hgap hspan
     exact ⟨C', c, hC', hc, fun L hL h hh hhJ E₀ Ω hΩ hgap hspan ↦ hall L hL Ω
-        ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩⟩
+        ⟨h, hh, hhJ, E₀, hΩ,
+      hgap.posSemidef_sub_smul_one hh hΩ hspan,
+      hspan ▸ Submodule.mem_span_singleton_self Ω⟩⟩
 
 end TNLean.PEPS.Approximation

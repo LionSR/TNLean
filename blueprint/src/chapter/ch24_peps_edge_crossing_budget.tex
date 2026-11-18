@@ -72,6 +72,7 @@
     \uses{def:polynomial_peps_model,def:area_law_nearest_neighbor_support,
         def:square_area_law_hamiltonian}
     Let $L,q,m\ge0$ be integers, $J,E_0,\Delta\in\mathbb R$, $H$ an original square-grid Hamiltonian with interaction bound $J$, and $\Omega$ a unit vector satisfying $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$. Write $\Lambda$ for the integer square domain, $U$ for the canonical configuration isometry, $\widetilde H=UHU^*$, and $\widetilde\Omega=U\Omega$.
+    No positivity assumption on $\Delta$ or uniqueness assumption on the eigenspace at $E_0$ is required.
     For any nested regions $D_0\subseteq\cdots\subseteq D_{m-1}\subseteq\Lambda$ whose boundaries $\partial_\Lambda D_j$ are pairwise disjoint in $E_\Lambda$, and weights $0<a_j\le1$, let feasible regional filters take the form $K_j=V_j\operatorname{diag}(p_{j,r}^{a_j/2})V_j^*$ ($V_j$ unitary, $p_{j,r}\ge0$, $\sum_r p_{j,r}=1$), extended by $\Id$ outside $D_j$, with $\psi(K)=K_{m-1}\cdots K_0\widetilde\Omega$. Then there exists a feasible family $K$ maximizing $\|\psi(K')\|$ over all feasible $K'$, and with $\psi=\psi(K)$, $\phi=\psi/\|\psi\|$, and $B=q^2J\sum_{j=0}^{m-1}a_j^2|\partial_\Lambda D_j|$,
     \begin{align}
         0 & < \|\psi\|,                                & \|\phi\| & =1, \notag \\
@@ -220,6 +221,7 @@
           & \le q^2J\sum_{j=0}^{m-1}b(X_j)a_j^2.
         \label{eq:pinned_square_energy}
     \end{align}
+    The hypotheses permit $\Delta=0$ and degenerate eigenspaces; for $\Delta>0$ the projector inequality implies uniqueness.
     The adapted source definitions and scope are recorded in~\cite{gap:polypeps_square_zero_floor_optimizer_scope}.
 \end{lemma}
 \begin{proof}

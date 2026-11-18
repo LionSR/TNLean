@@ -38,9 +38,10 @@ variable {L q : ℕ} {J E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q
 at most four times the interaction norm bound. The Hamiltonian and gap inequalities are those
 of the TNLean one-dimensional note, Section 1, `eq:ham` and `eq:gap`. -/
 theorem _root_.ManyBody.ChainInteraction.gap_le_four_mul_of_range_one (h : ChainInteraction L q 1)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-    (hL : 0 < L) (hq : 2 ≤ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
-    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) :
+    (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hL : 0 < L) (hq : 2 ≤ q) (hΩ : ‖Ω‖ = 1) (hgap : (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef)
+    (hmem : Ω ∈ groundSpace h.hamiltonian E₀) :
     Δ ≤ 4 * J := by
   classical
   let x : Fin L := ⟨0, hL⟩
@@ -66,12 +67,11 @@ theorem _root_.ManyBody.ChainInteraction.gap_le_four_mul_of_range_one (h : Chain
   have hgap : Δ ≤
       (⟪toEuclideanLin K Ω, toEuclideanLin h.hamiltonian (toEuclideanLin K Ω)⟫_ℂ).re - E₀ := by
     simpa [hφ, horth] using
-      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ
-          hspan).gap_le (toEuclideanLin K Ω)
+      hgap.gap_le (toEuclideanLin K Ω)
   have hE : (⟪Ω, toEuclideanLin h.hamiltonian Ω⟫_ℂ).re = E₀ := by
     have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω := by
       rw [← coe_toEuclideanCLM_eq_toEuclideanLin]
-      exact (ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _))
+      exact (ManyBody.mem_groundSpace_iff.mp hmem)
     rw [heig, inner_smul_right, inner_self_eq_norm_sq_to_K, hΩ]
     simp
   have hnorm (X : ChainSupport L 1) (v : EuclideanSpace ℂ (Fin L → Fin q))
@@ -152,8 +152,9 @@ theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Ω}) : Δ ≤ 1 := by
+    (hΩ : ‖Ω‖ = 1) (hgap : ((∑ i, h i) - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef)
+    (hmem : Ω ∈ groundSpace (∑ i, h i) E₀) : Δ ≤ 1 := by
   classical
   let x : Fin L := ⟨0, hL⟩
   obtain ⟨U, hU⟩ := Matrix.IsHermitian.exists_unitary_trace_mul_eq_zero
@@ -177,9 +178,7 @@ theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (
     simpa only [K, Entropy.inner_localLift] using hU
   have hgap : Δ ≤
       (⟪toEuclideanLin K Ω, toEuclideanLin (∑ i, h i) (toEuclideanLin K Ω)⟫_ℂ).re - E₀ := by
-    simpa [hφ, horth] using (hgap.posSemidef_sub_smul_one
-      (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian hΩ
-      hspan).gap_le (toEuclideanLin K Ω)
+    simpa [hφ, horth] using hgap.gap_le (toEuclideanLin K Ω)
   have hnonneg (i : Fin (L - 1)) (v : EuclideanSpace ℂ (Fin L → Fin q)) :
       0 ≤ (⟪v, toEuclideanLin (h i) v⟫_ℂ).re := by
     simpa only [RCLike.re_to_complex] using
@@ -217,7 +216,7 @@ theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (
   have hE : (⟪Ω, toEuclideanLin (∑ i, h i) Ω⟫_ℂ).re = E₀ := by
     have heig : toEuclideanLin (∑ i, h i) Ω = (E₀ : ℂ) • Ω := by
       rw [← coe_toEuclideanCLM_eq_toEuclideanLin]
-      exact (ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _))
+      exact (ManyBody.mem_groundSpace_iff.mp hmem)
     rw [heig, inner_smul_right, inner_self_eq_norm_sq_to_K, hΩ]
     simp
   have hcard : (Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val = 0)).card ≤ 1 :=

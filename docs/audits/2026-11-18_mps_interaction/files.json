@@ -1,0 +1,3047 @@
+[
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/Cost.lean",
+    "changed": true,
+    "sha256": "b70e2742273a6f3d7e6f7ba1f470a03b2d58e3f56e34b10dc5917ade9ad9f55d",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 1,
+        "current": 1
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean",
+    "changed": true,
+    "sha256": "c2a7d41ce41e9dadb692885205fb245152df508f573e9ba2eea40eccb8f90325",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 4,
+        "current": 4
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SampledCost.lean",
+    "changed": true,
+    "sha256": "3ee96700881442a821f65379bce5328b58fb62d0690ca3b70d4a0a4a0a4a94d5",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 3,
+        "current": 3
+      },
+      "0 < \u0394": {
+        "base": 5,
+        "current": 5
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 1,
+        "current": 1
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean",
+    "changed": true,
+    "sha256": "8e696bf9b06f775d8796f38b4b030f867bb4e78f602aa6bbfa20cc8b96663fde",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 11,
+        "current": 11
+      },
+      "0 < \u0394": {
+        "base": 11,
+        "current": 11
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 7,
+        "current": 7
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SweepProgram.lean",
+    "changed": true,
+    "sha256": "6c9bb1694452b6be03b0834743b63843ed1e3c8952a030867329a8cce3db0ff1",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 2,
+        "current": 2
+      },
+      "Nonempty": {
+        "base": 2,
+        "current": 2
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean",
+    "changed": true,
+    "sha256": "b2f72c5bf361ad8b0e0a3a2d3a12ba22750cd9de9a33d4e379a3ad7fef2bbe01",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 10,
+        "current": 10
+      },
+      "0 < \u0394": {
+        "base": 2,
+        "current": 2
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 5,
+        "current": 5
+      },
+      "Nonempty": {
+        "base": 2,
+        "current": 2
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleCost.lean",
+    "changed": true,
+    "sha256": "2db0a1f8114e64120c52c3b234332c87ec9f0ad79f3748ebcd545be78b7cab1a",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 2,
+        "current": 2
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean",
+    "changed": true,
+    "sha256": "aef33c0f0b32eaf4630865d9e3225a9023eef898c90cabb66e21b7caf83eec93",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 9,
+        "current": 9
+      },
+      "0 < \u0394": {
+        "base": 4,
+        "current": 4
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 3,
+        "current": 3
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampledCost.lean",
+    "changed": true,
+    "sha256": "47c3a38f7e8aae5dcc255efc0809aea2fd6abcdb744a7626269dbf66a46aec14",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 3,
+        "current": 3
+      },
+      "0 < \u0394": {
+        "base": 4,
+        "current": 4
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 2,
+        "current": 2
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/AreaLaw.lean",
+    "changed": true,
+    "sha256": "cd43a8fcc7042c16e564c9f425b108b361fffe50bd5998513779bdf5021c7a09",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 6,
+        "current": 6
+      },
+      "0 < \u0394": {
+        "base": 10,
+        "current": 10
+      },
+      "0 \u2264 J": {
+        "base": 14,
+        "current": 14
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/BandInformation.lean",
+    "changed": true,
+    "sha256": "db1ec461c4ace651ac57ccc8b04f2b67d69d79d1ceb4032ff477cbb457441cd0",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/BoundaryGap.lean",
+    "changed": true,
+    "sha256": "ba0001b75bb7a491152b7f825a0a92c43ff7911aa648e63fb905c37e788fe479",
+    "migration": "source_port",
+    "static_review": "targeted_signature_and_proof_review",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/BufferDiscount.lean",
+    "changed": true,
+    "sha256": "d8c856a036d7e291d7d500f4ffa2965a549c111f355fa5712a7abe9f3949ae8c",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 4,
+        "current": 4
+      },
+      "0 < \u0394": {
+        "base": 4,
+        "current": 4
+      },
+      "0 \u2264 J": {
+        "base": 6,
+        "current": 6
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/DomainInteractionBudget.lean",
+    "changed": true,
+    "sha256": "f817189d7179b9622d110dc9a1ae09f61a2836796c7754289537441c37631243",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 2,
+        "current": 1
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/DomainIntervalNeighborhoodEntropy.lean",
+    "changed": true,
+    "sha256": "7650e0e72dd9a6f7bc90c5f2c09826acdfee24413712c0476ff298904b6f98f2",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 1,
+        "current": 1
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/DomainLogarithmicSeparation.lean",
+    "changed": true,
+    "sha256": "3da545e0502acace958c96cb222ea17eec871907803de0b341d725876c5f824a",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 1,
+        "current": 1
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/DomainPartialSwap.lean",
+    "changed": true,
+    "sha256": "7461dc08adc7d128f80f032794aa4a04e26c59f5207ddda1850db2f849fbcc4a",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 1,
+        "current": 1
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/DoubledHamiltonian.lean",
+    "changed": true,
+    "sha256": "4bd626c815323872bec31071aa5630d35235c0b875d61f9cb597d3bb1f5ec78a",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/GluingHamiltonian.lean",
+    "changed": true,
+    "sha256": "7915a8dd6cbf17f7d35b7768d9f3e39d0577742c79583d4eabcd050fcddadb3c",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean",
+    "changed": false,
+    "sha256": "f7d8e52de647bd4275cbcce07ec438f218942b7edf24d5511bb96df2c30372c2",
+    "migration": "unchanged_factorization_api",
+    "static_review": "targeted_signature_and_proof_review",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/BootstrapLemma.lean",
+    "changed": true,
+    "sha256": "9e1e3b4f4e07f390d014cad7987add5e1fc10625fd12cbac5fecbe61f33890d1",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 1,
+        "current": 1
+      },
+      "NeZero": {
+        "base": 2,
+        "current": 2
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/BoundaryFactorization.lean",
+    "changed": true,
+    "sha256": "9f8a7f6470c928a5b7ac0454b9b6012bf83d945681a93b02f50561ff7841635c",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/BoundaryLocalization.lean",
+    "changed": true,
+    "sha256": "151bb9a5bb3f0a90bcfc5d136c2b30aa0adaeeaff819b95a53e9207b4846279b",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 1,
+        "current": 1
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/ChainLocalizedParts.lean",
+    "changed": true,
+    "sha256": "65329546020446e5cb8793117bb73388ccd9e5d32fc2aa0b91a5464fd77a2925",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 4,
+        "current": 4
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/CorrelationLemma.lean",
+    "changed": true,
+    "sha256": "cb9fb5b0f6b84010ff9b7516c0465e2f1ea76e747cd612bfa1c1f9b6e56b4dda",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 1,
+        "current": 1
+      },
+      "NeZero": {
+        "base": 1,
+        "current": 1
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/CutoffPair.lean",
+    "changed": true,
+    "sha256": "a7964541bdccda3a9fa37c1b3a34e162d1e29414f726805fac0cc43222076248",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 2,
+        "current": 2
+      },
+      "0 < \u0394": {
+        "base": 2,
+        "current": 2
+      },
+      "0 \u2264 J": {
+        "base": 1,
+        "current": 1
+      },
+      "NeZero": {
+        "base": 3,
+        "current": 3
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean",
+    "changed": true,
+    "sha256": "ab3228fff31b4a124553f74fb463f425b0513bf6d2da0279c0ca9d5142f3665b",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 2,
+        "current": 2
+      },
+      "0 < \u0394": {
+        "base": 2,
+        "current": 2
+      },
+      "0 \u2264 J": {
+        "base": 2,
+        "current": 2
+      },
+      "NeZero": {
+        "base": 2,
+        "current": 2
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/LemmaOneConstant.lean",
+    "changed": true,
+    "sha256": "8b053b19e95eec2041f1d226e8c6f37d149db5bcb0606d7db232a92ba6329100",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 4,
+        "current": 4
+      },
+      "0 < \u0394": {
+        "base": 4,
+        "current": 4
+      },
+      "0 \u2264 J": {
+        "base": 4,
+        "current": 4
+      },
+      "NeZero": {
+        "base": 4,
+        "current": 4
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+    "changed": true,
+    "sha256": "ea6d014ce73b50530808901a8e3e058884c660bfd537561eecfd4820fd70ab04",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 5,
+        "current": 5
+      },
+      "0 \u2264 J": {
+        "base": 1,
+        "current": 1
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean",
+    "changed": true,
+    "sha256": "aee14b8f260f6e5063963d7975a7fdc276323fa7f6cd0c2bf39282dbb7ef47ef",
+    "migration": "source_port",
+    "static_review": "targeted_signature_and_proof_review",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 2,
+        "current": 2
+      },
+      "0 < \u0394": {
+        "base": 2,
+        "current": 2
+      },
+      "0 \u2264 J": {
+        "base": 2,
+        "current": 2
+      },
+      "NeZero": {
+        "base": 3,
+        "current": 3
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/PartCommutators.lean",
+    "changed": true,
+    "sha256": "ede41b5124e5aa84a7a51b882eddac117cad40f85f943ea0ef687fae76957bda",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 1,
+        "current": 1
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/PrintedAreaLaw.lean",
+    "changed": true,
+    "sha256": "24a6ceab2df7c0902098cc74c91a19721335eb25b736be72ebe5c67e7a5c83e9",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 1,
+        "current": 1
+      },
+      "NeZero": {
+        "base": 2,
+        "current": 2
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/PrintedAreaLawSource.lean",
+    "changed": true,
+    "sha256": "1488e187b838fa6b76ca3b7dd67e40f7d2d0b2de6daf84a7410114f5c7b26a6a",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 3,
+        "current": 3
+      },
+      "0 < \u0394": {
+        "base": 3,
+        "current": 3
+      },
+      "0 \u2264 J": {
+        "base": 3,
+        "current": 3
+      },
+      "NeZero": {
+        "base": 3,
+        "current": 3
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/ProjectorFactorization.lean",
+    "changed": true,
+    "sha256": "07c07fa1a8cb8cfcdf8b1531ba0e709a8449b7c7e24f150976b7b3ee7469d5f9",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 4,
+        "current": 4
+      },
+      "0 < \u0394": {
+        "base": 5,
+        "current": 5
+      },
+      "0 \u2264 J": {
+        "base": 4,
+        "current": 4
+      },
+      "NeZero": {
+        "base": 5,
+        "current": 5
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/ProjectorFactorizationScaling.lean",
+    "changed": true,
+    "sha256": "acd5458b8cfc8de179b5269af3621b95caeb7401f42ad80c0b754c846146937d",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 2,
+        "current": 2
+      },
+      "0 \u2264 J": {
+        "base": 2,
+        "current": 2
+      },
+      "NeZero": {
+        "base": 1,
+        "current": 1
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/RelentGapped.lean",
+    "changed": true,
+    "sha256": "30bc5c79762b3a6430a91f486a1f92d16f3f2f40375aed8bb8501d468eb2ced9",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 1,
+        "current": 1
+      },
+      "NeZero": {
+        "base": 2,
+        "current": 2
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma.lean",
+    "changed": true,
+    "sha256": "524d006470b2b49633406758331059bc82d34ac4ea478378e657c188166b1cbf",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 2,
+        "current": 2
+      },
+      "0 < \u0394": {
+        "base": 2,
+        "current": 2
+      },
+      "0 \u2264 J": {
+        "base": 2,
+        "current": 2
+      },
+      "NeZero": {
+        "base": 3,
+        "current": 3
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/SourceConsequences.lean",
+    "changed": true,
+    "sha256": "4b0d575495ff532096a601e95eb55d890c19e8a0e7e450c94741773ccef4d61e",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 5,
+        "current": 5
+      },
+      "0 < \u0394": {
+        "base": 5,
+        "current": 5
+      },
+      "0 \u2264 J": {
+        "base": 5,
+        "current": 5
+      },
+      "NeZero": {
+        "base": 8,
+        "current": 8
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/SourceLength.lean",
+    "changed": true,
+    "sha256": "c529705300999029c165c0690a8a333fd9d1191bb92fdfcba813ca455f0a5658",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 2,
+        "current": 2
+      },
+      "0 < \u0394": {
+        "base": 2,
+        "current": 2
+      },
+      "0 \u2264 J": {
+        "base": 2,
+        "current": 2
+      },
+      "NeZero": {
+        "base": 2,
+        "current": 2
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean",
+    "changed": true,
+    "sha256": "6eacb1bc1b20eb4693aea19d0b25f839dd1b0daa1b98866befefb2d767435704",
+    "migration": "source_port",
+    "static_review": "targeted_signature_and_proof_review",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 2,
+        "current": 2
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Huang/PositiveChainHamiltonian.lean",
+    "changed": true,
+    "sha256": "a6674145590507e75afa6462d6e114dbf1797d71c3de5148a9b1d9fc02237289",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/InformationReset.lean",
+    "changed": true,
+    "sha256": "e7ebf2a150b867bcea19e76b90bfa9eab170688bc99b991d049086426dd89f16",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 3,
+        "current": 3
+      },
+      "0 < \u0394": {
+        "base": 3,
+        "current": 3
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/InteractionBudget.lean",
+    "changed": true,
+    "sha256": "2dc260cbb71cfbe20bd21e8dff147e92ce1ec854bc49eaed3be9b2c36c0250e7",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 1,
+        "current": 1
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/LogarithmicAreaLaw.lean",
+    "changed": true,
+    "sha256": "c97c7e9392528a33273f22fc7c329a9b620a28b6f60d6800e1354fd590ba05e8",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 4,
+        "current": 4
+      },
+      "0 < \u0394": {
+        "base": 4,
+        "current": 4
+      },
+      "0 \u2264 J": {
+        "base": 4,
+        "current": 3
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/LogarithmicSeparation.lean",
+    "changed": true,
+    "sha256": "801d4922b81a72470e1df036b5a44d1f7a6574a1901cecfd97058664aca4ed04",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 1,
+        "current": 1
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/MPSApproximation.lean",
+    "changed": true,
+    "sha256": "59da7c139af2e9539f1d5cfab96036d22dab18e26e186ea8ec11f385b54765b8",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 10,
+        "current": 10
+      },
+      "0 < \u0394": {
+        "base": 10,
+        "current": 10
+      },
+      "0 \u2264 J": {
+        "base": 14,
+        "current": 14
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/OverlapEnergy.lean",
+    "changed": true,
+    "sha256": "3033399bc2d2d10eca9a5db7788ac2a333a281da96a751534aea1e7c3afe286d",
+    "migration": "source_port",
+    "static_review": "targeted_signature_and_proof_review",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/PartialSwap.lean",
+    "changed": true,
+    "sha256": "2d1379df39f6eb148d91ffd5dca69e453b087ccbd0b9ca2b77596c0351ea2aca",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 1,
+        "current": 1
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ProtocolMPSApproximation.lean",
+    "changed": true,
+    "sha256": "458cf71c184350727bca476dd6b38864c6e30bb5f93dd3f3d06a1d4121c5b126",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 2,
+        "current": 2
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ProtocolPhysicalPreparation.lean",
+    "changed": true,
+    "sha256": "7219a7abacd8559f86df21ac91d0b535c5a3724575d643727af0887cf8c0a601",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ProtocolStageInformation.lean",
+    "changed": true,
+    "sha256": "8876f661d66e9092bcaab1037a7ace69f68c1c860441605a2f25ed87dce06c7b",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ProtocolStagePhysicalCircuits.lean",
+    "changed": true,
+    "sha256": "b04f83558b08281567d6f9ed29550579f53e4ece1690ad508f2a43d1999df41a",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ProtocolUniformPreparation.lean",
+    "changed": true,
+    "sha256": "00e078ffe349f45fc19cd3ddba4b5a2815b5892ee4099cfe8969553fa4efcab9",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 2,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/RangeOneCut.lean",
+    "changed": true,
+    "sha256": "2a3c401863e508d8ea74e21b974f7fbd1e51ea56a7ed1847f3054593b4be9835",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/RangeOneSupport.lean",
+    "changed": true,
+    "sha256": "eb06514071a6cbf5045417939f1740587c717824589013af15bccf51146552cb",
+    "migration": "source_port",
+    "static_review": "targeted_signature_and_proof_review",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+    "changed": true,
+    "sha256": "f93e47e6ec768c4acc0f3d7ef84480c46c7aaf8a370ca5005bb3ad539872a100",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 4,
+        "current": 4
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/RenyiEntropy.lean",
+    "changed": true,
+    "sha256": "d8e3a97bf6ed5c4129a2f5bdb51b2fc1fce002da13616d753c7ea80d7e25d80c",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 2,
+        "current": 2
+      },
+      "0 < \u0394": {
+        "base": 2,
+        "current": 2
+      },
+      "0 \u2264 J": {
+        "base": 3,
+        "current": 3
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/SharpPhysicalCompression.lean",
+    "changed": true,
+    "sha256": "9a10c40f651a4f99f0e61c69af75f419fafcd9776091df4e95abbba0fd4ed515",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/SnakeGridApproximation.lean",
+    "changed": true,
+    "sha256": "987094fd63438c9177d4b70a3a85b86fef730459e5eb5f19b5620bee2072f034",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/SnakeGridAreaLaw.lean",
+    "changed": true,
+    "sha256": "bd1096dd74bc43a1f3bf91915843313ccac379e6d8db9186527529cd5afd7ada",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/StripApproximation.lean",
+    "changed": true,
+    "sha256": "208ebbe87536c06aabef635d5b028ba5d15e14274d261e06b741b748a9e8af2d",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 5,
+        "current": 5
+      },
+      "0 < \u0394": {
+        "base": 6,
+        "current": 6
+      },
+      "0 \u2264 J": {
+        "base": 9,
+        "current": 9
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/StripBufferDiscount.lean",
+    "changed": true,
+    "sha256": "77f8f1cba708c7a437b7655c48e2a324a392e83f8b661b68ce9ef6e3cd70fe35",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 3,
+        "current": 3
+      },
+      "0 < \u0394": {
+        "base": 5,
+        "current": 5
+      },
+      "0 \u2264 J": {
+        "base": 8,
+        "current": 8
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/StripGeometry.lean",
+    "changed": true,
+    "sha256": "ad9eca1f73e63fdc66b5a2b0517c37e1f6593d109b8dc88e7b6ad2063d3b7aa8",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean",
+    "changed": true,
+    "sha256": "8660a731939d688387fb4f87762b942947f20ddd40d3603af27e2e9161bb160b",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 0,
+        "current": 0
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/SwappedDoubledHamiltonian.lean",
+    "changed": true,
+    "sha256": "db0752edd424e94168ba83b755a0674b3af183b0ab56ab434c9bc9e549e713fe",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 6,
+        "current": 6
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/BondTrimmingReference.lean",
+    "changed": true,
+    "sha256": "6511cba84b03231e4f0788e61a9b974e94022ddb0f25e26922ce92637eff2adc",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ConstantRankCut.lean",
+    "changed": true,
+    "sha256": "daa40363de458c879fbec30c8757fbef833d719ecb4024343a836a66f3dbb516",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 4,
+        "current": 4
+      },
+      "0 < \u0394": {
+        "base": 4,
+        "current": 4
+      },
+      "0 \u2264 J": {
+        "base": 4,
+        "current": 4
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean",
+    "changed": true,
+    "sha256": "0ba60809ed675dc14a97139b398533d229528a31402707df54ec4353b11af615",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 6,
+        "current": 6
+      },
+      "0 < \u0394": {
+        "base": 6,
+        "current": 6
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 1,
+        "current": 1
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/RationalBondTrimming.lean",
+    "changed": true,
+    "sha256": "dccc75f74b3c5399a19922b9c5b7bdef5feb0aaaccb05e6782b65667d1b74c91",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 1,
+        "current": 1
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/RationalSampledSuccessiveConstruction.lean",
+    "changed": true,
+    "sha256": "f8e9243c01cb202feef23fbc529dd9148c2c841191e75a7feed909fbd0b54deb",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 3,
+        "current": 3
+      },
+      "0 < \u0394": {
+        "base": 2,
+        "current": 2
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 1,
+        "current": 1
+      },
+      "Nonempty": {
+        "base": 4,
+        "current": 4
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SampledSuccessiveConstruction.lean",
+    "changed": true,
+    "sha256": "f13a33a500396a4fc435d780ca28f5911eda6c25f7c805f90b1e81c1dce78e27",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 8,
+        "current": 8
+      },
+      "0 < \u0394": {
+        "base": 8,
+        "current": 8
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 1,
+        "current": 1
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeBondTrimming.lean",
+    "changed": true,
+    "sha256": "9111536d8a18645509cc4bd522eff430ddde312436515527c5c905ac13942aaa",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 4,
+        "current": 4
+      },
+      "0 < \u0394": {
+        "base": 4,
+        "current": 4
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean",
+    "changed": true,
+    "sha256": "c3f82e4253094640ff8d6a6dc31d2ea7560d6ad1695aed685c21923c974607f4",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 5,
+        "current": 5
+      },
+      "0 < \u0394": {
+        "base": 5,
+        "current": 5
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 5,
+        "current": 5
+      },
+      "Nonempty": {
+        "base": 12,
+        "current": 12
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean",
+    "changed": true,
+    "sha256": "ad85e3572423620f5af4c91fcdc2ec94f97cc943999d9dbac9545c562832f37d",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 3,
+        "current": 3
+      },
+      "0 < \u0394": {
+        "base": 4,
+        "current": 4
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 3,
+        "current": 3
+      },
+      "Nonempty": {
+        "base": 8,
+        "current": 8
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean",
+    "changed": true,
+    "sha256": "8a632e004230cea1a32d89e662474b221a883c6b11f60558d7313f4333120e98",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 6,
+        "current": 6
+      },
+      "0 < \u0394": {
+        "base": 7,
+        "current": 7
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 7,
+        "current": 7
+      },
+      "Nonempty": {
+        "base": 2,
+        "current": 2
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean",
+    "changed": true,
+    "sha256": "a1fdf8961ec6955183473ec64b7cd707ff1689de9b5e0f69f549d090fc5672d5",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 4,
+        "current": 4
+      },
+      "0 < \u0394": {
+        "base": 6,
+        "current": 6
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 5,
+        "current": 5
+      },
+      "Nonempty": {
+        "base": 1,
+        "current": 1
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/PowerIteration.lean",
+    "changed": true,
+    "sha256": "b8656dc0e1c0d01a63b5865f332ce8a57a0794c1db779627151c5142c1687565",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 2,
+        "current": 2
+      },
+      "0 < \u0394": {
+        "base": 2,
+        "current": 2
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 2,
+        "current": 2
+      },
+      "Nonempty": {
+        "base": 1,
+        "current": 1
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean",
+    "changed": true,
+    "sha256": "b73921cef449505ae0d05b57931151560cac517a041bcd7a222a12449cc52c79",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 3,
+        "current": 3
+      },
+      "0 < \u0394": {
+        "base": 3,
+        "current": 3
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 3,
+        "current": 3
+      },
+      "Nonempty": {
+        "base": 8,
+        "current": 8
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/Selection.lean",
+    "changed": true,
+    "sha256": "614cbbc523df7b2e5906416a18f647ee2c505f3e7978823f38d39a1af89ce29d",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 5,
+        "current": 5
+      },
+      "0 < \u0394": {
+        "base": 5,
+        "current": 5
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 8,
+        "current": 8
+      },
+      "Nonempty": {
+        "base": 1,
+        "current": 1
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/UniformCertificates.lean",
+    "changed": true,
+    "sha256": "32732403b8feba9dac2773d5c9f627d438669ac685c23e7dc744cd575349a1ef",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 4,
+        "current": 4
+      },
+      "0 < \u0394": {
+        "base": 4,
+        "current": 4
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 5,
+        "current": 5
+      },
+      "Nonempty": {
+        "base": 15,
+        "current": 15
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SuccessiveConstruction.lean",
+    "changed": true,
+    "sha256": "abb92ace490dd863dbab438565d2abba9445c9d0f8803d34b9fa2a1777d5af9e",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 2,
+        "current": 2
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SuccessiveStep.lean",
+    "changed": true,
+    "sha256": "ff1147930e40848351680979775bcac06683c89e83ae155df122166ecb975fa3",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 3,
+        "current": 3
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean",
+    "changed": true,
+    "sha256": "10af5993239f9b7c7680613575d5a8be200ae788b1a8b65f71daf5bececfb951",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 5,
+        "current": 5
+      },
+      "0 < \u0394": {
+        "base": 6,
+        "current": 6
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 4,
+        "current": 4
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean",
+    "changed": true,
+    "sha256": "34caa1e876abce92f1dd1da67ac0e85dc8a35d5f8b0ec619dab22fe911d7e64a",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 2,
+        "current": 2
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 1,
+        "current": 1
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean",
+    "changed": true,
+    "sha256": "5ec18fb1c7b8c8595f102ebfb5800fc019146a57dd7335e02e87e7b0ac6931ce",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/WindowCounting.lean",
+    "changed": true,
+    "sha256": "b244f4e514914c1d7ea92b159ba0c282458de069d28d883e6c44c882ff636357",
+    "migration": "source_port",
+    "static_review": "migration_and_scope_token_scan_only",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 1,
+        "current": 1
+      },
+      "0 < \u0394": {
+        "base": 1,
+        "current": 1
+      },
+      "0 \u2264 J": {
+        "base": 2,
+        "current": 2
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  },
+  {
+    "path": "scripts/ground_state_gap_scope_regression.lean",
+    "changed": true,
+    "sha256": "6ca25ae11ec5df0ffaeb6c14f161dc7838d01ccf3a54d8bcd0aa985938e5d7f0",
+    "migration": "source_port",
+    "static_review": "targeted_signature_and_proof_review",
+    "scope_token_counts": {
+      "Submodule.span": {
+        "base": 2,
+        "current": 2
+      },
+      "0 < \u0394": {
+        "base": 0,
+        "current": 0
+      },
+      "0 \u2264 J": {
+        "base": 0,
+        "current": 0
+      },
+      "NeZero": {
+        "base": 0,
+        "current": 0
+      },
+      "Nonempty": {
+        "base": 0,
+        "current": 0
+      }
+    },
+    "old_owner_name_hits": [],
+    "conflict_markers": false,
+    "lines_over_100": [],
+    "lean_build": "not_run",
+    "lean_strict": "not_run",
+    "blocker": "no matching QIC729 build cache in this isolated checkout"
+  }
+]

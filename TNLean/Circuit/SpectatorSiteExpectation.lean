@@ -12,10 +12,11 @@ import QICLean.Algebra.L2OpNormReindex
 /-!
 # Site expectations with an untouched spectator
 
-A finite spectator `Aux` is one more site of the system: the sites are `Option ι`, the
-physical sites `some i` carry `Fin q` and the site `none` carries `Aux`. The spectator
-expectation onto the retained physical sites `K` is the region expectation of this system
-onto `K` together with the spectator site, written in the coordinates
+For arbitrary spectator labels `Aux`, apply the canonical physical region expectation
+to each spectator block. For finite `Aux`, the spectator is one more site of the system:
+the sites are `Option ι`, the physical sites `some i` carry `Fin q`, and `none` carries `Aux`.
+The spectator expectation onto the retained physical sites `K` is the region expectation
+of this system onto `K` together with the spectator site, written in the coordinates
 `(ι → Fin q) × Aux`. It acts on the physical matrix indices of each spectator block, it is
 contractive in the matrix `L²` operator norm, and its localization error is bounded by the
 sum of physical on-site commutator bounds, independently of the spectator dimension. No
@@ -35,13 +36,15 @@ formalized from the manuscript; no upstream Lean proof text is reused.
 * `QuantumCircuit.spectatorBasis` — the basis types of the physical sites and the spectator.
 * `QuantumCircuit.spectatorConfigEquiv` — configurations of this system as pairs of a
   physical configuration and a spectator label.
-* `QuantumCircuit.spectatorSiteExpectation` — the region expectation onto the retained
-  physical sites and the spectator.
+* `QuantumCircuit.spectatorSiteExpectation` — the canonical physical expectation applied
+  to each spectator block.
 
 ## Main results
 
 * `QuantumCircuit.spectatorSiteExpectation_apply` — the spectator expectation applies the
   region expectation of the physical sites to each spectator block.
+* `QuantumCircuit.spectatorSiteExpectation_eq_reindex` — for finite spectators, the same
+  expectation in coordinates with the spectator as an additional site.
 * `QuantumCircuit.norm_spectatorSiteExpectation_le`,
   `QuantumCircuit.norm_sub_spectatorSiteExpectation_le` — contraction and the localization
   error through on-site commutators, from `ManyBody.norm_regionExpectation_le` and
@@ -119,23 +122,34 @@ def spectatorComplEquiv (K : Finset ι) :
 
 /-! ### The spectator expectation -/
 
-/-- The spectator expectation onto the retained physical sites `K`: the region expectation of
-the system of physical sites and the spectator onto `K` and the spectator site, in the
-coordinates `(ι → Fin q) × Aux`. Source: area law, `09-amplification.tex`, lines 111–121,
+/-- The spectator expectation applies the canonical physical region expectation to each
+spectator block, for an arbitrary spectator index type. This extends the
+finite-dimensional operation in area law, `09-amplification.tex`, lines 111–121,
 including the sentence about operators acting on spectators. -/
 noncomputable def spectatorSiteExpectation (q : ℕ) (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ :=
-  reindex (spectatorConfigEquiv q ι Aux) (spectatorConfigEquiv q ι Aux)
-    (regionExpectation (Finset.insertNone K)
-      (reindex (spectatorConfigEquiv q ι Aux).symm (spectatorConfigEquiv q ι Aux).symm B))
+  Matrix.of fun x y => regionExpectation K
+    (Matrix.of fun σ τ => B (σ, x.2) (τ, y.2)) x.1 y.1
 
-/-- The spectator expectation applies the region expectation of the physical sites to each
-spectator block. Source: area law, `09-amplification.tex`, lines 111–121. -/
+omit [Fintype Aux] [DecidableEq Aux] in
+/-- The spectator expectation acts by the canonical physical expectation on each block.
+Source: area law, `09-amplification.tex`, lines 111–121. -/
 theorem spectatorSiteExpectation_apply (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) (σ τ : ι → Fin q) (a b : Aux) :
     spectatorSiteExpectation q K B (σ, a) (τ, b) =
-      regionExpectation K (Matrix.of fun σ' τ' ↦ B (σ', a) (τ', b)) σ τ := by
+      regionExpectation K (Matrix.of fun σ' τ' ↦ B (σ', a) (τ', b)) σ τ := rfl
+
+/-- For finite spectators, the same expectation is the canonical expectation in
+Option-site coordinates. Source: area law, `09-amplification.tex`, lines 111–121. -/
+theorem spectatorSiteExpectation_eq_reindex (K : Finset ι)
+    (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
+    spectatorSiteExpectation q K B =
+      reindex (spectatorConfigEquiv q ι Aux) (spectatorConfigEquiv q ι Aux)
+        (regionExpectation (Finset.insertNone K)
+          (reindex (spectatorConfigEquiv q ι Aux).symm (spectatorConfigEquiv q ι Aux).symm B)) := by
+  symm
+  ext ⟨σ, a⟩ ⟨τ, b⟩
   set e := spectatorConfigEquiv q ι Aux
   let φ : ComplConfig (spectatorBasis (ι := ι) q Aux) (Finset.insertNone K) ≃
       ComplConfig (fun _ : ι ↦ Fin q) K :=
@@ -170,8 +184,8 @@ theorem spectatorSiteExpectation_apply (K : Finset ι)
     · change (cutEquiv (spectatorBasis q Aux) (Finset.insertNone K)).symm _ none = ρ.2
       rw [cutEquiv_symm_apply_mem _ _ Finset.none_mem_insertNone]
       rfl
-  rw [spectatorSiteExpectation, reindex_apply, submatrix_apply, regionExpectation_apply,
-    regionExpectation_apply, hcard]
+  rw [spectatorSiteExpectation, Matrix.of_apply, reindex_apply, submatrix_apply,
+    regionExpectation_apply, regionExpectation_apply, hcard]
   congr 1
   by_cases h : ∀ i ∉ K, σ i = τ i
   · rw [ite_eq_left (hagree.mpr h), ite_eq_left h]
@@ -180,6 +194,7 @@ theorem spectatorSiteExpectation_apply (K : Finset ι)
     rw [hglue (σ, a) y, hglue (τ, b) y]
   · rw [ite_eq_right (mt hagree.mp h), ite_eq_right h]
 
+omit [Fintype Aux] [DecidableEq Aux] in
 /-- On a simple tensor, only the physical factor is averaged. In particular,
 this formula preserves arbitrary, possibly non-Hermitian spectator operators.
 Source: area law, `09-amplification.tex`, lines 111–121. -/
@@ -193,6 +208,7 @@ theorem spectatorSiteExpectation_kronecker (K : Finset ι)
   rw [spectatorSiteExpectation_apply, hblock, regionExpectation_smul]
   simp [Matrix.kroneckerMap_apply, mul_comm]
 
+omit [Fintype Aux] [DecidableEq Aux] in
 /-- An operator acting only on the spectator is fixed by every physical site
 expectation. Source: area law, `09-amplification.tex`, lines 111–121. -/
 @[simp] theorem spectatorSiteExpectation_one_kronecker (K : Finset ι)
@@ -220,6 +236,7 @@ theorem spectatorSiteExpectation_commute (K : Finset ι)
   simpa [Matrix.mul_apply, Fintype.sum_prod_type, Matrix.kroneckerMap_apply,
     Matrix.one_apply, mul_ite, ite_mul, spectatorSiteExpectation_apply] using h
 
+omit [Fintype Aux] [DecidableEq Aux] in
 /-- Retaining every physical site gives the identity map, even in the presence
 of a spectator. Source: area law, `09-amplification.tex`, lines 101 and 111–121. -/
 @[simp] theorem spectatorSiteExpectation_univ
@@ -235,8 +252,9 @@ any finite spectator. Source: area law, `09-amplification.tex`, lines 111–121.
 The norm is the matrix `L²` operator norm. -/
 theorem norm_spectatorSiteExpectation_le (K : Finset ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
-    ‖spectatorSiteExpectation q K B‖ ≤ ‖B‖ :=
-  (l2_opNorm_reindex_le_equiv _ _).trans <| (norm_regionExpectation_le _).trans
+    ‖spectatorSiteExpectation q K B‖ ≤ ‖B‖ := by
+  rw [spectatorSiteExpectation_eq_reindex]
+  exact (l2_opNorm_reindex_le_equiv _ _).trans <| (norm_regionExpectation_le _).trans
     (l2_opNorm_reindex_le_equiv _ _)
 
 /-- An operator on the enlarged system supported on one physical site `some i` is a physical
@@ -334,7 +352,7 @@ theorem norm_sub_spectatorSiteExpectation_le (K : Finset ι)
       reindex e e (B' - regionExpectation (Finset.insertNone K) B') := by
     conv_lhs => rw [hB]
     ext x y
-    simp [spectatorSiteExpectation, B', Matrix.sub_apply, e]
+    simp [spectatorSiteExpectation_eq_reindex, B', Matrix.sub_apply, e]
   have hsum : ∑ o ∈ (Finset.insertNone K)ᶜ, Option.elim o 0 ε = ∑ y ∈ Kᶜ, ε y := by
     have hc : (Finset.insertNone K)ᶜ = Kᶜ.map Function.Embedding.some := by
       ext o

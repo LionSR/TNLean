@@ -52,8 +52,9 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 /-! ### Permutations changing and reading only a set of sites -/
 
 /-- The permutation `σ` of the configurations changes only the sites of `S`, and the new values
-at the sites of `S` depend only on the old values at the sites of `S`. -/
-def IsLocalPerm (S : Finset ι) (σ : Equiv.Perm (ι → Fin d)) : Prop :=
+at the sites of `S` depend only on the old values at the sites of `S`.
+The site type and `S` need not be finite. -/
+def IsLocalPerm (S : Set ι) (σ : Equiv.Perm (ι → Fin d)) : Prop :=
   (∀ x, ∀ i ∉ S, σ x i = x i) ∧
     ∀ x y, (∀ j ∈ S, x j = y j) → ∀ i ∈ S, σ x i = σ y i
 
@@ -65,7 +66,7 @@ private theorem permMatrix_cfg_apply (σ : Equiv.Perm (ι → Fin d)) (x y : ι 
 /-- The permutation matrix of a permutation changing and reading only the sites of `S` acts
 on `S`. -/
 theorem IsLocalPerm.permMatrix_mem_supportedOperators {S : Finset ι}
-    {σ : Equiv.Perm (ι → Fin d)} (h : IsLocalPerm S σ) :
+    {σ : Equiv.Perm (ι → Fin d)} (h : IsLocalPerm (S : Set ι) σ) :
     σ.permMatrix ℂ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
   classical
   let e : Fin (Fintype.card S) → ι := fun j => ((Fintype.equivFin S).symm j : ι)
@@ -132,7 +133,7 @@ theorem shiftPerm_apply (t : ι) (f : (ι → Fin d) → Fin d)
   rfl
 
 omit [Fintype ι] in
-theorem isLocalPerm_shiftPerm {S : Finset ι} {t : ι} (ht : t ∈ S)
+theorem isLocalPerm_shiftPerm {S : Set ι} {t : ι} (ht : t ∈ S)
     (f : (ι → Fin d) → Fin d)
     (hf : ∀ x c, f (Function.update x t c) = f x)
     (hfS : ∀ x y, (∀ j ∈ S, x j = y j) → f x = f y) : IsLocalPerm S (shiftPerm t f hf) := by

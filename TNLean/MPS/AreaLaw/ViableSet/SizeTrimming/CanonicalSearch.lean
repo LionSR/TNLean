@@ -454,7 +454,9 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_canonic
   have hleading := fullyApproxSDP_errors_with_trace_energy_slack_fit_lvv_margin
     hL hΔ.le hκfit hεfit hεbfit hδfit' heηfit heKfit'
   have hΔ₄ : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hhJ hL hq hΩ
+      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+      (hspan ▸ Submodule.mem_span_singleton_self _)
   have hrational := canonical_search_rationalization_overlap_budget hL hΔ hΔ₄
     hκfit hεfit hεbfit hδfit' heηfit heKfit'
   apply h.exists_rationalViableMPSData_of_rational_search_result hh hhJ hL hq hΔ
@@ -594,7 +596,9 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalCoordinateData_of_canoni
   have hleading := fullyApproxSDP_errors_with_trace_energy_slack_fit_lvv_margin
     hL hΔ.le hκfit hεfit hεbfit hδfit' heηfit heKfit'
   have hΔ₄ : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hhJ hL hq hΩ
+      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+      (hspan ▸ Submodule.mem_span_singleton_self _)
   have hrational := canonical_search_rationalization_overlap_budget hL hΔ hΔ₄
     hκfit hεfit hεbfit hδfit' heηfit heKfit'
   apply h.exists_rationalCoordinateData_of_rational_search_result hh hhJ hL hq hΔ

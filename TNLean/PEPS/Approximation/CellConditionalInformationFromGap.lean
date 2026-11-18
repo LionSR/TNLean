@@ -92,10 +92,13 @@ theorem cell_conditionalMutualInformation_le_closed
             ∀ y ∈ E, c * s ≤ dist x (AreaLaw.Geometry.integerPoint y.val)) →
           FiniteProduct.conditionalMutualInformation (fun _ : Site Λ ↦ Fin q)
             Ω G E B ≤ cellInformationConstantClosed q R J Δ c *
-              (1 + Real.log s) ^ cellInformationExponentClosed q R J Δ c :=
-  cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
+              (1 + Real.log s) ^ cellInformationExponentClosed q R J Δ c := by
+  intro s hs o m₀ A hm₀ Λ h hh hhJ E₀ Ω hΩ hgap hspan
+  exact cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
     (sublinearCollarBoundAt_closed (R := R) (D₀ := 2 * (R : ℝ) + 11) hq hJ hΔ (by linarith))
-    (amplificationBoundAt_collarAmplification hΔ _) hc
+    (amplificationBoundAt_collarAmplification hΔ _) hc s hs o m₀ A hm₀ Λ h hh hhJ E₀ Ω hΩ
+    (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+    (hspan ▸ Submodule.mem_span_singleton_self _)
 
 open Classical in
 /-- **Lemma 3.2 on the original open square, at closed-form constants.** For `q ≥ 1`,

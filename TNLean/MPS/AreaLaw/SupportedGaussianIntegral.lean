@@ -206,19 +206,16 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
   refine ⟨a + d, 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1, by positivity, by positivity, ?_⟩
   intro q hq L h hh hhJ D ℓ hℓ K K' crossing Z N
   let g := h.swappedDoubled D
-  let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin (q * q)) (fun X : ChainSupport L R ↦ X.1) :=
-    ⟨g.term, g.mem⟩
-  have hΦ : Φ.hamiltonian = g.hamiltonian := rfl
   have hgen := exists_supported_gaussian_integral_graphNeighborhood
-    (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
-    (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le)
+    (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) g
+    (fun X ↦ ManyBody.ChainSupport.edist_le X) (fun X ↦ X.2.card_le)
         (h.isHermitian_swappedDoubled_term hh D) b₀
     (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D))
         (ManyBody.Interaction.isHermitian_hamiltonian (h.isHermitian_doubled_term hh)) Z ℓ
         d hd (fun s ↦ by
-      rw [hΦ, biUnion_graphBall_pathGraph_eq_chainNeighborhood Z hℓ, Fintype.card_fin]
+      rw [biUnion_graphBall_pathGraph_eq_chainNeighborhood Z hℓ, Fintype.card_fin]
       exact h.norm_relativeGenerator_sub_regionExpectation_le hh hhJ D hq ℓ hℓ s)
-  simp only [hΦ, biUnion_graphBall_pathGraph_eq_chainNeighborhood _ hℓ, Fintype.card_fin]
+  simp only [biUnion_graphBall_pathGraph_eq_chainNeighborhood _ hℓ, Fintype.card_fin]
     at hgen
   exact hgen
 
@@ -271,18 +268,15 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
   refine ⟨a + d, 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1, by positivity, by positivity, ?_⟩
   intro q hq Λ h hh hhJ D m K K' crossing Z N
   let g := h.swappedDoubled D
-  let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin (q * q))
-      (fun X : DomainSupport Λ R ↦ X.1) := ⟨g.term, g.mem⟩
-  have hΦ : Φ.hamiltonian = g.hamiltonian := rfl
   have hgen := exists_supported_gaussian_integral_graphNeighborhood
-    (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) Φ
+    (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) g
     (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) (h.isHermitian_swappedDoubled_term hh D) b₀
     (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D))
         (ManyBody.Interaction.isHermitian_hamiltonian (h.isHermitian_doubled_term hh)) Z (m : ℝ)
         d hd (fun s ↦ by
-      rw [hΦ, Nat.floor_natCast, Fintype.card_fin]
+      rw [Nat.floor_natCast, Fintype.card_fin]
       exact h.norm_relativeGenerator_sub_regionExpectation_le hh hhJ D hq m s)
-  simp only [hΦ, Nat.floor_natCast, Fintype.card_fin] at hgen
+  simp only [Nat.floor_natCast, Fintype.card_fin] at hgen
   exact hgen
 
 end TNLean.MPS.AreaLaw

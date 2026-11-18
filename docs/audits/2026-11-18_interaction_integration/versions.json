@@ -1,0 +1,17 @@
+{
+  "baseline10881": "fa9a40e22fa6384ba4a723e8bf675bb2cd20c5e7",
+  "main": "7376dab08421ab99afcc5373be11104c76cc8a50",
+  "10816_is_main_ancestor": true,
+  "main_merge": "34f0770445dd07935d6e0933f441d63f3c10aa1d",
+  "migration_source": "592a46e4e442f87205c407720acbb487db0d2fcf",
+  "migration_common_base": "8a040ee527c3a4861ab2a5c1369bf9a9c9d611fd",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "read_only_merge_tree": "a7856653d9f0d08c00f090eb39784f3231304ea3",
+  "proof_builds_run": 0,
+  "shared_files_ported": [
+    "TNLean/Lattice/LocalHamiltonian.lean",
+    "TNLean/MPS/AreaLaw/ComponentReduction.lean",
+    "TNLean/MPS/AreaLaw/Hamiltonian.lean",
+    "TNLean/PEPS/AreaLaw/RectangularHamiltonian.lean"
+  ]
+}

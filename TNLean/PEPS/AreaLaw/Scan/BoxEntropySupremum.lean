@@ -9,9 +9,10 @@ import QICLean.ManyBody.Hamiltonian.GroundSpace
 /-!
 # From physical rectangle estimates to the uniform box supremum
 
-The current box power applies to every safe physical rectangle, including the
-zero-size case. Conversely, a large-rectangle original-state bound extends to
-all sizes by the finite-dimensional entropy bound before taking the supremum.
+The current box power applies to every safe integer rectangle, whose size is at
+least one. Its intersection with the physical region may be empty. Conversely,
+a large-rectangle original-state bound extends to all positive sizes by the
+finite-dimensional entropy bound before taking the supremum.
 Neither bridge constructs the physical entropy improvement.
 
 Source: OpenAI area-law manuscript, `02-initial.tex`, lines 590--594, and
@@ -19,7 +20,7 @@ Source: OpenAI area-law manuscript, `02-initial.tex`, lines 590--594, and
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open scoped Matrix.Norms.L2Operator
+open scoped ComplexOrder Matrix.Norms.L2Operator
 
 open TNLean.Lattice
 
@@ -27,20 +28,22 @@ open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
 
-/-- A uniform positive-scale box power supplies every physical rectangle,
-including a possible zero-size rectangle. Source: `02-initial.tex`, lines 590--594. -/
+/-- A uniform positive-scale box power bounds the entropy of every safe intersection
+`rectRegion A Q`, including an empty intersection. The integer rectangle `Q` has size
+at least one. Source: `02-initial.tex`, lines 590--594. -/
 theorem regionalEntropy_le_of_boxEntropy_power
     {q R D₀ : ℕ} (hq : 1 ≤ q) {J Δ C e : ℝ} (he : 0 < 1 + e)
     (hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ C * (r : ℝ) ^ (1 + e))
     {Λ : Finset (ℤ × ℤ)} (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
-    {Ω : StateSpace Λ q} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
-    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
+      (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+    {Ω : StateSpace Λ q} (hΩ : ‖Ω‖ = 1) (hgap : (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef)
+    (hmem : Ω ∈ groundSpace h.hamiltonian E₀)
     (A : Finset (Site Λ)) (Q : IntRect) (hsafe : IsSafe Λ A D₀ Q) :
     regionalEntropy Λ q Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e) := by
   by_cases hs : 1 ≤ Q.size
-  · exact (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe le_rfl).trans
-      (hbox Q.size hs)
+  · exact (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ
+      hgap hmem hsafe le_rfl).trans (hbox Q.size hs)
   · have hs0 : Q.size = 0 := by omega
     have hcard : (rectRegion A Q).card = 0 :=
       Nat.le_zero.mp (by
@@ -54,10 +57,11 @@ The small-size correction uses only the physical volume entropy bound.
 Source: `08-scanner.tex`, lines 788--803. -/
 theorem boxEntropy_power_le_of_large_rectangles
     {q R D₀ : ℕ} (hq : 1 ≤ q) {J Δ C p : ℝ} (hC : 0 ≤ C) (hp : 0 ≤ p) (N : ℕ)
-    (hrect : ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
-        (_ : ∀ X, ‖h.term X‖ ≤ J)
-      (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+    (hrect : ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_hh : ∀ X, (h.term X).IsHermitian)
+      (_hhJ : ∀ X, ‖h.term X‖ ≤ J)
+      (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+      Ω ∈ groundSpace h.hamiltonian E₀ →
       ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q → N ≤ Q.size →
         regionalEntropy Λ q Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ p) :
     ∀ r : ℕ, 1 ≤ r →
@@ -71,9 +75,9 @@ theorem boxEntropy_power_le_of_large_rectangles
   have hpow : 1 ≤ (r : ℝ) ^ p := Real.one_le_rpow hr1 hp
   refine Real.sSup_le ?_ (by positivity)
   intro s hs
-  obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hspan, hsafe, hQr, rfl⟩ := hs
+  obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hmem, hsafe, hQr, rfl⟩ := hs
   by_cases hN : N ≤ Q.size
-  · have hlarge := hrect Λ h hh hhJ E₀ Ω hΩ hgap hspan A Q hsafe hN
+  · have hlarge := hrect Λ h hh hhJ E₀ Ω hΩ hgap hmem A Q hsafe hN
     have hscale : (Q.size : ℝ) ^ p ≤ (r : ℝ) ^ p :=
       Real.rpow_le_rpow (Nat.cast_nonneg _) (Nat.cast_le.mpr hQr) hp
     exact hlarge.trans ((mul_le_mul_of_nonneg_left hscale hC).trans

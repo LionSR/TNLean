@@ -57,11 +57,14 @@ abbrev StateSpace (L q : ℕ) := EuclideanSpace ℂ (Configuration L q)
 unit gapped ground vectors, with gap `Δ`, of the open-square Hamiltonians of side `L`: one
 term on each site and one on each nearest-neighbor edge, each of norm at most `J`, with
 Hermitian total sum. Individual terms need not be Hermitian. Source: polynomial-PEPS
-`eq:model` and `eq:global-gap`. -/
+`eq:model` and `eq:global-gap`.
+For nonpositive `Δ`, this retains the algebraic projector inequality and permits a
+degenerate eigenspace at `E₀`; uniqueness is not an additional assumption. -/
 def IsSquareGroundState (q : ℕ) (J Δ : ℝ) (L : ℕ) (Ω : StateSpace L q) : Prop :=
   ∃ h : SquareInteraction L q, h.hamiltonian.IsHermitian ∧ (∀ i, ‖h.term i‖ ≤ J) ∧
-    ∃ E₀ : ℝ, ‖Ω‖ = 1 ∧ IsGapped h.hamiltonian E₀ Δ ∧
-      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}
+    ∃ E₀ : ℝ, ‖Ω‖ = 1 ∧ (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef ∧
+      Ω ∈ groundSpace h.hamiltonian E₀
 
 /-- A ground vector of the model is a unit vector. Source: polynomial-PEPS `eq:global-gap`. -/
 theorem IsSquareGroundState.norm_eq_one {q : ℕ} {J Δ : ℝ} {L : ℕ} {Ω : StateSpace L q}

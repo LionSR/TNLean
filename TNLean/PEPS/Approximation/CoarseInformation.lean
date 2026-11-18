@@ -66,6 +66,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace SquareInteraction PlaneInteraction)
 
+open scoped ComplexOrder
+
 namespace TNLean.PEPS.Approximation
 
 /-- The whole domain has no crossing edges, so its endpoint set `Z_Λ` is empty.
@@ -138,8 +140,9 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
       ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
         (Ω : Lattice.StateSpace Λ q),
-        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+          (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+        Ω ∈ groundSpace h.hamiltonian E₀ →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
@@ -366,7 +369,12 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D�
   obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
   exact ⟨_, beta_lt_one, _, _,
-    coarse_mutualInformation_le_of_sublinearCollarBoundAt hcol hamp N₀ A₀⟩
+    by
+      intro u hu Λ h hh hhJ E₀ Ω hΩ hgap hspan
+      exact coarse_mutualInformation_le_of_sublinearCollarBoundAt hcol hamp N₀ A₀
+        u hu Λ h hh hhJ E₀ Ω hΩ
+        (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+        (hspan ▸ Submodule.mem_span_singleton_self _)⟩
 
 /-- Mutual information is unchanged by relabeling the sites along a bijection, once both
 regions are relabeled. Source: polynomial-PEPS `01-preliminaries.tex`, lines 23–31. -/

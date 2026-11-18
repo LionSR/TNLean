@@ -147,6 +147,9 @@ theorem uniform_boxEntropy_improvement_explicit
   have hprefix' : ∀ j : ℕ, j ≤ F.L S.n →
       regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
         Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ e + S.n) := hprefix
+  obtain ⟨-, -, hgap, hspan⟩ :=
+    (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+      ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hspan, hgap⟩
   have hresult := hsource e he hee₀ Λ Q.toFinset hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hnS
     rfl rfl rfl rfl rfl (by simpa only [one_mul] using hcard)
     hdepth hrows hmult hclear htarget' hprefix'

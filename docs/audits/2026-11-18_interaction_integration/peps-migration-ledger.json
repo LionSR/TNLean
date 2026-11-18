@@ -1,0 +1,5186 @@
+{
+  "base": "b2c72008326f3166d3bcdc9e79013443142b0aa8",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "status": "SOURCE MIGRATION CHECKPOINT — NOT MERGE READY",
+  "production_count": 107,
+  "fixture_count": 3,
+  "shared_owners_modified": false,
+  "builds_or_strict_checks_run": 0,
+  "note": "Whole-file mathematical review and exact-pin Lean elaboration remain required. Shared/MPS fixture files are untouched. Range fixture requires no source edit; its conversion theorem was migrated.",
+  "files": [
+    {
+      "path": "TNLean/PEPS/Approximation/CellConditionalInformation.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 1,
+          "after": 1
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "cellInformationScale",
+        "cellInformationConstant",
+        "cellInformationExponent",
+        "cellInformationConstant_pos",
+        "cellInformationExponent_pos",
+        "cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt",
+        "exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound"
+      ],
+      "sha256": "aa4ae41ae180a1e1ca73a4322e2abec9bd69bbcded00da0952c2307525b110dc",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/CellConditionalInformationFromGap.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 3,
+          "after": 3
+        },
+        "0 ≤ J": {
+          "before": 3,
+          "after": 3
+        },
+        "groundSpace": {
+          "before": 4,
+          "after": 4
+        },
+        "Submodule.span": {
+          "before": 3,
+          "after": 3
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "cellInformationConstantClosed",
+        "cellInformationExponentClosed",
+        "cellInformationConstantClosed_pos",
+        "cellInformationExponentClosed_pos",
+        "cell_conditionalMutualInformation_le_closed",
+        "cell_conditionalMutualInformation_le_square_closed",
+        "exists_cell_conditionalMutualInformation_le_square"
+      ],
+      "sha256": "93397d2e8a3fe23617769fd6a2376263de6798a733d3d1e283cb4c47704b1d6b",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/CoarseInformation.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 1,
+          "after": 1
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 4,
+          "after": 4
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "boundaryEndpoints_univ",
+        "mutualInformation_empty_left",
+        "coarseScaleFactor",
+        "coarseInformationThreshold",
+        "coarse_mutualInformation_le_of_sublinearCollarBoundAt",
+        "beta_lt_one",
+        "collarAmplificationConstant",
+        "collarAmplificationThreshold",
+        "amplificationBoundAt_collarAmplification",
+        "exists_sublinearCollarBoundAt_amplificationBoundAt",
+        "coarse_mutualInformation_le_of_sublinearCollarBound",
+        "finiteProductMutualInformation_relabel",
+        "coarse_mutualInformation_le_square_of_sublinearCollarBound"
+      ],
+      "sha256": "e9e8c6619539329f00b47c021157e17061a1dc590a9c46c1fd533328163f8367",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/CoarseInformationFromGap.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 5,
+          "after": 5
+        },
+        "0 ≤ J": {
+          "before": 5,
+          "after": 5
+        },
+        "groundSpace": {
+          "before": 7,
+          "after": 7
+        },
+        "Submodule.span": {
+          "before": 4,
+          "after": 4
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "collarBoxConstantClosed",
+        "collarConstantClosed",
+        "collarThresholdClosed",
+        "sublinearCollarBoundAt_closed",
+        "coarseInformationConstantClosed",
+        "coarseInformationThresholdClosed",
+        "coarse_mutualInformation_le_closed",
+        "coarse_mutualInformation_le",
+        "coarse_mutualInformation_le_square",
+        "coarse_mutualInformation_le_translated_square"
+      ],
+      "sha256": "63267cfbf7e17e910a7314ba01acb2ee952a051fee889e989ead54e5f77ae569",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/NestedPatchEnergy.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "_root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le"
+      ],
+      "sha256": "90a0e75fdf5c9dbfe5b8fd78102be6e3a9fdc7f1ad527d950fc84c230633a1bf",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/NestedPatchMarginalCloseness.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 2,
+          "after": 2
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "nestedPatch_minimizer_marginal_closeness",
+        "exists_uniform_nestedPatch_minimizer_marginal_closeness"
+      ],
+      "sha256": "d4587f343f375e5898070126e59961742113720cff8b5e7bc2352cd366b22b29",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/PinnedZeroFloorOptimizer.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 1,
+          "after": 1
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 1,
+          "after": 1
+        },
+        "Δ * (1 -": {
+          "before": 3,
+          "after": 3
+        }
+      },
+      "declarations": [
+        "Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount",
+        "rectangleForwardEdgeEquiv",
+        "rectangleForwardEdge_crosses_iff",
+        "rectangle_singleCrossing",
+        "canonicalCrossingBudget_eq_original",
+        "squareAreaLawState_inner",
+        "squareAreaLawState_operator",
+        "fromCanonical_physical_estimates",
+        "_root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelity"
+      ],
+      "sha256": "bac3e4fe3da33d8e95b20c0311103a920524db5707957a93ec8fe4b20795d5f4",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeAngularInformation.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 4,
+          "after": 4
+        },
+        "groundSpace": {
+          "before": 4,
+          "after": 4
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "IsRangeSquareGroundState.squareCellInformationBound",
+        "mutualInformation_squareAreaLawState",
+        "IsRangeSquareGroundState.squareResetBound",
+        "rangeAngularScale",
+        "rangeAngularThreshold",
+        "rangeAngularScale_eq",
+        "isAngularScale_range_closed_le"
+      ],
+      "sha256": "63c53d3235dc8d7b6e85f215247c27e189552c05cd7d98600fcc6c0d7181470a",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeInformationReset.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 4,
+          "after": 4
+        },
+        "groundSpace": {
+          "before": 4,
+          "after": 4
+        },
+        "Submodule.span": {
+          "before": 3,
+          "after": 3
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "rangeResetWidth",
+        "rangeResetThreshold",
+        "rangeResetWidth_pos",
+        "card_rectangularDomain",
+        "notMem_rangeResetSupport",
+        "information_reset_of_card_le",
+        "information_reset_of_rangeResetThreshold_le",
+        "information_reset"
+      ],
+      "sha256": "0de0181432539fb54cf8bf7e468fb8633e7a15a0f2ad9657087bfff1627b9666",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "rangeNestedPatchRadiusExponent",
+        "rangeNestedPatchRadiusExponent_pos",
+        "rangeAdaptivePatchExponent",
+        "rangeAdaptivePatchExponent_pos",
+        "SquareEntropyAreaLawAt.rangeNestedPatch_entropy_le",
+        "SquareEntropyAreaLawAt.uniform_rangeNestedPatch_cylinders",
+        "SquareEntropyAreaLawAt.rangeAdaptivePatchSupply"
+      ],
+      "sha256": "3c02e370f59f15caa25dc89e5d1a4d0dac039c6ff83aaa4a7d7de8cb66a8efdf",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 4,
+          "after": 4
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "rangePatchEnergyConstant",
+        "rangePatchEnergyConstant_nonneg",
+        "rangePatchEnergyConstant_pos",
+        "sum_crossingTerms_rangeNestedPatch_le",
+        "_root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le",
+        "rangePatchFilterExponent",
+        "rangePatchFilterExponent_le_half",
+        "rangePatchFilterExponent_pos",
+        "mul_sq_le_div_1024_of_le_rangePatchFilterExponent"
+      ],
+      "sha256": "5007e41f55e523c216c5544788430f2ea035e0a766e261785a302da5c9fbaf83",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 2,
+          "after": 2
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "rangeNestedPatch_minimizer_marginal_closeness",
+        "exists_uniform_rangeNestedPatch_minimizer_marginal_closeness"
+      ],
+      "sha256": "54ccc32492de362aab4d285dd423ca72e9a69e9aff811712aab883b3c8c051d1",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeResetUnitary.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 5,
+          "after": 5
+        },
+        "0 ≤ J": {
+          "before": 5,
+          "after": 5
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "rangeResetRadius",
+        "rangeResetFilterPrefactor",
+        "rangeResetUnitaryPrefactor",
+        "rangeResetRadius_pos",
+        "rangeResetFilterPrefactor_pos",
+        "rangeResetUnitaryPrefactor_pos",
+        "reset_localized_filter",
+        "reset_unitary"
+      ],
+      "sha256": "a9fa595056ed4d3dfd7d56f1581bdd84d7fcb5f1bbb39e6bb82e823f643bb08e",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeSquareGroundState.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 2,
+          "after": 2
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "IsRangeSquareGroundState",
+        "IsRangeSquareGroundState.norm_eq_one",
+        "IsSquareGroundState.isRangeSquareGroundState",
+        "SquareEntropyAreaLawAt.mono",
+        "squareEntropyAreaLawAt_range_of_areaLawBound"
+      ],
+      "sha256": "3167acb58cdc58f1be39113c4acf3176508ae5afbfd47c9de31a95c755c23b8f",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 2,
+          "after": 2
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 5,
+          "after": 5
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "finiteProductEntropy_relabel",
+        "card_edgeBoundary_rectangle",
+        "SquareEntropyAreaLawAt",
+        "SquareEntropyAreaLaw",
+        "finiteProductEntropy_le_of_areaLawBound",
+        "_root_.TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw"
+      ],
+      "sha256": "fc7ed0857eea20d99ecc076b8eb98f038b073b4c6157b855bcc11a12ad0ae2e2",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 1,
+          "after": 1
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 4,
+          "after": 4
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "SquareCellInformationBound",
+        "cell_conditionalMutualInformation_le_square_of_rectangle",
+        "cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt",
+        "cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_explicit",
+        "exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound"
+      ],
+      "sha256": "48942671491f35e32a8cbb66b79087a09f05cc636e08a432f636279dc7dcdcac",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SquareInteractionTerms.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "_root_.ManyBody.SquareInteraction.exists_nearestNeighbor_terms"
+      ],
+      "sha256": "22bfacccc11f1072f5fc2873447b8ba22aa8c1f7de9149333a6ebf69dc956b3a",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 2,
+          "after": 2
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 1,
+          "after": 1
+        },
+        "Δ * (1 -": {
+          "before": 1,
+          "after": 1
+        }
+      },
+      "declarations": [
+        "_root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fidelity"
+      ],
+      "sha256": "f69524b5b4b89468f28e98c0ccdbada17ac73df14f3b3c5dacd59cf7cf7f5324",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SupportedPhysicalBufferGaussian.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 3,
+          "after": 3
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "squareLocalizationPrefactor",
+        "squareLocalizationVelocity",
+        "squareLocalizationPrefactor_pos",
+        "squareLocalizationVelocity_nonneg",
+        "squareLocalizationPrefactor_eq",
+        "squareLocalizationVelocity_eq",
+        "_root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral",
+        "_root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integral"
+      ],
+      "sha256": "0e72048ae22cb3cd0376ffc3f6d40c27e29035e78274f026bd7685f161c077f4",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SwappedDoubledEdgeBoundary.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "swapped_doubled_boundary_bound_edgeBoundary"
+      ],
+      "sha256": "acc42c6ed1a021f0319d98da34ca35f62d60e250aeef602cb2f4a6740c7b7200",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SwappedLocalHamiltonian.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 2,
+          "after": 2
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "card_admissibleSupport_le",
+        "swapBoundaryCoefficient",
+        "swapBoundaryCoefficient_nonneg",
+        "doubledHamiltonian_isHermitian",
+        "swappedDoubled",
+        "isHermitian_swappedDoubled_term",
+        "norm_swappedDoubled_term_le",
+        "doubledHamiltonian_sum",
+        "swappedDoubled_hamiltonian",
+        "sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing",
+        "swapped_doubled_boundary_bound",
+        "supported_buffer_gaussian_integral"
+      ],
+      "sha256": "bf5c6fa165ea55befea6771134334a7f4842840d8fce85bcdf9cfc948e9f6f85",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SwappedSquareHamiltonianInteraction.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "_root_.ManyBody.SquareInteraction.exists_swapped_doubled_localHamiltonian"
+      ],
+      "sha256": "f8ce3a366c96593dbde5a2dc1460aad7a3b65ce1e95bf41a241852e0e4e00570",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 2,
+          "after": 2
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 2,
+          "after": 2
+        },
+        "groundSpace": {
+          "before": 9,
+          "after": 9
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "norm_sqrt_one_sub_le_one",
+        "norm_contractionWord_le_one",
+        "norm_contractionWord_sub_le",
+        "integrable_and_integral_norm_contractionWord_sub_le",
+        "integrable_and_integral_norm_contractionWord_retained_sub_le",
+        "mem_graphNeighborhood_iff",
+        "graphBall_subset_graphNeighborhood_two_mul",
+        "card_filter_anchor_mem_graphNeighborhood_le",
+        "card_anchor_graphNeighborhood_le",
+        "contractionWord_regionExpectation_mem_supportedOperators",
+        "constraintWordTruncationPrefactor",
+        "constraintWordTruncationPrefactor_nonneg",
+        "domainConstraintWord_truncation",
+        "exists_domainConstraintWord_truncation",
+        "latticeConstraintWord_truncation_of_positiveConstraints",
+        "latticeConstraintWord_truncation_explicit",
+        "exists_latticeConstraintWord_truncation"
+      ],
+      "sha256": "697b049859609b349e9649afce849da27b4f04ed556dbb2071feb8122d6e442c",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelPoissonGrowth.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_latticeChannelWord_spatial_growth"
+      ],
+      "sha256": "a9be555270e2aeff46a87e448389bff6028d1a1d2166ffd5c318e2f649033dab",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelPoissonThinning.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_latticeChannelWord_filter_spatial_growth"
+      ],
+      "sha256": "e16d95086662c4cac56907748d4a5427df6cc2dd1f46ff02d904c88b5af2a7da",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 2,
+          "after": 2
+        },
+        "0 < Δ": {
+          "before": 3,
+          "after": 3
+        },
+        "0 ≤ J": {
+          "before": 3,
+          "after": 3
+        },
+        "groundSpace": {
+          "before": 12,
+          "after": 12
+        },
+        "Submodule.span": {
+          "before": 3,
+          "after": 3
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "norm_toLp_prod_vector",
+        "lt_edist_of_notMem_graphNeighborhood",
+        "domain_integrable_and_integral_channelWordOmissionDefect_le",
+        "exists_domain_integrable_and_integral_channelWordOmissionDefect_le",
+        "domainConstraintWord_omission",
+        "exists_domainConstraintWord_omission",
+        "latticeOmissionPrefactor",
+        "latticeOmissionRate",
+        "latticeOmissionExponent",
+        "latticeConstraintWord_omission_of_positiveConstraints",
+        "latticeConstraintWord_omission_of_locality",
+        "latticeConstraintWord_omission_explicit",
+        "exists_latticeConstraintWord_omission"
+      ],
+      "sha256": "8557db991491d11da9fd2b39c540a1c96a9c2f11ebb92f0b90f22af23298460c",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelWeightedRow.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_latticeChannelEventKernel_bounds"
+      ],
+      "sha256": "0b77198d7b98ac74a0ac8e26f80252a69a1150fd9fcf5138422fb666de87f722",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeExcitedDecay.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "latticeConstraintWord_excitedProjection_decay"
+      ],
+      "sha256": "b205a188e20c05d87579a5fb5ba931b3c54695df0f0938cec5369b20569c9139",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeRestoring.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 3,
+          "after": 3
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "partialTraceRight_kronecker_one_mul_mul",
+        "partialTraceLeft_kronecker_one_conj",
+        "isStarProjection_kronecker",
+        "norm_projection_mulVec_sub_sq",
+        "IsHermitian.spectralSelection_eq_conj",
+        "IsHermitian.eq_conj",
+        "PosSemidef.spectralSelection_le_smul",
+        "IsHermitian.spectralSelection_mul_mul_le_smul",
+        "RegionalConfiguration",
+        "restoringSplit",
+        "restoringVector",
+        "restoringCutProjection",
+        "eigen_kronecker_unitary",
+        "restoringReducedDensity_restoringVector",
+        "partialTraceRight_restoringReducedDensity_restoringVector",
+        "partialTraceLeft_restoringReducedDensity_restoringVector",
+        "norm_restoringVector",
+        "trace_vecMulVec_kronecker_one",
+        "norm_kronecker_one_restoringVector_sub_le",
+        "norm_selectedProjection_restoringVector_sub_le",
+        "norm_typicalProjection_restoringVector_sub_le",
+        "restoringCutProjection_eq",
+        "restoringCutProjection_isStarProjection_commute",
+        "norm_restoringCutProjection_restoringVector_sub_le",
+        "mutualInformation_compl_eq",
+        "restoringCutProjection_le_and_typicalProjection_le",
+        "restoringOperator_estimates",
+        "sqrt_rpow_neg_two_mul",
+        "exists_restoringOperator_estimates"
+      ],
+      "sha256": "ff321f8e4d0d48cb8dbbdc2d0aeb748a8f3c3a3781c0c44ffabee9ea52b1f356",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Amplification/TypicalProjectors.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 7,
+          "after": 7
+        },
+        "0 ≤ J": {
+          "before": 9,
+          "after": 9
+        },
+        "groundSpace": {
+          "before": 7,
+          "after": 7
+        },
+        "Submodule.span": {
+          "before": 6,
+          "after": 6
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "typicalProjection",
+        "trace_mul_spectralSelection",
+        "typicalProjection_failure_le_surprisalTail",
+        "typicalFailureRate",
+        "typicalFailureRate_pos",
+        "typicalProjection_failure_le_stretchedExp",
+        "exists_typicalProjection_failure_le_stretchedExp",
+        "typicalProjectionThreshold",
+        "one_le_typicalProjectionThreshold",
+        "typicalProjection_failure_le_inv_pow_of_threshold_le",
+        "exists_typicalProjection_failure_le_inv_pow",
+        "typicalProjectors_three_cuts_of_threshold_le",
+        "exists_typicalProjectors_three_cuts"
+      ],
+      "sha256": "5c6a3229c3328615cda608e2428bceadadce8a93ec095eb38b6779c8c3088433",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 1,
+          "after": 1
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "graphNeighborhood_collar_subset_of_threshold_le",
+        "exists_threshold_graphNeighborhood_collar_subset",
+        "amplificationBound_of_radius_output"
+      ],
+      "sha256": "a34b0c8cfb204ec6895d1eb5a0bafd2af11ffa21971bdedfc76182eb5230e54c",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/AmplificationProof.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 5,
+          "after": 5
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 7,
+          "after": 7
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "sqrt_inv_pow_eq_rpow",
+        "norm_toLp_single_eq_one",
+        "unitary_error_le",
+        "amplificationGap",
+        "amplificationDecayRate",
+        "amplificationPrefactor",
+        "amplificationConstant",
+        "amplificationThreshold",
+        "amplificationConstant_nonneg",
+        "amplificationBound_of_locality",
+        "amplificationConstantExplicit",
+        "amplificationThresholdExplicit",
+        "amplificationBound_explicit",
+        "amplificationBoundAt_explicit",
+        "amplificationBound",
+        "uniformAreaLaw_of_collar_twoFamilies"
+      ],
+      "sha256": "4b5ab9ea9d4d9728d946000c01dd341c92b41b038ff5817521b38ef87c8b0f31",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/AreaLawElementaryConstant.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 2,
+          "after": 2
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "physicalBoxConstantElementary",
+        "physicalBoxConstantClosed_le_elementary",
+        "uniformAreaLawConstantElementary",
+        "uniformAreaLaw_elementary"
+      ],
+      "sha256": "8a559b70b986c072e203c4db68e1444f413d473ea154105676336e48607d6e0c",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 4,
+          "after": 4
+        },
+        "groundSpace": {
+          "before": 7,
+          "after": 7
+        },
+        "Submodule.span": {
+          "before": 4,
+          "after": 4
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "uniformAreaLawConstantAt",
+        "uniformAreaLawConstantExplicit",
+        "uniformAreaLaw_explicit_of_le",
+        "uniformAreaLaw_explicit",
+        "uniformAreaLawConstantClosed",
+        "uniformAreaLaw_closed",
+        "physicalBoxConstantClosed",
+        "uniformAreaLawConstantClosedAt",
+        "uniformAreaLawConstantClosedAt_physicalBoxConstantClosed",
+        "uniformAreaLaw_closed_of_le"
+      ],
+      "sha256": "6db4f2f707c743e3c2cee0ee6787900be52e0e56b96c402bea97aa98dc1d7d0a",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/AreaLawTheorem.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "uniformAreaLaw",
+        "uniformAreaLaw_vertex_boundary_bounds",
+        "rectangularEntropyAreaLaw",
+        "squareEntropyAreaLaw"
+      ],
+      "sha256": "e5add1df08cb482b0b6dbde9870aec334db89427db03493433d9cd455a33eca0",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/BoundaryTheorem.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 6,
+          "after": 6
+        },
+        "0 < Δ": {
+          "before": 3,
+          "after": 3
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 9,
+          "after": 9
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "SublinearCollarBound",
+        "AmplificationBound",
+        "SublinearCollarBoundAt",
+        "sublinearCollarBound_iff_exists_sublinearCollarBoundAt",
+        "AmplificationBoundAt",
+        "amplificationBound_iff_forall_exists_amplificationBoundAt",
+        "TwoFamilyDecomposition",
+        "exists_ambientSupDistance_le_of_mem_graphNeighborhood",
+        "uniformAreaLawConstantOf",
+        "uniformAreaLawConstantOf_nonneg",
+        "uniformAreaLawScale",
+        "two_le_uniformAreaLawScale",
+        "regionalEntropy_le_of_collar_amplification_twoFamilies_constants",
+        "uniformAreaLaw_of_collar_amplification_twoFamilies"
+      ],
+      "sha256": "4715e6d69cf707f473f7f134c6710cb9d499194fe7284e70045213d8007a932a",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/CollarInformation.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 5,
+          "after": 5
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 4,
+          "after": 4
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "collarPreQuantity",
+        "collarPostQuantity",
+        "mutualInformation_comm",
+        "mutualInformation_mono_right",
+        "collarLeaf_entropy_identity",
+        "two_mutualInformation_le_collarLeaf",
+        "two_mutualInformation_le_collarLeaf_average",
+        "abs_mutualInformation_sub_le_of_traceDistance",
+        "mutualInformation_le_add_of_traceDistance_le_rpow",
+        "Template.collar_cut_card_le",
+        "sublinearCollarBound_of_mutualInformation_le_at",
+        "sublinearCollarBound_of_mutualInformation_le"
+      ],
+      "sha256": "3c0619c14883a006e57d23854479bab24b016eeb2bba23383613d96129e10d72",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/GraphPropagation.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 2,
+          "after": 2
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "card_domainGraph_sphere_le",
+        "normBound_nonneg",
+        "sum_norm_term_containing_le",
+        "interaction",
+        "anchors",
+        "anchors_mem",
+        "anchors_self",
+        "norm_commutator_le_graphDistance",
+        "commutator_eq_zero_of_edist_eq_top",
+        "norm_sub_regionExpectation_graphBall_le",
+        "exists_quasilocal_lieb_robinson"
+      ],
+      "sha256": "421dc7ed25b751cad0720d04d5d794354bb0fc1329833a83e7132a4a967c8d10",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 5,
+          "after": 5
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 4,
+          "after": 4
+        },
+        "groundSpace": {
+          "before": 8,
+          "after": 8
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "boxEntropyValues",
+        "boxEntropy",
+        "card_rectRegion_le",
+        "le_of_mem_boxEntropyValues",
+        "bddAbove_boxEntropyValues",
+        "nonneg_of_mem_boxEntropyValues",
+        "boxEntropy_nonneg",
+        "boxEntropy_le_sq_mul_log",
+        "regionalEntropy_le_boxEntropy",
+        "boxEntropy_mono",
+        "boxEntropy_antitone",
+        "eq_of_color_eq",
+        "card_filter_not_interior_le",
+        "regionalEntropy_rectRegion_le_of_children",
+        "boxEntropy_le_of_scale",
+        "initialBoxProb",
+        "initialBoxScale",
+        "initialBoxRatio",
+        "initialBoxExponent",
+        "initialBoxConstant",
+        "initialBoxProb_pos_and_le_half",
+        "sixteen_le_initialBoxScale",
+        "one_lt_initialBoxScale",
+        "initialBoxScale_lt_initialBoxRatio_and_lt_sq",
+        "initialBoxExponent_pos_and_lt_one",
+        "boxEntropy_le_initialBoxRatio_mul",
+        "boxEntropy_le_initialBoxConstant_mul_rpow_of_scaleRecurrence",
+        "initialBoxConstantExplicit",
+        "boxEntropy_le_initialBoxConstant_mul_rpow",
+        "exists_boxEntropy_le_rpow"
+      ],
+      "sha256": "b201ee68ae9e9f5affdae541033b354075d71d77a57c130fac33b254fcd1a6a0",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/InitialBuffer.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 6,
+          "after": 6
+        },
+        "groundSpace": {
+          "before": 5,
+          "after": 5
+        },
+        "Submodule.span": {
+          "before": 3,
+          "after": 3
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "sum_range_succ_eq_sum_Icc",
+        "supportDim_le",
+        "one_le_supportDim",
+        "cutLogBudget_le_card",
+        "bufferCrossConst",
+        "bufferBudgetConst",
+        "bufferCrossConst_nonneg",
+        "one_le_bufferBudgetConst",
+        "condEntropy_le_initialBuffer_of_constants",
+        "initialPaddingScale",
+        "initialPaddingConst",
+        "initialBufferConst",
+        "one_le_initialPaddingConst",
+        "initialBufferConst_nonneg",
+        "condEntropy_le_initialBufferConst",
+        "exists_condEntropy_le_initialBuffer"
+      ],
+      "sha256": "5a556707fe0609741a8b60ddc74aaff2701b13b1c2ed08f1fe3df8a32ab091c7",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/InitialBufferReal.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_condEntropy_le_initialBuffer_real"
+      ],
+      "sha256": "ef161c696c0d555d16cf7b5f34bef468341ae9b0c2169ce6a61d3fbb4bcfe8ee",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/InitialRoundedCollarEntropy.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_regionalEntropy_initial_rounded_collar_le_rpow"
+      ],
+      "sha256": "43928e1bdedb8d805d9c25c53989f97b40076bf06bb20cdc83637fa5d3c686af",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_regionalEntropy_safe_rect_le_rpow"
+      ],
+      "sha256": "b65d344f543e55b136711baf4ade69b093648c6ac0d754be7f135269c22bfed1",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/InitialWeakRectangleShellEntropy.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_regionalEntropy_weak_rectangle_shell_le_rpow"
+      ],
+      "sha256": "b6cf74d93c51d54ff9a6e07c04927312dcf3ea14c34801b3ac254b588be7da4f",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/LatticeConstraints.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 4,
+          "after": 4
+        },
+        "0 < Δ": {
+          "before": 13,
+          "after": 13
+        },
+        "0 ≤ J": {
+          "before": 8,
+          "after": 8
+        },
+        "groundSpace": {
+          "before": 11,
+          "after": 11
+        },
+        "Submodule.span": {
+          "before": 9,
+          "after": 9
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "latticePositiveConstraints_of_locality",
+        "latticePositiveConstraintConst",
+        "latticePositiveConstraintRate",
+        "latticePositiveConstraintConst_nonneg",
+        "latticePositiveConstraintRate_pos",
+        "norm_latticePositiveConstraint_sub_map_le",
+        "latticePositiveConstraints_explicit",
+        "exists_latticePositiveConstraints",
+        "exists_latticeQuasilocalRoots",
+        "latticeFiniteSetTruncationConstant",
+        "latticeFiniteSetTruncationConstant_pos",
+        "latticeFiniteSetTruncation_of_locality",
+        "latticeTruncationRadiusConstant",
+        "latticeTruncationRadiusConstant_pos",
+        "latticeFiniteSetTruncation_explicit",
+        "exists_latticeFiniteSetTruncation",
+        "exists_latticeFiniteSetTruncation_eigenspace_eq_span",
+        "exists_latticeCrossingBudget",
+        "latticeCutCoefficient",
+        "cutBudget_le_latticeCutCoefficient",
+        "latticeCutBudgetConstant",
+        "latticeCutBudgetConstant_nonneg",
+        "latticeCutBudget_le_log",
+        "exists_latticeCutBudget_le_log"
+      ],
+      "sha256": "67a46e1a90362f15adff88e0c426b326e3570e3c6e1653513e35f35e2a7ff7db",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 5,
+          "after": 5
+        },
+        "0 ≤ J": {
+          "before": 5,
+          "after": 5
+        },
+        "groundSpace": {
+          "before": 9,
+          "after": 9
+        },
+        "Submodule.span": {
+          "before": 4,
+          "after": 4
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "collarBoxConstant",
+        "sublinearCollarConstant",
+        "sublinearCollarThreshold",
+        "sublinearCollarBound_real_of_boxEntropy_explicit",
+        "sublinearCollarBound_real_of_boxEntropy",
+        "sublinearCollarBound_real_of_initial",
+        "sublinearCollarBound_real",
+        "sublinearCollarBound_real_explicit"
+      ],
+      "sha256": "ca6cf8069989569caf57651314ebd8764352c834f4838da242bfd7472dff6bf9",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_regionalEntropy_safe_rect_le_boxError"
+      ],
+      "sha256": "e0dbb7aa948d3f8bf3cd07f6082b05b79937dabe55e263aeefbba2430a1abbf4",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/RectangularSpecialization.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 4,
+          "after": 4
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "RectangularEntropyAreaLaw",
+        "regionalEntropy_rectangleAreaLawState",
+        "UniformAreaLaw.rectangularEntropyAreaLaw",
+        "RectangularEntropyAreaLaw.squareEntropyAreaLaw"
+      ],
+      "sha256": "bffaf207d94a72c4aeafe1c0bc1d65432923e75c67e42c02962c955f709f9750",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/RegionOperatorLocalization.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "graphBallLocalizationPrefactor",
+        "graphBallLocalizationVelocity",
+        "graphBallLocalizationPrefactor_pos",
+        "graphBallLocalizationVelocity_nonneg",
+        "quasilocal_region_localization",
+        "exists_quasilocal_region_localization"
+      ],
+      "sha256": "2060b8187aad80829150955dd22c644686426b122c65fa90a11f6d540f826a92",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/SafeRectangleAreaLaw.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 2,
+          "after": 2
+        },
+        "groundSpace": {
+          "before": 4,
+          "after": 4
+        },
+        "Submodule.span": {
+          "before": 3,
+          "after": 3
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "card_edgeBoundary_rectRegion_le_of_disjoint",
+        "exists_regionalEntropy_safe_rect_le_linear",
+        "exists_initialBuffer_and_real_boxEntropy_recurrence"
+      ],
+      "sha256": "0e1e93176c7ad9966ec8c6f64a5ec16a7ba3748bcef8438dab74815656dd92ef",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyBound.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "actualCharge_energyError_le_domainGraph"
+      ],
+      "sha256": "6c662e2a4ec0cc24aab0ea99554c7148ba6b14a8556783acf5c61c901368aaae",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyCoefficients.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "CollarScan.actualChargeEntropyDefect_nonneg",
+        "charge_energy_coefficient_identity",
+        "actualChargeEnergyCoefficient",
+        "finalActualChargeEnergyThreshold",
+        "actualCharge_energy_coefficients_of_threshold_le",
+        "exists_actualCharge_energy_coefficients"
+      ],
+      "sha256": "a132aebf3c571da638f2f81cb0c4c2c1855830a9c6448ac459c70f32e1f5b498",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyDecay.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "actualCharge_energy_of_badOldHistoryThreshold_le",
+        "exists_actualCharge_energy_threshold"
+      ],
+      "sha256": "9c9eb4bf237633eb2bdf8847a4824cc702b5eb50b426ebaf1a48ffb02ff69831",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEntropySum.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "entropyGain_nonneg",
+        "sum_actualCharge_integral_le_sum_actualRounds_entropyGain_domainGraph",
+        "actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound",
+        "actualCharges_integral_bound_domainGraph"
+      ],
+      "sha256": "528aa1b6031ee8f8b33ef6e08c68f9cfe30d69d8f4e4ccea3dc6927c9a8f587a",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeParameterBound.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "mul_integral_le_of_integral_sub_le",
+        "actualCharge_integral_bound_domainGraph"
+      ],
+      "sha256": "119178738dea94eba2e96ac9ad346d37a5be1bd5253e105f78068ea0130d5f75",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeSelectionBound.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "actualCharges_selection_domainGraph_of_finiteFamilyTransportBound",
+        "actualCharges_selection_domainGraph"
+      ],
+      "sha256": "982c3792a57c01ee012e83c338f5097889089341eefea536029381c2e068c7bf",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualEnergyTerms.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 2,
+          "after": 2
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "augmentedDimensions",
+        "physicalRegion",
+        "augmentOperator",
+        "augmentOperator_one",
+        "augmentOperator_sub",
+        "augmentOperator_sum",
+        "augmentOperator_mem_Icc",
+        "augmentOperator_isSupportedOn",
+        "_root_.ManyBody.PlaneInteraction.positiveTerm",
+        "truncatedEnergyTerm",
+        "actualEnergyTerms",
+        "truncatedEnergyTerm_mem_Icc",
+        "isHermitian_sum_truncatedEnergyTerm",
+        "truncatedEnergyTerm_isSupportedOn",
+        "actualEnergyTerms_spec",
+        "sum_actualEnergyTerms",
+        "replicaEnergy_actualEnergyTerms"
+      ],
+      "sha256": "61fbcfbae4aae2a7720417e2ae95c4ae87272f28b6b742ea378251eace01dd1e",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualGlobalReplicaEnergy.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "actualFillScanRound_meanEnergy_eq_globalReplicaMeanHamiltonian",
+        "actualChargeScanRound_meanEnergy_eq_globalReplicaMeanHamiltonian"
+      ],
+      "sha256": "304fe927bbdcfa236b2a13789bf31ccdd66830fbea2ef301e015a13b33b12e97",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualMarginalTails.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 5,
+          "after": 5
+        },
+        "0 ≤ J": {
+          "before": 3,
+          "after": 3
+        },
+        "groundSpace": {
+          "before": 13,
+          "after": 13
+        },
+        "Submodule.span": {
+          "before": 9,
+          "after": 9
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "log_surprisalMoment_truncated_reducedState_le",
+        "surprisalTail_truncated_reducedState_le",
+        "truncated_reducedState_moment_tail_bounds_of_locality",
+        "truncated_reducedState_moment_tail_bounds_explicit",
+        "exists_truncated_reducedState_moment_tail_bounds"
+      ],
+      "sha256": "0992bf5f1b1a73573020456f4519c780567e06a0c296f178e1ab276155eed8a8",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualReplicaDefect.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 1,
+          "after": 1
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "norm_filteredVector_actualChargeData",
+        "actualChargeScanRound_globalLowDefectProjection_mass_ge"
+      ],
+      "sha256": "a9cd188c7447d36ba1788c9e6d1d45789625d3dd838de1a9768d060f6ece713b",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoughLower.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 2,
+          "after": 2
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_actualScan_rough_lower_norm_of_weight",
+        "exists_actualScan_rough_lower_norm"
+      ],
+      "sha256": "088f628b307996558f6e293b1cc6d4cea1774a4b7229a60e7acc4181ec0f3c58",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoughLowerPrevector.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 2,
+          "after": 2
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_actualScan_suppliedPrevector_rough_lower_of_weight",
+        "exists_actualScan_suppliedPrevector_rough_lower"
+      ],
+      "sha256": "a4335914c4a463d3ea7f9dee373a47509fb78bcfc3495887b7a2502b6930d896",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoundEntropy.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "actualBoundaryRoot",
+        "actualBoundaryRoot_even",
+        "actualRoundData_rootPath_zero_eq_boundary",
+        "actualRoundData_rootPath_one_eq_boundary",
+        "actualRoundData_rootPath_one_eq_succ_zero",
+        "actualRoundData_rootPath_one_of_last",
+        "sum_actualRoundData_logNormSq_sub",
+        "actualRoundData_crossBandCommute",
+        "actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound",
+        "actualRounds_entropy_integral_le_domainGraph"
+      ],
+      "sha256": "15c86279a1cee3041a4c98dfae85401adc3128656491f158c8394a87cb0a065d",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoundTransport.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "transportData_property_of_heq",
+        "actualRoundHistory",
+        "actualRoundChoice",
+        "actualRoundData",
+        "actualRoundData_induction",
+        "actualRoundHistory_length_add_one_le",
+        "actualRoundData_isAdmissible",
+        "FiniteFamilyTransportBound",
+        "finiteFamilyTransportBound_explicit",
+        "exists_finiteFamilyTransportBound",
+        "exists_of_finiteFamilyTransportBound",
+        "actualRounds_transport_domainGraph_of_finiteFamilyTransportBound",
+        "actualRounds_transport_domainGraph"
+      ],
+      "sha256": "5bfa01e395e3451d3cf56b599bc99c9e351cbd041e9872c847aedb11f740c578",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanMeasures.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "actualFillScanRound",
+        "actualChargeScanRound",
+        "integral_actualFillScanRound_old",
+        "integral_actualFillScanRound_new",
+        "actualFillScanRound_mass",
+        "actualFillScanRound_choiceGainSum",
+        "actualFillScanRound_energySum",
+        "integral_actualChargeScanRound_old",
+        "integral_actualChargeScanRound_new",
+        "actualChargeScanRound_mass",
+        "actualChargeScanRound_choiceGainSum",
+        "actualChargeScanRound_energySum",
+        "actualChargeScanRound_chargeDefect",
+        "actualFillScanRound_meanEnergy",
+        "actualChargeScanRound_meanEnergy"
+      ],
+      "sha256": "617fcea6af8103e6d8bbba73c29197fa39809d19b08f4632de16e048fe00c4a3",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanTransportInputs.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "ScanTransportInputs",
+        "toScanInputs",
+        "mul_rpow_le_of_le_mul_rpow_four",
+        "hasDerivAt_of_hasDerivAt_neg",
+        "withZeroCopyUnit",
+        "withZeroCopyUnit_of_pos",
+        "withZeroCopyUnit_mem_symmetricSubspace",
+        "withZeroCopyUnit_ne_zero",
+        "actualScanRound_eq_transportScanRound",
+        "actualRoundData_energyError_nonneg",
+        "continuous_log_filteredNormSq_actualRoundData",
+        "actualScanRound_of_transportScanRound",
+        "exists_scanTransportInputs_actualScan"
+      ],
+      "sha256": "ddecb60a7f3c53af32e1f4b32ee5ffc824a58fe9361d1805f7391cda11217510",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedChargeDensityEnergy.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "actualCharge_energyError_nonneg",
+        "actualCharge_defect_le_of_density_energy_bound"
+      ],
+      "sha256": "92fe84f6ff2dee8641c32e8295b79ac906e95318574d080020d641a765de4817",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedChargeEnergy.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "actualCharges_selection_energy_domainGraph_of_finiteFamilyTransportBound",
+        "actualCharges_selection_energy_domainGraph"
+      ],
+      "sha256": "bcb705370a712d97aff3001836fe804189233d3f56131e778ca258617cb8c1f9",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedSharpComparison.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "eventually_exists_selected_actualCharge_sharp_comparison"
+      ],
+      "sha256": "4497e9acaf4f9790b76fbd4fa9d7e94f4c5dfe756f929bd27206cf1dfb815ed3",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpComparison.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 1,
+          "after": 1
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "eventually_actualCharge_suppliedPrevector_sharp_comparison"
+      ],
+      "sha256": "9ce34a49150390ea7197d336085bf21771f358a003332bc6336ab5bc5ef4035b",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpLower.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 1,
+          "after": 1
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "actualTerminal_sharpLower_geometry",
+        "exists_actualScan_sharp_lower_norm"
+      ],
+      "sha256": "b2d8bdad88fca0b67c2230abdded644afdbc2550880940868d1063681fd46542",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpLowerPrevector.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 1,
+          "after": 1
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "sharp_lower_rate_of_finite_copy",
+        "sharpLower_marginalMoment_finiteProduct",
+        "actualTerminal_sharpLower_moments",
+        "sharpLower_suppliedPrevector_properties",
+        "exists_actualScan_suppliedPrevector_sharp_lower"
+      ],
+      "sha256": "a44ec307a17df6ca9a68920fbae5be5002b8940618778c323850e2f04a3b4653",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualTransportEstimates.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "actualFill_transport_domainGraph",
+        "actualCharge_transport_domainGraph"
+      ],
+      "sha256": "31d1b592f4eaf2945392af8b85dbab171b4e30a4d09419448251a18049393f3b",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "half_size_clearance",
+        "boxEntropy_power_le_of_succ_clearance"
+      ],
+      "sha256": "25d2fb6440767d3def9a63907659920832570b432cd82d4428e7ae96adf7dccc",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 2,
+          "after": 2
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "regionalEntropy_le_of_boxEntropy_power",
+        "boxEntropy_power_le_of_large_rectangles"
+      ],
+      "sha256": "ebf75d3e4126e0c9333a2b4ca050b288c6d1178a15c9bde57777cf7d8ebbc2ae",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/GenericChargeEnergy.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "ScannerExponents.badOldHistoryThreshold",
+        "ScannerExponents.badOldHistory_of_badOldHistoryThreshold_le",
+        "exists_generic_badOldHistory_threshold",
+        "generic_actualCharge_energy_of_threshold_le",
+        "charge_energy_coefficient_identity",
+        "ScannerExponents.actualChargeEnergyThreshold",
+        "ScannerExponents.actualCharge_energy_coefficients_of_threshold_le",
+        "ScannerExponents.exists_actualCharge_energy_coefficients"
+      ],
+      "sha256": "e7061b5f555b560251a835e329073b6257e7720440d4b8397dfba8951d2e838c",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/GenericSelectedChargeEnergy.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "actualCharge_energyError_nonneg",
+        "actualCharge_defect_le_of_density_energy_bound_at_exponent"
+      ],
+      "sha256": "64d8ed2fe378e49289a2bf71c25775caa62707463d255aec86f323658eb9c22a",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 11,
+          "after": 11
+        },
+        "0 ≤ J": {
+          "before": 11,
+          "after": 11
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "boxImprovementThreshold",
+        "boxImprovementConstant",
+        "boxImprovementConstant_pos",
+        "uniform_boxEntropy_improvement_explicit",
+        "exists_uniform_boxEntropy_improvement_of_finiteFamilyTransportBound",
+        "exists_uniform_boxEntropy_improvement_of_threshold_le",
+        "exists_uniform_boxEntropy_improvement",
+        "physicalBoxBootstrapConstant",
+        "boxEntropy_le_boxError_of_initial_explicit",
+        "exists_boxEntropy_le_boxError_of_initial_of_finiteFamilyTransportBound",
+        "exists_boxEntropy_le_boxError_of_initial",
+        "exists_boxEntropy_le_boxError",
+        "initialBoxConstantExplicit_nonneg",
+        "physicalBoxConstantExplicit",
+        "physicalBoxConstantExplicit_nonneg",
+        "boxEntropy_le_boxError_explicit"
+      ],
+      "sha256": "64044a638580b516e971152a5bed7a91cf31f77b2e5f0de8948bb921856e542a",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalScanner.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "HistoryFacts.mono",
+        "scanner_estimate_actualScan"
+      ],
+      "sha256": "27b1e3a3213a5b19886163dab01d7739e3694f75578cf47cd6137957f1caa236",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalTemplateInformation.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_template_final_mutualInformation"
+      ],
+      "sha256": "75b7ce36eb932f871feac447e9c7f47b69c79afce64028029ebf666f096d87d1",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/ScanTruncationInputs.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "abs_log_card_sub_le_of_window",
+        "target",
+        "shell",
+        "shell_subset_truncationSet",
+        "sqrt_truncationError_le",
+        "exists_scanTruncation"
+      ],
+      "sha256": "7f26185f4cc9d9272b83f565e71236d5b52544d8122ea80dfbcf8c9386e8c8aa",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceActualInformation.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 3,
+          "after": 3
+        },
+        "groundSpace": {
+          "before": 7,
+          "after": 7
+        },
+        "Submodule.span": {
+          "before": 6,
+          "after": 6
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "sourceTarget_actual_mutualInformation_bound_explicit",
+        "exists_sourceTarget_actual_mutualInformation_bound_of_threshold_le",
+        "exists_sourceTarget_actual_mutualInformation_bound"
+      ],
+      "sha256": "e5f71f33cd959c535ce97777d1165a3afd4884ba27ee661de585db6a5f72bd20",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceBootstrapEntropy.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 4,
+          "after": 4
+        },
+        "groundSpace": {
+          "before": 5,
+          "after": 5
+        },
+        "Submodule.span": {
+          "before": 4,
+          "after": 4
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "restored_entropy_le_of_selected_rough_comparisons",
+        "sourceBootstrapEntropyThreshold",
+        "sourceBootstrap_entropy_improvement_explicit",
+        "exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound",
+        "exists_sourceBootstrap_entropy_improvement_of_threshold_le",
+        "exists_sourceBootstrap_entropy_improvement"
+      ],
+      "sha256": "0a1b8b447e6de5c2a7a0d3368ae98902a176bb1d7ae2503c20573f98e357a32c",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceChargeSelection.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 4,
+          "after": 4
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_sourceTarget_selected_actualCharge_density_energy"
+      ],
+      "sha256": "62854621196cf42e94cfa86bac548dc8a31309d6626508625d24d19ca22b0f5b",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceFinalInformation.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 3,
+          "after": 3
+        },
+        "0 ≤ J": {
+          "before": 3,
+          "after": 3
+        },
+        "groundSpace": {
+          "before": 4,
+          "after": 4
+        },
+        "Submodule.span": {
+          "before": 3,
+          "after": 3
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "sourceFinalInformationThreshold",
+        "two_le_sourceFinalInformationThreshold",
+        "sourceFinalInformationConstant",
+        "sourceFinalInformationConstant_pos",
+        "sourceTarget_finalScale_mutualInformation_explicit",
+        "exists_sourceTarget_finalScale_mutualInformation_of_threshold_le",
+        "exists_sourceTarget_finalScale_mutualInformation"
+      ],
+      "sha256": "139a11b9bf2e3755b439b1dcc64da52ea9975435ab0c6181bb060a862a97f49d",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceRoughSelection.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 5,
+          "after": 5
+        },
+        "0 ≤ J": {
+          "before": 4,
+          "after": 4
+        },
+        "groundSpace": {
+          "before": 10,
+          "after": 10
+        },
+        "Submodule.span": {
+          "before": 8,
+          "after": 8
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "_root_.TNLean.PEPS.AreaLaw.Scan.ScannerExponents.sourceRoughSelectionThreshold",
+        "sourceTarget_selected_actualCharge_rough_comparison_explicit",
+        "exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFamilyTransportBound",
+        "exists_sourceTarget_selected_actualCharge_rough_comparison_of_threshold_le",
+        "exists_sourceTarget_selected_actualCharge_rough_comparison"
+      ],
+      "sha256": "2f2b06abe8cfe78b6f4210eb79f55c89e0afd2cb08a99961e0f40af8c7bb1800",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceRoundedInformation.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 3,
+          "after": 3
+        },
+        "0 ≤ J": {
+          "before": 3,
+          "after": 3
+        },
+        "groundSpace": {
+          "before": 4,
+          "after": 4
+        },
+        "Submodule.span": {
+          "before": 3,
+          "after": 3
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "sourceRoundedInformationThreshold",
+        "two_le_sourceRoundedInformationThreshold",
+        "sourceTarget_finalScale_mutualInformation_of_rounded_scales_explicit",
+        "exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales_of_threshold_le",
+        "exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales"
+      ],
+      "sha256": "a69607f7b9617b43e326e69e01ab5b27d20eba920a0b702a6c5759634e80f868",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 1,
+          "after": 1
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 7,
+          "after": 7
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "ScannerHypotheses",
+        "typicalWindow",
+        "scanPrevector",
+        "ScannerStatement",
+        "scannerStatement"
+      ],
+      "sha256": "7811fca0a783e1b2ea72f790d7680b5121e2e35d1a0533910e46e3863cc51a40",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedDensity.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_sourceTarget_selected_actualCharge_source_density"
+      ],
+      "sha256": "51a9689b552d1dec65aa5a7ff7b70f327316635758b55ca224556334eb042521",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedEnergy.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_sourceTarget_selected_actualCharge_source_density_energy"
+      ],
+      "sha256": "cc8179d1a76f4de780dd463cf6115cc73b91590335fc6e8ab2b2b8d842dd8dd4",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpComparison.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 4,
+          "after": 4
+        },
+        "groundSpace": {
+          "before": 10,
+          "after": 10
+        },
+        "Submodule.span": {
+          "before": 8,
+          "after": 8
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "sourceSelectedSharpThreshold",
+        "sourceTarget_selected_actualCharge_sharp_comparison_explicit",
+        "exists_sourceTarget_selected_actualCharge_sharp_comparison_of_finiteFamilyTransportBound",
+        "exists_sourceTarget_selected_actualCharge_sharp_comparison_of_threshold_le",
+        "exists_sourceTarget_selected_actualCharge_sharp_comparison"
+      ],
+      "sha256": "ab702b4e54435576c8dec7ff34589ea279958716def82b2dec30b0c08cbdd1df",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpDensity.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_sourceTarget_selected_actualCharge_sharp_density"
+      ],
+      "sha256": "299c6e22892423bbf6d15d9f2298e10883b1871a0715c23836f0059845bfb74b",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpEnergy.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 3,
+          "after": 3
+        },
+        "groundSpace": {
+          "before": 7,
+          "after": 7
+        },
+        "Submodule.span": {
+          "before": 6,
+          "after": 6
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "sourceSelectedSharpEnergyThreshold",
+        "two_le_sourceSelectedSharpEnergyThreshold",
+        "sourceTarget_selected_actualCharge_sharp_energy_explicit",
+        "exists_sourceTarget_selected_actualCharge_sharp_energy_of_threshold_le",
+        "exists_sourceTarget_selected_actualCharge_sharp_energy"
+      ],
+      "sha256": "5c070743a4393f9721c2df5bff6784e1b080dc2e9456b1573ec1fe25fb2cd599",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceStatusMarginalMoments.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_source_statusMarginal_moment_bounds"
+      ],
+      "sha256": "5f0729282ffa5cebfb3e45c9513f5a7ad44fbbe769bff3070fdcd4fcbc692501",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpMoments.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 3,
+          "after": 3
+        },
+        "groundSpace": {
+          "before": 7,
+          "after": 7
+        },
+        "Submodule.span": {
+          "before": 6,
+          "after": 6
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "targetSharpMomentThreshold",
+        "truncated_target_sharp_moments_explicit",
+        "exists_truncated_target_sharp_moments_of_targetSharpMomentThreshold_le",
+        "exists_truncated_target_sharp_moments"
+      ],
+      "sha256": "332becc3ec36fac3ec2fb8815ad283d3d3b10c52405e22ccc048fbb471735496",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpUpper.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 2,
+          "after": 2
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_truncated_target_actualSharpUpper"
+      ],
+      "sha256": "6db84f07ed22e6193fc6529609f56135537e11c4650ad82fdaabb0b313f308af",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/StatusMarginalMoments.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 4,
+          "after": 4
+        },
+        "Submodule.span": {
+          "before": 3,
+          "after": 3
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "tailRadius_antitone_budget",
+        "tailRadius_eq_div_sqrt",
+        "log_surprisalMoment_truncated_reducedState_le_common",
+        "exists_truncated_statusMarginal_moment_bounds"
+      ],
+      "sha256": "2a7b053207a33d9fe7be1fc7a5367cfbb276f1822fda59016f03ca63e97b5eef",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetNormAttachment.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_suppliedTarget_actualCharge_norm_bounds"
+      ],
+      "sha256": "e844962572d187a06a486cc91e59688bfe9409c2044256c68d53cd2d856d9be8",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetStatusMoments.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "exists_suppliedTarget_statusMarginal_moment_bounds"
+      ],
+      "sha256": "19e135e17c2b713a50d51be27eb5433a3f9e74af55245dbcac395a62ec45b38b",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/TargetTypicalWindow.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 5,
+          "after": 5
+        },
+        "0 ≤ J": {
+          "before": 4,
+          "after": 4
+        },
+        "groundSpace": {
+          "before": 9,
+          "after": 9
+        },
+        "Submodule.span": {
+          "before": 8,
+          "after": 8
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "target_typicalSet_bounds",
+        "typicalTailThreshold",
+        "typical_tail_bound_of_typicalTailThreshold_le",
+        "targetBudgetConstant",
+        "targetTypicalWindowThreshold",
+        "truncated_target_typical_window_explicit",
+        "exists_truncated_target_typical_window_of_targetTypicalWindowThreshold_le",
+        "exists_truncated_target_typical_window_uniform_in_q",
+        "exists_truncated_target_typical_window"
+      ],
+      "sha256": "e2cb55798e1c01bb54381a3d86985c2f30254ee1ee690f3f78e9f6ad5e55083b",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 3,
+          "after": 3
+        },
+        "0 ≤ J": {
+          "before": 3,
+          "after": 3
+        },
+        "groundSpace": {
+          "before": 4,
+          "after": 4
+        },
+        "Submodule.span": {
+          "before": 3,
+          "after": 3
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "template_target_volume",
+        "template_scanner_clearance",
+        "collarMultiplicity",
+        "collarConstant",
+        "collarConstant_pos",
+        "collarThreshold",
+        "two_le_collarThreshold",
+        "template_final_mutualInformation_of_boxEntropy_explicit",
+        "exists_template_final_mutualInformation_of_boxEntropy_of_threshold_le",
+        "exists_template_final_mutualInformation_of_boxEntropy"
+      ],
+      "sha256": "58ad54ecdc2e5e8b381fe94673e66c1e2ee3fe671ad6da6df6a3cdc5d365820b",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean",
+      "historical_text_conflict": true,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 2,
+          "after": 2
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 3,
+          "after": 3
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "template_pieceScale_le_size",
+        "templateSourceEntropyConstant",
+        "templateSourceEntropyConstant_nonneg",
+        "template_source_entropy_bounds",
+        "exists_template_source_entropy_bounds",
+        "template_final_source_entropy_bounds_of_boxEntropy",
+        "exists_template_final_source_entropy_bounds_of_boxEntropy"
+      ],
+      "sha256": "9142d90fffe17edf63c91110b7d20b7b9d6ade41fce6cd0b0e43587f908de3f9",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/SupportedGaussianIntegral.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 1,
+          "after": 1
+        },
+        "groundSpace": {
+          "before": 0,
+          "after": 0
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "supported_gaussian_integral_of_localization",
+        "supported_gaussian_integral",
+        "exists_supported_gaussian_integral"
+      ],
+      "sha256": "915179220529618080a11b29fc5409fb16f809e29b315fc06afe262bcea6808b",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/TailParameter.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 2,
+          "after": 2
+        },
+        "0 ≤ J": {
+          "before": 3,
+          "after": 3
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "card_crossingTerms_le_edgeBoundary",
+        "tailParameterConstant",
+        "one_le_tailParameterConstant",
+        "cutLogBudget_le_edgeBoundary",
+        "typicalWidthConstant",
+        "concentrationWidth_le",
+        "typicalMass_le_typicalMass_of_le",
+        "_root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_edgeBoundary"
+      ],
+      "sha256": "3f70a77c2e7bb797ce95d159b29913897d5ef89a48eb4dce1b294ebe0b7877ed",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/TheoremStatements.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "UniformAreaLaw"
+      ],
+      "sha256": "cccaa7ccf3c6120ca1398864fb605917ccce30c22792f4f61458beb2dcce3cec",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/VertexBoundaryCorollaries.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 1,
+          "after": 1
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "regionalEntropy_le_four_mul_innerBoundary_card",
+        "regionalEntropy_le_two_mul_endpointBoundary_card",
+        "UniformAreaLaw.vertex_boundary_bounds"
+      ],
+      "sha256": "79c713263f353496a1ecbcab959f34987a974fafccc0aa578ca28f68e4e2fad2",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/ZeroBoundary.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Unbundle existing term Hermiticity/norm fields; keep restored PSD/member conditions and positive-gap bridges. Scope-marker counts are a regression screen, not a proof of equivalence.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 0,
+          "after": 0
+        },
+        "0 < Δ": {
+          "before": 4,
+          "after": 4
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 5,
+          "after": 5
+        },
+        "Submodule.span": {
+          "before": 4,
+          "after": 4
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "`TNLean.Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint`,",
+        "mem_iff_of_adj_of_edgeBoundary_eq_empty",
+        "mem_iff_of_walk_of_edgeBoundary_eq_empty",
+        "subset_or_disjoint_of_edgeBoundary_eq_empty",
+        "edgeBoundary_connectedComponents_eq_empty",
+        "edgeBoundary_connectedComponent_eq_empty",
+        "regionalEntropy_eq_zero_of_forall_subset_or_disjoint",
+        "regionalEntropy_eq_zero_of_edgeBoundary_eq_empty",
+        "regionalEntropy_eq_zero_of_range_eq_zero",
+        "trace_reducedState",
+        "regionalEntropy_eq_zero_of_card_le_one",
+        "regionalEntropy_eq_zero_of_q_eq_one",
+        "regionalEntropy_eq_zero_of_domain_eq_empty",
+        "regionalEntropy_connectedComponents_eq_zero"
+      ],
+      "sha256": "f2db667bc1b8a913c43bb0ecb80f2a0b7e87e6ea9999dd062127c4fea771037b",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "scripts/range_square_zero_gap_regression.lean",
+      "historical_text_conflict": false,
+      "migration": "retained; already canonical constructor/API",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Persistent degenerate/conditional fixture retained; canonical constructor with explicit term bounds where needed.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 2,
+          "after": 2
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 1,
+          "after": 1
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "zeroSquare",
+        "omega",
+        "squareGroundState"
+      ],
+      "sha256": "73fa9d483160da883c4bc3dff69dcd946bc430acadb516353a4d5f2ed225a149",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "scripts/box_supremum_zero_gap_regression.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Persistent degenerate/conditional fixture retained; canonical constructor with explicit term bounds where needed.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 3,
+          "after": 3
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 2,
+          "after": 2
+        },
+        "Submodule.span": {
+          "before": 0,
+          "after": 0
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "domain",
+        "zeroHamiltonian",
+        "zeroHermitian",
+        "zeroNorm",
+        "omega",
+        "rectangle",
+        "omega_norm",
+        "projector_gap",
+        "omega_mem",
+        "safe_empty",
+        "actual_value_mem",
+        "values_at_zero_empty"
+      ],
+      "sha256": "865f4b10e7651f59aa78f3c31b7e62d44729c741de6153cad3f1157fd4179178",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    },
+    {
+      "path": "scripts/generic_gap_boundary_regression.lean",
+      "historical_text_conflict": false,
+      "migration": "source migrated",
+      "static_review": "scope-marker and declaration inventory checked; no kernel or complete semantic clearance",
+      "basis": "Persistent degenerate/conditional fixture retained; canonical constructor with explicit term bounds where needed.",
+      "scope_marker_counts": {
+        ".PosSemidef": {
+          "before": 3,
+          "after": 3
+        },
+        "0 < Δ": {
+          "before": 0,
+          "after": 0
+        },
+        "0 ≤ J": {
+          "before": 0,
+          "after": 0
+        },
+        "groundSpace": {
+          "before": 6,
+          "after": 6
+        },
+        "Submodule.span": {
+          "before": 1,
+          "after": 1
+        },
+        "∀ K'": {
+          "before": 0,
+          "after": 0
+        },
+        "Δ * (1 -": {
+          "before": 0,
+          "after": 0
+        }
+      },
+      "declarations": [
+        "domain",
+        "zeroHamiltonian",
+        "zeroHermitian",
+        "zeroNorm",
+        "omega",
+        "norm_omega",
+        "omega_mem",
+        "zero_projector_bound",
+        "groundSpace_not_span"
+      ],
+      "sha256": "bfcfc1cd59ead1a7b4c95f3ce4ad71c6dcc164da6564794fc2c0c6909240292c",
+      "lean_validation": "NOT RUN: only ~100 MiB free; no QIC72942858 artifact validation; old-pin caches unused"
+    }
+  ]
+}

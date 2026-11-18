@@ -26,6 +26,14 @@ finite set of sites, instantiated here on the chain. The registers of the
 physical protocol are the sheets of `TNLean/Lattice/Sheet/`, an owner for each
 site of the chain, with no encoded holes.
 
+The canonical objects are `ManyBody.ChainInteraction L q R` and
+`ManyBody.DomainInteraction Λ q R`, abbreviations of `ManyBody.Interaction`.
+Their fields are `term` and `mem`, and their sum is `.hamiltonian`.
+The real bound `J` and termwise Hermiticity are explicit hypotheses, not bundled
+fields. The general ground-vector and projector inequalities allow every real
+`Δ`; results using positive-gap tail or area-law estimates retain `0 < Δ`.
+No uniqueness is inferred at zero gap.
+
 ## Statements
 
 

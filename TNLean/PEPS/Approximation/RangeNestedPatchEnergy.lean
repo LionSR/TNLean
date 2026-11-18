@@ -143,7 +143,7 @@ open Classical in
 /-- The normalized regularized output of every feasible patch minimum on the range-`R`
 nested squares has excitation energy at most `C_E κ²`, with
 `C_E = rangePatchEnergyConstant q R J`, for a range-`R` Hamiltonian on any finite induced
-domain whose ground space at `E₀` is the line through a unit vector. No gap is used.
+domain with a unit vector in the canonical `E₀` eigenspace. No gap or uniqueness is used.
 
 The regions are the selected range-`R` squares, including repeated clipped regions, and
 the weights are exactly `κ / m`. At `R = 1` the squares are the source squares.
@@ -154,7 +154,7 @@ theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
     {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J E₀ : ℝ} (H : PlaneInteraction Λ q R)
         (hH : ∀ X, (H.term X).IsHermitian) (hHJ : ∀ X, ‖H.term X‖ ≤ J)
     (hR : 1 ≤ R) (hJ : 0 ≤ J) (Ψ : Lattice.StateSpace Λ q)
-    (hΩ : ‖Ψ‖ = 1) (hspan : groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ψ})
+    (hΩ : ‖Ψ‖ = 1) (hmem : Ψ ∈ groundSpace H.hamiltonian E₀)
     (center : ℝ × ℝ) (u κ b : ℝ) (hu : 0 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
     letI : LinearOrder (Lattice.Site Λ) :=
       (Fintype.equivFin (Lattice.Site Λ)).linearOrder
@@ -214,7 +214,7 @@ theorem _root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le
   have hop : H.hamiltonian = ∑ X, T X := rfl
   have heig₀ : Matrix.toEuclideanLin (∑ X, T X) Ψ = (E₀ : ℂ) • Ψ := by
     rw [← hop]
-    exact ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ψ)
+    exact ManyBody.mem_groundSpace_iff.mp hmem
   have heig := Entropy.toEuclideanLin_conj_apply_eq heig₀ hinv
     (((‖Matrix.toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
       Ψ‖⁻¹ : ℝ) : ℂ))

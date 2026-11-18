@@ -154,7 +154,8 @@ theorem exists_rational_sampled_viable_successor_polynomial
   obtain ⟨N, A, B', _, hdec, _, hgood⟩ := hcuts (n + 1) hi
   let V := successiveStep hi m Finset.univ A T₀
   have hV := hgood (F * L ^ k) m (bondTrimSet hi m T₀) htrim
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ
+    (hspan ▸ Submodule.mem_span_singleton_self _)
   have hbudgets := hsample L E₀ hL hE₀ hE₀L hEB
   have hVcard : V.card ≤ C * L ^ p := by
     calc

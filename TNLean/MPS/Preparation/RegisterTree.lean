@@ -124,7 +124,7 @@ theorem isZeroOn_pairLayerOp_mulVec_productVector {M N : ℕ} [NeZero d] {ℓ : 
   intro x hx i hi
   rw [pairLayerOp_mulVec_apply] at hx
   split_ifs at hx with h
-  · obtain ⟨b, y, hy1, hy2, rfl⟩ := (Finset.mem_filter.mp hi).2
+  · obtain ⟨b, y, hy1, hy2, rfl⟩ := hi
     have hx0 := h (blockSite hN b y) fun b' j hj => by
       have := (blockSite_mem_pairSite hN hr b y).mp ⟨b', j, hj⟩
       omega

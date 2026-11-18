@@ -124,9 +124,16 @@ theorem uniformAreaLaw_explicit_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (h
       (mul_le_mul_of_nonneg_right hB (Real.rpow_nonneg (Nat.cast_nonneg r) _))
   refine ⟨uniformAreaLawConstantOf_nonneg hq _ _, ?_⟩
   exact regionalEntropy_le_of_collar_amplification_twoFamilies_constants hq hΔ
-    (sublinearCollarBound_real_of_boxEntropy_explicit (D₀ := 2 * (R : ℝ) + 11) (Ctpl := 24) q R
-      hq hJ hΔ (by linarith) le_rfl hB₀ hbox hc₀ htr)
-    (amplificationBound_explicit (J := J) (C₀ := max (sublinearCollarConstant q J Δ B) 1)
+    (by
+      intro n s hn Λ h hh hhJ E₀ Ω hΩ hpsd hmem
+      obtain ⟨-, -, hgap, hspan⟩ :=
+        (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+          ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
+      exact sublinearCollarBound_real_of_boxEntropy_explicit
+        (D₀ := 2 * (R : ℝ) + 11) (Ctpl := 24) q R
+        hq hJ hΔ (by linarith) le_rfl hB₀ hbox hc₀ htr
+        n s hn Λ h hh hhJ E₀ Ω hΩ hgap hspan)
+    (amplificationBoundAt_explicit (J := J) (C₀ := max (sublinearCollarConstant q J Δ B) 1)
       q R hΔ (lt_max_of_lt_right one_pos) 100)
     (isTwoFamilyDecompositionConstant_twoFamilyDecompositionConstant _ _ _
       Geometry.isBirthSeparationConstant_birthTemplateSeparationConstant)

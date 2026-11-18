@@ -189,20 +189,22 @@ area-law Theorem 1.1 and Corollary 1.2. -/
 theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
     (hbound : ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q 1, (∀ X, (h.term X).IsHermitian) →
         (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
-      ∀ Ω : Lattice.StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+      ∀ Ω : Lattice.StateSpace Λ q, ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+      Ω ∈ groundSpace h.hamiltonian E₀ →
         ∀ A : Finset (Lattice.Site Λ),
           Lattice.regionalEntropy Λ q Ω A ≤ C * (Lattice.edgeBoundary Λ A).card)
     {L : ℕ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
         {E₀ : ℝ} {Ω : StateSpace L q}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
-    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Vertex L)) :
+    (hΩ : ‖Ω‖ = 1) (hgap : (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef)
+    (hmem : Ω ∈ groundSpace h.hamiltonian E₀) (A : Finset (Vertex L)) :
     FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
       C * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e} := by
-  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hh hΩ hgap hspan
+  obtain ⟨hΩ', hgap', hmem'⟩ := h.projectorGap_toAreaLawHamiltonian hh hΩ hgap hmem
   have := hbound (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian
     h.isHermitian_toAreaLawHamiltonian_term (h.norm_toAreaLawHamiltonian_term_le hhJ) E₀
-    (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap' hspan'
+    (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap' hmem'
         (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
   rw [Lattice.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
   exact (finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω A).symm.trans_le
@@ -218,7 +220,11 @@ theorem _root_.TNLean.PEPS.AreaLaw.UniformAreaLaw.squareEntropyAreaLaw
     (harea : AreaLaw.UniformAreaLaw) : SquareEntropyAreaLaw := by
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q (by omega) 1 J Δ hJ hΔ
-  exact ⟨C, hC, fun _ _ ⟨h, hh, hhJ, _, hΩ, hgap, hspan⟩ A ↦
-    finiteProductEntropy_le_of_areaLawBound hbound h hh hhJ hΩ hgap hspan A⟩
+  exact ⟨C, hC, fun _ _ ⟨h, hh, hhJ, _, hΩ, hgap, hmem⟩ A ↦
+    finiteProductEntropy_le_of_areaLawBound
+      (fun Λ H hH hHJ E₀ Ω hn hg hm ↦ by
+        obtain ⟨-, -, hg, hs⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+          ⟨hn, ManyBody.mem_groundSpace_iff.mp hm, hg⟩
+        exact hbound Λ H hH hHJ E₀ Ω hn hg hs) h hh hhJ hΩ hgap hmem A⟩
 
 end TNLean.PEPS.Approximation
