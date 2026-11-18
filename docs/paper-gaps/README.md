@@ -121,13 +121,16 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   and RVB tensors are placed on the simple torus graph, on which a torus of width or
   height two has a single edge between neighbouring sites, so their state
   formulas are stated for tori of width and height at least three; the GHZ
-  example holds on every torus.
-- `rmp_honeycomb_cluster_peps.tex` (local correction, open) records that the
-  printed honeycomb parent Hamiltonian, the sum of the terms `X Z Z Z`, has the
-  common `-1`
-  eigenvector as ground state, so the sign is reversed; that the vertex tensor
-  of the honeycomb cluster PEPS is not injective, while plaquette blocking
-  gives injectivity (not formalized); and the brick-wall torus used.
+  example holds on every torus. It also records the brick-wall honeycomb of the
+  cluster state, which has three distinct neighbours per site for even height and
+  width at least three.
+- `rmp_honeycomb_cluster_peps.tex` (local correction, resolved) records that
+  the printed honeycomb parent Hamiltonian, the sum of the terms `X Z Z Z`, has
+  the common `-1` eigenvector as ground state, so the sign is reversed.
+- `rmp_honeycomb_cluster_injectivity.tex` (false source claim, open) records
+  that the honeycomb cluster PEPS, called injective by the source, has
+  non-injective vertex tensors and a non-injective two-site blocked tensor,
+  while blocking over hexagonal plaquettes gives injectivity (not formalized).
 - `rmp_peps_czx_bond_orientation.tex` (false source claim) records that the
   printed CZX tensor, contracted with equal labels at the two ends of each
   bond, gives GHZ states on diagonal loops rather than the plaquette state,

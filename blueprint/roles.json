@@ -497,15 +497,13 @@
     },
     "ch:mpo_algebras": {
       "theorems": [
-        "thm:mpoalg_fusion_tensors_exist",
-        "thm:mpoalg_associator_cocycle"
+        "thm:mpoalg_fusion_tensors_exist"
       ],
       "corollaries": [
         "thm:mpoalg_action_tensors_exist"
       ],
       "notes": {
-        "thm:mpoalg_fusion_tensors_exist": "Existence of fusion tensors, the lift of periodic fusion to the virtual level",
-        "thm:mpoalg_associator_cocycle": "The associator is a three-cocycle"
+        "thm:mpoalg_fusion_tensors_exist": "Existence of fusion tensors, the lift of periodic fusion to the virtual level"
       }
     },
     "ch:local_quantum_circuits": {
