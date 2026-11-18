@@ -405,6 +405,7 @@ import TNLean.PEPS.TorusDeformedWindow
 import TNLean.PEPS.TorusDirectedBondUpdate
 import TNLean.PEPS.TorusDualCollar
 import TNLean.PEPS.TorusDualFaceGeneratorElimination
+import TNLean.PEPS.TorusDualFiniteFaceElimination
 import TNLean.PEPS.TorusDualFlatTransport
 import TNLean.PEPS.TorusDualFluxDetection
 import TNLean.PEPS.TorusDualFluxString
@@ -413,6 +414,7 @@ import TNLean.PEPS.TorusDualOpenDeformation
 import TNLean.PEPS.TorusDualPath
 import TNLean.PEPS.TorusDualPathPresentation
 import TNLean.PEPS.TorusDualPresentationCompleteness
+import TNLean.PEPS.TorusDualProperSupportNormalForm
 import TNLean.PEPS.TorusDualRectangle
 import TNLean.PEPS.TorusDualRectangleFlux
 import TNLean.PEPS.TorusDualWinding

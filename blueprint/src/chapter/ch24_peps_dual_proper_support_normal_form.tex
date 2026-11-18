@@ -1,0 +1,102 @@
+\begin{lemma}[Finite face elimination for every proper support]
+    \label{lem:peps_dual_finite_face_elimination}
+    \lean{TNLean.PEPS.exists_torusDualFaceEliminationSequence}\leanok
+    \uses{def:peps_dual_face_generator_elimination}
+    Let both periods be positive and let $R\subsetneq X$ be the allowed
+    primal square support. There exists a finite list of tagged native faces
+    whose substitution composition $\Sigma$ has the following properties:
+    its length is at most $|X|$, every listed face has its primal support in $R$,
+    and for every $v$ with $v+(1,1)\in R$,
+    \begin{align}
+        \Sigma(r_v)=1.
+        \label{eq:peps_dual_finite_face_elimination}
+    \end{align}
+    The list is constructed from $R$, independently of any compared paths.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_dual_face_elimination_locality}
+    Choose an excluded primal support $c$ and put $o=c-(1,1)$. Rank the
+    actual face bases by
+    \begin{align}
+        \kappa(v)=\overline{v_1-o_1}+\overline{v_2-o_2},
+        \label{eq:peps_dual_face_elimination_rank}
+    \end{align}
+    where bars are least nonnegative coordinate representatives.
+    An allowed face has positive rank. If its first shifted coordinate is
+    positive, choose west substitution; otherwise choose south substitution.
+    The corresponding west or south predecessor has strictly smaller rank.
+    A positive shifted coordinate also makes the required period exceed one.
+    Choose an allowed face $v$ of least rank and recurse on the remaining
+    allowed faces. Its substitution $\sigma_v$ fixes every remaining face
+    relation, since the only other incident face has smaller rank and
+    hence is not among those remaining. Thus, for every remaining face $w$,
+    \begin{align}
+        \Sigma=\Sigma_{\rm tail}\circ\sigma_v,\qquad
+        \Sigma(r_v)=1,\qquad
+        \Sigma(r_w)=\Sigma_{\rm tail}(r_w)=1.
+        \label{eq:peps_dual_face_elimination_induction}
+    \end{align}
+    The induction adds exactly one list entry for each allowed face base,
+    giving the stated finite bound.
+\end{proof}
+
+\begin{lemma}[A finite face certificate classifies parallel paths]
+    \label{lem:peps_dual_face_certificate_classification}
+    \lean{TNLean.PEPS.torusDualHomotopy_iff_faceElimination_word_eq}\leanok
+    \uses{def:peps_dual_path_word,def:peps_dual_flux_homotopy,
+        def:peps_dual_face_generator_elimination}
+    Let both periods be positive and let $R$ be any allowed primal support.
+    Suppose a finite list uses only allowed faces and its substitution
+    composition $\Sigma$ kills every allowed face relator. For parallel paths,
+    \begin{align}
+        p\sim_Rq\quad\Longleftrightarrow\quad\Sigma(W(p))=\Sigma(W(q)).
+        \label{eq:peps_dual_face_certificate_classification}
+    \end{align}
+    The finite certificate conditions are independent of the compared paths.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_dual_flat_transport_invariance,
+        lem:peps_dual_face_elimination_sequence,
+        lem:peps_dual_finite_presentation_classification,
+        def:peps_dual_finite_presentation}
+    The maps $F_e(z)=\Sigma(W(e))z$ form a reversible transport flat on the
+    allowed squares, proving necessity. For sufficiency the native quotient
+    $\pi_R$ is flat on each selected face, so
+    \begin{align}
+        \pi_R\circ\Sigma=\pi_R.
+        \label{eq:peps_dual_proper_support_quotient}
+    \end{align}
+    By~(\ref{eq:peps_dual_proper_support_quotient}), equal transformed words
+    have equal original quotient words, and finite-presentation completeness
+    applies.
+\end{proof}
+
+\begin{lemma}[A reduced-word normal form for every proper square support]
+    \label{lem:peps_dual_proper_support_normal_form}
+    \lean{TNLean.PEPS.exists_torusDualProperSupportNormalForm}\leanok
+    \uses{def:peps_dual_path_word,def:peps_dual_flux_homotopy,
+        lem:peps_dual_finite_face_elimination}
+    Let both periods be positive and $R\subsetneq X$. One list as above,
+    of length at most $|X|$ and using only allowed faces, satisfies for every
+    pair of finite labelled paths $p,q:a\to b$,
+    \begin{align}
+        p\sim_Rq
+        \quad\Longleftrightarrow\quad
+        \operatorname{red}(\Sigma(W(p)))
+        =\operatorname{red}(\Sigma(W(q))).
+        \label{eq:peps_dual_proper_support_normal_form}
+    \end{align}
+    This is existence of a finite geometric reduced-word classification.
+    No extracted executable general decision procedure or complexity bound
+    is asserted. Full support has its separate displacement classification.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:peps_dual_finite_face_elimination,
+        lem:peps_dual_face_certificate_classification}
+    Lemma~\ref{lem:peps_dual_finite_face_elimination} supplies the list with
+    the stated length, support and vanishing-relator properties.
+    Lemma~\ref{lem:peps_dual_face_certificate_classification} then identifies
+    $p\sim_Rq$ with $\Sigma(W(p))=\Sigma(W(q))$.
+    Free reduction identifies equal free-group elements with equal reduced
+    words, giving~(\ref{eq:peps_dual_proper_support_normal_form}).
+\end{proof}
