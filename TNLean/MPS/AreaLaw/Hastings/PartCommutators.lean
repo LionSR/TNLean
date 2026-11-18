@@ -228,7 +228,7 @@ theorem _root_.ManyBody.ChainInteraction.commutator_termSum_inner_eq_sum
 /-- The commutator `[H, H_A]` has norm at most `|C| (R + 1) 2^{2R+1} · 2 J²`, with `|C|` the
 number of split terms. Hastings, arXiv:0705.2024v4, `law16.tex`, line 794. -/
 theorem _root_.ManyBody.ChainInteraction.norm_commutator_termSum_inner_le
-    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (h : ChainInteraction L q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (A : Finset (Fin L)) :
     ‖h.hamiltonian * h.termSum (Finset.univ.filter fun X ↦ X.1 ⊆ A) -
         h.termSum (Finset.univ.filter fun X ↦ X.1 ⊆ A) * h.hamiltonian‖ ≤
@@ -247,7 +247,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_commutator_termSum_interval_le
     ‖h.hamiltonian * h.termSum (Finset.univ.filter fun X ↦ X.1 ⊆ interval L a b) -
         h.termSum (Finset.univ.filter fun X ↦ X.1 ⊆ interval L a b) * h.hamiltonian‖ ≤
       partCommutatorConst R * J ^ 2 := by
-  refine (h.norm_commutator_termSum_inner_le hh hhJ _).trans ?_
+  refine (h.norm_commutator_termSum_inner_le hhJ _).trans ?_
   have hcard : ((Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1)
       (interval L a b)).card : ℝ) ≤ chainCrossConst R := by
     exact_mod_cast card_crossingTerms_interval_le a b
@@ -260,7 +260,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_commutator_termSum_interval_le
 `X` and each term inside `A` that meets `X`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, line 794. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_commutator_termSum_inner
-    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (h : ChainInteraction L q R)
     (A W : Finset (Fin L))
     (hW : ∀ X ∈ Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) A,
       ∀ Y : ChainSupport L R, Y.1 ⊆ A → ¬Disjoint Y.1 X.1 → X.1 ⊆ W ∧ Y.1 ⊆ W) :
@@ -317,7 +317,7 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_commutator_leftPart
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h.hamiltonian * h.leftPart j m - h.leftPart j m * h.hamiltonian)
       (interval L (j - m - 2 * R) (j - m + R)) := by
-  refine h.isSupportedOn_commutator_termSum_inner hh hhJ _ _ fun X hX Y hYA hYX ↦ ?_
+  refine h.isSupportedOn_commutator_termSum_inner _ _ fun X hX Y hYA hYX ↦ ?_
   simp only [Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and,
     mem_interval] at hX
   obtain ⟨⟨v, hvX, -, hv⟩, ⟨w, hwX, hw⟩⟩ := hX
@@ -373,7 +373,7 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_commutator_rightPart
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h.hamiltonian * h.rightPart j m - h.rightPart j m * h.hamiltonian)
       (interval L (j + m - R) (j + m + 2 * R)) := by
-  refine h.isSupportedOn_commutator_termSum_inner hh hhJ _ _ fun X hX Y hYA hYX ↦ ?_
+  refine h.isSupportedOn_commutator_termSum_inner _ _ fun X hX Y hYA hYX ↦ ?_
   simp only [Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and,
     mem_interval] at hX
   obtain ⟨⟨v, hvX, hv, -⟩, ⟨w, hwX, hw⟩⟩ := hX

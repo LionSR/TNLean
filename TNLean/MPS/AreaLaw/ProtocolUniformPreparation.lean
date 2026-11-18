@@ -167,7 +167,8 @@ theorem exists_uniform_preparation_family
   let ground := fun i : ι ↦ i.val.2.2.1
   have hfamily := fun i : ι ↦
     hprepare (length i) ((le_max_left N 2).trans i.property.1)
-      i.val.2.1 (ground i) i.val.2.2.2 i.property.2.1 i.property.2.2.1 i.property.2.2.2
+      i.val.2.1 i.property.2.1 i.property.2.2.1 (ground i) i.val.2.2.2 i.property.2.2.2.1
+      i.property.2.2.2.2.1 i.property.2.2.2.2.2
   choose hx C hp using hfamily
   refine ⟨hx, C, ?_⟩
   dsimp only
@@ -186,7 +187,7 @@ theorem exists_uniform_preparation_family
     simpa only [pow_zero, mul_one] using hexp
   · exact ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
       (mainConfigurationEquiv (length i) (width i) q)).norm_map (ground i)).trans
-        i.property.2.1
+        i.property.2.2.2.1
   · rw [outerProduct_mainCoordinates]
     exact hdensity
   · exact outerProduct_mainCoordinates (length i) (width i) q (ground i)

@@ -368,8 +368,7 @@ theorem _root_.ManyBody.ChainInteraction.groundCentered_parts_sum_of_eigen
 energy zero: the normalization of the source.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 766–767 and 779–782. -/
 theorem _root_.ManyBody.ChainInteraction.isGapped_groundCentered_parts_sum
-    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-        {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (h : ChainInteraction L q R) {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (j m : ℕ) :
     ‖Ω‖ = 1 ∧ IsGapped (groundCentered Ω (h.leftPart j m) +
