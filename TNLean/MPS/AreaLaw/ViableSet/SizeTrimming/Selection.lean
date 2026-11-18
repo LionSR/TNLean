@@ -96,8 +96,7 @@ def _root_.ManyBody.ChainInteraction.IsAdmissibleSolver {L q k : ℕ}
 /-- The selection of an admissible solver lies in the span of the input family.
 LVV13, `algo53.tex`, Claim `c:2`, line 526. -/
 theorem _root_.ManyBody.ChainInteraction.sizeTrimmingSelectionWith_subset_span {L q k : ℕ}
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
-        (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
+    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
     (net : (m : ℕ) → Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ))
     {sol : (m : ℕ) → Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
       EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)}
@@ -119,15 +118,14 @@ theorem _root_.ManyBody.ChainInteraction.sizeTrimmingSelection_subset_span {L q 
         (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
     (h.sizeTrimmingSelection hq Δ S : Set (LeftBlockVector L q k)) ⊆
       Submodule.span ℂ (S : Set (LeftBlockVector L q k)) :=
-  h.sizeTrimmingSelectionWith_subset_span hh hhJ hq Δ S _ fun m ↦
+  h.sizeTrimmingSelectionWith_subset_span hq Δ S _ fun m ↦
     isAdmissibleLeadingVector_boundaryLeadingVector _ _ m _
 
 /-- Every retained column has norm at most one, since it is a column of a unit leading
 vector. This bound depends on no ground pair or viability assumption.
 LVV13, `algo53.tex`, column extraction, lines 477–478. -/
 theorem _root_.ManyBody.ChainInteraction.norm_le_one_of_mem_sizeTrimmingSelection {L q k : ℕ}
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
-        (hq : 2 ≤ q) (Δ : ℝ)
+    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ)
     (S : Finset (LeftBlockVector L q k)) {v : LeftBlockVector L q k}
     (hv : v ∈ h.sizeTrimmingSelection hq Δ S) : ‖v‖ ≤ 1 := by
   classical
@@ -142,8 +140,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_le_one_of_mem_sizeTrimmingSelectio
 /-- The selection of nets with at most `K` points each has at most `(D + 1) D K` members.
 LVV13, `algo53.tex`, Claim `c:2`, lines 520–527. -/
 theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelectionWith_le {L q k : ℕ}
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
-        (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
+    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
     {net : (m : ℕ) → Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)}
     (sol : (m : ℕ) → Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
       EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) {K : ℕ}
@@ -177,7 +174,7 @@ theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelection_le {L q k : 
   have hc : 0 < c := sq_pos_of_pos (div_pos hΔ (by norm_num))
   have hη : 0 < c / (2 * L) :=
     div_pos hc (mul_pos (by norm_num) (by exact_mod_cast hL))
-  exact h.card_sizeTrimmingSelectionWith_le hh hhJ hq Δ S _ fun m hm ↦
+  exact h.card_sizeTrimmingSelectionWith_le hq Δ S _ fun m hm ↦
     card_boundary_rectangularTraceNormNet_le (by omega) hη hm
 
 /-- The selection of nets with the standard point bound has explicit polynomial cardinality
@@ -204,7 +201,7 @@ theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelectionWith_le_polyn
   have hnet' := boundaryNet_card_bound_le_polynomial (q := q) (D := D) (c := c)
     (by omega : 1 ≤ L) (sq_pos_of_pos (div_pos hΔ (by norm_num)))
   simpa only [C, Nat.mul_assoc] using
-    (h.card_sizeTrimmingSelectionWith_le hh hhJ hq Δ S sol hnet).trans
+    (h.card_sizeTrimmingSelectionWith_le hq Δ S sol hnet).trans
       (Nat.mul_le_mul_left ((D + 1) * D) hnet')
 
 /-- The selection has explicit polynomial cardinality in the chain length, with coefficient
@@ -278,9 +275,9 @@ theorem _root_.ManyBody.ChainInteraction.isViable_sizeTrimmingSelectionWith {L q
       T m.val := rfl
   obtain ⟨_, m, W, x, -, -, -, -, hW, hmD, -, hxnorm, hxP, huniform⟩ :=
     h.exists_uniform_leading_bounds_of_isViable hh hhJ hpos hL hq hΔ
-      (h.cutLeftPart k) (h.cutBoundaryPart k) (h.cutLeftPart_add_cutBoundaryPart hh hhJ k)
-      (h.cutLeftPart_isSupportedOn hh hhJ k) (h.cutBoundaryPart_isSupportedOn hh hhJ k)
-      (h.norm_cutBoundaryPart_le hh hhJ k) hΩ hgap hspan hviable
+      (h.cutLeftPart k) (h.cutBoundaryPart k) (h.cutLeftPart_add_cutBoundaryPart k)
+      (h.cutLeftPart_isSupportedOn k) (h.cutBoundaryPart_isSupportedOn k)
+      (h.norm_cutBoundaryPart_le hhJ k) hΩ hgap hspan hviable
   let ρx := vecMulVec x (star x)
   have hρxp : ρx.PosSemidef := posSemidef_vecMulVec_self_star x
   have hρxt : ρx.trace = 1 := by

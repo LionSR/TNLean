@@ -78,8 +78,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_swappedDoubled_term_le {L q R : �
 /-- The sum of the swapped interactions is the conjugate of the doubled operator.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
 lemma _root_.ManyBody.ChainInteraction.swappedDoubled_hamiltonian
-    {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R)
     (D : Finset (Fin L)) :
     let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
@@ -123,10 +122,10 @@ theorem _root_.ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped
   have hsK := ManyBody.groundSpace_kronecker_add_eq_span hH hH hgap hgap hΔ.le hΔ.le hspan hspan
   rw [min_self] at hgK
   have hgapD : IsGapped h.doubled.hamiltonian (2 * E₀) Δ := by
-    rw [h.doubled_hamiltonian hh hhJ, ManyBody.isGapped_reindex_iff, two_mul]
+    rw [h.doubled_hamiltonian, ManyBody.isGapped_reindex_iff, two_mul]
     exact hgK
   have hspanD : groundSpace h.doubled.hamiltonian (2 * E₀) = Submodule.span ℂ {Ψ} := by
-    rw [h.doubled_hamiltonian hh hhJ, two_mul]
+    rw [h.doubled_hamiltonian, two_mul]
     exact ManyBody.groundSpace_reindex_eq_span e hsK
   have hΩsum : ∑ i, ‖WithLp.ofLp Ω i‖ ^ 2 = 1 := by
     rw [← EuclideanSpace.norm_sq_eq, hΩ]
@@ -145,7 +144,7 @@ theorem _root_.ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped
     change ‖WithLp.toLp 2 (F *ᵥ WithLp.ofLp Ψ)‖ = 1
     rw [Matrix.norm_toLp_mulVec_of_unitary hF]
     exact hΨ
-  rw [h.swappedDoubled_hamiltonian hh hhJ, ← hΦ]
+  rw [h.swappedDoubled_hamiltonian, ← hΦ]
   exact ⟨by rw [hΦ]; exact hΦn, (ManyBody.isGapped_unitary_conj_iff hF).mpr hgapD,
     ManyBody.groundSpace_unitary_conj_eq_span hF hspanD⟩
 

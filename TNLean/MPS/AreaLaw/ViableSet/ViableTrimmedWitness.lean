@@ -99,7 +99,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_trimmed_witness_of_isViable
       (hcdiv.trans (by linarith : c ≤ 1)) huΓ hψΓ
     linarith
   obtain ⟨HL, HR, K, hsplit, hHL, hHR, hK0, hK1⟩ :=
-    h.exists_cut_decomposition_of_range_one hh hhJ hpos k
+    h.exists_cut_decomposition_of_range_one hhJ hpos k
   have hblock : interval L 0 k = leftBlock L k := by
     ext i
     simp [interval, leftBlock]

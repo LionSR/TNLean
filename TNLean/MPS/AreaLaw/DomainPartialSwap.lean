@@ -70,8 +70,7 @@ theorem _root_.ManyBody.DomainInteraction.norm_doubled_term_le
 
 /-- Summing the original doubled terms gives exactly the paired two-copy operator.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–360. -/
-lemma _root_.ManyBody.DomainInteraction.doubled_hamiltonian (h : DomainInteraction Λ q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) :
+lemma _root_.ManyBody.DomainInteraction.doubled_hamiltonian (h : DomainInteraction Λ q R) :
     h.doubled.hamiltonian = Matrix.reindex (sitePairConfigurationEquiv (Fin Λ.card) q q)
       (sitePairConfigurationEquiv (Fin Λ.card) q q)
       (h.hamiltonian ⊗ₖ 1 + 1 ⊗ₖ h.hamiltonian) := by
@@ -117,8 +116,7 @@ theorem _root_.ManyBody.DomainInteraction.norm_swappedDoubled_term_le
 /-- The sum of the original swapped interactions is the conjugated doubled operator.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
 lemma _root_.ManyBody.DomainInteraction.swappedDoubled_hamiltonian
-    (h : DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-        (D : Finset (Fin Λ.card)) :
+    (h : DomainInteraction Λ q R) (D : Finset (Fin Λ.card)) :
     let e := sitePairConfigurationEquiv (Fin Λ.card) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
     (h.swappedDoubled D).hamiltonian = F * h.doubled.hamiltonian * Fᴴ := by
@@ -149,8 +147,7 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_term_difference_spec
 supports and both replica labels. Source: TNLean note, part2a_mps_information.tex,
 355–363; the count uses the original domain-support injection. -/
 theorem _root_.ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing
-    (h : DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-        (D : Finset (Fin Λ.card)) :
+    (h : DomainInteraction Λ q R) (D : Finset (Fin Λ.card)) :
     let e := sitePairConfigurationEquiv (Fin Λ.card) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
     let T (X : DomainSupport Λ R) (b : Bool) := Matrix.reindex e e
@@ -185,7 +182,7 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing
         (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
           (mem_supportedOperators_of_isSupportedOn (h.mem X)) hside)
   refine ⟨?_, card_domain_crossingTerms_mul_two_le Λ R D⟩
-  rw [h.swappedDoubled_hamiltonian hh hhJ D]
+  rw [h.swappedDoubled_hamiltonian D]
   change δ h.doubled.hamiltonian = ∑ X ∈ C, ∑ b : Bool, δ (T X b)
   change δ (∑ X, h.doubled.term X) = _
   rw [map_sum]

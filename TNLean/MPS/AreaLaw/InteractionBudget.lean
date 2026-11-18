@@ -49,8 +49,7 @@ an upper bound independent of the chain length and the local dimension.
 Source: TNLean one-dimensional note, `eq:ham`, and the per-site hypothesis
 before Lemma `lem:LR` (`part2a_mps_information.tex`, lines 260–265). -/
 lemma _root_.ManyBody.ChainInteraction.sum_norm_terms_containing_le
-    {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ J) (x : Fin L) :
+    {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (x : Fin L) :
     (∑ X ∈ Finset.univ.filter (fun X : ChainSupport L R ↦ x ∈ X.1),
       ‖h.term X‖) ≤ ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J := by
   classical

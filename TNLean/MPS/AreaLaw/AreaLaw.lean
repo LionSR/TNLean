@@ -374,7 +374,7 @@ theorem chainAreaLaw_of_consecutive_terms
   exact regionEntropy_interval_le_of_family_budget hq hJ hΔ g (fun X ↦ X.val)
     (fun X ↦ h.mem X.val) (fun X ↦ hh X.val) (fun X ↦ hhJ X.val)
     (2 * R) (one_le_windowBudgetConst q R)
-    (h.card_crossingTerms_interval_le_of_consecutive_terms hh hhJ hwindow)
+    (h.card_crossingTerms_interval_le_of_consecutive_terms hwindow)
     (h.cutLogBudget_interval_le_of_consecutive_terms hq hh hhJ hwindow) hΩ hgap hspan a b
 
 /-- The interval entropy estimate with the original polynomial source constants.

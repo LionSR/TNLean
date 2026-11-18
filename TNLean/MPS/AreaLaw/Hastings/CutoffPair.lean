@@ -178,7 +178,7 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c
     Entropy.IsSupportedOn (n := fun _ ↦ q)
       (h.localizedPart Ω s ΔE (h.leftPart c m) (leftWindow L R c m k)) (leftBlock L c) := by
   by_cases hcm : c ≤ m
-  · rw [h.leftPart_eq_zero_of_le hh hhJ hcm, h.localizedPart_zero]
+  · rw [h.leftPart_eq_zero_of_le hcm, h.localizedPart_zero]
     exact isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)
   refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_leftPart hh hhJ c m) _).mono ?_
   refine Finset.union_subset (fun x hx ↦ ?_) ((chainNeighborhood_interval_subset _ _ _).trans

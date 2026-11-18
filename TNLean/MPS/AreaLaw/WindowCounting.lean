@@ -135,7 +135,7 @@ open Classical in
 The window hypothesis concerns the actual nonzero terms of the given Hamiltonian.
 Source: the one-dimensional note, `rem:sharper`, lines 706–709. -/
 theorem _root_.ManyBody.ChainInteraction.card_crossingTerms_interval_le_of_consecutive_terms
-    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (h : ChainInteraction L q R)
     (hwindow : ∀ X : ChainSupport L R, h.term X ≠ 0 →
       ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) (l r : ℕ) :
     (Entropy.crossingTerms
@@ -168,7 +168,7 @@ theorem _root_.ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive
   let B : ℝ := 1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
   let budget := Entropy.cutLogBudget C (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ D)
   have hcard : (C.card : ℝ) ≤ (2 * R : ℕ) := by
-    exact_mod_cast (h.card_crossingTerms_interval_le_of_consecutive_terms hh hhJ) hwindow l r
+    exact_mod_cast h.card_crossingTerms_interval_le_of_consecutive_terms hwindow l r
   have hdim (X : A) :
       Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) (D X) : ℝ)) ^ 2 ≤
         Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2 := by

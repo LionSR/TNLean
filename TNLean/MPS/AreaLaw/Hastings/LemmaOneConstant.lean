@@ -234,7 +234,8 @@ theorem exists_projectorFactorization_pow (R : ℕ) {κ : ℝ} (hκ : 6 < κ) :
   rw [← h.smul_hamiltonian _] at hspan'
   obtain ⟨OB, OL, OR, hF⟩ := exists_isFactorizationAt_lemmaOneConst R hx one_pos
     (ξ' := κ * lemmaOneLength R (ΔE⁻¹ * J) 1) (by nlinarith)
-    (h.smul ΔE⁻¹ (inv_nonneg.mpr hΔ.le)) hΩ hgap' hspan' c l
+    (h.smul ΔE⁻¹) (h.isHermitian_smul_term hh ΔE⁻¹)
+      (h.norm_smul_term_le hhJ ΔE⁻¹ (inv_nonneg.mpr hΔ.le)) hΩ hgap' hspan' c l
   rw [div_eq_inv_mul]
   exact ⟨OB, OL, OR, hF.mono (mul_le_mul_of_nonneg_right (hK hx) (exp_pos _).le)⟩
 
@@ -267,7 +268,8 @@ theorem exists_projectorFactorization_posSemidef_pow (R : ℕ) {κ : ℝ} (hκ :
     (ξ' := κ * lemmaOneLength R (ΔE⁻¹ * J) 1) (by nlinarith)
     (le_max_of_le_right (exp_pos _).le) (lemmaOneBudgetB_nonneg one_pos (by positivity))
     (exists_isFactorizationAt_sqrt_decay R hx one_pos
-      (h.smul ΔE⁻¹ (inv_nonneg.mpr hΔ.le)) hΩ hgap' hspan' c l)
+      (h.smul ΔE⁻¹) (h.isHermitian_smul_term hh ΔE⁻¹)
+          (h.norm_smul_term_le hhJ ΔE⁻¹ (inv_nonneg.mpr hΔ.le)) hΩ hgap' hspan' c l)
   rw [div_eq_inv_mul]
   refine ⟨OB, OL, OR, hOB, hF.mono (mul_le_mul_of_nonneg_right ?_ (exp_pos _).le)⟩
   -- `√C₁ ≤ C₁ + 1 ≤ (K + 1) ξ̂³`
@@ -325,7 +327,7 @@ theorem exists_projectorFactorization_endpoint (R : ℕ) :
           exp (-(l / (6 * lemmaOneEndpointLength R J ΔE)))) OB OL OR := by
   obtain ⟨K, hK0, hF⟩ := exists_projectorFactorization_pow R (κ := 15 / 2) (by norm_num)
   refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h hh hhJ E₀ Ω hΩ hgap hspan c l ↦ ?_⟩
-  obtain ⟨OB, OL, OR, hF'⟩ := hF hJ hΔ h hΩ hgap hspan c l
+  obtain ⟨OB, OL, OR, hF'⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan c l
   have hξ0 := lemmaOneLength_pos R (J / ΔE) 1
   have hrate : 6 * lemmaOneEndpointLength R J ΔE = 15 / 2 * lemmaOneLength R (J / ΔE) 1 := by
     rw [lemmaOneEndpointLength_eq]; ring
@@ -353,7 +355,7 @@ theorem exists_projectorFactorization_posSemidef_endpoint (R : ℕ) :
   obtain ⟨K, hK0, hF⟩ :=
     exists_projectorFactorization_posSemidef_pow R (κ := 15 / 2) (by norm_num)
   refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h hh hhJ E₀ Ω hΩ hgap hspan c l ↦ ?_⟩
-  obtain ⟨OB, OL, OR, hOB, hF'⟩ := hF hJ hΔ h hΩ hgap hspan c l
+  obtain ⟨OB, OL, OR, hOB, hF'⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan c l
   have hξ0 := lemmaOneLength_pos R (J / ΔE) 1
   have hrate : 6 * lemmaOneEndpointLength R J ΔE = 15 / 2 * lemmaOneLength R (J / ΔE) 1 := by
     rw [lemmaOneEndpointLength_eq]; ring

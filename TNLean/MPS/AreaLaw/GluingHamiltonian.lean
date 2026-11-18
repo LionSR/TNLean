@@ -44,22 +44,21 @@ noncomputable def _root_.ManyBody.ChainInteraction.cutBoundaryPart
 
 /-- The Hamiltonian is the sum of its left part and its boundary part at every cut. -/
 theorem _root_.ManyBody.ChainInteraction.cutLeftPart_add_cutBoundaryPart
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
-    (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (k : ℕ) :
+    (h : ChainInteraction L q 1) (k : ℕ) :
     h.hamiltonian = h.cutLeftPart k + h.cutBoundaryPart k :=
   (Finset.sum_filter_add_sum_filter_not Finset.univ
     (fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k) h.term).symm
 
 /-- The left part is supported on the first `k` sites. -/
-theorem _root_.ManyBody.ChainInteraction.cutLeftPart_isSupportedOn (h : ChainInteraction L q 1)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (k : ℕ) :
+theorem _root_.ManyBody.ChainInteraction.cutLeftPart_isSupportedOn
+    (h : ChainInteraction L q 1) (k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutLeftPart k) (interval L 0 k) :=
   (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
     Entropy.IsSupportedOn.mono (h.mem X) (Finset.mem_filter.mp hX).2
 
 /-- The boundary part is supported from the boundary site onward. -/
-theorem _root_.ManyBody.ChainInteraction.cutBoundaryPart_isSupportedOn (h : ChainInteraction L q 1)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (k : ℕ) :
+theorem _root_.ManyBody.ChainInteraction.cutBoundaryPart_isSupportedOn
+    (h : ChainInteraction L q 1) (k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutBoundaryPart k)
       (interval L 0 (k - 1))ᶜ := by
   refine (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
@@ -73,7 +72,7 @@ theorem _root_.ManyBody.ChainInteraction.cutBoundaryPart_isSupportedOn (h : Chai
 
 /-- The boundary part has norm at most `2L`. -/
 theorem _root_.ManyBody.ChainInteraction.norm_cutBoundaryPart_le (h : ChainInteraction L q 1)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (k : ℕ) :
+    (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (k : ℕ) :
     ‖h.cutBoundaryPart k‖ ≤ 2 * (L : ℝ) := by
   classical
   set U := Finset.univ.filter (fun X : ChainSupport L 1 ↦ ¬ X.1 ⊆ interval L 0 k)
@@ -96,8 +95,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_gluing_decomposition_of_range_on
       Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (interval L 0 k) ∧
       Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (interval L 0 (k - 1))ᶜ ∧
       ‖B‖ ≤ 2 * (L : ℝ) :=
-  ⟨h.cutLeftPart k, h.cutBoundaryPart k, h.cutLeftPart_add_cutBoundaryPart hh hhJ k,
-    h.cutLeftPart_isSupportedOn hh hhJ k, h.cutBoundaryPart_isSupportedOn hh hhJ k,
-    h.norm_cutBoundaryPart_le hh hhJ k⟩
+  ⟨h.cutLeftPart k, h.cutBoundaryPart k, h.cutLeftPart_add_cutBoundaryPart k,
+    h.cutLeftPart_isSupportedOn k, h.cutBoundaryPart_isSupportedOn k,
+    h.norm_cutBoundaryPart_le hhJ k⟩
 
 end TNLean.MPS.AreaLaw

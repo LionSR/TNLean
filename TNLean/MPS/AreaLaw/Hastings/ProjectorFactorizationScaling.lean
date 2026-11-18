@@ -117,6 +117,6 @@ theorem exists_projectorFactorization_div (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ J)
   rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_hamiltonian _] at hgap'
   rw [← h.smul_hamiltonian _] at hspan'
   exact hF (h.smul ΔE⁻¹) (h.isHermitian_smul_term hh ΔE⁻¹)
-    (h.norm_smul_term_le hhJ ΔE⁻¹ (inv_nonneg.mpr hΔ.le)) hΩ hgap' hspan' c l
+      (h.norm_smul_term_le hhJ ΔE⁻¹ (inv_nonneg.mpr hΔ.le)) hΩ hgap' hspan' c l
 
 end TNLean.MPS.AreaLaw

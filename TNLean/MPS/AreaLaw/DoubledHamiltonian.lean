@@ -86,8 +86,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_doubled_term_le
 /-- Summing the paired interactions gives exactly the sum of the two copies of
 `H`, after grouping their local coordinates at each site.
 Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 355–360. -/
-lemma _root_.ManyBody.ChainInteraction.doubled_hamiltonian (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) :
+lemma _root_.ManyBody.ChainInteraction.doubled_hamiltonian (h : ChainInteraction L q R) :
     h.doubled.hamiltonian =
       Matrix.reindex (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)
         (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)

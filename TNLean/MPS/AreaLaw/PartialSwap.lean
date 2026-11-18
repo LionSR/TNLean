@@ -101,8 +101,7 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_term_difference_spec
 differences, with the printed boundary count. Source: TNLean note,
 `part2a_mps_information.tex`, lines 355–363. -/
 theorem _root_.ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing
-    {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ J) (D : Finset (Fin L)) :
+    {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (D : Finset (Fin L)) :
     let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
     let T (X : ChainSupport L R) (b : Bool) := Matrix.reindex e e
@@ -210,7 +209,7 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_boundary_spec
   let T (X : ChainSupport L R) (b : Bool) := Matrix.reindex e e
     (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
-  obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing hh hhJ D
+  obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing D
   change K = ∑ X ∈ C, ∑ b : Bool, (F * T X b * Fᴴ - T X b) at hsum
   have hsupp : Entropy.IsSupportedOn (n := fun _ ↦ q * q) K Z := by
     apply isSupportedOn_of_mem_supportedOperators

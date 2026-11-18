@@ -27,8 +27,6 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, algorithm steps 1--4, lines 379-
 456--487, 549--559 and 572--592, and the proof of Theorem 1, lines 652--668.
 -/
 
-open scoped Matrix.Norms.L2Operator
-
 open ManyBody (interval ChainInteraction)
 
 open Matrix Cslib
@@ -152,7 +150,6 @@ theorem eval_feasible_ite (L k b m : ℕ) (S : Finset (LeftBlockVector L q k))
 
 /-- With the honest oracle, step 2 computes the size-trimming selection. -/
 theorem eval_sizeTrimmingProgram (L k b : ℕ) (h : ChainInteraction L q 1)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
     FreeM.eval honestOracle (sizeTrimmingProgram L k b h hq Δ S) =
       h.sizeTrimmingSelection hq Δ S := by

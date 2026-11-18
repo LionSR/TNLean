@@ -49,7 +49,7 @@ theorem IsChainSupport.eq_interval_of_splits_of_range_one {L k : ℕ} {X : Finse
 `H = H_L + H_R + K`, with the two parts supported on their respective sides and
 `0 ≤ K ≤ 1`. Source: LVV13, `algo53.tex`, line 283 and lines 409–410. -/
 theorem _root_.ManyBody.ChainInteraction.exists_cut_decomposition_of_range_one {L q : ℕ}
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+    (h : ChainInteraction L q 1) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
         (hpos : ∀ X, (h.term X).PosSemidef) (k : ℕ) :
     ∃ HL HR K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       h.hamiltonian = HL + HR + K ∧

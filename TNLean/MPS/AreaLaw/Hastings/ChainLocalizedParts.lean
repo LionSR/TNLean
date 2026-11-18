@@ -156,7 +156,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_sub_localized
     intro s hs
     have hlr := norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
       (fun X : ChainSupport L R ↦ X) h.term hh h.mem _
-      (h.sum_norm_terms_containing_le hh hhJ) S hA ℓ hℓ s
+      (h.sum_norm_terms_containing_le hhJ) S hA ℓ hℓ s
     have hsT : |s| ≤ T := abs_le.mpr hs
     have hcard : (S.card : ℝ) ^ 2 ≤ (n : ℝ) ^ 2 :=
       pow_le_pow_left₀ (Nat.cast_nonneg _) (by exact_mod_cast hSn) 2
@@ -286,8 +286,8 @@ theorem _root_.ManyBody.ChainInteraction.isHermitian_bufferPart_localized
 /-- The left part vanishes when `j ≤ m`: the region `[0, j - m)` is then empty, and no
 support, being nonempty, is contained in it.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, line 776 (`H_L`). -/
-theorem _root_.ManyBody.ChainInteraction.leftPart_eq_zero_of_le (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) {j m : ℕ}
+theorem _root_.ManyBody.ChainInteraction.leftPart_eq_zero_of_le
+    (h : ChainInteraction L q R) {j m : ℕ}
     (hjm : j ≤ m) : h.leftPart j m = 0 := by
   change ∑ X ∈ leftSupports L R j m, h.term X = 0
   refine Finset.sum_eq_zero fun X hX ↦ ?_

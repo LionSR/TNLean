@@ -159,17 +159,18 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_siteExpectat
     (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
   let A (p : ChainSupport L R × Bool) := F * T p.1 p.2 * Fᴴ - T p.1 p.2
-  obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing hh hhJ D
+  obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing D
   have hdiff : K' - K = ∑ p ∈ C ×ˢ Finset.univ, A p := by
     rw [Finset.sum_product, show K' = F * h.doubled.hamiltonian * Fᴴ from
-      h.swappedDoubled_hamiltonian hh hhJ D]
+      h.swappedDoubled_hamiltonian D]
     exact hsum
   have hgen := norm_heisenberg_sum_sub_siteExpectation_graphNeighborhood_le
     (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
     (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le)
         (h.isHermitian_swappedDoubled_term hh D) b₀
-    (g.sum_norm_terms_containing_le (h.isHermitian_swappedDoubled_term hh D)
-        (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ) (fun p ↦ p.1.1) Z
+    (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D)
+        (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ)
+        (fun p ↦ p.1.1) Z
     (fun p hp ↦ Finset.subset_biUnion_of_mem (fun X ↦ X.1) (Finset.mem_product.mp hp).1)
     (fun p _ ↦ p.1.2.card_le) A (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).1)
     (2 * |J|) (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).2.2.trans
@@ -226,15 +227,16 @@ theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_siteExpecta
     (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ))
   let A (p : DomainSupport Λ R × Bool) := F * T p.1 p.2 * Fᴴ - T p.1 p.2
-  obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing hh hhJ D
+  obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing D
   have hdiff : K' - K = ∑ p ∈ C ×ˢ Finset.univ, A p := by
     rw [Finset.sum_product]
     exact hsum
   have hgen := norm_heisenberg_sum_sub_siteExpectation_graphNeighborhood_le
     (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) Φ
     (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) (h.isHermitian_swappedDoubled_term hh D) b₀
-    (g.sum_norm_terms_containing_le (h.isHermitian_swappedDoubled_term hh D)
-        (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ) (fun p ↦ p.1.1) Z
+    (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D)
+        (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ)
+        (fun p ↦ p.1.1) Z
     (fun p hp ↦ Finset.subset_biUnion_of_mem (fun X ↦ X.1) (Finset.mem_product.mp hp).1)
     (fun p _ ↦ p.1.2.isChainSupport.card_le) A
     (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).1)

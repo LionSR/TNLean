@@ -81,7 +81,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_rational_size_bond_trimmed_famil
     intro v hv
     obtain ⟨u, hu, rfl⟩ := Finset.mem_image.mp hv
     exact (norm_leftSchmidtTrim_le hi m u).trans
-      (h.norm_le_one_of_mem_sizeTrimmingSelection hh hhJ hq Δ S hu)
+      (h.norm_le_one_of_mem_sizeTrimmingSelection hq Δ S hu)
   obtain ⟨T, hcard, hdata, hcover⟩ :=
     exists_rational_leftFamily_approximation_of_norm_le_one B hi
       (fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m U hv) hBnorm hθ

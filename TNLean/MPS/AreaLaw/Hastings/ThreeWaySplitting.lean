@@ -273,7 +273,7 @@ noncomputable def _root_.ManyBody.ChainInteraction.termSum (h : ChainInteraction
 
 /-- A sum of terms is Hermitian. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 82–91. -/
 theorem _root_.ManyBody.ChainInteraction.termSum_isHermitian (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hh : ∀ X, (h.term X).IsHermitian)
     (S : Finset (ChainSupport L R)) : (h.termSum S).IsHermitian := by
   change (∑ X ∈ S, h.term X)ᴴ = ∑ X ∈ S, h.term X
   rw [conjTranspose_sum]
@@ -282,7 +282,7 @@ theorem _root_.ManyBody.ChainInteraction.termSum_isHermitian (h : ChainInteracti
 /-- A sum of `|S|` terms has operator norm at most `|S| J`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 89–91 (finite interaction strength). -/
 theorem _root_.ManyBody.ChainInteraction.norm_termSum_le (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (S : Finset (ChainSupport L R)) : ‖h.termSum S‖ ≤ S.card * J := by
   refine (norm_sum_le _ _).trans ?_
   simpa using Finset.sum_le_card_nsmul S _ _ fun X _ ↦ hhJ X
@@ -290,7 +290,6 @@ theorem _root_.ManyBody.ChainInteraction.norm_termSum_le (h : ChainInteraction L
 /-- A sum of terms whose supports lie in `D` is supported on `D`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 88–89 (finite range). -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_termSum (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     {S : Finset (ChainSupport L R)} {D : Finset (Fin L)} (hS : ∀ X ∈ S, X.1 ⊆ D) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.termSum S) D :=
   (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
@@ -322,25 +321,24 @@ noncomputable def _root_.ManyBody.ChainInteraction.rightPart
 theorem _root_.ManyBody.ChainInteraction.leftPart_isHermitian (h : ChainInteraction L q R)
     (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (j m : ℕ) :
     (h.leftPart j m).IsHermitian :=
-  h.termSum_isHermitian hh hhJ _
+  h.termSum_isHermitian hh _
 
 /-- The buffer part is Hermitian. Hastings, arXiv:0705.2024v4, `law16.tex`, line 777. -/
 theorem _root_.ManyBody.ChainInteraction.bufferPart_isHermitian (h : ChainInteraction L q R)
     (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (j m : ℕ) :
     (h.bufferPart j m).IsHermitian :=
-  h.termSum_isHermitian hh hhJ _
+  h.termSum_isHermitian hh _
 
 /-- The right part is Hermitian. Hastings, arXiv:0705.2024v4, `law16.tex`, line 778. -/
 theorem _root_.ManyBody.ChainInteraction.rightPart_isHermitian (h : ChainInteraction L q R)
     (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (j m : ℕ) :
     (h.rightPart j m).IsHermitian :=
-  h.termSum_isHermitian hh hhJ _
+  h.termSum_isHermitian hh _
 
 /-- **The three-way splitting.** `H = H_L + H_B + H_R`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 775–779. -/
 theorem _root_.ManyBody.ChainInteraction.hamiltonian_eq_leftPart_add_bufferPart_add_rightPart
-    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ J) (j m : ℕ) :
+    (h : ChainInteraction L q R) (j m : ℕ) :
     h.hamiltonian = h.leftPart j m + h.bufferPart j m + h.rightPart j m :=
   sum_supports_eq_left_add_buffer_add_right h.term j m
 
@@ -352,7 +350,7 @@ theorem _root_.ManyBody.ChainInteraction.groundCentered_parts_sum (h : ChainInte
     groundCentered Ψ (h.leftPart j m) + groundCentered Ψ (h.bufferPart j m) +
       groundCentered Ψ (h.rightPart j m) = groundCentered Ψ h.hamiltonian := by
   rw [groundCentered_add, groundCentered_add,
-    h.hamiltonian_eq_leftPart_add_bufferPart_add_rightPart hh hhJ j m]
+    h.hamiltonian_eq_leftPart_add_bufferPart_add_rightPart j m]
 
 /-- **The centered splitting.** For a unit eigenvector `Ψ₀` of `H` of energy `E₀`, the
 centered parts, each of expectation zero in `Ψ₀`, sum to `H - E₀ 1`. With the source's
@@ -388,14 +386,14 @@ cut. Hastings, arXiv:0705.2024v4, `law16.tex`, line 776. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_leftPart (h : ChainInteraction L q R)
     (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (j m : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.leftPart j m) (interval L 0 (j - m)) :=
-  h.isSupportedOn_termSum hh hhJ fun _ hX ↦ (Finset.mem_filter.mp hX).2
+  h.isSupportedOn_termSum fun _ hX ↦ (Finset.mem_filter.mp hX).2
 
 /-- The right part is supported on the sites `i ≥ j + m`, at distance at least `m` from the
 cut. Hastings, arXiv:0705.2024v4, `law16.tex`, line 778. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_rightPart (h : ChainInteraction L q R)
     (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (j m : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.rightPart j m) (interval L (j + m) L) :=
-  h.isSupportedOn_termSum hh hhJ fun _ hX ↦ (Finset.mem_filter.mp hX).2
+  h.isSupportedOn_termSum fun _ hX ↦ (Finset.mem_filter.mp hX).2
 
 /-- The buffer part is supported on the window `[j - m - R, j + m + R)`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, line 777. -/
@@ -403,14 +401,14 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_bufferPart (h : ChainInte
     (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (j m : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.bufferPart j m)
       (interval L (j - m - R) (j + m + R)) :=
-  h.isSupportedOn_termSum hh hhJ fun _ hX ↦ subset_window_of_mem_bufferSupports hX
+  h.isSupportedOn_termSum fun _ hX ↦ subset_window_of_mem_bufferSupports hX
 
 /-- **The norm of the buffer part.** `‖H_B‖ ≤ 2 (m + R) 2^{2R+1} J`, linear in the buffer
 width. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 89–91 and 777. -/
 theorem _root_.ManyBody.ChainInteraction.norm_bufferPart_le (h : ChainInteraction L q R)
     (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 ≤ J)
     (j m : ℕ) : ‖h.bufferPart j m‖ ≤ (2 * (m + R) * 2 ^ (2 * R + 1) : ℕ) * J :=
-  (h.norm_termSum_le hh hhJ _).trans
+  (h.norm_termSum_le hhJ _).trans
     (mul_le_mul_of_nonneg_right (by exact_mod_cast card_bufferSupports_le j m) hJ)
 
 /-- The centered buffer part has norm at most `4 (m + R) 2^{2R+1} J`.

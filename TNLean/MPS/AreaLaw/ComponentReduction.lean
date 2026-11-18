@@ -258,7 +258,7 @@ variable {Λ : Finset ℤ} {q R : ℕ} {J Δ : ℝ}
 Source: the one-dimensional note, part1_arealaw.tex, lines 64–93. -/
 theorem _root_.ManyBody.DomainInteraction.exists_regionEntropy_eq_card_boundaryEdges_eq
     {Λ : Finset ℤ} {q R : ℕ} {J E₀ Δ : ℝ}
-    (h : DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (h : DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
     {Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)}
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
@@ -305,7 +305,7 @@ theorem regionEntropy_le_mul_card_domainBoundaryEdges (hq : 1 ≤ q) (hJ : 0 ≤
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset ℤ) :
     Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ≤
       chainIntervalEntropyBound q R J Δ * (domainBoundaryEdges Λ A).card := by
-  obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hh hhJ hΔ hΩ hgap hspan A
+  obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hh hΔ hΩ hgap hspan A
   rw [← h.toChain_hamiltonian] at hgap hspan
   have hchain := regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ (h.toChain)
       (h.isHermitian_toChain_term hh) (h.norm_toChain_term_le hhJ hJ) hΩ hgap hspan A'

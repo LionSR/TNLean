@@ -50,7 +50,7 @@ lemma _root_.ManyBody.DomainInteraction.norm_bound_nonneg (h : DomainInteraction
 No sign or nonempty-domain hypothesis is added.
 Source: TNLean note, part2a_mps_information.tex, lines 260–265. -/
 lemma _root_.ManyBody.DomainInteraction.sum_norm_terms_containing_le (h : DomainInteraction Λ q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (x : Fin Λ.card) :
     (∑ X ∈ Finset.univ.filter (fun X : DomainSupport Λ R ↦ x ∈ X.1),
       ‖h.term X‖) ≤ ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J := by

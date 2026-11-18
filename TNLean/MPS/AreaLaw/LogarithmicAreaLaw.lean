@@ -276,7 +276,6 @@ private theorem consecutive_window_coefficient_le_range_log_cube :
 Source: the one-dimensional note, Section 2 (`sec:setting`), component reduction. -/
 theorem _root_.ManyBody.ChainInteraction.regionEntropy_eq_zero_of_range_zero
     {L q : ℕ} {J Δ : ℝ} (h : ChainInteraction L q 0) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
@@ -323,7 +322,7 @@ theorem chainAreaLaw_of_consecutive_terms_polynomial_range :
     exact hphysical.trans (by convert hlast using 1; ring)
   · by_cases hR0 : R = 0
     · subst R
-      rw [h.regionEntropy_eq_zero_of_range_zero hh hhJ hΔ hΩ hgap hspan A]
+      rw [h.regionEntropy_eq_zero_of_range_zero hh hΔ hΩ hgap hspan A]
       simp
     · have hq1 : q = 1 := by omega
       subst q
@@ -334,8 +333,7 @@ theorem chainAreaLaw_of_consecutive_terms_polynomial_range :
 Source: the one-dimensional note, part1_arealaw.tex, lines 64–93 and 706–748. -/
 private theorem _root_.ManyBody.DomainInteraction.toChain_consecutive_terms
     {Λ : Finset ℤ} {q R : ℕ} {J : ℝ}
-    (h : DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 ≤ J)
+    (h : DomainInteraction Λ q R) (hJ : 0 ≤ J)
     (hwindow : ∀ X : DomainSupport Λ R, h.term X ≠ 0 →
       ∃ a : ℤ, X.1.image (sitePos Λ) = Finset.Ico a (a + (R : ℤ) + 1)) :
     ∀ Y : ChainSupport Λ.card R, (h.toChain).term Y ≠ 0 →
@@ -377,11 +375,11 @@ theorem domainAreaLaw_of_consecutive_terms_polynomial_range :
     chainAreaLaw_of_consecutive_terms_polynomial_range
   refine ⟨Cabs, hCabs, hCeq, ?_⟩
   intro q R J Δ hq hJ hΔ Λ h hh hhJ hwindow E₀ Ω hΩ hgap hspan A
-  obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hh hhJ hΔ hΩ hgap hspan A
+  obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hh hΔ hΩ hgap hspan A
   rw [← h.toChain_hamiltonian] at hgap hspan
   have hbound := hchain q R J Δ hq hJ hΔ Λ.card (h.toChain) (h.isHermitian_toChain_term hh)
     (h.norm_toChain_term_le hhJ hJ)
-    (h.toChain_consecutive_terms hh hhJ hJ hwindow) E₀ Ω hΩ hgap hspan A'
+    (h.toChain_consecutive_terms hJ hwindow) E₀ Ω hΩ hgap hspan A'
   simpa only [hS, hB] using hbound
 
 end TNLean.MPS.AreaLaw
