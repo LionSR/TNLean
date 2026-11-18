@@ -14,7 +14,7 @@ operator of open bond `(max 1 bond)^{2k}` with `bond = 2 (m + 1) ℓ_c² q^{ℓ_
 logarithmic cluster order `ℓ_c`, and at most
 `(m k + 1)(q k)^{36 ℓ + 4 ⌊k / ℓ⌋}` members. The family is chosen before the three
 estimated bulk energies, and before the band width `η`, the buffer `w` and the residual
-scale. For each admissible estimate, the represented soft approximant `Ĝ` has two windows
+scale. For each admissible estimate, the represented soft approximant `Ghat` has two windows
 that bracket the original band `[E, E + η]` from above and the band `[E, E + η - 3 w]` from
 below, with explicit losses, and the family improves every subspace viable for the upper
 window into one viable for the lower window, with the Chebyshev contraction

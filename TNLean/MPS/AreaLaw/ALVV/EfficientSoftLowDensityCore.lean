@@ -12,7 +12,7 @@ import TNLean.MPS.AreaLaw.ALVV.UniformPhysicalSoftImprovingFamily
 One construction of the original regional minima determines the native soft middle
 operator, its polynomial closing matrices and a common family of middle operators with
 open matrix product bond. For every admissible estimate of the three bulk energies, the
-represented approximant `Ĝ` has a polynomial matrix decomposition through this family, and
+represented approximant `Ghat` has a polynomial matrix decomposition through this family, and
 the exact soft Hamiltonian `G` it approximates has the buffered windowed comparisons with
 the original Hamiltonian. No spectral gap is assumed: these are the inputs of the efficient
 low-density improving family.
