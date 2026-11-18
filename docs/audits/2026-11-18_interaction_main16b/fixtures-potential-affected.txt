@@ -1,0 +1,5 @@
+scripts/box_supremum_zero_gap_regression.lean
+scripts/generic_gap_boundary_regression.lean
+scripts/ground_state_gap_scope_regression.lean
+scripts/range_square_zero_gap_regression.lean
+scripts/zero_gap_tn_wrappers_regression.lean

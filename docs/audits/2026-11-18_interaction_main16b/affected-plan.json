@@ -1,0 +1,15 @@
+{
+  "parents": [
+    "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+    "16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931"
+  ],
+  "seeds": 50,
+  "potential_affected": 237,
+  "groups": {
+    "MPS": 112,
+    "PEPS": 116,
+    "shared": 4,
+    "fixtures": 5
+  },
+  "method": "Reverse transitive closure of 50 conflicted Lean paths on union of both parent import graphs. Conservative planning only; recompute actual changed blobs and transitive fingerprints after resolutions. No builds authorized by this manifest alone."
+}
