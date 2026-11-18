@@ -38,8 +38,8 @@ entropy of unions of components; only the two-factor product lemma is used.
 
 ## Main definitions
 
-* `DomainHamiltonian`: admissible Hamiltonians, one term for each support of range `R` in
-  the sense of `ManyBody.IsDomainSupport`.
+* `ManyBody.DomainInteraction.toChain`: an interaction on `Λ`, one term for each support of
+  range `R` in the sense of `ManyBody.IsDomainSupport`, as an interaction on the chain.
 * `domainBoundaryEdges`, `domainRegion`: the edge boundary `∂_Λ A` and the sites in `A`.
 
 ## Main results

@@ -19,7 +19,7 @@ The interaction family is the existing all-support Hamiltonian. Zero interaction
 omitted only from the finite sum to which the marginal estimate is applied. No new
 Hamiltonian or change in the norm bound is involved.
 
-**Scope restriction (full windows):** the three theorems about `ChainHamiltonian` in
+**Scope restriction (full windows):** the three theorems about chain interactions in
 this module assume that every nonzero interaction occupies a full window of `R + 1`
 consecutive sites contained in the chain; only under that hypothesis are the note's
 crossing count `N_R` and budget `B_R` replaced by `2R` and `B_win`. Recorded in
