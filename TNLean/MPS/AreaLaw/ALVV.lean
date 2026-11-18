@@ -10,6 +10,11 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.ALVV.BalancedRegionalEnergy
 import TNLean.MPS.AreaLaw.ALVV.CalibratedRootEnergy
+import TNLean.MPS.AreaLaw.ALVV.CanonicalWordTrim
+import TNLean.MPS.AreaLaw.ALVV.CanonicalWordTrimTree
+import TNLean.MPS.AreaLaw.ALVV.DGCanonicalNodeEvent
+import TNLean.MPS.AreaLaw.ALVV.DGCanonicalNodeParent
+import TNLean.MPS.AreaLaw.ALVV.DGCanonicalNodeTree
 import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeEvent
 import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeParent
 import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeTree
@@ -26,6 +31,7 @@ import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftResiduals
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftStructure
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftUniformClusters
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFree
+import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeCanonicalTree
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeChain
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeGap
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeImprovingFamily
