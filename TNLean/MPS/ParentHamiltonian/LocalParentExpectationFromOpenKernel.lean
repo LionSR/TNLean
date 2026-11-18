@@ -56,7 +56,8 @@ theorem quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
   have hzero := quasiLocalExpectation_interval_eq_zero_of_groundSpaceES_le_ker
     (A α) hTP hρ hfix htr a (openInteractionMatrix h N) hkerα
   rw [quasiLocalIntervalObservable_openInteractionMatrix a h hR N, map_sum] at hzero
-  simp only [quasiLocalExpectation_quasiLocalIntervalObservable, Finset.sum_const, Finset.card_range, nsmul_eq_mul] at hzero ⊢
+  simp only [quasiLocalExpectation_quasiLocalIntervalObservable, Finset.sum_const,
+    Finset.card_range, nsmul_eq_mul] at hzero ⊢
   exact (mul_eq_zero.mp hzero).resolve_left (Nat.cast_ne_zero.mpr (by omega))
 
 /-- An eventual equality between the open-chain kernel and the joint MPS space
