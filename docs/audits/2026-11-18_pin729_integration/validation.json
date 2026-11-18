@@ -27,7 +27,7 @@
     "seconds": 6.202091126004234
   },
   "tn_source_head": "e47015779a26ec05e61bc0c4d06971e0491c6705",
-  "tn_consumers_and_fixtures": "not Lean-validated at new pin",
+  "tn_consumers_and_fixtures": "five overlap consumers build+strict and eleven fixtures strict passed; see target16-ledger.json",
   "static_checks": {
     "import_layers": 0,
     "selector_tests": 84,
@@ -36,5 +36,6 @@
     "roles": 0,
     "blueprint_sync_after_complete_dependency_sources": 0,
     "whitespace": 0
-  }
+  },
+  "validated_production_snapshot": "6b7fb2e27dbc6856091e593e4226d350403beb8a"
 }

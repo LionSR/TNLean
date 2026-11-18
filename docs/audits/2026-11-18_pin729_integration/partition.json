@@ -24,7 +24,7 @@
   },
   "partition_assertions": "pairwise disjoint; union equals existing_affected; all paths exist",
   "peps_reserved_five": {
-    "status": "build in progress; zero completed; do not duplicate",
+    "status": "all five build+strict passed; skip these in subsequent PEPS closure",
     "paths": [
       "TNLean/PEPS/Approximation/AdaptivePatchConstraintFromAreaLaw.lean",
       "TNLean/PEPS/Approximation/NestedPatchApproximation.lean",

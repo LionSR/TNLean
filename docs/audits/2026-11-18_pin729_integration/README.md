@@ -91,3 +91,18 @@ export_coherent_tn_prerequisites.py. They verify exact dependency pins, toolchai
 and clean source provenance; the TN exporter additionally requires its recorded
 baseline configuration and source closure. These are bounded prerequisite sets,
 not full-closure caches. No cross-environment cache transfer is assumed or done.
+
+## Completed sixteen-target validation
+
+All five overlap consumers passed build and strict; all eleven listed fixtures
+passed full strict at pin 729428582. target16-ledger.json contains exact commands,
+exit codes and separate elapsed build/strict times; production editing time is zero.
+Raw logs include the first CZX strict failure (missing direct-import olean), its
+narrow dependency build and successful retry. No proof or implementation was edited.
+The audited production snapshot is 6b7fb2e27; subsequent commits only change audits.
+This does not certify the remaining 1668-module reverse closure.
+
+Bounded cache exporter probes: QIC refused a missing ZModCyclicSums artifact;
+TN refused its historical baseline toolchain mismatch. Neither check was bypassed
+and no transfer or extra cache build was started. Workers must validate their
+own exact-pin source/artifact provenance.
