@@ -52,6 +52,7 @@ import TNLean.MPS.AreaLaw.CanonicalSampledIntervalBounds
 import TNLean.MPS.AreaLaw.CanonicalSampledIntervalInterleaved
 import TNLean.MPS.AreaLaw.ChainNeighborhood
 import TNLean.MPS.AreaLaw.ChainStageIncidence
+import TNLean.MPS.AreaLaw.ChebyshevNestedViability
 import TNLean.MPS.AreaLaw.ClusterTruncationCutRank
 import TNLean.MPS.AreaLaw.ClusterTruncationMPO
 import TNLean.MPS.AreaLaw.CommonClosingPolynomialFamily
@@ -168,6 +169,7 @@ import TNLean.MPS.AreaLaw.OperatorMPOFromCutRank
 import TNLean.MPS.AreaLaw.OriginalLowEnergyFamily
 import TNLean.MPS.AreaLaw.OverlapEnergy
 import TNLean.MPS.AreaLaw.PartialSwap
+import TNLean.MPS.AreaLaw.PhysicalBufferedTargets
 import TNLean.MPS.AreaLaw.PhysicalChebyshevViability
 import TNLean.MPS.AreaLaw.PhysicalDGApproximation
 import TNLean.MPS.AreaLaw.PhysicalDGAutomaticRefinement
@@ -189,6 +191,7 @@ import TNLean.MPS.AreaLaw.PhysicalDGInterleavedPolynomialBond
 import TNLean.MPS.AreaLaw.PhysicalDGInterleavedTree
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTree
 import TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming
+import TNLean.MPS.AreaLaw.PhysicalDGLongMiddleFamily
 import TNLean.MPS.AreaLaw.PhysicalDGReferenceSpace
 import TNLean.MPS.AreaLaw.PhysicalDGReferenceTrimming
 import TNLean.MPS.AreaLaw.PhysicalDGSampledNode
@@ -290,6 +293,7 @@ import TNLean.MPS.AreaLaw.SharpLowDensityParameters
 import TNLean.MPS.AreaLaw.SharpPhysicalCompression
 import TNLean.MPS.AreaLaw.SharpRankCount
 import TNLean.MPS.AreaLaw.SharpRegionalLowDensityFamily
+import TNLean.MPS.AreaLaw.SharpRegionalScalarBudgets
 import TNLean.MPS.AreaLaw.ShiftedHeatMPO
 import TNLean.MPS.AreaLaw.ShortRegionViableFamily
 import TNLean.MPS.AreaLaw.SnakeGridApproximation
