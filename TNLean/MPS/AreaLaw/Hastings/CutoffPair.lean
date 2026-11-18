@@ -233,12 +233,12 @@ theorem _root_.ManyBody.ChainInteraction.norm_localizedPart_apply_le {E₀ : ℝ
     refine (norm_gaussianFilteredTerm_apply_le_commutator_of_isGapped hs hΔ
         (ManyBody.Interaction.isHermitian_hamiltonian hh)
       hgap hspan W (inner_groundCentered hP hΩ)).trans ?_
-    rw [h.commutator_groundCentered]
+    rw [h.commutator_groundCentered hh]
     gcongr
     exact (hop _).trans hc
   have hR : ‖toEuclideanLin (G - h.localizedPart Ω s ΔE P K) Ω‖ ≤ δ := by
     refine (hop _).trans ?_
-    rw [h.gaussianFilteredTerm_groundCentered_sub_localizedPart]
+    rw [h.gaussianFilteredTerm_groundCentered_sub_localizedPart hh]
     exact hδ
   rw [hsplit, map_sub, LinearMap.sub_apply]
   exact (norm_sub_le _ _).trans (add_le_add hG hR)
@@ -291,9 +291,9 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   have hML : ML.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPL KL
   have hMR : MR.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPR KR
   have hsL : Entropy.IsSupportedOn (n := fun _ ↦ q) ML (leftBlock L c) :=
-    h.isSupportedOn_localizedPart_leftPart Ω s ΔE hmk
+    h.isSupportedOn_localizedPart_leftPart hh hhJ Ω s ΔE hmk
   have hsR : Entropy.IsSupportedOn (n := fun _ ↦ q) MR (leftBlock L c)ᶜ :=
-    h.isSupportedOn_localizedPart_rightPart Ω s ΔE hmk
+    h.isSupportedOn_localizedPart_rightPart hh hhJ Ω s ΔE hmk
   let σ₀ : Entropy.SiteConfig (fun _ : Fin L ↦ q) := fun _ ↦ ⟨0, NeZero.pos q⟩
   have hcomm : Commute (spectralCutoff ML θ) (spectralCutoff MR θ) :=
     commute_spectralCutoff_of_isSupportedOn disjoint_compl_right hML hMR hsL hsR σ₀ θ θ

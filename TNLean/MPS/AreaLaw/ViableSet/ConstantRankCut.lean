@@ -178,7 +178,7 @@ theorem _root_.ManyBody.ChainInteraction.one_sub_le_re_inner_chainTrim {R : ℕ}
   have hw0 : 0 ≤ w := by
     have := Real.log_nonneg hcδ
     positivity
-  have hb := h.spectralProjectionGE_leftBlock_bounds hq hJ hΔ hΩ hgap hspan k w hw0
+  have hb := h.spectralProjectionGE_leftBlock_bounds hh hhJ hq hJ hΔ hΩ hgap hspan k w hw0
   dsimp only at hb
   obtain ⟨hproj, hrank, hmass⟩ := hb
   set Pw := spectralProjectionGE (Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω)
@@ -388,7 +388,7 @@ theorem _root_.ManyBody.ChainInteraction.re_inner_normalized_chainTrim_le {R : �
     (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) (constantCutBond q R J Δ δB)
   exact TNLean.MPS.AreaLaw.re_inner_normalized_chainTrim_le hsplit hHL hHR hK0 hK1 hΔ
       (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hgap hspan hPΩ
-    (h.one_sub_le_re_inner_chainTrim hq hJ hΔ hΩ hgap hspan hδB0 k hPΩ) hw hE hP hη hη2
+    (h.one_sub_le_re_inner_chainTrim hh hhJ hq hJ hΔ hΩ hgap hspan hδB0 k hPΩ) hw hE hP hη hη2
 
 /-- **Corollary `c:1`**, chain form (arXiv:1307.5143v1, algo53.tex, lines 361–364).
 If the chain Hamiltonian splits at the cut `k` as in Lemma `l:2` and `δ > 0`, there is a unit
@@ -418,13 +418,14 @@ theorem _root_.ManyBody.ChainInteraction.exists_rank_cutMatrix_le_constantCutBon
         (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + 4 * √d / (1 - 4 * d) := by
     obtain ⟨P, hP⟩ := exists_isTrimmingProjection
       (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) (constantCutBond q R J Δ d)
-    have hov := h.one_sub_le_re_inner_chainTrim hq hJ hΔ hΩ hgap hspan hd0 k hP
+    have hov := h.one_sub_le_re_inner_chainTrim hh hhJ hq hJ hΔ hΩ hgap hspan hd0 k hP
     have hEΩ : (⟪Ω, toEuclideanLin h.hamiltonian Ω⟫_ℂ).re ≤ E₀ + 0 := by
       have h2 : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
         ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _)
       rw [h2, inner_smul_right, inner_self_eq_norm_sq_to_K, hΩ]
       simp
-    have hE := h.re_inner_normalized_chainTrim_le hq hJ hΔ hsplit hHL hHR hK0 hK1 hΩ hgap hspan hd0
+    have hE := h.re_inner_normalized_chainTrim_le hh hhJ hq hJ hΔ hsplit hHL hHR hK0 hK1
+        hΩ hgap hspan hd0
       hΩ hEΩ hP (η := 2 * d) (by rw [zero_div, zero_add]) (by linarith)
     refine ⟨_, norm_normalized_chainTrim_eq_one (by linarith) hov,
       rank_cutMatrix_normalized_chainTrim_le hP, hov, hE.trans (le_of_eq ?_)⟩

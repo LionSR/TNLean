@@ -112,9 +112,9 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
     have hδ1 : α / (L : ℝ) ^ a ≤ 1 := (div_le_one (pow_pos hLp a)).mpr
       (hα1.trans (one_le_pow₀ (by exact_mod_cast hL)))
     let chain := ManyBody.ChainInteraction.ofBonds h hs
-    have hgapC : IsGapped chain.operator E₀ Δ := by
+    have hgapC : IsGapped chain.hamiltonian E₀ Δ := by
       simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hgap
-    have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
+    have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
       simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hspan
     have hsmall : IsViable Γ (c / L)
         (AreaLaw.extend i S : Set (LeftBlockVector L q i)) := by
@@ -131,7 +131,9 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
     let T₀ := chain.sizeTrimmingSelection hq Δ (AreaLaw.extend i S)
     have hT₁ : IsViableMPS Γ (F * L ^ k) m (1 / 2) (bondTrimSet hiL m T₀) :=
       ⟨(card_bondTrimSet_le hiL m T₀).trans
-        (chain.card_sizeTrimmingSelection_le_polynomial (by omega) hq hΔ _),
+        (chain.card_sizeTrimmingSelection_le_polynomial
+            (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
+            (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) (by omega) hq hΔ _),
         fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hiL m T₀ hv,
         chain.isViable_bondTrimSet_sizeTrimmingSelection
           (ManyBody.ChainInteraction.posSemidef_ofBonds_term h hs h0) (by omega) hq hiL hΔ

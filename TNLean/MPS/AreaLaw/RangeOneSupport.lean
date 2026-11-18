@@ -85,7 +85,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_hamiltonian_le_of_range_one {L q :
       omega
     let := Fintype.card_eq_zero_iff.mp hcard
     simp [ManyBody.Interaction.hamiltonian]
-  · have hJ := h.norm_bound_nonneg ⟨0, by omega⟩
+  · have hJ := h.norm_bound_nonneg hhJ ⟨0, by omega⟩
     calc
       ‖h.hamiltonian‖ ≤ ∑ X, ‖h.term X‖ := norm_sum_le _ _
       _ ≤ ∑ _ : ChainSupport L 1, J := Finset.sum_le_sum fun X _ ↦ hhJ X

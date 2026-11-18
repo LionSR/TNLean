@@ -154,7 +154,7 @@ private theorem surprisalTail_leftBlock_le_of_consecutive_terms
     (fun X ↦ h.mem X.val) (fun X ↦ hh X.val) hJ
     (fun X ↦ hhJ X.val) hΔ hΩ hgap hspan (leftBlock L k) ?_ w hw
   rw [leftBlock_eq_interval]
-  exact h.cutLogBudget_interval_le_of_consecutive_terms hq hwindow 0 k
+  exact h.cutLogBudget_interval_le_of_consecutive_terms hq hh hhJ hwindow 0 k
 
 open scoped ComplexOrder in
 /-- At every prefix cut, the spectral projection of the actual reduced ground
@@ -192,7 +192,7 @@ theorem _root_.ManyBody.ChainInteraction.spectralProjectionGE_leftBlock_bounds
   have hS : S ≤ C := by
     dsimp only [S, C]
     rw [leftBlock_eq_interval]
-    exact regionEntropy_interval_le hq hJ hΔ h hΩ hgap hspan _ _
+    exact regionEntropy_interval_le hq hJ hΔ h hh hhJ hΩ hgap hspan _ _
   have hwv : w ≤ v := by
     dsimp only [v]
     linarith
@@ -202,7 +202,7 @@ theorem _root_.ManyBody.ChainInteraction.spectralProjectionGE_leftBlock_bounds
     ring
   have hmass := hρ.trace_complement_spectralProjectionGE_le_surprisalTail S v
   rw [hcenter] at hmass
-  refine hmass.trans ((surprisalTail_leftBlock_le hq hJ hΔ h hΩ hgap hspan k v hv).trans ?_)
+  refine hmass.trans ((surprisalTail_leftBlock_le hq hJ hΔ h hh hhJ hΩ hgap hspan k v hv).trans ?_)
   apply mul_le_mul_of_nonneg_left _ (by positivity)
   apply Real.exp_le_exp.mpr
   exact neg_le_neg (div_le_div_of_nonneg_right hwv (by positivity))
@@ -361,10 +361,10 @@ theorem exists_isOpenMPS_norm_sub_le_of_error
     (chainIntervalEntropyBound_nonneg hq hJ hΔ) hs hL hΩ hε hε1 ?_ ?_
   · intro k
     rw [leftBlock_eq_interval]
-    exact regionEntropy_interval_le hq hJ hΔ h hΩ hgap hspan _ _
+    exact regionEntropy_interval_le hq hJ hΔ h hh hhJ hΩ hgap hspan _ _
   · dsimp only
     intro hw k _
-    exact surprisalTail_leftBlock_le hq hJ hΔ h hΩ hgap hspan k _ hw
+    exact surprisalTail_leftBlock_le hq hJ hΔ h hh hhJ hΩ hgap hspan k _ hw
 
 /-- A gapped chain whose actual nonzero interactions occupy full contained windows
 has a normalized matrix product state approximant at every accuracy `0 < ε ≤ 1`.
@@ -418,7 +418,8 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms
       _ = C := mul_one _
   · dsimp only
     intro hw k _
-    exact surprisalTail_leftBlock_le_of_consecutive_terms hq hJ hΔ h hwindow hΩ hgap hspan k _ hw
+    exact surprisalTail_leftBlock_le_of_consecutive_terms hq hJ hΔ h hh hhJ hwindow hΩ
+        hgap hspan k _ hw
 
 /-- Accuracy-dependent MPS approximation with the original printed interval constant.
 This extends the printed `1/L` approximation to a free accuracy parameter
@@ -458,10 +459,10 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_polynomial
     hC hs hL hΩ hε hε1 ?_ ?_
   · intro k
     rw [leftBlock_eq_interval]
-    exact regionEntropy_interval_le_polynomial hq hJ hΔ h hΩ hgap hspan _ _
+    exact regionEntropy_interval_le_polynomial hq hJ hΔ h hh hhJ hΩ hgap hspan _ _
   · dsimp only
     intro hw k _
-    exact surprisalTail_leftBlock_le hq hJ hΔ h hΩ hgap hspan k _ hw
+    exact surprisalTail_leftBlock_le hq hJ hΔ h hh hhJ hΩ hgap hspan k _ hw
 
 /-- **Theorem B: polynomial matrix product state approximation on a chain.** For a gapped
 ground vector `Ω` of a finite-range Hamiltonian on the chain of `L ≥ 1` sites there is a
@@ -484,7 +485,7 @@ theorem exists_isOpenMPS_norm_sub_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ
       2 * (L : ℝ) ^ 2 * tailPrefactorRoot := by
     field_simp
   simpa only [chainBondDimension, chainTruncationWidth, hy] using
-    exists_isOpenMPS_norm_sub_le_of_error hq hJ hΔ hL h hΩ hgap hspan hε hε1
+    exists_isOpenMPS_norm_sub_le_of_error hq hJ hΔ hL h hh hhJ hΩ hgap hspan hε hε1
 
 /-- **The bond dimension is polynomial in the length.** For `L ≥ 1`,
 `D(L) ≤ e^{C_int} (2 √(2 e^{e/2}))^{64 s} L^{128 s}` with `s = √((1 + J/Δ) B_R)`. -/
@@ -566,7 +567,7 @@ theorem exists_isOpenMPS_norm_sub_le_polynomial
       2 * (L : ℝ) ^ 2 * tailPrefactorRoot := by
     field_simp
   obtain ⟨Φ, hΦ, hMPS, herror⟩ :=
-    exists_isOpenMPS_norm_sub_le_of_error_polynomial hq hJ hΔ hL1 h hΩ hgap hspan hε hε1
+    exists_isOpenMPS_norm_sub_le_of_error_polynomial hq hJ hΔ hL1 h hh hhJ hΩ hgap hspan hε hε1
   refine ⟨Φ, hΦ, norm_ne_zero_iff.mp (by simp [hΦ]),
     ?_, herror, ?_⟩
   · simpa only [hy] using hMPS
@@ -616,7 +617,7 @@ theorem exists_isOpenMPS_norm_sub_le_of_error_rpow
         ((L : ℝ) / ε) ^ (64 * s) := by
   intro C_E m C_int s
   obtain ⟨Φ, hΦ, hMPS, herror⟩ :=
-    exists_isOpenMPS_norm_sub_le_of_error_polynomial hq hJ hΔ hL h hΩ hgap hspan hε hε1
+    exists_isOpenMPS_norm_sub_le_of_error_polynomial hq hJ hΔ hL h hh hhJ hΩ hgap hspan hε hε1
   refine ⟨Φ, hΦ, _, hMPS, herror, ?_⟩
   have hroot := tailPrefactorRoot_pos
   have hLpos : (0 : ℝ) < L := by exact_mod_cast hL

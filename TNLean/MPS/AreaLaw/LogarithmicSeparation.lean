@@ -113,10 +113,11 @@ theorem _root_.ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_sep
       exact_mod_cast (Nat.dist.triangle_inequality x.val y.val e.val).trans_eq
         (congrArg (Nat.dist x.val y.val + ·) (Nat.dist_comm y.val e.val))
     linarith only [htri, hxy, hsep, hdist x hx e he]
-  have hJ : 0 ≤ J := h.norm_bound_nonneg ⟨0, hLn⟩
+  have hJ : 0 ≤ J := h.norm_bound_nonneg hhJ ⟨0, hLn⟩
   have hI : ∀ a z : ℕ,
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a z) Ω ≤ c :=
-    fun a z ↦ (regionEntropy_interval_le hq hJ hΔ h hΩ hgap hspan a z).trans (le_max_right _ _)
+    fun a z ↦ (regionEntropy_interval_le hq hJ hΔ h hh hhJ hΩ hgap hspan a z).trans
+        (le_max_right _ _)
   have hD : Entropy.regionEntropy (n := fun _ : Fin L ↦ q) D Ω ≤ (k₀ : ℝ) * c := by
     obtain ⟨n, a, z, hn, hT⟩ := hT
     have hbound := regionEntropy_chainNeighborhood_biUnion_intervals_le hΩ hI

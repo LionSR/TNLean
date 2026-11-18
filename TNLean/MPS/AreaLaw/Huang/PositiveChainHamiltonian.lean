@@ -107,7 +107,8 @@ variable {L q : ℕ}
 /-- The constructed Hamiltonian keeps the actual original term at each adjacent pair.
 LVV13, `algo53.tex`, the nearest-neighbor Hamiltonian convention. -/
 theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term (i : Fin (L - 1)) :
-    (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term (nearestNeighborChainSupport i) = h i := by
+    (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term
+        (nearestNeighborChainSupport i) = h i := by
   change Function.extend nearestNeighborChainSupport h (fun _ ↦ 0)
     (nearestNeighborChainSupport i) = h i
   exact nearestNeighborChainSupport_injective.extend_apply h (fun _ ↦ 0) i
@@ -167,6 +168,7 @@ theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian :
       simpa only [Finset.mem_image, Finset.mem_univ, true_and, f] using hX
     _ = ∑ i, H.term (f i) := Finset.sum_image (fun _ _ _ _ hij ↦
       nearestNeighborChainSupport_injective hij)
-    _ = _ := Finset.sum_congr rfl fun i _ ↦ ManyBody.ChainInteraction.ofNearestNeighborPositive_term h hs i
+    _ = _ := Finset.sum_congr rfl fun i _ ↦
+        ManyBody.ChainInteraction.ofNearestNeighborPositive_term h hs i
 
 end TNLean.MPS.AreaLaw

@@ -52,7 +52,7 @@ theorem _root_.ManyBody.ChainInteraction.leftObjective_norm_bounds {L q k m : �
     ‖HL‖ ≤ 4 * L ∧
       ‖leftCutOperator k HL ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)‖ ≤ 4 * L := by
   have hop : ‖h.hamiltonian‖ ≤ 2 * L := by
-    simpa only [mul_one] using h.norm_hamiltonian_le_of_range_one
+    simpa only [mul_one] using h.norm_hamiltonian_le_of_range_one hh hhJ
   have hHLn : ‖HL‖ ≤ 4 * L := by
     have heq : HL = h.hamiltonian - B := by rw [hsplit]; abel
     rw [heq]
@@ -143,7 +143,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_compressed_boun
     rw [htransport.2]
     exact hσenergy
   obtain ⟨u, μ, hu, huρ, -, hmax⟩ := hρ.exists_unit_eigenvector_max_eigenvalue hρtrace
-  have hbounds := h.leading_bounds_of_approximate_boundary_solution hL hq hΔ
+  have hbounds := h.leading_bounds_of_approximate_boundary_solution hh hhJ hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX herr hρ hρtrace hρP
       hρboundary hρenergy u μ hu huρ hmax
   let P := reindex
@@ -236,7 +236,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_compres
     rw [htransport.2]
     exact hσenergy
   obtain ⟨u, μ, hu, huρ, -, hmax⟩ := hρ.exists_unit_eigenvector_max_eigenvalue hρtrace
-  have hbounds := h.leading_bounds_of_approximate_boundary_solution hL hq hΔ
+  have hbounds := h.leading_bounds_of_approximate_boundary_solution hh hhJ hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX herr hρ hρtrace hρP
       hρboundary hρenergy u μ hu huρ hmax
   let z : EuclideanSpace ℂ (Fin n) := WithLp.toLp 2 (Zᴴ *ᵥ WithLp.ofLp u)
@@ -337,7 +337,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalCoordinateData_of_compre
     rw [htransport.2]
     exact hσenergy
   obtain ⟨u, μ, hu, huρ, -, hmax⟩ := hρ.exists_unit_eigenvector_max_eigenvalue hρtrace
-  have hbounds := h.leading_bounds_of_approximate_boundary_solution hL hq hΔ
+  have hbounds := h.leading_bounds_of_approximate_boundary_solution hh hhJ hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX herr hρ hρtrace hρP
       hρboundary hρenergy u μ hu huρ hmax
   let z : EuclideanSpace ℂ (Fin n) := WithLp.toLp 2 (Zᴴ *ᵥ WithLp.ofLp u)
@@ -430,7 +430,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_finite_density_search_viable_vec
       hτ₀ hτ₀trace (by simpa only [η] using hτ₀boundary)
         (by simpa only [K, E, Hleft] using hτ₀energy)
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hcombined : 2 * (‖K‖ * (2 * δ) + ‖B‖ * (2 * δ)) ≤ 24 * L * δ := by
@@ -442,7 +442,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_finite_density_search_viable_vec
   have herr : 2 * (‖K‖ * (2 * δ) + ‖B‖ * (2 * δ)) ≤ Δ / 2028 :=
     hcombined.trans hprecision
   obtain ⟨v, hvnorm, hvS, hvenergy, hvoverlap⟩ :=
-    h.exists_viable_vector_of_compressed_boundary_solution_with_slack hL hq hΔ
+    h.exists_viable_vector_of_compressed_boundary_solution_with_slack hh hhJ hL hq hΔ
       HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ σ
         (hNdensity σ hσN).1 (hNdensity σ hσN).2
         (ξ := ‖K‖ * (2 * δ)) (δ := 2 * δ)
@@ -526,7 +526,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_coordinate_finite_density_search
     rw [← htransport.2]
   obtain ⟨N, hNcard, hNdensity, σ, hσN, hσmin,
       v, hvnorm, hvS, hvenergy, hvoverlap⟩ :=
-    h.exists_finite_density_search_viable_vector hL hq hΔ HL B hsplit hHL hBS hBn
+    h.exists_finite_density_search_viable_vector hh hhJ hL hq hΔ HL B hsplit hHL hBS hBn
       hΩ hgap hspan (S := (S : Set (LeftBlockVector L q k))) W hW x hwx hwE X hXHermitian hX
         Z hZ hZZ τ₀ hτ₀ hτ₀trace
         (by simpa only [Hleft] using hτ₀boundary)
@@ -588,7 +588,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_canonical_coordinate_finite_dens
           ‖v‖ = 1 ∧ v ∈ leftSupportSubmodule (S : Set (LeftBlockVector L q k)) ∧
           (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
           1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
-  exact h.exists_coordinate_finite_density_search_viable_vector hL hq hΔ
+  exact h.exists_coordinate_finite_density_search_viable_vector hh hhJ hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan S W hW x hxnorm hxP hwx hwE X hXHermitian hX
       (lvvFiniteDensityMesh_pos hL hΔ) (lvvFiniteDensityMesh_fits hL).le
 

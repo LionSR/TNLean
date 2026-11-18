@@ -60,7 +60,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings_
     ‖ManyBody.heisenbergEvolution h.hamiltonian t A * B -
       B * ManyBody.heisenbergEvolution h.hamiltonian t A‖ ≤
       4 * (X.card : ℝ) * ‖A‖ * ‖B‖ * Real.exp (-((d : ℝ) / 80)) := by
-  refine (h.norm_heisenberg_commutator_le_numeric X Y hA hB d hd t).trans ?_
+  refine (h.norm_heisenberg_commutator_le_numeric hh hhJ X Y hA hB d hd t).trans ?_
   apply mul_le_mul_of_nonneg_left _ (by positivity)
   apply Real.exp_le_exp.mpr
   dsimp only [hastingsLRVelocity] at hcone
