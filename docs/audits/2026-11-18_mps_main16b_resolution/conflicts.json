@@ -1,0 +1,532 @@
+[
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean",
+    "conflicts": [
+      {
+        "start_line": 176,
+        "ours": "        (ManyBody.Interaction.isHermitian_hamiltonian\n          (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0))\n        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) h\u03a9\n        (hspanC \u25b8 Submodule.mem_span_singleton_self _) hw'norm hover\n",
+        "main": "        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)\n        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) h\u03a9\n        hspanC hw'norm hover\n",
+        "resolution": "Retain total-Hermitian derivation and canonical membership extracted from the existing positive-gap caller; main would pass term Hermiticity and singleton equality to the restored broader overlap API."
+      }
+    ],
+    "reason": "Retain total-Hermitian derivation and canonical membership extracted from the existing positive-gap caller; main would pass term Hermiticity and singleton equality to the restored broader overlap API.",
+    "final_sha256": "c2a7d41ce41e9dadb692885205fb245152df508f573e9ba2eea40eccb8f90325",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean",
+    "conflicts": [
+      {
+        "start_line": 397,
+        "ours": "        (ManyBody.Interaction.isHermitian_hamiltonian\n          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0))\n        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) h\u03a9\n        (hspanC \u25b8 Submodule.mem_span_singleton_self _) hw'norm hover'\n",
+        "main": "        (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)\n        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) h\u03a9 hspanC hw'norm hover'\n",
+        "resolution": "Retain total-Hermitian derivation and canonical membership extracted from the existing positive-gap caller; main would pass term Hermiticity and singleton equality to the restored broader overlap API."
+      }
+    ],
+    "reason": "Retain total-Hermitian derivation and canonical membership extracted from the existing positive-gap caller; main would pass term Hermiticity and singleton equality to the restored broader overlap API.",
+    "final_sha256": "8e696bf9b06f775d8796f38b4b030f867bb4e78f602aa6bbfa20cc8b96663fde",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean",
+    "conflicts": [
+      {
+        "start_line": 535,
+        "ours": "        (ManyBody.Interaction.isHermitian_hamiltonian\n          (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0))\n        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) h\u03a9\n        (hspanC \u25b8 Submodule.mem_span_singleton_self _) hw'norm hover\n",
+        "main": "        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)\n        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) h\u03a9\n        hspanC hw'norm hover\n",
+        "resolution": "Retain total-Hermitian derivation and canonical membership extracted from the existing positive-gap caller; main would pass term Hermiticity and singleton equality to the restored broader overlap API."
+      }
+    ],
+    "reason": "Retain total-Hermitian derivation and canonical membership extracted from the existing positive-gap caller; main would pass term Hermiticity and singleton equality to the restored broader overlap API.",
+    "final_sha256": "b2f72c5bf361ad8b0e0a3a2d3a12ba22750cd9de9a33d4e379a3ad7fef2bbe01",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean",
+    "conflicts": [
+      {
+        "start_line": 267,
+        "ours": "        (ManyBody.Interaction.isHermitian_hamiltonian\n          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0))\n        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) h\u03a9\n        (hspanC \u25b8 Submodule.mem_span_singleton_self _) hw'norm hover'\n",
+        "main": "        (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)\n        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) h\u03a9 hspanC hw'norm hover'\n",
+        "resolution": "Retain total-Hermitian derivation and canonical membership extracted from the existing positive-gap caller; main would pass term Hermiticity and singleton equality to the restored broader overlap API."
+      }
+    ],
+    "reason": "Retain total-Hermitian derivation and canonical membership extracted from the existing positive-gap caller; main would pass term Hermiticity and singleton equality to the restored broader overlap API.",
+    "final_sha256": "aef33c0f0b32eaf4630865d9e3225a9023eef898c90cabb66e21b7caf83eec93",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/BoundaryGap.lean",
+    "conflicts": [
+      {
+        "start_line": 41,
+        "ours": "    (hhJ : \u2200 X, \u2016h.term X\u2016 \u2264 J)\n    (hL : 0 < L) (hq : 2 \u2264 q) (h\u03a9 : \u2016\u03a9\u2016 = 1) (hgap : (h.hamiltonian - (E\u2080 : \u2102) \u2022 1 - (\u0394 : \u2102) \u2022\n      (1 - Matrix.vecMulVec (fun x \u21a6 \u03a9 x) (star (fun x \u21a6 \u03a9 x)))).PosSemidef)\n    (hmem : \u03a9 \u2208 groundSpace h.hamiltonian E\u2080) :\n",
+        "main": "    (hh : \u2200 X, (h.term X).IsHermitian) (hhJ : \u2200 X, \u2016h.term X\u2016 \u2264 J)\n    (hL : 0 < L) (hq : 2 \u2264 q) (h\u03a9 : \u2016\u03a9\u2016 = 1) (hgap : IsGapped h.hamiltonian E\u2080 \u0394)\n    (hspan : groundSpace h.hamiltonian E\u2080 = Submodule.span \u2102 {\u03a9}) :\n",
+        "resolution": "Retain arbitrary real gap with projector positivity and membership, no extra term-Hermitian premise; use projector bound directly."
+      },
+      {
+        "start_line": 76,
+        "ours": "      hgap.gap_le (toEuclideanLin K \u03a9)\n",
+        "main": "      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) h\u03a9\n          hspan).gap_le (toEuclideanLin K \u03a9)\n",
+        "resolution": "Retain arbitrary real gap with projector positivity and membership, no extra term-Hermitian premise; use projector bound directly."
+      }
+    ],
+    "reason": "Retain arbitrary real gap with projector positivity and membership, no extra term-Hermitian premise; use projector bound directly.",
+    "final_sha256": "ba0001b75bb7a491152b7f825a0a92c43ff7911aa648e63fb905c37e788fe479",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean",
+    "conflicts": [
+      {
+        "start_line": 136,
+        "ours": "theorem regionEntropy_prefix_le_of_factorization {\u03a9 : EuclideanSpace \u2102 (Fin L \u2192 Fin q)}\n    (h\u03a9 : \u2016\u03a9\u2016 = 1)\n",
+        "main": "theorem regionEntropy_prefix_le_of_factorization (h : ChainInteraction L q R)\n    (hh : \u2200 X, (h.term X).IsHermitian) (hhJ : \u2200 X, \u2016h.term X\u2016 \u2264 J)\n    {E\u2080 \u0394 : \u211d} {\u03a9 : EuclideanSpace \u2102 (Fin L \u2192 Fin q)}\n    (h\u03a9 : \u2016\u03a9\u2016 = 1) (hgap : IsGapped h.hamiltonian E\u2080 \u0394)\n    (hspan : groundSpace h.hamiltonian E\u2080 = Submodule.span \u2102 {\u03a9})\n",
+        "resolution": "Retain factorization-only helper signatures and matching calls: no Hamiltonian, gap or singleton inputs needed. Only AreaLaw receives main scope/open additions."
+      }
+    ],
+    "reason": "Retain factorization-only helper signatures and matching calls: no Hamiltonian, gap or singleton inputs needed. Only AreaLaw receives main scope/open additions.",
+    "final_sha256": "9aadae03901e9b9f6d0fee7699471948b580922ae159a9504d79b836bdec0a87",
+    "same_as_42c4": false,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean",
+    "conflicts": [
+      {
+        "start_line": 93,
+        "ours": "  refine regionEntropy_prefix_le_of_factorization h\u03a9 h\u03be0 (le_max_right _ _)\n",
+        "main": "  refine regionEntropy_prefix_le_of_factorization h hh hhJ h\u03a9 hgap hspan h\u03be0 (le_max_right _ _)\n",
+        "resolution": "Retain factorization-only helper signatures and matching calls: no Hamiltonian, gap or singleton inputs needed. Only AreaLaw receives main scope/open additions."
+      }
+    ],
+    "reason": "Retain factorization-only helper signatures and matching calls: no Hamiltonian, gap or singleton inputs needed. Only AreaLaw receives main scope/open additions.",
+    "final_sha256": "ab3228fff31b4a124553f74fb463f425b0513bf6d2da0279c0ca9d5142f3665b",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+    "conflicts": [
+      {
+        "start_line": 54,
+        "ours": "  have hBound := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric\n    (SimpleGraph.pathGraph L) h\n    hh R (fun Z x hx y hy \u21a6 ManyBody.ChainSupport.edist_le Z x hx y hy)\n",
+        "main": "  let \u03a6 : ManyBody.Interaction (fun _ : Fin L \u21a6 Fin q) (fun Z : ChainSupport L R \u21a6 Z.1) :=\n    \u27e8h.term, h.mem\u27e9\n  have hBound := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric\n    (SimpleGraph.pathGraph L) \u03a6\n    hh R (fun Z x hx y hy \u21a6 ChainSupport.edist_le Z x hx y hy)\n",
+        "resolution": "Retain five direct canonical h/g arguments, no reconstructed Interaction and no identity rewrite. Fully qualified ChainSupport reference retained."
+      }
+    ],
+    "reason": "Retain five direct canonical h/g arguments, no reconstructed Interaction and no identity rewrite. Fully qualified ChainSupport reference retained.",
+    "final_sha256": "f3db5618c87217d5c65706ae7540237b79b37d74d640e4e1e4e564df7fa73cae",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean",
+    "conflicts": [
+      {
+        "start_line": 66,
+        "ours": "theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState [NeZero q]\n    {\u03a9 : EuclideanSpace \u2102 (Fin L \u2192 Fin q)}\n    (h\u03a9 : \u2016\u03a9\u2016 = 1)\n",
+        "main": "theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState [NeZero q] (h : ChainInteraction L q R)\n    (hh : \u2200 X, (h.term X).IsHermitian) (hhJ : \u2200 X, \u2016h.term X\u2016 \u2264 J)\n    {E\u2080 \u0394 : \u211d} {\u03a9 : EuclideanSpace \u2102 (Fin L \u2192 Fin q)}\n    (h\u03a9 : \u2016\u03a9\u2016 = 1) (hgap : IsGapped h.hamiltonian E\u2080 \u0394)\n    (hspan : groundSpace h.hamiltonian E\u2080 = Submodule.span \u2102 {\u03a9})\n",
+        "resolution": "Retain factorization-only helper signatures and matching calls: no Hamiltonian, gap or singleton inputs needed. Only AreaLaw receives main scope/open additions."
+      },
+      {
+        "start_line": 93,
+        "ours": "  have hS := regionEntropy_prefix_le_of_factorization h\u03a9 h\u03be' hC\u2081 hfact j\n",
+        "main": "  have hS := regionEntropy_prefix_le_of_factorization h hh hhJ h\u03a9 hgap hspan h\u03be' hC\u2081 hfact j\n",
+        "resolution": "Retain factorization-only helper signatures and matching calls: no Hamiltonian, gap or singleton inputs needed. Only AreaLaw receives main scope/open additions."
+      },
+      {
+        "start_line": 137,
+        "ours": "  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h\u03a9 h\u03be'0 (le_max_right _ _)\n",
+        "main": "  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hh hhJ h\u03a9 hgap hspan h\u03be'0\n      (le_max_right _ _)\n",
+        "resolution": "Retain factorization-only helper signatures and matching calls: no Hamiltonian, gap or singleton inputs needed. Only AreaLaw receives main scope/open additions."
+      },
+      {
+        "start_line": 178,
+        "ours": "  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h\u03a9 h\u03b60 (le_max_right _ _)\n",
+        "main": "  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hh hhJ h\u03a9 hgap hspan h\u03b60 (le_max_right _ _)\n",
+        "resolution": "Retain factorization-only helper signatures and matching calls: no Hamiltonian, gap or singleton inputs needed. Only AreaLaw receives main scope/open additions."
+      }
+    ],
+    "reason": "Retain factorization-only helper signatures and matching calls: no Hamiltonian, gap or singleton inputs needed. Only AreaLaw receives main scope/open additions.",
+    "final_sha256": "aee14b8f260f6e5063963d7975a7fdc276323fa7f6cd0c2bf39282dbb7ef47ef",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean",
+    "conflicts": [
+      {
+        "start_line": 372,
+        "ours": "    (h\u03a9 : \u2016\u03a9\u2016 = 1) (hgap : (h.hamiltonian - (E\u2080 : \u2102) \u2022 1 - (\u0394 : \u2102) \u2022\n      (1 - Matrix.vecMulVec (fun x \u21a6 \u03a9 x) (star (fun x \u21a6 \u03a9 x)))).PosSemidef)\n    (hmem : \u03a9 \u2208 groundSpace h.hamiltonian E\u2080) (j m : \u2115) :\n    \u2016\u03a9\u2016 = 1 \u2227 ((groundCentered \u03a9 (h.leftPart j m) +\n      groundCentered \u03a9 (h.bufferPart j m) + groundCentered \u03a9 (h.rightPart j m)) - (\u0394 : \u2102) \u2022\n      (1 - Matrix.vecMulVec (fun x \u21a6 \u03a9 x) (star (fun x \u21a6 \u03a9 x)))).PosSemidef \u2227\n      \u03a9 \u2208 groundSpace (groundCentered \u03a9 (h.leftPart j m) +\n      groundCentered \u03a9 (h.bufferPart j m) + groundCentered \u03a9 (h.rightPart j m)) 0 := by\n  have hE : toEuclideanLin h.hamiltonian \u03a9 = (E\u2080 : \u2102) \u2022 \u03a9 :=\n    ManyBody.mem_groundSpace_iff.mp hmem\n",
+        "main": "    (h\u03a9 : \u2016\u03a9\u2016 = 1) (hgap : IsGapped h.hamiltonian E\u2080 \u0394)\n    (hspan : groundSpace h.hamiltonian E\u2080 = Submodule.span \u2102 {\u03a9}) (j m : \u2115) :\n    \u2016\u03a9\u2016 = 1 \u2227 IsGapped (groundCentered \u03a9 (h.leftPart j m) +\n      groundCentered \u03a9 (h.bufferPart j m) + groundCentered \u03a9 (h.rightPart j m)) 0 \u0394 \u2227\n      groundSpace (groundCentered \u03a9 (h.leftPart j m) + groundCentered \u03a9 (h.bufferPart j m) +\n        groundCentered \u03a9 (h.rightPart j m)) 0 = Submodule.span \u2102 {\u03a9} := by\n  have hE : toEuclideanLin h.hamiltonian \u03a9 = (E\u2080 : \u2102) \u2022 \u03a9 :=\n    ManyBody.mem_groundSpace_iff.mp (hspan \u25b8 Submodule.mem_span_singleton_self \u03a9)\n",
+        "resolution": "Retain normalization/projector positivity/membership transport for arbitrary gap and all natural j,m; reject singleton/IsGapped replacement."
+      }
+    ],
+    "reason": "Retain normalization/projector positivity/membership transport for arbitrary gap and all natural j,m; reject singleton/IsGapped replacement.",
+    "final_sha256": "6eacb1bc1b20eb4693aea19d0b25f839dd1b0daa1b98866befefb2d767435704",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/OverlapEnergy.lean",
+    "conflicts": [
+      {
+        "start_line": 43,
+        "ours": "    (h : ChainInteraction L q 1) (hH : h.hamiltonian.IsHermitian)\n    (hhJ : \u2200 X, \u2016h.term X\u2016 \u2264 1) (h\u03a9 : \u2016\u03a9\u2016 = 1)\n    (hmem : \u03a9 \u2208 groundSpace h.hamiltonian E\u2080)\n",
+        "main": "    (h : ChainInteraction L q 1) (hh : \u2200 X, (h.term X).IsHermitian)\n        (hhJ : \u2200 X, \u2016h.term X\u2016 \u2264 1) (h\u03a9 : \u2016\u03a9\u2016 = 1)\n    (hspan : groundSpace h.hamiltonian E\u2080 = Submodule.span \u2102 {\u03a9})\n",
+        "resolution": "Retain total-Hermitian and membership premises, and norm-only bound call; reject termwise strengthening and singleton equality."
+      },
+      {
+        "start_line": 57,
+        "ours": "        h.norm_hamiltonian_le_of_range_one hhJ\n",
+        "main": "        h.norm_hamiltonian_le_of_range_one hh hhJ\n",
+        "resolution": "Retain total-Hermitian and membership premises, and norm-only bound call; reject termwise strengthening and singleton equality."
+      },
+      {
+        "start_line": 78,
+        "ours": "        hH\n",
+        "main": "        (ManyBody.Interaction.isHermitian_hamiltonian hh)\n",
+        "resolution": "Retain total-Hermitian and membership premises, and norm-only bound call; reject termwise strengthening and singleton equality."
+      },
+      {
+        "start_line": 93,
+        "ours": "    (h : ChainInteraction L q 1) (hH : h.hamiltonian.IsHermitian)\n    (hhJ : \u2200 X, \u2016h.term X\u2016 \u2264 1) (h\u03a9 : \u2016\u03a9\u2016 = 1)\n    (hmem : \u03a9 \u2208 groundSpace h.hamiltonian E\u2080)\n    (hL : 0 < L) (hv : \u2016v\u2016 = 1) (hover : 1 - c / L \u2264 \u2016\u27ea\u03a9, v\u27eb_\u2102\u2016) :\n    (\u27eav, toEuclideanLin h.hamiltonian v\u27eb_\u2102).re \u2264 E\u2080 + 8 * c := by\n  have henergy := h.re_inner_sub_le_of_overlap_of_range_one hH hhJ h\u03a9 hmem hv hover\n",
+        "main": "    (h : ChainInteraction L q 1) (hh : \u2200 X, (h.term X).IsHermitian)\n        (hhJ : \u2200 X, \u2016h.term X\u2016 \u2264 1) (h\u03a9 : \u2016\u03a9\u2016 = 1)\n    (hspan : groundSpace h.hamiltonian E\u2080 = Submodule.span \u2102 {\u03a9})\n    (hL : 0 < L) (hv : \u2016v\u2016 = 1) (hover : 1 - c / L \u2264 \u2016\u27ea\u03a9, v\u27eb_\u2102\u2016) :\n    (\u27eav, toEuclideanLin h.hamiltonian v\u27eb_\u2102).re \u2264 E\u2080 + 8 * c := by\n  have henergy := h.re_inner_sub_le_of_overlap_of_range_one hh hhJ h\u03a9 hspan hv hover\n",
+        "resolution": "Retain total-Hermitian and membership premises, and norm-only bound call; reject termwise strengthening and singleton equality."
+      }
+    ],
+    "reason": "Retain total-Hermitian and membership premises, and norm-only bound call; reject termwise strengthening and singleton equality.",
+    "final_sha256": "3033399bc2d2d10eca9a5db7788ac2a333a281da96a751534aea1e7c3afe286d",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/RangeOneSupport.lean",
+    "conflicts": [
+      {
+        "start_line": 78,
+        "ours": "    (h : ChainInteraction L q 1) (hhJ : \u2200 X, \u2016h.term X\u2016 \u2264 J) :\n",
+        "main": "    (h : ChainInteraction L q 1) (hh : \u2200 X, (h.term X).IsHermitian) (hhJ : \u2200 X, \u2016h.term X\u2016 \u2264 J) :\n",
+        "resolution": "Retain norm-only API for arbitrary real J without unnecessary term-Hermitian premise."
+      }
+    ],
+    "reason": "Retain norm-only API for arbitrary real J without unnecessary term-Hermitian premise.",
+    "final_sha256": "eb06514071a6cbf5045417939f1740587c717824589013af15bccf51146552cb",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+    "conflicts": [
+      {
+        "start_line": 155,
+        "ours": "",
+        "main": "  let \u03a6 : ManyBody.Interaction (fun _ : Fin L \u21a6 Fin (q * q)) (fun X : ChainSupport L R \u21a6 X.1) :=\n    \u27e8g.term, g.mem\u27e9\n",
+        "resolution": "Retain five direct canonical h/g arguments, no reconstructed Interaction and no identity rewrite. Fully qualified ChainSupport reference retained."
+      },
+      {
+        "start_line": 172,
+        "ours": "    (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) g\n    (fun X \u21a6 ManyBody.ChainSupport.edist_le X) (fun X \u21a6 X.2.card_le)\n",
+        "main": "    (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) \u03a6\n    (fun X \u21a6 ChainSupport.edist_le X) (fun X \u21a6 X.2.card_le)\n",
+        "resolution": "Retain five direct canonical h/g arguments, no reconstructed Interaction and no identity rewrite. Fully qualified ChainSupport reference retained."
+      },
+      {
+        "start_line": 230,
+        "ours": "",
+        "main": "  let \u03a6 : ManyBody.Interaction (fun _ : Fin \u039b.card \u21a6 Fin (q * q))\n      (fun X : DomainSupport \u039b R \u21a6 X.1) := \u27e8g.term, g.mem\u27e9\n",
+        "resolution": "Retain five direct canonical h/g arguments, no reconstructed Interaction and no identity rewrite. Fully qualified ChainSupport reference retained."
+      },
+      {
+        "start_line": 246,
+        "ours": "    (lineDomainGraph \u039b) (domainGraph_card_sphere_le_two \u039b) g\n",
+        "main": "    (lineDomainGraph \u039b) (domainGraph_card_sphere_le_two \u039b) \u03a6\n",
+        "resolution": "Retain five direct canonical h/g arguments, no reconstructed Interaction and no identity rewrite. Fully qualified ChainSupport reference retained."
+      }
+    ],
+    "reason": "Retain five direct canonical h/g arguments, no reconstructed Interaction and no identity rewrite. Fully qualified ChainSupport reference retained.",
+    "final_sha256": "b87f960c99a5ffd3a969a215a2ab96d9613cc47449d3bfd057bcfaf080c54d24",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean",
+    "conflicts": [
+      {
+        "start_line": 209,
+        "ours": "  have hgen := exists_supported_gaussian_integral_graphNeighborhood\n    (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) g\n    (fun X \u21a6 ManyBody.ChainSupport.edist_le X) (fun X \u21a6 X.2.card_le)\n",
+        "main": "  let \u03a6 : ManyBody.Interaction (fun _ : Fin L \u21a6 Fin (q * q)) (fun X : ChainSupport L R \u21a6 X.1) :=\n    \u27e8g.term, g.mem\u27e9\n  have h\u03a6 : \u03a6.hamiltonian = g.hamiltonian := rfl\n  have hgen := exists_supported_gaussian_integral_graphNeighborhood\n    (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) \u03a6\n    (fun X \u21a6 ChainSupport.edist_le X) (fun X \u21a6 X.2.card_le)\n",
+        "resolution": "Retain five direct canonical h/g arguments, no reconstructed Interaction and no identity rewrite. Fully qualified ChainSupport reference retained."
+      },
+      {
+        "start_line": 225,
+        "ours": "      rw [biUnion_graphBall_pathGraph_eq_chainNeighborhood Z h\u2113, Fintype.card_fin]\n      exact h.norm_relativeGenerator_sub_regionExpectation_le hh hhJ D hq \u2113 h\u2113 s)\n  simp only [biUnion_graphBall_pathGraph_eq_chainNeighborhood _ h\u2113, Fintype.card_fin]\n",
+        "main": "      rw [h\u03a6, biUnion_graphBall_pathGraph_eq_chainNeighborhood Z h\u2113, Fintype.card_fin]\n      exact h.norm_relativeGenerator_sub_regionExpectation_le hh hhJ D hq \u2113 h\u2113 s)\n  simp only [h\u03a6, biUnion_graphBall_pathGraph_eq_chainNeighborhood _ h\u2113, Fintype.card_fin]\n",
+        "resolution": "Retain five direct canonical h/g arguments, no reconstructed Interaction and no identity rewrite. Fully qualified ChainSupport reference retained."
+      },
+      {
+        "start_line": 286,
+        "ours": "  have hgen := exists_supported_gaussian_integral_graphNeighborhood\n    (lineDomainGraph \u039b) (domainGraph_card_sphere_le_two \u039b) g\n",
+        "main": "  let \u03a6 : ManyBody.Interaction (fun _ : Fin \u039b.card \u21a6 Fin (q * q))\n      (fun X : DomainSupport \u039b R \u21a6 X.1) := \u27e8g.term, g.mem\u27e9\n  have h\u03a6 : \u03a6.hamiltonian = g.hamiltonian := rfl\n  have hgen := exists_supported_gaussian_integral_graphNeighborhood\n    (lineDomainGraph \u039b) (domainGraph_card_sphere_le_two \u039b) \u03a6\n",
+        "resolution": "Retain five direct canonical h/g arguments, no reconstructed Interaction and no identity rewrite. Fully qualified ChainSupport reference retained."
+      },
+      {
+        "start_line": 300,
+        "ours": "      rw [Nat.floor_natCast, Fintype.card_fin]\n      exact h.norm_relativeGenerator_sub_regionExpectation_le hh hhJ D hq m s)\n  simp only [Nat.floor_natCast, Fintype.card_fin] at hgen\n",
+        "main": "      rw [h\u03a6, Nat.floor_natCast, Fintype.card_fin]\n      exact h.norm_relativeGenerator_sub_regionExpectation_le hh hhJ D hq m s)\n  simp only [h\u03a6, Nat.floor_natCast, Fintype.card_fin] at hgen\n",
+        "resolution": "Retain five direct canonical h/g arguments, no reconstructed Interaction and no identity rewrite. Fully qualified ChainSupport reference retained."
+      }
+    ],
+    "reason": "Retain five direct canonical h/g arguments, no reconstructed Interaction and no identity rewrite. Fully qualified ChainSupport reference retained.",
+    "final_sha256": "53d0b3c287ba8197a305711562b023f4944654f466372de72da813a284cac748",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean",
+    "conflicts": [
+      {
+        "start_line": 127,
+        "ours": "    \u00b7 exact zero_mem _\n",
+        "main": "    \u00b7 exact \u27e8fun _ _ _ \u21a6 rfl, fun _ _ _ _ _ _ _ _ \u21a6 rfl\u27e9\n",
+        "resolution": "Retain canonical subalgebra zero_mem proof rather than obsolete pair support witness; retain standard colon formatting."
+      },
+      {
+        "start_line": 161,
+        "ours": "    (hs : \u2200 i, Entropy.IsSupportedOn (n := fun _ : Fin L \u21a6 q) (h i) (interval L i (i + 2))) :\n",
+        "main": "    (hs : \u2200 i, Entropy.IsSupportedOn (n := fun _ : Fin L \u21a6 q) (h i) (interval L i (i + 2)))\n :\n",
+        "resolution": "Retain canonical subalgebra zero_mem proof rather than obsolete pair support witness; retain standard colon formatting."
+      }
+    ],
+    "reason": "Retain canonical subalgebra zero_mem proof rather than obsolete pair support witness; retain standard colon formatting.",
+    "final_sha256": "0ba60809ed675dc14a97139b398533d229528a31402707df54ec4353b11af615",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean",
+    "conflicts": [
+      {
+        "start_line": 114,
+        "ours": "    (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2\n",
+        "main": "    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      },
+      {
+        "start_line": 198,
+        "ours": "    (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2\n",
+        "main": "    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      },
+      {
+        "start_line": 290,
+        "ours": "    (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2\n",
+        "main": "    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      },
+      {
+        "start_line": 484,
+        "ours": "",
+        "main": "\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      }
+    ],
+    "reason": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses.",
+    "final_sha256": "c3f82e4253094640ff8d6a6dc31d2ea7560d6ad1695aed685c21923c974607f4",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean",
+    "conflicts": [
+      {
+        "start_line": 457,
+        "ours": "    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hhJ hL hq h\u03a9\n      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) h\u03a9 hspan)\n      (hspan \u25b8 Submodule.mem_span_singleton_self _)\n",
+        "main": "    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq h\u03a9 hgap hspan\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      },
+      {
+        "start_line": 603,
+        "ours": "    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hhJ hL hq h\u03a9\n      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) h\u03a9 hspan)\n      (hspan \u25b8 Submodule.mem_span_singleton_self _)\n",
+        "main": "    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq h\u03a9 hgap hspan\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      }
+    ],
+    "reason": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses.",
+    "final_sha256": "ad85e3572423620f5af4c91fcdc2ec94f97cc943999d9dbac9545c562832f37d",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean",
+    "conflicts": [
+      {
+        "start_line": 47,
+        "ours": "    (h : ChainInteraction L q 1) (hhJ : \u2200 X, \u2016h.term X\u2016 \u2264 1)\n",
+        "main": "    (h : ChainInteraction L q 1) (hh : \u2200 X, (h.term X).IsHermitian) (hhJ : \u2200 X, \u2016h.term X\u2016 \u2264 1)\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      },
+      {
+        "start_line": 59,
+        "ours": "    simpa only [mul_one] using h.norm_hamiltonian_le_of_range_one hhJ\n",
+        "main": "    simpa only [mul_one] using h.norm_hamiltonian_le_of_range_one hh hhJ\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      },
+      {
+        "start_line": 465,
+        "ours": "    (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2\n",
+        "main": "    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      },
+      {
+        "start_line": 638,
+        "ours": "",
+        "main": "\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      }
+    ],
+    "reason": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses.",
+    "final_sha256": "8a632e004230cea1a32d89e662474b221a883c6b11f60558d7313f4333120e98",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean",
+    "conflicts": [
+      {
+        "start_line": 148,
+        "ours": "      (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2\n",
+        "main": "      (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      },
+      {
+        "start_line": 171,
+        "ours": "      simpa only [mul_one] using h.gap_le_four_mul_of_range_one hhJ hL hq h\u03a9\n        (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) h\u03a9 hspan)\n        (hspan \u25b8 Submodule.mem_span_singleton_self _)\n",
+        "main": "      simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq h\u03a9 hgap hspan\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      },
+      {
+        "start_line": 275,
+        "ours": "    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hhJ hL hq h\u03a9\n      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) h\u03a9 hspan)\n      (hspan \u25b8 Submodule.mem_span_singleton_self _)\n",
+        "main": "    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq h\u03a9 hgap hspan\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      }
+    ],
+    "reason": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses.",
+    "final_sha256": "a1fdf8961ec6955183473ec64b7cd707ff1689de9b5e0f69f549d090fc5672d5",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean",
+    "conflicts": [
+      {
+        "start_line": 255,
+        "ours": "    (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2\n",
+        "main": "    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      },
+      {
+        "start_line": 431,
+        "ours": "    (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2\n",
+        "main": "    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      }
+    ],
+    "reason": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses.",
+    "final_sha256": "b73921cef449505ae0d05b57931151560cac517a041bcd7a222a12449cc52c79",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean",
+    "conflicts": [
+      {
+        "start_line": 438,
+        "ours": "    simpa only [mul_one] using h.norm_hamiltonian_le_of_range_one hhJ\n",
+        "main": "    simpa only [mul_one] using h.norm_hamiltonian_le_of_range_one hh hhJ\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      },
+      {
+        "start_line": 751,
+        "ours": "    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hhJ hL hq h\u03a9\n      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) h\u03a9 hspan)\n      (hspan \u25b8 Submodule.mem_span_singleton_self _)\n",
+        "main": "    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq h\u03a9 hgap hspan\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      },
+      {
+        "start_line": 913,
+        "ours": "    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hhJ hL hq h\u03a9\n      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) h\u03a9 hspan)\n      (hspan \u25b8 Submodule.mem_span_singleton_self _)\n",
+        "main": "    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq h\u03a9 hgap hspan\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      }
+    ],
+    "reason": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses.",
+    "final_sha256": "10af5993239f9b7c7680613575d5a8be200ae788b1a8b65f71daf5bececfb951",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean",
+    "conflicts": [
+      {
+        "start_line": 147,
+        "ours": "    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hhJ hL hq h\u03a9\n      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) h\u03a9 hspan)\n      (hspan \u25b8 Submodule.mem_span_singleton_self _)\n",
+        "main": "    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq h\u03a9 hgap hspan\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      }
+    ],
+    "reason": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses.",
+    "final_sha256": "34caa1e876abce92f1dd1da67ac0e85dc8a35d5f8b0ec619dab22fe911d7e64a",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean",
+    "conflicts": [
+      {
+        "start_line": 76,
+        "ours": "    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hhJ hL hq h\u03a9\n      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) h\u03a9 hspan)\n      (hspan \u25b8 Submodule.mem_span_singleton_self _)\n",
+        "main": "    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq h\u03a9 hgap hspan\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      },
+      {
+        "start_line": 92,
+        "ours": "  have hE := h.re_inner_le_of_overlap_div_of_range_one\n    (ManyBody.Interaction.isHermitian_hamiltonian hh) hhJ h\u03a9\n    (hspan \u25b8 Submodule.mem_span_singleton_self _) hL h\u03c8 h\u0393\u03c8\n",
+        "main": "  have hE := h.re_inner_le_of_overlap_div_of_range_one hh hhJ h\u03a9 hspan hL h\u03c8 h\u0393\u03c8\n",
+        "resolution": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses."
+      }
+    ],
+    "reason": "Retain norm-only leftObjective/norm_hamiltonian calls; where present retain canonical projector/membership bridge from existing positive-gap caller; retain total-Hermitian overlap call. Reject old singleton-API call shapes and extra unused hypotheses.",
+    "final_sha256": "5ec18fb1c7b8c8595f102ebfb5800fc019146a57dd7335e02e87e7b0ac6931ce",
+    "same_as_42c4": true,
+    "compile": "NOT RUN",
+    "automatic_neighbor_review": "Compared entire resolved file with42c4; unchanged except AreaLaw scope/open additions. No other MPS auto-merge deltas exist."
+  }
+]
