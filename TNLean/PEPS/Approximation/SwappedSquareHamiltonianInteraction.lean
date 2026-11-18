@@ -70,7 +70,7 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
       J + J :=
     (norm_add_le _ _).trans (add_le_add
       ((Matrix.l2_opNorm_kronecker_one_le _).trans (h.hermitianTerm_norm_le i))
-      ((Matrix.l2_opNorm_one_kronecker_rect_le _).trans (h.hermitianTerm_norm_le i)))
+      ((Matrix.l2_opNorm_one_kronecker_le _).trans (h.hermitianTerm_norm_le i)))
   have hBn (i : SquareInteraction L) : ‖B i‖ ≤ 2 * J := by
     simpa only [B, one_mul, mul_one, two_mul] using
       norm_mul_le_of_le
@@ -142,7 +142,7 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
       simpa only [Pi.zero_apply, norm_zero] using mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) hJ
   · let T := fun i : SquareInteraction L => Matrix.reindex e e (B i)
     have hsum : (∑ i : SquareInteraction L, T i) =
-        ∑ X : Lattice.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1,
+        ∑ X : ManyBody.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1,
           Function.extend (squareAreaLawSupport L) T 0 X := by
       apply Finset.sum_of_injOn (squareAreaLawSupport L)
         (squareAreaLawSupport_injective L).injOn (fun _ _ => Finset.mem_univ _)

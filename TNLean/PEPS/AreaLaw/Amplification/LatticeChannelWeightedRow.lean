@@ -36,6 +36,8 @@ open QuantumCircuit SpectralFilter Matrix
 open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Actual positive-constraint channels on an induced lattice domain have a
@@ -59,19 +61,19 @@ theorem exists_latticeChannelEventKernel_bounds {p : ℕ} (hp : 1 ≤ p)
         ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
         ∀ (P : AdmissibleSupport Λ R → Prop) [DecidablePred P]
           (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (N : ℕ),
-        (∀ i : {i // P i}, Finset.univ.sup ((domainGraph Λ).dist (a i)) ≤ N) →
+        (∀ i : {i // P i}, Finset.univ.sup ((planeDomainGraph Λ).dist (a i)) ≤ N) →
         let α := kernelExponent p
         let aP := fun i : {i // P i} => a i
         let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
           (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
         let D := 2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2))
-        (∀ y, (∑ z, graphChannelEventKernel (domainGraph Λ) aP D (c / 2) α N y z *
-          Real.exp (c / (4 * (2 : ℝ) ^ α) * ((domainGraph Λ).dist y z : ℝ) ^ α)) ≤ v) ∧
+        (∀ y, (∑ z, graphChannelEventKernel (planeDomainGraph Λ) aP D (c / 2) α N y z *
+          Real.exp (c / (4 * (2 : ℝ) ^ α) * ((planeDomainGraph Λ).dist y z : ℝ) ^ α)) ≤ v) ∧
         (∀ (y : Site Λ)
             (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
           (∑ i, (siteOscillation q y (spectatorRootChannel (k i) B) -
             siteOscillation q y B)) ≤
-          ∑ z, graphChannelEventKernel (domainGraph Λ) aP D (c / 2) α N y z *
+          ∑ z, graphChannelEventKernel (planeDomainGraph Λ) aP D (c / 2) α N y z *
             siteOscillation q z B) := by
   obtain ⟨C, c, hC, hc, hpos⟩ := exists_latticePositiveConstraints hp R hJ hΔ
   obtain ⟨v, hv, hbounds⟩ := exists_graphChannelEventKernel_bounds_of_component_support
@@ -81,7 +83,7 @@ theorem exists_latticeChannelEventKernel_bounds {p : ℕ} (hp : 1 ≤ p)
   refine ⟨C, c, v, hC, hc, hv, ?_⟩
   intro q _ Λ h a ha E₀ Ω hgs P _ Aux _ _ N hN α aP k D
   obtain ⟨-, hk, -, -, -, htail, hcomp⟩ := hpos Λ h a ha E₀ Ω hgs
-  exact hbounds (Site Λ) {i // P i} Aux q (domainGraph Λ) aP k
+  exact hbounds (Site Λ) {i // P i} Aux q (planeDomainGraph Λ) aP k
     (fun i => (hk i).1) (fun i => (hk i).2.1) (fun i => hcomp i)
     card_graphBall_domainGraph_le
     (fun x => by

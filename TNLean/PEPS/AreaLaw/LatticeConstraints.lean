@@ -48,6 +48,8 @@ allows `q, R, J, Δ` (`03-quasilocal.tex`, lines 41–42).
 open scoped Matrix Kronecker Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport graphBall planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 open QuantumCircuit SpectralFilter
@@ -94,16 +96,16 @@ theorem latticePositiveConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R : ℕ
         cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
       ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
         ∑ i, k i ∧
-      (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ∧
-        siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
-        ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i) ∧
+        siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+        ‖k i - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
           C₃ * Real.exp (-(c₃ * (l : ℝ) ^ kernelExponent p))) ∧
-      (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x}) := by
+      (∀ i, k i ∈ supportedOperators q {x | (planeDomainGraph Λ).Reachable (a i) x}) := by
   intro q _ Λ h a ha E₀ Ω hgs
   obtain ⟨hΩ, hHΩ, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
   obtain ⟨hk, hsum, hgapk, htail, hcomp⟩ := positiveQuasilocalConstraints_of_locality hp R
     (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) 2 2 hΔ htail
-    (q := q) (ι := Site Λ) (κ := AdmissibleSupport Λ R) (domainGraph Λ) (fun X => X.1) a ha
+    (q := q) (ι := Site Λ) (κ := AdmissibleSupport Λ R) (planeDomainGraph Λ) (fun X => X.1) a ha
     h.term h.hermitian h.supported (fun X => X.2.edist_le) (fun X => X.2.card_le)
     (h.sum_norm_term_containing_le hJ) (card_domainGraph_sphere_le Λ) h.norm_le E₀ Ω hΩ hHΩ hgap
   exact ⟨positiveNormalization_pos p _ J, hk, hsum, hgapk, hgapk.trans hsum, htail, hcomp⟩
@@ -186,12 +188,12 @@ theorem latticePositiveConstraints_explicit {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {
         cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
       ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
         ∑ i, k i ∧
-      (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ∧
-        siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
-        ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i) ∧
+        siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+        ‖k i - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
           latticePositiveConstraintConst R J Δ p *
             Real.exp (-(latticePositiveConstraintRate R J Δ p * (l : ℝ) ^ kernelExponent p))) ∧
-      (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x}) :=
+      (∀ i, k i ∈ supportedOperators q {x | (planeDomainGraph Λ).Reachable (a i) x}) :=
   latticePositiveConstraints_of_locality hp R hJ hΔ
     (fun hH hΩ hh hhJ L hcontr hunit hherm hfix _ hl hτ =>
       norm_latticePositiveConstraint_sub_map_le hp R hΔ hH hΩ hh hhJ L hcontr hunit hherm hfix
@@ -224,11 +226,11 @@ theorem exists_latticePositiveConstraints {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J 
           cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
         ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
           ∑ i, k i ∧
-        (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ∧
-          siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
-          ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i) ∧
+          siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+          ‖k i - siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
-        (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x}) := by
+        (∀ i, k i ∈ supportedOperators q {x | (planeDomainGraph Λ).Reachable (a i) x}) := by
   exact ⟨_, _, latticePositiveConstraintConst_nonneg R J Δ p,
     latticePositiveConstraintRate_pos hp R J hΔ, latticePositiveConstraints_explicit hp R hJ hΔ⟩
 
@@ -252,7 +254,7 @@ theorem exists_latticeQuasilocalRoots {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ :
         ∀ (i : AdmissibleSupport Λ R) (l : ℕ),
         let k := positiveConstraint (positiveNormalization p (Δ / 2) J)
           (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
-        let kl := siteExpectation q (graphBall (domainGraph Λ) (a i) l) k
+        let kl := siteExpectation q (graphBall (planeDomainGraph Λ) (a i) l) k
         let G := CFC.sqrt (1 - k)
         let Kr := CFC.sqrt k
         let Gl := CFC.sqrt (1 - kl)
@@ -270,11 +272,11 @@ theorem exists_latticeQuasilocalRoots {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ :
           ‖rootChannel (Gl ⊗ₖ (1 : Matrix κ κ ℂ)) (Kl ⊗ₖ 1) B‖ ≤ ‖B‖ ∧
           ‖rootChannel (G ⊗ₖ (1 : Matrix κ κ ℂ)) (Kr ⊗ₖ 1) B -
               rootChannel (Gl ⊗ₖ (1 : Matrix κ κ ℂ)) (Kl ⊗ₖ 1) B‖ ≤ ε * ‖B‖ ∧
-          ((∀ A ∈ supportedOperators q (graphBall (domainGraph Λ) (a i) l : Set (Site Λ)),
+          ((∀ A ∈ supportedOperators q (graphBall (planeDomainGraph Λ) (a i) l : Set (Site Λ)),
               Commute (A ⊗ₖ (1 : Matrix κ κ ℂ)) B) →
             rootChannel (Gl ⊗ₖ (1 : Matrix κ κ ℂ)) (Kl ⊗ₖ 1) B = B)) ∧
         (∀ B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
-          (∀ A ∈ supportedOperators q (graphBall (domainGraph Λ) (a i) l : Set (Site Λ)),
+          (∀ A ∈ supportedOperators q (graphBall (planeDomainGraph Λ) (a i) l : Set (Site Λ)),
             Commute A B) → rootChannel Gl Kl B = B) := by
   obtain ⟨C, c, hC, hc, hpos⟩ := exists_latticePositiveConstraints hp R hJ hΔ
   refine ⟨4 * Real.sqrt C, c / 2, by positivity, by positivity, ?_⟩
@@ -282,7 +284,7 @@ theorem exists_latticeQuasilocalRoots {p : ℕ} (hp : 1 ≤ p) (R : ℕ) {J Δ :
   obtain ⟨-, hk, -, -, -, htail, -⟩ := hpos Λ h a ha E₀ Ω hgs
   have hsq := sqrt_mul_exp_neg C c ((l : ℝ) ^ kernelExponent p)
   obtain ⟨h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12⟩ :=
-    quasilocalRoots (graphBall (domainGraph Λ) (a i) l) (hk i).1 (hk i).2.1 (hk i).2.2
+    quasilocalRoots (graphBall (planeDomainGraph Λ) (a i) l) (hk i).1 (hk i).2.1 (hk i).2.2
       (htail i l).2.2
   have hε : 2 * Real.sqrt (C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ≤ ε := by
     rw [hsq]
@@ -340,7 +342,7 @@ theorem latticeFiniteSetTruncation_of_locality (R : ℕ) {J Δ C₀ C₃ c₃ : 
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
       ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
       ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset (Site Λ), (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
-      let G := domainGraph Λ
+      let G := planeDomainGraph Λ
       let cs := positiveNormalization 1 (Δ / 2) J
       let g := Δ / cs
       let k := fun i => positiveConstraint cs (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))
@@ -365,8 +367,8 @@ theorem latticeFiniteSetTruncation_of_locality (R : ℕ) {J Δ C₀ C₃ c₃ : 
   exact finiteSetTruncation_of_locality R (1 + 2 * R * (R + 1))
     (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) 2 2 (Kb := 2)
     (μ := ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ)) hΔ zero_le_two (Nat.cast_nonneg _) hC₀ hC₃
-    hc₃ htail (q := q) (ι := Site Λ) (κ := AdmissibleSupport Λ R) (domainGraph Λ) (fun X => X.1)
-    a ha
+    hc₃ htail (q := q) (ι := Site Λ) (κ := AdmissibleSupport Λ R) (planeDomainGraph Λ)
+    (fun X => X.1) a ha
     h.term h.hermitian h.supported (fun X => X.2.edist_le) (fun X => X.2.card_le)
     (h.sum_norm_term_containing_le hJ) (card_domainGraph_sphere_le Λ) card_graphBall_domainGraph_le
     (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) h.norm_le E₀ Ω hΩ hHΩ hgap n hn S₀
@@ -400,7 +402,7 @@ theorem latticeFiniteSetTruncation_explicit (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
       ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
       ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset (Site Λ), (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
-      let G := domainGraph Λ
+      let G := planeDomainGraph Λ
       let cs := positiveNormalization 1 (Δ / 2) J
       let g := Δ / cs
       let k := fun i => positiveConstraint cs (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))
@@ -445,7 +447,7 @@ theorem exists_latticeFiniteSetTruncation (R : ℕ) {J Δ C₀ : ℝ} (hJ : 0 �
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
         ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
         ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset (Site Λ), (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
-        let G := domainGraph Λ
+        let G := planeDomainGraph Λ
         let cs := positiveNormalization 1 (Δ / 2) J
         let g := Δ / cs
         let k := fun i => positiveConstraint cs (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))
@@ -481,7 +483,7 @@ theorem exists_latticeFiniteSetTruncation_eigenspace_eq_span (R : ℕ) {J Δ C�
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
         ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
         ∀ n : ℝ, 2 ≤ n → ∀ S₀ : Finset (Site Λ), (S₀.card : ℝ) ≤ C₀ * n ^ 2 →
-        let G := domainGraph Λ
+        let G := planeDomainGraph Λ
         let cs := positiveNormalization 1 (Δ / 2) J
         let g := Δ / cs
         let k := fun i => positiveConstraint cs (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))
@@ -524,14 +526,15 @@ theorem exists_latticeCrossingBudget {q : ℕ} (hq : 1 ≤ q) (R : ℕ) :
     ∃ C : ℝ, 0 ≤ C ∧
       ∀ (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
       ∀ (S₀ : Finset (Site Λ)) (r₀ : ℕ) (X : Finset (Site Λ)), X ⊆ S₀ →
-        (∀ i ∈ crossingLabels (domainGraph Λ) S₀ r₀ a X,
-          designatedSupport (domainGraph Λ) S₀ r₀ (a i) = graphBall (domainGraph Λ) (a i) r₀) ∧
-        ((crossingLabels (domainGraph Λ) S₀ r₀ a X).card : ℝ) ≤
+        (∀ i ∈ crossingLabels (planeDomainGraph Λ) S₀ r₀ a X,
+          designatedSupport (planeDomainGraph Λ) S₀ r₀ (a i) = graphBall (planeDomainGraph Λ) (a i)
+              r₀) ∧
+        ((crossingLabels (planeDomainGraph Λ) S₀ r₀ a X).card : ℝ) ≤
           C * (edgeBoundary Λ X).card * ((r₀ : ℝ) + 1) ^ 2 ∧
-        (∀ i ∈ crossingLabels (domainGraph Λ) S₀ r₀ a X,
-          Real.log ((q : ℝ) ^ (designatedSupport (domainGraph Λ) S₀ r₀ (a i)).card) ≤
+        (∀ i ∈ crossingLabels (planeDomainGraph Λ) S₀ r₀ a X,
+          Real.log ((q : ℝ) ^ (designatedSupport (planeDomainGraph Λ) S₀ r₀ (a i)).card) ≤
             C * ((r₀ : ℝ) + 1) ^ 2) ∧
-        cutBudget q (domainGraph Λ) S₀ r₀ a X ≤
+        cutBudget q (planeDomainGraph Λ) S₀ r₀ a X ≤
           C * (1 + (edgeBoundary Λ X).card) * ((r₀ : ℝ) + 1) ^ 6 := by
   set μ : ℝ := ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ)
   have hμ : 0 ≤ μ := Nat.cast_nonneg _
@@ -539,7 +542,7 @@ theorem exists_latticeCrossingBudget {q : ℕ} (hq : 1 ≤ q) (R : ℕ) :
   set K := max 1 (2 * μ * 2 * (1 + 2 * Real.log q) ^ 2)
   refine ⟨max (max (2 * μ * 2) (2 * Real.log q)) K, by positivity, ?_⟩
   intro Λ a ha S₀ r₀ X hX
-  set G := domainGraph Λ
+  set G := planeDomainGraph Λ
   have hMult : ∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ := fun x => by
     simp only [μ]; exact_mod_cast card_anchor_fiber_le a ha x
   have hb : ((cutEdges G X).card : ℝ) ≤ (edgeBoundary Λ X).card := by
@@ -576,11 +579,11 @@ noncomputable def latticeCutCoefficient (q R : ℕ) : ℝ :=
 theorem cutBudget_le_latticeCutCoefficient {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
     (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ) (ha : ∀ X, a X ∈ X.1)
     (S₀ : Finset (Site Λ)) (r₀ : ℕ) {X : Finset (Site Λ)} (hX : X ⊆ S₀) :
-    cutBudget q (domainGraph Λ) S₀ r₀ a X ≤
+    cutBudget q (planeDomainGraph Λ) S₀ r₀ a X ≤
       latticeCutCoefficient q R * (1 + (edgeBoundary Λ X).card) * ((r₀ : ℝ) + 1) ^ 6 := by
   refine (cutBudget_le hq _ S₀ r₀ a hX zero_le_two (Nat.cast_nonneg _)
     card_graphBall_domainGraph_le fun x => by exact_mod_cast card_anchor_fiber_le a ha x).trans ?_
-  have hb : ((cutEdges (domainGraph Λ) X).card : ℝ) ≤ (edgeBoundary Λ X).card := by
+  have hb : ((cutEdges (planeDomainGraph Λ) X).card : ℝ) ≤ (edgeBoundary Λ X).card := by
     exact_mod_cast card_cutEdges_le_card_edgeBoundary X
   unfold latticeCutCoefficient
   gcongr
@@ -606,7 +609,7 @@ theorem latticeCutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ) {C₁ C₂ : 
     (hC₁ : 0 ≤ C₁) (hC₂ : 0 ≤ C₂) (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ)
     (ha : ∀ X, a X ∈ X.1) (S₀ X : Finset (Site Λ)) (hX : X ⊆ S₀) {n D : ℝ} (hn : 2 ≤ n)
     (hD : 1 ≤ D) (hb : ((edgeBoundary Λ X).card : ℝ) ≤ C₂ * n * D) :
-    cutBudget q (domainGraph Λ) S₀ ⌈C₁ * Real.log n ^ 2⌉₊ a X ≤
+    cutBudget q (planeDomainGraph Λ) S₀ ⌈C₁ * Real.log n ^ 2⌉₊ a X ≤
       latticeCutBudgetConstant q R C₁ C₂ * (n * D * Real.log n ^ 12) :=
   le_of_cutBudget_le (zero_le_one.trans (le_max_left _ _)) hC₁ hC₂ hn hD hb
     (cutBudget_le_latticeCutCoefficient hq R Λ a ha S₀ _ hX)
@@ -621,7 +624,7 @@ theorem exists_latticeCutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ) {C₁ 
       ∀ (Λ : Finset (ℤ × ℤ)) (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
       ∀ (S₀ X : Finset (Site Λ)), X ⊆ S₀ → ∀ n D : ℝ, 2 ≤ n → 1 ≤ D →
         ((edgeBoundary Λ X).card : ℝ) ≤ C₂ * n * D →
-        cutBudget q (domainGraph Λ) S₀ ⌈C₁ * Real.log n ^ 2⌉₊ a X ≤
+        cutBudget q (planeDomainGraph Λ) S₀ ⌈C₁ * Real.log n ^ 2⌉₊ a X ≤
           C * (n * D * Real.log n ^ 12) :=
   ⟨_, latticeCutBudgetConstant_nonneg q R hC₁ hC₂, fun Λ a ha S₀ X hX _ _ hn hD hb =>
     latticeCutBudget_le_log hq R hC₁ hC₂ Λ a ha S₀ X hX hn hD hb⟩

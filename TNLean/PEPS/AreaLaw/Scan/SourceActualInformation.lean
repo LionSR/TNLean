@@ -36,6 +36,8 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter ActualTerminals
@@ -59,7 +61,7 @@ theorem sourceTarget_actual_mutualInformation_bound_explicit
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
           IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceSelectedSharpEnergyThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr Cent eent Cen een ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -280,7 +282,7 @@ theorem exists_sourceTarget_actual_mutualInformation_bound_of_threshold_le
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
           IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceSelectedSharpEnergyThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr Cent eent Cen een ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -426,7 +428,7 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
           IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = ⌊(S.n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
           S.D = ⌈(S.n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →

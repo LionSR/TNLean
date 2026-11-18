@@ -62,7 +62,7 @@ theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
     {Ω : StateSpace L q} (hΩ : h.IsGappedGroundState E₀ Ω Δ)
     (D : ℕ → Finset (Lattice.Site (AreaLaw.rectangularDomain L L)))
     (hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j)
-    (hsingle : ∀ e : Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
+    (hsingle : ∀ e : Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
       ∀ i j : Fin m,
         s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D i) →
         s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j) →
@@ -97,14 +97,16 @@ theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
     have hnorm := hgs.1
     simp [h0] at hnorm
   have hsplit : ∀ i : Lattice.Site (AreaLaw.rectangularDomain L L) ⊕
-      Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
+      Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
       ∀ j ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m,
       ∀ k ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m, j = k := by
     intro i j hj k hk
     have hc (l : Fin m)
         (hl : l ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m) :
         i ∈ Entropy.crossingTerms AreaLaw.nearestNeighborSupport (D l) :=
-      Finset.mem_filter.mpr ⟨Finset.mem_univ _, Entropy.mem_splitIndices.mp hl⟩
+      by
+        simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
+        exact Entropy.mem_splitIndices.mp hl
     cases i with
     | inl v => exact False.elim (AreaLaw.inl_not_mem_crossingTerms (D j) v (hc j hj))
     | inr e =>

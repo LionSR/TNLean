@@ -71,14 +71,14 @@ anchor cannot reach `S₀`. -/
 noncomputable def truncatedConstraint (q : ℕ) (G : SimpleGraph ι) (S₀ : Finset ι) (r₀ : ℕ)
     (a : ι) (k : Matrix (ι → Fin q) (ι → Fin q) ℂ) : Matrix (ι → Fin q) (ι → Fin q) ℂ :=
   if setDist G S₀ a = ⊤ then k
-  else siteExpectation q (graphBall G a (truncationRadius r₀ (setDist G S₀ a).toNat)) k
+  else siteExpectation q (ManyBody.graphBall G a (truncationRadius r₀ (setDist G S₀ a).toNat)) k
 
 /-- **Shell count** (`03-quasilocal.tex`, lines 460–463): if every graph ball of radius `d`
 has at most `K_b (d + 1)²` sites and every site anchors at most `μ` labels, then at most
 `μ |S₀| K_b (d + 1)²` labels have anchors at distance `d` from `S₀`. -/
 theorem card_label_shell_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S₀ : Finset ι)
     (a : κ → ι) {Kb μ : ℝ}
-    (hBall : ∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2)
+    (hBall : ∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2)
     (hMult : ∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) (d : ℕ) :
     ((Finset.univ.filter fun i => setDist G S₀ (a i) = d).card : ℝ) ≤
       μ * (S₀.card * (Kb * ((d : ℝ) + 1) ^ 2)) := by
@@ -89,17 +89,18 @@ theorem card_label_shell_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S₀
   have hμ : 0 ≤ μ := (Nat.cast_nonneg _).trans (hMult x₀)
   set T := Finset.univ.filter fun x => setDist G S₀ x = d
   -- Sites at distance `d` lie in the balls of radius `d` about the points of `S₀`.
-  have hT : T ⊆ S₀.biUnion fun y => graphBall G y d := by
+  have hT : T ⊆ S₀.biUnion fun y => ManyBody.graphBall G y d := by
     intro x hx
     simp only [T, Finset.mem_filter, Finset.mem_univ, true_and] at hx
     obtain ⟨y, hy, he⟩ := exists_mem_edist_eq_setDist (x := x) (G := G) (S₀ := S₀)
       (by rw [hx]; exact ENat.natCast_ne_top d)
-    refine Finset.mem_biUnion.mpr ⟨y, hy, mem_graphBall.mpr ?_⟩
+    refine Finset.mem_biUnion.mpr ⟨y, hy, ManyBody.mem_graphBall.mpr ?_⟩
     rw [SimpleGraph.edist_comm, he, hx]
   have hTcard : (T.card : ℝ) ≤ S₀.card * (Kb * ((d : ℝ) + 1) ^ 2) := by
-    calc (T.card : ℝ) ≤ ((S₀.biUnion fun y => graphBall G y d).card : ℝ) := by
+    calc (T.card : ℝ) ≤ ((S₀.biUnion fun y => ManyBody.graphBall G y d).card : ℝ) := by
           exact_mod_cast Finset.card_le_card hT
-      _ ≤ ∑ y ∈ S₀, ((graphBall G y d).card : ℝ) := by exact_mod_cast Finset.card_biUnion_le
+      _ ≤ ∑ y ∈ S₀, ((ManyBody.graphBall G y d).card : ℝ) := by exact_mod_cast
+          Finset.card_biUnion_le
       _ ≤ ∑ _y ∈ S₀, Kb * ((d : ℝ) + 1) ^ 2 := Finset.sum_le_sum fun y _ => hBall y d
       _ = S₀.card * (Kb * ((d : ℝ) + 1) ^ 2) := by rw [Finset.sum_const, nsmul_eq_mul]
   -- Each site anchors at most `μ` labels.
@@ -124,9 +125,9 @@ theorem norm_sum_truncatedConstraint_sub_le {q : ℕ} [NeZero q] {κ : Type*} [F
     (G : SimpleGraph ι) (S₀ : Finset ι) (a : κ → ι)
     (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ) {C c α Kb μ A : ℝ} (hC : 0 ≤ C)
     (hKb : 0 ≤ Kb) (hμ : 0 ≤ μ)
-    (htail : ∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+    (htail : ∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α)))
-    (hBall : ∀ x (d : ℕ), ((graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2)
+    (hBall : ∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2)
     (hMult : ∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ)
     (hA : ∀ r₀ N : ℕ, ∑ d ∈ Finset.range N, ((d : ℝ) + 1) ^ 2 *
         Real.exp (-(c * ((max r₀ (d / 2) : ℕ) : ℝ) ^ α)) ≤

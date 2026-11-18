@@ -38,8 +38,8 @@ commutator vanishes exactly.
 
 \begin{definition}[Restricted commutator norm]
     \label{aux:restricted-commutator-norm}
-    \lean{QuantumCircuit.heisenbergCommutatorNorm,
-        QuantumCircuit.heisenbergEvolution}\leanok
+    \lean{ManyBody.heisenbergCommutatorNorm,
+        ManyBody.heisenbergEvolution}\leanok
     For operators $H,B$ and $X\subseteq I$, define
     \begin{align}
         C_B(X,t) & =\sup\{\|[\tau_t(A),B]\|: A\in\mathcal A_X,\ \|A\|\leq1\}.\notag
@@ -48,7 +48,7 @@ commutator vanishes exactly.
 
 \begin{lemma}[Evaluation of the restricted commutator norm]
     \label{aux:restricted-commutator-evaluation}
-    \lean{QuantumCircuit.norm_heisenberg_commutator_le_heisenbergCommutatorNorm}\leanok
+    \lean{ManyBody.norm_heisenberg_commutator_le_heisenbergCommutatorNorm}\leanok
     \uses{aux:restricted-commutator-norm}
     For $A\in\mathcal A_X$, $\|[\tau_t(A),B]\|\leq C_B(X,t)\|A\|$.
 \end{lemma}
@@ -58,7 +58,7 @@ commutator vanishes exactly.
 
 \begin{lemma}[Reversal of time]
     \label{aux:restricted-commutator-negative-time}
-    \lean{QuantumCircuit.heisenbergCommutatorNorm_neg_time}\leanok
+    \lean{ManyBody.heisenbergCommutatorNorm_neg_time}\leanok
     \uses{aux:restricted-commutator-norm}
     $C_B^{(H)}(X,-t)=C_B^{(-H)}(X,t)$.
 \end{lemma}
@@ -68,7 +68,7 @@ commutator vanishes exactly.
 
 \begin{lemma}[Continuity in time]
     \label{aux:restricted-commutator-continuity}
-    \lean{QuantumCircuit.continuous_heisenbergCommutatorNorm}\leanok
+    \lean{ManyBody.continuous_heisenbergCommutatorNorm}\leanok
     \uses{aux:restricted-commutator-norm}
     For fixed $H,B,X$, $t\mapsto C_B(X,t)$ is continuous.
 \end{lemma}
@@ -78,7 +78,7 @@ commutator vanishes exactly.
 
 \begin{lemma}[Initial commutator bound]
     \label{aux:restricted-initial-commutator-bound}
-    \lean{QuantumCircuit.heisenbergCommutatorNorm_zero_le}\leanok
+    \lean{ManyBody.heisenbergCommutatorNorm_zero_le}\leanok
     \uses{aux:restricted-commutator-norm}
     For arbitrary $H,B,X$, $C_B(X,0)\leq2\|B\|$.
 \end{lemma}
@@ -88,7 +88,7 @@ commutator vanishes exactly.
 
 \begin{lemma}[Vanishing initial commutator]
     \label{aux:restricted-initial-commutator-vanishing}
-    \lean{QuantumCircuit.heisenbergCommutatorNorm_zero_of_disjoint}\leanok
+    \lean{ManyBody.heisenbergCommutatorNorm_zero_of_disjoint}\leanok
     \uses{aux:restricted-commutator-norm}
     If $B\in\mathcal A_Y$ and $X\cap Y=\varnothing$, then $C_B(X,0)=0$.
 \end{lemma}
@@ -98,7 +98,7 @@ commutator vanishes exactly.
 
 \begin{lemma}[Local commutator recursion]
     \label{aux:restricted-commutator-recursion}
-    \lean{QuantumCircuit.heisenbergCommutatorNorm_le_integral}\leanok
+    \lean{ManyBody.heisenbergCommutatorNorm_le_integral}\leanok
     \uses{aux:restricted-commutator-norm}
     Following Hastings--Koma, Appendix A, (A.12)--(A.14), let $H=\sum_j h_j$ with $h_j=h_j^\dagger\in\mathcal A_{T_j}$. For arbitrary $B,X$ and $t\geq0$,
     \begin{align}
@@ -125,7 +125,7 @@ commutator vanishes exactly.
 
 \begin{lemma}[Exact locality on interaction-closed regions]
     \label{lem:qc_lr_closed_region}
-    \lean{QuantumCircuit.commute_heisenbergEvolution_of_closed}\leanok
+    \lean{ManyBody.commute_heisenbergEvolution_of_closed}\leanok
     Let $H=\sum_jh_j$ with $h_j\in\mathcal A_{T_j}$, and let $C\subseteq I$ satisfy $T_j\subseteq C$ or $T_j\cap C=\varnothing$ for all $j$. If $A\in\mathcal A_C$, $B\in\mathcal A_D$, and $C\cap D=\varnothing$, then $[\tau_t(A),B]=0$ for all $t\in\mathbb R$.
 \end{lemma}
 \begin{proof}\leanok
@@ -137,9 +137,9 @@ Let $G$ be a simple graph on $I$ with path metric $d_G\in\mathbb N\cup\{\infty\}
 
 \begin{lemma}[Graph-distance propagation]
     \label{thm:qc_graph_lieb_robinson}
-    \lean{QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance,
-        QuantumCircuit.norm_heisenberg_commutator_le_graphDistance,
-        QuantumCircuit.exists_graph_lieb_robinson}\leanok
+    \lean{ManyBody.heisenbergCommutatorNorm_le_graphDistance,
+        ManyBody.norm_heisenberg_commutator_le_graphDistance,
+        ManyBody.exists_graph_lieb_robinson}\leanok
     \uses{aux:restricted-commutator-recursion,aux:weighted-volterra-comparison,
         aux:restricted-commutator-evaluation,aux:restricted-commutator-negative-time,
         aux:restricted-initial-commutator-bound,
@@ -163,8 +163,8 @@ Let $G$ be a simple graph on $I$ with path metric $d_G\in\mathbb N\cup\{\infty\}
 % graph commutator estimate is asserted here, not chain localization.
 \begin{theorem}[Graph-distance propagation from an arbitrary finite support]
     \label{thm:qc_graph_lieb_robinson_finset}
-    \lean{QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finset,
-        QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset}\leanok
+    \lean{ManyBody.heisenbergCommutatorNorm_le_graphDistance_finset,
+        ManyBody.norm_heisenberg_commutator_le_graphDistance_finset}\leanok
     \uses{aux:restricted-commutator-norm}
     Under the preceding finite-range interaction assumptions, let $S\subseteq I$, $A\in\mathcal A_S$, $B\in\mathcal A_{\{y\}}$, $\mu\geq0$, and $0\le n\leq\min_{x\in S}d_G(x,y)$. With $C=2+4|b_0|e^{2\mu R}$ and $v=2v_R|b_0|e^{2\mu R}+1$, for all $t\in\mathbb R$,
     \begin{align}
@@ -197,8 +197,8 @@ Let $G$ be a simple graph on $I$ with path metric $d_G\in\mathbb N\cup\{\infty\}
 % velocity/length-pair identification or the source's printed time-cone formula.
 \begin{lemma}[Propagation between finite supports]
     \label{thm:qc_lr_finsets_numeric}
-    \lean{QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finsets_numeric,
-        QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finsets_numeric}\leanok
+    \lean{ManyBody.heisenbergCommutatorNorm_le_graphDistance_finsets_numeric,
+        ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric}\leanok
     \uses{aux:restricted-commutator-norm}
     Under the assumptions of Theorem~\ref{thm:qc_graph_lieb_robinson_finset} with $v_R\geq1$, let $S,Y\subseteq I$, $A\in\mathcal A_S$, $B\in\mathcal A_Y$, $\mu\geq0$, and $0\le n\leq d_G(S,Y)$. With $u=4v_R|b_0|e^{2\mu R}$, for all $t\in\mathbb R$,
     \begin{align}
@@ -219,7 +219,7 @@ Let $G$ be a simple graph on $I$ with path metric $d_G\in\mathbb N\cup\{\infty\}
 
 \begin{lemma}[Exact commutation across disconnected components]
     \label{thm:qc_graph_lieb_robinson_zero_finset}
-    \lean{QuantumCircuit.heisenberg_commutator_eq_zero_of_forall_edist_eq_top}
+    \lean{ManyBody.heisenberg_commutator_eq_zero_of_forall_edist_eq_top}
     \leanok
     \uses{aux:restricted-commutator-norm}
     Let $H=\sum_k h_k$ with $h_k\in\mathcal A_{X_k}$ and $\operatorname{diam}_{d_G}(X_k)\le R<\infty$. If $A\in\mathcal A_S$, $B\in\mathcal A_{\{y\}}$, and $d_G(x,y)=\infty$ for all $x\in S$, then $[\tau_t(A),B]=0$ for all $t\in\mathbb R$~\cite[Lemma~4.1]{OpenAI2026AreaLaw}.
@@ -231,7 +231,7 @@ Let $G$ be a simple graph on $I$ with path metric $d_G\in\mathbb N\cup\{\infty\}
 
 \begin{lemma}[Vanishing between connected components]
     \label{thm:qc_graph_lieb_robinson_zero}
-    \lean{QuantumCircuit.heisenberg_commutator_eq_zero_of_edist_eq_top}\leanok
+    \lean{ManyBody.heisenberg_commutator_eq_zero_of_edist_eq_top}\leanok
     \uses{thm:qc_graph_lieb_robinson_zero_finset}
     If $H=\sum_kh_k$ with $\operatorname{diam}_{d_G}(X_k)\le R$, $a_k\in X_k$, $A\in\mathcal A_{X_i}$, $B\in\mathcal A_{\{y\}}$, and $d_G(a_i,y)=\infty$, then $[\tau_t(A),B]=0$ for all $t\in\mathbb R$.
 \end{lemma}
@@ -242,7 +242,7 @@ Let $G$ be a simple graph on $I$ with path metric $d_G\in\mathbb N\cup\{\infty\}
 
 \begin{lemma}[Exponential kernel outside a graph ball]
     \label{lem:qc_graph_kernel_tail}
-    \lean{QuantumCircuit.sum_exp_neg_edist_compl_graphBall_le}
+    \lean{ManyBody.sum_exp_neg_edist_compl_graphBall_le}
     \leanok
     Let $G$ be a simple graph on a finite set $I$, $x\in I$, $K_g\in\mathbb R$, and $k\in\mathbb N$ such that $|\{y:d_G(x,y)=d\}|\le K_g(d+1)^k$ for all $d\in\mathbb N$. With $N_\ell(x)=\{y:d_G(x,y)\leq\ell\}$ and $T_k=2^kk!e^{1/2}/(1-e^{-1/2})$,
     \begin{align}
@@ -301,13 +301,12 @@ with every tensor factor at its original site.
 
 \begin{lemma}[Order and commutant of the ball expectation]
     \label{lem:al_site_expectation_order}
-    \lean{QuantumCircuit.heisenbergEvolution_eq_hermitianUnitaryPath,
-        QuantumCircuit.siteExpectation_conjTranspose,
+    \lean{QuantumCircuit.siteExpectation_conjTranspose,
         QuantumCircuit.isHermitian_siteExpectation,
         QuantumCircuit.siteExpectation_nonneg, QuantumCircuit.siteExpectation_mono,
         QuantumCircuit.siteExpectation_le_one,
         QuantumCircuit.siteExpectation_eq_self_of_forall_commute,
-        QuantumCircuit.mem_supportedOperators_of_forall_commute,
+        ManyBody.mem_supportedOperators_iff_forall_commute,
         Commute.cfcAbs_of_isHermitian,
         QuantumCircuit.siteExpectation_abs_of_mem_supportedOperators,
         QuantumCircuit.sqrt_mem_supportedOperators}
@@ -396,7 +395,8 @@ space with the graph interaction hypotheses.
 \begin{lemma}[Localization onto graph balls]
     \label{thm:qc_graph_ball_localization}
     \lean{QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le,
-        QuantumCircuit.graphBall, QuantumCircuit.sum_pow_mul_exp_neg_le}\leanok
+        QuantumCircuit.siteExpectation_eq_regionExpectation,
+        ManyBody.graphBall, ManyBody.sum_pow_mul_exp_neg_le}\leanok
     \uses{thm:qc_graph_lieb_robinson,thm:qc_graph_lieb_robinson_zero,
         lem:qc_site_expectation_commutator,lem:qc_site_expectation_properties}
     In the setting of Lemma~\ref{thm:qc_graph_lieb_robinson} with $q\geq1$ and $|\{y:d_G(x,y)=d\}|\le K_g(d+1)^k$, for $N_l(a)=\{x:d_G(a,x)\leq l\}$,
@@ -413,7 +413,7 @@ space with the graph interaction hypotheses.
 
 \begin{lemma}[Strict margins contain closed graph balls]
     \label{lem:qc_graph_ball_strict_margin}
-    \lean{QuantumCircuit.graphBall_subset_of_finite_distance_margin}\leanok
+    \lean{ManyBody.graphBall_subset_of_finite_distance_margin}\leanok
     If $m\in\mathbb N$ and $w\in\mathbb R$ satisfy $m\le w$, and $w<d_G(x,y)$ whenever $y\notin D$ and $d_G(x,y)<\infty$, then $N_m(x)=\{y:d_G(x,y)\le m\}\subseteq D$.
 \end{lemma}
 \begin{proof}\leanok
@@ -422,7 +422,7 @@ space with the graph interaction hypotheses.
 
 \begin{lemma}[Crossing supports avoid interior cores]
     \label{thm:qc_graph_support_separation}
-    \lean{QuantumCircuit.reset_graphNeighborhood_disjoint_cores}\leanok
+    \lean{ManyBody.reset_graphNeighborhood_disjoint_cores}\leanok
     Let $(X_j)_{j\in J}$ be subsets of $I$ with $\operatorname{diam}_{d_G}(X_j)\le R$, let $D\cap C=\varnothing$, and suppose $N_{\ell+R}(R_0)\subseteq D$ and $N_{\ell+R}(C_0)\subseteq C$. With $Q=(D\cup C)^c$, $\mathcal C=\{j\in J:X_j\cap D\ne\varnothing,\ X_j\setminus D\ne\varnothing\}$, and $Z=\bigcup_{j\in\mathcal C}X_j$, one has
     \begin{align}
         N_\ell(Q\cup Z)\cap(R_0\cup C_0) & =\varnothing,\notag

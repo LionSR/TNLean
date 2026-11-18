@@ -58,7 +58,7 @@ theorem Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount {L : ℕ}
 /-- The existing source/native bijection followed by graph-isomorphism transport. -/
 private def rectangleForwardEdgeEquiv (L : ℕ)
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] :
-    ForwardEdge L ≃ Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)) :=
+    ForwardEdge L ≃ Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)) :=
   (forwardSquareEdgeEquiv L).trans (Edge.equiv (AreaLaw.rectangleGraphIso L L))
 
 /-- The crossing predicate is insensitive to the endpoint swap caused by the
@@ -98,7 +98,7 @@ private theorem rectangle_singleCrossing {L m : ℕ}
     (X : Fin m → Finset (Vertex L))
     (hsingle : ∀ e : ForwardEdge L, ∀ i j : Fin m,
       Crosses (X i) e → Crosses (X j) e → i = j) :
-    ∀ e : Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
+    ∀ e : Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
       ∀ i j : Fin m,
         s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
           ((X i).map (AreaLaw.rectangleSiteEquiv L L).toEmbedding) →
@@ -207,7 +207,7 @@ theorem SquareHamiltonian.exists_pinned_maximizer_energy_fidelity
   have hD : ∀ i j : Fin m, i ≤ j → canonicalRegions X i ⊆ canonicalRegions X j := by
     intro i j hij
     simpa only [canonicalRegions_fin, Finset.map_subset_map] using hX hij
-  have hsep : ∀ e : Edge (Lattice.domainGraph (AreaLaw.rectangularDomain L L)),
+  have hsep : ∀ e : Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
       ∀ i j : Fin m,
         s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
           (canonicalRegions X i) →

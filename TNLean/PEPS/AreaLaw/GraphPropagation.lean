@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.LocalHamiltonian
 import TNLean.PEPS.AreaLaw.GraphInteractionDiamondCounting
-import TNLean.Circuit.LiebRobinson.GraphLocalization
+import TNLean.Circuit.SiteExpectationGraphLocalization
 
 /-!
 # Graph-distance propagation for finite-domain Hamiltonians
@@ -21,7 +21,7 @@ constants `C, v, c` are chosen from `R` and `J` alone, before the domain and the
 interaction; the source allows dependence on `q, R, J`.
 
 The proof instantiates the general graph estimates of `QuantumCircuit` on the induced
-nearest-neighbor graph `domainGraph Λ`. The support diameter comes from the walk condition
+nearest-neighbor graph `planeDomainGraph Λ`. The support diameter comes from the walk condition
 in `IsAdmissibleSupport`, the support size `v_R = 1 + 2R(R + 1)` and the per-site budget
 `b₀ = μ_R J` with `μ_R = 2^{v_R - 1}` come from the exact lattice diamond counts, and the
 sphere growth `|{y : d_Λ(x, y) = d}| ≤ 2 (d + 1)²` comes from the same count, since graph
@@ -52,56 +52,32 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open scoped Matrix.Norms.L2Operator Nat
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport IsAdmissibleSupport card_le_diamond_of_edist_le
+  exists_walk_length_le_iff_edist_le latticeL1Distance_le_one_of_planeDomainGraph_adj
+  planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 open QuantumCircuit
 
 /-! ### Geometry of the induced domain graph -/
 
-/-- Adjacent sites of the induced domain graph have ambient lattice displacement one.
-Source: area law, `01-preliminaries.tex`, lines 81–84. -/
-theorem latticeL1Distance_le_one_of_domainGraph_adj {Λ : Finset (ℤ × ℤ)} {x y : Site Λ}
-    (hxy : (domainGraph Λ).Adj x y) : latticeL1Distance x.1 y.1 ≤ 1 := by
-  simp only [domainGraph] at hxy
-  unfold latticeL1Distance
-  rcases hxy with ⟨h1, h2 | h2⟩ | ⟨h1, h2 | h2⟩ <;> omega
-
 /-- The sites at induced-graph distance exactly `d` from a site number at most
 `2 (d + 1)²`. Source: area law, `03-quasilocal.tex`, lines 124–126, using the diamond
 count `eq:ball-count`. -/
 theorem card_domainGraph_sphere_le (Λ : Finset (ℤ × ℤ)) (x : Site Λ) (d : ℕ) :
-    ((Finset.univ.filter fun y => (domainGraph Λ).edist x y = d).card : ℝ) ≤
+    ((Finset.univ.filter fun y => (planeDomainGraph Λ).edist x y = d).card : ℝ) ≤
       2 * ((d : ℝ) + 1) ^ 2 := by
   have hcard := card_le_diamond_of_edist_le Subtype.val
-    (Finset.univ.filter fun y => (domainGraph Λ).edist x y = d) Subtype.val_injective
-    (fun _ _ => latticeL1Distance_le_one_of_domainGraph_adj) x d
+    (Finset.univ.filter fun y => (planeDomainGraph Λ).edist x y = d) Subtype.val_injective
+    (fun _ _ => latticeL1Distance_le_one_of_planeDomainGraph_adj) x d
     (fun y hy => (Finset.mem_filter.mp hy).2.le)
-  have hreal : ((Finset.univ.filter fun y => (domainGraph Λ).edist x y = d).card : ℝ) ≤
+  have hreal : ((Finset.univ.filter fun y => (planeDomainGraph Λ).edist x y = d).card : ℝ) ≤
       ((1 + 2 * d * (d + 1) : ℕ) : ℝ) := by exact_mod_cast hcard
   push_cast at hreal
   nlinarith
 
 end TNLean.PEPS.AreaLaw
-
-namespace TNLean.Lattice.IsAdmissibleSupport
-
-open TNLean.PEPS.AreaLaw QuantumCircuit
-
-variable {Λ : Finset (ℤ × ℤ)} {R : ℕ} {X : Finset (Site Λ)}
-
-/-- An admissible support has induced-graph diameter at most `R`.
-Source: area law, `eq:hamiltonian` and `03-quasilocal.tex`, line 16. -/
-theorem edist_le (hX : IsAdmissibleSupport Λ R X) :
-    ∀ x ∈ X, ∀ z ∈ X, (domainGraph Λ).edist x z ≤ R := fun x hx z hz =>
-  (exists_walk_length_le_iff_edist_le Λ R x z).mp (hX.2 x hx z hz)
-
-/-- An admissible support has at most `v_R = 1 + 2R(R + 1)` sites.
-Source: area law, `eq:quasilocal-budget` (`03-quasilocal.tex`, lines 31–39). -/
-theorem card_le (hX : IsAdmissibleSupport Λ R X) : X.card ≤ 1 + 2 * R * (R + 1) :=
-  card_support_le_diamond Subtype.val Subtype.val_injective
-    (fun _ _ => latticeL1Distance_le_one_of_domainGraph_adj) X R hX.2
-
-end TNLean.Lattice.IsAdmissibleSupport
 
 /-! ### The interaction budget -/
 
@@ -127,7 +103,7 @@ theorem sum_norm_term_containing_le (h : LocalHamiltonian Λ q R J) (hJ : 0 ≤ 
       (2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) * J := by
   classical
   have hcard := card_supports_containing_le_diamond Subtype.val Subtype.val_injective
-    (fun _ _ => latticeL1Distance_le_one_of_domainGraph_adj)
+    (fun _ _ => latticeL1Distance_le_one_of_planeDomainGraph_adj)
     ((Finset.univ : Finset (AdmissibleSupport Λ R)).map (Function.Embedding.subtype _)) R
     (fun Y hY => by
       obtain ⟨Z, -, rfl⟩ := Finset.mem_map.mp hY
@@ -138,6 +114,11 @@ theorem sum_norm_term_containing_le (h : LocalHamiltonian Λ q R J) (hJ : 0 ≤ 
       simpa using Finset.sum_le_card_nsmul _ (fun X => ‖h.term X‖) J
         (fun X _ => h.norm_le X)
     _ ≤ _ := mul_le_mul_of_nonneg_right (by exact_mod_cast hcard) hJ
+
+/-- The terms of `h` as an interaction on the sites of `Λ`, with Hamiltonian `h.operator`. -/
+private noncomputable def interaction (h : LocalHamiltonian Λ q R J) :
+    ManyBody.Interaction (fun _ : Site Λ ↦ Fin q) (fun X : AdmissibleSupport Λ R ↦ X.1) :=
+  ⟨h.term, fun X ↦ isSupportedOn_of_mem_supportedOperators (h.supported X)⟩
 
 /-- An anchor family that takes the prescribed value `a` at `X` and an arbitrary site of
 every other support. -/
@@ -179,15 +160,18 @@ theorem norm_commutator_le_graphDistance (h : LocalHamiltonian Λ q R J)
     {A B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
     (hA : A ∈ supportedOperators q (X.1 : Set (Site Λ))) (y : Site Λ)
     (hB : B ∈ supportedOperators q ({y} : Set (Site Λ)))
-    (μ : ℝ) (hμ : 0 ≤ μ) (n : ℕ) (hn : (n : ℕ∞) ≤ (domainGraph Λ).edist a y) (t : ℝ) :
-    ‖heisenbergEvolution h.operator t A * B - B * heisenbergEvolution h.operator t A‖ ≤
+    (μ : ℝ) (hμ : 0 ≤ μ) (n : ℕ) (hn : (n : ℕ∞) ≤ (planeDomainGraph Λ).edist a y) (t : ℝ) :
+    ‖ManyBody.heisenbergEvolution h.operator t A * B - B * ManyBody.heisenbergEvolution h.operator
+        t A‖ ≤
       2 * Real.exp (μ * R) * ‖A‖ * ‖B‖ *
         Real.exp (2 * (1 + 2 * R * (R + 1) : ℕ) *
           ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) * J) * Real.exp (2 * μ * R) * |t| - μ * n) :=
-  QuantumCircuit.norm_heisenberg_commutator_le_graphDistance (domainGraph Λ) Subtype.val
-    (anchors X a) (anchors_mem ha) h.term h.hermitian h.supported R
+  ManyBody.norm_heisenberg_commutator_le_graphDistance (planeDomainGraph Λ) h.interaction
+    (anchors X a) (anchors_mem ha) h.hermitian R
     (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
-    (h.sum_norm_term_containing_le (h.normBound_nonneg X)) X hA y hB μ hμ n
+    (h.sum_norm_term_containing_le (h.normBound_nonneg X)) X
+    (isSupportedOn_of_mem_supportedOperators hA) y
+    (isSupportedOn_of_mem_supportedOperators (S := {y}) (by rwa [Finset.coe_singleton])) μ hμ n
     (by rwa [anchors_self]) t
 
 /-- **Exact vanishing between components.** If the anchor `a` and the site `y` lie in
@@ -201,10 +185,13 @@ theorem commutator_eq_zero_of_edist_eq_top (h : LocalHamiltonian Λ q R J)
     {A B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
     (hA : A ∈ supportedOperators q (X.1 : Set (Site Λ))) (y : Site Λ)
     (hB : B ∈ supportedOperators q ({y} : Set (Site Λ)))
-    (hy : (domainGraph Λ).edist a y = ⊤) (t : ℝ) :
-    heisenbergEvolution h.operator t A * B - B * heisenbergEvolution h.operator t A = 0 :=
-  QuantumCircuit.heisenberg_commutator_eq_zero_of_edist_eq_top (domainGraph Λ) Subtype.val
-    (anchors X a) (anchors_mem ha) h.term h.supported R (fun Y => Y.2.edist_le) X hA y hB
+    (hy : (planeDomainGraph Λ).edist a y = ⊤) (t : ℝ) :
+    ManyBody.heisenbergEvolution h.operator t A * B - B * ManyBody.heisenbergEvolution h.operator t
+        A = 0 :=
+  ManyBody.heisenberg_commutator_eq_zero_of_edist_eq_top (planeDomainGraph Λ) h.interaction
+    (anchors X a) (anchors_mem ha) R (fun Y => Y.2.edist_le) X
+    (isSupportedOn_of_mem_supportedOperators hA) y
+    (isSupportedOn_of_mem_supportedOperators (S := {y}) (by rwa [Finset.coe_singleton]))
     (by rwa [anchors_self]) t
 
 /-- **Localization onto graph balls**, explicit form, for the finite-domain Hamiltonian.
@@ -219,19 +206,20 @@ theorem norm_sub_siteExpectation_graphBall_le [NeZero q] (h : LocalHamiltonian �
     (X : AdmissibleSupport Λ R) {a : Site Λ} (ha : a ∈ X.1)
     {A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
     (hA : A ∈ supportedOperators q (X.1 : Set (Site Λ))) (l : ℕ) (t : ℝ) :
-    ‖heisenbergEvolution h.operator t A -
-        siteExpectation q (graphBall (domainGraph Λ) a l)
-          (heisenbergEvolution h.operator t A)‖ ≤
+    ‖ManyBody.heisenbergEvolution h.operator t A -
+        siteExpectation q (ManyBody.graphBall (planeDomainGraph Λ) a l)
+          (ManyBody.heisenbergEvolution h.operator t A)‖ ≤
       ‖A‖ * min 2
         (2 * Real.exp R * 2 * (2 ^ 2 * 2 ! * Real.exp (1 / 2) /
             (1 - Real.exp (-(1 / 2)))) *
           Real.exp (2 * (1 + 2 * R * (R + 1) : ℕ) *
             ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) * J) * Real.exp (2 * R) * |t| - l / 2)) := by
   have hBound := QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le
-    (domainGraph Λ) Subtype.val (anchors X a) (anchors_mem ha) h.term h.hermitian h.supported
+    (planeDomainGraph Λ) h.interaction (anchors X a) (anchors_mem ha) h.hermitian
     R (fun Y => Y.2.edist_le) _ (fun Y => Y.2.card_le) _
     (h.sum_norm_term_containing_le (h.normBound_nonneg X)) 2 2
-    (fun x d => card_domainGraph_sphere_le Λ x d) X hA l t
+    (fun x d => card_domainGraph_sphere_le Λ x d) X
+    (isSupportedOn_of_mem_supportedOperators hA) l t
   rwa [anchors_self] at hBound
 
 end TNLean.Lattice.LocalHamiltonian
@@ -263,22 +251,22 @@ lemma exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
         A ∈ supportedOperators q (X.1 : Set (Site Λ)) → ∀ t : ℝ,
         (∀ (y : Site Λ) (B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
           B ∈ supportedOperators q ({y} : Set (Site Λ)) →
-          (∀ d : ℕ, (domainGraph Λ).edist a y = d →
-            ‖heisenbergEvolution h.operator t A * B -
-                B * heisenbergEvolution h.operator t A‖ ≤
+          (∀ d : ℕ, (planeDomainGraph Λ).edist a y = d →
+            ‖ManyBody.heisenbergEvolution h.operator t A * B -
+                B * ManyBody.heisenbergEvolution h.operator t A‖ ≤
               C * ‖A‖ * ‖B‖ * Real.exp (v * |t| - c * d)) ∧
-          ((domainGraph Λ).edist a y = ⊤ →
-            heisenbergEvolution h.operator t A * B -
-              B * heisenbergEvolution h.operator t A = 0)) ∧
+          ((planeDomainGraph Λ).edist a y = ⊤ →
+            ManyBody.heisenbergEvolution h.operator t A * B -
+              B * ManyBody.heisenbergEvolution h.operator t A = 0)) ∧
         ∀ l : ℕ,
-          ‖heisenbergEvolution h.operator t A -
-              siteExpectation q (graphBall (domainGraph Λ) a l)
-                (heisenbergEvolution h.operator t A)‖ ≤
+          ‖ManyBody.heisenbergEvolution h.operator t A -
+              siteExpectation q (ManyBody.graphBall (planeDomainGraph Λ) a l)
+                (ManyBody.heisenbergEvolution h.operator t A)‖ ≤
             ‖A‖ * min 2 (C * Real.exp (v * |t| - c * l)) := by
   have : NeZero q := ⟨by omega⟩
   set vR : ℕ := 1 + 2 * R * (R + 1)
   set b₀ : ℝ := ((2 ^ (vR - 1) : ℕ) : ℝ) * J
-  obtain ⟨C₁, v₁, c₁, hC₁, hv₁, hc₁, hLR⟩ := exists_graph_lieb_robinson R vR b₀
+  obtain ⟨C₁, v₁, c₁, hC₁, hv₁, hc₁, hLR⟩ := ManyBody.exists_graph_lieb_robinson R vR b₀
   set C₂ : ℝ := 2 * Real.exp R * 2 *
     (2 ^ 2 * 2 ! * Real.exp (1 / 2) / (1 - Real.exp (-(1 / 2))))
   set v₂ : ℝ := 2 * vR * b₀ * Real.exp (2 * R)
@@ -287,10 +275,11 @@ lemma exists_quasilocal_lieb_robinson (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J : �
   intro Λ h X a ha A hA t
   have hJ := h.normBound_nonneg X
   refine ⟨fun y B hB => ?_, fun l => ?_⟩
-  · have hXY := hLR (domainGraph Λ) Subtype.val (LocalHamiltonian.anchors X a)
-      (LocalHamiltonian.anchors_mem ha) h.term h.hermitian h.supported
+  · have hXY := hLR (planeDomainGraph Λ) h.interaction (LocalHamiltonian.anchors X a)
+      (LocalHamiltonian.anchors_mem ha) h.hermitian
       (fun Y => Y.2.edist_le) (fun Y => Y.2.card_le)
-      (h.sum_norm_term_containing_le hJ) X A B hA y hB t
+      (h.sum_norm_term_containing_le hJ) X A B (isSupportedOn_of_mem_supportedOperators hA) y
+      (isSupportedOn_of_mem_supportedOperators (S := {y}) (by rwa [Finset.coe_singleton])) t
     rw [LocalHamiltonian.anchors_self] at hXY
     refine ⟨fun d hd => (hXY.1 d hd.symm.le).trans ?_, hXY.2⟩
     gcongr

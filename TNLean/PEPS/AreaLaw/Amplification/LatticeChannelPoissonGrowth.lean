@@ -34,6 +34,8 @@ open QuantumCircuit SpectralFilter Matrix MeasureTheory
 open scoped BigOperators ENNReal NNReal Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The actual retained lattice channel evolution satisfies the expected
@@ -55,7 +57,7 @@ theorem exists_latticeChannelWord_spatial_growth {p : ℕ} (hp : 1 ≤ p)
         (∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
           supportedOperators q (S : Set (Site Λ))) →
         ∀ (t : ℝ≥0) (y : Site Λ),
-        letI := graphPseudoEMetricSpace (domainGraph Λ)
+        letI := graphPseudoEMetricSpace (planeDomainGraph Λ)
         let α := kernelExponent p
         let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
           (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
@@ -76,17 +78,17 @@ theorem exists_latticeChannelWord_spatial_growth {p : ℕ} (hp : 1 ≤ p)
   let k := fun i : {i // P i} => positiveConstraint (positiveNormalization p (Δ / 2) J)
     (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
   let N := Finset.univ.sup fun i : {i // P i} =>
-    Finset.univ.sup ((domainGraph Λ).dist (a i))
-  have hN (i : {i // P i}) : Finset.univ.sup ((domainGraph Λ).dist (a i)) ≤ N :=
+    Finset.univ.sup ((planeDomainGraph Λ).dist (a i))
+  have hN (i : {i // P i}) : Finset.univ.sup ((planeDomainGraph Λ).dist (a i)) ≤ N :=
     Finset.le_sup (f := fun i : {i // P i} =>
-      Finset.univ.sup ((domainGraph Λ).dist (a i))) (Finset.mem_univ i)
+      Finset.univ.sup ((planeDomainGraph Λ).dist (a i))) (Finset.mem_univ i)
   obtain ⟨hrow, hstep⟩ := hbounds Λ h a ha E₀ Ω hgs P Aux N hN
-  exact integrable_and_integral_siteOscillation_le_of_graph_kernel (domainGraph Λ) k
-    (graphChannelEventKernel (domainGraph Λ) aP
+  exact integrable_and_integral_siteOscillation_le_of_graph_kernel (planeDomainGraph Λ) k
+    (graphChannelEventKernel (planeDomainGraph Λ) aP
       (2 * (2 + 8 * Real.sqrt C * Real.exp (c / 2))) (c / 2) α N)
     (by positivity) (kernelExponent_pos hp) (kernelExponent_le_one p) hv
-    (graphChannelEventKernel_nonneg (domainGraph Λ) aP (by positivity) (c / 2) α N)
-    hstep (graphChannelEventKernel_eq_zero_of_not_reachable (domainGraph Λ) aP _ _ _ _)
+    (graphChannelEventKernel_nonneg (planeDomainGraph Λ) aP (by positivity) (c / 2) α N)
+    hstep (graphChannelEventKernel_eq_zero_of_not_reachable (planeDomainGraph Λ) aP _ _ _ _)
     hrow S B hB t y
 
 end TNLean.PEPS.AreaLaw

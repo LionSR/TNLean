@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DomainGraphGeometry
 import TNLean.Circuit.EntropySupport
-import TNLean.Circuit.LiebRobinson.GraphLocalization
+import TNLean.Circuit.SiteExpectationGraphLocalization
 
 /-!
 # Lieb–Robinson commutator estimate on finite integer domains
@@ -42,39 +42,33 @@ theorem norm_heisenberg_commutator_le_domainDistance
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S) (y : Fin Λ.card)
     (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B {y}) (t : ℝ) :
     let δ : ℕ∞ := S.inf (fun x ↦ (domainGraph Λ).edist x y)
-    ‖QuantumCircuit.heisenbergEvolution (∑ k, h k) t A * B -
-        B * QuantumCircuit.heisenbergEvolution (∑ k, h k) t A‖ ≤
+    ‖ManyBody.heisenbergEvolution (∑ k, h k) t A * B -
+        B * ManyBody.heisenbergEvolution (∑ k, h k) t A‖ ≤
       (2 + 4 * |b₀| * Real.exp (2 * R)) * (S.card : ℝ) * ‖A‖ * ‖B‖ *
         Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t|) *
         (if δ = ⊤ then 0 else Real.exp (-((δ.toNat : ℝ) / 2))) := by
   classical
   let a : κ → Fin Λ.card := fun k ↦ Classical.choose (X k).2.1
   have ha : ∀ k, a k ∈ (X k).1 := fun k ↦ Classical.choose_spec (X k).2.1
+  let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin q) (fun k ↦ (X k).1) := ⟨h, hSupport⟩
+  have hΦ : Φ.hamiltonian = ∑ k, h k := rfl
   have hBound (n : ℕ)
       (hn : ∀ x ∈ S, (n : ℕ∞) ≤ (domainGraph Λ).edist x y) :=
-    QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset
-      (domainGraph Λ) (fun k ↦ (X k).1) a ha h hHerm
-      (fun k ↦ QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hSupport k))
-      R (fun k x hx z hz ↦ (X k).2.2 x hx z hz)
-      (R + 1) (fun k ↦ (X k).2.isChainSupport.card_le) b₀ hBudget S
-      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hA) y
-      (by simpa only [Finset.coe_singleton] using
-        QuantumCircuit.mem_supportedOperators_of_isSupportedOn hB)
+    ManyBody.norm_heisenberg_commutator_le_graphDistance_finset
+      (domainGraph Λ) Φ hHerm R (fun k x hx z hz ↦ (X k).2.2 x hx z hz)
+      (R + 1) (fun k ↦ (X k).2.isChainSupport.card_le) b₀ hBudget S hA y hB
       1 (by norm_num) n hn t
   dsimp only
   set δ := S.inf (fun x ↦ (domainGraph Λ).edist x y)
   by_cases hδ : δ = ⊤
-  · have hComm := QuantumCircuit.heisenberg_commutator_eq_zero_of_forall_edist_eq_top
-      (domainGraph Λ) (fun k ↦ (X k).1) h
-      (fun k ↦ QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hSupport k))
-      R (fun k x hx z hz ↦ (X k).2.2 x hx z hz) S
-      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hA) y
-      (by simpa only [Finset.coe_singleton] using
-        QuantumCircuit.mem_supportedOperators_of_isSupportedOn hB)
+  · have hComm := ManyBody.heisenberg_commutator_eq_zero_of_forall_edist_eq_top
+      (domainGraph Λ) Φ R (fun k x hx z hz ↦ (X k).2.2 x hx z hz) S hA y hB
       (fun x hx ↦ top_unique (hδ ▸
         (Finset.inf_le hx : δ ≤ (domainGraph Λ).edist x y))) t
+    rw [hΦ] at hComm
     simp only [hComm, norm_zero, ite_eq_left hδ, mul_zero, le_refl]
-  · have hGraph := hBound δ.toNat (fun x hx ↦
+  · simp only [hΦ] at hBound
+    have hGraph := hBound δ.toNat (fun x hx ↦
       (ENat.natCast_toNat_le_self δ).trans (Finset.inf_le hx))
     simp only [mul_one, one_mul, Nat.cast_add, Nat.cast_one, ite_eq_right hδ] at hGraph ⊢
     have hDecay :
@@ -106,10 +100,10 @@ theorem norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
     {A : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ}
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S)
     (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
-    ‖QuantumCircuit.heisenbergEvolution (∑ k, h k) t A -
+    ‖ManyBody.heisenbergEvolution (∑ k, h k) t A -
         QuantumCircuit.siteExpectation q
-          (S.biUnion fun x ↦ QuantumCircuit.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)
-          (QuantumCircuit.heisenbergEvolution (∑ k, h k) t A)‖ ≤
+          (S.biUnion fun x ↦ ManyBody.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)
+          (ManyBody.heisenbergEvolution (∑ k, h k) t A)‖ ≤
       (2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
         (1 - Real.exp (-(1 / 2)))) * (S.card : ℝ) ^ 2 * ‖A‖ *
           Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t| - ℓ / 2) := by
@@ -123,12 +117,10 @@ theorem norm_heisenberg_sub_siteExpectation_domainNeighborhood_le
     intro x d
     simp only [pow_zero, mul_one]
     exact_mod_cast domainGraph_card_sphere_le_two Λ x d
+  let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin q) (fun k ↦ (X k).1) := ⟨h, hSupport⟩
   have hGraph := QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le
-    (domainGraph Λ) (fun k ↦ (X k).1) a ha h hHerm
-    (fun k ↦ QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hSupport k))
-    R (fun k x hx z hz ↦ (X k).2.2 x hx z hz)
-    (R + 1) (fun k ↦ (X k).2.isChainSupport.card_le) b₀ hBudget 2 0 hGrowth S
-    (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hA) ⌊ℓ⌋₊ t
+    (domainGraph Λ) Φ hHerm R (fun k x hx z hz ↦ (X k).2.2 x hx z hz)
+    (R + 1) (fun k ↦ (X k).2.isChainSupport.card_le) b₀ hBudget 2 0 hGrowth S hA ⌊ℓ⌋₊ t
   simp only [pow_zero, Nat.factorial_zero, Nat.cast_one, mul_one, Nat.cast_add] at hGraph
   have hRound :
       Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t| - (⌊ℓ⌋₊ : ℝ) / 2) ≤

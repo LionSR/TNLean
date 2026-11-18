@@ -30,6 +30,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open TensorPower TensorPower.ReplicaTransport
@@ -176,7 +178,7 @@ theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBou
       (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
       (_h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
-      S.graph = domainGraph Λ →
+      S.graph = planeDomainGraph Λ →
       S.depth = (fun x => ambientDepth T hT x.val) →
       (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
       ∀ {L : ℕ} (hn : 0 < S.n), S.r₀ ≤ S.D →
@@ -265,7 +267,7 @@ theorem actualRounds_entropy_integral_le_domainGraph :
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
         (_h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
-        S.graph = domainGraph Λ →
+        S.graph = planeDomainGraph Λ →
         S.depth = (fun x => ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
         ∀ {L : ℕ} (hn : 0 < S.n), S.r₀ ≤ S.D →

@@ -197,6 +197,7 @@ import TNLean.PEPS.PhysicalStateNormalization
 import TNLean.PEPS.PhysicalSupportSection
 import TNLean.PEPS.PhysicalToVirtualCounterexample
 import TNLean.PEPS.PureCutLocalEquivalence
+import TNLean.PEPS.QuantumDoubleTensor
 import TNLean.PEPS.RegionBlock
 import TNLean.PEPS.RegionBondGaugeHolonomy
 import TNLean.PEPS.RegionComplementComparison

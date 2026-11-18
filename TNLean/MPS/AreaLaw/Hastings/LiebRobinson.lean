@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.LemmaOneConstant
-import TNLean.Circuit.LiebRobinson.TimeScaling
+import QICLean.ManyBody.Dynamics.GraphPropagation
 
 /-!
 # The Lieb–Robinson velocity and length in Hastings' factorization
@@ -43,24 +43,23 @@ theorem ChainHamiltonian.norm_heisenberg_commutator_le_numeric
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A X)
     (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B Y)
     (d : ℕ) (hd : ∀ x ∈ X, ∀ y ∈ Y, d ≤ Nat.dist x.val y.val) (t : ℝ) :
-    ‖heisenbergEvolution h.operator t A * B - B * heisenbergEvolution h.operator t A‖ ≤
+    ‖ManyBody.heisenbergEvolution h.operator t A * B - B * ManyBody.heisenbergEvolution h.operator
+        t A‖ ≤
       4 * (X.card : ℝ) * ‖A‖ * ‖B‖ *
         Real.exp (2 * (chainLRVelocity R J - 1) * |t| - d) := by
   classical
-  have hBound := norm_heisenberg_commutator_le_graphDistance_finsets_numeric
-    (SimpleGraph.pathGraph L) (fun Z : ChainSupport L R ↦ Z.1)
-    (fun Z ↦ Classical.choose Z.2.1) (fun Z ↦ Classical.choose_spec Z.2.1)
-    h.term h.hermitian (fun Z ↦ mem_supportedOperators_of_isSupportedOn (h.supported Z))
-    R (fun Z x hx y hy ↦ Z.edist_le x hx y hy)
-    (R + 1) (by omega) (fun Z ↦ Z.2.card_le)
-    (((2 ^ (2 * R + 1) : ℕ) : ℝ) * J) h.sum_norm_terms_containing_le X
-    (mem_supportedOperators_of_isSupportedOn hA) Y
-    (mem_supportedOperators_of_isSupportedOn hB) 1 (by norm_num) d
+  let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) (fun Z : ChainSupport L R ↦ Z.1) :=
+    ⟨h.term, h.supported⟩
+  have hBound := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric
+    (SimpleGraph.pathGraph L) Φ
+    h.hermitian R (fun Z x hx y hy ↦ Z.edist_le x hx y hy)
+    (R + 1) (fun Z ↦ Z.2.card_le)
+    (((2 ^ (2 * R + 1) : ℕ) : ℝ) * J) h.sum_norm_terms_containing_le X hA Y hB 1 (by norm_num) d
     (fun x hx y hy ↦ by
       simpa only [SimpleGraph.pathGraph_edist, ENat.natCast_le_natCast] using hd x hx y hy) t
   convert hBound using 1 <;>
-    simp only [ChainHamiltonian.operator, chainLRVelocity, Nat.cast_add, Nat.cast_one,
-      add_sub_cancel_right, mul_one, one_mul]
+    simp only [Φ, ManyBody.Interaction.hamiltonian, ChainHamiltonian.operator, chainLRVelocity,
+      Nat.cast_add, Nat.cast_one, add_sub_cancel_right, mul_one, one_mul]
   ring_nf
 
 /-- The time-cone form of Hastings' Lieb–Robinson bound, with numerical prefactor `4`.
@@ -75,7 +74,8 @@ theorem ChainHamiltonian.norm_heisenberg_commutator_le_hastings
     (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B Y)
     (d : ℕ) (hd : ∀ x ∈ X, ∀ y ∈ Y, d ≤ Nat.dist x.val y.val)
     (t : ℝ) (ht : |t| ≤ d / v) :
-    ‖heisenbergEvolution h.operator t A * B - B * heisenbergEvolution h.operator t A‖ ≤
+    ‖ManyBody.heisenbergEvolution h.operator t A * B - B * ManyBody.heisenbergEvolution h.operator
+        t A‖ ≤
       4 * (X.card : ℝ) * ‖A‖ * ‖B‖ * Real.exp (-(d / ξC)) := by
   have hcone : |t| * v ≤ (d : ℝ) := (le_div_iff₀ hvpos).mp ht
   have hspeed : 2 * (chainLRVelocity R J - 1) * |t| ≤ (d : ℝ) / 4 := by
@@ -148,7 +148,8 @@ theorem ChainHamiltonian.norm_heisenberg_commutator_le_hastings_rescaled
     (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B Y)
     (d : ℕ) (hd : ∀ x ∈ X, ∀ y ∈ Y, d ≤ Nat.dist x.val y.val)
     (t : ℝ) (ht : |t| ≤ d / (κ * Δ * chainLRVelocity R (J / Δ))) :
-    ‖heisenbergEvolution h.operator t A * B - B * heisenbergEvolution h.operator t A‖ ≤
+    ‖ManyBody.heisenbergEvolution h.operator t A * B - B * ManyBody.heisenbergEvolution h.operator
+        t A‖ ≤
       4 * (X.card : ℝ) * ‖A‖ * ‖B‖ * Real.exp (-(d / (8 : ℝ))) := by
   have hu : 1 ≤ chainLRVelocity R (J / Δ) := by
     unfold chainLRVelocity

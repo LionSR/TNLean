@@ -7,7 +7,7 @@ import TNLean.MPS.AreaLaw.Hastings.GaussianTimeAverage
 import TNLean.MPS.AreaLaw.Hastings.InteractionPicture
 import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.MPS.AreaLaw.InteractionBudget
-import TNLean.Circuit.ProjectedRelativeEvolution
+import QICLean.ManyBody.Dynamics.ProjectedRelativeEvolution
 import QICLean.Analysis.RectangularTraceNorm
 import TNLean.Algebra.ExpMulSubMonotone
 
@@ -145,13 +145,13 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
   have ha : 0 ≤ a := (div_pos (by positivity) hden).le
   have hv : 0 ≤ v := by positivity
   obtain ⟨U, hU0, hU, hunit, hsupport, _, hcompare⟩ :=
-    exists_supported_projected_relative_evolution q N hH hH₀
+    ManyBody.exists_supported_projected_relative_evolution N hH hH₀
   -- the Lieb–Robinson localization error of the generator, uniform on `[-T, T]`
   set E₃ : ℝ := a * (Z.card : ℝ) ^ 2 * ‖H - H₀‖ * Real.exp (v * T - ℓ / 2) with hE₃
   have hE₃0 : 0 ≤ E₃ := by positivity
   have hgen (s : ℝ) (hs : |s| ≤ T) :
-      ‖heisenbergEvolution H s (H - H₀) -
-        siteExpectation q N (heisenbergEvolution H s (H - H₀))‖ ≤ E₃ := by
+      ‖ManyBody.heisenbergEvolution H s (H - H₀) -
+        siteExpectation q N (ManyBody.heisenbergEvolution H s (H - H₀))‖ ≤ E₃ := by
     have hloc := norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
       (fun X : ChainSupport L R ↦ X) h.term h.hermitian h.supported b₀
       h.sum_norm_terms_containing_le hq Z hZ ℓ hℓ s
@@ -160,8 +160,9 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
       (by positivity))
   have hrel (t : ℝ) (ht : |t| ≤ T) :
       ‖hermitianUnitaryPath H t * hermitianUnitaryPath H₀ (-t) - U t‖ ≤ E₃ * |t| :=
-    hcompare t E₃ (fun s hs ↦ hgen s
-      ((show |s| ≤ |t| by
+    hcompare t E₃ (fun s hs ↦ by
+      rw [← siteExpectation_eq_regionExpectation]
+      exact hgen s ((show |s| ≤ |t| by
         simpa only [sub_zero] using Set.abs_sub_left_of_mem_uIcc hs).trans ht))
   -- the pointwise estimate, with the Gaussian tail beyond `T`
   set ε : ℝ := ‖A + B - H‖ + ‖A - H₀‖ + E₃ with hε
@@ -206,7 +207,8 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
   -- the operator `O_B`
   refine ⟨∫ t, U t ∂gaussianReal 0 η, ?_, ?_, ?_⟩
   · have hfix (t : ℝ) : siteExpectation q N (U t) = U t :=
-      siteExpectation_of_mem_supportedOperators N (hsupport t)
+      siteExpectation_of_mem_supportedOperators N
+        (mem_supportedOperators_of_isSupportedOn (hsupport t))
     have hMint : siteExpectation q N (∫ t, U t ∂gaussianReal 0 η) =
         ∫ t, U t ∂gaussianReal 0 η :=
       ((siteExpectationLM q N).toContinuousLinearMap.integral_comp_comm hUint).symm.trans

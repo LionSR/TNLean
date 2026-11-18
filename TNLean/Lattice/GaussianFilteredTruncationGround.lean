@@ -47,6 +47,8 @@ the unique ground state (lines 375–387).
 open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 /-- At the time window `T = q / ΔE`, the Gaussian tail `e^{-(TΔE)²/(2q)}` is `e^{-q/2}`.
@@ -63,14 +65,14 @@ theorem exp_neg_sq_div_eq_of_time_eq {q ΔE : ℝ} (hΔE : ΔE ≠ 0) :
 section Graph
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
-  (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+  (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
   (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
 
-include ha hHerm hSupport hDiam hCard hBudget
+include hHerm hSupport hDiam hCard hBudget
 
 /-- **The truncation error at the time window `T = q / ΔE`.** The bound of
 `norm_gaussianFilteredTerm_sub_truncated_le` at `T = q / ΔE`, where the Gaussian tail is
@@ -87,7 +89,7 @@ theorem norm_gaussianFilteredTerm_sub_truncated_le_of_time [NeZero d] [Decidable
           ((sᶜ.filter (fun k => ¬Disjoint (X k) K)).card : ℝ) * (q / ΔE) *
           Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * (q / ΔE) - μ * m) +
         2 * ‖W‖ * Real.exp (-q / 2) := by
-  have hb := norm_gaussianFilteredTerm_sub_truncated_le G X a ha h hHerm hSupport R hDiam vR hCard
+  have hb := norm_gaussianFilteredTerm_sub_truncated_le G X h hHerm hSupport R hDiam vR hCard
     b₀ hBudget (ΔE := ΔE) hq s K hsK S hSK hW J hJ μ hμ m hm (div_nonneg hq hΔE.le)
   rwa [exp_neg_sq_div_eq_of_time_eq hΔE.ne'] at hb
 
@@ -104,9 +106,9 @@ theorem norm_sub_starProjection_truncated_apply_le [NeZero d] [DecidableEq κ] {
     {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d (S : Set ι)) (J : ℝ)
     (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y)
-    {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ψ ∈ groundEigenspace (∑ k, h k) E₀) :
+    {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ψ ∈ groundSpace (∑ k, h k) E₀) :
     ‖toEuclideanLin (gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W) ψ -
-        (groundEigenspace (∑ k, h k) E₀).starProjection
+        (groundSpace (∑ k, h k) E₀).starProjection
           (toEuclideanLin (gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W) ψ)‖ ≤
       (3 * ‖W‖ * Real.exp (-q / 2) +
         2 * vR * (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖W‖ * J *
@@ -114,7 +116,7 @@ theorem norm_sub_starProjection_truncated_apply_le [NeZero d] [DecidableEq κ] {
           Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * (q / ΔE) - μ * m)) * ‖ψ‖ := by
   refine (norm_sub_starProjection_apply_le_of_gaussianFilteredTerm hq hΔE hH hgap W _ hψ).trans
     (mul_le_mul_of_nonneg_right ?_ (norm_nonneg ψ))
-  have hb := norm_gaussianFilteredTerm_sub_truncated_le_of_time G X a ha h hHerm hSupport R hDiam
+  have hb := norm_gaussianFilteredTerm_sub_truncated_le_of_time G X h hHerm hSupport R hDiam
     vR hCard b₀ hBudget hq hΔE s K hsK S hSK hW J hJ μ hμ m hm
   linarith
 
@@ -138,7 +140,7 @@ theorem norm_truncated_apply_sub_inner_smul_le [NeZero d] [DecidableEq κ] {q Δ
           ((sᶜ.filter (fun k => ¬Disjoint (X k) K)).card : ℝ) * (q / ΔE) *
           Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * (q / ΔE) - μ * m) := by
   refine (norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hq hΔE hgs W _).trans ?_
-  have hb := norm_gaussianFilteredTerm_sub_truncated_le_of_time G X a ha h hHerm hSupport R hDiam
+  have hb := norm_gaussianFilteredTerm_sub_truncated_le_of_time G X h hHerm hSupport R hDiam
     vR hCard b₀ hBudget hq hΔE s K hsK S hSK hW J hJ μ hμ m hm
   linarith
 
@@ -161,7 +163,7 @@ theorem norm_sum_truncated_sub_le [NeZero d] [DecidableEq κ] {q ΔE : ℝ} (hq 
           Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * (q / ΔE) - μ * m) +
         2 * ‖h i‖ * Real.exp (-q / 2)) :=
   (norm_sum_sub_le_of_sum_eq Finset.univ q ΔE hH (W := h) rfl).trans <|
-    Finset.sum_le_sum fun i _ ↦ norm_gaussianFilteredTerm_sub_truncated_le_of_time G X a ha h
+    Finset.sum_le_sum fun i _ ↦ norm_gaussianFilteredTerm_sub_truncated_le_of_time G X h
       hHerm hSupport R hDiam vR hCard b₀ hBudget hq hΔE (s i) (K i) (hsK i) (X i) (hXK i)
       (hSupport i) J hJ μ hμ m (hm i)
 
@@ -183,7 +185,7 @@ theorem norm_sum_truncated_sub_le_card [NeZero d] [DecidableEq κ] {q ΔE : ℝ}
           (N₀ : ℝ) * (q / ΔE) *
           Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * (q / ΔE) - μ * m) +
         2 * J * Real.exp (-q / 2)) := by
-  refine (norm_sum_truncated_sub_le G X a ha h hHerm hSupport R hDiam vR hCard b₀ hBudget hq hΔE
+  refine (norm_sum_truncated_sub_le G X h hHerm hSupport R hDiam vR hCard b₀ hBudget hq hΔE
     hH s K hsK hXK J hJ μ hμ m hm).trans ?_
   rw [← nsmul_eq_mul, ← Finset.card_univ]
   refine Finset.sum_le_card_nsmul _ _ _ fun i _ ↦ ?_

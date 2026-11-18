@@ -461,7 +461,7 @@ abstracted — record why, so it is not re-proposed).
   `MPS/AreaLaw/Hastings/ChainLocalizedParts.lean` and
   `MPS/AreaLaw/Hastings/BoundaryLocalization.lean`.
 - **Notes:** The variants without the subtracted constant in
-  `Circuit/LiebRobinson/GraphPropagation.lean` and
+  `QICLean/ManyBody/Dynamics/GraphPropagation.lean` and
   `PEPS/AreaLaw/Amplification/GraphChannelSpatialOmission.lean` bound
   `exp (v x)` with a further step and are not rewritten.
 
@@ -475,7 +475,7 @@ abstracted — record why, so it is not re-proposed).
 ### Supported Gaussian averaging — promoted (2026-10-21)
 
 - **Pattern:** Factor the two-Hamiltonian integrand into an evolved observable and relative evolution, localize the two factors on possibly different regions, and integrate against the restricted Gaussian measure.
-- **Defined in:** `TNLean/Circuit/SupportedGaussianIntegral.lean`, `QuantumCircuit.exists_supported_gaussian_integral_of_projection_bounds`.
+- **Defined in:** `QICLean/ManyBody/Dynamics/SupportedGaussianIntegral.lean`, `ManyBody.exists_supported_gaussian_integral_of_projection_bounds`.
 - **Use when:** Actual observable and generator projection estimates give scalar errors on a symmetric time interval. The theorem constructs one supported path before the observable and averaging data, retains the two projection regions and a common containing output region, and supplies support, norm and error bounds for the average.
 - **Refactored occurrences:** `MPS/AreaLaw/SupportedGaussianIntegral.lean` and `PEPS/AreaLaw/SupportedGaussianIntegral.lean`. Their physical localization estimates and constants remain at the callers; their repeated integration arguments are removed. The finite-domain caller in `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` uses the same theorem with intrinsic graph neighborhoods.
 - **Notes:** The restricted measure is not renormalized. Zero variance, zero cutoff and the empty site set are retained. The bound is `‖W‖ (εobs + T εgen)`, without an additional factor of two. The two caller files lose 146 lines in total.
@@ -501,8 +501,8 @@ abstracted — record why, so it is not re-proposed).
   ```
 - **Seen:** 5 occurrences across 3 files: three in
   `TNLean/Lattice/GaussianFilteredTermLocalization.lean`, one each in
-  `TNLean/Circuit/LiebRobinson/GraphLocalization.lean` and
-  `TNLean/Circuit/LiebRobinson/CommutatorRecursion.lean`.
+  `QICLean/ManyBody/Dynamics/GraphLocalization.lean` and
+  `QICLean/ManyBody/Dynamics/CommutatorRecursion.lean`.
 - **Abstraction:** `Matrix.isHermitian_sum` in
   `TNLean/Algebra/MatrixHermitianSum.lean`; all five call sites refactored.
 - **Notes:** where the goal is `IsSelfAdjoint`, append `.isSelfAdjoint`. The
@@ -4295,8 +4295,8 @@ three-plaquette output measurement, and the routed reunion measurement.
   support and is disjoint from the final site. Exact locality then gives zero
   commutator for every time.
 - **Abstraction:**
-  `QuantumCircuit.heisenberg_commutator_eq_zero_of_forall_edist_eq_top` in
-  `Circuit/LiebRobinson/GraphPropagation.lean` states the arbitrary-support result.
+  `ManyBody.heisenberg_commutator_eq_zero_of_forall_edist_eq_top` in
+  `QICLean/ManyBody/Dynamics/GraphPropagation.lean` states the arbitrary-support result.
   It needs neither anchors nor Hermiticity, a norm budget, a support-cardinality
   bound, positive local dimension, or nonempty initial support.
 - **Seen:** The anchored theorem
@@ -5857,7 +5857,7 @@ no additional helper is proposed.
 - **Pattern:** Apply the nonnegative-time estimate to the interaction family
   `fun k ↦ -h k` at time `-t`, preserve its Hermiticity, supports and norm
   budget, and rewrite with `heisenbergCommutatorNorm_neg_time`.
-- **Seen:** Three occurrences in `Circuit/LiebRobinson/GraphPropagation.lean`,
+- **Seen:** Three occurrences in `QICLean/ManyBody/Dynamics/GraphPropagation.lean`,
   in `heisenbergCommutatorNorm_le_graphDistance`,
   `heisenbergCommutatorNorm_le_graphDistance_finset`,
   and `heisenbergCommutatorNorm_le_graphDistance_finsets_numeric`
@@ -9025,7 +9025,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** all four equations use one local arbitrary-matrix transport
   lemma, itself an application of
   `Matrix.toEuclideanLin_reindex_piLpCongrLeft` in
-  `Algebra/MatrixReindexGap.lean`.
+  `QICLean/Algebra/MatrixReindexEuclidean.lean` (QICLean dependency).
 - **Notes:** the four applications occur in one module. A shared scalar-eigenvalue
   corollary is appropriate if the same conversion occurs in another module;
   the underlying matrix-action identity is already shared.
@@ -9711,7 +9711,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** `chain_reset_support_separation` in
   `MPS/AreaLaw/ResetSupportSeparation.lean` and
   `reset_graphNeighborhood_disjoint_cores` in
-  `Circuit/LiebRobinson/SupportSeparation.lean`.
+  `QICLean/ManyBody/Dynamics/GraphBall.lean`.
 - **Abstraction:** The graph theorem expresses the common geometric argument
   with natural ball containments. The chain theorem also gives a real-distance
   lower bound and retains its present proof.
@@ -12536,3 +12536,16 @@ length-one word indices is needed.
 - **Decision:** Separate the numerical/physical argument from the common
   interval selection argument. No second recursion, target approximation or
   repeated matrix-coordinate proof is introduced.
+
+### Faithful stationary matrices for normal canonical blocks — candidate (2026-11-17)
+
+- **Seen:** `MPSTensor.exists_blockTensor_normal_sectors_fixedPoints` (`hfixed`)
+  in `TNLean/MPS/CanonicalForm/BlockedNormalSectors.lean`, and
+  `MPSTensor.IsBNTCanonicalForm.exists_basisFixedPoint` in
+  `TNLean/MPS/Preparation/CanonicalFixedPoint.lean` (two occurrences).
+- **Pattern:** Apply `IsChannel.exists_unique_density_fixedPoint_of_irreducible`
+  to the Kraus transfer map, obtaining the channel from left canonicity and
+  irreducibility from the normal tensor; retain positive definiteness, trace one
+  and the stationary equation.
+- **Candidate status:** Below the three-occurrence promotion threshold. Record
+  a possible shared mathematical lemma; no abstraction or new tactic yet.

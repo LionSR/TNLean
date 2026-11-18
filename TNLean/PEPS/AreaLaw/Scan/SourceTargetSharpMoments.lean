@@ -35,6 +35,8 @@ open Matrix Filter
 open scoped BigOperators Matrix.Norms.L2Operator
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter
@@ -66,7 +68,7 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
             (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
             (E₀ : ℝ) (Ω : StateSpace Λ q),
             IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-            S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+            S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
             targetSharpMomentThreshold q R Ctr (Δ / positiveNormalization 1 (Δ / 2) J) F ω ≤
               S.n →
             S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -244,7 +246,7 @@ theorem exists_truncated_target_sharp_moments_of_targetSharpMomentThreshold_le {
             (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
             (E₀ : ℝ) (Ω : StateSpace Λ q),
             IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-            S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+            S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
             targetSharpMomentThreshold q R Ctr (Δ / positiveNormalization 1 (Δ / 2) J) F ω ≤
               S.n →
             S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -345,7 +347,7 @@ theorem exists_truncated_target_sharp_moments {q : ℕ} [NeZero q]
             (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
             (E₀ : ℝ) (Ω : StateSpace Λ q),
             IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-            S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+            S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
             S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
             S.m = ⌊(S.n : ℝ) ^ F.mu⌋₊ →
             S.D = ⌈(S.n : ℝ) ^ F.kappa⌉₊ →

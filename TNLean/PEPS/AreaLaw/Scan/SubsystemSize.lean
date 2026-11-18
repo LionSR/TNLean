@@ -24,13 +24,15 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- A finite graph-distance bound in an induced lattice domain implies membership
 in the ambient square, including for domains with holes or disconnected components. -/
 theorem mem_ambientDilation_singleton_of_domainGraph_edist_le
     {Λ : Finset (ℤ × ℤ)} {x a : Site Λ} {r : ℕ}
-    (h : (domainGraph Λ).edist x a ≤ (r : ℕ∞)) :
+    (h : (planeDomainGraph Λ).edist x a ≤ (r : ℕ∞)) :
     x.val ∈ ambientDilation {a.val} r := by
   have hd := abs_ambientDepth_sub_le_domainGraph {a.val} (Finset.singleton_nonempty _) h
   have hz : ambientDepth {a.val} (Finset.singleton_nonempty _) a.val = 0 := by
@@ -41,7 +43,7 @@ theorem mem_ambientDilation_singleton_of_domainGraph_edist_le
 /-- A graph ball has at most `(2r+1)²` physical sites. No geometric regularity
 of the finite domain is required. -/
 theorem card_domainGraph_ball_le (Λ : Finset (ℤ × ℤ)) (a : Site Λ) (r : ℕ) :
-    (Finset.univ.filter fun x ↦ (domainGraph Λ).edist a x ≤ (r : ℕ∞)).card ≤
+    (Finset.univ.filter fun x ↦ (planeDomainGraph Λ).edist a x ≤ (r : ℕ∞)).card ≤
       (2 * r + 1) ^ 2 := by
   classical
   calc
@@ -73,14 +75,14 @@ variable [Fintype I] [LinearOrder I]
 omit [Fintype I] [LinearOrder I] in
 /-- Every actual charge ball has the induced-lattice square bound. -/
 theorem card_ball_le_domainGraph {Λ : Finset (ℤ × ℤ)}
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ) (i : I) :
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ) (i : I) :
     (S.ball i).card ≤ (2 * S.r₀ + 1) ^ 2 := by
   simpa only [ball, hgraph] using card_domainGraph_ball_le Λ (S.anchor i) S.r₀
 
 /-- The actual charge moves no more than its ball's middle intersection. Blank
 slots and disabled charges move no sites. Both receiving sides are included. -/
 theorem card_chargeStep_moved_le_domainGraph {Λ : Finset (ℤ × ℤ)}
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (g r k : ℕ) (c : Bool × Fin S.M) (σ : PhysicalPartition (Site Λ)) :
     (middle σ \ middle (S.chargeStep g r k c σ)).card ≤ (2 * S.r₀ + 1) ^ 2 := by
   classical
@@ -98,7 +100,7 @@ theorem card_chargeStep_moved_le_domainGraph {Λ : Finset (ℤ × ℤ)}
 This makes no assertion about an arbitrary unsplit designated support. -/
 theorem card_designatedSupport_le_of_state_split_domainGraph
     {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I)
-    (hgraph : S.graph = domainGraph Λ) {k L : ℕ}
+    (hgraph : S.graph = planeDomainGraph Λ) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool) (i : I)
     (hL : 8 * S.K * S.m ≤ L) (hs : S.designatedSplitIncidence (S.state h g) L i side) :
     (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).card ≤
@@ -110,7 +112,7 @@ theorem card_designatedSupport_le_of_state_split_domainGraph
 The only scale assumption places the actual middle in the truncation set. -/
 theorem card_designatedSupport_le_of_old_split_domainGraph
     {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I)
-    (hgraph : S.graph = domainGraph Λ) {k L : ℕ}
+    (hgraph : S.graph = planeDomainGraph Λ) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool) (i : I)
     (hL : 8 * S.K * S.m ≤ L)
     (hs : S.designatedSplitIncidence (S.oldChargeState h g) L i side) :

@@ -54,6 +54,8 @@ open scoped BigOperators Kronecker Matrix.Norms.L2Operator NNReal
 
 noncomputable section
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.Lattice
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
@@ -64,22 +66,11 @@ Source: area-law `01-preliminaries.tex`, lines 95–102. -/
 theorem card_admissibleSupport_le (Λ : Finset (ℤ × ℤ)) (R : ℕ) :
     Fintype.card (AdmissibleSupport Λ R) ≤ 2 ^ ((1 + 2 * R * (R + 1)) - 1) * Λ.card := by
   classical
-  have hcover : (Finset.univ : Finset (AdmissibleSupport Λ R)) ⊆
-      (Finset.univ : Finset (Site Λ)).biUnion
-        fun v ↦ Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1 := by
-    intro X _
-    obtain ⟨v, hv⟩ := X.2.1
-    exact Finset.mem_biUnion.mpr
-      ⟨v, Finset.mem_univ v, Finset.mem_filter.mpr ⟨Finset.mem_univ X, hv⟩⟩
-  calc Fintype.card (AdmissibleSupport Λ R)
-      = (Finset.univ : Finset (AdmissibleSupport Λ R)).card := Finset.card_univ.symm
-    _ ≤ _ := Finset.card_le_card hcover
-    _ ≤ ∑ v : Site Λ, (Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1).card :=
-        Finset.card_biUnion_le
-    _ ≤ ∑ _v : Site Λ, 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
-        Finset.sum_le_sum fun v _ ↦ PEPS.AreaLaw.card_admissibleSupport_containing_le v
-    _ = 2 ^ ((1 + 2 * R * (R + 1)) - 1) * Λ.card := by
-        rw [Finset.sum_const, Finset.card_univ, Fintype.card_coe, smul_eq_mul, mul_comm]
+  have h := PEPS.AreaLaw.card_le_card_mul_of_forall_exists_mem (R := R)
+    (N := (Finset.univ : Finset (Site Λ))) (S := Finset.univ) fun X _ ↦ by
+      obtain ⟨v, hv⟩ := X.2.1
+      exact ⟨v, Finset.mem_univ v, hv⟩
+  rwa [Finset.card_univ, Finset.card_univ, Fintype.card_coe, mul_comm] at h
 
 /-- The coefficient `4 μ_R` of the norm bound `4 μ_R J |Λ|` of the partial-swap perturbation at
 range `R`, with `μ_R = 2^(v_R - 1)` supports through a site and `v_R = 1 + 2R(R + 1)`. -/
@@ -123,7 +114,7 @@ def swappedDoubled (h : LocalHamiltonian Λ q R J) (A : Finset (Site Λ)) :
     have hDn : ‖doubledHamiltonian (h.term X)‖ ≤ J + J :=
       (norm_add_le _ _).trans (add_le_add
         ((Matrix.l2_opNorm_kronecker_one_le _).trans (h.norm_le X))
-        ((Matrix.l2_opNorm_one_kronecker_rect_le _).trans (h.norm_le X)))
+        ((Matrix.l2_opNorm_one_kronecker_le _).trans (h.norm_le X)))
     simpa only [one_mul, mul_one, two_mul] using
       norm_mul_le_of_le
         (norm_mul_le_of_le hFn ((Matrix.l2_opNorm_reindex_equiv p _).le.trans hDn))
@@ -295,12 +286,12 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
           U 0 = 1 ∧
           (∀ t, HasDerivAt U
             ((Complex.I • siteExpectation (q * q) B
-              (heisenbergEvolution K' t (K' - K))) * U t) t) ∧
+              (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
           (∀ t, U t ∈ unitaryGroup (Configuration Λ (q * q)) ℂ) ∧
           (∀ t, U t ∈ supportedOperators (q * q) (B : Set (Site Λ))) ∧
           ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
             let M := ∫ t : ℝ in Set.Icc (-T) T,
-              siteExpectation (q * q) B (heisenbergEvolution K' t V) * U t
+              siteExpectation (q * q) B (ManyBody.heisenbergEvolution K' t V) * U t
                 ∂gaussianReal 0 η
             M ∈ supportedOperators (q * q) (B : Set (Site Λ)) ∧
             ‖M‖ ≤ ‖W‖ ∧
@@ -327,7 +318,7 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
     rw [hK']; exact hDs
   have hVn : ‖V‖ ≤ ‖W‖ :=
     (Matrix.l2_opNorm_reindex_equiv (g.symm.trans p) _).trans_le
-      (Matrix.l2_opNorm_one_kronecker_rect_le W)
+      (Matrix.l2_opNorm_one_kronecker_le W)
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
     PEPS.AreaLaw.supported_gaussian_integral (q * q) (Nat.mul_le_mul hq hq) R
       (by linarith : (0 : ℝ) ≤ 2 * J) Λ gH K V hDK Q Z hV hD l

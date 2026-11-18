@@ -26,6 +26,8 @@ Independently formalized from the manuscripts; no upstream Lean proof text is re
 
 open TNLean.Lattice
 
+open ManyBody (IsAdmissibleSupport isAdmissibleSupport_pair_of_adj planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The integer-coordinate embedding of the native rectangular vertices.
@@ -59,11 +61,11 @@ noncomputable def rectangleSiteEquiv (width height : ℕ) :
 /-- The open rectangular graph is exactly the induced lattice graph on its domain.
 Source: area-law Corollary 1.2 and polynomial-PEPS Section 1. -/
 noncomputable def rectangleGraphIso (width height : ℕ) :
-    squareLatticeGraph width height ≃g domainGraph (rectangularDomain width height) where
+    squareLatticeGraph width height ≃g planeDomainGraph (rectangularDomain width height) where
   toEquiv := rectangleSiteEquiv width height
   map_rel_iff' := by
     intro v w
-    simp only [domainGraph, rectangleSiteEquiv_val, rectangleEmbedding,
+    simp only [planeDomainGraph, rectangleSiteEquiv_val, rectangleEmbedding,
       squareLatticeGraph_adj, squareLatticeHorizontalNeighbor, squareLatticeVerticalNeighbor]
     norm_cast
     simp only [Fin.ext_iff]

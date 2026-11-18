@@ -25,6 +25,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The actual finite-history scanner at the final rounded scales, with
@@ -33,7 +35,7 @@ no geometric or entropy certificate stored as a field. Source:
 def finalTemplateScanner {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (A : Finset (Site Λ)) (R n : ℕ) (Cr C₁ : ℝ) :
     CollarScan (Site Λ) (AdmissibleSupport Λ R) where
-  graph := domainGraph Λ
+  graph := planeDomainGraph Λ
   A := A
   depth := fun x ↦ ambientDepth T hT x.val
   anchor := fun i ↦ i.property.1.choose

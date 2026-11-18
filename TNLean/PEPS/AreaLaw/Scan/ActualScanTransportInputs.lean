@@ -66,6 +66,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The conclusions of Proposition 7.4 (`prop:transport`, `06-transport.tex`, lines 377–433)
@@ -355,7 +357,7 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
         (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hm : 0 < S.m) (hM : 0 < S.M)
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)],
-        S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+        S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
         S.n = N → S.m = X.m N → S.K = X.K N → S.D = X.D N →
         S.r₀ = ⌈Ctr * Real.log N ^ 2⌉₊ → 0 < S.C₁ →

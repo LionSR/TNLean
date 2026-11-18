@@ -49,6 +49,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- **Typical entropies** (`comparator:typical-entropies`, `07-comparators.tex`,
@@ -142,7 +144,7 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
         (h : LocalHamiltonian Λ q R J) (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
         (E₀ : ℝ) (Ω : StateSpace Λ q),
         IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-        S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+        S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) →
         S.n = n → S.m = X.m n → S.K = X.K n → S.D = X.D n →
         S.r₀ = ⌈Ctr * Real.log (n : ℝ) ^ 2⌉₊ →

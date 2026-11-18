@@ -75,8 +75,8 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 
 \begin{lemma}[Energy and time rescaling]
     \label{thm:hastings_energy_time_rescaling}
-    \lean{QuantumCircuit.heisenbergEvolution_smul,
-        QuantumCircuit.heisenbergEvolution_inv_smul_mul}
+    \lean{ManyBody.heisenbergEvolution_smul,
+        ManyBody.heisenbergEvolution_inv_smul_mul}
     \leanok
     For every real $c$ and every pair of operators $H,A$,
     \begin{align}
@@ -158,8 +158,8 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
         TNLean.Lattice.gaussianFilteredTerm_sum,
         TNLean.Lattice.gaussianFilteredTerm_self,
         TNLean.Lattice.sum_gaussianFilteredTerm,
-        TNLean.Lattice.mem_groundEigenspace_iff,
-        TNLean.Lattice.inner_eq_zero_of_mem_groundEigenspace,
+        ManyBody.mem_groundSpace_iff_mulVec,
+        TNLean.Lattice.inner_eq_zero_of_mem_groundSpace,
         TNLean.Lattice.norm_sub_starProjection_gaussianFilteredTerm_le
     }
     \leanok

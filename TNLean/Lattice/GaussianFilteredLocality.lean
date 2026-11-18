@@ -29,7 +29,7 @@ mass of the times `|t| > T`, where the commutator is bounded crudely by `2 ‖W�
 
 The Lieb–Robinson input `ε` is left as a hypothesis on the window `|t| ≤ T`; for a local
 Hamiltonian on a finite graph it is supplied by
-`QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset` and
+`ManyBody.norm_heisenberg_commutator_le_graphDistance_finset` and
 `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`.
 
 ## References

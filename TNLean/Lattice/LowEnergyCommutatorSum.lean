@@ -57,6 +57,8 @@ are stated under their displayed hypotheses.
 open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace Nat Topology
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 section ShellSums
@@ -175,8 +177,8 @@ variable {n : Type*} [Fintype n] [DecidableEq n]
 /-- The compression of an operator to the ground space has norm at most that of the operator. -/
 theorem norm_groundCompression_le (H : Matrix n n ℂ) (E₀ : ℝ) (W : Matrix n n ℂ) :
     ‖groundCompression H E₀ W‖ ≤ ‖W‖ := by
-  set P := (groundEigenspace H E₀).starProjection
-  have hP : ‖P‖ ≤ 1 := (groundEigenspace H E₀).starProjection_norm_le
+  set P := (groundSpace H E₀).starProjection
+  have hP : ‖P‖ ≤ 1 := (groundSpace H E₀).starProjection_norm_le
   calc ‖groundCompression H E₀ W‖ ≤ ‖P‖ * ‖toEuclideanCLM (n := n) (𝕜 := ℂ) W‖ * ‖P‖ := by
         unfold groundCompression
         exact (norm_mul_le _ _).trans (mul_le_mul_of_nonneg_right (norm_mul_le _ _)
@@ -213,10 +215,10 @@ theorem isSelfAdjoint_groundCompression (H : Matrix n n ℂ) (E₀ : ℝ) {W : M
 orthonormal basis `v` of the ground space it is determined by its matrix elements. -/
 theorem groundCompression_apply_eq_sum {H : Matrix n n ℂ} {E₀ : ℝ} {m : ℕ}
     {v : Fin m → EuclideanSpace ℂ n}
-    (hspan : ∀ u ∈ groundEigenspace H E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c) (W : Matrix n n ℂ)
+    (hspan : ∀ u ∈ groundSpace H E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c) (W : Matrix n n ℂ)
     (x : EuclideanSpace ℂ n) :
     groundCompression H E₀ W x = ∑ c, ⟪v c, groundCompression H E₀ W x⟫_ℂ • v c :=
-  hspan _ ((groundEigenspace H E₀).starProjection_apply_mem _)
+  hspan _ ((groundSpace H E₀).starProjection_apply_mem _)
 
 end Compression
 
@@ -269,12 +271,12 @@ include ha hDiam in
 is disjoint from the sites within distance `l` of the first. -/
 theorem disjoint_biUnion_graphBall_of_lt_edist (i j : κ) (l : ℕ)
     (hlt : ((2 * R + l : ℕ) : ℕ∞) < G.edist (a j) (a i)) :
-    Disjoint (((X j).biUnion fun x => graphBall G x l : Finset ι) : Set ι) (X i) := by
+    Disjoint (((X j).biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) (X i) := by
   rw [Set.disjoint_left]
   intro y hy hyi
   simp only [Finset.coe_biUnion, Finset.mem_coe, Set.mem_iUnion, exists_prop] at hy
   obtain ⟨x, hx, hxy⟩ := hy
-  have hxy' := mem_graphBall.mp hxy
+  have hxy' := ManyBody.mem_graphBall.mp hxy
   have h1 := hDiam j (a j) (ha j) x hx
   have h2 := hDiam i y (Finset.mem_coe.mp hyi) (a i) (ha i)
   have htri : G.edist (a j) (a i) ≤ G.edist (a j) x + G.edist x y + G.edist y (a i) :=
@@ -291,6 +293,8 @@ theorem disjoint_biUnion_graphBall_of_lt_edist (i j : κ) (l : ℕ)
 
 include ha hHerm hSupport hDiam hCard hBudget
 
+omit ha in
+include a in
 /-- **Eq. `blecm` with an exponential rate.** Let every eigenvalue of `H = ∑ₖ hₖ` equal `E₀` or
 be at least `E₀ + ΔE`, and let `X_i` be disjoint from the sites within graph distance `l` of
 `X_j`. Then `‖[P h_j P, P h_i P]‖ ≤ C ‖h_j‖ ‖h_i‖ e^{-γ l}`, with `C = commutatorConst` and
@@ -302,7 +306,7 @@ theorem norm_groundCompression_commutator_le_exp [NeZero d] (Kg : ℝ) (kg : ℕ
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {ΔE : ℝ} (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k) (i j : κ) (l : ℕ)
-    (hY : Disjoint (((X j).biUnion fun x => graphBall G x l : Finset ι) : Set ι) (X i)) :
+    (hY : Disjoint (((X j).biUnion fun x => ManyBody.graphBall G x l : Finset ι) : Set ι) (X i)) :
     ‖groundCompression (∑ k, h k) E₀ (h j) * groundCompression (∑ k, h k) E₀ (h i) -
         groundCompression (∑ k, h k) E₀ (h i) * groundCompression (∑ k, h k) E₀ (h j)‖ ≤
       commutatorConst R vR b₀ Kg kg * ‖h j‖ * ‖h i‖ *
@@ -318,7 +322,7 @@ theorem norm_groundCompression_commutator_le_exp [NeZero d] (Kg : ℝ) (kg : ℕ
   have hT0 : 0 ≤ T := by positivity
   set q : ℝ := T * ΔE with hq
   have hq0 : 0 ≤ q := by positivity
-  have hb := norm_groundCompression_commutator_le_graphNeighborhood G X a ha h hHerm hSupport R
+  have hb := norm_groundCompression_commutator_le_graphNeighborhood G X h hHerm hSupport R
     hDiam vR hCard b₀ hBudget Kg kg hGrowth hq0 hΔE hH hgap (X j) (hSupport j) l (X i : Set ι)
     hY (hSupport i) hT0
   set A : ℝ := 2 + 4 * |b₀| * Real.exp (2 * R)
@@ -405,7 +409,7 @@ theorem norm_groundCompression_commutator_le_exp_edist [NeZero d] (Kg : ℝ) (kg
     groundCompression (∑ k, h k) E₀ (h i) * groundCompression (∑ k, h k) E₀ (h j)‖
   have hpair (l : ℕ) (hlt : ((2 * R + l : ℕ) : ℕ∞) < G.edist (a j) (a i)) :
       N ≤ C * ‖h j‖ * ‖h i‖ * Real.exp (-(γ * l)) :=
-    norm_groundCompression_commutator_le_exp G X a ha h hHerm hSupport R hDiam vR hCard b₀
+    norm_groundCompression_commutator_le_exp G X a h hHerm hSupport R hDiam vR hCard b₀
       hBudget Kg kg hGrowth hΔE hH hgap i j l
       (disjoint_biUnion_graphBall_of_lt_edist G X a ha R hDiam i j l hlt)
   have hW := norm_nonneg (h j)
@@ -559,7 +563,7 @@ theorem sum_norm_offDiagonalPartFamily_le_oibu_levels [NeZero d] (Kg : ℝ) (kg 
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k) {J : ℝ}
     (hJ : ∀ k, ‖h k‖ ≤ J) {m : ℕ} [NeZero m] {v : Fin m → EuclideanSpace ℂ (ι → Fin d)}
     (hv : Orthonormal ℂ v)
-    (hspan : ∀ u ∈ groundEigenspace (∑ k, h k) E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c)
+    (hspan : ∀ u ∈ groundSpace (∑ k, h k) E₀, u = ∑ c, ⟪v c, u⟫_ℂ • v c)
     {L : ℕ} (j : ℕ → κ) (hj : ∀ ℓ, ∃ ℓ' < L, j ℓ' = j ℓ) (r : ℕ → Fin m → ℝ)
     (hdiag : ∀ ℓ a, ∀ c ∈ labelClass r ℓ a, ∀ e ∈ labelClass r ℓ a,
       ⟪v c, groundCompression (∑ k, h k) E₀ (h (j ℓ)) (v e)⟫_ℂ =
