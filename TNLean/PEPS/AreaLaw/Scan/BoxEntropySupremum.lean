@@ -57,8 +57,8 @@ The small-size correction uses only the physical volume entropy bound.
 Source: `08-scanner.tex`, lines 788--803. -/
 theorem boxEntropy_power_le_of_large_rectangles
     {q R D₀ : ℕ} (hq : 1 ≤ q) {J Δ C p : ℝ} (hC : 0 ≤ C) (hp : 0 ≤ p) (N : ℕ)
-    (hrect : ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
-      (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hrect : ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_hh : ∀ X, (h.term X).IsHermitian)
+      (_hhJ : ∀ X, ‖h.term X‖ ≤ J)
       (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
       (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
       Ω ∈ groundSpace h.hamiltonian E₀ →

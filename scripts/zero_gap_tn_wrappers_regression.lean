@@ -62,7 +62,9 @@ example (w h : ℕ) :
       (by simp [ManyBody.groundSpace, zeroRectangle, ManyBody.Interaction.hamiltonian])
 
 
-def zeroChain := TNLean.MPS.AreaLaw.ChainHamiltonian.zero 1 2 1 1 (by norm_num)
+def zeroChain : ManyBody.ChainInteraction 1 2 1 where
+  term _ := 0
+  mem _ := zero_mem _
 def chainOmega : EuclideanSpace ℂ (Fin 1 → Fin 2) :=
   EuclideanSpace.single (fun _ ↦ 0) 1
 
@@ -79,11 +81,9 @@ example (j m : ℕ) :
   simpa only [Complex.ofReal_zero, zero_smul, sub_zero] using
     zeroChain.isGapped_groundCentered_parts_sum (E₀ := 0) (Δ := 0) (Ω := chainOmega)
       (by simp [chainOmega])
-      (by simpa [zeroChain, TNLean.MPS.AreaLaw.ChainHamiltonian.operator,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.zero] using
+      (by simpa [zeroChain, ManyBody.Interaction.hamiltonian] using
         (Matrix.PosSemidef.zero : (0 : Matrix (Fin 1 → Fin 2) (Fin 1 → Fin 2) ℂ).PosSemidef))
-      (by simp [ManyBody.groundSpace, zeroChain, TNLean.MPS.AreaLaw.ChainHamiltonian.operator,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.zero]) j m
+      (by simp [ManyBody.groundSpace, zeroChain, ManyBody.Interaction.hamiltonian]) j m
 
 
 -- Empty nested regions with weight one for every m, including m=0 and m=1.
