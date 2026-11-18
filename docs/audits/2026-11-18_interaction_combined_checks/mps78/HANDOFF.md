@@ -36,3 +36,14 @@ MPS77 now runs directly at that final version; the affected 21 are a subset,
 not a second queue. Source/recursive dependency checks invalidate all affected
 old artifacts. Prior dccc records and the quarantined premature attempt remain
 historical evidence, not final-version passes.
+
+## Authorized parallel scheduling
+
+The previous waiting-only plan is superseded by parallel-transition.json. The
+old runner remains untouched. The sole new worker copies only completed,
+source/artifact/recursive-hash verified cache entries into an independent
+writable overlay. It uses one Lean thread with a 4096 MiB Lean memory limit,
+waits below 6 GiB available memory before launching, and terminates only its
+own new child below 1 GiB available memory. Changed owners and their 21-target
+reverse closure have priority. No cached file is hard-linked or written in the
+old cache; historical logs and failures remain preserved.

@@ -6,17 +6,17 @@
   "selected": 78,
   "excluded_prior_passes": 8,
   "project_closure": 1887,
-  "reusable": 761,
-  "requires_compile": 1126,
+  "reusable": 1318,
+  "requires_compile": 569,
   "reasons": {
-    "source changed or no completed-source evidence": 1084,
-    "exact source/artifact and all project dependencies match": 761,
-    "transitive dependency cannot be reused": 42
+    "source changed or no completed-source evidence": 526,
+    "exact source/artifact and all project dependencies match": 1318,
+    "transitive dependency cannot be reused": 43
   },
-  "cache_action": "read-only inspection only; independent overlay not populated while old queue remains active",
+  "cache_action": "completed stable artifact snapshot copied into independent overlay; no old cache in LEAN_PATH",
   "package_manifest_identical": true,
   "toolchain_identical": true,
   "old_queue_pid": 412863,
-  "new_compiler_started": false,
-  "handoff_condition": "old queue finishes/drains all compiler writers; then refresh hash plan and copy only eligible completed artifacts to independent overlay. Retain 1 GiB disk guard; do not add workers to existing 2-worker queue."
+  "new_compiler_started": true,
+  "handoff_condition": "Authorized parallel transition; see parallel-transition.json"
 }

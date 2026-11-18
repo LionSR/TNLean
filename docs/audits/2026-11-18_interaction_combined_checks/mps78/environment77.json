@@ -1,0 +1,4 @@
+{
+  "LEAN_PATH": "/tmp/interaction-mps77-olean:/workspace/QICLean/.lake/packages/mathlib/.lake/build/lib/lean:/workspace/QICLean/.lake/packages/Gametheory/.lake/build/lib/lean:/workspace/QICLean/.lake/packages/checkdecls/.lake/build/lib/lean:/workspace/QICLean/.lake/packages/plausible/.lake/build/lib/lean:/workspace/QICLean/.lake/packages/LeanSearchClient/.lake/build/lib/lean:/workspace/QICLean/.lake/packages/importGraph/.lake/build/lib/lean:/workspace/QICLean/.lake/packages/proofwidgets/.lake/build/lib/lean:/workspace/QICLean/.lake/packages/aesop/.lake/build/lib/lean:/workspace/QICLean/.lake/packages/Qq/.lake/build/lib/lean:/workspace/QICLean/.lake/packages/batteries/.lake/build/lib/lean",
+  "toolchain": "leanprover/lean4:v4.36.0-rc1"
+}
