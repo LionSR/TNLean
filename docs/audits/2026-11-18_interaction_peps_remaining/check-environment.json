@@ -1,0 +1,27 @@
+{
+  "head": "dccc85e5607077b51822664e9d475287d300d607",
+  "cwd": "/workspace/tn-interaction-integration",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "python_executable": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+  "source_tree": "39e6ca6395613d393544ffd0a416f61235b67b13",
+  "manifest_sha256": "d7abc4cad73593cbbfe398814bb81c6a8270a1c5cff6452e5d62ea9bb0aa5cd1",
+  "lean_toolchain": "leanprover/lean4:v4.36.0-rc1",
+  "env": {
+    "BLUEPRINT_SYNC_FETCH_DEPS": "0"
+  },
+  "dependencies": {
+    "qiclean": {
+      "path": "/workspace/tn-pin729-other/.lake/packages/qiclean",
+      "head": "729428582b78ab7529b3796099193649f947354a",
+      "status": ""
+    },
+    "mathlib": {
+      "path": "/workspace/QICLean/.lake/packages/mathlib",
+      "head": "625d8914199bc567cca9b91f90e8e5afafa5ae51",
+      "status": ""
+    }
+  },
+  "leanblueprint": null,
+  "plasTeX": null,
+  "texra-blueprint": null
+}
