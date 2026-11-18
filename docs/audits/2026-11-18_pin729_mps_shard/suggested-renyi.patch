@@ -1,11 +1,5 @@
 --- a/TNLean/MPS/AreaLaw/EntropyScaling/RenyiApproximation.lean
 +++ b/TNLean/MPS/AreaLaw/EntropyScaling/RenyiApproximation.lean
-@@ -226,7 +226,7 @@
-   gcongr
-   · omega
-   · omega
+@@ -229 +229 @@
 -  · simpa using Finset.card_le_univ (leftBlock L k)
 +  · simp
- 
- private theorem isEfficientlyApproximableByMPS_of_eventually
-     {q : ℕ} {lengths : Set ℕ}
