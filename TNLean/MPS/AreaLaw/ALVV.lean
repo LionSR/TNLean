@@ -10,6 +10,12 @@ Authors: TNLean contributors
 
 import TNLean.MPS.AreaLaw.ALVV.BalancedRegionalEnergy
 import TNLean.MPS.AreaLaw.ALVV.CalibratedRootEnergy
+import TNLean.MPS.AreaLaw.ALVV.CanonicalWordTrim
+import TNLean.MPS.AreaLaw.ALVV.CanonicalWordTrimTargetTree
+import TNLean.MPS.AreaLaw.ALVV.CanonicalWordTrimTree
+import TNLean.MPS.AreaLaw.ALVV.DGCanonicalNodeEvent
+import TNLean.MPS.AreaLaw.ALVV.DGCanonicalNodeParent
+import TNLean.MPS.AreaLaw.ALVV.DGCanonicalNodeTree
 import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeEvent
 import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeParent
 import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeTree
@@ -26,6 +32,7 @@ import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftResiduals
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftStructure
 import TNLean.MPS.AreaLaw.ALVV.FiveRegionSoftUniformClusters
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFree
+import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeCanonicalTree
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeChain
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeGap
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeImprovingFamily
@@ -37,6 +44,9 @@ import TNLean.MPS.AreaLaw.ALVV.GoodProjectorHardTruncation
 import TNLean.MPS.AreaLaw.ALVV.GroundGapUpperBound
 import TNLean.MPS.AreaLaw.ALVV.HardTruncation
 import TNLean.MPS.AreaLaw.ALVV.HardTruncationResidual
+import TNLean.MPS.AreaLaw.ALVV.IndependentIntervalTargetProbability
+import TNLean.MPS.AreaLaw.ALVV.LDCanonicalNodeEvent
+import TNLean.MPS.AreaLaw.ALVV.LDCanonicalTree
 import TNLean.MPS.AreaLaw.ALVV.LargeGapComparison
 import TNLean.MPS.AreaLaw.ALVV.LongIntervalSoftImprovingFamily
 import TNLean.MPS.AreaLaw.ALVV.MergeRounds

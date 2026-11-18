@@ -31,10 +31,10 @@ Source: [Theorem 1.1 and Corollary 1.2](https://github.com/openai/math/blob/adc7
 | Site space `ℂ^q` | `StateSpace Λ q = EuclideanSpace ℂ (Site Λ → Fin q)` | Exactly `q ^ Λ.card` configuration coordinates. |
 | One term per nonempty support of graph diameter at most `R` | `AdmissibleSupport Λ R` and `ManyBody.PlaneInteraction.term` | The index is a subtype of finite supports, not a family with unrestricted multiplicity. Zero terms are allowed. |
 | Support on `X` | `ManyBody.supportedOperators (fun _ ↦ Fin q) X` | The QICLean site-operator algebra; `localLift` uses the existing placement `embedOp`. |
-| `h_X = h_X*` and `‖h_X‖ ≤ J` | The `hermitian` and `norm_le` fields | The norm is the Euclidean induced operator norm. |
-| `H = ∑_X h_X` | `ManyBody.Interaction.hamiltonian` | The sum is Hermitian by `operator_isHermitian`. |
-| A unit ground vector at real energy `E₀` | `‖Ω‖ = 1` and `groundSpace h.operator E₀ = span {Ω}` | For `Δ > 0`, `ManyBody.isGapped_and_groundSpace_eq_span_iff` identifies these hypotheses with the printed eigen-equation and projector-gap inequality. |
-| Unique ground vector up to phase and `H − E₀I ≥ Δ(I − |Ω⟩⟨Ω|)` | `ManyBody.IsGapped h.operator E₀ Δ` with `groundSpace h.operator E₀ = span {Ω}` | For `Δ > 0` the QICLean theorem `ManyBody.isGapped_and_groundSpace_eq_span_iff` is the equivalence with the printed inequality. No gap for a restriction is assumed. |
+| `h_X = h_X*` and `‖h_X‖ ≤ J` | The hypotheses `∀ X, (h.term X).IsHermitian` and `∀ X, ‖h.term X‖ ≤ J` | The norm is the Euclidean induced operator norm. |
+| `H = ∑_X h_X` | `ManyBody.Interaction.hamiltonian` | The sum is Hermitian by `ManyBody.Interaction.isHermitian_hamiltonian`. |
+| A unit ground vector at real energy `E₀` | `‖Ω‖ = 1` and `groundSpace h.hamiltonian E₀ = span {Ω}` | For `Δ > 0`, `ManyBody.isGapped_and_groundSpace_eq_span_iff` identifies these hypotheses with the printed eigen-equation and projector-gap inequality. |
+| Unique ground vector up to phase and `H − E₀I ≥ Δ(I − |Ω⟩⟨Ω|)` | `ManyBody.IsGapped h.hamiltonian E₀ Δ` with `groundSpace h.hamiltonian E₀ = span {Ω}` | For `Δ > 0` the QICLean theorem `ManyBody.isGapped_and_groundSpace_eq_span_iff` is the equivalence with the printed inequality. No gap for a restriction is assumed. |
 | Any `A ⊆ Λ` | `A : Finset (Site Λ)` after all physical data | Includes empty, full, and disconnected cuts. |
 | `∂Λ A` consists of unordered crossing edges | `edgeBoundary Λ A : Finset (Sym2 (Site Λ))` | Each edge occurs once; empty and full cuts have empty boundary. |
 | `ρ_A = Tr_(Λ∖A) |Ω⟩⟨Ω|` | `reducedState` | Uses `Matrix.partialTraceRight` after Mathlib's configuration splitting. |

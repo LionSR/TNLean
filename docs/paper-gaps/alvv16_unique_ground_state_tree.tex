@@ -72,6 +72,42 @@ The former deviation that the tree used the families of the degenerate-gap
 case, with constants depending on $\gamma$ through the degenerate-gap
 parameters, is eliminated by the third result.
 
+\paragraph{Success probability.}
+The third result also holds for the randomly sampled tree. Every interval
+receives one independent coordinate, a Haar unitary of every possible rank
+of its space, fixed before any retained space is known; a long parent
+samples the range of the projection onto its merged space through the
+coordinate of its rank, applies the products of length $k$ of the family,
+and trims once. For fixed children of dimension at most $\mathrm{count}$,
+Lemma~\texttt{l:rs} with its rank-dependent overlap bounds the failure of
+one merge by $e^{-s/64}\le\beta$. Every node has dimension at most
+$\mathrm{count}$ for every sample, so a union bound over the $L-1$ internal
+nodes shows that the root and all internal nodes are $3/200$-viable for
+$\mathbb C\Gamma$ outside a Borel set of measure at most
+\begin{align}
+    (L-1)\beta,
+    \label{eq:alvv16_unique_tree_failure}
+\end{align}
+and on that event the refinement of the root gives the line of matrix
+product states of the third
+result.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_canonical_tree_ritz_approximation}.}
+In the maintainer's reading of the official arXiv v2 text, \S6.2,
+Theorem~6.1 (\texttt{t:alg1}) states overall success probability at least
+$1-1/n$, and its proof derives this by a union bound from a failure
+probability at most $1/n^2$ for each merge; Theorem~6.2 (\texttt{t:unique}) states success at least $1-1/n$. The
+bound~(\ref{eq:alvv16_unique_tree_failure}) is the same union bound, for an arbitrary per-merge
+failure $\beta$. The parameter $\beta$ and the sample size
+$s=\lceil4096(1+\log D+\log(1/\beta))\rceil$ are a sufficient
+parametrization chosen by the formalization, not the source's formula.
+For $L\ge2$ and $0<\beta'<1$, a failure probability at most $\beta'$ for the
+whole tree follows with $\beta=\beta'/(L-1)$; the choice $\beta=1/L^2$ is
+the source's per-merge bound and gives overall failure $(L-1)/L^2<1/L$.
+For $L\le1$ every interval is a single short leaf, the tree has no internal
+node, and it fails with probability $0$. At a fixed overall failure
+probability $s$ grows like $\log L$, so the node bound is uniform in $L$
+only for fixed $\beta$. The identification of this tree with the source's
+algorithm, its output and its running time is not proved.
+
 \paragraph{Local fix (rounding of the number of rounds).}
 Write $m=\lceil\log_{\mathcal D}s\rceil$, where $\mathcal D\ge2$ and
 $s>1$. Theorem~t:alg1 takes $k=m/2$ applications at each merge. If $m$ is
@@ -148,10 +184,12 @@ $\mathcal D^4s^4$.
 \paragraph{Deviation.}
 The remaining differences from the source are:
 \begin{enumerate}
-    \item the length-independent node bound is attained by a tree shown to
-          exist, not by one found with high probability; the probabilistic tree
-          of the first item of the list of results above has node dimension growing
-          with $L$;
+    \item the length-independent node bound is attained by the randomly
+          sampled tree with failure probability at most $(L-1)\beta$, the
+          union bound of the source's proof with the formalization's own
+          per-merge parameter $\beta$; a failure probability independent of
+          $L$ needs $\beta$, and with it $s$, to depend on $L$, so the node
+          bound is uniform in $L$ only for fixed $\beta$;
     \item the bond dimension of the output matrix product states grows with
           $L$, through the trimming threshold, which is set by a reference space
           whose Schmidt ranks grow with $L$;
@@ -169,8 +207,10 @@ node bound is not settled by this arithmetic obstruction.
 \paragraph{Elimination plan.}
 A reference space for collective trimming whose Schmidt ranks are bounded
 independently of $L$ would make the output bond dimension independent of $L$;
-it is not needed for the node bound. A probabilistic version of the third result
-requires the joint failure bound along the tree.
+it is not needed for the node bound. The probabilistic version of the third result is
+proved by the union bound above; comparing it with the success probability
+printed for Theorems~t:alg1 and t:unique requires the source text of those
+statements.
 
 \bibliographystyle{unsrt}
 \bibliography{references}

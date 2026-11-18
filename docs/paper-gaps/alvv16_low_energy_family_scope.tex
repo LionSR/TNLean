@@ -251,8 +251,46 @@ $E_0+((1+1/\rho)(\eta-3w)+(1+\rho)\|H-E_0\|\delta)/(1-\delta)$ for every
 $\rho>0$. Whether the number of states, the orthonormality and the printed
 energy bound follow from these, and under which identification of the
 source's $\mu$, $\eta$ and $\delta$ with the parameters here, is not
-established. The success probability and the running time are outside the
-formalization.
+established. The running time is outside the formalization; the success
+probability is treated in the next paragraph.
+
+\paragraph{Success probability of the sampled tree.}
+The sampled tree can be run with fresh samples: every interval receives one
+independent coordinate, a Haar unitary of every possible rank of its space,
+fixed before any retained space is known, and a long parent samples the
+range of the projection onto its merged space through the coordinate of its
+rank, applies all words of length $\lceil\log_D(D^2s)\rceil$ of its family
+and trims once. For fixed children of dimension at most $D^6s^3$, viable for
+their own windows, Lemma~\texttt{l:rs} with its rank-dependent overlap
+bounds the failure of one merge by $e^{-s/64}\le\beta$ for the sample size
+$s=\lceil4096r(1+\log r+\log D+\log(1/\beta))\rceil$. Every node has
+dimension at most $D^6s^3$ for every sample, so a union bound over the $L-1$
+internal nodes shows that the root and every internal node $[p,r)$ are
+$3/200$-viable for their windows $G(\eta_{\rm LD}-3w\lceil\log_2(r-p)\rceil)$
+outside a Borel
+set\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_ld_canonical_tree_failure_le}.}
+of probability at most
+\begin{align}
+    (L-1)\beta.
+    \label{eq:ld_scope_tree_failure}
+\end{align}
+In the maintainer's reading of the official arXiv v2 text, \S6.2,
+Theorem~6.1 (\texttt{t:alg1}) states overall success probability at least
+$1-1/n$, and its proof derives this by a union bound from a failure
+probability at most $1/n^2$ for each merge; Theorem~6.3 (\texttt{t:alg2}) states success at least $1-1/n$. The
+bound~(\ref{eq:ld_scope_tree_failure}) is the same union bound, for an arbitrary per-merge
+failure $\beta$. The parameter $\beta$ and the sample size
+$s=\lceil4096 r(1+\log r+\log D+\log(1/\beta))\rceil$ are a sufficient
+parametrization chosen by the formalization, not the source's formula.
+For $L\ge2$ and $0<\beta'<1$, a failure probability at most $\beta'$ for the
+whole tree follows with $\beta=\beta'/(L-1)$; the choice $\beta=1/L^2$ is
+the source's per-merge bound and gives overall failure $(L-1)/L^2<1/L$.
+For $L\le1$ every interval is a single short leaf, the tree has no internal
+node, and it fails with probability $0$. At a fixed overall failure
+probability $s$ grows like $\log L$, so the node bound is uniform in $L$
+only for fixed $\beta$. The identification of this tree with the source's
+algorithm, its output and its running time is not proved.
+No conclusion at the root beyond its viability is asserted on this event.
 
 \paragraph{Remaining conclusions.}
 The long-interval construction assumes no global spectral gap and supplies
@@ -296,10 +334,11 @@ The sharper accuracy-dependent MPS approximation now follows from the
 independent-scale families as above. An actual inner-band basis image now
 also has the exact inner dimension,
 approximates that band in both directions, and admits a standard
-orthonormal basis of MPS. The sampled merge tree is constructed as above;
-an explicit bound on its reference bond, a success probability, a
-running-time bound and identification with the printed algorithm remain
-separate. Closed spectral
+orthonormal basis of MPS. The sampled merge tree is constructed as above,
+and its randomly sampled version succeeds outside an event of probability
+at most $(L-1)\beta$; an explicit bound on its reference bond, the root
+output on that event, a running-time bound and identification with the
+printed algorithm remain separate. Closed spectral
 cutoffs and the absence of a positivity claim for the Chebyshev polynomial
 follow the companion spectral-projector and positivity notes.
 

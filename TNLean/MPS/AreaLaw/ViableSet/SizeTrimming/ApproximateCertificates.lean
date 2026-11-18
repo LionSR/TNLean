@@ -111,7 +111,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_all_spectral_ap
     dsimp only [boundaryError]
     positivity
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have harith := fullyApproxSDP_errors_fit_lvv_margin hL
@@ -191,7 +191,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_erro
     exact add_nonneg
       (add_nonneg (mul_nonneg (by positivity) hcert.hεb) hδ0) hrepair0
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hnum : 2 * ((eK + ‖K‖ * repair) + ‖B‖ * boundaryError) ≤
@@ -279,7 +279,7 @@ theorem exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack
       (add_nonneg (add_nonneg heη (mul_nonneg (by positivity) hcert.hεb)) hδ0)
       hrepair0
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hnum : 2 * ((eK + ‖K‖ * repair) + ‖B‖ * boundaryError) ≤

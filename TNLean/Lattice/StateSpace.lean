@@ -9,14 +9,13 @@ import Mathlib.Analysis.CStarAlgebra.Matrix
 import QICLean.ManyBody.Hamiltonian.Models
 
 /-!
-# Finite-range Hamiltonians on induced lattice domains
+# The physical Hilbert space of a finite lattice domain
 
-A finite-range Hamiltonian is an interaction `ManyBody.PlaneInteraction Λ q R`, with one term
-for each nonempty support of bounded induced-graph diameter, whose terms are Hermitian and of
-norm at most `J`; both are hypotheses of the statements that use them. A term may be zero. Support
-is expressed using the
-existing algebra of operators acting trivially outside a region. Norms are
-Euclidean operator norms, rather than entrywise matrix norms.
+The physical Hilbert space of a finite set `Λ ⊂ ℤ²` of sites with local dimension `q`, in
+configuration coordinates. A finite-range Hamiltonian on `Λ` is an interaction
+`ManyBody.PlaneInteraction Λ q R`, with one term for each nonempty support of bounded
+induced-graph diameter, whose terms are Hermitian and of norm at most `J`; both are hypotheses
+of the statements that use them, and norms are Euclidean operator norms.
 
 ## Main definitions
 

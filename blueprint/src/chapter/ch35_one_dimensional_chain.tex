@@ -78,7 +78,9 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{definition}[Doubled chain Hamiltonian]
     \label{def:chain_doubled_hamiltonian}
-    \lean{ManyBody.ChainInteraction.doubled}
+    \lean{ManyBody.ChainInteraction.doubled,
+        ManyBody.ChainInteraction.isHermitian_doubled_term,
+        ManyBody.ChainInteraction.norm_doubled_term_le}
     \leanok
     \uses{def:chain_model,def:qc_site_pair_coordinates}
     Let $L,q,R$ be natural numbers, let $J$ be real, and let
@@ -135,6 +137,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{definition}[Regionally swapped doubled Hamiltonian]
     \label{def:chain_swapped_doubled_hamiltonian}
     \lean{ManyBody.ChainInteraction.swappedDoubled,
+        ManyBody.ChainInteraction.isHermitian_swappedDoubled_term,
+        ManyBody.ChainInteraction.norm_swappedDoubled_term_le,
         ManyBody.ChainInteraction.swappedDoubled_hamiltonian}
     \leanok
     \uses{def:chain_doubled_hamiltonian,def:peps_frame_sheet_swap}
@@ -1622,6 +1626,8 @@ Theorem~B a second way, by a sequential preparation protocol.
         ManyBody.IsDomainSupport.subset_or_disjoint_of_gap,
         ManyBody.DomainInteraction,
         ManyBody.DomainInteraction.toChain,
+        ManyBody.DomainInteraction.isHermitian_toChain_term,
+        ManyBody.DomainInteraction.norm_toChain_term_le,
         ManyBody.DomainInteraction.toChain_hamiltonian,
         TNLean.MPS.AreaLaw.domainBoundaryEdges,
         TNLean.MPS.AreaLaw.domainRegion,
@@ -1629,7 +1635,7 @@ Theorem~B a second way, by a sequential preparation protocol.
         TNLean.MPS.AreaLaw.card_domainBoundaryEdges
     }
     \leanok
-    \uses{def:chain_model}
+    \uses{def:chain_model,def:area_law_hamiltonian}
     A finite set $\Lambda\subset\mathbb Z$ carries the induced path graph, whose
     edges join consecutive integers that both lie in $\Lambda$, and its graph
     distance $d_\Lambda$. Its sites are labelled $0,\ldots,|\Lambda|-1$ in
@@ -1705,8 +1711,12 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{definition}[Doubled domain interactions and regional swaps]
     \label{def:domain_doubled_swapped_hamiltonian}
     \lean{ManyBody.DomainInteraction.doubled,
+        ManyBody.DomainInteraction.isHermitian_doubled_term,
+        ManyBody.DomainInteraction.norm_doubled_term_le,
         ManyBody.DomainInteraction.doubled_hamiltonian,
         ManyBody.DomainInteraction.swappedDoubled,
+        ManyBody.DomainInteraction.isHermitian_swappedDoubled_term,
+        ManyBody.DomainInteraction.norm_swappedDoubled_term_le,
         ManyBody.DomainInteraction.swappedDoubled_hamiltonian}\leanok
     \uses{def:domain_model,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     Let $H=\sum_Xh_X$ be an admissible domain Hamiltonian and let
