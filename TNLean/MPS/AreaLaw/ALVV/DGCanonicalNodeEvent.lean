@@ -9,13 +9,13 @@ import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeEvent
 /-!
 # The canonical sample of one degenerate-gap parent with `k` rounds
 
-ALVV, arXiv:1602.08828v2, Theorem `t:alg1`, lines 1777–1818, merges two viable spaces of
-dimension at most `D^{2k} s`, samples `s` vectors of the merged space and applies `k` rounds of
-the improving family of Corollary 4.6 and the proof of Theorem 4.9. This file bounds, for fixed
-children, the Haar measure of the set of rank-independent coordinates on which the image of the
-canonical range sample under all words of length `k` fails to be viable for the original ground
-space. The bound is the failure probability of Lemma `l:rs`. The companion event for a sample
-drawn from the unitary group of the merged dimension is in `DGConstantNodeEvent`.
+ALVV, arXiv:1602.08828v2, Theorem `t:alg1`, lines 1777–1818, merges two viable spaces of dimension
+at most `D^{2k} s`, samples `s` vectors of the merged space and applies `k` rounds of the improving
+family of Theorem 4.7 (`t:ais`, from Corollary 4.6 `c:goodagsphardtrunc`). This file bounds, for
+fixed children, the Haar measure of the set of rank-independent coordinates on which the image of
+the canonical range sample under all words of length `k` fails to be viable for the original ground
+space. The bound is the failure probability of Lemma `l:rs`. The companion event for a sample drawn
+from the unitary group of the merged dimension is in `DGConstantNodeEvent`.
 
 **Scope restriction (one long parent, one final trim and capped gap):** one parent of length
 greater than `4 ℓ`, with the trim applied once after the `k` rounds rather than after each round,

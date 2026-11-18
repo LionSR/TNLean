@@ -19,12 +19,16 @@ rank-independent Haar coordinate for every interval, every node has dimension at
 `3/200`-viable for their windows `etaLD - 3w · clog₂ (r - p)` outside a set of measure at most
 `(L - 1) β`, for the sample size `s = ⌈4096 r (1 + log r + log D + log (1/β))⌉`.
 
-**Unverified against source (composition along the tree):** the joint failure bound `(L - 1) β`
-is the union bound of the per-node failure bound `β` of Lemma `l:rs` over the internal nodes.
-The available source quotations fix `s` in terms of `β`; none states the success probability that
-Theorem `t:alg2` asserts for the whole tree, so neither the composition nor the reading of `β` as
-a per-node bound is checked against the source. See
-`docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
+**Local fix (sampling parametrization):** in the maintainer's reading of the arXiv v2 text, §6.2,
+Theorem 6.1 (`t:alg1`) and its proof state overall success probability at least `1 - 1/n`, derived
+by a union bound from a per-merge failure probability at most `1/n²`; Theorem 6.3 (`t:alg2`) states
+success at least `1 - 1/n`. The bound `(L - 1) β` is that union bound for an arbitrary per-merge
+failure `β`; the parameter `β` and the sampling envelope
+`s = ⌈4096 r (1 + log r + log D + log (1/β))⌉` are a sufficient parametrization chosen by the
+formalization, not the source's formula. For `L ≥ 2`, the choice `β = 1/L²` is the source's
+per-merge bound and gives overall failure `(L - 1)/L² < 1/L`; for `L ≤ 1` the tree is a single short
+leaf and the bound is `0`. The identification of this tree with the source's algorithm, its output
+and its running time is not proved. See `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
 
 **Scope restriction (modified tree and fixed bandwidth):** as in `PhysicalLDTree`, the leaves are
 full blocks of length at most `4 ℓ`, each long node has one final collective trim, the trimming

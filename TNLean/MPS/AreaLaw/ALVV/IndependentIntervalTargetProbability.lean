@@ -15,9 +15,10 @@ the node. This file states the same bound for a family of global targets `T p r`
 bounds `β` for the parents give failure at most `(r - p - 1) β` for the root `[p, r)` and its
 internal intervals, each for its own target.
 
-**Unverified against source (composition along the tree):** this is a union bound of the
-fixed-child bounds over the internal nodes; the success probability that the source asserts for
-the whole tree is not checked. See `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
+**Source comparison (composition along the tree):** in the maintainer's reading of the arXiv v2
+text, §6.2, the proof of Theorem 6.1 (`t:alg1`) obtains its overall success probability by this
+union bound over the merges, from a per-merge failure probability at most `1/n²`. Here the
+per-parent bound `β` is arbitrary. See `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
 -/
 
 open ManyBody (interval)

@@ -10,13 +10,14 @@ import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeParent
 # One canonical physical parent of the degenerate-gap tree with `k` rounds
 
 Under Assumption (DG) of ALVV, arXiv:1602.08828v2, lines 275–279, the original Hamiltonian
-determines, for every long interval, the improving family of Corollary 4.6 and the proof of
-Theorem 4.9 and its intermediate target, before the number of rounds, the sampling size and the
-child spaces. For every `k ≥ 1` and every sampling size `s ≤ D^{2k}`, and children of dimension at
-most `D^{2k} s`, the canonical parent with `k` rounds and one collective trim fails to be
-`3/200`-viable for the original ground space on a set of rank-independent Haar coordinates of
-measure at most the failure probability of Lemma `l:rs`. This is the fixed-child estimate that
-the independent-tree failure bound composes along the tree of Theorem `t:alg1`, lines 1777–1818.
+determines, for every long interval, the improving family of Theorem 4.7 (`t:ais`, from
+Corollary 4.6 `c:goodagsphardtrunc`) and its intermediate target, before the number of rounds, the
+sampling size and the child spaces. For every `k ≥ 1` and every sampling size `s ≤ D^{2k}`, and
+children of dimension at most `D^{2k} s`, the canonical parent with `k` rounds and one collective
+trim fails to be `3/200`-viable for the original ground space on a set of rank-independent Haar
+coordinates of measure at most the failure probability of Lemma `l:rs`. This is the fixed-child
+estimate that the independent-tree failure bound composes along the tree of Theorem `t:alg1`,
+lines 1777–1818.
 
 **Scope restriction (one long parent, one final trim and capped gap):** one parent of length
 greater than `4 ℓ`, one collective trim after the `k` rounds, explicit scalar tail and filter

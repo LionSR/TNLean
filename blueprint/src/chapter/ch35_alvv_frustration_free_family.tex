@@ -468,10 +468,15 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
     product states mutually $\eta/2$-close to $\mathbb C\Gamma$. This is a
     restricted form of~\cite[Theorem~\texttt{t:unique}, lines
         1829--1855]{Arad2016RigorousRG}: the leaves are blocks, each long
-    parent has one final trim, the output bond dimension grows with $L$, and
-    the bound $(L-1)\beta$ is a union bound of the per-merge failure that is
-    not checked against the source's success probability,
-    see~\cite{gap:alvv16_unique_ground_state_tree}.
+    parent has one final trim, and the output bond dimension grows with $L$.
+    In the maintainer's reading of the source, Theorems~6.1 and~6.2 state
+    success at least $1-1/n$, by a union bound from a per-merge failure at
+    most $1/n^2$; the bound $(L-1)\beta$ is that union bound, and $\beta$
+    with the sample size above is the formalization's own sufficient
+    parametrization. The node bound is independent of $L$ for fixed $\beta$
+    only: at a fixed overall failure probability $s$ grows like $\log L$.
+    The identification with the source's algorithm, output and running time
+    is not proved, see~\cite{gap:alvv16_unique_ground_state_tree}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:canonical_word_trim_tree_failure,lem:canonical_sampled_parent,

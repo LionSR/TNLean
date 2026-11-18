@@ -21,12 +21,15 @@ every coordinate, including failures.
 The composition is a union bound over the `L - 1` internal nodes of the per-node failure of
 Lemma `l:rs`, which is at most `β` for this sampling size.
 
-**Unverified against source (composition along the tree):** the joint failure bound `(L - 1) β`
-is the union bound of the per-node failure bound `β` over the internal nodes. The available
-source quotations fix `s` in terms of `β` and record `β` as the fixed-input failure bound of one
-merge; none states the success probability that Theorem `t:alg1` asserts for the whole tree, so
-neither the composition nor the reading of `β` as a per-node bound is checked against the source.
-See `docs/paper-gaps/alvv16_approximation_parameters.tex`.
+**Local fix (sampling parametrization):** in the maintainer's reading of the arXiv v2 text, §6.2,
+Theorem 6.1 (`t:alg1`) and its proof state overall success probability at least `1 - 1/n`, derived
+by a union bound from a per-merge failure probability at most `1/n²`. The bound `(L - 1) β` is that
+union bound for an arbitrary per-merge failure `β`; the parameter `β` and the sampling envelope
+`s = ⌈4096 r (1 + log r + log D + log (1/β))⌉` are a sufficient parametrization chosen by the
+formalization, not the source's formula. For `L ≥ 2`, the choice `β = 1/L²` is the source's
+per-merge bound and gives overall failure `(L - 1)/L² < 1/L`; for `L ≤ 1` the tree is a single short
+leaf and the bound is `0`. The identification of this tree with the source's algorithm, its output
+and its running time is not proved. See `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 
 **Local fix (rounding of the number of rounds):** `k = ⌈⌈log_D s⌉ / 2⌉`, as in
 `DGConstantNodeTree`; see `docs/paper-gaps/alvv16_approximation_parameters.tex`.
@@ -49,14 +52,14 @@ open TNLean.MPS.AreaLaw TNLean.Lattice
 
 /-- **Success probability of the degenerate-gap tree of constant node dimension.** For a
 nearest-neighbour chain with `0 ≤ hᵢ ≤ 1` satisfying Assumption (DG), with ground space `G` of
-dimension `r` and gap `γ`, the improving families of Corollary 4.6 and the proof of Theorem 4.9
-on every long interval are fixed before the trimming radius, the failure parameter and every
-coordinate. For every trimming radius `ξ` below the reference bound and every `0 < β < 1`, put
-`s = ⌈4096 r (1 + log r + log D + log (1/β))⌉`, `k = ⌈⌈log_D s⌉ / 2⌉` and
-`count = D^{2k} s ≤ D² s²`. With one independent rank-independent Haar coordinate per interval,
-the canonical tree with `k` rounds and one collective trim at every long node has every node of
-dimension at most `count`, and its root and internal nodes are all `3/200`-viable for `G` outside
-a measurable set of measure at most `(L - 1) β`.
+dimension `r` and gap `γ`, the improving families of Theorem 4.7 (`t:ais`, from Corollary 4.6
+`c:goodagsphardtrunc`) on every long interval are fixed before the trimming radius, the failure
+parameter and every coordinate. For every trimming radius `ξ` below the reference bound and every
+`0 < β < 1`, put `s = ⌈4096 r (1 + log r + log D + log (1/β))⌉`, `k = ⌈⌈log_D s⌉ / 2⌉` and
+`count = D^{2k} s ≤ D² s²`. With one independent rank-independent Haar coordinate per interval, the
+canonical tree with `k` rounds and one collective trim at every long node has every node of
+dimension at most `count`, and its root and internal nodes are all `3/200`-viable for `G` outside a
+measurable set of measure at most `(L - 1) β`.
 
 ALVV, arXiv:1602.08828v2, Theorem `t:alg1`, lines 1777–1818, in its probabilistic form, under the
 markers of this module. -/

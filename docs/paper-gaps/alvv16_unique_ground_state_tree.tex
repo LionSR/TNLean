@@ -91,13 +91,22 @@ $\mathbb C\Gamma$ outside a Borel set of measure at most
 and on that event the refinement of the root gives the line of matrix
 product states of the third
 result.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_canonical_tree_ritz_approximation}.}
-The source passages quoted in this repository fix $s$ in terms of $\beta$
-but do not state the success probability that Theorems~t:alg1 and t:unique
-assert for the whole tree; the composition~(\ref{eq:alvv16_unique_tree_failure})
-and the reading of $\beta$ as a per-merge failure probability are
-\emph{unverified against the source}. A failure probability $\beta'$ for
-the whole tree follows with $\beta=\beta'/(L-1)$, at the cost of $s$
-growing like $\log L$.
+In the maintainer's reading of the official arXiv v2 text, \S6.2,
+Theorem~6.1 (\texttt{t:alg1}) states overall success probability at least
+$1-1/n$, and its proof derives this by a union bound from a failure
+probability at most $1/n^2$ for each merge; Theorem~6.2 (\texttt{t:unique}) states success at least $1-1/n$. The
+bound~(\ref{eq:alvv16_unique_tree_failure}) is the same union bound, for an arbitrary per-merge
+failure $\beta$. The parameter $\beta$ and the sample size
+$s=\lceil4096(1+\log D+\log(1/\beta))\rceil$ are a sufficient
+parametrization chosen by the formalization, not the source's formula.
+For $L\ge2$ and $0<\beta'<1$, a failure probability at most $\beta'$ for the
+whole tree follows with $\beta=\beta'/(L-1)$; the choice $\beta=1/L^2$ is
+the source's per-merge bound and gives overall failure $(L-1)/L^2<1/L$.
+For $L\le1$ every interval is a single short leaf, the tree has no internal
+node, and it fails with probability $0$. At a fixed overall failure
+probability $s$ grows like $\log L$, so the node bound is uniform in $L$
+only for fixed $\beta$. The identification of this tree with the source's
+algorithm, its output and its running time is not proved.
 
 \paragraph{Local fix (rounding of the number of rounds).}
 Write $m=\lceil\log_{\mathcal D}s\rceil$, where $\mathcal D\ge2$ and
@@ -176,11 +185,11 @@ $\mathcal D^4s^4$.
 The remaining differences from the source are:
 \begin{enumerate}
     \item the length-independent node bound is attained by the randomly
-          sampled tree with failure probability at most $(L-1)\beta$, a union
-          bound of the per-merge failure that is not checked against the
-          source's statement of the success probability; a failure
-          probability independent of $L$ needs $\beta$, and with it $s$, to
-          depend on $L$;
+          sampled tree with failure probability at most $(L-1)\beta$, the
+          union bound of the source's proof with the formalization's own
+          per-merge parameter $\beta$; a failure probability independent of
+          $L$ needs $\beta$, and with it $s$, to depend on $L$, so the node
+          bound is uniform in $L$ only for fixed $\beta$;
     \item the bond dimension of the output matrix product states grows with
           $L$, through the trimming threshold, which is set by a reference space
           whose Schmidt ranks grow with $L$;

@@ -19,11 +19,10 @@ a set of coordinates of measure at most `β`, then the root and its internal nod
 outside a measurable set of measure at most `(L - 1) β`. Every node has dimension at most `count`
 for every coordinate.
 
-**Unverified against source (composition along the tree):** the joint bound is the union bound
-of the fixed-child bound over the `L - 1` internal nodes of the tree. The available source
-quotations do not state the success probability that Theorem `t:alg1` asserts for the whole
-tree, so this composition is not checked against the source. See
-`docs/paper-gaps/alvv16_approximation_parameters.tex`.
+**Source comparison (composition along the tree):** in the maintainer's reading of the arXiv v2
+text, §6.2, the proof of Theorem 6.1 (`t:alg1`) obtains its overall success probability by this
+union bound over the merges, from a per-merge failure probability at most `1/n²`. Here the
+per-parent bound `β` is arbitrary. See `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
 open ManyBody (interval)

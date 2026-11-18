@@ -577,16 +577,23 @@ The sampled parent is a Borel function of the merged space and of its own
 coordinate, so the shorter children do not depend on the coordinate of
 their parent, which is what the union bound uses.
 
-\paragraph{Unverified against source (composition along the tree).}
-The source passages quoted in this repository fix $s$ in terms of $\beta$
-and treat $\beta$ as the fixed-input failure bound of one merge. They do
-not state the success probability that Theorem \texttt{t:alg1} asserts for
-the whole tree. The bound~(\ref{eq:alvv16_approximation_parameters_tree_failure})
-is the union bound of the per-merge failure; neither this composition nor
-the reading of $\beta$ as a per-merge failure probability has been checked
-against the source. A failure probability at most $\beta'$ for the whole
-tree follows with $\beta=\beta'/(L-1)$, which makes $s$ grow like
-$\log L$.
+\paragraph{Comparison with the source.}
+In the maintainer's reading of the official arXiv v2 text, \S6.2,
+Theorem~6.1 (\texttt{t:alg1}) states overall success probability at least
+$1-1/n$, and its proof derives this by a union bound from a failure
+probability at most $1/n^2$ for each merge. The
+bound~(\ref{eq:alvv16_approximation_parameters_tree_failure}) is the same union bound, for an arbitrary per-merge
+failure $\beta$. The parameter $\beta$ and the sample size
+$s=\lceil4096 r(1+\log r+\log D+\log(1/\beta))\rceil$ are a sufficient
+parametrization chosen by the formalization, not the source's formula.
+For $L\ge2$ and $0<\beta'<1$, a failure probability at most $\beta'$ for the
+whole tree follows with $\beta=\beta'/(L-1)$; the choice $\beta=1/L^2$ is
+the source's per-merge bound and gives overall failure $(L-1)/L^2<1/L$.
+For $L\le1$ every interval is a single short leaf, the tree has no internal
+node, and it fails with probability $0$. At a fixed overall failure
+probability $s$ grows like $\log L$, so the node bound is uniform in $L$
+only for fixed $\beta$. The identification of this tree with the source's
+algorithm, its output and its running time is not proved.
 
 \bibliographystyle{unsrt}
 \subsection*{The literal interleaved interval tree}

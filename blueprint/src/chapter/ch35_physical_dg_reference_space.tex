@@ -1736,10 +1736,10 @@ samples through the coordinate of the rank of its merged space.
     that for all $\delta$-viable children of dimension at most $M$ the parent
     fails to be $\delta$-viable with probability at most $\beta$. Then the
     event that the root and all its internal nodes are $\delta$-viable is
-    Borel and fails with probability at most $(L-1)\beta$. This union bound
-    over the internal nodes is not checked against the success probability
-    printed for Theorem~\texttt{t:alg1}, see
-    \cite{gap:alvv16_approximation_parameters}.
+    Borel and fails with probability at most $(L-1)\beta$. This is the union
+    bound over the merges by which the proof of Theorem~6.1
+    (\texttt{t:alg1}) obtains its success probability, here for an arbitrary
+    per-merge bound $\beta$, see \cite{gap:alvv16_approximation_parameters}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:canonical_sampled_parent}
@@ -1791,9 +1791,14 @@ samples through the coordinate of the rank of its merged space.
     probability at most $(L-1)\beta$. This is a restricted form of the merge
     analysis of~\cite[Theorem~\texttt{t:alg1}, lines
         1777--1818]{Arad2016RigorousRG}: the leaves are blocks, each long
-    parent has one final trim, the gap is capped at one, and the bound
-    $(L-1)\beta$ is a union bound of the per-merge failure that is not checked
-    against the source's success probability, as recorded
+    parent has one final trim, and the gap is capped at one. In the
+    maintainer's reading of the source, Theorem~6.1 states success at least
+    $1-1/n$, by a union bound from a per-merge failure at most $1/n^2$; the
+    bound $(L-1)\beta$ is that union bound, and $\beta$ with the sample size
+    above is the formalization's own sufficient parametrization. For $L\ge2$,
+    $\beta=1/L^2$ gives failure $(L-1)/L^2<1/L$; for $L\le1$ the tree is a
+    single leaf. The identification with the source's algorithm, output and
+    running time is not proved, as recorded
     in~\cite{gap:alvv16_approximation_parameters}.
 \end{lemma}
 \begin{proof}\leanok

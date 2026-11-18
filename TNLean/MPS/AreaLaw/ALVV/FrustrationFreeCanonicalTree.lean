@@ -10,22 +10,28 @@ import TNLean.MPS.AreaLaw.ALVV.CanonicalWordTrimTree
 /-!
 # Success probability of the merge tree for a unique frustration-free ground state
 
-ALVV, arXiv:1602.08828v2, Theorem `t:unique`, lines 1829–1855, runs the merge tree of Theorem
-`t:alg1` with the frustration-free family of Theorem `t:aisff`, lines 1580–1609, sampling afresh
-at every merge. This file proves that the randomly sampled tree succeeds on a measurable event:
-with one independent rank-independent Haar coordinate for every interval, every node has
-dimension at most `count = D^{2k} s ≤ D² s²` for every coordinate, the root and all internal
-nodes are `3/200`-viable for `ℂ Γ` outside a set of measure at most `(L - 1) β`, and on the
-success event the raw-filter-and-trim iterates of the root with a Ritz extraction give a line of
-matrix product states mutually `η/2`-close to `ℂ Γ`. Here
-`s = ⌈4096 (1 + log D + log (1/β))⌉`, and neither `D` nor `count` depends on `L`.
+ALVV, arXiv:1602.08828v2, Theorem `t:unique`, lines 1829–1855, runs the merge tree of
+Theorem `t:alg1` with the frustration-free family of Theorem `t:aisff`, lines 1580–1609, sampling
+afresh at every merge. This file proves that the randomly sampled tree succeeds on a measurable
+event: with one independent rank-independent Haar coordinate for every interval, every node has
+dimension at most `count = D^{2k} s ≤ D² s²` for every coordinate, the root and all internal nodes
+are `3/200`-viable for `ℂ Γ` outside a set of measure at most `(L - 1) β`, and on the success event
+the raw-filter-and-trim iterates of the root with a Ritz extraction give a line of matrix product
+states mutually `η/2`-close to `ℂ Γ`. Here `s = ⌈4096 (1 + log D + log (1/β))⌉`. For fixed `β`
+neither `D` nor `count` depends on `L`; at a fixed whole-tree failure probability, such as
+`β = 1/L²`, `s` and `count` grow like `log L`, so no uniform constant node dimension follows at that
+confidence.
 
-**Unverified against source (composition along the tree):** the joint failure bound `(L - 1) β`
-is the union bound of the per-node failure bound `β` of Lemma `l:rs` over the internal nodes.
-The available source quotations fix `s` in terms of `β`; none states the success probability
-that Theorems `t:alg1` and `t:unique` assert for the whole tree, so neither the composition nor
-the reading of `β` as a per-node bound is checked against the source. See
-`docs/paper-gaps/alvv16_unique_ground_state_tree.tex`.
+**Local fix (sampling parametrization):** in the maintainer's reading of the arXiv v2 text, §6.2,
+Theorem 6.1 (`t:alg1`) and its proof state overall success probability at least `1 - 1/n`, derived
+by a union bound from a per-merge failure probability at most `1/n²`; Theorem 6.2 (`t:unique`)
+states success at least `1 - 1/n`. The bound `(L - 1) β` is that union bound for an arbitrary
+per-merge failure `β`; the parameter `β` and the sampling envelope
+`s = ⌈4096 (1 + log D + log (1/β))⌉` are a sufficient parametrization chosen by the formalization,
+not the source's formula. For `L ≥ 2`, the choice `β = 1/L²` is the source's per-merge bound and
+gives overall failure `(L - 1)/L² < 1/L`; for `L ≤ 1` the tree is a single short leaf and the bound
+is `0`. The identification of this tree with the source's algorithm, its output and its running time
+is not proved. See `docs/paper-gaps/alvv16_unique_ground_state_tree.tex`.
 
 **Local fix (rounding of the number of rounds):** `k = ⌈⌈log_D s⌉ / 2⌉`, as in
 `FrustrationFreeTree`; see `docs/paper-gaps/alvv16_unique_ground_state_tree.tex`. The local fixes

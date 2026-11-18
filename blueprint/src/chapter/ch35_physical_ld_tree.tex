@@ -216,9 +216,14 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     sampled tree of~\cite[Theorem~\texttt{t:alg2}, lines
         1869--1878]{Arad2016RigorousRG}: in addition to the restrictions of
     Lemma~\ref{lem:physical_ld_sampled_interval_tree}, nothing is asserted
-    at the root beyond its viability, and the bound $(L-1)\beta$ is a union
-    bound of the per-merge failure that is not checked against the source's
-    success probability, see~\cite{gap:alvv16_low_energy_family_scope}.
+    at the root beyond its viability. In the maintainer's reading of the
+    source, Theorem~6.3 states success at least $1-1/n$, and the proof of
+    Theorem~6.1 obtains such a bound by a union bound from a per-merge
+    failure at most $1/n^2$; the bound $(L-1)\beta$ is that union bound, and
+    $\beta$ with the sample size above is the formalization's own sufficient
+    parametrization. The identification with the source's algorithm, output
+    and running time is not proved,
+    see~\cite{gap:alvv16_low_energy_family_scope}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:physical_ld_sampled_interval_tree,lem:canonical_word_trim_tree_failure,
