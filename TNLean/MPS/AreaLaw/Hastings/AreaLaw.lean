@@ -120,8 +120,8 @@ theorem areaLawBound_le {ξ' C₁ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 ≤ C₁) (
     unfold maxEntropyBound at hmax ⊢
     linarith
 
-/-- **Hastings' area law on the chain, from Lemma 1.** Let `Ω` be a gapped ground vector of a
-finite-range Hamiltonian `h` on the chain of `L` sites with local dimension `q`. Suppose
+/-- **Hastings' area law on the chain, from Lemma 1.** Let `Ω` be a unit vector on a
+chain of `L` sites with local dimension `q`. Suppose
 Lemma 1 holds around `Ω` with constants `ξ' > 0` and `C₁ ≥ 1`: at every cut `c` and length
 `l` with `c + l ≤ L` there are commuting orthogonal projections `O_L`, `O_R` supported before
 and after the cut and an operator `O_B` of norm at most one supported on `[c − l, c + l)`, with
@@ -131,10 +131,8 @@ lines 148–232 and 478–503, with the quantitative changes recorded in the mod
 
 The assumption `C₁ ≥ 1` loses nothing, since enlarging `C₁` only weakens Lemma 1. The value
 of `S_max` carries the local fix of the module docstring. -/
-theorem regionEntropy_prefix_le_of_factorization (h : ChainHamiltonian L q R J)
-    {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+theorem regionEntropy_prefix_le_of_factorization {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hΩ : ‖Ω‖ = 1)
     {ξ' C₁ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 ≤ C₁)
     (hfact : ∀ c l : ℕ, c + l ≤ L → ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       IsFactorizationAt Ω c l (C₁ * Real.exp (-(l / ξ'))) OB OL OR)

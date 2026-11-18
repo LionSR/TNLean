@@ -153,7 +153,7 @@ Extension of polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 213–336,
 theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy_le
     {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J E₀ : ℝ} (H : LocalHamiltonian Λ q R J)
     (hR : 1 ≤ R) (hJ : 0 ≤ J) (Ψ : Lattice.StateSpace Λ q)
-    (hΩ : ‖Ψ‖ = 1) (hspan : groundSpace H.operator E₀ = Submodule.span ℂ {Ψ})
+    (hΩ : ‖Ψ‖ = 1) (hmem : Ψ ∈ groundSpace H.operator E₀)
     (center : ℝ × ℝ) (u κ b : ℝ) (hu : 0 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
     letI : LinearOrder (Lattice.Site Λ) :=
       (Fintype.equivFin (Lattice.Site Λ)).linearOrder
@@ -215,7 +215,7 @@ theorem _root_.TNLean.Lattice.LocalHamiltonian.rangeNestedPatch_minimizer_energy
   have hop : H.operator = ∑ X, T X := rfl
   have heig₀ : Matrix.toEuclideanLin (∑ X, T X) Ψ = (E₀ : ℂ) • Ψ := by
     rw [← hop]
-    exact ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ψ)
+    exact ManyBody.mem_groundSpace_iff.mp hmem
   have heig := Entropy.toEuclideanLin_conj_apply_eq heig₀ hinv
     (((‖Matrix.toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
       Ψ‖⁻¹ : ℝ) : ℂ))

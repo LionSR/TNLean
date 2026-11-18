@@ -103,8 +103,11 @@ theorem IsSquareGroundState.squareResetBound (q : ℕ) (hq : 1 ≤ q) (J : ℝ) 
     {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     SquareResetBound q (IsSquareGroundState q J Δ) p (resetWidth J Δ p)
       (resetThreshold q J Δ p) :=
-  fun L hL Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ ↦
-    ManyBody.SquareInteraction.information_reset_of_resetThreshold_le q hq J hJ hΔ hp L
+  fun L hL Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ ↦ by
+    obtain ⟨-, -, hgap, hspan⟩ :=
+      (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+        ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hspan, hgap⟩
+    exact ManyBody.SquareInteraction.information_reset_of_resetThreshold_le q hq J hJ hΔ hp L
         hL h hh hhJ E₀ Ω
       hΩ hgap hspan
 
@@ -141,7 +144,9 @@ theorem angular_information_reset_of_resetThreshold_le (q : ℕ) (hq : 1 ≤ q)
               (L : ℝ) ^ (-p) := by
   intro L hL h hh hhJ E₀ Ω hΩ hgap hspan
   exact angular_information_reset_of_squareResetBound
-    (IsSquareGroundState.squareResetBound q hq J hJ hΔ hp) L hL Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩
+    (IsSquareGroundState.squareResetBound q hq J hJ hΔ hp) L hL Ω ⟨h, hh, hhJ, E₀, hΩ,
+      hgap.posSemidef_sub_smul_one hh hΩ hspan,
+      hspan ▸ Submodule.mem_span_singleton_self Ω⟩
 
 open Classical in
 /-- The original-gap information reset applied to the actual padded annular

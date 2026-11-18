@@ -312,7 +312,8 @@ theorem exists_sampledGroundStateProgram_cost_polynomial (hq : 2 ≤ q) {Δ B η
   intro L _ h hs h0 h1 E₀ Γ hΩ hgap hspan hEB δ I hgood
   refine ⟨countQueries_le_cost honestOracle queryCost one_le_queryCost _, ?_⟩
   have hL : 1 ≤ L := Nat.pos_of_neZero L
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ
+    (hspan ▸ Submodule.mem_span_singleton_self _)
   obtain ⟨hℓD, hD⟩ := hbud L E₀ hL hE₀ hE₀L hEB
   obtain ⟨hδ0, hδ1, hδc, -⟩ := sampledPrecision_spec hΔ hη hL
   have hD1 : 1 ≤ sampledRankBound q L E₀ Δ δ := Nat.one_le_pow _ _ (by omega)

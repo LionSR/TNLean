@@ -93,6 +93,8 @@ theorem polynomialPEPSApproximation_explicit {q : ℕ} (hq : 2 ≤ q) {J Δ : �
   intro L hL h hh hhJ E₀ Ω hΩ hgap hspan
   exact hasPEPSApproximation_of_sufficiently_large_le (by omega) hL
     (pepsBondExponent_pos q J Δ).le hΩ
-        (fun hL₀ ↦ hlarge L hL hL₀ Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩)
+        (fun hL₀ ↦ hlarge L hL hL₀ Ω ⟨h, hh, hhJ, E₀, hΩ,
+      hgap.posSemidef_sub_smul_one hh hΩ hspan,
+      hspan ▸ Submodule.mem_span_singleton_self Ω⟩)
 
 end TNLean.PEPS.Approximation

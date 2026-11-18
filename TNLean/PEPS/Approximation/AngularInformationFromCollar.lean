@@ -248,15 +248,20 @@ theorem angularInformationBound_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 �
   have hc : 0 < c := div_pos (AngularGrid.angular_clearance_pos ha' ha'a hda') hd
   have hcell : SquareCellInformationBound q (IsSquareGroundState q J Δ) c
       (cellInformationConstant q c Ctpl N Ca Na) (cellInformationExponent c Ctpl N Ca Na) :=
-    fun s hs o m₀ A hm₀ L Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ ↦
-      cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc
+    fun s hs o m₀ A hm₀ L Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ ↦ by
+      obtain ⟨-, -, hgap, hspan⟩ :=
+        (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+          ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hspan, hgap⟩
+      exact cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt hcol hamp hc
         s hs o m₀ A hm₀ L h hh hhJ E₀ Ω hΩ hgap hspan
   intro L hL h hh hhJ E₀ Ω hΩ hgap hspan
   exact angularInformation_of_bounds (fun _ _ hΩ ↦ hΩ.norm_eq_one) ha m₀ hp hcell
     (IsSquareGroundState.squareResetBound q hq J hJ hΔ hp)
     (cellInformationConstant_pos q c Ctpl N Ca Na)
     (cellInformationExponent_pos c Ctpl N Ca Na).le (resetWidth_pos hJ hΔ hp) hD hL₀
-    L hL Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩
+    L hL Ω ⟨h, hh, hhJ, E₀, hΩ,
+      hgap.posSemidef_sub_smul_one hh hΩ hspan,
+      hspan ▸ Submodule.mem_span_singleton_self Ω⟩
 
 /-- **Proposition 3.4 at an integer accuracy under the sublinear collar bound, with explicit
 constants,** for sites placed at any common translation of `Λ_L`: every slope
@@ -273,8 +278,11 @@ theorem isAngularScale_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 ≤ q)
     (hD : angularScale J Δ a p ≤ D)
     (hL₀ : angularThreshold q J Δ a A₀ m₀ p Ctpl N Ca Na ≤ L₀) :
     IsAngularScale q (IsSquareGroundState q J Δ) a A₀ m₀ p D L₀ :=
-  IsAngularScale.of_sitePosition fun L hL Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ ↦
-    angularInformationBound_of_sublinearCollarBoundAt_le hq hJ hΔ hcol hamp ha m₀
+  IsAngularScale.of_sitePosition fun L hL Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ ↦ by
+    obtain ⟨-, -, hgap, hspan⟩ :=
+      (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+        ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hspan, hgap⟩
+    exact angularInformationBound_of_sublinearCollarBoundAt_le hq hJ hΔ hcol hamp ha m₀
       (by exact_mod_cast hp) hD hL₀ L hL h hh hhJ E₀ Ω hΩ hgap hspan
 
 /-- **Proposition 3.4 at an integer accuracy, at the named amplification constants.** Under
@@ -313,7 +321,11 @@ theorem angularInformationBound_of_sublinearCollarBound {q : ℕ} (hq : 1 ≤ q)
   intro a A₀ ha _hA₀ m₀ p hp
   obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
-  exact ⟨_, _, angularInformationBound_of_sublinearCollarBoundAt_le hq hJ hΔ hcol hamp ha m₀ hp
-    le_rfl le_rfl⟩
+  refine ⟨_, _, fun L hL h hh hhJ E₀ Ω hΩ hgap hmem ↦ ?_⟩
+  obtain ⟨-, -, hgap, hspan⟩ :=
+    (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+      ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hgap⟩
+  exact angularInformationBound_of_sublinearCollarBoundAt_le hq hJ hΔ hcol hamp ha m₀ hp
+    le_rfl le_rfl L hL h hh hhJ E₀ Ω hΩ hgap hspan
 
 end TNLean.PEPS.Approximation
