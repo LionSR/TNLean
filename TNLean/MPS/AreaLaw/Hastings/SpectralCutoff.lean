@@ -185,7 +185,7 @@ private noncomputable def localLiftStarAlgHom (D : Finset V) :
   toFun := localLift D
   map_one' := localLift_one
   map_mul' := localLift_mul
-  map_zero' := by simpa using localLift_smul (D := D) 0 0
+  map_zero' := by simp
   map_add' := localLift_add
   commutes' c := by
     rw [Algebra.algebraMap_eq_smul_one, localLift_smul, localLift_one,
