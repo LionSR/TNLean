@@ -1,0 +1,202 @@
+{
+  "time": "2026-11-18T18:18:17.429880+00:00",
+  "head": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+  "other_evidence": "cd2ae9471990a7446ba6cb50d47ae0b6fb55a6fe",
+  "manifest_sha256": "e1237df1264c3d22e86326c008518ede641103db74891667387f73e6c7152a18",
+  "status": "preflight only; final77 has not begun, old SnakeGridApproximation artifact is not final source; this is metadata, no payload transferred",
+  "modules": [
+    {
+      "module": "TNLean.Algebra.FinSpanOfFinrank",
+      "source_sha256": "ead043a4d1269b5ee5bd4f3f6233de5c83fb38750a0c1da3cb998b0b2b04510c",
+      "same_source_as_cd2ae947": true,
+      "direct_project_dependencies": [],
+      "old_cache_artifacts": [
+        {
+          "path": "TNLean/Algebra/FinSpanOfFinrank.olean",
+          "bytes": 109200,
+          "sha256": "ef9a40717e85cc39d6e5271bbab31e15e24b25bc55c20fa0ad9bd3375d506c04"
+        }
+      ],
+      "reuse_plan": true,
+      "final_overlay_ready": false
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.OpenMPS",
+      "source_sha256": "9d9bf8509c514801cbda279d58ad1227da14306a2a2006e3b00e5a228dec9406",
+      "same_source_as_cd2ae947": true,
+      "direct_project_dependencies": [
+        "QICLean.Channel.SchmidtRank",
+        "QICLean.Entropy.LocalLift",
+        "TNLean.MPS.Chain.VaryingBondOBC"
+      ],
+      "old_cache_artifacts": [
+        {
+          "path": "TNLean/MPS/AreaLaw/OpenMPS.olean",
+          "bytes": 255792,
+          "sha256": "ae20cbb06668e1ccc27bfb406342d49a71233be365a6a362ef91fbd51b435be9"
+        }
+      ],
+      "reuse_plan": true,
+      "final_overlay_ready": false
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.OpenMPSRank",
+      "source_sha256": "d530174c1e28ae23feebf9b7b1e2bf7ad5e0c2d7c6153caaecfc5cb48df7d079",
+      "same_source_as_cd2ae947": true,
+      "direct_project_dependencies": [
+        "TNLean.Algebra.FinSpanOfFinrank",
+        "TNLean.MPS.AreaLaw.OpenMPS"
+      ],
+      "old_cache_artifacts": [
+        {
+          "path": "TNLean/MPS/AreaLaw/OpenMPSRank.olean",
+          "bytes": 753624,
+          "sha256": "9b3e86afaa87ea5381d3f835ea57fd61f1e58942e25f4c0c0925f4fe1fc5212b"
+        }
+      ],
+      "reuse_plan": true,
+      "final_overlay_ready": false
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.SequentialTruncation",
+      "source_sha256": "ec3ac82e400e0f54c683898d6d7bd7cab0d05681dfaa382e830ea48f38d326fc",
+      "same_source_as_cd2ae947": true,
+      "direct_project_dependencies": [
+        "QICLean.Analysis.KyFanNorm",
+        "QICLean.Entropy.FilterOptimizer",
+        "QICLean.Entropy.RegionEntropy",
+        "QICLean.Entropy.SpectralTail",
+        "QICLean.Representation.RelativePin",
+        "TNLean.Algebra.SubmoduleStarProjectionMatrix",
+        "TNLean.Algebra.ToEuclideanLinApply",
+        "TNLean.Lattice.RegionEntropyInequalities",
+        "TNLean.MPS.AreaLaw.OpenMPSRank"
+      ],
+      "old_cache_artifacts": [
+        {
+          "path": "TNLean/MPS/AreaLaw/SequentialTruncation.olean",
+          "bytes": 1886240,
+          "sha256": "2790a015755484c5ea2cb410e7b758045c6d3dcda802a75f5c92de1d86c73b0e"
+        }
+      ],
+      "reuse_plan": true,
+      "final_overlay_ready": false
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.SnakeGridApproximation",
+      "source_sha256": "987094fd63438c9177d4b70a3a85b86fef730459e5eb5f19b5620bee2072f034",
+      "same_source_as_cd2ae947": true,
+      "direct_project_dependencies": [
+        "QICLean.Entropy.RegionCovariance",
+        "QICLean.ManyBody.Hamiltonian.GroundSpace",
+        "TNLean.MPS.AreaLaw.SequentialTruncation",
+        "TNLean.MPS.AreaLaw.SnakeGridGeometry",
+        "TNLean.MPS.AreaLaw.SnakeGridParameters",
+        "TNLean.PEPS.AreaLaw.TailParameter",
+        "TNLean.PEPS.AreaLaw.TheoremStatements"
+      ],
+      "old_cache_artifacts": [
+        {
+          "path": "TNLean/MPS/AreaLaw/SnakeGridApproximation.olean",
+          "bytes": 931240,
+          "sha256": "900010a5383f6f176d13a6ed5db0535c20a8af71d61d5eadf4321df8fb582af8"
+        }
+      ],
+      "reuse_plan": false,
+      "final_overlay_ready": false
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.SnakeGridGeometry",
+      "source_sha256": "3821b2beb60d210b7afbfeb26e38611ffcde0fd1595a19e596b900b9f180442a",
+      "same_source_as_cd2ae947": true,
+      "direct_project_dependencies": [
+        "TNLean.PEPS.AreaLaw.RectangularDomain"
+      ],
+      "old_cache_artifacts": [
+        {
+          "path": "TNLean/MPS/AreaLaw/SnakeGridGeometry.olean",
+          "bytes": 713824,
+          "sha256": "84a42da9cbdb66961d3042d089405b62d65e10b37be508fc8d2c45e21cd00f6e"
+        }
+      ],
+      "reuse_plan": true,
+      "final_overlay_ready": false
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.SnakeGridParameters",
+      "source_sha256": "6fea33d476ab39aa5fd95e1dec849adb0c5da7a408e25bc7edb3d21dc372e527",
+      "same_source_as_cd2ae947": true,
+      "direct_project_dependencies": [],
+      "old_cache_artifacts": [
+        {
+          "path": "TNLean/MPS/AreaLaw/SnakeGridParameters.olean",
+          "bytes": 251304,
+          "sha256": "3e12f47116ee906f7e4a5f4aefb01544b9ad72174e69f91504530bbda3e86756"
+        }
+      ],
+      "reuse_plan": true,
+      "final_overlay_ready": false
+    },
+    {
+      "module": "TNLean.MPS.Chain.Defs",
+      "source_sha256": "341da9ca5ff02bc7d8a338181fb6607f45f9e5f5eb1243a79726490aae29a324",
+      "same_source_as_cd2ae947": true,
+      "direct_project_dependencies": [
+        "TNLean.MPS.Defs"
+      ],
+      "old_cache_artifacts": [
+        {
+          "path": "TNLean/MPS/Chain/Defs.olean",
+          "bytes": 161504,
+          "sha256": "b6be9ddd2dc3d62355aed698e84ab937241555b648c89fe0adca605798b596b8"
+        }
+      ],
+      "reuse_plan": true,
+      "final_overlay_ready": false
+    },
+    {
+      "module": "TNLean.MPS.Chain.VaryingBondOBC",
+      "source_sha256": "dbf71e907753a7b0f65318e20ff52fe803f63e7e2e57b7c13e288ca5f3a12963",
+      "same_source_as_cd2ae947": true,
+      "direct_project_dependencies": [
+        "QICLean.Algebra.FinSum",
+        "TNLean.MPS.Chain.Defs",
+        "TNLean.MPS.Core.CyclicTrace"
+      ],
+      "old_cache_artifacts": [
+        {
+          "path": "TNLean/MPS/Chain/VaryingBondOBC.olean",
+          "bytes": 600808,
+          "sha256": "041ed8c883f2c1fa3d5e64ee67f8e61fd002891408257cc1d73b7ef42ce44036"
+        }
+      ],
+      "reuse_plan": true,
+      "final_overlay_ready": false
+    },
+    {
+      "module": "TNLean.MPS.Core.CyclicTrace",
+      "source_sha256": "67e8d968988035d212fe977e7b8f27fe46c0e5ebf411e8ba10ffd1fc6afc8010",
+      "same_source_as_cd2ae947": true,
+      "direct_project_dependencies": [
+        "TNLean.MPS.Defs"
+      ],
+      "old_cache_artifacts": [
+        {
+          "path": "TNLean/MPS/Core/CyclicTrace.olean",
+          "bytes": 290040,
+          "sha256": "4181b2534b9c14655321c5ba77783e9bdae9397b8bb2396b77f999abf64d4309"
+        }
+      ],
+      "reuse_plan": true,
+      "final_overlay_ready": false
+    }
+  ],
+  "transport": "No cache-export tool invoked or retried. No verified authorized cross-environment cache payload transport yet. Library file tools are discoverable but have not been established as compliant with the cache-export version rules. Keep local artifacts until supported transfer is confirmed.",
+  "final_requirements": [
+    "all ten final-source artifacts and sidecars",
+    "Lean executable and toolchain SHA plus exact package revisions",
+    "recursive dependency source/artifact fingerprints, not just ten top-level source hashes",
+    "recipient compares fingerprints and accepts only matching coherent artifacts",
+    "payload bytes and archive SHA distinct from metadata; no claim of transfer from metadata alone"
+  ]
+}

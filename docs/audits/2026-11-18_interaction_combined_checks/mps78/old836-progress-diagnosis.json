@@ -1,0 +1,125 @@
+{
+  "time": "2026-11-18T18:18:17.429880+00:00",
+  "old_passed": 840,
+  "completed_commands_since836": 771,
+  "dependency_builds_since836": 763,
+  "new_failures": 0,
+  "latest_completed": [
+    {
+      "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+      "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+      "file": "TNLean/MPS/Examples/ShortMomentum/OverlapChargeCoefficients.lean",
+      "phase": "build",
+      "command": [
+        "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-o",
+        "/tmp/pin729-mps-olean/TNLean/MPS/Examples/ShortMomentum/OverlapChargeCoefficients.olean",
+        "TNLean/MPS/Examples/ShortMomentum/OverlapChargeCoefficients.lean"
+      ],
+      "started_utc": "2026-11-18T18:18:09.729819+00:00",
+      "seconds": 1.769960264005931,
+      "exit_code": 0,
+      "method": "direct Lean (not lake build)",
+      "role": "dependency_only",
+      "source_sha256": "1113c0caad8ed029635fa98a021da72f98815a4aab83548fc30a6b967834a9ea",
+      "olean_sha256": "b9bfdc3f0f27bb6ef6bfe38e80cdd177144f93d1b12d6d996538be3a2a3a58fb"
+    },
+    {
+      "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+      "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+      "file": "TNLean/MPS/Examples/ShortMomentum/SevenCyclicObstruction.lean",
+      "phase": "build",
+      "command": [
+        "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-o",
+        "/tmp/pin729-mps-olean/TNLean/MPS/Examples/ShortMomentum/SevenCyclicObstruction.olean",
+        "TNLean/MPS/Examples/ShortMomentum/SevenCyclicObstruction.lean"
+      ],
+      "started_utc": "2026-11-18T18:18:09.808608+00:00",
+      "seconds": 2.154782576006255,
+      "exit_code": 0,
+      "method": "direct Lean (not lake build)",
+      "role": "dependency_only",
+      "source_sha256": "4d52eac72247ac91c23a8ee8ff565e4ba4ee662afd1e1cb418c7c1755a6549fb",
+      "olean_sha256": "930bf5a04cb4e5de161071bed2cdc8ec4fb5a20112add6e5d6cd5b380d76a17b"
+    },
+    {
+      "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+      "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+      "file": "TNLean/MPS/Examples/ShortMomentum/CyclicChargeDetection.lean",
+      "phase": "build",
+      "command": [
+        "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-o",
+        "/tmp/pin729-mps-olean/TNLean/MPS/Examples/ShortMomentum/CyclicChargeDetection.olean",
+        "TNLean/MPS/Examples/ShortMomentum/CyclicChargeDetection.lean"
+      ],
+      "started_utc": "2026-11-18T18:18:11.965673+00:00",
+      "seconds": 2.51477509799588,
+      "exit_code": 0,
+      "method": "direct Lean (not lake build)",
+      "role": "dependency_only",
+      "source_sha256": "0ec9b3ee0653cb56307d3e1cf51344481902f7de421d8c5c9720b54e813b82be",
+      "olean_sha256": "dd0e2a6f220b45172e4ac8971d3d3294e7e49dfeac085f4f794492fe79825e96"
+    },
+    {
+      "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+      "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+      "file": "TNLean/MPS/Examples/SpinHalf.lean",
+      "phase": "build",
+      "command": [
+        "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-o",
+        "/tmp/pin729-mps-olean/TNLean/MPS/Examples/SpinHalf.olean",
+        "TNLean/MPS/Examples/SpinHalf.lean"
+      ],
+      "started_utc": "2026-11-18T18:18:11.501350+00:00",
+      "seconds": 3.2214279979962157,
+      "exit_code": 0,
+      "method": "direct Lean (not lake build)",
+      "role": "dependency_only",
+      "source_sha256": "4962f7b9ebcb3990a6886eadd53e82ca2c9b256ca3300e1c2bb4daf4ca0a8e92",
+      "olean_sha256": "32d064f7aa8932b8cd507663f4a252f188d1da107b9f8fc55fb5c8206ea55ef0"
+    },
+    {
+      "source_head": "ec6168f62952ad7c7e0dbb48758f3736b33af88b",
+      "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+      "file": "TNLean/MPS/Examples/ShortMomentum/CyclicBoundaryClosure.lean",
+      "phase": "build",
+      "command": [
+        "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+        "-Dpp.unicode.fun=true",
+        "-DrelaxedAutoImplicit=false",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-o",
+        "/tmp/pin729-mps-olean/TNLean/MPS/Examples/ShortMomentum/CyclicBoundaryClosure.olean",
+        "TNLean/MPS/Examples/ShortMomentum/CyclicBoundaryClosure.lean"
+      ],
+      "started_utc": "2026-11-18T18:18:14.482750+00:00",
+      "seconds": 1.7321334199950797,
+      "exit_code": 0,
+      "method": "direct Lean (not lake build)",
+      "role": "dependency_only",
+      "source_sha256": "b6ff4a7e8abeb4342c0a286bf563d5d63d447770a86bb2f7251561b0dc0140dc",
+      "olean_sha256": "a339c1388e9f017c1d8586b6d5e1fd3147303a9c6e187c59d4088ec7de3acf85"
+    }
+  ],
+  "process_snapshot": " 412863 Sl      01:35:04 00:00:13  0.2 86816 python3 docs/audits/2026-11-18_pin729_mps_shard/resume.py\n 466580 Z          44:32 00:00:01  0.0     0 [lean] <defunct>\n 468831 S          36:15 00:00:06  0.2 39564 python3 docs/audits/2026-11-18_interaction_combined_checks/mps78/coordinator.py\n 478733 Sl         00:02 00:00:04  173 3423344 /workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -o /tmp/pin729-mps-olean/TNLean/MPS/Examples/MajumdarGhoshHamiltonian.olean TNLean/MPS/Examples/MajumdarGhoshHamiltonian.lean\n 478745 Sl         00:01 00:00:01 83.4 3090496 /workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -o /tmp/pin729-mps-olean/TNLean/MPS/Examples/ShortMomentum/ShortOverlapBridges.olean TNLean/MPS/Examples/ShortMomentum/ShortOverlapBridges.lean\n 478771 S          00:00 00:00:00 66.6 27912 python3 -\n"
+}
