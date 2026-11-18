@@ -92,9 +92,8 @@ of a Hamiltonian `h` on `Λ` with gap `Δ`; a collar scan `S` of the target `T` 
 depth, anchors in their supports, `r₀ = ⌈C_tr log² n⌉` (line 49) and charge-list constant
 `C₁` (lines 127–130); the test geometry `scanner:test-geometry` (lines 43–48); and the entropy
 inputs `scanner:entropy-input` with constant `C_e` (lines 353–357). -/
-structure ScannerHypotheses (X : ScannerExponents) (R : ℕ) (J Δ CT Ctr C₁ Ce : ℝ) (n : ℕ)
+structure ScannerHypotheses (X : ScannerExponents) (R : ℕ) (Δ CT Ctr C₁ Ce : ℝ) (n : ℕ)
     {q : ℕ} (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (h : PlaneInteraction Λ q R)
-        (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ) (Ω : StateSpace Λ q) :
     Prop where
   /-- `Ω` is a unit vector: the original ground vector of the standing setting
@@ -179,7 +178,7 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
       (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
       (hhJ : ∀ X, ‖h.term X‖ ≤ J) (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
       (E₀ : ℝ) (Ω : StateSpace Λ q),
-      ScannerHypotheses X R J Δ CT Ctr C₁ Ce n Λ T hT h hh hhJ S E₀ Ω →
+      ScannerHypotheses X R Δ CT Ctr C₁ Ce n Λ T hT h S E₀ Ω →
       let g : ℝ := Δ / positiveNormalization 1 (Δ / 2) J
       let C₀ := 512 * Real.exp 1 * (2 / g)
       let c₀ := 1 / (32 * Real.sqrt (1 + 2 / g))

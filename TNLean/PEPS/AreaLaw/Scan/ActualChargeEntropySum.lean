@@ -210,7 +210,7 @@ theorem actualCharges_integral_bound_domainGraph_of_finiteFamilyTransportBound
   let E := S.actualEnergyTerms h Ω J Δ L aux
   obtain ⟨β, Cβ, hCβ, hβ0, hβ, hround⟩ :=
     actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound
-        htransport aux h hh hhJ Ω
+        htransport aux Ω
       S hT hgraph hdepth hanchor hΔ hΩ (by omega) (by omega) hDpos hD hL
       hCpos hrows hclear ha haℓ
   refine ⟨β, Cβ, hCβ, hβ0, hβ, ?_⟩
