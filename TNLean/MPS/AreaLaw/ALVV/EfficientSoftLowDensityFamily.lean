@@ -22,7 +22,7 @@ window into one viable for the lower window, with the Chebyshev contraction
 
 This is the soft-truncated, matrix-product-operator version of the low-density improving
 family of ALVV, arXiv:1602.08828v2, `t:aisgapless`, lines 1027–1041, as used in
-`t:aisgaplessefficient`, lines 1435–1457.
+`t:aisgaplessefficient`, lines 1424–1437.
 
 **Local fix (cluster estimate, residuals and parameters):** the middle operator uses the
 corrected interaction-label cluster estimate at an independent scale `t ≥ 3 m`, the window
@@ -47,7 +47,7 @@ count, before every admissible estimate of the bulk energies and every band widt
 estimate, two windows of the represented soft approximant bracket the original low-energy
 bands from both sides with explicit losses, and the family improves viability from the upper
 window to the lower one with the Chebyshev contraction. No gap is assumed. Corrected
-version of ALVV, arXiv:1602.08828v2, `t:aisgaplessefficient`, lines 1435–1457. -/
+version of ALVV, arXiv:1602.08828v2, `t:aisgaplessefficient`, lines 1424–1437. -/
 theorem exists_efficient_soft_low_density_family
     (q ell m k : ℕ) (t xi : ℝ)
     (hq : 2 ≤ q) (hell : 1 ≤ ell) (hm : 2 ≤ m) (hk : 1 ≤ k)

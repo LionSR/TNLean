@@ -18,7 +18,7 @@ two windows of `B` that bracket the original low-energy band of width `η` from 
 separated by `w - ρ`. A polynomial matrix decomposition of `B` then gives the nested
 Chebyshev improvement between the two windows of `B`. These spectral auxiliaries support the
 efficient low-density improving family of ALVV, arXiv:1602.08828v2, `t:aisgaplessefficient`,
-lines 1435–1457, built from the low-density family of `t:aisgapless`, lines 1027–1041.
+lines 1424–1437, built from the low-density family of `t:aisgapless`, lines 1027–1041.
 -/
 
 open Matrix
@@ -90,7 +90,7 @@ degree at most `k` in a Hermitian matrix `B` is a Kronecker sum through a fixed 
 middle matrices, then for cutoffs `c₀ < c₁ ≤ M` with `‖B‖ ≤ M`, the family `W` improves every
 subspace viable for the window of `B` at `c₁` into one viable for the window at `c₀`, with
 contraction `(2 e^{-2 k √((c₁ - c₀) / (M - c₀))})²`. Auxiliary to ALVV, arXiv:1602.08828v2,
-`t:aisgaplessefficient`, lines 1435–1457, and `t:aisgapless`, lines 1037–1041. -/
+`t:aisgaplessefficient`, lines 1424–1437, and `t:aisgapless`, lines 1037–1041. -/
 theorem soft_low_density_chebyshev_viability
     {sigma mu nu : Type*} [Fintype sigma] [DecidableEq sigma]
     [Fintype mu] [Fintype nu] [DecidableEq nu] {n k : ℕ}

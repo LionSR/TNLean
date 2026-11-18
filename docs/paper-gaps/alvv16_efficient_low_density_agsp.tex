@@ -1,0 +1,140 @@
+\documentclass{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\title{The efficient approximate ground-space projector under (LD)}
+\author{}
+\date{2026-11-18}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source statement}
+
+Theorem~5.9 (\texttt{t:aisgaplessefficient}) of Arad, Landau, Vazirani and
+Vidick~\cite{Arad2016RigorousRG}, arXiv:1602.08828v2, file
+\path{local_alg_arxiv_v2.tex}, lines 1424--1437, reads, with its proof at
+lines 1439--1457:
+\begin{quote}
+Let $H$ be a local Hamiltonian satisfying Assumption (LD), parameters
+$\eta_1\leq \eta$ and $\mu>0$, $\{1,\ldots,n\} = L\cup M\cup R$, where
+$L=\{1,\ldots,i_1\}$, $M=\{i_1+1,\ldots,i_2\}$, and $R=\{i_2+1,\ldots,n\}$, a
+partition of the $n$-qudit space, and $\varepsilon'_M$ an estimate for the
+minimal energy $\varepsilon_M$ of the restriction of $H$ to $\mathcal H_M$
+such that $|\varepsilon_M-\varepsilon'_M|\leq 10$. Then the procedure
+\textsc{Generate}$(H, M, \varepsilon'_M,(\eta_1,\mu))$ described in Figure
+\texttt{fig:generate} returns
+\begin{itemize}
+ \item MPO representations for a collection of $D^2$ operators
+  $\{A_i\}_{i=1}^{D^2}$ acting on $\mathcal H_M$ and of bond dimension at most
+  $e^{\tilde O(\log^3 n)}$ each such that there exists subspaces
+  $\tilde T,\tilde T_-$ for which the conclusions of Theorem
+  \texttt{t:aisgapless} are satisfied;
+ \item An MPO for an operator $\tilde H_M$ such that
+  $\|\tilde H_M\| = \tilde O(\log(n)/\mu)$ and the minimal energy
+  $\tilde\varepsilon_M$ of $\tilde H_M$ restricted to $\tilde T_-$ satisfies
+  $|\varepsilon_M-\tilde\varepsilon_M|<1/2$.
+\end{itemize}
+Moreover, \textsc{Generate}$(H, M, \varepsilon'_M, (\eta_1,\mu))$ runs in time
+$e^{\tilde O(\log^3 n)}$.
+\end{quote}
+The running time is out of scope; only the existence content of the two items
+is considered.
+
+The conclusions referred to are those of Theorem~4.8
+(\texttt{t:aisgapless}, lines 1027--1035, proof 1037--1041): with $\mathcal H=\mathcal H_L\otimes
+\mathcal H_M\otimes\mathcal H_R$, there are $D^2$ operators $A_i$ on
+$\mathcal H_M$ and subspaces $\tilde T_-\subseteq\tilde T\subseteq\mathcal H$
+such that
+\begin{align}
+ &H_{[\varepsilon_0,\varepsilon_0+\eta_1]}\ \text{is $.005$-close to}\ \tilde T,
+ \qquad
+ \tilde T_-\ \text{is $.005$-close to}\
+ H_{[\varepsilon_0,\varepsilon_0+\eta_1-\mu/\log n]},
+ \label{eq:alvv16_eld_agsp_windows}\\
+ &D=e^{\tilde O(\frac{\log n}{\mu}\log^3 d)},\qquad D^{12}\Delta<10^{-5},
+ \label{eq:alvv16_eld_agsp_count}
+\end{align}
+and every $S\subseteq\mathcal H_M$ that is $\delta$-viable for $\tilde T$ has
+$\operatorname{span}\bigcup_iA_iS$ that is $\Delta/(1-\delta)^2$-viable for
+$\tilde T_-$.
+
+\section{A qualifier absent from the statement}
+
+Theorem \texttt{t:aisgapless} assumes that $\mu>0$ is a constant and that
+$\eta\geq\eta_1\geq2\mu/\log n$ (line 1027). Theorem~5.9 requires only
+$\eta_1\leq\eta$ and $\mu>0$, while invoking the conclusions of Theorem
+\texttt{t:aisgapless}. The source attaches the lower bound explicitly at that
+comparable existence statement, and neither the statement of Theorem~5.9 nor
+the description of \textsc{Generate} at line 1348 repeats it. Following the
+convention that silence is not always an omission, the faithful reading of
+Theorem~5.9 omits the lower bound. Whether the conclusions
+(\ref{eq:alvv16_eld_agsp_windows}) still hold for $\eta_1<2\mu/\log n$ is an
+open question for the formal statement: for $\eta_1<\mu/\log n$ the lower window
+lies below $\varepsilon_0$, and the second closeness claim concerns the zero
+space.
+
+\section{What is formalized}
+
+The formalization constructs, without any spectral gap, a soft-truncated
+low-density improving family of middle matrix product operators
+(\leanid{TNLean.MPS.AreaLaw.ALVV.exists_efficient_soft_low_density_family}) and
+a calibration of it
+(\leanid{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_efficient_soft_low_density_family}).
+The calibrated family gives the window structure of
+(\ref{eq:alvv16_eld_agsp_windows}) with losses at most $1/200$, the bound
+$D^{12}\Delta\leq10^{-5}$ in place of the strict inequality, and the viability
+improvement, for a fixed buffer $0<w\leq1$ and band width at most $34$. The
+source's buffer is $\mu/\log n$, which shrinks with the chain length; the
+calibrated parameters then depend on $n$. These results are restricted versions
+of the window and improvement clauses, not the source theorem.
+
+The following clauses of Theorem~5.9 are not formalized:
+\begin{enumerate}
+ \item the member bond dimension $e^{\tilde O(\log^3 n)}$ when the buffer is
+  $\mu/\log n$;
+ \item the count $D=e^{\tilde O(\frac{\log n}{\mu}\log^3 d)}$ at that buffer;
+ \item the norm bound $\|\tilde H_M\|=\tilde O(\log(n)/\mu)$;
+ \item the energy estimate $|\varepsilon_M-\tilde\varepsilon_M|<1/2$, the
+  uniform energy estimate recorded as open in
+  \href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_soft_regional_residuals.pdf}{the soft-residual note}.
+\end{enumerate}
+The source proof (lines 1439--1457) chooses
+\begin{align}
+ \ell=\Theta\Big(\frac{\log n}{\mu}\log\frac{\log n}{\mu}\Big),\qquad
+ k=\ell^2,\qquad t=\Theta(\ell),\qquad t'=4,
+ \label{eq:alvv16_eld_agsp_parameters}
+\end{align}
+and the fourth-order truncation $t'=4$ is not an instance of the formalized
+calibration, as recorded in
+\href{https://sirui-lu.com/TNLean/paper-gaps/alvv16_soft_regional_residuals.pdf}{the soft-residual note}. Here the soft-truncation
+parameters are written $t,t'$, as in the source.
+
+\section{Reading of the asymptotic bounds}
+
+A formal statement must fix the meaning of $\tilde O$. The bounds are read with
+constants depending only on the local dimension $d$, the energy parameter $\eta$
+of Assumption (LD) and $\mu$, uniformly in $n$, the partition and the estimate
+$\varepsilon'_M$; $\tilde O(f)$ allows a factor polylogarithmic in $f$. With
+this reading the first item asks for a bound
+\begin{align}
+ \log(\text{bond of }A_i)\leq C\log^3 n\,(\log\log n)^{C}
+ \label{eq:alvv16_eld_agsp_bond}
+\end{align}
+for all $n\geq3$, with $C$ depending only on $d$, $\eta$ and $\mu$.
+
+\section{Verdict}
+
+Scope restriction, open. The formalized families prove restricted versions of
+the window and improvement clauses for a fixed buffer. Theorem~5.9 itself, with
+its shrinking buffer, its bond and norm bounds and its energy estimate, is not
+formalized. The lower bound $\eta_1\geq2\mu/\log n$ is not added as a
+hypothesis.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

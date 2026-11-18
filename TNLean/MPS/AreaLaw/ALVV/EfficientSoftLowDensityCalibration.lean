@@ -22,7 +22,7 @@ improves viability between them with a contraction `Δ` satisfying `D¹² Δ ≤
 hard-truncation low-density family. No spectral gap is assumed.
 
 This calibrates the efficient low-density family supporting ALVV, arXiv:1602.08828v2,
-`t:aisgaplessefficient`, lines 1435–1457, with the fixed bandwidth of Assumption (LD),
+`t:aisgaplessefficient`, lines 1424–1437, with the fixed bandwidth of Assumption (LD),
 lines 281–284.
 
 **Scope restriction (band width and buffer):** the band width is at most `34` and the buffer
@@ -48,7 +48,7 @@ family of middle matrix product operators is chosen before every bulk estimate a
 width `3 w ≤ η ≤ 34`; the two windows of the represented approximant bracket the original
 bands with losses at most `1 / 200`, and the family improves viability between them with
 `D¹² Δ ≤ 10⁻⁵`. No gap is assumed. Corrected version of ALVV, arXiv:1602.08828v2,
-`t:aisgaplessefficient`, lines 1435–1457. -/
+`t:aisgaplessefficient`, lines 1424–1437. -/
 theorem exists_calibrated_efficient_soft_low_density_family (q : ℕ) (hq : 2 ≤ q)
     (w : ℝ) (hw : 0 < w) (hw1 : w ≤ 1) :
     ∃ u : ℕ, 2 ≤ u ∧
