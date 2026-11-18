@@ -119,9 +119,10 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
     exact hsub
   have hlift (s : ℝ) : Entropy.localLift (n := fun _ : Fin L ↦ q) J
       (K - (s : ℂ) • 1) = A - (s : ℂ) • 1 := by
-    rw [show Entropy.localLift J (K - (s : ℂ) • 1) =
-        Entropy.localLift J K - Entropy.localLift J ((s : ℂ) • 1) from ManyBody.place_sub _ _,
-      Entropy.localLift_smul, Entropy.localLift_one, ← hAK]
+    have hsub : Entropy.localLift (n := fun _ : Fin L ↦ q) J (K - (s : ℂ) • 1) =
+        Entropy.localLift J K - Entropy.localLift J ((s : ℂ) • 1) :=
+      ManyBody.place_sub _ _
+    rw [hsub, Entropy.localLift_smul, Entropy.localLift_one, ← hAK]
   let e := minEigenvalue hK
   have hKmin : (K - (e : ℂ) • 1).PosSemidef := sub_minEigenvalue_smul_one_posSemidef hK
   have hAlow : (A - (e : ℂ) • 1).PosSemidef := by
