@@ -1,7 +1,6 @@
 TNLean/MPS/AreaLaw.lean
 TNLean/MPS/AreaLaw/AKLV.lean
 TNLean/MPS/AreaLaw/AKLV/AccuracyWindow.lean
-TNLean/MPS/AreaLaw/AKLV/ApproximateGroundVector.lean
 TNLean/MPS/AreaLaw/AKLV/ChainNormalization.lean
 TNLean/MPS/AreaLaw/AKLV/ChangingTargetStep.lean
 TNLean/MPS/AreaLaw/AKLV/ChangingTargets.lean
@@ -11,7 +10,6 @@ TNLean/MPS/AreaLaw/AKLV/ClippedFilter.lean
 TNLean/MPS/AreaLaw/AKLV/ClippedHamiltonian.lean
 TNLean/MPS/AreaLaw/AKLV/CutApproximationTail.lean
 TNLean/MPS/AreaLaw/AKLV/CutTransport.lean
-TNLean/MPS/AreaLaw/AKLV/DisjointGroundEnergy.lean
 TNLean/MPS/AreaLaw/AKLV/FavorableFilter.lean
 TNLean/MPS/AreaLaw/AKLV/FrustrationFreeAccuracyParameters.lean
 TNLean/MPS/AreaLaw/AKLV/FrustrationFreeClipping.lean
@@ -19,15 +17,12 @@ TNLean/MPS/AreaLaw/AKLV/FrustrationFreeEntropy.lean
 TNLean/MPS/AreaLaw/AKLV/FrustrationFreeFilter.lean
 TNLean/MPS/AreaLaw/AKLV/FrustrationFreeMPSApproximation.lean
 TNLean/MPS/AreaLaw/AKLV/FullFrequencyRank.lean
-TNLean/MPS/AreaLaw/AKLV/GroundStateTail.lean
-TNLean/MPS/AreaLaw/AKLV/HighEnergyMass.lean
 TNLean/MPS/AreaLaw/AKLV/Initialization.lean
 TNLean/MPS/AreaLaw/AKLV/InverseGapRobustness.lean
 TNLean/MPS/AreaLaw/AKLV/LowFrequencyPower.lean
 TNLean/MPS/AreaLaw/AKLV/LowSpectrumGap.lean
 TNLean/MPS/AreaLaw/AKLV/Normalization.lean
 TNLean/MPS/AreaLaw/AKLV/NormalizedChain.lean
-TNLean/MPS/AreaLaw/AKLV/OneMarkerRank.lean
 TNLean/MPS/AreaLaw/AKLV/OptimizedInitialScale.lean
 TNLean/MPS/AreaLaw/AKLV/OptimizedRankBound.lean
 TNLean/MPS/AreaLaw/AKLV/OptimizedRankLog.lean
@@ -37,7 +32,6 @@ TNLean/MPS/AreaLaw/AKLV/OriginalChainRobustness.lean
 TNLean/MPS/AreaLaw/AKLV/PhysicalEntropy.lean
 TNLean/MPS/AreaLaw/AKLV/PhysicalRobustness.lean
 TNLean/MPS/AreaLaw/AKLV/PolynomialRank.lean
-TNLean/MPS/AreaLaw/AKLV/ProjectionEnergy.lean
 TNLean/MPS/AreaLaw/AKLV/RegionalNormalization.lean
 TNLean/MPS/AreaLaw/AKLV/Robustness.lean
 TNLean/MPS/AreaLaw/AKLV/SequenceEntropy.lean
@@ -49,12 +43,9 @@ TNLean/MPS/AreaLaw/AKLV/SharpPerCutApproximation.lean
 TNLean/MPS/AreaLaw/AKLV/ShortWindow.lean
 TNLean/MPS/AreaLaw/AKLV/SingleWindowPolynomialRank.lean
 TNLean/MPS/AreaLaw/AKLV/SpectralCluster.lean
-TNLean/MPS/AreaLaw/AKLV/SpectralTail.lean
-TNLean/MPS/AreaLaw/AKLV/Truncation.lean
 TNLean/MPS/AreaLaw/AKLV/TwoBlockTruncation.lean
 TNLean/MPS/AreaLaw/AKLV/VariableWindowRefinement.lean
 TNLean/MPS/AreaLaw/AKLV/WidthPolynomial.lean
-TNLean/MPS/AreaLaw/AKLV/WindowFrequencyRank.lean
 TNLean/MPS/AreaLaw/ALVV.lean
 TNLean/MPS/AreaLaw/ALVV/BalancedRegionalEnergy.lean
 TNLean/MPS/AreaLaw/ALVV/CalibratedRootEnergy.lean
@@ -93,7 +84,6 @@ TNLean/MPS/AreaLaw/ALVV/PhysicalSoftResampling.lean
 TNLean/MPS/AreaLaw/ALVV/PhysicalSoftSamplingData.lean
 TNLean/MPS/AreaLaw/ALVV/PhysicalSoftTreeRefinement.lean
 TNLean/MPS/AreaLaw/ALVV/RegionalChildEnergyCenter.lean
-TNLean/MPS/AreaLaw/ALVV/RegionalSlices.lean
 TNLean/MPS/AreaLaw/ALVV/SelectedSoftTerminalNodeEnergy.lean
 TNLean/MPS/AreaLaw/ALVV/SoftFamilyResiduals.lean
 TNLean/MPS/AreaLaw/ALVV/SoftGeneratedMiddleApproximation.lean
@@ -186,7 +176,6 @@ TNLean/MPS/AreaLaw/DyadicRegionalLowDensityWordFamily.lean
 TNLean/MPS/AreaLaw/EntropyInequalities.lean
 TNLean/MPS/AreaLaw/EntropyScaling.lean
 TNLean/MPS/AreaLaw/EntropyScaling/CutReducedState.lean
-TNLean/MPS/AreaLaw/EntropyScaling/EfficientApproximation.lean
 TNLean/MPS/AreaLaw/EntropyScaling/QutritApproximation.lean
 TNLean/MPS/AreaLaw/EntropyScaling/QutritCopies.lean
 TNLean/MPS/AreaLaw/EntropyScaling/QutritEntropy.lean
@@ -217,7 +206,6 @@ TNLean/MPS/AreaLaw/Hastings/BoundaryLocalization.lean
 TNLean/MPS/AreaLaw/Hastings/ChainBootstrap.lean
 TNLean/MPS/AreaLaw/Hastings/ChainLocalizedParts.lean
 TNLean/MPS/AreaLaw/Hastings/CorrelationLemma.lean
-TNLean/MPS/AreaLaw/Hastings/CutProductExpectation.lean
 TNLean/MPS/AreaLaw/Hastings/CutoffPair.lean
 TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean
 TNLean/MPS/AreaLaw/Hastings/IntervalMutualInformation.lean
@@ -229,7 +217,6 @@ TNLean/MPS/AreaLaw/Hastings/MainTheorem.lean
 TNLean/MPS/AreaLaw/Hastings/PartCommutators.lean
 TNLean/MPS/AreaLaw/Hastings/PrintedAreaLaw.lean
 TNLean/MPS/AreaLaw/Hastings/PrintedAreaLawSource.lean
-TNLean/MPS/AreaLaw/Hastings/ProductStateExpectation.lean
 TNLean/MPS/AreaLaw/Hastings/ProjectorFactorization.lean
 TNLean/MPS/AreaLaw/Hastings/ProjectorFactorizationScaling.lean
 TNLean/MPS/AreaLaw/Hastings/RelentAssembly.lean
@@ -245,7 +232,6 @@ TNLean/MPS/AreaLaw/Hastings/SpectralCutoff.lean
 TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean
 TNLean/MPS/AreaLaw/Hastings/Window.lean
 TNLean/MPS/AreaLaw/Huang.lean
-TNLean/MPS/AreaLaw/Huang/BlockProductBonds.lean
 TNLean/MPS/AreaLaw/Huang/ChainGrid.lean
 TNLean/MPS/AreaLaw/Huang/FilterGrowth.lean
 TNLean/MPS/AreaLaw/Huang/FilterParameters.lean
@@ -332,11 +318,8 @@ TNLean/MPS/AreaLaw/LowEnergyMPSBasis.lean
 TNLean/MPS/AreaLaw/LowEnergyRegionalFamily.lean
 TNLean/MPS/AreaLaw/MPSApproximation.lean
 TNLean/MPS/AreaLaw/NativeIntervalMPOApproximation.lean
-TNLean/MPS/AreaLaw/NearestNeighbourImaginaryTime.lean
 TNLean/MPS/AreaLaw/NormalizedSequentialApproximation.lean
 TNLean/MPS/AreaLaw/NormalizedVariableTruncation.lean
-TNLean/MPS/AreaLaw/OpenMPSOperatorAction.lean
-TNLean/MPS/AreaLaw/OpenMPSProduct.lean
 TNLean/MPS/AreaLaw/OperatorMPOFromCutRank.lean
 TNLean/MPS/AreaLaw/OriginalLowEnergyFamily.lean
 TNLean/MPS/AreaLaw/OverlapEnergy.lean
@@ -372,8 +355,6 @@ TNLean/MPS/AreaLaw/PhysicalDGTreeParameters.lean
 TNLean/MPS/AreaLaw/PhysicalDGTreePolynomialBond.lean
 TNLean/MPS/AreaLaw/PhysicalDGTreeWitness.lean
 TNLean/MPS/AreaLaw/PhysicalDGViability.lean
-TNLean/MPS/AreaLaw/PhysicalDetectability.lean
-TNLean/MPS/AreaLaw/PhysicalDetectabilityGap.lean
 TNLean/MPS/AreaLaw/PhysicalFlatGroundRitz.lean
 TNLean/MPS/AreaLaw/PhysicalFrustrationFreeRank.lean
 TNLean/MPS/AreaLaw/PhysicalFrustrationFreeTruncation.lean
@@ -433,7 +414,6 @@ TNLean/MPS/AreaLaw/RegionalBarrierResidual.lean
 TNLean/MPS/AreaLaw/RegionalBondRestriction.lean
 TNLean/MPS/AreaLaw/RegionalCentralEnergyEstimate.lean
 TNLean/MPS/AreaLaw/RegionalEnergyEstimate.lean
-TNLean/MPS/AreaLaw/RegionalEnergyMerge.lean
 TNLean/MPS/AreaLaw/RegionalEnergyMergePhysical.lean
 TNLean/MPS/AreaLaw/RegionalExponentialMoment.lean
 TNLean/MPS/AreaLaw/RegionalGroundEnergy.lean
@@ -465,7 +445,6 @@ TNLean/MPS/AreaLaw/SoftTruncationMPOSourceRange.lean
 TNLean/MPS/AreaLaw/StripApproximation.lean
 TNLean/MPS/AreaLaw/StripBufferDiscount.lean
 TNLean/MPS/AreaLaw/StripGeometry.lean
-TNLean/MPS/AreaLaw/SupportedCutRank.lean
 TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean
 TNLean/MPS/AreaLaw/SwappedDoubledHamiltonian.lean
 TNLean/MPS/AreaLaw/ThreeRegionSupport.lean
@@ -594,7 +573,6 @@ TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean
 TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean
 TNLean/MPS/AreaLaw/WindowCounting.lean
 TNLean/MPS/Examples.lean
-TNLean/MPS/Examples/HardTruncationCutoff.lean
 TNLean/MPS/MPU.lean
 TNLean/MPS/MPU/ApproximateBoundedCutRankCircuit.lean
 TNLean/MPS/MPU/BasisEncodingCoordinates.lean
@@ -604,7 +582,6 @@ TNLean/MPS/MPU/CompatibleBondDilationCircuit.lean
 TNLean/MPS/MPU/CyclicFinitePropagation.lean
 TNLean/MPS/MPU/EncodedJointColumns.lean
 TNLean/MPS/MPU/EncodedUniformMergingCircuit.lean
-TNLean/MPS/MPU/EndpointBondEncoding.lean
 TNLean/MPS/MPU/ExactBoundedCutRankCircuit.lean
 TNLean/MPS/MPU/ExactCleanAmplificationCircuit.lean
 TNLean/MPS/MPU/FinalCircuitRegisters.lean
@@ -612,18 +589,13 @@ TNLean/MPS/MPU/FiniteWindowSupport.lean
 TNLean/MPS/MPU/InitializedEncodingCoordinates.lean
 TNLean/MPS/MPU/IntervalChildComposition.lean
 TNLean/MPS/MPU/IntervalColumnEncoding.lean
-TNLean/MPS/MPU/IntervalInitializationBounds.lean
 TNLean/MPS/MPU/IntervalInputRegrouping.lean
 TNLean/MPS/MPU/IntervalJoiningPacketEncoding.lean
 TNLean/MPS/MPU/IntervalJointFlagInitialization.lean
 TNLean/MPS/MPU/IntervalJointOutputEncoding.lean
 TNLean/MPS/MPU/IntervalJointOutputReset.lean
 TNLean/MPS/MPU/IntervalJointSuffixFactorization.lean
-TNLean/MPS/MPU/IntervalMergingSupport.lean
 TNLean/MPS/MPU/IntervalParentColumns.lean
-TNLean/MPS/MPU/IntervalRegisterLayout.lean
-TNLean/MPS/MPU/JoiningPacketSupport.lean
-TNLean/MPS/MPU/JoiningRegisterCoordinates.lean
 TNLean/MPS/MPU/JoiningResetColumns.lean
 TNLean/MPS/MPU/JoiningSpectatorColumns.lean
 TNLean/MPS/MPU/LeafIntervalCircuit.lean
@@ -643,7 +615,6 @@ TNLean/MPS/MPU/QCAIndexComparison.lean
 TNLean/MPS/MPU/QuasiLocalActionChoice.lean
 TNLean/MPS/MPU/SingleSiteCircuit.lean
 TNLean/MPS/MPU/SingleSiteCompleteCircuit.lean
-TNLean/MPS/MPU/SuccessAttenuationCircuit.lean
 TNLean/MPS/MPU/SupportedAmplification.lean
 TNLean/MPS/MPU/SupportedChildColumns.lean
 TNLean/MPS/MPU/TwoSiteBlockedLocalAction.lean
@@ -810,7 +781,6 @@ TNLean/MPS/Preparation/SectorEncoderCompilation.lean
 TNLean/MPS/Preparation/SectorEncoderGroundspace.lean
 TNLean/MPS/Preparation/SectorEncoderPreparation.lean
 TNLean/MPS/Preparation/SectorEncoderRates.lean
-TNLean/MPS/Preparation/SequentialNoAncilla.lean
 TNLean/MPS/Preparation/ShortChainPreparation.lean
 TNLean/MPS/Preparation/SparseRegisterPadding.lean
 TNLean/MPS/Preparation/SparseWindowGHZ.lean

@@ -26,20 +26,20 @@ builds were launched. Ordinary dependency compilation includes necessary
 Circuit/Algebra/QIC files, but strict checks ran only on the twenty selected
 MPS targets. No PEPS consumers or fixtures were tested.
 
-All 20 selected targets passed both direct Lean olean compilation and strict
-elaboration. These are **not Lake build results**, full-library results, or
-verification of the remaining 845 targets. results.jsonl records exact source
-SHAs, commands, exit codes, UTC starts, and durations; logs are alongside it.
-summary.json separates build/strict time and records zero production editing.
-Evidence-preparation time was not separately timed. The source and artifact
-hashes support checking the new cache independently.
+## Resumed bounded verification
 
-No source errors were observed and no production code was changed. A static
-import scan gives 5156 project modules in the entire slice closure. This
-initial bounded batch stopped before an unplanned cold rebuild of that
-closure; not-run.txt explicitly lists the 845 unexecuted targets. They require
-coordinated coherent cache delivery or further bounded dependency batches.
-There are no still-running commands from this evidence batch.
+The queue is now continuing all remaining manifest targets in 30-target batches,
+with two workers and a single writer per dependency. summary.json and
+results.jsonl are the checkpoint record; the last committed snapshot can lag
+the live queue. not-run.txt means not yet completed at the snapshot, not failure.
+The original 20 successes and 122 dependency artifacts were hash-verified and
+reused. No old QIC/TN oleans enter LEAN_PATH. A 5 GiB free-space guard pauses
+new work; exclusive PEPS dependencies also require coordinator handling.
+
+Each target gets direct Lean olean compilation and strict elaboration. These
+are not Lake or full-library results. Each command records exact SHA, UTC,
+command, exit code and elapsed time. Production editing remains zero. Evidence
+preparation was not separately timed. Source errors are reported without edits.
 
 The generated exact-source cache remains at /tmp/pin729-mps-olean (local to
 this environment; not assumed shared with other workers). Driver scripts are
