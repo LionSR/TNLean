@@ -216,9 +216,9 @@ theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBou
   let D := S.actualRoundData hm hM
   let ℓ := transportLogDimBound q S.r₀
   obtain ⟨β, rem, Cβ, hCβ, hβ0, hrem0, hβ, hrem, hround⟩ :=
-    actualRounds_transport_domainGraph_of_finiteFamilyTransportBound htransport aux
+    actualRounds_transport_domainGraph_of_finiteFamilyTransportBound htransport (J := 0) aux
       (⟨fun _ ↦ 0, fun _ ↦ zero_mem _⟩ : PlaneInteraction Λ q R) (fun _ ↦ isHermitian_zero)
-      (fun _ ↦ norm_zero.le (α := Matrix _ _ ℂ)) Ω S hT
+      (fun _ ↦ by simp) Ω S hT
       hgraph hdepth hanchor hΔ hΩ hn hr hDpos hD hL hC
       hrows hclear ha haℓ
   refine ⟨β, Cβ, hCβ, hβ0, hβ, ?_⟩
