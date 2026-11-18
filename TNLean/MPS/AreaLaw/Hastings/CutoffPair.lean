@@ -169,6 +169,7 @@ noncomputable def leftWindow (L R c m k : ℕ) : Finset (Fin L) :=
 noncomputable def rightWindow (L R c m k : ℕ) : Finset (Fin L) :=
   chainNeighborhood (interval L (c + m - R) (c + m + 2 * R)) (k : ℝ)
 
+include hh in
 /-- **The localized left part acts left of the cut.** If `R + k ≤ m`, then `M_L` is supported on
 the sites `i < c`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 816–842. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c m k : ℕ}
@@ -290,7 +291,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   have hsL : Entropy.IsSupportedOn (n := fun _ ↦ q) ML (leftBlock L c) :=
     h.isSupportedOn_localizedPart_leftPart Ω s ΔE hmk
   have hsR : Entropy.IsSupportedOn (n := fun _ ↦ q) MR (leftBlock L c)ᶜ :=
-    h.isSupportedOn_localizedPart_rightPart Ω s ΔE hmk
+    h.isSupportedOn_localizedPart_rightPart hh Ω s ΔE hmk
   let σ₀ : Entropy.SiteConfig (fun _ : Fin L ↦ q) := fun _ ↦ ⟨0, NeZero.pos q⟩
   have hcomm : Commute (spectralCutoff ML θ) (spectralCutoff MR θ) :=
     commute_spectralCutoff_of_isSupportedOn disjoint_compl_right hML hMR hsL hsR σ₀ θ θ

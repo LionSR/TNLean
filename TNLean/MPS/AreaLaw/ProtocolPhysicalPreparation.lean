@@ -219,7 +219,7 @@ theorem exists_preparation_of_gappedGroundState
   have hwidth : D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) :=
     (mul_le_mul_of_nonneg_right (le_max_left _ _) hlog).trans (Nat.le_ceil _)
   have hfamily := hphysical L ((le_max_left _ _).trans hsize)
-    h Ω E₀ hΩ hgap hspan w hw hwidth
+    h hh hhJ Ω E₀ hΩ hgap hspan w hw hwidth
   choose c hc using hfamily
   let Fs := initialFrames L w
   let holder : Sheet (Fin L) (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
