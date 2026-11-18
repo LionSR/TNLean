@@ -258,12 +258,13 @@ At every longer parent, one actual family is chosen from the Hamiltonian
 before the sampling size and the child spaces. Its literal ordered words
 act on the actual Haar coordinate sample, followed by one collective trim.
 Writing $D_{\rm ref}=r^2B$, take
-\[
+\begin{align}
     A=1+\log r+\log D+\log(1/\beta),\qquad
     s=\lceil4096rA\rceil,\qquad
     M=D^6s^3,\qquad
     \xi=(1000D_{\rm ref}\sqrt{n+1})^{-1}.
-\]
+    \label{eq:alvv_approximation_bounded_witness_parameters}
+\end{align}
 The corrected fixed-input failure bound
 (\url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_random_sampling_net_count.pdf})
 is at most $\beta<1$, uniformly
@@ -293,14 +294,16 @@ the modified witness is established in the refinement below.
 The numerical tail and filter conditions in the bounded witness above can
 be derived uniformly from the physical input. Choose a universal $C\ge1$
 from the scalar parameter theorem, before the chain and Hamiltonian, and put
-\[
+\begin{align}
     m=\max\{q,50\},\quad v=1+\log m+\log(1/g),\quad
     \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
-\]
+    \label{eq:alvv_approximation_automatic_window_parameters}
+\end{align}
 Then $\ell\ge21$ and
-\[
+\begin{align}
     \log D\le22(C+1)(6+2\log(C+1))v^3/g.
-\]
+    \label{eq:alvv_approximation_automatic_count_bound}
+\end{align}
 Take $t=\ell$ and $\Delta=10^{-5}D^{-12}$. The scalar contraction
 estimate holds uniformly up to $8\ell$, hence throughout the required
 range $R\le3t+4\ell=7\ell$. The truncation tail estimate is at most
@@ -324,9 +327,10 @@ The actual recursively selected root space can be read on the original
 chain coordinates. Its regional internal cuts are the native chain cuts.
 If its at most $M$ recorded generators have ranks at most
 $R=10^6D_{\rm ref}^2(n+1)M$, the finite-span estimate gives bond at most
-\[
+\begin{align}
     MR=10^6D_{\rm ref}^2(n+1)M^2
-\]
+    \label{eq:alvv_approximation_root_bond_bound}
+\end{align}
 for every vector in this actual root space. The extra factor $M$ is
 retained: the per-generator bound is not assigned unchanged to the whole
 span. The families, actual recursive operations and original-ground-space
@@ -345,9 +349,10 @@ therefore exactly the closeness inequality for the native image $S$ of
 the same recursively constructed root. Let $P_S$ be its orthogonal
 projection. For every unit $\Gamma\in G$, this gives
 $\|P_S\Gamma\|^2\ge197/200$. The actual normalized projection
-\[
+\begin{align}
     \phi=\frac{P_S\Gamma}{\|P_S\Gamma\|}\in S
-\]
+    \label{eq:alvv_approximation_normalized_witness}
+\end{align}
 has squared overlap at least $197/200$ and squared distance at most
 $3/100$, with $\langle\phi,\Gamma\rangle=\|P_S\Gamma\|$ real and
 nonnegative. It retains the all-span native MPS bound
@@ -364,45 +369,50 @@ refinement and extraction for the modified common-threshold tree.
 Let $\mu$ be the original ground energy, $\gamma$ the gap, and $r$ the
 actual ground-space dimension. The same physical improving families can
 be selected before every requested accuracy $\eta>0$. Put
-\[
+\begin{align}
     A=\|H\|-\mu,\qquad c=\gamma/A,\qquad
     \rho=\frac{\eta\gamma}{2A+\eta\gamma},\qquad
     \varepsilon=\frac{c^2\rho}{32768}.
-\]
+    \label{eq:alvv_approximation_refinement_accuracy_parameters}
+\end{align}
 Choose the physical reference space at accuracy $\varepsilon$, with
 all-span MPS bond bound $b$, and let $b_0$ be the reference bound used in
 the tree. With $D$ the common filter count parameter, choose
-\[
+\begin{align}
     b_* =\max\{b_0,b\},\qquad
     N=\left\lceil\frac{100D^{12}}{c\rho}\right\rceil,\qquad
     \xi=\frac1{1000b_*N\sqrt{n+1}}.
-\]
+    \label{eq:alvv_approximation_refinement_threshold_parameters}
+\end{align}
 This threshold satisfies both the tree bound and the final refinement
 budgets, including the strict inequality
 $\sqrt{nrb}\,\xi<\eta/(10000D^{12})$.
 Fix $0<\beta<1$, and put
-\[
+\begin{align}
     s=\left\lceil4096r\bigl(1+\log r+\log D+\log(1/\beta)\bigr)\right\rceil,
     \qquad M=D^6s^3.
-\]
+    \label{eq:alvv_approximation_refinement_sample_parameters}
+\end{align}
 Construct the actual balanced tree using this same $\xi$ at every long
 parent. Write $S_0$ for its root; $M$ bounds the number of its recorded
 generators.
 
 Starting from this actual root, apply the literal raw filter
 $K=I-H/\|H\|$ followed by collective trimming at $\xi$, for
-\[
+\begin{align}
     j_* =\left\lceil(4/c)\log(1/\rho)\right\rceil+1
-\]
+    \label{eq:alvv_approximation_refinement_step_count}
+\end{align}
 steps. The retained space $W$ is $\rho$-close to the original full ground
 space, and its dimension is at most $M$. Let $R$ be the actual lowest
 $r$-dimensional Ritz space of the compression of the original $H$ to
 $W$. Then $R\subseteq W$, $\dim R=r$, and its two projection errors
 relative to the original ground space are at most $\eta/2$.
 Indeed the projected trial space has excess energy at most
-\[
+\begin{align}
     \frac{A\rho}{1-\rho}=\frac{\eta\gamma}{2},
-\]
+    \label{eq:alvv_approximation_trial_energy_excess}
+\end{align}
 and the original gap and the variational principle give the Ritz bounds.
 Every vector in $R$ has native MPS bond at most
 $10^6(b_*N)^2(n+1)M^2$. The factor $M^2$ is retained for the whole span.
@@ -455,11 +465,12 @@ round. Its right-hand side is independent of the current $V$, so every
 positive number of repetitions returns the same subspace. The subsequent
 analysis, which compounds the error reduction and the dimension growth
 across rounds, requires the intended recursive assignment
-\[
+\begin{align}
     V_0=W',\qquad
     V_{j+1}=\operatorname{Trim}_{\xi}
     \bigl(\operatorname{span}\{A_iV_j:i\}\bigr).
-\]
+    \label{eq:alvv_approximation_recursive_assignment}
+\end{align}
 This is a local correction of the assignment, not an identification of a
 single trim after an operator-word image with those interleaved trims.
 An analysis of the corrected procedure must control the actual trim and
@@ -487,9 +498,10 @@ the families of Theorems~4.2 and~4.3 on every long interval, and the
 sampling size $s=\lceil4096r(1+\log r+\log D+\log(1/\beta))\rceil$. Every
 node carries a $3/200$-viable space for the original ground space of
 dimension at most
-\[
+\begin{align}
     M=D^{2k}s\le D^2s^2,
-\]
+    \label{eq:alvv16_approximation_parameters_rounded_node_bound}
+\end{align}
 which has no additional dependence on $L$ or the trimming threshold when
 $q,g,r=\dim G$ and $\beta$ are fixed. If $r$ or $\beta$ varies with $L$,
 this is not a uniform bound in $L$. The root, after the
@@ -545,10 +557,11 @@ internal-cut ranks. The parent equality records an actual chosen Haar
 unitary for the actual recursive children.
 
 Here the calibrated window is
-\[
+\begin{align}
     \ell=\left\lceil C\left(v^6/g+\sqrt w\,v^3/\sqrt g\right)\right\rceil,
     \qquad w=1+\log r+2\log(L+1),
-\]
+    \label{eq:alvv_approximation_calibrated_window}
+\end{align}
 with $v=1+\log m+\log(1/g)+\log(1+w)$ and
 $D=(m\ell^2)^{22\ell}$. Thus $D$ is honest but length- and rank-dependent.
 The construction retains full leaves of length at most $4\ell$, the capped
@@ -562,9 +575,10 @@ fixed $q$ and $\gamma>0$, constants $C>0$ and $k\in\mathbb N$ precede
 all physical inputs and give the bound $CZ^k$, where
 $Z=(L+1)(r+1)(1+\eta^{-1})$. Moreover, there is a universal
 $C_{\rm deg}$ such that
-\[
+\begin{align}
     k\le C_{\rm deg}\frac{(1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2}.
-\]
+    \label{eq:alvv_approximation_degree_bound}
+\end{align}
 The prefactor can be controlled at the same scale: there is one
 universal $C_0>0$, chosen before $q,\gamma$, with
 $\log\max\{C,1\}\le C_0(1+\log\max\{q,50\}+\log(1/g))^{10}/g^2$
