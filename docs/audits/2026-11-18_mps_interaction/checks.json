@@ -1,0 +1,45 @@
+[
+  {
+    "command": [
+      "git",
+      "diff",
+      "b2c72008326f3166d3bcdc9e79013443142b0aa8",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 0.028,
+    "output": ""
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/check_forbidden_lean_tokens.py",
+      "--base-ref",
+      "b2c72008326f3166d3bcdc9e79013443142b0aa8"
+    ],
+    "exit": 0,
+    "seconds": 0.073,
+    "output": ""
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/check_import_layers.py",
+      "--base-ref",
+      "b2c72008326f3166d3bcdc9e79013443142b0aa8"
+    ],
+    "exit": 0,
+    "seconds": 9.527,
+    "output": "Import layers respected (0 recorded violations, 54 recorded pairs of directories that import each other and 0 recorded imports of worked examples remain).\n"
+  },
+  {
+    "command": [
+      "python3",
+      "scripts/generate_import_aggregators.py",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 2.285,
+    "output": "Import aggregators are current: 97 generated files cover 5504 production modules.\n"
+  }
+]
