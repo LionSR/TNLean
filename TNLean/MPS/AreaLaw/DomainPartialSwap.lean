@@ -54,7 +54,8 @@ Source: TNLean note, `part2a_mps_information.tex`, lines 355–360. -/
 theorem _root_.ManyBody.DomainInteraction.isHermitian_doubled_term
     (h : ManyBody.DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
     (X : DomainSupport Λ R) : (h.doubled.term X).IsHermitian := by
-  simpa only [ManyBody.ChainInteraction.doubled, ManyBody.DomainInteraction.toChain_term] using
+  simpa only [ManyBody.DomainInteraction.doubled, ManyBody.ChainInteraction.doubled,
+    ManyBody.DomainInteraction.toChain_term] using
     h.toChain.isHermitian_doubled_term (h.isHermitian_toChain_term hh) X.toChainSupport
 
 /-- Each paired domain term has norm at most `2 * J`.
@@ -62,7 +63,8 @@ Source: TNLean note, `part2a_mps_information.tex`, lines 355–360. -/
 theorem _root_.ManyBody.DomainInteraction.norm_doubled_term_le
     (h : ManyBody.DomainInteraction Λ q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (X : DomainSupport Λ R) : ‖h.doubled.term X‖ ≤ 2 * J := by
-  simpa only [ManyBody.ChainInteraction.doubled, ManyBody.DomainInteraction.toChain_term] using
+  simpa only [ManyBody.DomainInteraction.doubled, ManyBody.ChainInteraction.doubled,
+    ManyBody.DomainInteraction.toChain_term] using
     h.toChain.norm_doubled_term_le
       (h.norm_toChain_term_le hhJ (norm_bound_nonneg_of_support h hhJ X)) X.toChainSupport
 
@@ -106,8 +108,9 @@ theorem _root_.ManyBody.DomainInteraction.norm_swappedDoubled_term_le
     (h : ManyBody.DomainInteraction Λ q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (D : Finset (Fin Λ.card)) (X : DomainSupport Λ R) :
     ‖(h.swappedDoubled D).term X‖ ≤ 2 * J := by
-  simpa only [ManyBody.ChainInteraction.swappedDoubled, ManyBody.ChainInteraction.doubled,
-    ManyBody.DomainInteraction.toChain_term, ManyBody.DomainInteraction.doubled] using
+  simpa only [ManyBody.DomainInteraction.swappedDoubled, ManyBody.ChainInteraction.swappedDoubled,
+    ManyBody.ChainInteraction.doubled, ManyBody.DomainInteraction.toChain_term,
+    ManyBody.DomainInteraction.doubled] using
     (h.toChain.norm_swappedDoubled_term_le
       (h.norm_toChain_term_le hhJ (norm_bound_nonneg_of_support h hhJ X)) D X.toChainSupport)
 
@@ -137,7 +140,7 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_term_difference_spec
     Entropy.IsSupportedOn (n := fun _ ↦ q * q) K X.1 ∧ K.IsHermitian ∧ ‖K‖ ≤ 2 * J := by
   have hs :=
     (h.toChain).partialSwap_term_difference_spec (h.isHermitian_toChain_term hh)
-        (h.norm_toChain_term_le hhJ hJ)
+        (h.norm_toChain_term_le hhJ (norm_bound_nonneg_of_support h hhJ X))
       D X.toChainSupport b
   simp only [ManyBody.DomainInteraction.toChain_term] at hs
   simpa only [DomainSupport.toChainSupport] using hs

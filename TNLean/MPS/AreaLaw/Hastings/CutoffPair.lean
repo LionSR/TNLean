@@ -124,7 +124,7 @@ theorem _root_.ManyBody.ChainInteraction.gaussianFilteredTerm_groundCentered_sub
         rw [ManyBody.ChainInteraction.localizedPart]; simp only [D]; abel
     _ = (gaussianFilteredTerm s ΔE h.hamiltonian P - P) -
           siteExpectation q K (gaussianFilteredTerm s ΔE h.hamiltonian P - P) := by
-        simp only [D, h.gaussianFilteredTerm_groundCentered_sub Ω s ΔE P]
+        simp only [D, h.gaussianFilteredTerm_groundCentered_sub hh Ω s ΔE P]
     _ = _ := by abel
 
 include hh in
@@ -176,9 +176,9 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c
     Entropy.IsSupportedOn (n := fun _ ↦ q)
       (h.localizedPart Ω s ΔE (h.leftPart c m) (leftWindow L R c m k)) (leftBlock L c) := by
   by_cases hcm : c ≤ m
-  · rw [h.leftPart_eq_zero_of_le hcm, h.localizedPart_zero]
+  · rw [h.leftPart_eq_zero_of_le hh hhJ hcm, h.localizedPart_zero]
     exact isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)
-  refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_leftPart c m) _).mono ?_
+  refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_leftPart hh hhJ c m) _).mono ?_
   refine Finset.union_subset (fun x hx ↦ ?_) ((chainNeighborhood_interval_subset _ _ _).trans
     fun x hx ↦ ?_)
   · rw [mem_interval] at hx; rw [mem_leftBlock]; omega
@@ -190,7 +190,7 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_rightPart {
     (hmk : R + k ≤ m) :
     Entropy.IsSupportedOn (n := fun _ ↦ q)
       (h.localizedPart Ω s ΔE (h.rightPart c m) (rightWindow L R c m k)) (leftBlock L c)ᶜ := by
-  refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_rightPart c m) _).mono ?_
+  refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_rightPart hh hhJ c m) _).mono ?_
   refine Finset.union_subset (fun x hx ↦ ?_) ((chainNeighborhood_interval_subset _ _ _).trans
     fun x hx ↦ ?_)
   · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_leftBlock]; omega
@@ -284,8 +284,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   set MR := h.localizedPart Ω s ΔE PR KR
   have hPL : PL.IsHermitian := h.leftPart_isHermitian hh hhJ c m
   have hPR : PR.IsHermitian := h.rightPart_isHermitian hh hhJ c m
-  have hML : ML.IsHermitian := h.localizedPart_isHermitian Ω s ΔE hPL KL
-  have hMR : MR.IsHermitian := h.localizedPart_isHermitian Ω s ΔE hPR KR
+  have hML : ML.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPL KL
+  have hMR : MR.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPR KR
   have hsL : Entropy.IsSupportedOn (n := fun _ ↦ q) ML (leftBlock L c) :=
     h.isSupportedOn_localizedPart_leftPart Ω s ΔE hmk
   have hsR : Entropy.IsSupportedOn (n := fun _ ↦ q) MR (leftBlock L c)ᶜ :=
@@ -296,13 +296,13 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   -- the bounds `‖M Ω‖ ≤ μ`
   have hμL : ‖toEuclideanLin ML Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
-    h.norm_localizedPart_apply_le Ω s ΔE hΩ hgap hspan hΔ hs hPL KL
+    h.norm_localizedPart_apply_le hh Ω s ΔE hΩ hgap hspan hΔ hs hPL KL
       (h.norm_commutator_leftPart_le hh hhJ c m)
       (h.norm_gaussianFilteredTerm_leftPart_sub_localized_le hh hhJ hq1 c m s ΔE
           (Nat.cast_nonneg k) hT)
   have hμR : ‖toEuclideanLin MR Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
-    h.norm_localizedPart_apply_le Ω s ΔE hΩ hgap hspan hΔ hs hPR KR
+    h.norm_localizedPart_apply_le hh Ω s ΔE hΩ hgap hspan hΔ hs hPR KR
       (h.norm_commutator_rightPart_le hh hhJ c m)
       (h.norm_gaussianFilteredTerm_rightPart_sub_localized_le hh hhJ hq1 c m s ΔE
           (Nat.cast_nonneg k) hT)
@@ -354,7 +354,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
           groundCentered Ω P)‖ ≤
           Real.sqrt (2 * (s / ΔE ^ 2).toNNReal / Real.pi) * (partCommutatorConst R * J ^ 2) := by
       refine (norm_siteExpectation_le K _).trans ?_
-      rw [h.gaussianFilteredTerm_groundCentered_sub]
+      rw [h.gaussianFilteredTerm_groundCentered_sub hh]
       exact (norm_gaussianFilteredTerm_sub_self_le s ΔE
           (ManyBody.Interaction.isHermitian_hamiltonian hh) P).trans
         (by gcongr)

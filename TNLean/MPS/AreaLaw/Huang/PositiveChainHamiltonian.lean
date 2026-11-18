@@ -169,6 +169,6 @@ theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian :
     _ = ∑ i, H.term (f i) := Finset.sum_image (fun _ _ _ _ hij ↦
       nearestNeighborChainSupport_injective hij)
     _ = _ := Finset.sum_congr rfl fun i _ ↦
-        ManyBody.ChainInteraction.ofNearestNeighborPositive_term h hs h0 h1 i
+        ManyBody.ChainInteraction.ofNearestNeighborPositive_term h hs i
 
 end TNLean.MPS.AreaLaw

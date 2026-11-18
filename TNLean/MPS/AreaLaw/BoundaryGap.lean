@@ -131,7 +131,7 @@ theorem _root_.ManyBody.ChainInteraction.gap_le_four_mul_of_range_one (h : Chain
       (2 * J) ≤ 4 * J := by
     calc
       _ ≤ 2 * (2 * J) := mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
-        (mul_nonneg (by norm_num) (h.norm_bound_nonneg hh hhJ x))
+        (mul_nonneg (by norm_num) (h.norm_bound_nonneg hhJ x))
       _ = 4 * J := by ring
   have henergy :
       (⟪toEuclideanLin K Ω, toEuclideanLin h.hamiltonian (toEuclideanLin K Ω)⟫_ℂ).re - E₀ ≤

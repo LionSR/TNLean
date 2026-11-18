@@ -42,7 +42,7 @@ lemma IsDomainSupport.singleton (x : Fin Λ.card) : IsDomainSupport Λ R {x} := 
 /-- The interaction bound is nonnegative at every actual domain site.
 Source: TNLean note, part0_preamble.tex, eq:ham, lines 191–201. -/
 lemma _root_.ManyBody.DomainInteraction.norm_bound_nonneg (h : DomainInteraction Λ q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (x : Fin Λ.card) : 0 ≤ J := by
   exact (norm_nonneg (h.term ⟨{x}, IsDomainSupport.singleton x⟩)).trans (hhJ _)
 
@@ -59,7 +59,7 @@ lemma _root_.ManyBody.DomainInteraction.sum_norm_terms_containing_le (h : Domain
     DomainSupport.toChainSupport DomainSupport.toChainSupport_injective.injOn
     ?_ ?_ (fun _ _ _ ↦ norm_nonneg _)).trans
       ((h.toChain).sum_norm_terms_containing_le (h.isHermitian_toChain_term hh)
-        (h.norm_toChain_term_le hhJ (h.norm_bound_nonneg hh hhJ x)) x)
+        (h.norm_toChain_term_le hhJ (h.norm_bound_nonneg hhJ x)) x)
   · exact fun Y hY ↦ (Finset.mem_image.mp hY).elim fun X hX ↦
       hX.2 ▸ Finset.mem_filter.mpr ⟨Finset.mem_univ _, (Finset.mem_filter.mp hX.1).2⟩
   · exact fun X _ ↦ le_of_eq (congrArg norm (h.toChain_term X).symm)

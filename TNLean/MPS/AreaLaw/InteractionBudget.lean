@@ -54,7 +54,7 @@ lemma _root_.ManyBody.ChainInteraction.sum_norm_terms_containing_le
     (∑ X ∈ Finset.univ.filter (fun X : ChainSupport L R ↦ x ∈ X.1),
       ‖h.term X‖) ≤ ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J := by
   classical
-  have hJ : 0 ≤ J := h.norm_bound_nonneg hh hhJ x
+  have hJ : 0 ≤ J := h.norm_bound_nonneg hhJ x
   have hcard := card_supports_containing_le (R := R) x
   have hsum := Finset.sum_le_card_nsmul
     (Finset.univ.filter fun X : ChainSupport L R ↦ x ∈ X.1)

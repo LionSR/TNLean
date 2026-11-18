@@ -68,7 +68,7 @@ theorem one_le_supportDim (hq : 1 ≤ q) (X : ChainSupport L R) :
 The singleton interaction supplies the inequality.
 Source: TNLean note, Section 1, `eq:ham`. -/
 lemma _root_.ManyBody.ChainInteraction.norm_bound_nonneg (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (x : Fin L) :
+    (hhJ : ∀ X, ‖h.term X‖ ≤ J) (x : Fin L) :
     0 ≤ J := by
   classical
   let X : ChainSupport L R := ⟨{x}, by simp [IsChainSupport]⟩

@@ -140,7 +140,7 @@ theorem _root_.ManyBody.DomainInteraction.mutualInformation_le_of_logarithmic_se
     have hcoord := abs_sitePos_sub_le_of_edist_le x e (2 * n + d) htri
     push_cast at hcoord
     linarith only [hcoord, hdist x hx e he, hsep, hnhi]
-  have hJ : 0 ≤ J := h.norm_bound_nonneg hh hhJ ⟨0, hLn⟩
+  have hJ : 0 ≤ J := h.norm_bound_nonneg hhJ ⟨0, hLn⟩
   have hD : Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) D Ω ≤ (k₀ : ℝ) * c := by
     obtain ⟨n₀, a, z, hn₀, hT⟩ := hT
     have hbound := h.regionEntropy_neighborhood_biUnion_intervals_le hh hhJ hq hJ hΔ hΩ hgap hspan
