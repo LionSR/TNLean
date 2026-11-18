@@ -1,12 +1,25 @@
 {
   "head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
   "passed_or_provenance_reused": [
+    "TNLean.MPS.AreaLaw.DomainInteractionBudget",
+    "TNLean.MPS.AreaLaw.DomainPartialSwap",
+    "TNLean.MPS.AreaLaw.DoubledHamiltonian",
+    "TNLean.MPS.AreaLaw.Hastings",
     "TNLean.MPS.AreaLaw.Hastings.AreaLaw",
+    "TNLean.MPS.AreaLaw.Hastings.BootstrapLemma",
     "TNLean.MPS.AreaLaw.Hastings.BoundaryFactorization",
+    "TNLean.MPS.AreaLaw.Hastings.CorrelationLemma",
     "TNLean.MPS.AreaLaw.Hastings.GappedAreaLaw",
+    "TNLean.MPS.AreaLaw.Hastings.MPSGroundState",
     "TNLean.MPS.AreaLaw.Hastings.PrintedAreaLaw",
+    "TNLean.MPS.AreaLaw.Hastings.PrintedAreaLawSource",
+    "TNLean.MPS.AreaLaw.Hastings.SourceConsequences",
+    "TNLean.MPS.AreaLaw.Hastings.SourceLength",
     "TNLean.MPS.AreaLaw.RelativeGeneratorLocalization",
     "TNLean.MPS.AreaLaw.SupportedGaussianIntegral"
+  ],
+  "failed": [
+    "verification.area-law.Solution"
   ],
   "remaining": [
     "TNLean",
@@ -22,29 +35,19 @@
     "TNLean.MPS.AreaLaw.Algorithm.ValidOracleSampled",
     "TNLean.MPS.AreaLaw.Algorithm.ValidOracleSampledCost",
     "TNLean.MPS.AreaLaw.BandInformation",
-    "TNLean.MPS.AreaLaw.DomainInteractionBudget",
     "TNLean.MPS.AreaLaw.DomainIntervalNeighborhoodEntropy",
     "TNLean.MPS.AreaLaw.DomainLogarithmicSeparation",
-    "TNLean.MPS.AreaLaw.DomainPartialSwap",
-    "TNLean.MPS.AreaLaw.DoubledHamiltonian",
     "TNLean.MPS.AreaLaw.GluingHamiltonian",
-    "TNLean.MPS.AreaLaw.Hastings",
-    "TNLean.MPS.AreaLaw.Hastings.BootstrapLemma",
     "TNLean.MPS.AreaLaw.Hastings.BoundaryLocalization",
     "TNLean.MPS.AreaLaw.Hastings.ChainLocalizedParts",
-    "TNLean.MPS.AreaLaw.Hastings.CorrelationLemma",
     "TNLean.MPS.AreaLaw.Hastings.CutoffPair",
     "TNLean.MPS.AreaLaw.Hastings.LemmaOneConstant",
     "TNLean.MPS.AreaLaw.Hastings.LiebRobinson",
-    "TNLean.MPS.AreaLaw.Hastings.MPSGroundState",
     "TNLean.MPS.AreaLaw.Hastings.PartCommutators",
-    "TNLean.MPS.AreaLaw.Hastings.PrintedAreaLawSource",
     "TNLean.MPS.AreaLaw.Hastings.ProjectorFactorization",
     "TNLean.MPS.AreaLaw.Hastings.ProjectorFactorizationScaling",
     "TNLean.MPS.AreaLaw.Hastings.RelentGapped",
     "TNLean.MPS.AreaLaw.Hastings.RenyiBootstrapLemma",
-    "TNLean.MPS.AreaLaw.Hastings.SourceConsequences",
-    "TNLean.MPS.AreaLaw.Hastings.SourceLength",
     "TNLean.MPS.AreaLaw.Huang.PositiveChainHamiltonian",
     "TNLean.MPS.AreaLaw.InformationReset",
     "TNLean.MPS.AreaLaw.LogarithmicAreaLaw",
@@ -86,5 +89,5 @@
     "TNLean.MPS.AreaLaw.ViableSet.ViableTrimmedWitness",
     "verification.area-law.Solution"
   ],
-  "state": "running"
+  "state": "running with retained source failures"
 }

@@ -64,7 +64,7 @@ def main():
     q=dest.parent/p.name;h=sha(p);shutil.copy2(p,q);assert sha(q)==h==sha(p);artifactlog.append({'module':m,'path':str(q.relative_to(CACHE)),'sha256':h,'origin':str(p)})
   built.add(m)
  write('reused-artifacts.json',artifactlog)
- previous=read(OUT/'results.jsonl');passed={r['module'] for r in previous if r['phase']=='strict' and r['exit_code']==0}
+ previous=read(OUT/'results.jsonl');failed={r['module'] for r in previous if r['exit_code']!=0};passed={r['module'] for r in previous if r['phase']=='strict' and r['exit_code']==0}
  for r in previous:
   if r['exit_code']==0:
    assert hashes[r['module']]==r['source_sha256']
@@ -87,7 +87,8 @@ def main():
   r={'module':m,'phase':phase,'head':HEAD,'pin':PIN,'source_sha256':hashes[m],'command':cmd,'started':stamp,'seconds':time.monotonic()-t,'exit_code':code,'role':'target' if m in targets else 'dependency','method':'direct Lean compilation/strict, not Lake'}
   if phase=='build' and code==0:r['olean_sha256']=sha(dest)
   append('results.jsonl',r)
-  if code:raise RuntimeError(f'{m} {phase} exit {code}')
+  if code:
+   failed.add(m);raise RuntimeError(f'{m} {phase} exit {code}')
   if phase=='build':built.add(m)
   else:passed.add(m)
  def build(m):
@@ -96,16 +97,22 @@ def main():
   run(m,'build')
  pending=targets-passed-large;done=0
  while pending:
-  m=min(pending,key=lambda n:(0 if n=='TNLean.MPS.AreaLaw.Hastings.BoundaryFactorization' else 1 if n in affected else 2,len(closure(n)-built),n));build(m);run(m,'strict');pending.remove(m);done+=1;write('summary.json',{'head':HEAD,'passed_or_provenance_reused':sorted(passed),'remaining':sorted(targets-passed),'state':'running'})
+  blocked={m for m in pending if closure(m)&failed};pending-=blocked
+  if not pending:break
+  m=min(pending,key=lambda n:(0 if n=='TNLean.MPS.AreaLaw.Hastings.BoundaryFactorization' else 1 if n in affected else 2,len(closure(n)-built),n))
+  try:build(m);run(m,'strict')
+  except RuntimeError:
+   if not closure(m)&failed:raise
+  pending.remove(m);done+=1;write('summary.json',{'head':HEAD,'passed_or_provenance_reused':sorted(passed),'failed':sorted(failed),'remaining':sorted(targets-passed),'state':'running with retained source failures'})
   if done%10==0:publish('audit: checkpoint exact main16b MPS validation')
  # Aggregate checks only when closure is warm: do not launch a cold full-library closure.
  deferred={}
  for m in ['TNLean.MPS.AreaLaw','TNLean.MPS','TNLean']:
   missing=closure(m)-built
-  if missing-{m}:deferred[m]=sorted(missing);continue
+  if missing-{m} or closure(m)&failed:deferred[m]=sorted(missing| (closure(m)&failed));continue
   build(m);run(m,'strict')
  write('aggregate-not-run.json',deferred);write('summary.json',{'head':HEAD,'passed_or_provenance_reused':sorted(passed),'remaining':sorted(targets-passed),'state':'finished narrow checks; aggregate gaps recorded'})
- write('status.json',{'state':'finished','head':HEAD,'passed':len(passed),'not_run':sorted(targets-passed),'axiom_audit':'not-run; compilation/strict only'})
+ write('status.json',{'state':'finished','head':HEAD,'passed':len(passed),'not_run':sorted(targets-passed),'failed':sorted(failed),'axiom_audit':'not-run; compilation/strict only'})
  publish('audit: complete available exact main16b MPS narrow checks')
 if __name__=='__main__':
  try:main()
