@@ -166,7 +166,9 @@ theorem cost_sweepStepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL :
   have hcardF : F.card ≤ E * Rk :=
     hv.gaussianFilterFactors_card L (i + 1) (Nat.le_of_lt hq) h hs h0 h1 _ _ hc hDelta
   have h₁ := cost_extensionProgram_le_of_valid (o := o) L (i + 1) b S
-  have h₂ := cost_sizeTrimmingProgram_le_of_valid hv L (i + 1) b chain hL hq hDelta S₁
+  have h₂ := cost_sizeTrimmingProgram_le_of_valid hv L (i + 1) b chain
+      (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+      (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hL hq hDelta S₁
   have h₃ := cost_bondTrimmingProgram_le_of_valid (o := o) L (i + 1) hi b m S₂
   have h₅ := cost_errorReductionProgram_le_of_valid (o := o) L (i + 1) Rk (max 1 m) F S₃
   dsimp only at h₂

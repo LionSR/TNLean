@@ -127,7 +127,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped (R : ℕ) {κ : ℝ} (hκ : 
   refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hh hhJ hΩ hgap hspan hξ'0
       (le_max_right _ _)
     (fun c l _ ↦ ?_) hk'
-  obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hΩ hgap hspan c l
+  obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan c l
   exact ⟨OB, OL, OR, hf.mono
     (mul_le_mul_of_nonneg_right (le_max_left _ _) (Real.exp_pos _).le)⟩
 
@@ -163,7 +163,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_endpoint (R : ℕ) :
     rw [lemmaOneEndpointLength_eq]; linarith [lemmaOneLength_pos R (J / ΔE) 1]
   refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hh hhJ hΩ hgap hspan hζ0 (le_max_right _ _)
     (fun c l _ ↦ ?_) hk'
-  obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hΩ hgap hspan c l
+  obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan c l
   exact ⟨OB, OL, OR, hf.mono
     (mul_le_mul_of_nonneg_right (le_max_left _ _) (Real.exp_pos _).le)⟩
 

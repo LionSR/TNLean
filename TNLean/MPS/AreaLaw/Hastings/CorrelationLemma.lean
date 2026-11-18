@@ -80,7 +80,8 @@ theorem exists_norm_inner_mul_sub_le (R : ℕ) :
   refine ⟨K, hK, ?_⟩
   intro J ΔE hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan s j l ι _ a ψL ψR hψL hψR hdec O hO
       A SA hA hSA hA1
-  obtain ⟨OB, OL, OR, hOB, hOL, hOR, -, hOB1, hsB, hsL, hsR, herr⟩ := hF hJ hΔ h hΩ hgap hspan j l
+  obtain ⟨OB, OL, OR, hOB, hOL, hOR, -, hOB1, hsB, hsL, hsR, herr⟩ := hF hJ hΔ h hh hhJ
+      hΩ hgap hspan j l
   exact norm_inner_mul_sub_le_of_factorization hΩ a hψL hψR hdec hO hA hSA hA1
     ⟨OB, OL, OR, _, _, _, hOB, nonneg_iff_posSemidef.mp hOL.nonneg,
       nonneg_iff_posSemidef.mp hOR.nonneg, hOB1, hOL.norm_le, hOR.norm_le,

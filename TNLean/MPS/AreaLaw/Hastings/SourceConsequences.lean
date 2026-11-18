@@ -81,7 +81,7 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
     linarith
   · refine entropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt hq hΩ j hξ hC₁
       (fun m ↦ ?_) hk w ψ hw hrank hnorm hP hPdef
-    obtain ⟨OB, OL, OR, hFm⟩ := hF hJ hΔ h hΩ hgap hspan j m
+    obtain ⟨OB, OL, OR, hFm⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan j m
     exact ⟨OB, OL, OR, hFm.mono (mul_le_mul_of_nonneg_right
       (mul_le_mul_of_nonneg_right (le_max_left _ _) (pow_pos (by linarith) 3).le)
       (Real.exp_pos _).le)⟩
@@ -139,7 +139,7 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
     linarith
   · exact renyiEntropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt hq hΩ j hξ hC₁
       hα0 hα1 hconv (fun m ↦ by
-        obtain ⟨OB, OL, OR, hFm⟩ := hF hJ hΔ h hΩ hgap hspan j m
+        obtain ⟨OB, OL, OR, hFm⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan j m
         exact ⟨OB, OL, OR, hFm.mono (mul_le_mul_of_nonneg_right
           (mul_le_mul_of_nonneg_right (le_max_left _ _) (pow_pos (by linarith) 3).le)
           (Real.exp_pos _).le)⟩) hk w ψ hw hrank hnorm hP hPdef
@@ -217,7 +217,7 @@ theorem exists_relent_of_isGapped_source (R : ℕ) :
     exfalso
     linarith
   refine relent_of_projectorFactorization_of_le_entropy hq hΩ hcl hξ hC₁ (fun m _ ↦ ?_) hS
-  obtain ⟨OB, OL, OR, hF'⟩ := hF hJ hΔ h hΩ hgap hspan c m
+  obtain ⟨OB, OL, OR, hF'⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan c m
   refine ⟨OB, OL, OR, hF'.mono (mul_le_mul_of_nonneg_right ?_ (Real.exp_pos _).le)⟩
   nlinarith
 
@@ -254,7 +254,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_source (R : ℕ) :
   have hξ : 0 < ξ' := by dsimp [ξ']; linarith
   refine isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy hΩ hξ
     (fun j _ m _ ↦ ?_) (fun j _ ↦ ?_) hk'
-  · obtain ⟨OB, OL, OR, hfac⟩ := hF hJ hΔ h hΩ hgap hspan j m
+  · obtain ⟨OB, OL, OR, hfac⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan j m
     exact ⟨OB, OL, OR, hfac.mono
       (mul_le_mul_of_nonneg_right (le_max_left _ _) (exp_pos _).le)⟩
   · have hj := hS hJ hΔ h hΩ hgap hspan j

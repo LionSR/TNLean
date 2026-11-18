@@ -58,7 +58,7 @@ lemma _root_.ManyBody.DomainInteraction.sum_norm_terms_containing_le (h : Domain
     (g := fun Y : ChainSupport Λ.card R ↦ ‖(h.toChain).term Y‖)
     DomainSupport.toChainSupport DomainSupport.toChainSupport_injective.injOn
     ?_ ?_ (fun _ _ _ ↦ norm_nonneg _)).trans
-      ((h.toChain).sum_norm_terms_containing_le (h.isHermitian_toChain_term hh)
+      ((h.toChain).sum_norm_terms_containing_le
         (h.norm_toChain_term_le hhJ (h.norm_bound_nonneg hhJ x)) x)
   · exact fun Y hY ↦ (Finset.mem_image.mp hY).elim fun X hX ↦
       hX.2 ▸ Finset.mem_filter.mpr ⟨Finset.mem_univ _, (Finset.mem_filter.mp hX.1).2⟩

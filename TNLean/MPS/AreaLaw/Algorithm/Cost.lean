@@ -230,7 +230,9 @@ theorem cost_sweepStepProgram_le {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
   have hcardF : F.card ≤ E * Rk :=
     card_gaussianFilterFactors_le (Nat.le_of_lt hq) h hs h0 h1 hc hDelta
   have h₁ := cost_extensionProgram_le L (i + 1) b S
-  have h₂ := cost_sizeTrimmingProgram_le L (i + 1) b chain hL hq hDelta S₁
+  have h₂ := cost_sizeTrimmingProgram_le L (i + 1) b chain
+      (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+      (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hL hq hDelta S₁
   have h₃ := cost_bondTrimmingProgram_le L (i + 1) hi b m S₂
   have h₅ := cost_errorReductionProgram_le L (i + 1) Rk (max 1 m) F S₃
   dsimp only at h₂

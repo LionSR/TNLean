@@ -205,7 +205,7 @@ theorem exists_renyiEntropy_le_of_overlap_schmidtRank_mixture (R : ℕ) :
     linarith
   · exact renyiEntropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt hq hΩ j hξ hC₁
       hα0 hα1 hconv (fun m ↦ by
-        obtain ⟨OB, OL, OR, hFm⟩ := hF hJ hΔ h hΩ hgap hspan j m
+        obtain ⟨OB, OL, OR, hFm⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan j m
         exact ⟨OB, OL, OR, hFm.mono (mul_le_mul_of_nonneg_right
           (mul_le_mul_of_nonneg_right (le_max_left _ _) (pow_pos (by linarith) 3).le)
           (Real.exp_pos _).le)⟩) hk w ψ hw hrank hnorm hP hPdef

@@ -95,7 +95,7 @@ theorem exists_relent_of_isGapped (R : ℕ) :
     exfalso
     linarith
   refine relent_of_projectorFactorization_of_le_entropy hq hΩ hcl hξ hC₁ (fun m _ ↦ ?_) hS
-  obtain ⟨OB, OL, OR, hF'⟩ := hF hJ hΔ h hΩ hgap hspan c m
+  obtain ⟨OB, OL, OR, hF'⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan c m
   refine ⟨OB, OL, OR, hF'.mono (mul_le_mul_of_nonneg_right ?_ (Real.exp_pos _).le)⟩
   nlinarith
 

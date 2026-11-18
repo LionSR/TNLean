@@ -94,7 +94,9 @@ theorem cost_sampledSweepStepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
         (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hL hq hΔ S₁
   have hcard₃ : S₃.card ≤ S₂.card := card_bondTrimSet_le hi m' S₂
   have h₁ := cost_extensionProgram_le L (i + 1) b S
-  have h₂ := cost_sizeTrimmingProgram_le L (i + 1) b chain hL hq hΔ S₁
+  have h₂ := cost_sizeTrimmingProgram_le L (i + 1) b chain
+      (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
+      (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hL hq hΔ S₁
   have h₃ := cost_bondTrimmingProgram_le L (i + 1) hi b m' S₂
   have h₅ := cost_errorReductionProgram_le L (i + 1) D (max 1 m') F S₃
   dsimp only at h₂
