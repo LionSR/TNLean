@@ -131,35 +131,39 @@ decomposes the stacked tensor $T_aT_b$ into copies of the blocks $T_c$.
 
 \begin{theorem}[Existence of fusion tensors]%
     \label{thm:mpoalg_fusion_tensors_exist}
-    % Formalized as cor:asym_fusion_action_multiplicity and
-    %   thm:asym_multiplicity_reductions (ch25), which carry the Lean tags.
+    \lean{MPOTensor.IsMPOFusionAlgebra.nonempty_fusionTensors}
+    \leanok
     % Existing Lean special cases:
     %   MPOTensor.exists_multiBlockCompression_mulTensor_of_mpo_eq_sum
     %   (Theorem thm:asym_mpo_product) and
     %   MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors
     %   (Corollary cor:asym_fusion_tensors_group).
-    \uses{def:mpoalg_fusion_tensors, thm:asym_mpo_product,
-        cor:asym_fusion_action_multiplicity, thm:asym_multiplicity_reductions}
+    \uses{def:mpoalg_fusion_tensors, def:mpo_fusion_algebra}
     Every pair $(a,b)$ of labels of a fusion algebra of normal tensors of
-    positive bond dimension admits a family of fusion tensors
-    (Corollary~\ref{cor:asym_fusion_action_multiplicity}). This is the
+    positive bond dimension admits a family of fusion tensors. This is the
     periodic-trace reduction under the fusion rule
     (\ref{eq:mpo_fusion_algebra}). It allows a nilpotent remainder and
     does not assert the exact local reconstruction of
     \cite[Appendix~A]{GarreRubio2023MPOSym}. The exact fusion and action
     decompositions from length-independent arbitrary-boundary hypotheses
     are proved in Lemma~\ref{thm:glm_boundary_source_decomposition}.
-    % Source anchor: arXiv:2203.12563, line 361 and Appendix A (lines
-    %   2305--2455).
+    % Source anchor: arXiv:2203.12563, line 361, Appendix A (lines
+    %   2305--2455), and lines 1001--1028, where the group case is stated:
+    %   "$U_g U_h = U_{gh}$ with $T_g$ injective implies the existence of
+    %   fusion tensors that decompose the product of two tensors locally for
+    %   any length $n$", with "off-diagonal blocks [that] will disappear
+    %   after a finite number of concatenation". Injective tensors are
+    %   normal, and $U_e=\Id$ forces positive bond dimension, so the
+    %   hypotheses here follow from those of the source.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:asym_mpo_product, thm:asym_multiplicity_reductions}
-    Applying Theorem~\ref{thm:asym_mpo_product} to the target family
-    consisting of $N_{ab}^c$ copies of $T_c$ for each $c$, all with weight
-    $1$, as in Lemma~\ref{thm:asym_multiplicity_reductions} for the
-    stacked product, yields compression pairs indexed by $(c,\mu)$ that form
-    mutually biorthogonal reductions with a nilpotent remainder.
+    \leanok
+    \uses{cor:asym_fusion_action_multiplicity}
+    Corollary~\ref{cor:asym_fusion_action_multiplicity} gives, for the
+    target family consisting of $N_{ab}^c$ copies of $T_c$ for each $c$,
+    compression pairs indexed by $(c,\mu)$ that form mutually biorthogonal
+    reductions of $T_aT_b$ with a nilpotent remainder.
 \end{proof}
 
 For a group-like algebra, with labels in a group $G$ and
