@@ -68,17 +68,17 @@ theorem sampledStepCostBound_mono (q : ℕ) (Δ : ℝ) (L : ℕ) {ℓ ℓ' D D' 
 sampled factors number at most `ℓ D`. -/
 theorem cost_sampledSweepStepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ : ℝ) {Δ : ℝ} (hΔ : 0 < Δ)
+    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2))) (E₀ : ℝ)
+        {Δ : ℝ} (hΔ : 0 < Δ)
     {ℓ m : ℕ} (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) (hF : (sampledFactors h E₀ I (i + 1)).card ≤ ℓ * D) :
-    FreeM.cost honestOracle queryCost (sampledSweepStepProgram hq h hs h0 h1 E₀ Δ I b D hi S) ≤
+    FreeM.cost honestOracle queryCost (sampledSweepStepProgram hq h hs E₀ Δ I b D hi S) ≤
       sampledStepCostBound q Δ L ℓ D b S.card := by
   classical
   simp only [sampledSweepStepProgram, FreeM.cost_bind, FreeM.eval_lift, eval_extensionProgram,
     eval_sizeTrimmingProgram, eval_bondTrimmingProgram, honestOracle_sampledFactors,
     FreeM.cost_lift, queryCost_sampledFactors, sampledStepCostBound]
-  set chain := ChainHamiltonian.ofBonds h hs h0 h1 with hchain
+  set chain := ManyBody.ChainInteraction.ofBonds h hs with hchain
   set m' := bondTrimmingRadius L (lvvReferenceBond q Δ L) with hm'
   set c : ℝ := (Δ / 169) ^ 2 with hc
   set D' := constantCutBond q 1 1 Δ c with hD'
@@ -89,7 +89,7 @@ theorem cost_sampledSweepStepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
   set size := lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ with hsize
   have hcard₁ : S₁.card ≤ q * S.card := card_extend_le (i + 1) S
   have hcard₂ : S₂.card ≤ size :=
-    ChainHamiltonian.card_sizeTrimmingSelection_le_polynomial chain hL hq hΔ S₁
+    ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomial chain hL hq hΔ S₁
   have hcard₃ : S₃.card ≤ S₂.card := card_bondTrimSet_le hi m' S₂
   have h₁ := cost_extensionProgram_le L (i + 1) b S
   have h₂ := cost_sizeTrimmingProgram_le L (i + 1) b chain hL hq hΔ S₁
@@ -129,7 +129,7 @@ theorem cost_sampledSweepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
       (card_sampledFactors_le h E₀ (I ⟨i, by omega⟩) (i + 1) fun t ↦
         operatorSchmidtRank_cutOperator_bondComplementWord_le_all (by omega) h hs _
           ((hgood ⟨i, by omega⟩).2 t) (i + 1)).trans (Nat.mul_le_mul_left ℓ hD)
-    have hstep := cost_sampledSweepStepProgram_le hL hq h hs h0 h1 E₀ hΔ (I ⟨i, by omega⟩) b D
+    have hstep := cost_sampledSweepStepProgram_le hL hq h hs E₀ hΔ (I ⟨i, by omega⟩) b D
       hi' (sampledSweep hq h hs h0 h1 E₀ Δ I i) hF
     have hcard : (sampledSweep hq h hs h0 h1 E₀ Δ I i).card ≤
         max 1 (sampledSizeBudget q Δ L ℓ (q ^ (2 * κ))) := by

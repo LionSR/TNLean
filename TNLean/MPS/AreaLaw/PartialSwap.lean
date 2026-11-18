@@ -18,11 +18,11 @@ where `N_R = 2 * 2^(2R)`. Zero local dimension and empty boundaries are included
 
 ## Main results
 
-* `ChainHamiltonian.partialSwap_term_difference_spec`: support, Hermiticity
+* `ManyBody.ChainInteraction.partialSwap_term_difference_spec`: support, Hermiticity
   and the `2J` bound for each separately labelled replica difference.
-* `ChainHamiltonian.partialSwap_difference_eq_sum_crossing`: the exact global
+* `ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing`: the exact global
   decomposition and the number of retained labels.
-* `ChainHamiltonian.partialSwap_boundary_spec`: support near boundary
+* `ManyBody.ChainInteraction.partialSwap_boundary_spec`: support near boundary
   edges and the global norm bound with the original interaction coefficient.
 
 **Scope restriction (contiguous chains):** The physical sites are `Fin L`.
@@ -34,7 +34,7 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines
 No spectral or ground-state transport is asserted here.
 -/
 
-open ManyBody (ChainSupport mem_interval)
+open ManyBody (ChainSupport mem_interval ChainInteraction)
 
 open Matrix QuantumCircuit
 open scoped Kronecker Matrix.Norms.L2Operator
@@ -47,8 +47,9 @@ namespace TNLean.MPS.AreaLaw
 /-- Each labelled replica difference is Hermitian, supported on its original
 interaction support, and of norm at most `2J`. Source: TNLean note,
 `part2a_mps_information.tex`, lines 359–362. -/
-theorem ChainHamiltonian.partialSwap_term_difference_spec
-    {L q R : ℕ} {J : ℝ} (h : ChainHamiltonian L q R J)
+theorem _root_.ManyBody.ChainInteraction.partialSwap_term_difference_spec
+    {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (D : Finset (Fin L)) (X : ChainSupport L R) (b : Bool) :
     let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
@@ -60,7 +61,7 @@ theorem ChainHamiltonian.partialSwap_term_difference_spec
   classical
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (sheetSwapOp q D)
-  have hterm := h.supported X
+  have hterm := h.mem X
   have hone := one_mem (ManyBody.supportedOperators (fun _ ↦ Fin q) X.1)
   have hF : ‖F‖ ≤ 1 := by
     simpa only [F, Matrix.l2_opNorm_reindex_equiv] using norm_sheetSwapOp_le_one (q := q) D
@@ -89,25 +90,25 @@ theorem ChainHamiltonian.partialSwap_term_difference_spec
   cases b
   · apply hgeneral (h.term X) 1 hterm hone
     · change (h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))ᴴ = _
-      rw [conjTranspose_kronecker, h.hermitian X, conjTranspose_one]
-    · exact (Matrix.l2_opNorm_kronecker_one_le _).trans (h.norm_le X)
+      rw [conjTranspose_kronecker, hh X, conjTranspose_one]
+    · exact (Matrix.l2_opNorm_kronecker_one_le _).trans (hhJ X)
   · apply hgeneral 1 (h.term X) hone hterm
     · change ((1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X)ᴴ = _
-      rw [conjTranspose_kronecker, h.hermitian X, conjTranspose_one]
-    · exact (Matrix.l2_opNorm_one_kronecker_le _).trans (h.norm_le X)
+      rw [conjTranspose_kronecker, hh X, conjTranspose_one]
+    · exact (Matrix.l2_opNorm_one_kronecker_le _).trans (hhJ X)
 
 /-- The partial-swap perturbation is the sum of its crossing replica
 differences, with the printed boundary count. Source: TNLean note,
 `part2a_mps_information.tex`, lines 355–363. -/
-theorem ChainHamiltonian.partialSwap_difference_eq_sum_crossing
-    {L q R : ℕ} {J : ℝ} (h : ChainHamiltonian L q R J) (D : Finset (Fin L)) :
+theorem _root_.ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing
+    {L q R : ℕ} (h : ChainInteraction L q R) (D : Finset (Fin L)) :
     let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
     let T (X : ChainSupport L R) (b : Bool) := Matrix.reindex e e
       (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
         else h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
     let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
-    (F * h.doubled.operator * Fᴴ - h.doubled.operator =
+    (F * h.doubled.hamiltonian * Fᴴ - h.doubled.hamiltonian =
       ∑ X ∈ C, ∑ b : Bool, (F * T X b * Fᴴ - T X b)) ∧
       C.card * 2 ≤ chainCrossConst R * (boundaryEdges L D).card := by
   classical
@@ -117,7 +118,7 @@ theorem ChainHamiltonian.partialSwap_difference_eq_sum_crossing
     (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
   let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
-  change (F * h.doubled.operator * Fᴴ - h.doubled.operator =
+  change (F * h.doubled.hamiltonian * Fᴴ - h.doubled.hamiltonian =
     ∑ X ∈ C, ∑ b : Bool, (F * T X b * Fᴴ - T X b)) ∧
       C.card * 2 ≤ chainCrossConst R * (boundaryEdges L D).card
   have hpair (X : ChainSupport L R) : h.doubled.term X = ∑ b : Bool, T X b := by
@@ -127,7 +128,7 @@ theorem ChainHamiltonian.partialSwap_difference_eq_sum_crossing
     simpa only [Matrix.coe_reindexAddEquiv] using
       ((Matrix.reindexAddEquiv ℂ e e).map_add (h.term X ⊗ₖ 1) (1 ⊗ₖ h.term X)).trans
         (add_comm _ _)
-  have hsum : h.doubled.operator = ∑ X, ∑ b : Bool, T X b :=
+  have hsum : h.doubled.hamiltonian = ∑ X, ∑ b : Bool, T X b :=
     Finset.sum_congr rfl (fun X _ ↦ hpair X)
   let δ : Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ →ₗ[ℂ]
       Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ :=
@@ -151,9 +152,9 @@ theorem ChainHamiltonian.partialSwap_difference_eq_sum_crossing
       Matrix.submatrix_mul_equiv] using
       congrArg (Matrix.reindex e e)
         (sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
-          (h.supported X) hside)
+          (h.mem X) hside)
   refine ⟨?_, ?_⟩
-  · change δ h.doubled.operator = ∑ X ∈ C, ∑ b : Bool, δ (T X b)
+  · change δ h.doubled.hamiltonian = ∑ X ∈ C, ∑ b : Bool, δ (T X b)
     rw [hsum, map_sum]
     simp only [map_sum]
     symm
@@ -171,14 +172,15 @@ theorem ChainHamiltonian.partialSwap_difference_eq_sum_crossing
 which lies within range of a boundary edge, with the original `J`
 coefficient in its norm bound. Source: TNLean note,
 `part2a_mps_information.tex`, lines 355–363. -/
-theorem ChainHamiltonian.partialSwap_boundary_spec
-    {L q R : ℕ} {J : ℝ} (h : ChainHamiltonian L q R J)
+theorem _root_.ManyBody.ChainInteraction.partialSwap_boundary_spec
+    {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (D : Finset (Fin L)) :
     let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
     let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
     let Z := C.biUnion (fun X ↦ X.1)
-    let K := F * h.doubled.operator * Fᴴ - h.doubled.operator
+    let K := F * h.doubled.hamiltonian * Fᴴ - h.doubled.hamiltonian
     Entropy.IsSupportedOn (n := fun _ ↦ q * q) K Z ∧
       (∀ x ∈ Z, ∃ p ∈ boundaryEdges L D, Nat.dist x.val p ≤ R) ∧
       ‖K‖ ≤ 2 * J * (chainCrossConst R : ℝ) * ((boundaryEdges L D).card : ℝ) := by
@@ -187,7 +189,7 @@ theorem ChainHamiltonian.partialSwap_boundary_spec
   let F := Matrix.reindex e e (sheetSwapOp q D)
   let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
   let Z := C.biUnion (fun X ↦ X.1)
-  let K := F * h.doubled.operator * Fᴴ - h.doubled.operator
+  let K := F * h.doubled.hamiltonian * Fᴴ - h.doubled.hamiltonian
   change Entropy.IsSupportedOn (n := fun _ ↦ q * q) K Z ∧
     (∀ x ∈ Z, ∃ p ∈ boundaryEdges L D, Nat.dist x.val p ≤ R) ∧
       ‖K‖ ≤ 2 * J * (chainCrossConst R : ℝ) * ((boundaryEdges L D).card : ℝ)
@@ -216,7 +218,7 @@ theorem ChainHamiltonian.partialSwap_boundary_spec
     intro b _
     apply ManyBody.supportedOperators_mono
       (Finset.coe_subset.mpr (Finset.subset_biUnion_of_mem (fun X ↦ X.1) hXC))
-    exact (h.partialSwap_term_difference_spec D X b).1
+    exact (h.partialSwap_term_difference_spec hh hhJ D X b).1
   have hnorm : ‖K‖ ≤ (C.card : ℝ) * (2 * (2 * J)) := by
     rw [hsum]
     calc
@@ -226,7 +228,7 @@ theorem ChainHamiltonian.partialSwap_boundary_spec
       _ ≤ ∑ _X ∈ C, ∑ _b : Bool, 2 * J := by
         apply Finset.sum_le_sum
         intro X _
-        exact Finset.sum_le_sum (fun b _ ↦ (h.partialSwap_term_difference_spec D X b).2.2)
+        exact Finset.sum_le_sum (fun b _ ↦ (h.partialSwap_term_difference_spec hh hhJ D X b).2.2)
       _ = _ := by simp
   refine ⟨hsupp, hzone, ?_⟩
   by_cases hL : L = 0
@@ -238,7 +240,7 @@ theorem ChainHamiltonian.partialSwap_boundary_spec
       omega
     simpa only [hc, Nat.cast_zero, zero_mul, hb, Finset.card_empty, mul_zero] using hnorm
   · let x : Fin L := ⟨0, Nat.pos_of_ne_zero hL⟩
-    have hJ : 0 ≤ J := h.norm_bound_nonneg x
+    have hJ : 0 ≤ J := h.norm_bound_nonneg hhJ x
     have hc : (C.card : ℝ) * 2 ≤
         (chainCrossConst R : ℝ) * ((boundaryEdges L D).card : ℝ) := by
       exact_mod_cast hcount

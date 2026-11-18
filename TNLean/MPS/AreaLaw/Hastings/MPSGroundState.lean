@@ -43,10 +43,12 @@ because the constraint is available only at even exponents. See
 `docs/paper-gaps/hastings07_schmidt_tail_constant.tex`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open Matrix Real
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -99,9 +101,10 @@ only on `R`, `κ`, `J/ΔE` and `q`, not on `L`. Hastings, arXiv:0705.2024v4, lin
 `C₁` polynomial in `ξ̂` as at lines 258–262 and the restrictions of the module docstring. -/
 theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped (R : ℕ) {κ : ℝ} (hκ : 6 < κ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ {k' : ℕ}, ⌈Real.exp (2 * areaLawBound (κ * lemmaOneLength R (J / ΔE) 1)
           (max (K * lemmaOneLength R (J / ΔE) 1 ^ 3) 1) q) / 2⌉₊ ≤ k' →
         let k₀ := ⌈Real.exp (2 * areaLawBound (κ * lemmaOneLength R (J / ΔE) 1)
@@ -116,12 +119,12 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped (R : ℕ) {κ : ℝ} (hκ : 
               exp (2 / (κ * lemmaOneLength R (J / ΔE) 1)) *
               ((k' : ℝ) / k₀) ^ (-1 / ((κ * lemmaOneLength R (J / ΔE) 1) * log q))) := by
   obtain ⟨K, hK0, hF⟩ := exists_projectorFactorization_pow R hκ
-  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h {E₀} {Ω} hΩ hgap hspan {k'} hk' ↦ ?_⟩
+  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h hh hhJ {E₀} {Ω} hΩ hgap hspan {k'} hk' ↦ ?_⟩
   have hξ'0 : 0 < κ * lemmaOneLength R (J / ΔE) 1 :=
     mul_pos (by linarith) (lemmaOneLength_pos R _ 1)
   refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState hΩ hξ'0 (le_max_right _ _)
     (fun c l _ ↦ ?_) hk'
-  obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hΩ hgap hspan c l
+  obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan c l
   exact ⟨OB, OL, OR, hf.mono
     (mul_le_mul_of_nonneg_right (le_max_left _ _) (Real.exp_pos _).le)⟩
 
@@ -134,9 +137,10 @@ Hastings, arXiv:0705.2024v4, lines 505–557, with `ξ' = 6ξ` (lines 141–142)
 polynomial in `ζ` (lines 258–262), and the restriction on `ζ` of the module docstring. -/
 theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_endpoint (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ ΔE →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ {k' : ℕ}, ⌈Real.exp (2 * areaLawBound (6 * lemmaOneEndpointLength R J ΔE)
           (max (K * lemmaOneEndpointLength R J ΔE ^ 3) 1) q) / 2⌉₊ ≤ k' →
         let k₀ := ⌈Real.exp (2 * areaLawBound (6 * lemmaOneEndpointLength R J ΔE)
@@ -151,12 +155,12 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_endpoint (R : ℕ) :
               exp (2 / (6 * lemmaOneEndpointLength R J ΔE)) *
               ((k' : ℝ) / k₀) ^ (-1 / ((6 * lemmaOneEndpointLength R J ΔE) * log q))) := by
   obtain ⟨K, hK0, hF⟩ := exists_projectorFactorization_endpoint R
-  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h {E₀} {Ω} hΩ hgap hspan {k'} hk' ↦ ?_⟩
+  refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h hh hhJ {E₀} {Ω} hΩ hgap hspan {k'} hk' ↦ ?_⟩
   have hζ0 : 0 < 6 * lemmaOneEndpointLength R J ΔE := by
     rw [lemmaOneEndpointLength_eq]; linarith [lemmaOneLength_pos R (J / ΔE) 1]
   refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState hΩ hζ0 (le_max_right _ _)
     (fun c l _ ↦ ?_) hk'
-  obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hΩ hgap hspan c l
+  obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan c l
   exact ⟨OB, OL, OR, hf.mono
     (mul_le_mul_of_nonneg_right (le_max_left _ _) (Real.exp_pos _).le)⟩
 

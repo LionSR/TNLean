@@ -23,6 +23,8 @@ Source: one-dimensional note, Part II, proof of Theorem B,
 part2b_mps_protocol.tex:587–614 and order of constants:626–632.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 namespace TNLean.MPS.AreaLaw.ChainSweep
 open QuantumCircuit TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
@@ -37,10 +39,11 @@ Source: Part II, thm:B, part2b_mps_protocol.tex:587–614. -/
 theorem exists_physical_sampled_network_with_prefixCrossingLinks_le_1600
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
     ∃ (D K : ℝ) (s L₀ : ℕ) (hL₀ : 2 ≤ L₀), 1 ≤ D ∧ 0 < K ∧
-      let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
+      let ι := {a : Σ L : ℕ, ManyBody.ChainInteraction L q R ×
           EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
-        L₀ ≤ a.1 ∧ ‖a.2.2.1‖ = 1 ∧ IsGapped a.2.1.operator a.2.2.2 Δ ∧
-          groundSpace a.2.1.operator a.2.2.2 = Submodule.span ℂ {a.2.2.1}}
+        L₀ ≤ a.1 ∧ (∀ X, (a.2.1.term X).IsHermitian) ∧ (∀ X, ‖a.2.1.term X‖ ≤ J) ∧ ‖a.2.2.1‖ = 1 ∧
+            IsGapped a.2.1.hamiltonian a.2.2.2 Δ ∧
+          groundSpace a.2.1.hamiltonian a.2.2.2 = Submodule.span ℂ {a.2.2.1}}
       let length := fun i : ι ↦ i.val.1
       let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
       let ground := fun i : ι ↦ i.val.2.2.1

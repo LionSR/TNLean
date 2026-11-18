@@ -29,7 +29,7 @@ Source: Hastings, arXiv:0705.2024v4, eq. `lrb`, lines 96–112, and the main the
 eqs. `entbd` and `smd`, lines 124–144.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval ChainInteraction)
 
 open scoped ComplexOrder Matrix.Norms.L2Operator
 
@@ -40,18 +40,19 @@ namespace TNLean.MPS.AreaLaw
 /-- The source Lieb–Robinson pair has velocity `40c_RJ`, length `80`, and numerical
 prefactor `4`. Both observable supports are arbitrary finite sets.
 Hastings, arXiv:0705.2024v4, eq. `lrb`, lines 96–112. -/
-theorem ChainHamiltonian.norm_heisenberg_commutator_le_hastings_source
-    {L q R : ℕ} {J : ℝ} (h : ChainHamiltonian L q R J) (hJ : 0 < J)
+theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings_source
+    {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 < J)
     (X Y : Finset (Fin L)) {A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A X)
     (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B Y)
     (d : ℕ) (hd : ∀ x ∈ X, ∀ y ∈ Y, d ≤ Nat.dist x.val y.val)
     (t : ℝ) (ht : |t| ≤ d / (40 * (chainLRVelocity R J - 1))) :
-    ‖ManyBody.heisenbergEvolution h.operator t A * B -
-        B * ManyBody.heisenbergEvolution h.operator t A‖ ≤
+    ‖ManyBody.heisenbergEvolution h.hamiltonian t A * B -
+        B * ManyBody.heisenbergEvolution h.hamiltonian t A‖ ≤
       4 * (X.card : ℝ) * ‖A‖ * ‖B‖ * Real.exp (-(d / 80)) := by
   have hw := chainLRVelocity_sub_one_pos R hJ
-  exact h.norm_heisenberg_commutator_le_hastings
+  exact h.norm_heisenberg_commutator_le_hastings hh hhJ
     (mul_pos (by norm_num) hw) (by linarith only [hw]) (by norm_num) X Y hA hB d hd t ht
 
 /-- **The positive factorization at an admissible source length.** With velocity
@@ -61,17 +62,18 @@ Hastings, arXiv:0705.2024v4, Lemma 1, lines 246–267, and the note added, lines
 with the positivity correction of the module docstring. -/
 theorem exists_projectorFactorization_posSemidef_source (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J Δ : ℝ}, 0 ≤ J → 0 < Δ →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       let s := max (2 * (40 * (chainLRVelocity R J - 1)) / Δ) 80
       ∀ c l : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
         OB.PosSemidef ∧ Hastings.IsFactorizationAt Ω c l
           (K * s ^ 3 * Real.exp (-(l / (6 * s)))) OB OL OR := by
   obtain ⟨K, hK, hbound⟩ := exists_projectorFactorization_posSemidef_endpoint R
   refine ⟨K, hK, ?_⟩
-  intro J Δ hJ hΔ L q _ h E₀ Ω hΩ hgap hspan s c l
-  obtain ⟨OB, OL, OR, hOB, hfac⟩ := hbound hJ hΔ h hΩ hgap hspan c l
+  intro J Δ hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan s c l
+  obtain ⟨OB, OL, OR, hOB, hfac⟩ := hbound hJ hΔ h hh hhJ hΩ hgap hspan c l
   refine ⟨OB, OL, OR, hOB, hfac.mono ?_⟩
   have hs : 2 * lemmaOneEndpointLength R J Δ ≤ s :=
     two_mul_lemmaOneEndpointLength_le_sourceLength R hJ hΔ
@@ -91,16 +93,17 @@ theorem exists_projectorFactorization_posSemidef_source (R : ℕ) :
 its positive form. Hastings, arXiv:0705.2024v4, Lemma 1, lines 246–267. -/
 theorem exists_projectorFactorization_source (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J Δ : ℝ}, 0 ≤ J → 0 < Δ →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       let s := max (2 * (40 * (chainLRVelocity R J - 1)) / Δ) 80
       ∀ c l : ℕ, ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
         Hastings.IsFactorizationAt Ω c l (K * s ^ 3 * Real.exp (-(l / (6 * s)))) OB OL OR := by
   obtain ⟨K, hK, hbound⟩ := exists_projectorFactorization_posSemidef_source R
   refine ⟨K, hK, ?_⟩
-  intro J Δ hJ hΔ L q _ h E₀ Ω hΩ hgap hspan s c l
-  obtain ⟨OB, OL, OR, -, hfac⟩ := hbound hJ hΔ h hΩ hgap hspan c l
+  intro J Δ hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan s c l
+  obtain ⟨OB, OL, OR, -, hfac⟩ := hbound hJ hΔ h hh hhJ hΩ hgap hspan c l
   exact ⟨OB, OL, OR, hfac⟩
 
 namespace Hastings
@@ -112,16 +115,18 @@ depends only on the interaction range and is numerical for nearest-neighbour ter
 Hastings, arXiv:0705.2024v4, main theorem, eqs. `entbd` and `smd`, lines 124–144. -/
 theorem exists_regionEntropy_prefix_le_source (R : ℕ) :
     ∃ c₀ : ℝ, 0 < c₀ ∧ ∀ {J Δ : ℝ}, 0 ≤ J → 0 < Δ →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       let ξ' := 6 * max (2 * (40 * (chainLRVelocity R J - 1)) / Δ) 80
       ∀ i : ℕ, Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
         c₀ * ξ' * Real.log ξ' * Real.log q * (2 : ℝ) ^ (ξ' * Real.log q) := by
   obtain ⟨c₀, hc₀, hbound⟩ := exists_regionEntropy_prefix_le_printed R
   refine ⟨c₀, hc₀, ?_⟩
-  intro J Δ hJ hΔ L q _ h E₀ Ω hΩ hgap hspan
-  exact hbound hJ hΔ h hΩ hgap hspan _ (two_mul_lemmaOneEndpointLength_le_sourceLength R hJ hΔ)
+  intro J Δ hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan
+  exact hbound hJ hΔ h hh hhJ hΩ hgap hspan _
+      (two_mul_lemmaOneEndpointLength_le_sourceLength R hJ hΔ)
 
 end Hastings
 

@@ -28,7 +28,7 @@ lines 96–112 and 139–142.
 -/
 
 open QuantumCircuit
-open ManyBody (ChainSupport)
+open ManyBody (ChainSupport ChainInteraction)
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
@@ -38,28 +38,31 @@ variable {L q R : ℕ} {J : ℝ}
 /-- The numerical Lieb–Robinson estimate for two arbitrary finite supports on a chain.
 The distance lower bound is vacuous when either support is empty; the commutator then
 vanishes. Hastings, arXiv:0705.2024v4, eq. `lrb`, lines 96–112. -/
-theorem ChainHamiltonian.norm_heisenberg_commutator_le_numeric
-    (h : ChainHamiltonian L q R J) (X Y : Finset (Fin L))
+theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_numeric
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (X Y : Finset (Fin L))
     {A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A X)
     (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B Y)
     (d : ℕ) (hd : ∀ x ∈ X, ∀ y ∈ Y, d ≤ Nat.dist x.val y.val) (t : ℝ) :
-    ‖ManyBody.heisenbergEvolution h.operator t A * B - B * ManyBody.heisenbergEvolution h.operator
+    ‖ManyBody.heisenbergEvolution h.hamiltonian t A * B - B *
+        ManyBody.heisenbergEvolution h.hamiltonian
         t A‖ ≤
       4 * (X.card : ℝ) * ‖A‖ * ‖B‖ *
         Real.exp (2 * (chainLRVelocity R J - 1) * |t| - d) := by
   classical
   let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) (fun Z : ChainSupport L R ↦ Z.1) :=
-    ⟨h.term, h.supported⟩
+    ⟨h.term, h.mem⟩
   have hBound := ManyBody.norm_heisenberg_commutator_le_graphDistance_finsets_numeric
     (SimpleGraph.pathGraph L) Φ
-    h.hermitian R (fun Z x hx y hy ↦ ManyBody.ChainSupport.edist_le Z x hx y hy)
+    hh R (fun Z x hx y hy ↦ ManyBody.ChainSupport.edist_le Z x hx y hy)
     (R + 1) (fun Z ↦ Z.2.card_le)
-    (((2 ^ (2 * R + 1) : ℕ) : ℝ) * J) h.sum_norm_terms_containing_le X hA Y hB 1 (by norm_num) d
+    (((2 ^ (2 * R + 1) : ℕ) : ℝ) * J) (h.sum_norm_terms_containing_le hhJ) X hA Y hB 1
+        (by norm_num) d
     (fun x hx y hy ↦ by
       simpa only [SimpleGraph.pathGraph_edist, ENat.natCast_le_natCast] using hd x hx y hy) t
-  convert hBound using 1 <;>
-    simp only [Φ, ManyBody.Interaction.hamiltonian, ChainHamiltonian.operator, chainLRVelocity,
+  convert hBound using 1
+  simp only [chainLRVelocity,
       Nat.cast_add, Nat.cast_one, add_sub_cancel_right, mul_one, one_mul]
   ring_nf
 
@@ -67,15 +70,17 @@ theorem ChainHamiltonian.norm_heisenberg_commutator_le_numeric
 Any positive velocity `v ≥ 8(v₀ - 1)` and length `ξ_C ≥ 8` are admissible. The distance
 lower-bound formulation also includes empty supports. Hastings, arXiv:0705.2024v4,
 eq. `lrb`, lines 96–112, in the length convention of the module docstring. -/
-theorem ChainHamiltonian.norm_heisenberg_commutator_le_hastings
-    (h : ChainHamiltonian L q R J) {v ξC : ℝ}
+theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J) {v ξC : ℝ}
     (hvpos : 0 < v) (hv : 8 * (chainLRVelocity R J - 1) ≤ v) (hξC : 8 ≤ ξC)
     (X Y : Finset (Fin L)) {A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A X)
     (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B Y)
     (d : ℕ) (hd : ∀ x ∈ X, ∀ y ∈ Y, d ≤ Nat.dist x.val y.val)
     (t : ℝ) (ht : |t| ≤ d / v) :
-    ‖ManyBody.heisenbergEvolution h.operator t A * B - B * ManyBody.heisenbergEvolution h.operator
+    ‖ManyBody.heisenbergEvolution h.hamiltonian t A * B - B *
+        ManyBody.heisenbergEvolution h.hamiltonian
         t A‖ ≤
       4 * (X.card : ℝ) * ‖A‖ * ‖B‖ * Real.exp (-(d / ξC)) := by
   have hcone : |t| * v ≤ (d : ℝ) := (le_div_iff₀ hvpos).mp ht
@@ -83,7 +88,7 @@ theorem ChainHamiltonian.norm_heisenberg_commutator_le_hastings
     nlinarith [mul_nonneg (sub_nonneg.mpr hv) (abs_nonneg t)]
   have hdecay : (d : ℝ) / ξC ≤ d / 8 :=
     div_le_div_of_nonneg_left (Nat.cast_nonneg d) (by norm_num) hξC
-  exact (h.norm_heisenberg_commutator_le_numeric X Y hA hB d hd t).trans
+  exact (h.norm_heisenberg_commutator_le_numeric hh hhJ X Y hA hB d hd t).trans
     (mul_le_mul_of_nonneg_left (Real.exp_le_exp.mpr (by
       have := Nat.cast_nonneg (α := ℝ) d
       linarith)) (by positivity))
@@ -142,14 +147,16 @@ theorem chainLRVelocity_gapRescaling (R : ℕ) (J : ℝ) {Δ : ℝ} (hΔ : 0 < �
 /-- The rescaled factorization uses a physical velocity with the factor `Δ` restored.
 For every `κ ≥ 8`, the pair `(κΔ chainLRVelocity R (J/Δ), 8)` satisfies Hastings'
 time-cone estimate. Hastings, arXiv:0705.2024v4, eq. `lrb`, lines 96–112. -/
-theorem ChainHamiltonian.norm_heisenberg_commutator_le_hastings_rescaled
-    (h : ChainHamiltonian L q R J) {Δ κ : ℝ} (hΔ : 0 < Δ) (hκ : 8 ≤ κ)
+theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings_rescaled
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        {Δ κ : ℝ} (hΔ : 0 < Δ) (hκ : 8 ≤ κ)
     (X Y : Finset (Fin L)) {A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A X)
     (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B Y)
     (d : ℕ) (hd : ∀ x ∈ X, ∀ y ∈ Y, d ≤ Nat.dist x.val y.val)
     (t : ℝ) (ht : |t| ≤ d / (κ * Δ * chainLRVelocity R (J / Δ))) :
-    ‖ManyBody.heisenbergEvolution h.operator t A * B - B * ManyBody.heisenbergEvolution h.operator
+    ‖ManyBody.heisenbergEvolution h.hamiltonian t A * B - B *
+        ManyBody.heisenbergEvolution h.hamiltonian
         t A‖ ≤
       4 * (X.card : ℝ) * ‖A‖ * ‖B‖ * Real.exp (-(d / (8 : ℝ))) := by
   have hu : 1 ≤ chainLRVelocity R (J / Δ) := by
@@ -162,6 +169,6 @@ theorem ChainHamiltonian.norm_heisenberg_commutator_le_hastings_rescaled
     (show 0 ≤ Δ * chainLRVelocity R (J / Δ) from mul_nonneg hΔ.le (by linarith))
   have hv : 8 * (chainLRVelocity R J - 1) ≤ κ * Δ * chainLRVelocity R (J / Δ) := by
     nlinarith only [hscale, hκ', hΔ]
-  exact h.norm_heisenberg_commutator_le_hastings hvpos hv (by norm_num) X Y hA hB d hd t ht
+  exact h.norm_heisenberg_commutator_le_hastings hh hhJ hvpos hv (by norm_num) X Y hA hB d hd t ht
 
 end TNLean.MPS.AreaLaw

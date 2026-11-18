@@ -119,12 +119,12 @@ and apply the sampled factors of the words `I` at the cut after `i + 1` sites. L
 noncomputable def sampledSweepStep (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
+        (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     Finset (LeftBlockVector L q (i + 1)) :=
   successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
     (sampledFactors h E₀ I (i + 1)) id
-    ((ChainHamiltonian.ofBonds h hs h0 h1).sizeTrimmingSelection hq Δ (AreaLaw.extend (i + 1) S))
+    ((ManyBody.ChainInteraction.ofBonds h hs).sizeTrimmingSelection hq Δ (AreaLaw.extend (i + 1) S))
 
 /-- **The sampled sweep** with the words `I i` at the step from cut `i` to cut `i + 1`.
 LVV13, `algo53.tex`, lines 652--668. -/
@@ -136,7 +136,7 @@ noncomputable def sampledSweep (hq : 2 ≤ q)
   | 0 => {emptyLeftVector L q}
   | i + 1 =>
     if hi : i + 1 ≤ L then
-      sampledSweepStep hq h hs h0 h1 E₀ Δ (I ⟨i, by omega⟩) hi (sampledSweep hq h hs h0 h1 E₀ Δ I i)
+      sampledSweepStep hq h hs E₀ Δ (I ⟨i, by omega⟩) hi (sampledSweep hq h hs h0 h1 E₀ Δ I i)
     else ∅
 
 theorem sampledSweep_succ (hq : 2 ≤ q)
@@ -145,7 +145,7 @@ theorem sampledSweep_succ (hq : 2 ≤ q)
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) {i : ℕ} (hi : i + 1 ≤ L) :
     sampledSweep hq h hs h0 h1 E₀ Δ I (i + 1) =
-      sampledSweepStep hq h hs h0 h1 E₀ Δ (I ⟨i, by omega⟩) hi
+      sampledSweepStep hq h hs E₀ Δ (I ⟨i, by omega⟩) hi
         (sampledSweep hq h hs h0 h1 E₀ Δ I i) := by
   simp only [sampledSweep, hi, ↓reduceDIte]
 
@@ -167,13 +167,13 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
     IsViableMPS Γ (ℓ * q ^ (2 * κ) *
         (lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ))
       (q ^ (2 * κ) * max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L))) δ
-      (sampledSweepStep hq h hs h0 h1 E₀ Δ I hi S) := by
+      (sampledSweepStep hq h hs E₀ Δ I hi S) := by
   classical
-  let chain := ChainHamiltonian.ofBonds h hs h0 h1
-  have hgapC : IsGapped chain.operator E₀ Δ := by
-    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hgap
-  have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
-    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hspan
+  let chain := ManyBody.ChainInteraction.ofBonds h hs
+  have hgapC : IsGapped chain.hamiltonian E₀ Δ := by
+    simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hgap
+  have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
+    simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hspan
   have hext : IsViable Γ ((Δ / 169) ^ 2 / L)
       (AreaLaw.extend (i + 1) S : Set (LeftBlockVector L q (i + 1))) :=
     (hS.extend (by omega) hi).mono hδc
@@ -185,7 +185,9 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
       (chain.card_sizeTrimmingSelection_le_polynomial hL hq hΔ _),
       fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m' T₀ hv,
       chain.isViable_bondTrimSet_sizeTrimmingSelection
-        (ChainHamiltonian.posSemidef_ofBonds_term h hs h0 h1) hL hq hi hΔ
+          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
+          (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1)
+        (ManyBody.ChainInteraction.posSemidef_ofBonds_term h hs h0) hL hq hi hΔ
         (AreaLaw.extend (i + 1) S) E₀ Γ hΩ hgapC hspanC hext⟩
   have hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
       (leftBlock L k) (bondComplementWord h (I t))) ≤ q ^ (2 * κ) := fun t k ↦
@@ -246,13 +248,13 @@ open LinearAlgebraQuery
 noncomputable def sampledSweepStepProgram (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
+        (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) : LVVProgram q (Finset (LeftBlockVector L q (i + 1))) :=
   let r := bondTrimmingRadius L (lvvReferenceBond q Δ L)
   do
     let S₁ ← extensionProgram L (i + 1) b S
-    let S₂ ← sizeTrimmingProgram L (i + 1) b (ChainHamiltonian.ofBonds h hs h0 h1) hq Δ S₁
+    let S₂ ← sizeTrimmingProgram L (i + 1) b (ManyBody.ChainInteraction.ofBonds h hs) hq Δ S₁
     let S₃ ← bondTrimmingProgram L (i + 1) hi b r S₂
     let F ← FreeM.lift (LinearAlgebraQuery.sampledFactors L (i + 1) h E₀ ℓ m D I)
     errorReductionProgram L (i + 1) D (max 1 r) F S₃
@@ -262,11 +264,11 @@ sweep. -/
 theorem eval_sampledSweepStepProgram (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
+        (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
-    FreeM.eval honestOracle (sampledSweepStepProgram hq h hs h0 h1 E₀ Δ I b D hi S) =
-      sampledSweepStep hq h hs h0 h1 E₀ Δ I hi S := by
+    FreeM.eval honestOracle (sampledSweepStepProgram hq h hs E₀ Δ I b D hi S) =
+      sampledSweepStep hq h hs E₀ Δ I hi S := by
   simp only [sampledSweepStepProgram, FreeM.eval_bind, FreeM.eval_lift,
     honestOracle_sampledFactors, eval_extensionProgram, eval_sizeTrimmingProgram,
     eval_bondTrimmingProgram, eval_errorReductionProgram, sampledSweepStep, successiveStep]
@@ -282,7 +284,7 @@ noncomputable def sampledSweepProgram (hq : 2 ≤ q)
   | i + 1 =>
     if hi : i + 1 ≤ L then do
       let S ← sampledSweepProgram hq h hs h0 h1 E₀ Δ I b D i
-      sampledSweepStepProgram hq h hs h0 h1 E₀ Δ (I ⟨i, by omega⟩) b D hi S
+      sampledSweepStepProgram hq h hs E₀ Δ (I ⟨i, by omega⟩) b D hi S
     else pure ∅
 
 /-- With the honest oracle, the program computes the sampled sweep at every cut. -/
@@ -387,12 +389,15 @@ theorem sampledGroundStateProgram_spec (hL : 0 < L) (hq : 2 ≤ q)
         rw [← e.inner_map_map, e.apply_symm_apply]
       rw [← norm_inner_symm, this]
       exact hover
-    let chain := ChainHamiltonian.ofBonds h hs h0 h1
-    have hchain : chain.operator = ∑ j, h j := ChainHamiltonian.ofBonds_operator h hs h0 h1
-    have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
+    let chain := ManyBody.ChainInteraction.ofBonds h hs
+    have hchain : chain.hamiltonian = ∑ j, h j := ManyBody.ChainInteraction.ofBonds_hamiltonian h hs
+    have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
-    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hΩ
-      (hspanC ▸ Submodule.mem_span_singleton_self _) hw'norm hover'
+    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
+        (ManyBody.Interaction.isHermitian_hamiltonian
+          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0))
+        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hΩ
+        (hspanC ▸ Submodule.mem_span_singleton_self _) hw'norm hover'
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E₀ ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E₀).trans henergy
