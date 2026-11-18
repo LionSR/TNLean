@@ -1,0 +1,47 @@
+{
+  "head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+  "pin": "729428582b78ab7529b3796099193649f947354a",
+  "status": "narrow verification finished with two defects; not ready for shared update or merge",
+  "strict_counts": {
+    "all": {
+      "not-run": 4,
+      "pass": 75,
+      "reused-pass": 2,
+      "fail": 1
+    },
+    "77": {
+      "pass": 74,
+      "reused-pass": 2,
+      "fail": 1
+    },
+    "13": {
+      "not-run": 4,
+      "pass": 9
+    }
+  },
+  "aggregate_missing_including_root": {
+    "TNLean.MPS.AreaLaw": 237,
+    "TNLean.MPS": 753,
+    "TNLean": 2368
+  },
+  "axiom_audit": {
+    "exit_code": 0,
+    "declarations": 9,
+    "axioms": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ]
+  },
+  "build_command_seconds": 459.71751316396694,
+  "strict_command_seconds": 353.3429989090946,
+  "production_source_edits": false,
+  "all_writer_processes_finished": true,
+  "not_run": [
+    "full-library build",
+    "compiled Blueprint checkdecls",
+    "Blueprint web/PDF",
+    "shared PR update",
+    "merge"
+  ]
+}

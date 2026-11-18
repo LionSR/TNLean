@@ -1,0 +1,23 @@
+'TNLean.MPS.AreaLaw.Hastings.areaLawBound_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.MPS.AreaLaw.Hastings.regionEntropy_prefix_le_of_factorization' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le' depends on axioms: [propext, Classical.choice, Quot.sound]
+'TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_with_log_constant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_printed' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_source' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_sourceLength' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGapped' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGapped_source' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

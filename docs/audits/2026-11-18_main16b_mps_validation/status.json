@@ -5,13 +5,11 @@
   "not_run": [
     "TNLean",
     "TNLean.MPS",
-    "TNLean.MPS.AreaLaw",
-    "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds",
-    "verification.area-law.Solution"
+    "TNLean.MPS.AreaLaw"
   ],
   "failed": [
     "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds",
     "verification.area-law.Solution"
   ],
-  "axiom_audit": "not-run; compilation/strict only"
+  "axiom_audit": "9 declarations passed; propext, Classical.choice, Quot.sound only"
 }

@@ -1,0 +1,1455 @@
+[
+  {
+    "module": "TNLean",
+    "source_sha256": "087207ec2ec4cb21b61fac5a9c852132cbb6dd97b75c125d73f82256c5e6477b",
+    "in77": false,
+    "in13": true,
+    "build": {
+      "status": "not-run"
+    },
+    "strict": {
+      "status": "not-run"
+    }
+  },
+  {
+    "module": "TNLean.MPS",
+    "source_sha256": "09563f0a0233b8becf53fe55c0cd73af98ddbbd2b999fb719c777785b5a7ec46",
+    "in77": false,
+    "in13": true,
+    "build": {
+      "status": "not-run"
+    },
+    "strict": {
+      "status": "not-run"
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw",
+    "source_sha256": "8c6e728ee002b04f57dd1000b4d1da8a9be6c445293bfb2e7e309af9f1adbd8d",
+    "in77": false,
+    "in13": true,
+    "build": {
+      "status": "not-run"
+    },
+    "strict": {
+      "status": "not-run"
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Algorithm.Cost",
+    "source_sha256": "b70e2742273a6f3d7e6f7ba1f470a03b2d58e3f56e34b10dc5917ade9ad9f55d",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.245471251022536
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.480567562015494
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Algorithm.GroundStateProgram",
+    "source_sha256": "c2a7d41ce41e9dadb692885205fb245152df508f573e9ba2eea40eccb8f90325",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.33928392600501
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.982492201990681
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Algorithm.SampledCost",
+    "source_sha256": "3ee96700881442a821f65379bce5328b58fb62d0690ca3b70d4a0a4a0a4a94d5",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.571620733011514
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.6430372670001816
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Algorithm.SampledProgram",
+    "source_sha256": "8e696bf9b06f775d8796f38b4b030f867bb4e78f602aa6bbfa20cc8b96663fde",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 6.274732909019804
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.898800044000382
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Algorithm.SweepProgram",
+    "source_sha256": "6c9bb1694452b6be03b0834743b63843ed1e3c8952a030867329a8cce3db0ff1",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.631543151976075
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.8243681930180173
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Algorithm.ValidOracle",
+    "source_sha256": "b2f72c5bf361ad8b0e0a3a2d3a12ba22750cd9de9a33d4e379a3ad7fef2bbe01",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 6.586232649977319
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 6.769556207989808
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Algorithm.ValidOracleCost",
+    "source_sha256": "2db0a1f8114e64120c52c3b234332c87ec9f0ad79f3748ebcd545be78b7cab1a",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.031199189979816
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.9324493820022326
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Algorithm.ValidOracleSampled",
+    "source_sha256": "aef33c0f0b32eaf4630865d9e3225a9023eef898c90cabb66e21b7caf83eec93",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.155786810995778
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.264039327012142
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Algorithm.ValidOracleSampledCost",
+    "source_sha256": "47c3a38f7e8aae5dcc255efc0809aea2fd6abcdb744a7626269dbf66a46aec14",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.442925475013908
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.167734720016597
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.BandInformation",
+    "source_sha256": "db1ec461c4ace651ac57ccc8b04f2b67d69d79d1ceb4032ff477cbb457441cd0",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.8537063709954964
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.1383687400084455
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.DomainInteractionBudget",
+    "source_sha256": "f817189d7179b9622d110dc9a1ae09f61a2836796c7754289537441c37631243",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "reused-pass",
+      "origin_cache": "/tmp/interaction-mps77-olean",
+      "verification_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "reason": "complete current source/import and artifact fingerprint validated; not a new execution"
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.4324865249946015
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.DomainIntervalNeighborhoodEntropy",
+    "source_sha256": "7650e0e72dd9a6f7bc90c5f2c09826acdfee24413712c0476ff298904b6f98f2",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 1.8887054880033247
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.1667701940023107
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.DomainLogarithmicSeparation",
+    "source_sha256": "3da545e0502acace958c96cb222ea17eec871907803de0b341d725876c5f824a",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.1472874090104597
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.2754409039916936
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.DomainPartialSwap",
+    "source_sha256": "7461dc08adc7d128f80f032794aa4a04e26c59f5207ddda1850db2f849fbcc4a",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "reused-pass",
+      "origin_cache": "/tmp/interaction-mps77-olean",
+      "verification_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "reason": "complete current source/import and artifact fingerprint validated; not a new execution"
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.9500625009968644
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.DoubledHamiltonian",
+    "source_sha256": "4bd626c815323872bec31071aa5630d35235c0b875d61f9cb597d3bb1f5ec78a",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "reused-pass",
+      "origin_cache": "/tmp/interaction-mps77-olean",
+      "verification_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "reason": "complete current source/import and artifact fingerprint validated; not a new execution"
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.52036699000746
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.GluingHamiltonian",
+    "source_sha256": "7915a8dd6cbf17f7d35b7768d9f3e39d0577742c79583d4eabcd050fcddadb3c",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.0183024400030263
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.165858027001377
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings",
+    "source_sha256": "bc95deb6204cf9c0dfe4c8827e90b48401f568b330e48eab060a0e70dbd24657",
+    "in77": false,
+    "in13": true,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.435845870000776
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.2995261769974604
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.AreaLaw",
+    "source_sha256": "9aadae03901e9b9f6d0fee7699471948b580922ae159a9504d79b836bdec0a87",
+    "in77": true,
+    "in13": true,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.353544391997275
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.4784015199984424
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.BootstrapLemma",
+    "source_sha256": "9e1e3b4f4e07f390d014cad7987add5e1fc10625fd12cbac5fecbe61f33890d1",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.770999162006774
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.7271310599899152
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.BoundaryFactorization",
+    "source_sha256": "9f8a7f6470c928a5b7ac0454b9b6012bf83d945681a93b02f50561ff7841635c",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 10.619104750992847
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.935866111991345
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.BoundaryLocalization",
+    "source_sha256": "151bb9a5bb3f0a90bcfc5d136c2b30aa0adaeeaff819b95a53e9207b4846279b",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "reused-pass",
+      "origin_cache": "/tmp/interaction-mps77-olean",
+      "verification_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "reason": "complete current source/import and artifact fingerprint validated; not a new execution"
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 6.438807410988375
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.ChainLocalizedParts",
+    "source_sha256": "65329546020446e5cb8793117bb73388ccd9e5d32fc2aa0b91a5464fd77a2925",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "reused-pass",
+      "origin_cache": "/tmp/interaction-mps77-olean",
+      "verification_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "reason": "complete current source/import and artifact fingerprint validated; not a new execution"
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.2963299519906286
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.CorrelationLemma",
+    "source_sha256": "cb9fb5b0f6b84010ff9b7516c0465e2f1ea76e747cd612bfa1c1f9b6e56b4dda",
+    "in77": true,
+    "in13": true,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.5934874130034586
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.7262713499949314
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.CutoffPair",
+    "source_sha256": "a7964541bdccda3a9fa37c1b3a34e162d1e29414f726805fac0cc43222076248",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.59233372300514
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.581348428997444
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.GappedAreaLaw",
+    "source_sha256": "ab3228fff31b4a124553f74fb463f425b0513bf6d2da0279c0ca9d5142f3665b",
+    "in77": true,
+    "in13": true,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.692292053005076
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.7896468739927514
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.LemmaOneConstant",
+    "source_sha256": "8b053b19e95eec2041f1d226e8c6f37d149db5bcb0606d7db232a92ba6329100",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 15.33685301899095
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 14.244075112001156
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.LiebRobinson",
+    "source_sha256": "f3db5618c87217d5c65706ae7540237b79b37d74d640e4e1e4e564df7fa73cae",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.4391141590022016
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.278556794990436
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.MPSGroundState",
+    "source_sha256": "aee14b8f260f6e5063963d7975a7fdc276323fa7f6cd0c2bf39282dbb7ef47ef",
+    "in77": true,
+    "in13": true,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.3567334480030695
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.107269186002668
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.PartCommutators",
+    "source_sha256": "ede41b5124e5aa84a7a51b882eddac117cad40f85f943ea0ef687fae76957bda",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "reused-pass",
+      "origin_cache": "/tmp/interaction-mps77-olean",
+      "verification_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "reason": "complete current source/import and artifact fingerprint validated; not a new execution"
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.534943511011079
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.PrintedAreaLaw",
+    "source_sha256": "24a6ceab2df7c0902098cc74c91a19721335eb25b736be72ebe5c67e7a5c83e9",
+    "in77": true,
+    "in13": true,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.001475451004808
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.362935921992175
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.PrintedAreaLawSource",
+    "source_sha256": "1488e187b838fa6b76ca3b7dd67e40f7d2d0b2de6daf84a7410114f5c7b26a6a",
+    "in77": true,
+    "in13": true,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.2660756499972194
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.402889345001313
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.ProjectorFactorization",
+    "source_sha256": "07c07fa1a8cb8cfcdf8b1531ba0e709a8449b7c7e24f150976b7b3ee7469d5f9",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.193418746988755
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.120361915003741
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.ProjectorFactorizationScaling",
+    "source_sha256": "acd5458b8cfc8de179b5269af3621b95caeb7401f42ad80c0b754c846146937d",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.604835626014392
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.3621551130054286
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.RelentGapped",
+    "source_sha256": "30bc5c79762b3a6430a91f486a1f92d16f3f2f40375aed8bb8501d468eb2ced9",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.0042841840040637
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.8097139849996893
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.RenyiBootstrapLemma",
+    "source_sha256": "524d006470b2b49633406758331059bc82d34ac4ea478378e657c188166b1cbf",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.3332212710083695
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.054714836005587
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.SourceConsequences",
+    "source_sha256": "4b0d575495ff532096a601e95eb55d890c19e8a0e7e450c94741773ccef4d61e",
+    "in77": true,
+    "in13": true,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.514989536997746
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.677622508010245
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.SourceLength",
+    "source_sha256": "c529705300999029c165c0690a8a333fd9d1191bb92fdfcba813ca455f0a5658",
+    "in77": true,
+    "in13": true,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.6581327550084097
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.543932116997894
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Huang.PositiveChainHamiltonian",
+    "source_sha256": "a6674145590507e75afa6462d6e114dbf1797d71c3de5148a9b1d9fc02237289",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.3739210220082896
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.3531694910052465
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.InformationReset",
+    "source_sha256": "e7ebf2a150b867bcea19e76b90bfa9eab170688bc99b991d049086426dd89f16",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 13.169829272999777
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 12.732708071009256
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.LogarithmicAreaLaw",
+    "source_sha256": "c97c7e9392528a33273f22fc7c329a9b620a28b6f60d6800e1354fd590ba05e8",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.631819122994784
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.6588471720024245
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.LogarithmicSeparation",
+    "source_sha256": "801d4922b81a72470e1df036b5a44d1f7a6574a1901cecfd97058664aca4ed04",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.737477354006842
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.762014303007163
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.MPSApproximation",
+    "source_sha256": "59da7c139af2e9539f1d5cfab96036d22dab18e26e186ea8ec11f385b54765b8",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 6.84009273799893
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 6.413530263991561
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.PartialSwap",
+    "source_sha256": "2d1379df39f6eb148d91ffd5dca69e453b087ccbd0b9ca2b77596c0351ea2aca",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "reused-pass",
+      "origin_cache": "/tmp/interaction-mps77-olean",
+      "verification_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "reason": "complete current source/import and artifact fingerprint validated; not a new execution"
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.0835892530012643
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ProtocolMPSApproximation",
+    "source_sha256": "458cf71c184350727bca476dd6b38864c6e30bb5f93dd3f3d06a1d4121c5b126",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 7.318427796999458
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 7.153515364974737
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ProtocolPhysicalPreparation",
+    "source_sha256": "7219a7abacd8559f86df21ac91d0b535c5a3724575d643727af0887cf8c0a601",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 8.310419928006013
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 8.903636221017223
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ProtocolStageInformation",
+    "source_sha256": "8876f661d66e9092bcaab1037a7ace69f68c1c860441605a2f25ed87dce06c7b",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.3249408209958347
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.608579269013717
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ProtocolStagePhysicalCircuits",
+    "source_sha256": "b04f83558b08281567d6f9ed29550579f53e4ece1690ad508f2a43d1999df41a",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.506187211998622
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.5753985720075434
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ProtocolUniformPreparation",
+    "source_sha256": "00e078ffe349f45fc19cd3ddba4b5a2815b5892ee4099cfe8969553fa4efcab9",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 8.054103365982883
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 7.130583095015027
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.RangeOneCut",
+    "source_sha256": "2a3c401863e508d8ea74e21b974f7fbd1e51ea56a7ed1847f3054593b4be9835",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.191672952991212
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.2170540039951447
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.RelativeGeneratorLocalization",
+    "source_sha256": "b87f960c99a5ffd3a969a215a2ab96d9613cc47449d3bfd057bcfaf080c54d24",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "reused-pass",
+      "origin_cache": "/tmp/interaction-mps77-olean",
+      "verification_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "reason": "complete current source/import and artifact fingerprint validated; not a new execution"
+    },
+    "strict": {
+      "status": "reused-pass",
+      "original_head": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+      "verification_head": "f94193009343ee767ddc96a3dacee80e659ec5a9"
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.RenyiEntropy",
+    "source_sha256": "d8e3a97bf6ed5c4129a2f5bdb51b2fc1fce002da13616d753c7ea80d7e25d80c",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.6006874500017148
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.7421549469872843
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.SharpPhysicalCompression",
+    "source_sha256": "9a10c40f651a4f99f0e61c69af75f419fafcd9776091df4e95abbba0fd4ed515",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.394417083996814
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.63833248600713
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.SnakeGridApproximation",
+    "source_sha256": "987094fd63438c9177d4b70a3a85b86fef730459e5eb5f19b5620bee2072f034",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 6.7864473029912915
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 6.605858607013943
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.StripApproximation",
+    "source_sha256": "208ebbe87536c06aabef635d5b028ba5d15e14274d261e06b741b748a9e8af2d",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 8.40499290599837
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 7.8477964470221195
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.StripBufferDiscount",
+    "source_sha256": "77f8f1cba708c7a437b7655c48e2a324a392e83f8b661b68ce9ef6e3cd70fe35",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 8.357245751976734
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 8.489699040015694
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.StripGeometry",
+    "source_sha256": "ad9eca1f73e63fdc66b5a2b0517c37e1f6593d109b8dc88e7b6ad2063d3b7aa8",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.843851223005913
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.6828649420058355
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.SupportedGaussianIntegral",
+    "source_sha256": "53d0b3c287ba8197a305711562b023f4944654f466372de72da813a284cac748",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "reused-pass",
+      "origin_cache": "/tmp/interaction-mps77-olean",
+      "verification_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "reason": "complete current source/import and artifact fingerprint validated; not a new execution"
+    },
+    "strict": {
+      "status": "reused-pass",
+      "original_head": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+      "verification_head": "f94193009343ee767ddc96a3dacee80e659ec5a9"
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.SwappedDoubledHamiltonian",
+    "source_sha256": "db0752edd424e94168ba83b755a0674b3af183b0ab56ab434c9bc9e549e713fe",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "reused-pass",
+      "origin_cache": "/tmp/interaction-mps77-olean",
+      "verification_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "reason": "complete current source/import and artifact fingerprint validated; not a new execution"
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.966828350996366
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.BondTrimmingReference",
+    "source_sha256": "6511cba84b03231e4f0788e61a9b974e94022ddb0f25e26922ce92637eff2adc",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.7086963320034556
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.7178562089975458
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.ConstantRankCut",
+    "source_sha256": "daa40363de458c879fbec30c8757fbef833d719ecb4024343a836a66f3dbb516",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 6.425421807012754
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 6.124837677984033
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.PowerProjector",
+    "source_sha256": "0ba60809ed675dc14a97139b398533d229528a31402707df54ec4353b11af615",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.207559628994204
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.132192854012828
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.RationalBondTrimming",
+    "source_sha256": "dccc75f74b3c5399a19922b9c5b7bdef5feb0aaaccb05e6782b65667d1b74c91",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.803364927007351
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.7059162090008613
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.RationalSampledSuccessiveConstruction",
+    "source_sha256": "f8e9243c01cb202feef23fbc529dd9148c2c841191e75a7feed909fbd0b54deb",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.026338840019889
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.437563522980781
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.SampledSuccessiveConstruction",
+    "source_sha256": "f13a33a500396a4fc435d780ca28f5911eda6c25f7c805f90b1e81c1dce78e27",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.4013610309921205
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.667362184001831
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.SizeBondTrimming",
+    "source_sha256": "9111536d8a18645509cc4bd522eff430ddde312436515527c5c905ac13942aaa",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.6823227970162407
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.4371281399799045
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.ApproximateCertificates",
+    "source_sha256": "c3f82e4253094640ff8d6a6dc31d2ea7560d6ad1695aed685c21923c974607f4",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.552308212994831
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.355353922001086
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.CanonicalSearch",
+    "source_sha256": "ad85e3572423620f5af4c91fcdc2ec94f97cc943999d9dbac9545c562832f37d",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 7.0507451580197085
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 7.253989609016571
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.CompressedSolutions",
+    "source_sha256": "8a632e004230cea1a32d89e662474b221a883c6b11f60558d7313f4333120e98",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.495604583004024
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 5.326383078994695
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.LeadingVectorPrecision",
+    "source_sha256": "a1fdf8961ec6955183473ec64b7cd707ff1689de9b5e0f69f549d090fc5672d5",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 8.277274674008368
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 7.927343399001984
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.PowerIteration",
+    "source_sha256": "b8656dc0e1c0d01a63b5865f332ce8a57a0794c1db779627151c5142c1687565",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.855106506001903
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.827390196995111
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.RationalSearch",
+    "source_sha256": "b73921cef449505ae0d05b57931151560cac517a041bcd7a222a12449cc52c79",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 7.686842245020671
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 7.432809347985312
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.Selection",
+    "source_sha256": "614cbbc523df7b2e5906416a18f647ee2c505f3e7978823f38d39a1af89ce29d",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.149234028998762
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.77906172699295
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.UniformCertificates",
+    "source_sha256": "32732403b8feba9dac2773d5c9f627d438669ac685c23e7dc744cd575349a1ef",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.821454138989793
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.678889645001618
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.SuccessiveConstruction",
+    "source_sha256": "abb92ace490dd863dbab438565d2abba9445c9d0f8803d34b9fa2a1777d5af9e",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.3686451640096493
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.2060369980172254
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.SuccessiveStep",
+    "source_sha256": "ff1147930e40848351680979775bcac06683c89e83ae155df122166ecb975fa3",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.559168675012188
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 2.228508635016624
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds",
+    "source_sha256": "10af5993239f9b7c7680613575d5a8be200ae788b1a8b65f71daf5bececfb951",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 14.710468102974119
+    },
+    "strict": {
+      "status": "fail",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 1,
+      "seconds": 14.855209442001069
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingVector",
+    "source_sha256": "34caa1e876abce92f1dd1da67ac0e85dc8a35d5f8b0ec619dab22fe911d7e64a",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.048348497977713
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 4.118361724016722
+    }
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.ViableTrimmedWitness",
+    "source_sha256": "5ec18fb1c7b8c8595f102ebfb5800fc019146a57dd7335e02e87e7b0ac6931ce",
+    "in77": true,
+    "in13": false,
+    "build": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.674626519001322
+    },
+    "strict": {
+      "status": "pass",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 0,
+      "seconds": 3.1797464709961787
+    }
+  },
+  {
+    "module": "verification.area-law.Solution",
+    "source_sha256": "e59d098da39c769ceed7e09727b38f8b08f970c0ba77cb71fb4f604c2f5ba010",
+    "in77": false,
+    "in13": true,
+    "build": {
+      "status": "fail",
+      "execution_head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+      "exit_code": 1,
+      "seconds": 2.2812190639961045
+    },
+    "strict": {
+      "status": "not-run"
+    }
+  }
+]

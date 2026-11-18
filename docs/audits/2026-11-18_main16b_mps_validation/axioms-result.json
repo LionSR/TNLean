@@ -1,0 +1,24 @@
+{
+  "head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+  "pin": "729428582b78ab7529b3796099193649f947354a",
+  "command": [
+    "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+    "-j1",
+    "-M12288",
+    "docs/audits/2026-11-18_main16b_mps_validation/axioms.lean"
+  ],
+  "exit_code": 0,
+  "seconds": 2.8470395510084927,
+  "declarations": [
+    "TNLean.MPS.AreaLaw.Hastings.areaLawBound_le",
+    "TNLean.MPS.AreaLaw.Hastings.regionEntropy_prefix_le_of_factorization",
+    "TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le",
+    "TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_with_log_constant",
+    "TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_printed",
+    "TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_source",
+    "TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_sourceLength",
+    "TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGapped",
+    "TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGapped_source"
+  ],
+  "source_sha256": "2e53110a68cf77dbb2f6a840f01294b56dfc3aaa3d2814a998bf22e40234c573"
+}
