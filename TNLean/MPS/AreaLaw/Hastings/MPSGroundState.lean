@@ -64,7 +64,6 @@ eigenvectors at every cut is an open-boundary matrix product state of bond dimen
 `‖Φ - Ω‖² ≤ (L - 1) 4 C₁² e^{2/ξ'} (k'/k₀)^{-1/(ξ' log q)}`.
 Hastings, arXiv:0705.2024v4, lines 505–557, with the constants of the module docstring. -/
 theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState [NeZero q] (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
@@ -84,7 +83,7 @@ theorem isOpenMPS_norm_sub_sq_le_of_gappedGroundState [NeZero q] (h : ChainInter
   refine isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy hΩ hξ'
     (fun j _ m hm ↦ hfact j m hm) (fun j _ ↦ ?_) hk'
   -- The area law bounds the entropy of every initial segment by `S_max`.
-  have hS := regionEntropy_prefix_le_of_factorization h hh hhJ hΩ hgap hspan hξ' hC₁ hfact j
+  have hS := regionEntropy_prefix_le_of_factorization h hΩ hgap hspan hξ' hC₁ hfact j
   rw [← leftBlock_eq_interval] at hS
   calc Real.exp (2 * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) / 2
       ≤ Real.exp (2 * areaLawBound ξ' C₁ q) / 2 := by gcongr
@@ -124,7 +123,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped (R : ℕ) {κ : ℝ} (hκ : 
   refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h hh hhJ {E₀} {Ω} hΩ hgap hspan {k'} hk' ↦ ?_⟩
   have hξ'0 : 0 < κ * lemmaOneLength R (J / ΔE) 1 :=
     mul_pos (by linarith) (lemmaOneLength_pos R _ 1)
-  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hh hhJ hΩ hgap hspan hξ'0
+  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hΩ hgap hspan hξ'0
       (le_max_right _ _)
     (fun c l _ ↦ ?_) hk'
   obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan c l
@@ -161,7 +160,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_endpoint (R : ℕ) :
   refine ⟨K, hK0, fun {J ΔE} hJ hΔ {L q} _ h hh hhJ {E₀} {Ω} hΩ hgap hspan {k'} hk' ↦ ?_⟩
   have hζ0 : 0 < 6 * lemmaOneEndpointLength R J ΔE := by
     rw [lemmaOneEndpointLength_eq]; linarith [lemmaOneLength_pos R (J / ΔE) 1]
-  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hh hhJ hΩ hgap hspan hζ0 (le_max_right _ _)
+  refine isOpenMPS_norm_sub_sq_le_of_gappedGroundState h hΩ hgap hspan hζ0 (le_max_right _ _)
     (fun c l _ ↦ ?_) hk'
   obtain ⟨OB, OL, OR, hf⟩ := hF hJ hΔ h hh hhJ hΩ hgap hspan c l
   exact ⟨OB, OL, OR, hf.mono
