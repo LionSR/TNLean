@@ -542,7 +542,51 @@ tree above: it is shown to exist, with no joint sampling probability; its
 leaves are full blocks of length at most $4\ell$; each long parent applies
 one collective trim after its $k$ rounds rather than after each round; the
 parameters use $g=\min\{\gamma,1\}$; and the bond dimension of the output
-grows with $L$ through the trimming threshold.
+grows with $L$ through the trimming threshold. Its success probability is
+the subject of the next subsection.
+
+\subsection*{Success probability of the tree of constant node dimension}
+The same tree can be run with fresh samples. Every interval receives one
+independent coordinate, a Haar unitary of every possible rank of its space,
+fixed before any retained space is known. A long parent writes the
+orthogonal projection of its merged space $W$ in one fixed chart, samples
+the range through the coordinate of its rank, applies all words of length
+$k$ in its family, and trims once. For fixed children, Lemma
+\texttt{l:rs} with its rank-dependent overlap,
+\begin{align}
+    c&=\frac{3\min\{s,Q\}}{32Q},\qquad Q=\dim W,
+    \label{eq:alvv16_approximation_parameters_canonical_overlap}
+\end{align}
+bounds the failure of the sample by $(1+2/\sqrt c)^{2r}Qe^{-s/16}$ when
+$Q>s$; when $Q\le s$ the sample is $W$ itself and does not fail. Since
+$Q\le M^2\le D^{12}s^6$, the failure is at most $e^{-s/64}\le\beta$ for the
+sample size of~(\ref{eq:alvv_approximation_refinement_sample_parameters}).
+On the complementary event the merge error estimate above and one
+collective trim give a $3/200$-viable parent. Every node has dimension at
+most $M$ for every sample, including unsuccessful ones, so the fixed-child
+bound applies at every internal node. Write $E$ for the event that the
+root and all its internal nodes are $3/200$-viable for the original ground
+space, and $\mu$ for the product of the Haar laws. A union bound over the
+$L-1$ internal nodes gives
+\begin{align}
+    \mu(E^{\mathrm c})&\le(L-1)\beta,
+    \label{eq:alvv16_approximation_parameters_tree_failure}
+\end{align}
+and $E$ is Borel.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_canonical_constant_node_tree_failure_le}.}
+The sampled parent is a Borel function of the merged space and of its own
+coordinate, so the shorter children do not depend on the coordinate of
+their parent, which is what the union bound uses.
+
+\paragraph{Unverified against source (composition along the tree).}
+The source passages quoted in this repository fix $s$ in terms of $\beta$
+and treat $\beta$ as the fixed-input failure bound of one merge. They do
+not state the success probability that Theorem \texttt{t:alg1} asserts for
+the whole tree. The bound~(\ref{eq:alvv16_approximation_parameters_tree_failure})
+is the union bound of the per-merge failure; neither this composition nor
+the reading of $\beta$ as a per-merge failure probability has been checked
+against the source. A failure probability at most $\beta'$ for the whole
+tree follows with $\beta=\beta'/(L-1)$, which makes $s$ grow like
+$\log L$.
 
 \bibliographystyle{unsrt}
 \subsection*{The literal interleaved interval tree}
