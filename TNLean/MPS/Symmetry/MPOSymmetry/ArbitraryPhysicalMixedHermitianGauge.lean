@@ -123,41 +123,44 @@ theorem mixedEndpointBondWeight_ne_zero {c : ℂ} (hc : c ≠ 0) (α : Fin (χ�
   obtain ⟨α, rfl⟩ := finSumFinEquiv.surjective α
   rcases α with α | α <;> simp [mixedEndpointBondWeight, hc]
 
-/-- The physical adjoint of the mixed endpoint operator tensor. If both
-endpoint tensors are fixed by the physical adjoint and the entries of the
-action maps are conjugated, under transposition of the state indices, into
-multiples `ω_p`, `ν_p` of themselves, then the physical adjoint rescales
-the crossed blocks by `ω₀ ν₁` and `ω₁ ν₀`. When these factors are inverse to
-each other, this is a diagonal bond similarity. Source: arXiv:2203.12563,
+/-- The physical adjoint of the mixed endpoint operator tensor. If the
+physical adjoints of the endpoint tensors are endpoint tensors `T₀'`, `T₁'`,
+and the entries of the action maps are conjugated, under transposition of
+the state indices, into multiples `ω_p`, `ν_p` of the action maps of `T_p'`,
+then the physical adjoint is the mixed operator of the primed data with the
+crossed blocks rescaled by `ω₀ ν₁` and `ω₁ ν₀`. When these factors are
+inverse to each other, this is a diagonal bond similarity. The primed data
+are the unprimed ones for a Hermitian symmetry, and those of the inverse
+label for a unitary group representation. Source: arXiv:2203.12563,
 lines 1600–1631, and
 `docs/paper-gaps/glm23_mixed_path_parent_commutation.tex`,
 paragraph "When closure holds". -/
 theorem physicalAdjointTensor_mixedEndpointMPO_apply
-    {T₀ : MPOTensor (D₀ * D₀) χ₀} {T₁ : MPOTensor (D₁ * D₁) χ₁}
-    {V₀ : Fin m → Matrix (Fin D₀) (Fin (χ₀ * D₀)) ℂ}
-    {V₁ : Fin m → Matrix (Fin D₁) (Fin (χ₁ * D₁)) ℂ}
-    {W₀ : Fin m → Matrix (Fin (χ₀ * D₀)) (Fin D₀) ℂ}
-    {W₁ : Fin m → Matrix (Fin (χ₁ * D₁)) (Fin D₁) ℂ}
-    (hT₀ : physicalAdjointTensor T₀ = T₀) (hT₁ : physicalAdjointTensor T₁ = T₁)
+    {T₀ T₀' : MPOTensor (D₀ * D₀) χ₀} {T₁ T₁' : MPOTensor (D₁ * D₁) χ₁}
+    {V₀ V₀' : Fin m → Matrix (Fin D₀) (Fin (χ₀ * D₀)) ℂ}
+    {V₁ V₁' : Fin m → Matrix (Fin D₁) (Fin (χ₁ * D₁)) ℂ}
+    {W₀ W₀' : Fin m → Matrix (Fin (χ₀ * D₀)) (Fin D₀) ℂ}
+    {W₁ W₁' : Fin m → Matrix (Fin (χ₁ * D₁)) (Fin D₁) ℂ}
+    (hT₀ : physicalAdjointTensor T₀ = T₀') (hT₁ : physicalAdjointTensor T₁ = T₁')
     {ω₀ ω₁ ν₀ ν₁ c : ℂ}
     (hW₀ : ∀ μ α r k, star (W₀ μ (finProdFinEquiv (α, r)) k) =
-      ω₀ * W₀ μ (finProdFinEquiv (α, k)) r)
+      ω₀ * W₀' μ (finProdFinEquiv (α, k)) r)
     (hW₁ : ∀ μ α r k, star (W₁ μ (finProdFinEquiv (α, r)) k) =
-      ω₁ * W₁ μ (finProdFinEquiv (α, k)) r)
+      ω₁ * W₁' μ (finProdFinEquiv (α, k)) r)
     (hV₀ : ∀ μ β l s, star (V₀ μ l (finProdFinEquiv (β, s))) =
-      ν₀ * V₀ μ s (finProdFinEquiv (β, l)))
+      ν₀ * V₀' μ s (finProdFinEquiv (β, l)))
     (hV₁ : ∀ μ β l s, star (V₁ μ l (finProdFinEquiv (β, s))) =
-      ν₁ * V₁ μ s (finProdFinEquiv (β, l)))
+      ν₁ * V₁' μ s (finProdFinEquiv (β, l)))
     (h₀₁ : c * (ω₀ * ν₁) = 1) (h₁₀ : ω₁ * ν₀ = c)
     (i j : Fin ((D₀ + D₁) * (D₀ + D₁))) (β α : Fin (χ₀ + χ₁)) :
     physicalAdjointTensor (mixedEndpointMPO T₀ T₁ V₀ V₁ W₀ W₁) i j β α =
       mixedEndpointBondWeight χ₀ χ₁ c β / mixedEndpointBondWeight χ₀ χ₁ c α *
-        mixedEndpointMPO T₀ T₁ V₀ V₁ W₀ W₁ i j β α := by
+        mixedEndpointMPO T₀' T₁' V₀' V₁' W₀' W₁' i j β α := by
   have hc : c ≠ 0 := left_ne_zero_of_mul_eq_one h₀₁
   have h₀₁' : ω₀ * ν₁ = c⁻¹ := eq_inv_of_mul_eq_one_right h₀₁
-  have hT₀' : ∀ x y β α, star (T₀ y x β α) = T₀ x y β α := fun x y β α ↦
+  have hT₀' : ∀ x y β α, star (T₀ y x β α) = T₀' x y β α := fun x y β α ↦
     congrFun (congrFun (congrFun (congrFun hT₀ x) y) β) α
-  have hT₁' : ∀ x y β α, star (T₁ y x β α) = T₁ x y β α := fun x y β α ↦
+  have hT₁' : ∀ x y β α, star (T₁ y x β α) = T₁' x y β α := fun x y β α ↦
     congrFun (congrFun (congrFun (congrFun hT₁ x) y) β) α
   obtain ⟨⟨r, s⟩, rfl⟩ := (mixedEndpointPhysicalEquiv D₀ D₁).surjective i
   obtain ⟨⟨k, l⟩, rfl⟩ := (mixedEndpointPhysicalEquiv D₀ D₁).surjective j

@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Fintype.Prod
-import TNLean.PEPS.SquareLatticeGraph
+import QICLean.ManyBody.Sites.Lattice.Square
+import TNLean.PEPS.NormalBlocking
 
 /-!
 # Number of edges in an open square lattice
@@ -20,6 +21,10 @@ orientation. The resulting bound includes the empty and one-vertex squares.
   revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`: the finite edge count
   used in the bound for the doubled Hamiltonian boundary perturbation.
 -/
+
+open ManyBody (Edge IsHorizontalSquareLatticeEdge IsVerticalSquareLatticeEdge SquareLatticeVertex
+  horizontalSquareLatticeEdge_coords squareLatticeEdge_horizontal_or_vertical squareLatticeGraph
+  verticalSquareLatticeEdge_coords)
 
 namespace TNLean.PEPS
 

@@ -160,8 +160,10 @@ private theorem firstBonds_pairwiseDisjoint :
   obtain ⟨n', -, rfl⟩ := mem_firstBonds.mp hk'
   have hn : n ≠ n' := fun h => hkk' (h ▸ rfl)
   change Disjoint (ringBond _) (ringBond _)
-  rw [bond_ghzSite_zero, bond_ghzSite_zero, Set.disjoint_left]
-  rintro i (rfl | rfl) (h | h) <;> exact hn (ghzSite_injective h).1
+  rw [bond_ghzSite_zero, bond_ghzSite_zero, Finset.disjoint_left]
+  intro i hi hi'
+  simp only [Finset.mem_insert, Finset.mem_singleton] at hi hi'
+  rcases hi with rfl | rfl <;> rcases hi' with h | h <;> exact hn (ghzSite_injective h).1
 
 private theorem secondBonds_pairwiseDisjoint :
     ((secondBonds : Finset (Fin (M * 2))) : Set (Fin (M * 2))).PairwiseDisjoint ringBond := by
@@ -170,8 +172,10 @@ private theorem secondBonds_pairwiseDisjoint :
   obtain ⟨n', hn1', rfl⟩ := mem_secondBonds.mp hk'
   have hn : n ≠ n' := fun h => hkk' (h ▸ rfl)
   change Disjoint (ringBond _) (ringBond _)
-  rw [bond_ghzSite_one n hn1, bond_ghzSite_one n' hn1', Set.disjoint_left]
-  rintro i (rfl | rfl) (h | h)
+  rw [bond_ghzSite_one n hn1, bond_ghzSite_one n' hn1', Finset.disjoint_left]
+  intro i hi hi'
+  simp only [Finset.mem_insert, Finset.mem_singleton] at hi hi'
+  rcases hi with rfl | rfl <;> rcases hi' with h | h
   · exact hn (ghzSite_injective h).1
   · exact absurd (ghzSite_injective h).2 (by decide)
   · exact absurd (ghzSite_injective h).2 (by decide)
@@ -199,21 +203,21 @@ private def secondShift (k : Fin (M * 2)) : Equiv.Perm (Fin (M * 2) → Fin b) :
 
 private theorem isLocalPerm_firstShift (k : Fin (M * 2)) :
     IsLocalPerm (ringBond k) (firstShift (b := b) k) :=
-  isLocalPerm_shiftPerm (S := ringBond k) (Or.inr rfl) _ _ fun x y h => by
-    rw [h k (Or.inl rfl)]
+  isLocalPerm_shiftPerm (S := ringBond k) ((by simp [ringBond])) _ _ fun x y h => by
+    rw [h k ((by simp [ringBond]))]
 
 private theorem isLocalPerm_secondShift (k : Fin (M * 2)) :
     IsLocalPerm (ringBond k) (secondShift (b := b) k) :=
-  isLocalPerm_shiftPerm (S := ringBond k) (Or.inl rfl) _ _ fun x y h => by
-    rw [h (k + 1) (Or.inr rfl)]
+  isLocalPerm_shiftPerm (S := ringBond k) ((by simp [ringBond])) _ _ fun x y h => by
+    rw [h (k + 1) ((by simp [ringBond]))]
 
 /-- The first layer of controlled shifts. -/
-private noncomputable def firstLayer : Layer b (M * 2) :=
+private noncomputable def firstLayer : RingLayer b (M * 2) :=
   permLayer firstBonds firstBonds_pairwiseDisjoint firstShift
     fun k _ => isLocalPerm_firstShift k
 
 /-- The second layer of controlled shifts. -/
-private noncomputable def secondLayer : Layer b (M * 2) :=
+private noncomputable def secondLayer : RingLayer b (M * 2) :=
   permLayer secondBonds secondBonds_pairwiseDisjoint secondShift
     fun k _ => isLocalPerm_secondShift k
 
@@ -282,7 +286,7 @@ private theorem exists_firstLayer_op_mulVec : ∃ P : (Fin (M * 2) → Fin b) �
     (fun (k : Fin (M * 2)) (x : Fin (M * 2) → Fin b) => -x k) firstShift_aux
     fun k _ => isLocalPerm_firstShift k
   refine ⟨P, hv, fun x n hn => ?_, fun x n => ?_, fun x n hn => ?_⟩
-  · have := h1 x (ghzSite n 0) (mem_firstBonds.mpr ⟨n, hn, rfl⟩) (Or.inr rfl)
+  · have := h1 x (ghzSite n 0) (mem_firstBonds.mpr ⟨n, hn, rfl⟩) ((by simp [ringBond]))
     rwa [ghzSite_zero_add_one, ← sub_eq_add_neg] at this
   · refine h2 x _ fun k hk => ?_
     obtain ⟨n', -, rfl⟩ := mem_firstBonds.mp hk
@@ -307,7 +311,7 @@ private theorem exists_secondLayer_op_mulVec : ∃ P : (Fin (M * 2) → Fin b) �
     (fun (k : Fin (M * 2)) (x : Fin (M * 2) → Fin b) => x (k + 1)) secondShift_aux
     fun k _ => isLocalPerm_secondShift k
   refine ⟨P, hv, fun x n hn => ?_, fun x n => ?_, fun x n hn => ?_⟩
-  · have := h1 x (ghzSite n 1) (mem_secondBonds.mpr ⟨n, hn, rfl⟩) (Or.inl rfl)
+  · have := h1 x (ghzSite n 1) (mem_secondBonds.mpr ⟨n, hn, rfl⟩) ((by simp [ringBond]))
     rwa [ghzSite_one_add_one n hn] at this
   · refine h2 x _ fun k hk => ?_
     obtain ⟨n', -, rfl⟩ := mem_secondBonds.mp hk

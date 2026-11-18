@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.CollarInformation
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBoxBootstrap
 import TNLean.PEPS.AreaLaw.Scan.TemplateFinalInformation
 import TNLean.PEPS.AreaLaw.Scan.BoxClearanceComparison
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The physical sublinear collar bound
@@ -31,6 +32,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -71,7 +74,8 @@ theorem sublinearCollarBound_real_of_boxEntropy_explicit
       ∀ n s₀ : ℕ, sublinearCollarThreshold q R J Δ Cbox (latticeTruncationRadiusConstant R J Δ 10)
           c₀ Cent eent Cen een ≤ n →
         ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-          ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
               T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
@@ -109,14 +113,14 @@ theorem sublinearCollarBound_real_of_boxEntropy_explicit
   have hD₀1 : (1 : ℝ) ≤ D₀ := by
     linarith [show (0 : ℝ) ≤ (R : ℝ) from Nat.cast_nonneg R]
   refine sublinearCollarBound_of_mutualInformation_le_at hCtpl hD₀1 _ _ ?_
-  intro n s₀ hn Λ h E₀ Ω hgs A T hsep hL
+  intro n s₀ hn Λ h E₀ Ω hΩ hgap hspan A T hsep hL
   have hsep' : T.IsSeparated (d : ℝ) (Geometry.boundaryEndpoints Λ A) := by
     intro t ht z hz
     exact lt_of_le_of_lt
       (mul_le_mul_of_nonneg_right
         (mul_le_mul_of_nonneg_left hdreal.le (by norm_num : (0 : ℝ) ≤ 4))
         (Nat.cast_nonneg s₀)) (hsep t ht z hz)
-  have hi := (hinfo n s₀ hn Λ h E₀ Ω hgs A T hsep' hL).2
+  have hi := (hinfo n s₀ hn Λ h E₀ Ω hΩ hgap hspan A T hsep' hL).2
   dsimp only [Exponents.scannerEll, Exponents.amplificationEpsilon] at hi ⊢
   nlinarith only [hi]
 
@@ -141,7 +145,8 @@ theorem sublinearCollarBound_real_of_boxEntropy
     ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
       ∀ n s₀ : ℕ, sublinearCollarThreshold q R J Δ Cbox Ctr ct Cent eent Cen een ≤ n →
         ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-          ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
               T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
@@ -192,7 +197,8 @@ theorem sublinearCollarBound_real_of_initial
           (Scan.physicalBoxBootstrapConstant q R he₀ he₀₁ J Δ Ctr ct Cent eent Cen een C₀)
           Ctr' ct' Cent' eent' Cen' een' ≤ n →
         ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-          ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
               T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
@@ -271,7 +277,8 @@ theorem sublinearCollarBound_real_explicit
         (Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een)
         (latticeTruncationRadiusConstant R J Δ 10) c₀ Cent eent Cen een ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →

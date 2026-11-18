@@ -28,6 +28,8 @@ diagonal part is equivalent to the ordinary edge-boundary data.
   arXiv:1804.04964, Section 3](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 

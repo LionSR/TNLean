@@ -51,6 +51,8 @@ Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 67–94, and its use in
 Theorem 1.1 `thm:main`, `00-introduction.tex`, lines 20–57.
 -/
 
+open ManyBody (Edge squareLatticeGraph)
+
 noncomputable section
 
 open scoped BigOperators Matrix
@@ -71,7 +73,8 @@ configurations.
 
 Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 76–77;
 the operator network of `07-assembly.tex`, lines 56–63. -/
-def operatorMatrix (D : ForwardEdge L → ℕ) (A : (v : Vertex L) → LocalTensor (q * q) D v) :
+def operatorMatrix (D : Edge (squareLatticeGraph L L) → ℕ)
+    (A : (v : Vertex L) → LocalTensor (q * q) D v) :
     Matrix (Vertex L → Fin q) (Vertex L → Fin q) ℂ :=
   fun τ ρ ↦ contractPEPS D A fun v ↦ finProdFinEquiv (τ v, ρ v)
 
@@ -79,7 +82,7 @@ def operatorMatrix (D : ForwardEdge L → ℕ) (A : (v : Vertex L) → LocalTens
 They have the same edge dimensions `D` as the operator tensors.
 
 Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 91–92. -/
-def fixInput (D : ForwardEdge L → ℕ) (A : (v : Vertex L) → LocalTensor (q * q) D v)
+def fixInput (D : Edge (squareLatticeGraph L L) → ℕ) (A : (v : Vertex L) → LocalTensor (q * q) D v)
     (z : Vertex L → Fin q) : (v : Vertex L) → LocalTensor q D v :=
   fun v p ↦ A v (finProdFinEquiv (p, z v))
 
@@ -87,7 +90,7 @@ def fixInput (D : ForwardEdge L → ℕ) (A : (v : Vertex L) → LocalTensor (q 
 operator.
 
 Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 91–92. -/
-theorem contractPEPS_fixInput_apply (D : ForwardEdge L → ℕ)
+theorem contractPEPS_fixInput_apply (D : Edge (squareLatticeGraph L L) → ℕ)
     (A : (v : Vertex L) → LocalTensor (q * q) D v) (z τ : Vertex L → Fin q) :
     contractPEPS D (fixInput D A z) τ = operatorMatrix D A τ z :=
   rfl
@@ -96,7 +99,7 @@ theorem contractPEPS_fixInput_apply (D : ForwardEdge L → ℕ)
 `σ|z⟩` of the contracted operator `σ`.
 
 Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 91–92. -/
-theorem contractPEPS_fixInput (D : ForwardEdge L → ℕ)
+theorem contractPEPS_fixInput (D : Edge (squareLatticeGraph L L) → ℕ)
     (A : (v : Vertex L) → LocalTensor (q * q) D v) (z : Vertex L → Fin q) :
     contractPEPS D (fixInput D A z) =
       Matrix.toEuclideanLin (operatorMatrix D A) (EuclideanSpace.single z 1) := by
@@ -115,7 +118,8 @@ sitewise gives ket tensors with the same edge dimensions `D`, whose contraction
 
 Polynomial-PEPS manuscript (September 24, 2026), Lemma 8.1 `lem:columns`,
 `07-assembly.tex`, lines 67–94. -/
-theorem exists_fixInput_contractPEPS_of_traceNorm_sub_pure_le (D : ForwardEdge L → ℕ)
+theorem exists_fixInput_contractPEPS_of_traceNorm_sub_pure_le
+    (D : Edge (squareLatticeGraph L L) → ℕ)
     (A : (v : Vertex L) → LocalTensor (q * q) D v) {n : ℕ} (e : (Vertex L → Fin q) ≃ Fin n)
     (Ω : State L q) (hΩ : ‖Ω‖ = 1) {η : ℝ}
     (hσ : Matrix.traceNorm (Matrix.reindex e e
@@ -134,11 +138,11 @@ positive: if some `D e` were zero, the sum over virtual configurations would be
 empty. Theorem 1.1 `thm:main` asks for a nonzero PEPS
 (`00-introduction.tex`, lines 50–51), so positive bond dimensions are part of
 its conclusion and need not be assumed of the operator network. -/
-theorem pos_of_contractPEPS_ne_zero (D : ForwardEdge L → ℕ)
+theorem pos_of_contractPEPS_ne_zero (D : Edge (squareLatticeGraph L L) → ℕ)
     (A : (v : Vertex L) → LocalTensor q D v) (h : contractPEPS D A ≠ 0)
-    (e : ForwardEdge L) : 0 < D e := by
+    (e : Edge (squareLatticeGraph L L)) : 0 < D e := by
   refine Nat.pos_of_ne_zero fun hD ↦ h ?_
-  have : IsEmpty ((e : ForwardEdge L) → Fin (D e)) :=
+  have : IsEmpty ((e : Edge (squareLatticeGraph L L)) → Fin (D e)) :=
     ⟨fun a ↦ absurd (a e).isLt (by omega)⟩
   ext x
   simp [contractPEPS]
@@ -165,14 +169,14 @@ coordinates unchanged (`07-assembly.tex`, lines 125–126 and 159–160). Sizes
 Polynomial-PEPS manuscript (September 24, 2026), Lemma 8.1 `lem:columns`,
 `07-assembly.tex`, lines 67–94; the PEPS convention and the target error of
 Theorem 1.1 `thm:main`, `00-introduction.tex`, lines 27–56. -/
-theorem exists_peps_of_traceNorm_sub_pure_le (D : ForwardEdge L → ℕ)
+theorem exists_peps_of_traceNorm_sub_pure_le (D : Edge (squareLatticeGraph L L) → ℕ)
     (A : (v : Vertex L) → LocalTensor (q * q) D v) {B : ℝ}
     (hDB : ∀ e, (D e : ℝ) ≤ B) {n : ℕ} (e : (Vertex L → Fin q) ≃ Fin n)
     (Ω : State L q) (hΩ : ‖Ω‖ = 1) {η ε : ℝ}
     (hσ : Matrix.traceNorm (Matrix.reindex e e
       (operatorMatrix D A - Matrix.vecMulVec (⇑Ω) (star ⇑Ω))) ≤ η)
     (hη : η < 1) (hε : 2 * η ≤ ε) :
-    ∃ (D' : ForwardEdge L → ℕ) (A' : (v : Vertex L) → LocalTensor q D' v),
+    ∃ (D' : Edge (squareLatticeGraph L L) → ℕ) (A' : (v : Vertex L) → LocalTensor q D' v),
       (∀ e, 0 < D' e) ∧ (∀ e, (D' e : ℝ) ≤ B) ∧ contractPEPS D' A' ≠ 0 ∧
       ∃ θ : ℝ, ‖((‖contractPEPS D' A'‖⁻¹ : ℝ) : ℂ) • contractPEPS D' A' -
         Complex.exp (θ * Complex.I) • Ω‖ ≤ ε := by
@@ -189,7 +193,7 @@ native graph tensors on the square lattice; in particular every native bond
 dimension is unchanged.
 
 Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 76–77. -/
-theorem pinnedTensorToGraphTensor_fixInput (D : ForwardEdge L → ℕ)
+theorem pinnedTensorToGraphTensor_fixInput (D : Edge (squareLatticeGraph L L) → ℕ)
     (A : (v : Vertex L) → Pinned.LocalTensor (q * q) D v) (z : Vertex L → Fin q) :
     pinnedTensorToGraphTensor D (Pinned.fixInput D A z) =
       (pinnedTensorToGraphTensor D A).fixInput z :=
@@ -199,7 +203,7 @@ theorem pinnedTensorToGraphTensor_fixInput (D : ForwardEdge L → ℕ)
 native graph tensor.
 
 Polynomial-PEPS Lemma 8.1 `lem:columns`, `07-assembly.tex`, lines 76–77. -/
-theorem operatorCoeff_pinnedTensorToGraphTensor (D : ForwardEdge L → ℕ)
+theorem operatorCoeff_pinnedTensorToGraphTensor (D : Edge (squareLatticeGraph L L) → ℕ)
     (A : (v : Vertex L) → Pinned.LocalTensor (q * q) D v) :
     operatorCoeff (pinnedTensorToGraphTensor D A) = Pinned.operatorMatrix D A := by
   ext τ ρ

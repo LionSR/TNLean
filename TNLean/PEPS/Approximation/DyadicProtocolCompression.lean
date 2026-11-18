@@ -59,6 +59,8 @@ The former scope restriction is resolved in
   These are original proofs; no OpenAI Lean code is copied or adapted.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 open scoped Matrix

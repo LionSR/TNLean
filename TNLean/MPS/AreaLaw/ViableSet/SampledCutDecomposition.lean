@@ -19,6 +19,8 @@ Source: Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`,
 Claim `c:errorreduction`, decomposition `e:decomp`, lines 584–591.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators Kronecker
 

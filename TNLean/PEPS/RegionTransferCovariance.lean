@@ -35,6 +35,8 @@ which is the per-edge class agreement the orientation-uniform reduction consumes
   1407--1572 of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

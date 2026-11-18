@@ -29,6 +29,8 @@ not the printed quantitative bounds; see `docs/paper-gaps/lvv13_constant_bond.te
 <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
 -/
 
+open ManyBody (interval)
+
 open Matrix Cslib
 open scoped ComplexOrder MatrixOrder
 

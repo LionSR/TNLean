@@ -56,13 +56,14 @@ adjoint error of `L' R₀` is at most `a`. Then some unitary `U` acting on `S` s
 Source: `09-amplification.tex`, lines 501–545. -/
 theorem exists_supported_unitary_of_good_realization (S : Finset ι)
     {R₀ L' D Dret : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hR₀ : R₀ ∈ supportedOperators q (S : Set ι)) (hL : L' ∈ supportedOperators q (S : Set ι))
+    (hR₀ : R₀ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
+    (hL : L' ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
     {φ η g : (ι → Fin q) → ℂ} (hφ : ‖WithLp.toLp 2 φ‖ = 1) (hη : ‖WithLp.toLp 2 η‖ = 1)
     {M₀ ε a : ℝ} (hζ : ‖WithLp.toLp 2 (R₀ *ᵥ φ)‖ ≤ M₀) (hg : D *ᵥ g = g)
     (hgn : ‖WithLp.toLp 2 g‖ ≤ 1) (hexc : ‖WithLp.toLp 2 (D *ᵥ (R₀ *ᵥ φ - g))‖ ≤ ε)
     (hret : ‖WithLp.toLp 2 ((D - Dret) *ᵥ (R₀ *ᵥ φ))‖ ≤ ε) (htrunc : M₀ * ‖Dret - L'‖ ≤ ε)
     (hadj : ‖WithLp.toLp 2 ((L' * R₀)ᴴ *ᵥ η) - WithLp.toLp 2 φ‖ ≤ a) :
-    ∃ U : Matrix (ι → Fin q) (ι → Fin q) ℂ, U ∈ supportedOperators q (S : Set ι) ∧
+    ∃ U : Matrix (ι → Fin q) (ι → Fin q) ℂ, U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S ∧
       Uᴴ * U = 1 ∧ ‖WithLp.toLp 2 (U *ᵥ φ) - WithLp.toLp 2 η‖ ≤
         a + √(2 * a + 6 * ε + 9 * ε ^ 2) := by
   set e := FiniteProduct.splitEquiv (fun _ : ι => Fin q) S with he

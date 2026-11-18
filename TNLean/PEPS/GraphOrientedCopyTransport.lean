@@ -21,6 +21,8 @@ Source: SCP10, arXiv:1001.3807, Section 4.1 and Section 7,
 lines 2977–3019, extended to arbitrary positive copy multiplicities.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix BigOperators Kronecker
 namespace TNLean.PEPS

@@ -15,16 +15,15 @@ Multiplication by the local swap converts swap-combined adjunction and
 transposition into ordinary adjunction and transposition. It preserves
 entrywise conjugation. The same multiplication transports continuous paths.
 
-**Scope restriction (no identity ancillas):** The strict comparisons
+The strict comparisons
 `strictlyEquivalentUnderSymmetry_shiftSwapDagger_iff`,
 `strictlyEquivalentUnderSymmetry_shiftSwapTranspose_iff` and
-`strictlyEquivalentUnderSymmetry_conjugation_ketLeftMul_swap_iff` compare
-strict equivalence without adjoining identity ancillas. The source definition
-of equivalence under a symmetry also permits identity ancillas
-(arXiv:1703.09188, Definition `def:equivalent-symmetry`, lines 1356--1366),
-and transporting the symmetry action to the enlarged physical dimension is not
-determined by the source. See
-`docs/paper-gaps/mpu_symmetry_ancilla_transport.tex`.
+`strictlyEquivalentUnderSymmetry_conjugation_ketLeftMul_swap_iff` formalize
+Lemma `lemma:sym-trafo-swap`, where "same phase" means strict equivalence:
+arXiv:1703.09188 omits the qualifier when it is clear from the context
+(lines 725--730), the printed proof transports continuous symmetric paths at
+fixed chain length (lines 2071--2078), and the section names ancillas
+explicitly where it allows them (line 2208).
 
 **Local fix:** equation `threeMPU2` uses one-sided multiplication
 \(\widetilde U_N=S_NU_N\). The conjugation paragraph in the printed proof

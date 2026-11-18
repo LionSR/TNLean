@@ -25,6 +25,8 @@ open Filter
 open scoped BigOperators
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 universe u
@@ -46,7 +48,7 @@ theorem bad_history_probability_le_of_threshold_le
       S.K = ⌊(n : ℝ) ^ (1 - ell)⌋₊ / (8 * S.m) →
       S.D = ⌈(n : ℝ) ^ kappa⌉₊ → S.r₀ = roundedLogRadius Cr n →
       S.M = ⌈C1 * n * S.D⌉₊ → (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
-      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - ell)⌋₊ + 10 * S.r₀ : ℕ) : ℤ) <
           ambientSupDistance t z) →
@@ -100,7 +102,7 @@ theorem eventually_bad_history_probability_le
       S.K = ⌊(n : ℝ) ^ (1 - ell)⌋₊ / (8 * S.m) →
       S.D = ⌈(n : ℝ) ^ kappa⌉₊ → S.r₀ = roundedLogRadius Cr n →
       S.M = ⌈C1 * n * S.D⌉₊ → (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
-      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - ell)⌋₊ + 10 * S.r₀ : ℕ) : ℤ) <
           ambientSupDistance t z) →

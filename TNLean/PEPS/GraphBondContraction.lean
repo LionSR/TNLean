@@ -23,6 +23,8 @@ no connectedness, valence, or topology assumption is imposed. They make no
 parent-Hamiltonian claim.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

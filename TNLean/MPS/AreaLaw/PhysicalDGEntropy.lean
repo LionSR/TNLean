@@ -8,7 +8,7 @@ import QICLean.Analysis.ViableSubspaceBootstrap
 import QICLean.Analysis.ViableSubspaceEntropy
 import QICLean.Entropy.FiniteProduct
 import QICLean.Entropy.SupportedMarginalTails
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.DGEntropyParameters
 import TNLean.MPS.AreaLaw.PhysicalDGViability
 
@@ -27,6 +27,8 @@ conclusion only; no efficient construction or matrix product approximation
 is asserted here. Supporting ALVV, arXiv:1602.08828v2, `thm:al-dg`,
 lines 1048–1099.
 -/
+
+open ManyBody (interval)
 
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace Matrix
 

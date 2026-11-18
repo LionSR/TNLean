@@ -18,6 +18,8 @@ Proposition 5.7, lines 1332–1333. It asserts no runtime or printed sharp
 bond estimate.
 -/
 
+open ManyBody (interval interval_mono)
+
 open Matrix
 open scoped BigOperators Kronecker TensorProduct
 

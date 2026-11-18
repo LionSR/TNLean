@@ -16,6 +16,8 @@ Skolem--Noether turns that isomorphism into conjugation by an invertible edge
 matrix.
 -/
 
+open ManyBody (Edge)
+
 open scoped Matrix
 
 namespace TNLean

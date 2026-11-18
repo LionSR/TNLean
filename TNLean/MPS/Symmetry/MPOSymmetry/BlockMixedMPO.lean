@@ -3,14 +3,14 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.MPS.SharedInfra.BlockAssembly
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointMPOAction
-import TNLean.MPS.MPDO.PhysicalBasisAction
 
 /-!
 # The block-injective mixed path and the action of its common MPO
 
 GLM23 extends the interpolation between two MPO-symmetric states to systems
-with ground-state degeneracy (`REsubmission.tex`, lines 1695--1775):
+with ground-state degeneracy (`REsubmission.tex`, lines 1695--1777):
 
 > We now deal with the case of systems with ground state degeneracy. We want
 > to connect two block-injective MPSs (with the same number of blocks) that
@@ -46,12 +46,12 @@ local Hilbert space is already the span `⊕ₓ ℂ^{D^p_x} ⊗ ℂ^{D^p_x}` of 
 block-diagonal tensor. The source takes this restriction without loss of
 generality (lines 317 and 1584--1586); its derivation from block-injective
 tensors on an arbitrary common physical alphabet is not formalized. The
-injectivity of the common MPO, the ground space of the path Hamiltonians, and
-their commutation with the common MPO are not asserted. See
+injectivity of the common MPO and the commutation of the path Hamiltonians
+with the common MPO are not asserted. See
 `docs/paper-gaps/glm23_block_injective_mixed_path.tex`.
 
 Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563v3, `REsubmission.tex`,
-lines 1695--1775, with `defAgamma` and `Agammasym`.
+lines 1695--1777, with `defAgamma` and `Agammasym`.
 -/
 
 open scoped Matrix BigOperators Kronecker
@@ -171,11 +171,13 @@ theorem blockMixedMPOLetter_action
         mixedEndpointLetter B₀ B₁ r s * blockMixedAnalysis (V₀ μ) (V₁ μ))
           (α, i) (β, j) := by
   classical
+  -- Expand the products and sums once, before duplicating the goal across the sector cases.
+  simp only [Matrix.mul_apply, Fintype.sum_sum_type]
   cases r <;> cases s <;> cases i <;> cases j <;> cases α <;> cases β <;>
-    simp only [Fintype.sum_sum_type, blockMixedMPOLetter, mixedEndpointLetter,
+    simp only [blockMixedMPOLetter, mixedEndpointLetter,
       blockMixedSynthesis, blockMixedAnalysis, Matrix.fromBlocks_apply₁₁,
       Matrix.fromBlocks_apply₁₂, Matrix.fromBlocks_apply₂₁, Matrix.fromBlocks_apply₂₂,
-      Matrix.mul_apply, Matrix.single_apply, ite_and, mul_ite, ite_mul,
+      Matrix.single_apply, ite_and, mul_ite, ite_mul,
       Finset.sum_mul, Matrix.zero_apply, zero_mul, mul_zero, Finset.sum_const_zero,
       zero_add, add_zero, Sum.inl.injEq, Sum.inr.injEq, Sum.inl_ne_inr,
       Sum.inr_ne_inl, and_false, false_and, ite_false, ite_true,
@@ -442,7 +444,7 @@ theorem continuous_blockMixedInterpolation
 
 /-- Every block of the path is injective in the open interval when the
 corresponding endpoint blocks are injective. Source: GLM23,
-`REsubmission.tex`, line 1773: "The injectivity of every block of
+`REsubmission.tex`, line 1777: "The injectivity of every block of
 $A(\gamma)$ [...] is justified in the same way as in the previous case." -/
 theorem isInjective_blockMixedInterpolation
     (A₀ : ∀ x, MPSTensor (D₀ x * D₀ x) (D₀ x)) (A₁ : ∀ x, MPSTensor (D₁ x * D₁ x) (D₁ x))
@@ -524,7 +526,8 @@ private theorem endpoint_block_action_entry {D : Fin s → ℕ} {χ : ℕ}
     (fun Z : Matrix (Fin (χ * D x)) (Fin (χ * D x)) ℂ =>
       Z (finProdFinEquiv (α, i)) (finProdFinEquiv (β, j)))
     (h.letter (finSigmaFinEquiv ⟨y, finProdFinEquiv (r, t)⟩))
-  simp only [MPOTensor.actTensor_apply_finProdFinEquiv, Matrix.sum_apply] at hh
+  simp only [MPOTensor.actTensor, Matrix.submatrix_apply, Matrix.sum_apply,
+    Matrix.kroneckerMap_apply, Equiv.symm_apply_apply] at hh
   rw [sum_sectorTensor A x (fun q Z => T _ q α β * Z i j) (by simp),
     sum_sigma_sectorTensor A y _ (fun q Z => (W x q.1 q.2 * Z * V x q.1 q.2)
       (finProdFinEquiv (α, i)) (finProdFinEquiv (β, j))) (by simp)] at hh

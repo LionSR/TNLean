@@ -28,6 +28,8 @@ No center-independent family, adaptive measurability or running time is
 asserted; see `docs/paper-gaps/alvv16_soft_regional_residuals.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 

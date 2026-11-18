@@ -28,6 +28,8 @@ raw-filter gain and accuracy-dependent count documented in
 selection or running time is asserted.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped ENNReal InnerProductSpace TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.SupportedFunctionalCalculus
+import QICLean.ManyBody.Sites.Twirl
 import TNLean.Circuit.LocalCircuit
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchyLevels
 
@@ -33,7 +33,7 @@ periodic.
 
 * `windowProjection_mem_supportedOperators`,
   `compressedWindowProjection_mem_supportedOperators`: support of spectral windows,
-  from the shared `QuantumCircuit.cfc_mem_supportedOperators`.
+  from the shared `ManyBody.cfc_mem_supportedOperators`.
 * `mem_supportedOperators_hierarchy`: the level-`m` projection acts on its block.
 * `commute_supersiteHierarchy`: the projections of the two halves of a block commute.
 * `norm_sub_supersiteHierarchy_le`: the bound over all levels, with the commutation of the
@@ -51,52 +51,55 @@ section Support
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 /-- The window projection of an operator acting on `S` acts on `S`. -/
-theorem windowProjection_mem_supportedOperators {S : Set ι}
-    {M : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hM : M ∈ supportedOperators d S) (c x : ℝ) :
-    windowProjection M c x ∈ supportedOperators d S :=
-  cfc_mem_supportedOperators _ (Submodule.sub_mem _ hM
-    (Submodule.smul_mem _ _ (one_mem_supportedOperators S)))
+theorem windowProjection_mem_supportedOperators {S : Finset ι}
+    {M : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hM : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (c x : ℝ) :
+    windowProjection M c x ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
+  ManyBody.cfc_mem_supportedOperators _ (sub_mem hM
+    (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ S))))
 
 /-- The window projection inside the range of `Q` acts on `S` when `Q` and `M` do. -/
-theorem compressedWindowProjection_mem_supportedOperators {S : Set ι}
-    {Q M : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hQ : Q ∈ supportedOperators d S)
-    (hM : M ∈ supportedOperators d S) (c x : ℝ) :
-    compressedWindowProjection Q M c x ∈ supportedOperators d S :=
-  mul_mem_supportedOperators hQ (windowProjection_mem_supportedOperators
-    (mul_mem_supportedOperators (mul_mem_supportedOperators hQ hM) hQ) c x)
+theorem compressedWindowProjection_mem_supportedOperators {S : Finset ι}
+    {Q M : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hQ : Q ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    (hM : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (c x : ℝ) :
+    compressedWindowProjection Q M c x ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S :=
+  mul_mem hQ (windowProjection_mem_supportedOperators
+    (mul_mem (mul_mem hQ hM) hQ) c x)
 
 end Support
 
 section Supersites
 
-variable {ι : Type*}
+variable {ι : Type*} [Fintype ι]
 
 /-- The sites of block `k` at level `m`: those whose supersite has quotient `k` by `2^m`. -/
-def levelBlock (blk : ι → ℕ) (m k : ℕ) : Set ι :=
-  {i | blk i / 2 ^ m = k}
+def levelBlock (blk : ι → ℕ) (m k : ℕ) : Finset ι :=
+  Finset.univ.filter fun i ↦ blk i / 2 ^ m = k
+
+theorem mem_levelBlock {blk : ι → ℕ} {m k : ℕ} {i : ι} :
+    i ∈ levelBlock blk m k ↔ blk i / 2 ^ m = k := by
+  simp [levelBlock]
 
 theorem levelBlock_two_mul_subset (blk : ι → ℕ) (m k : ℕ) :
     levelBlock blk m (2 * k) ⊆ levelBlock blk (m + 1) k := fun i hi ↦ by
-  change blk i / 2 ^ m = _ at hi
-  change blk i / 2 ^ (m + 1) = k
+  rw [mem_levelBlock] at hi ⊢
   rw [pow_succ, ← Nat.div_div_eq_div_mul, hi]
   omega
 
 theorem levelBlock_two_mul_add_one_subset (blk : ι → ℕ) (m k : ℕ) :
     levelBlock blk m (2 * k + 1) ⊆ levelBlock blk (m + 1) k := fun i hi ↦ by
-  change blk i / 2 ^ m = _ at hi
-  change blk i / 2 ^ (m + 1) = k
+  rw [mem_levelBlock] at hi ⊢
   rw [pow_succ, ← Nat.div_div_eq_div_mul, hi]
   omega
 
 theorem disjoint_levelBlock_two_mul (blk : ι → ℕ) (m k : ℕ) :
     Disjoint (levelBlock blk m (2 * k)) (levelBlock blk m (2 * k + 1)) :=
-  Set.disjoint_left.mpr fun i h₁ h₂ ↦ by
-    change blk i / 2 ^ m = 2 * k at h₁
-    change blk i / 2 ^ m = 2 * k + 1 at h₂
+  Finset.disjoint_left.mpr fun i h₁ h₂ ↦ by
+    rw [mem_levelBlock] at h₁ h₂
     omega
 
-variable {d : ℕ} [Fintype ι] [DecidableEq ι]
+variable {d : ℕ} [DecidableEq ι]
 
 /-- **Each projection acts on its block.** If `P 0 k = 1`, `P (m + 1) k` is the window of
 `M m k` inside the range of `P m (2k) P m (2k + 1)`, and the pair operator `M m k` acts on the
@@ -107,21 +110,22 @@ theorem mem_supportedOperators_hierarchy (blk : ι → ℕ)
     (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
       compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
-    (hMsupp : ∀ m k, M m k ∈ supportedOperators d (levelBlock blk (m + 1) k)) :
-    ∀ m k, P m k ∈ supportedOperators d (levelBlock blk m k) := by
+    (hMsupp : ∀ m k,
+        M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k)) :
+    ∀ m k, P m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk m k) := by
   intro m
   induction m with
   | zero =>
     intro k
     rw [hP0]
-    exact one_mem_supportedOperators _
+    exact (one_mem (ManyBody.supportedOperators _ _))
   | succ m ih =>
     intro k
     rw [hstep]
     exact compressedWindowProjection_mem_supportedOperators
-      (mul_mem_supportedOperators
-        (supportedOperators_mono (levelBlock_two_mul_subset blk m k) (ih (2 * k)))
-        (supportedOperators_mono (levelBlock_two_mul_add_one_subset blk m k)
+      (mul_mem
+        (ManyBody.supportedOperators_mono (levelBlock_two_mul_subset blk m k) (ih (2 * k)))
+        (ManyBody.supportedOperators_mono (levelBlock_two_mul_add_one_subset blk m k)
           (ih (2 * k + 1))))
       (hMsupp m k) _ _
 
@@ -134,11 +138,12 @@ theorem commute_supersiteHierarchy (blk : ι → ℕ)
     (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
       compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
-    (hMsupp : ∀ m k, M m k ∈ supportedOperators d (levelBlock blk (m + 1) k)) :
+    (hMsupp : ∀ m k,
+        M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k)) :
     ∀ m k, Commute (P m (2 * k)) (P m (2 * k + 1)) := by
   have hsupp := mem_supportedOperators_hierarchy blk P M c x hP0 hstep hMsupp
-  exact fun m k ↦ commute_of_mem_supportedOperators (disjoint_levelBlock_two_mul blk m k)
-    (hsupp m (2 * k)) (hsupp m (2 * k + 1))
+  exact fun m k ↦ ManyBody.commute_of_mem_supportedOperators_of_disjoint (hsupp m (2 * k))
+      (hsupp m (2 * k + 1)) (disjoint_levelBlock_two_mul blk m k)
 
 /-- **All levels on supersites.** The bound of `norm_sub_hierarchy_le`, with the commutation of
 the two halves of each block derived from the supports: each pair operator `M m k` acts on the
@@ -149,7 +154,7 @@ theorem norm_sub_supersiteHierarchy_le (blk : ι → ℕ)
     (hP0 : ∀ k, P 0 k = 1)
     (hstep : ∀ m k, P (m + 1) k =
       compressedWindowProjection (P m (2 * k) * P m (2 * k + 1)) (M m k) (c m k) (x m))
-    (hMsupp : ∀ m k, M m k ∈ supportedOperators d (levelBlock blk (m + 1) k))
+    (hMsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (hx : ∀ m, 0 < x m)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {ε K : ℝ}
     (hres : ∀ m k, ‖toEuclideanLin (M m k - (c m k : ℂ) • 1) ψ‖ ≤ ε)

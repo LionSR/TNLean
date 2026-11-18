@@ -143,11 +143,23 @@ means using $K=I\setminus Q$.
 \begin{definition}[Site expectation with a spectator]
     \label{def:qc_spectator_expectation}
     \uses{def:qc_site_expectation}
-    \lean{QuantumCircuit.spectatorSiteExpectation}
+    \lean{QuantumCircuit.spectatorSiteExpectation,
+        QuantumCircuit.spectatorBasis, QuantumCircuit.spectatorConfigEquiv}
+    \leanok
+    Regard the spectator as one more site $\ast$ carrying the space
+    $\mathcal K=\C^J$, so that $\mathcal H\otimes\mathcal K$ is the space of
+    the sites $I\sqcup\{\ast\}$. Define $E_K^{\mathcal K}=E_{K\cup\{\ast\}}$,
+    the normalized partial-trace expectation of this system onto the retained
+    physical sites and the spectator site.
+\end{definition}
+
+\begin{lemma}[Spectator blocks]
+    \label{thm:qc_spectator_blocks}
+    \uses{def:qc_spectator_expectation}
+    \lean{QuantumCircuit.spectatorSiteExpectation_apply}
     \leanok
     For $a,b\in J$, let $B_{ab}$ be the physical matrix whose entries are
-    $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$.
-    Define $E_K^{\mathcal K}$ by applying $E_K$ to each such block:
+    $(B_{ab})_{\sigma,\tau}=B_{(\sigma,a),(\tau,b)}$. Then
     \begin{align}
         \bigl(E_K^{\mathcal K}(B)\bigr)_{(\sigma,a),(\tau,b)}
          & =\bigl(E_K(B_{ab})\bigr)_{\sigma,\tau}.
@@ -164,7 +176,14 @@ means using $K=I\setminus Q$.
         \label{eq:qc_spectator_trace}
     \end{align}
     with both spectator indices left unchanged.
-\end{definition}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{def:qc_spectator_expectation,def:qc_site_expectation}
+    The sites outside $K\cup\{\ast\}$ are the physical sites outside $K$, so
+    both sides are $q^{-|Q|}$ times the partial trace over the configurations
+    $\rho$ of $Q$, taken with the spectator labels $a$ and $b$ held fixed.
+\end{proof}
 
 \begin{lemma}[Preservation of spectator factors]
     \label{thm:qc_spectator_factors}
@@ -186,9 +205,9 @@ means using $K=I\setminus Q$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:qc_spectator_expectation,def:qc_site_expectation,
+    \uses{thm:qc_spectator_blocks,def:qc_site_expectation,
         lem:qc_site_expectation_properties}
-    The $(a,b)$ block of $A\otimes S$ is $S_{ab}A$, so linearity of $E_K$
+    By Lemma~\ref{thm:qc_spectator_blocks}, the $(a,b)$ block of $A\otimes S$ is $S_{ab}A$, so linearity of $E_K$
     gives $E_K(S_{ab}A)=S_{ab}E_K(A)$, proving~(\ref{eq:qc_spectator_tensor}).
     Since $E_K$ fixes the physical identity, this identity
     specializes to~(\ref{eq:qc_spectator_fixed}), and because every physical
@@ -205,106 +224,11 @@ means using $K=I\setminus Q$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{def:qc_spectator_expectation,def:qc_site_expectation}
-    Each block $E_K(B_{ab})$ is supported on $K$ by its partial-trace
+    \uses{thm:qc_spectator_blocks,def:qc_site_expectation}
+    By Lemma~\ref{thm:qc_spectator_blocks}, each block $E_K(B_{ab})$ is supported on $K$ by its partial-trace
     formula. Since operators on disjoint sets of physical sites commute,
     $E_K(B_{ab})U=UE_K(B_{ab})$, and matrix multiplication by $\widehat U$
     acts separately on each spectator block to give the commutation identity.
-\end{proof}
-
-\begin{definition}[Weyl product on a set of sites]
-    \label{def:qc_partial_weyl}
-    \uses{lem:qc_site_expectation_average}
-    \lean{QuantumCircuit.partialWeyl}
-    \leanok
-    Suppose $q>0$, let $S\subseteq I$, and let
-    $p\in(\Z/q\Z\times\Z/q\Z)^I$. For the on-site Weyl operators
-    $W(p_x)$, put $M_x=W(p_x)$ when $x\in S$ and
-    $M_x=\mathbb 1$ otherwise. Define
-    \begin{align}
-        P_S(p) & =\bigotimes_{x\in I}M_x.
-        \label{eq:qc_partial_weyl}
-    \end{align}
-    In particular, $P_{\varnothing}(p)=\mathbb 1$.
-\end{definition}
-
-\begin{lemma}[Unitarity and site insertion for Weyl products]
-    \label{thm:qc_partial_weyl_identities}
-    \uses{def:qc_partial_weyl,def:qc_local_circuit}
-    \lean{QuantumCircuit.partialWeyl_mem_unitary,
-        QuantumCircuit.outsideWeyl_eq_partialWeyl,
-        QuantumCircuit.partialWeyl_insert,
-        QuantumCircuit.partialWeyl_singleton_mem}
-    \leanok
-    Suppose $q>0$. Every $P_S(p)$ is unitary. The Weyl product
-    $W_K(p)$ with factors $W(p_x)$ off $K$ and the identity on $K$ satisfies
-    $W_K(p)=P_{I\setminus K}(p)$, and
-    $P_{\{y\}}(p)\in\mathcal A_{\{y\}}$ for every $y\in I$.
-    If $y\notin S$, then
-    \begin{align}
-        P_{S\cup\{y\}}(p) & =P_{\{y\}}(p)P_S(p).
-        \label{eq:qc_partial_weyl_insert}
-    \end{align}
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{def:qc_partial_weyl,def:qc_local_circuit}
-    Since each tensor factor $M_x$ is unitary, taking adjoints and multiplying
-    factor by factor gives $P_S(p)^\dagger P_S(p)=\mathbb 1$ and
-    $P_S(p)P_S(p)^\dagger=\mathbb 1$.
-    Both $W_K(p)$ and $P_{I\setminus K}(p)$ have factor $\mathbb 1$ on $K$ and
-    $W(p_x)$ off $K$, yielding the complementary-set identity, while the
-    singleton product $P_{\{y\}}(p)$ has identity factors off $\{y\}$ and
-    therefore belongs to $\mathcal A_{\{y\}}$. In~(\ref{eq:qc_partial_weyl_insert}),
-    the right-hand side has factor $W(p_y)\mathbb 1$ at $y$ and
-    $\mathbb 1\,M_x$ at every other site, matching the tensor factors of
-    $P_{S\cup\{y\}}(p)$.
-\end{proof}
-
-\begin{lemma}[Commutator with a product of unitaries]
-    \label{thm:qc_unitary_product_commutator}
-    \lean{QuantumCircuit.norm_commutator_mul_le}
-    \leanok
-    Let $R$ be a normed star ring satisfying the $C^*$-identity. For
-    $B\in R$ and unitaries $U,V\in R$,
-    \begin{align}
-        \|[B,UV]\| & \le\|[B,U]\|+\|[B,V]\|.
-        \label{eq:qc_unitary_product_commutator}
-    \end{align}
-\end{lemma}
-\begin{proof}
-    \leanok
-    Expanding $[B,UV]=[B,U]V+U[B,V]$ and applying the triangle inequality
-    together with unitary invariance of the norm gives
-    $\|[B,UV]\|\le\|[B,U]V\|+\|U[B,V]\|
-        =\|[B,U]\|+\|[B,V]\|$.
-\end{proof}
-
-\begin{lemma}[Amplified Weyl averaging formula]
-    \label{thm:qc_spectator_average}
-    \uses{def:qc_spectator_expectation,lem:qc_site_expectation_average}
-    \lean{QuantumCircuit.spectatorSiteExpectation_eq_average}
-    \leanok
-    Suppose $q>0$. For $p\in(\Z/q\Z\times\Z/q\Z)^I$, let
-    $W_K(p)$ be the product of the on-site Weyl operators $W(p_x)$ at
-    $x\notin K$, with the identity at $x\in K$.
-    Then
-    \begin{align}
-        E_K^{\mathcal K}(B)
-         & =q^{-2|I|}\sum_{p\in(\Z/q\Z\times\Z/q\Z)^I}
-        \widehat{W_K(p)}B\widehat{W_K(p)}^{\dagger}.
-        \label{eq:qc_spectator_average}
-    \end{align}
-    Labels at retained sites are included in the sum; each choice of
-    Weyl operators outside $K$ consequently occurs $q^{2|K|}$ times.
-\end{lemma}
-\begin{proof}
-    \leanok
-    \uses{def:qc_spectator_expectation,lem:qc_site_expectation_average}
-    For every physical $U$, the $(a,b)$ block of
-    $\widehat UB\widehat U^\dagger$ is $UB_{ab}U^\dagger$, so applying the
-    physical Weyl averaging formula to each block $B_{ab}$ in
-    (\ref{eq:qc_spectator_blocks}) yields the identity.
 \end{proof}
 
 \begin{lemma}[Contraction with an arbitrary spectator]
@@ -312,16 +236,13 @@ means using $K=I\setminus Q$.
     \uses{def:qc_spectator_expectation}
     \lean{QuantumCircuit.norm_spectatorSiteExpectation_le}
     \leanok
-    If $q>0$, then $\|E_K^{\mathcal K}(B)\|\le\|B\|$.
+    $\|E_K^{\mathcal K}(B)\|\le\|B\|$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:qc_spectator_average,thm:qc_partial_weyl_identities}
-    By Lemma~\ref{thm:qc_partial_weyl_identities}, every
-    $\widehat{W_K(p)}$ is unitary, so each of the $q^{2|I|}$ summands in
-    (\ref{eq:qc_spectator_average}) has norm $\|B\|$.
-    Applying the triangle inequality with the normalization
-    $q^{-2|I|}q^{2|I|}=1$ gives $\|E_K^{\mathcal K}(B)\|\le\|B\|$.
+    \uses{def:qc_spectator_expectation,lem:qc_site_expectation_properties}
+    This is the contraction property of Lemma~\ref{lem:qc_site_expectation_properties}
+    for the system of the sites $I\sqcup\{\ast\}$.
 \end{proof}
 
 \begin{lemma}[Averaging error from on-site commutator bounds]
@@ -329,7 +250,7 @@ means using $K=I\setminus Q$.
     \uses{def:qc_spectator_expectation}
     \lean{QuantumCircuit.norm_sub_spectatorSiteExpectation_le}
     \leanok
-    Suppose $q>0$, and let $\varepsilon:I\to\R$ satisfy
+    Let $\varepsilon:I\to\R$ satisfy
     $\|[B,\widehat U]\|\le\varepsilon_y$ for each $y\notin K$ and
     every unitary $U\in\mathcal A_{\{y\}}$. Then
     \begin{align}
@@ -340,32 +261,14 @@ means using $K=I\setminus Q$.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:qc_spectator_average,def:qc_partial_weyl,
-        thm:qc_partial_weyl_identities,thm:qc_unitary_product_commutator}
-    For unitaries $V,W$ on $\mathcal H\otimes\mathcal K$, the identity
-    $[B,VW]=[B,V]W+V[B,W]$ implies
-    $\|[B,VW]\|\le\|[B,V]\|+\|[B,W]\|$ by
-    Lemma~\ref{thm:qc_unitary_product_commutator}.
-    Starting from $P_{\varnothing}(p)=\mathbb 1$, induction over the sites
-    outside $K$ via the insertion identity~(\ref{eq:qc_partial_weyl_insert})
-    and the single-site unitarity and support properties of
-    Lemma~\ref{thm:qc_partial_weyl_identities} (with the identity on the
-    spectator throughout) bounds the commutator with $\widehat{W_K(p)}$ by
-    $\sum_{y\notin K}\varepsilon_y$.
-    For the unitary $V=\widehat{W_K(p)}$, the identity
-    \begin{align}
-        B-VBV^\dagger & =[B,V]V^\dagger
-        \label{eq:qc_spectator_difference}
-    \end{align}
-    therefore yields
-    \begin{align}
-        \|B-VBV^\dagger\| & =\|[B,V]\|
-        \le\sum_{y\notin K}\varepsilon_y.
-        \label{eq:qc_spectator_difference_bound}
-    \end{align}
-    Averaging~(\ref{eq:qc_spectator_difference_bound}) over all Weyl labels
-    via~(\ref{eq:qc_spectator_average}) and $q^{-2|I|}\sum_p B=B$ gives
-    (\ref{eq:qc_spectator_error}).
+    \uses{def:qc_spectator_expectation,lem:qc_site_expectation_commutator}
+    The sites of $I\sqcup\{\ast\}$ outside $K\cup\{\ast\}$ are the physical
+    sites $y\notin K$. An operator of the enlarged system acting on $\{y\}$ is
+    $\widehat U=U\otimes\mathbb 1_{\mathcal K}$ for an operator
+    $U\in\mathcal A_{\{y\}}$, which is unitary when $\widehat U$ is and
+    $\mathcal K\neq0$; when $\mathcal K=0$ every operator is zero. Hence the
+    hypothesis is that of Lemma~\ref{lem:qc_site_expectation_commutator} for
+    the enlarged system, which gives~(\ref{eq:qc_spectator_error}).
 \end{proof}
 
 For $q>0$, setting $K=I\setminus Q$ and $\varepsilon_y=d_y(B)$ in

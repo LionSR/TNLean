@@ -32,6 +32,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open Classical in
@@ -51,7 +53,7 @@ theorem actualCharge_energy_of_badOldHistoryThreshold_le {Cr C1 Ct : ℝ}
       S.D = ⌈(n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
-      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
@@ -129,7 +131,7 @@ theorem exists_actualCharge_energy_threshold {Cr C1 Ct : ℝ}
       S.D = ⌈(n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →
       S.r₀ = roundedLogRadius Cr n → S.C₁ = C1 →
       (T.card : ℝ) ≤ Ct * (n : ℝ) ^ 2 →
-      S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+      S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
         ((2 * ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ +
           10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →

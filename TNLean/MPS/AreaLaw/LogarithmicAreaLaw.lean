@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ComponentReduction
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Logarithmic dimension dependence and polynomial range dependence
@@ -28,7 +29,11 @@ domain; recorded in `docs/paper-gaps/tnlean_one_dimensional_discount_constants.t
 section "Full consecutive windows".
 -/
 
+open ManyBody (ChainSupport DomainSupport IsDomainSupport interval sitePos)
+
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -136,7 +141,8 @@ Source: the note, Remark `rem:sharper`, `part1_arealaw.tex`, lines 711–745. -/
 theorem regionEntropy_le_log_cube_mul_card_boundaryEdges (hq : 1 ≤ q)
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) (h : ChainHamiltonian L q R J)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (A : Finset (Fin L)) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Fin L)) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
       chainLogCubeConst R * (1 + J / Δ) *
         Real.log (q : ℝ) ^ 3 * (boundaryEdges L A).card := by
@@ -144,12 +150,12 @@ theorem regionEntropy_le_log_cube_mul_card_boundaryEdges (hq : 1 ≤ q)
   · have hθ : 0 ≤ 1 + J / Δ := by positivity
     have hbound := (chainIntervalEntropyBound_le (q := q) (R := R) hq hJ hΔ).trans
       (mul_le_mul_of_nonneg_right (chainAreaLawConst_le_mul_log_cube (R := R) hq2) hθ)
-    refine (regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ h hgs A).trans
+    refine (regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ h hΩ hgap hspan A).trans
       ((mul_le_mul_of_nonneg_right hbound (Nat.cast_nonneg _)).trans_eq ?_)
     ring
   · have hqeq : q = 1 := by omega
     subst q
-    rw [regionEntropy_eq_zero_of_localDimension_one hgs.1 A]
+    rw [regionEntropy_eq_zero_of_localDimension_one hΩ A]
     norm_num
 
 /-- Scalar window-budget bound after normalizing by a positive logarithmic lower
@@ -267,11 +273,12 @@ Source: the one-dimensional note, Section 2 (`sec:setting`), component reduction
 theorem ChainHamiltonian.regionEntropy_eq_zero_of_range_zero
     {L q : ℕ} {J Δ : ℝ} (h : ChainHamiltonian L q 0 J)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΔ : 0 < Δ) (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
     (A : Finset (Fin L)) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω = 0 := by
   refine regionEntropy_eq_zero_of_forall_subset_or_disjoint
-    h.supported h.hermitian hΔ hgs A ?_
+    h.supported h.hermitian hΔ hΩ hgap hspan A ?_
   intro X
   have hcard := X.property.card_le
   grind [Finset.card_le_one_iff, Finset.disjoint_left]
@@ -288,19 +295,20 @@ theorem chainAreaLaw_of_consecutive_terms_polynomial_range :
           (∀ X : ChainSupport L R, h.term X ≠ 0 →
             ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) →
           ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (Fin L → Fin q),
-            Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+            ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+            groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset (Fin L),
               Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
                 Cabs * (1 + J / Δ) * (R : ℝ) * Real.log ((q : ℝ) ^ R) ^ 3 *
                   (boundaryEdges L A).card := by
   obtain ⟨hC, hK, hscalar⟩ := consecutive_window_coefficient_le_range_log_cube
   refine ⟨_, mul_pos hC hK, rfl, ?_⟩
-  intro q R J Δ hq hJ hΔ L h hwindow E₀ Ω hgs A
+  intro q R J Δ hq hJ hΔ L h hwindow E₀ Ω hΩ hgap hspan A
   by_cases hpos : 2 ≤ q ∧ 1 ≤ R
   · obtain ⟨Cphys, hCphys, hCeq, hbound⟩ :=
       chainAreaLaw_of_consecutive_terms q R J Δ hq hJ hΔ
     have hscalar' := hscalar q R hpos.1 hpos.2
-    have hphysical := hbound L h hwindow E₀ Ω hgs A
+    have hphysical := hbound L h hwindow E₀ Ω hΩ hgap hspan A
     have hθ : 0 ≤ 1 + J / Δ := by positivity
     have hlast := mul_le_mul_of_nonneg_right
       (mul_le_mul_of_nonneg_right hscalar' hθ)
@@ -309,11 +317,11 @@ theorem chainAreaLaw_of_consecutive_terms_polynomial_range :
     exact hphysical.trans (by convert hlast using 1; ring)
   · by_cases hR0 : R = 0
     · subst R
-      rw [h.regionEntropy_eq_zero_of_range_zero hΔ hgs A]
+      rw [h.regionEntropy_eq_zero_of_range_zero hΔ hΩ hgap hspan A]
       simp
     · have hq1 : q = 1 := by omega
       subst q
-      rw [regionEntropy_eq_zero_of_localDimension_one hgs.1 A]
+      rw [regionEntropy_eq_zero_of_localDimension_one hΩ A]
       simp
 
 /-- Full physical windows remain full windows after increasing relabelling.
@@ -350,7 +358,8 @@ theorem domainAreaLaw_of_consecutive_terms_polynomial_range :
             ∃ a : ℤ,
               X.1.image (sitePos Λ) = Finset.Ico a (a + (R : ℤ) + 1)) →
           ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q),
-            Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+            ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+            groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset ℤ,
               Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
                 (domainRegion Λ A) Ω ≤
@@ -359,12 +368,11 @@ theorem domainAreaLaw_of_consecutive_terms_polynomial_range :
   obtain ⟨Cabs, hCabs, hCeq, hchain⟩ :=
     chainAreaLaw_of_consecutive_terms_polynomial_range
   refine ⟨Cabs, hCabs, hCeq, ?_⟩
-  intro q R J Δ hq hJ hΔ Λ h hwindow E₀ Ω hgs A
-  obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hΔ hgs A
-  have hgs' : Matrix.IsGappedGroundState (h.toChain hJ).operator E₀ Ω Δ := by
-    rwa [DomainHamiltonian.toChain_operator]
+  intro q R J Δ hq hJ hΔ Λ h hwindow E₀ Ω hΩ hgap hspan A
+  obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hΔ hΩ hgap hspan A
+  rw [← h.toChain_operator hJ] at hgap hspan
   have hbound := hchain q R J Δ hq hJ hΔ Λ.card (h.toChain hJ)
-    (h.toChain_consecutive_terms hJ hwindow) E₀ Ω hgs' A'
+    (h.toChain_consecutive_terms hJ hwindow) E₀ Ω hΩ hgap hspan A'
   simpa only [hS, hB] using hbound
 
 end TNLean.MPS.AreaLaw

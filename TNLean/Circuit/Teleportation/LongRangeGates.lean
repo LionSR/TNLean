@@ -89,9 +89,9 @@ theorem sitePerm_apply_of_notMem {hs : List (TeleportHop N)} {i : Fin N}
   induction hs with
   | nil => rfl
   | cons h hs ih =>
-    have hi' : i ∉ h.sites := fun h' => hi (Or.inl h')
-    simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff, not_or] at hi'
-    rw [sitePerm, Equiv.Perm.mul_apply, ih fun h' => hi (Or.inr h'),
+    have hi' : i ∉ h.sites := fun h' => hi (Finset.mem_union_left _ h')
+    simp only [sites, Finset.mem_insert, Finset.mem_singleton, not_or] at hi'
+    rw [sitePerm, Equiv.Perm.mul_apply, ih fun h' => hi (Finset.mem_union_right _ h'),
       Equiv.swap_apply_of_ne_of_ne hi'.1 hi'.2.2]
 
 theorem mem_allSites_flatMap {ι : Type*} {l : List ι} {f : ι → List (TeleportHop N)}
@@ -114,7 +114,7 @@ theorem chainPerm_append (hs hs' : List (TeleportHop N)) :
 theorem after_of_disjoint {h h' : TeleportHop N} (hd : Disjoint h.sites h'.sites) :
     After h h' := by
   have hmem : ∀ {i}, i ∈ h.sites → i ∉ h'.sites := fun hi hi' =>
-    Set.disjoint_left.mp hd hi hi'
+    Finset.disjoint_left.mp hd hi hi'
   refine ⟨hmem (by simp [sites]), hmem (by simp [sites]), fun he => ?_, fun he => ?_⟩
   · exact hmem (show h.c ∈ h.sites by simp [sites]) (he ▸ by simp [sites])
   · exact hmem (show h.c ∈ h.sites by simp [sites]) (he ▸ by simp [sites])
@@ -126,7 +126,7 @@ theorem sites_subset_allSites {h : TeleportHop N} {hs : List (TeleportHop N)} (h
 /-- **Parallel chains.** Lists of hops whose sites lie in pairwise disjoint sets form a valid
 list when concatenated. -/
 theorem valid_flatMap {ι : Type*} {l : List ι} {f : ι → List (TeleportHop N)}
-    {S : ι → Set (Fin N)} (hf : ∀ g ∈ l, Valid (f g)) (hS : ∀ g ∈ l, allSites (f g) ⊆ S g)
+    {S : ι → Finset (Fin N)} (hf : ∀ g ∈ l, Valid (f g)) (hS : ∀ g ∈ l, allSites (f g) ⊆ S g)
     (hl : l.Pairwise fun g g' => Disjoint (S g) (S g')) : Valid (l.flatMap f) := by
   rw [valid_iff_pairwise, List.pairwise_flatMap]
   refine ⟨fun g hg => valid_iff_pairwise.mp (hf g hg), ?_⟩
@@ -136,7 +136,7 @@ theorem valid_flatMap {ι : Type*} {l : List ι} {f : ι → List (TeleportHop N
 
 /-- On the set `S g`, the permutation of sites of parallel chains is that of the chain `f g`. -/
 theorem sitePerm_flatMap_apply {ι : Type*} {l : List ι} {f : ι → List (TeleportHop N)}
-    {S : ι → Set (Fin N)} (hS : ∀ g ∈ l, allSites (f g) ⊆ S g)
+    {S : ι → Finset (Fin N)} (hS : ∀ g ∈ l, allSites (f g) ⊆ S g)
     (hl : l.Pairwise fun g g' => Disjoint (S g) (S g')) {g : ι} (hg : g ∈ l) {i : Fin N}
     (hi : i ∈ S g) : sitePerm (l.flatMap f) i = sitePerm (f g) i := by
   induction l with
@@ -148,18 +148,18 @@ theorem sitePerm_flatMap_apply {ι : Type*} {l : List ι} {f : ι → List (Tele
     rcases List.mem_cons.mp hg with rfl | hg
     · have hfix : sitePerm (l.flatMap f) i = i := sitePerm_apply_of_notMem fun hi' => by
         obtain ⟨g', hg', hi'⟩ := mem_allSites_flatMap.mp hi'
-        exact Set.disjoint_left.mp (hl.1 g' hg') hi (hS' g' hg' hi')
+        exact Finset.disjoint_left.mp (hl.1 g' hg') hi (hS' g' hg' hi')
       rw [hfix]
     · rw [ih hS' hl.2 hg]
       refine sitePerm_apply_of_notMem fun hi' => ?_
       have hmem : sitePerm (f g) i ∈ S g :=
         Equiv.Perm.apply_mem_of_forall_notMem
           (fun j hj => sitePerm_apply_of_notMem fun hj' => hj (hS' g hg hj')) hi
-      exact Set.disjoint_left.mp (hl.1 g hg) (hS g₀ List.mem_cons_self hi') hmem
+      exact Finset.disjoint_left.mp (hl.1 g hg) (hS g₀ List.mem_cons_self hi') hmem
 
 /-- Off the sets `S g`, the permutation of sites of parallel chains is the identity. -/
 theorem sitePerm_flatMap_apply_of_notMem {ι : Type*} {l : List ι} {f : ι → List (TeleportHop N)}
-    {S : ι → Set (Fin N)} (hS : ∀ g ∈ l, allSites (f g) ⊆ S g) {i : Fin N}
+    {S : ι → Finset (Fin N)} (hS : ∀ g ∈ l, allSites (f g) ⊆ S g) {i : Fin N}
     (hi : ∀ g ∈ l, i ∉ S g) : sitePerm (l.flatMap f) i = i := by
   refine sitePerm_apply_of_notMem fun hi' => ?_
   obtain ⟨g, hg, hi'⟩ := mem_allSites_flatMap.mp hi'
@@ -167,11 +167,13 @@ theorem sitePerm_flatMap_apply_of_notMem {ι : Type*} {l : List ι} {f : ι → 
 
 open Fin.NatCast in
 theorem allSites_backwardChain_subset (a : Fin N) (L : ℕ) (hL : 2 * L < N) :
-    allSites (backwardChain a L hL) ⊆ {i | ∃ j ≤ 2 * L, i = a + (j : Fin N)} := by
+    allSites (backwardChain a L hL) ⊆
+      (Finset.range (2 * L + 1)).image fun j : ℕ => a + (j : Fin N) := by
   intro i hi
   obtain ⟨h, hh, hi⟩ := mem_allSites.mp hi
   obtain ⟨k, hk, hk', rfl⟩ := mem_backwardChain hh
-  simp only [sites, chainHopBack, Set.mem_insert_iff, Set.mem_singleton_iff] at hi
+  simp only [sites, chainHopBack, Finset.mem_insert, Finset.mem_singleton] at hi
+  simp only [Finset.mem_image, Finset.mem_range]
   rcases hi with rfl | rfl | rfl
   · exact ⟨2 * k + 2, by omega, rfl⟩
   · exact ⟨2 * k + 1, by omega, rfl⟩
@@ -211,10 +213,20 @@ neighbouring pair `{a + 2L, a + 2L + 1}`. -/
 def near : Fin N := g.a + ((2 * g.L : ℕ) : Fin N)
 
 /-- The stretch `a, a + 1, …, a + 2L + 1` of the gate. -/
-def span : Set (Fin N) := {i | ∃ j ≤ 2 * g.L + 1, i = g.a + (j : Fin N)}
+def span : Finset (Fin N) := (Finset.range (2 * g.L + 2)).image fun j : ℕ => g.a + (j : Fin N)
 
 /-- The `2L` sites `a + 1, …, a + 2L` strictly between the two sites of the gate. -/
-def interior : Set (Fin N) := {i | ∃ j, 1 ≤ j ∧ j ≤ 2 * g.L ∧ i = g.a + (j : Fin N)}
+def interior : Finset (Fin N) :=
+  (Finset.Icc 1 (2 * g.L)).image fun j : ℕ => g.a + (j : Fin N)
+
+theorem mem_span {i : Fin N} : i ∈ g.span ↔ ∃ j ≤ 2 * g.L + 1, i = g.a + (j : Fin N) := by
+  simp only [span, Finset.mem_image, Finset.mem_range]
+  exact ⟨fun ⟨j, hj, h⟩ => ⟨j, by omega, h.symm⟩, fun ⟨j, hj, h⟩ => ⟨j, by omega, h.symm⟩⟩
+
+theorem mem_interior {i : Fin N} :
+    i ∈ g.interior ↔ ∃ j, 1 ≤ j ∧ j ≤ 2 * g.L ∧ i = g.a + (j : Fin N) := by
+  simp only [interior, Finset.mem_image, Finset.mem_Icc]
+  exact ⟨fun ⟨j, hj, h⟩ => ⟨j, hj.1, hj.2, h.symm⟩, fun ⟨j, h1, h2, h⟩ => ⟨j, ⟨h1, h2⟩, h.symm⟩⟩
 
 /-- The `2L` sites `a, …, a + 2L - 1`, which carry `|0⟩` after the forward chain. -/
 def cleared : Finset (Fin N) := (Finset.range (2 * g.L)).image fun j : ℕ => g.a + (j : Fin N)
@@ -245,9 +257,10 @@ theorem localGate_mem_unitary :
   embedOp_mem_unitary (pair_injective g.near_ne_far) g.u_mem_unitary
 
 theorem localGate_mem_supportedOperators :
-    g.localGate ∈ supportedOperators d (ringBond g.near) := by
+    g.localGate ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ringBond g.near) := by
   have := embedOp_mem_supportedOperators (d := d) (pair_injective g.near_ne_far) g.u
-  rw [Matrix.range_cons_cons_empty] at this
+  rw [show Finset.univ.image ![g.near, g.far] = {g.near, g.far} from
+    image_univ_pairSites _ _] at this
   rw [ringBond, near, add_natCast_succ]
   exact this
 
@@ -262,38 +275,47 @@ theorem op_mem_unitary : g.op ∈ unitary (Matrix (Fin N → Fin d) (Fin N → F
   embedOp_mem_unitary (pair_injective g.a_ne_far) g.u_mem_unitary
 
 /-- The gate acts on its two sites `a` and `a + 2L + 1`. -/
-theorem op_mem_supportedOperators : g.op ∈ supportedOperators d {g.a, g.far} := by
+theorem op_mem_supportedOperators :
+    g.op ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) {g.a, g.far} := by
   have := embedOp_mem_supportedOperators (d := d) (pair_injective g.a_ne_far) g.u
-  rwa [Matrix.range_cons_cons_empty] at this
+  rwa [show Finset.univ.image ![g.a, g.far] = {g.a, g.far} from
+    image_univ_pairSites _ _] at this
 
-theorem far_mem_span : g.far ∈ g.span := ⟨2 * g.L + 1, le_rfl, rfl⟩
+theorem far_mem_span : g.far ∈ g.span :=
+  Finset.mem_image_of_mem _ (Finset.mem_range.mpr (by omega))
 
 theorem bond_near_subset_span : ringBond g.near ⊆ g.span := by
-  rintro i (rfl | rfl)
-  · exact ⟨2 * g.L, by omega, rfl⟩
-  · rw [near, add_natCast_succ]; exact ⟨2 * g.L + 1, le_rfl, rfl⟩
+  intro i hmem₀
+  rw [mem_ringBond] at hmem₀
+  rcases hmem₀ with rfl | rfl
+  · exact Finset.mem_image_of_mem _ (Finset.mem_range.mpr (by omega))
+  · rw [near, add_natCast_succ]; exact g.far_mem_span
+
+private theorem image_subset_span {t : Finset ℕ} (ht : ∀ j ∈ t, j < 2 * g.L + 2) :
+    t.image (fun j : ℕ => g.a + (j : Fin N)) ⊆ g.span :=
+  Finset.image_subset_image fun j hj => Finset.mem_range.mpr (ht j hj)
 
 theorem interior_subset_span : g.interior ⊆ g.span :=
-  fun _ ⟨j, _, hj, hi⟩ => ⟨j, by omega, hi⟩
+  g.image_subset_span fun j hj => by rw [Finset.mem_Icc] at hj; omega
 
-theorem cleared_subset_span : (g.cleared : Set (Fin N)) ⊆ g.span := by
-  intro i hi
-  obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hi
-  exact ⟨j, by simp at hj; omega, rfl⟩
+theorem cleared_subset_span : g.cleared ⊆ g.span :=
+  g.image_subset_span fun j hj => by rw [Finset.mem_range] at hj; omega
 
 theorem allSites_there_subset_span : allSites g.there ⊆ g.span :=
-  (allSites_forwardChain_subset _ _ _).trans fun _ ⟨j, hj, hi⟩ => ⟨j, by omega, hi⟩
+  (allSites_forwardChain_subset _ _ _).trans
+    (g.image_subset_span fun j hj => by rw [Finset.mem_range] at hj; omega)
 
 theorem allSites_back_subset_span : allSites g.back ⊆ g.span :=
-  (allSites_backwardChain_subset _ _ _).trans fun _ ⟨j, hj, hi⟩ => ⟨j, by omega, hi⟩
+  (allSites_backwardChain_subset _ _ _).trans
+    (g.image_subset_span fun j hj => by rw [Finset.mem_range] at hj; omega)
 
-theorem disjoint_cleared_bond_near : Disjoint (g.cleared : Set (Fin N)) (ringBond g.near) := by
+theorem disjoint_cleared_bond_near : Disjoint g.cleared (ringBond g.near) := by
   have hL := g.lt
-  rw [Set.disjoint_left]
+  rw [Finset.disjoint_left]
   intro i hi hi'
   obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hi
   have hj := Finset.mem_range.mp hj
-  rw [ringBond, near, add_natCast_succ] at hi'
+  rw [mem_ringBond, near, add_natCast_succ] at hi'
   rcases hi' with hi' | hi'
   · exact add_natCast_ne g.a (by omega) (by omega) (by omega) hi'
   · exact add_natCast_ne g.a (by omega) hL (by omega) hi'
@@ -326,7 +348,7 @@ theorem pairwise_disjoint_bond :
   hgs.imp fun {g g'} h => h.mono g.bond_near_subset_span g'.bond_near_subset_span
 
 /-- The layer of the gates `u` on the neighbouring pairs `{a + 2L, a + 2L + 1}`. -/
-noncomputable def localLayer : Layer d N :=
+noncomputable def localLayer : RingLayer d N :=
   layerOfList gs near localGate (pairwise_disjoint_bond hgs)
     (fun g _ => g.localGate_mem_unitary) fun g _ => g.localGate_mem_supportedOperators
 
@@ -348,27 +370,25 @@ variable [NeZero d]
 include hgs in
 /-- After the forward chains, the sites `a, …, a + 2L - 1` of every gate carry `|0⟩`. -/
 theorem isZeroOn_chainPerm_there {v : (Fin N → Fin d) → ℂ} (hv : ∀ g ∈ gs, IsZeroOn g.interior v) :
-    ∀ g ∈ gs, IsZeroOn (g.cleared : Set (Fin N)) (chainPerm (gs.flatMap there) *ᵥ v) := by
+    ∀ g ∈ gs, IsZeroOn (g.cleared) (chainPerm (gs.flatMap there) *ᵥ v) := by
   induction gs with
   | nil => simp
   | cons g₀ gs ih =>
     rw [List.pairwise_cons] at hgs
     have hrest : ∀ g ∈ gs, IsZeroOn g.interior v := fun g hg => hv g (List.mem_cons_of_mem _ hg)
     rw [List.flatMap_cons, chainPerm_append, ← mulVec_mulVec]
-    have hdisj : ∀ {S : Set (Fin N)}, S ⊆ g₀.span →
+    have hdisj : ∀ {S : Finset (Fin N)}, S ⊆ g₀.span →
         Disjoint S (allSites (gs.flatMap there)) := by
       intro S hS
-      rw [Set.disjoint_left]
+      rw [Finset.disjoint_left]
       intro i hi hi'
       obtain ⟨g, hg, hi'⟩ := mem_allSites_flatMap.mp hi'
-      exact Set.disjoint_left.mp (hgs.1 g hg) (hS hi) (g.allSites_there_subset_span hi')
+      exact Finset.disjoint_left.mp (hgs.1 g hg) (hS hi) (g.allSites_there_subset_span hi')
     intro g hg
     rcases List.mem_cons.mp hg with rfl | hg
     · have hw : IsZeroOn g.interior (chainPerm (gs.flatMap there) *ᵥ v) :=
         (hv g List.mem_cons_self).chainPerm_mulVec (hdisj g.interior_subset_span)
-      refine (isZeroOn_chainPerm_forwardChain _ _ _ hw).mono fun i hi => ?_
-      obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hi
-      exact ⟨j, Finset.mem_range.mp hj, rfl⟩
+      exact isZeroOn_chainPerm_forwardChain _ _ _ hw
     · refine (ih hgs.2 hrest g hg).chainPerm_mulVec ?_
       exact (hgs.1 g hg).symm.mono g.cleared_subset_span g₀.allSites_there_subset_span
 
@@ -376,8 +396,8 @@ include hgs in
 /-- The gates on the neighbouring pairs keep `|0⟩` at the sites `a, …, a + 2L - 1` of every
 gate. -/
 theorem isZeroOn_localLayer {w : (Fin N → Fin d) → ℂ}
-    (hw : ∀ g ∈ gs, IsZeroOn (g.cleared : Set (Fin N)) w) :
-    ∀ g ∈ gs, IsZeroOn (g.cleared : Set (Fin N)) ((localLayer hgs).op *ᵥ w) := by
+    (hw : ∀ g ∈ gs, IsZeroOn (g.cleared) w) :
+    ∀ g ∈ gs, IsZeroOn (g.cleared) ((localLayer hgs).op *ᵥ w) := by
   have : Std.Symm fun g g' : LongRangeGate d N => Disjoint g.span g'.span :=
     ⟨fun _ _ h => h.symm⟩
   intro g hg
@@ -385,13 +405,13 @@ theorem isZeroOn_localLayer {w : (Fin N → Fin d) → ℂ}
   refine (hw g hg).mulVec_of_mem_supportedOperators disjoint_compl_right
     (list_prod_mem_supportedOperators _ fun A hA => ?_)
   obtain ⟨g', hg', rfl⟩ := List.mem_map.mp hA
-  refine supportedOperators_mono
-    (show ringBond g'.near ⊆ ((g.cleared : Set (Fin N)))ᶜ from fun i hi hi' => ?_)
+  refine ManyBody.supportedOperators_mono
+    (show ringBond g'.near ⊆ g.clearedᶜ from fun i hi => Finset.mem_compl.mpr fun hi' => ?_)
     g'.localGate_mem_supportedOperators
   by_cases hgg : g = g'
   · subst hgg
-    exact Set.disjoint_left.mp g.disjoint_cleared_bond_near hi' hi
-  · exact Set.disjoint_left.mp (hgs.forall hg hg' hgg) (g.cleared_subset_span hi')
+    exact Finset.disjoint_left.mp g.disjoint_cleared_bond_near hi' hi
+  · exact Finset.disjoint_left.mp (hgs.forall hg hg' hgg) (g.cleared_subset_span hi')
       (g'.bond_near_subset_span hi)
 
 omit [NeZero d] in
@@ -437,7 +457,7 @@ theorem chainPerm_back_mul_localLayer_mul_chainPerm_there :
   funext t
   fin_cases t
   · simp only [Fin.zero_eta, Fin.isValue, Function.comp_apply, Matrix.cons_val_zero]
-    rw [hback (g.bond_near_subset_span (Or.inl rfl)), sitePerm_back_near]
+    rw [hback (g.bond_near_subset_span (mem_ringBond.mpr (Or.inl rfl))), sitePerm_back_near]
   · simp only [Fin.mk_one, Fin.isValue, Function.comp_apply, Matrix.cons_val_one,
       Matrix.cons_val_zero]
     rw [hback g.far_mem_span, sitePerm_back_far]

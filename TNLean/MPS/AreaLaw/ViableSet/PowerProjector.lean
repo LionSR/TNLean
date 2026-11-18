@@ -10,6 +10,8 @@ import TNLean.MPS.AreaLaw.Hastings.PartCommutators
 import QICLean.Analysis.PhysicalPowerFilterLowerGap
 import QICLean.Algebra.FiniteSumPowers
 import QICLean.Entropy.SupportedOperatorSchmidtWords
+import QICLean.ManyBody.Hamiltonian.GroundSpace
+import TNLean.Algebra.MatrixHermitianSum
 
 /-!
 # The power approximate ground-state projector on a nearest-neighbour chain
@@ -67,8 +69,12 @@ sites, so the spectral statements and the expansion take `0 < L`, the source's c
   expansion `eq:a-exp`, lines 606–609.
 -/
 
+open ManyBody (ChainSupport interval mem_interval)
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -114,11 +120,13 @@ noncomputable def ChainHamiltonian.ofBonds
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1) : ChainHamiltonian L q 1 1 where
   term X := ∑ i, if bondSupport i = X then h i else 0
-  supported X := (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun i _ ↦ by
+  supported X := by
+    change _ ∈ ManyBody.supportedOperators _ _
+    refine sum_mem fun i _ ↦ ?_
     split_ifs with hX
     · rw [← hX]
       exact hs i
-    · exact ⟨fun _ _ _ ↦ rfl, fun _ _ _ _ _ _ _ _ ↦ rfl⟩
+    · exact zero_mem _
   hermitian X := (posSemidef_sum_bondSupport_ite h h0 X).isHermitian
   norm_le X := by
     classical
@@ -159,7 +167,7 @@ noncomputable def powerProjector {ι : Type*} [Fintype ι] [DecidableEq ι] (H :
 
 /-- With `L - 1` bonds, one more than their number is the number of sites. -/
 private theorem card_bonds_add_one (hL : 0 < L) :
-    (((Fintype.card (Fin (L - 1)) + 1 : ℕ) : ℝ)) = L := by
+    ((Fintype.card (Fin (L - 1)) + 1 : ℕ) : ℝ) = L := by
   rw [Fintype.card_fin, Nat.sub_add_cancel hL]
 
 /-- The three properties of `A` at line 602, from the QICLean estimate for sums of positive
@@ -168,10 +176,14 @@ private theorem powerProjector_spec (hL : 0 < L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) (m : ℕ) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
     (powerProjector (∑ i, h i) L E₀ m).PosSemidef ∧ ‖powerProjector (∑ i, h i) L E₀ m‖ = 1 ∧
       toEuclideanLin (powerProjector (∑ i, h i) L E₀ m) Γ = Γ := by
-  obtain ⟨hΓ, hHΓ, hgap⟩ := isGappedGroundState_iff.mp hgs
+  have hΓ := hΩ
+  have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgap.posSemidef_sub_smul_one
+    (Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian) hΩ hspan
   have hspec := power_filter_exp_spec_of_posSemidef_terms h h0 h1 hΓ hHΓ hgap hΔ m
   simp only [card_bonds_add_one hL] at hspec
   exact ⟨hspec.1, hspec.2.1, hspec.2.2.1⟩
@@ -182,9 +194,10 @@ theorem posSemidef_powerProjector (hL : 0 < L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) (m : ℕ) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
     (powerProjector (∑ i, h i) L E₀ m).PosSemidef :=
-  (powerProjector_spec hL h h0 h1 hgs hΔ m).1
+  (powerProjector_spec hL h h0 h1 hΩ hgap hspan hΔ m).1
 
 /-- The power projector has operator norm one. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, line 602. -/
@@ -192,9 +205,10 @@ theorem norm_powerProjector (hL : 0 < L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) (m : ℕ) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
     ‖powerProjector (∑ i, h i) L E₀ m‖ = 1 :=
-  (powerProjector_spec hL h h0 h1 hgs hΔ m).2.1
+  (powerProjector_spec hL h h0 h1 hΩ hgap hspan hΔ m).2.1
 
 /-- The power projector fixes the ground state, `AΓ = Γ`. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, line 602. -/
@@ -202,9 +216,10 @@ theorem powerProjector_apply_ground (hL : 0 < L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) (m : ℕ) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
     toEuclideanLin (powerProjector (∑ i, h i) L E₀ m) Γ = Γ :=
-  (powerProjector_spec hL h h0 h1 hgs hΔ m).2.2
+  (powerProjector_spec hL h h0 h1 hΩ hgap hspan hΔ m).2.2
 
 /-- **Equation `e:cutdown`.** For every unit vector `ψ` orthogonal to the ground state,
 `|⟨ψ, A ψ⟩| ≤ ((1 - ε₁/n) / (1 - ε₀/n))^m` with `ε₁ = ε₀ + Δ`. Landau, Vazirani and Vidick,
@@ -213,11 +228,15 @@ theorem norm_inner_powerProjector_le (hL : 0 < L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) (m : ℕ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ)
     {ψ : EuclideanSpace ℂ (Fin L → Fin q)} (hψ : ‖ψ‖ = 1) (horth : ⟪Γ, ψ⟫_ℂ = 0) :
     ‖⟪ψ, toEuclideanLin (powerProjector (∑ i, h i) L E₀ m) ψ⟫_ℂ‖ ≤
       ((1 - (E₀ + Δ) / L) / (1 - E₀ / L)) ^ m := by
-  obtain ⟨hΓ, hHΓ, hgap⟩ := isGappedGroundState_iff.mp hgs
+  have hΓ := hΩ
+  have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgap.posSemidef_sub_smul_one
+    (Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian) hΩ hspan
   set H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
   set N : ℝ := (L : ℝ)
   set P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
@@ -292,11 +311,16 @@ theorem norm_powerProjector_sub_le (hL : 0 < L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) {η : ℝ} (hη : 0 < η) (m : ℕ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {η : ℝ} (hη : 0 < η)
+    (m : ℕ)
     (hm : ((L - E₀) / Δ) * Real.log (1 / η) ≤ m) :
     ‖powerProjector (∑ i, h i) L E₀ m - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
       η := by
-  obtain ⟨hΓ, hHΓ, hgap⟩ := isGappedGroundState_iff.mp hgs
+  have hΓ := hΩ
+  have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgap.posSemidef_sub_smul_one
+    (Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian) hΩ hspan
   have hm' : ((((Fintype.card (Fin (L - 1)) + 1 : ℕ) : ℝ) - E₀) / Δ) *
       Real.log (1 / η) ≤ (m : ℝ) := by
     rwa [card_bonds_add_one hL]
@@ -372,7 +396,8 @@ private theorem isSupportedOn_bondComplement
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (bondComplement h i) (letterSupport L i) := by
   by_cases hi : i.val < L - 1
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_true, ite_true]
-    exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sub_mem
+    change _ ∈ ManyBody.supportedOperators _ _
+    exact sub_mem
       (Entropy.isSupportedOn_one _) (hs ⟨i, hi⟩)
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_false, ite_false, sub_zero]
     exact Entropy.isSupportedOn_one _

@@ -32,6 +32,8 @@ the remaining source scope is recorded in
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped Matrix ComplexOrder
 
 namespace TNLean.PEPS

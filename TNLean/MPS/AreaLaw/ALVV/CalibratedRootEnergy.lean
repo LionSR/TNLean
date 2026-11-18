@@ -20,6 +20,8 @@ subtree. This is an auxiliary to the physical construction, not literal
 soft Generate; see `docs/paper-gaps/alvv16_soft_regional_energy_centering.tex`.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped ENNReal InnerProductSpace TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

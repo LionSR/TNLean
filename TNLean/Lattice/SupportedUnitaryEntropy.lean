@@ -43,8 +43,8 @@ from a region `X`, on a nonempty configuration space. Then `U = 1 ⊗ U₂` in t
 `X` and its complement, for a unitary `U₂` on the complement.
 Source: `09-amplification.tex`, lines 547–550. -/
 theorem exists_one_kronecker_unitary_of_mem_supportedOperators [Nonempty (ι → Fin q)]
-    {X S : Finset ι} (hS : Disjoint (S : Set ι) (X : Set ι))
-    {U : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hU : U ∈ supportedOperators q (S : Set ι))
+    {X S : Finset ι} (hS : Disjoint S X)
+    {U : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
     (hUu : Uᴴ * U = 1) :
     ∃ U₂ : Matrix (FiniteProduct.Configuration (fun _ : ι => Fin q) Xᶜ)
         (FiniteProduct.Configuration (fun _ : ι => Fin q) Xᶜ) ℂ,
@@ -90,8 +90,8 @@ unitary acting on a region `S` disjoint from `X ∪ J`, and let `η` be a unit v
 Source: `09-amplification.tex`, lines 547–555, and `02-information.tex`, lines 600–630. -/
 theorem mutualInformation_le_of_supported_unitary
     {φ η : EuclideanSpace ℂ (ι → Fin q)} (hφ : ‖φ‖ = 1) (hη : ‖η‖ = 1)
-    {X J S : Finset ι} (hXJ : Disjoint X J) (hS : Disjoint (S : Set ι) ((X ∪ J : Finset ι) :
-      Set ι)) {U : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hU : U ∈ supportedOperators q (S : Set ι))
+    {X J S : Finset ι} (hXJ : Disjoint X J) (hS : Disjoint S (X ∪ J))
+    {U : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
     (hUu : Uᴴ * U = 1)
     (hprod : FiniteProduct.mutualInformation (fun _ : ι => Fin q) η X J = 0) :
     FiniteProduct.mutualInformation (fun _ : ι => Fin q) φ X J ≤
@@ -115,8 +115,8 @@ then every part of `X` has mutual information at most `8 √C₁ (1 + C₂) n^(-
 the unit vector `φ`. Source: `09-amplification.tex`, lines 547–561. -/
 theorem mutualInformation_le_inv_pow_of_supported_unitary
     {φ η : EuclideanSpace ℂ (ι → Fin q)} (hφ : ‖φ‖ = 1) (hη : ‖η‖ = 1)
-    {X J S : Finset ι} (hXJ : Disjoint X J) (hS : Disjoint (S : Set ι) ((X ∪ J : Finset ι) :
-      Set ι)) {U : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hU : U ∈ supportedOperators q (S : Set ι))
+    {X J S : Finset ι} (hXJ : Disjoint X J) (hS : Disjoint S (X ∪ J))
+    {U : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
     (hUu : Uᴴ * U = 1)
     (hprod : FiniteProduct.mutualInformation (fun _ : ι => Fin q) η X J = 0)
     {C₁ C₂ : ℝ} {n M K : ℕ} (hn : 1 ≤ n) (hK : 4 * (M + 2) ≤ K)

@@ -26,6 +26,8 @@ statement is the same crossing-bond dimension argument.
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix ComplexOrder
 
 namespace TNLean.PEPS

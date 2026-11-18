@@ -20,6 +20,8 @@ arXiv:1602.08828v2, Proposition 5.7, lines 1311–1333. No identification of
 boundary conventions or running-time assertion is made.
 -/
 
+open ManyBody (interval)
+
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix
 open TNLean.Lattice.Sheet

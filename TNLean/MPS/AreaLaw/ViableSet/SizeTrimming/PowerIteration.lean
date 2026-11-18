@@ -11,6 +11,7 @@ import TNLean.MPS.AreaLaw.ViableSet.LeadingPower
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.LeadingVectorPrecision
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Coordinate-start power iteration for viable vectors
@@ -35,6 +36,8 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- End-to-end finite-precision form of the LVV leading-vector step.  A positive
@@ -54,7 +57,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_approximate_density_and_eigenre
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -135,7 +139,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approximate_density_and_eigenre
       _ ≤ Δ / 2028 := hcombined
   obtain ⟨ρ, u, μ, hρ, hρtr, hρP, -, hu, huρ, -, hbounds⟩ :=
     h.exists_leading_vector_of_approximate_compressed_boundary_solution hL hq hΔ
-      HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX Z hZ hZZ x₀ τ σ
+      HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ x₀ τ σ
         hτtrace hσpsd hclose hτenergy hτboundary hdensity
   dsimp only at hbounds
   rcases hbounds with ⟨-, huP, hvunit, -, -, -, hE, ha, -, hμ⟩
@@ -207,7 +211,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_approximate_density_and_eigenre
       exact hres
     have hres' : ‖toEuclideanLin ρ u' - (μ : ℂ) • u'‖ ≤ (11 / 24) * ζ :=
       residual_precision_of_lvv_vector_tolerance hL hresambient
-    exact h.nearby_glued_vector_viable_of_density_and_vector_residual hL hq hΔ hgs
+    exact h.nearby_glued_vector_viable_of_density_and_vector_residual hL hq hΔ hΩ hgap hspan
       W hW hρ hρtr u u' hu hu' huρ hμ hu'P hE ha hres' hcombined
   refine ⟨σ₀, ρ, u, z₀, μ, hσ₀, hσ₀tr, hρexpand, hρ, hρtr, hu, huρ, hμ,
     hz₀, hz₀eig, hZz₀, hv₀unit, hv₀overlap, hcertificate, ?_⟩
@@ -250,7 +254,8 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_approximate_density
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     (S : Finset (LeftBlockVector L q k)) {b Hv : ℕ}
     (hS : ∀ u : S, RationalLeftOpenMPSRepresentationOfHeight Hv b u.1)
     {m n : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
@@ -292,9 +297,9 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_approximate_density
   obtain ⟨σ₀, ρ, u, z₀, μ, hσ₀, hσ₀tr, hρexpand, hρ, hρtr, hu, huρ, hμ,
       hz₀, hz₀eig, hZz₀, hv₀unit, hv₀overlap, hcertificate, hpower⟩ :=
     h.exists_viable_vector_of_approximate_density_and_eigenresidual hL hq hΔ
-      HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX Z hZ hZZ x₀ τ σ
+      HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ x₀ τ σ
         hτtrace hσpsd hclose hτenergy hτboundary hε
-  exact exists_rationalSpanViableMPSData_of_leadingCoordinates hL hΔ hε S hS hgs.1
+  exact exists_rationalSpanViableMPSData_of_leadingCoordinates hL hΔ hε S hS hΩ
     Z hZ hZZ z₀ hz₀ W hW hv₀unit hv₀overlap
 
 

@@ -28,6 +28,8 @@ boundary disentangling, local source lines 1840–1920 and 1935–1990.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

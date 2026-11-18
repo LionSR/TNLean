@@ -27,6 +27,8 @@ reference rank; see
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_trimming_constant.pdf.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw

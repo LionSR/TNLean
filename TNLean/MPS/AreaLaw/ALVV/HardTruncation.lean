@@ -27,6 +27,8 @@ and the pending revision and prerequisite gates recorded in
 `docs/audits/2026-10-29_physical_hard_truncation_capstone.md`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

@@ -5,13 +5,15 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.ExpConjugation
 import TNLean.Lattice.BoundedDegreeImaginaryTime
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Finset.Disjoint
 import Mathlib.Data.Nat.Factorial.Basic
 import Mathlib.Logic.Function.Iterate
 import Mathlib.Tactic.Positivity
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order
@@ -34,6 +36,8 @@ side, so at most `2*m + 3` bonds contribute. This gives the factorial
 bound `4^m * m! * ‖O‖`; the exponential series is then bounded by a
 geometric series. The Hamiltonian is the original bond sum throughout.
 -/
+
+open ManyBody (interval mem_interval)
 
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
@@ -123,30 +127,28 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
       (4 : ℝ) * ((m : ℝ) + 1) * ‖X‖ := by
   classical
   let J := interval L (c - (m + 1)) (c + 2 + (m + 1))
-  have hXJ : X ∈ supportedOperators q (J : Set (Fin L)) :=
-    supportedOperators_mono
+  have hXJ : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J :=
+    ManyBody.supportedOperators_mono
       (by simpa only [Finset.coe_subset] using enlarged_interval_subset_succ L c m)
-      (mem_supportedOperators_of_isSupportedOn hX)
+      hX
   have hterm (i : Fin (L - 1)) (hi : i ∈ s) :
-      h i * X - X * h i ∈ supportedOperators q (J : Set (Fin L)) := by
+      h i * X - X * h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := by
     by_cases hd : Disjoint (interval L i.val (i.val + 2))
         (interval L (c - m) (c + 2 + m))
-    · have hc : Commute (h i) X := commute_of_mem_supportedOperators
-        (Finset.disjoint_coe.mpr hd)
-        (mem_supportedOperators_of_isSupportedOn (hs i hi))
-        (mem_supportedOperators_of_isSupportedOn hX)
+    · have hc : Commute (h i) X := ManyBody.commute_of_mem_supportedOperators_of_disjoint
+        (hs i hi) hX hd
       rw [sub_eq_zero.mpr hc.eq]
-      exact Submodule.zero_mem _
-    · have hhJ : h i ∈ supportedOperators q (J : Set (Fin L)) :=
-        supportedOperators_mono
+      exact zero_mem _
+    · have hhJ : h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J :=
+        ManyBody.supportedOperators_mono
           (by simpa only [Finset.coe_subset] using bond_subset_enlarged_interval_succ hd)
-          (mem_supportedOperators_of_isSupportedOn (hs i hi))
-      exact Submodule.sub_mem _ (mul_mem_supportedOperators hhJ hXJ)
-        (mul_mem_supportedOperators hXJ hhJ)
+          (hs i hi)
+      exact sub_mem (mul_mem hhJ hXJ) (mul_mem hXJ hhJ)
   have hsupport : Entropy.IsSupportedOn (n := fun _ ↦ q)
       ((∑ i ∈ s, h i) * X - X * (∑ i ∈ s, h i)) J := by
-    apply isSupportedOn_of_mem_supportedOperators
-    have hsum := (supportedOperators q (J : Set (Fin L))).sum_mem hterm
+    change _ ∈ ManyBody.supportedOperators _ _
+    have hsum : _ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := sum_mem hterm
+    change _ ∈ ManyBody.supportedOperators _ _
     simpa only [Finset.sum_sub_distrib, Finset.sum_mul, Finset.mul_sum] using hsum
   refine ⟨hsupport, ?_⟩
   let active := s.filter fun i ↦ ¬Disjoint (interval L i.val (i.val + 2))

@@ -147,7 +147,7 @@ theorem torusBondNetwork_slice_mem_plaquetteGroundSpace_of_holonomy_eq_one
     change (torusRightEdge w).1.2 ∈ torusPlaquetteRegion v at hh
     change torusGraphBondMatrix _ _ (torusRightEdge w) = 1
     have hw : w ∈ torusPlaquetteRegion v ∧ (w.1 + 1, w.2) ∈ torusPlaquetteRegion v := by
-      rcases Edge.ofAdj_endpoints (torusGraph_adj_right w.1 w.2) with h | h
+      rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right w.1 w.2) with h | h
       · exact ⟨by simpa only [torusRightEdge, h.1] using ht,
           by simpa only [torusRightEdge, h.2] using hh⟩
       · exact ⟨by simpa only [torusRightEdge, h.2] using hh,
@@ -157,7 +157,7 @@ theorem torusBondNetwork_slice_mem_plaquetteGroundSpace_of_holonomy_eq_one
     change (torusUpEdge w).1.2 ∈ torusPlaquetteRegion v at hh
     change torusGraphBondMatrix _ _ (torusUpEdge w) = 1
     have hw : w ∈ torusPlaquetteRegion v ∧ (w.1, w.2 + 1) ∈ torusPlaquetteRegion v := by
-      rcases Edge.ofAdj_endpoints (torusGraph_adj_up w.1 w.2) with h | h
+      rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up w.1 w.2) with h | h
       · exact ⟨by simpa only [torusUpEdge, h.1] using ht,
           by simpa only [torusUpEdge, h.2] using hh⟩
       · exact ⟨by simpa only [torusUpEdge, h.2] using hh,

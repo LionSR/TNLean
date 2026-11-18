@@ -23,6 +23,8 @@ is asserted. See `docs/paper-gaps/alvv16_approximation_parameters.tex` and
 `docs/paper-gaps/alvv16_final_filter_gain.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

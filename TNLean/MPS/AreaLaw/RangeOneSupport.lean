@@ -12,6 +12,8 @@ A nonempty support of diameter at most one is a singleton or a pair of adjacent 
 Consequently a chain of `L` sites has at most `2L` such supports.
 -/
 
+open ManyBody (ChainSupport interval mem_interval)
+
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

@@ -23,6 +23,8 @@ arXiv:1307.5143v1, Claim `c:2`, lines 520–527. No new area law or independent
 MPS approximation theorem is used.
 -/
 
+open ManyBody (interval interval_zero_eq_univ mem_interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- Read the actual full-interval vector on native chain configurations.

@@ -16,12 +16,14 @@ import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedInterpolation
 import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedMPO
 import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedParentCommutation
 import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedPathGap
+import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedUnitaryGauge
 import TNLean.MPS.Symmetry.MPOSymmetry.ArbitraryPhysicalMixedWeakHopf
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorComap
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorOrderTwo
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
+import TNLean.MPS.Symmetry.MPOSymmetry.BlockMixedGroundSpace
 import TNLean.MPS.Symmetry.MPOSymmetry.BlockMixedMPO
 import TNLean.MPS.Symmetry.MPOSymmetry.BlockMixedMPOFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks
@@ -72,6 +74,9 @@ import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointActiveEdgeNormalization
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointActiveEdgePlacement
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointActiveGapTransfer
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointActiveHamiltonian
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointAdjoint
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointAdjointCommutation
+import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointAdjointObstruction
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointBoundaryCoordinates
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointBoundaryFactors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointBoundaryNormBounds

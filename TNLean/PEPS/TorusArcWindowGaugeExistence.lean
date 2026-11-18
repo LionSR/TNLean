@@ -28,6 +28,8 @@ this among the corollary's hypotheses. The theorem here takes the tensor hypothe
 positivity hypothesis. Documented in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 open scoped Matrix

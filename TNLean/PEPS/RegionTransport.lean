@@ -33,6 +33,8 @@ a datum for the *same* tensor at the translated edge
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean
@@ -85,12 +87,12 @@ omit [Fintype V] [Fintype W] [DecidableRel G.Adj] [DecidableRel G'.Adj] in
 crosses the boundary of the image region.  The endpoints carry across by `φ`, which
 preserves membership in `R`. -/
 theorem isRegionBoundaryEdge_map (φ : G ≃g G') (R : Finset V) (f : Edge G) :
-    IsRegionBoundaryEdge (G := G') (Region.map φ R) (Edge.map φ f) ↔
+    IsRegionBoundaryEdge (G := G') (Region.map φ R) (ManyBody.Edge.map φ f) ↔
       IsRegionBoundaryEdge (G := G) R f := by
   have key : ∀ x : V, x ∈ R ↔ φ x ∈ Region.map φ R := fun x =>
     (mem_Region_map_apply φ R x).symm
   rw [IsRegionBoundaryEdge, IsRegionBoundaryEdge]
-  rcases Edge.map_endpoints φ f with ⟨h1, h2⟩ | ⟨h1, h2⟩
+  rcases ManyBody.Edge.map_endpoints φ f with ⟨h1, h2⟩ | ⟨h1, h2⟩
   · rw [h1, h2, ← key, ← key]
   · rw [h1, h2, ← key, ← key]; tauto
 
@@ -101,13 +103,13 @@ by the inverse edge action `Edge.map φ.symm`. -/
 def regionBoundaryEdgeMapEquiv (φ : G ≃g G') (R : Finset V) :
     {f : Edge G' // IsRegionBoundaryEdge (G := G') (Region.map φ R) f} ≃
       {f : Edge G // IsRegionBoundaryEdge (G := G) R f} where
-  toFun f := ⟨Edge.map φ.symm f.1, by
-    have h := isRegionBoundaryEdge_map φ R (Edge.map φ.symm f.1)
-    rw [Edge.map_map_symm] at h
+  toFun f := ⟨ManyBody.Edge.map φ.symm f.1, by
+    have h := isRegionBoundaryEdge_map φ R (ManyBody.Edge.map φ.symm f.1)
+    rw [ManyBody.Edge.map_map_symm] at h
     exact h.mp f.2⟩
-  invFun f := ⟨Edge.map φ f.1, (isRegionBoundaryEdge_map φ R f.1).mpr f.2⟩
-  left_inv f := by apply Subtype.ext; simp [Edge.map_map_symm]
-  right_inv f := by apply Subtype.ext; simp [Edge.map_symm_map]
+  invFun f := ⟨ManyBody.Edge.map φ f.1, (isRegionBoundaryEdge_map φ R f.1).mpr f.2⟩
+  left_inv f := by apply Subtype.ext; simp [ManyBody.Edge.map_map_symm]
+  right_inv f := by apply Subtype.ext; simp [ManyBody.Edge.map_symm_map]
 
 /-! ### Transport of the blocked-region weight
 

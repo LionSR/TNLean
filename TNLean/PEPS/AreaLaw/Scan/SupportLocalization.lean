@@ -29,6 +29,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- A radius-`r₀` graph ball meeting `A ∩ T_L` cannot leave the fixed cut.
@@ -40,17 +42,17 @@ theorem domainGraph_ball_subset_of_clearance (Λ T : Finset (ℤ × ℤ))
       ((2 * L + 10 * r₀ : ℕ) : ℤ) < ambientSupDistance t z)
     {anchor : Site Λ}
     (hmeet : ∃ y ∈ A, ambientDepth T hT y.val ≤ L ∧
-      (domainGraph Λ).edist anchor y ≤ (r₀ : ℕ∞)) :
-    (Finset.univ.filter fun x ↦ (domainGraph Λ).edist anchor x ≤ (r₀ : ℕ∞)) ⊆ A := by
+      (planeDomainGraph Λ).edist anchor y ≤ (r₀ : ℕ∞)) :
+    (Finset.univ.filter fun x ↦ (planeDomainGraph Λ).edist anchor x ≤ (r₀ : ℕ∞)) ⊆ A := by
   classical
   intro x hx
   obtain ⟨y, hyA, hydepth, hy⟩ := hmeet
   have hxball := (Finset.mem_filter.mp hx).2
   by_contra hxA
-  have hyx : (domainGraph Λ).edist y x ≤ ((2 * r₀ : ℕ) : ℕ∞) := by
+  have hyx : (planeDomainGraph Λ).edist y x ≤ ((2 * r₀ : ℕ) : ℕ∞) := by
     calc
-      (domainGraph Λ).edist y x ≤
-          (domainGraph Λ).edist y anchor + (domainGraph Λ).edist anchor x :=
+      (planeDomainGraph Λ).edist y x ≤
+          (planeDomainGraph Λ).edist y anchor + (planeDomainGraph Λ).edist anchor x :=
         SimpleGraph.edist_triangle
       _ ≤ (r₀ : ℕ∞) + r₀ :=
         add_le_add (by simpa only [SimpleGraph.edist_comm] using hy) hxball
@@ -58,11 +60,11 @@ theorem domainGraph_ball_subset_of_clearance (Λ T : Finset (ℤ × ℤ))
   obtain ⟨p, hp⟩ := SimpleGraph.exists_walk_of_edist_ne_top
     (ne_top_of_le_ne_top (ENat.natCast_ne_top (2 * r₀)) hyx)
   obtain ⟨u, w, -, -, hcut, p', hp'⟩ := exists_edgeBoundary_of_walk p hyA hxA
-  have hyd : (domainGraph Λ).edist y u ≤ ((2 * r₀ : ℕ) : ℕ∞) := by
+  have hyd : (planeDomainGraph Λ).edist y u ≤ ((2 * r₀ : ℕ) : ℕ∞) := by
     calc
-      (domainGraph Λ).edist y u ≤ p'.length := SimpleGraph.edist_le _
+      (planeDomainGraph Λ).edist y u ≤ p'.length := SimpleGraph.edist_le _
       _ ≤ p.length := by exact_mod_cast hp'
-      _ = (domainGraph Λ).edist y x := hp
+      _ = (planeDomainGraph Λ).edist y x := hp
       _ ≤ ((2 * r₀ : ℕ) : ℕ∞) := hyx
   have hvariation := abs_ambientDepth_sub_le_domainGraph T hT hyd
   have hz : u.val ∈ Geometry.boundaryEndpoints Λ A := by

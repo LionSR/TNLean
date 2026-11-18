@@ -29,6 +29,8 @@ Theorems 5.5 and 5.7, and the accessible regular coordinates in Section 6. The
 results here concern the regular representation on finite simple graphs.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

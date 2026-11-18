@@ -24,6 +24,8 @@ see `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 - [arXiv:1106.4752](https://arxiv.org/abs/1106.4752), boundary symmetry, lines 330–345.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

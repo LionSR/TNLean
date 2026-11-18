@@ -8,6 +8,7 @@ import QICLean.Analysis.OperatorMean.MatrixPowers
 import TNLean.PEPS.Approximation.SquareInteractionTerms
 import TNLean.PEPS.AreaLaw.Geometry.NestedPatches
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerFilter
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Energy of minimizing nested patch filters
@@ -25,7 +26,11 @@ states*, Proposition 4.1, `03-patches.tex`, lines 213–336,
 Independently formalized from the manuscript; no upstream Lean text is reused.
 -/
 
+open ManyBody (Edge SquareInteraction)
+
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -45,10 +50,12 @@ minimum. No density is assumed nonsingular.
 Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 213–336,
 eq:patch-single-crossing, eq:patch-one-term-energy and eq:patch-energy-bound;
 00-introduction.tex, eq:model and eq:global-gap. -/
-theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
-    {L q : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J)
+theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
+    {L q : ℕ} {J E₀ Δ : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+        (hhJ : ∀ i, ‖h.term i‖ ≤ J)
     (hJ : 0 ≤ J) (_hΔ : 0 < Δ)
-    (Ω : StateSpace L q) (hgs : h.IsGappedGroundState E₀ Ω Δ)
+    (Ω : StateSpace L q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (center : ℝ × ℝ) (u κ b : ℝ)
     (hu : 4 ≤ u) (hκ : 0 < κ) (hκ₁ : κ ≤ 1) (hb : 0 < b) :
     let Λ := AreaLaw.rectangularDomain L L
@@ -60,7 +67,7 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
     let U := dependentGlobalConfigIsometry
       (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-    let Ωᵤ := U.symm (squareAreaLawState Ω)
+    let Ωᵤ := U.symm (AreaLaw.rectangleAreaLawState Ω)
     ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
       x ∈ regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
       IsMinOn
@@ -70,13 +77,13 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
       let φ : Lattice.StateSpace Λ q := U
         (normalizedRegularizedPatchOutput (Out := fun _ : Lattice.Site Λ ↦ Fin q)
           regions a b Ωᵤ x)
-      (inner ℂ φ (Matrix.toEuclideanLin h.toAreaLawHamiltonian.operator φ)).re - E₀ ≤
+      (inner ℂ φ (Matrix.toEuclideanLin (h.toAreaLawHamiltonian hhJ).operator φ)).re - E₀ ≤
         36 * (q : ℝ) ^ 2 * J * κ ^ 2 := by
   intro Λ m regions a U Ωᵤ x hx hmin φ
   have hm : (0 : ℝ) < m := Nat.cast_pos.mpr (AreaLaw.Geometry.nestedPatchCount_pos u)
   have ha : ∀ j, 0 < a j := fun _ ↦ div_pos hκ hm
   have hΩᵤ : ‖Ωᵤ‖ = 1 :=
-    (U.symm.norm_map _).trans ((norm_squareAreaLawState Ω).trans hgs.1)
+    (U.symm.norm_map _).trans ((AreaLaw.norm_rectangleAreaLawState Ω).trans hΩ)
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   have hnorm := norm_normalizedRegularizedPatchOutput
     (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ωᵤ hΩᵤ hx
@@ -85,7 +92,7 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     AreaLaw.Geometry.nestedPatch_mono Λ center u hij
   have hcl := exists_clipped_filter_of_isMinOn_regularizedPatchObjective
     (n := fun _ : Lattice.Site Λ ↦ q) regions hregions a ha hb Ωᵤ hΩᵤ x hx hmin
-  obtain ⟨T, hsupp, hherm, hTnorm, hTsum⟩ := h.exists_nearestNeighbor_terms
+  obtain ⟨T, hsupp, hherm, hTnorm, hTsum⟩ := h.exists_nearestNeighbor_terms hh hhJ
   let D : ℕ → Finset (Lattice.Site Λ) := AreaLaw.Geometry.nestedPatch Λ center u
   let K : (j : Fin m) → Matrix (Entropy.RegionConfig (fun _ : Lattice.Site Λ ↦ q) (D j))
       (Entropy.RegionConfig (fun _ : Lattice.Site Λ ↦ q) (D j)) ℂ :=
@@ -93,12 +100,12 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
   have hunit : ∀ j, IsUnit (K j).det := fun j ↦
     (Matrix.isUnit_iff_isUnit_det _).mp (((hx j).1.add_smul_one_posDef hb).rpow _).isUnit
   have ha₁ : ∀ j, a j ≤ 1 := fun _ ↦
-    (div_nat_le_self_of_nonnneg hκ.le m).trans hκ₁
+    (div_nat_le_self_of_nonneg hκ.le m).trans hκ₁
   have hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j := fun _ _ hij ↦ hregions hij
   have hφpatch := dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput
     (n := fun _ : Lattice.Site Λ ↦ q) (fun j : Fin m ↦ D j) a b Ωᵤ x
   change φ = Entropy.patchState b (regularizedPatchFactorList (fun j : Fin m ↦ D j) a x)
-    (U (U.symm (squareAreaLawState Ω))) at hφpatch
+    (U (U.symm (AreaLaw.rectangleAreaLawState Ω))) at hφpatch
   simp only [U.apply_symm_apply, Entropy.patchState, Entropy.patchOutput,
     map_filter_regularizedPatchFactorList_eq_chainList] at hφpatch
   have hinv : Entropy.liftProdInv (Entropy.chainList D K fun _ ↦ True) *
@@ -106,14 +113,15 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     Entropy.liftProdInv_mul_liftProd_of_isUnit fun p hp ↦
       (List.mem_map.mp hp).elim fun i hi ↦ hi.2 ▸ hunit i
   have heig := Entropy.toEuclideanLin_conj_apply_eq
-    (h.isGappedGroundState_toAreaLawHamiltonian hgs).2.1 hinv
+    (ManyBody.mem_groundSpace_iff.mp ((h.isGapped_toAreaLawHamiltonian hhJ hh hΩ hgap hspan).2.2 ▸
+      Submodule.mem_span_singleton_self _)) hinv
     (((‖Matrix.toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
-      (squareAreaLawState Ω)‖⁻¹ : ℝ) : ℂ))
+      (AreaLaw.rectangleAreaLawState Ω)‖⁻¹ : ℝ) : ℂ))
   rw [← hφpatch, ← hTsum] at heig
   have hφne : φ ≠ 0 := norm_ne_zero_iff.mp (hφ.trans_ne one_ne_zero)
   obtain ⟨σ₀, _⟩ := Function.ne_iff.mp (show (φ : _ → ℂ) ≠ 0 from by
     intro hzero; apply hφne; simpa using congrArg (WithLp.toLp 2) hzero)
-  have hsingle : ∀ (i : Lattice.Site Λ ⊕ Edge (Lattice.domainGraph Λ)),
+  have hsingle : ∀ (i : Lattice.Site Λ ⊕ Edge (ManyBody.planeDomainGraph Λ)),
       ∀ j ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m,
       ∀ k ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m,
         j = k := by
@@ -121,7 +129,9 @@ theorem SquareHamiltonian.nestedPatch_minimizer_energy_le
     have hc (l : Fin m) (hl : l ∈ Entropy.splitIndices
         (AreaLaw.nearestNeighborSupport (Λ := Λ) i) D m) :
         i ∈ Entropy.crossingTerms (AreaLaw.nearestNeighborSupport (Λ := Λ)) (D l) :=
-      Finset.mem_filter.mpr ⟨Finset.mem_univ i, Entropy.mem_splitIndices.mp hl⟩
+      by
+        simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
+        exact Entropy.mem_splitIndices.mp hl
     cases i with
     | inl v => exact False.elim (AreaLaw.inl_not_mem_crossingTerms (D j) v (hc j hj))
     | inr e =>

@@ -18,6 +18,8 @@ These theorems convert an already supplied approximation witness. They do not
 construct approximations to ground states or prove the polynomial-PEPS theorem.
 -/
 
+open ManyBody (Edge squareLatticeGraph)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation
@@ -28,7 +30,7 @@ namespace Pinned
 Basic.lean lines 88–95, with `phase` unfolded. The bound keeps the source's explicit
 `Real.rpow` spelling, which is definitionally `(L : ℝ) ^ c`. -/
 def HasPEPSApproximation {L q : ℕ} (Ω : State L q) (C c : ℝ) : Prop :=
-  ∃ (D : ForwardEdge L → ℕ) (A : (v : Vertex L) → LocalTensor q D v),
+  ∃ (D : Edge (squareLatticeGraph L L) → ℕ) (A : (v : Vertex L) → LocalTensor q D v),
     (∀ e, 0 < D e) ∧
     (∀ e, (D e : ℝ) ≤ C * Real.rpow (L : ℝ) c) ∧
     contractPEPS D A ≠ 0 ∧
@@ -66,9 +68,9 @@ theorem hasPEPSApproximation_of_pinned {Ω : Pinned.State L q} {C c : ℝ}
   rcases h with ⟨D, A, hpos, hbound, hn, θ, herr⟩
   refine ⟨pinnedTensorToGraphTensor D A, ?_, ?_, ?_, θ, ?_⟩
   · intro e
-    exact hpos ((forwardSquareEdgeEquiv L).symm e)
+    exact hpos e
   · intro e
-    exact hbound ((forwardSquareEdgeEquiv L).symm e)
+    exact hbound e
   · rwa [vector_pinnedTensorToGraphTensor]
   · rwa [vector_pinnedTensorToGraphTensor]
 
@@ -81,7 +83,7 @@ theorem hasPEPSApproximation_of_vector (P : Vector.Tensor q L) {Ω : Vector.Stat
   rcases herr with ⟨θ, _, herr⟩
   refine ⟨vectorTensorToGraphTensor P, vectorTensorToGraphTensor_bondDim_pos P, ?_, ?_, θ, ?_⟩
   · intro e
-    exact hbound ((forwardSquareEdgeEquiv L).symm e)
+    exact hbound e
   · rwa [vector_vectorTensorToGraphTensor]
   · rw [vector_vectorTensorToGraphTensor]
     simpa only [Complex.ofReal_inv] using herr

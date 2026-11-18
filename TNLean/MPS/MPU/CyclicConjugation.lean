@@ -60,13 +60,13 @@ the periodic seam. Source context: arXiv:1703.09188, eq:appendix-1,
 lines 2300–2306. -/
 theorem mpo_conjugation_mem_supportedOperators_rotate
     (U : MPOTensor d D) {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
-    {S : Set (Fin N)}
-    (hA : mpo U N * A * (mpo U N)ᴴ ∈ QuantumCircuit.supportedOperators d S) :
+    {S : Finset (Fin N)}
+    (hA : mpo U N * A * (mpo U N)ᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
     mpo U N * A.submatrix (rotateConfig N d) (rotateConfig N d) * (mpo U N)ᴴ ∈
-      QuantumCircuit.supportedOperators d ((finRotate N) '' S) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image (finRotate N)) := by
   have h := QuantumCircuit.supportedOperators_submatrix_siteEquiv (finRotate N) hA
   change (mpo U N * A * (mpo U N)ᴴ).submatrix (rotateConfig N d) (rotateConfig N d) ∈
-    QuantumCircuit.supportedOperators d ((finRotate N) '' S) at h
+    ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image (finRotate N)) at h
   simpa only [mpo_conjugation_submatrix_rotateConfig] using h
 
 /-- A finite support bound for the actual adjoint conjugation rotates
@@ -76,13 +76,13 @@ not an assumed inverse-family compatibility condition.
 Source context: arXiv:1703.09188, eq:appendix-1, lines 2300–2306. -/
 theorem mpo_adjointConjugation_mem_supportedOperators_rotate
     (U : MPOTensor d D) {A : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ}
-    {S : Set (Fin N)}
-    (hA : (mpo U N)ᴴ * A * mpo U N ∈ QuantumCircuit.supportedOperators d S) :
+    {S : Finset (Fin N)}
+    (hA : (mpo U N)ᴴ * A * mpo U N ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
     (mpo U N)ᴴ * A.submatrix (rotateConfig N d) (rotateConfig N d) * mpo U N ∈
-      QuantumCircuit.supportedOperators d ((finRotate N) '' S) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image (finRotate N)) := by
   have h := QuantumCircuit.supportedOperators_submatrix_siteEquiv (finRotate N) hA
   change ((mpo U N)ᴴ * A * mpo U N).submatrix (rotateConfig N d) (rotateConfig N d) ∈
-    QuantumCircuit.supportedOperators d ((finRotate N) '' S) at h
+    ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image (finRotate N)) at h
   simpa only [mpo_adjointConjugation_submatrix_rotateConfig] using h
 
 end MPOTensor

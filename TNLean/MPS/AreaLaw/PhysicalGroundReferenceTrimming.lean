@@ -24,6 +24,8 @@ corrected weighted reference loss, recorded in
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_trimming_constant.pdf.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw

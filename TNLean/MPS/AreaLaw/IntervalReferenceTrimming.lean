@@ -23,6 +23,8 @@ proof of `t:alg1`, lines 1801–1813.
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_trimming_constant.pdf.
 -/
 
+open ManyBody (interval)
+
 open scoped InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw

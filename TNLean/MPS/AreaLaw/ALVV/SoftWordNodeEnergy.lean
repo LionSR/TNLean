@@ -25,6 +25,8 @@ construction, not an identification with literal soft Generate. See
 No efficient computation of these choices is asserted.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct InnerProductSpace ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator

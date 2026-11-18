@@ -39,6 +39,8 @@ final layout, read on the configurations of the square, is the readout of the pr
   653–681 (the frozen-hole count, the main reference at level one and the discarded factors).
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 open scoped TensorProduct

@@ -23,6 +23,8 @@ Source: arXiv:1804.04964, Theorem 2, lines 1207–1212, and Applications,
 lines 1891–1894.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 
 open scoped BigOperators Matrix
@@ -101,7 +103,7 @@ private theorem translateEdge_torusIncidentLeg (a : ZMod width) (b : ZMod height
 /-- The graph edge map preserves the same four native incident-leg numbers. -/
 private theorem map_translate_torusIncidentLeg (a : ZMod width) (b : ZMod height)
     (p : TorusVertex width height) (i : Fin 4) :
-    Edge.map (translate a b) (torusIncidentLeg p i).1 =
+    ManyBody.Edge.map (translate a b) (torusIncidentLeg p i).1 =
       (torusIncidentLeg (translate a b p) i).1 := by
   simpa only [translateEdge_eq_map] using translateEdge_torusIncidentLeg a b p i
 
@@ -178,7 +180,7 @@ private theorem localVirtualConfigPullback_torusFourLegConfigEquiv
       IncidentEdge.toSymm (translate a b) p
         (torusIncidentLeg ((translate a b).symm p) i) = torusIncidentLeg p i := by
     apply Subtype.ext
-    change Edge.map (translate a b)
+    change ManyBody.Edge.map (translate a b)
       (torusIncidentLeg ((translate a b).symm p) i).1 = (torusIncidentLeg p i).1
     have hp : translate a b ((translate a b).symm p) = p := by
       change ((p.1 - a + a, p.2 - b + b) : TorusVertex width height) = p
@@ -254,8 +256,8 @@ private theorem transport_bondDim_eq_of_torusUniformBondDim
   funext e
   rw [Tensor.transport_bondDim]
   have h := bondDim_translateEdge_of_torusUniformBondDim A.bondDim hU a b
-    (Edge.map (translate a b).symm e)
-  rw [translateEdge_eq_map, Edge.map_map_symm] at h
+    (ManyBody.Edge.map (translate a b).symm e)
+  rw [translateEdge_eq_map, ManyBody.Edge.map_map_symm] at h
   exact h.symm
 
 end TNLean.PEPS

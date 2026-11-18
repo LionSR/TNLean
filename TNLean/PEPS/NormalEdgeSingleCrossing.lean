@@ -32,6 +32,9 @@ is `(xStart + 1, yStart + 2)`--`(xStart + 2, yStart + 2)`, the distinguished edg
   blue blocks share exactly the distinguished edge](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge squareLatticeGraph squareLatticeGraph_adj squareLatticeHorizontalNeighbor
+  squareLatticeVerticalNeighbor)
+
 namespace TNLean
 namespace PEPS
 
@@ -139,7 +142,7 @@ theorem isCrossingEdge_normalSquareVerticalTranslatedEdge
           (normalSquareVerticalTranslatedEdgeBlue xStart yStart) g ↔
         IsCrossingEdge (G := squareLatticeGraph height width) (A.transport φ)
           (normalSquareHorizontalTranslatedEdgeRed yStart xStart)
-          (normalSquareHorizontalTranslatedEdgeBlue yStart xStart) (Edge.map φ g) := by
+          (normalSquareHorizontalTranslatedEdgeBlue yStart xStart) (ManyBody.Edge.map φ g) := by
     have h := isCrossingEdge_Region_map A φ
       (normalSquareVerticalTranslatedEdgeRed xStart yStart)
       (normalSquareVerticalTranslatedEdgeBlue xStart yStart) g
@@ -150,14 +153,14 @@ theorem isCrossingEdge_normalSquareVerticalTranslatedEdge
     isCrossingEdge_normalSquareHorizontalTranslatedEdge (A.transport φ) hy hx]
   constructor
   · intro h
-    apply (Edge.equiv φ).injective
-    change Edge.map φ g = Edge.map φ
+    apply (ManyBody.Edge.equiv φ).injective
+    change ManyBody.Edge.map φ g = ManyBody.Edge.map φ
       (normalSquareVerticalTranslatedEdge xStart yStart hx hy)
     rw [h]
     dsimp only [φ]
-    exact (Edge.map_squareLatticeCoordinateSwap_verticalTranslatedEdge hx hy).symm
+    exact (ManyBody.Edge.map_squareLatticeCoordinateSwap_verticalTranslatedEdge hx hy).symm
   · rintro rfl
-    exact Edge.map_squareLatticeCoordinateSwap_verticalTranslatedEdge hx hy
+    exact ManyBody.Edge.map_squareLatticeCoordinateSwap_verticalTranslatedEdge hx hy
 
 end PEPS
 end TNLean

@@ -33,6 +33,8 @@ open TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter
@@ -49,7 +51,7 @@ theorem actualCharges_selection_energy_domainGraph_of_finiteFamilyTransportBound
       [NeZero q] [NeZero d] [LinearOrder (AdmissibleSupport Λ R)]
       (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
-      S.graph = domainGraph Λ →
+      S.graph = planeDomainGraph Λ →
       S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
       ∀ {L multiplicity : ℕ} (hn : 2 ≤ S.n), 2 * S.r₀ ≤ S.D →
@@ -165,7 +167,7 @@ theorem actualCharges_selection_energy_domainGraph :
         [NeZero q] [NeZero d] [LinearOrder (AdmissibleSupport Λ R)]
         (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
-        S.graph = domainGraph Λ →
+        S.graph = planeDomainGraph Λ →
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
         ∀ {L multiplicity : ℕ} (hn : 2 ≤ S.n), 2 * S.r₀ ≤ S.D →

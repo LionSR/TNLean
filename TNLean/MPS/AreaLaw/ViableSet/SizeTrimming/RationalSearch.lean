@@ -11,6 +11,7 @@ import TNLean.MPS.AreaLaw.ViableSet.LeadingPower
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.ApproximateCertificates
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Viability from finite rational certificate search
@@ -35,6 +36,8 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- A code returned by the executable rational search yields the physical LVV viable
@@ -49,7 +52,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_rational_search_result
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -121,7 +125,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_rational_search_result
       c.1.decode c.2.1.decode c.2.2.1.decode := by
     convert hexact using 1 <;> dsimp [eη, eK, Ephys, δ', r, C] <;> ring
   apply h.exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack
-    hL hq hΔ HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX Z hZ hZZ hcert
+    hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ hcert
   · exact heη
   · simpa only [eη, eK, Ephys, δ', r, C, K] using hbudget
 
@@ -137,7 +141,8 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_rational_search_result
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     (S : Finset (LeftBlockVector L q k)) {b Hv : ℕ}
     (hS : ∀ u : S, RationalLeftOpenMPSRepresentationOfHeight Hv b u.1)
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
@@ -289,7 +294,7 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_rational_search_result
             2 * ξrat := by ring
       _ ≤ 1 / 12 := hrational'
   apply h.exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack
-    hL hq hΔ HL B hsplit hHL hBS hBn hgs S hS W hW x hwx hwE X hX Z hZ hZZ
+    hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan S hS W hW x hwx hwE X hX Z hZ hZZ
       hcert hleadingExact hξrat hξrat1
   simpa only [K, Hleft, repair, boundaryError] using hrationalExact
 
@@ -305,7 +310,8 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_rational_search_result
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     (S : Finset (LeftBlockVector L q k)) {s₀ b Hv : ℕ} {δin : ℝ}
     (D : RationalCoordinateViableMPSDataOfHeight Hv Γ s₀ b δin S)
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
@@ -459,7 +465,7 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_rational_search_result
             2 * ξrat := by ring
       _ ≤ 1 / 12 := hrational'
   apply h.exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slack
-    hL hq hΔ HL B hsplit hHL hBS hBn hgs S D W hW x hwx hwE X hX Z hZ hZZ
+    hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan S D W hW x hwx hwE X hX Z hZ hZZ
       hcert hleadingExact hξrat hξrat1
   simpa only [K, Hleft, repair, boundaryError] using hrationalExact
 

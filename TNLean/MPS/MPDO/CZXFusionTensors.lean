@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.ReductionBlocking
 import TNLean.MPS.MPDO.CZXDaggerGauge
-import TNLean.MPS.MPU.Examples.Shift
+import TNLean.MPS.MPU.Identity
 
 /-!
 # The concrete CZX `g,g` fusion tensors

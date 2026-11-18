@@ -17,6 +17,8 @@ Lemma `l:t`, lines 500–523, to the actual chain coordinates.
 No recursively selected viable family or sampling step is asserted.
 -/
 
+open ManyBody (disjoint_interval_interval interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- The actual tensor product candidate on the parent interval, transported

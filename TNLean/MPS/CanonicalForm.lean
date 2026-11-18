@@ -13,6 +13,7 @@ import TNLean.MPS.CanonicalForm.BNTExistence
 import TNLean.MPS.CanonicalForm.BNTGrouping
 import TNLean.MPS.CanonicalForm.BNTRefinement
 import TNLean.MPS.CanonicalForm.BNTTransport
+import TNLean.MPS.CanonicalForm.BlockedNormalSectors
 import TNLean.MPS.CanonicalForm.BlockingViaAdjoint
 import TNLean.MPS.CanonicalForm.CPSVAfterBlocking
 import TNLean.MPS.CanonicalForm.CPSVBlocking

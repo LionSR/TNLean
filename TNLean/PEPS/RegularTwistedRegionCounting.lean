@@ -24,6 +24,8 @@ Theorem 6.9, `Papers/1001.3807/paper_v3.tex`, lines 1935–1990 and 2043–2072.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean.PEPS

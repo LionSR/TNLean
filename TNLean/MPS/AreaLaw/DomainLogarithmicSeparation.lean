@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.DomainInformationReset
+import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.DomainIntervalNeighborhoodEntropy
 import QICLean.Entropy.ConditionalTwoFamilies
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Information at logarithmic separation in a finite integer domain
@@ -20,7 +21,11 @@ Extension of the chain lemma in the TNLean one-dimensional note, `lem:logsep`,
 `part0_preamble.tex`, lines 191–215.
 -/
 
+open ManyBody (interval lineDomainGraph sitePos sitePos_sub_val_of_walk)
+
 open QuantumCircuit
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -29,7 +34,7 @@ This auxiliary estimate makes no assertion across disconnected components.
 Source: TNLean note, `part0_preamble.tex`, lines 191–199. -/
 private theorem abs_sitePos_sub_le_of_edist_le
     {Λ : Finset ℤ} (x y : Fin Λ.card) (m : ℕ)
-    (hxy : (domainGraph Λ).edist x y ≤ (m : ℕ∞)) :
+    (hxy : (lineDomainGraph Λ).edist x y ≤ (m : ℕ∞)) :
     |(sitePos Λ x : ℝ) - (sitePos Λ y : ℝ)| ≤ (m : ℝ) := by
   obtain ⟨w, hw⟩ := SimpleGraph.exists_walk_of_edist_ne_top
     (ne_top_of_le_ne_top (by simp) hxy)
@@ -52,7 +57,8 @@ theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
       ∀ (Λ : Finset ℤ), L₀ ≤ Λ.card →
       ∀ (h : DomainHamiltonian Λ q R J)
         (Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)) (E₀ : ℝ),
-        Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ T E : Finset (Fin Λ.card),
           (∃ (n : ℕ) (a z : Fin n → ℕ), n ≤ k₀ ∧
             T = Finset.univ.biUnion (fun i ↦ interval Λ.card (a i) (z i))) →
@@ -71,7 +77,7 @@ theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
     DomainHamiltonian.information_reset q hq R J Δ hΔ p hp
   refine ⟨3 * Cp * (2 + b) + 4, max Lreset ⌈Real.exp 1⌉₊,
     by positivity, hLreset.trans (le_max_left _ _), ?_⟩
-  intro Λ hL h Ω E₀ hgs T E hT hdist
+  intro Λ hL h Ω E₀ hΩ hgap hspan T E hT hdist
   have hLn : 1 ≤ Λ.card := hLreset.trans ((le_max_left _ _).trans hL)
   have hL1 : (1 : ℝ) ≤ Λ.card := by exact_mod_cast hLn
   have hLexp : Real.exp 1 ≤ (Λ.card : ℝ) :=
@@ -89,7 +95,7 @@ theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
   have hnhi : (n : ℝ) < w + 2 := by
     simpa only [add_assoc, one_add_one_eq_two] using Nat.ceil_lt_add_one (by linarith : 0 ≤ w + 1)
   let N := fun (j : ℕ) (S : Finset (Fin Λ.card)) ↦
-    S.biUnion (fun x ↦ graphBall (domainGraph Λ) x j)
+    S.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x j)
   let D := N n T
   let C := (N (2 * n) T)ᶜ
   have hDC : Disjoint D C := by
@@ -97,34 +103,36 @@ theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
     intro y hyD hyC
     obtain ⟨x, hx, hxy⟩ := Finset.mem_biUnion.mp hyD
     exact (Finset.mem_compl.mp hyC) (Finset.mem_biUnion.mpr
-      ⟨x, hx, mem_graphBall.mpr ((mem_graphBall.mp hxy).trans
+      ⟨x, hx, ManyBody.mem_graphBall.mpr ((ManyBody.mem_graphBall.mp hxy).trans
         (by exact_mod_cast (show n ≤ 2 * n by omega)))⟩)
   have hTD : T ⊆ D := by
     intro x hx
-    exact Finset.mem_biUnion.mpr ⟨x, hx, mem_graphBall.mpr (by simp)⟩
+    exact Finset.mem_biUnion.mpr ⟨x, hx, ManyBody.mem_graphBall.mpr (by simp)⟩
   have hEC : E ⊆ C := by
     intro y hy
     apply Finset.mem_compl.mpr
     intro hyN
     obtain ⟨x, hx, hxy⟩ := Finset.mem_biUnion.mp hyN
-    have hcoord := abs_sitePos_sub_le_of_edist_le x y (2 * n) (mem_graphBall.mp hxy)
+    have hcoord := abs_sitePos_sub_le_of_edist_le x y (2 * n) (ManyBody.mem_graphBall.mp hxy)
     push_cast at hcoord
     linarith only [hcoord, hdist x hx y hy, hsep, hnhi, hw]
   have hmarginT : ∀ x ∈ T, ∀ y : Fin Λ.card, y ∉ D → ∀ d : ℕ,
-      (domainGraph Λ).edist x y = (d : ℕ∞) → w < (d : ℝ) := by
+      (lineDomainGraph Λ).edist x y = (d : ℕ∞) → w < (d : ℝ) := by
     intro x hx y hy d hd
     by_contra hnot
     have hdn : d ≤ n := by exact_mod_cast (show (d : ℝ) ≤ n by linarith only [not_lt.mp hnot, hnlo])
-    exact hy (Finset.mem_biUnion.mpr ⟨x, hx, mem_graphBall.mpr (hd ▸ (by exact_mod_cast hdn))⟩)
+    exact hy (Finset.mem_biUnion.mpr ⟨x, hx, ManyBody.mem_graphBall.mpr (hd ▸ (by exact_mod_cast
+        hdn))⟩)
   have hmarginE : ∀ e ∈ E, ∀ y : Fin Λ.card, y ∉ C → ∀ d : ℕ,
-      (domainGraph Λ).edist e y = (d : ℕ∞) → w < (d : ℝ) := by
+      (lineDomainGraph Λ).edist e y = (d : ℕ∞) → w < (d : ℝ) := by
     intro e he y hy d hd
     have hyN : y ∈ N (2 * n) T := by simpa only [C, Finset.mem_compl, not_not] using hy
     obtain ⟨x, hx, hxy⟩ := Finset.mem_biUnion.mp hyN
-    have htri : (domainGraph Λ).edist x e ≤ ((2 * n + d : ℕ) : ℕ∞) := by
+    have htri : (lineDomainGraph Λ).edist x e ≤ ((2 * n + d : ℕ) : ℕ∞) := by
       calc
-        _ ≤ (domainGraph Λ).edist x y + (domainGraph Λ).edist y e := (domainGraph Λ).edist_triangle
-        _ ≤ ((2 * n : ℕ) : ℕ∞) + (d : ℕ∞) := add_le_add (mem_graphBall.mp hxy)
+        _ ≤ (lineDomainGraph Λ).edist x y + (lineDomainGraph Λ).edist y e :=
+            (lineDomainGraph Λ).edist_triangle
+        _ ≤ ((2 * n : ℕ) : ℕ∞) + (d : ℕ∞) := add_le_add (ManyBody.mem_graphBall.mp hxy)
           (by rw [SimpleGraph.edist_comm, hd])
         _ = _ := by simp only [Nat.cast_add]
     have hcoord := abs_sitePos_sub_le_of_edist_le x e (2 * n + d) htri
@@ -133,18 +141,18 @@ theorem DomainHamiltonian.mutualInformation_le_of_logarithmic_separation
   have hJ : 0 ≤ J := h.norm_bound_nonneg ⟨0, hLn⟩
   have hD : Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) D Ω ≤ (k₀ : ℝ) * c := by
     obtain ⟨n₀, a, z, hn₀, hT⟩ := hT
-    have hbound := h.regionEntropy_neighborhood_biUnion_intervals_le hq hJ hΔ hgs
+    have hbound := h.regionEntropy_neighborhood_biUnion_intervals_le hq hJ hΔ hΩ hgap hspan
       (Finset.univ : Finset (Fin n₀)) a z n
     rw [← hT, Finset.card_univ, Fintype.card_fin] at hbound
     exact hbound.trans ((mul_le_mul_of_nonneg_left (le_max_right _ _) (by positivity)).trans
       (mul_le_mul_of_nonneg_right (by exact_mod_cast hn₀) hc))
   have hMI : FiniteProduct.mutualInformation (fun _ : Fin Λ.card ↦ Fin q) Ω D C ≤ b := by
     have hbound := FiniteProduct.mutualInformation_le_two_entropy
-      (fun _ : Fin Λ.card ↦ Fin q) Ω hgs.1 D C hDC
+      (fun _ : Fin Λ.card ↦ Fin q) Ω hΩ D C hDC
     rw [← Entropy.regionEntropy_eq_entropy] at hbound
     dsimp only [b]
     nlinarith only [hbound, hD, mul_nonneg hk₀r hc]
-  exact hreset Λ ((le_max_left _ _).trans hL) h Ω E₀ hgs
+  exact hreset Λ ((le_max_left _ _).trans hL) h Ω E₀ hΩ hgap hspan
     D C T E hDC hTD hEC b hMI hmarginT hmarginE
 
 end TNLean.MPS.AreaLaw

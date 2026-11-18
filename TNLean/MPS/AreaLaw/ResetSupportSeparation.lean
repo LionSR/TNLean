@@ -29,6 +29,8 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 419–4
 This is a geometric support statement, without a quantum-state assumption.
 -/
 
+open ManyBody (ChainSupport)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- The localized reset region avoids both cores under the strict

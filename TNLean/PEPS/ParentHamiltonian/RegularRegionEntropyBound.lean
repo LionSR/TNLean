@@ -32,6 +32,8 @@ for the entropy bound by the logarithm of the support dimension.
 - M. M. Wolf, *Quantum Channels & Operations: Guided Tour*, Section 8.2
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix ComplexOrder
 
 namespace TNLean.PEPS

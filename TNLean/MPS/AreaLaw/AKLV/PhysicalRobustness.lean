@@ -7,6 +7,7 @@ import QICLean.Analysis.EuclideanEigenvectorBasis
 import TNLean.MPS.AreaLaw.AKLV.SpectralCluster
 import TNLean.MPS.AreaLaw.BoundaryGap
 import QICLean.Analysis.LowEnergyCoordinates
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The AKLV physical robustness bound at logarithmic and polynomial thresholds
@@ -37,7 +38,11 @@ The spectral comparison also uses the corrected window count documented at
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_hard_truncation_windows.pdf.
 -/
 
+open ManyBody (interval)
+
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
@@ -144,14 +149,15 @@ private theorem exists_aklv_cut_logarithmic_robustness {L q a s l r : ℕ}
             ‖φ - Ω‖ ^ 2 ≤ Real.exp (-t / 16) / 100 := by
   have hH : (∑ i, h i).IsHermitian :=
     (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
-  have hgs : Matrix.IsGappedGroundState (∑ i, h i) mu Ω g :=
-    Matrix.isGappedGroundState_iff.mpr ⟨hΩ, hground, hgap⟩
+  obtain ⟨-, -, hgapI, hspan⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hg Ω).mp
+    ⟨hΩ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
+      WithLp.ofLp_smul]; exact hground, hgap⟩
   have hmu := Matrix.mem_spectrum_real_of_mulVec_eq_smul
     (by intro hz; simp only [hz, norm_zero, zero_ne_one] at hΩ) hground
   have hq2 : 2 ≤ q := hH.two_le_local_dimension_of_two_spectral_values
     hmu hexcited (by linarith)
   have hg1 := gap_le_one_of_positive_nearest_neighbor_terms
-    (by omega : 0 < L) hq2 h hsupp h0 h1 hgs
+    (by omega : 0 < L) hq2 h hsupp h0 h1 hΩ hgapI hspan
   obtain ⟨e, E0, hregional, hEeq, hE0, hE6, hcluster⟩ :=
     exists_aklv_cut_scaled_low_cluster (by omega) hs ha hlr hrL h hsupp h0 h1
       mu g Ω hΩ hground hgap hg hcut

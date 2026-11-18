@@ -95,6 +95,22 @@ theorem parentInteractionES_commute_of_starAlgebra_invariant
   exact S.starProjection_toEuclideanLin_comm
     (fun C hC ↦ S.orthogonal_mem_invtSubmodule hS C hC) hB x
 
+/-- A set of operators that is closed under conjugate transposition and
+preserves the local MPS support commutes with the canonical local parent
+interaction. The set need not be an algebra, nor the boundary range of one
+operator tensor: it may be the union of the boundary ranges of a family, as
+for a group whose adjoint of the operator of `g` is an operator of `g⁻¹`.
+This is the orthogonal-reduction form of the local symmetry assertion in
+GLM23, arXiv:2203.12563v3, lines 1276--1320. -/
+theorem parentInteractionES_commute_of_conjTranspose_mem
+    {d D L : ℕ} (A : MPSTensor d D) (s : Set (Matrix (Cfg d L) (Cfg d L) ℂ))
+    (hs : ∀ B ∈ s, Bᴴ ∈ s)
+    (hq : ∀ B ∈ s, groundSpaceES A L ∈ Module.End.invtSubmodule (Matrix.toEuclideanLin B))
+    {B : Matrix (Cfg d L) (Cfg d L) ℂ} (hB : B ∈ s) :
+    Commute (parentInteractionES A L) (Matrix.toEuclideanLin B) :=
+  parentInteractionES_commute_of_starAlgebra_invariant A (StarAlgebra.adjoin ℂ s)
+    (invariant_adjoin_of_conjTranspose_mem s hs _ hq) (StarAlgebra.subset_adjoin ℂ s hB)
+
 end MPSTensor
 
 namespace MPOTensor
@@ -135,6 +151,28 @@ theorem IsBoundaryCompatible.groundSpaceES_invariant_boundaryStarAlgebra
     exact ⟨Y, hY.symm⟩
   · rintro B ⟨X, rfl⟩
     exact h.groundSpaceES_mem_invtSubmodule X hL
+
+/-- Every boundary operator of a family of operator tensors compatible with
+one MPS tensor commutes with the canonical local parent, when the union of
+the boundary ranges is closed under the adjoint. The adjoint of an operator
+of the family may be an operator of another member. Source: the local
+symmetry conclusion in GLM23, arXiv:2203.12563v3, lines 1276--1320, for a
+whole symmetry family rather than one tensor. -/
+theorem parentInteractionES_commute_mpoWithBoundary_of_forall_isBoundaryCompatible
+    {ι : Type*} {T : ι → MPOTensor d D₁} (h : ∀ i, IsBoundaryCompatible (T i) A)
+    (hL : 0 < L)
+    (hstar : ∀ i (X : Matrix (Fin D₁) (Fin D₁) ℂ), ∃ j, ∃ Y : Matrix (Fin D₁) (Fin D₁) ℂ,
+      (mpoWithBoundary (T i) X L)ᴴ = mpoWithBoundary (T j) Y L)
+    (i : ι) (X : Matrix (Fin D₁) (Fin D₁) ℂ) :
+    Commute (MPSTensor.parentInteractionES A L)
+      (Matrix.toEuclideanLin (mpoWithBoundary (T i) X L)) := by
+  refine MPSTensor.parentInteractionES_commute_of_conjTranspose_mem A
+    {B | ∃ i X, mpoWithBoundary (T i) X L = B} ?_ ?_ ⟨i, X, rfl⟩
+  · rintro B ⟨i, X, rfl⟩
+    obtain ⟨j, Y, hY⟩ := hstar i X
+    exact ⟨j, Y, hY.symm⟩
+  · rintro B ⟨i, X, rfl⟩
+    exact (h i).groundSpaceES_mem_invtSubmodule X hL
 
 /-- Every arbitrary-boundary operator commutes with the canonical local
 parent when the boundary range is adjoint-closed. Source: the local symmetry

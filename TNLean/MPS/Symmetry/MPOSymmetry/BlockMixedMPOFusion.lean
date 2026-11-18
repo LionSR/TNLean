@@ -30,8 +30,8 @@ local Hilbert space is already the span `⊕ₓ ℂ^{D^p_x} ⊗ ℂ^{D^p_x}` of 
 block-diagonal tensor. The source takes this restriction without loss of
 generality (lines 317 and 1584--1586); its derivation from block-injective
 tensors on an arbitrary common physical alphabet is not formalized. The
-injectivity of the common MPO, the ground space of the path Hamiltonians, and
-their commutation with the common MPO are not asserted. See
+injectivity of the common MPO and the commutation of the path Hamiltonians
+with the common MPO are not asserted. See
 `docs/paper-gaps/glm23_block_injective_mixed_path.tex`.
 
 Source: Garre-Rubio–Lootens–Molnár, arXiv:2203.12563v3, `REsubmission.tex`,

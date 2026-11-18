@@ -37,6 +37,9 @@ on:
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/ci_lean_checks.py'
       - 'scripts/test_ci_lean_checks.py'
+      - 'scripts/ci_resource_diagnostics.py'
+      - 'scripts/ci_resource_diagnostics.sh'
+      - 'scripts/test_ci_resource_diagnostics.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/test_pr_ci_base_snapshot.py'
       - 'scripts/lake_build_locked.sh'
@@ -145,6 +148,9 @@ on:
       - 'scripts/lake_build_hotspots.py'
       - 'scripts/ci_lean_checks.py'
       - 'scripts/test_ci_lean_checks.py'
+      - 'scripts/ci_resource_diagnostics.py'
+      - 'scripts/ci_resource_diagnostics.sh'
+      - 'scripts/test_ci_resource_diagnostics.py'
       - 'scripts/test_lake_build_hotspots.py'
       - 'scripts/test_pr_ci_base_snapshot.py'
       - 'scripts/lake_build_locked.sh'
@@ -304,6 +310,9 @@ jobs:
               - 'scripts/lake_build_hotspots.py'
               - 'scripts/ci_lean_checks.py'
               - 'scripts/test_ci_lean_checks.py'
+              - 'scripts/ci_resource_diagnostics.py'
+              - 'scripts/ci_resource_diagnostics.sh'
+              - 'scripts/test_ci_resource_diagnostics.py'
               - 'scripts/test_lake_build_hotspots.py'
               - 'scripts/test_pr_ci_base_snapshot.py'
               - 'scripts/lake_build_locked.sh'
@@ -553,6 +562,9 @@ jobs:
 
       # Diagnose the PR's direct edits before the full dependency build. Selection
       # uses the explicit feature head, while checks use this merged checkout.
+      # The step is a shortcut: a failure it finds fails the job, but past its
+      # 50-minute budget (a cold dependency cache after a pin change, or a
+      # change near the bottom of the import graph) it stops with a warning.
       # The root build and complete strict suite below remain mandatory.
       - name: Check directly changed Lean sources and tests strictly
         if: github.event_name == 'pull_request'
@@ -571,7 +583,7 @@ jobs:
             git cat-file -e "$revision^{commit}"
           done
           python3 scripts/ci_lean_checks.py focused \
-            --base "$BASE_SHA" --head "$PR_HEAD_SHA" --jobs 3 \
+            --base "$BASE_SHA" --head "$PR_HEAD_SHA" --jobs 3 --budget 3000 \
             --log "$RUNNER_TEMP/lake-build.log"
 
       # Build the changed production modules before the full library so a
@@ -593,12 +605,38 @@ jobs:
           python3 scripts/ci_lean_checks.py early --budget 1200 --log "$RUNNER_TEMP/lake-build.log"
 
       - name: Build Lean project and capture timings
+        id: lean-build
         run: |
           set -eo pipefail
+          source scripts/ci_resource_diagnostics.sh
           {
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Validate closed resource diagnostics for upload
+        id: resource-diagnostics
+        if: always() && steps.lean-build.outputs.resource_directory != ''
+        continue-on-error: true
+        timeout-minutes: 1
+        env:
+          RESOURCE_DIRECTORY: ${{ steps.lean-build.outputs.resource_directory }}
+        run: |
+          python3 scripts/ci_resource_diagnostics.py publish \
+            --directory "$RESOURCE_DIRECTORY" --temp-root "$RUNNER_TEMP" \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Upload build resource diagnostics
+        if: always() && steps.resource-diagnostics.outputs.artifact_path != ''
+        continue-on-error: true
+        timeout-minutes: 2
+        uses: actions/upload-artifact@v7
+        with:
+          name: lean-resources-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ steps.resource-diagnostics.outputs.artifact_path }}
+          if-no-files-found: ignore
+          retention-days: 7
+          compression-level: 6
 
       # Elaborate changed production files and every affected
       # scripts/*_regression.lean file with warnings as errors. A regression is
@@ -607,7 +645,7 @@ jobs:
       # this workflow changes. New modules need no workflow edit. Selection:
       # scripts/ci_lean_checks.py.
       - name: Check changed Lean files and affected tests strictly
-        timeout-minutes: 60
+        timeout-minutes: 120
         env:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           PR_HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || '' }}
@@ -623,21 +661,15 @@ jobs:
         id: compilation-time
         if: github.event_name == 'pull_request'
         env:
-          BASE_REF: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -o pipefail
           timing_status=0
           archive_build_failed=false
-          git fetch --no-tags origin "$BASE_REF" || timing_status=$?
-          if [ "$timing_status" -eq 0 ]; then
-            git merge-base --is-ancestor "$BASE_REF" HEAD || timing_status=$?
-          fi
-          if [ "$timing_status" -eq 0 ]; then
-            git -c core.quotePath=false diff \
-              --name-only --diff-filter=AMR "$BASE_REF" HEAD -- '*.lean' \
-              > "$RUNNER_TEMP/changed-lean-files.txt" \
-              || timing_status=$?
-          fi
+          # Compare the verified tested merge against its actual first parent.
+          python3 scripts/lake_build_hotspots.py select-pr \
+            --head "$PR_HEAD_SHA" \
+            > "$RUNNER_TEMP/changed-lean-files.txt" || timing_status=$?
           if [ "$timing_status" -eq 0 ]; then
             while IFS= read -r path; do
               case "$path" in
@@ -804,6 +836,11 @@ jobs:
 
       - name: Test changed-file Lean check selection
         run: python3 scripts/test_ci_lean_checks.py
+
+      - name: Test build resource diagnostics
+        run: |
+          bash -n scripts/ci_resource_diagnostics.sh
+          python3 scripts/test_ci_resource_diagnostics.py
 
       - name: Check local cache-seeding shell syntax
         run: |

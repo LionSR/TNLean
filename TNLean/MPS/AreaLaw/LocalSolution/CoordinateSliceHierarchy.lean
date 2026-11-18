@@ -113,7 +113,7 @@ theorem natDist_coordinate_le_of_dist_le {σ : Type*} [PseudoMetricSpace σ] {D 
 
 section Operators
 
-variable {ι : Type*} [Fintype ι] {d N : ℕ}
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {d N : ℕ}
 
 /-- The actual pair operator is the sum of the local terms assigned to its coarse edge.
 Hastings, arXiv:cond-mat/0508554v3, lines 628–639 and 745–756. -/
@@ -121,6 +121,7 @@ def coordinateSliceOperator (z : ι → ℕ) (ℓ : ℕ) (hN : 0 < N)
     (a : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) : Fin N → Matrix (ι → Fin d) (ι → Fin d) ℂ :=
   edgePartition (fun i ↦ coordinateSliceEdge hN ℓ (z i)) a
 
+omit [DecidableEq ι] in
 /-- The coordinate grouping preserves the full sum of local terms. -/
 theorem sum_coordinateSliceOperator (z : ι → ℕ) (ℓ : ℕ) (hN : 0 < N)
     (a : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) :
@@ -132,13 +133,16 @@ Hastings, arXiv:cond-mat/0508554v3, lines 609–639 and 745–756. -/
 theorem coordinateSliceOperator_mem_supportedOperators (z : ι → ℕ)
     {ℓ : ℕ} (hℓ : 0 < ℓ) (hN : 0 < N)
     (a : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (ha : ∀ i, a i ∈ supportedOperators d {v | Nat.dist (z v) (z i) ≤ ℓ})
+    (ha : ∀ i, a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun v ↦ Nat.dist (z v) (z i) ≤ ℓ))
     (j : Fin N) (hj : 0 < (j : ℕ)) :
-    coordinateSliceOperator z ℓ hN a j ∈ supportedOperators d
-      {v | coordinateSlice ℓ (z v) + 1 = (j : ℕ) ∨ coordinateSlice ℓ (z v) = (j : ℕ)} := by
+    coordinateSliceOperator z ℓ hN a j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.univ.filter fun v ↦
+          coordinateSlice ℓ (z v) + 1 = (j : ℕ) ∨ coordinateSlice ℓ (z v) = (j : ℕ)) := by
   apply edgePartition_mem_supportedOperators
   intro i hi
-  exact supportedOperators_mono (fun v hv ↦ coordinateSliceEdge_support hN hℓ hv hj hi) (ha i)
+  exact ManyBody.supportedOperators_mono (fun v hv ↦ Finset.mem_filter.mpr ⟨Finset.mem_univ _,
+    coordinateSliceEdge_support hN hℓ (Finset.mem_filter.mp hv).2 hj hi⟩) (ha i)
 
 /-- Metric-ball support on an arbitrary finite coordinate box gives the actual adjacent
 slice supports. Coordinate maximum distance may be replaced by any dominating physical
@@ -148,23 +152,26 @@ theorem coordinateSliceOperator_mem_supportedOperators_of_metric [PseudoMetricSp
     (hcoord : ∀ a b, dist (coord a) (coord b) ≤ dist a b) (axis : Fin D)
     {ℓ : ℕ} (hℓ : 0 < ℓ) (hN : 0 < N)
     (a : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (ha : ∀ i, a i ∈ supportedOperators d {v | dist v i ≤ ℓ})
+    (ha : ∀ i, a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun v ↦ dist v i ≤ ℓ))
     (j : Fin N) (hj : 0 < (j : ℕ)) :
-    coordinateSliceOperator (fun i ↦ coord i axis) ℓ hN a j ∈ supportedOperators d
-      {v | coordinateSlice ℓ (coord v axis) + 1 = (j : ℕ) ∨
-        coordinateSlice ℓ (coord v axis) = (j : ℕ)} := by
+    coordinateSliceOperator (fun i ↦ coord i axis) ℓ hN a j ∈ ManyBody.supportedOperators
+        (fun _ ↦ Fin d)
+      (Finset.univ.filter fun v ↦
+          coordinateSlice ℓ (coord v axis) + 1 = (j : ℕ) ∨
+          coordinateSlice ℓ (coord v axis) = (j : ℕ)) := by
   apply coordinateSliceOperator_mem_supportedOperators _ hℓ hN a _ j hj
   intro i
-  exact supportedOperators_mono
-    (fun v hv ↦ natDist_coordinate_le_of_dist_le coord hcoord axis hv) (ha i)
+  exact ManyBody.supportedOperators_mono
+    (fun v hv ↦ Finset.mem_filter.mpr ⟨Finset.mem_univ _,
+      natDist_coordinate_le_of_dist_le coord hcoord axis (Finset.mem_filter.mp hv).2⟩) (ha i)
 
+omit [DecidableEq ι] in
 /-- The actual coordinate-slice edge operators are Hermitian. -/
 theorem isHermitian_coordinateSliceOperator (z : ι → ℕ) (ℓ : ℕ) (hN : 0 < N)
     (a : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (ha : ∀ i, (a i).IsHermitian)
     (j : Fin N) : (coordinateSliceOperator z ℓ hN a j).IsHermitian :=
   isHermitian_edgePartition _ a ha j
-
-variable [DecidableEq ι]
 
 /-- The residual of an actual slice pair is at most the number of physical terms times
 the local residual, in every dimension. Hastings, arXiv:cond-mat/0508554v3,
@@ -199,18 +206,21 @@ theorem centeredNorm_coordinateSliceOperator_le_two_mul (z : ι → ℕ) (ℓ : 
       2 * Fintype.card ι * J :=
   centeredNorm_edgePartition_le_two_mul _ a hψ hJ ha j
 
-omit [DecidableEq ι] in
 /-- The closing slice operator acts only on the two boundary slices of the finite box. -/
 theorem coordinateSliceOperator_closing_mem_supportedOperators (z : ι → ℕ)
     {ℓ : ℕ} (hℓ : 0 < ℓ) (hN : 0 < N) (hz : ∀ i, z i < N * (2 * ℓ))
     (a : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (ha : ∀ i, a i ∈ supportedOperators d {v | Nat.dist (z v) (z i) ≤ ℓ}) :
-    coordinateSliceOperator z ℓ hN a ⟨0, hN⟩ ∈ supportedOperators d
-      {v | coordinateSlice ℓ (z v) + 1 = N ∨ coordinateSlice ℓ (z v) = 0} := by
+    (ha : ∀ i, a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun v ↦ Nat.dist (z v) (z i) ≤ ℓ)) :
+    coordinateSliceOperator z ℓ hN a ⟨0, hN⟩ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.univ.filter fun v ↦
+          coordinateSlice ℓ (z v) + 1 = N ∨ coordinateSlice ℓ (z v) = 0) := by
   apply edgePartition_mem_supportedOperators
   intro i hi
-  exact supportedOperators_mono
-    (fun v hv ↦ coordinateSliceEdge_closing_support hN hℓ (hz i) (hz v) hv hi) (ha i)
+  exact ManyBody.supportedOperators_mono
+    (fun v hv ↦ Finset.mem_filter.mpr ⟨Finset.mem_univ _,
+      coordinateSliceEdge_closing_support hN hℓ (hz i) (hz v) (Finset.mem_filter.mp hv).2 hi⟩)
+    (ha i)
 
 end Operators
 

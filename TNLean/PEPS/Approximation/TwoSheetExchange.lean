@@ -116,26 +116,27 @@ structure TwoSheetExchange (pos : ι → ℝ × ℝ) (q : ℕ) (Party : Type*) w
   /-- The holes of the second frame have pairwise disjoint outer footprints. -/
   disjoint₂ : PairwiseDisjointOuter ((out₂ ++ in₂).map Hole.patch)
   /-- The outer squares of the holes inside `Y` lie in `Y`. -/
-  inside : ∀ h ∈ in₁ ++ in₂, (h.patch.outer : Set ι) ⊆ region
+  inside : ∀ h ∈ in₁ ++ in₂, h.patch.outer ⊆ region
   /-- The outer squares of the holes outside `Y` avoid `Y`. -/
-  outside : ∀ h ∈ out₁ ++ out₂, Disjoint (h.patch.outer : Set ι) region
+  outside : ∀ h ∈ out₁ ++ out₂, Disjoint h.patch.outer region
 
 /-- Holes outside and inside `Y` have disjoint outer footprints. -/
 theorem pairwiseDisjointOuter_append {o i : List (Hole pos q Party)} {Y : Finset ι}
     (ho : PairwiseDisjointOuter (o.map Hole.patch)) (hi : PairwiseDisjointOuter (i.map Hole.patch))
-    (hoY : ∀ h ∈ o, Disjoint (h.patch.outer : Set ι) Y)
-    (hiY : ∀ h ∈ i, (h.patch.outer : Set ι) ⊆ Y) :
+    (hoY : ∀ h ∈ o, Disjoint h.patch.outer Y)
+    (hiY : ∀ h ∈ i, h.patch.outer ⊆ Y) :
     PairwiseDisjointOuter ((o ++ i).map Hole.patch) := by
   rw [PairwiseDisjointOuter, List.map_append, List.pairwise_append]
   refine ⟨ho, hi, ?_⟩
   intro a ha b hb
   obtain ⟨h, hh, rfl⟩ := List.mem_map.mp ha
   obtain ⟨h', hh', rfl⟩ := List.mem_map.mp hb
-  rw [← Finset.disjoint_coe]
-  exact Set.disjoint_of_subset_right (hiY h' hh') (hoY h hh)
+  exact Finset.disjoint_of_subset_right (hiY h' hh') (hoY h hh)
 
 theorem footprint_mono {l l' : List (SquarePatch pos q)} (h : ∀ p ∈ l, p ∈ l') :
-    footprint l ⊆ footprint l' := fun _ ⟨p, hp, hx⟩ => ⟨p, h p hp, hx⟩
+    footprint l ⊆ footprint l' := fun _ hx => by
+  obtain ⟨p, hp, hx⟩ := mem_footprint.mp hx
+  exact mem_footprint.mpr ⟨p, h p hp, hx⟩
 
 /-- The operator acting as `G` on the raw registers of two sheets and as the identity on the
 tags of two lists of holes. -/
@@ -149,7 +150,7 @@ def liftTags {l₁ l₂ : List (Hole pos q Party)}
 theorem norm_liftTags_le {l₁ l₂ : List (Hole pos q Party)}
     (G : Matrix ((ι → Fin q) × (ι → Fin q)) ((ι → Fin q) × (ι → Fin q)) ℂ) :
     ‖liftTags (l₁ := l₁) (l₂ := l₂) G‖ ≤ ‖G‖ :=
-  (norm_submatrix_equiv_le _ _).trans (l2_opNorm_one_kronecker_rect_le G)
+  (norm_submatrix_equiv_le _ _).trans (l2_opNorm_one_kronecker_le G)
 
 /-- A two-sheet raw operator commuting with every product of raw parts of the two encodings
 passes through the product `K₁ ⊗ K₂` of the encodings. -/
@@ -255,8 +256,8 @@ theorem exists_in_form [NeZero q] {i : List (Hole pos q Party)}
       (rawProd i a).submatrix (sheetSplit q X.region).symm (sheetSplit q X.region).symm =
         I' ⊗ₖ 1 :=
   exists_kronecker_one_of_mem_supportedOperators
-    (supportedOperators_mono (fun x hx => by
-      obtain ⟨p, hp, hx⟩ := hx
+    (ManyBody.supportedOperators_mono (fun x hx => by
+      obtain ⟨p, hp, hx⟩ := mem_footprint.mp hx
       obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hp
       exact X.inside h (hi h hh) hx)
     (rawProd_mem_supportedOperators i a))
@@ -371,18 +372,20 @@ theorem newFrame₂_owner_of_mem {x : ι} (hx : x ∈ X.region) :
     X.newFrame₂.owner x = X.owner₁ x := ite_eq_left hx
 
 theorem footprint_new₁_subset :
-    footprint ((X.out₁ ++ X.in₂).map Hole.patch) ⊆ (↑(X.tSet P ∪ X.eSet P) : Set ι) := by
+    footprint ((X.out₁ ++ X.in₂).map Hole.patch) ⊆ X.tSet P ∪ X.eSet P := by
   rw [tSet_union_eSet, List.map_append, footprint_append]
-  rintro x (hx | hx)
+  intro x hx
+  rcases Finset.mem_union.mp hx with hx | hx
   · exact (X.mem_exchangeEnv P).mpr (Or.inr (Or.inl (footprint_mono (fun p hp => by
       simp only [Frame.patches, List.map_append, List.mem_append]; exact Or.inl hp) hx)))
   · exact (X.mem_exchangeEnv P).mpr (Or.inr (Or.inr (footprint_mono (fun p hp => by
       simp only [Frame.patches, List.map_append, List.mem_append]; exact Or.inr hp) hx)))
 
 theorem footprint_new₂_subset :
-    footprint ((X.out₂ ++ X.in₁).map Hole.patch) ⊆ (↑(X.tSet P ∪ X.eSet P) : Set ι) := by
+    footprint ((X.out₂ ++ X.in₁).map Hole.patch) ⊆ X.tSet P ∪ X.eSet P := by
   rw [tSet_union_eSet, List.map_append, footprint_append]
-  rintro x (hx | hx)
+  intro x hx
+  rcases Finset.mem_union.mp hx with hx | hx
   · exact (X.mem_exchangeEnv P).mpr (Or.inr (Or.inr (footprint_mono (fun p hp => by
       simp only [Frame.patches, List.map_append, List.mem_append]; exact Or.inl hp) hx)))
   · exact (X.mem_exchangeEnv P).mpr (Or.inr (Or.inl (footprint_mono (fun p hp => by
@@ -410,13 +413,13 @@ theorem commute_correction [NeZero q] (σ : SplittingData q (X.tSet P) (X.eSet P
     (a : TagSpace (X.out₁ ++ X.in₂)) (b : TagSpace (X.out₂ ++ X.in₁)) :
     Commute (sheetBufferCorrection (X.disjoint_tSet_eSet P) σ * sheetSwapOp q (X.aSet P))
       (rawProd (X.out₁ ++ X.in₂) a ⊗ₖ rawProd (X.out₂ ++ X.in₁) b) := by
-  have h₁ := supportedOperators_mono (X.footprint_new₁_subset P)
+  have h₁ := ManyBody.supportedOperators_mono (X.footprint_new₁_subset P)
     (rawProd_mem_supportedOperators _ a)
-  have h₂ := supportedOperators_mono (X.footprint_new₂_subset P)
+  have h₂ := ManyBody.supportedOperators_mono (X.footprint_new₂_subset P)
     (rawProd_mem_supportedOperators _ b)
   refine Commute.mul_left (commute_sheetBufferCorrection _ σ h₁ h₂)
     (commute_sheetSwapOp_kronecker ?_ h₁ h₂)
-  exact Finset.disjoint_coe.mpr (Finset.disjoint_of_subset_right (X.aSet_subset_compl P)
+  exact (Finset.disjoint_of_subset_right (X.aSet_subset_compl P)
     disjoint_compl_right)
 
 -- Two copies of the configurations `((t, e), u)` of three regions form a fourfold product of
@@ -507,8 +510,8 @@ a hole whose outer square has empty physical sample, which is compatible with ei
 
 Polynomial-PEPS manuscript, Lemma 6.6 `lem:exchange`, `05-frames.tex`, lines 461–464. -/
 def ofFrames (F₁ F₂ : Frame pos q Party) (Y : Finset ι) (out : Hole pos q Party → Bool)
-    (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true → Disjoint (h.patch.outer : Set ι) Y)
-    (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false → (h.patch.outer : Set ι) ⊆ Y) :
+    (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true → Disjoint h.patch.outer Y)
+    (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false → h.patch.outer ⊆ Y) :
     TwoSheetExchange pos q Party where
   owner₁ := F₁.owner
   owner₂ := F₂.owner
@@ -534,16 +537,17 @@ def ofFrames (F₁ F₂ : Frame pos q Party) (Y : Finset ι) (out : Hole pos q P
 
 /-- A permutation of a list of holes does not change its outer footprint. -/
 theorem mem_footprint_perm {l l' : List (Hole pos q Party)} (hp : l.Perm l') {x : ι} :
-    x ∈ footprint (l.map Hole.patch) ↔ x ∈ footprint (l'.map Hole.patch) :=
-  ⟨fun ⟨p, hp', hx⟩ => ⟨p, (hp.map _).subset hp', hx⟩,
+    x ∈ footprint (l.map Hole.patch) ↔ x ∈ footprint (l'.map Hole.patch) := by
+  simp only [mem_footprint]
+  exact ⟨fun ⟨p, hp', hx⟩ => ⟨p, (hp.map _).subset hp', hx⟩,
     fun ⟨p, hp', hx⟩ => ⟨p, (hp.map _).symm.subset hp', hx⟩⟩
 
 /-- For two arbitrary frames, the set `Z` of `eq:exchange-Z` is computed from the frames
 themselves. -/
 theorem mem_ofFrames_exchangeEnv (F₁ F₂ : Frame pos q Party) (Y : Finset ι)
     (out : Hole pos q Party → Bool)
-    (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true → Disjoint (h.patch.outer : Set ι) Y)
-    (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false → (h.patch.outer : Set ι) ⊆ Y) (P : Party)
+    (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true → Disjoint h.patch.outer Y)
+    (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false → h.patch.outer ⊆ Y) (P : Party)
     {x : ι} :
     x ∈ (ofFrames F₁ F₂ Y out hout hin).exchangeEnv P ↔
       ¬(F₁.owner x = P ∧ F₂.owner x = P) ∨ x ∈ F₁.outerHoles ∨ x ∈ F₂.outerHoles := by
@@ -596,8 +600,8 @@ Polynomial-PEPS manuscript, Lemma 6.6 `lem:exchange`, `05-frames.tex`, lines 460
 canonical identification of tag orderings of lines 75–76 and 84–85; proof lines 481–561. -/
 theorem exchange_ofFrames [NeZero q] (F₁ F₂ : Frame pos q Party) (Y : Finset ι)
     (out : Hole pos q Party → Bool)
-    (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true → Disjoint (h.patch.outer : Set ι) Y)
-    (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false → (h.patch.outer : Set ι) ⊆ Y) (P : Party)
+    (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true → Disjoint h.patch.outer Y)
+    (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false → h.patch.outer ⊆ Y) (P : Party)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω
       ((ofFrames F₁ F₂ Y out hout hin).tSet P) ((ofFrames F₁ F₂ Y out hout hin).eSet P) ≤

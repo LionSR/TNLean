@@ -25,6 +25,8 @@ a trivial middle residual. The complete prescribed braid remains separate.
 See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS
@@ -140,7 +142,7 @@ theorem torusActualHorizontalFluxMove_up_transport_of_vacancy (p : X)
     (regularRegionTreeCycleResidual_middle_eq_one_iff_rightPlaquette p u).mpr hv
   have hA (z : RegionCycleEdge (Γ := Γₜ) R T → G) (i : Fin 2) :
       regularTreeCycleAssignment R T z
-        (Edge.ofAdj (torusGraph_adj_up (p.1 + (i.val : ZMod width)) p.2)) =
+        (ManyBody.Edge.ofAdj (torusGraph_adj_up (p.1 + (i.val : ZMod width)) p.2)) =
       z (translatedTwoPlaquetteCycleBond p i) := by
     rw [← translatedTwoPlaquetteCycleBond_eq_up]
     change regularTreeCycleAssignment (translatedTwoPlaquetteRegion p)

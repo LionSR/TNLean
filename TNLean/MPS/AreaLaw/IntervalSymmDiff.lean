@@ -5,8 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Data.Finset.SymmDiff
 import Mathlib.Data.Nat.Dist
-import TNLean.MPS.AreaLaw.Basic
-
+import QICLean.ManyBody.Sites.Lattice.Chain
 /-!
 # Symmetric differences of chain intervals
 
@@ -26,6 +25,8 @@ Intervals are clipped to the finite chain, including the empty chain.
 - ALVV, arXiv:1602.08828v2, `item:small-sr`, lines 830–831, and
   `prop:Cheby-AGSP-eff`, lines 1311–1333.
 -/
+
+open ManyBody (card_interval_le interval mem_interval)
 
 open scoped symmDiff
 

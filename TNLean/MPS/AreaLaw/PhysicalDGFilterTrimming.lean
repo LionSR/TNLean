@@ -26,6 +26,8 @@ spaces equal those obtained from the printed unnormalized filter; see
 `docs/paper-gaps/alvv16_final_filter_gain.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

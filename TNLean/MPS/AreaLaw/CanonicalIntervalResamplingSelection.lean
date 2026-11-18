@@ -23,6 +23,8 @@ estimates remain explicit assumptions; primitive-chain constructions discharge
 them separately. No new recursion or sampling event is introduced.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped ENNReal
 

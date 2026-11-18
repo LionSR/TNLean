@@ -67,8 +67,8 @@ not stay inside a single interaction support.
 
 \begin{definition}[Integer lattice displacement]
     \label{def:area_lattice_displacement}
-    \lean{TNLean.PEPS.AreaLaw.latticeL1Distance,
-        TNLean.PEPS.AreaLaw.latticeL1Distance_self}
+    \lean{ManyBody.latticeL1Distance,
+        ManyBody.latticeL1Distance_self}
     \leanok
     For $a,b\in\Z^2$, set
     $\ell(a,b)=|a_1-b_1|+|a_2-b_2|$. In particular, $\ell(a,a)=0$.
@@ -77,9 +77,9 @@ not stay inside a single interaction support.
 \begin{lemma}[Walk displacement]
     \label{thm:area_walk_displacement}
     \uses{def:area_lattice_displacement}
-    \lean{TNLean.PEPS.AreaLaw.latticeL1Distance_triangle,
-        TNLean.PEPS.AreaLaw.latticeL1Distance_le_walk_length,
-        TNLean.PEPS.AreaLaw.latticeL1Distance_le_of_edist_le}
+    \lean{ManyBody.latticeL1Distance_triangle,
+        ManyBody.latticeL1Distance_le_walk_length,
+        ManyBody.latticeL1Distance_le_of_edist_le}
     \leanok
     The function $\ell$ satisfies the triangle inequality. Let
     $\iota:V\to\Z^2$ assign integer coordinates such that each graph edge
