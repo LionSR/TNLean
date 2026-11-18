@@ -11,8 +11,10 @@ not claim that migration has been fully reviewed or compiled.
 
 ## Current implementation boundary
 
-Four shared owner files have been ported from the read-only merge result:
+Six shared owner files have been ported from the read-only merge result:
 - TNLean/Lattice/LocalHamiltonian.lean
+- TNLean/Lattice/MarginalTails.lean
+- TNLean/Lattice/ProductForm.lean
 - TNLean/MPS/AreaLaw/Hamiltonian.lean
 - TNLean/MPS/AreaLaw/ComponentReduction.lean
 - TNLean/PEPS/AreaLaw/RectangularHamiltonian.lean
@@ -20,7 +22,7 @@ Four shared owner files have been ported from the read-only merge result:
 The three bundled structures are removed; no old-owner alias, operator alias,
 or second support/evolution/ground-state implementation is introduced. QIC's
 existing Interaction is the sole object. This is an intentionally incomplete
-source checkpoint: 229 delta files have NOT been ported. Existing consumers and
+source checkpoint: 227 delta files have NOT been ported. Existing consumers and
 fixtures still referring to removed APIs must be migrated before the repository
 can compile. Do not interpret a clean git status/diff check as Lean validation.
 
@@ -59,8 +61,8 @@ parameter, which is not used by this coordinate-transport proof.
 allocation.tsv and lane lists partition all 233 delta paths without overlap.
 A nonconflict path means only no git content conflict, NOT semantic clearance.
 
-- Shared lane (this branch owner): 6 paths, no text conflicts. Four implemented
-  above; the two remaining Lattice paths stay pending. Other lanes must not
+- Shared lane (this branch owner): 6 paths, no text conflicts. All six are source-ported; five passed narrow direct Lean/strict checks, while
+  ComponentReduction awaits its MPS dependency migration. Other lanes must not
   rewrite these owners. Request an explicit API adjustment if necessary.
 - MPS lane: 86 paths; 68 text-nonconflict and 18 conflicting. Own ChainInteraction
   consumers, ThreeWaySplitting broad PSD/member transport, algorithms and MPS
@@ -104,3 +106,6 @@ using the canonical constructor; do not restore removed production zero owners.
 
 No implementation files or caches in other worktrees have been changed.
 No build, strict check, axiom audit, or external PR mutation was run in this step.
+
+Follow-up: see ../2026-11-18_interaction_shared_checks/HANDOFF.md for the verified
+owner head, exact call signatures and the unavailable full fixture preaudit report.
