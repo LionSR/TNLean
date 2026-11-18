@@ -55,8 +55,8 @@ open LinearAlgebraQuery
 the input, when every word has rank at most `D` at every cut. -/
 theorem cost_sampledSweepStepProgram_le_of_valid (hv : IsValidOracle o) (hL : 0 < L)
     (hq : 2 ≤ q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ : ℝ) {Δ : ℝ} (hΔ : 0 < Δ)
+    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2))) (E₀ : ℝ)
+        {Δ : ℝ} (hΔ : 0 < Δ)
     {ℓ m : ℕ} (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i))
     (hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
@@ -117,7 +117,7 @@ theorem cost_sampledSweepProgram_le_of_valid (hv : IsValidOracle o) (hL : 0 < L)
   | succ i ih =>
     have hi' : i + 1 ≤ L := hi
     simp only [sampledSweepProgram, hi', ↓reduceDIte, FreeM.cost_bind]
-    have hstep := cost_sampledSweepStepProgram_le_of_valid hv hL hq h hs h0 h1 E₀ hΔ
+    have hstep := cost_sampledSweepStepProgram_le_of_valid hv hL hq h hs E₀ hΔ
       (I ⟨i, by omega⟩) b (q ^ (2 * κ)) hi'
       (FreeM.eval o (sampledSweepProgram hq h hs h0 h1 E₀ Δ I b (q ^ (2 * κ)) i)) fun t k ↦
         operatorSchmidtRank_cutOperator_bondComplementWord_le_all (by omega) h hs _

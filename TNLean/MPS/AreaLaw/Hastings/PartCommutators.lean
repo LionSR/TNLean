@@ -301,7 +301,7 @@ Hastings, arXiv:0705.2024v4, appendix, `law16.tex`, line 794: "Let `b_L = [H, H_
 that `‖b_L‖ ≤ J²`". The explicit constant `partCommutatorConst R` replaces the printed
 bound `J²`, which is stated for nearest-neighbour terms, for terms of range `R`. -/
 theorem _root_.ManyBody.ChainInteraction.norm_commutator_leftPart_le (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (j m : ℕ) :
     ‖h.hamiltonian * h.leftPart j m - h.leftPart j m * h.hamiltonian‖ ≤
       partCommutatorConst R * J ^ 2 :=
@@ -357,7 +357,7 @@ that `‖b_L‖ ≤ J²`", applied to the right part. The explicit constant
 `partCommutatorConst R` replaces the printed bound `J²`, which is stated for
 nearest-neighbour terms, for terms of range `R`. -/
 theorem _root_.ManyBody.ChainInteraction.norm_commutator_rightPart_le (h : ChainInteraction L q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (j m : ℕ) :
     ‖h.hamiltonian * h.rightPart j m - h.rightPart j m * h.hamiltonian‖ ≤
       partCommutatorConst R * J ^ 2 :=
@@ -420,14 +420,14 @@ theorem _root_.ManyBody.ChainInteraction.norm_commutator_bufferPart_le (h : Chai
       2 * (partCommutatorConst R * J ^ 2) := by
   rw [h.commutator_bufferPart_eq, norm_neg]
   refine (norm_add_le _ _).trans ?_
-  linarith [h.norm_commutator_leftPart_le hh hhJ j m, h.norm_commutator_rightPart_le hh hhJ j m]
+  linarith [h.norm_commutator_leftPart_le hhJ j m, h.norm_commutator_rightPart_le hhJ j m]
 
 /-- **The support of `[H, H_B]`.** `[H, H_B]` is supported on the union of the windows
 `[j - m - 2R, j - m + R)` and `[j + m - R, j + m + 2R)` around the two edges of the buffer.
 Hastings, arXiv:0705.2024v4, appendix, `law16.tex`, line 794: "Let `b_L = [H, H_L]`",
 applied to the buffer part. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_commutator_bufferPart
-    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (h : ChainInteraction L q R)
     (j m : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h.hamiltonian * h.bufferPart j m - h.bufferPart j m * h.hamiltonian)

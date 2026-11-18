@@ -169,7 +169,6 @@ noncomputable def leftWindow (L R c m k : ℕ) : Finset (Fin L) :=
 noncomputable def rightWindow (L R c m k : ℕ) : Finset (Fin L) :=
   chainNeighborhood (interval L (c + m - R) (c + m + 2 * R)) (k : ℝ)
 
-include hh in
 /-- **The localized left part acts left of the cut.** If `R + k ≤ m`, then `M_L` is supported on
 the sites `i < c`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 816–842. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c m k : ℕ}
@@ -186,7 +185,6 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c
   · rw [mem_interval] at hx; rw [mem_leftBlock]; omega
   · rw [mem_interval] at hx; rw [mem_leftBlock]; omega
 
-include hh in
 /-- **The localized right part acts right of the cut.** If `R + k ≤ m`, then `M_R` is supported
 on the sites `i ≥ c`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 816–842. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_rightPart {c m k : ℕ}
@@ -199,7 +197,6 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_rightPart {
   · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_leftBlock]; omega
   · rw [mem_interval] at hx; rw [Finset.mem_compl, mem_leftBlock]; omega
 
-include hh in
 /-- Centering does not change the commutator with `H`. -/
 theorem _root_.ManyBody.ChainInteraction.commutator_groundCentered
     (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
@@ -232,7 +229,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_localizedPart_apply_le {E₀ : ℝ
     refine (norm_gaussianFilteredTerm_apply_le_commutator_of_isGapped hs hΔ
         (ManyBody.Interaction.isHermitian_hamiltonian hh)
       hgap hspan W (inner_groundCentered hP hΩ)).trans ?_
-    rw [h.commutator_groundCentered hh]
+    rw [h.commutator_groundCentered]
     gcongr
     exact (hop _).trans hc
   have hR : ‖toEuclideanLin (G - h.localizedPart Ω s ΔE P K) Ω‖ ≤ δ := by
@@ -289,9 +286,9 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   have hML : ML.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPL KL
   have hMR : MR.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPR KR
   have hsL : Entropy.IsSupportedOn (n := fun _ ↦ q) ML (leftBlock L c) :=
-    h.isSupportedOn_localizedPart_leftPart hh Ω s ΔE hmk
+    h.isSupportedOn_localizedPart_leftPart Ω s ΔE hmk
   have hsR : Entropy.IsSupportedOn (n := fun _ ↦ q) MR (leftBlock L c)ᶜ :=
-    h.isSupportedOn_localizedPart_rightPart hh Ω s ΔE hmk
+    h.isSupportedOn_localizedPart_rightPart Ω s ΔE hmk
   let σ₀ : Entropy.SiteConfig (fun _ : Fin L ↦ q) := fun _ ↦ ⟨0, NeZero.pos q⟩
   have hcomm : Commute (spectralCutoff ML θ) (spectralCutoff MR θ) :=
     commute_spectralCutoff_of_isSupportedOn disjoint_compl_right hML hMR hsL hsR σ₀ θ θ
@@ -299,13 +296,13 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   have hμL : ‖toEuclideanLin ML Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
     h.norm_localizedPart_apply_le hh Ω s ΔE hΩ hgap hspan hΔ hs hPL KL
-      (h.norm_commutator_leftPart_le hh hhJ c m)
+      (h.norm_commutator_leftPart_le hhJ c m)
       (h.norm_gaussianFilteredTerm_leftPart_sub_localized_le hh hhJ hq1 c m s ΔE
           (Nat.cast_nonneg k) hT)
   have hμR : ‖toEuclideanLin MR Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
       partLocalizationError R J s ΔE T k :=
     h.norm_localizedPart_apply_le hh Ω s ΔE hΩ hgap hspan hΔ hs hPR KR
-      (h.norm_commutator_rightPart_le hh hhJ c m)
+      (h.norm_commutator_rightPart_le hhJ c m)
       (h.norm_gaussianFilteredTerm_rightPart_sub_localized_le hh hhJ hq1 c m s ΔE
           (Nat.cast_nonneg k) hT)
   -- the remainder
@@ -366,8 +363,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
     refine (norm_sub_le _ _).trans ?_
     refine (add_le_add (norm_sub_le _ _) le_rfl).trans ?_
     have hB := h.norm_groundCentered_bufferPart_le hhJ hJ hΩ c m
-    have hL := hD PL hPL (h.norm_commutator_leftPart_le hh hhJ c m) KL
-    have hR := hD PR hPR (h.norm_commutator_rightPart_le hh hhJ c m) KR
+    have hL := hD PL hPL (h.norm_commutator_leftPart_le hhJ c m) KL
+    have hR := hD PR hPR (h.norm_commutator_rightPart_le hhJ c m) KR
     linarith
 
 end TNLean.MPS.AreaLaw

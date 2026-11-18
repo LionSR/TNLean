@@ -70,7 +70,7 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
         (interval L j (j + 2)))
-      (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1)
+      (_ : ∀ j, (h j).PosSemidef) (_ : ∀ j, h j ≤ 1)
       (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
       ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
       groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
@@ -178,7 +178,7 @@ theorem exists_sampled_viable_successor_polynomial {q : ℕ} (hq : 2 ≤ q) (a :
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
         (interval L j (j + 2)))
-      (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1)
+      (_ : ∀ j, (h j).PosSemidef) (_ : ∀ j, h j ≤ 1)
       (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
       ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
       groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
@@ -215,7 +215,7 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
         (interval L j (j + 2)))
-      (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1)
+      (_ : ∀ j, (h j).PosSemidef) (_ : ∀ j, h j ≤ 1)
       (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
       ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
       groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
@@ -355,7 +355,7 @@ theorem exists_sampled_successive_viable_sets_polynomial {q : ℕ} (hq : 2 ≤ q
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
         (interval L j (j + 2)))
-      (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1)
+      (_ : ∀ j, (h j).PosSemidef) (_ : ∀ j, h j ≤ 1)
       (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
       ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
       groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
