@@ -20,7 +20,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open scoped BigOperators Matrix
-open TNLean.Lattice (siteLift)
 
 namespace TNLean.PEPS.EncodedFrame
 open TNLean.Lattice.Sheet
@@ -57,10 +56,11 @@ theorem exists_squarePatch_of_mem_iSup_dependentRegionCylinder
   have hLift (R : Finset V) (K : Matrix (R → Fin q) (R → Fin q) ℂ) :
       Matrix.reindex (dependentGlobalConfigEquiv (Out := fun _ : V ↦ Fin q))
         (dependentGlobalConfigEquiv (Out := fun _ : V ↦ Fin q))
-        (dependentRegionOperatorLift (Out := fun _ : V ↦ Fin q) R K) = siteLift R K := by
+        (dependentRegionOperatorLift (Out := fun _ : V ↦ Fin q) R K) = ManyBody.place R K := by
     ext σ τ
     simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-      dependentRegionOperatorLift_apply, dependentGlobalConfigEquiv, siteLift,
+      dependentRegionOperatorLift_apply, dependentGlobalConfigEquiv,
+      QuantumCircuit.place_eq_embedOp,
       QuantumCircuit.embedOp_apply]
     congr 1
     simp [QuantumCircuit.AgreeOff]
@@ -134,11 +134,12 @@ theorem exists_squarePatch_of_mem_iSup_dependentRegionCylinder
     · exact hcross i j hi hj hij
   let e := dependentGlobalConfigEquiv (Out := fun _ : V ↦ Fin q)
   let F := Matrix.reindexRingEquiv ℂ e
-  have hFB (j : Fin m) (ℓ : Fin (d j)) : F (B j ℓ) = siteLift (R j) (rankOne (b j ℓ)) :=
+  have hFB (j : Fin m) (ℓ : Fin (d j)) :
+      F (B j ℓ) = ManyBody.place (X := fun _ ↦ Fin _) (R j) (rankOne (b j ℓ)) :=
     hLift (R j) (rankOne (b j ℓ))
   have horth (s s' : (j : Fin m) × Fin (d j)) (hss' : s ≠ s') :
-      siteLift (R s.1) (rankOne (b s.1 s.2)) *
-        siteLift (R s'.1) (rankOne (b s'.1 s'.2)) = 0 := by
+      ManyBody.place (X := fun _ ↦ Fin _) (R s.1) (rankOne (b s.1 s.2)) *
+        ManyBody.place (X := fun _ ↦ Fin _) (R s'.1) (rankOne (b s'.1 s'.2)) = 0 := by
     simpa only [map_mul, map_zero, hFB] using congrArg F (hBorth s s' hss')
   let P : SquarePatch pos q :=
     { center := z

@@ -55,7 +55,6 @@ here are formalized independently from the manuscript; no upstream Lean text was
 open ManyBody (SquareLatticeVertex)
 
 open Matrix
-open TNLean.Lattice (siteLift)
 
 noncomputable section
 
@@ -77,9 +76,10 @@ theorem norm_castSiteVec {D D' : Finset ι} (h : D = D') (v : EuclideanSpace ℂ
   subst h
   rfl
 
-theorem siteLift_rankOne_castSiteVec {D D' : Finset ι} (h : D = D')
+theorem place_rankOne_castSiteVec {D D' : Finset ι} (h : D = D')
     (v : EuclideanSpace ℂ (D → Fin q)) :
-    siteLift D' (rankOne (castSiteVec h v)) = siteLift D (rankOne v) := by
+    ManyBody.place (X := fun _ ↦ Fin _) D' (rankOne (castSiteVec h v)) =
+      ManyBody.place (X := fun _ ↦ Fin _) D (rankOne v) := by
   subst h
   rfl
 
@@ -94,7 +94,8 @@ Unlike `SquarePatch.proj`, it carries no convention for an empty outer sample.
 
 Polynomial-PEPS manuscript, `03-patches.tex`, lines 36–45 (`eq:patch-cylinder-projection`). -/
 def cylSum : Matrix (ι → Fin q) (ι → Fin q) ℂ :=
-  ∑ s : (j : Fin p.n) × Fin (p.dim j), siteLift (p.sample s.1) (rankOne (p.vec s.1 s.2))
+  ∑ s : (j : Fin p.n) × Fin (p.dim j),
+    ManyBody.place (X := fun _ ↦ Fin _) (p.sample s.1) (rankOne (p.vec s.1 s.2))
 
 /-- With a nonempty outer sample, the projector of a patch is its cylinder sum. -/
 theorem proj_eq_cylSum (h : p.outer.Nonempty) : p.proj = p.cylSum := by
@@ -142,14 +143,14 @@ def translate (w : ℝ × ℝ) : SquarePatch (fun x => pos x + w) q where
   vec j ℓ := castSiteVec (squareSample_translate pos w p.center (p.radius j)) (p.vec j ℓ)
   norm_vec j ℓ := (norm_castSiteVec _ _).trans (p.norm_vec j ℓ)
   orthogonal s s' h := by
-    rw [siteLift_rankOne_castSiteVec, siteLift_rankOne_castSiteVec]
+    rw [place_rankOne_castSiteVec, place_rankOne_castSiteVec]
     exact p.orthogonal s s' h
 
 @[simp] theorem translate_center (w : ℝ × ℝ) : (p.translate w).center = p.center + w := rfl
 
 theorem cylSum_translate (w : ℝ × ℝ) : (p.translate w).cylSum = p.cylSum := by
   refine Finset.sum_congr rfl fun s _ => ?_
-  exact siteLift_rankOne_castSiteVec (squareSample_translate pos w p.center (p.radius s.1))
+  exact place_rankOne_castSiteVec (squareSample_translate pos w p.center (p.radius s.1))
     (p.vec s.1 s.2)
 
 end SquarePatch

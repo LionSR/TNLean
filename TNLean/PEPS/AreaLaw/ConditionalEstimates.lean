@@ -112,11 +112,11 @@ theorem exists_norm_movement_le :
           σ.PosSemidef → σ.trace.re ≤ 1 → τ.PosSemidef → τ.trace.re ≤ 1 →
           ∀ a : ℝ, 0 < a → a * Real.log (Real.exp 1 * (q : ℝ) ^ x.card) ≤ c →
             ‖(WithLp.toLp 2
-                ((localLift Λ q (P ∪ x) (cfc (fun t : ℝ ↦ t ^ (a / 2)) σ) *
-                  localLift Λ q P (cfc (fun t : ℝ ↦ t ^ (-a / 2))
+                ((ManyBody.place (P ∪ x) (cfc (fun t : ℝ ↦ t ^ (a / 2)) σ) *
+                  ManyBody.place P (cfc (fun t : ℝ ↦ t ^ (-a / 2))
                     (kernelCompletion (reducedState Λ q θ P))) *
-                  localLift Λ q (x ∪ Y) (cfc (fun t : ℝ ↦ t ^ (a / 2)) τ) *
-                  localLift Λ q Y (cfc (fun t : ℝ ↦ t ^ (-a / 2))
+                  ManyBody.place (x ∪ Y) (cfc (fun t : ℝ ↦ t ^ (a / 2)) τ) *
+                  ManyBody.place Y (cfc (fun t : ℝ ↦ t ^ (-a / 2))
                     (kernelCompletion (reducedState Λ q θ Y)))) *ᵥ θ.ofLp) :
                 StateSpace Λ q)‖ ≤
               Real.exp (-(a / 2) * (regionalEntropy Λ q θ (P ∪ x) - regionalEntropy Λ q θ P +
@@ -132,8 +132,8 @@ theorem exists_norm_movement_le :
   rw [hcard, Entropy.FourPartition.movementEta_frameVector] at key
   simp only [Entropy.regionalMoveOperator, Entropy.FourPartition.frameMarginalP_eq,
     Entropy.FourPartition.frameMarginalY_eq] at key
-  simpa only [localLift_eq_entropyLocalLift, reducedState_eq_regionState,
-    regionalEntropy_eq_regionEntropy, Entropy.regionalMovementEta] using key
+  simpa only [reducedState_eq_regionState, regionalEntropy_eq_regionEntropy,
+    Entropy.regionalMovementEta] using key
 
 /-! ### Lemma 5.3 -/
 
@@ -144,10 +144,10 @@ lines 495–500. -/
 noncomputable def skewSymbol (Λ : Finset (ℤ × ℤ)) (q : ℕ) (t : ℝ) (P Y : Finset (Site Λ))
     (h : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (θ : StateSpace Λ q) : ℂ :=
   star θ.ofLp ⬝ᵥ
-    ((localLift Λ q P (cfc (TensorPower.suppRpow t) (reducedState Λ q θ P)) *
-      localLift Λ q Y (cfc (TensorPower.suppRpow (-t)) (reducedState Λ q θ Y)) * h *
-      localLift Λ q P (cfc (TensorPower.suppRpow (-t)) (reducedState Λ q θ P)) *
-      localLift Λ q Y (cfc (TensorPower.suppRpow t) (reducedState Λ q θ Y))) *ᵥ θ.ofLp)
+    ((ManyBody.place P (cfc (TensorPower.suppRpow t) (reducedState Λ q θ P)) *
+      ManyBody.place Y (cfc (TensorPower.suppRpow (-t)) (reducedState Λ q θ Y)) * h *
+      ManyBody.place P (cfc (TensorPower.suppRpow (-t)) (reducedState Λ q θ P)) *
+      ManyBody.place Y (cfc (TensorPower.suppRpow t) (reducedState Λ q θ Y))) *ᵥ θ.ofLp)
 
 /-- The lattice skew symbol equals the marked scalar symbol on the physical tensor product. -/
 theorem skewSymbol_eq_markedScalarSymbol (t : ℝ) (P Y : Finset (Site Λ))
@@ -155,7 +155,7 @@ theorem skewSymbol_eq_markedScalarSymbol (t : ℝ) (P Y : Finset (Site Λ))
     skewSymbol Λ q t P Y h θ =
       TensorPower.markedScalarSymbol (n := fun _ ↦ q) t P Y h θ.ofLp := by
   simp only [skewSymbol, TensorPower.markedScalarSymbol, TensorPower.regionPow,
-    localLift_eq_entropyLocalLift, reducedState_eq_regionState, WithLp.toLp_ofLp]
+    reducedState_eq_regionState, WithLp.toLp_ofLp]
 
 /-- **Lemma 5.3 on lattice regions** (area-law manuscript, `lem:skew`, `04-conditional.tex`,
 lines 487–507; regional form `05-replicas.tex`, lines 640–660 and 838–843). Let
@@ -171,8 +171,8 @@ theorem skewSymbol_skew_le {P₀ P₁ x U F : Finset (Site Λ)}
     {a : ℝ} (ha : 0 < a)
     (hac : a * Real.log (Real.exp 1 * (q : ℝ) ^ (P₀.card + x.card)) ≤ 1 / 8)
     {θ : StateSpace Λ q} (hθ : ‖θ‖ = 1) :
-    ‖skewSymbol Λ q (a / 2) (P₀ ∪ P₁) (x ∪ U) (localLift Λ q (P₀ ∪ x) K) θ‖ -
-        (skewSymbol Λ q (a / 2) (P₀ ∪ P₁) (x ∪ U) (localLift Λ q (P₀ ∪ x) K) θ).re ≤
+    ‖skewSymbol Λ q (a / 2) (P₀ ∪ P₁) (x ∪ U) (ManyBody.place (P₀ ∪ x) K) θ‖ -
+        (skewSymbol Λ q (a / 2) (P₀ ∪ P₁) (x ∪ U) (ManyBody.place (P₀ ∪ x) K) θ).re ≤
       Entropy.ConditionalSkew.skewConst * a ^ 2 *
         Real.log (Real.exp 1 * (q : ℝ) ^ (P₀.card + x.card)) ^ 4 *
         (regionalEntropy Λ q θ ((P₀ ∪ P₁) ∪ x) - regionalEntropy Λ q θ (P₀ ∪ P₁) +
@@ -188,7 +188,7 @@ theorem skewSymbol_skew_le {P₀ P₁ x U F : Finset (Site Λ)}
     simpa using h
   have key := hp.markedScalarSymbol_skew_le (n := fun _ ↦ q) hK0 hK1 ha (by rwa [hcard]) hθ'
   rw [hcard, hp.skewEta_transport, WithLp.toLp_ofLp] at key
-  simpa only [skewSymbol_eq_markedScalarSymbol, localLift_eq_entropyLocalLift,
-    regionalEntropy_eq_regionEntropy, Entropy.regionalMovementEta] using key
+  simpa only [skewSymbol_eq_markedScalarSymbol, regionalEntropy_eq_regionEntropy,
+    Entropy.regionalMovementEta] using key
 
 end TNLean.PEPS.AreaLaw

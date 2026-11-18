@@ -322,15 +322,14 @@ theorem embedOp_mulVec_apply {e : κ → ι} (he : Function.Injective e)
   · rw [ite_eq_left h, ite_eq_left h, ← eq_extend_of_agreeOff he h]
   · rw [ite_eq_right h, ite_eq_right h, zero_mul]
 
-/-- The local lift of a regional matrix is its placement on the subtype of
-the designated sites. This identifies the tensor-factor and matrix-entry
-descriptions of a supported operator, including an empty region. -/
-theorem localLift_eq_embedOp {q : ℕ} (S : Finset ι)
+/-- The placement `K ⊗ 1` of a regional matrix is its embedding along the inclusion of
+the region. This identifies the tensor-factor and matrix-entry descriptions of a supported
+operator, including an empty region. -/
+theorem place_eq_embedOp {q : ℕ} (S : Finset ι)
     (K : Matrix (S → Fin q) (S → Fin q) ℂ) :
-    Entropy.localLift (n := fun _ ↦ q) S K =
-      embedOp (Subtype.val : S → ι) K := by
+    ManyBody.place (X := fun _ ↦ Fin q) S K = embedOp (Subtype.val : S → ι) K := by
   ext σ τ
-  rw [Entropy.localLift_apply, embedOp_apply]
+  rw [ManyBody.place_apply, embedOp_apply]
   congr 1
   simp only [AgreeOff, eq_iff_iff]
   constructor

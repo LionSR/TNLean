@@ -55,7 +55,7 @@ preparation of matrix product states.
     \label{thm:area_law_supported_identity}
     \lean{ManyBody.mem_supportedOperators_iff,
         ManyBody.supportedOperators_toSubmodule_eq_span,
-        QuantumCircuit.localLift_eq_embedOp}
+        QuantumCircuit.place_eq_embedOp}
     \leanok
     \uses{def:qc_local_circuit}
     Let $I$ be a finite set, $q\in\mathbb N$, $S\subseteq I$, and $\mathcal C=\{0,\ldots,q-1\}^I$. A matrix $A\in\C^{\mathcal C\times\mathcal C}$ belongs to $\mathcal A_S=\operatorname{span}\{\bigotimes_{i\in I}m_i:m_i=\mathbb 1\text{ for }i\notin S\}$ if and only if:
