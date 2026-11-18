@@ -1,0 +1,8 @@
+{
+  "count": 572,
+  "file_bytes": 1521725284,
+  "free_before": 1054007296,
+  "free_after": 2576932864,
+  "protected_files_verified": 14076,
+  "rebuild_source": "Lean v4.36.0-rc1 Lake/Build/Module.lean recFetchSetup and Lake/Build/Actions.lean compileLeanModule lines 66-68"
+}
