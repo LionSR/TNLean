@@ -1,8 +1,8 @@
 [
   {
     "path": "TNLean/PEPS/Approximation/CellConditionalInformation.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -13,26 +13,26 @@
   },
   {
     "path": "TNLean/PEPS/Approximation/CoarseInformation.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/Approximation/CoarseInformationFromGap.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/Approximation/NestedPatchEnergy.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/Approximation/NestedPatchMarginalCloseness.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -55,14 +55,14 @@
   },
   {
     "path": "TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -175,8 +175,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/InitialRoundedCollarEntropy.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -187,20 +187,20 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/InitialWeakRectangleShellEntropy.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -247,8 +247,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeParameterBound.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -277,8 +277,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualReplicaDefect.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -313,7 +313,7 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanTransportInputs.lean",
-    "compile": null,
+    "compile": 0,
     "strict": null,
     "blocked": null
   },
@@ -379,8 +379,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -391,50 +391,50 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalTemplateInformation.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ScanTruncationInputs.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceActualInformation.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceBootstrapEntropy.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceChargeSelection.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceFinalInformation.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceRoughSelection.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceRoundedInformation.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -445,8 +445,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedDensity.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -457,26 +457,26 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpComparison.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpDensity.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpEnergy.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceStatusMarginalMoments.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -487,8 +487,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpUpper.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -499,14 +499,14 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetNormAttachment.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetStatusMoments.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -517,8 +517,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
