@@ -57,11 +57,12 @@ def regularRegionSiteExtension (R : Finset V)
 
 /-- A regional unitary tensored with the complementary identity is globally unitary.
 Source: SCP10, the local physical operation in Theorem 6.16, lines 2270–2301. -/
-theorem regionLocalTerm_mem_unitaryGroup (R : Finset V)
+theorem place_mem_unitaryGroup (R : Finset V)
     (W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ)
     (hW : W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ) :
-    regionLocalTerm R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ := by
+    ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ := by
   classical
+  rw [place_eq_regionConfigEquiv]
   exact Matrix.reindex_mem_unitaryGroup (regionConfigEquiv (d := d) R).symm _
     (Matrix.kronecker_mem_unitary hW (one_mem _))
 
@@ -94,9 +95,9 @@ theorem exists_unitary_regularTwoCycleGlobalFluxMove
     (e₀ e₁ : RC (Γ := Γ) R T) (hne : e₀ ≠ e₁) :
     ∃ W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
+      ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
       ∀ (g : G) (b : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ),
-        regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor
+        ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor
           (regularRegionSiteExtension R (regularTwistedSite a
             (regularTreeCycleAssignment R T (fun e => if e = e₀ then g else 1))) b)) =
         stateCoeff (groupBondTensor
@@ -106,13 +107,13 @@ theorem exists_unitary_regularTwoCycleGlobalFluxMove
   classical
   obtain ⟨W, hW, hmove⟩ :=
     exists_unitary_regularTwoCyclePhysicalFluxMove R T a ha hT htree o e₀ e₁ hne
-  refine ⟨W, hW, regionLocalTerm_mem_unitaryGroup R W hW, ?_⟩
+  refine ⟨W, hW, place_mem_unitaryGroup R W hW, ?_⟩
   intro g b
   let a₀ := regularTwistedSite a
     (regularTreeCycleAssignment R T (fun e => if e = e₀ then g else 1))
   let a₁ := regularTwistedSite a
     (regularTreeCycleAssignment R T (fun e => if e = e₀ ∨ e = e₁ then g else 1))
-  apply regionLocalTerm_mulVec_stateCoeff_of_openColumns
+  apply place_mulVec_stateCoeff_of_openColumns
   · intro μ
     rw [openWeight_congr R (regularRegionSiteExtension R a₀ b) a₀
       (fun v hv => by simp only [regularRegionSiteExtension, ite_eq_left hv]),
@@ -204,9 +205,9 @@ theorem exists_unitary_regularTwoCycleGlobalFluxMove_bondOperators
     (e₀ e₁ : RC (Γ := Γ) R T) (hne : e₀ ≠ e₁) :
     ∃ W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
+      ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
       ∀ (g : G) (u : Edge Γ → G),
-        regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
+        ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
           (regularRegionBondExtension R
             (regularTreeCycleAssignment R T (fun e => if e = e₀ then g else 1)) u))) =
         stateCoeff (groupBondTensor (regularTwistedSite a
@@ -219,9 +220,9 @@ theorem exists_unitary_regularTwoCycleGlobalFluxMove_bondOperators
   have hinv : ∀ g v η s, a v (fun e => g * η e) s = a v η s := by
     intro g v η s
     exact (ha v).toIsGInjective.regularSiteMap_translation g η s
-  refine ⟨W, hW, regionLocalTerm_mem_unitaryGroup R W hW, ?_⟩
+  refine ⟨W, hW, place_mem_unitaryGroup R W hW, ?_⟩
   intro g u
-  apply regionLocalTerm_mulVec_stateCoeff_of_openColumns
+  apply place_mulVec_stateCoeff_of_openColumns
   · intro μ
     let θ := fun f => (Fintype.equivFin G).symm (μ f)
     have hμ : μ = fun f => Fintype.equivFin G (θ f) := by

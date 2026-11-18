@@ -95,8 +95,9 @@ theorem IsGIsometric.exists_unitary_torusVacantPlaquetteMove {d : ℕ}
       W ∈ Matrix.unitaryGroup
         ({v : X // v ∈ torusVacantPlaquetteMoveRegion direction p} → Fin d) ℂ ∧
       (if reverse direction then
-        (regionLocalTerm (torusVacantPlaquetteMoveRegion direction p) W).conjTranspose
-        else regionLocalTerm (torusVacantPlaquetteMoveRegion direction p) W) ∈
+        (ManyBody.place («X» := fun _ ↦ Fin _)
+            (torusVacantPlaquetteMoveRegion direction p) W).conjTranspose
+        else ManyBody.place («X» := fun _ ↦ Fin _) (torusVacantPlaquetteMoveRegion direction p) W) ∈
           Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (u : Edge Γₜ → G), regularWalkHolonomy u
           (torusPlaquetteWalk (torusVacantPlaquetteMoveTarget direction p)).reverse = 1 →
@@ -111,8 +112,10 @@ theorem IsGIsometric.exists_unitary_torusVacantPlaquetteMove {d : ℕ}
       ∀ (u : Edge Γₜ → G), regularWalkHolonomy u
           (torusPlaquetteWalk (torusVacantPlaquetteMoveTarget direction p)).reverse = 1 →
         (if reverse direction then
-          (regionLocalTerm (torusVacantPlaquetteMoveRegion direction p) W).conjTranspose
-          else regionLocalTerm (torusVacantPlaquetteMoveRegion direction p) W) *ᵥ
+          (ManyBody.place («X» := fun _ ↦ Fin _)
+              (torusVacantPlaquetteMoveRegion direction p) W).conjTranspose
+          else ManyBody.place («X» := fun _ ↦ Fin _)
+              (torusVacantPlaquetteMoveRegion direction p) W) *ᵥ
           stateCoeff (groupBondTensor (regularTwistedSite a u)) =
         stateCoeff (groupBondTensor (regularTwistedSite a
           (torusVacatingPlaquetteMove direction p u))) := by

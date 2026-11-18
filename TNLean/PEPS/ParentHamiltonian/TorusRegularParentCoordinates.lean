@@ -73,7 +73,7 @@ theorem globalDependentPhysicalMap_regularInverse_eq_zero_of_torusPlaquetteHolon
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hP : IsRegionParentInteraction (groupBondTensor a) (torusPlaquetteRegion v) P)
     (Ψ : (X → Fin d) → ℂ)
-    (hΨ : regionLocalTerm (torusPlaquetteRegion v) P *ᵥ Ψ = 0)
+    (hΨ : ManyBody.place («X» := fun _ ↦ Fin _) (torusPlaquetteRegion v) P *ᵥ Ψ = 0)
     (α : RegularHalfEdgeConfig Γₜ G)
     (hhol : regularWalkHolonomy (regularHalfEdgeOperators α) (torusPlaquetteWalk v) ≠ 1) :
     globalDependentPhysicalMap F Ψ (fun w => α w.1) = 0 := by
@@ -95,7 +95,7 @@ theorem IsGInjective.exists_torusParentCoordinates
     (hP : ∀ v, IsRegionParentInteraction (groupBondTensor (torusIncidentSite a))
       (torusPlaquetteRegion v) (P v))
     (Ψ : (X → Fin d) → ℂ)
-    (hΨ : ∀ v, regionLocalTerm (torusPlaquetteRegion v) (P v) *ᵥ Ψ = 0) :
+    (hΨ : ∀ v, ManyBody.place («X» := fun _ ↦ Fin _) (torusPlaquetteRegion v) (P v) *ᵥ Ψ = 0) :
     ∃ F : (v : X) → Matrix (IncidentEdge Γₜ v → G) (Fin d) ℂ,
       (∀ v α η, (∑ s : Fin d, F v α s * torusIncidentSite a v η s) =
         regularLegProjector (IncidentEdge Γₜ v) α η) ∧
@@ -116,7 +116,7 @@ theorem IsGInjective.exists_torusParentCoordinates
       (groupBondTensor (torusIncidentSite a)) torusPlaquetteRegion := by
     rw [mem_regionParentGroundSpace_iff]
     intro v τ
-    exact (regionLocalTerm_mulVec_eq_zero_iff _ _ (hP v) Ψ).mp (hΨ v) τ
+    exact (place_mulVec_eq_zero_iff _ _ (hP v) Ψ).mp (hΨ v) τ
   have hcover : ∀ v : X, ∃ w, v ∈ torusPlaquetteRegion w :=
     fun v => ⟨v, mem_torusPlaquetteRegion_self v⟩
   refine ⟨F, hF,

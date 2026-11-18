@@ -38,17 +38,6 @@ theorem agreeOff_region_iff (R : Finset V) (σ τ : V → Fin d) :
   · intro h v hv
     exact h v fun hvR => hv ⟨v, hvR⟩ rfl
 
-/-- Extending a regional matrix by the identity is its circuit embedding along
-the inclusion of the region. No positivity or nonzero-dimension hypothesis is needed. -/
-theorem regionLocalTerm_eq_embedOp (R : Finset V)
-    (H : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ) :
-    regionLocalTerm R H = QuantumCircuit.embedOp (Subtype.val : R → V) H := by
-  classical
-  ext σ τ
-  simp [regionLocalTerm, regionConfigEquiv, Matrix.one_apply,
-    QuantumCircuit.embedOp_apply, agreeOff_region_iff, funext_iff, mul_ite,
-    Function.comp_def]
-
 /-- In constant physical dimension, the dependent regional lift is the circuit
 embedding reindexed by full-region configurations. -/
 theorem dependentRegionOperatorLift_eq_reindex_embedOp (R : Finset V)
