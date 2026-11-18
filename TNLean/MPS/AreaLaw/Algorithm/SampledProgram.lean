@@ -264,7 +264,7 @@ sweep. -/
 theorem eval_sampledSweepStepProgram (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
+        (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
     FreeM.eval honestOracle (sampledSweepStepProgram hq h hs E₀ Δ I b D hi S) =

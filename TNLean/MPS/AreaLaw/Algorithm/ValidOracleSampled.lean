@@ -88,7 +88,7 @@ applied to the selection of the oracle's nets and solver. -/
 theorem eval_sampledSweepStepProgram_of_valid (hv : IsValidOracle o) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
+        (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
     FreeM.eval o (sampledSweepStepProgram hq h hs E₀ Δ I b D hi S) =
@@ -122,7 +122,7 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
       (FreeM.eval o (sampledSweepStepProgram hq h hs E₀ Δ I b (q ^ (2 * κ)) hi S)) := by
   classical
   let : NeZero q := ⟨by omega⟩
-  rw [eval_sampledSweepStepProgram_of_valid hv hq h hs h0 h1 E₀ Δ I b (q ^ (2 * κ)) hi S]
+  rw [eval_sampledSweepStepProgram_of_valid hv hq h hs E₀ Δ I b (q ^ (2 * κ)) hi S]
   let chain := ManyBody.ChainInteraction.ofBonds h hs
   have hgapC : IsGapped chain.hamiltonian E₀ Δ := by
     simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hgap
