@@ -1,0 +1,15 @@
+{
+  "selected": 865,
+  "build_and_strict_passed": 20,
+  "not_run": 845,
+  "failed_commands": 0,
+  "build_commands": 122,
+  "strict_commands": 20,
+  "recorded_build_seconds": 289.5700009839493,
+  "recorded_strict_seconds": 46.461079916974995,
+  "production_edit_seconds": 0,
+  "evidence_preparation_seconds": null,
+  "evidence_preparation_note": "Not separately timed; no estimated editing duration reported",
+  "full_slice_project_closure_static_count": 5156,
+  "stop_reason": "No complete exact-pin QIC/TN warm cache locally; initial bounded 20-target batch complete. Remaining 845 require coordinated cache or further narrow batches. No source failure found."
+}

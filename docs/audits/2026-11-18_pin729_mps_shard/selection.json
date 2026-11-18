@@ -1,0 +1,16 @@
+{
+  "head": "6b7fb2e27dbc6856091e593e4226d350403beb8a",
+  "tree": "b535ccb984038d4b8f8d47bb874bc17035ab5f03",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "tn_affected_raw": 1669,
+  "tn_affected_existing": 1668,
+  "missing": [
+    "TNLean/PEPS/ParentHamiltonian/DependentRegionOperatorLift.lean"
+  ],
+  "mps_affected": 864,
+  "extra_delta": [
+    "TNLean/MPS/AreaLaw/ALVV/MergeRounds.lean"
+  ],
+  "selected": 865,
+  "manifest_sha256": "6154be849927457d11a0e1666a778d3d68383e5884e16c08ec1252c5694cf7f5"
+}

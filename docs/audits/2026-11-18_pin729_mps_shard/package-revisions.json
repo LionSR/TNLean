@@ -1,0 +1,62 @@
+[
+  {
+    "name": "mathlib",
+    "required": "625d8914199bc567cca9b91f90e8e5afafa5ae51",
+    "actual": "625d8914199bc567cca9b91f90e8e5afafa5ae51",
+    "matches": true
+  },
+  {
+    "name": "Gametheory",
+    "required": "439aaeb9caa7a7f943f9e72afc77751cbc5b0098",
+    "actual": "439aaeb9caa7a7f943f9e72afc77751cbc5b0098",
+    "matches": true
+  },
+  {
+    "name": "checkdecls",
+    "required": "3d425859e73fcfbef85b9638c2a91708ef4a22d4",
+    "actual": "3d425859e73fcfbef85b9638c2a91708ef4a22d4",
+    "matches": true
+  },
+  {
+    "name": "plausible",
+    "required": "c2d7840c65673533e15b499f25beecdc6227f7d8",
+    "actual": "c2d7840c65673533e15b499f25beecdc6227f7d8",
+    "matches": true
+  },
+  {
+    "name": "LeanSearchClient",
+    "required": "9d39f9bb0c30aa2f6200808805ff16e6ce950890",
+    "actual": "9d39f9bb0c30aa2f6200808805ff16e6ce950890",
+    "matches": true
+  },
+  {
+    "name": "importGraph",
+    "required": "b3cc36c295aa5e3e3c0197b09a6556298e710447",
+    "actual": "b3cc36c295aa5e3e3c0197b09a6556298e710447",
+    "matches": true
+  },
+  {
+    "name": "proofwidgets",
+    "required": "17137fad38a2cc782ff00b323a13c3a991d085ab",
+    "actual": "17137fad38a2cc782ff00b323a13c3a991d085ab",
+    "matches": true
+  },
+  {
+    "name": "aesop",
+    "required": "cbdde3aa2665915fb286c48bcd4cdf885c629511",
+    "actual": "cbdde3aa2665915fb286c48bcd4cdf885c629511",
+    "matches": true
+  },
+  {
+    "name": "Qq",
+    "required": "6d26f8bb4b2bb78f929ad160feac508866821316",
+    "actual": "6d26f8bb4b2bb78f929ad160feac508866821316",
+    "matches": true
+  },
+  {
+    "name": "batteries",
+    "required": "4453b52d2468f4c346a8711d728c0742e7483c9b",
+    "actual": "4453b52d2468f4c346a8711d728c0742e7483c9b",
+    "matches": true
+  }
+]
