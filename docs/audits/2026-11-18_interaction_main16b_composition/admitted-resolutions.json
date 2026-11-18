@@ -1,0 +1,338 @@
+[
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "c2a7d41ce41e9dadb692885205fb245152df508f573e9ba2eea40eccb8f90325"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "8e696bf9b06f775d8796f38b4b030f867bb4e78f602aa6bbfa20cc8b96663fde"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "b2f72c5bf361ad8b0e0a3a2d3a12ba22750cd9de9a33d4e379a3ad7fef2bbe01"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "aef33c0f0b32eaf4630865d9e3225a9023eef898c90cabb66e21b7caf83eec93"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/BoundaryGap.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "ba0001b75bb7a491152b7f825a0a92c43ff7911aa648e63fb905c37e788fe479"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "9aadae03901e9b9f6d0fee7699471948b580922ae159a9504d79b836bdec0a87"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "ab3228fff31b4a124553f74fb463f425b0513bf6d2da0279c0ca9d5142f3665b"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "f3db5618c87217d5c65706ae7540237b79b37d74d640e4e1e4e564df7fa73cae"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "aee14b8f260f6e5063963d7975a7fdc276323fa7f6cd0c2bf39282dbb7ef47ef"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "6eacb1bc1b20eb4693aea19d0b25f839dd1b0daa1b98866befefb2d767435704"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/OverlapEnergy.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "3033399bc2d2d10eca9a5db7788ac2a333a281da96a751534aea1e7c3afe286d"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/RangeOneSupport.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "eb06514071a6cbf5045417939f1740587c717824589013af15bccf51146552cb"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "b87f960c99a5ffd3a969a215a2ab96d9613cc47449d3bfd057bcfaf080c54d24"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "53d0b3c287ba8197a305711562b023f4944654f466372de72da813a284cac748"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "0ba60809ed675dc14a97139b398533d229528a31402707df54ec4353b11af615"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "c3f82e4253094640ff8d6a6dc31d2ea7560d6ad1695aed685c21923c974607f4"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "ad85e3572423620f5af4c91fcdc2ec94f97cc943999d9dbac9545c562832f37d"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "8a632e004230cea1a32d89e662474b221a883c6b11f60558d7313f4333120e98"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "a1fdf8961ec6955183473ec64b7cd707ff1689de9b5e0f69f549d090fc5672d5"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "b73921cef449505ae0d05b57931151560cac517a041bcd7a222a12449cc52c79"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "10af5993239f9b7c7680613575d5a8be200ae788b1a8b65f71daf5bececfb951"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "34caa1e876abce92f1dd1da67ac0e85dc8a35d5f8b0ec619dab22fe911d7e64a"
+  },
+  {
+    "lane": "MPS",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean",
+    "source_commit": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+    "sha256": "5ec18fb1c7b8c8595f102ebfb5800fc019146a57dd7335e02e87e7b0ac6931ce"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/Approximation/CellConditionalInformation.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "aa4ae41ae180a1e1ca73a4322e2abec9bd69bbcded00da0952c2307525b110dc"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/Approximation/CoarseInformation.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "e9e8c6619539329f00b47c021157e17061a1dc590a9c46c1fd533328163f8367"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/Approximation/RangeAngularInformation.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "63c53d3235dc8d7b6e85f215247c27e189552c05cd7d98600fcc6c0d7181470a"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "3c02e370f59f15caa25dc89e5d1a4d0dac039c6ff83aaa4a7d7de8cb66a8efdf"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "5007e41f55e523c216c5544788430f2ea035e0a766e261785a302da5c9fbaf83"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "54ccc32492de362aab4d285dd423ca72e9a69e9aff811712aab883b3c8c051d1"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/Approximation/RangeSquareGroundState.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "3167acb58cdc58f1be39113c4acf3176508ae5afbfd47c9de31a95c755c23b8f"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "fc7ed0857eea20d99ecc076b8eb98f038b073b4c6157b855bcc11a12ad0ae2e2"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "48942671491f35e32a8cbb66b79087a09f05cc636e08a432f636279dc7dcdcac"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "f69524b5b4b89468f28e98c0ccdbada17ac73df14f3b3c5dacd59cf7cf7f5324"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "697b049859609b349e9649afce849da27b4f04ed556dbb2071feb8122d6e442c"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "f2bece04bb425e7e15f6afc8ac70a5dcc6a29dd684a4c8ffc5f7d8e05ed18782"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "a34b0c8cfb204ec6895d1eb5a0bafd2af11ffa21971bdedfc76182eb5230e54c"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/AmplificationProof.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "4b5ab9ea9d4d9728d946000c01dd341c92b41b038ff5817521b38ef87c8b0f31"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/BoundaryTheorem.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "a53cf9e1182adbe4c8877bd382fa45f21d267141d1a399fd882d5b68407a3841"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/CollarInformation.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "3c0619c14883a006e57d23854479bab24b016eeb2bba23383613d96129e10d72"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/GraphPropagation.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "8c2595f0a5f750972ff6d7fdf99c751587b744f73eccf2bd53c538dea7b56a56"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "388498b1f22665d38abd12abcb38105ae4b3def33bd8098d2c3f35539cde2308"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "b65d344f543e55b136711baf4ade69b093648c6ac0d754be7f135269c22bfed1"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "ca6cf8069989569caf57651314ebd8764352c834f4838da242bfd7472dff6bf9"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "e0dbb7aa948d3f8bf3cd07f6082b05b79937dabe55e263aeefbba2430a1abbf4"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "25d2fb6440767d3def9a63907659920832570b432cd82d4428e7ae96adf7dccc"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "0413da02d840e162d4faa21a06f167b2950c460f5013ac0862600405feb8dc16"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "64044a638580b516e971152a5bed7a91cf31f77b2e5f0de8948bb921856e542a"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "7811fca0a783e1b2ea72f790d7680b5121e2e35d1a0533910e46e3863cc51a40"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "58ad54ecdc2e5e8b381fe94673e66c1e2ee3fe671ad6da6df6a3cdc5d365820b"
+  },
+  {
+    "lane": "PEPS",
+    "path": "TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean",
+    "source_commit": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+    "sha256": "9142d90fffe17edf63c91110b7d20b7b9d6ade41fce6cd0b0e43587f908de3f9"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch24_peps_area_law_models.tex",
+    "source_commit": "6d2196117fbe94dd7d42d3bc02ed12e2d12c401b",
+    "sha256": "23de51600327b6ad095e3a9f9d7f7ae473e19ea6578f3dffe1213450876f3aac"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch24_peps_rectangular_specialization.tex",
+    "source_commit": "6d2196117fbe94dd7d42d3bc02ed12e2d12c401b",
+    "sha256": "bce4935e93150c31ffe0ef771d551de050c94596ea765291f0fb541cb98dab8b"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch35_hastings_lemma1.tex",
+    "source_commit": "6d2196117fbe94dd7d42d3bc02ed12e2d12c401b",
+    "sha256": "1380f9b13d0b3b4a004422c7fead829d4e40d920a1723bf397f3d2d6de3e68eb"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/formalization/openai-area-law-peps.md",
+    "source_commit": "6d2196117fbe94dd7d42d3bc02ed12e2d12c401b",
+    "sha256": "1c16c33eb0e576dfe63a607c09c711e5bb3d721aeee7c5a95a3540ec9d3054ae"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/glossary.md",
+    "source_commit": "6d2196117fbe94dd7d42d3bc02ed12e2d12c401b",
+    "sha256": "1397ddd51039692198f30ebccfc55a5e0a54aab2a0beadd7642f1b4c7442255b"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/tactic_patterns.md",
+    "source_commit": "6d2196117fbe94dd7d42d3bc02ed12e2d12c401b",
+    "sha256": "7e98f054d39d575491df70ebc3c36a62e9a265ba289daf8b5b27ea72d096796c"
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "name": "source-sync",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+      "scripts/blueprint_lean_sync.py",
+      "--ci",
+      "--report",
+      "/workspace/reviews/interaction-main16b-composition/checks/source-sync.json"
+    ],
+    "cwd": "/workspace/tn-interaction-main16b",
+    "head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+    "env_override": {
+      "BLUEPRINT_SYNC_FETCH_DEPS": "0"
+    },
+    "start": "2026-11-18T20:03:42.784194+00:00",
+    "seconds": 110.68784351799695,
+    "exit_code": 0,
+    "stdout_sha256": "7b14964eb6973f93e37a734a7e732d52e8cc0839bfe312169be00a036b001670"
+  },
+  {
+    "name": "prose",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+      "scripts/check_reader_facing_prose.py",
+      "--root",
+      "/workspace/tn-interaction-main16b",
+      "--diff-base",
+      "fa9a40e22fa6384ba4a723e8bf675bb2cd20c5e7",
+      "--ci"
+    ],
+    "cwd": "/workspace/tn-interaction-main16b",
+    "head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+    "env_override": {
+      "BLUEPRINT_SYNC_FETCH_DEPS": "0"
+    },
+    "start": "2026-11-18T20:05:33.472333+00:00",
+    "seconds": 11.561544124997454,
+    "exit_code": 0,
+    "stdout_sha256": "d39c2b93f7b3558c79cdece49fc662676154c593925a7e54d992218ac5c360e2"
+  },
+  {
+    "name": "selector",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+      "/workspace/reviews/interaction-main16b-composition/checks/selector_complete.py"
+    ],
+    "cwd": "/workspace/tn-interaction-main16b",
+    "head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+    "env_override": {
+      "BLUEPRINT_SYNC_FETCH_DEPS": "0"
+    },
+    "start": "2026-11-18T20:05:45.034905+00:00",
+    "seconds": 10.935711851998349,
+    "exit_code": 0,
+    "stdout_sha256": "eea83b571c6e591c9650541a1afd06de99ca148380abd528c2ac8740aa7a8dfe"
+  },
+  {
+    "name": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check",
+      "fa9a40e22fa6384ba4a723e8bf675bb2cd20c5e7",
+      "HEAD"
+    ],
+    "cwd": "/workspace/tn-interaction-main16b",
+    "head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+    "env_override": {
+      "BLUEPRINT_SYNC_FETCH_DEPS": "0"
+    },
+    "start": "2026-11-18T20:05:55.970893+00:00",
+    "seconds": 0.07828589399287011,
+    "exit_code": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

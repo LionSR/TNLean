@@ -1,0 +1,7 @@
+from pathlib import Path
+import subprocess,json,time,datetime,os,hashlib,sys
+r=Path('/workspace/tn-interaction-main16b');o=Path(__file__).parent;env=os.environ.copy();env['BLUEPRINT_SYNC_FETCH_DEPS']='0';records=[]
+commands=[('source-sync',[sys.executable,'scripts/blueprint_lean_sync.py','--ci','--report',str(o/'source-sync.json')]),('prose',[sys.executable,'scripts/check_reader_facing_prose.py','--root',str(r),'--diff-base','fa9a40e22fa6384ba4a723e8bf675bb2cd20c5e7','--ci']),('selector',[sys.executable,str(o/'selector_complete.py')]),('diff-check',['git','diff','--check','fa9a40e22fa6384ba4a723e8bf675bb2cd20c5e7','HEAD'])]
+for name,cmd in commands:
+ t=time.monotonic();start=datetime.datetime.now(datetime.timezone.utc).isoformat();p=subprocess.run(cmd,cwd=r,env=env,stdout=subprocess.PIPE,stderr=subprocess.STDOUT);(o/(name+'.stdout')).write_bytes(p.stdout);records.append(dict(name=name,command=cmd,cwd=str(r),head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=r,text=True).strip(),env_override={'BLUEPRINT_SYNC_FETCH_DEPS':'0'},start=start,seconds=time.monotonic()-t,exit_code=p.returncode,stdout_sha256=hashlib.sha256(p.stdout).hexdigest()));(o/'commands.json').write_text(json.dumps(records,indent=2)+'\n');print(name,p.returncode,flush=True)
+(o/'environment.txt').write_text(subprocess.check_output([sys.executable,'--version'],text=True)+subprocess.check_output([sys.executable,'-m','pip','freeze'],text=True))

@@ -1,0 +1,1860 @@
+{
+  "TNLean.MPS.AreaLaw.Hastings.AreaLaw": [
+    "TNLean.MPS.AreaLaw.Hastings.MainTheorem",
+    "TNLean.MPS.AreaLaw.Hastings.RelentFromBootstrap",
+    "TNLean.MPS.AreaLaw.Hastings.Window",
+    "QICLean.ManyBody.Hamiltonian.GroundSpace"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.MainTheorem": [
+    "TNLean.Lattice.RegionEntropyInequalities",
+    "TNLean.MPS.AreaLaw.Hamiltonian",
+    "TNLean.MPS.AreaLaw.Hastings.Doubling"
+  ],
+  "TNLean.Lattice.RegionEntropyInequalities": [
+    "QICLean.Entropy.FiniteProductInformation",
+    "QICLean.Entropy.MovementEtaRegional"
+  ],
+  "QICLean.Entropy.FiniteProductInformation": [
+    "QICLean.Entropy.FiniteProductConditional",
+    "QICLean.Entropy.UnnormalizedStrongSubadditivity"
+  ],
+  "QICLean.Entropy.FiniteProductConditional": [
+    "QICLean.Entropy.FiniteProduct",
+    "QICLean.Entropy.OrderedEntropyAlgebra"
+  ],
+  "QICLean.Entropy.FiniteProduct": [
+    "QICLean.Channel.FiniteProduct",
+    "QICLean.Entropy.Bipartite"
+  ],
+  "QICLean.Channel.FiniteProduct": [
+    "QICLean.Channel.PartialTrace",
+    "Mathlib.Analysis.InnerProductSpace.PiL2",
+    "Mathlib.Logic.Equiv.Prod"
+  ],
+  "QICLean.Channel.PartialTrace": [
+    "Mathlib.LinearAlgebra.Matrix.Kronecker",
+    "Mathlib.LinearAlgebra.Matrix.Trace",
+    "Mathlib.Analysis.Matrix.PosDef",
+    "Mathlib.Basic.Complex.Basic",
+    "QICLean.Algebra.MatrixIsometryEntries"
+  ],
+  "Mathlib.LinearAlgebra.Matrix.Kronecker": [],
+  "Mathlib.LinearAlgebra.Matrix.Trace": [],
+  "Mathlib.Analysis.Matrix.PosDef": [],
+  "Mathlib.Basic.Complex.Basic": [],
+  "QICLean.Algebra.MatrixIsometryEntries": [
+    "Mathlib.Basic.Complex.Basic",
+    "Mathlib.LinearAlgebra.Matrix.ConjTranspose"
+  ],
+  "Mathlib.LinearAlgebra.Matrix.ConjTranspose": [],
+  "Mathlib.Analysis.InnerProductSpace.PiL2": [],
+  "Mathlib.Logic.Equiv.Prod": [],
+  "QICLean.Entropy.Bipartite": [
+    "QICLean.Entropy.StrongSubadditivity",
+    "QICLean.Channel.MaximalOverlap"
+  ],
+  "QICLean.Entropy.StrongSubadditivity": [
+    "QICLean.Channel.Schwarz.StrongSubadditivityPosDef",
+    "QICLean.Entropy.TripartiteTrace",
+    "QICLean.Entropy.VonNeumann"
+  ],
+  "QICLean.Channel.Schwarz.StrongSubadditivityPosDef": [
+    "QICLean.Channel.Schwarz.RelativeEntropyDataProcessing",
+    "QICLean.Channel.Schwarz.RelativeEntropyAncillaAdditivity",
+    "QICLean.Analysis.MarginalSupport",
+    "QICLean.Entropy.TripartiteTrace"
+  ],
+  "QICLean.Channel.Schwarz.RelativeEntropyDataProcessing": [
+    "QICLean.Analysis.EntropyReindex",
+    "QICLean.Analysis.MarginalSupport",
+    "QICLean.Channel.ComplementaryWeylTwirl",
+    "QICLean.Channel.Schwarz.RelativeEntropyConvexity",
+    "QICLean.Channel.Schwarz.RelativeEntropyUnitaryInvariance",
+    "QICLean.Channel.Schwarz.RelativeEntropyAncillaAdditivity",
+    "Mathlib.LinearAlgebra.UnitaryGroup"
+  ],
+  "QICLean.Analysis.EntropyReindex": [
+    "QICLean.Algebra.TraceReindex",
+    "QICLean.Analysis.CfcConjugation",
+    "QICLean.Analysis.Entropy"
+  ],
+  "QICLean.Algebra.TraceReindex": [
+    "Mathlib.LinearAlgebra.Matrix.Reindex",
+    "Mathlib.LinearAlgebra.Matrix.Trace"
+  ],
+  "Mathlib.LinearAlgebra.Matrix.Reindex": [],
+  "QICLean.Analysis.CfcConjugation": [
+    "QICLean.Algebra.MatrixReindex",
+    "QICLean.Analysis.SupportProjectionOrder",
+    "Mathlib.Analysis.CStarAlgebra.Classes",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.Analysis.Matrix.HermitianFunctionalCalculus",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic"
+  ],
+  "QICLean.Algebra.MatrixReindex": [
+    "Mathlib.Basic.Complex.Basic",
+    "Mathlib.LinearAlgebra.Matrix.ConjTranspose",
+    "Mathlib.LinearAlgebra.Matrix.Reindex"
+  ],
+  "QICLean.Analysis.SupportProjectionOrder": [
+    "QICLean.Algebra.PosSemidefSupport",
+    "QICLean.Algebra.MatrixAux",
+    "Mathlib.Analysis.Matrix.HermitianFunctionalCalculus",
+    "Mathlib.Analysis.Matrix.Order"
+  ],
+  "QICLean.Algebra.PosSemidefSupport": [
+    "Mathlib.Analysis.Matrix.PosDef",
+    "Mathlib.Analysis.Matrix.Spectrum",
+    "QICLean.Algebra.OrthogonalProjection"
+  ],
+  "Mathlib.Analysis.Matrix.Spectrum": [],
+  "QICLean.Algebra.OrthogonalProjection": [
+    "Mathlib.Analysis.Complex.Basic",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.LinearAlgebra.Matrix.PosDef",
+    "QICLean.Algebra.MatrixAux",
+    "QICLean.Algebra.MatrixIsometryEntries"
+  ],
+  "Mathlib.Analysis.Complex.Basic": [],
+  "Mathlib.Analysis.Matrix.Order": [],
+  "Mathlib.LinearAlgebra.Matrix.PosDef": [],
+  "QICLean.Algebra.MatrixAux": [
+    "Mathlib.Data.Matrix.Basic",
+    "Mathlib.Data.Matrix.Block",
+    "Mathlib.LinearAlgebra.Matrix.PosDef",
+    "Mathlib.Analysis.Matrix.Normed",
+    "Mathlib.Analysis.Matrix.PosDef",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.Analysis.MeanInequalities",
+    "Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs",
+    "Mathlib.LinearAlgebra.Matrix.Transvection",
+    "Mathlib.Topology.Instances.Matrix"
+  ],
+  "Mathlib.Data.Matrix.Basic": [],
+  "Mathlib.Data.Matrix.Block": [],
+  "Mathlib.Analysis.Matrix.Normed": [],
+  "Mathlib.Analysis.CStarAlgebra.Matrix": [],
+  "Mathlib.Analysis.MeanInequalities": [],
+  "Mathlib.LinearAlgebra.Matrix.Charpoly.Eigs": [],
+  "Mathlib.LinearAlgebra.Matrix.Transvection": [],
+  "Mathlib.Topology.Instances.Matrix": [],
+  "Mathlib.Analysis.Matrix.HermitianFunctionalCalculus": [],
+  "Mathlib.Analysis.CStarAlgebra.Classes": [],
+  "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic": [],
+  "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic": [],
+  "QICLean.Analysis.Entropy": [
+    "Mathlib.Analysis.Matrix.PosDef",
+    "Mathlib.Analysis.Matrix.Spectrum",
+    "Mathlib.Analysis.SpecialFunctions.Log.NegMulLog",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "QICLean.Analysis.ProbabilityEntropy",
+    "QICLean.Channel.Basic",
+    "QICLean.Channel.PartialTrace",
+    "QICLean.Analysis.TraceCFC"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.Log.NegMulLog": [],
+  "QICLean.Analysis.ProbabilityEntropy": [
+    "Mathlib.Analysis.Convex.SpecificFunctions.Basic",
+    "Mathlib.Analysis.SpecialFunctions.Log.NegMulLog"
+  ],
+  "Mathlib.Analysis.Convex.SpecificFunctions.Basic": [],
+  "QICLean.Channel.Basic": [
+    "Mathlib.Analysis.Matrix.PosDef",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.Matrix.Spectrum",
+    "Mathlib.Analysis.Matrix.Normed",
+    "Mathlib.Analysis.CStarAlgebra.PositiveLinearMap",
+    "Mathlib.Analysis.RCLike.Lemmas",
+    "Mathlib.Topology.Algebra.Module.FiniteDimension",
+    "Mathlib.Topology.Order.OrderClosed",
+    "Mathlib.Topology.Sequences",
+    "Mathlib.Topology.MetricSpace.Bounded",
+    "Mathlib.Topology.Instances.Matrix"
+  ],
+  "Mathlib.Analysis.CStarAlgebra.PositiveLinearMap": [],
+  "Mathlib.Analysis.RCLike.Lemmas": [],
+  "Mathlib.Topology.Algebra.Module.FiniteDimension": [],
+  "Mathlib.Topology.Order.OrderClosed": [],
+  "Mathlib.Topology.Sequences": [],
+  "Mathlib.Topology.MetricSpace.Bounded": [],
+  "QICLean.Analysis.TraceCFC": [
+    "Mathlib.Analysis.Matrix.HermitianFunctionalCalculus"
+  ],
+  "QICLean.Analysis.MarginalSupport": [
+    "QICLean.Algebra.FinSum",
+    "QICLean.Analysis.MatrixSqrt",
+    "QICLean.Analysis.Entropy"
+  ],
+  "QICLean.Algebra.FinSum": [
+    "Mathlib.Algebra.BigOperators.Fin",
+    "Mathlib.Algebra.BigOperators.Group.Finset.Basic",
+    "Mathlib.Algebra.Module.BigOperators",
+    "Mathlib.Basic.Complex.Basic",
+    "Mathlib.Data.Matrix.Basic",
+    "Mathlib.LinearAlgebra.LinearIndependent.Defs",
+    "Mathlib.Order.Fin.Tuple"
+  ],
+  "Mathlib.Algebra.BigOperators.Fin": [],
+  "Mathlib.Algebra.BigOperators.Group.Finset.Basic": [],
+  "Mathlib.Algebra.Module.BigOperators": [],
+  "Mathlib.LinearAlgebra.LinearIndependent.Defs": [],
+  "Mathlib.Order.Fin.Tuple": [],
+  "QICLean.Analysis.MatrixSqrt": [
+    "QICLean.Algebra.PosSemidefSupport",
+    "QICLean.Analysis.CfcKronecker",
+    "QICLean.Analysis.TraceCFC",
+    "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.Matrix.PosDef",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic",
+    "Mathlib.Analysis.SpecialFunctions.Sqrt"
+  ],
+  "QICLean.Analysis.CfcKronecker": [
+    "QICLean.Algebra.MatrixKroneckerEmbed",
+    "QICLean.Algebra.PosSemidefSupport",
+    "QICLean.Analysis.CfcConjugation",
+    "QICLean.Analysis.TraceCFC",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic",
+    "Mathlib.LinearAlgebra.Matrix.Kronecker"
+  ],
+  "QICLean.Algebra.MatrixKroneckerEmbed": [
+    "Mathlib.Basic.Complex.Basic",
+    "Mathlib.LinearAlgebra.Matrix.ConjTranspose",
+    "Mathlib.LinearAlgebra.Matrix.Kronecker"
+  ],
+  "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order": [],
+  "Mathlib.Analysis.SpecialFunctions.Sqrt": [],
+  "QICLean.Channel.ComplementaryWeylTwirl": [
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "QICLean.Algebra.MatrixReindexUnitary",
+    "QICLean.Channel.PartialTrace",
+    "QICLean.Channel.WeylTwirl"
+  ],
+  "QICLean.Algebra.MatrixReindexUnitary": [
+    "QICLean.Algebra.MatrixUnitaryBetween"
+  ],
+  "QICLean.Algebra.MatrixUnitaryBetween": [
+    "Mathlib.Basic.Complex.Basic",
+    "Mathlib.LinearAlgebra.Matrix.NonsingularInverse",
+    "Mathlib.LinearAlgebra.Matrix.Rank",
+    "Mathlib.LinearAlgebra.Matrix.Reindex",
+    "Mathlib.LinearAlgebra.UnitaryGroup"
+  ],
+  "Mathlib.LinearAlgebra.Matrix.NonsingularInverse": [],
+  "Mathlib.LinearAlgebra.Matrix.Rank": [],
+  "Mathlib.LinearAlgebra.UnitaryGroup": [],
+  "QICLean.Channel.WeylTwirl": [
+    "Mathlib.Algebra.Ring.GeomSum",
+    "Mathlib.Analysis.SpecialFunctions.Complex.Circle",
+    "Mathlib.LinearAlgebra.Matrix.Permutation",
+    "Mathlib.LinearAlgebra.Matrix.Trace",
+    "Mathlib.RingTheory.RootsOfUnity.Complex",
+    "Mathlib.RingTheory.RootsOfUnity.PrimitiveRoots"
+  ],
+  "Mathlib.Algebra.Ring.GeomSum": [],
+  "Mathlib.Analysis.SpecialFunctions.Complex.Circle": [],
+  "Mathlib.LinearAlgebra.Matrix.Permutation": [],
+  "Mathlib.RingTheory.RootsOfUnity.Complex": [],
+  "Mathlib.RingTheory.RootsOfUnity.PrimitiveRoots": [],
+  "QICLean.Channel.Schwarz.RelativeEntropyConvexity": [
+    "QICLean.Analysis.KleinInequality",
+    "QICLean.Channel.Schwarz.AndoLieb",
+    "Mathlib.Analysis.CStarAlgebra.Matrix"
+  ],
+  "QICLean.Analysis.KleinInequality": [
+    "Mathlib.Analysis.Matrix.PosDef",
+    "Mathlib.Analysis.Matrix.Spectrum",
+    "Mathlib.Analysis.SpecialFunctions.Log.NegMulLog",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "QICLean.Analysis.Entropy",
+    "QICLean.Analysis.TraceCFC"
+  ],
+  "QICLean.Channel.Schwarz.AndoLieb": [
+    "QICLean.Analysis.LiebConcavity",
+    "QICLean.Analysis.OperatorConvexity",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order",
+    "Mathlib.LinearAlgebra.Matrix.Trace"
+  ],
+  "QICLean.Analysis.LiebConcavity": [
+    "QICLean.Algebra.HermitianHelpers",
+    "QICLean.Channel.Basic",
+    "QICLean.Channel.Schwarz.IntegralJensen",
+    "QICLean.Analysis.LiebOperatorConcave",
+    "QICLean.Analysis.CfcKronecker",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Order",
+    "Mathlib.LinearAlgebra.Matrix.Trace",
+    "Mathlib.LinearAlgebra.Matrix.Vec",
+    "Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap"
+  ],
+  "QICLean.Algebra.HermitianHelpers": [
+    "Mathlib.Analysis.InnerProductSpace.PiL2",
+    "Mathlib.Analysis.Matrix.PosDef",
+    "QICLean.Algebra.MatrixAux"
+  ],
+  "QICLean.Channel.Schwarz.IntegralJensen": [
+    "QICLean.Analysis.MatrixCFCIntegral",
+    "QICLean.Channel.Schwarz.OperatorJensenAux",
+    "Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap"
+  ],
+  "QICLean.Analysis.MatrixCFCIntegral": [
+    "Mathlib.Analysis.Matrix.HermitianFunctionalCalculus",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.MeasureTheory.SpecificCodomains.Pi"
+  ],
+  "Mathlib.MeasureTheory.SpecificCodomains.Pi": [],
+  "QICLean.Channel.Schwarz.OperatorJensenAux": [
+    "QICLean.Channel.Basic",
+    "QICLean.Channel.Schwarz.OperatorJensenIntegrands",
+    "Mathlib.MeasureTheory.Integral.Bochner.Basic"
+  ],
+  "QICLean.Channel.Schwarz.OperatorJensenIntegrands": [
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.IntegralRepresentation"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.IntegralRepresentation": [],
+  "Mathlib.MeasureTheory.Integral.Bochner.Basic": [],
+  "Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap": [],
+  "QICLean.Analysis.LiebOperatorConcave": [
+    "QICLean.Analysis.LiebOperatorIntegral",
+    "QICLean.Analysis.LiebIntegrandConcave"
+  ],
+  "QICLean.Analysis.LiebOperatorIntegral": [
+    "QICLean.Analysis.CfcConjugation",
+    "QICLean.Analysis.LiebScalarIntegral",
+    "QICLean.Analysis.TraceCFC",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic",
+    "Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap",
+    "Mathlib.MeasureTheory.SpecificCodomains.Pi"
+  ],
+  "QICLean.Analysis.LiebScalarIntegral": [
+    "Mathlib.Analysis.SpecialFunctions.Gamma.Beta",
+    "Mathlib.Analysis.SpecialFunctions.ImproperIntegrals",
+    "Mathlib.MeasureTheory.Integral.IntegralEqImproper",
+    "Mathlib.MeasureTheory.Function.JacobianOneDim"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.Gamma.Beta": [],
+  "Mathlib.Analysis.SpecialFunctions.ImproperIntegrals": [],
+  "Mathlib.MeasureTheory.Integral.IntegralEqImproper": [],
+  "Mathlib.MeasureTheory.Function.JacobianOneDim": [],
+  "QICLean.Analysis.LiebIntegrandConcave": [
+    "QICLean.Analysis.SuperoperatorResolvent"
+  ],
+  "QICLean.Analysis.SuperoperatorResolvent": [
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.LinearAlgebra.Matrix.PosDef"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order": [],
+  "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Order": [],
+  "Mathlib.LinearAlgebra.Matrix.Vec": [],
+  "QICLean.Analysis.OperatorConvexity": [
+    "QICLean.Channel.Schwarz.DiagonalJensen",
+    "QICLean.Analysis.TraceCFC",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order",
+    "Mathlib.Analysis.Convex.SpecificFunctions.Basic",
+    "Mathlib.Analysis.Convex.SpecificFunctions.Pow"
+  ],
+  "QICLean.Channel.Schwarz.DiagonalJensen": [
+    "Mathlib.Analysis.Convex.Jensen",
+    "Mathlib.Analysis.Matrix.PosDef",
+    "QICLean.Analysis.SpectralQuadraticForm"
+  ],
+  "Mathlib.Analysis.Convex.Jensen": [],
+  "QICLean.Analysis.SpectralQuadraticForm": [
+    "QICLean.Analysis.TraceCFC"
+  ],
+  "Mathlib.Analysis.Convex.SpecificFunctions.Pow": [],
+  "QICLean.Channel.Schwarz.RelativeEntropyUnitaryInvariance": [
+    "QICLean.Analysis.CfcConjugation",
+    "QICLean.Analysis.KleinInequality"
+  ],
+  "QICLean.Channel.Schwarz.RelativeEntropyAncillaAdditivity": [
+    "Mathlib.LinearAlgebra.Matrix.Kronecker",
+    "Mathlib.Analysis.Matrix.Order",
+    "QICLean.Analysis.CfcKronecker",
+    "QICLean.Analysis.CfcLogAdditive",
+    "QICLean.Analysis.Entropy"
+  ],
+  "QICLean.Analysis.CfcLogAdditive": [
+    "Mathlib.Analysis.Matrix.PosDef",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic",
+    "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute"
+  ],
+  "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute": [],
+  "QICLean.Entropy.TripartiteTrace": [
+    "QICLean.Analysis.Entropy"
+  ],
+  "QICLean.Entropy.VonNeumann": [
+    "QICLean.Analysis.Entropy"
+  ],
+  "QICLean.Channel.MaximalOverlap": [
+    "QICLean.Analysis.KyFanNorm",
+    "QICLean.Algebra.PosSemidefSupport",
+    "QICLean.Channel.SchmidtRank",
+    "QICLean.Channel.PartialTrace",
+    "Mathlib.Analysis.InnerProductSpace.PiL2",
+    "Mathlib.Analysis.Matrix.Spectrum"
+  ],
+  "QICLean.Analysis.KyFanNorm": [
+    "Mathlib.Analysis.Matrix.Spectrum",
+    "Mathlib.Analysis.Matrix.PosDef",
+    "QICLean.Algebra.PosSemidefSupport"
+  ],
+  "QICLean.Channel.SchmidtRank": [
+    "Mathlib.Analysis.InnerProductSpace.PiL2",
+    "Mathlib.Analysis.InnerProductSpace.SingularValues",
+    "Mathlib.Basic.Complex.Basic",
+    "Mathlib.LinearAlgebra.Basis.VectorSpace",
+    "Mathlib.LinearAlgebra.Matrix.Rank"
+  ],
+  "Mathlib.Analysis.InnerProductSpace.SingularValues": [],
+  "Mathlib.LinearAlgebra.Basis.VectorSpace": [],
+  "QICLean.Entropy.OrderedEntropyAlgebra": [
+    "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+    "Mathlib.Data.Finset.Max",
+    "Mathlib.Data.Finset.Pairwise",
+    "Mathlib.Data.Finset.Union",
+    "Mathlib.Basic.Real.Basic",
+    "Mathlib.Tactic.Linarith",
+    "Mathlib.Tactic.Ring"
+  ],
+  "Mathlib.Algebra.Order.BigOperators.Group.Finset": [],
+  "Mathlib.Data.Finset.Max": [],
+  "Mathlib.Data.Finset.Pairwise": [],
+  "Mathlib.Data.Finset.Union": [],
+  "Mathlib.Basic.Real.Basic": [],
+  "Mathlib.Tactic.Linarith": [],
+  "Mathlib.Tactic.Ring": [],
+  "QICLean.Entropy.UnnormalizedStrongSubadditivity": [
+    "QICLean.Analysis.EntropySubadditivity",
+    "QICLean.Channel.Schwarz.StrongSubadditivityPosDef"
+  ],
+  "QICLean.Analysis.EntropySubadditivity": [
+    "QICLean.Analysis.EntropyDecomposition",
+    "QICLean.Analysis.TraceCFC",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Order"
+  ],
+  "QICLean.Analysis.EntropyDecomposition": [
+    "Mathlib.LinearAlgebra.Matrix.Kronecker",
+    "Mathlib.Data.Matrix.Block",
+    "QICLean.Analysis.Entropy",
+    "QICLean.Analysis.MatrixSqrt"
+  ],
+  "QICLean.Entropy.MovementEtaRegional": [
+    "QICLean.Entropy.ConditionalMovementRegional",
+    "QICLean.Entropy.FiniteProductConditional",
+    "QICLean.Entropy.RegionEntropy",
+    "QICLean.Entropy.RegionSplit"
+  ],
+  "QICLean.Entropy.ConditionalMovementRegional": [
+    "QICLean.Entropy.ConditionalMovementEstimate",
+    "QICLean.Entropy.RegionUnion",
+    "QICLean.Analysis.CfcConjugation"
+  ],
+  "QICLean.Entropy.ConditionalMovementEstimate": [
+    "QICLean.Analysis.KernelCompletion",
+    "QICLean.Entropy.ConditionalEntropy",
+    "QICLean.Entropy.ConditionalMovement.UnitaryCovariance"
+  ],
+  "QICLean.Analysis.KernelCompletion": [
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Basic"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.Pow.Real": [],
+  "QICLean.Entropy.ConditionalEntropy": [
+    "QICLean.Entropy.UnnormalizedStrongSubadditivity"
+  ],
+  "QICLean.Entropy.ConditionalMovement.UnitaryCovariance": [
+    "QICLean.Entropy.ConditionalMovement.SingularInterpolation"
+  ],
+  "QICLean.Entropy.ConditionalMovement.SingularInterpolation": [
+    "QICLean.Entropy.ConditionalMovement.DoubleCurve"
+  ],
+  "QICLean.Entropy.ConditionalMovement.DoubleCurve": [
+    "QICLean.Entropy.ConditionalMovement.BoundaryEnergy",
+    "QICLean.Entropy.ConditionalMovement.ThreeLines"
+  ],
+  "QICLean.Entropy.ConditionalMovement.BoundaryEnergy": [
+    "QICLean.Entropy.ConditionalMovement.Purification"
+  ],
+  "QICLean.Entropy.ConditionalMovement.Purification": [
+    "QICLean.Entropy.ConditionalMovement.FilterSlack",
+    "QICLean.Entropy.ConditionalMovement.MoveBounds"
+  ],
+  "QICLean.Entropy.ConditionalMovement.FilterSlack": [
+    "QICLean.Entropy.ConditionalMovement.ConditionalPhase",
+    "QICLean.Entropy.ConditionalMovement.ModularDistance"
+  ],
+  "QICLean.Entropy.ConditionalMovement.ConditionalPhase": [
+    "QICLean.Entropy.ConditionalMovement.ConditionalCollision",
+    "QICLean.Entropy.ConditionalMovement.SpectralPhase"
+  ],
+  "QICLean.Entropy.ConditionalMovement.ConditionalCollision": [
+    "QICLean.Entropy.ConditionalMovement.EntropyHolder",
+    "QICLean.Entropy.ConditionalMovement.LogMoments"
+  ],
+  "QICLean.Entropy.ConditionalMovement.EntropyHolder": [
+    "Mathlib.Analysis.SpecialFunctions.Log.NegMulLog",
+    "QICLean.Entropy.ConditionalMovement.NormalizedRows"
+  ],
+  "QICLean.Entropy.ConditionalMovement.NormalizedRows": [
+    "QICLean.Entropy.ConditionalMovement.Interpolation"
+  ],
+  "QICLean.Entropy.ConditionalMovement.Interpolation": [
+    "Mathlib.Analysis.Complex.Hadamard",
+    "Mathlib.LinearAlgebra.Matrix.FiniteDimensional",
+    "QICLean.Entropy.ConditionalMovement.SpectralPowers"
+  ],
+  "Mathlib.Analysis.Complex.Hadamard": [],
+  "Mathlib.LinearAlgebra.Matrix.FiniteDimensional": [],
+  "QICLean.Entropy.ConditionalMovement.SpectralPowers": [
+    "Mathlib.Analysis.CStarAlgebra.PositiveLinearMap",
+    "Mathlib.Analysis.Calculus.Deriv.Prod",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.RingTheory.Coalgebra.IsFrobenius",
+    "Mathlib.RingTheory.HopfAlgebra.Basic",
+    "Mathlib.Topology.Order.Hom.Esakia"
+  ],
+  "Mathlib.Analysis.Calculus.Deriv.Prod": [],
+  "Mathlib.RingTheory.Coalgebra.IsFrobenius": [],
+  "Mathlib.RingTheory.HopfAlgebra.Basic": [],
+  "Mathlib.Topology.Order.Hom.Esakia": [],
+  "QICLean.Entropy.ConditionalMovement.LogMoments": [
+    "Mathlib.Algebra.BigOperators.Field",
+    "Mathlib.Algebra.Order.Star.Real",
+    "Mathlib.Analysis.Complex.Basic",
+    "Mathlib.Analysis.Convex.SpecificFunctions.Basic",
+    "Mathlib.Analysis.Matrix.Order"
+  ],
+  "Mathlib.Algebra.BigOperators.Field": [],
+  "Mathlib.Algebra.Order.Star.Real": [],
+  "QICLean.Entropy.ConditionalMovement.SpectralPhase": [
+    "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds",
+    "QICLean.Entropy.ConditionalMovement.EntropyHolder"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.Trigonometric.Bounds": [],
+  "QICLean.Entropy.ConditionalMovement.ModularDistance": [
+    "QICLean.Entropy.ConditionalMovement.EntropyContinuity",
+    "QICLean.Entropy.ConditionalMovement.PhaseTransfer"
+  ],
+  "QICLean.Entropy.ConditionalMovement.EntropyContinuity": [
+    "QICLean.Entropy.ConditionalMovement.PureEntropy"
+  ],
+  "QICLean.Entropy.ConditionalMovement.PureEntropy": [
+    "QICLean.Entropy.ConditionalMovement.EntropyBounds"
+  ],
+  "QICLean.Entropy.ConditionalMovement.EntropyBounds": [
+    "QICLean.Entropy.ConditionalMovement.StrongSubadditivity"
+  ],
+  "QICLean.Entropy.ConditionalMovement.StrongSubadditivity": [
+    "QICLean.Entropy.ConditionalMovement.PartialTrace"
+  ],
+  "QICLean.Entropy.ConditionalMovement.PartialTrace": [
+    "QICLean.Entropy.ConditionalMovement.LogCompression"
+  ],
+  "QICLean.Entropy.ConditionalMovement.LogCompression": [
+    "Mathlib.Analysis.LocallyConvex.AbsConvexOpen",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Order",
+    "Mathlib.LinearAlgebra.FreeModule.PID",
+    "Mathlib.LinearAlgebra.Matrix.FiniteDimensional",
+    "Mathlib.RingTheory.Flat.FaithfullyFlat.Algebra",
+    "Mathlib.RingTheory.Flat.TorsionFree",
+    "Mathlib.RingTheory.SimpleRing.Principal"
+  ],
+  "Mathlib.Analysis.LocallyConvex.AbsConvexOpen": [],
+  "Mathlib.LinearAlgebra.FreeModule.PID": [],
+  "Mathlib.RingTheory.Flat.FaithfullyFlat.Algebra": [],
+  "Mathlib.RingTheory.Flat.TorsionFree": [],
+  "Mathlib.RingTheory.SimpleRing.Principal": [],
+  "QICLean.Entropy.ConditionalMovement.PhaseTransfer": [
+    "QICLean.Entropy.ConditionalMovement.Optimizer",
+    "QICLean.Entropy.ConditionalMovement.PhaseContinuity"
+  ],
+  "QICLean.Entropy.ConditionalMovement.Optimizer": [
+    "QICLean.Entropy.ConditionalMovement.FilterEntropy",
+    "QICLean.Entropy.ConditionalMovement.OptimizerStability"
+  ],
+  "QICLean.Entropy.ConditionalMovement.FilterEntropy": [
+    "QICLean.Entropy.ConditionalMovement.ConditionalCollision"
+  ],
+  "QICLean.Entropy.ConditionalMovement.OptimizerStability": [
+    "Mathlib.Algebra.Order.Star.Real",
+    "Mathlib.Analysis.Complex.Basic",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.MeanInequalities"
+  ],
+  "QICLean.Entropy.ConditionalMovement.PhaseContinuity": [
+    "QICLean.Entropy.ConditionalMovement.RenyiSlack"
+  ],
+  "QICLean.Entropy.ConditionalMovement.RenyiSlack": [
+    "QICLean.Entropy.ConditionalMovement.SpectralPhase"
+  ],
+  "QICLean.Entropy.ConditionalMovement.MoveBounds": [
+    "Mathlib.Algebra.Order.Star.Real",
+    "Mathlib.Analysis.Complex.Basic",
+    "Mathlib.Analysis.Complex.ExponentialBounds",
+    "Mathlib.Analysis.Matrix.Order"
+  ],
+  "Mathlib.Analysis.Complex.ExponentialBounds": [],
+  "QICLean.Entropy.ConditionalMovement.ThreeLines": [
+    "Mathlib.Algebra.Order.Star.Real",
+    "Mathlib.Analysis.CStarAlgebra.Classes",
+    "Mathlib.Analysis.Calculus.Deriv.Star",
+    "Mathlib.Analysis.Complex.Basic",
+    "Mathlib.Analysis.Complex.Hadamard",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.Normed.Module.HahnBanach"
+  ],
+  "Mathlib.Analysis.Calculus.Deriv.Star": [],
+  "Mathlib.Analysis.Normed.Module.HahnBanach": [],
+  "QICLean.Entropy.RegionUnion": [
+    "QICLean.Entropy.FilterOptimizer",
+    "QICLean.ManyBody.Sites.RegionUnion"
+  ],
+  "QICLean.Entropy.FilterOptimizer": [
+    "QICLean.Entropy.FilterClipping",
+    "QICLean.Analysis.CfcConjugation"
+  ],
+  "QICLean.Entropy.FilterClipping": [
+    "QICLean.Entropy.FilterStationarity",
+    "QICLean.Analysis.FloorKKT",
+    "QICLean.Analysis.LogClipping",
+    "QICLean.Analysis.CommutingHermitian",
+    "Mathlib.Analysis.SpecialFunctions.Pow.Deriv",
+    "Mathlib.Analysis.Calculus.Deriv.Prod"
+  ],
+  "QICLean.Entropy.FilterStationarity": [
+    "QICLean.Entropy.SupportedOperatorAlgebra",
+    "Mathlib.Analysis.SpecialFunctions.Exponential",
+    "Mathlib.Analysis.Complex.RealDeriv",
+    "Mathlib.Analysis.InnerProductSpace.Calculus",
+    "Mathlib.Analysis.Normed.Algebra.MatrixExponential"
+  ],
+  "QICLean.Entropy.SupportedOperatorAlgebra": [
+    "QICLean.Entropy.LocalLift"
+  ],
+  "QICLean.Entropy.LocalLift": [
+    "QICLean.Entropy.SupportedMarginalTails",
+    "QICLean.Entropy.FilterMoment",
+    "QICLean.ManyBody.Sites.RegionState"
+  ],
+  "QICLean.Entropy.SupportedMarginalTails": [
+    "QICLean.Entropy.MarginalTails",
+    "QICLean.Algebra.L2OpNormReindex",
+    "QICLean.ManyBody.Sites.Cut",
+    "QICLean.ManyBody.Sites.Support",
+    "QICLean.ManyBody.Sites.RegionState"
+  ],
+  "QICLean.Entropy.MarginalTails": [
+    "QICLean.Entropy.GapSurprisal",
+    "QICLean.Channel.PartialTrace",
+    "QICLean.Analysis.Entropy"
+  ],
+  "QICLean.Entropy.GapSurprisal": [
+    "QICLean.Entropy.SchmidtTilt",
+    "QICLean.Analysis.GlobalGap",
+    "Mathlib.Analysis.Complex.ExponentialBounds"
+  ],
+  "QICLean.Entropy.SchmidtTilt": [
+    "QICLean.Entropy.ModularExpectation",
+    "QICLean.Analysis.SurprisalMoment"
+  ],
+  "QICLean.Entropy.ModularExpectation": [
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.Analysis.InnerProductSpace.Adjoint",
+    "Mathlib.Analysis.MeanInequalities",
+    "Mathlib.Analysis.Matrix.Hermitian",
+    "Mathlib.LinearAlgebra.Matrix.Kronecker",
+    "QICLean.Analysis.StripQuadratic"
+  ],
+  "Mathlib.Analysis.InnerProductSpace.Adjoint": [],
+  "Mathlib.Analysis.Matrix.Hermitian": [],
+  "QICLean.Analysis.StripQuadratic": [
+    "Mathlib.Analysis.Complex.Hadamard",
+    "Mathlib.Analysis.Complex.AbsMax",
+    "Mathlib.Analysis.Complex.RemovableSingularity",
+    "Mathlib.Analysis.SpecialFunctions.Pow.Real"
+  ],
+  "Mathlib.Analysis.Complex.AbsMax": [],
+  "Mathlib.Analysis.Complex.RemovableSingularity": [],
+  "QICLean.Analysis.SurprisalMoment": [
+    "Mathlib.Analysis.SpecialFunctions.Log.NegMulLog",
+    "Mathlib.Analysis.SpecialFunctions.Pow.Deriv"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.Pow.Deriv": [],
+  "QICLean.Analysis.GlobalGap": [
+    "Mathlib.Analysis.InnerProductSpace.Positive",
+    "Mathlib.Analysis.InnerProductSpace.PiL2",
+    "QICLean.Analysis.PhaseError"
+  ],
+  "Mathlib.Analysis.InnerProductSpace.Positive": [],
+  "QICLean.Analysis.PhaseError": [
+    "Mathlib.Analysis.InnerProductSpace.Basic",
+    "Mathlib.Analysis.SpecialFunctions.Complex.Arg"
+  ],
+  "Mathlib.Analysis.InnerProductSpace.Basic": [],
+  "Mathlib.Analysis.SpecialFunctions.Complex.Arg": [],
+  "QICLean.Algebra.L2OpNormReindex": [
+    "QICLean.Algebra.MatrixAux"
+  ],
+  "QICLean.ManyBody.Sites.Cut": [
+    "Mathlib.Data.Fintype.Basic"
+  ],
+  "Mathlib.Data.Fintype.Basic": [],
+  "QICLean.ManyBody.Sites.Support": [
+    "QICLean.ManyBody.Sites.Config",
+    "Mathlib.Algebra.Star.Subalgebra",
+    "Mathlib.Analysis.Complex.Basic",
+    "Mathlib.LinearAlgebra.Matrix.ConjTranspose"
+  ],
+  "QICLean.ManyBody.Sites.Config": [
+    "Mathlib.Data.Finset.Basic",
+    "Mathlib.Logic.Equiv.Basic"
+  ],
+  "Mathlib.Data.Finset.Basic": [],
+  "Mathlib.Logic.Equiv.Basic": [],
+  "Mathlib.Algebra.Star.Subalgebra": [],
+  "QICLean.ManyBody.Sites.RegionState": [
+    "QICLean.ManyBody.Sites.RegionUnion",
+    "QICLean.Algebra.PureStateExpectation",
+    "QICLean.Analysis.Entropy",
+    "QICLean.Analysis.TraceDistance"
+  ],
+  "QICLean.ManyBody.Sites.RegionUnion": [
+    "QICLean.ManyBody.Sites.Placement"
+  ],
+  "QICLean.ManyBody.Sites.Placement": [
+    "QICLean.ManyBody.Sites.Support",
+    "QICLean.Algebra.HermitianHelpers",
+    "Mathlib.Analysis.CStarAlgebra.Hom",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.LinearAlgebra.Matrix.Kronecker",
+    "Mathlib.LinearAlgebra.Matrix.NonsingularInverse"
+  ],
+  "Mathlib.Analysis.CStarAlgebra.Hom": [],
+  "QICLean.Algebra.PureStateExpectation": [
+    "Mathlib.Analysis.InnerProductSpace.PiL2",
+    "Mathlib.Analysis.Matrix.Hermitian",
+    "Mathlib.LinearAlgebra.Matrix.Trace",
+    "Mathlib.Tactic.Ring"
+  ],
+  "QICLean.Analysis.TraceDistance": [
+    "QICLean.Analysis.CfcConjugation",
+    "QICLean.Analysis.TraceNormContractivity",
+    "QICLean.Channel.PartialTrace"
+  ],
+  "QICLean.Analysis.TraceNormContractivity": [
+    "QICLean.Algebra.MatrixAux",
+    "QICLean.Analysis.TraceNormAbs"
+  ],
+  "QICLean.Analysis.TraceNormAbs": [
+    "QICLean.Analysis.SchattenNorm",
+    "QICLean.Analysis.TraceCFC",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs"
+  ],
+  "QICLean.Analysis.SchattenNorm": [
+    "Mathlib.Analysis.InnerProductSpace.SingularValues"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs": [],
+  "QICLean.Entropy.FilterMoment": [
+    "QICLean.Entropy.MarginalTails",
+    "QICLean.Algebra.PureStateExpectation",
+    "QICLean.Analysis.TraceHolder",
+    "QICLean.Analysis.TraceDistance"
+  ],
+  "QICLean.Analysis.TraceHolder": [
+    "Mathlib.Analysis.Matrix.Spectrum",
+    "Mathlib.Analysis.MeanInequalities",
+    "Mathlib.Analysis.Matrix.PosDef"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.Exponential": [],
+  "Mathlib.Analysis.Complex.RealDeriv": [],
+  "Mathlib.Analysis.InnerProductSpace.Calculus": [],
+  "Mathlib.Analysis.Normed.Algebra.MatrixExponential": [],
+  "QICLean.Analysis.FloorKKT": [
+    "Mathlib.Analysis.Calculus.Deriv.Slope",
+    "Mathlib.Algebra.Order.BigOperators.Group.Finset",
+    "Mathlib.Order.Filter.Basic"
+  ],
+  "Mathlib.Analysis.Calculus.Deriv.Slope": [],
+  "Mathlib.Order.Filter.Basic": [],
+  "QICLean.Analysis.LogClipping": [
+    "Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp",
+    "Mathlib.Analysis.Calculus.MeanValue",
+    "Mathlib.Analysis.SpecialFunctions.Pow.Real",
+    "Mathlib.Analysis.Complex.ExponentialBounds",
+    "Mathlib.Analysis.SpecialFunctions.Trigonometric.Series"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.Trigonometric.DerivHyp": [],
+  "Mathlib.Analysis.Calculus.MeanValue": [],
+  "Mathlib.Analysis.SpecialFunctions.Trigonometric.Series": [],
+  "QICLean.Analysis.CommutingHermitian": [
+    "Mathlib.Analysis.InnerProductSpace.JointEigenspace",
+    "Mathlib.Analysis.Matrix.Spectrum",
+    "Mathlib.LinearAlgebra.Eigenspace.Minpoly"
+  ],
+  "Mathlib.Analysis.InnerProductSpace.JointEigenspace": [],
+  "Mathlib.LinearAlgebra.Eigenspace.Minpoly": [],
+  "QICLean.Entropy.RegionEntropy": [
+    "QICLean.Entropy.SchmidtPinning",
+    "QICLean.Entropy.ConditionalEntropy"
+  ],
+  "QICLean.Entropy.SchmidtPinning": [
+    "QICLean.Entropy.RegionUnion",
+    "QICLean.Entropy.FilterChain"
+  ],
+  "QICLean.Entropy.FilterChain": [
+    "QICLean.Entropy.FilterOptimizer"
+  ],
+  "QICLean.Entropy.RegionSplit": [
+    "QICLean.Entropy.RegionUnion"
+  ],
+  "TNLean.MPS.AreaLaw.Hamiltonian": [
+    "QICLean.ManyBody.Sites.Lattice.Chain",
+    "QICLean.Entropy.LocalLift",
+    "TNLean.Lattice.RegionEntropyInequalities",
+    "QICLean.ManyBody.Hamiltonian.GroundSpace",
+    "QICLean.ManyBody.Hamiltonian.Models"
+  ],
+  "QICLean.ManyBody.Sites.Lattice.Chain": [
+    "QICLean.ManyBody.Sites.Lattice.PathGraph",
+    "Mathlib.Data.Finset.Max",
+    "Mathlib.Order.Interval.Finset.Nat"
+  ],
+  "QICLean.ManyBody.Sites.Lattice.PathGraph": [
+    "Mathlib.Combinatorics.SimpleGraph.Hasse",
+    "Mathlib.Combinatorics.SimpleGraph.Metric",
+    "Mathlib.Data.Nat.Dist"
+  ],
+  "Mathlib.Combinatorics.SimpleGraph.Hasse": [],
+  "Mathlib.Combinatorics.SimpleGraph.Metric": [],
+  "Mathlib.Data.Nat.Dist": [],
+  "Mathlib.Order.Interval.Finset.Nat": [],
+  "QICLean.ManyBody.Hamiltonian.GroundSpace": [
+    "QICLean.Algebra.MatrixReindexEuclidean",
+    "QICLean.Analysis.PositiveGapUniqueness",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.Analysis.InnerProductSpace.Positive",
+    "Mathlib.Analysis.Matrix.Order"
+  ],
+  "QICLean.Algebra.MatrixReindexEuclidean": [
+    "Mathlib.Analysis.InnerProductSpace.PiL2",
+    "Mathlib.Analysis.InnerProductSpace.Orthogonal",
+    "Mathlib.LinearAlgebra.Eigenspace.Basic"
+  ],
+  "Mathlib.Analysis.InnerProductSpace.Orthogonal": [],
+  "Mathlib.LinearAlgebra.Eigenspace.Basic": [],
+  "QICLean.Analysis.PositiveGapUniqueness": [
+    "QICLean.Analysis.GlobalGap",
+    "Mathlib.Analysis.Matrix.Spectrum"
+  ],
+  "QICLean.ManyBody.Hamiltonian.Models": [
+    "QICLean.ManyBody.Dynamics.Interaction",
+    "QICLean.ManyBody.Sites.Lattice.Line",
+    "QICLean.ManyBody.Sites.Lattice.Plane",
+    "QICLean.ManyBody.Sites.Lattice.Square"
+  ],
+  "QICLean.ManyBody.Dynamics.Interaction": [
+    "QICLean.ManyBody.Sites.Support",
+    "Mathlib.Algebra.Star.BigOperators",
+    "Mathlib.LinearAlgebra.Matrix.Hermitian"
+  ],
+  "Mathlib.Algebra.Star.BigOperators": [],
+  "Mathlib.LinearAlgebra.Matrix.Hermitian": [],
+  "QICLean.ManyBody.Sites.Lattice.Line": [
+    "QICLean.ManyBody.Sites.Lattice.Chain",
+    "Mathlib.Combinatorics.SimpleGraph.Metric",
+    "Mathlib.Data.Finset.Sort"
+  ],
+  "Mathlib.Data.Finset.Sort": [],
+  "QICLean.ManyBody.Sites.Lattice.Plane": [
+    "QICLean.ManyBody.Sites.Lattice.Diamond",
+    "Mathlib.Combinatorics.SimpleGraph.Metric",
+    "Mathlib.Combinatorics.SimpleGraph.Finite",
+    "Mathlib.Data.Int.Interval"
+  ],
+  "QICLean.ManyBody.Sites.Lattice.Diamond": [
+    "Mathlib.Combinatorics.SimpleGraph.Metric",
+    "Mathlib.Data.Int.NatAbs",
+    "Mathlib.Data.Finset.Prod",
+    "Mathlib.Data.Int.Interval",
+    "Mathlib.Algebra.Order.Group.Abs",
+    "Mathlib.Algebra.BigOperators.Ring.Finset",
+    "Mathlib.Tactic.Ring"
+  ],
+  "Mathlib.Data.Int.NatAbs": [],
+  "Mathlib.Data.Finset.Prod": [],
+  "Mathlib.Data.Int.Interval": [],
+  "Mathlib.Algebra.Order.Group.Abs": [],
+  "Mathlib.Algebra.BigOperators.Ring.Finset": [],
+  "Mathlib.Combinatorics.SimpleGraph.Finite": [],
+  "QICLean.ManyBody.Sites.Lattice.Square": [
+    "QICLean.ManyBody.Sites.Lattice.Edge",
+    "Mathlib.Order.Prod.Lex.Basic"
+  ],
+  "QICLean.ManyBody.Sites.Lattice.Edge": [
+    "Mathlib.Combinatorics.SimpleGraph.Basic",
+    "Mathlib.Data.Fintype.Prod"
+  ],
+  "Mathlib.Combinatorics.SimpleGraph.Basic": [],
+  "Mathlib.Data.Fintype.Prod": [],
+  "Mathlib.Order.Prod.Lex.Basic": [],
+  "TNLean.MPS.AreaLaw.Hastings.Doubling": [
+    "Mathlib.Analysis.SpecialFunctions.Log.Basic",
+    "Mathlib.Algebra.Order.Field.GeomSum",
+    "Mathlib.Analysis.SpecificLimits.Basic"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.Log.Basic": [],
+  "Mathlib.Algebra.Order.Field.GeomSum": [],
+  "Mathlib.Analysis.SpecificLimits.Basic": [],
+  "TNLean.MPS.AreaLaw.Hastings.RelentFromBootstrap": [
+    "TNLean.MPS.AreaLaw.Hastings.RelentAssembly",
+    "TNLean.MPS.AreaLaw.Hastings.ChainBootstrap",
+    "TNLean.MPS.AreaLaw.Hastings.PositiveFactorization"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.RelentAssembly": [
+    "TNLean.MPS.AreaLaw.Hastings.IntervalMutualInformation",
+    "TNLean.MPS.AreaLaw.Hastings.ProductStateExpectation",
+    "TNLean.MPS.AreaLaw.Hastings.EffectExpectation",
+    "TNLean.MPS.AreaLaw.Hastings.EffectFromFactorization",
+    "TNLean.MPS.AreaLaw.Hastings.RelativeEntropyGain",
+    "TNLean.Lattice.RegionEntropyInequalities"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.IntervalMutualInformation": [
+    "TNLean.MPS.AreaLaw.Hastings.CutProductExpectation",
+    "QICLean.ManyBody.Sites.Lattice.Chain",
+    "QICLean.Entropy.RegionEntropy",
+    "QICLean.Entropy.FilterOptimizer",
+    "QICLean.Entropy.FilterChainEnergy",
+    "QICLean.Entropy.EffectMutualInformation",
+    "QICLean.Entropy.MovementEtaRegional",
+    "QICLean.Analysis.SemidefiniteProgram"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.CutProductExpectation": [
+    "TNLean.MPS.AreaLaw.Hastings.CutProductState",
+    "QICLean.Entropy.FilterChainEnergy",
+    "QICLean.Entropy.FilterStationarity"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.CutProductState": [
+    "TNLean.MPS.AreaLaw.OpenMPS",
+    "QICLean.Entropy.FilterMoment",
+    "QICLean.Analysis.GlobalGap"
+  ],
+  "TNLean.MPS.AreaLaw.OpenMPS": [
+    "QICLean.Entropy.LocalLift",
+    "QICLean.Channel.SchmidtRank",
+    "TNLean.MPS.Chain.VaryingBondOBC"
+  ],
+  "TNLean.MPS.Chain.VaryingBondOBC": [
+    "QICLean.Algebra.FinSum",
+    "TNLean.MPS.Chain.Defs",
+    "TNLean.MPS.Core.CyclicTrace"
+  ],
+  "TNLean.MPS.Chain.Defs": [
+    "TNLean.MPS.Defs",
+    "Batteries.Data.Fin",
+    "Mathlib.Logic.Equiv.Fin.Rotate"
+  ],
+  "TNLean.MPS.Defs": [
+    "Mathlib.Basic.Complex.Basic",
+    "Mathlib.Data.List.OfFn",
+    "Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs",
+    "Mathlib.LinearAlgebra.Matrix.Trace",
+    "Mathlib.Order.Filter.AtTopBot.Basic",
+    "QICLean.Algebra.MatrixKernelRigidity",
+    "QICLean.Kraus.Word",
+    "QICLean.Kraus.Injectivity"
+  ],
+  "Mathlib.Data.List.OfFn": [],
+  "Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs": [],
+  "Mathlib.Order.Filter.AtTopBot.Basic": [],
+  "QICLean.Algebra.MatrixKernelRigidity": [
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.LinearAlgebra.Matrix.ToLinearEquiv"
+  ],
+  "Mathlib.LinearAlgebra.Matrix.ToLinearEquiv": [],
+  "QICLean.Kraus.Word": [
+    "Mathlib.Basic.Complex.Basic",
+    "Mathlib.Data.List.FinRange",
+    "Mathlib.Data.List.OfFn",
+    "Mathlib.Data.Matrix.Mul",
+    "Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs",
+    "Mathlib.LinearAlgebra.Matrix.Trace"
+  ],
+  "Mathlib.Data.List.FinRange": [],
+  "Mathlib.Data.Matrix.Mul": [],
+  "QICLean.Kraus.Injectivity": [
+    "QICLean.Kraus.WordSpan",
+    "QICLean.Channel.Schwarz.Basic"
+  ],
+  "QICLean.Kraus.WordSpan": [
+    "QICLean.Kraus.Word"
+  ],
+  "QICLean.Channel.Schwarz.Basic": [
+    "QICLean.Algebra.MatrixAux"
+  ],
+  "Batteries.Data.Fin": [],
+  "Mathlib.Logic.Equiv.Fin.Rotate": [],
+  "TNLean.MPS.Core.CyclicTrace": [
+    "TNLean.MPS.Defs",
+    "Mathlib.Data.Fin.Basic"
+  ],
+  "Mathlib.Data.Fin.Basic": [],
+  "QICLean.Entropy.FilterChainEnergy": [
+    "QICLean.Entropy.FilterChain",
+    "QICLean.Entropy.FilterEnergy",
+    "QICLean.Entropy.FilterMaximizer"
+  ],
+  "QICLean.Entropy.FilterEnergy": [
+    "QICLean.Entropy.FilterConjugation",
+    "QICLean.Entropy.MarginalTails"
+  ],
+  "QICLean.Entropy.FilterConjugation": [
+    "QICLean.Entropy.SchmidtTilt",
+    "QICLean.Analysis.LogClipping"
+  ],
+  "QICLean.Entropy.FilterMaximizer": [
+    "QICLean.Entropy.FilterChain"
+  ],
+  "QICLean.Entropy.EffectMutualInformation": [
+    "QICLean.Entropy.EffectRelativeEntropy",
+    "QICLean.Entropy.ProductMarginals"
+  ],
+  "QICLean.Entropy.EffectRelativeEntropy": [
+    "QICLean.Analysis.IsometricCompression",
+    "QICLean.Channel.Schwarz.RelativeEntropyDataProcessing",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.InformationTheory.KullbackLeibler.KLFun"
+  ],
+  "QICLean.Analysis.IsometricCompression": [
+    "QICLean.Analysis.CfcConjugation"
+  ],
+  "Mathlib.InformationTheory.KullbackLeibler.KLFun": [],
+  "QICLean.Entropy.ProductMarginals": [
+    "QICLean.Analysis.CfcKronecker",
+    "QICLean.Analysis.EntropyDecomposition",
+    "QICLean.Channel.MarginalSupportAbsorption"
+  ],
+  "QICLean.Channel.MarginalSupportAbsorption": [
+    "QICLean.Algebra.OperatorSchmidt",
+    "QICLean.Analysis.CfcKronecker",
+    "QICLean.Analysis.MarginalSupport",
+    "QICLean.Analysis.SupportCompression",
+    "QICLean.Channel.PartialTrace"
+  ],
+  "QICLean.Algebra.OperatorSchmidt": [
+    "Mathlib.Basic.Complex.Basic",
+    "Mathlib.LinearAlgebra.Dimension.Constructions",
+    "Mathlib.LinearAlgebra.Dimension.Free",
+    "Mathlib.LinearAlgebra.Finsupp.LinearCombination",
+    "Mathlib.LinearAlgebra.Matrix.FiniteDimensional",
+    "Mathlib.LinearAlgebra.Matrix.Kronecker",
+    "QICLean.Algebra.OperatorBlock"
+  ],
+  "Mathlib.LinearAlgebra.Dimension.Constructions": [],
+  "Mathlib.LinearAlgebra.Dimension.Free": [],
+  "Mathlib.LinearAlgebra.Finsupp.LinearCombination": [],
+  "QICLean.Algebra.OperatorBlock": [
+    "Mathlib.Data.Matrix.Basic"
+  ],
+  "QICLean.Analysis.SupportCompression": [
+    "QICLean.Analysis.MatrixSqrt"
+  ],
+  "QICLean.Analysis.SemidefiniteProgram": [
+    "QICLean.Algebra.MatrixAux",
+    "QICLean.Analysis.MatrixSqrt"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.ProductStateExpectation": [
+    "TNLean.Algebra.ToEuclideanCLM",
+    "TNLean.Circuit.SiteEmbedding",
+    "TNLean.Circuit.SupportedMatrixElements",
+    "QICLean.Entropy.RegionUnion",
+    "TNLean.MPS.AreaLaw.Hastings.CutProductExpectation",
+    "TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation"
+  ],
+  "TNLean.Algebra.ToEuclideanCLM": [
+    "Mathlib.Analysis.CStarAlgebra.Matrix"
+  ],
+  "TNLean.Circuit.SiteEmbedding": [
+    "TNLean.Circuit.SupportedOperators",
+    "QICLean.Entropy.RegionUnion"
+  ],
+  "TNLean.Circuit.SupportedOperators": [
+    "TNLean.Algebra.FinKronecker",
+    "TNLean.Circuit.ProductVector",
+    "QICLean.ManyBody.Sites.Placement",
+    "Mathlib.Algebra.Algebra.Bilinear",
+    "Mathlib.Algebra.Algebra.Operations",
+    "Mathlib.Algebra.Star.BigOperators",
+    "Mathlib.LinearAlgebra.Matrix.Trace"
+  ],
+  "TNLean.Algebra.FinKronecker": [
+    "QICLean.Analysis.FiniteKroneckerPowers",
+    "TNLean.Algebra.ListProduct"
+  ],
+  "QICLean.Analysis.FiniteKroneckerPowers": [
+    "QICLean.Algebra.KroneckerFactorPositivity",
+    "QICLean.Analysis.CfcKronecker"
+  ],
+  "QICLean.Algebra.KroneckerFactorPositivity": [
+    "Mathlib.Analysis.Complex.Basic",
+    "Mathlib.Analysis.Complex.Order",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.RCLike.Basic",
+    "Mathlib.LinearAlgebra.Matrix.Kronecker",
+    "Mathlib.LinearAlgebra.Matrix.PosDef"
+  ],
+  "Mathlib.Analysis.Complex.Order": [],
+  "Mathlib.Analysis.RCLike.Basic": [],
+  "TNLean.Algebra.ListProduct": [
+    "Mathlib.Algebra.Algebra.Basic",
+    "Mathlib.Algebra.BigOperators.Fin",
+    "Mathlib.Data.List.OfFn"
+  ],
+  "Mathlib.Algebra.Algebra.Basic": [],
+  "TNLean.Circuit.ProductVector": [
+    "TNLean.Algebra.FinKronecker"
+  ],
+  "Mathlib.Algebra.Algebra.Bilinear": [],
+  "Mathlib.Algebra.Algebra.Operations": [],
+  "TNLean.Circuit.SupportedMatrixElements": [
+    "TNLean.Circuit.SupportedOperators"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation": [
+    "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order",
+    "Mathlib.Analysis.Matrix.Order",
+    "QICLean.Analysis.GlobalGap"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.EffectExpectation": [
+    "QICLean.Analysis.TraceMulBound"
+  ],
+  "QICLean.Analysis.TraceMulBound": [
+    "QICLean.Analysis.KroneckerOperatorNorm",
+    "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order",
+    "Mathlib.Analysis.Matrix.Order"
+  ],
+  "QICLean.Analysis.KroneckerOperatorNorm": [
+    "QICLean.Algebra.L2OpNormReindex",
+    "QICLean.Algebra.MatrixKroneckerEmbed",
+    "QICLean.Analysis.RootChannel",
+    "Mathlib.Analysis.CStarAlgebra.Hom",
+    "Mathlib.Analysis.CStarAlgebra.Matrix"
+  ],
+  "QICLean.Analysis.RootChannel": [
+    "QICLean.Analysis.SqrtHolder",
+    "QICLean.Analysis.MatrixFramePerturbation",
+    "Mathlib.Analysis.Matrix.Order"
+  ],
+  "QICLean.Analysis.SqrtHolder": [
+    "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Abs",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order"
+  ],
+  "QICLean.Analysis.MatrixFramePerturbation": [
+    "QICLean.Algebra.MatrixUnitaryBetween",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.LinearAlgebra.Matrix.Kronecker"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.EffectFromFactorization": [
+    "Mathlib.Analysis.CStarAlgebra.Matrix"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.RelativeEntropyGain": [
+    "Mathlib.Analysis.Complex.ExponentialBounds"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.ChainBootstrap": [
+    "TNLean.MPS.AreaLaw.Hastings.ProjectorOverlap",
+    "TNLean.MPS.AreaLaw.Hastings.SchmidtRankBootstrap",
+    "TNLean.MPS.AreaLaw.MPSApproximation",
+    "TNLean.MPS.AreaLaw.SupportedCutRank"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.ProjectorOverlap": [
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "QICLean.Analysis.GlobalGap"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.SchmidtRankBootstrap": [
+    "TNLean.MPS.AreaLaw.Hastings.TailEntropy",
+    "QICLean.Channel.MaximalOverlap",
+    "QICLean.Analysis.Entropy",
+    "QICLean.Analysis.KyFanNorm"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.TailEntropy": [
+    "QICLean.Analysis.ProbabilityEntropy"
+  ],
+  "TNLean.MPS.AreaLaw.MPSApproximation": [
+    "QICLean.Analysis.UnitNormalizationDistance",
+    "TNLean.MPS.AreaLaw.AreaLaw",
+    "TNLean.MPS.AreaLaw.OpenMPSRank",
+    "TNLean.MPS.AreaLaw.NormalizedSequentialApproximation",
+    "QICLean.ManyBody.Hamiltonian.GroundSpace"
+  ],
+  "QICLean.Analysis.UnitNormalizationDistance": [
+    "Mathlib.Analysis.Normed.Module.Basic",
+    "Mathlib.Analysis.Complex.Basic",
+    "Mathlib.Tactic.FieldSimp",
+    "Mathlib.Tactic.Linarith"
+  ],
+  "Mathlib.Analysis.Normed.Module.Basic": [],
+  "Mathlib.Tactic.FieldSimp": [],
+  "TNLean.MPS.AreaLaw.AreaLaw": [
+    "TNLean.MPS.AreaLaw.BufferDiscount",
+    "TNLean.MPS.AreaLaw.EntropyInequalities",
+    "TNLean.MPS.AreaLaw.WindowCounting",
+    "QICLean.ManyBody.Hamiltonian.GroundSpace"
+  ],
+  "TNLean.MPS.AreaLaw.BufferDiscount": [
+    "TNLean.MPS.AreaLaw.Counting",
+    "TNLean.Algebra.TailRadiusWeights",
+    "QICLean.Entropy.BufferDiscount",
+    "QICLean.ManyBody.Hamiltonian.GroundSpace",
+    "TNLean.Algebra.MatrixHermitianSum"
+  ],
+  "TNLean.MPS.AreaLaw.Counting": [
+    "TNLean.MPS.AreaLaw.Hamiltonian"
+  ],
+  "TNLean.Algebra.TailRadiusWeights": [
+    "QICLean.Entropy.GapSurprisal"
+  ],
+  "QICLean.Entropy.BufferDiscount": [
+    "QICLean.Entropy.FilterPower",
+    "QICLean.Entropy.FilterZeroFloor",
+    "QICLean.Entropy.RegionEntropy"
+  ],
+  "QICLean.Entropy.FilterPower": [
+    "QICLean.Entropy.FilterPrefix",
+    "Mathlib.Analysis.Complex.Hadamard"
+  ],
+  "QICLean.Entropy.FilterPrefix": [
+    "QICLean.Entropy.FilterChainEnergy",
+    "QICLean.Analysis.GlobalGap"
+  ],
+  "QICLean.Entropy.FilterZeroFloor": [
+    "QICLean.Entropy.FilterPrefix"
+  ],
+  "TNLean.Algebra.MatrixHermitianSum": [
+    "Mathlib.Algebra.Star.BigOperators",
+    "Mathlib.LinearAlgebra.Matrix.Hermitian"
+  ],
+  "TNLean.MPS.AreaLaw.EntropyInequalities": [
+    "QICLean.ManyBody.Sites.Lattice.Chain",
+    "TNLean.Lattice.RegionEntropyInequalities",
+    "QICLean.Entropy.ConditionalEntropy",
+    "QICLean.Entropy.FilterOptimizer"
+  ],
+  "TNLean.MPS.AreaLaw.WindowCounting": [
+    "TNLean.MPS.AreaLaw.Counting",
+    "TNLean.Algebra.FinsetSubtypeSum",
+    "QICLean.ManyBody.Hamiltonian.GroundSpace"
+  ],
+  "TNLean.Algebra.FinsetSubtypeSum": [
+    "Mathlib.Algebra.BigOperators.Group.Finset.Basic"
+  ],
+  "TNLean.MPS.AreaLaw.OpenMPSRank": [
+    "TNLean.MPS.AreaLaw.OpenMPS",
+    "TNLean.Algebra.FinSpanOfFinrank"
+  ],
+  "TNLean.Algebra.FinSpanOfFinrank": [
+    "Mathlib.LinearAlgebra.Dimension.Constructions",
+    "Mathlib.LinearAlgebra.FiniteDimensional.Defs",
+    "Mathlib.LinearAlgebra.Basis.VectorSpace",
+    "Mathlib.LinearAlgebra.Pi"
+  ],
+  "Mathlib.LinearAlgebra.FiniteDimensional.Defs": [],
+  "Mathlib.LinearAlgebra.Pi": [],
+  "TNLean.MPS.AreaLaw.NormalizedSequentialApproximation": [
+    "QICLean.ManyBody.Sites.Lattice.Chain",
+    "TNLean.MPS.AreaLaw.NormalizedVariableTruncation",
+    "QICLean.Analysis.ViableSubspaceEntropy",
+    "QICLean.Channel.MaximalOverlap"
+  ],
+  "TNLean.MPS.AreaLaw.NormalizedVariableTruncation": [
+    "TNLean.MPS.AreaLaw.SequentialTruncation",
+    "QICLean.Analysis.UnitNormalizationDistance"
+  ],
+  "TNLean.MPS.AreaLaw.SequentialTruncation": [
+    "TNLean.MPS.AreaLaw.OpenMPSRank",
+    "TNLean.Algebra.ToEuclideanLinApply",
+    "TNLean.Algebra.SubmoduleStarProjectionMatrix",
+    "QICLean.Entropy.FilterOptimizer",
+    "TNLean.Lattice.RegionEntropyInequalities",
+    "QICLean.Entropy.RegionEntropy",
+    "QICLean.Entropy.SpectralTail",
+    "QICLean.Analysis.KyFanNorm",
+    "QICLean.Representation.RelativePin"
+  ],
+  "TNLean.Algebra.ToEuclideanLinApply": [
+    "QICLean.Channel.SchmidtRank"
+  ],
+  "TNLean.Algebra.SubmoduleStarProjectionMatrix": [
+    "Mathlib.Analysis.CStarAlgebra.Matrix"
+  ],
+  "QICLean.Entropy.SpectralTail": [
+    "QICLean.Analysis.Entropy",
+    "QICLean.Analysis.ShiftedDensityTruncation",
+    "QICLean.Analysis.TraceDistance",
+    "QICLean.Analysis.PatchRegulator"
+  ],
+  "QICLean.Analysis.ShiftedDensityTruncation": [
+    "QICLean.Analysis.ShiftedDensityPowers",
+    "QICLean.Analysis.TraceCFC",
+    "QICLean.Algebra.PosSemidefSupport"
+  ],
+  "QICLean.Analysis.ShiftedDensityPowers": [
+    "QICLean.Channel.Basic",
+    "QICLean.Analysis.MatrixTraceInequalities",
+    "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Isometric"
+  ],
+  "QICLean.Analysis.MatrixTraceInequalities": [
+    "Mathlib.Algebra.Order.Chebyshev",
+    "Mathlib.Analysis.MeanInequalities",
+    "Mathlib.Analysis.Matrix.Spectrum",
+    "Mathlib.Analysis.Matrix.PosDef",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "QICLean.Algebra.PerronFrobenius.RankOne"
+  ],
+  "Mathlib.Algebra.Order.Chebyshev": [],
+  "QICLean.Algebra.PerronFrobenius.RankOne": [
+    "Mathlib.Analysis.Matrix.PosDef",
+    "Mathlib.LinearAlgebra.Dual.Defs",
+    "Mathlib.LinearAlgebra.Finsupp.LinearCombination",
+    "Mathlib.LinearAlgebra.LinearIndependent.Defs",
+    "Mathlib.LinearAlgebra.Matrix.Irreducible.Defs",
+    "Mathlib.LinearAlgebra.Projection",
+    "Mathlib.LinearAlgebra.Trace",
+    "Mathlib.Tactic.Linarith",
+    "Mathlib.Tactic.NormNum",
+    "Mathlib.Tactic.Ring"
+  ],
+  "Mathlib.LinearAlgebra.Dual.Defs": [],
+  "Mathlib.LinearAlgebra.Matrix.Irreducible.Defs": [],
+  "Mathlib.LinearAlgebra.Projection": [],
+  "Mathlib.LinearAlgebra.Trace": [],
+  "Mathlib.Tactic.NormNum": [],
+  "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Isometric": [],
+  "QICLean.Analysis.PatchRegulator": [
+    "QICLean.Algebra.PosSemidefSupport",
+    "QICLean.Analysis.PosSemidefCommute",
+    "QICLean.Analysis.ShiftedDensityPowers",
+    "QICLean.Analysis.TraceNormContractivity"
+  ],
+  "QICLean.Analysis.PosSemidefCommute": [
+    "Mathlib.Analysis.Matrix.Order"
+  ],
+  "QICLean.Representation.RelativePin": [
+    "QICLean.Representation.RelativePinCommute",
+    "QICLean.Entropy.ConditionalMovementRegional"
+  ],
+  "QICLean.Representation.RelativePinCommute": [
+    "QICLean.Representation.RelativePinCompensator",
+    "QICLean.Representation.RelativePinAlgebra",
+    "QICLean.Representation.MergeMoment",
+    "QICLean.Entropy.FilterStationarity"
+  ],
+  "QICLean.Representation.RelativePinCompensator": [
+    "QICLean.Representation.TensorPowerRpow",
+    "QICLean.Representation.ReplicaLift",
+    "QICLean.Representation.ReplicaSimilarity",
+    "QICLean.Analysis.RootChannel",
+    "QICLean.Algebra.L2OpNormReindex"
+  ],
+  "QICLean.Representation.TensorPowerRpow": [
+    "QICLean.Representation.UnitaryTwirl",
+    "QICLean.Analysis.CfcConjugation",
+    "QICLean.Representation.SchurSurprisal",
+    "QICLean.Analysis.OrthogonalResolutionCfc"
+  ],
+  "QICLean.Representation.UnitaryTwirl": [
+    "QICLean.Analysis.UnitaryHaar",
+    "QICLean.Representation.UnitaryCommutant",
+    "QICLean.Representation.ReplicaSiteOp"
+  ],
+  "QICLean.Analysis.UnitaryHaar": [
+    "Mathlib.LinearAlgebra.UnitaryGroup",
+    "Mathlib.Topology.Algebra.Star.Unitary",
+    "Mathlib.MeasureTheory.Measure.Haar.Basic",
+    "Mathlib.MeasureTheory.Group.Integral",
+    "Mathlib.Analysis.Complex.Basic",
+    "Mathlib.Topology.Instances.Matrix"
+  ],
+  "Mathlib.Topology.Algebra.Star.Unitary": [],
+  "Mathlib.MeasureTheory.Measure.Haar.Basic": [],
+  "Mathlib.MeasureTheory.Group.Integral": [],
+  "QICLean.Representation.UnitaryCommutant": [
+    "QICLean.Representation.CentralLabelFunction",
+    "QICLean.Representation.SchurWeylCommutant",
+    "QICLean.Representation.HighestWeight",
+    "Mathlib.Analysis.SpecialFunctions.Trigonometric.Deriv"
+  ],
+  "QICLean.Representation.CentralLabelFunction": [
+    "QICLean.Representation.CommutantDimension"
+  ],
+  "QICLean.Representation.CommutantDimension": [
+    "QICLean.Analysis.OrthogonalResolution",
+    "QICLean.Representation.IsotypicDimension",
+    "QICLean.Representation.TensorPowerAction",
+    "Mathlib.Analysis.Matrix.PosDef",
+    "Mathlib.LinearAlgebra.Dimension.Constructions"
+  ],
+  "QICLean.Analysis.OrthogonalResolution": [
+    "QICLean.Analysis.TraceCFC",
+    "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Commute",
+    "Mathlib.Analysis.Matrix.Normed",
+    "Mathlib.Analysis.Normed.Algebra.Exponential",
+    "Mathlib.LinearAlgebra.Matrix.PosDef",
+    "Mathlib.Analysis.SpecialFunctions.Exponential",
+    "Mathlib.Topology.Algebra.Module.FiniteDimension"
+  ],
+  "Mathlib.Analysis.Normed.Algebra.Exponential": [],
+  "QICLean.Representation.IsotypicDimension": [
+    "QICLean.Representation.LabelProjectors",
+    "Mathlib.LinearAlgebra.Matrix.ToLin",
+    "Mathlib.LinearAlgebra.Trace"
+  ],
+  "QICLean.Representation.LabelProjectors": [
+    "QICLean.Representation.IrrepLabels",
+    "Mathlib.LinearAlgebra.Matrix.Hermitian"
+  ],
+  "QICLean.Representation.IrrepLabels": [
+    "QICLean.Representation.PermutationRepresentation",
+    "Mathlib.Analysis.Complex.Polynomial.Basic",
+    "Mathlib.LinearAlgebra.Matrix.DotProduct",
+    "Mathlib.RepresentationTheory.Maschke",
+    "Mathlib.RingTheory.SimpleModule.IsAlgClosed"
+  ],
+  "QICLean.Representation.PermutationRepresentation": [
+    "Mathlib.Algebra.MonoidAlgebra.Basic",
+    "Mathlib.Basic.Complex.Basic",
+    "Mathlib.LinearAlgebra.Matrix.Permutation",
+    "Mathlib.LinearAlgebra.Matrix.ConjTranspose"
+  ],
+  "Mathlib.Algebra.MonoidAlgebra.Basic": [],
+  "Mathlib.Analysis.Complex.Polynomial.Basic": [],
+  "Mathlib.LinearAlgebra.Matrix.DotProduct": [],
+  "Mathlib.RepresentationTheory.Maschke": [],
+  "Mathlib.RingTheory.SimpleModule.IsAlgClosed": [],
+  "Mathlib.LinearAlgebra.Matrix.ToLin": [],
+  "QICLean.Representation.TensorPowerAction": [
+    "QICLean.Representation.LabelProjectors",
+    "Mathlib.GroupTheory.Perm.Cycle.Type"
+  ],
+  "Mathlib.GroupTheory.Perm.Cycle.Type": [],
+  "QICLean.Representation.SchurWeylCommutant": [
+    "QICLean.Representation.CommutantDimension",
+    "Mathlib.RingTheory.MvPolynomial.Symmetric.NewtonIdentities"
+  ],
+  "Mathlib.RingTheory.MvPolynomial.Symmetric.NewtonIdentities": [],
+  "QICLean.Representation.HighestWeight": [
+    "QICLean.Representation.SchurWeylCommutant"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.Trigonometric.Deriv": [],
+  "QICLean.Representation.ReplicaSiteOp": [
+    "QICLean.Representation.SchurWeylCommutant",
+    "QICLean.Entropy.LocalLift",
+    "QICLean.Analysis.RootChannel",
+    "QICLean.Algebra.L2OpNormReindex"
+  ],
+  "QICLean.Representation.SchurSurprisal": [
+    "QICLean.Algebra.PosSemidefSupport",
+    "QICLean.Representation.CommutantDimension",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.ExpLog.Basic"
+  ],
+  "QICLean.Analysis.OrthogonalResolutionCfc": [
+    "QICLean.Analysis.OrthogonalResolution",
+    "Mathlib.LinearAlgebra.Lagrange",
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.Analysis.Matrix.Order",
+    "Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Order",
+    "QICLean.Algebra.MatrixAux"
+  ],
+  "Mathlib.LinearAlgebra.Lagrange": [],
+  "QICLean.Representation.ReplicaLift": [
+    "QICLean.Representation.ReplicaIntegral",
+    "QICLean.Representation.CoherentResolution",
+    "QICLean.Entropy.LocalLift",
+    "Mathlib.MeasureTheory.SpecificCodomains.WithLp"
+  ],
+  "QICLean.Representation.ReplicaIntegral": [
+    "QICLean.Representation.ReplicaSpectralLaw",
+    "QICLean.Representation.ReplicaMetric",
+    "QICLean.Analysis.TraceCompression",
+    "QICLean.Analysis.OperatorMean.MatrixPowers"
+  ],
+  "QICLean.Representation.ReplicaSpectralLaw": [
+    "QICLean.Representation.WeylCharacter",
+    "QICLean.Representation.ReplicaGammaIntegral",
+    "QICLean.Analysis.CfcConjugation"
+  ],
+  "QICLean.Representation.WeylCharacter": [
+    "QICLean.Representation.ExteriorPieri",
+    "QICLean.Representation.WeylDimension"
+  ],
+  "QICLean.Representation.ExteriorPieri": [
+    "QICLean.Representation.SplitCopies",
+    "QICLean.Representation.BranchingPieri"
+  ],
+  "QICLean.Representation.SplitCopies": [
+    "QICLean.Representation.Alternant",
+    "QICLean.Representation.UnitaryTwirl",
+    "QICLean.Representation.Branching"
+  ],
+  "QICLean.Representation.Alternant": [
+    "QICLean.Representation.WeylRecursion",
+    "Mathlib.LinearAlgebra.Vandermonde",
+    "Mathlib.Algebra.Polynomial.Eval.Defs"
+  ],
+  "QICLean.Representation.WeylRecursion": [
+    "QICLean.Representation.HookRecursion"
+  ],
+  "QICLean.Representation.HookRecursion": [
+    "QICLean.Representation.HookFormula",
+    "Mathlib.LinearAlgebra.Lagrange"
+  ],
+  "QICLean.Representation.HookFormula": [
+    "Mathlib.Analysis.SpecialFunctions.Stirling",
+    "Mathlib.Analysis.SpecialFunctions.Log.NegMulLog"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.Stirling": [],
+  "Mathlib.LinearAlgebra.Vandermonde": [],
+  "Mathlib.Algebra.Polynomial.Eval.Defs": [],
+  "QICLean.Representation.Branching": [
+    "QICLean.Representation.JointIsotypic",
+    "QICLean.Representation.IsotypicDimension"
+  ],
+  "QICLean.Representation.JointIsotypic": [
+    "QICLean.Representation.IsotypicDimension",
+    "Mathlib.LinearAlgebra.Dimension.Constructions"
+  ],
+  "QICLean.Representation.BranchingPieri": [
+    "QICLean.Representation.Branching",
+    "QICLean.Representation.SchurWeylLift",
+    "QICLean.Representation.GroupedCopies"
+  ],
+  "QICLean.Representation.SchurWeylLift": [
+    "QICLean.Representation.SchurWeylLabels"
+  ],
+  "QICLean.Representation.SchurWeylLabels": [
+    "QICLean.Representation.ColumnAntisymmetrizer",
+    "QICLean.Representation.IrrepLabelCount",
+    "QICLean.Representation.IsotypicDimension",
+    "QICLean.Representation.CommutantDimension"
+  ],
+  "QICLean.Representation.ColumnAntisymmetrizer": [
+    "QICLean.Representation.HighestWeight",
+    "QICLean.Representation.PartitionCount"
+  ],
+  "QICLean.Representation.PartitionCount": [
+    "Mathlib.Combinatorics.Enumerative.Partition.Basic",
+    "Mathlib.GroupTheory.Perm.Cycle.PossibleTypes",
+    "Mathlib.Order.Interval.Finset.Fin"
+  ],
+  "Mathlib.Combinatorics.Enumerative.Partition.Basic": [],
+  "Mathlib.GroupTheory.Perm.Cycle.PossibleTypes": [],
+  "Mathlib.Order.Interval.Finset.Fin": [],
+  "QICLean.Representation.IrrepLabelCount": [
+    "QICLean.Representation.TensorPowerAction"
+  ],
+  "QICLean.Representation.GroupedCopies": [
+    "QICLean.Representation.JointIsotypic",
+    "Mathlib.GroupTheory.Index",
+    "Mathlib.GroupTheory.NoncommCoprod",
+    "Mathlib.GroupTheory.Perm.Fin"
+  ],
+  "Mathlib.GroupTheory.Index": [],
+  "Mathlib.GroupTheory.NoncommCoprod": [],
+  "Mathlib.GroupTheory.Perm.Fin": [],
+  "QICLean.Representation.WeylDimension": [
+    "QICLean.Representation.SchurLabelEstimates",
+    "QICLean.Representation.WeylRecursion",
+    "QICLean.Representation.JucysRecursion"
+  ],
+  "QICLean.Representation.SchurLabelEstimates": [
+    "QICLean.Representation.BranchProbability"
+  ],
+  "QICLean.Representation.BranchProbability": [
+    "QICLean.Representation.StarOperator"
+  ],
+  "QICLean.Representation.StarOperator": [
+    "QICLean.Representation.Casimir"
+  ],
+  "QICLean.Representation.Casimir": [
+    "QICLean.Representation.HookDimension"
+  ],
+  "QICLean.Representation.HookDimension": [
+    "QICLean.Representation.BranchingPieri",
+    "QICLean.Representation.HookRecursion"
+  ],
+  "QICLean.Representation.JucysRecursion": [
+    "QICLean.Representation.StarOperator",
+    "QICLean.Representation.RegularTrace"
+  ],
+  "QICLean.Representation.RegularTrace": [
+    "QICLean.Representation.Branching"
+  ],
+  "QICLean.Representation.ReplicaGammaIntegral": [
+    "QICLean.Analysis.BetaHalfLine",
+    "QICLean.Representation.Alternant",
+    "QICLean.Representation.ReplicaWeight",
+    "Mathlib.MeasureTheory.Integral.Pi",
+    "Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral",
+    "Mathlib.RingTheory.Polynomial.Pochhammer"
+  ],
+  "QICLean.Analysis.BetaHalfLine": [
+    "Mathlib.Analysis.SpecialFunctions.Gamma.Beta",
+    "Mathlib.MeasureTheory.Function.JacobianOneDim"
+  ],
+  "QICLean.Representation.ReplicaWeight": [
+    "QICLean.Analysis.GammaRatio",
+    "QICLean.Representation.HookFormula"
+  ],
+  "QICLean.Analysis.GammaRatio": [
+    "Mathlib.Analysis.SpecialFunctions.Gamma.BohrMollerup"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.Gamma.BohrMollerup": [],
+  "Mathlib.MeasureTheory.Integral.Pi": [],
+  "Mathlib.Analysis.SpecialFunctions.Gaussian.GaussianIntegral": [],
+  "Mathlib.RingTheory.Polynomial.Pochhammer": [],
+  "QICLean.Representation.ReplicaMetric": [
+    "QICLean.Analysis.OrthogonalResolutionCfc",
+    "QICLean.Representation.ReplicaWeight",
+    "QICLean.Representation.SubsystemTransport",
+    "QICLean.Representation.SchurSurprisal",
+    "QICLean.Representation.SchurLabelCommutation"
+  ],
+  "QICLean.Representation.SubsystemTransport": [
+    "QICLean.Representation.SchurLabelEstimates"
+  ],
+  "QICLean.Representation.SchurLabelCommutation": [
+    "QICLean.Representation.TensorPowerAction"
+  ],
+  "QICLean.Analysis.TraceCompression": [
+    "QICLean.Analysis.OperatorConvexity"
+  ],
+  "QICLean.Analysis.OperatorMean.MatrixPowers": [
+    "QICLean.Analysis.CfcLogAdditive",
+    "QICLean.Analysis.MatrixSqrt",
+    "QICLean.Analysis.PosSemidefCommute",
+    "Mathlib.Analysis.SpecialFunctions.ContinuousFunctionalCalculus.Rpow.Order"
+  ],
+  "QICLean.Representation.CoherentResolution": [
+    "QICLean.Representation.UnitaryTwirl",
+    "QICLean.Representation.TrivialLabel"
+  ],
+  "QICLean.Representation.TrivialLabel": [
+    "QICLean.Representation.TensorPowerAction",
+    "QICLean.Representation.LabelProjectors"
+  ],
+  "Mathlib.MeasureTheory.SpecificCodomains.WithLp": [],
+  "QICLean.Representation.ReplicaSimilarity": [
+    "QICLean.Representation.ReplicaMarkedRatioInverse",
+    "QICLean.Representation.ReplicaSiteOp",
+    "QICLean.Entropy.RegionUnion",
+    "QICLean.Analysis.PosSemidefCommute"
+  ],
+  "QICLean.Representation.ReplicaMarkedRatioInverse": [
+    "QICLean.Representation.ReplicaMarkedRatio",
+    "QICLean.Representation.MergeMoment"
+  ],
+  "QICLean.Representation.ReplicaMarkedRatio": [
+    "QICLean.Representation.ReplicaMetric",
+    "QICLean.Representation.ReplicaRatio"
+  ],
+  "QICLean.Representation.ReplicaRatio": [
+    "QICLean.Representation.ReplicaWeight"
+  ],
+  "QICLean.Representation.MergeMoment": [
+    "QICLean.Representation.MergeDimensions",
+    "QICLean.Representation.CommutantDimension"
+  ],
+  "QICLean.Representation.MergeDimensions": [
+    "QICLean.Representation.GroupedCopies",
+    "QICLean.Representation.SchurLabelCommutation"
+  ],
+  "QICLean.Representation.RelativePinAlgebra": [
+    "QICLean.Representation.ReplicaSimilarity"
+  ],
+  "QICLean.Analysis.ViableSubspaceEntropy": [
+    "QICLean.Analysis.ViableSubspaceCoordinates",
+    "QICLean.Analysis.ViableSubspaceSchmidtRank",
+    "QICLean.Analysis.VonNeumannEntropySpectralTail",
+    "QICLean.Channel.FiniteProduct",
+    "QICLean.Channel.MaximalOverlap",
+    "QICLean.Entropy.RegionRank"
+  ],
+  "QICLean.Analysis.ViableSubspaceCoordinates": [
+    "QICLean.Analysis.ViableSubspaceSpectralProjector",
+    "Mathlib.Algebra.Module.LinearMap.End",
+    "Mathlib.Algebra.Module.Submodule.Map",
+    "Mathlib.Data.Fintype.EquivFin",
+    "Mathlib.LinearAlgebra.Basis.Basic"
+  ],
+  "QICLean.Analysis.ViableSubspaceSpectralProjector": [
+    "QICLean.Analysis.ViableSubspaceErrorReduction",
+    "QICLean.Analysis.ViableSubspaceTensor",
+    "QICLean.Analysis.TensorFamilyImage"
+  ],
+  "QICLean.Analysis.ViableSubspaceErrorReduction": [
+    "QICLean.Analysis.ViableSubspace"
+  ],
+  "QICLean.Analysis.ViableSubspace": [
+    "Mathlib.Analysis.InnerProductSpace.Positive",
+    "Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional"
+  ],
+  "Mathlib.Analysis.InnerProductSpace.Projection.FiniteDimensional": [],
+  "QICLean.Analysis.ViableSubspaceTensor": [
+    "QICLean.Analysis.ViableSubspace",
+    "Mathlib.Analysis.InnerProductSpace.TensorProduct"
+  ],
+  "Mathlib.Analysis.InnerProductSpace.TensorProduct": [],
+  "QICLean.Analysis.TensorFamilyImage": [
+    "QICLean.Analysis.ViableSubspaceTensor"
+  ],
+  "Mathlib.Algebra.Module.LinearMap.End": [],
+  "Mathlib.Algebra.Module.Submodule.Map": [],
+  "Mathlib.Data.Fintype.EquivFin": [],
+  "Mathlib.LinearAlgebra.Basis.Basic": [],
+  "QICLean.Analysis.ViableSubspaceSchmidtRank": [
+    "QICLean.Analysis.ViableSubspaceCoordinates",
+    "QICLean.Analysis.ViableSubspaceUnitApproximation",
+    "QICLean.Channel.MaximalOverlap"
+  ],
+  "QICLean.Analysis.ViableSubspaceUnitApproximation": [
+    "QICLean.Analysis.ViableSubspace"
+  ],
+  "QICLean.Analysis.VonNeumannEntropySpectralTail": [
+    "QICLean.Analysis.ProbabilityEntropyConcentration",
+    "QICLean.Analysis.Entropy",
+    "QICLean.Analysis.SpectralTailTraceNorm",
+    "QICLean.Analysis.RectangularTraceNormAlgebra"
+  ],
+  "QICLean.Analysis.ProbabilityEntropyConcentration": [
+    "QICLean.Analysis.ProbabilityEntropy",
+    "Mathlib.Analysis.SpecialFunctions.BinaryEntropy"
+  ],
+  "Mathlib.Analysis.SpecialFunctions.BinaryEntropy": [],
+  "QICLean.Analysis.SpectralTailTraceNorm": [
+    "QICLean.Analysis.KyFanNorm",
+    "QICLean.Analysis.TraceDistance",
+    "QICLean.Analysis.RectangularTraceNormAlgebra"
+  ],
+  "QICLean.Analysis.RectangularTraceNormAlgebra": [
+    "QICLean.Analysis.RectangularTraceNorm",
+    "QICLean.Analysis.MatrixFramePerturbation",
+    "Mathlib.LinearAlgebra.Matrix.Kronecker"
+  ],
+  "QICLean.Analysis.RectangularTraceNorm": [
+    "QICLean.Analysis.TraceNormAbs",
+    "QICLean.Analysis.TraceNormVariational",
+    "Mathlib.Analysis.CStarAlgebra.Matrix"
+  ],
+  "QICLean.Analysis.TraceNormVariational": [
+    "Mathlib.Analysis.InnerProductSpace.PiL2",
+    "QICLean.Analysis.PolarUnitaryCorrection",
+    "QICLean.Analysis.TraceNormAbs"
+  ],
+  "QICLean.Analysis.PolarUnitaryCorrection": [
+    "QICLean.Algebra.MatrixGramUnitary",
+    "QICLean.Analysis.MatrixSqrt"
+  ],
+  "QICLean.Algebra.MatrixGramUnitary": [
+    "Mathlib.Analysis.InnerProductSpace.Adjoint",
+    "Mathlib.Analysis.InnerProductSpace.PiL2",
+    "Mathlib.Data.Matrix.Block",
+    "Mathlib.Logic.Equiv.Fin.Basic"
+  ],
+  "Mathlib.Logic.Equiv.Fin.Basic": [],
+  "QICLean.Entropy.RegionRank": [
+    "QICLean.Channel.PureMarginalRank",
+    "QICLean.Channel.MarginalRank",
+    "QICLean.Entropy.FiniteProduct",
+    "QICLean.Entropy.LocalLift"
+  ],
+  "QICLean.Channel.PureMarginalRank": [
+    "QICLean.Channel.MaximalOverlap",
+    "QICLean.Entropy.Bipartite"
+  ],
+  "QICLean.Channel.MarginalRank": [
+    "QICLean.Channel.MarginalSupportAbsorption",
+    "QICLean.Algebra.MatrixRankKronecker"
+  ],
+  "QICLean.Algebra.MatrixRankKronecker": [
+    "Mathlib.LinearAlgebra.Matrix.Rank",
+    "Mathlib.LinearAlgebra.TensorProduct.Matrix",
+    "Mathlib.RingTheory.Flat.Basic"
+  ],
+  "Mathlib.LinearAlgebra.TensorProduct.Matrix": [],
+  "Mathlib.RingTheory.Flat.Basic": [],
+  "TNLean.MPS.AreaLaw.SupportedCutRank": [
+    "TNLean.MPS.AreaLaw.CutMatrixGrowth",
+    "QICLean.Entropy.GapSurprisal",
+    "QICLean.Channel.UhlmannIsometry",
+    "TNLean.Algebra.ToEuclideanLinApply"
+  ],
+  "TNLean.MPS.AreaLaw.CutMatrixGrowth": [
+    "TNLean.MPS.AreaLaw.OpenMPS",
+    "TNLean.MPS.Preparation.MinimalCutRepresentationCuts",
+    "Mathlib.Algebra.BigOperators.Group.Finset.Piecewise",
+    "Mathlib.Data.Fintype.BigOperators",
+    "Mathlib.Logic.Equiv.Basic"
+  ],
+  "TNLean.MPS.Preparation.MinimalCutRepresentationCuts": [
+    "Mathlib.Analysis.Complex.Basic",
+    "Mathlib.LinearAlgebra.Matrix.Rank"
+  ],
+  "Mathlib.Algebra.BigOperators.Group.Finset.Piecewise": [],
+  "Mathlib.Data.Fintype.BigOperators": [],
+  "QICLean.Channel.UhlmannIsometry": [
+    "QICLean.Algebra.MatrixGramUnitary",
+    "QICLean.Algebra.MatrixUnitaryBetween",
+    "QICLean.Analysis.MatrixSqrt",
+    "QICLean.Analysis.RootFidelity",
+    "QICLean.Channel.MaximalOverlap"
+  ],
+  "QICLean.Analysis.RootFidelity": [
+    "QICLean.Algebra.MatrixReindexUnitary",
+    "QICLean.Algebra.TraceReindex",
+    "QICLean.Analysis.TraceNormVariational"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.PositiveFactorization": [
+    "QICLean.Analysis.PositiveFactorRepair",
+    "QICLean.Entropy.LocalLift",
+    "QICLean.Entropy.SupportedOperatorAlgebra",
+    "QICLean.ManyBody.Sites.Lattice.Chain",
+    "TNLean.MPS.AreaLaw.OpenMPS"
+  ],
+  "QICLean.Analysis.PositiveFactorRepair": [
+    "Mathlib.LinearAlgebra.Matrix.PosDef",
+    "QICLean.Analysis.HermitianFactorRepair"
+  ],
+  "QICLean.Analysis.HermitianFactorRepair": [
+    "Mathlib.Analysis.CStarAlgebra.Matrix",
+    "Mathlib.Analysis.InnerProductSpace.Adjoint"
+  ],
+  "TNLean.MPS.AreaLaw.Hastings.Window": [
+    "TNLean.MPS.AreaLaw.IntervalUnion",
+    "TNLean.Lattice.RegionEntropyInequalities"
+  ],
+  "TNLean.MPS.AreaLaw.IntervalUnion": [
+    "QICLean.ManyBody.Sites.Lattice.Chain"
+  ]
+}

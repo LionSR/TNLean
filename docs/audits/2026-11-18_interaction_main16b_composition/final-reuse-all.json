@@ -1,0 +1,1199 @@
+{
+  "base": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+  "final": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+  "package_manifest_unchanged": true,
+  "toolchain_unchanged": true,
+  "records": [
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/CellConditionalInformation.lean",
+      "transitive_TN_modules": 134,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "18e2083e5a5790afefc91fbb736a4ebc714874162082923c0fc3dac6fa37078f",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "18e2083e5a5790afefc91fbb736a4ebc714874162082923c0fc3dac6fa37078f"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/CellConditionalInformationFromGap.lean",
+      "transitive_TN_modules": 359,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "ac6247b03874a14a70b35889313e2236d9ffdd52a666bc3f823ca07301f91fac",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "ac6247b03874a14a70b35889313e2236d9ffdd52a666bc3f823ca07301f91fac"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/CoarseInformation.lean",
+      "transitive_TN_modules": 124,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "783509cf67f6527d7149695aabdcd18f372884b2fb321b1a7ed6ae1ab0bad6ce",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "783509cf67f6527d7149695aabdcd18f372884b2fb321b1a7ed6ae1ab0bad6ce"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/CoarseInformationFromGap.lean",
+      "transitive_TN_modules": 339,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "baf13419ee272a666fda93215641161665fe012dc3747c71882a9d134a4754b1",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "baf13419ee272a666fda93215641161665fe012dc3747c71882a9d134a4754b1"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/NestedPatchEnergy.lean",
+      "transitive_TN_modules": 86,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "7eddea0461e23c7aca00dc049f2c869bd619f60718712ef1dbfbfd4e6fa4f893",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "7eddea0461e23c7aca00dc049f2c869bd619f60718712ef1dbfbfd4e6fa4f893"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/NestedPatchMarginalCloseness.lean",
+      "transitive_TN_modules": 90,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "4cce2453c1e198bf2e17237aa05f44681982afb5804b9c5dc3e99d39854f35a8",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "4cce2453c1e198bf2e17237aa05f44681982afb5804b9c5dc3e99d39854f35a8"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/PinnedZeroFloorOptimizer.lean",
+      "transitive_TN_modules": 85,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "67dcd82eeb143c8429384307a3caf388e6477e27e4202c4f474a6c5197579cce",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "67dcd82eeb143c8429384307a3caf388e6477e27e4202c4f474a6c5197579cce"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/RangeAngularInformation.lean",
+      "transitive_TN_modules": 399,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "01bf68affc614087cfc32caefdd451119241e64f130caebda088c4374a79ada5",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "01bf68affc614087cfc32caefdd451119241e64f130caebda088c4374a79ada5"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/RangeInformationReset.lean",
+      "transitive_TN_modules": 61,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "8b4278c6da14c39db58499e41abd5c4cba452ba688c4ab313a856b5d8a06d559",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "8b4278c6da14c39db58499e41abd5c4cba452ba688c4ab313a856b5d8a06d559"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean",
+      "transitive_TN_modules": 162,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "0c835c54b59481857d335476c34165e7ebaa78405d47adebc7dd5e4ada052821",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "0c835c54b59481857d335476c34165e7ebaa78405d47adebc7dd5e4ada052821"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean",
+      "transitive_TN_modules": 91,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "218149ec4be2788da647e5319a00c945d4feed3f82b88bc1a7e7fd2e3f40f158",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "218149ec4be2788da647e5319a00c945d4feed3f82b88bc1a7e7fd2e3f40f158"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean",
+      "transitive_TN_modules": 94,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "b3fb41d56d0c4e7f888855db1d2b035dae73326481c3a33985647b79c7022232",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "b3fb41d56d0c4e7f888855db1d2b035dae73326481c3a33985647b79c7022232"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/RangeResetUnitary.lean",
+      "transitive_TN_modules": 33,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "a1d7acd1c0a603e9f61cb923ceb74201bb0915831d487cc63abc5d0f4d514273",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "a1d7acd1c0a603e9f61cb923ceb74201bb0915831d487cc63abc5d0f4d514273"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/RangeSquareGroundState.lean",
+      "transitive_TN_modules": 38,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "f739872c7829a3f6ecf325133f7fd4aab06af7a9a5f867586906d19333fac07f",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "f739872c7829a3f6ecf325133f7fd4aab06af7a9a5f867586906d19333fac07f"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean",
+      "transitive_TN_modules": 34,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "75731b9e62a02dd3a20deb3b9e6d7e4ed3687458847cc560aa6119b85b908ed5",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "75731b9e62a02dd3a20deb3b9e6d7e4ed3687458847cc560aa6119b85b908ed5"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean",
+      "transitive_TN_modules": 143,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "ad8b66fcbfa81d938dca9de5824268fb3e00f3adf525920fbcb667878807637e",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "ad8b66fcbfa81d938dca9de5824268fb3e00f3adf525920fbcb667878807637e"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/SquareInteractionTerms.lean",
+      "transitive_TN_modules": 23,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "933f826ab6b994490685a346ea619fa5236ae010b88bd4dfd94dcea916931037",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "933f826ab6b994490685a346ea619fa5236ae010b88bd4dfd94dcea916931037"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean",
+      "transitive_TN_modules": 24,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "695fe9d2a0a54bf6f598df729ebfdf0de73b2682e78169762f2637878d896016",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "695fe9d2a0a54bf6f598df729ebfdf0de73b2682e78169762f2637878d896016"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/SupportedPhysicalBufferGaussian.lean",
+      "transitive_TN_modules": 48,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "7c6541b00c98905d742011f1a383f1e3574b022ad75599fbc664cf00aac4e3a2",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "7c6541b00c98905d742011f1a383f1e3574b022ad75599fbc664cf00aac4e3a2"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/SwappedDoubledEdgeBoundary.lean",
+      "transitive_TN_modules": 38,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "c7edba1d12aad92ce627fa2738bc4db844e46805a530a51563a8424a2782a331",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "c7edba1d12aad92ce627fa2738bc4db844e46805a530a51563a8424a2782a331"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/SwappedLocalHamiltonian.lean",
+      "transitive_TN_modules": 30,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "4af4546de163d10a99f67f90a66cff66c92db4e5acf6bbdbd4277771b22c7008",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "4af4546de163d10a99f67f90a66cff66c92db4e5acf6bbdbd4277771b22c7008"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/Approximation/SwappedSquareHamiltonianInteraction.lean",
+      "transitive_TN_modules": 32,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "68939c671fb8246eddd3348229517924c7962c6380ed8cfa5f28ddd0ba90f504",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "68939c671fb8246eddd3348229517924c7962c6380ed8cfa5f28ddd0ba90f504"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean",
+      "transitive_TN_modules": 23,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "ec745798ca412ac4af7e4c3075db73d86b0da7c25a481896877ebb2e50125975",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "ec745798ca412ac4af7e4c3075db73d86b0da7c25a481896877ebb2e50125975"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelPoissonGrowth.lean",
+      "transitive_TN_modules": 37,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "f92a2c3ed75b6068f89ff24e55930a43fe8ee05a3b9051731dfc7b72334f9e20",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "f92a2c3ed75b6068f89ff24e55930a43fe8ee05a3b9051731dfc7b72334f9e20"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelPoissonThinning.lean",
+      "transitive_TN_modules": 39,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "25035f09d7d67ed2c4a34919beb31c57dea3254bee17899deea32f994546155b",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "25035f09d7d67ed2c4a34919beb31c57dea3254bee17899deea32f994546155b"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean",
+      "transitive_TN_modules": 43,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "6def663bf7cb174c9b9bd98fffc727ddeeaf4b9f27cc28a82d7fca35c8ab9d1d",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "6def663bf7cb174c9b9bd98fffc727ddeeaf4b9f27cc28a82d7fca35c8ab9d1d"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelWeightedRow.lean",
+      "transitive_TN_modules": 32,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "0f2b2b933c864e8e6f6c6a7211426cd694add177cc020a5bc88c92632242bbfe",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "0f2b2b933c864e8e6f6c6a7211426cd694add177cc020a5bc88c92632242bbfe"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeExcitedDecay.lean",
+      "transitive_TN_modules": 23,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "e2dd6ddd766f624fb04a1e6ba8610fb22c512fd8669abc6b31f048e62046223f",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "e2dd6ddd766f624fb04a1e6ba8610fb22c512fd8669abc6b31f048e62046223f"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeRestoring.lean",
+      "transitive_TN_modules": 29,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "31f19bfd48a08e14b2e81becc3bcd8e40cca56d5bd52fdc6c5a0761efc7481f8",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "31f19bfd48a08e14b2e81becc3bcd8e40cca56d5bd52fdc6c5a0761efc7481f8"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Amplification/TypicalProjectors.lean",
+      "transitive_TN_modules": 26,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "37bcfe2606de611044c40a283ea07718c383b870ffac03b43998e4bd5b7af867",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "37bcfe2606de611044c40a283ea07718c383b870ffac03b43998e4bd5b7af867"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean",
+      "transitive_TN_modules": 31,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "3d63332b9e561bc26875b1e147d75f8ae841fedf73f656cafcb8a611c117faa0",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "3d63332b9e561bc26875b1e147d75f8ae841fedf73f656cafcb8a611c117faa0"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/AmplificationProof.lean",
+      "transitive_TN_modules": 103,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "00992f1e6136cac55cdcd21285c8a21e3dca3917958789e8adbad27cb3df97cf",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "00992f1e6136cac55cdcd21285c8a21e3dca3917958789e8adbad27cb3df97cf"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/AreaLawElementaryConstant.lean",
+      "transitive_TN_modules": 485,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "1417793ca9668519f37e4647307e597d885b9c144f2cea11e421b7c3e18fa25d",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "1417793ca9668519f37e4647307e597d885b9c144f2cea11e421b7c3e18fa25d"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean",
+      "transitive_TN_modules": 480,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "d5082fe78778868a263b984263b798b0c464451e0b5a1ceea3acb9e041a55675",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "d5082fe78778868a263b984263b798b0c464451e0b5a1ceea3acb9e041a55675"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/AreaLawTheorem.lean",
+      "transitive_TN_modules": 481,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "8d29090d7503833287b0178d34394d707b953fbafcc94a7a7b013cc4e3cae1a5",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "8d29090d7503833287b0178d34394d707b953fbafcc94a7a7b013cc4e3cae1a5"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/BoundaryTheorem.lean",
+      "transitive_TN_modules": 29,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "214283a427ffc4ecedb827f63945fa7b2309216dd7b170b10838c89aa1ba5efd",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "214283a427ffc4ecedb827f63945fa7b2309216dd7b170b10838c89aa1ba5efd"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/CollarInformation.lean",
+      "transitive_TN_modules": 39,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "4c4f9815938e94dfaa8a115ce7bb93665540114694c63204531c90e2c3e39660",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "4c4f9815938e94dfaa8a115ce7bb93665540114694c63204531c90e2c3e39660"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/GraphPropagation.lean",
+      "transitive_TN_modules": 11,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "fab1796c9520427dfaf69ff19bb81c4ed26f5efc40446776f0b29ea71f444571",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "fab1796c9520427dfaf69ff19bb81c4ed26f5efc40446776f0b29ea71f444571"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean",
+      "transitive_TN_modules": 30,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "8adf7d6424440df402379226a182e048c4e29def241b6d2ea35c7f8c78baeaf4",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "8adf7d6424440df402379226a182e048c4e29def241b6d2ea35c7f8c78baeaf4"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/InitialBuffer.lean",
+      "transitive_TN_modules": 17,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "50b1da2ab3bce522315aa0f0d5c614788db364b63df3e90f030b2600d22f9620",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "50b1da2ab3bce522315aa0f0d5c614788db364b63df3e90f030b2600d22f9620"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/InitialBufferReal.lean",
+      "transitive_TN_modules": 19,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "e977558e5a7323a4b208b10ad716ec00414958034ecbb383f28bf33c1885dba8",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "e977558e5a7323a4b208b10ad716ec00414958034ecbb383f28bf33c1885dba8"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/InitialRoundedCollarEntropy.lean",
+      "transitive_TN_modules": 59,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "b33769a3aa17b6525eae78a9dc7ee15bd7c3ea4e6eb628a97eb0af51fffe2f96",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "b33769a3aa17b6525eae78a9dc7ee15bd7c3ea4e6eb628a97eb0af51fffe2f96"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean",
+      "transitive_TN_modules": 31,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "a1cd42816fb94c8f69fd2fd3299e7ac44026a3825c372526f23b0465d3478a8b",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "a1cd42816fb94c8f69fd2fd3299e7ac44026a3825c372526f23b0465d3478a8b"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/InitialWeakRectangleShellEntropy.lean",
+      "transitive_TN_modules": 50,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "6e262917a426ae63858b22f642f126f38010d4c74470955880c2650f2d1e07e0",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "6e262917a426ae63858b22f642f126f38010d4c74470955880c2650f2d1e07e0"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/LatticeConstraints.lean",
+      "transitive_TN_modules": 22,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "aac8cac2fa0d08942e674fad0d1baed1e402f96ee203ec0127d80d4a3cadec47",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "aac8cac2fa0d08942e674fad0d1baed1e402f96ee203ec0127d80d4a3cadec47"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean",
+      "transitive_TN_modules": 264,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "8e70f5661da1003443f5323eec97b9311d0e0f389426b155085b75b3e4a6aea6",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "8e70f5661da1003443f5323eec97b9311d0e0f389426b155085b75b3e4a6aea6"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean",
+      "transitive_TN_modules": 215,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "1b8d3a2662eda376ed2f86a040ed699b35c605acee8fd4e8a4a30314933b3841",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "1b8d3a2662eda376ed2f86a040ed699b35c605acee8fd4e8a4a30314933b3841"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/RectangularSpecialization.lean",
+      "transitive_TN_modules": 38,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "9592c978fd075cb4d954c70d0c4663ffe41a41e3cfc2d56501bc65e26c7c73b5",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "9592c978fd075cb4d954c70d0c4663ffe41a41e3cfc2d56501bc65e26c7c73b5"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/RegionOperatorLocalization.lean",
+      "transitive_TN_modules": 12,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "04fb1cde7262a60463032a72eca5479f0fe00a2ff1f157e80eba447745eb385f",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "04fb1cde7262a60463032a72eca5479f0fe00a2ff1f157e80eba447745eb385f"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/SafeRectangleAreaLaw.lean",
+      "transitive_TN_modules": 483,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "aac354c4efe76d859151267285abafa1e37ceff91a95df67f69583640e298964",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "aac354c4efe76d859151267285abafa1e37ceff91a95df67f69583640e298964"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyBound.lean",
+      "transitive_TN_modules": 69,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "d926f67f6fc78ac9586ed702527c26e6adfd9fa137ef1f165d7aaa22fffe77e4",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "d926f67f6fc78ac9586ed702527c26e6adfd9fa137ef1f165d7aaa22fffe77e4"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyCoefficients.lean",
+      "transitive_TN_modules": 97,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "aca2a6462f0553d00d4fcbf601fb70b795bceada4d49e674904f4cf0a9b168ca",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "aca2a6462f0553d00d4fcbf601fb70b795bceada4d49e674904f4cf0a9b168ca"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyDecay.lean",
+      "transitive_TN_modules": 93,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "5e6c37814c65a6d786b02e8ae6e2b20f7d2ba96026ce2f7208adc8f620b365e3",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "5e6c37814c65a6d786b02e8ae6e2b20f7d2ba96026ce2f7208adc8f620b365e3"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEntropySum.lean",
+      "transitive_TN_modules": 68,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "333d9c4062beaed3836429017df7055f05c201ffe31d3f51a86f0b01a7dce0a2",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "333d9c4062beaed3836429017df7055f05c201ffe31d3f51a86f0b01a7dce0a2"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeParameterBound.lean",
+      "transitive_TN_modules": 64,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "14008492c63d82d37c6df4a011d306c4b14ba1b776b7c205c3dad296e187e53f",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "14008492c63d82d37c6df4a011d306c4b14ba1b776b7c205c3dad296e187e53f"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeSelectionBound.lean",
+      "transitive_TN_modules": 72,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "2eaeb5282cc6d413e71a20ace522c14e00e4c400b083e81f5277c941a2b01e58",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "2eaeb5282cc6d413e71a20ace522c14e00e4c400b083e81f5277c941a2b01e58"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualEnergyTerms.lean",
+      "transitive_TN_modules": 30,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "f5465885c8f36e3e2a7cbbe3cee418016afff0b5ccf7c105cb6939c7f2563f60",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "f5465885c8f36e3e2a7cbbe3cee418016afff0b5ccf7c105cb6939c7f2563f60"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualGlobalReplicaEnergy.lean",
+      "transitive_TN_modules": 62,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "374a05cffe7386e75463f45e278173a6d76a50d9ff849f17ac19cb69f9d54d54",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "374a05cffe7386e75463f45e278173a6d76a50d9ff849f17ac19cb69f9d54d54"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualMarginalTails.lean",
+      "transitive_TN_modules": 39,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "5caa6b2daa67d80604c7510e3073966dc0aaf740827f60fac587d84187f94679",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "5caa6b2daa67d80604c7510e3073966dc0aaf740827f60fac587d84187f94679"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualReplicaDefect.lean",
+      "transitive_TN_modules": 63,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "c1516e5b8a5e8990868ca19caded507e179c4bed3648f9274eabd2bf25a8f15f",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "c1516e5b8a5e8990868ca19caded507e179c4bed3648f9274eabd2bf25a8f15f"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoughLower.lean",
+      "transitive_TN_modules": 66,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "b97766d7a347ff670368530062b961bc0a2016628b45e3665ce2ed0341e2d40a",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "b97766d7a347ff670368530062b961bc0a2016628b45e3665ce2ed0341e2d40a"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoughLowerPrevector.lean",
+      "transitive_TN_modules": 72,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "4918d34a62cf87dab5ba8783b092f443888440c98d9bf39345066fb3ad7038d1",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "4918d34a62cf87dab5ba8783b092f443888440c98d9bf39345066fb3ad7038d1"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoundEntropy.lean",
+      "transitive_TN_modules": 59,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "939958687b422a8806eb2f35223c2ac1c334a29d2888046a78d19e425e10c15f",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "939958687b422a8806eb2f35223c2ac1c334a29d2888046a78d19e425e10c15f"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoundTransport.lean",
+      "transitive_TN_modules": 57,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "9e7377474273e1c9cc6781fb8829c0b062b30b25c21fdb6e2ca881e7cf8cb262",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "9e7377474273e1c9cc6781fb8829c0b062b30b25c21fdb6e2ca881e7cf8cb262"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanMeasures.lean",
+      "transitive_TN_modules": 59,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "c9f84e8b786f239a3caa5e54699cc6fbce53422b2ee4d5b052711be565a3cba3",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "c9f84e8b786f239a3caa5e54699cc6fbce53422b2ee4d5b052711be565a3cba3"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanTransportInputs.lean",
+      "transitive_TN_modules": 106,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "2b2bbcd8ebef2b2d2c80166a91c5f4675d858d7b56a327cce680326134557940",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "2b2bbcd8ebef2b2d2c80166a91c5f4675d858d7b56a327cce680326134557940"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedChargeDensityEnergy.lean",
+      "transitive_TN_modules": 113,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "8e52816711524e53902762692ffe96653d42aa5167c8aad2e3b4e551b732cf83",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "8e52816711524e53902762692ffe96653d42aa5167c8aad2e3b4e551b732cf83"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedChargeEnergy.lean",
+      "transitive_TN_modules": 79,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "084bed1d9f50837e06b8380e42ee58056ad373b2ff1fdf9b4b796294e1266122",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "084bed1d9f50837e06b8380e42ee58056ad373b2ff1fdf9b4b796294e1266122"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedSharpComparison.lean",
+      "transitive_TN_modules": 152,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "75362fb2d0620489f5645686270925815d75c9c069b6a9cf9c3cae6936501e8c",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "75362fb2d0620489f5645686270925815d75c9c069b6a9cf9c3cae6936501e8c"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpComparison.lean",
+      "transitive_TN_modules": 100,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "cf97f881c94896814cca1f90b42eebe1070e2b2b97c6bc60e6930fa8a7f1cba6",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "cf97f881c94896814cca1f90b42eebe1070e2b2b97c6bc60e6930fa8a7f1cba6"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpLower.lean",
+      "transitive_TN_modules": 66,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "4c2d617cc135f24dff1e5e533c8e25a8141587233d4fee7d5564cc4ef56badbf",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "4c2d617cc135f24dff1e5e533c8e25a8141587233d4fee7d5564cc4ef56badbf"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpLowerPrevector.lean",
+      "transitive_TN_modules": 96,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "83f1650521b5bdd44dc7e5731ea9ff2d32a21df4b68a6733c95fce32b1ad0729",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "83f1650521b5bdd44dc7e5731ea9ff2d32a21df4b68a6733c95fce32b1ad0729"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ActualTransportEstimates.lean",
+      "transitive_TN_modules": 55,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "789f250364a54dfefebd92baf1700418bdc068ff5df20500c9941577f27d7640",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "789f250364a54dfefebd92baf1700418bdc068ff5df20500c9941577f27d7640"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean",
+      "transitive_TN_modules": 32,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "004853118301408f1532e511a301e2fafd85b4823b795b661fa95e79cd48adee",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "004853118301408f1532e511a301e2fafd85b4823b795b661fa95e79cd48adee"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean",
+      "transitive_TN_modules": 31,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "1fd1e123129f494b5ff8329715502a1793ee72abd9b785f298b80a098ab0377f",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "1fd1e123129f494b5ff8329715502a1793ee72abd9b785f298b80a098ab0377f"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/GenericChargeEnergy.lean",
+      "transitive_TN_modules": 98,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "ec40068bc1e7601382c66b5752dc5799e4dad12ea49f02558f7e97ffd7dd7cd3",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "ec40068bc1e7601382c66b5752dc5799e4dad12ea49f02558f7e97ffd7dd7cd3"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/GenericSelectedChargeEnergy.lean",
+      "transitive_TN_modules": 114,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "ca82680dafe867d4c53082dd2f804c2d4cce31404cde94681099fd5749990de1",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "ca82680dafe867d4c53082dd2f804c2d4cce31404cde94681099fd5749990de1"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean",
+      "transitive_TN_modules": 213,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "5abbfdf5ceae4d2f834baac5f4db9d57640a9c11ff04b1a0afff0cbd7bccf18f",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "5abbfdf5ceae4d2f834baac5f4db9d57640a9c11ff04b1a0afff0cbd7bccf18f"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalScanner.lean",
+      "transitive_TN_modules": 135,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "8b2f3195704be82889a67a8c713e2908396078a91c6f9db062cb3f67537a8273",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "8b2f3195704be82889a67a8c713e2908396078a91c6f9db062cb3f67537a8273"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalTemplateInformation.lean",
+      "transitive_TN_modules": 263,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "69c9bc68787952a40160cdaa6956e92ac9578260cbf2a189bb222fe07fbafe57",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "69c9bc68787952a40160cdaa6956e92ac9578260cbf2a189bb222fe07fbafe57"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/ScanTruncationInputs.lean",
+      "transitive_TN_modules": 93,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "0b741d60cf59e9637e5783c7af5cf25712fc0de4d055a93a028c4ba0b142f974",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "0b741d60cf59e9637e5783c7af5cf25712fc0de4d055a93a028c4ba0b142f974"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceActualInformation.lean",
+      "transitive_TN_modules": 197,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "ddce9b985046436d20c280051277725f5fe3a2e9a67643a5620443222648bfb7",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "ddce9b985046436d20c280051277725f5fe3a2e9a67643a5620443222648bfb7"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceBootstrapEntropy.lean",
+      "transitive_TN_modules": 184,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "20fe3a894870cdb0c1129ee52793ba2ecbc09872608b1c63b594faddaca63d07",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "20fe3a894870cdb0c1129ee52793ba2ecbc09872608b1c63b594faddaca63d07"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceChargeSelection.lean",
+      "transitive_TN_modules": 165,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "4480ac7279e4cb3b6f4d22ac135f67fd05dc4c1b3d0f06b22d5d45f09a5211d5",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "4480ac7279e4cb3b6f4d22ac135f67fd05dc4c1b3d0f06b22d5d45f09a5211d5"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceFinalInformation.lean",
+      "transitive_TN_modules": 203,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "1a0678d5dfa0e4190fdfcff5c18f75558f861878c516d4caed27d2e2f42cb445",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "1a0678d5dfa0e4190fdfcff5c18f75558f861878c516d4caed27d2e2f42cb445"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceRoughSelection.lean",
+      "transitive_TN_modules": 168,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "2649d9e1a2c6c2810f6398473d51f2867ff4918b545366c6af2bfb49010d7ba1",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "2649d9e1a2c6c2810f6398473d51f2867ff4918b545366c6af2bfb49010d7ba1"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceRoundedInformation.lean",
+      "transitive_TN_modules": 205,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "42226b610b6cdb7d86b6575144f86b8624205728d92682c6d39544144838615e",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "42226b610b6cdb7d86b6575144f86b8624205728d92682c6d39544144838615e"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean",
+      "transitive_TN_modules": 190,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "5ba2dc25047bba9a7f11cbc6c3a1cc333bda7c287d8bec003c6f67ba1a5ba454",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "5ba2dc25047bba9a7f11cbc6c3a1cc333bda7c287d8bec003c6f67ba1a5ba454"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedDensity.lean",
+      "transitive_TN_modules": 171,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "2124e012d64758a4a42561876b0c59d5fc7f928043cc5f5070c47b9f86125b64",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "2124e012d64758a4a42561876b0c59d5fc7f928043cc5f5070c47b9f86125b64"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedEnergy.lean",
+      "transitive_TN_modules": 173,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "418a7b678aadb7f221b43acfdf75cc3fd25efe1681146b181307584d6974bd83",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "418a7b678aadb7f221b43acfdf75cc3fd25efe1681146b181307584d6974bd83"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpComparison.lean",
+      "transitive_TN_modules": 173,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "01ac1c9530557712a31a188bf1ca826dd358c82e810602d5feb2607d50bc0337",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "01ac1c9530557712a31a188bf1ca826dd358c82e810602d5feb2607d50bc0337"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpDensity.lean",
+      "transitive_TN_modules": 179,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "a7620f1fca3be710d933d7643461241db6c75ddc3c5139417aa3dc01a9eecd93",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "a7620f1fca3be710d933d7643461241db6c75ddc3c5139417aa3dc01a9eecd93"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpEnergy.lean",
+      "transitive_TN_modules": 181,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "3acb16f6eca585752e80dc5a62af9c3ca2add3954c9a351766cec27dbae7f3db",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "3acb16f6eca585752e80dc5a62af9c3ca2add3954c9a351766cec27dbae7f3db"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceStatusMarginalMoments.lean",
+      "transitive_TN_modules": 82,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "5f38ec93b2f6b980791e00007277242babe0dd7603a45f6249b9a0984002c594",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "5f38ec93b2f6b980791e00007277242babe0dd7603a45f6249b9a0984002c594"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpMoments.lean",
+      "transitive_TN_modules": 95,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "9bee151e078be83d74508d0d4dc6369be3a6fb84792df725c5ab19b12fe63222",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "9bee151e078be83d74508d0d4dc6369be3a6fb84792df725c5ab19b12fe63222"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpUpper.lean",
+      "transitive_TN_modules": 110,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "31d3c93edba97261573b1ccaca818665df1175eb460a512a8f1aa740eee5c4a6",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "31d3c93edba97261573b1ccaca818665df1175eb460a512a8f1aa740eee5c4a6"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/StatusMarginalMoments.lean",
+      "transitive_TN_modules": 63,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "256634aa6bb94356a3402dd98a7350e109983f5acd53aed076c31460df99aad1",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "256634aa6bb94356a3402dd98a7350e109983f5acd53aed076c31460df99aad1"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetNormAttachment.lean",
+      "transitive_TN_modules": 104,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "d5e18627a5899f1192a85fe0c6b349f8e22c03b2c56f157d936919f2b43d3a70",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "d5e18627a5899f1192a85fe0c6b349f8e22c03b2c56f157d936919f2b43d3a70"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetStatusMoments.lean",
+      "transitive_TN_modules": 64,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "cc1bd16ee34774486a39b86d6a94b948a42777725887f08230791a4308148a69",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "cc1bd16ee34774486a39b86d6a94b948a42777725887f08230791a4308148a69"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/TargetTypicalWindow.lean",
+      "transitive_TN_modules": 82,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "ab22ef8550733fb8bf9b5feb15f409d3f40db2178b5e442363f92fdc46c36c49",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "ab22ef8550733fb8bf9b5feb15f409d3f40db2178b5e442363f92fdc46c36c49"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean",
+      "transitive_TN_modules": 230,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "edd1506e5e4212ce5b973431c8b08d90d260cbbcf1bdf15bb38df759aa703531",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "edd1506e5e4212ce5b973431c8b08d90d260cbbcf1bdf15bb38df759aa703531"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean",
+      "transitive_TN_modules": 74,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "ae8faf2d2d588eebb527c868663d26a42542c11d37013a29d9d97e64e1c36448",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "ae8faf2d2d588eebb527c868663d26a42542c11d37013a29d9d97e64e1c36448"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/SupportedGaussianIntegral.lean",
+      "transitive_TN_modules": 13,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "009fd651fd49b6528c03d0c8be792040fc2a9163c9164c284dc60a650fa37340",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "009fd651fd49b6528c03d0c8be792040fc2a9163c9164c284dc60a650fa37340"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/TailParameter.lean",
+      "transitive_TN_modules": 18,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "e32d3ae0e4b2266a7ce3f328cd99afb399565ef1f9a1e09cfad0ad7f16db9f6d",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "e32d3ae0e4b2266a7ce3f328cd99afb399565ef1f9a1e09cfad0ad7f16db9f6d"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/TheoremStatements.lean",
+      "transitive_TN_modules": 9,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "d260968bc3e1237d55ea8a314f6bce3e9e1d997b19e1b10700feb34dc91ec872",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "d260968bc3e1237d55ea8a314f6bce3e9e1d997b19e1b10700feb34dc91ec872"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/VertexBoundaryCorollaries.lean",
+      "transitive_TN_modules": 11,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "d8d0d31b714dfd6ece441ad0e4162b156db83c3dd712daaed1555d5074c7d1d3",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "d8d0d31b714dfd6ece441ad0e4162b156db83c3dd712daaed1555d5074c7d1d3"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "peps107",
+      "path": "TNLean/PEPS/AreaLaw/ZeroBoundary.lean",
+      "transitive_TN_modules": 18,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "96df64456e319b92b55a4a7af5e47b2edf35632572aaf3155c57552079bad448",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "96df64456e319b92b55a4a7af5e47b2edf35632572aaf3155c57552079bad448"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "shared6",
+      "path": "TNLean/Lattice/LocalHamiltonian.lean",
+      "transitive_TN_modules": 7,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "9162b8913429ccac595202cd82e44e16a8cd32fcaa8f1b92809c674ef5ea5670",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "9162b8913429ccac595202cd82e44e16a8cd32fcaa8f1b92809c674ef5ea5670"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "shared6",
+      "path": "TNLean/Lattice/MarginalTails.lean",
+      "transitive_TN_modules": 10,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "83889db86f450a7117f8256fe857ea071f2c91f5b41fdec402af457dccc665cf",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "83889db86f450a7117f8256fe857ea071f2c91f5b41fdec402af457dccc665cf"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "shared6",
+      "path": "TNLean/Lattice/ProductForm.lean",
+      "transitive_TN_modules": 9,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "a709b4e7ad20a5850008c67cf2c160d055438c46f7f63e1fe714dbee3f42f534",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "a709b4e7ad20a5850008c67cf2c160d055438c46f7f63e1fe714dbee3f42f534"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "shared6",
+      "path": "TNLean/MPS/AreaLaw/ComponentReduction.lean",
+      "transitive_TN_modules": 14,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "1243b9e452b0df1fa6e110304ca28741e333950f4975219934ecd5cc7e63502e",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "1243b9e452b0df1fa6e110304ca28741e333950f4975219934ecd5cc7e63502e"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "shared6",
+      "path": "TNLean/MPS/AreaLaw/Hamiltonian.lean",
+      "transitive_TN_modules": 2,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "32a58c91d788e9f7a614a6cdcab692eee60323c6d0b848ec254065f5eeb806fd",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "32a58c91d788e9f7a614a6cdcab692eee60323c6d0b848ec254065f5eeb806fd"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "shared6",
+      "path": "TNLean/PEPS/AreaLaw/RectangularHamiltonian.lean",
+      "transitive_TN_modules": 14,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "8f594d16b5fb7b53773c0ff151a68fa5498a5cea551ec0d5b4d8956387531e0e",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "8f594d16b5fb7b53773c0ff151a68fa5498a5cea551ec0d5b4d8956387531e0e"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "snake1",
+      "path": "TNLean/MPS/AreaLaw/SnakeGridAreaLaw.lean",
+      "transitive_TN_modules": 494,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "c3f1fe23e89c60fece587c382de3e91d66e748a9b8e28b74b260d17c76a4a803",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "c3f1fe23e89c60fece587c382de3e91d66e748a9b8e28b74b260d17c76a4a803"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "fixtures5",
+      "path": "scripts/ground_state_gap_scope_regression.lean",
+      "transitive_TN_modules": 17,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "91f4935dd5889e3e63832e3c6012f1ec8f91a4115ebeb1f3cd69ff179149d8bd",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "91f4935dd5889e3e63832e3c6012f1ec8f91a4115ebeb1f3cd69ff179149d8bd"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "fixtures5",
+      "path": "scripts/generic_gap_boundary_regression.lean",
+      "transitive_TN_modules": 42,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "58ebb736d5cd20d41093bb9b2c0b34ef4df5408ebf045a59cfa61b4905432455",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "58ebb736d5cd20d41093bb9b2c0b34ef4df5408ebf045a59cfa61b4905432455"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "fixtures5",
+      "path": "scripts/zero_gap_tn_wrappers_regression.lean",
+      "transitive_TN_modules": 95,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "7e21fc95c6fae8a72403883bc1f4cdd740d8e78da1b8fd50348afc970724c110",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "7e21fc95c6fae8a72403883bc1f4cdd740d8e78da1b8fd50348afc970724c110"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "fixtures5",
+      "path": "scripts/range_square_zero_gap_regression.lean",
+      "transitive_TN_modules": 39,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "41c2256bd943163b97daac8e91c390b96f85f84364dd98595571490cb8a9499d",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "41c2256bd943163b97daac8e91c390b96f85f84364dd98595571490cb8a9499d"
+      },
+      "unchanged": true
+    },
+    {
+      "group": "fixtures5",
+      "path": "scripts/box_supremum_zero_gap_regression.lean",
+      "transitive_TN_modules": 32,
+      "fingerprints": {
+        "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d": "b744647eb292b3dbaead9a1d324707ce30737f85b88b3090ca7483b8993cbe53",
+        "f94193009343ee767ddc96a3dacee80e659ec5a9": "b744647eb292b3dbaead9a1d324707ce30737f85b88b3090ca7483b8993cbe53"
+      },
+      "unchanged": true
+    }
+  ],
+  "boundary": "Source/manifest/toolchain equivalence supports reuse; execution heads remain unchanged in original records. The 25 affected MPS/root modules are excluded."
+}

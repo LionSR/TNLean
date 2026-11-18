@@ -1,0 +1,39 @@
+{
+  "head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+  "changed": [
+    "TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean"
+  ],
+  "reverse_closure_count": 13,
+  "project_sources": 322,
+  "missing_artifact_count": 27,
+  "missing_artifacts": [
+    "TNLean.Algebra.ToEuclideanCLM",
+    "TNLean.MPS.AreaLaw.CutMatrixGrowth",
+    "TNLean.MPS.AreaLaw.Hastings.AreaLaw",
+    "TNLean.MPS.AreaLaw.Hastings.ChainBootstrap",
+    "TNLean.MPS.AreaLaw.Hastings.CutProductExpectation",
+    "TNLean.MPS.AreaLaw.Hastings.CutProductState",
+    "TNLean.MPS.AreaLaw.Hastings.Doubling",
+    "TNLean.MPS.AreaLaw.Hastings.EffectExpectation",
+    "TNLean.MPS.AreaLaw.Hastings.EffectFromFactorization",
+    "TNLean.MPS.AreaLaw.Hastings.IntervalMutualInformation",
+    "TNLean.MPS.AreaLaw.Hastings.MainTheorem",
+    "TNLean.MPS.AreaLaw.Hastings.PositiveFactorization",
+    "TNLean.MPS.AreaLaw.Hastings.ProductStateExpectation",
+    "TNLean.MPS.AreaLaw.Hastings.ProjectorOverlap",
+    "TNLean.MPS.AreaLaw.Hastings.RelativeEntropyGain",
+    "TNLean.MPS.AreaLaw.Hastings.RelentAssembly",
+    "TNLean.MPS.AreaLaw.Hastings.RelentFromBootstrap",
+    "TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation",
+    "TNLean.MPS.AreaLaw.Hastings.SchmidtRankBootstrap",
+    "TNLean.MPS.AreaLaw.Hastings.TailEntropy",
+    "TNLean.MPS.AreaLaw.Hastings.Window",
+    "TNLean.MPS.AreaLaw.IntervalUnion",
+    "TNLean.MPS.AreaLaw.MPSApproximation",
+    "TNLean.MPS.AreaLaw.NormalizedSequentialApproximation",
+    "TNLean.MPS.AreaLaw.NormalizedVariableTruncation",
+    "TNLean.MPS.AreaLaw.SupportedCutRank",
+    "TNLean.MPS.Preparation.MinimalCutRepresentationCuts"
+  ],
+  "note": "Existence preflight only; existing artifacts require source/dependency fingerprint validation before reuse. No compile launched."
+}

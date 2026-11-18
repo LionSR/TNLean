@@ -1,0 +1,6 @@
+{
+  "time": "2026-11-18T18:29:46.517093+00:00",
+  "coordinator_pid": 481024,
+  "state": "blocked",
+  "error": "RuntimeError('TNLean.MPS.AreaLaw.Hastings.BoundaryFactorization build failed exit -6; original log retained')"
+}

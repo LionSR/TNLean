@@ -1,0 +1,88 @@
+{
+  "head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+  "owner_case_count": 17,
+  "lean_owner_count": 16,
+  "dependency_manifest_case": true,
+  "fixture_count": 5,
+  "cases": {
+    "lake-manifest.json": [
+      "scripts/ground_state_gap_scope_regression.lean",
+      "scripts/generic_gap_boundary_regression.lean",
+      "scripts/zero_gap_tn_wrappers_regression.lean",
+      "scripts/range_square_zero_gap_regression.lean",
+      "scripts/box_supremum_zero_gap_regression.lean"
+    ],
+    "TNLean/PEPS/Approximation/Basic.lean": [
+      "scripts/ground_state_gap_scope_regression.lean",
+      "scripts/zero_gap_tn_wrappers_regression.lean",
+      "scripts/range_square_zero_gap_regression.lean"
+    ],
+    "TNLean/PEPS/AreaLaw/RectangularDomain.lean": [
+      "scripts/zero_gap_tn_wrappers_regression.lean",
+      "scripts/range_square_zero_gap_regression.lean"
+    ],
+    "TNLean/Lattice/LocalHamiltonian.lean": [
+      "scripts/generic_gap_boundary_regression.lean",
+      "scripts/zero_gap_tn_wrappers_regression.lean",
+      "scripts/range_square_zero_gap_regression.lean",
+      "scripts/box_supremum_zero_gap_regression.lean"
+    ],
+    "TNLean/MPS/AreaLaw/Hamiltonian.lean": [
+      "scripts/ground_state_gap_scope_regression.lean",
+      "scripts/zero_gap_tn_wrappers_regression.lean"
+    ],
+    "TNLean/PEPS/AreaLaw/RectangularHamiltonian.lean": [
+      "scripts/zero_gap_tn_wrappers_regression.lean",
+      "scripts/range_square_zero_gap_regression.lean"
+    ],
+    "TNLean/PEPS/AreaLaw/BoundaryTheorem.lean": [
+      "scripts/generic_gap_boundary_regression.lean"
+    ],
+    "TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean": [
+      "scripts/zero_gap_tn_wrappers_regression.lean"
+    ],
+    "TNLean/PEPS/Approximation/PinnedZeroFloorOptimizer.lean": [
+      "scripts/zero_gap_tn_wrappers_regression.lean"
+    ],
+    "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean": [
+      "scripts/zero_gap_tn_wrappers_regression.lean"
+    ],
+    "TNLean/PEPS/Approximation/RangeSquareGroundState.lean": [
+      "scripts/range_square_zero_gap_regression.lean"
+    ],
+    "TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean": [
+      "scripts/box_supremum_zero_gap_regression.lean"
+    ],
+    "TNLean/MPS/AreaLaw/OverlapEnergy.lean": [
+      "scripts/ground_state_gap_scope_regression.lean"
+    ],
+    "TNLean/MPS/AreaLaw/BoundaryGap.lean": [
+      "scripts/ground_state_gap_scope_regression.lean"
+    ],
+    "TNLean/PEPS/AreaLaw/CollarInformation.lean": [
+      "scripts/generic_gap_boundary_regression.lean"
+    ],
+    "TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean": [
+      "scripts/generic_gap_boundary_regression.lean"
+    ],
+    "TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean": [
+      "scripts/box_supremum_zero_gap_regression.lean"
+    ],
+    "scripts/ground_state_gap_scope_regression.lean": [
+      "scripts/ground_state_gap_scope_regression.lean"
+    ],
+    "scripts/generic_gap_boundary_regression.lean": [
+      "scripts/generic_gap_boundary_regression.lean"
+    ],
+    "scripts/zero_gap_tn_wrappers_regression.lean": [
+      "scripts/zero_gap_tn_wrappers_regression.lean"
+    ],
+    "scripts/range_square_zero_gap_regression.lean": [
+      "scripts/range_square_zero_gap_regression.lean"
+    ],
+    "scripts/box_supremum_zero_gap_regression.lean": [
+      "scripts/box_supremum_zero_gap_regression.lean"
+    ]
+  },
+  "exit_code": 0
+}

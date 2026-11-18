@@ -1,0 +1,804 @@
+{
+  "base": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+  "main": "16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931",
+  "common_base": "7376dab08421ab99afcc5373be11104c76cc8a50",
+  "diagnostic_merge_tree": "4059286841126d67a51e1ec2a55f1950cd692d69",
+  "files": 27,
+  "hunks": 78,
+  "source_delta_from_base": 0,
+  "builds_run": 0,
+  "whole_merge_completed": false,
+  "scope": "Only 27 PEPS conflict resolutions reviewed; no other lane resolution or whole-tree approval. Exact integrated dependencies and checks remain coordinator gates.",
+  "adjacent_checks": "Basic, PinnedZeroFloorOptimizer, RectangularHamiltonian and all five fixtures are byte-identical to42c4 in the raw automatic merge tree. No fixture removed or weakened.",
+  "rows": [
+    {
+      "path": "TNLean/PEPS/Approximation/CellConditionalInformation.lean",
+      "resolved_blob": "060e6fd3f357e45be8873b70908ee44628fbc61e",
+      "sha256": "aa4ae41ae180a1e1ca73a4322e2abec9bd69bbcded00da0952c2307525b110dc",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "scope openings",
+          "resolution": "Keep ComplexOrder for the retained projector-PSD expressions; retain Matrix.Norms.L2Operator where present.",
+          "retained_text_sha256": "223b9ed623e514adc49564c4e7fad29ad3e1b798bde2bf35411be391838c5247",
+          "rejected_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "hunk": 2,
+          "symbol": "cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "7142d1ec9d6f40dcaa15bf9ff68dc87a8321f1b9901e43758bfac671f21809b8",
+          "rejected_text_sha256": "7da1f2f971c410a96df00a4a505ad169cb878c87307ef72adcc536b38584e960"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/CoarseInformation.lean",
+      "resolved_blob": "3ff5f5fec534ccf5aa81b3f0cc9d4c9675c9303d",
+      "sha256": "e9e8c6619539329f00b47c021157e17061a1dc590a9c46c1fd533328163f8367",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "scope openings",
+          "resolution": "Keep ComplexOrder for the retained projector-PSD expressions; retain Matrix.Norms.L2Operator where present.",
+          "retained_text_sha256": "223b9ed623e514adc49564c4e7fad29ad3e1b798bde2bf35411be391838c5247",
+          "rejected_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "hunk": 2,
+          "symbol": "coarse_mutualInformation_le_of_sublinearCollarBoundAt",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "7142d1ec9d6f40dcaa15bf9ff68dc87a8321f1b9901e43758bfac671f21809b8",
+          "rejected_text_sha256": "7da1f2f971c410a96df00a4a505ad169cb878c87307ef72adcc536b38584e960"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeAngularInformation.lean",
+      "resolved_blob": "6500a639b63f81d679320a91765ff75fca2e1261",
+      "sha256": "63c53d3235dc8d7b6e85f215247c27e189552c05cd7d98600fcc6c0d7181470a",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "IsRangeSquareGroundState.squareCellInformationBound",
+          "resolution": "Retain the canonical positive-Delta bridge at the existing hDelta premise, adapting broad state inputs only where the positive-gap downstream result needs them.",
+          "retained_text_sha256": "3f81b490dd166662a9ee57bf72116f938a1dc8fdc4c6120626a7176e4974a395",
+          "rejected_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "hunk": 2,
+          "symbol": "IsRangeSquareGroundState.squareResetBound",
+          "resolution": "Retain the canonical positive-Delta bridge at the existing hDelta premise, adapting broad state inputs only where the positive-gap downstream result needs them.",
+          "retained_text_sha256": "4a080d6c20bb83c24acace94d40af60830bde8e96a6a8442c0159366316d61f2",
+          "rejected_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "hunk": 3,
+          "symbol": "IsRangeSquareGroundState.squareResetBound",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "21d12fa1d426804ac634c70d3dd8856b5f0340b7fc9944d64644ff29140aa9e9",
+          "rejected_text_sha256": "957ffa14769de8d219fbeeae24d2a0b16a021508027d79db4077a2bf43e57927"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean",
+      "resolved_blob": "02743548a4ed5dc449264a6ab0987d0f64b4ccbd",
+      "sha256": "3c02e370f59f15caa25dc89e5d1a4d0dac039c6ff83aaa4a7d7de8cb66a8efdf",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "SquareEntropyAreaLawAt.uniform_rangeNestedPatch_cylinders",
+          "resolution": "Retain the canonical positive-Delta bridge at the existing hDelta premise, adapting broad state inputs only where the positive-gap downstream result needs them.",
+          "retained_text_sha256": "d1b5e1b40345b01a96ae15c6c3a166902dd9ae077ad4266b1d256e05123f0b48",
+          "rejected_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "hunk": 2,
+          "symbol": "SquareEntropyAreaLawAt.uniform_rangeNestedPatch_cylinders",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "9d18feb8e6c8e13802a7df3ff461bd466d7539a6dfe51a4941044767f8e66ff8",
+          "rejected_text_sha256": "baa9d90c2a33627e4d20bf9a60409000eb53b026409c1e189614c42a29b7e51b"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean",
+      "resolved_blob": "39a6f9329b57387c3c5da4a5df5ef6fadc04d754",
+      "sha256": "5007e41f55e523c216c5544788430f2ea035e0a766e261785a302da5c9fbaf83",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "_root_.ManyBody.PlaneInteraction.rangeNestedPatch_minimizer_energy_le",
+          "resolution": "The energy helper needs only the eigen equation: keep canonical membership; derive membership at its stronger positive-gap caller without narrowing the helper.",
+          "retained_text_sha256": "8d271d13b675fe3066545d01c14430be863d24b6d4df378e52fbd94d42da2a10",
+          "rejected_text_sha256": "ca9a3197158f9204cfc2e98b1ca23554cddace566caa8d9a84e3d72f71c4bd51"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean",
+      "resolved_blob": "c5f81497ce139c490128f2bf8ba29a710f413025",
+      "sha256": "54ccc32492de362aab4d285dd423ca72e9a69e9aff811712aab883b3c8c051d1",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "rangeNestedPatch_minimizer_marginal_closeness",
+          "resolution": "The energy helper needs only the eigen equation: keep canonical membership; derive membership at its stronger positive-gap caller without narrowing the helper.",
+          "retained_text_sha256": "4309a6b674d85f9ecb4712170658c4c056a10621cb607a57a6580bac79bd6a10",
+          "rejected_text_sha256": "f179be6386103a02055a5d4bec840207deb81a0979307f985a16a5b56f0ecf01"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeSquareGroundState.lean",
+      "resolved_blob": "272610cffbb2b5702ed1d2a184726f7eb638eebf",
+      "sha256": "3167acb58cdc58f1be39113c4acf3176508ae5afbfd47c9de31a95c755c23b8f",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "scope openings",
+          "resolution": "Keep ComplexOrder for the retained projector-PSD expressions; retain Matrix.Norms.L2Operator where present.",
+          "retained_text_sha256": "48154d25a64538419db478ba15ef0da0b4c02020f2a5ed92b2da39b83d737c05",
+          "rejected_text_sha256": "511454575ea21017e798b5077f655a504c6fc4ac306dcdc2574c25836c91c42f"
+        },
+        {
+          "hunk": 2,
+          "symbol": "IsRangeSquareGroundState",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "474e49b1f6ef08e3c256e5e3dd45579efd8dbfea3e1c8de7ba355aa6b1f957fe",
+          "rejected_text_sha256": "d3b692332ce15e3b8ce5cc5c8077d7fd1ccbe7e5b59058914e2956a1afd8768f"
+        },
+        {
+          "hunk": 3,
+          "symbol": "IsSquareGroundState.isRangeSquareGroundState",
+          "resolution": "Use the broad coordinate-transport API on the same canonical interaction; total Hermiticity only, no J argument and no singleton/positive-gap requirement. Separate term bounds remain.",
+          "retained_text_sha256": "7aa7dfc3fd40d61c961f626e2556f4d1d1986dfb5c59558fbc5c44b5c74f1b89",
+          "rejected_text_sha256": "0f4def9d3c4b993e293262d721afa7f3e414de6aa00dc4f08fb25bb24a3c3c33"
+        },
+        {
+          "hunk": 4,
+          "symbol": "squareEntropyAreaLawAt_range_of_areaLawBound",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "5c242e45d65d3479b28b6361545759c3362f43084a258418ddd2506395413a2c",
+          "rejected_text_sha256": "2edc3b90cf137afd1c7e7c11fe559bcc84f2d9451263e00a29463d246ac5f4a3"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean",
+      "resolved_blob": "5a556935d0f75a56f35f50e1b0020a5900a2a32b",
+      "sha256": "fc7ed0857eea20d99ecc076b8eb98f038b073b4c6157b855bcc11a12ad0ae2e2",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "finiteProductEntropy_le_of_areaLawBound",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "837fdd09373d99fc3fb7427f5de9aea7a77936157faba41f808bdb1f0fd96f29",
+          "rejected_text_sha256": "86405846e81a16cdb0951fda37995f2146e91ce32c5e946faa52fb7624921363"
+        },
+        {
+          "hunk": 2,
+          "symbol": "finiteProductEntropy_le_of_areaLawBound",
+          "resolution": "Use the broad coordinate-transport API on the same canonical interaction; total Hermiticity only, no J argument and no singleton/positive-gap requirement. Separate term bounds remain.",
+          "retained_text_sha256": "12b93a9191dc011dddf4416b54560dd3ca64cc2b74ad2bbd9ba4e6600bb29b2e",
+          "rejected_text_sha256": "325a9e62c316154badf8ef4a1c82c63ff18b5467fbdca8cca47db75b23097d14"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean",
+      "resolved_blob": "d3866f51677dd140657564eda68dc89bea37777d",
+      "sha256": "48942671491f35e32a8cbb66b79087a09f05cc636e08a432f636279dc7dcdcac",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt",
+          "resolution": "Use the broad coordinate-transport API on the same canonical interaction; total Hermiticity only, no J argument and no singleton/positive-gap requirement. Separate term bounds remain.",
+          "retained_text_sha256": "04819149b74293b3b78262dedc59413ea59b86cf880c97b123b500297789d453",
+          "rejected_text_sha256": "0b8afafaa5445d5764b3b33bdb19fe6c6238b61e23d6f671c333045109c23c5c"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean",
+      "resolved_blob": "346e97d2794d27fdd24152bec6c1c4454e634453",
+      "sha256": "f69524b5b4b89468f28e98c0ccdbada17ac73df14f3b3c5dacd59cf7cf7f5324",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "_root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fidelity",
+          "resolution": "Use the broad coordinate-transport API on the same canonical interaction; total Hermiticity only, no J argument and no singleton/positive-gap requirement. Separate term bounds remain.",
+          "retained_text_sha256": "e86fbfc0118a0cae649bd970c2617598a914c41e4f561c7c7553b5e87f86ccb7",
+          "rejected_text_sha256": "bd0d7662a974503e39ff38c3c738bbca2979189e2bd4dfaf1e3b7e5b45bd0689"
+        },
+        {
+          "hunk": 2,
+          "symbol": "_root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fidelity",
+          "resolution": "Pass the transported projector PSD directly to the Delta-weighted fidelity proof; do not demand a singleton to reconstruct an already supplied inequality.",
+          "retained_text_sha256": "3c5cbeeb96bd8947ff66a57e79128922909a2b5cb158e5930db198f29efdaa64",
+          "rejected_text_sha256": "3504f950a6ea995cacb4c2a27642fe04319d4feedd5cda36e0609762599365bf"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean",
+      "resolved_blob": "2bd5fc71355883f5e91b8c1e9da145f7c9f34737",
+      "sha256": "697b049859609b349e9649afce849da27b4f04ed556dbb2071feb8122d6e442c",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "latticeConstraintWord_truncation_of_positiveConstraints",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "c3679d8b4c7e6dd710a8f16467df88138633d9e042664430b92a56c5b9cc7f42",
+          "rejected_text_sha256": "369a46a98ac23b9132255e595c61f0389eef17633b0083010d40ae3e7d9a813c"
+        },
+        {
+          "hunk": 2,
+          "symbol": "latticeConstraintWord_truncation_of_positiveConstraints",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "7fa0f017af4c0300518dd8913e9eaf4bb2353f4e666da8962264da45e5bd8b76",
+          "rejected_text_sha256": "72f8c3628ce5d17776f0aa1d7f3a28a91c30466fa64e78fa46d06dff88b99fe5"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean",
+      "resolved_blob": "6c0f660b112adc46d89c87074efaa05860272495",
+      "sha256": "f2bece04bb425e7e15f6afc8ac70a5dcc6a29dd684a4c8ffc5f7d8e05ed18782",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "scope openings",
+          "resolution": "Keep ComplexOrder for the retained projector-PSD expressions; retain Matrix.Norms.L2Operator where present.",
+          "retained_text_sha256": "223b9ed623e514adc49564c4e7fad29ad3e1b798bde2bf35411be391838c5247",
+          "rejected_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "hunk": 2,
+          "symbol": "latticeConstraintWord_omission_of_positiveConstraints",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "c3679d8b4c7e6dd710a8f16467df88138633d9e042664430b92a56c5b9cc7f42",
+          "rejected_text_sha256": "369a46a98ac23b9132255e595c61f0389eef17633b0083010d40ae3e7d9a813c"
+        },
+        {
+          "hunk": 3,
+          "symbol": "latticeConstraintWord_omission_of_positiveConstraints",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "7fa0f017af4c0300518dd8913e9eaf4bb2353f4e666da8962264da45e5bd8b76",
+          "rejected_text_sha256": "72f8c3628ce5d17776f0aa1d7f3a28a91c30466fa64e78fa46d06dff88b99fe5"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean",
+      "resolved_blob": "7a2b034619b0ac1f928ec9a92effda6c473bcb70",
+      "sha256": "a34b0c8cfb204ec6895d1eb5a0bafd2af11ffa21971bdedfc76182eb5230e54c",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "scope openings",
+          "resolution": "Keep ComplexOrder for the retained projector-PSD expressions; retain Matrix.Norms.L2Operator where present.",
+          "retained_text_sha256": "223b9ed623e514adc49564c4e7fad29ad3e1b798bde2bf35411be391838c5247",
+          "rejected_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "hunk": 2,
+          "symbol": "amplificationBound_of_radius_output",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "eb6c63e20f1e35fb26de340f8358b91616db734efb19155c713adcdaa05ad7b7",
+          "rejected_text_sha256": "f0b201568195fe81f85ccb024f35aae60b18c7cf2128df19fcba4018f38aa8aa"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/AmplificationProof.lean",
+      "resolved_blob": "7dfc05dd2a5226e5a64546618d5f08515593fc14",
+      "sha256": "4b5ab9ea9d4d9728d946000c01dd341c92b41b038ff5817521b38ef87c8b0f31",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "amplificationBound_of_locality",
+          "resolution": "Retain the positive-locality adapter, whose existing positive-Delta premise bridges to the restored generic PSD/member omission theorem. Main canonical interaction arguments hh/hhJ retained.",
+          "retained_text_sha256": "a3c1c14a0b91e23e7a809fffee78d16f41e5420e2b80cee0dd2443fab449dbaa",
+          "rejected_text_sha256": "6a8c23e10dd3211ea4f1016dc43331402c6cbb83c5af11aaac6709df5ca9daa1"
+        },
+        {
+          "hunk": 2,
+          "symbol": "amplificationBound_of_locality",
+          "resolution": "Retain the canonical positive-Delta bridge at the existing hDelta premise, adapting broad state inputs only where the positive-gap downstream result needs them.",
+          "retained_text_sha256": "727218a5b5acb2582fdaf996c9af3f98aef11e39df2accb3b474405638a44bf2",
+          "rejected_text_sha256": "91f139642c0f2176fa36d8f91cae26f27d5348d5ae270fb021f18de06740c11b"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/BoundaryTheorem.lean",
+      "resolved_blob": "d20120a8d32d94714f6725ce1e4a498751122bad",
+      "sha256": "a53cf9e1182adbe4c8877bd382fa45f21d267141d1a399fd882d5b68407a3841",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "scope openings",
+          "resolution": "Keep ComplexOrder for the retained projector-PSD expressions; retain Matrix.Norms.L2Operator where present.",
+          "retained_text_sha256": "223b9ed623e514adc49564c4e7fad29ad3e1b798bde2bf35411be391838c5247",
+          "rejected_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "hunk": 2,
+          "symbol": "SublinearCollarBound",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "12a29565c52e2b0370a38993a36d37ab208b3a430ee866c5c44023a8687301a9",
+          "rejected_text_sha256": "3c4580382d49e266dc50de6d8a7322747e31648ff57aef72ed0fdfe88e9c0bb8"
+        },
+        {
+          "hunk": 3,
+          "symbol": "AmplificationBound",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "cac18f2902d989b58c92f97d13e6923b98b825ed60eefba7224e9d90a6a28392",
+          "rejected_text_sha256": "381dd9855a0d9ca9d8f4b57475a43fcbd1520623e9953ac58120c746c11f4d08"
+        },
+        {
+          "hunk": 4,
+          "symbol": "SublinearCollarBoundAt",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "12a29565c52e2b0370a38993a36d37ab208b3a430ee866c5c44023a8687301a9",
+          "rejected_text_sha256": "3c4580382d49e266dc50de6d8a7322747e31648ff57aef72ed0fdfe88e9c0bb8"
+        },
+        {
+          "hunk": 5,
+          "symbol": "AmplificationBoundAt",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "12a29565c52e2b0370a38993a36d37ab208b3a430ee866c5c44023a8687301a9",
+          "rejected_text_sha256": "3c4580382d49e266dc50de6d8a7322747e31648ff57aef72ed0fdfe88e9c0bb8"
+        },
+        {
+          "hunk": 6,
+          "symbol": "regionalEntropy_le_of_collar_amplification_twoFamilies_constants",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "cac18f2902d989b58c92f97d13e6923b98b825ed60eefba7224e9d90a6a28392",
+          "rejected_text_sha256": "381dd9855a0d9ca9d8f4b57475a43fcbd1520623e9953ac58120c746c11f4d08"
+        },
+        {
+          "hunk": 7,
+          "symbol": "regionalEntropy_le_of_collar_amplification_twoFamilies_constants",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "cac18f2902d989b58c92f97d13e6923b98b825ed60eefba7224e9d90a6a28392",
+          "rejected_text_sha256": "381dd9855a0d9ca9d8f4b57475a43fcbd1520623e9953ac58120c746c11f4d08"
+        },
+        {
+          "hunk": 8,
+          "symbol": "regionalEntropy_le_of_collar_amplification_twoFamilies_constants",
+          "resolution": "Convert canonical positive-gap/singleton data to the broad PSD/member consumer signature, retaining existing Hermiticity and norm premises.",
+          "retained_text_sha256": "a986623606bfa00ff11d70f69bf594d9f235eb5c8e88e2c09d5c3ecf26197d2b",
+          "rejected_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "hunk": 9,
+          "symbol": "regionalEntropy_le_of_collar_amplification_twoFamilies_constants",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "6fa019467d5613d418e37bc761044b2176192e01b26ae57f374e865a96fe5654",
+          "rejected_text_sha256": "7812d33892678d8643a21b12e8b4e82d0265af790b52ac4237f611b53488fd56"
+        },
+        {
+          "hunk": 10,
+          "symbol": "regionalEntropy_le_of_collar_amplification_twoFamilies_constants",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "5895ae9bb12f46bb2fdd2251a534772b8cc4cbe9ae86f4834e549dbd50a0e0d3",
+          "rejected_text_sha256": "b00a89f0340a8ef3c41c56cd54e2fcb9775736a48d235b7a75ea110bbf1497fd"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/CollarInformation.lean",
+      "resolved_blob": "421699af3b92c63d6964c1c009faccece65719d6",
+      "sha256": "3c0619c14883a006e57d23854479bab24b016eeb2bba23383613d96129e10d72",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "sublinearCollarBound_of_mutualInformation_le_at",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "cac18f2902d989b58c92f97d13e6923b98b825ed60eefba7224e9d90a6a28392",
+          "rejected_text_sha256": "381dd9855a0d9ca9d8f4b57475a43fcbd1520623e9953ac58120c746c11f4d08"
+        },
+        {
+          "hunk": 2,
+          "symbol": "sublinearCollarBound_of_mutualInformation_le_at",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "cac18f2902d989b58c92f97d13e6923b98b825ed60eefba7224e9d90a6a28392",
+          "rejected_text_sha256": "381dd9855a0d9ca9d8f4b57475a43fcbd1520623e9953ac58120c746c11f4d08"
+        },
+        {
+          "hunk": 3,
+          "symbol": "sublinearCollarBound_of_mutualInformation_le",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "cac18f2902d989b58c92f97d13e6923b98b825ed60eefba7224e9d90a6a28392",
+          "rejected_text_sha256": "381dd9855a0d9ca9d8f4b57475a43fcbd1520623e9953ac58120c746c11f4d08"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/GraphPropagation.lean",
+      "resolved_blob": "6d1df95923bb9ef7df7fd62899890de9dc7f0947",
+      "sha256": "8c2595f0a5f750972ff6d7fdf99c751587b744f73eccf2bd53c538dea7b56a56",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "sum_norm_term_containing_le",
+          "resolution": "Keep direct canonical Interaction h; reject the redundant private interaction reconstruction and its three uses. Main canonical PlaneInteraction type remains present.",
+          "retained_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rejected_text_sha256": "3395023e5008b9a816bf51c8a1833e13d420df93ec27d71a39287321e78a7d52"
+        },
+        {
+          "hunk": 2,
+          "symbol": "norm_commutator_le_graphDistance",
+          "resolution": "Keep direct canonical Interaction h; reject the redundant private interaction reconstruction and its three uses. Main canonical PlaneInteraction type remains present.",
+          "retained_text_sha256": "f9966de23525864b0a1b1ca76fad0f18c32252297958f52153e88a35023ab9e5",
+          "rejected_text_sha256": "3cb04a1fa8afd139dca2632a68a2b96f229b9a837287e08357758adf8ef7aa1f"
+        },
+        {
+          "hunk": 3,
+          "symbol": "norm_sub_regionExpectation_graphBall_le",
+          "resolution": "Keep direct canonical Interaction h; reject the redundant private interaction reconstruction and its three uses. Main canonical PlaneInteraction type remains present.",
+          "retained_text_sha256": "5445a7c0f69151cbe183628dc802deb6b6acb11cf311a5ad4a2a726390f8ab03",
+          "rejected_text_sha256": "557aafd835a4427bd112e379096f9515020eee496c91de814bf93053180bdf71"
+        },
+        {
+          "hunk": 4,
+          "symbol": "exists_quasilocal_lieb_robinson",
+          "resolution": "Keep direct canonical Interaction h; reject the redundant private interaction reconstruction and its three uses. Main canonical PlaneInteraction type remains present.",
+          "retained_text_sha256": "87a2cc51ce8b07c06c68073e5a7893be2e6717df62986d98e7bb97360e80b556",
+          "rejected_text_sha256": "72bd511044fbe11bdbea3f5b22f9d46371d76ab41a034f77b7891b84a18a30b8"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean",
+      "resolved_blob": "73c56255544cf6ac1841160e0cded30ee0292f84",
+      "sha256": "388498b1f22665d38abd12abcb38105ae4b3def33bd8098d2c3f35539cde2308",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "scope openings",
+          "resolution": "Keep ComplexOrder for the retained projector-PSD expressions; retain Matrix.Norms.L2Operator where present.",
+          "retained_text_sha256": "48154d25a64538419db478ba15ef0da0b4c02020f2a5ed92b2da39b83d737c05",
+          "rejected_text_sha256": "511454575ea21017e798b5077f655a504c6fc4ac306dcdc2574c25836c91c42f"
+        },
+        {
+          "hunk": 2,
+          "symbol": "boxEntropyValues",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "116645171f56731ab788742c7c56a35c403ef93b017ec5088dcf0247ced39e8e",
+          "rejected_text_sha256": "644141ca018e77da5b39b348a8f1365326128bf1cd8e2f2981ac9feb80add1c9"
+        },
+        {
+          "hunk": 3,
+          "symbol": "le_of_mem_boxEntropyValues",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "dbcfb20d9acec2d58ea193a34f8a501804b33184272452cc86459404edc33fae",
+          "rejected_text_sha256": "ca4ef122571f4fa5a59d0173fed501a74b0d7022c13d76d3b672a18a6f1ef2f5"
+        },
+        {
+          "hunk": 4,
+          "symbol": "nonneg_of_mem_boxEntropyValues",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "11b739759b1b8879ec7be67616e7028967caef827d56ce9b0ee7841edf894453",
+          "rejected_text_sha256": "ac9bdc5a3ea75315876a3161ba9d546653c1e51fb6f1b2e620026634cd14297d"
+        },
+        {
+          "hunk": 5,
+          "symbol": "regionalEntropy_le_boxEntropy",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "560e2281c3836bc856f200fe803a7d4331fcfe6b5a8b1b041027e58432971daa",
+          "rejected_text_sha256": "97b963c8040a27f02bed41f80567307c521cd6fe84a5feb144c5a691efb91f4c"
+        },
+        {
+          "hunk": 6,
+          "symbol": "boxEntropy_mono",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "19c0118f1cd90a1b06b1959e7f5fd5860ab80e6d1589f18fdc9af15fffea2f02",
+          "rejected_text_sha256": "729bb7061d8f345d004ac8c4230cf2c0cdfb8cf0eedcf218859ea664fb5eaafd"
+        },
+        {
+          "hunk": 7,
+          "symbol": "boxEntropy_antitone",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "b3d9f31246384a20c552e8a831a7c2b09860ebef78ae78172de170e4c11de504",
+          "rejected_text_sha256": "cb9583cb24d3cc91895a547e32fc702335ce528c2151c8910e4ff859ca2efcd5"
+        },
+        {
+          "hunk": 8,
+          "symbol": "regionalEntropy_rectRegion_le_of_children",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "bf697d748c9bc8f2e624c478a30bb5acf8e073668a83376b7cacb1b128e4f8f2",
+          "rejected_text_sha256": "82188f06e5d72a82362ca2b23df63ac83adde3b47be3ace0a5a0b94f3e6dde92"
+        },
+        {
+          "hunk": 9,
+          "symbol": "regionalEntropy_rectRegion_le_of_children",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "fbc300713af219c9c59152769d5c8575686da2c6bba47f1eb5ac25a645864fc3",
+          "rejected_text_sha256": "a0057d01c29b049aef374990e1efbbb8f243c61c6c03a9c858a116c478e17138"
+        },
+        {
+          "hunk": 10,
+          "symbol": "regionalEntropy_rectRegion_le_of_children",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "6f9e8100a9879d2d85f82f79a1b6fd9a81d7762732ccf2ca240d92e310146876",
+          "rejected_text_sha256": "54c5979901ed91f72b065277051bb3e0f03c97113f0e2ac4f7e23185a841d370"
+        },
+        {
+          "hunk": 11,
+          "symbol": "regionalEntropy_rectRegion_le_of_children",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "7b7ab8bf813b5f594eb2e75588c49cbe820c02fe92f0e3769919ab3d7af9a132",
+          "rejected_text_sha256": "fcc7299b3387444471fa14528c86b4e29588eafd62791a7ac3e8162002642d6f"
+        },
+        {
+          "hunk": 12,
+          "symbol": "boxEntropy_le_of_scale",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "bf697d748c9bc8f2e624c478a30bb5acf8e073668a83376b7cacb1b128e4f8f2",
+          "rejected_text_sha256": "82188f06e5d72a82362ca2b23df63ac83adde3b47be3ace0a5a0b94f3e6dde92"
+        },
+        {
+          "hunk": 13,
+          "symbol": "boxEntropy_le_of_scale",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "ea2c20dc219d25fdb7ba202549c27e3d67c1acf6d6a58c75db6df15b9fbb1562",
+          "rejected_text_sha256": "75d865c5f9a9e38f8e246b4534d2c986e38e9b4c3b3c4b02261423db582d5617"
+        },
+        {
+          "hunk": 14,
+          "symbol": "boxEntropy_le_initialBoxRatio_mul",
+          "resolution": "Retain the canonical positive-Delta bridge at the existing hDelta premise, adapting broad state inputs only where the positive-gap downstream result needs them.",
+          "retained_text_sha256": "ea2c2ed4815f658d7172f6d2bd46a6af0e707e7290cce6860e578f65e77ab411",
+          "rejected_text_sha256": "67ab954f42f10dfb24f8122ee2ecf3e559e82f940a88551bd3783c9f19fcb30e"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean",
+      "resolved_blob": "e05d27f7462c49094847e87dc410afab01d90b49",
+      "sha256": "b65d344f543e55b136711baf4ade69b093648c6ac0d754be7f135269c22bfed1",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "exists_regionalEntropy_safe_rect_le_rpow",
+          "resolution": "Convert canonical positive-gap/singleton data to the broad PSD/member consumer signature, retaining existing Hermiticity and norm premises.",
+          "retained_text_sha256": "65dce41a3e30b3b73bb222d08175a28f6dff2196180ea25ed5fc20b9a608aa64",
+          "rejected_text_sha256": "87bef0fb0c2352a3ef0d1f64f6aee09d1d7d4c77c721beaa225eaaec81ef52a1"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean",
+      "resolved_blob": "1ac8f1d39499182db4cb39951c755ab4859c2f34",
+      "sha256": "ca6cf8069989569caf57651314ebd8764352c834f4838da242bfd7472dff6bf9",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "sublinearCollarBound_real_of_boxEntropy_explicit",
+          "resolution": "Retain the canonical positive-Delta bridge at the existing hDelta premise, adapting broad state inputs only where the positive-gap downstream result needs them.",
+          "retained_text_sha256": "3885d5da540602e5fbb5c515020d78bc46b2d5da0a6b580433793e6d536f57eb",
+          "rejected_text_sha256": "344f554de4f73841cc002a9d8902d761510f2c335952aede6ea2db5de120c831"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean",
+      "resolved_blob": "cd3fbd69fa9d7ad2fa6e7fc97ca8f6edc8aacb99",
+      "sha256": "e0dbb7aa948d3f8bf3cd07f6082b05b79937dabe55e263aeefbba2430a1abbf4",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "exists_regionalEntropy_safe_rect_le_boxError",
+          "resolution": "Convert canonical positive-gap/singleton data to the broad PSD/member consumer signature, retaining existing Hermiticity and norm premises.",
+          "retained_text_sha256": "b1dfec2129447d057fea42ea9e0e8e3f9308ae9999055429b583bb6a712ad831",
+          "rejected_text_sha256": "6801b0cb53a7d2f99bb2b23c92e9bcb5b8df3e5b82d928e8a43dcbc8831e126e"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean",
+      "resolved_blob": "e39fa615566bf864a102299e1a03a6eaf6d2e2b7",
+      "sha256": "25d2fb6440767d3def9a63907659920832570b432cd82d4428e7ae96adf7dccc",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "boxEntropy_power_le_of_succ_clearance",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "4eff1459b076616bc0ad976846fbd30672afa642d3296d1a9f9ab749dad2e46a",
+          "rejected_text_sha256": "e2db2563a32e1aa1b22a718317c0c459c29dd34500fb65a7d2522703a39a4839"
+        },
+        {
+          "hunk": 2,
+          "symbol": "boxEntropy_power_le_of_succ_clearance",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "20772a87321d2996c63c4014ce9657277439649ef424b6029498c1ffd5936487",
+          "rejected_text_sha256": "63c33029e6f619eda9709bd981be964283d2271bc1b98c7a2149d7e18cb7fb9f"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean",
+      "resolved_blob": "37ec5452365ccf4fed7967c7549dd0dbd201904f",
+      "sha256": "0413da02d840e162d4faa21a06f167b2950c460f5013ac0862600405feb8dc16",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "scope openings",
+          "resolution": "Keep ComplexOrder for the retained projector-PSD expressions; retain Matrix.Norms.L2Operator where present.",
+          "retained_text_sha256": "48154d25a64538419db478ba15ef0da0b4c02020f2a5ed92b2da39b83d737c05",
+          "rejected_text_sha256": "511454575ea21017e798b5077f655a504c6fc4ac306dcdc2574c25836c91c42f"
+        },
+        {
+          "hunk": 2,
+          "symbol": "regionalEntropy_le_of_boxEntropy_power",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "0c7bc27c11f8327aea55ffd0261d408a680d46dfdd1ac5889d979d8614d26d67",
+          "rejected_text_sha256": "e93b79ba7a1607acea1dbcde60c981841ef5f9106d78b874acf0be794e52fcaa"
+        },
+        {
+          "hunk": 3,
+          "symbol": "boxEntropy_power_le_of_large_rectangles",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "9cffadf85e94654322b19af7635192662df6bacdabcc1b4b6934afae36935b76",
+          "rejected_text_sha256": "e1460835dbd6af3d0ab0b58da795d888e6450fb6585d5e2db4d733eef80011cf"
+        },
+        {
+          "hunk": 4,
+          "symbol": "boxEntropy_power_le_of_large_rectangles",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "6f8b0d8e0df5c9135b8c6887f47c0b50396364d4f55ec4f2d0cd5614986758e7",
+          "rejected_text_sha256": "1e1016cbbdd69b57c9a95dab0b05cf4270257fdc6cb083040edcd617367da433"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean",
+      "resolved_blob": "8622d0c6194913b068a9404a345c2fc62b735fb7",
+      "sha256": "64044a638580b516e971152a5bed7a91cf31f77b2e5f0de8948bb921856e542a",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "uniform_boxEntropy_improvement_explicit",
+          "resolution": "Retain the canonical positive-Delta bridge at the existing hDelta premise, adapting broad state inputs only where the positive-gap downstream result needs them.",
+          "retained_text_sha256": "eb86055590f662a923327beb1e524b01f543f93be0d60cd9bf83ddc94cc9e37d",
+          "rejected_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean",
+      "resolved_blob": "c551391b853347c3f147b55f7de23c157d93394e",
+      "sha256": "7811fca0a783e1b2ea72f790d7680b5121e2e35d1a0533910e46e3863cc51a40",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "ScannerHypotheses",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "47cc5bed11cac03d3141eb2eea5a3442fd9b653d32c1f91061a15dc44934e122",
+          "rejected_text_sha256": "38b793f7b97ff8377275eaa568ab7b29b7ecfa93026214b0eb7b60fbe138ac33"
+        },
+        {
+          "hunk": 2,
+          "symbol": "scannerStatement",
+          "resolution": "Retain the canonical positive-Delta bridge at the existing hDelta premise, adapting broad state inputs only where the positive-gap downstream result needs them.",
+          "retained_text_sha256": "3723ae8e8c0c7276e51193346019a55791f3e07fcac0e3fd9521a39deba1a661",
+          "rejected_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "hunk": 3,
+          "symbol": "scannerStatement",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "aab925653f732bdcb47bf7a74aa7ece7ccb576737a35506657b2a8bdf311bb80",
+          "rejected_text_sha256": "4f2cc70282c0ff4933bbf15e9eb8b406408de6647b551b62cffc4a3fa8e670f1"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean",
+      "resolved_blob": "f3072173c030a419631db7c4c2962300470324fc",
+      "sha256": "58ad54ecdc2e5e8b381fe94673e66c1e2ee3fe671ad6da6df6a3cdc5d365820b",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "template_final_mutualInformation_of_boxEntropy_explicit",
+          "resolution": "Convert canonical positive-gap/singleton data to the broad PSD/member consumer signature, retaining existing Hermiticity and norm premises.",
+          "retained_text_sha256": "afa496719b60d257a12d4890a8abdaf8c4a20f7660c7e60e59f4ea7af94a3d12",
+          "rejected_text_sha256": "7de71bb733622909d3be6ed7ee190fd7d338a271506355d99f5c8af7e92f655f"
+        }
+      ]
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean",
+      "resolved_blob": "e9db25d6ac568072c93a3c9060e060563b269f5f",
+      "sha256": "9142d90fffe17edf63c91110b7d20b7b9d6ade41fce6cd0b0e43587f908de3f9",
+      "main_equals_10905_head": true,
+      "whole_file_including_auto_merged_neighbors_equals_42c4": true,
+      "hunks": [
+        {
+          "hunk": 1,
+          "symbol": "scope openings",
+          "resolution": "Keep ComplexOrder for the retained projector-PSD expressions; retain Matrix.Norms.L2Operator where present.",
+          "retained_text_sha256": "223b9ed623e514adc49564c4e7fad29ad3e1b798bde2bf35411be391838c5247",
+          "rejected_text_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "hunk": 2,
+          "symbol": "template_final_source_entropy_bounds_of_boxEntropy",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "4fd10412b6d036be25895cbb1947eab273ea62c8a807ffbdfd697a7fe42acd3d",
+          "rejected_text_sha256": "5cff7a20d86a65cd8106ef4952aad2471275cdc6195bfaccdcdc623ff73fc113"
+        },
+        {
+          "hunk": 3,
+          "symbol": "template_final_source_entropy_bounds_of_boxEntropy",
+          "resolution": "Keep the matching witness destructuring or caller arguments for the restored PSD/member signature (or derived positive-gap bridge), while retaining main canonical Interaction/hamiltonian and explicit term premises; do not pass membership as singleton equality.",
+          "retained_text_sha256": "f7d4ae6daec1d2d01b10f3710448bd2dc244a237f57dcb368ffebd972f5cb79b",
+          "rejected_text_sha256": "6a7bc6cf1344419ae95b3c41edddff31fb7ae8933a50bd6bc4cd4f213268f500"
+        },
+        {
+          "hunk": 4,
+          "symbol": "exists_template_final_source_entropy_bounds_of_boxEntropy",
+          "resolution": "Keep norm plus projector PSD plus canonical eigenspace membership over arbitrary real Delta; keep canonical PlaneInteraction and explicit pre-existing term hypotheses from main. Reject unconditional singleton restriction.",
+          "retained_text_sha256": "7142d1ec9d6f40dcaa15bf9ff68dc87a8321f1b9901e43758bfac671f21809b8",
+          "rejected_text_sha256": "7da1f2f971c410a96df00a4a505ad169cb878c87307ef72adcc536b38584e960"
+        }
+      ]
+    }
+  ]
+}
