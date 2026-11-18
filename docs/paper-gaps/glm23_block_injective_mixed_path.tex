@@ -93,24 +93,47 @@ exact fusion.\footnote{\leanid{MPSTensor.MPOSymmetry.isBiorthogonalDecomposition
     \leanid{MPSTensor.MPOSymmetry.isMPOFusionAlgebra_blockMixedMPO},
     in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/BlockMixedMPOFusion}.}
 
+The ground-space claim is proved for the two-site canonical parent
+Hamiltonian $H(\gamma)$ of $A(\gamma)$, the Hamiltonian of the injective
+case (line 1690). Since the blocks occupy separated physical sectors and
+each block is injective on $(0,1)$, the one-site letters of the blocks
+already span $\bigoplus_x M_{D^0_x+D^1_x}$, so the block-injective parent
+theory applies with the source's two-site interaction. For every
+$\gamma\in(0,1)$ and every ring of length $N\ge2$ the periodic ground space
+of $H(\gamma)$ is spanned by the block states
+$\ket{\psi_{A_x(\gamma)}}$, and these are linearly independent on the
+whole closed interval, because they are nonzero and supported on disjoint
+sectors. The statement that $H(\gamma)$ is well behaved is proved in the
+following sense: the ground projection is continuous on $(0,1)$, every
+compact subset of $(0,1)$ has one positive gap bound for all $N\ge2$, and
+as $\gamma$ tends to any point of $[0,1]$, in particular to an endpoint,
+the ground projections converge to the projection onto the span of the
+block states at that point.\footnote{%
+    \leanid{MPSTensor.MPOSymmetry.ker_parentHamiltonianES_blockMixedTensor},
+    \leanid{MPSTensor.MPOSymmetry.linearIndependent_mpv_blockMixedInterpolation},
+    \leanid{MPSTensor.MPOSymmetry.continuous_blockMixed_groundSpace_starProjection},
+    \leanid{MPSTensor.MPOSymmetry.exists_uniform_blockMixed_parentHamiltonianES_gap},
+    \leanid{MPSTensor.MPOSymmetry.tendsto_blockMixed_groundSpace_starProjection},
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/BlockMixedGroundSpace}.}
+All of these statements carry the separated-sector restriction.
+
 The one-site injectivity of the operators $T_a$ on the enlarged space is
 false already for one block, by the counterexample of
-\texttt{glm23\_mixed\_operator\_one\_site\_injectivity.tex}. Two claims
-of the passage remain open: the statement that $H(\gamma)$ is well behaved
-along the path, and the statement that its ground space is spanned by the
-block states. The source
-gives no argument for the last two beyond the injective case. The
-restriction of an arbitrary physical alphabet to the span of a
-block-injective tensor, derived for one block in the arbitrary-alphabet
-construction, is not derived for several blocks.
+\texttt{glm23\_mixed\_operator\_one\_site\_injectivity.tex}. Open are the
+identification of the limiting projections with the kernels of the
+endpoint Hamiltonians, and a gap there, which the injective case proves
+separately; and the restriction of
+an arbitrary physical alphabet to the span of a block-injective tensor,
+derived for one block in the arbitrary-alphabet construction but not for
+several blocks. The source gives no argument for the ground-space claims
+beyond the injective case.
 
 \section{Elimination plan}
 \begin{enumerate}
-    \item Prove the ground-space claim from the block-injective parent
-          Hamiltonian theory: for $\gamma\in(0,1)$ the canonical parent
-          of $A(\gamma)$ has the block states as a basis of its periodic
-          ground space, and the limits at $\gamma=0,1$ are handled as in
-          the injective case.
+    \item The interior ground space, continuity, and compact gaps are
+          proved. Identify the limiting projections at $\gamma=0,1$ with the
+          kernels of the endpoint Hamiltonians, and prove an endpoint gap,
+          as in the injective case.
     \item State any commutation of $H(\gamma)$ with the common operators
           under the adjoint-closure restriction of
           \texttt{glm23\_mixed\_path\_parent\_commutation.tex}, or replace

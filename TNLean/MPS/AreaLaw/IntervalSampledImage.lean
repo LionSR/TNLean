@@ -108,8 +108,9 @@ lemma _root_.Submodule.exists_measurable_sampledWordImage_event_of_nested
 
 /-- The actual sampled word image has a measurable fixed-input success
 event, a cubic dimension bound and controlled error, when the children are
-viable for a global target `G`, the words improve a target `Thi` close to `G`
-into a target `Tlo`, and `Tlo` is close to the output target `Gout`.
+viable for a global target `G`, `G` is `epsilon`-close to `Thi`, the word family
+improves viability for `Thi` into viability for `Tlo`, and `Tlo` is
+`epsilon`-close to the output target `Gout`.
 The fixed improving family precedes both child spaces and
 the sample. Supporting ALVV, arXiv:1602.08828v2, `l:t`, lines 500–523,
 `l:rs`, lines 530–558, and `l:er`, lines 597–622. This composition does not
