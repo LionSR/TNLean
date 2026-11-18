@@ -40,9 +40,11 @@ open scoped BigOperators Kronecker TensorProduct Matrix.Norms.L2Operator MatrixO
 
 namespace TNLean.MPS.AreaLaw.ALVV
 
-/-- Additive identity for replacing three bulks and then the middle one.
-Auxiliary to ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1311–1333. -/
-private theorem actual_three_bulk_replacement_sum {M : Type*} [AddCommGroup M]
+/-- Additive identity for replacing three bulks and then the middle one: the two-window
+alphabet with the left and right closing terms and a middle replacement `Z` sums to the
+three-bulk replacement with the middle bulk exchanged for `Z`. Auxiliary to ALVV,
+arXiv:1602.08828v2, Proposition 5.7, lines 1311–1333. -/
+theorem actual_three_bulk_replacement_sum {M : Type*} [AddCommGroup M]
     (L a b ell : ℕ) (hell : 1 ≤ ell) (hab : a + 2 * ell ≤ b)
     (hb : b + 2 * ell ≤ L - 1) (h : Fin (L - 1) → M)
     (F shifts : Fin 5 → M) (Z U : M) :

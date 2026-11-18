@@ -104,8 +104,32 @@ The root is `3/200`-close to the window `etaLD - 3w · clog₂ L`, and each of
 its vectors is a matrix product state of bond dimension
 `10^6 Dref^2 (L + 1) count^2`. ALVV, arXiv:1602.08828v2, Theorem `t:alg2`,
 lines 1869–1878, with Theorem `t:alg1`, lines 1777–1817, and the families
-of Theorem `t:aisgapless`, lines 1027–1041. -/
-theorem exists_physical_ld_sampled_interval_tree (etaLD : ℝ) (hLD : 0 < etaLD) :
+of Theorem `t:aisgapless`, lines 1027–1041. The conclusion at the root is
+recorded as any consequence `Q` of its closeness, dimension and matrix
+product bounds, so that its instances need not repeat the construction. -/
+theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 0 < etaLD)
+    (Q : ∀ (L q m : ℕ) (w : ℝ) (_hq : 2 ≤ q)
+      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (_h0 : ∀ i, 0 ≤ h i)
+      (_count _Dref : ℕ), Submodule ℂ (EuclideanSpace ℂ (interval L 0 L → Fin q)) → Prop)
+    (hQ : ∀ (L q m : ℕ) (w : ℝ) (hq : 2 ≤ q), q ≤ m → 0 < w →
+      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
+      (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        (h i) (interval L i.val (i.val + 2))) →
+      ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
+      let _ : Nonempty (Fin L → Fin q) :=
+        ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
+      let H := ∑ i, h i
+      let hRaw : H.IsHermitian :=
+        (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
+      let G := fun eta : ℝ ↦ Submodule.spectralSpanLE
+        hRaw.eigenvectorBasis hRaw.eigenvalues (minEigenvalue hRaw + eta)
+      ∀ (count Dref : ℕ) (S0 : Submodule ℂ (EuclideanSpace ℂ (interval L 0 L → Fin q))),
+      Submodule.IsCloseTo (3 / 200 : ℝ) (nativeFullIntervalSpace L q S0)
+        (G (etaLD - 3 * w * Nat.clog 2 L)) →
+      Module.finrank ℂ S0 ≤ count →
+      (∀ v ∈ S0, IsOpenMPS L q (1000000 * Dref ^ 2 * (L + 1) * count ^ 2)
+        (fullIntervalRead L q v)) →
+      Q L q m w hq h h0 count Dref S0) :
     ∃ C : ℝ, 100 ≤ C ∧ 19 + etaLD ≤ C ∧
       ∀ (L q m : ℕ) (w : ℝ) (hq : 2 ≤ q), q ≤ m → 0 < w →
       let mi := 4 * m
@@ -168,21 +192,18 @@ theorem exists_physical_ld_sampled_interval_tree (etaLD : ℝ) (hLD : 0 < etaLD)
                 (interval L p r)).toLinearEquiv.toLinearMap) ∧
             Module.finrank ℂ S ≤ count ∧ IsIntervalSpanWithRankBound L q p r count xi S) ∧
           let S0 := balancedIntervalSpace operation width hwidth 0 L
-          Submodule.IsCloseTo (3 / 200 : ℝ) (nativeFullIntervalSpace L q S0)
-            (G (etaLD - 3 * w * Nat.clog 2 L)) ∧
-          ∀ v ∈ S0, IsOpenMPS L q (1000000 * Dref ^ 2 * (L + 1) * count ^ 2)
-            (fullIntervalRead L q v)) := by
+          Q L q m w hq h h0 count Dref S0) := by
   classical
   obtain ⟨C, hC, hCeta, hlong⟩ :=
     exists_fixed_bandwidth_long_interval_dyadic_low_energy_word_family etaLD hLD
   obtain ⟨_Kref, _hKref, hbasis⟩ :=
     exists_fixed_bandwidth_low_energy_orthonormal_mps_basis etaLD hLD
   refine ⟨C, hC, hCeta, ?_⟩
-  intro L q m w hq hqm hw mi g u ell D h hs h0 h1 config H hRaw G rG
+  intro L q m w hq hqm hw mi g u ell D h hsupp h0 h1 config H hRaw G rG
   let : Nonempty (Fin L → Fin q) := config
   have hm4 : m * 2 ^ 2 = mi := by dsimp only [mi]; ring
   have hfamily (p r : ℕ) (hpr : p ≤ r) (hrL : r ≤ L) := by
-    have hfam := hlong L q m p r 2 w hq hqm hpr hrL hw h hs h0 h1
+    have hfam := hlong L q m p r 2 w hq hqm hpr hrL hw h hsupp h0 h1
     rw [hm4, show (1 / 200 : ℝ) / 2 ^ (4 * 2) = 1 / 51200 by norm_num] at hfam
     exact hfam
   obtain ⟨hell, hlogD, -⟩ := hfamily 0 0 le_rfl (Nat.zero_le L)
@@ -226,7 +247,7 @@ theorem exists_physical_ld_sampled_interval_tree (etaLD : ℝ) (hLD : 0 < etaLD)
         have : (1 : ℝ) ≤ K := by exact_mod_cast hK
         positivity
       obtain ⟨B, _hB, _hlogB, _phi, _hphi, hrest⟩ :=
-        hbasis L q (3 * w * K) (by omega) hv h hs h0 h1 (1 / 10000) (by norm_num) (by norm_num)
+        hbasis L q (3 * w * K) (by omega) hv h hsupp h0 h1 (1 / 10000) (by norm_num) (by norm_num)
       obtain ⟨_hinj, _hdim, _hdimle, _hspan, hVG, hGV, _hGV', hMPS, _⟩ := hrest
       exact ⟨_, _ + 1, Nat.le_add_left 1 _, fun _ ↦ ⟨hGV, hVG,
         fun v hv' ↦ (hMPS v hv').mono (Nat.le_succ _)⟩⟩
@@ -358,8 +379,9 @@ theorem exists_physical_ld_sampled_interval_tree (etaLD : ℝ) (hLD : 0 < etaLD)
       exact Submodule.IsCloseTo.of_le htrim (by linarith only [hb]))
   refine ⟨hscount, operation, fun J k hpk hkr hmid ↦ hliteral J k hpk hkr hmid, htree, ?_⟩
   intro S0
-  obtain ⟨hroot, _hdim, n, hn, vectors, hspan, hranks⟩ := htree 0 L (Nat.zero_le L) le_rfl
-  refine ⟨(isViable_fullInterval_iff_isCloseTo _ _).mp hroot, ?_⟩
+  obtain ⟨hroot, hdim0, n, hn, vectors, hspan, hranks⟩ := htree 0 L (Nat.zero_le L) le_rfl
+  refine hQ L q m w hq hqm hw h hsupp h0 h1 count Dref S0
+    ((isViable_fullInterval_iff_isCloseTo _ _).mp hroot) hdim0 ?_
   intro v hv
   have hrank (i : Fin n) (j : ℕ) (hj : j < L - 1) :
       Matrix.schmidtRank (WithLp.ofLp
