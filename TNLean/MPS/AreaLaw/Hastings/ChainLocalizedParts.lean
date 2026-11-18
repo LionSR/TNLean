@@ -288,7 +288,7 @@ support, being nonempty, is contained in it.
 Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, line 776 (`H_L`). -/
 theorem _root_.ManyBody.ChainInteraction.leftPart_eq_zero_of_le
     (h : ChainInteraction L q R) {j m : ℕ}
- (hjm : j ≤ m) : h.leftPart j m = 0 := by
+    (hjm : j ≤ m) : h.leftPart j m = 0 := by
   change ∑ X ∈ leftSupports L R j m, h.term X = 0
   refine Finset.sum_eq_zero fun X hX ↦ ?_
   obtain ⟨x, hx⟩ := X.2.1

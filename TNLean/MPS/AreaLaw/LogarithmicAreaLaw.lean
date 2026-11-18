@@ -277,9 +277,9 @@ Source: the one-dimensional note, Section 2 (`sec:setting`), component reduction
 theorem _root_.ManyBody.ChainInteraction.regionEntropy_eq_zero_of_range_zero
     {L q : ℕ} {Δ : ℝ} (h : ChainInteraction L q 0) (hh : ∀ X, (h.term X).IsHermitian)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
- (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
- (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
- (A : Finset (Fin L)) :
+    (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
+    (A : Finset (Fin L)) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω = 0 := by
   refine regionEntropy_eq_zero_of_forall_subset_or_disjoint
     h.mem hh hΔ hΩ hgap hspan A ?_

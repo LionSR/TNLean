@@ -105,17 +105,17 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing
     let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
     let T (X : ChainSupport L R) (b : Bool) := Matrix.reindex e e
- (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
+      (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
         else h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
     let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
- (F * h.doubled.hamiltonian * Fᴴ - h.doubled.hamiltonian =
+    (F * h.doubled.hamiltonian * Fᴴ - h.doubled.hamiltonian =
       ∑ X ∈ C, ∑ b : Bool, (F * T X b * Fᴴ - T X b)) ∧
       C.card * 2 ≤ chainCrossConst R * (boundaryEdges L D).card := by
   classical
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (sheetSwapOp q D)
   let T (X : ChainSupport L R) (b : Bool) := Matrix.reindex e e
- (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
+    (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
   let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
   change (F * h.doubled.hamiltonian * Fᴴ - h.doubled.hamiltonian =
@@ -126,8 +126,8 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing
     change Matrix.reindex e e (h.term X ⊗ₖ 1 + 1 ⊗ₖ h.term X) =
       Matrix.reindex e e (1 ⊗ₖ h.term X) + Matrix.reindex e e (h.term X ⊗ₖ 1)
     simpa only [Matrix.coe_reindexAddEquiv] using
- ((Matrix.reindexAddEquiv ℂ e e).map_add (h.term X ⊗ₖ 1) (1 ⊗ₖ h.term X)).trans
- (add_comm _ _)
+      ((Matrix.reindexAddEquiv ℂ e e).map_add (h.term X ⊗ₖ 1) (1 ⊗ₖ h.term X)).trans
+        (add_comm _ _)
   have hsum : h.doubled.hamiltonian = ∑ X, ∑ b : Bool, T X b :=
     Finset.sum_congr rfl (fun X _ ↦ hpair X)
   let δ : Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ →ₗ[ℂ]
@@ -141,7 +141,7 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing
         Disjoint (X.1 : Set (Fin L)) (D : Set (Fin L)) := by
       rcases not_and_or.mp hnot with hi | ho
       · exact Or.inr (Finset.disjoint_coe.mpr
- (Finset.disjoint_left.mpr (fun x hx hxD ↦ hi ⟨x, hx, hxD⟩)))
+          (Finset.disjoint_left.mpr (fun x hx hxD ↦ hi ⟨x, hx, hxD⟩)))
       · exact Or.inl (Finset.coe_subset.mpr (by
           intro x hx
           by_contra hxD
@@ -153,8 +153,8 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing
     simpa only [F, Matrix.conjTranspose_submatrix, Matrix.reindex_apply,
       Matrix.submatrix_mul_equiv] using
       congrArg (Matrix.reindex e e)
- (sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
- (mem_supportedOperators_of_isSupportedOn (h.mem X)) hside)
+        (sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
+          (mem_supportedOperators_of_isSupportedOn (h.mem X)) hside)
   refine ⟨?_, ?_⟩
   · change δ h.doubled.hamiltonian = ∑ X ∈ C, ∑ b : Bool, δ (T X b)
     rw [hsum, map_sum]

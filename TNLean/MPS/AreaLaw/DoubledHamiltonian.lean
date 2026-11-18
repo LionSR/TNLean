@@ -89,8 +89,8 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 355–3
 lemma _root_.ManyBody.ChainInteraction.doubled_hamiltonian (h : ChainInteraction L q R) :
     h.doubled.hamiltonian =
       Matrix.reindex (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)
- (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)
- (h.hamiltonian ⊗ₖ 1 + 1 ⊗ₖ h.hamiltonian) := by
+        (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)
+        (h.hamiltonian ⊗ₖ 1 + 1 ⊗ₖ h.hamiltonian) := by
   ext σ τ
   simp only [ManyBody.Interaction.hamiltonian, ManyBody.ChainInteraction.doubled, Matrix.sum_apply,
     Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.add_apply,
