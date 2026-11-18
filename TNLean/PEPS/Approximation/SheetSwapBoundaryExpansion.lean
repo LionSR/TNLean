@@ -62,8 +62,7 @@ theorem _root_.ManyBody.SquareInteraction.sheetSwapOp_conj_doubled_operator_sub_
   have hcancel {S : Finset (SquareLatticeVertex L L)}
       {A : Matrix (Configuration L q) (Configuration L q) ℂ}
       (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
-      (hS : (S : Set (SquareLatticeVertex L L)) ⊆ (R : Set (SquareLatticeVertex L L)) ∨
-        Disjoint (S : Set (SquareLatticeVertex L L)) (R : Set (SquareLatticeVertex L L))) :
+      (hS : S ⊆ R ∨ Disjoint S R) :
       δ A = 0 :=
     sub_eq_zero.mpr
       (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
@@ -71,14 +70,14 @@ theorem _root_.ManyBody.SquareInteraction.sheetSwapOp_conj_doubled_operator_sub_
   have hedge (e : Edge (squareLatticeGraph L L)) (he : ¬ IsRegionBoundaryEdge R e) :
       δ (h.term (.inr e)) = 0 := by
     apply hcancel (h.mem (.inr e))
-    simp only [ManyBody.squareLatticeSiteOrEdgeSupport, Finset.coe_insert, Finset.coe_singleton,
-      IsRegionBoundaryEdge, Set.insert_subset_iff, Set.singleton_subset_iff,
-      Set.disjoint_insert_left, Set.disjoint_singleton_left, Finset.mem_coe] at he ⊢
+    simp only [ManyBody.squareLatticeSiteOrEdgeSupport, IsRegionBoundaryEdge,
+      Finset.insert_subset_iff, Finset.singleton_subset_iff, Finset.disjoint_insert_left,
+      Finset.disjoint_singleton_left] at he ⊢
     tauto
   have hsite (v : SquareLatticeVertex L L) : δ (h.term (.inl v)) = 0 :=
     hcancel (h.mem (.inl v)) (by
-      simp only [ManyBody.squareLatticeSiteOrEdgeSupport, Finset.coe_singleton,
-        Set.singleton_subset_iff, SetLike.mem_coe, Set.disjoint_singleton_left]
+      simp only [ManyBody.squareLatticeSiteOrEdgeSupport, Finset.singleton_subset_iff,
+        Finset.disjoint_singleton_left]
       exact em _)
   rw [Finset.sum_eq_zero fun v _ => hsite v, zero_add]
   refine (Finset.sum_subset (Finset.filter_subset _ _) ?_).symm
