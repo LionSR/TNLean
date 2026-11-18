@@ -99,7 +99,7 @@ theorem exists_aklv_physical_favorable_filter :
     hq2 h hsupp h0 h1 hΩ
       (hgapI.posSemidef_sub_smul_one
         (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
-        hΩ hspan) (hspan ▸ Submodule.mem_span_singleton_self Ω)
+        hΩ hspan) (hspan ▸ Submodule.mem_span_singleton_self _)
   obtain ⟨_hsLower, _hsUpper, hs21, _hsb, hdiv, hsqrt, _hR, _hRup, _hDaux,
       hdelta, htrade, _htradeSmall, hlogD⟩ := hscalar q g hq2 hg hg1
   change 21 ≤ s at hs21

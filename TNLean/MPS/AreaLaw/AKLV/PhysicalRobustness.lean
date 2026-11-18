@@ -160,7 +160,7 @@ private theorem exists_aklv_cut_logarithmic_robustness {L q a s l r : ℕ}
     (by omega : 0 < L) hq2 h hsupp h0 h1 hΩ
       (hgapI.posSemidef_sub_smul_one
         (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
-        hΩ hspan) (hspan ▸ Submodule.mem_span_singleton_self Ω)
+        hΩ hspan) (hspan ▸ Submodule.mem_span_singleton_self _)
   obtain ⟨e, E0, hregional, hEeq, hE0, hE6, hcluster⟩ :=
     exists_aklv_cut_scaled_low_cluster (by omega) hs ha hlr hrL h hsupp h0 h1
       mu g Ω hΩ hground hgap hg hcut

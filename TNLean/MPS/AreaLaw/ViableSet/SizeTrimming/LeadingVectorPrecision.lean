@@ -162,7 +162,7 @@ theorem ChainHamiltonian.exists_leading_vector_of_approximate_compressed_boundar
     have hΔ4 : Δ ≤ 4 := by
       simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ
       (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
-      (hspan ▸ Submodule.mem_span_singleton_self Ω)
+      (hspan ▸ Submodule.mem_span_singleton_self _)
     have hcr : 2 * (Δ / 169) ^ 2 ≤ Δ / 169 := by
       nlinarith only [mul_nonneg hΔ.le (sub_nonneg.mpr hΔ4), hΔ]
     have hBτ : ‖B‖ * (2 * (((Δ / 169) ^ 2) / (2 * L))) ≤
@@ -257,7 +257,7 @@ theorem ChainHamiltonian.nearby_glued_vector_viable_of_density_and_vector_precis
   have hΔ4 : Δ ≤ 4 := by
     simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ
       (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
-      (hspan ▸ Submodule.mem_span_singleton_self Ω)
+      (hspan ▸ Submodule.mem_span_singleton_self _)
   have hζ0 : 0 ≤ ζ := (norm_nonneg (u' - u)).trans hdist
   have hΔL : Δ * ζ ≤ 4 * L * ζ := by
     have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hL
