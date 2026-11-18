@@ -1,0 +1,542 @@
+[
+  {
+    "path": "TNLean/PEPS/Approximation/CellConditionalInformation.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/CellConditionalInformationFromGap.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/CoarseInformation.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/CoarseInformationFromGap.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/NestedPatchEnergy.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/NestedPatchMarginalCloseness.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/RangeAngularInformation.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/RangeInformationReset.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/RangeResetUnitary.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SupportedPhysicalBufferGaussian.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SwappedDoubledEdgeBoundary.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SwappedLocalHamiltonian.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SwappedSquareHamiltonianInteraction.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelPoissonGrowth.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelPoissonThinning.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelWeightedRow.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeExcitedDecay.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeRestoring.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Amplification/TypicalProjectors.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/AmplificationProof.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/AreaLawElementaryConstant.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/AreaLawTheorem.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/InitialBufferReal.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/InitialRoundedCollarEntropy.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/InitialWeakRectangleShellEntropy.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/RectangularSpecialization.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/RegionOperatorLocalization.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/SafeRectangleAreaLaw.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyBound.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyCoefficients.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyDecay.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEntropySum.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeParameterBound.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeSelectionBound.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualEnergyTerms.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualGlobalReplicaEnergy.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualMarginalTails.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualReplicaDefect.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoughLower.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoughLowerPrevector.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoundEntropy.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoundTransport.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanMeasures.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanTransportInputs.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedChargeDensityEnergy.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedChargeEnergy.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedSharpComparison.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpComparison.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpLower.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpLowerPrevector.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualTransportEstimates.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/GenericChargeEnergy.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/GenericSelectedChargeEnergy.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalScanner.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalTemplateInformation.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/ScanTruncationInputs.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceActualInformation.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceBootstrapEntropy.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceChargeSelection.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceFinalInformation.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceRoughSelection.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceRoundedInformation.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedDensity.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedEnergy.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpComparison.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpDensity.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpEnergy.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceStatusMarginalMoments.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpMoments.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpUpper.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/StatusMarginalMoments.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetNormAttachment.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetStatusMoments.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/TargetTypicalWindow.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean",
+    "compile": null,
+    "strict": null,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/SupportedGaussianIntegral.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/VertexBoundaryCorollaries.lean",
+    "compile": 0,
+    "strict": 0,
+    "blocked": null
+  }
+]

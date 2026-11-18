@@ -1,0 +1,22 @@
+{
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "scripts/blueprint_lean_sync.py",
+    "--ci",
+    "--report",
+    "/workspace/reviews/interaction-peps-remaining/source-sync.json"
+  ],
+  "cwd": "/workspace/tn-interaction-integration",
+  "env_override": {
+    "BLUEPRINT_SYNC_FETCH_DEPS": "0"
+  },
+  "source_head": "dccc85e5607077b51822664e9d475287d300d607",
+  "start": "2026-11-18T17:32:30.952678+00:00",
+  "end": "2026-11-18T17:34:19.441691+00:00",
+  "seconds": 108.48902626900235,
+  "pid": 100512,
+  "pgid": 100512,
+  "exit_code": 0,
+  "stdout_sha256": "fa24689b4601f0119fb6e7a02a2e0e27b3854baafda7ee80a164436109715375",
+  "report_sha256": "a31b9a4176bb73f277ed8c85934de3e664cbd92d19932d58743e0cedd5336120"
+}

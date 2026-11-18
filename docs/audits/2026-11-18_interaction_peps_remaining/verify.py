@@ -51,7 +51,8 @@ def record(x):
 def run(m,phase):
  if shutil.disk_usage(r).free<2**30:raise SystemExit('1 GiB disk guard')
  assert subprocess.check_output(['git','rev-parse','HEAD'],cwd=r,text=True).strip()==head
- assert sh(src(m).read_bytes())==sources[m]
+ for d in closure(m):
+  if d in sources:assert sh(src(d).read_bytes())==sources[d], 'dependency source changed: '+d
  dependency_hashes={d:artifact(d) for d in sorted(closure(m)-{m})}
  fingerprint=sh(json.dumps({'sources':{d:sources[d] for d in sorted(closure(m)) if d in sources},'artifacts':dependency_hashes,'packages':packages},sort_keys=True).encode())
  root=q if m.startswith('QICLean.') else r;p=m.replace('.','/')+'.lean';cmd=[lean,*flags]
@@ -71,7 +72,7 @@ def run(m,phase):
   (valid if rc==0 else failed).add(m)
  if rc:print(log.read_text()[:4000],flush=True)
  return rc
-limit=int(sys.argv[1]);targets=sorted(plans,key=lambda t:(len(set(plans[t])-valid),t));attempted=0
+limit=int(sys.argv[1]);priority={p[:-5].replace('/','.') for p in (o/'snake-priority46.txt').read_text().splitlines()};targets=sorted(plans,key=lambda t:(t not in priority,len(set(plans[t])-valid),t));attempted=0
 for target in targets:
  if (target,'strict') in done or (target,'blocked') in done:continue
  required=[m for m in plans[target] if m not in valid]

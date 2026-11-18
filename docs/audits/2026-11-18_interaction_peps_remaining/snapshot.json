@@ -1,11 +1,14 @@
 {
+  "time": "2026-11-18T17:37:37.609072+00:00",
   "source_head": "dccc85e5607077b51822664e9d475287d300d607",
   "qic_pin": "729428582b78ab7529b3796099193649f947354a",
   "manifest_count": 90,
   "manifest_sha256": "0df13e249d214a9a7872539d4cd364ad69322dd64c2fdb56bde4aefe873362dd",
-  "compile_pass_commands": 28,
-  "target_strict_pass": 20,
+  "compile_pass_commands": 106,
+  "target_compile_pass": 25,
+  "target_strict_pass": 25,
   "failures": 0,
-  "status": "batch 35676 running; no whole-lane clearance",
-  "disk_free_bytes": 2914738176
+  "compiler_seconds": 360.3531398830528,
+  "disk_free_bytes": 2733842432,
+  "status": "LIVE CHECKPOINT; consult process status; not whole-lane clearance"
 }
