@@ -1,0 +1,22 @@
+fa9a40e2:scripts/box_supremum_zero_gap_regression.lean:15:def zeroHamiltonian := LocalHamiltonian.zero domain 2 1 0 (by norm_num)
+fa9a40e2:scripts/box_supremum_zero_gap_regression.lean:24:  simpa [zeroHamiltonian, LocalHamiltonian.operator, LocalHamiltonian.zero] using
+fa9a40e2:scripts/box_supremum_zero_gap_regression.lean:29:  simp [ManyBody.groundSpace, zeroHamiltonian, LocalHamiltonian.operator, LocalHamiltonian.zero]
+fa9a40e2:scripts/generic_gap_boundary_regression.lean:25:def zeroHamiltonian : LocalHamiltonian domain 2 1 0 where
+fa9a40e2:scripts/generic_gap_boundary_regression.lean:36:  simp [ManyBody.groundSpace, zeroHamiltonian, LocalHamiltonian.operator]
+fa9a40e2:scripts/generic_gap_boundary_regression.lean:41:  simpa [zeroHamiltonian, LocalHamiltonian.operator] using
+fa9a40e2:scripts/generic_gap_boundary_regression.lean:50:    simp [ManyBody.groundSpace, zeroHamiltonian, LocalHamiltonian.operator]
+fa9a40e2:scripts/ground_state_gap_scope_regression.lean:55:noncomputable def zeroChain := TNLean.MPS.AreaLaw.ChainHamiltonian.zero 1 2 1 1 (by norm_num)
+fa9a40e2:scripts/ground_state_gap_scope_regression.lean:66:      TNLean.MPS.AreaLaw.ChainHamiltonian.operator, TNLean.MPS.AreaLaw.ChainHamiltonian.zero])
+fa9a40e2:scripts/ground_state_gap_scope_regression.lean:73:  · simpa [zeroChain, TNLean.MPS.AreaLaw.ChainHamiltonian.operator,
+fa9a40e2:scripts/ground_state_gap_scope_regression.lean:74:      TNLean.MPS.AreaLaw.ChainHamiltonian.zero] using
+fa9a40e2:scripts/ground_state_gap_scope_regression.lean:77:      TNLean.MPS.AreaLaw.ChainHamiltonian.operator, TNLean.MPS.AreaLaw.ChainHamiltonian.zero]
+fa9a40e2:scripts/zero_gap_tn_wrappers_regression.lean:51:    ((zeroRectangle w h).toAreaLawHamiltonian (rectangleTermBound w h)).operator.PosSemidef ∧
+fa9a40e2:scripts/zero_gap_tn_wrappers_regression.lean:53:      ((zeroRectangle w h).toAreaLawHamiltonian (rectangleTermBound w h)).operator 0 := by
+fa9a40e2:scripts/zero_gap_tn_wrappers_regression.lean:55:    (zeroRectangle w h).projectorGap_toAreaLawHamiltonian (J := 0) (E₀ := 0) (Δ := 0)
+fa9a40e2:scripts/zero_gap_tn_wrappers_regression.lean:66:def zeroChain := TNLean.MPS.AreaLaw.ChainHamiltonian.zero 1 2 1 1 (by norm_num)
+fa9a40e2:scripts/zero_gap_tn_wrappers_regression.lean:81:    zeroChain.isGapped_groundCentered_parts_sum (E₀ := 0) (Δ := 0) (Ω := chainOmega)
+fa9a40e2:scripts/zero_gap_tn_wrappers_regression.lean:83:      (by simpa [zeroChain, TNLean.MPS.AreaLaw.ChainHamiltonian.operator,
+fa9a40e2:scripts/zero_gap_tn_wrappers_regression.lean:84:        TNLean.MPS.AreaLaw.ChainHamiltonian.zero] using
+fa9a40e2:scripts/zero_gap_tn_wrappers_regression.lean:86:      (by simp [ManyBody.groundSpace, zeroChain, TNLean.MPS.AreaLaw.ChainHamiltonian.operator,
+fa9a40e2:scripts/zero_gap_tn_wrappers_regression.lean:87:        TNLean.MPS.AreaLaw.ChainHamiltonian.zero]) j m
+fa9a40e2:scripts/zero_gap_tn_wrappers_regression.lean:137:          ((zeroRectangle 1 1).toAreaLawHamiltonian (rectangleTermBound 1 1)).operator φ⟫_ℂ).re|

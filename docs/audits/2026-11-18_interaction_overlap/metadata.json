@@ -1,0 +1,28 @@
+{
+  "old10905": "8a040ee527c3a4861ab2a5c1369bf9a9c9d611fd",
+  "new10905": "592a46e4e442f87205c407720acbb487db0d2fcf",
+  "pr10881": "fa9a40e22fa6384ba4a723e8bf675bb2cd20c5e7",
+  "reported_base": "75fc22288234ef66239cb4c2fa0b22914cfa5c6b",
+  "fetched_main": "87455a5addbea191daf9b2d0c3b2e36cc6235674",
+  "delta_files": 233,
+  "delta_lean": 199,
+  "delta_other": 34,
+  "pr10881_changed_files": 287,
+  "intersection": 68,
+  "merge_conflicts": 46,
+  "selected_hunk_review_files": 9,
+  "manifest_only_files": 224,
+  "latest_main_new_paths": [
+    "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeEvent.lean",
+    "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeParent.lean",
+    "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeTree.lean",
+    "TNLean/MPS/AreaLaw/CanonicalLowDensityFamily.lean",
+    "TNLean/MPS/AreaLaw/IndependentPhysicalDGPower.lean",
+    "TNLean/MPS/AreaLaw/IndependentPhysicalDGViability.lean",
+    "TNLean/MPS/AreaLaw/PhysicalDGCanonicalApproximation.lean",
+    "TNLean/MPS/AreaLaw/PhysicalDGViability.lean"
+  ],
+  "main_delta_overlap": [],
+  "main_10881_overlap": [],
+  "same_qic_pin": "729428582b78ab7529b3796099193649f947354a"
+}
