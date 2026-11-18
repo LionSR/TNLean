@@ -172,18 +172,6 @@ end Graph
 
 /-! ### The contiguous chain -/
 
-/-- The path distance between two sites of a range-`R` support is at most `R`.
-Hastings, arXiv:0705.2024v4, finite-range condition, lines 90–94. -/
-theorem ChainSupport.edist_le {L R : ℕ} (X : ChainSupport L R)
-    (x : Fin L) (hx : x ∈ X.1) (z : Fin L) (hz : z ∈ X.1) :
-    (SimpleGraph.pathGraph L).edist x z ≤ (R : ℕ∞) := by
-  rw [SimpleGraph.pathGraph_edist]
-  have hxz := X.2.2 x hx z hz
-  have hzx := X.2.2 z hz x hx
-  exact_mod_cast (show Nat.dist x.val z.val ≤ R by
-    simp only [Nat.dist]
-    omega)
-
 /-- The real-radius chain neighborhood of `S` is the union of the path-graph balls of radius
 `⌊ℓ⌋` about its sites. -/
 theorem biUnion_graphBall_pathGraph_eq_chainNeighborhood {L : ℕ} (S : Finset (Fin L))
@@ -216,7 +204,7 @@ theorem norm_heisenberg_commutator_le_chainDistance
         Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t|) *
         (if δ = ⊤ then 0 else Real.exp (-((δ.toNat : ℝ) / 2))) :=
   norm_heisenberg_commutator_le_graphDistance_inf (SimpleGraph.pathGraph L) (fun k ↦ (X k).1)
-    (fun k ↦ ChainSupport.edist_le (X k)) (fun k ↦ (X k).2.card_le)
+    (fun k ↦ ManyBody.ChainSupport.edist_le (X k)) (fun k ↦ (X k).2.card_le)
     h hHerm hSupport b₀ hBudget S hA y hB t
 
 /-- Contiguous-chain specialization of Lemma lem:LR, real-radius localization.
@@ -243,7 +231,7 @@ theorem norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
           Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t| - ℓ / 2) := by
   rw [← biUnion_graphBall_pathGraph_eq_chainNeighborhood S hℓ]
   exact norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_two
-    (SimpleGraph.pathGraph L) (fun k ↦ (X k).1) (fun k ↦ ChainSupport.edist_le (X k))
+    (SimpleGraph.pathGraph L) (fun k ↦ (X k).1) (fun k ↦ ManyBody.ChainSupport.edist_le (X k))
     (fun k ↦ (X k).2.card_le) (SimpleGraph.pathGraph_card_sphere_le_two L)
     h hHerm hSupport b₀ hBudget S hA ℓ t
 
