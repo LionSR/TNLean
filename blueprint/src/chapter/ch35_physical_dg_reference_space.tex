@@ -1552,7 +1552,7 @@ recursive root remains a separate step.
 The merge of~\cite[Theorem~\texttt{t:alg1}, lines 1777--1818]{Arad2016RigorousRG}
 applies $k=\lceil\log_Ds\rceil/2$ rounds of the improving family, so that
 $D^{2k}\le Ds$ and every node of the tree has dimension at most $Ds^2$,
-independent of the chain length. The tree above uses the larger power
+independent of the chain length at fixed $D,s$. The tree above uses the larger power
 $\lceil\log_D(D^2s)\rceil$ and the node bound $D^6s^3$. The three results below
 run the tree with the least integer number of rounds $k$ with $D^{2k}\ge s$.
 The printed $k$ is not an integer when $\lceil\log_Ds\rceil$ is odd; then no
@@ -1619,10 +1619,14 @@ in~\cite{gap:alvv16_approximation_parameters}.
     $k$ rounds and one collective trim, whose interval spaces are all
     $3/200$-viable for the original ground space $G$, of dimension at most
     $M$, with at most $M$ recorded generators satisfying
-    $\xi^2\operatorname{SR}(v)\le M$ at every internal cut. Neither $D$ nor
-    $s$ nor $M$ depends on $L$. When $\lceil\log_Ds\rceil$ is even, $k$ is the
-    source's number of rounds and $M\le Ds^2$; when it is odd, $M$ exceeds
-    $Ds^2$ by a factor less than $D$.
+    $\xi^2\operatorname{SR}(v)\le M$ at every internal cut. For fixed
+    $q,g,r=\dim G$ and $\beta$, the quantities $D,s,M$ have no additional
+    dependence on $L$ or the trimming threshold. This is not a uniform
+    bound when $r$ or $\beta$ varies with $L$.
+    When $c=\lceil\log_Ds\rceil$ is even, $k$ is the source's number of
+    rounds and $M\le Ds^2$; when $c$ is odd,
+    $M/(Ds^2)=D^c/s\in[1,D)$. The ratio is strictly greater than one
+    exactly when $s<D^c$, and equals one when $s=D^c$.
 
     This is a restricted form of the merge analysis
     of~\cite[Theorem~\texttt{t:alg1}, lines 1777--1818]{Arad2016RigorousRG},
