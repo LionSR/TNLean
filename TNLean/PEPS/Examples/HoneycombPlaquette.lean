@@ -9,7 +9,7 @@ open ManyBody (Edge)
 
 namespace TNLean.PEPS
 
-variable {V : Type*} [Fintype V] [LinearOrder V] (G : SimpleGraph V) [DecidableRel G.Adj]
+variable {V : Type*} [LinearOrder V] (G : SimpleGraph V)
 
 /-- Sum the six internal bond indices while fixing the six boundary indices.
 Each factor is the same oriented leg used in graphStatePEPS.component. -/
@@ -29,7 +29,9 @@ theorem sixBondContraction_factor (inner outer : Fin 6 → Edge G)
       ∏ i, graphStateLeg G (site i) (outer i) (β i) (s (site i)) := by
   classical
   unfold sixBondContraction
-  rw [← Finset.sum_mul, ← Fintype.prod_sum]
+  rw [← Finset.sum_mul, ← Fintype.prod_sum (fun (i : Fin 6) (b : Fin 2) =>
+    graphStateLeg G (inner i).1.1 (inner i) b (s (inner i).1.1) *
+      graphStateLeg G (inner i).1.2 (inner i) b (s (inner i).1.2))]
   congr 1
   apply Finset.prod_congr rfl
   intro i _
