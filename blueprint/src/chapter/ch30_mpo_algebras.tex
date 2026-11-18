@@ -131,35 +131,39 @@ decomposes the stacked tensor $T_aT_b$ into copies of the blocks $T_c$.
 
 \begin{theorem}[Existence of fusion tensors]%
     \label{thm:mpoalg_fusion_tensors_exist}
-    % Formalized as cor:asym_fusion_action_multiplicity and
-    %   thm:asym_multiplicity_reductions (ch25), which carry the Lean tags.
+    \lean{MPOTensor.IsMPOFusionAlgebra.nonempty_fusionTensors}
+    \leanok
     % Existing Lean special cases:
     %   MPOTensor.exists_multiBlockCompression_mulTensor_of_mpo_eq_sum
     %   (Theorem thm:asym_mpo_product) and
     %   MPOTensor.GroupFamily.IsNormalRepresentation.exists_fusionTensors
     %   (Corollary cor:asym_fusion_tensors_group).
-    \uses{def:mpoalg_fusion_tensors, thm:asym_mpo_product,
-        cor:asym_fusion_action_multiplicity, thm:asym_multiplicity_reductions}
+    \uses{def:mpoalg_fusion_tensors, def:mpo_fusion_algebra}
     Every pair $(a,b)$ of labels of a fusion algebra of normal tensors of
-    positive bond dimension admits a family of fusion tensors
-    (Corollary~\ref{cor:asym_fusion_action_multiplicity}). This is the
+    positive bond dimension admits a family of fusion tensors. This is the
     periodic-trace reduction under the fusion rule
     (\ref{eq:mpo_fusion_algebra}). It allows a nilpotent remainder and
     does not assert the exact local reconstruction of
     \cite[Appendix~A]{GarreRubio2023MPOSym}. The exact fusion and action
     decompositions from length-independent arbitrary-boundary hypotheses
     are proved in Lemma~\ref{thm:glm_boundary_source_decomposition}.
-    % Source anchor: arXiv:2203.12563, line 361 and Appendix A (lines
-    %   2305--2455).
+    % Source anchor: arXiv:2203.12563, line 361, Appendix A (lines
+    %   2305--2455), and lines 1001--1028, where the group case is stated:
+    %   "$U_g U_h = U_{gh}$ with $T_g$ injective implies the existence of
+    %   fusion tensors that decompose the product of two tensors locally for
+    %   any length $n$", with "off-diagonal blocks [that] will disappear
+    %   after a finite number of concatenation". Injective tensors are
+    %   normal, and $U_e=\Id$ forces positive bond dimension, so the
+    %   hypotheses here follow from those of the source.
 \end{theorem}
 
 \begin{proof}
-    \uses{thm:asym_mpo_product, thm:asym_multiplicity_reductions}
-    Applying Theorem~\ref{thm:asym_mpo_product} to the target family
-    consisting of $N_{ab}^c$ copies of $T_c$ for each $c$, all with weight
-    $1$, as in Lemma~\ref{thm:asym_multiplicity_reductions} for the
-    stacked product, yields compression pairs indexed by $(c,\mu)$ that form
-    mutually biorthogonal reductions with a nilpotent remainder.
+    \leanok
+    \uses{cor:asym_fusion_action_multiplicity}
+    Corollary~\ref{cor:asym_fusion_action_multiplicity} gives, for the
+    target family consisting of $N_{ab}^c$ copies of $T_c$ for each $c$,
+    compression pairs indexed by $(c,\mu)$ that form mutually biorthogonal
+    reductions of $T_aT_b$ with a nilpotent remainder.
 \end{proof}
 
 For a group-like algebra, with labels in a group $G$ and
@@ -231,28 +235,27 @@ normal tensors this is Corollary~\ref{cor:asym_fusion_tensors_group}.
 
 \begin{corollary}[Existence of action tensors]%
     \label{thm:mpoalg_action_tensors_exist}
-    % Formalized as the action clause of cor:asym_fusion_action_multiplicity
-    %   (ch25), which carries the Lean tag.
-    % Existing Lean: MPOTensor.exists_isReduction_actTensor_of_isNormal,
-    %   MPOTensor.exists_multiBlockCompression_actTensor_of_isNormal
-    %   (Corollary cor:asym_action_tensors).
-    \uses{def:mpoalg_action_tensors, cor:asym_action_tensors,
-        thm:mpo_symmetric_nimrep, cor:asym_fusion_action_multiplicity}
-    Under the hypotheses of Theorem~\ref{thm:mpo_symmetric_nimrep}, the
-    action clause of Corollary~\ref{cor:asym_fusion_action_multiplicity}
-    shows that every pair $(a,x)$ admits a family of action tensors as in
+    \lean{MPOTensor.IsMPOSymmetricFamily.exists_nat_actionTensors}
+    \leanok
+    \uses{def:mpoalg_action_tensors, thm:mpo_symmetric_nimrep,
+        cor:asym_fusion_action_multiplicity}
+    Under the hypotheses of Theorem~\ref{thm:mpo_symmetric_nimrep}, every
+    pair $(a,x)$ admits a family of action tensors as in
     \cite[Section~3]{GarreRubio2023MPOSym}, reducing $T_a\cdot A_x$ onto the
     blocks $A_y$ with multiplicities $M_{a,x}^y$.
     % Source anchor: arXiv:2203.12563, lines 459--460 and 1065--1091.
 \end{corollary}
 
 \begin{proof}
-    \uses{cor:asym_action_tensors, thm:mpo_symmetric_nimrep}
+    \leanok
+    \uses{def:mpoalg_action_tensors, thm:mpo_symmetric_nimrep,
+        cor:asym_fusion_action_multiplicity}
     By Theorem~\ref{thm:mpo_symmetric_nimrep} the coefficients are
     nonnegative integers, so (\ref{eq:mpo_symmetric_family}) writes
     $O_a^{(N)}\ket{V^{(N)}(A_x)}$ as a sum of periodic vectors of blocks
-    repeated with multiplicities $M_{a,x}^y$. Corollary~\ref{cor:asym_action_tensors}
-    applied to this family with unit weights gives the reductions.
+    repeated with multiplicities $M_{a,x}^y$. The action clause of
+    Corollary~\ref{cor:asym_fusion_action_multiplicity} then gives the
+    action tensors of $(a,x)$.
 \end{proof}
 
 %% ---------------------------------------------------------

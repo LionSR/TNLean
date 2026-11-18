@@ -23,6 +23,7 @@ import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorComap
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorOrderTwo
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorToolkit
+import TNLean.MPS.Symmetry.MPOSymmetry.BlockMixedGroundSpace
 import TNLean.MPS.Symmetry.MPOSymmetry.BlockMixedMPO
 import TNLean.MPS.Symmetry.MPOSymmetry.BlockMixedMPOFusion
 import TNLean.MPS.Symmetry.MPOSymmetry.CZXPermutedBlocks

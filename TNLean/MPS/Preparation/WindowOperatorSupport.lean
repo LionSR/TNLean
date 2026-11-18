@@ -227,7 +227,7 @@ theorem chainWindowOperator_chainWindowOperator {L w N a b : ℕ} (ha : a < N)
     exact h₁ fun k hk ↦ h k (by omega)
 
 /-- **Support of a window operator.** The operator `X` placed on the sites
-`a, …, a + L - 1` acts on those sites in the sense of `QuantumCircuit.supportedOperators`.
+`a, …, a + L - 1` acts on those sites in the sense of `ManyBody.supportedOperators`.
 This is what the light cone of arXiv:2307.01696, Supplemental Material, proof of
 Theorem 1, is applied to. -/
 theorem chainWindowOperator_mem_supportedOperators {L N a : ℕ} (ha : a < N)
