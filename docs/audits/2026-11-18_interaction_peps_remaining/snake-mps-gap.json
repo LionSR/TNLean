@@ -1,0 +1,62 @@
+[
+  {
+    "module": "TNLean.MPS.AreaLaw.SnakeGridGeometry",
+    "warm_olean_exists": false,
+    "overlay_olean_exists": false,
+    "source_matches_warm_baseline": true
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.SnakeGridParameters",
+    "warm_olean_exists": false,
+    "overlay_olean_exists": false,
+    "source_matches_warm_baseline": true
+  },
+  {
+    "module": "TNLean.MPS.Chain.Defs",
+    "warm_olean_exists": false,
+    "overlay_olean_exists": false,
+    "source_matches_warm_baseline": true
+  },
+  {
+    "module": "TNLean.MPS.Core.CyclicTrace",
+    "warm_olean_exists": false,
+    "overlay_olean_exists": false,
+    "source_matches_warm_baseline": true
+  },
+  {
+    "module": "TNLean.MPS.Chain.VaryingBondOBC",
+    "warm_olean_exists": false,
+    "overlay_olean_exists": false,
+    "source_matches_warm_baseline": true
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.OpenMPS",
+    "warm_olean_exists": false,
+    "overlay_olean_exists": false,
+    "source_matches_warm_baseline": true
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.OpenMPSRank",
+    "warm_olean_exists": false,
+    "overlay_olean_exists": false,
+    "source_matches_warm_baseline": true
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.SequentialTruncation",
+    "warm_olean_exists": false,
+    "overlay_olean_exists": false,
+    "source_matches_warm_baseline": true
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.SnakeGridApproximation",
+    "warm_olean_exists": false,
+    "overlay_olean_exists": false,
+    "source_matches_warm_baseline": false
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.SnakeGridAreaLaw",
+    "warm_olean_exists": false,
+    "overlay_olean_exists": false,
+    "source_matches_warm_baseline": false
+  }
+]

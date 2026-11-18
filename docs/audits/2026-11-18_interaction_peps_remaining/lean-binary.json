@@ -1,0 +1,5 @@
+{
+  "path": "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+  "version": "Lean (version 4.36.0-rc1, x86_64-unknown-linux-gnu, commit c9afcddf514a6772bd4d649f7cfc04eff0b9f15e, Release)",
+  "sha256": "db7f559d05795e7af52e42bc966c90240a39dcb9712161c54c97afa546e20c00"
+}

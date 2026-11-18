@@ -223,26 +223,26 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyBound.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyCoefficients.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyDecay.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEntropySum.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -253,8 +253,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeSelectionBound.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -265,8 +265,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualGlobalReplicaEnergy.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -283,32 +283,32 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoughLower.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoughLowerPrevector.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoundEntropy.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoundTransport.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanMeasures.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -319,44 +319,44 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedChargeDensityEnergy.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedChargeEnergy.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedSharpComparison.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpComparison.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpLower.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpLowerPrevector.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualTransportEstimates.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -367,14 +367,14 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/GenericChargeEnergy.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/GenericSelectedChargeEnergy.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -481,8 +481,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpMoments.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -511,8 +511,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/TargetTypicalWindow.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
