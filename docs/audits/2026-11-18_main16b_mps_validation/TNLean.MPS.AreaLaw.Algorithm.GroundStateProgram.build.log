@@ -1,0 +1,4 @@
+Try this:
+  [apply] rwa [hchain]
+
+Note: This linter can be disabled with `set_option linter.tacticAnalysis.rwaSuggestion false`

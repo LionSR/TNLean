@@ -1,9 +1,9 @@
 {
   "state": "strict",
-  "module": "TNLean.MPS.AreaLaw.ViableSet.RationalBondTrimming",
-  "pid": 493697,
+  "module": "TNLean.MPS.AreaLaw.Algorithm.SampledCost",
+  "pid": 493914,
   "runner_pid": 493559,
-  "time": "2026-11-18T20:22:35.930493+00:00",
-  "passed": 63,
+  "time": "2026-11-18T20:24:42.439988+00:00",
+  "passed": 73,
   "head": "f94193009343ee767ddc96a3dacee80e659ec5a9"
 }
