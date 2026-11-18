@@ -72,8 +72,8 @@ theorem _root_.ManyBody.DomainInteraction.norm_doubled_term_le
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–360. -/
 lemma _root_.ManyBody.DomainInteraction.doubled_hamiltonian (h : DomainInteraction Λ q R) :
     h.doubled.hamiltonian = Matrix.reindex (sitePairConfigurationEquiv (Fin Λ.card) q q)
-      (sitePairConfigurationEquiv (Fin Λ.card) q q)
-      (h.hamiltonian ⊗ₖ 1 + 1 ⊗ₖ h.hamiltonian) := by
+ (sitePairConfigurationEquiv (Fin Λ.card) q q)
+ (h.hamiltonian ⊗ₖ 1 + 1 ⊗ₖ h.hamiltonian) := by
   ext σ τ
   simp only [ManyBody.Interaction.hamiltonian, ManyBody.DomainInteraction.doubled, Matrix.sum_apply,
     Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.add_apply,
@@ -116,10 +116,10 @@ theorem _root_.ManyBody.DomainInteraction.norm_swappedDoubled_term_le
 /-- The sum of the original swapped interactions is the conjugated doubled operator.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
 lemma _root_.ManyBody.DomainInteraction.swappedDoubled_hamiltonian
-    (h : DomainInteraction Λ q R) (D : Finset (Fin Λ.card)) :
+ (h : DomainInteraction Λ q R) (D : Finset (Fin Λ.card)) :
     let e := sitePairConfigurationEquiv (Fin Λ.card) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
-    (h.swappedDoubled D).hamiltonian = F * h.doubled.hamiltonian * Fᴴ := by
+ (h.swappedDoubled D).hamiltonian = F * h.doubled.hamiltonian * Fᴴ := by
   simp only [ManyBody.Interaction.hamiltonian, ManyBody.DomainInteraction.swappedDoubled,
     Matrix.sum_mul, Matrix.mul_sum]
 
@@ -147,21 +147,21 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_term_difference_spec
 supports and both replica labels. Source: TNLean note, part2a_mps_information.tex,
 355–363; the count uses the original domain-support injection. -/
 theorem _root_.ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing
-    (h : DomainInteraction Λ q R) (D : Finset (Fin Λ.card)) :
+ (h : DomainInteraction Λ q R) (D : Finset (Fin Λ.card)) :
     let e := sitePairConfigurationEquiv (Fin Λ.card) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
     let T (X : DomainSupport Λ R) (b : Bool) := Matrix.reindex e e
-      (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
+ (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
         else h.term X ⊗ₖ (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ))
     let C := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
-    ((h.swappedDoubled D).hamiltonian - h.doubled.hamiltonian =
+ ((h.swappedDoubled D).hamiltonian - h.doubled.hamiltonian =
       ∑ X ∈ C, ∑ b : Bool, (F * T X b * Fᴴ - T X b)) ∧
       C.card * 2 ≤ chainCrossConst R * Λ.card := by
   classical
   let e := sitePairConfigurationEquiv (Fin Λ.card) q q
   let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
   let T (X : DomainSupport Λ R) (b : Bool) := Matrix.reindex e e
-    (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
+ (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ))
   let C := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
   let δ : Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ →ₗ[ℂ]
@@ -179,8 +179,8 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing
     simpa only [F, Matrix.conjTranspose_submatrix, Matrix.reindex_apply,
       Matrix.submatrix_mul_equiv] using
       congrArg (Matrix.reindex e e)
-        (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
-          (mem_supportedOperators_of_isSupportedOn (h.mem X)) hside)
+ (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
+ (mem_supportedOperators_of_isSupportedOn (h.mem X)) hside)
   refine ⟨?_, card_domain_crossingTerms_mul_two_le Λ R D⟩
   rw [h.swappedDoubled_hamiltonian D]
   change δ h.doubled.hamiltonian = ∑ X ∈ C, ∑ b : Bool, δ (T X b)
@@ -200,7 +200,7 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing
       change Matrix.reindex e e (h.term X ⊗ₖ 1 + 1 ⊗ₖ h.term X) =
         Matrix.reindex e e (1 ⊗ₖ h.term X) + Matrix.reindex e e (h.term X ⊗ₖ 1)
       simpa only [Matrix.coe_reindexAddEquiv] using
-        ((Matrix.reindexAddEquiv ℂ e e).map_add (h.term X ⊗ₖ 1) (1 ⊗ₖ h.term X)).trans
-          (add_comm _ _)
+ ((Matrix.reindexAddEquiv ℂ e e).map_add (h.term X ⊗ₖ 1) (1 ⊗ₖ h.term X)).trans
+ (add_comm _ _)
 
 end TNLean.MPS.AreaLaw

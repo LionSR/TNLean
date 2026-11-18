@@ -150,7 +150,7 @@ theorem eval_feasible_ite (L k b m : ℕ) (S : Finset (LeftBlockVector L q k))
 
 /-- With the honest oracle, step 2 computes the size-trimming selection. -/
 theorem eval_sizeTrimmingProgram (L k b : ℕ) (h : ChainInteraction L q 1)
-    (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
+ (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k)) :
     FreeM.eval honestOracle (sizeTrimmingProgram L k b h hq Δ S) =
       h.sizeTrimmingSelection hq Δ S := by
   classical

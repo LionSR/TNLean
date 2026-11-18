@@ -49,8 +49,8 @@ theorem IsChainSupport.eq_interval_of_splits_of_range_one {L k : ℕ} {X : Finse
 `H = H_L + H_R + K`, with the two parts supported on their respective sides and
 `0 ≤ K ≤ 1`. Source: LVV13, `algo53.tex`, line 283 and lines 409–410. -/
 theorem _root_.ManyBody.ChainInteraction.exists_cut_decomposition_of_range_one {L q : ℕ}
-    (h : ChainInteraction L q 1) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
-        (hpos : ∀ X, (h.term X).PosSemidef) (k : ℕ) :
+ (h : ChainInteraction L q 1) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+     (hpos : ∀ X, (h.term X).PosSemidef) (k : ℕ) :
     ∃ HL HR K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       h.hamiltonian = HL + HR + K ∧
       Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (interval L 0 k) ∧
@@ -88,10 +88,10 @@ theorem _root_.ManyBody.ChainInteraction.exists_cut_decomposition_of_range_one {
   let HR := ∑ X ∈ T, h.term X
   refine ⟨HL, HR, K, ?_, ?_, ?_, hK, hK1⟩
   · have hSU : h.hamiltonian = HL + ∑ X ∈ U, h.term X :=
-      (Finset.sum_filter_add_sum_filter_not Finset.univ
-        (fun X : ChainSupport L 1 ↦ X.1 ⊆ A) h.term).symm
+ (Finset.sum_filter_add_sum_filter_not Finset.univ
+ (fun X : ChainSupport L 1 ↦ X.1 ⊆ A) h.term).symm
     have hTC : (∑ X ∈ U, h.term X) = HR + K :=
-      (Finset.sum_filter_add_sum_filter_not U (fun X ↦ X.1 ⊆ Aᶜ) h.term).symm
+ (Finset.sum_filter_add_sum_filter_not U (fun X ↦ X.1 ⊆ Aᶜ) h.term).symm
     rw [hSU, hTC, add_assoc]
   · exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
       Entropy.IsSupportedOn.mono (h.mem X) (Finset.mem_filter.mp hX).2

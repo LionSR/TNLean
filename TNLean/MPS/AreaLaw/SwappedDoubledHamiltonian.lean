@@ -78,11 +78,11 @@ theorem _root_.ManyBody.ChainInteraction.norm_swappedDoubled_term_le {L q R : �
 /-- The sum of the swapped interactions is the conjugate of the doubled operator.
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
 lemma _root_.ManyBody.ChainInteraction.swappedDoubled_hamiltonian
-    {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R)
-    (D : Finset (Fin L)) :
+    {L q R : ℕ} (h : ChainInteraction L q R)
+ (D : Finset (Fin L)) :
     let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
-    (h.swappedDoubled D).hamiltonian = F * h.doubled.hamiltonian * Fᴴ := by
+ (h.swappedDoubled D).hamiltonian = F * h.doubled.hamiltonian * Fᴴ := by
   simp only [ManyBody.Interaction.hamiltonian, ManyBody.ChainInteraction.swappedDoubled,
     Matrix.sum_mul, Matrix.mul_sum]
 

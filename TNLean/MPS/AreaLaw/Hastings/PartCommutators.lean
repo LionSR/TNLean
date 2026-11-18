@@ -115,7 +115,7 @@ variable {L q R : ℕ} {J : ℝ}
 Hastings, arXiv:0705.2024v4, `law16.tex`, line 794. -/
 theorem _root_.ManyBody.ChainInteraction.term_mul_comm_of_disjoint (h : ChainInteraction L q R)
     {X : ChainSupport L R} {M : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {D : Finset (Fin L)}
-    (hM : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) M D) (hD : Disjoint X.1 D) :
+ (hM : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) M D) (hD : Disjoint X.1 D) :
     h.term X * M = M * h.term X := by
   rcases isEmpty_or_nonempty (Fin L → Fin q) with hE | hne
   · ext σ
@@ -167,7 +167,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_term_commutator_termSum_le
 /-- The commutator of two sums of terms, expanded over the terms of the first sum.
 Hastings, arXiv:0705.2024v4, `law16.tex`, line 794. -/
 theorem _root_.ManyBody.ChainInteraction.termSum_commutator_eq_sum (h : ChainInteraction L q R)
-    (S T : Finset (ChainSupport L R)) :
+ (S T : Finset (ChainSupport L R)) :
     h.termSum S * h.termSum T - h.termSum T * h.termSum S =
       ∑ X ∈ S, (h.term X * h.termSum T - h.termSum T * h.term X) := by
   change (∑ X ∈ S, h.term X) * h.termSum T - h.termSum T * (∑ X ∈ S, h.term X) = _

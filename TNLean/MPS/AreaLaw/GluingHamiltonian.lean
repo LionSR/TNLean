@@ -46,21 +46,21 @@ noncomputable def _root_.ManyBody.ChainInteraction.cutBoundaryPart
 theorem _root_.ManyBody.ChainInteraction.cutLeftPart_add_cutBoundaryPart
     (h : ChainInteraction L q 1) (k : ℕ) :
     h.hamiltonian = h.cutLeftPart k + h.cutBoundaryPart k :=
-  (Finset.sum_filter_add_sum_filter_not Finset.univ
-    (fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k) h.term).symm
+ (Finset.sum_filter_add_sum_filter_not Finset.univ
+ (fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k) h.term).symm
 
 /-- The left part is supported on the first `k` sites. -/
 theorem _root_.ManyBody.ChainInteraction.cutLeftPart_isSupportedOn
     (h : ChainInteraction L q 1) (k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutLeftPart k) (interval L 0 k) :=
-  (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
+ (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
     Entropy.IsSupportedOn.mono (h.mem X) (Finset.mem_filter.mp hX).2
 
 /-- The boundary part is supported from the boundary site onward. -/
 theorem _root_.ManyBody.ChainInteraction.cutBoundaryPart_isSupportedOn
     (h : ChainInteraction L q 1) (k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutBoundaryPart k)
-      (interval L 0 (k - 1))ᶜ := by
+ (interval L 0 (k - 1))ᶜ := by
   refine (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
     Entropy.IsSupportedOn.mono (h.mem X) ?_
   have hX' := (Finset.mem_filter.mp hX).2
@@ -77,7 +77,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_cutBoundaryPart_le (h : ChainInter
   classical
   set U := Finset.univ.filter (fun X : ChainSupport L 1 ↦ ¬ X.1 ⊆ interval L 0 k)
   have hcard : U.card ≤ 2 * L :=
-    (Finset.card_le_univ U).trans (card_chainSupport_range_one_le L)
+ (Finset.card_le_univ U).trans (card_chainSupport_range_one_le L)
   calc
     _ ≤ ∑ _ ∈ U, (1 : ℝ) := norm_sum_le_of_le U fun X _ ↦ hhJ X
     _ ≤ 2 * (L : ℝ) := by

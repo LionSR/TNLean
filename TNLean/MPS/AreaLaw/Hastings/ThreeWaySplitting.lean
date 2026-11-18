@@ -274,7 +274,7 @@ noncomputable def _root_.ManyBody.ChainInteraction.termSum (h : ChainInteraction
 /-- A sum of terms is Hermitian. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 82–91. -/
 theorem _root_.ManyBody.ChainInteraction.termSum_isHermitian (h : ChainInteraction L q R)
     (hh : ∀ X, (h.term X).IsHermitian)
-    (S : Finset (ChainSupport L R)) : (h.termSum S).IsHermitian := by
+ (S : Finset (ChainSupport L R)) : (h.termSum S).IsHermitian := by
   change (∑ X ∈ S, h.term X)ᴴ = ∑ X ∈ S, h.term X
   rw [conjTranspose_sum]
   exact Finset.sum_congr rfl fun X _ ↦ hh X
@@ -292,7 +292,7 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, lines 88–89 (finite range). -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_termSum (h : ChainInteraction L q R)
     {S : Finset (ChainSupport L R)} {D : Finset (Fin L)} (hS : ∀ X ∈ S, X.1 ⊆ D) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.termSum S) D :=
-  (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
+ (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
     Entropy.IsSupportedOn.mono (h.mem X) (hS X hX)
 
 /-! ### The parts `H_L`, `H_B`, `H_R` -/
@@ -338,7 +338,7 @@ theorem _root_.ManyBody.ChainInteraction.rightPart_isHermitian (h : ChainInterac
 /-- **The three-way splitting.** `H = H_L + H_B + H_R`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 775–779. -/
 theorem _root_.ManyBody.ChainInteraction.hamiltonian_eq_leftPart_add_bufferPart_add_rightPart
-    (h : ChainInteraction L q R) (j m : ℕ) :
+ (h : ChainInteraction L q R) (j m : ℕ) :
     h.hamiltonian = h.leftPart j m + h.bufferPart j m + h.rightPart j m :=
   sum_supports_eq_left_add_buffer_add_right h.term j m
 

@@ -96,12 +96,12 @@ def _root_.ManyBody.ChainInteraction.IsAdmissibleSolver {L q k : ℕ}
 /-- The selection of an admissible solver lies in the span of the input family.
 LVV13, `algo53.tex`, Claim `c:2`, line 526. -/
 theorem _root_.ManyBody.ChainInteraction.sizeTrimmingSelectionWith_subset_span {L q k : ℕ}
-    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
-    (net : (m : ℕ) → Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ))
+ (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
+ (net : (m : ℕ) → Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ))
     {sol : (m : ℕ) → Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
       EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)}
-    (hsol : h.IsAdmissibleSolver hq Δ S sol) :
-    (h.sizeTrimmingSelectionWith hq Δ S net sol : Set (LeftBlockVector L q k)) ⊆
+ (hsol : h.IsAdmissibleSolver hq Δ S sol) :
+ (h.sizeTrimmingSelectionWith hq Δ S net sol : Set (LeftBlockVector L q k)) ⊆
       Submodule.span ℂ (S : Set (LeftBlockVector L q k)) := by
   classical
   intro v hv
@@ -125,9 +125,9 @@ theorem _root_.ManyBody.ChainInteraction.sizeTrimmingSelection_subset_span {L q 
 vector. This bound depends on no ground pair or viability assumption.
 LVV13, `algo53.tex`, column extraction, lines 477–478. -/
 theorem _root_.ManyBody.ChainInteraction.norm_le_one_of_mem_sizeTrimmingSelection {L q k : ℕ}
-    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ)
-    (S : Finset (LeftBlockVector L q k)) {v : LeftBlockVector L q k}
-    (hv : v ∈ h.sizeTrimmingSelection hq Δ S) : ‖v‖ ≤ 1 := by
+ (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ)
+ (S : Finset (LeftBlockVector L q k)) {v : LeftBlockVector L q k}
+ (hv : v ∈ h.sizeTrimmingSelection hq Δ S) : ‖v‖ ≤ 1 := by
   classical
   let : NeZero q := ⟨by omega⟩
   simp only [ManyBody.ChainInteraction.sizeTrimmingSelection,
@@ -135,25 +135,25 @@ theorem _root_.ManyBody.ChainInteraction.norm_le_one_of_mem_sizeTrimmingSelectio
     Finset.mem_biUnion, Finset.mem_univ, true_and] at hv
   obtain ⟨m, hm⟩ := hv
   exact norm_le_one_of_mem_boundaryMinimizerFamily
-    (S : Set (LeftBlockVector L q k)) (leftCutOperator k (h.cutLeftPart k)) _ _ _ hm
+ (S : Set (LeftBlockVector L q k)) (leftCutOperator k (h.cutLeftPart k)) _ _ _ hm
 
 /-- The selection of nets with at most `K` points each has at most `(D + 1) D K` members.
 LVV13, `algo53.tex`, Claim `c:2`, lines 520–527. -/
 theorem _root_.ManyBody.ChainInteraction.card_sizeTrimmingSelectionWith_le {L q k : ℕ}
-    (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
+ (h : ChainInteraction L q 1) (hq : 2 ≤ q) (Δ : ℝ) (S : Finset (LeftBlockVector L q k))
     {net : (m : ℕ) → Finset (Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)}
-    (sol : (m : ℕ) → Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
+ (sol : (m : ℕ) → Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ →
       EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m)) {K : ℕ}
-    (hnet : ∀ m ≤ constantCutBond q 1 1 Δ ((Δ / 169) ^ 2), (net m).card ≤ K) :
-    (h.sizeTrimmingSelectionWith hq Δ S net sol).card ≤
-      (constantCutBond q 1 1 Δ ((Δ / 169) ^ 2) + 1) * constantCutBond q 1 1 Δ ((Δ / 169) ^ 2) *
+ (hnet : ∀ m ≤ constantCutBond q 1 1 Δ ((Δ / 169) ^ 2), (net m).card ≤ K) :
+ (h.sizeTrimmingSelectionWith hq Δ S net sol).card ≤
+ (constantCutBond q 1 1 Δ ((Δ / 169) ^ 2) + 1) * constantCutBond q 1 1 Δ ((Δ / 169) ^ 2) *
         K := by
   classical
   set D := constantCutBond q 1 1 Δ ((Δ / 169) ^ 2) with hD
   have hm (m : Fin (D + 1)) : (boundaryFamily (S : Set (LeftBlockVector L q k)) m.val
-      ((Δ / 169) ^ 2 / (2 * L)) (net m.val) (sol m.val)).card ≤ D * K :=
-    (card_boundaryFamily_le _ _ _ _ _).trans
-      (Nat.mul_le_mul (Nat.le_of_lt_succ m.isLt) (hnet m.val (Nat.le_of_lt_succ m.isLt)))
+ ((Δ / 169) ^ 2 / (2 * L)) (net m.val) (sol m.val)).card ≤ D * K :=
+ (card_boundaryFamily_le _ _ _ _ _).trans
+ (Nat.mul_le_mul (Nat.le_of_lt_succ m.isLt) (hnet m.val (Nat.le_of_lt_succ m.isLt)))
   simpa only [ManyBody.ChainInteraction.sizeTrimmingSelectionWith, Finset.card_univ,
       Fintype.card_fin,
     Nat.mul_assoc] using Finset.card_biUnion_le_card_mul Finset.univ _ (D * K) fun m _ ↦ hm m
