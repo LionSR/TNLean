@@ -97,39 +97,43 @@ theorem chainNeighborhood_interval_subset (a b k : ℕ) :
 
 section Localized
 
-variable [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
-    (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
+variable [NeZero q] (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
+    (hhJ : ∀ X, ‖h.term X‖ ≤ J) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
   (s ΔE : ℝ)
 
 omit [NeZero q] in
+include hh in
 /-- Centering does not change `W_tilde - W`. -/
 theorem _root_.ManyBody.ChainInteraction.gaussianFilteredTerm_groundCentered_sub
     (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    gaussianFilteredTerm s ΔE h.operator (groundCentered Ω P) - groundCentered Ω P =
-      gaussianFilteredTerm s ΔE h.operator P - P := by
+    gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - groundCentered Ω P =
+      gaussianFilteredTerm s ΔE h.hamiltonian P - P := by
   rw [groundCentered]
-  exact gaussianFilteredTerm_sub_smul_one_sub s ΔE h.operator_isHermitian P _
+  exact gaussianFilteredTerm_sub_smul_one_sub s ΔE
+      (ManyBody.Interaction.isHermitian_hamiltonian hh) P _
 
 /-- The localization error of the centered part equals that of the part. -/
 theorem _root_.ManyBody.ChainInteraction.gaussianFilteredTerm_groundCentered_sub_localizedPart
     (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (K : Finset (Fin L)) :
-    gaussianFilteredTerm s ΔE h.operator (groundCentered Ω P) - h.localizedPart Ω s ΔE P K =
-      gaussianFilteredTerm s ΔE h.operator P -
-        (P + siteExpectation q K (gaussianFilteredTerm s ΔE h.operator P - P)) := by
-  set D := gaussianFilteredTerm s ΔE h.operator (groundCentered Ω P) - groundCentered Ω P
-  calc gaussianFilteredTerm s ΔE h.operator (groundCentered Ω P) - h.localizedPart Ω s ΔE P K
+    gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - h.localizedPart Ω s ΔE P K =
+      gaussianFilteredTerm s ΔE h.hamiltonian P -
+        (P + siteExpectation q K (gaussianFilteredTerm s ΔE h.hamiltonian P - P)) := by
+  set D := gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - groundCentered Ω P
+  calc gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - h.localizedPart Ω s ΔE P K
       = D - siteExpectation q K D := by
         rw [ManyBody.ChainInteraction.localizedPart]; simp only [D]; abel
-    _ = (gaussianFilteredTerm s ΔE h.operator P - P) -
-          siteExpectation q K (gaussianFilteredTerm s ΔE h.operator P - P) := by
+    _ = (gaussianFilteredTerm s ΔE h.hamiltonian P - P) -
+          siteExpectation q K (gaussianFilteredTerm s ΔE h.hamiltonian P - P) := by
         simp only [D, h.gaussianFilteredTerm_groundCentered_sub Ω s ΔE P]
     _ = _ := by abel
 
+include hh in
 /-- The centered localized part of a Hermitian part is Hermitian. -/
 theorem _root_.ManyBody.ChainInteraction.localizedPart_isHermitian
     {P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hP : P.IsHermitian) (K : Finset (Fin L)) : (h.localizedPart Ω s ΔE P K).IsHermitian :=
-  isHermitian_localized s ΔE h.operator_isHermitian (hP.groundCentered Ω) K
+  isHermitian_localized s ΔE (ManyBody.Interaction.isHermitian_hamiltonian hh)
+      (hP.groundCentered Ω) K
 
 /-- The centered localized part of a part supported on `D` is supported on `D ∪ K`. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart
@@ -150,7 +154,7 @@ theorem groundCentered_zero :
 /-- The centered localized part of `0` is `0`. -/
 theorem _root_.ManyBody.ChainInteraction.localizedPart_zero (K : Finset (Fin L)) :
     h.localizedPart Ω s ΔE 0 K = 0 := by
-  have hG : gaussianFilteredTerm s ΔE h.operator (0 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+  have hG : gaussianFilteredTerm s ΔE h.hamiltonian (0 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       = 0 := by
     simp [gaussianFilteredTerm, gaussianIntertwiner]
   rw [ManyBody.ChainInteraction.localizedPart, groundCentered_zero, hG, sub_zero, zero_add,
@@ -196,32 +200,34 @@ omit [NeZero q] in
 /-- Centering does not change the commutator with `H`. -/
 theorem _root_.ManyBody.ChainInteraction.commutator_groundCentered
     (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    h.operator * groundCentered Ω P - groundCentered Ω P * h.operator =
-      h.operator * P - P * h.operator := by
+    h.hamiltonian * groundCentered Ω P - groundCentered Ω P * h.hamiltonian =
+      h.hamiltonian * P - P * h.hamiltonian := by
   simp only [groundCentered, mul_sub, sub_mul, mul_smul_comm, smul_mul_assoc, mul_one, one_mul]
   abel
 
+include hh in
 /-- **The localized part nearly annihilates the ground state.** If `‖[H, P]‖ ≤ c_P` and the
 localization error is at most `δ`, then `‖M Ω‖ ≤ ΔE⁻¹ e^{-s/2} c_P + δ`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 794–828 (eqs. `tighter`, `tighter2` and the
 bound on `|M_L Ψ₀|`). -/
 theorem _root_.ManyBody.ChainInteraction.norm_localizedPart_apply_le {E₀ : ℝ}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ ΔE)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 < ΔE) (hs : 0 ≤ s)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ ΔE)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 < ΔE) (hs : 0 ≤ s)
     {P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hP : P.IsHermitian) (K : Finset (Fin L))
-    {cP δ : ℝ} (hc : ‖h.operator * P - P * h.operator‖ ≤ cP)
-    (hδ : ‖gaussianFilteredTerm s ΔE h.operator P -
-      (P + siteExpectation q K (gaussianFilteredTerm s ΔE h.operator P - P))‖ ≤ δ) :
+    {cP δ : ℝ} (hc : ‖h.hamiltonian * P - P * h.hamiltonian‖ ≤ cP)
+    (hδ : ‖gaussianFilteredTerm s ΔE h.hamiltonian P -
+      (P + siteExpectation q K (gaussianFilteredTerm s ΔE h.hamiltonian P - P))‖ ≤ δ) :
     ‖toEuclideanLin (h.localizedPart Ω s ΔE P K) Ω‖ ≤
       ΔE⁻¹ * Real.exp (-s / 2) * cP + δ := by
   have hop (A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) : ‖toEuclideanLin A Ω‖ ≤ ‖A‖ := by
     rw [← coe_toEuclideanCLM_eq_toEuclideanLin, ← l2_opNorm_toEuclideanCLM]
     simpa [hΩ] using (toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) A).le_opNorm Ω
   set W := groundCentered Ω P
-  set G := gaussianFilteredTerm s ΔE h.operator W
+  set G := gaussianFilteredTerm s ΔE h.hamiltonian W
   have hsplit : h.localizedPart Ω s ΔE P K = G - (G - h.localizedPart Ω s ΔE P K) := by abel
   have hG : ‖toEuclideanLin G Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * cP := by
-    refine (norm_gaussianFilteredTerm_apply_le_commutator_of_isGapped hs hΔ h.operator_isHermitian
+    refine (norm_gaussianFilteredTerm_apply_le_commutator_of_isGapped hs hΔ
+        (ManyBody.Interaction.isHermitian_hamiltonian hh)
       hgap hspan W (inner_groundCentered hP hΩ)).trans ?_
     rw [h.commutator_groundCentered]
     gcongr

@@ -132,18 +132,18 @@ theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero_
   have := card_nearestNeighborChainSupport i
   omega
 
+include h0 in
 /-- Every term remains positive in the constructed representation of the original
 positive Hamiltonian of LVV13, `algo53.tex`. -/
-include h0 in
 theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term_nonneg
     (X : ChainSupport L 1) :
     0 ≤ (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term X := by
   change 0 ≤ Function.extend nearestNeighborChainSupport h (fun _ ↦ 0) X
   exact forall_nearestNeighborExtension h (fun _ M ↦ 0 ≤ M) (fun _ ↦ le_rfl) h0 X
 
+include h1 in
 /-- Every term remains bounded above by the identity in the constructed representation.
 LVV13, `algo53.tex`, the local positive-contraction assumptions. -/
-include h1 in
 theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term_le_one
     (X : ChainSupport L 1) :
     (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term X ≤ 1 := by
@@ -168,6 +168,7 @@ theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian :
       simpa only [Finset.mem_image, Finset.mem_univ, true_and, f] using hX
     _ = ∑ i, H.term (f i) := Finset.sum_image (fun _ _ _ _ hij ↦
       nearestNeighborChainSupport_injective hij)
-    _ = _ := Finset.sum_congr rfl fun i _ ↦ ofNearestNeighborPositive_term h hs h0 h1 i
+    _ = _ := Finset.sum_congr rfl fun i _ ↦
+        ManyBody.ChainInteraction.ofNearestNeighborPositive_term h hs h0 h1 i
 
 end TNLean.MPS.AreaLaw
