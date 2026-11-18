@@ -242,7 +242,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_commutator_termSum_inner_le
 /-- The commutator `[H, H_A]` for an interval `A` has norm at most
 `partCommutatorConst R * J²`. Hastings, arXiv:0705.2024v4, `law16.tex`, line 794. -/
 theorem _root_.ManyBody.ChainInteraction.norm_commutator_termSum_interval_le
-    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (h : ChainInteraction L q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (a b : ℕ) :
     ‖h.hamiltonian * h.termSum (Finset.univ.filter fun X ↦ X.1 ⊆ interval L a b) -
         h.termSum (Finset.univ.filter fun X ↦ X.1 ⊆ interval L a b) * h.hamiltonian‖ ≤
@@ -305,14 +305,14 @@ theorem _root_.ManyBody.ChainInteraction.norm_commutator_leftPart_le (h : ChainI
     (j m : ℕ) :
     ‖h.hamiltonian * h.leftPart j m - h.leftPart j m * h.hamiltonian‖ ≤
       partCommutatorConst R * J ^ 2 :=
-  h.norm_commutator_termSum_interval_le hh hhJ 0 (j - m)
+  h.norm_commutator_termSum_interval_le hhJ 0 (j - m)
 
 /-- **The support of `b_L`.** `[H, H_L]` is supported on the window
 `[j - m - 2R, j - m + R)` around the left edge of the buffer.
 Hastings, arXiv:0705.2024v4, appendix, `law16.tex`, line 794: "Let `b_L = [H, H_L]`". For
 terms of range `R` the window has width `3R`. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_commutator_leftPart
-    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (h : ChainInteraction L q R)
     (j m : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h.hamiltonian * h.leftPart j m - h.leftPart j m * h.hamiltonian)
@@ -361,14 +361,14 @@ theorem _root_.ManyBody.ChainInteraction.norm_commutator_rightPart_le (h : Chain
     (j m : ℕ) :
     ‖h.hamiltonian * h.rightPart j m - h.rightPart j m * h.hamiltonian‖ ≤
       partCommutatorConst R * J ^ 2 :=
-  h.norm_commutator_termSum_interval_le hh hhJ (j + m) L
+  h.norm_commutator_termSum_interval_le hhJ (j + m) L
 
 /-- **The support of `b_R`.** `[H, H_R]` is supported on the window
 `[j + m - R, j + m + 2R)` around the right edge of the buffer.
 Hastings, arXiv:0705.2024v4, appendix, `law16.tex`, line 794: "Let `b_L = [H, H_L]`",
 applied to the right part. For terms of range `R` the window has width `3R`. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_commutator_rightPart
-    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (h : ChainInteraction L q R)
     (j m : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h.hamiltonian * h.rightPart j m - h.rightPart j m * h.hamiltonian)
@@ -435,8 +435,8 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_commutator_bufferPart
   change _ ∈ ManyBody.supportedOperators _ _
   rw [h.commutator_bufferPart_eq]
   exact neg_mem (add_mem
-    ((h.isSupportedOn_commutator_leftPart hh hhJ j m).mono Finset.subset_union_left)
-    ((h.isSupportedOn_commutator_rightPart hh hhJ j m).mono Finset.subset_union_right))
+    ((h.isSupportedOn_commutator_leftPart j m).mono Finset.subset_union_left)
+    ((h.isSupportedOn_commutator_rightPart j m).mono Finset.subset_union_right))
 
 end PartCommutators
 

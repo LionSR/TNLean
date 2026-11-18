@@ -72,7 +72,7 @@ theorem cost_sampledSweepStepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ : ℝ) {Δ : ℝ} (hΔ : 0 < Δ)
     {ℓ m : ℕ} (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) (hF : (sampledFactors h E₀ I (i + 1)).card ≤ ℓ * D) :
-    FreeM.cost honestOracle queryCost (sampledSweepStepProgram hq h hs h0 h1 E₀ Δ I b D hi S) ≤
+    FreeM.cost honestOracle queryCost (sampledSweepStepProgram hq h hs E₀ Δ I b D hi S) ≤
       sampledStepCostBound q Δ L ℓ D b S.card := by
   classical
   simp only [sampledSweepStepProgram, FreeM.cost_bind, FreeM.eval_lift, eval_extensionProgram,

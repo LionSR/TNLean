@@ -87,7 +87,7 @@ lines 379--592, with Huang, Section 5.4, Lemmas 18--19 for the error-reduction o
 noncomputable def lvvSweepStep (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
     (Delta : ℝ) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     Finset (LeftBlockVector L q (i + 1)) :=
   successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Delta L))
@@ -102,7 +102,7 @@ theorem card_lvvSweepStep_le (hq : 2 ≤ q)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
-    (lvvSweepStep hq h hs h0 h1 Delta hi S).card ≤ lvvSuccessiveCardBound q Delta L := by
+    (lvvSweepStep hq h hs h0 Delta hi S).card ≤ lvvSuccessiveCardBound q Delta L := by
   calc
     _ ≤ (gaussianFilterFactors h h0 (lvvSuccessiveError Delta) Delta
           (i + 1)).card *
@@ -128,7 +128,7 @@ theorem isLeftOpenMPS_of_mem_lvvSweepStep (hq : 2 ≤ q)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i))
-    {v : LeftBlockVector L q (i + 1)} (hv : v ∈ lvvSweepStep hq h hs h0 h1 Delta hi S) :
+    {v : LeftBlockVector L q (i + 1)} (hv : v ∈ lvvSweepStep hq h hs h0 Delta hi S) :
     IsLeftOpenMPS (lvvSuccessiveBondBound q Delta L) v :=
   isLeftOpenMPS_of_mem_successiveStep hi
     (fun _ hA k _ hki ↦ operatorSchmidtRank_of_mem_gaussianFilterFactors (Nat.le_of_lt hq) h hs
@@ -149,7 +149,7 @@ theorem isViable_lvvSweepStep (hq : 2 ≤ q)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
     (hviable : IsViable Γ (lvvSuccessiveError Delta / L) (S : Set (LeftBlockVector L q i))) :
     IsViable Γ (lvvSuccessiveError Delta / L)
-      (lvvSweepStep hq h hs h0 h1 Delta hi S : Set (LeftBlockVector L q (i + 1))) := by
+      (lvvSweepStep hq h hs h0 Delta hi S : Set (LeftBlockVector L q (i + 1))) := by
   classical
   let chain := ManyBody.ChainInteraction.ofNearestNeighborPositive h hs
   have hpos (X) : (chain.term X).PosSemidef :=
@@ -189,7 +189,7 @@ theorem exists_positive_chain_successive_step (hq : 2 ≤ q)
         groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} →
         IsViable Γ (lvvSuccessiveError Delta / L) (S : Set (LeftBlockVector L q i)) →
         IsViable Γ (lvvSuccessiveError Delta / L) (T : Set (LeftBlockVector L q (i + 1))) :=
-  ⟨lvvSweepStep hq h hs h0 h1 Delta hi S, card_lvvSweepStep_le hq h hs h0 h1 hDelta hi S,
+  ⟨lvvSweepStep hq h hs h0 Delta hi S, card_lvvSweepStep_le hq h hs h0 h1 hDelta hi S,
     fun _ hv ↦ isLeftOpenMPS_of_mem_lvvSweepStep hq h hs h0 h1 hDelta hi S hv,
     fun E₀ Γ hΩ hgap hspan hviable ↦ isViable_lvvSweepStep hq h hs h0 h1 hDelta hi S E₀ Γ hΩ hgap
       hspan hviable⟩

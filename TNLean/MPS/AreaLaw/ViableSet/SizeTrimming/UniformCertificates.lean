@@ -260,12 +260,18 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_uniform_approx_
       A hA P N hP hN htrace hε hmin hεb hPmin hNmin hresidual htraces henergy
         hκbound hεbound hεbbound hδbound
 
+end TNLean.MPS.AreaLaw
+
+namespace ManyBody.ChainInteraction
+
+open TNLean.MPS.AreaLaw
+
 /-- A normalized supported glued vector determines positive-dimensional compressed
 coordinates containing an exact zero-error SDP certificate and in which every uniformly
 accurate certificate is physically sound.  Thus the numerical solver need only return
 matrices in the nonempty coordinate problem constructed here; it does not need to supply
 or certify the support isometry itself. -/
-theorem _root_.ManyBody.ChainInteraction.exists_boundary_coordinates_with_uniform_approx_sdp_soundness
+theorem exists_boundary_coordinates_with_uniform_approx_sdp_soundness
     {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
@@ -353,6 +359,10 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundary_coordinates_with_unifor
   exact h.exists_viable_vector_of_uniform_approx_sdp_feasible hh hhJ hL hq hΔ
     HL B hsplit hHL hBS hBn hΩ hgap hspan S hn W hW x hwx hwE X hX Z hZ hZZ
       hcert hκbound hεbound hεbbound hδbound
+
+end ManyBody.ChainInteraction
+
+namespace TNLean.MPS.AreaLaw
 
 /-- A normalized vector in the retained support also supplies an exact feasible point
 in its compressed boundary coordinates.  Thus the coordinate system used by the

@@ -77,10 +77,16 @@ theorem lvvFiniteDensityMesh_fits {L : ℕ} {Δ : ℝ} (hL : 0 < L) :
   field_simp [hLreal]
   ring
 
+end TNLean.MPS.AreaLaw
+
+namespace ManyBody.ChainInteraction
+
+open TNLean.MPS.AreaLaw
+
 /-- An exact compressed density satisfying objective and boundary constraints with slack
 produces a physical LVV viable vector.  This separates the numerical repair of a
 semidefinite certificate from its physical use. -/
-theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_compressed_boundary_solution_with_slack
+theorem exists_viable_vector_of_compressed_boundary_solution_with_slack
     {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
@@ -156,12 +162,19 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_compressed_boun
   exact ⟨v, hbounds.2.2.1, hbounds.2.2.2.1, hbounds.2.2.2.2.1,
     hbounds.2.2.2.2.2.1⟩
 
+end ManyBody.ChainInteraction
+
+
+namespace ManyBody.ChainInteraction
+
+open TNLean.MPS.AreaLaw
+
 /-- An exact compressed boundary solution whose sharp leading-vector overlap leaves a
 rationalization reserve produces compact rational viable MPS data.  The dominant
 eigenvector is pulled back through the support isometry before its physical left columns
 are rationalized.  This is the rational-output form of the size-trimming step in LVV13,
 `algo53.tex`, lines 493--527. -/
-theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_compressed_boundary_solution_with_slack
+theorem exists_rationalViableMPSData_of_compressed_boundary_solution_with_slack
     {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
@@ -259,9 +272,16 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_compres
   exact exists_rationalSpanViableMPSData_of_mulVec_atTarget S hS hΩ
     hξrat hξrat1 hbudget Z hZ hZZ z hz W hW hunit hoverlap
 
+end ManyBody.ChainInteraction
+
+
+namespace ManyBody.ChainInteraction
+
+open TNLean.MPS.AreaLaw
+
 /-- Coordinate-rational form of the exact compressed boundary-solution theorem.  It
 can consume the compact output invariant from a preceding LVV iteration. -/
-theorem _root_.ManyBody.ChainInteraction.exists_rationalCoordinateData_of_compressed_boundary_solution_with_slack
+theorem exists_rationalCoordinateData_of_compressed_boundary_solution_with_slack
     {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
@@ -359,6 +379,10 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalCoordinateData_of_compre
     exact hbounds.2.2.2.2.2.2.2.1
   exact exists_rationalCoordinateViableMPSData_of_mulVec_atTarget S D hΩ
     hξrat hξrat1 hbudget Z hZ hZZ z hz W hW hunit hoverlap
+
+end ManyBody.ChainInteraction
+
+namespace TNLean.MPS.AreaLaw
 
 /-- A finite exact-density search has a least-energy relaxed-feasible certificate whose
 physical expansion is an LVV viable vector.  Starting from one exactly feasible density,
@@ -534,10 +558,16 @@ theorem _root_.ManyBody.ChainInteraction.exists_coordinate_finite_density_search
   exact ⟨n, Z, N, hnpos, hn, hZ, hZZ, hNcard, hNdensity, σ, hσN, hσmin, v,
     hvnorm, hvS, hvenergy, hvoverlap⟩
 
+end TNLean.MPS.AreaLaw
+
+namespace ManyBody.ChainInteraction
+
+open TNLean.MPS.AreaLaw
+
 /-- At the canonical LVV mesh, the supported glued vector determines the compressed
 coordinates, the finite least-energy relaxed-feasible density, and its physical viable
 vector without any further precision choice. -/
-theorem _root_.ManyBody.ChainInteraction.exists_canonical_coordinate_finite_density_search_viable_vector
+theorem exists_canonical_coordinate_finite_density_search_viable_vector
     {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
@@ -592,4 +622,5 @@ theorem _root_.ManyBody.ChainInteraction.exists_canonical_coordinate_finite_dens
     HL B hsplit hHL hBS hBn hΩ hgap hspan S W hW x hxnorm hxP hwx hwE X hXHermitian hX
       (lvvFiniteDensityMesh_pos hL hΔ) (lvvFiniteDensityMesh_fits hL).le
 
-end TNLean.MPS.AreaLaw
+end ManyBody.ChainInteraction
+

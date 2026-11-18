@@ -62,8 +62,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_numeric
     (fun x hx y hy ↦ by
       simpa only [SimpleGraph.pathGraph_edist, ENat.natCast_le_natCast] using hd x hx y hy) t
   convert hBound using 1 <;>
-    simp only [Φ, ManyBody.Interaction.hamiltonian, ManyBody.Interaction.hamiltonian,
-        chainLRVelocity,
+    simp only [chainLRVelocity,
       Nat.cast_add, Nat.cast_one, add_sub_cancel_right, mul_one, one_mul]
   ring_nf
 

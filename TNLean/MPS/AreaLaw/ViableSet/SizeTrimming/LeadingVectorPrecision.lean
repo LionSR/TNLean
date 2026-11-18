@@ -38,14 +38,17 @@ open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2
 
 open ManyBody (IsGapped groundSpace ChainInteraction)
 
-namespace TNLean.MPS.AreaLaw
+
+namespace ManyBody.ChainInteraction
+
+open TNLean.MPS.AreaLaw
 
 /-- A positive approximate solution of the compressed boundary program yields a physical
 LVV viable vector.  If the compressed trace-norm error is `ε`, normalization and expansion
 produce objective error `2 ‖Zᴴ H_L Z‖ ε` and additional boundary error `2 ε`.
 The displayed precision condition places their combined contribution inside the exact
 ` Δ / 2028` margin of the viable-vector estimate. -/
-theorem _root_.ManyBody.ChainInteraction.exists_leading_vector_of_approximate_compressed_boundary_solution
+theorem exists_leading_vector_of_approximate_compressed_boundary_solution
     {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
@@ -212,6 +215,10 @@ theorem _root_.ManyBody.ChainInteraction.exists_leading_vector_of_approximate_co
       field_simp [ne_of_gt hΔ]
     rw [heq] at hratio
     linarith only [hsharp, hratio]
+
+end ManyBody.ChainInteraction
+
+namespace TNLean.MPS.AreaLaw
 
 /-- The density precision `ε` and compressed-vector precision `ζ` share the unused LVV
 margin.  Under `24 L ε + 4 L ζ ≤ Δ / 2028`, the numerical physical vector retains the

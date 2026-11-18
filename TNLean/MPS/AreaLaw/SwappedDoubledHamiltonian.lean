@@ -48,7 +48,6 @@ noncomputable def _root_.ManyBody.ChainInteraction.swappedDoubled
     let F := Matrix.reindex e e (sheetSwapOp q D)
     F * h.doubled.term X * Fᴴ
   mem X := by
-    change _ ∈ ManyBody.supportedOperators _ _
     exact reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
       D X.1 (h.mem X)
 

@@ -45,7 +45,6 @@ noncomputable def _root_.ManyBody.ChainInteraction.doubled (h : ManyBody.ChainIn
     (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)
       (h.term X ⊗ₖ 1 + 1 ⊗ₖ h.term X)
   mem X := by
-    change _ ∈ ManyBody.supportedOperators _ _
     change (Matrix.reindexAddEquiv ℂ (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)
       (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)) (_ + _) ∈ _
     rw [map_add]

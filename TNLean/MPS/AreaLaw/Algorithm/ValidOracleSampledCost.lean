@@ -61,7 +61,7 @@ theorem cost_sampledSweepStepProgram_le_of_valid (hv : IsValidOracle o) (hL : 0 
     (S : Finset (LeftBlockVector L q i))
     (hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
       (leftBlock L k) (bondComplementWord h (I t))) ≤ D) :
-    FreeM.cost o queryCost (sampledSweepStepProgram hq h hs h0 h1 E₀ Δ I b D hi S) ≤
+    FreeM.cost o queryCost (sampledSweepStepProgram hq h hs E₀ Δ I b D hi S) ≤
       sampledStepCostBound q Δ L ℓ D b S.card := by
   classical
   let : NeZero q := ⟨by omega⟩

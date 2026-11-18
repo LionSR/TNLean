@@ -119,7 +119,7 @@ and apply the sampled factors of the words `I` at the cut after `i + 1` sites. L
 noncomputable def sampledSweepStep (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
+        (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     Finset (LeftBlockVector L q (i + 1)) :=
   successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
@@ -136,7 +136,7 @@ noncomputable def sampledSweep (hq : 2 ≤ q)
   | 0 => {emptyLeftVector L q}
   | i + 1 =>
     if hi : i + 1 ≤ L then
-      sampledSweepStep hq h hs h0 h1 E₀ Δ (I ⟨i, by omega⟩) hi (sampledSweep hq h hs h0 h1 E₀ Δ I i)
+      sampledSweepStep hq h hs E₀ Δ (I ⟨i, by omega⟩) hi (sampledSweep hq h hs h0 h1 E₀ Δ I i)
     else ∅
 
 theorem sampledSweep_succ (hq : 2 ≤ q)
@@ -145,7 +145,7 @@ theorem sampledSweep_succ (hq : 2 ≤ q)
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) {i : ℕ} (hi : i + 1 ≤ L) :
     sampledSweep hq h hs h0 h1 E₀ Δ I (i + 1) =
-      sampledSweepStep hq h hs h0 h1 E₀ Δ (I ⟨i, by omega⟩) hi
+      sampledSweepStep hq h hs E₀ Δ (I ⟨i, by omega⟩) hi
         (sampledSweep hq h hs h0 h1 E₀ Δ I i) := by
   simp only [sampledSweep, hi, ↓reduceDIte]
 
@@ -167,7 +167,7 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
     IsViableMPS Γ (ℓ * q ^ (2 * κ) *
         (lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ))
       (q ^ (2 * κ) * max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L))) δ
-      (sampledSweepStep hq h hs h0 h1 E₀ Δ I hi S) := by
+      (sampledSweepStep hq h hs E₀ Δ I hi S) := by
   classical
   let chain := ManyBody.ChainInteraction.ofBonds h hs
   have hgapC : IsGapped chain.hamiltonian E₀ Δ := by
@@ -248,7 +248,7 @@ open LinearAlgebraQuery
 noncomputable def sampledSweepStepProgram (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
+        (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) : LVVProgram q (Finset (LeftBlockVector L q (i + 1))) :=
   let r := bondTrimmingRadius L (lvvReferenceBond q Δ L)
@@ -267,8 +267,8 @@ theorem eval_sampledSweepStepProgram (hq : 2 ≤ q)
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
-    FreeM.eval honestOracle (sampledSweepStepProgram hq h hs h0 h1 E₀ Δ I b D hi S) =
-      sampledSweepStep hq h hs h0 h1 E₀ Δ I hi S := by
+    FreeM.eval honestOracle (sampledSweepStepProgram hq h hs E₀ Δ I b D hi S) =
+      sampledSweepStep hq h hs E₀ Δ I hi S := by
   simp only [sampledSweepStepProgram, FreeM.eval_bind, FreeM.eval_lift,
     honestOracle_sampledFactors, eval_extensionProgram, eval_sizeTrimmingProgram,
     eval_bondTrimmingProgram, eval_errorReductionProgram, sampledSweepStep, successiveStep]
@@ -284,7 +284,7 @@ noncomputable def sampledSweepProgram (hq : 2 ≤ q)
   | i + 1 =>
     if hi : i + 1 ≤ L then do
       let S ← sampledSweepProgram hq h hs h0 h1 E₀ Δ I b D i
-      sampledSweepStepProgram hq h hs h0 h1 E₀ Δ (I ⟨i, by omega⟩) b D hi S
+      sampledSweepStepProgram hq h hs E₀ Δ (I ⟨i, by omega⟩) b D hi S
     else pure ∅
 
 /-- With the honest oracle, the program computes the sampled sweep at every cut. -/

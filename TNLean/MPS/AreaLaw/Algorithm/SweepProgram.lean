@@ -233,7 +233,7 @@ declared for the vectors handled. LVV13, `algo53.tex`, algorithm steps 1--4, lin
 noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     LVVProgram q (Finset (LeftBlockVector L q (i + 1))) :=
   let b := lvvSuccessiveBondBound q Delta L
@@ -254,8 +254,8 @@ theorem eval_sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
-    FreeM.eval honestOracle (sweepStepProgram hq h hs h0 h1 Delta hi S) =
-      lvvSweepStep hq h hs h0 h1 Delta hi S := by
+    FreeM.eval honestOracle (sweepStepProgram hq h hs h0 Delta hi S) =
+      lvvSweepStep hq h hs h0 Delta hi S := by
   simp only [sweepStepProgram, FreeM.eval_bind, FreeM.eval_lift,
     honestOracle_gaussianFilterFactors, eval_extensionProgram, eval_sizeTrimmingProgram,
     eval_bondTrimmingProgram, eval_errorReductionProgram, lvvSweepStep, successiveStep]
@@ -271,7 +271,7 @@ noncomputable def sweepProgram {L : ℕ} (hq : 2 ≤ q)
   | i + 1 =>
     if hi : i + 1 ≤ L then do
       let S ← sweepProgram hq h hs h0 h1 Delta i
-      sweepStepProgram hq h hs h0 h1 Delta hi S
+      sweepStepProgram hq h hs h0 Delta hi S
     else pure ∅
 
 /-- With the honest oracle, the program computes the sweep at every cut. -/

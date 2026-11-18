@@ -128,7 +128,7 @@ theorem cost_sweepStepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL :
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
-    FreeM.cost o queryCost (sweepStepProgram hq h hs h0 h1 Delta hi S) ≤
+    FreeM.cost o queryCost (sweepStepProgram hq h hs h0 Delta hi S) ≤
       sweepStepCostBound q Delta L S.card := by
   classical
   let : NeZero q := ⟨by omega⟩

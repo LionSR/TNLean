@@ -209,10 +209,16 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_erro
   · simpa only [η, boundaryError, repair, add_assoc] using hσboundary
   · exact herr
 
+end TNLean.MPS.AreaLaw
+
+namespace ManyBody.ChainInteraction
+
+open TNLean.MPS.AreaLaw
+
 /-- The error-budget theorem with an additional auxiliary-trace allowance.  A
 certificate with trace budget `η + eη` incurs the extra boundary error `eη`; this is the
 form needed for certificates obtained by finite rational search. -/
-theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack
+theorem exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack
     {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
@@ -291,11 +297,18 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_erro
   · simpa only [η, boundaryError, repair, add_assoc] using hσboundary
   · exact herr
 
+end ManyBody.ChainInteraction
+
+
+namespace ManyBody.ChainInteraction
+
+open TNLean.MPS.AreaLaw
+
 /-- A repaired approximate semidefinite certificate produces rational viable MPS data
 once the sharp leading-vector deficit and the rationalization reserve fit the target.
 The statement includes the auxiliary trace slack used by the executable rational search.
 It is the certificate-level rational-output step of LVV13, `algo53.tex`, lines 493--527. -/
-theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack
+theorem exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack
     {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
@@ -370,9 +383,16 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_approx_
   · simpa only [K, Hleft, repair, boundaryError] using hleading
   · simpa only [K, Hleft, repair, boundaryError] using hrational
 
+end ManyBody.ChainInteraction
+
+
+namespace ManyBody.ChainInteraction
+
+open TNLean.MPS.AreaLaw
+
 /-- A repaired approximate semidefinite certificate transports the compact
 coordinate-rational invariant from one LVV iteration to the next. -/
-theorem _root_.ManyBody.ChainInteraction.exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slack
+theorem exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slack
     {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
@@ -448,4 +468,5 @@ theorem _root_.ManyBody.ChainInteraction.exists_rationalCoordinateData_of_approx
   · simpa only [K, Hleft, repair, boundaryError] using hleading
   · simpa only [K, Hleft, repair, boundaryError] using hrational
 
-end TNLean.MPS.AreaLaw
+end ManyBody.ChainInteraction
+

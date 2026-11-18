@@ -91,7 +91,7 @@ theorem eval_sampledSweepStepProgram_of_valid (hv : IsValidOracle o) (hq : 2 ≤
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
-    FreeM.eval o (sampledSweepStepProgram hq h hs h0 h1 E₀ Δ I b D hi S) =
+    FreeM.eval o (sampledSweepStepProgram hq h hs E₀ Δ I b D hi S) =
       haveI : NeZero q := ⟨by omega⟩
       successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
         (o (LinearAlgebraQuery.sampledFactors L (i + 1) h E₀ ℓ m D I)) id
@@ -119,7 +119,7 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
     IsViableMPS Γ (ℓ * q ^ (2 * κ) *
         (lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ))
       (q ^ (2 * κ) * max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L))) δ
-      (FreeM.eval o (sampledSweepStepProgram hq h hs h0 h1 E₀ Δ I b (q ^ (2 * κ)) hi S)) := by
+      (FreeM.eval o (sampledSweepStepProgram hq h hs E₀ Δ I b (q ^ (2 * κ)) hi S)) := by
   classical
   let : NeZero q := ⟨by omega⟩
   rw [eval_sampledSweepStepProgram_of_valid hv hq h hs h0 h1 E₀ Δ I b (q ^ (2 * κ)) hi S]

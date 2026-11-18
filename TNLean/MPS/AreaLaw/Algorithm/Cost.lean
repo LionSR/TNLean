@@ -198,7 +198,7 @@ theorem cost_sweepStepProgram_le {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
-    FreeM.cost honestOracle queryCost (sweepStepProgram hq h hs h0 h1 Delta hi S) ≤
+    FreeM.cost honestOracle queryCost (sweepStepProgram hq h hs h0 Delta hi S) ≤
       sweepStepCostBound q Delta L S.card := by
   classical
   have hc : 0 < lvvSuccessiveError Delta := lvvSuccessiveError_pos hDelta

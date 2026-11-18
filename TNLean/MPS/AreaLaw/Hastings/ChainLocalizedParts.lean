@@ -199,7 +199,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_leftPart_sub_
           (Real.sqrt (2 * (q' / ΔE ^ 2).toNNReal / Real.pi) *
             Real.exp (-T ^ 2 / (2 * (q' / ΔE ^ 2).toNNReal))) :=
   h.norm_gaussianFilteredTerm_sub_localized_le_of_commutator hh hhJ hq q' ΔE _ _ _ _
-    (h.isSupportedOn_commutator_leftPart hh hhJ j m) ((card_interval_le _ _).trans (by omega))
+    (h.isSupportedOn_commutator_leftPart j m) ((card_interval_le _ _).trans (by omega))
     (h.norm_commutator_leftPart_le hh hhJ j m) hℓ hT
 
 /-- **The localized right part.** With `K` the `ℓ`-neighbourhood of the window
@@ -223,7 +223,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_rightPart_sub
           (Real.sqrt (2 * (q' / ΔE ^ 2).toNNReal / Real.pi) *
             Real.exp (-T ^ 2 / (2 * (q' / ΔE ^ 2).toNNReal))) :=
   h.norm_gaussianFilteredTerm_sub_localized_le_of_commutator hh hhJ hq q' ΔE _ _ _ _
-    (h.isSupportedOn_commutator_rightPart hh hhJ j m) ((card_interval_le _ _).trans (by omega))
+    (h.isSupportedOn_commutator_rightPart j m) ((card_interval_le _ _).trans (by omega))
     (h.norm_commutator_rightPart_le hh hhJ j m) hℓ hT
 
 /-- **The localized buffer part.** With `K` the `ℓ`-neighbourhood of the union of the two

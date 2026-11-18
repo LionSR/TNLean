@@ -332,8 +332,7 @@ theorem chainAreaLaw_of_consecutive_terms_polynomial_range :
 /-- Full physical windows remain full windows after increasing relabelling.
 Source: the one-dimensional note, part1_arealaw.tex, lines 64–93 and 706–748. -/
 private theorem _root_.ManyBody.DomainInteraction.toChain_consecutive_terms
-    {Λ : Finset ℤ} {q R : ℕ} {J : ℝ}
-    (h : DomainInteraction Λ q R) (hJ : 0 ≤ J)
+    {Λ : Finset ℤ} {q R : ℕ} (h : DomainInteraction Λ q R)
     (hwindow : ∀ X : DomainSupport Λ R, h.term X ≠ 0 →
       ∃ a : ℤ, X.1.image (sitePos Λ) = Finset.Ico a (a + (R : ℤ) + 1)) :
     ∀ Y : ChainSupport Λ.card R, (h.toChain).term Y ≠ 0 →
@@ -379,7 +378,7 @@ theorem domainAreaLaw_of_consecutive_terms_polynomial_range :
   rw [← h.toChain_hamiltonian] at hgap hspan
   have hbound := hchain q R J Δ hq hJ hΔ Λ.card (h.toChain) (h.isHermitian_toChain_term hh)
     (h.norm_toChain_term_le hhJ hJ)
-    (h.toChain_consecutive_terms hJ hwindow) E₀ Ω hΩ hgap hspan A'
+    (h.toChain_consecutive_terms hwindow) E₀ Ω hΩ hgap hspan A'
   simpa only [hS, hB] using hbound
 
 end TNLean.MPS.AreaLaw

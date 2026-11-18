@@ -38,7 +38,10 @@ open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2
 
 open ManyBody (IsGapped groundSpace ChainInteraction)
 
-namespace TNLean.MPS.AreaLaw
+
+namespace ManyBody.ChainInteraction
+
+open TNLean.MPS.AreaLaw
 
 /-- End-to-end finite-precision form of the LVV leading-vector step.  A positive
 compressed density approximation at trace-norm precision `Δ / (97344 L)` determines
@@ -49,7 +52,7 @@ viable vector with the original LVV energy and overlap bounds.  Isometric expans
 preserves its norm and residual and places it in the retained support.  The theorem also
 constructs such a vector by the normalized coordinate-start power method at the explicit
 polynomial iteration count `ceil (n / (11 Δ / (778752 L))²)`. -/
-theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approximate_density_and_eigenresidual
+theorem exists_viable_vector_of_approximate_density_and_eigenresidual
     {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
@@ -241,6 +244,10 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approximate_den
   simpa only [η, P] using
     (Matrix.PosSemidef.exists_basisVector_scaled_power_of_residual_certificate
       (by have := x₀.isLt; omega : 0 < n) hσ₀ hσ₀tr hz₀ hz₀eig hμ hη P hcert)
+
+end ManyBody.ChainInteraction
+
+namespace TNLean.MPS.AreaLaw
 
 /-- End-to-end rational-output form of the finite-precision LVV leading-vector step.
 From an approximate compressed density at the standard trace-norm precision, it extracts
