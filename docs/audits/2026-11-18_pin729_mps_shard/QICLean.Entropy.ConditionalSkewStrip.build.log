@@ -1,0 +1,19 @@
+QICLean/Entropy/ConditionalSkewStrip.lean:71:8: warning: `norm_apply_le_one_of_nonneg_le_one` does not use the following hypothesis in its type:
+  • [Fintype n] (#2)
+
+Consider replacing this hypothesis with the corresponding instance of `Finite` and using `Fintype.ofFinite` in the proof, or removing it entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
+QICLean/Entropy/ConditionalSkewStrip.lean:120:8: warning: `kronecker_one_le_one` does not use the following hypotheses in its type:
+  • [Fintype n] (#3)
+  • [Fintype m] (#5)
+
+Consider replacing these hypotheses with the corresponding instances of `Finite` and using `Fintype.ofFinite` in the proof, or removing them entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
+Try this:
+  [apply] ring_nf
+  
+  The `ring` tactic failed to close the goal. Use `ring_nf` to obtain a normal form.
+    
+  Note that `ring` works primarily in *commutative* rings. If you have a noncommutative ring, abelian group or module, consider using `noncomm_ring`, `abel` or `module` instead.

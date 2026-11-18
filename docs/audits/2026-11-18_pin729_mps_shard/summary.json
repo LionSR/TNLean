@@ -1,12 +1,12 @@
 {
   "selected": 865,
-  "build_and_strict_passed": 200,
-  "not_completed": 665,
+  "build_and_strict_passed": 260,
+  "not_completed": 605,
   "failed_commands": 0,
-  "build_commands": 744,
-  "strict_commands": 200,
-  "build_seconds": 2079.1744357387943,
-  "strict_seconds": 673.7720558208675,
+  "build_commands": 957,
+  "strict_commands": 260,
+  "build_seconds": 2832.898244575874,
+  "strict_seconds": 908.9951835669053,
   "production_edit_seconds": 0,
   "state": "running; resume.py continues bounded batches",
   "source_head": "6b7fb2e27dbc6856091e593e4226d350403beb8a"

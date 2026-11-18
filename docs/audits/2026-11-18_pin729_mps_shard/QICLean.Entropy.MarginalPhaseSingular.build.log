@@ -1,0 +1,41 @@
+QICLean/Entropy/MarginalPhaseSingular.lean:130:0: warning: automatically included section variable(s) unused in theorem `Entropy.MarginalPhase.tendsto_cpow_affF`:
+  [DecidableEq X]
+  [DecidableEq U]
+  [DecidableEq F]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq X] [DecidableEq U] [DecidableEq F] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+QICLean/Entropy/MarginalPhaseSingular.lean:130:8: warning: `tendsto_cpow_affF` does not use the following hypotheses in its type:
+  • [DecidableEq X] (#5)
+  • [DecidableEq U] (#7)
+  • [DecidableEq F] (#9)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+QICLean/Entropy/MarginalPhaseSingular.lean:134:0: warning: automatically included section variable(s) unused in theorem `Entropy.MarginalPhase.tendsto_rpow_affF`:
+  [DecidableEq X]
+  [DecidableEq U]
+  [DecidableEq F]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq X] [DecidableEq U] [DecidableEq F] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+QICLean/Entropy/MarginalPhaseSingular.lean:134:8: warning: `tendsto_rpow_affF` does not use the following hypotheses in its type:
+  • [DecidableEq X] (#5)
+  • [DecidableEq U] (#7)
+  • [DecidableEq F] (#9)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+QICLean/Entropy/MarginalPhaseSingular.lean:167:8: warning: `tendsto_phaseFam_mul` does not use the following hypotheses in its type:
+  • [DecidableEq X] (#5)
+  • [DecidableEq U] (#7)
+  • [DecidableEq F] (#9)
+  • [DecidableEq m] (#18)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`

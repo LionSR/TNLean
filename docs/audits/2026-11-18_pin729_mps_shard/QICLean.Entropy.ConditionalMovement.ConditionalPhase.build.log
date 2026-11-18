@@ -1,0 +1,12 @@
+QICLean/Entropy/ConditionalMovement/ConditionalPhase.lean:107:8: warning: `conditional_spectral_second_moment` does not use the following hypothesis in its type:
+  • [DecidableEq F] (#9)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+QICLean/Entropy/ConditionalMovement/ConditionalPhase.lean:202:8: warning: `conditional_phase_continuity` does not use the following hypothesis in its type:
+  • [DecidableEq F] (#9)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`

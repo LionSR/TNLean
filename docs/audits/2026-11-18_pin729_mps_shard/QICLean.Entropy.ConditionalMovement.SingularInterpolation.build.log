@@ -1,0 +1,12 @@
+QICLean/Entropy/ConditionalMovement/SingularInterpolation.lean:100:8: warning: `one_copy_interpolation` does not use the following hypothesis in its type:
+  • [DecidableEq F] (#12)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+QICLean/Entropy/ConditionalMovement/SingularInterpolation.lean:157:8: warning: `one_copy_move_schmidt` does not use the following hypothesis in its type:
+  • [DecidableEq F] (#12)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`

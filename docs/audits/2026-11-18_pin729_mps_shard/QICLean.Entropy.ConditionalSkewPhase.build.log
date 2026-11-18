@@ -1,0 +1,8 @@
+QICLean/Entropy/ConditionalSkewPhase.lean:372:8: warning: `posSemidef_rhoW` does not use the following hypotheses in its type:
+  • [Fintype X] (#8)
+  • [Fintype U] (#9)
+  • [Fintype F] (#10)
+
+Consider replacing these hypotheses with the corresponding instances of `Finite` and using `Fintype.ofFinite` in the proof, or removing them entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`

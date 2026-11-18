@@ -1,0 +1,12 @@
+QICLean/Algebra/PartialTraceDomination.lean:66:8: warning: `PosSemidef.le_card_smul_one_kronecker_partialTraceLeft` does not use the following hypothesis in its type:
+  • [DecidableEq Y] (#6)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+QICLean/Algebra/PartialTraceDomination.lean:66:8: warning: `PosSemidef.le_card_smul_one_kronecker_partialTraceLeft` does not use the following hypothesis in its type:
+  • [Fintype Y] (#5)
+
+Consider replacing this hypothesis with the corresponding instance of `Finite` and using `Fintype.ofFinite` in the proof, or removing it entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`

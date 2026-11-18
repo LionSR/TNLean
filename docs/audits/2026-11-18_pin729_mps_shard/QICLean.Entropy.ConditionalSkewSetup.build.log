@@ -1,0 +1,32 @@
+QICLean/Entropy/ConditionalSkewSetup.lean:60:8: warning: `posSemidef_margP` does not use the following hypotheses in its type:
+  • [Fintype P₀] (#6)
+  • [Fintype P₁] (#7)
+
+Consider replacing these hypotheses with the corresponding instances of `Finite` and using `Fintype.ofFinite` in the proof, or removing them entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
+QICLean/Entropy/ConditionalSkewSetup.lean:64:8: warning: `posSemidef_margW` does not use the following hypotheses in its type:
+  • [Fintype X] (#8)
+  • [Fintype U] (#9)
+  • [Fintype F] (#10)
+
+Consider replacing these hypotheses with the corresponding instances of `Finite` and using `Fintype.ofFinite` in the proof, or removing them entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
+QICLean/Entropy/ConditionalSkewSetup.lean:68:8: warning: `posSemidef_margY` does not use the following hypotheses in its type:
+  • [Fintype X] (#8)
+  • [Fintype U] (#9)
+
+Consider replacing these hypotheses with the corresponding instances of `Finite` and using `Fintype.ofFinite` in the proof, or removing them entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
+QICLean/Entropy/ConditionalSkewSetup.lean:328:8: warning: `posSemidef_liftH` does not use the following hypotheses in its type:
+  • [Fintype P₀] (#6)
+  • [Fintype P₁] (#7)
+  • [Fintype X] (#9)
+  • [Fintype U] (#10)
+  • [Fintype F] (#12)
+
+Consider replacing these hypotheses with the corresponding instances of `Finite` and using `Fintype.ofFinite` in the proof, or removing them entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`

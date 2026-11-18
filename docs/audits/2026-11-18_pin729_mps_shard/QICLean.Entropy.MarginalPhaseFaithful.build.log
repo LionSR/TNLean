@@ -1,0 +1,42 @@
+QICLean/Entropy/MarginalPhaseFaithful.lean:51:8: warning: `posDef_marginalUF` does not use the following hypotheses in its type:
+  • [Fintype U] (#5)
+  • [Fintype F] (#6)
+
+Consider replacing these hypotheses with the corresponding instances of `Finite` and using `Fintype.ofFinite` in the proof, or removing them entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
+QICLean/Entropy/MarginalPhaseFaithful.lean:55:8: warning: `posDef_marginalXU` does not use the following hypotheses in its type:
+  • [Fintype X] (#4)
+  • [Fintype U] (#5)
+
+Consider replacing these hypotheses with the corresponding instances of `Finite` and using `Fintype.ofFinite` in the proof, or removing them entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
+QICLean/Entropy/MarginalPhaseFaithful.lean:58:0: warning: automatically included section variable(s) unused in theorem `Entropy.MarginalPhase.posDef_marginalU`:
+  [DecidableEq X]
+  [DecidableEq U]
+  [DecidableEq F]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq X] [DecidableEq U] [DecidableEq F] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+QICLean/Entropy/MarginalPhaseFaithful.lean:58:8: warning: `posDef_marginalU` does not use the following hypotheses in its type:
+  • [DecidableEq X] (#5)
+  • [DecidableEq U] (#7)
+  • [DecidableEq F] (#9)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+QICLean/Entropy/MarginalPhaseFaithful.lean:58:8: warning: `posDef_marginalU` does not use the following hypothesis in its type:
+  • [Fintype U] (#6)
+
+Consider replacing this hypothesis with the corresponding instance of `Finite` and using `Fintype.ofFinite` in the proof, or removing it entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
+QICLean/Entropy/MarginalPhaseFaithful.lean:147:4: warning: Overlapping instance parameters in `isoMap`:
+
+⚠️ There are 2 `[Nonempty X]` instances; one is sufficient.
+⚠️ There are 2 `[Nonempty F]` instances; one is sufficient.
+
+Note: This linter can be disabled with `set_option linter.overlappingInstances false`

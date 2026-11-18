@@ -1,0 +1,14 @@
+QICLean/Analysis/SpectralKronecker.lean:116:8: warning: `ext_star_dotProduct_mulVec` does not use the following hypotheses in its type:
+  • [DecidableEq n] (#4)
+  • [DecidableEq m] (#6)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+QICLean/Analysis/SpectralKronecker.lean:123:8: warning: `ext_star_vec_dotProduct_mulVec_vec` does not use the following hypotheses in its type:
+  • [DecidableEq l] (#4)
+  • [DecidableEq k] (#6)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`

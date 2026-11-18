@@ -1,0 +1,20 @@
+QICLean/Entropy/ConditionalMovement/ConditionalCollision.lean:67:8: warning: `collision_le` does not use the following hypotheses in its type:
+  • [DecidableEq X] (#7)
+  • [DecidableEq F] (#9)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+QICLean/Entropy/ConditionalMovement/ConditionalCollision.lean:130:8: warning: `density_pos` does not use the following hypotheses in its type:
+  • [Fintype X] (#4)
+  • [Fintype P] (#5)
+
+Consider replacing these hypotheses with the corresponding instances of `Finite` and using `Fintype.ofFinite` in the proof, or removing them entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
+QICLean/Entropy/ConditionalMovement/ConditionalCollision.lean:141:8: warning: `conditional_spectral_mgf` does not use the following hypothesis in its type:
+  • [DecidableEq F] (#9)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`

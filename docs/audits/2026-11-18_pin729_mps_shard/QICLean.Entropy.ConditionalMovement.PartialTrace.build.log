@@ -1,0 +1,82 @@
+QICLean/Entropy/ConditionalMovement/PartialTrace.lean:55:8: warning: `ptrR_posSemidef` does not use the following hypotheses in its type:
+  • [DecidableEq m] (#5)
+  • [DecidableEq n] (#6)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+QICLean/Entropy/ConditionalMovement/PartialTrace.lean:55:8: warning: `ptrR_posSemidef` does not use the following hypothesis in its type:
+  • [Fintype m] (#3)
+
+Consider replacing this hypothesis with the corresponding instance of `Finite` and using `Fintype.ofFinite` in the proof, or removing it entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
+QICLean/Entropy/ConditionalMovement/PartialTrace.lean:60:8: warning: `ptrR_posDef` does not use the following hypotheses in its type:
+  • [DecidableEq m] (#5)
+  • [DecidableEq n] (#6)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+QICLean/Entropy/ConditionalMovement/PartialTrace.lean:60:8: warning: `ptrR_posDef` does not use the following hypothesis in its type:
+  • [Fintype m] (#3)
+
+Consider replacing this hypothesis with the corresponding instance of `Finite` and using `Fintype.ofFinite` in the proof, or removing it entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
+QICLean/Entropy/ConditionalMovement/PartialTrace.lean:72:2: warning: `simp [tensorLeftHom, Matrix.trace, Matrix.mul_apply, Matrix.kroneckerMap,
+    Fintype.sum_prod_type, ptrR, Matrix.one_apply, Finset.sum_mul]` is a flexible tactic modifying `⊢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+`exact Finset.sum_congr rfl fun x _ => Finset.sum_comm`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 72!
+QICLean/Entropy/ConditionalMovement/PartialTrace.lean:78:2: warning: `simp [tensorRightHom, Matrix.trace, Matrix.mul_apply, Matrix.kroneckerMap,
+    Fintype.sum_prod_type, ptrL, Matrix.one_apply, Finset.sum_mul]` is a flexible tactic modifying `⊢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+`rw [Finset.sum_comm]`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 78!
+QICLean/Entropy/ConditionalMovement/PartialTrace.lean:78:2: warning: `simp [tensorRightHom, Matrix.trace, Matrix.mul_apply, Matrix.kroneckerMap,
+    Fintype.sum_prod_type, ptrL, Matrix.one_apply, Finset.sum_mul]` is a flexible tactic modifying `⊢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+`apply Finset.sum_congr rfl`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 78!
+QICLean/Entropy/ConditionalMovement/PartialTrace.lean:78:2: warning: `simp [tensorRightHom, Matrix.trace, Matrix.mul_apply, Matrix.kroneckerMap,
+    Fintype.sum_prod_type, ptrL, Matrix.one_apply, Finset.sum_mul]` is a flexible tactic modifying `⊢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+`intro i hi`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 78!
+QICLean/Entropy/ConditionalMovement/PartialTrace.lean:78:2: warning: `simp [tensorRightHom, Matrix.trace, Matrix.mul_apply, Matrix.kroneckerMap,
+    Fintype.sum_prod_type, ptrL, Matrix.one_apply, Finset.sum_mul]` is a flexible tactic modifying `⊢`. Try `simp?` and use the suggested `simp only [...]`. Alternatively, use `suffices` to explicitly state the simplified form.
+
+Note: This linter can be disabled with `set_option linter.flexible false`
+`exact Finset.sum_comm`
+modifies the current goal, which was modified by the flexible tactic `simp` on line 78!
+QICLean/Entropy/ConditionalMovement/PartialTrace.lean:192:8: warning: `ptrL_posSemidef` does not use the following hypotheses in its type:
+  • [DecidableEq m] (#5)
+  • [DecidableEq n] (#6)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+QICLean/Entropy/ConditionalMovement/PartialTrace.lean:192:8: warning: `ptrL_posSemidef` does not use the following hypothesis in its type:
+  • [Fintype n] (#4)
+
+Consider replacing this hypothesis with the corresponding instance of `Finite` and using `Fintype.ofFinite` in the proof, or removing it entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
+QICLean/Entropy/ConditionalMovement/PartialTrace.lean:197:8: warning: `ptrL_posDef` does not use the following hypotheses in its type:
+  • [DecidableEq m] (#5)
+  • [DecidableEq n] (#6)
+
+Consider removing these hypotheses and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+QICLean/Entropy/ConditionalMovement/PartialTrace.lean:197:8: warning: `ptrL_posDef` does not use the following hypothesis in its type:
+  • [Fintype n] (#4)
+
+Consider replacing this hypothesis with the corresponding instance of `Finite` and using `Fintype.ofFinite` in the proof, or removing it entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`

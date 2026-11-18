@@ -1,0 +1,24 @@
+QICLean/Entropy/ConditionalMovement/LogCompression.lean:96:6: warning: `compression_mono` does not use the following hypothesis in its type:
+  • [Fintype n] (#4)
+
+Consider replacing this hypothesis with the corresponding instance of `Finite` and using `Fintype.ofFinite` in the proof, or removing it entirely.
+
+Note: This linter can be disabled with `set_option linter.unusedFintypeInType false`
+QICLean/Entropy/ConditionalMovement/LogCompression.lean:281:6: warning: `sqrt_posDef` does not use the following hypothesis in its type outside of proofs:
+  • [DecidableEq m] (#3) (used in type, but only in a proof)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+QICLean/Entropy/ConditionalMovement/LogCompression.lean:284:6: warning: `sqrt_square` does not use the following hypothesis in its type outside of proofs:
+  • [DecidableEq m] (#3) (used in type, but only in a proof)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
+QICLean/Entropy/ConditionalMovement/LogCompression.lean:296:6: warning: `eq_of_vec_pairing` does not use the following hypothesis in its type:
+  • [DecidableEq m] (#3)
+
+Consider removing this hypothesis and using `classical` in the proof instead. For terms, consider using `open scoped Classical in` at the term level (not the command level).
+
+Note: This linter can be disabled with `set_option linter.unusedDecidableInType false`
