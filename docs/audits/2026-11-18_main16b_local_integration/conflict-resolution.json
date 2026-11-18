@@ -1,0 +1,399 @@
+{
+  "head": "e7cab335e102f5555fb2b2e642b99ac17d889db1",
+  "merge": "0599e89d1d80884c6118a1a51a9d5aac1f13aa1f",
+  "parents": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d 16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931",
+  "paths": [
+    {
+      "path": "TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "6ebc43be909caa3cfa9ddc23f0f410e5fd387ee7",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "4d38e2c730021921722ff28e4c4c65e3c0bf2aad",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "84c8d6bd8582fc18f7be2785942950abc003db94",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "37e73df25e916a9ea2c1faf451d04110edc4f69d",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/BoundaryGap.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "adbf563330db00b20d5b464ad3b14689c9fea541",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "ad47560d22346e1d413c16889f9c7ae5b7190731",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "bab7aa24600a236df09c32f5743f79cfd6611281",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "c1e284db08f005ad553c2374a86952b08318428e",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "3f6c64db2c0a880d3120bf36810de00d165671b9",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "1cd3178c077f9058908e5a6d60e1d3d02c68309b",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/OverlapEnergy.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "a7dff7e5be255bb45f84f089798a4c5ac338b801",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/RangeOneSupport.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "da712ba4d1d2cd2b7e6e6e50f1068ec16723fd55",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "ab8803788800b5dde9846dcc852d6262634435ab",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "3630dcf0baf8989ebbf29b4cad98770680d7a115",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "f2a542a1b3dff0d725d786933c18018e388ee6c7",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "2dd243f8eda87f4fa21ec1c887d15b8373f17140",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "447d1970e6efe2e4d6ed629f5fb836a3017bd4d3",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "5ba4efe9379f1c0cc619f411d12d2d4c764df894",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "4e45ef14816dc7c6a5d49c96c0a3de624078bece",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "f6e62ad29a6cbd934b303a2265c51673959a560f",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "79ea2e65e8047ed843ce564cde74431b5c72a39a",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "62d1f21caa2cd84739322fa51afe49d538c1e6c7",
+      "matches": true
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean",
+      "lane": "mps",
+      "resolution_source": "1ee6bad71b740d5f054ecc5254f62c9eea2da462",
+      "blob": "a67d289e75c71c2e8624b57f9579f5c94523fbe0",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/CellConditionalInformation.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "060e6fd3f357e45be8873b70908ee44628fbc61e",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/CoarseInformation.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "3ff5f5fec534ccf5aa81b3f0cc9d4c9675c9303d",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeAngularInformation.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "6500a639b63f81d679320a91765ff75fca2e1261",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "02743548a4ed5dc449264a6ab0987d0f64b4ccbd",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "39a6f9329b57387c3c5da4a5df5ef6fadc04d754",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "c5f81497ce139c490128f2bf8ba29a710f413025",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/RangeSquareGroundState.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "272610cffbb2b5702ed1d2a184726f7eb638eebf",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "5a556935d0f75a56f35f50e1b0020a5900a2a32b",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "d3866f51677dd140657564eda68dc89bea37777d",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "346e97d2794d27fdd24152bec6c1c4454e634453",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "2bd5fc71355883f5e91b8c1e9da145f7c9f34737",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "6c0f660b112adc46d89c87074efaa05860272495",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "7a2b034619b0ac1f928ec9a92effda6c473bcb70",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/AmplificationProof.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "7dfc05dd2a5226e5a64546618d5f08515593fc14",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/BoundaryTheorem.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "d20120a8d32d94714f6725ce1e4a498751122bad",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/CollarInformation.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "421699af3b92c63d6964c1c009faccece65719d6",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/GraphPropagation.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "6d1df95923bb9ef7df7fd62899890de9dc7f0947",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "73c56255544cf6ac1841160e0cded30ee0292f84",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "e05d27f7462c49094847e87dc410afab01d90b49",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "1ac8f1d39499182db4cb39951c755ab4859c2f34",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "cd3fbd69fa9d7ad2fa6e7fc97ca8f6edc8aacb99",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "e39fa615566bf864a102299e1a03a6eaf6d2e2b7",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "37ec5452365ccf4fed7967c7549dd0dbd201904f",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "8622d0c6194913b068a9404a345c2fc62b735fb7",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "c551391b853347c3f147b55f7de23c157d93394e",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "f3072173c030a419631db7c4c2962300470324fc",
+      "matches": true
+    },
+    {
+      "path": "TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean",
+      "lane": "peps",
+      "resolution_source": "9e9528f64e90be49fabca7fbbb3b9a048d044e23",
+      "blob": "e9db25d6ac568072c93a3c9060e060563b269f5f",
+      "matches": true
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_area_law_models.tex",
+      "lane": "docs",
+      "resolution_source": "6d2196117fbe94dd7d42d3bc02ed12e2d12c401b",
+      "blob": "a1e80b34f502d0ec7b914db4e71622f0e131c6f9",
+      "matches": true
+    },
+    {
+      "path": "blueprint/src/chapter/ch24_peps_rectangular_specialization.tex",
+      "lane": "docs",
+      "resolution_source": "6d2196117fbe94dd7d42d3bc02ed12e2d12c401b",
+      "blob": "dc5ec5cfa3e75e7e910eeaa352a96be82c8c531b",
+      "matches": true
+    },
+    {
+      "path": "blueprint/src/chapter/ch35_hastings_lemma1.tex",
+      "lane": "docs",
+      "resolution_source": "6d2196117fbe94dd7d42d3bc02ed12e2d12c401b",
+      "blob": "24829d99aca05bd633ab148bac27e1bb167baacc",
+      "matches": true
+    },
+    {
+      "path": "docs/formalization/openai-area-law-peps.md",
+      "lane": "docs",
+      "resolution_source": "6d2196117fbe94dd7d42d3bc02ed12e2d12c401b",
+      "blob": "613c97bb6b0ccc74b4fbfc0b22a2a0f678daf06d",
+      "matches": true
+    },
+    {
+      "path": "docs/glossary.md",
+      "lane": "docs",
+      "resolution_source": "6d2196117fbe94dd7d42d3bc02ed12e2d12c401b",
+      "blob": "d344235426a629adfc51386cbbe13e4552b92cf2",
+      "matches": true
+    },
+    {
+      "path": "docs/tactic_patterns.md",
+      "lane": "docs",
+      "resolution_source": "6d2196117fbe94dd7d42d3bc02ed12e2d12c401b",
+      "blob": "baf156e1cbe62f3e5e1e8bd85f12358bda6110f1",
+      "matches": true
+    }
+  ]
+}
