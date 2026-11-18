@@ -11,17 +11,17 @@ import TNLean.MPS.AreaLaw.PolynomialFilterParameters
 # The degenerate-gap merge tree with node dimension independent of the chain length
 
 ALVV, arXiv:1602.08828v2, Theorem `t:alg1`, lines 1777–1818, runs the merge tree under
-Assumption (DG), lines 275–279: each merge samples `s` vectors and applies
-`k = ⌈log_D s⌉ / 2` rounds of the improving family of Theorems 4.2 and 4.3, so that every node
+Assumption (DG), lines 275–279: each merge samples `s` vectors and applies `k = ⌈log_D s⌉ / 2`
+rounds of the improving family of Corollary 4.6 and the proof of Theorem 4.9, so that every node
 carries a viable space of dimension at most `D s²`, independent of the chain length `L`.
 
 This file proves the length-independent node bound with the source's hypotheses. The improving
-family on every long interval is that of Theorems 4.2 and 4.3, at most `D²` operators with
-`D = (m ℓ²)^{22ℓ}` and `m = max (q, 50)`. With the sampling size `s` of Lemma `l:rs`, the merge
-uses `k = ⌈⌈log_D s⌉ / 2⌉` rounds, the least `k` with `D^{2k} ≥ s`. Every node carries a
-`3/200`-viable space for the original ground space of dimension at most
-`count = D^{2k} s ≤ D² s²`; neither `D` nor `s` depends on `L`. The earlier tree of the
-degenerate-gap case used `⌈log_D (D² s)⌉` rounds and the node bound `D⁶ s³`.
+family on every long interval is that of Corollary 4.6 and the proof of Theorem 4.9, at most `D²`
+operators with `D = (m ℓ²)^{22ℓ}` and `m = max (q, 50)`. With the sampling size `s` of Lemma `l:rs`,
+the merge uses `k = ⌈⌈log_D s⌉ / 2⌉` rounds, the least `k` with `D^{2k} ≥ s`. Every node carries a
+`3/200`-viable space for the original ground space of dimension at most `count = D^{2k} s ≤ D² s²`;
+neither `D` nor `s` depends on `L`. The earlier tree of the degenerate-gap case used
+`⌈log_D (D² s)⌉` rounds and the node bound `D⁶ s³`.
 
 **Local fix (rounding of the number of rounds):** the source, line 1797, takes
 `k = ⌈log_D s⌉ / 2`, which is not an integer when `⌈log_D s⌉` is odd. The formalization takes the
@@ -44,15 +44,15 @@ namespace TNLean.MPS.AreaLaw.ALVV
 open TNLean.MPS.AreaLaw TNLean.Lattice
 
 /-- **The degenerate-gap merge tree of node dimension independent of the chain length.** For a
-nearest-neighbour chain with `0 ≤ hᵢ ≤ 1` satisfying Assumption (DG), with ground energy `μ`,
-ground space `G` of dimension `r` and gap `γ`, the improving families of Theorems 4.2 and 4.3
-on every long interval are fixed before the sampling parameter and the child spaces: at most
-`D²` operators, with `D = (m ℓ²)^{22ℓ}`, `m = max (q, 50)` and `ℓ` depending only on `q` and
+nearest-neighbour chain with `0 ≤ hᵢ ≤ 1` satisfying Assumption (DG), with ground energy `μ`, ground
+space `G` of dimension `r` and gap `γ`, the improving families of Corollary 4.6 and the proof of
+Theorem 4.9 on every long interval are fixed before the sampling parameter and the child spaces: at
+most `D²` operators, with `D = (m ℓ²)^{22ℓ}`, `m = max (q, 50)` and `ℓ` depending only on `q` and
 `min γ 1`. For every trimming radius `ξ` below the reference bound and every `0 < β < 1`, put
 `s = ⌈4096 r (1 + log r + log D + log (1/β))⌉`, `k = ⌈⌈log_D s⌉ / 2⌉` and
-`count = D^{2k} s ≤ D² s²`. There is a merge tree whose long parents are literal sampled merges
-with `k` rounds and one collective trim, and whose node spaces are all `3/200`-viable for `G`
-of dimension at most `count`.
+`count = D^{2k} s ≤ D² s²`. There is a merge tree whose long parents are literal sampled merges with
+`k` rounds and one collective trim, and whose node spaces are all `3/200`-viable for `G` of
+dimension at most `count`.
 
 Existence form of the merge analysis of ALVV, arXiv:1602.08828v2, Theorem `t:alg1`,
 lines 1777–1818, under the local fix and the scope restriction of this module. -/
