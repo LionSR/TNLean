@@ -1,0 +1,4061 @@
+[
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/Cost.lean",
+    "changed": true,
+    "head_sha256": "b70e2742273a6f3d7e6f7ba1f470a03b2d58e3f56e34b10dc5917ade9ad9f55d",
+    "declarations_before": 17,
+    "declarations_after": 17,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.netCost_mono",
+        "line": 48,
+        "end_line": 61
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.convexProgramCost_mono",
+        "line": 62,
+        "end_line": 65
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.energyMinimizerCost_mono",
+        "line": 66,
+        "end_line": 74
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_extensionProgram_le",
+        "line": 75,
+        "end_line": 89
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_feasible_ite_le",
+        "line": 90,
+        "end_line": 108
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_sizeTrimmingProgram_le",
+        "line": 109,
+        "end_line": 137
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_bondTrimmingProgram_le",
+        "line": 138,
+        "end_line": 148
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_errorReductionProgram_le",
+        "line": 149,
+        "end_line": 169
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sweepStepCostBound",
+        "line": 170,
+        "end_line": 183
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sweepStepCostBound_mono",
+        "line": 184,
+        "end_line": 194
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_sweepStepProgram_le",
+        "line": 195,
+        "end_line": 239
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_sweepProgram_le",
+        "line": 240,
+        "end_line": 262
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.groundStateCostBound",
+        "line": 263,
+        "end_line": 268
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_groundStateProgram_le",
+        "line": 269,
+        "end_line": 305
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isNatPolynomialBounded_sweepStepCostBound",
+        "line": 306,
+        "end_line": 381
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isNatPolynomialBounded_groundStateCostBound",
+        "line": 382,
+        "end_line": 402
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_groundStateProgram_cost_polynomial",
+        "line": 403,
+        "end_line": 420
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean",
+    "changed": true,
+    "head_sha256": "c2a7d41ce41e9dadb692885205fb245152df508f573e9ba2eea40eccb8f90325",
+    "declarations_before": 4,
+    "declarations_after": 4,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.groundStateProgram",
+        "line": 45,
+        "end_line": 63
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_groundStateProgram",
+        "line": 64,
+        "end_line": 87
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.one_sub_le_norm_inner_of_norm_sub_sq_le",
+        "line": 88,
+        "end_line": 104
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.groundStateProgram_spec",
+        "line": 105,
+        "end_line": 211
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SampledCost.lean",
+    "changed": true,
+    "head_sha256": "3ee96700881442a821f65379bce5328b58fb62d0690ca3b70d4a0a4a0a4a94d5",
+    "declarations_before": 10,
+    "declarations_after": 10,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledStepCostBound",
+        "line": 49,
+        "end_line": 59
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledStepCostBound_mono",
+        "line": 60,
+        "end_line": 68
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_sampledSweepStepProgram_le",
+        "line": 69,
+        "end_line": 105
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledSizeBudget",
+        "line": 106,
+        "end_line": 110
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_sampledSweepProgram_le",
+        "line": 111,
+        "end_line": 144
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledGroundStateCostBound",
+        "line": 145,
+        "end_line": 148
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledGroundStateCostBound_mono",
+        "line": 149,
+        "end_line": 162
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_sampledGroundStateProgram_le",
+        "line": 163,
+        "end_line": 196
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isNatPolynomialBounded_sampledGroundStateCostBound",
+        "line": 197,
+        "end_line": 284
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_sampledGroundStateProgram_cost_polynomial",
+        "line": 285,
+        "end_line": 335
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean",
+    "changed": true,
+    "head_sha256": "8e696bf9b06f775d8796f38b4b030f867bb4e78f602aa6bbfa20cc8b96663fde",
+    "declarations_before": 30,
+    "declarations_after": 30,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.IsViable.mono",
+        "line": 62,
+        "end_line": 70
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledPower",
+        "line": 71,
+        "end_line": 75
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledWordCount",
+        "line": 76,
+        "end_line": 82
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledLetterBound",
+        "line": 83,
+        "end_line": 86
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledRankBound",
+        "line": 87,
+        "end_line": 92
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.GoodWords",
+        "line": 93,
+        "end_line": 99
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.measureReal_goodWords_ge",
+        "line": 100,
+        "end_line": 118
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledSweepStep",
+        "line": 119,
+        "end_line": 130
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledSweep",
+        "line": 131,
+        "end_line": 141
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledSweep_succ",
+        "line": 142,
+        "end_line": 156
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isViableMPS_sampledSweepStep",
+        "line": 157,
+        "end_line": 213
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledSweep_spec",
+        "line": 214,
+        "end_line": 247
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledSweepStepProgram",
+        "line": 248,
+        "end_line": 263
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_sampledSweepStepProgram",
+        "line": 264,
+        "end_line": 276
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledSweepProgram",
+        "line": 277,
+        "end_line": 290
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_sampledSweepProgram",
+        "line": 291,
+        "end_line": 308
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledGroundStateProgram",
+        "line": 309,
+        "end_line": 319
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_sampledGroundStateProgram",
+        "line": 320,
+        "end_line": 339
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledGroundStateProgram_spec",
+        "line": 340,
+        "end_line": 419
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stepWordsMeasure",
+        "line": 420,
+        "end_line": 428
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.measureReal_forall_goodWords_ge",
+        "line": 429,
+        "end_line": 480
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.measureReal_sampledGroundStateProgram_success",
+        "line": 481,
+        "end_line": 504
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledPrecisionConstant",
+        "line": 505,
+        "end_line": 507
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledPrecisionConstant_pos",
+        "line": 508,
+        "end_line": 511
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledPrecisionConstant_le_one",
+        "line": 512,
+        "end_line": 514
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledPrecisionConstant_le_sq",
+        "line": 515,
+        "end_line": 520
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledPrecision_spec",
+        "line": 521,
+        "end_line": 538
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_sampled_budgets_polynomial",
+        "line": 539,
+        "end_line": 563
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_sampledBond_polynomial",
+        "line": 564,
+        "end_line": 615
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_sampledGroundStateProgram_success_polynomial",
+        "line": 616,
+        "end_line": 644
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SweepProgram.lean",
+    "changed": true,
+    "head_sha256": "6c9bb1694452b6be03b0834743b63843ed1e3c8952a030867329a8cce3db0ff1",
+    "declarations_before": 17,
+    "declarations_after": 17,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.LVVProgram",
+        "line": 41,
+        "end_line": 48
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Finset.biUnion_ite_empty",
+        "line": 49,
+        "end_line": 63
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.leftColumnsOf",
+        "line": 64,
+        "end_line": 72
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.leftColumns_eq_biUnion",
+        "line": 73,
+        "end_line": 90
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.extensionProgram",
+        "line": 91,
+        "end_line": 97
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_extensionProgram",
+        "line": 98,
+        "end_line": 113
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sizeTrimmingProgram",
+        "line": 114,
+        "end_line": 133
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_feasible_ite",
+        "line": 134,
+        "end_line": 151
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_sizeTrimmingProgram",
+        "line": 152,
+        "end_line": 177
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.bondTrimmingProgram",
+        "line": 178,
+        "end_line": 184
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_bondTrimmingProgram",
+        "line": 185,
+        "end_line": 203
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.errorReductionProgram",
+        "line": 204,
+        "end_line": 210
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_errorReductionProgram",
+        "line": 211,
+        "end_line": 232
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sweepStepProgram",
+        "line": 233,
+        "end_line": 251
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_sweepStepProgram",
+        "line": 252,
+        "end_line": 264
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sweepProgram",
+        "line": 265,
+        "end_line": 277
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_sweepProgram",
+        "line": 278,
+        "end_line": 293
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean",
+    "changed": true,
+    "head_sha256": "b2f72c5bf361ad8b0e0a3a2d3a12ba22750cd9de9a33d4e379a3ad7fef2bbe01",
+    "declarations_before": 31,
+    "declarations_after": 31,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.netPointBound",
+        "line": 53,
+        "end_line": 55
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.netPointBound_mono",
+        "line": 56,
+        "end_line": 68
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isAdmissibleSampledFactors_sampledFactors",
+        "line": 69,
+        "end_line": 90
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle",
+        "line": 91,
+        "end_line": 157
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.LinearAlgebraQuery.isValidOracle_honestOracle",
+        "line": 158,
+        "end_line": 184
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_feasible_ite_of_valid",
+        "line": 185,
+        "end_line": 206
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_extensionProgram_of_valid",
+        "line": 207,
+        "end_line": 217
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.oracleNets",
+        "line": 218,
+        "end_line": 222
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.oracleSolver",
+        "line": 223,
+        "end_line": 231
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_sizeTrimmingProgram_of_valid",
+        "line": 232,
+        "end_line": 257
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_bondTrimmingProgram_of_valid",
+        "line": 258,
+        "end_line": 272
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_errorReductionProgram_of_valid",
+        "line": 273,
+        "end_line": 288
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_sweepStepProgram_of_valid",
+        "line": 289,
+        "end_line": 312
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isAdmissibleNet_oracleNets",
+        "line": 313,
+        "end_line": 321
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isAdmissibleSolver_oracleSolver",
+        "line": 322,
+        "end_line": 330
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_oracleNets_le",
+        "line": 331,
+        "end_line": 344
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sweepStepProgram_spec_of_valid",
+        "line": 345,
+        "end_line": 424
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sweepProgram_spec_of_valid",
+        "line": 425,
+        "end_line": 456
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.groundStateProgram_spec_of_valid",
+        "line": 457,
+        "end_line": 570
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle.extendSite",
+        "line": 93,
+        "end_line": 93
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle.boundaryNet_cover",
+        "line": 95,
+        "end_line": 95
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle.boundaryNet_card",
+        "line": 99,
+        "end_line": 99
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle.feasible",
+        "line": 101,
+        "end_line": 101
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle.leadingVector",
+        "line": 105,
+        "end_line": 105
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle.schmidtTrim",
+        "line": 110,
+        "end_line": 110
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle.gaussianFilterFactors_admissible",
+        "line": 112,
+        "end_line": 112
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle.gaussianFilterFactors_card",
+        "line": 117,
+        "end_line": 117
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle.gaussianFilterFactors_rank",
+        "line": 124,
+        "end_line": 124
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle.sampledFactors",
+        "line": 132,
+        "end_line": 132
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle.applyFactor",
+        "line": 144,
+        "end_line": 144
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.LinearAlgebraQuery.IsValidOracle.energyMinimizer",
+        "line": 146,
+        "end_line": 146
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleCost.lean",
+    "changed": true,
+    "head_sha256": "2db0a1f8114e64120c52c3b234332c87ec9f0ad79f3748ebcd545be78b7cab1a",
+    "declarations_before": 8,
+    "declarations_after": 8,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_sizeTrimmingProgram_le_of_valid",
+        "line": 44,
+        "end_line": 87
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_extensionProgram_le_of_valid",
+        "line": 88,
+        "end_line": 99
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_bondTrimmingProgram_le_of_valid",
+        "line": 100,
+        "end_line": 108
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_errorReductionProgram_le_of_valid",
+        "line": 109,
+        "end_line": 124
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_sweepStepProgram_le_of_valid",
+        "line": 125,
+        "end_line": 173
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_sweepProgram_le_of_valid",
+        "line": 174,
+        "end_line": 196
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_groundStateProgram_le_of_valid",
+        "line": 197,
+        "end_line": 235
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_groundStateProgram_cost_polynomial_of_valid",
+        "line": 236,
+        "end_line": 254
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean",
+    "changed": true,
+    "head_sha256": "aef33c0f0b32eaf4630865d9e3225a9023eef898c90cabb66e21b7caf83eec93",
+    "declarations_before": 6,
+    "declarations_after": 6,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.isViableMPS_errorReductionSet_of_admissible_sampled",
+        "line": 52,
+        "end_line": 87
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eval_sampledSweepStepProgram_of_valid",
+        "line": 88,
+        "end_line": 108
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledSweepStepProgram_spec_of_valid",
+        "line": 109,
+        "end_line": 174
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledSweepProgram_spec_of_valid",
+        "line": 175,
+        "end_line": 205
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sampledGroundStateProgram_spec_of_valid",
+        "line": 206,
+        "end_line": 286
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.measureReal_sampledGroundStateProgram_success_of_valid",
+        "line": 287,
+        "end_line": 311
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampledCost.lean",
+    "changed": true,
+    "head_sha256": "47c3a38f7e8aae5dcc255efc0809aea2fd6abcdb744a7626269dbf66a46aec14",
+    "declarations_before": 4,
+    "declarations_after": 4,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_sampledSweepStepProgram_le_of_valid",
+        "line": 56,
+        "end_line": 102
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_sampledSweepProgram_le_of_valid",
+        "line": 103,
+        "end_line": 137
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cost_sampledGroundStateProgram_le_of_valid",
+        "line": 138,
+        "end_line": 175
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_sampledGroundStateProgram_success_cost_polynomial_of_valid",
+        "line": 176,
+        "end_line": 220
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/AreaLaw.lean",
+    "changed": true,
+    "head_sha256": "cd43a8fcc7042c16e564c9f425b108b361fffe50bd5998513779bdf5021c7a09",
+    "declarations_before": 13,
+    "declarations_after": 13,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.chainIntervalEntropyBound",
+        "line": 60,
+        "end_line": 63
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainDiscountConst_nonneg",
+        "line": 64,
+        "end_line": 78
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainIntervalEntropyBound_nonneg",
+        "line": 79,
+        "end_line": 97
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.regionEntropy_interval_le",
+        "line": 98,
+        "end_line": 120
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainShellConst",
+        "line": 121,
+        "end_line": 124
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainShellCount_le",
+        "line": 125,
+        "end_line": 169
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainAreaLawConst",
+        "line": 170,
+        "end_line": 174
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainIntervalEntropyBound_le",
+        "line": 175,
+        "end_line": 207
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges",
+        "line": 208,
+        "end_line": 223
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainAreaLaw",
+        "line": 224,
+        "end_line": 246
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.regionEntropy_interval_le_of_family_budget",
+        "line": 247,
+        "end_line": 349
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainAreaLaw_of_consecutive_terms",
+        "line": 350,
+        "end_line": 381
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.regionEntropy_interval_le_polynomial",
+        "line": 382,
+        "end_line": 411
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/BandInformation.lean",
+    "changed": true,
+    "head_sha256": "db1ec461c4ace651ac57ccc8b04f2b67d69d79d1ceb4032ff477cbb457441cd0",
+    "declarations_before": 5,
+    "declarations_after": 5,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.OneBand.interval_separation_of_notMem",
+        "line": 47,
+        "end_line": 55
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.OneBand.separation_of_owner_window",
+        "line": 56,
+        "end_line": 67
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.OneBand.after_death_owner_windows",
+        "line": 68,
+        "end_line": 173
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.OneBand.primitive_separation",
+        "line": 174,
+        "end_line": 251
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.OneBand.primitive_information_of_logarithmic_separation",
+        "line": 252,
+        "end_line": 323
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/BoundaryGap.lean",
+    "changed": true,
+    "head_sha256": "ba0001b75bb7a491152b7f825a0a92c43ff7911aa648e63fb905c37e788fe479",
+    "declarations_before": 2,
+    "declarations_after": 2,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.gap_le_four_mul_of_range_one",
+        "line": 40,
+        "end_line": 149
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.gap_le_one_of_positive_nearest_neighbor_terms",
+        "line": 150,
+        "end_line": 240
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/BufferDiscount.lean",
+    "changed": true,
+    "head_sha256": "d8c856a036d7e291d7d500f4ffa2965a549c111f355fa5712a7abe9f3949ae8c",
+    "declarations_before": 27,
+    "declarations_after": 27,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.chainQuadraticEnergyThreshold",
+        "line": 79,
+        "end_line": 83
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainLogEnergyThreshold",
+        "line": 84,
+        "end_line": 88
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainEnergyThreshold",
+        "line": 89,
+        "end_line": 92
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainTailThreshold",
+        "line": 93,
+        "end_line": 98
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainShellCount",
+        "line": 99,
+        "end_line": 102
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.four_le_chainShellCount",
+        "line": 103,
+        "end_line": 109
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainEnergyThreshold_le_chainShellCount",
+        "line": 110,
+        "end_line": 114
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainTailThreshold_le_chainShellCount",
+        "line": 115,
+        "end_line": 119
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainDiscountConst",
+        "line": 120,
+        "end_line": 125
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainBuffer",
+        "line": 126,
+        "end_line": 129
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.disjoint_interval_chainBuffer",
+        "line": 130,
+        "end_line": 136
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_interval_enlargement_sdiff_le",
+        "line": 137,
+        "end_line": 151
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_chainBuffer_le",
+        "line": 152,
+        "end_line": 157
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.uniformShell",
+        "line": 158,
+        "end_line": 161
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.union_uniformShell_of_lt",
+        "line": 162,
+        "end_line": 167
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.union_uniformShell_of_le",
+        "line": 168,
+        "end_line": 172
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.uniformShell_mono",
+        "line": 173,
+        "end_line": 184
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.disjoint_uniformShell",
+        "line": 185,
+        "end_line": 188
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.uniformShell_subset_buffer",
+        "line": 189,
+        "end_line": 195
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.eq_of_splits_uniformShell",
+        "line": 196,
+        "end_line": 214
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.uniform_weight_ratio_le_tailRadius",
+        "line": 215,
+        "end_line": 225
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sum_uniform_shell_error_le",
+        "line": 226,
+        "end_line": 250
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le_of_family_budget",
+        "line": 251,
+        "end_line": 435
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le",
+        "line": 436,
+        "end_line": 454
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.neg_log_one_sub_le_two_mul",
+        "line": 455,
+        "end_line": 466
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le_of_energy_estimate",
+        "line": 467,
+        "end_line": 594
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le_polynomial",
+        "line": 595,
+        "end_line": 688
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/DomainInteractionBudget.lean",
+    "changed": true,
+    "head_sha256": "f817189d7179b9622d110dc9a1ae09f61a2836796c7754289537441c37631243",
+    "declarations_before": 6,
+    "declarations_after": 6,
+    "declarations": [
+      {
+        "name": "ManyBody.DomainInteraction.toChain_term",
+        "line": 33,
+        "end_line": 38
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.IsDomainSupport.singleton",
+        "line": 39,
+        "end_line": 43
+      },
+      {
+        "name": "ManyBody.DomainInteraction.norm_bound_nonneg",
+        "line": 44,
+        "end_line": 51
+      },
+      {
+        "name": "ManyBody.DomainInteraction.sum_norm_terms_containing_le",
+        "line": 52,
+        "end_line": 70
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_domain_crossingTerms_le_mul_card_boundaryEdges",
+        "line": 71,
+        "end_line": 85
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_domain_crossingTerms_mul_two_le",
+        "line": 86,
+        "end_line": 98
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/DomainIntervalNeighborhoodEntropy.lean",
+    "changed": true,
+    "head_sha256": "7650e0e72dd9a6f7bc90c5f2c09826acdfee24413712c0476ff298904b6f98f2",
+    "declarations_before": 2,
+    "declarations_after": 2,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.regionEntropy_domainNeighborhood_biUnion_intervals_le",
+        "line": 37,
+        "end_line": 52
+      },
+      {
+        "name": "ManyBody.DomainInteraction.regionEntropy_neighborhood_biUnion_intervals_le",
+        "line": 53,
+        "end_line": 71
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/DomainLogarithmicSeparation.lean",
+    "changed": true,
+    "head_sha256": "3da545e0502acace958c96cb222ea17eec871907803de0b341d725876c5f824a",
+    "declarations_before": 2,
+    "declarations_after": 2,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.abs_sitePos_sub_le_of_edist_le",
+        "line": 37,
+        "end_line": 54
+      },
+      {
+        "name": "ManyBody.DomainInteraction.mutualInformation_le_of_logarithmic_separation",
+        "line": 55,
+        "end_line": 160
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/DomainPartialSwap.lean",
+    "changed": true,
+    "head_sha256": "7461dc08adc7d128f80f032794aa4a04e26c59f5207ddda1850db2f849fbcc4a",
+    "declarations_before": 7,
+    "declarations_after": 11,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.norm_bound_nonneg_of_support",
+        "line": 35,
+        "end_line": 41
+      },
+      {
+        "name": "ManyBody.DomainInteraction.doubled",
+        "line": 42,
+        "end_line": 53
+      },
+      {
+        "name": "ManyBody.DomainInteraction.isHermitian_doubled_term",
+        "line": 54,
+        "end_line": 62
+      },
+      {
+        "name": "ManyBody.DomainInteraction.norm_doubled_term_le",
+        "line": 63,
+        "end_line": 72
+      },
+      {
+        "name": "ManyBody.DomainInteraction.doubled_hamiltonian",
+        "line": 73,
+        "end_line": 83
+      },
+      {
+        "name": "ManyBody.DomainInteraction.swappedDoubled",
+        "line": 84,
+        "end_line": 96
+      },
+      {
+        "name": "ManyBody.DomainInteraction.isHermitian_swappedDoubled_term",
+        "line": 97,
+        "end_line": 104
+      },
+      {
+        "name": "ManyBody.DomainInteraction.norm_swappedDoubled_term_le",
+        "line": 105,
+        "end_line": 116
+      },
+      {
+        "name": "ManyBody.DomainInteraction.swappedDoubled_hamiltonian",
+        "line": 117,
+        "end_line": 126
+      },
+      {
+        "name": "ManyBody.DomainInteraction.partialSwap_term_difference_spec",
+        "line": 127,
+        "end_line": 147
+      },
+      {
+        "name": "ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing",
+        "line": 148,
+        "end_line": 204
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/DoubledHamiltonian.lean",
+    "changed": true,
+    "head_sha256": "4bd626c815323872bec31071aa5630d35235c0b875d61f9cb597d3bb1f5ec78a",
+    "declarations_before": 2,
+    "declarations_after": 4,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.doubled",
+        "line": 42,
+        "end_line": 59
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isHermitian_doubled_term",
+        "line": 60,
+        "end_line": 69
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_doubled_term_le",
+        "line": 70,
+        "end_line": 88
+      },
+      {
+        "name": "ManyBody.ChainInteraction.doubled_hamiltonian",
+        "line": 89,
+        "end_line": 99
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/GluingHamiltonian.lean",
+    "changed": true,
+    "head_sha256": "7915a8dd6cbf17f7d35b7768d9f3e39d0577742c79583d4eabcd050fcddadb3c",
+    "declarations_before": 7,
+    "declarations_after": 7,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.cutLeftPart",
+        "line": 32,
+        "end_line": 39
+      },
+      {
+        "name": "ManyBody.ChainInteraction.cutBoundaryPart",
+        "line": 40,
+        "end_line": 45
+      },
+      {
+        "name": "ManyBody.ChainInteraction.cutLeftPart_add_cutBoundaryPart",
+        "line": 46,
+        "end_line": 52
+      },
+      {
+        "name": "ManyBody.ChainInteraction.cutLeftPart_isSupportedOn",
+        "line": 53,
+        "end_line": 60
+      },
+      {
+        "name": "ManyBody.ChainInteraction.cutBoundaryPart_isSupportedOn",
+        "line": 61,
+        "end_line": 75
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_cutBoundaryPart_le",
+        "line": 76,
+        "end_line": 91
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_gluing_decomposition_of_range_one",
+        "line": 92,
+        "end_line": 103
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean",
+    "changed": false,
+    "head_sha256": "f7d8e52de647bd4275cbcce07ec438f218942b7edf24d5511bb96df2c30372c2",
+    "declarations_before": 4,
+    "declarations_after": 4,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.areaLawWindowLength",
+        "line": 75,
+        "end_line": 80
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.areaLawBound",
+        "line": 81,
+        "end_line": 87
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.areaLawBound_le",
+        "line": 88,
+        "end_line": 133
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.regionEntropy_prefix_le_of_factorization",
+        "line": 134,
+        "end_line": 183
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/BootstrapLemma.lean",
+    "changed": true,
+    "head_sha256": "9e1e3b4f4e07f390d014cad7987add5e1fc10625fd12cbac5fecbe61f33890d1",
+    "declarations_before": 2,
+    "declarations_after": 2,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.entropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt",
+        "line": 54,
+        "end_line": 89
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_entropy_le_of_overlap_schmidtRank_mixture",
+        "line": 90,
+        "end_line": 131
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/BoundaryFactorization.lean",
+    "changed": true,
+    "head_sha256": "9f8a7f6470c928a5b7ac0454b9b6012bf83d945681a93b02f50561ff7841635c",
+    "declarations_before": 2,
+    "declarations_after": 2,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.interactionAverage_add_smul_one",
+        "line": 62,
+        "end_line": 83
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_boundaryOperator_factorization",
+        "line": 84,
+        "end_line": 141
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/BoundaryLocalization.lean",
+    "changed": true,
+    "head_sha256": "151bb9a5bb3f0a90bcfc5d136c2b30aa0adaeeaff819b95a53e9207b4846279b",
+    "declarations_before": 3,
+    "declarations_after": 3,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.norm_interactionPropagator_sub_le",
+        "line": 84,
+        "end_line": 123
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.exists_supported_interactionAverage_approx",
+        "line": 124,
+        "end_line": 239
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.exists_supported_interactionAverage_approx_exp",
+        "line": 240,
+        "end_line": 269
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/ChainLocalizedParts.lean",
+    "changed": true,
+    "head_sha256": "65329546020446e5cb8793117bb73388ccd9e5d32fc2aa0b91a5464fd77a2925",
+    "declarations_before": 14,
+    "declarations_after": 14,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.chainLRPrefactor",
+        "line": 75,
+        "end_line": 81
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainLRVelocity",
+        "line": 82,
+        "end_line": 84
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainLRPrefactor_nonneg",
+        "line": 85,
+        "end_line": 89
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainLRVelocity_nonneg",
+        "line": 90,
+        "end_line": 102
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isSupportedOn_localized_sub_self",
+        "line": 103,
+        "end_line": 110
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isHermitian_localized",
+        "line": 111,
+        "end_line": 128
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_gaussianFilteredTerm_sub_localized_le_of_commutator",
+        "line": 129,
+        "end_line": 187
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_gaussianFilteredTerm_leftPart_sub_localized_le",
+        "line": 188,
+        "end_line": 211
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_gaussianFilteredTerm_rightPart_sub_localized_le",
+        "line": 212,
+        "end_line": 234
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_gaussianFilteredTerm_bufferPart_sub_localized_le",
+        "line": 235,
+        "end_line": 258
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isHermitian_leftPart_localized",
+        "line": 259,
+        "end_line": 268
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isHermitian_rightPart_localized",
+        "line": 269,
+        "end_line": 278
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isHermitian_bufferPart_localized",
+        "line": 279,
+        "end_line": 290
+      },
+      {
+        "name": "ManyBody.ChainInteraction.leftPart_eq_zero_of_le",
+        "line": 291,
+        "end_line": 302
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/CorrelationLemma.lean",
+    "changed": true,
+    "head_sha256": "cb9fb5b0f6b84010ff9b7516c0465e2f1ea76e747cd612bfa1c1f9b6e56b4dda",
+    "declarations_before": 1,
+    "declarations_after": 1,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_norm_inner_mul_sub_le",
+        "line": 55,
+        "end_line": 90
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/CutoffPair.lean",
+    "changed": true,
+    "head_sha256": "a7964541bdccda3a9fa37c1b3a34e162d1e29414f726805fac0cc43222076248",
+    "declarations_before": 16,
+    "declarations_after": 16,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.partLocalizationError",
+        "line": 70,
+        "end_line": 79
+      },
+      {
+        "name": "ManyBody.ChainInteraction.localizedPart",
+        "line": 80,
+        "end_line": 87
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainNeighborhood_interval_subset",
+        "line": 88,
+        "end_line": 104
+      },
+      {
+        "name": "ManyBody.ChainInteraction.gaussianFilteredTerm_groundCentered_sub",
+        "line": 105,
+        "end_line": 114
+      },
+      {
+        "name": "ManyBody.ChainInteraction.gaussianFilteredTerm_groundCentered_sub_localizedPart",
+        "line": 115,
+        "end_line": 130
+      },
+      {
+        "name": "ManyBody.ChainInteraction.localizedPart_isHermitian",
+        "line": 131,
+        "end_line": 137
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isSupportedOn_localizedPart",
+        "line": 138,
+        "end_line": 149
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.groundCentered_zero",
+        "line": 150,
+        "end_line": 154
+      },
+      {
+        "name": "ManyBody.ChainInteraction.localizedPart_zero",
+        "line": 155,
+        "end_line": 164
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.leftWindow",
+        "line": 165,
+        "end_line": 168
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.rightWindow",
+        "line": 169,
+        "end_line": 173
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart",
+        "line": 174,
+        "end_line": 189
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isSupportedOn_localizedPart_rightPart",
+        "line": 190,
+        "end_line": 200
+      },
+      {
+        "name": "ManyBody.ChainInteraction.commutator_groundCentered",
+        "line": 201,
+        "end_line": 212
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_localizedPart_apply_le",
+        "line": 213,
+        "end_line": 256
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_cutoffPair",
+        "line": 257,
+        "end_line": 370
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean",
+    "changed": true,
+    "head_sha256": "ab3228fff31b4a124553f74fb463f425b0513bf6d2da0279c0ca9d5142f3665b",
+    "declarations_before": 3,
+    "declarations_after": 3,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le",
+        "line": 79,
+        "end_line": 101
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.log_polynomial_factorization_constant_le",
+        "line": 102,
+        "end_line": 134
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_with_log_constant",
+        "line": 135,
+        "end_line": 157
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/LemmaOneConstant.lean",
+    "changed": true,
+    "head_sha256": "8b053b19e95eec2041f1d226e8c6f37d149db5bcb0606d7db232a92ba6329100",
+    "declarations_before": 8,
+    "declarations_after": 8,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.sixteen_le_lemmaOneLength_and_le",
+        "line": 76,
+        "end_line": 106
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lemmaOneConst_le_pow",
+        "line": 107,
+        "end_line": 217
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_projectorFactorization_pow",
+        "line": 218,
+        "end_line": 248
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_pow",
+        "line": 249,
+        "end_line": 295
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lemmaOneEndpointLength",
+        "line": 296,
+        "end_line": 299
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lemmaOneEndpointLength_eq",
+        "line": 300,
+        "end_line": 318
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_projectorFactorization_endpoint",
+        "line": 319,
+        "end_line": 345
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_endpoint",
+        "line": 346,
+        "end_line": 367
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+    "changed": true,
+    "head_sha256": "ea6d014ce73b50530808901a8e3e058884c660bfd537561eecfd4820fd70ab04",
+    "declarations_before": 8,
+    "declarations_after": 8,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.norm_heisenberg_commutator_le_numeric",
+        "line": 41,
+        "end_line": 72
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings",
+        "line": 73,
+        "end_line": 97
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainLRVelocity_sub_one_pos",
+        "line": 98,
+        "end_line": 105
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.two_mul_lemmaOneEndpointLength_le_sourceLength",
+        "line": 106,
+        "end_line": 119
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lemmaOneLength_eq_sourceLength",
+        "line": 120,
+        "end_line": 130
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lemmaOneEndpointLength_eq_sourceLength",
+        "line": 131,
+        "end_line": 141
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainLRVelocity_gapRescaling",
+        "line": 142,
+        "end_line": 149
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings_rescaled",
+        "line": 150,
+        "end_line": 174
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean",
+    "changed": true,
+    "head_sha256": "aee14b8f260f6e5063963d7975a7fdc276323fa7f6cd0c2bf39282dbb7ef47ef",
+    "declarations_before": 3,
+    "declarations_after": 3,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.isOpenMPS_norm_sub_sq_le_of_gappedGroundState",
+        "line": 66,
+        "end_line": 101
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGapped",
+        "line": 102,
+        "end_line": 137
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGapped_endpoint",
+        "line": 138,
+        "end_line": 167
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/PartCommutators.lean",
+    "changed": true,
+    "head_sha256": "ede41b5124e5aa84a7a51b882eddac117cad40f85f943ea0ef687fae76957bda",
+    "declarations_before": 22,
+    "declarations_after": 22,
+    "declarations": [
+      {
+        "name": "Entropy.IsSupportedOn.commutator",
+        "line": 72,
+        "end_line": 87
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.partCommutatorConst",
+        "line": 88,
+        "end_line": 92
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_filter_not_disjoint_le",
+        "line": 93,
+        "end_line": 116
+      },
+      {
+        "name": "ManyBody.ChainInteraction.term_mul_comm_of_disjoint",
+        "line": 117,
+        "end_line": 128
+      },
+      {
+        "name": "ManyBody.ChainInteraction.term_commutator_termSum_eq",
+        "line": 129,
+        "end_line": 140
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_term_commutator_le",
+        "line": 141,
+        "end_line": 154
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_term_commutator_termSum_le",
+        "line": 155,
+        "end_line": 168
+      },
+      {
+        "name": "ManyBody.ChainInteraction.termSum_commutator_eq_sum",
+        "line": 169,
+        "end_line": 180
+      },
+      {
+        "name": "ManyBody.ChainInteraction.commutator_termSum_inner_eq",
+        "line": 181,
+        "end_line": 217
+      },
+      {
+        "name": "ManyBody.ChainInteraction.commutator_termSum_inner_eq_sum",
+        "line": 218,
+        "end_line": 229
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_commutator_termSum_inner_le",
+        "line": 230,
+        "end_line": 243
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_commutator_termSum_interval_le",
+        "line": 244,
+        "end_line": 261
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isSupportedOn_commutator_termSum_inner",
+        "line": 262,
+        "end_line": 288
+      },
+      {
+        "name": "ManyBody.ChainInteraction.commutator_leftPart_eq",
+        "line": 289,
+        "end_line": 302
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_commutator_leftPart_le",
+        "line": 303,
+        "end_line": 313
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isSupportedOn_commutator_leftPart",
+        "line": 314,
+        "end_line": 343
+      },
+      {
+        "name": "ManyBody.ChainInteraction.commutator_rightPart_eq",
+        "line": 344,
+        "end_line": 358
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_commutator_rightPart_le",
+        "line": 359,
+        "end_line": 369
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isSupportedOn_commutator_rightPart",
+        "line": 370,
+        "end_line": 400
+      },
+      {
+        "name": "ManyBody.ChainInteraction.commutator_bufferPart_eq",
+        "line": 401,
+        "end_line": 415
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_commutator_bufferPart_le",
+        "line": 416,
+        "end_line": 428
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isSupportedOn_commutator_bufferPart",
+        "line": 429,
+        "end_line": 443
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/PrintedAreaLaw.lean",
+    "changed": true,
+    "head_sha256": "24a6ceab2df7c0902098cc74c91a19721335eb25b736be72ebe5c67e7a5c83e9",
+    "declarations_before": 4,
+    "declarations_after": 4,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.bootstrapRemainder_le_log_product",
+        "line": 37,
+        "end_line": 69
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.areaLawBound_le_log_product",
+        "line": 70,
+        "end_line": 128
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.log_max_cubic_le",
+        "line": 129,
+        "end_line": 156
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_printed",
+        "line": 157,
+        "end_line": 208
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/PrintedAreaLawSource.lean",
+    "changed": true,
+    "head_sha256": "1488e187b838fa6b76ca3b7dd67e40f7d2d0b2de6daf84a7410114f5c7b26a6a",
+    "declarations_before": 4,
+    "declarations_after": 4,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings_source",
+        "line": 43,
+        "end_line": 62
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_source",
+        "line": 63,
+        "end_line": 93
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_projectorFactorization_source",
+        "line": 94,
+        "end_line": 115
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_source",
+        "line": 116,
+        "end_line": 133
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/ProjectorFactorization.lean",
+    "changed": true,
+    "head_sha256": "07c07fa1a8cb8cfcdf8b1531ba0e709a8449b7c7e24f150976b7b3ee7469d5f9",
+    "declarations_before": 11,
+    "declarations_after": 11,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.lemmaOneLength",
+        "line": 80,
+        "end_line": 82
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lemmaOneLength_pos",
+        "line": 83,
+        "end_line": 87
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lemmaOneSqrtA",
+        "line": 88,
+        "end_line": 92
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lemmaOneSqrtB",
+        "line": 93,
+        "end_line": 98
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lemmaOneConst",
+        "line": 99,
+        "end_line": 102
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lemmaOneConst_nonneg",
+        "line": 103,
+        "end_line": 111
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isFactorizationAt_zero_one_one",
+        "line": 112,
+        "end_line": 127
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_isFactorizationAt_sqrt_decay",
+        "line": 128,
+        "end_line": 212
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_isFactorizationAt_lemmaOneConst",
+        "line": 213,
+        "end_line": 233
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_projectorFactorization",
+        "line": 234,
+        "end_line": 248
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef",
+        "line": 249,
+        "end_line": 262
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/ProjectorFactorizationScaling.lean",
+    "changed": true,
+    "head_sha256": "acd5458b8cfc8de179b5269af3621b95caeb7401f42ad80c0b754c846146937d",
+    "declarations_before": 4,
+    "declarations_after": 6,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.smul",
+        "line": 53,
+        "end_line": 58
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isHermitian_smul_term",
+        "line": 59,
+        "end_line": 64
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_smul_term_le",
+        "line": 65,
+        "end_line": 71
+      },
+      {
+        "name": "ManyBody.ChainInteraction.smul_hamiltonian",
+        "line": 72,
+        "end_line": 79
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lemmaOneLength_div",
+        "line": 80,
+        "end_line": 102
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_projectorFactorization_div",
+        "line": 103,
+        "end_line": 122
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/RelentGapped.lean",
+    "changed": true,
+    "head_sha256": "30bc5c79762b3a6430a91f486a1f92d16f3f2f40375aed8bb8501d468eb2ced9",
+    "declarations_before": 1,
+    "declarations_after": 1,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.exists_relent_of_isGapped",
+        "line": 58,
+        "end_line": 102
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma.lean",
+    "changed": true,
+    "head_sha256": "524d006470b2b49633406758331059bc82d34ac4ea478378e657c188166b1cbf",
+    "declarations_before": 5,
+    "declarations_after": 5,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.renyiEntropy_le_of_overlap_schmidtRank_mixture_of_isFactorizationAt",
+        "line": 50,
+        "end_line": 103
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.renyiEntropy_cutMatrix_nonpos_of_one",
+        "line": 104,
+        "end_line": 125
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.renyiEntropy_cutMatrix_le_regionEntropy_of_one_lt",
+        "line": 126,
+        "end_line": 162
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture",
+        "line": 163,
+        "end_line": 219
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt",
+        "line": 220,
+        "end_line": 243
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/SourceConsequences.lean",
+    "changed": true,
+    "head_sha256": "4b0d575495ff532096a601e95eb55d890c19e8a0e7e450c94741773ccef4d61e",
+    "declarations_before": 5,
+    "declarations_after": 5,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_entropy_le_of_overlap_schmidtRank_mixture_source",
+        "line": 47,
+        "end_line": 90
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_source",
+        "line": 91,
+        "end_line": 148
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_renyiEntropy_le_of_overlap_schmidtRank_mixture_of_one_lt_source",
+        "line": 149,
+        "end_line": 177
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.exists_relent_of_isGapped_source",
+        "line": 178,
+        "end_line": 228
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.exists_isOpenMPS_norm_sub_sq_le_of_isGapped_source",
+        "line": 229,
+        "end_line": 268
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/SourceLength.lean",
+    "changed": true,
+    "head_sha256": "c529705300999029c165c0690a8a333fd9d1191bb92fdfcba813ca455f0a5658",
+    "declarations_before": 5,
+    "declarations_after": 5,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.hastingsLRVelocity",
+        "line": 42,
+        "end_line": 46
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.hastingsLRLength",
+        "line": 47,
+        "end_line": 51
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings_cone",
+        "line": 52,
+        "end_line": 70
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_projectorFactorization_posSemidef_sourceLength",
+        "line": 71,
+        "end_line": 98
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.exists_regionEntropy_prefix_le_sourceLength",
+        "line": 99,
+        "end_line": 114
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean",
+    "changed": true,
+    "head_sha256": "6eacb1bc1b20eb4693aea19d0b25f839dd1b0daa1b98866befefb2d767435704",
+    "declarations_before": 33,
+    "declarations_after": 33,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.groundCentered",
+        "line": 84,
+        "end_line": 89
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.groundCentered_add",
+        "line": 90,
+        "end_line": 97
+      },
+      {
+        "name": "Matrix.IsHermitian.groundCentered",
+        "line": 98,
+        "end_line": 103
+      },
+      {
+        "name": "Matrix.IsHermitian.ofReal_re_inner",
+        "line": 104,
+        "end_line": 110
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.inner_groundCentered",
+        "line": 111,
+        "end_line": 121
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.groundCentered_of_eigen",
+        "line": 122,
+        "end_line": 130
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.norm_groundCentered_le",
+        "line": 131,
+        "end_line": 156
+      },
+      {
+        "name": "Entropy.IsSupportedOn.groundCentered",
+        "line": 157,
+        "end_line": 178
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.leftSupports",
+        "line": 179,
+        "end_line": 183
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.rightSupports",
+        "line": 184,
+        "end_line": 188
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.bufferSupports",
+        "line": 189,
+        "end_line": 193
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.sum_supports_eq_left_add_buffer_add_right",
+        "line": 194,
+        "end_line": 218
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.subset_window_of_mem_bufferSupports",
+        "line": 219,
+        "end_line": 235
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Hastings.card_bufferSupports_le",
+        "line": 236,
+        "end_line": 269
+      },
+      {
+        "name": "ManyBody.ChainInteraction.termSum",
+        "line": 270,
+        "end_line": 274
+      },
+      {
+        "name": "ManyBody.ChainInteraction.termSum_isHermitian",
+        "line": 275,
+        "end_line": 283
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_termSum_le",
+        "line": 284,
+        "end_line": 291
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isSupportedOn_termSum",
+        "line": 292,
+        "end_line": 302
+      },
+      {
+        "name": "ManyBody.ChainInteraction.leftPart",
+        "line": 303,
+        "end_line": 308
+      },
+      {
+        "name": "ManyBody.ChainInteraction.bufferPart",
+        "line": 309,
+        "end_line": 315
+      },
+      {
+        "name": "ManyBody.ChainInteraction.rightPart",
+        "line": 316,
+        "end_line": 321
+      },
+      {
+        "name": "ManyBody.ChainInteraction.leftPart_isHermitian",
+        "line": 322,
+        "end_line": 327
+      },
+      {
+        "name": "ManyBody.ChainInteraction.bufferPart_isHermitian",
+        "line": 328,
+        "end_line": 333
+      },
+      {
+        "name": "ManyBody.ChainInteraction.rightPart_isHermitian",
+        "line": 334,
+        "end_line": 340
+      },
+      {
+        "name": "ManyBody.ChainInteraction.hamiltonian_eq_leftPart_add_bufferPart_add_rightPart",
+        "line": 341,
+        "end_line": 347
+      },
+      {
+        "name": "ManyBody.ChainInteraction.groundCentered_parts_sum",
+        "line": 348,
+        "end_line": 358
+      },
+      {
+        "name": "ManyBody.ChainInteraction.groundCentered_parts_sum_of_eigen",
+        "line": 359,
+        "end_line": 369
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isGapped_groundCentered_parts_sum",
+        "line": 370,
+        "end_line": 388
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isSupportedOn_leftPart",
+        "line": 389,
+        "end_line": 395
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isSupportedOn_rightPart",
+        "line": 396,
+        "end_line": 402
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isSupportedOn_bufferPart",
+        "line": 403,
+        "end_line": 410
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_bufferPart_le",
+        "line": 411,
+        "end_line": 418
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_groundCentered_bufferPart_le",
+        "line": 419,
+        "end_line": 428
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Huang/PositiveChainHamiltonian.lean",
+    "changed": true,
+    "head_sha256": "a6674145590507e75afa6462d6e114dbf1797d71c3de5148a9b1d9fc02237289",
+    "declarations_before": 10,
+    "declarations_after": 12,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.nearestNeighborChainSupport_injective",
+        "line": 30,
+        "end_line": 47
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_nearestNeighborChainSupport",
+        "line": 48,
+        "end_line": 59
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.forall_nearestNeighborExtension",
+        "line": 60,
+        "end_line": 73
+      },
+      {
+        "name": "ManyBody.ChainInteraction.ofNearestNeighborPositive",
+        "line": 74,
+        "end_line": 83
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term",
+        "line": 84,
+        "end_line": 93
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le",
+        "line": 94,
+        "end_line": 108
+      },
+      {
+        "name": "ManyBody.ChainInteraction.ofNearestNeighborPositive_term",
+        "line": 109,
+        "end_line": 117
+      },
+      {
+        "name": "ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero",
+        "line": 118,
+        "end_line": 126
+      },
+      {
+        "name": "ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero_of_card_one",
+        "line": 127,
+        "end_line": 137
+      },
+      {
+        "name": "ManyBody.ChainInteraction.ofNearestNeighborPositive_term_nonneg",
+        "line": 138,
+        "end_line": 146
+      },
+      {
+        "name": "ManyBody.ChainInteraction.ofNearestNeighborPositive_term_le_one",
+        "line": 147,
+        "end_line": 154
+      },
+      {
+        "name": "ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian",
+        "line": 155,
+        "end_line": 174
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/InformationReset.lean",
+    "changed": true,
+    "head_sha256": "e7ebf2a150b867bcea19e76b90bfa9eab170688bc99b991d049086426dd89f16",
+    "declarations_before": 3,
+    "declarations_after": 3,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.information_reset_of_supported_localization",
+        "line": 69,
+        "end_line": 259
+      },
+      {
+        "name": "ManyBody.ChainInteraction.information_reset",
+        "line": 260,
+        "end_line": 305
+      },
+      {
+        "name": "ManyBody.DomainInteraction.information_reset",
+        "line": 306,
+        "end_line": 354
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/InteractionBudget.lean",
+    "changed": true,
+    "head_sha256": "2dc260cbb71cfbe20bd21e8dff147e92ce1ec854bc49eaed3be9b2c36c0250e7",
+    "declarations_before": 2,
+    "declarations_after": 2,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.card_supports_containing_le",
+        "line": 31,
+        "end_line": 50
+      },
+      {
+        "name": "ManyBody.ChainInteraction.sum_norm_terms_containing_le",
+        "line": 51,
+        "end_line": 64
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/LogarithmicAreaLaw.lean",
+    "changed": true,
+    "head_sha256": "c97c7e9392528a33273f22fc7c329a9b620a28b6f60d6800e1354fd590ba05e8",
+    "declarations_before": 10,
+    "declarations_after": 10,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.chainLogCubeConst",
+        "line": 48,
+        "end_line": 58
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainAreaLawConst_le_mul_log_cube",
+        "line": 59,
+        "end_line": 143
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.regionEntropy_le_log_cube_mul_card_boundaryEdges",
+        "line": 144,
+        "end_line": 166
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.consecutive_window_budget_le_range_log_sq",
+        "line": 167,
+        "end_line": 194
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.area_law_coefficient_le_budget_mul_log",
+        "line": 195,
+        "end_line": 216
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.consecutive_window_coefficient_le_range_log_cube",
+        "line": 217,
+        "end_line": 276
+      },
+      {
+        "name": "ManyBody.ChainInteraction.regionEntropy_eq_zero_of_range_zero",
+        "line": 277,
+        "end_line": 292
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainAreaLaw_of_consecutive_terms_polynomial_range",
+        "line": 293,
+        "end_line": 333
+      },
+      {
+        "name": "ManyBody.DomainInteraction.toChain_consecutive_terms",
+        "line": 334,
+        "end_line": 354
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.domainAreaLaw_of_consecutive_terms_polynomial_range",
+        "line": 355,
+        "end_line": 384
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/LogarithmicSeparation.lean",
+    "changed": true,
+    "head_sha256": "801d4922b81a72470e1df036b5a44d1f7a6574a1901cecfd97058664aca4ed04",
+    "declarations_before": 1,
+    "declarations_after": 1,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_separation",
+        "line": 40,
+        "end_line": 140
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/MPSApproximation.lean",
+    "changed": true,
+    "head_sha256": "59da7c139af2e9539f1d5cfab96036d22dab18e26e186ea8ec11f385b54765b8",
+    "declarations_before": 19,
+    "declarations_after": 19,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.surprisalTail_region_le_of_family_budget",
+        "line": 53,
+        "end_line": 103
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.surprisalTail_leftBlock_le",
+        "line": 104,
+        "end_line": 129
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.surprisalTail_leftBlock_le_of_consecutive_terms",
+        "line": 130,
+        "end_line": 166
+      },
+      {
+        "name": "ManyBody.ChainInteraction.spectralProjectionGE_leftBlock_bounds",
+        "line": 167,
+        "end_line": 210
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.tailPrefactorRoot",
+        "line": 211,
+        "end_line": 213
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.tailPrefactorRoot_pos",
+        "line": 214,
+        "end_line": 217
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.tailPrefactorRoot_sq",
+        "line": 218,
+        "end_line": 221
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainTruncationWidth",
+        "line": 222,
+        "end_line": 226
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainBondDimension",
+        "line": 227,
+        "end_line": 230
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.one_lt_tailPrefactorRoot",
+        "line": 231,
+        "end_line": 239
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_prefix_bounds",
+        "line": 240,
+        "end_line": 341
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error",
+        "line": 342,
+        "end_line": 379
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms",
+        "line": 380,
+        "end_line": 428
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_polynomial",
+        "line": 429,
+        "end_line": 471
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le",
+        "line": 472,
+        "end_line": 491
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.chainBondDimension_le_mul_rpow",
+        "line": 492,
+        "end_line": 519
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.polynomial_floor_exp_le",
+        "line": 520,
+        "end_line": 538
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_polynomial",
+        "line": 539,
+        "end_line": 598
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_rpow",
+        "line": 599,
+        "end_line": 636
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/OverlapEnergy.lean",
+    "changed": true,
+    "head_sha256": "3033399bc2d2d10eca9a5db7788ac2a333a281da96a751534aea1e7c3afe286d",
+    "declarations_before": 2,
+    "declarations_after": 2,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.re_inner_sub_le_of_overlap_of_range_one",
+        "line": 42,
+        "end_line": 77
+      },
+      {
+        "name": "ManyBody.ChainInteraction.re_inner_le_of_overlap_div_of_range_one",
+        "line": 78,
+        "end_line": 90
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/PartialSwap.lean",
+    "changed": true,
+    "head_sha256": "2d1379df39f6eb148d91ffd5dca69e453b087ccbd0b9ca2b77596c0351ea2aca",
+    "declarations_before": 3,
+    "declarations_after": 3,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.partialSwap_term_difference_spec",
+        "line": 50,
+        "end_line": 102
+      },
+      {
+        "name": "ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing",
+        "line": 103,
+        "end_line": 174
+      },
+      {
+        "name": "ManyBody.ChainInteraction.partialSwap_boundary_spec",
+        "line": 175,
+        "end_line": 254
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ProtocolMPSApproximation.lean",
+    "changed": true,
+    "head_sha256": "458cf71c184350727bca476dd6b38864c6e30bb5f93dd3f3d06a1d4121c5b126",
+    "declarations_before": 4,
+    "declarations_after": 4,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.ChainSweep.protocol_error_bounds",
+        "line": 49,
+        "end_line": 96
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.ChainSweep.norm_mainPullback_sub",
+        "line": 97,
+        "end_line": 120
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.ChainSweep.exact_isOpenMPS_of_length_le",
+        "line": 121,
+        "end_line": 139
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.ChainSweep.exists_protocol_isOpenMPS_norm_sub_phase_le",
+        "line": 140,
+        "end_line": 246
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ProtocolPhysicalPreparation.lean",
+    "changed": true,
+    "head_sha256": "7219a7abacd8559f86df21ac91d0b535c5a3724575d643727af0887cf8c0a601",
+    "declarations_before": 3,
+    "declarations_after": 3,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.ChainSweep.ceil_log_width_bounds",
+        "line": 52,
+        "end_line": 107
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.ChainSweep.sweep_error_le",
+        "line": 108,
+        "end_line": 129
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.ChainSweep.exists_preparation_of_gappedGroundState",
+        "line": 130,
+        "end_line": 285
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ProtocolStageInformation.lean",
+    "changed": true,
+    "head_sha256": "8876f661d66e9092bcaab1037a7ace69f68c1c860441605a2f25ed87dce06c7b",
+    "declarations_before": 2,
+    "declarations_after": 2,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.ChainSweep.birth_death_separation",
+        "line": 52,
+        "end_line": 92
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.ChainSweep.birth_death_information_of_logarithmic_separation",
+        "line": 93,
+        "end_line": 141
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ProtocolStagePhysicalCircuits.lean",
+    "changed": true,
+    "head_sha256": "b04f83558b08281567d6f9ed29550579f53e4ece1690ad508f2a43d1999df41a",
+    "declarations_before": 1,
+    "declarations_after": 1,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.ChainSweep.local_stage_circuits_of_logarithmic_separation",
+        "line": 52,
+        "end_line": 135
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ProtocolUniformPreparation.lean",
+    "changed": true,
+    "head_sha256": "00e078ffe349f45fc19cd3ddba4b5a2815b5892ee4099cfe8969553fa4efcab9",
+    "declarations_before": 3,
+    "declarations_after": 3,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.ChainSweep.preparationConstruction",
+        "line": 47,
+        "end_line": 80
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.ChainSweep.outerProduct_mainCoordinates",
+        "line": 81,
+        "end_line": 95
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.ChainSweep.exists_uniform_preparation_family",
+        "line": 96,
+        "end_line": 188
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/RangeOneCut.lean",
+    "changed": true,
+    "head_sha256": "2a3c401863e508d8ea74e21b974f7fbd1e51ea56a7ed1847f3054593b4be9835",
+    "declarations_before": 2,
+    "declarations_after": 2,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.IsChainSupport.eq_interval_of_splits_of_range_one",
+        "line": 30,
+        "end_line": 50
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_cut_decomposition_of_range_one",
+        "line": 51,
+        "end_line": 101
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/RangeOneSupport.lean",
+    "changed": true,
+    "head_sha256": "eb06514071a6cbf5045417939f1740587c717824589013af15bccf51146552cb",
+    "declarations_before": 3,
+    "declarations_after": 3,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.chainSupport_range_one_eq_interval",
+        "line": 23,
+        "end_line": 55
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_chainSupport_range_one_le",
+        "line": 56,
+        "end_line": 76
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_hamiltonian_le_of_range_one",
+        "line": 77,
+        "end_line": 96
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+    "changed": true,
+    "head_sha256": "f93e47e6ec768c4acc0f3d7ef84480c46c7aaf8a370ca5005bb3ad539872a100",
+    "declarations_before": 3,
+    "declarations_after": 3,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le",
+        "line": 67,
+        "end_line": 133
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpectation_le",
+        "line": 134,
+        "end_line": 200
+      },
+      {
+        "name": "ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpectation_le",
+        "line": 201,
+        "end_line": 259
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/RenyiEntropy.lean",
+    "changed": true,
+    "head_sha256": "d8e3a97bf6ed5c4129a2f5bdb51b2fc1fce002da13616d753c7ea80d7e25d80c",
+    "declarations_before": 4,
+    "declarations_after": 4,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.mul_entropy_le_log_surprisalMoment",
+        "line": 34,
+        "end_line": 50
+      },
+      {
+        "name": "ManyBody.ChainInteraction.log_surprisalMoment_region_le",
+        "line": 51,
+        "end_line": 73
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.tailRadius_anti_budget",
+        "line": 74,
+        "end_line": 90
+      },
+      {
+        "name": "ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds",
+        "line": 91,
+        "end_line": 183
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/SharpPhysicalCompression.lean",
+    "changed": true,
+    "head_sha256": "9a10c40f651a4f99f0e61c69af75f419fafcd9776091df4e95abbba0fd4ed515",
+    "declarations_before": 1,
+    "declarations_after": 1,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.ChainSweep.exists_physical_sampled_network_with_prefixCrossingLinks_le_1600",
+        "line": 39,
+        "end_line": 153
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/SnakeGridApproximation.lean",
+    "changed": true,
+    "head_sha256": "987094fd63438c9177d4b70a3a85b86fef730459e5eb5f19b5620bee2072f034",
+    "declarations_before": 5,
+    "declarations_after": 5,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.trace_reindexed_complement_mul",
+        "line": 37,
+        "end_line": 50
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.snakeGridStateEquiv",
+        "line": 51,
+        "end_line": 59
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isOpenMPS_snakeGridStateEquiv_one",
+        "line": 60,
+        "end_line": 70
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cutLogBudget_snakeGridPrefix_le",
+        "line": 71,
+        "end_line": 86
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_snakeGridMPS_of_uniformAreaLaw",
+        "line": 87,
+        "end_line": 272
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/SnakeGridAreaLaw.lean",
+    "changed": true,
+    "head_sha256": "bd1096dd74bc43a1f3bf91915843313ccac379e6d8db9186527529cd5afd7ada",
+    "declarations_before": 1,
+    "declarations_after": 1,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_snakeGridMPS",
+        "line": 37,
+        "end_line": 50
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/StripApproximation.lean",
+    "changed": true,
+    "head_sha256": "208ebbe87536c06aabef635d5b028ba5d15e14274d261e06b741b748a9e8af2d",
+    "declarations_before": 22,
+    "declarations_after": 22,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.stripSnakeRows",
+        "line": 32,
+        "end_line": 38
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripSnakeEquiv",
+        "line": 39,
+        "end_line": 42
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripColumn_stripSnakeEquiv",
+        "line": 43,
+        "end_line": 48
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripSnakePrefix",
+        "line": 49,
+        "end_line": 52
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripInterval_subset_snakePrefix",
+        "line": 53,
+        "end_line": 71
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.snakePrefix_subset_stripInterval",
+        "line": 72,
+        "end_line": 82
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_snakePrefix_sdiff_le",
+        "line": 83,
+        "end_line": 97
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.regionEntropy_stripSnakePrefix_le",
+        "line": 98,
+        "end_line": 121
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripPrefixBudgetConst",
+        "line": 122,
+        "end_line": 126
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cutLogBudget_stripSnakePrefix_le",
+        "line": 127,
+        "end_line": 148
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.surprisalTail_stripSnakePrefix_le",
+        "line": 149,
+        "end_line": 186
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.surprisalTail_submatrix_equiv",
+        "line": 187,
+        "end_line": 203
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripSnakeState",
+        "line": 204,
+        "end_line": 209
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.norm_stripSnakeState",
+        "line": 210,
+        "end_line": 213
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.regionEntropy_stripSnakeState",
+        "line": 214,
+        "end_line": 222
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.surprisalTail_stripSnakeState_le",
+        "line": 223,
+        "end_line": 253
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.strip_approximation_of_prefix_bounds",
+        "line": 254,
+        "end_line": 349
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripApproximationExponent",
+        "line": 350,
+        "end_line": 353
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripApproximationConst",
+        "line": 354,
+        "end_line": 358
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.strip_bond_bound",
+        "line": 359,
+        "end_line": 438
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_stripMPS_norm_sub_le",
+        "line": 439,
+        "end_line": 497
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripMPSApproximation",
+        "line": 498,
+        "end_line": 521
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/StripBufferDiscount.lean",
+    "changed": true,
+    "head_sha256": "77f8f1cba708c7a437b7655c48e2a324a392e83f8b661b68ce9ef6e3cd70fe35",
+    "declarations_before": 13,
+    "declarations_after": 13,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.stripBudgetConst",
+        "line": 32,
+        "end_line": 36
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.one_le_stripBudgetConst",
+        "line": 37,
+        "end_line": 41
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cutLogBudget_stripInterval_le_mul",
+        "line": 42,
+        "end_line": 54
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripShellCount",
+        "line": 55,
+        "end_line": 59
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripShell",
+        "line": 60,
+        "end_line": 63
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.union_stripShell",
+        "line": 64,
+        "end_line": 71
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.two_mul_condEntropy_stripInterval_le",
+        "line": 72,
+        "end_line": 203
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripShellConst",
+        "line": 204,
+        "end_line": 207
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripShellCount_le",
+        "line": 208,
+        "end_line": 234
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripAreaLawConst",
+        "line": 235,
+        "end_line": 239
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripEntropyBound_le",
+        "line": 240,
+        "end_line": 294
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.regionEntropy_stripInterval_le",
+        "line": 295,
+        "end_line": 327
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripAreaLaw",
+        "line": 328,
+        "end_line": 344
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/StripGeometry.lean",
+    "changed": true,
+    "head_sha256": "ad9eca1f73e63fdc66b5a2b0517c37e1f6593d109b8dc88e7b6ad2063d3b7aa8",
+    "declarations_before": 17,
+    "declarations_after": 17,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.stripDomain",
+        "line": 34,
+        "end_line": 37
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripSite_bounds",
+        "line": 38,
+        "end_line": 42
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripSiteEquiv",
+        "line": 43,
+        "end_line": 56
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripColumn",
+        "line": 57,
+        "end_line": 59
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripRow",
+        "line": 60,
+        "end_line": 62
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripInterval",
+        "line": 63,
+        "end_line": 66
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.mem_stripInterval",
+        "line": 67,
+        "end_line": 71
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_stripInterval_le",
+        "line": 72,
+        "end_line": 100
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_stripInterval_enlargement_sdiff_le",
+        "line": 101,
+        "end_line": 118
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripColumn_le_add_range",
+        "line": 119,
+        "end_line": 130
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.crossingSupport_meets_stripBand",
+        "line": 131,
+        "end_line": 145
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripCrossConst",
+        "line": 146,
+        "end_line": 148
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_crossingTerms_stripInterval_le",
+        "line": 149,
+        "end_line": 171
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cutLogBudget_stripInterval_le",
+        "line": 172,
+        "end_line": 186
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.stripInterval_mono",
+        "line": 187,
+        "end_line": 194
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.strip_single_splitting",
+        "line": 195,
+        "end_line": 221
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_crossingTerms_stripPrefix_le",
+        "line": 222,
+        "end_line": 250
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean",
+    "changed": true,
+    "head_sha256": "8660a731939d688387fb4f87762b942947f20ddd40d3603af27e2e9161bb160b",
+    "declarations_before": 3,
+    "declarations_after": 3,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_supported_gaussian_integral_graphNeighborhood",
+        "line": 62,
+        "end_line": 165
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_supported_gaussian_integral",
+        "line": 166,
+        "end_line": 229
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_supported_gaussian_integral_domain",
+        "line": 230,
+        "end_line": 288
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/SwappedDoubledHamiltonian.lean",
+    "changed": true,
+    "head_sha256": "db0752edd424e94168ba83b755a0674b3af183b0ab56ab434c9bc9e549e713fe",
+    "declarations_before": 3,
+    "declarations_after": 5,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.swappedDoubled",
+        "line": 43,
+        "end_line": 55
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isHermitian_swappedDoubled_term",
+        "line": 56,
+        "end_line": 63
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_swappedDoubled_term_le",
+        "line": 64,
+        "end_line": 78
+      },
+      {
+        "name": "ManyBody.ChainInteraction.swappedDoubled_hamiltonian",
+        "line": 79,
+        "end_line": 90
+      },
+      {
+        "name": "ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped",
+        "line": 91,
+        "end_line": 149
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/BondTrimmingReference.lean",
+    "changed": true,
+    "head_sha256": "6511cba84b03231e4f0788e61a9b974e94022ddb0f25e26922ce92637eff2adc",
+    "declarations_before": 2,
+    "declarations_after": 2,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.lvvReferenceBond",
+        "line": 38,
+        "end_line": 43
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_bond_trimming_reference",
+        "line": 44,
+        "end_line": 88
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ConstantRankCut.lean",
+    "changed": true,
+    "head_sha256": "daa40363de458c879fbec30c8757fbef833d719ecb4024343a836a66f3dbb516",
+    "declarations_before": 14,
+    "declarations_after": 14,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.regionState_leftBlock_eq_leftMarginal",
+        "line": 99,
+        "end_line": 105
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cutVector_smul",
+        "line": 106,
+        "end_line": 112
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cutVector_normalized_chainTrim",
+        "line": 113,
+        "end_line": 124
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.inner_normalized_chainTrim",
+        "line": 125,
+        "end_line": 140
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.constantCutBond",
+        "line": 141,
+        "end_line": 152
+      },
+      {
+        "name": "ManyBody.ChainInteraction.one_sub_le_re_inner_chainTrim",
+        "line": 153,
+        "end_line": 215
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.hasSchmidtRankLE_smul",
+        "line": 216,
+        "end_line": 227
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.rank_cutMatrix_normalized_chainTrim_le",
+        "line": 228,
+        "end_line": 236
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.norm_normalized_chainTrim_eq_one",
+        "line": 237,
+        "end_line": 247
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cutOperator_add",
+        "line": 248,
+        "end_line": 255
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cutOperator_sub_smul_one",
+        "line": 256,
+        "end_line": 271
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.re_inner_normalized_chainTrim_le",
+        "line": 272,
+        "end_line": 367
+      },
+      {
+        "name": "ManyBody.ChainInteraction.re_inner_normalized_chainTrim_le",
+        "line": 368,
+        "end_line": 398
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_rank_cutMatrix_le_constantCutBond",
+        "line": 399,
+        "end_line": 447
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean",
+    "changed": true,
+    "head_sha256": "0ba60809ed675dc14a97139b398533d229528a31402707df54ec4353b11af615",
+    "declarations_before": 24,
+    "declarations_after": 26,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.bondSupport",
+        "line": 86,
+        "end_line": 92
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.bondSupport_injective",
+        "line": 93,
+        "end_line": 105
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.posSemidef_sum_bondSupport_ite",
+        "line": 106,
+        "end_line": 117
+      },
+      {
+        "name": "ManyBody.ChainInteraction.ofBonds",
+        "line": 118,
+        "end_line": 129
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isHermitian_ofBonds_term",
+        "line": 130,
+        "end_line": 137
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_ofBonds_term_le",
+        "line": 138,
+        "end_line": 154
+      },
+      {
+        "name": "ManyBody.ChainInteraction.ofBonds_hamiltonian",
+        "line": 155,
+        "end_line": 163
+      },
+      {
+        "name": "ManyBody.ChainInteraction.posSemidef_ofBonds_term",
+        "line": 164,
+        "end_line": 174
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.powerProjector",
+        "line": 175,
+        "end_line": 179
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_bonds_add_one",
+        "line": 180,
+        "end_line": 185
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.powerProjector_spec",
+        "line": 186,
+        "end_line": 203
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.posSemidef_powerProjector",
+        "line": 204,
+        "end_line": 214
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.norm_powerProjector",
+        "line": 215,
+        "end_line": 225
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.powerProjector_apply_ground",
+        "line": 226,
+        "end_line": 237
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.norm_inner_powerProjector_le",
+        "line": 238,
+        "end_line": 320
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.norm_powerProjector_sub_le",
+        "line": 321,
+        "end_line": 347
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.paddedBond",
+        "line": 348,
+        "end_line": 353
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.bondComplement",
+        "line": 354,
+        "end_line": 359
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.bondComplementWord",
+        "line": 360,
+        "end_line": 365
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sum_paddedBond",
+        "line": 366,
+        "end_line": 377
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.powerProjector_eq_sum_bondComplementWord",
+        "line": 378,
+        "end_line": 398
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.letterSupport",
+        "line": 399,
+        "end_line": 402
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isSupportedOn_bondComplement",
+        "line": 403,
+        "end_line": 417
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.letterSupport_crossing",
+        "line": 418,
+        "end_line": 458
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.sum_crossing_eq_countP",
+        "line": 459,
+        "end_line": 474
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.operatorSchmidtRank_cutOperator_bondComplementWord_le",
+        "line": 475,
+        "end_line": 504
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/RationalBondTrimming.lean",
+    "changed": true,
+    "head_sha256": "dccc75f74b3c5399a19922b9c5b7bdef5feb0aaaccb05e6782b65667d1b74c91",
+    "declarations_before": 1,
+    "declarations_after": 1,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.exists_rational_size_bond_trimmed_family",
+        "line": 51,
+        "end_line": 123
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/RationalSampledSuccessiveConstruction.lean",
+    "changed": true,
+    "head_sha256": "f8e9243c01cb202feef23fbc529dd9148c2c841191e75a7feed909fbd0b54deb",
+    "declarations_before": 2,
+    "declarations_after": 2,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_rational_sampled_viable_successor_polynomial",
+        "line": 56,
+        "end_line": 217
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_rational_sampled_successive_viable_sets_polynomial",
+        "line": 218,
+        "end_line": 317
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SampledSuccessiveConstruction.lean",
+    "changed": true,
+    "head_sha256": "f13a33a500396a4fc435d780ca28f5911eda6c25f7c805f90b1e81c1dce78e27",
+    "declarations_before": 9,
+    "declarations_after": 9,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.lvvViabilityPrecision",
+        "line": 54,
+        "end_line": 55
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lvvViabilityPrecision_pos",
+        "line": 56,
+        "end_line": 65
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_sampled_viable_successor_polynomial_explicit_energy_degree",
+        "line": 66,
+        "end_line": 175
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_sampled_viable_successor_polynomial",
+        "line": 176,
+        "end_line": 211
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree",
+        "line": 212,
+        "end_line": 298
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial_total_cardinality",
+        "line": 299,
+        "end_line": 352
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_sampled_successive_viable_sets_polynomial",
+        "line": 353,
+        "end_line": 388
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_sampled_groundState_openMPS_polynomial_explicit_energy_degree",
+        "line": 389,
+        "end_line": 431
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_sampled_groundState_openMPS_polynomial",
+        "line": 432,
+        "end_line": 450
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeBondTrimming.lean",
+    "changed": true,
+    "head_sha256": "9111536d8a18645509cc4bd522eff430ddde312436515527c5c905ac13942aaa",
+    "declarations_before": 4,
+    "declarations_after": 4,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.isViable_bondTrimSet_sizeTrimmingSelectionWith",
+        "line": 48,
+        "end_line": 85
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isViable_bondTrimSet_sizeTrimmingSelection_with_reserve",
+        "line": 86,
+        "end_line": 113
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isViable_bondTrimSet_sizeTrimmingSelection",
+        "line": 114,
+        "end_line": 133
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_size_bond_trimmed_family_polynomial",
+        "line": 134,
+        "end_line": 160
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean",
+    "changed": true,
+    "head_sha256": "c3f82e4253094640ff8d6a6dc31d2ea7560d6ad1695aed685c21923c974607f4",
+    "declarations_before": 5,
+    "declarations_after": 5,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.exists_viable_vector_of_all_spectral_approx_sdp_certificate",
+        "line": 47,
+        "end_line": 134
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_error_budget",
+        "line": 135,
+        "end_line": 220
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack",
+        "line": 221,
+        "end_line": 310
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack",
+        "line": 311,
+        "end_line": 394
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slack",
+        "line": 395,
+        "end_line": 471
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean",
+    "changed": true,
+    "head_sha256": "ad85e3572423620f5af4c91fcdc2ec94f97cc943999d9dbac9545c562832f37d",
+    "declarations_before": 4,
+    "declarations_after": 4,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.canonical_search_rationalization_overlap_budget",
+        "line": 47,
+        "end_line": 110
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_viable_vector_of_canonical_rational_search",
+        "line": 111,
+        "end_line": 339
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_rationalViableMPSData_of_canonical_rational_search",
+        "line": 340,
+        "end_line": 479
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_rationalCoordinateData_of_canonical_rational_search",
+        "line": 480,
+        "end_line": 619
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean",
+    "changed": true,
+    "head_sha256": "8a632e004230cea1a32d89e662474b221a883c6b11f60558d7313f4333120e98",
+    "declarations_before": 10,
+    "declarations_after": 10,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.leftObjective_norm_bounds",
+        "line": 46,
+        "end_line": 63
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lvvFiniteDensityMesh",
+        "line": 64,
+        "end_line": 66
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lvvFiniteDensityMesh_pos",
+        "line": 67,
+        "end_line": 72
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lvvFiniteDensityMesh_fits",
+        "line": 73,
+        "end_line": 88
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_viable_vector_of_compressed_boundary_solution_with_slack",
+        "line": 89,
+        "end_line": 176
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_rationalViableMPSData_of_compressed_boundary_solution_with_slack",
+        "line": 177,
+        "end_line": 283
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_rationalCoordinateData_of_compressed_boundary_solution_with_slack",
+        "line": 284,
+        "end_line": 394
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_finite_density_search_viable_vector",
+        "line": 395,
+        "end_line": 484
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_coordinate_finite_density_search_viable_vector",
+        "line": 485,
+        "end_line": 569
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_canonical_coordinate_finite_density_search_viable_vector",
+        "line": 570,
+        "end_line": 625
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean",
+    "changed": true,
+    "head_sha256": "a1fdf8961ec6955183473ec64b7cd707ff1689de9b5e0f69f549d090fc5672d5",
+    "declarations_before": 7,
+    "declarations_after": 7,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.exists_leading_vector_of_approximate_compressed_boundary_solution",
+        "line": 51,
+        "end_line": 227
+      },
+      {
+        "name": "ManyBody.ChainInteraction.nearby_glued_vector_viable_of_density_and_vector_precision",
+        "line": 228,
+        "end_line": 299
+      },
+      {
+        "name": "ManyBody.ChainInteraction.nearby_glued_vector_viable_of_phase_distance",
+        "line": 300,
+        "end_line": 369
+      },
+      {
+        "name": "ManyBody.ChainInteraction.nearby_glued_vector_viable_of_density_and_vector_residual",
+        "line": 370,
+        "end_line": 425
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.density_and_vector_precision_of_separate_bounds",
+        "line": 426,
+        "end_line": 444
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.density_and_rationalization_overlap_budget",
+        "line": 445,
+        "end_line": 467
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_rationalSpanViableMPSData_of_leadingCoordinates",
+        "line": 468,
+        "end_line": 514
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/PowerIteration.lean",
+    "changed": true,
+    "head_sha256": "b8656dc0e1c0d01a63b5865f332ce8a57a0794c1db779627151c5142c1687565",
+    "declarations_before": 2,
+    "declarations_after": 2,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.exists_viable_vector_of_approximate_density_and_eigenresidual",
+        "line": 55,
+        "end_line": 256
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_rationalViableMPSData_of_approximate_density",
+        "line": 257,
+        "end_line": 315
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean",
+    "changed": true,
+    "head_sha256": "b73921cef449505ae0d05b57931151560cac517a041bcd7a222a12449cc52c79",
+    "declarations_before": 6,
+    "declarations_after": 6,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.exists_viable_vector_of_rational_search_result",
+        "line": 47,
+        "end_line": 136
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_rationalViableMPSData_of_rational_search_result",
+        "line": 137,
+        "end_line": 306
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_rationalCoordinateData_of_rational_search_result",
+        "line": 307,
+        "end_line": 479
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.cutLeft_coordinateMapRationalCoordinateCount_le_compressedSDPInputBitSizeBound",
+        "line": 480,
+        "end_line": 488
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.twoPow_mul_le_cutLeft_compressedSDPInputBitSizeBound",
+        "line": 489,
+        "end_line": 504
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.twoPow_le_cutLeft_compressedSDPInputBitSizeBound",
+        "line": 505,
+        "end_line": 521
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/Selection.lean",
+    "changed": true,
+    "head_sha256": "614cbbc523df7b2e5906416a18f647ee2c505f3e7978823f38d39a1af89ce29d",
+    "declarations_before": 13,
+    "declarations_after": 13,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.sizeTrimmingSelectionWith",
+        "line": 46,
+        "end_line": 64
+      },
+      {
+        "name": "ManyBody.ChainInteraction.sizeTrimmingSelection",
+        "line": 65,
+        "end_line": 75
+      },
+      {
+        "name": "ManyBody.ChainInteraction.IsAdmissibleNet",
+        "line": 76,
+        "end_line": 86
+      },
+      {
+        "name": "ManyBody.ChainInteraction.IsAdmissibleSolver",
+        "line": 87,
+        "end_line": 97
+      },
+      {
+        "name": "ManyBody.ChainInteraction.sizeTrimmingSelectionWith_subset_span",
+        "line": 98,
+        "end_line": 115
+      },
+      {
+        "name": "ManyBody.ChainInteraction.sizeTrimmingSelection_subset_span",
+        "line": 116,
+        "end_line": 125
+      },
+      {
+        "name": "ManyBody.ChainInteraction.norm_le_one_of_mem_sizeTrimmingSelection",
+        "line": 126,
+        "end_line": 140
+      },
+      {
+        "name": "ManyBody.ChainInteraction.card_sizeTrimmingSelectionWith_le",
+        "line": 141,
+        "end_line": 161
+      },
+      {
+        "name": "ManyBody.ChainInteraction.card_sizeTrimmingSelection_le",
+        "line": 162,
+        "end_line": 180
+      },
+      {
+        "name": "ManyBody.ChainInteraction.card_sizeTrimmingSelectionWith_le_polynomial",
+        "line": 181,
+        "end_line": 205
+      },
+      {
+        "name": "ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomial",
+        "line": 206,
+        "end_line": 228
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isViable_sizeTrimmingSelectionWith",
+        "line": 229,
+        "end_line": 337
+      },
+      {
+        "name": "ManyBody.ChainInteraction.isViable_sizeTrimmingSelection",
+        "line": 338,
+        "end_line": 364
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/UniformCertificates.lean",
+    "changed": true,
+    "head_sha256": "32732403b8feba9dac2773d5c9f627d438669ac685c23e7dc744cd575349a1ef",
+    "declarations_before": 5,
+    "declarations_after": 5,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.exists_viable_vector_of_rational_fixed_data_sdp_certificate",
+        "line": 48,
+        "end_line": 132
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_viable_vector_of_uniformly_approx_sdp_certificate",
+        "line": 133,
+        "end_line": 209
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_viable_vector_of_uniform_approx_sdp_feasible",
+        "line": 210,
+        "end_line": 273
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_boundary_coordinates_with_uniform_approx_sdp_soundness",
+        "line": 274,
+        "end_line": 370
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_boundary_coordinates_with_zero_error_sdp_certificate",
+        "line": 371,
+        "end_line": 423
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SuccessiveConstruction.lean",
+    "changed": true,
+    "head_sha256": "abb92ace490dd863dbab438565d2abba9445c9d0f8803d34b9fa2a1777d5af9e",
+    "declarations_before": 5,
+    "declarations_after": 5,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.lvvSweep",
+        "line": 47,
+        "end_line": 57
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lvvSweep_zero",
+        "line": 58,
+        "end_line": 65
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lvvSweep_succ",
+        "line": 66,
+        "end_line": 79
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lvvSweep_spec",
+        "line": 80,
+        "end_line": 122
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_positive_chain_successive_viable_sets",
+        "line": 123,
+        "end_line": 142
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SuccessiveStep.lean",
+    "changed": true,
+    "head_sha256": "ff1147930e40848351680979775bcac06683c89e83ae155df122166ecb975fa3",
+    "declarations_before": 8,
+    "declarations_after": 8,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.successiveStep",
+        "line": 55,
+        "end_line": 61
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_successiveStep_le",
+        "line": 62,
+        "end_line": 71
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isLeftOpenMPS_of_mem_successiveStep",
+        "line": 72,
+        "end_line": 86
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.lvvSweepStep",
+        "line": 87,
+        "end_line": 99
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_lvvSweepStep_le",
+        "line": 100,
+        "end_line": 125
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isLeftOpenMPS_of_mem_lvvSweepStep",
+        "line": 126,
+        "end_line": 141
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.isViable_lvvSweepStep",
+        "line": 142,
+        "end_line": 177
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.exists_positive_chain_successive_step",
+        "line": 178,
+        "end_line": 197
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean",
+    "changed": true,
+    "head_sha256": "10af5993239f9b7c7680613575d5a8be200ae788b1a8b65f71daf5bececfb951",
+    "declarations_before": 15,
+    "declarations_after": 15,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.Matrix.PosSemidef.one_sub_energyExcess_div_gap_le_maxEigenvalue",
+        "line": 45,
+        "end_line": 113
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Matrix.PosSemidef.twentyThree_div_twentyFour_le_maxEigenvalue",
+        "line": 114,
+        "end_line": 134
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.Matrix.PosSemidef.re_inner_le_one_sub_eigenvalue_of_orthogonal",
+        "line": 135,
+        "end_line": 218
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.leading_residual_div_separation_le",
+        "line": 219,
+        "end_line": 229
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.maxEigenvalue_lower_bound_of_gluing_with_objective_slack",
+        "line": 230,
+        "end_line": 318
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.maxEigenvalue_lower_bound_chain_with_objective_slack",
+        "line": 319,
+        "end_line": 394
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.nearby_unit_vector_energy_and_overlap_bounds",
+        "line": 395,
+        "end_line": 423
+      },
+      {
+        "name": "ManyBody.ChainInteraction.nearby_unit_vector_energy_and_overlap_bounds",
+        "line": 424,
+        "end_line": 443
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.norm_glued_vectors_sub_eq",
+        "line": 444,
+        "end_line": 476
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.gluedVector_smul",
+        "line": 477,
+        "end_line": 493
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.gluedVector_phase_invariants",
+        "line": 494,
+        "end_line": 527
+      },
+      {
+        "name": "ManyBody.ChainInteraction.nearby_glued_vector_bounds",
+        "line": 528,
+        "end_line": 602
+      },
+      {
+        "name": "ManyBody.ChainInteraction.nearby_glued_vector_viable_bounds",
+        "line": 603,
+        "end_line": 644
+      },
+      {
+        "name": "ManyBody.ChainInteraction.exists_uniform_leading_bounds_of_isViable",
+        "line": 645,
+        "end_line": 823
+      },
+      {
+        "name": "ManyBody.ChainInteraction.leading_bounds_of_approximate_boundary_solution",
+        "line": 824,
+        "end_line": 989
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean",
+    "changed": true,
+    "head_sha256": "34caa1e876abce92f1dd1da67ac0e85dc8a35d5f8b0ec619dab22fe911d7e64a",
+    "declarations_before": 1,
+    "declarations_after": 1,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.exists_boundary_minimizer_leading_vector_of_isViable",
+        "line": 51,
+        "end_line": 220
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean",
+    "changed": true,
+    "head_sha256": "5ec18fb1c7b8c8595f102ebfb5800fc019146a57dd7335e02e87e7b0ac6931ce",
+    "declarations_before": 1,
+    "declarations_after": 1,
+    "declarations": [
+      {
+        "name": "ManyBody.ChainInteraction.exists_trimmed_witness_of_isViable",
+        "line": 51,
+        "end_line": 130
+      }
+    ]
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/WindowCounting.lean",
+    "changed": true,
+    "head_sha256": "b244f4e514914c1d7ea92b159ba0c282458de069d28d883e6c44c882ff636357",
+    "declarations_before": 7,
+    "declarations_after": 7,
+    "declarations": [
+      {
+        "name": "TNLean.MPS.AreaLaw.windowBudgetConst",
+        "line": 61,
+        "end_line": 64
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.one_le_windowBudgetConst",
+        "line": 65,
+        "end_line": 70
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.windowAreaLawConst",
+        "line": 71,
+        "end_line": 75
+      },
+      {
+        "name": "TNLean.MPS.AreaLaw.card_crossingTerms_consecutive_le",
+        "line": 76,
+        "end_line": 136
+      },
+      {
+        "name": "ManyBody.ChainInteraction.card_crossingTerms_interval_le_of_consecutive_terms",
+        "line": 137,
+        "end_line": 150
+      },
+      {
+        "name": "ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive_terms",
+        "line": 151,
+        "end_line": 193
+      },
+      {
+        "name": "ManyBody.ChainInteraction.log_surprisalMoment_interval_le_of_consecutive_terms",
+        "line": 194,
+        "end_line": 258
+      }
+    ]
+  }
+]

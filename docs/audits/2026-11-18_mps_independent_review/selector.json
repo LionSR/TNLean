@@ -1,0 +1,56 @@
+[
+  {
+    "changed": "TNLean/MPS/AreaLaw/Hamiltonian.lean",
+    "expected": "scripts/ground_state_gap_scope_regression.lean",
+    "selected": true,
+    "strict_sources": [
+      "TNLean/MPS/AreaLaw/Hamiltonian.lean"
+    ],
+    "selected_tests": [
+      "scripts/ground_state_gap_scope_regression.lean",
+      "scripts/zero_gap_tn_wrappers_regression.lean"
+    ]
+  },
+  {
+    "changed": "TNLean/MPS/AreaLaw/OverlapEnergy.lean",
+    "expected": "scripts/ground_state_gap_scope_regression.lean",
+    "selected": true,
+    "strict_sources": [
+      "TNLean/MPS/AreaLaw/OverlapEnergy.lean"
+    ],
+    "selected_tests": [
+      "scripts/ground_state_gap_scope_regression.lean"
+    ]
+  },
+  {
+    "changed": "TNLean/MPS/AreaLaw/BoundaryGap.lean",
+    "expected": "scripts/ground_state_gap_scope_regression.lean",
+    "selected": true,
+    "strict_sources": [
+      "TNLean/MPS/AreaLaw/BoundaryGap.lean"
+    ],
+    "selected_tests": [
+      "scripts/ground_state_gap_scope_regression.lean"
+    ]
+  },
+  {
+    "changed": "scripts/ground_state_gap_scope_regression.lean",
+    "expected": "scripts/ground_state_gap_scope_regression.lean",
+    "selected": true,
+    "strict_sources": [],
+    "selected_tests": [
+      "scripts/ground_state_gap_scope_regression.lean"
+    ]
+  },
+  {
+    "changed": "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean",
+    "expected": "scripts/zero_gap_tn_wrappers_regression.lean",
+    "selected": true,
+    "strict_sources": [
+      "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean"
+    ],
+    "selected_tests": [
+      "scripts/zero_gap_tn_wrappers_regression.lean"
+    ]
+  }
+]

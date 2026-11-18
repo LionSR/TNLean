@@ -1,0 +1,16 @@
+{
+  "coverage_rows": 92,
+  "changed_production": 85,
+  "unchanged_allocated_production": 1,
+  "migrated_fixture": 1,
+  "lane_audit_files": 3,
+  "shared_files_accounted_separately": 2,
+  "declarations_before": 643,
+  "declarations_after": 657,
+  "selector_cases": 5,
+  "selector_cases_passed": 5,
+  "head_source_hashes_matched": 86,
+  "independent_lean_build": "not_run",
+  "independent_lean_strict": "not_run",
+  "integrated_source_sync": "not_run"
+}
