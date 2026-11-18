@@ -647,6 +647,55 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     to be the identity. Orthogonality then permits only one orbit.
 \end{proof}
 
+\begin{lemma}[Trace preservation of positive roots]
+    \label{lem:periodic_positive_root_trace_preservation}
+    \lean{IsPositiveMap.isTracePreservingMap_of_irreducible_pow}
+    \leanok
+    Let $\mathcal F:M_D(\C)\to M_D(\C)$ be positive and let $p>0$.
+    If $\mathcal E=\mathcal F^p$ is irreducible and trace preserving,
+    then $\mathcal F$ is trace preserving. In particular, the roots
+    of a single irreducible target in the converse of
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible} need no separate
+    trace-preservation assumption once positivity is known.
+\end{lemma}
+
+\begin{proof}\leanok
+    Set $T=\mathcal F^\dagger$. Trace preservation gives $T^p(\Id)=\Id$.
+    Since $T$ commutes with $T^p$, the matrix $T(\Id)$ is fixed by
+    $\mathcal E^\dagger$. Irreducibility gives
+    $\Fix(\mathcal E^\dagger)=\C \Id$, hence $T(\Id)=c\Id$.
+    Positivity gives $c\ge0$. Iteration gives $c^p=1$, so $c=1$.
+\end{proof}
+
+\begin{lemma}[Trace annihilation in the linearized root equation]
+    \label{lem:periodic_root_linearization_trace}
+    \lean{IsPositiveMap.trace_eq_zero_of_power_linearization_eq_zero}
+    \leanok
+    Let $\mathcal F$ be positive, let $p>0$, and suppose that
+    $\mathcal F^p$ is irreducible and trace preserving. Let $H$ be
+    any complex-linear endomorphism of $M_D(\C)$. If
+    \begin{align}
+        \sum_{k=0}^{p-1}\mathcal F^kH\mathcal F^{p-1-k} & =0,
+        \label{eq:periodic_root_linearization_zero}
+    \end{align}
+    then $\tr H(X)=0$ for every $X\in M_D(\C)$.
+    No assumption of Hermiticity preservation on $H$ is required.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_positive_root_trace_preservation}
+    Put $T=\mathcal F^\dagger$ and $u=H^\dagger(\Id)$. The preceding lemma gives
+    $T(\Id)=\Id$. Taking the adjoint of
+    (\ref{eq:periodic_root_linearization_zero}), evaluating at $\Id$,
+    and reversing the summation order gives
+    $\sum_{k=0}^{p-1}T^ku=0$. Applying $T-\Id$ yields $T^pu=u$.
+    Irreducibility of $\mathcal F^p$ gives $u=c\Id$, so $Tu=u$.
+    The sum is therefore $pu=0$. Since $p>0$, $u=0$; trace duality
+    gives $\tr H(X)=\tr(uX)=0$.
+    This is a first-order condition and does not construct an exact
+    family of roots of the same power.
+\end{proof}
+
 \begin{lemma}[A channel root of larger Kraus rank]
     \label{thm:periodic_supplied_root_rank_obstruction}
     \lean{MPSTensor.CyclicResetCounterexample.root,

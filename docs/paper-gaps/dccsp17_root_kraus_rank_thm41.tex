@@ -383,18 +383,25 @@ exact family of roots and reaching a smaller Choi support remain unproved.
 
 \section{Trace preservation at an irreducible target}
 
-The following reductions are mathematical arguments; they are not yet
-asserted as Lean theorems. Let $\mathcal E$ be an irreducible CPTP map on
+Root trace preservation and trace annihilation of the linearized root
+equation are formalized in
+\path{TNLean/Algebra/IrreduciblePositiveRoot.lean}. The declarations
+\leanid{IsPositiveMap.isTracePreservingMap_of_irreducible_pow} and
+\leanid{IsPositiveMap.trace_eq_zero_of_power_linearization_eq_zero}
+require only positivity of the root, not complete positivity or
+invertibility. They do not prove the Choi-support dimension count or the
+existence of exact rank-reducing deformations.
+Let $\mathcal E$ be an irreducible positive trace-preserving map on
 $M_D(\mathbb C)$, where $D>0$, and let $p>0$. Its adjoint fixed space is
 $\operatorname{Fix}(\mathcal E^*)=\mathbb C I$.
 
-First, every completely positive root $\mathcal F^p=\mathcal E$ is
+First, every positive root $\mathcal F^p=\mathcal E$ is
 trace preserving. Indeed, $\mathcal F$ commutes with $\mathcal E$, so
 $\mathcal F^*(I)$ is fixed by $\mathcal E^*$. Thus
 $\mathcal F^*(I)=cI$ for some $c\ge0$. Taking the $p$th power gives
 $c^p=1$, hence $c=1$.
 
-Second, suppose that a Hermiticity-preserving perturbation $H$ belongs to
+Second, suppose that a complex-linear perturbation $H$ belongs to
 the kernel of the differential in
 (\ref{eq:dccsp17_power_differential}). Put $T=\mathcal F^*$ and
 $h=H^*(I)$. Since $T(I)=I$, the adjoint differential equation evaluated
@@ -424,6 +431,77 @@ minimization and compactness alone do not supply one. These reductions
 apply to a single irreducible target. A target with several irreducible
 blocks can have a larger adjoint fixed space, so the same proof does not
 establish trace preservation in that setting.
+The restriction is necessary: on $M_2(\mathbb C)$, take
+$K=\left(\begin{smallmatrix}0&2\\1/2&0\end{smallmatrix}\right)$ and
+$\mathcal F(X)=KXK^\dagger$. Then $K^2=I$ and
+$\mathcal F^2=\mathrm{id}$, but
+$\operatorname{tr}\mathcal F(E_{00})=1/4$.
+The identity channel is a two-block irreducible form with unit weights,
+so the single-block normalization reduction cannot be extended merely by
+replacing irreducibility with irreducible form. This does not obstruct
+bounded-root selection: the identity channel itself is a one-Kraus root.
+
+\section{Extreme roots cannot have larger Kraus rank}
+
+The following consequence is a mathematical argument. The trace-annihilation
+step is formalized above; the face-dimension and extremality argument here
+has not been formalized.
+
+Let $\mathcal F$ be a channel on $M_D(\mathbb C)$ with $D>0$, let $p>0$, and suppose that
+$\mathcal E=\mathcal F^p$ is irreducible. If $\mathcal F$ is an extreme
+point of the convex set of channels, then
+\begin{align}
+ \operatorname{rank}C_{\mathcal F}
+ &\le \operatorname{rank}C_{\mathcal E}.
+ \label{eq:dccsp17_extreme_root_rank}
+\end{align}
+
+To prove this, put $r=\operatorname{rank}C_{\mathcal F}$ and
+$s=\operatorname{rank}C_{\mathcal E}$. Let $V$ be the real vector space
+of Hermiticity-preserving maps whose Choi matrices are supported on
+$\operatorname{ran}C_{\mathcal F}$, and define $W$ using
+$\operatorname{ran}C_{\mathcal E}$ instead. Their real dimensions are
+$r^2$ and $s^2$. The linearization $L$ in
+(\ref{eq:dccsp17_power_differential}) carries $V$ into $W$.
+Indeed, if a completely positive map $G$ satisfies, for some $c>0$,
+$0\le_{\mathrm{CP}}G\le_{\mathrm{CP}}c\mathcal F$, where
+$A\le_{\mathrm{CP}}B$ means that $B-A$ is completely positive, then
+for each $k<p$,
+$0\le_{\mathrm{CP}}\mathcal F^kG\mathcal F^{p-1-k}
+\le_{\mathrm{CP}}c\mathcal E$. Such positive $G$ span $V$ over the reals,
+so this order bound proves the claimed containment.
+
+If $r>s$, there is a nonzero $H\in V$ with $L(H)=0$. The preceding
+trace-annihilation result gives $\operatorname{tr}H(X)=0$ for every $X$.
+Since $C_{\mathcal F}$ is positive definite on its range and $C_H$ is
+Hermitian and supported there, there is an $\varepsilon>0$ for which
+$C_{\mathcal F}\pm\varepsilon C_H\ge0$. Thus
+$\mathcal F+\varepsilon H$ and $\mathcal F-\varepsilon H$ are distinct
+channels with midpoint $\mathcal F$, contradicting extremality.
+This proves (\ref{eq:dccsp17_extreme_root_rank}).
+
+Consequently a divisible irreducible target with a $d$-operator Kraus
+representation admits a suitable bounded root whenever it admits an
+extreme channel root. This is a sufficient condition, not an existence
+argument: the set of roots of a fixed power is generally not convex, so
+minimizing Kraus rank within that set does not establish extremality in
+the full convex set of channels. The general selection problem remains
+open.
+
+In fact, an extreme root need not exist even for a divisible singular
+irreducible target. On $M_2(\mathbb C)$, take the completely depolarizing
+channel $\mathcal E(X)=\operatorname{tr}(X)I/2$. It is idempotent and
+irreducible, and hence has a channel $p$th root for every $p>0$.
+If $\mathcal F^p=\mathcal E$, then $\mathcal F$ commutes with
+$\mathcal E$. Trace preservation gives
+$\mathcal F(I)=\mathcal F\mathcal E(I)=\mathcal E\mathcal F(I)=I$,
+so $\mathcal F$ is unital. Every unital qubit channel is a convex
+combination of unitary conjugations~\cite[proof of Theorem~23]{WolfCirac2008DividingQuantumChannels}.
+No such root can be unitary, since a power of a unitary conjugation is
+invertible whereas $\mathcal E$ is singular. The convex combination
+therefore has at least two distinct terms, and $\mathcal F$ is not an
+extreme channel. This rules out universal extreme-root selection, not
+bounded-rank selection: $\mathcal E$ itself is a root of Choi rank four.
 
 \section{The zero eigenspace cannot simply be discarded}
 
