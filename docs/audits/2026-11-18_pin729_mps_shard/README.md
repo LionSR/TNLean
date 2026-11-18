@@ -45,3 +45,25 @@ The generated exact-source cache remains at /tmp/pin729-mps-olean (local to
 this environment; not assumed shared with other workers). Driver scripts are
 saved here; their absolute paths describe this execution environment. No
 shared candidate branch, external author branch, PR, or issue was modified.
+
+## Stop at the first strict failure
+
+Final candidate result: 327 targets passed build and strict; one target failed
+strict; 537 targets were not executed. 1166 direct compiler builds (including
+required dependencies) and 328 target strict invocations were recorded.
+No other shard strict checks ran. No compiler process remains.
+
+Hastings/SpectralCutoff.lean line 188 passes ordinary compilation but fails
+strict on linter.unnecessarySimpa. The exact original log and exit code 1 are
+retained. Suggested correction: replace the complete map_zero proof with
+`map_zero' := by simp`. A temporary copy passed strict in 8.55 seconds;
+this is not counted as a candidate pass and the production source is unchanged.
+The first scratch attempt merely replaced the tactic token and was rejected
+because `simp using` is invalid; both scratch attempts are retained separately.
+No disabling of linters or suppression of the original failure occurred.
+
+Further continuation needs coordinator disposition of the source failure.
+The proposed one-line patch is evidence only, not applied to any production
+branch. Build commands total 3563.41 seconds, strict commands 1204.34 seconds;
+parallel command durations are summed, not claimed to be wall-clock duration.
+Production editing time is zero; evidence-editing time was not separately timed.

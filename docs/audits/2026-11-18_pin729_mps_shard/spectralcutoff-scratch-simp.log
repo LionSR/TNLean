@@ -1,0 +1,2 @@
+/tmp/pin729-SpectralCutoff-simp.lean:184:45: error: Fields missing: `map_add'`, `commutes'`, `map_star'`
+/tmp/pin729-SpectralCutoff-simp.lean:188:23: error: unexpected token 'using'; expected command

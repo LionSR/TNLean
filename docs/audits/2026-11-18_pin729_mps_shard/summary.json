@@ -1,13 +1,17 @@
 {
   "selected": 865,
-  "build_and_strict_passed": 320,
-  "not_completed": 545,
-  "failed_commands": 0,
-  "build_commands": 1120,
-  "strict_commands": 320,
-  "build_seconds": 3395.808188496827,
-  "strict_seconds": 1165.7399552929564,
+  "build_and_strict_passed": 327,
+  "not_completed": 538,
+  "failed_commands": 1,
+  "build_commands": 1166,
+  "strict_commands": 328,
+  "build_seconds": 3563.406791241752,
+  "strict_seconds": 1204.3446718499472,
   "production_edit_seconds": 0,
-  "state": "running; resume.py continues bounded batches",
-  "source_head": "6b7fb2e27dbc6856091e593e4226d350403beb8a"
+  "state": "stopped on first actual strict failure; no remaining compiler processes",
+  "source_head": "6b7fb2e27dbc6856091e593e4226d350403beb8a",
+  "failed_targets": 1,
+  "not_executed_targets": 537,
+  "blocker": "TNLean/MPS/AreaLaw/Hastings/SpectralCutoff.lean:188:18 linter.unnecessarySimpa",
+  "minimal_suggestion": "map_zero' := by simp; verified only in temporary copy; candidate remains unchanged"
 }

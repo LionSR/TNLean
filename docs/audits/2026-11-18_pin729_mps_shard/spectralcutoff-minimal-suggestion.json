@@ -1,0 +1,56 @@
+{
+  "original_failure": {
+    "source_head": "6b7fb2e27dbc6856091e593e4226d350403beb8a",
+    "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+    "file": "TNLean/MPS/AreaLaw/Hastings/SpectralCutoff.lean",
+    "phase": "strict",
+    "command": [
+      "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DautoImplicit=false",
+      "-DwarningAsError=true",
+      "TNLean/MPS/AreaLaw/Hastings/SpectralCutoff.lean"
+    ],
+    "started_utc": "2026-11-18T15:07:39.826186+00:00",
+    "seconds": 8.82547666800383,
+    "exit_code": 1,
+    "method": "direct Lean (not lake build)",
+    "role": "shard_target",
+    "source_sha256": "9be907baf1d85dfc611f65611f81a784aea01878578b49633ce5bee39c4aff41"
+  },
+  "scratch_command": [
+    "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-DmaxSynthPendingDepth=3",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DautoImplicit=false",
+    "-DwarningAsError=true",
+    "/tmp/pin729-SpectralCutoff-simp.lean"
+  ],
+  "scratch_exit_code": 0,
+  "scratch_seconds": 8.553833230005694,
+  "change": "line188 replace entire proof with map_zero' := by simp",
+  "production_modified": false,
+  "counts_as_candidate_pass": false,
+  "initial_scratch": {
+    "scratch_command": [
+      "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DautoImplicit=false",
+      "-DwarningAsError=true",
+      "/tmp/pin729-SpectralCutoff-simp.lean"
+    ],
+    "scratch_exit_code": 1,
+    "scratch_seconds": 10.373347922009998,
+    "change": "line188 simpa -> simp",
+    "production_modified": false,
+    "counts_as_candidate_pass": false
+  }
+}

@@ -16,13 +16,9 @@ TNLean/MPS/AreaLaw/AKLV/Initialization.lean
 TNLean/MPS/AreaLaw/AKLV/OptimizedInitialScale.lean
 TNLean/MPS/AreaLaw/AKLV/OptimizedRankBound.lean
 TNLean/MPS/AreaLaw/AKLV/OptimizedRankLog.lean
-TNLean/MPS/AreaLaw/AKLV/OptimizedRankScale.lean
-TNLean/MPS/AreaLaw/AKLV/OptimizedTailParameters.lean
 TNLean/MPS/AreaLaw/AKLV/PhysicalEntropy.lean
-TNLean/MPS/AreaLaw/AKLV/PhysicalRobustness.lean
 TNLean/MPS/AreaLaw/AKLV/SequenceEntropy.lean
 TNLean/MPS/AreaLaw/AKLV/SequenceEntropyParameters.lean
-TNLean/MPS/AreaLaw/AKLV/SequenceParameters.lean
 TNLean/MPS/AreaLaw/AKLV/SequentialApproximation.lean
 TNLean/MPS/AreaLaw/AKLV/SharpMPSApproximation.lean
 TNLean/MPS/AreaLaw/AKLV/SharpPerCutApproximation.lean
@@ -38,7 +34,6 @@ TNLean/MPS/AreaLaw/ALVV/EfficientSoftLowDensityFamily.lean
 TNLean/MPS/AreaLaw/ALVV/FrustrationFreeImprovingFamily.lean
 TNLean/MPS/AreaLaw/ALVV/FrustrationFreeTree.lean
 TNLean/MPS/AreaLaw/ALVV/FrustrationFreeTreeFamily.lean
-TNLean/MPS/AreaLaw/ALVV/GoodProjectorHardTruncation.lean
 TNLean/MPS/AreaLaw/ALVV/LargeGapComparison.lean
 TNLean/MPS/AreaLaw/ALVV/LongIntervalSoftImprovingFamily.lean
 TNLean/MPS/AreaLaw/ALVV/NativeLongIntervalSoftFamily.lean
@@ -70,7 +65,6 @@ TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean
 TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampledCost.lean
 TNLean/MPS/AreaLaw/BandDissolution.lean
 TNLean/MPS/AreaLaw/BandInformation.lean
-TNLean/MPS/AreaLaw/BoundaryGap.lean
 TNLean/MPS/AreaLaw/CanonicalLowDensityFamily.lean
 TNLean/MPS/AreaLaw/ChainStageIncidence.lean
 TNLean/MPS/AreaLaw/CommonClosingPolynomialFamily.lean
@@ -99,7 +93,6 @@ TNLean/MPS/AreaLaw/FullIntervalViability.lean
 TNLean/MPS/AreaLaw/Hastings.lean
 TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean
 TNLean/MPS/AreaLaw/Hastings/BootstrapLemma.lean
-TNLean/MPS/AreaLaw/Hastings/BoundaryFactorization.lean
 TNLean/MPS/AreaLaw/Hastings/ChainBootstrap.lean
 TNLean/MPS/AreaLaw/Hastings/CorrelationLemma.lean
 TNLean/MPS/AreaLaw/Hastings/CutoffPair.lean
