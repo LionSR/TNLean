@@ -44,7 +44,7 @@ as does its restriction to the left cut tensored with the bond identity.
 This supplies the objective bound used in the finite-precision form of LVV13,
 `algo53.tex`, equation `eq:conv`, lines 472–476. -/
 theorem _root_.ManyBody.ChainInteraction.leftObjective_norm_bounds {L q k m : ℕ} [NeZero q]
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+    (h : ChainInteraction L q 1) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
@@ -52,7 +52,7 @@ theorem _root_.ManyBody.ChainInteraction.leftObjective_norm_bounds {L q k m : �
     ‖HL‖ ≤ 4 * L ∧
       ‖leftCutOperator k HL ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)‖ ≤ 4 * L := by
   have hop : ‖h.hamiltonian‖ ≤ 2 * L := by
-    simpa only [mul_one] using h.norm_hamiltonian_le_of_range_one hh hhJ
+    simpa only [mul_one] using h.norm_hamiltonian_le_of_range_one hhJ
   have hHLn : ‖HL‖ ≤ 4 * L := by
     have heq : HL = h.hamiltonian - B := by rw [hsplit]; abel
     rw [heq]
@@ -454,7 +454,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_finite_density_search_viable_vec
       hτ₀ hτ₀trace (by simpa only [η] using hτ₀boundary)
         (by simpa only [K, E, Hleft] using hτ₀energy)
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds hh hhJ HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hcombined : 2 * (‖K‖ * (2 * δ) + ‖B‖ * (2 * δ)) ≤ 24 * L * δ := by

@@ -75,8 +75,8 @@ theorem card_chainSupport_range_one_le (L : ℕ) : Fintype.card (ChainSupport L 
 This follows from the interaction convention in the one-dimensional note, Section 1,
 `eq:ham`, and the support count above. -/
 theorem _root_.ManyBody.ChainInteraction.norm_hamiltonian_le_of_range_one {L q : ℕ} {J : ℝ}
-    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) :
-        ‖h.hamiltonian‖ ≤ 2 * L * J := by
+    (h : ChainInteraction L q 1) (hhJ : ∀ X, ‖h.term X‖ ≤ J) :
+    ‖h.hamiltonian‖ ≤ 2 * L * J := by
   classical
   by_cases hL : L = 0
   · subst L
