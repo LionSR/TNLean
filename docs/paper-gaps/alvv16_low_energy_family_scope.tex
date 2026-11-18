@@ -198,10 +198,9 @@ needs $3w(\lceil\log_2L\rceil+2)\le\eta_{\rm LD}$, one level more than the
 tree. The factor $D_i^{2a}$ grows quasi-polynomially in $1/\delta$, because
 the comparison loss decreases only through the enlarged count base; no
 polynomial dependence on $1/\delta$ is asserted. No Ritz extraction or
-energy estimate is used. The energy-output and number-of-states clause of
-Theorem~t:alg2, lines 1869--1878, is not verified: the source text of those
-lines is not recorded in the repository, so only the $\delta$-viability
-form of the conclusion is formalized.
+energy estimate is used. Only the $\delta$-viability form of the conclusion
+is formalized here; the printed output clause of Theorem~t:alg2 is discussed
+in the paragraph on it below.
 
 \paragraph{The algorithm.}
 The existence content of Theorem~t:alg2, lines 1869--1878, is assembled from
@@ -232,11 +231,26 @@ then at most a constant multiple of $\mu$, as in the source. This is a
 the shortened window be nonempty, by a constant factor coming from the binary
 level count and the two extra levels.
 The Ritz space is not claimed to be close to the window, since the
-window need not have a gap at its edge, and (LD) supplies none. The
-energy-output and number-of-states clause of lines 1869--1878 is not verified
-against the source: its text is not recorded in the repository and the
-source could not be consulted. No hypothesis is drawn from a paraphrase of
-that clause; the formal statement is the existence content above.
+window need not have a gap at its edge, and (LD) supplies none. No
+hypothesis is drawn from the printed output clause; the formal statement is
+the existence content above.
+
+\paragraph{The printed output clause.}
+Per the official arXiv v2 text, as read by the maintainer in the combined
+review of the constant-node tree (TNLean pull request 10886), Theorem~t:alg2
+specifies as its output $r$ orthonormal states of energy at most
+$E_0+\eta-\mu+\delta$, together with a success probability and a
+quasi-polynomial running time. The comparison of this clause with the
+formalized output is open. The formalized output gives, for the window
+$G(\eta-3w)$, a space of matrix product states of the window's dimension
+that is mutually $\delta$-close to it, and a Ritz space of the same dimension
+whose vectors have energy at most
+$E_0+((1+1/\rho)(\eta-3w)+(1+\rho)\|H-E_0\|\delta)/(1-\delta)$ for every
+$\rho>0$. Whether the number of states, the orthonormality and the printed
+energy bound follow from these, and under which identification of the
+source's $\mu$, $\eta$ and $\delta$ with the parameters here, is not
+established. The success probability and the running time are outside the
+formalization.
 
 \paragraph{Remaining conclusions.}
 The long-interval construction assumes no global spectral gap and supplies
