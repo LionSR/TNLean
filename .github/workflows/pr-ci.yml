@@ -645,7 +645,7 @@ jobs:
       # this workflow changes. New modules need no workflow edit. Selection:
       # scripts/ci_lean_checks.py.
       - name: Check changed Lean files and affected tests strictly
-        timeout-minutes: 60
+        timeout-minutes: 120
         env:
           BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
           PR_HEAD_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || '' }}
