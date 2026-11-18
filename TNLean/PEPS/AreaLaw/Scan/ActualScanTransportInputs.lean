@@ -58,6 +58,8 @@ the transport coefficients `C ℓ^C` into `κ.C (log n)^{κ.C_l}`.
   manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open scoped BigOperators Matrix ComplexOrder MatrixOrder
 open Filter Topology Set MeasureTheory
 open TensorPower TensorPower.ReplicaTransport Entropy
@@ -66,7 +68,7 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (AdmissibleSupport planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -354,7 +356,8 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
     ∃ c₀ C₀ Cl₀ : ℝ, 0 < c₀ ∧ ∀ κ : ScanConstants, C₀ ≤ κ.C → Cl₀ ≤ κ.Cl →
       ∀ᶠ N : ℕ in atTop,
       ∀ {Λ T : Finset (ℤ × ℤ)} {R : ℕ} {J Δ : ℝ} [LinearOrder (AdmissibleSupport Λ R)]
-        (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+        (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+            (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : StateSpace Λ q)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hm : 0 < S.m) (hM : 0 < S.M)
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)],
         S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
@@ -373,11 +376,11 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
           symmetricSubspace k (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v))) →
         (∀ k, 1 ≤ k → pre k ≠ 0) →
         (∀ k, 1 ≤ k → copyMean (augmentedDimensions (V := Site Λ) q aux) k
-            (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ (X.L N) i)) *ᵥ pre k =
+            (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L N) i)) *ᵥ pre k =
           (Tr.E0 : ℂ) • pre k) →
         Nonempty (ScanTransportInputs X κ N Tr
           (fun r ↦ S.actualScanRound hm hM (augmentedDimensions (V := Site Λ) q aux)
-            (S.actualEnergyTerms h Ω Δ (X.L N) aux) (X.a W N) (withZeroCopyUnit pre) r.val)
+            (S.actualEnergyTerms h Ω J Δ (X.L N) aux) (X.a W N) (withZeroCopyUnit pre) r.val)
           W) := by
   classical
   obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := actualRounds_transport_domainGraph
@@ -391,12 +394,12 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
     X.kappa_pos X.kappa_lt_mu, eventually_ge_atTop 3,
     (Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually_ge_atTop 1]
     with N hsf hsep hN3 hlog
-  intro Λ T R J Δ _ hT h Ω S hm hM aux _ hgraph hdepth hanchor hΔ hΩ hSn hSm hSK hSD hSr hC
+  intro Λ T R J Δ _ hT h hh hhJ Ω S hm hM aux _ hgraph hdepth hanchor hΔ hΩ hSn hSm hSK hSD hSr hC
     hrows hclear Tr W hW haℓ pre₁ hsym₁ hpre₁ heig₁
   have hsym := withZeroCopyUnit_mem_symmetricSubspace hsym₁
   have hpre := withZeroCopyUnit_ne_zero hpre₁
   have heig : ∀ k, 1 ≤ k → copyMean (augmentedDimensions (V := Site Λ) q aux) k
-      (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ (X.L N) i)) *ᵥ
+      (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L N) i)) *ᵥ
         withZeroCopyUnit pre₁ k = (Tr.E0 : ℂ) • withZeroCopyUnit pre₁ k := fun k hk ↦ by
     rw [withZeroCopyUnit_of_pos pre₁ hk]
     exact heig₁ k hk
@@ -419,7 +422,7 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
   have ha : 0 < X.a W N := div_pos (by linarith) hK
   have ha2 : 0 ≤ X.a W N / 2 := by positivity
   obtain ⟨βs, rems, Cβs, -, hβ0, hrem0, hβ, hrem, hround⟩ :=
-    htransport aux h Ω S hT hgraph hdepth hanchor hΔ hΩ hn hr' hD1 hD4 hL hC hrows hclear
+    htransport aux h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ hn hr' hD1 hD4 hL hC hrows hclear
       ha haℓ
   -- the coefficients of Proposition 7.4 are absorbed into `κ.C (log N)^{κ.C_l}`
   have hℓ1 : 1 ≤ transportLogDimBound q S.r₀ := one_le_transportLogDimBound hq S.r₀
@@ -445,10 +448,10 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
       (CoherentSphere (SiteConfig (augmentedDimensions (V := Site Λ) q aux))) → Prop)
       (r : Fin (X.rounds N))
       (hP : P (transportScanRound (S.actualRoundData hm hM ⟨r.val, hj r⟩)
-        (augmentedDimensions (V := Site Λ) q aux) (S.actualEnergyTerms h Ω Δ (X.L N) aux)
+        (augmentedDimensions (V := Site Λ) q aux) (S.actualEnergyTerms h Ω J Δ (X.L N) aux)
         S.IsGoodOldHistory (X.a W N / 2) pre)) :
       P (S.actualScanRound hm hM (augmentedDimensions (V := Site Λ) q aux)
-        (S.actualEnergyTerms h Ω Δ (X.L N) aux) (X.a W N) pre r.val) :=
+        (S.actualEnergyTerms h Ω J Δ (X.L N) aux) (X.a W N) pre r.val) :=
     S.actualScanRound_of_transportScanRound hm hM _ _ _ pre P r.val (hj r) hP
   refine ⟨ScanTransportInputs.mk rems hrem0 hrem βs Cβs hβ0 hβ
     ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_ ?_⟩
@@ -523,7 +526,7 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
     obtain ⟨-, -, henergy⟩ := (hround ⟨r.val, hj r⟩ k (pre k) (hsym k) (hpre k)).1 p hp
     obtain ⟨E₀, hE₀, heigE₀⟩ : ∃ E₀ : ℝ, E₀ ≤ Tr.E0 ∧
         copyMean (augmentedDimensions (V := Site Λ) q aux) k
-            (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ (X.L N) i)) *ᵥ pre k =
+            (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L N) i)) *ᵥ pre k =
           (E₀ : ℂ) • pre k := by
       rcases Nat.eq_zero_or_pos k with hk | hk
       · subst hk
@@ -533,18 +536,18 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
     rw [transportScanRound_energySum _ _ _ _ _ pre (hadm _) ha2 k (hcomm _ k)
       (Ioo_subset_Icc_self hp)]
     have hmean : (transportScanRound (S.actualRoundData hm hM ⟨r.val, hj r⟩)
-        (augmentedDimensions (V := Site Λ) q aux) (S.actualEnergyTerms h Ω Δ (X.L N) aux)
+        (augmentedDimensions (V := Site Λ) q aux) (S.actualEnergyTerms h Ω J Δ (X.L N) aux)
         S.IsGoodOldHistory (X.a W N / 2) pre).meanEnergy k p =
         let v := Matrix.Transport.filteredVector
           ((S.actualRoundData hm hM ⟨r.val, hj r⟩).rootPath
             (augmentedDimensions (V := Site Λ) q aux) (X.a W N / 2) k p) (pre k)
         (star v ⬝ᵥ (copyMean (augmentedDimensions (V := Site Λ) q aux) k
-          (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ (X.L N) i)) *ᵥ v)).re := by
+          (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L N) i)) *ᵥ v)).re := by
       dsimp only [transportScanRound]
       rw [S.replicaEnergy_actualEnergyTerms h Ω Δ (X.L N) aux k]
     rw [hmean]
     have herr := S.actualRoundData_energyError_nonneg hm hM
-      (augmentedDimensions (V := Site Λ) q aux) (S.actualEnergyTerms h Ω Δ (X.L N) aux) ha.le
+      (augmentedDimensions (V := Site Λ) q aux) (S.actualEnergyTerms h Ω J Δ (X.L N) aux) ha.le
       ⟨r.val, hj r⟩ k (pre k) p
     have hc := mul_nonneg (sq_nonneg (X.a W N)) herr
     have habs := mul_le_mul_of_nonneg_left hen hc
@@ -557,9 +560,9 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
       rw [hSn, hSm]
       exact this
     change (S.actualScanRound hm hM (augmentedDimensions (V := Site Λ) q aux)
-        (S.actualEnergyTerms h Ω Δ (X.L N) aux) (X.a W N) pre (r.val + 1)).logNormSq k 0 =
+        (S.actualEnergyTerms h Ω J Δ (X.L N) aux) (X.a W N) pre (r.val + 1)).logNormSq k 0 =
       (S.actualScanRound hm hM (augmentedDimensions (V := Site Λ) q aux)
-        (S.actualEnergyTerms h Ω Δ (X.L N) aux) (X.a W N) pre r.val).logNormSq k 1
+        (S.actualEnergyTerms h Ω J Δ (X.L N) aux) (X.a W N) pre r.val).logNormSq k 1
     rw [S.actualScanRound_eq_transportScanRound hm hM _ _ _ pre (r.val + 1) hj',
       S.actualScanRound_eq_transportScanRound hm hM _ _ _ pre r.val (hj r)]
     exact congrArg (fun M ↦ Real.log (Matrix.Transport.filteredNormSq M (pre k)))

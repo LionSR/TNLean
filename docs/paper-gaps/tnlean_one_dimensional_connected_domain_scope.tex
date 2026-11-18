@@ -37,7 +37,7 @@ $\{0,\ldots,L-1\}$, supports of range $R$ the nonempty sets of sites of
 diameter at most $R$, and the Hamiltonian, gapped ground vector, regional
 entropies and boundary edges as in the note.\footnote{Declarations:
     \leanid{ManyBody.IsChainSupport},
-    \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian},
+    \leanid{ManyBody.ChainInteraction},
     \leanid{TNLean.MPS.AreaLaw.boundaryEdges}.} Theorem~A is proved on this
 chain for every subset $A$, with the explicit constant
 $C_0(q,R)(1+J/\Delta)$.\footnote{Declarations:
@@ -51,7 +51,7 @@ the chain of $L$ sites in the note itself, so it carries no restriction.
 Theorem~A is now formalized for every finite $\Lambda\subset\mathbb Z$, with
 no hypothesis beyond the source's and with the constant
 $C_0(q,R)(1+J/\Delta)$ of the chain case.\footnote{Declarations:
-    \leanid{TNLean.MPS.AreaLaw.DomainHamiltonian},
+    \leanid{ManyBody.DomainInteraction},
     \leanid{TNLean.MPS.AreaLaw.domainBoundaryEdges},
     \leanid{TNLean.MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges},
     \leanid{TNLean.MPS.AreaLaw.domainAreaLaw}.} The sites of $\Lambda$ are
@@ -145,7 +145,7 @@ Nonnegativity of $b$ is derived, and only the original full-system gap is
 assumed. The Gaussian filter, supported approximation, polar unitary and
 independence after the regional replica swap are constructed within the
 proof.\footnote{Declaration:
-    \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}.}
+    \leanid{ManyBody.ChainInteraction.information_reset}.}
 
 \section{Resolution: information reset on finite domains}
 
@@ -155,7 +155,7 @@ The information-reset lemma is now proved on every finite induced integer
  and supported polar unitary for the actual doubled and regionally swapped
  domain operators. No factorization or product-marginal hypothesis is added.
  The constants $C_p,L_0$ precede the domain and all instance data.\footnote{
- Declaration: \leanid{TNLean.MPS.AreaLaw.DomainHamiltonian.information_reset}.}
+ Declaration: \leanid{ManyBody.DomainInteraction.information_reset}.}
 
 Let $C_{\mathrm{int}},v>0$ be the constants in supported Gaussian averaging,
 and let $T_0>0$ be the time constant in the physical-buffer filter for exponent
@@ -222,7 +222,7 @@ large $L$. The interval family may overlap or contain empty members.
 Neither disjointness nor a sign hypothesis on the original real $J$ is
 added. The sign needed for the interval area law follows from the norm
 bound of an actual singleton interaction.\footnote{Declaration:
-    \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
+    \leanid{ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_separation}.}
 
 \section{Resolution: logarithmic separation on finite domains}
 
@@ -231,7 +231,7 @@ The logarithmic-separation lemma is also proved on arbitrary finite induced
  order, while separation is measured in the original integer positions,
  not in compressed labels. All constants precede the domain and instance
  data; no sign condition on $J$ is added.\footnote{Declaration:
- \leanid{TNLean.MPS.AreaLaw.DomainHamiltonian.mutualInformation_le_of_logarithmic_separation}.}
+ \leanid{ManyBody.DomainInteraction.mutualInformation_le_of_logarithmic_separation}.}
 
 Let $C_{\mathrm{AL}}=C_{\mathrm{int}}(q,R,J,\Delta)$ be the interval
 entropy constant.

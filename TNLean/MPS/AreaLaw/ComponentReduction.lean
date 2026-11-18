@@ -38,8 +38,8 @@ entropy of unions of components; only the two-factor product lemma is used.
 
 ## Main definitions
 
-* `DomainHamiltonian`: admissible Hamiltonians, one term for each support of range `R` in
-  the sense of `ManyBody.IsDomainSupport`.
+* `ManyBody.DomainInteraction.toChain`: an interaction on `Λ`, one term for each support of
+  range `R` in the sense of `ManyBody.IsDomainSupport`, as an interaction on the chain.
 * `domainBoundaryEdges`, `domainRegion`: the edge boundary `∂_Λ A` and the sites in `A`.
 
 ## Main results
@@ -60,8 +60,8 @@ site-generic lemmas `TNLean.Lattice.regionEntropy_eq_zero_of_forall_subset_or_di
 -/
 
 open ManyBody (ChainSupport DomainSupport DomainSupport.toChainSupport
-    DomainSupport.toChainSupport_injective IsChainSupport IsDomainSupport exists_sitePos_eq interval
-    mem_interval sitePos sitePos_mem val_eq_add_one_of_sitePos_eq_add_one)
+  DomainSupport.toChainSupport_injective IsChainSupport IsDomainSupport exists_sitePos_eq interval
+  mem_interval sitePos sitePos_mem val_eq_add_one_of_sitePos_eq_add_one DomainInteraction)
 
 open Matrix
 open scoped ComplexOrder Kronecker symmDiff Matrix.Norms.L2Operator
@@ -152,51 +152,38 @@ section Domain
 
 variable {Λ : Finset ℤ} {q R : ℕ} {J : ℝ}
 
-/-- An admissible Hamiltonian on a finite set `Λ ⊂ ℤ` with local dimension `q`: one term per
-support of range `R`, acting as the identity off its support, Hermitian, and of operator norm
-at most `J`. Zero terms are permitted. TNLean note, `part0_preamble.tex`, `eq:ham`. -/
-structure DomainHamiltonian (Λ : Finset ℤ) (q R : ℕ) (J : ℝ) where
-  /-- The term assigned to each support of range `R`. -/
-  term : DomainSupport Λ R → Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ
-  /-- Each term acts as the identity off its support. -/
-  supported : ∀ X, Entropy.IsSupportedOn (n := fun _ : Fin Λ.card ↦ q) (term X) X.1
-  /-- Each term is Hermitian. -/
-  hermitian : ∀ X, (term X).IsHermitian
-  /-- Each term has operator norm at most `J`. -/
-  norm_le : ∀ X, ‖term X‖ ≤ J
-
-/-- The Hamiltonian `H = ∑_X h_X`. TNLean note, `part0_preamble.tex`, `eq:ham`. -/
-noncomputable def DomainHamiltonian.operator (h : DomainHamiltonian Λ q R J) :
-    Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ :=
-  ∑ X, h.term X
-
-/-- The finite sum of domain interaction terms is Hermitian.
-TNLean note, `part0_preamble.tex`, `eq:ham`. -/
-theorem DomainHamiltonian.operator_isHermitian (h : DomainHamiltonian Λ q R J) :
-    h.operator.IsHermitian :=
-  (isSelfAdjoint_sum Finset.univ (fun X _ ↦ (h.hermitian X).isSelfAdjoint)).isHermitian
-
-/-- An admissible Hamiltonian on `Λ` as a finite-range Hamiltonian on the chain of `|Λ|`
-sites, with zero terms on the chain supports that straddle a gap of `Λ`. -/
-noncomputable def DomainHamiltonian.toChain (h : DomainHamiltonian Λ q R J) (hJ : 0 ≤ J) :
-    ChainHamiltonian Λ.card q R J where
+/-- An interaction on `Λ` as a finite-range interaction on the chain of `|Λ|` sites, with zero
+terms on the chain supports that straddle a gap of `Λ`. TNLean note, `part0_preamble.tex`,
+`eq:ham`. -/
+noncomputable def _root_.ManyBody.DomainInteraction.toChain (h : ManyBody.DomainInteraction Λ q R) :
+    ManyBody.ChainInteraction Λ.card q R where
   term Y := if hY : IsDomainSupport Λ R Y.1 then h.term ⟨Y.1, hY⟩ else 0
-  supported Y := by
+  mem Y := by
     split
-    · exact h.supported _
-    · exact ⟨fun _ _ _ ↦ rfl, fun _ _ _ _ _ _ _ _ ↦ rfl⟩
-  hermitian Y := by
-    split
-    · exact h.hermitian _
-    · exact Matrix.isHermitian_zero
-  norm_le Y := by
-    split
-    · exact h.norm_le _
-    · simpa using hJ
+    · exact h.mem _
+    · exact (ManyBody.supportedOperators (fun _ : Fin Λ.card ↦ Fin q) _).zero_mem
 
-/-- The chain Hamiltonian has the same sum. -/
-theorem DomainHamiltonian.toChain_operator (h : DomainHamiltonian Λ q R J) (hJ : 0 ≤ J) :
-    (h.toChain hJ).operator = h.operator := by
+/-- The chain terms of Hermitian domain terms are Hermitian. -/
+theorem _root_.ManyBody.DomainInteraction.isHermitian_toChain_term
+    (h : ManyBody.DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
+    (Y : ManyBody.ChainSupport Λ.card R) : (h.toChain.term Y).IsHermitian := by
+  change (if hY : IsDomainSupport Λ R Y.1 then h.term ⟨Y.1, hY⟩ else 0).IsHermitian
+  split
+  · exact hh _
+  · exact Matrix.isHermitian_zero
+
+/-- The chain terms keep the bound `J ≥ 0` of the domain terms. -/
+theorem _root_.ManyBody.DomainInteraction.norm_toChain_term_le
+    (h : ManyBody.DomainInteraction Λ q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 ≤ J)
+    (Y : ManyBody.ChainSupport Λ.card R) : ‖h.toChain.term Y‖ ≤ J := by
+  change ‖if hY : IsDomainSupport Λ R Y.1 then h.term ⟨Y.1, hY⟩ else 0‖ ≤ J
+  split
+  · exact hhJ _
+  · simpa using hJ
+
+/-- The chain interaction has the same sum. -/
+theorem _root_.ManyBody.DomainInteraction.toChain_hamiltonian
+    (h : ManyBody.DomainInteraction Λ q R) : h.toChain.hamiltonian = h.hamiltonian := by
   classical
   refine (Fintype.sum_of_injective
     (DomainSupport.toChainSupport (Λ := Λ) (R := R))
@@ -269,12 +256,12 @@ variable {Λ : Finset ℤ} {q R : ℕ} {J Δ : ℝ}
 
 /-- Removing boundary cuts across gaps preserves entropy and leaves the actual domain boundary.
 Source: the one-dimensional note, part1_arealaw.tex, lines 64–93. -/
-theorem DomainHamiltonian.exists_regionEntropy_eq_card_boundaryEdges_eq
-    {Λ : Finset ℤ} {q R : ℕ} {J E₀ Δ : ℝ}
-    (h : DomainHamiltonian Λ q R J)
+theorem _root_.ManyBody.DomainInteraction.exists_regionEntropy_eq_card_boundaryEdges_eq
+    {Λ : Finset ℤ} {q R : ℕ} {E₀ Δ : ℝ}
+    (h : DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
     {Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)}
-    (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+    (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A : Finset ℤ) :
     ∃ A' : Finset (Fin Λ.card),
       Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) A' Ω =
@@ -288,7 +275,7 @@ theorem DomainHamiltonian.exists_regionEntropy_eq_card_boundaryEdges_eq
     obtain ⟨hpb, hpe⟩ := Finset.mem_filter.mp hp
     have hp1 := (mem_boundaryEdges.mp hpb).1
     refine ⟨hp1, regionEntropy_eq_zero_of_forall_subset_or_disjoint (h := h.term)
-      (D := fun X ↦ X.1) h.supported h.hermitian hΔ hΩ hgap hspan _ fun X ↦ ?_⟩
+      (D := fun X ↦ X.1) h.mem hh hΔ hΩ hgap hspan _ fun X ↦ ?_⟩
     exact X.2.subset_or_disjoint_of_gap hp1 fun he ↦ hpe ⟨hp1, he⟩
   obtain ⟨A', hS, hB⟩ :=
     exists_regionEntropy_eq_boundaryEdges_eq_symmDiff hΩ G hG (domainRegion Λ A)
@@ -312,14 +299,16 @@ on the chain, and the chain bound `regionEntropy_le_mul_card_boundaryEdges` appl
 TNLean note, `part0_preamble.tex`, Theorem A (`thm:A`), and `part1_arealaw.tex`, Section 2
 (`sec:setting`), first reduction. -/
 theorem regionEntropy_le_mul_card_domainBoundaryEdges (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (h : DomainHamiltonian Λ q R J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset ℤ) :
+    (h : DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)}
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset ℤ) :
     Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ≤
       chainIntervalEntropyBound q R J Δ * (domainBoundaryEdges Λ A).card := by
-  obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hΔ hΩ hgap hspan A
-  rw [← h.toChain_operator hJ] at hgap hspan
-  have hchain := regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ (h.toChain hJ) hΩ hgap hspan A'
+  obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hh hΔ hΩ hgap hspan A
+  rw [← h.toChain_hamiltonian] at hgap hspan
+  have hchain := regionEntropy_le_mul_card_boundaryEdges hq hJ hΔ (h.toChain)
+      (h.isHermitian_toChain_term hh) (h.norm_toChain_term_le hhJ hJ) hΩ hgap hspan A'
   simpa only [hS, hB] using hchain
 
 /-- **The one-dimensional area law** (Theorem A). For every local dimension `q ≥ 1`, range
@@ -329,17 +318,18 @@ vector `Ω` and every `A ⊆ ℤ`, the sites of `Λ` in `A` satisfy `S_Ω(A) ≤
 TNLean note, `part0_preamble.tex`, Theorem A (`thm:A`). -/
 theorem domainAreaLaw (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ C : ℝ, 0 ≤ C ∧ C = chainAreaLawConst q R * (1 + J / Δ) ∧
-      ∀ Λ : Finset ℤ, ∀ h : DomainHamiltonian Λ q R J, ∀ E₀ : ℝ,
+      ∀ Λ : Finset ℤ, ∀ h : DomainInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
+          (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
         ∀ Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q),
-          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset ℤ,
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset ℤ,
             Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ≤
               C * (domainBoundaryEdges Λ A).card := by
   have hle := chainIntervalEntropyBound_le (q := q) (R := R) hq hJ hΔ
   have h0 := chainIntervalEntropyBound_nonneg (q := q) (R := R) hq hJ hΔ
   refine ⟨chainAreaLawConst q R * (1 + J / Δ), h0.trans hle, rfl, ?_⟩
-  intro Λ h E₀ Ω hΩ hgap hspan A
-  refine (regionEntropy_le_mul_card_domainBoundaryEdges hq hJ hΔ h hΩ hgap hspan A).trans ?_
+  intro Λ h hh hhJ E₀ Ω hΩ hgap hspan A
+  refine (regionEntropy_le_mul_card_domainBoundaryEdges hq hJ hΔ h hh hhJ hΩ hgap hspan A).trans ?_
   exact mul_le_mul_of_nonneg_right hle (Nat.cast_nonneg _)
 
 end TheoremA

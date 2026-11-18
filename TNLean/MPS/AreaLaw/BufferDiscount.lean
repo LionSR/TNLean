@@ -63,7 +63,7 @@ constants and propagate to `C_int` and `C₀` in `TNLean.MPS.AreaLaw.AreaLaw`. D
   logarithmic energy estimate.
 -/
 
-open ManyBody (ChainSupport card_interval_le interval interval_mono mem_interval)
+open ManyBody (ChainSupport card_interval_le interval interval_mono mem_interval ChainInteraction)
 
 open Matrix
 open scoped Matrix.Norms.L2Operator
@@ -434,16 +434,17 @@ Hamiltonian on the chain and an interval `X = [l, r)` with buffer `T = X^{+mR} \
 The shells are `X_j = X^{+(j+1)R}`, `0 ≤ j < m`, with the uniform weights `2/m`.
 TNLean note, Lemma 4.2. -/
 theorem two_mul_condEntropy_interval_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (h : ChainHamiltonian L q R J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (l r : ℕ) :
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (l r : ℕ) :
     2 * (Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
           (interval L l r ∪ chainBuffer L q R J Δ l r) Ω -
         Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (chainBuffer L q R J Δ l r) Ω) ≤
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +
         chainDiscountConst q R J Δ :=
-  two_mul_condEntropy_interval_le_of_family_budget hq hJ hΔ h.term id h.supported h.hermitian
-    h.norm_le (chainCrossConst R) (one_le_chainBudgetConst q R)
+  two_mul_condEntropy_interval_le_of_family_budget hq hJ hΔ h.term id h.mem hh
+    hhJ (chainCrossConst R) (one_le_chainBudgetConst q R)
     (card_crossingTerms_interval_le (L := L) (R := R)) (cutLogBudget_interval_le hq)
     (chainShellCount q R J Δ) (four_le_chainShellCount q R J Δ)
     (chainEnergyThreshold_le_chainShellCount q R J Δ)
@@ -593,9 +594,10 @@ Source: one-dimensional note, part1_arealaw.tex, eq:CE and eq:discount,
 lines 366–409 and 517–645. -/
 theorem two_mul_condEntropy_interval_le_polynomial
     (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (h : ChainHamiltonian L q R J) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (l r : ℕ) :
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (l r : ℕ) :
     let C_E : ℝ := 8 * chainCrossConst R * (q : ℝ) ^ (2 * (R + 1)) * J
     let m : ℕ :=
       ⌈max (max (max 4 (4 * C_E / Δ))
@@ -680,7 +682,7 @@ theorem two_mul_condEntropy_interval_le_polynomial
     dsimp only [m]
     exact (le_max_right _ _).trans (Nat.le_ceil _)
   exact two_mul_condEntropy_interval_le_of_energy_estimate
-    q R K' C_E hK' hCE0 hJ hΔ h.term S h.supported h.hermitian h.norm_le
+    q R K' C_E hK' hCE0 hJ hΔ h.term S h.mem hh hhJ
     (fun X ↦ X.property.2) m l r hm4 hmE hmT hmF hB hE hΩ hgap hspan
 
 end TNLean.MPS.AreaLaw

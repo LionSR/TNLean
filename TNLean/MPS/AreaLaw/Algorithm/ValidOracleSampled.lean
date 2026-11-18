@@ -88,17 +88,17 @@ applied to the selection of the oracle's nets and solver. -/
 theorem eval_sampledSweepStepProgram_of_valid (hv : IsValidOracle o) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
+        (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
-    FreeM.eval o (sampledSweepStepProgram hq h hs h0 h1 E₀ Δ I b D hi S) =
+    FreeM.eval o (sampledSweepStepProgram hq h hs E₀ Δ I b D hi S) =
       haveI : NeZero q := ⟨by omega⟩
       successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
         (o (LinearAlgebraQuery.sampledFactors L (i + 1) h E₀ ℓ m D I)) id
-        ((ChainHamiltonian.ofBonds h hs h0 h1).sizeTrimmingSelectionWith hq Δ
+        ((ManyBody.ChainInteraction.ofBonds h hs).sizeTrimmingSelectionWith hq Δ
           (AreaLaw.extend (i + 1) S) (oracleNets o L (i + 1) ((Δ / 169) ^ 2 / (2 * L)))
           (oracleSolver o L (i + 1) b (AreaLaw.extend (i + 1) S)
-            (leftCutOperator (i + 1) ((ChainHamiltonian.ofBonds h hs h0 h1).cutLeftPart (i + 1)))
+            (leftCutOperator (i + 1) ((ManyBody.ChainInteraction.ofBonds h hs).cutLeftPart (i + 1)))
             ((Δ / 169) ^ 2 / (2 * L)))) := by
   simp only [sampledSweepStepProgram, FreeM.eval_bind, FreeM.eval_lift,
     eval_extensionProgram_of_valid hv, eval_sizeTrimmingProgram_of_valid hv,
@@ -119,15 +119,15 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
     IsViableMPS Γ (ℓ * q ^ (2 * κ) *
         (lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ))
       (q ^ (2 * κ) * max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L))) δ
-      (FreeM.eval o (sampledSweepStepProgram hq h hs h0 h1 E₀ Δ I b (q ^ (2 * κ)) hi S)) := by
+      (FreeM.eval o (sampledSweepStepProgram hq h hs E₀ Δ I b (q ^ (2 * κ)) hi S)) := by
   classical
   let : NeZero q := ⟨by omega⟩
-  rw [eval_sampledSweepStepProgram_of_valid hv hq h hs h0 h1 E₀ Δ I b (q ^ (2 * κ)) hi S]
-  let chain := ChainHamiltonian.ofBonds h hs h0 h1
-  have hgapC : IsGapped chain.operator E₀ Δ := by
-    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hgap
-  have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
-    simpa only [chain, ChainHamiltonian.ofBonds_operator] using hspan
+  rw [eval_sampledSweepStepProgram_of_valid hv hq h hs E₀ Δ I b (q ^ (2 * κ)) hi S]
+  let chain := ManyBody.ChainInteraction.ofBonds h hs
+  have hgapC : IsGapped chain.hamiltonian E₀ Δ := by
+    simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hgap
+  have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
+    simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hspan
   have hext : IsViable Γ ((Δ / 169) ^ 2 / L)
       (AreaLaw.extend (i + 1) S : Set (LeftBlockVector L q (i + 1))) :=
     (hS.extend (by omega) hi).mono hδc
@@ -145,7 +145,9 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
         (card_oracleNets_le hv hL hq hΔ)),
       fun v hv' ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m' T₀ hv',
       chain.isViable_bondTrimSet_sizeTrimmingSelectionWith
-        (ChainHamiltonian.posSemidef_ofBonds_term h hs h0 h1) hL hq hi hΔ
+          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
+          (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1)
+        (ManyBody.ChainInteraction.posSemidef_ofBonds_term h hs h0) hL hq hi hΔ
         (AreaLaw.extend (i + 1) S) hnet hsol E₀ Γ hΩ hgapC hspanC hext⟩
   have hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
       (leftBlock L k) (bondComplementWord h (I t))) ≤ q ^ (2 * κ) := fun t k ↦
@@ -257,11 +259,13 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
         rw [← e.inner_map_map, e.apply_symm_apply]
       rw [← norm_inner_symm, this]
       exact hover
-    let chain := ChainHamiltonian.ofBonds h hs h0 h1
-    have hchain : chain.operator = ∑ j, h j := ChainHamiltonian.ofBonds_operator h hs h0 h1
-    have hspanC : groundSpace chain.operator E₀ = Submodule.span ℂ {Γ} := by
+    let chain := ManyBody.ChainInteraction.ofBonds h hs
+    have hchain : chain.hamiltonian = ∑ j, h j := ManyBody.ChainInteraction.ofBonds_hamiltonian h hs
+    have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
-    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one hΩ hspanC hw'norm hover'
+    have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
+        (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
+        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hΩ hspanC hw'norm hover'
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E₀ ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E₀).trans henergy

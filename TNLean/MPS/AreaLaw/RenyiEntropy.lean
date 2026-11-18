@@ -23,7 +23,7 @@ Source: the one-dimensional note, `part1_arealaw.tex`, Remark `rem:renyi`, lines
 with the moment estimate `eq:mgf` and parameter `eq:theta`, lines 152–166.
 -/
 
-open ManyBody (interval)
+open ManyBody (interval ChainInteraction)
 
 noncomputable section
 
@@ -48,23 +48,25 @@ open scoped ComplexOrder Matrix.Norms.L2Operator
 
 /-- The physical log-moment bound applied to the regional state.
 Source: the one-dimensional note, `part1_arealaw.tex`, `eq:mgf`, lines 157–166. -/
-private theorem ChainHamiltonian.log_surprisalMoment_region_le
-    {L q R : ℕ} {J Δ : ℝ} (h : ChainHamiltonian L q R J)
+private theorem _root_.ManyBody.ChainInteraction.log_surprisalMoment_region_le
+    {L q R : ℕ} {J Δ : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) {E₀ : ℝ}
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (X : Finset (Fin L)) {u : ℝ}
     (hu : |u| ≤ Entropy.tailRadius (J / Δ) (cutLogBudget L q R X)) :
     Real.log (Entropy.surprisalMoment
       (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) X Ω).eigenvalues u) ≤
     u * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω +
       512 * Real.exp 1 * (J / Δ) * cutLogBudget L q R X * u ^ 2 := by
-  have heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω :=
+  have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
     ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
-  have hgap := hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan
+  have hgap := hgap.posSemidef_sub_smul_one
+      (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan
   exact Entropy.log_surprisalMoment_cut_le (n := fun _ : Fin L ↦ q) (B := X)
-    h.supported h.hermitian hJ h.norm_le hΩ hΔ heig hgap rfl
+    h.mem hh hJ hhJ hΩ hΔ heig hgap rfl
     (Entropy.regionState_isHermitian X Ω) hu
 
 /-- Increasing the cut budget decreases the admissible moment radius.
@@ -86,13 +88,13 @@ No invertibility or rank assumption is imposed.
 Source: the one-dimensional note, `part1_arealaw.tex`, `rem:renyi`,
 lines 280–286, with `eq:theta` and `eq:mgf`, lines 152–166.
 The source explicitly restricts to the contiguous chain at lines 91–93. -/
-theorem ChainHamiltonian.near_one_renyi_entropy_interval_bounds
+theorem _root_.ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds
     {L q R : ℕ} {J Δ : ℝ}
-    (h : ChainHamiltonian L q R J)
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω})
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (l r : ℕ) :
     let X := interval L l r
     let p := (Entropy.regionState_isHermitian
@@ -146,7 +148,7 @@ theorem ChainHamiltonian.near_one_renyi_entropy_interval_bounds
           mul_comm] using
           mul_entropy_le_log_surprisalMoment hp hpSum u)
     have hcut := cutLogBudget_interval_le (L := L) (R := R) hq l r
-    have hmoment := h.log_surprisalMoment_region_le hJ hΔ hΩ hgap hspan (interval L l r)
+    have hmoment := h.log_surprisalMoment_region_le hh hhJ hJ hΔ hΩ hgap hspan (interval L l r)
       ((abs_of_pos hu0).le.trans (hu.trans
         (tailRadius_anti_budget hθ (one_le_cutLogBudget L q R (interval L l r)) hcut)))
     have hlog : Real.log (Entropy.surprisalMoment p u) ≤ u * S +

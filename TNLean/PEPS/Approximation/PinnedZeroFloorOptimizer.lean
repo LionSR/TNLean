@@ -169,7 +169,7 @@ private theorem fromCanonical_physical_estimates
         (Entropy.chainList (canonicalRegions X) K fun _ ↦ True)) (AreaLaw.rectangleAreaLawState Ω)
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
-        |(⟪φ, toEuclideanLin (h.toAreaLawHamiltonian hhJ).operator φ⟫_ℂ).re - E₀| ≤ B ∧
+        |(⟪φ, toEuclideanLin h.toAreaLawHamiltonian.hamiltonian φ⟫_ℂ).re - E₀| ≤ B ∧
         Δ * (1 - ‖⟪AreaLaw.rectangleAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤ B) :
     IsMaximizer Ω a (fromCanonical K hK) ∧
       0 < ‖output (fromCanonical K hK) Ω‖ ∧
@@ -181,7 +181,7 @@ private theorem fromCanonical_physical_estimates
   have hnorm := squareAreaLawState_normalizedOutput (fromCanonical K hK) Ω
   rw [canonicalMatrices_fromCanonical] at hout hnorm
   dsimp only at hnorm hresult
-  rw [← hnorm, ← hout, h.toAreaLawHamiltonian_operator hhJ hh,
+  rw [← hnorm, ← hout, h.toAreaLawHamiltonian_hamiltonian hh,
     ← squareAreaLawState_operator] at hresult
   simp only [AreaLaw.norm_rectangleAreaLawState, squareAreaLawState_inner] at hresult
   refine ⟨?_, hresult⟩
