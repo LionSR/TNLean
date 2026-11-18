@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.BoundaryTheoremFromTwoFamilies
 import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyAssembly
 import TNLean.PEPS.AreaLaw.RectangularSpecialization
 import TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The two-dimensional area law with an explicit constant
@@ -46,6 +47,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -105,7 +108,8 @@ theorem uniformAreaLaw_explicit_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (h
     (hB : Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een ≤ B) :
     0 ≤ uniformAreaLawConstantAt q R J Δ B c₀ Cent eent Cen een ∧
       ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-        IsGappedGroundState Λ q H.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
+        ‖Ω‖ = 1 → IsGapped H.operator E₀ Δ →
+        groundSpace H.operator E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
           regionalEntropy Λ q Ω A ≤
             uniformAreaLawConstantAt q R J Δ B c₀ Cent eent Cen een *
               (edgeBoundary Λ A).card := by
@@ -144,7 +148,8 @@ theorem uniformAreaLaw_explicit (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 
     (htr : Scan.CollarScan.FiniteFamilyTransportBound c₀ Cent eent Cen een) :
     0 ≤ uniformAreaLawConstantExplicit q R J Δ c₀ Cent eent Cen een ∧
       ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-        IsGappedGroundState Λ q H.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
+        ‖Ω‖ = 1 → IsGapped H.operator E₀ Δ →
+        groundSpace H.operator E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
           regionalEntropy Λ q Ω A ≤
             uniformAreaLawConstantExplicit q R J Δ c₀ Cent eent Cen een *
               (edgeBoundary Λ A).card :=
@@ -174,7 +179,8 @@ Section `sec:top`. -/
 theorem uniformAreaLaw_closed (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     0 ≤ uniformAreaLawConstantClosed q R J Δ ∧
       ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-        IsGappedGroundState Λ q H.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
+        ‖Ω‖ = 1 → IsGapped H.operator E₀ Δ →
+        groundSpace H.operator E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
           regionalEntropy Λ q Ω A ≤
             uniformAreaLawConstantClosed q R J Δ * (edgeBoundary Λ A).card :=
   uniformAreaLaw_explicit q R hq hJ hΔ TensorPower.ReplicaTransport.transportThreshold_pos
@@ -221,7 +227,8 @@ theorem uniformAreaLaw_closed_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ 
     (hΔ : 0 < Δ) {B : ℝ} (hB : physicalBoxConstantClosed q R J Δ ≤ B) :
     0 ≤ uniformAreaLawConstantClosedAt q R J Δ B ∧
       ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-        IsGappedGroundState Λ q H.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
+        ‖Ω‖ = 1 → IsGapped H.operator E₀ Δ →
+        groundSpace H.operator E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
           regionalEntropy Λ q Ω A ≤
             uniformAreaLawConstantClosedAt q R J Δ B * (edgeBoundary Λ A).card :=
   uniformAreaLaw_explicit_of_le q R hq hJ hΔ TensorPower.ReplicaTransport.transportThreshold_pos

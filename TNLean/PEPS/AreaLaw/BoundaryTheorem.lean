@@ -8,6 +8,7 @@ import TNLean.PEPS.AreaLaw.ZeroBoundary
 import TNLean.PEPS.AreaLaw.Scan.AmbientDepth
 import TNLean.PEPS.AreaLaw.Geometry.CellCounting
 import TNLean.PEPS.AreaLaw.Amplification.RadiusScales
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The area law from the collar, amplification and two-family propositions
@@ -55,6 +56,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open scoped BigOperators
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- **Proposition 9.6** (`prop:collar`, `08-scanner.tex` lines 808–827), for the
@@ -67,7 +70,8 @@ and threshold are chosen before `T, s₀, n, Λ` and `A`. -/
 def SublinearCollarBound (q R : ℕ) (J Δ D₀ Ctpl : ℝ) : Prop :=
   ∃ C : ℝ, ∃ N : ℕ, ∀ n s₀ : ℕ, N ≤ n →
     ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-      ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
           T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
           ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
@@ -104,7 +108,8 @@ def AmplificationBound (q R : ℕ) (J Δ : ℝ) : Prop :=
   ∀ C₀ : ℝ, 0 < C₀ → ∀ M : ℕ, 1 ≤ M →
     ∃ C : ℝ, ∃ N : ℕ, ∀ n : ℕ, 2 ≤ n → N ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
             ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
@@ -145,7 +150,8 @@ and `|S₀| ≤ C n²`. -/
 def SublinearCollarBoundAt (q R : ℕ) (J Δ D₀ Ctpl C : ℝ) (N : ℕ) : Prop :=
   ∀ n s₀ : ℕ, N ≤ n →
     ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-      ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
           T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
           ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
@@ -182,7 +188,8 @@ hypotheses with constant `C₀`, there is a radius `r ≤ C n^((1-ε)/α)` such 
 def AmplificationBoundAt (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) (C : ℝ) (N : ℕ) : Prop :=
   ∀ n : ℕ, 2 ≤ n → N ≤ n →
     ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-      ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
           ((A.filter fun x ↦ x.val ∈ ambientDilation T
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
@@ -313,7 +320,8 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
     {q R : ℕ} (hq : 1 ≤ q) {J Δ D₀ Ctpl C₁ C₂ C₃ : ℝ} {N₁ N₂ : ℕ} (hΔ : 0 < Δ)
     (hcol : ∀ n s₀ : ℕ, N₁ ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
@@ -334,7 +342,8 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
               C₁ * (n : ℝ) ^ 2)
     (hamp : ∀ n : ℕ, 2 ≤ n → N₂ ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
             ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
@@ -380,7 +389,8 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
             2 * (n i : ℝ) ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t x.val : ℝ)) ∧
           ∑ i, ((n i : ℝ) ^ 100)⁻¹ ≤ C₃ * (edgeBoundary Λ A).card) :
     ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-      IsGappedGroundState Λ q h.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
+      ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
         regionalEntropy Λ q Ω A ≤ uniformAreaLawConstantOf q C₂ C₃ * (edgeBoundary Λ A).card := by
   classical
   set cD := max C₃ 0 with hcD
@@ -391,9 +401,9 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
   have hN₃ : Exponents.collarRadiusThreshold C₂ 1 ≤ uniformAreaLawScale N₁ N₂ C₂ :=
     (le_max_right _ _).trans (le_max_right _ _)
   have h2 := two_le_uniformAreaLawScale N₁ N₂ C₂
-  intro Λ h E₀ Ω hΩ A
+  intro Λ h E₀ Ω hΩ hgap hspan A
   rcases Nat.eq_zero_or_pos (edgeBoundary Λ A).card with hb | hb
-  · rw [regionalEntropy_eq_zero_of_edgeBoundary_eq_empty h hΔ hΩ
+  · rw [regionalEntropy_eq_zero_of_edgeBoundary_eq_empty h hΔ hΩ hgap hspan
       (Finset.card_eq_zero.mp hb), hb]
     simp
   obtain ⟨P, n, s, T, hD, -, hsub, hsep, hL, hn, hcut, hord, hsum⟩ := htwo Λ A hb
@@ -407,13 +417,13 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
     have hLs := hL i
     rw [hell] at hLs
     obtain ⟨hI, hX, hS, hY, hcard⟩ :=
-      hcol (n i) (s i) (hN₁.trans hni) Λ h E₀ Ω hΩ A (T i) (hsep i) hLs
+      hcol (n i) (s i) (hN₁.trans hni) Λ h E₀ Ω hΩ hgap hspan A (T i) (hsep i) hLs
     have hC₁ : C₁ ≤ max C₁ 1 := le_max_left _ _
     have hn2 : (0 : ℝ) ≤ (n i : ℝ) ^ 2 := by positivity
     have hnε : (0 : ℝ) ≤ (n i : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
       positivity
     obtain ⟨r, hr, hinfo, hclear⟩ :=
-      hamp (n i) (h2.trans hni) (hN₂.trans hni) Λ h E₀ Ω hΩ A (T i).points
+      hamp (n i) (h2.trans hni) (hN₂.trans hni) Λ h E₀ Ω hΩ hgap hspan A (T i).points
         (hcard.trans (mul_le_mul_of_nonneg_right hC₁ hn2))
         (hX.trans (mul_le_mul_of_nonneg_right hC₁ hnpos.le))
         (hY.trans (mul_le_mul_of_nonneg_right hC₁ hnpos.le))
@@ -450,7 +460,7 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
     rw [← Finset.mul_sum, mul_assoc]
     exact mul_le_mul_of_nonneg_left
       (hsum.trans (mul_le_mul_of_nonneg_right (le_max_left _ _) hbR)) hcM0
-  exact regionalEntropy_le_boundary_of_partition_estimates Λ q hq Ω hΩ.1 A P
+  exact regionalEntropy_le_boundary_of_partition_estimates Λ q hq Ω hΩ A P
     (fun i ↦ cM * ((n i : ℝ) ^ 100)⁻¹) hpiece cD (cM * cD) hD' hE
 
 /-- **Theorem 1.1 from Propositions 9.6, 10.2 and 11.2.** If, for every choice of

@@ -49,12 +49,12 @@
 
 ### Regional lift and inclusion of sites — promoted (2026-11-03)
 
-- **Seen:** `Circuit/EntropySupport.lean`, `MPS/AreaLaw/SelectedMiddleData.lean`,
+- **Seen:** `Circuit/EntropySupport.lean` (deleted), `MPS/AreaLaw/SelectedMiddleData.lean`,
   and the native middle approximation in `MPS/AreaLaw/ALVV/SoftGeneratedMiddleApproximation.lean`.
 - **Pattern:** Compare the entries of a regional local lift with placement
   along the inclusion of the same sites, then identify the exterior matching
   condition with agreement away from the inclusion.
-- **Helper:** `QuantumCircuit.localLift_eq_embedOp` in `Circuit/EntropySupport.lean`.
+- **Helper:** `QuantumCircuit.localLift_eq_embedOp` in `Circuit/SiteEmbedding.lean`.
 - **Decision:** The existing coordinate identity is stated once and reused;
   the support characterization and selected singleton calculation retain their
   mathematical statements.
@@ -455,9 +455,9 @@ abstracted — record why, so it is not re-proposed).
   exp (v * x - c) ≤ exp (v * T - c)`.
 - **Use when:** A Lieb–Robinson factor `exp (v |t| - c)` must be bounded
   uniformly on `[-T, T]`; pass `x = |t|`.
-- **Refactored occurrences:** six terms across four files:
-  `MPS/AreaLaw/SupportedGaussianIntegral.lean` (two),
-  `MPS/AreaLaw/DomainSupportedGaussianIntegral.lean` (two),
+- **Refactored occurrences:** four terms across three files:
+  `MPS/AreaLaw/SupportedGaussianIntegral.lean` (two, in the graph statement that the
+  chain and domain statements specialize),
   `MPS/AreaLaw/Hastings/ChainLocalizedParts.lean` and
   `MPS/AreaLaw/Hastings/BoundaryLocalization.lean`.
 - **Notes:** The variants without the subtracted constant in
@@ -2662,8 +2662,8 @@ three-plaquette output measurement, and the routed reunion measurement.
   `expect_productVector_mul` and `trace_rectKronecker_mul_mul` in
   `TNLean/Circuit/SupportedOperators.lean`, and `OnsiteChannel.dual_mul` in
   `TNLean/Circuit/Channel/Conversion.lean`.
-- **Abstraction:** `QuantumCircuit.eq_of_mem_supportedOperators₂` in
-  `TNLean/Circuit/SupportedOperators.lean`: two bilinear maps
+- **Abstraction:** `ManyBody.eq_of_mem_supportedOperators₂` in QICLean
+  (formerly `QuantumCircuit.eq_of_mem_supportedOperators₂`): two bilinear maps
   `f g : M →ₗ[ℂ] M →ₗ[ℂ] P` agree on supported pairs once they agree on pairs of product
   generators (`LinearMap.eqOn_span'` applied in each argument). A call site builds the two
   maps from `LinearMap.mul`, `LinearMap.compr₂` and `LinearMap.compl₁₂`, then proves only the
@@ -4302,8 +4302,8 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Seen:** The anchored theorem
   `heisenberg_commutator_eq_zero_of_edist_eq_top`, the infinite-distance branch of
   `norm_heisenberg_commutator_le_graph_kernel_sum` in `GraphLocalization.lean`,
-  and `MPS/AreaLaw/DomainLiebRobinson.lean`,
-  `norm_heisenberg_commutator_le_domainDistance`.
+  and `MPS/AreaLaw/LiebRobinson.lean`,
+  `norm_heisenberg_commutator_le_graphDistance_inf`.
 - **Notes:** Both existing closed-region arguments and the finite-domain
   specialization use the shared theorem. The existing public statements are
   retained. No tactic or global attribute is introduced.
@@ -5538,14 +5538,14 @@ three-plaquette output measurement, and the routed reunion measurement.
   the region and its translate and count the union.
 - **Seen:** `MPS/AreaLaw/NearestNeighbourImaginaryTime.lean`
   (`card_bonds_meeting_enlarged_interval_le`, clipped linear intervals, by
-  injection) and `MPS/Preparation/FiniteRingLiebRobinson.lean`
-  (`card_bonds_meeting_le`, cyclic ring bonds, by a union cover); two
-  occurrences across two files with different ambient index sets.
+  injection). The ring occurrence (`card_bonds_meeting_le` in
+  `MPS/Preparation/FiniteRingLiebRobinson.lean`) was deleted when that estimate
+  became a corollary of the graph bound; its site budget now counts the two bonds
+  `{x, x - 1}` meeting one site. One occurrence remains.
 - **Abstraction:** A shared counting lemma in `TNLean/Algebra/`, stated for
   bonds `{i, i + 1}` meeting a finite set of sites, from which both the
   clipped-interval and ring bounds follow.
-- **Notes:** Below the rule-of-three threshold. A third occurrence would
-  justify the shared lemma.
+- **Notes:** Below the rule-of-three threshold.
 
 ### Local residuals over a bounded assignment fibre — candidate (2026-10-28)
 
@@ -5599,7 +5599,7 @@ three-plaquette output measurement, and the routed reunion measurement.
 ### Regional expectation compared with a supported approximant — candidate (2026-10-21)
 
 - **Pattern:** For a contractive regional expectation fixing a supported approximant, rewrite the projection error as the difference between the approximation error and its expectation.
-- **Defined in:** `Circuit/SiteExpectation.lean`, `QuantumCircuit.norm_sub_siteExpectation_le_two_mul_norm_sub_of_mem_supportedOperators`.
+- **Defined in:** QICLean `ManyBody/Sites/RegionExpectation.lean`, `ManyBody.norm_sub_regionExpectation_le_two_mul_norm_sub`.
 - **Use when:** An approximant is supported on the output region; the error of projecting the original operator is at most twice its distance to that approximant.
 - **Refactored occurrences:** The chain relative-generator proof and the finite-domain relative-generator proof use this same inequality. The finite-family bounds use the existing `map_sum` and `norm_sum_le` lemmas.
 - **Notes:** No state, Hermiticity or nonempty-region assumption is required.
@@ -5622,17 +5622,20 @@ three-plaquette output measurement, and the routed reunion measurement.
   no additional tactic or abstraction is proposed. Both comparisons are in
   `TNLean/Algebra/GraphDistanceTransport.lean`.
 
-### Passing from a natural localization radius to a real radius — candidate (2026-10-21)
+### Passing from a natural localization radius to a real radius — resolved (2026-11-17)
 
 - **Pattern:** Use the floor inequality to bound
   `exp (a - (⌊ℓ⌋₊ : ℝ) / 2)` by `exp (1 / 2) * exp (a - ℓ / 2)`;
   combine this factor with the coefficient of the natural-radius estimate.
 - **Seen:** The chain localization theorem in `MPS/AreaLaw/LiebRobinson.lean`
-  and the domain localization theorem in `MPS/AreaLaw/DomainLiebRobinson.lean`.
+  and the domain localization theorem formerly in
+  `MPS/AreaLaw/DomainLiebRobinson.lean`.
 - **Existing lemmas:** `Nat.lt_floor_add_one`, `Nat.floor_lt`,
   `Real.exp_le_exp` and `Real.exp_add`.
-- **Notes:** Two occurrences in two files. A third occurrence would warrant
-  extracting the scalar inequality, independently of the graph and Hamiltonian.
+- **Notes:** Both occurrences now go through the one graph localization
+  theorem `norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_two`
+  in `MPS/AreaLaw/LiebRobinson.lean`, so the rounding step occurs once. A new
+  occurrence elsewhere would warrant extracting the scalar inequality.
 
 ### Restricting an operator Schmidt decomposition at a fixed configuration — candidate (2026-10-23)
 
@@ -5915,12 +5918,12 @@ no additional helper is proposed.
 - **Pattern:** Transport membership in a supported-operator algebra through the
   site bijection, replace the resulting embedding by matrix reindexing, and
   identify the image support.
-- **Seen:** 2 occurrences: `SquareHamiltonian.toAreaLawHamiltonian` in
-  `PEPS/Approximation/SquareAreaLawHamiltonian.lean` and
-  `SquareHamiltonian.exists_nearestNeighbor_terms` in
+- **Seen:** 2 occurrences: `ManyBody.RectangleInteraction.toAreaLawHamiltonian` in
+  `PEPS/AreaLaw/RectangularHamiltonian.lean` and
+  `ManyBody.SquareInteraction.exists_nearestNeighbor_terms` in
   `PEPS/Approximation/SquareInteractionTerms.lean`.
 - **Abstraction:** The existing `embedOp_mem_supportedOperators_image` and
-  `embedOp_rectangle_eq_reindex` perform the two transports. At a third
+  `embedOp_rectangular_eq_reindex` perform the two transports. At a third
   occurrence, consider a lemma giving the reindexed Hermitian term's
   supported-operator membership directly.
 - **Notes:** The second occurrence also relabels sites and edges. The support
@@ -7722,7 +7725,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   `n * (1 + c * J * n * T) ≤ (1 + c * J) * L ^ 4 * (1 + T)` from `n ≤ L ^ 4 (1 + T)` and
   `c J n² T ≤ c J L ^ 4 (1 + T)`, combined by `add_le_add`. Then rearrange with `gcongr`
   and close with `GaussianFilter.localization_error_bound_of_parameter_constant`.
-- **Seen:** 2 occurrences, `SquareHamiltonian.reset_localized_filter` in
+- **Seen:** 2 occurrences, `ManyBody.SquareInteraction.reset_localized_filter` in
   `PEPS/Approximation/ResetUnitary.lean` (lines 167–221) and
   `LocalHamiltonian.reset_localized_filter` in `PEPS/Approximation/RangeResetUnitary.lean`
   (lines 144–201). The two blocks differ only in the constants: `L ^ 2` versus `Λ.card`, the
@@ -9609,7 +9612,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 ### Agreement outside a finite support — candidate (2026-10-17)
 
 - **Pattern:** Identify agreement outside a finite support with agreement off its subtype inclusion when comparing two local lifts.
-- **Seen:** Two proofs, in `Circuit/EntropySupport.lean`, `mem_supportedOperators_of_isSupportedOn`, and `PEPS/AreaLaw/RegionalEntropyBridge.lean`, `localLift_eq_entropyLocalLift`.
+- **Seen:** Two proofs, in `Circuit/EntropySupport.lean`, `mem_supportedOperators_of_isSupportedOn` (both since deleted), and `PEPS/AreaLaw/RegionalEntropyBridge.lean`, `localLift_eq_entropyLocalLift`.
 - **Possible abstraction:** A lemma identifying these two agreement conditions if a third use appears. The current two occurrences do not require a new public lemma.
 - **Notes:** Both comparisons reuse the existing local-lift entry formula. The Circuit result imports no PEPS or MPS module.
 
@@ -9688,19 +9691,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   the clearance and physical data. These are two occurrences across two
   files; no promotion or proof refactor is proposed.
 
-### Commutator decay from the least support distance — candidate (2026-10-21)
+### Commutator decay from the least support distance — resolved (2026-11-17)
 
 - **Pattern:** Choose anchors from nonempty interaction supports, take the
   infimum of distances from the initial support to the observed site, separate
   infinite distance from finite distance, and weaken exponential decay from
   exponent one to one half.
-- **Seen:** `norm_heisenberg_commutator_le_chainDistance` in
-  `MPS/AreaLaw/LiebRobinson.lean` and
-  `norm_heisenberg_commutator_le_domainDistance` in
-  `MPS/AreaLaw/DomainLiebRobinson.lean`.
-- **Notes:** Two occurrences. Their infinite-distance arguments differ:
-  the finite path is connected, whereas an induced domain uses exact
-  commutation across components. No further abstraction is proposed yet.
+- **Seen:** `norm_heisenberg_commutator_le_chainDistance` and
+  `norm_heisenberg_commutator_le_domainDistance`, formerly proved separately
+  in `MPS/AreaLaw/LiebRobinson.lean` and `MPS/AreaLaw/DomainLiebRobinson.lean`.
+- **Abstraction:** `norm_heisenberg_commutator_le_graphDistance_inf` in
+  `MPS/AreaLaw/LiebRobinson.lean`, for an arbitrary finite graph; infinite
+  distance uses exact commutation across components, which also covers the
+  connected path. Both estimates are now its specializations.
 
 ### Opposite-side witnesses for reset supports — candidate (2026-10-21)
 
@@ -9811,24 +9814,25 @@ spectral split → block extraction → MPV calculation → strict bounds
   `Lattice.hasSourceBoundedChange_liftOne`. The stage births call it with an
   empty prefix and the scalar idle vector; the former private copy is removed.
 
-### Gaussian approximation and polar correction for a regional reset — candidate (2026-10-22)
+### Gaussian approximation and polar correction for a regional reset — promoted (2026-11-17)
 
 - **Pattern:** Choose the Gaussian variance, time cutoff and spatial radius;
   compare the actual truncated Gaussian operator with its supported approximation;
   obtain a supported unitary from the two-sided vector estimates; apply the
   common finite-site entropy comparison to that same unitary.
-- **Seen:** `ChainHamiltonian.information_reset` in
-  `MPS/AreaLaw/InformationReset.lean` and `DomainHamiltonian.information_reset`
-  in `MPS/AreaLaw/DomainInformationReset.lean`.
+- **Seen:** `ChainHamiltonian.information_reset` and
+  `DomainHamiltonian.information_reset`, formerly in two modules.
 - **Existing reuse:** The Gaussian estimates,
   `exists_supported_unitary_of_two_sided`, and
   `mutualInformation_cores_le_of_reset_unitary` are shared already. The narrower
   scalar estimate is recorded under “Absorbing a localization coefficient with
   spare decay”.
-- **Possible abstraction:** A common finite-site theorem whose inputs are the
-  original doubled Hamiltonians, the actual supported Gaussian approximation
-  and the required geometric disjointness. Two complete applications are
-  recorded; no new theorem or tactic is introduced here.
+- **Abstraction:** `information_reset_of_supported_localization` in
+  `MPS/AreaLaw/InformationReset.lean`, a finite-site theorem whose inputs are the
+  Hamiltonian, a supported Gaussian approximation at every natural radius and the
+  separation of its support from the cores. The chain and domain resets are its
+  corollaries. The square-lattice and plane-domain resets in `PEPS/Approximation`
+  and `Lattice` are further candidate applications.
 
 ### Mutual information at logarithmic separation — candidate (2026-10-22)
 
@@ -9985,8 +9989,8 @@ there is no need for a new tactic.
   `SelectedCoefficientDecomposition.lean`, `SelectedMiddleData.lean`,
   `SelectedMiddleMPOFamily.lean` (twice), `ThreeRegionSupport.lean` and
   `TwoWindowOperatorForms.lean`; two further uses in `Hastings/Window.lean`.
-- **Abstraction:** `TNLean.MPS.AreaLaw.disjoint_interval_interval` in
-  `MPS/AreaLaw/Basic.lean`. The proof applies
+- **Abstraction:** `ManyBody.disjoint_interval_interval` in
+  `QICLean/ManyBody/Sites/Lattice/Chain.lean` (QICLean dependency). The proof applies
   `Finset.Ico_disjoint_Ico_consecutive` to the natural-number positions.
 - **Notes:** The statement needs no ordering of the endpoints and no positivity
   of the chain length. The Mathlib theorem is already imported. The former
@@ -11533,7 +11537,8 @@ removed after the dependency audit exposed it.
 - **Pattern:** Produce regional ground cutoffs by real functional calculus, factor
   their product trace on disjoint supports, and extract a nonzero common ground column.
 - **Reuse:** Promoted the existing Hastings functional-calculus support theorem to
-  `QuantumCircuit.cfc_mem_supportedOperators`; the Hastings consumer now uses that owner.
+  `QuantumCircuit.cfc_mem_supportedOperators`, now QICLean's
+  `ManyBody.cfc_mem_supportedOperators`; the Hastings consumer uses that owner.
   `exists_normalized_common_ground_of_disjoint` performs normalization once for the
   actual ground-energy bound consumer. The annihilator equations use three distinct
   reassociations within one file; no custom tactic is warranted.

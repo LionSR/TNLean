@@ -23,6 +23,8 @@ localization estimate linear in the domain size.
 Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 355–363.
 -/
 
+open ManyBody (DomainSupport DomainSupport.toChainSupport)
+
 open Matrix QuantumCircuit
 open scoped Kronecker Matrix.Norms.L2Operator
 
@@ -75,9 +77,8 @@ noncomputable def DomainHamiltonian.swappedDoubled
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
     F * h.doubled.term X * Fᴴ
   supported X := by
-    exact isSupportedOn_of_mem_supportedOperators
-      (TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
-        D X.1 (mem_supportedOperators_of_isSupportedOn (h.supported X)))
+    exact (TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
+        D X.1 ((h.supported X)))
   hermitian X := Matrix.isHermitian_mul_mul_conjTranspose _ (h.doubled.hermitian X)
   norm_le X := by
     simpa only [ChainHamiltonian.swappedDoubled, ChainHamiltonian.doubled,
@@ -138,10 +139,9 @@ theorem DomainHamiltonian.partialSwap_difference_eq_sum_crossing
       Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ :=
     LinearMap.mulLeftRight ℂ (F, Fᴴ) - LinearMap.id
   have hcancel (X : DomainSupport Λ R) (hX : X ∉ C) : δ (h.doubled.term X) = 0 := by
-    have hside : (X.1 : Set (Fin Λ.card)) ⊆ (D : Set (Fin Λ.card)) ∨
-        Disjoint (X.1 : Set (Fin Λ.card)) (D : Set (Fin Λ.card)) := by
+    have hside : X.1 ⊆ D ∨ Disjoint X.1 D := by
       simp only [C, Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
-      simp only [Finset.coe_subset, Finset.disjoint_coe, Finset.disjoint_left]
+      simp only [Finset.disjoint_left]
       grind
     change F * Matrix.reindex e e (doubledHamiltonian (h.term X)) * Fᴴ -
       Matrix.reindex e e (doubledHamiltonian (h.term X)) = 0
@@ -150,7 +150,7 @@ theorem DomainHamiltonian.partialSwap_difference_eq_sum_crossing
       Matrix.submatrix_mul_equiv] using
       congrArg (Matrix.reindex e e)
         (TNLean.Lattice.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
-          (mem_supportedOperators_of_isSupportedOn (h.supported X)) hside)
+          ((h.supported X)) hside)
   refine ⟨?_, card_domain_crossingTerms_mul_two_le Λ R D⟩
   rw [h.swappedDoubled_operator D]
   change δ h.doubled.operator = ∑ X ∈ C, ∑ b : Bool, δ (T X b)

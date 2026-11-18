@@ -16,6 +16,8 @@ finite-graph calculation underlies SCP10, arXiv:1001.3807, Theorem 6.16,
 lines 2271–2305. Native geometry and all original-spin operations remain
 separate consumers. No state, Gram or supplied gauge equality is assumed.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 namespace TNLean.PEPS
 variable {V : Type*} [LinearOrder V]
@@ -33,7 +35,7 @@ theorem regularActualTwoChord_forwardTransport (u : Edge Γ → G)
     (h₃₄ : T.Adj v₃ v₄) (h₄₅ : T.Adj v₄ v₅)
     (h₀₅ : Γ.Adj v₀.1 v₅.1) (h₁₄ : Γ.Adj v₁.1 v₄.1)
     (e₀ e₁ : RegionCycleEdge (Γ := Γ) R T) (hne : e₀ ≠ e₁)
-    (he₀ : Edge.ofAdj h₀₅ = e₀.1.1) (he₁ : Edge.ofAdj h₁₄ = e₁.1.1)
+    (he₀ : ManyBody.Edge.ofAdj h₀₅ = e₀.1.1) (he₁ : ManyBody.Edge.ofAdj h₁₄ = e₁.1.1)
     (horder : v₁.1 < v₄.1 ↔ v₀.1 < v₅.1)
     (hv : regularWalkHolonomy u
       (.cons (SimpleGraph.induce_adj.mp (hT h₁₂))
@@ -50,7 +52,7 @@ theorem regularActualTwoChord_forwardTransport (u : Edge Γ → G)
   let ω := regularRegionTreeCycleResidual R T hT htree o u
   have H := regularRegionGaugeResidual_eq_one_iff_directedTransport R T hT htree o u
     h₁₄ v₁.2 v₄.2
-  have he : (⟨Edge.ofAdj h₁₄, by rw [he₁]; exact e₁.1.2⟩ :
+  have he : (⟨ManyBody.Edge.ofAdj h₁₄, by rw [he₁]; exact e₁.1.2⟩ :
       {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}) = e₁.1 := Subtype.ext he₁
   rw [he] at H
   have hres : ω e₁ = 1 := H.mpr
@@ -90,7 +92,7 @@ theorem regularActualTwoChord_reverseTransport (u : Edge Γ → G)
     (h₃₄ : T.Adj v₃ v₄) (h₄₅ : T.Adj v₄ v₅)
     (h₀₅ : Γ.Adj v₀.1 v₅.1) (h₁₄ : Γ.Adj v₁.1 v₄.1)
     (e₀ e₁ : RegionCycleEdge (Γ := Γ) R T) (hne : e₀ ≠ e₁)
-    (he₀ : Edge.ofAdj h₀₅ = e₀.1.1) (he₁ : Edge.ofAdj h₁₄ = e₁.1.1)
+    (he₀ : ManyBody.Edge.ofAdj h₀₅ = e₀.1.1) (he₁ : ManyBody.Edge.ofAdj h₁₄ = e₁.1.1)
     (horder : v₁.1 < v₄.1 ↔ v₀.1 < v₅.1)
     (hv : regularWalkHolonomy u
       (.cons (SimpleGraph.induce_adj.mp (hT h₀₁))

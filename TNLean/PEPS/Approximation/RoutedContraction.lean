@@ -51,6 +51,8 @@ Party networks and their coefficients are defined in `TNLean.Lattice.Compression
   `lem:routing` and equation `eq:final-bond`, `07-assembly.tex:164–177`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators
 
@@ -167,9 +169,9 @@ theorem consistent_route_eq (x : R.ConsistentConfig) (ℓ : Λ) (i : Fin (R.len 
   | zero => rfl
   | succ i ih =>
     have hadj := R.route_adj ℓ i
-    let e : Edge G := Edge.ofAdj hadj
+    let e : Edge G := ManyBody.Edge.ofAdj hadj
     have hcr : IsCrossing (R.route ℓ i.castSucc) (R.route ℓ i.succ) e := by
-      rcases Edge.ofAdj_endpoints hadj with ⟨h1, h2⟩ | ⟨h1, h2⟩
+      rcases ManyBody.Edge.ofAdj_endpoints hadj with ⟨h1, h2⟩ | ⟨h1, h2⟩
       · exact Or.inl ⟨h1.symm, h2.symm⟩
       · exact Or.inr ⟨h2.symm, h1.symm⟩
     let t : R.Traversal e := ⟨⟨ℓ, i⟩, hcr⟩

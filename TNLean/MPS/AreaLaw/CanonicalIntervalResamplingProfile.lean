@@ -21,6 +21,8 @@ operation is the corrected parent with its terminal full image and trim;
 see https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- Every actual retained interval space has the same dimension and

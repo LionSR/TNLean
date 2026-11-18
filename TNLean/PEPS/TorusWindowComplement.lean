@@ -40,6 +40,8 @@ the tensor and the form the seam-wrapping complement bands consume.
   `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 

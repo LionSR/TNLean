@@ -55,16 +55,16 @@ variable {ι : Type*} (l : List ι) (key : ι → Fin N)
   (G : ι → Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ)
   (hl : l.Pairwise fun i j => Disjoint (ringBond (key i)) (ringBond (key j)))
   (hu : ∀ i ∈ l, G i ∈ unitary (Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ))
-  (hs : ∀ i ∈ l, G i ∈ supportedOperators d (ringBond (key i)))
+  (hs : ∀ i ∈ l, G i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ringBond (key i)))
 
-private theorem key_mem_bond (k : Fin N) : k ∈ ringBond k := Or.inl rfl
+private theorem key_mem_bond (k : Fin N) : k ∈ ringBond k := Finset.mem_insert_self _ _
 
 include hl in
 private theorem eq_of_key_eq {i j : ι} (hi : i ∈ l) (hj : j ∈ l) (h : key i = key j) : i = j := by
   by_contra hne
   have : Std.Symm fun i j : ι => Disjoint (ringBond (key i)) (ringBond (key j)) :=
     ⟨fun _ _ h => h.symm⟩
-  exact Set.disjoint_left.mp (hl.forall hi hj hne) (key_mem_bond (key i)) (h ▸ key_mem_bond _)
+  exact Finset.disjoint_left.mp (hl.forall hi hj hne) (key_mem_bond (key i)) (h ▸ key_mem_bond _)
 
 /-- The gate of `layerOfList` on the pair `{k, k + 1}`. -/
 noncomputable def layerOfListGate (k : Fin N) : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ := by
@@ -80,7 +80,7 @@ theorem layerOfListGate_key {i : ι} (hi : i ∈ l) : layerOfListGate l key G (k
 
 /-- The layer of the gates `G i` on the pairs `{key i, key i + 1}` for `i` in the list `l`, the
 pairs being pairwise disjoint. -/
-noncomputable def layerOfList : Layer d N where
+noncomputable def layerOfList : RingLayer d N where
   bonds := by classical exact (l.map key).toFinset
   gate := layerOfListGate l key G
   gate_mem_unitary k hk := by
@@ -108,7 +108,7 @@ theorem layerOfList_op : (layerOfList l key G hl hu hs).op = (l.map G).prod := b
   classical
   have hnodup : (l.map key).Nodup := by
     exact List.Pairwise.map _ (fun a b h hab =>
-      Set.disjoint_left.mp h (key_mem_bond (key a)) (hab ▸ key_mem_bond (key b))) hl
+      Finset.disjoint_left.mp h (key_mem_bond (key a)) (hab ▸ key_mem_bond (key b))) hl
   rw [BondLayer.op, BondLayer.partialOp]
   refine (Finset.noncommProd_toFinset (l.map key) (layerOfListGate l key G) _ hnodup).trans ?_
   rw [List.map_map]
@@ -117,15 +117,15 @@ theorem layerOfList_op : (layerOfList l key G hl hu hs).op = (l.map G).prod := b
 end LayerOfList
 
 /-- A product of operators acting on `S` acts on `S`. -/
-theorem list_prod_mem_supportedOperators {ι : Type*} [Fintype ι] [DecidableEq ι] {S : Set ι}
+theorem list_prod_mem_supportedOperators {ι : Type*} [Fintype ι] [DecidableEq ι] {S : Finset ι}
     (l : List (Matrix (ι → Fin d) (ι → Fin d) ℂ))
-    (hl : ∀ A ∈ l, A ∈ supportedOperators d S) :
-    l.prod ∈ supportedOperators d S := by
+    (hl : ∀ A ∈ l, A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
+    l.prod ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
   induction l with
-  | nil => exact one_mem_supportedOperators S
+  | nil => exact (one_mem (ManyBody.supportedOperators _ S))
   | cons A l ih =>
     rw [List.prod_cons]
-    exact mul_mem_supportedOperators (hl A (List.mem_cons_self ..))
+    exact mul_mem (hl A (List.mem_cons_self ..))
       (ih fun B hB => hl B (List.mem_cons_of_mem _ hB))
 
 /-! ### Lists of hops -/
@@ -133,15 +133,15 @@ theorem list_prod_mem_supportedOperators {ι : Type*} [Fintype ι] [DecidableEq 
 namespace TeleportHop
 
 /-- The sites `c`, `e`, `f` of a hop. -/
-def sites (h : TeleportHop N) : Set (Fin N) := {h.c, h.e, h.f}
+def sites (h : TeleportHop N) : Finset (Fin N) := {h.c, h.e, h.f}
 
 /-- The sites of all hops of a list. -/
-def allSites : List (TeleportHop N) → Set (Fin N)
+def allSites : List (TeleportHop N) → Finset (Fin N)
   | [] => ∅
   | h :: hs => h.sites ∪ allSites hs
 
 /-- The sites `e` and `f` of all hops of a list, which carry `|0⟩` before the round. -/
-def pairSites : List (TeleportHop N) → Set (Fin N)
+def pairSites : List (TeleportHop N) → Finset (Fin N)
   | [] => ∅
   | h :: hs => {h.e, h.f} ∪ pairSites hs
 
@@ -164,35 +164,37 @@ theorem mem_allSites {hs : List (TeleportHop N)} {i : Fin N} :
   | nil => simp [allSites]
   | cons h hs ih => simp [allSites, ih]
 
-theorem coe_measuredSites_subset_allSites (hs : List (TeleportHop N)) :
-    (measuredSites hs : Set (Fin N)) ⊆ allSites hs := by
+theorem measuredSites_subset_allSites (hs : List (TeleportHop N)) :
+    measuredSites hs ⊆ allSites hs := by
   induction hs with
   | nil => simp [measuredSites]
   | cons h hs ih =>
     intro i hi
-    simp only [measuredSites, Finset.coe_insert, Set.mem_insert_iff] at hi
+    simp only [measuredSites, Finset.mem_insert] at hi
     rcases hi with rfl | rfl | hi
-    · exact Or.inl (Or.inl rfl)
-    · exact Or.inl (Or.inr (Or.inl rfl))
-    · exact Or.inr (ih hi)
+    · simp [allSites, sites]
+    · simp [allSites, sites]
+    · exact Finset.mem_union_right _ (ih hi)
 
 /-- The sites `c` and `e` of the hops of a valid list are not the sites `c`, `e`, `f` of a later
 hop, except through its site `c`. -/
 theorem disjoint_measuredSites {h : TeleportHop N} {hs : List (TeleportHop N)}
-    (hv : Valid (h :: hs)) : Disjoint (measuredSites hs : Set (Fin N)) h.sites := by
-  rw [Set.disjoint_right]
-  rintro i (rfl | rfl | rfl) hi
+    (hv : Valid (h :: hs)) : Disjoint (measuredSites hs) h.sites := by
+  rw [Finset.disjoint_right]
+  intro i hmem₀ hi
+  simp only [sites, Finset.mem_insert, Finset.mem_singleton] at hmem₀
+  rcases hmem₀ with rfl | rfl | rfl
   · obtain ⟨-, -, -, hc⟩ := hv
     induction hs with
     | nil => simp [measuredSites] at hi
     | cons h' hs ih =>
-      simp only [measuredSites, Finset.coe_insert, Set.mem_insert_iff] at hi
+      simp only [measuredSites, Finset.mem_insert] at hi
       rcases hi with hi | hi | hi
       · exact (hc h' (List.mem_cons_self ..)).1 hi
       · exact (hc h' (List.mem_cons_self ..)).2 hi
       · exact ih hi fun h'' hh => hc h'' (List.mem_cons_of_mem _ hh)
-  · exact hv.2.1 (coe_measuredSites_subset_allSites hs hi)
-  · exact hv.2.2.1 (coe_measuredSites_subset_allSites hs hi)
+  · exact hv.2.1 (measuredSites_subset_allSites hs hi)
+  · exact hv.2.2.1 (measuredSites_subset_allSites hs hi)
 
 /-! ### The layers of a list of hops -/
 
@@ -201,36 +203,41 @@ theorem pairwise_disjoint_one : ∀ {hs : List (TeleportHop N)}, Valid hs →
   | [], _ => List.Pairwise.nil
   | h :: hs, ⟨hv, he, hf, _⟩ => by
     refine List.Pairwise.cons (fun h' hh' => ?_) (pairwise_disjoint_one hv)
-    rw [h.bond_k₁, h'.bond_k₁, Set.disjoint_left]
-    rintro i (rfl | rfl) hi
+    rw [h.bond_k₁, h'.bond_k₁, Finset.disjoint_left]
+    intro i hmem₀ hi
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hmem₀
+    rcases hmem₀ with rfl | rfl
     · exact he (mem_allSites.mpr ⟨h', hh', by
-        simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff] at hi ⊢; tauto⟩)
+        simp only [sites, Finset.mem_insert, Finset.mem_singleton] at hi ⊢; tauto⟩)
     · exact hf (mem_allSites.mpr ⟨h', hh', by
-        simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff] at hi ⊢; tauto⟩)
+        simp only [sites, Finset.mem_insert, Finset.mem_singleton] at hi ⊢; tauto⟩)
 
 theorem pairwise_disjoint_two : ∀ {hs : List (TeleportHop N)}, Valid hs →
     hs.Pairwise fun h h' => Disjoint (ringBond h.k₂) (ringBond h'.k₂)
   | [], _ => List.Pairwise.nil
   | h :: hs, ⟨hv, he, _, hc⟩ => by
     refine List.Pairwise.cons (fun h' hh' => ?_) (pairwise_disjoint_two hv)
-    rw [h.bond_k₂, h'.bond_k₂, Set.disjoint_left]
-    rintro i (rfl | rfl) hi
-    · rcases hi with hi | hi
+    rw [h.bond_k₂, h'.bond_k₂, Finset.disjoint_left]
+    intro i hmem₀ hi
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hmem₀
+    rcases hmem₀ with rfl | rfl
+    · simp only [Finset.mem_insert, Finset.mem_singleton] at hi
+      rcases hi with hi | hi
       · exact (hc h' hh').1 hi
       · exact (hc h' hh').2 hi
     · exact he (mem_allSites.mpr ⟨h', hh', by
-        simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff] at hi ⊢; tauto⟩)
+        simp only [sites, Finset.mem_insert, Finset.mem_singleton] at hi ⊢; tauto⟩)
 
 variable [NeZero d]
 
 /-- The first layer of a valid list of hops: the gates preparing the entangled pairs. -/
-noncomputable def layerOne (hs : List (TeleportHop N)) (hv : Valid hs) : Layer d N :=
+noncomputable def layerOne (hs : List (TeleportHop N)) (hv : Valid hs) : RingLayer d N :=
   layerOfList hs TeleportHop.k₁ TeleportHop.gate₁ (pairwise_disjoint_one hv)
     (fun h _ => h.gate₁_mem_unitary) fun h _ => h.bond_k₁ ▸ h.gate₁_mem_supportedOperators
 
 /-- The second layer of a valid list of hops: the gates of the measurements in the basis of
 maximally entangled pairs. -/
-noncomputable def layerTwo (hs : List (TeleportHop N)) (hv : Valid hs) : Layer d N :=
+noncomputable def layerTwo (hs : List (TeleportHop N)) (hv : Valid hs) : RingLayer d N :=
   layerOfList hs TeleportHop.k₂ TeleportHop.gate₂ (pairwise_disjoint_two hv)
     (fun h _ => h.gate₂_mem_unitary) fun h _ => h.bond_k₂ ▸ h.gate₂_mem_supportedOperators
 
@@ -295,46 +302,53 @@ theorem chainFrame_of_notMem (hs : List (TeleportHop N)) (z : Fin N → Fin d) {
   induction hs with
   | nil => rfl
   | cons h hs ih =>
-    have hi' : i ∉ h.sites := fun h' => hi (Or.inl h')
-    have hrest : i ∉ allSites hs := fun h' => hi (Or.inr h')
-    simp only [sites, Set.mem_insert_iff, Set.mem_singleton_iff, not_or] at hi'
+    have hi' : i ∉ h.sites := fun h' => hi (Finset.mem_union_left _ h')
+    have hrest : i ∉ allSites hs := fun h' => hi (Finset.mem_union_right _ h')
+    simp only [sites, Finset.mem_insert, Finset.mem_singleton, not_or] at hi'
     simp only [chainFrame, Function.update_of_ne hi'.1, Function.update_of_ne hi'.2.2,
       ih hrest, h.frame_of_ne z hi'.1 hi'.2.1 hi'.2.2, Pi.one_apply, mul_one]
 
 theorem prod_gate₂_mem_supportedOperators (hs : List (TeleportHop N)) :
-    (hs.map TeleportHop.gate₂).prod ∈ supportedOperators d (allSites hs) := by
+    (hs.map TeleportHop.gate₂).prod ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+    (allSites hs) := by
   refine list_prod_mem_supportedOperators _ fun A hA => ?_
   obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hA
-  refine supportedOperators_mono ?_ h.gate₂_mem_supportedOperators
-  rintro i (rfl | rfl) <;> exact mem_allSites.mpr ⟨h, hh, by simp [sites]⟩
+  refine ManyBody.supportedOperators_mono ?_ h.gate₂_mem_supportedOperators
+  intro i hmem₀
+  simp only [Finset.mem_insert, Finset.mem_singleton] at hmem₀
+  rcases hmem₀ with rfl | rfl <;> exact mem_allSites.mpr ⟨h, hh, by simp [sites]⟩
 
 theorem pre_mem_supportedOperators (h : TeleportHop N) (z : Fin N → Fin d) :
-    h.pre z ∈ supportedOperators d h.sites := by
-  have hc : ({h.c} : Set (Fin N)) ⊆ h.sites := by simp [sites]
-  have he : ({h.e} : Set (Fin N)) ⊆ h.sites := by simp [sites]
-  refine mul_mem_supportedOperators (mul_mem_supportedOperators (mul_mem_supportedOperators
+    h.pre z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) h.sites := by
+  have hc : ({h.c} : Finset (Fin N)) ⊆ h.sites := by simp [sites]
+  have he : ({h.e} : Finset (Fin N)) ⊆ h.sites := by simp [sites]
+  refine mul_mem (mul_mem (mul_mem
     ?_ ?_) ?_) ?_
-  · exact supportedOperators_mono (by simpa using he) (ctrlProj_mem_supportedOperators _ z)
-  · exact supportedOperators_mono (by simpa using hc) (ctrlProj_mem_supportedOperators _ z)
-  · exact supportedOperators_mono (by rintro i (rfl | rfl) <;> simp [sites])
-      h.gate₂_mem_supportedOperators
-  · exact supportedOperators_mono (by rintro i (rfl | rfl) <;> simp [sites])
-      h.gate₁_mem_supportedOperators
+  · exact ManyBody.supportedOperators_mono (by simpa using he) (ctrlProj_mem_supportedOperators _ z)
+  · exact ManyBody.supportedOperators_mono (by simpa using hc) (ctrlProj_mem_supportedOperators _ z)
+  · refine ManyBody.supportedOperators_mono (fun i hi => ?_) h.gate₂_mem_supportedOperators
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hi
+    rcases hi with rfl | rfl <;> simp [sites]
+  · refine ManyBody.supportedOperators_mono (fun i hi => ?_) h.gate₁_mem_supportedOperators
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hi
+    rcases hi with rfl | rfl <;> simp [sites]
 
 /-- One more hop factors off the operator of a valid list. -/
 theorem chainPre_cons {h : TeleportHop N} {hs : List (TeleportHop N)} (hv : Valid (h :: hs))
     (z : Fin N → Fin d) : chainPre (h :: hs) z = h.pre z * chainPre hs z := by
-  have hdisj : Disjoint ({h.e, h.f} : Set (Fin N)) (allSites hs) := by
-    rw [Set.disjoint_left]
-    rintro i (rfl | rfl)
+  have hdisj : Disjoint ({h.e, h.f} : Finset (Fin N)) (allSites hs) := by
+    rw [Finset.disjoint_left]
+    intro i hmem₀
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hmem₀
+    rcases hmem₀ with rfl | rfl
     · exact hv.2.1
     · exact hv.2.2.1
   have h1 : Commute (h.gate₁ (d := d)) (hs.map TeleportHop.gate₂).prod :=
-    commute_of_mem_supportedOperators hdisj h.gate₁_mem_supportedOperators
-      (prod_gate₂_mem_supportedOperators hs)
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint h.gate₁_mem_supportedOperators
+        (prod_gate₂_mem_supportedOperators hs) hdisj
   have h2 : Commute (ctrlProj (measuredSites hs) z) (h.pre z) :=
-    commute_of_mem_supportedOperators (disjoint_measuredSites hv)
-      (ctrlProj_mem_supportedOperators _ z) (pre_mem_supportedOperators h z)
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint (ctrlProj_mem_supportedOperators _ z)
+        (pre_mem_supportedOperators h z) (disjoint_measuredSites hv)
   simp only [chainPre, measuredSites, List.map_cons, List.prod_cons, ctrlProj_insert]
   calc ctrlProj (measuredSites hs) z * ctrlProj {h.e} z * ctrlProj {h.c} z *
         (h.gate₂ * (hs.map TeleportHop.gate₂).prod) * (h.gate₁ * (hs.map TeleportHop.gate₁).prod)
@@ -346,18 +360,18 @@ theorem chainPre_cons {h : TeleportHop N} {hs : List (TeleportHop N)} (hv : Vali
           (hs.map TeleportHop.gate₁).prod) := by
         rw [h2.eq]; simp only [Matrix.mul_assoc]
 
-theorem _root_.QuantumCircuit.IsZeroOn.chainPerm_mulVec {S : Set (Fin N)} {v : (Fin N → Fin d) → ℂ}
-    (hS : IsZeroOn S v)
+theorem _root_.QuantumCircuit.IsZeroOn.chainPerm_mulVec {S : Finset (Fin N)}
+    {v : (Fin N → Fin d) → ℂ} (hS : IsZeroOn S v)
     {hs : List (TeleportHop N)} (hdisj : Disjoint S (allSites hs)) :
     IsZeroOn S (chainPerm hs *ᵥ v) := by
   induction hs with
   | nil => simpa [chainPerm_nil] using hS
   | cons h hs ih =>
     rw [chainPerm_cons, ← mulVec_mulVec]
-    refine (ih (hdisj.mono_right Set.subset_union_right)).permMatrix_cfgPerm_mulVec
+    refine (ih (hdisj.mono_right Finset.subset_union_right)).permMatrix_cfgPerm_mulVec
       fun i hi => Equiv.swap_apply_of_ne_of_ne ?_ ?_
-    · rintro rfl; exact Set.disjoint_left.mp hdisj hi (Or.inl (Or.inl rfl))
-    · rintro rfl; exact Set.disjoint_left.mp hdisj hi (Or.inl (Or.inr (Or.inr rfl)))
+    · rintro rfl; exact Finset.disjoint_left.mp hdisj hi (by simp [sites, allSites])
+    · rintro rfl; exact Finset.disjoint_left.mp hdisj hi (by simp [sites, allSites])
 
 /-- **Chains of hops before the correction.** For a valid list of `H` hops and a vector with
 `|0⟩` at the sites `e` and `f` of every hop, the operator of the hops for the outcome `z` is
@@ -372,15 +386,15 @@ theorem chainPre_mulVec : ∀ {hs : List (TeleportHop N)}, Valid hs → ∀ (z :
       (finKronecker (chainFrame hs z) *ᵥ (chainPerm hs *ᵥ v))
   | [], _, z, v, _ => by simp [chainPre, chainPerm_nil, chainFrame, measuredSites]
   | h :: hs, hv, z, v, hz => by
-    have hzhs : IsZeroOn (pairSites hs) v := hz.mono Set.subset_union_right
-    have hef : Disjoint ({h.e, h.f} : Set (Fin N)) (allSites hs) :=
-      Set.disjoint_left.mpr fun i hi => by
-        rcases hi with rfl | rfl
-        exacts [hv.2.1, hv.2.2.1]
-    have hc : h.c ∉ ({h.e, h.f} : Set (Fin N)) := by
-      rintro (h' | h')
-      · exact h.c_ne_e h'
-      · exact h.c_ne_f h'
+    have hzhs : IsZeroOn (pairSites hs) v := hz.mono Finset.subset_union_right
+    have hef : Disjoint ({h.e, h.f} : Finset (Fin N)) (allSites hs) :=
+      Finset.disjoint_left.mpr fun i hi => by
+        rcases Finset.mem_insert.mp hi with rfl | hi
+        · exact hv.2.1
+        · rw [Finset.mem_singleton.mp hi]; exact hv.2.2.1
+    have hc : h.c ∉ ({h.e, h.f} : Finset (Fin N)) := by
+      simp only [Finset.mem_insert, Finset.mem_singleton, not_or]
+      exact ⟨h.c_ne_e, h.c_ne_f⟩
     set g := chainFrame hs z
     set U := g h.c
     set w := chainPerm hs *ᵥ v
@@ -396,16 +410,17 @@ theorem chainPre_mulVec : ∀ {hs : List (TeleportHop N)}, Valid hs → ∀ (z :
       · subst hi; simp [U]
       · simp [Function.update_of_ne hi]
     have hcomm : Commute (h.pre z) (finKronecker (Function.update g h.c 1)) := by
-      refine commute_of_mem_supportedOperators disjoint_compl_right
-        (pre_mem_supportedOperators h z) (finKronecker_mem_supportedOperators fun i hi => ?_)
-      simp only [Set.mem_compl_iff, not_not, sites, Set.mem_insert_iff,
-        Set.mem_singleton_iff] at hi
+      refine ManyBody.commute_of_mem_supportedOperators_of_disjoint
+          (pre_mem_supportedOperators h z)
+          (finKronecker_mem_supportedOperators fun i hi => ?_) disjoint_compl_right
+      simp only [Finset.mem_compl, not_not, sites, Finset.mem_insert,
+        Finset.mem_singleton] at hi
       rcases hi with rfl | rfl | rfl
       · exact Function.update_self ..
       · rw [Function.update_of_ne h.c_ne_e.symm, hge]
       · rw [Function.update_of_ne h.c_ne_f.symm, hgf]
     have hw : IsZeroOn {h.e, h.f} w :=
-      (hz.mono Set.subset_union_left).chainPerm_mulVec hef
+      (hz.mono Finset.subset_union_left).chainPerm_mulVec hef
     have hw' : IsZeroOn {h.e, h.f} (finKronecker (Function.update 1 h.c U) *ᵥ w) :=
       hw.finKronecker_update_one_mulVec hc U
     have hswap : h.swapPerm.permMatrix ℂ * finKronecker (Function.update 1 h.c U) =
@@ -450,7 +465,7 @@ the first layers of all hops, the second layers of all hops, the measurement of 
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("creating
 nearest-neighbor entangled pairs, then performing simultaneous measurements, and correcting
 (without postselection) based on the measurement outcomes"). -/
-noncomputable def round (pre : List (Layer d N)) (hs : List (TeleportHop N)) (hv : Valid hs) :
+noncomputable def round (pre : List (RingLayer d N)) (hs : List (TeleportHop N)) (hv : Valid hs) :
     MeasurementRound d N where
   circuit := pre ++ [layerOne hs hv, layerTwo hs hv]
   measured := measuredSites hs
@@ -459,7 +474,7 @@ noncomputable def round (pre : List (Layer d N)) (hs : List (TeleportHop N)) (hv
 
 /-- The teleportation round has depth `2` after the circuit `pre`, whatever the number and the
 lengths of the chains. -/
-theorem depth_round (pre : List (Layer d N)) (hs : List (TeleportHop N)) (hv : Valid hs) :
+theorem depth_round (pre : List (RingLayer d N)) (hs : List (TeleportHop N)) (hv : Valid hs) :
     (round pre hs hv).depth = pre.length + 2 := by
   simp [round, MeasurementRound.depth]
 
@@ -472,7 +487,7 @@ hops, of any length, in depth `2`.
 Source: arXiv:2307.01696, paragraph "Tree-RG circuit with measurements" ("Isometries ... act on
 a constant number of sites which, although spatially separated, can be teleported at
 neighboring registers with a constant overhead"). -/
-theorem isImplementationOn_round (pre : List (Layer d N)) {hs : List (TeleportHop N)}
+theorem isImplementationOn_round (pre : List (RingLayer d N)) {hs : List (TeleportHop N)}
     (hv : Valid hs) :
     (round pre hs hv).IsImplementationOn {v | IsZeroOn (pairSites hs) (circuitOp pre *ᵥ v)}
       (chainPerm hs * circuitOp pre) := by

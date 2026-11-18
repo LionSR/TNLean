@@ -43,14 +43,16 @@ namespace TNLean.PEPS.AreaLaw
 open QuantumCircuit
 
 /-- Each truncated constraint is a positive contraction (`03-quasilocal.tex`, line 426). -/
-theorem truncatedConstraint_mem_Icc {q : ℕ} [NeZero q] {ι : Type*} [Fintype ι] [DecidableEq ι]
+theorem truncatedConstraint_mem_Icc {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
     (G : SimpleGraph ι) (S₀ : Finset ι) (r₀ : ℕ) (a : ι)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1) :
     0 ≤ truncatedConstraint q G S₀ r₀ a k ∧ truncatedConstraint q G S₀ r₀ a k ≤ 1 := by
   unfold truncatedConstraint
   split_ifs
   · exact ⟨hk₀, hk₁⟩
-  · exact ⟨siteExpectation_nonneg _ hk₀, siteExpectation_le_one _ hk₁⟩
+  · exact ⟨(Matrix.nonneg_iff_posSemidef.mpr (ManyBody.posSemidef_regionExpectation
+      (Matrix.nonneg_iff_posSemidef.mp
+          hk₀))), ((ManyBody.regionExpectation_mono hk₁).trans_eq ManyBody.regionExpectation_one)⟩
 
 /-- The truncation constant `C₁ = truncationRadiusConstant (C μ K_b A) C₀ c g` of
 Proposition 4.5, with `A = shellSeriesConstant c (1/2)` the constant of the volume-free
@@ -76,7 +78,7 @@ theorem finiteSetTruncation {C c g μ Kb C₀ : ℝ} (hC : 0 ≤ C) (hc : 0 < c)
       (∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0) →
       ((∑ i, k i) - (g : ℂ) •
         (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-      (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ (1 / 2 : ℝ)))) →
       (∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
       (∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) →
@@ -138,7 +140,7 @@ theorem exists_finiteSetTruncation {C c g μ Kb C₀ : ℝ} (hC : 0 ≤ C) (hc :
         (∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0) →
         ((∑ i, k i) - (g : ℂ) •
           (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-        (∀ i (l : ℕ), ‖k i - siteExpectation q (ManyBody.graphBall G (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ (1 / 2 : ℝ)))) →
         (∀ x (d : ℕ), ((ManyBody.graphBall G x d).card : ℝ) ≤ Kb * ((d : ℝ) + 1) ^ 2) →
         (∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ) →
@@ -194,7 +196,7 @@ theorem finiteSetTruncation_of_locality (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ)
     ∀ {q : ℕ} [NeZero q] {ι : Type u} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
       (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι), (∀ k, a k ∈ X k) →
       ∀ (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ), (∀ k, (h k).IsHermitian) →
-      (∀ k, h k ∈ supportedOperators q (X k : Set ι)) →
+      (∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (X k : Finset ι)) →
       (∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R) →
       (∀ k, (X k).card ≤ vR) →
       (∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀) →
@@ -217,7 +219,7 @@ theorem finiteSetTruncation_of_locality (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ)
       let ε := min (n ^ (-1000 : ℝ)) (g / 4)
       let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
       (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
-        supportedOperators q (designatedSupport G S₀ r₀ (a i) : Set ι)) ∧
+        ManyBody.supportedOperators (fun _ ↦ Fin q) (designatedSupport G S₀ r₀ (a i) : Finset ι)) ∧
       (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
         truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
       ‖Ht - ∑ i, k i‖ ≤ ε ∧
@@ -243,7 +245,8 @@ theorem finiteSetTruncation_of_locality (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ)
     rw [← Matrix.le_iff]; exact hgapk.trans hsum
   have htail' : ∀ i (l : ℕ), ‖SpectralFilter.positiveConstraint cs
       (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i)) -
-        siteExpectation q (ManyBody.graphBall G (a i) l) (SpectralFilter.positiveConstraint cs
+        ManyBody.regionExpectation (ManyBody.graphBall G (a i)
+            l) (SpectralFilter.positiveConstraint cs
           (SpectralFilter.centeredFilter 1 (Δ / 2) (∑ j, h j) Ω (h i)))‖ ≤
         C₃ * Real.exp (-(c₃ * (l : ℝ) ^ (1 / 2 : ℝ))) := by
     intro i l
@@ -267,7 +270,7 @@ theorem exists_finiteSetTruncation_of_gap (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ
       ∀ {q : ℕ} [NeZero q] {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
         (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι), (∀ k, a k ∈ X k) →
         ∀ (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ), (∀ k, (h k).IsHermitian) →
-        (∀ k, h k ∈ supportedOperators q (X k : Set ι)) →
+        (∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (X k : Finset ι)) →
         (∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R) →
         (∀ k, (X k).card ≤ vR) →
         (∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀) →
@@ -290,7 +293,8 @@ theorem exists_finiteSetTruncation_of_gap (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ
         let ε := min (n ^ (-1000 : ℝ)) (g / 4)
         let Ht := ∑ i, truncatedConstraint q G S₀ r₀ (a i) (k i)
         (∀ i, truncatedConstraint q G S₀ r₀ (a i) (k i) ∈
-          supportedOperators q (designatedSupport G S₀ r₀ (a i) : Set ι)) ∧
+          ManyBody.supportedOperators (fun _ ↦ Fin q)
+              (designatedSupport G S₀ r₀ (a i) : Finset ι)) ∧
         (∀ i, 0 ≤ truncatedConstraint q G S₀ r₀ (a i) (k i) ∧
           truncatedConstraint q G S₀ r₀ (a i) (k i) ≤ 1) ∧
         ‖Ht - ∑ i, k i‖ ≤ ε ∧

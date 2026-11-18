@@ -21,6 +21,8 @@ efficient-filter parameter theorem. See `docs/paper-gaps/alvv16_soft_regional_re
 and `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

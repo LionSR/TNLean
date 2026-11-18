@@ -7,6 +7,7 @@ import TNLean.PEPS.Approximation.PinnedNestedFilterCoordinates
 import TNLean.PEPS.Approximation.SquareZeroFloorOptimizer
 import TNLean.PEPS.Approximation.SquareAreaLawSpecialization
 import TNLean.PEPS.Approximation.RegionalStates
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # A source-facing maximizing family for the original square Hamiltonian
@@ -30,9 +31,13 @@ OAI types. Regions and weights are supplied; no geometry, inverse-density
 optimization, or full geometric optimizer is constructed here.
 -/
 
+open ManyBody (Edge squareLatticeGraph SquareInteraction)
+
 noncomputable section
 
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -58,14 +63,15 @@ theorem Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount {L : ℕ}
 /-- The existing source/native bijection followed by graph-isomorphism transport. -/
 private def rectangleForwardEdgeEquiv (L : ℕ)
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] :
-    ForwardEdge L ≃ Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)) :=
-  (forwardSquareEdgeEquiv L).trans (Edge.equiv (AreaLaw.rectangleGraphIso L L))
+    Edge (squareLatticeGraph L L) ≃
+      Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)) :=
+  (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
 
 /-- The crossing predicate is insensitive to the endpoint swap caused by the
 chosen target order. No order compatibility of rectangleSiteEquiv is assumed. -/
 private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
-    (A : Finset (Vertex L)) (e : ForwardEdge L) :
+    (A : Finset (Vertex L)) (e : Edge (squareLatticeGraph L L)) :
     s((rectangleForwardEdgeEquiv L e).1.1,
       (rectangleForwardEdgeEquiv L e).1.2) ∈
         Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
@@ -75,8 +81,8 @@ private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
   let σ := AreaLaw.rectangleSiteEquiv L L
   have hmem : ∀ v : Vertex L, σ v ∈ A.map σ.toEmbedding ↔ v ∈ A :=
     fun v => by simp [σ]
-  have hend := Edge.map_endpoints (AreaLaw.rectangleGraphIso L L)
-    (forwardSquareEdgeEquiv L e)
+  have hend := ManyBody.Edge.map_endpoints (AreaLaw.rectangleGraphIso L L)
+    e
   change ((rectangleForwardEdgeEquiv L e).1.1 = σ e.val.1 ∧
       (rectangleForwardEdgeEquiv L e).1.2 = σ e.val.2) ∨
     ((rectangleForwardEdgeEquiv L e).1.1 = σ e.val.2 ∧
@@ -96,7 +102,7 @@ private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
 private theorem rectangle_singleCrossing {L m : ℕ}
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
     (X : Fin m → Finset (Vertex L))
-    (hsingle : ∀ e : ForwardEdge L, ∀ i j : Fin m,
+    (hsingle : ∀ e : Edge (squareLatticeGraph L L), ∀ i j : Fin m,
       Crosses (X i) e → Crosses (X j) e → i = j) :
     ∀ e : Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
       ∀ i j : Fin m,
@@ -130,15 +136,15 @@ private theorem canonicalCrossingBudget_eq_original {L q m : ℕ}
   rw [hs]
 
 private theorem squareAreaLawState_inner {L q : ℕ} (φ ψ : StateSpace L q) :
-    ⟪squareAreaLawState φ, squareAreaLawState ψ⟫_ℂ = ⟪φ, ψ⟫_ℂ :=
+    ⟪AreaLaw.rectangleAreaLawState φ, AreaLaw.rectangleAreaLawState ψ⟫_ℂ = ⟪φ, ψ⟫_ℂ :=
   (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (AreaLaw.rectangleConfigurationEquiv L L q)).inner_map_map φ ψ
 
 private theorem squareAreaLawState_operator {L q : ℕ}
     (H : Matrix (Configuration L q) (Configuration L q) ℂ) (ψ : StateSpace L q) :
-    squareAreaLawState (toEuclideanLin H ψ) =
+    AreaLaw.rectangleAreaLawState (toEuclideanLin H ψ) =
       toEuclideanLin (reindex (AreaLaw.rectangleConfigurationEquiv L L q)
-        (AreaLaw.rectangleConfigurationEquiv L L q) H) (squareAreaLawState ψ) := by
+        (AreaLaw.rectangleConfigurationEquiv L L q) H) (AreaLaw.rectangleAreaLawState ψ) := by
   ext σ
   exact (congrFun (reindex_mulVec (AreaLaw.rectangleConfigurationEquiv L L q)
     H (WithLp.ofLp ψ)) σ).symm
@@ -146,36 +152,38 @@ private theorem squareAreaLawState_operator {L q : ℕ}
 /-- Transport supplied canonical conclusions for the explicitly pulled-back
 family. This helper makes no optimizer choice. -/
 private theorem fromCanonical_physical_estimates
-    {L q m : ℕ} {J E₀ Δ B : ℝ} (h : SquareHamiltonian L q J)
+    {L q m : ℕ} {J E₀ Δ B : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+        (hhJ : ∀ i, ‖h.term i‖ ≤ J)
     {Ω : StateSpace L q} {X : Fin m → Finset (Vertex L)}
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
     (K : CanonicalFamily q X) (hK : ∀ j, Entropy.IsFeasibleFilter 0 (a j) (K j))
     (hmax : ∀ K' : CanonicalFamily q X,
       (∀ j, Entropy.IsFeasibleFilter 0 (a j) (K' j)) →
       ‖toEuclideanLin (Entropy.liftProd
-        (Entropy.chainList (canonicalRegions X) K' fun _ ↦ True)) (squareAreaLawState Ω)‖ ≤
+        (Entropy.chainList (canonicalRegions X) K' fun _ ↦ True))
+            (AreaLaw.rectangleAreaLawState Ω)‖ ≤
       ‖toEuclideanLin (Entropy.liftProd
-        (Entropy.chainList (canonicalRegions X) K fun _ ↦ True)) (squareAreaLawState Ω)‖)
+        (Entropy.chainList (canonicalRegions X) K fun _ ↦ True)) (AreaLaw.rectangleAreaLawState Ω)‖)
     (hresult :
       let ψ := toEuclideanLin (Entropy.liftProd
-        (Entropy.chainList (canonicalRegions X) K fun _ ↦ True)) (squareAreaLawState Ω)
+        (Entropy.chainList (canonicalRegions X) K fun _ ↦ True)) (AreaLaw.rectangleAreaLawState Ω)
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
-        |(⟪φ, toEuclideanLin h.toAreaLawHamiltonian.operator φ⟫_ℂ).re - E₀| ≤ B ∧
-        Δ * (1 - ‖⟪squareAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤ B) :
+        |(⟪φ, toEuclideanLin (h.toAreaLawHamiltonian hhJ).operator φ⟫_ℂ).re - E₀| ≤ B ∧
+        Δ * (1 - ‖⟪AreaLaw.rectangleAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤ B) :
     IsMaximizer Ω a (fromCanonical K hK) ∧
       0 < ‖output (fromCanonical K hK) Ω‖ ∧
       ‖normalizedOutput (fromCanonical K hK) Ω‖ = 1 ∧
       |(⟪normalizedOutput (fromCanonical K hK) Ω,
-          toEuclideanLin h.operator (normalizedOutput (fromCanonical K hK) Ω)⟫_ℂ).re - E₀| ≤ B ∧
+          toEuclideanLin h.hamiltonian (normalizedOutput (fromCanonical K hK) Ω)⟫_ℂ).re - E₀| ≤ B ∧
       Δ * (1 - ‖⟪Ω, normalizedOutput (fromCanonical K hK) Ω⟫_ℂ‖ ^ 2) ≤ B := by
   have hout := squareAreaLawState_output (fromCanonical K hK) Ω
   have hnorm := squareAreaLawState_normalizedOutput (fromCanonical K hK) Ω
   rw [canonicalMatrices_fromCanonical] at hout hnorm
   dsimp only at hnorm hresult
-  rw [← hnorm, ← hout, h.toAreaLawHamiltonian_operator,
+  rw [← hnorm, ← hout, h.toAreaLawHamiltonian_operator hhJ hh,
     ← squareAreaLawState_operator] at hresult
-  simp only [norm_squareAreaLawState, squareAreaLawState_inner] at hresult
+  simp only [AreaLaw.norm_rectangleAreaLawState, squareAreaLawState_inner] at hresult
   refine ⟨?_, hresult⟩
   apply (isMaximizer_iff Ω a ha (fromCanonical K hK)).mpr
   simpa only [canonicalMatrices_fromCanonical] using And.intro hK hmax
@@ -187,16 +195,18 @@ The filters are the attributed adapted source type. Only the total original
 Hamiltonian must be Hermitian. The sign of `J`, positive local dimension, a
 positive gap and a chosen order on integer-domain sites are not premises.
 Source: `EnergyOptimizer.lean`, lines 62–109, at the revision cited above. -/
-theorem SquareHamiltonian.exists_pinned_maximizer_energy_fidelity
-    {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareHamiltonian L q J)
-    {Ω : Pinned.State L q} (hΩ : h.IsGappedGroundState E₀ Ω Δ)
+theorem _root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelity
+    {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
+        (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+    {Ω : Pinned.State L q} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (X : Fin m → Finset (Vertex L)) (hX : Monotone X)
-    (hsingle : ∀ e : ForwardEdge L, ∀ i j : Fin m,
+    (hsingle : ∀ e : Edge (squareLatticeGraph L L), ∀ i j : Fin m,
       Crosses (X i) e → Crosses (X j) e → i = j)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) (ha1 : ∀ j, a j ≤ 1) :
     ∃ F : FilterFamily q m X,
       IsMaximizer Ω a F ∧ 0 < ‖output F Ω‖ ∧ ‖normalizedOutput F Ω‖ = 1 ∧
-      |(⟪normalizedOutput F Ω, toEuclideanLin h.operator (normalizedOutput F Ω)⟫_ℂ).re - E₀| ≤
+      |(⟪normalizedOutput F Ω, toEuclideanLin h.hamiltonian (normalizedOutput F Ω)⟫_ℂ).re - E₀| ≤
         (q : ℝ) ^ 2 * J * ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 ∧
       Δ * (1 - ‖⟪Ω, normalizedOutput F Ω⟫_ℂ‖ ^ 2) ≤
         (q : ℝ) ^ 2 * J * ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 := by
@@ -215,7 +225,8 @@ theorem SquareHamiltonian.exists_pinned_maximizer_energy_fidelity
           (canonicalRegions X j) → i = j := by
     simpa only [canonicalRegions_fin] using rectangle_singleCrossing X hsingle
   obtain ⟨K, hK, hmax, hresult⟩ :=
-    h.exists_zero_floor_maximizer_energy_fidelity hΩ (canonicalRegions X) hD hsep a ha ha1
+    h.exists_zero_floor_maximizer_energy_fidelity hh hhJ hΩ hgap hspan (canonicalRegions X) hD
+      hsep a ha ha1
   have hbudget : (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 *
       (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (canonicalRegions X j)).card =
       (q : ℝ) ^ 2 * J * ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 := by
@@ -223,6 +234,6 @@ theorem SquareHamiltonian.exists_pinned_maximizer_energy_fidelity
   dsimp only at hresult
   rw [hbudget] at hresult
   exact ⟨fromCanonical K hK,
-    fromCanonical_physical_estimates h a ha K hK hmax hresult⟩
+    fromCanonical_physical_estimates h hh hhJ a ha K hK hmax hresult⟩
 
 end TNLean.PEPS.Approximation

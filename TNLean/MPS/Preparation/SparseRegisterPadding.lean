@@ -77,10 +77,10 @@ theorem exists_isPairProduct_padding (hd : 0 < d) (hr : 1 ≤ r) :
   obtain ⟨K, hK⟩ := exists_isPairProduct (d := d) (n := r + 1) hd (by omega)
   refine ⟨K, fun q hq => ?_⟩
   have hπ : ∀ π : Equiv.Perm (Fin q),
-      (∀ i ∉ Set.range (prefixEmbedding hq), π i = i) →
+      (∀ i ∉ Finset.univ.image (prefixEmbedding hq), π i = i) →
       IsPairProduct d q K ((cfgPerm π).permMatrix ℂ) := by
     intro π hπ
-    have hs : IsLocalPerm (Set.range (prefixEmbedding hq)) (cfgPerm (d := d) π) := by
+    have hs : IsLocalPerm (Finset.univ.image (prefixEmbedding hq)) (cfgPerm (d := d) π) := by
       refine ⟨fun x i hi => congrArg x (hπ i hi), fun x y h i hi => ?_⟩
       exact h (π i) (π.apply_mem_of_forall_notMem hπ hi)
     obtain ⟨X, hX⟩ := exists_embedOp_eq_of_mem_supportedOperators
@@ -90,8 +90,8 @@ theorem exists_isPairProduct_padding (hd : 0 < d) (hr : 1 ≤ r) :
       (prefixEmbedding hq).injective (a := 0) (fun i => by simp [prefixEmbedding])
     rw [← hX]
     exact Equiv.Perm.permMatrix_mem_unitaryGroup _
-  have hfix : ∀ i ∉ Set.range (prefixEmbedding hq), padding hq i = i :=
-    Equiv.Perm.viaEmbedding_apply_of_notMem _ _
+  have hfix : ∀ i ∉ Finset.univ.image (prefixEmbedding hq), padding hq i = i :=
+    fun i hi => Equiv.Perm.viaEmbedding_apply_of_notMem _ _ i (by simpa using hi)
   refine ⟨hπ _ hfix, hπ _ fun i hi => ?_⟩
   exact (Equiv.symm_apply_eq _).2 (hfix i hi).symm
 
@@ -136,8 +136,8 @@ private theorem blockLayerOp_padding (hN : ∑ k, ℓ k = N) (hq : ∀ k, r + 1 
 theorem exists_isCircuitOn_paddingAll (hd : 0 < d) (hr : 1 ≤ r) :
     ∃ K : ℕ, ∀ {M N : ℕ} [NeZero N] {ℓ : Fin M → ℕ}
       (hN : ∑ k, ℓ k = N) (hq : ∀ k, r + 1 ≤ ℓ k),
-      IsCircuitOn (d := d) Set.univ K ((cfgPerm (paddingAll hN hq)).permMatrix ℂ) ∧
-      IsCircuitOn (d := d) Set.univ K ((cfgPerm (paddingAll hN hq).symm).permMatrix ℂ) := by
+      IsCircuitOn (d := d) Finset.univ K ((cfgPerm (paddingAll hN hq)).permMatrix ℂ) ∧
+      IsCircuitOn (d := d) Finset.univ K ((cfgPerm (paddingAll hN hq).symm).permMatrix ℂ) := by
   obtain ⟨K, hK⟩ := exists_isPairProduct_padding hd hr
   refine ⟨K, fun {M N} _ {ℓ} hN hq => ?_⟩
   constructor
@@ -240,16 +240,17 @@ private theorem gate_add (k : Fin M) {j : ℕ} (hj : j < 2 * (gate (d := d) hN h
 
 /-- Every teleportation stretch lies entirely within its block. -/
 theorem gate_span_subset (k : Fin M) :
-    (gate (d := d) hN hr hℓ k).span ⊆ Set.range (blockSite hN k) := by
-  rintro i ⟨j, hj, rfl⟩
-  exact ⟨_, (gate_add hN hr hℓ k hj).symm⟩
+    (gate (d := d) hN hr hℓ k).span ⊆ Finset.univ.image (blockSite hN k) := by
+  intro i hi
+  obtain ⟨j, hj, rfl⟩ := (gate (d := d) hN hr hℓ k).mem_span.mp hi
+  exact Finset.mem_image.mpr ⟨_, Finset.mem_univ _, (gate_add hN hr hℓ k hj).symm⟩
 
 /-- All padded register gates can be teleported in parallel. -/
 theorem pairwise_gates :
     (List.ofFn (gate (d := d) hN hr hℓ)).Pairwise fun g g' => Disjoint g.span g'.span := by
   rw [List.pairwise_ofFn]
   intro k k' hkk'
-  exact (disjoint_range_blockSite hN (ne_of_lt hkk')).mono
+  exact (Finset.disjoint_coe.mp (by simpa using disjoint_range_blockSite hN (ne_of_lt hkk'))).mono
     (gate_span_subset hN hr hℓ k) (gate_span_subset hN hr hℓ k')
 
 /-- The padded register sites are the images of the original two end registers. -/
@@ -277,7 +278,7 @@ is fixed by the padding permutation. -/
 theorem gate_interior (k : Fin M) {i : Fin N} (hi : i ∈ (gate (d := d) hN hr hℓ k).interior) :
     (∃ p : Fin (ℓ k), r ≤ p.val ∧ p.val < ℓ k - r ∧ i = blockSite hN k p) ∧
       paddingAll (r := r) hN (fun j => by have := hℓ j; omega) i = i := by
-  obtain ⟨j, hj, hj', rfl⟩ := hi
+  obtain ⟨j, hj, hj', rfl⟩ := (gate (d := d) hN hr hℓ k).mem_zone.mp hi
   have hp := twice_hops hℓ k
   change j < r + 2 * ((ℓ k - 2 * r) / 2) at hj'
   rw [gate_add hN hr hℓ k (by dsimp [gate]; omega)]

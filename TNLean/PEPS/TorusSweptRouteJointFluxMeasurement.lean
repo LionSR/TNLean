@@ -23,6 +23,8 @@ eight and the height at least seven. Every position and both periodic seams
 are allowed. The results concern the displayed endpoint route and its original
 physical contractions. See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix ComplexOrder
 namespace TNLean.PEPS

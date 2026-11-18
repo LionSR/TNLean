@@ -125,7 +125,7 @@ theorem uniform_boxEntropy_improvement_explicit
     have hθ : 0 < 1 - BootstrapParameters.ell e₀ := sub_pos.mpr F.ell_lt_one
     positivity
   refine boxEntropy_power_le_of_large_rectangles (C := Crect) hq hCrect hp N ?_
-  intro Λ h E₀ Ω hgs A Q hsafe hQN
+  intro Λ h E₀ Ω hΩ hgap hspan A Q hsafe hQN
   let : LinearOrder (AdmissibleSupport Λ R) :=
     LinearOrder.lift' (Fintype.equivFin (AdmissibleSupport Λ R))
       (Fintype.equivFin (AdmissibleSupport Λ R)).injective
@@ -139,15 +139,15 @@ theorem uniform_boxEntropy_improvement_explicit
   have hphysical : ∀ Q' : IntRect, IsSafe Λ A D₀ Q' →
       regionalEntropy Λ q Ω (rectRegion A Q') ≤ Cbox * (Q'.size : ℝ) ^ (1 + e) :=
     fun Q' hsafe' ↦ regionalEntropy_le_of_boxEntropy_power hq (by linarith)
-      hbox h hgs A Q' hsafe'
-  obtain ⟨htarget, hprefix⟩ := hentropy Λ q D₀ Ω hgs.1 A Q hT hsafe
+      hbox h hΩ hgap hspan A Q' hsafe'
+  obtain ⟨htarget, hprefix⟩ := hentropy Λ q D₀ Ω hΩ A Q hT hsafe
     S.n (F.L S.n) hsn hLpos hL hbudget e he.le hphysical
   have htarget' : regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ Q.toFinset) ≤
       Ce * (S.n : ℝ) ^ (1 + e) := htarget
   have hprefix' : ∀ j : ℕ, j ≤ F.L S.n →
       regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
         Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ e + S.n) := hprefix
-  have hresult := hsource e he hee₀ Λ Q.toFinset hT h S E₀ Ω hgs hgraph hanchor hnS
+  have hresult := hsource e he hee₀ Λ Q.toFinset hT h S E₀ Ω hΩ hgap hspan hgraph hanchor hnS
     rfl rfl rfl rfl rfl (by simpa only [one_mul] using hcard)
     hdepth hrows hmult hclear htarget' hprefix'
   rw [hregion] at hresult

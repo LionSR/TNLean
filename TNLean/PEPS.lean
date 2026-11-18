@@ -359,7 +359,6 @@ import TNLean.PEPS.SquareLatticeBoundaryMPO
 import TNLean.PEPS.SquareLatticeBoundaryPositivity
 import TNLean.PEPS.SquareLatticeCoordinateSwap
 import TNLean.PEPS.SquareLatticeEdgeCount
-import TNLean.PEPS.SquareLatticeGraph
 import TNLean.PEPS.TensorFactorScalar
 import TNLean.PEPS.ThetaBondCoordinates
 import TNLean.PEPS.ThetaBondOrthonormalCoordinates

@@ -16,6 +16,8 @@ Source: SCP10, arXiv:1001.3807, regional contractions and Section 7,
 lines 2977–3019.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix BigOperators Kronecker
 namespace TNLean.PEPS

@@ -11,6 +11,7 @@ import TNLean.MPS.AreaLaw.ViableSet.LeadingPower
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.ApproximateCertificates
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Uniform approximation of compressed boundary programs
@@ -36,6 +37,8 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- A certificate checked entirely against rational approximations of the coordinate
@@ -50,7 +53,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_rational_fixed_data_sdp_certifi
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -118,7 +122,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_rational_fixed_data_sdp_certifi
         hθKbound hθXbound
     simpa only [ω, C] using hθZbound
   apply h.exists_viable_vector_of_approx_sdp_error_budget hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX Z hZ hZZ hexact
+    HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ hexact
   simpa only [K, C, eK, eX, ω, add_assoc] using hbudget
 
 /-- A priori support-size tolerances suffice for the fully approximate compressed SDP.
@@ -133,7 +137,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_uniformly_approx_sdp_certificat
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) (S : Finset (LeftBlockVector L q k))
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) (S : Finset (LeftBlockVector L q k))
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (hn : n ≤ S.card * m)
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
@@ -190,7 +195,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_uniformly_approx_sdp_certificat
       (by simpa only [Nat.cast_mul] using hεbound)
       (by simpa only [Nat.cast_mul] using hεbbound)
   apply h.exists_viable_vector_of_all_spectral_approx_sdp_certificate hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX Z hZ hZZ A hA P N hP hN
+    HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ A hA P N hP hN
       htrace hε hmin hεb hPmin hNmin hresidual htraces henergy hκbound
   · exact hεrealized
   · simpa only [r] using hεbrealized
@@ -207,7 +212,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_uniform_approx_sdp_feasible
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) (S : Finset (LeftBlockVector L q k))
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) (S : Finset (LeftBlockVector L q k))
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (hn : n ≤ S.card * m)
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
@@ -245,7 +251,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_uniform_approx_sdp_feasible
   rcases hcert with ⟨hA, hP, hN, htrace, hε, hmin, hεb, hPmin, hNmin,
     hresidual, htraces, henergy⟩
   exact h.exists_viable_vector_of_uniformly_approx_sdp_certificate hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs S hn W hW x hwx hwE X hX Z hZ hZZ
+    HL B hsplit hHL hBS hBn hΩ hgap hspan S hn W hW x hwx hwE X hX Z hZ hZZ
       A hA P N hP hN htrace hε hmin hεb hPmin hNmin hresidual htraces henergy
         hκbound hεbound hεbbound hδbound
 
@@ -262,7 +268,8 @@ theorem ChainHamiltonian.exists_boundary_coordinates_with_uniform_approx_sdp_sou
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) (S : Finset (LeftBlockVector L q k))
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) (S : Finset (LeftBlockVector L q k))
     {m : ℕ} [Nonempty (CutSite L q k × Fin m)]
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -337,7 +344,7 @@ theorem ChainHamiltonian.exists_boundary_coordinates_with_uniform_approx_sdp_sou
     by simpa only [K, E, ρ] using hzero, ?_⟩
   intro κ ε εb δ A P N hcert hκbound hεbound hεbbound hδbound
   exact h.exists_viable_vector_of_uniform_approx_sdp_feasible hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs S hn W hW x hwx hwE X hX Z hZ hZZ
+    HL B hsplit hHL hBS hBn hΩ hgap hspan S hn W hW x hwx hwE X hX Z hZ hZZ
       hcert hκbound hεbound hεbbound hδbound
 
 /-- A normalized vector in the retained support also supplies an exact feasible point

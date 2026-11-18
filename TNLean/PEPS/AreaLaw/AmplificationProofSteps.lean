@@ -54,13 +54,13 @@ Source: `eq:amplification-restoring-operator`, `09-amplification.tex`, lines 350
 524–525. -/
 theorem sum_kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finset (Site Λ)}
     {κ : Type*} (s : Finset κ) {P : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hP : ∀ i, P i ∈ supportedOperators q (S : Set (Site Λ)))
+    (hP : ∀ i, P i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
     (b : κ → Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ) :
     (∑ i ∈ s, P i ⊗ₖ (b i ⊗ₖ
       (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ))).submatrix
         (ancillaSplit q X) (ancillaSplit q X) ∈
-      supportedOperators q ((S.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) :
-        Set (AncillaSites Λ X)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (S.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) := by
   have hsum : (∑ i ∈ s, P i ⊗ₖ (b i ⊗ₖ
       (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ))).submatrix
         (ancillaSplit q X) (ancillaSplit q X) = ∑ i ∈ s, (P i ⊗ₖ (b i ⊗ₖ
@@ -69,7 +69,7 @@ theorem sum_kronecker_submatrix_ancillaSplit_mem_supportedOperators {X S : Finse
     ext c c'
     simp only [submatrix_apply, Matrix.sum_apply]
   rw [hsum]
-  exact Submodule.sum_mem _ fun i _ =>
+  exact sum_mem fun i _ =>
     kronecker_submatrix_ancillaSplit_mem_supportedOperators (hP i) (b i)
 
 /-- **The blocks of a column operator act on a physical region.** If `B = ∑_i P_i ⊗ A_i` with
@@ -78,17 +78,17 @@ every `P_i` acting on a physical region `S`, then for all ancillary labels `x, y
 Source: `eq:amplification-column-operator`, `09-amplification.tex`, lines 359–364. -/
 theorem block_mem_supportedOperators_of_eq_sum {S : Finset (Site Λ)} {α κ : Type*}
     (s : Finset κ) {P : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hP : ∀ i, P i ∈ supportedOperators q (S : Set (Site Λ))) (A : κ → Matrix α α ℂ)
+    (hP : ∀ i, P i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) (A : κ → Matrix α α ℂ)
     (x y : α) :
     (Matrix.of fun σ τ => (∑ i ∈ s, P i ⊗ₖ A i) (σ, x) (τ, y)) ∈
-      supportedOperators q (S : Set (Site Λ)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q) S := by
   have hblock : (Matrix.of fun σ τ => (∑ i ∈ s, P i ⊗ₖ A i) (σ, x) (τ, y)) =
       ∑ i ∈ s, A i x y • P i := by
     ext σ τ
     simp only [of_apply, Matrix.sum_apply, kroneckerMap_apply, Matrix.smul_apply, smul_eq_mul]
     exact Finset.sum_congr rfl fun i _ => mul_comm _ _
   rw [hblock]
-  exact Submodule.sum_mem _ fun i _ => Submodule.smul_mem _ _ (hP i)
+  exact sum_mem fun i _ => SMulMemClass.smul_mem _ (hP i)
 
 /-- **The polar correction on the enlarged sites.** Work in the coordinates
 `physical × (s', e')` of the enlarged sites. Let the restoring operator `R₀` act on `N ⊔ s'`
@@ -103,10 +103,10 @@ theorem exists_ancilla_unitary_of_good_realization {X N : Finset (Site Λ)}
     {R₀ : Matrix (Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X))
       (Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X)) ℂ}
     (hR₀ : R₀.submatrix (ancillaSplit q X) (ancillaSplit q X) ∈
-      supportedOperators q ((N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) :
-        Set (AncillaSites Λ X)))
+      ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)))
     {L' D Dret : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-    (hL : L' ∈ supportedOperators q (N : Set (Site Λ)))
+    (hL : L' ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) N)
     {φ η g : Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X) → ℂ}
     (hφ : ‖WithLp.toLp 2 φ‖ = 1) (hη : ‖WithLp.toLp 2 η‖ = 1) {M₀ ε a : ℝ}
     (hζ : ‖WithLp.toLp 2 (R₀ *ᵥ φ)‖ ≤ M₀)
@@ -124,8 +124,9 @@ theorem exists_ancilla_unitary_of_good_realization {X N : Finset (Site Λ)}
       RegionalConfiguration q X) (RegionalConfiguration q X × RegionalConfiguration q X) ℂ)) *
         R₀)ᴴ *ᵥ η) - WithLp.toLp 2 φ‖ ≤ a) :
     ∃ U : Matrix (AncillaSites Λ X → Fin q) (AncillaSites Λ X → Fin q) ℂ,
-      U ∈ supportedOperators q ((N.disjSum (Finset.univ.disjSum ∅) :
-        Finset (AncillaSites Λ X)) : Set (AncillaSites Λ X)) ∧ Uᴴ * U = 1 ∧
+      U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) ∧
+          Uᴴ * U = 1 ∧
       ‖WithLp.toLp 2 (U *ᵥ (φ ∘ ancillaSplit q X)) - WithLp.toLp 2 (η ∘ ancillaSplit q X)‖ ≤
         a + √(2 * a + 6 * ε + 9 * ε ^ 2) := by
   set sp := ancillaSplit q X with hspdef
@@ -219,8 +220,9 @@ theorem mutualInformation_le_of_ancilla_unitary {Ω : StateSpace Λ q} (hΩ : �
     (hη : ‖WithLp.toLp 2 (restoringTransport Ω X Y hXY *ᵥ
       (Entropy.restoringRestored p (restoringVector Ω X Y hXY)).ofLp)‖ = 1)
     {U : Matrix (AncillaSites Λ X → Fin q) (AncillaSites Λ X → Fin q) ℂ}
-    (hU : U ∈ supportedOperators q ((N.disjSum (Finset.univ.disjSum ∅) :
-      Finset (AncillaSites Λ X)) : Set (AncillaSites Λ X))) (hUu : Uᴴ * U = 1)
+    (hU : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)))
+        (hUu : Uᴴ * U = 1)
     {C₁ C₂ : ℝ} {n M K : ℕ} (hn : 1 ≤ n) (hK : 4 * (M + 2) ≤ K)
     (hδ : ‖WithLp.toLp 2 (U *ᵥ ((restoringTransport Ω X Y hXY *ᵥ
         (Entropy.restoringCopy sBlank xBlank (restoringVector Ω X Y hXY)).ofLp) ∘
@@ -276,7 +278,7 @@ theorem mutualInformation_le_of_ancilla_unitary {Ω : StateSpace Λ q} (hΩ : �
   have hfinal := mutualInformation_le_inv_pow_of_supported_unitary (φ := WithLp.toLp 2 (φ ∘ sp))
     (η := WithLp.toLp 2 (η ∘ sp)) (by rw [hTn]; exact hφ) (by rw [hTn]; exact hη)
     (disjoint_ancillaCopyRegion_ancillaPhysicalRegion _ _)
-    (by rw [Finset.disjoint_coe]; exact disjoint_disjSum_ancillaCopyRegion_union hJ _)
+    (disjoint_disjSum_ancillaCopyRegion_union hJ _)
     hU hUu hprod hn hK hδ hdim'
   -- Back to `Ω` and the part `X'` of the target.
   set X'' : Finset ↥X := X'.subtype (· ∈ X)

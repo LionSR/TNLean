@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.PositiveFactorRepair
 import QICLean.Entropy.LocalLift
 import QICLean.Entropy.SupportedOperatorAlgebra
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.OpenMPS
 
 /-!
@@ -39,6 +39,8 @@ unchanged. Documented in `docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`
 * `exists_factorization_of_isFactorizationAt`: the shape of the factorization hypothesis
   consumed by `entropy_le_of_overlap_schmidtRank_mixture_of_factorization`.
 -/
+
+open ManyBody (interval mem_interval)
 
 open Matrix Real
 open scoped Matrix.Norms.L2Operator ComplexOrder
@@ -110,8 +112,9 @@ theorem IsFactorizationAt.conjTranspose_mul_self {Ω : EuclideanSpace ℂ (Fin L
     posSemidef_conjTranspose_mul_self_mul_mul_sub_le hB1 hP hL hR hLR hBLR
   have hε0 : 0 ≤ ε := (norm_nonneg _).trans hBLR
   have hsupp : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (OBᴴ * OB)
-      (interval L (c - l) (c + l)) :=
-    (mul_mem (star_mem hBs) hBs : star OB * OB ∈
+      (interval L (c - l) (c + l)) := by
+    change _ ∈ ManyBody.supportedOperators _ _
+    exact (mul_mem (star_mem hBs) hBs : star OB * OB ∈
       ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) (interval L (c - l) (c + l)))
   refine ⟨hpos, hL, hR, hLR, hnorm, hsupp, hLs, hRs, ?_⟩
   rcases le_or_gt ε 1 with h1 | h1

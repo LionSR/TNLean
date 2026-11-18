@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Amplification.ChannelWordThinning
 import TNLean.PEPS.AreaLaw.Amplification.LatticeChannelPoissonGrowth
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Spatial growth after filtering a full lattice Poisson word
@@ -29,7 +30,7 @@ open QuantumCircuit SpectralFilter Matrix MeasureTheory
 open scoped BigOperators ENNReal NNReal Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (IsGapped groundSpace AdmissibleSupport planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -44,12 +45,13 @@ theorem exists_latticeChannelWord_filter_spatial_growth {p : ℕ} (hp : 1 ≤ p)
     ∃ c v : ℝ, 0 < c ∧ 0 ≤ v ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (P : AdmissibleSupport Λ R → Prop) [DecidablePred P]
           (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
           (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ a b : Aux, (Matrix.of fun σ τ => B (σ, a) (τ, b)) ∈
-          supportedOperators q (S : Set (Site Λ))) →
+          ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (t : ℝ≥0) (y : Site Λ),
         letI := graphPseudoEMetricSpace (planeDomainGraph Λ)
         let α := kernelExponent p
@@ -71,12 +73,12 @@ theorem exists_latticeChannelWord_filter_spatial_growth {p : ℕ} (hp : 1 ≤ p)
               ((List.ofFn w.2).filter (fun i => decide (P i))) B) = 0) := by
   obtain ⟨c, v, hc, hv, hgrowth⟩ := exists_latticeChannelWord_spatial_growth hp R hJ hΔ
   refine ⟨c, v, hc, hv, ?_⟩
-  intro q _ Λ h a ha E₀ Ω hgs P _ Aux _ _ S B hB t y
+  intro q _ Λ h a ha E₀ Ω hΩ hgap hspan P _ Aux _ _ S B hB t y
   let := graphPseudoEMetricSpace (planeDomainGraph Λ)
   let k := fun i : AdmissibleSupport Λ R =>
     positiveConstraint (positiveNormalization p (Δ / 2) J)
       (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
-  have hg := hgrowth Λ h a ha E₀ Ω hgs P Aux S B hB t y
+  have hg := hgrowth Λ h a ha E₀ Ω hΩ hgap hspan P Aux S B hB t y
   have htransport := integrable_and_integral_siteOscillation_filter_le P k B t y _
     ⟨hg.1, hg.2.1⟩
   refine ⟨htransport.1, htransport.2, fun w hy => ?_⟩

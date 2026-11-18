@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.Scan.SourceActualInformation
 import TNLean.PEPS.AreaLaw.Scan.FinalSharpErrorPower
 import TNLean.PEPS.AreaLaw.Scan.FinalSharpTransportSmallness
 import TNLean.PEPS.AreaLaw.Scan.PhysicalInformationDimension
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Conditional final-scale information for the concrete physical source
@@ -30,6 +31,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
@@ -90,7 +93,8 @@ theorem sourceTarget_finalScale_mutualInformation_explicit
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceFinalInformationThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr ct Cent eent Cen een ≤ S.n →
@@ -144,7 +148,7 @@ theorem sourceTarget_finalScale_mutualInformation_explicit
   have herror := fun n (hn : finalSharpErrorThreshold C₀ CB ≤ n) =>
     finalSharp_source_error_le_of_finalSharpErrorThreshold_le q hq Ce C₀ CB g (C_T + 1) hCe hC₀
       hCB.le hg hCvol hn
-  intro Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
+  intro Λ T _ hT h S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix hrD hDpos hDm L X β
   simp only [sourceFinalInformationThreshold, max_le_iff] at hn
   obtain ⟨hnS, hnE, hnSmall⟩ := hn
@@ -160,7 +164,7 @@ theorem sourceTarget_finalScale_mutualInformation_explicit
   let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
   let Bsh := Ce * ((S.n : ℝ) * (L : ℝ) ^ (Exponents.boxError : ℝ) + S.n) +
     (S.n : ℝ) ^ (-247 : ℝ)
-  obtain ⟨hm, hM, hdata⟩ := hsource Ce hCe Λ T hT h S E₀ Ω hgs hgraph hanchor hnS
+  obtain ⟨hm, hM, hdata⟩ := hsource Ce hCe Λ T hT h S E₀ Ω hΩ hgap hspan hgraph hanchor hnS
     hr hmScale hDScale hKScale hCeq hsize hdepth hrows hmult hclear
     htargetEntropy hprefix hrD hDpos hDm
   obtain ⟨hK, hKL, hB, hcard, hX, e, Ωt, htrgs, he0, he, htrace, hBX, htail, hwdata⟩ :=
@@ -179,10 +183,10 @@ theorem sourceTarget_finalScale_mutualInformation_explicit
   let dlog := Real.log (Real.exp 1 * Fintype.card (FiniteProduct.Configuration β X))
   let continuity := 16 * Real.sqrt t * dlog
   obtain ⟨ell, hpre, hdim, hinfo⟩ := hpdata
-  have hΩt : ‖Ωt‖ = 1 := (Matrix.isGappedGroundState_iff.mp htrgs).1
+  have hΩt : ‖Ωt‖ = 1 := htrgs.1
   have hXcard : (X.card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 :=
     (Nat.cast_le.mpr (Finset.card_le_card hX)).trans hcard
-  have htargetCont := htarget S.n hnT Λ Ω Ωt hgs.1 hΩt X hXcard htrace
+  have htargetCont := htarget S.n hnT Λ Ω Ωt hΩ hΩt X hXcard htrace
   have hSt : St ≤ Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) +
       (S.n : ℝ) ^ (-247 : ℝ) := by
     have h := le_abs_self (regionalEntropy Λ q Ωt X - regionalEntropy Λ q Ω X)
@@ -237,7 +241,8 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_threshold_le
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceFinalInformationThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr ct Cent eent Cen een ≤ S.n →
@@ -298,7 +303,8 @@ theorem exists_sourceTarget_finalScale_mutualInformation
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = ⌊(S.n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →

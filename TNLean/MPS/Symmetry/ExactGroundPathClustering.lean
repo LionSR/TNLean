@@ -46,7 +46,8 @@ theorem ExactMPSGroundPath.exists_uniform_connected_exponential_clustering
       ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) [NeZero N] (_hN : 2 ≤ N),
       ∀ (A B : MPOTensor.ChainOperator d N) (X Y : Finset (Fin N)),
       ∀ (hX : X.Nonempty) (hY : Y.Nonempty),
-      A ∈ supportedOperators d X → B ∈ supportedOperators d Y →
+      A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X →
+          B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y →
       Disjoint (X : Set (Fin N)) (Y : Set (Fin N)) →
       ∀ ℓ : ℝ, 1 ≤ ℓ →
         ℓ ≤ ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY →

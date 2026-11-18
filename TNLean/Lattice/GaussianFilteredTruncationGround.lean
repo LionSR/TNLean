@@ -47,7 +47,7 @@ the unique ground state (lines 375–387).
 open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
-open ManyBody (groundSpace)
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.Lattice
 
@@ -67,7 +67,7 @@ section Graph
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
   (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+  (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
@@ -81,7 +81,8 @@ include hHerm hSupport hDiam hCard hBudget
 theorem norm_gaussianFilteredTerm_sub_truncated_le_of_time [NeZero d] [DecidableEq κ]
     {q ΔE : ℝ} (hq : 0 ≤ q) (hΔE : 0 < ΔE) (s : Finset κ) (K : Finset ι)
     (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι) (hSK : S ⊆ K)
-    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d (S : Set ι)) (J : ℝ)
+    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (J : ℝ)
     (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y) :
     ‖gaussianFilteredTerm q ΔE (∑ k, h k) W - gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W‖ ≤
@@ -103,7 +104,8 @@ theorem norm_sub_starProjection_truncated_apply_le [NeZero d] [DecidableEq κ] {
     (hq : 0 ≤ q) (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ j, hH.eigenvalues j = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues j) (s : Finset κ)
     (K : Finset ι) (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι) (hSK : S ⊆ K)
-    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d (S : Set ι)) (J : ℝ)
+    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (J : ℝ)
     (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ψ ∈ groundSpace (∑ k, h k) E₀) :
@@ -120,17 +122,19 @@ theorem norm_sub_starProjection_truncated_apply_le [NeZero d] [DecidableEq κ] {
     vR hCard b₀ hBudget hq hΔE s K hsK S hSK hW J hJ μ hμ m hm
   linarith
 
-/-- **A unique gapped ground state is nearly an eigenvector of `M_i`.** If `Ω` is a unique
-ground state of `H = ∑ₖ hₖ` with gap `ΔE > 0`, then the truncated filter `M = W_tilde_s`
-satisfies `‖M Ω - ⟨Ω, M Ω⟩ Ω‖ ≤ 3 ‖W‖ e^{-q/2} + C (q/ΔE) e^{v q/ΔE - μ m}`, with the constants
-of `norm_gaussianFilteredTerm_sub_truncated_le`. Hastings, arXiv:cond-mat/0508554v3,
-`proj3new.tex`, the case of one ground state (lines 375–387), with `q` free and
-`T = q / ΔE`. -/
+/-- **A unique gapped ground state is nearly an eigenvector of `M_i`.** If `H = ∑ₖ hₖ` is gapped
+at `E₀` with gap `ΔE > 0` and its ground space is the line through the unit vector `Ω`, then the
+truncated filter `M = W_tilde_s` satisfies
+`‖M Ω - ⟨Ω, M Ω⟩ Ω‖ ≤ 3 ‖W‖ e^{-q/2} + C (q/ΔE) e^{v q/ΔE - μ m}`, with the constants of
+`norm_gaussianFilteredTerm_sub_truncated_le`. Hastings, arXiv:cond-mat/0508554v3,
+`proj3new.tex`, the case of one ground state (lines 375–387), with `q` free and `T = q / ΔE`. -/
 theorem norm_truncated_apply_sub_inner_smul_le [NeZero d] [DecidableEq κ] {q ΔE : ℝ}
     (hq : 0 ≤ q) (hΔE : 0 < ΔE) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (ι → Fin d)}
-    (hgs : Matrix.IsGappedGroundState (∑ k, h k) E₀ Ω ΔE) (s : Finset κ) (K : Finset ι)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped (∑ k, h k) E₀ ΔE)
+    (hspan : groundSpace (∑ k, h k) E₀ = Submodule.span ℂ {Ω}) (s : Finset κ) (K : Finset ι)
     (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι) (hSK : S ⊆ K)
-    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d (S : Set ι)) (J : ℝ)
+    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (J : ℝ)
     (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y) :
     ‖toEuclideanLin (gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W) Ω -
@@ -139,7 +143,8 @@ theorem norm_truncated_apply_sub_inner_smul_le [NeZero d] [DecidableEq κ] {q Δ
         2 * vR * (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖W‖ * J *
           ((sᶜ.filter (fun k => ¬Disjoint (X k) K)).card : ℝ) * (q / ΔE) *
           Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * (q / ΔE) - μ * m) := by
-  refine (norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hq hΔE hgs W _).trans ?_
+  refine (norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hq hΔE
+    (isHermitian_sum _ fun k _ ↦ hHerm k) hΩ hgap hspan W _).trans ?_
   have hb := norm_gaussianFilteredTerm_sub_truncated_le_of_time G X h hHerm hSupport R hDiam
     vR hCard b₀ hBudget hq hΔE s K hsK S hSK hW J hJ μ hμ m hm
   linarith

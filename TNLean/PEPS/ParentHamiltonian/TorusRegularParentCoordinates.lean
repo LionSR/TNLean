@@ -28,6 +28,8 @@ smaller-period statements remain separate; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
@@ -45,15 +47,15 @@ theorem exists_torusPlaquetteRegion_contains_edge (e : Edge Γₜ) :
   obtain ⟨z, rfl⟩ := torusEdgeEquiv.surjective e
   rcases z with v | v
   · refine ⟨v, ?_⟩
-    change (Edge.ofAdj (torusGraph_adj_right v.1 v.2)).1.1 ∈ _ ∧
-      (Edge.ofAdj (torusGraph_adj_right v.1 v.2)).1.2 ∈ _
-    rcases Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with
+    change (ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 v.2)).1.1 ∈ _ ∧
+      (ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 v.2)).1.2 ∈ _
+    rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with
       ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩ <;>
       simp [h₁, h₂, torusPlaquetteRegion, torusPlaquetteWalk, SimpleGraph.Walk.support]
   · refine ⟨v, ?_⟩
-    change (Edge.ofAdj (torusGraph_adj_up v.1 v.2)).1.1 ∈ _ ∧
-      (Edge.ofAdj (torusGraph_adj_up v.1 v.2)).1.2 ∈ _
-    rcases Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with
+    change (ManyBody.Edge.ofAdj (torusGraph_adj_up v.1 v.2)).1.1 ∈ _ ∧
+      (ManyBody.Edge.ofAdj (torusGraph_adj_up v.1 v.2)).1.2 ∈ _
+    rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with
       ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩ <;>
       simp [h₁, h₂, torusPlaquetteRegion, torusPlaquetteWalk, SimpleGraph.Walk.support]
 

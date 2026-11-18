@@ -16,6 +16,8 @@ the same unit Bell product. Source: SCP10, arXiv:1001.3807, Observations 6.5–6
 lines 1840–1909. This graph statement is separate from geometric reblocking.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

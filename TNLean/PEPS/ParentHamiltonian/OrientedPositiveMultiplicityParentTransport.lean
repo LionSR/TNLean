@@ -12,6 +12,8 @@ Every map acts on genuine regional contraction ranges and the full parent
 space. Source: SCP10, Definition 5.1 and Section 7.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS

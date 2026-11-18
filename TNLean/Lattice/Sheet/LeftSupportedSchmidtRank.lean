@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Sheet.Splitting
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import QICLean.Algebra.OperatorSchmidt
 import QICLean.Entropy.SupportedMarginalTails
 
@@ -37,7 +39,7 @@ theorem exists_threeSplit_eq_kronecker_one_rank_le
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     {T E D : Finset ι} (hTE : Disjoint T E) (hD : D ⊆ T ∪ E)
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : A ∈ supportedOperators q (D : Set ι)) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) :
     ∃ B : Matrix ((T → Fin q) × (E → Fin q))
         ((T → Fin q) × (E → Fin q)) ℂ,
       A.submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
@@ -51,7 +53,7 @@ theorem exists_threeSplit_eq_kronecker_one_rank_le
     let u₀ : ↥(T ∪ E)ᶜ → Fin q := fun v ↦ σ₀ v
     have hDset : (D : Set ι) ⊆ (↑(T ∪ E) : Set ι) := Finset.coe_subset.mpr hD
     obtain ⟨B, hB⟩ := exists_threeSplit_eq_kronecker_one hTE
-      (supportedOperators_mono hDset hA)
+      (ManyBody.supportedOperators_mono hDset hA)
     let γ : (E → Fin q) → ((v : {v // v ∉ T}) → Fin q) :=
       fun e v ↦ (threeSplit q T E hTE).symm ((t₀, e), u₀) v
     have houtside (t : T → Fin q) (e : E → Fin q)
@@ -92,7 +94,7 @@ theorem exists_threeSplit_eq_kronecker_one_rank_le
           (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) u₀ u₀ at hentry
       simpa only [Matrix.one_apply_eq, mul_one] using hentry
     have hsupp : Entropy.IsSupportedOn (n := fun _ : ι ↦ q) A D :=
-      isSupportedOn_of_mem_supportedOperators hA
+      hA
     obtain ⟨M, L, R, hM, hdec, _⟩ :=
       hsupp.hasProductDecomposition_inner (B := T) σ₀ (c₀ := ‖A‖) le_rfl
     have hBdec : HasOperatorSchmidtDecomposition B M := by

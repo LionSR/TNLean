@@ -88,7 +88,7 @@ theorem norm_localRootChannelShell_le_exp_sum_siteOscillation
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (l : ℕ)
-    (hε : ∀ j ≤ l, ‖k - siteExpectation q (regions j) k‖ ≤
+    (hε : ∀ j ≤ l, ‖k - ManyBody.regionExpectation (regions j) k‖ ≤
       C * Real.exp (-(c * (j : ℝ) ^ α)))
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     ‖localRootChannelShell regions k l B‖ ≤
@@ -109,7 +109,7 @@ theorem siteOscillation_localRootChannel_le_exp
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (n : ℕ)
-    (hε : ∀ l ≤ n, ‖k - siteExpectation q (regions l) k‖ ≤
+    (hε : ∀ l ≤ n, ‖k - ManyBody.regionExpectation (regions l) k‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α)))
     (y : ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     siteOscillation q y (localRootChannel (regions n) k B) ≤

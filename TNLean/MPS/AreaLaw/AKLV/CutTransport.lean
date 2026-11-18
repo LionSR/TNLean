@@ -23,6 +23,8 @@ Source: AKLV, arXiv:1301.1162v1, Lemma 4.2 (`l:agsp`), lines 651--654.
 The low-frequency partition and the final optimized polynomial estimate are separate.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix
 open scoped BigOperators symmDiff
 

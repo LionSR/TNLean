@@ -31,6 +31,8 @@ separately, in `TNLean.PEPS.TorusComplementPathReplacement`; see
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V] {Γ : SimpleGraph V}
@@ -85,7 +87,7 @@ theorem regularCombinedBoundaryTransport_insideOutside (R : Finset V)
     have hstep : regularDirectedTransport u (regularBoundaryCrossingAdj R f) = u f.1 := by
       unfold regularDirectedTransport
       simp only [regularBoundaryInsideVertex, regularBoundaryOutsideVertex, dite_eq_left ht]
-      rw [ite_eq_left f.1.2.1, Edge.ofAdj_of_lt _ f.1.2.1]
+      rw [ite_eq_left f.1.2.1, ManyBody.Edge.ofAdj_of_lt _ f.1.2.1]
     rw [hstep]
     simpa only [regularBoundaryInsideVertex, regularBoundaryOutsideVertex, dite_eq_left ht] using
       regularCombinedBoundaryTransport_tail R kR kS u θ f.1 ht hh
@@ -96,7 +98,7 @@ theorem regularCombinedBoundaryTransport_insideOutside (R : Finset V)
     have hstep : regularDirectedTransport u (regularBoundaryCrossingAdj R f) = (u f.1)⁻¹ := by
       unfold regularDirectedTransport
       simp only [regularBoundaryInsideVertex, regularBoundaryOutsideVertex, dite_eq_right ht]
-      rw [ite_eq_right (not_lt.mpr f.1.2.1.le), Edge.ofAdj_of_gt _ f.1.2.1]
+      rw [ite_eq_right (not_lt.mpr f.1.2.1.le), ManyBody.Edge.ofAdj_of_gt _ f.1.2.1]
     rw [hstep]
     simpa only [regularBoundaryInsideVertex, regularBoundaryOutsideVertex, dite_eq_right ht] using
       regularCombinedBoundaryTransport_head R kR kS u θ f.1 ht hh

@@ -25,8 +25,8 @@ family `c` annihilates the blocked-region weight family of `univ \ red`. Reading
 physical leg of `univ \ red` as a fused blue/complement pair
 (`ThreeBlockGeometry.complPhysical`, a bijection onto `univ \ red` legs) and applying,
 for each host boundary configuration, the pointwise blue smul-factorization
-`ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue` rewrites the
-annihilation, as a function of the blue physical leg, as a blue-block combination
+`ThreeBlockGeometry.regionInteriorBondProd_smul_regionBlockedWeight_threeBlockComplPhysical_blue`
+rewrites the annihilation, as a function of the blue physical leg, as a blue-block combination
 whose coefficients are the `c`-weighted complement coupling coefficients. Injectivity
 of the blue block removes the blue part, leaving `c`-weighted complement coupling
 coefficients that vanish for every complement physical leg and blue boundary
@@ -42,6 +42,8 @@ surjectivity of the host boundary label forces `c = 0`.
   `injective_union`, lines 1324--1400 of
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
+
+open ManyBody (Edge)
 
 open scoped BigOperators Matrix
 

@@ -30,6 +30,8 @@ Source: arXiv:1001.3807, lines 1935–1990 and 2027–2072.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix ComplexOrder
 open Matrix
 

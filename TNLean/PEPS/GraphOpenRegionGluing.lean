@@ -14,6 +14,8 @@ and the independent column contractions in `eq:anyons:chargeon-move-setting`,
 lines 2489–2507. Only labels on bonds joining the two disjoint regions are
 summed; every label on the external boundary remains fixed.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
@@ -55,8 +57,8 @@ def regionJoiningEdge_ofAdj (L S : Finset V) (hd : Disjoint L S)
     RegionJoiningEdge (Γ := Γ) L S := by
   have hnx : x ∉ S := fun h => Finset.disjoint_left.mp hd hx h
   have hny : y ∉ L := fun h => Finset.disjoint_left.mp hd h hy
-  refine ⟨Edge.ofAdj hxy,?_⟩
-  rcases Edge.ofAdj_endpoints hxy with ⟨ht,hh⟩ | ⟨ht,hh⟩ <;>
+  refine ⟨ManyBody.Edge.ofAdj hxy,?_⟩
+  rcases ManyBody.Edge.ofAdj_endpoints hxy with ⟨ht,hh⟩ | ⟨ht,hh⟩ <;>
     simp only [ht,hh]
   · exact ⟨⟨Finset.mem_union_left _ hx,Finset.mem_union_right _ hy⟩,
       fun h => hny h.2,fun h => hnx h.1⟩

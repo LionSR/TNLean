@@ -28,6 +28,8 @@ https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf a
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_chebyshev_filter_positivity.pdf.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct InnerProductSpace Matrix.Norms.L2Operator
   ComplexOrder MatrixOrder

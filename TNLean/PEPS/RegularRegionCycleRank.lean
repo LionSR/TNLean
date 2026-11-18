@@ -26,6 +26,8 @@ assert the full physical entropy theorem.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean.PEPS

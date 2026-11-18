@@ -66,6 +66,8 @@ and ``The window family around an edge'' in
   filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

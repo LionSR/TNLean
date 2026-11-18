@@ -15,8 +15,8 @@ Theorem B by the preparation protocol).
 The model is stated natively on the chain of `L` sites (`Fin L`), with local
 dimension `q`, supports of range `R` (nonempty sets of sites of diameter at most
 `R`), one Hermitian term of norm at most `J` per support acting as the identity
-off its support, and a gapped ground vector in the sense of
-`Matrix.IsGappedGroundState`. Regional entropies are QICLean's
+off its support, and a unit vector spanning the ground space of a gapped
+Hamiltonian (`ManyBody.IsGapped` and `ManyBody.groundSpace`). Regional entropies are QICLean's
 `Entropy.regionEntropy`. The chain proof uses only the site-generic layer
 `TNLean/Lattice/` and QICLean: no module of `TNLean/MPS/AreaLaw/` imports
 `TNLean.PEPS`, directly or transitively. The two finite-dimensional cores (the
@@ -31,7 +31,7 @@ site of the chain, with no encoded holes.
 
 | Note statement | Formal statement | Status |
 |---|---|---|
-| Setting: the chain of `L` sites, intervals, supports, Hamiltonians (`eq:ham`, `eq:gap`) | `MPS.AreaLaw.interval`, `MPS.AreaLaw.IsChainSupport`, `MPS.AreaLaw.ChainHamiltonian`, `Matrix.IsGappedGroundState` | Definitions. |
+| Setting: the chain of `L` sites, intervals, supports, Hamiltonians (`eq:ham`, `eq:gap`) | `ManyBody.interval`, `ManyBody.IsChainSupport`, `MPS.AreaLaw.ChainHamiltonian`, `ManyBody.IsGapped`, `ManyBody.groundSpace` | Definitions. |
 | Lemma 3.1 (marginal tail bound) at a cut | `MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le` with the budget `MPS.AreaLaw.cutLogBudget` | Proved, from the QICLean core. |
 | Rényi entropies near one (`rem:renyi`) | `MPS.AreaLaw.ChainHamiltonian.near_one_renyi_entropy_interval_bounds` | Proved on the full closed order interval `[1-u₀, 1]`, with the linear coefficient `512e` and uniform bound `16e √((1 + J/Δ) B_R)`. The statement includes order one, zero eigenvalues and the spectral power formula. |
 | `eq:count`, `eq:BR`: split interactions and cut budget of an interval | `MPS.AreaLaw.card_crossingTerms_interval_le` (`N_R = 2·2^{2R}`), `MPS.AreaLaw.cutLogBudget_interval_le` (`B_R = 1 + N_R log²(e q^{R+1})`) | Proved; the constants are those of the note. |
@@ -43,7 +43,7 @@ site of the chain, with no encoded holes.
 | Original interval constant (`eq:final`) | `MPS.AreaLaw.regionEntropy_interval_le_polynomial` | Proved with `C_int = 8 m R log q + 1 + 2 C_E/Δ`, using the same original `C_E` and four-entry `m`, for every clipped coordinate interval. |
 | Prescribed accuracy with the original interval constant (extension of the printed `1/L` statement) | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_polynomial` | Proved for `L ≥ 1` and `0 < ε ≤ 1`: a unit MPS has error at most `ε` and bond dimension at most `⌊exp(C_int + 64 s log(2 L c₀/ε))⌋`, with `s = √((1 + J/Δ) B_R)` and `c₀ = √(2 exp(e/2))`, using the original printed `C_int`. |
 | Quantitative two-line MPS bound (`thm:Bshort`) with the original constants | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_polynomial` | Proved for every `L ≥ 2`: a unit nonzero open MPS has error at most `1/L`, explicit integer bond dimension `⌊exp(C_int + 64 s log(2 L² c₀))⌋`, and the printed upper bound `2 exp(C_int) (32 exp(e/2) L⁴)^(1/u₀)`, where `u₀ = 1/(32 s)`. Normalization and phase adjustment follow with phase zero. |
-| Component factorization with the same gap (`lem:reductions`) | `Lattice.exists_isGappedGroundState_factors_of_kronecker_sum`, `Lattice.exists_isGappedGroundState_factors_of_sum_factorOperator` | Proved for two Hermitian factors and for every nonempty finite family of them: the ground vector is the product of normalized factor ground vectors, the energies add, and each factor is a gapped ground vector with the original gap `Δ`. The finite-domain Theorem A below does not use it. |
+| Component factorization with the same gap (`lem:reductions`) | `Lattice.exists_isGapped_factors_of_kronecker_sum`, `Lattice.exists_isGapped_factors_of_sum_factorOperator` | Proved for two Hermitian factors and for every nonempty finite family of them: the ground vector is the product of normalized factor ground vectors, the energies add, and each factor is a gapped ground vector with the original gap `Δ`. The finite-domain Theorem A below does not use it. |
 | Araki–Lieb closure, reductions (Section 2) | `Lattice.regionEntropy_le_union_add`, `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges_of_intervals` | Proved. |
 | Theorem A for intervals | `MPS.AreaLaw.regionEntropy_interval_le` with the explicit `MPS.AreaLaw.chainIntervalEntropyBound` | Proved; no existential constant. |
 | Theorem A, constant linear in `1 + J/Δ` | `MPS.AreaLaw.chainIntervalEntropyBound_le`, `MPS.AreaLaw.chainAreaLawConst` | Proved. |
@@ -51,7 +51,7 @@ site of the chain, with no encoded holes.
 | Fixed-range logarithmic dimension dependence (`rem:sharper`, lines 711–745) | `MPS.AreaLaw.chainAreaLawConst_le_mul_log_cube`, `MPS.AreaLaw.regionEntropy_le_log_cube_mul_card_boundaryEdges` | For `q ≥ 2`, `C₀(q,R) ≤ K_R log³q`, where `K_R log³2` is `C₀(2,R)` with its energy entry `E_R` replaced by the logarithmic entry `64 e N_R log²(e 2^(R+1))`; the physical bound holds for `q ≥ 1`, with zero entropy when `q = 1`. |
 | Full contained consecutive windows (`rem:sharper`, lines 706–748) | `MPS.AreaLaw.ChainHamiltonian.cutLogBudget_interval_le_of_consecutive_terms`, `MPS.AreaLaw.chainAreaLaw_of_consecutive_terms`, `MPS.AreaLaw.chainAreaLaw_of_consecutive_terms_polynomial_range` | For nonzero terms assigned to full `(R+1)`-site windows contained in the chain, `B_win = 1 + 2R log²(e q^(R+1))`, and `C₀,win` is `C₀(q,R)` with `N_R` replaced by `2R` and `B_R` by `B_win`. One constant `C = C₀,win(q,R)(1+J/Δ)` precedes all lengths, Hamiltonians, normalized gapped ground vectors and regions. An absolute positive constant, chosen before all physical data, gives `S_Ω(A) ≤ C_abs(1+J/Δ) R log³(q^R) card(∂A)`. Range zero and local dimension one give zero entropy, including the empty chain. |
 | Zero interaction range | `MPS.AreaLaw.ChainHamiltonian.regionEntropy_eq_zero_of_range_zero` | Every region of a gapped range-zero ground vector has zero entropy, without an added sign or positivity assumption on `J` or `q`. |
-| Setting on a finite `Λ ⊂ ℤ` (induced path graph, `eq:ham`, `∂_Λ A`) | `MPS.AreaLaw.sitePos`, `MPS.AreaLaw.domainGraph`, `MPS.AreaLaw.IsDomainSupport`, `MPS.AreaLaw.DomainHamiltonian`, `MPS.AreaLaw.domainBoundaryEdges` | Definitions; the sites of `Λ` are labelled in increasing order. |
+| Setting on a finite `Λ ⊂ ℤ` (induced path graph, `eq:ham`, `∂_Λ A`) | `ManyBody.sitePos`, `ManyBody.lineDomainGraph`, `ManyBody.IsDomainSupport`, `MPS.AreaLaw.DomainHamiltonian`, `MPS.AreaLaw.domainBoundaryEdges` | Definitions; the sites of `Λ` are labelled in increasing order. |
 | Theorem A on a finite `Λ ⊂ ℤ`; first reduction (Section 2) | `MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges`, `MPS.AreaLaw.domainAreaLaw` | Proved, with the constant `C₀(q, R)(1 + J/Δ)` of the chain. The reduction uses the zero entropy of the prefixes ending at the gaps of `Λ` (`Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint`) and flips of the region on them (`Lattice.regionEntropy_symmDiff_eq_of_eq_zero`) in place of the factorization over components: `docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex` (resolved). |
 | Polynomial-range full-window area law on finite domains | `MPS.AreaLaw.domainAreaLaw_of_consecutive_terms_polynomial_range` | Proved on every finite `Λ ⊂ ℤ` when every nonzero designated physical support is a full `(R+1)`-site interval contained in `Λ`. The same absolute `C_abs`, fixed before all physical data, gives `S_Ω(A∩Λ) ≤ C_abs (1+J/Δ) R log³(q^R) card(∂_Λ A)`, including range zero, local dimension one and the empty domain. Sorted labelling preserves the original terms, `J`, sum and global gap; zero-entropy prefix flips preserve entropy and the exact physical boundary cardinality, with no component factor. |
 | Part II, `lem:reset` (information reset) | `MPS.AreaLaw.ChainHamiltonian.information_reset` | Proved on the contiguous chain, with only the original full-system gap. The constants precede all system, region and information-bound data. |
@@ -129,7 +129,7 @@ b₀, the explicit constants are C = 2 + 4|b₀| exp(2μR) and
 v = 2v_R|b₀| exp(2μR) + 1, for μ ≥ 0.
 
 For localization, under polynomial sphere growth K_g(d + 1)^k,
-`QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`
+`ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le`
 bounds the error of the normalized partial trace onto the union of the radius-ℓ
 balls about S by C |S|² ‖A‖ K_g T_k exp(v|t| − ℓ/2), for natural ℓ. Here
 C and v are the preceding constants at μ = 1, and
@@ -152,16 +152,15 @@ chain length. These statements include the empty chain and all natural
 radii. They concern the contiguous path; coordinate distance does not replace
 graph distance across holes in a disconnected domain.
 
-The matrix-entry condition for support is equivalent to membership in the
-supported-operator algebra by `QuantumCircuit.mem_supportedOperators_of_isSupportedOn`
-and its converse. The paired two-copy construction
+The matrix-entry condition for support is the carrier of the
+supported-operator algebra `ManyBody.supportedOperators` of QICLean. The paired two-copy construction
 `MPS.AreaLaw.ChainHamiltonian.doubled` keeps the same physical supports and
 has local dimension q² and term bound 2J. The equality
 `MPS.AreaLaw.ChainHamiltonian.doubled_operator` identifies its sum exactly
 with H⊗1+1⊗H in paired coordinates.
 
 On a contiguous chain, `MPS.AreaLaw.norm_heisenberg_commutator_le_chainDistance`
-and `MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_chainNeighborhood_le`
+and `MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_chainNeighborhood_le`
 prove both estimates with common decay exponent μ = 1/2 and velocity
 v = 2(R + 1)|b₀| exp(2R) + 1. The commutator coefficient is
 C = 2 + 4|b₀| exp(2R); the localization coefficient is
@@ -191,7 +190,7 @@ preservation under isomorphism and component inclusion, gives
 sphere has at most two sites; no distance is measured across a missing integer.
 
 With q ≥ 1, the extension
-`MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le`
+`MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_domainNeighborhood_le`
 gives localization on every finite integer domain with the same C′ and v
 as the contiguous chain. At a real radius ℓ ≥ 0 its neighborhood is exactly
 `S.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)`.
@@ -227,14 +226,14 @@ doubled interaction by the actual paired swap. It retains the same supports
 and range, local dimension q² and term bound 2J; its operator identity is
 `MPS.AreaLaw.ChainHamiltonian.swappedDoubled_operator`.
 The theorem
-`MPS.AreaLaw.ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState`
+`MPS.AreaLaw.ChainHamiltonian.doubled_swappedDoubled_isGapped`
 constructs the two ground-state predicates for the actual paired tensor
 square Ψ and its swap image Φ. Both vectors are normalized, have energy
 2E₀ and inherit the lower gap Δ from the original ground-state predicate
 and Δ > 0. No additional positivity or nonemptiness assumption is imposed.
 
 The theorem
-`MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le`
+`MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_regionExpectation_le`
 localizes the actual relative-evolution generator
 G(t) = exp(itK′)(K′−K)exp(−itK′) onto the exact radius-ℓ neighborhood of Z.
 Its error is bounded by 4|J| a (R+1)² N_R L exp(v|t|−ℓ/2), where a and v

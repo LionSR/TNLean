@@ -26,6 +26,8 @@ formula is derived from the original internal-bond summation; no factorization i
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

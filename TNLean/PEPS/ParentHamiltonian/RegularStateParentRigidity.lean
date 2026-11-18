@@ -35,6 +35,8 @@ not a bondwise Fundamental Theorem.
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (Edge)
+
 open scoped Matrix ComplexOrder
 
 namespace TNLean.PEPS

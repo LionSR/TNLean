@@ -25,6 +25,8 @@ the root party (`mainState_zero`).
   (lines 82–100), the resizes (lines 127–131), and the initial copy (lines 658–661).
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 open Set

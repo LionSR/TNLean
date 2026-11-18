@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.GaussianFilteredTerm
+import TNLean.Lattice.MetricInteractionGraph
 import TNLean.Circuit.SupportedOperators
 import TNLean.Algebra.ToEuclideanLinApply
 import Mathlib.Topology.MetricSpace.Defs
@@ -12,7 +13,7 @@ import Mathlib.Topology.MetricSpace.Defs
 # Exact Gaussian filtering for zero-range Hamiltonians
 
 Let a finite metric space index both the sites and the terms of a local Hamiltonian.
-If each term `Hᵢ` acts inside `Metric.closedBall i 0`, it acts only at site `i`.
+If each term `Hᵢ` acts inside the closed ball of radius `0` about `i`, it acts only at site `i`.
 The terms therefore commute pairwise, and filtering `Hᵢ` under the full Hamiltonian
 or any partial sum returns `Hᵢ` exactly. Each term also preserves every eigenspace
 of the full Hamiltonian, so its excited component on a ground vector vanishes.
@@ -74,22 +75,23 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι] {d : ℕ}
 /-- Terms supported on their individual sites commute pairwise. -/
 theorem commute_of_singleton_support
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d ({i} : Set ι)) (i j : ι) :
+    (hsupp : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({i} : Finset ι)) (i j : ι) :
     Commute (h i) (h j) := by
   by_cases hij : i = j
   · subst j
     exact Commute.refl _
-  · apply commute_of_mem_supportedOperators _ (hsupp i) (hsupp j)
-    apply Set.disjoint_left.mpr
+  · apply ManyBody.commute_of_mem_supportedOperators_of_disjoint (hsupp i) (hsupp j) _
+    apply Finset.disjoint_left.mpr
     intro k hki hkj
-    simp only [Set.mem_singleton_iff] at hki hkj
+    simp only [Finset.mem_singleton] at hki hkj
     exact hij (hki.symm.trans hkj)
 
 /-- Any partial sum of zero-range terms commutes with each individual term, even when the
 partial sum omits its index. -/
 theorem commute_sum_of_singleton_support
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d ({i} : Set ι)) (s : Finset ι) (i : ι) :
+    (hsupp : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({i} : Finset ι))
+    (s : Finset ι) (i : ι) :
     Commute (∑ j ∈ s, h j) (h i) := by
   change (∑ j ∈ s, h j) * h i = h i * ∑ j ∈ s, h j
   rw [Finset.sum_mul, Finset.mul_sum]
@@ -98,7 +100,7 @@ theorem commute_sum_of_singleton_support
 /-- The local and full Gaussian filters are exact for physical zero-range terms. -/
 theorem gaussianFilteredTerm_sum_eq_of_singleton_support
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d ({i} : Set ι))
+    (hsupp : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({i} : Finset ι))
     (s : Finset ι) (q ΔE : ℝ) (i : ι) :
     gaussianFilteredTerm q ΔE (∑ j ∈ s, h j) (h i) = h i :=
   gaussianFilteredTerm_eq_of_commute q ΔE (commute_sum_of_singleton_support h hsupp s i)
@@ -109,19 +111,20 @@ section Metric
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] [MetricSpace ι] {d : ℕ}
 
-omit [DecidableEq ι] in
 /-- In a genuine metric, radius-zero balls are singletons. -/
 theorem singleton_support_of_zero_range
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i 0)) :
-    ∀ i, h i ∈ supportedOperators d ({i} : Set ι) := by
+    (hsupp : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall 0 i)) :
+    ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({i} : Finset ι) := by
   intro i
-  simpa only [Metric.closedBall_zero] using hsupp i
+  convert hsupp i using 2
+  ext j
+  simp [mem_metricRangeBall, dist_le_zero, eq_comm]
 
 /-- The Gaussian filter under every retained local generator fixes a zero-range term. -/
 theorem gaussianFilteredTerm_sum_eq_of_zero_range
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i 0))
+    (hsupp : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall 0 i))
     (s : Finset ι) (q ΔE : ℝ) (i : ι) :
     gaussianFilteredTerm q ΔE (∑ j ∈ s, h j) (h i) = h i :=
   gaussianFilteredTerm_sum_eq_of_singleton_support h
@@ -130,7 +133,7 @@ theorem gaussianFilteredTerm_sum_eq_of_zero_range
 /-- Full and truncated filters agree exactly in the physical metric zero-range case. -/
 theorem gaussianFilteredTerm_full_and_sum_eq_of_zero_range
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i 0))
+    (hsupp : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall 0 i))
     (s : Finset ι) (q ΔE : ℝ) (i : ι) :
     gaussianFilteredTerm q ΔE (∑ j, h j) (h i) = h i ∧
       gaussianFilteredTerm q ΔE (∑ j ∈ s, h j) (h i) = h i :=
@@ -140,7 +143,7 @@ theorem gaussianFilteredTerm_full_and_sum_eq_of_zero_range
 /-- A zero-range term preserves the full ground eigenspace exactly. -/
 theorem starProjection_term_eq_of_zero_range
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i 0))
+    (hsupp : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall 0 i))
     {E₀ : ℝ} {ψ : EuclideanSpace ℂ (ι → Fin d)}
     (hψ : ψ ∈ groundSpace (∑ j, h j) E₀) (i : ι) :
     (groundSpace (∑ j, h j) E₀).starProjection (toEuclideanLin (h i) ψ) =
@@ -152,7 +155,7 @@ theorem starProjection_term_eq_of_zero_range
 its excited component vanishes exactly, for every retained generator. -/
 theorem sub_starProjection_gaussianFilteredTerm_sum_eq_zero_of_zero_range
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i 0))
+    (hsupp : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall 0 i))
     (s : Finset ι) (q ΔE : ℝ) {E₀ : ℝ} {ψ : EuclideanSpace ℂ (ι → Fin d)}
     (hψ : ψ ∈ groundSpace (∑ j, h j) E₀) (i : ι) :
     toEuclideanLin (gaussianFilteredTerm q ΔE (∑ j ∈ s, h j) (h i)) ψ -

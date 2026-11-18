@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Data.Finset.Prod
 
 import TNLean.PEPS.NormalEdgeBlockingData
+import QICLean.ManyBody.Sites.Lattice.Square
 
 /-!
 # Normal PEPS blocking hypotheses
@@ -27,6 +28,8 @@ one-site-different injective regions with injective complements.
   Section 3, Theorem 3 and Theorem normal](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge SquareLatticeVertex)
+
 namespace TNLean
 namespace PEPS
 
@@ -36,15 +39,6 @@ variable {G : SimpleGraph V}
 variable (ι : RegionInjectivityData V)
 
 /-! ### Coordinate regions for the square-lattice normal theorem -/
-
-/-- The vertex type of a finite rectangular square lattice of size
-`width × height`.
-
-Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1452 of
-`Papers/1804.04964/paper_normal.tex`, where the normal theorem is specialized
-to finite square lattices. -/
-abbrev SquareLatticeVertex (width height : ℕ) :=
-  Fin width × Fin height
 
 /-- A coordinate rectangle in a finite square lattice, specified by its
 horizontal and vertical coordinate sets.

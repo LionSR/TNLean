@@ -47,7 +47,7 @@ theorem exists_ne_of_two_le (hn : 2 ≤ n) (a : Fin n) : ∃ b : Fin n, b ≠ a 
   · exact ⟨⟨0, by omega⟩, fun h' => h (by rw [← h'])⟩
 
 theorem exists_pair_superset (hn : 2 ≤ n) {T : Finset (Fin n)} (hT : T.card ≤ 2) :
-    ∃ s t : Fin n, s ≠ t ∧ (T : Set (Fin n)) ⊆ {s, t} := by
+    ∃ s t : Fin n, s ≠ t ∧ T ⊆ {s, t} := by
   rcases Nat.lt_or_ge T.card 2 with h | h
   · rcases Nat.lt_or_ge T.card 1 with h' | h'
     · rw [Nat.lt_one_iff, Finset.card_eq_zero] at h'
@@ -64,9 +64,10 @@ sites. -/
 theorem isPairProduct_of_mem_supportedOperators_card_le_two (hd : 0 < d) (hn : 2 ≤ n)
     {T : Finset (Fin n)} (hT : T.card ≤ 2) {Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ}
     (hZu : Z ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ))
-    (hZ : Z ∈ supportedOperators d (T : Set (Fin n))) : IsPairProduct d n (2 * n) Z := by
+    (hZ : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) T) : IsPairProduct d n (2 * n) Z := by
   obtain ⟨s, t, hst, hsub⟩ := exists_pair_superset hn hT
-  exact isPairProduct_of_mem_supportedOperators_pair hd hst hZu (supportedOperators_mono hsub hZ)
+  exact isPairProduct_of_mem_supportedOperators_pair hd hst hZu
+      (ManyBody.supportedOperators_mono hsub hZ)
 
 /-! ### Removing the controls one by one -/
 

@@ -49,6 +49,8 @@ with `angularScale` and `angularThresholdClosed`, are unchanged.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 open TNLean.Lattice
@@ -68,20 +70,20 @@ theorem IsRangeSquareGroundState.squareCellInformationBound {q R : ℕ} (hq : 1 
     SquareCellInformationBound q (IsRangeSquareGroundState q R J Δ) c
       (cellInformationConstantClosed q R J Δ c) (cellInformationExponentClosed q R J Δ c) := by
   intro s hs o m₀ A hm₀ L Ω hΩ
-  obtain ⟨H, E₀, hgap⟩ := hΩ
+  obtain ⟨H, E₀, hΩ', hgap, hspan⟩ := hΩ
   exact cell_conditionalMutualInformation_le_square_of_rectangle Ω o m₀ A
     (cell_conditionalMutualInformation_le_closed hq hJ hΔ hc s hs (o - (1, 1)) m₀ A hm₀
-      (rectangularDomain L L) H E₀ (squareAreaLawState Ω) hgap)
+      (rectangularDomain L L) H E₀ (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap hspan)
 
 /-- The mutual information of a state of the square equals that of its placement on the integer
 square, for the corresponding sets of sites. -/
 theorem mutualInformation_squareAreaLawState {q L : ℕ} (Ω : StateSpace L q)
     (X Y : Finset (SquareLatticeVertex L L)) :
     FiniteProduct.mutualInformation (fun _ : Site (rectangularDomain L L) ↦ Fin q)
-        (squareAreaLawState Ω) (X.map (rectangleSiteEquiv L L).toEmbedding)
+        (AreaLaw.rectangleAreaLawState Ω) (X.map (rectangleSiteEquiv L L).toEmbedding)
         (Y.map (rectangleSiteEquiv L L).toEmbedding) =
       FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω X Y := by
-  simp only [FiniteProduct.mutualInformation, squareAreaLawState,
+  simp only [FiniteProduct.mutualInformation, AreaLaw.rectangleAreaLawState,
     show rectangleConfigurationEquiv L L q =
       (rectangleSiteEquiv L L).arrowCongr (Equiv.refl (Fin q)) from rfl,
     ← Finset.map_union, finiteProductEntropy_relabel]
@@ -110,7 +112,8 @@ theorem IsRangeSquareGroundState.squareResetBound {q R : ℕ} (hq : 1 ≤ q) {J 
     have hv : v ∉ T := fun h ↦ hy (Finset.mem_map_of_mem _ h)
     simpa only [Equiv.toEmbedding_apply, hval] using hT u hu v hv
   have h := H.information_reset_of_rangeResetThreshold_le hq hJ hΔ hp hL E₀
-    (squareAreaLawState Ω) hgap (Rg.map σ.toEmbedding) (C.map σ.toEmbedding)
+    (AreaLaw.rectangleAreaLawState Ω) hgap.1 hgap.2.1 hgap.2.2 (Rg.map σ.toEmbedding)
+        (C.map σ.toEmbedding)
     (R₀.map σ.toEmbedding) (C₀.map σ.toEmbedding)
     ((Finset.disjoint_map σ.toEmbedding).mpr hRC) (Finset.map_subset_map.mpr hR₀)
     (Finset.map_subset_map.mpr hC₀) b hb

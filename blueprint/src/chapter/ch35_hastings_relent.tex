@@ -117,7 +117,7 @@ $C_2=7$ as recorded in~\cite{gap:hastings07_relent_constants}.
 
 \begin{lemma}[The entropy gain across a cut of a gapped chain]
     \label{thm:hastings_relent}
-    \lean{TNLean.MPS.AreaLaw.Hastings.exists_relent_of_isGappedGroundState}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_relent_of_isGapped}
     \leanok
     \uses{def:chain_model, def:hastings_bootstrap_remainder,
         thm:hastings_lemma1_endpoint}
@@ -154,7 +154,7 @@ $C_2=7$ as recorded in~\cite{gap:hastings07_relent_constants}.
 
 \begin{lemma}[The entropy gain at the source length]
     \label{thm:hastings_relent_source}
-    \lean{TNLean.MPS.AreaLaw.Hastings.exists_relent_of_isGappedGroundState_source}
+    \lean{TNLean.MPS.AreaLaw.Hastings.exists_relent_of_isGapped_source}
     \leanok
     \uses{thm:hastings_source_factorization,thm:hastings_relent_window}
     For each range $R$ there is $K\ge0$, depending only on $R$, such that

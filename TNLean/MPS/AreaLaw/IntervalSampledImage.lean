@@ -26,6 +26,8 @@ corrected exponent and net scale documented at
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_random_sampling_net_count.pdf.
 -/
 
+open ManyBody (interval)
+
 open scoped TensorProduct
 open MeasureTheory
 

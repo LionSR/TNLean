@@ -27,6 +27,8 @@ see `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 choice is asserted.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory Matrix
 open scoped BigOperators ComplexOrder MatrixOrder ENNReal Matrix.Norms.L2Operator
 

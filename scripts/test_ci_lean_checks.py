@@ -871,7 +871,7 @@ class FocusedWorkflowTest(unittest.TestCase):
             self.assertIn("set -eo pipefail", step["run"])
         self.assertIn("lake build\n", full["run"])
         self.assertIn("ci_lean_checks.py strict --jobs 3", strict["run"])
-        self.assertEqual(strict["timeout-minutes"], 60)
+        self.assertEqual(strict["timeout-minutes"], 120)
 
 
 class EarlyBuildTest(unittest.TestCase):

@@ -44,8 +44,8 @@ theorem torusSecondStringCrossingOutput_up_transport (v p : X) (g h : G) :
   have he := torusSecondStringCrossingOutput_eq_of_ne v g h (torusUpEdge p)
     (torusRightEdge_ne_torusUpEdge (v.1 + 2, v.2 + 2) p).symm
   change torusSecondStringCrossingOutput v g h
-      (Edge.ofAdj (torusGraph_adj_up p.1 p.2)) =
-    torusSweptStringRightStepOperators v g h (Edge.ofAdj (torusGraph_adj_up p.1 p.2)) at he
+      (ManyBody.Edge.ofAdj (torusGraph_adj_up p.1 p.2)) =
+    torusSweptStringRightStepOperators v g h (ManyBody.Edge.ofAdj (torusGraph_adj_up p.1 p.2)) at he
   simpa only [regularDirectedTransport, he] using
     torusSweptStringRightStepOperators_up_transport v p g h
 /-- Only the selected middle rightward transport is added in the second step.
@@ -61,8 +61,9 @@ theorem torusSecondStringCrossingOutput_right_transport (v p : X) (g h : G) :
   · have he := torusSecondStringCrossingOutput_eq_of_ne v g h (torusRightEdge p)
       ((torusRightEdge_injective (width := width) (height := height)).ne hp)
     change torusSecondStringCrossingOutput v g h
-        (Edge.ofAdj (torusGraph_adj_right p.1 p.2)) =
-      torusSweptStringRightStepOperators v g h (Edge.ofAdj (torusGraph_adj_right p.1 p.2)) at he
+        (ManyBody.Edge.ofAdj (torusGraph_adj_right p.1 p.2)) =
+      torusSweptStringRightStepOperators v g h
+          (ManyBody.Edge.ofAdj (torusGraph_adj_right p.1 p.2)) at he
     simpa only [regularDirectedTransport, he, ite_eq_right hp] using
       torusSweptStringRightStepOperators_right_transport v p g h
 /-- The actual three plaquettes visited by the first two physical steps.

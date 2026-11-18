@@ -37,6 +37,8 @@ Source: Schuch, Cirac, and Pérez-García, arXiv:1001.3807,
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

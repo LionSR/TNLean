@@ -27,6 +27,8 @@ bond transformation in Section 7, lines 2977–3019. This is a local-support
 step toward transport of canonical parent kernels, not the complete transport.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

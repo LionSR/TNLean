@@ -49,6 +49,8 @@ depends on the fixed bandwidth `etaLD`; the local dimension satisfies
 `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open MeasureTheory
 

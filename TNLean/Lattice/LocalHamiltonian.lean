@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.Lattice.FiniteDomain
 import TNLean.Circuit.SiteEmbedding
-import TNLean.Algebra.GappedGroundState
 import Mathlib.Analysis.CStarAlgebra.Matrix
 
 /-!
@@ -20,7 +19,6 @@ Euclidean operator norms, rather than entrywise matrix norms.
 
 * `LocalHamiltonian`: the bounded Hermitian interaction family.
 * `LocalHamiltonian.operator`: its finite sum.
-* `IsGappedGroundState`: a unit eigenvector and the full-system projector gap.
 
 ## References
 
@@ -48,7 +46,7 @@ structure LocalHamiltonian (Λ : Finset (ℤ × ℤ)) (q R : ℕ) (J : ℝ) wher
   /-- The term assigned to each support; zero terms are permitted. -/
   term : AdmissibleSupport Λ R → Matrix (Configuration Λ q) (Configuration Λ q) ℂ
   /-- Each term acts trivially on the complementary sites. -/
-  supported : ∀ X, term X ∈ QuantumCircuit.supportedOperators q (X.1 : Set (Site Λ))
+  supported : ∀ X, term X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X.1
   /-- Each summand is Hermitian, as required by `eq:hamiltonian`. -/
   hermitian : ∀ X, (term X).IsHermitian
   /-- Each summand has Euclidean operator norm at most `J`. -/
@@ -72,7 +70,7 @@ Source: area-law `eq:hamiltonian`, zero summands are permitted. -/
 noncomputable def LocalHamiltonian.zero (Λ : Finset (ℤ × ℤ)) (q R : ℕ)
     (J : ℝ) (hJ : 0 ≤ J) : LocalHamiltonian Λ q R J where
   term _ := 0
-  supported _ := Submodule.zero_mem _
+  supported _ := zero_mem _
   hermitian _ := Matrix.isHermitian_zero
   norm_le _ := by simpa using hJ
 
@@ -87,19 +85,9 @@ noncomputable def localLift (Λ : Finset (ℤ × ℤ)) (q : ℕ) (X : Finset (Si
 /-- A placed local matrix belongs to the existing supported-operator algebra. -/
 theorem localLift_mem_supportedOperators (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (X : Finset (Site Λ)) (K : Matrix (↥X → Fin q) (↥X → Fin q) ℂ) :
-    localLift Λ q X K ∈ QuantumCircuit.supportedOperators q (X : Set (Site Λ)) := by
+    localLift Λ q X K ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) X := by
   simpa [localLift] using
     QuantumCircuit.embedOp_mem_supportedOperators
       (e := fun x : ↥X ↦ x.val) Subtype.val_injective K
-
-/-- A unit eigenvector with the full-system projector gap, the specialization of
-`Matrix.IsGappedGroundState` to the finite-domain state space.
-Source: area-law Theorem 1.1. For a Hermitian Hamiltonian and positive `Δ`,
-the inequality also forces the eigenvalue to be the ground energy and its
-eigenspace to be one-dimensional; these consequences are separate proof obligations. -/
-def IsGappedGroundState (Λ : Finset (ℤ × ℤ)) (q : ℕ)
-    (H : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-    (E₀ : ℝ) (Ω : StateSpace Λ q) (Δ : ℝ) : Prop :=
-  Matrix.IsGappedGroundState H E₀ Ω Δ
 
 end TNLean.Lattice

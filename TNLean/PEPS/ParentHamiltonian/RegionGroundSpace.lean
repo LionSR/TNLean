@@ -31,6 +31,8 @@ Section IV.C.1, local source lines 2003–2011.
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean.PEPS

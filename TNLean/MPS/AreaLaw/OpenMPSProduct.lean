@@ -88,14 +88,14 @@ Supporting locality algebra for ALVV, arXiv:1602.08828v2,
 Proposition 5.7, lines 1324–1333. -/
 theorem isOpenMPS_operator_entries_of_supported_singleton {L q : ℕ} (v : Fin L)
     (M : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hM : M ∈ QuantumCircuit.supportedOperators q ({v} : Set (Fin L))) :
+    (hM : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({v} : Finset (Fin L))) :
     IsOpenMPS L (q * q) 1 (fun w ↦
       M (fun t ↦ (w t).divNat) (fun t ↦ (w t).modNat)) := by
   classical
   let e := fun _ : Fin 1 ↦ v
   have he : Function.Injective e := fun _ _ _ ↦ Subsingleton.elim _ _
-  have hs : M ∈ QuantumCircuit.supportedOperators q (Set.range e) := by
-    simpa only [e, Set.range_const] using hM
+  have hs : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Finset.univ.image e) := by
+    simpa only [e, Finset.univ_nonempty, Finset.image_const] using hM
   obtain ⟨X, rfl⟩ := QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators he hs
   exact isOpenMPS_operator_entries_embed_one_site v X
 

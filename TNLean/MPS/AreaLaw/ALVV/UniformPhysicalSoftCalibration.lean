@@ -23,6 +23,8 @@ corrected residual and cluster estimates in
 source's fourth-order choice or assert its running time.
 -/
 
+open ManyBody (interval)
+
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker TensorProduct Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 

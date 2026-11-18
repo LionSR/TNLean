@@ -94,7 +94,7 @@ Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 396–
 413–437 and 445–446; bounded changes, lines 99–105; allowed monomials, `04-compression.tex`,
 lines 32–35. -/
 theorem birth_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
-    (hTH : Disjoint (T : Set ι) F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
+    (hTH : Disjoint T F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     {L : ℝ}
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
@@ -139,7 +139,7 @@ pair effect `⟨s|` held by `Q∘` and `P∘`, reinserts `s` and applies `Vᴴ` 
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 407–410; proof lines
 439–446. -/
 theorem death_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
-    (hTH : Disjoint (T : Set ι) F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
+    (hTH : Disjoint T F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     {L : ℝ}
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
@@ -300,8 +300,8 @@ canonical identification of tag orderings of lines 75–76 and 84–85; proof li
 bounded changes, lines 99–105. -/
 theorem exchange_ofFrames_bounded [NeZero q] (F₁ F₂ : Frame pos q Party) (Y : Finset ι)
     (out : Hole pos q Party → Bool)
-    (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true → Disjoint (h.patch.outer : Set ι) Y)
-    (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false → (h.patch.outer : Set ι) ⊆ Y) (P : Party)
+    (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true → Disjoint h.patch.outer Y)
+    (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false → h.patch.outer ⊆ Y) (P : Party)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω
       ((ofFrames F₁ F₂ Y out hout hin).tSet P) ((ofFrames F₁ F₂ Y out hout hin).eSet P) ≤

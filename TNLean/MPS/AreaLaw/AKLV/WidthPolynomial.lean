@@ -22,6 +22,8 @@ The restriction on the window width is explicit here; the unrestricted central-c
 statement follows by regrouping the actual interactions into a shorter window.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators
 

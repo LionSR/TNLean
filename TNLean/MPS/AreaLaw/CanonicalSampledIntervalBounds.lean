@@ -22,6 +22,8 @@ iteration and larger integer count are those documented in
 spanning-vector bounds, not an all-span Schmidt-rank or runtime assertion.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

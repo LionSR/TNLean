@@ -26,6 +26,8 @@ joint success probability for an adaptive algorithm. The leaves are full
 spaces at a prescribed positive width, and long nodes use one final trim.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped ENNReal
 

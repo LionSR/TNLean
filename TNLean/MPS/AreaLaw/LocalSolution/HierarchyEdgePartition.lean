@@ -103,14 +103,14 @@ end Matrices
 
 section Support
 
-variable {α β ι : Type*} [Fintype α] [DecidableEq β] [Fintype ι] {d : ℕ}
+variable {α β ι : Type*} [Fintype α] [DecidableEq β] [Fintype ι] [DecidableEq ι] {d : ℕ}
 
 /-- A coarse edge has the support shared by the terms assigned to it. -/
 theorem edgePartition_mem_supportedOperators (f : α → β)
-    (a : α → Matrix (ι → Fin d) (ι → Fin d) ℂ) (j : β) (S : Set ι)
-    (ha : ∀ i, f i = j → a i ∈ supportedOperators d S) :
-    edgePartition f a j ∈ supportedOperators d S := by
-  apply Submodule.sum_mem
+    (a : α → Matrix (ι → Fin d) (ι → Fin d) ℂ) (j : β) (S : Finset ι)
+    (ha : ∀ i, f i = j → a i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
+    edgePartition f a j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
+  apply sum_mem
   intro i hi
   exact ha i (Finset.mem_filter.mp hi).2
 

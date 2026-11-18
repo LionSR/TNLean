@@ -26,6 +26,8 @@ the corrected regional ones. See `docs/paper-gaps/alvv16_cluster_approximation.t
 `docs/paper-gaps/alvv16_soft_regional_residuals.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker TensorProduct Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 
@@ -210,23 +212,24 @@ theorem exists_soft_low_density_polynomial_core
       (Fin (N + 1) → Fin q) ℂ) + (p 2 : ℂ) • 1
     have hFsupport (j : Fin 5) : Entropy.IsSupportedOn (Fraw j)
         (interval (N + 1) (cuts j.castSucc) (cuts j.succ)) := by
-      let V := QuantumCircuit.supportedOperators q
-        (interval (N + 1) (cuts j.castSucc) (cuts j.succ) : Set (Fin (N + 1)))
-      have hAmem : A j ∈ V := QuantumCircuit.mem_supportedOperators_of_isSupportedOn
-        (isSupportedOn_sum_internal_bonds (N + 1) q (cuts j.castSucc) (cuts j.succ) h hs)
-      apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-      exact V.add_mem (V.smul_mem _ (QuantumCircuit.one_mem_supportedOperators _))
-        (QuantumCircuit.cfc_mem_supportedOperators _
-          (V.sub_mem hAmem (V.smul_mem _ (QuantumCircuit.one_mem_supportedOperators _))))
+      change _ ∈ ManyBody.supportedOperators _ _
+      let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (interval (N + 1) (cuts j.castSucc) (cuts j.succ) : Finset (Fin (N + 1)))
+      have hAmem : A j ∈ V :=
+        isSupportedOn_sum_internal_bonds (N + 1) q (cuts j.castSucc) (cuts j.succ) h hs
+      change _ ∈ ManyBody.supportedOperators _ _
+      exact add_mem (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
+        (ManyBody.cfc_mem_supportedOperators _
+          (sub_mem hAmem (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))))
     have hPL : Entropy.IsSupportedOn PL (interval (N + 1) 0 (a + 1)) := by
-      let V := QuantumCircuit.supportedOperators q
-        (interval (N + 1) 0 (a + 1) : Set (Fin (N + 1)))
-      have hFmem : Fraw 0 ∈ V := QuantumCircuit.mem_supportedOperators_of_isSupportedOn
-        (hFsupport 0)
-      apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-      exact V.add_mem (V.sub_mem hFmem (V.sum_mem fun j _ ↦
-        V.smul_mem _ (QuantumCircuit.one_mem_supportedOperators _)))
-        (V.smul_mem _ (QuantumCircuit.one_mem_supportedOperators _))
+      change _ ∈ ManyBody.supportedOperators _ _
+      let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (interval (N + 1) 0 (a + 1) : Finset (Fin (N + 1)))
+      have hFmem : Fraw 0 ∈ V := hFsupport 0
+      change _ ∈ ManyBody.supportedOperators _ _
+      exact add_mem (sub_mem hFmem (sum_mem fun j _ ↦
+        SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _))))
+        (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
     have hPR : Entropy.IsSupportedOn (Fraw 4) (interval (N + 1) (b + 2 * ell) (N + 1)) :=
       hFsupport 4
     have hAlphabet :

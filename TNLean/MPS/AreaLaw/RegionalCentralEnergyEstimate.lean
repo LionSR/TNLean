@@ -24,6 +24,8 @@ https://sirui-lu.com/TNLean/paper-gaps/alvv16_soft_regional_energy_centering.pdf
 No efficient computation of the collar minima or generation algorithm is claimed.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw

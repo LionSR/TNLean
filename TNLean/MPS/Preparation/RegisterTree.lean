@@ -124,7 +124,7 @@ theorem isZeroOn_pairLayerOp_mulVec_productVector {M N : ℕ} [NeZero d] {ℓ : 
   intro x hx i hi
   rw [pairLayerOp_mulVec_apply] at hx
   split_ifs at hx with h
-  · obtain ⟨b, y, hy1, hy2, rfl⟩ := hi
+  · obtain ⟨b, y, hy1, hy2, rfl⟩ := (Finset.mem_filter.mp hi).2
     have hx0 := h (blockSite hN b y) fun b' j hj => by
       have := (blockSite_mem_pairSite hN hr b y).mp ⟨b', j, hj⟩
       omega
@@ -337,7 +337,7 @@ theorem mem_span_regGate {j p : ℕ} (hj : j ≤ k) (hp : p < 2 ^ j) {b : Fin M}
     (hx : x ∈ (regGate X hN j b p).span) :
     ∃ m, ∃ hm : m < s * regSpan k j,
       x = blockSite hN b ⟨s * (p * regSpan k j) + m, mul_mul_regSpan_add_lt hj hp hm⟩ := by
-  obtain ⟨m, hm, rfl⟩ := hx
+  obtain ⟨m, hm, rfl⟩ := (regGate X hN j b p).mem_span.mp hx
   have hm' : m < s * regSpan k j := by
     have := two_mul_regGate_L (X := X) (hN := hN) hj b p
     have := mul_sub_two_add_two_mul (s := s) (two_le_regSpan hj)
@@ -348,7 +348,7 @@ theorem mem_interior_regGate {j p : ℕ} (hj : j ≤ k) (hp : p < 2 ^ j) {b : Fi
     (hx : x ∈ (regGate X hN j b p).interior) :
     ∃ m, ∃ hm : m < s * regSpan k j, s ≤ m ∧ m + s < s * regSpan k j ∧
       x = blockSite hN b ⟨s * (p * regSpan k j) + m, mul_mul_regSpan_add_lt hj hp hm⟩ := by
-  obtain ⟨m, hm1, hm2, rfl⟩ := hx
+  obtain ⟨m, hm1, hm2, rfl⟩ := (regGate X hN j b p).mem_zone.mp hx
   have hL := two_mul_regGate_L (X := X) (hN := hN) hj b p
   have := mul_sub_two_add_two_mul (s := s) (two_le_regSpan hj)
   have hm' : m < s * regSpan k j := by omega
@@ -380,7 +380,7 @@ theorem pairwise_regLevelGates {j : ℕ} (hj : j ≤ k) :
   have key : ∀ (b b' : Fin M) (p p' : Fin (2 ^ j)), (b ≠ b' ∨ p ≠ p') →
       Disjoint (regGate X hN j b p).span (regGate X hN j b' p').span := by
     intro b b' p p' hne
-    rw [Set.disjoint_left]
+    rw [Finset.disjoint_left]
     intro x hx hx'
     obtain ⟨m, hm, rfl⟩ := mem_span_regGate hj p.isLt hx
     obtain ⟨m', hm', he⟩ := mem_span_regGate hj p'.isLt hx'
@@ -465,26 +465,36 @@ theorem regWindow_val_ne {j j' p p' m : ℕ} (hjj : j' < j) (hj : j ≤ k) (t : 
 
 variable (X hN) in
 /-- The sites strictly between the two registers of the unitaries of depths `j, …, k`. -/
-def regInteriorFrom (j : ℕ) : Set (Fin N) :=
-  {x | ∃ j', j ≤ j' ∧ j' ≤ k ∧ ∃ g ∈ regLevelGates X hN j', x ∈ g.interior}
+noncomputable def regInteriorFrom (j : ℕ) : Finset (Fin N) := by
+  classical
+  exact Finset.univ.filter fun x ↦
+    ∃ j', j ≤ j' ∧ j' ≤ k ∧ ∃ g ∈ regLevelGates X hN j', x ∈ g.interior
+
+theorem mem_regInteriorFrom {j : ℕ} {x : Fin N} :
+    x ∈ regInteriorFrom (k := k) X hN j ↔
+      ∃ j', j ≤ j' ∧ j' ≤ k ∧ ∃ g ∈ regLevelGates X hN j', x ∈ g.interior := by
+  classical
+  simp [regInteriorFrom]
 
 theorem regInteriorFrom_succ_subset (j : ℕ) :
-    regInteriorFrom (k := k) X hN (j + 1) ⊆ regInteriorFrom X hN j :=
-  fun _ ⟨j', hj', hjk, g, hg, hx⟩ => ⟨j', by omega, hjk, g, hg, hx⟩
+    regInteriorFrom (k := k) X hN (j + 1) ⊆ regInteriorFrom X hN j := fun _ hx => by
+  obtain ⟨j', hj', hjk, g, hg, hx⟩ := mem_regInteriorFrom.mp hx
+  exact mem_regInteriorFrom.mpr ⟨j', by omega, hjk, g, hg, hx⟩
 
 theorem interior_subset_regInteriorFrom {j : ℕ} (hj : j ≤ k) {g : RegisterGate d N s}
     (hg : g ∈ regLevelGates X hN j) : g.interior ⊆ regInteriorFrom X hN j :=
-  fun _ hx => ⟨j, le_rfl, hj, g, hg, hx⟩
+  fun _ hx => mem_regInteriorFrom.mpr ⟨j, le_rfl, hj, g, hg, hx⟩
 
 /-- The registers of a unitary of depth `j' < j` are not strictly between the two registers of a
 unitary of depth `j`. -/
 theorem disjoint_range_sites_interior {j j' : ℕ} (hjj : j' < j) (hj : j ≤ k)
     {g' g : RegisterGate d N s} (hg' : g' ∈ regLevelGates X hN j')
-    (hg : g ∈ regLevelGates X hN j) : Disjoint (Set.range g'.sites) g.interior := by
+    (hg : g ∈ regLevelGates X hN j) : Disjoint (Finset.univ.image g'.sites) g.interior := by
   obtain ⟨b', p', hp', rfl⟩ := mem_regLevelGates hg'
   obtain ⟨b, p, hp, rfl⟩ := mem_regLevelGates hg
-  rw [regGate_sites (by omega) hp', Set.disjoint_left]
-  rintro x ⟨t, rfl⟩ hx
+  rw [regGate_sites (by omega) hp', Finset.disjoint_left]
+  intro x hx' hx
+  obtain ⟨t, -, rfl⟩ := Finset.mem_image.mp hx'
   obtain ⟨m, hm, hm1, hm2, he⟩ := mem_interior_regGate hj hp hx
   have := ((blockSite_eq_iff hN).mp he).2
   rw [regWindow_val (by omega) hp'] at this
@@ -497,28 +507,40 @@ theorem isZeroOn_regInteriorFrom_mulVec [NeZero d] {j : ℕ} {v : Cfg d N → �
     IsZeroOn (regInteriorFrom X hN (j + 1))
       (((regLevelGates X hN j).map RegisterGate.op).prod *ᵥ v) := by
   refine hv.mulVec_of_mem_supportedOperators
-    (T := {x | ∃ g ∈ regLevelGates X hN j, x ∈ Set.range g.sites}) ?_
-    (list_prod_mem_supportedOperators _ fun A hA => ?_)
-  · rw [Set.disjoint_left]
-    rintro x ⟨j', hj', hjk, g, hg, hx⟩ ⟨g', hg', hx'⟩
-    exact Set.disjoint_left.mp (disjoint_range_sites_interior (by omega) hjk hg' hg) hx' hx
+    (T := Finset.univ.filter fun x ↦ ∃ g ∈ regLevelGates X hN j, x ∈ Finset.univ.image g.sites)
+    ?_ (list_prod_mem_supportedOperators _ fun A hA => ?_)
+  · rw [Finset.disjoint_left]
+    intro x hx hx'
+    obtain ⟨j', hj', hjk, g, hg, hx⟩ := mem_regInteriorFrom.mp hx
+    obtain ⟨g', hg', hx'⟩ := (Finset.mem_filter.mp hx').2
+    exact Finset.disjoint_left.mp (disjoint_range_sites_interior (by omega) hjk hg' hg) hx' hx
   · obtain ⟨g, hg, rfl⟩ := List.mem_map.mp hA
-    refine supportedOperators_mono ?_ g.op_mem_supportedOperators
-    exact fun x hx => ⟨g, hg, hx⟩
+    refine ManyBody.supportedOperators_mono ?_ g.op_mem_supportedOperators
+    exact fun x hx => Finset.mem_filter.mpr ⟨Finset.mem_univ _, g, hg, hx⟩
 
 /-! ### The trees of all the blocks with measurements -/
 
 variable (hN) in
 /-- The sites of the blocks other than their first and their last `s` sites. -/
-def regCentralSites : Set (Fin N) :=
-  {x | ∃ b y, s ≤ y.val ∧ y.val + s < s * 2 ^ (k + 1) ∧ x = blockSite hN b y}
+noncomputable def regCentralSites : Finset (Fin N) := by
+  classical
+  exact Finset.univ.filter fun x ↦
+    ∃ b y, s ≤ y.val ∧ y.val + s < s * 2 ^ (k + 1) ∧ x = blockSite hN b y
+
+omit [NeZero s] [NeZero N] in
+theorem mem_regCentralSites {x : Fin N} :
+    x ∈ regCentralSites (k := k) (s := s) hN ↔
+      ∃ b y, s ≤ y.val ∧ y.val + s < s * 2 ^ (k + 1) ∧ x = blockSite hN b y := by
+  classical
+  simp [regCentralSites]
 
 theorem regInteriorFrom_zero_subset :
     regInteriorFrom X hN 0 ⊆ regCentralSites (k := k) (s := s) hN := by
-  rintro x ⟨j, -, hj, g, hg, hx⟩
+  intro x hx
+  obtain ⟨j, -, hj, g, hg, hx⟩ := mem_regInteriorFrom.mp hx
   obtain ⟨b, p, hp, rfl⟩ := mem_regLevelGates hg
   obtain ⟨m, hm, hm1, hm2, rfl⟩ := mem_interior_regGate hj hp hx
-  refine ⟨b, _, by simp only; omega, ?_, rfl⟩
+  refine mem_regCentralSites.mpr ⟨b, _, by simp only; omega, ?_, rfl⟩
   have := Nat.mul_le_mul_left s (succ_mul_regSpan_le hj hp)
   rw [Nat.succ_mul, Nat.mul_add] at this
   simp only

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelWeightedRow
 import TNLean.PEPS.AreaLaw.LatticeConstraints
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Actual channel-family weighted rows on a finite lattice domain
@@ -36,7 +37,7 @@ open QuantumCircuit SpectralFilter Matrix
 open scoped BigOperators Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport planeDomainGraph)
+open ManyBody (IsGapped groundSpace AdmissibleSupport planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -58,7 +59,8 @@ theorem exists_latticeChannelEventKernel_bounds {p : ℕ} (hp : 1 ≤ p)
     ∃ C c v : ℝ, 0 ≤ C ∧ 0 < c ∧ 0 ≤ v ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (P : AdmissibleSupport Λ R → Prop) [DecidablePred P]
           (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (N : ℕ),
         (∀ i : {i // P i}, Finset.univ.sup ((planeDomainGraph Λ).dist (a i)) ≤ N) →
@@ -81,8 +83,8 @@ theorem exists_latticeChannelEventKernel_bounds {p : ℕ} (hp : 1 ≤ p)
     (μ := ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ)) (Nat.cast_nonneg _)
     hc (kernelExponent_pos hp) (kernelExponent_le_one p)
   refine ⟨C, c, v, hC, hc, hv, ?_⟩
-  intro q _ Λ h a ha E₀ Ω hgs P _ Aux _ _ N hN α aP k D
-  obtain ⟨-, hk, -, -, -, htail, hcomp⟩ := hpos Λ h a ha E₀ Ω hgs
+  intro q _ Λ h a ha E₀ Ω hΩ hgap hspan P _ Aux _ _ N hN α aP k D
+  obtain ⟨-, hk, -, -, -, htail, hcomp⟩ := hpos Λ h a ha E₀ Ω hΩ hgap hspan
   exact hbounds (Site Λ) {i // P i} Aux q (planeDomainGraph Λ) aP k
     (fun i => (hk i).1) (fun i => (hk i).2.1) (fun i => hcomp i)
     card_graphBall_domainGraph_le

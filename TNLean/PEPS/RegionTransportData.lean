@@ -35,6 +35,8 @@ the translated edge.
   1407--1572 of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean
@@ -134,16 +136,16 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1572 of
 noncomputable def transportBlockingDataAlong (A : Tensor G d) (φ : G ≃g G') {e : Edge G}
     (D : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e) :
     NormalEdgeBlockingData (regionInjectivityDataOf (G := G') (A.transport φ)) G'
-      (Edge.map φ e) :=
-  if hord : (Edge.map φ e).1.1 = φ e.1.1 then
+      (ManyBody.Edge.map φ e) :=
+  if hord : (ManyBody.Edge.map φ e).1.1 = φ e.1.1 then
     { red := Region.map φ D.red
       blue := Region.map φ D.blue
       complement := Region.map φ D.complement
       left_mem_red := by
         rw [hord]; exact (mem_Region_map_apply φ D.red e.1.1).mpr D.left_mem_red
       right_mem_blue := by
-        have h2 : (Edge.map φ e).1.2 = φ e.1.2 :=
-          (Edge.map_endpoints φ e).resolve_right (fun h => by
+        have h2 : (ManyBody.Edge.map φ e).1.2 = φ e.1.2 :=
+          (ManyBody.Edge.map_endpoints φ e).resolve_right (fun h => by
             rw [h.1] at hord; exact (G.ne_of_adj e.2.2) (φ.injective hord).symm) |>.2
         rw [h2]; exact (mem_Region_map_apply φ D.blue e.1.2).mpr D.right_mem_blue
       red_injective := regionInjectivityDataOf_transport_map A φ D.red_injective
@@ -159,12 +161,12 @@ noncomputable def transportBlockingDataAlong (A : Tensor G d) (φ : G ≃g G') {
       blue := Region.map φ D.red
       complement := Region.map φ D.complement
       left_mem_red := by
-        have h1 : (Edge.map φ e).1.1 = φ e.1.2 :=
-          (Edge.map_endpoints φ e).resolve_left (fun h => hord h.1) |>.1
+        have h1 : (ManyBody.Edge.map φ e).1.1 = φ e.1.2 :=
+          (ManyBody.Edge.map_endpoints φ e).resolve_left (fun h => hord h.1) |>.1
         rw [h1]; exact (mem_Region_map_apply φ D.blue e.1.2).mpr D.right_mem_blue
       right_mem_blue := by
-        have h2 : (Edge.map φ e).1.2 = φ e.1.1 :=
-          (Edge.map_endpoints φ e).resolve_left (fun h => hord h.1) |>.2
+        have h2 : (ManyBody.Edge.map φ e).1.2 = φ e.1.1 :=
+          (ManyBody.Edge.map_endpoints φ e).resolve_left (fun h => hord h.1) |>.2
         rw [h2]; exact (mem_Region_map_apply φ D.red e.1.1).mpr D.left_mem_red
       red_injective := regionInjectivityDataOf_transport_map A φ D.blue_injective
       blue_injective := regionInjectivityDataOf_transport_map A φ D.red_injective
@@ -189,7 +191,7 @@ originals. -/
 theorem isCrossingEdge_Region_map (A : Tensor G d) (φ : G ≃g G') (R R' : Finset V)
     (g' : Edge G) :
     IsCrossingEdge (G := G') (A.transport φ) (Region.map φ R) (Region.map φ R')
-        (Edge.map φ g') ↔
+        (ManyBody.Edge.map φ g') ↔
       IsCrossingEdge (G := G) A R R' g' := by
   rw [IsCrossingEdge, IsCrossingEdge, isRegionBoundaryEdge_map, isRegionBoundaryEdge_map]
 
@@ -205,7 +207,7 @@ theorem transportBlockingDataAlong_redBlue (A : Tensor G d) (φ : G ≃g G') {e 
         (transportBlockingDataAlong A φ D).blue = Region.map φ D.red) := by
   classical
   unfold transportBlockingDataAlong
-  by_cases hord : (Edge.map φ e).1.1 = φ e.1.1
+  by_cases hord : (ManyBody.Edge.map φ e).1.1 = φ e.1.1
   · rw [dite_eq_left hord]; exact Or.inl ⟨rfl, rfl⟩
   · rw [dite_eq_right hord]; exact Or.inr ⟨rfl, rfl⟩
 
@@ -219,7 +221,7 @@ theorem transportBlockingDataAlong_complement (A : Tensor G d) (φ : G ≃g G') 
     (transportBlockingDataAlong A φ D).complement = Region.map φ D.complement := by
   classical
   unfold transportBlockingDataAlong
-  by_cases hord : (Edge.map φ e).1.1 = φ e.1.1
+  by_cases hord : (ManyBody.Edge.map φ e).1.1 = φ e.1.1
   · rw [dite_eq_left hord]
   · rw [dite_eq_right hord]
 
@@ -293,7 +295,7 @@ theorem isCrossingEdge_transportBlockingDataAlong (A : Tensor G d) (φ : G ≃g 
     (g : Edge G') :
     IsCrossingEdge (G := G') (A.transport φ) (transportBlockingDataAlong A φ D).red
         (transportBlockingDataAlong A φ D).blue g ↔
-      g = Edge.map φ e := by
+      g = ManyBody.Edge.map φ e := by
   -- Reduce the crossing condition to a crossing between the image red and image blue blocks.
   have hcross : IsCrossingEdge (G := G') (A.transport φ)
       (transportBlockingDataAlong A φ D).red (transportBlockingDataAlong A φ D).blue g ↔
@@ -304,13 +306,15 @@ theorem isCrossingEdge_transportBlockingDataAlong (A : Tensor G d) (φ : G ≃g 
   rw [hcross]
   -- Carry the crossing back to the original tensor along the inverse edge action.
   have hback : IsCrossingEdge (G := G') (A.transport φ) (Region.map φ D.red)
-      (Region.map φ D.blue) g ↔ IsCrossingEdge (G := G) A D.red D.blue (Edge.map φ.symm g) := by
-    rw [← isCrossingEdge_Region_map A φ D.red D.blue (Edge.map φ.symm g), Edge.map_map_symm]
+      (Region.map φ D.blue) g ↔
+          IsCrossingEdge (G := G) A D.red D.blue (ManyBody.Edge.map φ.symm g) := by
+    rw [← isCrossingEdge_Region_map A φ D.red D.blue (ManyBody.Edge.map φ.symm g),
+        ManyBody.Edge.map_map_symm]
   rw [hback, hsingle]
   -- `Edge.map φ.symm g = e ↔ g = Edge.map φ e` by the edge bijection.
   constructor
-  · intro h; rw [← h, Edge.map_map_symm]
-  · intro h; rw [h, Edge.map_symm_map]
+  · intro h; rw [← h, ManyBody.Edge.map_map_symm]
+  · intro h; rw [h, ManyBody.Edge.map_symm_map]
 
 end PEPS
 end TNLean

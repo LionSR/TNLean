@@ -1733,29 +1733,28 @@ in `MPS/Preparation/` uses it.
 
 ### Local circuits and two-site gates
 
-#### `QuantumCircuit.supportedOperators`
+#### `ManyBody.supportedOperators` (QICLean)
 
 - **Declaration:**
-  `QuantumCircuit.supportedOperators {ι : Type*} [Fintype ι] (d : ℕ) (S : Set ι) : Submodule ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)`.
-- **Defined in:** `TNLean/Circuit/SupportedOperators.lean`.
-- **Meaning:** the complex span of the product operators
-  `Matrix.rectKronecker m = ⊗ᵢ mᵢ` with `mᵢ = 1` for every `i ∉ S`, that is
-  `M_d^{⊗ S} ⊗ 1`: the operators acting on the sites of `S` of a finite type
-  of `d`-level sites `ι`. The chain of `N` sites is `ι = Fin N`, where
-  `Matrix.rectKronecker m` is `Matrix.finKronecker m`.
+  `ManyBody.supportedOperators (X : V → Type*) (D : Finset V) : StarSubalgebra ℂ (Matrix (Config X) (Config X) ℂ)`.
+- **Defined in:** QICLean, `QICLean/ManyBody/Sites/Support.lean`. TNLean has no
+  copy; circuits on `d`-level sites use `ManyBody.supportedOperators (fun _ ↦ Fin d) S`.
+- **Meaning:** the operators acting on the sites of `D`, that is `M^{⊗ D} ⊗ 1`.
+  Its carrier is the matrix-entry condition `ManyBody.IsSupportedOn`
+  (`Entropy.IsSupportedOn` for dimensions `n : V → ℕ`), and
+  `ManyBody.supportedOperators_toSubmodule_eq_span` identifies it with the span of
+  the product operators `⊗ᵥ mᵥ` with `mᵥ = 1` off `D`.
 - **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
   operators `𝒪₁` and `𝒪'ₛ` acting on sites of the chain).
 - **Sanctioned bridges:** `QuantumCircuit.rectKronecker_mem_supportedOperators`
-  and its chain form `QuantumCircuit.finKronecker_mem_supportedOperators`,
-  `QuantumCircuit.supportedOperators_mono`,
-  `QuantumCircuit.one_mem_supportedOperators`,
-  `QuantumCircuit.mul_mem_supportedOperators`,
-  `QuantumCircuit.star_mem_supportedOperators`,
-  `QuantumCircuit.commute_of_mem_supportedOperators` (operators acting on
-  disjoint sets commute), and `QuantumCircuit.embedOp_mem_supportedOperators`
-  (an operator placed by an injective map acts on its range).
-- **Caveat:** membership says nothing about unitarity; for `S = ∅` the
-  submodule consists of the scalar multiples of the identity.
+  and its chain form `QuantumCircuit.finKronecker_mem_supportedOperators`
+  (with `QuantumCircuit.prodOp_eq_rectKronecker`), `ManyBody.supportedOperators_mono`,
+  `ManyBody.commute_of_mem_supportedOperators_of_disjoint`,
+  `ManyBody.supportedOperators_induction`, and
+  `QuantumCircuit.embedOp_mem_supportedOperators` (an operator placed by an
+  injective map acts on its range).
+- **Caveat:** membership says nothing about unitarity; for `D = ∅` the
+  subalgebra consists of the scalar multiples of the identity.
 
 #### `QuantumCircuit.bondNeighbourhood` and `QuantumCircuit.lightCone`
 
@@ -1807,13 +1806,13 @@ in `MPS/Preparation/` uses it.
   both are nonempty it fails as soon as `N ≤ 2s + 1`, since the offsets
   `|m| ≤ s` then reach every site of the ring.
 
-#### `QuantumCircuit.BondLayer` and `QuantumCircuit.Layer`
+#### `QuantumCircuit.BondLayer` and `QuantumCircuit.RingLayer`
 
 - **Declarations:** `structure QuantumCircuit.BondLayer (d : ℕ) (bond : β → Set ι)`,
   with fields `bonds : Finset β`, `gate : β → Matrix (ι → Fin d) (ι → Fin d) ℂ`,
   and the conditions that every gate of a bond is unitary and lies in
   `supportedOperators d (bond b)`, and that the bonds carrying gates are
-  pairwise disjoint; `QuantumCircuit.Layer (d N : ℕ) [NeZero N]` abbreviates
+  pairwise disjoint; `QuantumCircuit.RingLayer (d N : ℕ) [NeZero N]` abbreviates
   `BondLayer d ringBond` on `Fin N`.
 - **Defined in:** `TNLean/Circuit/LocalCircuit.lean`.
 - **Meaning:** one layer of a local circuit: unitaries on pairwise disjoint
@@ -2084,7 +2083,7 @@ in `MPS/Preparation/` uses it.
   `QuantumCircuit.exists_permLayer_op_mulVec` (a layer of such gates on
   disjoint pairs acts as one permutation of the configurations).
 - **Caveat:** only permutations of the computational basis are covered; a
-  general gate is a `QuantumCircuit.Layer` gate.
+  general gate is a `QuantumCircuit.RingLayer` gate.
 
 #### `QuantumCircuit.IsPreparedWithMeasurementRoundsInDepth`
 
@@ -2362,33 +2361,29 @@ in `MPS/Preparation/` uses it.
   budget `μ_R J`, and `TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson` is
   the resulting Lemma 4.1 of the area-law manuscript.
 
-#### `QuantumCircuit.siteExpectation`
+#### `ManyBody.regionExpectation`
 
 - **Declaration:**
-  `QuantumCircuit.siteExpectation (q : ℕ) (K : Finset ι) (B : Matrix (ι → Fin q) (ι → Fin q) ℂ)`,
-  with the linear map `QuantumCircuit.siteExpectationLM`.
-- **Defined in:** `TNLean/Circuit/SiteExpectation.lean`.
+  `ManyBody.regionExpectation (D : Finset V) (A : Matrix (Config X) (Config X) ℂ)`,
+  with the linear map `ManyBody.regionExpectationLM`; QICLean,
+  `QICLean/ManyBody/Sites/RegionExpectation.lean`. TNLean uses it at
+  `X := fun _ ↦ Fin q`; the former `QuantumCircuit.siteExpectation` was deleted in
+  follow-up F12 of `docs/audits/2026-11-17_qiclean_pin_49b9aa93_followups.md`.
 - **Meaning:** the normalized partial trace
-  `E_K(B) = q^{-|ι \ K|} Tr_{ι \ K}(B) ⊗ 1`, with the factors at their
+  `E_K(B) = |X_{V∖K}|⁻¹ Tr_{V∖K}(B) ⊗ 1`, with the factors at their
   original sites.
 - **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
   `eq:quasilocal-ce` (`03-quasilocal.tex`, lines 17–29).
-- **Sanctioned bridges:** `QuantumCircuit.siteExpectation_eq_average` (uniform
-  average over products of on-site Weyl operators outside `K`),
-  `siteExpectation_mem_supportedOperators`,
-  `siteExpectation_of_mem_supportedOperators`, `siteExpectation_one`,
-  `norm_siteExpectation_le`, `siteExpectationLM_isKrausCPTP`,
-  `norm_sub_siteExpectation_le` (error through on-site commutators), and
-  `norm_heisenberg_sub_siteExpectation_graphBall_le` (localization of the
-  dynamics onto graph balls under a sphere-growth hypothesis).
-- **Caveat:** the averaging formula and its consequences assume `q ≠ 0`.
+- **Sanctioned bridges:** none in TNLean. The spectator form
+  `QuantumCircuit.spectatorSiteExpectation` is the region expectation of the
+  system with one extra site carrying the spectator, by definition.
 
 #### Positive quasi-local constraints (`exists_positiveQuasilocalConstraints`)
 
 - **Declaration:** `TNLean.PEPS.AreaLaw.exists_positiveQuasilocalConstraints`, with the
   constraints `SpectralFilter.positiveConstraint c_* (SpectralFilter.centeredFilter p (Δ / 2) H Ω hᵢ)`
   from QICLean and their ball expectations
-  `QuantumCircuit.siteExpectation q (ManyBody.graphBall G aᵢ l) kᵢ`.
+  `ManyBody.regionExpectation (ManyBody.graphBall G aᵢ l) kᵢ`.
 - **Defined in:** `TNLean/PEPS/AreaLaw/PositiveConstraints.lean`; the root channels of
   Lemma 4.4 in `TNLean/PEPS/AreaLaw/QuasilocalRoots.lean`.
 - **Meaning:** `kᵢ = |Mᵢ| / c_*`, where `Mᵢ` is the term `hᵢ` filtered below the gap and
@@ -3490,11 +3485,10 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation_eigenspace_eq_span` | The truncated sum of `exists_latticeFiniteSetTruncation` has a gapped ground vector whose eigenspace at the ground energy is the line it spans | Area-law Proposition 4.5 (`prop:truncation`), uniqueness of the truncated ground vector, on induced lattice domains, with `p = 1`. |
 | `TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget` | Crossing constraints of a cut are balls about their anchors, number at most `C b_X (r₀ + 1)²`, have log-dimension at most `C (r₀ + 1)²`, and the cut budget is at most `C (1 + b_X) (r₀ + 1)⁶` | Area-law `eq:quasilocal-crossing-count` and `eq:quasilocal-cut-budget`; `C` depends only on `q` and `R`. |
 | `TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log` | The cut budget at radius `⌈C₁ (log n)²⌉` is at most `C n D (log n)¹²` when `b_X ≤ C₂ n D` | Area-law Proposition 4.5, last sentence; `C` depends only on `q, R, C₁, C₂`. |
-| `Matrix.IsGappedGroundState`, `Matrix.isGappedGroundState_iff` | Unit eigenvector `HΩ = E₀Ω` of a complex square matrix with the full-system projector-gap inequality; the characterization restates the eigen-equation as `H *ᵥ Ω = E₀ • Ω` on coordinate vectors | Shared by the area-law and polynomial-PEPS models, which specialize it. |
-| `TNLean.Lattice.IsGappedGroundState` | Unit eigenvector with a full-system positive projector-gap inequality | Area-law Theorem 1.1; the checked ground/uniqueness equivalence is tracked in #8739. |
+| `ManyBody.IsGapped`, `ManyBody.groundSpace` (QICLean) | `H` is gapped at `E₀` with gap `Δ`: its ground space at `E₀` is nonzero and every other eigenvalue is at least `E₀ + Δ`. A unique gapped ground vector is stated by the hypotheses `‖Ω‖ = 1`, `IsGapped H E₀ Δ` and `groundSpace H E₀ = span {Ω}`, with `H.IsHermitian` only for a bare matrix; `isGapped_and_groundSpace_eq_span_iff` identifies them, for `0 < Δ`, with the projector-gap inequality `H − E₀ ≥ Δ (1 − \|Ω⟩⟨Ω\|)` | Area-law Theorem 1.1, polynomial-PEPS `eq:global-gap`, the one-dimensional note `eq:gap`. |
 | `Matrix.IsSiteInvariant` | An operator `H` on the configurations of the sites `V` commuting with every site-permutation unitary `P_g` of a group `G` acting on `V`; for the translations of a lattice, a translation-invariant Hamiltonian. `isSiteInvariant_of_conj` gives it from the conjugation form `P_g H P_g† = H`. `isSiteInvariant_sum_of_covariant` gives it for a sum `∑_k h_k` of covariant terms `h_{g•k} = P_g h_k P_g†`, and `isSiteInvariant_sum_conj` for the sum of the translates of one term over a finite group | Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 862–863 and 1603–1613 ("the Hamiltonian is invariant under translation"); definition in `TNLean/Lattice/SiteSymmetry.lean`. The converse of `isSiteInvariant_of_conj` (invariance implies `P_g H P_g† = H`) holds since `P_g` is unitary, but it is not stated as a separate lemma; it is the hypothesis under which `gaussianFilteredTerm_sitePermMatrix_conj` moves a site permutation through the filter. Invariance of `H` alone does not make its terms covariant, so the supercell results in `TNLean/Lattice/TranslationSupercell.lean` take covariance as a separate hypothesis. |
 | `TNLean.Lattice.norm_groundCompression_truncated_commutator_le_finite_translation_exp` | The low-energy commutator of the actual truncated Gaussian terms is bounded by `(2^m−1)(4vObs+4)J² exp(γ(2ρ+2)) exp(−γN/[4(m+1)])`, with `m=max(1,n₀²)` for ground-space dimension at most `n₀`. | Hastings, arXiv:cond-mat/0508554v3, lines 1603–1654. Only the original Hamiltonian is invariant; graph translations preserve the geometry. There is no assumption on momentum denominators, covariance of the local decomposition or retained sets, polynomial growth, or the gap of an approximating Hamiltonian. The proof uses Cayley–Hamilton on the actual ground-space operator algebra; see `docs/paper-gaps/hastings05_translation_supercell.tex`. |
-| `TNLean.Lattice.LowEnergyExample.IsGround` | Example-specific: a configuration of the `m + 3`-site spin-1/2 chain of Hastings' Appendix B example with spin `1` up, every spin `i ≥ 2` down and spin `0` free; `energy_eq_groundEnergy_iff` and `hamiltonian_mulVec_eq_iff` identify these with the ground space of `H = −S^z_1 + ∑_{i≥2} S^z_i` | Hastings, arXiv:cond-mat/0508554v3, lines 1655–1676, with the corrected sum (`docs/paper-gaps/hastings05_low_energy_example.tex`); not a general lattice predicate, and no bridge to `IsGappedGroundState` is stated. |
+| `TNLean.Lattice.LowEnergyExample.IsGround` | Example-specific: a configuration of the `m + 3`-site spin-1/2 chain of Hastings' Appendix B example with spin `1` up, every spin `i ≥ 2` down and spin `0` free; `energy_eq_groundEnergy_iff` and `hamiltonian_mulVec_eq_iff` identify these with the ground space of `H = −S^z_1 + ∑_{i≥2} S^z_i` | Hastings, arXiv:cond-mat/0508554v3, lines 1655–1676, with the corrected sum (`docs/paper-gaps/hastings05_low_energy_example.tex`); not a general lattice predicate, and no bridge to `ManyBody.IsGapped` is stated. |
 | `TNLean.PEPS.AreaLaw.relabelState` | The same physical vector in configuration coordinates transported by a site bijection | Area-law Section 2; Euclidean norm is preserved, reductions are covariant and regional entropy is invariant when the bijection preserves the cut. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; proved, with the source's hypotheses, as `TNLean.PEPS.AreaLaw.uniformAreaLaw`. |
 | `TNLean.PEPS.AreaLaw.innerBoundary` | Sites in the cut adjacent to its complement within the induced domain | Area-law Corollary 1.2; every cut has at most four crossing edges per inner-boundary site. |
@@ -3515,7 +3509,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.Scan.ScanData` | The finite data of the collar scan at one scale for all replica counts, with the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and Lemmas 2.1 and 3.1 for that scan as fields | Area-law Proposition 9.2 (`prop:scanner`), `08-scanner.tex`, lines 399–533; the inputs are hypotheses and are not derived from the scan geometry, so results over `ScanData` are Proposition 9.2 restricted to them, as recorded in `docs/paper-gaps/arealaw2d_scanner_inputs.tex`. |
 | `TNLean.PEPS.AreaLaw.Scan.ScanTransportInputs`, `TNLean.PEPS.AreaLaw.Scan.ScanTransportInputs.toScanInputs`, `TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_scanTransportInputs_actualScan` | The Proposition 7.4 fields of `ScanInputs` (replica remainders, leaf masses `1/2`, defect measurability, continuity and differentiability of `log N(p)²`, entropy gain and energy with constants `κ.C` and `κ.C_l`, endpoint agreement), their completion by the Proposition 8.1 fields with the remainders and logarithmic errors added, and their proof for the actual rounds of a physical collar scan at the source scales for every sufficiently large `n` | Area-law Proposition 7.4 (`prop:transport`), `06-transport.tex`, lines 377–433, as used in `08-scanner.tex`, lines 416–461; hypotheses are the source ones, at positive replica counts only: nonzero symmetric replica vectors, smallness `aℓ ≤ c₀`, and the replica-mean eigenvector equation with the truncated ground energy. The conclusion is for the family `withZeroCopyUnit pre`, which carries the unit vector at zero copies; consumed by the conditional `scanner_estimate_actualScan` through `toScanInputs`. `κ.C` and `κ.C_l` must exceed thresholds depending on `q` and `C_tr`. |
 | `TNLean.PEPS.AreaLaw.Scan.CollarScan.HistoryProperties`, `TNLean.PEPS.AreaLaw.Scan.eventually_historyProperties` | The four assertions of Lemma 9.1 for an actual collar scan, with explicit constants: splitting designated supports are graph `r₀`-balls inside `A` that terminally split one band on one side, distinct-band metrics commute on the symmetric replica space, assigned leads are at most `j + D + r₀`, prefix comparisons differ by `3nD` sites, status cuts have at most `40nD` edges, at most `10bKnD` terms split, split probabilities are at most `10D/m`, bad histories have probability at most `n^(-p)`, and good-history sampling has probability at least `1/(2(C₁+1)nD)`. The theorem proves them at the source scales for all sufficiently large `n`. | Area-law Lemma 9.1 (`scanner:histories`), `08-scanner.tex`, lines 195–347; hypotheses are `scanner:scales`, `scanner:test-geometry`, a bound `b` on labels per anchor and the padding condition `3b ≤ C₁`. The threshold is chosen before the domain, cut, target, labels and scanner; all probabilities are classical history weights. |
-| `TNLean.PEPS.Approximation.SquareHamiltonian` | Bounded supported site and edge terms on the original open square, with Hermitian total sum | Polynomial-PEPS `eq:model`; individual Hermiticity is not assumed. |
+| `TNLean.PEPS.Approximation.IsSquareGroundState` | Unit gapped ground vector of an interaction `ManyBody.SquareInteraction L q` (one supported term per site and edge) with Hermitian total and terms of norm at most `J` | Polynomial-PEPS `eq:model`; individual Hermiticity is not assumed. |
 | `TNLean.PEPS.Approximation.HasPEPSApproximation` | Nonzero native PEPS, positive polynomially bounded bonds, and normalized global error at most the inverse side length, up to phase | Polynomial-PEPS Theorem 1.1; a predicate defining the desired approximation. |
 | `TNLean.PEPS.Approximation.PolynomialPEPSApproximation` | Constants chosen before every square size, Hamiltonian, and ground vector | Polynomial-PEPS Theorem 1.1; proved, with the source's hypotheses, as `TNLean.PEPS.Approximation.polynomialPEPSApproximation`. |
 | `TNLean.PEPS.AreaLaw.Geometry.Template` | A nonempty finite ambient lattice union sampled from the permitted rectangles and triangles, with the source size conditions | Area-law Definition 9.3; distinct from induced-graph support geometry. |

@@ -38,6 +38,8 @@ absorption step is invalid on a disconnected graph. Documented in
 `docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 namespace GaugeConsistencyConnectivityCounterexample

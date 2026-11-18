@@ -48,6 +48,8 @@ and after the repainting of `R`, and the party map may be switched there
   placeholder (lines 627–630).
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation

@@ -10,6 +10,7 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundaryTraceNormSDP
 import TNLean.MPS.AreaLaw.ViableSet.LeadingPower
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Compressed boundary solutions and finite density approximation
@@ -33,6 +34,8 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -85,7 +88,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_compressed_boundary_solution_wi
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -139,7 +143,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_compressed_boundary_solution_wi
     exact hσenergy
   obtain ⟨u, μ, hu, huρ, -, hmax⟩ := hρ.exists_unit_eigenvector_max_eigenvalue hρtrace
   have hbounds := h.leading_bounds_of_approximate_boundary_solution hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX herr hρ hρtrace hρP
+    HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX herr hρ hρtrace hρP
       hρboundary hρenergy u μ hu huρ hmax
   let P := reindex
     (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
@@ -164,7 +168,8 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_compressed_boundary_sol
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     (S : Finset (LeftBlockVector L q k)) {b Hv : ℕ}
     (hS : ∀ u : S, RationalLeftOpenMPSRepresentationOfHeight Hv b u.1)
     {m n : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
@@ -230,7 +235,7 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_compressed_boundary_sol
     exact hσenergy
   obtain ⟨u, μ, hu, huρ, -, hmax⟩ := hρ.exists_unit_eigenvector_max_eigenvalue hρtrace
   have hbounds := h.leading_bounds_of_approximate_boundary_solution hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX herr hρ hρtrace hρP
+    HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX herr hρ hρtrace hρP
       hρboundary hρenergy u μ hu huρ hmax
   let z : EuclideanSpace ℂ (Fin n) := WithLp.toLp 2 (Zᴴ *ᵥ WithLp.ofLp u)
   have hcoords := isometricDensityExpansion_eigenvector_coordinates
@@ -249,7 +254,7 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_compressed_boundary_sol
           (WithLp.toLp 2 (Z *ᵥ WithLp.ofLp z))), Γ⟫_ℂ‖ := by
     rw [physicalRightApply_gluingLeftCoordinates, hZz, norm_inner_symm]
     exact hbounds.2.2.2.2.2.2.2.1
-  exact exists_rationalSpanViableMPSData_of_mulVec_atTarget S hS hgs.1
+  exact exists_rationalSpanViableMPSData_of_mulVec_atTarget S hS hΩ
     hξrat hξrat1 hbudget Z hZ hZZ z hz W hW hunit hoverlap
 
 /-- Coordinate-rational form of the exact compressed boundary-solution theorem.  It
@@ -262,7 +267,8 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_compressed_boundary_so
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     (S : Finset (LeftBlockVector L q k)) {s₀ b Hv : ℕ} {δin : ℝ}
     (D : RationalCoordinateViableMPSDataOfHeight Hv Γ s₀ b δin S)
     {m n : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
@@ -329,7 +335,7 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_compressed_boundary_so
     exact hσenergy
   obtain ⟨u, μ, hu, huρ, -, hmax⟩ := hρ.exists_unit_eigenvector_max_eigenvalue hρtrace
   have hbounds := h.leading_bounds_of_approximate_boundary_solution hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX herr hρ hρtrace hρP
+    HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX herr hρ hρtrace hρP
       hρboundary hρenergy u μ hu huρ hmax
   let z : EuclideanSpace ℂ (Fin n) := WithLp.toLp 2 (Zᴴ *ᵥ WithLp.ofLp u)
   have hcoords := isometricDensityExpansion_eigenvector_coordinates
@@ -348,7 +354,7 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_compressed_boundary_so
           (WithLp.toLp 2 (Z *ᵥ WithLp.ofLp z))), Γ⟫_ℂ‖ := by
     rw [physicalRightApply_gluingLeftCoordinates, hZz, norm_inner_symm]
     exact hbounds.2.2.2.2.2.2.2.1
-  exact exists_rationalCoordinateViableMPSData_of_mulVec_atTarget S D hgs.1
+  exact exists_rationalCoordinateViableMPSData_of_mulVec_atTarget S D hΩ
     hξrat hξrat1 hbudget Z hZ hZZ z hz W hW hunit hoverlap
 
 /-- A finite exact-density search has a least-energy relaxed-feasible certificate whose
@@ -367,7 +373,8 @@ theorem ChainHamiltonian.exists_finite_density_search_viable_vector
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -432,7 +439,7 @@ theorem ChainHamiltonian.exists_finite_density_search_viable_vector
     hcombined.trans hprecision
   obtain ⟨v, hvnorm, hvS, hvenergy, hvoverlap⟩ :=
     h.exists_viable_vector_of_compressed_boundary_solution_with_slack hL hq hΔ
-      HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX Z hZ hZZ σ
+      HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ σ
         (hNdensity σ hσN).1 (hNdensity σ hσN).2
         (ξ := ‖K‖ * (2 * δ)) (δ := 2 * δ)
         (by simpa only [K, E, Hleft] using hσenergy)
@@ -455,7 +462,8 @@ theorem ChainHamiltonian.exists_coordinate_finite_density_search_viable_vector
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) (S : Finset (LeftBlockVector L q k))
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) (S : Finset (LeftBlockVector L q k))
     {m : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     (hxnorm : ‖WithLp.toLp 2 x‖ = 1)
@@ -513,7 +521,7 @@ theorem ChainHamiltonian.exists_coordinate_finite_density_search_viable_vector
   obtain ⟨N, hNcard, hNdensity, σ, hσN, hσmin,
       v, hvnorm, hvS, hvenergy, hvoverlap⟩ :=
     h.exists_finite_density_search_viable_vector hL hq hΔ HL B hsplit hHL hBS hBn
-      hgs (S := (S : Set (LeftBlockVector L q k))) W hW x hwx hwE X hXHermitian hX
+      hΩ hgap hspan (S := (S : Set (LeftBlockVector L q k))) W hW x hwx hwE X hXHermitian hX
         Z hZ hZZ τ₀ hτ₀ hτ₀trace
         (by simpa only [Hleft] using hτ₀boundary)
         (by simpa only [Hleft] using hτ₀energy) hδ hprecision
@@ -531,7 +539,8 @@ theorem ChainHamiltonian.exists_canonical_coordinate_finite_density_search_viabl
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) (S : Finset (LeftBlockVector L q k))
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) (S : Finset (LeftBlockVector L q k))
     {m : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     (hxnorm : ‖WithLp.toLp 2 x‖ = 1)
@@ -572,7 +581,7 @@ theorem ChainHamiltonian.exists_canonical_coordinate_finite_density_search_viabl
           (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
           1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
   exact h.exists_coordinate_finite_density_search_viable_vector hL hq hΔ
-    HL B hsplit hHL hBS hBn hgs S W hW x hxnorm hxP hwx hwE X hXHermitian hX
+    HL B hsplit hHL hBS hBn hΩ hgap hspan S W hW x hxnorm hxP hwx hwE X hXHermitian hX
       (lvvFiniteDensityMesh_pos hL hΔ) (lvvFiniteDensityMesh_fits hL).le
 
 end TNLean.MPS.AreaLaw

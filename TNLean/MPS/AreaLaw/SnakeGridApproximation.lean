@@ -9,6 +9,7 @@ import TNLean.MPS.AreaLaw.SequentialTruncation
 import TNLean.PEPS.AreaLaw.TailParameter
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import QICLean.Entropy.RegionCovariance
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Snake-order matrix product approximation on an open square
@@ -27,7 +28,7 @@ The older reference to Part IIb, Section 7, does not locate this argument.
 
 open Matrix TNLean.Lattice
 
-open ManyBody (AdmissibleSupport)
+open ManyBody (IsGapped groundSpace AdmissibleSupport)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -86,7 +87,8 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     ∃ C : ℝ, 0 ≤ C ∧ ∀ L : ℕ, 2 ≤ L →
       ∀ H : LocalHamiltonian (PEPS.AreaLaw.rectangularDomain L L) q R J,
       ∀ E₀ : ℝ, ∀ Ω : StateSpace (PEPS.AreaLaw.rectangularDomain L L) q,
-        IsGappedGroundState _ q H.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped H.operator E₀ Δ →
+        groundSpace H.operator E₀ = Submodule.span ℂ {Ω} →
         ∃ (D : ℕ) (Φ : StateSpace (PEPS.AreaLaw.rectangularDomain L L) q),
           ‖Φ‖ = 1 ∧ IsOpenMPS (L * L) q D (fun x ↦ snakeGridStateEquiv L q Φ x) ∧
           ‖Φ - Ω‖ ≤ 1 / (L : ℝ) ∧ (D : ℝ) ≤ Real.exp (C * L) := by
@@ -110,7 +112,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     dsimp [C]
     positivity
   refine ⟨C, hC, ?_⟩
-  intro L hL H E₀ Ω hgs
+  intro L hL H E₀ Ω hΩ hgap hspan
   have hLreal : (2 : ℝ) ≤ L := by exact_mod_cast hL
   have hLpos : (0 : ℝ) < L := by linarith
   have hN : 1 ≤ L * L := by nlinarith
@@ -128,7 +130,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
   let w : ℝ := 64 * s * Real.log y
   have hw : 0 ≤ w := mul_nonneg (by positivity) (Real.log_nonneg hy.le)
   let ψ := snakeGridStateEquiv L q Ω
-  have hψ : ‖ψ‖ = 1 := (snakeGridStateEquiv L q).norm_map Ω |>.trans hgs.1
+  have hψ : ‖ψ‖ = 1 := (snakeGridStateEquiv L q).norm_map Ω |>.trans hΩ
   let A := snakeGridPrefix L
   let S : ℕ → ℝ := fun k ↦ regionalEntropy _ q Ω (A k)
   let ρ := fun k ↦ reducedState _ q Ω (A k)
@@ -149,7 +151,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     rw [show ρ k = Entropy.regionState (A k) Ω from reducedState_eq_regionState _ _]
     exact Entropy.regionState_relabel _ _ e (hA k) _ Ω
   have hS (k : ℕ) : S k ≤ C₀ * ((L : ℝ) + 1) := by
-    have h := harea _ H E₀ Ω hgs (A k)
+    have h := harea _ H E₀ Ω hΩ hgap hspan (A k)
     have hc : ((edgeBoundary _ (A k)).card : ℝ) ≤ (L : ℝ) + 1 := by
       exact_mod_cast card_edgeBoundary_snakeGridPrefix_le L k
     exact h.trans (mul_le_mul_of_nonneg_left hc hC₀)
@@ -170,7 +172,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     rw [htrace]
     refine (Matrix.PosSemidef.trace_complement_spectralProjectionGE_le_surprisalTail
       (reducedState_posSemidef _ q Ω (A k)) (S k) w).trans ?_
-    refine (H.surprisalTail_reducedState_le hJ.le hΔ hgs (A k) w |>.trans
+    refine (H.surprisalTail_reducedState_le hJ.le hΔ hΩ hgap hspan (A k) w |>.trans
       (min_le_right _ _)).trans ?_
     apply mul_le_mul_of_nonneg_left _ (by positivity)
     apply Real.exp_le_exp.mpr
@@ -240,7 +242,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     refine hr.trans ?_
     have htrace : (ρ k).trace = 1 := by
       rw [show ρ k = Entropy.regionState (A k) Ω from reducedState_eq_regionState _ _]
-      exact Entropy.trace_regionState_eq_one hgs.1
+      exact Entropy.trace_regionState_eq_one hΩ
     change (((Q k).submatrix (f k).symm (f k).symm).rank : ℝ) ≤ _
     rw [Matrix.rank_submatrix]
     exact ((reducedState_posSemidef _ q Ω (A k)).rank_spectralProjectionGE_exp_le

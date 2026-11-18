@@ -23,6 +23,8 @@ periods, but the physical Bell separation at periods one and two requires
 extending the graph support argument to a bond-indexed model.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

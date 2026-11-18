@@ -260,16 +260,26 @@ theorem leafPacketSites_mem {d D N : ℕ} (i : Fin N)
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 noncomputable def intervalConsecutiveSupport (d D N j k : ℕ) :
-    Set (Fin (logicalSiteCount d D N)) :=
-  logicalSiteEquivFin d D N '' intervalLogicalSupport d D N j k
+    Finset (Fin (logicalSiteCount d D N)) := by
+  classical
+  exact Finset.univ.filter fun x ↦
+    (logicalSiteEquivFin d D N).symm x ∈ intervalLogicalSupport d D N j k
+
+theorem coe_intervalConsecutiveSupport (d D N j k : ℕ) :
+    (intervalConsecutiveSupport d D N j k : Set (Fin (logicalSiteCount d D N))) =
+      logicalSiteEquivFin d D N '' intervalLogicalSupport d D N j k := by
+  classical
+  ext x
+  simp [intervalConsecutiveSupport, Equiv.image_eq_preimage_symm]
 
 /-- Adjacent nonempty intervals have disjoint supports in the consecutive logical numbering.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem intervalConsecutiveSupport_disjoint {d D N j m k : ℕ}
     (hjm : j < m) (hmk : m < k) :
-    Disjoint (intervalConsecutiveSupport d D N j m) (intervalConsecutiveSupport d D N m k) :=
-  Set.disjoint_image_of_injective (logicalSiteEquivFin d D N).injective
+    Disjoint (intervalConsecutiveSupport d D N j m) (intervalConsecutiveSupport d D N m k) := by
+  rw [← Finset.disjoint_coe, coe_intervalConsecutiveSupport, coe_intervalConsecutiveSupport]
+  exact Set.disjoint_image_of_injective (logicalSiteEquivFin d D N).injective
     (intervalLogicalSupport_disjoint hjm hmk)
 
 /-- Operators supported on the two child intervals commute.
@@ -279,11 +289,11 @@ theorem interval_supportedOperators_commute {d D N j m k : ℕ}
     (hjm : j < m) (hmk : m < k)
     {X Y : Matrix (MPSTensor.Cfg d (logicalSiteCount d D N))
       (MPSTensor.Cfg d (logicalSiteCount d D N)) ℂ}
-    (hX : X ∈ QuantumCircuit.supportedOperators d (intervalConsecutiveSupport d D N j m))
-    (hY : Y ∈ QuantumCircuit.supportedOperators d (intervalConsecutiveSupport d D N m k)) :
+    (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (intervalConsecutiveSupport d D N j m))
+    (hY : Y ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (intervalConsecutiveSupport d D N m k)) :
     Commute X Y :=
-  QuantumCircuit.commute_of_mem_supportedOperators
-    (intervalConsecutiveSupport_disjoint hjm hmk) hX hY
+  ManyBody.commute_of_mem_supportedOperators_of_disjoint hX hY
+      (intervalConsecutiveSupport_disjoint hjm hmk)
 
 
 /-- A bond site is in a boundary register exactly when its cut and side have the prescribed
@@ -485,9 +495,11 @@ noncomputable def leafConsecutiveSites (d D N : ℕ) (i : Fin N) :
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem leafConsecutiveSites_range {d D N : ℕ} (i : Fin N) :
-    Set.range (leafConsecutiveSites d D N i) =
+    Finset.univ.image (leafConsecutiveSites d D N i) =
       intervalConsecutiveSupport d D N i.val (i.val + 1) := by
-  rw [leafConsecutiveSites, Function.Embedding.coe_trans, Set.range_comp, leafPacketSites_range]
+  apply Finset.coe_injective
+  rw [Finset.coe_image, Finset.coe_univ, Set.image_univ, coe_intervalConsecutiveSupport,
+    leafConsecutiveSites, Function.Embedding.coe_trans, Set.range_comp, leafPacketSites_range]
   rfl
 
 /-- Every operator placed on the actual leaf sites is supported on that leaf interval, for
@@ -501,7 +513,8 @@ theorem leaf_embedOp_mem_supportedOperators {d D N : ℕ} (i : Fin N)
       (MPSTensor.Cfg d
         (1 + (cutBondRegisterWidth d D N i.succ + cutBondRegisterWidth d D N i.castSucc))) ℂ) :
     QuantumCircuit.embedOp (leafConsecutiveSites d D N i) X ∈
-      QuantumCircuit.supportedOperators d (intervalConsecutiveSupport d D N i.val (i.val + 1)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin d)
+          (intervalConsecutiveSupport d D N i.val (i.val + 1)) := by
   have h := QuantumCircuit.embedOp_mem_supportedOperators
     (leafConsecutiveSites d D N i).injective X
   rw [leafConsecutiveSites_range] at h

@@ -54,6 +54,8 @@ per-edge gauge is assembled unconditionally on top of it.
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean
@@ -271,6 +273,8 @@ gauge `exists_regionEdgeGauge_of_coeffTransfer`
 the shared one-edge blocking data and positive bond dimensions; the forward
 multiplicativity `hmul` and the two-directional bond locality are the remaining
 hypotheses, the open content `V=W` of the block frame. -/
+
+variable {A B : Tensor G d} {e : Edge G}
 
 /-- The forward coefficient transfer of a shared one-edge blocking datum, derived from
 the `A → B` bond locality. For each inserted matrix `M` on the boundary edge `f` of

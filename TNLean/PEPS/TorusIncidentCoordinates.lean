@@ -38,7 +38,7 @@ private theorem torusIncidentEdge_eq_leg (v : TorusVertex width height)
   · change torusRightEdge p = f.1 at hz
     have hi := f.2
     rw [← hz] at hi
-    have hep := Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2)
+    have hep := ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2)
     have hp : p = v ∨ (p.1 + 1, p.2) = v := by
       rcases hep with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;> rcases hi with hi | hi
       · exact Or.inl (h1.symm.trans hi)
@@ -55,7 +55,7 @@ private theorem torusIncidentEdge_eq_leg (v : TorusVertex width height)
   · change torusUpEdge p = f.1 at hz
     have hi := f.2
     rw [← hz] at hi
-    have hep := Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2)
+    have hep := ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2)
     have hp : p = v ∨ (p.1, p.2 + 1) = v := by
       rcases hep with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;> rcases hi with hi | hi
       · exact Or.inl (h1.symm.trans hi)

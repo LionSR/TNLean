@@ -22,6 +22,8 @@ September 24, 2026, Corollary 1.2 (`cor:rectangles`), at immutable revision
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+
 noncomputable section
 
 open TNLean.Lattice
@@ -91,12 +93,12 @@ theorem card_edgeBoundary_rectangular {width height : ℕ}
       obtain ⟨b, rfl⟩ := σ.surjective y
       rw [hadj] at hxy
       rw [hmem, hmem] at hcut
-      refine ⟨Edge.ofAdj hxy, ?_, ?_⟩
+      refine ⟨ManyBody.Edge.ofAdj hxy, ?_, ?_⟩
       · rw [Finset.mem_filter]
         refine ⟨Finset.mem_univ _, ?_⟩
-        unfold IsRegionBoundaryEdge Edge.ofAdj
+        unfold IsRegionBoundaryEdge ManyBody.Edge.ofAdj
         split_ifs <;> tauto
-      · unfold Edge.ofAdj
+      · unfold ManyBody.Edge.ofAdj
         split_ifs
         · rfl
         · exact Sym2.eq_swap

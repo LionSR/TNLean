@@ -8,6 +8,7 @@ import TNLean.PEPS.AreaLaw.Scan.StrongSelectedDensityPower
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedEnergyPower
 import TNLean.PEPS.AreaLaw.Scan.SubsystemDimensionScale
 import TNLean.PEPS.AreaLaw.SelectedSchmidtEntropyBounds
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Paper-rate energy at the same source-selected charge point
@@ -32,6 +33,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
@@ -86,7 +89,8 @@ theorem sourceTarget_selected_actualCharge_sharp_energy_explicit
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceSelectedSharpEnergyThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr Cent eent Cen een ≤ S.n →
@@ -128,7 +132,8 @@ theorem sourceTarget_selected_actualCharge_sharp_energy_explicit
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -260,11 +265,11 @@ theorem sourceTarget_selected_actualCharge_sharp_energy_explicit
   have hdensity := fun n (hn : finalSelectedDensityThreshold q Ce C₁ Ct Clt ≤ n) =>
     final_selectedDensity_le_eightNu_of_finalSelectedDensityThreshold_le hq Ce C₁ Ct Clt
       hCe hC₁ (zero_le_one.trans hCt) hn
-  intro Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
+  intro Λ T _ hT h S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix hrD hDpos hDm
   simp only [sourceSelectedSharpEnergyThreshold, max_le_iff] at hn
   obtain ⟨hnB, hnD, hnE, hnT, hnI, hnLog⟩ := hn
-  obtain ⟨hm, hM, hdata⟩ := hsource Λ T hT h S E₀ Ω hgs hgraph hanchor hnB
+  obtain ⟨hm, hM, hdata⟩ := hsource Λ T hT h S E₀ Ω hΩ hgap hspan hgraph hanchor hnB
     hr hmScale hDScale hKScale hCeq hsize hdepth hrows hmult hclear
     Ce (Exponents.boxError : ℝ) hprefix hrD hDpos hDm
   refine ⟨hm, hM, ?_⟩
@@ -277,10 +282,10 @@ theorem sourceTarget_selected_actualCharge_sharp_energy_explicit
   refine ⟨hwindow, hd, ?_⟩
   have : NeZero E.card := NeZero.of_pos hd
   intro d ΩX ψ Sent dims energy σ near middleRegion gpre gpost gaps gmax tree Gpre Gpost
-  have hΩt : ‖Ωt‖ = 1 := (Matrix.isGappedGroundState_iff.mp htrgs).1
+  have hΩt : ‖Ωt‖ = 1 := htrgs.1
   have hXcard : (X.card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 :=
     (Nat.cast_le.mpr (Finset.card_le_card hX)).trans hcard
-  have hcont := htarget S.n hnT Λ Ω Ωt hgs.1 hΩt X hXcard htrace
+  have hcont := htarget S.n hnT Λ Ω Ωt hΩ hΩt X hXcard htrace
   have hSt : regionalEntropy Λ q Ωt X ≤
       Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ)) +
         (S.n : ℝ) ^ (-247 : ℝ) := by
@@ -402,7 +407,8 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy_of_threshold_le
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceSelectedSharpEnergyThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr Cent eent Cen een ≤ S.n →
@@ -444,7 +450,8 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy_of_threshold_le
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -574,7 +581,8 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = ⌊(S.n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
@@ -613,7 +621,8 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))

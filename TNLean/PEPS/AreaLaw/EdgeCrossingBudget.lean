@@ -21,6 +21,8 @@ Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground stat
 Independently formalized from the manuscript; no upstream Lean proof text reused.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 open TNLean.Lattice
 
@@ -149,9 +151,9 @@ theorem card_crossingTerms_nearestNeighbor
     obtain ⟨x, y⟩ := b
     have hxy : (planeDomainGraph Λ).Adj x y :=
       SimpleGraph.mem_edgeFinset.mp (Finset.mem_filter.mp hb).1
-    let e := Edge.ofAdj hxy
+    let e := ManyBody.Edge.ofAdj hxy
     have he : s(e.1.1, e.1.2) = s(x, y) := by
-      rcases Edge.ofAdj_endpoints hxy with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+      rcases ManyBody.Edge.ofAdj_endpoints hxy with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
       · exact congrArg₂ (fun x y ↦ s(x, y)) h₁ h₂
       · exact (congrArg₂ (fun x y ↦ s(x, y)) h₁ h₂).trans Sym2.eq_swap
     exact ⟨Sum.inr e, (inr_mem_crossingTerms_iff A e).mpr (he.symm ▸ hb), he⟩

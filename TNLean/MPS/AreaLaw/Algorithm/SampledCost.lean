@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Algorithm.Cost
 import TNLean.MPS.AreaLaw.Algorithm.SampledProgram
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The polynomial cost of the sampled ground-state program
@@ -30,7 +31,11 @@ charged a declared polynomial cost in the dimensions of its arguments, arithmeti
 nothing is proved about how a query is answered; see `docs/paper-gaps/lvv13_cost_model.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix Cslib
+
+open ManyBody (IsGapped groundSpace)
 open scoped ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw
@@ -107,7 +112,8 @@ theorem cost_sampledSweepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState (∑ j, h j) E₀ Γ Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
+    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
     (hgood : ∀ i, GoodWords h E₀ m (δ / 8) κ (I i)) (b D : ℕ) (hD : q ^ (2 * κ) ≤ D)
@@ -127,7 +133,7 @@ theorem cost_sampledSweepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
       hi' (sampledSweep hq h hs h0 h1 E₀ Δ I i) hF
     have hcard : (sampledSweep hq h hs h0 h1 E₀ Δ I i).card ≤
         max 1 (sampledSizeBudget q Δ L ℓ (q ^ (2 * κ))) := by
-      refine (sampledSweep_spec hL hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc I hm hgood i
+      refine (sampledSweep_spec hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood i
         (by omega)).1.trans ?_
       unfold sampledSizeBudget
       split_ifs <;> simp
@@ -158,7 +164,8 @@ theorem cost_sampledGroundStateProgram_le (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState (∑ j, h j) E₀ Γ Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
+    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
     (hgood : ∀ i, GoodWords h E₀ m (δ / 8) κ (I i)) (b D : ℕ) (hD : q ^ (2 * κ) ≤ D) :
@@ -167,12 +174,14 @@ theorem cost_sampledGroundStateProgram_le (hL : 0 < L) (hq : 2 ≤ q)
   classical
   simp only [sampledGroundStateProgram, FreeM.cost_bind, FreeM.cost_lift,
     eval_sampledSweepProgram, queryCost_energyMinimizer, sampledGroundStateCostBound]
-  have hsweep := cost_sampledSweepProgram_le hL hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc I hm hgood b D hD
+  have hsweep := cost_sampledSweepProgram_le hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm
+      hgood b D hD
     L le_rfl
   have hcard : ((sampledSweep hq h hs h0 h1 E₀ Δ I L).image fun w ↦
       (fullLeftEquiv L q).symm w).card ≤ max 1 (sampledSizeBudget q Δ L ℓ D) := by
     refine Finset.card_image_le.trans ?_
-    refine (sampledSweep_spec hL hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc I hm hgood L le_rfl).1.trans ?_
+    refine (sampledSweep_spec hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood L
+        le_rfl).1.trans ?_
     simp only [show L ≠ 0 by omega, ↓reduceIte]
     exact le_max_of_le_right (Nat.mul_le_mul_right _ (Nat.mul_le_mul_left ℓ hD))
   have hsize : max 1 (sampledSizeBudget q Δ L ℓ (q ^ (2 * κ))) ≤
@@ -280,7 +289,8 @@ theorem exists_sampledGroundStateProgram_cost_polynomial (hq : 2 ≤ q) {Δ B η
       (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
       (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ : ℝ)
       (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-      IsGappedGroundState (∑ j, h j) E₀ Γ Δ → E₀ / Δ ≤ B →
+      ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
+      groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
       let δ := sampledPrecisionConstant Δ η / L
       ∀ I : Fin L → Fin (sampledWordCount q L E₀ Δ δ) → Fin (sampledPower L E₀ Δ δ) → Fin L,
         (∀ i, GoodWords h E₀ (sampledPower L E₀ Δ δ) (δ / 8) (sampledLetterBound q L E₀ Δ δ)
@@ -299,10 +309,10 @@ theorem exists_sampledGroundStateProgram_cost_polynomial (hq : 2 ≤ q) {Δ B η
   obtain ⟨P, d, hP, hbound⟩ := (isNatPolynomialBounded_sampledGroundStateCostBound hΔ
     (max C₁ C) (max p₁ p) C p).exists_one_le
   refine ⟨P, d, hP, ?_⟩
-  intro L _ h hs h0 h1 E₀ Γ hgs hEB δ I hgood
+  intro L _ h hs h0 h1 E₀ Γ hΩ hgap hspan hEB δ I hgood
   refine ⟨countQueries_le_cost honestOracle queryCost one_le_queryCost _, ?_⟩
   have hL : 1 ≤ L := Nat.pos_of_neZero L
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hgs
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
   obtain ⟨hℓD, hD⟩ := hbud L E₀ hL hE₀ hE₀L hEB
   obtain ⟨hδ0, hδ1, hδc, -⟩ := sampledPrecision_spec hΔ hη hL
   have hD1 : 1 ≤ sampledRankBound q L E₀ Δ δ := Nat.one_le_pow _ _ (by omega)
@@ -313,7 +323,8 @@ theorem exists_sampledGroundStateProgram_cost_polynomial (hq : 2 ≤ q) {Δ B η
   calc
     _ ≤ sampledGroundStateCostBound q Δ L (sampledWordCount q L E₀ Δ δ)
           (sampledRankBound q L E₀ Δ δ) (C * L ^ p) :=
-        cost_sampledGroundStateProgram_le (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hgs hδ0 hδ1 hδc
+        cost_sampledGroundStateProgram_le (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hΩ hgap hspan hδ0
+          hδ1 hδc
           I (Nat.le_ceil _) hgood (C * L ^ p) (sampledRankBound q L E₀ Δ δ) le_rfl
     _ ≤ sampledGroundStateCostBound q Δ L (max C₁ C * L ^ max p₁ p) (max C₁ C * L ^ max p₁ p)
           (C * L ^ p) :=

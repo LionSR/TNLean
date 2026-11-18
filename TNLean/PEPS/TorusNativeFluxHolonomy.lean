@@ -75,10 +75,10 @@ theorem torusNativeRightTransport_torusGraphRegularLabels (uh uv : X → G) (q :
   rw [show torusEdgeEquiv.symm (torusRightEdge q) = Sum.inl q from
     torusEdgeEquiv.symm_apply_apply (Sum.inl q)]
   by_cases hq : q < (q.1 + 1, q.2)
-  · simp [hq, torusRightEdge, Edge.ofAdj_of_lt _ hq]
+  · simp [hq, torusRightEdge, ManyBody.Edge.ofAdj_of_lt _ hq]
   · have hr : (q.1 + 1, q.2) < q :=
       lt_of_le_of_ne (le_of_not_gt hq) (torusGraph_adj_right q.1 q.2).ne.symm
-    simp [hq, torusRightEdge, Edge.ofAdj_of_gt _ hr, ne_of_lt hr]
+    simp [hq, torusRightEdge, ManyBody.Edge.ofAdj_of_gt _ hr, ne_of_lt hr]
 
 /-- Upward transport is the inverse downward native label, including at the
 periodic seam. Source: SCP10, Definition 6.13, lines 2181–2197. -/
@@ -93,10 +93,10 @@ theorem torusNativeUpTransport_torusGraphRegularLabels (uh uv : X → G) (q : X)
   rw [show torusEdgeEquiv.symm (torusUpEdge q) = Sum.inr q from
     torusEdgeEquiv.symm_apply_apply (Sum.inr q)]
   by_cases hq : q < (q.1, q.2 + 1)
-  · simp [hq, torusUpEdge, Edge.ofAdj_of_lt _ hq]
+  · simp [hq, torusUpEdge, ManyBody.Edge.ofAdj_of_lt _ hq]
   · have hr : (q.1, q.2 + 1) < q :=
       lt_of_le_of_ne (le_of_not_gt hq) (torusGraph_adj_up q.1 q.2).ne.symm
-    simp [hq, torusUpEdge, Edge.ofAdj_of_gt _ hr, ne_of_lt hr]
+    simp [hq, torusUpEdge, ManyBody.Edge.ofAdj_of_gt _ hr, ne_of_lt hr]
 
 /-- The reverse graph plaquette walk is exactly the clockwise native product.
 Source: SCP10, Definition 6.13, lines 2181–2197. -/

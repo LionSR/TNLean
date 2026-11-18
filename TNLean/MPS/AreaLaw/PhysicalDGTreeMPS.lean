@@ -24,6 +24,8 @@ entire root space has the extra count factor. No adaptive joint success
 probability, final spectral extraction or running time is asserted.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

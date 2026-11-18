@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.SourceFinalInformation
 import TNLean.PEPS.AreaLaw.Scan.FinalScannerAdmissibility
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Final physical information from the literal rounded scales
@@ -27,6 +28,8 @@ Independently proved from the manuscript; no upstream Lean proof text reused.
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
@@ -73,7 +76,8 @@ theorem sourceTarget_finalScale_mutualInformation_of_rounded_scales_explicit
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceRoundedInformationThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr ct Cent eent Cen een ≤ S.n →
@@ -111,12 +115,12 @@ theorem sourceTarget_finalScale_mutualInformation_of_rounded_scales_explicit
     multiplicity hmultiplicity P hP hct htransport hCtrEq
   have hCtr : 0 < Ctr := by
     rw [hCtrEq]; exact latticeTruncationRadiusConstant_pos R hΔ (by positivity)
-  intro Ce hCe Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
+  intro Ce hCe Λ T _ hT h S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix
   have hscales := finalScanner_admissibility_of_threshold_le hCtr.le
     ((le_max_right _ _).trans hn)
   simp only [roundedLogRadius, ← hmScale, ← hDScale, ← hKScale, ← hr] at hscales
-  exact hsource Ce hCe Λ T hT h S E₀ Ω hgs hgraph hanchor ((le_max_left _ _).trans hn) hr
+  exact hsource Ce hCe Λ T hT h S E₀ Ω hΩ hgap hspan hgraph hanchor ((le_max_left _ _).trans hn) hr
     hmScale hDScale hKScale hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix
     hscales.1 hscales.2.1 hscales.2.2.1
 
@@ -138,7 +142,8 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales_of_th
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceRoundedInformationThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr ct Cent eent Cen een ≤ S.n →
@@ -196,7 +201,8 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales
           (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = ⌊(S.n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →

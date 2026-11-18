@@ -33,6 +33,8 @@ two-window five-region chain of the gapped family. See
 `docs/paper-gaps/alvv16_soft_regional_residuals.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker TensorProduct Matrix.Norms.L2Operator MatrixOrder ComplexOrder
 

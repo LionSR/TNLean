@@ -26,6 +26,8 @@ boundary space, and does not establish the physical entropy formula.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 open Module Representation
 

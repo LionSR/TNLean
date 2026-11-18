@@ -25,6 +25,8 @@ comparison loss is `1 / (200 * 2^(4*i))`. Short intervals are treated by actual
 configuration matrix units in the subsequent interval theorem.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

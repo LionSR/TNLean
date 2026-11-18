@@ -70,6 +70,8 @@ injective and all bond dimensions positive, the union `R₁ ∪ R₂` is blocked
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

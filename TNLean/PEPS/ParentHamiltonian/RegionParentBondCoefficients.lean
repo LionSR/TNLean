@@ -23,6 +23,8 @@ framework retains its common physical alphabet.
 Source: SCP10, arXiv:1001.3807, Theorems 5.4 and 5.5.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS

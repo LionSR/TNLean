@@ -23,6 +23,8 @@ The current-space assignment is retained at every round, as corrected in
 or adaptive probability conclusion is substituted.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

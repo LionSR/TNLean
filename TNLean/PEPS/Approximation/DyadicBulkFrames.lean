@@ -29,6 +29,8 @@ sampled guides of the protocol:
   changed true vertices (lines 375–387).
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 open Set Metric Filter Topology

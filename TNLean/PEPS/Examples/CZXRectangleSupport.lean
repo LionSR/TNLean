@@ -28,6 +28,8 @@ nonrectangular-region assertions remain open; see
 - [arXiv:1106.4752](https://arxiv.org/abs/1106.4752), CZX model boundary, lines 330–345.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean.PEPS

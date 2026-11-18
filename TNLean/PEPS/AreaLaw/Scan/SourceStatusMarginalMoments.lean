@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.Scan.StatusMarginalMoments
 import TNLean.PEPS.AreaLaw.Scan.StatusScaleSeparation
 import TNLean.PEPS.AreaLaw.Scan.CompactCollarCounting
 import TNLean.PEPS.AreaLaw.Scan.BadChargeRatioBound
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Physical status moments at the literal source scales
@@ -27,6 +28,8 @@ at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
 open Filter Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
@@ -56,7 +59,8 @@ theorem exists_source_statusMarginal_moment_bounds
           (h : LocalHamiltonian Λ q R J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
           (E₀ : ℝ) (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ →
           S.depth = (fun x ↦ ambientDepth T hT x.val) →
           (∀ i, S.anchor i ∈ i.val) →
@@ -79,7 +83,8 @@ theorem exists_source_statusMarginal_moment_bounds
           0 < C₀ ∧ 0 < c₀ ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q) (B : ℝ),
             1 ≤ B ∧ B ≤ CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12) ∧
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
             Matrix.traceDistance
@@ -109,7 +114,7 @@ theorem exists_source_statusMarginal_moment_bounds
   intro q _
   obtain ⟨CB, hCB, hstatusq⟩ := hstatus q
   refine ⟨CB, hCB, ?_⟩
-  intro Λ T _ hT h S E₀ Ω hgs hgraph hdepth hanchor L hn hL hm hD hK hradius
+  intro Λ T _ hT h S E₀ Ω hΩ hgap hspan hgraph hdepth hanchor L hn hL hm hD hK hradius
     hsize hrows hclear
   obtain ⟨hscales, hKpos⟩ := hN S.n ((le_max_left N 2).trans hn)
   dsimp only [roundedLogRadius] at hscales
@@ -122,7 +127,7 @@ theorem exists_source_statusMarginal_moment_bounds
   have hcard : ((S.truncationSet L).card : ℝ) ≤ (Ct + 1) * (S.n : ℝ) ^ 2 := by
     simpa only [truncationSet, hdepth] using
       card_compact_collar_le_quadratic hT S.A hLn hsize hrows
-  exact ⟨hKpos, hstatusq Λ T hT h S E₀ Ω hgs hgraph hdepth hanchor L hn2 hradius
+  exact ⟨hKpos, hstatusq Λ T hT h S E₀ Ω hΩ hgap hspan hgraph hdepth hanchor L hn2 hradius
     hcard hr hDpos hDm hKL hrows hclear⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

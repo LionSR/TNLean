@@ -29,6 +29,8 @@ https://sirui-lu.com/QICLean/paper-gaps/alvv16_random_sampling_net_count.pdf.
 The event is for fixed child spaces; no adaptive measurability is asserted.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open MeasureTheory

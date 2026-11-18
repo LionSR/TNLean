@@ -8,6 +8,7 @@ import TNLean.PEPS.AreaLaw.Scan.SharpSmallness
 import TNLean.PEPS.AreaLaw.Scan.ActualSharpUpper
 import TNLean.PEPS.AreaLaw.Scan.ActualSharpLowerPrevector
 import TNLean.PEPS.AreaLaw.Scan.ActualRoughLowerPrevector
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Norm estimates for the supplied physical charge state
@@ -27,6 +28,8 @@ Proposition 9.2, `08-scanner.tex`, lines 349–397, and Proposition 8.1,
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
@@ -68,8 +71,8 @@ theorem exists_suppliedTarget_actualCharge_norm_bounds
             let C₀ := 512 * Real.exp 1 * (2 / g)
             let c₀ := 1 / (32 * Real.sqrt (1 + 2 / g))
             ∀ (e : ℝ) (Ωt : StateSpace Λ q),
-              IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i)
-                e Ωt (g / 2) →
+              ‖Ωt‖ = 1 → IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) →
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt} →
               let X := S.A.filter fun x ↦ x.val ∈ T
               let β := fun _ : Site Λ ↦ Fin q
               ∀ (E : Finset (FiniteProduct.Configuration β X)) (hd : 0 < E.card),
@@ -172,10 +175,11 @@ theorem exists_suppliedTarget_actualCharge_norm_bounds
   obtain ⟨hB, hmom⟩ := hmoments Λ T hT S hgraph hdepth hanchor L hn hradius
     hr hDpos hD hL hrows hclear
   refine ⟨hB, ?_⟩
-  intro J Δ h Ω hΔ hΩ g C₀ c₀ e Ωt hgs X β E hd d ΩX z hz ψ Sent ell
+  intro J Δ h Ω hΔ hΩ g C₀ c₀ e Ωt hΩt hgapt hspant X β E hd d ΩX z hz ψ Sent ell
     hpre hmass hdim dims energy pre σ Q Y gpre gpost gaps gmax W hW a haradius
-  obtain ⟨hC₀, hc₀, hmomBound⟩ := hmom h Ω hΔ hΩ e Ωt hgs
-  have htr := Matrix.isGappedGroundState_iff.mp hgs
+  obtain ⟨hC₀, hc₀, hmomBound⟩ := hmom h Ω hΔ hΩ e Ωt hΩt hgapt hspant
+  have hPt := hgapt.posSemidef_sub_smul_one (S.isHermitian_sum_truncatedEnergyTerm h Ω hΔ hΩ L)
+    hΩt hspant
   have hgap : 0 < g / 2 := half_pos (div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J))
   have ha : 0 < a := div_pos (lt_of_lt_of_le zero_lt_one hW) (Nat.cast_pos.mpr hK)
   have hr₀ : 1 ≤ S.r₀ := hradius.symm ▸ Nat.one_le_ceil_iff.mpr
@@ -187,7 +191,7 @@ theorem exists_suppliedTarget_actualCharge_norm_bounds
     exists_actualScan_suppliedPrevector_rough_lower_of_weight
       (Λ := Λ) (q := q) (d := d) (R := R) (J := J) S.K a ha haHalf
   obtain ⟨hlimR, hlowerR⟩ := hrough S rfl hm hM h Ω Δ L Ωt e (g / 2)
-    htr.1 htr.2.2 hgap ell Sent hpre hdim
+    hΩt hPt hgap ell Sent hpre hdim
   refine ⟨⟨cR, CfR, hcR, hCfR, hlimR, fun k hk s p ↦ ?_⟩, ?_⟩
   · simpa only [show a * (S.K : ℝ) = W from
       div_mul_cancel₀ W (Nat.cast_ne_zero.mpr (Nat.ne_of_gt hK))] using (hlowerR k hk s p).2
@@ -197,10 +201,10 @@ theorem exists_suppliedTarget_actualCharge_norm_bounds
       eventually_actualScan_suppliedPrevector_sharp_upper hT S hdepth hm hM
         a (C₀ * B) (c₀ / Real.sqrt B) ha
         (by linarith only [har10, ha]) (by linarith only [haone10, ha])
-        L hL Ωt htr.1 E ell hmomBound hz hmass
+        L hL Ωt hΩt E ell hmomBound hz hmass
     obtain ⟨cL, CfL, hcL, hCfL, hlimL, hlowerL⟩ :=
       exists_actualScan_suppliedPrevector_sharp_lower S hm hM h Ω Δ L Ωt e (g / 2)
-        htr.1 htr.2.2 hgap a (C₀ * B) (c₀ / Real.sqrt B) ha har10 haone10
+        hΩt hPt hgap a (C₀ * B) (c₀ / Real.sqrt B) ha har10 haone10
         (mul_nonneg hC₀.le (zero_le_one.trans hB)) ell Sent hpre hdim hmomBound
     refine ⟨cU, cL, CfL, hcU, hcL, hCfL, hlimU, hlimL, ?_⟩
     filter_upwards [hupper, eventually_gt_atTop (0 : ℕ)] with k hu hk

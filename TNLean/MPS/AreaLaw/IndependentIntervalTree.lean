@@ -19,6 +19,8 @@ measurability is an explicit hypothesis; no sampling-success estimate is
 assumed or concluded.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped Matrix.Norms.L2Operator
 

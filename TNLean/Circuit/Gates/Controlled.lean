@@ -71,14 +71,14 @@ theorem ctrlOp_mem_unitary {S : Finset ι} {t : ι} (ht : t ∉ S) (c : ι → F
 
 theorem ctrlOp_mem_supportedOperators (S : Finset ι) (c : ι → Fin d) (t : ι)
     (u : Matrix (Fin d) (Fin d) ℂ) :
-    ctrlOp S c t u ∈ supportedOperators d (insert t (S : Set ι)) := by
-  have hp := supportedOperators_mono (Set.subset_insert t (S : Set ι))
+    ctrlOp S c t u ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (insert t S) := by
+  have hp := ManyBody.supportedOperators_mono (Finset.subset_insert t S)
     (ctrlProj_mem_supportedOperators (d := d) S c)
-  have hs := supportedOperators_mono (Set.singleton_subset_iff.mpr
-    (Set.mem_insert t (S : Set ι)))
+  have hs := ManyBody.supportedOperators_mono
+      (Finset.singleton_subset_iff.mpr (Finset.mem_insert_self t S))
     (siteOp_mem_supportedOperators (d := d) t u)
-  exact Submodule.add_mem _ (mul_mem_supportedOperators hp hs)
-    (Submodule.sub_mem _ (one_mem_supportedOperators _) hp)
+  exact add_mem (mul_mem hp hs)
+    (sub_mem (one_mem (ManyBody.supportedOperators _ _)) hp)
 
 /-- **Controlled commutator on the sites.** Removing one control site `s` from the controls of
 a commutator `v w v† w†` at the site `t`. -/

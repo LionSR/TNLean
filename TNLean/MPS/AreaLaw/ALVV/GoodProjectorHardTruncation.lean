@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.RelativeLowEnergyCloseness
 import QICLean.Representation.CoherentSymbolFunction
-import TNLean.Circuit.SupportedFunctionalCalculus
+import QICLean.ManyBody.Sites.Twirl
 import TNLean.Lattice.HardTruncation
 import TNLean.MPS.AreaLaw.ALVV.SpectralProjector
 import TNLean.MPS.AreaLaw.IndependentFiveRegionResidual
@@ -55,6 +55,8 @@ not assumed, and the ground space may be degenerate.
 * Two-window form needs `a + 2ℓ ≤ b` and `b + 2ℓ ≤ L − 1`, so both windows consist of `2ℓ`
   bonds of the chain.
 -/
+
+open ManyBody (interval)
 
 open Matrix Polynomial TNLean.Lattice TNLean.Lattice.Sheet QuantumCircuit
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
@@ -170,13 +172,16 @@ theorem exists_three_bulk_hard_truncation_spectral_comparison
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
       Ht = ∑ α, F α ∧
-      (∀ r, F (Sum.inl (Sum.inl r)) ∈ supportedOperators q
-        (interval L (a + r.val) (a + r.val + 2) : Set (Fin L))) ∧
-      (∀ r, F (Sum.inl (Sum.inr r)) ∈ supportedOperators q
-        (interval L (b + r.val) (b + r.val + 2) : Set (Fin L))) ∧
-      F (Sum.inr 0) ∈ supportedOperators q (interval L 0 (a + 1) : Set (Fin L)) ∧
-      F (Sum.inr 1) ∈ supportedOperators q (interval L (a + 2 * ell) (b + 1) : Set (Fin L)) ∧
-      F (Sum.inr 2) ∈ supportedOperators q (interval L (b + 2 * ell) L : Set (Fin L)) ∧
+      (∀ r, F (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L))) ∧
+      (∀ r, F (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L))) ∧
+      F (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (interval L 0 (a + 1) : Finset (Fin L)) ∧
+      F (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (interval L (a + 2 * ell) (b + 1) : Finset (Fin L)) ∧
+      F (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (interval L (b + 2 * ell) L : Finset (Fin L)) ∧
       ∃ (hH : H.IsHermitian) (hHt : Ht.IsHermitian),
         let bH := (isSymmetric_toEuclideanLin_iff.mpr hH).eigenvectorBasis
           finrank_euclideanSpace
@@ -297,21 +302,23 @@ theorem exists_three_bulk_hard_truncation_spectral_comparison
     push_cast
     simp only [add_smul]
     exact five_region_rearrange _ _ _ _ _ _ _ _ _ _ _
-  have hsupp : (∀ r, F (Sum.inl (Sum.inl r)) ∈ supportedOperators q
-        (interval L (a + r.val) (a + r.val + 2) : Set (Fin L))) ∧
-      (∀ r, F (Sum.inl (Sum.inr r)) ∈ supportedOperators q
-        (interval L (b + r.val) (b + r.val + 2) : Set (Fin L))) ∧
-      F (Sum.inr 0) ∈ supportedOperators q (interval L 0 (a + 1) : Set (Fin L)) ∧
-      F (Sum.inr 1) ∈ supportedOperators q (interval L (a + 2 * ell) (b + 1) : Set (Fin L)) ∧
-      F (Sum.inr 2) ∈ supportedOperators q (interval L (b + 2 * ell) L : Set (Fin L)) := by
+  have hsupp : (∀ r, F (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L))) ∧
+      (∀ r, F (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L))) ∧
+      F (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (interval L 0 (a + 1) : Finset (Fin L)) ∧
+      F (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (interval L (a + 2 * ell) (b + 1) : Finset (Fin L)) ∧
+      F (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (interval L (b + 2 * ell) L : Finset (Fin L)) := by
     have hbulk (j : Fin 5) (c : ℝ) (lo hi : ℕ)
         (hR : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (A j) (interval L lo hi)) :
         cfc (fun r : ℝ ↦ min r (e j + t)) (A j) - (c : ℂ) • 1 ∈
-          supportedOperators q (interval L lo hi : Set (Fin L)) :=
-      sub_mem (cfc_mem_supportedOperators _ (mem_supportedOperators_of_isSupportedOn hR))
-        (Submodule.smul_mem _ _ (one_mem_supportedOperators _))
-    exact ⟨fun r ↦ mem_supportedOperators_of_isSupportedOn (hs _),
-      fun r ↦ mem_supportedOperators_of_isSupportedOn (hs _),
+          ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L lo hi : Finset (Fin L)) :=
+      sub_mem (ManyBody.cfc_mem_supportedOperators _ hR)
+        (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
+    exact ⟨fun r ↦ hs ⟨a + r.val, _⟩, fun r ↦ hs ⟨b + r.val, _⟩,
       hbulk 0 _ _ _ (hAs 0), hbulk 2 _ _ _ (hAs 2), hbulk 4 _ _ _ (hAs 4)⟩
   beta_reduce at hnorm
   refine ⟨hxunit, hx, hlo, hdecomp, hsupp.1, hsupp.2.1, hsupp.2.2.1, hsupp.2.2.2.1,
@@ -373,16 +380,16 @@ theorem exists_two_window_chebyshev_projector_degree_sq
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
       Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ supportedOperators q
-      (interval L (a + r.val) (a + r.val + 2) : Set (Fin L)))
-    (hright : ∀ r, F (Sum.inl (Sum.inr r)) ∈ supportedOperators q
-      (interval L (b + r.val) (b + r.val + 2) : Set (Fin L)))
-    (hL : F (Sum.inr 0) ∈ supportedOperators q
-      (interval L 0 (a + 1) : Set (Fin L)))
-    (hM : F (Sum.inr 1) ∈ supportedOperators q
-      (interval L (a + 2 * ℓ) (b + 1) : Set (Fin L)))
-    (hR : F (Sum.inr 2) ∈ supportedOperators q
-      (interval L (b + 2 * ℓ) L : Set (Fin L)))
+    (hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L)))
+    (hright : ∀ r, F (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L)))
+    (hL : F (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L 0 (a + 1) : Finset (Fin L)))
+    (hM : F (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (a + 2 * ℓ) (b + 1) : Finset (Fin L)))
+    (hR : F (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (b + 2 * ℓ) L : Finset (Fin L)))
     (hab : a + 2 * ℓ ≤ b) (hb : b + 2 * ℓ ≤ L - 1) (hℓ : 1 ≤ ℓ) (hq : 1 ≤ q)
     (hH : (∑ α, F α).IsHermitian) {u η₀ η₁ : ℝ} (hnorm : ‖∑ α, F α‖ ≤ u)
     (h01 : η₀ < η₁) (h1u : η₁ ≤ u) :

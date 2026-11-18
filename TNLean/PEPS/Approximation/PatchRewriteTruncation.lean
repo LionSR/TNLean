@@ -273,7 +273,7 @@ theorem mem_holeSquares_iff_encSteps {x : ι} : (l : List (Hole pos q Party)) �
     (x ∈ holeSquares l t ↔ ∃ s ∈ encSteps l t, x ∈ s.sites)
   | [], _ => by simp [holeSquares, encSteps]
   | h :: l, t => by
-    simp only [holeSquares, encSteps, Set.mem_union, Finset.mem_coe, List.mem_cons,
+    simp only [holeSquares, encSteps, Finset.mem_union, List.mem_cons,
       exists_eq_or_imp, mem_holeSquares_iff_encSteps l t.2]
     rfl
 
@@ -281,7 +281,7 @@ theorem mem_holeSquares_iff_decSteps {x : ι} : (l : List (Hole pos q Party)) �
     (x ∈ holeSquares l t ↔ ∃ s ∈ decSteps l t, x ∈ s.sites)
   | [], _ => by simp [holeSquares, decSteps]
   | h :: l, t => by
-    simp only [holeSquares, decSteps, Set.mem_union, Finset.mem_coe, List.mem_append,
+    simp only [holeSquares, decSteps, Finset.mem_union, List.mem_append,
       List.mem_singleton, mem_holeSquares_iff_decSteps l t.2]
     constructor
     · rintro (hx | ⟨s, hs, hx⟩)
@@ -295,7 +295,7 @@ theorem mem_patchSquares_iff {x : ι} : (l : List (SquarePatch pos q)) → (s : 
     (x ∈ patchSquares l s ↔ ∃ st ∈ patchSteps l s, x ∈ st.sites)
   | [], _ => by simp [patchSquares, patchSteps]
   | p :: l, s => by
-    simp only [patchSquares, patchSteps, Set.mem_union, Finset.mem_coe, List.mem_cons,
+    simp only [patchSquares, patchSteps, Finset.mem_union, List.mem_cons,
       exists_eq_or_imp, mem_patchSquares_iff l s.2]
     rfl
 

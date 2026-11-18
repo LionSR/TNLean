@@ -28,6 +28,8 @@ local source lines 1995–2025.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix ComplexOrder
 
 namespace TNLean.PEPS

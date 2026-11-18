@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.StatusMarginalMoments
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Common status moments for a supplied truncated ground vector
@@ -22,6 +23,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 noncomputable section
 
 open Matrix Filter
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -55,8 +58,10 @@ theorem exists_suppliedTarget_statusMarginal_moment_bounds
           ∀ {J Δ : ℝ} (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q),
             0 < Δ → ‖Ω‖ = 1 →
             ∀ (e : ℝ) (Ωt : StateSpace Λ q),
-              IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt
+              ‖Ωt‖ = 1 →
+              IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e
                 ((Δ / positiveNormalization 1 (Δ / 2) J) / 2) →
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt} →
               let g := Δ / positiveNormalization 1 (Δ / 2) J
               let C₀ := 512 * Real.exp 1 * (2 / g)
               let c₀ := 1 / (32 * Real.sqrt (1 + 2 / g))
@@ -80,16 +85,16 @@ theorem exists_suppliedTarget_statusMarginal_moment_bounds
   obtain ⟨hB, hcut⟩ := hbudget Λ T hT S hgraph hdepth hanchor L hn hradius
     hr hDpos hD hL hrows hclear
   refine ⟨hB, ?_⟩
-  intro J Δ h Ω hΔ hΩ e Ωt hgs
+  intro J Δ h Ω hΔ hΩ e Ωt hΩt hgapt hspant
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   refine ⟨by positivity, by positivity, ?_⟩
   intro s hist band
   exact ⟨fun hs Q hQ u hu ↦
     S.log_surprisalMoment_truncated_reducedState_le_common h Ω hgraph hanchor hΔ hΩ
-      L hgs Q ((hcut s hist band).1 hs Q hQ) hu,
+      L hΩt hgapt hspant Q ((hcut s hist band).1 hs Q hQ) hu,
     fun hs Q hQ u hu ↦
       S.log_surprisalMoment_truncated_reducedState_le_common h Ω hgraph hanchor hΔ hΩ
-        L hgs Q ((hcut s hist band).2 hs Q hQ) hu⟩
+        L hΩt hgapt hspant Q ((hcut s hist band).2 hs Q hQ) hu⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
