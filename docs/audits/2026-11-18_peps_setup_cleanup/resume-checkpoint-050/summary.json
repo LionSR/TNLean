@@ -1,0 +1,17 @@
+{
+  "production_head": "a28f35a6b916ee5a24d3836a31d13d74f832e11f",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "resumed_passed": 50,
+  "total_in_591_passed": 174,
+  "remaining": 417,
+  "unresolved_failures": [],
+  "runner_pid": 113318,
+  "session": 71491,
+  "queue_continues": true,
+  "free_GiB": 3.173900604248047,
+  "sha256": {
+    "passed": "18d638fd5041a47b60046bac937421ca7ba1497e3c912ab67c23c1a4d86323dd",
+    "remaining": "a549d86a5312240e62eafda2537ae1d1fb2e480dd02310122218d7cfa6d00007"
+  },
+  "root_aggregator": "not started; requires all 591 completed"
+}
