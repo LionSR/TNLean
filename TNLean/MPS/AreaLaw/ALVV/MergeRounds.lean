@@ -51,7 +51,7 @@ theorem merge_rounds_lt_of_odd {D s j : ℕ} (hD : 2 ≤ D) (hs : 2 ≤ s)
     (hodd : Odd (Nat.clog D s)) (hpow : s ≠ D ^ Nat.clog D s) (hj : D ^ (2 * j) ≤ D * s) :
     D ^ (2 * j) < s := by
   have hD1 : 1 < D := hD
-  set c := Nat.clog D s with hcdef
+  set c := Nat.clog D s
   have hup : s < D ^ c := lt_of_le_of_ne (Nat.le_pow_clog hD1 s) hpow
   have hlow : D ^ (c - 1) < s := by
     simpa only [Nat.pred_eq_sub_one] using Nat.pow_pred_clog_lt_self hD1 hs

@@ -9,7 +9,7 @@ import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeEvent
 # One physical parent of the degenerate-gap tree with `k` rounds
 
 Under Assumption (DG) of ALVV, arXiv:1602.08828v2, lines 275–279, the original Hamiltonian
-determines, for every long interval, the improving family of Theorems 4.2 and 4.3 and its
+determines, for every long interval, the improving family of Theorem 4.7 (from Corollary 4.6) and its
 intermediate target, before the number of rounds, the sampling size and the child spaces. For
 every `k ≥ 1` and every sampling size `s ≤ D^{2k}`, children of dimension at most `D^{2k} s`
 have a measurable Haar success event, with the failure probability of Lemma `l:rs`, on which the
