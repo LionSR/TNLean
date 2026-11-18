@@ -9,9 +9,10 @@ import QICLean.ManyBody.Hamiltonian.GroundSpace
 /-!
 # From physical rectangle estimates to the uniform box supremum
 
-The current box power applies to every safe physical rectangle, including the
-zero-size case. Conversely, a large-rectangle original-state bound extends to
-all sizes by the finite-dimensional entropy bound before taking the supremum.
+The current box power applies to every safe integer rectangle, whose size is at
+least one. Its intersection with the physical region may be empty. Conversely,
+a large-rectangle original-state bound extends to all positive sizes by the
+finite-dimensional entropy bound before taking the supremum.
 Neither bridge constructs the physical entropy improvement.
 
 Source: OpenAI area-law manuscript, `02-initial.tex`, lines 590--594, and
@@ -27,8 +28,9 @@ open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.AreaLaw
 
-/-- A uniform positive-scale box power supplies every physical rectangle,
-including a possible zero-size rectangle. Source: `02-initial.tex`, lines 590--594. -/
+/-- A uniform positive-scale box power bounds the entropy of every safe intersection
+`rectRegion A Q`, including an empty intersection. The integer rectangle `Q` has size
+at least one. Source: `02-initial.tex`, lines 590--594. -/
 theorem regionalEntropy_le_of_boxEntropy_power
     {q R D₀ : ℕ} (hq : 1 ≤ q) {J Δ C e : ℝ} (he : 0 < 1 + e)
     (hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤ C * (r : ℝ) ^ (1 + e))
