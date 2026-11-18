@@ -100,6 +100,7 @@ class ImmutableBaseTests(unittest.TestCase):
     def run_step(self, name, *, base=None, check=True, extra_env=None):
         self.output.unlink(missing_ok=True)
         env = os.environ | {"BASE_REF": self.base if base is None else base,
+                            "PR_HEAD_SHA": self.git("rev-parse", "HEAD").stdout.strip(),
                             "GITHUB_OUTPUT": str(self.output),
                             "RUNNER_TEMP": str(self.runtime),
                             "PATH": str(self.bin) + os.pathsep + os.environ["PATH"]}
@@ -226,6 +227,13 @@ class ImmutableBaseTests(unittest.TestCase):
                     self.git("rm", LEAN)
                 self.commit(operation)
                 self.assert_detection(True)
+                (self.runtime / "lake-build.log").write_text("")
+                self.run_step(TIMING_NAME)
+                self.assertEqual(self.output.read_text(), "result=success\n")
+                target = {"add": "TNLean/Fixture/New.lean", "modify": LEAN,
+                          "rename": "TNLean/Fixture/Renamed.lean", "delete": None}[operation]
+                self.assertEqual((self.runtime / "changed-lean-files.txt").read_text(),
+                                 target + "\n" if target else "")
                 # Deletions must trigger sync but are not passed as nonexistent
                 # input files to the changed-declaration scanner.
                 result = self.run_step(COVERAGE)
@@ -341,15 +349,39 @@ class ImmutableBaseTests(unittest.TestCase):
         for command in ("fetch", "diff"):
             with self.subTest(command=command):
                 self.fail_git(command)
-                result = self.run_step(TIMING_NAME)
+                result = self.run_step(TIMING_NAME, base="f" * 40 if command == "fetch" else self.base)
                 self.assertEqual(self.output.read_text(), "result=error\n")
                 self.assertIn("injected git failure", result.stderr)
         (self.bin / "git").unlink()
         self.make_criss_cross()
-        for base in ("", "0" * 40, self.git("rev-parse", "moving-base").stdout.strip()):
+        for base in ("", "0" * 40, "HEAD", "--help"):
             with self.subTest(base=base):
                 self.run_step(TIMING_NAME, base=base)
                 self.assertEqual(self.output.read_text(), "result=error\n")
+
+    def test_timing_advanced_checkout_excludes_upstream_and_keeps_feature_limit(self):
+        self.write(LEAN, "theorem changed : True := by trivial\n")
+        self.commit("feature change")
+        feature = self.git("rev-parse", "HEAD").stdout.strip()
+        self.git("checkout", "-q", "moving-base")
+        self.write("TNLean/Fixture/Upstream.lean", "theorem upstream : True := by trivial\n")
+        self.commit("main advances")
+        self.git("merge", "--no-ff", "-m", "synthetic merge", feature)
+        log = self.runtime / "lake-build.log"
+        for seconds, expected in ((10, "success"), (50, "limit")):
+            log.write_text(f"Built TNLean.Fixture.Existing ({seconds}s)\n"
+                           "Built TNLean.Fixture.Upstream (81s)\n")
+            self.run_step(TIMING_NAME, extra_env={"PR_HEAD_SHA": feature})
+            self.assertEqual(self.output.read_text(), f"result={expected}\n")
+            self.assertEqual((self.runtime / "changed-lean-files.txt").read_text(), LEAN + "\n")
+
+    def test_timing_ambiguous_event_merge_base_fails_closed(self):
+        self.make_criss_cross()
+        ambiguous = self.git("rev-parse", "moving-base").stdout.strip()
+        self.assertEqual(len(self.git("merge-base", "--all", ambiguous, "HEAD").stdout.split()), 2)
+        result = self.run_step(TIMING_NAME, base=ambiguous)
+        self.assertEqual(self.output.read_text(), "result=error\n")
+        self.assertIn("unique merge base", result.stderr)
 
     def test_coverage_is_scoped_to_changed_declarations_in_a_changed_file(self):
         self.write(LEAN, "namespace Regression\n"
@@ -408,7 +440,11 @@ class ImmutableBaseTests(unittest.TestCase):
             self.assertNotIn("BASE_REF", step.get("env", {}))
             self.assertNotIn("github.event.pull_request.base.ref", step.get("run", ""))
         self.assertEqual(STEPS[TIMING_NAME]["env"]["BASE_REF"], expression)
-        self.assertIn('git merge-base --is-ancestor "$BASE_REF" HEAD', STEPS[TIMING_NAME]["run"])
+        self.assertEqual(STEPS[TIMING_NAME]["env"]["PR_HEAD_SHA"],
+                         "${{ github.event.pull_request.head.sha }}")
+        self.assertIn('scripts/lake_build_hotspots.py select-pr', STEPS[TIMING_NAME]["run"])
+        self.assertIn('--base "$BASE_REF" --head "$PR_HEAD_SHA"', STEPS[TIMING_NAME]["run"])
+        self.assertEqual(STEPS[TIMING_NAME]["if"], "github.event_name == 'pull_request'")
         self.assertNotIn("--merge-base", STEPS[TIMING_NAME]["run"])
         for name in ("Check reader-facing prose patterns", "Check blueprint and Lean source stay in sync",
                      "Generate lean_decls from blueprint .tex files", COVERAGE):

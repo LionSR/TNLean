@@ -114,7 +114,10 @@ def pr_changed_paths(base: str, head: str) -> list[str]:
         if git("rev-parse", "--verify", f"{sha}^{{commit}}") != sha:
             raise ValueError("PR timing endpoint is not a commit")
     subprocess.run(["git", "merge-base", "--is-ancestor", head, "HEAD"], check=True)
-    fork = git("merge-base", base, head)
+    forks = git("merge-base", "--all", base, head).splitlines()
+    if len(forks) != 1:
+        raise ValueError("PR timing endpoints must have a unique merge base")
+    fork = forks[0]
     paths = subprocess.check_output(
         ["git", "-c", "core.quotePath=false", "diff", "--name-only", "--no-renames",
          "--diff-filter=AM", "-z", fork, head, "--", "*.lean"], text=True).split("\0")
