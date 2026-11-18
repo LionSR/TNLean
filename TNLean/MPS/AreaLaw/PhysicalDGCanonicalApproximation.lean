@@ -243,10 +243,10 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
   obtain ⟨hGoodMeasurable, hfailure, hsuccess⟩ := hGood
   refine ⟨hGoodMeasurable, hfailure, hsuccess, ?_⟩
   intro Bout
-  have hL1 : (1 : ℝ) ≤ (L : ℝ) + 1 := by linarith [(Nat.cast_nonneg L : (0 : ℝ) ≤ L)]
+  have hL1 : (1 : ℝ) ≤ (L : ℝ) + 1 := le_add_of_nonneg_left (Nat.cast_nonneg L)
   have hw : 1 ≤ w := by
     dsimp only [w]
-    linarith [Real.log_natCast_nonneg rG, Real.log_nonneg hL1]
+    linarith only [Real.log_natCast_nonneg rG, Real.log_nonneg hL1]
   obtain ⟨_hellCount, _hfirst, _hsecond, _hupper, _hbase, hrawLog⟩ :=
     Real.interleaved_filter_scale_count_bounds Cscale m g w
       hCscale (Nat.le_max_right q 50) hg hg1 hw
@@ -291,6 +291,6 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
     intro z hz
     exact isOpenMPS_of_mem_nativeFullIntervalSpace_of_trimming_rank_bound hDN hrootProfile.2 hz
   refine ⟨hcloseRoot, hrootMPS, ?_⟩
-  exact hterminal (D ^ 6 * s ^ 3) S0 hrootProfile.1 hcloseRoot
+  apply hterminal (D ^ 6 * s ^ 3) S0 hrootProfile.1 hcloseRoot
 
 end TNLean.MPS.AreaLaw
