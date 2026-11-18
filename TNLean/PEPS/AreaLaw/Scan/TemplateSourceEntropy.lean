@@ -33,11 +33,13 @@ and 828--844, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace AdmissibleSupport)
+open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction)
 
 open scoped ComplexOrder
 
@@ -193,11 +195,12 @@ theorem template_final_source_entropy_bounds_of_boxEntropy
     (hCbox : 0 ≤ Cbox)
     (hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
       Cbox * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ))) :
-    ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+    ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+        (_ : ∀ X, ‖h.term X‖ ≤ J)
       (E₀ : ℝ) (Ω : StateSpace Λ q),
-      ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
         (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
-      Ω ∈ groundSpace h.operator E₀ →
+      Ω ∈ groundSpace h.hamiltonian E₀ →
       ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
         {Ctpl : ℝ} {s₀ : ℕ} (T : Template Ctpl S.n s₀),
         24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ S.A) →
@@ -212,12 +215,12 @@ theorem template_final_source_entropy_bounds_of_boxEntropy
                 ((S.n : ℝ) * (L : ℝ) ^ (Exponents.boxError : ℝ) + S.n)) := by
   have hsource := template_source_entropy_bounds q hq (Exponents.boxError : ℝ) Cbox
     (by norm_num [Exponents.boxError]) hCbox
-  intro Λ h E₀ Ω hΩ hgap hspan S Ctpl s₀ T hC hsep hdepth L hLpos hL
+  intro Λ h hh hhJ E₀ Ω hΩ hgap hspan S Ctpl s₀ T hC hsep hdepth L hLpos hL
   have hrect : ∀ Q : IntRect, IsSafe Λ S.A D₀ Q →
       regionalEntropy Λ q Ω (rectRegion S.A Q) ≤
         Cbox * (Q.size : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
     intro Q hsafe
-    exact (regionalEntropy_le_boxEntropy hq h hΩ
+    exact (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ
       hgap hspan hsafe le_rfl).trans
       (hbox Q.size Q.one_le_size)
   obtain ⟨hcore, hprefix⟩ := hsource Λ Ω hΩ S.A D₀ hD T hC hsep hrect
@@ -236,11 +239,12 @@ theorem exists_template_final_source_entropy_bounds_of_boxEntropy
     (hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
       Cbox * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ))) :
     ∃ Ce : ℝ, 0 ≤ Ce ∧
-      ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J)
         (E₀ : ℝ) (Ω : StateSpace Λ q),
-        ‖Ω‖ = 1 → (h.operator - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+        ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
           (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
-        Ω ∈ groundSpace h.operator E₀ →
+        Ω ∈ groundSpace h.hamiltonian E₀ →
         ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
           {Ctpl : ℝ} {s₀ : ℕ} (T : Template Ctpl S.n s₀),
           24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ S.A) →
