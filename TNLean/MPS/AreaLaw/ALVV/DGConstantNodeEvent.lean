@@ -30,6 +30,7 @@ open MeasureTheory
 namespace TNLean.MPS.AreaLaw.ALVV
 
 open TNLean.MPS.AreaLaw TNLean.Lattice
+open ManyBody (interval)
 
 /-- The sampled word image of a merged space has a measurable Haar success event at every
 number of rounds `k ≥ 1` with `s ≤ D^{2k}` and children of dimension at most `D^{2k} s`; on it
