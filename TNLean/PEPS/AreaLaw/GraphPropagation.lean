@@ -95,7 +95,7 @@ variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
 /-- The term-norm bound `J` is nonnegative as soon as one support exists, since the term at
 that support has norm at most `J`. Source: area law, `eq:hamiltonian`
 (`00-introduction.tex`, lines 19–25). -/
-theorem normBound_nonneg (h : PlaneInteraction Λ q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+theorem normBound_nonneg {J : ℝ} (h : PlaneInteraction Λ q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (X : AdmissibleSupport Λ R) :
     0 ≤ J :=
   (norm_nonneg _).trans (hhJ X)
@@ -103,7 +103,7 @@ theorem normBound_nonneg (h : PlaneInteraction Λ q R) (hhJ : ∀ X, ‖h.term X
 /-- The norms of the terms whose support contains a site sum to at most `μ_R J`, with
 `μ_R = 2^{v_R - 1}`. Source: area law, `eq:quasilocal-budget`
 (`03-quasilocal.tex`, lines 31–39) and `01-preliminaries.tex`, lines 95–102. -/
-theorem sum_norm_term_containing_le (h : PlaneInteraction Λ q R)
+theorem sum_norm_term_containing_le {J : ℝ} (h : PlaneInteraction Λ q R)
     (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 ≤ J)
     (x : Site Λ) :
     ∑ X ∈ Finset.univ.filter (fun X : AdmissibleSupport Λ R => x ∈ X.1), ‖h.term X‖ ≤

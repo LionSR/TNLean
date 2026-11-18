@@ -67,7 +67,7 @@ theorem one_le_supportDim (hq : 1 ≤ q) (X : ChainSupport L R) :
 /-- The interaction bound is nonnegative whenever the chain contains a site.
 The singleton interaction supplies the inequality.
 Source: TNLean note, Section 1, `eq:ham`. -/
-lemma _root_.ManyBody.ChainInteraction.norm_bound_nonneg (h : ChainInteraction L q R)
+lemma _root_.ManyBody.ChainInteraction.norm_bound_nonneg {J : ℝ} (h : ChainInteraction L q R)
     (hhJ : ∀ X, ‖h.term X‖ ≤ J) (x : Fin L) :
     0 ≤ J := by
   classical

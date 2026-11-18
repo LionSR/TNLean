@@ -49,7 +49,7 @@ open Classical in
 /-- The literal charge energy is controlled by its actual entropy defect and
 classical bad-old mass. The split capacity and replica count may be zero. -/
 theorem actualCharge_energyError_le_domainGraph
-    {Λ T : Finset (ℤ × ℤ)} {q R : ℕ}  [NeZero q]
+    {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ} [NeZero q]
     [LinearOrder (AdmissibleSupport Λ R)]
     (hT : T.Nonempty) (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
     (hgraph : S.graph = planeDomainGraph Λ)

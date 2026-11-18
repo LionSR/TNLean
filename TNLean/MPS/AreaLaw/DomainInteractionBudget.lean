@@ -41,7 +41,7 @@ lemma IsDomainSupport.singleton (x : Fin Λ.card) : IsDomainSupport Λ R {x} := 
 
 /-- The interaction bound is nonnegative at every actual domain site.
 Source: TNLean note, part0_preamble.tex, eq:ham, lines 191–201. -/
-lemma _root_.ManyBody.DomainInteraction.norm_bound_nonneg (h : DomainInteraction Λ q R)
+lemma _root_.ManyBody.DomainInteraction.norm_bound_nonneg {J : ℝ} (h : DomainInteraction Λ q R)
     (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (x : Fin Λ.card) : 0 ≤ J := by
   exact (norm_nonneg (h.term ⟨{x}, IsDomainSupport.singleton x⟩)).trans (hhJ _)
@@ -49,8 +49,8 @@ lemma _root_.ManyBody.DomainInteraction.norm_bound_nonneg (h : DomainInteraction
 /-- The original domain interactions satisfy the chain per-site norm budget.
 No sign or nonempty-domain hypothesis is added.
 Source: TNLean note, part2a_mps_information.tex, lines 260–265. -/
-lemma _root_.ManyBody.DomainInteraction.sum_norm_terms_containing_le (h : DomainInteraction Λ q R)
-    (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+lemma _root_.ManyBody.DomainInteraction.sum_norm_terms_containing_le {J : ℝ}
+    (h : DomainInteraction Λ q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (x : Fin Λ.card) :
     (∑ X ∈ Finset.univ.filter (fun X : DomainSupport Λ R ↦ x ∈ X.1),
       ‖h.term X‖) ≤ ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J := by

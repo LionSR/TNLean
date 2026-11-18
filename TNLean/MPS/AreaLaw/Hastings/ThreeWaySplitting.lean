@@ -281,7 +281,7 @@ theorem _root_.ManyBody.ChainInteraction.termSum_isHermitian (h : ChainInteracti
 
 /-- A sum of `|S|` terms has operator norm at most `|S| J`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 89–91 (finite interaction strength). -/
-theorem _root_.ManyBody.ChainInteraction.norm_termSum_le (h : ChainInteraction L q R)
+theorem _root_.ManyBody.ChainInteraction.norm_termSum_le {J : ℝ} (h : ChainInteraction L q R)
     (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (S : Finset (ChainSupport L R)) : ‖h.termSum S‖ ≤ S.card * J := by
   refine (norm_sum_le _ _).trans ?_
@@ -404,7 +404,7 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_bufferPart
 
 /-- **The norm of the buffer part.** `‖H_B‖ ≤ 2 (m + R) 2^{2R+1} J`, linear in the buffer
 width. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 89–91 and 777. -/
-theorem _root_.ManyBody.ChainInteraction.norm_bufferPart_le (h : ChainInteraction L q R)
+theorem _root_.ManyBody.ChainInteraction.norm_bufferPart_le {J : ℝ} (h : ChainInteraction L q R)
     (hhJ : ∀ X, ‖h.term X‖ ≤ J) (hJ : 0 ≤ J)
     (j m : ℕ) : ‖h.bufferPart j m‖ ≤ (2 * (m + R) * 2 ^ (2 * R + 1) : ℕ) * J :=
   (h.norm_termSum_le hhJ _).trans
@@ -412,7 +412,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_bufferPart_le (h : ChainInteractio
 
 /-- The centered buffer part has norm at most `4 (m + R) 2^{2R+1} J`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 777 and 781–782. -/
-theorem _root_.ManyBody.ChainInteraction.norm_groundCentered_bufferPart_le
+theorem _root_.ManyBody.ChainInteraction.norm_groundCentered_bufferPart_le {J : ℝ}
     (h : ChainInteraction L q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (hJ : 0 ≤ J) {Ψ : EuclideanSpace ℂ (Fin L → Fin q)} (hΨ : ‖Ψ‖ = 1) (j m : ℕ) :
     ‖groundCentered Ψ (h.bufferPart j m)‖ ≤ 2 * ((2 * (m + R) * 2 ^ (2 * R + 1) : ℕ) * J) :=

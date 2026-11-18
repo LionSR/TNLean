@@ -75,7 +75,7 @@ area-law theorem. Their derivation from that construction is separate.
 Source: 07-comparators.tex, comparator:defect-mass, lines 421--443;
 08-scanner.tex, lines 371--384 and 416--451, adc7f124. -/
 theorem actualChargeScanRound_globalLowDefectProjection_mass_ge
-    {Λ : Finset (ℤ × ℤ)} {q d R : ℕ}  [NeZero q] [NeZero d]
+    {Λ : Finset (ℤ × ℤ)} {q d R : ℕ} {J : ℝ} [NeZero q] [NeZero d]
     [LinearOrder (AdmissibleSupport Λ R)]
     (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
     (hm : 0 < S.m) (hM : 0 < S.M) (s : ℕ)

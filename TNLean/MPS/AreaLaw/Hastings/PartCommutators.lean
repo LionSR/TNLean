@@ -138,8 +138,8 @@ theorem _root_.ManyBody.ChainInteraction.term_commutator_termSum_eq (h : ChainIn
 
 /-- The commutator of two terms has norm at most `2 J²`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, line 794. -/
-theorem _root_.ManyBody.ChainInteraction.norm_term_commutator_le (h : ChainInteraction L q R)
-    (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+theorem _root_.ManyBody.ChainInteraction.norm_term_commutator_le {J : ℝ}
+    (h : ChainInteraction L q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (X Y : ChainSupport L R) :
     ‖h.term X * h.term Y - h.term Y * h.term X‖ ≤ 2 * J ^ 2 := by
   have hJ : 0 ≤ J := (norm_nonneg _).trans (hhJ X)
@@ -152,7 +152,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_term_commutator_le (h : ChainInter
 
 /-- The commutator of a term with a sum of terms has norm at most
 `(R + 1) 2^{2R+1} · 2 J²`. Hastings, arXiv:0705.2024v4, `law16.tex`, line 794. -/
-theorem _root_.ManyBody.ChainInteraction.norm_term_commutator_termSum_le
+theorem _root_.ManyBody.ChainInteraction.norm_term_commutator_termSum_le {J : ℝ}
     (h : ChainInteraction L q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (X : ChainSupport L R) (S : Finset (ChainSupport L R)) :
     ‖h.term X * h.termSum S - h.termSum S * h.term X‖ ≤
@@ -227,7 +227,7 @@ theorem _root_.ManyBody.ChainInteraction.commutator_termSum_inner_eq_sum
 
 /-- The commutator `[H, H_A]` has norm at most `|C| (R + 1) 2^{2R+1} · 2 J²`, with `|C|` the
 number of split terms. Hastings, arXiv:0705.2024v4, `law16.tex`, line 794. -/
-theorem _root_.ManyBody.ChainInteraction.norm_commutator_termSum_inner_le
+theorem _root_.ManyBody.ChainInteraction.norm_commutator_termSum_inner_le {J : ℝ}
     (h : ChainInteraction L q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (A : Finset (Fin L)) :
     ‖h.hamiltonian * h.termSum (Finset.univ.filter fun X ↦ X.1 ⊆ A) -
@@ -241,7 +241,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_commutator_termSum_inner_le
 
 /-- The commutator `[H, H_A]` for an interval `A` has norm at most
 `partCommutatorConst R * J²`. Hastings, arXiv:0705.2024v4, `law16.tex`, line 794. -/
-theorem _root_.ManyBody.ChainInteraction.norm_commutator_termSum_interval_le
+theorem _root_.ManyBody.ChainInteraction.norm_commutator_termSum_interval_le {J : ℝ}
     (h : ChainInteraction L q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (a b : ℕ) :
     ‖h.hamiltonian * h.termSum (Finset.univ.filter fun X ↦ X.1 ⊆ interval L a b) -
@@ -300,8 +300,8 @@ theorem _root_.ManyBody.ChainInteraction.commutator_leftPart_eq
 Hastings, arXiv:0705.2024v4, appendix, `law16.tex`, line 794: "Let `b_L = [H, H_L]`. Note
 that `‖b_L‖ ≤ J²`". The explicit constant `partCommutatorConst R` replaces the printed
 bound `J²`, which is stated for nearest-neighbour terms, for terms of range `R`. -/
-theorem _root_.ManyBody.ChainInteraction.norm_commutator_leftPart_le (h : ChainInteraction L q R)
-    (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+theorem _root_.ManyBody.ChainInteraction.norm_commutator_leftPart_le {J : ℝ}
+    (h : ChainInteraction L q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (j m : ℕ) :
     ‖h.hamiltonian * h.leftPart j m - h.leftPart j m * h.hamiltonian‖ ≤
       partCommutatorConst R * J ^ 2 :=
@@ -356,8 +356,8 @@ Hastings, arXiv:0705.2024v4, appendix, `law16.tex`, line 794: "Let `b_L = [H, H_
 that `‖b_L‖ ≤ J²`", applied to the right part. The explicit constant
 `partCommutatorConst R` replaces the printed bound `J²`, which is stated for
 nearest-neighbour terms, for terms of range `R`. -/
-theorem _root_.ManyBody.ChainInteraction.norm_commutator_rightPart_le (h : ChainInteraction L q R)
-    (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+theorem _root_.ManyBody.ChainInteraction.norm_commutator_rightPart_le {J : ℝ}
+    (h : ChainInteraction L q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (j m : ℕ) :
     ‖h.hamiltonian * h.rightPart j m - h.rightPart j m * h.hamiltonian‖ ≤
       partCommutatorConst R * J ^ 2 :=
@@ -413,8 +413,8 @@ theorem _root_.ManyBody.ChainInteraction.commutator_bufferPart_eq
 Hastings, arXiv:0705.2024v4, appendix, `law16.tex`, line 794: "Let `b_L = [H, H_L]`. Note
 that `‖b_L‖ ≤ J²`", applied to the buffer part. The explicit constant replaces the printed
 bound `J²`, which is stated for nearest-neighbour terms, for terms of range `R`. -/
-theorem _root_.ManyBody.ChainInteraction.norm_commutator_bufferPart_le (h : ChainInteraction L q R)
-    (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+theorem _root_.ManyBody.ChainInteraction.norm_commutator_bufferPart_le {J : ℝ}
+    (h : ChainInteraction L q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (j m : ℕ) :
     ‖h.hamiltonian * h.bufferPart j m - h.bufferPart j m * h.hamiltonian‖ ≤
       2 * (partCommutatorConst R * J ^ 2) := by
