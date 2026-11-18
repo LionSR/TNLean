@@ -1,0 +1,22 @@
+{
+  "head": "dccc85e5607077b51822664e9d475287d300d607",
+  "production_head": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "manifest_sha256": "e44f7a56247de8b4583cfaa8676114189a01e9a0f0f68ff4b420012488ea488e",
+  "selected": 78,
+  "excluded_prior_passes": 8,
+  "project_closure": 1887,
+  "reusable": 760,
+  "requires_compile": 1127,
+  "reasons": {
+    "source changed or no completed-source evidence": 1085,
+    "exact source/artifact and all project dependencies match": 760,
+    "transitive dependency cannot be reused": 42
+  },
+  "cache_action": "read-only inspection only; independent overlay not populated while old queue remains active",
+  "package_manifest_identical": true,
+  "toolchain_identical": true,
+  "old_queue_pid": 412863,
+  "new_compiler_started": false,
+  "handoff_condition": "old queue finishes/drains all compiler writers; then refresh hash plan and copy only eligible completed artifacts to independent overlay. Retain 1 GiB disk guard; do not add workers to existing 2-worker queue."
+}
