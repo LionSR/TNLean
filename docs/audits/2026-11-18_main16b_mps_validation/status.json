@@ -1,9 +1,17 @@
 {
-  "state": "strict",
-  "module": "TNLean.MPS.AreaLaw.Algorithm.SampledCost",
-  "pid": 493914,
-  "runner_pid": 493559,
-  "time": "2026-11-18T20:24:42.439988+00:00",
-  "passed": 73,
-  "head": "f94193009343ee767ddc96a3dacee80e659ec5a9"
+  "state": "finished",
+  "head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+  "passed": 77,
+  "not_run": [
+    "TNLean",
+    "TNLean.MPS",
+    "TNLean.MPS.AreaLaw",
+    "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds",
+    "verification.area-law.Solution"
+  ],
+  "failed": [
+    "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds",
+    "verification.area-law.Solution"
+  ],
+  "axiom_audit": "not-run; compilation/strict only"
 }

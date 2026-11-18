@@ -8,6 +8,8 @@
     "TNLean.MPS.AreaLaw.Algorithm.SweepProgram",
     "TNLean.MPS.AreaLaw.Algorithm.ValidOracle",
     "TNLean.MPS.AreaLaw.Algorithm.ValidOracleCost",
+    "TNLean.MPS.AreaLaw.Algorithm.ValidOracleSampled",
+    "TNLean.MPS.AreaLaw.Algorithm.ValidOracleSampledCost",
     "TNLean.MPS.AreaLaw.BandInformation",
     "TNLean.MPS.AreaLaw.DomainInteractionBudget",
     "TNLean.MPS.AreaLaw.DomainIntervalNeighborhoodEntropy",
@@ -61,6 +63,7 @@
     "TNLean.MPS.AreaLaw.ViableSet.ConstantRankCut",
     "TNLean.MPS.AreaLaw.ViableSet.PowerProjector",
     "TNLean.MPS.AreaLaw.ViableSet.RationalBondTrimming",
+    "TNLean.MPS.AreaLaw.ViableSet.RationalSampledSuccessiveConstruction",
     "TNLean.MPS.AreaLaw.ViableSet.SampledSuccessiveConstruction",
     "TNLean.MPS.AreaLaw.ViableSet.SizeBondTrimming",
     "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.ApproximateCertificates",
@@ -76,19 +79,12 @@
     "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingVector",
     "TNLean.MPS.AreaLaw.ViableSet.ViableTrimmedWitness"
   ],
-  "failed": [
-    "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds",
-    "verification.area-law.Solution"
-  ],
   "remaining": [
     "TNLean",
     "TNLean.MPS",
     "TNLean.MPS.AreaLaw",
-    "TNLean.MPS.AreaLaw.Algorithm.ValidOracleSampled",
-    "TNLean.MPS.AreaLaw.Algorithm.ValidOracleSampledCost",
-    "TNLean.MPS.AreaLaw.ViableSet.RationalSampledSuccessiveConstruction",
     "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds",
     "verification.area-law.Solution"
   ],
-  "state": "running with retained source failures"
+  "state": "finished narrow checks; aggregate gaps recorded"
 }
