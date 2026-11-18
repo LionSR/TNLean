@@ -57,6 +57,8 @@ coincide. Documented, with the two previous items, in
   Concepts, symmetries, theorems*, Section IV, line 1445
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean.PEPS
@@ -112,13 +114,13 @@ theorem IncidentEdge.adj_other {v : V} (ie : IncidentEdge G v) : G.Adj v ie.othe
 def incidentEdgeEquivNeighborFinset (v : V) :
     IncidentEdge G v ≃ {w // w ∈ G.neighborFinset v} where
   toFun ie := ⟨ie.other, (G.mem_neighborFinset v _).mpr ie.adj_other⟩
-  invFun w := ⟨Edge.ofAdj ((G.mem_neighborFinset v w).mp w.2), by
-    rcases Edge.ofAdj_endpoints ((G.mem_neighborFinset v w).mp w.2) with h | h
+  invFun w := ⟨ManyBody.Edge.ofAdj ((G.mem_neighborFinset v w).mp w.2), by
+    rcases ManyBody.Edge.ofAdj_endpoints ((G.mem_neighborFinset v w).mp w.2) with h | h
     · exact Or.inl h.1
     · exact Or.inr h.2⟩
   left_inv ie := by
     apply Subtype.ext
-    refine Edge.ofAdj_eq_of_endpoints (IncidentEdge.adj_other G ie) ie.1 ?_
+    refine ManyBody.Edge.ofAdj_eq_of_endpoints (IncidentEdge.adj_other G ie) ie.1 ?_
     rcases ie with ⟨⟨⟨a, b⟩, hab, hadj⟩, hv⟩
     unfold IncidentEdge.other
     dsimp only
@@ -130,9 +132,9 @@ def incidentEdgeEquivNeighborFinset (v : V) :
   right_inv w := by
     apply Subtype.ext
     have hadj := (G.mem_neighborFinset v w).mp w.2
-    change IncidentEdge.other G ⟨Edge.ofAdj hadj, _⟩ = w
+    change IncidentEdge.other G ⟨ManyBody.Edge.ofAdj hadj, _⟩ = w
     unfold IncidentEdge.other
-    rcases Edge.ofAdj_endpoints hadj with ⟨h1, h2⟩ | ⟨h1, h2⟩
+    rcases ManyBody.Edge.ofAdj_endpoints hadj with ⟨h1, h2⟩ | ⟨h1, h2⟩
     · simp [h1, h2]
     · have hne : (w : V) ≠ v := (G.ne_of_adj hadj).symm
       simp [h1, hne]
