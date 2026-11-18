@@ -1042,9 +1042,10 @@ state the two models separately following
 
 The next two conditional bounds are defined for every real $\Delta$.
 Their state hypotheses are $\|\Omega\|=1$, $H\Omega=E_0\Omega$, and
-\[
-    H-E_0I-\Delta\bigl(I-|\Omega\rangle\langle\Omega|\bigr)\succeq0.
-\]
+\begin{align}
+    H-E_0I-\Delta\bigl(I-|\Omega\rangle\langle\Omega|\bigr) & \succeq0.
+    \label{eq:area_law_conditional_projector_gap}
+\end{align}
 They do not assume that the $E_0$ eigenspace is one-dimensional.
 The theorems establishing the physical collar and amplification bounds retain
 $\Delta>0$; no unconditional nonpositive-gap area law is asserted here.
@@ -1060,7 +1061,7 @@ $\Delta>0$; no unconditional nonpositive-gap area law is asserted here.
     \cite[Proposition~9.6]{OpenAI2026AreaLaw} holds with constant $C$ and
     threshold $N$ if for every $n\ge N$, every unit eigenvector $\Omega$ of
     an admissible Hamiltonian on a finite induced domain $\Lambda$ satisfying the
-    preceding projector inequality, every
+    projector inequality~(\ref{eq:area_law_conditional_projector_gap}), every
     $A\subseteq\Lambda$, and every template $T$ with parameters $(n,s_0)$
     separated from $Z$ with $L=\lfloor n^{1-\varepsilon}\rfloor\le s_0$, setting
     $X=A\cap T$ and $S_0=A\cap T_L$ gives
@@ -1083,7 +1084,7 @@ $\Delta>0$; no unconditional nonpositive-gap area law is asserted here.
     \cite[Proposition~10.2]{OpenAI2026AreaLaw} holds at $(C_0,M)$ ($C_0>0$,
     $M\ge1$) with constant $C_M$ and threshold $N$ if for every
     $n\ge\max(2,N)$, every unit eigenvector $\Omega$ of an admissible
-    Hamiltonian on $\Lambda$ satisfying the preceding projector inequality, every $A\subseteq\Lambda$, and every finite
+    Hamiltonian on $\Lambda$ satisfying the projector inequality~(\ref{eq:area_law_conditional_projector_gap}), every $A\subseteq\Lambda$, and every finite
     $T\subset\mathbb Z^2$, setting $L=\lfloor n^{1-\varepsilon}\rfloor$,
     $X=A\cap T$, $S_0=A\cap T_L$, and $Y=S_0\setminus X$, the hypotheses
     $|S_0|\le C_0n^2$, $|\partial_\Lambda X|,|\partial_\Lambda Y|,|\partial_\Lambda S_0|\le C_0n$,
