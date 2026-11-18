@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolUniformPreparation
 import TNLean.MPS.AreaLaw.SharpChainCompression
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The crossing estimate from physical chain data
@@ -25,6 +26,8 @@ part2b_mps_protocol.tex:587–614 and order of constants:626–632.
 noncomputable section
 namespace TNLean.MPS.AreaLaw.ChainSweep
 open QuantumCircuit TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet
+
+open ManyBody (IsGapped groundSpace)
 open TNLean.Lattice.Compression
 
 /-- The physical hypotheses alone give uniformly polynomial sampled networks
@@ -36,7 +39,8 @@ theorem exists_physical_sampled_network_with_prefixCrossingLinks_le_1600
     ∃ (D K : ℝ) (s L₀ : ℕ) (hL₀ : 2 ≤ L₀), 1 ≤ D ∧ 0 < K ∧
       let ι := {a : Σ L : ℕ, ChainHamiltonian L q R J ×
           EuclideanSpace ℂ (Fin L → Fin q) × ℝ //
-        L₀ ≤ a.1 ∧ Matrix.IsGappedGroundState a.2.1.operator a.2.2.2 a.2.2.1 Δ}
+        L₀ ≤ a.1 ∧ ‖a.2.2.1‖ = 1 ∧ IsGapped a.2.1.operator a.2.2.2 Δ ∧
+          groundSpace a.2.1.operator a.2.2.2 = Submodule.span ℂ {a.2.2.1}}
       let length := fun i : ι ↦ i.val.1
       let width := fun i : ι ↦ ⌈D * Real.log (length i : ℝ)⌉₊
       let ground := fun i : ι ↦ i.val.2.2.1

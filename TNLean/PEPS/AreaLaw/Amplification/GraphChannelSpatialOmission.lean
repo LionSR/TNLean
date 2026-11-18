@@ -35,33 +35,39 @@ open scoped BigOperators ENNReal NNReal Matrix.Norms.L2Operator MatrixOrder Comp
 
 namespace TNLean.PEPS.AreaLaw
 
+open Classical in
 /-- Localization tails at every radius force exact support on the anchor
 component: beyond the largest distance in the component the graph balls stop
 growing, while the tail tends to zero. Source: area law, `09-amplification.tex`,
 lines 135–137. -/
 theorem mem_supportedOperators_reachable_of_forall_tail
-    {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q]
+    {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     {C c α : ℝ} (hc : 0 < c) (hα : 0 < α)
-    (hε : ∀ l : ℕ, ‖k - siteExpectation q (graphBall G a l) k‖ ≤
+    (hε : ∀ l : ℕ, ‖k - ManyBody.regionExpectation (ManyBody.graphBall G a l) k‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α))) :
-    k ∈ supportedOperators q {x | G.Reachable a x} := by
+    k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (Finset.univ.filter fun x ↦ G.Reachable a x) := by
   classical
   set n := Finset.univ.sup (G.dist a)
-  have hball (l : ℕ) (hl : n ≤ l) : graphBall G a l = graphBall G a n :=
+  have hball (l : ℕ) (hl : n ≤ l) : ManyBody.graphBall G a l = ManyBody.graphBall G a n :=
     Finset.coe_injective (by
-      rw [coe_graphBall_eq_reachable_of_sup_dist_le G a hl,
-        coe_graphBall_eq_reachable_of_sup_dist_le G a le_rfl])
+      rw [ManyBody.coe_graphBall_eq_reachable_of_sup_dist_le G a hl,
+        ManyBody.coe_graphBall_eq_reachable_of_sup_dist_le G a le_rfl])
   have htend : Filter.Tendsto (fun l : ℕ => C * Real.exp (-(c * (l : ℝ) ^ α)))
       Filter.atTop (nhds 0) := by
     have h := ((tendsto_rpow_atTop hα).comp tendsto_natCast_atTop_atTop).const_mul_atTop hc
     simpa using (Real.tendsto_exp_atBot.comp (Filter.tendsto_neg_atTop_atBot.comp h)).const_mul C
-  have hzero : ‖k - siteExpectation q (graphBall G a n) k‖ ≤ 0 :=
+  have hzero : ‖k - ManyBody.regionExpectation (ManyBody.graphBall G a n) k‖ ≤ 0 :=
     ge_of_tendsto htend (Filter.eventually_atTop.mpr ⟨n, fun l hl => hball l hl ▸ hε l⟩)
-  have hk : siteExpectation q (graphBall G a n) k = k :=
+  have hk : ManyBody.regionExpectation (ManyBody.graphBall G a n) k = k :=
     (sub_eq_zero.mp (norm_le_zero_iff.mp hzero)).symm
-  rw [← hk, ← coe_graphBall_eq_reachable_of_sup_dist_le G a le_rfl]
-  exact siteExpectation_mem_supportedOperators _ k
+  rw [← hk]
+  convert (ManyBody.regionExpectation_mem_supportedOperators (ManyBody.graphBall G a n) k) using 2
+  apply Finset.coe_injective
+  rw [ManyBody.coe_graphBall_eq_reachable_of_sup_dist_le G a le_rfl]
+  ext
+  simp
 
 /-- The prefactor `2 A₀ L` of the spatial omission bound, with `A₀ = 2 + 8 √C e^{c/2}` and
 `L = omittedAnchorTailConstant K μ (c / 2) (c / (4 · 2^α)) α`. Source: area law,
@@ -97,6 +103,7 @@ theorem channelOmissionExponent_pos {c : ℝ} (hc : 0 < c) (α : ℝ) :
   unfold channelOmissionExponent
   positivity
 
+open Classical in
 /-- **Uniform spatial decay of the omission defect, with explicit constants.** For every
 graph, finite family of component-supported effects with localization tails `C e^{-c l^α}`,
 retained predicate, spectator operator `B` on `S` and time `T`, the full/retained defect is
@@ -110,16 +117,17 @@ theorem graph_integrable_and_integral_channelWordOmissionDefect_le
       [Fintype Aux] [DecidableEq Aux] (q : ℕ) [NeZero q]
       (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ),
       (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
-      (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) →
-      (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
+      (∀ i, k i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+          (Finset.univ.filter fun x ↦ G.Reachable (a i) x)) →
+      (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
       ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
-      (∀ i l, l ≤ N → ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+      (∀ i l, l ≤ N → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
       ∀ (P : κ → Prop) [DecidablePred P] (S : Finset ι)
         (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-          supportedOperators q (S : Set ι)) →
+          ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (r : ℝ), 0 ≤ r →
           (∀ i, ¬ P i → ∀ s ∈ S, ENNReal.ofReal r < (G.edist (a i) s : ℝ≥0∞)) →
           ∀ T : ℝ≥0,
@@ -174,14 +182,14 @@ theorem graph_integrable_and_integral_channelWordOmissionDefect_le
       (∫ u, F u i ∂PoissonWord.measure {i // P i} t) ≤
         A₀ * (Real.exp (v * t) * (2 * ‖B‖)) *
           ∑ l ∈ Finset.range (N + 1), Real.exp (-(c / 2) * (l : ℝ) ^ α) *
-            ∑ z ∈ graphBall G (a i) l, p z := by
+            ∑ z ∈ ManyBody.graphBall G (a i) l, p z := by
     let w (l : ℕ) := A₀ * Real.exp (-(c / 2 * (l : ℝ) ^ α))
     have hint (l : ℕ) : Integrable (fun u => w l *
-        ∑ z ∈ graphBall G (a i) l, d u z) (PoissonWord.measure {i // P i} t) :=
+        ∑ z ∈ ManyBody.graphBall G (a i) l, d u z) (PoissonWord.measure {i // P i} t) :=
       (integrable_finsetSum _ fun z _ => hdint t z).const_mul (w l)
     calc
       _ ≤ ∫ u, ∑ l ∈ Finset.range (N + 1), w l *
-          ∑ z ∈ graphBall G (a i) l, d u z ∂PoissonWord.measure {i // P i} t := by
+          ∑ z ∈ ManyBody.graphBall G (a i) l, d u z ∂PoissonWord.measure {i // P i} t := by
         apply integral_mono_of_nonneg (Filter.Eventually.of_forall fun u => norm_nonneg _)
           (integrable_finsetSum _ fun l _ => hint l)
         apply Filter.Eventually.of_forall
@@ -189,14 +197,14 @@ theorem graph_integrable_and_integral_channelWordOmissionDefect_le
         exact norm_spectatorRootChannel_sub_self_le_exp_of_component_support
           G (a i) (hk₀ i) (hk₁ i) (hk i) hC hc hα hα₁ N (hN i) (hε i) (W u)
       _ = ∑ l ∈ Finset.range (N + 1), w l *
-          ∑ z ∈ graphBall G (a i) l,
+          ∑ z ∈ ManyBody.graphBall G (a i) l,
             ∫ u, d u z ∂PoissonWord.measure {i // P i} t := by
         rw [integral_finsetSum _ fun l _ => hint l]
         apply Finset.sum_congr rfl
         intro l _
         rw [integral_const_mul, integral_finsetSum _ fun z _ => hdint t z]
       _ ≤ ∑ l ∈ Finset.range (N + 1), w l *
-          ∑ z ∈ graphBall G (a i) l, Real.exp (v * t) * (2 * ‖B‖) * p z := by
+          ∑ z ∈ ManyBody.graphBall G (a i) l, Real.exp (v * t) * (2 * ‖B‖) * p z := by
         apply Finset.sum_le_sum
         intro l _
         exact mul_le_mul_of_nonneg_left
@@ -206,7 +214,7 @@ theorem graph_integrable_and_integral_channelWordOmissionDefect_le
         refine Finset.sum_congr₂ fun l _ z _ ↦ ?_
         ring
   have hspatial : (∑ i ∈ E, ∑ l ∈ Finset.range (N + 1),
-      Real.exp (-(c / 2) * (l : ℝ) ^ α) * ∑ z ∈ graphBall G (a i) l, p z) ≤
+      Real.exp (-(c / 2) * (l : ℝ) ^ α) * ∑ z ∈ ManyBody.graphBall G (a i) l, p z) ≤
       L * S.card * Real.exp (-γ * r ^ α) :=
     htail ι κ G a hball hfiber E S N r hr
       (fun i hi => hfar i (Finset.mem_filter.mp hi).2)
@@ -222,10 +230,10 @@ theorem graph_integrable_and_integral_channelWordOmissionDefect_le
     calc
       _ ≤ ∑ i ∈ E, A₀ * (Real.exp (v * (Real.toNNReal s : ℝ)) * (2 * ‖B‖)) *
           ∑ l ∈ Finset.range (N + 1), Real.exp (-(c / 2) * (l : ℝ) ^ α) *
-            ∑ z ∈ graphBall G (a i) l, p z := Finset.sum_le_sum fun i _ => hevent _ i
+            ∑ z ∈ ManyBody.graphBall G (a i) l, p z := Finset.sum_le_sum fun i _ => hevent _ i
       _ = A₀ * (Real.exp (v * (Real.toNNReal s : ℝ)) * (2 * ‖B‖)) *
           ∑ i ∈ E, ∑ l ∈ Finset.range (N + 1), Real.exp (-(c / 2) * (l : ℝ) ^ α) *
-            ∑ z ∈ graphBall G (a i) l, p z := (Finset.mul_sum _ _ _).symm
+            ∑ z ∈ ManyBody.graphBall G (a i) l, p z := (Finset.mul_sum _ _ _).symm
       _ ≤ A₀ * (Real.exp (v * (Real.toNNReal s : ℝ)) * (2 * ‖B‖)) *
           (L * S.card * Real.exp (-γ * r ^ α)) :=
         mul_le_mul_of_nonneg_left hspatial (by positivity)
@@ -246,6 +254,7 @@ theorem graph_integrable_and_integral_channelWordOmissionDefect_le
       rw [setIntegral_const, Real.volume_real_Ioc_of_le T.coe_nonneg, sub_zero, smul_eq_mul]
       ring
 
+open Classical in
 /-- Uniform spatial decay for the expectation of the full/retained
 operator-norm defect. Every constant is chosen before the graph, all finite
 types, physical effects, retained predicate, cutoff, observable and time.
@@ -262,16 +271,17 @@ theorem exists_integrable_and_integral_channelWordOmissionDefect_le
         [Fintype Aux] [DecidableEq Aux] (q : ℕ) [NeZero q]
         (G : SimpleGraph ι) (a : κ → ι) (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
-        (∀ i, k i ∈ supportedOperators q {x | G.Reachable (a i) x}) →
-        (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
+        (∀ i, k i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+            (Finset.univ.filter fun x ↦ G.Reachable (a i) x)) →
+        (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
         ∀ (N : ℕ), (∀ i, Finset.univ.sup (G.dist (a i)) ≤ N) →
-        (∀ i l, l ≤ N → ‖k i - siteExpectation q (graphBall G (a i) l) (k i)‖ ≤
+        (∀ i l, l ≤ N → ‖k i - ManyBody.regionExpectation (ManyBody.graphBall G (a i) l) (k i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         ∀ (P : κ → Prop) [DecidablePred P] (S : Finset ι)
           (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ),
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-            supportedOperators q (S : Set ι)) →
+            ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
           ∀ (r : ℝ), 0 ≤ r →
             (∀ i, ¬ P i → ∀ s ∈ S, ENNReal.ofReal r < (G.edist (a i) s : ℝ≥0∞)) →
             ∀ T : ℝ≥0,

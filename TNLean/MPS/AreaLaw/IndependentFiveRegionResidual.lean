@@ -31,6 +31,8 @@ and `c:goodagsphardtrunc`, lines 979–1005. The current coupled-cutoff
 construction remains separate.
 -/
 
+open ManyBody (interval)
+
 namespace Real
 
 /-- The fixed physical parameters yield a uniform single-region tail

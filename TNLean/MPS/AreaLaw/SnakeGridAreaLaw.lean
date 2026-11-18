@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SnakeGridApproximation
 import TNLean.PEPS.AreaLaw.AreaLawTheorem
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Exponential snake MPS approximation of a gapped square ground state
@@ -20,6 +21,8 @@ Section 1; the threshold and normalization argument is
 
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- Every gapped finite-range ground vector on an open `L × L` square,
@@ -34,7 +37,8 @@ theorem exists_snakeGridMPS (q : ℕ) (hq : 1 ≤ q) (R : ℕ)
     ∃ C : ℝ, 0 ≤ C ∧ ∀ L : ℕ, 2 ≤ L →
       ∀ H : LocalHamiltonian (PEPS.AreaLaw.rectangularDomain L L) q R J,
       ∀ E₀ : ℝ, ∀ Ω : StateSpace (PEPS.AreaLaw.rectangularDomain L L) q,
-        IsGappedGroundState _ q H.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped H.operator E₀ Δ →
+        groundSpace H.operator E₀ = Submodule.span ℂ {Ω} →
         ∃ (D : ℕ) (Φ : StateSpace (PEPS.AreaLaw.rectangularDomain L L) q),
           ‖Φ‖ = 1 ∧ IsOpenMPS (L * L) q D (fun x ↦ snakeGridStateEquiv L q Φ x) ∧
           ‖Φ - Ω‖ ≤ 1 / (L : ℝ) ∧ (D : ℝ) ≤ Real.exp (C * L) :=

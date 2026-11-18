@@ -68,9 +68,9 @@ theorem torusSweptStringRightStep_extension_initial (v : X) (g h : G) :
     simpa only [add_assoc, one_add_one_eq_two] using H
   have he : (torusUpEdge ((v.1 + 2, v.2 + 1) : X)).1.1 ∈ R ∧
       (torusUpEdge ((v.1 + 2, v.2 + 1) : X)).1.2 ∈ R := by
-    change (Edge.ofAdj (torusGraph_adj_up (v.1 + 2) (v.2 + 1))).1.1 ∈ R ∧
-      (Edge.ofAdj (torusGraph_adj_up (v.1 + 2) (v.2 + 1))).1.2 ∈ R
-    rcases Edge.ofAdj_endpoints (torusGraph_adj_up (v.1 + 2) (v.2 + 1)) with
+    change (ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1 + 2) (v.2 + 1))).1.1 ∈ R ∧
+      (ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1 + 2) (v.2 + 1))).1.2 ∈ R
+    rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up (v.1 + 2) (v.2 + 1)) with
       ⟨ha, hb⟩ | ⟨ha, hb⟩
     · simpa only [ha, hb] using And.intro hx hy
     · simpa only [ha, hb] using And.intro hy hx

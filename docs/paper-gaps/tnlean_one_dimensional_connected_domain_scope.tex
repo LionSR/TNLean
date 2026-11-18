@@ -36,7 +36,7 @@ The formalization first states the model on the chain of $L$ sites, with sites
 $\{0,\ldots,L-1\}$, supports of range $R$ the nonempty sets of sites of
 diameter at most $R$, and the Hamiltonian, gapped ground vector, regional
 entropies and boundary edges as in the note.\footnote{Declarations:
-    \leanid{TNLean.MPS.AreaLaw.IsChainSupport},
+    \leanid{ManyBody.IsChainSupport},
     \leanid{TNLean.MPS.AreaLaw.ChainHamiltonian},
     \leanid{TNLean.MPS.AreaLaw.boundaryEdges}.} Theorem~A is proved on this
 chain for every subset $A$, with the explicit constant
@@ -113,7 +113,7 @@ $N_\ell(S)=\bigcup_{x\in S}\{y:d_\Lambda(x,y)\le\lfloor\ell\rfloor\}$.
 Neither estimate assumes connectedness, a ground state or a spectral gap;
 empty $S$ is allowed.\footnote{Declarations:
     \leanid{TNLean.MPS.AreaLaw.norm_heisenberg_commutator_le_domainDistance},
-    \leanid{TNLean.MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le}.}
+    \leanid{TNLean.MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_domainNeighborhood_le}.}
 
 The increasing enumeration identifies the domain graph with the induced
 integer Hasse graph. Each component is a finite path, and its inclusion

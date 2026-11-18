@@ -29,6 +29,8 @@ arbitrary disk cut and torus disentangling argument remain separate; see
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix ComplexOrder
 open Matrix
 

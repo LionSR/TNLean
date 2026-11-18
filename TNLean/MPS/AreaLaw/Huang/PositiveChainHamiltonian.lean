@@ -18,6 +18,8 @@ Huang, arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. This identification change
 the physical operator nor the spectral hypotheses used by the two constructions.
 -/
 
+open ManyBody (ChainSupport interval mem_interval)
+
 open Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator ComplexOrder MatrixOrder
 
@@ -77,7 +79,7 @@ noncomputable def ChainHamiltonian.ofNearestNeighborPositive {L q : ℕ}
   term := Function.extend nearestNeighborChainSupport h (fun _ ↦ 0)
   supported := forall_nearestNeighborExtension h
     (fun X M ↦ Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) M X.val)
-    (fun _ ↦ isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)) hs
+    (fun X ↦ zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) X.val)) hs
   hermitian := forall_nearestNeighborExtension h (fun _ M ↦ M.IsHermitian)
     (fun _ ↦ isHermitian_zero)
     (fun i ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian)

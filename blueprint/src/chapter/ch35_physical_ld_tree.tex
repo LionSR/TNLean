@@ -1,0 +1,328 @@
+\section{A sampled merge tree for a low-density spectrum}
+\label{sec:physical_ld_tree}
+
+The interval families of Lemma~\ref{lem:dyadic_long_interval_low_energy_family}
+compare two different low-energy windows: viability for the upper window
+of width $\eta$ is carried to viability for the lower window of width
+$\eta-3w$. The merge of~\cite[Theorem~\texttt{t:alg1}, lines
+    1777--1817]{Arad2016RigorousRG} applies one filter $k$ times, and the
+proof of~\cite[Theorem~\texttt{t:alg2}, lines 1869--1878]{Arad2016RigorousRG}
+runs the same tree with the filters
+of~\cite[Theorem~\texttt{t:aisgapless}, lines 1027--1041]{Arad2016RigorousRG}.
+The power of such a filter is again a filter between the same two windows,
+with the suppression raised to the same power. The tree therefore keeps
+one window per level, shortened by the buffer $3w$ at each level, as in the
+condition $\eta_1\ge2\mu/\log n$ with $w=\mu/(3\log n)$.
+
+The statements below are restricted as the gapped tree is: leaves are full
+blocks, every long node has one final collective trim, and the theorem
+asserts the existence of successful samples, not a success probability or a
+running time. The constant depends on the fixed bandwidth, as recorded
+in~\cite{gap:alvv16_low_energy_family_scope}.
+
+\begin{lemma}[Words of one filter between two nested spectral spaces]
+    \label{lem:chebyshev_nested_word_family}
+    \lean{TNLean.MPS.AreaLaw.exists_chebyshev_nested_word_viability_of_polynomial_family,
+        Submodule.iSup_map_ofFn_prod_fin_one}
+    \leanok
+    \uses{lem:chebyshev_nested_polynomial_family}
+    In the setting of Lemma~\ref{lem:chebyshev_nested_polynomial_family},
+    let $A_1,\dots,A_N$ be the operators of the filter on $\mathcal H_J$.
+    For every $a\ge0$, if $S$ is $\delta$-viable for the upper spectral
+    space with $\delta<1$, then the span of all images
+    $A_{i_1}\cdots A_{i_a}S$ has dimension at most $N^a\dim S$ and is
+    $\Delta^a/(1-\delta)^2$-viable for the lower spectral space. For
+    $a=1$ these images are those of the operators themselves.
+\end{lemma}
+\begin{proof}\leanok
+    The filter $K$ has eigenvalue at least one on the lower space and
+    squared eigenvalue at most $\Delta$ above the upper cutoff, so $K^a$
+    has eigenvalue at least one on the lower space and squared eigenvalue
+    at most $\Delta^a$ above the upper cutoff. The power of the tensor sum
+    $K=\sum_iA_i\otimes M_i$ is the sum over words of
+    $A_{i_1}\cdots A_{i_a}\otimes M_{i_1}\cdots M_{i_a}$. Apply the
+    nested error-reduction step to $K^a$.
+\end{proof}
+
+\begin{lemma}[Word families on long intervals]
+    \label{lem:dyadic_long_interval_low_energy_word_family}
+    \lean{TNLean.MPS.AreaLaw.exists_fixed_bandwidth_regional_dyadic_low_energy_family_of_clause,
+        TNLean.MPS.AreaLaw.exists_fixed_bandwidth_regional_dyadic_low_energy_word_family,
+        TNLean.MPS.AreaLaw.exists_fixed_bandwidth_long_interval_dyadic_low_energy_word_family}
+    \leanok
+    \uses{lem:chebyshev_nested_word_family,lem:dyadic_regional_low_energy_family,
+        lem:dyadic_long_interval_low_energy_family}
+    In the setting of Lemmas~\ref{lem:dyadic_regional_low_energy_family}
+    and~\ref{lem:dyadic_long_interval_low_energy_family}, the family on a
+    long interval consists of $N\le D_i^2$ operators, chosen before the
+    window, and for every $a\ge0$ the words of length $a$ carry
+    $\delta$-viability for the upper target to
+    $\Delta^a/(1-\delta)^2$-viability for the lower target, with dimension
+    at most $N^a\dim S$. The targets, comparisons and suppression are those
+    of the single-word statements, which are the case $a=1$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:chebyshev_nested_word_family}
+    Repeat the proofs of the single-word statements with
+    Lemma~\ref{lem:chebyshev_nested_word_family} in place of
+    Lemma~\ref{lem:chebyshev_nested_polynomial_family}.
+\end{proof}
+
+\begin{lemma}[A sampled parent between two windows]
+    \label{lem:sampled_parent_two_windows}
+    \lean{Submodule.exists_measurable_sampledWordImage_event_of_nested,
+        TNLean.MPS.AreaLaw.exists_measurable_interval_word_image_event_of_nested}
+    \leanok
+    \uses{thm:physical_dg_sampled_node}
+    Let $G$, $G_{\rm out}$, $T_{\rm hi}$ and $T_{\rm lo}$ be subspaces of
+    the chain, with $G\ne0$, $G$ $\epsilon$-close to $T_{\rm hi}$ and
+    $T_{\rm lo}$ $\epsilon$-close to $G_{\rm out}$, where
+    $\epsilon\le10^{-4}$. Suppose the words of a fixed family of at most
+    $D^2$ operators carry viability for $T_{\rm hi}$ to viability for
+    $T_{\rm lo}$ with suppression $\Delta^a$, where $D^{12}\Delta\le10^{-5}$.
+    Then for two $3/200$-viable child spaces for $G$ of dimension at most
+    $D^6s^3$, the conclusion of Lemma~\ref{thm:physical_dg_sampled_node}
+    holds with output target $G_{\rm out}$, and with the dimension of
+    $T_{\rm hi}$ in the failure bound.
+\end{lemma}
+\begin{proof}\leanok
+    The merged space is viable for $T_{\rm hi}$; sample it for this target,
+    apply the words, and compare the image with $G_{\rm out}$. When
+    $G_{\rm out}=G$ and $T_{\rm hi}=T_{\rm lo}$ this is
+    Lemma~\ref{thm:physical_dg_sampled_node}.
+\end{proof}
+
+\begin{lemma}[Midpoint induction for the interval recursion]
+    \label{lem:balanced_interval_invariant_midpoint}
+    \lean{TNLean.MPS.AreaLaw.balancedIntervalSpace_invariant_of_midpoint}
+    \leanok
+    \uses{def:balanced_interval_spaces}
+    Any property of interval spaces that holds at the short leaves, and is
+    preserved by the parent operation applied at the actual midpoint
+    $k=p+\lfloor(r-p)/2\rfloor$ of a long interval $[p,r)$, holds at every
+    recursively constructed space.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the interval length, as in
+    Lemma~\ref{lem:balanced_interval_invariant}, retaining that the cut of
+    a long interval is its midpoint.
+\end{proof}
+
+\begin{lemma}[A witness tree with a target on every interval]
+    \label{lem:sampled_interval_witness_tree_targets}
+    \lean{TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree_of_targets_power,
+        TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree_of_targets}
+    \leanok
+    \uses{thm:sampled_interval_witness_tree,lem:balanced_interval_invariant_midpoint}
+    The conclusion of Lemma~\ref{thm:sampled_interval_witness_tree} holds
+    when every interval $[p,r)$ carries its own target $T(p,r)$, and the
+    node events are required only at cuts satisfying a prescribed condition
+    that holds at the midpoint. Child spaces are then viable for the targets
+    of the child intervals, and every recursive space is viable for the
+    target of its own interval. More generally, any word length $k$ and node
+    budget $M$ with $M^2\le D^{12}s^6$ and $D^{2k}s\le M$ may replace
+    $k=\lceil\log_D(D^2s)\rceil$ and $M=D^6s^3$; with a single target and no
+    condition on the cuts this is the corresponding statement for one global
+    target.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:balanced_interval_invariant_midpoint}
+    Select the successful unitaries as in
+    Lemma~\ref{thm:sampled_interval_witness_tree}, and conclude with
+    Lemma~\ref{lem:balanced_interval_invariant_midpoint}.
+\end{proof}
+
+\begin{lemma}[The sampled merge tree for a low-density spectrum]
+    \label{lem:physical_ld_sampled_interval_tree}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_ld_sampled_interval_tree}
+    \leanok
+    \uses{lem:dyadic_long_interval_low_energy_word_family,
+        lem:sampled_parent_two_windows,
+        lem:sampled_interval_witness_tree_targets,
+        thm:low_energy_orthonormal_mps_basis,
+        thm:interval_trimming_reference,
+        lem:full_interval_viability,
+        lem:full_interval_mps_span}
+    Fix $\eta_{\rm LD}>0$. There is a constant $C\ge\max\{100,19+\eta_{\rm LD}\}$
+    with the following property. Let $q\ge2$, $m\ge q$ and $w>0$, put
+    $m'=4m$, $g=\min\{w,1\}$, $u=1+\log m'+\log(1/g)$,
+    $\ell=\lceil Cu^2/g\rceil$ and $D=(m'\ell^2)^{22\ell}$. Let
+    $H=\sum_ih_i$ be a nearest-neighbour chain of length $L$ and local
+    dimension $q$ with $0\le h_i\le\Id$, let $G(\eta)$ be the span of the
+    eigenvectors of energy at most $E_0+\eta$, and put
+    $r=\dim G(\eta_{\rm LD})$. Then $\ell\ge21$, and on every long interval
+    there is a family of at most $D^2$ operators, chosen before the tree.
+    If $3w(\lceil\log_2L\rceil+1)\le\eta_{\rm LD}$, there is a reference
+    bond $D_{\rm ref}\ge1$ with the following property. Put
+    $\xi=(1000D_{\rm ref}\sqrt{L+1})^{-1}$, and for $0<\beta<1$ put
+    $A=1+\log r+\log D+\log(1/\beta)$, $s=\lceil4096rA\rceil$ and
+    $M=D^6s^3$. There is an operation whose values at midpoint cuts are
+    the trims at threshold $\xi$ of sampled word images of the family of
+    the parent, such that every recursive space on $[p,r)$ is
+    $3/200$-viable for $G(\eta_{\rm LD}-3w\lceil\log_2(r-p)\rceil)$, has
+    dimension at most $M$, and is spanned by at most $M$ vectors $u_i$ with
+    $\xi^2\operatorname{SR}(u_i)\le M$ at every cut. The root is
+    $3/200$-close to $G(\eta_{\rm LD}-3w\lceil\log_2L\rceil)$, and each of
+    its vectors is a matrix product state of bond dimension at most
+    $10^6D_{\rm ref}^2(L+1)M^2$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:dyadic_long_interval_low_energy_word_family,
+        lem:sampled_parent_two_windows,
+        lem:sampled_interval_witness_tree_targets,
+        thm:low_energy_orthonormal_mps_basis,
+        thm:interval_trimming_reference,
+        lem:full_interval_viability,
+        lem:full_interval_mps_span}
+    Take the word families of
+    Lemma~\ref{lem:dyadic_long_interval_low_energy_word_family} at the index
+    $i=2$, so that each comparison has loss $1/51200\le10^{-4}$. For every
+    level $K\ge1$, Theorem~\ref{thm:low_energy_orthonormal_mps_basis} gives
+    a matrix product space $10^{-4}$-close to $G(\eta_{\rm LD}-3wK)$ in both
+    directions; let $D_{\rm ref}$ bound all their bonds for
+    $K\le\lceil\log_2L\rceil$. Apply
+    Lemma~\ref{lem:sampled_interval_witness_tree_targets} with the targets
+    $T(p,r)=G(\eta_{\rm LD}-3w\lceil\log_2(r-p)\rceil)$ and the midpoint
+    condition. At a long node of level $K+1$, both children have level at
+    most $K$, so they are viable for $G(\eta)$ with $\eta=\eta_{\rm LD}-3wK$,
+    and $6w\le\eta\le\eta_{\rm LD}$. The upper target of the family has
+    dimension at most $\dim G(\eta)\le r$. By
+    Lemma~\ref{lem:sampled_parent_two_windows} the sampled word image is
+    $1/400$-viable for $G(\eta-3w)=T(p,r)$, and the trim against the
+    reference of level $K+1$ is $3/200$-viable by
+    Lemma~\ref{thm:interval_trimming_reference}. At the root, apply
+    Lemmas~\ref{lem:full_interval_viability} and~\ref{lem:full_interval_mps_span}.
+\end{proof}
+
+\begin{lemma}[Refining a close space on the whole chain]
+    \label{lem:physical_ld_root_refinement}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_ld_root_refinement}
+    \leanok
+    \uses{lem:dyadic_long_interval_low_energy_word_family,
+        thm:low_energy_orthonormal_mps_basis,
+        thm:interval_trimming_reference,
+        lem:full_interval_viability,
+        lem:full_interval_mps_span}
+    Fix $\eta_{\rm LD}>0$, and let $C$ be the constant of
+    Lemma~\ref{lem:dyadic_long_interval_low_energy_word_family} and $K$ that
+    of Theorem~\ref{thm:low_energy_orthonormal_mps_basis}. Let
+    $6w\le\eta\le\eta_{\rm LD}$, and let $S_0$ be a space on the whole chain of dimension at
+    most $M_0$ that is $3/200$-close to $G(\eta)$. For $0<\delta\le1$ put
+    $i=\lceil\log_{16}\lceil1/\delta\rceil\rceil$ and
+    $a=\lceil\log_2\lceil32/\delta\rceil\rceil$, and let $\ell_i$ and $D_i$ be
+    the scale and count of the family at the index $i$. There is a reference
+    factor $B$ with the logarithmic bound of
+    Theorem~\ref{thm:low_energy_orthonormal_mps_basis} at accuracy
+    $\delta/48$ and deficit $\eta_{\rm LD}-\eta+3w$; put
+    $D_{\rm ref}=\dim G(\eta-3w)\dim G(\eta_{\rm LD})B$,
+    $\xi=\delta/(16D_{\rm ref}\sqrt{L+1})$ and
+    $M=\max\{q^{4\ell_i},D_i^{2a}M_0\}$. Then there is a space $R$ that is
+    $\delta$-close to $G(\eta-3w)$ and is spanned by at most $M$ vectors $u_k$
+    with $\xi^2\operatorname{SR}(u_k)\le M$ at every cut, each of whose vectors
+    is a matrix product state of bond dimension at most
+    $M\lceil256D_{\rm ref}^2(L+1)M/\delta^2\rceil$. If $L\le4\ell_i$, then $R$
+    is the whole local space; otherwise $R$ is the collective trim at the
+    threshold $\xi$ of the span of all images of $S_0$ under the words of
+    length $a$ of a family of at most $D_i^2$ operators.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:dyadic_long_interval_low_energy_word_family,
+        thm:low_energy_orthonormal_mps_basis,
+        thm:interval_trimming_reference,
+        lem:full_interval_viability,
+        lem:full_interval_mps_span}
+    The index $i$ makes each comparison loss at most $\delta/200$. The space
+    $S_0$ is $1/25$-viable for the upper target of the family on the whole
+    chain, and its word image is $\Delta^a/(24/25)^2$-viable for the lower
+    target, with $\Delta^a\le2^{-a}\le\delta/32$. Hence the image is
+    $\delta/8$-viable for $G(\eta-3w)$. The reference of
+    Theorem~\ref{thm:low_energy_orthonormal_mps_basis} is $\delta/48$-close to
+    $G(\eta-3w)$ in both directions, and the trim at threshold $\xi$ adds at
+    most $\delta/4$ by Lemma~\ref{thm:interval_trimming_reference}, so the
+    error is at most $4\delta/8+6\delta/48+\delta/4<\delta$. For a short chain
+    the whole local space has the stated rank bounds. The matrix product bound
+    follows from Lemma~\ref{lem:full_interval_mps_span}.
+\end{proof}
+
+\begin{lemma}[A refined approximation from the low-density tree]
+    \label{lem:physical_ld_tree_refined_approximation}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_ld_tree_refined_approximation}
+    \leanok
+    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement}
+    In the setting of Lemma~\ref{lem:physical_ld_sampled_interval_tree}, take
+    the failure parameter $\beta=1/2$ and the node bound $M_0=D^6s^3$, and
+    suppose $3w(\lceil\log_2L\rceil+2)\le\eta_{\rm LD}$. Then for every
+    $0<\delta\le1$ there is a space on the whole chain that is $\delta$-close
+    to $G(\eta_{\rm LD}-3w\lceil\log_2L\rceil-3w)$ and consists of matrix
+    product states of the bond dimension of
+    Lemma~\ref{lem:physical_ld_root_refinement}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement}
+    Apply Lemma~\ref{lem:physical_ld_root_refinement} to the root of the tree,
+    with $\eta=\eta_{\rm LD}-3w\lceil\log_2L\rceil$; the hypothesis gives
+    $6w\le\eta$.
+\end{proof}
+
+\begin{lemma}[Extracting a window from a close space]
+    \label{lem:window_extraction}
+    \lean{Submodule.norm_inner_sq_le_norm_sq_mul_norm_starProjection_sq,
+        Submodule.IsCloseTo.map_starProjection_isCloseTo,
+        TNLean.MPS.AreaLaw.window_extraction_of_isCloseTo}
+    \leanok
+    Let $H$ be Hermitian with ground energy $E_0$, let $c\ge0$, and let
+    $G(c)$ be the span of the eigenvectors of energy at most $E_0+c$. Let
+    $0\le\delta<1$, and let $R$ be a space that is $\delta$-close to $G(c)$.
+    Then the projection $V$ of $G(c)$ onto $R$ lies in $R$, has the dimension
+    of $G(c)$, and is $\delta$-close to $G(c)$ in both directions. The Ritz
+    space of the compression of $H$ to $R$ of the same dimension lies in $R$,
+    and every vector $x$ in it satisfies, for every $\rho>0$,
+    \[
+        \langle x,Hx\rangle\le\Bigl(E_0+
+        \frac{(1+1/\rho)c+(1+\rho)\|H-E_0\|\delta}{1-\delta}\Bigr)\|x\|^2.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    For $g\in G(c)$ the vector $P_Rg$ lies in $V$, and $\langle P_Rg,g\rangle=
+        \|P_Rg\|^2$; the Cauchy--Schwarz inequality for the projections onto $V$
+    and onto $G(c)$ gives both closeness bounds. Projection into $R$ is
+    injective on $G(c)$, so $V$ has the dimension of $G(c)$. The energy of
+    $H-E_0\ge0$ on $V$ is controlled by its energy on $G(c)$ and the
+    projection loss, and the min--max characterization of the Ritz space
+    compares it with the trial space $V$. No gap at the edge of the window
+    is used.
+\end{proof}
+
+\begin{lemma}[The merge-tree algorithm for a low-density spectrum]
+    \label{lem:low_density_tree_algorithm}
+    \lean{TNLean.MPS.AreaLaw.exists_physical_ld_sampled_interval_tree_of_clause,
+        TNLean.MPS.AreaLaw.exists_low_density_tree_algorithm}
+    \leanok
+    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement,
+        lem:window_extraction}
+    In the setting of Lemma~\ref{lem:physical_ld_sampled_interval_tree},
+    suppose $3w(\lceil\log_2L\rceil+2)\le\eta_{\rm LD}$ and put
+    $\eta=\eta_{\rm LD}-3w\lceil\log_2L\rceil$. For every failure parameter,
+    the tree of that lemma has a root $S_0$, and for every $0<\delta<1$ the
+    refinement $R$ of $S_0$ of Lemma~\ref{lem:physical_ld_root_refinement},
+    the trim of the word image of $S_0$ unless the chain is short, is
+    $\delta$-close to $G(\eta-3w)$ and consists of matrix product states of
+    the bond dimension stated there. Inside $R$, the projection of
+    $G(\eta-3w)$ has the dimension of $G(\eta-3w)$ and is $\delta$-close to it
+    in both directions, and the Ritz space of $H$ compressed to $R$ of the same
+    dimension satisfies the energy bound of
+    Lemma~\ref{lem:window_extraction} with $c=\eta-3w$. Both consist of matrix
+    product states. The number of states and the energy threshold claimed by
+    the source for its output are not verified here, and no hypothesis is
+    drawn from them.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement,
+        lem:window_extraction}
+    The tree is stated with its conclusion at the root left as any
+    consequence of the closeness, dimension and matrix product bounds of
+    the root. Take that consequence to be the refinement of
+    Lemma~\ref{lem:physical_ld_root_refinement}, followed by
+    Lemma~\ref{lem:window_extraction} in the refinement. Every subspace of $R$
+    consists of matrix product states of the bond dimension of $R$.
+\end{proof}

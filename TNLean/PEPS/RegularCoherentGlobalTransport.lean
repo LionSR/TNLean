@@ -22,6 +22,8 @@ These are auxiliary contraction identities; no energy or parent-Hamiltonian
 membership statement is asserted.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

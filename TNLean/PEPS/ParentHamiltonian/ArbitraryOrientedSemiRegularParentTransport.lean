@@ -26,6 +26,8 @@ Neither a local-range comparison nor a parent-kernel identity is assumed.
 Source: SCP10, arXiv:1001.3807, Definition 4.5, Theorem 5.7, and Section 7.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS

@@ -59,7 +59,7 @@ theorem norm_localRootChannelShell_le_sum_siteOscillation
     (regions : ℕ → Finset ι) (hregions : Monotone regions)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     (ε : ℕ → ℝ) (l : ℕ)
-    (hε : ∀ j ≤ l, ‖k - siteExpectation q (regions j) k‖ ≤ ε j)
+    (hε : ∀ j ≤ l, ‖k - ManyBody.regionExpectation (regions j) k‖ ≤ ε j)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     ‖localRootChannelShell regions k l B‖ ≤
       localRootChannelShellBound ε l * ∑ z ∈ regions l, siteOscillation q z B := by
@@ -79,7 +79,7 @@ theorem siteOscillation_localRootChannel_le
     (regions : ℕ → Finset ι) (hregions : Monotone regions)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     (ε : ℕ → ℝ) (n : ℕ)
-    (hε : ∀ l ≤ n, ‖k - siteExpectation q (regions l) k‖ ≤ ε l)
+    (hε : ∀ l ≤ n, ‖k - ManyBody.regionExpectation (regions l) k‖ ≤ ε l)
     (y : ι) (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     siteOscillation q y (localRootChannel (regions n) k B) ≤
       siteOscillation q y B +

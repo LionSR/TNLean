@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 
 /-!
@@ -18,6 +18,8 @@ These are the explicit support layouts used in the two-layer decomposition of Os
 arXiv:quant-ph/0508031v2, Figure 2, and the propagator approximation in Huang,
 arXiv:1406.6355v6, Section 5.4, Lemma 19. No partition is supplied as a hypothesis.
 -/
+
+open ManyBody (card_interval_le interval mem_interval)
 
 namespace TNLean.MPS.AreaLaw
 

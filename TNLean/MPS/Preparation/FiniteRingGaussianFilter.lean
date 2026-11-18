@@ -55,7 +55,8 @@ theorem norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le
     (h : MPOTensor.ChainOperator d 2) (hHerm : h.IsHermitian) (hNorm : ‖h‖ ≤ 1)
     (A B : MPOTensor.ChainOperator d N)
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
-    (hA : A ∈ supportedOperators d X) (hB : B ∈ supportedOperators d Y)
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
     (hXY : Disjoint (X : Set (Fin N)) (Y : Set (Fin N)))
     (a : ℝ) (ha : 0 ≤ a) {q Δ T : ℝ} (hq : 0 ≤ q) (hT : 0 ≤ T) :
     ‖TNLean.Lattice.gaussianFilteredTerm q Δ (interactionHamiltonian h hN) A * B -
@@ -90,7 +91,8 @@ theorem norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le_exp
     (h : MPOTensor.ChainOperator d 2) (hHerm : h.IsHermitian) (hNorm : ‖h‖ ≤ 1)
     (A B : MPOTensor.ChainOperator d N)
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
-    (hA : A ∈ supportedOperators d X) (hB : B ∈ supportedOperators d Y)
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
     (hXY : Disjoint (X : Set (Fin N)) (Y : Set (Fin N)))
     {ℓ Δ : ℝ} (hℓ : 0 < ℓ) (hΔ : 0 < Δ)
     (hDist : ℓ ≤ ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) :

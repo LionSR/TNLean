@@ -34,6 +34,8 @@ states no separate positivity hypothesis. The region step
 that field. Documented in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 variable {width height L K : ℕ} [NeZero width] [NeZero height]
 variable [Fact (1 < width)] [Fact (1 < height)]
@@ -86,7 +88,7 @@ private theorem exists_injective_region_boundary_of_normalArcWindows
   have hCR : RegionBlockedTensorInjective B (Finset.univ \ R) :=
     hB.compl_windowCornerRegion_injective hU hL hK hw hh
   have htr (a : ZMod width) (b : ZMod height) (e₀ : Edge (torusGraph width height))
-      (hb : IsRegionBoundaryEdge R e₀) (he : Edge.map (translate a b) e₀ = e) :
+      (hb : IsRegionBoundaryEdge R e₀) (he : ManyBody.Edge.map (translate a b) e₀ = e) :
       ∃ Q : Finset (TorusVertex width height), IsRegionBoundaryEdge Q e ∧
         RegionBlockedTensorInjective B Q ∧
         RegionBlockedTensorInjective B (Finset.univ \ Q) := by

@@ -7,8 +7,7 @@ import QICLean.Analysis.EuclideanEigenvectorBasis
 import QICLean.Analysis.LowEnergyCoordinates
 import QICLean.Analysis.LowEnergyPerturbation
 import QICLean.Entropy.FilterChainEnergy
-import TNLean.MPS.AreaLaw.Basic
-
+import QICLean.ManyBody.Sites.Lattice.Chain
 /-!
 # The gap above a degenerate ground space is logarithmic in its dimension
 
@@ -38,6 +37,8 @@ the ground space, whose energy is at least the ground energy plus `γ`.
 These are used to compare the capped-gap estimates with the printed large-gap
 expression; see `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
+
+open ManyBody (interval mem_interval)
 
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Kronecker
 open Matrix

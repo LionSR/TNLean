@@ -16,10 +16,10 @@ the normalized partial trace of Definition~\ref{def:qc_site_expectation}.
 
 \begin{lemma}[Lattice-domain counts]
     \label{lem:area_domain_graph_counts}
-    \lean{TNLean.PEPS.AreaLaw.latticeL1Distance_le_one_of_domainGraph_adj,
+    \lean{ManyBody.latticeL1Distance_le_one_of_planeDomainGraph_adj,
         TNLean.PEPS.AreaLaw.card_domainGraph_sphere_le,
-        TNLean.Lattice.IsAdmissibleSupport.edist_le,
-        TNLean.Lattice.IsAdmissibleSupport.card_le,
+        ManyBody.IsAdmissibleSupport.edist_le,
+        ManyBody.IsAdmissibleSupport.card_le,
         TNLean.Lattice.LocalHamiltonian.normBound_nonneg,
         TNLean.Lattice.LocalHamiltonian.sum_norm_term_containing_le}
     \leanok
@@ -50,7 +50,7 @@ the normalized partial trace of Definition~\ref{def:qc_site_expectation}.
     \lean{TNLean.PEPS.AreaLaw.exists_quasilocal_lieb_robinson,
         TNLean.Lattice.LocalHamiltonian.norm_commutator_le_graphDistance,
         TNLean.Lattice.LocalHamiltonian.commutator_eq_zero_of_edist_eq_top,
-        TNLean.Lattice.LocalHamiltonian.norm_sub_siteExpectation_graphBall_le}
+        TNLean.Lattice.LocalHamiltonian.norm_sub_regionExpectation_graphBall_le}
     \leanok
     \uses{def:area_law_hamiltonian,lem:area_domain_graph_counts,
         thm:qc_graph_lieb_robinson,thm:qc_graph_lieb_robinson_zero,

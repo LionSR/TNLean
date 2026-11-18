@@ -21,6 +21,8 @@ Source: arXiv:1804.04964, the algebra-isomorphism argument at lines 563--582 and
 two-dimensional reduction at lines 2320--2444 of `Papers/1804.04964/paper_normal.tex`.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 section StaircaseAlgebra

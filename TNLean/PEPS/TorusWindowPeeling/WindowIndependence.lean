@@ -53,6 +53,8 @@ complement contraction.
   `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

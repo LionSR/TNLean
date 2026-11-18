@@ -121,7 +121,16 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   and RVB tensors are placed on the simple torus graph, on which a torus of width or
   height two has a single edge between neighbouring sites, so their state
   formulas are stated for tori of width and height at least three; the GHZ
-  example holds on every torus.
+  example holds on every torus. It also records the brick-wall honeycomb of the
+  cluster state, which has three distinct neighbours per site for even height and
+  width at least three.
+- `rmp_honeycomb_cluster_peps.tex` (local correction, resolved) records that
+  the printed honeycomb parent Hamiltonian, the sum of the terms `X Z Z Z`, has
+  the common `-1` eigenvector as ground state, so the sign is reversed.
+- `rmp_honeycomb_cluster_injectivity.tex` (false source claim, open) records
+  that the honeycomb cluster PEPS, called injective by the source, has
+  non-injective vertex tensors and a non-injective two-site blocked tensor,
+  while blocking over hexagonal plaquettes gives injectivity (not formalized).
 - `rmp_peps_czx_bond_orientation.tex` (false source claim) records that the
   printed CZX tensor, contracted with equal labels at the two ends of each
   bond, gives GHZ states on diagonal loops rather than the plaquette state,
@@ -856,12 +865,27 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   `scripts/check_glm23_unitary_mixed_adjoint_closure.py`); it formalizes
   commutation along the closed interval under adjoint closure of the two-site
   boundary range.
+- `glm23_mixed_operator_one_site_injectivity.tex` (false source claim,
+  resolved) records that the one-site injectivity of the common operator of
+  the Section 5 interpolation fails in the full aligned setting: for
+  `Rep(A₄)`, two injective endpoint states with injective endpoint operators,
+  common fusion tensors and equal F- and L-symbols, the crossed corners of the
+  three-dimensional object are not spanned, for every gauge of the action
+  tensors preserving the L-symbols (checked by
+  `scripts/check_glm23_mixed_operator_one_site_injectivity.py`); the claim
+  holds with multiplicity one, and three-site normality is the formalized
+  substitute.
 - `glm23_block_injective_mixed_path.tex` (scope restriction, open) records
   that the block-injective interpolation of Section 5 uses no commutation of
   the path Hamiltonians, so its exact action and fusion are formalized without
   adjoint closure, while any commutation statement inherits the one-block
-  counterexample; the injectivity of the common operators and the claimed
-  ground space of the path Hamiltonians remain open.
+  counterexample. In the open interval the periodic ground space of the
+  two-site canonical parent is spanned by the linearly independent block
+  states, its projection is continuous, and compact subintervals have a gap
+  uniform over all ring lengths; the ground projections converge to the span
+  of the block states at the endpoints. The one-site injectivity of the common
+  operators fails already for one block; the endpoint Hamiltonians and the
+  derivation of sector-separated blocks remain open.
 - `glm23_fibonacci_module_rank_scope.tex` records that the source's claim that
   the Fibonacci algebra has only the two-block invariant subspace is
   formalized for at most two blocks, where the nonnegative integer
@@ -1135,7 +1159,11 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   assuming `K N^k exp(-r q)` at every scale `1 ≤ q ≤ N` for some partition
   with lengths between `q` and `2q` is proved separately, including exact linear-depth preparation
   when the selected block length exceeds the ring length.
-- `mswc24_measurement_preparation_scope.tex` records the scope of the
+- `mswc24_measurement_preparation_scope.tex` (scope restriction, open) records
+  the remaining original-site and all-length obligations for arbitrary tensors.
+  A fixed positive blocking now gives normal sectors and both measurement depth
+  bounds without supplied canonical data, on grouped sites. The note also records
+  the scope of the
   preparation with measurements of a tensor that is not normal (paragraph
   "Long-range MPS using measurements"). The first formal statement takes
   orthogonal `q`-site states of distinct blocks, block lengths dividing `N`, and

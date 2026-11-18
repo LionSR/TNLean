@@ -242,4 +242,64 @@ choice, establish sharp inverse-gap dependence, or prove the full adaptive
 soft generating algorithm and its running time. The existing false-source
 claims and counterexamples are unchanged.
 
+\section{An efficient family for low-density spectra}
+The same construction gives, without a spectral gap, the soft-truncated
+matrix product operator version of the low-density improving family. The
+original interactions determine the regional minima, the native soft middle
+operator and a family of at most $(mk+1)(qk)^{36\ell+4\lfloor k/\ell\rfloor}$
+middle operators of open bond $\max\{1,D_0\}^{2k}$, with
+$D_0=2(m+1)r^2q^r$ for the logarithmic cluster order $r$, before every
+allowed estimate. For each estimate and each band width $\eta\geq3w$, with
+$U=2(\eta+3C+32)\leq t,T$ and $T\geq\eta+3C+12$, let $\rho_1$ be the reverse
+residual scale at the band width $\eta-3w$ and assume $\rho_1<w$. The windows
+of the represented approximant $\widehat G$ at $c_1=\mu+\eta-w$ and
+$c_0=\mu+\eta-2w+\rho_1$ satisfy: the original band at $E+\eta$ is close to the
+window at $c_1$, and the window at $c_0$ is close to the original band at
+$E+\eta-3w$, both with explicit losses from the windowed comparisons and
+from the norm perturbation $\|G-\widehat G\|\leq\xi$. The family improves
+viability from the window at $c_1$ to the window at $c_0$ with contraction
+$(2e^{-2k\sqrt{(c_1-c_0)/(M-c_0)}})^2$, $M=3t(1+\log m)+4\ell+34+\xi$. This is
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_efficient_soft_low_density_family}.
+For fixed $q\geq2$ and buffer $0<w\leq1$, the calibration of the gapped family
+at the gap $g=w^2/2$ chooses $u$ before the chain length, with $\ell=u^8$,
+$m=u^{10}$, $t=3m$, $k=u^{16}$, $T=u^9$ and precision
+$\xi=\min\{1,\tau g^2/(20000(M+g+8))\}$. With the window resolution
+$h=w^2/(1000(8\eta+24))$, for every band width $3w\leq\eta\leq34$ both losses are at
+most $1/200$, the residual scale is at most $w^2/(2\cdot10^6)$, and the
+contraction satisfies $D^{12}\Delta\leq10^{-5}$; the member bond is bounded by a
+natural polynomial in the chain length. This is
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_efficient_soft_low_density_family}.
+Two restrictions remain. The band width is at most $34$, because the
+calibrated residual floor $156+2g$ must cover $2(\eta+44)$. The parameters
+depend on $w$: in the source's use the buffer is $\mu/(3\log n)$, so the
+parameters then depend on the chain length and the bond is no longer polynomial
+for fixed parameters. The source's parameter choice and the running time are
+not formalized.
+\section{The source's parameter choices: what is checked here}
+The source text is not available to this formalization, so the printed
+parameter choices of Proposition \texttt{prop:Cheby-AGSP-eff} and Theorems
+\texttt{t:aisefficient} and \texttt{t:aisgaplessefficient} (source lines
+1309--1457) are not quoted in any note or docstring beyond the paraphrase
+that the efficient constructions use soft truncation of fourth order. In
+particular the sharp form of the improving operator in
+Proposition~\texttt{prop:Cheby-AGSP-eff} is not quoted anywhere, and every
+printed parameter clause other than the order is unverified here.
+What can be checked is the following.
+\begin{itemize}
+ \item The fourth order is admissible in every corrected construction:
+  Definition \texttt{def:soft-trunc} and Lemma \texttt{lem:exp-approx}
+  allow $t\geq m\geq2$, the matrix product constructions need $t\geq3m$,
+  that is $t\geq12$, or $m<(\log2/2)\,t$.
+ \item The fourth order is not an instance of the calibration of the
+  preceding section. With $m=4$, $t\geq12$, $T_0\geq24$, norm ceiling
+  $M\geq3t$, count $D\geq1$, $\tau=(D^{24}M^{10})^{-1}$ and
+  $0<\gamma\leq10^{20}$, the residual condition
+  $3(32e^{-(T_0-\gamma/40-24)/8}+(t/4)(T_0/t)^4)\leq\tau\gamma/10^6$ fails,
+  because its left side is at least $248832/t^3$ and its right side at most
+  $10^{14}/(3t)^{10}$. This is
+  \leanid{TNLean.MPS.AreaLaw.ALVV.not_soft_fourth_order_residual_budget}.
+\end{itemize}
+Within this calibration, recovering the fourth-order choice therefore needs
+a weaker precision requirement than the one fixed by $\tau$, which is not
+formalized.
 \end{document}

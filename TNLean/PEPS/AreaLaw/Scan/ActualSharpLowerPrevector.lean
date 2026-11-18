@@ -29,6 +29,8 @@ open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation F
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder Topology
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open ActualTerminals

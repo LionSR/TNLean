@@ -21,6 +21,8 @@ The actual two-column factorization includes either periodic seam; no claim
 about other lattice geometries is made. See
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix Kronecker
 namespace TNLean.PEPS
@@ -105,7 +107,7 @@ def torusColumnChargeMotionBond (v : X) (upper : Bool) :
 Source: SCP10, lines 2489–2507. -/
 theorem torusColumnChargeMotionBond_val (v : X) (upper : Bool) :
     (torusColumnChargeMotionBond v upper).val =
-      Edge.ofAdj (torusGraph_adj_right v.1 (if upper then v.2 + 1 else v.2)) := rfl
+      ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 (if upper then v.2 + 1 else v.2)) := rfl
 
 /-- Independent unitaries on the two original two-spin columns move the literal
 charge insertion from the upper horizontal bond to the lower one, uniformly

@@ -75,8 +75,8 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 
 \begin{lemma}[Energy and time rescaling]
     \label{thm:hastings_energy_time_rescaling}
-    \lean{QuantumCircuit.heisenbergEvolution_smul,
-        QuantumCircuit.heisenbergEvolution_inv_smul_mul}
+    \lean{ManyBody.heisenbergEvolution_smul,
+        ManyBody.heisenbergEvolution_inv_smul_mul}
     \leanok
     For every real $c$ and every pair of operators $H,A$,
     \begin{align}
@@ -158,8 +158,8 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
         TNLean.Lattice.gaussianFilteredTerm_sum,
         TNLean.Lattice.gaussianFilteredTerm_self,
         TNLean.Lattice.sum_gaussianFilteredTerm,
-        TNLean.Lattice.mem_groundEigenspace_iff,
-        TNLean.Lattice.inner_eq_zero_of_mem_groundEigenspace,
+        ManyBody.mem_groundSpace_iff_mulVec,
+        TNLean.Lattice.inner_eq_zero_of_mem_groundSpace,
         TNLean.Lattice.norm_sub_starProjection_gaussianFilteredTerm_le
     }
     \leanok
@@ -191,8 +191,7 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
     \label{thm:hastings_filtered_no_ground_component}
     \lean{
         TNLean.Lattice.norm_gaussianFilteredTerm_apply_le_commutator,
-        TNLean.Lattice.eigenvalues_eq_or_le_of_isGappedGroundState,
-        TNLean.Lattice.norm_gaussianFilteredTerm_apply_le_commutator_of_isGappedGroundState
+        TNLean.Lattice.norm_gaussianFilteredTerm_apply_le_commutator_of_isGapped
     }
     \leanok
     \uses{thm:hastings_gaussian_filtered_spectral}
@@ -246,8 +245,8 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 \begin{lemma}[Localization of filtered operators by partial trace]
     \label{thm:hastings_filtered_partial_trace}
     \lean{
-        TNLean.Lattice.norm_sub_siteExpectation_gaussianFilteredTerm_le_mass,
-        TNLean.Lattice.norm_sub_siteExpectation_gaussianFilteredTerm_le
+        TNLean.Lattice.norm_sub_regionExpectation_gaussianFilteredTerm_le_mass,
+        TNLean.Lattice.norm_sub_regionExpectation_gaussianFilteredTerm_le
     }
     \leanok
     \uses{thm:hastings_filtered_locality}
@@ -518,7 +517,8 @@ $X_{j-l+1,j+l}$.
         TNLean.MPS.AreaLaw.lemmaOneConst_nonneg,
         TNLean.MPS.AreaLaw.exists_isFactorizationAt_lemmaOneConst,
         TNLean.MPS.AreaLaw.isFactorizationAt_zero_one_one,
-        Matrix.IsGappedGroundState.sub_smul_one}
+        ManyBody.IsGapped.sub_smul_one_self,
+        ManyBody.groundSpace_sub_smul_one_self}
     \leanok
     \uses{thm:hastings_three_way_splitting_sum,
         thm:hastings_three_way_splitting_supports,
@@ -601,7 +601,8 @@ $X_{j-l+1,j+l}$.
     \lean{TNLean.MPS.AreaLaw.exists_projectorFactorization_div,
         TNLean.MPS.AreaLaw.lemmaOneLength_div,
         TNLean.MPS.AreaLaw.ChainHamiltonian.smul,
-        Matrix.IsGappedGroundState.smul}
+        ManyBody.IsGapped.smul,
+        ManyBody.groundSpace_smul}
     \leanok
     \uses{thm:hastings_projector_factorization}
     Under the assumptions of Lemma~\ref{thm:hastings_projector_factorization},

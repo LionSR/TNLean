@@ -27,6 +27,8 @@ The polynomial quantitative scope is the conservative one stated in
 `docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace Kronecker ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
@@ -106,10 +108,10 @@ theorem exists_finite_left_filter_factors {L q i M R : ℕ} (hi : i ≤ L)
 factors of Huang's filter approximants over the energy mesh. They depend only on the
 chain terms, the precision `c`, the gap `Delta` and the cut. Huang, arXiv:1406.6355v6,
 Section 5.4, Lemmas 18--19; LVV13, algo53.tex, Claim c:errorreduction, lines 580--592. -/
-noncomputable def gaussianFilterFactors {L q : ℕ} (hq : 1 ≤ q)
+noncomputable def gaussianFilterFactors {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
     (c Delta : ℝ) (i : ℕ) : Finset (LeftBlockMatrix L q i) :=
-  leftFilterFactors (huangFilterApproximant hq h h0 c Delta)
+  leftFilterFactors (huangFilterApproximant h h0 c Delta)
 
 /-- The Gaussian filter factors number at most `E R`, the energy count times the filter
 rank bound. -/
@@ -118,7 +120,7 @@ theorem card_gaussianFilterFactors_le {L q i : ℕ} (hq : 1 ≤ q)
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) :
-    (gaussianFilterFactors hq h h0 c Delta i).card ≤
+    (gaussianFilterFactors h h0 c Delta i).card ≤
       huangEnergyCount c Delta L * huangFilterRankBound q c Delta L :=
   card_leftFilterFactors_le _ fun j ↦ (huangFilterApproximant_spec hq h hs h0 h1 hc hDelta j).1 i
 
@@ -129,7 +131,7 @@ theorem operatorSchmidtRank_of_mem_gaussianFilterFactors {L q i : ℕ} (hq : 1 �
     (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hi : i ≤ L)
-    {A : LeftBlockMatrix L q i} (hA : A ∈ gaussianFilterFactors hq h h0 c Delta i)
+    {A : LeftBlockMatrix L q i} (hA : A ∈ gaussianFilterFactors h h0 c Delta i)
     (k : ℕ) (hki : k < i) :
     operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
       (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ huangFilterRankBound q c Delta L :=
@@ -153,13 +155,13 @@ theorem isViable_errorReductionSet_gaussianFilterFactors {L q i : ℕ} (hq : 1 �
       (1 - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ)))).PosSemidef)
     (S : Finset (LeftBlockVector L q i))
     (hviable : IsViable Γ (1 / 2) (S : Set (LeftBlockVector L q i))) :
-    IsViable Γ (c / L) (errorReductionSet (gaussianFilterFactors hq h h0 c Delta i) id S :
+    IsViable Γ (c / L) (errorReductionSet (gaussianFilterFactors h h0 c Delta i) id S :
       Set (LeftBlockVector L q i)) := by
   classical
   obtain ⟨j, a, ha, -, herror⟩ :=
     exists_huangFilterApproximant_near_ground hq h hs h0 h1 hc hDelta E₀ Γ hΓ hHΓ hgap
   have ha0 : 0 < a := by linarith
-  set Q := huangFilterApproximant hq h h0 c Delta j with hQ
+  set Q := huangFilterApproximant h h0 c Delta j with hQ
   have hdecomp' : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) Q =
       ∑ k ∈ (Finset.univ : Finset (Fin _)), cutLeftFactor Q k ⊗ₖ cutRightFactor Q k := by
     simpa using cutOperator_eq_sum_cutLeftFactor_kronecker (i := i) Q
@@ -177,11 +179,11 @@ theorem isViable_errorReductionSet_gaussianFilterFactors {L q i : ℕ} (hq : 1 �
   refine ⟨v, hv1, by linarith, ?_⟩
   have hsubset : (errorReductionSet Finset.univ (cutLeftFactor Q) S :
       Set (LeftBlockVector L q i)) ⊆
-      errorReductionSet (gaussianFilterFactors hq h h0 c Delta i) id S := by
+      errorReductionSet (gaussianFilterFactors h h0 c Delta i) id S := by
     intro w hw
     obtain ⟨k, -, t, ht, rfl⟩ := Finset.mem_image₂.mp hw
     exact Finset.mem_image₂.mpr
-      ⟨_, cutLeftFactor_mem_leftFilterFactors (huangFilterApproximant hq h h0 c Delta) j k,
+      ⟨_, cutLeftFactor_mem_leftFilterFactors (huangFilterApproximant h h0 c Delta) j k,
         t, ht, rfl⟩
   intro z
   exact Submodule.span_mono hsubset (hvS z)
@@ -190,26 +192,26 @@ theorem isViable_errorReductionSet_gaussianFilterFactors {L q i : ℕ} (hq : 1 �
 Gaussian approximant, the left factors of some cut decomposition of it. The chosen factors
 `gaussianFilterFactors` are admissible; so is the answer of any solver returning a cut
 decomposition of each approximant. -/
-def IsAdmissibleFilterFactors {L q : ℕ} (hq : 1 ≤ q)
+def IsAdmissibleFilterFactors {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
     (c Delta : ℝ) (i : ℕ) (F : Finset (LeftBlockMatrix L q i)) : Prop :=
   ∀ j : Fin (huangEnergyCount c Delta L), ∃ (ι : Type) (J : Finset ι)
     (A : ι → LeftBlockMatrix L q i) (B : ι → RightBlockMatrix L q i),
     Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i)
-        (huangFilterApproximant hq h h0 c Delta j) = ∑ t ∈ J, A t ⊗ₖ B t ∧
+        (huangFilterApproximant h h0 c Delta j) = ∑ t ∈ J, A t ⊗ₖ B t ∧
       ∀ t ∈ J, A t ∈ F
 
 /-- The chosen Gaussian filter factors are admissible. -/
-theorem isAdmissibleFilterFactors_gaussianFilterFactors {L q : ℕ} (hq : 1 ≤ q)
+theorem isAdmissibleFilterFactors_gaussianFilterFactors {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
     (c Delta : ℝ) (i : ℕ) :
-    IsAdmissibleFilterFactors hq h h0 c Delta i (gaussianFilterFactors hq h h0 c Delta i) :=
-  fun j ↦ ⟨_, Finset.univ, cutLeftFactor (huangFilterApproximant hq h h0 c Delta j),
-    cutRightFactor (huangFilterApproximant hq h h0 c Delta j),
+    IsAdmissibleFilterFactors h h0 c Delta i (gaussianFilterFactors h h0 c Delta i) :=
+  fun j ↦ ⟨_, Finset.univ, cutLeftFactor (huangFilterApproximant h h0 c Delta j),
+    cutRightFactor (huangFilterApproximant h h0 c Delta j),
     (by
       simpa using cutOperator_eq_sum_cutLeftFactor_kronecker (i := i)
-        (huangFilterApproximant hq h h0 c Delta j)),
-    fun k _ ↦ cutLeftFactor_mem_leftFilterFactors (huangFilterApproximant hq h h0 c Delta) j k⟩
+        (huangFilterApproximant h h0 c Delta j)),
+    fun k _ ↦ cutLeftFactor_mem_leftFilterFactors (huangFilterApproximant h h0 c Delta) j k⟩
 
 /-- **Error reduction with any admissible filter factors.** For every ground pair with the
 prescribed gap, `1/2`-viability of the input family implies `c / L`-viability of its image
@@ -224,7 +226,7 @@ theorem isViable_errorReductionSet_of_isAdmissibleFilterFactors {L q i : ℕ} (h
     (hHΓ : (∑ j, h j) *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ)
     (hgap : ((∑ j, h j) - (E₀ : ℂ) • 1 - (Delta : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ)))).PosSemidef)
-    {F : Finset (LeftBlockMatrix L q i)} (hF : IsAdmissibleFilterFactors hq h h0 c Delta i F)
+    {F : Finset (LeftBlockMatrix L q i)} (hF : IsAdmissibleFilterFactors h h0 c Delta i F)
     (S : Finset (LeftBlockVector L q i))
     (hviable : IsViable Γ (1 / 2) (S : Set (LeftBlockVector L q i))) :
     IsViable Γ (c / L) (errorReductionSet F id S : Set (LeftBlockVector L q i)) := by
@@ -273,7 +275,7 @@ theorem exists_positive_chain_error_reduction_factors {L q i : ℕ} (hq : 1 ≤ 
         ∀ S : Finset (LeftBlockVector L q i),
           IsViable Γ (1 / 2) (S : Set (LeftBlockVector L q i)) →
           IsViable Γ (c / L) (errorReductionSet F id S : Set (LeftBlockVector L q i)) :=
-  ⟨gaussianFilterFactors hq h h0 c Delta i, card_gaussianFilterFactors_le hq h hs h0 h1 hc hDelta,
+  ⟨gaussianFilterFactors h h0 c Delta i, card_gaussianFilterFactors_le hq h hs h0 h1 hc hDelta,
     fun _ hA k _ hki ↦
       operatorSchmidtRank_of_mem_gaussianFilterFactors hq h hs h0 h1 hc hDelta hi hA k hki,
     fun E₀ Γ hΓ hHΓ hgap S hviable ↦ isViable_errorReductionSet_gaussianFilterFactors hq h hs h0

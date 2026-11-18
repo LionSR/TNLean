@@ -218,11 +218,11 @@ theorem intervalJointOutputEmbedding_eq_away_joining_bonds
       intervalJointOutputEmbedding_right_support j m k hjm hmk em ej ek t _ s hR]
     exact intervalBoundaryConfig_left_eq_away m k ek em _ _ _ _ s h1
   have hLs : logicalSiteEquivFin d D N s ∉ Set.range (intervalPacketSites d D N j.val m.val) := by
-    rw [intervalPacketSites_range]
+    rw [intervalPacketSites_range, coe_intervalConsecutiveSupport]
     rintro ⟨s', hs', hh⟩
     exact hL ((logicalSiteEquivFin d D N).injective hh ▸ hs')
   have hRs : logicalSiteEquivFin d D N s ∉ Set.range (intervalPacketSites d D N m.val k.val) := by
-    rw [intervalPacketSites_range]
+    rw [intervalPacketSites_range, coe_intervalConsecutiveSupport]
     rintro ⟨s', hs', hh⟩
     exact hR ((logicalSiteEquivFin d D N).injective hh ▸ hs')
   have hout : logicalSiteEquivFin d D N s ∉ Set.range (Fin.Embedding.append

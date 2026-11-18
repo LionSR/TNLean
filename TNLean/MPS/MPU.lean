@@ -103,7 +103,9 @@ import TNLean.MPS.MPU.GroupCocycleMPO.FusionTensors
 import TNLean.MPS.MPU.GroupCocycleMPO.Instances
 import TNLean.MPS.MPU.GroupIndex
 import TNLean.MPS.MPU.GroupRepresentation
+import TNLean.MPS.MPU.Identity
 import TNLean.MPS.MPU.IdentityIndex
+import TNLean.MPS.MPU.IdentitySourceRanks
 import TNLean.MPS.MPU.Index
 import TNLean.MPS.MPU.IndexClassification
 import TNLean.MPS.MPU.IndexContinuity

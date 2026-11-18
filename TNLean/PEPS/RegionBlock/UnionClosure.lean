@@ -33,6 +33,8 @@ The same input also supplies the singleton comparison of
   Section 3, lines 205--250, 1205--1210, and 1322--1404](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 

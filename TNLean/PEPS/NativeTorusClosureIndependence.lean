@@ -21,6 +21,8 @@ Source: SCP10, arXiv:1001.3807, Definition 5.8 and the independence argument of
 Theorem 5.9. No independence, blocking, or uniform-representation premise is used.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS.NativeTorus

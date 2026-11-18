@@ -5,7 +5,7 @@
 \input{command}
 \title{The ALVV Merge Tree for a Unique Frustration-Free Ground State}
 \author{}
-\date{November 15, 2026}
+\date{November 17, 2026}
 \begin{document}
 \maketitle
 \gapnote{scope-restriction}{open}
@@ -31,41 +31,146 @@ contractive nearest-neighbour terms, a nonzero vector $\Gamma$ with
 $H\Gamma=0$, every vector of the kernel a multiple of $\Gamma$, and every
 other spectral value at least $\gamma$. Such a chain satisfies
 Assumption~(DG) with ground energy $0$ and ground-space dimension $1$; the
-closed spectral span at energy $0$ is the line $\mathbb C\Gamma$. The
-physical resampling tree of the degenerate-gap case and its refinement
-therefore apply. On an event of failure probability at most $(L+1)^{-2}$,
-the refinement of the actual root and its Ritz extraction give a line,
-mutually $\eta/2$-close to $\mathbb C\Gamma$, of matrix product states whose
-bond dimension is polynomial in $L$ and $1/\eta$.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_refined_ritz_approximation}.}
-
-\paragraph{Deviation.}
-The per-node families are the corrected soft families of the degenerate-gap
-tree, not the frustration-free family of Theorem~t:aisff. Consequently:
+closed spectral span at energy $0$ is the line $\mathbb C\Gamma$. Three
+results use this.
 \begin{enumerate}
-    \item the dimension of the viable space at every node of the underlying
-          tree is bounded by
+    \item The physical resampling tree of the degenerate-gap case and its
+          refinement: on an event of failure probability at most $(L+1)^{-2}$,
+          the refinement of the actual root and its Ritz extraction give a line,
+          mutually $\eta/2$-close to $\mathbb C\Gamma$, of matrix product states
+          whose bond dimension is polynomial in $L$ and
+          $1/\eta$.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_refined_ritz_approximation}.}
+          Its node dimension is
           $\max\bigl(q^{\mathrm{width}},D^2K\cdot2\,(L+2)^2\bigr)$, which grows
           with $L$ through the corrected sample threshold of
-          \url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf},
-          rather than the constant $\mathcal D s^2$ of the source;
-    \item the constants depend on $\gamma$ through the degenerate-gap
-          parameters, not through the sharper frustration-free parameters
-          $\mathcal D=(d\ell^2)^{22\ell}$;
+          \url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf}.
+    \item The products of length $k$ of the frustration-free family of
+          Theorem~t:aisff improve viability by $\Delta^k/(1-\delta)^2$, as the
+          merge of lines 1662--1677
+          requires.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family_words}.}
+          Restated under the hypotheses of Theorem~t:unique and in the
+          region-first coordinates in which the tree measures viability, this
+          carries no hypothesis beyond those of the
+          source.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family_words_regionTensorCoordinates}.}
+    \item The deterministic recursive merge tree run with that family on every
+          long interval: with the constant $A$ and the parameters
+          $g=\min(\gamma,1)$, $d=\max(q,2)$, $u=1+\log d+\log(1/g)$,
+          $\ell=\lceil Au^2/g\rceil$, $\mathcal D=(d\ell^2)^{22\ell}$ of
+          Theorem~t:aisff,
+          $s=\lceil4096(1+\log\mathcal D+\log(1/\beta))\rceil$ for any
+          $0<\beta<1$, and $k=\lceil\lceil\log_{\mathcal D}s\rceil/2\rceil$
+          applications of the family at each merge, every node carries a
+          $3/200$-viable space for $\mathbb C\Gamma$ of dimension at most
+          $\mathrm{count}=\mathcal D^{2k}s$, bounded as in
+          (\ref{eq:alvv16_unique_rounded_count}). The filter-and-trim
+          iterates of the root with a Ritz extraction give a line of matrix
+          product states mutually $\eta/2$-close to
+          $\mathbb C\Gamma$.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_tree_ritz_approximation}.}
+          Neither $\mathcal D$ nor the node bound depends on $L$.
+\end{enumerate}
+The former deviation that the tree used the families of the degenerate-gap
+case, with constants depending on $\gamma$ through the degenerate-gap
+parameters, is eliminated by the third result.
+
+\paragraph{Local fix (rounding of the number of rounds).}
+Write $m=\lceil\log_{\mathcal D}s\rceil$, where $\mathcal D\ge2$ and
+$s>1$. Theorem~t:alg1 takes $k=m/2$ applications at each merge. If $m$ is
+even, this is an integer and
+\begin{align}
+    \mathcal D^{2k}&=\mathcal D^m\le\mathcal Ds,
+    \label{eq:alvv16_unique_even_power}\\
+    \mathrm{count}&=\mathcal D^{2k}s\le\mathcal Ds^2.
+    \label{eq:alvv16_unique_even_count}
+\end{align}
+For general $m$, take $k=\lceil m/2\rceil$, the least integer with
+$\mathcal D^{2k}\ge s$. Since $2k\le m+1$,
+\begin{align}
+    s&\le\mathcal D^{2k}\le\mathcal D^{m+1}\le\mathcal D^2s,
+    \label{eq:alvv16_unique_rounded_power}\\
+    \mathrm{count}&=\mathcal D^{2k}s\le\mathcal D^2s^2.
+    \label{eq:alvv16_unique_rounded_count}
+\end{align}
+The formalized conclusion is~(\ref{eq:alvv16_unique_rounded_count}); the even case
+admits the sharper estimate~(\ref{eq:alvv16_unique_even_count}). For odd $m$ the
+bound is up to a factor $\mathcal D$ weaker than the source's, and this is a
+rounding obstruction to satisfying the two inequalities used below when
+$s<\mathcal D^m$. It is not an impossibility result for other error
+estimates or constructions attaining the printed node bound.
+
+The condition $s\le\mathcal D^{2k}$ also controls the error. A merged space
+of dimension $Q$ and its sampled overlap $\alpha$ satisfy
+\begin{align}
+    Q&\le\mathrm{count}^2=\mathcal D^{4k}s^2,\nonumber\\
+    \alpha&\ge\frac{3}{32\mathcal D^{4k}s},
+    \label{eq:alvv16_unique_sample_overlap}\\
+    \frac{\Delta^k}{\alpha^2}
+    &\le\frac{1024}{9}\Delta^k\mathcal D^{8k}s^2
+    \le\frac{1024}{9}(\mathcal D^{12}\Delta)^k
+    \le\frac{1024}{9}\,10^{-5}<\frac1{400}.
+    \label{eq:alvv16_unique_power_error}
+\end{align}
+The second inequality uses $s^2\le\mathcal D^{4k}$ from
+(\ref{eq:alvv16_unique_rounded_power}); the third uses $k\ge1$ and
+$\mathcal D^{12}\Delta\le10^{-5}$. The earlier cubic node bound came from
+$a=\lceil\log_{\mathcal D}(\mathcal D^2s)\rceil$, for which
+\begin{align}
+    \mathcal D^a&\le\mathcal D^3s,\nonumber\\
+    \mathcal D^{2a}s&\le\mathcal D^6s^3.
+    \label{eq:alvv16_unique_old_cubic_count}
+\end{align}
+
+Now suppose $m$ is odd and
+$s<\mathcal D^m$. The node bound after $j$ rounds is $\mathcal D^{2j}s$, so
+the source's bound $\mathcal Ds^2$ requires $\mathcal D^{2j}\le\mathcal Ds$,
+while the error estimate above uses the sufficient condition
+$s^2\le\mathcal D^{4j}$ to bound $(1024/9)\Delta^j\mathcal D^{8j}s^2$
+by $(1024/9)(\mathcal D^{12}\Delta)^j$. The count condition and
+$s\le\mathcal D^{2j}$ are incompatible, since
+$\mathcal D^{2j}\le\mathcal Ds<\mathcal D^{m+1}$ forces $2j\le m-1$ and then
+$\mathcal D^{2j}\le\mathcal D^{m-1}<s$; for $m=1$ only $j=0$ remains, which
+does not improve the sample at
+all.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.merge_rounds_lt_of_odd}.}
+Under these two conditions, only for $s=\mathcal D^m$ does $j=(m+1)/2$ attain $\mathcal Ds^2$. The
+formalized bound exceeds the source's by the factor
+$\mathcal D^m/s<\mathcal D$. For the parameters of Theorem~t:aisff,
+$\mathcal D=(d\ell^2)^{22\ell}$ is far larger than
+$s=\lceil4096(1+\log\mathcal D+\log(1/\beta))\rceil$ unless $\beta$ is
+extremely small, so typically $m=1$, $k=1$ and the node bound is
+$\mathcal D^2s$. The same rounding is made in the degenerate-gap tree of
+constant node dimension, recorded in
+\url{https://sirui-lu.com/TNLean/paper-gaps/alvv16_approximation_parameters.pdf}.
+
+The source's lower bound $s\ge1600r(\log r+1)$ is a lower bound, and the
+formalized $s$ satisfies it; the random-sampling lemma needs in addition that
+$s$ grow like $\log\mathcal D$, since the merged space has dimension up to
+$\mathcal D^4s^4$.
+
+\paragraph{Deviation.}
+The remaining differences from the source are:
+\begin{enumerate}
+    \item the length-independent node bound is attained by a tree shown to
+          exist, not by one found with high probability; the probabilistic tree
+          of the first item of the list of results above has node dimension growing
+          with $L$;
+    \item the bond dimension of the output matrix product states grows with
+          $L$, through the trimming threshold, which is set by a reference space
+          whose Schmidt ranks grow with $L$;
+    \item the third result assumes $L\ge1$ and $q\ge2$: on an empty chain, or for $q=1$,
+          the space has dimension one, $H$ has no positive spectral value, and the
+          refinement of the root does not apply; this excludes only the trivial
+          case in which $\mathbb C\Gamma$ is the whole space;
     \item no running time is asserted.
 \end{enumerate}
-The conclusion is mathematically correct as stated, and narrower than the
-source only in the size of the intermediate spaces.
+The conclusions are mathematically correct as stated, and narrower than the
+source in the items listed. The factor $\mathcal D$ in the odd case is the local
+rounding choice above; whether another argument recovers the printed
+node bound is not settled by this arithmetic obstruction.
 
 \paragraph{Elimination plan.}
-Feed the frustration-free family of Theorem~t:aisff, which is
-proved,\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_frustrationFree_improving_family}.}
-into the generic selection of interval families on the
-tree.\footnote{\leanid{TNLean.MPS.AreaLaw.exists_canonical_interval_resampling_tree_with_certificate}.}
-Two inputs are missing: a transport of the family from the sheet-split
-coordinates in which it is stated to the region coordinates of the tree, and a
-reference space for collective trimming whose Schmidt ranks are bounded
-independently of $L$. The constant per-node bound $\mathcal D s^2$ additionally
-requires the source's sample threshold, which is not established.
+A reference space for collective trimming whose Schmidt ranks are bounded
+independently of $L$ would make the output bond dimension independent of $L$;
+it is not needed for the node bound. A probabilistic version of the third result
+requires the joint failure bound along the tree.
 
 \bibliographystyle{unsrt}
 \bibliography{references}

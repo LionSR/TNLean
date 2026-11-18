@@ -58,7 +58,7 @@ theorem SquareEntropyAreaLawAt.closedSquareSample_entropy_le
       ∀ (z : ℝ × ℝ) (u r : ℝ), 0 ≤ r → r ≤ 2 * u →
         Entropy.regionEntropy
           (AreaLaw.Geometry.closedSquareSample (AreaLaw.rectangularDomain L L) z r)
-          (squareAreaLawState Ω) ≤ max 1 (16 * C_A) * (1 + u) := by
+          (AreaLaw.rectangleAreaLawState Ω) ≤ max 1 (16 * C_A) * (1 + u) := by
   intro L Ω hΩ z u r hr hru
   obtain ⟨hCA, hA⟩ := hA
   let D := AreaLaw.Geometry.closedSquareSample (AreaLaw.rectangularDomain L L) z r
@@ -68,9 +68,9 @@ theorem SquareEntropyAreaLawAt.closedSquareSample_entropy_le
     ← card_edgeBoundary_rectangle] at hcut
   simp only [Finset.map_map, Function.Embedding.mk_trans_mk, Equiv.self_comp_symm,
     Function.Embedding.mk_id, Finset.map_refl] at hcut
-  have hbound : Entropy.regionEntropy D (squareAreaLawState Ω) ≤
+  have hbound : Entropy.regionEntropy D (AreaLaw.rectangleAreaLawState Ω) ≤
       C_A * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) D).card := by
-    simpa only [Entropy.regionEntropy_eq_entropy, squareAreaLawState,
+    simpa only [Entropy.regionEntropy_eq_entropy, AreaLaw.rectangleAreaLawState,
       AreaLaw.rectangleConfigurationEquiv] using hcut
   have hu : 0 ≤ u := by linarith
   have hedge : ((Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) D).card : ℝ) ≤
@@ -96,7 +96,7 @@ theorem SquareEntropyAreaLawAt.nestedPatch_entropy_le
         ∀ j : Fin (AreaLaw.Geometry.nestedPatchCount u),
           Entropy.regionEntropy
             (AreaLaw.Geometry.nestedPatch (AreaLaw.rectangularDomain L L) z u j.val)
-            (squareAreaLawState Ω) ≤ max 1 (16 * C_A) * (1 + u) := fun L Ω hΩ z u hu j ↦
+            (AreaLaw.rectangleAreaLawState Ω) ≤ max 1 (16 * C_A) * (1 + u) := fun L Ω hΩ z u hu j ↦
   hA.closedSquareSample_entropy_le L Ω hΩ z u _
     (hu.trans (AreaLaw.Geometry.le_nestedPatchRadius u j.val))
     (AreaLaw.Geometry.nestedPatchRadius_le_two_mul hu j.isLt)
@@ -117,7 +117,7 @@ theorem SquareEntropyAreaLaw.exists_nestedPatch_entropy_le
           ∀ j : Fin (AreaLaw.Geometry.nestedPatchCount u),
             Entropy.regionEntropy
               (AreaLaw.Geometry.nestedPatch (AreaLaw.rectangularDomain L L) z u j.val)
-              (squareAreaLawState Ω) ≤ C_S * (1 + u) := by
+              (AreaLaw.rectangleAreaLawState Ω) ≤ C_S * (1 + u) := by
   obtain ⟨C_A, hA⟩ := harea.exists_squareEntropyAreaLawAt hq hJ hΔ
   exact ⟨max 1 (16 * C_A), le_max_left _ _, hA.nestedPatch_entropy_le⟩
 

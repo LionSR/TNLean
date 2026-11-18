@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.OpenMPS
 import QICLean.Entropy.SupportedOperatorSchmidtWords
 
@@ -23,6 +23,8 @@ arXiv:quant-ph/0508031v2, Figure 2 and the decomposition preceding equation (1),
 the finite propagator sum of Huang, arXiv:1406.6355v6, Section 5.4, Lemma 19, equation (22).
 The analytic approximation of time evolution by such a product is a separate theorem.
 -/
+
+open ManyBody (card_interval_le interval mem_interval)
 
 open Matrix
 open scoped BigOperators

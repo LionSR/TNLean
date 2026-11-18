@@ -52,6 +52,8 @@ Source text: `openai/math` at commit `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 here are formalized independently from the manuscript; no upstream Lean text was reused.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 open Matrix
 open TNLean.Lattice (siteLift)
 

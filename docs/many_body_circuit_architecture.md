@@ -86,7 +86,7 @@ flowchart BT
 | Layer | Objects | Defining types | Now | After the move | May import |
 |---|---|---|---|---|---|
 | Sites | a finite tensor product `⊗_v ℂ^{X_v}` and its regions | a system `X : V → Type` of finite basis types, its configurations and those of a region; `supportedOperators X D`; the placement `K ↦ K ⊗ 1`; the partial trace onto a region; product vectors | QICLean `Entropy`, `Representation`, `Analysis` (86 modules using `SiteConfig`); 25 modules of `TNLean/Circuit`, among them `RegionSplit` and `RegionalSwap`; `Lattice/RegionalSwapSupport` | `QICLean/ManyBody/Sites` | matrices, channels |
-| Dynamics | a family of Hermitian terms with supports, and the evolution it generates | `Interaction X S` (terms `term i ∈ supportedOperators X (S i)`, supports a parameter) and its `hamiltonian`; the evolution is `Matrix.hermitianUnitaryPath`, with the Heisenberg picture, commutator bounds on a graph and `graphBall` | `TNLean/Circuit/LiebRobinson`; `Circuit/ProjectedRelativeEvolution`, `DisjointRelativeEvolution`, `SupportedGaussianIntegral` | `QICLean/ManyBody/Dynamics` | Sites |
+| Dynamics | a family of Hermitian terms with supports, and the evolution it generates | `Interaction X S` (terms `term i ∈ supportedOperators X (S i)`, supports a parameter) and its `hamiltonian`; the evolution is `Matrix.hermitianUnitaryPath`, with the Heisenberg picture, commutator bounds on a graph and `graphBall` | `QICLean/ManyBody/Dynamics` (moved, #10718); `TNLean/Circuit/SiteExpectationGraphLocalization` keeps the two site-expectation localization estimates until `siteExpectation` is replaced | `QICLean/ManyBody/Dynamics` | Sites |
 | Hamiltonians | spectral properties of an interaction on a finite set of sites | `groundSpace` and the one gap predicate `IsGapped`, stated for any matrix; spectral and Gaussian filters, truncation, low-energy bases; the models as choices of sites and supports | `TNLean/Lattice` (root, `ClusterExpansion`); five separate structures | `QICLean/ManyBody/Hamiltonian` | Sites, Dynamics |
 | Gates | unitaries on a finite basis, with no sites | two-level and Givens words, controlled elements, permutation matrices, dilations, amplification | parts of `TNLean/Circuit/Gates`, eight root modules of `TNLean/Circuit` | `QICLean/Circuit/Gate` | matrices |
 | Circuits | a geometry of cells on a set of sites, and operations layered on it | `Layer`, `Circuit`, its Kraus family, depth and gate count | `TNLean/Circuit` (the rest) | `QICLean/Circuit` | Sites, Gates |
@@ -102,8 +102,9 @@ spells the Hamiltonian the same way, as `Φ.hamiltonian`. A lemma stated at
 the bare sum `∑ i, h i` would be a second spelling that `rw` cannot match
 against the first. Hermiticity, norm bounds, range and degree are hypotheses,
 not fields. A gap is `IsGapped H E₀ Δ`, whose ground space is nonzero. The
-eigenvalue dichotomy and the unique gapped ground state
-(`Matrix.IsGappedGroundState`, swept in step 4.0) are theorems about it, not
+eigenvalue dichotomy and the unique gapped ground state (the hypotheses
+`‖Ω‖ = 1`, `IsGapped H E₀ Δ` and `groundSpace H E₀ = span {Ω}`, which replaced
+TNLean's `Matrix.IsGappedGroundState` in step 4.0) are theorems about it, not
 further predicates. An eigenvalue bound that does not assert a ground state is
 a hypothesis, not a gap.
 
@@ -209,7 +210,8 @@ cannot be admitted by recording it. The 17 imports recorded when the check was
 introduced were repaired by step 0.3, and the set is empty:
 
 - nine site and dynamics modules imported `Circuit/LocalCircuit` for
-  `supportedOperators`, now defined in `Circuit/SupportedOperators`;
+  `supportedOperators`, which was defined in `Circuit/SupportedOperators` and
+  was replaced by QICLean's `ManyBody.supportedOperators` in follow-up F12;
 - four modules of the Sites and Hamiltonian layers imported gate modules for
   `siteOp`, `ctrlProj` and local permutations, now in `Circuit/SiteOperators`
   and `Circuit/SitePermutation`;
@@ -218,8 +220,11 @@ introduced were repaired by step 0.3, and the set is empty:
 - `SiteExpectationOrder` imported `LiebRobinson/CommutatorRecursion` for one
   lemma on the Heisenberg evolution, now stated beside its definition;
   `ProjectedRelativeEvolution`, `DisjointRelativeEvolution` and
-  `SupportedGaussianIntegral`, which state results about that evolution, are
-  dynamics modules and are listed as such in the checker;
+  `SupportedGaussianIntegral`, which state results about that evolution, were
+  dynamics modules; they and `Circuit/LiebRobinson` are now QICLean's
+  `ManyBody/Dynamics` (tracker #10718); the one TNLean dynamics module left by
+  that move, `Circuit/SiteExpectationGraphLocalization`, was deleted with
+  `siteExpectation` in follow-up F12;
 - two modules of `Lattice/Sheet` imported `RegionSplit` and `RegionalSwap`,
   site notions that were kept among the Hamiltonian modules and are now
   modules of `TNLean/Circuit`.
@@ -238,9 +243,12 @@ it.
   directories that are layers today stay layers.
 - `EXAMPLES_IMPORTS`, in the same script, lists the imports of a module inside
   an `Examples` directory by a module outside every such directory. It
-  recorded 17 when introduced. A worked example is not a prerequisite of the
-  theory it illustrates: the declaration the library needs moves out of the
-  example.
+  recorded 17 when introduced and is now empty under the checker's expanded
+  dependency interpretation. Shared interfaces live in library modules;
+  concrete demonstrations live under `Examples`. Seven historical import-only
+  compatibility paths still literally import examples; the checker expands
+  them when checking declaration-bearing callers. See
+  `audits/2026-11-17_examples_import_extraction.md` for the inventory and scope.
 - `PASS_THROUGH`, in `scripts/check_pass_through_declarations.py`, lists the
   declarations whose whole body applies the declaration of the same name in
   another namespace to their own explicit arguments in order, as in
@@ -286,7 +294,9 @@ else.
   entries, with site-dependent dimensions `n : V → ℕ` and `D : Finset V` (311
   TNLean modules, 29 QICLean modules). 61 modules use both. The two bridge
   lemmas in `Circuit/EntropySupport` are each applied in about 50 modules and
-  exist only for one local dimension.
+  exist only for one local dimension. Follow-up F12 deleted the first predicate
+  and the bridges: supports are now `ManyBody.supportedOperators`, whose carrier
+  is the entry condition.
 - The algebra of `Entropy.IsSupportedOn` (`add`, `neg`, `sub`, `smul`,
   `conjTranspose`, finite sums, `exp`) is proved in TNLean area-law modules
   under the QICLean namespace, not in QICLean. Its product and commutation
@@ -352,7 +362,7 @@ other directories.
 - One placement of a regional matrix as `K ⊗ 1`, along a region or along an
   injection of sites; the nine constructions above become this one or
   specializations of it by definition.
-- One partial trace onto a region (`siteExpectation`), one product vector, one
+- One partial trace onto a region (`ManyBody.regionExpectation`), one product vector, one
   expectation.
 - Lieb–Robinson bounds for a family of supported Hermitian terms on a graph,
   moved unchanged.

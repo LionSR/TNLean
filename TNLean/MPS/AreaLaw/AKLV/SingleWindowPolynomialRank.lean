@@ -22,6 +22,8 @@ The explicit bound is proportional to `w + k/(2*w)` in the exponent;
 the further optimization over the window width is separate.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix QuantumCircuit
 open TNLean.Lattice
 open TNLean.MPS.AreaLaw
@@ -133,10 +135,11 @@ theorem operatorSchmidtRank_aeval_single_window_le_pow
     {L q w c : ℕ} [instConfig : DecidableEq (Fin L → Fin q)]
     (W : Fin (2 * w) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hW : ∀ r, W r ∈ supportedOperators q
-      (interval L (c + r.val) (c + r.val + 2) : Set (Fin L)))
-    (hPL : PL ∈ supportedOperators q (interval L 0 (c + 1) : Set (Fin L)))
-    (hPR : PR ∈ supportedOperators q (interval L (c + 2 * w) L : Set (Fin L)))
+    (hW : ∀ r, W r ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (c + r.val) (c + r.val + 2) : Finset (Fin L)))
+    (hPL : PL ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (interval L 0 (c + 1) : Finset (Fin L)))
+    (hPR : PR ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (interval L (c + 2 * w) L : Finset (Fin L)))
     (hw : 1 ≤ w) (hc : c + 2 * w ≤ L - 1) (τ : Fin q)
     (k : ℕ) (hk : 1 ≤ k) (P : Polynomial ℂ) (hdeg : P.natDegree ≤ k) :
     let A := interval L 0 (c + w + 1)
@@ -162,15 +165,16 @@ theorem operatorSchmidtRank_aeval_single_window_le_pow
     Sum.elim (Sum.elim (fun _ ↦ 0) (fun r ↦ E (W r))) ![0, E PL, E PR]
   have hmove {S : Finset (Fin L)} {R : Finset (Fin T)}
       {X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-      (hX : X ∈ supportedOperators q (S : Set (Fin L)))
-      (hSR : ∀ i ∈ S, e i ∈ R) : E X ∈ supportedOperators q (R : Set (Fin T)) := by
-    apply supportedOperators_mono ?_ (embedOp_mem_supportedOperators_image e.injective hX)
-    rintro j ⟨i, hi, rfl⟩
+      (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
+      (hSR : ∀ i ∈ S, e i ∈ R) : E X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) R := by
+    apply ManyBody.supportedOperators_mono ?_ (embedOp_mem_supportedOperators_image e.injective hX)
+    intro j hj
+    obtain ⟨i, hi, rfl⟩ := Finset.mem_image.mp hj
     exact hSR i hi
-  have hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ supportedOperators q
-      (interval T r.val (r.val + 2) : Set (Fin T)) := fun _ ↦ Submodule.zero_mem _
-  have hright : ∀ r, F (Sum.inl (Sum.inr r)) ∈ supportedOperators q
-      (interval T (b + r.val) (b + r.val + 2) : Set (Fin T)) := by
+  have hleft : ∀ r, F (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval T r.val (r.val + 2) : Finset (Fin T)) := fun _ ↦ zero_mem _
+  have hright : ∀ r, F (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval T (b + r.val) (b + r.val + 2) : Finset (Fin T)) := by
     intro r
     apply hmove (hW r)
     intro i hi
@@ -178,18 +182,18 @@ theorem operatorSchmidtRank_aeval_single_window_le_pow
     change b + r.val ≤ N + i.val ∧ N + i.val < b + r.val + 2
     dsimp [b]
     omega
-  have hleftbulk : F (Sum.inr 0) ∈ supportedOperators q
-      (interval T 0 1 : Set (Fin T)) := Submodule.zero_mem _
-  have hmidbulk : F (Sum.inr 1) ∈ supportedOperators q
-      (interval T (2 * w) (b + 1) : Set (Fin T)) := by
+  have hleftbulk : F (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval T 0 1 : Finset (Fin T)) := zero_mem _
+  have hmidbulk : F (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval T (2 * w) (b + 1) : Finset (Fin T)) := by
     apply hmove hPL
     intro i hi
     simp only [mem_interval] at hi ⊢
     change 2 * w ≤ N + i.val ∧ N + i.val < b + 1
     dsimp [b, N]
     omega
-  have hrightbulk : F (Sum.inr 2) ∈ supportedOperators q
-      (interval T (b + 2 * w) T : Set (Fin T)) := by
+  have hrightbulk : F (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval T (b + 2 * w) T : Finset (Fin T)) := by
     apply hmove hPR
     intro i hi
     simp only [mem_interval] at hi ⊢

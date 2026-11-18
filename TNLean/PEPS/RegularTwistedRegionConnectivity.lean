@@ -26,6 +26,8 @@ geometric construction and the physical entropy assertion are separate results.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {V : Type*} [LinearOrder V] {Γ Δ : SimpleGraph V} {G : Type*}

@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Huang.ChainGrid
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import TNLean.Algebra.MatrixHermitianSum
 
 /-!
@@ -18,6 +20,8 @@ by exactly the omitted edges.
 This is the physical decomposition in Osborne, arXiv:quant-ph/0508031v2, Figures 1--2
 and equations (2)--(3), used in Huang, arXiv:1406.6355v6, Section 5.4, Lemma 19.
 -/
+
+open ManyBody (interval mem_interval)
 
 open Matrix QuantumCircuit
 open scoped BigOperators Matrix.Norms.L2Operator
@@ -143,14 +147,14 @@ theorem chainGridBlockHamiltonian_mem_supported (hw : 0 < w)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i.val (i.val + 2))) (j : Fin (L / w + 1)) :
     chainGridBlockHamiltonian hw h j ∈
-      supportedOperators q (chainGridBlock L w j.val : Set (Fin L)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q) (chainGridBlock L w j.val : Finset (Fin L)) := by
   classical
-  apply Submodule.sum_mem
+  apply sum_mem
   intro i hi
   obtain ⟨hinot, hiowner⟩ := (Finset.mem_filter.mp hi).2
   have hsub := chainGridEdge_subset_ownerBlock hw i hinot
   rw [hiowner] at hsub
-  exact mem_supportedOperators_of_isSupportedOn ((hs i).mono hsub)
+  exact ((hs i).mono hsub)
 
 /-- Hermiticity of each original term implies Hermiticity of each retained block.
 Osborne, equations (2)--(3). -/

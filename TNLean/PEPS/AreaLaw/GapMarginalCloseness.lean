@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.GappedGroundState
 import TNLean.Lattice.EntropyComparison
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Marginal trace norm from the original full-system gap
@@ -22,6 +22,8 @@ states*, Proposition 4.1, `03-patches.tex`, lines 320–365,
 
 open scoped InnerProductSpace Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 
+open ManyBody (IsGapped groundSpace)
+
 namespace FiniteProduct
 
 variable {V : Type*} [Fintype V] [DecidableEq V]
@@ -36,17 +38,18 @@ Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 320–365,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 theorem re_trace_abs_reducedPure_sub_le_sqrt_energy
     {H : Matrix ((v : V) → β v) ((v : V) → β v) ℂ}
-    {E₀ Δ : ℝ} {Ω φ : EuclideanSpace ℂ ((v : V) → β v)}
-    (hgs : Matrix.IsGappedGroundState H E₀ Ω Δ) (hΔ : 0 < Δ)
+    {E₀ Δ : ℝ} {Ω φ : EuclideanSpace ℂ ((v : V) → β v)} (hH : H.IsHermitian)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped H E₀ Δ)
+    (hspan : groundSpace H E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 < Δ)
     (hφ : ‖φ‖ = 1) (R : Finset V) :
     (CFC.abs (reducedPure β φ R - reducedPure β Ω R)).trace.re ≤
       2 * Real.sqrt (((⟪φ, Matrix.toEuclideanLin H φ⟫_ℂ).re - E₀) / Δ) := by
   refine (div_le_iff₀' (show (0 : ℝ) < 2 from zero_lt_two)).mp
-    ((traceDistance_reducedPure_le β φ Ω hφ hgs.1 R).trans
-      ((Matrix.traceDistance_vecMulVec_eq hφ hgs.1).le.trans
+    ((traceDistance_reducedPure_le β φ Ω hφ hΩ R).trans
+      ((Matrix.traceDistance_vecMulVec_eq hφ hΩ).le.trans
         (Real.sqrt_le_sqrt ((le_div_iff₀' hΔ).2 ?_))))
   simpa only [hφ, one_pow, mul_one, norm_inner_symm (𝕜 := ℂ) Ω φ] using
-    Matrix.PosSemidef.gap_le (Ω := Ω) hgs.2.2 φ
+    Matrix.PosSemidef.gap_le (Ω := Ω) (hgap.posSemidef_sub_smul_one hH hΩ hspan) φ
 
 /-- An energy excess at most one 1024th of the original spectral gap gives
 full marginal trace norm at most one sixteenth. This is an auxiliary energy
@@ -57,13 +60,14 @@ Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 339–365,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 theorem re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy
     {H : Matrix ((v : V) → β v) ((v : V) → β v) ℂ}
-    {E₀ Δ : ℝ} {Ω φ : EuclideanSpace ℂ ((v : V) → β v)}
-    (hgs : Matrix.IsGappedGroundState H E₀ Ω Δ) (hΔ : 0 < Δ)
+    {E₀ Δ : ℝ} {Ω φ : EuclideanSpace ℂ ((v : V) → β v)} (hH : H.IsHermitian)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped H E₀ Δ)
+    (hspan : groundSpace H E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 < Δ)
     (hφ : ‖φ‖ = 1)
     (henergy : (⟪φ, Matrix.toEuclideanLin H φ⟫_ℂ).re - E₀ ≤ Δ / 1024)
     (R : Finset V) :
     (CFC.abs (reducedPure β φ R - reducedPure β Ω R)).trace.re ≤ (1 / 16 : ℝ) := by
-  refine (re_trace_abs_reducedPure_sub_le_sqrt_energy β hgs hΔ hφ R).trans
+  refine (re_trace_abs_reducedPure_sub_le_sqrt_energy β hH hΩ hgap hspan hΔ hφ R).trans
     ((le_div_iff₀' (show (0 : ℝ) < 2 from zero_lt_two)).mp ?_)
   norm_num [Real.sqrt_le_iff, div_le_iff₀' hΔ]
   linarith

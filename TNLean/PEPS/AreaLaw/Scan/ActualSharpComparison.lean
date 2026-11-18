@@ -32,6 +32,8 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open ActualTerminals

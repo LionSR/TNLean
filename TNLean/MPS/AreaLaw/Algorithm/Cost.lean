@@ -32,6 +32,8 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--219 (Theorem 1) and 6
 `docs/paper-gaps/lvv13_cost_model.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix Cslib
 open scoped ComplexOrder MatrixOrder
 
@@ -211,7 +213,7 @@ theorem cost_sweepStepProgram_le {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
   set S₁ := AreaLaw.extend (i + 1) S with hS₁
   set S₂ := chain.sizeTrimmingSelection hq Delta S₁ with hS₂
   set S₃ := bondTrimSet hi m S₂ with hS₃
-  set F := gaussianFilterFactors (Nat.le_of_lt hq) h h0 c Delta (i + 1) with hF
+  set F := gaussianFilterFactors h h0 c Delta (i + 1) with hF
   set E := huangEnergyCount c Delta L with hE
   set Rk := huangFilterRankBound q c Delta L with hRk
   set size := lvvSizeTrimmingCoefficient q Delta * L ^ lvvSizeTrimmingDegree q Delta with hsize

@@ -34,6 +34,8 @@ and seam deformation, lines 1622–1647. No G-isometry is required.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
@@ -51,12 +53,12 @@ variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}
 omit [Fintype G] [DecidableEq G] in
 private theorem directedTransport_of_head_eq {W : Type*} [LinearOrder W]
     {H : SimpleGraph W} (u : Edge H → G) {x y : W} (hxy : H.Adj x y)
-    (hhead : (Edge.ofAdj hxy).1.2 = x) :
-    regularDirectedTransport u hxy = (u (Edge.ofAdj hxy))⁻¹ := by
+    (hhead : (ManyBody.Edge.ofAdj hxy).1.2 = x) :
+    regularDirectedTransport u hxy = (u (ManyBody.Edge.ofAdj hxy))⁻¹ := by
   have hyx : y < x := by
-    rcases Edge.ofAdj_endpoints hxy with ⟨ht, hh⟩ | ⟨ht, hh⟩
+    rcases ManyBody.Edge.ofAdj_endpoints hxy with ⟨ht, hh⟩ | ⟨ht, hh⟩
     · exact (hxy.ne (hhead.symm.trans hh)).elim
-    · simpa only [ht, hhead] using (Edge.ofAdj hxy).2.1
+    · simpa only [ht, hhead] using (ManyBody.Edge.ofAdj hxy).2.1
   simp only [regularDirectedTransport, ite_eq_right (not_lt.mpr hyx.le)]
 
 omit [Fintype G] [DecidableEq G] in

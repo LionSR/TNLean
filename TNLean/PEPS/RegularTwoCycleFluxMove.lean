@@ -33,6 +33,8 @@ not the full physical flux-moving theorem; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
@@ -68,7 +70,7 @@ theorem regularTreeCycleAssignment_eq_of_support {V : Type*} [LinearOrder V]
   classical
   funext e
   simp only [regularTreeCycleAssignment]
-  split_ifs <;> first | rfl | skip
+  split_ifs <;> try rfl
   all_goals
     symm
     by_contra he

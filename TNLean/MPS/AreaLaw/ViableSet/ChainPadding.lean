@@ -21,6 +21,8 @@ LVV13, arXiv:1307.5143v1, final induction, lines 652--678. This is an algebraic
 physical reduction; it asserts no computational running time.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
@@ -33,10 +35,11 @@ theorem isSupportedOn_embedOp_prefix {L N q a b : ℕ} (hi : L ≤ N)
     Entropy.IsSupportedOn (n := fun _ : Fin N ↦ q)
       (QuantumCircuit.embedOp (Fin.castLE hi) X) (interval N a b) := by
   have h := QuantumCircuit.embedOp_mem_supportedOperators_image
-    (Fin.castLE_injective hi) (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hX)
-  apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-  apply QuantumCircuit.supportedOperators_mono ?_ h
-  rintro _ ⟨v, hv, rfl⟩
+    (Fin.castLE_injective hi) hX
+  change _ ∈ ManyBody.supportedOperators _ _
+  apply ManyBody.supportedOperators_mono ?_ h
+  intro _ hw
+  obtain ⟨v, hv, rfl⟩ := Finset.mem_image.mp hw
   exact mem_interval.mpr ((mem_interval (L := L)).mp hv)
 
 /-- Padded bonds are exactly the old bonds together with the new sites on
@@ -92,11 +95,12 @@ theorem paddedInteraction_supported {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
   unfold paddedInteraction
   split_ifs with hj
   · exact isSupportedOn_embedOp_prefix hi (hs ⟨j.val, hj⟩)
-  · apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-    apply QuantumCircuit.supportedOperators_mono ?_
+  · change _ ∈ ManyBody.supportedOperators _ _
+    apply ManyBody.supportedOperators_mono ?_
       (QuantumCircuit.siteOp_mem_supportedOperators
         (⟨j.val + 1, by omega⟩ : Fin N) (QuantumCircuit.siteBasisPenalty z))
-    rintro v rfl
+    intro v hv
+    rw [Finset.mem_singleton.mp hv]
     apply mem_interval.mpr
     change j.val ≤ j.val + 1 ∧ j.val + 1 < j.val + 2
     omega

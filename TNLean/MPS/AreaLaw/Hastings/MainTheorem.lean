@@ -84,6 +84,8 @@ No other constant differs from the source.
   P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 124–232.
 -/
 
+open ManyBody (card_interval_le interval mem_interval)
+
 open TNLean.Lattice
 
 namespace TNLean.MPS.AreaLaw.Hastings
@@ -184,12 +186,13 @@ theorem regionEntropy_interval_zero_le {Ω : EuclideanSpace ℂ (Fin L → Fin q
   exact card_interval_le i L
 
 /-- **Hastings' area law on the chain, stage theorem, for any window length.** Let `Ω` be a
-gapped ground vector of a finite-range Hamiltonian `h` on the chain of `L` sites with local
-dimension `q ≥ 1`. Let `ξ' > 0`, `C₁` with `2 C₁ > 1`, and `C₂` with `ln C₁ + C₂ ≥ 0`; both
-conditions lose nothing, since enlarging `C₁` or `C₂` only weakens eq. `claim`. Let `l₀` be a
-window length with `l₀ ≥ ⌈ξ₀⌉ 2^M = doublingWindowLength ξ' C₁ C₂ q`, put
-`S_max = 3 l₀ ln q`, and let `W i l` stand for the largest entropy of an interval of `l` sites
-in the window `[i, i + l₀]`. Assume
+unit vector on the chain of `L` sites with local dimension `q ≥ 1`; in the source it is the
+gapped ground vector of a finite-range Hamiltonian, but the argument uses only `‖Ω‖ = 1`, and
+the gap is needed only to discharge `hclaim`. Let `ξ' > 0`, `C₁` with `2 C₁ > 1`, and `C₂`
+with `ln C₁ + C₂ ≥ 0`; both conditions lose nothing, since enlarging `C₁` or `C₂` only
+weakens eq. `claim`. Let `l₀` be a window length with
+`l₀ ≥ ⌈ξ₀⌉ 2^M = doublingWindowLength ξ' C₁ C₂ q`, put `S_max = 3 l₀ ln q`, and let `W i l`
+stand for the largest entropy of an interval of `l` sites in the window `[i, i + l₀]`. Assume
 
 * `hdrop`: `S([0, i)) - (k - i) ln q ≤ S([0, k))` for `i ≤ k ≤ L` (lines 150–152);
 * `hpos`, `hinit`: `0 ≤ W i l ≤ l ln q` for `l ≤ l₀` and windows inside the chain
@@ -204,9 +207,8 @@ source meets the window condition of eq. `relent` (lines 480–484).
 This is a stage theorem: it is the formalization of the source theorem only once `hdrop`,
 `hpos`, `hinit` and `hclaim` are discharged for the window entropy of the ground vector.
 The lower bound on `l₀` carries the local fix of the module docstring. -/
-theorem regionEntropy_prefix_le_of_windowClaim_of_le (hq : 1 ≤ q) (h : ChainHamiltonian L q R J)
-    {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+theorem regionEntropy_prefix_le_of_windowClaim_of_le (hq : 1 ≤ q)
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {ξ' C₁ C₂ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 < 2 * C₁) (hC : 0 ≤ Real.log C₁ + C₂)
     (l₀ : ℕ) (hl₀ : doublingWindowLength ξ' C₁ C₂ q ≤ l₀) (W : ℕ → ℕ → ℝ)
     (hdrop : ∀ i k : ℕ, i ≤ k → k ≤ L →
@@ -229,7 +231,7 @@ theorem regionEntropy_prefix_le_of_windowClaim_of_le (hq : 1 ≤ q) (h : ChainHa
   have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   rcases lt_or_ge L (i + l₀) with hend | hfit
   · -- The window runs past the end of the chain: `L - i < l₀`.
-    refine (regionEntropy_interval_zero_le hgs.1 hq i).trans ?_
+    refine (regionEntropy_interval_zero_le hΩ hq i).trans ?_
     have hLi : ((L - i : ℕ) : ℝ) ≤ l₀ := by exact_mod_cast (by omega : L - i ≤ l₀)
     calc ((L - i : ℕ) : ℝ) * Real.log q ≤ l₀ * Real.log q :=
           mul_le_mul_of_nonneg_right hLi hlog
@@ -264,9 +266,8 @@ arXiv:0705.2024v4 (lines 130–137), proved as in lines 148–232. The condition
 This is a stage theorem: it is the formalization of the source theorem only once `hdrop`,
 `hpos`, `hinit` and `hclaim` are discharged for the window entropy of the ground vector.
 The value of `S_max` carries the local fix of the module docstring. -/
-theorem regionEntropy_prefix_le_of_windowClaim (hq : 1 ≤ q) (h : ChainHamiltonian L q R J)
-    {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+theorem regionEntropy_prefix_le_of_windowClaim (hq : 1 ≤ q)
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     {ξ' C₁ C₂ : ℝ} (hξ' : 0 < ξ') (hC₁ : 1 < 2 * C₁) (hC : 0 ≤ Real.log C₁ + C₂)
     (W : ℕ → ℕ → ℝ)
     (hdrop : ∀ i k : ℕ, i ≤ k → k ≤ L →
@@ -287,7 +288,7 @@ theorem regionEntropy_prefix_le_of_windowClaim (hq : 1 ≤ q) (h : ChainHamilton
     (i : ℕ) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
       maxEntropyBound ξ' C₁ C₂ q :=
-  regionEntropy_prefix_le_of_windowClaim_of_le hq h hgs hξ' hC₁ hC _ le_rfl W hdrop hpos hinit
+  regionEntropy_prefix_le_of_windowClaim_of_le hq hΩ hξ' hC₁ hC _ le_rfl W hdrop hpos hinit
     hclaim i
 
 end TNLean.MPS.AreaLaw.Hastings

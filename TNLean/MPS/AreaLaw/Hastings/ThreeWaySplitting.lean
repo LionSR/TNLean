@@ -8,6 +8,7 @@ import TNLean.MPS.AreaLaw.InteractionBudget
 import TNLean.Lattice.ZeroEntropy
 import QICLean.Entropy.FilterStationarity
 import QICLean.Analysis.ContractionChain
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The three-way splitting of a chain Hamiltonian at a cut
@@ -46,7 +47,7 @@ through the Lieb–Robinson localization.
 * `ChainHamiltonian.operator_eq_leftPart_add_bufferPart_add_rightPart`: `H = H_L + H_B + H_R`.
 * `ChainHamiltonian.groundCentered_parts_sum_of_eigen`: the centered parts sum to
   `H - E₀ 1` for a unit eigenvector of energy `E₀`.
-* `ChainHamiltonian.isGappedGroundState_groundCentered_parts_sum`: the centered sum has
+* `ChainHamiltonian.isGapped_groundCentered_parts_sum`: the centered sum has
   the same gapped ground vector, at energy zero.
 * `ChainHamiltonian.isSupportedOn_leftPart`, `isSupportedOn_rightPart`,
   `isSupportedOn_bufferPart`: the support statements.
@@ -60,7 +61,11 @@ through the Lieb–Robinson localization.
   763–790 (the splitting).
 -/
 
+open ManyBody (ChainSupport card_interval_le interval mem_interval)
+
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped ComplexOrder Matrix.Norms.L2Operator InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw.Hastings
@@ -283,8 +288,9 @@ theorem ChainHamiltonian.norm_termSum_le (h : ChainHamiltonian L q R J)
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 88–89 (finite range). -/
 theorem ChainHamiltonian.isSupportedOn_termSum (h : ChainHamiltonian L q R J)
     {S : Finset (ChainSupport L R)} {D : Finset (Fin L)} (hS : ∀ X ∈ S, X.1 ⊆ D) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.termSum S) D :=
-  (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
+    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.termSum S) D := by
+  change _ ∈ ManyBody.supportedOperators _ _
+  exact sum_mem fun X hX ↦
     (h.supported X).mono (hS X hX)
 
 /-! ### The parts `H_L`, `H_B`, `H_R` -/
@@ -352,19 +358,18 @@ theorem ChainHamiltonian.groundCentered_parts_sum_of_eigen (h : ChainHamiltonian
 /-- The centered splitting of a gapped Hamiltonian has the same gapped ground vector, at
 energy zero: the normalization of the source.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 766–767 and 779–782. -/
-theorem ChainHamiltonian.isGappedGroundState_groundCentered_parts_sum
+theorem ChainHamiltonian.isGapped_groundCentered_parts_sum
     (h : ChainHamiltonian L q R J) {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Ω Δ) (j m : ℕ) :
-    IsGappedGroundState (groundCentered Ω (h.leftPart j m) +
-      groundCentered Ω (h.bufferPart j m) + groundCentered Ω (h.rightPart j m)) 0 Ω Δ := by
-  obtain ⟨hΩ, heig, hgap⟩ := hgs
-  have hE : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := by
-    rw [← coe_toEuclideanCLM_eq_toEuclideanLin]; exact heig
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (j m : ℕ) :
+    ‖Ω‖ = 1 ∧ IsGapped (groundCentered Ω (h.leftPart j m) +
+      groundCentered Ω (h.bufferPart j m) + groundCentered Ω (h.rightPart j m)) 0 Δ ∧
+      groundSpace (groundCentered Ω (h.leftPart j m) + groundCentered Ω (h.bufferPart j m) +
+        groundCentered Ω (h.rightPart j m)) 0 = Submodule.span ℂ {Ω} := by
+  have hE : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   rw [h.groundCentered_parts_sum_of_eigen hΩ hE]
-  refine ⟨hΩ, ?_, ?_⟩
-  · rw [map_sub, map_smul, map_one]
-    simp [heig]
-  · simpa using hgap
+  exact ⟨hΩ, hgap.sub_smul_one_self, (ManyBody.groundSpace_sub_smul_one_self _ _).trans hspan⟩
 
 /-- The left part is supported on the sites `i < j - m`, at distance at least `m` from the
 cut. Hastings, arXiv:0705.2024v4, `law16.tex`, line 776. -/

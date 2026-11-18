@@ -17,6 +17,8 @@ is `d²+3` for interior regions and `d²+2` for prefix/suffix regions. Squared n
 are used in the gap comparison. See `docs/paper-gaps/alvv16_ff_rank.tex`.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix ContinuousLinearMap
 open scoped InnerProductSpace
 

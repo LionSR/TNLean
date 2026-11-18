@@ -25,6 +25,8 @@ https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf.
 No running-time estimate is asserted.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped Matrix.Norms.L2Operator
 

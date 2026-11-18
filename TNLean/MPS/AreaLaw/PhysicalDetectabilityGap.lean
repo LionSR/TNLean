@@ -20,6 +20,8 @@ positive contractions is proved in `PhysicalRangeDetectability.lean`.
 The regional truncated Hamiltonian remains a separate construction.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators InnerProductSpace
 

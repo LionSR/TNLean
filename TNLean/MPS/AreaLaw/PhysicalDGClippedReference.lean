@@ -24,6 +24,8 @@ uses `min gamma 1`; see `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 No physical cutoff calibration or adaptive probability is asserted here.
 -/
 
+open ManyBody (interval)
+
 open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

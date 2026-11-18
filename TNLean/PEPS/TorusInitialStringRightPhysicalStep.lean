@@ -24,6 +24,8 @@ handles the first rightward step; it does not establish the complete prescribed
 braid. See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS
 variable {width height : ℕ} [NeZero width] [NeZero height]
@@ -67,10 +69,10 @@ private theorem horizontal_transport (p q : X) (b : Bool) (h : G) :
       (torusGraph_adj_right q.1 q.2) = 1 := by
   have hn₀ := torusRightEdge_ne_torusUpEdge q p
   have hn₁ := torusRightEdge_ne_torusUpEdge q (p.1+1,p.2)
-  change Edge.ofAdj (torusGraph_adj_right q.1 q.2) ≠
-    Edge.ofAdj (torusGraph_adj_up p.1 p.2) at hn₀
-  change Edge.ofAdj (torusGraph_adj_right q.1 q.2) ≠
-    Edge.ofAdj (torusGraph_adj_up (p.1+1) p.2) at hn₁
+  change ManyBody.Edge.ofAdj (torusGraph_adj_right q.1 q.2) ≠
+    ManyBody.Edge.ofAdj (torusGraph_adj_up p.1 p.2) at hn₀
+  change ManyBody.Edge.ofAdj (torusGraph_adj_right q.1 q.2) ≠
+    ManyBody.Edge.ofAdj (torusGraph_adj_up (p.1+1) p.2) at hn₁
   simp [regularDirectedTransport, torusTranslatedFluxAssignment, hn₀, hn₁]
 
 private theorem right_up_transport (p : X) (b : Bool) (h : G) :
@@ -81,12 +83,12 @@ private theorem right_up_transport (p : X) (b : Bool) (h : G) :
     simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := width) 2 0 (by omega) (by decide)
   have h21 : (2 : ZMod width) ≠ 1 := by
     simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := width) 2 1 (by omega) (by decide)
-  have he₀ : Edge.ofAdj (torusGraph_adj_up (p.1+2) p.2) ≠
-      Edge.ofAdj (torusGraph_adj_up p.1 p.2) :=
-    Edge.ofAdj_ne_of_endpoint_coordinates _ _ Prod.fst rfl (Or.inl (by simpa using h20))
-  have he₁ : Edge.ofAdj (torusGraph_adj_up (p.1+2) p.2) ≠
-      Edge.ofAdj (torusGraph_adj_up (p.1+1) p.2) :=
-    Edge.ofAdj_ne_of_endpoint_coordinates _ _ Prod.fst rfl (Or.inl (by simpa using h21))
+  have he₀ : ManyBody.Edge.ofAdj (torusGraph_adj_up (p.1+2) p.2) ≠
+      ManyBody.Edge.ofAdj (torusGraph_adj_up p.1 p.2) :=
+    ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates _ _ Prod.fst rfl (Or.inl (by simpa using h20))
+  have he₁ : ManyBody.Edge.ofAdj (torusGraph_adj_up (p.1+2) p.2) ≠
+      ManyBody.Edge.ofAdj (torusGraph_adj_up (p.1+1) p.2) :=
+    ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates _ _ Prod.fst rfl (Or.inl (by simpa using h21))
   simp [regularDirectedTransport, torusTranslatedFluxAssignment, he₀, he₁]
 
 private theorem internal_eq (v : X) (g h : G) (b : Bool) (e : Edge Γₜ)

@@ -70,13 +70,14 @@ theorem rectKronecker_submatrix_sheetSplit (S : Finset ι) (m : ι → Matrix (F
 
 /-- An operator acting on `S` is `A' ⊗ 1` in the coordinates of `sheetSplit S`. -/
 theorem exists_kronecker_one_of_mem_supportedOperators {S : Finset ι}
-    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hA : A ∈ supportedOperators q (S : Set ι)) :
+    {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
     ∃ A' : Matrix (S → Fin q) (S → Fin q) ℂ,
       A.submatrix (sheetSplit q S).symm (sheetSplit q S).symm =
         A' ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ) := by
-  induction hA using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨m, hm, rfl⟩ := hx
+  induction hA using ManyBody.supportedOperators_induction with
+  | prod m hm =>
+    rw [prodOp_eq_rectKronecker]
     refine ⟨rectKronecker fun v : S => m v, ?_⟩
     rw [rectKronecker_submatrix_sheetSplit]
     congr 1
@@ -84,7 +85,6 @@ theorem exists_kronecker_one_of_mem_supportedOperators {S : Finset ι}
     congr 1
     funext v
     exact hm v (Finset.mem_compl.mp v.2)
-  | zero => exact ⟨0, by simp⟩
   | add x y _ _ hx hy =>
     obtain ⟨X, hX⟩ := hx
     obtain ⟨Y, hY⟩ := hy
@@ -95,23 +95,22 @@ theorem exists_kronecker_one_of_mem_supportedOperators {S : Finset ι}
 
 /-- An operator acting on a set disjoint from `S` is `1 ⊗ A'` in the coordinates of
 `sheetSplit S`. -/
-theorem exists_one_kronecker_of_mem_supportedOperators {S : Finset ι} {D : Set ι}
-    (hD : Disjoint D (S : Set ι)) {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : A ∈ supportedOperators q D) :
+theorem exists_one_kronecker_of_mem_supportedOperators {S : Finset ι} {D : Finset ι}
+    (hD : Disjoint D S) {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) :
     ∃ A' : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ,
       A.submatrix (sheetSplit q S).symm (sheetSplit q S).symm =
         (1 : Matrix (S → Fin q) (S → Fin q) ℂ) ⊗ₖ A' := by
-  induction hA using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨m, hm, rfl⟩ := hx
+  induction hA using ManyBody.supportedOperators_induction with
+  | prod m hm =>
+    rw [prodOp_eq_rectKronecker]
     refine ⟨rectKronecker fun v : ↥Sᶜ => m v, ?_⟩
     rw [rectKronecker_submatrix_sheetSplit]
     congr 1
     rw [← rectKronecker_one (ν := ↥S) (ι := Fin q)]
     congr 1
     funext v
-    exact hm v fun hv => Set.disjoint_left.mp hD hv v.2
-  | zero => exact ⟨0, by simp⟩
+    exact hm v fun hv => Finset.disjoint_left.mp hD hv v.2
   | add x y _ _ hx hy =>
     obtain ⟨X, hX⟩ := hx
     obtain ⟨Y, hY⟩ := hy
@@ -139,9 +138,9 @@ theorem siteLift_conjTranspose (D : Finset ι) (X : Matrix (D → Fin q) (D → 
 /-- An operator lifted from `D` acts on the sites of `D`. -/
 theorem siteLift_mem_supportedOperators (D : Finset ι)
     (X : Matrix (D → Fin q) (D → Fin q) ℂ) :
-    siteLift D X ∈ supportedOperators q (D : Set ι) := by
+    siteLift D X ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D := by
   have h := embedOp_mem_supportedOperators (d := q) (Subtype.val_injective (p := (· ∈ D))) X
-  rwa [Subtype.range_coe_subtype] at h
+  rwa [show Finset.univ.image Subtype.val = D by ext; simp] at h
 
 end TNLean.Lattice
 
@@ -179,7 +178,7 @@ theorem kronecker_one_submatrix_mem_supportedOperators (S : Finset ι)
     (K ⊗ₖ (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ)).submatrix
         (FiniteProduct.splitEquiv (fun _ : ι => Fin q) S)
         (FiniteProduct.splitEquiv (fun _ : ι => Fin q) S) ∈
-      supportedOperators q (S : Set ι) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q) S := by
   rw [← embedOp_val_eq_kronecker_one_submatrix]
   simpa using embedOp_mem_supportedOperators (e := fun x : S => x.val) Subtype.val_injective K
 

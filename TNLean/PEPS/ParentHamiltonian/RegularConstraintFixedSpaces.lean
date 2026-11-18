@@ -14,6 +14,8 @@ supported on the flat locus. These identities connect the commuting product
 to the actual regional range characterization in SCP10, Theorem 6.12.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

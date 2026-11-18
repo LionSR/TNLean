@@ -35,8 +35,8 @@ The sites of the crossing supports and their walks to both sides of `A` are in
 The polynomial-PEPS manuscript treats only site and nearest-neighbour terms on the open square,
 which is range one; this file extends its boundary estimate to range `R`. The range-one
 statements on the open square, with the constant `8 J L²`, are
-`SquareHamiltonian.swapped_doubled_boundary_bound` and
-`SquareHamiltonian.supported_buffer_gaussian_integral`, and are unchanged.
+`ManyBody.SquareInteraction.swapped_doubled_boundary_bound` and
+`ManyBody.SquareInteraction.supported_buffer_gaussian_integral`, and are unchanged.
 
 ## References
 
@@ -54,6 +54,8 @@ open scoped BigOperators Kronecker Matrix.Norms.L2Operator NNReal
 
 noncomputable section
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.Lattice
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
@@ -64,22 +66,11 @@ Source: area-law `01-preliminaries.tex`, lines 95–102. -/
 theorem card_admissibleSupport_le (Λ : Finset (ℤ × ℤ)) (R : ℕ) :
     Fintype.card (AdmissibleSupport Λ R) ≤ 2 ^ ((1 + 2 * R * (R + 1)) - 1) * Λ.card := by
   classical
-  have hcover : (Finset.univ : Finset (AdmissibleSupport Λ R)) ⊆
-      (Finset.univ : Finset (Site Λ)).biUnion
-        fun v ↦ Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1 := by
-    intro X _
-    obtain ⟨v, hv⟩ := X.2.1
-    exact Finset.mem_biUnion.mpr
-      ⟨v, Finset.mem_univ v, Finset.mem_filter.mpr ⟨Finset.mem_univ X, hv⟩⟩
-  calc Fintype.card (AdmissibleSupport Λ R)
-      = (Finset.univ : Finset (AdmissibleSupport Λ R)).card := Finset.card_univ.symm
-    _ ≤ _ := Finset.card_le_card hcover
-    _ ≤ ∑ v : Site Λ, (Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1).card :=
-        Finset.card_biUnion_le
-    _ ≤ ∑ _v : Site Λ, 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
-        Finset.sum_le_sum fun v _ ↦ PEPS.AreaLaw.card_admissibleSupport_containing_le v
-    _ = 2 ^ ((1 + 2 * R * (R + 1)) - 1) * Λ.card := by
-        rw [Finset.sum_const, Finset.card_univ, Fintype.card_coe, smul_eq_mul, mul_comm]
+  have h := PEPS.AreaLaw.card_le_card_mul_of_forall_exists_mem (R := R)
+    (N := (Finset.univ : Finset (Site Λ))) (S := Finset.univ) fun X _ ↦ by
+      obtain ⟨v, hv⟩ := X.2.1
+      exact ⟨v, Finset.mem_univ v, hv⟩
+  rwa [Finset.card_univ, Finset.card_univ, Fintype.card_coe, mul_comm] at h
 
 /-- The coefficient `4 μ_R` of the norm bound `4 μ_R J |Λ|` of the partial-swap perturbation at
 range `R`, with `μ_R = 2^(v_R - 1)` supports through a site and `v_R = 1 + 2R(R + 1)`. -/
@@ -123,7 +114,7 @@ def swappedDoubled (h : LocalHamiltonian Λ q R J) (A : Finset (Site Λ)) :
     have hDn : ‖doubledHamiltonian (h.term X)‖ ≤ J + J :=
       (norm_add_le _ _).trans (add_le_add
         ((Matrix.l2_opNorm_kronecker_one_le _).trans (h.norm_le X))
-        ((Matrix.l2_opNorm_one_kronecker_rect_le _).trans (h.norm_le X)))
+        ((Matrix.l2_opNorm_one_kronecker_le _).trans (h.norm_le X)))
     simpa only [one_mul, mul_one, two_mul] using
       norm_mul_le_of_le
         (norm_mul_le_of_le hFn ((Matrix.l2_opNorm_reindex_equiv p _).le.trans hDn))
@@ -181,7 +172,7 @@ theorem sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing (h : LocalHamilton
       (sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators (h.supported X) ?_)
     rcases hX with hX | hX
     · exact Or.inl (Finset.coe_subset.mpr hX)
-    · exact Or.inr (Finset.disjoint_coe.mpr hX)
+    · exact Or.inr hX
   have hsum : F * doubledHamiltonian h.operator * Fᴴ - doubledHamiltonian h.operator =
       ∑ X, (F * doubledHamiltonian (h.term X) * Fᴴ - doubledHamiltonian (h.term X)) := by
     rw [LocalHamiltonian.operator, doubledHamiltonian_sum, Finset.mul_sum, Finset.sum_mul,
@@ -200,7 +191,8 @@ theorem swapped_doubled_boundary_bound (h : LocalHamiltonian Λ q R J) (hJ : 0 �
     let p := sitePairConfigurationEquiv (Site Λ) q q
     let K := Matrix.reindex p p (doubledHamiltonian h.operator)
     let F := Matrix.reindex p p (sheetSwapOp q A)
-    F * K * Fᴴ - K ∈ supportedOperators (q * q) (crossingSites Λ R A : Set (Site Λ)) ∧
+    F * K * Fᴴ - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
+        (crossingSites Λ R A : Finset (Site Λ)) ∧
       ‖F * K * Fᴴ - K‖ ≤ swapBoundaryCoefficient R * J * (Λ.card : ℝ) := by
   classical
   intro p K F
@@ -222,21 +214,21 @@ theorem swapped_doubled_boundary_bound (h : LocalHamiltonian Λ q R J) (hJ : 0 �
         (PEPS.EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le A M)
   have hplain (S : Finset (Site Λ))
       {M : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
-      (hM : M ∈ supportedOperators q (S : Set (Site Λ))) :
+      (hM : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
       Matrix.reindex p p (doubledHamiltonian M) ∈
-        supportedOperators (q * q) (S : Set (Site Λ)) := by
+        ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
     simpa only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply,
       Matrix.submatrix_mul_equiv,
       sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
         (R := ∅) hM (Or.inr (by simp))] using!
       reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators ∅ S hM
   have hsupport : F * K * Fᴴ - K ∈
-      supportedOperators (q * q) (crossingSites Λ R A : Set (Site Λ)) :=
-    hsum.symm ▸ (supportedOperators (q * q) (crossingSites Λ R A : Set (Site Λ))).sum_mem
-      fun X hX ↦ supportedOperators_mono
+      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (crossingSites Λ R A : Finset (Site Λ)) :=
+    hsum.symm ▸ sum_mem
+      fun X hX ↦ ManyBody.supportedOperators_mono
         (Finset.coe_subset.mpr (Finset.subset_biUnion_of_mem
           (fun X : AdmissibleSupport Λ R ↦ X.1) hX))
-        ((supportedOperators (q * q) (X.1 : Set (Site Λ))).sub_mem
+        (sub_mem
           (reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators A X.1
             (h.supported X))
           (hplain X.1 (h.supported X)))
@@ -272,7 +264,7 @@ intertwiner with error at most
 The polynomial-PEPS manuscript treats range one only; this is the extension to range `R`. The
 range-one statement on the open square, with `C = squareLocalizationPrefactor`,
 `v = squareLocalizationVelocity J` and the factor `1 + 8 J L² T`, is
-`SquareHamiltonian.supported_buffer_gaussian_integral`.
+`ManyBody.SquareInteraction.supported_buffer_gaussian_integral`.
 Source: polynomial-PEPS, Section 2, `eq:info-local-two-sided`, lines 513–562, with the
 constants of `eq:info-lr` (lines 486–496). -/
 theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
@@ -294,15 +286,15 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
         ∃ U : ℝ → Matrix (Configuration Λ (q * q)) (Configuration Λ (q * q)) ℂ,
           U 0 = 1 ∧
           (∀ t, HasDerivAt U
-            ((Complex.I • siteExpectation (q * q) B
-              (heisenbergEvolution K' t (K' - K))) * U t) t) ∧
+            ((Complex.I • ManyBody.regionExpectation B
+              (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
           (∀ t, U t ∈ unitaryGroup (Configuration Λ (q * q)) ℂ) ∧
-          (∀ t, U t ∈ supportedOperators (q * q) (B : Set (Site Λ))) ∧
+          (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B) ∧
           ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
             let M := ∫ t : ℝ in Set.Icc (-T) T,
-              siteExpectation (q * q) B (heisenbergEvolution K' t V) * U t
+              ManyBody.regionExpectation B (ManyBody.heisenbergEvolution K' t V) * U t
                 ∂gaussianReal 0 η
-            M ∈ supportedOperators (q * q) (B : Set (Site Λ)) ∧
+            M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
             ‖M‖ ≤ ‖W‖ ∧
             ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K V‖ ≤
               ‖W‖ * (2 * PEPS.AreaLaw.graphBallLocalizationPrefactor R) * (Λ.card : ℝ) *
@@ -317,17 +309,17 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
   have hK' : gH.operator = K' := h.swappedDoubled_operator A
   have hDK : K.IsHermitian :=
     (doubledHamiltonian_isHermitian h.operator_isHermitian).reindex p
-  have hV : V ∈ supportedOperators (q * q) (Q : Set (Site Λ)) := by
+  have hV : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q := by
     have hlift := siteLift_mem_supportedOperators Q
       (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
     rw [← reindex_physicalBuffer_eq_siteLift q A C hAC W] at hlift
     exact hlift
   obtain ⟨hDs, hDn⟩ := h.swapped_doubled_boundary_bound hJ A
-  have hD : gH.operator - K ∈ supportedOperators (q * q) (Z : Set (Site Λ)) := by
+  have hD : gH.operator - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Z := by
     rw [hK']; exact hDs
   have hVn : ‖V‖ ≤ ‖W‖ :=
     (Matrix.l2_opNorm_reindex_equiv (g.symm.trans p) _).trans_le
-      (Matrix.l2_opNorm_one_kronecker_rect_le W)
+      (Matrix.l2_opNorm_one_kronecker_le W)
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
     PEPS.AreaLaw.supported_gaussian_integral (q * q) (Nat.mul_le_mul hq hq) R
       (by linarith : (0 : ℝ) ≤ 2 * J) Λ gH K V hDK Q Z hV hD l

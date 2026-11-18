@@ -29,6 +29,8 @@ This theorem does not identify the printed fourth-order parameter choice,
 assert sharp inverse-gap dependence, or give a running-time estimate.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory Matrix
 open scoped BigOperators ComplexOrder MatrixOrder ENNReal Matrix.Norms.L2Operator
 

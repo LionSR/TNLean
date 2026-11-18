@@ -22,6 +22,8 @@ virtual insertions and the converse physical-to-virtual recovery produce an
 algebra isomorphism between the matrix algebras on the chosen bond.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 

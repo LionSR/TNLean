@@ -61,6 +61,8 @@ square commutes, then the two boundary paths of a rectangle have the same produc
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean

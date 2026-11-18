@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalTensorApproximation
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.ViabilityStability
 import TNLean.MPS.AreaLaw.ViableSet.SizeBondTrimming
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Rational approximation after independent bond trimming
@@ -35,6 +36,8 @@ and matrix-net bounds are those recorded in `docs/paper-gaps/lvv13_constant_bond
 open Matrix
 open scoped InnerProductSpace ComplexOrder
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- Size trimming followed by independent Schmidt trimming admits rational tensor
@@ -62,7 +65,8 @@ theorem ChainHamiltonian.exists_rational_size_bond_trimmed_family
       (∀ v ∈ bondTrimSet hi m (h.sizeTrimmingSelection hq Δ S),
         ∃ w ∈ T, ‖v - w‖ ≤ θ) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-        IsGappedGroundState h.operator E₀ Γ Δ →
+        ‖Γ‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Γ} →
         IsViable Γ (c / L) (S : Set (LeftBlockVector L q (n + 1))) →
         IsViable Γ (1 / 2) (T : Set (LeftBlockVector L q (n + 1))) := by
   classical
@@ -79,17 +83,17 @@ theorem ChainHamiltonian.exists_rational_size_bond_trimmed_family
     exists_rational_leftFamily_approximation_of_norm_le_one B hi
       (fun v hv ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m U hv) hBnorm hθ
   refine ⟨T, hcard.trans (card_bondTrimSet_le hi m U), hdata, hcover, ?_⟩
-  intro E₀ Γ hgs hviable
+  intro E₀ Γ hΩ hgap hspan hviable
   obtain ⟨_, r, W, u, hW, hrD, hu, hcols, hΓu⟩ :=
-    h.isViable_sizeTrimmingSelection hpos hL hq hΔ S E₀ Γ hgs hviable
+    h.isViable_sizeTrimmingSelection hpos hL hq hΔ S E₀ Γ hΩ hgap hspan hviable
   obtain ⟨v, hv, hvMPS, hΓv⟩ :=
-    exists_bond_trimming_reference (by omega) hΔ (by omega) h hgs
+    exists_bond_trimming_reference (by omega) hΔ (by omega) h hΩ hgap hspan
   have hΓu' : 1 - 1 / 12 ≤
       ‖⟪Γ, (blockSplit L q (n + 1)).symm (rightApply W u)⟫_ℂ‖ := by
     rw [blockSplit_symm_eq]
     exact hΓu
   obtain ⟨hnorm, _, _, hoverlap, _⟩ :=
-    bondTrimSet_witness_with_reserve hi U u W hW hu hcols Γ hgs.1 hΓu'
+    bondTrimSet_witness_with_reserve hi U u W hW hu hcols Γ hΩ hΓu'
       v hv hΓv (lvvReferenceBond q Δ L)
       (fun k hk0 hki ↦ hvMPS.rank_cutMatrix_le hk0 (lt_of_lt_of_le hki hi))
   let u' := leftColumnwiseSchmidtTrim hi m u
@@ -109,7 +113,7 @@ theorem ChainHamiltonian.exists_rational_size_bond_trimmed_family
     have hsqrt : Real.sqrt (r : ℝ) ≤ Real.sqrt (D : ℝ) :=
       Real.sqrt_le_sqrt (by exact_mod_cast hrD)
     exact div_le_div_of_nonneg_left (by norm_num) (by positivity) (by linarith only [hsqrt])
-  exact isViable_half_of_approximating_trimmed_leftFamily hgs.1 hθ.le hmesh
+  exact isViable_half_of_approximating_trimmed_leftFamily hΩ hθ.le hmesh
     B T hcover W hW u'
     (fun a ↦ leftColumnwiseSchmidtTrim_column_mem hi m U u hcols a) hnorm' hoverlap'
 

@@ -22,6 +22,8 @@ prescribed four-endpoint string braid or compare different crossing
 presentations. No coefficient, Gram or parent-Hamiltonian hypothesis is used.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS

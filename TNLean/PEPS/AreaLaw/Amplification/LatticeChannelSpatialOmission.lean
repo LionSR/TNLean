@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Amplification.ChannelGroundVectors
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelSpatialOmission
 import TNLean.PEPS.AreaLaw.LatticeConstraints
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Omitting distant events on finite lattice domains
@@ -38,6 +39,8 @@ open scoped BigOperators Kronecker ENNReal NNReal Matrix.Norms.L2Operator Matrix
 
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace AdmissibleSupport graphBall planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The Euclidean norm of a product vector is the product of the two norms. -/
@@ -54,12 +57,12 @@ private theorem norm_toLp_prod_vector {n m : Type*} [Fintype n] [Fintype m]
 distance more than `r` from every site of `S`. -/
 private theorem lt_edist_of_notMem_graphNeighborhood {Λ : Finset (ℤ × ℤ)}
     {S : Finset (Site Λ)} {r : ℕ} {y : Site Λ} (hy : y ∉ graphNeighborhood Λ r S) :
-    ∀ s ∈ S, ENNReal.ofReal (r : ℝ) < ((domainGraph Λ).edist y s : ℝ≥0∞) := by
+    ∀ s ∈ S, ENNReal.ofReal (r : ℝ) < ((planeDomainGraph Λ).edist y s : ℝ≥0∞) := by
   classical
   intro s hs
   rw [ENNReal.ofReal_natCast]
   by_contra hle
-  have hle' : (domainGraph Λ).edist y s ≤ r := by
+  have hle' : (planeDomainGraph Λ).edist y s ≤ r := by
     rw [not_lt] at hle
     exact_mod_cast hle
   obtain ⟨w, hw⟩ := SimpleGraph.exists_walk_of_edist_ne_top
@@ -82,16 +85,17 @@ theorem domain_integrable_and_integral_channelWordOmissionDefect_le
       (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
       (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-      (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k
+          i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
       ∀ (P : κ → Prop) [DecidablePred P]
         (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
         (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-          supportedOperators q (S : Set (Site Λ))) →
+          ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (r : ℝ), 0 ≤ r →
           (∀ i, ¬ P i → ∀ s ∈ S,
-            ENNReal.ofReal r < ((domainGraph Λ).edist (a i) s : ℝ≥0∞)) →
+            ENNReal.ofReal r < ((planeDomainGraph Λ).edist (a i) s : ℝ≥0∞)) →
           ∀ t : ℝ≥0,
             Integrable (fun w : PoissonWord.Word κ =>
               channelWordOmissionDefect k P (List.ofFn w.2) B) (PoissonWord.measure κ t) ∧
@@ -104,11 +108,11 @@ theorem domain_integrable_and_integral_channelWordOmissionDefect_le
     zero_le_two hμ hc hα hα₁
   intro q _ Λ κ _ a k hk₀ hk₁ hfiber htail P _ Aux _ _ S B hB r hr hfar t
   classical
-  let N := Finset.univ.sup fun i : κ => Finset.univ.sup ((domainGraph Λ).dist (a i))
-  have hN (i : κ) : Finset.univ.sup ((domainGraph Λ).dist (a i)) ≤ N :=
-    Finset.le_sup (f := fun j => Finset.univ.sup ((domainGraph Λ).dist (a j)))
+  let N := Finset.univ.sup fun i : κ => Finset.univ.sup ((planeDomainGraph Λ).dist (a i))
+  have hN (i : κ) : Finset.univ.sup ((planeDomainGraph Λ).dist (a i)) ≤ N :=
+    Finset.le_sup (f := fun j => Finset.univ.sup ((planeDomainGraph Λ).dist (a j)))
       (Finset.mem_univ i)
-  exact hbound (Site Λ) κ Aux q (domainGraph Λ) a k hk₀ hk₁
+  exact hbound (Site Λ) κ Aux q (planeDomainGraph Λ) a k hk₀ hk₁
     (fun i => mem_supportedOperators_reachable_of_forall_tail _ _ hc hα (htail i))
     card_graphBall_domainGraph_le hfiber N hN (fun i l _ => htail i l) P S B hB r hr hfar t
 
@@ -129,16 +133,17 @@ theorem exists_domain_integrable_and_integral_channelWordOmissionDefect_le
         (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-        (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k
+            i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         ∀ (P : κ → Prop) [DecidablePred P]
           (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
           (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-            supportedOperators q (S : Set (Site Λ))) →
+            ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
           ∀ (r : ℝ), 0 ≤ r →
             (∀ i, ¬ P i → ∀ s ∈ S,
-              ENNReal.ofReal r < ((domainGraph Λ).edist (a i) s : ℝ≥0∞)) →
+              ENNReal.ofReal r < ((planeDomainGraph Λ).edist (a i) s : ℝ≥0∞)) →
             ∀ t : ℝ≥0,
               Integrable (fun w : PoissonWord.Word κ =>
                 channelWordOmissionDefect k P (List.ofFn w.2) B) (PoissonWord.measure κ t) ∧
@@ -160,13 +165,14 @@ theorem domainConstraintWord_omission
       (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
       (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-      (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+      (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k
+          i)‖ ≤
         C * Real.exp (-(c * (l : ℝ) ^ α))) →
       ∀ (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (∀ i, k i *ᵥ WithLp.ofLp Ω = 0) →
       ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
         (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-          supportedOperators q (S : Set (Site Λ))) →
+          ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
           let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
           let D := fun u : List κ =>
@@ -223,13 +229,14 @@ theorem exists_domainConstraintWord_omission
         (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
         (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
-        (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), ‖k i - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k
+            i)‖ ≤
           C * Real.exp (-(c * (l : ℝ) ^ α))) →
         ∀ (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (∀ i, k i *ᵥ WithLp.ofLp Ω = 0) →
         ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
           (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-            supportedOperators q (S : Set (Site Λ))) →
+            ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
           ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
             let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
             let D := fun u : List κ =>
@@ -262,6 +269,7 @@ lines 42–72 and 188–226. -/
 noncomputable def latticeOmissionExponent (c : ℝ) (p : ℕ) : ℝ :=
   channelOmissionExponent c (kernelExponent p)
 
+open Classical in
 /-- **Omission of distant events for the exact positive constraints, with explicit
 constants** (Lemma 10.1, `eq:amplification-product-omission`; `09-amplification.tex`,
 lines 17–30, 42–72 and 188–226). Let `C ≥ 0` and `c > 0` be localization constants of the
@@ -272,7 +280,8 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
     {J Δ C c : ℝ} (hC : 0 ≤ C) (hc : 0 < c)
     (hpos : ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         let cs := positiveNormalization p (Δ / 2) J
         let k := fun i => positiveConstraint cs (centeredFilter p (Δ / 2) h.operator Ω (h.term i))
         0 < cs ∧
@@ -282,18 +291,21 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
           cs⁻¹ • (h.operator - (E₀ : ℂ) • 1) ∧
         ((Δ / cs : ℝ) : ℂ) • (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
           ∑ i, k i ∧
-        (∀ i (l : ℕ), 0 ≤ siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ∧
-          siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i) ≤ 1 ∧
-          ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+        (∀ i (l : ℕ), 0 ≤ ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k i)
+            ∧
+          ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k i) ≤ 1 ∧
+          ‖k i - ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i) l) (k i)‖ ≤
             C * Real.exp (-(c * (l : ℝ) ^ kernelExponent p))) ∧
-        (∀ i, k i ∈ supportedOperators q {x | (domainGraph Λ).Reachable (a i) x})) :
+        (∀ i, k i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (Finset.univ.filter fun x ↦
+            (planeDomainGraph Λ).Reachable (a i) x))) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
         (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-          supportedOperators q (S : Set (Site Λ))) →
+          ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
           let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
           let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
@@ -309,9 +321,8 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
             latticeOmissionPrefactor R C c p * t * S.card * ‖B‖ *
               Real.exp (latticeOmissionRate R C c p * t -
                 latticeOmissionExponent c p * (r : ℝ) ^ kernelExponent p) := by
-  intro q _ Λ h a ha E₀ Ω hgs Aux _ _ S B hB ξ hξ r t
-  obtain ⟨hΩ, -, -⟩ := Matrix.isGappedGroundState_iff.mp hgs
-  obtain ⟨-, hk, -, -, -, htail, -⟩ := hpos Λ h a ha E₀ Ω hgs
+  intro q _ Λ h a ha E₀ Ω hΩ hgap hspan Aux _ _ S B hB ξ hξ r t
+  obtain ⟨-, hk, -, -, -, htail, -⟩ := hpos Λ h a ha E₀ Ω hΩ hgap hspan
   exact domainConstraintWord_omission hC (μ := ((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ))
     (Nat.cast_nonneg _) hc (kernelExponent_pos hp) (kernelExponent_le_one p) Λ
     (AdmissibleSupport Λ R) a _ (fun i => (hk i).1) (fun i => (hk i).2.1)
@@ -347,11 +358,12 @@ theorem latticeConstraintWord_omission_of_locality {p : ℕ} (hp : 1 ≤ p) (R :
         C₃ * Real.exp (-(c₃ * l ^ kernelExponent p))) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
         (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-          supportedOperators q (S : Set (Site Λ))) →
+          ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
           let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
           let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
@@ -380,11 +392,12 @@ theorem latticeConstraintWord_omission_explicit {p : ℕ} (hp : 1 ≤ p) (R : �
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+      groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
       ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
         (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-          supportedOperators q (S : Set (Site Λ))) →
+          ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
         ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
           let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
           let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)
@@ -422,11 +435,12 @@ theorem exists_latticeConstraintWord_omission {p : ℕ} (hp : 1 ≤ p) (R : ℕ)
     ∃ A v γ : ℝ, 0 ≤ A ∧ 0 < v ∧ 0 < γ ∧
       ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
           (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
           (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
-            supportedOperators q (S : Set (Site Λ))) →
+            ManyBody.supportedOperators (fun _ ↦ Fin q) S) →
           ∀ (ξ : Aux → ℂ), ‖WithLp.toLp 2 ξ‖ = 1 → ∀ (r : ℕ) (t : ℝ≥0),
             let P := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S
             let k := fun i => positiveConstraint (positiveNormalization p (Δ / 2) J)

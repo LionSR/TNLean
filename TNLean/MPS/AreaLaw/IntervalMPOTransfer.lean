@@ -29,6 +29,8 @@ arXiv:1602.08828v2, Proposition 5.7, lines 1332–1333. Positivity of the local
 dimension and nonreversed overlap are explicit hypotheses.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix
 open scoped BigOperators Kronecker Matrix
 

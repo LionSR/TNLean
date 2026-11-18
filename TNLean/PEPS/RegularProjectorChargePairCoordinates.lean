@@ -17,6 +17,8 @@ Source: SCP10, arXiv:1001.3807, charge-pair creation, lines 2505–2558.
 These auxiliary finite-region identities make no original-spin creation or
 parent-Hamiltonian assertion.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

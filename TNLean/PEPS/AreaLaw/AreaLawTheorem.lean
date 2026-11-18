@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.AreaLawExplicitConstant
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The two-dimensional area law
@@ -40,6 +41,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Theorem 1.1 of the area-law manuscript, `00-introduction.tex`, lines 39–53:
@@ -60,7 +63,8 @@ theorem uniformAreaLaw_vertex_boundary_bounds :
       ∃ C : ℝ, 0 ≤ C ∧
         ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J,
           ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-            IsGappedGroundState Λ q H.operator E₀ Ω Δ →
+            ‖Ω‖ = 1 → IsGapped H.operator E₀ Δ →
+            groundSpace H.operator E₀ = Submodule.span ℂ {Ω} →
               ∀ A : Finset (Site Λ),
                 regionalEntropy Λ q Ω A ≤ 4 * C * (innerBoundary Λ A).card ∧
                 regionalEntropy Λ q Ω A ≤ 2 * C * (endpointBoundary Λ A).card :=

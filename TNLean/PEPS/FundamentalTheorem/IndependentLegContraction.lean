@@ -18,6 +18,8 @@ Invertible local changes preserve injectivity.
 Source: arXiv:1804.04964, Applications, lines 1891–1894.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 
 open scoped BigOperators Matrix

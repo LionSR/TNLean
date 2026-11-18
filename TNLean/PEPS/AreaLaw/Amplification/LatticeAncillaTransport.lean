@@ -150,12 +150,12 @@ theorem ancillaPhysical_mem_supportedOperators (X Y : Finset (Site Λ)) (hXY : D
     (M : Matrix (RegionalConfiguration q X × RegionalConfiguration q Y)
       (RegionalConfiguration q X × RegionalConfiguration q Y) ℂ) :
     ancillaPhysical U (restoringSplit q X Y hXY) M ∈
-      QuantumCircuit.supportedOperators q ((X ∪ Y : Finset (Site Λ)) : Set (Site Λ)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q) (X ∪ Y : Finset (Site Λ)) := by
   set uE := FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY
   have h : ancillaPhysical U (restoringSplit q X Y hXY) M =
-      localLift Λ q (X ∪ Y) ((((U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
+      localLift Λ q (X ∪ Y) (((U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
         (RegionalConfiguration q Y) ℂ)) * M * (U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
-          (RegionalConfiguration q Y) ℂ))ᴴ)).submatrix uE uE) := by
+          (RegionalConfiguration q Y) ℂ))ᴴ).submatrix uE uE) := by
     rw [localLift_eq_kronecker_one_submatrix]
     ext c c'
     simp only [ancillaPhysical, submatrix_apply, kroneckerMap_apply]
@@ -230,15 +230,15 @@ theorem restoringTransport_restoringGlobal_eq_sum (Ω : StateSpace Λ q)
       (RegionalConfiguration q X × RegionalConfiguration q Y) ℂ)
     (T : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ) :
     ∃ P : RegionalConfiguration q X → Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
-      (∀ x, P x ∈ QuantumCircuit.supportedOperators q
-        ((X ∪ Y : Finset (Site Λ)) : Set (Site Λ))) ∧
+      (∀ x, P x ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (X ∪ Y : Finset (Site Λ))) ∧
       restoringTransport Ω X Y hXY * Entropy.restoringGlobal (Z := RegionalConfiguration q
           (X ∪ Y)ᶜ) E p sBlank xBlank Q T * (restoringTransport Ω X Y hXY)ᴴ =
         ∑ x ∈ E, P x ⊗ₖ (Entropy.basisColumn x sBlank ⊗ₖ
           (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)) := by
   refine ⟨fun x => Entropy.restoringWeight (p x) • ancillaPhysical (restoringEigenbasis Ω X)
     (restoringSplit q X Y hXY) (Q * (Entropy.basisColumn x xBlank ⊗ₖ T)),
-    fun x => Submodule.smul_mem _ _ (ancillaPhysical_mem_supportedOperators X Y hXY _ _), ?_⟩
+    fun x => SMulMemClass.smul_mem _ (ancillaPhysical_mem_supportedOperators X Y hXY _ _), ?_⟩
   rw [restoringTransport, ancillaTransport_conj_restoringGlobal
     (restoringEigenbasis_unitary Ω X).1]
   refine Finset.sum_congr rfl fun x _ => ?_
@@ -258,8 +258,8 @@ theorem restoringTransport_restoringColumnGlobal_eq_sum (Ω : StateSpace Λ q)
       (A : RegionalConfiguration q X × RegionalConfiguration q X →
         Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
           (RegionalConfiguration q X × RegionalConfiguration q X) ℂ),
-      (∀ i, P i ∈ QuantumCircuit.supportedOperators q
-        ((X ∪ Y : Finset (Site Λ)) : Set (Site Λ))) ∧
+      (∀ i, P i ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (X ∪ Y : Finset (Site Λ))) ∧
       restoringTransport Ω X Y hXY * Entropy.restoringColumnGlobal (Z := RegionalConfiguration q
           (X ∪ Y)ᶜ) E p sBlank eBlank Q T * (restoringTransport Ω X Y hXY)ᴴ =
         ∑ i ∈ E ×ˢ Finset.univ, P i ⊗ₖ A i := by

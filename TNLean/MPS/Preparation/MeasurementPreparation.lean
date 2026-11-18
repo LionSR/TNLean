@@ -142,7 +142,7 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_sum_blockIsometryStat
     obtain ⟨W, hW, hWV⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq hV emb
     exact ⟨W, hW, fun u j => hWV u j⟩
   -- The circuit after the measurement.
-  have hcirc : IsCircuitOn Set.univ (KW + CU * L)
+  have hcirc : IsCircuitOn Finset.univ (KW + CU * L)
       (blockLayerOp hN U * pairLayerOp hN hr fun _ => W) :=
     (isCircuitOn_pairLayerOp hN hr fun _ => hKW W hWu).mul
       (isCircuitOn_blockLayerOp hN (K := CU * L) fun k =>

@@ -9,6 +9,7 @@ import TNLean.PEPS.AreaLaw.Scan.TargetGeometry
 import TNLean.PEPS.AreaLaw.ZeroBoundary
 import QICLean.Analysis.TypicalTailScales
 import QICLean.Entropy.TypicalStateFromTail
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The target typical window of the actual truncated ground vector
@@ -33,11 +34,15 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 -/
 
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
 
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -133,8 +138,9 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
         (E₀ : ℝ) (Ω : StateSpace Λ q) (F : ScannerExponents)
         (T : Finset (ℤ × ℤ)) (hT : T.Nonempty),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
         targetTypicalWindowThreshold q R Ctr (Δ / positiveNormalization 1 (Δ / 2) J) ≤ S.n →
         S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
         (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
@@ -154,7 +160,8 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
         ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
         X ⊆ S.truncationSet L ∧ (edgeBoundary Λ X).card ≤ 4 * S.n ∧
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-          IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+          (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
+            groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
           0 ≤ e ∧ e ≤ ε ∧
           (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
           Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
@@ -195,13 +202,13 @@ theorem truncated_target_typical_window_explicit (R : ℕ)
   have hscalar := fun n (hn : typicalTailThreshold (2 / (Δ / positiveNormalization 1 (Δ / 2) J))
     (max 1 C) ≤ n) => typical_tail_bound_of_typicalTailThreshold_le
       (div_nonneg (by norm_num : (0 : ℝ) ≤ 2) hg.le) hCB hn
-  intro Λ h S E₀ Ω F T hT hgs hgraph hanchor hn hr hsize hdepth hrows hclear
+  intro Λ h S E₀ Ω F T hT hΩ hgap hspan hgraph hanchor hn hr hsize hdepth hrows hclear
   have hn2 : 2 ≤ S.n := (le_max_left _ _).trans hn
   obtain ⟨hcard, hX, hboundary⟩ := S.source_target_geometry F T hT
     (by omega) hsize hdepth hrows hclear
   refine ⟨hcard, hX, hboundary, ?_⟩
   obtain ⟨e, Ωt, htrgs, he0, he, hphase, htrace, hmoment, htail⟩ :=
-    htr Λ h S E₀ Ω hgs hgraph hanchor (F.L S.n) hn2 hr hcard
+    htr Λ h S E₀ Ω hΩ hgap hspan hgraph hanchor (F.L S.n) hn2 hr hcard
   let X := S.A.filter fun x ↦ x.val ∈ T
   let B := cutBudget q S.graph (S.truncationSet (F.L S.n)) S.r₀ S.anchor X
   have hboundaryR : ((edgeBoundary Λ X).card : ℝ) ≤ 4 * (S.n : ℝ) := by
@@ -241,8 +248,9 @@ theorem exists_truncated_target_typical_window_of_targetTypicalWindowThreshold_l
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
         (E₀ : ℝ) (Ω : StateSpace Λ q) (F : ScannerExponents)
         (T : Finset (ℤ × ℤ)) (hT : T.Nonempty),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
         targetTypicalWindowThreshold q R Ctr (Δ / positiveNormalization 1 (Δ / 2) J) ≤ S.n →
         S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
         (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
@@ -262,7 +270,8 @@ theorem exists_truncated_target_typical_window_of_targetTypicalWindowThreshold_l
         ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
         X ⊆ S.truncationSet L ∧ (edgeBoundary Λ X).card ≤ 4 * S.n ∧
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-          IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+          (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
+            groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
           0 ≤ e ∧ e ≤ ε ∧
           (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
           Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
@@ -317,8 +326,9 @@ theorem exists_truncated_target_typical_window_uniform_in_q (R : ℕ)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
         (E₀ : ℝ) (Ω : StateSpace Λ q) (F : ScannerExponents)
         (T : Finset (ℤ × ℤ)) (hT : T.Nonempty),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
         S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
         (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
@@ -337,7 +347,8 @@ theorem exists_truncated_target_typical_window_uniform_in_q (R : ℕ)
         ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
         X ⊆ S.truncationSet L ∧ (edgeBoundary Λ X).card ≤ 4 * S.n ∧
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-          IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+          (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
+            groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
           0 ≤ e ∧ e ≤ ε ∧
           (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
           Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
@@ -380,8 +391,9 @@ theorem exists_truncated_target_typical_window {q : ℕ} [NeZero q]
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
         (E₀ : ℝ) (Ω : StateSpace Λ q) (F : ScannerExponents)
         (T : Finset (ℤ × ℤ)) (hT : T.Nonempty),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
         S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
         (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
@@ -400,7 +412,8 @@ theorem exists_truncated_target_typical_window {q : ℕ} [NeZero q]
         ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
         X ⊆ S.truncationSet L ∧ (edgeBoundary Λ X).card ≤ 4 * S.n ∧
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-          IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+          (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e (g / 2) ∧
+            groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt}) ∧
           0 ≤ e ∧ e ≤ ε ∧
           (∃ θ : ℝ, ‖Ωt - Complex.exp (θ * Complex.I) • Ω‖ ≤ 2 * Real.sqrt (ε / g)) ∧
           Matrix.traceDistance (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))

@@ -1,4 +1,4 @@
-% Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 1695--1775
+% Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 1695--1777
 % (block-injective interpolation), with lines 317, 1584--1586, defAgamma,
 % Agammasym, and the injective-case fusion argument at lines 1667--1685.
 
@@ -275,11 +275,80 @@ Definition~\ref{def:glm_boundary_action_l_matrix}.
 \end{proof}
 
 The common $F$-symbols are not needed for the exact fusion
-(\ref{eq:mpo_block_mixed_fusion}). The claims that the operators $T_a$ are
-injective, that $H(\gamma)$ is well behaved along the whole path, and that
-its ground space is spanned by the block states are not treated in this
-section. The source does not show that $H(\gamma)$ commutes with the
-periodic operators of $T_a$, and the one-block case of this construction
-is the injective interpolation, for which the canonical parent need not
-commute with a non-unitary symmetry; see
-\cite{gap:glm23_block_injective_mixed_path}.
+(\ref{eq:mpo_block_mixed_fusion}).
+
+The path Hamiltonian is the two-site canonical parent Hamiltonian
+$H(\gamma)$ of $A(\gamma)$ on a ring of $N$ sites, as in the injective
+case.
+
+\begin{lemma}[Ground space of the block-injective path]
+    \label{thm:mpo_block_mixed_ground_space}
+    \lean{MPSTensor.MPOSymmetry.evalWord_sectorTensor_map,
+        MPSTensor.MPOSymmetry.mpv_sectorTensor_self,
+        MPSTensor.MPOSymmetry.mpv_sectorTensor_of_ne,
+        MPSTensor.MPOSymmetry.blockPeriodicMpvMapES_sectorTensor_injective,
+        MPSTensor.MPOSymmetry.wordTupleSpanTop_blockMixedInterpolation,
+        MPSTensor.MPOSymmetry.blockPeriodicMpvMapES_blockMixedInterpolation_injective,
+        MPSTensor.MPOSymmetry.ker_parentHamiltonianES_blockMixedTensor,
+        MPSTensor.MPOSymmetry.linearIndependent_mpv_blockMixedInterpolation,
+        MPSTensor.MPOSymmetry.continuous_blockMixed_groundSpace_starProjection,
+        MPSTensor.MPOSymmetry.exists_uniform_blockMixed_parentHamiltonianES_gap,
+        MPSTensor.MPOSymmetry.tendsto_blockMixed_groundSpace_starProjection}
+    \leanok
+    \uses{def:mpo_block_mixed_path,def:parent_hamiltonian_es}
+    Assume the endpoint blocks occupy separated physical sectors, that there
+    is at least one block, and that every block $A^p_x$ is injective with
+    $D^p_x>0$. Let $N\geq2$.
+    \begin{enumerate}
+        \item For $\gamma\in(0,1)$ the ground space of $H(\gamma)$ is
+              spanned by the block states $\ket{V^{(N)}(A_x(\gamma))}$.
+        \item For $\gamma\in[0,1]$ the block states are linearly
+              independent.
+        \item The ground projection of $H(\gamma)$ is continuous on
+              $(0,1)$, and every compact subset of $(0,1)$ admits one
+              $\delta>0$ with $\|H(\gamma)v\|\geq\delta\|v\|$ for all
+              $N\geq2$ and all $v$ orthogonal to the ground space.
+        \item As $\gamma\to\gamma_0\in[0,1]$ within $(0,1)$, the ground
+              projection of $H(\gamma)$ converges to the orthogonal
+              projection onto the span of the block states at $\gamma_0$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_block_mixed_injective,thm:mpo_block_mixed_fusion_cross,
+        thm:mpo_mixed_interior,thm:mpo_mixed_periodic_line_continuity,
+        thm:block_ground_space_continuity,thm:compact_block_parent_gap,
+        lem:uncle_local_projector_continuity}
+    For $\gamma\in(0,1)$ every block is injective, and since the blocks
+    occupy separated physical sectors, the letters of length one span
+    $\bigoplus_xM_{D^0_x+D^1_x}$. The block-injective parent Hamiltonian
+    theory with simultaneous injectivity length one and a two-site
+    interaction identifies the ground space with the span of the block
+    states, gives continuity of its projection, and gives the uniform gap
+    on compact parameter sets. For $N\geq1$, a word $\tau$ of length $N$ in
+    the basis of $F_y\otimes F_y$, and its image $\iota_y(\tau)$ in the basis
+    of $\mathcal H$,
+    \begin{align}
+        V^{(N)}(A_x(\gamma))_{\iota_y(\tau)}
+         & =\delta_{xy}\,V^{(N)}\bigl(A_y(\gamma)|_{F_y\otimes F_y}\bigr)_\tau,
+        \label{eq:mpo_block_mixed_sector_support}
+    \end{align}
+    since for $y\neq x$ the first letter of $\iota_y(\tau)$ is a zero matrix
+    of $A_x(\gamma)$. The states
+    $V^{(N)}(A_y(\gamma)|_{F_y\otimes F_y})$ are nonzero for
+    $\gamma\in[0,1]$, by the injective case. Evaluating
+    $\sum_xc_xV^{(N)}(A_x(\gamma))=0$ at $\iota_y(\tau)$ through
+    (\ref{eq:mpo_block_mixed_sector_support}) gives
+    $c_yV^{(N)}(A_y(\gamma)|_{F_y\otimes F_y})_\tau=0$ for every $\tau$, so
+    $c_y=0$: the block states are linearly independent. The span of a
+    continuous family of linearly independent vectors has a projection that
+    is continuous at every such point, and it
+    agrees with the ground projection on $(0,1)$.
+\end{proof}
+
+The claim that the operators $T_a$ are injective is not treated in this
+section, nor are the kernels and gaps of the endpoint Hamiltonians. The
+source does not show that $H(\gamma)$ commutes with the periodic operators
+of $T_a$, and the one-block case of this construction is the injective
+interpolation, for which the canonical parent need not commute with a
+non-unitary symmetry; see \cite{gap:glm23_block_injective_mixed_path}.

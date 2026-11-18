@@ -34,7 +34,8 @@ theorem norm_negativeFrequency_interactionHamiltonian_commutator_le
     (h : MPOTensor.ChainOperator d 2) (hHerm : h.IsHermitian) (hNorm : ‖h‖ ≤ 1)
     (A B : MPOTensor.ChainOperator d N)
     (X Y : Finset (Fin N)) (hX : X.Nonempty) (hY : Y.Nonempty)
-    (hA : A ∈ supportedOperators d X) (hB : B ∈ supportedOperators d Y)
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
     (hXY : Disjoint (X : Set (Fin N)) (Y : Set (Fin N)))
     (s : ℝ≥0) {ε T a : ℝ} (hε : 0 < ε) (hT : 0 < T) (ha : 0 ≤ a) :
     ‖gaussianNegativeFrequencyOperator s ε (interactionHamiltonian h hN) A * B -

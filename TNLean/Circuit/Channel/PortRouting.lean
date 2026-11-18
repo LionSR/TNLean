@@ -71,7 +71,7 @@ variable {d N W : ℕ} [NeZero N]
 /-- Any physical layer can instead act on one selected memory qudit per site, at the same
 physical depth, while restoring every unselected wire exactly. -/
 theorem IsPhysicalPortUnitary.selected_layer (P : PhysicalPortLayout N W)
-    (e : Fin N ↪ Fin W) (he : ∀ i, P.site (e i) = i) (L : Layer d N) :
+    (e : Fin N ↪ Fin W) (he : ∀ i, P.site (e i) = i) (L : RingLayer d N) :
     IsPhysicalPortUnitary P 1 (embedOp e L.op) := by
   let π := P.selectionPermutation e he
   have hπ : IsPhysicalPortUnitary (d := d) P 0 (permOp π) :=
@@ -121,7 +121,7 @@ theorem embedOp_permOp_viaEmbedding {m n : ℕ} (e : Fin m ↪ Fin n)
 /-- A permutation layer on physical ports has an exact one-layer realization on any
 selected memory wires; all unselected ports and memory remain untouched. -/
 theorem IsPhysicalPortUnitary.selected_permutation_layer (P : PhysicalPortLayout N W)
-    (e : Fin N ↪ Fin W) (he : ∀ i, P.site (e i) = i) (L : Layer d N)
+    (e : Fin N ↪ Fin W) (he : ∀ i, P.site (e i) = i) (L : RingLayer d N)
     (σ : Equiv.Perm (Fin N)) (hL : L.op = permOp σ) :
     IsPhysicalPortUnitary (d := d) P 1 (permOp (σ.viaEmbedding e)) := by
   have h := IsPhysicalPortUnitary.selected_layer P e he L

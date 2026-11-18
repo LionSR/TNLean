@@ -853,40 +853,78 @@ finite product of samples; the same estimate applies.
     dimension, and an orthonormal basis spans it.
 \end{proof}
 
-\begin{lemma}[A recursive witness tree from fixed-input node events]
+\begin{lemma}[A recursive witness tree with prescribed word length and node count]
+    % Preserve the published label despite its legacy prefix.
     \label{thm:sampled_interval_witness_tree}
-    \lean{TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree}
+    \lean{TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree_of_power,
+        TNLean.MPS.AreaLaw.exists_balanced_sampled_interval_tree}
     \leanok
     \uses{lem:balanced_interval_invariant,lem:interval_recorded_generator_bounds}
-    Fix the same arbitrary global target $G$ at every interval. Suppose
-    a family of at most $D^2$ operators is fixed at each long parent,
-    before choosing the child spaces and the sampling size. Let $r_G\ge1$,
-    $D\ge2$, $0<\beta<1$, and choose
-    \[
-        A=1+\log r_G+\log D+\log(1/\beta),\quad
-        s=\lceil4096r_GA\rceil,\quad M=D^6s^3.
-    \]
-    Assume $q^w\le M$ and $0<\xi\le1$.
-    Suppose that, for every pair of $3/200$-viable child spaces of
-    dimensions at most $M$, the actual sampled-word image and final
-    collective trim is $3/200$-viable on a fixed-input Haar event with
-    the corrected failure bound above.
+    Let $L\ge0$, $q,w,r_G\ge1$ and $D\ge2$ be integers, let $0<\beta<1$
+    and $0<\xi\le1$, and fix an arbitrary global subspace
+    $G\subseteq(\mathbb C^q)^{\otimes L}$. Set
+    \begin{align}
+        A & =1+\log r_G+\log D+\log(1/\beta),\nonumber \\
+        s & =\lceil4096r_GA\rceil.
+        \label{eq:sampled_tree_sample_size}
+    \end{align}
+    At each interval $J=[p,r)\subseteq[0,L)$ with $r-p>w$, fix
+    $N_J\le D^2$ operators $F_{J,j}$ on its local space, independently of
+    the child spaces. Let $a,M\ge0$ be integers satisfying
+    \begin{align}
+        M^2     & \le D^{12}s^6,\nonumber \\
+        D^{2a}s & \le M,\nonumber         \\
+        q^w     & \le M.
+        \label{eq:sampled_tree_count_hypotheses}
+    \end{align}
+    For every split $p\le k\le r$ and every pair of $3/200$-viable child
+    spaces for the regional images of $G$, each of dimension at most $M$,
+    let $W$ be their adjacent tensor product and $Q=\dim W$. Suppose there
+    is a set $\mathcal E\subseteq U(Q)$ such that its complement has Haar
+    measure at most $f(Q)$, where
+    \begin{align}
+        f(Q) & =\begin{cases}
+                    0,          & Q\le s, \\
+                    \left(1+\dfrac{2}{\sqrt{3s/(32Q)}}\right)^{2r_G}
+                    Qe^{-s/16}, & Q>s,
+                \end{cases}
+        \label{eq:sampled_tree_failure}
+    \end{align}
+    and every $U\in\mathcal E$ gives a $3/200$-viable space after sampling
+    $\min(s,Q)$ vectors in $W$, applying all words of length $a$ in
+    $F_{J,j}$, and collectively trimming at threshold $\xi$.
     Then one operation can be selected whose values on all such inputs
-    are literal sampled and trimmed outputs for actual unitaries.
-    Its actual balanced recursion is $3/200$-viable for the same $G$ at
-    every interval, has dimension at most $M$, and retains at most $M$
-    generators with $\xi^2\operatorname{SR}(u_i)\le M$.
-    This auxiliary theorem assumes the certified node events; it does
-    not assume final viable spaces or assert an adaptive probability.
+    are these sampled and trimmed spaces for actual unitaries. Its balanced
+    recursion, with full spaces on leaves of width at most $w$, is
+    $3/200$-viable for the same $G$ on every interval $[p,r)$ with
+    $0\le p\le r\le L$. Each resulting space has dimension at most $M$
+    and is spanned by at most $M$ vectors $u_i$ satisfying
+    $\xi^2\operatorname{SR}(u_i)\le M$ at every internal cut.
+    No dimension bound on $G$ is an additional hypothesis: the fixed-input
+    event estimate is assumed explicitly. The conclusion asserts existence,
+    not measurable selection or an adaptive success probability.
+
+    The cubic-count case takes
+    $a=\lceil\log_D(D^2s)\rceil$ and $M=D^6s^3$; then the first two
+    inequalities in~(\ref{eq:sampled_tree_count_hypotheses}) hold automatically.
 \end{lemma}
 \begin{proof}\leanok
-    The actual merged dimension is at most $M^2=D^{12}s^6$. The uniform
-    failure bound is at most $\beta<1$, hence every certified Haar event
-    contains a unitary. Choose such a unitary for each admissible input.
-    The resulting parent space is the literal sampled-word image and
-    collective trim. At the leaves the full local dimension is at most
-    $q^w\le M$. The preceding induction proves all three bounds for the
-    actual recursion.
+    \uses{lem:balanced_interval_invariant,lem:interval_recorded_generator_bounds}
+    The sample-size estimate gives $f(Q)<1$ for $Q\le D^{12}s^6$.
+    The merged dimension obeys $Q\le M^2\le D^{12}s^6$, so every assumed
+    good set contains a unitary. Choose one for each admissible input.
+    Before trimming, the word image has dimension at most
+    \begin{align}
+        N_J^a\min(s,Q) & \le D^{2a}s\le M.
+        \label{eq:sampled_tree_word_count}
+    \end{align}
+    Lemma~\ref{lem:interval_recorded_generator_bounds} gives the retained
+    generator and rank bounds after trimming. At a short leaf the full
+    space has dimension at most $q^w\le M$; it is viable and satisfies
+    the same rank bound since $\xi\le1$. Apply
+    Lemma~\ref{lem:balanced_interval_invariant} to these three properties.
+    For the cubic-count case, $D^a\le D^3s$, whence
+    $D^{2a}s\le D^6s^3=M$ and $M^2=D^{12}s^6$.
 \end{proof}
 
 \begin{lemma}[An actual recursive tree for the physical ground space]
@@ -1507,4 +1545,133 @@ recursive root remains a separate step.
     The physical reference space of
     Lemma~\ref{thm:physical_dg_mps_reference_subspace} supplies $U$ and
     $B$.
+\end{proof}
+
+\section{The merge tree with the source's number of rounds}
+
+The merge of~\cite[Theorem~\texttt{t:alg1}, lines 1777--1818]{Arad2016RigorousRG}
+applies $k=\lceil\log_Ds\rceil/2$ rounds of the improving family, so that
+$D^{2k}\le Ds$ and every node of the tree has dimension at most $Ds^2$,
+independent of the chain length at fixed $D,s$. The tree above uses the larger power
+$\lceil\log_D(D^2s)\rceil$ and the node bound $D^6s^3$. The three results below
+run the tree with the least integer number of rounds $k$ with $D^{2k}\ge s$.
+The printed $k$ is not an integer when $\lceil\log_Ds\rceil$ is odd; then no
+integer number of rounds satisfies both $D^{2k}\le Ds$ and the condition
+$s\le D^{2k}$ used in this error estimate, unless $s$ is a power of $D$, and the
+node bound is $D^2s^2$. This rounding is recorded
+in~\cite{gap:alvv16_approximation_parameters}.
+
+\begin{lemma}[One physical parent with $k$ rounds]
+    \label{lem:physical_dg_sampled_node_power}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_measurable_interval_word_image_event_of_power,
+        TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_sampled_interval_node_event_of_power}
+    \leanok
+    \uses{thm:physical_dg_sampled_node,thm:alvv_unique_ground_state_tree}
+    Retain the physical hypotheses, the common reference and the explicit
+    scalar conditions of Lemma~\ref{thm:physical_dg_sampled_node}, and let
+    $\xi_{\max}=(1000D_{\rm ref}\sqrt{L+1})^{-1}$. For every parent $[p,r)$
+    of length greater than $4\ell$, the physical construction chooses an
+    operator family of size at most $D^2$ before the number of rounds, the
+    sampling size, the threshold and the child spaces. Let $k\ge1$ and
+    $1\le s\le D^{2k}$, let $0<\xi\le\xi_{\max}$, and let both adjacent
+    children be $3/200$-viable for $G$ and of dimension at most $D^{2k}s$.
+    Then there is a measurable event of Haar unitaries, with the failure
+    bound $\eta$ of Lemma~\ref{thm:physical_dg_sampled_node}, on which the
+    images of the sample under all words of length $k$ in the family,
+    collectively trimmed at threshold $\xi$, form a $3/200$-viable space for
+    $G$. Before the trim, the images are viable for $G$ with error at most
+    $2\bigl((1024/9)\cdot10^{-5}+\varepsilon\bigr)$, where $\varepsilon$ is the
+    closeness of $G$ to the target of the family.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_dg_sampled_node,thm:alvv_unique_ground_state_tree}
+    The merged space has dimension $Q\le(D^{2k}s)^2$ and is $1/4$-viable for
+    the target of the family. The random sample has overlap at least
+    $3/(32D^{4k}s)$ with that target outside the event of small probability,
+    and its images under the words of length $k$ are viable with error at most
+    $(1024/9)\Delta^kD^{8k}s^2\le(1024/9)(D^{12}\Delta)^k\le(1024/9)\cdot10^{-5}$,
+    using $s^2\le D^{4k}$. Returning to $G$ doubles the error and adds the
+    closeness of the two targets, which is at most $10^{-4}$, so the error is
+    below $1/400$. Collective trimming against the common reference then gives
+    $3/200$, as in Lemma~\ref{thm:physical_dg_sampled_node}.
+\end{proof}
+
+\begin{lemma}[The degenerate-gap merge tree of constant node dimension]
+    \label{thm:physical_dg_constant_node_tree}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_constant_node_tree}
+    \leanok
+    \uses{lem:physical_dg_sampled_node_power,thm:sampled_interval_witness_tree,
+        thm:dg_accuracy_scalar_parameters,thm:alvv_unique_ground_state_tree}
+    Retain the physical hypotheses, the universal constants and the automatic
+    parameters $g,m,v,\ell,D$ of
+    Theorem~\ref{thm:physical_dg_interval_tree_parameters}. The actual parent
+    families, of at most $D^2$ operators, are chosen before every threshold
+    $0<\xi\le\xi_{\rm tree}$, sampling parameter and child space. For
+    $0<\beta<1$ put
+    \[
+        s=\lceil4096r(1+\log r+\log D+\log(1/\beta))\rceil,\qquad
+        k=\lceil\lceil\log_Ds\rceil/2\rceil,\qquad
+        M=D^{2k}s.
+    \]
+    Then $M\le D^2s^2$, and there is a recursively selected merge tree with
+    leaves of at most $4\ell$ sites whose long parents are sampled merges with
+    $k$ rounds and one collective trim, whose interval spaces are all
+    $3/200$-viable for the original ground space $G$, of dimension at most
+    $M$, with at most $M$ recorded generators satisfying
+    $\xi^2\operatorname{SR}(v)\le M$ at every internal cut. For fixed
+    $q,g,r=\dim G$ and $\beta$, the quantities $D,s,M$ have no additional
+    dependence on $L$ or the trimming threshold. This is not a uniform
+    bound when $r$ or $\beta$ varies with $L$.
+    When $c=\lceil\log_Ds\rceil$ is even, $k$ is the source's number of
+    rounds and $M\le Ds^2$; when $c$ is odd,
+    $M/(Ds^2)=D^c/s\in[1,D)$. The ratio is strictly greater than one
+    exactly when $s<D^c$, and equals one when $s=D^c$.
+
+    This is a restricted form of the merge analysis
+    of~\cite[Theorem~\texttt{t:alg1}, lines 1777--1818]{Arad2016RigorousRG},
+    not that theorem itself: the tree is shown to exist rather than found with
+    high probability, the leaves are blocks, each long parent has one final
+    trim, and the gap is capped at one, as recorded
+    in~\cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_dg_sampled_node_power,thm:sampled_interval_witness_tree,
+        thm:dg_accuracy_scalar_parameters,thm:alvv_unique_ground_state_tree}
+    The automatic parameters give all scalar conditions of
+    Lemma~\ref{lem:physical_dg_sampled_node_power}, as in
+    Theorem~\ref{thm:physical_dg_interval_tree_parameters}. Since
+    $s\ge4096$ and $D\ge2$, the number of rounds satisfies $k\ge1$ and
+    $s\le D^{2k}\le D^2s$, so $M\le D^2s^2$ and $M^2\le D^{12}s^6$. The leaves
+    have dimension $q^{4\ell}\le D\le M$. The node events of
+    Lemma~\ref{lem:physical_dg_sampled_node_power} at $k$ rounds then feed the
+    recursive selection with $k$ rounds and node budget $M$, as in
+    Lemma~\ref{thm:alvv_unique_ground_state_tree}. If
+    $\lceil\log_Ds\rceil=c$ is odd and $s<D^c$, an integer $j$ with
+    $D^{2j}\le Ds<D^{c+1}$ has $2j\le c-1$, hence $D^{2j}\le D^{c-1}<s$.
+\end{proof}
+
+\begin{lemma}[The refined root of the tree of constant node dimension]
+    \label{lem:physical_dg_constant_node_tree_ritz}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_constant_node_tree_ritz_approximation}
+    \leanok
+    \uses{thm:physical_dg_constant_node_tree,lem:physical_dg_automatic_refinement}
+    Retain the hypotheses and parameters of
+    Lemma~\ref{thm:physical_dg_constant_node_tree}, and the threshold, the
+    count $n$ and the bounds $D_*,N_*$ of
+    Lemma~\ref{lem:physical_dg_automatic_refinement}. The actual parent
+    families can be chosen before every accuracy $\eta>0$. Starting from the
+    root of the tree of Lemma~\ref{thm:physical_dg_constant_node_tree} at
+    that threshold, apply the literal raw filter and trim $n$ times. The
+    compressed Ritz space of the terminal native space has dimension $r$, is
+    mutually $\eta/2$-close to $G$, and every one of its vectors has bond
+    dimension at most $10^6(D_*N_*)^2(L+1)M^2$, where $M=D^{2k}s\le D^2s^2$
+    is the node bound, independent of $L$. The bond dimension of the output
+    grows with $L$ through the threshold. No adaptive sampling probability,
+    printed final iteration count or running time is asserted.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_dg_constant_node_tree,lem:physical_dg_automatic_refinement}
+    As in Lemma~\ref{lem:physical_dg_tree_ritz_approximation}, with the tree
+    of Lemma~\ref{thm:physical_dg_constant_node_tree} in place of the tree
+    of node bound $D^6s^3$.
 \end{proof}

@@ -24,6 +24,8 @@ on the chosen ground vector. No adaptive joint probability, Ritz extraction
 or running-time bound is asserted.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open scoped InnerProductSpace

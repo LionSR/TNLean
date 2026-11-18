@@ -23,6 +23,8 @@ at lines 1027–1041. The bandwidth is fixed as in Assumption (LD), lines 281–
 `q ≥ 2`; see `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator TensorProduct
 
 namespace TNLean.MPS.AreaLaw

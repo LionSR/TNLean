@@ -22,6 +22,8 @@ measurability, independent comparison event, or basis-law identification
 is assumed.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped ENNReal
 

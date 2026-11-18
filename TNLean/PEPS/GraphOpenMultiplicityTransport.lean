@@ -18,6 +18,8 @@ Source: SCP10, arXiv:1001.3807, Section 7, lines 2977–3019, and the genuine
 regional parent construction of Theorem 5.7.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix BigOperators Kronecker
 namespace TNLean.PEPS

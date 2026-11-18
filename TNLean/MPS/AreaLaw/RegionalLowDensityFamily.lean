@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.DyadicRegionalLowDensityFamily
+import TNLean.MPS.AreaLaw.DyadicRegionalLowDensitySingleStep
 
 /-!
 # Regional improving families at a fixed low-density bandwidth
@@ -25,6 +25,8 @@ is retained. The buffer `6*w ≤ eta` is the source lower-cutoff condition
 after `w = mu/(3*log n)`. Boundary and short intervals remain separate;
 see `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
 -/
+
+open ManyBody (interval)
 
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

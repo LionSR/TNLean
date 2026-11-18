@@ -18,6 +18,8 @@ arXiv:1307.5143v1, `algo53.tex`, lines 409–410, given as the named parts `cutL
 one-site terms and arbitrary Hermitian contractions.
 -/
 
+open ManyBody (ChainSupport interval mem_interval)
+
 open Matrix
 open scoped Matrix.Norms.L2Operator
 
@@ -46,15 +48,17 @@ theorem ChainHamiltonian.cutLeftPart_add_cutBoundaryPart (h : ChainHamiltonian L
 
 /-- The left part is supported on the first `k` sites. -/
 theorem ChainHamiltonian.cutLeftPart_isSupportedOn (h : ChainHamiltonian L q 1 1) (k : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutLeftPart k) (interval L 0 k) :=
-  (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
+    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutLeftPart k) (interval L 0 k) := by
+  change _ ∈ ManyBody.supportedOperators _ _
+  exact sum_mem fun X hX ↦
     (h.supported X).mono (Finset.mem_filter.mp hX).2
 
 /-- The boundary part is supported from the boundary site onward. -/
 theorem ChainHamiltonian.cutBoundaryPart_isSupportedOn (h : ChainHamiltonian L q 1 1) (k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutBoundaryPart k)
       (interval L 0 (k - 1))ᶜ := by
-  refine (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
+  change _ ∈ ManyBody.supportedOperators _ _
+  refine sum_mem fun X hX ↦
     (h.supported X).mono ?_
   have hX' := (Finset.mem_filter.mp hX).2
   obtain ⟨y, hy, hyA⟩ := Finset.not_subset.mp hX'

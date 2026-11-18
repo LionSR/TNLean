@@ -25,6 +25,8 @@ lemma; it is supplied by the separate cell and information-reset estimates.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 namespace TNLean.PEPS.Approximation
 
 open AngularGrid

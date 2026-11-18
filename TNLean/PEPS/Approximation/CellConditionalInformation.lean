@@ -7,6 +7,7 @@ import TNLean.PEPS.Approximation.CoarseInformation
 import TNLean.PEPS.Approximation.CellTwoFamilyPartition
 import TNLean.PEPS.Approximation.ConditionalTwoFamilies
 import TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartitionComap
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Conditional information of a physical cell
@@ -42,6 +43,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 noncomputable section
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.PEPS.Approximation
 
@@ -112,7 +115,8 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
       m₀ ∉ A →
       ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J)
         (E₀ : ℝ) (Ω : Lattice.StateSpace Λ q),
-        Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
         let G : Finset (Site Λ) :=
           Finset.univ.filter (fun x ↦ x.val ∈ CellPartition.cellSample o s m₀)
         let B : Finset (Site Λ) := Finset.univ.filter
@@ -138,7 +142,7 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
   set ustar := CellPartition.cellStopScale β (max u₀ u₁)
   set Cp := CellPartition.cellPartitionConstant β (max u₀ u₁)
   set K := CellPartition.cellPartitionExponent β (max u₀ u₁)
-  intro s hs o m₀ A hm₀ Λ h E₀ Ω hΩ G B E hE hclear
+  intro s hs o m₀ A hm₀ Λ h E₀ Ω hΩ hgap hspan G B E hE hclear
   obtain ⟨P, scale, hscale, hrect, hdiam, houtside, hearlier, hcount⟩ :=
     hpart s hs o m₀ (fun i ↦ if i ∈ A then 0 else 1)
   let Q : OrderedTwoFamilyPartition G := P.comap (fun x : Site Λ ↦ x.val)
@@ -165,7 +169,7 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
         scale i ^ β < dist (integerPoint x) (integerPoint y.val)) :
       FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω (Q.piece i) F ≤ C₂ :=
     hcoarse (scale i) ((le_max_left _ _).trans (hustar.trans (hscale i).1))
-      Λ h E₀ Ω hΩ (P.piece i) (hbox i)
+      Λ h E₀ Ω hΩ hgap hspan (P.piece i) (hbox i)
       (fun x hx y hy ↦ by simpa only [hdist, one_mul] using hdiam i x hx y hy)
       (Q.piece i) (fun _ hx ↦ hx) F
       (fun x hx y hy ↦ by simpa only [hdist] using hF x hx y hy)
@@ -214,7 +218,7 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
     simpa only [regionalEntropy_eq_finiteProduct,
       FiniteProduct.conditionalMutualInformation] using
       regionalEntropy_conditional_le_card_residual_add_pieceCount
-        Λ q Ω hΩ.1 G B E Q hGB hdisj.1 hdisj.2 C₂ h₀ h₁
+        Λ q Ω hΩ G B E Q hGB hdisj.1 hdisj.2 C₂ h₀ h₁
   have hres : (Q.residual.card : ℝ) ≤ P.residual.card :=
     Nat.cast_le.mpr (P.card_residual_comap_le (fun x : Site Λ ↦ x.val)
       Subtype.val_injective)
@@ -253,7 +257,8 @@ theorem exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound
         m₀ ∉ A →
         ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J)
           (E₀ : ℝ) (Ω : Lattice.StateSpace Λ q),
-          Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           let G : Finset (Site Λ) :=
             Finset.univ.filter (fun x ↦ x.val ∈ CellPartition.cellSample o s m₀)
           let B : Finset (Site Λ) := Finset.univ.filter

@@ -8,6 +8,7 @@ import TNLean.MPS.AreaLaw.ViableSet.GluingBounds
 import TNLean.MPS.AreaLaw.LocalSolution.HierarchicalEnergy
 import QICLean.Analysis.DensityMaxEigenvector
 import QICLean.Analysis.DominantEigenvectorUniqueness
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Every minimizing boundary state and its top eigenvector
@@ -30,6 +31,8 @@ space. No finite-net cardinality assertion is made; see
 
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -319,7 +322,9 @@ theorem maxEigenvalue_lower_bound_chain_with_objective_slack [NeZero q]
     {D : Finset (Fin L)} (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ ξ μ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
-    (hgs : IsGappedGroundState (HL + K) E₀ Γ Δ) {m : ℕ}
+    (hH : (HL + K).IsHermitian) (hΩ : ‖Γ‖ = 1)
+    (hgap : IsGapped (HL + K) E₀ Δ)
+    (hspan : groundSpace (HL + K) E₀ = Submodule.span ℂ {Γ}) {m : ℕ}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -348,7 +353,8 @@ theorem maxEigenvalue_lower_bound_chain_with_objective_slack [NeZero q]
       ((CutLeft L q k × CutSite L q k) × CutRight L q k) :=
     WithLp.toLp 2 (WithLp.ofLp Γ ∘ E.symm)
   have hsplit := reindex_gluingCut_eq hHL hK hDA
-  obtain ⟨hΓ, -, hgap⟩ := isGappedGroundState_iff.mp hgs
+  have hΓ := hΩ
+  have hgap := hgap.posSemidef_sub_smul_one hH hΩ hspan
   have hΓ' : ‖Γ'‖ = 1 :=
     ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ E).norm_map Γ).trans hΓ
   have hgap' : (reindex E E (HL + K) - (E₀ : ℂ) • 1 -
@@ -642,7 +648,8 @@ theorem ChainHamiltonian.exists_uniform_leading_bounds_of_isViable
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ})
     {S : Set (LeftBlockVector L q k)}
     (hviable : IsViable Γ (((Δ / 169) ^ 2) / L) S) :
     let : NeZero q := ⟨by omega⟩
@@ -699,7 +706,7 @@ theorem ChainHamiltonian.exists_uniform_leading_bounds_of_isViable
     (spanProjection S)
   obtain ⟨_, _, w, m, W, x, -, -, -, -, hw, hwS, hwD, hwE, hW, hmD,
       hwx, hxnorm, hxP, -⟩ :=
-    h.exists_boundary_minimizer_leading_vector_of_isViable hpos hL hq hΔ hgs hviable
+    h.exists_boundary_minimizer_leading_vector_of_isViable hpos hL hq hΔ hΩ hgap hspan hviable
   refine ⟨w, m, W, x, hw, hwS, hwD, hwE, hW, hmD,
     hwx, hxnorm, hxP, ?_⟩
   intro X hX σ hσ htr hσP hσX hmin u μ hu huσ hmax
@@ -732,7 +739,7 @@ theorem ChainHamiltonian.exists_uniform_leading_bounds_of_isViable
           rectangularTraceNorm (X - partialTraceFirst ρx) := rectangularTraceNorm_add_le _ _
       _ ≤ 2 * η := by rw [hneg]; linarith only [hσX, hX]
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hgs
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
   have hsqrt : √c = Δ / 169 := Real.sqrt_sq (div_nonneg hΔ.le (by norm_num))
   have hcr : 2 * c ≤ √c := by
     rw [hsqrt]
@@ -751,20 +758,24 @@ theorem ChainHamiltonian.exists_uniform_leading_bounds_of_isViable
   have hgood : 14 * √c < Δ / 12 := by rw [hsqrt]; linarith only [hΔ]
   have h4 : 4 * (6 * √c + ‖B‖ * (2 * η)) < Δ := by
     linarith only [htwo, hgood, hΔ]
-  have hgs' : IsGappedGroundState (HL + B) E₀ Γ Δ := by rw [← hsplit]; exact hgs
+  have hHC : (HL + B).IsHermitian := by rw [← hsplit]; exact h.operator_isHermitian
+  have hgapC : IsGapped (HL + B) E₀ Δ := by rw [← hsplit]; exact hgap
+  have hspanC : groundSpace (HL + B) E₀ = Submodule.span ℂ {Γ} := by
+    rw [← hsplit]; exact hspan
   have hwE' : (⟪w, toEuclideanLin (HL + B) w⟫_ℂ).re ≤ E₀ + 6 * √c := by
     rw [← hsplit]
     exact hwE
   obtain ⟨u₀, ν, hu₀, hu₀σ, hν, -, -⟩ :=
     exists_leading_eigenvector_chain (L := L) (q := q) (k := k) (e := 6 * √c) (τ := 2 * η)
-      hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ h4
+      hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ h4
   have hu₀0 : u₀ ≠ 0 := by
     intro hz
     simp only [hz, norm_zero, zero_ne_one] at hu₀
   have hμ : 1 / 2 < μ := hν.trans_le (hmax ν u₀ hu₀0 hu₀σ)
   obtain ⟨huE, huov⟩ :=
     leading_eigenvector_bounds_chain (L := L) (q := q) (k := k) (e := 6 * √c) (τ := 2 * η)
-      hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ h4 u μ hu huσ hμ
+      hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ h4
+      u μ hu huσ hμ
   have hμ0 : (μ : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr (by linarith only [hμ])
   have hQu : (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u =
       WithLp.ofLp u := by
@@ -810,7 +821,8 @@ theorem ChainHamiltonian.leading_bounds_of_approximate_boundary_solution [NeZero
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
+    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m : ℕ} (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
     {w : EuclideanSpace ℂ (Fin L → Fin q)} (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
@@ -881,7 +893,7 @@ theorem ChainHamiltonian.leading_bounds_of_approximate_boundary_solution [NeZero
           rectangularTraceNorm (X - partialTraceFirst ρx) := rectangularTraceNorm_add_le _ _
       _ ≤ 2 * η + δ := by rw [hneg]; linarith only [hσX, hX]
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hgs
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hΩ hgap hspan
   have hsqrt : √c = Δ / 169 := Real.sqrt_sq (div_nonneg hΔ.le (by norm_num))
   have hcr : 2 * c ≤ √c := by
     rw [hsqrt]
@@ -905,24 +917,27 @@ theorem ChainHamiltonian.leading_bounds_of_approximate_boundary_solution [NeZero
       _ = Δ / 12 := by rw [hsqrt]; ring
   have h4 : 4 * (6 * √c + ξ + ‖B‖ * (2 * η + δ)) < Δ := by
     nlinarith only [htotal, hΔ]
-  have hgs' : IsGappedGroundState (HL + B) E₀ Γ Δ := by rw [← hsplit]; exact hgs
+  have hHC : (HL + B).IsHermitian := by rw [← hsplit]; exact h.operator_isHermitian
+  have hgapC : IsGapped (HL + B) E₀ Δ := by rw [← hsplit]; exact hgap
+  have hspanC : groundSpace (HL + B) E₀ = Submodule.span ℂ {Γ} := by
+    rw [← hsplit]; exact hspan
   have hwE' : (⟪w, toEuclideanLin (HL + B) w⟫_ℂ).re ≤ E₀ + 6 * √c := by
     rw [← hsplit]
     exact hwE
   obtain ⟨u₀, ν, hu₀, hu₀σ, hν, -, -⟩ :=
     exists_leading_eigenvector_chain_with_objective_slack
       (L := L) (q := q) (k := k) (e := 6 * √c) (τ := 2 * η + δ) (ξ := ξ)
-      hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ h4
+      hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ h4
   have hu₀0 : u₀ ≠ 0 := by
     intro hz
     simp only [hz, norm_zero, zero_ne_one] at hu₀
   have hμ : 1 / 2 < μ := hν.trans_le (hmax ν u₀ hu₀0 hu₀σ)
   have hμquant := maxEigenvalue_lower_bound_chain_with_objective_slack
-    hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ hmax
+    hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ hmax
   obtain ⟨huE, huov⟩ :=
     leading_eigenvector_bounds_chain_with_objective_slack
       (L := L) (q := q) (k := k) (e := 6 * √c) (τ := 2 * η + δ) (ξ := ξ)
-      hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ h4
+      hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ h4
       u μ hu huσ hμ
   have hμ0 : (μ : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr (by linarith only [hμ])
   have hQu : (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u =

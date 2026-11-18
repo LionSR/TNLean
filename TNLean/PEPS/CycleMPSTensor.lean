@@ -50,6 +50,8 @@ that cyclic sum.
   1585--1668 of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped Matrix
 
 namespace TNLean
@@ -81,7 +83,7 @@ theorem cycleGraph_adj_succ (hn : 3 ≤ n) (u : Fin n) :
 of the source corollaries (arXiv:1804.04964, Section 3, lines 1585--1668 of
 `Papers/1804.04964/paper_normal.tex`). -/
 def cycleSuccEdge (hn : 3 ≤ n) (u : Fin n) : Edge (SimpleGraph.cycleGraph n) :=
-  Edge.ofAdj (cycleGraph_adj_succ hn u)
+  ManyBody.Edge.ofAdj (cycleGraph_adj_succ hn u)
 
 /-- Away from the seam, the bond from `u` to `u + 1` is stored as the ordered
 pair `(u, u + 1)`. -/
@@ -91,7 +93,7 @@ theorem cycleSuccEdge_val_of_lt (hn : 3 ≤ n) {u : Fin n} (h : u.val + 1 < n) :
   have hlt : u < u + 1 := by
     rw [Fin.lt_def, Fin.val_add_eq_ite, h1]
     split_ifs <;> omega
-  rw [cycleSuccEdge, Edge.ofAdj_of_lt _ hlt]
+  rw [cycleSuccEdge, ManyBody.Edge.ofAdj_of_lt _ hlt]
 
 /-- The seam bond, from the last site to the zeroth, is stored with its
 endpoints in the opposite cyclic order. -/
@@ -101,7 +103,7 @@ theorem cycleSuccEdge_val_of_eq (hn : 3 ≤ n) {u : Fin n} (h : u.val + 1 = n) :
   have hgt : u + 1 < u := by
     rw [Fin.lt_def, Fin.val_add_eq_ite, h1]
     split_ifs <;> omega
-  rw [cycleSuccEdge, Edge.ofAdj_of_gt _ hgt]
+  rw [cycleSuccEdge, ManyBody.Edge.ofAdj_of_gt _ hgt]
 
 /-- Distinct sites give distinct successor bonds. -/
 theorem cycleSuccEdge_injective (hn : 3 ≤ n) :
@@ -137,11 +139,11 @@ theorem cycleSuccEdge_surjective (hn : 3 ≤ n) :
   rcases (cycleGraph_adj_iff_add_one hn).mp e.2.2 with h | h
   · refine ⟨e.1.1, Subtype.ext ?_⟩
     have hlt : e.1.1 < e.1.1 + 1 := h ▸ e.2.1
-    rw [cycleSuccEdge, Edge.ofAdj_of_lt _ hlt]
+    rw [cycleSuccEdge, ManyBody.Edge.ofAdj_of_lt _ hlt]
     exact Prod.ext rfl h
   · refine ⟨e.1.2, Subtype.ext ?_⟩
     have hgt : e.1.2 + 1 < e.1.2 := h ▸ e.2.1
-    rw [cycleSuccEdge, Edge.ofAdj_of_gt _ hgt]
+    rw [cycleSuccEdge, ManyBody.Edge.ofAdj_of_gt _ hgt]
     exact Prod.ext h rfl
 
 /-- Sites and bonds of the closed chain are in bijection: the bond attached to
@@ -161,7 +163,7 @@ the site. -/
 def cycleRightIncident (hn : 3 ≤ n) (v : Fin n) :
     IncidentEdge (SimpleGraph.cycleGraph n) v :=
   ⟨cycleSuccEdge hn v, by
-    rcases Edge.ofAdj_endpoints (cycleGraph_adj_succ hn v) with ⟨h, _⟩ | ⟨_, h⟩
+    rcases ManyBody.Edge.ofAdj_endpoints (cycleGraph_adj_succ hn v) with ⟨h, _⟩ | ⟨_, h⟩
     · exact Or.inl h
     · exact Or.inr h⟩
 
@@ -170,7 +172,7 @@ the site. -/
 def cycleLeftIncident (hn : 3 ≤ n) (v : Fin n) :
     IncidentEdge (SimpleGraph.cycleGraph n) v :=
   ⟨cycleSuccEdge hn (v - 1), by
-    rcases Edge.ofAdj_endpoints (cycleGraph_adj_succ hn (v - 1)) with ⟨_, h⟩ | ⟨h, _⟩
+    rcases ManyBody.Edge.ofAdj_endpoints (cycleGraph_adj_succ hn (v - 1)) with ⟨_, h⟩ | ⟨h, _⟩
     · exact Or.inr (h.trans (sub_add_cancel v 1))
     · exact Or.inl (h.trans (sub_add_cancel v 1))⟩
 
@@ -197,7 +199,7 @@ theorem incidentEdge_eq_left_or_right (hn : 3 ≤ n) (v : Fin n)
   have hinc := ie.2
   rw [← hu] at hinc
   have hv : u = v ∨ u + 1 = v := by
-    rcases Edge.ofAdj_endpoints (cycleGraph_adj_succ hn u) with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;>
+    rcases ManyBody.Edge.ofAdj_endpoints (cycleGraph_adj_succ hn u) with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;>
       rcases hinc with h | h
     · exact Or.inl (h1.symm.trans h)
     · exact Or.inr (h2.symm.trans h)

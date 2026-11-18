@@ -8,6 +8,7 @@ import TNLean.Lattice.EntropyComparison
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary
 import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
 import TNLean.PEPS.AreaLaw.Scan.CompactCollarCounting
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The deterministic steps of the sublinear collar bound
@@ -62,6 +63,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped ComplexOrder
 open TNLean.Lattice
 
@@ -350,7 +353,8 @@ theorem sublinearCollarBound_of_mutualInformation_le_at {q R : ℕ} {J Δ D₀ C
     (hC : 24 ≤ Ctpl) (hD : 1 ≤ D₀) (C : ℝ) (N : ℕ)
     (hI : ∀ n s₀ : ℕ, N ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
@@ -361,7 +365,8 @@ theorem sublinearCollarBound_of_mutualInformation_le_at {q R : ℕ} {J Δ D₀ C
               C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))) :
     ∀ n s₀ : ℕ, N ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →
@@ -380,11 +385,11 @@ theorem sublinearCollarBound_of_mutualInformation_le_at {q R : ℕ} {J Δ D₀ C
             ((A.filter fun x ↦ x.val ∈ ambientDilation T.points
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
               max C 10 * (n : ℝ) ^ 2 := by
-  intro n s₀ hn Λ h E₀ Ω hΩ A T hsep hL
+  intro n s₀ hn Λ h E₀ Ω hΩ hgap hspan A T hsep hL
   obtain ⟨hX, hS, hY, hcard⟩ := T.collar_cut_card_le hC Λ A hsep hD hL
   have hn0 : (0 : ℝ) ≤ n := Nat.cast_nonneg n
   have hC10 : (10 : ℝ) ≤ max C 10 := le_max_right _ _
-  refine ⟨(hI n s₀ hn Λ h E₀ Ω hΩ A T hsep hL).trans
+  refine ⟨(hI n s₀ hn Λ h E₀ Ω hΩ hgap hspan A T hsep hL).trans
     (mul_le_mul_of_nonneg_right (le_max_left _ _) (by positivity)), ?_, ?_, ?_, ?_⟩
   · have : ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ T.points)).card : ℝ) ≤ 4 * n := by
       exact_mod_cast hX
@@ -417,7 +422,8 @@ theorem sublinearCollarBound_of_mutualInformation_le {q R : ℕ} {J Δ D₀ Ctpl
     (hC : 24 ≤ Ctpl) (hD : 1 ≤ D₀)
     (hinfo : ∃ C : ℝ, ∃ N : ℕ, ∀ n s₀ : ℕ, N ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
+        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
           ∀ A : Finset (Site Λ), ∀ T : Geometry.Template Ctpl n s₀,
             T.IsSeparated D₀ (Geometry.boundaryEndpoints Λ A) →
             ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ ≤ s₀ →

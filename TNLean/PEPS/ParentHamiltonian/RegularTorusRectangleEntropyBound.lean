@@ -31,6 +31,8 @@ and 2074–2090. The von Neumann inequality follows from Wolf Section 8.2.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {width height : ℕ} [NeZero width] [NeZero height]

@@ -30,6 +30,8 @@ bound are explicit. Boundary and short regions require the subsequent
 interval argument; see `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator TensorProduct
 
 namespace TNLean.MPS.AreaLaw

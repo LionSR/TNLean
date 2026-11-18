@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.CutProductExpectation
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.Entropy.RegionEntropy
 import QICLean.Entropy.FilterOptimizer
 import QICLean.Entropy.FilterChainEnergy
@@ -42,6 +42,8 @@ marginals gives positive probability to every effect on `A ∪ B` that the groun
 * M. B. Hastings, *An area law for one-dimensional quantum systems*, J. Stat. Mech. (2007)
   P08024, arXiv:0705.2024v4, `References/0705.2024/law16.tex`, lines 427–477.
 -/
+
+open ManyBody (interval mem_interval)
 
 open Matrix
 open scoped ComplexOrder InnerProductSpace Kronecker

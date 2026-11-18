@@ -20,6 +20,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 namespace CollarScan
 
@@ -32,7 +34,7 @@ comparisons with at most `3nD` changed sites. Full near sets and the entropy
 regions with the fixed target removed obey the same bound. -/
 theorem state_prefix_approximation_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K)
     (hn : 0 < S.n) (hk : k ≤ S.n * S.m)
@@ -73,7 +75,7 @@ comparisons with at most `3nD` changed sites. Full near sets and the entropy
 regions with the fixed target removed obey the same bound. -/
 theorem oldChargeState_prefix_approximation_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K)
     (hn : 0 < S.n) (hk : (k + 1) ≤ S.n * S.m)

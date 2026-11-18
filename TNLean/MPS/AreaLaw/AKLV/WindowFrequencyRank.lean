@@ -22,6 +22,8 @@ for this algebraic rank estimate. The low-frequency partition and central-cut as
 are separate results.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix
 open scoped BigOperators
 

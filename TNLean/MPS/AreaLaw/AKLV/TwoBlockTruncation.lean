@@ -26,6 +26,8 @@ ground-vector conclusion of Theorem 6.1. The remaining steps are recorded in
 `docs/paper-gaps/aklv13_two_block_robustness.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

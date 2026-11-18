@@ -16,6 +16,8 @@ coefficient identities used in the one-vertex-versus-complement step of
 arXiv:1804.04964, Section 3.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

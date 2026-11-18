@@ -19,6 +19,8 @@ in `docs/paper-gaps/aklv13_robustness_constants.tex`.
 Source: AKLV, arXiv:1301.1162v1, Section 6.1 and Theorem 6.1.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator InnerProductSpace
 

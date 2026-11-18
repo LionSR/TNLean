@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Circuit.WeightedGHZ
 import TNLean.MPS.Preparation.GHZSectorObstruction
-import TNLean.MPS.Examples.GHZ
+import TNLean.MPS.Core.GHZ
 import TNLean.MPS.ParentHamiltonian.ChainGroundSpace
 import TNLean.MPS.ParentHamiltonian.Defs
 import TNLean.MPS.Preparation.RepeatedBlockCounterexample

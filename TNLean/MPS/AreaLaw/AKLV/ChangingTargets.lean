@@ -27,6 +27,8 @@ rank estimate, optimized accuracy-dependent enlarged window, and final
 entropy and MPS estimates are separate results.
 -/
 
+open ManyBody (interval)
+
 open Matrix Polynomial
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
 

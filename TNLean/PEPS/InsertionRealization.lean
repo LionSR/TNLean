@@ -36,6 +36,8 @@ The coefficient-level endpoint realization lemmas are separated into
 `TNLean.PEPS.InsertionCoefficientRealization`.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 

@@ -27,6 +27,8 @@ or energy-eigenstate assertion. The zero inner band, scalar local space
 and empty chain are included.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder InnerProductSpace Matrix
 
 namespace TNLean.MPS.AreaLaw

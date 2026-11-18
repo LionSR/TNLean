@@ -26,6 +26,8 @@ region isometry, or entropy formula is assumed.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {W G : Type*} [Fintype W] [LinearOrder W] [Group G] [Fintype G]
@@ -58,17 +60,17 @@ private theorem rootedTreeGradient_injective (T : SimpleGraph W) (hT : T.Connect
   intro r s hrs
   have hAdj (u v : W) (h : T.Adj u v) :
       (r.1 u)⁻¹ * s.1 u = (r.1 v)⁻¹ * s.1 v := by
-    have he := congrFun hrs (Edge.ofAdj h)
-    change r.1 (Edge.ofAdj h).1.2 * (r.1 (Edge.ofAdj h).1.1)⁻¹ =
-      s.1 (Edge.ofAdj h).1.2 * (s.1 (Edge.ofAdj h).1.1)⁻¹ at he
-    have hc : (r.1 (Edge.ofAdj h).1.1)⁻¹ * s.1 (Edge.ofAdj h).1.1 =
-        (r.1 (Edge.ofAdj h).1.2)⁻¹ * s.1 (Edge.ofAdj h).1.2 := by
+    have he := congrFun hrs (ManyBody.Edge.ofAdj h)
+    change r.1 (ManyBody.Edge.ofAdj h).1.2 * (r.1 (ManyBody.Edge.ofAdj h).1.1)⁻¹ =
+      s.1 (ManyBody.Edge.ofAdj h).1.2 * (s.1 (ManyBody.Edge.ofAdj h).1.1)⁻¹ at he
+    have hc : (r.1 (ManyBody.Edge.ofAdj h).1.1)⁻¹ * s.1 (ManyBody.Edge.ofAdj h).1.1 =
+        (r.1 (ManyBody.Edge.ofAdj h).1.2)⁻¹ * s.1 (ManyBody.Edge.ofAdj h).1.2 := by
       calc
-        _ = (r.1 (Edge.ofAdj h).1.2)⁻¹ *
-            (r.1 (Edge.ofAdj h).1.2 * (r.1 (Edge.ofAdj h).1.1)⁻¹) *
-            s.1 (Edge.ofAdj h).1.1 := by group
+        _ = (r.1 (ManyBody.Edge.ofAdj h).1.2)⁻¹ *
+            (r.1 (ManyBody.Edge.ofAdj h).1.2 * (r.1 (ManyBody.Edge.ofAdj h).1.1)⁻¹) *
+            s.1 (ManyBody.Edge.ofAdj h).1.1 := by group
         _ = _ := by rw [he]; group
-    rcases Edge.ofAdj_endpoints h with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+    rcases ManyBody.Edge.ofAdj_endpoints h with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
     · simpa [h₁, h₂] using hc
     · simpa [h₁, h₂] using hc.symm
   have hconst (v : W) : (r.1 v)⁻¹ * s.1 v = (r.1 o)⁻¹ * s.1 o := by

@@ -22,6 +22,8 @@ This module proves an explicit constant bound with base `q * (ell + 1)`;
 no approximate-ground-projector or area-law theorem is assumed.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators
 

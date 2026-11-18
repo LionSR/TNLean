@@ -48,13 +48,15 @@ inductive IsPhysicalPortUnitary (P : PhysicalPortLayout N W) : ℕ →
   /-- Unitary operations on one site's wires are free. -/
   | onsite (i : Fin N) {U : Matrix (Fin W → Fin d) (Fin W → Fin d) ℂ}
       (hU : U ∈ unitary (Matrix (Fin W → Fin d) (Fin W → Fin d) ℂ))
-      (hs : U ∈ supportedOperators d (P.site ⁻¹' {i})) : IsPhysicalPortUnitary P 0 U
+      (hs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+          (Finset.univ.filter fun p ↦ P.site p = i)) :
+      IsPhysicalPortUnitary P 0 U
   /-- Reordering wires separately within each spatial site is a free local unitary.
   The site-preservation equation forbids moving a wire between sites. -/
   | onsitePermutation (π : Equiv.Perm (Fin W)) (hπ : ∀ x, P.site (π x) = P.site x) :
       IsPhysicalPortUnitary P 0 (permOp π)
   /-- Count one nearest-neighbor layer on the physical ports alone. -/
-  | layer (L : Layer d N) : IsPhysicalPortUnitary P 1 (embedOp P.port L.op)
+  | layer (L : RingLayer d N) : IsPhysicalPortUnitary P 1 (embedOp P.port L.op)
   /-- Multiplying circuit operators adds their physical depths. -/
   | mul {T S : ℕ} {U V} (hU : IsPhysicalPortUnitary P T U)
       (hV : IsPhysicalPortUnitary P S V) : IsPhysicalPortUnitary P (T + S) (U * V)
@@ -79,7 +81,7 @@ theorem mem_unitary {P : PhysicalPortLayout N W} {T : ℕ} {U}
 theorem conjTranspose {P : PhysicalPortLayout N W} {T : ℕ} {U}
     (h : IsPhysicalPortUnitary (d := d) P T U) : IsPhysicalPortUnitary P T Uᴴ := by
   induction h with
-  | onsite i hU hs => exact .onsite i (Unitary.star_mem hU) (star_mem_supportedOperators hs)
+  | onsite i hU hs => exact .onsite i (Unitary.star_mem hU) (star_mem hs)
   | onsitePermutation π hπ =>
     rw [permOp_conjTranspose]
     exact .onsitePermutation π.symm (fun x => by simpa using (hπ (π.symm x)).symm)
@@ -92,7 +94,7 @@ theorem conjTranspose {P : PhysicalPortLayout N W} {T : ℕ} {U}
 /-- The identity needs no physical layers. -/
 theorem one (P : PhysicalPortLayout N W) :
     IsPhysicalPortUnitary (d := d) P 0 1 :=
-  .onsite 0 (Submonoid.one_mem _) (one_mem_supportedOperators _)
+  .onsite 0 (Submonoid.one_mem _) (one_mem (ManyBody.supportedOperators _ _))
 
 /-- Swapping wires inside one spatial site costs no physical layer. -/
 theorem onsite_swap (P : PhysicalPortLayout N W) {a b : Fin W}
@@ -100,8 +102,10 @@ theorem onsite_swap (P : PhysicalPortLayout N W) {a b : Fin W}
     IsPhysicalPortUnitary (d := d) P 0 (permOp (Equiv.swap a b)) := by
   apply onsite (P.site a) (permOp_mem_unitary _)
   rw [permOp_swap_eq_embedOp hab]
-  apply supportedOperators_mono _ (embedOp_mem_supportedOperators (pairSites_injective hab) _)
-  rintro x ⟨j, rfl⟩
+  apply ManyBody.supportedOperators_mono _
+      (embedOp_mem_supportedOperators (pairSites_injective hab) _)
+  intro x hx
+  obtain ⟨j, -, rfl⟩ := Finset.mem_image.mp hx
   fin_cases j <;> simp [pairSites, hs]
 
 end IsPhysicalPortUnitary
@@ -119,7 +123,8 @@ inductive IsPhysicalPortProtocol (P : PhysicalPortLayout N W) : ℕ →
   /-- An arbitrary local instrument with its outcome discarded is a free onsite channel. -/
   | onsite (i : Fin N) {r : ℕ}
       (K : Fin r → Matrix (Fin W → Fin d) (Fin W → Fin d) ℂ)
-      (hK : ∀ j, K j ∈ supportedOperators d (P.site ⁻¹' {i}))
+      (hK : ∀ j, K j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+          (Finset.univ.filter fun p ↦ P.site p = i))
       (htrace : ∑ j, (K j)ᴴ * K j = 1) :
       IsPhysicalPortProtocol P 0 (rectangularKrausMap K)
   /-- Compose actual channels in execution order and add their physical depths. -/

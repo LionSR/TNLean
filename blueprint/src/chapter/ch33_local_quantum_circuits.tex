@@ -41,10 +41,9 @@ preparation of matrix product states.
 \begin{definition}[Local circuit of depth $T$]
     \label{def:qc_local_circuit}
     \lean{QuantumCircuit.IsLocalCircuitOfDepth, QuantumCircuit.IsPreparedInDepth,
-        QuantumCircuit.Layer, QuantumCircuit.circuitOp,
+        QuantumCircuit.RingLayer, QuantumCircuit.circuitOp,
         QuantumCircuit.BondLayer, QuantumCircuit.IsBondCircuitOfDepth,
         QuantumCircuit.IsBondPreparedInDepth, QuantumCircuit.ringBond,
-        QuantumCircuit.supportedOperators,
         QuantumCircuit.rectKronecker_mem_supportedOperators}
     \leanok
     A \emph{bond geometry} on a finite site set $I$ is a family $(B_b)_{b\in\beta}$ of subsets $B_b\subseteq I$. An operator on $(\C^d)^{\otimes I}$ \emph{acts on} $X\subseteq I$ if it lies in $\mathcal A_X=\MN{d}^{\otimes X}\otimes\mathbb 1_{I\setminus X}=\operatorname{span}\{\bigotimes_{i\in I}m_i:m_i=\mathbb 1\text{ for }i\notin X\}$. A \emph{layer} is a product of unitaries on pairwise disjoint bonds, a \emph{local circuit of depth $T$} is a product $U=W_T\cdots W_1$ of $T$ layers, and a state $\ket\psi$ is \emph{prepared in depth $T$} if $\ket\psi=U\bigotimes_{i\in I}\ket{v_i}$.
@@ -54,8 +53,8 @@ preparation of matrix product states.
 
 \begin{lemma}[Matrix entries of a supported operator]
     \label{thm:area_law_supported_identity}
-    \lean{QuantumCircuit.isSupportedOn_of_mem_supportedOperators,
-        QuantumCircuit.mem_supportedOperators_of_isSupportedOn,
+    \lean{ManyBody.mem_supportedOperators_iff,
+        ManyBody.supportedOperators_toSubmodule_eq_span,
         QuantumCircuit.localLift_eq_embedOp}
     \leanok
     \uses{def:qc_local_circuit}

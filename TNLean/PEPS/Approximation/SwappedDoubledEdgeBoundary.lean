@@ -23,6 +23,8 @@ The whole-domain estimate in `SwappedLocalHamiltonian` remains available.
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.Lattice.LocalHamiltonian
 
 /-- The edge-boundary norm estimate for the actual swapped doubled Hamiltonian.

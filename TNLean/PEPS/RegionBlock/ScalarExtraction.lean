@@ -40,6 +40,8 @@ not.  Linear independence of `B'`'s `R`-blocked family therefore separates the
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

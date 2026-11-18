@@ -28,6 +28,8 @@ place of the first uniform energy estimate of ALVV `lem:exp-approx`, which is fa
 (`docs/paper-gaps/alvv16_soft_truncation_energy_estimate.tex`).
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

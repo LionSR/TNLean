@@ -29,6 +29,8 @@ gap. The local support and normalization conventions are recorded in
 `docs/paper-gaps/aklv13_two_block_robustness.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
 

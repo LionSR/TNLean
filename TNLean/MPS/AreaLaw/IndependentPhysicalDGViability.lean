@@ -19,6 +19,8 @@ retained as documented at
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators Kronecker TensorProduct ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator InnerProductSpace
 
