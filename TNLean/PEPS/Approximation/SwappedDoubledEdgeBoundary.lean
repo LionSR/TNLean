@@ -47,7 +47,7 @@ theorem swapped_doubled_boundary_bound_edgeBoundary
         J * ((edgeBoundary Λ A).card : ℝ) := by
   intro p K F
   classical
-  have hsum := h.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing hh hhJ A
+  have hsum := h.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing A
   have hpaired : ‖F * K * Fᴴ - K‖ =
       ‖sheetSwapOp q A * doubledHamiltonian h.hamiltonian * (sheetSwapOp q A)ᴴ -
         doubledHamiltonian h.hamiltonian‖ := by

@@ -152,8 +152,7 @@ private theorem squareAreaLawState_operator {L q : ℕ}
 /-- Transport supplied canonical conclusions for the explicitly pulled-back
 family. This helper makes no optimizer choice. -/
 private theorem fromCanonical_physical_estimates
-    {L q m : ℕ} {J E₀ Δ B : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
-        (hhJ : ∀ i, ‖h.term i‖ ≤ J)
+    {L q m : ℕ} {E₀ Δ B : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
     {Ω : StateSpace L q} {X : Fin m → Finset (Vertex L)}
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
     (K : CanonicalFamily q X) (hK : ∀ j, Entropy.IsFeasibleFilter 0 (a j) (K j))
@@ -234,6 +233,6 @@ theorem _root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelit
   dsimp only at hresult
   rw [hbudget] at hresult
   exact ⟨fromCanonical K hK,
-    fromCanonical_physical_estimates h hh hhJ a ha K hK hmax hresult⟩
+    fromCanonical_physical_estimates h hh a ha K hK hmax hresult⟩
 
 end TNLean.PEPS.Approximation

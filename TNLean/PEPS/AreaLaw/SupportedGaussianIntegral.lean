@@ -43,8 +43,8 @@ namespace TNLean.PEPS.AreaLaw
 `C, v ≥ 0` and decay `c`, for one finite-range Hamiltonian `g`. The constants of the
 localization bound pass unchanged to the approximation error. -/
 private theorem supported_gaussian_integral_of_localization {q : ℕ} (hq : 1 ≤ q) {R : ℕ}
-    {J C v c : ℝ} (hC : 0 ≤ C) (hv : 0 ≤ v) {Λ : Finset (ℤ × ℤ)} (g : PlaneInteraction Λ q R)
-        (hg : ∀ X, (g.term X).IsHermitian) (hgJ : ∀ X, ‖g.term X‖ ≤ J)
+    {C v c : ℝ} (hC : 0 ≤ C) (hv : 0 ≤ v) {Λ : Finset (ℤ × ℤ)} (g : PlaneInteraction Λ q R)
+        (hg : ∀ X, (g.term X).IsHermitian)
     (hlocal : ∀ (S : Finset (Site Λ)) (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
       A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S → ∀ (l : ℕ) (t : ℝ),
       ‖ManyBody.heisenbergEvolution g.hamiltonian t A -
@@ -138,7 +138,7 @@ theorem supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q) (R : ℕ) {J : ℝ}
             Real.exp (graphBallLocalizationVelocity R J * T - 1 / 2 * l) :=
   supported_gaussian_integral_of_localization hq
     (mul_pos two_pos (graphBallLocalizationPrefactor_pos R)).le
-    (graphBallLocalizationVelocity_nonneg R hJ) g hg hgJ
+    (graphBallLocalizationVelocity_nonneg R hJ) g hg
     (quasilocal_region_localization q hq R J Λ g hg hgJ) H W hH Q Z hW hD l
 
 /-- The actual projected relative evolution constructs a supported
@@ -178,7 +178,7 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
   obtain ⟨C, v, c, hC, hv, hc, hlocal⟩ :=
     exists_quasilocal_region_localization q hq R J
   exact ⟨C, v, c, hC, hv, hc, fun Λ g hg hgJ H W hH Q Z hW hD l ↦
-    supported_gaussian_integral_of_localization hq hC.le hv.le g hg hgJ (hlocal Λ g hg hgJ) H W
+    supported_gaussian_integral_of_localization hq hC.le hv.le g hg (hlocal Λ g hg hgJ) H W
         hH Q Z hW hD l⟩
 
 end TNLean.PEPS.AreaLaw

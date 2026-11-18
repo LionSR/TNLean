@@ -305,7 +305,7 @@ theorem exists_sourceTarget_selected_actualCharge_density_energy
   have hcoeff := hcoefficient (fun _ ↦ d) J h hh hhJ Ω Δ s.val
     (Nat.succ_le_of_lt s.isLt) W hW.le k pre hsym hnonzero p hpInterior
   have hcap := S.actualCharge_defect_le_of_density_energy_bound_at_exponent
-    hm hM s.val h hh hhJ Ω L hΔ F.ell W Cen een C Cl P (rem k) e hW.le
+    hm hM s.val h Ω L hΔ F.ell W Cen een C Cl P (rem k) e hW.le
     pre k p henergy hcoeff
   exact ⟨s, p, hp, hdensity, hcap,
     (hupperK s.val (Nat.succ_le_of_lt s.isLt) p).2⟩

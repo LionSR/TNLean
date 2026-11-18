@@ -317,7 +317,7 @@ theorem sourceTarget_selected_actualCharge_rough_comparison_explicit
   have hcoeff := hcoefficient (fun _ ↦ d) J h hh hhJ Ω Δ s.val
     (Nat.succ_le_of_lt s.isLt) 4 (by norm_num) k pre hsym hnonzero p hpInterior
   have hcap := S.actualCharge_defect_le_of_density_energy_bound_at_exponent
-    hm hM s.val h hh hhJ Ω L hΔ F.ell 4 Cen een _ _ P (rem k) e (by norm_num)
+    hm hM s.val h Ω L hΔ F.ell 4 Cen een _ _ P (rem k) e (by norm_num)
     pre k p henergy hcoeff
   have hlowerCharge := (hlower k hk s p).2.2
   exact ⟨s, p, hp, hdensity, hlowerCharge.2.1, hcap, hlowerCharge.1,

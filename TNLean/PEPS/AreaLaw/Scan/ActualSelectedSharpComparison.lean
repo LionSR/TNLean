@@ -135,7 +135,7 @@ theorem eventually_exists_selected_actualCharge_sharp_comparison
   filter_upwards [hcomparison, eventually_gt_atTop 0] with k hcomparisonK hk
   obtain ⟨s, p, hp, hQ, henergy⟩ := hselected k hk
   have hcap : δ k s p ≤ (e₀ + cap k s p + rem k) / (g / 2) := by
-    have hbound := S.actualCharge_defect_le_of_density_energy_bound hm hM s.val h hh hhJ Ω L
+    have hbound := S.actualCharge_defect_le_of_density_energy_bound hm hM s.val h Ω L
       hΔ W Cen een C Cl P (rem k) e₀ hW.le pre k p
     simp only [hweight] at hbound
     exact hbound henergy (hcoefficient k hk s p hp)

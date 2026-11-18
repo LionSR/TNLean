@@ -167,7 +167,7 @@ hypotheses of Theorem 1.1, if `∂_Λ A = ∅`, then `S_Ω(A) = 0`.
 Only the gapped ground-state hypothesis with `Δ > 0` is used; the bound `J`,
 the range `R` and the local dimension `q` are arbitrary. -/
 theorem regionalEntropy_eq_zero_of_edgeBoundary_eq_empty (h : PlaneInteraction Λ q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hh : ∀ X, (h.term X).IsHermitian)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : StateSpace Λ q}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) {A : Finset (Site Λ)}
@@ -179,7 +179,7 @@ theorem regionalEntropy_eq_zero_of_edgeBoundary_eq_empty (h : PlaneInteraction �
 `R = 0` the Hamiltonian is a sum of on-site terms and every regional entropy of
 the gapped ground vector vanishes. -/
 theorem regionalEntropy_eq_zero_of_range_eq_zero (h : PlaneInteraction Λ q 0)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (hh : ∀ X, (h.term X).IsHermitian)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : StateSpace Λ q}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ)) :
@@ -234,7 +234,7 @@ theorem regionalEntropy_connectedComponents_eq_zero (h : PlaneInteraction Λ q R
     (s : Set (planeDomainGraph Λ).ConnectedComponent) :
     regionalEntropy Λ q Ω
       (Finset.univ.filter fun x ↦ (planeDomainGraph Λ).connectedComponentMk x ∈ s) = 0 :=
-  regionalEntropy_eq_zero_of_edgeBoundary_eq_empty h hh hhJ hΔ hΩ hgap hspan
+  regionalEntropy_eq_zero_of_edgeBoundary_eq_empty h hh hΔ hΩ hgap hspan
     (edgeBoundary_connectedComponents_eq_empty s)
 
 end ZeroBoundary

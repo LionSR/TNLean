@@ -32,8 +32,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 416–440 and 492–511, at `openai/math@adc7f124`.
 -/
 
-open scoped Matrix.Norms.L2Operator
-
 open scoped BigOperators Matrix
 open MeasureTheory Set TensorPower TensorPower.ReplicaTransport Entropy
 
@@ -51,14 +49,13 @@ open Classical in
 /-- The literal charge energy is controlled by its actual entropy defect and
 classical bad-old mass. The split capacity and replica count may be zero. -/
 theorem actualCharge_energyError_le_domainGraph
-    {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ} [NeZero q]
+    {Λ T : Finset (ℤ × ℤ)} {q R : ℕ}  [NeZero q]
     [LinearOrder (AdmissibleSupport Λ R)]
     (hT : T.Nonempty) (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
     (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-        (Ω : StateSpace Λ q) (Δ : ℝ)
+    (h : PlaneInteraction Λ q R) (Ω : StateSpace Λ q) (Δ : ℝ)
     {s L μ : ℕ} (hn : 2 ≤ S.n) (hs : s + 1 ≤ S.n * S.m)
     (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D)
     (hmargin : 4 * (S.D + 2 * S.r₀) ≤ S.m)

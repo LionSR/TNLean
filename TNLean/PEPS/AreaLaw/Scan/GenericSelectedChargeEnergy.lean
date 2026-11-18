@@ -25,8 +25,6 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
-open scoped Matrix.Norms.L2Operator
-
 noncomputable section
 
 open Matrix Set TensorPower TensorPower.ReplicaTransport
@@ -79,8 +77,7 @@ theorem actualCharge_defect_le_of_density_energy_bound_at_exponent
     [LinearOrder (AdmissibleSupport Λ R)]
     (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
     (hm : 0 < S.m) (hM : 0 < S.M) (s : ℕ)
-    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-        (Ω : StateSpace Λ q) (L : ℕ)
+    (h : PlaneInteraction Λ q R) (Ω : StateSpace Λ q) (L : ℕ)
     (hΔ : 0 < Δ) (ell W Cen een C Cl P rem e₀ : ℝ) (hW : 0 ≤ W)
     (pre : (k : ℕ) → Config k
       (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q (fun _ ↦ d) v)) → ℂ)

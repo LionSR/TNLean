@@ -353,7 +353,7 @@ noncomputable def _root_.ManyBody.PlaneInteraction.trotterProduct {R : ℕ}
 /-- **Trotter form.** Every Trotter product of a local Hamiltonian of range `R` has a matrix
 product form of range `R`, exactly.
 Source: Hastings, arXiv:cond-mat/0508554v3, lines 1053–1077. -/
-theorem _root_.ManyBody.PlaneInteraction.hasProductForm_trotterProduct {R : ℕ}
+theorem _root_.ManyBody.PlaneInteraction.hasProductForm_trotterProduct {R : ℕ} {J : ℝ}
     (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (seq : List (AdmissibleSupport Λ R)) (β : ℝ) (n : ℕ) :
     HasProductForm (fun _ ↦ q) (fun i j : Site Λ ↦

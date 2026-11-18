@@ -325,7 +325,7 @@ theorem sourceTarget_selected_actualCharge_sharp_comparison_explicit
     ⟨hp₀.trans_le hp.1, hp.2.trans_lt hp₁⟩
   have hcoeff := hcoefficient (fun _ ↦ d) J h hh hhJ Ω Δ s.val
     (Nat.succ_le_of_lt s.isLt) W hW.le k pre hsym hnonzero p hpInterior
-  have hcap := S.actualCharge_defect_le_of_density_energy_bound hm hM s.val h hh hhJ Ω L
+  have hcap := S.actualCharge_defect_le_of_density_energy_bound hm hM s.val h Ω L
     hΔ W Cen een _ _ P (rem k) e hW.le pre k p henergy hcoeff
   refine ⟨s, p, hp, hdensity, (hsharpK s p).2.1, hcap, ?_⟩
   intro τ hτ hτhalf

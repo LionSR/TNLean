@@ -412,7 +412,7 @@ theorem regionalEntropy_le_of_collar_amplification_twoFamilies_constants
   have h2 := two_le_uniformAreaLawScale N₁ N₂ C₂
   intro Λ h hh hhJ E₀ Ω hΩ hgap hspan A
   rcases Nat.eq_zero_or_pos (edgeBoundary Λ A).card with hb | hb
-  · rw [regionalEntropy_eq_zero_of_edgeBoundary_eq_empty h hh hhJ hΔ hΩ hgap hspan
+  · rw [regionalEntropy_eq_zero_of_edgeBoundary_eq_empty h hh hΔ hΩ hgap hspan
       (Finset.card_eq_zero.mp hb), hb]
     simp
   obtain ⟨P, n, s, T, hD, -, hsub, hsep, hL, hn, hcut, hord, hsum⟩ := htwo Λ A hb

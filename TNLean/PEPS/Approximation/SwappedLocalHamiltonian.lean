@@ -169,7 +169,6 @@ between the doubled Hamiltonian and its conjugate by the swap on `A` is the sum 
 corresponding differences for the terms whose support crosses `A`.
 Source: polynomial-PEPS `02-information.tex`, lines 416–424 and 513–524, at range `R`. -/
 theorem sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing (h : PlaneInteraction Λ q R)
-    (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (A : Finset (Site Λ)) :
     let F := sheetSwapOp q A
     F * doubledHamiltonian h.hamiltonian * Fᴴ - doubledHamiltonian h.hamiltonian =
@@ -218,7 +217,7 @@ theorem swapped_doubled_boundary_bound (h : PlaneInteraction Λ q R)
   intro p K F
   set T := Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A
   have hsum := congrArg (Matrix.reindex p p)
-    (h.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing hh hhJ A)
+    (h.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing A)
   simp only [← Matrix.coe_reindexRingEquiv, map_sum, map_sub, map_mul] at hsum
   change F * K * Fᴴ - K = ∑ X ∈ T,
     (F * Matrix.reindex p p (doubledHamiltonian (h.term X)) * Fᴴ -

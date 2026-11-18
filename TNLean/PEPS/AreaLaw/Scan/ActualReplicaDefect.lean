@@ -25,8 +25,6 @@ Source: OpenAI, A two-dimensional area law from a global spectral gap,
 adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 -/
 
-open scoped Matrix.Norms.L2Operator
-
 noncomputable section
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
@@ -77,11 +75,11 @@ area-law theorem. Their derivation from that construction is separate.
 Source: 07-comparators.tex, comparator:defect-mass, lines 421--443;
 08-scanner.tex, lines 371--384 and 416--451, adc7f124. -/
 theorem actualChargeScanRound_globalLowDefectProjection_mass_ge
-    {Λ : Finset (ℤ × ℤ)} {q d R : ℕ} {J : ℝ} [NeZero q] [NeZero d]
+    {Λ : Finset (ℤ × ℤ)} {q d R : ℕ}  [NeZero q] [NeZero d]
     [LinearOrder (AdmissibleSupport Λ R)]
     (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
     (hm : 0 < S.m) (hM : 0 < S.M) (s : ℕ)
-    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+    (h : PlaneInteraction Λ q R)
     (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
     (Ωt : StateSpace Λ q) (e₀ g : ℝ)
     (hΩt : ‖Ωt‖ = 1)
