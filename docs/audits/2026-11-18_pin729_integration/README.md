@@ -1,0 +1,61 @@
+# Isolated placement-pin integration: review candidate
+
+Preserved backup: db55866689688dab942d646a38f91fe4f2b3c53d on
+backup/10881-pre-new-pin-evidence. Recovery found no active build, a clean
+9a440ee87474b5564ed26c297c7f63e0ab81aeac tree, and 4.6 GiB free. Its old-pin
+15-target queue had five build/strict passes, one failed target and nine not
+started. These results are historical, not evidence for the new pin.
+
+Main: 75fc22288234ef66239cb4c2fa0b22914cfa5c6b.
+PR 10905: 8a040ee527c3a4861ab2a5c1369bf9a9c9d611fd (still open when read).
+QICLean: 729428582b78ab7529b3796099193649f947354a.
+Main's b5ad5f5aa (#10903) supplies all four canonical interval opens: the three
+local edits merged identically and the fourth came from main. No duplicate
+opens or repeated cherry-picks were introduced. Formatting patch 5f9d620b was
+absent both ancestrally and textually and was applied exactly once (012eb9cc6).
+
+## Conflict and scope assessment
+
+Both sequential merges were text-clean. There are eleven direct overlap paths
+(overlap11.txt): five PEPS Lean files and six documentation files. Zero textual
+conflicts is not mathematical or compilation clearance.
+
+The five Lean overlaps preserve the reviewed scope corrections while adopting
+10905's direct global configuration coordinates. RangeNestedPatchEnergy still
+requires normalization and canonical eigenspace membership, not singleton
+span; positive-gap callers still obtain gap/span through the explicit bridge.
+NestedPatchApproximation retains the projector-PSD and membership inputs when
+constructing its square-state evidence. RangeNestedPatchApproximation keeps
+the hDelta-positive conversion; adaptive supply and marginal closeness adopt
+the new global coordinates consistently. The stale range-energy docstring
+claiming a one-dimensional eigenspace is corrected; proof and signature are
+unchanged by that local edit.
+
+Geometry, LocalCircuit, Channel/Layer, SitePermutation, both spectator owners,
+Basic, BoundaryTheorem and BoxEntropySupremum remain byte-identical to e06a33e5.
+All fixtures and arbitrary Aux/bond/site/control and nonpositive-gap repairs
+are retained. Deleted local lift definitions are not reintroduced. The only
+remaining dependentRegionOperatorLift_sum name is a private HoleEncoder lemma
+whose statement and proof directly use ManyBody.place, not a second placement
+implementation. F12 historical descriptions, F4 dedup follow-up and new F12c
+placement record coexist. The new place owner is QICLean/ManyBody/Sites/Placement.
+
+## Validation boundary and next targets
+
+Static checks passed: import layers, 84 selector tests, 12 timing tests,
+22 immutable-snapshot tests, roles and whitespace. Blueprint sync initially
+failed for two unavailable Mathlib source declarations; only unchanged,
+revision-matched dependency links were then installed and sync rerun.
+The separate QIC checkout has no imported old QIC/TN build products.
+Any placement-owner build result is recorded separately; it does not validate
+the five combined TN consumers or the regression fixtures.
+
+impact.json records 113 directly changed TN files, 29 changed QIC modules,
+1669 transitively affected TNLean/ modules and 11 affected fixtures. Old-pin
+passes cannot be relabelled as new-pin success. Prioritize the five overlap
+consumers, the retained zero-gap and arbitrary-label fixtures, then the full
+recorded affected set after independent review. The unrelated old-pin consumer
+queue remains assigned to its original worker; it was not restarted here.
+
+No external author branch, shared PR head/base, or issue body was modified.
+This candidate is for independent review, not merge approval.

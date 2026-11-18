@@ -143,7 +143,7 @@ open Classical in
 /-- The normalized regularized output of every feasible patch minimum on the range-`R`
 nested squares has excitation energy at most `C_E κ²`, with
 `C_E = rangePatchEnergyConstant q R J`, for a range-`R` Hamiltonian on any finite induced
-domain whose ground space at `E₀` is the line through a unit vector. No gap is used.
+domain with a unit vector in the canonical `E₀` eigenspace. No gap or uniqueness is used.
 
 The regions are the selected range-`R` squares, including repeated clipped regions, and
 the weights are exactly `κ / m`. At `R = 1` the squares are the source squares.
