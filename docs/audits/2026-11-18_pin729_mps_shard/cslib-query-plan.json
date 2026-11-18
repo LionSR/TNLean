@@ -1,0 +1,42 @@
+{
+  "source_pin": "acab13b776722f5efa897c780d6fa1a3069d709e",
+  "toolchain": "leanprover/lean4:v4.36.0-rc1",
+  "order": [
+    "Cslib.Foundations.Lint.Basic",
+    "Cslib.Tactic.GrindAttrs",
+    "Cslib.Init",
+    "Cslib.Foundations.Control.Monad.IsMonadHom",
+    "Cslib.Foundations.Control.Monad.Free",
+    "Cslib.Algorithms.Lean.TimeM",
+    "Cslib.Algorithms.Lean.Query.FreeM",
+    "Cslib.Algorithms.Lean.Query.Bounds"
+  ],
+  "external_imports": [
+    "Batteries.Control.AlternativeMonad",
+    "Batteries.Tactic.Lint.Basic",
+    "Lean.Message",
+    "Lean.Meta.Tactic.Grind.RegisterCommand",
+    "Mathlib.Algebra.Group.Defs",
+    "Mathlib.Combinatorics.Pigeonhole",
+    "Mathlib.Data.Fintype.Card",
+    "Mathlib.Data.Nat.Log",
+    "Mathlib.Data.Set.Function",
+    "Mathlib.Init",
+    "Mathlib.Order.Monotone.Defs",
+    "Mathlib.SetTheory.Cardinal.Finite",
+    "Mathlib.Tactic.Common",
+    "Std.Do.WP.Monad"
+  ],
+  "source_hashes": {
+    "Cslib.Foundations.Lint.Basic": "b92bb7aac662d4bea332126949702b17563cbaa833826646b7fad8265a087cfa",
+    "Cslib.Tactic.GrindAttrs": "039da177090845a88b3a3cc7697f76f33369406a27531cfebfca92518b3b3b9c",
+    "Cslib.Init": "e453b900baa1938e94b02c562254de2ab2240611e3f23410f8c35dde0f419b0b",
+    "Cslib.Foundations.Control.Monad.IsMonadHom": "4b9ac3f8802833e1f71005091e44dcb804b20876dfa553d5a5ea6f63c26314e6",
+    "Cslib.Foundations.Control.Monad.Free": "6146ad73bdbea4e5b8554b1a00bba9dbdf4aa6c29940c77b0b868bd0de4825fa",
+    "Cslib.Algorithms.Lean.TimeM": "391294b3a961332ae8a321fe4158bd45eaa5fd87edd80a5ca39e4790481c5413",
+    "Cslib.Algorithms.Lean.Query.FreeM": "4dc6a5ba3a80c0f084ae29df378a1a3f376e3c613706dcda4ecc5a59cf571124",
+    "Cslib.Algorithms.Lean.Query.Bounds": "e7c0d9b55c40a4144f57386b947119e18ecb3674b629212dae1b945805b212ed"
+  },
+  "cache_initially_absent": true,
+  "root_mathlib_pin": "625d8914199bc567cca9b91f90e8e5afafa5ae51"
+}

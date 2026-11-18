@@ -144,3 +144,19 @@ Original SpectralCutoff fixed-run logs were already pushed in 9630ab7e; their
 zero length records successful diagnostic-free executions, not missing logs.
 spectralcutoff-fixed-verification.json indexes the two complete command records
 with exact source SHA, pin, exit code, elapsed time and source/artifact hashes.
+
+## Narrow CSLib environment repair
+
+535 previously passed target hashes were rechecked. The pinned official CSLib
+checkout was genuinely absent, not merely missing from LEAN_PATH. Only the
+eight-module transitive closure of Query.Bounds was checked out at
+acab13b776722f5efa897c780d6fa1a3069d709e and compiled, with matching Lean
+v4.36.0-rc1 and the candidate's resolved external dependencies. The existing
+cache root is already on LEAN_PATH; no pin or production source changed.
+
+All eight dependency builds passed. Query then passed build/strict separately
+in 4.76/3.34 seconds; original unknown-prefix failure remains untouched.
+cslib-query-plan.json records topology and source hashes, cslib-results.jsonl
+records exact commands, and cslib-artifacts.json includes module sidecars.
+Query.after-cslib logs distinguish the successful repair from the original
+failure. Remaining 329 targets resume without rerunning old target successes.
