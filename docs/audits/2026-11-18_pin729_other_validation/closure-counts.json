@@ -1,0 +1,854 @@
+{
+  "TNLean/Circuit.lean": {
+    "TN_closure": 118,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/ArbitrarySiteGateEmbedding.lean": {
+    "TN_closure": 10,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel.lean": {
+    "TN_closure": 50,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/ApproximateConversion.lean": {
+    "TN_closure": 9,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/AsymptoticConversion.lean": {
+    "TN_closure": 10,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/BoundedPortApproximateOutput.lean": {
+    "TN_closure": 39,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/BoundedPortPureOutput.lean": {
+    "TN_closure": 40,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/Conversion.lean": {
+    "TN_closure": 8,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/DataInitialization.lean": {
+    "TN_closure": 28,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/DimensionBoundedConversion.lean": {
+    "TN_closure": 9,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/EncodedChannelLayer.lean": {
+    "TN_closure": 20,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/EncodedChannelPlacement.lean": {
+    "TN_closure": 13,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/EncodedChannelProtocol.lean": {
+    "TN_closure": 22,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/Feedforward.lean": {
+    "TN_closure": 9,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/Layer.lean": {
+    "TN_closure": 7,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/NativePortLayer.lean": {
+    "TN_closure": 24,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/NativeRegisterWires.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/OnsiteChannelProduct.lean": {
+    "TN_closure": 14,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/OnsiteRegisterEncoding.lean": {
+    "TN_closure": 11,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PhysicalPort.lean": {
+    "TN_closure": 12,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PhysicalPortCodes.lean": {
+    "TN_closure": 26,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PhysicalPortDilation.lean": {
+    "TN_closure": 19,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PhysicalPortEmbedding.lean": {
+    "TN_closure": 14,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PhysicalPortEnvironmentComposition.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PhysicalPortIO.lean": {
+    "TN_closure": 32,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PhysicalPortLocalDilation.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PhysicalPortPureOutput.lean": {
+    "TN_closure": 21,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PhysicalPortUnitaryCompilation.lean": {
+    "TN_closure": 38,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PhysicalProtocolCompilation.lean": {
+    "TN_closure": 28,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PhysicalRegisterEncoding.lean": {
+    "TN_closure": 18,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PortChannelRouting.lean": {
+    "TN_closure": 14,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PortMatching.lean": {
+    "TN_closure": 10,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PortRegisters.lean": {
+    "TN_closure": 15,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PortRouting.lean": {
+    "TN_closure": 13,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/PortSimulation.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/RegisterChannelLift.lean": {
+    "TN_closure": 6,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/RegisterEnvironment.lean": {
+    "TN_closure": 7,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/RegroupedProtocol.lean": {
+    "TN_closure": 24,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/SiteBlocking.lean": {
+    "TN_closure": 20,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Channel/WholeSiteChannels.lean": {
+    "TN_closure": 25,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/CleanImplementationPlacement.lean": {
+    "TN_closure": 24,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/CleanUnitaryImplementation.lean": {
+    "TN_closure": 23,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/CoherentEncoder.lean": {
+    "TN_closure": 7,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Composition.lean": {
+    "TN_closure": 10,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/ConfigurationLayers.lean": {
+    "TN_closure": 13,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/EmbeddedProduct.lean": {
+    "TN_closure": 6,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/ExpectationBounds.lean": {
+    "TN_closure": 6,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Gates.lean": {
+    "TN_closure": 16,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Gates/Controlled.lean": {
+    "TN_closure": 11,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Gates/ControlledProducts.lean": {
+    "TN_closure": 12,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Gates/Permutation.lean": {
+    "TN_closure": 11,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Gates/TwoSiteUniversality.lean": {
+    "TN_closure": 13,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/ImageReflectionCircuit.lean": {
+    "TN_closure": 15,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/InitializedRegisterProjection.lean": {
+    "TN_closure": 26,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/LocalCircuit.lean": {
+    "TN_closure": 6,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Measurement.lean": {
+    "TN_closure": 30,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Measurement/AdaptiveConversion.lean": {
+    "TN_closure": 10,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Measurement/AdaptiveRound.lean": {
+    "TN_closure": 20,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Measurement/Asymptotic.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Measurement/Channel.lean": {
+    "TN_closure": 18,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Measurement/CoherentRounds.lean": {
+    "TN_closure": 15,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Measurement/GHZ.lean": {
+    "TN_closure": 16,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Measurement/PreparedComposition.lean": {
+    "TN_closure": 15,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Measurement/Protocol.lean": {
+    "TN_closure": 13,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Measurement/Rounds.lean": {
+    "TN_closure": 14,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/PairProduct.lean": {
+    "TN_closure": 9,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/PairProductPowers.lean": {
+    "TN_closure": 10,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/ProductBasisPenalty.lean": {
+    "TN_closure": 14,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/ProductStateCircuit.lean": {
+    "TN_closure": 12,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/QuantitativeSitePermutation.lean": {
+    "TN_closure": 26,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/QuantitativeUnitaryGates.lean": {
+    "TN_closure": 15,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/RegionSplit.lean": {
+    "TN_closure": 6,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/RegionalSwap.lean": {
+    "TN_closure": 9,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/RingSeparation.lean": {
+    "TN_closure": 7,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SelectedZeroRegisterReflection.lean": {
+    "TN_closure": 24,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SelectedZeroRegisterReflectionPool.lean": {
+    "TN_closure": 25,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SelectedZeroRegisterSupport.lean": {
+    "TN_closure": 25,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SiteEmbedding.lean": {
+    "TN_closure": 5,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SiteEmbeddingNorm.lean": {
+    "TN_closure": 8,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SiteEmbeddingOrder.lean": {
+    "TN_closure": 7,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SiteOperators.lean": {
+    "TN_closure": 6,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SiteOscillation.lean": {
+    "TN_closure": 5,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SitePermutation.lean": {
+    "TN_closure": 6,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SitePermutationSupport.lean": {
+    "TN_closure": 5,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SitewiseTensorSupport.lean": {
+    "TN_closure": 5,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SpectatorOscillationSupport.lean": {
+    "TN_closure": 9,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SpectatorSiteExpectation.lean": {
+    "TN_closure": 7,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SupportProjection.lean": {
+    "TN_closure": 7,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SupportedComplementProduct.lean": {
+    "TN_closure": 7,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SupportedGroundSpace.lean": {
+    "TN_closure": 5,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SupportedMatrixElements.lean": {
+    "TN_closure": 5,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SupportedNormalizedGroundSpace.lean": {
+    "TN_closure": 6,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/SupportedOperators.lean": {
+    "TN_closure": 4,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Teleportation.lean": {
+    "TN_closure": 22,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Teleportation/Chains.lean": {
+    "TN_closure": 18,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Teleportation/Hop.lean": {
+    "TN_closure": 16,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Teleportation/LongRangeGates.lean": {
+    "TN_closure": 19,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Teleportation/RegisterGates.lean": {
+    "TN_closure": 20,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Teleportation/Round.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/Teleportation/ZeroSubspace.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/WeightedGHZ.lean": {
+    "TN_closure": 11,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/WindowProduct.lean": {
+    "TN_closure": 14,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/ZeroRegisterConjunction.lean": {
+    "TN_closure": 20,
+    "foreign_family": 0
+  },
+  "TNLean/Circuit/ZeroRegisterReflection.lean": {
+    "TN_closure": 21,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice.lean": {
+    "TN_closure": 497,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/BoundedDegreeImaginaryTime.lean": {
+    "TN_closure": 8,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion.lean": {
+    "TN_closure": 44,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/AllTemperatures.lean": {
+    "TN_closure": 10,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/ClusterFactorization.lean": {
+    "TN_closure": 14,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/CrossingComponentSum.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/CrossingIntervalCount.lean": {
+    "TN_closure": 16,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/LocalIndexCount.lean": {
+    "TN_closure": 24,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/MandatoryLabels.lean": {
+    "TN_closure": 15,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/NearestNeighborIntervalRank.lean": {
+    "TN_closure": 24,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/NearestNeighborPath.lean": {
+    "TN_closure": 21,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/NearestNeighborSupport.lean": {
+    "TN_closure": 23,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/NearestNeighborTruncationRank.lean": {
+    "TN_closure": 26,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/NormalizedPathTail.lean": {
+    "TN_closure": 19,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/PathCrossingExpansion.lean": {
+    "TN_closure": 20,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/PathIntervals.lean": {
+    "TN_closure": 15,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/PathSeparation.lean": {
+    "TN_closure": 16,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/PathWindowWeights.lean": {
+    "TN_closure": 16,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/RetainedClusterSupport.lean": {
+    "TN_closure": 15,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/SeparatedClusterSums.lean": {
+    "TN_closure": 16,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/SeparatedClusterSupports.lean": {
+    "TN_closure": 15,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/TemperatureError.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/TruncatedAllTemperatures.lean": {
+    "TN_closure": 20,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/TruncatedPositivity.lean": {
+    "TN_closure": 15,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/TruncatedProductForm.lean": {
+    "TN_closure": 15,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ClusterExpansion/WindowInclusionExclusion.lean": {
+    "TN_closure": 16,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/CrossingSupports.lean": {
+    "TN_closure": 2,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/DisjointRegionalGround.lean": {
+    "TN_closure": 9,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/EntropyDimension.lean": {
+    "TN_closure": 13,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/GaussianConnectedCorrelation.lean": {
+    "TN_closure": 19,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/GaussianFilteredIncrement.lean": {
+    "TN_closure": 12,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/GaussianFilteredLocality.lean": {
+    "TN_closure": 9,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/GaussianFilteredMetricTruncation.lean": {
+    "TN_closure": 25,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/GaussianFilteredTermLocalization.lean": {
+    "TN_closure": 13,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/GaussianFilteredTruncation.lean": {
+    "TN_closure": 14,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/GaussianFilteredTruncationDecay.lean": {
+    "TN_closure": 20,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/GaussianFilteredTruncationGround.lean": {
+    "TN_closure": 18,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/GaussianFilteredTruncationWeighted.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/GaussianGroundStateOverlap.lean": {
+    "TN_closure": 26,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/GaussianNegativeFrequencyLocality.lean": {
+    "TN_closure": 15,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/GaussianVariationalLowerBound.lean": {
+    "TN_closure": 9,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/GaussianZeroRange.lean": {
+    "TN_closure": 8,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/HardTruncation.lean": {
+    "TN_closure": 13,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/HeisenbergDuhamel.lean": {
+    "TN_closure": 7,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LocalHamiltonian.lean": {
+    "TN_closure": 7,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyBasis.lean": {
+    "TN_closure": 15,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyBasisConstruction.lean": {
+    "TN_closure": 23,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyBasisIteration.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyBasisPerturbation.lean": {
+    "TN_closure": 44,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyBasisRecursive.lean": {
+    "TN_closure": 26,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyBasisRefinement.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyBasisSimpleSpectrum.lean": {
+    "TN_closure": 16,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyBasisSpectralSplit.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyBasisTruncatedUniform.lean": {
+    "TN_closure": 43,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyBasisTwoDimensional.lean": {
+    "TN_closure": 24,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyBasisUniform.lean": {
+    "TN_closure": 25,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyBasisUniformGeneral.lean": {
+    "TN_closure": 30,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyCommutator.lean": {
+    "TN_closure": 14,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyCommutatorExample.lean": {
+    "TN_closure": 8,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyCommutatorSum.lean": {
+    "TN_closure": 22,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyDecayKernel.lean": {
+    "TN_closure": 23,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/LowEnergyMetricCommutator.lean": {
+    "TN_closure": 27,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/MarginalTails.lean": {
+    "TN_closure": 10,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/PhysicalBufferCoordinates.lean": {
+    "TN_closure": 8,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ProductForm.lean": {
+    "TN_closure": 9,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ProductFormIndexRestriction.lean": {
+    "TN_closure": 10,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/RegionEntropyInequalities.lean": {
+    "TN_closure": 1,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/RegionalEntropy.lean": {
+    "TN_closure": 8,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/RegionalEntropyBridge.lean": {
+    "TN_closure": 11,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/RegionalReset.lean": {
+    "TN_closure": 11,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/RegionalResetEntropy.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/RegionalSwapSupport.lean": {
+    "TN_closure": 12,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ReplicaSwap.lean": {
+    "TN_closure": 12,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/Sheet.lean": {
+    "TN_closure": 99,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/Sheet/Birth.lean": {
+    "TN_closure": 12,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/Sheet/BoundedChanges.lean": {
+    "TN_closure": 34,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/Sheet/Defs.lean": {
+    "TN_closure": 33,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/Sheet/FrontChanges.lean": {
+    "TN_closure": 32,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/Sheet/LeftSupportedSchmidtRank.lean": {
+    "TN_closure": 13,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/Sheet/Monomials.lean": {
+    "TN_closure": 25,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/Sheet/RegionalOperatorForms.lean": {
+    "TN_closure": 12,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/Sheet/Registers.lean": {
+    "TN_closure": 28,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/Sheet/SheetStack.lean": {
+    "TN_closure": 93,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/Sheet/Splitting.lean": {
+    "TN_closure": 11,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/Sheet/SupportedSchmidtRank.lean": {
+    "TN_closure": 13,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/Sheet/SwapCorrection.lean": {
+    "TN_closure": 14,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/Sheet/TwoRegisters.lean": {
+    "TN_closure": 30,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/SiteSymmetry.lean": {
+    "TN_closure": 7,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/SupportedPolarUnitary.lean": {
+    "TN_closure": 9,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/SupportedUnitaryEntropy.lean": {
+    "TN_closure": 10,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/TranslationFiniteOrbitCommutator.lean": {
+    "TN_closure": 42,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/TranslationFiniteOrbitSpacing.lean": {
+    "TN_closure": 20,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/TranslationGroundSpace.lean": {
+    "TN_closure": 28,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/TranslationMomentum.lean": {
+    "TN_closure": 18,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/TranslationSupercell.lean": {
+    "TN_closure": 17,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/TranslationSupercellCommutator.lean": {
+    "TN_closure": 29,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/TranslationSupercellDecay.lean": {
+    "TN_closure": 18,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/TranslationSupercellSpacing.lean": {
+    "TN_closure": 19,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/TranslationSupercellTruncated.lean": {
+    "TN_closure": 34,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/TreeBasisCounterexample.lean": {
+    "TN_closure": 11,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/TreeBasisCounterexample/HardCoreNumber.lean": {
+    "TN_closure": 8,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/TreeBasisCounterexample/HardCoreSectorGap.lean": {
+    "TN_closure": 10,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/TrotterIndexCount.lean": {
+    "TN_closure": 11,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/VariationalLowerBound.lean": {
+    "TN_closure": 8,
+    "foreign_family": 0
+  },
+  "TNLean/Lattice/ZeroEntropy.lean": {
+    "TN_closure": 4,
+    "foreign_family": 0
+  },
+  "TNLean/MPS.lean": {
+    "TN_closure": 4333,
+    "foreign_family": 3560
+  },
+  "TNLean/PEPS.lean": {
+    "TN_closure": 2295,
+    "foreign_family": 1818
+  },
+  "TNLean/QCA.lean": {
+    "TN_closure": 193,
+    "foreign_family": 99
+  },
+  "TNLean/QCA/IntervalSupport.lean": {
+    "TN_closure": 8,
+    "foreign_family": 0
+  }
+}
