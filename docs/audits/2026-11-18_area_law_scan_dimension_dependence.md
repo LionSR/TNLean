@@ -173,8 +173,8 @@ Write `b` for the boundary size and `n` for the template scale.
 | 2 | Template entropy | Template `≤ C_e n^{1+e}`; prefixes `≤ C_e(n L^e + n)` (`Scan/TemplateSourceEntropy.lean:74`); core `C(18 + 4/(2^e−1)) n s₀^e` (`Geometry/TemplateBoxEntropy.lean:40`) | `C_e n^{2+e}`, prefixes `C_e(n² L^e + n²)` | Yes. The factor `1/(2^e−1) ≈ 7·10⁵` at `e = boxError` does not depend on dimension |
 | 3 | Dyadic moment (Lemma 9.4) | `∑ (2^k)^{1+e} ≤ (A + B/(2^e−1)) L^e` with `2^k·#cells` budgets (`Geometry/CappedDyadicPartitionByScale.lean:48`) | `∑ (2^k)^{2+e} ≤ (A + B/(2^e−1)) L^e` with `4^k·#cells` budgets | Yes. The geometric-series arithmetic (`Geometry/DyadicWeightedSum.lean:28`) is unchanged |
 | 4 | Bootstrap iterate | `e_j = (1−ℓ)^j e₀` and `C_j ≤ ((A+1)(1+C₀))^{(2K)^M}` (`Scan/BootstrapIterateBound.lean:98`) | See the second note below | Yes, given a 3D Prop 3.3 with `e₀ < 1`. It does not close from the trivial volume bound alone: at `e₀ = 1` the gain `1 − e₀` is zero (`Scan/BootstrapParameters.lean:35–49`) |
-| 5 | Amplification time | `t_* = (6/g)(I + w + K log n)`, linear in the collar information `I` (`Amplification/GoodRealization.lean:103`) | `t_* ≳ n^{2−ε}/g` | See row 6 |
-| 6 | Amplification radius vs clearance | `r ≤ C n^{(1−ε)/α}` (`Amplification/RadiusBound.lean:56`), which needs `(1−ε)/α < β < 1` (`Amplification/RadiusScales.lean:43`) | `r ≳ n^{(2−ε)/α} ≈ n²` | **No.** `L + 2r = o(n^β)` would need `2 − ε < β < 1`. The radius exceeds the template size `n` itself |
+| 5 | Amplification time | `t_* = (6/g)(I + w + K log n)`, linear in the collar information `I` (`Amplification/GoodRealization.lean:103`) | From `I ≤ C n^{2−ε}` only the upper bound `t_* ≲ n^{2−ε}/g` follows | See row 6 |
+| 6 | Amplification radius vs clearance | `r ≤ C n^{(1−ε)/α}` (`Amplification/RadiusBound.lean:56`), which needs `(1−ε)/α < β < 1` (`Amplification/RadiusScales.lean:43`) | The guaranteed radius is only `r ≲ n^{(2−ε)/α} ≈ n²`. This is an upper bound: a smaller information gives a smaller radius | **No, as stated.** The guarantee `L + 2r = o(n^β)` would need `(2 − ε)/α < β < 1`. The available information estimate cannot certify a radius below the clearance scale `n^β`, or even below the template size `n` |
 | 7 | Belt sparsity | See the third note below | See the third note below | Yes after re-tuning `ζ`, e.g. `ζ = 1 − δ/4` |
 | 8 | Typical window | `w = n^{3/5} ≥ √\|∂Y\|`, with `\|∂Y\| ≤ C₀ n` (`Amplification/TypicalProjectors.lean:139`, lines 164–176) | `w ≳ n` | Harmless next to row 6, but `w` already exceeds the 2D radius budget |
 | 9 | Error sum and residual | `∑ n_i^{-100} ≤ C b` and `\|D\| ≤ C b`. They are piece counts such as `repairStage_markIndex_prefix_le` (`Geometry/RepairTotalMarkPrefixCount.lean:57`) and `primaryPitchIndices_error_sum_le` (`Geometry/InitialPrimaryErrorSum.lean:58`) | `(2C+1)³` constants; `27^j` descendants in place of `9^j` | Yes, provided row 7 decays and the class (C) repair of §2 exists |
@@ -212,9 +212,11 @@ Two barriers stand out. The rest of the spine is (A), or (B) with routine expone
      - this is used at `BoundaryTheorem.lean:432` to turn Prop 11.2's `2 n^β` clearance
        into Prop 10.2's hypothesis.
    - Inferred:
-     - in 3D the collar information is only sublinear in the collar *area*, `n^{2−ε}`, so
-       `r ≈ n²`;
-     - templates of linear size `n` cannot absorb a radius of `n²`;
+     - in 3D the natural collar estimate is only sublinear in the collar *area*,
+       `I ≤ C n^{2−ε}`, so the radius it guarantees is only `r ≲ n^{(2−ε)/α} ≈ n²`;
+     - this is an upper bound, not a lower bound: the obstruction is that the estimate cannot
+       certify a radius below the clearance `n^β` that templates of linear size `n` provide,
+       not that the radius must exceed `n`;
      - a 3D argument needs either a collar bound `I ≪ n`, which is sublinear in the linear
        size and therefore far stronger than an area law at scale `n`, or an amplification
        mechanism whose time is not linear in `I`.
@@ -266,9 +268,18 @@ How the proposition relates to the approximate-ground-state-projector (AGSP) rou
   - Known AGSPs have `log D` growing at least linearly in `|∂A|`, while `δ` is set by the
     polynomial degree and the gap.
   - For large boundaries `D·δ ≤ 1/2` fails.
-  - Even given such a seed with overlap `μ = exp(−C|∂A|)`, the bootstrap would need the
-    stronger condition `D·δ ≲ μ`. With present AGSP constructions this condition also fails
-    when `|∂A|` is large.
-  - So the seed alone does not close the AGSP route in two or more dimensions.
+  - That condition is what lets a product vector serve as the starting point; the seed is
+    meant to replace it.
+  - Given a seed with squared overlap `μ = exp(−C|∂A|)` and Schmidt rank `S = exp(C|∂A|)`,
+    the normalization estimate behind `exists_cut_product_filtered_output` gives, after `m`
+    applications of an AGSP, squared error at most `2δ^m/μ` and Schmidt rank at most
+    `S·D^m`. So the small overlap raises the number of filtering steps to
+    `m ≈ (C|∂A| + log(1/ε)) / log(1/δ)`, but it imposes no condition `D·δ ≲ μ`.
+  - The resulting rank is `exp(C|∂A| + m log D)`. Its logarithm is linear in `|∂A|` only if
+    `log D / log(1/δ)` stays bounded independently of `|∂A|`.
+  - Whether AGSPs with that ratio exist in two or more dimensions is the open point. Known
+    constructions have `log D` growing with the boundary, so the seed does not by itself
+    close the AGSP route there. Any further condition needed by a particular entropy
+    bootstrap would have to be derived explicitly.
 - **The seed and the barriers of §4 (inferred).** The seed is independent of the scan proof
   recorded above. It does not remove either barrier of §4.
