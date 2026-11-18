@@ -1,4 +1,4 @@
-% Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 1695--1775
+% Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 1695--1777
 % (block-injective interpolation), with lines 317, 1584--1586, defAgamma,
 % Agammasym, and the injective-case fusion argument at lines 1667--1685.
 
@@ -325,12 +325,24 @@ case.
     theory with simultaneous injectivity length one and a two-site
     interaction identifies the ground space with the span of the block
     states, gives continuity of its projection, and gives the uniform gap
-    on compact parameter sets. A block state takes the value of the
-    periodic state of its block on configurations inside its sector and
-    vanishes on every other nonempty configuration. The block states at
-    $\gamma\in[0,1]$ are nonzero, by the injective case, and so linearly
-    independent. The span of a continuous family of linearly independent
-    vectors has a projection that is continuous at every such point, and it
+    on compact parameter sets. For $N\geq1$, a word $\tau$ of length $N$ in
+    the basis of $F_y\otimes F_y$, and its image $\iota_y(\tau)$ in the basis
+    of $\mathcal H$,
+    \begin{align}
+        V^{(N)}(A_x(\gamma))_{\iota_y(\tau)}
+         & =\delta_{xy}\,V^{(N)}\bigl(A_y(\gamma)|_{F_y\otimes F_y}\bigr)_\tau,
+        \label{eq:mpo_block_mixed_sector_support}
+    \end{align}
+    since for $y\neq x$ the first letter of $\iota_y(\tau)$ is a zero matrix
+    of $A_x(\gamma)$. The states
+    $V^{(N)}(A_y(\gamma)|_{F_y\otimes F_y})$ are nonzero for
+    $\gamma\in[0,1]$, by the injective case. Evaluating
+    $\sum_xc_xV^{(N)}(A_x(\gamma))=0$ at $\iota_y(\tau)$ through
+    (\ref{eq:mpo_block_mixed_sector_support}) gives
+    $c_yV^{(N)}(A_y(\gamma)|_{F_y\otimes F_y})_\tau=0$ for every $\tau$, so
+    $c_y=0$: the block states are linearly independent. The span of a
+    continuous family of linearly independent vectors has a projection that
+    is continuous at every such point, and it
     agrees with the ground projection on $(0,1)$.
 \end{proof}
 

@@ -36,19 +36,19 @@ nearest neighbours of the source.
 $+\sum X_iZ_jZ_kZ_l$ has as unique ground state the common $-1$ eigenvector of the
 stabilizers, which is $\prod_i Z_i$ applied to the cluster state, not the cluster state.
 The Hamiltonian here is $-\sum X_iZ_jZ_kZ_l$, the stabilizer convention under which the
-source's claim holds.
+source's claim holds. Documented in `docs/paper-gaps/rmp_honeycomb_cluster_peps.tex`.
 
-**Scope restriction (single-site injectivity):** the source calls the PEPS injective. The
-vertex tensor, read as a map from its virtual legs to the qubit, has rank two, so a vertex
-with at least two bonds is not injective (`not_isVertexInjective_honeycombClusterPEPS`).
-Injectivity holds only after blocking, for instance over hexagonal plaquettes; this is not
-formalized, and no injectivity of the honeycomb PEPS is asserted.
+**False source (injectivity):** the source calls the PEPS injective, and the review defines
+injectivity tensor by tensor (line 1929). The vertex tensor, read as a map from its virtual
+legs to the qubit, has rank two, so a vertex with at least two bonds is not injective
+(`not_isVertexInjective_honeycombClusterPEPS`); the source's two-site blocking maps a space
+of dimension sixteen to one of dimension four. Injectivity holds after blocking over
+hexagonal plaquettes; this is not formalized, and no injectivity of the honeycomb PEPS is
+asserted. Documented in `docs/paper-gaps/rmp_honeycomb_cluster_injectivity.tex`.
 
 **Scope restriction (torus size):** the brick wall on a `width × height` torus is the
-honeycomb when both sides are even; the three neighbours are distinct for width at least
-three. As for the square-lattice cluster state, small tori are excluded where bonds would
-coincide. Documented, with the two previous items, in
-`docs/paper-gaps/rmp_honeycomb_cluster_peps.tex`.
+honeycomb when both sides are even; the three neighbours are distinct for even height and
+width at least three. Documented in `docs/paper-gaps/rmp_peps_examples_small_torus.tex`.
 
 ## References
 
@@ -56,6 +56,8 @@ coincide. Documented, with the two previous items, in
   N. Schuch, F. Verstraete, *Matrix product states and projected entangled pair states:
   Concepts, symmetries, theorems*, Section IV, line 1445
 -/
+
+open ManyBody (Edge)
 
 open scoped BigOperators
 
@@ -112,13 +114,13 @@ theorem IncidentEdge.adj_other {v : V} (ie : IncidentEdge G v) : G.Adj v ie.othe
 def incidentEdgeEquivNeighborFinset (v : V) :
     IncidentEdge G v ≃ {w // w ∈ G.neighborFinset v} where
   toFun ie := ⟨ie.other, (G.mem_neighborFinset v _).mpr ie.adj_other⟩
-  invFun w := ⟨Edge.ofAdj ((G.mem_neighborFinset v w).mp w.2), by
-    rcases Edge.ofAdj_endpoints ((G.mem_neighborFinset v w).mp w.2) with h | h
+  invFun w := ⟨ManyBody.Edge.ofAdj ((G.mem_neighborFinset v w).mp w.2), by
+    rcases ManyBody.Edge.ofAdj_endpoints ((G.mem_neighborFinset v w).mp w.2) with h | h
     · exact Or.inl h.1
     · exact Or.inr h.2⟩
   left_inv ie := by
     apply Subtype.ext
-    refine Edge.ofAdj_eq_of_endpoints (IncidentEdge.adj_other G ie) ie.1 ?_
+    refine ManyBody.Edge.ofAdj_eq_of_endpoints (IncidentEdge.adj_other G ie) ie.1 ?_
     rcases ie with ⟨⟨⟨a, b⟩, hab, hadj⟩, hv⟩
     unfold IncidentEdge.other
     dsimp only
@@ -130,9 +132,9 @@ def incidentEdgeEquivNeighborFinset (v : V) :
   right_inv w := by
     apply Subtype.ext
     have hadj := (G.mem_neighborFinset v w).mp w.2
-    change IncidentEdge.other G ⟨Edge.ofAdj hadj, _⟩ = w
+    change IncidentEdge.other G ⟨ManyBody.Edge.ofAdj hadj, _⟩ = w
     unfold IncidentEdge.other
-    rcases Edge.ofAdj_endpoints hadj with ⟨h1, h2⟩ | ⟨h1, h2⟩
+    rcases ManyBody.Edge.ofAdj_endpoints hadj with ⟨h1, h2⟩ | ⟨h1, h2⟩
     · simp [h1, h2]
     · have hne : (w : V) ≠ v := (G.ne_of_adj hadj).symm
       simp [h1, hne]

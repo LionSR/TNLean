@@ -92,8 +92,10 @@ $\mathcal D^{2k}\ge s$. Since $2k\le m+1$,
 \end{align}
 The formalized conclusion is~(\ref{eq:alvv16_unique_rounded_count}); the even case
 admits the sharper estimate~(\ref{eq:alvv16_unique_even_count}). For odd $m$ the
-bound is up to a factor $\mathcal D$ weaker than the source's, a remaining
-gap listed below.
+bound is up to a factor $\mathcal D$ weaker than the source's, and this is a
+rounding obstruction to satisfying the two inequalities used below when
+$s<\mathcal D^m$. It is not an impossibility result for other error
+estimates or constructions attaining the printed node bound.
 
 The condition $s\le\mathcal D^{2k}$ also controls the error. A merged space
 of dimension $Q$ and its sampled overlap $\alpha$ satisfy
@@ -117,6 +119,27 @@ $a=\lceil\log_{\mathcal D}(\mathcal D^2s)\rceil$, for which
     \label{eq:alvv16_unique_old_cubic_count}
 \end{align}
 
+Now suppose $m$ is odd and
+$s<\mathcal D^m$. The node bound after $j$ rounds is $\mathcal D^{2j}s$, so
+the source's bound $\mathcal Ds^2$ requires $\mathcal D^{2j}\le\mathcal Ds$,
+while the error estimate above uses the sufficient condition
+$s^2\le\mathcal D^{4j}$ to bound $(1024/9)\Delta^j\mathcal D^{8j}s^2$
+by $(1024/9)(\mathcal D^{12}\Delta)^j$. The count condition and
+$s\le\mathcal D^{2j}$ are incompatible, since
+$\mathcal D^{2j}\le\mathcal Ds<\mathcal D^{m+1}$ forces $2j\le m-1$ and then
+$\mathcal D^{2j}\le\mathcal D^{m-1}<s$; for $m=1$ only $j=0$ remains, which
+does not improve the sample at
+all.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.merge_rounds_lt_of_odd}.}
+Under these two conditions, only for $s=\mathcal D^m$ does $j=(m+1)/2$ attain $\mathcal Ds^2$. The
+formalized bound exceeds the source's by the factor
+$\mathcal D^m/s<\mathcal D$. For the parameters of Theorem~t:aisff,
+$\mathcal D=(d\ell^2)^{22\ell}$ is far larger than
+$s=\lceil4096(1+\log\mathcal D+\log(1/\beta))\rceil$ unless $\beta$ is
+extremely small, so typically $m=1$, $k=1$ and the node bound is
+$\mathcal D^2s$. The same rounding is made in the degenerate-gap tree of
+constant node dimension, recorded in
+\url{https://sirui-lu.com/TNLean/paper-gaps/alvv16_approximation_parameters.pdf}.
+
 The source's lower bound $s\ge1600r(\log r+1)$ is a lower bound, and the
 formalized $s$ satisfies it; the random-sampling lemma needs in addition that
 $s$ grow like $\log\mathcal D$, since the merged space has dimension up to
@@ -125,10 +148,6 @@ $\mathcal D^4s^4$.
 \paragraph{Deviation.}
 The remaining differences from the source are:
 \begin{enumerate}
-    \item when $\lceil\log_{\mathcal D}s\rceil$ is odd, the node bound is
-          $\mathcal D^{2k}s\le\mathcal D^2s^2$, up to a factor $\mathcal D$ weaker
-          than the source's $\mathcal Ds^2$, because the number of applications
-          is an integer;
     \item the length-independent node bound is attained by a tree shown to
           exist, not by one found with high probability; the probabilistic tree
           of the first item of the list of results above has node dimension growing
@@ -143,7 +162,9 @@ The remaining differences from the source are:
     \item no running time is asserted.
 \end{enumerate}
 The conclusions are mathematically correct as stated, and narrower than the
-source in the items listed.
+source in the items listed. The factor $\mathcal D$ in the odd case is the local
+rounding choice above; whether another argument recovers the printed
+node bound is not settled by this arithmetic obstruction.
 
 \paragraph{Elimination plan.}
 A reference space for collective trimming whose Schmidt ranks are bounded

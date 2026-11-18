@@ -4,12 +4,12 @@
 \usepackage[hidelinks]{hyperref}
 \setlength{\emergencystretch}{2em}
 \input{./command}
-\title{The Honeycomb Cluster State: Sign of the Parent Hamiltonian and Injectivity}
+\title{The Honeycomb Cluster State: Sign of the Parent Hamiltonian}
 \author{}
 \date{2026-11-18}
 \begin{document}
 \maketitle
-\gapnote{local-correction}{open}
+\gapnote{local-correction}{resolved}
 
 \section{The source claim}
 Section~IV of \cite{Cirac2021Matrix} introduces the cluster state as follows:
@@ -35,9 +35,10 @@ For a finite simple graph with vertex set $V$ and edge set $E$, put a copy
 tensor $\ket{0\ldots0}+\ket{1\ldots1}$ at every vertex and the matrix
 $H=\frac1{\sqrt2}\left(\begin{smallmatrix}1&1\\1&-1\end{smallmatrix}\right)$
 on every bond. Contracting the network gives the coefficients
-\begin{equation*}
+\begin{align}
     \psi(\sigma)=2^{-|E|/2}\prod_{\{u,v\}\in E}(-1)^{\sigma_u\sigma_v},
-\end{equation*}
+    \label{eq:rmp_honeycomb_cluster_peps_coefficient}
+\end{align}
 which is $2^{(|V|-|E|)/2}$ times the controlled-$Z$ circuit applied to
 $\ket{+}^{\otimes V}$. In the formal tensor the bond matrix is absorbed into
 the leg at the smaller endpoint of each bond, which leaves the contraction
@@ -68,46 +69,11 @@ $Y^{\otimes N}$ either way.
 $-\sum_iX_iZ_jZ_kZ_l$, the usual stabilizer convention, under which the
 source's claim holds. In Lean this is \leanid{TNLean.PEPS.honeycombHamiltonian}.
 
-\section{Injectivity}
-The vertex tensor $\ket{0000}+\ket{1111}$ maps the virtual space of a
-vertex of degree three, of dimension eight, to the qubit, and its image is
-two-dimensional. A vertex tensor with at least two bonds is therefore not
-injective, with or without the bond matrices, and the honeycomb PEPS is not
-injective site by site.\footnote{\leanid{TNLean.PEPS.not_isVertexInjective_honeycombClusterPEPS}.}
-Blocking the two sites of a unit cell, as the source does to make the
-tensor uniform, does not help: the blocked tensor has four virtual legs of
-dimension two and a physical space of dimension four.
-
-The claim holds after blocking over hexagonal plaquettes. A plaquette has
-six sites, each with exactly one bond leaving the plaquette. With the
-boundary indices $\beta$ fixed, the blocked tensor sends $\beta$ to
-\begin{equation*}
-    \prod_{\text{inner bonds}}CZ\;\bigotimes_{u}M_u\ket{\beta_u},
-\end{equation*}
-up to normalization, where each $M_u$ is the identity or $H$ according to
-the side on which the bond matrix of the leaving bond is placed. Both maps
-are invertible, so the blocked tensor is injective. The honeycomb vertex
-set is partitioned by every third plaquette, on a torus whose dimensions
-are compatible with this pattern, and the blocked network is a triangular
-lattice of injective tensors. This argument is not formalized, and no
-injectivity of the honeycomb PEPS is asserted.
-
-\section{The torus}
-The brick wall on a torus of width $w$ and height $h$ joins each site to
-its two horizontal neighbours and to one vertical neighbour, above when the
-coordinate sum is even and below otherwise. For even $w$ and $h$ it is the
-honeycomb lattice. For even $h$ and $w\ge3$ every site has exactly three
-distinct neighbours; for $w=2$ the two horizontal neighbours coincide. The
-general graph statements hold for every finite simple graph, so they apply
-to the brick wall on every torus of width and height at least two.
-
-\section{Elimination plan}
-\begin{enumerate}
-    \item Formalize injectivity of the plaquette-blocked tensor and the
-          partition of the honeycomb torus into plaquettes, then state the
-          source's injectivity under that blocking.
-    \item The sign is a convention and needs no further work.
-\end{enumerate}
+\section{Related records}
+The same passage calls the PEPS injective. That claim is false as printed and
+is recorded in \cite{gap:rmp_honeycomb_cluster_injectivity}. The brick-wall
+torus on which the formal statements are made is recorded with the other
+torus examples in \cite{gap:rmp_peps_examples_small_torus}.
 
 \bibliographystyle{alpha}
 \bibliography{references}
