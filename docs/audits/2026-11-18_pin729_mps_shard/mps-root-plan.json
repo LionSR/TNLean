@@ -1,0 +1,9 @@
+{
+  "root": "TNLean.MPS",
+  "in_865_manifest": false,
+  "project_dependency_closure_including_root": 5667,
+  "compiled_in_current_cache": 1368,
+  "not_compiled": 4299,
+  "executed": false,
+  "reason": "Manifest continuation stopped on strict failure before root closure matured"
+}

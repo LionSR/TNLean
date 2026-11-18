@@ -1,0 +1,6 @@
+TNLean/MPS/AreaLaw/EntropyScaling/RenyiApproximation.lean:229:4: error: `simp` already closes the goal
+
+Hint: Use `simp` instead of `simpa`:
+  [apply] simp
+
+Note: This linter can be disabled with `set_option linter.unnecessarySimpa false`

@@ -1,0 +1,38 @@
+{
+  "original_failure": {
+    "source_head": "ef098ad32a728e847957320f9cf79ddcfce5245a",
+    "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+    "file": "TNLean/MPS/AreaLaw/EntropyScaling/RenyiApproximation.lean",
+    "phase": "strict",
+    "command": [
+      "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DautoImplicit=false",
+      "-DwarningAsError=true",
+      "TNLean/MPS/AreaLaw/EntropyScaling/RenyiApproximation.lean"
+    ],
+    "started_utc": "2026-11-18T15:22:53.248673+00:00",
+    "seconds": 4.543080738003482,
+    "exit_code": 1,
+    "method": "direct Lean (not lake build)",
+    "role": "shard_target",
+    "source_sha256": "6feb5e58a671ac2d69669f32b0588f2ba303e6a9c68fc51276f8bb98d0be35ac"
+  },
+  "scratch_command": [
+    "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+    "-Dpp.unicode.fun=true",
+    "-DrelaxedAutoImplicit=false",
+    "-DmaxSynthPendingDepth=3",
+    "-Dlinter.mathlibStandardSet=true",
+    "-DautoImplicit=false",
+    "-DwarningAsError=true",
+    "/tmp/pin729-RenyiApproximation-simp.lean"
+  ],
+  "scratch_exit_code": 0,
+  "scratch_seconds": 4.440048750999267,
+  "source_modified": false,
+  "counts_as_candidate_pass": false
+}

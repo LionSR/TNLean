@@ -83,3 +83,29 @@ its dependency closure. The continuation runs only the 537 not-yet-executed
 manifest targets. New TN records use ef098ad32 (same production tree as the
 original candidate except this fix), with the same exact QIC pin.
 MPS.lean root aggregation is not in the 865-path manifest and will be separate.
+
+## Second stop: RenyiApproximation strict linter
+
+After the authorized isolated fix, 428 manifest targets have passed build and
+strict. RenyiApproximation.lean:229:4 fails strict on unnecessarySimpa; ordinary
+build succeeded. ChainBootstrap has only a completed build; 435 further targets
+are untouched. There are two historical strict failures, of which SpectralCutoff
+is resolved by ef098ad32; RenyiApproximation remains a candidate failure.
+
+The minimal suggestion (evidence patch only) replaces the entire line-229
+`simpa using Finset.card_le_univ ...` branch with `simp`. A temporary copy passed
+strict in 4.44 seconds. No second production fix was applied. Original logs and
+exit codes remain intact, and the temporary result is not a candidate pass.
+
+The MPS root is additional to the 865-path manifest and has not been run. Its
+project closure is 5667 modules, with 1368 already compiled locally. There was
+no cold full-library or root build. The QCA coordination check found all 98
+MPS modules within our dependency closure (none direct manifest targets): 17
+are compiled, 81 pending. ListOfFn is compiled too. All 99 source hashes match
+other evidence 7ffe53e6. No cache payload was transferred. Direct Lean outputs
+have no Lake traces; a later sanctioned transfer must validate actual payload,
+source and transitive dependencies rather than infer cache hits from metadata.
+
+Production change is exactly the single authorized SpectralCutoff line; no
+shared PR or external branch was modified. Timing for that edit was not
+separately measured. All verification processes have completed or stopped.
