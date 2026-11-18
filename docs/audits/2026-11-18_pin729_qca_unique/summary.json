@@ -1,0 +1,22 @@
+{
+  "source_sha": "6b7fb2e27dbc6856091e593e4226d350403beb8a",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "build_pass": 36,
+  "strict_pass": 36,
+  "failed": 0,
+  "pilot_targets": 6,
+  "remaining_batch_targets": 30,
+  "build_seconds": 258.4618088189891,
+  "strict_seconds": 155.36888330004876,
+  "start": "2026-11-18T15:18:06.959100+00:00",
+  "end": "2026-11-18T15:25:07.978520+00:00",
+  "wall_seconds": 421.01942,
+  "disk_free_bytes": 3362578432,
+  "forbidden_rebuilds_observed": [],
+  "production_source_edits": 0,
+  "qca_root_pass": false,
+  "qca_missing_oleans": 123,
+  "original_shard_result_unchanged": "210/213; MPS PEPS QCA roots remain unverified",
+  "active_jobs": 0,
+  "cache_exported": false
+}
