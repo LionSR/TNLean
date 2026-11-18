@@ -1,0 +1,117 @@
+{
+  "source_head": "42c4ed17b53f06bc274dd2c70b1eb3ae607bce5d",
+  "base_head": "dccc85e5607077b51822664e9d475287d300d607",
+  "source_tree": "5c32e40898d4a34a04514e95dd70a23e091278e1",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "lean_toolchain": "leanprover/lean4:v4.36.0-rc1",
+  "closure_count_including_targets": 25,
+  "base_and_source_closures_byte_identical": true,
+  "original_local_closure_byte_identical": true,
+  "lean_runs": 0,
+  "files": [
+    {
+      "path": "TNLean.lean",
+      "sha256": "087207ec2ec4cb21b61fac5a9c852132cbb6dd97b75c125d73f82256c5e6477b"
+    },
+    {
+      "path": "TNLean/MPS.lean",
+      "sha256": "09563f0a0233b8becf53fe55c0cd73af98ddbbd2b999fb719c777785b5a7ec46"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw.lean",
+      "sha256": "8c6e728ee002b04f57dd1000b4d1da8a9be6c445293bfb2e7e309af9f1adbd8d"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/BandInformation.lean",
+      "sha256": "db1ec461c4ace651ac57ccc8b04f2b67d69d79d1ceb4032ff477cbb457441cd0"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/DomainLogarithmicSeparation.lean",
+      "sha256": "3da545e0502acace958c96cb222ea17eec871907803de0b341d725876c5f824a"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings.lean",
+      "sha256": "bc95deb6204cf9c0dfe4c8827e90b48401f568b330e48eab060a0e70dbd24657"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings/BootstrapLemma.lean",
+      "sha256": "9e1e3b4f4e07f390d014cad7987add5e1fc10625fd12cbac5fecbe61f33890d1"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings/CorrelationLemma.lean",
+      "sha256": "cb9fb5b0f6b84010ff9b7516c0465e2f1ea76e747cd612bfa1c1f9b6e56b4dda"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+      "sha256": "f3db5618c87217d5c65706ae7540237b79b37d74d640e4e1e4e564df7fa73cae"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean",
+      "sha256": "aee14b8f260f6e5063963d7975a7fdc276323fa7f6cd0c2bf39282dbb7ef47ef"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings/PrintedAreaLawSource.lean",
+      "sha256": "1488e187b838fa6b76ca3b7dd67e40f7d2d0b2de6daf84a7410114f5c7b26a6a"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings/RelentGapped.lean",
+      "sha256": "30bc5c79762b3a6430a91f486a1f92d16f3f2f40375aed8bb8501d468eb2ced9"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma.lean",
+      "sha256": "524d006470b2b49633406758331059bc82d34ac4ea478378e657c188166b1cbf"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings/SourceConsequences.lean",
+      "sha256": "4b0d575495ff532096a601e95eb55d890c19e8a0e7e450c94741773ccef4d61e"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/Hastings/SourceLength.lean",
+      "sha256": "c529705300999029c165c0690a8a333fd9d1191bb92fdfcba813ca455f0a5658"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/InformationReset.lean",
+      "sha256": "e7ebf2a150b867bcea19e76b90bfa9eab170688bc99b991d049086426dd89f16"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/LogarithmicSeparation.lean",
+      "sha256": "801d4922b81a72470e1df036b5a44d1f7a6574a1901cecfd97058664aca4ed04"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/ProtocolMPSApproximation.lean",
+      "sha256": "458cf71c184350727bca476dd6b38864c6e30bb5f93dd3f3d06a1d4121c5b126"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/ProtocolPhysicalPreparation.lean",
+      "sha256": "7219a7abacd8559f86df21ac91d0b535c5a3724575d643727af0887cf8c0a601"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/ProtocolStageInformation.lean",
+      "sha256": "8876f661d66e9092bcaab1037a7ace69f68c1c860441605a2f25ed87dce06c7b"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/ProtocolStagePhysicalCircuits.lean",
+      "sha256": "b04f83558b08281567d6f9ed29550579f53e4ece1690ad508f2a43d1999df41a"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/ProtocolUniformPreparation.lean",
+      "sha256": "00e078ffe349f45fc19cd3ddba4b5a2815b5892ee4099cfe8969553fa4efcab9"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+      "sha256": "b87f960c99a5ffd3a969a215a2ab96d9613cc47449d3bfd057bcfaf080c54d24"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/SharpPhysicalCompression.lean",
+      "sha256": "9a10c40f651a4f99f0e61c69af75f419fafcd9776091df4e95abbba0fd4ed515"
+    },
+    {
+      "path": "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean",
+      "sha256": "53d0b3c287ba8197a305711562b023f4944654f466372de72da813a284cac748"
+    }
+  ],
+  "evidence_sha256": {
+    "import-closure.json": "fd1a759f8ccca8ada79b44ab36a2a30f8d8db2ee02bc2fd39908aa09c6f3d4f9",
+    "generate.py": "59df109b9f11dd65b8aaacb66fad92a2068a734b8fecc499097656b135ab5201"
+  }
+}
