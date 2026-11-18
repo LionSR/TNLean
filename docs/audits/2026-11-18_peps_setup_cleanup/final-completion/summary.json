@@ -1,0 +1,57 @@
+{
+  "production_head": "a28f35a6b916ee5a24d3836a31d13d74f832e11f",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "tranche_counts": [
+    5,
+    119,
+    261,
+    133,
+    73
+  ],
+  "passed": 591,
+  "remaining": 0,
+  "failed": 0,
+  "manifest_sha256": "d74b70d64cc1eef9d8dd8773ce8a4ad608c488a377638d4281191e99c370ddb4",
+  "root_results": [
+    {
+      "file": "TNLean/PEPS.lean",
+      "kind": "root-build",
+      "command": [
+        "lake",
+        "--fail-fast",
+        "build",
+        "TNLean.PEPS"
+      ],
+      "exit": 0,
+      "seconds": 225.01398396492004,
+      "log": "TNLean_PEPS.lean.root-build.log",
+      "editing_seconds": 0
+    },
+    {
+      "file": "TNLean/PEPS.lean",
+      "kind": "root-strict",
+      "command": [
+        "lake",
+        "env",
+        "lean",
+        "-j1",
+        "-DautoImplicit=false",
+        "-DrelaxedAutoImplicit=false",
+        "-Dpp.unicode.fun=true",
+        "-DmaxSynthPendingDepth=3",
+        "-Dlinter.mathlibStandardSet=true",
+        "-DwarningAsError=true",
+        "TNLean/PEPS.lean"
+      ],
+      "exit": 0,
+      "seconds": 5.590557098388672,
+      "log": "TNLean_PEPS.lean.root-strict.log",
+      "editing_seconds": 0
+    }
+  ],
+  "runner_pid": 205637,
+  "session": 74502,
+  "process_exited": true,
+  "free_GiB": 1.3418655395507812,
+  "scope": "old a28 production; fa9 differs by two separately validated MPS simp lines; not Interaction migration integration"
+}
