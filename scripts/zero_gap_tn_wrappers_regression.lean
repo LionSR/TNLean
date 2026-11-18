@@ -48,13 +48,12 @@ theorem nonSingletonGroundSpace :
 -- Arbitrary dimensions include the degenerate 1×2 system and empty width/height.
 example (w h : ℕ) :
     ‖rectangleAreaLawState (rectangleOmega w h)‖ = 1 ∧
-    ((zeroRectangle w h).toAreaLawHamiltonian (rectangleTermBound w h)).operator.PosSemidef ∧
+    (zeroRectangle w h).toAreaLawHamiltonian.hamiltonian.PosSemidef ∧
     rectangleAreaLawState (rectangleOmega w h) ∈ ManyBody.groundSpace
-      ((zeroRectangle w h).toAreaLawHamiltonian (rectangleTermBound w h)).operator 0 := by
+      (zeroRectangle w h).toAreaLawHamiltonian.hamiltonian 0 := by
   simpa only [Complex.ofReal_zero, zero_smul, sub_zero] using
-    (zeroRectangle w h).projectorGap_toAreaLawHamiltonian (J := 0) (E₀ := 0) (Δ := 0)
+    (zeroRectangle w h).projectorGap_toAreaLawHamiltonian (E₀ := 0) (Δ := 0)
       (Ω := rectangleOmega w h)
-      (by intro i; simp [zeroRectangle])
       (by simp [zeroRectangle, ManyBody.Interaction.hamiltonian])
       (by simp [rectangleOmega])
       (by simpa [zeroRectangle, ManyBody.Interaction.hamiltonian] using
@@ -134,7 +133,7 @@ example (m : ℕ) :
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
         |(⟪φ, toEuclideanLin
-          ((zeroRectangle 1 1).toAreaLawHamiltonian (rectangleTermBound 1 1)).operator φ⟫_ℂ).re|
+          (zeroRectangle 1 1).toAreaLawHamiltonian.hamiltonian φ⟫_ℂ).re|
           ≤ 0 ∧
         (0 : ℝ) * (1 - ‖⟪rectangleAreaLawState (rectangleOmega 1 1), φ⟫_ℂ‖ ^ 2) ≤ 0 := by
   simpa only [mul_zero, zero_mul, sub_zero] using
