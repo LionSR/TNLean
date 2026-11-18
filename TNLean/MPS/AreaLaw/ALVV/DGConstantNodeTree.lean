@@ -42,7 +42,6 @@ open scoped BigOperators TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2O
 namespace TNLean.MPS.AreaLaw.ALVV
 
 open TNLean.MPS.AreaLaw TNLean.Lattice
-open ManyBody (interval)
 
 /-- **The degenerate-gap merge tree of node dimension independent of the chain length.** For a
 nearest-neighbour chain with `0 ≤ hᵢ ≤ 1` satisfying Assumption (DG), with ground energy `μ`, ground
