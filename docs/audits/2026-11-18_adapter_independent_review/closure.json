@@ -1,0 +1,63 @@
+{
+  "changed": [
+    "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+    "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+    "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean"
+  ],
+  "all_affected": [
+    "TNLean.lean",
+    "TNLean/MPS.lean",
+    "TNLean/MPS/AreaLaw.lean",
+    "TNLean/MPS/AreaLaw/BandInformation.lean",
+    "TNLean/MPS/AreaLaw/DomainLogarithmicSeparation.lean",
+    "TNLean/MPS/AreaLaw/Hastings.lean",
+    "TNLean/MPS/AreaLaw/Hastings/BootstrapLemma.lean",
+    "TNLean/MPS/AreaLaw/Hastings/CorrelationLemma.lean",
+    "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+    "TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean",
+    "TNLean/MPS/AreaLaw/Hastings/PrintedAreaLawSource.lean",
+    "TNLean/MPS/AreaLaw/Hastings/RelentGapped.lean",
+    "TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma.lean",
+    "TNLean/MPS/AreaLaw/Hastings/SourceConsequences.lean",
+    "TNLean/MPS/AreaLaw/Hastings/SourceLength.lean",
+    "TNLean/MPS/AreaLaw/InformationReset.lean",
+    "TNLean/MPS/AreaLaw/LogarithmicSeparation.lean",
+    "TNLean/MPS/AreaLaw/ProtocolMPSApproximation.lean",
+    "TNLean/MPS/AreaLaw/ProtocolPhysicalPreparation.lean",
+    "TNLean/MPS/AreaLaw/ProtocolStageInformation.lean",
+    "TNLean/MPS/AreaLaw/ProtocolStagePhysicalCircuits.lean",
+    "TNLean/MPS/AreaLaw/ProtocolUniformPreparation.lean",
+    "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+    "TNLean/MPS/AreaLaw/SharpPhysicalCompression.lean",
+    "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean"
+  ],
+  "import_only": [
+    "TNLean.lean",
+    "TNLean/MPS.lean",
+    "TNLean/MPS/AreaLaw.lean",
+    "TNLean/MPS/AreaLaw/Hastings.lean"
+  ],
+  "substantive": [
+    "TNLean/MPS/AreaLaw/BandInformation.lean",
+    "TNLean/MPS/AreaLaw/DomainLogarithmicSeparation.lean",
+    "TNLean/MPS/AreaLaw/Hastings/BootstrapLemma.lean",
+    "TNLean/MPS/AreaLaw/Hastings/CorrelationLemma.lean",
+    "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+    "TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean",
+    "TNLean/MPS/AreaLaw/Hastings/PrintedAreaLawSource.lean",
+    "TNLean/MPS/AreaLaw/Hastings/RelentGapped.lean",
+    "TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma.lean",
+    "TNLean/MPS/AreaLaw/Hastings/SourceConsequences.lean",
+    "TNLean/MPS/AreaLaw/Hastings/SourceLength.lean",
+    "TNLean/MPS/AreaLaw/InformationReset.lean",
+    "TNLean/MPS/AreaLaw/LogarithmicSeparation.lean",
+    "TNLean/MPS/AreaLaw/ProtocolMPSApproximation.lean",
+    "TNLean/MPS/AreaLaw/ProtocolPhysicalPreparation.lean",
+    "TNLean/MPS/AreaLaw/ProtocolStageInformation.lean",
+    "TNLean/MPS/AreaLaw/ProtocolStagePhysicalCircuits.lean",
+    "TNLean/MPS/AreaLaw/ProtocolUniformPreparation.lean",
+    "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+    "TNLean/MPS/AreaLaw/SharpPhysicalCompression.lean",
+    "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean"
+  ]
+}

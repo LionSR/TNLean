@@ -1,0 +1,8 @@
+{
+  "strict_sources": [
+    "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+    "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+    "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean"
+  ],
+  "selected_tests": []
+}
