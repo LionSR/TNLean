@@ -1,0 +1,237 @@
+% Single-file source. Compile twice with pdflatex (REVTeX 4.2).
+\documentclass[aps,prb,onecolumn,10pt,nofootinbib]{revtex4-2}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb}
+\usepackage[hidelinks]{hyperref}
+\newcommand{\id}{\mathbf{1}}
+\newcommand{\tr}{\operatorname{Tr}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\diam}{\operatorname{diam}}
+\providecommand{\ket}[1]{\lvert #1\rangle}
+\providecommand{\bra}[1]{\langle #1\rvert}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\MI}{\mathcal I}
+\newcommand{\leanref}[3]{\href{https://github.com/LionSR/TNLean/blob/16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931/TNLean/PEPS/AreaLaw/#1.lean\#L#2}{\texttt{\detokenize{#3}}}}
+\setlength{\emergencystretch}{2em}
+
+\begin{document}
+\title{Entanglement across a cut in two-dimensional frustration-free ground states}
+\date{Reading note, November 18, 2026}
+\begin{abstract}
+How much can the interior of a region tell us about the spins on the other side of its boundary?
+We give a reading proof of the two-dimensional entropy area law in the finite-range, frustration-free case, using the scanner and planar decomposition of Ref.~\cite{area}. Each interaction already annihilates the ground state. Thus the scanner can act on the original Hamiltonian, and a product of its local filters suppresses excitations with an exact bound on how far a local perturbation can spread. The scanner supplies a sublinear mutual-information cost. Filtering makes this cost summable over the pieces of a cut, and an entropy identity for two ordered families gives the area bound. Only the spectral gap of the whole system enters.
+\end{abstract}
+\maketitle
+
+For a pure state on a region $A$ and its complement $B$, the mutual information $I(A:B)$ equals $2S(A)$. It measures all correlations between the two regions, including correlations that measurements on pairs of individual spins can miss~\cite{wolf}. For a projected entangled pair state of fixed bond dimension, counting the virtual bonds cut by the boundary gives an entropy bound immediately~\cite{cirac}. A local Hamiltonian specifies energy costs. The question is how those costs constrain the information deep inside $A$. In a frustration-free system each local measurement of zero energy succeeds with certainty in the ground state. We use this property twice, first to keep one Hamiltonian throughout the scan, then to remove excitations by a finite number of local layers.
+
+\emph{Setting.}
+Let $\Lambda\subset\mathbb Z^2$ be finite, with all nearest-neighbor edges between its sites. Write $d_\Lambda$ for induced graph distance, infinite between distinct components, and $N_s(U)$ for its closed $s$-neighborhood. The spins have common dimension $q$, and all logarithms are natural. There is at most one term for each nonempty assigned support $D_i$ of graph diameter at most $R$. With $J,\Delta>0$, assume
+\begin{equation}
+ H=\sum_i h_i,\qquad 0\le h_i\le J\id,\qquad
+ h_i\Omega=0,\qquad \norm{\Omega}=1,\qquad
+ H\ge\Delta(\id-P),\quad P=\ket{\Omega}\bra{\Omega}.
+ \label{eq:model}
+\end{equation}
+These conditions give a unique ground vector up to phase. If the terms share their individual minima, subtract these local scalars first. An original bound $\norm{h_i}\le J_{\rm old}$ then gives the positive bound $J=2J_{\rm old}$. The one-term convention can also be achieved by grouping equal supports with a uniform bound on the grouped norm. In particular, a cap on the norm of each of arbitrarily many duplicate terms would not specify the strength in Eq.~\eqref{eq:model}.
+
+Choose an anchor $a_i\in D_i$. A graph ball of radius $R$ has at most $v_R=1+2R(R+1)$ sites, so a site is in at most $\mu_R=2^{v_R-1}$ supports. Let $\partial_\Lambda A$ consist of the \emph{edges of the induced graph} crossing from $A$ to $B$, and $Z$ of their endpoints. The goal is
+\begin{equation}
+ S_\Omega(A)\le C(q,R,J,\Delta)|\partial_\Lambda A|
+ \quad\text{for every }\Lambda,H,A.
+ \label{eq:goal}
+\end{equation}
+This is the frustration-free specialization of Theorem~1.1 of Ref.~\cite{area}. We use its intermediate results below. Equation numbers with a section prefix, such as (9.16), refer to that manuscript. Write $k_i=h_i/J$ and $H_F=H/J$. Then $0\le k_i\le\id$ and $H_F\ge g(\id-P)$ with $g=\Delta/J$. All gaps below concern this full physical system or the original $H$. The empty domain and $q=1$ have zero entropy, so take $q\ge2$ and $\Lambda\ne\varnothing$. For $R=0$ uniqueness gives a product state, so also take $R\ge1$. For a cut with no crossing edge, $A$ is a union of components, the Hamiltonian is a tensor sum, and uniqueness again gives $S_\Omega(A)=0$.
+
+\section{Boundary spectral tails and the first box estimate}
+
+Let $\rho_U$ be the marginal on $U$. Sample a positive eigenvalue $p_j$ with its spectral probability $p_j$ (counted with multiplicity), and put $K_U=-\log p_j$. Thus $\mathbb E K_U=S(U)$. Tilting $\Omega$ by $\rho_U^{-u/2}$ on its support costs excitation energy only at crossing interactions. For a term confined to $U$ this follows by cyclicity in the tilted marginal, and terms on $U^c$ commute with the tilt. The full gap bounds the loss of ground-state overlap. Lemma~3.1, (3.1)--(3.8), gives
+\begin{align}
+ \log\mathbb E e^{u(K_U-S(U))}&\le C(1+b_U)u^2,
+ & |u|&\le c(1+b_U)^{-1/2}, \nonumber\\
+ \Pr(|K_U-S(U)|>w)&\le C e^{-cw/\sqrt{1+b_U}},
+ & b_U&=|\partial_\Lambda U|. \label{eq:tails}
+\end{align}
+Indeed the lemma charges $1+\sum_{i\ {\rm split}}\log^2(e q^{|D_i|})$. Each split anchor is within $R$ of a crossing-edge endpoint, and there are at most $2v_R\mu_R b_U$ such labels. In particular, at a cut of size $O(n)$ the window $w=n^{3/5}$ misses mass at most $Ce^{-c n^{1/10}}$, even if the complement is arbitrarily large. Equation~\eqref{eq:tails} bounds fluctuations around $S(U)$. To bound their center we use a separate estimate for a buffered rectangle.
+
+Fix $D_0=2R+11$. Call an ambient integer rectangle $Q$ of maximal side length $s$ safe when $\dist_\infty(Q,Z)>D_0s$. In a safe parent, let $X=A\cap Q_0$ with $Q_0$ of size at most $r$ and its padding by $C_{\rm pad}r$ contained in the parent. Let $V$ be the portion of that padding in $A$ outside $X$. Lemma~3.2 compares optimized nested filters with a trial obtained by selecting a Schmidt vector of $X$. The energy estimate uses the full Hamiltonian. Equation (3.9) yields $S(X\mid V)\le S(X)/2+C_{\rm buf}r$.
+
+Let $F(r)$ be the supremum of $S(A\cap Q)$ over safe rectangles of size at most $r$ and all instances of Eq.~\eqref{eq:model} with the fixed parameters. Split a parent of size $Mr$ into at most $M^2$ children of size $r$. In a random order an interior child follows all its buffer neighbors with a probability bounded below independent of $r$. It then earns the conditional entropy discount. Only $O(M)$ children are at the perimeter. The averaged chain rule (3.22) consequently gives, for a fixed sufficiently large $M$,
+\begin{equation}
+ F(Mr)\le\lambda F(r)+C M^2r,\qquad M<\lambda<M^2 .
+ \label{eq:box}
+\end{equation}
+Iteration gives $F(r)\le C r^{1+e_0}$ with $1+e_0=\log_M\lambda\in(1,2)$ (Proposition~3.3). Restricting the supremum to the frustration-free class also makes the later iteration over this class valid.
+
+\section{Scanning a collar of the target}\label{sec:scan}
+
+The scanner sweeps partitions across the region surrounding a fixed target. A random offset spreads the energy cost of cutting any one term over many choices. The entropy cost of the sweep then yields a bound on how much the core knows about the exterior. For an ambient target $T$, write $T_j=T+([-j,j]^2\cap\mathbb Z^2)$, $X=A\cap T$, $S_0=A\cap T_L$, and $Q_j=A\cap(T_j\setminus T)$. Here $L$ is the collar width and $\Lambda\setminus S_0$ is its exterior.
+
+\emph{Where the Hamiltonian enters.}
+In the general proof, Lemmas~4.1--4.2 and Proposition~4.3 construct centered time-filtered interactions $M_i$ and take $|M_i|/c_*$ to obtain positive constraints. Lemma~4.4 localizes their square roots. Proposition~4.5 approximates the constraints near the test set, controls the sum of the norm errors independently of volume, and compares ground energies, gaps and vectors, (4.16)--(4.21). Here each normalized $k_i$ is already positive, local, and annihilates $\Omega$.
+
+One can keep the paper's scanner \emph{at its stated radii}. For its compact test set $S_0$, keep $r_0=\lceil C\log^2 n\rceil\ge R$ at large $n$. At finite $d_i=d_\Lambda(a_i,S_0)$ designate the ball of radius $r_i=\max(r_0,\lfloor d_i/2\rfloor)$ about $a_i$, and at infinite distance designate the anchor's component. Conditional expectation onto that algebra fixes $k_i$ exactly. Thus the scanner data may be taken to be
+\begin{equation}
+ \widetilde h_i=k_i,\qquad \widetilde H=H_F,\qquad
+ \widetilde\Omega=\Omega,\qquad \widetilde E_0=0,\qquad
+ \widetilde g=g\ \text{as a gap lower bound}.
+ \label{eq:identity}
+\end{equation}
+The larger sets are support labels. If $r_i>r_0$ then $r_i<d_i$, so that ball misses $S_0$. Every split ball meets $S_0$, has radius $r_0$, and lies in $A$ by the clearance in (9.2). A path within such a ball crossing the physical cut would put a cut endpoint within $L+2r_0$ of the target. The charge move must take the unassigned part of the \emph{designated ball}. An arbitrary physical support need not coincide with that move.
+
+\emph{Inputs to the scan.}
+Use Definition~9.3. A template $T$ is a nonempty union of $N$ lattice samples of closed rectangles or triangles with slopes $0,\infty,\pm1$ and individual sup-diameter at most $s_0$. Require $\diam_\infty T\le n$, $n\ge C_{\rm tpl}N(s_0+1)$ and $\dist_\infty(T,Z)>4D_0s_0$, with $C_{\rm tpl}$ a sufficiently large fixed constant. The target and its shell are in the original state. From $F(u)\le C_e u^{1+e}$ and $L\le s_0$, Lemma~9.4 covers the shell with $O(n/u)$ safe squares at each dyadic scale $u\le L$. Subadditivity gives
+\[
+ S(X)\le C_e n s_0^e,\qquad S(Q_j)\le C_e nL^e\quad (j\le L).
+\]
+A partial last row adds at most $n\log q$. For the intermediate scan of a single safe rectangle one uses its weaker clearance $D_0s_0$ and $L=o(s_0)$, as in the proof of Proposition~9.5.
+
+There are $K_b=\lfloor L/(8m)\rfloor$ separated bands, offset scale $m$ and charge lookahead $D$, as in (9.1). Lemma~9.1 gives cross-band nesting, $O(nD)$ edges in each status cut and a split probability $O(D/m)$ for each fixed label. On good histories each split label has sampling probability at least $c/(nD)$, and the probability of bad histories decays faster than any fixed inverse power. These statements depend on the designated balls and the row bound in (9.2). Proposition~7.4 allows any positive contractions supported on those balls. Its energy hypothesis holds because the initial replica vector (8.7) projects only an auxiliary Schur label of $(\Omega\otimes{\rm Bell})^{\otimes k}$, so $\overline{H_F}\,\mathrm{pre}_k=0$. Here $\overline{H_F}=k^{-1}\sum_{j=1}^k H_F^{(j)}$ is the mean over copies. The moved and split supports have log dimension $O((1+r_0)^2)$ and $ar_0^2=o(1)$ for the per-band weight $a=W/K_b$. Nested shell prefixes differ from the actual status sets by $O(nD)$ sites. These bounds supply the rough norm comparisons of Proposition~8.1. For its sharp comparisons, Eq.~\eqref{eq:tails} gives (8.5) at \emph{every} required status cut, with $\mathcal B=O(nD)$ using the true finite-range supports. One can equally keep the paper's looser polylogarithmic factors.
+
+\emph{Two uses of the same scanner.}
+The entropy derivative (7.21) telescopes over rounds. The split probabilities and the energy inequality (7.22) then select a charge round and a common interpolation parameter with the defect bound (9.5)--(9.9). With $W=4$, (8.8)--(8.9) compare leading target entropy coefficients $2$ and $4$. The positive difference absorbs the small defect and gives (9.15), improving $e$ to $(1-\ell)e$ for a fixed $\ell>0$. Iterating from $e_0$ yields $e_*=2\cdot10^{-6}$. Each iteration uses only the preceding safe-box estimate. In the final scan use (9.17), in particular $W=n^{1/20000}$, $\varepsilon=10^{-5}$ and $L=\lfloor n^{1-\varepsilon}\rfloor\le s_0$. Then $a\asymp n^{-0.74994}$, $a\sqrt{\mathcal B}=o(1)$ and (9.18) bounds the defect by $C n^{-0.0005}+o_k(1)$.
+
+At a leaf the physical partition is $X,U,Y,V$. The sharp comparisons (8.10)--(8.11) bound a quantity which, by purity, equals $I(X:V)+I(X:YV)$, (8.12) or (9.20). Both far systems contain $\Lambda\setminus S_0$. Thus the leaf-independent quantity $\MI=I_\Omega(X:\Lambda\setminus S_0)$ is bounded by the errors in (9.19). At fixed physical instance and $n$ one first sends $k\to\infty$. The remainders are uniform over the selected round and parameter. The largest remaining power in (9.19) is $0.999952<1-\varepsilon$, leaving room to absorb its fixed logarithms. Together with Lemma~9.4 this gives Proposition~9.6 in the form
+\begin{equation}
+ \MI\le C_0 n^{1-\varepsilon},\quad |S_0|\le C_0n^2,\quad
+ |\partial_\Lambda U|\le C_0 n\quad(U=X,S_0\setminus X,S_0).
+ \label{eq:collar}
+\end{equation}
+Equation~\eqref{eq:identity} removes both the transfer of entropy inputs to a perturbed state and the transfer of mutual information back to $\Omega$. The typical windows, the replica limit and its errors from Sections~5--9 are still needed.
+
+\section{Amplification with the original frustration-free terms}
+
+Set $Y=S_0\setminus X$. We turn Eq.~\eqref{eq:collar} into an inverse-power estimate on a slightly larger neighborhood. There are two ingredients. The typical subspaces give an operation that restores the target at cost $\exp[O(\MI+w)]$. Repeated local filters pay this cost at a rate set by the full gap.
+
+\emph{Restoring the target.}
+For nonempty $X$, introduce two copies $s',e'$ of its Hilbert space. Swap $X$ into the blank register $e'$ in $\Omega\otimes\ket{00}_{s'e'}$ to form $\phi$. The desired vector is $\eta=\Omega\otimes\sum_x\sqrt{p_x}\ket{x}_{s'}\ket{x}_{e'}$, where $\rho_X$ has eigenvalues $p_x$ in the chosen basis. The register $e'$ distinguishes the original correlations of $X$ from a state in which it is independent of all physical spins. Fix an integer $M\ge1$, take $K\ge4(M+3)$, and put $\delta=n^{-2K}$. The three cuts in Eq.~\eqref{eq:collar} and Eq.~\eqref{eq:tails} supply typical projections $P_X,T_Y,Q_{S_0}$, of width $w=n^{3/5}$, each with failure probability at most $\delta$ for large $n$. Inverses below are only on selected positive eigenvalues. The restoring operator (10.22) on $s',X,Y$ is
+\[
+ R_0=\sum_{x\ {\rm selected}} p_x^{-1/2}
+  \ket{x}\bra{0}_{s'}\otimes Q_{S_0}(\ket{x}\bra{0}_X\otimes T_Y).
+\]
+Equations (10.25)--(10.28) give
+\begin{equation}
+ \norm{R_0}\le M_0=e^{(\MI+3w)/2},\qquad
+ \norm{P R_0\phi}\le1,\qquad
+ \norm{R_0^\dagger\eta-\phi}\le3\sqrt{\delta}.
+ \label{eq:restore}
+\end{equation}
+Here $P$ is tensored with the identity on all registers. The exponent in $M_0$ comes from the three spectral cutoffs and purity, $S(X)+S(S_0)-S(Y)=\MI$. The third estimate uses cancellation of the selected inverse square roots against the amplitudes in $\eta$. It carries no factor $M_0$.
+
+\emph{Contraction in one sweep.}
+Return to the actual supports $D_i$ in Eq.~\eqref{eq:model}. Let $d$ bound the degree of their intersection graph, for example $d=v_R\mu_R$. Color it in $\chi\le d+1$ colors and order the terms by color. Write $G_i=(\id-k_i)^{1/2}$, $K_i=k_i^{1/2}$ and $D=G_N\cdots G_1$ for one sweep over the $N$ terms of this system. These operators have the same local support bound as $h_i$. Each $G_i$ fixes $\Omega$ and commutes with $P$. The following argument is the norm-loss argument of the detectability lemma~\cite{aav}, written for these positive contractions.
+
+For $v_0\perp\Omega$, put $v_i=G_i v_{i-1}$ and $u_i=\norm{K_i v_{i-1}}$. Then $\sum_i u_i^2=\norm{v_0}^2-\norm{v_N}^2$. Immediately after term $i$ one has $\norm{K_i v_i}\le u_i$. A later disjoint term commutes with $K_i$ and cannot increase this norm. A later overlapping term $j$ increases it by at most $\norm{(\id-G_j)v_{j-1}}\le u_j$, since $(1-\sqrt{1-x})^2\le x$ on $[0,1]$. Hence $\norm{K_i v_N}\le u_i+\sum_{j>i:D_j\cap D_i\ne\varnothing}u_j$. Cauchy--Schwarz and the overlap count, first for each row and then for each column of this sum, give
+\begin{align}
+ g\norm{v_N}^2
+ &\le\sum_i\norm{K_i v_N}^2
+ \le(d+1)^2\bigl(\norm{v_0}^2-\norm{v_N}^2\bigr),\nonumber\\
+ \norm{D^t(\id-P)}&\le \theta^t,\qquad
+ \theta=(1+g/(d+1)^2)^{-1/2}<1 .
+ \label{eq:sweep}
+\end{align}
+The inequalities persist after tensoring with spectator registers. Only the global lower bound in Eq.~\eqref{eq:model} was used.
+
+\emph{Exact localization on the perturbed vector.}
+If $B_0$ acts physically only on $S_0$ and possibly on registers, apply one disjoint color layer to $B_0(\Omega\otimes\xi)$. Its factors missing $S_0$ commute past $B_0$ and fix $\Omega$. The factors retained enlarge its physical support by at most $R$. Induction gives a physical product $L_t$ supported on $N_{\chi Rt}(S_0)$, with
+\begin{equation}
+ D^t B_0(\Omega\otimes\xi)=L_t B_0(\Omega\otimes\xi),
+ \qquad L_t^\dagger\Omega=\Omega .
+ \label{eq:cone}
+\end{equation}
+This equality is on the indicated vectors. Take $B_0=R_0\,\mathrm{SWAP}_{X,e'}$ and $\xi=\ket{00}$. With $t=\lceil(\log M_0+K\log n)/|\log\theta|\rceil$, Eqs.~\eqref{eq:restore}--\eqref{eq:cone} give $\norm{L_tR_0\phi}\le1+n^{-K}$ and $\norm{(L_tR_0)^\dagger\eta-\phi}\le3n^{-K}$. The latter bound gives the real overlap $\Re\langle\eta,L_tR_0\phi\rangle\ge1-3n^{-K}$, hence $\norm{L_tR_0\phi-\eta}=O(n^{-K/2})$.
+
+Extend the polar isometry of $L_tR_0=U H_+$ to a unitary on its finite support $s'\cup N_{\chi Rt}(S_0)$. For $z=U^\dagger\eta$, write $(\id+H_+)(z-\phi)=(H_+z-\phi)-(H_+\phi-z)$. Since $\norm{(\id+H_+)^{-1}}\le1$, the adjoint and direct errors give $\norm{U\phi-\eta}=O(n^{-K/2})$, as in (10.32)--(10.33). The register $e'$ is untouched. Put $r=\max(1,\lceil\chi Rt/2\rceil)$ and take the entire far system $W_{\max}=\Lambda\setminus N_{2r}(S_0)$. Its joint state with $e'$ in $U\phi$ is the original $XW_{\max}$ state up to relabeling. In $\eta$ this joint state is a product. Conditional-entropy continuity (2.1), applied with $e'$ as the first system, costs only $\log\dim e'=|X|\log q=O(n^2)$. By data processing, simultaneously
+\begin{equation}
+ I_\Omega(X':W)\le C n^{2-K/4}\le C_M n^{-M}
+ \quad(X'\subseteq X,\ W\subseteq W_{\max}).
+ \label{eq:far}
+\end{equation}
+The same $r$ works for all these sets. It obeys $L+2r=O_M(n^{1-\varepsilon})=o(n^\beta)$ with $\beta=1-2\cdot10^{-6}$. For empty $X$ the information vanishes.
+
+If one keeps the Poisson clocks of Lemma~10.1 instead, finite range makes the retained-factor approximation (10.3) exactly zero at $r\ge R$. The distant-clock omission in (10.4) still requires a propagation estimate. Equations~\eqref{eq:sweep}--\eqref{eq:cone} replace that process altogether. They also remove the high-power second filter of Section~10, the choice of a good clock trajectory, and the localization errors in (10.29)--(10.31). The restoring, polar, and continuity arguments remain.
+
+\section{Two families and cancellation of tile entropies}
+
+Let $b=|\partial_\Lambda A|>0$. Fix a scale threshold large enough for the scanner and Eq.~\eqref{eq:far} with $M=100$ and $L+2r<n^\beta$. Proposition~11.2 supplies the planar input. It constructs pieces in distance layers, fills the separating strips, and repairs contacts between pieces with equal labels. Its outcome is a partition $A=D_{\rm res}\,\dot\cup\,\bigcup_i X_i$, with $|D_{\rm res}|\le Cb$, together with ordered labels $f_i\in\{0,1\}$, scales $n_i$ above threshold and birth templates $T_i$ satisfying the conditions of Sec.~\ref{sec:scan}. Importantly, $X_i\subseteq A\cap T_i$ and $L_i=\lfloor n_i^{1-\varepsilon}\rfloor\le s_i$, where $s_i$ is the template's piece-size parameter. The estimates one needs from the geometry are
+\begin{align}
+ \dist_\infty(T_i,Z)&>2n_i^\beta,\qquad
+ \dist_\infty\Bigl(T_i,\bigcup_{j<i:f_j=f_i}X_j\Bigr)>2n_i^\beta,\nonumber\\
+ \sum_i n_i^{-100}&\le Cb .
+ \label{eq:geom}
+\end{align}
+The first two inequalities are (11.3)--(11.4). They measure separation from the \emph{birth template} to earlier \emph{actual pieces}.
+
+Apply the scanner and amplifier to $A\cap T_i$, with $S_i=A\cap (T_i)_{L_i}$. The whole set
+\[
+ J_i=B\ \cup\!\!\bigcup_{j<i:f_j=f_i}X_j
+\]
+is outside $N_{2r_i}(S_i)$. Indeed a graph path of length $2r_i$ or less starting in $S_i$ stays within ambient sup-distance $L_i+2r_i<n_i^\beta$ of $T_i$. It cannot meet the earlier pieces, and its first step into $B$ would meet a cut endpoint in this same neighborhood. Equation~\eqref{eq:far} therefore gives $I_\Omega(X_i:J_i)\le C_{100} n_i^{-100}$. Pairwise bounds on earlier pieces would not give this joint estimate. Every tile estimate is in the same physical state $\Omega$, although the local unitaries proving the estimates can differ.
+
+Write $A_f=\bigcup_{f_i=f}X_i$ and $E_f=\sum_{f_i=f} C_{100}n_i^{-100}$. The chain rule, followed by purity and subadditivity, gives
+\[
+ S(A)+\sum_{f_i=f}S(X_i)-E_f
+ \ \le\ S(BA_f)=S(D_{\rm res} A_{1-f})
+ \ \le\ S(D_{\rm res})+\sum_{f_i=1-f}S(X_i).
+\]
+Adding the two inequalities cancels every tile entropy. This is Lemma~11.1. It leaves
+\[
+ S_\Omega(A)\le |D_{\rm res}|\log q+
+             \tfrac12 C_{100}\sum_i n_i^{-100}
+       \le C(q,R,J,\Delta)b ,
+\]
+as claimed. The constants were chosen before the domain and the cut.
+
+\section*{Scope of the reduction}
+
+The first box estimate, the finite-dimensional transport and norm comparisons, the geometry of the scanner, and the two-family partition are established inputs from Ref.~\cite{area}. Equation~\eqref{eq:identity} verifies the physical hypotheses used in the proof of Proposition~9.2. Equations~\eqref{eq:sweep} and \eqref{eq:cone} prove the finite-range replacement in Proposition~10.2. These specializations are mathematical deductions here. The full general theorem has a Lean proof. Its existing physical scanner and amplifier construct specific filtered terms internally, so those entry points alone would not verify this shorter dependency chain.
+
+Two questions remain outside this deduction. A direct estimate of the collar cost without the replica comparisons would shorten its largest remaining analytic step. For constraints with nonzero tails at all radii, a corresponding argument would have to specify a decay and strength condition, recover the boundary moment and buffered-box estimates, and control propagation in place of Eq.~\eqref{eq:cone}. Exact annihilation of $\Omega$ alone supplies none of these size estimates.
+
+\appendix
+\section{Reading the TNLean declarations}
+The links below point to the inspected revision \texttt{16b1dfbd7e45} of TNLean~\cite{tnlean}. Names are relative to \texttt{TNLean.PEPS.AreaLaw} unless the linked file declares another namespace.
+
+\emph{Initial inputs.} The lattice tail budget and typical mass are
+\leanref{TailParameter}{129}{cutLogBudget_le_edgeBoundary} and
+\leanref{TailParameter}{208}{ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_edgeBoundary}.
+For the noncircular route to Proposition~3.3 use
+\leanref{InitialBuffer}{443}{condEntropy_le_initialBufferConst},
+\leanref{InitialBoxEstimate}{507}{boxEntropy_le_initialBoxRatio_mul}, and
+\leanref{InitialBoxEstimate}{587}{exists_boxEntropy_le_rpow}.
+There is a real-clearance recurrence with a similar purpose,
+\leanref{SafeRectangleAreaLaw}{103}{exists_initialBuffer_and_real_boxEntropy_recurrence}.
+Its proof uses \leanref{SafeRectangleAreaLaw}{63}{exists_regionalEntropy_safe_rect_le_linear}, which invokes the final area law. The fixed choice $D_0=2R+11$ above uses the forward integer-clearance proof.
+
+\emph{Scanner.} \leanref{Scan/ActualRoundTransport}{149}{Scan.CollarScan.FiniteFamilyTransportBound} quantifies over supplied positive supported terms and compatible partitions. The bound is proved at
+\leanref{Scan/ActualRoundTransport}{192}{finiteFamilyTransportBound_explicit}.
+The ball used for a split is visible in
+\leanref{Scan/DesignatedDilution}{52}{designatedSupport_eq_ball_of_state_split}.
+\leanref{Scan/Scanner}{54}{Scan.scanner_estimate} consumes assembled scan data. The physical implementation chooses a centered filter in
+\leanref{Scan/ActualEnergyTerms}{172}{ManyBody.PlaneInteraction.positiveTerm} and applies a conditional expectation in
+\leanref{Scan/ActualEnergyTerms}{186}{Scan.CollarScan.truncatedEnergyTerm}.
+Consequently \leanref{Scan/PhysicalScanner}{122}{scanner_estimate_actualScan} and
+\leanref{PhysicalCollarInformation}{254}{sublinearCollarBound_real} describe the existing general route. Formalizing Eq.~\eqref{eq:identity} along the shorter route would require supplying the raw terms to the transport and norm-comparison data, including their graph-ball labels, gap and moments. Frustration-freeness does not identify the library's centered time filter with $h_i/J$.
+
+\emph{Amplification and assembly.} The physical inputs that transfer directly are
+\leanref{Amplification/TypicalProjectors}{311}{exists_typicalProjectors_three_cuts} and
+\leanref{Amplification/LatticeRestoring}{630}{restoringOperator_estimates}.
+The formal passage from a supported unitary to mutual information is
+\leanref{AmplificationProofSteps}{214}{mutualInformation_le_of_ancilla_unitary}.
+The general \leanref{AmplificationProof}{689}{amplificationBound} uses the filtered constraint system. The quantifier over remote subsystems can be read in
+\leanref{BoundaryTheorem}{110}{AmplificationBound}.
+For the geometric conclusion see
+\leanref{Geometry/TwoFamilyAssembly}{880}{twoFamilyDecomposition},
+\leanref{TwoFamilies}{110}{regionalEntropy_le_residual_add_half_sum}, and
+\leanref{BirthTargetNeighborhoodInformation}{45}{regionalEntropy_le_boundary_of_neighborhood_information_estimates}.
+This last declaration takes whole-union exclusion and the residual and scale counts as hypotheses. Proposition~11.2 supplies the counts and Eq.~\eqref{eq:geom} gives the exclusion used above.
+\leanref{AreaLawTheorem}{56}{uniformAreaLaw} is the general endpoint.
+
+\begin{thebibliography}{9}
+\bibitem{area} OpenAI, \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/paper.pdf}{\emph{A two-dimensional area law from a global spectral gap}} (24 September 2026). The \href{https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections}{section sources} are pinned to the same revision.
+\bibitem{wolf} M.~M. Wolf, F.~Verstraete, M.~B. Hastings, and J.~I. Cirac, \href{https://doi.org/10.1103/PhysRevLett.100.070502}{Phys.\ Rev.\ Lett.\ \textbf{100}, 070502 (2008)}.
+\bibitem{cirac} J.~I. Cirac, J. Garre-Rubio, and D. P\'erez-Garc\'ia, \href{https://arxiv.org/abs/1903.09439}{\emph{Mathematical open problems in Projected Entangled Pair States}}, arXiv:1903.09439.
+\bibitem{aav} A. Anshu, I. Arad, and T. Vidick, \href{https://doi.org/10.1103/PhysRevB.93.205142}{Phys.\ Rev.\ B \textbf{93}, 205142 (2016)}.
+\bibitem{tnlean} TNLean contributors, \href{https://github.com/LionSR/TNLean/tree/16b1dfbd7e45f0e8fed7f2607e25313cf5a9f931/TNLean/PEPS/AreaLaw}{\emph{TNLean, PEPS area-law modules}}, revision \texttt{16b1dfbd7e45} (18 November 2026).
+\end{thebibliography}
+\end{document}
