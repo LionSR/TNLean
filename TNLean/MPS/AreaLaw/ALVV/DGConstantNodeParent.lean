@@ -30,6 +30,7 @@ open MeasureTheory
 namespace TNLean.MPS.AreaLaw.ALVV
 
 open TNLean.MPS.AreaLaw TNLean.Lattice
+open ManyBody (interval)
 
 /-- One long physical parent of the degenerate-gap tree has, for every number of rounds `k ≥ 1`
 and sampling size `1 ≤ s ≤ D^{2k}`, a measurable Haar success event for children of dimension at
