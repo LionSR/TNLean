@@ -314,7 +314,7 @@ theorem chainAreaLaw_of_consecutive_terms_polynomial_range :
   · obtain ⟨Cphys, hCphys, hCeq, hbound⟩ :=
       chainAreaLaw_of_consecutive_terms q R J Δ hq hJ hΔ
     have hscalar' := hscalar q R hpos.1 hpos.2
-    have hphysical := hbound L h hwindow E₀ Ω hΩ hgap hspan A
+    have hphysical := hbound L h hh hhJ hwindow E₀ Ω hΩ hgap hspan A
     have hθ : 0 ≤ 1 + J / Δ := by positivity
     have hlast := mul_le_mul_of_nonneg_right
       (mul_le_mul_of_nonneg_right hscalar' hθ)

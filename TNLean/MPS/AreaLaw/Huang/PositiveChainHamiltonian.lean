@@ -107,7 +107,8 @@ variable {L q : ℕ}
 /-- The constructed Hamiltonian keeps the actual original term at each adjacent pair.
 LVV13, `algo53.tex`, the nearest-neighbor Hamiltonian convention. -/
 theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term (i : Fin (L - 1)) :
-    (ofNearestNeighborPositive h hs).term (nearestNeighborChainSupport i) = h i := by
+    (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term
+        (nearestNeighborChainSupport i) = h i := by
   change Function.extend nearestNeighborChainSupport h (fun _ ↦ 0)
     (nearestNeighborChainSupport i) = h i
   exact nearestNeighborChainSupport_injective.extend_apply h (fun _ ↦ 0) i
@@ -117,7 +118,7 @@ does not add interactions to the original model of LVV13, `algo53.tex`. -/
 theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero
     (X : ChainSupport L 1)
     (hX : ¬∃ i, nearestNeighborChainSupport i = X) :
-    (ofNearestNeighborPositive h hs).term X = 0 := by
+    (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term X = 0 := by
   change Function.extend nearestNeighborChainSupport h (fun _ ↦ 0) X = 0
   exact Function.extend_apply' h (fun _ ↦ 0) X hX
 
@@ -125,35 +126,37 @@ theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero
 original adjacent-pair model of LVV13, `algo53.tex`. -/
 theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero_of_card_one
     (X : ChainSupport L 1) (hX : X.val.card = 1) :
-    (ofNearestNeighborPositive h hs).term X = 0 := by
-  apply ofNearestNeighborPositive_term_eq_zero
+    (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term X = 0 := by
+  apply ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero
   rintro ⟨i, rfl⟩
   have := card_nearestNeighborChainSupport i
   omega
 
 /-- Every term remains positive in the constructed representation of the original
 positive Hamiltonian of LVV13, `algo53.tex`. -/
+include h0 in
 theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term_nonneg
     (X : ChainSupport L 1) :
-    0 ≤ (ofNearestNeighborPositive h hs).term X := by
+    0 ≤ (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term X := by
   change 0 ≤ Function.extend nearestNeighborChainSupport h (fun _ ↦ 0) X
   exact forall_nearestNeighborExtension h (fun _ M ↦ 0 ≤ M) (fun _ ↦ le_rfl) h0 X
 
 /-- Every term remains bounded above by the identity in the constructed representation.
 LVV13, `algo53.tex`, the local positive-contraction assumptions. -/
+include h1 in
 theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term_le_one
     (X : ChainSupport L 1) :
-    (ofNearestNeighborPositive h hs).term X ≤ 1 := by
+    (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term X ≤ 1 := by
   change Function.extend nearestNeighborChainSupport h (fun _ ↦ 0) X ≤ 1
   exact forall_nearestNeighborExtension h (fun _ M ↦ M ≤ 1) (fun _ ↦ zero_le_one) h1 X
 
 /-- Summing the constructed range-one interaction family gives exactly the original
 operator. LVV13, `algo53.tex`, the nearest-neighbor Hamiltonian; Huang, Section 5.4. -/
 theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian :
-    (ofNearestNeighborPositive h hs).hamiltonian = ∑ i, h i := by
+    (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).hamiltonian = ∑ i, h i := by
   classical
   let f := nearestNeighborChainSupport (L := L)
-  let H := ofNearestNeighborPositive h hs
+  let H := ManyBody.ChainInteraction.ofNearestNeighborPositive h hs
   have hsub : Finset.univ.image f ⊆ (Finset.univ : Finset (ChainSupport L 1)) :=
     Finset.subset_univ _
   calc
@@ -161,7 +164,7 @@ theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian :
       symm
       apply Finset.sum_subset hsub
       intro X _ hX
-      apply ofNearestNeighborPositive_term_eq_zero
+      apply ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero
       simpa only [Finset.mem_image, Finset.mem_univ, true_and, f] using hX
     _ = ∑ i, H.term (f i) := Finset.sum_image (fun _ _ _ _ hij ↦
       nearestNeighborChainSupport_injective hij)
