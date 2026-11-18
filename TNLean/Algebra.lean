@@ -175,6 +175,7 @@ import TNLean.Algebra.PowerExponential
 import TNLean.Algebra.PreBialgebra
 import TNLean.Algebra.PrimitiveMatrixIdealDimension
 import TNLean.Algebra.ProductFactorUniqueness
+import TNLean.Algebra.ProductMatrixPlacement
 import TNLean.Algebra.ProjectionDefectIsometry
 import TNLean.Algebra.ProjectiveCommutantEigenspace
 import TNLean.Algebra.ProjectiveRepresentation
@@ -223,6 +224,7 @@ import TNLean.Algebra.StarClosedSemisimple
 import TNLean.Algebra.StarSubalgebraEquiv
 import TNLean.Algebra.SubmoduleStarProjectionMatrix
 import TNLean.Algebra.Subquotient
+import TNLean.Algebra.SubregionPlacement
 import TNLean.Algebra.SupportedIsometricCompression
 import TNLean.Algebra.SupportedRangeProjector
 import TNLean.Algebra.SupportedRangeProjectorNorm

@@ -86,7 +86,8 @@ theorem IsGInjective.torusParentKernel_le_commutingClosureSpan
           (leftRegularMatrix G) a p.1.1 p.1.2)) := by
   classical
   intro Ψ hΨ
-  have hlocal : ∀ v, regionLocalTerm (torusPlaquetteRegion v) (P v) *ᵥ Ψ = 0 :=
+  have hlocal : ∀ v,
+      ManyBody.place («X» := fun _ ↦ Fin _) (torusPlaquetteRegion v) (P v) *ᵥ Ψ = 0 :=
     (regionParentHamiltonian_mulVec_eq_zero_iff torusPlaquetteRegion P
       (fun v => (hP v).1) Ψ).mp hΨ
   obtain ⟨F, hF, hrec, hleft, hright, hsupport⟩ :=

@@ -109,8 +109,9 @@ theorem torusParent_annihilates_torusGClosure_of_invariant
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hP : IsRegionParentInteraction (groupBondTensor (torusNativeIncidentSite a))
       (torusPlaquetteRegion v) P) :
-    regionLocalTerm (torusPlaquetteRegion v) P *ᵥ torusGClosure U a g h = 0 := by
-  apply (regionLocalTerm_mulVec_eq_zero_iff _ _ hP _).mpr
+    ManyBody.place (X := fun _ ↦ Fin _)
+        (torusPlaquetteRegion v) P *ᵥ torusGClosure U a g h = 0 := by
+  apply (place_mulVec_eq_zero_iff _ _ hP _).mpr
   exact torusGClosure_slice_mem_plaquetteGroundSpace_of_invariant U a ha g h hgh v
 
 /-- Commuting native closures belong to the kernel of every genuine positive

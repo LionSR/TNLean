@@ -244,7 +244,7 @@ theorem IsGIsometric.exists_unitary_torusSecondStringCrossing
     let R := verticalTwoPlaquetteRegion (torusSecondStringCrossingBase v)
     ∃ W : Matrix ({x : X // x ∈ R} → Fin d) ({x : X // x ∈ R} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({x : X // x ∈ R} → Fin d) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (g h : G) (θ : {e : Edge Γₜ // IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a)
@@ -254,7 +254,8 @@ theorem IsGIsometric.exists_unitary_torusSecondStringCrossing
           (torusIncidentSite (width := width) (height := height) a)
           (torusSecondStringCrossingOutput v g h))) R
           (fun e => Fintype.equivFin G (θ e))) ∧
-      ∀ (g h : G), regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite
+      ∀ (g h : G), ManyBody.place («X» :=
+          fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a)
           (torusSweptStringRightStepOperators v g h))) =
         stateCoeff (groupBondTensor (regularTwistedSite

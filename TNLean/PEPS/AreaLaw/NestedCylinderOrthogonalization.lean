@@ -123,7 +123,7 @@ private theorem projector_finset_sup {ι κ : Type*} [Fintype κ]
     exact Finset.sum_eq_zero fun i hi => h (ne_of_mem_of_not_mem hi ha).symm
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*} [∀ v, Fintype (Out v)] {n : ℕ}
+variable {Out : V → Type*} [∀ v, Fintype (Out v)] [∀ v, DecidableEq (Out v)] {n : ℕ}
 
 /-- The earlier cylinders expressed inside the current region, using the identity
 extensions of their original range projectors. -/
@@ -131,7 +131,7 @@ noncomputable def nestedCylinderEarlierInside (R : Fin n → Finset V) (hR : Mon
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (j : Fin n) : Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ) :=
   ⨆ i : {i : Fin n // i < j},
-    (dependentSubregionOperatorLift (R i.1) (R j) (hR i.2.le)
+    (ManyBody.subregionPlace (hR i.2.le)
       (coordinateRangeProjector (S i.1))).mulVecLin.range
 
 /-- The projected-image innovation \((I-P_{W_j})S_j\), which need not equal
@@ -169,8 +169,8 @@ theorem dependentRegionCylinder_nestedCylinderInnovation
         (1 - coordinateRangeProjector (nestedCylinderEarlierInside R hR S j)).mulVecLin := by
     ext x α
     simp
-  rw [nestedCylinderInnovation, hm, dependentRegionCylinder_map, dependentRegionOperatorLift_sub,
-    dependentRegionOperatorLift_one (Out := Out),
+  rw [nestedCylinderInnovation, hm, dependentRegionCylinder_map, ManyBody.place_sub,
+    ManyBody.place_one (X := Out),
     ← coordinateRangeProjector_dependentRegionCylinder,
     dependentRegionCylinder_nestedCylinderEarlierInside,
     ← Matrix.toLin'_apply', map_sub, Matrix.toLin'_one]
@@ -323,7 +323,7 @@ theorem nestedCylinderInnovation_projector_sum
     (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ)) :
     coordinateRangeProjector (⨆ i, dependentRegionCylinder (R i) (S i)) =
-      ∑ i, dependentRegionOperatorLift (R i)
+      ∑ i, ManyBody.place (R i)
         (coordinateRangeProjector (nestedCylinderInnovation R hR S i)) := by
   classical
   rw [← nestedCylinderInnovation_span R hR S, ← Finset.sup_univ_eq_iSup]
@@ -364,8 +364,8 @@ theorem nestedCylinder_projector_supported
     (U : Finset V) (hU : ∀ i, R i ⊆ U) :
     ∃ T : Submodule ℂ (((w : {w : V // w ∈ U}) → Out w.1) → ℂ),
       coordinateRangeProjector (⨆ i, dependentRegionCylinder (R i) (S i)) =
-        dependentRegionOperatorLift U (coordinateRangeProjector T) := by
-  refine ⟨⨆ i, (dependentSubregionOperatorLift (R i) U (hU i)
+        ManyBody.place U (coordinateRangeProjector T) := by
+  refine ⟨⨆ i, (ManyBody.subregionPlace (hU i)
     (coordinateRangeProjector (S i))).mulVecLin.range, ?_⟩
   rw [← coordinateRangeProjector_dependentRegionCylinder, dependentRegionCylinder_iSup]
   simp only [dependentRegionCylinder_subregion]

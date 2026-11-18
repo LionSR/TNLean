@@ -113,17 +113,17 @@ theorem identityHoleEncoder_norm (x : ι → ℂ) :
   simpa using norm_mulVec_eq_of_gram_eq identityHoleEncoder (1 : Matrix ι ι ℂ) h x
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*} [∀ v, Fintype (Out v)] {n : ℕ}
+variable {Out : V → Type*} [∀ v, DecidableEq (Out v)] [∀ v, Fintype (Out v)] {n : ℕ}
 
 omit [∀ v, Fintype (Out v)] in
 private theorem dependentRegionOperatorLift_sum {κ : Type*} [Fintype κ] (R : Finset V)
     (B : κ → Matrix ((w : {w : V // w ∈ R}) → Out w.1)
       ((w : {w : V // w ∈ R}) → Out w.1) ℂ) :
-    dependentRegionOperatorLift R (∑ k, B k) =
-      ∑ k, dependentRegionOperatorLift R (B k) := by
+    ManyBody.place R (∑ k, B k) =
+      ∑ k, ManyBody.place R (B k) := by
   classical
   ext α β
-  simp [dependentRegionOperatorLift, Matrix.reindex_apply, Matrix.sum_apply, Finset.sum_mul]
+  simp [ManyBody.place, Matrix.reindex_apply, Matrix.sum_apply, Finset.sum_mul]
 
 /-- The tag records the branch and one actual inside innovation basis index. -/
 abbrev HoleEncoderTag (R : Fin n → Finset V) (hR : Monotone R)
@@ -159,9 +159,9 @@ gives a unit reset on every branch, and the full raw output factor retains every
 noncomputable def holeEncoder (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (zero : (v : V) → Out v) :
-    Matrix (HoleEncoderTag R hR S × ((w : {w : V // w ∈ Finset.univ}) → Out w.1))
-      ((w : {w : V // w ∈ Finset.univ}) → Out w.1) ℂ :=
-  Matrix.of fun p β => dependentRegionOperatorLift (R p.1.1)
+    Matrix (HoleEncoderTag R hR S × ((v : V) → Out v))
+      ((v : V) → Out v) ℂ :=
+  Matrix.of fun p β => ManyBody.place (R p.1.1)
     (coordinateResetMatrix (fun w => zero w.1)
       (fun a => (holeEncoderBasis R hR S p.1.1 p.1.2).val a)) p.2 β
 
@@ -174,7 +174,7 @@ theorem holeEncoder_gram (R : Fin n → Finset V) (hR : Monotone R)
       coordinateRangeProjector (⨆ j, dependentRegionCylinder (R j) (S j)) := by
   classical
   let B (t : HoleEncoderTag R hR S) :=
-    dependentRegionOperatorLift (R t.1)
+    ManyBody.place (R t.1)
       (coordinateResetMatrix (fun w => zero w.1)
         (fun a => (holeEncoderBasis R hR S t.1 t.2).val a))
   have hg : (holeEncoder R hR S zero).conjTranspose * holeEncoder R hR S zero =
@@ -183,8 +183,8 @@ theorem holeEncoder_gram (R : Fin n → Finset V) (hR : Monotone R)
   apply Finset.sum_congr rfl
   intro j _
   dsimp only [B]
-  simp_rw [dependentRegionOperatorLift_conjTranspose,
-    ← dependentRegionOperatorLift_mul, coordinateResetMatrix_gram]
+  simp_rw [← ManyBody.place_conjTranspose,
+    ← ManyBody.place_mul, coordinateResetMatrix_gram]
   rw [← dependentRegionOperatorLift_sum,
     ← coordinateRangeProjector_eq_sum_basis _ (holeEncoderBasis R hR S j)]
 
@@ -193,29 +193,29 @@ open Classical in
 theorem holeEncoder_apply (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (zero : (v : V) → Out v) (t : HoleEncoderTag R hR S)
-    (α β : (w : {w : V // w ∈ Finset.univ}) → Out w.1) :
+    (α β : (v : V) → Out v) :
     holeEncoder R hR S zero (t, α) β =
-      if ∀ v, v ∉ R t.1 → α ⟨v, Finset.mem_univ v⟩ = β ⟨v, Finset.mem_univ v⟩ then
-        if (fun w : {w : V // w ∈ R t.1} => α ⟨w.1, Finset.mem_univ w.1⟩) =
+      if ∀ v, v ∉ R t.1 → α v = β v then
+        if (fun w : {w : V // w ∈ R t.1} => α w.1) =
             (fun w : {w : V // w ∈ R t.1} => zero w.1) then
           star ((holeEncoderBasis R hR S t.1 t.2).val
-            (fun w => β ⟨w.1, Finset.mem_univ w.1⟩))
+            (fun w => β w.1))
         else 0
       else 0 := by
   classical
   unfold holeEncoder
-  rw [Matrix.of_apply, dependentRegionOperatorLift_apply]
+  rw [Matrix.of_apply, ManyBody.place_apply]
   simp only [coordinateResetMatrix, Matrix.of_apply]
 
 /-- A raw output coordinate inside this branch's region must be at the reset value. -/
 theorem holeEncoder_eq_zero_of_not_reset (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (zero : (v : V) → Out v) (t : HoleEncoderTag R hR S)
-    (α β : (w : {w : V // w ∈ Finset.univ}) → Out w.1)
-    (v : V) (hv : v ∈ R t.1) (hα : α ⟨v, Finset.mem_univ v⟩ ≠ zero v) :
+    (α β : (v : V) → Out v)
+    (v : V) (hv : v ∈ R t.1) (hα : α v ≠ zero v) :
     holeEncoder R hR S zero (t, α) β = 0 := by
   classical
-  have hne : (fun w : {w : V // w ∈ R t.1} => α ⟨w.1, Finset.mem_univ w.1⟩) ≠
+  have hne : (fun w : {w : V // w ∈ R t.1} => α w.1) ≠
       (fun w : {w : V // w ∈ R t.1} => zero w.1) := fun h => hα (congrFun h ⟨v, hv⟩)
   simp [holeEncoder_apply, hne]
 
@@ -223,13 +223,13 @@ theorem holeEncoder_eq_zero_of_not_reset (R : Fin n → Finset V) (hR : Monotone
 theorem holeEncoder_eq_zero_of_complement_ne (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (zero : (v : V) → Out v) (t : HoleEncoderTag R hR S)
-    (α β : (w : {w : V // w ∈ Finset.univ}) → Out w.1)
+    (α β : (v : V) → Out v)
     (v : V) (hv : v ∉ R t.1)
-    (hαβ : α ⟨v, Finset.mem_univ v⟩ ≠ β ⟨v, Finset.mem_univ v⟩) :
+    (hαβ : α v ≠ β v) :
     holeEncoder R hR S zero (t, α) β = 0 := by
   classical
   have hne : ¬ ∀ w, w ∉ R t.1 →
-      α ⟨w, Finset.mem_univ w⟩ = β ⟨w, Finset.mem_univ w⟩ := fun h => hαβ (h v hv)
+      α w = β w := fun h => hαβ (h v hv)
   simp [holeEncoder_apply, hne]
 
 open Classical in
@@ -248,7 +248,7 @@ theorem holeEncoder_opNorm_le_one (R : Fin n → Finset V) (hR : Monotone R)
 theorem holeEncoder_norm_eq_projector (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (zero : (v : V) → Out v)
-    (x : ((w : {w : V // w ∈ Finset.univ}) → Out w.1) → ℂ) :
+    (x : ((v : V) → Out v) → ℂ) :
     ‖WithLp.toLp 2 (holeEncoder R hR S zero *ᵥ x)‖ =
       ‖WithLp.toLp 2 (coordinateRangeProjector
         (⨆ j, dependentRegionCylinder (R j) (S j)) *ᵥ x)‖ := by
@@ -267,7 +267,7 @@ in polynomial-PEPS, `05-frames.tex`, `eq:encoder-contraction`, lines 62–64.
 theorem holeEncoder_norm_eq_of_mem (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (zero : (v : V) → Out v)
-    (x : ((w : {w : V // w ∈ Finset.univ}) → Out w.1) → ℂ)
+    (x : ((v : V) → Out v) → ℂ)
     (hx : x ∈ ⨆ j, dependentRegionCylinder (R j) (S j)) :
     ‖WithLp.toLp 2 (holeEncoder R hR S zero *ᵥ x)‖ = ‖WithLp.toLp 2 x‖ := by
   exact (holeEncoder_norm_eq_projector R hR S zero x).trans
@@ -278,7 +278,7 @@ theorem holeEncoder_norm_eq_of_mem (R : Fin n → Finset V) (hR : Monotone R)
 theorem holeEncoder_norm_le (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (zero : (v : V) → Out v)
-    (x : ((w : {w : V // w ∈ Finset.univ}) → Out w.1) → ℂ) :
+    (x : ((v : V) → Out v) → ℂ) :
     ‖WithLp.toLp 2 (holeEncoder R hR S zero *ᵥ x)‖ ≤ ‖WithLp.toLp 2 x‖ := by
   classical
   calc

@@ -33,7 +33,7 @@ enumerations are retained, and zero local dimension and empty regions are allowe
 
 Source: polynomial-PEPS manuscript, `02-information.tex`, lines 498–564,
 `eq:info-operator-localization` and `eq:info-local-two-sided`. -/
-theorem reindex_physicalBuffer_eq_siteLift
+theorem reindex_physicalBuffer_eq_place
     {ι : Type*} [Fintype ι] [DecidableEq ι]
     (q : ℕ) (R C : Finset ι) (hRC : Disjoint R C) :
     let Q := (R ∪ C)ᶜ
@@ -45,12 +45,12 @@ theorem reindex_physicalBuffer_eq_siteLift
     let e := g.symm.trans p
     ∀ W : Matrix ((Q → Fin q) × (Q → Fin q)) ((Q → Fin q) × (Q → Fin q)) ℂ,
       Matrix.reindex e e ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) =
-        siteLift Q (Matrix.reindex pQ pQ W) := by
+        ManyBody.place Q (Matrix.reindex pQ pQ W) := by
   classical
   intro Q P s g p pQ e W
   ext x y
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
-    Matrix.one_apply, siteLift, QuantumCircuit.embedOp_apply]
+    Matrix.one_apply, QuantumCircuit.place_eq_embedOp, QuantumCircuit.embedOp_apply]
   have hcondition : (e.symm x).1 = (e.symm y).1 ↔
       QuantumCircuit.AgreeOff (Subtype.val : Q → ι) x y := by
     simp only [P, e, g, s, Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.trans_apply,

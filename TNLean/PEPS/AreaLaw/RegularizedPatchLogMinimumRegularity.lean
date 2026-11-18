@@ -29,7 +29,7 @@ open scoped BigOperators NNReal
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*} [∀ v, Fintype (Out v)]
+variable {Out : V → Type*} [∀ v, DecidableEq (Out v)] [∀ v, Fintype (Out v)]
 variable {m : ℕ} (regions : Fin m → Finset V)
 
 /-- The logarithm of the actual ordered patch minimum inherits the common
@@ -38,7 +38,7 @@ of minimizing tuples is needed.
 Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 433–451. -/
 theorem lipschitzOnWith_log_regularizedPatchMinimum_exp_neg
     (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (hΩ : ‖Ω‖ = 1) (T : ℝ) (hT : 0 ≤ T) :
     let κ : ℝ := ∑ j, a j
     let K : ℝ≥0 := ⟨κ / 2 * (2 : ℝ) ^ (κ / 2) * Real.exp (κ * T / 2), by
@@ -75,7 +75,7 @@ every bounded nonnegative radius interval, including a singleton interval.
 Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 433–451. -/
 theorem absolutelyContinuousOnInterval_log_regularizedPatchMinimum_exp_neg
     (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (hΩ : ‖Ω‖ = 1) (T : ℝ) (hT : 0 ≤ T) :
     AbsolutelyContinuousOnInterval
       (fun R : ℝ ↦ Real.log (regularizedPatchMinimum regions a (Real.exp (-R)) Ω))

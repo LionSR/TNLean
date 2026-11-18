@@ -10,13 +10,11 @@ with marginals taken in the final normalized vector of
 
 \begin{definition}[One-coordinate variation and insertion]
     \label{def:peps_patch_coordinate_insertion}
-    \lean{
-        TNLean.PEPS.regularizedPatchCoordinateUpdate,
+    \lean{TNLean.PEPS.regularizedPatchCoordinateUpdate,
         TNLean.PEPS.regularizedPatchInsertion,
         TNLean.PEPS.regularizedPatchInsertion_apply,
         TNLean.PEPS.regularizedPatchInsertion_self,
-        TNLean.PEPS.regularizedPatchUnitaryCurve
-    }
+        TNLean.PEPS.regularizedPatchUnitaryCurve}
     \leanok
     \uses{def:peps_regularized_patch_objective}
     Fix $0\le j<m$ and a unitary $U$ on $\mathcal H_{X_j}$.
@@ -33,11 +31,9 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[Feasibility and covariance]
     \label{thm:peps_patch_coordinate_covariance}
-    \lean{
-        TNLean.PEPS.regularizedPatchCoordinateUpdate_mem,
+    \lean{TNLean.PEPS.regularizedPatchCoordinateUpdate_mem,
         TNLean.PEPS.regularizedPatchCoordinateUpdate_rpow,
-        TNLean.PEPS.regularizedPatchOutput_coordinateUpdate
-    }
+        TNLean.PEPS.regularizedPatchOutput_coordinateUpdate}
     \leanok
     \uses{def:peps_patch_coordinate_insertion}
     For $x\in\mathcal D$, $b>0$, $a_j\in\R$, and a unitary $U$
@@ -58,10 +54,8 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[Ordered first variation]
     \label{thm:peps_patch_first_variation}
-    \lean{
-        TNLean.PEPS.hasDerivAt_regularizedPatchOutput_coordinateUpdate,
-        TNLean.PEPS.regularizedPatchFirstVariation_eq_zero
-    }
+    \lean{TNLean.PEPS.hasDerivAt_regularizedPatchOutput_coordinateUpdate,
+        TNLean.PEPS.regularizedPatchFirstVariation_eq_zero}
     \leanok
     \uses{def:peps_patch_coordinate_insertion}
     Let $x\in\mathcal D$, $b>0$, $a_j\in\R$, and $B^*=-B$ on $\mathcal H_{X_j}$. Then
@@ -128,12 +122,8 @@ with marginals taken in the final normalized vector of
 
 \begin{definition}[Canonical global coordinates and marginals]
     \label{def:peps_patch_canonical_marginal}
-    \lean{
-        TNLean.PEPS.dependentGlobalConfigEquiv,
-        TNLean.PEPS.dependentGlobalConfigIsometry,
-        TNLean.PEPS.dependentGlobalConfigIsometry_apply,
-        TNLean.PEPS.normalizedRegularizedPatchMarginal
-    }
+    \lean{TNLean.PEPS.dependentGlobalConfigEquiv,
+        TNLean.PEPS.normalizedRegularizedPatchMarginal}
     \leanok
     \uses{def:peps_regularized_patch_minimum}
     Let $J$ be the unitary coordinate identification induced by forgetting the redundant membership condition $v\in V$ on configurations indexed by $V$.
@@ -178,10 +168,8 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[Canonical coordinates for the ordered output]
     \label{thm:peps_ordered_patch_output_coordinates}
-    \lean{
-        TNLean.PEPS.dependentGlobalConfigIsometry_regularizedPatchOutput,
-        TNLean.PEPS.regularizedPatchObjective_eq_norm_patchOutput
-    }
+    \lean{TNLean.PEPS.regularizedPatchOutput_eq_patchOutput,
+        TNLean.PEPS.regularizedPatchObjective_eq_norm_patchOutput}
     \leanok
     \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal,
         def:peps_regularized_patch_objective}
@@ -223,7 +211,7 @@ with marginals taken in the final normalized vector of
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 91--99.
 \begin{lemma}[Canonical coordinates for the normalized output]
     \label{thm:peps_ordered_patch_normalized_coordinates}
-    \lean{TNLean.PEPS.dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput}
+    \lean{TNLean.PEPS.normalizedRegularizedPatchOutput_eq_patchState}
     \leanok
     \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal,
         def:peps_regularized_patch_minimum}
@@ -252,12 +240,10 @@ with marginals taken in the final normalized vector of
 
 \begin{lemma}[Regional expectation and density properties]
     \label{thm:peps_patch_marginal_expectation}
-    \lean{
-        TNLean.PEPS.inner_dependentRegionOperatorLift_eq_trace_reducedPure,
+    \lean{TNLean.PEPS.inner_place_eq_trace_reducedPure,
         TNLean.PEPS.normalizedRegularizedPatchMarginal_posSemidef,
         TNLean.PEPS.trace_normalizedRegularizedPatchMarginal,
-        TNLean.PEPS.inner_normalizedRegularizedPatchOutput_lift_eq_trace
-    }
+        TNLean.PEPS.inner_normalizedRegularizedPatchOutput_lift_eq_trace}
     \leanok
     \uses{def:peps_patch_canonical_marginal}
     For every $\xi\in\mathcal H_V$, $X\subseteq V$, and $K\in\operatorname{End}(\mathcal H_X)$,
@@ -409,10 +395,8 @@ with marginals taken in the final normalized vector of
 
 \begin{definition}[Diagonal coordinate objective]
     \label{def:peps_patch_diagonal_objective}
-    \lean{
-        TNLean.PEPS.regularizedPatchDiagonalUpdate,
-        TNLean.PEPS.regularizedPatchDiagonalObjective
-    }
+    \lean{TNLean.PEPS.regularizedPatchDiagonalUpdate,
+        TNLean.PEPS.regularizedPatchDiagonalObjective}
     \leanok
     \uses{def:peps_regularized_patch_objective}
     Fix $0\le j<m$ and a unitary $U$ on $\mathcal H_{X_j}$.

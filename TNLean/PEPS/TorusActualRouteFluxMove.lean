@@ -433,7 +433,7 @@ theorem IsGIsometric.exists_unitary_torusActualRouteFluxMove {d : ℕ}
       (regularSiteMap (a v))) (horizontal : Bool) (p : X) :
     ∃ W : Matrix (RV horizontal p → Fin d) (RV horizontal p → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV horizontal p → Fin d) ℂ ∧
-      regionLocalTerm (R horizontal p) W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) (R horizontal p) W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (reverse : Bool) (u : Edge Γₜ → G)
           (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (R horizontal p) e} → G),
         (if reverse then W.conjTranspose else W) *ᵥ
@@ -443,8 +443,8 @@ theorem IsGIsometric.exists_unitary_torusActualRouteFluxMove {d : ℕ}
           (torusActualRouteFluxMove horizontal reverse p u))) (R horizontal p)
           (fun f => Fintype.equivFin G (θ f))) ∧
       ∀ (reverse : Bool) (u : Edge Γₜ → G),
-        (if reverse then (regionLocalTerm (R horizontal p) W).conjTranspose
-          else regionLocalTerm (R horizontal p) W) *ᵥ
+        (if reverse then (ManyBody.place («X» := fun _ ↦ Fin _) (R horizontal p) W).conjTranspose
+          else ManyBody.place («X» := fun _ ↦ Fin _) (R horizontal p) W) *ᵥ
           stateCoeff (groupBondTensor (regularTwistedSite a u)) =
         stateCoeff (groupBondTensor (regularTwistedSite a
           (torusActualRouteFluxMove horizontal reverse p u))) :=
@@ -463,7 +463,7 @@ theorem IsGIsometric.exists_unitary_torusActualRouteFluxUpdate {d : ℕ}
       (regularSiteMap (a v))) (horizontal : Bool) (p : X) :
     ∃ W : Matrix (RV horizontal p → Fin d) (RV horizontal p → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV horizontal p → Fin d) ℂ ∧
-      regionLocalTerm (R horizontal p) W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) (R horizontal p) W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (reverse : Bool) (u : Edge Γₜ → G),
         regularWalkHolonomy u (torusPlaquetteWalk
           (if reverse then p else offset horizontal p 1 0)) = 1 →
@@ -477,8 +477,8 @@ theorem IsGIsometric.exists_unitary_torusActualRouteFluxUpdate {d : ℕ}
       ∀ (reverse : Bool) (u : Edge Γₜ → G),
         regularWalkHolonomy u (torusPlaquetteWalk
           (if reverse then p else offset horizontal p 1 0)) = 1 →
-        (if reverse then (regionLocalTerm (R horizontal p) W).conjTranspose
-          else regionLocalTerm (R horizontal p) W) *ᵥ
+        (if reverse then (ManyBody.place («X» := fun _ ↦ Fin _) (R horizontal p) W).conjTranspose
+          else ManyBody.place («X» := fun _ ↦ Fin _) (R horizontal p) W) *ᵥ
           stateCoeff (groupBondTensor (regularTwistedSite a u)) =
         stateCoeff (groupBondTensor (regularTwistedSite a
           (torusActualRouteFluxUpdate horizontal reverse p u))) := by

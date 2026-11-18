@@ -53,9 +53,9 @@ theorem IsGIsometric.exists_unitary_torusTwoPlaquetteGlobalFluxMove
     (ha : IsGIsometric (torusLegRep (leftRegularMatrix G)) (siteMap a)) :
     ∃ W : Matrix ({v : X // v ∈ R} → Fin d) ({v : X // v ∈ R} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({v : X // v ∈ R} → Fin d) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       ∀ (g : G) (u : Edge Γₜ → G),
-        regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite
+        ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a)
           (regularRegionBondExtension R
             (torusTwoPlaquetteFluxAssignment (width := width) (height := height) false g) u))) =

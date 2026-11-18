@@ -91,7 +91,7 @@ theorem IsGInjective.commute_of_cornerParent_annihilates_torusGClosure
       (RegionPhysicalConfig (d := d) (R₀)) ℂ)
     (hQ : IsRegionParentInteraction (groupBondTensor (torusIncidentSite a))
       (R₀) Q)
-    (hground : regionLocalTerm (R₀) Q *ᵥ
+    (hground : ManyBody.place («X» := fun _ ↦ Fin _) (R₀) Q *ᵥ
       torusGClosure (width := width) (height := height) (leftRegularMatrix G) a g h = 0) :
     Commute g h := by
   classical
@@ -129,7 +129,7 @@ theorem IsGInjective.regionParent_annihilates_torusGClosure_of_isSimplyConnected
     (g h : G) (hgh : Commute g h)
     (Q : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (hQ : IsRegionParentInteraction (groupBondTensor (torusIncidentSite a)) R Q) :
-    regionLocalTerm R Q *ᵥ
+    ManyBody.place («X» := fun _ ↦ Fin _) R Q *ᵥ
       torusGClosure (width := width) (height := height) (leftRegularMatrix G) a g h = 0 := by
   classical
   obtain ⟨o⟩ := hR.nonempty
@@ -143,7 +143,7 @@ theorem IsGInjective.regionParent_annihilates_torusGClosure_of_isSimplyConnected
       stateCoeff (groupBondTensor (regularTwistedSite (torusIncidentSite a)
         (torusClosureEdgeAssignment g h))) := funext (torusGClosure_eq_stateCoeff_twisted a g h)
   rw [hc]
-  apply (regionLocalTerm_mulVec_eq_zero_iff (groupBondTensor (torusIncidentSite a)) R hQ _).mpr
+  apply (place_mulVec_eq_zero_iff (groupBondTensor (torusIncidentSite a)) R hQ _).mpr
   intro τ
   rw [← hspaces]
   exact stateCoeff_slice_mem_regionGroundSpace _ R τ

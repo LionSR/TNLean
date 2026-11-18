@@ -45,13 +45,13 @@ theorem regularIsometric_regionRangeProjector_lifts_commute
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ v, IsGIsometric (regularLegRepresentation (IncidentEdge Γ v))
       (regularSiteMap (a v))) (R S : Finset V) :
-    Commute (dependentRegionOperatorLift (Out := fun _ => Fin d) R
+    Commute (ManyBody.place (X := fun _ => Fin d) R
         (coordinateRangeProjector (regionGroundSpace (groupBondTensor a) R)))
-      (dependentRegionOperatorLift (Out := fun _ => Fin d) S
+      (ManyBody.place (X := fun _ => Fin d) S
         (coordinateRangeProjector (regionGroundSpace (groupBondTensor a) S))) := by
   classical
   obtain ⟨L, J, hAL, hJ, hJ0, hJA⟩ := exists_regularIsometric_siteImageProjectors a ha
-  exact commute_dependentRegionOperatorLift_of_productSiteTransport R S
+  exact commute_place_of_productSiteTransport R S
     (fun v => Matrix.of fun s α => a v α s) L J _ _
     (regularCanonicalRegionRangeProjector (Γ := Γ) (G := G) R)
     (regularCanonicalRegionRangeProjector (Γ := Γ) (G := G) S)
@@ -101,28 +101,6 @@ theorem canonicalRegionParentInteraction_eq_one_sub_rangeProjector
   rw [← h]
   exact (sub_sub_cancel 1 P).symm
 
-/-- The two coordinate conventions for extending a physical regional operator agree. -/
-theorem regionLocalTerm_eq_dependentRegionOperatorLift (R : Finset V)
-    (H : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ) :
-    regionLocalTerm R H =
-      (dependentRegionOperatorLift (Out := fun _ => Fin d) R H).submatrix
-        (fullRegionConfigEquiv d) (fullRegionConfigEquiv d) := by
-  classical
-  ext σ τ
-  simp only [regionLocalTerm, dependentRegionOperatorLift, Matrix.reindex_apply,
-    Matrix.submatrix_apply]
-  simp [Matrix.kroneckerMap, Matrix.one_apply, regionConfigEquiv, dependentRegionConfigEquiv,
-    fullRegionConfigEquiv]
-
-/-- Extending a complementary interaction gives the complement of the extended projector. -/
-theorem dependentRegionOperatorLift_one_sub (R : Finset V)
-    (P : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ) :
-    dependentRegionOperatorLift (Out := fun _ => Fin d) R (1 - P) =
-      1 - dependentRegionOperatorLift (Out := fun _ => Fin d) R P := by
-  classical
-  rw [dependentRegionOperatorLift_sub,
-    dependentRegionOperatorLift_one (Out := fun _ => Fin d)]
-
 omit [DecidableEq G] in
 /-- Source: SCP10, arXiv:1001.3807, Theorem 6.12. The actual canonical physical
 parent terms of locally regular G-isometric PEPS commute for any two regions.
@@ -132,17 +110,16 @@ theorem regularIsometric_canonicalRegionParentInteractions_commute
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ v, IsGIsometric (regularLegRepresentation (IncidentEdge Γ v))
       (regularSiteMap (a v))) (R S : Finset V) :
-    Commute (regionLocalTerm R (canonicalRegionParentInteraction (groupBondTensor a) R))
-      (regionLocalTerm S (canonicalRegionParentInteraction (groupBondTensor a) S)) := by
+    Commute (ManyBody.place (X :=
+        fun _ ↦ Fin _) R (canonicalRegionParentInteraction (groupBondTensor a) R))
+      (ManyBody.place (X :=
+          fun _ ↦ Fin _) S (canonicalRegionParentInteraction (groupBondTensor a) S)) := by
   classical
   have hrange := regularIsometric_regionRangeProjector_lifts_commute a ha R S
   have hcomp := (Commute.one_right _).sub_right ((Commute.one_left _).sub_left hrange)
   rw [canonicalRegionParentInteraction_eq_one_sub_rangeProjector,
-    canonicalRegionParentInteraction_eq_one_sub_rangeProjector,
-    regionLocalTerm_eq_dependentRegionOperatorLift,
-    regionLocalTerm_eq_dependentRegionOperatorLift,
-    dependentRegionOperatorLift_one_sub, dependentRegionOperatorLift_one_sub]
-  change _ * _ = _ * _
-  rw [Matrix.submatrix_mul_equiv, Matrix.submatrix_mul_equiv, hcomp.eq]
+    canonicalRegionParentInteraction_eq_one_sub_rangeProjector, ManyBody.place_sub,
+    ManyBody.place_sub, ManyBody.place_one, ManyBody.place_one]
+  exact hcomp
 
 end TNLean.PEPS

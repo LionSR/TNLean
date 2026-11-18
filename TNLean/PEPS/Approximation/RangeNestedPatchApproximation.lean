@@ -107,15 +107,13 @@ theorem SquareEntropyAreaLawAt.uniform_rangeNestedPatch_cylinders
         let m := AreaLaw.Geometry.rangeNestedPatchCount R u
         let regions : Fin m → Finset (Lattice.Site Λ) :=
           fun j ↦ AreaLaw.Geometry.rangeNestedPatch Λ center R u j.val
-        let U := dependentGlobalConfigIsometry
-          (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-        let Ωᵤ := U.symm (AreaLaw.rectangleAreaLawState Ω)
+        let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
         ∃ (S : (j : Fin m) → Submodule ℂ ((regions j → Fin q) → ℂ))
           (v : EuclideanSpace ℂ
-            ((w : (Finset.univ : Finset (Lattice.Site Λ))) → Fin q)),
+            ((v : Lattice.Site Λ) → Fin q)),
           (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤
             (L : ℝ) ^ rangeNestedPatchRadiusExponent q R J Δ B₀ p C_A) ∧
-          (v : (((w : (Finset.univ : Finset (Lattice.Site Λ))) → Fin q) → ℂ)) ∈
+          (v : (((v : Lattice.Site Λ) → Fin q) → ℂ)) ∈
             (⨆ j, dependentRegionCylinder
               (Out := fun _ : Lattice.Site Λ ↦ Fin q) (regions j) (S j)) ∧
           ‖Ωᵤ - v‖ ≤ (L : ℝ) ^ (-p) := by

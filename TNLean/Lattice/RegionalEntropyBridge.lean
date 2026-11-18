@@ -11,15 +11,14 @@ import QICLean.Entropy.RegionUnion
 /-!
 # Regional data of the finite-domain model as QICLean regional data
 
-The regional states, regional entropies and local placements of the finite-domain model are
-the QICLean regional states, region entropies and local lifts on the sites of the domain with
-constant local dimension `q`. These identifications let the finite-dimensional entropy
+The regional states and regional entropies of the finite-domain model are the QICLean
+regional states and region entropies on the sites of the domain with constant local
+dimension `q`. These identifications let the finite-dimensional entropy
 results of QICLean, stated on an arbitrary finite set of sites, be read on lattice domains.
 
 ## Main results
 
-* `reducedState_eq_regionState`, `regionalEntropy_eq_regionEntropy`,
-  `localLift_eq_entropyLocalLift`, `card_regionConfig`.
+* `reducedState_eq_regionState`, `regionalEntropy_eq_regionEntropy`, `card_regionConfig`.
 * `reducedState_eq_finiteProduct`, `regionalEntropy_eq_finiteProduct`: the same
   identifications with QICLean's generic finite-product entropy.
 
@@ -48,20 +47,6 @@ theorem reducedState_eq_regionState (Ω : StateSpace Λ q) (A : Finset (Site Λ)
 theorem regionalEntropy_eq_regionEntropy (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
     regionalEntropy Λ q Ω A = Entropy.regionEntropy (n := fun _ ↦ q) A Ω :=
   vonNeumannEntropy_congr (reducedState_eq_regionState Ω A) _ _
-
-/-- The placement of a local matrix in the finite-domain model is the QICLean local lift. -/
-theorem localLift_eq_entropyLocalLift (A : Finset (Site Λ))
-    (K : Matrix (↥A → Fin q) (↥A → Fin q) ℂ) :
-    localLift Λ q A K = Entropy.localLift (n := fun _ ↦ q) A K := by
-  ext σ τ
-  rw [Entropy.localLift_apply, localLift, QuantumCircuit.embedOp_apply]
-  congr 1
-  simp only [QuantumCircuit.AgreeOff, eq_iff_iff]
-  constructor
-  · intro h v hv
-    exact h v fun w hw ↦ hv (hw ▸ w.2)
-  · intro h v hv
-    exact h v fun hvA ↦ hv ⟨v, hvA⟩ rfl
 
 /-- The number of configurations of a region is `q ^ |A|`. -/
 theorem card_regionConfig (A : Finset (Site Λ)) :

@@ -186,13 +186,13 @@ theorem regionPhysicalMap_slice_halfEdgeRightMul_of_parent_annihilates
     (hr : ∀ e, IsRegionBoundaryEdge R e → r e = 1)
     (P : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (hP : IsRegionParentInteraction (groupBondTensor a) R P)
-    (Ψ : (V → Fin d) → ℂ) (hΨ : regionLocalTerm R P *ᵥ Ψ = 0)
+    (Ψ : (V → Fin d) → ℂ) (hΨ : ManyBody.place (X := fun _ ↦ Fin _) R P *ᵥ Ψ = 0)
     (τ : RegionPhysicalConfig (d := d) (Finset.univ \ R))
     (α : RegionHalfEdgeConfig (Γ := Γ) G R) :
     regionPhysicalMap R F (fun σ => Ψ (assembleRegionσ R σ τ))
         (regularRegionHalfEdgeRightMul R r α) =
       regionPhysicalMap R F (fun σ => Ψ (assembleRegionσ R σ τ)) α := by
   exact regionPhysicalMap_halfEdgeRightMul_of_mem_regularGroundSpace a F hF R r hr
-    ((regionLocalTerm_mulVec_eq_zero_iff (groupBondTensor a) R hP Ψ).mp hΨ τ) α
+    ((place_mulVec_eq_zero_iff (groupBondTensor a) R hP Ψ).mp hΨ τ) α
 
 end TNLean.PEPS

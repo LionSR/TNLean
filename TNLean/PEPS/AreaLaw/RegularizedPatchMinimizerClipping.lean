@@ -42,7 +42,7 @@ Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 68–99 and
 theorem exists_unitary_diagonal_clipped_of_isMinOn_regularizedPatchObjective
     (regions : Fin m → Finset V) (hnested : Monotone regions)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Fin (n v.1)))
+    (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
     (hΩ : ‖Ω‖ = 1)
     (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
       (Entropy.RegionConfig n (regions j)) ℂ)
@@ -86,7 +86,7 @@ theorem exists_unitary_diagonal_clipped_of_isMinOn_regularizedPatchObjective
     trace_normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
       regions a (fun k ↦ (ha k).le) hb Ω hΩ hx (regions j)
   have hρeq : ρ = Entropy.regionState (regions j)
-      (Entropy.patchState b l (dependentGlobalConfigIsometry Ω)) :=
+      (Entropy.patchState b l (Ω)) :=
     normalizedRegularizedPatchMarginal_eq_regionState_patchState regions a b Ω x (regions j)
   have hcomm : Commute (x j) ρ := by
     simpa only [hρeq] using (Entropy.patch_stationarity hb hexp hden hnest hminList _ hf).1

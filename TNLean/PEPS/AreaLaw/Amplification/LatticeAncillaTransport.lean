@@ -118,15 +118,15 @@ variable {Λ : Finset (ℤ × ℤ)} {q : ℕ}
 
 /-- A local matrix placed on a region is `K ⊗ 1` in the coordinates of that region and its
 complement. -/
-theorem localLift_eq_kronecker_one_submatrix (S : Finset (Site Λ))
+theorem place_eq_kronecker_one_submatrix (S : Finset (Site Λ))
     (K : Matrix (RegionalConfiguration q S) (RegionalConfiguration q S) ℂ) :
-    localLift Λ q S K = (K ⊗ₖ (1 : Matrix (RegionalConfiguration q Sᶜ)
+    ManyBody.place S K = (K ⊗ₖ (1 : Matrix (RegionalConfiguration q Sᶜ)
       (RegionalConfiguration q Sᶜ) ℂ)).submatrix
         (FiniteProduct.splitEquiv (fun _ : Site Λ ↦ Fin q) S)
         (FiniteProduct.splitEquiv (fun _ : Site Λ ↦ Fin q) S) := by
   ext c c'
-  simp only [localLift, QuantumCircuit.embedOp_apply, submatrix_apply, kroneckerMap_apply,
-    one_apply]
+  simp only [QuantumCircuit.place_eq_embedOp, QuantumCircuit.embedOp_apply, submatrix_apply,
+    kroneckerMap_apply, one_apply]
   have hagree : QuantumCircuit.AgreeOff (fun x : ↥S ↦ x.val) c c' ↔
       (FiniteProduct.splitEquiv (fun _ : Site Λ ↦ Fin q) S c).2 =
         (FiniteProduct.splitEquiv (fun _ : Site Λ ↦ Fin q) S c').2 := by
@@ -153,15 +153,15 @@ theorem ancillaPhysical_mem_supportedOperators (X Y : Finset (Site Λ)) (hXY : D
       ManyBody.supportedOperators (fun _ ↦ Fin q) (X ∪ Y : Finset (Site Λ)) := by
   set uE := FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY
   have h : ancillaPhysical U (restoringSplit q X Y hXY) M =
-      localLift Λ q (X ∪ Y) (((U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
+      ManyBody.place (X ∪ Y) (((U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
         (RegionalConfiguration q Y) ℂ)) * M * (U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
           (RegionalConfiguration q Y) ℂ))ᴴ).submatrix uE uE) := by
-    rw [localLift_eq_kronecker_one_submatrix]
+    rw [place_eq_kronecker_one_submatrix]
     ext c c'
     simp only [ancillaPhysical, submatrix_apply, kroneckerMap_apply]
     rfl
   rw [h]
-  exact localLift_mem_supportedOperators Λ q _ _
+  exact ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _) _
 
 /-- The eigenvector unitary of the reduced state `ρ_X`, whose columns are the full
 eigenbasis `{|x⟩}`. Source: `09-amplification.tex`, lines 324–325. -/
