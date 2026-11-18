@@ -330,17 +330,19 @@ case.
     of $\mathcal H$,
     \begin{align}
         V^{(N)}(A_x(\gamma))_{\iota_y(\tau)}
-         & =\delta_{xy}\,V^{(N)}\bigl(A_x(\gamma)|_{F_x\otimes F_x}\bigr)_\tau,
+         & =\delta_{xy}\,V^{(N)}\bigl(A_y(\gamma)|_{F_y\otimes F_y}\bigr)_\tau,
         \label{eq:mpo_block_mixed_sector_support}
     \end{align}
     since for $y\neq x$ the first letter of $\iota_y(\tau)$ is a zero matrix
     of $A_x(\gamma)$. The states
     $V^{(N)}(A_y(\gamma)|_{F_y\otimes F_y})$ are nonzero for
-    $\gamma\in[0,1]$, by the injective case, so evaluating
+    $\gamma\in[0,1]$, by the injective case. Evaluating
     $\sum_xc_xV^{(N)}(A_x(\gamma))=0$ at $\iota_y(\tau)$ through
-    (\ref{eq:mpo_block_mixed_sector_support}) gives $c_y=0$: the block
-    states are linearly independent. The span of a continuous family of linearly independent
-    vectors has a projection that is continuous at every such point, and it
+    (\ref{eq:mpo_block_mixed_sector_support}) gives
+    $c_yV^{(N)}(A_y(\gamma)|_{F_y\otimes F_y})_\tau=0$ for every $\tau$, so
+    $c_y=0$: the block states are linearly independent. The span of a
+    continuous family of linearly independent vectors has a projection that
+    is continuous at every such point, and it
     agrees with the ground projection on $(0,1)$.
 \end{proof}
 
