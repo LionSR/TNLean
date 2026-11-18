@@ -507,9 +507,9 @@ private theorem exists_accuracy_long_middle_actual_dg_family :
   let xi : ℝ := g / (1000000 * (m : ℝ))
   let scale : ℝ := 1 / (m : ℝ)
   have hmR : (2 : ℝ) ≤ (m : ℝ) := by exact_mod_cast (hq.trans hqm)
-  have hmRpos : 0 < (m : ℝ) := by linarith
+  have hmRpos : 0 < (m : ℝ) := by linarith only [hmR]
   have hscale0 : 0 < scale := one_div_pos.mpr hmRpos
-  have hscale1 : scale ≤ 1 := (div_le_iff₀ hmRpos).2 (by linarith)
+  have hscale1 : scale ≤ 1 := (div_le_iff₀ hmRpos).2 (by linarith only [hmR])
   have hxi : xi = scale * g / 1000000 := by
     dsimp only [xi, scale]
     rw [div_mul_eq_mul_div, one_mul, div_div, mul_comm (m : ℝ) 1000000]

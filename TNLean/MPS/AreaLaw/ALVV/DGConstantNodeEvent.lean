@@ -11,7 +11,8 @@ import TNLean.MPS.AreaLaw.PhysicalDGSampledNode
 
 ALVV, arXiv:1602.08828v2, Theorem `t:alg1`, lines 1777–1818, merges two viable spaces of dimension
 at most `D^{2k} s`, samples `s` vectors of the merged space, and applies `k` rounds of the improving
-family of Corollary 4.6 and the proof of Theorem 4.9, a family of at most `D²` operators. This file
+family of Theorem 4.7 (`t:ais`, from Corollary 4.6 `c:goodagsphardtrunc`), a family of at most
+`D²` operators. This file
 proves, for one long parent and every number of rounds `k ≥ 1` with `s ≤ D^{2k}`, that the literal
 sampled word image followed by one collective trim is `3/200`-viable for the original ground space
 on a measurable Haar event with the failure probability of Lemma `l:rs`. The earlier node event
