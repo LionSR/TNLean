@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.Core.ReductionUniqueness
 import TNLean.MPS.FundamentalTheorem.Reduction.MPOProduct
-import TNLean.MPS.Symmetry.MPOSymmetry.Defs
+import TNLean.MPS.Symmetry.MPOSymmetry.NIMRep
 
 /-!
 # Fusion tensors and action tensors of matrix product operator algebras
@@ -54,6 +54,10 @@ periodic-boundary relation `O_a ψ_{A_x} = ∑_y M_{a,x}^y ψ_{A_y}` (lines 567-
   algebra of normal tensors of positive bond dimension has fusion tensors.
 * `MPOTensor.nonempty_actionTensors_of_mpo_mulVec_eq_sum`: action tensors exist under a
   periodic action with nonnegative integer multiplicities.
+* `MPOTensor.IsMPOSymmetricFamily.exists_nat_actionTensors`: for a symmetric family of normal
+  tensors of positive bond dimension with linearly independent periodic vectors at one length,
+  the coefficients are nonnegative integers and every pair `(a, x)` has action tensors with
+  these multiplicities.
 * `MPOTensor.exists_boundary_dressed_proportional_of_mpo_mul_eq`: the gauge freedom of the
   fusion tensors of a multiplicity-free single fusion channel is one nonzero scalar, after
   sufficiently long words.
@@ -397,6 +401,40 @@ theorem nonempty_actionTensors_of_mpo_mulVec_eq_sum {K : Type*} [Fintype K] {χ 
   obtain ⟨V, W, hred, horth, hnil⟩ :=
     exists_actionTensors_of_mpo_mulVec_eq_sum (O a) (A x) A (M a x) hA hD hact
   exact ⟨⟨V, W, hred, horth, ⟨_, hnil⟩⟩⟩
+
+omit [Fintype L] in
+/-- **Existence of action tensors for a symmetric family** (Garre-Rubio--Lootens--Molnár,
+arXiv:2203.12563, lines 459--460 and 1065--1091).  Let the family of normal tensors `A_x` of
+positive bond dimension, with linearly independent periodic vectors at one length `L₀`, be
+symmetric under the periodic operators `O_a` with complex coefficients `M_{a,x}^y`.  Then the
+coefficients are nonnegative integers `N_{a,x}^y`, and every pair `(a, x)` has action tensors
+reducing `T_a · A_x` onto `N_{a,x}^y` copies of each `A_y`.
+
+The source states at line 460: "where $i=1,\cdots, M_{a,x}^y$ and $ M_{a,x}^y$ is the
+multiplicity of the block $y$ after the action of $a$ on the block $x$".  Here the multiplicity
+is derived rather than assumed: integrality is
+`MPOTensor.exists_nat_eq_of_isMPOSymmetricFamily`, and the action tensors are
+`MPOTensor.nonempty_actionTensors_of_mpo_mulVec_eq_sum`.  The hypotheses are those of
+`MPOTensor.exists_nat_eq_of_isMPOSymmetricFamily`; linear independence at one length follows
+from the source's standing assumption of injective blocks orthogonal to each other in the
+thermodynamic limit (line 317).
+
+**Scope restriction (periodic boundary):** the symmetry hypothesis is the periodic-boundary
+form `MPOTensor.IsMPOSymmetricFamily` (lines 567--568) of the source's arbitrary-boundary
+invariance (lines 431--434), which implies it; documented in
+`docs/paper-gaps/glm23_mpo_symmetric_mps_scope.tex`. -/
+theorem IsMPOSymmetricFamily.exists_nat_actionTensors {K : Type*} [Fintype K] {χ : L → ℕ}
+    {D : K → ℕ} {O : ∀ a, MPOTensor d (χ a)} {A : ∀ x, MPSTensor d (D x)}
+    {M : L → K → K → ℂ} (hsym : IsMPOSymmetricFamily O A M) (hA : ∀ x, Kraus.IsNormal (A x))
+    (hD : ∀ x, 0 < D x) {L₀ : ℕ}
+    (hli : LinearIndependent ℂ fun x => fun σ : Fin L₀ → Fin d => MPSTensor.mpv (A x) σ) :
+    ∃ N : L → K → K → ℕ, (∀ a x y, M a x y = N a x y) ∧
+      ∀ a x, Nonempty (ActionTensors O A N a x) := by
+  choose N hN using exists_nat_eq_of_isMPOSymmetricFamily O A M hsym hA hD hli
+  refine ⟨N, hN, fun a x => nonempty_actionTensors_of_mpo_mulVec_eq_sum O A N hA hD a x
+    fun n hn => ?_⟩
+  rw [hsym a x n hn]
+  simp only [hN]
 
 /-- **Gauge freedom of a multiplicity-free fusion channel** (arXiv:2203.12563, line 361: the
 fusion tensors are unique up to a gauge; line 416 describes the gauge for exact
