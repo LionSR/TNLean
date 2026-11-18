@@ -14,6 +14,8 @@ eigenvalue powers, ascending action, inverse-zero normalization and forward-edge
 counting retain the source conventions. No upstream Lean proof text is copied.
 -/
 import TNLean.PEPS.Approximation.PinnedRegionalState
+import QICLean.ManyBody.Sites.Placement
+import QICLean.ManyBody.Sites.Placement
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.LinearAlgebra.Matrix.PosDef
@@ -35,14 +37,6 @@ noncomputable section
 open scoped BigOperators ComplexOrder
 
 namespace TNLean.PEPS.Approximation.Pinned
-
-/-- Adapted complement-agreement lift from source `Basic.lean`, lines 35–40. -/
-def liftLocal {L q : ℕ} (X : Finset (Vertex L))
-    (A : Matrix (RegionConfiguration q X) (RegionConfiguration q X) ℂ) :
-    Matrix (Vertex L → Fin q) (Vertex L → Fin q) ℂ := fun x y ↦
-  if ∀ v, v ∉ X → x v = y v then
-    A (fun v ↦ x v.val) (fun v ↦ y v.val)
-  else 0
 
 /-- Adapted Euclidean continuous-linear action from source `Basic.lean`, lines 52–53. -/
 def asMap {L q : ℕ} (A : Matrix (Vertex L → Fin q) (Vertex L → Fin q) ℂ) :
@@ -73,7 +67,7 @@ def Admissible {L q m : ℕ} {X : Fin m → Finset (Vertex L)}
 /-- Adapted source output: local continuous linear maps act in ascending index order. -/
 def output {L q m : ℕ} {X : Fin m → Finset (Vertex L)}
     (F : FilterFamily q m X) (Ω : State L q) : State L q :=
-  (List.ofFn fun j ↦ asMap (liftLocal (X j) (F j).matrix)).foldl
+  (List.ofFn fun j ↦ asMap (ManyBody.place (X j) (F j).matrix)).foldl
     (fun ψ T ↦ T ψ) Ω
 
 /-- Adapted source global maximum against every admissible bundled filter family. -/

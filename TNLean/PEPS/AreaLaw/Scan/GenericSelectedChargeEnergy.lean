@@ -31,7 +31,7 @@ open Matrix Set TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators Matrix ComplexOrder MatrixOrder
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport)
+open ManyBody (AdmissibleSupport PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -77,14 +77,14 @@ theorem actualCharge_defect_le_of_density_energy_bound_at_exponent
     [LinearOrder (AdmissibleSupport Λ R)]
     (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
     (hm : 0 < S.m) (hM : 0 < S.M) (s : ℕ)
-    (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (L : ℕ)
+    (h : PlaneInteraction Λ q R) (Ω : StateSpace Λ q) (L : ℕ)
     (hΔ : 0 < Δ) (ell W Cen een C Cl P rem e₀ : ℝ) (hW : 0 ≤ W)
     (pre : (k : ℕ) → Config k
       (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q (fun _ ↦ d) v)) → ℂ)
     (k : ℕ) (p : ℝ) :
     let a := W / (S.K : ℝ)
     let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-    let E := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+    let E := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
     let ℓ := transportLogDimBound q S.r₀
     let g := Δ / positiveNormalization 1 (Δ / 2) J
     let μ := (S.actualChargeScanRound hm hM s dims E a pre).meanEnergy k p

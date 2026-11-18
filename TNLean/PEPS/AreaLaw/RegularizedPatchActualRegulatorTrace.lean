@@ -72,7 +72,7 @@ is a caller hypothesis. Source: polynomial-PEPS `03-patches.tex`, lines 362–41
 theorem trace_regularizedPatchRegulator_le_quarter_of_isMinOn
     (regions : Fin m → Finset V) (hnested : Monotone regions)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Fin (n v.1)))
+    (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
     (hΩ : ‖Ω‖ = 1) {C u R : ℝ} (hC : 0 < C) (hu : 0 ≤ u)
     (hR : (16 * C + Real.log 8) * (1 + u) ≤ R)
     (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
@@ -89,10 +89,10 @@ theorem trace_regularizedPatchRegulator_le_quarter_of_isMinOn
         regions a (Real.exp (-R)) Ω x (regions j)
     let σ : Matrix (Entropy.RegionConfig n (regions j))
         (Entropy.RegionConfig n (regions j)) ℂ :=
-      Entropy.regionState (regions j) (dependentGlobalConfigIsometry Ω)
+      Entropy.regionState (regions j) (Ω)
     _root_.vonNeumannEntropy σ
         (Entropy.regionState_posSemidef (regions j)
-          (dependentGlobalConfigIsometry Ω)).isHermitian ≤ C * (1 + u) →
+          (Ω)).isHermitian ≤ C * (1 + u) →
       (CFC.abs (ρ - σ)).trace.re ≤ 1 / 16 →
       (Real.exp (-R) •
         (ρ * (x j + Real.exp (-R) • (1 : Matrix (Entropy.RegionConfig n (regions j))
@@ -105,10 +105,10 @@ theorem trace_regularizedPatchRegulator_le_quarter_of_isMinOn
     trace_normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v)) regions a
       (fun k ↦ (ha k).le) (Real.exp_pos (-R)) Ω hΩ hx (regions j)
   have hσ : σ.PosSemidef :=
-    Entropy.regionState_posSemidef (regions j) (dependentGlobalConfigIsometry Ω)
+    Entropy.regionState_posSemidef (regions j) (Ω)
   have hσ1 : σ.trace = 1 := by
     dsimp only [σ]
-    rw [Entropy.trace_regionState, dependentGlobalConfigIsometry.norm_map, hΩ]
+    rw [Entropy.trace_regionState, hΩ]
     norm_num
   obtain ⟨hcomm, hle⟩ := normalizedRegularizedPatchMarginal_stationarity_of_isMinOn
     regions hnested a ha (Real.exp_pos (-R)) Ω x hx hmin j

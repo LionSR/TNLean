@@ -47,19 +47,16 @@ state the two models separately following
     \lean{
         ManyBody.IsAdmissibleSupport,
         ManyBody.AdmissibleSupport,
-        TNLean.Lattice.LocalHamiltonian,
-        TNLean.Lattice.LocalHamiltonian.operator,
-        TNLean.Lattice.LocalHamiltonian.operator_isHermitian,
-        TNLean.Lattice.LocalHamiltonian.zero,
-        TNLean.Lattice.localLift,
-        TNLean.Lattice.localLift_mem_supportedOperators,
-        TNLean.Lattice.localLift_eq_entropyLocalLift,
+        ManyBody.PlaneInteraction,
+        ManyBody.Interaction.hamiltonian,
+        ManyBody.Interaction.isHermitian_hamiltonian,
+        ManyBody.place_mem_supportedOperators,
         TNLean.Lattice.edgeBoundary,
         TNLean.Lattice.edgeBoundary_empty,
         TNLean.Lattice.edgeBoundary_univ
     }
     \leanok
-    \uses{def:area_law_domain}
+    \uses{def:area_law_domain, def:peps_regional_operator_extension}
     Fix an integer $R\ge0$ and $J>0$. For each nonempty $X\subseteq\Lambda$ with
     $\operatorname{diam}_{d_\Lambda}X\le R$, assign one Hermitian operator
     $h_X=h_X^*$ supported on $X$ (extended by $I_{\Lambda\setminus X}$, possibly

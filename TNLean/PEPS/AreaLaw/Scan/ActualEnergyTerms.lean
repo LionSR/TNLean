@@ -33,7 +33,8 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (AdmissibleSupport exists_walk_length_le_iff_edist_le planeDomainGraph)
+open ManyBody (AdmissibleSupport exists_walk_length_le_iff_edist_le planeDomainGraph
+  PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -166,97 +167,103 @@ theorem augmentOperator_isSupportedOn (q : ℕ) (aux : Bool → ℕ)
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
 
-/-- The source positive constraint of the actual labelled interaction.
-Source: `03-quasilocal.tex`, lines 250–266. -/
-def _root_.TNLean.Lattice.LocalHamiltonian.positiveTerm
-    (h : LocalHamiltonian Λ q R J) (Δ : ℝ) (Ω : StateSpace Λ q)
+/-- The source positive constraint of the actual labelled interaction, normalized by the bound
+`J` on the norms of its terms. Source: `03-quasilocal.tex`, lines 250–266. -/
+def _root_.ManyBody.PlaneInteraction.positiveTerm
+    (h : PlaneInteraction Λ q R) (J Δ : ℝ) (Ω : StateSpace Λ q)
     (i : AdmissibleSupport Λ R) : Matrix (Configuration Λ q) (Configuration Λ q) ℂ :=
   positiveConstraint (positiveNormalization 1 (Δ / 2) J)
-    (centeredFilter 1 (Δ / 2) h.operator Ω (h.term i))
+    (centeredFilter 1 (Δ / 2) h.hamiltonian Ω (h.term i))
 
 namespace CollarScan
 
 variable (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-    (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
+    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (Ω : StateSpace Λ q)
 
 /-- The actual constraint truncated near the scanner's compact set at its base radius.
 Source: `03-quasilocal.tex`, lines 417–426. -/
-def truncatedEnergyTerm (Δ : ℝ) (L : ℕ) (i : AdmissibleSupport Λ R) :
+def truncatedEnergyTerm (J Δ : ℝ) (L : ℕ) (i : AdmissibleSupport Λ R) :
     Matrix (Configuration Λ q) (Configuration Λ q) ℂ :=
-  truncatedConstraint q S.graph (S.truncationSet L) S.r₀ (S.anchor i) (h.positiveTerm Δ Ω i)
+  truncatedConstraint q S.graph (S.truncationSet L) S.r₀ (S.anchor i) (h.positiveTerm J Δ Ω i)
 
 /-- Actual energy terms, with the original support labels retained and with both
 auxiliary identities. Only the term and designated-support fields are bundled.
 Source: `06-transport.tex`, lines 335–358. -/
-def actualEnergyTerms (Δ : ℝ) (L : ℕ) (aux : Bool → ℕ) :
+def actualEnergyTerms (J Δ : ℝ) (L : ℕ) (aux : Bool → ℕ) :
     EnergyTerms (Site Λ ⊕ Bool) (augmentedDimensions q aux) (AdmissibleSupport Λ R) where
-  term i := augmentOperator q aux (S.truncatedEnergyTerm h Ω Δ L i)
+  term i := augmentOperator q aux (S.truncatedEnergyTerm h Ω J Δ L i)
   support i := physicalRegion (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i))
 
+include hh hhJ in
 /-- The actual truncated terms are positive contractions, derived from the norm
 bound on each local interaction and the accepted centered-filter estimate. -/
 theorem truncatedEnergyTerm_mem_Icc [NeZero q] (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1)
     (L : ℕ) (i : AdmissibleSupport Λ R) :
-    0 ≤ S.truncatedEnergyTerm h Ω Δ L i ∧ S.truncatedEnergyTerm h Ω Δ L i ≤ 1 := by
+    0 ≤ S.truncatedEnergyTerm h Ω J Δ L i ∧ S.truncatedEnergyTerm h Ω J Δ L i ≤ 1 := by
   have hc := positiveNormalization_pos 1 (Δ / 2) J
   apply truncatedConstraint_mem_Icc
   · exact positiveConstraint_nonneg hc.le _
   · apply positiveConstraint_le_one hc
     refine (norm_centeredFilter_le (le_refl 1) (half_pos hΔ)
-      h.operator_isHermitian hΩ (h.term i)).trans ?_
-    exact (mul_le_mul_of_nonneg_right (h.norm_le i)
+      (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ (h.term i)).trans ?_
+    exact (mul_le_mul_of_nonneg_right (hhJ i)
       (add_nonneg (filterL1_nonneg _ _) zero_le_one)).trans (le_max_right _ _)
 
+include hh hhJ in
 /-- The actual truncated physical sum is Hermitian, since each of its terms is positive. -/
 theorem isHermitian_sum_truncatedEnergyTerm [NeZero q] (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) :
-    (∑ i, S.truncatedEnergyTerm h Ω Δ L i).IsHermitian :=
+    (∑ i, S.truncatedEnergyTerm h Ω J Δ L i).IsHermitian :=
   Matrix.isHermitian_sum _ fun i _ ↦
-    (Matrix.nonneg_iff_posSemidef.mp (S.truncatedEnergyTerm_mem_Icc h Ω hΔ hΩ L i).1).isHermitian
+    (Matrix.nonneg_iff_posSemidef.mp
+        (S.truncatedEnergyTerm_mem_Icc h hh hhJ Ω hΔ hΩ L i).1).isHermitian
 
+include hh in
 /-- The support certificate follows from actual admissibility: every interaction
 support has induced-graph diameter at most `R`, including in disconnected domains. -/
 theorem truncatedEnergyTerm_isSupportedOn [NeZero q]
     (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (L : ℕ) (i : AdmissibleSupport Λ R) :
-    IsSupportedOn (n := fun _ => q) (S.truncatedEnergyTerm h Ω Δ L i)
+    IsSupportedOn (n := fun _ => q) (S.truncatedEnergyTerm h Ω J Δ L i)
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) := by
   change _ ∈ ManyBody.supportedOperators _ _
   apply truncatedConstraint_mem_supportedOperators
   apply positiveConstraint_mem_supportedOperators_component (le_refl 1) (half_pos hΔ)
     S.graph (fun i : AdmissibleSupport Λ R => i.val) S.anchor hanchor h.term
-    h.hermitian h.supported R
+    hh h.mem R
   intro j x hx y hy
   rw [hgraph]
   exact (exists_walk_length_le_iff_edist_le Λ R x y).mp (j.property.2 x hx y hy)
 
+include hh hhJ in
 /-- All three operator hypotheses of energy transport hold for the actual
 labelled augmented terms; no positivity or support certificate is assumed. -/
 theorem actualEnergyTerms_spec [NeZero q]
     (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) (aux : Bool → ℕ) :
-    (∀ i, 0 ≤ (S.actualEnergyTerms h Ω Δ L aux).term i) ∧
-    (∀ i, (S.actualEnergyTerms h Ω Δ L aux).term i ≤ 1) ∧
-    (∀ i, IsSupportedOn ((S.actualEnergyTerms h Ω Δ L aux).term i)
-      ((S.actualEnergyTerms h Ω Δ L aux).support i)) := by
-  have hc := fun i => S.truncatedEnergyTerm_mem_Icc h Ω hΔ hΩ L i
+    (∀ i, 0 ≤ (S.actualEnergyTerms h Ω J Δ L aux).term i) ∧
+    (∀ i, (S.actualEnergyTerms h Ω J Δ L aux).term i ≤ 1) ∧
+    (∀ i, IsSupportedOn ((S.actualEnergyTerms h Ω J Δ L aux).term i)
+      ((S.actualEnergyTerms h Ω J Δ L aux).support i)) := by
+  have hc := fun i => S.truncatedEnergyTerm_mem_Icc h hh hhJ Ω hΔ hΩ L i
   have ha := fun i => augmentOperator_mem_Icc q aux (hc i).1 (hc i).2
   exact ⟨fun i => (ha i).1, fun i => (ha i).2, fun i =>
     augmentOperator_isSupportedOn q aux
-      (S.truncatedEnergyTerm_isSupportedOn h Ω hgraph hanchor hΔ L i)⟩
+      (S.truncatedEnergyTerm_isSupportedOn h hh Ω hgraph hanchor hΔ L i)⟩
 
 /-- The labelled augmented sum is exactly the identity extension of the actual
 truncated physical Hamiltonian. No term labels are merged or discarded. -/
 theorem sum_actualEnergyTerms (Δ : ℝ) (L : ℕ) (aux : Bool → ℕ) :
-    ∑ i, (S.actualEnergyTerms h Ω Δ L aux).term i =
-      augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ L i) :=
+    ∑ i, (S.actualEnergyTerms h Ω J Δ L aux).term i =
+      augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) :=
   (augmentOperator_sum q aux Finset.univ _).symm
 
 /-- The replica energy is the copy mean of the actual augmented truncated sum,
 with the source copy normalization retained also at zero replicas. -/
 theorem replicaEnergy_actualEnergyTerms (Δ : ℝ) (L : ℕ) (aux : Bool → ℕ) (k : ℕ) :
-    (S.actualEnergyTerms h Ω Δ L aux).replicaEnergy k =
+    (S.actualEnergyTerms h Ω J Δ L aux).replicaEnergy k =
       copyMean (augmentedDimensions q aux) k
-        (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ L i)) := by
+        (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω J Δ L i)) := by
   rw [← S.sum_actualEnergyTerms h Ω Δ L aux]
   simp only [EnergyTerms.replicaEnergy, copyMean, siteOp_sum, Finset.smul_sum]
   rw [Finset.sum_comm]

@@ -10,9 +10,9 @@ Lean proof text is reused.
 
 ## Existing coordinates and region support
 
-The construction uses the existing dependent site coordinates,
-`dependentRegionSlice`, `dependentSubregionOperatorLift`,
-`dependentRegionOperatorLift`, and `coordinateRangeProjector`.
+The construction uses the global configurations `(v : V) → Out v` of QICLean's
+`ManyBody` layer, the slices `placeSlice` along a complementary configuration, the
+placement `ManyBody.place` with `ManyBody.subregionPlace`, and `coordinateRangeProjector`.
 It introduces no new lattice, Hamiltonian, physical state, or support algebra.
 The sites form a finite ordered type and each local configuration type is finite;
 no positive-dimension assumption is added.

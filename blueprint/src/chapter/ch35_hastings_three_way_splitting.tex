@@ -16,14 +16,14 @@ ground state $\Psi_0$.
         TNLean.MPS.AreaLaw.Hastings.bufferSupports,
         TNLean.MPS.AreaLaw.Hastings.rightSupports,
         TNLean.MPS.AreaLaw.Hastings.sum_supports_eq_left_add_buffer_add_right,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.termSum,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.termSum_isHermitian,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.leftPart,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.bufferPart,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.rightPart,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.leftPart_isHermitian,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.bufferPart_isHermitian,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.rightPart_isHermitian,
+        ManyBody.ChainInteraction.termSum,
+        ManyBody.ChainInteraction.termSum_isHermitian,
+        ManyBody.ChainInteraction.leftPart,
+        ManyBody.ChainInteraction.bufferPart,
+        ManyBody.ChainInteraction.rightPart,
+        ManyBody.ChainInteraction.leftPart_isHermitian,
+        ManyBody.ChainInteraction.bufferPart_isHermitian,
+        ManyBody.ChainInteraction.rightPart_isHermitian,
         TNLean.MPS.AreaLaw.Hastings.groundCentered,
         TNLean.MPS.AreaLaw.Hastings.groundCentered_add,
         Matrix.IsHermitian.groundCentered,
@@ -47,10 +47,10 @@ ground state $\Psi_0$.
 \begin{lemma}[The splitting is exact]
     \label{thm:hastings_three_way_splitting_sum}
     \lean{
-        TNLean.MPS.AreaLaw.ChainHamiltonian.operator_eq_leftPart_add_bufferPart_add_rightPart,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.groundCentered_parts_sum,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.groundCentered_parts_sum_of_eigen,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.isGapped_groundCentered_parts_sum,
+        ManyBody.ChainInteraction.hamiltonian_eq_leftPart_add_bufferPart_add_rightPart,
+        ManyBody.ChainInteraction.groundCentered_parts_sum,
+        ManyBody.ChainInteraction.groundCentered_parts_sum_of_eigen,
+        ManyBody.ChainInteraction.isGapped_groundCentered_parts_sum,
         TNLean.MPS.AreaLaw.Hastings.inner_groundCentered,
         TNLean.MPS.AreaLaw.Hastings.groundCentered_of_eigen
     }
@@ -79,10 +79,10 @@ ground state $\Psi_0$.
 \begin{lemma}[Supports of the three parts]
     \label{thm:hastings_three_way_splitting_supports}
     \lean{
-        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_termSum,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_leftPart,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_rightPart,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.isSupportedOn_bufferPart,
+        ManyBody.ChainInteraction.isSupportedOn_termSum,
+        ManyBody.ChainInteraction.isSupportedOn_leftPart,
+        ManyBody.ChainInteraction.isSupportedOn_rightPart,
+        ManyBody.ChainInteraction.isSupportedOn_bufferPart,
         TNLean.MPS.AreaLaw.Hastings.subset_window_of_mem_bufferSupports,
         Entropy.IsSupportedOn.groundCentered
     }
@@ -102,12 +102,12 @@ ground state $\Psi_0$.
 \begin{lemma}[Norm of the buffer part]
     \label{thm:hastings_three_way_splitting_norm}
     \lean{
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_termSum_le,
+        ManyBody.ChainInteraction.norm_termSum_le,
         TNLean.MPS.AreaLaw.card_supports_containing_le,
         TNLean.MPS.AreaLaw.Hastings.card_bufferSupports_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_bufferPart_le,
+        ManyBody.ChainInteraction.norm_bufferPart_le,
         TNLean.MPS.AreaLaw.Hastings.norm_groundCentered_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_groundCentered_bufferPart_le
+        ManyBody.ChainInteraction.norm_groundCentered_bufferPart_le
     }
     \leanok
     \uses{def:hastings_three_way_splitting,

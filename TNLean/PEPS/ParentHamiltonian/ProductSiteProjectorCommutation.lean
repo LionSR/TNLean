@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.ParentHamiltonian.DependentRegionOperatorLift
+import TNLean.PEPS.ParentHamiltonian.VertexVirtualParentTransport
+import TNLean.PEPS.ParentHamiltonian.RegionPlacement
 
 /-!
 # Regional projector commutation through product site maps
@@ -22,18 +23,16 @@ variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {In Out : V → Type*}
 
 /-- The local image projection on selected sites and the identity elsewhere. -/
-noncomputable def productSiteMask
+def productSiteMask [∀ v, DecidableEq (Out v)]
     (J : (v : V) → Matrix (Out v) (Out v) ℂ) (T : Finset V) (v : V) :
-    Matrix (Out v) (Out v) ℂ := by
-  classical
-  exact if v ∈ T then J v else 1
+    Matrix (Out v) (Out v) ℂ :=
+  if v ∈ T then J v else 1
 
 /-- The product of the site image projections on a selected region. -/
-noncomputable def globalProductSiteMask
+def globalProductSiteMask [∀ v, DecidableEq (Out v)]
     (J : (v : V) → Matrix (Out v) (Out v) ℂ) (T : Finset V) :
-    Matrix ((w : {w : V // w ∈ Finset.univ}) → Out w.1)
-      ((w : {w : V // w ∈ Finset.univ}) → Out w.1) ℂ :=
-  regionPhysicalProductMatrix Finset.univ (productSiteMask J T)
+    Matrix ((v : V) → Out v) ((v : V) → Out v) ℂ :=
+  ManyBody.prodOp (productSiteMask J T)
 
 omit [Fintype V] [LinearOrder V] in
 /-- A product of nonzero site matrices is nonzero, also for an empty region. -/
@@ -50,35 +49,25 @@ theorem regionPhysicalProductMatrix_ne_zero (R : Finset V)
   change (∏ w : {w : V // w ∈ R}, F w.1 (α w.1) (β w.1)) = 0 at h
   exact (Finset.prod_ne_zero_iff.mpr (fun w _ => hαβ w.1)) h
 
-/-- A site mask is the ordinary regional lift of the regional product matrix. -/
-theorem globalProductSiteMask_eq_lift
+/-- A site mask is the placement of the regional product matrix. -/
+theorem globalProductSiteMask_eq_place [∀ v, DecidableEq (Out v)]
     (J : (v : V) → Matrix (Out v) (Out v) ℂ) (R : Finset V) :
     globalProductSiteMask J R =
-      dependentRegionOperatorLift R (regionPhysicalProductMatrix R J) := by
+      ManyBody.place R (regionPhysicalProductMatrix R J) := by
   classical
-  have hR : regionPhysicalProductMatrix R (productSiteMask J R) =
-      regionPhysicalProductMatrix R J := by
-    ext α β
-    apply Finset.prod_congr rfl
-    intro w _
-    simp [productSiteMask, w.2]
-  have hC : regionPhysicalProductMatrix (Finset.univ \ R) (productSiteMask J R) = 1 := by
-    rw [← regionPhysicalProductMatrix_one (Out := Out) (Finset.univ \ R)]
-    ext α β
-    apply Finset.prod_congr rfl
-    intro w _
-    simp [productSiteMask, (Finset.mem_sdiff.mp w.2).2]
-  rw [globalProductSiteMask, regionPhysicalProductMatrix_univ_eq_reindex_kronecker R,
-    hR, hC]
-  rfl
+  rw [globalProductSiteMask,
+    ManyBody.prodOp_eq_place (D := R) _ fun v hv ↦ by simp [productSiteMask, hv]]
+  congr 1
+  ext α β
+  exact Finset.prod_congr rfl fun w _ ↦ by simp [productSiteMask, w.2]
 
 /-- The product of two site masks is the mask on the union. -/
-theorem globalProductSiteMask_mul [∀ v, Fintype (Out v)]
+theorem globalProductSiteMask_mul [∀ v, Fintype (Out v)] [∀ v, DecidableEq (Out v)]
     (J : (v : V) → Matrix (Out v) (Out v) ℂ)
     (hJ : ∀ v, IsStarProjection (J v)) (R S : Finset V) :
     globalProductSiteMask J R * globalProductSiteMask J S =
       globalProductSiteMask J (R ∪ S) := by
-  rw [globalProductSiteMask, globalProductSiteMask, regionPhysicalProductMatrix_mul]
+  rw [globalProductSiteMask, globalProductSiteMask, ManyBody.prodOp_mul]
   congr 1
   funext v
   by_cases hR : v ∈ R <;> by_cases hS : v ∈ S <;>
@@ -86,7 +75,7 @@ theorem globalProductSiteMask_mul [∀ v, Fintype (Out v)]
 
 section FiniteSites
 
-variable [∀ v, Fintype (Out v)]
+variable [∀ v, Fintype (Out v)] [∀ v, DecidableEq (Out v)]
 
 omit [Fintype V] in
 /-- A selected site mask is an orthogonal projection. -/
@@ -99,7 +88,7 @@ theorem productSiteMask_isStarProjection
   · simpa [productSiteMask, hv] using hJ v
   · simp [productSiteMask, hv]
 
-omit [Fintype V] in
+omit [Fintype V] [∀ v, DecidableEq (Out v)] in
 /-- A product of site orthogonal projections is an orthogonal projection. -/
 theorem regionPhysicalProductMatrix_isStarProjection
     (J : (v : V) → Matrix (Out v) (Out v) ℂ)
@@ -141,14 +130,14 @@ theorem regionPhysicalProductMatrix_productSiteMask_isStarProjection
   regionPhysicalProductMatrix_isStarProjection _ (productSiteMask_isStarProjection J hJ T) R
 
 /-- A supported regional orthogonal projection commutes with every product site mask. -/
-theorem dependentRegionOperatorLift_commute_globalProductSiteMask
+theorem place_commute_globalProductSiteMask
     (J : (v : V) → Matrix (Out v) (Out v) ℂ)
     (hJ : ∀ v, IsStarProjection (J v)) (R T : Finset V)
     (H : Matrix ((w : {w : V // w ∈ R}) → Out w.1)
       ((w : {w : V // w ∈ R}) → Out w.1) ℂ)
     (hH : IsStarProjection H)
     (hJH : regionPhysicalProductMatrix R J * H = H) :
-    Commute (dependentRegionOperatorLift R H) (globalProductSiteMask J T) := by
+    Commute (ManyBody.place R H) (globalProductSiteMask J T) := by
   have hM := regionPhysicalProductMatrix_productSiteMask_isStarProjection J hJ R T
   have hMH : regionPhysicalProductMatrix R (productSiteMask J T) * H = H := by
     calc
@@ -159,10 +148,10 @@ theorem dependentRegionOperatorLift_commute_globalProductSiteMask
   have hHM : H * regionPhysicalProductMatrix R (productSiteMask J T) = H := by
     simpa only [star_mul, hM.isSelfAdjoint.star_eq, hH.isSelfAdjoint.star_eq] using
       congrArg star hMH
-  exact dependentRegionOperatorLift_intertwine R (productSiteMask J T) H H
-    (hHM.trans hMH.symm)
+  exact (ManyBody.prodOp_mul_place (productSiteMask J T)
+    (hMH.trans hHM.symm)).symm
 
-omit [Fintype V] in
+omit [Fintype V] [∀ v, DecidableEq (Out v)] in
 /-- Support on the left by an orthogonal projection also gives support on the right. -/
 theorem regionPhysicalProductMatrix_mul_supported_right
     (J : (v : V) → Matrix (Out v) (Out v) ℂ)
@@ -177,20 +166,20 @@ theorem regionPhysicalProductMatrix_mul_supported_right
     congrArg star hJH
 
 /-- A supported regional projection absorbs its own global product site mask. -/
-theorem dependentRegionOperatorLift_mul_globalProductSiteMask_self
+theorem place_mul_globalProductSiteMask_self
     (J : (v : V) → Matrix (Out v) (Out v) ℂ)
     (hJ : ∀ v, IsStarProjection (J v)) (R : Finset V)
     (H : Matrix ((w : {w : V // w ∈ R}) → Out w.1)
       ((w : {w : V // w ∈ R}) → Out w.1) ℂ)
     (hH : IsStarProjection H)
     (hJH : regionPhysicalProductMatrix R J * H = H) :
-    dependentRegionOperatorLift R H * globalProductSiteMask J R =
-      dependentRegionOperatorLift R H := by
-  rw [globalProductSiteMask_eq_lift, ← dependentRegionOperatorLift_mul,
+    ManyBody.place R H * globalProductSiteMask J R =
+      ManyBody.place R H := by
+  rw [globalProductSiteMask_eq_place, ← ManyBody.place_mul,
     regionPhysicalProductMatrix_mul_supported_right J hJ R H hH hJH]
 
 /-- A product of two supported regional projections absorbs the site mask on their union. -/
-theorem dependentRegionOperatorLift_mul_absorbs_union
+theorem place_mul_absorbs_union
     (J : (v : V) → Matrix (Out v) (Out v) ℂ)
     (hJ : ∀ v, IsStarProjection (J v)) (R S : Finset V)
     (H : Matrix ((w : {w : V // w ∈ R}) → Out w.1)
@@ -200,30 +189,30 @@ theorem dependentRegionOperatorLift_mul_absorbs_union
     (hH : IsStarProjection H) (hK : IsStarProjection K)
     (hJH : regionPhysicalProductMatrix R J * H = H)
     (hJK : regionPhysicalProductMatrix S J * K = K) :
-    (dependentRegionOperatorLift R H * dependentRegionOperatorLift S K) *
+    (ManyBody.place R H * ManyBody.place S K) *
         globalProductSiteMask J (R ∪ S) =
-      dependentRegionOperatorLift R H * dependentRegionOperatorLift S K := by
-  have hcomm := dependentRegionOperatorLift_commute_globalProductSiteMask J hJ S R K hK hJK
+      ManyBody.place R H * ManyBody.place S K := by
+  have hcomm := place_commute_globalProductSiteMask J hJ S R K hK hJK
   rw [← globalProductSiteMask_mul J hJ]
   calc
-    _ = dependentRegionOperatorLift R H *
-        (dependentRegionOperatorLift S K * globalProductSiteMask J R) *
+    _ = ManyBody.place R H *
+        (ManyBody.place S K * globalProductSiteMask J R) *
           globalProductSiteMask J S := by simp only [Matrix.mul_assoc]
-    _ = dependentRegionOperatorLift R H *
-        (globalProductSiteMask J R * dependentRegionOperatorLift S K) *
+    _ = ManyBody.place R H *
+        (globalProductSiteMask J R * ManyBody.place S K) *
           globalProductSiteMask J S := by rw [hcomm.eq]
-    _ = (dependentRegionOperatorLift R H * globalProductSiteMask J R) *
-        (dependentRegionOperatorLift S K * globalProductSiteMask J S) := by
+    _ = (ManyBody.place R H * globalProductSiteMask J R) *
+        (ManyBody.place S K * globalProductSiteMask J S) := by
       simp only [Matrix.mul_assoc]
     _ = _ := by
-      rw [dependentRegionOperatorLift_mul_globalProductSiteMask_self J hJ R H hH hJH,
-        dependentRegionOperatorLift_mul_globalProductSiteMask_self J hJ S K hK hJK]
+      rw [place_mul_globalProductSiteMask_self J hJ R H hH hJH,
+        place_mul_globalProductSiteMask_self J hJ S K hK hJK]
 
 /-- Regional orthogonal projections intertwining through product site maps commute
 when the virtual lifts commute and the site image projections are nonzero.
 Only the complementary product is canceled; no ambient surjectivity is assumed. -/
-theorem commute_dependentRegionOperatorLift_of_productSiteTransport
-    [∀ v, Fintype (In v)] (R S : Finset V)
+theorem commute_place_of_productSiteTransport
+    [∀ v, Fintype (In v)] [∀ v, DecidableEq (In v)] (R S : Finset V)
     (A : (v : V) → Matrix (Out v) (In v) ℂ)
     (L : (v : V) → Matrix (In v) (Out v) ℂ)
     (J : (v : V) → Matrix (Out v) (Out v) ℂ)
@@ -244,65 +233,62 @@ theorem commute_dependentRegionOperatorLift_of_productSiteTransport
       regionPhysicalProductMatrix R A * K_R)
     (hintertwine_S : H_S * regionPhysicalProductMatrix S A =
       regionPhysicalProductMatrix S A * K_S)
-    (hcommute : Commute (dependentRegionOperatorLift R K_R)
-      (dependentRegionOperatorLift S K_S)) :
-    Commute (dependentRegionOperatorLift R H_R) (dependentRegionOperatorLift S H_S) := by
+    (hcommute : Commute (ManyBody.place R K_R)
+      (ManyBody.place S K_S)) :
+    Commute (ManyBody.place R H_R) (ManyBody.place S H_S) := by
   classical
-  let P := dependentRegionOperatorLift R H_R
-  let Q := dependentRegionOperatorLift S H_S
-  let B := regionPhysicalProductMatrix Finset.univ A
+  let P := ManyBody.place R H_R
+  let Q := ManyBody.place S H_S
+  let B := ManyBody.prodOp A
   let D := P * Q - Q * P
-  have hPB : P * B = B * dependentRegionOperatorLift R K_R :=
-    dependentRegionOperatorLift_intertwine R A H_R K_R hintertwine_R
-  have hQB : Q * B = B * dependentRegionOperatorLift S K_S :=
-    dependentRegionOperatorLift_intertwine S A H_S K_S hintertwine_S
+  have hPB : P * B = B * ManyBody.place R K_R :=
+    (ManyBody.prodOp_mul_place A hintertwine_R.symm).symm
+  have hQB : Q * B = B * ManyBody.place S K_S :=
+    (ManyBody.prodOp_mul_place A hintertwine_S.symm).symm
   have hDB : D * B = 0 := by
     calc
       _ = P * (Q * B) - Q * (P * B) := by simp only [D, Matrix.sub_mul, Matrix.mul_assoc]
-      _ = (B * dependentRegionOperatorLift R K_R) * dependentRegionOperatorLift S K_S -
-          (B * dependentRegionOperatorLift S K_S) * dependentRegionOperatorLift R K_R := by
+      _ = (B * ManyBody.place R K_R) * ManyBody.place S K_S -
+          (B * ManyBody.place S K_S) * ManyBody.place R K_R := by
         rw [hQB, hPB, ← Matrix.mul_assoc, ← Matrix.mul_assoc, hPB, hQB]
-      _ = B * (dependentRegionOperatorLift R K_R * dependentRegionOperatorLift S K_S -
-          dependentRegionOperatorLift S K_S * dependentRegionOperatorLift R K_R) := by
+      _ = B * (ManyBody.place R K_R * ManyBody.place S K_S -
+          ManyBody.place S K_S * ManyBody.place R K_R) := by
         rw [Matrix.mul_sub, Matrix.mul_assoc, Matrix.mul_assoc]
       _ = 0 := by rw [hcommute.eq, sub_self, Matrix.mul_zero]
-  have hBL : B * regionPhysicalProductMatrix Finset.univ L =
-      regionPhysicalProductMatrix Finset.univ J := by
+  have hBL : B * ManyBody.prodOp L = ManyBody.prodOp J := by
     dsimp [B]
-    rw [regionPhysicalProductMatrix_mul]
+    rw [ManyBody.prodOp_mul]
     congr 1
     funext v
     exact hAL v
-  have hDJ : D * regionPhysicalProductMatrix Finset.univ J = 0 := by
+  have hDJ : D * ManyBody.prodOp J = 0 := by
     rw [← hBL, ← Matrix.mul_assoc, hDB, Matrix.zero_mul]
-  have hPQ := dependentRegionOperatorLift_mul_absorbs_union J hJ R S H_R H_S
+  have hPQ := place_mul_absorbs_union J hJ R S H_R H_S
     hH_R hH_S hsupport_R hsupport_S
-  have hQP := dependentRegionOperatorLift_mul_absorbs_union J hJ S R H_S H_R
+  have hQP := place_mul_absorbs_union J hJ S R H_S H_R
     hH_S hH_R hsupport_S hsupport_R
   have hDmask : D * globalProductSiteMask J (R ∪ S) = D := by
     dsimp [D, P, Q]
     rw [Matrix.sub_mul, hPQ]
     rw [Finset.union_comm S R] at hQP
     rw [hQP]
-  obtain ⟨E, hE⟩ := exists_dependentRegionOperatorLift_commutator_union R S H_R H_S
-  change D = dependentRegionOperatorLift (R ∪ S) E at hE
+  obtain ⟨E, hE⟩ := exists_place_commutator_union R S H_R H_S
+  change D = ManyBody.place (R ∪ S) E at hE
   have hEJ : E * regionPhysicalProductMatrix (R ∪ S) J = 0 :=
-    (dependentRegionOperatorLift_mul_product_eq_zero_iff (R ∪ S) J E
-      (regionPhysicalProductMatrix_ne_zero _ J hJ0)).mp (by rw [← hE]; exact hDJ)
+    (ManyBody.place_mul_prodOp_eq_zero_iff J E
+      (ManyBody.prodOp_ne_zero _ fun w ↦ hJ0 w)).mp (by rw [← hE]; exact hDJ)
   change P * Q = Q * P
   apply sub_eq_zero.mp
   change D = 0
   calc
     D = D * globalProductSiteMask J (R ∪ S) := hDmask.symm
-    _ = dependentRegionOperatorLift (R ∪ S) E *
-        dependentRegionOperatorLift (R ∪ S) (regionPhysicalProductMatrix (R ∪ S) J) := by
-      rw [hE, globalProductSiteMask_eq_lift]
-    _ = dependentRegionOperatorLift (R ∪ S)
+    _ = ManyBody.place (R ∪ S) E *
+        ManyBody.place (R ∪ S) (regionPhysicalProductMatrix (R ∪ S) J) := by
+      rw [hE, globalProductSiteMask_eq_place]
+    _ = ManyBody.place (R ∪ S)
         (E * regionPhysicalProductMatrix (R ∪ S) J) :=
-      (dependentRegionOperatorLift_mul _ _ _).symm
-    _ = 0 := by
-      rw [hEJ]
-      simp [dependentRegionOperatorLift, Matrix.reindex_apply]
+      (ManyBody.place_mul _ _).symm
+    _ = 0 := by rw [hEJ, ManyBody.place_zero]
 
 end FiniteSites
 

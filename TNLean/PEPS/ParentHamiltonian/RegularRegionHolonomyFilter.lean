@@ -165,27 +165,29 @@ theorem exists_regularClosedWalkGlobalIdentityFilter
           (RegionPhysicalConfig (d := d) R) ℂ)
         (Ψ : (V → Fin d) → ℂ),
         IsRegionParentInteraction (groupBondTensor a) R P →
-        regionLocalTerm R P *ᵥ Ψ = 0 → regionLocalTerm R Q *ᵥ Ψ = Ψ) ∧
+        ManyBody.place (X := fun _ ↦ Fin _) R P *ᵥ Ψ = 0 → ManyBody.place
+            (X := fun _ ↦ Fin _) R Q *ᵥ Ψ = Ψ) ∧
       ∀ u : Edge Γ → G,
-        regionLocalTerm R Q *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a u)) =
+        ManyBody.place (X :=
+            fun _ ↦ Fin _) R Q *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a u)) =
           if regularWalkHolonomy (regularRegionInternalOperators R u) p = 1
           then stateCoeff (groupBondTensor (regularTwistedSite a u)) else 0 := by
   classical
   obtain ⟨Q, hfix, heigen⟩ := exists_regularClosedWalkIdentityFilter a ha R hR o p
   refine ⟨Q, ?_, ?_⟩
   · intro P Ψ hP hΨ
-    have hslices := (regionLocalTerm_mulVec_eq_zero_iff (groupBondTensor a) R hP Ψ).mp hΨ
+    have hslices := (place_mulVec_eq_zero_iff (groupBondTensor a) R hP Ψ).mp hΨ
     funext η
     obtain ⟨⟨σ, τ⟩, rfl⟩ := (regionConfigEquiv (d := d) R).symm.surjective η
-    change (regionLocalTerm R Q *ᵥ Ψ) (assembleRegionσ R σ τ) = _
-    rw [regionLocalTerm_mulVec_assemble]
+    change (ManyBody.place (X := fun _ ↦ Fin _) R Q *ᵥ Ψ) (assembleRegionσ R σ τ) = _
+    rw [place_mulVec_assemble]
     exact congrFun (hfix _ (hslices τ)) σ
   · intro u
     funext η
     obtain ⟨⟨σ, τ⟩, rfl⟩ := (regionConfigEquiv (d := d) R).symm.surjective η
-    change (regionLocalTerm R Q *ᵥ
+    change (ManyBody.place (X := fun _ ↦ Fin _) R Q *ᵥ
       stateCoeff (groupBondTensor (regularTwistedSite a u))) (assembleRegionσ R σ τ) = _
-    rw [regionLocalTerm_mulVec_assemble]
+    rw [place_mulVec_assemble]
     simpa only [ite_apply, Pi.zero_apply, regionConfigEquiv, Equiv.coe_fn_symm_mk] using congrFun
       (heigen u _ (stateCoeff_slice_mem_regionGroundSpace _ R τ)) σ
 

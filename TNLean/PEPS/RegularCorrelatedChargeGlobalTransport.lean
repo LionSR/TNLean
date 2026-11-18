@@ -119,7 +119,7 @@ theorem regularCorrelatedChargeState_apply
 /-- A uniform action on the literal charge columns passes through the actual
 closed contraction while the remote reference remains summed. Source: SCP10,
 lines 2505–2535 and 2560–2581; auxiliary linear contraction identity. -/
-theorem regionLocalTerm_mulVec_regularCorrelatedChargeState
+theorem place_mulVec_regularCorrelatedChargeState
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (R : Finset V) (u : Edge Γ → G) (e₀ e₁ : Edge Γ)
     (h₀ : e₀.1.1 ∈ R) (h₁ : e₁.1.1 ∉ R) (k : G)
@@ -130,7 +130,7 @@ theorem regionLocalTerm_mulVec_regularCorrelatedChargeState
         regularWeightedOpenRegionWeight a R u
           (fun η => χ (p * q⁻¹ * k⁻¹ * η ⟨e₀, Or.inl h₀⟩)) θ)
     (χ : G → ℂ) (p : G) :
-    regionLocalTerm R W *ᵥ regularCorrelatedChargeState a u e₀ e₁ χ p 1 =
+    ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ regularCorrelatedChargeState a u e₀ e₁ χ p 1 =
       regularCorrelatedChargeState a u e₀ e₁ χ p k⁻¹ := by
   classical
   unfold regularCorrelatedChargeState
@@ -145,9 +145,9 @@ theorem regionLocalTerm_mulVec_regularCorrelatedChargeState
     (regularEdgeCharacterSite (regularTwistedSite a u) e₀
       (fun t => χ (p * q⁻¹ * k⁻¹ * t)) 1)
     e₁ (fun t => if t = q then 1 else 0) 1
-  change regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor A) =
+  change ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor A) =
     stateCoeff (groupBondTensor B)
-  apply regionLocalTerm_mulVec_stateCoeff_of_openColumns R A B W
+  apply place_mulVec_stateCoeff_of_openColumns R A B W
   · intro μ
     let θ : RB (Γ := Γ) R → G := fun f => (Fintype.equivFin G).symm (μ f)
     have hμ : (fun f => Fintype.equivFin G (θ f)) = μ := by

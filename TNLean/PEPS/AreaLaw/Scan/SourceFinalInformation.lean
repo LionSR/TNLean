@@ -28,11 +28,13 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
@@ -90,11 +92,12 @@ theorem sourceTarget_finalScale_mutualInformation_explicit
     {Ctr : ℝ} (hCtrEq : Ctr = latticeTruncationRadiusConstant R J Δ (C_T + 1)) :
       ∀ Ce : ℝ, 0 ≤ Ce →
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceFinalInformationThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr ct Cent eent Cen een ≤ S.n →
@@ -148,7 +151,7 @@ theorem sourceTarget_finalScale_mutualInformation_explicit
   have herror := fun n (hn : finalSharpErrorThreshold C₀ CB ≤ n) =>
     finalSharp_source_error_le_of_finalSharpErrorThreshold_le q hq Ce C₀ CB g (C_T + 1) hCe hC₀
       hCB.le hg hCvol hn
-  intro Λ T _ hT h S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
+  intro Λ T _ hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix hrD hDpos hDm L X β
   simp only [sourceFinalInformationThreshold, max_le_iff] at hn
   obtain ⟨hnS, hnE, hnSmall⟩ := hn
@@ -164,7 +167,7 @@ theorem sourceTarget_finalScale_mutualInformation_explicit
   let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
   let Bsh := Ce * ((S.n : ℝ) * (L : ℝ) ^ (Exponents.boxError : ℝ) + S.n) +
     (S.n : ℝ) ^ (-247 : ℝ)
-  obtain ⟨hm, hM, hdata⟩ := hsource Ce hCe Λ T hT h S E₀ Ω hΩ hgap hspan hgraph hanchor hnS
+  obtain ⟨hm, hM, hdata⟩ := hsource Ce hCe Λ T hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hnS
     hr hmScale hDScale hKScale hCeq hsize hdepth hrows hmult hclear
     htargetEntropy hprefix hrD hDpos hDm
   obtain ⟨hK, hKL, hB, hcard, hX, e, Ωt, htrgs, he0, he, htrace, hBX, htail, hwdata⟩ :=
@@ -238,11 +241,12 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_threshold_le
     ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
       ∀ Ce : ℝ, 0 ≤ Ce →
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceFinalInformationThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr ct Cent eent Cen een ≤ S.n →
@@ -300,11 +304,12 @@ theorem exists_sourceTarget_finalScale_mutualInformation
     ∃ Ctr : ℝ, 0 < Ctr ∧
       ∀ Ce : ℝ, 0 ≤ Ce → ∃ C : ℝ, 0 < C ∧ ∃ N : ℕ, 2 ≤ N ∧
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = ⌊(S.n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →

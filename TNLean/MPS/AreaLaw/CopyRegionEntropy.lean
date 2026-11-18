@@ -164,7 +164,7 @@ theorem regionEntropy_copyProduct (η : Fin K → EuclideanSpace ℂ (Fin L → 
     (hη : ∀ j, ‖η j‖ = 1) (i : Fin K) (R : Finset (Fin L)) :
     Entropy.regionEntropy (copyRegion i R) (copyProduct η) =
       Entropy.regionEntropy R (η i) := by
-  unfold Entropy.regionEntropy
+  unfold Entropy.regionEntropy ManyBody.regionEntropy
   rw [← vonNeumannEntropy_submatrix_equiv (copyRegionConfigurationEquiv (q := q) i R).symm
     (Entropy.regionState (copyRegion i R) (copyProduct η))
     (Entropy.regionState_isHermitian (copyRegion i R) (copyProduct η))]

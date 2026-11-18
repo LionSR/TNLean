@@ -30,7 +30,7 @@ statement at the width `C_M √(1 + |∂_Λ A|) log (n + 2)`.
   `eq:initial-local-tail-parameter`, with `C = tailParameterConstant q R`.
 * `concentrationWidth_le`: the concentration width is at most
   `C_M √(1 + |∂_Λ A|) log (n + 2)`, with `C_M = typicalWidthConstant q R J Δ M`.
-* `LocalHamiltonian.one_sub_rpow_le_typicalMass_edgeBoundary`: the typical marginal
+* `ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_edgeBoundary`: the typical marginal
   spectrum at that width.
 
 ## References
@@ -44,11 +44,13 @@ statement at the width `C_M √(1 + |∂_Λ A|) log (n + 2)`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open Matrix
 open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport card_le_diamond_of_walks
-  latticeL1Distance_le_one_of_planeDomainGraph_adj planeDomainGraph)
+  latticeL1Distance_le_one_of_planeDomainGraph_adj planeDomainGraph PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -203,17 +205,18 @@ finite-range Hamiltonian with local dimension `q ≥ 1`, every cut `A`, every `n
 `C_M √(1 + |∂_Λ A|) log (n + 2)` of `S_Ω(A)` carry mass at least `1 - (n + 2)^{-M}`, with
 `C_M = typicalWidthConstant q R J Δ M`. The manuscript states `n ≥ 1` and `M > 0`.
 Source: `02-initial.tex`, lines 207–212. -/
-theorem _root_.TNLean.Lattice.LocalHamiltonian.one_sub_rpow_le_typicalMass_edgeBoundary
-    (h : LocalHamiltonian Λ q R J) (hq : 1 ≤ q) (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q}
-    (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.operator E₀ Δ)
-    (hspan : groundSpace h.operator E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ))
+theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_edgeBoundary
+    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (hq : 1 ≤ q) (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q}
+    (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ))
     (n : ℕ) {M : ℝ} (hM : 0 ≤ M) :
     1 - ((n : ℝ) + 2) ^ (-M) ≤
       Entropy.typicalMass (reducedState_isHermitian Λ q Ω A).eigenvalues
         (regionalEntropy Λ q Ω A)
         (typicalWidthConstant q R J Δ M * Real.sqrt (1 + (edgeBoundary Λ A).card) *
           Real.log (n + 2)) := by
-  exact (h.one_sub_rpow_le_typicalMass_reducedState hJ hΔ hΩ hgap hspan A n M).trans
+  exact (h.one_sub_rpow_le_typicalMass_reducedState hh hhJ hJ hΔ hΩ hgap hspan A n M).trans
     (typicalMass_le_typicalMass_of_le (reducedState_posSemidef Λ q Ω A).eigenvalues_nonneg _
       (concentrationWidth_le hq R hJ hΔ A n hM))
 

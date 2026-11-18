@@ -91,7 +91,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
         (AreaLaw.rectangleAreaLawState Ω)
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
-        |(⟪φ, toEuclideanLin (h.toAreaLawHamiltonian hhJ).operator φ⟫_ℂ).re - E₀| ≤
+        |(⟪φ, toEuclideanLin h.toAreaLawHamiltonian.hamiltonian φ⟫_ℂ).re - E₀| ≤
           (q : ℝ) ^ 2 * J * ∑ j : Fin m,
             a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card ∧
         Δ * (1 - ‖⟪AreaLaw.rectangleAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤
@@ -99,7 +99,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
             a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
   classical
   obtain ⟨T, hT, hTH, hTJ, hsum⟩ := h.exists_nearestNeighbor_terms hh hhJ
-  obtain ⟨hΩ, hgs, hspan⟩ := h.isGapped_toAreaLawHamiltonian hhJ hh hΩn hΩg hΩs
+  obtain ⟨hΩ, hgs, hspan⟩ := h.isGapped_toAreaLawHamiltonian hh hΩn hΩg hΩs
   have hΩ0 : AreaLaw.rectangleAreaLawState Ω ≠ 0 := fun h0 ↦ by
     have hnorm := hΩ
     simp [h0] at hnorm
@@ -141,7 +141,9 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
   rw [hsum, hbudget] at henergy
   refine ⟨K, hK, hmax, hpos, hunit, henergy, ?_⟩
   have hgap := Matrix.PosSemidef.gap_le (Ω := AreaLaw.rectangleAreaLawState Ω)
-    (hgs.posSemidef_sub_smul_one (h.toAreaLawHamiltonian hhJ).operator_isHermitian hΩ hspan)
+    (hgs.posSemidef_sub_smul_one
+        (ManyBody.Interaction.isHermitian_hamiltonian
+        h.isHermitian_toAreaLawHamiltonian_term) hΩ hspan)
     (((‖toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
       (AreaLaw.rectangleAreaLawState Ω)‖⁻¹ : ℝ) : ℂ) •
       toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))

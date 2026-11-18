@@ -62,9 +62,7 @@ theorem nestedPatch_minimizer_marginal_closeness
         let regions : Fin m → Finset (Lattice.Site Λ) :=
           fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j
         let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
-        let U := dependentGlobalConfigIsometry
-          (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-        let Ωᵤ := U.symm (AreaLaw.rectangleAreaLawState Ω)
+        let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
         ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
           x ∈ regularizedPatchDomain
             (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
@@ -78,27 +76,27 @@ theorem nestedPatch_minimizer_marginal_closeness
                 (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ωᵤ x R -
                 Entropy.regionState (n := fun _ : Lattice.Site Λ ↦ q) R
                   (AreaLaw.rectangleAreaLawState Ω))).trace.re ≤ (1 / 16 : ℝ) := by
-  intro L h hh hhJ E₀ Ω hΩ hgap hspan center u b hu hb Λ m regions a U Ωᵤ x hx hmin R
+  intro L h hh hhJ E₀ Ω hΩ hgap hspan center u b hu hb Λ m regions a Ωᵤ x hx hmin R
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   have henergy := (h.nestedPatch_minimizer_energy_le hh hhJ hJ hΔ Ω hΩ hgap hspan center u κ b
     hu hκ (hκhalf.trans (by norm_num)) hb x hx hmin).trans hsmall
   have hnorm := norm_normalizedRegularizedPatchOutput
     (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a
     (fun _ ↦ div_nonneg hκ.le (Nat.cast_nonneg m)) hb Ωᵤ
-    ((U.symm.norm_map _).trans ((AreaLaw.norm_rectangleAreaLawState Ω).trans hΩ)) hx
-  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hhJ hh hΩ hgap hspan
+    ((AreaLaw.norm_rectangleAreaLawState Ω).trans hΩ) hx
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hh hΩ hgap hspan
   have hgap := FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy
-    (fun _ : Lattice.Site Λ ↦ Fin q) (h.toAreaLawHamiltonian hhJ).operator_isHermitian hΩ'
+    (fun _ : Lattice.Site Λ ↦ Fin q)
+        (ManyBody.Interaction.isHermitian_hamiltonian h.isHermitian_toAreaLawHamiltonian_term) hΩ'
         hgap' hspan' hΔ
-    ((U.norm_map _).trans hnorm) henergy R
+    (hnorm) henergy R
   have hρ := reindex_reducedPure_eq_regionState
     (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) R Ωᵤ
   simp only [dependentRegionFinEquiv, Equiv.piCongrRight_refl,
     Matrix.reindex_refl_refl] at hρ
   have hU : dependentGlobalFinIsometry
-      (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) Ωᵤ = U Ωᵤ := rfl
-  have hΩeq : dependentGlobalConfigIsometry Ωᵤ = AreaLaw.rectangleAreaLawState Ω :=
-    U.apply_symm_apply _
+      (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) Ωᵤ = Ωᵤ := rfl
+  have hΩeq : Ωᵤ = AreaLaw.rectangleAreaLawState Ω := rfl
   rw [hU, hΩeq] at hρ
   simpa only [normalizedRegularizedPatchMarginal, hρ] using hgap
 
@@ -126,9 +124,7 @@ theorem exists_uniform_nestedPatch_minimizer_marginal_closeness
           let regions : Fin m → Finset (Lattice.Site Λ) :=
             fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j
           let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
-          let U := dependentGlobalConfigIsometry
-            (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-          let Ωᵤ := U.symm (AreaLaw.rectangleAreaLawState Ω)
+          let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
           ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
             x ∈ regularizedPatchDomain
               (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →

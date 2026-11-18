@@ -65,29 +65,27 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
     let regions : Fin m → Finset (Lattice.Site Λ) :=
       fun j ↦ AreaLaw.Geometry.nestedPatch Λ center u j
     let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
-    let U := dependentGlobalConfigIsometry
-      (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-    let Ωᵤ := U.symm (AreaLaw.rectangleAreaLawState Ω)
+    let Ωᵤ := AreaLaw.rectangleAreaLawState Ω
     ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
       x ∈ regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
       IsMinOn
         (regularizedPatchObjective (Out := fun _ : Lattice.Site Λ ↦ Fin q)
           regions a b Ωᵤ)
         (regularizedPatchDomain (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions) x →
-      let φ : Lattice.StateSpace Λ q := U
+      let φ : Lattice.StateSpace Λ q :=
         (normalizedRegularizedPatchOutput (Out := fun _ : Lattice.Site Λ ↦ Fin q)
           regions a b Ωᵤ x)
-      (inner ℂ φ (Matrix.toEuclideanLin (h.toAreaLawHamiltonian hhJ).operator φ)).re - E₀ ≤
+      (inner ℂ φ (Matrix.toEuclideanLin h.toAreaLawHamiltonian.hamiltonian φ)).re - E₀ ≤
         36 * (q : ℝ) ^ 2 * J * κ ^ 2 := by
-  intro Λ m regions a U Ωᵤ x hx hmin φ
+  intro Λ m regions a Ωᵤ x hx hmin φ
   have hm : (0 : ℝ) < m := Nat.cast_pos.mpr (AreaLaw.Geometry.nestedPatchCount_pos u)
   have ha : ∀ j, 0 < a j := fun _ ↦ div_pos hκ hm
   have hΩᵤ : ‖Ωᵤ‖ = 1 :=
-    (U.symm.norm_map _).trans ((AreaLaw.norm_rectangleAreaLawState Ω).trans hΩ)
+    ((AreaLaw.norm_rectangleAreaLawState Ω).trans hΩ)
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   have hnorm := norm_normalizedRegularizedPatchOutput
     (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a (fun j ↦ (ha j).le) hb Ωᵤ hΩᵤ hx
-  have hφ : ‖φ‖ = 1 := (U.norm_map _).trans hnorm
+  have hφ : ‖φ‖ = 1 := hnorm
   have hregions : Monotone regions := fun i j hij ↦
     AreaLaw.Geometry.nestedPatch_mono Λ center u hij
   have hcl := exists_clipped_filter_of_isMinOn_regularizedPatchObjective
@@ -102,18 +100,18 @@ theorem _root_.ManyBody.SquareInteraction.nestedPatch_minimizer_energy_le
   have ha₁ : ∀ j, a j ≤ 1 := fun _ ↦
     (div_nat_le_self_of_nonneg hκ.le m).trans hκ₁
   have hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j := fun _ _ hij ↦ hregions hij
-  have hφpatch := dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput
+  have hφpatch := normalizedRegularizedPatchOutput_eq_patchState
     (n := fun _ : Lattice.Site Λ ↦ q) (fun j : Fin m ↦ D j) a b Ωᵤ x
   change φ = Entropy.patchState b (regularizedPatchFactorList (fun j : Fin m ↦ D j) a x)
-    (U (U.symm (AreaLaw.rectangleAreaLawState Ω))) at hφpatch
-  simp only [U.apply_symm_apply, Entropy.patchState, Entropy.patchOutput,
+    (AreaLaw.rectangleAreaLawState Ω) at hφpatch
+  simp only [Entropy.patchState, Entropy.patchOutput,
     map_filter_regularizedPatchFactorList_eq_chainList] at hφpatch
   have hinv : Entropy.liftProdInv (Entropy.chainList D K fun _ ↦ True) *
       Entropy.liftProd (Entropy.chainList D K fun _ ↦ True) = 1 :=
     Entropy.liftProdInv_mul_liftProd_of_isUnit fun p hp ↦
       (List.mem_map.mp hp).elim fun i hi ↦ hi.2 ▸ hunit i
   have heig := Entropy.toEuclideanLin_conj_apply_eq
-    (ManyBody.mem_groundSpace_iff.mp ((h.isGapped_toAreaLawHamiltonian hhJ hh hΩ hgap hspan).2.2 ▸
+    (ManyBody.mem_groundSpace_iff.mp ((h.isGapped_toAreaLawHamiltonian hh hΩ hgap hspan).2.2 ▸
       Submodule.mem_span_singleton_self _)) hinv
     (((‖Matrix.toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
       (AreaLaw.rectangleAreaLawState Ω)‖⁻¹ : ℝ) : ℂ))

@@ -32,10 +32,10 @@ distance bound.
 
 * `information_reset_of_supported_localization`: polynomial decay of the mutual
   information of the cores from a supported localization and a core separation.
-* `ChainHamiltonian.information_reset`: polynomial decay of the mutual
+* `ManyBody.ChainInteraction.information_reset`: polynomial decay of the mutual
   information of the cores, with uniform constants chosen before the system,
   state, regions and original mutual-information upper bound.
-* `DomainHamiltonian.information_reset`: the same on finite integer domains.
+* `ManyBody.DomainInteraction.information_reset`: the same on finite integer domains.
 
 **Source convention (contiguous chains):** The note fixes a contiguous chain in
 `part1_arealaw.tex`, lines 91–93, before the Part II argument. The sites here
@@ -47,14 +47,12 @@ Source: TNLean one-dimensional note, Lemma `lem:reset`,
 `part2a_mps_information.tex`, lines 319–435.
 -/
 
-open ManyBody (ChainSupport DomainSupport lineDomainGraph)
+open ManyBody (ChainSupport DomainSupport lineDomainGraph ChainInteraction DomainInteraction)
 
 open Matrix QuantumCircuit MeasureTheory ProbabilityTheory
 open scoped Kronecker Matrix.Norms.L2Operator NNReal
-open TNLean.Lattice (exists_regional_physicalBuffer_filter
-  exists_supported_unitary_of_two_sided norm_two_sided_le_of_norm_sub_le
-  reindex_physicalBuffer_eq_siteLift reset_entropy_scalar sheetSwapOp
-  siteLift_mem_supportedOperators)
+open TNLean.Lattice (exists_regional_physicalBuffer_filter exists_supported_unitary_of_two_sided
+  norm_two_sided_le_of_norm_sub_le reindex_physicalBuffer_eq_place reset_entropy_scalar sheetSwapOp)
 
 open ManyBody (IsGapped groundSpace)
 
@@ -189,9 +187,9 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
   let V := Matrix.reindex (g.symm.trans e) (g.symm.trans e)
     ((1 : Matrix (Pconf × Pconf) (Pconf × Pconf) ℂ) ⊗ₖ W)
   have hVsupp : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q := by
-    have hs := siteLift_mem_supportedOperators Q
+    have hs := ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _)
       (Matrix.reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
-    rw [← reindex_physicalBuffer_eq_siteLift q D C hDC W] at hs
+    rw [← reindex_physicalBuffer_eq_place q D C hDC W] at hs
     exact hs
   have hV : ‖V‖ ≤ 1 :=
     ((Matrix.l2_opNorm_reindex_equiv (g.symm.trans e) _).trans_le
@@ -259,14 +257,14 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
 
 /-- Contiguous-chain information reset from the original full-system gap.
 Source: TNLean note, Lemma `lem:reset`, `part2a_mps_information.tex`, lines 319–435. -/
-theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
+theorem _root_.ManyBody.ChainInteraction.information_reset (q : ℕ) (hq : 1 ≤ q)
     (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) (p : ℝ) (hp : 0 < p) :
     ∃ (Cp : ℝ) (L₀ : ℕ), 0 < Cp ∧ 1 ≤ L₀ ∧
       ∀ (L : ℕ), L₀ ≤ L →
-      ∀ (h : ChainHamiltonian L q R J)
+      ∀ (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (D C R₀ C₀ : Finset (Fin L)), Disjoint D C → R₀ ⊆ D → C₀ ⊆ C →
         ∀ b : ℝ,
           FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω D C ≤ b →
@@ -282,20 +280,21 @@ theorem ChainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   obtain ⟨Cp, L₀, hCp, hL₀, hreset⟩ :=
     information_reset_of_supported_localization q hq R Δ hΔ p hp Cint v hCint hv
   refine ⟨Cp, L₀, hCp, hL₀, ?_⟩
-  intro L hL h Ω E₀ hΩ hgap hspan D C R₀ C₀ hDC hR₀ hC₀ b hI w hRw hCw
+  intro L hL h hh hhJ Ω E₀ hΩ hgap hspan D C R₀ C₀ hDC hR₀ hC₀ b hI w hRw hCw
   have hK : Matrix.reindex (sitePairConfigurationEquiv (Fin L) q q)
-      (sitePairConfigurationEquiv (Fin L) q q) (doubledHamiltonian h.operator) =
-        h.doubled.operator := h.doubled_operator.symm
+      (sitePairConfigurationEquiv (Fin L) q q) (doubledHamiltonian h.hamiltonian) =
+        h.doubled.hamiltonian := h.doubled_hamiltonian.symm
   let Z := (Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D).biUnion (fun X ↦ X.1)
   have hreset' := hreset (Fin L) (by simpa only [Fintype.card_fin] using hL)
   simp only [Fintype.card_fin] at hreset'
-  refine hreset' h.operator Ω E₀ h.operator_isHermitian hΩ hgap hspan D C R₀ C₀ hDC hR₀ hC₀ b hI
+  refine hreset' h.hamiltonian Ω E₀ (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hgap hspan
+      D C R₀ C₀ hDC hR₀ hC₀ b hI
     (fun ℓ A ↦ chainNeighborhood A (ℓ : ℝ)) Z (fun ℓ ↦ ?_)
     (fun ℓ hℓ ↦ (chain_reset_support_separation D C R₀ C₀ hDC w hRw hCw).2 (ℓ : ℝ) hℓ)
-  obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq L h D (ℓ : ℝ) (Nat.cast_nonneg _)
+  obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq L h hh hhJ D (ℓ : ℝ) (Nat.cast_nonneg _)
   refine ⟨path, fun Q W hW η T hT ↦ ?_⟩
   obtain ⟨hs, -, herr⟩ := hint Q W hW η T hT
-  rw [hK, ← h.swappedDoubled_operator D]
+  rw [hK, ← h.swappedDoubled_hamiltonian D]
   exact ⟨hs, herr⟩
 
 /-- Information reset on an actual finite induced integer domain, using its
@@ -304,14 +303,14 @@ note, Lemma lem:reset,
 part2a_mps_information.tex, lines 319–435, to the finite domains defined in
 part0_preamble.tex, lines 191–215. Infinite distances impose no finite margin
 condition. No restricted spectral gap or product marginal is assumed. -/
-theorem DomainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
+theorem _root_.ManyBody.DomainInteraction.information_reset (q : ℕ) (hq : 1 ≤ q)
     (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) (p : ℝ) (hp : 0 < p) :
     ∃ (Cp : ℝ) (L₀ : ℕ), 0 < Cp ∧ 1 ≤ L₀ ∧
       ∀ (Λ : Finset ℤ), L₀ ≤ Λ.card →
-      ∀ (h : DomainHamiltonian Λ q R J)
+      ∀ (h : DomainInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)) (E₀ : ℝ),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (D C R₀ C₀ : Finset (Fin Λ.card)), Disjoint D C → R₀ ⊆ D → C₀ ⊆ C →
         ∀ b : ℝ,
           FiniteProduct.mutualInformation (fun _ : Fin Λ.card ↦ Fin q) Ω D C ≤ b →
@@ -327,20 +326,21 @@ theorem DomainHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q)
   obtain ⟨Cp, L₀, hCp, hL₀, hreset⟩ :=
     information_reset_of_supported_localization q hq R Δ hΔ p hp Cint v hCint hv
   refine ⟨Cp, L₀, hCp, hL₀, ?_⟩
-  intro Λ hL h Ω E₀ hΩ hgap hspan D C R₀ C₀ hDC hR₀ hC₀ b hI w hRw hCw
+  intro Λ hL h hh hhJ Ω E₀ hΩ hgap hspan D C R₀ C₀ hDC hR₀ hC₀ b hI w hRw hCw
   have hK : Matrix.reindex (sitePairConfigurationEquiv (Fin Λ.card) q q)
-      (sitePairConfigurationEquiv (Fin Λ.card) q q) (doubledHamiltonian h.operator) =
-        h.doubled.operator := h.doubled_operator.symm
+      (sitePairConfigurationEquiv (Fin Λ.card) q q) (doubledHamiltonian h.hamiltonian) =
+        h.doubled.hamiltonian := h.doubled_hamiltonian.symm
   let Z := (Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).biUnion (fun X ↦ X.1)
   have hreset' := hreset (Fin Λ.card) (by simpa only [Fintype.card_fin] using hL)
   simp only [Fintype.card_fin] at hreset'
-  refine hreset' h.operator Ω E₀ h.operator_isHermitian hΩ hgap hspan D C R₀ C₀ hDC hR₀ hC₀ b hI
+  refine hreset' h.hamiltonian Ω E₀ (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hgap hspan
+      D C R₀ C₀ hDC hR₀ hC₀ b hI
     (fun ℓ A ↦ A.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x ℓ)) Z
     (fun ℓ ↦ ?_) (fun ℓ hℓ ↦ ?_)
-  · obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq Λ h D ℓ
+  · obtain ⟨path, -, -, -, -, hint⟩ := hlocal q hq Λ h hh hhJ D ℓ
     refine ⟨path, fun Q W hW η T hT ↦ ?_⟩
     obtain ⟨hs, -, herr⟩ := hint Q W hW η T hT
-    rw [hK, ← h.swappedDoubled_operator D]
+    rw [hK, ← h.swappedDoubled_hamiltonian D]
     exact ⟨hs, herr⟩
   · have hrad : ((ℓ + R : ℕ) : ℝ) ≤ w := by simpa only [Nat.cast_add] using hℓ
     exact ManyBody.reset_graphNeighborhood_disjoint_cores (lineDomainGraph Λ)

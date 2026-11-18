@@ -27,7 +27,9 @@ Lemma lem:logsep, lines 472–488.
 The information exponent is 24, as in the source's logarithmic width choice.
 -/
 
-open ManyBody (interval mem_interval)
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (interval mem_interval ChainInteraction)
 
 noncomputable section
 
@@ -251,10 +253,10 @@ theorem primitive_information_of_logarithmic_separation
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ) :
     ∃ (D₂₄ : ℝ) (L₀ : ℕ), 0 < D₂₄ ∧ 1 ≤ L₀ ∧
       ∀ (L : ℕ), L₀ ≤ L →
-      ∀ (h : ChainHamiltonian L q R J)
+      ∀ (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
-        ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-        groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (Party : Type)
         (own : Fin L → Party) (A B C : Party) (a w : ℕ),
         A ≠ C → B ≠ C → 1 ≤ w → 8 * w ≤ a →
@@ -288,10 +290,10 @@ theorem primitive_information_of_logarithmic_separation
           ((main₈ own A B C a w).birthEnv C) ≤ (L : ℝ) ^ (-24 : ℤ)) := by
   classical
   obtain ⟨D₂₄, L₀, hD, hL₀, hlogsep⟩ :=
-    ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
+    ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_separation
       q hq R J Δ hΔ 24 (by norm_num) 1 le_rfl
   refine ⟨D₂₄, L₀, hD, hL₀, ?_⟩
-  intro L hL h Ω E₀ hΩ hgap hspan Party own A B C a w hAC hBC hw hleft hC hA hB hwidth
+  intro L hL h hh hhJ Ω E₀ hΩ hgap hspan Party own A B C a w hAC hBC hw hleft hC hA hB hwidth
   obtain ⟨hd₀, hd₁, hd₂, hd₃, hd₄, hd₅, hd₆, hd₇⟩ :=
     primitive_separation own A B C a w
       hAC hBC hw hleft hC hA hB
@@ -302,7 +304,7 @@ theorem primitive_information_of_logarithmic_separation
     have hT : ∃ (n : ℕ) (a z : Fin n → ℕ), n ≤ 1 ∧
         interval L b c = Finset.univ.biUnion (fun i ↦ interval L (a i) (z i)) :=
       ⟨1, fun _ ↦ b, fun _ ↦ c, le_rfl, by simp⟩
-    have hi := hlogsep L hL h Ω E₀ hΩ hgap hspan (interval L b c) E hT
+    have hi := hlogsep L hL h hh hhJ Ω E₀ hΩ hgap hspan (interval L b c) E hT
       (fun x hx y hy ↦ hwidth.trans (by exact_mod_cast hd x hx y hy))
     have hexponent : -(24 : ℝ) = ((-24 : ℤ) : ℝ) := by norm_num
     rw [hexponent, Real.rpow_intCast] at hi

@@ -27,9 +27,11 @@ module does not assert that the area law has been proved.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -39,10 +41,11 @@ This proposition is a theorem statement, not a proof of that theorem. -/
 def UniformAreaLaw : Prop :=
   ∀ q : ℕ, 1 ≤ q → ∀ R : ℕ, ∀ J Δ : ℝ, 0 < J → 0 < Δ →
     ∃ C : ℝ, 0 ≤ C ∧
-      ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J,
+      ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
+          (∀ X, ‖h.term X‖ ≤ J) →
         ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-          ‖Ω‖ = 1 → IsGapped h.operator E₀ Δ →
-          groundSpace h.operator E₀ = Submodule.span ℂ {Ω} →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset (Site Λ), regionalEntropy Λ q Ω A ≤ C * (edgeBoundary Λ A).card
 
 end TNLean.PEPS.AreaLaw

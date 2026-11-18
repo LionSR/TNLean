@@ -33,13 +33,6 @@ open Matrix
 
 namespace TNLean.PEPS.Approximation.Pinned
 
-/-- The adapted complement-agreement matrix is the existing local lift. -/
-theorem liftLocal_eq_localLift {L q : ℕ} (X : Finset (Vertex L))
-    (A : Matrix (RegionConfiguration q X) (RegionConfiguration q X) ℂ) :
-    liftLocal X A = Entropy.localLift (n := fun _ ↦ q) X A := by
-  ext x y
-  exact (Entropy.localLift_apply X A x y).symm
-
 namespace NestedFilter
 
 variable {L q m : ℕ} {X : Fin m → Finset (Vertex L)}
@@ -173,7 +166,7 @@ private theorem output_eq_extended_chain (F : FilterFamily q m X) (Ω : State L 
     output F Ω = toEuclideanLin
       (Entropy.liftProd (Entropy.chainList (extendRegions X) (extendedMatrices F)
         fun _ ↦ True)) Ω := by
-  simpa only [output, asMap, liftLocal_eq_localLift, localLift_extendedMatrices] using
+  simpa only [output, asMap, localLift_extendedMatrices] using
     Entropy.foldl_localLift_eq_liftProd_chainList (extendRegions X) (extendedMatrices F) Ω
 
 /-- The actual adapted ascending output equals the canonical reverse-product action.
