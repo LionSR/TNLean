@@ -4,6 +4,8 @@ import TNLean.PEPS.Examples.HoneycombCluster
 The edge lists are parameters: identifying them with all the incidences of a
 honeycomb face is a separate geometric step. -/
 
+open scoped BigOperators
+
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V] (G : SimpleGraph V) [DecidableRel G.Adj]
@@ -59,7 +61,7 @@ theorem exterior_outside : ∀ i j, exterior i ≠ vertex j := by decide
 
 private def bond (a b : Site) (h : graph.Adj a b) : Edge graph :=
   if hab : a < b then ⟨(a,b), hab, h⟩
-  else ⟨(b,a), lt_of_le_of_ne (le_of_not_gt hab) (Ne.symm h.ne), graph.symm h⟩
+  else ⟨(b,a), lt_of_le_of_ne (le_of_not_gt hab) (Ne.symm h.ne), h.symm⟩
 
 def inner (i : Fin 6) : Edge graph :=
   bond _ _ ((incidence i _).2 (Or.inr (Or.inl rfl)))
