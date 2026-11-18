@@ -1,0 +1,8 @@
+[
+ "exists_rational_sampled_successive_viable_sets_polynomial",
+ "exists_rational_sampled_viable_successor_polynomial",
+ "exists_sampled_successive_viable_sets_polynomial",
+ "exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree",
+ "exists_sampled_viable_successor_polynomial",
+ "exists_sampled_viable_successor_polynomial_explicit_energy_degree"
+]

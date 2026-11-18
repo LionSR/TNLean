@@ -1,0 +1,262 @@
+{
+ "bufferPart_isHermitian": [
+  "hhJ"
+ ],
+ "card_crossingTerms_interval_le_of_consecutive_terms": [
+  "hh",
+  "hhJ"
+ ],
+ "card_sizeTrimmingSelectionWith_le": [
+  "hh",
+  "hhJ"
+ ],
+ "card_sizeTrimmingSelectionWith_le_polynomial": [
+  "hh",
+  "hhJ"
+ ],
+ "card_sizeTrimmingSelection_le": [
+  "hh",
+  "hhJ"
+ ],
+ "card_sizeTrimmingSelection_le_polynomial": [
+  "hh",
+  "hhJ"
+ ],
+ "commutator_bufferPart_eq": [
+  "hh",
+  "hhJ"
+ ],
+ "commutator_eq_zero_of_edist_eq_top": [
+  "hh",
+  "hhJ"
+ ],
+ "commutator_leftPart_eq": [
+  "hh",
+  "hhJ"
+ ],
+ "commutator_rightPart_eq": [
+  "hh",
+  "hhJ"
+ ],
+ "commutator_termSum_inner_eq": [
+  "hh",
+  "hhJ"
+ ],
+ "commutator_termSum_inner_eq_sum": [
+  "hh",
+  "hhJ"
+ ],
+ "cost_sizeTrimmingProgram_le": [
+  "hh",
+  "hhJ"
+ ],
+ "cost_sizeTrimmingProgram_le_of_valid": [
+  "hh",
+  "hhJ"
+ ],
+ "cutBoundaryPart_isSupportedOn": [
+  "hh",
+  "hhJ"
+ ],
+ "cutLeftPart_add_cutBoundaryPart": [
+  "hh",
+  "hhJ"
+ ],
+ "cutLeftPart_isSupportedOn": [
+  "hh",
+  "hhJ"
+ ],
+ "cutLogBudget_interval_le_of_consecutive_terms": [
+  "hh",
+  "hhJ"
+ ],
+ "doubled_hamiltonian": [
+  "hh",
+  "hhJ"
+ ],
+ "doubled_swappedDoubled_isGapped": [
+  "hhJ"
+ ],
+ "eval_sizeTrimmingProgram": [
+  "hh",
+  "hhJ"
+ ],
+ "eval_sizeTrimmingProgram_of_valid": [
+  "hh",
+  "hhJ"
+ ],
+ "exists_cut_decomposition_of_range_one": [
+  "hh"
+ ],
+ "exists_gluing_decomposition_of_range_one": [
+  "hh"
+ ],
+ "exists_regionEntropy_eq_card_boundaryEdges_eq": [
+  "hhJ"
+ ],
+ "groundCentered_parts_sum": [
+  "hh",
+  "hhJ"
+ ],
+ "groundCentered_parts_sum_of_eigen": [
+  "hh",
+  "hhJ"
+ ],
+ "hamiltonian_eq_leftPart_add_bufferPart_add_rightPart": [
+  "hh",
+  "hhJ"
+ ],
+ "isAdmissibleNet_oracleNets": [
+  "hh",
+  "hhJ"
+ ],
+ "isAdmissibleSolver_oracleSolver": [
+  "hh",
+  "hhJ"
+ ],
+ "isGapped_groundCentered_parts_sum": [
+  "hh",
+  "hhJ"
+ ],
+ "isHermitian_bufferPart_localized": [
+  "hhJ"
+ ],
+ "isHermitian_leftPart_localized": [
+  "hhJ"
+ ],
+ "isHermitian_rightPart_localized": [
+  "hhJ"
+ ],
+ "isSupportedOn_bufferPart": [
+  "hh",
+  "hhJ"
+ ],
+ "isSupportedOn_commutator_bufferPart": [
+  "hh",
+  "hhJ"
+ ],
+ "isSupportedOn_commutator_leftPart": [
+  "hh",
+  "hhJ"
+ ],
+ "isSupportedOn_commutator_rightPart": [
+  "hh",
+  "hhJ"
+ ],
+ "isSupportedOn_commutator_termSum_inner": [
+  "hh",
+  "hhJ"
+ ],
+ "isSupportedOn_leftPart": [
+  "hh",
+  "hhJ"
+ ],
+ "isSupportedOn_rightPart": [
+  "hh",
+  "hhJ"
+ ],
+ "isSupportedOn_termSum": [
+  "hh",
+  "hhJ"
+ ],
+ "leftPart_eq_zero_of_le": [
+  "hh",
+  "hhJ"
+ ],
+ "leftPart_isHermitian": [
+  "hhJ"
+ ],
+ "normBound_nonneg": [
+  "hh"
+ ],
+ "norm_bound_nonneg": [
+  "hh"
+ ],
+ "norm_bufferPart_le": [
+  "hh"
+ ],
+ "norm_commutator_bufferPart_le": [
+  "hh"
+ ],
+ "norm_commutator_leftPart_le": [
+  "hh"
+ ],
+ "norm_commutator_rightPart_le": [
+  "hh"
+ ],
+ "norm_commutator_termSum_inner_le": [
+  "hh"
+ ],
+ "norm_commutator_termSum_interval_le": [
+  "hh"
+ ],
+ "norm_cutBoundaryPart_le": [
+  "hh"
+ ],
+ "norm_groundCentered_bufferPart_le": [
+  "hh"
+ ],
+ "norm_le_one_of_mem_sizeTrimmingSelection": [
+  "hh",
+  "hhJ"
+ ],
+ "norm_termSum_le": [
+  "hh"
+ ],
+ "norm_term_commutator_le": [
+  "hh"
+ ],
+ "norm_term_commutator_termSum_le": [
+  "hh"
+ ],
+ "partialSwap_difference_eq_sum_crossing": [
+  "hh",
+  "hhJ"
+ ],
+ "regionEntropy_eq_zero_of_range_zero": [
+  "hhJ"
+ ],
+ "regionalEntropy_eq_zero_of_forall_subset_or_disjoint": [
+  "hhJ"
+ ],
+ "rightPart_isHermitian": [
+  "hhJ"
+ ],
+ "sizeTrimmingSelectionWith_subset_span": [
+  "hh",
+  "hhJ"
+ ],
+ "sizeTrimmingSelection_subset_span": [
+  "hh",
+  "hhJ"
+ ],
+ "sum_norm_term_containing_le": [
+  "hh"
+ ],
+ "sum_norm_terms_containing_le": [
+  "hh"
+ ],
+ "swappedDoubled_hamiltonian": [
+  "hh",
+  "hhJ"
+ ],
+ "termSum_commutator_eq_sum": [
+  "hh",
+  "hhJ"
+ ],
+ "termSum_isHermitian": [
+  "hhJ"
+ ],
+ "term_commutator_termSum_eq": [
+  "hh",
+  "hhJ"
+ ],
+ "term_mul_comm_of_disjoint": [
+  "hh",
+  "hhJ"
+ ],
+ "toChain_consecutive_terms": [
+  "hh",
+  "hhJ"
+ ]
+}

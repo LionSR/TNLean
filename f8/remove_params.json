@@ -1,0 +1,41 @@
+{
+ "sampledSweepStep": [
+  "h0",
+  "h1"
+ ],
+ "sampledSweepStepProgram": [
+  "h0",
+  "h1"
+ ],
+ "sweepStepProgram": [
+  "h1"
+ ],
+ "lvvSweepStep": [
+  "h1"
+ ],
+ "toChain_consecutive_terms": [
+  "hJ"
+ ],
+ "eval_sweepStepProgram": [
+  "h1"
+ ],
+ "eval_sampledSweepStepProgram": [
+  "h0",
+  "h1"
+ ],
+ "eval_sampledSweepStepProgram_of_valid": [
+  "h0",
+  "h1"
+ ],
+ "cost_sampledSweepStepProgram_le": [
+  "h0",
+  "h1"
+ ],
+ "cost_sampledSweepStepProgram_le_of_valid": [
+  "h0",
+  "h1"
+ ],
+ "eval_sweepStepProgram_of_valid": [
+  "h1"
+ ]
+}
