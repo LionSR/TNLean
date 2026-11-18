@@ -1566,7 +1566,7 @@ in~\cite{gap:alvv16_approximation_parameters}.
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_measurable_interval_word_image_event_of_power,
         TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_sampled_interval_node_event_of_power}
     \leanok
-    \uses{thm:physical_dg_sampled_node}
+    \uses{thm:physical_dg_sampled_node,thm:alvv_unique_ground_state_tree}
     Retain the physical hypotheses, the common reference and the explicit
     scalar conditions of Lemma~\ref{thm:physical_dg_sampled_node}, and let
     $\xi_{\max}=(1000D_{\rm ref}\sqrt{L+1})^{-1}$. For every parent $[p,r)$
@@ -1584,7 +1584,7 @@ in~\cite{gap:alvv16_approximation_parameters}.
     closeness of $G$ to the target of the family.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:physical_dg_sampled_node}
+    \uses{thm:physical_dg_sampled_node,thm:alvv_unique_ground_state_tree}
     The merged space has dimension $Q\le(D^{2k}s)^2$ and is $1/4$-viable for
     the target of the family. The random sample has overlap at least
     $3/(32D^{4k}s)$ with that target outside the event of small probability,
@@ -1598,8 +1598,7 @@ in~\cite{gap:alvv16_approximation_parameters}.
 
 \begin{lemma}[The degenerate-gap merge tree of constant node dimension]
     \label{thm:physical_dg_constant_node_tree}
-    \lean{TNLean.MPS.AreaLaw.ALVV.merge_rounds_lt_of_odd,
-        TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_constant_node_tree}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_constant_node_tree}
     \leanok
     \uses{lem:physical_dg_sampled_node_power,thm:sampled_interval_witness_tree,
         thm:dg_accuracy_scalar_parameters,thm:alvv_unique_ground_state_tree}
@@ -1637,7 +1636,7 @@ in~\cite{gap:alvv16_approximation_parameters}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:physical_dg_sampled_node_power,thm:sampled_interval_witness_tree,
-        thm:dg_accuracy_scalar_parameters}
+        thm:dg_accuracy_scalar_parameters,thm:alvv_unique_ground_state_tree}
     The automatic parameters give all scalar conditions of
     Lemma~\ref{lem:physical_dg_sampled_node_power}, as in
     Theorem~\ref{thm:physical_dg_interval_tree_parameters}. Since
