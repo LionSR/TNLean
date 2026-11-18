@@ -14,8 +14,8 @@ truncation of fourth order. The calibration of the gapped soft family in
 `τ = (D²⁴ M¹⁰)⁻¹`, where `D ≥ 1` is the family count and `M ≥ 3 t` the norm ceiling. At order
 `m = 4` the remainder `(t / 4) (T₀ / t)⁴` decays only like `t⁻³`, while the budget decays at
 least like `t⁻¹⁰`, so for every gap `g ≤ 10²⁰` no scale `t ≥ 12` and cutoff `T₀ ≥ 24` meet the
-budget. The fourth-order choice is therefore not an instance of that calibration; recovering
-it needs a different precision requirement. Numerical auxiliary; see
+budget. The fourth-order choice is therefore not an instance of that calibration; within
+this calibration, recovering it needs a different precision requirement. Numerical auxiliary; see
 `docs/paper-gaps/alvv16_soft_regional_residuals.tex`.
 -/
 
