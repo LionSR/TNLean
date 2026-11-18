@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rank timed Lake build jobs from a build log."""
+"""Select tested PR changes and rank timed Lake build jobs."""
 
 from __future__ import annotations
 
@@ -95,74 +95,73 @@ def render_github_annotations(
     return "\n".join(lines) + ("\n" if lines else "")
 
 
-def pr_changed_paths(base: str, head: str) -> list[str]:
-    """Select feature edits from immutable event commits, not the build checkout.
+def pr_changed_paths(head: str) -> list[str]:
+    """Compare a verified synthetic merge with its actual tested base parent.
 
-    Fetch missing objects by SHA only. Verify the checkout contains the feature
-    head, but never switch it: timings still belong to the integration build.
+    Mirror ci_lean_checks.selection_base's two-parent contract, but fail closed
+    instead of falling back to all files. The event base is deliberately unused.
     """
-    def git(*args: str) -> str:
-        return subprocess.check_output(["git", *args], text=True).strip()
-
-    for sha in (base, head):
-        if not re.fullmatch(r"[0-9a-f]{40}", sha) or sha == "0" * 40:
-            raise ValueError("PR timing endpoints must be nonzero full commit SHAs")
-    for sha in (base, head):
-        if subprocess.run(["git", "cat-file", "-e", f"{sha}^{{commit}}"],
-                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
-            subprocess.run(["git", "fetch", "--no-tags", "origin", sha], check=True)
-        if git("rev-parse", "--verify", f"{sha}^{{commit}}") != sha:
-            raise ValueError("PR timing endpoint is not a commit")
-    subprocess.run(["git", "merge-base", "--is-ancestor", head, "HEAD"], check=True)
-    forks = git("merge-base", "--all", base, head).splitlines()
-    if len(forks) != 1:
-        raise ValueError("PR timing endpoints must have a unique merge base")
-    fork = forks[0]
+    if not re.fullmatch(r"[0-9a-f]{40}", head) or head == "0" * 40:
+        raise ValueError("PR head must be a nonzero full commit SHA")
+    if subprocess.run(["git", "cat-file", "-e", f"{head}^{{commit}}"],
+                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
+        subprocess.run(["git", "fetch", "--no-tags", "origin", head], check=True)
+    if subprocess.check_output(["git", "rev-parse", "--verify", f"{head}^{{commit}}"],
+                               text=True).strip() != head:
+        raise ValueError("PR head is not a commit")
+    commits = subprocess.check_output(
+        ["git", "rev-list", "--parents", "-n", "1", "HEAD"], text=True).split()
+    if len(commits) != 3 or commits[2] != head:
+        raise ValueError("cannot verify two-parent PR merge with event head as second parent")
+    fork = commits[1]
+    subprocess.run(["git", "cat-file", "-e", f"{fork}^{{commit}}"], check=True)
     paths = subprocess.check_output(
         ["git", "-c", "core.quotePath=false", "diff", "--name-only", "--no-renames",
-         "--diff-filter=AM", "-z", fork, head, "--", "*.lean"], text=True).split("\0")
+         "--diff-filter=AM", "-z", fork, "HEAD", "--", "*.lean"], text=True).split("\0")
     paths = [p for p in paths if p]
     if any("\n" in p or "\r" in p for p in paths):
         raise ValueError("newline in Lean source path cannot be represented in timing list")
     return paths
 
 
-def select_pr_main(argv: Sequence[str]) -> int:
-    parser = argparse.ArgumentParser(description="Select immutable PR timing paths")
-    parser.add_argument("--base", required=True)
-    parser.add_argument("--head", required=True)
-    args = parser.parse_args(argv)
-    try:
-        paths = pr_changed_paths(args.base, args.head)
-    except (ValueError, subprocess.CalledProcessError) as exc:
-        print(f"PR timing selection failed: {exc}", file=sys.stderr)
-        return 1
-    print("".join(p + "\n" for p in paths), end="")
-    return 0
-
-
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("log", type=Path, help="Lake build log")
-    parser.add_argument(
+    commands = parser.add_subparsers(dest="command", required=True)
+    select = commands.add_parser("select-pr", help="select changed paths from a verified PR merge")
+    select.add_argument("--head", required=True, help="immutable event PR head SHA")
+    report = commands.add_parser("report", help="rank a Lake build log (default for legacy invocations)")
+    report.add_argument("log", type=Path, help="Lake build log")
+    report.add_argument(
         "--warn-threshold",
         type=float,
         default=25.0,
         help="minimum elapsed seconds to warn and report (default: 25)",
     )
-    parser.add_argument(
+    report.add_argument(
         "--error-threshold",
         type=float,
         default=50.0,
         help="minimum elapsed seconds to fail (default: 50)",
     )
-    parser.add_argument("--limit", type=int, help="maximum number of jobs to report")
-    parser.add_argument(
+    report.add_argument("--limit", type=int, help="maximum number of jobs to report")
+    report.add_argument(
         "--changed-files-from",
         type=Path,
         help="only check Lean source paths listed in this newline-delimited file",
     )
+    argv = list(sys.argv[1:] if argv is None else argv)
+    # Preserve the original LOG [options] interface; argparse owns both commands.
+    if argv and argv[0] not in ("select-pr", "report", "-h", "--help"):
+        argv.insert(0, "report")
     args = parser.parse_args(argv)
+    if args.command == "select-pr":
+        try:
+            paths = pr_changed_paths(args.head)
+        except (ValueError, subprocess.CalledProcessError) as exc:
+            print(f"PR timing selection failed: {exc}", file=sys.stderr)
+            return 1
+        print("".join(p + "\n" for p in paths), end="")
+        return 0
     if args.warn_threshold < 0:
         parser.error("--warn-threshold must be nonnegative")
     if args.error_threshold < args.warn_threshold:
@@ -191,4 +190,4 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(select_pr_main(sys.argv[2:]) if sys.argv[1:2] == ["select-pr"] else main())
+    raise SystemExit(main())

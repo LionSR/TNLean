@@ -661,15 +661,14 @@ jobs:
         id: compilation-time
         if: github.event_name == 'pull_request'
         env:
-          BASE_REF: ${{ github.event.pull_request.base.sha }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -o pipefail
           timing_status=0
           archive_build_failed=false
-          # Select immutable feature edits; build/timing input remains the merged checkout.
+          # Compare the verified tested merge against its actual first parent.
           python3 scripts/lake_build_hotspots.py select-pr \
-            --base "$BASE_REF" --head "$PR_HEAD_SHA" \
+            --head "$PR_HEAD_SHA" \
             > "$RUNNER_TEMP/changed-lean-files.txt" || timing_status=$?
           if [ "$timing_status" -eq 0 ]; then
             while IFS= read -r path; do

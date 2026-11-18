@@ -104,9 +104,20 @@ class ImmutableBaseTests(unittest.TestCase):
                             "GITHUB_OUTPUT": str(self.output),
                             "RUNNER_TEMP": str(self.runtime),
                             "PATH": str(self.bin) + os.pathsep + os.environ["PATH"]}
+        original = None
+        if name == TIMING_NAME and not extra_env:
+            # Model the actual checkout: base first, event feature head second.
+            original = self.git("rev-parse", "HEAD").stdout.strip()
+            parent = self.git("commit-tree", self.base + "^{tree}", "-p", self.base,
+                              "-m", "tested base").stdout.strip()
+            merge = self.git("commit-tree", "HEAD^{tree}", "-p", parent, "-p", original,
+                             "-m", "synthetic checkout").stdout.strip()
+            self.git("checkout", "-q", "--detach", merge)
         env.update(extra_env or {})
         result = subprocess.run(["bash", "-e", "-o", "pipefail", "-c", STEPS[name]["run"]],
                                 cwd=self.root, env=env, text=True, capture_output=True)
+        if original:
+            self.git("checkout", "-q", "--detach", original)
         if check:
             self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
         return result
@@ -344,19 +355,19 @@ class ImmutableBaseTests(unittest.TestCase):
         self.run_step(TIMING_NAME)
         self.assertEqual(self.output.read_text(), "result=error\n")
 
-    def test_timing_fetch_diff_and_invalid_base_errors(self):
+    def test_timing_fetch_diff_and_invalid_head_errors(self):
         (self.runtime / "lake-build.log").write_text("")
         for command in ("fetch", "diff"):
             with self.subTest(command=command):
                 self.fail_git(command)
-                result = self.run_step(TIMING_NAME, base="f" * 40 if command == "fetch" else self.base)
+                result = self.run_step(TIMING_NAME, extra_env={"PR_HEAD_SHA": "f" * 40}) if command == "fetch" else self.run_step(TIMING_NAME)
                 self.assertEqual(self.output.read_text(), "result=error\n")
                 self.assertIn("injected git failure", result.stderr)
         (self.bin / "git").unlink()
         self.make_criss_cross()
         for base in ("", "0" * 40, "HEAD", "--help"):
             with self.subTest(base=base):
-                self.run_step(TIMING_NAME, base=base)
+                self.run_step(TIMING_NAME, extra_env={"PR_HEAD_SHA": base})
                 self.assertEqual(self.output.read_text(), "result=error\n")
 
     def test_timing_advanced_checkout_excludes_upstream_and_keeps_feature_limit(self):
@@ -375,13 +386,14 @@ class ImmutableBaseTests(unittest.TestCase):
             self.assertEqual(self.output.read_text(), f"result={expected}\n")
             self.assertEqual((self.runtime / "changed-lean-files.txt").read_text(), LEAN + "\n")
 
-    def test_timing_ambiguous_event_merge_base_fails_closed(self):
+    def test_timing_unverified_merge_fails_closed(self):
         self.make_criss_cross()
         ambiguous = self.git("rev-parse", "moving-base").stdout.strip()
         self.assertEqual(len(self.git("merge-base", "--all", ambiguous, "HEAD").stdout.split()), 2)
-        result = self.run_step(TIMING_NAME, base=ambiguous)
+        result = self.run_step(TIMING_NAME, base=ambiguous,
+                               extra_env={"PR_HEAD_SHA": self.git("rev-parse", "HEAD").stdout.strip()})
         self.assertEqual(self.output.read_text(), "result=error\n")
-        self.assertIn("unique merge base", result.stderr)
+        self.assertIn("cannot verify two-parent PR merge", result.stderr)
 
     def test_coverage_is_scoped_to_changed_declarations_in_a_changed_file(self):
         self.write(LEAN, "namespace Regression\n"
@@ -439,11 +451,11 @@ class ImmutableBaseTests(unittest.TestCase):
         for step in BLUEPRINT["steps"]:
             self.assertNotIn("BASE_REF", step.get("env", {}))
             self.assertNotIn("github.event.pull_request.base.ref", step.get("run", ""))
-        self.assertEqual(STEPS[TIMING_NAME]["env"]["BASE_REF"], expression)
+        self.assertNotIn("BASE_REF", STEPS[TIMING_NAME]["env"])
         self.assertEqual(STEPS[TIMING_NAME]["env"]["PR_HEAD_SHA"],
                          "${{ github.event.pull_request.head.sha }}")
         self.assertIn('scripts/lake_build_hotspots.py select-pr', STEPS[TIMING_NAME]["run"])
-        self.assertIn('--base "$BASE_REF" --head "$PR_HEAD_SHA"', STEPS[TIMING_NAME]["run"])
+        self.assertIn('--head "$PR_HEAD_SHA"', STEPS[TIMING_NAME]["run"])
         self.assertEqual(STEPS[TIMING_NAME]["if"], "github.event_name == 'pull_request'")
         self.assertNotIn("--merge-base", STEPS[TIMING_NAME]["run"])
         for name in ("Check reader-facing prose patterns", "Check blueprint and Lean source stay in sync",
