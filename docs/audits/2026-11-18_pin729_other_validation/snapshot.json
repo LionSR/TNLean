@@ -1,17 +1,12 @@
 {
-  "at": "2026-11-18T14:52:50.723482+00:00",
-  "build_pass": 193,
-  "strict_pass": 193,
+  "at": "2026-11-18T14:55:00.342710+00:00",
+  "build_pass": 198,
+  "strict_pass": 198,
   "failed": [],
   "blocked": [],
   "remaining": [
     "TNLean/Lattice.lean",
     "TNLean/Lattice/Sheet.lean",
-    "TNLean/Lattice/Sheet/BoundedChanges.lean",
-    "TNLean/Lattice/Sheet/Defs.lean",
-    "TNLean/Lattice/Sheet/FrontChanges.lean",
-    "TNLean/Lattice/Sheet/LeftSupportedSchmidtRank.lean",
-    "TNLean/Lattice/Sheet/RegionalOperatorForms.lean",
     "TNLean/Lattice/Sheet/SheetStack.lean",
     "TNLean/Lattice/Sheet/SupportedSchmidtRank.lean",
     "TNLean/Lattice/TranslationFiniteOrbitCommutator.lean",
@@ -26,8 +21,8 @@
     "TNLean/QCA.lean",
     "TNLean/QCA/IntervalSupport.lean"
   ],
-  "build_seconds": 1208.3875754450855,
-  "strict_seconds": 651.6769079708902,
-  "free_disk_GiB": 4.029090881347656,
+  "build_seconds": 1235.7483118850796,
+  "strict_seconds": 670.8605441258987,
+  "free_disk_GiB": 3.9242401123046875,
   "production_source_edits": 0
 }
