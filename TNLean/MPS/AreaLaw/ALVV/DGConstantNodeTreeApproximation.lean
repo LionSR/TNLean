@@ -31,12 +31,13 @@ recursive witness, with no joint sampling probability; leaves are full blocks of
 See `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw.ALVV
 
 open TNLean.MPS.AreaLaw TNLean.Lattice
-open ManyBody (interval)
 
 /-- **The root of the degenerate-gap tree of constant node dimension, refined.** The original
 ground space `G` of dimension `r` has an `r`-dimensional space of matrix product states, mutually

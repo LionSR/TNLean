@@ -9,14 +9,13 @@ import TNLean.MPS.AreaLaw.PhysicalDGSampledNode
 /-!
 # One sampled parent of the degenerate-gap tree with `k` rounds
 
-ALVV, arXiv:1602.08828v2, Theorem `t:alg1`, lines 1777–1818, merges two viable spaces of
-dimension at most `D^{2k} s`, samples `s` vectors of the merged space, and applies `k`
-rounds of the improving family of Theorem 4.7 (from Corollary 4.6), a family of at most
-`D²` operators. This file proves, for one long parent and every number of rounds `k ≥ 1`
-with `s ≤ D^{2k}`, that the literal sampled word image followed by one collective trim is
-`3/200`-viable for the original ground space on a measurable Haar event with the failure
-probability of Lemma `l:rs`. The earlier node event takes the larger power `⌈log_D (D²
-s)⌉` and the children of dimension `D⁶ s³`.
+ALVV, arXiv:1602.08828v2, Theorem `t:alg1`, lines 1777–1818, merges two viable spaces of dimension
+at most `D^{2k} s`, samples `s` vectors of the merged space, and applies `k` rounds of the improving
+family of Theorem 4.7 (from Corollary 4.6), a family of at most `D²` operators. This file
+proves, for one long parent and every number of rounds `k ≥ 1` with `s ≤ D^{2k}`, that the literal
+sampled word image followed by one collective trim is `3/200`-viable for the original ground space
+on a measurable Haar event with the failure probability of Lemma `l:rs`. The earlier node event
+takes the larger power `⌈log_D (D² s)⌉` and the children of dimension `D⁶ s³`.
 
 **Scope restriction (one long parent, one final trim and capped gap):** one parent of length
 greater than `4 ℓ`, with the trim applied once after the `k` rounds rather than after each round,
@@ -24,8 +23,9 @@ explicit scalar tail and filter conditions, and `min γ 1` in place of `γ`; the
 children. See `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
-open Matrix
 open ManyBody (interval)
+
+open Matrix
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open MeasureTheory
 

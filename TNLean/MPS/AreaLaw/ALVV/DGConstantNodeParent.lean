@@ -9,13 +9,13 @@ import TNLean.MPS.AreaLaw.ALVV.DGConstantNodeEvent
 # One physical parent of the degenerate-gap tree with `k` rounds
 
 Under Assumption (DG) of ALVV, arXiv:1602.08828v2, lines 275–279, the original Hamiltonian
-determines, for every long interval, the improving family of Theorem 4.7 (from Corollary
-4.6) and its intermediate target, before the number of rounds, the sampling size and the
-child spaces. For every `k ≥ 1` and every sampling size `s ≤ D^{2k}`, children of
-dimension at most `D^{2k} s` have a measurable Haar success event, with the failure
-probability of Lemma `l:rs`, on which the literal sampled word image with `k` rounds and
-its collective trim are `3/200`-viable for the original ground space. This is the node
-step of Theorem `t:alg1`, lines 1777–1818, at the source's number of rounds.
+determines, for every long interval, the improving family of Theorem 4.7 (from Corollary 4.6)
+and its intermediate target, before the number of rounds, the sampling size and the
+child spaces. For every `k ≥ 1` and every sampling size `s ≤ D^{2k}`, children of dimension at most
+`D^{2k} s` have a measurable Haar success event, with the failure probability of Lemma `l:rs`, on
+which the literal sampled word image with `k` rounds and its collective trim are `3/200`-viable for
+the original ground space. This is the node step of Theorem `t:alg1`, lines 1777–1818, at the
+source's number of rounds.
 
 **Scope restriction (one long parent, one final trim and capped gap):** one parent of length
 greater than `4 ℓ`, one collective trim after the `k` rounds, explicit scalar tail and filter
@@ -23,8 +23,9 @@ conditions and `min γ 1`; the event is for fixed children. See
 `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
-open Matrix
 open ManyBody (interval)
+
+open Matrix
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open MeasureTheory
 

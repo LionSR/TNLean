@@ -259,6 +259,19 @@ would not fix the selection. An unverifiable merge checkout falls back to all
 tests. Pushes and local invocations without a PR-head SHA retain their explicit
 base revision (the previous head for pushes).
 
+The changed-module timing gate uses the same verified two-parent checkout
+contract, comparing the tested merge tree to its first parent. It deliberately
+ignores the event base SHA, including when that history has been rewritten.
+Unlike test selection's full-suite fallback, an unverifiable timing checkout
+fails closed: it cannot reliably attribute build times to PR changes. Missing
+PR-head objects are fetched by immutable SHA; missing base-parent objects or Git
+failures are errors. Added/modified Lean paths (including rename destinations)
+are selected; deletions are excluded. The full integration build and the
+25-second warning / 50-second failure thresholds are unchanged.
+Use `lake_build_hotspots.py select-pr --head SHA` for selection and
+`lake_build_hotspots.py report LOG` for reporting; legacy `LOG [options]`
+invocations remain supported. Top-level `--help` lists both commands.
+
 - **Focused checks** (pull requests, before the early build): the directly
   changed production files and regression scripts are prepared by one
   `lake build` and elaborated with the strict flags, so that an error in the
