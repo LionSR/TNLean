@@ -1,10 +1,10 @@
 {
-  "checkpoint": 4,
-  "passed": 535,
-  "remaining": 330,
+  "checkpoint": 1,
+  "passed": 566,
+  "remaining": 299,
   "failed_commands": 3,
-  "build_seconds": 4793.95092971281,
-  "strict_seconds": 2008.966926874913,
-  "stop": "TNLean.MPS.AreaLaw.Algorithm.Query build failed (1)",
-  "free_bytes": 12949413888
+  "build_seconds": 5532.885888532925,
+  "strict_seconds": 2119.4236841908714,
+  "stop": null,
+  "free_bytes": 12806516736
 }

@@ -258,7 +258,6 @@ TNLean/MPS/Preparation/QCccClassification.lean
 TNLean/MPS/Preparation/RectangularPreparation.lean
 TNLean/MPS/Preparation/RectangularTransferEstimate.lean
 TNLean/MPS/Preparation/RectangularWindowPreparation.lean
-TNLean/MPS/Preparation/RegisterTreeState.lean
 TNLean/MPS/Preparation/RelativePolarCompression.lean
 TNLean/MPS/Preparation/RelativePositivePart.lean
 TNLean/MPS/Preparation/RelativeSecondOrderOverlap.lean
@@ -277,7 +276,6 @@ TNLean/MPS/Preparation/SectorEncoderRates.lean
 TNLean/MPS/Preparation/StaircasePreparation.lean
 TNLean/MPS/Preparation/SupportedLogLogPreparation.lean
 TNLean/MPS/Preparation/SupportedTreePreparation.lean
-TNLean/MPS/Preparation/TreeAmplitude.lean
 TNLean/MPS/Preparation/TreeMERARegisters.lean
 TNLean/MPS/Preparation/UnequalRegisterTreeState.lean
 TNLean/MPS/Preparation/UnequalTreeMERA.lean
