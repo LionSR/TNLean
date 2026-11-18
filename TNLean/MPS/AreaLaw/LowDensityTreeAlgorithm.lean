@@ -46,6 +46,8 @@ a nonempty shortened window. See
 `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw
