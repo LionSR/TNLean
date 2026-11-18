@@ -1,0 +1,11 @@
+{
+  "head": "a928f4fad7ceb1fd0cfd3b44dc0ab38427c65385",
+  "command": [
+    "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+    "-j1",
+    "-M12288",
+    "docs/audits/2026-11-18_main16b_validation_fixes/axioms.lean"
+  ],
+  "exit_code": 0,
+  "seconds": 2.542419794976013
+}

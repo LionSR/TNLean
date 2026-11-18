@@ -1,0 +1,2702 @@
+[
+  {
+    "module": "QICLean.Algebra.DependentBlockDiagonal",
+    "source_sha256": "8f302b933f5efdf5915e094586fa74cc30c7e5922adae9807863b304ce7287d0",
+    "artifact": "QICLean/Algebra/DependentBlockDiagonal.olean",
+    "sha256": "4c96c13ada1c143360044f6ffdd48706274a1df4d5f2f645adf943664decf4da"
+  },
+  {
+    "module": "QICLean.Algebra.FinSum",
+    "source_sha256": "3ee0f9ef8c0a3a27664d0de6a49f7ea710a3fb572bf8e8d8c270cf753c418b39",
+    "artifact": "QICLean/Algebra/FinSum.olean",
+    "sha256": "21bed4dce7c62a09385854dfff97ac6d4d052cce935095b783723652b2727cc4"
+  },
+  {
+    "module": "QICLean.Algebra.HermitianHelpers",
+    "source_sha256": "24f238e2ec546803e572095866c8e4b592a6aea2c8b3c485e3ada9d896785e82",
+    "artifact": "QICLean/Algebra/HermitianHelpers.olean",
+    "sha256": "36eba463da6caa79cc51e781090690cf997838bfa86677b1f3cba3404af11a4b"
+  },
+  {
+    "module": "QICLean.Algebra.KroneckerFactorPositivity",
+    "source_sha256": "ca8c43503eaf99e5a2175918abaee00b6e8fb85a5a030bc1d6c2e2f5b31876d7",
+    "artifact": "QICLean/Algebra/KroneckerFactorPositivity.olean",
+    "sha256": "715b59804e491f213169d4c281fe73e0c95457460536d7d7861c2bb771b122eb"
+  },
+  {
+    "module": "QICLean.Algebra.L2OpNormReindex",
+    "source_sha256": "1986f9d5edc9debb28374b743376846ebe1db04695874fb8d9a424666cc28200",
+    "artifact": "QICLean/Algebra/L2OpNormReindex.olean",
+    "sha256": "d69f9e9f7d5916076f453047e2684d9a3e8365c6223693f2c7e787b55b71f5af"
+  },
+  {
+    "module": "QICLean.Algebra.MatrixAux",
+    "source_sha256": "d63b6bf4ae5cc9aa51bc7ec59acba95858b64a7ee280c657fac5e7feb31e052c",
+    "artifact": "QICLean/Algebra/MatrixAux.olean",
+    "sha256": "30f9ff086ad7109ac15839ff2943853d7cab2c3a9da41595f152a07a1c97de14"
+  },
+  {
+    "module": "QICLean.Algebra.MatrixGramUnitary",
+    "source_sha256": "57a1a3de1b0222c878b0a5c2aae80c48745d43e95829d3dac3d73c0fed3c1a28",
+    "artifact": "QICLean/Algebra/MatrixGramUnitary.olean",
+    "sha256": "e4278d9da4c462d91e9f81082bfab2d29d861e706fbba4b6590f80d602ee8594"
+  },
+  {
+    "module": "QICLean.Algebra.MatrixIsometryEntries",
+    "source_sha256": "c9003209c02bf9895582c9550204b37e1709533ec1e6dfd2131ba706437becbb",
+    "artifact": "QICLean/Algebra/MatrixIsometryEntries.olean",
+    "sha256": "00ffcad0e83a4ccb6cbcc5486bede3894789401944ca56c4e96d69c39914d109"
+  },
+  {
+    "module": "QICLean.Algebra.MatrixIsometryKronecker",
+    "source_sha256": "746c34ca9936268b86158fadc0b9207890c07aaae2a913fa40555ee6e7ead102",
+    "artifact": "QICLean/Algebra/MatrixIsometryKronecker.olean",
+    "sha256": "07138581467182fd26f7954bdf91fe743878999744c88f723224ad087b042a95"
+  },
+  {
+    "module": "QICLean.Algebra.MatrixKernelRigidity",
+    "source_sha256": "057c87996e417ff435c2d24bf5666c1dbb13e863385a6c7d292363abc1b2dc00",
+    "artifact": "QICLean/Algebra/MatrixKernelRigidity.olean",
+    "sha256": "faa4dffdf11a01160ae22c9ba64e44efbb2ee32b1a466986a3849c842d403080"
+  },
+  {
+    "module": "QICLean.Algebra.MatrixKroneckerEmbed",
+    "source_sha256": "48e57d25a934c562ad97bb0e3b4ee0b9787796e7f9e3846c390615399e21e0ac",
+    "artifact": "QICLean/Algebra/MatrixKroneckerEmbed.olean",
+    "sha256": "b14e96204c01e9de4025b9d598acf8356d4b4cfc808449d83aa25af6894ac14d"
+  },
+  {
+    "module": "QICLean.Algebra.MatrixRankKronecker",
+    "source_sha256": "ad0cb0d6073fad949113888fa6c54f56288de045d4ea17299ede0a552e9eee75",
+    "artifact": "QICLean/Algebra/MatrixRankKronecker.olean",
+    "sha256": "24c6532b4a3d5f2e5715eb6310e0fc14c13b19175c4e73525da85a93ea3e34b4"
+  },
+  {
+    "module": "QICLean.Algebra.MatrixReindex",
+    "source_sha256": "23cb66b57701bc538df761d0f5b39a2933afcf85827abbf3474c3bb270121f17",
+    "artifact": "QICLean/Algebra/MatrixReindex.olean",
+    "sha256": "6b72d55bb3018acb32a945eb67275faa955d6c7431842860f6e305ed7a773c4d"
+  },
+  {
+    "module": "QICLean.Algebra.MatrixReindexEuclidean",
+    "source_sha256": "c1569049aa492b7ace35b7e386fc7427e26ae8505594147587b8c9b7a8eed718",
+    "artifact": "QICLean/Algebra/MatrixReindexEuclidean.olean",
+    "sha256": "fec116ae6b2900b70bfe8714341fe7c31dba01ed24745cbb33dce497af961ecb"
+  },
+  {
+    "module": "QICLean.Algebra.MatrixReindexUnitary",
+    "source_sha256": "1ce355a9c35ee1820532c11a3dfc337a86102e205d8d788f888ca476137916c7",
+    "artifact": "QICLean/Algebra/MatrixReindexUnitary.olean",
+    "sha256": "bd43de6f284846706f1b5179c9b460e4a68f9a6c99213f0ed83aabdefc4be94f"
+  },
+  {
+    "module": "QICLean.Algebra.MatrixTracePairing",
+    "source_sha256": "bd489dfc79f0b4d038ea42b959bd5f4252c5ecc842e6b9c6d09b08e697ee07aa",
+    "artifact": "QICLean/Algebra/MatrixTracePairing.olean",
+    "sha256": "74e9ca70f17b372fc64e4f9992b7ef0cf914d761c99db43c34fd69af63536174"
+  },
+  {
+    "module": "QICLean.Algebra.MatrixUnitaryBetween",
+    "source_sha256": "8a16535653a740b1c3088c263aa11ec12bbc2f5682125e0a65efe81e325e470c",
+    "artifact": "QICLean/Algebra/MatrixUnitaryBetween.olean",
+    "sha256": "60767571d946e5f46fec2608e90df54b615053ffe064a247ea1a3aeeadca9ffa"
+  },
+  {
+    "module": "QICLean.Algebra.OperatorBlock",
+    "source_sha256": "aa103dc3f20dab8031a3f0805682ad8d8a3d6d60fe73d17e5f347cb7a0ebbe7c",
+    "artifact": "QICLean/Algebra/OperatorBlock.olean",
+    "sha256": "254b6f680e1ba90d6ac4ff311411b3fc1ebe64ac688701e49ed12624cfe77e22"
+  },
+  {
+    "module": "QICLean.Algebra.OperatorSchmidt",
+    "source_sha256": "07d51cd91b7f0af982e03fb95d2d37cd515428097377d4bfebc966912e7a6737",
+    "artifact": "QICLean/Algebra/OperatorSchmidt.olean",
+    "sha256": "7ab3cf0a5cd3951f2a5ba1a9dee0784e98b2b056ca7beaec7f7ef2dcd0353819"
+  },
+  {
+    "module": "QICLean.Algebra.OrthogonalProjection",
+    "source_sha256": "999342a2e06e40f8c3eb99ae5b56f1726623a5b4fbe7a0b1a81b1b26ec72c921",
+    "artifact": "QICLean/Algebra/OrthogonalProjection.olean",
+    "sha256": "301ec60c2e0a7ef7afd8dba6cc80598cc334595a0d380009181698831ad3e3d4"
+  },
+  {
+    "module": "QICLean.Algebra.PermutationMatrixUnitary",
+    "source_sha256": "debfa24db82347145abeb9ca2e676e28c9d1a7e769f67790fa456ee986f7a745",
+    "artifact": "QICLean/Algebra/PermutationMatrixUnitary.olean",
+    "sha256": "9d411d26cb22158fa627a534a78586b5e51783409b45c969a5d09cde27987f24"
+  },
+  {
+    "module": "QICLean.Algebra.PerronFrobenius.RankOne",
+    "source_sha256": "e98bd1def2b81ee1c6b1f458404360db9087c18a23876cc847ec7e612613be53",
+    "artifact": "QICLean/Algebra/PerronFrobenius/RankOne.olean",
+    "sha256": "fe42edf97a5ba3912c083a90ce630e269033992ed2ef8c57af478520052e3f6f"
+  },
+  {
+    "module": "QICLean.Algebra.PosSemidefSupport",
+    "source_sha256": "98d6807761fd25528b3543efa5b2043fee2369e8843acb48067390cc9f1b6a06",
+    "artifact": "QICLean/Algebra/PosSemidefSupport.olean",
+    "sha256": "e3959d5f61dd73d7fe4709e6a0b065a2b8ac9293fb83cafea5566079270d268c"
+  },
+  {
+    "module": "QICLean.Algebra.PureStateExpectation",
+    "source_sha256": "62bd3c96bd1c8613d76b4bfafc26f46c5846b77e650a2e011c501e63791ff2af",
+    "artifact": "QICLean/Algebra/PureStateExpectation.olean.server",
+    "sha256": "028e1a7a2bc365c14e7b9df21ddf80199c9dd9a9d859553d9abaf9817bac7af2"
+  },
+  {
+    "module": "QICLean.Algebra.PureStateExpectation",
+    "source_sha256": "62bd3c96bd1c8613d76b4bfafc26f46c5846b77e650a2e011c501e63791ff2af",
+    "artifact": "QICLean/Algebra/PureStateExpectation.ir.sig",
+    "sha256": "b222c5b28cbc7f44b7bfec219a26506cf53a778ebfa8eb4f37937fd2d0c1acf4"
+  },
+  {
+    "module": "QICLean.Algebra.PureStateExpectation",
+    "source_sha256": "62bd3c96bd1c8613d76b4bfafc26f46c5846b77e650a2e011c501e63791ff2af",
+    "artifact": "QICLean/Algebra/PureStateExpectation.olean.private",
+    "sha256": "2d739b4e7af161e7b7389d1871f869f079c579afbf157f56505b718235b1e34a"
+  },
+  {
+    "module": "QICLean.Algebra.PureStateExpectation",
+    "source_sha256": "62bd3c96bd1c8613d76b4bfafc26f46c5846b77e650a2e011c501e63791ff2af",
+    "artifact": "QICLean/Algebra/PureStateExpectation.olean",
+    "sha256": "5c4c86c1a95dbada1070d0c0c8993191c0df65a4f78472afdd87e51a23fa4b04"
+  },
+  {
+    "module": "QICLean.Algebra.PureStateExpectation",
+    "source_sha256": "62bd3c96bd1c8613d76b4bfafc26f46c5846b77e650a2e011c501e63791ff2af",
+    "artifact": "QICLean/Algebra/PureStateExpectation.ir",
+    "sha256": "ad8b4b41bfaeaa37b04b8385926b4316a2e35789e8d1485ae10d425c0496231c"
+  },
+  {
+    "module": "QICLean.Algebra.TraceReindex",
+    "source_sha256": "5f2b6acbd8484f2e126ea5fba70cb49ad37eb58322336f42025bf2f4fe8c083b",
+    "artifact": "QICLean/Algebra/TraceReindex.olean",
+    "sha256": "506c18f0fe9e4fd3be4f5e54fe9c2559c0ea5c69f880d2c77ee81c102976d1d4"
+  },
+  {
+    "module": "QICLean.Algebra.UnitaryTraceZero",
+    "source_sha256": "4a42b25d14994d53032252eff5b0b71c0d6292d31a82bf6c2dec6277a6d99388",
+    "artifact": "QICLean/Algebra/UnitaryTraceZero.olean",
+    "sha256": "459a862e885bd5883218cfa5a517add5d49f9ac5da1e6b2440b23afb9a7b5bb8"
+  },
+  {
+    "module": "QICLean.Analysis.BetaHalfLine",
+    "source_sha256": "4954deca3dc6f1e348266315199c7f4b87e669c91b666ebcfe36fde4af4fb0e5",
+    "artifact": "QICLean/Analysis/BetaHalfLine.olean",
+    "sha256": "9aca62ace2238cfd9e7f7d849390ba2262b7b3549661aae0ef7da7c3ac1ecbf7"
+  },
+  {
+    "module": "QICLean.Analysis.CfcConjugation",
+    "source_sha256": "7541e6706cc2a1ea93e02998ca9033c8195106ac222c49c418582626e89454e6",
+    "artifact": "QICLean/Analysis/CfcConjugation.olean",
+    "sha256": "6eaee5c15b9a10de6e75f21ac659ce388fc52cbdcb5d1278f665ed73be739c49"
+  },
+  {
+    "module": "QICLean.Analysis.CfcKronecker",
+    "source_sha256": "928703e2e8db716711566d7803cf0234a1c7988a2f566cfe1507e1e0a8ec7359",
+    "artifact": "QICLean/Analysis/CfcKronecker.olean",
+    "sha256": "6cf1e9def082d84c9134236867125e3e9238aad039b982af4db24b71c2a65b46"
+  },
+  {
+    "module": "QICLean.Analysis.CfcLogAdditive",
+    "source_sha256": "fa2efa76d77b1c937aff33445a869af35b88fce79dd40608a2aac6c1a464c714",
+    "artifact": "QICLean/Analysis/CfcLogAdditive.olean",
+    "sha256": "2cd542574f30da953067e56b96f755399302f5ef2f3fb0ff36966387cfee6732"
+  },
+  {
+    "module": "QICLean.Analysis.CommutingHermitian",
+    "source_sha256": "6421c0a312974b6a0616e26dc4191c3076bdda2f4031ed072775378e5950e6c3",
+    "artifact": "QICLean/Analysis/CommutingHermitian.olean",
+    "sha256": "fbc8aac8c805926ac4baa5dc2a4a9acf18757b335085b09bbf9ca58d6ee9ddf0"
+  },
+  {
+    "module": "QICLean.Analysis.CompressedPartialSwap",
+    "source_sha256": "7dfe1e75c612c646036f95b65d63210c251d93530f61d9b09674dc1ab59c7e29",
+    "artifact": "QICLean/Analysis/CompressedPartialSwap.olean",
+    "sha256": "3f4b765241a36c7fe39600017441e7ef61815df990b7b08a9b6601769ac90f88"
+  },
+  {
+    "module": "QICLean.Analysis.ContractionChain",
+    "source_sha256": "9d2e451fd5d5bb976b3f9452d132e353d7e313a84cee386df387865a75faed1f",
+    "artifact": "QICLean/Analysis/ContractionChain.olean",
+    "sha256": "85e7d52fa339b5823b858b38f70d6c6f1956c509648c503b330627cc0cc8d545"
+  },
+  {
+    "module": "QICLean.Analysis.DensityMaxEigenvector",
+    "source_sha256": "cbf3909d8b07488441a5fef18649439c07d296eafc2194d3976280131bfe9797",
+    "artifact": "QICLean/Analysis/DensityMaxEigenvector.olean",
+    "sha256": "5bda409902f08fe31e1f74ff8c673819fa8685f18639a22082944d6e5db91abf"
+  },
+  {
+    "module": "QICLean.Analysis.DominantEigenvector",
+    "source_sha256": "94c9db4a0e4a03cf88c921df100eb0465914fac693d886f638d976c5da64bf2d",
+    "artifact": "QICLean/Analysis/DominantEigenvector.olean",
+    "sha256": "31eeeb7cba84ff94b5a4bc4e8204cdc479c92e40f6aeb83fc59a8031879ec924"
+  },
+  {
+    "module": "QICLean.Analysis.DominantEigenvectorUniqueness",
+    "source_sha256": "961dfaf4bdadbac0057e9337004367d5b95dbb99fb8af13057323a8d9687447a",
+    "artifact": "QICLean/Analysis/DominantEigenvectorUniqueness.olean",
+    "sha256": "4cf5d0f6be02d2b914b87f7b250d97b52c860fbb8659836505e96da9bafe596e"
+  },
+  {
+    "module": "QICLean.Analysis.DoubledSystemGap",
+    "source_sha256": "c2288eee962b5984030107d69191cee2e39e846612950d66d8f5353f571c6bed",
+    "artifact": "QICLean/Analysis/DoubledSystemGap.olean",
+    "sha256": "66d9019c50c46f25221c37aa956b7ad003f492e577e4c131e2856b6e668fd08f"
+  },
+  {
+    "module": "QICLean.Analysis.Entropy",
+    "source_sha256": "d00452793bb4659db2250cbd2be9e5add283ad023702ccdfec779a8d84099c98",
+    "artifact": "QICLean/Analysis/Entropy.olean",
+    "sha256": "b61bf489bb85f696b4dcf4737ff6ea210ed1e418aae8b844c0b16cc8145a07da"
+  },
+  {
+    "module": "QICLean.Analysis.EntropyDecomposition",
+    "source_sha256": "57cc8b2eeabef4eb2f1a47d48b5f8a62e50be9900949f4f78a1c1594765f02c2",
+    "artifact": "QICLean/Analysis/EntropyDecomposition.olean",
+    "sha256": "cc392c05356203134d360f1e8b21698ad20d2cc2a89be3c2ec9dec70ff86f994"
+  },
+  {
+    "module": "QICLean.Analysis.EntropyReindex",
+    "source_sha256": "b31fbf6c25da3319d79ab69227e6ee363f6423386b723cfd4cb9f84b8f2bc717",
+    "artifact": "QICLean/Analysis/EntropyReindex.olean",
+    "sha256": "26615eb84744caf660c76c8b810ef7a6725b67b587dd54123261cc32a2f7e1aa"
+  },
+  {
+    "module": "QICLean.Analysis.EntropySubadditivity",
+    "source_sha256": "271cc68ba708834377d46d70b8c980f48e088593ffc3fc0590293be104fee40e",
+    "artifact": "QICLean/Analysis/EntropySubadditivity.olean",
+    "sha256": "55da7ccee305a56dc2f09a9eed607f05c1ba1f497319f6a4557b4a98b903bda4"
+  },
+  {
+    "module": "QICLean.Analysis.EuclideanReindex",
+    "source_sha256": "bad3392d9554286a8fca6b061fa3f513d80cceeb38d5333a64d359656ef0c110",
+    "artifact": "QICLean/Analysis/EuclideanReindex.olean",
+    "sha256": "8103a22e3546dabc3012133e487b774e2ce72ac3006d94fddc3d75a4d8ccbe9c"
+  },
+  {
+    "module": "QICLean.Analysis.FiniteKroneckerPowers",
+    "source_sha256": "30298ac9002c44b1545c57180335fd2d674eb434b3dd228db191ac04d877d44e",
+    "artifact": "QICLean/Analysis/FiniteKroneckerPowers.olean",
+    "sha256": "a005ec64549b6a9d08cc038ffe624d10850e4c7d99b67ac1d0112792ba80c304"
+  },
+  {
+    "module": "QICLean.Analysis.FloorKKT",
+    "source_sha256": "bb7d78668ce46492b8087502c0d5dfc1950c56ec04092d98ea96f1648fe9e166",
+    "artifact": "QICLean/Analysis/FloorKKT.olean",
+    "sha256": "6051678d8aae6db2ca82c348ea4227d86409159107dca800b92f25242ac8c5f4"
+  },
+  {
+    "module": "QICLean.Analysis.GammaRatio",
+    "source_sha256": "50a67890170af794a3146bcd11d25b410c9be8e6bde58f47fa0bdee6f13f44fb",
+    "artifact": "QICLean/Analysis/GammaRatio.olean",
+    "sha256": "5de11921e723aa9ab39dbac94beabfaa78e23e1a96495a7acc5c5ca81dae8871"
+  },
+  {
+    "module": "QICLean.Analysis.GapPerturbation",
+    "source_sha256": "7373eb7292482563fd8b3e3f0d5d40318a2b6941af2e3e1d17b2461315849174",
+    "artifact": "QICLean/Analysis/GapPerturbation.olean",
+    "sha256": "89157b107c259eb25a83ccc6408e574209ef4d7dbaf0cd47e4007736fccca214"
+  },
+  {
+    "module": "QICLean.Analysis.GaussianFilter.CommutatorSeries",
+    "source_sha256": "d1d0bd0b4a3e2d941c0ef751991aee3f742f97a488d5d4e0b95e862bb59e34ff",
+    "artifact": "QICLean/Analysis/GaussianFilter/CommutatorSeries.olean",
+    "sha256": "a4323c8e61b3b21f61bac461a622c6e413c77eaa34b45239a03f7dbb5f24850e"
+  },
+  {
+    "module": "QICLean.Analysis.GaussianFilter.GroundEstimate",
+    "source_sha256": "6f8f4f2d8481f8cf3f582a4c42bcdbc5c3b792fb731979cc9170435b02200d19",
+    "artifact": "QICLean/Analysis/GaussianFilter/GroundEstimate.olean",
+    "sha256": "d00adfb41c6125e01c3f6df95346ffbfe14be47901e433f64d8b1acc1b2ec0b8"
+  },
+  {
+    "module": "QICLean.Analysis.GaussianFilter.Kernel",
+    "source_sha256": "ad1a198a4bb8e460b1caffee366f86428e4654fbb1fd190f92c2f7d4adb33b26",
+    "artifact": "QICLean/Analysis/GaussianFilter/Kernel.olean",
+    "sha256": "0f015a46a31fd95e7a5d67f073c083644556a8190136191c6fd9da4e54dfffff"
+  },
+  {
+    "module": "QICLean.Analysis.GaussianFilter.MatrixIntegral",
+    "source_sha256": "317a0f5c819a178d6600f1d0c4e427d7425061507516741bb5bef4b382a60104",
+    "artifact": "QICLean/Analysis/GaussianFilter/MatrixIntegral.olean",
+    "sha256": "b9f397deb9499c9b4cac18cded34b67b07f099a254b07d29eea2c4b59faa7925"
+  },
+  {
+    "module": "QICLean.Analysis.GaussianFilter.PhysicalBuffer",
+    "source_sha256": "fe30a910a4f9ce21d9e4c1aebe2e6f6ff6140250595744f73d7eaf20aae770ad",
+    "artifact": "QICLean/Analysis/GaussianFilter/PhysicalBuffer.olean",
+    "sha256": "3c70a1f4d13d84bcaa2c7d934b7c0728286a5d3284ee6bf490c8ec8fc9d64335"
+  },
+  {
+    "module": "QICLean.Analysis.GaussianFilter.SpectralGap",
+    "source_sha256": "79d4986b3785ec18eb8a6f5aabaf40e5c8cb00868aa61d90ab9478d06ee26210",
+    "artifact": "QICLean/Analysis/GaussianFilter/SpectralGap.olean",
+    "sha256": "04e81fc113a01926144056a9bb0611fb836f4cb4252853eb73b951206edbd708"
+  },
+  {
+    "module": "QICLean.Analysis.GlobalGap",
+    "source_sha256": "4d13d557dcea9a9165ecb75023365f30f915a8ab1f253f50ae99a1451a8a128b",
+    "artifact": "QICLean/Analysis/GlobalGap.olean",
+    "sha256": "a5236be729af28f86be29c5e01f954f2d142d6f2b74dd5d6d61728ff2dc9fbaf"
+  },
+  {
+    "module": "QICLean.Analysis.HermitianFactorRepair",
+    "source_sha256": "6fce09b71e383d3a6c3b65c570b3fcfe2561f558838bd0af54154ec67a16e25d",
+    "artifact": "QICLean/Analysis/HermitianFactorRepair.olean",
+    "sha256": "8f4ec16b13e88e56bfc4221649cc60018fbfc85818b23a1bb1d0947090ff87e5"
+  },
+  {
+    "module": "QICLean.Analysis.HermitianUnitaryPath",
+    "source_sha256": "daffa1d8d4fd1d8acbabb58d68313635752234e319099b17836c153c88eed6ea",
+    "artifact": "QICLean/Analysis/HermitianUnitaryPath.olean",
+    "sha256": "7f7f9ed2c6b3667c8a684e585b7d150f49f7d100d15b5e7e5e0e3250e7eb8e1c"
+  },
+  {
+    "module": "QICLean.Analysis.IsometricCompression",
+    "source_sha256": "070d56378b8e5334a55bc05f0273dcdd6ecbc922dfb8f04618be26fa0e78fc80",
+    "artifact": "QICLean/Analysis/IsometricCompression.olean",
+    "sha256": "b978810f237df87263e5d39f8ebd9fcc08544ad7d0d2256d2a2819285055c537"
+  },
+  {
+    "module": "QICLean.Analysis.IsometricDomainExtension",
+    "source_sha256": "0f57e08df2556410a1ad9e663d6ff8fe10dd071f9794a7f957ca43279576d2e5",
+    "artifact": "QICLean/Analysis/IsometricDomainExtension.olean",
+    "sha256": "fbec947940eee4e4797af5d29f87df6d6dcdc0be447d376f8f34b7bd277ee606"
+  },
+  {
+    "module": "QICLean.Analysis.KernelCompletion",
+    "source_sha256": "d32979c3dedd2ff0639028a8bcfa8fe8b43898b046e99ad1c24d8c0b4c96176d",
+    "artifact": "QICLean/Analysis/KernelCompletion.olean",
+    "sha256": "ecbd1b1c7816b30da88edcea8a0929edfd736952c79372b45d6faa032b898da5"
+  },
+  {
+    "module": "QICLean.Analysis.KleinInequality",
+    "source_sha256": "1e3250ec5415cf6b5229dd8e9c263cc2c6d29b916e4921ecf19016471e439396",
+    "artifact": "QICLean/Analysis/KleinInequality.olean",
+    "sha256": "6e0aaeeee450e8d21e19104e88bd3fad18cbec7aebfe77e552d5e9adcd2c94f4"
+  },
+  {
+    "module": "QICLean.Analysis.KroneckerOperatorNorm",
+    "source_sha256": "2e0239901f5520be6cfa10f8815633a742d3424c8b4efd9ff5cc5b407853f531",
+    "artifact": "QICLean/Analysis/KroneckerOperatorNorm.olean",
+    "sha256": "e469ed032074ce397455fb0ecb056209aee0357cd2a36fac154fe0eadaffeb35"
+  },
+  {
+    "module": "QICLean.Analysis.KyFanNorm",
+    "source_sha256": "9ef91ef00642ad9739d03ee8556a06dd724e478c87b200f7eeae666d06ce9867",
+    "artifact": "QICLean/Analysis/KyFanNorm.olean",
+    "sha256": "a6b82ece7a0a21c6ba78b7d11615c91cb46be155a780884d092f80f8a9f42051"
+  },
+  {
+    "module": "QICLean.Analysis.LiebConcavity",
+    "source_sha256": "be97fe252adc80f711a9553ccdd78ef49305822a547dcb3cc5654c1d7b043479",
+    "artifact": "QICLean/Analysis/LiebConcavity.olean",
+    "sha256": "acb6d74d440547e8a3673c18416013e2a258d1dca51463add0560b236ae0e9ed"
+  },
+  {
+    "module": "QICLean.Analysis.LiebIntegrandConcave",
+    "source_sha256": "2f4ca9b9ba64ec31af22b94b2236168cb984c0d8cb0b3370d691e4f5dae1b2e9",
+    "artifact": "QICLean/Analysis/LiebIntegrandConcave.olean",
+    "sha256": "cf3d729f6e6a43a5ccf1af417c155b7a2b08041c00d9a3b87d817778e3ef3d81"
+  },
+  {
+    "module": "QICLean.Analysis.LiebOperatorConcave",
+    "source_sha256": "f2bd62448beda5b9f68be285f5713d9807b31d1fe32d39db8bd42ad529724517",
+    "artifact": "QICLean/Analysis/LiebOperatorConcave.olean",
+    "sha256": "851080bca423347a0f29e0d9d9e17729641ac11b33c8f645bef5cd39613aed5d"
+  },
+  {
+    "module": "QICLean.Analysis.LiebOperatorIntegral",
+    "source_sha256": "1ec64700c617bac6785af08336ec6a5cb5923a7f7bb39b3cf0cf13313fb380d4",
+    "artifact": "QICLean/Analysis/LiebOperatorIntegral.olean",
+    "sha256": "0b8d8f5c51d919b1c4e852018319762ba6ff51a6be3dbf8e0c6384a2949ccc9d"
+  },
+  {
+    "module": "QICLean.Analysis.LiebScalarIntegral",
+    "source_sha256": "374f5949cc51bb0277f5351bf9e4ef4fe3f80c988afcff51323d91c83760efd4",
+    "artifact": "QICLean/Analysis/LiebScalarIntegral.olean",
+    "sha256": "30809ad04ecb191f6701d75a1de3d6c93fea3c5fc8e4dcb9cbd45e2d3d918b54"
+  },
+  {
+    "module": "QICLean.Analysis.LogClipping",
+    "source_sha256": "4231e7c6fc0fd30824c692ffac202ff8188462c5300e380d1650baf7fb2043f7",
+    "artifact": "QICLean/Analysis/LogClipping.olean",
+    "sha256": "fbd53acc922c39895c49d9f7346c66c4a5546abbde04bed302335e86cb4d2dd9"
+  },
+  {
+    "module": "QICLean.Analysis.MarginalSupport",
+    "source_sha256": "51a8ff3eefd58a428a3f81ff7557a96de948ceaa688dc086c865c4fad9bb9f7e",
+    "artifact": "QICLean/Analysis/MarginalSupport.olean",
+    "sha256": "41d2018a7cba71bdbf7b303a71d4c4df527e192b9a2c89005c9d2b4568f83afa"
+  },
+  {
+    "module": "QICLean.Analysis.MatrixCFCIntegral",
+    "source_sha256": "6cd4c26633d73328cc93aee1b421afc672afa4975dcdf9de71a0572b54d1146b",
+    "artifact": "QICLean/Analysis/MatrixCFCIntegral.olean",
+    "sha256": "43ce911ae23c43add5723888b004a55dec4ab2444f90308c0d39bb2d347b1a66"
+  },
+  {
+    "module": "QICLean.Analysis.MatrixEvolution",
+    "source_sha256": "c78d596b4d6232a09f0e8d5fe94ca95a4e5b525983aa61c4edde2847a2fa4201",
+    "artifact": "QICLean/Analysis/MatrixEvolution.olean",
+    "sha256": "e09d8881a8f46d4e14daaf99b6f90c2d52b2ee97bdb862fe6f4f3ca594ea76d9"
+  },
+  {
+    "module": "QICLean.Analysis.MatrixFramePerturbation",
+    "source_sha256": "f160ed33060d6de810e72ec5ff4a5c8f5b88e8ee41ee82bb7d31c57297914bc9",
+    "artifact": "QICLean/Analysis/MatrixFramePerturbation.olean",
+    "sha256": "03b4f35b7f5ecfad013abcc37d7d78181552abe1634b5ae6bfb7e7c4ffa8f834"
+  },
+  {
+    "module": "QICLean.Analysis.MatrixSqrt",
+    "source_sha256": "44cac9c517623d5ed2212e69cfbdbdff2903b56e58181a7b97d5b9042dad9d49",
+    "artifact": "QICLean/Analysis/MatrixSqrt.olean",
+    "sha256": "9ea921663800a037779033a8f8ea3ae63ad8bb0f8bb87ecabfefd3ec7c043bbe"
+  },
+  {
+    "module": "QICLean.Analysis.MatrixTraceInequalities",
+    "source_sha256": "b3a31dc40f3476143d3c2f120a227a19132bc008f7383a8a0096d83c9946f5ec",
+    "artifact": "QICLean/Analysis/MatrixTraceInequalities.olean",
+    "sha256": "11ebad6cbe327ac3113ee2154f0c7856bbab641490fc363dbcf1e1fc912b663d"
+  },
+  {
+    "module": "QICLean.Analysis.OperatorConvexity",
+    "source_sha256": "992c3fc90631d5ee2dd30fe76078e8ad8a2b60404f783764ab38d0325ad9cb07",
+    "artifact": "QICLean/Analysis/OperatorConvexity.olean",
+    "sha256": "95c0edd543571b411651b23fe4f4d9f5369e774b2ee05831da402f79d227e457"
+  },
+  {
+    "module": "QICLean.Analysis.OperatorMean.MatrixPowers",
+    "source_sha256": "59d167b1aa2a7bb74fd4dbcddee8cfefd2a835aa7f005fb22537c7a647b25bf2",
+    "artifact": "QICLean/Analysis/OperatorMean/MatrixPowers.olean",
+    "sha256": "51ac85002d6d3535419fce96da451ff3e4d8f702585b48eb9b3fa6515fa38236"
+  },
+  {
+    "module": "QICLean.Analysis.OrthogonalResolution",
+    "source_sha256": "e58e7883c76ec32ae29a7d1cc1c662d7440c6339902e2fc88db323d24de45e65",
+    "artifact": "QICLean/Analysis/OrthogonalResolution.olean",
+    "sha256": "df88e211f2926eeed8948fb65270b52df67e10a49e4dbd667fd8a263f4129f5b"
+  },
+  {
+    "module": "QICLean.Analysis.OrthogonalResolutionCfc",
+    "source_sha256": "3cf31c2daea0071b6b3fc82f47ea986e90dd71567fed5ea9068b3257c6a507e8",
+    "artifact": "QICLean/Analysis/OrthogonalResolutionCfc.olean",
+    "sha256": "249c1d02f1d8cf6ddaf0e2756590b247030e1ece770426e7b972cd4c09c3cacc"
+  },
+  {
+    "module": "QICLean.Analysis.OverlapEnergy",
+    "source_sha256": "411e025e3b0543bbbd0498cc85a6e52d6c926645d560b184926c91a5d4815b92",
+    "artifact": "QICLean/Analysis/OverlapEnergy.olean",
+    "sha256": "9094641371d260edc6cc723a614263585d0dfbeba96d617d159e819118d6b2e5"
+  },
+  {
+    "module": "QICLean.Analysis.OverlapTriangle",
+    "source_sha256": "bdf0796a59676a1c58252513e383a031841c03045692793459d33af55b3e851b",
+    "artifact": "QICLean/Analysis/OverlapTriangle.olean",
+    "sha256": "b0ee6a8125122d988ee349e83be83169eaf1d966349ae44571b1b837af66e132"
+  },
+  {
+    "module": "QICLean.Analysis.PatchRegulator",
+    "source_sha256": "fc8b43e50156509656cdf916225d7815a56d3d88509b0ad532f1d941683a5160",
+    "artifact": "QICLean/Analysis/PatchRegulator.olean",
+    "sha256": "08a1e5479c71440481956259e2f3e169f33bc9f0d75b0cc54bf59e8a3b55df46"
+  },
+  {
+    "module": "QICLean.Analysis.PhaseError",
+    "source_sha256": "a2321cd6f89b055c174d0922be7f71bbac0c4fcaf65ff566b866502f9d205e7b",
+    "artifact": "QICLean/Analysis/PhaseError.olean",
+    "sha256": "1b3a439cbbda9a6de734d9c944ed877b978c0008330e6f8a8218b184c1f73762"
+  },
+  {
+    "module": "QICLean.Analysis.PolarUnitaryCorrection",
+    "source_sha256": "810770d67570f5d06196ffe584adb4be2b4927812b2eab482349be4d522bda9a",
+    "artifact": "QICLean/Analysis/PolarUnitaryCorrection.olean",
+    "sha256": "7dcb7db74035b60b3044fcc105a404639c03a2b519c97ee44992e0ec4d920e70"
+  },
+  {
+    "module": "QICLean.Analysis.PosSemidefCommute",
+    "source_sha256": "4496988a7f54e6228edfef9a5a441778152f29fb31dc7570477f69100f35c741",
+    "artifact": "QICLean/Analysis/PosSemidefCommute.olean",
+    "sha256": "af0df32a8eef1db52631f5eb93c28ea763d0fcda07fd97535392e2770ff26bee"
+  },
+  {
+    "module": "QICLean.Analysis.PositiveFactorRepair",
+    "source_sha256": "5b69d632f4934c194a3b898cc022ea8d61bcd512b307591ee1162880c6f11135",
+    "artifact": "QICLean/Analysis/PositiveFactorRepair.olean",
+    "sha256": "4d2d1e576da365a000b1afd3aafd4317d099a8a7b53e95b1f45d47b45c8bfa15"
+  },
+  {
+    "module": "QICLean.Analysis.PositiveGapUniqueness",
+    "source_sha256": "85e1384c01f0ba05db2c6f0995145969d553cdfc75255fbb238a169ed06ac8a7",
+    "artifact": "QICLean/Analysis/PositiveGapUniqueness.olean",
+    "sha256": "80675db625306986afe889969d4947c0585a27597588fbfc62593483ca5fc227"
+  },
+  {
+    "module": "QICLean.Analysis.ProbabilityEntropy",
+    "source_sha256": "000961a2a32b18f51714db64fe174124c15d2adf57b8d2745f3ee9f75c6a8f57",
+    "artifact": "QICLean/Analysis/ProbabilityEntropy.olean",
+    "sha256": "6e58c40272a626d9bbedfb57ed6baa8dbcb5266ab62a35df5c82ac3b269f6c0f"
+  },
+  {
+    "module": "QICLean.Analysis.ProbabilityEntropyConcentration",
+    "source_sha256": "d00891c7fe79ba636cf203f18d31e09dcb68968e620fca86dfa3319123a266c4",
+    "artifact": "QICLean/Analysis/ProbabilityEntropyConcentration.olean",
+    "sha256": "ae3fb8fc8e3739caf3ba780c6d9095da8f71acc0a1f873611954c51e2fa5e019"
+  },
+  {
+    "module": "QICLean.Analysis.ProjectedEvolution",
+    "source_sha256": "58e4e608d6d4b17346a7c7a9bb869de7e15f786ccfa29ca78cbde65e29bff9a8",
+    "artifact": "QICLean/Analysis/ProjectedEvolution.olean",
+    "sha256": "2859de258251ceeb63586642f470aed7c038e9c7054379c97311632af9348149"
+  },
+  {
+    "module": "QICLean.Analysis.PureStateTraceDistance",
+    "source_sha256": "6c19753287c4dda505a81e5e9357a800a4ee49a189b8465db9464c297262c93f",
+    "artifact": "QICLean/Analysis/PureStateTraceDistance.olean",
+    "sha256": "27b4988241b93ee8d518f34d0c317abb8b52ba0adb17ac5c32f0463530453437"
+  },
+  {
+    "module": "QICLean.Analysis.RectangularTraceNorm",
+    "source_sha256": "2e39c2fb09b31452ec8ec3c16a3408edfb62453cca06e2d7b67ef21c0534263a",
+    "artifact": "QICLean/Analysis/RectangularTraceNorm.olean",
+    "sha256": "21d6904d9fa507d8d54dc976256c715fb82ac8f796d111908405bb296ad5e6ab"
+  },
+  {
+    "module": "QICLean.Analysis.RectangularTraceNormAlgebra",
+    "source_sha256": "2759737178af1c96d624b8693f886000d4774b22ca4ccea0df606eaa699b65ff",
+    "artifact": "QICLean/Analysis/RectangularTraceNormAlgebra.olean",
+    "sha256": "8e1c3134fc85f0908db9666e6dec69eea513851ba02b4c114c3d76bb5a5924f7"
+  },
+  {
+    "module": "QICLean.Analysis.RectangularTraceNormTopology",
+    "source_sha256": "f0f2ecae7d1ce9896d226733cd4e29de2663a97fefb1cdd307644925452d5314",
+    "artifact": "QICLean/Analysis/RectangularTraceNormTopology.olean",
+    "sha256": "2e6856db5afeaecd7c74cf22a445486874e00456e748a4fd2bcf8f3487e526e5"
+  },
+  {
+    "module": "QICLean.Analysis.RootChannel",
+    "source_sha256": "080c593393ffc81f48939a163a676a2d18fbbdd7a1dc6f9fb54cfbffddfafbd8",
+    "artifact": "QICLean/Analysis/RootChannel.olean",
+    "sha256": "bf3a3dc1753f95a88250a29952d9ca57302577ba3cbcea4c81927204898fd0bc"
+  },
+  {
+    "module": "QICLean.Analysis.RootFidelity",
+    "source_sha256": "fae4583726670ca1463ec2399b07b0bf385ba9a2190689db0679557e7fbf4108",
+    "artifact": "QICLean/Analysis/RootFidelity.olean",
+    "sha256": "554caee4616c6d1f8283ee3dbd66f1e2798973227220e8ec994200584c75f002"
+  },
+  {
+    "module": "QICLean.Analysis.RootFidelityRelativeEntropy",
+    "source_sha256": "79cc0dc21c07c375172e1210ad49242035ffe9fb435e8a20f0cdf1d8cf5be090",
+    "artifact": "QICLean/Analysis/RootFidelityRelativeEntropy.olean",
+    "sha256": "6e80947a2ff37a59258dc1f68d35f90aff871fa56a5df773817a071e7c826f5f"
+  },
+  {
+    "module": "QICLean.Analysis.SchattenNorm",
+    "source_sha256": "e35718f8c935b6e5ded555d8f2a4117c8494d99e9e85b62d5a41d787d297d6e6",
+    "artifact": "QICLean/Analysis/SchattenNorm.olean",
+    "sha256": "99febb4cd746d9c01ec514988e3afa05067022b226d2f6099717d2807697b25b"
+  },
+  {
+    "module": "QICLean.Analysis.SemidefiniteProgram",
+    "source_sha256": "fd2cc85c552139dee264768ca35905540e7e1f4e6c51174bbab6d25b751ebd5a",
+    "artifact": "QICLean/Analysis/SemidefiniteProgram.olean",
+    "sha256": "d12b57f919dd7493d6c21540155b2f0161deb08f42d3a4b60e27c1156ea822aa"
+  },
+  {
+    "module": "QICLean.Analysis.ShiftedDensityPowers",
+    "source_sha256": "fa8162e8a2347188ac8b5f6f5388e33c39d3b2df4d21b1087859d9bb4e470b1b",
+    "artifact": "QICLean/Analysis/ShiftedDensityPowers.olean",
+    "sha256": "496f616f3c8c2483e7b191ab694ba569ddb542a5db724b390bd0dd0c66b7384d"
+  },
+  {
+    "module": "QICLean.Analysis.ShiftedDensityTruncation",
+    "source_sha256": "27558401c309c1ab09c77238b8715926b370d478913335a6b7be9adb90c23791",
+    "artifact": "QICLean/Analysis/ShiftedDensityTruncation.olean",
+    "sha256": "653e532b3a27cffc0b8428ae02acbc1a2bf61c0714fa2a891147a52639a5a1ed"
+  },
+  {
+    "module": "QICLean.Analysis.SpectralFilter.Cutoff",
+    "source_sha256": "29ba592db83dbfe82be648d5d039c50b9cab9f00fec0b0280306092a38a59673",
+    "artifact": "QICLean/Analysis/SpectralFilter/Cutoff.olean",
+    "sha256": "b9a59ac160dbe675018e7b8e6a433deb03a0a37b251dd211e4448c5eb7314adf"
+  },
+  {
+    "module": "QICLean.Analysis.SpectralFilter.Decay",
+    "source_sha256": "8d93d722c7b34ed6d22391365b7d95418600bb511139c7e8ac30f78f44ed0bf5",
+    "artifact": "QICLean/Analysis/SpectralFilter/Decay.olean",
+    "sha256": "51728a30019d8270996b9337dd5b1f7043564a3bda46a811aa323a912845977e"
+  },
+  {
+    "module": "QICLean.Analysis.SpectralFilter.Inversion",
+    "source_sha256": "9620a7e07f491b01e6508f76b0aaa2575addffb5fdd6f5ea2ded9f5be5d2285b",
+    "artifact": "QICLean/Analysis/SpectralFilter/Inversion.olean",
+    "sha256": "67af6207a170280a0b7235063d25ca66abbb070ed36d8b4e7a1e87336ad6d89f"
+  },
+  {
+    "module": "QICLean.Analysis.SpectralFilter.Kernel",
+    "source_sha256": "2131cbf685be60932bd15a76532f76a1d31f4cfba23c6c76f36ca015e7e33c17",
+    "artifact": "QICLean/Analysis/SpectralFilter/Kernel.olean",
+    "sha256": "6a084ed21784574f2657f6f942fb26086f2d0492bfedf34810ef21f46c4619f2"
+  },
+  {
+    "module": "QICLean.Analysis.SpectralFilter.MatrixFilter",
+    "source_sha256": "5acf1a80ed8c5b66598400ee4ad2d0e2616186c11772562e8217f40424cdde5e",
+    "artifact": "QICLean/Analysis/SpectralFilter/MatrixFilter.olean",
+    "sha256": "52be4a9845019b00b1bd87f20059033864f17f106d055b9a0286ae6e2fd9e92e"
+  },
+  {
+    "module": "QICLean.Analysis.SpectralFilter.Profile",
+    "source_sha256": "7d8dd6ab542f5e083677805eb8381390acbc7a5dee6057dea631222d99521eb4",
+    "artifact": "QICLean/Analysis/SpectralFilter/Profile.olean",
+    "sha256": "38847c0f8ac01061812f7e44eb520fc97a32b93e29cebaf152ae1380b1d9c5fb"
+  },
+  {
+    "module": "QICLean.Analysis.SpectralQuadraticForm",
+    "source_sha256": "425a8cb2c6ba9db0cf69868029c788b8f67b93b620339e6ece339941534651dd",
+    "artifact": "QICLean/Analysis/SpectralQuadraticForm.olean",
+    "sha256": "0ae08b3fbb17d56d716d15b4563ad3e36194ed41e4c0fba2c00893d716e23e5d"
+  },
+  {
+    "module": "QICLean.Analysis.SpectralTailTraceNorm",
+    "source_sha256": "fcaa0b537ea305547c26c7cfc4773c1d50656d4a4d1fd753f86c6a4bedc61a62",
+    "artifact": "QICLean/Analysis/SpectralTailTraceNorm.olean",
+    "sha256": "3249b6d50694c5bb1044eacaa6e7d1d97003825476c160ceb6f3804ea19a0b8b"
+  },
+  {
+    "module": "QICLean.Analysis.SqrtHolder",
+    "source_sha256": "bb0a9a84507d4291a2e749cdaf38c5213b802ac0f7088770924f176559cf884b",
+    "artifact": "QICLean/Analysis/SqrtHolder.olean",
+    "sha256": "cda74ec1d41e1433500a3abbd1d9e120b7c40b3ff01a4d5fc1b40e9b9e851ffa"
+  },
+  {
+    "module": "QICLean.Analysis.StripQuadratic",
+    "source_sha256": "0f8c6ad8f4c044c10251fceb28dcc08560f6edc3aecef269bad7b98ba1bbd76f",
+    "artifact": "QICLean/Analysis/StripQuadratic.olean",
+    "sha256": "e00aa349c5101edce1bb0cb87b1e56008082e80c571a807a6ad204472df0b642"
+  },
+  {
+    "module": "QICLean.Analysis.SuperoperatorResolvent",
+    "source_sha256": "8a61d1ff485001c0a54dfb9e32f6918b1b754c5612e1f4f65ea32272b11189d9",
+    "artifact": "QICLean/Analysis/SuperoperatorResolvent.olean",
+    "sha256": "480f07bd00b1529152519fe7b0db5003c32497e879f3fb5aeffaa515a0bcca41"
+  },
+  {
+    "module": "QICLean.Analysis.SupportCompression",
+    "source_sha256": "d5a6067154910d818199c84151d9db46d5931e9c2a0f052aed092c05706bfcf2",
+    "artifact": "QICLean/Analysis/SupportCompression.olean",
+    "sha256": "4c8febc1521b918a6eedcd9f90e373f6875163353dc423399bf8436c3e15578c"
+  },
+  {
+    "module": "QICLean.Analysis.SupportProjectionOrder",
+    "source_sha256": "a2239ebd75f533a0860c668ea4517db692f44a3d5f476dede0c20adfcba6c531",
+    "artifact": "QICLean/Analysis/SupportProjectionOrder.olean",
+    "sha256": "887f427241818af23ced477eef4fbfeab0b78af2cf840609b80ec3bccec6acd5"
+  },
+  {
+    "module": "QICLean.Analysis.SurprisalMoment",
+    "source_sha256": "30b8c6687894b9e359a3a6308d0be4aace0c41417737bebec88c6b2775ea868e",
+    "artifact": "QICLean/Analysis/SurprisalMoment.olean",
+    "sha256": "a9885aff0e95c54c24cb804944f946826e8c4311bd8f943e3d326a12a31fd4fa"
+  },
+  {
+    "module": "QICLean.Analysis.TensorFamilyImage",
+    "source_sha256": "def254a4221dacc1ab4425f3737f90845c56e02afd75ba8204f828c894c61219",
+    "artifact": "QICLean/Analysis/TensorFamilyImage.olean",
+    "sha256": "6d5a6a1c153a0dc5cedc5deb7b4f2f4ca3514f56a9dc79f6585a7cae181f34c5"
+  },
+  {
+    "module": "QICLean.Analysis.TraceCFC",
+    "source_sha256": "5c439b388c03eb6728b39f55a13bf0d08ba37bdf8c2928d4a5f04cede0dd76d2",
+    "artifact": "QICLean/Analysis/TraceCFC.olean",
+    "sha256": "aac0ff1309a2afd3c6023d4ea1036aed754f371f18f150378b557c9438c7d01f"
+  },
+  {
+    "module": "QICLean.Analysis.TraceCompression",
+    "source_sha256": "a2fe4771f8dbaaa71401e87542258a1e5db6fe1a1ed2cd266127e94e2b8f8b37",
+    "artifact": "QICLean/Analysis/TraceCompression.olean",
+    "sha256": "a03326a73197b6788d8295f2c5c4bc6cdc3eaabfd95b556e2ac65df72ecf8128"
+  },
+  {
+    "module": "QICLean.Analysis.TraceDistance",
+    "source_sha256": "b8a503d3260e23cb55885a874440e7eb42e95ee9654310ad6a85a414d94b4f5e",
+    "artifact": "QICLean/Analysis/TraceDistance.olean",
+    "sha256": "b410be52496d661f04ddb6f24635df6b320346f5e66503437921ca53b1732886"
+  },
+  {
+    "module": "QICLean.Analysis.TraceHolder",
+    "source_sha256": "f48178248e2c2411f9c5e3e4e946e7c4c5b702b0206f87e79896ecc86e10468b",
+    "artifact": "QICLean/Analysis/TraceHolder.olean",
+    "sha256": "6e9f5ab0d6efcee707cea436892b45a5dca47f54779e7da8b36647a01bd80d39"
+  },
+  {
+    "module": "QICLean.Analysis.TraceMulBound",
+    "source_sha256": "fea9682cbc03afbea5ac9534a38c3d87553f374b33e1f298be3d3f2dc657a111",
+    "artifact": "QICLean/Analysis/TraceMulBound.olean",
+    "sha256": "456e1502dfcfa7d50f53b6e3ce8dba7415ada9a6a004b3a8e16be5bcd2222e1b"
+  },
+  {
+    "module": "QICLean.Analysis.TraceNormAbs",
+    "source_sha256": "32d08d1a7527e1fed4aaa54c7c438fbdb69dd1055e9bb8b15956962af7cf63dc",
+    "artifact": "QICLean/Analysis/TraceNormAbs.olean",
+    "sha256": "b5ed34597b5347381b950e3db61824bdaf9e7c2f67ff4ca3ab1ae2808eae67a4"
+  },
+  {
+    "module": "QICLean.Analysis.TraceNormContractivity",
+    "source_sha256": "11f471aa03a3aa0cd751ed70f0f5f4f3d98ed5aa62c978a52fff30b43f61d3f8",
+    "artifact": "QICLean/Analysis/TraceNormContractivity.olean",
+    "sha256": "293d6e701acfe19e4ca9bd0f65768773e5d6546c1156f7630e71b87c698aacec"
+  },
+  {
+    "module": "QICLean.Analysis.TraceNormVariational",
+    "source_sha256": "a7bea22869e18c79c2665101930c62dc6808ece257b4ef09d33382b62ceaf32f",
+    "artifact": "QICLean/Analysis/TraceNormVariational.olean",
+    "sha256": "73cf887212736350c98c202238966159e0a3b10a5921d0d729c370ba32523551"
+  },
+  {
+    "module": "QICLean.Analysis.UnitNormalizationDistance",
+    "source_sha256": "12205a3571a7572a01edbf5f7b773e5363f30a49c13353e9d87486825ecaae9a",
+    "artifact": "QICLean/Analysis/UnitNormalizationDistance.olean",
+    "sha256": "349299736b629f1db6f763429d5bd0c40bda5cf8bede4de561d8d9bc5ed84d61"
+  },
+  {
+    "module": "QICLean.Analysis.UnitaryEvolution",
+    "source_sha256": "1c27a0a2ebd1e7bf9509853bdc21e44b1ec997989bf08825e76db2186f247055",
+    "artifact": "QICLean/Analysis/UnitaryEvolution.olean",
+    "sha256": "b264b31169a4a1484a69cb8f150531f885ddacc3dcd749c2fb014c5947afb8ce"
+  },
+  {
+    "module": "QICLean.Analysis.UnitaryHaar",
+    "source_sha256": "0c02ec6b7f3e51e89b73ac838808ebb12d25c80f2dd93b6b271e6e1dea72e893",
+    "artifact": "QICLean/Analysis/UnitaryHaar.olean",
+    "sha256": "bccbf274a7f79591f8c6dcecd4151223a3327e253f46884615b04716b327979d"
+  },
+  {
+    "module": "QICLean.Analysis.ViableSubspace",
+    "source_sha256": "c629eb06ec79d680dab79bc66ea9e118084e41a884f9cf30dbe60f3b03845fb0",
+    "artifact": "QICLean/Analysis/ViableSubspace.olean",
+    "sha256": "f89e9e1043027ba0cea3c6a65ba093a47b9d122945ce628129ab758a740b9cf5"
+  },
+  {
+    "module": "QICLean.Analysis.ViableSubspaceCoordinates",
+    "source_sha256": "28a9f1ee23d3accafa849f3680a4617df31272d1a397a68efa9d8d41c778f414",
+    "artifact": "QICLean/Analysis/ViableSubspaceCoordinates.olean",
+    "sha256": "47e26ff8667b2650ea82f687ebb3b479e2daa990e4c0b066b804bbf31f98725e"
+  },
+  {
+    "module": "QICLean.Analysis.ViableSubspaceEntropy",
+    "source_sha256": "6b6352a361557e81cd03bff84094ddc33e811bcdb544ccb39f16b934db2f3f9f",
+    "artifact": "QICLean/Analysis/ViableSubspaceEntropy.olean",
+    "sha256": "32118d9582a7eb9b479faf5a43169b52e64dd02fdd22135c2641a29d403b88ca"
+  },
+  {
+    "module": "QICLean.Analysis.ViableSubspaceErrorReduction",
+    "source_sha256": "bd5153efef52b65f93f81e71eaa9a160e4cad53efe52b73625bc0b61aaecf4e2",
+    "artifact": "QICLean/Analysis/ViableSubspaceErrorReduction.olean",
+    "sha256": "d510d3bd4c10a40b864f0434316c7329620b5998667882f7bdfc9c4c572fd0d1"
+  },
+  {
+    "module": "QICLean.Analysis.ViableSubspaceSchmidtRank",
+    "source_sha256": "1984efe78cdb61a32e55e4ff0a47a11ad8a726c10e79f5c5749f47eebbe0f9f1",
+    "artifact": "QICLean/Analysis/ViableSubspaceSchmidtRank.olean",
+    "sha256": "fd7df75abc154cd6f6fd10ef02ac0d2fa1a3d259ed2b035b504537d18a582721"
+  },
+  {
+    "module": "QICLean.Analysis.ViableSubspaceSpectralProjector",
+    "source_sha256": "a4564bb8558f3c0e0f9f35e8e4a0e3d5af1246fd3d35da1412292a723a208510",
+    "artifact": "QICLean/Analysis/ViableSubspaceSpectralProjector.olean",
+    "sha256": "723f23fb41041a9bc2c663878986aa51010c65b570de723532558f2d46c61520"
+  },
+  {
+    "module": "QICLean.Analysis.ViableSubspaceTensor",
+    "source_sha256": "2a1b3e911ad2213212d869b58b2ace09cb2dfae78a0b257ea046f19e48ab1ed6",
+    "artifact": "QICLean/Analysis/ViableSubspaceTensor.olean",
+    "sha256": "1049ea6d547692d8ddf6558d8007f47a8be4cc46749d1a0e801e9aa9f5830d16"
+  },
+  {
+    "module": "QICLean.Analysis.ViableSubspaceUnitApproximation",
+    "source_sha256": "1769672d9b51f5d5d7fefe7d33d5c4ccb2017eb086a271e9eb13d5658e8b237e",
+    "artifact": "QICLean/Analysis/ViableSubspaceUnitApproximation.olean",
+    "sha256": "f272ed0b1ce12c0bc13d7669bf31d52b85f8beb2d8b58c0af86c52bd651b7d11"
+  },
+  {
+    "module": "QICLean.Analysis.Volterra",
+    "source_sha256": "ebf065721553a0c7f67c4112292159d619c2e28f9a07c1b131284cd5560d4394",
+    "artifact": "QICLean/Analysis/Volterra.olean",
+    "sha256": "38aa177c811d4f07bf548823ac8f6d617135a64979b56ec37d63c949146aa6a5"
+  },
+  {
+    "module": "QICLean.Analysis.VonNeumannEntropySpectralTail",
+    "source_sha256": "5a2ecac7826e3ba4cbe1b641d5c65bd300c47e6cef8f45838bcf0c37c7b0002e",
+    "artifact": "QICLean/Analysis/VonNeumannEntropySpectralTail.olean",
+    "sha256": "a72963f4883af91389f4bc95fad6e3d386da1349b943a602904f5d00bb7189a6"
+  },
+  {
+    "module": "QICLean.Analysis.WeightedPureStateTraceNorm",
+    "source_sha256": "1cbd29acae5cf2584d763883602456d0550249039ec0f7d50a888f0bfd81037d",
+    "artifact": "QICLean/Analysis/WeightedPureStateTraceNorm.olean",
+    "sha256": "f96dc928942dfae61ef95a0547e8a0eed8996bff5c486ce7b24eabea6c64bcc1"
+  },
+  {
+    "module": "QICLean.Channel.Basic",
+    "source_sha256": "c31efba637867350e485c76953d572c3591fb716d9d3d54fa910beae4d4e3d0e",
+    "artifact": "QICLean/Channel/Basic.olean",
+    "sha256": "42cf2e60391c509d36516ade94629f3200a27c2acb13287a7ec04d4576088e28"
+  },
+  {
+    "module": "QICLean.Channel.BoundaryDensityMinimizer",
+    "source_sha256": "9328734edcec162880f3bfd64fda65d8d24dfa4eeefdf5ed1fd9462324ba4d16",
+    "artifact": "QICLean/Channel/BoundaryDensityMinimizer.olean",
+    "sha256": "20953f66186c27ad03d8aade60c206b7141ba701ff4cb4b643d63f3d58015abe"
+  },
+  {
+    "module": "QICLean.Channel.BoundaryGluing",
+    "source_sha256": "5fdef1bd990e58a2bfb4fe5ebd5900bb24315e2eabb341a4c76043f0b5b29101",
+    "artifact": "QICLean/Channel/BoundaryGluing.olean",
+    "sha256": "c2d7e3e7f57f199623452c5c2aed19c14f248709835e6f7909908845e34e54d5"
+  },
+  {
+    "module": "QICLean.Channel.ComplementaryWeylTwirl",
+    "source_sha256": "d8dd691c1f1b8dd06ef9d77c71c0be8c7311c34d5710251bbe6e18c4760076af",
+    "artifact": "QICLean/Channel/ComplementaryWeylTwirl.olean",
+    "sha256": "545de5e188685ccb551b0b4d8710cada26637f3c50639105bf3fd80a0a45ef97"
+  },
+  {
+    "module": "QICLean.Channel.FiniteProduct",
+    "source_sha256": "7f904e601ed5a84c8cbbdf988f1b431ce7af14744c77ccdcd875d6a401b64ce2",
+    "artifact": "QICLean/Channel/FiniteProduct.olean",
+    "sha256": "5b57c11dd78aea255f152db4daf6490b51bc5506ae9ad11f5edf348650ccdad9"
+  },
+  {
+    "module": "QICLean.Channel.KrausCPTP",
+    "source_sha256": "b8d8ac7036e39e09a5bbbf134a951bf60206eee56dec88c65da2e35f1b9c2784",
+    "artifact": "QICLean/Channel/KrausCPTP.olean",
+    "sha256": "f84ca857bf6f157a7ecc278625071eff663c1d0b10326500f031ef5f32184d22"
+  },
+  {
+    "module": "QICLean.Channel.KrausRepresentation",
+    "source_sha256": "df9a2ee95d9dc1c745b49e4f01b4b845f0bf55a060f03860099ea07fcd2e3ce5",
+    "artifact": "QICLean/Channel/KrausRepresentation.olean",
+    "sha256": "e354cd05140c7e9ea0fc3bef8c4c15ffc1f05b1223f09ddeada38bf0e9768a52"
+  },
+  {
+    "module": "QICLean.Channel.LeadingEigenvector",
+    "source_sha256": "6a2defb7b35a729568da83b2b6f39c33856b14a6002319efa6aed3d0d855be59",
+    "artifact": "QICLean/Channel/LeadingEigenvector.olean",
+    "sha256": "4d749376019466253137707213eada4ba3abf32b2e1fd66d54f635d58893bbb7"
+  },
+  {
+    "module": "QICLean.Channel.MarginalRank",
+    "source_sha256": "c0b7e4d9d8cd2116435d95eebac76e2551abcae05f78c4e3ac5c4ac639273964",
+    "artifact": "QICLean/Channel/MarginalRank.olean",
+    "sha256": "17b9ede446dc57bfc63b950cc41928f5a1ee692cfe91b7a2cb8301c814961075"
+  },
+  {
+    "module": "QICLean.Channel.MarginalSupportAbsorption",
+    "source_sha256": "dff4b7db2d622c0f06be13b5e191b63cc7970aeeaf7c8f3a869874424d3d4930",
+    "artifact": "QICLean/Channel/MarginalSupportAbsorption.olean",
+    "sha256": "feafc7120af51a79668b7feac105e4ef0f7876a0b2b91c735f9836ce023fb78b"
+  },
+  {
+    "module": "QICLean.Channel.MaximalOverlap",
+    "source_sha256": "2c98c796c7dcda9fe469e1ad7ff8f6d48999be02187d05ded55ddf8f24b95fa5",
+    "artifact": "QICLean/Channel/MaximalOverlap.olean",
+    "sha256": "eb5b06dcb85bfe10e695dc3813f49efc12a34ca43e9fa4ff2649c743eb4d2a60"
+  },
+  {
+    "module": "QICLean.Channel.PartialTrace",
+    "source_sha256": "6deff109171281a38a5b60edb671e82ff7667b2a5a7dcf40573309cd1bc28338",
+    "artifact": "QICLean/Channel/PartialTrace.olean",
+    "sha256": "18911e8946e194886ef2fd41d582608a8537a4936807f1c214d3061ff6ef91b3"
+  },
+  {
+    "module": "QICLean.Channel.PureMarginalRank",
+    "source_sha256": "668372bea1c63c0da487885b307ca5749941fd08c7ec5e7836cd5278a8a2eec1",
+    "artifact": "QICLean/Channel/PureMarginalRank.olean",
+    "sha256": "1e7c8dcf78dfa0b7cf89f07df114570daa0f1f0d374866763d3b08cde0115631"
+  },
+  {
+    "module": "QICLean.Channel.SchmidtRank",
+    "source_sha256": "37d897e01d54492ed8ef2f7658f5b7d0340868826526339343618c0129f19ea1",
+    "artifact": "QICLean/Channel/SchmidtRank.olean",
+    "sha256": "fbedd610a4e37a253b0621454db3a15bef453950d0bb297607d2c74ffe927b4c"
+  },
+  {
+    "module": "QICLean.Channel.SchmidtTrimming",
+    "source_sha256": "cdb952ed43731e3db7c82ecbbf09a0c448469be89c887db00dfcac41ca898a0f",
+    "artifact": "QICLean/Channel/SchmidtTrimming.olean",
+    "sha256": "255b3c5271b97e7ec19a337e6fbae5118bb8494566313d9556b875b3b0f2f0ae"
+  },
+  {
+    "module": "QICLean.Channel.Schwarz.AndoLieb",
+    "source_sha256": "104c15758ca453b9a0256607bfeb0628022765a0b2d8a2d18cd8378bb8d7e3fd",
+    "artifact": "QICLean/Channel/Schwarz/AndoLieb.olean",
+    "sha256": "635d9b9f7068124293052ef62d512cc026e0be9bda3bb65518ccffbf15435bb7"
+  },
+  {
+    "module": "QICLean.Channel.Schwarz.Basic",
+    "source_sha256": "58debb619d5ac490540c359e94c5ab37d5c66354e575cc2033618b0f271a0b96",
+    "artifact": "QICLean/Channel/Schwarz/Basic.olean",
+    "sha256": "d47444247c598709501bff9c15c7f6fd872d8db8a2f0c58b546f9424dbd05402"
+  },
+  {
+    "module": "QICLean.Channel.Schwarz.DiagonalJensen",
+    "source_sha256": "58f58626b13f47d2998e6d00e2aafec4f12d25efe532298a4b5c886defcc8022",
+    "artifact": "QICLean/Channel/Schwarz/DiagonalJensen.olean",
+    "sha256": "93fe1a7ca959685bef62b5cdf801a14dbdb86e9b8dc2ebf846a7600cb269f9da"
+  },
+  {
+    "module": "QICLean.Channel.Schwarz.IntegralJensen",
+    "source_sha256": "7408e2842b6bef3ebe36ef691cf78c9bb56aafe41083cd38ffb92339ad770679",
+    "artifact": "QICLean/Channel/Schwarz/IntegralJensen.olean",
+    "sha256": "3756b73bd28d7f4fa30644d2eb00d1cccd9a06d89876288471ff1a16f0b22277"
+  },
+  {
+    "module": "QICLean.Channel.Schwarz.OperatorJensenAux",
+    "source_sha256": "bd473ce598b7b700896fe0744cddeb6cf5d5d2466fe0ddc83a0499799f7bcfa4",
+    "artifact": "QICLean/Channel/Schwarz/OperatorJensenAux.olean",
+    "sha256": "835ffeda83890ec67d71419e0e759814e99128f993a6be36717bad34c64d94e1"
+  },
+  {
+    "module": "QICLean.Channel.Schwarz.OperatorJensenIntegrands",
+    "source_sha256": "ec56d24ee9c0a7be6e3f88c46eca8e39f372359bfc932e102f3d71b6cd044df1",
+    "artifact": "QICLean/Channel/Schwarz/OperatorJensenIntegrands.olean",
+    "sha256": "f8f8b978bc381ecbd44e26082b5c1990c6bc04a76b711803c2cbd8a43a5a58a0"
+  },
+  {
+    "module": "QICLean.Channel.Schwarz.RelativeEntropyAncillaAdditivity",
+    "source_sha256": "a3158e9d76d59bb1f327c28101bfaf05d19821f5f918fd8629d0e0bc2d920bf3",
+    "artifact": "QICLean/Channel/Schwarz/RelativeEntropyAncillaAdditivity.olean",
+    "sha256": "ef247223d9cb6e7e8e0df2af2fd07495edd3e156b066b17553ebc58c1f523144"
+  },
+  {
+    "module": "QICLean.Channel.Schwarz.RelativeEntropyConvexity",
+    "source_sha256": "d55fbbbe08b31f9d8e25082992b5f77deef9ed148ce9d18e5a4e84d47fa01137",
+    "artifact": "QICLean/Channel/Schwarz/RelativeEntropyConvexity.olean",
+    "sha256": "182268196462bd6537d2ddaeb026bbfed13c771ca4d8ab1ce8a7bad05070856b"
+  },
+  {
+    "module": "QICLean.Channel.Schwarz.RelativeEntropyDataProcessing",
+    "source_sha256": "4d77f07a6081fce8f5cd934eb2da554200d533b26bc086676c12b3ca4c7592ef",
+    "artifact": "QICLean/Channel/Schwarz/RelativeEntropyDataProcessing.olean",
+    "sha256": "4df9e643f5ff54e1160191859ccbf62512c04084e079bc9b0c1b79a92cf4859d"
+  },
+  {
+    "module": "QICLean.Channel.Schwarz.RelativeEntropyUnitaryInvariance",
+    "source_sha256": "73b5b37a13a28c8ff54927dcda5077070234a008ad2730b3ae232576f91b3983",
+    "artifact": "QICLean/Channel/Schwarz/RelativeEntropyUnitaryInvariance.olean",
+    "sha256": "713241d605604e9c3d29bb9270674738d20bdc75b61a4531bc1ee75746c88194"
+  },
+  {
+    "module": "QICLean.Channel.Schwarz.StrongSubadditivityPosDef",
+    "source_sha256": "589df6f93c62f6d84fcc345aed585c761bb8dbed4a66e7115ed3482ad6cf3982",
+    "artifact": "QICLean/Channel/Schwarz/StrongSubadditivityPosDef.olean",
+    "sha256": "c7064997e55f5313f9877b58ee0683c4c4e33143e8010f78f4dbf16fb6023e18"
+  },
+  {
+    "module": "QICLean.Channel.TrimmedWitness",
+    "source_sha256": "5a35a6ccc0fad483a04d79d57926aa7ba326b5f68d1ce94124a20e3dfd916016",
+    "artifact": "QICLean/Channel/TrimmedWitness.olean",
+    "sha256": "c0ef0a5e1bd28ac459c32553794af65e55a2f57d74f004a5af0c815e93bd3438"
+  },
+  {
+    "module": "QICLean.Channel.TrimmingEnergy",
+    "source_sha256": "74b0a6baf0be9a8a270f9343aa50c904f462a79fe527250e16a05b46861780be",
+    "artifact": "QICLean/Channel/TrimmingEnergy.olean",
+    "sha256": "d82b70a595ecac40cdc6305d0b12a4a6fdaee87fc07912bda913ffc995ffa594"
+  },
+  {
+    "module": "QICLean.Channel.UhlmannIsometry",
+    "source_sha256": "81e5b4ed634b6e9157d40acbd7f43f9192648e85511dbe45ec5e8de3f453216d",
+    "artifact": "QICLean/Channel/UhlmannIsometry.olean",
+    "sha256": "ae6263623f507ff11dcea2acdca5e5e5d763760e73b91ec1a97638ffa2809cb3"
+  },
+  {
+    "module": "QICLean.Channel.WeylTwirl",
+    "source_sha256": "bff6139bdf20410cecdc99e2f3570e84fdc13753409d6af42dd9a4e28b6ad32d",
+    "artifact": "QICLean/Channel/WeylTwirl.olean",
+    "sha256": "88ba6f60f76979d2118fdd0e5b74e6aec0a421e371bdb1d7f0ac103e13fc922a"
+  },
+  {
+    "module": "QICLean.Entropy.Bipartite",
+    "source_sha256": "3a23a0feb9368519259411255eb0de696625381f6a1a156b44ad1d8605e47581",
+    "artifact": "QICLean/Entropy/Bipartite.olean",
+    "sha256": "63db8da963a6cf9cb23059abf7849ebdd08bfc8bb44f23660b21318dfdbbd579"
+  },
+  {
+    "module": "QICLean.Entropy.BufferDiscount",
+    "source_sha256": "c323ff906ab222621c2327b4e27162115ea28d06763514f3a1a8a6e61bdb5fb7",
+    "artifact": "QICLean/Entropy/BufferDiscount.olean",
+    "sha256": "d41c39bc471b0efc7e2bf2604543b140ba958f070bd9cf18a13926712523d808"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalEntropy",
+    "source_sha256": "ffdad0852970e91aa8c8ecf169e90f78817c5a0b3875ffa75d23a4338b6560a6",
+    "artifact": "QICLean/Entropy/ConditionalEntropy.olean",
+    "sha256": "de62974eb6c831cb1a3a76e3c085893cc6507eafff617678838f9ebdf3b51cd5"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.BoundaryEnergy",
+    "source_sha256": "84b7303df0226157b987064cc64e77f7a108a028288dd9e8ece04000d6b80a47",
+    "artifact": "QICLean/Entropy/ConditionalMovement/BoundaryEnergy.olean",
+    "sha256": "4bcb64ad9832e6e406e0fa02618c723b0f657d88f528812dd15ecb897233636d"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.ConditionalCollision",
+    "source_sha256": "a91d444db4fb1ab1b2b5025ed3d83b00a33ac24be774ba5506578ad1e282f110",
+    "artifact": "QICLean/Entropy/ConditionalMovement/ConditionalCollision.olean",
+    "sha256": "3b09ebbe1c05a47ac5dd3535f8e2b15db68790c7f3cb98ea77748afa6d00ac98"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.ConditionalPhase",
+    "source_sha256": "cd6066e8028bc767915b423425dde1917d5096d0232561b119b26d00fd541bb5",
+    "artifact": "QICLean/Entropy/ConditionalMovement/ConditionalPhase.olean",
+    "sha256": "020f3fb803b039250f75e86eaa7ed85b45a0599ecca008f6217091494f34830e"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.DoubleCurve",
+    "source_sha256": "d31051481bbcf8f854b0dc465df7f760b5bff06e6e22997d0c0e27c5a83023b4",
+    "artifact": "QICLean/Entropy/ConditionalMovement/DoubleCurve.olean",
+    "sha256": "c7ab24e0c525d6290647532a221d4f1b6c340810428bd3216d5f554fb4b1f130"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.EntropyBounds",
+    "source_sha256": "67780bcad254b60198e475b5b47066d8a08a4fcb46c6d3a45b860c7a879d6f06",
+    "artifact": "QICLean/Entropy/ConditionalMovement/EntropyBounds.olean",
+    "sha256": "2807c5629fb30e30d56924bb567fa86e074a03f4443a70da0cbffec79b89e4ba"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.EntropyContinuity",
+    "source_sha256": "ef642cfccb6b422a969aed969ecf46bbedb24d6dbef92e78af64db4bb77c2bb0",
+    "artifact": "QICLean/Entropy/ConditionalMovement/EntropyContinuity.olean",
+    "sha256": "9e74d8e952fe41eadb074fc021dacca9bf66b1673a1b8bf9684b77d702d72baf"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.EntropyHolder",
+    "source_sha256": "2e90805f182083ded48133886809513ed2a38cc58d43cec29e42a282313c1f07",
+    "artifact": "QICLean/Entropy/ConditionalMovement/EntropyHolder.olean",
+    "sha256": "d69843da97ec3dca13e6852ca1f3774863a91bdd18e8ea8043e65ccb87fea66c"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.FilterEntropy",
+    "source_sha256": "ebb4a1674fd9ed1b49c14b252fcf68eca50dc7371ed4981dcc9459f0698f8315",
+    "artifact": "QICLean/Entropy/ConditionalMovement/FilterEntropy.olean",
+    "sha256": "bb0b1739411fd31999df8c7d3fe16bd9e078b933d786bfee78e6ba498353bad2"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.FilterSlack",
+    "source_sha256": "3644bf5de343533590a5a12b5be2f312bb5041c83b17b6b0495b297a0c373ebd",
+    "artifact": "QICLean/Entropy/ConditionalMovement/FilterSlack.olean",
+    "sha256": "71ae3d3480f4f02d27bf2fd57e91265a66d23e40c602fbc470edca4841c5a34d"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.Interpolation",
+    "source_sha256": "b8b2ef729d80c66cd0d0705dbd9db49e310065ec532ee9b6468e3039947dffe2",
+    "artifact": "QICLean/Entropy/ConditionalMovement/Interpolation.olean",
+    "sha256": "ac09607679f211b5013aec62a760a5d08ca7f6067fd11d40fab993d8f2e15f77"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.LogCompression",
+    "source_sha256": "4d7c53897060babd5ca84aeb8c008bf1e29004c779c2abf9c35cf83a0a64f7f3",
+    "artifact": "QICLean/Entropy/ConditionalMovement/LogCompression.olean",
+    "sha256": "c8fb8c973ee44e0022e0f661ce53ad4e5201051c74eddfe6335737039b40d313"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.LogMoments",
+    "source_sha256": "ebd99027286f562da8d098b6f2452925276de27b4d4504e97a651e860da7b3c3",
+    "artifact": "QICLean/Entropy/ConditionalMovement/LogMoments.olean",
+    "sha256": "e4c7baf47d4da5b7a785f483a4abb972d5ed673fc8ba7568c16881b9cabe6355"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.ModularDistance",
+    "source_sha256": "7d0e514005e96b8f3e2e7cbb9eb3867a5ef5b02eab8dc2f2e264b8544ee9c048",
+    "artifact": "QICLean/Entropy/ConditionalMovement/ModularDistance.olean",
+    "sha256": "e88f58019034cd12fdd68b5a6ded1f833c077f272e03fceb9ea737d24a7b8dcd"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.MoveBounds",
+    "source_sha256": "800d498d9230cf2c525929292469a5db9d7b2ca8051ca9db290f889c865448b1",
+    "artifact": "QICLean/Entropy/ConditionalMovement/MoveBounds.olean",
+    "sha256": "7c745eaa69c16c956ef5dc1021160be680076cb4dead57695a953c305a1c32e0"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.NormalizedRows",
+    "source_sha256": "73cf4a5165da818cd44eea238fe6f27c0b6dc4c2a2f1f843602c49e41cc84761",
+    "artifact": "QICLean/Entropy/ConditionalMovement/NormalizedRows.olean",
+    "sha256": "564cba33b39a3de4797a2ec4c61fe156963e49b3da3559a6f3b9127ef6cf29a7"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.Optimizer",
+    "source_sha256": "96c8976968d52e5fd2e773b0592e7bbba5cd4776e88bff330f5ffbbf4d2a7993",
+    "artifact": "QICLean/Entropy/ConditionalMovement/Optimizer.olean",
+    "sha256": "a0058fa328f7f66d807ae12adbbbbecc98783eb39b2e8617ab6108707bfe4154"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.OptimizerStability",
+    "source_sha256": "8dbfdba85dce09c0e1bf2ead0f724c39ad703af11f92a008be59b64f518f84b7",
+    "artifact": "QICLean/Entropy/ConditionalMovement/OptimizerStability.olean",
+    "sha256": "1baaf2fac4d136b8583c6ea52b7854f73602445a2f6a7a04c48967ea30d2dcdd"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.PartialTrace",
+    "source_sha256": "fae8f17a9bef669ec7c32773fcd9c4d6411e553fea15c58732b83845a95216d9",
+    "artifact": "QICLean/Entropy/ConditionalMovement/PartialTrace.olean",
+    "sha256": "cfc094f6dc34d9517c014638f3b35a222b1c6680fb0c4c5e93698f150dc5f110"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.PhaseContinuity",
+    "source_sha256": "7bc6b4cc929780307749d8480013288fbb18dd2ea38559fd210634fba7556fbe",
+    "artifact": "QICLean/Entropy/ConditionalMovement/PhaseContinuity.olean",
+    "sha256": "f4d34e3287f2aa692c98330346024f16dd7d88cd5eabac7eb86544428f5cf6de"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.PhaseTransfer",
+    "source_sha256": "b6db263b771c85fbc7fe250db9a56fa3fc83e01ebd264edacbcf9ae6f23bb56f",
+    "artifact": "QICLean/Entropy/ConditionalMovement/PhaseTransfer.olean",
+    "sha256": "0c3c6f6e4414d4ff96b1e1326bf87acbbea9ff30f3bea8d5125f77704027f116"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.PureEntropy",
+    "source_sha256": "d004d8cc475730dd2f543cbce2931585e7d7c5be4cced0a99d99216fc1781056",
+    "artifact": "QICLean/Entropy/ConditionalMovement/PureEntropy.olean",
+    "sha256": "7ce40544d7f34cd312e876528879d29a59613f9f1d15673ab1ab2f7b6cd0c1a9"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.Purification",
+    "source_sha256": "49395db99525576531b614e4675356690e9f2b7e9e1097447d31a8938d963efb",
+    "artifact": "QICLean/Entropy/ConditionalMovement/Purification.olean",
+    "sha256": "9e1ea035c962d454974b845476e9eea1aebc220a7df33b4ac29ba21292f28afd"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.RenyiSlack",
+    "source_sha256": "03eb3422e85a32bab75b0d3909dfb5c2f2a63d9b607e8d105621a31ed17c5f59",
+    "artifact": "QICLean/Entropy/ConditionalMovement/RenyiSlack.olean",
+    "sha256": "937d7dc442ef58771c077a65a27e67f296f81dce195691ac829908756e1d3bde"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.SingularInterpolation",
+    "source_sha256": "4df870f7704819e0f5264b64a1abb9102e75269261a4bb6aef60747615e2f8f1",
+    "artifact": "QICLean/Entropy/ConditionalMovement/SingularInterpolation.olean",
+    "sha256": "9e1f4d82e3dc411927da0d285ba2d18985202dfdb02fd39c24a889b1446fca8c"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.SpectralPhase",
+    "source_sha256": "fa3112a27a738b2bca3b85c87a748f161204834e234dca2de354b426694291f1",
+    "artifact": "QICLean/Entropy/ConditionalMovement/SpectralPhase.olean",
+    "sha256": "50bced8dae2a7b5324a4ea1580714ca2c32ae6a93a86af194147b573ff450eb3"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.SpectralPowers",
+    "source_sha256": "2684ec3cfc7444597e2885f6ba8079fcfbc298c2508cade7956c5de11da2dde3",
+    "artifact": "QICLean/Entropy/ConditionalMovement/SpectralPowers.olean",
+    "sha256": "c379ac601f499b9487c2b34516dfc6e45704b5e2efb1964f6b76ab3f333af90f"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.StrongSubadditivity",
+    "source_sha256": "2b7e5d433a720b2c501ad5ba085874b01d1a804f81df84cce6f481ac3aff83d6",
+    "artifact": "QICLean/Entropy/ConditionalMovement/StrongSubadditivity.olean",
+    "sha256": "87456d787951332f3d8f6698ae7c0e6cb7c5112f71b2ebd5ce9568b025d7df98"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.ThreeLines",
+    "source_sha256": "554171b8cc4c8aa7dfd2090761995071662d56d8a4b5e8b7ad4edad2dc1f4b07",
+    "artifact": "QICLean/Entropy/ConditionalMovement/ThreeLines.olean",
+    "sha256": "19837ed16eb5b9355d84c0a846391ee96902c264818623aa0a7c4fafeac7148a"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovement.UnitaryCovariance",
+    "source_sha256": "8b307993599093830419bdcdc6ddf3947b68bb284a5601473afb9771cc7d41a8",
+    "artifact": "QICLean/Entropy/ConditionalMovement/UnitaryCovariance.olean",
+    "sha256": "61fbf3ec6183b62e58747d0a1b14457756982f288c7f8f7f257726dbe20f6490"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovementEstimate",
+    "source_sha256": "ff851819f83d0803d17ffd53bb4d5ca52724f30fb1ac666388fe9da6c46ba66b",
+    "artifact": "QICLean/Entropy/ConditionalMovementEstimate.olean",
+    "sha256": "32a38a00312821eac60fe08b3153559c1ebcee21fc4537da0f45a0bcd6f898f3"
+  },
+  {
+    "module": "QICLean.Entropy.ConditionalMovementRegional",
+    "source_sha256": "358afc695fed8536c61b7e5cdd01282896df8fc83b9b41f50a6500c562e9deff",
+    "artifact": "QICLean/Entropy/ConditionalMovementRegional.olean",
+    "sha256": "eb7ee9cea6e4b1bc8f89b1b9df47c5fd3225e7dc1c2937c8680550008a0f0065"
+  },
+  {
+    "module": "QICLean.Entropy.EffectMutualInformation",
+    "source_sha256": "96a689c698d9ea51d5028d8ba4696798ccc8072d0c8c5085a547af9f53168c10",
+    "artifact": "QICLean/Entropy/EffectMutualInformation.olean",
+    "sha256": "ca2d17d7728510e905bff21019496f1a3e7665577826e190df59f8f9815f4c3f"
+  },
+  {
+    "module": "QICLean.Entropy.EffectRelativeEntropy",
+    "source_sha256": "05219f9675538a5588a3cfa39d23b9c3a64418617363503e16dea443bd2125e1",
+    "artifact": "QICLean/Entropy/EffectRelativeEntropy.olean",
+    "sha256": "af379e6b48e525558d9f90acdc163497ac45458a9b8fb36f84bdfaf56796de8a"
+  },
+  {
+    "module": "QICLean.Entropy.FilterChain",
+    "source_sha256": "538a27a0b523a922c678289095a78b9a7d76387ce32594ac8e8997085b2527e4",
+    "artifact": "QICLean/Entropy/FilterChain.olean",
+    "sha256": "d1768b446cb97b5a79c9124638b3405becf9eae710961168f1064c82fc5a515c"
+  },
+  {
+    "module": "QICLean.Entropy.FilterChainEnergy",
+    "source_sha256": "1b69f1cdb9fbce00d232960b16c911ac4fe2cdde46e55204538ae0e96b1cc928",
+    "artifact": "QICLean/Entropy/FilterChainEnergy.olean",
+    "sha256": "1680426009b58f59b571fb667f2afc79cf7d17ba9951af56f64a0044f2b74b6f"
+  },
+  {
+    "module": "QICLean.Entropy.FilterClipping",
+    "source_sha256": "69c4af39b9030b8ef5e926c3d8c9ec826f8f24d9e13a05cef56900f9ed9c1c88",
+    "artifact": "QICLean/Entropy/FilterClipping.olean",
+    "sha256": "04c93ee44fa4e0c9ec63cdb44378d8465940dceb1dedf8b5517debdd8a7bda01"
+  },
+  {
+    "module": "QICLean.Entropy.FilterConjugation",
+    "source_sha256": "e80a2de0415e6632b5214af96084f14b03d717f87035a39693c486a47994b5bb",
+    "artifact": "QICLean/Entropy/FilterConjugation.olean",
+    "sha256": "d64196abbb11915e6ce5dcdccdb0f36f74496007740cff071681d0c3b2f4f175"
+  },
+  {
+    "module": "QICLean.Entropy.FilterEnergy",
+    "source_sha256": "971283a9910c0a3eee0a464918e57b4188df2a174da63d22252513546247b608",
+    "artifact": "QICLean/Entropy/FilterEnergy.olean",
+    "sha256": "4cec8120ebc22020e1447adb6a246b71492e78525b444582d2a6f961b95999a6"
+  },
+  {
+    "module": "QICLean.Entropy.FilterMaximizer",
+    "source_sha256": "a99b7258e1200af01c21eb6bd9ecc0941421f9016e356b7f63c0ccf205393e98",
+    "artifact": "QICLean/Entropy/FilterMaximizer.olean",
+    "sha256": "e504797f09bcddc327e7b85280bc322b058050ec168ed582f5da6d2c1f9f6da7"
+  },
+  {
+    "module": "QICLean.Entropy.FilterMoment",
+    "source_sha256": "3bccf4a7e36f89eb3e447e514456253dd752bf0cdcab65b5102ca6f82924c655",
+    "artifact": "QICLean/Entropy/FilterMoment.olean",
+    "sha256": "03e2f988ed8fb5d6a36cb9c97b03165ecd48ea9c763109c7025526c578eb5916"
+  },
+  {
+    "module": "QICLean.Entropy.FilterOptimizer",
+    "source_sha256": "7ef3fba4c8a67e0ca80c384e50630df3b3e74f4e507a42548fd64f12f00fed62",
+    "artifact": "QICLean/Entropy/FilterOptimizer.olean",
+    "sha256": "9836fee001c11f7395954ebdc6c76513ec878e7bb373b50d8f01ba1219420fcf"
+  },
+  {
+    "module": "QICLean.Entropy.FilterPower",
+    "source_sha256": "92c73ac46006b7c6b9fc314417199e4fae81055590b029d71821facfc7196197",
+    "artifact": "QICLean/Entropy/FilterPower.olean",
+    "sha256": "de88d79e840ad48235a569b3805175e2ef2bc4e99c0915c68721d0b67abe7fb3"
+  },
+  {
+    "module": "QICLean.Entropy.FilterPrefix",
+    "source_sha256": "c1b6b2f2db3f520a287a4fd7c4f86b953a5035bafe8edf53c70785736831c4cf",
+    "artifact": "QICLean/Entropy/FilterPrefix.olean",
+    "sha256": "99aa3fc31e0462c02763e940c171306879421b2d0fc873945810593f3315b7e4"
+  },
+  {
+    "module": "QICLean.Entropy.FilterStationarity",
+    "source_sha256": "20800b35c340ce49fdf2f4f3632d842cfab6b1239d71399086cb8c97d7804a68",
+    "artifact": "QICLean/Entropy/FilterStationarity.olean",
+    "sha256": "d9cf5e04f6388169bff4dec41fb87322391624b63d39309920f3ed8b62757bd0"
+  },
+  {
+    "module": "QICLean.Entropy.FilterZeroFloor",
+    "source_sha256": "1dbab8a348d419e9e9c37825c4a3a5e7d2b9852b4a21347a1cb83ec0f9339edd",
+    "artifact": "QICLean/Entropy/FilterZeroFloor.olean",
+    "sha256": "2c1b55630ddc6a4fd5ee7cde21f8f5218ee5dc4e1498db6dc182d2e82023e34c"
+  },
+  {
+    "module": "QICLean.Entropy.FiniteProduct",
+    "source_sha256": "5957b202ed28286a1f392864af6abc5201e78301e792b100e3c81639e6b8812f",
+    "artifact": "QICLean/Entropy/FiniteProduct.olean",
+    "sha256": "e5736bc4640e83caaf257540e75a588839752874af6cbf190710560521213430"
+  },
+  {
+    "module": "QICLean.Entropy.FiniteProductConditional",
+    "source_sha256": "2f8e0f595509ced6a3314c42f0645762c4bb35774f31b7464c174c581d1f1b35",
+    "artifact": "QICLean/Entropy/FiniteProductConditional.olean",
+    "sha256": "8970ff081839f545f48fd5ce697c9835bd83a156973fef4e43be39a75c5d3bed"
+  },
+  {
+    "module": "QICLean.Entropy.FiniteProductInformation",
+    "source_sha256": "47dea0b2c0796ef1d6553bfa733dd5a0a0baa806eb53c46ad3136699c1c2ca6a",
+    "artifact": "QICLean/Entropy/FiniteProductInformation.olean",
+    "sha256": "3b45e3b47a3103e264a71a3fc38b1b9e5ad0bc5d979f98648fbf4ca4c5bb9211"
+  },
+  {
+    "module": "QICLean.Entropy.GapSurprisal",
+    "source_sha256": "c57c6df4a7913dcb675c79bdb6181b268335d945ecfead87869e6eb93f4bbb2a",
+    "artifact": "QICLean/Entropy/GapSurprisal.olean",
+    "sha256": "3a93c46c86ea69542b2db188812b05d9867ae739faeb1fdeb5f9ad1eaad8f1a4"
+  },
+  {
+    "module": "QICLean.Entropy.LocalLift",
+    "source_sha256": "4044fc161cf097062a81ddabdfd0f36fb06cda8421160294c36b0591197a1bb4",
+    "artifact": "QICLean/Entropy/LocalLift.olean",
+    "sha256": "8a3265ac3bd3ebe8a5a37f537fc674877876cb2f3c11cd31bf05d03cb3745aa8"
+  },
+  {
+    "module": "QICLean.Entropy.MarginalTails",
+    "source_sha256": "7040959875476f5fb4207d94eb7cdc7097dfacf2582bca4c311202c4cb3f5b4b",
+    "artifact": "QICLean/Entropy/MarginalTails.olean",
+    "sha256": "b9db62426cd4201578a59c76ae80b6125a0a2bb5168cdfec032369fb5eda7c26"
+  },
+  {
+    "module": "QICLean.Entropy.ModularExpectation",
+    "source_sha256": "11343d7306f27dc4bf5c8288e3b17a403933be42eaf5f361ed4d96bce556a4e7",
+    "artifact": "QICLean/Entropy/ModularExpectation.olean",
+    "sha256": "3596bb0727425c44b8288786df83770f0244f3b1d8394890ad67addb9c80d8df"
+  },
+  {
+    "module": "QICLean.Entropy.MovementEtaRegional",
+    "source_sha256": "fe69bb203ffb43bb381fb29f269115023e759ccb9305c7a921e9c0e039d85282",
+    "artifact": "QICLean/Entropy/MovementEtaRegional.olean",
+    "sha256": "5501ecbcefeaeb6db60be9e140b464bb9e72bc314c7b8ff820fc7f59c36afa75"
+  },
+  {
+    "module": "QICLean.Entropy.OrderedEntropyAlgebra",
+    "source_sha256": "3668a758970d3ca9dbbc08fffadc511a0819981f94eaf0ea4fa91224c4be0a26",
+    "artifact": "QICLean/Entropy/OrderedEntropyAlgebra.olean",
+    "sha256": "c7b382b7880a2573e14026e453f2d84ecac7ca2678744474ec2af84cf653b68f"
+  },
+  {
+    "module": "QICLean.Entropy.PhysicalBufferOverlap",
+    "source_sha256": "e141a462f151bde946777312ad56777602e78a2e301542c5854c6aefb83e24f7",
+    "artifact": "QICLean/Entropy/PhysicalBufferOverlap.olean",
+    "sha256": "ab8cbdbac64a15214019cc6751b2e9afa9de708448d44036ebd5b2573d6cc7d6"
+  },
+  {
+    "module": "QICLean.Entropy.ProductMarginals",
+    "source_sha256": "54cda2671e4f8ee1418f62061f9d3bae81dee38e1ed58b6c2005d43812281ca1",
+    "artifact": "QICLean/Entropy/ProductMarginals.olean",
+    "sha256": "ee4d842a50d88df656aaf23ed4ecf878c7a5d916b90aa2c6208decd873446472"
+  },
+  {
+    "module": "QICLean.Entropy.ProductOverlapPurity",
+    "source_sha256": "58e415e6e81ec2d40dcd1499b43e27b7d34ecf2b386be1c1ddfa1f993e914cef",
+    "artifact": "QICLean/Entropy/ProductOverlapPurity.olean",
+    "sha256": "4a51ba9e82990e221630fd3f8bb31ccb8afb07f67437ecc86bfd65232d0e1d6b"
+  },
+  {
+    "module": "QICLean.Entropy.PurificationSplitting",
+    "source_sha256": "1ea83d2b18307de329f1b4d8c9538798a98577ae1fcf77c6e5bb067133c7af4d",
+    "artifact": "QICLean/Entropy/PurificationSplitting.olean",
+    "sha256": "862d25d8edbd601d294283bc361766dcac3de1ed5819657d608bb4e96606736d"
+  },
+  {
+    "module": "QICLean.Entropy.RegionEntropy",
+    "source_sha256": "8990266af3ca3e5723bdd66ca8bb18ec27ad3388a6305e8aa830d31a60474422",
+    "artifact": "QICLean/Entropy/RegionEntropy.olean",
+    "sha256": "6da6687e6b0d267f4d81cc52234e3358739fda802db815cb45abd309bd716c61"
+  },
+  {
+    "module": "QICLean.Entropy.RegionRank",
+    "source_sha256": "f0bd94dcf466bd2446b53c7068bef439e0c8c0012b09b440fa6e5ae1c4c3c786",
+    "artifact": "QICLean/Entropy/RegionRank.olean",
+    "sha256": "fae480ad40f2a67ac6c995bfb261434c88373fbc47e94d53b49edc62f827af08"
+  },
+  {
+    "module": "QICLean.Entropy.RegionSplit",
+    "source_sha256": "1380bd3b202f55a42e5b05d1ab29feb5dd2c1de3db6f59c108fe645f6e0052cd",
+    "artifact": "QICLean/Entropy/RegionSplit.olean",
+    "sha256": "847cda4183e37aa23e1cea9e7ef4d373e2f456774b3f8f1d9871fd6ec574b29b"
+  },
+  {
+    "module": "QICLean.Entropy.RegionUnion",
+    "source_sha256": "877389592cbff5e6f2a6bb626cc685f784ad1c60f7298d02601dfd98428ff8d0",
+    "artifact": "QICLean/Entropy/RegionUnion.olean",
+    "sha256": "04f3fb42b78dbddba903f7bbee17d39e9d3f6cf53cc47987478fc3082da77d9a"
+  },
+  {
+    "module": "QICLean.Entropy.RightLocalLift",
+    "source_sha256": "b47c27416e71d9f4f44034d750711116c0d2213ddee35ffff4758a9f0ef4493d",
+    "artifact": "QICLean/Entropy/RightLocalLift.olean",
+    "sha256": "6b132c889b4ed8c2e9cf10b98d392979e97c59f3ac7a51f3d052f7cff8d319e6"
+  },
+  {
+    "module": "QICLean.Entropy.SchmidtPinning",
+    "source_sha256": "cd3c25dd8ebccf8f8eb703b459f46c7cfc20c99ef965f4e100494ed6f4f5a7f1",
+    "artifact": "QICLean/Entropy/SchmidtPinning.olean",
+    "sha256": "1830a16fc6b4b9397c844396eeb2bd1171391c7ccbb24bab0b1005518c30312a"
+  },
+  {
+    "module": "QICLean.Entropy.SchmidtTilt",
+    "source_sha256": "cb6568122a8270a756787446fa9e4719c827e2a13bcfb67bdbbcc67ae3938193",
+    "artifact": "QICLean/Entropy/SchmidtTilt.olean",
+    "sha256": "db5e2f1c6e3fb1721c8524b60d3db0db0ecc3e7e9c84a62a3bbc75aae8a23116"
+  },
+  {
+    "module": "QICLean.Entropy.SpectralTail",
+    "source_sha256": "ec222a0b4a487bd5224cae4d3e489ff05b7ec953b731b5fab92385f8c704ff7c",
+    "artifact": "QICLean/Entropy/SpectralTail.olean",
+    "sha256": "463276a93b38e4bd0d8e2cd569f9131fd92d535559861f29a5fe675ce7bf8a30"
+  },
+  {
+    "module": "QICLean.Entropy.StrongSubadditivity",
+    "source_sha256": "d8884538bbf2e24e276cb68ce8fc592c4d94930d6db55017f7667190a1c1e295",
+    "artifact": "QICLean/Entropy/StrongSubadditivity.olean",
+    "sha256": "450fe479c2476484022f1939f68ffa9a6e95a56c2b957a1bea8a57f5410e9289"
+  },
+  {
+    "module": "QICLean.Entropy.SupportedMarginalTails",
+    "source_sha256": "139b3a49774bb179c566dd0ed97c7a1a2eef08dc2ed050c81f17b759a2c6f501",
+    "artifact": "QICLean/Entropy/SupportedMarginalTails.olean",
+    "sha256": "9565513d5da7651310b13f86550d257ac0ae8fe468dee50e71449cd1523a6e2b"
+  },
+  {
+    "module": "QICLean.Entropy.SupportedOperatorAlgebra",
+    "source_sha256": "5a590e3c1d669be912ae368923204e8af3cffbc0cced094a90fcc748f10006ef",
+    "artifact": "QICLean/Entropy/SupportedOperatorAlgebra.olean",
+    "sha256": "3155e8faf9b4e23fc507f137354a04e7eb586e59e3fbd31a05525288a73cb370"
+  },
+  {
+    "module": "QICLean.Entropy.ThreeWayCut",
+    "source_sha256": "66e9350078171f8ed732146310c065ab842ea37e99c34634811ca48151ff0c48",
+    "artifact": "QICLean/Entropy/ThreeWayCut.olean",
+    "sha256": "12936948bc5d05abd90390dcf5b772779f06e469520854615ac9ba3b8fcadaa8"
+  },
+  {
+    "module": "QICLean.Entropy.TripartiteTrace",
+    "source_sha256": "6ac5fd24f38c8468a077cb5b407db6b4bc828986330aa6772f060b07c1ecfff6",
+    "artifact": "QICLean/Entropy/TripartiteTrace.olean",
+    "sha256": "67fb71a4d0065110216e5e9924623d3ee26d916cc9818275e3d033a426f7113c"
+  },
+  {
+    "module": "QICLean.Entropy.UnnormalizedStrongSubadditivity",
+    "source_sha256": "cb727424373eac3888a16c038347f25351ceceb007078fd795d7edc2869b427b",
+    "artifact": "QICLean/Entropy/UnnormalizedStrongSubadditivity.olean",
+    "sha256": "0e0347a2b62258418815dcc75900faf16ebe85e731b0437a1b4fbb2bdc80d515"
+  },
+  {
+    "module": "QICLean.Entropy.VonNeumann",
+    "source_sha256": "4d83acc9d7eee94d9426a2c3cb815b753e3059407d3e1cf8d6b5b2fcdb062be2",
+    "artifact": "QICLean/Entropy/VonNeumann.olean",
+    "sha256": "e3a16b569d930b7c7edcc83f16e0f88235b4e54529b9a7cae13903354fa1e718"
+  },
+  {
+    "module": "QICLean.Kraus.Injectivity",
+    "source_sha256": "9a14833ba12330dfe54197a9f22d96db14624f3cc8befded909b7d656f5da8be",
+    "artifact": "QICLean/Kraus/Injectivity.olean",
+    "sha256": "21c9ce646339251eac0fa55cf975a00551298452ece3b721e6874d1ee6442fff"
+  },
+  {
+    "module": "QICLean.Kraus.Word",
+    "source_sha256": "757605ab7384a5f74a64a095aa754c1fe99986f567ea0e77ac70c8e646678d87",
+    "artifact": "QICLean/Kraus/Word.olean",
+    "sha256": "737f5887f34e71d94ff10914d6e5e30bdc61ed4bdfdd0354ac0a1189f72f30a4"
+  },
+  {
+    "module": "QICLean.Kraus.WordSpan",
+    "source_sha256": "263feefd293fbb7a97c191bf4953e1259810a00f6eaced9d6a93922509dd6b1c",
+    "artifact": "QICLean/Kraus/WordSpan.olean",
+    "sha256": "8300cac00d9283e8840c5866265ac04ebc78c7504cbd476e0593df8e7f43b9b1"
+  },
+  {
+    "module": "QICLean.ManyBody.Dynamics.CommutatorRecursion",
+    "source_sha256": "5d67429eb8216fa74b45f6d8282c0b1797a87129886505d49e2ebd6d0db804a4",
+    "artifact": "QICLean/ManyBody/Dynamics/CommutatorRecursion.olean",
+    "sha256": "2cbd01b8beb2b2af1bfe29f027ba37f224ea786ffa2ed648413ccb16798a8439"
+  },
+  {
+    "module": "QICLean.ManyBody.Dynamics.ComponentLocality",
+    "source_sha256": "9f05ec854b87a52d9a874ef0b0255107de338dd38c162e7ac8af2eb2c3ed6826",
+    "artifact": "QICLean/ManyBody/Dynamics/ComponentLocality.olean",
+    "sha256": "53ed699b5a2a768b918507a92d87a6d3b1d1ea818a357588a7a8b649611df1b8"
+  },
+  {
+    "module": "QICLean.ManyBody.Dynamics.GraphBall",
+    "source_sha256": "b0b42328ebee424088fb13e2431db97d6e3466d9769a536b9cb62aad78a07734",
+    "artifact": "QICLean/ManyBody/Dynamics/GraphBall.olean",
+    "sha256": "1e70b3dad379262a99a6f2d33a6a89800ee61b91762fea4267001543a2c5b6cd"
+  },
+  {
+    "module": "QICLean.ManyBody.Dynamics.GraphLocalization",
+    "source_sha256": "ad36e801968ebe4c4c43f4024dd6ba85c52a9a9d0e84b891956db29fb994dec9",
+    "artifact": "QICLean/ManyBody/Dynamics/GraphLocalization.olean",
+    "sha256": "67178432d5be35ac9c3f7961a62af1ae1eafcc53dfd5709bb0485ea7f8e56016"
+  },
+  {
+    "module": "QICLean.ManyBody.Dynamics.GraphPropagation",
+    "source_sha256": "6a24505c51a401652b4042c08fca1bc4494024d6819753889a483e3bd98ed562",
+    "artifact": "QICLean/ManyBody/Dynamics/GraphPropagation.olean",
+    "sha256": "510db0a7df5a6cab561e7d774cbd03ba07d569a45394f53019b1ade2111bdeb1"
+  },
+  {
+    "module": "QICLean.ManyBody.Dynamics.HeisenbergEvolution",
+    "source_sha256": "d76787b13030fa5d56b12e1b2160e0ca442fa624801c85417d6a93dd9c3be05d",
+    "artifact": "QICLean/ManyBody/Dynamics/HeisenbergEvolution.olean",
+    "sha256": "c9a65fc8c89e94e21934f91b3bda4cd69dfc869368083fae1b890e257cc91397"
+  },
+  {
+    "module": "QICLean.ManyBody.Dynamics.Interaction",
+    "source_sha256": "5f08cde5a24d0d885a3a3ef376117c44f6a3f681662feb8e1d738df0fbd2491d",
+    "artifact": "QICLean/ManyBody/Dynamics/Interaction.olean",
+    "sha256": "b2be65f3f9bd367ea3b7c454ee407bac748cb3716c672acf828f936fd50dac43"
+  },
+  {
+    "module": "QICLean.ManyBody.Dynamics.ProjectedRelativeEvolution",
+    "source_sha256": "5e77e7495731f63263a6dd224c8b8a32fd8cc648824b49caa39795f8c12f9658",
+    "artifact": "QICLean/ManyBody/Dynamics/ProjectedRelativeEvolution.olean",
+    "sha256": "d7fc2ef12f60d64070909e83177f9bc6aa3a99f539dee8f7716048511f674308"
+  },
+  {
+    "module": "QICLean.ManyBody.Hamiltonian.GroundSpace",
+    "source_sha256": "77c36c5081e5869083aadfe8937153b8ac62bed9c5d1c82c7e8b5a31b89e7336",
+    "artifact": "QICLean/ManyBody/Hamiltonian/GroundSpace.olean",
+    "sha256": "4685f7b3ed5eb66d29012adc0b910a7907c1f51aa523cfe47121b241080bc85e"
+  },
+  {
+    "module": "QICLean.ManyBody.Hamiltonian.KroneckerSum",
+    "source_sha256": "070cad6c9934740c9c6168d9a134482d6624ce555df8c388b344cf2dae11ffed",
+    "artifact": "QICLean/ManyBody/Hamiltonian/KroneckerSum.olean",
+    "sha256": "199461dea3e9297af76c0163d48a75732f3a38a27467ff72d6029ad1fb804eea"
+  },
+  {
+    "module": "QICLean.ManyBody.Hamiltonian.Models",
+    "source_sha256": "c0af53e7c29f34609418bf3290229ff322636d0aa01f96bc904395ee43a70314",
+    "artifact": "QICLean/ManyBody/Hamiltonian/Models.olean",
+    "sha256": "081d69133e528a3df9c6ae3fefa85dfc1216fac3baf806f2b8ecf6f346c59327"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.Config",
+    "source_sha256": "cb77299c1f66c21ddfd8b5632af6754b4eeba639ca93aebcd29f8a654274ea17",
+    "artifact": "QICLean/ManyBody/Sites/Config.olean",
+    "sha256": "e02c8465bf9bc4d34b4aaf7335e59098c880ab4122e2d96037aa88db18ca52be"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.Cut",
+    "source_sha256": "d320296b46542e8e44c3f3f36c4043d0d08ee0081ca98e80da6d98a7f5832459",
+    "artifact": "QICLean/ManyBody/Sites/Cut.olean",
+    "sha256": "a08fddf1bdd1083eca56bf85b339dd607da02d9796591b97e1269ed4dddc7b3c"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.Lattice.Chain",
+    "source_sha256": "09ec49760fac485676df0aa2fb932893f917fa0ab356a8f19ca099e27f2a7a77",
+    "artifact": "QICLean/ManyBody/Sites/Lattice/Chain.olean",
+    "sha256": "c3831c80ce6616f978357b8b62e21b5f02726c262a98252c5da45134f686dfe1"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.Lattice.Diamond",
+    "source_sha256": "e76af53cc0e54b414006db3c25dbd36b9c14a88f96f5a0e140610b319640fa3d",
+    "artifact": "QICLean/ManyBody/Sites/Lattice/Diamond.olean",
+    "sha256": "a33523304b4bf0ef8053afbd18855a5c409d16f817e5fb01c50831c11ee24b17"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.Lattice.Edge",
+    "source_sha256": "c3b262fd5c346607e10b75ce920b6be56134f32f89e53dc4f7a8042345e0894e",
+    "artifact": "QICLean/ManyBody/Sites/Lattice/Edge.olean",
+    "sha256": "20d8cceff3395dfb1f06d938050870eab18ee25ff6bac16c603ab7b3dc7270cb"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.Lattice.Line",
+    "source_sha256": "d49428985330e668be67a666c2435a70a6e0fa0cab7a7b197bc28c1a561ade09",
+    "artifact": "QICLean/ManyBody/Sites/Lattice/Line.olean",
+    "sha256": "1dfdfc2adf48324d1a1f41e73b713bcb1680cbc72d467de306214c557e35f5bd"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.Lattice.PathGraph",
+    "source_sha256": "61203f7b496ea10a6e33e7495e9163a2e12926ff45ac211645482688596f0017",
+    "artifact": "QICLean/ManyBody/Sites/Lattice/PathGraph.olean",
+    "sha256": "4aa4ac3480d94c00c8d731e244a2f2fe7dcbc6001f1bf7af1d816169ccee7b04"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.Lattice.Plane",
+    "source_sha256": "9abab67ff1d2270f9989beff85a5f4c665aae088b549000c33fc07213a8d2551",
+    "artifact": "QICLean/ManyBody/Sites/Lattice/Plane.olean",
+    "sha256": "b44f136e78e7cd1a77e7a99419fdc0d5af30ceda896529b34a31757abe760781"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.Lattice.Square",
+    "source_sha256": "56b7201a1b2b1e26654078a86ca18f30fe39e552d6ea6451cd14c8d6d77bd304",
+    "artifact": "QICLean/ManyBody/Sites/Lattice/Square.olean",
+    "sha256": "355634fa2514eec1756f55a197880f8bf7adc3a9e355cccb63e00f7758e6e4dc"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.Placement",
+    "source_sha256": "cac69d386c90a4a40b9a4def26c4e763abb98fc15d20d38e7335bdbfc6992c84",
+    "artifact": "QICLean/ManyBody/Sites/Placement.olean",
+    "sha256": "38df9976c59adef62845093445725b9899aaa0b4c5fca05d0fc5716367a32f0b"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.RegionExpectation",
+    "source_sha256": "f18dc741154d646d822cc43afaecc6484e72bd57b6ee6a5a39959b9c26fa3859",
+    "artifact": "QICLean/ManyBody/Sites/RegionExpectation.olean",
+    "sha256": "bcb5da9a55152386026f929d022c5a73544ce089dbcbe572d45e9021d9287cdd"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.RegionState",
+    "source_sha256": "634ffc491624224667c4d0078fb071ec09dfc08ceca79047acc48a8c22031436",
+    "artifact": "QICLean/ManyBody/Sites/RegionState.olean",
+    "sha256": "cd5287f75c880967b91a62f0f4951c7321610dedca15848e5f556d2b71c2b35b"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.RegionUnion",
+    "source_sha256": "0785f924c77a72d1b5e1f2a8ad0917c9638bb1a6ea35d82ee76f6044bbbb72b3",
+    "artifact": "QICLean/ManyBody/Sites/RegionUnion.olean",
+    "sha256": "9d9e822fdfcaa622a6b9d6ded66062302d3ac58700c9de3342b8601b14306d5c"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.Support",
+    "source_sha256": "a0084826fca6b7b0f606fa8077d916da33f3bc93d517c4938abbf38e7f1a4dee",
+    "artifact": "QICLean/ManyBody/Sites/Support.olean",
+    "sha256": "de0670b52ab5136f68c55e803751d96aafcbd0740b1820f5f45e1966d40ad410"
+  },
+  {
+    "module": "QICLean.ManyBody.Sites.Twirl",
+    "source_sha256": "bf10652bc5b0beceec6234d764ebf791ed99fb19c9439f7db5ab42cb8b226c97",
+    "artifact": "QICLean/ManyBody/Sites/Twirl.olean",
+    "sha256": "4642632f9518a5ecddf564aded4da46728da5743ef385adaad03478c507ac025"
+  },
+  {
+    "module": "QICLean.Representation.Alternant",
+    "source_sha256": "607e403d766d673f8ef0fd50011522212bfeb3481e9b48c855f04fa2ca64793b",
+    "artifact": "QICLean/Representation/Alternant.olean",
+    "sha256": "380bcb6fed6b6c66b8e3d11b6f334c56f48d49f3c66f9a79b34f2f3ee1a41a45"
+  },
+  {
+    "module": "QICLean.Representation.BranchProbability",
+    "source_sha256": "af8ab2c3bcdc7e9aa027ba00941ae1ef2de75acafda1dca912721ca3b7ecf04a",
+    "artifact": "QICLean/Representation/BranchProbability.olean",
+    "sha256": "f291645534fa55d0a46211487dcf8e1a66113b70432adb4c12794decda29dd4e"
+  },
+  {
+    "module": "QICLean.Representation.Branching",
+    "source_sha256": "42334e58140df3e286eea8e608a9a999ecc970954b8b4b96bccc520937080b54",
+    "artifact": "QICLean/Representation/Branching.olean",
+    "sha256": "efd56f72ddcdddf818877e7b0f26c081197c79b58c16cc990716b8a63ba3d567"
+  },
+  {
+    "module": "QICLean.Representation.BranchingPieri",
+    "source_sha256": "9789484ec9bc1592cfc01289856d91ceeb3893023a056786e530c03535357387",
+    "artifact": "QICLean/Representation/BranchingPieri.olean",
+    "sha256": "1c1ee145693c87d915b13fc976df75dc3df5d9e898dec8733160d15c224f7379"
+  },
+  {
+    "module": "QICLean.Representation.Casimir",
+    "source_sha256": "8ac9cb1a16e4124bfcccb7cf42b8136d4a228b1483f3a8d6009dc779e48e384a",
+    "artifact": "QICLean/Representation/Casimir.olean",
+    "sha256": "bb4868a446a67aae227b302fcd97a8079492c4824c6dacaaaa95bf652f6ca648"
+  },
+  {
+    "module": "QICLean.Representation.CentralLabelFunction",
+    "source_sha256": "123481d8cdedc8efa4547cb4378414a3219713549ed7c545a566ad69ee887191",
+    "artifact": "QICLean/Representation/CentralLabelFunction.olean",
+    "sha256": "ccd6661952d082682da2366cc266a633470adb0d038cb81045e19d0656d6f41f"
+  },
+  {
+    "module": "QICLean.Representation.CoherentMeasure",
+    "source_sha256": "5dd1ee3f8da977cadfd8db55e7cf69a336e49632d727bb879ceb663b01f53091",
+    "artifact": "QICLean/Representation/CoherentMeasure.olean",
+    "sha256": "50848a225a58babaa6fb5adfe8ff893a49a9b3ba8d43a13620b8e3168ced3566"
+  },
+  {
+    "module": "QICLean.Representation.CoherentResolution",
+    "source_sha256": "ee40f46073acd05d05da03c638ab079a2b39ceb7863430082eae19dba3f49446",
+    "artifact": "QICLean/Representation/CoherentResolution.olean",
+    "sha256": "8f67eeec31bd7e2cd604887a89c60e0b175d6158411b11737e7c2de98199758d"
+  },
+  {
+    "module": "QICLean.Representation.CoherentSymbol",
+    "source_sha256": "c14e294d84681ddd20de37a4a0147c9ff9e1e262ce565fd208bf0c1ad7c7de24",
+    "artifact": "QICLean/Representation/CoherentSymbol.olean",
+    "sha256": "ea6a006be5c62f82da04e3ed6e6865042a6c8715dae9beb0443feaec82b7712a"
+  },
+  {
+    "module": "QICLean.Representation.ColumnAntisymmetrizer",
+    "source_sha256": "0ebd43d42f26ff9ad956c58d7a20dd908aa1dcb3f28384f6a7408e9f93afcb9e",
+    "artifact": "QICLean/Representation/ColumnAntisymmetrizer.olean",
+    "sha256": "fb15c3b5e6da8592780a61c87ba1f44aa105c7a02c66779389c159b5ef630da7"
+  },
+  {
+    "module": "QICLean.Representation.CommutantDimension",
+    "source_sha256": "5910ab1261fcf219f34c300b24d736cd75ce603d53928f55c1800b205a769c51",
+    "artifact": "QICLean/Representation/CommutantDimension.olean",
+    "sha256": "48dc4dd1bd76e82a089d165eba1db1a5a1eba245d2ae39f4dac98ef90b1956fe"
+  },
+  {
+    "module": "QICLean.Representation.ExteriorPieri",
+    "source_sha256": "e93153fd47f758b741677634b6a3b26cd25e99003e474618f6bca26886e3f19c",
+    "artifact": "QICLean/Representation/ExteriorPieri.olean",
+    "sha256": "608f6956dfbe53fb7ac226ba12c2a45ce71946afeb059b2122f266ea21c77870"
+  },
+  {
+    "module": "QICLean.Representation.GroupedCopies",
+    "source_sha256": "e7e33d7f5d14ff1f6e8eb2ac3eeeef7fad4493d6608c9cd5375990595f09b946",
+    "artifact": "QICLean/Representation/GroupedCopies.olean",
+    "sha256": "696d3555eed74c46649b56563b44a1f66c6e1443ff2a41318a1453f2eca862ab"
+  },
+  {
+    "module": "QICLean.Representation.HighestWeight",
+    "source_sha256": "37629238ea0baad52a0ad13d5913f28404e4b4077c5be5f854541d8773f5b005",
+    "artifact": "QICLean/Representation/HighestWeight.olean",
+    "sha256": "7b04100b930c44286cedeab785e17f19ec35f3b4b9cd7c62e66ed81eea26fd7c"
+  },
+  {
+    "module": "QICLean.Representation.HookDimension",
+    "source_sha256": "b8eef1e0f900cb7b18d4b103f3a977a8dabc9ee4a9d50c82c8d9eeeb88241b82",
+    "artifact": "QICLean/Representation/HookDimension.olean",
+    "sha256": "5ec64bfc06c7e09c83935a2dfda02939c6d59cb40f6728e0a1f1cac464557ef6"
+  },
+  {
+    "module": "QICLean.Representation.HookFormula",
+    "source_sha256": "c0cc40c90ec02ecd0983075549da7a7b3711e6572edfe3c6f37f0f53bb9bc2ec",
+    "artifact": "QICLean/Representation/HookFormula.olean",
+    "sha256": "a76b3713ac5487e07177eea0aeb66150efffb8fec573320e3509370948417696"
+  },
+  {
+    "module": "QICLean.Representation.HookRecursion",
+    "source_sha256": "96eb78f5276fbd217e4bfaa7c6141c280dded9c8776bbd6ad10b49f0006b7bb6",
+    "artifact": "QICLean/Representation/HookRecursion.olean",
+    "sha256": "cef009c17157b9d5cedb324fa7d767b1c2cc937574abffc4c4f9d9e291f3f7bf"
+  },
+  {
+    "module": "QICLean.Representation.HusimiIdentity",
+    "source_sha256": "ccd8d5439558438bf337e9fbdc92db998a01362762702018e4383f22b0fae64c",
+    "artifact": "QICLean/Representation/HusimiIdentity.olean",
+    "sha256": "ae1a14d15e5f2f0a680d43b3fe9bb02abf83a24c64931de439fa1d85d28969d5"
+  },
+  {
+    "module": "QICLean.Representation.InjectionAverage",
+    "source_sha256": "a3a1125550ccec4cf11e4c28bba8413a09f945956b2e86654f5c1b545a104ce2",
+    "artifact": "QICLean/Representation/InjectionAverage.olean",
+    "sha256": "d00d496d553f815ddc3ddf43b0850de416a1ce48c670309aa723a905f55ca05f"
+  },
+  {
+    "module": "QICLean.Representation.InjectionPoly",
+    "source_sha256": "902a78abb3c2166b99a83705d8cbd13da63dd869a20256f4710f018326c50120",
+    "artifact": "QICLean/Representation/InjectionPoly.olean",
+    "sha256": "e12866570c110441e9b736e5cdc3f80e375d066713b6767f92e44001a66f7f52"
+  },
+  {
+    "module": "QICLean.Representation.InjectionProduct",
+    "source_sha256": "8508f498f10018427c232ac738ef2cd9d12904c3e2cf9c0efd138c977e8ab841",
+    "artifact": "QICLean/Representation/InjectionProduct.olean",
+    "sha256": "e57ba0f8123ab6f527de21b4ce826f56ab506176098ea72752f18beb9747613a"
+  },
+  {
+    "module": "QICLean.Representation.IrrepLabelCount",
+    "source_sha256": "702c3d1f40ce04a5deff382647f2480dd5c04e7266d04c9d6b262c38baab10cc",
+    "artifact": "QICLean/Representation/IrrepLabelCount.olean",
+    "sha256": "70d37f9c26d4fa7986ae5b13ad1e1330a2807f91488080350d0790c250821e0a"
+  },
+  {
+    "module": "QICLean.Representation.IrrepLabels",
+    "source_sha256": "83a7338cf6a30588efc8c9bc44c9912754d956519c43f768a8ee5d3da4b724b1",
+    "artifact": "QICLean/Representation/IrrepLabels.olean",
+    "sha256": "d84b16eb726d8bc64cb12354a7e251042e860e3a9d97432caae4acdf3c059458"
+  },
+  {
+    "module": "QICLean.Representation.IsotypicDimension",
+    "source_sha256": "92e4a333a70894e7d75ad4dedbddabc22a64a955ac0f6f541b56f2ed17ca5258",
+    "artifact": "QICLean/Representation/IsotypicDimension.olean",
+    "sha256": "a5022c8596a3440cd5faf8f3597a538fed9ba9d7a0665c22cf7a1eb556904e4a"
+  },
+  {
+    "module": "QICLean.Representation.JointIsotypic",
+    "source_sha256": "43e6b7af5acfa1c8bd43532d0c323fb658bdac017dcbb5b1c033d65763ef73de",
+    "artifact": "QICLean/Representation/JointIsotypic.olean",
+    "sha256": "1add23eee450b32d6ab1516a75b8cf11c0dc78df0d9b047405507b2a5d3d24a6"
+  },
+  {
+    "module": "QICLean.Representation.JucysRecursion",
+    "source_sha256": "ca6e7ed904dac6e88cc79ac2ebe182291d5d0c5a0e5830681b20e48cfe92f035",
+    "artifact": "QICLean/Representation/JucysRecursion.olean",
+    "sha256": "58d81b3bff9f15bd57ea245bd374c137fee76b580b114f67cced303f7cd54fc9"
+  },
+  {
+    "module": "QICLean.Representation.LabelProjectors",
+    "source_sha256": "629b51a379c8910c6bc6ce0fcf22b10aa36a49389dbb452563f1dda58b2ce5e4",
+    "artifact": "QICLean/Representation/LabelProjectors.olean",
+    "sha256": "cf954b6d5e2e1db20a8cea435bed8880d610882f85ed63445af2e0e341228bc3"
+  },
+  {
+    "module": "QICLean.Representation.MarkedStar",
+    "source_sha256": "a9a555e469dddc91334e3cffe62d4039625413a5e7a50decfda74ba2dfe0a661",
+    "artifact": "QICLean/Representation/MarkedStar.olean",
+    "sha256": "696cc5f3a5e7444ae1b3d8b15e2a14cf5b62c6c473bf52b45ce85efaf6889d74"
+  },
+  {
+    "module": "QICLean.Representation.MarkedSymbol",
+    "source_sha256": "a4cc894804fb437a952440a9898b9a3da773cbcaba127cbdcf6104814621f247",
+    "artifact": "QICLean/Representation/MarkedSymbol.olean",
+    "sha256": "95aabb1c84acfedb621596bd80d3c4f185957d2da9adedd06adfc1b66d4a7ac6"
+  },
+  {
+    "module": "QICLean.Representation.MergeDimensions",
+    "source_sha256": "8847bb251e94029447c0e4a828645947b1b684c93054ddebd4d569e9480f604a",
+    "artifact": "QICLean/Representation/MergeDimensions.olean",
+    "sha256": "2caf21210f56963b91231dd5ab19576682f3ee0faebc62bebfa70db30f528a5d"
+  },
+  {
+    "module": "QICLean.Representation.MergeMoment",
+    "source_sha256": "1bff1e83bd3addc89400adcd85fd58d91f700297fb3e9e0c27e5f14ed88a6a08",
+    "artifact": "QICLean/Representation/MergeMoment.olean",
+    "sha256": "898cd9898afa013bb63301c336efd097a17ca0d3af131047b8cdcfc097c7c8d6"
+  },
+  {
+    "module": "QICLean.Representation.PartitionCount",
+    "source_sha256": "aa188561b137f2c2cf4ae3e5270ef6d51bb2fc9a4741ca1df0eaefd75b3c837c",
+    "artifact": "QICLean/Representation/PartitionCount.olean",
+    "sha256": "5c06b139153e0507b3d50ff34bbe7d23b77dee9607e98e8563508fe934a31b24"
+  },
+  {
+    "module": "QICLean.Representation.PermutationRepresentation",
+    "source_sha256": "5ce2cb1de5288ab1699c9cb3f6bc01bef0d0ddc672cfdd0678b6ec14ca0a0bd8",
+    "artifact": "QICLean/Representation/PermutationRepresentation.olean",
+    "sha256": "972a655f56dc1c70e76282ad2dcb3643697c4cac85c7348b6af42d2b4691fb11"
+  },
+  {
+    "module": "QICLean.Representation.RegionPowerSymbol",
+    "source_sha256": "f27b20536a2dc70d698887e3d846a38c04894fee1b0dc5d7e7c1244dddbda850",
+    "artifact": "QICLean/Representation/RegionPowerSymbol.olean",
+    "sha256": "5a6c0cb8cfe41dc2eec63f607761cd933756f50d1e41c3f455ebc97b06e3fa06"
+  },
+  {
+    "module": "QICLean.Representation.RegularTrace",
+    "source_sha256": "52e8fe111d9b5f9948854cd906b7a0a5b650fb4a1542b5e7343bb97f4a73fade",
+    "artifact": "QICLean/Representation/RegularTrace.olean",
+    "sha256": "04aeeb3eebb5b8a72d8eb24645a0c7d117773730512b40bc10951d66c21f0c3e"
+  },
+  {
+    "module": "QICLean.Representation.RelativePin",
+    "source_sha256": "c28b289295057ac223ff98c6c59b10df775bab68d37d98b64251759c1af50873",
+    "artifact": "QICLean/Representation/RelativePin.olean",
+    "sha256": "5b544f28e4dde636d9396915d5bd52d6e10e1b6c36bb90672a9d2e949a1ae270"
+  },
+  {
+    "module": "QICLean.Representation.RelativePinAlgebra",
+    "source_sha256": "1e1a7abeae5b39d3c29a74e7a2957a714a986dfb9514bf758d714213804edbdd",
+    "artifact": "QICLean/Representation/RelativePinAlgebra.olean",
+    "sha256": "e8b8dd3f805a3f4e3ddd66731bab22759ca520122c8a88316bb031e32f78b692"
+  },
+  {
+    "module": "QICLean.Representation.RelativePinCommute",
+    "source_sha256": "17e241ae76a05a35398bb579e927546eeeeb2b682fa46399e277e8568d8577bd",
+    "artifact": "QICLean/Representation/RelativePinCommute.olean",
+    "sha256": "855fb4074a18af0836cf54da65df50d9b8ae4498f316c18e6a49855944fc68e6"
+  },
+  {
+    "module": "QICLean.Representation.RelativePinCompensator",
+    "source_sha256": "0051b6c3dbeccd28f2606fbc5041d162dc006a2fced3801805f0c62d6c59099a",
+    "artifact": "QICLean/Representation/RelativePinCompensator.olean",
+    "sha256": "c3c59d2c910d9e410d138c94234ff33093eb7b0bea801cf4da34142a3e43f7a2"
+  },
+  {
+    "module": "QICLean.Representation.ReplicaGammaIntegral",
+    "source_sha256": "dc1415824491ef7596dd9bd6173f939e01e2996e3057fb86beca926776d155e4",
+    "artifact": "QICLean/Representation/ReplicaGammaIntegral.olean",
+    "sha256": "902a08f105cf158d1e68e801ef970b5c89b78326714e63fbe877ce2a2c738cb2"
+  },
+  {
+    "module": "QICLean.Representation.ReplicaIntegral",
+    "source_sha256": "5b6e38ab11c35e6f5e3af6889bf2dd88d4d15a48b747a34af6f006d3d99cf715",
+    "artifact": "QICLean/Representation/ReplicaIntegral.olean",
+    "sha256": "0a67df0fafcf6f7adcb1470674edcf53ec0b268e217c16f3849b60883cbc33a5"
+  },
+  {
+    "module": "QICLean.Representation.ReplicaLift",
+    "source_sha256": "2db11549b9df0256f53ee75e5a3a0d617c524e084ebbbfc3efacf643a9277af7",
+    "artifact": "QICLean/Representation/ReplicaLift.olean",
+    "sha256": "f126345c6ac615e0017df3dba2eca572115775f3f3d21d46908d2fed1e566035"
+  },
+  {
+    "module": "QICLean.Representation.ReplicaMarkedRatio",
+    "source_sha256": "9e62d7ec1e70b274fb5b4b20c4c34eec8528e4f1f802f41fc80acb89dfd7a215",
+    "artifact": "QICLean/Representation/ReplicaMarkedRatio.olean",
+    "sha256": "a49ee0f4edcfa89f19f74f89811ac9a67ead31617a95ee02c92308caeb3f1593"
+  },
+  {
+    "module": "QICLean.Representation.ReplicaMarkedRatioInverse",
+    "source_sha256": "f62ac5b761e0565cb103e8d36e2194a31b2c6fca83127a81a6a3de266f6f367c",
+    "artifact": "QICLean/Representation/ReplicaMarkedRatioInverse.olean",
+    "sha256": "fe5e0de795015c3363ce934f3e2fcefccfbadaf2353d766ba1772ad0e3e904f7"
+  },
+  {
+    "module": "QICLean.Representation.ReplicaMetric",
+    "source_sha256": "4ddb96e787486dbc05f67aaff709f0c01669a05e89ec3e30ea69a6886e029718",
+    "artifact": "QICLean/Representation/ReplicaMetric.olean",
+    "sha256": "424c5d1a006cfdd0dc472d283d73d5d60290cb5bb33b154bcc444f5365ae1771"
+  },
+  {
+    "module": "QICLean.Representation.ReplicaRatio",
+    "source_sha256": "95916be0c005c87a97c62613b76bebc273ac8a755dfd110f765357dfaf0aad65",
+    "artifact": "QICLean/Representation/ReplicaRatio.olean",
+    "sha256": "c4cd8d25d0fae901123bf5c02b3873a75f50fd7e5a0e1a7453d687b6cfb8fc92"
+  },
+  {
+    "module": "QICLean.Representation.ReplicaSimilarity",
+    "source_sha256": "e3de89460e74a3e21076208d37443c1d802e9f4d39bf11eb86600523c9b36289",
+    "artifact": "QICLean/Representation/ReplicaSimilarity.olean",
+    "sha256": "34fb5852691bfd56cff3e12758f6c73184bfa959491b4410b0f2db6bd6956a7b"
+  },
+  {
+    "module": "QICLean.Representation.ReplicaSiteOp",
+    "source_sha256": "76d6a3b40d57f769a2ae99d3a66fcd38cab560f77af468d9593db2e9006481ca",
+    "artifact": "QICLean/Representation/ReplicaSiteOp.olean",
+    "sha256": "1ce90c7897dbf72d24cee1f8a828d4e987c40f6a794b776357a1781598a5a6d2"
+  },
+  {
+    "module": "QICLean.Representation.ReplicaSpectralLaw",
+    "source_sha256": "f5ae8ae8015e47b2c3a38453220fc026d3ade216c6e6ae61bdec6a4c5727cf04",
+    "artifact": "QICLean/Representation/ReplicaSpectralLaw.olean",
+    "sha256": "0ea3328786ce14eb46fe415d6d100f7f18b294565e8c05639ec6f22ba9fa0e14"
+  },
+  {
+    "module": "QICLean.Representation.ReplicaWeight",
+    "source_sha256": "ed8ba82b2ba1ff8c8f00efd899033b5793bae861ae3302547b226c5a2d10b88f",
+    "artifact": "QICLean/Representation/ReplicaWeight.olean",
+    "sha256": "56dcb88041eb025dc887028ab102dad80f5ae30af3bc14439ffe2b541c7a04c5"
+  },
+  {
+    "module": "QICLean.Representation.SchurLabelCommutation",
+    "source_sha256": "141f0229ddfe37c284e498efa071d6b6340d601b00418634d52c0173fab55ba1",
+    "artifact": "QICLean/Representation/SchurLabelCommutation.olean",
+    "sha256": "e0679e0cb18f27798bef17fe07c85a1813f0d2cf5c8a5213ee232c34ed8e3fd1"
+  },
+  {
+    "module": "QICLean.Representation.SchurLabelEstimates",
+    "source_sha256": "18d26cfeac8982933e496b2f7d84893474a1e88e69c132ffacc41c8a824332fe",
+    "artifact": "QICLean/Representation/SchurLabelEstimates.olean",
+    "sha256": "461cc7e84ac631045f3aad519489b37a5923357050de3b4bddaf442e705a866e"
+  },
+  {
+    "module": "QICLean.Representation.SchurSurprisal",
+    "source_sha256": "620c7a5fd5f80e833756993357a889d036c6dee6bf4c543a71abdddb2b5e804a",
+    "artifact": "QICLean/Representation/SchurSurprisal.olean",
+    "sha256": "b9f6af3f9b9fd003739693fa356dc0e9fdbadf8f9a1f699fcdcdfe613a47db52"
+  },
+  {
+    "module": "QICLean.Representation.SchurWeylCommutant",
+    "source_sha256": "18f64c02e518609602bd983554a41a38d694a84348cf87baaf3cd43ecfb296a7",
+    "artifact": "QICLean/Representation/SchurWeylCommutant.olean",
+    "sha256": "bbee7cfe1bee9a4ba2a50f7ba11da001adb65d3e2e85ef20a4b1b78780bdce33"
+  },
+  {
+    "module": "QICLean.Representation.SchurWeylLabels",
+    "source_sha256": "138adb830becc36bdec8f58da76861166b52506c0b000b3c52c798e67c46a6a1",
+    "artifact": "QICLean/Representation/SchurWeylLabels.olean",
+    "sha256": "e470d3bba41440dc6475cd4f74cdc8033c6bbf4fdd423ade60ea5fb5f5cdb55a"
+  },
+  {
+    "module": "QICLean.Representation.SchurWeylLift",
+    "source_sha256": "d9d731e959d01f9601698eb15a426052b77dfe2d7ea73d0cb5cf8b4d4624a91f",
+    "artifact": "QICLean/Representation/SchurWeylLift.olean",
+    "sha256": "cc345f5f4b2f24861d094e9fb4aa74e5ebaeb13c1e3d4f405c0477ee57d8c3c3"
+  },
+  {
+    "module": "QICLean.Representation.SplitCopies",
+    "source_sha256": "d6840e690ed8d7fa20c7ff5034f81c1c47d651f205de6e3d1724c6573a18d16b",
+    "artifact": "QICLean/Representation/SplitCopies.olean",
+    "sha256": "4b276ab288d975f9c170426eadcb1cd2508b531b573cd8748979fd2d5522daee"
+  },
+  {
+    "module": "QICLean.Representation.StarOperator",
+    "source_sha256": "6987d379155539f2b11a06bb3e77a0f0473b8712c95a338af7a5860c3fa41a5c",
+    "artifact": "QICLean/Representation/StarOperator.olean",
+    "sha256": "70e9fbb37e1427608f64bcce51170b6b5901cda349e66c274167fbd5c5b6cc8f"
+  },
+  {
+    "module": "QICLean.Representation.SubsystemTransport",
+    "source_sha256": "d3de4831771dd87d7eb9335db705f7c9493a2de3cbd678f0be28098d0642019c",
+    "artifact": "QICLean/Representation/SubsystemTransport.olean",
+    "sha256": "30be9ca627fe06e4121cecf53ac6afa60e7de1fa8d49ecf9b35c877e64fb6b3b"
+  },
+  {
+    "module": "QICLean.Representation.TensorPowerAction",
+    "source_sha256": "bcdca5576ab5ba88513dd18e60b37ccd71ab31bdc4531d29fb5dca9db82fa6cc",
+    "artifact": "QICLean/Representation/TensorPowerAction.olean",
+    "sha256": "f3d5fdb2940119ae2c7edbc8a229a02f650d8a9817be2bd678135f58773fdc90"
+  },
+  {
+    "module": "QICLean.Representation.TensorPowerRpow",
+    "source_sha256": "c48b217205f5710f815639e0beb06e6db25f869201c9c2906b30dce366b3feb9",
+    "artifact": "QICLean/Representation/TensorPowerRpow.olean",
+    "sha256": "0781165bbeb71aca6926319665d03b6a61763aef08d2e795b27212fbbbe61b17"
+  },
+  {
+    "module": "QICLean.Representation.TrivialLabel",
+    "source_sha256": "74d47b02c6405727413fb1bf9e782abe26d73cf00493de1de0ec6f9c1c356e14",
+    "artifact": "QICLean/Representation/TrivialLabel.olean",
+    "sha256": "9b96c24e3e213ad982724a270254cda0d5fc600fa80bb7329c2505da72e5664a"
+  },
+  {
+    "module": "QICLean.Representation.UniformHusimi",
+    "source_sha256": "8adfd12f32412daf774fde379e2feb17f570229c285224c2bec6da62fe2b6484",
+    "artifact": "QICLean/Representation/UniformHusimi.olean",
+    "sha256": "4d9de229545333e52167f391bdcfef17d98ad51935b27c429e5679069da22e19"
+  },
+  {
+    "module": "QICLean.Representation.UnitaryCommutant",
+    "source_sha256": "21b9e476a7f3863b8fd08636a970cd3076aa8f38f8847f28499d15f8adb0c8d9",
+    "artifact": "QICLean/Representation/UnitaryCommutant.olean",
+    "sha256": "08eaebf8098dd9247729059951745028f893fc837e24b8d5d9c93ed0d6ce424f"
+  },
+  {
+    "module": "QICLean.Representation.UnitaryTwirl",
+    "source_sha256": "10f90ed8657d7144f8a928fd0cd65eac5da75e72139d068609c367b2a9fd2c6b",
+    "artifact": "QICLean/Representation/UnitaryTwirl.olean",
+    "sha256": "8a8a246215c3f3db8015f04ac36097b01b66d6b0e501157f66fcc53b5d51c1d1"
+  },
+  {
+    "module": "QICLean.Representation.WeylCharacter",
+    "source_sha256": "6379fb5d0861e465ea5656349381a8604531b0b4056bf6be6ae025f94a7de9ae",
+    "artifact": "QICLean/Representation/WeylCharacter.olean",
+    "sha256": "4df3c52b31d8f65dcfb9c598304b00bb4d8b123637fa5c8df4991a99c3a78e07"
+  },
+  {
+    "module": "QICLean.Representation.WeylDimension",
+    "source_sha256": "14eddbf313e04689a973ae32c3045931c8c97013551aad63ce82ae356f8b2dc4",
+    "artifact": "QICLean/Representation/WeylDimension.olean",
+    "sha256": "ee55e89da3d49d9c682c7e774972ad15a2396734371ace72329de6d2684d2340"
+  },
+  {
+    "module": "QICLean.Representation.WeylRecursion",
+    "source_sha256": "216dcd999b28e3e6a8ce1340f4b4f5a19ea28db6e72d3ea55504fa3ee18ede0a",
+    "artifact": "QICLean/Representation/WeylRecursion.olean",
+    "sha256": "21d3816d2f91d7fe9e56ceabfd6edbeff4eb631ab52be284cc0fa2714c5a39ab"
+  },
+  {
+    "module": "TNLean.Algebra.ExpMulSubMonotone",
+    "source_sha256": "da125648c53b444d05ebed6b954479dcbd878e6a314cb866598c1ba4ca923005",
+    "artifact": "TNLean/Algebra/ExpMulSubMonotone.olean",
+    "sha256": "a74f3fb9de94068d625d3cf35f6dc7a6b9cfd5af190cb1c83e4e73b2d7410a72"
+  },
+  {
+    "module": "TNLean.Algebra.FinKronecker",
+    "source_sha256": "9e11c602b1a18442987e098f22decb704e90c543134f03b7a7b9463f3d0af50e",
+    "artifact": "TNLean/Algebra/FinKronecker.olean",
+    "sha256": "36459c7a3ca534c51eda80bace40ca1523102a8b68b8695e7a4d04278bde7efc"
+  },
+  {
+    "module": "TNLean.Algebra.FinSpanOfFinrank",
+    "source_sha256": "ead043a4d1269b5ee5bd4f3f6233de5c83fb38750a0c1da3cb998b0b2b04510c",
+    "artifact": "TNLean/Algebra/FinSpanOfFinrank.olean",
+    "sha256": "ef9a40717e85cc39d6e5271bbab31e15e24b25bc55c20fa0ad9bd3375d506c04"
+  },
+  {
+    "module": "TNLean.Algebra.FinsetSubtypeSum",
+    "source_sha256": "d71fd146a55ff1e865876086653cd6ad018952523ebf5a252a75b46cc660c3cd",
+    "artifact": "TNLean/Algebra/FinsetSubtypeSum.olean",
+    "sha256": "e623f53978c748126765862c401dfea2319c7046091c26618e97acc1ccd921d0"
+  },
+  {
+    "module": "TNLean.Algebra.GraphDistanceTransport",
+    "source_sha256": "183eba8f0f1a2e22d47a3827988ae6c02772a9d70dff92ba50efe7dcaf14f3a0",
+    "artifact": "TNLean/Algebra/GraphDistanceTransport.olean",
+    "sha256": "c8d3fa664402bd909336d146cdaa441c1ecbca5358befd9e90cc871e102225d7"
+  },
+  {
+    "module": "TNLean.Algebra.IntegerHasseGraph",
+    "source_sha256": "7c34d64686fc8ecccf4d80fb40ce922a9c5936f17a6ddca440004615f9418400",
+    "artifact": "TNLean/Algebra/IntegerHasseGraph.olean",
+    "sha256": "55cbc981be795dd2ba3d1f810ab12e5274d906eb9be936da155e501f115d5721"
+  },
+  {
+    "module": "TNLean.Algebra.KroneckerLeastEigenvalue",
+    "source_sha256": "3d46b350fe3cc5f0992f216f08e73411e68877459c0df0b5058a4aae8d6eab7c",
+    "artifact": "TNLean/Algebra/KroneckerLeastEigenvalue.olean",
+    "sha256": "0700e02d78b71655e1c036fe1a8ce8f80e159e014c2ce867706a3a0978d379f7"
+  },
+  {
+    "module": "TNLean.Algebra.ListProduct",
+    "source_sha256": "8f460135d464048fc5a6cdd4fef8660440afc6d67b13ce699210a98d65fc2a9b",
+    "artifact": "TNLean/Algebra/ListProduct.olean",
+    "sha256": "394782758784beede781899192a4cc5d3218c195c47f96c87ef2a7a7cf6cfa57"
+  },
+  {
+    "module": "TNLean.Algebra.MatrixHermitianSum",
+    "source_sha256": "509b345de85adc7e3b94f45a0efc0f0906f6babe89a3e01f6d6e0cfe7bb0e9ed",
+    "artifact": "TNLean/Algebra/MatrixHermitianSum.olean",
+    "sha256": "6a3fc32da6a3eab1d05a0ac9205fd8fab1cd846f9d558d86af68512f1cdedc57"
+  },
+  {
+    "module": "TNLean.Algebra.PowerExponential",
+    "source_sha256": "1edc3bc97821be7b0ed98eaefbf4a46ca7fb8c69437d7061fa36662a37aac1a6",
+    "artifact": "TNLean/Algebra/PowerExponential.olean",
+    "sha256": "f194e734f4ad077167bc8271db1b77dad57aa8e8cbcd7803f79f7e9d0c205e97"
+  },
+  {
+    "module": "TNLean.Algebra.SubmoduleStarProjectionMatrix",
+    "source_sha256": "7334573282d8e82de4498c2371063d53c97d91d4e652e4bf1962a4a342c67e50",
+    "artifact": "TNLean/Algebra/SubmoduleStarProjectionMatrix.olean",
+    "sha256": "1817f3d19a7248f5f38c25ae77730c7e46f188364d8c391a56f196a69fa8c71f"
+  },
+  {
+    "module": "TNLean.Algebra.TailRadiusWeights",
+    "source_sha256": "2f72352f9300280c40773916d93278b45d595944a88d94bfb124b0601a0722e0",
+    "artifact": "TNLean/Algebra/TailRadiusWeights.olean",
+    "sha256": "bec1ec2791907faeffda8d58f341a3f383ba4f0aa6eac0e487407d029a15f1dd"
+  },
+  {
+    "module": "TNLean.Algebra.ToEuclideanCLM",
+    "source_sha256": "115c7289a38ba5d0ac6a32702c1eeb1b152d5e28b1bdf57195b7f71a086c2af4",
+    "artifact": "TNLean/Algebra/ToEuclideanCLM.olean",
+    "sha256": "76cbbdf48af8e77e0b484957c706397b0604b15b7707d6bff7e7f6d264eb4f5d"
+  },
+  {
+    "module": "TNLean.Algebra.ToEuclideanLinApply",
+    "source_sha256": "dc4d0ac6dcda09bd066dfa12a54855a4e102eaf7305f640922f9c80ab4025898",
+    "artifact": "TNLean/Algebra/ToEuclideanLinApply.olean",
+    "sha256": "724baf4879f0abe743999ce2c2fa1af76ee9429ddf1f3ac7f24363f7dbd1aa70"
+  },
+  {
+    "module": "TNLean.Circuit.ProductVector",
+    "source_sha256": "e16efa1820d5ab5a161f3d2127b8d711eaa4a47abb5c955c2b5fafd4e97ccd8e",
+    "artifact": "TNLean/Circuit/ProductVector.olean",
+    "sha256": "3b6d091f38ded1eb5fcecf7380f47261c09aa1dedac63f44b266e3a5fcaeb70b"
+  },
+  {
+    "module": "TNLean.Circuit.SiteEmbedding",
+    "source_sha256": "5cf92c494726d0669c4554ce335bd01a329238e3c98759a60129d44c5ab4aa8d",
+    "artifact": "TNLean/Circuit/SiteEmbedding.olean",
+    "sha256": "27d636a6b23577ee0025969c4b42d1a6f0a9244f2514e41582449f39cdcb3194"
+  },
+  {
+    "module": "TNLean.Circuit.SupportedMatrixElements",
+    "source_sha256": "6ec2d69b717b13c876c1ce148ccdb989db1a9450f0bf22ad35d4e00b850926f7",
+    "artifact": "TNLean/Circuit/SupportedMatrixElements.olean",
+    "sha256": "ff8ff0a16be092da3ca23c5f58f1daee6af0c0f81d49467a7cf8973da6c79488"
+  },
+  {
+    "module": "TNLean.Circuit.SupportedOperators",
+    "source_sha256": "cf4ffafd9e25668ebb362d064191fd4a7398f0a610cb5a61213889bf6c7f10c4",
+    "artifact": "TNLean/Circuit/SupportedOperators.olean",
+    "sha256": "df0e908081bf8f476a4d85702ddfb16e08ca2d8c8cb880ee54ecd534fb33e020"
+  },
+  {
+    "module": "TNLean.Lattice.GaussianFilteredGround",
+    "source_sha256": "f7f884cd73e466eda100877be81faeab4137b65090af9f218334a728f4f0cae8",
+    "artifact": "TNLean/Lattice/GaussianFilteredGround.olean",
+    "sha256": "3ec965eb285e70ed3a82aa137483e14d017c1e2f065aaabbbbd4540290cb7d53"
+  },
+  {
+    "module": "TNLean.Lattice.GaussianFilteredIncrement",
+    "source_sha256": "7c86a58022a7032f858335b8c94e1b5f2bec8085e0bc2a1658bf98e7ebf9e1c6",
+    "artifact": "TNLean/Lattice/GaussianFilteredIncrement.olean",
+    "sha256": "9cbba4c65acb76102cbbb76881b0aa00c3aa3e64182a1231a3e11fb63caac90a"
+  },
+  {
+    "module": "TNLean.Lattice.GaussianFilteredLocality",
+    "source_sha256": "8af6c1fcb0cac6bf30cf69ba271798dd4364b1b664bf6d647fc974d7b689179d",
+    "artifact": "TNLean/Lattice/GaussianFilteredLocality.olean",
+    "sha256": "0667d45acd12afebcf4fb9ed0b8cacb7abf2fa67d55282e5ecea3f759673f1c2"
+  },
+  {
+    "module": "TNLean.Lattice.GaussianFilteredTerm",
+    "source_sha256": "0f6722fe230bc2a3337f6ca14562b014fa0aa4ab68ebeffe0e3d8e3be5429ccc",
+    "artifact": "TNLean/Lattice/GaussianFilteredTerm.olean",
+    "sha256": "6b5b8c7768688a6881c91b4530f62cdfcf462c8849b7225e8ef3d638216dbe1d"
+  },
+  {
+    "module": "TNLean.Lattice.GaussianTail",
+    "source_sha256": "9194c41f78bbeb304ca196982c26bc97259251e3610b49db4d274b93ca2f137a",
+    "artifact": "TNLean/Lattice/GaussianTail.olean",
+    "sha256": "b0ac5c5ca76870b1095b2bf2591afe8229e1931e8f7ef1f08b58432bc08ed688"
+  },
+  {
+    "module": "TNLean.Lattice.GaussianTailMoment",
+    "source_sha256": "9cfb426b567d2953455f4b3f9770114d71d3d6020f98831763c196c6b412038b",
+    "artifact": "TNLean/Lattice/GaussianTailMoment.olean",
+    "sha256": "211bf7374af1794393f83ffca7a192369d5b85ef2d450932d061276e7876b429"
+  },
+  {
+    "module": "TNLean.Lattice.HeisenbergDuhamel",
+    "source_sha256": "4cda8ed0ded32d7086189c5169ffa38469299ee2e3dbf06dcf6e6242e81728ac",
+    "artifact": "TNLean/Lattice/HeisenbergDuhamel.olean",
+    "sha256": "64729bb02edc12d92c615dab6957a0115b4acf7fc1b2769de176a9889db2b865"
+  },
+  {
+    "module": "TNLean.Lattice.ProductGroundState",
+    "source_sha256": "edacb47db84e78928bc0920112eb266d6c7a3d69e5697e173f7b68d1b7be7fa9",
+    "artifact": "TNLean/Lattice/ProductGroundState.olean",
+    "sha256": "46ea79f06711d95cd2025e6d67d66dcba5a745474ee600806528e478f2c173b5"
+  },
+  {
+    "module": "TNLean.Lattice.RegionEntropyInequalities",
+    "source_sha256": "24a66c9c5a2c4a33ad617cb1f95ded30f211559d817fb29fd72546fedf3da492",
+    "artifact": "TNLean/Lattice/RegionEntropyInequalities.olean",
+    "sha256": "d66777ffb2eb9780158b2c6841f896b68794655fc64ebac327ba63f0bce6a039"
+  },
+  {
+    "module": "TNLean.Lattice.ZeroEntropy",
+    "source_sha256": "ee6818f7fcb7e2b0035fb07a3ee11fe9615aa90400b5458761dab12c801be667",
+    "artifact": "TNLean/Lattice/ZeroEntropy.olean",
+    "sha256": "8c95df8270bb23162445dae6fbb12f64a083bc4c207c54b24b4a7bccee673125"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.AreaLaw",
+    "source_sha256": "cd43a8fcc7042c16e564c9f425b108b361fffe50bd5998513779bdf5021c7a09",
+    "artifact": "TNLean/MPS/AreaLaw/AreaLaw.olean",
+    "sha256": "a8f6aaf2c575a0099c92d6cc6d9872d162dc98e2d8348b7dd3a1133a327358e9"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.BoundaryGap",
+    "source_sha256": "ba0001b75bb7a491152b7f825a0a92c43ff7911aa648e63fb905c37e788fe479",
+    "artifact": "TNLean/MPS/AreaLaw/BoundaryGap.olean",
+    "sha256": "b8178bcc954e16bf32301f153cd71d5c14047c80e9cdd78552b6c74f3de54cdb"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.BufferDiscount",
+    "source_sha256": "d8c856a036d7e291d7d500f4ffa2965a549c111f355fa5712a7abe9f3949ae8c",
+    "artifact": "TNLean/MPS/AreaLaw/BufferDiscount.olean",
+    "sha256": "ae8d657d190d922f87256f98371b4932ee27d61b85f258e9ae3cd51b0bc4f2a0"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ChainNeighborhood",
+    "source_sha256": "de93ed90baa6650b8a0fe0c9248fe936455671065059eb800144d90d653eabb8",
+    "artifact": "TNLean/MPS/AreaLaw/ChainNeighborhood.olean",
+    "sha256": "097a39803e63e940cd30b60b9d4fb79f23388b03d54611985e45a3b419ed8d02"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ComponentReduction",
+    "source_sha256": "072cc7781f625092d8a6461ce98ba5d8e9b91654822ef9a22a3fb8038c95a406",
+    "artifact": "TNLean/MPS/AreaLaw/ComponentReduction.olean",
+    "sha256": "827235a84f818c4eb17fc8700da8db999be52d966f6e2012262e9f41a990fc3f"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Counting",
+    "source_sha256": "724514055821e38f2b5369d673c9923d652c5cd0fa6c2e0d13b445977b78b7f0",
+    "artifact": "TNLean/MPS/AreaLaw/Counting.olean",
+    "sha256": "cc9d3b3c39529004fe0387ea45422ed5d42cd5c7470bf732cbfd07c86ca2a82e"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.CutMatrixGrowth",
+    "source_sha256": "94d04621555cfde2fb3b843739527eaed033852a05e1f9e3c7f59f89cae5f7ba",
+    "artifact": "TNLean/MPS/AreaLaw/CutMatrixGrowth.olean",
+    "sha256": "b57d6b3f4115d1e800476a50ad2eea31ee87a5c89f7ca896302c81dd98189edc"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.DomainGraphGeometry",
+    "source_sha256": "69c908053f5589f693ebfe9a814d1a1b9324f3000243c748fd9f03369d0a473a",
+    "artifact": "TNLean/MPS/AreaLaw/DomainGraphGeometry.olean",
+    "sha256": "4a850fced413bd4a1b99d1334ea4a8fe43b302c1e1c5d2241434a89727d5f694"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.EntropyInequalities",
+    "source_sha256": "12c88f2878846bd4b34863c8b1f2d5fe5d0c1f1574f391161df0e1980f271b4f",
+    "artifact": "TNLean/MPS/AreaLaw/EntropyInequalities.olean",
+    "sha256": "580bdb71b1f0d8b4cb89225fe2e44a4af9ad9e210ee2b2a921d0b5b08d68f84a"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.GluingHamiltonian",
+    "source_sha256": "7915a8dd6cbf17f7d35b7768d9f3e39d0577742c79583d4eabcd050fcddadb3c",
+    "artifact": "TNLean/MPS/AreaLaw/GluingHamiltonian.olean",
+    "sha256": "8b768d15d1597f33008bc5a2ed29c46b6ffbe0241559b657bc0d2b653784a9d4"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hamiltonian",
+    "source_sha256": "0f98330169d6e56cb59373a9289b6e66b2f8b63478bbba65e425a837d4f9c18a",
+    "artifact": "TNLean/MPS/AreaLaw/Hamiltonian.olean",
+    "sha256": "43dc88f8f86777304df39a9d1c04ab9f85ad8f02d0f7db2adb720ef0300aa102"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.AreaLaw",
+    "source_sha256": "9aadae03901e9b9f6d0fee7699471948b580922ae159a9504d79b836bdec0a87",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/AreaLaw.olean",
+    "sha256": "2861146f7218ab27ee5f55e38d4dc5d6982b345784cecfeb6d572401e45510c1"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.BoundaryFactorization",
+    "source_sha256": "9f8a7f6470c928a5b7ac0454b9b6012bf83d945681a93b02f50561ff7841635c",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/BoundaryFactorization.olean",
+    "sha256": "2996a26377892c284ddbf7e1e9fbf054160d92a30bf0c3e3d9e209d6a89f120c"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.BoundaryLocalization",
+    "source_sha256": "151bb9a5bb3f0a90bcfc5d136c2b30aa0adaeeaff819b95a53e9207b4846279b",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/BoundaryLocalization.olean",
+    "sha256": "d8ff9ef006a6c2b9509662d620f3f9709d0a8e144232766e438d7241966b6ab6"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.ChainBootstrap",
+    "source_sha256": "592453bea9d9e70fad287c200d5866e93baa5e623821a00807e211d9f3fb7ab8",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/ChainBootstrap.olean",
+    "sha256": "89786e0119d61f3d3974bfce919eb76f77bc58815776adb97101ab8ea17285e6"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.ChainLocalizedParts",
+    "source_sha256": "65329546020446e5cb8793117bb73388ccd9e5d32fc2aa0b91a5464fd77a2925",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/ChainLocalizedParts.olean",
+    "sha256": "056c2f1d5f7b9952fb0887d06bca68fff519b1d356a82c0f25b5fb2fa980a6cd"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.CutProductExpectation",
+    "source_sha256": "776b00560d3d4516343b24ad90cd31c5b0e09f54293fe82bbbd8d1286123a1da",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/CutProductExpectation.olean",
+    "sha256": "3d0301d8b761d27a7b75090451774dcf31345a8f3f98f6fe88994c82a527ec8a"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.CutProductState",
+    "source_sha256": "2b19cf6976b4cfb3e2c2c4436e6d35afa518790a41a02e381d749bd5fefda2f3",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/CutProductState.olean",
+    "sha256": "59219b5924997c764a4d8b81996f8acf0e6bd1469c416510ffe799f9fac35ce8"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.CutoffPair",
+    "source_sha256": "a7964541bdccda3a9fa37c1b3a34e162d1e29414f726805fac0cc43222076248",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/CutoffPair.olean",
+    "sha256": "76346c204c3712c0d993e14bfdef8ab15baae3d5aee2d844873f6ba943e1b7db"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.DecaySlack",
+    "source_sha256": "90d5e1372b75d119987d24ef40b90e0dac3e0ec3708664392ecc0551d9fa609c",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/DecaySlack.olean",
+    "sha256": "acff199dc3a62da1840bf4d2fcdffa89d035e0c60040c4e4f6e728ef06a42094"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.Doubling",
+    "source_sha256": "d52087cc40f45706ba738942cc7e766a34e2c8f5f101bdf66fa06f474c918e1c",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/Doubling.olean",
+    "sha256": "19ba28f048819f8f0d3c8fb86507cc08f109d8afdfcfa7e06d682e4c727d56e0"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.EffectExpectation",
+    "source_sha256": "f6c073cb1b7c3eaa13c7da6bfa7311b96c60458c82eb00e24b57e7259c2f411b",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/EffectExpectation.olean",
+    "sha256": "a45c0a5606f26b0e8a288d53ac1605e4e5f55fbf5c0a30bfeabd9f8e6c2f0a1c"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.EffectFromFactorization",
+    "source_sha256": "963b7c0b25c6db3160e98fcd49757f60685ddf7520bbeffabc66fd105e168246",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/EffectFromFactorization.olean",
+    "sha256": "a13619222a50ffa49fe5e488f9ef3293f29065bf3557a4f6d67dcf3140ab4f46"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.FactorizationBudget",
+    "source_sha256": "18b58d82f3bc9a9c3c6774cdee0e1bdc083b2fabdc21be00886035c9e9e95859",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/FactorizationBudget.olean",
+    "sha256": "d9a1f32392598e6af206dacb66436b095aa178997940dd6af734245cb288bd17"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.GappedAreaLaw",
+    "source_sha256": "ab3228fff31b4a124553f74fb463f425b0513bf6d2da0279c0ca9d5142f3665b",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.olean",
+    "sha256": "7409f5d599ca3117447fd362eda8187de5e196c279a63937b293542f6c763666"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.GaussianTimeAverage",
+    "source_sha256": "d1f59837e93c09f533f68c9fe319ff0bd24eb2420d65d98f72b40f9a50f474e9",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/GaussianTimeAverage.olean",
+    "sha256": "845374b889f98a6e90ba5417f63f09f7e6096c32d2a3972e5760a962c55bb97e"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.InteractionPicture",
+    "source_sha256": "6f1483d7a7958ddb3c90e41aac6d3f923317a71d171e5ea8653ce3515e88749a",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/InteractionPicture.olean",
+    "sha256": "2e3fbf53a4f5a07c6d1b2689e2503d18cd2fb1c478a0270abb4ed2be23ae1586"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.IntervalMutualInformation",
+    "source_sha256": "9b7e66f216a718c4d29af608409543ec0ae0a9490545272b6f0c7cf3f2ce8a58",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/IntervalMutualInformation.olean",
+    "sha256": "f3be096db84e6402d0ba244a71e8f5bd58ca67d26e51c14055304980e65d26ac"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.LemmaOneConstant",
+    "source_sha256": "8b053b19e95eec2041f1d226e8c6f37d149db5bcb0606d7db232a92ba6329100",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/LemmaOneConstant.olean",
+    "sha256": "e9318e8fc7b3b5087cac4558ad43cddbb9c1d1ee53fa7a795801e86d4ad08e43"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.MainTheorem",
+    "source_sha256": "eedad9e7f15795ca066d173ef3614823be261c35a5028a08bb417a10758c89a0",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/MainTheorem.olean",
+    "sha256": "3bfed7d34793e4ff6326faec8aada21192b71fc3608a73e8ad7c6f85d287b8af"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.MovedEstimate",
+    "source_sha256": "b72be28253c1e72d4103fa623e9f396c1d7d3b9f719a6d9dfed097a52a20cb8d",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/MovedEstimate.olean",
+    "sha256": "cc5a2d78468c143f92e2e8da417a30521d77def553c8c007c48dfd5b5db345ce"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.PartCommutators",
+    "source_sha256": "ede41b5124e5aa84a7a51b882eddac117cad40f85f943ea0ef687fae76957bda",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/PartCommutators.olean",
+    "sha256": "31eb01041109a0bd697d521245a2d70f6f52b3abca86476b60f264f8c1e9a626"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.PositiveFactorization",
+    "source_sha256": "bda31327994e763860e6df1c3f145ae6eccb018f0880682bf2e5c4b07d9af07c",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/PositiveFactorization.olean",
+    "sha256": "ded75ea023ad9d48bdfd6b40eebfe0b0f819f002ae2bd1ac0528365353f2bb65"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.ProductStateExpectation",
+    "source_sha256": "f6d98bfcb30f12b36281280f064d460f6254c3f771516ad588b4242b6097f19a",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/ProductStateExpectation.olean",
+    "sha256": "567ed91867fb1d32de9e7c735d58b79798b1d34275d5327d350c3cd5b8556ab6"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.ProjectorFactorization",
+    "source_sha256": "07c07fa1a8cb8cfcdf8b1531ba0e709a8449b7c7e24f150976b7b3ee7469d5f9",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/ProjectorFactorization.olean",
+    "sha256": "6adb0ee2973d89cb8fada4d34b00cc2c92f565593c34b629cbb12f6f09fb2ba5"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.ProjectorFactorizationScaling",
+    "source_sha256": "acd5458b8cfc8de179b5269af3621b95caeb7401f42ad80c0b754c846146937d",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/ProjectorFactorizationScaling.olean",
+    "sha256": "14b27928efe9f34bee154a290da7b25a4926e0d8f4b8fc99744a24b2ae6efdbc"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.ProjectorOverlap",
+    "source_sha256": "c4cf9f21d101af39ae13c132396b1d18299d77cec29b973a67b41fe4eb3262ec",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/ProjectorOverlap.olean",
+    "sha256": "9ef8e1ac4cb44af4f960316b62b9e57a7ad42fd7a9f2288f00ebd596a694a0e0"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.RelativeEntropyGain",
+    "source_sha256": "f4e11fb668a3f6e5ebc77ddb81eb528e0deadc5867322d2d3fbe415eafe714b0",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/RelativeEntropyGain.olean",
+    "sha256": "4c0317f2a410a3ea74b10e84c76530500014852db6e350d4f0d657715170d106"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.RelentAssembly",
+    "source_sha256": "fd4852dd26bc0414c953c1224785c9aabca49508cbc8b62fbb2578790b8e293d",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/RelentAssembly.olean",
+    "sha256": "fedafb5d3bfa747f03f7c63c316ef7d17d7e4eea7eb450b70a4a99989f61dba0"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.RelentFromBootstrap",
+    "source_sha256": "e5d4de1e8da65563f6cf30527a8d3307dfe7a2b57f6317e1f3e8d2e77ba7ade6",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/RelentFromBootstrap.olean",
+    "sha256": "daa9657004c55d8c4c7a9252c98210fe3662ad30b3ebce21beb7d4a2e58fd3be"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation",
+    "source_sha256": "23502329238f4c436fa3b237d5d3692f3f64053a7b36bbfbd8a5efb2f731f70b",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/SchmidtDiagonalCorrelation.olean",
+    "sha256": "8d5e607376afd2a2d2465b5256872393a6c6c3183dc101926822570896846850"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.SchmidtRankBootstrap",
+    "source_sha256": "731285819fee554adce94b46611fa0668e72f0fab73fa9ae24f88d1975753a25",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/SchmidtRankBootstrap.olean",
+    "sha256": "282b060997fcdb5ec4ab323fdb5b8921753f660cd661d4e25a1c3fd4a19e183a"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.SpectralCutoff",
+    "source_sha256": "f9c2b1255fb2add8d3c1a3e8c270ae39ebeda2b4acc36d28f2d3d38796a63d13",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/SpectralCutoff.olean",
+    "sha256": "4fb69f425495dd2412b2a96a2c10cfcdb53e9309d313ce9e20964f483ec28979"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.TailEntropy",
+    "source_sha256": "3d65e65d8f0ec32174a9340dcbe384af4672e9c65c828dd188efe8d86f904423",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/TailEntropy.olean",
+    "sha256": "c224fbbc5806666ee933a4e5a245d103fbc40107b5bd5ec4048ae67886234660"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.ThreeWaySplitting",
+    "source_sha256": "6eacb1bc1b20eb4693aea19d0b25f839dd1b0daa1b98866befefb2d767435704",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.olean",
+    "sha256": "099170b29d90998445e0d48ea90d0b57e5a8d7920cc6e2d0280f5e3d22a53e1d"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.Hastings.Window",
+    "source_sha256": "a297a57ea493f7b531effe249e1f9968570cf29328b8b37681cd1e1ef918a8ec",
+    "artifact": "TNLean/MPS/AreaLaw/Hastings/Window.olean",
+    "sha256": "6baa49e88d4485e1bce4966df26035ceac1ee1e1482a9a08d556d605467aacb4"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.InteractionBudget",
+    "source_sha256": "2dc260cbb71cfbe20bd21e8dff147e92ce1ec854bc49eaed3be9b2c36c0250e7",
+    "artifact": "TNLean/MPS/AreaLaw/InteractionBudget.olean",
+    "sha256": "071be5632117d0e194129ef746bda0cd376881f373eb746339154d73304797ac"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.IntervalUnion",
+    "source_sha256": "aacf5c7ddd1dcc79e1e3f0153bb3c492f24805c0b124a66effea7686e517e245",
+    "artifact": "TNLean/MPS/AreaLaw/IntervalUnion.olean",
+    "sha256": "eee17771b5f876a0233b0b34c577691e1ee80399aeddeb6ca8ac1db54deea1aa"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.LiebRobinson",
+    "source_sha256": "a7a8377364d1568fac613d627b020a3848913e757b3ffb90834283c4ab67dd2f",
+    "artifact": "TNLean/MPS/AreaLaw/LiebRobinson.olean",
+    "sha256": "d663905232c0326a23f2ad2f78f7ad74c34e89fcfecc1975f4c8d4cf0172e1dc"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.LocalSolution.FinalStateCount",
+    "source_sha256": "d08e420cbe3569cab3a8721873b52bf6f8342003852d91f909dee6bab1bcc922",
+    "artifact": "TNLean/MPS/AreaLaw/LocalSolution/FinalStateCount.olean",
+    "sha256": "fecdcef396aca7292f71fdeb7cd09b969f04ece8d99913c2b9d179bdc45df4b4"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.LocalSolution.HierarchicalEnergy",
+    "source_sha256": "e656044e8c2c92d43d974fc99eaf05505cc8c08a407f37884445ce4c1f2c6d2d",
+    "artifact": "TNLean/MPS/AreaLaw/LocalSolution/HierarchicalEnergy.olean",
+    "sha256": "3ab9a53cd8732f49aec013f6665ecd3a00f6e61a9f715e245eaf6c45c30c6437"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.LocalSolution.HierarchicalProjection",
+    "source_sha256": "58d5676cab943d4ef1517c0a9ba0fcf847df5b2cbd280091426706ed3f609c83",
+    "artifact": "TNLean/MPS/AreaLaw/LocalSolution/HierarchicalProjection.olean",
+    "sha256": "7dc61daf3ff083d2b942281dcbbf46d773234cc89386f557ce7069cc764b4a62"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.MPSApproximation",
+    "source_sha256": "59da7c139af2e9539f1d5cfab96036d22dab18e26e186ea8ec11f385b54765b8",
+    "artifact": "TNLean/MPS/AreaLaw/MPSApproximation.olean",
+    "sha256": "b27751d24d1b629f454763eebfa4dde9e3d439e308078cf6a14e7933cac66f04"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.NormalizedSequentialApproximation",
+    "source_sha256": "a0a02624795ee6c33d0f90a79ad26d96fcc7303595bcc1b7e7cf6e085e6c782f",
+    "artifact": "TNLean/MPS/AreaLaw/NormalizedSequentialApproximation.olean",
+    "sha256": "3fb5b64a9bcb74e49a36f255a4e231beddb7cd16ba1d933461b3dc05baa3798a"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.NormalizedVariableTruncation",
+    "source_sha256": "991d762de4322909de27994eaf4359a599c49c721dd5f5217757f942b9eb2ab6",
+    "artifact": "TNLean/MPS/AreaLaw/NormalizedVariableTruncation.olean",
+    "sha256": "06b245468e1de5c3dcc27d408c28d34f3d2ebbc48fe493e3afee2f0a374c01a7"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.OpenMPS",
+    "source_sha256": "9d9bf8509c514801cbda279d58ad1227da14306a2a2006e3b00e5a228dec9406",
+    "artifact": "TNLean/MPS/AreaLaw/OpenMPS.olean",
+    "sha256": "ae20cbb06668e1ccc27bfb406342d49a71233be365a6a362ef91fbd51b435be9"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.OpenMPSCutRank",
+    "source_sha256": "5c2085fa90b6c92ca4a645ae2cd05b2935a0c4e60ae82eab71080ca5d2a50bc9",
+    "artifact": "TNLean/MPS/AreaLaw/OpenMPSCutRank.olean",
+    "sha256": "1f4282c59519d0a458496df3265e90d3fac3cc5a0f58d65621ae6bd132c827a4"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.OpenMPSRank",
+    "source_sha256": "d530174c1e28ae23feebf9b7b1e2bf7ad5e0c2d7c6153caaecfc5cb48df7d079",
+    "artifact": "TNLean/MPS/AreaLaw/OpenMPSRank.olean",
+    "sha256": "9b3e86afaa87ea5381d3f835ea57fd61f1e58942e25f4c0c0925f4fe1fc5212b"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.OverlapEnergy",
+    "source_sha256": "3033399bc2d2d10eca9a5db7788ac2a333a281da96a751534aea1e7c3afe286d",
+    "artifact": "TNLean/MPS/AreaLaw/OverlapEnergy.olean",
+    "sha256": "d362b5b86630ad07a8b98250fafc2cf921fa2a6dc62763f2958ce9faf188635f"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.RangeOneCut",
+    "source_sha256": "2a3c401863e508d8ea74e21b974f7fbd1e51ea56a7ed1847f3054593b4be9835",
+    "artifact": "TNLean/MPS/AreaLaw/RangeOneCut.olean",
+    "sha256": "1567805c2bb8268ebd179619226cac2dcde9a58e2e1e4a28065523a333068e0b"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.RangeOneSupport",
+    "source_sha256": "eb06514071a6cbf5045417939f1740587c717824589013af15bccf51146552cb",
+    "artifact": "TNLean/MPS/AreaLaw/RangeOneSupport.olean",
+    "sha256": "2089ffd0be878ce5c1ebfb2cf95adae39779b88cf88da67547d3952de8b8aeae"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.SequentialTruncation",
+    "source_sha256": "ec3ac82e400e0f54c683898d6d7bd7cab0d05681dfaa382e830ea48f38d326fc",
+    "artifact": "TNLean/MPS/AreaLaw/SequentialTruncation.olean",
+    "sha256": "2790a015755484c5ea2cb410e7b758045c6d3dcda802a75f5c92de1d86c73b0e"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.SupportedCutRank",
+    "source_sha256": "eee667928b683842e5a8e3fd357457d166d78d6f8f2c4cea503e55c7013c7490",
+    "artifact": "TNLean/MPS/AreaLaw/SupportedCutRank.olean",
+    "sha256": "402cbc0ff8377f6ee8e3b5fe102df3b1d40e16b04030069a08e9e4448e660eae"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.Basic",
+    "source_sha256": "ef6c719601140d445c5b03a44085ece31a52a9262eaf19509967b39a16af8c78",
+    "artifact": "TNLean/MPS/AreaLaw/ViableSet/Basic.olean",
+    "sha256": "4ca28d7305b5bcc2ed051946c8fbf85f04f49879b3d436a93e490440850f5f0f"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.ConstantRankCut",
+    "source_sha256": "daa40363de458c879fbec30c8757fbef833d719ecb4024343a836a66f3dbb516",
+    "artifact": "TNLean/MPS/AreaLaw/ViableSet/ConstantRankCut.olean",
+    "sha256": "5552482d18ecd77e10d52144f03686d9e20e040ccd198fa8a9f5f6f1fcf0f345"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.Gluing",
+    "source_sha256": "dc4cccee4482acaff293be0372ecc1fa41c9fd3bdf318794d44150583b019341",
+    "artifact": "TNLean/MPS/AreaLaw/ViableSet/Gluing.olean",
+    "sha256": "9ee002224f2242ea039198cc4961b6532b8c093f802f0016569a4f43959b17be"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.GluingBounds",
+    "source_sha256": "30cc86e01b6f248511a46c0cbbe456d503752b35df56db68cf6c258177e042a6",
+    "artifact": "TNLean/MPS/AreaLaw/ViableSet/GluingBounds.olean",
+    "sha256": "1d017d24ca958e175a9222fec637d5174371eb81ef1def55750f7f23d6b1df6c"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.GluingSupport",
+    "source_sha256": "9a8cb858ca2f7a10c3a36b6f86b07aff277e29aa8b2edd638ce7b7101a10bf7b",
+    "artifact": "TNLean/MPS/AreaLaw/ViableSet/GluingSupport.olean",
+    "sha256": "77223df40ed886a8c6ac1d9b024ec84d951941ed33c7250f8d289055452a5270"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.TrimmedWitness",
+    "source_sha256": "11d4211242a67e43e58b392ddc0ba538ceea9d98ac28f492ec09d3c102a171e9",
+    "artifact": "TNLean/MPS/AreaLaw/ViableSet/TrimmedWitness.olean",
+    "sha256": "2d608b8d76938b575fcc2883c3a8df11fd90b107c0353f641da00c3e1c331773"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.Trimming",
+    "source_sha256": "e13e233eed23e06f3a46161b2a2148db64ce970170cb89ffc9f7515a166ca9cf",
+    "artifact": "TNLean/MPS/AreaLaw/ViableSet/Trimming.olean",
+    "sha256": "7b1fe5a9a887cff0540bd5fa4d51f3ec1dbd372c195c410e06a074f646c76b2d"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.TrimmingConstants",
+    "source_sha256": "9b91abf8e32f1f5566444a16b09b316d769d410afa1c621e2002e2e826c38c8b",
+    "artifact": "TNLean/MPS/AreaLaw/ViableSet/TrimmingConstants.olean",
+    "sha256": "3847ce37feab953998bc5a6f59c8fd945a8b9ff82981fe9312b651e6aebe8135"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingVector",
+    "source_sha256": "34caa1e876abce92f1dd1da67ac0e85dc8a35d5f8b0ec619dab22fe911d7e64a",
+    "artifact": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.olean",
+    "sha256": "65be0008a21b81af3b245322328332b78bc201a4f3e9431141e1c831af2cd989"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.ViableSet.ViableTrimmedWitness",
+    "source_sha256": "5ec18fb1c7b8c8595f102ebfb5800fc019146a57dd7335e02e87e7b0ac6931ce",
+    "artifact": "TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.olean",
+    "sha256": "d2150746cd748243e0461a64624df51703a19d02a587e4f3ddbba84a059ea0a7"
+  },
+  {
+    "module": "TNLean.MPS.AreaLaw.WindowCounting",
+    "source_sha256": "b244f4e514914c1d7ea92b159ba0c282458de069d28d883e6c44c882ff636357",
+    "artifact": "TNLean/MPS/AreaLaw/WindowCounting.olean",
+    "sha256": "baa3d493f06729ee7bb5aced9a6edeaf705ee0ecda4a15f5a704b89420928d6c"
+  },
+  {
+    "module": "TNLean.MPS.Chain.Defs",
+    "source_sha256": "341da9ca5ff02bc7d8a338181fb6607f45f9e5f5eb1243a79726490aae29a324",
+    "artifact": "TNLean/MPS/Chain/Defs.olean",
+    "sha256": "b6be9ddd2dc3d62355aed698e84ab937241555b648c89fe0adca605798b596b8"
+  },
+  {
+    "module": "TNLean.MPS.Chain.VaryingBondOBC",
+    "source_sha256": "dbf71e907753a7b0f65318e20ff52fe803f63e7e2e57b7c13e288ca5f3a12963",
+    "artifact": "TNLean/MPS/Chain/VaryingBondOBC.olean",
+    "sha256": "041ed8c883f2c1fa3d5e64ee67f8e61fd002891408257cc1d73b7ef42ce44036"
+  },
+  {
+    "module": "TNLean.MPS.Core.CyclicTrace",
+    "source_sha256": "67e8d968988035d212fe977e7b8f27fe46c0e5ebf411e8ba10ffd1fc6afc8010",
+    "artifact": "TNLean/MPS/Core/CyclicTrace.olean",
+    "sha256": "4181b2534b9c14655321c5ba77783e9bdae9397b8bb2396b77f999abf64d4309"
+  },
+  {
+    "module": "TNLean.MPS.Defs",
+    "source_sha256": "e12c85140ff30cbace18bd0cdd7054ea35b75bfa4065b7acc96b98057dfbe3b3",
+    "artifact": "TNLean/MPS/Defs.olean",
+    "sha256": "ec5e8b68185b38fb05705f91a96e49a2e3cc08918679d77b923339c8b7fa391d"
+  },
+  {
+    "module": "TNLean.MPS.Preparation.MinimalCutRepresentationCuts",
+    "source_sha256": "a7f8676fd7a38913a699c13cad4688a2fc0acb19ce2298fedad52a0fddaa8134",
+    "artifact": "TNLean/MPS/Preparation/MinimalCutRepresentationCuts.olean",
+    "sha256": "7ca31a4878d75a2bb86802e8155b030fcba9b4644a784fbfecd9df26034111b5"
+  }
+]

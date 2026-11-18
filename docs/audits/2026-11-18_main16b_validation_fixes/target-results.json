@@ -1,0 +1,107 @@
+[
+  {
+    "file": "verification/area-law/Solution.lean",
+    "phase": "build",
+    "command": [
+      "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+      "-j1",
+      "-M12288",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-o",
+      "/tmp/main16b-mps-fix-olean/verification/area-law/Solution.olean",
+      "verification/area-law/Solution.lean"
+    ],
+    "exit_code": 0,
+    "seconds": 2.6893156630103476,
+    "source_sha256": "969b98ee71adfba92b4d056881814442314a0edd709dec7a93116ee6f211b5c8",
+    "head": "a928f4fad7ceb1fd0cfd3b44dc0ab38427c65385",
+    "pin": "729428582b78ab7529b3796099193649f947354a"
+  },
+  {
+    "file": "verification/area-law/Solution.lean",
+    "phase": "strict",
+    "command": [
+      "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+      "-j1",
+      "-M12288",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DautoImplicit=false",
+      "-DwarningAsError=true",
+      "verification/area-law/Solution.lean"
+    ],
+    "exit_code": 0,
+    "seconds": 2.14094802600448,
+    "source_sha256": "969b98ee71adfba92b4d056881814442314a0edd709dec7a93116ee6f211b5c8",
+    "head": "a928f4fad7ceb1fd0cfd3b44dc0ab38427c65385",
+    "pin": "729428582b78ab7529b3796099193649f947354a"
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean",
+    "phase": "build",
+    "command": [
+      "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+      "-j1",
+      "-M12288",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-o",
+      "/tmp/main16b-mps-fix-olean/TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.olean",
+      "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean"
+    ],
+    "exit_code": 1,
+    "seconds": 0.0908525720005855,
+    "source_sha256": "3d554a250305a83ca98e8b9ed47f260fc2754b405cce36ab05d5ba576345ece4",
+    "head": "a928f4fad7ceb1fd0cfd3b44dc0ab38427c65385",
+    "pin": "729428582b78ab7529b3796099193649f947354a"
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean",
+    "phase": "build",
+    "command": [
+      "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+      "-j1",
+      "-M12288",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-o",
+      "/tmp/main16b-mps-fix-olean/TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.olean",
+      "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean"
+    ],
+    "exit_code": 0,
+    "seconds": 13.622841165022692,
+    "source_sha256": "3d554a250305a83ca98e8b9ed47f260fc2754b405cce36ab05d5ba576345ece4",
+    "head": "a928f4fad7ceb1fd0cfd3b44dc0ab38427c65385",
+    "pin": "729428582b78ab7529b3796099193649f947354a"
+  },
+  {
+    "file": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean",
+    "phase": "strict",
+    "command": [
+      "/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean",
+      "-j1",
+      "-M12288",
+      "-Dpp.unicode.fun=true",
+      "-DrelaxedAutoImplicit=false",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DautoImplicit=false",
+      "-DwarningAsError=true",
+      "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean"
+    ],
+    "exit_code": 0,
+    "seconds": 12.618274848995497,
+    "source_sha256": "3d554a250305a83ca98e8b9ed47f260fc2754b405cce36ab05d5ba576345ece4",
+    "head": "a928f4fad7ceb1fd0cfd3b44dc0ab38427c65385",
+    "pin": "729428582b78ab7529b3796099193649f947354a"
+  }
+]
