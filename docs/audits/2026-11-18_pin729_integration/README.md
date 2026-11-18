@@ -45,7 +45,7 @@ placement record coexist. The new place owner is QICLean/ManyBody/Sites/Placemen
 Static checks passed: import layers, 84 selector tests, 12 timing tests,
 22 immutable-snapshot tests, roles and whitespace. Blueprint sync initially
 failed for two unavailable Mathlib source declarations; only unchanged,
-revision-matched dependency links were then installed and sync rerun.
+revision-matched dependency links were then installed and sync rerun successfully.
 The separate QIC checkout has no imported old QIC/TN build products.
 Any placement-owner build result is recorded separately; it does not validate
 the five combined TN consumers or the regression fixtures.
@@ -59,3 +59,13 @@ queue remains assigned to its original worker; it was not restarted here.
 
 No external author branch, shared PR head/base, or issue body was modified.
 This candidate is for independent review, not merge approval.
+
+## Completed narrow new-pin check
+
+QICLean.ManyBody.Sites.Placement built successfully in 21.80 seconds and
+passed repository strict flags in 6.20 seconds from a separate new-pin QIC
+checkout. Only revision-identical Mathlib/other dependency caches were reused;
+no old QIC or TN build artifacts were reused. This proves neither the combined
+TN consumers nor the eleven fixtures at this pin. validation.json records the
+exact command and boundary. All four DG sources now match 75fc2228 exactly,
+with one canonical interval open each; the formatting file matches 5f9d620b.

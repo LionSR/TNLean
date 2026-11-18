@@ -1,0 +1,40 @@
+{
+  "command": [
+    "lake",
+    "--fail-fast",
+    "build",
+    "QICLean.ManyBody.Sites.Placement"
+  ],
+  "exit": 0,
+  "seconds": 21.79593840400048,
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "old_qic_artifacts_reused": false,
+  "strict": {
+    "command": [
+      "lake",
+      "env",
+      "lean",
+      "-j1",
+      "-DautoImplicit=false",
+      "-DrelaxedAutoImplicit=false",
+      "-Dpp.unicode.fun=true",
+      "-DmaxSynthPendingDepth=3",
+      "-Dlinter.mathlibStandardSet=true",
+      "-DwarningAsError=true",
+      ".lake/packages/qiclean/QICLean/ManyBody/Sites/Placement.lean"
+    ],
+    "exit": 0,
+    "seconds": 6.202091126004234
+  },
+  "tn_source_head": "e47015779a26ec05e61bc0c4d06971e0491c6705",
+  "tn_consumers_and_fixtures": "not Lean-validated at new pin",
+  "static_checks": {
+    "import_layers": 0,
+    "selector_tests": 84,
+    "timing_tests": 12,
+    "snapshot_tests": 22,
+    "roles": 0,
+    "blueprint_sync_after_complete_dependency_sources": 0,
+    "whitespace": 0
+  }
+}
