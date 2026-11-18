@@ -7,8 +7,8 @@
   },
   {
     "path": "TNLean/PEPS/Approximation/CellConditionalInformationFromGap.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -37,8 +37,8 @@
   },
   {
     "path": "TNLean/PEPS/Approximation/RangeAngularInformation.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -49,8 +49,8 @@
   },
   {
     "path": "TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -73,8 +73,8 @@
   },
   {
     "path": "TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -314,7 +314,7 @@
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanTransportInputs.lean",
     "compile": 0,
-    "strict": null,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -385,8 +385,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalScanner.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -439,8 +439,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {
@@ -451,8 +451,8 @@
   },
   {
     "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedEnergy.lean",
-    "compile": null,
-    "strict": null,
+    "compile": 0,
+    "strict": 0,
     "blocked": null
   },
   {

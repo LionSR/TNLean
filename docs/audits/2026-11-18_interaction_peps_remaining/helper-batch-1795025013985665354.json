@@ -1,0 +1,26 @@
+{
+  "head": "dccc85e5607077b51822664e9d475287d300d607",
+  "pin": "729428582b78ab7529b3796099193649f947354a",
+  "modules": [
+    "TNLean.PEPS.AreaLaw.Geometry.BeltFanColors",
+    "TNLean.PEPS.AreaLaw.Geometry.InitialRegions",
+    "TNLean.PEPS.AreaLaw.Geometry.SimultaneousRepair",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairCurrentAssignments",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairStage",
+    "TNLean.PEPS.AreaLaw.Geometry.FanRunContacts",
+    "TNLean.PEPS.AreaLaw.Geometry.CellFanCycle",
+    "TNLean.PEPS.AreaLaw.Geometry.IsolatedStars",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairDescendants",
+    "TNLean.PEPS.AreaLaw.Geometry.BeltReplacementTemplates",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairFanCones",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairStarModel",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairChildCones",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairChildStars",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairDepth",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairInitialMarkFacts",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairInductionMetric",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairChildStarStep",
+    "TNLean.PEPS.AreaLaw.Geometry.RepairStageStars"
+  ]
+}

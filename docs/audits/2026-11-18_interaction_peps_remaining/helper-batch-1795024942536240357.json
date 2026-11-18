@@ -1,0 +1,26 @@
+{
+  "head": "dccc85e5607077b51822664e9d475287d300d607",
+  "pin": "729428582b78ab7529b3796099193649f947354a",
+  "modules": [
+    "TNLean.PEPS.AreaLaw.Geometry.MeshGeometry",
+    "TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation",
+    "TNLean.PEPS.AreaLaw.Geometry.LocalLayers",
+    "TNLean.PEPS.AreaLaw.Geometry.AdjacentScales",
+    "TNLean.PEPS.AreaLaw.Geometry.DyadicExhaustion",
+    "TNLean.PEPS.AreaLaw.Geometry.LayerPartition",
+    "TNLean.PEPS.AreaLaw.Geometry.FineMarkSeparation",
+    "TNLean.PEPS.AreaLaw.Geometry.InitialMarkFamily",
+    "TNLean.PEPS.AreaLaw.Geometry.FineCellPartition",
+    "TNLean.PEPS.AreaLaw.Geometry.DummyContacts",
+    "TNLean.PEPS.AreaLaw.Geometry.SideSubdivision",
+    "TNLean.PEPS.AreaLaw.Geometry.SideSubdivisionMask",
+    "TNLean.PEPS.AreaLaw.Geometry.SideEndpoints",
+    "TNLean.PEPS.AreaLaw.Geometry.DummyCorners",
+    "TNLean.PEPS.AreaLaw.Geometry.CellContacts",
+    "TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponents",
+    "TNLean.PEPS.AreaLaw.Geometry.ElementarySideOpponentUniqueness",
+    "TNLean.PEPS.AreaLaw.Geometry.ActualSideMatching",
+    "TNLean.PEPS.AreaLaw.Geometry.ElementarySideReciprocity",
+    "TNLean.PEPS.AreaLaw.Geometry.NonbeltPrimaries"
+  ]
+}

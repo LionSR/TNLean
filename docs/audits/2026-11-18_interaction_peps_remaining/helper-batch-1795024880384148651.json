@@ -1,0 +1,26 @@
+{
+  "head": "dccc85e5607077b51822664e9d475287d300d607",
+  "pin": "729428582b78ab7529b3796099193649f947354a",
+  "modules": [
+    "TNLean.PEPS.AreaLaw.BoundaryTheoremFromTwoFamilies",
+    "TNLean.PEPS.AreaLaw.Geometry.DyadicScales",
+    "TNLean.PEPS.AreaLaw.Geometry.DyadicClosure",
+    "TNLean.PEPS.AreaLaw.Geometry.DistanceLayers",
+    "TNLean.PEPS.AreaLaw.Geometry.PrimaryRegions",
+    "TNLean.PEPS.AreaLaw.Geometry.PrimaryCounting",
+    "TNLean.PEPS.AreaLaw.Geometry.PolynomialBudget",
+    "TNLean.PEPS.AreaLaw.Geometry.InitialPrimaryErrorSum",
+    "TNLean.PEPS.AreaLaw.Geometry.PrimaryBirthSeparation",
+    "TNLean.PEPS.AreaLaw.Geometry.PrimaryFragments",
+    "TNLean.PEPS.AreaLaw.Geometry.TwoFamilyExplicitThresholds",
+    "TNLean.PEPS.AreaLaw.Geometry.PrimaryBirthTemplates",
+    "TNLean.PEPS.AreaLaw.Geometry.SparseBelts",
+    "TNLean.PEPS.AreaLaw.Geometry.FineBelts",
+    "TNLean.PEPS.AreaLaw.Geometry.BeltMarks",
+    "TNLean.PEPS.AreaLaw.Geometry.CellFans",
+    "TNLean.Algebra.FinCyclicInduction",
+    "TNLean.PEPS.AreaLaw.Geometry.FanRuns",
+    "TNLean.PEPS.AreaLaw.Geometry.TemplatePolygonFiniteIntegerPoints",
+    "TNLean.PEPS.AreaLaw.Geometry.FanRunTemplate"
+  ]
+}
