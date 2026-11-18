@@ -662,20 +662,15 @@ jobs:
         if: github.event_name == 'pull_request'
         env:
           BASE_REF: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set -o pipefail
           timing_status=0
           archive_build_failed=false
-          git fetch --no-tags origin "$BASE_REF" || timing_status=$?
-          if [ "$timing_status" -eq 0 ]; then
-            git merge-base --is-ancestor "$BASE_REF" HEAD || timing_status=$?
-          fi
-          if [ "$timing_status" -eq 0 ]; then
-            git -c core.quotePath=false diff \
-              --name-only --diff-filter=AMR "$BASE_REF" HEAD -- '*.lean' \
-              > "$RUNNER_TEMP/changed-lean-files.txt" \
-              || timing_status=$?
-          fi
+          # Select immutable feature edits; build/timing input remains the merged checkout.
+          python3 scripts/lake_build_hotspots.py select-pr \
+            --base "$BASE_REF" --head "$PR_HEAD_SHA" \
+            > "$RUNNER_TEMP/changed-lean-files.txt" || timing_status=$?
           if [ "$timing_status" -eq 0 ]; then
             while IFS= read -r path; do
               case "$path" in

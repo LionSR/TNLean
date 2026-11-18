@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import argparse
 import re
+import subprocess
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Sequence
@@ -93,6 +95,49 @@ def render_github_annotations(
     return "\n".join(lines) + ("\n" if lines else "")
 
 
+def pr_changed_paths(base: str, head: str) -> list[str]:
+    """Select feature edits from immutable event commits, not the build checkout.
+
+    Fetch missing objects by SHA only. Verify the checkout contains the feature
+    head, but never switch it: timings still belong to the integration build.
+    """
+    def git(*args: str) -> str:
+        return subprocess.check_output(["git", *args], text=True).strip()
+
+    for sha in (base, head):
+        if not re.fullmatch(r"[0-9a-f]{40}", sha) or sha == "0" * 40:
+            raise ValueError("PR timing endpoints must be nonzero full commit SHAs")
+    for sha in (base, head):
+        if subprocess.run(["git", "cat-file", "-e", f"{sha}^{{commit}}"],
+                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode:
+            subprocess.run(["git", "fetch", "--no-tags", "origin", sha], check=True)
+        if git("rev-parse", "--verify", f"{sha}^{{commit}}") != sha:
+            raise ValueError("PR timing endpoint is not a commit")
+    subprocess.run(["git", "merge-base", "--is-ancestor", head, "HEAD"], check=True)
+    fork = git("merge-base", base, head)
+    paths = subprocess.check_output(
+        ["git", "-c", "core.quotePath=false", "diff", "--name-only", "--no-renames",
+         "--diff-filter=AM", "-z", fork, head, "--", "*.lean"], text=True).split("\0")
+    paths = [p for p in paths if p]
+    if any("\n" in p or "\r" in p for p in paths):
+        raise ValueError("newline in Lean source path cannot be represented in timing list")
+    return paths
+
+
+def select_pr_main(argv: Sequence[str]) -> int:
+    parser = argparse.ArgumentParser(description="Select immutable PR timing paths")
+    parser.add_argument("--base", required=True)
+    parser.add_argument("--head", required=True)
+    args = parser.parse_args(argv)
+    try:
+        paths = pr_changed_paths(args.base, args.head)
+    except (ValueError, subprocess.CalledProcessError) as exc:
+        print(f"PR timing selection failed: {exc}", file=sys.stderr)
+        return 1
+    print("".join(p + "\n" for p in paths), end="")
+    return 0
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("log", type=Path, help="Lake build log")
@@ -143,4 +188,4 @@ def main(argv: Sequence[str] | None = None) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(select_pr_main(sys.argv[2:]) if sys.argv[1:2] == ["select-pr"] else main())

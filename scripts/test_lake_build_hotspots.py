@@ -5,11 +5,68 @@ from __future__ import annotations
 
 import contextlib
 import io
+import os
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 
 import lake_build_hotspots as hotspots
+
+
+class PRRangeTests(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.cwd = os.getcwd()
+        os.chdir(self.tmp.name)
+        self.git("init", "-q")
+        self.git("config", "user.email", "test@example.com")
+        self.git("config", "user.name", "Test")
+        for name in ("Modified", "Deleted", "Renamed"):
+            Path(name + ".lean").write_text("-- original\n")
+        self.base = self.commit()
+        self.git("checkout", "-qb", "feature")
+        Path("Modified.lean").write_text("-- modified\n")
+        Path("Deleted.lean").unlink()
+        Path("Renamed.lean").rename("NewName.lean")
+        Path("Added.lean").write_text("-- added\n")
+        self.head = self.commit()
+        self.git("checkout", "-qb", "advanced", self.base)
+        Path("Upstream.lean").write_text("-- upstream\n")
+        self.advanced = self.commit()
+        self.git("merge", "--no-edit", "feature")
+
+    def tearDown(self):
+        os.chdir(self.cwd)
+        self.tmp.cleanup()
+
+    def git(self, *args):
+        return subprocess.check_output(["git", *args], text=True, stderr=subprocess.DEVNULL).strip()
+
+    def commit(self):
+        self.git("add", "-A")
+        self.git("commit", "-qm", "fixture")
+        return self.git("rev-parse", "HEAD")
+
+    def test_advanced_merge_selects_only_feature_edits(self):
+        expected = ["Added.lean", "Modified.lean", "NewName.lean"]
+        self.assertEqual(hotspots.pr_changed_paths(self.base, self.head), expected)
+        self.assertEqual(hotspots.pr_changed_paths(self.advanced, self.head), expected)
+        jobs = hotspots.parse_timed_jobs("Built Upstream (81s)\nBuilt Added (51s)")
+        selected = hotspots.changed_jobs(jobs, expected)
+        self.assertEqual([j.job for j in selected], ["Added"])
+        self.assertTrue(any(j.seconds >= 50 for j in selected))
+
+    def test_invalid_missing_and_uncontained_heads_fail(self):
+        for value in ("", "HEAD", "0" * 40, "--help"):
+            with self.assertRaises(ValueError):
+                hotspots.pr_changed_paths(self.base, value)
+        # No origin: missing immutable objects must fail, not produce an empty list.
+        with self.assertRaises(subprocess.CalledProcessError):
+            hotspots.pr_changed_paths(self.base, "f" * 40)
+        self.git("checkout", "--detach", self.base)
+        with self.assertRaises(subprocess.CalledProcessError):
+            hotspots.pr_changed_paths(self.base, self.head)
 
 
 class LakeBuildHotspotTests(unittest.TestCase):
