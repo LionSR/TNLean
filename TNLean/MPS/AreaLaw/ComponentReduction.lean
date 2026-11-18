@@ -161,7 +161,7 @@ noncomputable def _root_.ManyBody.DomainInteraction.toChain (h : ManyBody.Domain
   mem Y := by
     split
     · exact h.mem _
-    · exact Submodule.zero_mem _
+    · exact (ManyBody.supportedOperators (fun _ : Fin Λ.card ↦ Fin q) _).zero_mem
 
 /-- The chain terms of Hermitian domain terms are Hermitian. -/
 theorem _root_.ManyBody.DomainInteraction.isHermitian_toChain_term
