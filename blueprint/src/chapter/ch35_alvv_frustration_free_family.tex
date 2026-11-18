@@ -372,6 +372,7 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
     \label{thm:alvv_unique_ground_state_tree}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_pos_mem_spectrum_of_unique_ground_state,
         TNLean.MPS.AreaLaw.ALVV.merge_rounds_bounds,
+        TNLean.MPS.AreaLaw.ALVV.merge_rounds_lt_of_odd,
         TNLean.MPS.AreaLaw.ALVV.merge_sample_overlap_lower,
         TNLean.MPS.AreaLaw.ALVV.merge_power_error_le,
         TNLean.MPS.AreaLaw.ALVV.exists_unique_ground_state_tree_ritz_approximation}
@@ -403,7 +404,12 @@ in~\cite{gap:alvv16_unique_ground_state_tree}.
     takes $\lceil\log_{\mathcal D}s\rceil/2$ applications, which need not be an
     integer, and obtains $\mathcal Ds^2$: when $\lceil\log_{\mathcal D}s\rceil$
     is even the sharper bound $\mathcal Ds^2$ follows, and otherwise
-    it is up to a factor $\mathcal D$ weaker, $\mathcal D^2s^2$. The tree is
+    it is up to a factor $\mathcal D$ weaker, $\mathcal D^2s^2$. In the odd
+    case no integer number of rounds $j$ satisfies both
+    $\mathcal D^{2j}\le\mathcal Ds$ and the sufficient condition $s\le\mathcal D^{2j}$ used in
+    the error estimate, unless $s$ is a power of $\mathcal D$, so the factor is a
+    rounding of the printed number of rounds,
+    see~\cite{gap:alvv16_unique_ground_state_tree}. The tree is
     shown to exist rather than to be found with high probability, and the
     output bond dimension grows with $L$.
 \end{lemma}
