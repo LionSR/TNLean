@@ -184,28 +184,71 @@ physical representation is not asserted to have a semisimple dual.
 
 \section{Construction from the source assumptions}
 
-The Wedderburn--Artin theorem over $\C$ gives finitely many positive bond
+In the cosemisimple setting of \cite[Section~4.1]{Molnar2022MPOAlgebrasI},
+the Wedderburn--Artin theorem over $\C$ gives finitely many positive bond
 dimensions $D_c$ and an algebra isomorphism
 $\psi\colon\mathcal A^*\to\bigoplus_c M_{D_c}(\C)$.
-The physical coefficients $\phi_{ik}$ separate points because $\phi$ is
-injective. Finite-dimensional duality therefore says that they span
-$\mathcal A^*$, so the letters $T_c^{ik}=\psi(\phi_{ik})_c$ span the entire
-block algebra simultaneously. This gives individual block injectivity and
-the simultaneous left inverse at length one; no blocking is required.
+Write $\phi_{ik}(x)=\phi(x)_{ik}$. Injectivity and finite-dimensional
+annihilator duality give, respectively,
+\begin{align}
+    \bigcap_{i,k}\ker\phi_{ik}                & =\{0\},
+    \label{eq:mrgscp22_coefficient_separation}                 \\
+    \operatorname{span}_{\C}\{\phi_{ik}:i,k\} & =\mathcal A^*.
+    \label{eq:mrgscp22_dual_span}
+\end{align}
+Define $T_c^{ik}=\psi(\phi_{ik})_c$. Transport through $\psi$ gives
+\begin{align}
+    \operatorname{span}_{\C}\{(T_c^{ik})_c:i,k\}
+     & =\prod_c M_{D_c}(\C).
+    \label{eq:mrgscp22_simultaneous_span}
+\end{align}
+Projection to each block gives block injectivity. The simultaneous span
+also gives coefficients $K_{(c,x,y),(i,k)}$ with
+\begin{align}
+    \sum_{i,k}K_{(c,x,y),(i,k)}(T_e^{ik})_{x'y'}
+     & =\delta_{ce}\delta_{xx'}\delta_{yy'}.
+    \label{eq:mrgscp22_one_letter_inverse}
+\end{align}
+Here $x,y$ index block $c$, and $x',y'$ index block $e$; the right side
+is zero for distinct blocks. No blocking is required.
 
-The direct sum of the simple dual representations is faithful. Every
-arbitrary-boundary operator of its tensor is a represented element
-$\rho_n(x)$ for one $x$ independent of $n$, and every $x$ has such a boundary.
-Multiplicativity of the coproduct gives
-$\rho_n(xy)=\rho_n(x)\rho_n(y)$ for all $n>0$. Thus the tensor family is
-closed under products with one output boundary at all positive lengths.
-The boundary representation and matrix-unit decomposition theorems then
-supply the multiplicities and exact biorthogonal fusion maps for each
-incoming pair. Reconstruction and biorthogonality imply both zipper
-identities. Together with the simultaneous letter inverse these maps form
-a complete zipper fusion family. Its letters are exactly
-$\psi(\phi_{ik})$, so the previously established counit construction applies
-without an additional witness.\footnote{Formal declarations in
+The direct sum of the simple dual representations is faithful. Write
+$\rho_N(x)$ for the represented iterated coproduct at system size $N$.
+Every arbitrary-boundary operator is $\rho_N(x)$ for one $x$ independent
+of $N$, and every $x$ has such a boundary. Multiplicativity gives
+\begin{align}
+    \rho_N(xy) & =\rho_N(x)\rho_N(y) \qquad (N>0).
+    \label{eq:mrgscp22_represented_multiplication}
+\end{align}
+Thus products have one output boundary at all positive lengths. The
+boundary representation and matrix-unit decomposition give multiplicities
+$N_{ab}^c$, analysis maps $V_{ab}^{c\mu}:\C^{D_a}\otimes\C^{D_b}\to\C^{D_c}$,
+and synthesis maps $W_{ab}^{c\mu}:\C^{D_c}\to\C^{D_a}\otimes\C^{D_b}$,
+where $1\leq\mu\leq N_{ab}^c$, satisfying
+\begin{align}
+    \sum_j T_a^{ij}\otimes T_b^{jk}
+     & =\sum_{c,\mu}W_{ab}^{c\mu}T_c^{ik}V_{ab}^{c\mu},
+    \label{eq:mrgscp22_biorthogonal_reconstruction}     \\
+    V_{ab}^{c\mu}W_{ab}^{e\nu}
+     & =\delta_{ce}\delta_{\mu\nu}I_{D_c}.
+    \label{eq:mrgscp22_biorthogonal_inverse}
+\end{align}
+For $c\ne e$ the last right side denotes the zero map from $\C^{D_e}$
+to $\C^{D_c}$. These identities imply both zipper identities. Together
+with (\ref{eq:mrgscp22_one_letter_inverse}) they give a complete zipper
+fusion family $F$. Its letter identification and the counit are
+\begin{align}
+    F^{ik}               & =(T_c^{ik})_c=\psi(\phi_{ik}),
+    \label{eq:mrgscp22_constructed_letter}                \\
+    \varepsilon(\psi(f)) & =f(1_{\mathcal A}),
+    \label{eq:mrgscp22_constructed_counit}                \\
+    \varepsilon(F^{ik})  & =\phi_{ik}(1_{\mathcal A})
+    =\phi(1_{\mathcal A})_{ik}=\delta_{ik}.
+    \label{eq:mrgscp22_constructed_counit_letter}
+\end{align}
+Here $f\in\mathcal A^*$, and the last equality uses unitality of $\phi$.
+The established counit construction therefore applies without an
+additional witness.\footnote{Formal declarations in
     \doclink{TNLean/MPS/MPDO/DualRepresentationFusion}:
     \leanid{MPOTensor.isBoundaryClosed_ofDualRepresentation},
     \leanid{MPOTensor.DualRepresentationFusion.wordTupleSpanTop_tensor},

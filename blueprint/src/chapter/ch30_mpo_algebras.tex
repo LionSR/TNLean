@@ -1140,6 +1140,7 @@ Theorem~\ref{thm:mpug_anomaly_obstruction}.
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_incoming_blocks,def:glm_boundary_zipper_family,
+        thm:glm_wha_boundary_realization,thm:glm_wha_represented_coproduct_mul,
         thm:mpdo_bnt_common_positive_blocked_fusion,
         thm:mpdo_one_letter_simultaneous_inverse,
         lem:mpoalg_fusion_counit_unital_representation}
@@ -1148,7 +1149,7 @@ Theorem~\ref{thm:mpug_anomaly_obstruction}.
     \begin{align}
         \bigcap_{i,k}\ker\phi_{ik}                & =\{0\},        &
         \operatorname{span}_{\C}\{\phi_{ik}:i,k\} & =\mathcal A^*.
-        \notag
+        \label{eq:mpoalg_cosemisimple_coefficient_span}
     \end{align}
     Indeed, the first equality says that the annihilator of the displayed
     span is zero; finite-dimensional duality gives the second. Transporting
@@ -1156,7 +1157,7 @@ Theorem~\ref{thm:mpug_anomaly_obstruction}.
     \begin{align}
         \operatorname{span}_{\C}\{(T_c^{ik})_c:i,k\}
          & =\prod_c\MN{D_c}.
-        \notag
+        \label{eq:mpoalg_cosemisimple_simultaneous_span}
     \end{align}
     Projecting this simultaneous span to each block gives one-letter
     injectivity, as in Lemma~\ref{thm:mpdo_bnt_common_positive_blocked_fusion}.
@@ -1165,12 +1166,14 @@ Theorem~\ref{thm:mpug_anomaly_obstruction}.
     \begin{align}
         \sum_{i,k}K_{(c,x,y),(i,k)}(T_d^{ik})_{x'y'}
          & =\delta_{cd}\delta_{xx'}\delta_{yy'}.
-        \notag
+        \label{eq:mpoalg_cosemisimple_letter_inverse}
     \end{align}
     The direct sum representation of $\mathcal A^*$
-    is faithful. Its arbitrary-boundary operators are exactly the
-    represented elements $\rho_n(x)$ with one element $x$ for all lengths.
-    Since $\rho_n(xy)=\rho_n(x)\rho_n(y)$ for $n>0$, these operators are
+    is faithful. By Lemma~\ref{thm:glm_wha_boundary_realization}, its
+    arbitrary-boundary operators are exactly the
+    represented elements $\rho_N(x)$ with one element $x$ for all lengths.
+    Lemma~\ref{thm:glm_wha_represented_coproduct_mul} gives
+    $\rho_N(xy)=\rho_N(x)\rho_N(y)$ for $N>0$, so these operators are
     closed under products with one boundary for all positive lengths.
     Lemma~\ref{thm:glm_boundary_incoming_blocks} gives the exact
     biorthogonal decompositions of each incoming pair. Their synthesis
