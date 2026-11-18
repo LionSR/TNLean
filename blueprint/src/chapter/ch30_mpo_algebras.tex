@@ -235,28 +235,27 @@ normal tensors this is Corollary~\ref{cor:asym_fusion_tensors_group}.
 
 \begin{corollary}[Existence of action tensors]%
     \label{thm:mpoalg_action_tensors_exist}
-    % Formalized as the action clause of cor:asym_fusion_action_multiplicity
-    %   (ch25), which carries the Lean tag.
-    % Existing Lean: MPOTensor.exists_isReduction_actTensor_of_isNormal,
-    %   MPOTensor.exists_multiBlockCompression_actTensor_of_isNormal
-    %   (Corollary cor:asym_action_tensors).
-    \uses{def:mpoalg_action_tensors, cor:asym_action_tensors,
-        thm:mpo_symmetric_nimrep, cor:asym_fusion_action_multiplicity}
-    Under the hypotheses of Theorem~\ref{thm:mpo_symmetric_nimrep}, the
-    action clause of Corollary~\ref{cor:asym_fusion_action_multiplicity}
-    shows that every pair $(a,x)$ admits a family of action tensors as in
+    \lean{MPOTensor.IsMPOSymmetricFamily.exists_nat_actionTensors}
+    \leanok
+    \uses{def:mpoalg_action_tensors, thm:mpo_symmetric_nimrep,
+        cor:asym_fusion_action_multiplicity}
+    Under the hypotheses of Theorem~\ref{thm:mpo_symmetric_nimrep}, every
+    pair $(a,x)$ admits a family of action tensors as in
     \cite[Section~3]{GarreRubio2023MPOSym}, reducing $T_a\cdot A_x$ onto the
     blocks $A_y$ with multiplicities $M_{a,x}^y$.
     % Source anchor: arXiv:2203.12563, lines 459--460 and 1065--1091.
 \end{corollary}
 
 \begin{proof}
-    \uses{cor:asym_action_tensors, thm:mpo_symmetric_nimrep}
+    \leanok
+    \uses{def:mpoalg_action_tensors, thm:mpo_symmetric_nimrep,
+        cor:asym_fusion_action_multiplicity}
     By Theorem~\ref{thm:mpo_symmetric_nimrep} the coefficients are
     nonnegative integers, so (\ref{eq:mpo_symmetric_family}) writes
     $O_a^{(N)}\ket{V^{(N)}(A_x)}$ as a sum of periodic vectors of blocks
-    repeated with multiplicities $M_{a,x}^y$. Corollary~\ref{cor:asym_action_tensors}
-    applied to this family with unit weights gives the reductions.
+    repeated with multiplicities $M_{a,x}^y$. The action clause of
+    Corollary~\ref{cor:asym_fusion_action_multiplicity} then gives the
+    action tensors of $(a,x)$.
 \end{proof}
 
 %% ---------------------------------------------------------
