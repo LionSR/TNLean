@@ -67,8 +67,11 @@ private theorem presentation_face_one (R : Finset X) (v : X)
     (hv : (v.1 + 1, v.2 + 1) ∈ R) :
     PresentedGroup.mk (torusDualPresentationRelators R : Set FG) (torusDualFaceWord v) = 1 := by
   classical
-  -- Match the classical equality used to form the relator finset. Free-word reduction
-  -- also supplies a computable equality, so `classical` alone does not select this one.
+  -- The relator finset was elaborated in `TorusDualPathPresentation` with classical
+  -- free-group equality, before the `FreeGroup.Reduce` import in this module.
+  -- Its equality instance is fixed in that definition. The membership lemmas must use
+  -- the same instance; otherwise they synthesize the later computable equality and
+  -- fail with a definitional mismatch. `classical` alone does not override that instance.
   let : DecidableEq FG := fun a b => Classical.propDecidable (a = b)
   apply PresentedGroup.one_of_mem
   change torusDualFaceWord v ∈ torusDualPresentationRelators R
