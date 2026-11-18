@@ -24,7 +24,7 @@ noncomputable section
 
 open Matrix Filter
 
-open ManyBody (IsGapped groundSpace)
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -55,13 +55,14 @@ theorem exists_suppliedTarget_statusMarginal_moment_bounds
           ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
         let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
         1 ≤ B ∧
-          ∀ {J Δ : ℝ} (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q),
+          ∀ {J Δ : ℝ} (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J) (Ω : StateSpace Λ q),
             0 < Δ → ‖Ω‖ = 1 →
             ∀ (e : ℝ) (Ωt : StateSpace Λ q),
               ‖Ωt‖ = 1 →
-              IsGapped (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e
+              IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e
                 ((Δ / positiveNormalization 1 (Δ / 2) J) / 2) →
-              groundSpace (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e = Submodule.span ℂ {Ωt} →
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt} →
               let g := Δ / positiveNormalization 1 (Δ / 2) J
               let C₀ := 512 * Real.exp 1 * (2 / g)
               let c₀ := 1 / (32 * Real.sqrt (1 + 2 / g))
@@ -85,16 +86,16 @@ theorem exists_suppliedTarget_statusMarginal_moment_bounds
   obtain ⟨hB, hcut⟩ := hbudget Λ T hT S hgraph hdepth hanchor L hn hradius
     hr hDpos hD hL hrows hclear
   refine ⟨hB, ?_⟩
-  intro J Δ h Ω hΔ hΩ e Ωt hΩt hgapt hspant
+  intro J Δ h hh hhJ Ω hΔ hΩ e Ωt hΩt hgapt hspant
   have hg : 0 < Δ / positiveNormalization 1 (Δ / 2) J :=
     div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   refine ⟨by positivity, by positivity, ?_⟩
   intro s hist band
   exact ⟨fun hs Q hQ u hu ↦
-    S.log_surprisalMoment_truncated_reducedState_le_common h Ω hgraph hanchor hΔ hΩ
+    S.log_surprisalMoment_truncated_reducedState_le_common h hh hhJ Ω hgraph hanchor hΔ hΩ
       L hΩt hgapt hspant Q ((hcut s hist band).1 hs Q hQ) hu,
     fun hs Q hQ u hu ↦
-      S.log_surprisalMoment_truncated_reducedState_le_common h Ω hgraph hanchor hΔ hΩ
+      S.log_surprisalMoment_truncated_reducedState_le_common h hh hhJ Ω hgraph hanchor hΔ hΩ
         L hΩt hgapt hspant Q ((hcut s hist band).2 hs Q hQ) hu⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
