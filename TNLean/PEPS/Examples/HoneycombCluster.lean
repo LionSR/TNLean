@@ -59,6 +59,8 @@ coincide. Documented, with the two previous items, in
 
 open scoped BigOperators
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 section GraphState
