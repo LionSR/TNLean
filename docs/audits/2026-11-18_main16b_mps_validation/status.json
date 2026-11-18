@@ -1,9 +1,9 @@
 {
   "state": "strict",
-  "module": "TNLean.MPS.AreaLaw.Hastings.RenyiBootstrapLemma",
-  "pid": 492943,
+  "module": "TNLean.MPS.AreaLaw.BandInformation",
+  "pid": 493087,
   "runner_pid": 492715,
-  "time": "2026-11-18T20:14:02.307727+00:00",
-  "passed": 25,
+  "time": "2026-11-18T20:15:23.420277+00:00",
+  "passed": 35,
   "head": "f94193009343ee767ddc96a3dacee80e659ec5a9"
 }
