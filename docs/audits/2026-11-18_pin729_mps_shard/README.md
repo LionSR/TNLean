@@ -67,3 +67,19 @@ The proposed one-line patch is evidence only, not applied to any production
 branch. Build commands total 3563.41 seconds, strict commands 1204.34 seconds;
 parallel command durations are summed, not claimed to be wall-clock duration.
 Production editing time is zero; evidence-editing time was not separately timed.
+
+## Authorized continuation after isolated fix
+
+Single-source fix commit ef098ad32a728e847957320f9cf79ddcfce5245a replaces
+SpectralCutoff map_zero proof with `by simp`; latest candidate a28f35a6 has
+identical pre-fix SpectralCutoff content. Separate targeted compilation and
+strict passed in 11.67/7.66 seconds. The original strict failure and original
+artifact hash remain in the historical records. The standalone fix branch is
+fix/pin729-spectralcutoff-simp; no shared PR branch was changed.
+
+All 327 previously passed source hashes and 1166 prior artifacts were verified
+before continuation. None of those 327 targets imports SpectralCutoff through
+its dependency closure. The continuation runs only the 537 not-yet-executed
+manifest targets. New TN records use ef098ad32 (same production tree as the
+original candidate except this fix), with the same exact QIC pin.
+MPS.lean root aggregation is not in the 865-path manifest and will be separate.

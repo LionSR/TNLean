@@ -2,7 +2,7 @@ import concurrent.futures as cf
 import datetime,hashlib,json,os,re,shutil,subprocess,time
 from pathlib import Path
 root=Path('/tmp/pin729-mps'); qic=Path('/tmp/qic729-mps'); out=root/'docs/audits/2026-11-18_pin729_mps_shard'; cache=Path('/tmp/pin729-mps-olean')
-head='6b7fb2e27dbc6856091e593e4226d350403beb8a';pin='729428582b78ab7529b3796099193649f947354a'
+head='ef098ad32a728e847957320f9cf79ddcfce5245a';pin='729428582b78ab7529b3796099193649f947354a'
 lean='/workspace/elan/toolchains/leanprover--lean4---v4.36.0-rc1/bin/lean'
 files=(out/'manifest.txt').read_text().splitlines(); targets={p[:-5].replace('/','.') for p in files}
 assert hashlib.sha256((out/'manifest.txt').read_bytes()).hexdigest()=='6154be849927457d11a0e1666a778d3d68383e5884e16c08ec1252c5694cf7f5'
