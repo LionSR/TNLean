@@ -1,10 +1,10 @@
 {
-  "checkpoint": 11,
-  "passed": 327,
-  "remaining": 538,
+  "checkpoint": 1,
+  "passed": 358,
+  "remaining": 507,
   "failed_commands": 1,
-  "build_seconds": 3563.406791241752,
-  "strict_seconds": 1204.3446718499472,
-  "stop": "TNLean.MPS.AreaLaw.Hastings.SpectralCutoff strict failed (1)",
-  "free_bytes": 13320605696
+  "build_seconds": 3761.6552861067903,
+  "strict_seconds": 1371.0411259239045,
+  "stop": null,
+  "free_bytes": 13137354752
 }
