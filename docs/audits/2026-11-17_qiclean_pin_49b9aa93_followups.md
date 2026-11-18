@@ -92,11 +92,11 @@ and F9; F14 lands before the pin move that brings in QICLean's circuit core.
 | F3 | `MPS.AreaLaw.interval` | `ManyBody.interval` | 347 |
 | F4 | `IsChainSupport`, `ChainSupport` | `ManyBody.IsChainSupport`, `ManyBody.ChainSupport` | 29 |
 | F5 | `sitePos`, the MPS `domainGraph`, `DomainSupport` | `ManyBody.sitePos`, `ManyBody.lineDomainGraph`, `ManyBody.DomainSupport` | 4 / 10 / 8 |
-| F6 | `Lattice.domainGraph`, `AdmissibleSupport` | `ManyBody.planeDomainGraph`, `ManyBody.AdmissibleSupport` | 111 / 82 |
+| F6 | `Lattice.domainGraph`, `AdmissibleSupport` | `ManyBody.planeDomainGraph`, `ManyBody.AdmissibleSupport` | 111 / 82; done in #10858 |
 | F7 | the `RectangleInteraction` and `SquareInteraction` index types, `ForwardEdge`, `ForwardAdjacent`, `forwardSquareEdgeEquiv` | `ManyBody.SquareLatticeSiteOrEdge` | 12 |
 | F8 | `ChainHamiltonian`, `DomainHamiltonian`, `LocalHamiltonian`, `RectangularHamiltonian`, `SquareHamiltonian` | `ManyBody.ChainInteraction`, `DomainInteraction`, `PlaneInteraction`, `RectangleInteraction`, `SquareInteraction`, with the former fields (Hermiticity, norm bounds) as hypotheses; one pull request each | 80 / 9 / 108 / 3 / 32 |
 | F9 | `SquareHamiltonian.hermitianTerm`, `RectangularHamiltonian.hermitianTerm` and their lemmas | `ManyBody.Interaction.hermitianPart` | 5 |
-| F10 | `Lattice.groundEigenspace` | `ManyBody.groundSpace` | 25 |
+| F10 | `Lattice.groundEigenspace` | `ManyBody.groundSpace` | 25; done in #10860 |
 | F11 | `Matrix.IsGappedGroundState` | `ManyBody.IsGapped` with `groundSpace = span {Ω}`, through `ManyBody.isGapped_and_groundSpace_eq_span_iff` | 186 |
 | F12 | `QuantumCircuit.siteExpectation`; deletes `QuantumCircuit.siteExpectation_eq_regionExpectation`, the one translating lemma admitted by this pin PR against the migration rules; with it the transitional bridge `QuantumCircuit.siteExpectation_eq_regionExpectation`, the corollaries through it `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphBall_le` and `QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`, its uses in `MPS/AreaLaw/Hastings/BoundaryLocalization`, `MPS/AreaLaw/Huang/GridPropagation`, `MPS/AreaLaw/SupportedGaussianIntegral`, `MPS/AreaLaw/DomainSupportedGaussianIntegral` and `PEPS/AreaLaw/SupportedGaussianIntegral`, and `QuantumCircuit.norm_sub_siteExpectation_le` | `ManyBody.regionExpectation`, `ManyBody.norm_sub_regionExpectation_le` | 53 |
 | F13 | `Entropy.crossingTerms` (QICLean's temporary export) | `ManyBody.crossingTerms` | 35 |

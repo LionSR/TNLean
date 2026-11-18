@@ -131,6 +131,7 @@ import TNLean.Algebra.MatrixIdempotentFactorization
 import TNLean.Algebra.MatrixInvolutionConjugation
 import TNLean.Algebra.MatrixKroneckerContraction
 import TNLean.Algebra.MatrixL2Contraction
+import TNLean.Algebra.MatrixLinearODE
 import TNLean.Algebra.MatrixProjectionReindex
 import TNLean.Algebra.MatrixRankOfFactor
 import TNLean.Algebra.MatrixRealignment

@@ -20,6 +20,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 namespace CollarScan
 
@@ -79,7 +81,7 @@ open Classical in
 is at most `10 K n D μ`. Multiplicity counts interaction labels, not anchor sites. -/
 theorem sum_card_state_designatedSplitIncidence_le_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L μ : ℕ}
     (h : History S.K S.m S.M k) (hn : 2 ≤ S.n) (hm : 2 ≤ S.m)
     (hk : k ≤ S.n * S.m) (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D)
@@ -105,7 +107,7 @@ open Classical in
 is at most `10 K n D μ`. Multiplicity counts interaction labels, not anchor sites. -/
 theorem sum_card_old_designatedSplitIncidence_le_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L μ : ℕ}
     (h : History S.K S.m S.M k) (hn : 2 ≤ S.n) (hm : 2 ≤ S.m)
     (hk : k + 1 ≤ S.n * S.m) (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D)

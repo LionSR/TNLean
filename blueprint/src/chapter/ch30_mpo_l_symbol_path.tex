@@ -281,3 +281,122 @@ coefficients of the span.
     of Lemma~\ref{lem:glm_mixed_gauge_coefficients}, with trivial fusion
     gauge, expresses $R$ through $L(\gamma_0)$ as stated.
 \end{proof}
+
+\begin{lemma}[Transport by a continuous matrix differential equation]
+    \leanok
+    \label{lem:glm_l_path_matrix_ode}
+    \lean{Matrix.eqOn_of_hasDerivAt_mul,
+        Matrix.eq_mul_initial_of_hasDerivAt_mul,
+        Matrix.isUnit_of_hasDerivAt_mul,
+        Matrix.eq_mul_initial_of_hasDerivAt_mul_entries,
+        Matrix.eq_mul_initial_mul_inv_of_hasDerivAt,
+        Matrix.eq_kronecker_mul_initial_mul_inv_of_hasDerivAt}
+    Let $I=[\alpha,\beta]$ and $t_0\in I$. A continuous square matrix
+    coefficient $X$ has at most one differentiable solution of $F'=XF$
+    with prescribed value at $t_0$. If $g'=Xg$ and $g(t_0)=1$, then $g(t)$
+    is invertible and $F(t)=g(t)F(t_0)$, also for rectangular $F$.
+    For the two-sided rectangular case, let $X:I\to\mathbb C^{n\times n}$
+    and $Y:I\to\mathbb C^{m\times m}$ be continuous, and let
+    $F:I\to\mathbb C^{n\times m}$, $G:I\to\mathbb C^{n\times n}$ and
+    $H:I\to\mathbb C^{m\times m}$ satisfy
+    \[
+        F'=XF-FY,\qquad G'=XG,\qquad H'=YH,\qquad G(t_0)=1,\quad H(t_0)=1.
+    \]
+    Here the functions are defined in real neighborhoods of the interval so
+    that the derivatives, entrywise for $F$, exist at every point of $I$,
+    including its endpoints. Then $G(t)$ and $H(t)$ are invertible and
+    \[
+        F(t)=G(t)F(t_0)H(t)^{-1}\qquad(t\in I).
+    \]
+    More generally, let $X_1,X_2,X_3$ be continuous matrix coefficients
+    and let $g_\nu'=X_\nu g_\nu$, $g_\nu(t_0)=1$. If
+    $L'= (X_1\otimes1+1\otimes X_2)L-LX_3$, then
+    \begin{align}
+        L(t) & =(g_1(t)\otimes g_2(t))L(t_0)g_3(t)^{-1}.
+        \label{eq:glm_l_path_integrated}
+    \end{align}
+    All derivatives are assumed to exist at every point of $I$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Continuity bounds $\|X(t)\|$ on the compact interval. Uniqueness for a
+    uniformly Lipschitz differential equation applies both forwards and
+    backwards from $t_0$. Comparing $F$ with $gF(t_0)$ gives transport.
+    If $g(t)U=g(t)V$, uniqueness backwards to $t_0$ gives $U=V$;
+    finite dimensionality therefore makes $g(t)$ invertible.
+    Apply transport columnwise to rectangular matrices. For the two-sided
+    equation, the product rule gives
+    \[
+        (FH)'=(XF-FY)H+F(YH)=X(FH),\qquad (FH)(t_0)=F(t_0).
+    \]
+    Rectangular transport yields $F(t)H(t)=G(t)F(t_0)$; multiplying by
+    the inverse of $H(t)$ proves the two-sided formula. The product rule
+    gives $(Lg_3)'=(X_1\otimes1+1\otimes X_2)Lg_3$ and
+    $(g_1\otimes g_2)'=(X_1\otimes1+1\otimes X_2)(g_1\otimes g_2)$.
+    Transport of $Lg_3$, followed by multiplication by $g_3^{-1}$,
+    proves~(\ref{eq:glm_l_path_integrated}).
+\end{proof}
+
+\begin{lemma}[Constancy with continuous generators and fundamental solutions]
+    \leanok
+    \label{lem:glm_l_path_integrated}
+    \lean{MPOTensor.actionLMatrix_gaugeEquiv_of_continuous}
+    \uses{lem:glm_l_path_first_order}
+    On $I=[\alpha,\beta]$, assume the hypotheses of
+    Lemma~\ref{lem:glm_l_path_first_order} at every point, including the
+    stated neighborhood hypotheses at the endpoints. Let $t_0\in I$.
+    Suppose each generator $X_{ax}^y(t)$ is continuous on $I$, and suppose
+    differentiable matrix functions $g_{ax}^y$ satisfy
+    $(g_{ax}^y)'=X_{ax}^y g_{ax}^y$ and $g_{ax}^y(t_0)=1$.
+    Then every $g_{ax}^y(t)$ is invertible and
+    \begin{align}
+        L(t)^{zij}_{ck\mu}
+         & =\sum_{i',j',k'}
+        g_{az}^y(t)_{ii'}g_{bx}^z(t)_{jj'}
+        \bigl(g_{cx}^y(t)^{-1}\bigr)_{k'k}
+        L(t_0)^{zi'j'}_{ck'\mu}.
+        \label{eq:glm_l_path_gauge_transport}
+    \end{align}
+    Thus all these symbols have the same gauge class, with the fusion
+    gauge fixed. Continuity of the generators and existence of the
+    fundamental solutions are explicit additional hypotheses here;
+    the source does not supply the integration argument
+    \cite{gap:glm23_mpo_symmetric_mps_scope}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:glm_l_path_first_order,lem:glm_l_path_matrix_ode}
+    Fix $a,b,c,x,y,z,\mu$ and regard $L^{zij}_{ck\mu}$ as a rectangular
+    matrix with row $(i,j)$ and column $k$. Its derivative from
+    Lemma~\ref{lem:glm_l_path_first_order} is
+    $(X_{az}^y\otimes1+1\otimes X_{bx}^z)L-LX_{cx}^y$.
+    Lemma~\ref{lem:glm_l_path_matrix_ode} yields invertibility of all
+    gauges and~(\ref{eq:glm_l_path_gauge_transport}).
+\end{proof}
+
+
+\begin{lemma}[Constructed gauges for bounded smooth generators]
+    \leanok
+    \label{lem:glm_l_path_constructed}
+    \lean{MPOTensor.exists_actionLMatrix_gaugeEquiv_of_contDiff}
+    \uses{lem:glm_l_path_integrated}
+    Retain the tensor-path assumptions of
+    Lemma~\ref{lem:glm_l_path_integrated}. Suppose each generator
+    $X_{ax}^y$ is continuously differentiable on $\mathbb R$ and bounded
+    there in the matrix operator norm. Then there exist differentiable
+    fundamental solutions $g_{ax}^y$, equal to $1$ at the chosen base
+    point, which are invertible on $I$ and satisfy the gauge law
+    (\ref{eq:glm_l_path_gauge_transport}). The global regularity and
+    boundedness assumptions are stronger than those stated in the source
+    \cite{gap:glm23_mpo_symmetric_mps_scope}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:glm_l_path_integrated}
+    For each multiplicity space, apply existence for a bounded
+    continuously differentiable matrix coefficient to the shifted equation
+    $U'(s)=X(t_0+s)U(s)$, $U(0)=1$. Set $g(t)=U(t-t_0)$.
+    The chain rule gives $g'=Xg$ and $g(t_0)=1$.
+    Lemma~\ref{lem:glm_l_path_integrated} proves invertibility and the
+    gauge identity.
+\end{proof}

@@ -31,6 +31,8 @@ open Matrix Set TensorPower TensorPower.ReplicaTransport
 open scoped BigOperators Matrix ComplexOrder MatrixOrder
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter

@@ -44,6 +44,8 @@ polynomial-shell argument and this metric-space result is documented in
 open Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 private theorem exp_neg_mul_ceil_metric_le {R β : ℝ} (hR : 0 < R) (hβ : 0 ≤ β) (ℓ : ℝ) :
@@ -224,8 +226,8 @@ theorem exists_metric_truncated_filter_localization {R J Δ : ℝ} (hR : 0 < R)
             ‖gaussianFilteredTerm q Δ (∑ j, h j) (h i) - M‖ ≤ J * C * Real.exp (-(η * ℓ)) ∧
             (∀ (hH : (∑ j, h j).IsHermitian) {E₀ : ℝ}
               (_hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues k)
-              {ψ : EuclideanSpace ℂ (ι → Fin d)}, ψ ∈ groundEigenspace (∑ j, h j) E₀ →
-              ‖toEuclideanLin M ψ - (groundEigenspace (∑ j, h j) E₀).starProjection
+              {ψ : EuclideanSpace ℂ (ι → Fin d)}, ψ ∈ groundSpace (∑ j, h j) E₀ →
+              ‖toEuclideanLin M ψ - (groundSpace (∑ j, h j) E₀).starProjection
                 (toEuclideanLin M ψ)‖ ≤ J * C * Real.exp (-(η * ℓ)) * ‖ψ‖) ∧
             (∀ {E₀ : ℝ} {Ω : EuclideanSpace ℂ (ι → Fin d)},
               Matrix.IsGappedGroundState (∑ j, h j) E₀ Ω Δ →

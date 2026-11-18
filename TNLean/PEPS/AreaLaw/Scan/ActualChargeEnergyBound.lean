@@ -39,6 +39,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 namespace CollarScan
@@ -50,7 +52,7 @@ theorem actualCharge_energyError_le_domainGraph
     {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ} [NeZero q]
     [LinearOrder (AdmissibleSupport Λ R)]
     (hT : T.Nonempty) (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
-    (hgraph : S.graph = domainGraph Λ)
+    (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
     (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ)

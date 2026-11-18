@@ -307,6 +307,18 @@ continuous and to a bond dimension growing along the path (line 1551), the
 step from a gapped path of parent Hamiltonians to a continuous path of
 tensors (line 1356), and the periodic-boundary variant (lines 1555--1578).
 
+An additional ODE construction gives the explicit transport matrices on a
+closed interval when the generators are continuous and fundamental
+solutions are supplied. For globally bounded continuously differentiable
+generators, those solutions are constructed using the matrix evolution
+existence theorem. These extra assumptions belong only to this explicit
+ODE construction; the connected-open-set theorem above does not require
+them.\footnote{
+    \leanid{MPOTensor.actionLMatrix_gaugeEquiv_of_continuous}, in
+    \doclink{TNLean/MPS/MPDO/BoundaryActionLMatrixPath}, and
+    \leanid{MPOTensor.exists_actionLMatrix_gaugeEquiv_of_contDiff}, in
+    \doclink{TNLean/MPS/MPDO/BoundaryActionLMatrixPathExistence}.}
+
 \paragraph{The single-block obstruction for exact maps.}
 For a single injective state block acted on without multiplicity, the L
 matrix of each operator pair has one row; being invertible, it has one

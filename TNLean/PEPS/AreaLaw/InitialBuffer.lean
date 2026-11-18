@@ -51,6 +51,8 @@ open Matrix
 open scoped Matrix.Norms.L2Operator
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport latticeL1Distance_le_one_of_planeDomainGraph_adj planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Shifting the index of a finite sum from `0, …, m-1` to `1, …, m`. -/
@@ -66,8 +68,8 @@ theorem sum_range_succ_eq_sum_Icc {M : Type*} [AddCommMonoid M] (f : ℕ → M) 
 theorem supportDim_le {Λ : Finset (ℤ × ℤ)} {q R : ℕ} (hq : 1 ≤ q) (X : AdmissibleSupport Λ R) :
     Entropy.supportDim (fun _ : Site Λ ↦ q) X.1 ≤ q ^ (1 + 2 * R * (R + 1)) := by
   rw [Entropy.supportDim, Finset.prod_const]
-  exact Nat.pow_le_pow_right hq (card_support_le_diamond (G := domainGraph Λ) Subtype.val
-    Subtype.val_injective (fun _ _ h ↦ latticeL1Distance_le_one_of_adj h) X.1 R X.2.2)
+  exact Nat.pow_le_pow_right hq (card_support_le_diamond (G := planeDomainGraph Λ) Subtype.val
+    Subtype.val_injective (fun _ _ ↦ latticeL1Distance_le_one_of_planeDomainGraph_adj) X.1 R X.2.2)
 
 /-- Every admissible support has positive Hilbert-space dimension when the local
 dimension is positive. -/

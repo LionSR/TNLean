@@ -21,6 +21,8 @@ strip as a chain of `q^w`-dimensional sites.
 
 open Matrix TNLean.Lattice
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- Reverse the rows in odd columns. -/

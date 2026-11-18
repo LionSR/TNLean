@@ -43,6 +43,8 @@ multiplicative, because `P_{gh} = P_g P_h`, so it is a character.
 
 open Matrix Module.End
 
+open ManyBody (groundSpace mem_groundSpace_iff_mulVec)
+
 namespace TNLean.Lattice
 
 variable {V : Type*} [Fintype V] [DecidableEq V] {G : Type*} [CommGroup G] [MulAction G V]
@@ -63,11 +65,11 @@ theorem toEuclideanLin_sitePermMatrix_one (v : EuclideanSpace ℂ (V → Fin q))
   simp only [sitePermMatrix, map_one, one_mulVec, WithLp.toLp_ofLp]
 
 /-- An invariant `H` has its ground space mapped into itself by every site permutation. -/
-theorem mapsTo_groundEigenspace_sitePermMatrix {H : Matrix (V → Fin q) (V → Fin q) ℂ}
+theorem mapsTo_groundSpace_sitePermMatrix {H : Matrix (V → Fin q) (V → Fin q) ℂ}
     (hInv : IsSiteInvariant G q H) (E₀ : ℝ) (g : G) :
-    Set.MapsTo (toEuclideanLin (sitePermMatrix (V := V) q g)) (groundEigenspace H E₀ : Set _)
-      (groundEigenspace H E₀ : Set _) := fun v hv ↦ by
-  rw [SetLike.mem_coe, mem_groundEigenspace_iff] at hv ⊢
+    Set.MapsTo (toEuclideanLin (sitePermMatrix (V := V) q g)) (groundSpace H E₀ : Set _)
+      (groundSpace H E₀ : Set _) := fun v hv ↦ by
+  rw [SetLike.mem_coe, mem_groundSpace_iff_mulVec] at hv ⊢
   rw [toEuclideanLin_apply_eq, WithLp.ofLp_toLp, mulVec_mulVec, ← (hInv g).eq, ← mulVec_mulVec,
     hv, mulVec_smul]
 
@@ -78,10 +80,10 @@ arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1613–1618, ground states that 
 of the translations with momentum `k_a`, for which `χ(x) = e^{i k_a · x}`. -/
 noncomputable def momentumSector (H : Matrix (V → Fin q) (V → Fin q) ℂ) (E₀ : ℝ)
     (χ : G →* ℂ) : Submodule ℂ (EuclideanSpace ℂ (V → Fin q)) :=
-  groundEigenspace H E₀ ⊓ ⨅ g, eigenspace (toEuclideanLin (sitePermMatrix q g)) (χ g)
+  groundSpace H E₀ ⊓ ⨅ g, eigenspace (toEuclideanLin (sitePermMatrix q g)) (χ g)
 
-theorem momentumSector_le_groundEigenspace (H : Matrix (V → Fin q) (V → Fin q) ℂ) (E₀ : ℝ)
-    (χ : G →* ℂ) : momentumSector G q H E₀ χ ≤ groundEigenspace H E₀ :=
+theorem momentumSector_le_groundSpace (H : Matrix (V → Fin q) (V → Fin q) ℂ) (E₀ : ℝ)
+    (χ : G →* ℂ) : momentumSector G q H E₀ χ ≤ groundSpace H E₀ :=
   inf_le_left
 
 theorem toEuclideanLin_sitePermMatrix_of_mem_momentumSector
@@ -104,11 +106,11 @@ Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1613–1618: "we can p
 states to be eigenvectors of the translation operators". -/
 theorem iSup_momentumSector {H : Matrix (V → Fin q) (V → Fin q) ℂ}
     (hInv : IsSiteInvariant G q H) (E₀ : ℝ) :
-    ⨆ χ : G →* ℂ, momentumSector G q H E₀ χ = groundEigenspace H E₀ := by
-  set K := groundEigenspace H E₀
+    ⨆ χ : G →* ℂ, momentumSector G q H E₀ χ = groundSpace H E₀ := by
+  set K := groundSpace H E₀
   let R : G → Module.End ℂ K := fun g ↦
     (toEuclideanLin (sitePermMatrix q g)).restrict
-      (mapsTo_groundEigenspace_sitePermMatrix hInv E₀ g)
+      (mapsTo_groundSpace_sitePermMatrix hInv E₀ g)
   have hR (g : G) (v : K) : (R g v : EuclideanSpace ℂ (V → Fin q)) =
       toEuclideanLin (sitePermMatrix q g) v := rfl
   have hRmul (g h : G) (v : K) : R (g * h) v = R g (R h v) := by
@@ -136,7 +138,7 @@ theorem iSup_momentumSector {H : Matrix (V → Fin q) (V → Fin q) ℂ}
     have := iSup_iInf_maxGenEigenspace_eq_top_of_iSup_maxGenEigenspace_eq_top_of_commute R hcomm
       fun g ↦ iSup_maxGenEigenspace_eq_top (R g)
     simpa only [IsFinitelySemisimple.maxGenEigenspace_eq_eigenspace (hss _)] using this
-  refine le_antisymm (iSup_le fun χ ↦ momentumSector_le_groundEigenspace H E₀ χ) ?_
+  refine le_antisymm (iSup_le fun χ ↦ momentumSector_le_groundSpace H E₀ χ) ?_
   -- every joint eigenspace of the restrictions lies in a momentum sector
   have hjoint (χ : G → ℂ) :
       (⨅ g, eigenspace (R g) (χ g)).map K.subtype ≤ ⨆ χ : G →* ℂ, momentumSector G q H E₀ χ := by
@@ -177,7 +179,7 @@ states are unchanged by translation by a supercell". -/
 theorem mem_supercell_iff {H : Matrix (V → Fin q) (V → Fin q) ℂ}
     (hInv : IsSiteInvariant G q H) {E₀ : ℝ} {g : G} :
     g ∈ supercell G q H E₀ ↔
-      ∀ v ∈ groundEigenspace H E₀, toEuclideanLin (sitePermMatrix q g) v = v := by
+      ∀ v ∈ groundSpace H E₀, toEuclideanLin (sitePermMatrix q g) v = v := by
   simp only [supercell, Subgroup.mem_iInf, MonoidHom.mem_ker]
   constructor
   · intro hg v hv
@@ -192,7 +194,7 @@ theorem mem_supercell_iff {H : Matrix (V → Fin q) (V → Fin q) ℂ}
   · intro hg χ hbot
     obtain ⟨v, hv, hv0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot hbot
     have := (toEuclideanLin_sitePermMatrix_of_mem_momentumSector hv g).symm.trans
-      (hg v (momentumSector_le_groundEigenspace H E₀ χ hv))
+      (hg v (momentumSector_le_groundSpace H E₀ χ hv))
     exact smul_left_injective ℂ hv0 (this.trans (one_smul ℂ v).symm)
 
 /-- The supercell satisfies the hypothesis on the subgroup in
@@ -200,7 +202,7 @@ theorem mem_supercell_iff {H : Matrix (V → Fin q) (V → Fin q) ℂ}
 `norm_groundCompression_commutator_le_of_mem_supercell`. -/
 theorem sitePermMatrix_mulVec_eq_of_mem_supercell {H : Matrix (V → Fin q) (V → Fin q) ℂ}
     (hInv : IsSiteInvariant G q H) {E₀ : ℝ} {g : G} (hg : g ∈ supercell G q H E₀)
-    (v : EuclideanSpace ℂ (V → Fin q)) (hv : v ∈ groundEigenspace H E₀) :
+    (v : EuclideanSpace ℂ (V → Fin q)) (hv : v ∈ groundSpace H E₀) :
     sitePermMatrix q g *ᵥ WithLp.ofLp v = WithLp.ofLp v := by
   simpa [toEuclideanLin_apply_eq] using congrArg WithLp.ofLp ((mem_supercell_iff hInv).mp hg v hv)
 

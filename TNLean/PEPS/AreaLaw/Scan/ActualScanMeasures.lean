@@ -33,6 +33,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 variable {V I : Type} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]

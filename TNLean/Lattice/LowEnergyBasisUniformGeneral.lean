@@ -27,6 +27,8 @@ The normalization and recursive basis theorems themselves require no such geomet
 
 open scoped InnerProductSpace
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 section Normalization
@@ -145,8 +147,8 @@ theorem sqrtKernel_comp {α : Type*} (k : α → α → ℝ) (a : κ → α) (n 
 end AnchorSum
 
 noncomputable local instance {ν : Type*} [Fintype ν] [DecidableEq ν]
-    (H : Matrix ν ν ℂ) (E₀ : ℝ) : InnerProductSpace ℂ (groundEigenspace H E₀) :=
-  (groundEigenspace H E₀).innerProductSpace
+    (H : Matrix ν ν ℂ) (E₀ : ℝ) : InnerProductSpace ℂ (groundSpace H E₀) :=
+  (groundSpace H E₀).innerProductSpace
 
 section Graph
 
@@ -173,17 +175,17 @@ theorem exists_groundSpaceBasis_sum_norm_offDiagonalPartFamily_le_uniform [NeZer
       ((Finset.univ.filter fun y ↦ G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {q ΔE : ℝ} (hq : 0 ≤ q) (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
-    [NeZero (Module.finrank ℂ (groundEigenspace (∑ k, h k) E₀))] :
-    let n := Module.finrank ℂ (groundEigenspace (∑ k, h k) E₀)
+    [NeZero (Module.finrank ℂ (groundSpace (∑ k, h k) E₀))] :
+    let n := Module.finrank ℂ (groundSpace (∑ k, h k) E₀)
     let γ := commutatorRate R vR b₀ ΔE
     let C := commutatorConst R vR b₀ |Kg| kg * Real.exp (γ * (2 * R + 1))
-    ∃ b : OrthonormalBasis (Fin n) ℂ (groundEigenspace (∑ k, h k) E₀),
+    ∃ b : OrthonormalBasis (Fin n) ℂ (groundSpace (∑ k, h k) E₀),
       ∑ i, ‖offDiagonalPartFamily (fun c ↦ (b c : EuclideanSpace ℂ (ι → Fin d)))
         (groundCompression (∑ k, h k) E₀ (gaussianFilteredTerm q ΔE (∑ k, h k) (h i)))‖ ≤
         ((n - 1 : ℕ) : ℝ) ^ 2 * recursiveBasisCoeff n C *
           (|b₀| * (|Kg| * shellSumConst (γ / 2 ^ n) kg)) := by
   classical
-  let K := groundEigenspace (∑ k, h k) E₀
+  let K := groundSpace (∑ k, h k) E₀
   let B := fun i ↦ groundSpaceCompression (∑ k, h k) E₀ (h i)
   let n := Module.finrank ℂ K
   let γ := commutatorRate R vR b₀ ΔE

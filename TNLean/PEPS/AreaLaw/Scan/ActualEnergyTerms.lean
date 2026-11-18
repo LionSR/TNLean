@@ -32,6 +32,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport exists_walk_length_le_iff_edist_le planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open Entropy TensorPower TensorPower.ReplicaTransport SpectralFilter
@@ -207,7 +209,7 @@ theorem truncatedEnergyTerm_mem_Icc [NeZero q] (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 
 /-- The support certificate follows from actual admissibility: every interaction
 support has induced-graph diameter at most `R`, including in disconnected domains. -/
 theorem truncatedEnergyTerm_isSupportedOn [NeZero q]
-    (hgraph : S.graph = domainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (L : ℕ) (i : AdmissibleSupport Λ R) :
     IsSupportedOn (n := fun _ => q) (S.truncatedEnergyTerm h Ω Δ L i)
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) := by
@@ -223,7 +225,7 @@ theorem truncatedEnergyTerm_isSupportedOn [NeZero q]
 /-- All three operator hypotheses of energy transport hold for the actual
 labelled augmented terms; no positivity or support certificate is assumed. -/
 theorem actualEnergyTerms_spec [NeZero q]
-    (hgraph : S.graph = domainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) (aux : Bool → ℕ) :
     (∀ i, 0 ≤ (S.actualEnergyTerms h Ω Δ L aux).term i) ∧
     (∀ i, (S.actualEnergyTerms h Ω Δ L aux).term i ≤ 1) ∧

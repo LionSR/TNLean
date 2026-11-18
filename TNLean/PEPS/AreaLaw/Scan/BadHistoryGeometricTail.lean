@@ -21,6 +21,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open scoped BigOperators
@@ -79,7 +81,7 @@ sides and all bands, averaged over offsets. Its endpoint factor is compact and
 its ratio is derived, not supplied as a probability hypothesis. -/
 theorem sum_historyWeight_bad_through_geometric_domainGraph_le
     [Fintype I] [LinearOrder I] {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     {N L μ : ℕ} (hn : 0 < S.n) (hm : 0 < S.m) (hr : 0 < S.r₀) (hM : 0 < S.M)
     (hL : 8 * S.K * S.m ≤ L)
