@@ -1,0 +1,432 @@
+[
+  [
+    "TNLean/Lattice/LowEnergyCommutatorExample.lean",
+    97,
+    "noncomputable def hamiltonian : Matrix (Fin (m + 3) \u2192 Fin 2) (Fin (m + 3) \u2192 Fin 2) \u2102 :="
+  ],
+  [
+    "TNLean/Lattice/ProductForm.lean",
+    346,
+    "noncomputable def _root_.ManyBody.PlaneInteraction.trotterProduct {R : \u2115}"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/AKLV/TwoBlockTruncation.lean",
+    49,
+    "noncomputable def aklvTwoBlockHamiltonian {L q : \u2115} (l r : \u2115)"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/ComponentReduction.lean",
+    158,
+    "noncomputable def _root_.ManyBody.DomainInteraction.toChain (h : ManyBody.DomainInteraction \u039b q R) :"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/DomainPartialSwap.lean",
+    42,
+    "noncomputable def _root_.ManyBody.DomainInteraction.doubled (h : ManyBody.DomainInteraction \u039b q R) :"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/DomainPartialSwap.lean",
+    84,
+    "noncomputable def _root_.ManyBody.DomainInteraction.swappedDoubled"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/DoubledHamiltonian.lean",
+    42,
+    "noncomputable def _root_.ManyBody.ChainInteraction.doubled (h : ManyBody.ChainInteraction L q R) :"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/GluingHamiltonian.lean",
+    32,
+    "noncomputable def _root_.ManyBody.ChainInteraction.cutLeftPart"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/GluingHamiltonian.lean",
+    40,
+    "noncomputable def _root_.ManyBody.ChainInteraction.cutBoundaryPart"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/Hastings/CutoffPair.lean",
+    80,
+    "noncomputable def _root_.ManyBody.ChainInteraction.localizedPart (h : ChainInteraction L q R)"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/Hastings/ProjectorFactorizationScaling.lean",
+    53,
+    "noncomputable def _root_.ManyBody.ChainInteraction.smul (h : ManyBody.ChainInteraction L q R)"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean",
+    270,
+    "noncomputable def _root_.ManyBody.ChainInteraction.termSum (h : ChainInteraction L q R)"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean",
+    303,
+    "noncomputable def _root_.ManyBody.ChainInteraction.leftPart (h : ChainInteraction L q R) (j m : \u2115) :"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean",
+    309,
+    "noncomputable def _root_.ManyBody.ChainInteraction.bufferPart"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean",
+    316,
+    "noncomputable def _root_.ManyBody.ChainInteraction.rightPart"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/Huang/GridHamiltonian.lean",
+    94,
+    "noncomputable def chainGridBlockHamiltonian (hw : 0 < w)"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/Huang/GridHamiltonian.lean",
+    100,
+    "noncomputable def chainGridRetainedHamiltonian (hw : 0 < w)"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/Huang/PositiveChainHamiltonian.lean",
+    74,
+    "noncomputable def _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive {L q : \u2115}"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/SwappedDoubledHamiltonian.lean",
+    43,
+    "noncomputable def _root_.ManyBody.ChainInteraction.swappedDoubled"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/ViableSet/ChainPadding.lean",
+    82,
+    "noncomputable def paddedInteraction {L N q : \u2115} (hi : L \u2264 N) (z : Fin q)"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean",
+    118,
+    "noncomputable def _root_.ManyBody.ChainInteraction.ofBonds"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/Selection.lean",
+    46,
+    "noncomputable def _root_.ManyBody.ChainInteraction.sizeTrimmingSelectionWith {L q k : \u2115}"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/Selection.lean",
+    65,
+    "noncomputable def _root_.ManyBody.ChainInteraction.sizeTrimmingSelection {L q k : \u2115}"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/Selection.lean",
+    76,
+    "def _root_.ManyBody.ChainInteraction.IsAdmissibleNet {L q k : \u2115}"
+  ],
+  [
+    "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/Selection.lean",
+    87,
+    "def _root_.ManyBody.ChainInteraction.IsAdmissibleSolver {L q k : \u2115}"
+  ],
+  [
+    "TNLean/MPS/Examples/AKLTOpenPolynomialHamiltonian.lean",
+    33,
+    "def akltOpenHamiltonian (N : \u2115) : NSiteSpace 3 N \u2192\u2097[\u2102] NSiteSpace 3 N :="
+  ],
+  [
+    "TNLean/MPS/Examples/AKLTPolynomialHamiltonian.lean",
+    273,
+    "def akltHamiltonian (N : \u2115) : NSiteSpace 3 N \u2192\u2097[\u2102] NSiteSpace 3 N :="
+  ],
+  [
+    "TNLean/MPS/Examples/CZX/ClusterIsingSymmetry.lean",
+    129,
+    "noncomputable def clusterIsingHamiltonian (N : \u2115) [NeZero N] (c : \u2102) :"
+  ],
+  [
+    "TNLean/MPS/Examples/CZX/ClusterIsingSymmetry.lean",
+    136,
+    "noncomputable def rooseHamiltonian (N : \u2115) [NeZero N] (\u03bc : \u2102) :"
+  ],
+  [
+    "TNLean/MPS/Examples/Fibonacci/FibonacciGoldenChain.lean",
+    121,
+    "def goldenChainHamiltonian (N : \u2115) [NeZero N] : Matrix (Fin N \u2192 Fin 2) (Fin N \u2192 Fin 2) \u2102 :="
+  ],
+  [
+    "TNLean/MPS/Examples/HardTruncationCutoff.lean",
+    82,
+    "def regionalHamiltonian (K : \u2115) : Matrix (Config K) (Config K) \u2102 :="
+  ],
+  [
+    "TNLean/MPS/Examples/HardTruncationCutoff.lean",
+    86,
+    "def hamiltonian (K : \u2115) : Matrix (Config K) (Config K) \u2102 :="
+  ],
+  [
+    "TNLean/MPS/Examples/HardTruncationCutoff.lean",
+    90,
+    "def truncatedHamiltonian (K : \u2115) : Matrix (Config K) (Config K) \u2102 :="
+  ],
+  [
+    "TNLean/MPS/Examples/KramersWannier/KramersWannierSectors.lean",
+    199,
+    "def isingHamiltonian (N : \u2115) [NeZero N] (J h : \u211d) :"
+  ],
+  [
+    "TNLean/MPS/Examples/MajumdarGhoshHamiltonian.lean",
+    263,
+    "def majumdarGhoshHamiltonian (N : \u2115) : NSiteSpace 2 N \u2192\u2097[\u2102] NSiteSpace 2 N :="
+  ],
+  [
+    "TNLean/MPS/Examples/PVBSPureWindowHamiltonian.lean",
+    27,
+    "noncomputable def pvbsPureWindowInteraction (q : \u2102) (R : \u2115) :"
+  ],
+  [
+    "TNLean/MPS/Examples/ShortMomentum/SectorModel.lean",
+    37,
+    "noncomputable def sevenSectorInteraction (\u03b6 q : \u2102) : MPVSpace 5 7 \u2192\u2097[\u2102] MPVSpace 5 7 :="
+  ],
+  [
+    "TNLean/MPS/ParentHamiltonian/Defs.lean",
+    85,
+    "noncomputable def parentInteraction (A : MPSTensor d D) (L : \u2115) :"
+  ],
+  [
+    "TNLean/MPS/ParentHamiltonian/Defs.lean",
+    213,
+    "noncomputable def parentHamiltonian (A : MPSTensor d D) (L N : \u2115) :"
+  ],
+  [
+    "TNLean/MPS/ParentHamiltonian/LocalSupport.lean",
+    259,
+    "structure HasAppendixD2ParentCommutingHamiltonian"
+  ],
+  [
+    "TNLean/MPS/ParentHamiltonian/PhysicalDeformation.lean",
+    171,
+    "structure IsParentInteraction (A : MPSTensor d D) (L : \u2115)"
+  ],
+  [
+    "TNLean/MPS/ParentHamiltonian/PhysicalDeformation.lean",
+    190,
+    "noncomputable def deformedInteraction (L : \u2115) (\u039b : Matrix (Fin d) (Fin d) \u2102)"
+  ],
+  [
+    "TNLean/MPS/ParentHamiltonian/TripartiteDecorrelation.lean",
+    104,
+    "structure CommutingParentHamiltonian"
+  ],
+  [
+    "TNLean/MPS/ParentHamiltonian/TripartiteDecorrelation.lean",
+    147,
+    "def HasCommutingParentHamiltonian"
+  ],
+  [
+    "TNLean/MPS/ParentHamiltonian/VaryingOBCProjectorKernel.lean",
+    138,
+    "noncomputable def obcParentHamiltonian (b : \u2115 \u2192 \u2115)"
+  ],
+  [
+    "TNLean/MPS/ParentHamiltonian/VaryingPhysicalParentHamiltonian.lean",
+    98,
+    "noncomputable def varyingPhysicalParentHamiltonian {N : \u2115}"
+  ],
+  [
+    "TNLean/MPS/Preparation/SequentialTransition.lean",
+    104,
+    "def IsTransitionInteraction [NeZero d]"
+  ],
+  [
+    "TNLean/MPS/Symmetry/BondProductParentHamiltonian.lean",
+    80,
+    "noncomputable def bondProductParentHamiltonian"
+  ],
+  [
+    "TNLean/MPS/Symmetry/BondProductPhysicalParentHamiltonian.lean",
+    49,
+    "noncomputable def physicalBondProductParentHamiltonian"
+  ],
+  [
+    "TNLean/MPS/Symmetry/CommonPhysicalEndpointPaths.lean",
+    31,
+    "private def replaceInitialInteraction"
+  ],
+  [
+    "TNLean/MPS/Symmetry/CommonPhysicalFixedPointGroundPath.lean",
+    140,
+    "noncomputable def exactMPSGroundPath_commonPhysicalNormalizedBondInteraction"
+  ],
+  [
+    "TNLean/MPS/Symmetry/CommonPhysicalFixedPointPath.lean",
+    124,
+    "noncomputable def commonPhysicalNormalizedBondInteraction"
+  ],
+  [
+    "TNLean/MPS/Symmetry/FixedPointGappedPath.lean",
+    27,
+    "noncomputable def normalizedBondInteraction (D\u2080 D\u2081 : \u2115) (\u03b3 : \u211d) :"
+  ],
+  [
+    "TNLean/MPS/Symmetry/GappedInteractionPath.lean",
+    35,
+    "noncomputable def interactionHamiltonian {d N : \u2115}"
+  ],
+  [
+    "TNLean/MPS/Symmetry/GappedInteractionPathComposition.lean",
+    31,
+    "noncomputable def concatenatedInteraction"
+  ],
+  [
+    "TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalEndpointAttachment.lean",
+    108,
+    "noncomputable def arbitraryPhysicalEndpointParentInteraction"
+  ],
+  [
+    "TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedPathGap.lean",
+    88,
+    "noncomputable def arbitraryPhysicalMixedInteraction"
+  ],
+  [
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCoreHamiltonian.lean",
+    208,
+    "def jointEndpointCoreHamiltonian"
+  ],
+  [
+    "TNLean/MPS/Symmetry/MPOSymmetry/JointMixedEndpointCornerSupport.lean",
+    28,
+    "noncomputable def jointMixedEndpointParentInteraction"
+  ],
+  [
+    "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointActiveEdgeNormalization.lean",
+    317,
+    "def mixedEndpointActiveNormalizedLocalInteraction"
+  ],
+  [
+    "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointActiveEdgeNormalization.lean",
+    607,
+    "def mixedEndpointActiveNormalizedHamiltonian"
+  ],
+  [
+    "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointActiveHamiltonian.lean",
+    239,
+    "def mixedEndpointActiveLocalInteraction"
+  ],
+  [
+    "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointActiveHamiltonian.lean",
+    351,
+    "def mixedEndpointActiveHamiltonian"
+  ],
+  [
+    "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointCoreHamiltonianSpectators.lean",
+    153,
+    "def endpointCoreLocalInteraction (A\u2080 : MPSTensor (D\u2080 * D\u2080) D\u2080)"
+  ],
+  [
+    "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointCoreHamiltonianSpectators.lean",
+    190,
+    "def endpointCoreHamiltonian (A\u2080 : MPSTensor (D\u2080 * D\u2080) D\u2080) (N : \u2115) :"
+  ],
+  [
+    "TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointSupport.lean",
+    216,
+    "noncomputable def mixedEndpointParentInteraction"
+  ],
+  [
+    "TNLean/MPS/Symmetry/MPOSymmetry/MixedWeakHopfAverage.lean",
+    90,
+    "def mixedWeakHopfCompletedInteraction (\u03b3 : \u211d) :="
+  ],
+  [
+    "TNLean/MPS/Symmetry/PhysicalInteractionGap.lean",
+    98,
+    "noncomputable def sectorBondInteraction {K d : \u2115} (dl dr : Fin K \u2192 \u2115)"
+  ],
+  [
+    "TNLean/MPS/Symmetry/PhysicalSpectatorBondExtension.lean",
+    27,
+    "noncomputable def physicalSpectatorEdgeInteraction (K d\u2080 d\u2081 : \u2115)"
+  ],
+  [
+    "TNLean/MPS/Symmetry/PhysicalSpectatorBondExtension.lean",
+    60,
+    "noncomputable def physicalSpectatorBondInteraction (K d\u2080 d\u2081 : \u2115)"
+  ],
+  [
+    "TNLean/MPS/Symmetry/TwoSiteBondInteraction.lean",
+    47,
+    "noncomputable def twoSiteBondInteraction {D : \u2115}"
+  ],
+  [
+    "TNLean/PEPS/AreaLaw/RectangularHamiltonian.lean",
+    124,
+    "def toAreaLawHamiltonian (\u03a6 : RectangleInteraction width height q) :"
+  ],
+  [
+    "TNLean/PEPS/AreaLaw/Scan/ActualEnergyTerms.lean",
+    172,
+    "def _root_.ManyBody.PlaneInteraction.positiveTerm"
+  ],
+  [
+    "TNLean/PEPS/Examples/ClusterStabilizer.lean",
+    257,
+    "def graphHamiltonian (a b : E \u2192 V) (\u03c8 : (V \u2192 Fin 2) \u2192 \u2102) : (V \u2192 Fin 2) \u2192 \u2102 :="
+  ],
+  [
+    "TNLean/PEPS/Examples/HoneycombCluster.lean",
+    276,
+    "abbrev honeycombHamiltonian (\u03c8 : (TorusVertex width height \u2192 Fin 2) \u2192 \u2102) :"
+  ],
+  [
+    "TNLean/PEPS/ParentHamiltonian/InjectiveParentReconstructionCounterexample.lean",
+    73,
+    "def virtualInteraction :"
+  ],
+  [
+    "TNLean/PEPS/ParentHamiltonian/InjectiveParentReconstructionCounterexample.lean",
+    79,
+    "def barePhysicalInteraction : Matrix (Fin 2 \u00d7 Fin 2) (Fin 2 \u00d7 Fin 2) \u2102 :="
+  ],
+  [
+    "TNLean/PEPS/ParentHamiltonian/RegionParentHamiltonian.lean",
+    56,
+    "def IsRegionParentInteraction (A : Tensor \u0393 d) (R : Finset V)"
+  ],
+  [
+    "TNLean/PEPS/ParentHamiltonian/RegionParentHamiltonian.lean",
+    72,
+    "noncomputable def canonicalRegionParentInteraction (A : Tensor \u0393 d) (R : Finset V) :"
+  ],
+  [
+    "TNLean/PEPS/ParentHamiltonian/RegionParentHamiltonian.lean",
+    196,
+    "noncomputable def regionParentHamiltonian (R : \u03b9 \u2192 Finset V)"
+  ],
+  [
+    "TNLean/PEPS/ParentHamiltonian/RegionPhysicalDeformation.lean",
+    159,
+    "noncomputable def deformedRegionInteraction (R : Finset V)"
+  ],
+  [
+    "TNLean/PEPS/RegularBoundaryGibbsSupport.lean",
+    78,
+    "noncomputable def regularBoundarySupportedHamiltonian (n : \u2115) :"
+  ],
+  [
+    "TNLean/PEPS/RegularBoundarySupportedGram.lean",
+    210,
+    "noncomputable def regularBoundaryGramHamiltonian (n : \u2115)"
+  ],
+  [
+    "TNLean/PEPS/RegularRegionBoundaryHamiltonian.lean",
+    51,
+    "noncomputable def regularRegionBoundaryHamiltonian"
+  ],
+  [
+    "scripts/box_supremum_zero_gap_regression.lean",
+    15,
+    "def zeroHamiltonian : ManyBody.PlaneInteraction domain 2 1 where"
+  ],
+  [
+    "scripts/generic_gap_boundary_regression.lean",
+    25,
+    "def zeroHamiltonian : ManyBody.PlaneInteraction domain 2 1 where"
+  ]
+]

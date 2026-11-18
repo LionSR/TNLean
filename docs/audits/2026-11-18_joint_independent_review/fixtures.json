@@ -1,0 +1,37 @@
+[
+  {
+    "path": "scripts/ground_state_gap_scope_regression.lean",
+    "sha256": "6ca25ae11ec5df0ffaeb6c14f161dc7838d01ccf3a54d8bcd0aa985938e5d7f0",
+    "unchanged_from_550": true,
+    "review": "entire fixture read plus production signature and call inspection",
+    "independent_compilation": "not_run"
+  },
+  {
+    "path": "scripts/generic_gap_boundary_regression.lean",
+    "sha256": "b7859a5912fd6f4f9c14e43d2725ac3ee387da12cb1fcbaf94f1c051d56f89f4",
+    "unchanged_from_550": false,
+    "review": "entire fixture read plus production signature and call inspection",
+    "independent_compilation": "not_run"
+  },
+  {
+    "path": "scripts/zero_gap_tn_wrappers_regression.lean",
+    "sha256": "f3e431241a69e8321b89d7f403a9b19a430fcc6f3b00bd70dfc42a29f95638a4",
+    "unchanged_from_550": false,
+    "review": "entire fixture read plus production signature and call inspection",
+    "independent_compilation": "not_run"
+  },
+  {
+    "path": "scripts/range_square_zero_gap_regression.lean",
+    "sha256": "73fa9d483160da883c4bc3dff69dcd946bc430acadb516353a4d5f2ed225a149",
+    "unchanged_from_550": true,
+    "review": "entire fixture read plus production signature and call inspection",
+    "independent_compilation": "not_run"
+  },
+  {
+    "path": "scripts/box_supremum_zero_gap_regression.lean",
+    "sha256": "865f4b10e7651f59aa78f3c31b7e62d44729c741de6153cad3f1157fd4179178",
+    "unchanged_from_550": false,
+    "review": "entire fixture read plus production signature and call inspection",
+    "independent_compilation": "not_run"
+  }
+]

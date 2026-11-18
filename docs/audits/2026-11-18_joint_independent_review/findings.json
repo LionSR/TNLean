@@ -1,0 +1,20 @@
+[
+  [
+    "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+    54,
+    "h",
+    "Remove local Phi reconstruction at54-55; pass h directly at57."
+  ],
+  [
+    "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+    155,
+    "g",
+    "Remove local Phi at155-156 and222-223; pass existing g to the two generic bounds."
+  ],
+  [
+    "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean",
+    209,
+    "g",
+    "Remove local Phi at209-210 and274-275; pass existing g; remove tautological hPhi equalities at211/276 and their rewrite/simp entries."
+  ]
+]

@@ -1,0 +1,50 @@
+{
+  "head": "dccc85e5607077b51822664e9d475287d300d607",
+  "production": "3a41ae4b75eda0cb0daa0c75b74db5908b61a7f9",
+  "patch_pairs": [
+    {
+      "original": "54ab66ae0",
+      "integrated": "c0be5284e",
+      "original_patch": "dc3feb3ec7b51fe0a873a305c16d6af338215b8d",
+      "integrated_patch": "dc3feb3ec7b51fe0a873a305c16d6af338215b8d",
+      "equal": true
+    },
+    {
+      "original": "42229ed94",
+      "integrated": "7fb674c7a",
+      "original_patch": "f200d23839eb15d234964a32bd1bfa9edbe7df5a",
+      "integrated_patch": "f200d23839eb15d234964a32bd1bfa9edbe7df5a",
+      "equal": true
+    },
+    {
+      "original": "550b63ccb",
+      "integrated": "e052cb83f",
+      "original_patch": "c53433bf643d89dd1d3255b1a30d0b33a3c5cea4",
+      "integrated_patch": "c53433bf643d89dd1d3255b1a30d0b33a3c5cea4",
+      "equal": true
+    },
+    {
+      "original": "81e70a7d4",
+      "integrated": "b992c791d",
+      "original_patch": "ffd92d3018eabd9dde0ce736364cec94e6a3c614",
+      "integrated_patch": "ffd92d3018eabd9dde0ce736364cec94e6a3c614",
+      "equal": true
+    }
+  ],
+  "ancestry": {
+    "7376dab08421ab99afcc5373be11104c76cc8a50": true,
+    "b992c791d": true,
+    "81e70a7d4": false,
+    "f8e80bac": true,
+    "e740d046": true
+  },
+  "pins": {
+    "550b63ccb": "729428582b78ab7529b3796099193649f947354a",
+    "dccc85e5607077b51822664e9d475287d300d607": "729428582b78ab7529b3796099193649f947354a"
+  },
+  "reused_mps_lattice_paths": 3587,
+  "documentation_paths": 41,
+  "documentation_differences_from_e740": [],
+  "lean_scan_files": 5621,
+  "legacy_nonimport_hits": []
+}
