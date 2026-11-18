@@ -88,6 +88,8 @@ private theorem outerProduct_mainCoordinates (L w q : ℕ)
   ext x y
   rfl
 
+set_option maxHeartbeats 400000 in
+-- The subtype of instances carries the two interaction hypotheses.
 /-- One family indexed by every admissible sufficiently large physical
 instance satisfies all hypotheses of uniform compression. Its circuit, input
 and readout are exactly those of the constructed sweep.
