@@ -1,0 +1,295 @@
+{
+  "other_evidence": "3a0bcfbab9d92ce105f7583ea79bb1d93bb3977f",
+  "nine_all_in77_closure": true,
+  "direct77_targets": [
+    "TNLean.MPS.AreaLaw.SnakeGridApproximation"
+  ],
+  "dependency_only_count": 8,
+  "nine_old_sidecar_bytes": 5844376,
+  "nine_transitive_project_modules": 277,
+  "nine_transitive_old_sidecar_bytes": 157971024,
+  "local_peps46": [
+    {
+      "module": "TNLean.PEPS.AreaLaw.Amplification.ConstraintWordTruncation",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Amplification.LatticeExcitedDecay",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Amplification.LatticeRestoring",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Amplification.TypicalProjectors",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.AmplificationProof",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.AreaLawExplicitConstant",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.AreaLawTheorem",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.PhysicalCollarInformation",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.RectangularSpecialization",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyBound",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyCoefficients",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyDecay",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualChargeEntropySum",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualChargeSelectionBound",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualGlobalReplicaEnergy",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualMarginalTails",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualRoughLower",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualRoughLowerPrevector",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualScanMeasures",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualSelectedChargeDensityEnergy",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualSelectedChargeEnergy",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualSelectedSharpComparison",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualSharpComparison",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualSharpLower",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualSharpLowerPrevector",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.ActualTransportEstimates",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.BoxClearanceComparison",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.GenericChargeEnergy",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.GenericSelectedChargeEnergy",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.PhysicalBoxBootstrap",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceActualInformation",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceBootstrapEntropy",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceFinalInformation",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceRoughSelection",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceRoundedInformation",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpComparison",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpEnergy",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.SourceTargetSharpMoments",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.StatusMarginalMoments",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.TargetTypicalWindow",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.TemplateFinalInformation",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.Scan.TemplateSourceEntropy",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    },
+    {
+      "module": "TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries",
+      "has_local_olean": false,
+      "eligible_final_source_and_transitive_hash": false,
+      "local_sidecar_bytes": 0
+    }
+  ],
+  "local_peps46_eligible_count": 0,
+  "other_peps46_olean_measured_count": 0,
+  "other_peps46_measured_olean_bytes": 0,
+  "disk_free_bytes": 11051819008,
+  "cost_limit": "Only measured existing artifact bytes; no reliable estimate for full missing PEPS transitive closure or compiler scratch. No transfer executed and no shared filesystem assumed.",
+  "handoff": "After final77 produces SnakeGridApproximation, package nine final artifacts with all sidecars and hashes. Receiver compares Lean executable/toolchain/package pins, nine source hashes and recursively every imported artifact hash. Transfer only receiver-missing/mismatching dependency artifacts, using authorized artifact transport; if transport unavailable, prefer recipient narrowly compiling the nine modules in topological order against its verified warm dependencies. Snake remains 695c owner; no PEPS compilation here."
+}
