@@ -1,9 +1,40 @@
 {
-  "state": "strict",
-  "module": "TNLean.MPS.AreaLaw.ViableSet.ConstantRankCut",
-  "pid": 493251,
-  "runner_pid": 492715,
-  "time": "2026-11-18T20:17:00.816395+00:00",
-  "passed": 45,
-  "head": "f94193009343ee767ddc96a3dacee80e659ec5a9"
+  "state": "finished",
+  "head": "f94193009343ee767ddc96a3dacee80e659ec5a9",
+  "passed": 54,
+  "not_run": [
+    "TNLean",
+    "TNLean.MPS",
+    "TNLean.MPS.AreaLaw",
+    "TNLean.MPS.AreaLaw.Algorithm.Cost",
+    "TNLean.MPS.AreaLaw.Algorithm.GroundStateProgram",
+    "TNLean.MPS.AreaLaw.Algorithm.SampledCost",
+    "TNLean.MPS.AreaLaw.Algorithm.SampledProgram",
+    "TNLean.MPS.AreaLaw.Algorithm.SweepProgram",
+    "TNLean.MPS.AreaLaw.Algorithm.ValidOracle",
+    "TNLean.MPS.AreaLaw.Algorithm.ValidOracleCost",
+    "TNLean.MPS.AreaLaw.Algorithm.ValidOracleSampled",
+    "TNLean.MPS.AreaLaw.Algorithm.ValidOracleSampledCost",
+    "TNLean.MPS.AreaLaw.ViableSet.RationalBondTrimming",
+    "TNLean.MPS.AreaLaw.ViableSet.RationalSampledSuccessiveConstruction",
+    "TNLean.MPS.AreaLaw.ViableSet.SampledSuccessiveConstruction",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeBondTrimming",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.ApproximateCertificates",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.CanonicalSearch",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.CompressedSolutions",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.LeadingVectorPrecision",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.PowerIteration",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.RationalSearch",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.Selection",
+    "TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.UniformCertificates",
+    "TNLean.MPS.AreaLaw.ViableSet.SuccessiveConstruction",
+    "TNLean.MPS.AreaLaw.ViableSet.SuccessiveStep",
+    "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds",
+    "verification.area-law.Solution"
+  ],
+  "failed": [
+    "TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds",
+    "verification.area-law.Solution"
+  ],
+  "axiom_audit": "not-run; compilation/strict only"
 }
