@@ -214,7 +214,9 @@ theorem SquareEntropyAreaLawAt.uniform_nestedPatch_cylinders
     (fun j ↦ AreaLaw.Geometry.nestedPatchRadius u j.val)
     (fun i j hij ↦ add_le_add_right (mul_le_mul_of_nonneg_left (Nat.cast_le.mpr hij)
       (by norm_num : (0 : ℝ) ≤ 2)) u)
-    (fun j ↦ hA.nestedPatch_entropy_le L Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ center u
+    (fun j ↦ hA.nestedPatch_entropy_le L Ω ⟨h, hh, hhJ, E₀, hΩ,
+      hgap.posSemidef_sub_smul_one hh hΩ hspan,
+      hspan ▸ Submodule.mem_span_singleton_self Ω⟩ center u
         (by linarith) j)
     (fun b hb ↦ nestedPatch_minimizer_marginal_closeness q hJ.le hΔ hκ
       (patchFilterExponent_le_half q J Δ) (mul_patchFilterExponent_sq_le hJ.le hΔ.le)

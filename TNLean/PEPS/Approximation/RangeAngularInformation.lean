@@ -71,6 +71,9 @@ theorem IsRangeSquareGroundState.squareCellInformationBound {q R : ℕ} (hq : 1 
       (cellInformationConstantClosed q R J Δ c) (cellInformationExponentClosed q R J Δ c) := by
   intro s hs o m₀ A hm₀ L Ω hΩ
   obtain ⟨H, E₀, hΩ', hgap, hspan⟩ := hΩ
+  obtain ⟨-, -, hgap, hspan⟩ :=
+    (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ (AreaLaw.rectangleAreaLawState Ω)).mp
+      ⟨hΩ', ManyBody.mem_groundSpace_iff.mp hspan, hgap⟩
   exact cell_conditionalMutualInformation_le_square_of_rectangle Ω o m₀ A
     (cell_conditionalMutualInformation_le_closed hq hJ hΔ hc s hs (o - (1, 1)) m₀ A hm₀
       (rectangularDomain L L) H E₀ (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap hspan)
@@ -98,6 +101,9 @@ theorem IsRangeSquareGroundState.squareResetBound {q R : ℕ} (hq : 1 ≤ q) {J 
       (rangeResetThreshold q R J Δ p) := by
   intro L hL Ω hΩ Rg C R₀ C₀ hRC hR₀ hC₀ b hb hI hRw hCw
   obtain ⟨H, E₀, hgap⟩ := hΩ
+  obtain ⟨-, -, hgapI, hspan⟩ :=
+    (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ (AreaLaw.rectangleAreaLawState Ω)).mp
+      ⟨hgap.1, ManyBody.mem_groundSpace_iff.mp hgap.2.2, hgap.2.1⟩
   set σ := rectangleSiteEquiv L L
   have hval (v : SquareLatticeVertex L L) : (σ v).1 = rectangleEmbedding v :=
     rectangleSiteEquiv_val L L v
@@ -112,7 +118,7 @@ theorem IsRangeSquareGroundState.squareResetBound {q R : ℕ} (hq : 1 ≤ q) {J 
     have hv : v ∉ T := fun h ↦ hy (Finset.mem_map_of_mem _ h)
     simpa only [Equiv.toEmbedding_apply, hval] using hT u hu v hv
   have h := H.information_reset_of_rangeResetThreshold_le hq hJ hΔ hp hL E₀
-    (AreaLaw.rectangleAreaLawState Ω) hgap.1 hgap.2.1 hgap.2.2 (Rg.map σ.toEmbedding)
+    (AreaLaw.rectangleAreaLawState Ω) hgap.1 hgapI hspan (Rg.map σ.toEmbedding)
         (C.map σ.toEmbedding)
     (R₀.map σ.toEmbedding) (C₀.map σ.toEmbedding)
     ((Finset.disjoint_map σ.toEmbedding).mpr hRC) (Finset.map_subset_map.mpr hR₀)

@@ -81,6 +81,8 @@ theorem exists_regionalEntropy_safe_rect_le_boxError
       simpa only [Nat.cast_mul] using hle.trans_lt hreal
     exact_mod_cast hcast
   exact regionalEntropy_le_of_boxEntropy_power (e := (Exponents.boxError : ℝ)) hq
-    (by norm_num [Exponents.boxError]) hweak h hΩ hgap hspan A Q hsafe
+    (by norm_num [Exponents.boxError]) hweak h hΩ
+    (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+    (hspan ▸ Submodule.mem_span_singleton_self _) A Q hsafe
 
 end TNLean.PEPS.AreaLaw

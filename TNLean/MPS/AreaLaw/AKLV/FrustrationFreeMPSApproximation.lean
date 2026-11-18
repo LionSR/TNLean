@@ -83,7 +83,10 @@ theorem aklv_frustrationFree_dimension_and_gap_bounds {L q : ℕ}
     ⟨hΩ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
       WithLp.ofLp_smul]; exact hground, by simpa only [Complex.ofReal_zero, zero_smul, sub_zero]
         using hgap⟩
-  exact ⟨hq, gap_le_one_of_positive_nearest_neighbor_terms hL hq h hsupp h0 h1 hΩ hgap hspan⟩
+  exact ⟨hq, gap_le_one_of_positive_nearest_neighbor_terms hL hq h hsupp h0 h1 hΩ
+      (hgap.posSemidef_sub_smul_one
+        (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
+        hΩ hspan) (hspan ▸ Submodule.mem_span_singleton_self Ω)⟩
 
 /-- Two physical filters at one cut. The filter of degree `s₀²` on the window of width
 `s₀`, applied to a product vector of good overlap, gives a vector of rank at most `D₀`

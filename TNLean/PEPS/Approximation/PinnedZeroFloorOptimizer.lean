@@ -31,6 +31,8 @@ OAI types. Regions and weights are supplied; no geometry, inverse-density
 optimization, or full geometric optimizer is constructed here.
 -/
 
+open scoped ComplexOrder
+
 open ManyBody (Edge squareLatticeGraph SquareInteraction)
 
 noncomputable section
@@ -198,8 +200,9 @@ Source: `EnergyOptimizer.lean`, lines 62–109, at the revision cited above. -/
 theorem _root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelity
     {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
         (hhJ : ∀ i, ‖h.term i‖ ≤ J)
-    {Ω : Pinned.State L q} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
-    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
+    {Ω : Pinned.State L q} (hΩ : ‖Ω‖ = 1) (hgap : (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef)
+    (hmem : Ω ∈ groundSpace h.hamiltonian E₀)
     (X : Fin m → Finset (Vertex L)) (hX : Monotone X)
     (hsingle : ∀ e : Edge (squareLatticeGraph L L), ∀ i j : Fin m,
       Crosses (X i) e → Crosses (X j) e → i = j)
@@ -225,7 +228,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelit
           (canonicalRegions X j) → i = j := by
     simpa only [canonicalRegions_fin] using rectangle_singleCrossing X hsingle
   obtain ⟨K, hK, hmax, hresult⟩ :=
-    h.exists_zero_floor_maximizer_energy_fidelity hh hhJ hΩ hgap hspan (canonicalRegions X) hD
+    h.exists_zero_floor_maximizer_energy_fidelity hh hhJ hΩ hgap hmem (canonicalRegions X) hD
       hsep a ha ha1
   have hbudget : (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 *
       (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (canonicalRegions X j)).card =

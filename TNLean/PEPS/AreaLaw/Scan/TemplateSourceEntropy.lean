@@ -214,7 +214,9 @@ theorem template_final_source_entropy_bounds_of_boxEntropy
       regionalEntropy Λ q Ω (rectRegion S.A Q) ≤
         Cbox * (Q.size : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
     intro Q hsafe
-    exact (regionalEntropy_le_boxEntropy hq h hΩ hgap hspan hsafe le_rfl).trans
+    exact (regionalEntropy_le_boxEntropy hq h hΩ
+      (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+      (hspan ▸ Submodule.mem_span_singleton_self _) hsafe le_rfl).trans
       (hbox Q.size Q.one_le_size)
   obtain ⟨hcore, hprefix⟩ := hsource Λ Ω hΩ S.A D₀ hD T hC hsep hrect
   refine ⟨hcore, ?_⟩

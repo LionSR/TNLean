@@ -43,6 +43,8 @@ with the companion code's own filter types is recorded in
 https://sirui-lu.com/QICLean/paper-gaps/oai26_zero_floor_energy_scope.pdf.
 -/
 
+open scoped ComplexOrder
+
 open ManyBody (Edge SquareInteraction)
 
 open Matrix
@@ -65,8 +67,9 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
     {L q m : ℕ} {J E₀ Δ : ℝ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian)
         (hhJ : ∀ i, ‖h.term i‖ ≤ J)
     [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
-    {Ω : StateSpace L q} (hΩn : ‖Ω‖ = 1) (hΩg : IsGapped h.hamiltonian E₀ Δ)
-    (hΩs : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
+    {Ω : StateSpace L q} (hΩn : ‖Ω‖ = 1) (hΩg : (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef)
+    (hΩmem : Ω ∈ groundSpace h.hamiltonian E₀)
     (D : ℕ → Finset (Lattice.Site (AreaLaw.rectangularDomain L L)))
     (hD : ∀ i j : Fin m, i ≤ j → D i ⊆ D j)
     (hsingle : ∀ e : Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
@@ -99,7 +102,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
             a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
   classical
   obtain ⟨T, hT, hTH, hTJ, hsum⟩ := h.exists_nearestNeighbor_terms hh hhJ
-  obtain ⟨hΩ, hgs, hspan⟩ := h.isGapped_toAreaLawHamiltonian hhJ hh hΩn hΩg hΩs
+  obtain ⟨hΩ, hgs, hmem⟩ := h.projectorGap_toAreaLawHamiltonian hhJ hh hΩn hΩg hΩmem
   have hΩ0 : AreaLaw.rectangleAreaLawState Ω ≠ 0 := fun h0 ↦ by
     have hnorm := hΩ
     simp [h0] at hnorm
@@ -123,7 +126,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
   have heig : toEuclideanLin (∑ i, T i) (AreaLaw.rectangleAreaLawState Ω) =
       (E₀ : ℂ) • AreaLaw.rectangleAreaLawState Ω := by
     rw [hsum]
-    exact ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _)
+    exact ManyBody.mem_groundSpace_iff.mp hmem
   obtain ⟨K, hK, hmax, hpos, hunit, henergy⟩ :=
     Entropy.exists_max_feasible_chain_zero_floor_normalized_abs_energy_sharp
       D hD a ha ha1 hΩ0 T AreaLaw.nearestNeighborSupport hT hTH hTJ hsplit heig
@@ -141,7 +144,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
   rw [hsum, hbudget] at henergy
   refine ⟨K, hK, hmax, hpos, hunit, henergy, ?_⟩
   have hgap := Matrix.PosSemidef.gap_le (Ω := AreaLaw.rectangleAreaLawState Ω)
-    (hgs.posSemidef_sub_smul_one (h.toAreaLawHamiltonian hhJ).operator_isHermitian hΩ hspan)
+    hgs
     (((‖toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))
       (AreaLaw.rectangleAreaLawState Ω)‖⁻¹ : ℝ) : ℂ) •
       toEuclideanLin (Entropy.liftProd (Entropy.chainList D K fun _ ↦ True))

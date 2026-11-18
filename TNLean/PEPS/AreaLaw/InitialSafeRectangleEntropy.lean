@@ -53,7 +53,9 @@ theorem exists_regionalEntropy_safe_rect_le_rpow
       (boxEntropy_nonneg (q := q) (R := R) (J := J) (Δ := Δ) (D₀ := 2 * R + 11) 1).trans
         (hbox (2 * R + 11) (Nat.lt_succ_self (2 * R + 10)) 1 le_rfl)
   refine ⟨C₀, e₀, hC₀, he₀, he₀', fun D₀ hD₀ Λ h E₀ Ω hΩ hgap hspan A Q hsafe ↦ ?_⟩
-  exact (regionalEntropy_le_boxEntropy hq h hΩ hgap hspan hsafe le_rfl).trans
+  exact (regionalEntropy_le_boxEntropy hq h hΩ
+      (hgap.posSemidef_sub_smul_one h.operator_isHermitian hΩ hspan)
+      (hspan ▸ Submodule.mem_span_singleton_self _) hsafe le_rfl).trans
     (hbox D₀ hD₀ Q.size Q.one_le_size)
 
 end TNLean.PEPS.AreaLaw
