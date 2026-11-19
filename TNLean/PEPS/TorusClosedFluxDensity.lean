@@ -16,8 +16,8 @@ of those closures therefore identifies its normalized regional density with
 the vacuum density on every connected, simply connected observation region.
 Nonvanishing of the actual cut is derived from regular G-isometry.
 
-Source: SCP10, arXiv:1001.3807v3, Theorem 6.7 and Lemma 6.14,
-local source lines 1995–2025 and 2199–2214.
+Source: SCP10, arXiv:1001.3807v3, Theorem 6.9 and Lemma 6.14,
+local source lines 2027–2072 and 2199–2214.
 
 **Scope restriction (closed strings and simply connected regions):** Both
 torus periods are at least three, the tensor is regular G-isometric, and the
@@ -83,7 +83,7 @@ local notation "Γₜ" => torusGraph width height
 /-- Every closed flux string has the vacuum normalized reduced density on a
 connected, simply connected physical region. This includes winding loops;
 nonzero normalization is derived from regular G-isometry. The two global
-states are not asserted equal. Source: SCP10, Lemma 6.14 and Theorem 6.7. -/
+states are not asserted equal. Source: SCP10, Lemma 6.14 and Theorem 6.9. -/
 theorem IsGIsometric.torusClosedFlux_normalized_density_eq_vacuum
     {A : G → G → G → G → Fin d → ℂ}
     (hA : IsGIsometric (torusLegRep (leftRegularMatrix G)) (siteMap A))
