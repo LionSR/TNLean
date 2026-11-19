@@ -29,7 +29,7 @@ open Matrix
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*} [∀ v, Fintype (Out v)]
+variable {Out : V → Type*} [∀ v, DecidableEq (Out v)] [∀ v, Fintype (Out v)]
 variable {m : ℕ} (regions : Fin m → Finset V)
 
 open Classical in
@@ -51,7 +51,7 @@ open Classical in
 obtained by inserting the local commutator in its original position. -/
 theorem hasDerivAt_regularizedPatchOutput_coordinateUpdate
     (a : Fin m → ℝ) {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
     (hx : x ∈ regularizedPatchDomain regions) (j : Fin m)
     (B : Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
@@ -83,7 +83,7 @@ a first variation, and does not assert commutation of local densities or differe
 filters. -/
 theorem regularizedPatchFirstVariation_eq_zero
     (a : Fin m → ℝ) {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
     (hx : x ∈ regularizedPatchDomain regions)
     (hmin : IsMinOn (regularizedPatchObjective regions a b Ω) (regularizedPatchDomain regions) x)

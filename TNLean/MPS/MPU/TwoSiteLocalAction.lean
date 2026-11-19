@@ -91,8 +91,8 @@ identity. Source: arXiv:1703.09188, Appendix lines 2292--2306. -/
 theorem bufferedMPULocalAction_compatible {d D ℓ r : ℕ} {U : MPOTensor d D}
     (hU : U.IsMPU) (k : ℕ) (hk : 0 < k)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
     (Λ Γ : Finset ℤ) (hΛΓ : Λ ⊆ Γ) (A : LocalAlgebra d Λ) :
@@ -114,8 +114,8 @@ in its definition. Source: arXiv:1703.09188, eq:appendix-1, lines 2300--2306. -/
 theorem bufferedMPULocalAction_eq_finiteChainLocalObservable
     {d D ℓ r : ℕ} {U : MPOTensor d D} (hU : U.IsMPU) (k : ℕ) (hk : 0 < k)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
     (Λ : Finset ℤ) (b : ℤ) (N : ℕ) (hN : 1 < N) (hΛ : Λ ⊆ finiteChainRegion b N)
@@ -131,8 +131,8 @@ Source: arXiv:1703.09188, Appendix lines 2292--2306. -/
 noncomputable def bufferedMPUAlgebraicAction {d D ℓ r : ℕ} {U : MPOTensor d D}
     (hU : U.IsMPU) (k : ℕ) (hk : 0 < k)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v) :
     AlgebraicLocalAlgebra d →⋆ₐ[ℂ] AlgebraicLocalAlgebra d :=
@@ -157,8 +157,8 @@ Appendix norm completion in lines 2292--2306. -/
 theorem norm_bufferedMPUAlgebraicAction {d D ℓ r : ℕ} [NeZero d] {U : MPOTensor d D}
     (hU : U.IsMPU) (k : ℕ) (hk : 0 < k)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : MPOTensor.TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.blockTensor U k)) u v)
     (X : AlgebraicLocalAlgebra d) : ‖bufferedMPUAlgebraicAction hU k hk S X‖ = ‖X‖ := by

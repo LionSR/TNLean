@@ -19,6 +19,8 @@ ranges, rather than closed vectors or a one-dimensional replacement of the
 external legs. Transport to arbitrary G-injective site maps is a separate step.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

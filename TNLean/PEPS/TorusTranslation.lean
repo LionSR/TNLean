@@ -35,6 +35,8 @@ input to that invariance and to the covariance of the blocked machinery.
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 
@@ -142,7 +144,7 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1407--1500 of
 `Papers/1804.04964/paper_normal.tex`. -/
 def translateEdge (a : ZMod width) (b : ZMod height)
     (e : Edge (torusGraph width height)) : Edge (torusGraph width height) :=
-  Edge.ofAdj (torusGraph_adj_translate a b e.2.2)
+  ManyBody.Edge.ofAdj (torusGraph_adj_translate a b e.2.2)
 
 /-- The unordered endpoints of `translateEdge a b e` are the translates of the
 endpoints of `e`. -/
@@ -152,7 +154,7 @@ theorem translateEdge_endpoints (a : ZMod width) (b : ZMod height)
         (translateEdge a b e).1.2 = translate a b e.1.2) ∨
       ((translateEdge a b e).1.1 = translate a b e.1.2 ∧
         (translateEdge a b e).1.2 = translate a b e.1.1) :=
-  Edge.ofAdj_endpoints (torusGraph_adj_translate a b e.2.2)
+  ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_translate a b e.2.2)
 
 /-- The translation edge action preserves horizontal orientation: the translate of
 a horizontal edge is horizontal. -/

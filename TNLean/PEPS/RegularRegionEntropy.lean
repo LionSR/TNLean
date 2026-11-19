@@ -29,6 +29,8 @@ Source: SCP10, Lemma 6.2 and the proof of Theorem 6.9, local source
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix ComplexOrder
 open Matrix
 

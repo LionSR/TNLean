@@ -23,6 +23,7 @@ cancellation. Primitivity supplies them in the subsequent convergence result.
 -/
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
+open Kraus (blockPhysDim)
 
 namespace MPSTensor
 
@@ -99,10 +100,10 @@ The row support and all inverse estimates are derived from the exact tail
 Gram and the faithful invariant matrix. Source: Nachtergaele,
 arXiv:cond-mat/9410110, commutation (ii), equation (3.15), lines 1567--1574;
 A_m, boundAm, lines 2394--2409. -/
-theorem IsPrimitiveMPS.residualWindow_projection_comp_sub_tendsto_zero
+theorem _root_.Kraus.HasComplementaryFixedPointGap.residualWindow_projection_comp_sub_tendsto_zero
     [NeZero D] [NeZero E]
     {B : MPSTensor (blockPhysDim d L) E} {ρ : Matrix (Fin E) (Fin E) ℂ}
-    (hP : IsPrimitiveMPS B ρ) (hρ : ρ.PosDef)
+    (hP : Kraus.HasComplementaryFixedPointGap B ρ) (hρ : ρ.PosDef)
     (A : MPSTensor d D) (V : Matrix (Fin D) (Fin E) ℂ)
     (Q : ℕ → Matrix (Fin D) (Fin D) ℂ) (hQ : ∀ r, IsOrthogonalProjection (Q r))
     (hGram : ∀ r : ℕ, (∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ * (V * Vᴴ) *

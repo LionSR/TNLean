@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Analysis.PolarUnitaryCorrectionKronecker
 import QICLean.Algebra.MatrixReindexUnitary
 import TNLean.Algebra.MatrixKroneckerContraction
-import TNLean.Lattice.RegionSplit
+import TNLean.Circuit.RegionSplit
 
 /-!
 # A supported unitary polar correction
@@ -46,9 +46,10 @@ of the local operator of `D`, tensored with the identity outside `S`; no dilatio
 additional system is used.
 Source: `02-information.tex`, lines 580–595, equation `eq:info-reset-unitary`. -/
 theorem exists_supported_unitary_polar_correction (S : Finset ι)
-    {D : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hD : D ∈ supportedOperators q (S : Set ι)) :
+    {D : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hD : D ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
     ∃ U : Matrix (ι → Fin q) (ι → Fin q) ℂ,
-      U ∈ unitaryGroup (ι → Fin q) ℂ ∧ U ∈ supportedOperators q (S : Set ι) ∧
+      U ∈ unitaryGroup (ι → Fin q) ℂ ∧ U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S ∧
       ∀ x y : (ι → Fin q) → ℂ,
         ‖WithLp.toLp 2 (U *ᵥ x) - WithLp.toLp 2 y‖ ≤
           ‖WithLp.toLp 2 (D *ᵥ x) - WithLp.toLp 2 y‖ +

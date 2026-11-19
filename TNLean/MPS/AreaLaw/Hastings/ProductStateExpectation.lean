@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.ToEuclideanCLM
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import TNLean.MPS.AreaLaw.Hastings.CutProductExpectation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 
@@ -243,10 +245,7 @@ theorem one_sub_two_mul_sq_le_re_trace_cutProductState_mul {L q c : ℕ}
     (hprod : ‖OB * OL * OR - vecMulVec Ω.ofLp (star Ω.ofLp)‖ ≤ ε) :
     1 - 2 * ε ^ 2 ≤ (cutProductState L q c Ω * (OL * OR)).trace.re := by
   have hcomm : Commute OL OR :=
-    QuantumCircuit.commute_of_mem_supportedOperators
-      (Finset.disjoint_coe.mpr disjoint_compl_right)
-      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hL)
-      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn hR)
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint (hL) (hR) disjoint_compl_right
   rw [trace_cutProductState_mul_mul c Ω hL hR]
   change 1 - 2 * ε ^ 2 ≤ (⟪Ω, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) OL Ω⟫_ℂ *
     ⟪Ω, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) OR Ω⟫_ℂ).re

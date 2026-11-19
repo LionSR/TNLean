@@ -260,7 +260,7 @@ C3, $E_n^{(N)}=0$ when $n<l$, and at $n=l$ the endpoint identity
 \end{align}
 supplies the remaining initial index. The physical estimate controls all
 $n>l$. Hence
-\leanid{MPSTensor.IsPrimitiveMPS.exists_openParentHamiltonianES_gap}
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_openParentHamiltonianES_gap}
 applies the full-range theorem with $d_{l+1}=\gamma_{l+1}=1$ and preserves the
 coefficient in
 Equation~\eqref{eq:cpgsv21_martingale_overlap_nachtergaele_full_range_coefficient}.
@@ -363,7 +363,7 @@ the distinct batched condition C3$'$ involving $E_n^{(p)}$.
 
 The numerical open-chain step is complete. The imported FNW estimate is
 uniform in the left length, the empty prefix included, and
-\leanid{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjection_defect_lt_c3_threshold}
 chooses a block-injective $l>1$, measured in sites of the input tensor, and
 $\varepsilon_l\geq0$ such that
 \begin{align}
@@ -372,7 +372,7 @@ $\varepsilon_l\geq0$ such that
     \label{eq:cpgsv21_martingale_overlap_c3_threshold}
 \end{align}
 The theorem
-\leanid{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
 combines Nachtergaele's projector-defect identity with the two-projection
 estimate and proves the corresponding anticommutator inequality for every left
 length, the empty prefix included. Exact blocked three-site identities then
@@ -447,7 +447,7 @@ extension does not increase it.  Hence
 reduces the fixed-volume norm to the open-chain norm.
 
 Combining this comparison with the two boundary cases proves
-\leanid{MPSTensor.IsPrimitiveMPS.exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold}.
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold}.
 For the same block-injective $l>1$ and the same $\varepsilon_l\geq0$ chosen by
 the open-chain theorem, every $N$ and every $n<N$ satisfy
 \begin{align}
@@ -489,7 +489,7 @@ The exact identification
 three-site open-chain projector defect of
 $B=\operatorname{block}_p(A)$ with the whole-block defect on three consecutive
 $p$-site regions of $A$. Together with
-\leanid{MPSTensor.IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths},
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths},
 it gives
 \begin{align}
     c & =\frac{7}{16}
@@ -1130,9 +1130,9 @@ identities and the current weighted route.
           $D^3(Cr^n)^2$.
 
     \item The quantitative inverse results are
-          \leanid{MPSTensor.IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds}
+          \leanid{Kraus.HasComplementaryFixedPointGap.groundSpaceGram_geometric_inverse_bounds}
           and
-          \leanid{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds}.
+          \leanid{Kraus.HasComplementaryFixedPointGap.groundSpaceMapES_geometric_inverseGram_bounds}.
           Assume that the bond dimension is nonzero and that the primitive
           fixed-point witness $\rho$ is positive definite. Define
           \begin{align}
@@ -1272,7 +1272,7 @@ identities and the current weighted route.
           \leanid{MPSTensor.wholeIncrementCenteredResidualES_norm_le},
           \leanid{MPSTensor.wholeIncrementCenteredResidualES_norm_le_of_leftCanonical},
           and
-          \leanid{MPSTensor.IsPrimitiveMPS.wholeIncrementCenteredResidualES_norm_le}.
+          \leanid{Kraus.HasComplementaryFixedPointGap.wholeIncrementCenteredResidualES_norm_le}.
 
           The former finite-Gram telescope is no longer assembled into a projector-defect
           estimate. The former inverse-Gram reconstruction of that estimate, whose
@@ -1293,7 +1293,7 @@ identities and the current weighted route.
               \label{eq:cpgsv21_martingale_overlap_whole_increment_left_projector}
           \end{align}
           The theorem
-          \leanid{MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric}
+          \leanid{Kraus.HasComplementaryFixedPointGap.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric}
           gives $c>0$, $0<\lambda<1$, and an injective length $L_0\geq1$ such that,
           whenever $L\geq L_0$, $c\lambda^L<1$, $Q\geq1$, and $K\geq0$,
           \begin{align}
@@ -1311,11 +1311,11 @@ identities and the current weighted route.
           asserted.
 
           The theorem
-          \leanid{MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths}
+          \leanid{Kraus.HasComplementaryFixedPointGap.exists_uniform_wholeIncrement_defect_le_seven_sixteenths}
           chooses $p>0$, measured in input-tensor sites, such that $A$ is
           $p$-block injective and the defect with $L=Q=p$ is at most $7/16$ for
           every $K$. Its specialization
-          \leanid{MPSTensor.IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths}
+          \leanid{Kraus.HasComplementaryFixedPointGap.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths}
           takes $K=p$. Thus the prefix-uniform estimate and the three-block
           coefficient $7/16$ are proved in original-site units.
 
@@ -1385,7 +1385,7 @@ identities and the current weighted route.
 
     \item For a primitive MPS tensor with nonzero virtual dimension, let
           $J_K^{\mathrm{tail}}$ be its length-$K$ tail virtual map. The theorem
-          \leanid{MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_uniform} gives
+          \leanid{Kraus.HasComplementaryFixedPointGap.tailVirtualMapES_norm_uniform} gives
           $C>0$, independent of $K$, such that
           \begin{align}
               \lVert J_K^{\mathrm{tail}}\rVert
@@ -1460,7 +1460,7 @@ identities and the current weighted route.
               \label{eq:cpgsv21_martingale_overlap_c3_centered_norm}
           \end{align}
           If $A$ is primitive with positive-definite fixed-point witness $\rho$, then
-          \leanid{MPSTensor.IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric}
+          \leanid{Kraus.HasComplementaryFixedPointGap.c3_centeredVirtualResidualES_norm_sq_le_geometric}
           gives $C>0$ and $0<r<1$, independent of $K$, such that
           \begin{align}
               \lVert R_{K,l}\rVert^2
@@ -1649,14 +1649,14 @@ The formal estimate controls deviation from the nonidentity limiting Gram:
 \end{align}
 It does not control $\lVert1-\mathcal K_n\rVert$ in unweighted coordinates.
 Under positive-definiteness of $\rho$, the results
-\leanid{MPSTensor.IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds} and
-\leanid{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds}
+\leanid{Kraus.HasComplementaryFixedPointGap.groundSpaceGram_geometric_inverse_bounds} and
+\leanid{Kraus.HasComplementaryFixedPointGap.groundSpaceMapES_geometric_inverseGram_bounds}
 perturb around $\mathscr R(P_\rho)$ and give denominator $1-cr^n$ whenever
 $cr^n<1$. The theorem
 \leanid{MPSTensor.geometric_smallness_at_c3_lengths} supplies the three
 required lengths. The square-root conversion retains the factor
 $\sqrt{D^3}\,C$ without further dimension loss. Moreover,
-\leanid{MPSTensor.IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto} proves
+\leanid{Kraus.HasComplementaryFixedPointGap.groundSpaceGram_ringInverse_tendsto} proves
 \begin{align}
     \mathcal K_n^{-1}
      & \longrightarrow\mathscr R(P_\rho)^{-1}.
@@ -1673,7 +1673,7 @@ For the uniform assembly, set
     \label{eq:cpgsv21_martingale_overlap_uniform_limiting_inverse}
 \end{align}
 Choose $g,c,r>0$ from
-\leanid{MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds}
+\leanid{Kraus.HasComplementaryFixedPointGap.groundSpaceMapES_geometric_inverseGram_bounds}
 with
 \begin{align}
     c
@@ -1683,7 +1683,7 @@ with
     \label{eq:cpgsv21_martingale_overlap_uniform_geometric_constants}
 \end{align}
 and choose $T>0$ from
-\leanid{MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_uniform}. Define
+\leanid{Kraus.HasComplementaryFixedPointGap.tailVirtualMapES_norm_uniform}. Define
 \begin{align}
     J
      & :=\lVert J_1^{\mathrm{left}}\rVert,
@@ -1704,7 +1704,7 @@ one-site suffix increment needs no reassociation, so
 \leanid{MPSTensor.openChain_groundProjection_defect_eq_wholeIncrement} identifies
 the open-chain defect at overlap length $l$ and prefix length $K$ with the
 whole-increment defect at $r=K$, $m=l$, and $\ell=1$. Hence
-\leanid{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_le_fnw_geometric}
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjection_defect_le_fnw_geometric}
 proves, for every prefix length $K$ and every $l$ above an injective length
 with $c\lambda^l<1$,
 \begin{align}
@@ -1722,7 +1722,7 @@ transfer fixed-point projector.
 
 The source coefficient suffices for Nachtergaele's C3 condition. The
 theorem
-\leanid{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjection_defect_lt_c3_threshold}
 uses
 \begin{align}
     \sqrt{n+1}\,\lambda^n
@@ -1739,7 +1739,7 @@ to choose $l>1$ above a positive block-injectivity length such that
     \label{eq:cpgsv21_martingale_overlap_c3_chosen_threshold}
 \end{align}
 The same $l$ works for every prefix length $K$, including $K=0$. The theorem
-\leanid{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
 then gives the open-chain anticommutator estimate through two-projection
 geometry. The length $l$ is measured in sites of the input tensor; if that
 tensor is already blocked, one such site is one blocked-chain filtration step.
@@ -1790,7 +1790,7 @@ proves the coefficient in Lemma~6.2:
 \end{align}
 for $L_0,r,\ell\geq1$ and $m\geq L_0$, where $L_0$ is an injective length.
 The theorem
-\leanid{MPSTensor.IsPrimitiveMPS.exists_wholeIncrement_groundProjection_defect_le_fnw}
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_wholeIncrement_groundProjection_defect_le_fnw}
 chooses such an $L_0$ for a primitive tensor.
 
 The later prescribed-rate expression
@@ -1807,7 +1807,7 @@ $1-a(m)\leq a_-(m)$ of Equation~(5.9), which is weaker than the identity
 $a_-(m)=1-a(m)$, and bounds the numerator $a(m)(1+a(m))$ by
 $c\lambda^m(1+c\lambda^m)$ using monotonicity. The prescribed rate is supplied
 by
-\leanid{MPSTensor.IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric}: any
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_fnwMixingQuantity_le_geometric}: any
 $\lambda$ strictly above the weighted spectral radius of the transfer
 remainder $\mathcal E_A-E_\infty^\rho$. The source instead phrases its
 condition through the transfer eigenvalues, $\lambda_i<\lambda<1$ for
@@ -1819,9 +1819,9 @@ for the remainder. Thus, if $\lambda>0$ exceeds the moduli of all nonunit
 transfer eigenvalues, every remainder eigenvalue has modulus below
 $\lambda$. Finite dimensionality gives the required strict spectral-radius
 bound, also in the weighted norm. The declarations
-\leanid{MPSTensor.IsPrimitiveMPS.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues}
+\leanid{Kraus.HasComplementaryFixedPointGap.fnwWeightedRemainderSpectralRadius_lt_of_transfer_eigenvalues}
 and
-\leanid{MPSTensor.IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric_of_transfer_eigenvalues}
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_fnwMixingQuantity_le_geometric_of_transfer_eigenvalues}
 therefore establish the prescribed-rate estimate without a diagonalizability
 assumption.
 
@@ -1839,7 +1839,7 @@ $D^{3/2}$ reshuffle factor, a finite Gram inverse, or periodic coercivity.
 The compatible open-chain estimate now gives a periodic gap without a
 restriction to block-divisible lengths.  Let $A$ be primitive with nonzero
 bond dimension and positive-definite fixed point.  The theorem
-\leanid{MPSTensor.IsPrimitiveMPS.exists_openParentHamiltonianES_gap}
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_openParentHamiltonianES_gap}
 provides $l>1$, $\epsilon_l\geq0$, and the exact open coefficient
 \begin{align}
     \gamma_{\mathrm{open}}
@@ -1915,7 +1915,7 @@ for every $N\geq2m$ and every
 $v\in(\ker H_{N,l+1}^{\mathrm{ES}}(A))^\perp$.  The first general statement is
 \leanid{MPSTensor.parentHamiltonianES_gap_of_openParentHamiltonianES_gap}; the
 primitive-MPS conclusion is
-\leanid{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_of_finiteRangeKnabe}.
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_parentHamiltonianES_gap_of_finiteRangeKnabe}.
 
 The gap definition and the MPS gap assertion occur at lines~1460--1500 of the
 local source for Ref.~\cite{PerezGarcia2007Matrix} and at lines~2184--2188 of
@@ -2053,9 +2053,9 @@ large $n$, since $(\mu/\lambda)^n\to0$. Increasing this onset to exceed an
 injectivity length and to ensure $c\lambda^n<1$ gives the same rational
 projector bound, uniformly in both exterior interval lengths. The two
 formal statements are
-\leanid{MPSTensor.IsPrimitiveMPS.eventually_fnwMixingQuantity_le_of_pos_prefactor}
+\leanid{Kraus.HasComplementaryFixedPointGap.eventually_fnwMixingQuantity_le_of_pos_prefactor}
 and
-\leanid{MPSTensor.IsPrimitiveMPS.eventually_projector_defect_le_of_pos_prefactor}.
+\leanid{Kraus.HasComplementaryFixedPointGap.eventually_projector_defect_le_of_pos_prefactor}.
 The onset depends on the state, rate, and prefactor. For no value of $c$,
 including $c=k^2$, is this onset shown to equal the injectivity threshold. The
 printed assertion, with prefactor $k^2$ at every admissible rate from that
@@ -2074,7 +2074,7 @@ $l=1$, so the finite cyclic domination was a reconstruction rather than the
 printed route.  That theorem and its sparse-sum engine are no longer needed to
 obtain an all-length periodic gap, and both have been deleted.  The removed
 declarations are
-\path{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_eighth_mul},
+\path{Kraus.HasComplementaryFixedPointGap.exists_parentHamiltonianES_gap_eighth_mul},
 which carried the divisible-length bound; its engine
 \path{MPSTensor.blockTensor_parentHamiltonianES_conj_le}, which carried the
 sparse aligned-sum domination; the pair of exact conjugation identities
@@ -2083,7 +2083,7 @@ sparse aligned-sum domination; the pair of exact conjugation identities
 blocked parent interaction and the blocked range-two local terms to their
 original range-$2p$ counterparts at block-aligned starts; and the private
 helpers serving them.  The replacement for the first is
-\leanid{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_of_finiteRangeKnabe},
+\leanid{Kraus.HasComplementaryFixedPointGap.exists_parentHamiltonianES_gap_of_finiteRangeKnabe},
 whose compatible open-chain estimate, cyclic active-block identity, and
 finite-range inequality give
 (\ref{eq:cpgsv21_martingale_overlap_open_knabe_periodic_gap}) for every

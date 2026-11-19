@@ -33,6 +33,8 @@ transfer bound and exact unitary virtual covariance are explicit auxiliary
 hypotheses. No physical-gap conclusion is asserted here.
 -/
 
+open Kraus (blockPhysDim wordOfBlock blockTensor evalWord_blockTensor)
+
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
@@ -291,12 +293,12 @@ periodic ray. Source: arXiv:1606.00608, lines 318–344. -/
 theorem SamePositiveMpvRay.blockTensor {d D E : ℕ}
     {A : MPSTensor d D} {B : MPSTensor d E} (hRay : SamePositiveMpvRay A B)
     (L : ℕ) (hL : 0 < L) :
-    SamePositiveMpvRay (MPSTensor.blockTensor A L) (MPSTensor.blockTensor B L) := by
+    SamePositiveMpvRay (Kraus.blockTensor A L) (Kraus.blockTensor B L) := by
   intro N hN
   let f := LinearMap.funLeft ℂ ℂ (blockedConfigEquiv d N L)
   have hMap : ∀ {k : ℕ} (C : MPSTensor d k),
       f (mpv C : (Fin (N * L) → Fin d) → ℂ) =
-        (mpv (MPSTensor.blockTensor C L) : (Fin N → Fin (blockPhysDim d L)) → ℂ) := by
+        (mpv (Kraus.blockTensor C L) : (Fin N → Fin (blockPhysDim d L)) → ℂ) := by
     intro k C
     funext s
     simp only [f, LinearMap.funLeft_apply, mpv, coeff,

@@ -28,16 +28,6 @@ namespace QuantumCircuit
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 variable {m n q r : ℕ}
 
-omit [DecidableEq ι] in
-private theorem linearMap_ext_rectKronecker {M : Type*} [AddCommMonoid M] [Module ℂ M]
-    (Φ Ψ : Matrix (ι → Fin m) (ι → Fin m) ℂ →ₗ[ℂ] M)
-    (h : ∀ A : ι → Matrix (Fin m) (Fin m) ℂ, Φ (rectKronecker A) = Ψ (rectKronecker A)) :
-    Φ = Ψ := by
-  apply LinearMap.ext
-  intro X
-  exact LinearMap.eqOn_span' (by rintro _ ⟨A, _, rfl⟩; exact h A)
-    (mem_supportedOperators_univ X)
-
 namespace OnsiteChannel
 
 /-- Assemble sitewise CPTP maps into the existing finite-Kraus onsite-channel API. -/

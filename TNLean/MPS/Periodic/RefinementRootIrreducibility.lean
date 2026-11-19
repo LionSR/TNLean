@@ -18,6 +18,7 @@ Theorem 4.1; it does not select such a root.
 -/
 
 open scoped Matrix
+open Kraus (wordOfBlock blockTensor)
 
 namespace MPSTensor
 

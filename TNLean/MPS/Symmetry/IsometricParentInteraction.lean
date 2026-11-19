@@ -45,7 +45,7 @@ theorem parentInteraction_matrix_rotatePhysical_eq_isometricInteractionExtension
   rw [parentInteraction_matrix_rotatePhysical_isometry E hE A 2]
   simp only [isometricInteractionExtension, map_sub, singleKrausMap_apply, Matrix.mul_one]
   rw [show Matrix.rectKronecker (fun _ : Fin 2 => E) =
-    MPOTensor.sitewisePhysicalMatrix E 2 from rfl]
+    Matrix.tensorPower 2 E from rfl]
   abel
 
 end MPSTensor

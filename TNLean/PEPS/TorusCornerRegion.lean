@@ -210,7 +210,7 @@ theorem isRegionBoundaryEdge_cornerRegion (hw : 7 ≤ width) (hh : 7 ≤ height)
       exact ZMod.val_cast_of_lt (by omega)
     dsimp only
     omega
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_up
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up
       (cornerVertex : TorusVertex width height).1
       (cornerVertex : TorusVertex width height).2) with ⟨h1, h2⟩ | ⟨h1, h2⟩
   · refine Or.inr ⟨?_, ?_⟩
@@ -258,7 +258,7 @@ theorem isRegionBoundaryEdge_cornerSquare (hw : 7 ≤ width) (hh : 7 ≤ height)
       exact ZMod.val_cast_of_lt (by omega)
     dsimp only
     omega
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_up
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up
       (belowCornerVertex : TorusVertex width height).1
       (belowCornerVertex : TorusVertex width height).2) with ⟨h1, h2⟩ | ⟨h1, h2⟩
   · refine Or.inr ⟨?_, ?_⟩

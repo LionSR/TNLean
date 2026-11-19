@@ -9,20 +9,32 @@ import QICLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive
 import QICLean.Kraus.InvariantProjection
 import QICLean.Channel.KrausMap
 import QICLean.Kraus.Transfer
-import TNLean.Wielandt.Primitivity.Definitions
+import TNLean.Wielandt.Primitivity.EasyDirections
 
 /-!
-# Proposition 3, direction (a) to (c): MPS formulations
+# Spectral consequences of normality for the transfer map
 
-This file states the positivity, irreducibility, spectral and fixed-point
-consequences of fixed-length vector spreading in transfer-map notation. Their
-finite-Kraus proofs are provided by
+A normal tensor spreads every nonzero vector to the whole space at one fixed
+length (`MPSTensor.exists_vectorSpreadSpan_eq_top_of_isNormal`). This file
+states the consequences of that spreading for the transfer map: irreducibility,
+and, for a left-canonical tensor, a positive-definite fixed matrix and the
+absence of peripheral eigenvalues other than one. The finite-Kraus proofs are in
 `QICLean.Kraus.Wielandt.Primitivity.VectorSpreadPositivity` and
 `QICLean.Kraus.Wielandt.Primitivity.VectorSpreadToPrimitive`.
 
-These results form Proposition 3, direction (a) to (c), of Sanz,
-Pérez-García, Wolf, and Cirac, arXiv:0909.5347. For the combined
-Proposition 3 statement, see `TNLean.Wielandt.Primitivity.Equivalence`.
+These results are the direction (a) to (c) of Proposition 3 of Sanz,
+Pérez-García, Wolf, and Cirac, arXiv:0909.5347, stated from the equivalent
+clause (b). The proposition itself is `MPSTensor.primitivity_tfae` in
+`TNLean.Wielandt.Primitivity.Equivalence`.
+
+## Main results
+
+* `MPSTensor.isIrreducibleMap_transferMap_of_isNormal` and
+  `MPSTensor.isIrreducibleFamily_of_isNormal`: a normal tensor is irreducible.
+* `MPSTensor.isPrimitive_transferMap_of_isNormal`: the transfer map of a normal
+  left-canonical tensor has peripheral spectrum `{1}`.
+* `MPSTensor.exists_posDef_fixedPoint_of_isNormal`: it has a positive-definite
+  fixed matrix.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
@@ -32,15 +44,22 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- Paper-primitivity implies that the tensor has no nontrivial invariant
-orthogonal projection. -/
-theorem isIrreducibleTensor_of_isPrimitivePaper
-    (A : MPSTensor d D)
-    (hPrim : IsPrimitivePaper A) :
-    Kraus.IsIrreducibleFamily A := by
-  obtain ⟨q, _, hq⟩ := hPrim
-  exact Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
-    (Kraus.isIrreducibleMap_mapLM_of_vectorSpreadSpan_eq_top A hq)
+/-- The transfer map of a normal tensor has no nontrivial invariant orthogonal
+projection. No normalization is needed.
+
+Source: arXiv:0909.5347, Proposition 3, proof of (a)⟹(c). -/
+theorem isIrreducibleMap_transferMap_of_isNormal
+    (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
+    IsIrreducibleMap (Kraus.transferMap (d := d) (D := D) A) := by
+  obtain ⟨q, _, hq⟩ := exists_vectorSpreadSpan_eq_top_of_isNormal A hA
+  simpa only using Kraus.isIrreducibleMap_mapLM_of_vectorSpreadSpan_eq_top A hq
+
+/-- A normal tensor has no nontrivial invariant orthogonal projection. -/
+theorem isIrreducibleFamily_of_isNormal
+    (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
+    Kraus.IsIrreducibleFamily A :=
+  Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM A
+    (isIrreducibleMap_transferMap_of_isNormal A hA)
 
 section SpectralPerturbation
 
@@ -69,37 +88,33 @@ end SpectralPerturbation
 
 section Construction
 
-/-- Proposition 3(a) to (c) of Sanz, Pérez-García, Wolf, and Cirac,
-arXiv:0909.5347: paper-primitivity and normalization imply peripheral
-primitivity of the transfer map. See also Wolf, Theorem 6.7. -/
-theorem isPeripherallyPrimitive_of_isPrimitivePaper [NeZero D]
+/-- The transfer map of a normal left-canonical tensor has no eigenvalue of
+modulus one other than one.
+
+Source: arXiv:0909.5347, Proposition 3, (b)⟹(a)⟹(c); Wolf, Theorem 6.7. -/
+theorem isPrimitive_transferMap_of_isNormal [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : IsPrimitivePaper A) :
-    IsPeripherallyPrimitive A := by
-  obtain ⟨q, _, hq⟩ := hPrim
-  change IsPrimitive (Kraus.transferMap (d := d) (D := D) A)
+    (hA : Kraus.IsNormal A) :
+    IsPrimitive (Kraus.transferMap (d := d) (D := D) A) := by
+  obtain ⟨q, _, hq⟩ := exists_vectorSpreadSpan_eq_top_of_isNormal A hA
   simpa only using
     Kraus.isPrimitive_mapLM_of_isTP_of_vectorSpreadSpan_eq_top A hNorm hq
 
-/-- Paper-primitivity and normalization imply a positive-definite fixed point,
-peripheral primitivity, and irreducibility of the transfer map.
+/-- The transfer map of a normal left-canonical tensor has a positive-definite
+fixed matrix.
 
-This is Proposition 3(a)→(c) of arXiv:0909.5347; the peripheral-spectral
-ingredient is the finite-dimensional channel result of Wolf, Theorem 6.7. -/
-theorem isStronglyIrreduciblePaper_of_isPrimitivePaper [NeZero D]
+Source: arXiv:0909.5347, Proposition 3, (b)⟹(a)⟹(c). -/
+theorem exists_posDef_fixedPoint_of_isNormal [NeZero D]
     (A : MPSTensor d D)
     (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hPrim : IsPrimitivePaper A) :
-    IsStronglyIrreduciblePaper A := by
-  obtain ⟨q, hqpos, hq⟩ := hPrim
+    (hA : Kraus.IsNormal A) :
+    ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
+      ρ.PosDef ∧ Kraus.transferMap (d := d) (D := D) A ρ = ρ := by
+  obtain ⟨q, _, hq⟩ := exists_vectorSpreadSpan_eq_top_of_isNormal A hA
   obtain ⟨ρ, hρ_pd, hρ_fix⟩ :=
     Kraus.exists_posDef_fixedPoint_of_isTP_of_vectorSpreadSpan_eq_top A hNorm hq
-  refine isStronglyIrreduciblePaper_of ρ hρ_pd ?_ ?_ ?_
-  · simpa only using hρ_fix
-  · exact isPeripherallyPrimitive_of_isPrimitivePaper A hNorm ⟨q, hqpos, hq⟩
-  · simpa only using
-      Kraus.isIrreducibleMap_mapLM_of_vectorSpreadSpan_eq_top A hq
+  exact ⟨ρ, hρ_pd, by simpa only using hρ_fix⟩
 
 end Construction
 

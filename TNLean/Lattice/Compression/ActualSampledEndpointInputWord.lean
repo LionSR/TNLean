@@ -68,7 +68,7 @@ theorem actualSourceInputBasis_repr_sampledEndpointInputWord
       ((sampledEndpointInputWord w k lam E F ξ ζ j ω).eval
         (Layout.memCongr (List.append_nil w.allResidualSourceLayout).symm
           (w.allSourceBasis y)))) x = _
-  simp only [sampledEndpointInputWord, Word.eval_castLayouts, comp_apply, isoL_apply,
+  simp only [sampledEndpointInputWord, Circuit.eval_castLayouts, comp_apply, isoL_apply,
     LinearIsometryEquiv.symm_apply_apply]
 
 /-- The product of the actual sampled source matrices is the weighted sum of

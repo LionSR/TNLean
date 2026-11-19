@@ -37,16 +37,16 @@ namespace MPOTensor.RescalingStableLengthDependentRFP
 /-- The canonical relabeling from the doubled physical alphabet after one-site
 blocking to the original doubled physical alphabet. -/
 def oneSiteDoubledEquiv :
-    Fin (MPSTensor.blockPhysDim 4 1 * MPSTensor.blockPhysDim 4 1) ≃ Fin (4 * 4) :=
+    Fin (Kraus.blockPhysDim 4 1 * Kraus.blockPhysDim 4 1) ≃ Fin (4 * 4) :=
   finProdFinEquiv.symm |>.trans
-    (Equiv.prodCongr (MPSTensor.singleBlockEquiv 4) (MPSTensor.singleBlockEquiv 4)) |>.trans
+    (Equiv.prodCongr (Kraus.singleBlockEquiv 4) (Kraus.singleBlockEquiv 4)) |>.trans
       finProdFinEquiv
 
 @[deprecated "Simplify directly with `oneSiteDoubledEquiv`." (since := "2026-08-15"), simp]
-lemma oneSiteDoubledEquiv_diagonal (i : Fin (MPSTensor.blockPhysDim 4 1)) :
+lemma oneSiteDoubledEquiv_diagonal (i : Fin (Kraus.blockPhysDim 4 1)) :
     oneSiteDoubledEquiv (finProdFinEquiv (i, i)) =
       finProdFinEquiv
-        (MPSTensor.singleBlockEquiv 4 i, MPSTensor.singleBlockEquiv 4 i) := by
+        (Kraus.singleBlockEquiv 4 i, Kraus.singleBlockEquiv 4 i) := by
   simp [oneSiteDoubledEquiv]
 
 /-- One-site physical blocking of the dimer gives the canonical physical
@@ -56,14 +56,14 @@ theorem toMPSTensor_blockTensor_R_one :
       Kraus.reindexPhysical oneSiteDoubledEquiv R.toMPSTensor := by
   funext ij
   change
-    R (MPSTensor.singleBlockEquiv 4 ij.divNat)
-        (MPSTensor.singleBlockEquiv 4 ij.modNat) * 1 =
+    R (Kraus.singleBlockEquiv 4 ij.divNat)
+        (Kraus.singleBlockEquiv 4 ij.modNat) * 1 =
       R (finProdFinEquiv
-          (MPSTensor.singleBlockEquiv 4 ij.divNat,
-            MPSTensor.singleBlockEquiv 4 ij.modNat)).divNat
+          (Kraus.singleBlockEquiv 4 ij.divNat,
+            Kraus.singleBlockEquiv 4 ij.modNat)).divNat
         (finProdFinEquiv
-          (MPSTensor.singleBlockEquiv 4 ij.divNat,
-            MPSTensor.singleBlockEquiv 4 ij.modNat)).modNat
+          (Kraus.singleBlockEquiv 4 ij.divNat,
+            Kraus.singleBlockEquiv 4 ij.modNat)).modNat
   rw [mul_one, MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
 
 /-- The rescaling-stable dimer tensor is simple in the sense of Definition 4.7.
@@ -89,11 +89,11 @@ theorem R_isSimple : MPOTensor.IsSimple R := by
         (Kraus.reindexPhysical oneSiteDoubledEquiv retainedBlock) =
         MPOTensor.doubledPhysTraceTransfer 4 retainedBlock := by
       rw [MPOTensor.doubledPhysTraceTransfer, MPOTensor.doubledPhysTraceTransfer]
-      change (∑ i : Fin (MPSTensor.blockPhysDim 4 1),
+      change (∑ i : Fin (Kraus.blockPhysDim 4 1),
           retainedBlock (finProdFinEquiv
-            (MPSTensor.singleBlockEquiv 4 i, MPSTensor.singleBlockEquiv 4 i))) =
+            (Kraus.singleBlockEquiv 4 i, Kraus.singleBlockEquiv 4 i))) =
         ∑ i : Fin 4, retainedBlock (finProdFinEquiv (i, i))
-      exact (MPSTensor.singleBlockEquiv 4).sum_comp
+      exact (Kraus.singleBlockEquiv 4).sum_comp
         (fun i : Fin 4 => retainedBlock (finProdFinEquiv (i, i)))
     rw [hTransfer]
     exact doubledPhysTraceTransfer_retainedBlock_not_isNilpotent

@@ -64,9 +64,9 @@ private theorem reindexChainVector_inner_window {N M : ℕ} (h : N = M)
 /-- The finite-volume commutator energy converges to the expectation of its
 fixed local patch. No energy-limit assumption is needed.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
-theorem IsPrimitiveMPS.localCommutatorObservable_expectation_tendsto
+theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutatorObservable_expectation_tendsto
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     (hR : 0 < R) (hk : 0 < k)
     (N : ℕ → ℕ) (hN : ∀ n, N n = (n + ((R - 1 + k) + (R - 1))) + n)
@@ -108,9 +108,9 @@ theorem IsPrimitiveMPS.localCommutatorObservable_expectation_tendsto
 assuming finite-volume uniqueness. At short lengths the chosen vectors may
 vanish, but their norms are eventually one. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Section 6, the finite-volume boundary approximation. -/
-theorem IsPrimitiveMPS.exists_eventually_unit_groundSpaceES
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_eventually_unit_groundSpaceES
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     {ι : Type*} {f : Filter ι} (N : ι → ℕ) (hN : Tendsto N f atTop) :
     ∃ ψ : (n : ι) → EuclideanSpace ℂ (Cfg d (N n)),
       (∀ n, ψ n ∈ groundSpaceES A (N n)) ∧ (∀ᶠ n in f, ‖ψ n‖ = 1) := by
@@ -137,9 +137,9 @@ theorem IsPrimitiveMPS.exists_eventually_unit_groundSpaceES
 from its eventual ground-space identity and uniform norm gap. The commutator
 energy limit is derived from locality and primitive transfer convergence.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
-theorem IsPrimitiveMPS.localCommutator_gap_of_open_gap
+theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_open_gap
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R) (hk : 0 < k)
     (hcenter : observableInsertionExpectation A ρ X = 0)
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
@@ -193,16 +193,16 @@ one positive local commutator bound for all centered local observables.
 The finite-volume kernel, gap, and unit boundary approximants are derived
 internally. Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and
 Section 6; arXiv:0909.5347, the quantum Wielandt injectivity bound. -/
-theorem IsPrimitiveMPS.exists_pos_localCommutator_gap_of_wielandt_range
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_gap_of_wielandt_range
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) (hR : D ^ 4 + 1 ≤ R) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) (hR : D ^ 4 + 1 ≤ R) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ),
       0 < k → observableInsertionExpectation A ρ X = 0 →
         γ * (observableInsertionExpectation A ρ (Xᴴ * X)).re ≤
           (observableInsertionExpectation A ρ (localCommutatorObservable
             ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
               (groundSpaceES A R)ᗮ.starProjection) X)).re := by
-  have hNormal := isNormal_of_isPrimitiveMPS_with_posDef hP hρ
+  have hNormal := isNormal_of_hasComplementaryFixedPointGap_with_posDef hP hρ
   obtain ⟨γ, hγ, hgap⟩ :=
     exists_openParentHamiltonianES_uniform_gap_of_isNormal_of_le A hNormal hR
   refine ⟨γ, hγ, ?_⟩

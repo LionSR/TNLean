@@ -18,7 +18,6 @@ import TNLean.PEPS.ParentHamiltonian.CycleGroundSpace
 import TNLean.PEPS.ParentHamiltonian.CycleParentGroundSpace
 import TNLean.PEPS.ParentHamiltonian.CyclePhysicalDeformation
 import TNLean.PEPS.ParentHamiltonian.DependentRegionCoordinates
-import TNLean.PEPS.ParentHamiltonian.DependentRegionOperatorLift
 import TNLean.PEPS.ParentHamiltonian.GInjectiveParentTransport
 import TNLean.PEPS.ParentHamiltonian.GIsometricRegionParentHamiltonian
 import TNLean.PEPS.ParentHamiltonian.GraphBondPhysicalCoordinates
@@ -60,6 +59,7 @@ import TNLean.PEPS.ParentHamiltonian.RegionParentHamiltonian
 import TNLean.PEPS.ParentHamiltonian.RegionPhysicalDeformation
 import TNLean.PEPS.ParentHamiltonian.RegionPhysicalGroundSpaceTransport
 import TNLean.PEPS.ParentHamiltonian.RegionPhysicalHamiltonianTransport
+import TNLean.PEPS.ParentHamiltonian.RegionPlacement
 import TNLean.PEPS.ParentHamiltonian.RegionReducedDensity
 import TNLean.PEPS.ParentHamiltonian.RegionVertexImageSupport
 import TNLean.PEPS.ParentHamiltonian.RegularCanonicalRegionProjector

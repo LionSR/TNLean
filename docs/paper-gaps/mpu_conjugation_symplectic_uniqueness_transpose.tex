@@ -1,0 +1,83 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+
+\input{./command}
+
+\title{The Transposes in the Symplectic Uniqueness Clause of the Conjugation Standard Form}
+\author{}
+\date{2026-11-16}
+
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The printed clause}
+
+Proposition~\texttt{corconj} of Ref.~\cite{Cirac2017MPU} chooses the
+standard-form unitaries $u',v'$ of a conjugation-invariant matrix product
+unitary. In Case~II they satisfy
+\begin{align}
+    \overline{u'} & =(\Sigma_\ell\otimes\Sigma_r)u', &
+    \overline{v'} & =v'(\Sigma_r\otimes\Sigma_\ell),
+    \label{eq:sympuv}
+\end{align}
+with $\Sigma_x=\mathbb 1_{x/2}\otimes Y$ and
+$Y=\left(\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\right)$.
+The uniqueness clause \cite[lines~1121--1124]{Cirac2017MPU} states that if
+$u'',v''$ also satisfy \eqref{eq:sympuv} and generate the same matrix product
+unitary, then there are $S_\ell,S_r$ with $S_x^T\Sigma_xS_x=\Sigma_x$ such that
+\begin{align}
+    u'' & =(S_\ell\otimes S_r)u', &
+    v'' & =v'(S_r^T\otimes S_\ell^T).
+    \label{eq:printed}
+\end{align}
+The proof \cite[lines~1151--1163]{Cirac2017MPU} starts from the Fundamental
+Theorem, which gives unitaries $a,b$ with $u''=(a\otimes b)u'$ and
+$v''=v'(b^\dagger\otimes a^\dagger)$, and then rephases $a,b$ to symplectic
+matrices.
+
+\section{The correction}
+
+The rephasing gives $S_\ell=wa$ and $S_r=w^{-1}b$ for a phase $w$, so
+$S_\ell\otimes S_r=a\otimes b$ and
+$S_r^\dagger\otimes S_\ell^\dagger=b^\dagger\otimes a^\dagger$. The relation
+for $v''$ that the proof establishes is therefore
+\begin{align}
+    v'' & =v'(S_r^\dagger\otimes S_\ell^\dagger).
+    \label{eq:corrected}
+\end{align}
+For a real orthogonal matrix the transpose and the adjoint agree, so the Case~I
+clause $v''=v'(O_r^T\otimes O_\ell^T)$ is correct as printed. A unitary
+symplectic matrix need not be real, and then \eqref{eq:printed} fails.
+
+\paragraph{Example.} Take $\ell=r=2$, let $u',v'$ satisfy \eqref{eq:sympuv},
+and let $S_\ell=\operatorname{diag}(i,-i)$, $S_r=\mathbb 1_2$. Since
+$\det S_\ell=1$, one has $S_\ell^TYS_\ell=Y$, and since
+$\overline{S_\ell}\,Y=YS_\ell$ the pair
+$u''=(S_\ell\otimes\mathbb 1)u'$, $v''=v'(\mathbb 1\otimes S_\ell^\dagger)$
+again satisfies \eqref{eq:sympuv} and generates the same matrix product
+unitary. The gate $v'$ is unitary, so the printed formula would force
+$\mathbb 1\otimes S_\ell^\dagger=\mathbb 1\otimes S_\ell^T$, that is,
+$\operatorname{diag}(-i,i)=\operatorname{diag}(i,-i)$.
+
+\section{Formal statement}
+
+The Case~II uniqueness theorem
+\leanid{Matrix.exists_symplectic_factors_of_kronecker_mul} states the corrected
+relation $b^\dagger\otimes a^\dagger=S_r^\dagger\otimes S_\ell^\dagger$, and
+the matrix product unitary statement
+\leanid{MPOTensor.IsMPUCanonicalFormII.exists_symplectic_gauge_of_mpo_eq}
+states \eqref{eq:corrected}. In the gate-level theorem only the transposes in
+the conclusion are replaced by adjoints. The matrix product unitary statement
+additionally carries the reduced-presentation restriction recorded in
+the note
+\url{https://sirui-lu.com/TNLean/paper-gaps/mpu_canonical_form_full_support.pdf}: both tensors are in canonical
+form~II with supplied source factors whose gate $u$ is unitary. It is
+therefore not the unrestricted source result.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

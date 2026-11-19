@@ -35,6 +35,7 @@ period-window hypothesis is used.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 
@@ -182,7 +183,7 @@ argument in arXiv:1606.00608, lines 318--344, used in Appendix C.3, Lemma L,
 lines 1835--1858. -/
 theorem eventuallyRepresentativeWordTupleSpan_blockTensor
     (hCF : IsBNTCanonicalForm P) (p : ℕ) (hp : 0 < p)
-    (hInj : ∀ j, Kraus.IsInjective (MPSTensor.blockTensor (P.basis j) p)) :
+    (hInj : ∀ j, Kraus.IsInjective (Kraus.blockTensor (P.basis j) p)) :
     (P.blockTensor p).EventuallyRepresentativeWordTupleSpan := by
   classical
   let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
@@ -194,16 +195,16 @@ theorem eventuallyRepresentativeWordTupleSpan_blockTensor
     pairTraceSeparatingAt_six_mul_of_common_isNBlkInjective hCF hp hAtP
   have hSepBlocked : ∀ k j : Fin P.basisCount, j ≠ k →
       PairTraceSeparatingAt
-        (MPSTensor.blockTensor (P.basis k) p)
-        (MPSTensor.blockTensor (P.basis j) p) 6 := by
+        (Kraus.blockTensor (P.basis k) p)
+        (Kraus.blockTensor (P.basis j) p) 6 := by
     intro k j hjk
     exact pairTraceSeparatingAt_blockTensor
       (P.basis k) (P.basis j) p 6 (hSepOriginal k j hjk)
   have hPair : HasPairBlockSeparatingWords (P.blockTensor p).basis 6 := by
     change HasPairBlockSeparatingWords
-      (fun j ↦ MPSTensor.blockTensor (P.basis j) p) 6
+      (fun j ↦ Kraus.blockTensor (P.basis j) p) 6
     exact hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt
-      (fun j ↦ MPSTensor.blockTensor (P.basis j) p) hSepBlocked
+      (fun j ↦ Kraus.blockTensor (P.basis j) p) hSepBlocked
   let selectorLength := (P.basisCount - 1) * 6
   have hSelectors : HasBlockSelectorWords (P.blockTensor p).basis selectorLength := by
     change HasBlockSelectorWords (P.blockTensor p).basis ((P.basisCount - 1) * 6)
@@ -211,9 +212,9 @@ theorem eventuallyRepresentativeWordTupleSpan_blockTensor
   have hBlkPos : ∀ (j : Fin P.basisCount) (n : ℕ), 0 < n →
       Kraus.IsNBlkInjective ((P.blockTensor p).basis j) n := by
     intro j n hn
-    change Kraus.IsNBlkInjective (MPSTensor.blockTensor (P.basis j) p) n
+    change Kraus.IsNBlkInjective (Kraus.blockTensor (P.basis j) p) n
     exact (wordSpan_eq_top_iff_isNBlkInjective
-      (MPSTensor.blockTensor (P.basis j) p) n).mp
+      (Kraus.blockTensor (P.basis j) p) n).mp
       (wordSpan_eq_top_of_isInjective (hInj j) hn)
   change ∃ L₁ : ℕ, ∀ L ≥ L₁, WordTupleSpanTop (P.blockTensor p).basis L
   exact eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective

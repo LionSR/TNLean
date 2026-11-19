@@ -94,7 +94,7 @@ Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 396–
 413–437 and 445–446; bounded changes, lines 99–105; allowed monomials, `04-compression.tex`,
 lines 32–35. -/
 theorem birth_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
-    (hTH : Disjoint (T : Set ι) F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
+    (hTH : Disjoint T F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     {L : ℝ}
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
@@ -139,7 +139,7 @@ pair effect `⟨s|` held by `Q∘` and `P∘`, reinserts `s` and applies `Vᴴ` 
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 407–410; proof lines
 439–446. -/
 theorem death_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
-    (hTH : Disjoint (T : Set ι) F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
+    (hTH : Disjoint T F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     {L : ℝ}
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
@@ -197,9 +197,9 @@ theorem exists_tagReorderWord [NeZero q] {l₁ l₁' l₂ l₂' : List (Hole pos
         (layoutRegs q l₂ own₂)).comp (Word.frameList (layoutRegs q l₁' own₁) w₂))),
     by simp [a₁, a₂], ?_⟩
   · refine twoLayoutIso_eq_act_of_basis _ _ _ _ _ _ _ _ _ _ fun τ₁ c₁ τ₂ c₂ => ?_
-    simp only [layoutVec, Word.eval_comp, ContinuousLinearMap.comp_apply,
+    simp only [layoutVec, Circuit.eval_comp, ContinuousLinearMap.comp_apply,
       Word.eval_assocWord_appendIso_symm, hw₁, Word.eval_unassocWord_appendIso_symm,
-      Word.eval_frameList_appendIso_symm, hw₂]
+      Circuit.eval_frameList_appendIso_symm, hw₂]
     rw [← layoutVec, ← layoutVec, twoLayoutIso_basis, TwoSheetExchange.tagReorder,
       act_toMatrix_symm_single]
     rfl
@@ -261,7 +261,7 @@ theorem exchange_bounded [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (h�
         (correctionMatrix σ (X.aSet P)))).eval z) =
       act (X.exchangeOp P σ) (twoLayoutIso _ _ X.owner₁ X.owner₂ z) := by
     intro z
-    rw [Word.eval_comp, ContinuousLinearMap.comp_apply, twoLayoutIso_correctionLayoutWord h,
+    rw [Circuit.eval_comp, ContinuousLinearMap.comp_apply, twoLayoutIso_correctionLayoutWord h,
       twoLayoutIso_renameWord, ← act_mul, exchangeOp,
       sheetBufferCorrection_mul_sheetSwapOp_eq h σ (X.aSet_subset_compl P)]
   have r := X.isReordering_renameWord
@@ -300,8 +300,8 @@ canonical identification of tag orderings of lines 75–76 and 84–85; proof li
 bounded changes, lines 99–105. -/
 theorem exchange_ofFrames_bounded [NeZero q] (F₁ F₂ : Frame pos q Party) (Y : Finset ι)
     (out : Hole pos q Party → Bool)
-    (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true → Disjoint (h.patch.outer : Set ι) Y)
-    (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false → (h.patch.outer : Set ι) ⊆ Y) (P : Party)
+    (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true → Disjoint h.patch.outer Y)
+    (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false → h.patch.outer ⊆ Y) (P : Party)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω
       ((ofFrames F₁ F₂ Y out hout hin).tSet P) ((ofFrames F₁ F₂ Y out hout hin).eSet P) ≤

@@ -100,7 +100,7 @@ theorem eventually_groundSpaceES_iSupIndep_of_primitive
     {d : ℕ} {ι : Type*} [Finite ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
     (B : ∀ j, MPSTensor d (dim j))
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i)) :
     ∀ᶠ N in atTop, iSupIndep (fun j => groundSpaceES (B j) N) := by

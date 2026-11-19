@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.Lattice.RegionEntropyInequalities
 import QICLean.Entropy.ConditionalEntropy
 import QICLean.Entropy.FilterOptimizer
@@ -35,6 +35,8 @@ geometry of the chain.
   global gap* (`docs/notes/one_dimensional_note`), Section 2, the reduction of the area
   law on a chain to interval regions.
 -/
+
+open ManyBody (interval mem_interval)
 
 open TNLean.Lattice
 

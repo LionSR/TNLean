@@ -68,6 +68,7 @@ Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal InnerProductSpace
 open Matrix
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

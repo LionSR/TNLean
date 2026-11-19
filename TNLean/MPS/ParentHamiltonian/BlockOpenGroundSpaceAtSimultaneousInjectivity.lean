@@ -34,7 +34,7 @@ theorem wordTupleSpanTop_of_ge
     WordTupleSpanTop A n := by
   classical
   choose B ζ ρ hζ hGauge _hmpv hP _hρ _hGS _hPI _hCGS using
-    fun j ↦ exists_isPrimitiveMPS_gauge_of_isNormal
+    fun j ↦ exists_hasComplementaryFixedPointGap_gauge_of_isNormal
       ⟨S, hS, isNBlkInjective_of_wordTupleSpanTop A hSpan j⟩
   have hSpanB : WordTupleSpanTop B n :=
     wordTupleSpanTop_of_ge_of_tracePreserving B
@@ -58,7 +58,7 @@ theorem ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_wordT
       (toTensorFromBlocks (d := d) (μ := μ) A) R N) =
       groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N := by
   obtain ⟨B, ρ, hP, _hρ, hSpanB, hGS, _⟩ :=
-    exists_isPrimitiveMPS_family_of_wordTupleSpanTop A hS hSpan
+    exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
   have hLocal : ∀ L, groundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L =
       groundSpace (toTensorFromBlocks (d := d) (μ := μ) B) L :=
     fun L ↦ groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq

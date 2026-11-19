@@ -21,6 +21,8 @@ The available-window and actual-first-excited-energy restrictions of
 auxiliary data; the final recursive construction obtains them physically.
 -/
 
+open ManyBody (interval)
+
 open Matrix Polynomial
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
 

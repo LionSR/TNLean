@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Overlap.Basic
 import TNLean.Circuit.CleanImplementationPlacement
+import TNLean.Algebra.FinCastAddNatAdd
 
 /-!
 # A single-site unitary with one clean padding qudit
@@ -48,12 +49,12 @@ theorem singleSitePaddedOperator_isNeighbourGate
     {U : Matrix (Cfg d 1) (Cfg d 1) ℂ}
     (hU : U ∈ unitary (Matrix (Cfg d 1) (Cfg d 1) ℂ)) :
     IsNeighbourGate (singleSitePaddedOperator U) := by
-  have hpair : ({0, 1} : Set (Fin 2)) = Set.univ := by
+  have hpair : ({0, 1} : Finset (Fin 2)) = Finset.univ := by
     ext i
     fin_cases i <;> simp
   refine ⟨singleSitePaddedOperator_mem_unitary hU, 0, 1, by decide, ?_⟩
   rw [hpair]
-  exact mem_supportedOperators_univ _
+  exact (by simp)
 
 /-- A single-site unitary therefore has a one-gate neighboring-pair
 implementation on two qudits. Source: the single-site endpoint in Section 5
@@ -86,11 +87,8 @@ theorem singleSitePaddedOperator_isCleanImplementation
       ∀ j : Fin 1, z (Fin.natAdd 1 j) = 0 := by
     constructor
     · intro h j
-      have hj : ∀ i : Fin 1, Fin.castAdd 1 i ≠ Fin.natAdd 1 j := by
-        intro i hi
-        have := congrArg Fin.val hi
-        simp only [Fin.val_castAdd, Fin.val_natAdd] at this
-        omega
+      have hj : ∀ i : Fin 1, Fin.castAdd 1 i ≠ Fin.natAdd 1 j := fun i ↦
+        Fin.castAdd_ne_natAdd i j
       simpa only [Fin.append_right, Pi.zero_apply] using h (Fin.natAdd 1 j) hj
     · intro h j
       refine Fin.addCases (fun i hi ↦ ?_) (fun i _ ↦ ?_) j

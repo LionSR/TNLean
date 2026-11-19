@@ -25,6 +25,8 @@ false printed estimate nor a computational running time is asserted; see
 that range. See `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

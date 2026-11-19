@@ -69,6 +69,8 @@ theorem Submodule.starProjection_mul_conj_mul_starProjection {K : Submodule 𝕜
 
 end Projection
 
+open ManyBody (groundSpace)
+
 namespace TNLean.Lattice
 
 variable {V : Type*} [Fintype V] [DecidableEq V] {G : Type*} [Group G] [MulAction G V]
@@ -94,7 +96,7 @@ supercell, "such that all of the `n` ground states are unchanged by translation 
 supercell" (Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1626–1628). Then for
 `g ∈ S` the compression of `P_g W P_g†` to the ground space equals that of `W`. -/
 theorem groundCompression_sitePermMatrix_conj (S : Subgroup G)
-    (hS : ∀ g ∈ S, ∀ v ∈ groundEigenspace H E₀,
+    (hS : ∀ g ∈ S, ∀ v ∈ groundSpace H E₀,
       sitePermMatrix q g *ᵥ WithLp.ofLp v = WithLp.ofLp v)
     {g : G} (hg : g ∈ S) (W : Matrix (V → Fin q) (V → Fin q) ℂ) :
     groundCompression H E₀ (sitePermMatrix q g * W * (sitePermMatrix q g)ᴴ) =
@@ -124,7 +126,7 @@ theorem groundCompression_commutator_eq_of_mem_supercell (r ΔE : ℝ)
     (hInv : IsSiteInvariant G q H) (hH : H.IsHermitian)
     (hcov : ∀ (g : G) k, h (g • k) = sitePermMatrix q g * h k * (sitePermMatrix q g)ᴴ)
     (S : Subgroup G)
-    (hS : ∀ g ∈ S, ∀ v ∈ groundEigenspace H E₀,
+    (hS : ∀ g ∈ S, ∀ v ∈ groundSpace H E₀,
       sitePermMatrix q g *ᵥ WithLp.ofLp v = WithLp.ofLp v)
     {g : G} (hg : g ∈ S) (i j : κ) :
     groundCompression H E₀ (gaussianFilteredTerm r ΔE H (h i)) *
@@ -151,7 +153,7 @@ theorem norm_groundCompression_commutator_le_of_mem_supercell (r ΔE : ℝ)
     (hInv : IsSiteInvariant G q H) (hH : H.IsHermitian)
     (hcov : ∀ (g : G) k, h (g • k) = sitePermMatrix q g * h k * (sitePermMatrix q g)ᴴ)
     (S : Subgroup G)
-    (hS : ∀ g ∈ S, ∀ v ∈ groundEigenspace H E₀,
+    (hS : ∀ g ∈ S, ∀ v ∈ groundSpace H E₀,
       sitePermMatrix q g *ᵥ WithLp.ofLp v = WithLp.ofLp v)
     (B : κ → κ → ℝ)
     (hB : ∀ i j,

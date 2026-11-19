@@ -28,6 +28,8 @@ physical string crossing, braid, energy, or parent-Hamiltonian membership is
 asserted. See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix ComplexOrder
 namespace TNLean.PEPS
@@ -123,7 +125,7 @@ theorem IsGIsometric.exists_torusThreePlaquetteMeasuredDoubleExchange
       (Q : Option (ConjClasses G) →
         Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ),
       W ∈ Matrix.unitaryGroup (RegionPhysicalConfig (d := d) R) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ C, (Q C).IsHermitian ∧ (Q C).PosSemidef) ∧
       (∀ C D, Q C * Q D = if C = D then Q C else 0) ∧
       (∑ C, Q C = 1) ∧
@@ -133,7 +135,7 @@ theorem IsGIsometric.exists_torusThreePlaquetteMeasuredDoubleExchange
         openRegionWeight (groupBondTensor (regularTwistedSite A (output t))) R
           (fun f => Fintype.equivFin G (θ f))) ∧
       (∀ (t : Fin 3 → G) (u : Edge Γₜ → G),
-        regionLocalTerm R W *ᵥ stateCoeff
+        ManyBody.place («X» := fun _ ↦ Fin _) R W *ᵥ stateCoeff
           (groupBondTensor (regularTwistedSite A (regularRegionBondExtension R (input t) u))) =
         stateCoeff
           (groupBondTensor (regularTwistedSite A (regularRegionBondExtension R (output t) u)))) ∧
@@ -165,7 +167,7 @@ theorem IsGIsometric.exists_torusThreePlaquetteMeasuredDoubleExchange
           (regularTwistedSite A (regularRegionBondExtension R (output t) u)) R := by
     ext σ τ
     have h := congrFun (hglobal t u) (assembleRegionσ R σ τ)
-    rw [regionLocalTerm_mulVec_assemble] at h
+    rw [place_mulVec_assemble] at h
     exact h
   refine ⟨W, Q, hW, hWU, hQh, hQm, hQsum, hlocal, hglobal, ?_, ?_⟩
   · intro t θ C

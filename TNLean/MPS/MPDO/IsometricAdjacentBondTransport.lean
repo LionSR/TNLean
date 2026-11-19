@@ -267,11 +267,11 @@ private theorem pair_product_transport
       rw [leftPair_mul_firstProjection B' P hB',
         lastProjection_mul_rightPair P C' hC']
 
-private theorem reindex_sitewisePhysicalMatrix_three
+private theorem reindex_tensorPower_three
     (V : Matrix (Fin d) (Fin e) ℂ) :
     Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
         (_root_.finThreeArrowEquiv (Fin e))
-        (sitewisePhysicalMatrix V 3) = V ⊗ₖ (V ⊗ₖ V) := by
+        (Matrix.tensorPower 3 V) = V ⊗ₖ (V ⊗ₖ V) := by
   ext ⟨i, j, k⟩ ⟨a, b, c⟩
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
     finThreeArrowEquiv_symm_apply, Nat.succ_eq_add_one, Nat.reduceAdd,
@@ -379,19 +379,19 @@ Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and
 theorem singleKrausMap_crossedTwoSiteBondProduct
     (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
     (B C : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
-    singleKrausMap (sitewisePhysicalMatrix V 2)
+    singleKrausMap (Matrix.tensorPower 2 V)
         (embedLocalOperator (d := e) 2 2 (by decide) (0 : Fin 2) B *
           embedLocalOperator (d := e) 2 2 (by decide) (1 : Fin 2) C) =
       embedLocalOperator (d := d) 2 2 (by decide) (0 : Fin 2)
-          (singleKrausMap (sitewisePhysicalMatrix V 2) B) *
+          (singleKrausMap (Matrix.tensorPower 2 V) B) *
         embedLocalOperator (d := d) 2 2 (by decide) (1 : Fin 2)
-          (singleKrausMap (sitewisePhysicalMatrix V 2) C) := by
+          (singleKrausMap (Matrix.tensorPower 2 V) C) := by
   apply (Matrix.reindex (_root_.finTwoArrowEquiv (Fin d))
     (_root_.finTwoArrowEquiv (Fin d))).injective
   rw [Matrix.reindex_singleKrausMap
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin d)),
-    reindex_sitewisePhysicalMatrix_two]
+    reindex_tensorPower_two]
   have hrestricted := Matrix.reindexLinearEquiv_mul ℂ ℂ
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin e))
@@ -406,9 +406,9 @@ theorem singleKrausMap_crossedTwoSiteBondProduct
       (_root_.finTwoArrowEquiv (Fin d))
       (_root_.finTwoArrowEquiv (Fin d))
       (embedLocalOperator (d := d) 2 2 (by decide) (0 : Fin 2)
-        (singleKrausMap (sitewisePhysicalMatrix V 2) B))
+        (singleKrausMap (Matrix.tensorPower 2 V) B))
       (embedLocalOperator (d := d) 2 2 (by decide) (1 : Fin 2)
-        (singleKrausMap (sitewisePhysicalMatrix V 2) C))
+        (singleKrausMap (Matrix.tensorPower 2 V) C))
   simp only [Matrix.coe_reindexLinearEquiv] at hambient
   rw [← hambient, reindex_embedLocalOperator_two_zero,
     reindex_embedLocalOperator_two_one,
@@ -418,7 +418,7 @@ theorem singleKrausMap_crossedTwoSiteBondProduct
     Matrix.reindex_singleKrausMap
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin d)),
-    reindex_sitewisePhysicalMatrix_two]
+    reindex_tensorPower_two]
   rw [Matrix.singleKrausMap_mul_of_isometry _
     (Matrix.IsIsometry.kronecker V V hV hV)]
   have hswap := swapPairMatrix_singleKraus_kronecker_self Vᴴ
@@ -450,19 +450,19 @@ Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj` and
 theorem singleKrausMap_adjacentBondProduct
     (V : Matrix (Fin d) (Fin e) ℂ) (hV : Vᴴ * V = 1)
     (B C : Matrix (Fin 2 → Fin e) (Fin 2 → Fin e) ℂ) :
-    singleKrausMap (sitewisePhysicalMatrix V 3)
+    singleKrausMap (Matrix.tensorPower 3 V)
         (embedLocalOperator (d := e) 2 3 (by decide) (0 : Fin 3) B *
           embedLocalOperator (d := e) 2 3 (by decide) (1 : Fin 3) C) =
       embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3)
-          (singleKrausMap (sitewisePhysicalMatrix V 2) B) *
+          (singleKrausMap (Matrix.tensorPower 2 V) B) *
         embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3)
-          (singleKrausMap (sitewisePhysicalMatrix V 2) C) := by
+          (singleKrausMap (Matrix.tensorPower 2 V) C) := by
   apply (Matrix.reindex (_root_.finThreeArrowEquiv (Fin d))
     (_root_.finThreeArrowEquiv (Fin d))).injective
   rw [Matrix.reindex_singleKrausMap
       (_root_.finThreeArrowEquiv (Fin e))
       (_root_.finThreeArrowEquiv (Fin d)),
-    reindex_sitewisePhysicalMatrix_three]
+    reindex_tensorPower_three]
   have hrestricted := Matrix.reindexLinearEquiv_mul ℂ ℂ
       (_root_.finThreeArrowEquiv (Fin e))
       (_root_.finThreeArrowEquiv (Fin e))
@@ -478,9 +478,9 @@ theorem singleKrausMap_adjacentBondProduct
       (_root_.finThreeArrowEquiv (Fin d))
       (_root_.finThreeArrowEquiv (Fin d))
       (embedLocalOperator (d := d) 2 3 (by decide) (0 : Fin 3)
-        (singleKrausMap (sitewisePhysicalMatrix V 2) B))
+        (singleKrausMap (Matrix.tensorPower 2 V) B))
       (embedLocalOperator (d := d) 2 3 (by decide) (1 : Fin 3)
-        (singleKrausMap (sitewisePhysicalMatrix V 2) C))
+        (singleKrausMap (Matrix.tensorPower 2 V) C))
   simp only [Matrix.coe_reindexLinearEquiv] at hambient
   rw [← hambient]
   rw [reindex_embedLocalOperator_three_zero,
@@ -491,7 +491,7 @@ theorem singleKrausMap_adjacentBondProduct
     Matrix.reindex_singleKrausMap
       (_root_.finTwoArrowEquiv (Fin e))
       (_root_.finTwoArrowEquiv (Fin d)),
-    reindex_sitewisePhysicalMatrix_two]
+    reindex_tensorPower_two]
   exact pair_product_transport V hV _ _
 
 end MPOTensor

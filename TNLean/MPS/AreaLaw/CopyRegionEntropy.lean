@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.CopyProduct
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.Entropy.RegionSplit
 import QICLean.Entropy.MovementEtaRegional
 import QICLean.Entropy.OrderedEntropyAlgebra
@@ -19,6 +19,8 @@ region by the contributions of its at most two partially intersected copies.
 Source: Schuch, Wolf, Verstraete, and Cirac, arXiv:0705.0292v2,
 `paper_v2.tex`, lines 421–479.
 -/
+
+open ManyBody (interval mem_interval)
 
 noncomputable section
 
@@ -162,7 +164,7 @@ theorem regionEntropy_copyProduct (η : Fin K → EuclideanSpace ℂ (Fin L → 
     (hη : ∀ j, ‖η j‖ = 1) (i : Fin K) (R : Finset (Fin L)) :
     Entropy.regionEntropy (copyRegion i R) (copyProduct η) =
       Entropy.regionEntropy R (η i) := by
-  unfold Entropy.regionEntropy
+  unfold Entropy.regionEntropy ManyBody.regionEntropy
   rw [← vonNeumannEntropy_submatrix_equiv (copyRegionConfigurationEquiv (q := q) i R).symm
     (Entropy.regionState (copyRegion i R) (copyProduct η))
     (Entropy.regionState_isHermitian (copyRegion i R) (copyProduct η))]

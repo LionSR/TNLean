@@ -42,6 +42,11 @@ open part of the every-edge construction in the present open rectangular model.
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge IsHorizontalSquareLatticeEdge IsVerticalSquareLatticeEdge SquareLatticeVertex
+  horizontalSquareLatticeEdge_eq_rightEdge squareLatticeEdge_horizontal_or_vertical
+  squareLatticeEdge_not_horizontal_and_vertical squareLatticeGraph squareLatticeRightEdge
+  squareLatticeUpEdge verticalSquareLatticeEdge_eq_upEdge)
+
 namespace TNLean
 namespace PEPS
 

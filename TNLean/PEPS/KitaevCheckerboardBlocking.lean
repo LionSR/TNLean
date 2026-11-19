@@ -13,7 +13,7 @@ import Mathlib.Algebra.BigOperators.Group.Finset.Piecewise
 import Mathlib.Tactic.FinCases
 import QICLean.Algebra.PermutationMatrixUnitary
 import TNLean.PEPS.SemiRegularBondSupport
-import TNLean.PEPS.Examples.QuantumDouble
+import TNLean.PEPS.QuantumDoubleTensor
 
 /-!
 # The actual four-site blocking of Kitaev's binary tensor

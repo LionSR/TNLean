@@ -50,16 +50,13 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport IsAdmissibleSupport latticeL1Distance
+  latticeL1Distance_le_one_of_planeDomainGraph_adj latticeL1Distance_le_walk_length
+  planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-! ### Ambient distances -/
-
-/-- Nearest-neighbor edges of an induced domain have ambient displacement one. -/
-theorem latticeL1Distance_le_one_of_adj {Λ : Finset (ℤ × ℤ)} {x y : Site Λ}
-    (h : (domainGraph Λ).Adj x y) : latticeL1Distance x.1 y.1 ≤ 1 := by
-  simp only [domainGraph] at h
-  simp only [latticeL1Distance]
-  omega
 
 /-- The sup-norm distance of two lattice points. Source: `02-initial.tex`, line 225,
 `dist_∞`. -/
@@ -79,10 +76,10 @@ theorem supDist_le_latticeL1Distance (a b : ℤ × ℤ) : supDist a b ≤ lattic
 /-- A walk of length at most `R` in an induced domain moves its endpoints by sup-norm distance
 at most `R`. -/
 theorem supDist_le_of_walk {Λ : Finset (ℤ × ℤ)} {x y : Site Λ} {R : ℕ}
-    (p : (domainGraph Λ).Walk x y) (hp : p.length ≤ R) : supDist x.1 y.1 ≤ R :=
+    (p : (planeDomainGraph Λ).Walk x y) (hp : p.length ≤ R) : supDist x.1 y.1 ≤ R :=
   (supDist_le_latticeL1Distance _ _).trans
     ((latticeL1Distance_le_walk_length Subtype.val
-      (fun _ _ h ↦ latticeL1Distance_le_one_of_adj h) p).trans hp)
+      (fun _ _ ↦ latticeL1Distance_le_one_of_planeDomainGraph_adj) p).trans hp)
 
 /-! ### Integer rectangles -/
 
@@ -310,14 +307,27 @@ theorem card_admissibleSupport_containing_le (v : Site Λ) :
     (Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1).card ≤
       2 ^ ((1 + 2 * R * (R + 1)) - 1) := by
   classical
-  have h := card_supports_containing_le_diamond (G := domainGraph Λ) Subtype.val
-    Subtype.val_injective (fun _ _ h ↦ latticeL1Distance_le_one_of_adj h)
+  have h := card_supports_containing_le_diamond (G := planeDomainGraph Λ) Subtype.val
+    Subtype.val_injective (fun _ _ ↦ latticeL1Distance_le_one_of_planeDomainGraph_adj)
     (Finset.univ.image fun X : AdmissibleSupport Λ R ↦ X.1) R (by
       intro S hS a ha x hx
       obtain ⟨X, -, rfl⟩ := Finset.mem_image.mp hS
       exact X.2.2 a ha x hx) v
   refine le_trans ?_ h
   rw [Finset.filter_image, Finset.card_image_of_injective _ Subtype.val_injective]
+
+/-- **Supports through a set of sites.** If every support of a family contains a site of `N`,
+the family has at most `|N| μ_R` members, with `μ_R = 2^{v_R - 1}` and `v_R = 1 + 2 R (R + 1)`.
+Source: `01-preliminaries.tex`, lines 95–102. -/
+theorem card_le_card_mul_of_forall_exists_mem {N : Finset (Site Λ)}
+    {S : Finset (AdmissibleSupport Λ R)} (hS : ∀ X ∈ S, ∃ v ∈ N, v ∈ X.1) :
+    S.card ≤ N.card * 2 ^ ((1 + 2 * R * (R + 1)) - 1) := by
+  classical
+  refine (Finset.card_le_card fun X hX ↦ ?_).trans (Finset.card_biUnion_le_card_mul N
+    (fun v ↦ Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1) _
+    fun v _ ↦ card_admissibleSupport_containing_le v)
+  obtain ⟨v, hvN, hvX⟩ := hS X hX
+  exact Finset.mem_biUnion.mpr ⟨v, hvN, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hvX⟩⟩
 
 /-- **The crossing count of one contour.** Let `Q` be safe with `R < D₀`, and let
 `Q₀^{+d} ⊆ Q` with `R + 1 ≤ d`. At most `8 (R + 1) μ_R (size Q₀ + d)` admissible supports are
@@ -334,14 +344,12 @@ theorem card_crossingTerms_rectRegion_le (hsafe : IsSafe Λ A D₀ Q) (hR : R < 
   set sites : Finset (Site Λ) := Finset.univ.filter fun v ↦ v.1 ∈ layer
   set μ := 2 ^ ((1 + 2 * R * (R + 1)) - 1)
   -- every split support has a site in the layer
-  have hcover : Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1)
-      (rectRegion A (Q₀.dilate d)) ⊆
-        sites.biUnion fun v ↦ Finset.univ.filter fun X : AdmissibleSupport Λ R ↦ v ∈ X.1 := by
+  have hcover : ∀ X ∈ Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1)
+      (rectRegion A (Q₀.dilate d)), ∃ v ∈ sites, v ∈ X.1 := by
     intro X hX
     simp only [Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
     obtain ⟨-, ⟨v, hvS, hv⟩, ⟨w, hwS, hw⟩⟩ := exists_of_splits_rectRegion hsafe hR hQ X.2 hX
-    simp only [Finset.mem_biUnion, Finset.mem_filter, Finset.mem_univ, true_and, sites, layer,
-      Finset.mem_sdiff]
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, sites, layer, Finset.mem_sdiff]
     refine ⟨v, ⟨hv, fun hv' ↦ hw ?_⟩, hvS⟩
     obtain ⟨p, hp⟩ := X.2.2 v hvS w hwS
     exact Q₀.toFinset_dilate_mono (by omega)
@@ -351,9 +359,7 @@ theorem card_crossingTerms_rectRegion_le (hsafe : IsSafe Λ A D₀ Q) (hR : R < 
     refine Finset.card_le_card_of_injOn Subtype.val (fun v hv ↦ ?_) Subtype.val_injective.injOn
     exact (Finset.mem_filter.mp hv).2
   have hlayer := card_dilate_sdiff_le Q₀ hd
-  calc _ ≤ _ := Finset.card_le_card hcover
-    _ ≤ sites.card * μ :=
-        Finset.card_biUnion_le_card_mul _ _ _ fun v _ ↦ card_admissibleSupport_containing_le v
+  calc _ ≤ sites.card * μ := card_le_card_mul_of_forall_exists_mem hcover
     _ ≤ 4 * (R + 1) * (Q₀.size + 2 * d) * μ := Nat.mul_le_mul_right _ (hsites.trans hlayer)
     _ ≤ 4 * (R + 1) * (2 * (Q₀.size + d)) * μ := by
         gcongr

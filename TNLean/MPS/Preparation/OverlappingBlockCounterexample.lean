@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.JordanBlockPower
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 import TNLean.MPS.FundamentalTheorem.SectorBNT.Api
 import TNLean.MPS.Preparation.OneDimensionalBlocks
 
@@ -82,6 +82,7 @@ the approximating state of eq. (S7) even when every multiplicity is one. Documen
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix Filter Topology Complex
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

@@ -27,6 +27,8 @@ Definition `def:Cheby-AGSP`, lines 789–803, Theorem `thm:Cheby-AGSP`,
 lines 809–853, and Lemma `l:er`, lines 597–622.
 -/
 
+open ManyBody (interval)
+
 open Matrix QuantumCircuit
 open TNLean.Lattice.Sheet
 open scoped BigOperators Matrix Kronecker TensorProduct InnerProductSpace

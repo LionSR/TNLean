@@ -18,6 +18,8 @@ This is an auxiliary to ALVV, arXiv:1602.08828v2, `t:alg1`, lines 1801–1805.
 The exponent is not asserted to have the source's sharp inverse-gap dependence.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw

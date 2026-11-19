@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.Scan.TargetTypicalWindow
 import TNLean.PEPS.AreaLaw.Scan.StatusMarginalBudget
 import TNLean.PEPS.AreaLaw.Scan.StatusScaleSeparation
 import TNLean.PEPS.AreaLaw.RegionalEntropyContinuity
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The truncated ground state and its entropy inputs
@@ -43,11 +44,15 @@ The source's estimate `t = O(n^(-500))` (`08-scanner.tex`, lines 400–403) is s
 -/
 
 open Filter Matrix
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix.Norms.L2Operator
 
 noncomputable section
 
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -139,10 +144,12 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
       κ.g = Δ / positiveNormalization 1 (Δ / 2) J → C₀ ≤ κ.C →
       ∀ᶠ n : ℕ in atTop,
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
-        (h : LocalHamiltonian Λ q R J) (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
+        (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+            (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
         (E₀ : ℝ) (Ω : StateSpace Λ q),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-        S.graph = domainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        S.graph = planeDomainGraph Λ → S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) →
         S.n = n → S.m = X.m n → S.K = X.K n → S.D = X.D n →
         S.r₀ = ⌈Ctr * Real.log (n : ℝ) ^ 2⌉₊ →
@@ -157,8 +164,8 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
         let B : Finset (Site Λ) → ℝ :=
           fun Y ↦ cutBudget q S.graph (S.truncationSet (X.L n)) S.r₀ S.anchor Y
         ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-          IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ (X.L n) i) e Ωt
-            (κ.g / 2) ∧
+          (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e (κ.g / 2) ∧
+            groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ (X.L n) i) e = Submodule.span ℂ {Ωt}) ∧
           (∀ (Y : Finset (Site Λ)) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / κ.g) (B Y) →
             Real.log (Entropy.surprisalMoment
@@ -210,7 +217,8 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
     (lt_of_lt_of_le zero_lt_one (le_max_left 1 Clat))
   filter_upwards [eventually_status_scale_separation (ell := X.ell) hCtr.le X.kappa_pos
     X.kappa_lt_mu, eventually_ge_atTop N₁] with n hscales hnN
-  intro Λ T _ hT h S E₀ Ω hgs hgraph hdepth hanchor hSn hSm hSK hSD hSr hsize hrows hclear
+  intro Λ T _ hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hdepth hanchor hSn hSm hSK hSD hSr
+      hsize hrows hclear
     hinX hinQ B
   subst hSn
   dsimp only [roundedLogRadius] at hscales
@@ -222,7 +230,7 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
   obtain ⟨hcard, hXsub, hbdry⟩ := S.source_target_geometry X T hT (by omega) hsize hdepth
     hrows hclear
   obtain ⟨e, Ωt, htrgs, he0, he, -, htrace, hmom, htail⟩ :=
-    hroot (q := q) Λ h S E₀ Ω hgs hgraph hanchor (X.L S.n) hn2 hSr hcard
+    hroot (q := q) Λ h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor (X.L S.n) hn2 hSr hcard
   -- The target window of width `n^{3/5}`.
   let Xs := S.target T
   have hBX : B Xs ≤ max 1 Clat * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 := by
@@ -259,7 +267,7 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
     have hYc : (Y.card : ℝ) ≤ κ.C * S.n ^ 2 :=
       (by exact_mod_cast Finset.card_le_card hY : (Y.card : ℝ) ≤ _).trans
         (hcard.trans (mul_le_mul_of_nonneg_right hCT1 (by positivity)))
-    refine (abs_regionalEntropy_sub_le_sqrt_traceDistance Λ q Ωt Ω htrgs.1 hgs.1 Y).trans ?_
+    refine (abs_regionalEntropy_sub_le_sqrt_traceDistance Λ q Ωt Ω htrgs.1 hΩ Y).trans ?_
     rw [hκq]
     gcongr
   refine ⟨e, Ωt, by rw [hκg]; exact htrgs, by rw [hκg]; exact hmom, ?_⟩

@@ -25,8 +25,8 @@ variable {d D : ℕ}
 
 /-- Constant blocked chain obtained by repeating `blockTensor A L` at every site. -/
 noncomputable def blockedChain (A : MPSTensor d D) (L n : ℕ) :
-    MPSChainTensor (MPSTensor.blockPhysDim d L) D n :=
-  fun _ => MPSTensor.blockTensor A L
+    MPSChainTensor (Kraus.blockPhysDim d L) D n :=
+  fun _ => Kraus.blockTensor A L
 
 /-- If `A` is `L`-block injective, then the constant chain of `L`-blocked tensors
 is injective at every site. -/
@@ -35,7 +35,7 @@ lemma blockedChain_isInjective (A : MPSTensor d D) (L n : ℕ)
     IsInjective (blockedChain A L n) := by
   intro k
   simp only [blockedChain]
-  exact (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective A L).1 hA
+  exact (Kraus.isNBlkInjective_iff_blockTensor_isInjective A L).1 hA
 
 /-- **Fundamental Theorem for blocked chains**.
 

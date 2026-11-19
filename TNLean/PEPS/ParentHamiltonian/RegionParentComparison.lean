@@ -70,35 +70,6 @@ theorem IsRegionParentInteraction.exists_pos_comparison
       LinearEquiv.apply_symm_apply, hh.ker_toEuclideanLin] using
       LinearMap.le_def.mp hUpper
 
-/-- Extending a regional operator by the identity commutes with subtraction.
-Source: CPGSV21, arXiv:2011.12127, local extensions, lines 2003–2011. -/
-theorem regionLocalTerm_sub (R : Finset V)
-    (h k : Matrix (RegionPhysicalConfig (d := d) R)
-      (RegionPhysicalConfig (d := d) R) ℂ) :
-    regionLocalTerm R (h - k) = regionLocalTerm R h - regionLocalTerm R k := by
-  classical
-  ext σ τ
-  simp [regionLocalTerm, sub_mul]
-
-/-- Extending a regional operator by the identity commutes with scalar multiplication.
-Source: CPGSV21, arXiv:2011.12127, local extensions, lines 2003–2011. -/
-theorem regionLocalTerm_smul (R : Finset V) (z : ℂ)
-    (h : Matrix (RegionPhysicalConfig (d := d) R)
-      (RegionPhysicalConfig (d := d) R) ℂ) :
-    regionLocalTerm R (z • h) = z • regionLocalTerm R h := by
-  classical
-  ext σ τ
-  simp [regionLocalTerm, mul_assoc]
-
-/-- Extending regional operators by the identity preserves Loewner order.
-Source: CPGSV21, arXiv:2011.12127, positive regional extensions, lines 2003–2011. -/
-theorem regionLocalTerm_mono (R : Finset V)
-    {h k : Matrix (RegionPhysicalConfig (d := d) R)
-      (RegionPhysicalConfig (d := d) R) ℂ} (hhk : h ≤ k) :
-    regionLocalTerm R h ≤ regionLocalTerm R k := by
-  rw [Matrix.le_iff, ← regionLocalTerm_sub]
-  exact regionLocalTerm_posSemidef R hhk
-
 variable {ι : Type*} [Fintype ι]
 
 /-- Common regional comparison constants also compare the full Hamiltonians.
@@ -115,11 +86,11 @@ theorem regionParentHamiltonian_comparison (R : ι → Finset V)
   · simp only [regionParentHamiltonian, Finset.smul_sum]
     apply Finset.sum_le_sum
     intro i hi
-    simpa only [regionLocalTerm_smul] using regionLocalTerm_mono (R i) (hLower i)
+    simpa only [ManyBody.place_smul] using ManyBody.place_le_place (X := fun _ ↦ Fin _) (hLower i)
   · simp only [regionParentHamiltonian, Finset.smul_sum]
     apply Finset.sum_le_sum
     intro i hi
-    simpa only [regionLocalTerm_smul] using regionLocalTerm_mono (R i) (hUpper i)
+    simpa only [ManyBody.place_smul] using ManyBody.place_le_place (X := fun _ ↦ Fin _) (hUpper i)
 
 private theorem smul_mono_of_posSemidef {n : Type*} {P : Matrix n n ℂ}
     (hP : P.PosSemidef) {a b : ℝ} (hab : a ≤ b) : (a : ℂ) • P ≤ (b : ℂ) • P := by

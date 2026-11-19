@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Examples.Ising
 
 import TNLean.MPS.Examples.Ising.IsingDimension
+import TNLean.MPS.Examples.Ising.IsingFusion
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebra
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebraOnePsi
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebraOneSigma

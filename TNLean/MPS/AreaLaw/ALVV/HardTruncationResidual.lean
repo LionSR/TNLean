@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.DisjointRegionalGround
+import TNLean.Lattice.HardTruncation
 import TNLean.MPS.AreaLaw.AKLV.TwoBlockTruncation
 
 /-!
@@ -25,6 +25,8 @@ Its pending cutoff revision, the separate source counterexample and the
 acceptance gates for the physical prerequisites are recorded in
 `docs/audits/2026-10-29_single_region_hard_truncation.md`.
 -/
+
+open ManyBody (interval)
 
 open Matrix
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
@@ -128,27 +130,6 @@ private theorem residual_coefficient_le {c E η t : ℝ} (hc : c ≤ 2) (hE : E 
       gcongr
       exact Real.exp_le_one_iff.mpr (by norm_num)
     _ = _ := mul_one _
-
-private theorem canonical_spectralSpanLE_eq {n : Type*} [Fintype n] [DecidableEq n]
-    {M : Matrix n n ℂ} (hM : M.IsHermitian) (c : ℝ) :
-    Submodule.spectralSpanLE hM.eigenvectorBasis hM.eigenvalues c =
-      Submodule.spectralSpanLE
-        ((isSymmetric_toEuclideanLin_iff.mpr hM).eigenvectorBasis finrank_euclideanSpace)
-        hM.eigenvalues₀ c := by
-  let e : Fin (Fintype.card n) ≃ n := Fintype.equivOfCardEq (Fintype.card_fin _)
-  unfold Submodule.spectralSpanLE
-  congr 1
-  ext x
-  constructor
-  · rintro ⟨i, hi, rfl⟩
-    refine ⟨e.symm i, hi, ?_⟩
-    simp only [IsHermitian.eigenvectorBasis, OrthonormalBasis.reindex_apply, e]
-  · rintro ⟨i, hi, rfl⟩
-    refine ⟨e i, ?_, ?_⟩
-    · have hi' : hM.eigenvalues₀ i ≤ c := hi
-      simpa [IsHermitian.eigenvalues, e] using hi'
-    · simp only [IsHermitian.eigenvectorBasis, OrthonormalBasis.reindex_apply,
-        e, Equiv.symm_apply_apply]
 
 open Classical in
 /-- Actual single-middle-region hard truncation from the original chain, with both
@@ -286,9 +267,9 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
       rw [← map_sub, hdiff]
       exact hsingle'
     constructor
-    · rw [← canonical_spectralSpanLE_eq hH (E + η)]
+    · rw [← hH.spectralSpanLE_eigenvectorBasis_eq (E + η)]
       exact hres H hH ∅ (hcenter t)
-    · rw [← canonical_spectralSpanLE_eq hF (E + η)]
+    · rw [← hF.spectralSpanLE_eigenvectorBasis_eq (E + η)]
       exact hres F hF {1} hmiddle
 
 end TNLean.MPS.AreaLaw.ALVV

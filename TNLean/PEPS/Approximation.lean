@@ -217,13 +217,11 @@ import TNLean.PEPS.Approximation.SourceBlockMatrix
 import TNLean.PEPS.Approximation.SourceFrameMatrix
 import TNLean.PEPS.Approximation.SourceSlotMaps
 import TNLean.PEPS.Approximation.SpectatorOwnerExclusion
-import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
 import TNLean.PEPS.Approximation.SquareAreaLawSpecialization
 import TNLean.PEPS.Approximation.SquareCellConditionalInformation
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
-import TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms
 import TNLean.PEPS.Approximation.SquareInteractionSupport
 import TNLean.PEPS.Approximation.SquareInteractionTerms
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
@@ -232,7 +230,7 @@ import TNLean.PEPS.Approximation.SquarePatchRelabel
 import TNLean.PEPS.Approximation.SquareZeroFloorOptimizer
 import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
 import TNLean.PEPS.Approximation.SwappedDoubledEdgeBoundary
-import TNLean.PEPS.Approximation.SwappedLocalHamiltonian
+import TNLean.PEPS.Approximation.SwappedPlaneInteraction
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianBoundary
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianInteraction
 import TNLean.PEPS.Approximation.TagRegisters

@@ -20,6 +20,8 @@ existing genuine open-region contraction, with its explicitly accounted
 exterior multiplicity.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS

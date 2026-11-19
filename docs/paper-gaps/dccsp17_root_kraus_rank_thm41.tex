@@ -9,7 +9,7 @@
 
 \title{The Root-Channel Kraus-Rank Step in Theorem 4.1}
 \author{}
-\date{2026-04-30; revised 2026-09-26}
+\date{2026-04-30; revised 2026-11-15}
 
 \begin{document}
 \maketitle
@@ -248,9 +248,29 @@ The rank calculation uses linear independence of the scaled matrix units;
 irreducibility follows by propagating an invariant subspace through the
 five sectors. Replacing the middle two-dimensional reset by a unitary
 again preserves the square and gives a root of rank $10-4+1=7$.
-This last alternative-root calculation is not part of the formal theorem.
-Thus the formal obstruction concerns compression of a supplied root,
-while the general existential selection problem remains open.
+This alternative root and the resulting refinement are now formalized in
+\path{TNLean/MPS/Periodic/Symmetry/RefinementCyclicResetAlternativeRoot.lean}.
+In coordinates $0,\ldots,6$, its Kraus family is
+\begin{align}
+ (K_0,\ldots,K_6)&=
+ \left(\frac{E_{10}}{\sqrt2},\frac{E_{20}}{\sqrt2},
+ E_{31}+E_{42},E_{53},E_{54},E_{65},E_{06}\right),
+ \label{eq:dccsp17_cyclic_alternative_root}
+\end{align}
+where $E_{ab}=|a\rangle\langle b|$. The identity
+$\sum_jK_j^\dagger K_j=I$ proves trace preservation, and the seven
+matrices are linearly independent by inspecting respectively entries
+$(1,0),(2,0),(3,1),(5,3),(5,4),(6,5),(0,6)$.
+The theorem \leanid{MPSTensor.CyclicResetCounterexample.choiRank_alternativeRoot}
+therefore gives Choi rank seven. The equality of its square with the
+nine-letter target is
+\leanid{MPSTensor.CyclicResetCounterexample.transferMap_square_eq_alternativeRoot_pow}.
+After zero-padding this root to nine letters, the bounded-root refinement
+theorem proves
+\leanid{MPSTensor.CyclicResetCounterexample.square_isPRefinable}.
+Thus this singular target satisfies the existential selection claim;
+the formal obstruction still concerns compression of a supplied root,
+and the general existential selection problem remains open.
 
 \section{A sufficient condition on the Kraus span}
 
@@ -344,9 +364,56 @@ power inequalities. The resulting refinement theorem is
 \path{TNLean/MPS/Periodic/Symmetry/RefinementFromInjectiveTransfer.lean}.
 It requires no canonical-form assumption.
 
-Consequently any obstruction to bounded-root selection must have a
-singular target channel. For this remaining case, a first-order argument
-alone is insufficient. If the root has Kraus span $S$ of dimension $r$
+\section{All qubit targets, including singular and reducible ones}
+
+There is also a complete dimension-two result, formalized in
+\path{TNLean/MPS/Periodic/RefinementQubitRootRank.lean}.
+If $\mathcal F$ is a channel on $M_2(\mathbb C)$ and $p>0$, then
+\begin{align}
+ \operatorname{rank}C_{\mathcal F}
+ &\le \operatorname{rank}C_{\mathcal F^p}.
+ \label{eq:dccsp17_qubit_root_rank}
+\end{align}
+No invertibility assumption is made on the power. The theorem
+\leanid{Channel.choiRank_le_pow_fin_two} bounds every
+supplied channel root, so no further root selection is needed in this case.
+
+The key dimension bound is
+\leanid{Matrix.finrank_le_two_of_forall_det_eq_zero_fin_two}:
+an all-singular complex linear subspace $S\subseteq M_2(\mathbb C)$ has
+dimension at most two. To prove it, polarize determinant:
+\begin{align}
+ b(A,B)&=\det(A+B)-\det A-\det B\notag\\
+ &=A_{00}B_{11}+A_{11}B_{00}-A_{01}B_{10}-A_{10}B_{01}.
+ \label{eq:dccsp17_qubit_singular_polarization}
+\end{align}
+This bilinear form is nondegenerate on the four-dimensional matrix space.
+For an all-singular $S$, polarization gives $S\subseteq S^{\perp_b}$,
+so $\dim S\le\dim S^{\perp_b}=4-\dim S$.
+
+Now put $r=\operatorname{rank}C_{\mathcal F}$ and
+$s=\operatorname{rank}C_{\mathcal F^p}$. If $s\le1$, the channel power has
+a one-operator Kraus representation $\mathcal F^p(X)=KXK^\dagger$.
+Trace preservation gives $K^\dagger K=I$, so conjugation by $K^\dagger$
+is a left inverse of the power. Thus $\mathcal F$ is injective, and the
+preceding injective-map rank bound gives $r\le s$.
+Otherwise $s\ge2$, so $r\le2$ already suffices. If $r>2$, the Kraus span
+of $\mathcal F$ has dimension greater than two and therefore contains an
+invertible matrix. The word-span dimension argument again gives $r\le s$.
+
+Consequently
+\leanid{MPSTensor.isPRefinable_of_isPDivisibleChannel_fin_two}
+proves the reverse implication for every tensor of bond dimension two,
+including singular and reducible targets. It assumes only $p>0$ and channel
+divisibility, with no canonical-form or root-rank hypothesis. In particular,
+it covers the full multi-block irreducible-form case at bond dimension two.
+The higher-dimensional singular case remains open.
+
+\section{First-order variations at singular targets}
+
+Any obstruction to bounded-root selection must have a singular target
+channel of bond dimension greater than two. In the remaining cases, a first-order argument alone is
+insufficient. If the root has Kraus span $S$ of dimension $r$
 and the target has Kraus span $S^p$ of dimension $s$, the differential
 of the power map is
 \begin{align}
@@ -479,9 +546,11 @@ absent from the source definition of $p$-divisibility and is not proved in the
 cited converse paragraph.
 
 For invertible target channels, the preceding rank argument supplies the
-required bound for every root. For singular target channels it remains open
-whether, under the irreducible-form hypotheses, a channel root can always
-be chosen with Kraus rank at most $d$. The formal development
+required bound for every root. The same conclusion holds for all qubit
+targets, including singular and reducible ones. In the remaining singular cases it
+remains open whether, under the irreducible-form hypotheses, a channel root
+can always be chosen with Kraus rank at most $d$. Outside the proved cases,
+the formal development
 therefore proves the reverse implication from a selected bounded-rank
 root, and under the inverse canonicalization hypothesis
 (\ref{eq:dccsp17_root_kraus_rank_thm41_inverse_canonicalization}). Until a paper-level

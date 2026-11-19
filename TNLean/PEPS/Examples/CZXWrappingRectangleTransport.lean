@@ -26,6 +26,8 @@ cylinders have a different boundary. See
 Source: arXiv:2011.12127, Appendix A, lines 2502–2518 and 2582–2605.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
@@ -55,10 +57,10 @@ noncomputable def czxWrappingRectangleBoundaryTransport (a : ZMod width) (b : ZM
 
 private theorem incident_translate (a : ZMod width) (b : ZMod height)
     (R : Finset (TorusVertex width height)) (e : Edge (torusGraph width height)) :
-    IsRegionIncidentEdge (Region.map (translate a b) R) (Edge.map (translate a b) e) ↔
+    IsRegionIncidentEdge (Region.map (translate a b) R) (ManyBody.Edge.map (translate a b) e) ↔
       IsRegionIncidentEdge R e := by
   unfold IsRegionIncidentEdge
-  rcases Edge.map_endpoints (translate a b) e with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+  rcases ManyBody.Edge.map_endpoints (translate a b) e with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
   · rw [h₁, h₂, mem_Region_map_apply, mem_Region_map_apply]
   · rw [h₁, h₂, mem_Region_map_apply, mem_Region_map_apply]
     exact or_comm
@@ -70,7 +72,7 @@ noncomputable def czxWrappingRectangleIncidentEdgeEquiv (a : ZMod width) (b : ZM
     {e : Edge (torusGraph width height) // IsRegionIncidentEdge R e} ≃
       {e : Edge (torusGraph width height) //
         IsRegionIncidentEdge (Region.map (translate a b) R) e} :=
-  (Edge.equiv (translate a b)).subtypeEquiv fun e => (incident_translate a b R e).symm
+  (ManyBody.Edge.equiv (translate a b)).subtypeEquiv fun e => (incident_translate a b R e).symm
 
 /-- Reindex the incident labels, summing exactly the same internal bonds. -/
 noncomputable def czxWrappingRectangleIncidentTransport (a : ZMod width) (b : ZMod height)
@@ -80,21 +82,21 @@ noncomputable def czxWrappingRectangleIncidentTransport (a : ZMod width) (b : ZM
   Equiv.arrowCongr (czxWrappingRectangleIncidentEdgeEquiv a b R) (Equiv.refl (Fin 4))
 
 private theorem map_up (a : ZMod width) (b : ZMod height) (v : TorusVertex width height) :
-    Edge.map (translate a b) (torusUpEdge v) = torusUpEdge (translate a b v) :=
+    ManyBody.Edge.map (translate a b) (torusUpEdge v) = torusUpEdge (translate a b v) :=
   translateEdge_torusUpEdge a b v
 
 private theorem map_right (a : ZMod width) (b : ZMod height) (v : TorusVertex width height) :
-    Edge.map (translate a b) (torusRightEdge v) = torusRightEdge (translate a b v) :=
+    ManyBody.Edge.map (translate a b) (torusRightEdge v) = torusRightEdge (translate a b v) :=
   translateEdge_torusRightEdge a b v
 
 private theorem map_down (a : ZMod width) (b : ZMod height) (v : TorusVertex width height) :
-    Edge.map (translate a b) (torusDownEdge v) = torusDownEdge (translate a b v) := by
+    ManyBody.Edge.map (translate a b) (torusDownEdge v) = torusDownEdge (translate a b v) := by
   simp only [torusDownEdge, map_up, translate_apply]
   congr 2
   ring
 
 private theorem map_left (a : ZMod width) (b : ZMod height) (v : TorusVertex width height) :
-    Edge.map (translate a b) (torusLeftEdge v) = torusLeftEdge (translate a b v) := by
+    ManyBody.Edge.map (translate a b) (torusLeftEdge v) = torusLeftEdge (translate a b v) := by
   simp only [torusLeftEdge, map_right, translate_apply]
   congr 2
   ring
@@ -104,14 +106,15 @@ directional bond convention. -/
 theorem czxWrappingRectangle_component_translate (a : ZMod width) (b : ZMod height)
     (v : TorusVertex width height) (ζ : Edge (torusGraph width height) → Fin 4) (p : Fin 16) :
     (czxPEPS width height).component (translate a b v)
-        (fun e => ζ (Edge.map (translate a b).symm e.1)) p =
+        (fun e => ζ (ManyBody.Edge.map (translate a b).symm e.1)) p =
       (czxPEPS width height).component v (fun e => ζ e.1) p := by
-  change czxSiteTensor (ζ (Edge.map (translate a b).symm (torusUpEdge (translate a b v))))
-    (ζ (Edge.map (translate a b).symm (torusRightEdge (translate a b v))))
-    (czxBondSwap (ζ (Edge.map (translate a b).symm (torusDownEdge (translate a b v)))))
-    (czxBondSwap (ζ (Edge.map (translate a b).symm (torusLeftEdge (translate a b v))))) p = _
+  change czxSiteTensor (ζ (ManyBody.Edge.map (translate a b).symm (torusUpEdge (translate a b v))))
+    (ζ (ManyBody.Edge.map (translate a b).symm (torusRightEdge (translate a b v))))
+    (czxBondSwap (ζ (ManyBody.Edge.map (translate a b).symm (torusDownEdge (translate a b v)))))
+    (czxBondSwap (ζ (ManyBody.Edge.map (translate a b).symm
+        (torusLeftEdge (translate a b v))))) p = _
   rw [← map_up, ← map_right, ← map_down, ← map_left]
-  simp only [Edge.map_symm_map]
+  simp only [ManyBody.Edge.map_symm_map]
   rfl
 
 private theorem boundaryLabel_translate (a : ZMod width) (b : ZMod height)
@@ -147,13 +150,13 @@ private theorem incidentWeight_translate (a : ZMod width) (b : ZMod height)
     simp [ζ, isRegionIncidentEdge_of_regionVertex R v e]
   have hr (e : IncidentEdge (torusGraph width height) v'.1) :
       θ ⟨e.1, isRegionIncidentEdge_of_regionVertex _ v' e⟩ =
-        ζ (Edge.map (translate a b).symm e.1) := by
+        ζ (ManyBody.Edge.map (translate a b).symm e.1) := by
     have he := ((czxWrappingRectangleIncidentEdgeEquiv a b R).symm
       ⟨e.1, isRegionIncidentEdge_of_regionVertex _ v' e⟩).2
-    change IsRegionIncidentEdge R (Edge.map (translate a b).symm e.1) at he
-    change η ⟨Edge.map (translate a b).symm e.1, he⟩ =
-      (if he' : IsRegionIncidentEdge R (Edge.map (translate a b).symm e.1) then
-        η ⟨Edge.map (translate a b).symm e.1, he'⟩ else 0)
+    change IsRegionIncidentEdge R (ManyBody.Edge.map (translate a b).symm e.1) at he
+    change η ⟨ManyBody.Edge.map (translate a b).symm e.1, he⟩ =
+      (if he' : IsRegionIncidentEdge R (ManyBody.Edge.map (translate a b).symm e.1) then
+        η ⟨ManyBody.Edge.map (translate a b).symm e.1, he'⟩ else 0)
     rw [dite_eq_left he]
   have hp : regionPhysicalConfigMapEquiv (d := 16) (translate a b) R σ
       ((Finset.equivMap (translate a b).toEquiv.toEmbedding R) v) = σ v := by
@@ -196,16 +199,16 @@ labels. This uses directional bonds, independent of stored endpoint order. -/
 theorem czxWrappingRectangle_plaquetteBond_translate (a : ZMod width) (b : ZMod height)
     (q : TorusVertex width height → Fin 2) (e : Edge (torusGraph width height)) :
     czxPlaquetteBondConfig (fun v => q ((translate a b).symm v))
-        (Edge.map (translate a b) e) = czxPlaquetteBondConfig q e := by
+        (ManyBody.Edge.map (translate a b) e) = czxPlaquetteBondConfig q e := by
   obtain ⟨v | v, rfl⟩ := torusEdgeEquiv.surjective e
-  · change czxPlaquetteBondConfig _ (Edge.map (translate a b) (torusRightEdge v)) =
+  · change czxPlaquetteBondConfig _ (ManyBody.Edge.map (translate a b) (torusRightEdge v)) =
       czxPlaquetteBondConfig q (torusRightEdge v)
     rw [map_right, czxPlaquetteBondConfig_right, czxPlaquetteBondConfig_right]
     change czxBond (q (v.1 + a + 1 - a, v.2 + b + 1 - b),
       q (v.1 + a + 1 - a, v.2 + b - b)) = _
     apply congrArg czxBond
     apply Prod.ext <;> apply congrArg q <;> apply Prod.ext <;> ring
-  · change czxPlaquetteBondConfig _ (Edge.map (translate a b) (torusUpEdge v)) =
+  · change czxPlaquetteBondConfig _ (ManyBody.Edge.map (translate a b) (torusUpEdge v)) =
       czxPlaquetteBondConfig q (torusUpEdge v)
     rw [map_up, czxPlaquetteBondConfig_up, czxPlaquetteBondConfig_up]
     change czxBond (q (v.1 + a - a, v.2 + b + 1 - b),

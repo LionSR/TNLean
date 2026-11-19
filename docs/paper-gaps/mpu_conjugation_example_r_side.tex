@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{All Phases under Conjugation: the Side of $R$ on $v'$}
+\author{}
+\date{2026-11-17}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The printed gates}
+The example ``All phases under conjugation'' of \cite{Cirac2017MPU} takes
+$u_\pm=v_\pm\in\{\Id_{r\ell},\operatorname{diag}(-1,1,\dots,1)\}$ and,
+for even $r$ and $\ell$, prints
+\begin{align}
+    u'_\pm & =(\Id_{r\ell/4}\otimes R)\,u_\pm, &
+    v'_\pm & =(\Id_{r\ell/4}\otimes R)\,v_\pm,
+    \label{eq:mpu_conjugation_example_r_side_1}
+\end{align}
+with $R=\tfrac{1-i}{2}[\Id_4+i(Y\otimes Y)]$, ``as in''
+Corollary~\texttt{cor:sympl-to-orthogonal}.\footnote{Source traceability:
+    \path{Papers/1703.09188/paper_v2.tex}, lines 1847--1876; the corollary is
+    at lines 1168--1181.}
+
+\section{The correction}
+The gate $v\colon\mathbb C^r\otimes\mathbb C^\ell\to\mathbb C^d\otimes\mathbb C^d$
+is in Case~II of Proposition~\texttt{corconj} when
+$\overline v=v\,(\Sigma_r\otimes\Sigma_\ell)$: the symplectic form acts on the
+input of $v$. Corollary~\texttt{cor:sympl-to-orthogonal}, which the example
+cites, writes accordingly $v'=\tilde v(\Id_{r\ell/4}\otimes R)$, with $R$
+on the right. Since $\overline R=(Y\otimes Y)R=R(Y\otimes Y)$, the gate
+$v'_\pm=v_\pm(\Id_{r\ell/4}\otimes R)$ satisfies
+$\overline{v'_\pm}=v'_\pm(\Sigma_r\otimes\Sigma_\ell)$ for the real $v_\pm$.
+With $R$ on the left, $(\Id\otimes R)v_\pm$ would carry the symplectic
+form on the output $\mathbb C^d\otimes\mathbb C^d$ instead, which is not the
+Case~II relation. The formalization uses $v'_\pm=v_\pm(\Id_{r\ell/4}\otimes R)$.
+The determinant claim $\det v'_\pm=\pm(-1)^{r\ell/4}$ is unchanged, since
+$\det R=-1$ on either side.
+
+\section{Formal status}
+The corrected gates, their Case~II relations, the conjugation invariance of
+the matrix product unitaries they generate, and the determinants are
+\path{MPOTensor.ConjugationExamples.conjugation_caseII_gates}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import TNLean.PEPS.RegionBlock.UnionInjectivityOverlapBridge
 import TNLean.PEPS.RegionBlock.UnionClosure
 import TNLean.PEPS.NormalEdgeComplementCover
-import TNLean.PEPS.SquareLatticeGraph
+import QICLean.ManyBody.Sites.Lattice.Square
+import TNLean.PEPS.NormalBlocking
 
 /-!
 # Square-lattice region injectivity from the overlapping union lemma
@@ -50,6 +51,8 @@ from rectangular injectivity and positivity alone.
   Section 3, Lemma `injective_union` and Theorem 3, lines 1322--1443 of
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
+
+open ManyBody (Edge SquareLatticeVertex)
 
 open scoped BigOperators
 
@@ -121,7 +124,7 @@ namespace PEPS
 
 variable {width height : ℕ}
 variable {G : SimpleGraph (SquareLatticeVertex width height)} [DecidableRel G.Adj]
-variable {A : Tensor G d}
+variable {d : ℕ} {A : Tensor G d}
 
 /-- **Region `R` is injective from rectangular injectivity alone.** If a normal
 square-lattice PEPS tensor has positive bond dimensions and every contiguous

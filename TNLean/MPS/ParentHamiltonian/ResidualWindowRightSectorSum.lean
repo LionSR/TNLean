@@ -25,6 +25,7 @@ Lemma lem:blocking-arbitrary, lines 434--451.
 -/
 
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder
+open Kraus (blockPhysDim)
 namespace MPSTensor
 variable {d D E L : ℕ}
 /-- Decode the blocked common interval and append its original tail.
@@ -66,7 +67,7 @@ theorem tendsto_norm_isometric_residual_sector_projection_sum_sub_iSup_zero
     (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
     {κ : Type*} {f : Filter κ} {M r : κ → ℕ}
@@ -107,7 +108,7 @@ theorem tendsto_norm_residualWindowRight_sector_projection_sum_sub_iSup_zero
     (A : MPSTensor d D) (B : ∀ j, MPSTensor (blockPhysDim d L) (dim j))
     (V : ∀ j, Matrix (Fin D) (Fin (dim j)) ℂ)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
     {κ : Type*} {f : Filter κ} {K M r : κ → ℕ} (hM : Filter.Tendsto M f Filter.atTop) :

@@ -16,6 +16,8 @@ exterior of the parent interval. Source: ALVV, arXiv:1602.08828v2,
 Lemma `l:t`, lines 500–523. No adaptive probability conclusion is asserted.
 -/
 
+open ManyBody (disjoint_interval_interval interval)
+
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

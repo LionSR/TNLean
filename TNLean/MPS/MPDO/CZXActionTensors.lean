@@ -32,7 +32,7 @@ namespace MPOTensor.CZX
 Source: arXiv:2502.20257, lines 4660–4670. -/
 def blockedSector (x : Fin 2) : MPSTensor 4 1 :=
   Kraus.reindexPhysical (twoSiteBlockEquiv 2)
-    (MPSTensor.blockTensor (MPSTensor.ghzSectorTensor x) 2)
+    (Kraus.blockTensor (MPSTensor.ghzSectorTensor x) 2)
 
 /-- Direct physical contraction of the shared CZX tensor with a bond-one
 blocked GHZ sector; no MPO multiplication is used.

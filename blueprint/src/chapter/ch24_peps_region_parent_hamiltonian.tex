@@ -37,12 +37,12 @@ tensors. Different interaction terms may act on different regions.
 \begin{definition}[Parent Hamiltonian of a finite family of regions]%
     \label{def:peps_region_parent_hamiltonian}
     \lean{TNLean.PEPS.regionConfigEquiv,
-        TNLean.PEPS.regionLocalTerm,
+        TNLean.PEPS.place_eq_regionConfigEquiv,
         TNLean.PEPS.regionSliceMap,
         TNLean.PEPS.regionParentGroundSpace,
         TNLean.PEPS.regionParentHamiltonian}
     \leanok
-    \uses{def:peps_region_parent_interaction}
+    \uses{def:peps_region_parent_interaction, def:peps_regional_operator_extension}
     Let $(R_i)_{i\in I}$ be a finite family of regions, and let $h_i$
     be a parent interaction on $R_i$. Its extension to the full graph
     and the parent Hamiltonian are
@@ -64,9 +64,9 @@ tensors. Different interaction terms may act on different regions.
 
 \begin{lemma}[Positivity and the common kernel]%
     \label{thm:peps_region_parent_common_kernel}
-    \lean{TNLean.PEPS.regionLocalTerm_posSemidef,
-        TNLean.PEPS.regionLocalTerm_mulVec_assemble,
-        TNLean.PEPS.regionLocalTerm_mulVec_eq_zero_iff,
+    \lean{ManyBody.posSemidef_place,
+        TNLean.PEPS.place_mulVec_assemble,
+        TNLean.PEPS.place_mulVec_eq_zero_iff,
         TNLean.PEPS.regionParentHamiltonian_posSemidef,
         TNLean.PEPS.regionParentHamiltonian_mulVec_eq_zero_iff,
         TNLean.PEPS.ker_regionParentHamiltonian}
@@ -94,7 +94,7 @@ tensors. Different interaction terms may act on different regions.
 
 \begin{theorem}[Frustration freeness of the represented PEPS]%
     \label{thm:peps_region_parent_frustration_free}
-    \lean{TNLean.PEPS.regionLocalTerm_stateCoeff_eq_zero,
+    \lean{TNLean.PEPS.place_stateCoeff_eq_zero,
         TNLean.PEPS.stateCoeff_mem_regionParentGroundSpace,
         TNLean.PEPS.regionParentHamiltonian_stateCoeff_eq_zero}
     \leanok

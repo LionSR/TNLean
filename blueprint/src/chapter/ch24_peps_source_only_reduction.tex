@@ -37,19 +37,14 @@ All registers are retained until the final partial trace, on arbitrary finite-di
 \begin{definition}[Prepared sources and retained spectators]
     \label{def:peps_source_replacement_operations}
     \lean{TNLean.Lattice.PartyCircuit.EffectCircuit}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.IsAllowed}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.eval}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.norm_eval_le_one}
     \lean{TNLean.Lattice.PartyCircuit.PartyChain.isPreparation_prepStack}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.castLayouts}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_castLayouts}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_exchangeBlocks}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_frameList_tmul}
+    \lean{TNLean.Lattice.PartyCircuit.Circuit.eval_frameList_appendIso_symm}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.eval_ofLocalWord}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.exchangeBlocks}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.frameList}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_castLayouts}
-    \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_frameList}
+    \lean{TNLean.Lattice.PartyCircuit.Circuit.isAllowed_frameList}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isAllowed_ofLocalWord}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.ofLocalWord}
     \lean{TNLean.Lattice.PartyCircuit.SourceInventory.norm_vector}
@@ -70,17 +65,13 @@ All registers are retained until the final partial trace, on arbitrary finite-di
 
 \begin{definition}[Original distributed circuits]
     \label{def:peps_original_circuit}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.gateLocations}
-    \lean{TNLean.Lattice.PartyCircuit.EffectCircuit.participants}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isAllowed_produce}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.isExpansionBounded_produce_iff}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.nonprivateLocations}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participants}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participants_produce}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.produce}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.produceLocationsEquiv}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.eval}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.nonprivateCount}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.IsExpansionBounded}
     \leanok
@@ -293,7 +284,6 @@ All registers are retained until the final partial trace, on arbitrary finite-di
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.isExpansionBounded_ofLocalWord}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.card_nonprivateLocations}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.natCard_nonprivateLocations}
-    \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.nonprivateLocationsFintype}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participationCount}
     \lean{TNLean.Lattice.PartyCircuit.OriginalCircuit.participationLocationsEquiv}
     \lean{TNLean.Lattice.PartyCircuit.SourceCircuit.participationCount}

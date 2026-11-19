@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedDensity
 import TNLean.PEPS.AreaLaw.Scan.SelectedEnergyDelta
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Physical selected density and energy for arbitrary scanner exponents
@@ -31,13 +32,19 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -63,11 +70,13 @@ theorem exists_sourceTarget_selected_actualCharge_source_density_energy
         ∀ Ce : ℝ, 0 ≤ Ce →
         ∃ Cδ Clδ : ℝ, 0 < Cδ ∧ 0 ≤ Clδ ∧ ∃ N : ℕ, 2 ≤ N ∧
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = F.m S.n → S.D = F.D S.n → S.K = F.K S.n →
           S.C₁ = C₁ → (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
@@ -97,7 +106,8 @@ theorem exists_sourceTarget_selected_actualCharge_source_density_energy
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -125,7 +135,7 @@ theorem exists_sourceTarget_selected_actualCharge_source_density_energy
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
             let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-            let energy := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+            let energy := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
             ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
               let pre : (k : ℕ) → Config k (fun v ↦ Fin (dims v)) → ℂ := fun k ↦
                 replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
@@ -203,16 +213,16 @@ theorem exists_sourceTarget_selected_actualCharge_source_density_energy
   obtain ⟨C, Cl, hC, hCl, hdata⟩ := hdensity F
   refine ⟨C, Cl, hC, hCl, fun Ce hCe ↦ ?_⟩
   obtain ⟨Cd, Cld, hCd, hCld, Nb, hNb, hsource⟩ := hdata Ce hCe
-  have hgap : 0 < (Δ / positiveNormalization 1 (Δ / 2) J) / 2 :=
+  have hg2 : 0 < (Δ / positiveNormalization 1 (Δ / 2) J) / 2 :=
     half_pos (div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J))
   obtain ⟨Nl, hlog⟩ := eventually_atTop.mp
     ((Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually_ge_atTop 1)
   refine ⟨max Cd ((C + 1) / ((Δ / positiveNormalization 1 (Δ / 2) J) / 2)),
     max Cld Cl, hCd.trans_le (le_max_left _ _), hCld.trans (le_max_left _ _),
     max Nb Nl, hNb.trans (le_max_left _ _), ?_⟩
-  intro Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
+  intro Λ T _ hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix
-  obtain ⟨hrD, hDpos, hDm, hm, hM, hphysical⟩ := hsource Λ T hT h S E₀ Ω hgs
+  obtain ⟨hrD, hDpos, hDm, hm, hM, hphysical⟩ := hsource Λ T hT h hh hhJ S E₀ Ω hΩ hgap hspan
     hgraph hanchor (le_trans (le_max_left _ _) hn) hr hmScale hDScale hKScale hCeq
     hsize hdepth hrows hmult hclear htargetEntropy hprefix
   refine ⟨hrD, hDpos, hDm, hm, hM, ?_⟩
@@ -231,13 +241,13 @@ theorem exists_sourceTarget_selected_actualCharge_source_density_energy
   obtain ⟨hrough, b, rem, ρ, Cb, cU, cR, Ci, hCb, hcU, hcR, hCi, hb0, hb,
       hrem0, hrem, hρ0, hρ, hlimU, hlimR, hpoints⟩ := hweights W hW hasmall
   have hinv : 1 / (g / 2) ≤ max Cd ((C + 1) / (g / 2)) :=
-    (div_le_div_of_nonneg_right (by linarith : (1 : ℝ) ≤ C + 1) hgap.le).trans
+    (div_le_div_of_nonneg_right (by linarith : (1 : ℝ) ≤ C + 1) hg2.le).trans
       (le_max_right _ _)
   have hecap : e / (g / 2) ≤
       max Cd ((C + 1) / (g / 2)) * (S.n : ℝ) ^ (-1000 : ℝ) := by
     calc
       e / (g / 2) ≤ (S.n : ℝ) ^ (-1000 : ℝ) / (g / 2) :=
-        div_le_div_of_nonneg_right (he.trans (min_le_left _ _)) hgap.le
+        div_le_div_of_nonneg_right (he.trans (min_le_left _ _)) hg2.le
       _ = (1 / (g / 2)) * (S.n : ℝ) ^ (-1000 : ℝ) := by ring
       _ ≤ _ := mul_le_mul_of_nonneg_right hinv (by positivity)
   let A := C * W ^ 2 * (S.n : ℝ) ^ F.ell * (S.D : ℝ) ^ 2 *
@@ -252,7 +262,7 @@ theorem exists_sourceTarget_selected_actualCharge_source_density_energy
     Cb, cU, cR, Ci, hCb, hcU, hcR, hCi, hb0, hb, hrem0, hrem, hρ0, hρ,
     (fun k ↦ div_nonneg
       (add_nonneg (mul_nonneg hA (Real.rpow_nonneg (abs_nonneg _) _)) (hrem0 k))
-      hgap.le), tendsto_selectedEnergy_remainder hρ hrem A (g / 2), hlimU, hlimR, ?_⟩
+      hg2.le), tendsto_selectedEnergy_remainder hρ hrem A (g / 2), hlimU, hlimR, ?_⟩
   intro εp δ
   have hδmono : F.delta W Cd Cld S.n ≤ δ :=
     mul_le_mul
@@ -268,7 +278,7 @@ theorem exists_sourceTarget_selected_actualCharge_source_density_energy
       (mul_nonneg (hCd.le.trans (le_max_left _ _))
         (inv_nonneg.mpr (Real.rpow_nonneg (Nat.cast_nonneg _) _)))
   have hCgap : C / (g / 2) ≤ max Cd ((C + 1) / (g / 2)) :=
-    (div_le_div_of_nonneg_right (le_add_of_nonneg_right zero_le_one) hgap.le).trans
+    (div_le_div_of_nonneg_right (le_add_of_nonneg_right zero_le_one) hg2.le).trans
       (le_max_right _ _)
   have hAcap : A / (g / 2) ≤ max Cd ((C + 1) / (g / 2)) * W ^ 2 *
       (S.n : ℝ) ^ F.ell * (S.D : ℝ) ^ 2 * (Real.log S.n) ^ max Cld Cl := by
@@ -307,7 +317,7 @@ theorem exists_sourceTarget_selected_actualCharge_source_density_energy
     (div_nonneg (Real.rpow_nonneg (Nat.cast_nonneg S.n) (-F.nu)) zero_le_two).trans hp.1
   have hselected := selectedEnergy_le_of_density_le_add (A := A) hQ0 hδ0
     (abs_nonneg (ρ k)) (hQ.trans (_root_.add_le_add hδmono (le_abs_self (ρ k))))
-    hgap hA (Real.rpow_nonneg (Nat.cast_nonneg S.n) (-100 : ℝ)) hp0 hp.2 henergy
+    hg2 hA (Real.rpow_nonneg (Nat.cast_nonneg S.n) (-100 : ℝ)) hp0 hp.2 henergy
   exact hselected.trans (_root_.add_le_add (_root_.add_le_add
     (mul_le_mul_of_nonneg_right hAcap
       (add_nonneg (add_nonneg (Real.rpow_nonneg hδ0 _)

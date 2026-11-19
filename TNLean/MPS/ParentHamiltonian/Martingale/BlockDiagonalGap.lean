@@ -49,10 +49,10 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isNormal
       γ * ‖v‖ ≤
         ‖parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
   obtain ⟨B, ρ, hP, hρ, hDistinctB, hEq⟩ :=
-    exists_isPrimitiveMPS_family_parentHamiltonianES_eq_of_isNormal
+    exists_hasComplementaryFixedPointGap_family_parentHamiltonianES_eq_of_isNormal
       μ A hμ hNormal hDistinct
   simpa only [hEq] using
-    exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS
+    exists_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap
       μ B hμ ρ hP hρ hDistinctB
 
 /-- Beyond one finite interaction threshold, every parent Hamiltonian of the
@@ -70,10 +70,10 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_isNormal
         γ * ‖v‖ ≤
           ‖parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
   obtain ⟨B, ρ, hP, hρ, hDistinctB, hEq⟩ :=
-    exists_isPrimitiveMPS_family_parentHamiltonianES_eq_of_isNormal
+    exists_hasComplementaryFixedPointGap_family_parentHamiltonianES_eq_of_isNormal
       μ A hμ hNormal hDistinct
   simpa only [hEq] using
-    exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_isPrimitiveMPS
+    exists_parentHamiltonianES_toTensorFromBlocks_gap_threshold_of_hasComplementaryFixedPointGap
       μ B hμ ρ hP hρ hDistinctB
 
 /-- The parent-Hamiltonian gap at the prescribed C1 interaction range is
@@ -94,7 +94,7 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_common_isNB
       γ * ‖v‖ ≤
         ‖parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
   obtain ⟨B, ρ, hP, hρ, hBlkB, hDistinctB, hEq⟩ :=
-    exists_isPrimitiveMPS_family_parentHamiltonianES_eq_of_common_isNBlkInjective
+    exists_hasComplementaryFixedPointGap_family_parentHamiltonianES_eq_of_common_isNBlkInjective
       μ A hμ hL₀ hBlk hDistinct
   simpa only [hEq] using
     exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_threeBlock_bound

@@ -27,6 +27,8 @@ boundary-preserving action is asserted. See
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 variable {width height : ℕ} [NeZero width] [NeZero height]
 variable [Fact (4 < width)] [Fact (3 < height)]
@@ -93,7 +95,7 @@ Source: SCP10, lines 2361–2386. -/
 theorem torusSweptStringInitialOperators_right_transport (v p : X) (g h : G) :
     regularDirectedTransport (torusSweptStringInitialOperators v g h)
       (torusGraph_adj_right p.1 p.2) = torusSweptStringInitialRight v h p := by
-  have he : torusEdgeEquiv.symm (Edge.ofAdj (torusGraph_adj_right p.1 p.2)) = Sum.inl p :=
+  have he : torusEdgeEquiv.symm (ManyBody.Edge.ofAdj (torusGraph_adj_right p.1 p.2)) = Sum.inl p :=
     torusEdgeEquiv.symm_apply_apply (Sum.inl p)
   simp only [regularDirectedTransport, right_lt, torusSweptStringInitialOperators, he]
   split_ifs <;> simp
@@ -103,7 +105,7 @@ Source: SCP10, lines 2361–2386. -/
 theorem torusSweptStringInitialOperators_up_transport (v p : X) (g h : G) :
     regularDirectedTransport (torusSweptStringInitialOperators v g h)
       (torusGraph_adj_up p.1 p.2) = torusSweptStringInitialUp v g p := by
-  have he : torusEdgeEquiv.symm (Edge.ofAdj (torusGraph_adj_up p.1 p.2)) = Sum.inr p :=
+  have he : torusEdgeEquiv.symm (ManyBody.Edge.ofAdj (torusGraph_adj_up p.1 p.2)) = Sum.inr p :=
     torusEdgeEquiv.symm_apply_apply (Sum.inr p)
   simp only [regularDirectedTransport, up_lt, torusSweptStringInitialOperators, he]
   split_ifs <;> simp
@@ -141,7 +143,7 @@ theorem torusSweptStringOperators_up_transport (v p : X) (second : Bool) (g h : 
 omit [NeZero width] [NeZero height] [Fact (4 < width)] [Fact (3 < height)] in
 private theorem operator_eq_directed {Y : Type*} [LinearOrder Y] {Λ : SimpleGraph Y}
     (u : Edge Λ → G) {a b : Y} (hab : Λ.Adj a b) :
-    u (Edge.ofAdj hab) =
+    u (ManyBody.Edge.ofAdj hab) =
       if a < b then regularDirectedTransport u hab
       else (regularDirectedTransport u hab)⁻¹ := by
   by_cases h : a < b <;> simp [regularDirectedTransport, h]

@@ -31,6 +31,8 @@ These are the geometric inputs to the scan, not the full histories lemma.
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- Integer sup-norm distance in the ambient lattice. Source: `08-scanner.tex`, lines 13–18. -/
@@ -135,9 +137,9 @@ theorem abs_ambientDepth_sub_le_of_edist_le (T : Finset (ℤ × ℤ)) (hT : T.No
 /-- Ambient coordinate steps in the actual induced domain graph have sup norm at most one.
 Source: the induced nearest-neighbor domain and `08-scanner.tex`, lines 13–18. -/
 theorem ambientSupDistance_le_one_of_domainGraph_adj {Λ : Finset (ℤ × ℤ)}
-    {x y : Site Λ} (hxy : (domainGraph Λ).Adj x y) :
+    {x y : Site Λ} (hxy : (planeDomainGraph Λ).Adj x y) :
     ambientSupDistance x.val y.val ≤ 1 := by
-  simp only [domainGraph] at hxy
+  simp only [planeDomainGraph] at hxy
   simp only [ambientSupDistance, max_le_iff, abs_le]
   rcases hxy with ⟨h₁, h₂ | h₂⟩ | ⟨h₁, h₂ | h₂⟩ <;> omega
 
@@ -146,7 +148,7 @@ No Lipschitz estimate or coordinate-step certificate is an input to this special
 Source: `08-scanner.tex`, lines 13–18, 125–137, and 331–337. -/
 theorem abs_ambientDepth_sub_le_domainGraph (T : Finset (ℤ × ℤ)) (hT : T.Nonempty)
     {Λ : Finset (ℤ × ℤ)} {x anchor : Site Λ} {r₀ : ℕ}
-    (hx : (domainGraph Λ).edist x anchor ≤ (r₀ : ℕ∞)) :
+    (hx : (planeDomainGraph Λ).edist x anchor ≤ (r₀ : ℕ∞)) :
     |ambientDepth T hT x.val - ambientDepth T hT anchor.val| ≤ r₀ :=
   abs_ambientDepth_sub_le_of_edist_le T hT Subtype.val
     (fun _ _ ↦ ambientSupDistance_le_one_of_domainGraph_adj) hx

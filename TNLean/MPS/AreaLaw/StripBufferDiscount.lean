@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.StripGeometry
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Buffered discount and entropy bound for a strip
@@ -22,6 +23,8 @@ preamble, lines 193–206; a degenerate ground-space gap is not sufficient here.
 
 open Matrix TNLean.Lattice
 open scoped Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -68,9 +71,11 @@ set_option maxHeartbeats 800000 in
 /-- The buffered discount with energy derived from the original interactions. -/
 theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     (hq : 1 ≤ q) (hw : 1 ≤ w) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (h : LocalHamiltonian (stripDomain L w) q R J) {E₀ : ℝ}
+    (h : PlaneInteraction (stripDomain L w) q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
     {Ω : StateSpace (stripDomain L w) q}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (a b : ℕ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (a b : ℕ) :
     let m := stripShellCount q R w J Δ
     let T := stripInterval L w (a - m * R) (b + m * R) \ stripInterval L w a b
     2 * (Entropy.regionEntropy (n := fun _ : Site (stripDomain L w) ↦ q)
@@ -167,13 +172,15 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     intro j hj
     have hd : (j + 1) * R ≤ m * R := Nat.mul_le_mul_right R hj
     exact Finset.sdiff_subset_sdiff (stripInterval_mono (by omega) (by omega)) le_rfl
-  obtain ⟨hΩ, heig, hgap⟩ := hgs
-  change toEuclideanLin (∑ Y, h.term Y) Ω = (E₀ : ℂ) • Ω at heig
+  have heig : toEuclideanLin (∑ Y, h.term Y) Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
+  have hgap := hgap.posSemidef_sub_smul_one
+      (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan
   have key := Entropy.two_mul_condEntropy_le_logarithmic
     (n := fun _ : Site (stripDomain L w) ↦ q) X T hmono
     (fun _ ↦ Finset.disjoint_sdiff) weights hweights hhalf hΩ h.term S
-    (fun Y ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.supported Y))
-    h.hermitian hJ h.norm_le hsingle hΔ heig hgap (E := Δ / 2)
+    (fun Y ↦ (h.mem Y))
+    hh hJ hhJ hsingle hΔ heig hgap (E := Δ / 2)
     (by linarith) henergy hu hmass Finset.disjoint_sdiff hbuf
   have herr : ∑ j ∈ Finset.range m, 1024 * Real.exp 1 * (J / Δ) *
       Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
@@ -287,21 +294,23 @@ private theorem stripEntropyBound_le {q R w : ℕ} {J Δ : ℝ}
 This uses the original lattice Hamiltonian and its unique-vector projector gap. -/
 theorem regionEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     (hq : 1 ≤ q) (hw : 1 ≤ w) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (h : LocalHamiltonian (stripDomain L w) q R J) {E₀ : ℝ}
+    (h : PlaneInteraction (stripDomain L w) q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
     {Ω : StateSpace (stripDomain L w) q}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (a b : ℕ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (a b : ℕ) :
     Entropy.regionEntropy (n := fun _ : Site (stripDomain L w) ↦ q)
       (stripInterval L w a b) Ω ≤ stripAreaLawConst q R * (1 + J / Δ) * (w : ℝ) ^ 2 := by
   let m := stripShellCount q R w J Δ
   let B : ℝ := stripBudgetConst q R * w
   let T := stripInterval L w (a - m * R) (b + m * R) \ stripInterval L w a b
-  have hdisc := two_mul_condEntropy_stripInterval_le hq hw hJ hΔ h hgs a b
+  have hdisc := two_mul_condEntropy_stripInterval_le hq hw hJ hΔ h hh hhJ hΩ hgap hspan a b
   change 2 * (Entropy.regionEntropy (stripInterval L w a b ∪ T) Ω -
     Entropy.regionEntropy T Ω) ≤ Entropy.regionEntropy (stripInterval L w a b) Ω +
       4096 * Real.exp 1 * (J / Δ) * B / m + m * Real.log 2 at hdisc
-  have hAL := regionEntropy_le_union_add hgs.1
+  have hAL := regionEntropy_le_union_add hΩ
     (show Disjoint (stripInterval L w a b) T from Finset.disjoint_sdiff)
-  have hT := regionEntropy_le_card_mul_log hgs.1 T
+  have hT := regionEntropy_le_card_mul_log hΩ T
   have hcard : (T.card : ℝ) ≤ 2 * (m : ℝ) * R * w := by
     have hc := card_stripInterval_enlargement_sdiff_le L w a b (m * R)
     change T.card ≤ _ at hc
@@ -319,15 +328,17 @@ theorem regionEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
 theorem stripAreaLaw (q R : ℕ) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ L w : ℕ, 1 ≤ L → 1 ≤ w → 1 ≤ q →
       ∀ J Δ : ℝ, 0 ≤ J → 0 < Δ →
-      ∀ h : LocalHamiltonian (stripDomain L w) q R J, ∀ E₀ : ℝ,
+      ∀ h : PlaneInteraction (stripDomain L w) q R, (∀ X, (h.term X).IsHermitian) →
+          (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
       ∀ Ω : StateSpace (stripDomain L w) q,
-      Matrix.IsGappedGroundState h.operator E₀ Ω Δ → ∀ a b : ℕ,
+      ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ a b : ℕ,
       Entropy.regionEntropy (n := fun _ : Site (stripDomain L w) ↦ q)
         (stripInterval L w a b) Ω ≤ C * (1 + J / Δ) * (w : ℝ) ^ 2 := by
   refine ⟨stripAreaLawConst q R, ?_, ?_⟩
   · unfold stripAreaLawConst stripShellConst stripBudgetConst
     positivity
-  · intro L w _ hw hq J Δ hJ hΔ h E₀ Ω hgs a b
-    exact regionEntropy_stripInterval_le hq hw hJ hΔ h hgs a b
+  · intro L w _ hw hq J Δ hJ hΔ h hh hhJ E₀ Ω hΩ hgap hspan a b
+    exact regionEntropy_stripInterval_le hq hw hJ hΔ h hh hhJ hΩ hgap hspan a b
 
 end TNLean.MPS.AreaLaw

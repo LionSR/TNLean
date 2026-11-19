@@ -49,7 +49,7 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_wordTupleSp
       γ * ‖v‖ ≤ ‖parentHamiltonianES
         (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, _⟩ :=
-    exists_isPrimitiveMPS_family_of_wordTupleSpanTop A hS hSpan
+    exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
   have hEq : ∀ N, parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ) A) R N =
       parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ) B) R N :=
     fun N ↦ parentHamiltonianES_toTensorFromBlocks_eq_of_block_groundSpace_eq

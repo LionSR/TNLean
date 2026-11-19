@@ -27,6 +27,8 @@ counts are retained as in `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 No measurable Ritz-basis selection or running time is asserted.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped ENNReal InnerProductSpace TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

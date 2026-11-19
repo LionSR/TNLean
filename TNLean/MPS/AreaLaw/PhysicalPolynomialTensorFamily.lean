@@ -23,6 +23,8 @@ The source-sharp bond estimate and running time are separate questions.
 Supporting ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1311–1333.
 -/
 
+open ManyBody (interval)
+
 open Matrix QuantumCircuit
 open TNLean.Lattice.Sheet
 open scoped BigOperators Matrix Kronecker TensorProduct

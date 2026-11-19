@@ -22,6 +22,7 @@ identity coefficients, which prove full word span at every positive length.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (decodeBlockEquiv)
 
 namespace MPSTensor
 

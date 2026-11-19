@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.SourceFactorsStandardForm
 import TNLean.MPS.MPU.TimeReversalLocalNecessity
+import TNLean.MPS.MPU.TimeReversalGateCertificate
 
 /-!
 # Even-ring contraction of the local time-reversal equation
@@ -25,57 +26,6 @@ open scoped Matrix Kronecker
 
 namespace MPOTensor
 
-private theorem adjoint_gate_gauges_of_local_sign
-    {q : ℕ} (A B : Matrix (Fin q × Fin q) (Fin q × Fin q) ℂ)
-    (σ : ℂ) (hσ : σ = 1 ∨ σ = -1) (x : Matrix.unitaryGroup (Fin q) ℂ)
-    (hlocal : A = σ • ((x : Matrix (Fin q) (Fin q) ℂ) ⊗ₖ
-      (x : Matrix (Fin q) (Fin q) ℂ)ᴴ) * Bᴴ) :
-    ∃ X Y : Matrix.unitaryGroup (Fin q) ℂ,
-      Bᴴ = ((X : Matrix (Fin q) (Fin q) ℂ) ⊗ₖ
-        (Y : Matrix (Fin q) (Fin q) ℂ)) * A ∧
-      Aᴴ = B * ((Y : Matrix (Fin q) (Fin q) ℂ)ᴴ ⊗ₖ
-        (X : Matrix (Fin q) (Fin q) ℂ)ᴴ) := by
-  have hσsq : σ * σ = 1 := by rcases hσ with rfl | rfl <;> norm_num
-  have hσstar : star σ * σ = 1 := by rcases hσ with rfl | rfl <;> norm_num
-  have hxx : (x : Matrix (Fin q) (Fin q) ℂ)ᴴ *
-      (x : Matrix (Fin q) (Fin q) ℂ) = 1 :=
-    Matrix.mem_unitaryGroup_iff'.mp x.property
-  let X := star x
-  let Y : Matrix.unitaryGroup (Fin q) ℂ := ⟨σ • (x : Matrix (Fin q) (Fin q) ℂ), by
-    rw [← Matrix.isUnitaryBetween_iff_mem_unitaryGroup]
-    constructor
-    · change (σ • (x : Matrix (Fin q) (Fin q) ℂ))ᴴ *
-        (σ • (x : Matrix (Fin q) (Fin q) ℂ)) = 1
-      rw [Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul,
-        smul_smul, hσstar, one_smul, hxx]
-    · change (σ • (x : Matrix (Fin q) (Fin q) ℂ)) *
-        (σ • (x : Matrix (Fin q) (Fin q) ℂ))ᴴ = 1
-      have hσstar' : σ * star σ = 1 := by rw [mul_comm, hσstar]
-      rw [Matrix.conjTranspose_smul, Matrix.smul_mul, Matrix.mul_smul,
-        smul_smul, hσstar', one_smul]
-      exact ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup _).mpr x.property).2⟩
-  let K := (x : Matrix (Fin q) (Fin q) ℂ) ⊗ₖ (x : Matrix (Fin q) (Fin q) ℂ)ᴴ
-  have hK : Kᴴ * K = 1 :=
-    ((Matrix.isUnitaryBetween_coe_unitaryGroup x).kronecker _ _
-      (Matrix.isUnitaryBetween_star_coe_unitaryGroup x)).1
-  have hXY : ((X : Matrix (Fin q) (Fin q) ℂ) ⊗ₖ
-      (Y : Matrix (Fin q) (Fin q) ℂ)) = σ • Kᴴ := by
-    change (x : Matrix (Fin q) (Fin q) ℂ)ᴴ ⊗ₖ
-      (σ • (x : Matrix (Fin q) (Fin q) ℂ)) = _
-    rw [Matrix.kronecker_smul]
-    simp only [K, Matrix.conjTranspose_kronecker, Matrix.conjTranspose_conjTranspose]
-  refine ⟨X, Y, ?_, ?_⟩
-  · rw [hXY, hlocal]
-    change Bᴴ = (σ • Kᴴ) * ((σ • K) * Bᴴ)
-    simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, hσsq, one_smul]
-    rw [← Matrix.mul_assoc, hK, Matrix.one_mul]
-  · have h := congrArg Matrix.conjTranspose hlocal
-    simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_smul,
-      Matrix.conjTranspose_kronecker, Matrix.conjTranspose_conjTranspose] at h
-    simpa only [X, Y, Unitary.coe_star, Matrix.star_eq_conjTranspose,
-      Matrix.conjTranspose_smul, Matrix.conjTranspose_conjTranspose,
-      Matrix.smul_kronecker] using h
-
 /-- The local sign equation for actual normalized source factors closes on
 every positive even ring. No extra local equation or adjoint-factor supplier
 is assumed. Source: CPSV17, `PropChiral`, the implication proved by
@@ -95,56 +45,16 @@ theorem IsMPUCanonicalFormII.mpo_even_eq_adjoint_of_source_local_certificate
             (SourceFactors.sourceV U S))ᴴ)
     (N : ℕ) (hN : 1 < N) (heven : Even N) : mpo U N = (mpo U N)ᴴ := by
   classical
-  let T := SourceFactors.physicalAdjoint hU hsimple S hr hl
   let L := finCongr hl
   let R := finCongr hr
-  let LA := finCongr ((leftRank_physicalAdjointTensor U).trans hr)
-  let RA := finCongr ((rightRank_physicalAdjointTensor U).trans hl)
   let A := Matrix.reindex (Equiv.prodCongr L R) (Equiv.refl _) (SourceFactors.sourceU U S)
   let B := Matrix.reindex (Equiv.refl _) (Equiv.prodCongr R L) (SourceFactors.sourceV U S)
   obtain ⟨dataS⟩ := hU.exists_twoSiteStandardFormData_sourceFactors hsimple S
-  obtain ⟨dataT⟩ := hU.physicalAdjointTensor.exists_twoSiteStandardFormData_sourceFactors
-    (hU.isMPUSimple_physicalAdjointTensor hsimple) T
   have dataA : TwoSiteStandardFormData (MPOTensor.blockTwo U) A B := dataS.reindexRanks L R
-  have dataB : TwoSiteStandardFormData
-      (MPOTensor.blockTwo (MPOTensor.physicalAdjointTensor U)) Bᴴ Aᴴ := by
-    have data := dataT.reindexRanks LA RA
-    change TwoSiteStandardFormData (MPOTensor.blockTwo (MPOTensor.physicalAdjointTensor U))
-      (Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
-        (SourceFactors.sourceU (ρ := hU.ρ) (MPOTensor.physicalAdjointTensor U) T))
-      (Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
-        (SourceFactors.sourceV (ρ := hU.ρ) (MPOTensor.physicalAdjointTensor U) T)) at data
-    dsimp only [T] at data
-    rw [SourceFactors.sourceU_physicalAdjoint hU hsimple S hr hl,
-      SourceFactors.sourceV_physicalAdjoint hU hsimple S hr hl] at data
-    have hu : Matrix.reindex (Equiv.prodCongr LA RA) (Equiv.refl _)
-        (Matrix.reindex
-          (Equiv.prodCongr (finCongr (leftRank_physicalAdjointTensor U).symm)
-            (finCongr (rightRank_physicalAdjointTensor U).symm))
-          (Equiv.refl _) (SourceFactors.sourceV U S)ᴴ) = Bᴴ := by
-      ext ⟨i, j⟩ ⟨k, l⟩
-      rfl
-    have hv : Matrix.reindex (Equiv.refl _) (Equiv.prodCongr RA LA)
-        (Matrix.reindex (Equiv.refl _)
-          (Equiv.prodCongr (finCongr (rightRank_physicalAdjointTensor U).symm)
-            (finCongr (leftRank_physicalAdjointTensor U).symm))
-          (SourceFactors.sourceU U S)ᴴ) = Aᴴ := by
-      ext ⟨i, j⟩ ⟨k, l⟩
-      rfl
-    rw [hu, hv] at data
-    exact data
-  obtain ⟨X, Y, hfirst, hsecond⟩ := adjoint_gate_gauges_of_local_sign A B σ hσ x hlocal
-  rw [hfirst, hsecond] at dataB
   rcases heven with ⟨m, rfl⟩
   let : NeZero m := ⟨by omega⟩
-  have h := dataA.mpo_eq_of_gate_gauges (N := m) X Y dataB
-  rw [mpo_blockTwo_eq_reindex_blockTensor, mpo_blockTwo_eq_reindex_blockTensor] at h
-  have h' := (Matrix.reindex _ _).injective h
-  rw [mpo_blockTensor_eq_reindex, mpo_blockTensor_eq_reindex] at h'
-  have h'' := (Matrix.reindex _ _).injective h'
-  rw [mpo_physicalAdjointTensor_eq_conjTranspose] at h''
-  rw [Nat.mul_two] at h''
-  exact h''
+  exact mpo_even_eq_conjTranspose_of_blockTwo
+    (dataA.mpo_blockTwo_eq_conjTranspose_of_local_sign σ hσ x hlocal m)
 
 /-- The original four-spin equation for the chosen source gates implies
 adjoint symmetry at every even length of their actual standard-form tensor.

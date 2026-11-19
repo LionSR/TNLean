@@ -39,6 +39,8 @@ theorem does not need it. Documented in
   states generating the same state*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

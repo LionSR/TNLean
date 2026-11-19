@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.GappedGroundState
 import TNLean.Lattice.GaussianFilteredMetricTruncation
 import QICLean.Analysis.GapPerturbation
 
@@ -39,6 +38,8 @@ estimate at lines 343–357.
 open Matrix Complex
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (IsGapped groundSpace mem_groundSpace_iff mem_groundSpace_iff_mulVec)
+
 namespace TNLean.Lattice
 
 variable {n : Type*} [Fintype n] [DecidableEq n]
@@ -55,12 +56,12 @@ private theorem unit_energy_error_le {H M : Matrix n n ℂ} {ε : ℝ}
 
 /-- The eigenvalue gap is the quadratic-form gap above the canonical ground eigenspace.
 Hastings, arXiv:cond-mat/0508554v3, lines 359–367. -/
-theorem groundEigenspace_gap_le_of_eigenvalues {H : Matrix n n ℂ} (hH : H.IsHermitian)
+theorem groundSpace_gap_le_of_eigenvalues {H : Matrix n n ℂ} (hH : H.IsHermitian)
     {E₀ Δ : ℝ} (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + Δ ≤ hH.eigenvalues k)
     (ψ : EuclideanSpace ℂ n) :
-    Δ * (‖ψ‖ ^ 2 - ‖(groundEigenspace H E₀).starProjection ψ‖ ^ 2) ≤
+    Δ * (‖ψ‖ ^ 2 - ‖(groundSpace H E₀).starProjection ψ‖ ^ 2) ≤
       (⟪ψ, toEuclideanLin H ψ⟫_ℂ).re - E₀ * ‖ψ‖ ^ 2 := by
-  let K := groundEigenspace H E₀
+  let K := groundSpace H E₀
   let b := hH.eigenvectorBasis
   let y := ψ - K.starProjection ψ
   have hb (k : n) : H *ᵥ WithLp.ofLp (b k) = (hH.eigenvalues k : ℂ) • WithLp.ofLp (b k) :=
@@ -101,13 +102,13 @@ theorem groundEigenspace_gap_le_of_eigenvalues {H : Matrix n n ℂ} (hH : H.IsHe
   apply Finset.sum_le_sum
   intro k _
   by_cases hk : hH.eigenvalues k = E₀
-  · have hmem : b k ∈ K := mem_groundEigenspace_iff.mpr (by simpa only [hk] using hb k)
+  · have hmem : b k ∈ K := eigenvectorBasis_mem_groundSpace hH hk
     have hzero : ⟪b k, y⟫_ℂ = 0 := by
       rw [inner_eq_zero_symm]
       exact K.starProjection_inner_eq_zero ψ (b k) hmem
     simp [hzero, hk]
   · have hzero : ⟪b k, K.starProjection ψ⟫_ℂ = 0 :=
-      inner_eq_zero_of_mem_groundEigenspace hH hk (hb k) (K.starProjection_apply_mem ψ)
+      inner_eq_zero_of_mem_groundSpace hH hk (hb k) (K.starProjection_apply_mem ψ)
     have hge := (hgap k).resolve_left hk
     simp only [y, inner_sub_right, hzero, sub_zero]
     exact mul_le_mul_of_nonneg_right (by linarith) (sq_nonneg _)
@@ -145,11 +146,11 @@ theorem exists_groundVector_energy_le_of_norm_sub_le {H M : Matrix n n ℂ}
   exact ⟨_, φ, hφ, heig, hmin, henergy⟩
 
 /-- An actual ground vector of a Hermitian approximation has large overlap with the
-unique gapped ground vector of the original Hamiltonian.
+unit vector spanning the ground space of a gapped Hermitian Hamiltonian.
 Hastings, arXiv:cond-mat/0508554v3, lines 359–367. -/
 theorem exists_groundVector_overlap_of_norm_sub_le {H M : Matrix n n ℂ}
-    {E₀ Δ ε : ℝ} {Ω : EuclideanSpace ℂ n}
-    (hgs : Matrix.IsGappedGroundState H E₀ Ω Δ) (hΔ : 0 < Δ)
+    {E₀ Δ ε : ℝ} {Ω : EuclideanSpace ℂ n} (hH : H.IsHermitian) (hΩ : ‖Ω‖ = 1)
+    (hgs : IsGapped H E₀ Δ) (hspan : groundSpace H E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 < Δ)
     (hM : M.IsHermitian) (hHM : ‖H - M‖ ≤ ε) :
     ∃ (e : ℝ) (φ : EuclideanSpace ℂ n), ‖φ‖ = 1 ∧
       toEuclideanCLM (𝕜 := ℂ) (n := n) M φ = (e : ℂ) • φ ∧
@@ -159,13 +160,15 @@ theorem exists_groundVector_overlap_of_norm_sub_le {H M : Matrix n n ℂ}
       ∃ θ : ℝ, IsMinOn
         (fun α : ℝ ↦ ‖φ - Complex.exp (α * Complex.I) • Ω‖) Set.univ θ ∧
         ‖φ - Complex.exp (θ * Complex.I) • Ω‖ ^ 2 ≤ 4 * ε / Δ := by
+  have hHΩ : toEuclideanCLM (𝕜 := ℂ) (n := n) H Ω = (E₀ : ℂ) • Ω :=
+    mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
   obtain ⟨e, φ, hφ, heig, hmin, henergy⟩ :=
-    exists_groundVector_energy_le_of_norm_sub_le hgs.1 hgs.2.1 hM hHM
+    exists_groundVector_energy_le_of_norm_sub_le hΩ hHΩ hM hHM
   have hgap : Δ * (1 - ‖⟪Ω, φ⟫_ℂ‖ ^ 2) ≤ 2 * ε := by
-    have hg := hgs.2.2.gap_le φ
+    have hg := (hgs.posSemidef_sub_smul_one hH hΩ hspan).gap_le φ
     rw [hφ, one_pow, mul_one] at hg
     exact hg.trans henergy
-  obtain ⟨θ, hminθ, hθ⟩ := exists_isMinOn_sq_norm_sub_exp_smul_le_of_gap hΔ hφ hgs.1 hgap
+  obtain ⟨θ, hminθ, hθ⟩ := exists_isMinOn_sq_norm_sub_exp_smul_le_of_gap hΔ hφ hΩ hgap
   refine ⟨_, φ, hφ, heig, hmin, hgap, θ, hminθ, ?_⟩
   simpa only [show (2 : ℝ) * (2 * ε) = 4 * ε by ring] using hθ
 
@@ -176,18 +179,18 @@ theorem exists_groundVector_projected_mass_of_norm_sub_le {H M : Matrix n n ℂ}
     {E₀ Δ ε : ℝ} {Ω : EuclideanSpace ℂ n} (hΩ : ‖Ω‖ = 1)
     (hHΩ : toEuclideanCLM (𝕜 := ℂ) (n := n) H Ω = (E₀ : ℂ) • Ω)
     (hgap : ∀ ψ : EuclideanSpace ℂ n,
-      Δ * (‖ψ‖ ^ 2 - ‖(groundEigenspace H E₀).starProjection ψ‖ ^ 2) ≤
+      Δ * (‖ψ‖ ^ 2 - ‖(groundSpace H E₀).starProjection ψ‖ ^ 2) ≤
         (⟪ψ, toEuclideanLin H ψ⟫_ℂ).re - E₀ * ‖ψ‖ ^ 2)
     (hM : M.IsHermitian) (hHM : ‖H - M‖ ≤ ε) :
     ∃ (e : ℝ) (φ : EuclideanSpace ℂ n), ‖φ‖ = 1 ∧
       toEuclideanCLM (𝕜 := ℂ) (n := n) M φ = (e : ℂ) • φ ∧
       (∀ ψ : EuclideanSpace ℂ n,
         e * ‖ψ‖ ^ 2 ≤ (⟪ψ, toEuclideanLin M ψ⟫_ℂ).re) ∧
-      Δ * (1 - ‖(groundEigenspace H E₀).starProjection φ‖ ^ 2) ≤ 2 * ε ∧
-      (2 * ε < Δ → (groundEigenspace H E₀).starProjection φ ≠ 0) := by
+      Δ * (1 - ‖(groundSpace H E₀).starProjection φ‖ ^ 2) ≤ 2 * ε ∧
+      (2 * ε < Δ → (groundSpace H E₀).starProjection φ ≠ 0) := by
   obtain ⟨e, φ, hφ, heig, hmin, henergy⟩ :=
     exists_groundVector_energy_le_of_norm_sub_le hΩ hHΩ hM hHM
-  have hmass : Δ * (1 - ‖(groundEigenspace H E₀).starProjection φ‖ ^ 2) ≤ 2 * ε := by
+  have hmass : Δ * (1 - ‖(groundSpace H E₀).starProjection φ‖ ^ 2) ≤ 2 * ε := by
     have hg := hgap φ
     rw [hφ, one_pow, mul_one] at hg
     exact hg.trans henergy
@@ -219,8 +222,8 @@ theorem exp_error_le_of_log_radius {B β Δ τ ℓ : ℝ} (hβ : 0 < β) (hΔ : 
 and arbitrary phase-minimized accuracy at an explicit logarithmic radius.
 Hastings, arXiv:cond-mat/0508554v3, lines 359–367. -/
 theorem exists_groundVector_overlap_of_exp_norm_bound {H M : Matrix n n ℂ}
-    {E₀ Δ B β ℓ η : ℝ} {Ω : EuclideanSpace ℂ n}
-    (hgs : Matrix.IsGappedGroundState H E₀ Ω Δ) (hΔ : 0 < Δ)
+    {E₀ Δ B β ℓ η : ℝ} {Ω : EuclideanSpace ℂ n} (hH : H.IsHermitian) (hΩ : ‖Ω‖ = 1)
+    (hgs : IsGapped H E₀ Δ) (hspan : groundSpace H E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 < Δ)
     (hM : M.IsHermitian) (hβ : 0 < β) (hη : 0 < η)
     (hHM : ‖H - M‖ ≤ B * Real.exp (-(β * ℓ)))
     (hℓ : Real.log (4 * max B 1 / (Δ * min η 1)) / β ≤ ℓ) :
@@ -234,7 +237,7 @@ theorem exists_groundVector_overlap_of_exp_norm_bound {H M : Matrix n n ℂ}
         ‖φ - Complex.exp (θ * Complex.I) • Ω‖ ^ 2 ≤ η := by
   have herr := exp_error_le_of_log_radius hβ hΔ (lt_min hη zero_lt_one) hℓ
   obtain ⟨e, φ, hφ, heig, hmin, hgap, θ, hminθ, hphase⟩ :=
-    exists_groundVector_overlap_of_norm_sub_le hgs hΔ hM hHM
+    exists_groundVector_overlap_of_norm_sub_le hH hΩ hgs hspan hΔ hM hHM
   have hsmall : 2 * (B * Real.exp (-(β * ℓ))) ≤ Δ / 2 := by
     nlinarith [min_le_right η 1]
   have hnonzero : ⟪Ω, φ⟫_ℂ ≠ 0 := by
@@ -254,7 +257,7 @@ theorem exists_groundVector_projection_of_exp_norm_bound {H M : Matrix n n ℂ}
     {E₀ Δ B β ℓ η : ℝ} {Ω : EuclideanSpace ℂ n} (hΩ : ‖Ω‖ = 1)
     (hHΩ : toEuclideanCLM (𝕜 := ℂ) (n := n) H Ω = (E₀ : ℂ) • Ω)
     (hgap : ∀ ψ : EuclideanSpace ℂ n,
-      Δ * (‖ψ‖ ^ 2 - ‖(groundEigenspace H E₀).starProjection ψ‖ ^ 2) ≤
+      Δ * (‖ψ‖ ^ 2 - ‖(groundSpace H E₀).starProjection ψ‖ ^ 2) ≤
         (⟪ψ, toEuclideanLin H ψ⟫_ℂ).re - E₀ * ‖ψ‖ ^ 2)
     (hΔ : 0 < Δ) (hM : M.IsHermitian) (hβ : 0 < β) (hη : 0 < η)
     (hHM : ‖H - M‖ ≤ B * Real.exp (-(β * ℓ)))
@@ -263,8 +266,8 @@ theorem exists_groundVector_projection_of_exp_norm_bound {H M : Matrix n n ℂ}
       toEuclideanCLM (𝕜 := ℂ) (n := n) M φ = (e : ℂ) • φ ∧
       (∀ ψ : EuclideanSpace ℂ n,
         e * ‖ψ‖ ^ 2 ≤ (⟪ψ, toEuclideanLin M ψ⟫_ℂ).re) ∧
-      (groundEigenspace H E₀).starProjection φ ≠ 0 ∧
-      1 - ‖(groundEigenspace H E₀).starProjection φ‖ ^ 2 ≤ η := by
+      (groundSpace H E₀).starProjection φ ≠ 0 ∧
+      1 - ‖(groundSpace H E₀).starProjection φ‖ ^ 2 ≤ η := by
   have herr := exp_error_le_of_log_radius hβ hΔ (lt_min hη zero_lt_one) hℓ
   obtain ⟨e, φ, hφ, heig, hmin, hmass, hnonzero⟩ :=
     exists_groundVector_projected_mass_of_norm_sub_le hΩ hHΩ hgap hM hHM
@@ -285,7 +288,7 @@ theorem exists_metric_truncated_groundVector_projection {R J Δ : ℝ} (hR : 0 <
       ∀ {ι : Type*} [PseudoMetricSpace ι] [Fintype ι] [DecidableEq ι] {d : ℕ},
         ∀ (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
           (_hHerm : ∀ i, (h i).IsHermitian)
-          (_hSupport : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i R))
+          (_hSupport : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall R i))
           (_hNorm : ∀ i, ‖h i‖ ≤ J)
           (_hCard : ∀ i : ι, (metricRangeBall R i).card ≤ S)
           (hH : (∑ i, h i).IsHermitian) {E₀ : ℝ} {Ω : EuclideanSpace ℂ (ι → Fin d)},
@@ -301,8 +304,8 @@ theorem exists_metric_truncated_groundVector_projection {R J Δ : ℝ} (hR : 0 <
             toEuclideanCLM (𝕜 := ℂ) (n := ι → Fin d) M φ = (e : ℂ) • φ ∧
             (∀ ψ : EuclideanSpace ℂ (ι → Fin d),
               e * ‖ψ‖ ^ 2 ≤ (⟪ψ, toEuclideanLin M ψ⟫_ℂ).re) ∧
-            (groundEigenspace (∑ i, h i) E₀).starProjection φ ≠ 0 ∧
-            1 - ‖(groundEigenspace (∑ i, h i) E₀).starProjection φ‖ ^ 2 ≤ η := by
+            (groundSpace (∑ i, h i) E₀).starProjection φ ≠ 0 ∧
+            1 - ‖(groundSpace (∑ i, h i) E₀).starProjection φ‖ ^ 2 ≤ η := by
   obtain ⟨c₁, β, C, hc₁, hβ, hC, hbound⟩ :=
     exists_metric_truncated_filter_sum_bound hR S hJ hΔ
   refine ⟨c₁, β, C, hc₁, hβ, hC, ?_⟩
@@ -314,7 +317,7 @@ theorem exists_metric_truncated_groundVector_projection {R J Δ : ℝ} (hR : 0 <
     intro i _
     exact isHermitian_gaussianFilteredTerm _ _
       (Matrix.isHermitian_sum _ fun j _ ↦ hHerm j) (hHerm i)
-  have hgap := groundEigenspace_gap_le_of_eigenvalues hH hgapSpec
+  have hgap := groundSpace_gap_le_of_eigenvalues hH hgapSpec
   apply exists_groundVector_projection_of_exp_norm_bound hΩ hHΩ hgap hΔ hM hβ hη _ hℓlog
   have hb := hbound h hHerm hSupport hNorm hCard ℓ hℓR
   rw [norm_sub_rev] at hb
@@ -329,11 +332,11 @@ theorem exists_metric_truncated_groundVector_overlap {R J Δ : ℝ} (hR : 0 < R)
       ∀ {ι : Type*} [PseudoMetricSpace ι] [Fintype ι] [DecidableEq ι] {d : ℕ},
         ∀ (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ)
           (_hHerm : ∀ i, (h i).IsHermitian)
-          (_hSupport : ∀ i, h i ∈ supportedOperators d (Metric.closedBall i R))
+          (_hSupport : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (metricRangeBall R i))
           (_hNorm : ∀ i, ‖h i‖ ≤ J)
           (_hCard : ∀ i : ι, (metricRangeBall R i).card ≤ S)
-          {E₀ : ℝ} {Ω : EuclideanSpace ℂ (ι → Fin d)},
-          Matrix.IsGappedGroundState (∑ i, h i) E₀ Ω Δ →
+          {E₀ : ℝ} {Ω : EuclideanSpace ℂ (ι → Fin d)}, ‖Ω‖ = 1 →
+          IsGapped (∑ i, h i) E₀ Δ → groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Ω} →
           ∀ {η : ℝ}, 0 < η → ∀ ℓ : ℝ,
           max R (Real.log (4 * max ((Fintype.card ι : ℝ) * (J * C)) 1 /
             (Δ * min η 1)) / β) ≤ ℓ →
@@ -350,7 +353,7 @@ theorem exists_metric_truncated_groundVector_overlap {R J Δ : ℝ} (hR : 0 < R)
   obtain ⟨c₁, β, C, hc₁, hβ, hC, hbound⟩ :=
     exists_metric_truncated_filter_sum_bound hR S hJ hΔ
   refine ⟨c₁, β, C, hc₁, hβ, hC, ?_⟩
-  intro ι _ _ _ d h hHerm hSupport hNorm hCard E₀ Ω hgs η hη ℓ hℓ M
+  intro ι _ _ _ d h hHerm hSupport hNorm hCard E₀ Ω hΩ hgs hspan η hη ℓ hℓ M
   have hℓR : R ≤ ℓ := (le_max_left _ _).trans hℓ
   have hℓlog := (le_max_right _ _).trans hℓ
   have hM : M.IsHermitian := by
@@ -358,7 +361,8 @@ theorem exists_metric_truncated_groundVector_overlap {R J Δ : ℝ} (hR : 0 < R)
     intro i _
     exact isHermitian_gaussianFilteredTerm _ _
       (Matrix.isHermitian_sum _ fun j _ ↦ hHerm j) (hHerm i)
-  apply exists_groundVector_overlap_of_exp_norm_bound hgs hΔ hM hβ hη _ hℓlog
+  apply exists_groundVector_overlap_of_exp_norm_bound (Matrix.isHermitian_sum _ fun i _ ↦ hHerm i)
+    hΩ hgs hspan hΔ hM hβ hη _ hℓlog
   have hb := hbound h hHerm hSupport hNorm hCard ℓ hℓR
   rw [norm_sub_rev] at hb
   simpa only [M, mul_assoc] using hb

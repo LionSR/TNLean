@@ -40,11 +40,9 @@
     "TNLean.Spectral.PrimitiveOverlap",
     "TNLean.Spectral.TransferOperatorGapInjective",
     "TNLean.Wielandt.Inequality.Bounds",
-    "TNLean.Wielandt.Inequality.MatrixSpanSharpBound",
     "TNLean.Wielandt.Inequality.NonzeroTraceWord",
     "TNLean.Wielandt.Primitivity.Equivalence",
     "TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible",
-    "TNLean.Wielandt.Primitivity.PrimitiveBridge",
     "TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank",
     "TNLean.Wielandt.RectangularSpan.Universality"
   ]

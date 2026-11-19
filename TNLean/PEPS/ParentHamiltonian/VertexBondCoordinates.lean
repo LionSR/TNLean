@@ -24,6 +24,8 @@ the product of virtual entangled pairs, lines 2017–2044.
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 open scoped BigOperators

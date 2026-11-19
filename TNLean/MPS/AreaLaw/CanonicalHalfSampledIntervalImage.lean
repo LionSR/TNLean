@@ -20,6 +20,8 @@ full-family image even when the initial rank is below the threshold. See
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

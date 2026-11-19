@@ -6,7 +6,10 @@ Authors: TNLean contributors
 import Mathlib.Analysis.Convex.Integral
 import QICLean.Analysis.ProjectedEvolution
 import TNLean.Algebra.MatrixHermitianSum
-import TNLean.Circuit.LiebRobinson.GraphPropagation
+import QICLean.ManyBody.Dynamics.GraphPropagation
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import TNLean.Lattice.GaussianFilteredLocality
 import TNLean.Lattice.ProductForm
 
@@ -131,33 +134,17 @@ theorem norm_gaussianFilteredTerm_sub_le {q ΔE : ℝ} (hq : 0 ≤ q) {H H' : Ma
   have heq : gaussianFilteredTerm q ΔE H W - gaussianFilteredTerm q ΔE H' W = ∫ t, g t ∂μ := by
     simp only [gaussianFilteredTerm, gaussianIntertwiner]
     rw [integral_sub hI hI']
-  have hbound : ∀ t, ‖g t‖ ≤ Set.indicator (Set.Icc (-T) T) (fun _ => ε) t +
-      Set.indicator (Set.Icc (-T) T)ᶜ (fun _ => 2 * ‖W‖) t := by
-    intro t
-    by_cases ht : t ∈ Set.Icc (-T) T
-    · simp only [Set.indicator_of_mem ht, Set.indicator_of_notMem (Set.notMem_compl_iff.mpr ht),
-        add_zero]
-      exact hloc t ht
-    · simp only [Set.indicator_of_notMem ht, Set.indicator_of_mem (Set.mem_compl ht), zero_add]
-      refine (norm_sub_le _ _).trans_eq ?_
-      rw [norm_intertwinerIntegrand hH hH W t, norm_intertwinerIntegrand hH' hH' W t]
-      ring
-  have hi1 : Integrable (Set.indicator (Set.Icc (-T) T) (fun _ : ℝ => ε)) μ :=
-    (integrable_const ε).indicator measurableSet_Icc
-  have hi2 : Integrable (Set.indicator (Set.Icc (-T) T)ᶜ (fun _ : ℝ => 2 * ‖W‖)) μ :=
-    (integrable_const _).indicator measurableSet_Icc.compl
-  rw [heq]
-  calc ‖∫ t, g t ∂μ‖ ≤ ∫ t, (Set.indicator (Set.Icc (-T) T) (fun _ => ε) t +
-        Set.indicator (Set.Icc (-T) T)ᶜ (fun _ => 2 * ‖W‖) t) ∂μ :=
-      norm_integral_le_of_norm_le (hi1.add hi2) (Filter.Eventually.of_forall hbound)
-    _ = ε * μ.real (Set.Icc (-T) T) + 2 * ‖W‖ * μ.real (Set.Icc (-T) T)ᶜ := by
-      rw [integral_add hi1 hi2, integral_indicator_const _ measurableSet_Icc,
-        integral_indicator_const _ measurableSet_Icc.compl, smul_eq_mul, smul_eq_mul,
-        mul_comm, mul_comm (μ.real _)]
-    _ ≤ ε + 2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
-      gcongr
-      · exact mul_le_of_le_one_right hε measureReal_le_one
-      · exact gaussianFilter_tail_le hq hT
+  have hglob (t : ℝ) : ‖g t‖ ≤ 2 * ‖W‖ := by
+    refine (norm_sub_le _ _).trans_eq ?_
+    rw [norm_intertwinerIntegrand hH hH W t, norm_intertwinerIntegrand hH' hH' W t]
+    ring
+  have hg : Integrable g μ := hI.sub hI'
+  rw [heq, ← integral_add_compl (s := Set.Icc (-T) T) measurableSet_Icc hg]
+  refine (norm_add_le _ _).trans ?_
+  refine (add_le_add (norm_setIntegral_le_of_norm_le_const (μ := μ) (by finiteness) hloc)
+    (norm_setIntegral_le_of_norm_le_const (μ := μ) (by finiteness) (fun t _ => hglob t))).trans ?_
+  exact add_le_add (mul_le_of_le_one_right hε measureReal_le_one)
+    (mul_le_mul_of_nonneg_left (gaussianFilter_tail_le hq hT) (by positivity))
 
 end Abstract
 
@@ -168,48 +155,50 @@ variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 /-- If the generator `H` and the operator `W` act on `K`, so does the evolution
 `e^{iHt} W e^{-iHt}`. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 302–304:
 `H_i^trunc(t)` acts only on sites within distance `l_proj` of `i`. -/
-theorem hermitianUnitaryPath_conj_mem_supportedOperators {K : Set ι}
-    {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hH : H ∈ supportedOperators d K)
-    (hW : W ∈ supportedOperators d K) (t : ℝ) :
-    hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t) ∈ supportedOperators d K := by
-  have hU (s : ℝ) : hermitianUnitaryPath H s ∈ supportedOperators d K :=
-    exp_mem_supportedOperators
-      (Submodule.smul_of_tower_mem _ s (Submodule.smul_mem _ Complex.I hH))
-  exact mul_mem_supportedOperators (mul_mem_supportedOperators (hU t) hW) (hU (-t))
+theorem hermitianUnitaryPath_conj_mem_supportedOperators {K : Finset ι}
+    {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hH : H ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K)
+    (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K) (t : ℝ) :
+    hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t) ∈ ManyBody.supportedOperators
+        (fun _ ↦ Fin d) K := by
+  have hU (s : ℝ) : hermitianUnitaryPath H s ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K :=
+    ManyBody.hermitianUnitaryPath_mem_supportedOperators hH s
+  exact mul_mem (mul_mem (hU t) hW) (hU (-t))
 
 /-- If the generator `H` and the operator `W` act on `K`, so does the filtered operator. With
 `H = H_loc` and `W = H_i`, this is the support of `M_i` in Hastings, arXiv:cond-mat/0508554v3,
 `proj3new.tex`, eqs. `mid`, `odef`, `hpdef` (lines 285–303). -/
-theorem gaussianFilteredTerm_mem_supportedOperators (q ΔE : ℝ) {K : Set ι}
-    {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hH : H ∈ supportedOperators d K)
-    (hW : W ∈ supportedOperators d K) :
-    gaussianFilteredTerm q ΔE H W ∈ supportedOperators d K := by
+theorem gaussianFilteredTerm_mem_supportedOperators (q ΔE : ℝ) {K : Finset ι}
+    {H W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hH : H ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K)
+    (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K) :
+    gaussianFilteredTerm q ΔE H W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K := by
   set μ := gaussianReal 0 (q / ΔE ^ 2).toNNReal
   set f : ℝ → Matrix (ι → Fin d) (ι → Fin d) ℂ := fun t =>
     hermitianUnitaryPath H t * W * hermitianUnitaryPath H (-t)
   have hf : gaussianFilteredTerm q ΔE H W = ∫ t, f t ∂μ := rfl
   rw [hf]
   by_cases hint : Integrable f μ
-  · exact ((supportedOperators d K).restrictScalars ℝ).convex.integral_mem
-      (Submodule.closed_of_finiteDimensional (supportedOperators d K))
+  · let V := Subalgebra.toSubmodule (ManyBody.supportedOperators (fun _ ↦ Fin d) K).toSubalgebra
+    exact (V.restrictScalars ℝ).convex.integral_mem (Submodule.closed_of_finiteDimensional V)
       (Filter.Eventually.of_forall fun t => hermitianUnitaryPath_conj_mem_supportedOperators
         hH hW t) hint
   · rw [integral_undef hint]
-    exact Submodule.zero_mem _
+    exact zero_mem _
 
 end Support
 
 section Graph
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
-  (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+  (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+  (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
 
-include ha hHerm hSupport hDiam hCard hBudget
+include hHerm hSupport hDiam hCard hBudget
 
 /-- **Lieb–Robinson bound against an operator on several sites.** Let `A` act on `S` and `B` on
 a finite set `Y` with every site of `Y` at graph distance at least `m` from every site of `S`.
@@ -219,32 +208,40 @@ it differs from `τ_t(A)` by at most the sum of the single-site commutator bound
 This is the input `‖[H_j, H_i(t')]‖` of Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`,
 lines 1484–1505. -/
 theorem norm_commutator_heisenbergEvolution_le_graphDistance_finset [NeZero d] (S : Finset ι)
-    {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hA : A ∈ supportedOperators d (S : Set ι))
-    (Y : Finset ι) (hB : B ∈ supportedOperators d (Y : Set ι)) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
+    {A B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    (Y : Finset ι) (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) (μ : ℝ)
+    (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ x ∈ S, ∀ y ∈ Y, (m : ℕ∞) ≤ G.edist x y) (t : ℝ) :
-    ‖B * heisenbergEvolution (∑ k, h k) t A - heisenbergEvolution (∑ k, h k) t A * B‖ ≤
+    ‖B * ManyBody.heisenbergEvolution (∑ k, h k) t A - ManyBody.heisenbergEvolution (∑ k, h k) t A
+        * B‖ ≤
       2 * (Y.card : ℝ) * (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖A‖ * ‖B‖ *
         Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * |t| - μ * m) := by
-  set τA := heisenbergEvolution (∑ k, h k) t A
+  set τA := ManyBody.heisenbergEvolution (∑ k, h k) t A
   set c : ℝ := (2 + 4 * |b₀| * Real.exp (2 * μ * R)) * (S.card : ℝ) * ‖A‖ *
     Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * |t| - μ * m)
-  have hloc : ‖τA - siteExpectation d Yᶜ τA‖ ≤ ∑ _y ∈ Yᶜᶜ, c :=
-    norm_sub_siteExpectation_le Yᶜ τA (fun _ => c) fun y hy U hU hUu => by
+  have hloc : ‖τA - ManyBody.regionExpectation Yᶜ τA‖ ≤ ∑ _y ∈ Yᶜᶜ, c :=
+    ManyBody.norm_sub_regionExpectation_le Yᶜ τA (fun _ => c) fun y hy U hU hUu => by
       have hyY : y ∈ Y := by simpa using hy
-      have hLR := norm_heisenberg_commutator_le_graphDistance_finset G X a ha h hHerm hSupport
-        R hDiam vR hCard b₀ hBudget S hA y hU μ hμ m (fun x hx => hm x hx y hyY) t
+      let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin d) X :=
+        ⟨h, fun k => (hSupport k)⟩
+      have hLR := ManyBody.norm_heisenberg_commutator_le_graphDistance_finset G Φ hHerm
+        R hDiam vR hCard b₀ hBudget S hA y
+        hU
+        μ hμ m (fun x hx => hm x hx y hyY) t
       rw [CStarRing.norm_of_mem_unitary hUu, mul_one] at hLR
       exact hLR
   rw [compl_compl, Finset.sum_const, nsmul_eq_mul] at hloc
-  have hcomm : Commute B (siteExpectation d Yᶜ τA) :=
-    commute_of_mem_supportedOperators (by simp [Finset.coe_compl, disjoint_compl_right]) hB
-      (siteExpectation_mem_supportedOperators _ _)
+  have hcomm : Commute B (ManyBody.regionExpectation Yᶜ τA) :=
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint hB
+        (ManyBody.regionExpectation_mem_supportedOperators _ _) disjoint_compl_right
   have hsplit : B * τA - τA * B =
-      B * (τA - siteExpectation d Yᶜ τA) - (τA - siteExpectation d Yᶜ τA) * B := by
+      B * (τA - ManyBody.regionExpectation Yᶜ τA) -
+        (τA - ManyBody.regionExpectation Yᶜ τA) * B := by
     rw [Matrix.mul_sub, Matrix.sub_mul, hcomm.eq]
     abel
   rw [hsplit]
-  calc _ ≤ 2 * ‖τA - siteExpectation d Yᶜ τA‖ * ‖B‖ := norm_commutator_le B _
+  calc _ ≤ 2 * ‖τA - ManyBody.regionExpectation Yᶜ τA‖ * ‖B‖ := norm_commutator_le B _
     _ ≤ 2 * ((Y.card : ℝ) * c) * ‖B‖ := by gcongr
     _ = _ := by ring
 
@@ -258,7 +255,7 @@ from `i` commute with the truncated evolution, and the remaining ones are bounde
 Lieb–Robinson bound. -/
 theorem norm_commutator_sub_truncated_le [NeZero d] [DecidableEq κ] (s : Finset κ)
     (K : Finset ι) (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι) (hSK : S ⊆ K)
-    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ supportedOperators d (S : Set ι))
+    {W : Matrix (ι → Fin d) (ι → Fin d) ℂ} (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y) (u : ℝ) :
     ‖((∑ k, h k) - ∑ k ∈ s, h k) *
@@ -277,21 +274,22 @@ theorem norm_commutator_sub_truncated_le [NeZero d] [DecidableEq κ] (s : Finset
     simp only [h']
     split_ifs
     exacts [hHerm k, isHermitian_zero]
-  have hSupport' (k : κ) : h' k ∈ supportedOperators d (X k : Set ι) := by
+  have hSupport' (k : κ) : h' k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι) := by
     simp only [h']
     split_ifs
-    exacts [hSupport k, Submodule.zero_mem _]
+    exacts [hSupport k, zero_mem _]
   have hBudget' (x : ι) : ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h' j‖ ≤ b₀ := by
     refine le_trans (Finset.sum_le_sum fun j _ => ?_) (hBudget x)
     simp only [h']
     split_ifs
     exacts [le_rfl, by simp]
-  have hHsK : (∑ k ∈ s, h k) ∈ supportedOperators d (K : Set ι) :=
-    Submodule.sum_mem _ fun k hk =>
-      supportedOperators_mono (Finset.coe_subset.mpr (hsK k hk)) (hSupport k)
+  have hHsK : (∑ k ∈ s, h k) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K :=
+    sum_mem fun k hk =>
+      ManyBody.supportedOperators_mono (Finset.coe_subset.mpr (hsK k hk)) (hSupport k)
   have hAK := hermitianUnitaryPath_conj_mem_supportedOperators hHsK
-    (supportedOperators_mono (Finset.coe_subset.mpr hSK) hW) u
-  have hA : heisenbergEvolution (∑ k, h' k) u W = hermitianUnitaryPath (∑ k ∈ s, h k) u * W *
+    (ManyBody.supportedOperators_mono (Finset.coe_subset.mpr hSK) hW) u
+  have hA : ManyBody.heisenbergEvolution (∑ k, h' k) u W = hermitianUnitaryPath (∑ k ∈ s, h k) u *
+      W *
       hermitianUnitaryPath (∑ k ∈ s, h k) (-u) := by
     rw [hsum]
     rfl
@@ -302,9 +300,9 @@ theorem norm_commutator_sub_truncated_le [NeZero d] [DecidableEq κ] (s : Finset
   have hterm (k : κ) (hk : k ∉ s) :
       ‖h k * A - A * h k‖ ≤ if ¬Disjoint (X k) K then F * ‖h k‖ else 0 := by
     split_ifs with hd
-    · rw [(commute_of_mem_supportedOperators (Finset.disjoint_coe.mpr hd) (hSupport k)
-        hAK).eq, sub_self, norm_zero]
-    · have hLR := norm_commutator_heisenbergEvolution_le_graphDistance_finset G X a ha h'
+    · rw [(ManyBody.commute_of_mem_supportedOperators_of_disjoint (hSupport k) hAK hd).eq,
+        sub_self, norm_zero]
+    · have hLR := norm_commutator_heisenbergEvolution_le_graphDistance_finset G X h'
         hHerm' hSupport' R hDiam vR hCard b₀ hBudget' S hW (X k) (hSupport k) μ hμ m
         (hm k hk hd) u
       rw [hA] at hLR
@@ -336,7 +334,7 @@ rest. -/
 theorem norm_gaussianFilteredTerm_sub_truncated_le_sum [NeZero d] [DecidableEq κ] {q ΔE : ℝ}
     (hq : 0 ≤ q) (s : Finset κ) (K : Finset ι) (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι)
     (hSK : S ⊆ K) {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι)) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
+    (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (μ : ℝ) (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y)
     {T : ℝ} (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q ΔE (∑ k, h k) W - gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W‖ ≤
@@ -357,7 +355,7 @@ theorem norm_gaussianFilteredTerm_sub_truncated_le_sum [NeZero d] [DecidableEq �
           hermitianUnitaryPath (∑ k ∈ s, h k) u * W *
               hermitianUnitaryPath (∑ k ∈ s, h k) (-u) * ((∑ k, h k) - ∑ k ∈ s, h k)‖ ≤
         F * Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * T - μ * m) := by
-    refine (norm_commutator_sub_truncated_le G X a ha h hHerm hSupport R hDiam vR hCard b₀
+    refine (norm_commutator_sub_truncated_le G X h hHerm hSupport R hDiam vR hCard b₀
       hBudget s K hsK S hSK hW μ hμ m hm u).trans ?_
     rw [hF]
     gcongr
@@ -381,7 +379,7 @@ the terms within distance `l_proj - R` of `i`, this is Hastings, arXiv:cond-mat/
 theorem norm_gaussianFilteredTerm_sub_truncated_le [NeZero d] [DecidableEq κ] {q ΔE : ℝ}
     (hq : 0 ≤ q) (s : Finset κ) (K : Finset ι) (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι)
     (hSK : S ⊆ K) {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι)) (J : ℝ) (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ)
+    (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (J : ℝ) (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ)
     (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y)
     {T : ℝ} (hT : 0 ≤ T) :
@@ -390,7 +388,7 @@ theorem norm_gaussianFilteredTerm_sub_truncated_le [NeZero d] [DecidableEq κ] {
           ((sᶜ.filter (fun k => ¬Disjoint (X k) K)).card : ℝ) * T *
           Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * T - μ * m) +
         2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
-  refine (norm_gaussianFilteredTerm_sub_truncated_le_sum G X a ha h hHerm hSupport R hDiam vR
+  refine (norm_gaussianFilteredTerm_sub_truncated_le_sum G X h hHerm hSupport R hDiam vR
     hCard b₀ hBudget hq s K hsK S hSK hW μ hμ m hm hT).trans ?_
   have hsum : ∑ k ∈ sᶜ.filter (fun k => ¬Disjoint (X k) K), ‖h k‖ ≤
       J * ((sᶜ.filter (fun k => ¬Disjoint (X k) K)).card : ℝ) := by
@@ -408,11 +406,11 @@ and approximates the filter of `W` under `H` as in
 theorem truncated_approx_gaussianFilteredTerm [NeZero d] [DecidableEq κ] {q ΔE : ℝ}
     (hq : 0 ≤ q) (s : Finset κ) (K : Finset ι) (hsK : ∀ k ∈ s, X k ⊆ K) (S : Finset ι)
     (hSK : S ⊆ K) {W : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι)) (J : ℝ) (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ)
+    (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (J : ℝ) (hJ : ∀ k, ‖h k‖ ≤ J) (μ : ℝ)
     (hμ : 0 ≤ μ) (m : ℕ)
     (hm : ∀ k ∉ s, ¬Disjoint (X k) K → ∀ x ∈ S, ∀ y ∈ X k, (m : ℕ∞) ≤ G.edist x y)
     {T : ℝ} (hT : 0 ≤ T) :
-    gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W ∈ supportedOperators d (K : Set ι) ∧
+    gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K ∧
       ‖gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W‖ ≤ ‖W‖ ∧
       (W.IsHermitian → (gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W).IsHermitian) ∧
       ‖gaussianFilteredTerm q ΔE (∑ k, h k) W - gaussianFilteredTerm q ΔE (∑ k ∈ s, h k) W‖ ≤
@@ -421,13 +419,13 @@ theorem truncated_approx_gaussianFilteredTerm [NeZero d] [DecidableEq κ] {q ΔE
             Real.exp ((2 * vR * |b₀| * Real.exp (2 * μ * R) + 1) * T - μ * m) +
           2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q)) := by
   have hHs : (∑ k ∈ s, h k).IsHermitian := Matrix.isHermitian_sum _ fun k _ => hHerm k
-  have hHsK : (∑ k ∈ s, h k) ∈ supportedOperators d (K : Set ι) :=
-    Submodule.sum_mem _ fun k hk =>
-      supportedOperators_mono (Finset.coe_subset.mpr (hsK k hk)) (hSupport k)
+  have hHsK : (∑ k ∈ s, h k) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) K :=
+    sum_mem fun k hk =>
+      ManyBody.supportedOperators_mono (Finset.coe_subset.mpr (hsK k hk)) (hSupport k)
   exact ⟨gaussianFilteredTerm_mem_supportedOperators q ΔE hHsK
-    (supportedOperators_mono (Finset.coe_subset.mpr hSK) hW),
+    (ManyBody.supportedOperators_mono (Finset.coe_subset.mpr hSK) hW),
     norm_gaussianFilteredTerm_le q ΔE hHs W, isHermitian_gaussianFilteredTerm q ΔE hHs,
-    norm_gaussianFilteredTerm_sub_truncated_le G X a ha h hHerm hSupport R hDiam vR hCard b₀
+    norm_gaussianFilteredTerm_sub_truncated_le G X h hHerm hSupport R hDiam vR hCard b₀
       hBudget hq s K hsK S hSK hW J hJ μ hμ m hm hT⟩
 
 end Graph

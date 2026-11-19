@@ -7,9 +7,12 @@ import QICLean.Analysis.DetectabilityLemma
 import QICLean.Analysis.ComplementProdKernel
 import QICLean.Analysis.ComplementProdPartition
 import QICLean.Analysis.ProjectionGeometry
-import TNLean.Algebra.GappedGroundState
-import TNLean.Circuit.EntropySupport
-import TNLean.MPS.AreaLaw.Basic
+import TNLean.Algebra.MatrixHermitianSum
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
+import QICLean.ManyBody.Sites.Lattice.Chain
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Detectability for a physical nearest-neighbour projection chain
@@ -26,7 +29,11 @@ at lines 1457–1460. The reduction from arbitrary positive contractions is prov
 conclusions are separate.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw
@@ -62,13 +69,9 @@ private theorem commute_bonds_of_separated
       (h i) (interval L i.val (i.val + 2)))
     (i j : Fin (L - 1)) (hsep : i.val + 1 < j.val ∨ j.val + 1 < i.val) :
     Commute (h i) (h j) := by
-  refine QuantumCircuit.commute_of_mem_supportedOperators ?_
-    (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
-    (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs j))
-  rw [Set.disjoint_left]
+  refine ManyBody.commute_of_mem_supportedOperators_of_disjoint (hs i) (hs j) ?_
+  rw [Finset.disjoint_left]
   intro x hx hy
-  change x ∈ interval L i.val (i.val + 2) at hx
-  change x ∈ interval L j.val (j.val + 2) at hy
   rw [mem_interval] at hx hy
   omega
 
@@ -433,15 +436,19 @@ theorem norm_sq_physicalDetectability_le_of_gappedGroundState
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2)))
     {Gamma x : EuclideanSpace ℂ (Fin L → Fin q)} {gamma : ℝ}
-    (hgs : Matrix.IsGappedGroundState (∑ i, h i) 0 Gamma gamma)
+    (hΩ : ‖Gamma‖ = 1) (hgap : IsGapped (∑ i, h i) 0 gamma)
+    (hspan : groundSpace (∑ i, h i) 0 = Submodule.span ℂ {Gamma})
     (hgamma : 0 < gamma) (hx : ‖x‖ = 1) (horth : ⟪Gamma, x⟫_ℂ = 0) :
     ‖physicalDetectability h x‖ ^ 2 ≤ 4 / (4 + gamma) := by
   have hGamma : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
       (∑ i, h i) Gamma = 0 := by
-    simpa only [Complex.ofReal_zero, zero_smul] using hgs.2.1
+    have h0 := ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Gamma)
+    rw [Complex.ofReal_zero, zero_smul] at h0
+    exact h0
   have horth' : ⟪Gamma, physicalDetectability h x⟫_ℂ = 0 :=
     (inner_physicalDetectability_eq h hp hs hGamma x).trans horth
-  have hgap := hgs.2.2.gap_le (physicalDetectability h x)
+  have hH : (∑ i, h i).IsHermitian := Matrix.isHermitian_sum _ fun i _ ↦ (hp i).isSelfAdjoint
+  have hgap := (hgap.posSemidef_sub_smul_one hH hΩ hspan).gap_le (physicalDetectability h x)
   rw [horth', norm_zero, zero_pow (by decide : (2 : ℕ) ≠ 0), sub_zero,
     zero_mul, sub_zero] at hgap
   have henergy := re_inner_physicalDetectability_le h hp hs x

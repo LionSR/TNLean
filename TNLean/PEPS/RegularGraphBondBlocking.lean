@@ -28,6 +28,8 @@ statement of Observation 6.6 remains separate. See
 `docs/paper-gaps/scp10_general_group_physical_blocking.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

@@ -25,6 +25,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open scoped BigOperators
@@ -53,7 +55,7 @@ with independent offsets averaged. The only site-count hypotheses are the source
 ambient row bound and bounded interaction-label multiplicity. -/
 theorem sum_historyWeight_bad_through_domainGraph_le
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     {N L μ : ℕ} (hn : 0 < S.n) (hm : 0 < S.m) (hM : 0 < S.M)
     (hL : 8 * S.K * S.m ≤ L)

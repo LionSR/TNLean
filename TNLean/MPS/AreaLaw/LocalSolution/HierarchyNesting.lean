@@ -48,7 +48,7 @@ projections. Hastings, arXiv:cond-mat/0508554v3, lines 671–685. -/
 theorem hierarchyProjection_children (blk : ι → ℕ)
     (M : ℕ → ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
-    (hsupp : ∀ m k, M m k ∈ supportedOperators d (levelBlock blk (m + 1) k))
+    (hsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian)
     (m k : ℕ) {φ : EuclideanSpace ℂ (ι → Fin d)}
     (hφ : toEuclideanLin (hierarchyProjection M c x (m + 1) k) φ = φ) :
@@ -77,7 +77,7 @@ lines 668–704 and Figure 1(b). -/
 theorem isRetainedHierarchy_of_hierarchyProjection (blk : ι → ℕ)
     (M : ℕ → ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
-    (hsupp : ∀ m k, M m k ∈ supportedOperators d (levelBlock blk (m + 1) k))
+    (hsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (m k : ℕ)
     {φ : EuclideanSpace ℂ (ι → Fin d)}
     (hφ : toEuclideanLin (hierarchyProjection M c x m k) φ = φ) :
@@ -95,7 +95,7 @@ Hastings, arXiv:cond-mat/0508554v3, lines 722–743, with the correction recorde
 theorem isRetainedHierarchy_of_hierarchyClosingProjection (blk : ι → ℕ)
     (M : ℕ → ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ)
     (c : ℕ → ℕ → ℝ) (x : ℕ → ℝ)
-    (hsupp : ∀ m k, M m k ∈ supportedOperators d (levelBlock blk (m + 1) k))
+    (hsupp : ∀ m k, M m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (levelBlock blk (m + 1) k))
     (hM : ∀ m k, (M m k).IsHermitian) (h : ℕ)
     (W : Matrix (ι → Fin d) (ι → Fin d) ℂ) (cW : ℝ)
     {φ : EuclideanSpace ℂ (ι → Fin d)}

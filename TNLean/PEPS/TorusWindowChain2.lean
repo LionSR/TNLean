@@ -65,6 +65,8 @@ a superset of the end pair can avoid \(V\setminus S\).  See
   Steps 2--3.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

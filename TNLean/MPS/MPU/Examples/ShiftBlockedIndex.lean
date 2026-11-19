@@ -120,7 +120,7 @@ $\tau_m=\sigma_{m+1}$ for every $m<k$, and zero otherwise.
 Source: arXiv:1703.09188, lines 1980--1987 (the shift $T^{(N)}$), blocked as in
 Proposition IV.2, lines 697--704. -/
 theorem blockTensor_rightShiftTensor_apply (k : ℕ)
-    (I J : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+    (I J : Fin (Kraus.blockPhysDim d (k + 1))) :
     blockTensor (rightShiftTensor d) (k + 1) I J =
       if Fin.init (Kraus.decodeBlock d (k + 1) J) = Fin.tail (Kraus.decodeBlock d (k + 1) I)
       then Matrix.single (Kraus.decodeBlock d (k + 1) I 0)
@@ -132,8 +132,8 @@ theorem blockTensor_rightShiftTensor_apply (k : ℕ)
 blocked right shift to the identity: a row $(\sigma,\beta)$ goes to the column
 $(\sigma_0,\ \sigma_1\cdots\sigma_k\beta)$. -/
 private noncomputable def rightShiftCutEquiv (d k : ℕ) :
-    Fin (MPSTensor.blockPhysDim d (k + 1)) × Fin d ≃
-      Fin d × Fin (MPSTensor.blockPhysDim d (k + 1)) where
+    Fin (Kraus.blockPhysDim d (k + 1)) × Fin d ≃
+      Fin d × Fin (Kraus.blockPhysDim d (k + 1)) where
   toFun p := (Kraus.decodeBlock d (k + 1) p.1 0,
     (Kraus.decodeBlockEquiv d (k + 1)).symm
       (Fin.snoc (Fin.tail (Kraus.decodeBlock d (k + 1) p.1)) p.2))
@@ -157,8 +157,8 @@ Source: arXiv:1703.09188, definition `defnrl`, lines 450--477, applied to the
 blocked shift tensor. -/
 theorem sourceCutM₁_blockTensor_rightShiftTensor (k : ℕ) :
     sourceCutM₁ (blockTensor (rightShiftTensor d) (k + 1)) =
-      (1 : Matrix (Fin d × Fin (MPSTensor.blockPhysDim d (k + 1)))
-        (Fin d × Fin (MPSTensor.blockPhysDim d (k + 1))) ℂ).submatrix
+      (1 : Matrix (Fin d × Fin (Kraus.blockPhysDim d (k + 1)))
+        (Fin d × Fin (Kraus.blockPhysDim d (k + 1))) ℂ).submatrix
           (rightShiftCutEquiv d k) (Equiv.refl _) := by
   ext ⟨I, β⟩ ⟨α, J⟩
   have hsnoc : (Kraus.decodeBlockEquiv d (k + 1)).symm
@@ -189,7 +189,7 @@ theorem rightRank_blockTensor_rightShiftTensor (k : ℕ) :
     r[blockTensor (rightShiftTensor d) (k + 1)] = d ^ (k + 2) := by
   rw [rightRank, sourceCutM₁_blockTensor_rightShiftTensor, Matrix.rank_submatrix,
     Matrix.rank_one]
-  simp [MPSTensor.blockPhysDim, Kraus.blockPhysDim_eq_pow, pow_succ]
+  simp [Kraus.blockPhysDim, pow_succ]
   ring
 
 /-- The second source cut of the blocked right shift factors through the
@@ -199,12 +199,12 @@ Source: arXiv:1703.09188, definition `defnrl`, lines 450--477, applied to the
 blocked shift tensor. -/
 theorem sourceCutM₂_blockTensor_rightShiftTensor (k : ℕ) :
     sourceCutM₂ (blockTensor (rightShiftTensor d) (k + 1)) =
-      (Matrix.of fun (p : Fin d × Fin (MPSTensor.blockPhysDim d (k + 1)))
+      (Matrix.of fun (p : Fin d × Fin (Kraus.blockPhysDim d (k + 1)))
           (y : Fin k → Fin d) ↦
         if Kraus.decodeBlock d (k + 1) p.2 0 = p.1 ∧
             Fin.tail (Kraus.decodeBlock d (k + 1) p.2) = y then (1 : ℂ) else 0) *
       Matrix.of fun (y : Fin k → Fin d)
-          (q : Fin (MPSTensor.blockPhysDim d (k + 1)) × Fin d) ↦
+          (q : Fin (Kraus.blockPhysDim d (k + 1)) × Fin d) ↦
         if Fin.init (Kraus.decodeBlock d (k + 1) q.1) = y ∧
             Kraus.decodeBlock d (k + 1) q.1 (Fin.last k) = q.2 then (1 : ℂ) else 0 := by
   ext ⟨α, I⟩ ⟨J, β⟩
@@ -230,9 +230,9 @@ theorem leftRank_blockTensor_rightShiftTensor [NeZero d] (k : ℕ) :
     refine (Matrix.rank_mul_le_left _ _).trans ((Matrix.rank_le_card_width _).trans_eq ?_)
     simp
   · let e := (Kraus.decodeBlockEquiv d (k + 1)).symm
-    let f : (Fin k → Fin d) → Fin d × Fin (MPSTensor.blockPhysDim d (k + 1)) :=
+    let f : (Fin k → Fin d) → Fin d × Fin (Kraus.blockPhysDim d (k + 1)) :=
       fun y ↦ (0, e (Fin.cons 0 y))
-    let g : (Fin k → Fin d) → Fin (MPSTensor.blockPhysDim d (k + 1)) × Fin d :=
+    let g : (Fin k → Fin d) → Fin (Kraus.blockPhysDim d (k + 1)) × Fin d :=
       fun y ↦ (e (Fin.snoc y 0), 0)
     have hminor : (sourceCutM₂ (blockTensor (rightShiftTensor d) (k + 1))).submatrix f g = 1 := by
       ext y y'

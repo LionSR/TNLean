@@ -21,6 +21,8 @@ dimensions, matching semi-regular representations, site tensors, and physical
 alphabets may differ; both native torus periods are at least three.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS
 open TNLean.Lattice

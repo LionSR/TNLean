@@ -207,7 +207,7 @@ private def surroundWindowEquiv (α β γ δ : Type*) :
   right_inv _ := rfl
 
 private noncomputable def originalWindowMiddleEquiv (d k : ℕ) :
-    (Fin 3 → Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)) ≃
+    (Fin 3 → Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)) ≃
       (Fin (3 * (2 * k)) → Fin d) :=
   (Equiv.arrowCongr (Equiv.refl (Fin 3)) (twoSiteDirectBlockEquiv d k).symm).trans
     (MPSTensor.blockedConfigEquiv d 3 (2 * k))
@@ -215,7 +215,7 @@ private noncomputable def originalWindowMiddleEquiv (d k : ℕ) :
 private noncomputable def originalWindowConfigEquiv (d k p s : ℕ)
     {E C : Type*}
     (head : (E × C) ≃ (Fin 3 →
-      Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))) :
+      Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k))) :
     (OriginalExterior d p s E × C) ≃ (Fin (p + (3 * (2 * k) + s)) → Fin d) :=
   (surroundWindowEquiv _ _ _ _).trans
     (((Equiv.refl (Fin p → Fin d)).prodCongr
@@ -229,56 +229,56 @@ blocks; no divisibility condition on the whole chain is imposed.
 Source: arXiv:1703.09188, finite conjugation, lines 2300--2306. -/
 noncomputable def originalSiteHeisenbergInputEquiv (d k p s : ℕ) :
     (OriginalExterior d p s
-      (Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) ×
-        Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)) ×
-          HalfPair (MPSTensor.blockPhysDim d k)) ≃
+      (Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k) ×
+        Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)) ×
+          HalfPair (Kraus.blockPhysDim d k)) ≃
       (Fin (p + (3 * (2 * k) + s)) → Fin d) :=
-  originalWindowConfigEquiv d k p s (windowInputHeadEquiv (MPSTensor.blockPhysDim d k))
+  originalWindowConfigEquiv d k p s (windowInputHeadEquiv (Kraus.blockPhysDim d k))
 
 /-- Complete original-chain output coordinates separate the four output
 half-blocks from the arbitrary original residuals and exterior halves.
 Source: arXiv:1703.09188, finite conjugation, lines 2300--2306. -/
 noncomputable def originalSiteHeisenbergOutputEquiv (d k p s : ℕ) :
-    (OriginalExterior d p s (HalfPair (MPSTensor.blockPhysDim d k)) ×
-      FourHalves (MPSTensor.blockPhysDim d k)) ≃
+    (OriginalExterior d p s (HalfPair (Kraus.blockPhysDim d k)) ×
+      FourHalves (Kraus.blockPhysDim d k)) ≃
         (Fin (p + (3 * (2 * k) + s)) → Fin d) :=
-  originalWindowConfigEquiv d k p s (windowOutputHeadEquiv (MPSTensor.blockPhysDim d k))
+  originalWindowConfigEquiv d k p s (windowOutputHeadEquiv (Kraus.blockPhysDim d k))
 
 /-- The actual original-site MPO, in complete window coordinates with
 arbitrary original residual lengths. Source: arXiv:1703.09188,
 StandardForm and eq:appendix-1, lines 603--622 and 2300--2306. -/
 noncomputable def originalSiteHeisenbergMatrix {d D : ℕ}
     (U : MPOTensor d D) (k p s : ℕ) :
-    Matrix (OriginalExterior d p s (HalfPair (MPSTensor.blockPhysDim d k)) ×
-      FourHalves (MPSTensor.blockPhysDim d k))
+    Matrix (OriginalExterior d p s (HalfPair (Kraus.blockPhysDim d k)) ×
+      FourHalves (Kraus.blockPhysDim d k))
       (OriginalExterior d p s
-        (Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) ×
-          Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)) ×
-            HalfPair (MPSTensor.blockPhysDim d k)) ℂ :=
+        (Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k) ×
+          Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)) ×
+            HalfPair (Kraus.blockPhysDim d k)) ℂ :=
   Matrix.reindex (originalSiteHeisenbergOutputEquiv d k p s).symm
     (originalSiteHeisenbergInputEquiv d k p s).symm
       (mpo U (p + (3 * (2 * k) + s)))
 
 private theorem originalSiteHeisenbergMatrix_apply {d D ℓ r k p s : ℕ}
     (U : MPOTensor d D)
-    {u : Matrix (Fin ℓ × Fin r) (HalfPair (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (HalfPair (MPSTensor.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ}
+    {u : Matrix (Fin ℓ × Fin r) (HalfPair (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (HalfPair (Kraus.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
-    (e : OriginalExterior d p s (HalfPair (MPSTensor.blockPhysDim d k)))
+    (e : OriginalExterior d p s (HalfPair (Kraus.blockPhysDim d k)))
     (f : OriginalExterior d p s
-      (Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) ×
-        Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)))
-    (x : FourHalves (MPSTensor.blockPhysDim d k))
-    (j : HalfPair (MPSTensor.blockPhysDim d k)) :
+      (Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k) ×
+        Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)))
+    (x : FourHalves (Kraus.blockPhysDim d k))
+    (j : HalfPair (Kraus.blockPhysDim d k)) :
     originalSiteHeisenbergMatrix U k p s (e, x) (f, j) =
       twoSiteThreeBlockTrace S
         (evalWord U (List.ofFn e.1.1) (List.ofFn f.1.1))
         (evalWord U (List.ofFn e.1.2) (List.ofFn f.1.2))
         e.2.1 e.2.2 f.2.1 f.2.2 x j := by
   let midI := fun t : Fin 3 ↦ (twoSiteDirectBlockEquiv d k).symm
-    (windowOutputHeadEquiv (MPSTensor.blockPhysDim d k) (e.2, x) t)
+    (windowOutputHeadEquiv (Kraus.blockPhysDim d k) (e.2, x) t)
   let midJ := fun t : Fin 3 ↦ (twoSiteDirectBlockEquiv d k).symm
-    (windowInputHeadEquiv (MPSTensor.blockPhysDim d k) (f.2, j) t)
+    (windowInputHeadEquiv (Kraus.blockPhysDim d k) (f.2, j) t)
   change mpo U (p + (3 * (2 * k) + s))
     (Fin.append e.1.1 (Fin.append
       (MPSTensor.blockedConfigEquiv d 3 (2 * k) midI) e.1.2))
@@ -289,12 +289,12 @@ private theorem originalSiteHeisenbergMatrix_apply {d D ℓ r k p s : ℕ}
   · funext t
     change (twoSiteDirectBlockEquiv d k)
       ((twoSiteDirectBlockEquiv d k).symm
-        (windowOutputHeadEquiv (MPSTensor.blockPhysDim d k) (e.2, x) t)) = _
+        (windowOutputHeadEquiv (Kraus.blockPhysDim d k) (e.2, x) t)) = _
     exact (twoSiteDirectBlockEquiv d k).apply_symm_apply _
   · funext t
     change (twoSiteDirectBlockEquiv d k)
       ((twoSiteDirectBlockEquiv d k).symm
-        (windowInputHeadEquiv (MPSTensor.blockPhysDim d k) (f.2, j) t)) = _
+        (windowInputHeadEquiv (Kraus.blockPhysDim d k) (f.2, j) t)) = _
     exact (twoSiteDirectBlockEquiv d k).apply_symm_apply _
 
 /-- Actual original-site finite MPO intertwining with arbitrary residual
@@ -303,11 +303,11 @@ simple-block length. Source: arXiv:1703.09188, StandardForm and
 finite conjugation, lines 603--622 and 2300--2306. -/
 theorem originalSiteHeisenbergMatrix_intertwiner {d D ℓ r : ℕ}
     (U : MPOTensor d D) (k p s : ℕ)
-    {u : Matrix (Fin ℓ × Fin r) (HalfPair (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (HalfPair (MPSTensor.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ}
+    {u : Matrix (Fin ℓ × Fin r) (HalfPair (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (HalfPair (Kraus.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
-    (A : Matrix (HalfPair (MPSTensor.blockPhysDim d k))
-      (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
+    (A : Matrix (HalfPair (Kraus.blockPhysDim d k))
+      (HalfPair (Kraus.blockPhysDim d k)) ℂ) :
     Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul (originalSiteHeisenbergMatrix U k p s)
         (Matrix.rightKroneckerEmbed A) =
       Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul
@@ -347,16 +347,16 @@ Source: arXiv:1703.09188, eq:appendix-1, lines 2300--2306. -/
 theorem originalSiteHeisenbergMatrix_conjugation {d D ℓ r : ℕ}
     {U : MPOTensor d D} (hU : U.IsMPU) (k p s : ℕ)
     (hN : 1 < p + (3 * (2 * k) + s))
-    {u : Matrix (Fin ℓ × Fin r) (HalfPair (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (HalfPair (MPSTensor.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ}
+    {u : Matrix (Fin ℓ × Fin r) (HalfPair (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (HalfPair (Kraus.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
-    (A : Matrix (HalfPair (MPSTensor.blockPhysDim d k))
-      (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
+    (A : Matrix (HalfPair (Kraus.blockPhysDim d k))
+      (HalfPair (Kraus.blockPhysDim d k)) ℂ) :
     Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul
         (Matrix.instHMulOfFintypeOfMulOfAddCommMonoid.hMul (originalSiteHeisenbergMatrix U k p s)
           (Matrix.rightKroneckerEmbed A)) (originalSiteHeisenbergMatrix U k p s)ᴴ =
       Matrix.rightKroneckerEmbed
-        (m := OriginalExterior d p s (HalfPair (MPSTensor.blockPhysDim d k)))
+        (m := OriginalExterior d p s (HalfPair (Kraus.blockPhysDim d k)))
         (twoLinkOutputObservable u v A) := by
   rw [originalSiteHeisenbergMatrix_intertwiner U k p s S A, Matrix.mul_assoc,
     (originalSiteHeisenbergMatrix_isUnitaryBetween hU k p s hN).2, Matrix.mul_one]
@@ -384,7 +384,7 @@ noncomputable def bufferedWindowMatrix (d n p s : ℕ)
 
 private theorem originalWindowConfigEquiv_buffer {d k p s : ℕ} {E C : Type*}
     (head : (E × C) ≃ (Fin 3 →
-      Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)))
+      Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)))
     (z : OriginalExterior d p s E × C) :
     originalWindowConfigEquiv d k p s head z =
       bufferedWindowConfigEquiv d (3 * (2 * k)) p s
@@ -393,7 +393,7 @@ private theorem originalWindowConfigEquiv_buffer {d k p s : ℕ} {E C : Type*}
 private theorem originalWindowMatrix_eq_buffer {d k p s : ℕ} {E C : Type*}
     [Fintype E] [DecidableEq E] [Fintype C] [DecidableEq C]
     (head : (E × C) ≃ (Fin 3 →
-      Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)))
+      Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)))
     (A : Matrix C C ℂ) :
     Matrix.reindex (originalWindowConfigEquiv d k p s head)
       (originalWindowConfigEquiv d k p s head) (Matrix.rightKroneckerEmbed A) =
@@ -418,18 +418,18 @@ private theorem originalWindowMatrix_eq_buffer {d k p s : ℕ} {E C : Type*}
 its central two-block input index from the two exterior block indices.
 Source: arXiv:1703.09188, StandardForm, lines 603--622. -/
 noncomputable def originalSiteHeisenbergInputWindowEquiv (d k : ℕ) :
-    ((Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) ×
-      Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)) ×
-        HalfPair (MPSTensor.blockPhysDim d k)) ≃ (Fin (3 * (2 * k)) → Fin d) :=
-  (windowInputHeadEquiv (MPSTensor.blockPhysDim d k)).trans (originalWindowMiddleEquiv d k)
+    ((Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k) ×
+      Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)) ×
+        HalfPair (Kraus.blockPhysDim d k)) ≃ (Fin (3 * (2 * k)) → Fin d) :=
+  (windowInputHeadEquiv (Kraus.blockPhysDim d k)).trans (originalWindowMiddleEquiv d k)
 
 /-- The input matrix on the fixed six-block window. Its central two
 half-blocks carry the supplied observable and the other four half-blocks
 carry identities. Source: arXiv:1703.09188, StandardForm and finite
 conjugation, lines 603--622 and 2300--2306. -/
 noncomputable def originalSiteHeisenbergInputWindow (d k : ℕ)
-    (A : Matrix (HalfPair (MPSTensor.blockPhysDim d k))
-      (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
+    (A : Matrix (HalfPair (Kraus.blockPhysDim d k))
+      (HalfPair (Kraus.blockPhysDim d k)) ℂ) :
     Matrix (Fin (3 * (2 * k)) → Fin d) (Fin (3 * (2 * k)) → Fin d) ℂ :=
   Matrix.reindex
     (originalSiteHeisenbergInputWindowEquiv d k)
@@ -439,9 +439,9 @@ noncomputable def originalSiteHeisenbergInputWindow (d k : ℕ)
 blocks and the four consecutive output half blocks. Source: CPSV17,
 StandardForm and eq:appendix-1, lines 603–622 and 2300–2306. -/
 noncomputable def originalSiteHeisenbergOutputWindowEquiv (d k : ℕ) :
-    (HalfPair (MPSTensor.blockPhysDim d k) ×
-      FourHalves (MPSTensor.blockPhysDim d k)) ≃ (Fin (3 * (2 * k)) → Fin d) :=
-  (windowOutputHeadEquiv (MPSTensor.blockPhysDim d k)).trans (originalWindowMiddleEquiv d k)
+    (HalfPair (Kraus.blockPhysDim d k) ×
+      FourHalves (Kraus.blockPhysDim d k)) ≃ (Fin (3 * (2 * k)) → Fin d) :=
+  (windowOutputHeadEquiv (Kraus.blockPhysDim d k)).trans (originalWindowMiddleEquiv d k)
 
 /-- The fixed six-block output matrix of the actual local action. Keeping
 the two exterior half-blocks here makes adjoining original residual words
@@ -449,10 +449,10 @@ canonical without imposing divisibility on their lengths.
 Source: arXiv:1703.09188, StandardForm and finite conjugation,
 lines 603--622 and 2300--2306. -/
 noncomputable def originalSiteHeisenbergOutputWindow {d ℓ r : ℕ} (k : ℕ)
-    (u : Matrix (Fin ℓ × Fin r) (HalfPair (MPSTensor.blockPhysDim d k)) ℂ)
-    (v : Matrix (HalfPair (MPSTensor.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ)
-    (A : Matrix (HalfPair (MPSTensor.blockPhysDim d k))
-      (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
+    (u : Matrix (Fin ℓ × Fin r) (HalfPair (Kraus.blockPhysDim d k)) ℂ)
+    (v : Matrix (HalfPair (Kraus.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ)
+    (A : Matrix (HalfPair (Kraus.blockPhysDim d k))
+      (HalfPair (Kraus.blockPhysDim d k)) ℂ) :
     Matrix (Fin (3 * (2 * k)) → Fin d) (Fin (3 * (2 * k)) → Fin d) ℂ :=
   Matrix.reindex
     (originalSiteHeisenbergOutputWindowEquiv d k)
@@ -466,11 +466,11 @@ matrix is chosen. Source: arXiv:1703.09188, eq:appendix-1, lines 2300--2306. -/
 theorem mpo_bufferedWindow_conjugation {d D ℓ r : ℕ}
     {U : MPOTensor d D} (hU : U.IsMPU) (k p s : ℕ)
     (hN : 1 < p + (3 * (2 * k) + s))
-    {u : Matrix (Fin ℓ × Fin r) (HalfPair (MPSTensor.blockPhysDim d k)) ℂ}
-    {v : Matrix (HalfPair (MPSTensor.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ}
+    {u : Matrix (Fin ℓ × Fin r) (HalfPair (Kraus.blockPhysDim d k)) ℂ}
+    {v : Matrix (HalfPair (Kraus.blockPhysDim d k)) (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
-    (A : Matrix (HalfPair (MPSTensor.blockPhysDim d k))
-      (HalfPair (MPSTensor.blockPhysDim d k)) ℂ) :
+    (A : Matrix (HalfPair (Kraus.blockPhysDim d k))
+      (HalfPair (Kraus.blockPhysDim d k)) ℂ) :
     mpo U (p + (3 * (2 * k) + s)) *
         bufferedWindowMatrix d (3 * (2 * k)) p s
           (originalSiteHeisenbergInputWindow d k A) *
@@ -501,24 +501,24 @@ theorem mpo_bufferedWindow_conjugation {d D ℓ r : ℕ}
 input algebra. Source: arXiv:1703.09188, StandardForm and physical blocking,
 lines 603--622. -/
 noncomputable def originalSiteHeisenbergCentreEquiv (d k : ℕ) :
-    HalfPair (MPSTensor.blockPhysDim d k) ≃ (Fin (2 * k) → Fin d) :=
+    HalfPair (Kraus.blockPhysDim d k) ≃ (Fin (2 * k) → Fin d) :=
   finProdFinEquiv.trans ((twoSiteDirectBlockEquiv d k).symm.trans
-    (MPSTensor.decodeBlockEquiv d (2 * k)))
+    (Kraus.decodeBlockEquiv d (2 * k)))
 
 private theorem originalWindowMiddleEquiv_block (d k : ℕ)
-    (w : Fin 3 → Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))
+    (w : Fin 3 → Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k))
     (i : Fin 3) (j : Fin (2 * k)) :
     originalWindowMiddleEquiv d k w (finProdFinEquiv (i, j)) =
-      MPSTensor.decodeBlock d (2 * k) ((twoSiteDirectBlockEquiv d k).symm (w i)) j := by
+      Kraus.decodeBlock d (2 * k) ((twoSiteDirectBlockEquiv d k).symm (w i)) j := by
   simp [originalWindowMiddleEquiv, MPSTensor.blockedConfigEquiv,
     Equiv.arrowCongr, Equiv.curry, Function.comp]
 
 /-- The numbered middle interval reads exactly the complete central input
 configuration; arXiv:1703.09188, StandardForm, lines 603--622. -/
 theorem originalSiteHeisenbergInputWindowEquiv_middle (d k : ℕ)
-    (e : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) ×
-      Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))
-    (c : HalfPair (MPSTensor.blockPhysDim d k)) :
+    (e : Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k) ×
+      Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k))
+    (c : HalfPair (Kraus.blockPhysDim d k)) :
     (fun i : Fin (2 * k) ↦
       (originalSiteHeisenbergInputWindowEquiv d k) (e, c)
           ⟨2 * k + i.val, by omega⟩) = originalSiteHeisenbergCentreEquiv d k c := by
@@ -535,9 +535,9 @@ theorem originalSiteHeisenbergInputWindowEquiv_middle (d k : ℕ)
 of the two exterior block coordinates; arXiv:1703.09188, finite local
 inclusions in lines 2292--2295. -/
 theorem originalSiteHeisenbergInputWindowEquiv_outside_eq_iff (d k : ℕ)
-    (e e' : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) ×
-      Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))
-    (c c' : HalfPair (MPSTensor.blockPhysDim d k)) :
+    (e e' : Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k) ×
+      Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k))
+    (c c' : HalfPair (Kraus.blockPhysDim d k)) :
     (∀ i : Fin (3 * (2 * k)), ¬ (2 * k ≤ i.val ∧ i.val < 2 * k + 2 * k) →
       (originalSiteHeisenbergInputWindowEquiv d k) (e, c) i =
       (originalSiteHeisenbergInputWindowEquiv d k) (e', c') i) ↔ e = e' := by
@@ -545,7 +545,7 @@ theorem originalSiteHeisenbergInputWindowEquiv_outside_eq_iff (d k : ℕ)
   · intro h
     apply Prod.ext
     · apply (twoSiteDirectBlockEquiv d k).symm.injective
-      apply (MPSTensor.decodeBlockEquiv d (2 * k)).injective
+      apply (Kraus.decodeBlockEquiv d (2 * k)).injective
       funext j
       have hj := h (finProdFinEquiv ((0 : Fin 3), j)) (by
         change ¬ (2 * k ≤ j.val + (2 * k) * 0 ∧
@@ -554,7 +554,7 @@ theorem originalSiteHeisenbergInputWindowEquiv_outside_eq_iff (d k : ℕ)
       simpa [originalSiteHeisenbergInputWindowEquiv,
         originalWindowMiddleEquiv_block, windowInputHeadEquiv] using hj
     · apply (twoSiteDirectBlockEquiv d k).symm.injective
-      apply (MPSTensor.decodeBlockEquiv d (2 * k)).injective
+      apply (Kraus.decodeBlockEquiv d (2 * k)).injective
       funext j
       have hj := h (finProdFinEquiv ((2 : Fin 3), j)) (by
         change ¬ (2 * k ≤ j.val + (2 * k) * 2 ∧
@@ -581,19 +581,19 @@ theorem originalSiteHeisenbergInputWindowEquiv_outside_eq_iff (d k : ℕ)
 configuration concatenation. Source: CPSV17, StandardForm and physical
 blocking, lines 603–622. -/
 theorem originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv (d k : ℕ)
-    (c : HalfPair (MPSTensor.blockPhysDim d k)) :
+    (c : HalfPair (Kraus.blockPhysDim d k)) :
     originalSiteHeisenbergCentreEquiv d k c =
       MPSTensor.blockedConfigEquiv d 2 k ![c.1, c.2] := by
   apply List.ofFn_injective
-  change MPSTensor.wordOfBlock d (2 * k)
+  change Kraus.wordOfBlock d (2 * k)
     ((twoSiteDirectBlockEquiv d k).symm (finProdFinEquiv c)) = _
   rw [wordOfBlock_twoSiteDirectBlockEquiv_symm, MPSTensor.ofFn_blockedConfigEquiv]
   simp [Kraus.flattenBlockedWord, List.ofFn_succ]
 
 private theorem originalSiteHeisenbergCentreEquiv_block (d k : ℕ)
-    (c : HalfPair (MPSTensor.blockPhysDim d k)) (b : Fin 2) (j : Fin k) :
+    (c : HalfPair (Kraus.blockPhysDim d k)) (b : Fin 2) (j : Fin k) :
     originalSiteHeisenbergCentreEquiv d k c (finProdFinEquiv (b, j)) =
-      MPSTensor.decodeBlock d k (![c.1, c.2] b) j := by
+      Kraus.decodeBlock d k (![c.1, c.2] b) j := by
   rw [originalSiteHeisenbergCentreEquiv_eq_blockedConfigEquiv]
   simp [MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
 
@@ -609,17 +609,17 @@ def originalSiteHeisenbergOutputBlockEquiv (b : ℕ) : FourHalves b ≃ (Fin 4 �
 /-- Original coordinates on the four consecutive output half blocks.
 Source: CPSV17, StandardForm, lines 603–622. -/
 noncomputable def originalSiteHeisenbergOutputCentreEquiv (d k : ℕ) :
-    FourHalves (MPSTensor.blockPhysDim d k) ≃ (Fin (4 * k) → Fin d) :=
-  (originalSiteHeisenbergOutputBlockEquiv (MPSTensor.blockPhysDim d k)).trans
+    FourHalves (Kraus.blockPhysDim d k) ≃ (Fin (4 * k) → Fin d) :=
+  (originalSiteHeisenbergOutputBlockEquiv (Kraus.blockPhysDim d k)).trans
     (MPSTensor.blockedConfigEquiv d 4 k)
 
 private theorem originalSiteHeisenbergOutputWindowEquiv_half (d k : ℕ)
-    (e : HalfPair (MPSTensor.blockPhysDim d k))
-    (c : FourHalves (MPSTensor.blockPhysDim d k))
+    (e : HalfPair (Kraus.blockPhysDim d k))
+    (c : FourHalves (Kraus.blockPhysDim d k))
     (b : Fin 3) (t : Fin 2) (j : Fin k) :
     originalSiteHeisenbergOutputWindowEquiv d k (e, c)
         (finProdFinEquiv (b, finProdFinEquiv (t, j))) =
-      MPSTensor.decodeBlock d k
+      Kraus.decodeBlock d k
         (![![(e.1), c.1.1], ![c.1.2, c.2.1], ![c.2.2, (e.2)]] b t) j := by
   rw [originalSiteHeisenbergOutputWindowEquiv, Equiv.trans_apply,
     originalWindowMiddleEquiv_block]
@@ -632,8 +632,8 @@ private theorem originalSiteHeisenbergOutputWindowEquiv_half (d k : ℕ)
 output reads precisely its four output coordinates.
 Source: CPSV17, StandardForm and eq:appendix-1, lines 603–622 and 2300–2306. -/
 theorem originalSiteHeisenbergOutputWindowEquiv_middle (d k : ℕ)
-    (e : HalfPair (MPSTensor.blockPhysDim d k))
-    (c : FourHalves (MPSTensor.blockPhysDim d k)) :
+    (e : HalfPair (Kraus.blockPhysDim d k))
+    (c : FourHalves (Kraus.blockPhysDim d k)) :
     (fun i : Fin (4 * k) ↦ originalSiteHeisenbergOutputWindowEquiv d k (e, c)
       ⟨k + i.val, by omega⟩) = originalSiteHeisenbergOutputCentreEquiv d k c := by
   funext i
@@ -643,13 +643,13 @@ theorem originalSiteHeisenbergOutputWindowEquiv_middle (d k : ℕ)
         (finProdFinEquiv (b, finProdFinEquiv (s, j))).val) :
       originalSiteHeisenbergOutputWindowEquiv d k (e, c)
         ⟨k + (finProdFinEquiv (t, j)).val, by omega⟩ =
-      MPSTensor.decodeBlock d k
+      Kraus.decodeBlock d k
         (![![e.1, c.1.1], ![c.1.2, c.2.1], ![c.2.2, e.2]] b s) j := by
     have hidx : (⟨k + (finProdFinEquiv (t, j)).val, by omega⟩ : Fin (3 * (2 * k))) =
         finProdFinEquiv (b, finProdFinEquiv (s, j)) := Fin.ext hi
     rw [hidx, originalSiteHeisenbergOutputWindowEquiv_half]
   have hcentre : originalSiteHeisenbergOutputCentreEquiv d k c (finProdFinEquiv (t, j)) =
-      MPSTensor.decodeBlock d k (![c.1.1, c.1.2, c.2.1, c.2.2] t) j := by
+      Kraus.decodeBlock d k (![c.1.1, c.1.2, c.2.1, c.2.2] t) j := by
     change MPSTensor.blockedConfigEquiv d 4 k ![c.1.1, c.1.2, c.2.1, c.2.2]
       (finProdFinEquiv (t, j)) = _
     simp [MPSTensor.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp]
@@ -664,22 +664,22 @@ theorem originalSiteHeisenbergOutputWindowEquiv_middle (d k : ℕ)
 equality of the two exterior half-block coordinates. Source: CPSV17,
 identity-tensor inclusions and eq:appendix-1, lines 2292–2306. -/
 theorem originalSiteHeisenbergOutputWindowEquiv_outside_eq_iff (d k : ℕ)
-    (e e' : HalfPair (MPSTensor.blockPhysDim d k))
-    (c c' : FourHalves (MPSTensor.blockPhysDim d k)) :
+    (e e' : HalfPair (Kraus.blockPhysDim d k))
+    (c c' : FourHalves (Kraus.blockPhysDim d k)) :
     (∀ i : Fin (3 * (2 * k)), ¬ (k ≤ i.val ∧ i.val < k + 4 * k) →
       originalSiteHeisenbergOutputWindowEquiv d k (e, c) i =
         originalSiteHeisenbergOutputWindowEquiv d k (e', c') i) ↔ e = e' := by
   constructor
   · intro h
     apply Prod.ext
-    · apply (MPSTensor.decodeBlockEquiv d k).injective
+    · apply (Kraus.decodeBlockEquiv d k).injective
       funext j
       have hj := h (finProdFinEquiv ((0 : Fin 3), finProdFinEquiv ((0 : Fin 2), j)))
         (by change ¬ (k ≤ j.val + k * 0 + (2 * k) * 0 ∧
           j.val + k * 0 + (2 * k) * 0 < k + 4 * k); omega)
       simpa [originalSiteHeisenbergOutputWindowEquiv_half, Kraus.decodeBlockEquiv_apply]
         using hj
-    · apply (MPSTensor.decodeBlockEquiv d k).injective
+    · apply (Kraus.decodeBlockEquiv d k).injective
       funext j
       have hj := h (finProdFinEquiv ((2 : Fin 3), finProdFinEquiv ((1 : Fin 2), j)))
         (by change ¬ (k ≤ j.val + k * 1 + (2 * k) * 2 ∧

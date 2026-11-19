@@ -50,7 +50,7 @@ theorem exists_openParentHamiltonianES_toTensorFromBlocks_gap_subsequence_of_wor
         δ * ‖v‖ ≤ ‖openParentHamiltonianES
           (toTensorFromBlocks (d := d) (μ := μ) A) R (p * M) v‖ := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, _⟩ :=
-    exists_isPrimitiveMPS_family_of_wordTupleSpanTop A hS hSpan
+    exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
   let T := toTensorFromBlocks (d := d) (μ := μ) B
   have hKernel : ∀ L N : ℕ, S + 1 ≤ L → L ≤ N →
       LinearMap.ker (openParentHamiltonianES T L N) = groundSpaceES T N :=
@@ -58,7 +58,7 @@ theorem exists_openParentHamiltonianES_toTensorFromBlocks_gap_subsequence_of_wor
       ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_wordTupleSpanTop
         μ B hμ hS hSpanB hSL hLN
   obtain ⟨p, hRp, hp, γ, hγ, hLong⟩ :=
-    exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS
+    exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap
       μ B hμ ρ hP hρ (fun i j hij h ↦ by
         simpa only [eqRec_eq_cast] using
           not_gaugePhaseEquiv_of_wordTupleSpanTop B hSpanB i j hij h) R

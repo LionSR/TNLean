@@ -17,6 +17,8 @@ ALVV, arXiv:1602.08828v2, lines 749–755 and 1777–1817. The fixed-candidate
 probability and history-to-parent implication remain explicit premises.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped Matrix.Norms.L2Operator ENNReal
 

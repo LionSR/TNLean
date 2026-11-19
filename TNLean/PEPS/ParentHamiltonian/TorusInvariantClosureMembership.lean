@@ -18,6 +18,8 @@ matrices are absorbed by the virtual boundary condition. Only the native
 four-leg virtual invariance is used, with arbitrary finite virtual alphabet.
 Source: SCP10, Theorem 5.7 and the seam deformation `eq:2d:move-strings`.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
@@ -43,7 +45,7 @@ theorem torusGraphBondMatrix_closureAt_eq_one_on_plaquette_internal
   · change (torusRightEdge p).1.1 ∈ torusPlaquetteRegion v at ht
     change (torusRightEdge p).1.2 ∈ torusPlaquetteRegion v at hh
     have hp : (p.1 + 1, p.2) ∈ torusPlaquetteRegion v := by
-      rcases Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2) with ht' | hh'
+      rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2) with ht' | hh'
       · simpa only [torusRightEdge, ht'.2] using hh
       · simpa only [torusRightEdge, hh'.1] using ht
     have hne : p.1 + 1 ≠ v.1 + 2 := (torusPlaquetteRegion_ne_add_two hp).1
@@ -52,7 +54,7 @@ theorem torusGraphBondMatrix_closureAt_eq_one_on_plaquette_internal
   · change (torusUpEdge p).1.1 ∈ torusPlaquetteRegion v at ht
     change (torusUpEdge p).1.2 ∈ torusPlaquetteRegion v at hh
     have hp : (p.1, p.2 + 1) ∈ torusPlaquetteRegion v := by
-      rcases Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2) with ht' | hh'
+      rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2) with ht' | hh'
       · simpa only [torusUpEdge, ht'.2] using hh
       · simpa only [torusUpEdge, hh'.1] using ht
     have hne : p.2 + 1 ≠ v.2 + 2 := (torusPlaquetteRegion_ne_add_two hp).2
@@ -107,8 +109,9 @@ theorem torusParent_annihilates_torusGClosure_of_invariant
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hP : IsRegionParentInteraction (groupBondTensor (torusNativeIncidentSite a))
       (torusPlaquetteRegion v) P) :
-    regionLocalTerm (torusPlaquetteRegion v) P *ᵥ torusGClosure U a g h = 0 := by
-  apply (regionLocalTerm_mulVec_eq_zero_iff _ _ hP _).mpr
+    ManyBody.place (X := fun _ ↦ Fin _)
+        (torusPlaquetteRegion v) P *ᵥ torusGClosure U a g h = 0 := by
+  apply (place_mulVec_eq_zero_iff _ _ hP _).mpr
   exact torusGClosure_slice_mem_plaquetteGroundSpace_of_invariant U a ha g h hgh v
 
 /-- Commuting native closures belong to the kernel of every genuine positive

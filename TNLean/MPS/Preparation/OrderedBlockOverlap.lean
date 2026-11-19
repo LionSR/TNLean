@@ -21,6 +21,7 @@ the normalized squared-distance estimate, rather than an absolute trace estimate
 -/
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators InnerProductSpace
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

@@ -43,7 +43,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Marginal moment and tail bounds at a cut]
     \label{lem:chain_marginal_tail}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le,
+    \lean{ManyBody.ChainInteraction.surprisalTail_regionState_le,
         Entropy.log_surprisalMoment_cut_le}
     \leanok
     \uses{def:chain_model}
@@ -78,7 +78,9 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{definition}[Doubled chain Hamiltonian]
     \label{def:chain_doubled_hamiltonian}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.doubled}
+    \lean{ManyBody.ChainInteraction.doubled,
+        ManyBody.ChainInteraction.isHermitian_doubled_term,
+        ManyBody.ChainInteraction.norm_doubled_term_le}
     \leanok
     \uses{def:chain_model,def:qc_site_pair_coordinates}
     Let $L,q,R$ be natural numbers, let $J$ be real, and let
@@ -115,7 +117,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Operator of the doubled Hamiltonian]
     \label{lem:chain_doubled_operator}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.doubled_operator}
+    \lean{ManyBody.ChainInteraction.doubled_hamiltonian}
     \leanok
     \uses{def:chain_doubled_hamiltonian}
     Under the hypotheses of Definition~\ref{def:chain_doubled_hamiltonian},
@@ -134,8 +136,10 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{definition}[Regionally swapped doubled Hamiltonian]
     \label{def:chain_swapped_doubled_hamiltonian}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.swappedDoubled,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.swappedDoubled_operator}
+    \lean{ManyBody.ChainInteraction.swappedDoubled,
+        ManyBody.ChainInteraction.isHermitian_swappedDoubled_term,
+        ManyBody.ChainInteraction.norm_swappedDoubled_term_le,
+        ManyBody.ChainInteraction.swappedDoubled_hamiltonian}
     \leanok
     \uses{def:chain_doubled_hamiltonian,def:peps_frame_sheet_swap}
     Let $H=\sum_Xh_X$ be a range-$R$ Hamiltonian on the contiguous chain
@@ -175,32 +179,20 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[The ground vectors of the doubled and swapped chains]
     \label{thm:chain_doubled_swapped_ground_gap}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState}
+    \lean{ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped}
     \leanok
     \uses{def:chain_model,def:chain_swapped_doubled_hamiltonian}
     In the setting of Definition~\ref{def:chain_swapped_doubled_hamiltonian},
-    let $E_0,\Delta$ be real with $\Delta>0$, and suppose the original
-    vector $\Omega$ satisfies
-    \begin{align}
-        \|\Omega\|     & =1,\notag                                          \\
-        H\Omega        & =E_0\Omega,\notag                                  \\
-        H-E_0\mathbb 1 & \ge\Delta(\mathbb 1-|\Omega\rangle\langle\Omega|).
-    \end{align}
+    let $E_0,\Delta$ be real with $\Delta>0$, and suppose that $\|\Omega\|=1$
+    and that $H$ is gapped at $E_0$ with gap $\Delta$, with ground space the
+    line through $\Omega$.
     Define the vectors in the paired physical coordinates by
     $\Psi(p(\sigma,\tau))=\Omega(\sigma)\Omega(\tau)$ and
-    $\Phi=F\Psi$. Then
-    \begin{align}
-        \|\Psi\|        & =\|\Phi\|=1,\notag                                   \\
-        \widehat H\Psi  & =2E_0\Psi,\notag                                     \\
-        \widehat H'\Phi & =2E_0\Phi,\notag                                     \\
-        \widehat H-2E_0\mathbb 1
-                        & \ge\Delta(\mathbb 1-|\Psi\rangle\langle\Psi|),\notag \\
-        \widehat H'-2E_0\mathbb 1
-                        & \ge\Delta(\mathbb 1-|\Phi\rangle\langle\Phi|).
-    \end{align}
-    In particular, these vectors give the ground lines of the two
-    Hamiltonians, with common ground energy $2E_0$ and gap at least
-    $\Delta$. This is the contiguous-chain assertion in the paragraph
+    $\Phi=F\Psi$. Then $\|\Psi\|=\|\Phi\|=1$, the Hamiltonian $\widehat H$ is
+    gapped at $2E_0$ with gap $\Delta$ and ground space the line through
+    $\Psi$, and $\widehat H'$ is gapped at $2E_0$ with gap $\Delta$ and ground
+    space the line through $\Phi$.
+    This is the contiguous-chain assertion in the paragraph
     ``Two-sided Gaussian filtering'' of~\cite{TNLean2026OneDimensional},
     before the filtering construction; the distinction from arbitrary
     finite induced domains is recorded
@@ -210,45 +202,18 @@ Theorem~B a second way, by a sequential preparation protocol.
     \leanok
     \uses{lem:chain_doubled_operator,def:chain_swapped_doubled_hamiltonian,
         thm:permutation_matrix_unitary,thm:mpu_reindex_unitary}
-    Put $P=|\Omega\rangle\langle\Omega|$, $Q=\mathbb 1-P$ and
-    $G=H-E_0\mathbb 1-\Delta Q\ge0$. Normalization gives $Q\ge0$.
-    Before pairing coordinates, the doubled defect is
-    \begin{align}
-        H\otimes\mathbb 1+\mathbb 1\otimes H-2E_0\mathbb 1
-        -\Delta(\mathbb 1-P\otimes P)
-         & =G\otimes\mathbb 1+\mathbb 1\otimes G+\Delta Q\otimes Q
-        \ge0.
-    \end{align}
-    The tensor-square vector satisfies
-    \begin{align}
-        (H\otimes\mathbb 1+\mathbb 1\otimes H)(\Omega\otimes\Omega)
-         & =2E_0\,\Omega\otimes\Omega,
-         &
-        \|\Omega\otimes\Omega\|
-         & =\|\Omega\|^2=1.
-    \end{align}
-    Pairing coordinates is unitary, so the same norm, eigen-equation and
-    positive defect hold for $\Psi$ and $\widehat H$.
+    The eigenvalues of $H\otimes\mathbb 1+\mathbb 1\otimes H$ are the sums
+    $\lambda+\mu$ of two eigenvalues of $H$. Such a sum equals $2E_0$ only
+    when $\lambda=\mu=E_0$, and is otherwise at least $2E_0+\Delta$; the
+    eigenspace at $2E_0$ is the tensor product of the two ground spaces, the
+    line through $\Omega\otimes\Omega$, and
+    $\|\Omega\otimes\Omega\|=\|\Omega\|^2=1$. Pairing coordinates is
+    unitary, so the same holds for $\widehat H$ and $\Psi$.
     The regional swap is a permutation matrix; after pairing it remains
-    unitary, $F^\dagger F=\mathbb 1$. Since $\widehat H'=F\widehat HF^\dagger$,
-    \begin{align}
-        \widehat H'\Phi
-         & =F\widehat HF^\dagger F\Psi=F\widehat H\Psi=2E_0\Phi,
-         &
-        \|\Phi\|
-         & =\|F\Psi\|=\|\Psi\|=1,
-    \end{align}
-    and
-    \begin{align}
-         & \widehat H'-2E_0\mathbb 1
-        -\Delta(\mathbb 1-|\Phi\rangle\langle\Phi|)\notag \\
-         & \qquad=F\bigl(\widehat H-2E_0\mathbb 1
-        -\Delta(\mathbb 1-|\Psi\rangle\langle\Psi|)\bigr)F^\dagger
-        \ge0.
-    \end{align}
-    Finally, a positive projector gap forces every vector at the ground
-    energy to lie in the span of the displayed unit vector, giving the
-    asserted ground lines.
+    unitary, $F^\dagger F=\mathbb 1$. Since $\widehat H'=F\widehat HF^\dagger$
+    is unitarily equivalent to $\widehat H$, it has the same spectrum, its
+    ground space is the image of that of $\widehat H$ under $F$, the line
+    through $\Phi=F\Psi$, and $\|\Phi\|=\|\Psi\|=1$.
 \end{proof}
 
 \begin{lemma}[Supports contained in a prescribed set]
@@ -270,7 +235,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{lemma}[Interactions split by an interval]
     \label{lem:chain_crossing_count}
     \lean{
-        TNLean.MPS.AreaLaw.IsChainSupport.subset_window_of_splits,
+        ManyBody.IsChainSupport.subset_window_of_splits,
         TNLean.MPS.AreaLaw.chainCrossConst,
         TNLean.MPS.AreaLaw.card_crossingTerms_interval_le,
         TNLean.MPS.AreaLaw.cutBudgetConst,
@@ -315,7 +280,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 % Source: part1_arealaw.tex:706--709, with eq:theta and eq:mgf:152--166.
 \begin{lemma}[Consecutive-window interactions split by an interval]
     \label{thm:chain_consecutive_window_count}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.card_crossingTerms_interval_le_of_consecutive_terms}
+    \lean{ManyBody.ChainInteraction.card_crossingTerms_interval_le_of_consecutive_terms}
     \leanok
     \uses{def:chain_model}
     Let $L,q,R$ be natural numbers, let $J$ be real, and let
@@ -344,7 +309,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[The cut budget for consecutive-window interactions]
     \label{thm:chain_window_cut_budget}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.cutLogBudget_interval_le_of_consecutive_terms}
+    \lean{ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive_terms}
     \leanok
     \uses{thm:chain_consecutive_window_count}
     Let $q\ge1$, and suppose that every nonzero interaction is assigned to
@@ -368,7 +333,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Marginal moments for consecutive-window interactions]
     \label{thm:chain_consecutive_window_moment}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms}
+    \lean{ManyBody.ChainInteraction.log_surprisalMoment_interval_le_of_consecutive_terms}
     \leanok
     \uses{def:chain_model}
     Let $L,R$ be natural numbers, let $q\ge1$ be an integer, and let
@@ -487,7 +452,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 % Source: part1_arealaw.tex:280--287, rem:renyi.
 \begin{lemma}[Rényi entropies near order one]
     \label{thm:chain_renyi_near_one}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.near_one_renyi_entropy_interval_bounds}
+    \lean{ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds}
     \leanok
     \uses{def:chain_model,lem:chain_crossing_count,lem:chain_marginal_tail}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
@@ -595,9 +560,9 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[The boundary perturbation of a doubled chain]
     \label{thm:chain_partial_swap_boundary}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.partialSwap_term_difference_spec,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.partialSwap_difference_eq_sum_crossing,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.partialSwap_boundary_spec}
+    \lean{ManyBody.ChainInteraction.partialSwap_term_difference_spec,
+        ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing,
+        ManyBody.ChainInteraction.partialSwap_boundary_spec}
     \leanok
     \uses{def:chain_model,def:chain_doubled_hamiltonian,
         def:qc_site_pair_coordinates,def:peps_frame_sheet_swap,
@@ -694,8 +659,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 % Source: TNLean2026OneDimensional, eq:ham; setting before lem:LR.
 \begin{lemma}[Interaction norm budget at a site]
     \label{lem:chain_site_norm_budget}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.sum_norm_terms_containing_le,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.norm_bound_nonneg}
+    \lean{ManyBody.ChainInteraction.sum_norm_terms_containing_le,
+        ManyBody.ChainInteraction.norm_bound_nonneg}
     \leanok
     \uses{def:chain_model}
     Let $L,q,R$ be natural numbers and $J\in\mathbb R$. On the chain of $L$
@@ -724,9 +689,43 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \section{The buffered discount with a constant-width buffer}
 
+\begin{lemma}[Localization of an evolved sum of local perturbations]
+    \label{lem:graph_evolved_perturbation_localization}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le}
+    \leanok
+    \uses{thm:graph_lieb_robinson_two_spheres,def:qc_site_expectation}
+    Let $\Gamma$ be a finite graph on a vertex set $V$ whose spheres have at
+    most two vertices, and let $H=\sum_k h_k$ be a finite family of Hermitian
+    terms with supports of graph diameter at most $R$ and at most $R+1$
+    vertices, such that the norms of the terms meeting any vertex sum to at
+    most $b_0$. Let $\mathcal C$ be a finite index set, and for $c\in\mathcal C$
+    let $P_c$ be an operator of norm at most $\varepsilon$ supported on a set
+    $U_c\subseteq Z$ of at most $R+1$ vertices. For real $\ell$ and $t$ put
+    $B=\bigcup_{x\in Z}\{y:d_\Gamma(x,y)\le\lfloor\ell\rfloor\}$ and
+    $G(t)=e^{itH}\bigl(\sum_{c\in\mathcal C}P_c\bigr)e^{-itH}$. With $a$ and
+    $v$ the constants of Lemma~\ref{thm:graph_lieb_robinson_two_spheres},
+    \begin{align}
+        \|G(t)-E_B(G(t))\|
+        \le|\mathcal C|\cdot2a(R+1)^2\varepsilon\,e^{v|t|-\ell/2}.
+    \end{align}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:graph_lieb_robinson_two_spheres,lem:qc_site_expectation_properties,
+        thm:qc_site_expectation_supported_approximant}
+    For one index $c$ put $A=e^{itH}P_ce^{-itH}$, and let $A_0$ be its
+    expectation on the balls of radius $\lfloor\ell\rfloor$ about $U_c$. The
+    localization estimate gives
+    $\|A-A_0\|\le a|U_c|^2\|P_c\|e^{v|t|-\ell/2}\le a(R+1)^2\varepsilon
+        e^{v|t|-\ell/2}$. Since $U_c\subseteq Z$, the operator $A_0$ is
+    supported on $B$ and fixed by $E_B$, so
+    $\|A-E_B(A)\|=\|(A-A_0)-E_B(A-A_0)\|\le2\|A-A_0\|$. Conjugation and the
+    expectation are linear; summing over $\mathcal C$ proves the claim.
+\end{proof}
+
 \begin{lemma}[Localization of the relative-evolution generator]
     \label{thm:chain_relative_generator_localization}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le}
+    \lean{ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpectation_le}
     \leanok
     \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
         def:qc_site_expectation}
@@ -764,8 +763,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{proof}
     \leanok
     \uses{def:chain_swapped_doubled_hamiltonian,thm:chain_partial_swap_boundary,
-        lem:chain_site_norm_budget,thm:chain_lieb_robinson,
-        lem:qc_site_expectation_properties,thm:qc_site_expectation_supported_approximant}
+        lem:chain_site_norm_budget,lem:graph_evolved_perturbation_localization}
     The swapped doubled interactions have range $R$ and bound $2J$.
     Their per-site norm sum is at most $b_0$. The chain localization
     estimate therefore has constants $a,v$ as displayed.
@@ -792,6 +790,38 @@ Theorem~B a second way, by a sequential preparation protocol.
     over the crossing replica labels and using their cardinality
     bound proves the assertion. An empty crossing family gives the zero
     generator; the same nonnegative estimates include $J=0$.
+\end{proof}
+
+\begin{lemma}[A supported Gaussian integral on a graph]
+    \label{lem:graph_supported_gaussian_integral}
+    \lean{TNLean.MPS.AreaLaw.exists_supported_gaussian_integral_graphNeighborhood}
+    \leanok
+    \uses{thm:graph_lieb_robinson_two_spheres,thm:qc_supported_gaussian_projection_bounds,
+        def:qc_site_expectation}
+    Let $\Gamma$ be a finite graph on a vertex set $V$ whose spheres have at
+    most two vertices, and let $K'=\sum_k h_k$ be a finite family of
+    Hermitian terms as in Lemma~\ref{thm:graph_lieb_robinson_two_spheres},
+    with per-vertex norm budget $b_0$ and constants $a,v$. Let $K$ be
+    Hermitian, let $Z\subseteq V$, let $\ell$ be real, write $N(S)$ for the
+    union of the balls of radius $\lfloor\ell\rfloor$ about the vertices of
+    $S$, and let $d\ge0$ be such that for every real $s$
+    \begin{align}
+        \bigl\|G(s)-E_{N(Z)}(G(s))\bigr\|\le d|V|e^{v|s|-\ell/2},\qquad
+        G(s)=e^{isK'}(K'-K)e^{-isK'}.\notag
+    \end{align}
+    Then the assertions of
+    Lemma~\ref{thm:chain_supported_gaussian_integral} hold on $V$ for this
+    $N$, with $C=a+d$ and $|V|$ in place of $L$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:graph_lieb_robinson_two_spheres,thm:qc_supported_gaussian_projection_bounds}
+    Apply Lemma~\ref{thm:qc_supported_gaussian_projection_bounds} with
+    $B_g=N(Z)$, $B_o=N(Q)$ and output region $B=N(Q\cup Z)$; the path is
+    chosen from $K,K',N(Z)$ before $Q,W,\eta,T$. The generator hypothesis
+    and the localization estimate, with $|Q|\le|V|$, give
+    $\varepsilon_g=d|V|e^{vT-\ell/2}$ and $\varepsilon_o=a|V|^2e^{vT-\ell/2}$.
+    Since $|V|\le|V|^2$ and $a,d,T\ge0$,
+    $a|V|^2+d|V|T\le(a+d)|V|^2(1+T)$, and substitution gives the error.
 \end{proof}
 
 \begin{lemma}[A supported Gaussian integral on a contiguous chain]
@@ -844,9 +874,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:chain_swapped_doubled_hamiltonian,
-        thm:chain_relative_generator_localization,thm:chain_lieb_robinson,
-        lem:chain_site_norm_budget,thm:area_law_supported_identity,
-        thm:qc_supported_gaussian_projection_bounds}
+        thm:chain_relative_generator_localization,lem:graph_supported_gaussian_integral,
+        lem:chain_site_norm_budget,thm:area_law_supported_identity}
     Let $a,v$ be the localization constants, put
     $d=4|J|a(R+1)^2N_R$ and $C=a+d>0$.
     Apply Lemma~\ref{thm:qc_supported_gaussian_projection_bounds} with
@@ -921,9 +950,43 @@ Theorem~B a second way, by a sequential preparation protocol.
     $w-R<|a-z|\le\ell\le w-R$, a contradiction.
 \end{proof}
 
+\begin{lemma}[Information reset from a supported localization]
+    \label{lem:information_reset_of_supported_localization}
+    \lean{TNLean.MPS.AreaLaw.information_reset_of_supported_localization}
+    \leanok
+    \uses{thm:peps_reset_regional_filter,thm:peps_reset_polar_step,
+        thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
+    Fix $q\ge1$, a natural $R$, a gap $\Delta>0$, an exponent $p>0$ and
+    constants $C_{\mathrm{int}},v>0$. There are $C_p>0$ and a natural
+    $L_0\ge1$, depending only on these data, with the following property.
+    Let $L\ge L_0$, let $\Omega$ be a gapped ground vector of a Hamiltonian
+    $H$ on $L$ sites of local dimension $q$ with gap $\Delta$, let $D,C$ be
+    disjoint regions with $R_0\subseteq D$, $C_0\subseteq C$ and
+    $I(D:C)_\Omega\le b$, and put $w=C_p(1+b+\log L)$ and
+    $Q=(D\cup C)^c$. Let $K$ be the doubled Hamiltonian of $H$ and $K'$
+    its regional swap at $D$. Let $N_\ell$, for natural $\ell$, be maps on
+    regions and $Z$ a region such that for every $\ell$ there is a path $U$
+    for which, for every region $Q'$, every operator $W$ supported on $Q'$,
+    and all $\eta,T\ge0$, the average
+    $\int_{[-T,T]}E_{N_\ell(Q')}(e^{itK'}We^{-itK'})U(t)\,d\gamma_\eta(t)$
+    is supported on $N_\ell(Q'\cup Z)$ and differs from the truncated
+    Gaussian filter of $W$ by at most
+    $\|W\|C_{\mathrm{int}}L^2(1+T)e^{vT-\ell/2}$. Suppose that
+    $N_\ell(Q\cup Z)$ is disjoint from $R_0\cup C_0$ whenever
+    $\ell+R\le w$. Then $I(R_0:C_0)_\Omega\le L^{-p}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_regional_filter,thm:peps_reset_polar_step,
+        thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
+    This is the argument of Lemma~\ref{thm:chain_information_reset} below,
+    with the supported Gaussian integral and the separation of the reset
+    support from the cores taken as the two hypotheses.
+\end{proof}
+
 \begin{lemma}[Information reset on a contiguous chain]
     \label{thm:chain_information_reset}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.information_reset}
+    \lean{ManyBody.ChainInteraction.information_reset}
     \leanok
     \uses{def:chain_model}
     Fix a natural local dimension $q\ge1$, a natural range $R$, a real
@@ -955,9 +1018,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:peps_reset_regional_filter,thm:chain_supported_gaussian_integral,
-        thm:peps_reset_polar_step,lem:chain_reset_support_separation,
-        thm:regional_reset_cores_entropy,thm:peps_reset_entropy_scalar}
+    \uses{lem:information_reset_of_supported_localization,
+        thm:chain_supported_gaussian_integral,lem:chain_reset_support_separation}
     Set $r=2p+10$. Choose the Gaussian constants $A,T_0>0$ from
     Corollary~\ref{thm:peps_reset_regional_filter} once, and choose the locality
     constants $C,v>0$ from Lemma~\ref{thm:chain_supported_gaussian_integral}.
@@ -1550,30 +1612,30 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{definition}[Finite domains, supports and admissible Hamiltonians]
     \label{def:domain_model}
     \lean{
-        TNLean.MPS.AreaLaw.sitePos,
-        TNLean.MPS.AreaLaw.sitePos_mem,
-        TNLean.MPS.AreaLaw.exists_sitePos_eq,
-        TNLean.MPS.AreaLaw.sub_le_sitePos_sub,
-        TNLean.MPS.AreaLaw.val_eq_add_one_of_sitePos_eq_add_one,
-        TNLean.MPS.AreaLaw.domainGraph,
-        TNLean.MPS.AreaLaw.sitePos_sub_val_of_walk,
-        TNLean.MPS.AreaLaw.IsDomainSupport,
-        TNLean.MPS.AreaLaw.DomainSupport,
-        TNLean.MPS.AreaLaw.IsDomainSupport.exists_walk,
-        TNLean.MPS.AreaLaw.IsDomainSupport.isChainSupport,
-        TNLean.MPS.AreaLaw.IsDomainSupport.subset_or_disjoint_of_gap,
-        TNLean.MPS.AreaLaw.DomainHamiltonian,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.operator,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.operator_isHermitian,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.toChain,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.toChain_operator,
+        ManyBody.sitePos,
+        ManyBody.sitePos_mem,
+        ManyBody.exists_sitePos_eq,
+        ManyBody.sub_le_sitePos_sub,
+        ManyBody.val_eq_add_one_of_sitePos_eq_add_one,
+        ManyBody.lineDomainGraph,
+        ManyBody.sitePos_sub_val_of_walk,
+        ManyBody.IsDomainSupport,
+        ManyBody.DomainSupport,
+        ManyBody.IsDomainSupport.exists_walk,
+        ManyBody.IsDomainSupport.isChainSupport,
+        ManyBody.IsDomainSupport.subset_or_disjoint_of_gap,
+        ManyBody.DomainInteraction,
+        ManyBody.DomainInteraction.toChain,
+        ManyBody.DomainInteraction.isHermitian_toChain_term,
+        ManyBody.DomainInteraction.norm_toChain_term_le,
+        ManyBody.DomainInteraction.toChain_hamiltonian,
         TNLean.MPS.AreaLaw.domainBoundaryEdges,
         TNLean.MPS.AreaLaw.domainRegion,
         TNLean.MPS.AreaLaw.IsDomainEdge,
         TNLean.MPS.AreaLaw.card_domainBoundaryEdges
     }
     \leanok
-    \uses{def:chain_model}
+    \uses{def:chain_model,def:area_law_hamiltonian}
     A finite set $\Lambda\subset\mathbb Z$ carries the induced path graph, whose
     edges join consecutive integers that both lie in $\Lambda$, and its graph
     distance $d_\Lambda$. Its sites are labelled $0,\ldots,|\Lambda|-1$ in
@@ -1596,11 +1658,11 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{lemma}[Interaction norm budget on a finite integer domain]
     \label{lem:domain_site_norm_budget}
     \lean{TNLean.MPS.AreaLaw.IsDomainSupport.singleton,
-        TNLean.MPS.AreaLaw.DomainSupport.toChainSupport,
-        TNLean.MPS.AreaLaw.DomainSupport.toChainSupport_injective,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.toChain_term,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.norm_bound_nonneg,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.sum_norm_terms_containing_le}\leanok
+        ManyBody.DomainSupport.toChainSupport,
+        ManyBody.DomainSupport.toChainSupport_injective,
+        ManyBody.DomainInteraction.toChain_term,
+        ManyBody.DomainInteraction.norm_bound_nonneg,
+        ManyBody.DomainInteraction.sum_norm_terms_containing_le}\leanok
     \uses{def:domain_model}
     In the setting of Definition~\ref{def:domain_model}, every site $x$ satisfies
     $J\ge0$ and
@@ -1648,10 +1710,14 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{definition}[Doubled domain interactions and regional swaps]
     \label{def:domain_doubled_swapped_hamiltonian}
-    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.doubled,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.doubled_operator,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.swappedDoubled,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.swappedDoubled_operator}\leanok
+    \lean{ManyBody.DomainInteraction.doubled,
+        ManyBody.DomainInteraction.isHermitian_doubled_term,
+        ManyBody.DomainInteraction.norm_doubled_term_le,
+        ManyBody.DomainInteraction.doubled_hamiltonian,
+        ManyBody.DomainInteraction.swappedDoubled,
+        ManyBody.DomainInteraction.isHermitian_swappedDoubled_term,
+        ManyBody.DomainInteraction.norm_swappedDoubled_term_le,
+        ManyBody.DomainInteraction.swappedDoubled_hamiltonian}\leanok
     \uses{def:domain_model,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     Let $H=\sum_Xh_X$ be an admissible domain Hamiltonian and let
     $D\subseteq V=\{0,\ldots,|\Lambda|-1\}$. Let $p$ pair the two replica
@@ -1683,8 +1749,8 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Crossing decomposition for a domain regional swap]
     \label{thm:domain_partial_swap_crossing}
-    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.partialSwap_term_difference_spec,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.partialSwap_difference_eq_sum_crossing}\leanok
+    \lean{ManyBody.DomainInteraction.partialSwap_term_difference_spec,
+        ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing}\leanok
     \uses{def:domain_doubled_swapped_hamiltonian,lem:domain_crossing_count}
     With the notation of Definition~\ref{def:domain_doubled_swapped_hamiltonian},
     put $T_{X,0}=p_*(h_X\otimes\mathbb 1)$,
@@ -1717,7 +1783,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Relative-generator localization on a finite integer domain]
     \label{thm:domain_relative_generator_localization}
-    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le}
+    \lean{ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpectation_le}
     \leanok
     \uses{def:domain_doubled_swapped_hamiltonian,thm:domain_partial_swap_crossing,
         def:qc_site_expectation,thm:domain_interval_neighborhood}
@@ -1745,8 +1811,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:domain_partial_swap_crossing,lem:domain_site_norm_budget,
-        thm:domain_lieb_robinson_localization,
-        lem:qc_site_expectation_properties,thm:qc_site_expectation_supported_approximant}
+        thm:domain_lieb_robinson_localization,lem:graph_evolved_perturbation_localization}
     The swapped domain family has interaction bound $2J$, so its per-site
     norm budget is $b_0$. Domain localization gives an error
     $a|X|^2\|A_{X,b}\|e^{v|t|-m/2}$ for each evolved replica perturbation
@@ -1793,10 +1858,8 @@ Theorem~B a second way, by a sequential preparation protocol.
     \cite[Part~IIa]{TNLean2026OneDimensional}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:domain_doubled_swapped_hamiltonian,
-        thm:qc_supported_gaussian_projection_bounds,
-        thm:domain_relative_generator_localization,thm:domain_lieb_robinson_localization,
-        lem:domain_site_norm_budget}
+    \uses{def:domain_doubled_swapped_hamiltonian,lem:graph_supported_gaussian_integral,
+        thm:domain_relative_generator_localization,lem:domain_site_norm_budget}
     Use the constants $a,v$ from the domain generator estimate and put
     $d=4|J|a(R+1)^2N_R$, $C=a+d$. The actual doubled and swapped operators
     are Hermitian because their terms are Hermitian.
@@ -1862,7 +1925,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Information reset on a finite integer domain]
     \label{thm:domain_information_reset}
-    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.information_reset}\leanok
+    \lean{ManyBody.DomainInteraction.information_reset}\leanok
     \uses{def:domain_model}
     Fix $q\ge1$, a natural range $R$, a real interaction bound $J$, a gap
     $\Delta>0$ and an exponent $p>0$. There exist $C_p>0$ and a natural
@@ -1885,10 +1948,9 @@ Theorem~B a second way, by a sequential preparation protocol.
     \cite{gap:tnlean_one_dimensional_connected_domain_scope}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:domain_supported_gaussian_integral,thm:peps_reset_regional_filter,
-        thm:peps_reset_polar_step,lem:qc_graph_ball_strict_margin,
-        thm:qc_graph_support_separation,thm:regional_reset_cores_entropy,
-        thm:peps_reset_entropy_scalar}
+    \uses{lem:information_reset_of_supported_localization,
+        thm:domain_supported_gaussian_integral,lem:qc_graph_ball_strict_margin,
+        thm:qc_graph_support_separation}
     Set $r=2p+10$. Choose the filter constants $A,T_0>0$ and the domain
     locality constants $C,v>0$, and put
     \begin{align}
@@ -1967,7 +2029,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{lemma}[Entropy of intrinsic neighborhoods of interval unions]
     \label{thm:domain_interval_neighborhood_entropy}
     \lean{TNLean.MPS.AreaLaw.regionEntropy_domainNeighborhood_biUnion_intervals_le,
-        TNLean.MPS.AreaLaw.DomainHamiltonian.regionEntropy_neighborhood_biUnion_intervals_le}
+        ManyBody.DomainInteraction.regionEntropy_neighborhood_biUnion_intervals_le}
     \leanok
     \uses{def:domain_model}
     Let $\Omega$ be a normalized vector on the finite domain of
@@ -2009,7 +2071,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Information at logarithmic physical separation on a finite domain]
     \label{thm:domain_logarithmic_separation}
-    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.mutualInformation_le_of_logarithmic_separation}
+    \lean{ManyBody.DomainInteraction.mutualInformation_le_of_logarithmic_separation}
     \leanok
     \uses{def:domain_model,def:chain_model}
     Fix $q\ge1$, a natural range $R$, a real interaction bound $J$, a gap
@@ -2177,25 +2239,20 @@ Theorem~B a second way, by a sequential preparation protocol.
     spectral-gap hypothesis is required.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:domain_model,thm:qc_graph_lieb_robinson_finset,
-        thm:qc_graph_lieb_robinson_zero_finset}
-    Every range-$R$ support has at most $R+1$ sites. For finite $\delta$,
-    the graph propagation estimate with exponential weight parameter one
-    gives the stronger decay $e^{-\delta}$, which is at most
-    $e^{-\delta/2}$. For infinite $\delta$, every $x\in S$ has
-    $d_\Lambda(x,y)=\infty$, so $[\tau_t(A),B]=0$ by
-    Lemma~\ref{thm:qc_graph_lieb_robinson_zero_finset} and the left side
-    vanishes. All distances are those of the
-    induced graph; sites separated by a hole are not identified with
-    consecutive sites of a longer chain.
+    \uses{def:domain_model,thm:graph_lieb_robinson_two_spheres}
+    Every range-$R$ support has at most $R+1$ sites and induced-graph
+    diameter at most $R$, so this is the commutator estimate of
+    Lemma~\ref{thm:graph_lieb_robinson_two_spheres} for the induced graph.
+    All distances are those of the induced graph; sites separated by a hole
+    are not identified with consecutive sites of a longer chain.
 \end{proof}
 
 \begin{lemma}[Localization on a finite integer domain]
     \label{thm:domain_lieb_robinson_localization}
-    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le}
+    \lean{TNLean.MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_domainNeighborhood_le}
     \leanok
     \uses{def:domain_model,def:qc_site_expectation}
-    Let $\Lambda\subset\mathbb Z$ be finite, let $q,R\in\mathbb N$ with $q\ge1$,
+    Let $\Lambda\subset\mathbb Z$ be finite, let $q,R\in\mathbb N$,
     and let $H=\sum_kh_k$ be a finite labelled sum of Hermitian operators.
     Each $h_k$ is supported on a nonempty set $X_k$ of induced-graph diameter
     at most $R$. Suppose $\sum_{k:x\in X_k}\|h_k\|\le b_0$ for every site $x$.
@@ -2224,24 +2281,16 @@ Theorem~B a second way, by a sequential preparation protocol.
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:domain_graph_spheres,thm:qc_graph_neighborhood_localization,
-        thm:area_law_supported_identity}
-    Each interaction support has at most $R+1$ sites. Apply graph
-    localization with this support-size bound, sphere coefficient $2$,
-    sphere exponent zero, and natural radius $m=\lfloor\ell\rfloor$.
-    Its neighborhood is precisely the displayed union of closed balls.
-    Graph distances are integers when finite, and
-    $e^{-m/2}\le e^{1/2}e^{-\ell/2}$.
-    The natural-radius coefficient is $2Ce^{1/2}/(1-e^{-1/2})$;
-    multiplication by this rounding factor gives $C'$.
-    The graph localization theorem includes the empty union and its
-    vanishing factor $|S|^2$.
+    \uses{thm:domain_graph_spheres,thm:graph_lieb_robinson_two_spheres}
+    Each interaction support has at most $R+1$ sites, and every distance
+    sphere of the induced graph has at most two sites. The localization
+    estimate of Lemma~\ref{thm:graph_lieb_robinson_two_spheres} for the
+    induced graph is the displayed bound.
 \end{proof}
 
 \begin{lemma}[A cut that splits no term]
     \label{lem:zero_entropy_cut}
     \lean{
-        TNLean.Lattice.isSupportedOn_sum,
         TNLean.Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint
     }
     \leanok
@@ -2264,7 +2313,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Zero entropy for on-site interactions]
     \label{thm:chain_range_zero_entropy}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.regionEntropy_eq_zero_of_range_zero}
+    \lean{ManyBody.ChainInteraction.regionEntropy_eq_zero_of_range_zero}
     \leanok
     \uses{def:chain_model,lem:zero_entropy_cut}
     Let $\Omega$ be a gapped ground vector, with positive gap, of a
@@ -2320,7 +2369,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 % and rem:sharper, lines 706--748.
 \begin{lemma}[A support of maximal cardinality]
     \label{thm:chain_full_support_window}
-    \lean{TNLean.MPS.AreaLaw.IsChainSupport.exists_eq_interval_of_card_eq}
+    \lean{ManyBody.IsChainSupport.exists_eq_interval_of_card_eq}
     \leanok
     \uses{def:chain_model}
     Let $L,R\in\mathbb N$ and let $X\subseteq\{0,\ldots,L-1\}$
@@ -2337,7 +2386,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Removing boundary cuts across gaps]
     \label{thm:domain_entropy_boundary_reduction}
-    \lean{TNLean.MPS.AreaLaw.DomainHamiltonian.exists_regionEntropy_eq_card_boundaryEdges_eq}
+    \lean{ManyBody.DomainInteraction.exists_regionEntropy_eq_card_boundaryEdges_eq}
     \leanok
     \uses{def:domain_model}
     Let $\Lambda=\{x_0<\cdots<x_{L-1}\}\subset\mathbb Z$ be finite.
@@ -2467,6 +2516,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 \begin{lemma}[Neighborhoods of intervals and their entropy]
     \label{thm:chain_interval_neighborhood_entropy}
     \lean{TNLean.MPS.AreaLaw.chainNeighborhood_interval_eq,
+        TNLean.MPS.AreaLaw.regionEntropy_biUnion_neighborhood_intervals_le,
         TNLean.MPS.AreaLaw.regionEntropy_chainNeighborhood_biUnion_intervals_le}
     \leanok
     \uses{def:chain_model}
@@ -2533,7 +2583,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Information at logarithmic separation on a contiguous chain]
     \label{thm:chain_logarithmic_separation}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation}
+    \lean{ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_separation}
     \leanok
     \uses{def:chain_model}
     Fix a natural local dimension $q\ge1$, a natural range $R$, a real
@@ -2624,7 +2674,7 @@ Theorem~B a second way, by a sequential preparation protocol.
 
 \begin{lemma}[Spectral truncation at a prefix cut]
     \label{thm:chain_prefix_spectral_bounds}
-    \lean{TNLean.MPS.AreaLaw.ChainHamiltonian.spectralProjectionGE_leftBlock_bounds}
+    \lean{ManyBody.ChainInteraction.spectralProjectionGE_leftBlock_bounds}
     \leanok
     \uses{def:chain_model}
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a

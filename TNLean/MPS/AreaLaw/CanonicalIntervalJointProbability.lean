@@ -23,6 +23,8 @@ estimate remains an explicit premise; the theorem does not assert that
 estimate for arbitrary operator families.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped ENNReal
 

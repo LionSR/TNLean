@@ -1,0 +1,87 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{./command}
+\title{The Honeycomb Cluster State Is Not an Injective PEPS}
+\author{}
+\date{2026-11-18}
+\begin{document}
+\maketitle
+\gapnote{false-source}{open}
+
+\section{The source claim}
+Section~IV of \cite{Cirac2021Matrix} introduces the cluster state as follows:
+\begin{quote}
+    ``The canonical example for an injective PEPS with global symmetries is
+    the cluster state on the honeycomb lattice [\ldots] This state has a very
+    simple PEPS representation: [figure] with [vertex tensor]
+    $=\ket{0000}+\ket{1111}$, [bond matrix]
+    $=\frac{1}{\sqrt{2}}\left(\begin{smallmatrix} 1 & 1\\ 1 &
+                -1\end{smallmatrix}\right)$.
+        [\ldots] To use the fundamental theorem of PEPS, we first block two sites
+    of this PEPS such as to make it uniform [\ldots]''
+\end{quote}
+\footnote{Source traceability: \path{Papers/2011.12127/TN-Review-main.tex},
+    lines 1445--1452.}
+The review defines injectivity tensor by tensor: ``A PEPS tensor $A$ is
+called injective if it is injective as a linear map
+$A:(\mathbb C^D)^{\otimes r}\to\mathbb C^d$ from the virtual to the physical
+system'', and it reserves a separate word for injectivity after blocking: a
+tensor ``is called \emph{normal} if it becomes injective after blocking a
+sufficiently large rectangular region''.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 1927--1938.}
+
+\section{The counterexample}
+Let $H=\frac1{\sqrt2}\left(\begin{smallmatrix}1&1\\1&-1\end{smallmatrix}
+    \right)$. The vertex tensor $\ket{0000}+\ket{1111}$ of a vertex of degree
+three maps the virtual space $(\C^2)^{\otimes3}$, of dimension eight, to
+$\C^2$. Its image is two-dimensional, so it is not injective, and composing
+with invertible bond matrices on its legs does not change this. More
+generally, a vertex tensor of the graph-state PEPS on a vertex of degree
+$k\geq2$ is a family of $2^k\geq4$ vectors in $\C^2$, which cannot be
+linearly independent.\footnote{\leanid{TNLean.PEPS.not_linearIndependent_graphStatePEPS_component},
+    \leanid{TNLean.PEPS.not_isVertexInjective_honeycombClusterPEPS}, in
+    \doclink{TNLean/PEPS/Examples/HoneycombCluster}.}
+The two-site blocking that the source performs to make the tensor uniform
+does not help either: the blocked tensor of a unit cell has four virtual legs
+of dimension two and a physical space of dimension four, so it maps a space of
+dimension sixteen to one of dimension four.
+
+The data are not degenerate: all bond dimensions are two and the state is
+nonzero, with coefficient $2^{-|E|/2}$ at the all-zero configuration. The
+claim ``injective PEPS'' is therefore false as printed, both for the site
+tensor and for the uniform two-site tensor to which the source applies the
+fundamental theorem.
+
+\section{The corrected claim}
+The PEPS becomes injective after blocking over hexagonal plaquettes, so it is
+normal in the sense of the review, with plaquettes in place of rectangles. A
+plaquette has six sites, each with exactly one bond leaving the plaquette.
+With the boundary indices $\beta$ fixed, the blocked tensor sends $\beta$ to
+\begin{align}
+    \prod_{\text{inner bonds}}CZ\;\bigotimes_{u}M_u\ket{\beta_u},
+    \label{eq:rmp_honeycomb_cluster_injectivity_plaquette_block}
+\end{align}
+up to normalization, where each $M_u$ is the identity or $H$ according to the
+side on which the bond matrix of the leaving bond is placed. Both maps in
+(\ref{eq:rmp_honeycomb_cluster_injectivity_plaquette_block}) are invertible, so
+the blocked tensor is injective. The honeycomb vertex set is
+partitioned by every third plaquette, on a torus whose dimensions are
+compatible with this pattern, and the blocked network is a triangular lattice
+of injective tensors. The fundamental theorem for normal tensors applies to
+this blocked network.
+
+\section{Elimination plan}
+\begin{enumerate}
+    \item Formalize injectivity of the plaquette-blocked tensor and the
+          partition of the honeycomb torus into plaquettes.
+    \item State the corrected claim, that the honeycomb cluster PEPS is
+          injective after plaquette blocking. No injectivity of the
+          honeycomb PEPS is asserted until then.
+\end{enumerate}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

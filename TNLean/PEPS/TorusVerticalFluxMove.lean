@@ -25,6 +25,8 @@ parent-Hamiltonian conclusion is asserted. See
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS
@@ -47,8 +49,8 @@ private def verticalFluxInsertionElement (v : X) (g : G) : G :=
 /-- Literal rightward insertion on the lower horizontal bond, optionally extended
 onto the middle horizontal bond. Source: SCP10, Theorem 6.16, lines 2271–2305. -/
 def torusVerticalFluxAssignment (v : X) (extend : Bool) (g : G) (e : Edge Γₜ) : G :=
-  if e = Edge.ofAdj (torusGraph_adj_right v.1 v.2) ∨
-    (extend = true ∧ e = Edge.ofAdj (torusGraph_adj_right v.1 (v.2+1)))
+  if e = ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 v.2) ∨
+    (extend = true ∧ e = ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 (v.2+1)))
   then verticalFluxInsertionElement v g else 1
 
 /-- The literal native insertion is the internally derived cycle assignment.
@@ -78,9 +80,9 @@ theorem torusVerticalFluxAssignment_right_transport (v : X) (extend : Bool) (g :
       (torusGraph_adj_right v.1 v.2) = g ∧
     regularDirectedTransport (torusVerticalFluxAssignment v extend g)
       (torusGraph_adj_right v.1 (v.2+1)) = (if extend then g else 1) := by
-  have hne : Edge.ofAdj (torusGraph_adj_right v.1 (v.2+1)) ≠
-      Edge.ofAdj (torusGraph_adj_right v.1 v.2) := by
-    simp [Edge.ofAdj_eq_iff_endpoints]
+  have hne : ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 (v.2+1)) ≠
+      ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 v.2) := by
+    simp [ManyBody.Edge.ofAdj_eq_iff_endpoints]
   simp only [regularDirectedTransport, right_lt_iff, torusVerticalFluxAssignment,
     hne, false_or, and_true, verticalFluxInsertionElement]
   by_cases h : v.1.val < (v.1+1).val <;> cases extend <;> simp [h]
@@ -96,10 +98,10 @@ theorem regularWalkHolonomy_torusVerticalFluxAssignment
   let u := torusVerticalFluxAssignment v extend g
   have hV (x : ZMod width) (y : ZMod height) :
       regularDirectedTransport u (torusGraph_adj_up x y) = 1 := by
-    have hn (b : ZMod height) : Edge.ofAdj (torusGraph_adj_up x y) ≠
-        Edge.ofAdj (torusGraph_adj_right v.1 b) := by
+    have hn (b : ZMod height) : ManyBody.Edge.ofAdj (torusGraph_adj_up x y) ≠
+        ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 b) := by
       intro h
-      simp only [Edge.ofAdj_eq_iff_endpoints, Prod.mk.injEq] at h
+      simp only [ManyBody.Edge.ofAdj_eq_iff_endpoints, Prod.mk.injEq] at h
       rcases h with ⟨⟨h₀,_⟩,⟨h₁,_⟩⟩ | ⟨⟨h₀,_⟩,⟨h₁,_⟩⟩ <;> simp_all
     simp [u, regularDirectedTransport, torusVerticalFluxAssignment, hn]
   have htwo : (2 : ZMod height) ≠ 0 := by
@@ -112,12 +114,12 @@ theorem regularWalkHolonomy_torusVerticalFluxAssignment
     exact htwo (add_left_cancel h')
   have hTop : regularDirectedTransport u
       (torusGraph_adj_right v.1 (v.2+1+1)) = 1 := by
-    have h₀ : Edge.ofAdj (torusGraph_adj_right v.1 (v.2+1+1)) ≠
-        Edge.ofAdj (torusGraph_adj_right v.1 v.2) := by
-      simp [Edge.ofAdj_eq_iff_endpoints, hy₂]
-    have h₁ : Edge.ofAdj (torusGraph_adj_right v.1 (v.2+1+1)) ≠
-        Edge.ofAdj (torusGraph_adj_right v.1 (v.2+1)) := by
-      simp [Edge.ofAdj_eq_iff_endpoints]
+    have h₀ : ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 (v.2+1+1)) ≠
+        ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 v.2) := by
+      simp [ManyBody.Edge.ofAdj_eq_iff_endpoints, hy₂]
+    have h₁ : ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 (v.2+1+1)) ≠
+        ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 (v.2+1)) := by
+      simp [ManyBody.Edge.ofAdj_eq_iff_endpoints]
     simp [u, regularDirectedTransport, torusVerticalFluxAssignment, h₀, h₁]
   obtain ⟨hL,hM⟩ := torusVerticalFluxAssignment_right_transport v extend g
   change regularDirectedTransport u (torusGraph_adj_right v.1 v.2) = g at hL
@@ -143,7 +145,7 @@ theorem IsGIsometric.exists_unitary_torusVerticalFluxMove
     (ha : IsGIsometric (torusLegRep (leftRegularMatrix G)) (siteMap a)) (v : X) :
     ∃ W : Matrix (RV v → Fin d) (RV v → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV v → Fin d) ℂ ∧
-      regionLocalTerm (R v) W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) (R v) W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (reverse : Bool) (g : G) (θ : {e : Edge Γₜ // IsRegionBoundaryEdge (R v) e} → G),
         (if reverse then W.conjTranspose else W) *ᵥ
           openRegionWeight (groupBondTensor (regularTwistedSite
@@ -155,8 +157,9 @@ theorem IsGIsometric.exists_unitary_torusVerticalFluxMove
           (torusVerticalFluxAssignment v (!reverse) g))) (R v)
           (fun f => Fintype.equivFin G (θ f))) ∧
       ∀ (reverse : Bool) (g : G) (u : Edge Γₜ → G),
-        (if reverse then (regionLocalTerm (R v) W).conjTranspose
-          else regionLocalTerm (R v) W) *ᵥ stateCoeff (groupBondTensor (regularTwistedSite
+        (if reverse then (ManyBody.place («X» := fun _ ↦ Fin _) (R v) W).conjTranspose
+          else ManyBody.place («X» := fun _ ↦ Fin _)
+              (R v) W) *ᵥ stateCoeff (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a)
           (regularRegionBondExtension (R v) (torusVerticalFluxAssignment v reverse g) u))) =
         stateCoeff (groupBondTensor (regularTwistedSite

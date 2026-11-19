@@ -105,8 +105,8 @@ theorem blockTensor_smul (c : ℂ) (M : MPOTensor d D) (L : ℕ) :
     blockTensor (c • M) L = c ^ L • blockTensor M L := by
   funext i j
   simp only [blockTensor_apply, Pi.smul_apply]
-  rw [evalWord_smul c M (MPSTensor.wordOfBlock d L i)
-    (MPSTensor.wordOfBlock d L j) (by simp), MPSTensor.length_wordOfBlock]
+  rw [evalWord_smul c M (Kraus.wordOfBlock d L i)
+    (Kraus.wordOfBlock d L j) (by simp), Kraus.length_wordOfBlock]
 
 /-- Rescaling the tensor by a nonzero complex scalar leaves every normalized
 density operator unchanged.  At chain length `N` the closed operator and its

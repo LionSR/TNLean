@@ -27,6 +27,8 @@ connectedness, flatness, or Gram identity is assumed in the gauge identity.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean.PEPS

@@ -124,9 +124,10 @@ theorem exists_isWindowProduct_mulVec_eq_of_hasOBCRep (hd : 0 < d) {N D k : ℕ}
     omega)
   refine ⟨U * embedOp last Wr, ?_, funext fun σ => ?_⟩
   · refine hU _ (embedOp_mem_unitary hlast hWr)
-      (supportedOperators_mono ?_ (embedOp_mem_supportedOperators hlast Wr))
-    rintro _ ⟨j, rfl⟩
-    simp only [windowSites, Set.mem_ofPred_eq, last]
+      (ManyBody.supportedOperators_mono ?_ (embedOp_mem_supportedOperators hlast Wr))
+    intro _ hj
+    obtain ⟨j, -, rfl⟩ := Finset.mem_image.mp hj
+    simp only [windowSites, Finset.mem_filter, Finset.mem_univ, true_and, last]
     omega
   have hext : ∀ u : Cfg d k,
       Function.extend last u (fun _ => (⟨0, hd⟩ : Fin d)) = inputCfg hd N u := by

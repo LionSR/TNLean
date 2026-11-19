@@ -26,6 +26,8 @@ nonzero normalized multiple as in `docs/paper-gaps/alvv16_final_filter_gain.tex`
 The proof uses the corrected error recurrence.
 -/
 
+open ManyBody (interval)
+
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

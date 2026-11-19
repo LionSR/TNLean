@@ -29,11 +29,11 @@ Source: CPSV17, StandardForm and Appendix, lines 603–622 and 2300–2334. -/
 theorem originalSiteHeisenbergOutputWindow_eq_chainWindowOperator
     {d ℓ r : ℕ} (k : ℕ) (hk : 0 < k)
     (u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ)
-    (v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ)
+    (v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ)
-    (A : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+    (A : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ) :
     originalSiteHeisenbergOutputWindow k u v A =
       MPSTensor.chainWindowOperator (3 * (2 * k)) k
         (Matrix.reindex (originalSiteHeisenbergOutputCentreEquiv d k)
@@ -55,13 +55,13 @@ is supplied as a hypothesis. Source: CPSV17, Appendix, lines 2300–2334. -/
 theorem originalSiteHeisenbergOutputWindow_mem_supportedOperators
     {d ℓ r : ℕ} (k : ℕ) (hk : 0 < k)
     (u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ)
-    (v : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ)
+    (v : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ)
-    (A : Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
-    originalSiteHeisenbergOutputWindow k u v A ∈ QuantumCircuit.supportedOperators d
-      {i : Fin (3 * (2 * k)) | k ≤ i.val ∧ i.val < k + 4 * k} := by
+    (A : Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ) :
+    originalSiteHeisenbergOutputWindow k u v A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (Finset.univ.filter fun (i : Fin (3 * (2 * k))) ↦ k ≤ i.val ∧ i.val < k + 4 * k) := by
   rw [originalSiteHeisenbergOutputWindow_eq_chainWindowOperator k hk u v A]
   exact MPSTensor.chainWindowOperator_mem_supportedOperators (by omega) (by omega) _
 

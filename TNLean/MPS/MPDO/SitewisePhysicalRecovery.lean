@@ -33,7 +33,7 @@ noncomputable def sitewisePhysicalRecovery
     (V : Matrix (Fin e) (Fin d) ℂ) (N : ℕ) [NeZero d] :
     Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ →ₗ[ℂ]
       Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
-  let W := sitewisePhysicalMatrix V N
+  let W := Matrix.tensorPower N V
   let P := W * Wᴴ
   Matrix.supportCompletion (singleKrausMap Wᴴ) P
     (Matrix.faithfulDensity (Fin N → Fin d))
@@ -44,9 +44,9 @@ theorem sitewisePhysicalRecovery_isKrausCPTP
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1) (N : ℕ)
     [NeZero d] :
     IsKrausCPTP (sitewisePhysicalRecovery V N) := by
-  let W := sitewisePhysicalMatrix V N
+  let W := Matrix.tensorPower N V
   let P := W * Wᴴ
-  have hW : Wᴴ * W = 1 := sitewisePhysicalMatrix_isometry V hV N
+  have hW : Wᴴ * W = 1 := tensorPower_isometry V hV N
   have hPherm : P.IsHermitian := Matrix.isHermitian_mul_conjTranspose_self W
   have hPidem : P * P = P := by
     change (W * Wᴴ) * (W * Wᴴ) = W * Wᴴ
@@ -74,10 +74,10 @@ theorem sitewisePhysicalRecovery_apply_singleKrausMap
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1) (N : ℕ)
     [NeZero d] (X : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
     sitewisePhysicalRecovery V N
-        (singleKrausMap (sitewisePhysicalMatrix V N) X) = X := by
-  let W := sitewisePhysicalMatrix V N
+        (singleKrausMap (Matrix.tensorPower N V) X) = X := by
+  let W := Matrix.tensorPower N V
   let P := W * Wᴴ
-  have hW : Wᴴ * W = 1 := sitewisePhysicalMatrix_isometry V hV N
+  have hW : Wᴴ * W = 1 := tensorPower_isometry V hV N
   have hPherm : P.IsHermitian := Matrix.isHermitian_mul_conjTranspose_self W
   have hPidem : P * P = P := by
     change (W * Wᴴ) * (W * Wᴴ) = W * Wᴴ
@@ -112,7 +112,7 @@ theorem sitewisePhysicalRecovery_physCloseN
     (X : Matrix (Fin D) (Fin D) ℂ) :
     sitewisePhysicalRecovery V N
         (physCloseN (changePhysicalBasis V M) N X) = physCloseN M N X := by
-  rw [← singleKrausMap_sitewisePhysicalMatrix_physCloseN]
+  rw [← singleKrausMap_tensorPower_physCloseN]
   exact sitewisePhysicalRecovery_apply_singleKrausMap V hV N (physCloseN M N X)
 
 end MPOTensor

@@ -62,6 +62,7 @@ case.
 -/
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
+open Kraus (blockPhysDim decodeBlockEquiv blockTensor)
 
 namespace Matrix
 

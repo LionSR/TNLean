@@ -84,7 +84,7 @@ Theorem 1.2, lines 933--947, and Section 6, lines 2649--2675. -/
 theorem exists_pos_multiblock_localCommutator_gap_of_eventual_kernel
     (μ : Fin b → ℂ) (A : ∀ i, MPSTensor d (D i)) (hμ : ∀ i, μ i ≠ 0)
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
-    (hP : ∀ i, IsPrimitiveMPS (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
+    (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : D j = D i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) {R : ℕ} (hR : 0 < R)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
@@ -124,7 +124,7 @@ Theorem 1.2, lines 933--947, and Section 6, lines 2649--2675. -/
 theorem exists_pos_multiblock_quasiLocalCommutator_gap_of_eventual_kernel
     (μ : Fin b → ℂ) (A : ∀ i, MPSTensor d (D i)) (hμ : ∀ i, μ i ≠ 0)
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
-    (hP : ∀ i, IsPrimitiveMPS (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
+    (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : D j = D i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) {R : ℕ} (hR : 0 < R)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
@@ -165,7 +165,7 @@ Theorem 1.2, lines 933--947, and Section 6, lines 2649--2675. -/
 theorem exists_pos_multiblock_quasiLocalCommutator_limit_gap_of_eventual_kernel
     (μ : Fin b → ℂ) (A : ∀ i, MPSTensor d (D i)) (hμ : ∀ i, μ i ≠ 0)
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
-    (hP : ∀ i, IsPrimitiveMPS (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
+    (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : D j = D i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) {R : ℕ} (hR : 0 < R)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)

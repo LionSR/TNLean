@@ -35,7 +35,7 @@ theorem ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_three
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     {L₀ R N : ℕ} (hL₀ : 0 < L₀)

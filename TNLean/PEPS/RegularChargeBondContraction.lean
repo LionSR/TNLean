@@ -19,6 +19,8 @@ lines 2449–2486. These are auxiliary regular-coordinate identities; no physica
 measurement or general semiregular isometry for character insertions is asserted.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

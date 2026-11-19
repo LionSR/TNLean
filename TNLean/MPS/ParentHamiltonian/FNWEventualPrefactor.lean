@@ -33,9 +33,9 @@ variable {d D : ℕ}
 prescribed rate above every nonunit transfer eigenvalue modulus. This is the
 version of Nachtergaele's `boundAm` with the rate-dependent onset specified
 in the module's scope-restriction statement. -/
-theorem IsPrimitiveMPS.eventually_fnwMixingQuantity_le_of_pos_prefactor
+theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_fnwMixingQuantity_le_of_pos_prefactor
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (rate : ℝ≥0) (hrate : 0 < rate)
     (hEigen : ∀ ν : ℂ, Module.End.HasEigenvalue (fnwTransferMap A) ν →
       ν ≠ 1 → ‖ν‖ < (rate : ℝ)) {c : ℝ} (hc : 0 < c) :
@@ -59,9 +59,9 @@ theorem IsPrimitiveMPS.eventually_fnwMixingQuantity_le_of_pos_prefactor
 holds beyond a state- and rate-dependent overlap threshold. This is the
 corrected eventual form of Nachtergaele, Section 6, equation `boundAm`.
 The bound is uniform in the prefix and every positive suffix length. -/
-theorem IsPrimitiveMPS.eventually_projector_defect_le_of_pos_prefactor
+theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_projector_defect_le_of_pos_prefactor
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1)
     (rate : ℝ≥0) (hrate : 0 < rate) (hrate1 : rate < 1)
     (hEigen : ∀ ν : ℂ, Module.End.HasEigenvalue (fnwTransferMap A) ν →
       ν ≠ 1 → ‖ν‖ < (rate : ℝ)) {c : ℝ} (hc : 0 < c) :
@@ -71,7 +71,7 @@ theorem IsPrimitiveMPS.eventually_projector_defect_le_of_pos_prefactor
           (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
         c * (rate : ℝ) ^ m * (1 + c * (rate : ℝ) ^ m) /
           (1 - c * (rate : ℝ) ^ m) := by
-  obtain ⟨L, hL, hInj⟩ := isNormal_of_isPrimitiveMPS_with_posDef hP hρ
+  obtain ⟨L, hL, hInj⟩ := isNormal_of_hasComplementaryFixedPointGap_with_posDef hP hρ
   have hdecay : Tendsto (fun m : ℕ ↦ c * (rate : ℝ) ^ m) atTop (𝓝 0) := by
     simpa using tendsto_const_nhds.mul
       (tendsto_pow_atTop_nhds_zero_of_lt_one rate.coe_nonneg

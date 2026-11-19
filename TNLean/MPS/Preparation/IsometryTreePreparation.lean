@@ -27,6 +27,7 @@ Source: arXiv:2307.01696, eq. (16) and "Tree-RG circuit with measurements".
 open Matrix MPSTensor
 open scoped BigOperators
 open QuantumCircuit TeleportHop
+open Kraus (blockPhysDim)
 
 namespace MPSPreparation
 
@@ -79,7 +80,7 @@ theorem exists_rounds_blockLayerOp_treeBlockOp (d s c : ℕ) [NeZero d] [NeZero 
       (blockLayerOp hN fun b => treeLeafOp (hT b) (U b)) := by
     have := (isImplementationOn_round (d := d) Ll (valid_nil (N := N))).isRoundsImplementationOn
     rw [chainPerm_nil, Matrix.one_mul, ← hLlU] at this
-    exact this.mono fun v _ => fun _ _ _ h => h.elim
+    exact this.mono fun v _ => fun _ _ _ h => by simp [TeleportHop.pairSites] at h
   have hall : MeasurementRound.IsRoundsImplementationOn (Rs ++ [round Ll [] valid_nil])
       {v | IsZeroOn (treeCentralSites h s hN w) v}
       (blockLayerOp hN fun b => treeBlockOp (hT b) V W (ι₀ b) enc) := by

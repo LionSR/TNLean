@@ -23,6 +23,7 @@ to the coarse depth; a top disentangler contributes one further layer.
 
 open Matrix MPSTensor
 open scoped BigOperators Kronecker
+open Kraus (blockPhysDim decodeBlock decodeBlockEquiv)
 
 namespace MPSPreparation
 

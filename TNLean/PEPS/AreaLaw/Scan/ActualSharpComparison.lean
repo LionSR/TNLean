@@ -24,6 +24,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
@@ -31,6 +33,8 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -51,10 +55,11 @@ theorem eventually_actualCharge_suppliedPrevector_sharp_comparison
     (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hm : 0 < S.m) (hM : 0 < S.M) (hKpos : 0 < S.K)
-    (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ)
+    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (Ω : StateSpace Λ q) (Δ : ℝ)
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L)
     (Ωt : StateSpace Λ q) (e₀ gap : ℝ) (hΩt : ‖Ωt‖ = 1)
-    (hgap : ((∑ i, S.truncatedEnergyTerm h Ω Δ L i) - (e₀ : ℂ) • 1 -
+    (hgap : ((∑ i, S.truncatedEnergyTerm h Ω J Δ L i) - (e₀ : ℂ) • 1 -
       (gap : ℂ) • (1 - vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef)
     (hgap_pos : 0 < gap)
     (a Kmom rMom : ℝ) (ha : 0 < a) (har : 10 * a ≤ rMom)
@@ -131,7 +136,7 @@ theorem eventually_actualCharge_suppliedPrevector_sharp_comparison
         let Gpre := (∑ g, ∑ j, tree.weight j * gpre j g) / (S.K : ℝ)
         let Gpost := (∑ g, ∑ j, tree.weight j * gpost j g) / (S.K : ℝ)
         let μ := (S.actualChargeScanRound hm hM s.val dims
-          (S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)) a pre).meanEnergy k p
+          (S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)) a pre).meanEnergy k p
         let δ := (μ - e₀) / gap
         0 < Transport.filteredNormSq (D.rootPath dims (a / 2) k p) (pre k) ∧
           0 ≤ δ ∧ ∀ τ : ℝ, 0 < τ → τ ≤ 1 / 2 →
@@ -150,7 +155,7 @@ theorem eventually_actualCharge_suppliedPrevector_sharp_comparison
     eventually_actualScan_suppliedPrevector_sharp_upper hT S hdepth hm hM
       a Kmom rMom ha har6 haone6 L hL Ωt hΩt E ell hmom hz hmass
   obtain ⟨cL, Cf, hcL, hCf, hlimL, hlower⟩ :=
-    exists_actualScan_suppliedPrevector_sharp_lower S hm hM h Ω Δ L Ωt e₀ gap
+    exists_actualScan_suppliedPrevector_sharp_lower S hm hM h hh hhJ Ω Δ L Ωt e₀ gap
       hΩt hgap hgap_pos a Kmom rMom ha har haone hKmom ell Sent hpre hdim hmom
   have hKr : (0 : ℝ) < S.K := Nat.cast_pos.mpr hKpos
   have hW : 0 < W := mul_pos ha hKr

@@ -28,6 +28,8 @@ Lemma 2 for a gapped chain once the factorization is supplied.
 * `TNLean.MPS.AreaLaw.Hastings.regionEntropy_interval_eq`: the entropy of the first `j` sites
   as the entropy of `C Cᴴ` for the cut matrix `C`.
 -/
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder
 
@@ -55,7 +57,7 @@ theorem regionEntropy_interval_eq (j : ℕ) (Ω : EuclideanSpace ℂ (Fin L → 
       _root_.vonNeumannEntropy (cutMatrix Ω j * (cutMatrix Ω j)ᴴ)
         (posSemidef_self_mul_conjTranspose (cutMatrix Ω j)).isHermitian := by
   rw [← leftBlock_eq_interval]
-  unfold Entropy.regionEntropy Entropy.regionState
+  unfold Entropy.regionEntropy ManyBody.regionEntropy ManyBody.regionState ManyBody.cutVector
   exact vonNeumannEntropy_congr (partialTraceRight_vecMulVec_eq _) _ _
 
 /-- If `j + s` exceeds the length of the chain, the cut matrix after `j` sites has rank at most

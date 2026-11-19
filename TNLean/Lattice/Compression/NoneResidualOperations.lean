@@ -65,7 +65,7 @@ theorem Word.restrict_localPart_comp_scalar {Q : Type} (f : Q → Bool)
   unfold Word.localPart
   refine (Word.restrict_castInput_eval_heq f _ _ hc).trans ?_
   exact scalar_comp_heq
-    ((Word.frameList v.sources.layout w.localPart).restrict f
+    (Word.restrict f (Word.frameList v.sources.layout w.localPart)
       ((Word.sources_frameList _ _).trans w.sources_localPart)).eval
     (v.localPart.restrict f v.sources_localPart).eval
     (by simp only [Layout.restrict_append, hv, hw, ha, List.nil_append])

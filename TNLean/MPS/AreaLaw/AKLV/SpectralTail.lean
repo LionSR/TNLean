@@ -22,6 +22,8 @@ at half the identity recovers coefficient 2: scalar matrices have zero
 off-diagonal block. See `docs/paper-gaps/aklv13_robustness_constants.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 noncomputable section
@@ -205,10 +207,10 @@ theorem norm_boundary_spectral_offDiagonal_le {L q : ℕ}
       exact (IsSelfAdjoint.all z).smul (IsSelfAdjoint.one _)
   have hO : Entropy.IsSupportedOn (n := fun _ ↦ q) O
       (interval L a.val (a.val + 2)) := by
-    apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-    exact Submodule.sub_mem _
-      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs a))
-      (Submodule.smul_mem _ _ (QuantumCircuit.one_mem_supportedOperators _))
+    change _ ∈ ManyBody.supportedOperators _ _
+    exact sub_mem
+      (hs a)
+      (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
   have hnorm : ‖O‖ ≤ (1 / 2 : ℝ) := norm_sub_half_one_le (h a) (h0 a) (h1 a)
   have hconj := norm_exp_conjugation_nearest_neighbour_shift_le_two I h
     (fun i _ ↦ hs i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) O hO (z : ℂ)

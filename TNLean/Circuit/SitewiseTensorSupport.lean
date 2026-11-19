@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.LocalCircuit
+import TNLean.Circuit.SupportedOperators
 import Mathlib.Logic.Equiv.Fin.Basic
 import Mathlib.Logic.Equiv.Prod
 
@@ -42,33 +42,44 @@ local dimensions are included.
 
 Source: polynomial-PEPS, `02-information.tex`, lines 416–424 and 513–524. -/
 theorem reindex_kronecker_mem_supportedOperators
-    {ι : Type*} [Fintype ι] {d e : ℕ} {S T : Set ι}
+    {ι : Type*} [Fintype ι] [DecidableEq ι] {d e : ℕ} {S T : Finset ι}
     {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
     {B : Matrix (ι → Fin e) (ι → Fin e) ℂ}
-    (hA : A ∈ supportedOperators d S) (hB : B ∈ supportedOperators e T) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) T) :
     Matrix.reindex (sitePairConfigurationEquiv ι d e) (sitePairConfigurationEquiv ι d e)
-      (A ⊗ₖ B) ∈ supportedOperators (d * e) (S ∪ T) := by
-  refine Submodule.span_induction₂
-    (p := fun A B _ _ ↦
-      Matrix.reindex (sitePairConfigurationEquiv ι d e) (sitePairConfigurationEquiv ι d e)
-        (A ⊗ₖ B) ∈ supportedOperators (d * e) (S ∪ T))
-    ?mem ?zeroL ?zeroR ?addL ?addR ?smulL ?smulR hA hB
-  case mem =>
-    rintro _ _ ⟨m, hm, rfl⟩ ⟨n, hn, rfl⟩
-    refine Submodule.subset_span
-      ⟨fun i ↦ Matrix.reindex finProdFinEquiv finProdFinEquiv (m i ⊗ₖ n i), ?_, ?_⟩
-    · intro i hi
-      simp only [hm i (fun h ↦ hi (Or.inl h)), hn i (fun h ↦ hi (Or.inr h)),
+      (A ⊗ₖ B) ∈ ManyBody.supportedOperators (fun _ ↦ Fin (d * e)) (S ∪ T) := by
+  induction hA using ManyBody.supportedOperators_induction with
+  | prod m hm =>
+    induction hB using ManyBody.supportedOperators_induction with
+    | prod n hn =>
+      have heq : Matrix.reindex (sitePairConfigurationEquiv ι d e)
+          (sitePairConfigurationEquiv ι d e)
+          (Matrix.rectKronecker m ⊗ₖ Matrix.rectKronecker n) =
+          Matrix.rectKronecker fun i ↦ Matrix.reindex finProdFinEquiv finProdFinEquiv
+              (m i ⊗ₖ n i) := by
+        ext x y
+        exact Finset.prod_mul_distrib.symm
+      rw [prodOp_eq_rectKronecker, prodOp_eq_rectKronecker, heq]
+      refine rectKronecker_mem_supportedOperators fun i hi ↦ ?_
+      simp only [hm i (fun h ↦ hi (Finset.mem_union_left _ h)),
+        hn i (fun h ↦ hi (Finset.mem_union_right _ h)),
         Matrix.one_kronecker_one, Matrix.reindex_apply, Matrix.submatrix_one_equiv]
-    · ext x y
-      exact Finset.prod_mul_distrib.symm
-  case zeroL => intro y _; rw [Matrix.zero_kronecker]; exact Submodule.zero_mem _
-  case zeroR => intro x _; rw [Matrix.kronecker_zero]; exact Submodule.zero_mem _
-  case addL =>
-    intro x y z _ _ _ hxz hyz; rw [Matrix.add_kronecker]; exact Submodule.add_mem _ hxz hyz
-  case addR =>
-    intro x y z _ _ _ hxy hxz; rw [Matrix.kronecker_add]; exact Submodule.add_mem _ hxy hxz
-  case smulL => intro r x y _ _ hxy; rw [Matrix.smul_kronecker]; exact Submodule.smul_mem _ r hxy
-  case smulR => intro r x y _ _ hxy; rw [Matrix.kronecker_smul]; exact Submodule.smul_mem _ r hxy
+    | add B C _ _ hB hC =>
+      convert add_mem hB hC using 1
+      ext x y
+      simp [Matrix.kronecker_add]
+    | smul c B _ hB =>
+      convert SMulMemClass.smul_mem c hB using 1
+      ext x y
+      simp [Matrix.kronecker_smul]
+  | add A C _ _ hA hC =>
+    convert add_mem hA hC using 1
+    ext x y
+    simp [Matrix.add_kronecker]
+  | smul c A _ hA =>
+    convert SMulMemClass.smul_mem c hA using 1
+    ext x y
+    simp [Matrix.smul_kronecker]
 
 end QuantumCircuit

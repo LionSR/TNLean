@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.SoftParentStructure
 import TNLean.MPS.AreaLaw.RegionalGroundEnergy
-import TNLean.Circuit.SupportedFunctionalCalculus
+import QICLean.ManyBody.Sites.Twirl
 import QICLean.Analysis.QuadraticScalarShift
 import QICLean.Entropy.PositiveLocalLift
 
@@ -27,6 +27,8 @@ the original ground space. Transfer to the generated soft spectral target
 and the recursive energy estimate remain separate. See
 `docs/paper-gaps/alvv16_soft_regional_energy_centering.tex`.
 -/
+
+open ManyBody (interval mem_interval)
 
 open Matrix
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
@@ -140,19 +142,20 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
     intro i hi
     simp only [J, mem_interval] at hi ⊢
     omega
-  let V := QuantumCircuit.supportedOperators q (J : Set (Fin L))
-  have hPV : P ∈ V := QuantumCircuit.mem_supportedOperators_of_isSupportedOn hPs
-  have hMV : M ∈ V := QuantumCircuit.mem_supportedOperators_of_isSupportedOn hMs
+  let V := ManyBody.supportedOperators (fun _ ↦ Fin q) J
+  have hPV : P ∈ V := hPs
+  have hMV : M ∈ V := hMs
   have hIV : (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ∈ V :=
-    QuantumCircuit.one_mem_supportedOperators (J : Set (Fin L))
-  have hXV : M - (p : ℂ) • 1 ∈ V := V.sub_mem hMV (V.smul_mem _ hIV)
+    (one_mem (ManyBody.supportedOperators _ J))
+  have hXV : M - (p : ℂ) • 1 ∈ V := sub_mem hMV (SMulMemClass.smul_mem _ hIV)
   have hFV : cfc (Real.softTruncation t m) (M - (p : ℂ) • 1) ∈ V :=
-    QuantumCircuit.cfc_mem_supportedOperators _ hXV
+    ManyBody.cfc_mem_supportedOperators _ hXV
   have hCV : Csoft ∈ V :=
-    V.sub_mem (V.sub_mem (V.add_mem (V.add_mem (V.sub_mem hPV hMV)
-      (V.smul_mem _ hIV)) hFV) (V.smul_mem _ hIV)) (V.smul_mem _ hIV)
-  have hCs := QuantumCircuit.isSupportedOn_of_mem_supportedOperators hCV
-  obtain ⟨K, hK, hKnorm, hLift⟩ := hCs.exists_posSemidef_localLift_norm_le hBlow budget hnorm
+    sub_mem (sub_mem (add_mem (add_mem (sub_mem hPV hMV)
+      (SMulMemClass.smul_mem _ hIV)) hFV) (SMulMemClass.smul_mem _ hIV))
+          (SMulMemClass.smul_mem _ hIV)
+  obtain ⟨K, hK, hKnorm, hLift⟩ :=
+    Entropy.IsSupportedOn.exists_posSemidef_localLift_norm_le hCV hBlow budget hnorm
   have hRnative : R = Entropy.localLift (n := fun _ : Fin L ↦ q) J K + (eSoft : ℂ) • 1 := by
     rw [← hLift, hCraw]
     abel

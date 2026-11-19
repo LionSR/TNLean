@@ -21,6 +21,7 @@ Source: arXiv:2307.01696, eqs. (10)–(12), Fig. 1 and the paragraph
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder
 open QuantumCircuit
+open Kraus (blockTensor)
 
 namespace MPSPreparation
 

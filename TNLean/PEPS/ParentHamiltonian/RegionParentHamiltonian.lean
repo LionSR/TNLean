@@ -7,6 +7,7 @@ import TNLean.PEPS.ParentHamiltonian.RegionGroundSpace
 import TNLean.Algebra.SubmoduleStarProjectionMatrix
 import Mathlib.Analysis.InnerProductSpace.Projection.Basic
 import Mathlib.Analysis.Matrix.Hermitian
+import QICLean.ManyBody.Sites.Placement
 import QICLean.Algebra.MatrixAux
 
 /-!
@@ -103,48 +104,46 @@ theorem isRegionParentInteraction_canonical (A : Tensor Γ d) (R : Finset V) :
     IsRegionParentInteraction A R (canonicalRegionParentInteraction A R) :=
   ⟨canonicalRegionParentInteraction_posSemidef A R, ker_canonicalRegionParentInteraction A R⟩
 
-/-- Extend a regional operator by the identity on its complement.
+/-- The placement of a regional operator, extended by the identity on its complement, in the
+coordinates of the region and of `univ \ R`.
 Source: arXiv:2011.12127, parent Hamiltonian construction, lines 2003–2011. -/
-noncomputable def regionLocalTerm (R : Finset V)
+theorem place_eq_regionConfigEquiv (R : Finset V)
     (h : Matrix (RegionPhysicalConfig (d := d) R)
-      (RegionPhysicalConfig (d := d) R) ℂ) : Matrix (V → Fin d) (V → Fin d) ℂ :=
-  (h ⊗ₖ (1 : Matrix (RegionPhysicalConfig (d := d) (Finset.univ \ R))
-    (RegionPhysicalConfig (d := d) (Finset.univ \ R)) ℂ)).submatrix
-      (regionConfigEquiv R) (regionConfigEquiv R)
-
-/-- Extending a positive interaction by the identity preserves positivity.
-Source: arXiv:2011.12127, positivity of parent interactions, lines 2008–2011. -/
-theorem regionLocalTerm_posSemidef (R : Finset V)
-    {h : Matrix (RegionPhysicalConfig (d := d) R)
-      (RegionPhysicalConfig (d := d) R) ℂ} (hh : h.PosSemidef) :
-    (regionLocalTerm R h).PosSemidef := by
-  classical
-  exact (hh.kronecker Matrix.PosSemidef.one).submatrix _
+      (RegionPhysicalConfig (d := d) R) ℂ) :
+    ManyBody.place (X := fun _ ↦ Fin d) R h =
+      (h ⊗ₖ (1 : Matrix (RegionPhysicalConfig (d := d) (Finset.univ \ R))
+        (RegionPhysicalConfig (d := d) (Finset.univ \ R)) ℂ)).submatrix
+          (regionConfigEquiv R) (regionConfigEquiv R) := by
+  ext σ τ
+  simp only [ManyBody.place_apply, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, regionConfigEquiv, Equiv.coe_fn_mk, funext_iff, Subtype.forall,
+    Finset.mem_sdiff, Finset.mem_univ, true_and]
+  split_ifs <;> simp_all
 
 /-- On a fixed complementary configuration the global interaction is exactly
 the original regional interaction. Source: arXiv:2011.12127, lines 2003–2011. -/
-theorem regionLocalTerm_mulVec_assemble (R : Finset V)
+theorem place_mulVec_assemble (R : Finset V)
     (h : Matrix (RegionPhysicalConfig (d := d) R)
       (RegionPhysicalConfig (d := d) R) ℂ) (ψ : (V → Fin d) → ℂ)
     (σ : RegionPhysicalConfig (d := d) R)
     (τ : RegionPhysicalConfig (d := d) (Finset.univ \ R)) :
-    (regionLocalTerm R h *ᵥ ψ) (assembleRegionσ R σ τ) =
+    (ManyBody.place (X := fun _ ↦ Fin _) R h *ᵥ ψ) (assembleRegionσ R σ τ) =
       (h *ᵥ (fun ν => ψ (assembleRegionσ R ν τ))) σ := by
   classical
   simp only [Matrix.mulVec, dotProduct]
   rw [← Equiv.sum_comp (regionConfigEquiv (d := d) R).symm,
     Fintype.sum_prod_type]
-  simp [regionLocalTerm, Matrix.submatrix_apply,
+  simp [place_eq_regionConfigEquiv, Matrix.submatrix_apply,
     regionConfigEquiv, Matrix.one_apply]
 
 /-- A global vector is killed by a regional parent interaction precisely when
 every complementary slice belongs to the local PEPS ground space.
 Source: arXiv:2011.12127, local parent kernels, lines 2003–2011. -/
-theorem regionLocalTerm_mulVec_eq_zero_iff (A : Tensor Γ d) (R : Finset V)
+theorem place_mulVec_eq_zero_iff (A : Tensor Γ d) (R : Finset V)
     {h : Matrix (RegionPhysicalConfig (d := d) R)
       (RegionPhysicalConfig (d := d) R) ℂ}
     (hh : IsRegionParentInteraction A R h) (ψ : (V → Fin d) → ℂ) :
-    regionLocalTerm R h *ᵥ ψ = 0 ↔
+    ManyBody.place (X := fun _ ↦ Fin _) R h *ᵥ ψ = 0 ↔
       ∀ τ : RegionPhysicalConfig (d := d) (Finset.univ \ R),
         (fun σ => ψ (assembleRegionσ R σ τ)) ∈ regionGroundSpace A R := by
   constructor
@@ -152,24 +151,24 @@ theorem regionLocalTerm_mulVec_eq_zero_iff (A : Tensor Γ d) (R : Finset V)
     rw [← hh.2]
     apply LinearMap.mem_ker.mpr
     funext σ
-    exact (regionLocalTerm_mulVec_assemble R h ψ σ τ).symm.trans (congrFun hzero _)
+    exact (place_mulVec_assemble R h ψ σ τ).symm.trans (congrFun hzero _)
   · intro hslice
     funext η
     obtain ⟨⟨σ, τ⟩, rfl⟩ := (regionConfigEquiv (d := d) R).symm.surjective η
-    change (regionLocalTerm R h *ᵥ ψ) (assembleRegionσ R σ τ) = 0
-    rw [regionLocalTerm_mulVec_assemble]
+    change (ManyBody.place (X := fun _ ↦ Fin _) R h *ᵥ ψ) (assembleRegionσ R σ τ) = 0
+    rw [place_mulVec_assemble]
     have hmem := hslice τ
     rw [← hh.2] at hmem
     exact congrFun (LinearMap.mem_ker.mp hmem) σ
 
 /-- The closed PEPS vector is annihilated by every parent interaction.
 Source: arXiv:2011.12127, frustration freeness, lines 2008–2011. -/
-theorem regionLocalTerm_stateCoeff_eq_zero (A : Tensor Γ d) (R : Finset V)
+theorem place_stateCoeff_eq_zero (A : Tensor Γ d) (R : Finset V)
     {h : Matrix (RegionPhysicalConfig (d := d) R)
       (RegionPhysicalConfig (d := d) R) ℂ}
     (hh : IsRegionParentInteraction A R h) :
-    regionLocalTerm R h *ᵥ stateCoeff A = 0 :=
-  (regionLocalTerm_mulVec_eq_zero_iff A R hh _).mpr
+    ManyBody.place (X := fun _ ↦ Fin _) R h *ᵥ stateCoeff A = 0 :=
+  (place_mulVec_eq_zero_iff A R hh _).mpr
     (stateCoeff_slice_mem_regionGroundSpace A R)
 
 /-! ## Finite families of interactions -/
@@ -197,7 +196,7 @@ Source: arXiv:2011.12127, parent Hamiltonian, lines 2003–2011. -/
 noncomputable def regionParentHamiltonian (R : ι → Finset V)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ) : Matrix (V → Fin d) (V → Fin d) ℂ :=
-  ∑ i, regionLocalTerm (R i) (h i)
+  ∑ i, ManyBody.place (X := fun _ ↦ Fin _) (R i) (h i)
 
 /-- A finite parent Hamiltonian is positive semidefinite.
 Source: arXiv:2011.12127, lines 2008–2011. -/
@@ -205,7 +204,8 @@ theorem regionParentHamiltonian_posSemidef (R : ι → Finset V)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hh : ∀ i, (h i).PosSemidef) : (regionParentHamiltonian R h).PosSemidef := by
-  exact Matrix.posSemidef_sum Finset.univ fun i _ => regionLocalTerm_posSemidef (R i) (hh i)
+  exact Matrix.posSemidef_sum Finset.univ fun i _ => ManyBody.posSemidef_place
+      (X := fun _ ↦ Fin _) (hh i)
 
 /-- The kernel of the positive sum is the common kernel of its local terms.
 Source: arXiv:2011.12127, frustration-free ground space, lines 2008–2011. -/
@@ -214,11 +214,11 @@ theorem regionParentHamiltonian_mulVec_eq_zero_iff (R : ι → Finset V)
       (RegionPhysicalConfig (d := d) (R i)) ℂ)
     (hh : ∀ i, (h i).PosSemidef) (ψ : (V → Fin d) → ℂ) :
     regionParentHamiltonian R h *ᵥ ψ = 0 ↔
-      ∀ i, regionLocalTerm (R i) (h i) *ᵥ ψ = 0 := by
+      ∀ i, ManyBody.place (X := fun _ ↦ Fin _) (R i) (h i) *ᵥ ψ = 0 := by
   constructor
   · intro hzero i
     exact Matrix.PosSemidef.mulVec_eq_zero_of_sum_mulVec_eq_zero
-      (fun j => regionLocalTerm_posSemidef (R j) (hh j)) hzero i
+      (fun j => ManyBody.posSemidef_place (X := fun _ ↦ Fin _) (hh j)) hzero i
   · intro hzero
     simp [regionParentHamiltonian, Matrix.sum_mulVec, hzero]
 
@@ -234,7 +234,7 @@ theorem ker_regionParentHamiltonian (A : Tensor Γ d) (R : ι → Finset V)
   ext ψ
   simp only [LinearMap.mem_ker, Matrix.mulVecLin_apply,
     regionParentHamiltonian_mulVec_eq_zero_iff R h (fun i => (hh i).1),
-    regionLocalTerm_mulVec_eq_zero_iff A _ (hh _), regionParentGroundSpace,
+    place_mulVec_eq_zero_iff A _ (hh _), regionParentGroundSpace,
     Submodule.mem_iInf, Submodule.mem_comap, regionSliceMap, LinearMap.coe_mk,
     AddHom.coe_mk]
 
@@ -254,6 +254,6 @@ theorem regionParentHamiltonian_stateCoeff_eq_zero (A : Tensor Γ d) (R : ι →
     (hh : ∀ i, IsRegionParentInteraction A (R i) (h i)) :
     regionParentHamiltonian R h *ᵥ stateCoeff A = 0 := by
   exact (regionParentHamiltonian_mulVec_eq_zero_iff R h (fun i => (hh i).1) _).mpr
-    (fun i => regionLocalTerm_stateCoeff_eq_zero A (R i) (hh i))
+    (fun i => place_stateCoeff_eq_zero A (R i) (hh i))
 
 end TNLean.PEPS

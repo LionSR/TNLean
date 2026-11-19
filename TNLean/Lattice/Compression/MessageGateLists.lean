@@ -35,7 +35,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 32–43 and 137
   | _, _, .id _ => PUnit
   | _, _, .comp w v => MessageGateLists w × MessageGateLists v
   | _, _, .localMap .. => PUnit
-  | _, _, @EffectCircuit.gate _ _ _ _ a b _ _ => MessageGate a b
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ _ a b _ _) => MessageGate a b
   | _, _, .swap .. => PUnit
   | _, _, .frame _ w => MessageGateLists w
 
@@ -48,7 +48,7 @@ def expandMessageGateLists : {a b : Layout P} → (w : EffectCircuit a b) →
   | _, _, .comp w v, lists =>
       (w.expandMessageGateLists lists.1, v.expandMessageGateLists lists.2)
   | _, _, .localMap .., _ => PUnit.unit
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ _ _, lists => lists.expand
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ _ _ _ _ _), lists => lists.expand
   | _, _, .swap .., _ => PUnit.unit
   | _, _, .frame _ w, lists => w.expandMessageGateLists lists
 
@@ -63,7 +63,7 @@ def IsMessageGateApproximation (δ : ℝ) : {a b : Layout P} → (w : EffectCirc
       w.IsMessageGateApproximation δ lists.1 G.1 ∧
         v.IsMessageGateApproximation δ lists.2 G.2
   | _, _, .localMap _ _ _ A _, _, _ => ‖A‖ ≤ 1
-  | _, _, @EffectCircuit.gate _ C _ _ a b _ _, lists, G =>
+  | _, _, Circuit.gate (@EffectGate.mk _ C _ _ a b _ _), lists, G =>
       Fintype.card C ≠ 1 ∧ (∀ term ∈ lists, term.2.IsAllowed) ∧
         ‖(G : Mem a →L[ℂ] Mem b)‖ ≤ 1 ∧
           ‖lists.eval - (G : Mem a →L[ℂ] Mem b)‖ ≤ δ
@@ -81,7 +81,7 @@ def IsMessageResourceBounded (r m K : ℕ) (D C : ℝ) :
       w.IsMessageResourceBounded r m K D C lists.1 ∧
         v.IsMessageResourceBounded r m K D C lists.2
   | _, _, .localMap .., _ => True
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ _ _, lists =>
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ _ _ _ _ _), lists =>
       lists.length ≤ K ∧ ∀ term ∈ lists,
         term.2.effectCount ≤ r ∧ ‖term.1‖ ≤ C ∧
           term.2.messageDimensions.length ≤ m ∧
@@ -149,7 +149,8 @@ theorem IsTermwiseBounded.mono_coefficient {a b : Layout P} {w : EffectCircuit a
   | id => trivial
   | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
   | localMap => trivial
-  | gate => exact fun term hterm ↦ ⟨(h term hterm).1, (h term hterm).2.trans hC⟩
+  | gate =>
+      exact fun term hterm ↦ ⟨(h term hterm).1, (h term hterm).2.trans hC⟩
   | swap => trivial
   | frame r w ih => exact ih h
 

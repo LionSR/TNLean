@@ -120,7 +120,7 @@ theorem restrict_regs_eq (hR : R.Conditions) :
     restrict_siteRegs_congr _ R.ownerOld R.ownerNew _ fun x _ hx => ?_]
   by_contra hne
   obtain ⟨h₁, h₂⟩ := hR.raw_owners_mem x
-    (Or.inl (innerUnion_subset_footprint _ (hR.changed_mem x hne)))
+    (Finset.mem_union_left _ (innerUnion_subset_footprint _ (hR.changed_mem x hne)))
   rcases hx with hx | hx <;> simp_all
 
 variable [DecidableEq Party] in

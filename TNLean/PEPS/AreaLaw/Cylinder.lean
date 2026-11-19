@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.ParentHamiltonian.DependentRegionOperatorLift
+import TNLean.PEPS.ParentHamiltonian.RegionPlacement
 import TNLean.PEPS.ParentHamiltonian.CoordinateRangeProjector
 
 /-!
@@ -23,58 +23,61 @@ open scoped BigOperators Matrix
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*}
+variable {Out : V → Type*} [∀ v, DecidableEq (Out v)]
 
 /-- The cylinder over a regional subspace: every complementary slice belongs to it. -/
 def dependentRegionCylinder (R : Finset V)
     (S : Submodule ℂ (((w : {w : V // w ∈ R}) → Out w.1) → ℂ)) :
-    Submodule ℂ (((w : {w : V // w ∈ Finset.univ}) → Out w.1) → ℂ) :=
-  ⨅ τ, S.comap (dependentRegionSlice R τ)
+    Submodule ℂ (((v : V) → Out v) → ℂ) :=
+  ⨅ τ, S.comap (placeSlice R τ)
 
+omit [Fintype V] [∀ v, DecidableEq (Out v)] in
 /-- Cylinder membership is membership of every complementary slice. -/
 @[simp]
 theorem mem_dependentRegionCylinder (R : Finset V)
     (S : Submodule ℂ (((w : {w : V // w ∈ R}) → Out w.1) → ℂ))
-    (x : ((w : {w : V // w ∈ Finset.univ}) → Out w.1) → ℂ) :
-    x ∈ dependentRegionCylinder R S ↔ ∀ τ, dependentRegionSlice R τ x ∈ S := by
+    (x : ((v : V) → Out v) → ℂ) :
+    x ∈ dependentRegionCylinder R S ↔ ∀ τ, placeSlice R τ x ∈ S := by
   simp [dependentRegionCylinder]
 
+omit [Fintype V] [∀ v, DecidableEq (Out v)] in
 /-- A global vector is determined by its complementary slices. -/
-private theorem eq_of_forall_dependentRegionSlice_eq (R : Finset V)
-    {x x' : ((w : {w : V // w ∈ Finset.univ}) → Out w.1) → ℂ}
-    (h : ∀ τ, dependentRegionSlice R τ x = dependentRegionSlice R τ x') : x = x' := by
+private theorem eq_of_forall_placeSlice_eq (R : Finset V)
+    {x x' : ((v : V) → Out v) → ℂ}
+    (h : ∀ τ, placeSlice R τ x = placeSlice R τ x') : x = x' := by
   funext η
-  obtain ⟨⟨α, τ⟩, rfl⟩ := (dependentRegionConfigEquiv R).symm.surjective η
+  obtain ⟨⟨α, τ⟩, rfl⟩ := (ManyBody.cutEquiv Out R).symm.surjective η
   exact congrFun (h τ) α
 
+omit [Fintype V] [∀ v, DecidableEq (Out v)] in
 /-- Every family of regional vectors indexed by the complementary configurations is
 the slice family of one global vector. -/
-private theorem exists_dependentRegionSlice_eq (R : Finset V)
-    (y : ((w : {w : V // w ∈ Finset.univ \ R}) → Out w.1) →
+private theorem exists_placeSlice_eq (R : Finset V)
+    (y : (ManyBody.ComplConfig Out R) →
       ((w : {w : V // w ∈ R}) → Out w.1) → ℂ) :
-    ∃ z, ∀ τ, dependentRegionSlice R τ z = y τ := by
-  refine ⟨fun η ↦ y (dependentRegionConfigEquiv R η).2 (dependentRegionConfigEquiv R η).1,
+    ∃ z, ∀ τ, placeSlice R τ z = y τ := by
+  refine ⟨fun η ↦ y (ManyBody.cutEquiv Out R η).2 (ManyBody.cutEquiv Out R η).1,
     fun τ ↦ ?_⟩
   funext α
-  exact congrArg (fun p ↦ y p.2 p.1) ((dependentRegionConfigEquiv R).apply_symm_apply (α, τ))
+  exact congrArg (fun p ↦ y p.2 p.1) ((ManyBody.cutEquiv Out R).apply_symm_apply (α, τ))
 
 /-- Extending a regional linear map by the identity extends its range to a cylinder. -/
-theorem range_dependentRegionOperatorLift [∀ v, Fintype (Out v)] (R : Finset V)
+theorem range_place [∀ v, Fintype (Out v)] (R : Finset V)
     (K : Matrix ((w : {w : V // w ∈ R}) → Out w.1)
       ((w : {w : V // w ∈ R}) → Out w.1) ℂ) :
-    (dependentRegionOperatorLift R K).mulVecLin.range =
+    (ManyBody.place R K).mulVecLin.range =
       dependentRegionCylinder R K.mulVecLin.range := by
   classical
   ext x
   constructor
   · rintro ⟨y, rfl⟩
-    refine (mem_dependentRegionCylinder R _ _).mpr fun τ => ⟨dependentRegionSlice R τ y, ?_⟩
-    exact (dependentRegionSlice_mulVec_dependentRegionOperatorLift R K y τ).symm
+    refine (mem_dependentRegionCylinder R _ _).mpr fun τ => ⟨placeSlice R τ y, ?_⟩
+    exact (placeSlice_mulVec_place R K y τ).symm
   · intro hx
     choose y hy using (mem_dependentRegionCylinder R _ x).mp hx
-    obtain ⟨z, hz⟩ := exists_dependentRegionSlice_eq R y
-    refine ⟨z, eq_of_forall_dependentRegionSlice_eq R fun τ ↦ ?_⟩
-    have he := dependentRegionSlice_mulVec_dependentRegionOperatorLift R K z τ
+    obtain ⟨z, hz⟩ := exists_placeSlice_eq R y
+    refine ⟨z, eq_of_forall_placeSlice_eq R fun τ ↦ ?_⟩
+    have he := placeSlice_mulVec_place R K z τ
     rw [hz] at he
     exact he.trans (hy τ)
 
@@ -83,12 +86,13 @@ theorem coordinateRangeProjector_dependentRegionCylinder [∀ v, Fintype (Out v)
     (R : Finset V)
     (S : Submodule ℂ (((w : {w : V // w ∈ R}) → Out w.1) → ℂ)) :
     coordinateRangeProjector (dependentRegionCylinder R S) =
-      dependentRegionOperatorLift R (coordinateRangeProjector S) := by
+      ManyBody.place R (coordinateRangeProjector S) := by
   symm
   apply eq_coordinateRangeProjector_of_range
-    (dependentRegionOperatorLift_isStarProjection R _ (coordinateRangeProjector_isStarProjection S))
-  rw [range_dependentRegionOperatorLift, range_coordinateRangeProjector]
+    (isStarProjection_place R (coordinateRangeProjector_isStarProjection S))
+  rw [range_place, range_coordinateRangeProjector]
 
+omit [Fintype V] [∀ v, DecidableEq (Out v)] in
 /-- A zero inside subspace has a zero cylinder, even when the complement is empty. -/
 @[simp]
 theorem dependentRegionCylinder_bot (R : Finset V) :
@@ -96,10 +100,11 @@ theorem dependentRegionCylinder_bot (R : Finset V) :
   ext x
   simp only [mem_dependentRegionCylinder, Submodule.mem_bot]
   constructor
-  · exact fun h ↦ eq_of_forall_dependentRegionSlice_eq R fun τ ↦ (h τ).trans (map_zero _).symm
+  · exact fun h ↦ eq_of_forall_placeSlice_eq R fun τ ↦ (h τ).trans (map_zero _).symm
   · rintro rfl
     simp
 
+omit [Fintype V] [∀ v, DecidableEq (Out v)] in
 /-- Cylinders preserve sums of inside subspaces. -/
 theorem dependentRegionCylinder_sup (R : Finset V)
     (S T : Submodule ℂ (((w : {w : V // w ∈ R}) → Out w.1) → ℂ)) :
@@ -109,15 +114,15 @@ theorem dependentRegionCylinder_sup (R : Finset V)
   apply le_antisymm
   · intro x hx
     have h := (mem_dependentRegionCylinder R _ x).mp hx
-    have h' : ∀ τ, ∃ s ∈ S, ∃ t ∈ T, s + t = dependentRegionSlice R τ x :=
+    have h' : ∀ τ, ∃ s ∈ S, ∃ t ∈ T, s + t = placeSlice R τ x :=
       fun τ => Submodule.mem_sup.mp (h τ)
     choose s hs t ht hst using h'
-    obtain ⟨a, ha⟩ := exists_dependentRegionSlice_eq R s
-    obtain ⟨b, hb⟩ := exists_dependentRegionSlice_eq R t
+    obtain ⟨a, ha⟩ := exists_placeSlice_eq R s
+    obtain ⟨b, hb⟩ := exists_placeSlice_eq R t
     refine Submodule.mem_sup.mpr ⟨a, ?_, b, ?_, ?_⟩
     · exact (mem_dependentRegionCylinder R S a).mpr fun τ => (ha τ).symm ▸ hs τ
     · exact (mem_dependentRegionCylinder R T b).mpr fun τ => (hb τ).symm ▸ ht τ
-    · exact eq_of_forall_dependentRegionSlice_eq R fun τ ↦ by rw [map_add, ha, hb, hst]
+    · exact eq_of_forall_placeSlice_eq R fun τ ↦ by rw [map_add, ha, hb, hst]
   · apply sup_le
     · intro x hx
       exact (mem_dependentRegionCylinder R _ x).mpr fun τ =>
@@ -126,13 +131,14 @@ theorem dependentRegionCylinder_sup (R : Finset V)
       exact (mem_dependentRegionCylinder R _ x).mpr fun τ =>
         (show T ≤ S ⊔ T from le_sup_right) ((mem_dependentRegionCylinder R T x).mp hx τ)
 
+omit [Fintype V] [∀ v, DecidableEq (Out v)] in
 /-- Cylinders preserve finite suprema of inside subspaces. -/
 theorem dependentRegionCylinder_iSup {ι : Type*} [Finite ι] (R : Finset V)
     (S : ι → Submodule ℂ (((w : {w : V // w ∈ R}) → Out w.1) → ℂ)) :
     dependentRegionCylinder R (⨆ i, S i) = ⨆ i, dependentRegionCylinder R (S i) := by
   let := Fintype.ofFinite ι
   let f : SupBotHom (Submodule ℂ (((w : {w : V // w ∈ R}) → Out w.1) → ℂ))
-      (Submodule ℂ (((w : {w : V // w ∈ Finset.univ}) → Out w.1) → ℂ)) :=
+      (Submodule ℂ (((v : V) → Out v) → ℂ)) :=
     { toFun := dependentRegionCylinder R
       map_bot' := dependentRegionCylinder_bot R
       map_sup' := dependentRegionCylinder_sup R }
@@ -140,15 +146,17 @@ theorem dependentRegionCylinder_iSup {ι : Type*} [Finite ι] (R : Finset V)
   simpa only [Finset.sup_univ_eq_iSup, Function.comp_def] using
     map_finset_sup f Finset.univ S
 
+omit [Fintype V] in
 /-- A cylinder over a smaller region is also a cylinder over any containing region. -/
-theorem dependentRegionCylinder_subregion [∀ v, Fintype (Out v)]
+theorem dependentRegionCylinder_subregion [Finite V] [∀ v, Fintype (Out v)]
     (R U : Finset V) (hRU : R ⊆ U)
     (S : Submodule ℂ (((w : {w : V // w ∈ R}) → Out w.1) → ℂ)) :
     dependentRegionCylinder U
-        (dependentSubregionOperatorLift R U hRU (coordinateRangeProjector S)).mulVecLin.range =
+        (ManyBody.subregionPlace hRU (coordinateRangeProjector S)).mulVecLin.range =
       dependentRegionCylinder R S := by
-  rw [← range_dependentRegionOperatorLift, dependentRegionOperatorLift_subregion,
-    range_dependentRegionOperatorLift, range_coordinateRangeProjector]
+  have := Fintype.ofFinite V
+  rw [← range_place, ManyBody.place_subregionPlace,
+    range_place, range_coordinateRangeProjector]
 
 /-- The cylinder of a projected image is the corresponding image of the cylinder. -/
 theorem dependentRegionCylinder_map [∀ v, Fintype (Out v)] (R : Finset V)
@@ -156,11 +164,11 @@ theorem dependentRegionCylinder_map [∀ v, Fintype (Out v)] (R : Finset V)
     (K : Matrix ((w : {w : V // w ∈ R}) → Out w.1)
       ((w : {w : V // w ∈ R}) → Out w.1) ℂ) :
     dependentRegionCylinder R (S.map K.mulVecLin) =
-      (dependentRegionCylinder R S).map (dependentRegionOperatorLift R K).mulVecLin := by
+      (dependentRegionCylinder R S).map (ManyBody.place R K).mulVecLin := by
   nth_rw 1 [← range_coordinateRangeProjector S]
   rw [← LinearMap.range_comp, ← Matrix.mulVecLin_mul,
-    ← range_dependentRegionOperatorLift, dependentRegionOperatorLift_mul,
+    ← range_place, ManyBody.place_mul,
     Matrix.mulVecLin_mul, LinearMap.range_comp,
-    range_dependentRegionOperatorLift, range_coordinateRangeProjector]
+    range_place, range_coordinateRangeProjector]
 
 end TNLean.PEPS

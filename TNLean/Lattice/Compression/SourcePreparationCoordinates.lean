@@ -122,7 +122,7 @@ theorem eval_prepareSlots_eq_appendIso_symm (R : SourceInventory P)
     (ℓ : Layout P) (x : Mem ℓ) :
     (prepareSlots R U V η ℓ).eval x =
       (appendIso (slotLayout R U V) ℓ).symm (slotVector R U V η ⊗ₜ x) := by
-  rw [slotVector_eq_vector, prepareSlots, Word.eval_castLayouts]
+  rw [slotVector_eq_vector, prepareSlots, Circuit.eval_castLayouts]
   change Layout.memCongr (congrArg (· ++ ℓ) (layout_ofSlots_eq R U V η (fun _ ↦ 0)))
     (((ofSlots R U V η).prepare ℓ).eval x) = _
   rw [eval_prepare_eq_appendIso_symm]
@@ -172,7 +172,7 @@ theorem prepareSlots_eval_heq_prepare (R : SourceInventory P)
     (U V : Fin R.length → HSpace) (η : ∀ i, U i ⊗[ℂ] V i)
     (ℓ : Layout P) (x : Mem ℓ) :
     HEq ((prepareSlots R U V η ℓ).eval x) (((ofSlots R U V η).prepare ℓ).eval x) := by
-  rw [prepareSlots, Word.eval_castLayouts]
+  rw [prepareSlots, Circuit.eval_castLayouts]
   exact Layout.memCongr_apply_heq _ _
 
 /-- A source operation respects equality of the spectator register list and vector. -/

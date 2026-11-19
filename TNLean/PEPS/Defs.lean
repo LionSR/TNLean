@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Combinatorics.SimpleGraph.Basic
+import QICLean.ManyBody.Sites.Lattice.Edge
 import Mathlib.Basic.Complex.BigOperators
 import Mathlib.LinearAlgebra.LinearIndependent.Defs
 
@@ -11,8 +12,9 @@ import Mathlib.LinearAlgebra.LinearIndependent.Defs
 # PEPS definitions on finite simple graphs
 
 This file introduces the finite-graph PEPS tensor objects.
-The index types (`Edge`, `IncidentEdge`, `VirtualConfig`) are the combinatorial
-index sets for PEPS tensors on a finite simple graph.
+The index types (`IncidentEdge`, `VirtualConfig`, and the oriented edges
+`ManyBody.Edge` from QICLean) are the combinatorial index sets for PEPS tensors
+on a finite simple graph.
 
 ## Design note on decidability
 
@@ -22,89 +24,14 @@ finite sums/products. Keeping adjacency decidable at module scope makes
 instance synthesis for `Fintype` predictable.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean
 namespace PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-
-/-- Undirected edges of `G`, represented by ordered endpoint pairs `(u, v)` with
-`u < v` to avoid double-counting. -/
-abbrev Edge (G : SimpleGraph V) : Type _ :=
-  { uv : V × V // uv.1 < uv.2 ∧ G.Adj uv.1 uv.2 }
-
-instance instFintypeEdge (G : SimpleGraph V) [DecidableRel G.Adj] : Fintype (Edge G) :=
-  inferInstance
-
-/-- The edge of `G` on an adjacent pair `(u, v)`, with the endpoints reordered into
-the `Edge` convention `·.1 < ·.2`.  Adjacency forbids `u = v`, so exactly one of
-`u < v` and `v < u` holds; the smaller endpoint is placed first.  This normalizes an
-unordered adjacent pair into the ordered-endpoint `Edge` representation, the operation
-needed to push an edge through a vertex bijection (such as a translation), where the
-bijection may swap the lexicographic order of the two endpoints. -/
-def Edge.ofAdj {G : SimpleGraph V} {u v : V} (h : G.Adj u v) : Edge G :=
-  if huv : u < v then
-    ⟨(u, v), huv, h⟩
-  else
-    ⟨(v, u), lt_of_le_of_ne (not_lt.mp huv) (G.ne_of_adj h).symm, h.symm⟩
-
-omit [Fintype V] in
-/-- On a pair already in order (`u < v`), `Edge.ofAdj` keeps the endpoints as given. -/
-theorem Edge.ofAdj_of_lt {G : SimpleGraph V} {u v : V} (h : G.Adj u v) (huv : u < v) :
-    Edge.ofAdj h = ⟨(u, v), huv, h⟩ := by
-  rw [Edge.ofAdj, dite_eq_left huv]
-
-omit [Fintype V] in
-/-- On a pair in reverse order (`v < u`), `Edge.ofAdj` swaps the endpoints. -/
-theorem Edge.ofAdj_of_gt {G : SimpleGraph V} {u v : V} (h : G.Adj u v) (hvu : v < u) :
-    Edge.ofAdj h =
-      ⟨(v, u), hvu, h.symm⟩ := by
-  rw [Edge.ofAdj, dite_eq_right (not_lt.mpr hvu.le)]
-
-omit [Fintype V] in
-/-- The unordered endpoint set of `Edge.ofAdj h` is `{u, v}`: its two endpoints are
-`u` and `v` in some order. -/
-theorem Edge.ofAdj_endpoints {G : SimpleGraph V} {u v : V} (h : G.Adj u v) :
-    ((Edge.ofAdj h).1.1 = u ∧ (Edge.ofAdj h).1.2 = v) ∨
-      ((Edge.ofAdj h).1.1 = v ∧ (Edge.ofAdj h).1.2 = u) := by
-  rcases lt_or_gt_of_ne (G.ne_of_adj h) with huv | hvu
-  · exact Or.inl ⟨by rw [Edge.ofAdj_of_lt h huv], by rw [Edge.ofAdj_of_lt h huv]⟩
-  · exact Or.inr ⟨by rw [Edge.ofAdj_of_gt h hvu], by rw [Edge.ofAdj_of_gt h hvu]⟩
-
-omit [Fintype V] in
-/-- An edge is determined by its unordered endpoint pair: if `(u, v)` is, in some
-order, the ordered endpoint pair of `e`, then orienting `(u, v)` with `Edge.ofAdj`
-recovers `e`. This is the bookkeeping that makes edge constructions independent
-of the order in which an unordered adjacent pair is presented. -/
-theorem Edge.ofAdj_eq_of_endpoints {G : SimpleGraph V} {u v : V} (h : G.Adj u v)
-    (e : Edge G)
-    (H : (u = e.1.1 ∧ v = e.1.2) ∨ (u = e.1.2 ∧ v = e.1.1)) :
-    Edge.ofAdj h = e := by
-  apply Subtype.ext
-  rcases Edge.ofAdj_endpoints h with ⟨o1, o2⟩ | ⟨o1, o2⟩ <;>
-    rcases H with ⟨hu, hv⟩ | ⟨hu, hv⟩
-  · exact Prod.ext (o1.trans hu) (o2.trans hv)
-  · exfalso
-    have hlt : (Edge.ofAdj h).1.1 < (Edge.ofAdj h).1.2 := (Edge.ofAdj h).2.1
-    rw [o1, o2, hu, hv] at hlt
-    exact absurd hlt (not_lt.mpr e.2.1.le)
-  · exfalso
-    have hlt : (Edge.ofAdj h).1.1 < (Edge.ofAdj h).1.2 := (Edge.ofAdj h).2.1
-    rw [o1, o2, hu, hv] at hlt
-    exact absurd hlt (not_lt.mpr e.2.1.le)
-  · exact Prod.ext (o1.trans hv) (o2.trans hu)
-
-omit [Fintype V] in
-/-- Two `Edge.ofAdj` constructions agree when their adjacent pairs have the same
-unordered endpoints: orienting `(u, v)` and `(u', v')` gives the same edge
-whenever `{u, v} = {u', v'}`. -/
-theorem Edge.ofAdj_eq_ofAdj {G : SimpleGraph V} {u v u' v' : V} (h1 : G.Adj u v)
-    (h2 : G.Adj u' v')
-    (H : (u = u' ∧ v = v') ∨ (u = v' ∧ v = u')) :
-    Edge.ofAdj h1 = Edge.ofAdj h2 := by
-  rw [Edge.ofAdj_eq_of_endpoints h1 (Edge.ofAdj h2)]
-  rcases Edge.ofAdj_endpoints h2 with ⟨o1, o2⟩ | ⟨o1, o2⟩ <;> rw [o1, o2] <;> tauto
 
 /-- Edges incident to a vertex `v`. -/
 abbrev IncidentEdge (G : SimpleGraph V) (v : V) : Type _ :=

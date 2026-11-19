@@ -29,6 +29,7 @@ Lemma commutation (ii), lines 2442--2531.
 -/
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius
+open Kraus (blockPhysDim)
 namespace MPSTensor
 variable {d D E L : ℕ}
 

@@ -27,6 +27,8 @@ open Matrix
 open scoped BigOperators
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open ActualTerminals
@@ -38,7 +40,7 @@ is the complement of the middle region. Source: `08-scanner.tex`, 868--877. -/
 theorem terminalPartition_preEntropy_bounds
     {I : Type} [Fintype I] [LinearOrder I] {Λ T : Finset (ℤ × ℤ)} {q : ℕ}
     (hT : T.Nonempty) (S : CollarScan (Site Λ) I)
-    (hgraph : S.graph = domainGraph Λ)
+    (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hn : 0 < S.n) (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m)
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L)
@@ -109,7 +111,7 @@ introduced. Source: `08-scanner.tex`, lines 868--890. -/
 theorem terminalPartition_preEntropy_max_average_bounds
     {I : Type} [Fintype I] [LinearOrder I] {Λ T : Finset (ℤ × ℤ)} {q : ℕ}
     (hT : T.Nonempty) (S : CollarScan (Site Λ) I)
-    (hgraph : S.graph = domainGraph Λ)
+    (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hn : 0 < S.n) (hK : 0 < S.K)
     (hr : S.r₀ ≤ S.D) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m)

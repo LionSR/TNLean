@@ -7,12 +7,15 @@ Adapted definitions from openai/math, Apache-2.0, revision
 adc7f1241b42e322a6451854ab7e4b4c146bf78a:
 lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean, lines 35–40, 52–53, 151–179;
 ContourEnergy.lean, lines 65–66; HamiltonianEnergy.lean, lines 64–65.
-Changes: namespace, explicit imports, and the existing shared ForwardEdge name.
+Changes: namespace, explicit imports, and `ManyBody.Edge (squareLatticeGraph L L)`
+for the forward edges.
 The existing Pinned.State and Pinned.RegionConfiguration are reused. Positivity,
 eigenvalue powers, ascending action, inverse-zero normalization and forward-edge
 counting retain the source conventions. No upstream Lean proof text is copied.
 -/
 import TNLean.PEPS.Approximation.PinnedRegionalState
+import QICLean.ManyBody.Sites.Placement
+import QICLean.ManyBody.Sites.Placement
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.LinearAlgebra.Matrix.PosDef
@@ -27,19 +30,13 @@ Singular filters, empty regions, empty configuration types and empty families ar
 allowed. No eigenbasis or spectral-coordinate representation is part of the data.
 -/
 
+open ManyBody (Edge squareLatticeGraph)
+
 noncomputable section
 
 open scoped BigOperators ComplexOrder
 
 namespace TNLean.PEPS.Approximation.Pinned
-
-/-- Adapted complement-agreement lift from source `Basic.lean`, lines 35–40. -/
-def liftLocal {L q : ℕ} (X : Finset (Vertex L))
-    (A : Matrix (RegionConfiguration q X) (RegionConfiguration q X) ℂ) :
-    Matrix (Vertex L → Fin q) (Vertex L → Fin q) ℂ := fun x y ↦
-  if ∀ v, v ∉ X → x v = y v then
-    A (fun v ↦ x v.val) (fun v ↦ y v.val)
-  else 0
 
 /-- Adapted Euclidean continuous-linear action from source `Basic.lean`, lines 52–53. -/
 def asMap {L q : ℕ} (A : Matrix (Vertex L → Fin q) (Vertex L → Fin q) ℂ) :
@@ -70,7 +67,7 @@ def Admissible {L q m : ℕ} {X : Fin m → Finset (Vertex L)}
 /-- Adapted source output: local continuous linear maps act in ascending index order. -/
 def output {L q m : ℕ} {X : Fin m → Finset (Vertex L)}
     (F : FilterFamily q m X) (Ω : State L q) : State L q :=
-  (List.ofFn fun j ↦ asMap (liftLocal (X j) (F j).matrix)).foldl
+  (List.ofFn fun j ↦ asMap (ManyBody.place (X j) (F j).matrix)).foldl
     (fun ψ T ↦ T ψ) Ω
 
 /-- Adapted source global maximum against every admissible bundled filter family. -/
@@ -87,10 +84,10 @@ def normalizedOutput {L q m : ℕ} {X : Fin m → Finset (Vertex L)}
 namespace Energy
 
 /-- Adapted source crossing predicate on the shared original forward-edge type. -/
-def Crosses {L : ℕ} (X : Finset (Vertex L)) (e : ForwardEdge L) : Prop :=
+def Crosses {L : ℕ} (X : Finset (Vertex L)) (e : Edge (squareLatticeGraph L L)) : Prop :=
   (e.val.1 ∈ X ∧ e.val.2 ∉ X) ∨ (e.val.2 ∈ X ∧ e.val.1 ∉ X)
 
-instance {L : ℕ} (X : Finset (Vertex L)) (e : ForwardEdge L) :
+instance {L : ℕ} (X : Finset (Vertex L)) (e : Edge (squareLatticeGraph L L)) :
     Decidable (Crosses X e) :=
   inferInstanceAs (Decidable
     ((e.val.1 ∈ X ∧ e.val.2 ∉ X) ∨ (e.val.2 ∈ X ∧ e.val.1 ∉ X)))

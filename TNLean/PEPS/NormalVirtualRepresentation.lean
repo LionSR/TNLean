@@ -20,6 +20,8 @@ Source: arXiv:1804.04964, Applications, lines 1696–1713 of paper_normal.tex.
 The connectedness correction is recorded on the concluding theorem.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 
 namespace TNLean.PEPS

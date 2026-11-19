@@ -258,10 +258,8 @@ private theorem exists_scalar_and_leftCanonical_normalTensor_representations :
   let _ : NeZero 2 := ⟨by omega⟩
   have hNormal : Kraus.IsNormal tensor.toMPSTensor :=
     Kraus.IsInjective.isNormal tensor_isInjective
-  have hPrimitivePaper : tensor.toMPSTensor.IsPrimitivePaper :=
-    MPSTensor.isPrimitivePaper_of_isNormal tensor.toMPSTensor hNormal
   have hIrr : Kraus.IsIrreducibleFamily tensor.toMPSTensor :=
-    MPSTensor.isIrreducibleTensor_of_isPrimitivePaper tensor.toMPSTensor hPrimitivePaper
+    MPSTensor.isIrreducibleFamily_of_isNormal tensor.toMPSTensor hNormal
   obtain ⟨rho, r, hrho, hr, hEig⟩ :=
     MPSTensor.exists_posDef_transferMap_eigenvector_of_irreducible tensor.toMPSTensor
       hIrr exists_toMPSTensor_apply_ne_zero
@@ -284,10 +282,8 @@ private theorem exists_scalar_and_leftCanonical_normalTensor_representations :
     exact tensor_isInjective.smul (inv_ne_zero hmu)
   have hANormal : Kraus.IsNormal A.toMPSTensor :=
     Kraus.IsInjective.isNormal hAinj
-  have hAPrimitivePaper : A.toMPSTensor.IsPrimitivePaper :=
-    MPSTensor.isPrimitivePaper_of_isNormal A.toMPSTensor hANormal
   have hAIrr : Kraus.IsIrreducibleFamily A.toMPSTensor :=
-    MPSTensor.isIrreducibleTensor_of_isPrimitivePaper A.toMPSTensor hAPrimitivePaper
+    MPSTensor.isIrreducibleFamily_of_isNormal A.toMPSTensor hANormal
   have hmumu : mu⁻¹ * starRingEnd ℂ mu⁻¹ = (r : ℂ)⁻¹ := by
     change (((Real.sqrt r : ℝ) : ℂ))⁻¹ *
         starRingEnd ℂ (((Real.sqrt r : ℝ) : ℂ))⁻¹ = (r : ℂ)⁻¹

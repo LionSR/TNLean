@@ -31,7 +31,7 @@ product state follow from it as in the source.
 bound in the conditional construction (lines 516–518). This theorem takes the factorization
 and a common entropy threshold as hypotheses. The application under only the Hamiltonian
 assumptions, which derives both bounds with constants independent of chain length, is
-`exists_isOpenMPS_norm_sub_sq_le_of_isGappedGroundState` in
+`exists_isOpenMPS_norm_sub_sq_le_of_isGapped` in
 `TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean`. Documented in
 `docs/paper-gaps/hastings07_mps_entropy_stage.tex`.
 

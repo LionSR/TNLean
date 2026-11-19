@@ -16,6 +16,8 @@ literal retained space. Supporting ALVV, arXiv:1602.08828v2,
 Figure `fig:algo1`, lines 1777–1817.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 
 namespace TNLean.MPS.AreaLaw

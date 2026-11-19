@@ -24,6 +24,8 @@ native string crossing or an anyon braid. It asserts no energy or ground-space
 conclusion; see `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
@@ -48,7 +50,7 @@ theorem exists_unitary_regularCycleGlobalPermutation
     (hφ : ∀ z x, φ (fun e => x * z e * x⁻¹) = fun e => x * φ z e * x⁻¹) :
     ∃ W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
+      ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
       (∀ (ω : RC (Γ := Γ) R T → G)
         (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a
@@ -58,7 +60,7 @@ theorem exists_unitary_regularCycleGlobalPermutation
           (regularTreeCycleAssignment R T (φ ω)))) R
           (fun f => Fintype.equivFin G (θ f))) ∧
       ∀ (ω : RC (Γ := Γ) R T → G) (u : Edge Γ → G),
-        regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
+        ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
           (regularRegionBondExtension R (regularTreeCycleAssignment R T ω) u))) =
         stateCoeff (groupBondTensor (regularTwistedSite a
           (regularRegionBondExtension R (regularTreeCycleAssignment R T (φ ω)) u))) := by
@@ -68,9 +70,9 @@ theorem exists_unitary_regularCycleGlobalPermutation
   have hinv : ∀ g v η s, a v (fun e => g * η e) s = a v η s := by
     intro g v η s
     exact (ha v).toIsGInjective.regularSiteMap_translation g η s
-  refine ⟨W, hW, regionLocalTerm_mem_unitaryGroup R W hW, hperm, ?_⟩
+  refine ⟨W, hW, place_mem_unitaryGroup R W hW, hperm, ?_⟩
   intro ω u
-  apply regionLocalTerm_mulVec_stateCoeff_of_openColumns
+  apply place_mulVec_stateCoeff_of_openColumns
   · intro μ
     let θ := fun f => (Fintype.equivFin G).symm (μ f)
     have h := hperm ω (regularRegionBoundaryTransport R (fun _ => 1) u θ)
@@ -90,9 +92,9 @@ theorem exists_unitary_regularTwoCycleGlobalConjugation
     (e₀ e₁ : RC (Γ := Γ) R T) (hne : e₀ ≠ e₁) :
     ∃ W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
+      ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
       ∀ (ω : RC (Γ := Γ) R T → G) (u : Edge Γ → G),
-        regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
+        ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
           (regularRegionBondExtension R (regularTreeCycleAssignment R T ω) u))) =
         stateCoeff (groupBondTensor (regularTwistedSite a
           (regularRegionBondExtension R (regularTreeCycleAssignment R T
