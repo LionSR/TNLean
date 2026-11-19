@@ -217,6 +217,27 @@ theorem exists_of_finiteFamilyTransportBound {P : ℝ → ℝ → ℝ → ℝ �
   obtain ⟨Ctr, hCtr, hP⟩ := h ct Cent eent Cen een hct htransport
   exact ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hP⟩
 
+/-- Every move of an actual fill or charge round acts on a subsystem of logarithmic dimension
+at most `transportLogDimBound q r₀`, when interaction supports use the graph metric of the
+domain. Source: `08-scanner.tex`, lines 83–154. -/
+theorem actualRoundData_logDim_move_le {Λ : Finset (ℤ × ℤ)} {q R : ℕ} [NeZero q]
+    [LinearOrder (AdmissibleSupport Λ R)] (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
+    (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hgraph : S.graph = planeDomainGraph Λ)
+    (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m)) :
+    ∀ hist c g, logDim (augmentedDimensions (V := Site Λ) q aux)
+      ((S.actualRoundData hm hM j).move hist c g).subsystem ≤ transportLogDimBound q S.r₀ := by
+  have hq : 1 ≤ q := NeZero.pos q
+  refine S.actualRoundData_induction hm hM j
+    (fun _ _ _ D => ∀ hist c g, logDim (augmentedDimensions (V := Site Λ) q aux)
+      (D.move hist c g).subsystem ≤ transportLogDimBound q S.r₀) ?_ ?_
+  · intro _
+    exact S.chargeTransportData_logDim_move_le_domainGraph hgraph
+        (historyMeanTree S.K S.m S.M hm hM (j.val / 2))
+        (fun _ => chargeChoiceTree S.K S.M hM) _ hq (fun _ => rfl)
+  · intro _
+    exact S.fillTransportData_logDim_move_le
+        (historyMeanTree S.K S.m S.M hm hM (j.val / 2)) _ hq (fun _ => rfl)
+
 /-- A single nonnegative error pair works for every actual fill and charge round, at any
 constants `c₀, C_ent, e_ent, C_en, e_en` satisfying the finite-family transport bound, such as
 QICLean's universal transport constants, which depend on none of `q, R, J, Δ`. Source:
@@ -308,19 +329,7 @@ theorem actualRounds_transport_domainGraph_of_finiteFamilyTransportBound
     · intro _
       exact S.fillTransportData_crossBandCommute
           (historyMeanTree S.K S.m S.M hm hM (j.val / 2)) n ht k
-  have hmove : ∀ j hist c g, logDim n ((D j).move hist c g).subsystem ≤
-      transportLogDimBound q S.r₀ := by
-    intro j
-    refine S.actualRoundData_induction hm hM j
-      (fun _ _ _ D => ∀ hist c g, logDim n (D.move hist c g).subsystem ≤
-        transportLogDimBound q S.r₀) ?_ ?_
-    · intro _
-      exact S.chargeTransportData_logDim_move_le_domainGraph hgraph
-          (historyMeanTree S.K S.m S.M hm hM (j.val / 2))
-          (fun _ => chargeChoiceTree S.K S.M hM) n hq (fun _ => rfl)
-    · intro _
-      exact S.fillTransportData_logDim_move_le
-          (historyMeanTree S.K S.m S.M hm hM (j.val / 2)) n hq (fun _ => rfl)
+  have hmove := actualRoundData_logDim_move_le (q := q) aux S hgraph hm hM
   have hsplit : ∀ j i, ((D j).splitLeaves E i).Nonempty →
       logDim n (E.support i) ≤ transportLogDimBound q S.r₀ := by
     intro j

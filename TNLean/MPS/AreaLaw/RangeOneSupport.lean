@@ -76,7 +76,7 @@ This follows from the interaction convention in the one-dimensional note, Sectio
 `eq:ham`, and the support count above. -/
 theorem _root_.ManyBody.ChainInteraction.norm_hamiltonian_le_of_range_one {L q : ℕ} {J : ℝ}
     (h : ChainInteraction L q 1) (hhJ : ∀ X, ‖h.term X‖ ≤ J) :
-        ‖h.hamiltonian‖ ≤ 2 * L * J := by
+    ‖h.hamiltonian‖ ≤ 2 * L * J := by
   classical
   by_cases hL : L = 0
   · subst L

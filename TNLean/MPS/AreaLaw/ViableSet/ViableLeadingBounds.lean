@@ -422,8 +422,7 @@ theorem nearby_unit_vector_energy_and_overlap_bounds
 /-- For a range-one chain Hamiltonian, perturbing a unit witness by distance at most `ζ`
 costs at most `4 L ζ` in energy and `ζ` in ground-state overlap. -/
 theorem _root_.ManyBody.ChainInteraction.nearby_unit_vector_energy_and_overlap_bounds
-    {L q : ℕ} (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+    {L q : ℕ} (h : ChainInteraction L q 1) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     {Γ v v' : EuclideanSpace ℂ (Fin L → Fin q)} {E a ζ : ℝ}
     (hΓ : ‖Γ‖ = 1) (hv : ‖v‖ = 1) (hv' : ‖v'‖ = 1)
     (hE : (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E)
@@ -526,8 +525,7 @@ left-supported unit vector.  Its distance from the exact physical witness is the
 compressed distance, so its range-one energy and ground-state overlap incur only the
 corresponding perturbation losses. -/
 theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_bounds
-    {L q k m : ℕ} (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+    {L q k m : ℕ} (h : ChainInteraction L q 1) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΓ : ‖Γ‖ = 1)
     {S : Set (LeftBlockVector L q k)}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
@@ -594,15 +592,14 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_bounds
       WithLp.toLp 2 ((J *ᵥ WithLp.ofLp u) ∘ gluingCut L q k)‖ ≤ ζ
     rw [norm_glued_vectors_sub_eq W hW u u']
     exact hdist
-  have hbounds := h.nearby_unit_vector_energy_and_overlap_bounds hh hhJ
+  have hbounds := h.nearby_unit_vector_energy_and_overlap_bounds hhJ
     hΓ hv hv' hE ha hvdist
   exact ⟨hv', hv'S, hbounds⟩
 
 /-- With the perturbation losses reserved in advance, a nearby compressed numerical vector
 has the original LVV viability bounds `Δ / 12` and `1 / 12`. -/
 theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_bounds
-    {L q k m : ℕ} (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
-        (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+    {L q k m : ℕ} (h : ChainInteraction L q 1) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
     {E₀ Δ ζ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΓ : ‖Γ‖ = 1)
     {S : Set (LeftBlockVector L q k)}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
@@ -633,7 +630,7 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_bounds
     ‖v'‖ = 1 ∧ v' ∈ leftSupportSubmodule S ∧
       (⟪v', toEuclideanLin h.hamiltonian v'⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v'⟫_ℂ‖ := by
-  obtain ⟨hv', hv'S, henergy, hoverlap⟩ := h.nearby_glued_vector_bounds hh hhJ
+  obtain ⟨hv', hv'S, henergy, hoverlap⟩ := h.nearby_glued_vector_bounds hhJ
     hΓ W hW u u' hu hu' hu'P hE ha hdist
   refine ⟨hv', hv'S, ?_, ?_⟩
   · linarith only [henergy]

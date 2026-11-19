@@ -48,7 +48,6 @@ import TNLean.Lattice.GraphDegreeTail
 import TNLean.Lattice.HardTruncation
 import TNLean.Lattice.HeisenbergDuhamel
 import TNLean.Lattice.IntegerLatticeBallCount
-import TNLean.Lattice.LocalHamiltonian
 import TNLean.Lattice.LowEnergyBasis
 import TNLean.Lattice.LowEnergyBasisConstruction
 import TNLean.Lattice.LowEnergyBasisIteration
@@ -85,6 +84,7 @@ import TNLean.Lattice.ReplicaSwap
 import TNLean.Lattice.Sheet
 import TNLean.Lattice.SiteRelabelEntropy
 import TNLean.Lattice.SiteSymmetry
+import TNLean.Lattice.StateSpace
 import TNLean.Lattice.SupportedPolarUnitary
 import TNLean.Lattice.SupportedUnitaryEntropy
 import TNLean.Lattice.TranslationFiniteOrbit
@@ -99,7 +99,6 @@ import TNLean.Lattice.TranslationSupercellDecay
 import TNLean.Lattice.TranslationSupercellSpacing
 import TNLean.Lattice.TranslationSupercellTruncated
 import TNLean.Lattice.TreeBasisCounterexample
-import TNLean.Lattice.TrotterActiveIndices
 import TNLean.Lattice.TrotterIndexCount
 import TNLean.Lattice.VariationalLowerBound
 import TNLean.Lattice.ZeroEntropy

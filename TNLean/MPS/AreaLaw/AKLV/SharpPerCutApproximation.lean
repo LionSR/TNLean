@@ -70,10 +70,7 @@ theorem aklv_chain_dimension_and_gap_bounds {L q : ℕ}
   obtain ⟨-, -, hgap, hspan⟩ := (ManyBody.isGapped_and_groundSpace_eq_span_iff hg Ω).mp
     ⟨hΩ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
       WithLp.ofLp_smul]; exact hground, hgap⟩
-  exact ⟨hL, hq, gap_le_one_of_positive_nearest_neighbor_terms hL hq h hsupp h0 h1 hΩ
-      (hgap.posSemidef_sub_smul_one
-        (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
-        hΩ hspan) (hspan ▸ Submodule.mem_span_singleton_self _)⟩
+  exact ⟨hL, hq, gap_le_one_of_positive_nearest_neighbor_terms hL hq h hsupp h0 h1 hΩ hgap hspan⟩
 
 /-- The actual same-cut physical approximants obey the sharp fourth-root
 logarithmic rank bound, uniformly over cuts and chain lengths. Their overlap

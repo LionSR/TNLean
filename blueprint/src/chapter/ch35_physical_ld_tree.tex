@@ -194,6 +194,53 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     Lemmas~\ref{lem:full_interval_viability} and~\ref{lem:full_interval_mps_span}.
 \end{proof}
 
+\begin{lemma}[The success probability of the low-density tree]
+    \label{lem:physical_ld_tree_probability}
+    \lean{TNLean.MPS.AreaLaw.ALVV.measurableSet_guardedIntervalFailure_independentIntervalTree_of_targets,
+        TNLean.MPS.AreaLaw.ALVV.pi_independentIntervalTree_joint_failure_le_of_targets,
+        TNLean.MPS.AreaLaw.ALVV.intervalSamplingMeasure_canonicalWordTrimTreeGoodOfTargets_compl_le,
+        TNLean.MPS.AreaLaw.ALVV.rankUnitaryHaar_canonical_interval_word_image_failure_le_of_nested,
+        TNLean.MPS.AreaLaw.ALVV.exists_physical_ld_canonical_tree_failure_le}
+    \leanok
+    \uses{lem:physical_ld_sampled_interval_tree,lem:canonical_word_trim_tree_failure}
+    Retain the hypotheses, the families, the windows, the reference bond and
+    the parameters of Lemma~\ref{lem:physical_ld_sampled_interval_tree}, for
+    $0<\beta<1$. Run the tree with the canonical sampled parent of
+    Lemma~\ref{lem:canonical_sampled_parent}, with
+    $\lceil\log_D(D^2s)\rceil$ rounds, at every interval longer than
+    $4\ell$, and one independent coordinate per interval. Then every node has
+    dimension at most $D^6s^3$ for every choice of coordinates, and the root
+    and every internal node $[p,r)$ are $3/200$-viable for the window
+    $G(\eta_{\rm LD}-3w\lceil\log_2(r-p)\rceil)$ outside a Borel set of
+    probability at most $(L-1)\beta$. This is a restricted form of the
+    sampled tree of~\cite[Theorem~\texttt{t:alg2}, lines
+        1869--1878]{Arad2016RigorousRG}: in addition to the restrictions of
+    Lemma~\ref{lem:physical_ld_sampled_interval_tree}, nothing is asserted
+    at the root beyond its viability. In the maintainer's reading of the
+    source, Theorem~6.3 states success at least $1-1/n$, and the proof of
+    Theorem~6.1 obtains such a bound by a union bound from a per-merge
+    failure at most $1/n^2$; the bound $(L-1)\beta$ is that union bound, and
+    $\beta$ with the sample size above is the formalization's own sufficient
+    parametrization. The identification with the source's algorithm, output
+    and running time is not proved,
+    see~\cite{gap:alvv16_low_energy_family_scope}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_ld_sampled_interval_tree,lem:canonical_word_trim_tree_failure,
+        lem:canonical_sampled_parent}
+    The union bound of Lemma~\ref{lem:canonical_word_trim_tree_failure} holds
+    with one target per interval, with the same proof. At a long parent cut at
+    its midpoint, the children are viable for a window that contains the upper
+    window of the parent's family, as in the proof of
+    Lemma~\ref{lem:physical_ld_sampled_interval_tree}. For the canonical
+    sample, Lemma~\ref{lem:canonical_sampled_parent} bounds the probability
+    that it is not $(1-c)$-viable for the upper window by
+    $e^{-s/64}\le\beta$, since the merged space has dimension at most
+    $D^{12}s^6$. Off that event the family carries it to the lower window
+    with the error of the deterministic tree, and trimming against the
+    reference of the parent's window gives $3/200$-viability.
+\end{proof}
+
 \begin{lemma}[Refining a close space on the whole chain]
     \label{lem:physical_ld_root_refinement}
     \lean{TNLean.MPS.AreaLaw.exists_physical_ld_root_refinement}
@@ -325,4 +372,56 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     Lemma~\ref{lem:physical_ld_root_refinement}, followed by
     Lemma~\ref{lem:window_extraction} in the refinement. Every subspace of $R$
     consists of matrix product states of the bond dimension of $R$.
+\end{proof}
+
+\begin{lemma}[Orthonormal low-energy output of the low-density algorithm]
+    \label{lem:low_density_tree_algorithm_output}
+    \lean{TNLean.MPS.AreaLaw.ALVV.low_density_output_accuracy,
+        TNLean.MPS.AreaLaw.ALVV.exists_orthonormal_ritz_energy_le,
+        TNLean.MPS.AreaLaw.ALVV.exists_low_density_tree_algorithm_output}
+    \leanok
+    \uses{lem:low_density_tree_algorithm}
+    In the setting of Lemma~\ref{lem:low_density_tree_algorithm}, with
+    $3w(\lceil\log_2L\rceil+2)\le\eta_{\rm LD}$ and
+    $x=\eta_{\rm LD}-3w(\lceil\log_2L\rceil+1)$, for every $0<\delta<1$ there
+    are an accuracy $0<\delta'<1$ and a refinement $R$ of the root, either the
+    whole space or the trim of a word image of the root, such that $R$ is
+    $\delta'$-close to $G(x)$ and the Ritz space of $H$ compressed to $R$ of
+    dimension $\dim G(x)$ has an orthonormal basis of matrix product states,
+    each of energy at most $E_0+x+\delta$. This states Theorem~6.3 of the
+    source with the following restriction: the number of output states is
+    $\dim G(x)$, which is at most the source's count $r=\dim G(\eta_{\rm LD})$
+    and in general smaller; the samples are asserted to exist rather than drawn with
+    a success probability; and no running time is asserted.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:low_density_tree_algorithm}
+    Put $A=\|H-E_0\|$, $\rho=3x/\delta+1$ and
+    $\delta'=\min(1/2,\delta/(3((1+\rho)A+x+\delta+1)))$. Then
+    $x/\rho\le\delta/3$, $(1+\rho)A\delta'\le\delta/3$ and
+    $(x+\delta)\delta'\le\delta/3$, so
+    $((1+1/\rho)x+(1+\rho)A\delta')/(1-\delta')\le x+\delta$. Apply
+    Lemma~\ref{lem:low_density_tree_algorithm} at accuracy $\delta'$ and take
+    an orthonormal basis of its Ritz space, whose dimension is $\dim G(x)$.
+    Every vector of this basis is a unit vector of $R$, so its energy is at
+    most $E_0+x+\delta$ and it is a matrix product state.
+\end{proof}
+
+\begin{lemma}[The source's buffer shortens the window by at least its loss]
+    \label{lem:low_density_source_buffer}
+    \lean{TNLean.MPS.AreaLaw.ALVV.source_buffer_le_window_shortening}
+    \leanok
+    For $L\ge2$, $\mu\ge0$ and $w=\mu/(3\log L)$ with the natural logarithm,
+    \begin{align}
+        \mu\le3w(\lceil\log_2L\rceil+1).
+        \label{eq:low_density_source_buffer}
+    \end{align}
+    Hence the energy bound $E_0+\eta_{\rm LD}-3w(\lceil\log_2L\rceil+1)+\delta$
+    of Lemma~\ref{lem:low_density_tree_algorithm_output} is at most
+    $E_0+\eta_{\rm LD}-\mu+\delta$.
+\end{lemma}
+\begin{proof}\leanok
+    Since $L\le2^{\lceil\log_2L\rceil}$ and $\log2\le1$,
+    $\log L\le\lceil\log_2L\rceil\log2\le\lceil\log_2L\rceil+1$; multiply by
+    $\mu/\log L\ge0$.
 \end{proof}

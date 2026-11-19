@@ -143,7 +143,7 @@ special structure is not stated with it.
 
 | Axis | Required generality | What is hard-coded today |
 |---|---|---|
-| Sites | any finite type `V` | `Fin N` (389 of the 1,541 declarations of `TNLean/Circuit`, 1,304 of the 4,371 of `MPS/AreaLaw`), `Finset (ℤ × ℤ)` (1,024 of the 3,425 declarations of `PEPS/AreaLaw`, and `ManyBody.PlaneInteraction` itself), `Finset ℤ` |
+| Sites | any finite type `V` | `Fin N` (389 of the 1,541 declarations of `TNLean/Circuit`, 1,304 of the 4,371 of `MPS/AreaLaw`), `Finset (ℤ × ℤ)` (1,024 of the 3,425 declarations of `PEPS/AreaLaw`, and `Lattice.LocalHamiltonian` itself), `Finset ℤ` |
 | Local spaces | any finite basis type at each site, `X : V → Type` | one `Fin d` for all sites in TNLean; `Fin (n v)` in QICLean. Composite local spaces are then written `Fin (d * a)`, `Fin (d ^ k)`, `Fin (a + b)` and unpacked by index arithmetic: 170 declarations in `Circuit`, 226 in `MPS/Preparation`, 285 in `MPS/MPU`, 214 in `MPS/AreaLaw` |
 | Regions | any finite set of sites, as one type `Finset V` | `Set` in one support notion, `Finset` in the other |
 | Geometry | any family of cells, any graph | the ring: 130 declarations of `Circuit` and every channel, measurement and adaptive model; the open chain for gate counts |
@@ -282,19 +282,22 @@ not built on that pattern.
 
 ## What is wrong now
 
-Counts are from an audit of `main` at `3d3507f` (TNLean) and `c62f178`
-(QICLean).
+Counts are from TNLean `main` at `0b469c1e2`, after the third pin move,
+re-measured with the script of the first audit (TNLean `3d3507f`, QICLean
+`c62f178`); where a figure of that audit is kept for comparison, it says so.
 
 ### The directory holds two libraries
 
-More than twenty root-level modules of `TNLean/Circuit` (`SiteEmbedding*`,
+`TNLean/Circuit` has 107 modules and 20,925 lines (125 and 25,197 at the
+first audit). More than twenty root-level modules of `TNLean/Circuit` (`SiteEmbedding*`,
 `SiteExpectation*`, `Supported*`, `EntropySupport`, `ProductVector`,
 `ExpectationBounds`, ...) and all of `Circuit/LiebRobinson` mention no layer,
 gate or depth. Until step 0.3 they imported `Circuit/LocalCircuit`, only
 because the definition of `supportedOperators` sat in that file above
 `BondLayer`. Outside
-`TNLean/Circuit`, 356 modules mention `QuantumCircuit` and 279 open the
-namespace; nearly all of them (`Lattice`, `MPS/AreaLaw`, `PEPS`) use only
+`TNLean/Circuit`, 310 modules mention `QuantumCircuit` and 278 open the
+namespace (356 and 279 at the first audit); these counts now include uses of
+QICLean's circuit core, which shares the namespace. Nearly all of them (`Lattice`, `MPS/AreaLaw`, `PEPS`) use only
 these lemmas on supported operators. The circuit models proper are consumed by
 `MPS/Preparation` (ring depth circuits, measurement rounds, teleportation,
 gate counts) and `MPS/MPU` (gate counts with a clean workspace), and by nothing
@@ -302,15 +305,13 @@ else.
 
 ### The Sites layer exists in parallel copies
 
-- Two support predicates. `QuantumCircuit.supportedOperators d S` is a span of
-  product operators, with one local dimension `d` and `S : Set ι` (279
-  modules). `Entropy.IsSupportedOn X D` in QICLean is a condition on matrix
-  entries, with site-dependent dimensions `n : V → ℕ` and `D : Finset V` (311
-  TNLean modules, 29 QICLean modules). 61 modules use both. The two bridge
-  lemmas in `Circuit/EntropySupport` are each applied in about 50 modules and
-  exist only for one local dimension. Follow-up F12 deleted the first predicate
-  and the bridges: supports are now `ManyBody.supportedOperators`, whose carrier
-  is the entry condition.
+- Two support predicates, `QuantumCircuit.supportedOperators d S` (a span of
+  product operators, one local dimension) and `Entropy.IsSupportedOn X D` (a
+  condition on matrix entries, site-dependent dimensions), with two bridge
+  lemmas in `Circuit/EntropySupport`. Follow-up F12 removed the first
+  predicate and the bridges: supports are now `ManyBody.supportedOperators`,
+  whose carrier is the entry condition. The module counts of the first audit
+  for this item no longer apply and are dropped.
 - The algebra of `Entropy.IsSupportedOn` (`add`, `neg`, `sub`, `smul`,
   `conjTranspose`, finite sums, `exp`) is proved in TNLean area-law modules
   under the QICLean namespace, not in QICLean. Its product and commutation
@@ -477,20 +478,20 @@ outcome.
 
 ## `TNLean/Lattice`
 
-`TNLean/Lattice` (472 modules, about 78,000 lines) has the same shape as
+`TNLean/Lattice` (470 modules, 77,781 lines) has the same shape as
 `TNLean/Circuit`: its transitive imports inside TNLean are itself, 17 modules
 of `Algebra` and 20 modules of `Circuit` (the site modules and two gate
 modules), and nothing from `MPS` or `PEPS`. It can leave TNLean once the
 Sites layer has. It holds three unrelated things:
 
 - Local Hamiltonians and their analysis on finite sets of sites (the root
-  directory and `ClusterExpansion`, 127 modules, about 25,000 lines): Gaussian
+  directory and `ClusterExpansion`, 124 modules, 24,532 lines): Gaussian
   filtering and truncation, low-energy bases, regional entropy, the regional
   swap and reset. Half of this theory is already in QICLean (`Analysis`,
   `Entropy`), which `Lattice` imports about 100 times; the split between the
   two repositories follows no mathematical line.
 - A calculus of distributed circuits and operator networks on a set of parties
-  (`PartyCircuit`, `Compression`, `Sheet`, 342 modules, about 52,000 lines).
+  (`PartyCircuit`, `Compression`, `Sheet`, 343 modules, 52,901 lines).
   This is not lattice theory, and it is the second circuit library described
   above. `Compression` has 254 modules, 123 of them with at most two
   declarations.
@@ -498,8 +499,9 @@ Sites layer has. It holds three unrelated things:
 
 The abbreviation `ManyBody.PlaneInteraction`, shared by the one- and
 two-dimensional area laws, is defined on `Λ : Finset (ℤ × ℤ)`. The chain uses
-`ManyBody.ChainInteraction` and `ManyBody.DomainInteraction` in `MPS/AreaLaw`, and the squares
-and rectangles of `PEPS` use two more structures. Namespaces vary inside the
+`ChainHamiltonian` and `DomainHamiltonian` in `MPS/AreaLaw`, and the squares
+and rectangles of `PEPS` use two more structures. (Item 3H.2 replaced all five by
+instances of QICLean's `ManyBody.Interaction`.) Namespaces vary inside the
 directory (`TNLean.Lattice`, `TNLean.Lattice.PartyCircuit`,
 `Lattice.PartyCircuit`, and bare `Word`, `EffectCircuit`).
 
@@ -585,18 +587,24 @@ Wave 3, two tracks that share no file:
 
 - **3H.1** (QICLean). `Interaction`; the Hamiltonian part of `Lattice` (127
   modules) restated on it and moved.
-- **3H.2** (TNLean, pin move 2). `ManyBody.ChainInteraction`, `ManyBody.DomainInteraction`,
-  `ManyBody.PlaneInteraction`, `SquareHamiltonian` and `RectangularHamiltonian`
-  become instances; `Lattice/RegionalEntropyBridge` is deleted.
+- **3H.2** (TNLean, pin move 2; done in #10905 by F8 phase 2 and its follow-up
+  #10910, apart from the deletion of `Lattice/RegionalEntropyBridge`). `ChainHamiltonian`, `DomainHamiltonian`,
+  `Lattice.LocalHamiltonian`, `SquareHamiltonian` and `RectangularHamiltonian`
+  become instances (`ManyBody.ChainInteraction`, `ManyBody.DomainInteraction`,
+  `ManyBody.PlaneInteraction`, `ManyBody.SquareInteraction` and
+  `ManyBody.RectangleInteraction`); `Lattice/RegionalEntropyBridge` is deleted.
 - **3A** (both). The generic modules of `TNLean/Algebra` move to QICLean,
   merged into topical modules: 40 used by two or more directories, up to 131
   used by one; 44 used nowhere outside the directory are reviewed for deletion;
   19 mention a tensor network and stay.
 - **3C.0** (QICLean). Check the circuit core against the party calculus before
   its signatures are fixed.
-- **3C.1** (QICLean). The core: `System`, `Layer`, `Circuit`, Kraus family and
+- **3C.1** (QICLean, done). The core: `System`, `Layer`, `Circuit`, Kraus family and
   map, depth and gate count, identity and composition, trace preservation,
-  light cone.
+  light cone. Core I (LionSR/QICLean#1099) is pinned since the third pin move;
+  cores II and III (through LionSR/QICLean#1120, blocking, substitution,
+  light-cone factorization and dimension bounds) are on QICLean `main` for the
+  fourth.
 - **3C.2** (QICLean). The channel stack as restrictions, with its compilation
   theorems; it replaces about 45 modules that have no consumer.
 - **3C.3** (QICLean). Unitary depth circuits, gate counts with a clean
@@ -614,7 +622,8 @@ Wave 4, sweeps:
   rest of `Lattice`, `QCA`, `MPS/Symmetry`; one pull request per directory.
   `Lattice.localLift`, `siteLift`, `Pinned.liftLocal`, `regionLocalTerm`,
   `dependentRegionOperatorLift` and `embedLocalOperator` are replaced by the
-  one placement.
+  one placement. Done for all of them except `embedLocalOperator` (F12c, in
+  the third pin move, #10905).
 - **4.2** (TNLean). `MPS/Preparation`, `MPS/MPU`, `MPS/Examples`.
 - **4.3** (TNLean). The abbreviations are deleted and their names retired.
 

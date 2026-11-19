@@ -292,7 +292,7 @@ theorem _root_.ManyBody.ChainInteraction.nearby_glued_vector_viable_of_density_a
     apply ha.trans'
     field_simp [ne_of_gt hΔ]
     nlinarith only [hscaled, hΔ]
-  exact h.nearby_glued_vector_viable_bounds hh hhJ hΩ W hW u u' hu hu' hu'P
+  exact h.nearby_glued_vector_viable_bounds hhJ hΩ W hW u u' hu hu' hu'P
     hEreserve hareserve hdist
 
 /-- The finite-precision LVV conclusion depends only on the ray of the exact leading
