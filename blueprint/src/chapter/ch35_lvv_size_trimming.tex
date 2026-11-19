@@ -1297,6 +1297,83 @@ a function of the Hamiltonian, the gap parameter and the input set.
     including the final cap.
 \end{proof}
 
+\begin{lemma}[Recorded weighted overlap]
+    \label{lem:lvv_recorded_weighted_overlap}
+    \lean{TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedTerm,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_weightedTerm,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.sumFin,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_sumFin,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedTransferEntry,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_weightedTransferEntry,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedTransferEntry_value_length,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedTransfer,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_weightedTransfer,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedTransfer_value_length,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedRowProduct,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_weightedRowProduct,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedRowProduct_value,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedContract,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_weightedContract,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedOverlapOfRationalParameters,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedOverlap_value_length}
+    \leanok
+    Let two rational open chains have length $n$, physical dimension $q$,
+    and bond bounds $D_a,D_b$. Write $D=D_aD_b$. At each site, each entry
+    of the weighted transfer matrix accumulates $q^2$ terms of the form
+    $\overline{x}wy$. The entry records exactly $15q^2$ rational operations,
+    and the full transfer matrix records $15q^2D^2$.
+    Replacing the operation list by its length recovers the counted
+    evaluation for a summand, a transfer entry, a full transfer matrix,
+    sequential row propagation, and the contraction with both caps.
+    The complete evaluation returns the rational weighted overlap and
+    records exactly $n(15q^2+8)D^2+13$ operations.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_rational_operation_records_correct,
+        lem:lvv_recorded_coefficient_contraction,
+        lem:lvv_rational_weighted_overlap_arithmetic_count}
+    Forgetting the records commutes with the primitive arithmetic,
+    the finite sums, and storage of the transfer rows. Induction over
+    the sites then gives the counted row propagation. The caps contribute
+    one conjugation and two complex products. The counted evaluation
+    gives the returned value and the length.
+\end{proof}
+
+\begin{lemma}[Recorded local Hamiltonian matrix element]
+    \label{lem:lvv_recorded_local_matrix_element}
+    \lean{TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedMatrixElementTerm,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_weightedMatrixElementTerm,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.twoSiteMatrixElementOfRationalParameters,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_twoSiteMatrixElement,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.matrixElementOfLocalTerms,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.erase_matrixElementOfLocalTerms,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.localTerms_value_length}
+    \leanok
+    Consider a family of $m$ rational two-site terms on the same chains.
+    Each local matrix element is a sum over $q^4$ matrix units. For each
+    summand evaluate a weighted overlap, multiply it by the matrix-unit
+    coefficient, and add it to the partial sum. Replacing the operation
+    lists by their lengths recovers the counted evaluations of the
+    weighted summand, the two-site matrix element, and the full sum.
+    The full evaluation returns the rational matrix element of the sum
+    of local terms and records exactly
+    \[
+        m\bigl[q^4\bigl(n(15q^2+8)D^2+21\bigr)+2\bigr]
+    \]
+    rational operations.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_rational_operation_records_correct,
+        lem:lvv_recorded_weighted_overlap,
+        lem:lvv_local_matrix_element_arithmetic_count}
+    Forgetting the records commutes with the coefficient multiplication
+    and with both finite sums. Each matrix unit adds six rational
+    operations for the complex product and two for the complex addition
+    to the overlap count. Summing the local matrix elements adds two
+    rational operations per term. The counted evaluation gives the
+    returned value and the displayed length.
+\end{proof}
+
 \begin{definition}[Binary length of a rational coordinate]
     \label{def:lvv_rational_coordinate_storage}
     \lean{TNLean.MPS.AreaLaw.rationalCoordinateBitCount}
