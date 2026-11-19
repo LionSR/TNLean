@@ -61,13 +61,17 @@ hypothesis.\footnote{Formal declarations:
 This does not require a block form for a finite positive part.
 
 The corrected one-copy state at $N=qM$ uses
-\begin{align*}
-    c_j&=\left(\sum_k|\mu_{j,k}|^{2q}\right)^{1/2},&
+\begin{align}
+    c_j&=\left(\sum_k|\mu_{j,k}|^{2q}\right)^{1/2},
+    \label{eq:mswc24_ghz_copy_norm}\\
     \beta'_j&=\left(\sum_k\mu_{j,k}^{qM}\right)
-        \left(\frac{c_j}{\mu_{j,k_j}^{q}}\right)^M,&
+        \left(\frac{c_j}{\mu_{j,k_j}^{q}}\right)^M,
+    \label{eq:mswc24_ghz_copy_weight}\\
     \alpha'_j&=\frac{\beta'_j}{(\sum_l|\beta'_l|^2)^{1/2}}.
-\end{align*}
-Its GHZ identity is formalized, and its unit norm is proved for $M\geq1$
+    \label{eq:mswc24_ghz_normalized_weight}
+\end{align}
+With the coefficients (\ref{eq:mswc24_ghz_copy_norm})--(\ref{eq:mswc24_ghz_normalized_weight}),
+its GHZ identity is formalized, and its unit norm is proved for $M\geq1$
 when $(\sum_k\mu_{j,k}^{qM})_j\neq0$. For $q\geq1$ its image under the
 polar factor of the actual blocked canonical tensor equals the corrected
 copy-isometry construction before normalization, and the normalized
@@ -77,21 +81,29 @@ physical overlaps agree.\footnote{Formal declarations:
     \leanid{MPSTensor.IsBNTCanonicalForm.nonNormalApproxVector_oneCopyFixedPoint}, and
     \leanid{MPSTensor.IsBNTCanonicalForm.nonNormalApproxOverlap_oneCopyFixedPoint}
     in \doclink{TNLean/MPS/Preparation/CanonicalOneCopyState}.}
-For multiplicity one, $\beta'_j=|\mu_j|^N$. Replacing these coefficients by
+For multiplicity one, (\ref{eq:mswc24_ghz_copy_weight}) gives
+$\beta'_j=|\mu_j|^N$. Replacing these coefficients by
 those printed in (S7) would be a different statement and is refuted by the
 phase and multiplicity examples in
 \cite{gap:mswc24_block_form_mixed_overlap,gap:mswc24_repeated_block_corrected_state}.
 
 \section{Why a finite positive-part block form cannot discharge the gap}
-Even for multiplicity one and unit weights, the combined blocked map has
-$B_q=\sum_j B_{j,q}K_j^\dagger$, with $K_j$ the mutually orthogonal pair
-embeddings. Consequently
-\begin{align*}
+Consider multiplicity one and unit weights. Let $B_q$ be the map from the two
+virtual bond coordinates to the $q$ physical sites whose matrix entries are
+the coefficients of $A^{i_1}\cdots A^{i_q}$, and write its polar decomposition
+as $B_q=V_qP_q$. Define $B_{j,q}$ in the same way from the block $A_j$.
+Let $E_j\colon\mathbb C^{D_j}\to\mathbb C^D$ be the coordinate inclusion of
+block $j$, and put $K_j=E_j\otimes E_j$. These pair embeddings satisfy
+$K_j^\dagger K_j=I$ and $K_j^\dagger K_{j'}=0$ for $j\neq j'$.
+The direct sum gives $B_q=\sum_j B_{j,q}K_j^\dagger$, so
+\begin{align}
     K_j^\dagger B_q^\dagger B_q K_{j'}&=B_{j,q}^\dagger B_{j',q}.
-\end{align*}
+    \label{eq:mswc24_ghz_kernel_identity}
+\end{align}
 If $P_q=(B_q^\dagger B_q)^{1/2}$ were block diagonal along these embeddings,
-then $P_q^2$ would be too, forcing every mixed Gram matrix on the right to
-vanish for $j\neq j'$. Conversely, vanishing mixed Gram matrices gives
+then $P_q^2$ would be too. By (\ref{eq:mswc24_ghz_kernel_identity}), this forces
+every mixed Gram matrix $B_{j,q}^\dagger B_{j',q}$ to vanish for $j\neq j'$.
+Conversely, vanishing mixed Gram matrices gives
 $P_q=\sum_jK_j(B_{j,q}^\dagger B_{j,q})^{1/2}K_j^\dagger$ by uniqueness of
 the positive square root. The sufficient direction is formalized for
 orthogonal summands; orthogonality is an additional hypothesis, not a
@@ -100,12 +112,13 @@ consequence of normality.\footnote{Formal declaration:
     \doclink{TNLean/MPS/Preparation/OrthogonalSumPolar}.}
 
 For $A_1=(1,0)$ and $A_2=(3/5,4/5)$, both of multiplicity one and weight one,
-the active Gram matrix is
-\[
-    G_q=\begin{pmatrix}1&s_q\\s_q&1\end{pmatrix},
-    \qquad s_q=(3/5)^q>0.
-\]
-Thus the finite block form fails at every $q\geq1$, while the canonical
+put $s_q=(3/5)^q>0$. The active Gram matrix is
+\begin{align}
+    G_q&=\begin{pmatrix}1&s_q\\s_q&1\end{pmatrix}.
+    \label{eq:mswc24_ghz_active_gram}
+\end{align}
+The nonzero off-diagonal entries in (\ref{eq:mswc24_ghz_active_gram}) show that
+the finite block form fails at every $q\geq1$, while the canonical
 pairs $e_{00},e_{11}$ are exactly orthonormal. The existing formal
 counterexample also gives
 $\|P_q-JJ^\dagger\|\geq(3/5)^q/2>0$, where $J\ket j=\ket{j,j}$;
@@ -118,26 +131,30 @@ not a counterexample to local orthogonality of the limiting canonical pairs.
 
 \section{Corrected limiting scope and remaining identification}
 For multiplicity one and unit weights, let
-\[
-    P_\infty=\sum_jK_j\bigl((\sqrt{\sigma_j})^T\otimes I\bigr)K_j^\dagger.
-\]
+\begin{align}
+    P_\infty&=\sum_jK_j\bigl((\sqrt{\sigma_j})^T\otimes I\bigr)K_j^\dagger.
+    \label{eq:mswc24_ghz_limiting_positive_part}
+\end{align}
 For normal left-canonical blocks with faithful trace-one fixed points, choose
 $0<|\lambda_2|<1$ bounding the nontrivial eigenvalues of each diagonal transfer
 map and all eigenvalues of each mixed transfer map. For $0<\gamma<1$ the
-formalized estimate is
-\[
-    \|P_q-P_\infty\|\leq K e^{-\gamma q/\xi},\qquad q\geq1,
-\]
+formalized estimate, for every $q\geq1$, is
+\begin{align}
+    \|P_q-P_\infty\|&\leq K e^{-\gamma q/\xi},
+    \label{eq:mswc24_ghz_polar_limit_rate}
+\end{align}
 where $\xi$ is the correlation length of $\lambda_2$ and $K$ is independent
 of $q$.\footnote{Formal declarations:
     \leanid{MPSTensor.blockSumPosLimit} and
     \leanid{MPSTensor.exists_norm_polarPos_blockTensor_blockSum_sub_le} in
     \doclink{TNLean/MPS/Preparation/OverlappingBlockGram}.}
-This estimate concerns matrices. It does not assert equality at finite $q$
-or convergence of states uniformly over an increasing number of sites.
+The estimate (\ref{eq:mswc24_ghz_polar_limit_rate}) concerns matrices. It does
+not assert equality at finite $q$ or convergence of states uniformly over an
+increasing number of sites.
 
 A separate explicit identification remains to be formalized: read
-$P_\infty$ as a tensor with physical index in $\mathbb C^D\otimes\mathbb C^D$
+$P_\infty$ from (\ref{eq:mswc24_ghz_limiting_positive_part}) as a tensor with
+physical index in $\mathbb C^D\otimes\mathbb C^D$
 and show that its unnormalized periodic vector on $M\geq1$ sites is
 $\sum_j\bigotimes_{k=1}^M\ket{\omega_j}_{R_kL_{k+1}}$, with the same pair
 embeddings and cyclic regrouping. Its normalized GHZ coefficients in the
@@ -145,7 +162,7 @@ unit-weight case would be $b^{-1/2}$ for $b\geq1$. This is an identification
 of the limiting positive-part tensor; the already proved canonical-pair
 GHZ identity does not itself establish it. Weighted or repeated blocks
 require their weight-dependent construction and the corrected coefficients
-above, rather than this unit-weight limit.
+(\ref{eq:mswc24_ghz_normalized_weight}), rather than this unit-weight limit.
 
 Issue \#10575 therefore remains open for reconciliation of the source and
 this corrected limiting statement. Its proposed finite positive-part block
