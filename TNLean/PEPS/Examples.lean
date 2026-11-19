@@ -32,6 +32,7 @@ import TNLean.PEPS.Examples.HoneycombPlaquetteInjectivity
 import TNLean.PEPS.Examples.HoneycombStripEdges
 import TNLean.PEPS.Examples.HoneycombStripIncidence
 import TNLean.PEPS.Examples.HoneycombStripInjectivity
+import TNLean.PEPS.Examples.HoneycombStripQuotient
 import TNLean.PEPS.Examples.QuantumDouble
 import TNLean.PEPS.Examples.QuantumDoubleBondAverage
 import TNLean.PEPS.Examples.QuantumDoubleBondParent
