@@ -1258,7 +1258,8 @@ a function of the Hamiltonian, the gap parameter and the input set.
     height at most $2S^4$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:lvv_contraction_intermediate_bounds,
+    \uses{lem:lvv_weighted_transfer_intermediate_bounds,
+        lem:lvv_contraction_intermediate_bounds,
         lem:lvv_recorded_complex_operation_heights,
         lem:lvv_recorded_coefficient_contraction}
     Zero padding preserves the denominator and norm bounds. The initial
@@ -1286,7 +1287,8 @@ a function of the Hamiltonian, the gap parameter and the input set.
     \]
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:lvv_common_rational_denominator,
+    \uses{lem:lvv_rational_tensor_storage,
+        lem:lvv_common_rational_denominator,
         lem:lvv_recorded_coefficient_max_height,
         lem:lvv_recorded_coefficient_contraction,
         lem:lvv_recorded_arithmetic_schoolbook_charge_bound}
