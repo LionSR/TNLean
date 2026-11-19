@@ -14,9 +14,10 @@ with simply connected closed-cell realization has a complementary walk with
 the same seam crossing numbers. The replacement is constructed one maximal
 interior segment at a time using the genuine exterior collar.
 
-Source: SCP10, arXiv:1001.3807v3, the geometric deformation in Lemma 6.14
-and the exterior-collar construction in the proof of Theorem 6.9,
-local source lines 1935–1990 and 2199–2214.
+Source: SCP10, arXiv:1001.3807v3, the L-shaped block construction preceding
+Theorem 6.7 (eq:iso:L-shape-scenario and eq:iso:block-disent-decomposition),
+local source lines 1935–1996, and the geometric deformation in Lemma 6.14,
+lines 2199–2214.
 
 **Scope restriction (simply connected forbidden cells):** Both torus periods
 are at least three. The forbidden region has simply connected closed-cell
@@ -206,8 +207,9 @@ private theorem replace_region_segment
 /-- Every finite torus graph walk with endpoints outside a simply connected
 forbidden region has a complementary walk with exactly the same seam crossing
 numbers. The complementary walk is derived, not assumed. No graph connectivity
-or collar hypothesis is supplied. Source: SCP10, Lemma 6.14 and the exterior
-replacement argument in Theorem 6.9, lines 1935–1990 and 2199–2214. -/
+or collar hypothesis is supplied. Source: SCP10, the L-shaped block construction
+preceding Theorem 6.7 (eq:iso:L-shape-scenario and eq:iso:block-disent-decomposition),
+lines 1935–1996, and Lemma 6.14, lines 2199–2214. -/
 theorem exists_complementWalk_same_winding_of_isSimplyConnected
     (R : Finset X) (hSC : IsSimplyConnected (torusRegionRealization R))
     {a b : X} (p : (Γₜ).Walk a b) (ha : a ∉ R) (hb : b ∉ R) :
