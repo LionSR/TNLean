@@ -464,7 +464,7 @@ outcome.
 
 ## `TNLean/Lattice`
 
-`TNLean/Lattice` (371 modules, 58,208 lines; 470 and 77,781 before step 3H.1)
+`TNLean/Lattice` (371 modules, 58,208 lines; 469 and 77,689 on `main` before pin move 5)
 has the same shape as `TNLean/Circuit`: its transitive imports inside TNLean
 are itself, 15 modules of `Algebra` and 9 modules of `Circuit`, and nothing
 from `MPS` or `PEPS`. It can leave TNLean once the
@@ -574,7 +574,7 @@ Wave 3, two tracks that share no file:
 
 - **3H.1** (QICLean, done; TNLean, pin move 5). `Interaction`; the Hamiltonian
   part of `Lattice` restated on it and moved (LionSR/QICLean#1138, #1141, #1144,
-  #1145, #1146 and #1148). Pin move 5 deletes 99 modules of `Lattice`, among
+  #1145, #1146 and #1148). Pin move 5 deletes 98 modules of `Lattice`, among
   them all of `Lattice/ClusterExpansion`, and `Circuit/SitePermutationSupport`;
   what stays is described under `TNLean/Lattice` above.
 - **3H.2** (TNLean, pin move 2; done in #10905 by F8 phase 2 and its follow-up
