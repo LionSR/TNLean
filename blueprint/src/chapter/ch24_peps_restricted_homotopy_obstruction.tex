@@ -14,7 +14,8 @@
         \label{eq:peps_dual_seam_step_word}
     \end{align}
     The brackets denote the zero-or-one indicator. The path word satisfies
-    $W(1_a)=1$ and $W(pe)=W(p)\omega(e)$.
+    $W(\mathrm{nil})=1$ on the empty path at its base point and
+    $W(pe)=W(p)\omega(e)$.
 \end{definition}
 
 \begin{lemma}[Restricted moves preserve the nonabelian seam word]
@@ -51,7 +52,7 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:peps_dual_restricted_seam_word,def:peps_dual_flux_displacement,
-        def:peps_dual_nonabelian_seam_word}
+        def:peps_dual_nonabelian_seam_word,def:peps_dual_flux_homotopy}
     The four displacements sum to zero, while the seam word is
     $uvu^{-1}v^{-1}\ne1$. The constant path has word $1$, so the preceding
     invariant rules out the asserted contraction.
