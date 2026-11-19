@@ -33,7 +33,7 @@ namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj] {d : ℕ}
-variable {G : Type*} [Group G] [Fintype G]
+variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
 
 omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] in
 private theorem twisted_translation_iff
