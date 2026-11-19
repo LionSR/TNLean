@@ -9,12 +9,15 @@ import TNLean.MPS.AreaLaw.ALVV.LowDensityOutputParameters
 /-!
 # The output clause of the low-density algorithm
 
-ALVV, arXiv:1602.08828v2, Theorem 6.3 (`t:alg2`, lines 1869–1878), runs the merge tree of
+ALVV, arXiv:1602.08828v2, Theorem 6.3 (`t:alg2`, lines 1869–1870), runs the merge tree of
 Theorem `t:alg1` with the low-density improving families of Theorem `t:aisgapless`,
-lines 1027–1041, under Assumption (LD), lines 281–284. In the official arXiv v2 text, as
-transcribed in the review of the constant-node tree and recorded in
-`docs/paper-gaps/alvv16_low_energy_family_scope.tex`, it outputs `r` orthonormal states of energy
-at most `E₀ + η - μ + δ`, with a success probability and a quasi-polynomial running time.
+lines 1027–1041, under Assumption (LD), lines 282–284. It reads: "Let `H` be a local
+Hamiltonian satisfying Assumption (LD), `η > 0` the associated energy parameter,
+`μ = Ω(1/log n)` and `δ ≥ poly⁻¹(n)`. With probability at least `1 - 1/n` the set `{|z_i⟩}`
+returned by LOW`(H, δ, (η, μ))` is an orthonormal set of `r` states each having energy at most
+`ε₀ + η - μ + δ` with respect to `H`. The algorithm runs in time `2^{poly log(n)}`." Assumption
+(LD), lines 282–284, defines `r`: "The dimension of the space of all eigenvectors of `H` with
+eigenvalue in the range `[ε₀, ε₀ + η]`, for some constant `η > 0`, is `r = poly(n)`."
 
 This file states the existence content with an output clause of that form. For every `δ` with
 `0 < δ < 1` the refinement of the root of the sampled tree, at an accuracy chosen from `δ`,
@@ -24,11 +27,15 @@ space, each of energy at most `E₀ + η_LD - 3w (⌈log₂ L⌉ + 1) + δ`. For
 (`source_buffer_le_window_shortening`), so these energies are at most the printed
 `E₀ + η - μ + δ` with `η = η_LD`.
 
-**Scope restriction (number of output states):** the number of states is the dimension `r'` of
-the shortened window `G(η_LD - 3w (⌈log₂ L⌉ + 1))`, not a count read from the printed statement,
-whose definition of `r` is not transcribed in the repository; whether `r' ≥ r` is not
-established. The states are an orthonormal basis of the Ritz space of the refinement, not
-eigenstates. As in `LowDensityTreeAlgorithm`, the samples are asserted to exist rather than drawn
+**Scope restriction (number of output states):** the number of states is the dimension
+`r' = dim G(η_LD - 3w (⌈log₂ L⌉ + 1))` of the shortened window, whereas the printed count is
+`r = dim G(η_LD)`. Since the shortened window lies inside `G(η_LD)`, `r' ≤ r`, with equality only
+when `H` has no eigenvalue in `(E₀ + η_LD - 3w (⌈log₂ L⌉ + 1), E₀ + η_LD]`. Whether `r`
+orthonormal states of energy at most `E₀ + η - μ + δ` can be extracted is not established; the
+remark after the theorem, line 1880, derives the energy bound from "the closest vectors to
+`H_{[ε₀, ε₀ + η - μ]}` in `W`", a space of dimension at most `dim G(η - μ)`. The states are an
+orthonormal basis of the Ritz space of the refinement, not eigenstates, as that remark also
+says. As in `LowDensityTreeAlgorithm`, the samples are asserted to exist rather than drawn
 with a success probability, the tree has full leaves and one final trim per node, the buffer
 satisfies `3w (⌈log₂ L⌉ + 2) ≤ η_LD`, and no running time is asserted. See
 `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.

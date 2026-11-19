@@ -237,12 +237,21 @@ hypothesis is drawn from the printed output clause; the formal statement is
 the existence content above.
 
 \paragraph{The printed output clause.}
-Theorem~6.3 (t:alg2) of \cite{Arad2016RigorousRG}, in the official arXiv v2
-text, specifies as its output $r$ orthonormal states of energy at most
-$E_0+\eta-\mu+\delta$, together with a success probability and a
-quasi-polynomial running time.\footnote{The transcription was recorded in
-    the combined review of the constant-node tree,
-    \url{https://github.com/LionSR/TNLean/pull/10886}.} The formalized output is compared with this clause as
+Theorem~6.3 (t:alg2) of \cite{Arad2016RigorousRG}, lines 1869--1870 of the
+arXiv v2 source, reads: ``Let $H$ be a local Hamiltonian satisfying
+Assumption (LD), $\eta>0$ the associated energy parameter,
+$\mu=\Omega(1/\log n)$ and $\delta\ge\mathrm{poly}^{-1}(n)$. With probability at
+least $1-\frac1n$ the set $\{|z_i\rangle\}$ returned by
+$\mathrm{LOW}(H,\delta,(\eta,\mu))$ is an orthonormal set of $r$ states each
+having energy at most $\varepsilon_0+\eta-\mu+\delta$ with respect to $H$. The
+algorithm runs in time $2^{\mathrm{poly}\log(n)}$.'' The count $r$ is that of
+Assumption (LD), lines 282--284: ``The dimension of the space of all
+eigenvectors of $H$ with eigenvalue in the range
+$[\varepsilon_0,\varepsilon_0+\eta]$, for some constant $\eta>0$, is
+$r=\mathrm{poly}(n)$.'' The remark after the theorem, line 1880, justifies the
+energy bound by noting that ``the closest vectors to
+$H_{[\varepsilon_0,\varepsilon_0+\eta-\mu]}$ in $W$ will have this property''.
+The formalized output is compared with this clause as
 follows.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_low_density_tree_algorithm_output}.}
 Write $x=\eta_{\rm LD}-3w(\lceil\log_2L\rceil+1)$ for the top of the shortened
 window $G(x)$ and $A=\|H-E_0\|$. For every $0<\delta<1$ choose
@@ -266,8 +275,12 @@ $\log L\le\lceil\log_2L\rceil\log2\le\lceil\log_2L\rceil+1$. The
 bound~\eqref{eq:ld_scope_output_energy} is therefore at most the printed
 $E_0+\eta-\mu+\delta$. The orthonormality and the energy bound of the printed
 clause are thus recovered. The number of states is not: it is
-$r'=\dim G(x)$, whereas the printed count $r$ is not transcribed with its
-definition in the repository, and whether $r'\ge r$ is not established. This
+$r'=\dim G(x)$, whereas the printed count is $r=\dim G(\eta_{\rm LD})$. Since
+$x<\eta_{\rm LD}$, $r'\le r$, with equality only when $H$ has no eigenvalue in
+$(E_0+x,E_0+\eta_{\rm LD}]$. Whether $r$ orthonormal states of energy at most
+$E_0+\eta-\mu+\delta$ can be extracted is not established; the remark of
+line 1880 argues through the closest vectors to $G(\eta-\mu)$, a space of
+dimension at most $\dim G(\eta-\mu)\le r$. This
 is a \emph{scope restriction}, recorded in the output module. The states are
 an orthonormal basis of a Ritz space, not eigenstates. The running time is
 outside the formalization; the success
