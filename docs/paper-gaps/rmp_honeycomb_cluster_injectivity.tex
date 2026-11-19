@@ -78,9 +78,17 @@ an injective open-region map with coefficient Gram matrix $I_{64}/64$.
     \leanid{HoneycombStrip.actual_columnGram}, in
     \doclink{TNLean/PEPS/Examples/HoneycombStripInjectivity}.}
 
+\paragraph{Rectangles of vertical pairs.}
+The review specifies two-site grouping for uniformity and leaves the pairing
+and coarse axes unspecified. For vertical pairs with even-parity anchors and
+axes $(1,-1)$ and $(-1,-1)$, the nonwrapping margins in
+\leanid{HoneycombCorner.rectangle_obstruction} leave both horizontal neighbors
+of the top corner outside the lifted region. Its fine open-region map therefore
+has a kernel. This result concerns those lifts. Identifying the source grouping
+and deciding rectangular normality for its uniform tensor remain open.
+
 \section{Elimination plan}
-The classification of compatible sizes and the construction of a blocked
-network remain open. The rectangular blocking needed for normality as defined by the
+The strip quotient for the compatible sizes above is injective and preserves state coefficients (\doclink{TNLean/PEPS/Examples/HoneycombStripQuotient}). A classification of other sizes remains open. The rectangular blocking needed for normality as defined by the
 review, and the application of its fundamental theorem, remain open.
 
 \bibliographystyle{alpha}
