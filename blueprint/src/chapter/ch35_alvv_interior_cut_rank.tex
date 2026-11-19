@@ -298,7 +298,7 @@ of~\cite{Arad2016RigorousRG}.
     Under the hypotheses of
     Lemma~\ref{lem:alvv_three_bulk_hard_truncation_spectral_comparison}, the
     truncated Hamiltonian $\tilde H$ of that lemma has all of its properties,
-    and in addition, for every $\eta_0<\eta_1\le3t+4\ell$, there is a real
+    and in addition, for every $\eta_0<\eta_1$, there is a real
     polynomial $p$ of degree $\ell^2$ with $p(\eta_0)=1$ such that
     $p(\tilde H)$ is a spectral projector for $(\tilde H,\eta_0,\eta_1)$ with
     \[
@@ -311,11 +311,7 @@ of~\cite{Arad2016RigorousRG}.
     under which the truncated-side estimate is false
     \cite{gap:alvv16_hard_truncation_windows}, the constants are explicit,
     and the spectral conditions, the slope near $\eta_0$ and the word count
-    are those of Lemma~\ref{thm:alvv_two_window_chebyshev_projector}. It is
-    restricted to upper windows $\eta_1\le3t+4\ell$, below the norm bound of
-    $\tilde H$, whereas the source allows every $\eta_1>\eta_0$; above that
-    bound no eigenvalue of $\tilde H$ lies beyond $\eta_1$
-    \cite{gap:alvv16_approximation_parameters}.
+    are those of Lemma~\ref{thm:alvv_two_window_chebyshev_projector}.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:alvv_three_bulk_hard_truncation_spectral_comparison,
@@ -323,5 +319,10 @@ of~\cite{Arad2016RigorousRG}.
     Lemma~\ref{lem:alvv_three_bulk_hard_truncation_spectral_comparison} writes
     $\tilde H$ in the two-window form with $\|\tilde H\|\le3t+4\ell$, so
     Lemma~\ref{cor:alvv_good_projector_hard_truncation} applies to it with
-    $u=3t+4\ell$.
+    $u=3t+4\ell$ when $\eta_1\le u$. When $\eta_1>u$, no eigenvalue of
+    $\tilde H$ is at least $\eta_1$, so the contraction condition is vacuous;
+    take $p(x)=(\eta_0+1-x)^{\ell^2}$, which satisfies $p(\eta_0)=1$ and
+    $p\ge1$ on $(-\infty,\eta_0]$, and whose image $p(\tilde H)$ has the same
+    two-cut rank bound as every polynomial of degree $\ell^2$ in a Hamiltonian
+    of the two-window form.
 \end{proof}

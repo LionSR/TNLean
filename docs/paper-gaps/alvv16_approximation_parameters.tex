@@ -618,18 +618,16 @@ $\delta=\Theta(\frac{\eta_0-\varepsilon_0}{(\eta_1-\eta_0)^2})
 e^{-\Omega(t-(\eta_0-\varepsilon_0))}$.'' Its proof, lines 999--1005, takes the
 Chebyshev construction of Theorem~4.2 at degree $k=\ell^2$.
 
-The formalized combined statement gives the projector only for
-$\eta_0<\eta_1\le3t+4\ell$, where $3t+4\ell$ bounds the norm of the truncated
-Hamiltonian. This is a \emph{scope restriction}: the source asserts every
-$\eta_1>\eta_0$. For $\eta_1>3t+4\ell$ no eigenvalue of $\tilde H$ is at least
-$\eta_1$, so the contraction condition of a spectral AGSP is vacuous and the
-remaining content is a polynomial of degree $\ell^2$ at least one on the
-spectrum below $\eta_0$ whose image has the stated Schmidt rank. The
-restriction is inherited from the two-window Chebyshev lemma, which assumes
-$\eta_1\le u$ for its norm bound $u$. Elimination: bound the operator
-Schmidt rank of every polynomial of degree $\ell^2$ in a Hamiltonian of the
-two-window form, and use $p(x)=(\eta_0+1-x)^{\ell^2}$, which satisfies
-$p(\eta_0)=1$ and $p\ge1$ on $(-\infty,\eta_0]$, when $\eta_1>3t+4\ell$.
+The formalized combined statement covers every $\eta_1>\eta_0$, as the
+source does. For $\eta_1\le3t+4\ell$, where $3t+4\ell$ bounds the norm of the
+truncated Hamiltonian, the projector is the Chebyshev polynomial of degree
+$\ell^2$. For $\eta_1>3t+4\ell$ no eigenvalue of $\tilde H$ is at least
+$\eta_1$, so the contraction condition of a spectral AGSP is vacuous, and the
+polynomial $p(x)=(\eta_0+1-x)^{\ell^2}$, with $p(\eta_0)=1$ and $p\ge1$ on
+$(-\infty,\eta_0]$, serves; its image has the two-cut rank bound of every
+polynomial of degree $\ell^2$ in a Hamiltonian of the two-window form. The
+remaining deviations are the explicit constants and the corrected cutoff of
+the hard-truncation note.
 
 \bibliographystyle{unsrt}
 \subsection*{The literal interleaved interval tree}

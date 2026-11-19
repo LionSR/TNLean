@@ -18,7 +18,7 @@ a projector with `D = (dℓ)^{O(ℓ)}` and `Δ = e^{−Ω(ℓ² √(η₁ − η
 `GoodProjectorHardTruncation` proves the spectral part for the actual truncated chain and the
 projector part for every Hamiltonian of the two-window form. This file joins them into one
 statement about the same truncated Hamiltonian `Ht`: its spectral comparison with `H`, and for
-every `η₀ < η₁ ≤ 3t + 4ℓ` a real polynomial `p` of degree `ℓ²` with `p(η₀) = 1` such that
+every `η₀ < η₁` a real polynomial `p` of degree `ℓ²` with `p(η₀) = 1` such that
 `p(Ht)` is a spectral projector for `(Ht, η₀, η₁)` with
 `Δ = 4 exp(−4ℓ² √((η₁ − η₀)/(3t + 4ℓ − η₀)))` and operator Schmidt rank at most `(qℓ)^{68ℓ}`
 across both middle cuts.
@@ -27,11 +27,10 @@ The printed statement, lines 981–997, is quoted in
 `docs/paper-gaps/alvv16_approximation_parameters.tex`, subsection "The window range of
 Corollary 4.6".
 
-**Scope restriction (upper window below the norm bound):** the projector is given only for
-`η₁ ≤ 3t + 4ℓ`, the norm bound of `Ht`, whereas the source asserts every `η₁ > η₀`. For larger
-`η₁` no eigenvalue of `Ht` is at least `η₁`. The restriction is inherited from
-`exists_two_window_chebyshev_projector_degree_sq`; see
-`docs/paper-gaps/alvv16_approximation_parameters.tex` for the elimination plan.
+Every upper window `η₁ > η₀` is covered, as in the source. For `η₁ ≤ 3t + 4ℓ`, the norm bound
+of `Ht`, the polynomial is the Chebyshev projector of `GoodProjectorHardTruncation`; above it no
+eigenvalue of `Ht` reaches `η₁`, the contraction condition is vacuous, and the polynomial is
+`(η₀ + 1 - x)^{ℓ²}`, with the same two-cut rank bound.
 
 **Local fix (explicit constants, cutoff, spectral conditions):** the constants, the cutoff
 `19 + η ≤ t` of the spectral comparison, the closed spectral conditions and the slope near `η₀`
@@ -50,8 +49,9 @@ noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ALVV
 
-/-- The Chebyshev projector at degree `ℓ²` of a matrix equal to a Hamiltonian of the two-window
-form. Auxiliary to ALVV, arXiv:1602.08828v2, `c:goodagsphardtrunc`, lines 979–1005. -/
+/-- A projector at degree `ℓ²` of a matrix equal to a Hamiltonian of the two-window form, for
+every upper window: the Chebyshev projector below the norm bound `u`, and `(η₀ + 1 - x)^{ℓ²}`
+above it. Auxiliary to ALVV, arXiv:1602.08828v2, `c:goodagsphardtrunc`, lines 979–1005. -/
 private theorem exists_degree_sq_projector_of_eq_two_window
     {L q ℓ a b : ℕ}
     (F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
@@ -68,7 +68,7 @@ private theorem exists_degree_sq_projector_of_eq_two_window
       (interval L (b + 2 * ℓ) L : Finset (Fin L)))
     (hab : a + 2 * ℓ ≤ b) (hb : b + 2 * ℓ ≤ L - 1) (hℓ : 1 ≤ ℓ) (hq : 1 ≤ q)
     (M : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (hMF : M = ∑ α, F α)
-    (hMh : M.IsHermitian) {u η₀ η₁ : ℝ} (hnorm : ‖M‖ ≤ u) (h01 : η₀ < η₁) (h1u : η₁ ≤ u) :
+    (hMh : M.IsHermitian) {u η₀ η₁ : ℝ} (hnorm : ‖M‖ ≤ u) (h01 : η₀ < η₁) :
     ∃ p : Polynomial ℝ, p.natDegree = ℓ * ℓ ∧ p.eval η₀ = 1 ∧
       Submodule.IsSpectralProjector
         (Matrix.toEuclideanCLM (𝕜 := ℂ) (aeval M (p.map (algebraMap ℝ ℂ))))
@@ -83,14 +83,48 @@ private theorem exists_degree_sq_projector_of_eq_two_window
           (sheetSplit q (interval L (a + ℓ + δ.val) (b + ℓ + 1)))
           (sheetSplit q (interval L (a + ℓ + δ.val) (b + ℓ + 1)))) ≤ (q * ℓ) ^ (68 * ℓ) := by
   subst hMF
-  obtain ⟨p, hdeg, hp0, hK, -, hrank⟩ := exists_two_window_chebyshev_projector_degree_sq F
-    hleft hright hL hM hR hab hb hℓ hq hMh hnorm h01 h1u
-  exact ⟨p, hdeg, hp0, hK, fun δ ↦ (hrank δ).2⟩
+  by_cases h1u : η₁ ≤ u
+  · obtain ⟨p, hdeg, hp0, hK, -, hrank⟩ := exists_two_window_chebyshev_projector_degree_sq F
+      hleft hright hL hM hR hab hb hℓ hq hMh hnorm h01 h1u
+    exact ⟨p, hdeg, hp0, hK, fun δ ↦ (hrank δ).2⟩
+  -- Above the norm bound no eigenvalue reaches `η₁`; take `p = (η₀ + 1 - X) ^ ℓ²`.
+  rw [not_le] at h1u
+  have hS := Matrix.isSymmetric_toEuclideanLin_iff.mpr hMh
+  have hupper : ∀ j, hS.eigenvalues finrank_euclideanSpace j ≤ u := by
+    intro j
+    have habs := hMh.abs_eigenvalues_le (Fintype.equivOfCardEq (Fintype.card_fin _) j)
+    simp only [IsHermitian.eigenvalues, Equiv.symm_apply_apply] at habs
+    exact (le_abs_self _).trans (habs.trans hnorm)
+  obtain ⟨p, hp⟩ : ∃ p : Polynomial ℝ, p = (C (η₀ + 1) - X) ^ (ℓ * ℓ) := ⟨_, rfl⟩
+  have hdeg : p.natDegree = ℓ * ℓ := by
+    rw [hp, natDegree_pow, show C (η₀ + 1) - X = -(X - C (η₀ + 1)) by ring, natDegree_neg,
+      natDegree_X_sub_C, mul_one]
+  have hk : 1 ≤ ℓ * ℓ := Nat.one_le_iff_ne_zero.mpr (by positivity)
+  have hmapdeg : (p.map (algebraMap ℝ ℂ)).natDegree ≤ ℓ * ℓ := by
+    rw [natDegree_map]; exact hdeg.le
+  have hlow : ∀ x : ℝ, x ≤ η₀ → 1 ≤ p.eval x := by
+    intro x hx
+    simp only [hp, eval_pow, eval_sub, eval_C, eval_X]
+    exact one_le_pow₀ (by linarith)
+  have hhigh : ∀ j, η₁ ≤ hS.eigenvalues finrank_euclideanSpace j →
+      (p.eval (hS.eigenvalues finrank_euclideanSpace j)) ^ 2 ≤
+        4 * Real.exp (-4 * ((ℓ * ℓ : ℕ) : ℝ) * Real.sqrt ((η₁ - η₀) / (u - η₀))) :=
+    fun j hj ↦ absurd (hj.trans (hupper j)) (not_le.mpr h1u)
+  have hK := Submodule.isSpectralProjector_aeval
+    (Matrix.toEuclideanCLM (𝕜 := ℂ) (∑ α, F α)) hS finrank_euclideanSpace p hlow hhigh
+  have hcomm : Matrix.toEuclideanCLM (𝕜 := ℂ) (aeval (∑ α, F α) (p.map (algebraMap ℝ ℂ))) =
+      aeval (Matrix.toEuclideanCLM (𝕜 := ℂ) (∑ α, F α)) (p.map (algebraMap ℝ ℂ)) :=
+    (aeval_algHom_apply (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)) _
+      (p.map (algebraMap ℝ ℂ))).symm
+  refine ⟨p, hdeg, by simp [hp], hcomm ▸ hK, fun δ ↦ ?_⟩
+  · have h := operatorSchmidtRank_aeval_two_window_le_pow F hleft hright hL hM hR hab hb hℓ
+      (ℓ * ℓ) hk _ hmapdeg δ
+    convert h.trans (two_cut_rank_degree_sq_le hq hℓ)
 
 /-- **Corollary 4.6: a good projector after hard truncation of three regions** (ALVV,
 arXiv:1602.08828v2, Corollary `c:goodagsphardtrunc`, lines 979–1005). Under the hypotheses of
 `exists_three_bulk_hard_truncation_spectral_comparison`, its truncated Hamiltonian `Ht`
-satisfies all the conclusions of that theorem, and in addition, for every `η₀ < η₁ ≤ 3t + 4ℓ`,
+satisfies all the conclusions of that theorem, and in addition, for every `η₀ < η₁`,
 there is a real polynomial `p` of degree `ℓ²` with `p(η₀) = 1` such that `p(Ht)` is a spectral
 projector for `(Ht, η₀, η₁)` with `Δ = 4 exp(−4ℓ² √((η₁ − η₀)/(3t + 4ℓ − η₀)))` and operator
 Schmidt rank at most `(qℓ)^{68ℓ}` across both middle cuts. This is the form `D = (dℓ)^{O(ℓ)}`,
@@ -166,7 +200,7 @@ theorem exists_three_bulk_hard_truncation_good_projector
             Submodule.IsCloseTo δ
               (Submodule.spectralSpanLE bH hH.eigenvalues₀ (E0 + η'))
               (Submodule.spectralSpanLE bHt hHt.eigenvalues₀ (E0' + η)))) ∧
-        ∀ η₀ η₁ : ℝ, η₀ < η₁ → η₁ ≤ 3 * t + 4 * (ell : ℝ) →
+        ∀ η₀ η₁ : ℝ, η₀ < η₁ →
           ∀ Δ : ℝ, Δ = 4 * Real.exp (-4 * ((ell * ell : ℕ) : ℝ) *
             Real.sqrt ((η₁ - η₀) / (3 * t + 4 * (ell : ℝ) - η₀))) →
           ∃ p : Polynomial ℝ, p.natDegree = ell * ell ∧ p.eval η₀ = 1 ∧
@@ -189,9 +223,9 @@ theorem exists_three_bulk_hard_truncation_good_projector
   obtain ⟨hE0, hE00, hE04, hle, hnorm, hspec⟩ := hrest
   refine ⟨hx, hxe, hpos, hHtF, hleft, hright, hL0, hM, hR, hH, hHt,
     hE0, hE00, hE04, hle, hnorm, hspec, ?_⟩
-  intro η₀ η₁ h01 h1u Δ hΔ
+  intro η₀ η₁ h01 Δ hΔ
   subst hΔ
   exact exists_degree_sq_projector_of_eq_two_window F hleft hright hL0 hM hR hab hbL hell
-    (by omega) Ht hHtF hHt hnorm h01 h1u
+    (by omega) Ht hHtF hHt hnorm h01
 
 end TNLean.MPS.AreaLaw.ALVV
