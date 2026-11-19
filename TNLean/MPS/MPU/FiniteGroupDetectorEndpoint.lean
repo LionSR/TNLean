@@ -74,7 +74,7 @@ theorem cyclicTwoTruncationDetector_leftDressedOnSiteInterval_pauliX
     cyclicTwoTruncationDetector (leftDressedOnSiteInterval σX σZ)
       a₀ a₁ a₂ b₀ b₁ b₂ = -1 := by
   simp only [cyclicTwoTruncationDetector, leftDressedOnSiteInterval,
-    onSiteTruncation, finKronecker_mul, finKronecker_conjTranspose]
+    onSiteTruncation, ← finKronecker_mul, finKronecker_conjTranspose]
   rw [← neg_one_smul ℂ (1 : Matrix (Fin N → Fin 2) (Fin N → Fin 2) ℂ),
     ← finKronecker_ite_smul_one (α := fun _ ↦ Fin 2) a₁]
   congr 1

@@ -142,7 +142,7 @@ theorem choiRank_le_pow_fin_two
       rw [hA, choiRank_mapLM_eq_finrank_wordSpan_one]
     _ ≤ Module.finrank ℂ (Kraus.wordSpan A p) :=
       Kraus.wordSpan_one_finrank_le_of_isUnit_mem_wordSpan_one A hp hX hUnit
-    _ = choiRank (Kraus.transferMap (MPSTensor.blockTensor A p)) := by
+    _ = choiRank (Kraus.transferMap (Kraus.blockTensor A p)) := by
       rw [choiRank_mapLM_eq_finrank_wordSpan_one, Kraus.wordSpan_blockTensor_one]
     _ = choiRank (F ^ p) := by rw [MPSTensor.transferMap_blockTensor, hA]
 
