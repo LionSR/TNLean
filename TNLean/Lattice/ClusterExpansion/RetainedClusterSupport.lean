@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.ClusterExpansion.ClusterFactorization
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 
 /-!
 # Physical support of actual retained cluster sums
@@ -28,10 +30,10 @@ theorem isSupportedOn_sum_retained_clusterOp
     (B : Finset κ) (β : ℝ) :
     Entropy.IsSupportedOn (n := fun _ : σ ↦ q)
       (∑ A ∈ B.powerset with NoLargeCluster G large A, clusterOp h A β) (B.biUnion acts) := by
-  apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-  refine Submodule.sum_mem _ fun A hA ↦ ?_
-  apply supportedOperators_mono _ (clusterOp_mem_supportedOperators
-    (fun i ↦ QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i)) A β)
+  change _ ∈ ManyBody.supportedOperators _ _
+  refine sum_mem fun A hA ↦ ?_
+  apply ManyBody.supportedOperators_mono _ (clusterOp_mem_supportedOperators
+    (fun i ↦ (hs i)) A β)
   exact Finset.coe_subset.mpr (Finset.biUnion_subset_biUnion_of_subset_left acts
     (mem_powerset.mp (mem_filter.mp hA).1))
 

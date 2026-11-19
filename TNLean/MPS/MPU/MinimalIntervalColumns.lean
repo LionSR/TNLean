@@ -92,8 +92,10 @@ theorem minimalIntervalChildColumns_of_supported_individual {d D N : ℕ} [NeZer
       (Fin (cutCoefficientRank (operatorCoefficientTensor U) j.val)) ℂ)
     (j m k : Fin (N + 1)) (hjm : j.val < m.val) (hmk : m.val < k.val)
     (X Y : Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ)
-    (hSX : X ∈ supportedOperators d (intervalConsecutiveSupport d D N j.val m.val))
-    (hSY : Y ∈ supportedOperators d (intervalConsecutiveSupport d D N m.val k.val))
+    (hSX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (intervalConsecutiveSupport d D N j.val m.val))
+    (hSY : Y ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (intervalConsecutiveSupport d D N m.val k.val))
     (hX : IsMinimalIntervalColumnImplementation hd U hU hbound B P j m (Nat.le_of_lt hjm) X)
     (hY : IsMinimalIntervalColumnImplementation hd U hU hbound B P m k (Nat.le_of_lt hmk) Y) :
     (X * Y) * initializedBasisMatrix
@@ -140,7 +142,8 @@ theorem minimalIntervalChildColumns_of_supported_individual {d D N : ℕ} [NeZer
       (CFC.sqrt (P j)) (CFC.sqrt (dualGramMetric (P m))))
     (vectorizedWeightedInterval (minimalOperatorInterval U B (Nat.le_of_lt hmk))
       (CFC.sqrt (P m)) (CFC.sqrt (dualGramMetric (P k))))
-    (by rwa [intervalPacketSites_range]) (by rwa [intervalPacketSites_range]) hX hY using 1
+    (by rwa [image_univ_intervalPacketSites])
+        (by rwa [image_univ_intervalPacketSites]) hX hY using 1
   all_goals congr!
 
 end MPUCircuit

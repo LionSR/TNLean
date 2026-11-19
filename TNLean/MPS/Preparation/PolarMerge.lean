@@ -60,6 +60,7 @@ The partial isometries are read on configurations of the sites of a block
 
 open Matrix MPSTensor
 open scoped BigOperators
+open Kraus (blockPhysDim decodeBlock decodeBlockEquiv blockTensor)
 
 namespace MPSPreparation
 

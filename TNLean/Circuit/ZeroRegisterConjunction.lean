@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Circuit.Gates.Permutation
 import TNLean.Circuit.QuantitativeUnitaryGates
 import TNLean.Circuit.ArbitrarySiteGateEmbedding
+import TNLean.Algebra.FinCastAddNatAdd
 
 /-!
 # Reversible conjunction of zero-register tests
@@ -50,12 +51,6 @@ noncomputable def zeroConjunctionIncrement (j : Fin a) (z : (Fin (a + a) → Fin
   if z (Fin.castAdd a j) = 0 ∧
       (j.val = 0 ∨ z (Fin.natAdd a (zeroConjunctionPrev j)) = 1) then 1 else 0
 
-private theorem castAdd_ne_natAdd (i j : Fin a) : Fin.castAdd a i ≠ Fin.natAdd a j := by
-  intro h
-  have hval := congrArg Fin.val h
-  simp only [Fin.val_castAdd, Fin.val_natAdd] at hval
-  omega
-
 /-- The increment does not depend on the scratch coordinate it changes.
 Source: Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem zeroConjunctionIncrement_update (j : Fin a) (z : (Fin (a + a) → Fin d)) (c : Fin d) :
@@ -63,26 +58,26 @@ theorem zeroConjunctionIncrement_update (j : Fin a) (z : (Fin (a + a) → Fin d)
       zeroConjunctionIncrement j z := by
   classical
   by_cases hj : j.val = 0
-  · simp only [zeroConjunctionIncrement, Function.update_of_ne (castAdd_ne_natAdd j j),
+  · simp only [zeroConjunctionIncrement, Function.update_of_ne (Fin.castAdd_ne_natAdd j j),
       hj, true_or, and_true]
   · have hprev : Fin.natAdd a (zeroConjunctionPrev j) ≠ Fin.natAdd a j := by
       intro h
       have hval := congrArg Fin.val h
       simp only [Fin.val_natAdd, zeroConjunctionPrev] at hval
       omega
-    simp only [zeroConjunctionIncrement, Function.update_of_ne (castAdd_ne_natAdd j j),
+    simp only [zeroConjunctionIncrement, Function.update_of_ne (Fin.castAdd_ne_natAdd j j),
       Function.update_of_ne hprev]
 
 /-- One reversible controlled shift writes the next conjunction into its
 scratch coordinate. It is defined on all configurations. Source:
 Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-noncomputable def zeroConjunctionStep (j : Fin a) : Equiv.Perm ((Fin (a + a) → Fin d)) :=
+noncomputable def zeroConjunctionStep (j : Fin a) : Equiv.Perm (Fin (a + a) → Fin d) :=
   shiftPerm (Fin.natAdd a j) (zeroConjunctionIncrement j)
     (zeroConjunctionIncrement_update j)
 
 /-- Forward composition of the first `k` controlled shifts. Source:
 Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-noncomputable def zeroConjunctionPerm : ℕ → Equiv.Perm ((Fin (a + a) → Fin d))
+noncomputable def zeroConjunctionPerm : ℕ → Equiv.Perm (Fin (a + a) → Fin d)
   | 0 => 1
   | k + 1 => if h : k < a then zeroConjunctionStep ⟨k, h⟩ * zeroConjunctionPerm k
       else zeroConjunctionPerm k
@@ -159,7 +154,7 @@ theorem zeroConjunctionStep_state (hd : 2 ≤ d) (x : (Fin a → Fin d)) (j : Fi
   · change Function.update (zeroConjunctionState x j.val) (Fin.natAdd a j)
         ((zeroConjunctionState x j.val) (Fin.natAdd a j) +
           zeroConjunctionIncrement j (zeroConjunctionState x j.val)) (Fin.castAdd a i) = _
-    rw [Function.update_of_ne (castAdd_ne_natAdd i j)]
+    rw [Function.update_of_ne (Fin.castAdd_ne_natAdd i j)]
     simp only [zeroConjunctionState, Fin.append_left]
   · by_cases hij : i = j
     · subst i
@@ -205,7 +200,7 @@ theorem zeroConjunctionPerm_apply_clean (hd : 2 ≤ d) (x : (Fin a → Fin d)) :
 
 /-- The full register on which one conjunction step is supported. Source:
 Section 5 of `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-def zeroConjunctionStepSites (j : Fin a) : Set (Fin (a + a)) :=
+def zeroConjunctionStepSites (j : Fin a) : Finset (Fin (a + a)) :=
   {Fin.castAdd a j, Fin.natAdd a (zeroConjunctionPrev j), Fin.natAdd a j}
 
 /-- Each controlled shift changes and reads at most three sites. Source:
@@ -245,7 +240,7 @@ theorem isPairProduct_zeroConjunctionStep (hd : 2 ≤ d) (j : Fin a) :
   · have hs :=
       (zeroConjunctionStep_isLocalPerm_first (d := d) j hj).permMatrix_mem_supportedOperators
     have hpair := isPairProduct_of_mem_supportedOperators_pair (by omega)
-      (castAdd_ne_natAdd j j) hu hs
+      (Fin.castAdd_ne_natAdd j j) hu hs
     exact hpair.mono (by
       dsimp [zeroConjunctionStepGateCount]
       exact Nat.le_mul_of_pos_left _ (Nat.succ_pos _))
@@ -258,11 +253,14 @@ theorem isPairProduct_zeroConjunctionStep (hd : 2 ≤ d) (j : Fin a) :
         have hval := congrArg Fin.val huv
         norm_num [e, zeroConjunctionPrev] at hval
         omega
-    have hrange : Set.range e = zeroConjunctionStepSites j := by
+    have hrange : Finset.univ.image e = zeroConjunctionStepSites j := by
       ext p
-      simp only [e, zeroConjunctionStepSites, Matrix.range_cons, Matrix.range_empty,
-        Set.union_empty, Set.singleton_union, Set.mem_insert_iff, Set.mem_singleton_iff]
-    have hs : (zeroConjunctionStep j).permMatrix ℂ ∈ supportedOperators d (Set.range e) := by
+      simp only [e, zeroConjunctionStepSites, Finset.mem_image, Finset.mem_univ, true_and,
+        Fin.exists_fin_succ, Fin.exists_fin_zero, Finset.mem_insert, Finset.mem_singleton,
+        Matrix.cons_val_zero, Matrix.cons_val_succ]
+      tauto
+    have hs : (zeroConjunctionStep j).permMatrix ℂ ∈
+        ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.image e) := by
       rw [hrange]
       exact (zeroConjunctionStep_isLocalPerm j).permMatrix_mem_supportedOperators
     obtain ⟨X, hX⟩ := exists_embedOp_eq_of_mem_supportedOperators he hs

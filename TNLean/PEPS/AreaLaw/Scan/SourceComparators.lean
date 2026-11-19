@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.ComparatorBounds
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 
 /-!
@@ -53,6 +54,8 @@ manuscript; no Lean declaration of the accompanying development is reused.
 noncomputable section
 
 open Filter Topology Matrix TensorPower PermutationRepresentation
+
+open ManyBody (IsGapped groundSpace)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder Matrix.Norms.L2Operator
   symmDiff
 namespace TNLean.PEPS.AreaLaw.Scan.Comparators
@@ -100,7 +103,8 @@ def ComparatorsStatement : Prop :=
   ∀ {ι : Type} [Fintype ι] [DecidableEq ι] (β : ι → Type) [∀ v, Fintype (β v)]
     [∀ v, DecidableEq (β v)] (H : Matrix ((v : ι) → β v) ((v : ι) → β v) ℂ)
     (Ω : EuclideanSpace ℂ ((v : ι) → β v)) (E₀ gap : ℝ),
-    H.PosSemidef → IsGappedGroundState H E₀ Ω gap → 0 < gap →
+    H.PosSemidef → ‖Ω‖ = 1 → IsGapped H E₀ gap →
+    groundSpace H E₀ = Submodule.span ℂ {Ω} → 0 < gap →
   ∀ (X : Finset ι) (E : Finset (FiniteProduct.Configuration β X)) (w : ℝ),
     IsTypicalSchmidtSet β Ω X E w →
     let p := (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.eigenvalues
@@ -187,8 +191,9 @@ with `a₀ = 1/10`, rough constant `4`, sharp constant `4 + 25 C₀` and thresho
 theorem comparatorsStatement : ComparatorsStatement := by
   refine ⟨1 / 10, by norm_num, 4, by norm_num, fun C₀ c₀ hC₀ hc₀ ↦
     ⟨c₀ / 10, 4 + 25 * C₀, by positivity, by positivity, ?_⟩⟩
-  intro ι _ _ β _ _ H Ω E₀ gap hHpos hgs hgap_pos X E w htyp p S z d S' Hbar Psym LC LR
-  obtain ⟨hΩ, hE, hgapM⟩ := isGappedGroundState_iff.mp hgs
+  intro ι _ _ β _ _ H Ω E₀ gap hHpos hΩ hgap hspan hgap_pos X E w htyp p S z d S' Hbar Psym LC LR
+  have hE := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have hgapM := hgap.posSemidef_sub_smul_one hHpos.isHermitian hΩ hspan
   have hz : 0 < (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.spectralRestrictionMass
       E := htyp.mass_pos
   have : NeZero d := ⟨htyp.nonempty.card_pos.ne'⟩

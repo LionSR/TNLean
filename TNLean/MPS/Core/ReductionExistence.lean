@@ -39,6 +39,7 @@ The unscaled conclusion printed in Proposition 20 is false for unrestricted
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 

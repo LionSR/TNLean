@@ -32,6 +32,7 @@ each compressed block is periodic of period m/gcd(m,p).
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

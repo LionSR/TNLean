@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Examples.KramersWannier.KramersWannier
 import TNLean.MPS.Examples.KramersWannier.KramersWannierAction
+import TNLean.MPS.Examples.KramersWannier.KramersWannierBimodule
 import TNLean.MPS.Examples.KramersWannier.KramersWannierCircuit
 import TNLean.MPS.Examples.KramersWannier.KramersWannierPhysical
 import TNLean.MPS.Examples.KramersWannier.KramersWannierSectors

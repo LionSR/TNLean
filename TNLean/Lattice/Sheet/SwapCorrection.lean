@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixKroneckerContraction
-import TNLean.Lattice.RegionalSwap
+import TNLean.Circuit.RegionalSwap
 import TNLean.Lattice.Sheet.Birth
 
 /-!
@@ -26,7 +26,7 @@ unit vector it moves by at most `4 ‖𝒱 ω - s ⊗ s'‖`, since `F_{T B_T}` 
 The unitary `F_S` swapping the two raw sheets at the sites of `S`, `TNLean.Lattice.sheetSwapOp`,
 and its algebra (`TNLean.Lattice.sheetSwapOp_mul_sheetSwapOp`: `F_A F_Y = F_T` for
 `Y = T ⊔ A`; `TNLean.Lattice.commute_sheetSwapOp_kronecker`) do not depend on the geometry of
-the sites and are stated in `TNLean.Lattice.RegionalSwap`.
+the sites and are stated in `TNLean.Circuit.RegionalSwap`.
 
 ## Main results
 
@@ -162,7 +162,7 @@ theorem bufferCorrection_mul_tSwap (V : Matrix (BT × BE) U ℂ) :
 
 theorem norm_bufferCorrection_le_one {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry) :
     ‖bufferCorrection (T := T) (E := E) V‖ ≤ 1 := by
-  refine (norm_submatrix_equiv_le _ _).trans ((l2_opNorm_one_kronecker_rect_le _).trans ?_)
+  refine (norm_submatrix_equiv_le _ _).trans ((l2_opNorm_one_kronecker_le _).trans ?_)
   exact l2_opNorm_conjTranspose_mul_mul_le_one (IsIsometry.kronecker V V hV hV).l2_opNorm_le_one
     (l2_opNorm_toMatrix_toPEquiv_le _)
 
@@ -269,8 +269,8 @@ set_option synthInstance.maxSize 512 in
 /-- In the coordinates `threeSplit T E` of both sheets, swapping the sheets at `T` exchanges the
 `T`-components. -/
 theorem sheetSwapOp_eq_submatrix :
-    sheetSwapOp q T = (((tSwapW (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)).toPEquiv.toMatrix :
-      Matrix _ _ ℂ)).submatrix (threeSplit₂ h) (threeSplit₂ h) := by
+    sheetSwapOp q T = ((tSwapW (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)).toPEquiv.toMatrix :
+      Matrix _ _ ℂ).submatrix (threeSplit₂ h) (threeSplit₂ h) := by
   have he : (threeSplit₂ h).symm.trans ((sheetSwap q T).trans (threeSplit₂ h)) =
       tSwapW (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q) := by
     refine Equiv.ext fun w => ?_
@@ -301,8 +301,8 @@ in particular with the encoders of both sheets when all holes lie in `T ∪ E`
 (`05-frames.tex`, lines 514–515). -/
 theorem commute_sheetBufferCorrection (σ : SplittingData q T E)
     {R₁ R₂ : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hR₁ : R₁ ∈ supportedOperators q (↑(T ∪ E) : Set ι))
-    (hR₂ : R₂ ∈ supportedOperators q (↑(T ∪ E) : Set ι)) :
+    (hR₁ : R₁ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (T ∪ E : Finset ι))
+    (hR₂ : R₂ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (T ∪ E : Finset ι)) :
     Commute (sheetBufferCorrection h σ) (R₁ ⊗ₖ R₂) := by
   obtain ⟨R₁', hR₁'⟩ := exists_threeSplit_eq_kronecker_one h hR₁
   obtain ⟨R₂', hR₂'⟩ := exists_threeSplit_eq_kronecker_one h hR₂

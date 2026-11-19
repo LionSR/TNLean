@@ -22,32 +22,17 @@ namespace TNLean.Lattice.PartyCircuit
 namespace OriginalCircuit
 variable {P : Type}
 
-/-- A finite original chronology has finitely many nonprivate occurrences,
-independently of the number or dimensions of private registers.
-Source: polynomial-PEPS 04-compression.tex, lines 137–147 and 199–229. -/
-instance nonprivateLocationsFintype : {a b : Layout P} →
-    (w : OriginalCircuit a b) → Fintype w.nonprivateLocations
-  | _, _, .id _ => inferInstanceAs (Fintype Empty)
-  | _, _, .comp w v => by
-      letI := nonprivateLocationsFintype w
-      letI := nonprivateLocationsFintype v
-      exact inferInstanceAs (Fintype (w.nonprivateLocations ⊕ v.nonprivateLocations))
-  | _, _, .privateMap .. => inferInstanceAs (Fintype Empty)
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ _ _ _ _ =>
-      inferInstanceAs (Fintype Unit)
-  | _, _, .swap .. => inferInstanceAs (Fintype Empty)
-  | _, _, .frame _ w => nonprivateLocationsFintype w
 /-- The finite nonprivate occurrence set has the original structural gate count.
 Source: polynomial-PEPS 04-compression.tex, lines 199–229. -/
 theorem natCard_nonprivateLocations {a b : Layout P} (w : OriginalCircuit a b) :
-    Nat.card w.nonprivateLocations = w.nonprivateCount := by
-  induction w <;> simp_all [nonprivateLocations, nonprivateCount]
+    Nat.card w.nonprivateLocations = w.nonprivateCount :=
+  Nat.card_eq_fintype_card.trans (Circuit.card_gateLocations w)
 
 /-- Finite enumeration agrees with the original structural nonprivate gate count.
 Source: polynomial-PEPS 04-compression.tex, lines 199–229. -/
 theorem card_nonprivateLocations {a b : Layout P} (w : OriginalCircuit a b) :
     Fintype.card w.nonprivateLocations = w.nonprivateCount :=
-  Nat.card_eq_fintype_card.symm.trans w.natCard_nonprivateLocations
+  Circuit.card_gateLocations w
 end OriginalCircuit
 end TNLean.Lattice.PartyCircuit
 

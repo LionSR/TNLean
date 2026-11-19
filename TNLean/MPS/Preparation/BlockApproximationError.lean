@@ -26,9 +26,11 @@ valid for all positive numbers of blocks at its first-order rate.
 * `MPSTensor.exists_norm_trace_prod_transferMatrix_sub_one_le` — the overlap estimate (S29) of
   arXiv:2103.13367 for blocks of unequal lengths.
 * `MPSTensor.exists_blockApproximationError_le_mul` — the approximation error.
+* `MPSTensor.exists_blockApproximationError_le_exp` — a common positive exponential rate.
 -/
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators InnerProductSpace
+open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -226,5 +228,30 @@ theorem exists_blockApproximationError_le_mul (A : MPSTensor d D) (hN : Kraus.Is
         gcongr
         exact hsmall.le.trans hC1
     _ ≤ (C * Real.exp C + 1) * u := by nlinarith only [hu0]
+
+/-- A real spectral bound in `(0, 1)` gives a positive exponential rate for
+every unequal-block preparation. This specializes the preceding quadratic
+estimate at `γ = 1/2`; the same constants work for all partitions. -/
+theorem exists_blockApproximationError_le_exp (A : MPSTensor d D) (hN : Kraus.IsNormal A)
+    (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
+    (htr : σ.trace = 1) (hfix : Kraus.transferMap A σ = σ) {t : ℝ}
+    (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖(t : ℂ)‖)
+    (ht0 : 0 < t) (ht1 : t < 1) :
+    ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r = -Real.log t ∧
+      ∀ (M : ℕ) [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} (hN : ∑ k, ℓ k = N)
+        (q : ℕ), (∀ k, q ≤ ℓ k) → (∀ k, Kraus.IsInjective (blockTensor A (ℓ k))) →
+          1 - ‖⟪blockIsometryState A (fixedPointPair σ) hN, normalizedMPVState A N⟫_ℂ‖ ≤
+            C * (M * Real.exp (-(r * q))) := by
+  have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
+  obtain ⟨C, hC, herr⟩ := exists_blockApproximationError_le_mul A hN hA hσ htr hfix hlam
+    (by rw [hnorm]; exact ht1.le) (γ := 1 / 2) (by norm_num) (by norm_num)
+  refine ⟨C, -Real.log t, hC, neg_pos.mpr (Real.log_neg ht0 ht1), rfl,
+    fun M _ ℓ N hN q hq hinj => ?_⟩
+  have hexp : Real.exp (-(2 * (1 / 2)) * q / correlationLength (t : ℂ)) =
+      Real.exp (-((-Real.log t) * q)) := by
+    congr 1
+    rw [mul_div_right_comm, neg_div_correlationLength, hnorm]
+    ring
+  simpa only [hexp] using herr M ℓ hN q hq hinj
 
 end MPSTensor

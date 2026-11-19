@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BlockedInteractionKernel
-import TNLean.Algebra.MatrixReindexGap
+import QICLean.Algebra.MatrixReindexEuclidean
 import TNLean.MPS.ParentHamiltonian.Martingale.EventualKernelOpenGap
 import TNLean.MPS.ParentHamiltonian.PeriodicGroundStatePresentation
 import TNLean.MPS.ParentHamiltonian.GaugePhaseSeparationTransport
@@ -38,6 +38,7 @@ equations (3.12)--(3.14), lines 1547--1570, and Theorem 1.2.
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder InnerProductSpace
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d R L K N : ℕ} [NeZero d] [NeZero L]
 
@@ -97,7 +98,7 @@ theorem exists_aligned_openInteractionMatrix_gap_of_blocked_primitive_family
     (A : MPSTensor d D) (μ : Fin b → ℂ)
     (B : ∀ j, MPSTensor (blockPhysDim d L) (E j)) (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (E j)) (Fin (E j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : E j = E i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
     (hJoint : ∀ N, groundSpaceES (blockTensor A L) N =

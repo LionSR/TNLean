@@ -1,0 +1,354 @@
+% Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 1695--1777
+% (block-injective interpolation), with lines 317, 1584--1586, defAgamma,
+% Agammasym, and the injective-case fusion argument at lines 1667--1685.
+
+\section{The block-injective interpolation}
+\label{sec:mpo_block_mixed_path}
+
+\cite[Section~5]{GarreRubio2023MPOSym} extends the interpolation to states
+with a degenerate ground space:
+\begin{quote}
+    ``We now deal with the case of systems with ground state degeneracy. We
+    want to connect two block-injective MPSs (with the same number of
+    blocks) that share the $L$-symbols under the action of two MPO algebras
+    with the same fusion category $\mathcal{C}$ and same $F$-symbols. For
+    this we first have to establish a correspondence between the blocks of
+    each MPS, $x:x_0 \to x_1$, and the degeneracies compatible with the
+    action of $\mathcal{C}$ to associate
+    $\left({L^0}_{abx_0}^{y_0} \right)_{c,k_0 \mu}^{z_0,i_0j_0} =
+        \left({L^01}_{abx_1}^{y_1} \right)_{c,k_1 \mu}^{z_1,i_1j_1}$.
+    The embedding MPS tensor has the block-diagonal form
+    $A(\gamma)=\bigoplus_x A_x(\gamma)$. For every block $x$ the bond
+    dimension is $D^0_x+D^1_x$ and it is defined by
+    $A_x(\gamma)= A_x \cdot W_x(\gamma)$, [\ldots] where
+    $B_x^{pq}= \mathbb{1}_{D^p_x}\otimes \mathbb{1}_{D_x^q}$ and
+    $W_x(\gamma) = (1-\gamma)\mathbb{1}_{D_x^0}\oplus
+        \gamma\mathbb{1}_{D_x^1}$.''
+\end{quote}
+The common operators are then described as follows:
+\begin{quote}
+    ``The MPO tensor $T_a$ is defined as in the injective case, with bond
+    dimension $\chi^0_a + \chi^1_a$ for every $a \in \mathcal{C}$, but now we
+    have to define the action on all blocks [\ldots] The previous MPO
+    tensors define an MPO representation of $\mathcal{C}$ if $L^0=L^1$ and
+    $F^0=F^1$, this can be seen as in the injective case. Also, it
+    corresponds to an MPO symmetry of $|\psi_{A(\gamma)}\rangle$ since it
+    satisfies [\ldots] which is the analogous version of
+    Eq.~(fusiontensors2) here, so that the action it is characterized by
+    $L^0 = L^1$. The injectivity of every block of $A(\gamma)$ and the
+    injectivity of $T_a$ is justified in the same way as in the previous
+    case. Moreover, $H(\gamma)$ is well-behaved in the whole path its ground
+    space is spanned by $\{ |\psi_{A_x(\gamma)}\rangle\}$.''
+\end{quote}
+
+Throughout, the blocks of both endpoints are labelled by one finite set
+$x,y,z\in X$, which records the correspondence $x_0\leftrightarrow x_1$,
+and the action multiplicities $M_{a,xy}$ are common to both endpoints,
+which records the correspondence of the degeneracies. The endpoint blocks
+are assumed to occupy separated physical sectors: the local space of the
+endpoint $p\in\{0,1\}$ is $\mathcal H_p=\bigoplus_xE^p_x\otimes E^p_x$
+with $E^p_x=\C^{D^p_x}$, and the block $A^p_x$ has physical space
+$E^p_x\otimes E^p_x$; it is extended by zero on the other summands of
+$\mathcal H_p$. This is a restriction beyond the source: line 1584
+restricts the local space only to the span of the whole tensor $A_p$, and
+for several blocks the separation of that span into block sectors is not
+derived here \cite{gap:glm23_block_injective_mixed_path}. Every statement
+of this section is made under this restriction. Put $F_x=E^0_x\oplus E^1_x$ and
+$\mathcal H=\bigoplus_xF_x\otimes F_x$. The endpoint operators
+$T_{p,a}$ act on $\mathcal H_p$ and have bond spaces
+$K_{p,a}=\C^{\chi_{p,a}}$; write $T^{yx}_{p,a}$ for the part of $T_{p,a}$
+from the summand $x$ to the summand $y$. The action decompositions are
+\begin{align}
+    (T_{p,a}\cdot A^p_x)^\rho
+     & =\sum_{y\in X}\sum_{i=0}^{M_{a,xy}-1}
+    W^A_{p,a;xy,i}\,(A^p_y)^\rho\,V^A_{p,a;xy,i},
+    \label{eq:mpo_block_action_input}
+\end{align}
+with maps $V^A_{p,a;xy,i}:K_{p,a}\otimes E^p_x\to E^p_y$ and
+$W^A_{p,a;xy,i}:E^p_y\to K_{p,a}\otimes E^p_x$ satisfying
+$V^A_{p,a;xy,i}W^A_{p,a;xy',j}=\delta_{(y,i),(y',j)}\Id$. No synthesis
+map is assumed to be an adjoint.
+
+\begin{definition}[Block-injective mixed path]
+    \label{def:mpo_block_mixed_path}
+    \lean{MPSTensor.MPOSymmetry.sectorLetter,
+        MPSTensor.MPOSymmetry.sectorTensor,
+        MPSTensor.MPOSymmetry.blockMixedPhysicalDim,
+        MPSTensor.MPOSymmetry.blockMixedInterpolation,
+        MPSTensor.MPOSymmetry.blockMixedTensor}
+    \leanok
+    \uses{def:mpo_mixed_endpoint_tensor}
+    Assume the endpoint blocks occupy separated physical sectors, as
+    stated above. For each block $x$, let $A_x(\gamma)$ be the mixed
+    interpolation of
+    $A^0_x$ and $A^1_x$ of
+    Definition~\ref{def:mpo_mixed_endpoint_tensor}, with physical space
+    $F_x\otimes F_x$ and bond space $F_x$, extended by zero on the other
+    summands of $\mathcal H$. The block-injective mixed tensor is
+    $A(\gamma)=\bigoplus_xA_x(\gamma)$, with bond space $\bigoplus_xF_x$.
+\end{definition}
+
+\begin{lemma}[Continuity and injectivity of the blocks]
+    \label{thm:mpo_block_mixed_injective}
+    \lean{MPSTensor.MPOSymmetry.sectorTensor_self,
+        MPSTensor.MPOSymmetry.sectorTensor_of_ne,
+        MPSTensor.MPOSymmetry.sum_sectorTensor,
+        MPSTensor.MPOSymmetry.sum_sigma_sectorTensor,
+        MPSTensor.MPOSymmetry.span_range_sectorTensor,
+        MPSTensor.MPOSymmetry.isInjective_sectorTensor_iff,
+        MPSTensor.MPOSymmetry.sectorTensor_mul_right,
+        MPSTensor.MPOSymmetry.continuous_blockMixedInterpolation,
+        MPSTensor.MPOSymmetry.isInjective_blockMixedInterpolation}
+    \leanok
+    \uses{def:mpo_block_mixed_path}
+    Each block $A_x(\gamma)$ depends continuously on $\gamma\in\R$. If
+    $A^0_x$ and $A^1_x$ are injective, then $A_x(\gamma)$ is injective for
+    every $\gamma\in(0,1)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_interior}
+    A tensor extended by zero on the other summands has the same span of
+    letters as the original tensor. The statements therefore reduce to the
+    continuity and interior injectivity of the mixed interpolation of one
+    pair of injective tensors.
+\end{proof}
+
+\begin{definition}[Common operator of the block-injective path]
+    \label{def:mpo_block_mixed_operator}
+    \lean{MPSTensor.MPOSymmetry.blockMixedAnalysis,
+        MPSTensor.MPOSymmetry.blockMixedSynthesis,
+        MPSTensor.MPOSymmetry.blockMixedMPOLetter,
+        MPSTensor.MPOSymmetry.blockMixedMPOAnalysis,
+        MPSTensor.MPOSymmetry.blockMixedMPOSynthesis,
+        MPSTensor.MPOSymmetry.blockMixedMPOSector,
+        MPSTensor.MPOSymmetry.operatorSector,
+        MPSTensor.MPOSymmetry.blockMixedMPOEntry,
+        MPSTensor.MPOSymmetry.blockMixedMPO,
+        MPSTensor.MPOSymmetry.blockMixedMPO_finSigmaFinEquiv}
+    \leanok
+    \uses{def:mpo_mixed_action_tensor,def:mpo_block_mixed_path}
+    For each label $a$, define $T_a$ on $\mathcal H$ with bond space
+    $K_{0,a}\oplus K_{1,a}$ as follows. The part of $T_a$ from
+    $F_x\otimes F_x$ to $F_y\otimes F_y$ has, for $r,k$ in the sector $p$
+    of $F_y$ and $F_x$, $s,l$ in the sector $q$, $\alpha\in K_{p,a}$ and
+    $\beta\in K_{q,a}$, the entries
+    \begin{align}
+        (T_a^{(r,s),(k,l)})_{\alpha\beta}
+         & =\begin{cases}
+                ((T^{yx}_{p,a})^{(r,s),(k,l)})_{\alpha\beta}, & p=q,    \\
+                \displaystyle\sum_{i=0}^{M_{a,xy}-1}
+                (W^A_{p,a;xy,i})_{(\alpha,k),r}
+                (V^A_{q,a;xy,i})_{s,(\beta,l)},               & p\ne q,
+            \end{cases}
+        \label{eq:mpo_block_mixed_operator}
+    \end{align}
+    and every entry with unmatched sectors vanishes. The analysis and
+    synthesis maps $V_{a;xy,i}$ and $W_{a;xy,i}$ are the direct sums of
+    the endpoint maps on matching sectors and vanish on unmatched ones.
+\end{definition}
+
+\begin{lemma}[Exact action on every block]
+    \label{thm:mpo_block_mixed_action}
+    \lean{MPSTensor.MPOSymmetry.blockMixedAnalysis_mul_synthesis,
+        MPSTensor.MPOSymmetry.blockMixedMPOAnalysis_mul_synthesis,
+        MPSTensor.MPOSymmetry.blockMixedMPOAnalysis_mul_weight,
+        MPSTensor.MPOSymmetry.blockMixedMPOLetter_action,
+        MPSTensor.MPOSymmetry.blockMixedMPOSector_action,
+        MPSTensor.MPOSymmetry.isBiorthogonalDecomposition_blockMixedInterpolation,
+        MPSTensor.MPOSymmetry.mpo_mulVec_blockMixedInterpolation}
+    \leanok
+    \uses{def:mpo_block_mixed_operator,def:glm_boundary_decomposition}
+    Assume (\ref{eq:mpo_block_action_input}). Then for every real $\gamma$,
+    every label $a$ and every block $x$,
+    \begin{align}
+        (T_a\cdot A_x(\gamma))^\rho
+         & =\sum_{y\in X}\sum_{i=0}^{M_{a,xy}-1}
+        W_{a;xy,i}\,A_y(\gamma)^\rho\,V_{a;xy,i},
+        \label{eq:mpo_block_mixed_action}
+    \end{align}
+    and these maps are biorthogonal. Consequently, for every $N\geq1$, the
+    periodic operator of $T_a$ maps
+    $\ket{V^{(N)}(A_x(\gamma))}$ to
+    $\sum_yM_{a,xy}\ket{V^{(N)}(A_y(\gamma))}$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Both sides vanish unless the physical letter lies in some summand
+    $F_y\otimes F_y$, and there the sum over the input letters runs over
+    the summand $F_x\otimes F_x$ only. On that pair of summands the
+    identity is the same entrywise computation as in
+    Lemma~\ref{thm:mpo_mixed_action_exact}, with input block $x$ and
+    output block $y$: its diagonal sectors are the parts of
+    (\ref{eq:mpo_block_action_input}) from $x$ to $y$, and its cross sectors
+    are the defining contractions (\ref{eq:mpo_block_mixed_operator}). The
+    analysis maps commute with the weights $W_x(\gamma)$ and $W_y(\gamma)$
+    as in that lemma. Taking the trace of a word, biorthogonality gives the
+    periodic statement.
+\end{proof}
+
+For the fusion, fix a finite label set with fusion multiplicities
+$N_{ab}^c$, and fusion decompositions
+\begin{align}
+    (T_{p,a}T_{p,b})^{\rho\sigma}
+     & =\sum_{c}\sum_{\mu=0}^{N_{ab}^c-1}
+    W^F_{p,ab;c\mu}T_{p,c}^{\rho\sigma}V^F_{p,ab;c\mu}
+    \label{eq:mpo_block_fusion_input}
+\end{align}
+with biorthogonal maps, as in Section~\ref{sec:mpo_mixed_fusion}. For
+blocks $x,y$, let $L_{p,ab;xy}$ be the comparison matrix of the
+sequential action paths $x\to z\to y$ with the fusion-then-action paths
+$x\to y$, defined from the maps of (\ref{eq:mpo_block_action_input}) and
+(\ref{eq:mpo_block_fusion_input}) as in
+Definition~\ref{def:glm_boundary_action_l_matrix}.
+
+\begin{lemma}[Block comparison relations]
+    \label{thm:mpo_block_mixed_fusion_cross}
+    \lean{MPSTensor.MPOSymmetry.wordTupleSpanTop_sectorTensor,
+        MPSTensor.MPOSymmetry.blockSequentialAnalysis,
+        MPSTensor.MPOSymmetry.blockSequentialSynthesis,
+        MPSTensor.MPOSymmetry.blockFusionThenActionAnalysis,
+        MPSTensor.MPOSymmetry.blockFusionThenActionSynthesis,
+        MPSTensor.MPOSymmetry.blockSequentialSynthesis_apply,
+        MPSTensor.MPOSymmetry.blockSequentialAnalysis_apply,
+        MPSTensor.MPOSymmetry.blockFusionThenActionSynthesis_apply,
+        MPSTensor.MPOSymmetry.blockFusionThenActionAnalysis_apply,
+        MPSTensor.MPOSymmetry.block_actionLMatrix_relations,
+        MPSTensor.MPOSymmetry.blockCrossEndpoint_actionTree_contraction,
+        MPSTensor.MPOSymmetry.blockCrossEndpoint_actionTree_contraction_apply,
+        MPSTensor.MPOSymmetry.blockCrossEndpoint_fusion_entry}
+    \leanok
+    \uses{thm:mpo_mixed_fusion_cross,thm:glm_boundary_action_l_exists,
+        def:glm_boundary_action_l_matrix}
+    Assume that all blocks $A^p_x$ are injective with $D^p_x>0$, and
+    that $L_{0,ab;xy}=L_{1,ab;xy}$ for a pair of labels $a,b$ and a pair
+    of blocks $x,y$. Then the crossed contraction
+    (\ref{eq:mpo_mix_fusion_cross}) holds for the sequential and
+    fusion-then-action maps from $x$ to $y$, for every rectangular matrix
+    $X:E^1_y\to E^0_y$, with the intermediate block $z$ summed on the
+    sequential side.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Since every letter of $\bigoplus_x A^p_x$ lies in one summand of
+    $\mathcal H_p$ and every block is injective, the letters of length one
+    already span $\bigoplus_x M_{D^p_x}$. The comparison relations of
+    Lemma~\ref{thm:mpo_mixed_fusion_cross} hold therefore block by block,
+    and the crossed contraction follows from them by the same computation.
+\end{proof}
+
+\begin{lemma}[Fusion of the common operators]
+    \label{thm:mpo_block_mixed_fusion}
+    \lean{MPSTensor.MPOSymmetry.operatorSector_fusion_entry,
+        MPSTensor.MPOSymmetry.blockMixedMPOLetter_fusion,
+        MPSTensor.MPOSymmetry.isBiorthogonalDecomposition_blockMixedMPO,
+        MPSTensor.MPOSymmetry.isMPOFusionAlgebra_blockMixedMPO}
+    \leanok
+    \uses{thm:mpo_block_mixed_fusion_cross,thm:mpo_mixed_fusion_maps,
+        def:mpo_mixed_fusion_maps,def:mpo_fusion_algebra}
+    Assume (\ref{eq:mpo_block_action_input}),
+    (\ref{eq:mpo_block_fusion_input}), that every block $A^p_x$ is
+    injective with $D^p_x>0$, and that $L_{0,ab;xy}=L_{1,ab;xy}$ for a pair
+    of labels $a,b$ and all blocks $x,y$. Then
+    \begin{align}
+        (T_aT_b)^{\rho\sigma}
+         & =\sum_c\sum_{\mu=0}^{N_{ab}^c-1}
+        W^F_{ab;c\mu}T_c^{\rho\sigma}V^F_{ab;c\mu},
+        \label{eq:mpo_block_mixed_fusion}
+    \end{align}
+    with the biorthogonal direct sums $V^F_{ab;c\mu}$ and $W^F_{ab;c\mu}$
+    of the endpoint fusion maps. If the comparison matrices agree for all
+    labels and blocks, the periodic operators of the family $T_a$ satisfy
+    the fusion rules $N_{ab}^c$ at every length.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The product $T_aT_b$ from $F_x\otimes F_x$ to $F_y\otimes F_y$ sums over
+    the intermediate summands $F_z\otimes F_z$. On the diagonal sectors
+    the identity is the part of (\ref{eq:mpo_block_fusion_input}) from $x$
+    to $y$, with the intermediate letter split by its summand. On the cross
+    sectors it is the crossed contraction of
+    Lemma~\ref{thm:mpo_block_mixed_fusion_cross} evaluated at a matrix unit,
+    exactly as in Lemma~\ref{thm:mpo_mixed_fusion_exact}. All other
+    sectors vanish on both sides. The fusion rules follow by taking traces
+    of words.
+\end{proof}
+
+The common $F$-symbols are not needed for the exact fusion
+(\ref{eq:mpo_block_mixed_fusion}).
+
+The path Hamiltonian is the two-site canonical parent Hamiltonian
+$H(\gamma)$ of $A(\gamma)$ on a ring of $N$ sites, as in the injective
+case.
+
+\begin{lemma}[Ground space of the block-injective path]
+    \label{thm:mpo_block_mixed_ground_space}
+    \lean{MPSTensor.MPOSymmetry.evalWord_sectorTensor_map,
+        MPSTensor.MPOSymmetry.mpv_sectorTensor_self,
+        MPSTensor.MPOSymmetry.mpv_sectorTensor_of_ne,
+        MPSTensor.MPOSymmetry.blockPeriodicMpvMapES_sectorTensor_injective,
+        MPSTensor.MPOSymmetry.wordTupleSpanTop_blockMixedInterpolation,
+        MPSTensor.MPOSymmetry.blockPeriodicMpvMapES_blockMixedInterpolation_injective,
+        MPSTensor.MPOSymmetry.ker_parentHamiltonianES_blockMixedTensor,
+        MPSTensor.MPOSymmetry.linearIndependent_mpv_blockMixedInterpolation,
+        MPSTensor.MPOSymmetry.continuous_blockMixed_groundSpace_starProjection,
+        MPSTensor.MPOSymmetry.exists_uniform_blockMixed_parentHamiltonianES_gap,
+        MPSTensor.MPOSymmetry.tendsto_blockMixed_groundSpace_starProjection}
+    \leanok
+    \uses{def:mpo_block_mixed_path,def:parent_hamiltonian_es}
+    Assume the endpoint blocks occupy separated physical sectors, that there
+    is at least one block, and that every block $A^p_x$ is injective with
+    $D^p_x>0$. Let $N\geq2$.
+    \begin{enumerate}
+        \item For $\gamma\in(0,1)$ the ground space of $H(\gamma)$ is
+              spanned by the block states $\ket{V^{(N)}(A_x(\gamma))}$.
+        \item For $\gamma\in[0,1]$ the block states are linearly
+              independent.
+        \item The ground projection of $H(\gamma)$ is continuous on
+              $(0,1)$, and every compact subset of $(0,1)$ admits one
+              $\delta>0$ with $\|H(\gamma)v\|\geq\delta\|v\|$ for all
+              $N\geq2$ and all $v$ orthogonal to the ground space.
+        \item As $\gamma\to\gamma_0\in[0,1]$ within $(0,1)$, the ground
+              projection of $H(\gamma)$ converges to the orthogonal
+              projection onto the span of the block states at $\gamma_0$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_block_mixed_injective,thm:mpo_block_mixed_fusion_cross,
+        thm:mpo_mixed_interior,thm:mpo_mixed_periodic_line_continuity,
+        thm:block_ground_space_continuity,thm:compact_block_parent_gap,
+        lem:uncle_local_projector_continuity}
+    For $\gamma\in(0,1)$ every block is injective, and since the blocks
+    occupy separated physical sectors, the letters of length one span
+    $\bigoplus_xM_{D^0_x+D^1_x}$. The block-injective parent Hamiltonian
+    theory with simultaneous injectivity length one and a two-site
+    interaction identifies the ground space with the span of the block
+    states, gives continuity of its projection, and gives the uniform gap
+    on compact parameter sets. For $N\geq1$, a word $\tau$ of length $N$ in
+    the basis of $F_y\otimes F_y$, and its image $\iota_y(\tau)$ in the basis
+    of $\mathcal H$,
+    \begin{align}
+        V^{(N)}(A_x(\gamma))_{\iota_y(\tau)}
+         & =\delta_{xy}\,V^{(N)}\bigl(A_y(\gamma)|_{F_y\otimes F_y}\bigr)_\tau,
+        \label{eq:mpo_block_mixed_sector_support}
+    \end{align}
+    since for $y\neq x$ the first letter of $\iota_y(\tau)$ is a zero matrix
+    of $A_x(\gamma)$. The states
+    $V^{(N)}(A_y(\gamma)|_{F_y\otimes F_y})$ are nonzero for
+    $\gamma\in[0,1]$, by the injective case. Evaluating
+    $\sum_xc_xV^{(N)}(A_x(\gamma))=0$ at $\iota_y(\tau)$ through
+    (\ref{eq:mpo_block_mixed_sector_support}) gives
+    $c_yV^{(N)}(A_y(\gamma)|_{F_y\otimes F_y})_\tau=0$ for every $\tau$, so
+    $c_y=0$: the block states are linearly independent. The span of a
+    continuous family of linearly independent vectors has a projection that
+    is continuous at every such point, and it
+    agrees with the ground projection on $(0,1)$.
+\end{proof}
+
+The claim that the operators $T_a$ are injective is not treated in this
+section, nor are the kernels and gaps of the endpoint Hamiltonians. The
+source does not show that $H(\gamma)$ commutes with the periodic operators
+of $T_a$, and the one-block case of this construction is the injective
+interpolation, for which the canonical parent need not commute with a
+non-unitary symmetry; see \cite{gap:glm23_block_injective_mixed_path}.

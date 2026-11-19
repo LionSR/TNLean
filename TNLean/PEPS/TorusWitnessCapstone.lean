@@ -23,6 +23,8 @@ translation-covariant absorbed family (`exists_torusCovariantAbsorbedGaugeFamily
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean
@@ -48,7 +50,7 @@ as data: the offset is the coordinate difference of the left endpoints. -/
 noncomputable def translate_horizontalReferenceEdge {xStart yStart : ℕ}
     {e : Edge (torusGraph width height)} (he : IsHorizontalTorusEdge e) :
     {ab : ZMod width × ZMod height //
-      e = Edge.map (translate ab.1 ab.2) (torusHorizontalReferenceEdge xStart yStart)} :=
+      e = ManyBody.Edge.map (translate ab.1 ab.2) (torusHorizontalReferenceEdge xStart yStart)} :=
   ⟨((isHorizontalTorusEdge_eq_rightEdge he).choose.1 - (((xStart : ℕ) + 1 : ZMod width)),
       (isHorizontalTorusEdge_eq_rightEdge he).choose.2 - (((yStart : ℕ) + 2 : ZMod height))),
     by
@@ -61,7 +63,7 @@ noncomputable def translate_horizontalReferenceEdge {xStart yStart : ℕ}
 noncomputable def translate_verticalReferenceEdge {xStart yStart : ℕ}
     {e : Edge (torusGraph width height)} (he : IsVerticalTorusEdge e) :
     {ab : ZMod width × ZMod height //
-      e = Edge.map (translate ab.1 ab.2) (torusVerticalReferenceEdge xStart yStart)} :=
+      e = ManyBody.Edge.map (translate ab.1 ab.2) (torusVerticalReferenceEdge xStart yStart)} :=
   ⟨((isVerticalTorusEdge_eq_upEdge he).choose.1 - (((xStart : ℕ) + 2 : ZMod width)),
       (isVerticalTorusEdge_eq_upEdge he).choose.2 - (((yStart : ℕ) + 1 : ZMod height))),
     by

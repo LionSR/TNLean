@@ -137,7 +137,7 @@ theorem regionState_qutritState_decomposition {N : ℕ}
   have hcross' := congrArg Matrix.conjTranspose hcross
   simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
     Matrix.conjTranspose_zero] at hcross'
-  simp only [Entropy.regionState, partialTraceRight_vecMulVec_eq]
+  simp only [Entropy.regionState]
   change regionalMatrix A (qutritState N p) * (regionalMatrix A (qutritState N p))ᴴ =
     ((1 - p : ℝ) : ℂ) •
         (regionalMatrix A (qutritState N 0) * (regionalMatrix A (qutritState N 0))ᴴ) +
@@ -242,7 +242,8 @@ theorem regionEntropy_qutritState_le {N : ℕ} (hN : 0 < N)
   have hmix : Entropy.regionEntropy A (qutritState N p) ≤
       (1 - p) * Entropy.regionEntropy A (qutritState N 0) + Real.negMulLog (1 - p) +
         (p * Entropy.regionEntropy A (qutritState N 1) + Real.negMulLog p) := by
-    simpa only [Entropy.regionEntropy, regionState_qutritState_decomposition hA hp hp']
+    simpa only [Entropy.regionEntropy, ManyBody.regionEntropy,
+      regionState_qutritState_decomposition hA hp hp']
       using hadd
   rw [regionEntropy_qutritState_zero hN A, mul_zero, zero_add] at hmix
   have hbound := mul_le_mul_of_nonneg_left (regionEntropy_qutritState_one_le hN A) hp

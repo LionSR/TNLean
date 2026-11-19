@@ -48,6 +48,8 @@ is determined by its `Q` and `univ \ R` residuals).  The result is the kernel tr
   filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 3.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

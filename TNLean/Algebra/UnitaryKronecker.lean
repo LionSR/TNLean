@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Analysis.Matrix.PosDef
 import Mathlib.LinearAlgebra.UnitaryGroup
 import QICLean.Algebra.MatrixIsometryKronecker
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 
 /-!
 # Unitary factors of a Kronecker product

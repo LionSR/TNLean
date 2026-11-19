@@ -3,6 +3,7 @@ Copyright (c) 2026 Sirui Lu. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
+import TNLean.MPS.Chain.BinaryPhase
 import TNLean.Algebra.MonomialMatrix
 import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.Examples.CZX.CZXAnomaly
@@ -36,7 +37,9 @@ does not identify that failure with an anomaly invariant: the three-cocycle of t
 `φ(CZX,CZX,CZX) = -1` at lines 438–470)
 requires a fusion-associator calculation that is not performed here.
 
-## Main definitions
+## Shared definitions
+
+The following definitions are imported from `TNLean.MPS.Chain.BinaryPhase`.
 
 * `CZXCompression.spinFlip`: the global spin flip of a periodic configuration.
 * `CZXCompression.czExponent`: the number of neighboring pairs of ones around the periodic
@@ -90,24 +93,7 @@ theorem czxTensor_apply (i j l r : Fin 2) :
 
 /-! ### The periodic operator -/
 
-/-- The global spin flip `X^{⊗ N}` on periodic configurations of `N` qubits. -/
-def spinFlip (N : ℕ) : Equiv.Perm (Fin N → Fin 2) :=
-  Equiv.piCongrRight fun _ ↦ Fin.revPerm
-
-theorem spinFlip_apply {N : ℕ} (t : Fin N → Fin 2) (n : Fin N) :
-    spinFlip N t n = (t n).rev := rfl
-
-/-- The global spin flip is an involution. -/
-theorem spinFlip_mul_self {N : ℕ} : spinFlip N * spinFlip N = 1 := by
-  ext t n
-  simp [Equiv.Perm.mul_apply, spinFlip_apply]
-
 variable {N : ℕ} [NeZero N]
-
-/-- The controlled-`Z` exponent of a periodic configuration: the number of neighboring pairs
-of ones, the site after the last being the first. -/
-def czExponent (t : Fin N → Fin 2) : ℕ :=
-  ∑ n, (t n).val * (t (n + 1)).val
 
 /-- **The periodic CZX operator entrywise**: the entry at `(s, t)` vanishes unless `s` is the
 spin flip of `t`, and then equals the controlled-`Z` sign of `t`. This is the closed-chain

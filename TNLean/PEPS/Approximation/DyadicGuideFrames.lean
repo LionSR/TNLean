@@ -182,7 +182,7 @@ theorem mem_holes_guideFrame {h : Hole pos q Party} :
 the outer holes of the guide frame. The outer patch samples are assumed pairwise disjoint on
 the finite center set; the guide and owners are arbitrary. No true-vertex, supplied-patch or
 positive local-dimension assumption is required. -/
-lemma disjoint_outerHoles_guideFrame {T : Set ι}
+lemma disjoint_outerHoles_guideFrame {T : Finset ι}
     (hfar : ∀ z ∈ V, ∀ x ∈ T, 2 * (patch z).scale < dist (patch z).center (pos x)) :
     Disjoint T (guideFrame pos q g own ph rank V patch hV).outerHoles := by
   apply Disjoint.symm
@@ -190,7 +190,7 @@ lemma disjoint_outerHoles_guideFrame {T : Set ι}
   intro p hp
   obtain ⟨h, hh, rfl⟩ := List.mem_map.1 hp
   obtain ⟨z, hz, rfl⟩ := mem_holes_guideFrame.1 hh
-  refine Set.disjoint_left.2 fun x hxp hx => ?_
+  refine Finset.disjoint_left.2 fun x hxp hx => ?_
   have hd : dist (pos x) (patch z).center ≤ 2 * (patch z).scale := by
     simpa [SquarePatch.outer, squareSample] using hxp
   have := hfar z hz x hx

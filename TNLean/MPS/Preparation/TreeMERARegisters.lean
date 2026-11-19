@@ -61,6 +61,7 @@ positive length with nonzero periodic state, with a physical leaf bound fixed be
 
 open Matrix MPSTensor
 open scoped ComplexOrder InnerProductSpace
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSPreparation
 

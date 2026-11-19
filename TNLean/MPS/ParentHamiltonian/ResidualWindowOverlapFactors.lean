@@ -21,6 +21,7 @@ uniform numerical constants uses separate bounds for the virtual maps.
 -/
 
 open scoped Matrix InnerProductSpace Matrix.Norms.Frobenius ComplexOrder
+open Kraus (blockPhysDim)
 
 namespace MPSTensor
 variable {d D E L : ℕ}

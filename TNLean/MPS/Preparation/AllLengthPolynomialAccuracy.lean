@@ -25,6 +25,7 @@ assumes `ξ > 0`. The zero-correlation-length case remains outside this construc
 
 open scoped BigOperators ComplexOrder InnerProductSpace
 open MPSTensor QuantumCircuit
+open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSPreparation
 

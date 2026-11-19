@@ -15,6 +15,8 @@ This elementary group identity is auxiliary to the accessible-coordinate
 construction of SCP10, arXiv:1001.3807, lines 1765–1920.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 variable {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}
 variable {G : Type*} [Group G]
@@ -40,7 +42,7 @@ shared edge. This elementary identity is auxiliary to SCP10, lines 1765–1920. 
 theorem regularDirectedTransport_injective_on_edge {x y : V} (hadj : Γ.Adj x y)
     (u w : Edge Γ → G)
     (he : regularDirectedTransport u hadj = regularDirectedTransport w hadj) :
-    u (Edge.ofAdj hadj) = w (Edge.ofAdj hadj) := by
+    u (ManyBody.Edge.ofAdj hadj) = w (ManyBody.Edge.ofAdj hadj) := by
   by_cases hxy : x < y
   · simpa only [regularDirectedTransport, ite_eq_left hxy] using he
   · simpa only [regularDirectedTransport, ite_eq_right hxy, inv_inj] using he

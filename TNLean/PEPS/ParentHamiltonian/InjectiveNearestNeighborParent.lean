@@ -38,6 +38,8 @@ theorems take vertex injectivity alone. Documented in
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
@@ -56,8 +58,8 @@ theorem edgePairRegion_covers_edges (e : Edge Γ) :
 omit [Fintype V] [DecidableRel Γ.Adj] in
 /-- An adjacent vertex belongs to the corresponding unordered endpoint region. -/
 theorem mem_edgePairRegion_of_adj {v w : V} (h : Γ.Adj v w) :
-    v ∈ edgePairRegion (Edge.ofAdj h) := by
-  rcases Edge.ofAdj_endpoints h with h | h <;> simp [edgePairRegion, h.1, h.2]
+    v ∈ edgePairRegion (ManyBody.Edge.ofAdj h) := by
+  rcases ManyBody.Edge.ofAdj_endpoints h with h | h <;> simp [edgePairRegion, h.1, h.2]
 
 omit [Fintype V] [DecidableRel Γ.Adj] in
 /-- Edge-pair regions cover the vertices if every vertex has a neighbor. -/
@@ -65,7 +67,7 @@ theorem edgePairRegion_covers_vertices
     (hneighbors : ∀ v, ∃ w, Γ.Adj v w) : ∀ v, ∃ e : Edge Γ, v ∈ edgePairRegion e := by
   intro v
   obtain ⟨w, h⟩ := hneighbors v
-  exact ⟨Edge.ofAdj h, mem_edgePairRegion_of_adj h⟩
+  exact ⟨ManyBody.Edge.ofAdj h, mem_edgePairRegion_of_adj h⟩
 
 /-- Edge-pair regions together with singleton regions at isolated vertices.
 Source: the graph parent construction of CPGSV21, Section IV.C.1,
@@ -82,7 +84,7 @@ theorem edgeAndIsolatedRegion_covers_vertices :
   intro v
   by_cases h : ∃ w, Γ.Adj v w
   · obtain ⟨w, hw⟩ := h
-    exact ⟨Sum.inl (Edge.ofAdj hw), mem_edgePairRegion_of_adj hw⟩
+    exact ⟨Sum.inl (ManyBody.Edge.ofAdj hw), mem_edgePairRegion_of_adj hw⟩
   · exact ⟨Sum.inr ⟨v, h⟩, Finset.mem_singleton_self v⟩
 
 omit [Fintype V] [DecidableRel Γ.Adj] in

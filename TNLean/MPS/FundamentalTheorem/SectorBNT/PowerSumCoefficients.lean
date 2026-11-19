@@ -84,7 +84,7 @@ theorem exists_leftCanonical_normalTensor_scale_of_isNormal
       (∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ) ∧
       IsLeftCanonical B ∧ IsNormalTensor B := by
   obtain ⟨B, ζ, ρ, hζ, hGauge, hMpv, hPrim, _hρ, _, _, _⟩ :=
-    exists_isPrimitiveMPS_gauge_of_isNormal hA
+    exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA
   have hLC : IsLeftCanonical B := hPrim.norm
   have hNormalB : Kraus.IsNormal B :=
     isNormal_of_gaugeEquiv ((isNormal_smul_iff hζ A).2 hA) hGauge

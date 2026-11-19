@@ -120,21 +120,21 @@ chain by inverse blocking of observables. Source: Nachtergaele,
 arXiv:cond-mat/9410110, lines 825--836; the completed observable identification
 is the one in arXiv:1703.09188, Appendix, lines 2308 and 2313--2320. -/
 noncomputable def quasiLocalBlockingFunctional (d L : ℕ) [NeZero d] [NeZero L] :
-    (QuasiLocalAlgebra (MPSTensor.blockPhysDim d L) →L[ℂ] ℂ) ≃L[ℂ]
+    (QuasiLocalAlgebra (Kraus.blockPhysDim d L) →L[ℂ] ℂ) ≃L[ℂ]
       (QuasiLocalAlgebra d →L[ℂ] ℂ) :=
   quasiLocalFunctionalCongr (quasiLocalBlocking d L)
 
 /-- Evaluation of the transported functional on an original observable.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 825--836. -/
 @[simp] theorem quasiLocalBlockingFunctional_apply (d L : ℕ) [NeZero d] [NeZero L]
-    (ω : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L) →L[ℂ] ℂ)
+    (ω : QuasiLocalAlgebra (Kraus.blockPhysDim d L) →L[ℂ] ℂ)
     (X : QuasiLocalAlgebra d) :
     quasiLocalBlockingFunctional d L ω X = ω ((quasiLocalBlocking d L).symm X) := rfl
 
 /-- Site grouping preserves the norm of a continuous functional.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 825--836. -/
 theorem norm_quasiLocalBlockingFunctional (d L : ℕ) [NeZero d] [NeZero L]
-    (ω : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L) →L[ℂ] ℂ) :
+    (ω : QuasiLocalAlgebra (Kraus.blockPhysDim d L) →L[ℂ] ℂ) :
     ‖quasiLocalBlockingFunctional d L ω‖ = ‖ω‖ :=
   norm_quasiLocalFunctionalCongr (quasiLocalBlocking d L) ω
 
@@ -142,9 +142,9 @@ theorem norm_quasiLocalBlockingFunctional (d L : ℕ) [NeZero d] [NeZero L]
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 825--836 and 854--887. -/
 @[simp] theorem quasiLocalBlockingFunctional_mem_stateSpace_iff
     (d L : ℕ) [NeZero d] [NeZero L]
-    (ω : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L) →L[ℂ] ℂ) :
+    (ω : QuasiLocalAlgebra (Kraus.blockPhysDim d L) →L[ℂ] ℂ) :
     quasiLocalBlockingFunctional d L ω ∈ quasiLocalStateSpace d ↔
-      ω ∈ quasiLocalStateSpace (MPSTensor.blockPhysDim d L) :=
+      ω ∈ quasiLocalStateSpace (Kraus.blockPhysDim d L) :=
   quasiLocalFunctionalCongr_mem_stateSpace_iff (quasiLocalBlocking d L) ω
 
 /-- A pure state on the blocked chain is pure on the original lattice, and
@@ -152,9 +152,9 @@ conversely. Purity is tested against all state decompositions. Source:
 Nachtergaele, arXiv:cond-mat/9410110, lines 825--836 and 1469--1482. -/
 @[simp] theorem isPureQuasiLocalState_quasiLocalBlockingFunctional_iff
     (d L : ℕ) [NeZero d] [NeZero L]
-    (ω : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L) →L[ℂ] ℂ) :
+    (ω : QuasiLocalAlgebra (Kraus.blockPhysDim d L) →L[ℂ] ℂ) :
     IsPureQuasiLocalState d (quasiLocalBlockingFunctional d L ω) ↔
-      IsPureQuasiLocalState (MPSTensor.blockPhysDim d L) ω :=
+      IsPureQuasiLocalState (Kraus.blockPhysDim d L) ω :=
   isPureQuasiLocalState_quasiLocalFunctionalCongr_iff (quasiLocalBlocking d L) ω
 
 end SpinChain

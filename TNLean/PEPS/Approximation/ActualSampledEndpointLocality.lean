@@ -74,6 +74,6 @@ theorem restrict_sampledEndpointInputWord_eval_eq_of_incident_samples
     Word.restrict_castLayouts f (sampledEndpointWord w k lam L R ξ ζ j' ω')
       (List.append_nil _).symm (List.append_nil _).symm
       (sources_sampledEndpointWord w k lam L R ξ ζ j' ω')]
-  simp only [Word.eval_castLayouts, hWord]
+  simp only [Circuit.eval_castLayouts, hWord]
 
 end TNLean.Lattice.PartyCircuit.SourceCircuit

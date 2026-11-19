@@ -37,30 +37,33 @@ counterexample, not a formalized Lean counterexample theorem.
 
 Number the sites $0,\ldots,7$ and let $p=|0\rangle\langle0|$.
 For bonds $i=0,\ldots,6$, set
-\[
+\begin{align}
  h_i=I-p_i p_{i+1}\quad(i\ne3),\qquad
  h_3=|\psi^-\rangle\langle\psi^-|,\qquad
  |\psi^-\rangle=(|01\rangle-|10\rangle)/\sqrt2.
-\]
+    \label{eq:ff_rank_bond_terms}
+\end{align}
 Each term is a nonzero orthogonal projection of norm one, supported on
 its two assigned sites. The four even bonds are disjoint and cover
 all sites. Thus
-\[
+\begin{align}
  H=\sum_{i=0}^6h_i\ \ge\ h_0+h_2+h_4+h_6
        \ \ge\ I-|0^8\rangle\langle0^8|.
-\]
+    \label{eq:ff_rank_hamiltonian_lower_bound}
+\end{align}
 All seven terms annihilate $|0^8\rangle$. The vector $|10000000\rangle$
 is an eigenvector of energy one. Hence $H$ is frustration free, its
 ground state is unique, and its spectral gap is exactly one.
 
 Take the region $J=\{1,\ldots,6\}$, with internal bonds $1,\ldots,5$.
 The source's truncated Hamiltonian is
-\[
+\begin{align}
  \widetilde H=2I-Q_o-Q_e+h_0+h_6,
  \qquad
  Q_o=(I-h_1)(I-h_3)(I-h_5),\quad
  Q_e=(I-h_2)(I-h_4).
-\]
+    \label{eq:ff_rank_truncated_hamiltonian}
+\end{align}
 The terms in each product have disjoint supports.
 Furthermore, $h_0$, $I-Q_e$, and $h_6$ are projections on disjoint
 blocks covering the eight sites, with common kernel spanned by $|0^8\rangle$.
@@ -71,28 +74,33 @@ $\widetilde H$ also has unique ground state $|0^8\rangle$ and gap one.
 \section{The exact Schmidt rank}
 
 Cut between sites 3 and 4. On the left and right four-qubit factors put
-\begin{align*}
+\begin{align}
  E_L&=I\otimes p\otimes p\otimes I,&
- E_R&=I\otimes p\otimes p\otimes I,\\
+ E_R&=I\otimes p\otimes p\otimes I,
+    \label{eq:ff_rank_factors_E}\\
  O_L&=I\otimes I\otimes p\otimes p,&
- O_R&=p\otimes p\otimes I\otimes I,\\
+ O_R&=p\otimes p\otimes I\otimes I,
+    \label{eq:ff_rank_factors_O}\\
  B_L&=I-p\otimes p\otimes I\otimes I,&
  B_R&=I-I\otimes I\otimes p\otimes p.
-\end{align*}
+    \label{eq:ff_rank_factors_B}
+\end{align}
 Here the identity in an additive expression acts on all four sites.
 Let
-\[
+\begin{align}
  X=\begin{pmatrix}0&1\\1&0\end{pmatrix},\quad
  W=\begin{pmatrix}0&1\\-1&0\end{pmatrix},\quad
  Z=\begin{pmatrix}1&0\\0&-1\end{pmatrix}.
-\]
+    \label{eq:ff_rank_two_qubit_matrices}
+\end{align}
 For $\sigma\in\{I,X,W,Z\}$, define
 $E_{L,\sigma}=I\otimes p\otimes p\otimes\sigma$ and
 $E_{R,\sigma}=\sigma\otimes p\otimes p\otimes I$.
 The identity
-\[
+\begin{align}
  I-h_3=\tfrac14(3I\otimes I+X\otimes X-W\otimes W+Z\otimes Z)
-\]
+    \label{eq:ff_rank_singlet_complement}
+\end{align}
 gives
 \begin{align}
  \widetilde H={}&-\tfrac34E_{L,I}\otimes E_{R,I}
@@ -106,16 +114,18 @@ Both ordered seven-element families in this expression are linearly
 independent over $\mathbb C$. To check this directly, number the
 four-qubit computational basis $0,\ldots,15$. In the left family select
 matrix entries
-\[
+\begin{align}
  (0,0),(0,1),(1,0),(1,1),(4,4),(2,2),(5,5);
-\]
+    \label{eq:ff_rank_left_entries}
+\end{align}
 in the right family select
-\[
+\begin{align}
  (0,0),(0,8),(8,0),(8,8),(2,2),(4,4),(1,1).
-\]
+    \label{eq:ff_rank_right_entries}
+\end{align}
 The resulting matrices, whose columns follow the order in
 \eqref{eq:ff_rank_seven}, are
-\[
+\begin{align}
  \begin{pmatrix}
  1&0&0&1&1&2&1\\0&1&1&0&0&0&0\\0&1&-1&0&0&0&0\\
  1&0&0&-1&0&2&1\\0&0&0&0&1&3&1\\0&0&0&0&0&2&1\\0&0&0&0&0&3&1
@@ -124,7 +134,8 @@ The resulting matrices, whose columns follow the order in
  1&0&0&1&1&1&0\\0&1&1&0&0&0&0\\0&1&-1&0&0&0&0\\
  1&0&0&-1&0&1&0\\0&0&0&0&1&1&1\\0&0&0&0&0&1&0\\1&0&0&1&1&1&1
  \end{pmatrix}.
-\]
+    \label{eq:ff_rank_selected_matrices}
+\end{align}
 Their determinants are $-4$ and $4$. All seven coefficients in
 \eqref{eq:ff_rank_seven} are nonzero, so the operator Schmidt rank
 is exactly seven. This exceeds the printed bound $d^2+2=6$.
@@ -135,10 +146,11 @@ For a cut in the truncated region, exactly one parity product can contain
 a bond crossing the cut. Its operator Schmidt rank is at most $d^2$:
 all its other factors act entirely on one side. The other parity product
 has rank at most one. Finally,
-\[
+\begin{align}
  2I+H_{\overline J}= (2I+H_{\mathrm{left}})\otimes I
                          +I\otimes H_{\mathrm{right}}
-\]
+    \label{eq:ff_rank_complement_split}
+\end{align}
 has rank at most two. Thus $\operatorname{OSR}(\widetilde H)\le d^2+3$.
 The example saturates this count. The source's interior-cut argument
 counts the complementary Hamiltonian as one contribution, whereas it can

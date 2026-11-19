@@ -186,13 +186,14 @@ theorem norm_groundSpaceES_bulkObservable_cross_compression_le
         ‖Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X‖ * 1 := by gcongr
     _ = _ := by simp only [one_mul, mul_one]
 
+set_option linter.style.longLine false in
 /-- The products of the ground projections of inequivalent normalized primitive
 tensors tend to zero in operator norm. Source: Nachtergaele,
 arXiv:cond-mat/9410110, proof of Lemma disjoint, equations C1C2 and limP12. -/
-theorem IsPrimitiveMPS.groundSpaceES_starProjection_comp_tendsto_zero_of_inequivalent
+theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceES_starProjection_comp_tendsto_zero_of_inequivalent
     [NeZero D₁] [NeZero D₂] {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} {σ : Matrix (Fin D₂) (Fin D₂) ℂ}
-    (hA : IsPrimitiveMPS A ρ) (hB : IsPrimitiveMPS B σ)
+    (hA : Kraus.HasComplementaryFixedPointGap A ρ) (hB : Kraus.HasComplementaryFixedPointGap B σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
     (hDistinct : ∀ h : D₂ = D₁, ¬ GaugePhaseEquiv (h ▸ B) A) :
     Tendsto (fun n =>
@@ -210,15 +211,16 @@ theorem IsPrimitiveMPS.groundSpaceES_starProjection_comp_tendsto_zero_of_inequiv
     simp only [Submodule.starProjection_bot, sub_zero] at h
     exact h.trans_lt (half_lt_self hε)
 
+set_option linter.style.longLine false in
 /-- Cross compression of a fixed nonempty local observable between inequivalent
 primitive sectors tends to zero as the left free interval expands. The right
 free interval may vary arbitrarily. This follows by prefix locality from the
 sector-overlap estimate in Nachtergaele, arXiv:cond-mat/9410110,
 proof of Lemma disjoint, lines 1744--1820. -/
-theorem IsPrimitiveMPS.bulkObservable_cross_groundSpace_compression_tendsto_zero_of_inequivalent
+theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_cross_groundSpace_compression_tendsto_zero_of_inequivalent
     [NeZero D₁] [NeZero D₂] {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     {ρ : Matrix (Fin D₁) (Fin D₁) ℂ} {σ : Matrix (Fin D₂) (Fin D₂) ℂ}
-    (hA : IsPrimitiveMPS A ρ) (hB : IsPrimitiveMPS B σ)
+    (hA : Kraus.HasComplementaryFixedPointGap A ρ) (hB : Kraus.HasComplementaryFixedPointGap B σ)
     (hρ : ρ.PosDef) (hσ : σ.PosDef)
     (hDistinct : ∀ h : D₂ = D₁, ¬ GaugePhaseEquiv (h ▸ B) A)
     {k : ℕ} (hk : 0 < k) (X : Matrix (Cfg d k) (Cfg d k) ℂ)

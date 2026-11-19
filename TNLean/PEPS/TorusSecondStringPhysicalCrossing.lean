@@ -18,6 +18,8 @@ Source: SCP10, arXiv:1001.3807, Theorem 6.16 and Section 6.6, local lines
 2271–2305 and 2361–2415. This auxiliary single crossing does not establish the
 complete four-endpoint braid or its reunion protocol.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS
@@ -166,15 +168,15 @@ def torusSecondStringCrossingOutput (v : X) (g h : G) : Edge Γₜ → G :=
 /-- Apart from the middle horizontal bond, every ordered operator is retained.
 Source: SCP10, the next elementary crossing in lines 2271–2386. -/
 theorem torusSecondStringCrossingOutput_eq_of_ne (v : X) (g h : G) (e : Edge Γₜ)
-    (he : e ≠ Edge.ofAdj (torusGraph_adj_right (v.1 + 2) (v.2 + 2))) :
+    (he : e ≠ ManyBody.Edge.ofAdj (torusGraph_adj_right (v.1 + 2) (v.2 + 2))) :
     torusSecondStringCrossingOutput v g h e = torusSweptStringRightStepOperators v g h e := by
   let p := torusSecondStringCrossingBase v
-  have hm : Edge.ofAdj (torusGraph_adj_right p.1 (p.2 + 1)) =
-      Edge.ofAdj (torusGraph_adj_right (v.1 + 2) (v.2 + 2)) := by
-    change Edge.ofAdj (torusGraph_adj_right (v.1 + 2) (v.2 + 1 + 1)) = _
+  have hm : ManyBody.Edge.ofAdj (torusGraph_adj_right p.1 (p.2 + 1)) =
+      ManyBody.Edge.ofAdj (torusGraph_adj_right (v.1 + 2) (v.2 + 2)) := by
+    change ManyBody.Edge.ofAdj (torusGraph_adj_right (v.1 + 2) (v.2 + 1 + 1)) = _
     have hy : v.2 + 1 + 1 = v.2 + 2 := by ring
     rw [hy]
-  have he' : e ≠ Edge.ofAdj (torusGraph_adj_right p.1 (p.2 + 1)) := by
+  have he' : e ≠ ManyBody.Edge.ofAdj (torusGraph_adj_right p.1 (p.2 + 1)) := by
     intro H
     exact he (H.trans hm)
   have hc : torusVerticalFluxAssignment p true h⁻¹ e =
@@ -242,7 +244,7 @@ theorem IsGIsometric.exists_unitary_torusSecondStringCrossing
     let R := verticalTwoPlaquetteRegion (torusSecondStringCrossingBase v)
     ∃ W : Matrix ({x : X // x ∈ R} → Fin d) ({x : X // x ∈ R} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({x : X // x ∈ R} → Fin d) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (g h : G) (θ : {e : Edge Γₜ // IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a)
@@ -252,7 +254,8 @@ theorem IsGIsometric.exists_unitary_torusSecondStringCrossing
           (torusIncidentSite (width := width) (height := height) a)
           (torusSecondStringCrossingOutput v g h))) R
           (fun e => Fintype.equivFin G (θ e))) ∧
-      ∀ (g h : G), regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite
+      ∀ (g h : G), ManyBody.place («X» :=
+          fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a)
           (torusSweptStringRightStepOperators v g h))) =
         stateCoeff (groupBondTensor (regularTwistedSite

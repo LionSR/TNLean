@@ -93,7 +93,7 @@ canonical pairing of the blocked ket and bra words. -/
 theorem productTensor_block (F : GroupFamily G d) (g h : G) (L : ℕ) :
     (F.block L).productTensor g h =
       Kraus.reindexPhysical (blockedDoubledIndexEquiv d L)
-        (MPSTensor.blockTensor (F.productTensor g h) L) := by
+        (Kraus.blockTensor (F.productTensor g h) L) := by
   change (mulTensor (MPOTensor.blockTensor (F.tensor g) L)
     (MPOTensor.blockTensor (F.tensor h) L)).toMPSTensor = _
   rw [← blockTensor_mulTensor, toMPSTensor_blockTensor]
@@ -114,7 +114,7 @@ canonical pairing of the blocked ket and bra words. -/
 theorem targetTensor_block (F : GroupFamily G d) (g h : G) (L : ℕ) :
     (F.block L).targetTensor g h =
       Kraus.reindexPhysical (blockedDoubledIndexEquiv d L)
-        (MPSTensor.blockTensor (F.targetTensor g h) L) := by
+        (Kraus.blockTensor (F.targetTensor g h) L) := by
   change (MPOTensor.blockTensor (F.tensor (g * h)) L).toMPSTensor = _
   rw [toMPSTensor_blockTensor]
   rfl

@@ -73,7 +73,7 @@ theorem precomp_props {ℓ₀ ℓX ℓY : Layout P} (w : Word ℓ₀ ℓX) (S : 
         (M.precomp w).toEffectChain.effectCount = M.toEffectChain.effectCount
   | final _, hM, hMS => ⟨⟨hw, hM⟩, ⟨hS, hMS⟩, rfl, rfl⟩
   | effect .. , hM, hMS => ⟨⟨⟨hw, hM.1⟩, hM.2⟩, ⟨hMS.1, hMS.2.1, ⟨hS, hMS.2.2.1⟩, hMS.2.2.2⟩,
-      by simp only [precomp, sourceCount, Word.sourceCount, Nat.add_assoc], rfl⟩
+      by simp only [precomp, sourceCount, Circuit.gateCount, Word.sourceCount, Nat.add_assoc], rfl⟩
 
 theorem postcomp_props {ℓX ℓY ℓZ : Layout P} (S : Set P) :
     (M : PartyChain ℓX ℓY) → (w : Word ℓY ℓZ) → w.IsAllowed → w.UsesOnly S → M.IsAllowed →

@@ -33,6 +33,8 @@ lattice braid or a parent-Hamiltonian interpretation; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
@@ -323,7 +325,7 @@ theorem exists_unitary_regularOrientedThreePlaquetteDoubleExchange
     let φ := regularOrientedThreePlaquetteDoubleExchange reversed e₀ e₁ e₂ h₀₁ h₀₂ h₁₂
     ∃ W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
+      ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
       (∀ (ω : RC (Γ := Γ) R T → G)
         (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite a
@@ -333,7 +335,7 @@ theorem exists_unitary_regularOrientedThreePlaquetteDoubleExchange
           (regularTreeCycleAssignment R T (φ ω)))) R
           (fun f => Fintype.equivFin G (θ f))) ∧
       ∀ (ω : RC (Γ := Γ) R T → G) (u : Edge Γ → G),
-        regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
+        ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
           (regularRegionBondExtension R (regularTreeCycleAssignment R T ω) u))) =
         stateCoeff (groupBondTensor (regularTwistedSite a
           (regularRegionBondExtension R (regularTreeCycleAssignment R T (φ ω)) u))) :=

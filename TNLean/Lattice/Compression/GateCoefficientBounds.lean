@@ -70,8 +70,8 @@ Theorem 5.2, item 3, `04-compression.tex`, lines 143–149. -/
 def IsTermwiseBounded (r : ℕ) (C : ℝ) : {a b : Layout P} → OriginalCircuit a b → Prop
   | _, _, .id _ => True
   | _, _, .comp w v => w.IsTermwiseBounded r C ∧ v.IsTermwiseBounded r C
-  | _, _, .privateMap .. => True
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ G _ _ _ =>
+  | _, _, OriginalCircuit.privateMap .. => True
+  | _, _, Circuit.gate (@OriginalGate.mk _ _ _ _ _ _ _ G _ _ _) =>
       ∀ term ∈ G, term.2.toEffectChain.effectCount ≤ r ∧ ‖term.1‖ ≤ C
   | _, _, .swap .. => True
   | _, _, .frame _ w => w.IsTermwiseBounded r C

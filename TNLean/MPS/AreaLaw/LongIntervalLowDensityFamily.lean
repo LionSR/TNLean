@@ -21,6 +21,8 @@ result retains `4*ell < r-p`; short intervals are treated by actual
 configuration matrix units in the subsequent interval theorem.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

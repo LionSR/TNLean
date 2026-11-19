@@ -42,7 +42,7 @@ def choicesOfTouchedLabels (A : P → Bool) : {a b : Layout P} → (w : SourceCi
       (choicesOfTouchedLabels A w (fun g hg => ξ (.inl g) hg),
         choicesOfTouchedLabels A v (fun g hg => ξ (.inr g) hg))
   | _, _, .localMap .., _ => ()
-  | _, _, @SourceCircuit.gate _ C ι _ _ owner a b c G tail, ξ => by
+  | _, _, Circuit.gate (@PreparedGate.mk _ C ι _ _ owner a b c G tail), ξ => by
       classical
       by_cases h : ∃ q : C, A (owner q) = true
       · exact (Equiv.cast (by simp only [Choices, ite_eq_left h]) :

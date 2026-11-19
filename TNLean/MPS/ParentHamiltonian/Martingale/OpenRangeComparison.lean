@@ -334,7 +334,7 @@ theorem exists_openParentHamiltonianES_two_uniform_gap_of_isInjective
       ∀ N : ℕ, W ≤ N → ∀ v ∈ (groundSpaceES A N)ᗮ,
         δ * ‖v‖ ≤ ‖openParentHamiltonianES A 2 N v‖ := by
   obtain ⟨B, ζ, ρ, _hζ, _hGauge, _hMPV, hP, hρ, hGS, _hPI, _hChain⟩ :=
-    exists_isPrimitiveMPS_gauge_of_isNormal hA.isNormal
+    exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA.isNormal
   obtain ⟨l, ε, hl, _hInjB, hε, hεlt, hOpenB⟩ :=
     hP.exists_openParentHamiltonianES_gap hρ
   let W := l + 1

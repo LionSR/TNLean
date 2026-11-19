@@ -32,7 +32,7 @@ def emptyGateScalar : {a b : Layout P} → SourceCircuit a b → ℂ
   | _, _, .id _ => 1
   | _, _, .comp w v => emptyGateScalar w * emptyGateScalar v
   | _, _, .localMap .. => 1
-  | _, _, @SourceCircuit.gate _ C ι _ _ _ _ _ c _ _ => by
+  | _, _, Circuit.gate (@PreparedGate.mk _ C ι _ _ _ _ _ c _ _) => by
       classical
       exact if Nonempty C then 1 else ∑ ξ : ι, c ξ
   | _, _, .swap .. => 1

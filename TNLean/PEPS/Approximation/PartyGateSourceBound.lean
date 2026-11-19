@@ -52,17 +52,11 @@ theorem sourceCount_eq_length_sources {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') 
   induction w with
   | id => rfl
   | comp w w' ih ih' =>
-      simp only [sourceCount, sources, List.length_append, ih, ih', Nat.add_comm]
+      simp only [sourceCount, Circuit.gateCount, sources, List.length_append, ih, ih', Nat.add_comm]
   | localMap => rfl
   | source => rfl
   | swap => rfl
   | frame r w ih => exact ih
-
-@[simp] theorem sourceCount_castLayouts {ℓ ℓ' a b : Layout P} (w : Word ℓ ℓ')
-    (h : ℓ = a) (h' : ℓ' = b) : (w.castLayouts h h').sourceCount = w.sourceCount := by
-  cases h
-  cases h'
-  rfl
 
 /-- The selected part of a word keeps all of its pair sources. -/
 @[simp] theorem sourceCount_selectedPart (f : P → Bool) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ')
@@ -89,7 +83,7 @@ sources. -/
   induction M with
   | final w => exact w.sourceCount_selectedPart f _
   | effect hpq α β ℓS w η rest ih =>
-      simp only [selectedPart, sourceCount, Word.sourceCount_castLayouts,
+      simp only [selectedPart, sourceCount, Circuit.gateCount_castLayouts,
         Word.sourceCount_selectedPart, ih]
 
 /-- Relabelling owners does not create pair sources. -/
@@ -176,10 +170,10 @@ theorem PartyGate.exists_originalCircuit_isSourceBounded (S : Finset P) (hS₀ :
   have hQ := Layout.isReordering_unpartitionWord (fun p ↦ decide (p ∈ S)) ℓ'
   refine ⟨gateCircuit S hS₀ h G hA hU hN', eval_gateCircuit S hS₀ h G hA hU hFx hN', ?_, ?_,
     ?_, ?_, fun r hr => isSourceBounded_gateCircuit S hS₀ h G hA hU hN' hr⟩
-  · simp only [gateCircuit, OriginalCircuit.nonprivateCount,
+  · simp only [gateCircuit, OriginalCircuit.nonprivateCount, Circuit.gateCount,
       Word.nonprivateCount_toOriginalCircuit_of_isReordering hP,
       Word.nonprivateCount_toOriginalCircuit_of_isReordering hQ,
-      OriginalCircuit.nonprivateCount_castLayouts, zero_add, add_zero]
+      Circuit.gateCount_castLayouts, zero_add, add_zero]
     exact nonprivateCount_coreGateCircuit_le S hS₀ G hA hU hN' _
   · intro g
     rcases g with g | g | g

@@ -28,6 +28,7 @@ This restriction is recorded in
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Kraus (blockPhysDim blockPhysDim_eq_pow decodeBlock)
 
 noncomputable section
 
@@ -199,7 +200,7 @@ lemma clusterStringLeft_apply_decode (h : blockPhysDim 2 2 = 4) (i j : Fin 4) :
           (decodeBlock 2 2 (Fin.cast h.symm j) 0) *
         SpinCover.pauli 1 (decodeBlock 2 2 (Fin.cast h.symm i) 1)
           (decodeBlock 2 2 (Fin.cast h.symm j) 1) := by
-  simp [decodeBlock, clusterString_decodeBlock h i, clusterString_decodeBlock h j,
+  simp [clusterString_decodeBlock h i, clusterString_decodeBlock h j,
     clusterStringLeft]
 
 /-- The right endpoint acts on the decoded sites by `σy ⊗ σz`.
@@ -210,7 +211,7 @@ lemma clusterStringRight_apply_decode (h : blockPhysDim 2 2 = 4) (i j : Fin 4) :
           (decodeBlock 2 2 (Fin.cast h.symm j) 0) *
         pauliZ (decodeBlock 2 2 (Fin.cast h.symm i) 1)
           (decodeBlock 2 2 (Fin.cast h.symm j) 1) := by
-  simp [decodeBlock, clusterString_decodeBlock h i, clusterString_decodeBlock h j,
+  simp [clusterString_decodeBlock h i, clusterString_decodeBlock h j,
     clusterStringRight]
 
 /-- The blocked physical twist is the tensor square of `-σx`.
@@ -219,7 +220,7 @@ lemma clusterStringTwist_eq_blockKron (h : blockPhysDim 2 2 = 4) :
     clusterStringTwist = (blockKron 2 (-pauliX)).submatrix
       (Fin.cast h.symm) (Fin.cast h.symm) := by
   ext i j
-  simp [blockKron, decodeBlock, Matrix.submatrix_apply, Fin.prod_univ_two,
+  simp [blockKron, Matrix.submatrix_apply, Fin.prod_univ_two,
     clusterString_decodeBlock h i, clusterString_decodeBlock h j, clusterStringTwist]
 
 /-- The right two-site physical endpoint produces `-σy` on the bond space.

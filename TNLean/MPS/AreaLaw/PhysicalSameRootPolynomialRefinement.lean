@@ -27,6 +27,8 @@ filter from `docs/paper-gaps/alvv16_final_filter_gain.tex`. In the flat
 spectral branch zero rounds retain the given root exactly.
 -/
 
+open ManyBody (interval)
+
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

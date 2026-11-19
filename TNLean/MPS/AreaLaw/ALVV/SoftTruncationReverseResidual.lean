@@ -22,6 +22,8 @@ The corrected reverse estimate retains its explicit scale and threshold conditio
 does not assert the printed uniform energy estimate or the full efficient-filter theorem.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

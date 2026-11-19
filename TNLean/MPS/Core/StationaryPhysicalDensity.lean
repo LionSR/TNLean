@@ -27,6 +27,8 @@ and consistency under tracing out either boundary site.
 -/
 
 open scoped Matrix BigOperators Kronecker ComplexOrder MatrixOrder
+open Kraus (blockPhysDim wordOfBlock length_wordOfBlock decodeBlockEquiv
+  decodeBlock_decodeBlockEquiv_symm blockTensor)
 
 namespace MPSTensor
 

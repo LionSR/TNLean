@@ -52,7 +52,7 @@ theorem parentHamiltonianES_toTensorFromBlocks_eq_of_block_groundSpace_eq
 periodic parent Hamiltonians of their weighted direct sum. This is the
 normalization in Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.1)--(3.2b), before the gap argument of Section 6. -/
-theorem exists_isPrimitiveMPS_family_parentHamiltonianES_eq_of_isNormal
+theorem exists_hasComplementaryFixedPointGap_family_parentHamiltonianES_eq_of_isNormal
     [∀ j, NeZero (dim j)]
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) (hNormal : ∀ j, Kraus.IsNormal (A j))
@@ -60,12 +60,12 @@ theorem exists_isPrimitiveMPS_family_parentHamiltonianES_eq_of_isNormal
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) :
     ∃ (B : (j : Fin r) → MPSTensor d (dim j))
       (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
-      (∀ j, IsPrimitiveMPS (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
+      (∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
       (∀ i j, i ≠ j → ∀ h : dim j = dim i,
         ¬ GaugePhaseEquiv (h ▸ B j) (B i)) ∧
       (∀ L N, parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ) A) L N =
         parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ) B) L N) := by
-  exact (exists_isPrimitiveMPS_family_of_isNormal A hNormal hDistinct).elim
+  exact (exists_hasComplementaryFixedPointGap_family_of_isNormal A hNormal hDistinct).elim
     fun B ⟨ρ, hP, hρ, hGS, hDistinctB⟩ ↦
       ⟨B, ρ, hP, hρ, hDistinctB, fun L N ↦
         parentHamiltonianES_toTensorFromBlocks_eq_of_block_groundSpace_eq

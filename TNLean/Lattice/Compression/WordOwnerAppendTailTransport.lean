@@ -25,7 +25,7 @@ variable {P Q : Type}
 
 private theorem mapOwner_castLayouts_word_heq (g : P → Q) {a b a' b' : Layout P}
     (w : Word a b) (ha : a = a') (hb : b = b') :
-    HEq ((w.castLayouts ha hb).mapOwner g) (w.mapOwner g) := by
+    HEq (Word.mapOwner g (w.castLayouts ha hb)) (w.mapOwner g) := by
   rw [mapOwner_castLayouts]
   exact castLayouts_heq _ _ _
 
@@ -103,7 +103,7 @@ theorem mapOwner_appendTail_heq (g : P → Q) {a b : Layout P}
     (Layout.mapOwner_append g b tail)
     (mapOwner_exchangeTwo_word_heq g a tail) hinner
   change HEq (((exchangeTwo a tail).mapOwner g).comp
-    (((frameList tail w).mapOwner g).comp ((exchangeTwo tail b).mapOwner g)))
+    ((Word.mapOwner g (frameList tail w)).comp ((exchangeTwo tail b).mapOwner g)))
       ((exchangeTwo (Layout.mapOwner g a) (Layout.mapOwner g tail)).comp
         ((frameList (Layout.mapOwner g tail) (w.mapOwner g)).comp
           (exchangeTwo (Layout.mapOwner g tail) (Layout.mapOwner g b))))

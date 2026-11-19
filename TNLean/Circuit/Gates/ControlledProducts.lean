@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Analysis.Complex.Polynomial.Basic
+import QICLean.Circuit.Gate.TwoLevel
 import TNLean.Circuit.Gates.Controlled
 
 /-!
@@ -47,7 +47,7 @@ theorem exists_ne_of_two_le (hn : 2 ≤ n) (a : Fin n) : ∃ b : Fin n, b ≠ a 
   · exact ⟨⟨0, by omega⟩, fun h' => h (by rw [← h'])⟩
 
 theorem exists_pair_superset (hn : 2 ≤ n) {T : Finset (Fin n)} (hT : T.card ≤ 2) :
-    ∃ s t : Fin n, s ≠ t ∧ (T : Set (Fin n)) ⊆ {s, t} := by
+    ∃ s t : Fin n, s ≠ t ∧ T ⊆ {s, t} := by
   rcases Nat.lt_or_ge T.card 2 with h | h
   · rcases Nat.lt_or_ge T.card 1 with h' | h'
     · rw [Nat.lt_one_iff, Finset.card_eq_zero] at h'
@@ -64,48 +64,10 @@ sites. -/
 theorem isPairProduct_of_mem_supportedOperators_card_le_two (hd : 0 < d) (hn : 2 ≤ n)
     {T : Finset (Fin n)} (hT : T.card ≤ 2) {Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ}
     (hZu : Z ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ))
-    (hZ : Z ∈ supportedOperators d (T : Set (Fin n))) : IsPairProduct d n (2 * n) Z := by
+    (hZ : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) T) : IsPairProduct d n (2 * n) Z := by
   obtain ⟨s, t, hst, hsub⟩ := exists_pair_superset hn hT
-  exact isPairProduct_of_mem_supportedOperators_pair hd hst hZu (supportedOperators_mono hsub hZ)
-
-/-! ### The two-level targets -/
-
-/-- The `2 × 2` targets of the controlled operations: real rotations and diagonal phases. -/
-def IsSpecialTwo (g : Matrix (Fin 2) (Fin 2) ℂ) : Prop :=
-  (∃ z : ℂ, ‖z‖ = 1 ∧ g = rotTwo z) ∨ ∃ ν : ℂ, ‖ν‖ = 1 ∧ g = diagTwo ν
-
-theorem IsSpecialTwo.mem_unitary {g : Matrix (Fin 2) (Fin 2) ℂ} (hg : IsSpecialTwo g) :
-    g ∈ unitary (Matrix (Fin 2) (Fin 2) ℂ) := by
-  rcases hg with ⟨z, hz, rfl⟩ | ⟨ν, hν, rfl⟩
-  · exact rotTwo_mem_unitary hz
-  · exact diagTwo_mem_unitary hν
-
-theorem diagTwo_conjTranspose (ν : ℂ) : (diagTwo ν)ᴴ = diagTwo (star ν) := by
-  ext i j; fin_cases i <;> fin_cases j <;> simp [diagTwo, conjTranspose_apply]
-
-theorem IsSpecialTwo.conjTranspose {g : Matrix (Fin 2) (Fin 2) ℂ} (hg : IsSpecialTwo g) :
-    IsSpecialTwo gᴴ := by
-  rcases hg with ⟨z, hz, rfl⟩ | ⟨ν, hν, rfl⟩
-  · exact Or.inl ⟨conj z, by simpa using hz, rotTwo_conjTranspose z⟩
-  · exact Or.inr ⟨star ν, by simpa using hν, diagTwo_conjTranspose ν⟩
-
-theorem exists_sq_eq_of_norm_eq_one {z : ℂ} (hz : ‖z‖ = 1) : ∃ w : ℂ, ‖w‖ = 1 ∧ w * w = z := by
-  obtain ⟨w, hw⟩ := IsAlgClosed.exists_pow_nat_eq z two_pos
-  refine ⟨w, ?_, by rw [← hw]; ring⟩
-  have h : ‖w‖ ^ 2 = 1 := by rw [← norm_pow, hw, hz]
-  nlinarith [norm_nonneg w, sq_nonneg (‖w‖ - 1)]
-
-/-- Every target is a group commutator `g₁ g₂ g₁† g₂†` with `g₁` a target and `g₂` unitary. -/
-theorem IsSpecialTwo.exists_commutator {g : Matrix (Fin 2) (Fin 2) ℂ} (hg : IsSpecialTwo g) :
-    ∃ g₁ g₂ : Matrix (Fin 2) (Fin 2) ℂ, IsSpecialTwo g₁ ∧
-      g₂ ∈ unitary (Matrix (Fin 2) (Fin 2) ℂ) ∧ g = g₁ * g₂ * star g₁ * star g₂ := by
-  rcases hg with ⟨z, hz, rfl⟩ | ⟨ν, hν, rfl⟩
-  · obtain ⟨w, hw, rfl⟩ := exists_sq_eq_of_norm_eq_one hz
-    refine ⟨rotTwo w, phaseTwo, Or.inl ⟨w, hw, rfl⟩, phaseTwo_mem_unitary, ?_⟩
-    rw [rotTwo_sq_eq_commutator, star_eq_conjTranspose, rotTwo_conjTranspose]; rfl
-  · obtain ⟨w, hw, rfl⟩ := exists_sq_eq_of_norm_eq_one hν
-    refine ⟨diagTwo w, quarterTwo, Or.inr ⟨w, hw, rfl⟩, quarterTwo_mem_unitary, ?_⟩
-    rw [diagTwo_sq_eq_commutator, star_eq_conjTranspose, diagTwo_conjTranspose]; rfl
+  exact isPairProduct_of_mem_supportedOperators_pair hd hst hZu
+      (ManyBody.supportedOperators_mono hsub hZ)
 
 /-! ### Removing the controls one by one -/
 

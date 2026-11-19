@@ -73,6 +73,7 @@ carries the phase. Documented in `docs/paper-gaps/mswc24_block_form_mixed_overla
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix Filter Topology Complex
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

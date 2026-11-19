@@ -35,7 +35,7 @@ private theorem restrict_restrict_eq_of_implies (f g : P → Bool)
 
 private theorem restrict_castLayouts_word_heq (f : P → Bool) {a b a' b' : Layout P}
     (w : Word a b) (ha : a = a') (hb : b = b') (hs : w.sources = []) :
-    HEq ((w.castLayouts ha hb).restrict f ((Word.sources_castLayouts _ _ _).trans hs))
+    HEq (Word.restrict f (w.castLayouts ha hb) ((Word.sources_castLayouts _ _ _).trans hs))
       (w.restrict f hs) := by
   rw [Word.restrict_castLayouts f w ha hb hs]
   exact Word.castLayouts_heq _ _ _

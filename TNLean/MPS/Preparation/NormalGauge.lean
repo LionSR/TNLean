@@ -110,7 +110,7 @@ theorem IsNormalTensor.exists_normalGauge {A : MPSTensor d D} (hA : IsNormalTens
   set B := Kraus.tpGauge (d := d) (D := D) A σ
   have hNB : Kraus.IsNormal B := isNormal_of_gaugeEquiv hA.isNormal hGauge
   obtain ⟨L, hL0, hL⟩ := hNB
-  obtain ⟨ρ, hρ, hfix, -⟩ := isNormal_implies_stronglyIrreducible B hTP ⟨L, hL0, hL⟩
+  obtain ⟨ρ, hρ, hfix⟩ := exists_posDef_fixedPoint_of_isNormal B hTP ⟨L, hL0, hL⟩
   have htr : 0 < ρ.trace := hρ.trace_pos
   refine ⟨B, L, (ρ.trace)⁻¹ • ρ, hGauge, hL0, hL, hTP, hρ.smul (inv_pos.mpr htr), ?_, ?_⟩
   · rw [map_smul, hfix]

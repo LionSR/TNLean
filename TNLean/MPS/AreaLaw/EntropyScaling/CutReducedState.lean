@@ -27,7 +27,8 @@ theorem IsOpenMPS.rank_regionState_leftBlock_le {L q D : ℕ}
     {φ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hφ : IsOpenMPS L q D (fun x ↦ φ x)) {k : ℕ} (hk0 : 0 < k) (hkL : k < L) :
     (Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) φ).rank ≤ D := by
-  simpa only [Entropy.regionState, Matrix.partialTraceRight_vecMulVec_eq,
+  simpa only [Entropy.regionState, ManyBody.regionState, ManyBody.cutVector,
+    Matrix.partialTraceRight_vecMulVec_eq,
     Matrix.rank_self_mul_conjTranspose, cutMatrix] using hφ.rank_cutMatrix_le hk0 hkL
 
 /-- Taking a reduced state at a chain cut cannot increase the full trace-norm
@@ -72,7 +73,8 @@ theorem IsOpenMPS.rank_regionState_leftBlock_le_max {L q D : ℕ}
     · exact (rank_cutMatrix_le_one_of_le hkL φ).trans (le_max_left _ _)
     exact (hφ.rank_cutMatrix_le (Nat.pos_of_ne_zero hk0) (Nat.lt_of_not_ge hkL)).trans
       (le_max_right _ _)
-  simpa only [Entropy.regionState, Matrix.partialTraceRight_vecMulVec_eq,
+  simpa only [Entropy.regionState, ManyBody.regionState, ManyBody.cutVector,
+    Matrix.partialTraceRight_vecMulVec_eq,
     Matrix.rank_self_mul_conjTranspose, cutMatrix] using hcut
 
 /-- The rank bound for an arbitrary contiguous block, including endpoint cuts,

@@ -81,7 +81,7 @@ theorem isAllowed_selectedPart (f : P → Bool) {ℓX ℓY : Layout P} (M : Part
   induction M with
   | final w => exact w.isAllowed_selectedPart f _ hM
   | effect hpq α β ℓS w η rest ih =>
-      exact ⟨(Word.isAllowed_castLayouts _ _ _).2 (w.isAllowed_selectedPart f _ hM.1), hM.2.1,
+      exact ⟨(Circuit.isAllowed_castLayouts _ _ _).2 (w.isAllowed_selectedPart f _ hM.1), hM.2.1,
         ih h.2.2.2 hM.2.2⟩
 
 @[simp] theorem effectCount_selectedPart (f : P → Bool) {ℓX ℓY : Layout P}
@@ -146,7 +146,7 @@ theorem partitionIso_eval (f : P → Bool) {ℓX ℓY : Layout P} (M : PartyChai
       have hw := w.partitionIso_eval_of_usesOnly f h.2.2.1
       have he := partitionIso_effect (f := f) h.1 h.2.1 α β η ℓS
       simp only [toEffectChain, EffectChain.eval, selectedPart, complementPart,
-        Word.eval_castLayouts, Word.eval_comp]
+        Circuit.eval_castLayouts, Circuit.eval_comp]
       calc isoL (Layout.partitionIso f _) ∘L rest.toEffectChain.eval ∘L effectMap η (Mem ℓS) ∘L
             isoL (pairHeadIso ℓS) ∘L w.eval
           = TensorProduct.mapL (rest.selectedPart f h.2.2.2).toEffectChain.eval

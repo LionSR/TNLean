@@ -156,7 +156,7 @@ theorem right_notMem (K : Finset (Fin N))
     (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond) {i : Fin N}
     (hi : i ∈ K) (hne : i ≠ i + 1) : i + 1 ∉ K := by
   intro hj
-  exact Set.disjoint_left.mp (hK hi hj hne)
+  exact Finset.disjoint_left.mp (hK hi hj hne)
     (show i + 1 ∈ ringBond i by simp [ringBond])
     (show i + 1 ∈ ringBond (i + 1) by simp [ringBond])
 

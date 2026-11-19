@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.Dimension
-import TNLean.MPS.Symmetry.MPOSymmetry.IsingFusion
+import TNLean.MPS.Examples.Ising.IsingFusion
 
 /-!
 # The Perron–Frobenius dimensions of the Ising fusion ring

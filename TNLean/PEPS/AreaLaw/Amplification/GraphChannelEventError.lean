@@ -41,7 +41,7 @@ theorem norm_localRootChannel_sub_self_le_exp_sum_siteOscillation
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (n : ℕ)
-    (hε : ∀ l ≤ n, ‖k - siteExpectation q (regions l) k‖ ≤
+    (hε : ∀ l ≤ n, ‖k - ManyBody.regionExpectation (regions l) k‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α)))
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     ‖localRootChannel (regions n) k B - B‖ ≤
@@ -67,25 +67,27 @@ theorem norm_localRootChannel_sub_self_le_exp_sum_siteOscillation
     exact (norm_sub_le_norm_sub_add_norm_sub _ (localRootChannel (regions n) k B) _).trans
       ((add_le_add hnext hprev).trans_eq (add_comm _ _))
 
+open Classical in
 /-- Once the graph-ball cutoff contains the anchor component, the finite shell
 bound controls the full physical event error. Source: area law,
 `09-amplification.tex`, lines 135–137 and 188–191. -/
 theorem norm_spectatorRootChannel_sub_self_le_exp_of_component_support
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
-    (hk : k ∈ supportedOperators q {x | G.Reachable a x})
+    (hk : k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+        (Finset.univ.filter fun x ↦ G.Reachable a x))
     {C c α : ℝ} (hC : 0 ≤ C) (hc : 0 < c) (hα : 0 < α) (hα₁ : α ≤ 1)
     (n : ℕ) (hn : Finset.univ.sup (G.dist a) ≤ n)
-    (hε : ∀ l ≤ n, ‖k - siteExpectation q (graphBall G a l) k‖ ≤
+    (hε : ∀ l ≤ n, ‖k - ManyBody.regionExpectation (ManyBody.graphBall G a l) k‖ ≤
       C * Real.exp (-(c * (l : ℝ) ^ α)))
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     ‖spectatorRootChannel k B - B‖ ≤
       ∑ l ∈ Finset.range (n + 1),
         ((2 + 8 * Real.sqrt C * Real.exp (c / 2)) *
           Real.exp (-(c / 2 * (l : ℝ) ^ α))) *
-            ∑ z ∈ graphBall G a l, siteOscillation q z B := by
+            ∑ z ∈ ManyBody.graphBall G a l, siteOscillation q z B := by
   simpa only [localRootChannel_graphBall_eq_of_component_support G a hk hn] using
     norm_localRootChannel_sub_self_le_exp_sum_siteOscillation
-      (graphBall G a) (graphBall_mono G a) hk₀ hk₁ hC hc hα hα₁ n hε B
+      (ManyBody.graphBall G a) (ManyBody.graphBall_mono G a) hk₀ hk₁ hC hc hα hα₁ n hε B
 
 end TNLean.PEPS.AreaLaw

@@ -39,6 +39,7 @@ letterwise reconstruction, not only equality of closed-chain coefficients.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -74,21 +75,21 @@ Source: arXiv:1606.00608, lines 227--235 define physical blocking and normal
 tensors; the closure under reblocking is used in the normal-block arguments at
 lines 332--345. -/
 theorem blockTensor {A : MPSTensor d D} (hA : IsNormalTensor A) (p : ℕ) (hp : 0 < p) :
-    IsNormalTensor (MPSTensor.blockTensor (d := d) (D := D) A p) := by
+    IsNormalTensor (Kraus.blockTensor (d := d) (D := D) A p) := by
   let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσpos, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
   let B : MPSTensor d D := Kraus.tpGauge (d := d) (D := D) A σ
   have hExtra := tp_primitive_irreducible_extra_blocking
     (d := d) (D := D) B hTP hPrim hIrr hp
-  have hNormalAlg : Kraus.IsNormal (MPSTensor.blockTensor (d := d) (D := D) B p) :=
+  have hNormalAlg : Kraus.IsNormal (Kraus.blockTensor (d := d) (D := D) B p) :=
     isNormal_of_tp_primitive_irreducible
       (d := blockPhysDim d p) (D := D)
-      (MPSTensor.blockTensor (d := d) (D := D) B p) hExtra.1 hExtra.2.1 hExtra.2.2
+      (Kraus.blockTensor (d := d) (D := D) B p) hExtra.1 hExtra.2.1 hExtra.2.2
   have hBlockedGaugeNormal :
-      IsNormalTensor (MPSTensor.blockTensor (d := d) (D := D) B p) :=
+      IsNormalTensor (Kraus.blockTensor (d := d) (D := D) B p) :=
     isNormalTensor_of_isNormal_leftCanonical
       (d := blockPhysDim d p) (D := D)
-      (MPSTensor.blockTensor (d := d) (D := D) B p) hNormalAlg hExtra.1
+      (Kraus.blockTensor (d := d) (D := D) B p) hNormalAlg hExtra.1
   exact hBlockedGaugeNormal.of_gaugeEquiv (hGauge.blockTensor p)
 
 end IsNormalTensor
@@ -149,13 +150,13 @@ blocked by that length.
 Source: arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`. -/
 noncomputable def blockTensor {A : MPSTensor d D}
     (data : CPSVCanonicalFormData A) (p : ℕ) (hp : 0 < p) :
-    CPSVCanonicalFormData (MPSTensor.blockTensor (d := d) (D := D) A p) where
+    CPSVCanonicalFormData (Kraus.blockTensor (d := d) (D := D) A p) where
   r := data.r
   dim := data.dim
   dim_pos := data.dim_pos
   weights := fun k ↦ data.weights k ^ p
   weights_ne_zero := fun k ↦ pow_ne_zero p (data.weights_ne_zero k)
-  blocks := fun k ↦ MPSTensor.blockTensor (d := d) (D := data.dim k) (data.blocks k) p
+  blocks := fun k ↦ Kraus.blockTensor (d := d) (D := data.dim k) (data.blocks k) p
   blocks_normal := fun k ↦ (data.blocks_normal k).blockTensor p hp
   total_dim_le := data.total_dim_le
   ambient_coisometry := data.ambient_coisometry
@@ -167,7 +168,7 @@ noncomputable def blockTensor {A : MPSTensor d D}
       have hlen := congrArg List.length hnil
       simp [Kraus.length_wordOfBlock, hp.ne'] at hlen
     calc
-      MPSTensor.blockTensor (d := d) (D := D) A p i =
+      Kraus.blockTensor (d := d) (D := D) A p i =
           data.ambient_coisometryᴴ *
             Kraus.evalWord (toTensorFromBlocks (d := d) data.weights data.blocks)
               (Kraus.wordOfBlock d p i) *
@@ -179,7 +180,7 @@ noncomputable def blockTensor {A : MPSTensor d D}
       _ = data.ambient_coisometryᴴ *
             toTensorFromBlocks (d := blockPhysDim d p)
               (fun k ↦ data.weights k ^ p)
-              (fun k ↦ MPSTensor.blockTensor (d := d) (D := data.dim k)
+              (fun k ↦ Kraus.blockTensor (d := d) (D := data.dim k)
                 (data.blocks k) p) i *
             data.ambient_coisometry := by
             have hblock := blockTensor_toTensorFromBlocks_apply
@@ -200,7 +201,7 @@ matrix is retained, so any separately supplied trace normalization is also uncha
 Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. -/
 noncomputable def blockTensor {A : MPSTensor d D}
     (data : CPSVCanonicalFormIIData A) (p : ℕ) (hp : 0 < p) :
-    CPSVCanonicalFormIIData (MPSTensor.blockTensor (d := d) (D := D) A p) where
+    CPSVCanonicalFormIIData (Kraus.blockTensor (d := d) (D := D) A p) where
   toCPSVCanonicalFormData := data.toCPSVCanonicalFormData.blockTensor p hp
   blocks_left_canonical := fun k ↦
     leftCanonical_blockTensor (data.blocks k) p (data.blocks_left_canonical k)
@@ -221,7 +222,7 @@ Source: arXiv:1606.00608, lines 227--244 define blocking, normal tensors, and
 canonical form; lines 259--301 give the weight-power expansion under products. -/
 theorem blockTensor {A : MPSTensor d D} (hA : IsCPSVCanonicalForm A)
     (p : ℕ) (hp : 0 < p) :
-    IsCPSVCanonicalForm (MPSTensor.blockTensor (d := d) (D := D) A p) := by
+    IsCPSVCanonicalForm (Kraus.blockTensor (d := d) (D := D) A p) := by
   obtain ⟨data⟩ := hA
   exact ⟨data.blockTensor p hp⟩
 

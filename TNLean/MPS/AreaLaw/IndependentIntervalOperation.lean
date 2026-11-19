@@ -16,6 +16,8 @@ interval recursion. This is an auxiliary construction for ALVV,
 arXiv:1602.08828v2, Figure `fig:algo1`, lines 1777–1817.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- The genuine finite endpoint coordinate of a valid long interval.

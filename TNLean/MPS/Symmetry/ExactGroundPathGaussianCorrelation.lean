@@ -43,7 +43,8 @@ theorem ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound
     ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) [NeZero N] (_hN : 2 ≤ N),
       ∀ (A B : MPOTensor.ChainOperator d N) (X Y : Finset (Fin N)),
       ∀ (hX : X.Nonempty) (hY : Y.Nonempty),
-      A ∈ supportedOperators d X → B ∈ supportedOperators d Y →
+      A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X →
+          B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y →
       Disjoint (X : Set (Fin N)) (Y : Set (Fin N)) →
       ⟪mpvState (Q.tensor γ) N,
         toEuclideanCLM (𝕜 := ℂ) A (mpvState (Q.tensor γ) N)⟫_ℂ = 0 →
@@ -62,7 +63,7 @@ theorem ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound
   intro γ hγ N _ hN A B X Y hX hY hA hB hXY hcenter q T a hq hT ha
   obtain ⟨E₀, hH, hline, hgap⟩ := hdata γ hγ N hN
   have hψ : mpvState (Q.tensor γ) N ∈
-      groundEigenspace (interactionHamiltonian (P.interaction γ) hN) E₀ := by
+      ManyBody.groundSpace (interactionHamiltonian (P.interaction γ) hN) E₀ := by
     rw [hline]
     exact Submodule.mem_span_singleton_self _
   apply norm_centered_ground_correlation_le_gaussian hq hΔ hT (by positivity)
@@ -82,7 +83,8 @@ theorem ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound
     ∃ Δ : ℝ, 0 < Δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ (N : ℕ) [NeZero N] (_hN : 2 ≤ N),
       ∀ (A B : MPOTensor.ChainOperator d N) (X Y : Finset (Fin N)),
       ∀ (hX : X.Nonempty) (hY : Y.Nonempty),
-      A ∈ supportedOperators d X → B ∈ supportedOperators d Y →
+      A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X →
+          B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y →
       Disjoint (X : Set (Fin N)) (Y : Set (Fin N)) →
       ∀ (q T a : ℝ), 0 < q → 0 < T → 0 ≤ a →
         let ψ := mpvState (Q.tensor γ) N
@@ -104,8 +106,10 @@ theorem ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound
     exact ((EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm.map_eq_zero_iff).not.mpr
       (Q.nonzero γ hγ N (by omega))
   let A₀ := centeredObservable ψ A
-  have hA₀ : A₀ ∈ supportedOperators d X :=
-    centeredObservable_mem ψ (one_mem_supportedOperators _) hA
+  have hA₀ : A₀ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X :=
+    centeredObservable_mem ψ
+      (S := Subalgebra.toSubmodule (ManyBody.supportedOperators (fun _ ↦ Fin d) X).toSubalgebra)
+      (one_mem (ManyBody.supportedOperators _ _)) hA
   have hcenter : ⟪ψ, toEuclideanCLM (𝕜 := ℂ) A₀ ψ⟫_ℂ = 0 :=
     inner_centeredObservable_eq_zero hψne A
   have hNormA : ‖A₀‖ ≤ 2 * ‖A‖ := norm_centeredObservable_le hψne A

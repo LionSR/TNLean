@@ -17,6 +17,8 @@ The boundary, tail, mass and residual estimates are all derived from
 the original chain terms and its three positive disconnected blocks.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator InnerProductSpace
 
 noncomputable section

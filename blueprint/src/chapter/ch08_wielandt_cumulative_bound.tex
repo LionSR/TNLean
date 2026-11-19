@@ -40,9 +40,20 @@ Section~\ref{sec:app_wielandt_cumulative_support}.
 \subsection{Paper primitivity and indices}
 
 For the quantitative bounds, write $d'=\dim S_1(A)$ for the number of
-linearly independent Kraus operators. The source definitions and
-Proposition~3 of~\cite{Sanz2010Quantum} distinguish uniform vector spreading,
-eventual exact-word spanning, and spectral strong irreducibility.
+linearly independent Kraus operators. The source~\cite{Sanz2010Quantum}
+introduces three properties of the transfer map $\E_A$. It is
+\emph{primitive} if there is a positive integer $q$ such that
+$H_q(A,\varphi)=\C^D$ for every nonzero $\varphi\in\C^D$, the same $q$
+serving all vectors. It has \emph{eventually full Kraus rank} if
+$S_i(A)=\MN{D}$ for some positive integer $i$; this is normality of $A$
+(Definition~\ref{def:normal}). It is \emph{strongly irreducible} if $1$ is its
+only eigenvalue of modulus one and the corresponding eigenvector is positive
+definite. Proposition~3 of the source, Lemma~\ref{thm:wielandt_proposition_three}
+below, shows that the three properties coincide when
+$\sum_i(A^i)^\dagger A^i=\Id$. Accordingly the three properties are not given
+separate definitions: each statement below spells out the property it uses, and
+the results that the source states for a primitive channel are stated for a
+normal tensor.
 
 \begin{definition}[Kraus rank]\label{def:wielandt_kraus_rank}
     \lean{MPSTensor.krausRank}
@@ -52,34 +63,10 @@ eventual exact-word spanning, and spectral strong irreducibility.
     $\krausrk(A)=\dim S_1(A)$.
 \end{definition}
 
-\begin{definition}[Eventually full Kraus rank]
-    \label{def:eventually_full_kraus_rank}
-    \lean{MPSTensor.HasEventuallyFullKrausRank}
-    \leanok
-    \uses{def:word_span}
-    The Kraus family has \emph{eventually full Kraus rank} if there is a
-    positive integer $i$ such that $S_i(A)=\MN{D}$.
-\end{definition}
-
-\begin{definition}[Paper primitivity]\label{def:paper_primitive}
-    \lean{MPSTensor.IsPrimitivePaper}
-    \leanok
-
-    The transfer map is \emph{primitive in the sense of
-        \cite{Sanz2010Quantum}} if there is a positive integer $q$ such that
-    \begin{align}
-        H_q(A,\varphi)
-         & =\C^D
-        \label{eq:wld_paper_primitive_spread}
-    \end{align}
-    for every nonzero $\varphi\in\C^D$. The same $q$ works for all
-    nonzero vectors.
-\end{definition}
-
 \begin{definition}[Full-Kraus-rank index]\label{def:wielandt_i_index}
     \lean{MPSTensor.iIndex}
     \leanok
-    \uses{def:eventually_full_kraus_rank}
+    \uses{def:word_span}
     The \emph{full-Kraus-rank index} is
     \begin{align}
         \iota(A)
@@ -92,7 +79,6 @@ eventual exact-word spanning, and spectral strong irreducibility.
 \begin{definition}[Primitivity index]\label{def:wielandt_q_index}
     \lean{MPSTensor.qIndex}
     \leanok
-    \uses{def:paper_primitive}
     The \emph{primitivity index} is
     \begin{align}
         q(\E_A)
@@ -136,13 +122,14 @@ eventual exact-word spanning, and spectral strong irreducibility.
 
 \begin{lemma}[Primitive stochastic embedding]
     \label{thm:primitive_stochastic_embedding}
-    \lean{MPSTensor.isPrimitivePaper_stochasticFamily,
+    \lean{MPSTensor.exists_vectorSpreadSpan_stochasticFamily_eq_top,
         MPSTensor.stochasticFamily_primitive_and_indices}
     \leanok
-    \uses{def:stochastic_wielandt_embedding, def:paper_primitive,
+    \uses{def:stochastic_wielandt_embedding,
         def:wielandt_i_index, def:wielandt_q_index}
     Let $a$ be a primitive column-stochastic $D\times D$ matrix with
-    $D>0$. Then its matrix-unit quantum embedding is primitive and
+    $D>0$. Then its matrix-unit quantum embedding is primitive, that is,
+    $H_q(K,\varphi)=\C^D$ for one positive $q$ and every $\varphi\neq0$, and
     $q(\E_K)=p(a)=\iota(K)$, as in
     \cite[Proposition~2]{Sanz2010Quantum}.
 \end{lemma}
@@ -154,25 +141,7 @@ eventual exact-word spanning, and spectral strong irreducibility.
     Lemma~\ref{thm:stochastic_wielandt_indices}.
 \end{proof}
 
-\begin{definition}[Strengthened strong irreducibility]
-    \label{def:strongly_irreducible_paper}
-    \lean{MPSTensor.IsStronglyIrreduciblePaper}
-    \leanok
-    \uses{def:transfer_map}
-    An MPS tensor $A$ is \emph{strongly irreducible} if there exists a matrix
-    $\rho>0$ such that
-    \begin{align}
-        \E_A(\rho)                 & =\rho, \notag \\
-        \spec_{\mathrm{per}}(\E_A) & =\{1\},
-        \notag
-    \end{align}
-    and $\E_A$ is irreducible. This formulation includes explicit irreducibility
-    alongside the peripheral spectrum and fixed-point condition of
-    Sanz et al.~\cite[Proposition~3(c)]{Sanz2010Quantum}; see
-    \cite{gap:spwc10_wielandt_one_step_subspace}.
-\end{definition}
-
-The next seven results use the following notation. For nonnegative integers
+The next three results use the following notation. For nonnegative integers
 $d$ and $D$, let $K=\{K^i\}_{i=0}^{d-1}$ be a finite family of $D\times D$
 matrices, and let $\E_K$ be its Kraus map.
 
@@ -235,30 +204,6 @@ matrices, and let $\E_K$ be its Kraus map.
     to the Kraus family formed by the matrices of $A$ yields $\sigma=c\rho$.
 \end{proof}
 
-
-\begin{lemma}[Kraus-span equivalence]%
-    \label{thm:wolf_6_8_kraus_span}
-    \lean{MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank}
-    \leanok
-    Under normalization, primitivity in Wolf's sense is equivalent to eventual
-    full Kraus rank.
-\end{lemma}
-\begin{lemma}[Combined primitivity equivalence]%
-    \label{thm:wolf_6_8_conjunction}
-    \lean{MPSTensor.wolf_theorem_6_8_conjunction}
-    \leanok
-    \uses{thm:wolf_6_8_kraus_span}
-    Under normalization, primitivity in Wolf's sense is equivalent to the conjunction
-    of eventual full Kraus rank, normality, and strong irreducibility.
-\end{lemma}
-\begin{remark}[Eventually full Kraus rank and normality]
-    \label{rem:wolf_6_8_pairwise}
-    \lean{MPSTensor.hasEventuallyFullKrausRank_iff_isNormal}
-    \leanok
-    Eventual full Kraus rank is equivalent to normality. The remaining
-    pairwise primitivity equivalences are stated in
-    Lemma~\ref{thm:wielandt_proposition_three}.
-\end{remark}
 
 \subsection{Different indices for the three-Pauli channel}
 
@@ -336,15 +281,14 @@ matrices, and let $\E_K$ be its Kraus map.
     and the length-two span is full.
 \end{proof}
 
-\begin{lemma}[Eventual full Kraus rank gives paper primitivity]
+\begin{lemma}[A full word span spreads every vector]
     \label{thm:paper_primitive_of_full_kraus_rank}
-    \lean{MPSTensor.isPrimitivePaper_of_hasEventuallyFullKrausRank}
+    \lean{MPSTensor.exists_vectorSpreadSpan_eq_top_of_isNormal}
     \leanok
-    \uses{def:eventually_full_kraus_rank, def:paper_primitive}
-    If $S_i(A)=\MN{D}$ for some positive $i$, then $H_i(A,\varphi)=\C^D$ for
-    every $\varphi\neq0$, so $A$ is primitive in the sense of
-    Definition~\ref{def:paper_primitive}.  No normalization is imposed on
-    $A$.
+    \uses{def:normal}
+    If $A$ is normal, so that $S_i(A)=\MN{D}$ for some positive $i$, then
+    $H_i(A,\varphi)=\C^D$ for every $\varphi\neq0$.  No normalization is
+    imposed on $A$.
 \end{lemma}
 
 \begin{proof}
@@ -354,59 +298,56 @@ matrices, and let $\E_K$ be its Kraus map.
     applied to $\varphi$.
 \end{proof}
 
-\begin{lemma}[Paper primitivity gives strong irreducibility]
-    \label{thm:strongly_irreducible_of_paper_primitive}
-    \lean{MPSTensor.isStronglyIrreduciblePaper_of_isPrimitivePaper}
-    \leanok
-    \uses{def:paper_primitive, def:strongly_irreducible_paper}
-    Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.  If $A$ is primitive
-    in the sense of Definition~\ref{def:paper_primitive}, then $\E_A$ is
-    strongly irreducible.
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    For the finite Kraus family of $A$,
-    Theorems~\cite[``Positive-definite fixed point from vector spreading'']{QICLean2026Blueprint}
-    and~\cite[``Primitivity from vector spreading'']{QICLean2026Blueprint}
-    give a positive-definite fixed point and show that $1$ is the only
-    peripheral eigenvalue, and
-    Theorem~\cite[``Irreducibility from vector spreading'']{QICLean2026Blueprint}
-    gives irreducibility of $\E_A$.  Together these are the three conditions
-    of Definition~\ref{def:strongly_irreducible_paper}.
-\end{proof}
-
-\begin{lemma}[Strengthened form of the primitivity equivalence]
+\begin{lemma}[The primitivity equivalence]
     \label{thm:wielandt_proposition_three}
-    \lean{MPSTensor.primitivePaper_iff_stronglyIrreducible}
-    \lean{MPSTensor.hasEventuallyFullKrausRank_iff_stronglyIrreducible}
+    \lean{MPSTensor.primitivity_tfae}
     \leanok
-    \uses{def:paper_primitive, def:eventually_full_kraus_rank, def:strongly_irreducible_paper}
+    \uses{def:normal, def:transfer_map}
     Let $D>0$ and suppose
     $\sum_i(A^i)^\dagger A^i=\Id$. The following are equivalent:
     \begin{enumerate}
         \item there is a positive $q$ for which
               $H_q(A,\varphi)=\C^D$ for every $\varphi\neq0$;
         \item there is a positive $i$ for which $S_i(A)=\MN{D}$;
-        \item $\E_A$ is strongly irreducible.
+        \item there is $\rho>0$ such that $\E_A(\rho)=\rho$, the fixed
+              eigenspace is $\C\rho$, and $1$ is the only peripheral
+              eigenvalue of $\E_A$.
     \end{enumerate}
-    Proposition~3 of~\cite{Sanz2010Quantum} states the same equivalence with
-    item~(3) replaced by the printed condition in the source: $1$ is the only
-    peripheral eigenvalue, and its one-dimensional eigenspace is generated by
-    a positive-definite fixed point. Here item~(3) includes the additional
-    irreducibility condition.
+    This is \cite[Proposition~3]{Sanz2010Quantum}: the three items are
+    primitivity, eventual full Kraus rank, and strong irreducibility of
+    $\E_A$. Item~(2) is normality of $A$. In item~(3), irreducibility of
+    $\E_A$ is a conclusion rather than an additional hypothesis. The
+    equivalence of items~(2) and~(3) is also
+    \cite[Theorems~6.7 and~6.8]{Wolf2012Quantum}.
 \end{lemma}
 
 \begin{proof}\leanok
     \uses{thm:paper_primitive_of_full_kraus_rank,
-        thm:strongly_irreducible_of_paper_primitive}
+        thm:primitive_from_strongly_irred}
     Lemma~\ref{thm:paper_primitive_of_full_kraus_rank} is
-    (2)$\Rightarrow$(1), and
-    Lemma~\ref{thm:strongly_irreducible_of_paper_primitive} is
-    (1)$\Rightarrow$(3).
+    (2)$\Rightarrow$(1).
 
-    For (3)$\Rightarrow$(2), the power decomposition
-    $\E_A^m=P_\rho+(\E_A-P_\rho)^m$ has complementary powers tending to zero.
+    For (1)$\Rightarrow$(3), apply to the finite Kraus family of $A$
+    Theorems~\cite[``Positive-definite fixed point from vector spreading'']{QICLean2026Blueprint},
+    \cite[``Primitivity from vector spreading'']{QICLean2026Blueprint}
+    and~\cite[``Irreducibility from vector spreading'']{QICLean2026Blueprint}:
+    $\E_A$ is irreducible and $1$ is its only peripheral eigenvalue.
+    Lemma~\ref{thm:primitive_from_strongly_irred} then gives a fixed point
+    $\rho>0$ with a complementary spectral gap, and the gap makes every fixed
+    point a multiple of $\rho$.
+
+    For (3)$\Rightarrow$(2), first let $P\neq0,\Id$ be an orthogonal
+    projection with $\E_A(P\MN{D}P)\subseteq P\MN{D}P$. The restriction of
+    $\E_A$ to this corner is positive and trace preserving, so it fixes a
+    density matrix $\sigma=P\sigma P$. Simplicity of the fixed eigenspace
+    gives $\sigma=c\rho$ with $c\neq0$, hence
+    \begin{align}
+        (\Id-P)\rho(\Id-P) & =c^{-1}(\Id-P)\sigma(\Id-P)=0,
+        \notag
+    \end{align}
+    contradicting $\rho>0$. Thus $\E_A$ is irreducible. The power
+    decomposition $\E_A^m=P_\rho+(\E_A-P_\rho)^m$ then has complementary
+    powers tending to zero.
     If $S_m(A)\neq\MN{D}$ for every $m$, a nonzero matrix $B$ orthogonal to
     $S_m(A)$ has vanishing trace pairing on the left, while positive
     definiteness gives a lower bound $c\lVert B\rVert^2$ for the $P_\rho$ term
@@ -414,73 +355,42 @@ matrices, and let $\E_K$ be its Kraus map.
     large $m$.
 \end{proof}
 
-\begin{lemma}[The simple peripheral eigenspace criterion]
-    \label{thm:wielandt_literal_peripheral_criterion}
-    \lean{MPSTensor.isStronglyIrreduciblePaper_of_simple_peripheral_fixedPoint,
-        MPSTensor.primitivePaper_iff_exists_simple_peripheral_fixedPoint,
-        MPSTensor.hasEventuallyFullKrausRank_iff_exists_simple_peripheral_fixedPoint}
-    \leanok
-    \uses{def:paper_primitive, def:eventually_full_kraus_rank,
-        def:strongly_irreducible_paper, thm:wielandt_proposition_three,
-        thm:wolf_6_8_kraus_span, thm:strongly_irreducible_of_paper_primitive,
-        thm:primitive_from_strongly_irred}
-    Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.
-    The following conditions are equivalent:
-    \begin{enumerate}
-        \item $\E_A$ is primitive.
-        \item The exact-length word spaces eventually equal $\MN{D}$.
-        \item There is $\rho>0$ such that $\E_A(\rho)=\rho$, the fixed
-              eigenspace is $\mathbb C\rho$, and $1$ is the only peripheral
-              eigenvalue.
-    \end{enumerate}
-    In the third condition, irreducibility is a conclusion rather than
-    an additional hypothesis. This is \cite[Proposition~3]{Sanz2010Quantum}.
-\end{lemma}
-\begin{proof}\leanok
-    For a primitive channel, the positive-definite fixed point and the
-    complementary spectral gap give the third condition. Conversely, assume
-    the third condition and let $P\neq0,\Id$ be an orthogonal projection with
-    $\E_A(P\MN{D}P)\subseteq P\MN{D}P$. The restriction of $\E_A$ to this
-    corner is positive and trace preserving, so it fixes a density matrix
-    $\sigma=P\sigma P$. Simplicity of the fixed eigenspace gives
-    $\sigma=c\rho$ with $c\neq0$, hence
-    \begin{align}
-        (\Id-P)\rho(\Id-P) & =c^{-1}(\Id-P)\sigma(\Id-P)=0,
-        \notag
-    \end{align}
-    contradicting $\rho>0$. Thus $\E_A$ is irreducible, and together with
-    peripheral primitivity this gives eventual full Kraus rank and hence
-    primitivity.
-\end{proof}
-
-\begin{lemma}[Normalized normal tensors are strongly irreducible]
+\begin{lemma}[Spectral consequences of normality]
     \label{thm:normalized_normal_strongly_irreducible}
-    \lean{MPSTensor.isStronglyIrreduciblePaper_of_hasEventuallyFullKrausRank,
-        MPSTensor.isNormal_implies_stronglyIrreducible}
+    \lean{MPSTensor.isIrreducibleMap_transferMap_of_isNormal,
+        MPSTensor.exists_posDef_fixedPoint_of_isNormal,
+        MPSTensor.isPrimitive_transferMap_of_isNormal,
+        MPSTensor.exists_hasComplementaryFixedPointGap_posDef_of_isNormal}
     \leanok
-    \uses{def:eventually_full_kraus_rank, def:normal,
-        def:strongly_irreducible_paper}
-    Let $D>0$ and suppose $\sum_i(A^i)^\dagger A^i=\Id$.  If $A$ has
-    eventually full Kraus rank, or equivalently is normal, then $\E_A$ is
-    strongly irreducible.
+    \uses{def:normal, def:transfer_map, def:primitive_mps}
+    Let $A$ be normal. Then $\E_A$ is irreducible. If moreover $D>0$ and
+    $\sum_i(A^i)^\dagger A^i=\Id$, then $\E_A$ has a positive-definite fixed
+    point, its peripheral spectrum is $\{1\}$, and there is $\rho>0$ such that
+    $(A,\rho)$ is primitive in the sense of
+    Definition~\ref{def:primitive_mps}.
 \end{lemma}
 
 \begin{proof}
     \leanok
     \uses{thm:paper_primitive_of_full_kraus_rank,
-        thm:strongly_irreducible_of_paper_primitive, rem:wolf_6_8_pairwise}
-    Normality is eventual full Kraus rank by
-    Remark~\ref{rem:wolf_6_8_pairwise}.
-    Lemma~\ref{thm:paper_primitive_of_full_kraus_rank} then gives paper
-    primitivity, and Lemma~\ref{thm:strongly_irreducible_of_paper_primitive}
-    gives strong irreducibility.
+        thm:primitive_from_strongly_irred}
+    Lemma~\ref{thm:paper_primitive_of_full_kraus_rank} gives a positive
+    length at which every nonzero vector is spread to $\C^D$.
+    Theorem~\cite[``Irreducibility from vector spreading'']{QICLean2026Blueprint}
+    then gives irreducibility of $\E_A$, with no normalization. Under the
+    normalization,
+    Theorems~\cite[``Positive-definite fixed point from vector spreading'']{QICLean2026Blueprint}
+    and~\cite[``Primitivity from vector spreading'']{QICLean2026Blueprint}
+    give a positive-definite fixed point and show that $1$ is the only
+    peripheral eigenvalue, and
+    Lemma~\ref{thm:primitive_from_strongly_irred} gives the primitive pair.
 \end{proof}
 
 \begin{lemma}[Comparison of the two channel indices]
     \label{thm:q_index_le_i_index_channel}
     \lean{MPSTensor.qIndex_le_iIndex_of_tracePreserving}
     \leanok
-    \uses{def:wielandt_i_index, def:wielandt_q_index, thm:wolf_6_8_kraus_span}
+    \uses{def:wielandt_i_index, def:wielandt_q_index, thm:wielandt_proposition_three}
     Let $A_1,\ldots,A_d\in\MN{D}$, where $D>0$, satisfy
     $\sum_i A_i^\dagger A_i=\Id$. With both indices set to zero when
     their defining sets are empty, one has $q(\E_A)\le\iota(A)$.
@@ -491,21 +401,22 @@ matrices, and let $\E_K$ be its Kraus map.
     If $\iota(A)$ is a positive integer with $S_{\iota(A)}(A)=\MN{D}$, then
     $H_{\iota(A)}(A,\varphi)=\C^D$ for every $\varphi\neq0$, so $\iota(A)$
     lies in the defining set for $q(\E_A)$ and $q(\E_A)\le\iota(A)$.
-    Otherwise, Lemma~\ref{thm:wolf_6_8_kraus_span} excludes
+    Otherwise, Lemma~\ref{thm:wielandt_proposition_three} excludes
     primitivity, so
     $\{q\ge1:H_q(A,\varphi)=\C^D\text{ for every }\varphi\neq0\}=\emptyset$
     and $q(\E_A)=0\le\iota(A)$.
 \end{proof}
 
-\begin{lemma}[Primitive-channel specialization of the index bound]
+\begin{lemma}[The index bound for a normal tensor]
     \label{thm:q_index_le_i_index}
-    \lean{MPSTensor.qIndex_le_iIndex_of_isPrimitivePaper}
+    \lean{MPSTensor.qIndex_le_iIndex}
     \leanok
-    \uses{def:wielandt_i_index, def:wielandt_q_index, thm:wielandt_proposition_three}
-    As the primitive-channel specialization of the universal inequality
+    \uses{def:wielandt_i_index, def:wielandt_q_index, def:normal}
+    As the case of the universal inequality
     $q(\E)\le\iota$ of Sanz et al.~\cite[Proposition~1]{Sanz2010Quantum} (see
-    \cite{gap:spwc10_wielandt_one_step_subspace}), under the hypotheses of
-    Lemma~\ref{thm:wielandt_proposition_three}, paper primitivity implies
+    \cite{gap:spwc10_wielandt_one_step_subspace}) in which the defining set of
+    $\iota(A)$ is nonempty, if $A$ is normal, with no normalization imposed,
+    then
     \begin{align}
         q(\E_A) & \le\iota(A).
         \notag
@@ -513,7 +424,7 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{lemma}
 
 \begin{proof}\leanok
-    By Lemma~\ref{thm:wielandt_proposition_three}, $\iota(A)$ is a
+    By normality, $\iota(A)$ is a
     positive length with $S_{\iota(A)}(A)=\MN{D}$. Therefore
     $H_{\iota(A)}(A,\varphi)=\C^D$ for every $\varphi\neq0$, so the defining
     minimum for $q(\E_A)$ is at most $\iota(A)$.
@@ -523,7 +434,7 @@ matrices, and let $\E_K$ be its Kraus map.
     \label{thm:wolf_6_15}
     \lean{MPSTensor.wolf_theorem_6_15}
     \leanok
-    \uses{thm:wielandt_proposition_three}
+    \uses{def:normal, def:transfer_map}
     Following~\cite[Theorem~6.15]{Wolf2012Quantum}, let $D>0$ and suppose
     $\sum_i(A^i)^\dagger A^i=\Id$. If there is a positive $n$ for which
     $S_n(A)=\MN{D}$, then there is a unique positive definite density matrix
@@ -532,9 +443,9 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{thm:wielandt_proposition_three, lem:fixedpoint_unique_spectral}
-    By Lemma~\ref{thm:wielandt_proposition_three}, the span hypothesis
-    makes $\E_A$ strongly irreducible, giving a positive-definite fixed
+    \uses{thm:normalized_normal_strongly_irreducible, lem:fixedpoint_unique_spectral}
+    By Lemma~\ref{thm:normalized_normal_strongly_irreducible}, the span
+    hypothesis gives a positive-definite fixed
     point $\rho_0$ together with peripheral primitivity (unique peripheral
     eigenvalue $1$) and irreducibility of $\E_A$. Peripheral primitivity and
     irreducibility of $\E_A$ together give the complementary transfer-map
@@ -710,15 +621,15 @@ matrices, and let $\E_K$ be its Kraus map.
     eigenvector.
 \end{proof}
 
-\begin{lemma}[Sharp nonzero trace product for a primitive channel]%
+\begin{lemma}[Sharp nonzero trace product of positive length]%
     \label{thm:nonzero_trace_word_primitive_sharp}
-    \lean{MPSTensor.exists_nonzero_trace_word_of_isPrimitivePaper_sharp_pos}
+    \lean{MPSTensor.exists_nonzero_trace_word_of_isNormal_sharp_pos}
     \leanok
-    \uses{def:paper_primitive, def:wielandt_kraus_rank, thm:wielandt_proposition_three}
+    \uses{def:normal, def:wielandt_kraus_rank}
     Establishing the sharp trace conclusion of
-    \cite[Lemma~1]{Sanz2010Quantum}, let $D>0$, suppose
-    $\sum_i(A^i)^\dagger A^i=\Id$, and assume that $A$ is primitive in the
-    sense of Definition~\ref{def:paper_primitive}. Then there is a word $w$
+    \cite[Lemma~1]{Sanz2010Quantum}, whose primitive channel is a normal
+    tensor by Lemma~\ref{thm:wielandt_proposition_three}, let $D>0$ and let
+    $A$ be normal. Then there is a word $w$
     with
     \begin{align}
         1\le|w|  & \le D^2-\krausrk(A)+1,
@@ -729,8 +640,7 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{lemma}
 
 \begin{proof}\leanok
-    Lemma~\ref{thm:wielandt_proposition_three} gives eventual full Kraus
-    rank, hence normality. For $b=D^2-\krausrk(A)+1$, let
+    For $b=D^2-\krausrk(A)+1$, let
     $V_n$ be the span of $A^w$ with $1\le|w|\le n$. Then
     $S_1(A)\subseteq V_1$, so $\dim V_1\ge\krausrk(A)$. If
     $V_n=V_{n+1}$ for some $n\ge1$, then $V_n$ is closed under left
@@ -748,7 +658,7 @@ matrices, and let $\E_K$ be its Kraus map.
     \leanok
     \uses{def:normal}
     Matching the sharp length bound of \cite[Lemma~1]{Sanz2010Quantum} under
-    normality (whose source-hypothesis counterpart is
+    normality (the positive-length form is
     Lemma~\ref{thm:nonzero_trace_word_primitive_sharp}), let $D>0$. If $A$ is
     normal, then there exists a word $w$ of length at most $D^2-\krausrk(A)+1$
     such that $\tr(A^w)\neq0$.
@@ -829,22 +739,21 @@ matrices, and let $\E_K$ be its Kraus map.
 \end{proof}
 
 
-\begin{lemma}[Fixed-length eigenvector spreading for a primitive channel]
+\begin{lemma}[Fixed-length eigenvector spreading]
     \label{thm:eigenvector_spreading_primitive}
-    \lean{MPSTensor.vectorSpreadSpan_eq_top_of_isPrimitivePaper_of_eigenvector}
+    \lean{MPSTensor.vectorSpreadSpan_eq_top_of_isNormal_of_eigenvector}
     \leanok
-    \uses{def:paper_primitive, thm:wielandt_proposition_three, thm:eigenvector_spreading, lem:eigenvector_padding}
+    \uses{def:normal, thm:eigenvector_spreading, lem:eigenvector_padding}
     Following~\cite[Lemma~2(a)]{Sanz2010Quantum}, let $D>0$, suppose
-    $\sum_i(A^i)^\dagger A^i=\Id$, and assume that $A$ is primitive in the
-    sense of Definition~\ref{def:paper_primitive}. If $\varphi\neq0$,
+    $\sum_i(A^i)^\dagger A^i=\Id$, and assume that $A$ is normal, which by
+    Lemma~\ref{thm:wielandt_proposition_three} is the source's hypothesis
+    of a primitive channel. If $\varphi\neq0$,
     $\mu\neq0$, and $A^{i_0}\varphi=\mu\varphi$, then
     $H_{D-1}(A,\varphi)=\C^D$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Proposition~3, in the form of
-    Lemma~\ref{thm:wielandt_proposition_three}, gives eventual full Kraus
-    rank and hence normality. The cumulative spaces $K_n(A,\varphi)$ cannot
+    The cumulative spaces $K_n(A,\varphi)$ cannot
     stabilise below $\C^D$, because every matrix eventually lies in an exact
     word span. Their dimensions therefore reach $D$ by $n=D-1$, giving
     $K_{D-1}(A,\varphi)=\C^D$. Finally, the eigenvector relation pads every
@@ -874,14 +783,14 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{lemma}[Wielandt case (2), one-step invertible element]%
     \label{thm:wielandt_case2_one_step_span}
-    \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_isUnit}
+    \lean{MPSTensor.wordSpan_eq_top_of_isNormal_of_mem_wordSpan_one_of_isUnit}
     \leanok
-    \uses{def:word_span, def:one_step_augment, lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank, thm:wielandt_case2_normal_generator, def:paper_primitive}
+    \uses{def:word_span, def:one_step_augment, lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank, thm:wielandt_case2_normal_generator, def:normal}
     In the exact word-span form of \cite[Theorem~1, case~(2)]{Sanz2010Quantum},
     where the first application space $S_1(A)$ of~\cite{Sanz2010Quantum}
-    contains an invertible operator, let $A$ be an MPS tensor with bond
-    dimension $D\ge1$, satisfying $\sum_i(A^i)^\dagger A^i=\Id$, and suppose
-    that $A$ is primitive in the sense of Definition~\ref{def:paper_primitive}.
+    contains an invertible operator, let $A$ be a normal MPS tensor, which
+    by Lemma~\ref{thm:wielandt_proposition_three} covers the primitive
+    channels of the source.
     If $S_1(A)$ contains an invertible matrix~$X$, then
     \begin{align}
         S_{D^2-\krausrk(A)+1}(A)
@@ -892,11 +801,10 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{proof}
     \leanok
-    \uses{thm:wielandt_proposition_three, lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank, thm:wielandt_case2_normal_generator}
+    \uses{lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank, thm:wielandt_case2_normal_generator}
     Adjoining $X$ as an extra first Kraus operator produces an augmented tensor
-    $\widetilde A$. Lemma~\ref{thm:wielandt_proposition_three} gives normality
-    of $A$, hence normality of $\widetilde A$, while preserving the Kraus rank
-    and all exact word spans. Since the first Kraus operator of $\widetilde A$
+    $\widetilde A$, which is again normal and has the same Kraus rank
+    and the same exact word spans as $A$. Since the first Kraus operator of $\widetilde A$
     is invertible, Lemma~\ref{thm:wielandt_case2_normal_generator} gives
     $S_{D^2-\krausrk(\widetilde A)+1}(\widetilde A)=\MN{D}$, which transfers
     directly back to $A$.
@@ -925,7 +833,10 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
         MPSTensor.rectSpan_nilpIndex_strict_growth_of_isNormal}
     \leanok
     \uses{def:word_span, def:normal}
-    Let $A$ be a normal MPS tensor with bond dimension $D\ge1$.
+    Establishing the quantitative rank-one conclusion of
+    \cite[Lemma~2(b)]{Sanz2010Quantum}, whose primitive channel is a normal
+    tensor by Lemma~\ref{thm:wielandt_proposition_three}, let $A$ be a normal
+    MPS tensor with bond dimension $D\ge1$.
     Suppose that a Kraus operator $A^{i_0}$ is non-invertible and that
     there exist a nonzero vector $\varphi\in\C^D$ and a nonzero scalar $\mu$
     such that $A^{i_0}\varphi=\mu\varphi$.
@@ -969,56 +880,17 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
     $\ketbra{\varphi}{\psi}\in S_{D^2-D+1}(A)$.
 \end{proof}
 
-\begin{lemma}[Sharp rank-one extraction for a primitive channel]%
-    \label{thm:rank_one_noninvertible_eigenvector_primitive}
-    \lean{MPSTensor.vecMulVec_mem_wordSpan_of_isPrimitivePaper_of_noninvertible_eigenvector}
-    \leanok
-    \uses{def:paper_primitive, thm:wielandt_proposition_three}
-    Establishing the quantitative rank-one conclusion of
-    \cite[Lemma~2(b)]{Sanz2010Quantum}, let $D>0$, suppose
-    $\sum_i(A^i)^\dagger A^i=\Id$, and assume that $A$ is primitive in the
-    sense of Definition~\ref{def:paper_primitive}. Suppose $A^{i_0}$ is not
-    invertible and $A^{i_0}\varphi=\mu\varphi$ with $\varphi\neq0$ and
-    $\mu\neq0$. Then, for every $\psi\in\C^D$,
-    \begin{align}
-        \ketbra{\varphi}{\psi}
-         & \in S_{D^2-D+1}(A).
-        \notag
-    \end{align}
-\end{lemma}
-
-\begin{proof}\leanok
-    Lemma~\ref{thm:wielandt_proposition_three} first gives normality.
-    Applying the Fitting decomposition to left multiplication
-    $\mathcal L(M)=A^{i_0}M$ with index $r$ chosen so that $\mathcal L^r$ kills
-    its generalized zero-eigenspace, dimension growth gives $n_0$ with
-    \begin{align}
-        (A^{i_0})^rS_{n_0}(A)
-              & =\{(A^{i_0})^rM:M\in\MN{D}\},
-        \notag                                \\
-        r+n_0 & \le D^2-D+1.
-        \notag
-    \end{align}
-    Since $(A^{i_0})^r\varphi=\mu^r\varphi$ and $\mu\neq0$, the vector
-    $\varphi$ lies in the range of $(A^{i_0})^r$. Hence
-    $\ketbra{\varphi}{\psi}\in S_{r+n_0}(A)$ for every $\psi$.
-    The identity
-    $\ketbra{\varphi}{\psi}=\mu^{-1}A^{i_0}
-        \ketbra{\varphi}{\psi}$
-    pads this element to the exact length $D^2-D+1$.
-\end{proof}
-
 \begin{lemma}[Wielandt case (3), one-step non-invertible element]%
     \label{thm:wielandt_case3_one_step_span}
-    \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_mem_wordSpan_one_of_noninvertible_eigenvector}
+    \lean{MPSTensor.wordSpan_eq_top_of_isNormal_of_mem_wordSpan_one_of_noninvertible_eigenvector}
     \leanok
-    \uses{def:word_span, def:one_step_augment, lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank, thm:eigenvector_spreading, lem:rank_one_noninvertible_eigenvector, thm:lemma2b_assembly, def:paper_primitive}
+    \uses{def:word_span, def:one_step_augment, lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank, thm:eigenvector_spreading, lem:rank_one_noninvertible_eigenvector, thm:lemma2b_assembly, def:normal}
     In the exact word-span form of \cite[Theorem~1, case~(3)]{Sanz2010Quantum},
     where the first application space $S_1(A)$ of~\cite{Sanz2010Quantum}
-    contains a non-invertible operator with a nonzero eigenvalue, let $A$ be an
-    MPS tensor with bond dimension $D\ge1$, satisfying
-    $\sum_i(A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in the
-    sense of Definition~\ref{def:paper_primitive}. If $S_1(A)$ contains a
+    contains a non-invertible operator with a nonzero eigenvalue, let $A$ be a
+    normal MPS tensor with bond dimension $D\ge1$, which by
+    Lemma~\ref{thm:wielandt_proposition_three} covers the primitive channels
+    of the source. If $S_1(A)$ contains a
     non-invertible matrix $X$ with a nonzero eigenvalue (that is,
     $X\varphi=\mu\varphi$ with $\varphi\neq0$ and $\mu\neq0$), then
     $S_{D^2}(A)=\MN{D}$.
@@ -1026,8 +898,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{proof}
     \leanok
-    \uses{thm:wielandt_proposition_three, lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank, thm:eigenvector_spreading, lem:rank_one_noninvertible_eigenvector, thm:lemma2b_assembly}
-    Lemma~\ref{thm:wielandt_proposition_three} gives normality.
+    \uses{lem:one_step_augment_word_span, lem:one_step_augment_normal_kraus_rank, thm:eigenvector_spreading, lem:rank_one_noninvertible_eigenvector, thm:lemma2b_assembly}
     Adjoining $X$ as an extra first Kraus operator yields an augmented tensor
     that remains normal and has the same exact word spans as $A$, turning the
     eigenvector relation for $X$ into a one-generator eigenvector relation. The
@@ -1056,12 +927,13 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{theorem}[Wielandt's inequality --- general bound]%
     \label{thm:wielandt_general}
-    \lean{MPSTensor.iIndex_le_general_of_isPrimitivePaper}
+    \lean{MPSTensor.iIndex_le_general_of_isNormal}
     \leanok
-    \uses{def:paper_primitive, def:wielandt_i_index, def:wielandt_kraus_rank}
+    \uses{def:normal, def:wielandt_i_index, def:wielandt_kraus_rank}
     Following~\cite[Theorem~1, case~(1)]{Sanz2010Quantum}, let $A$ be a
-    normalized MPS tensor with $D>0$, $\sum_i(A^i)^\dagger A^i=\Id$, that is
-    primitive in the sense of Definition~\ref{def:paper_primitive}.
+    normal MPS tensor with $D>0$; by
+    Lemma~\ref{thm:wielandt_proposition_three} this covers the primitive
+    channels of the source, for which $\sum_i(A^i)^\dagger A^i=\Id$.
     Then
     \begin{align}
         \iota(A)
@@ -1074,8 +946,7 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
 
 \begin{proof}
     \leanok
-    \uses{thm:wielandt_proposition_three, thm:nonzero_trace_word_primitive_sharp, thm:isNormal_blockTensor, thm:wielandt_case2_normal_generator, cor:wielandt_case3_generator}
-    Lemma~\ref{thm:wielandt_proposition_three} gives normality.
+    \uses{thm:nonzero_trace_word_primitive_sharp, thm:isNormal_blockTensor, thm:wielandt_case2_normal_generator, cor:wielandt_case3_generator}
     By Lemma~\ref{thm:nonzero_trace_word_primitive_sharp}, there exists a
     \emph{positive-length} word~$w$ with
     $|w|\le D^2-d'+1$ and $\tr(A^w)\neq0$, where
@@ -1219,13 +1090,12 @@ case are proved in Section~\ref{sec:app_wielandt_blocking_support}.
 \begin{lemma}[Exact index of the cyclic example]
     \label{thm:cyclic_wielandt_index}
     \lean{MPSTensor.CyclicWielandt.isNormal,
-        MPSTensor.CyclicWielandt.isPrimitivePaper,
         MPSTensor.CyclicWielandt.iIndex_eq,
         MPSTensor.CyclicWielandt.classical_bound_lt_iIndex}
     \leanok
     \uses{def:cyclic_wielandt_family, def:wielandt_i_index,
-        def:paper_primitive, def:normal}
-    The cyclic family is normal and primitive, and
+        def:normal}
+    The cyclic family is normal, and
     $\iota(A)=D(D-1)$. For $D>2$, this exceeds the classical
     Wielandt exponent $D^2-2D+2$.
 \end{lemma}

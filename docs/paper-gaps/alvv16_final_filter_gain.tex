@@ -17,35 +17,39 @@ $K=I-H/\lVert H\rVert$ with collective trimming, then selects the $r$
 smallest eigenvectors of the compression to the last retained space.
 The displayed estimate in the proof of Theorem~t:alg1, line 1813,
 asserts, in particular,
-\begin{equation}\label{eq:printed-gain}
+\begin{align}
  \frac{f}{1-\gamma(1-f)/B}
  \ge f\left(1+\frac{\gamma}{2B}\right),
  \qquad f=\alpha^2,\quad B=\lVert H\rVert.
-\end{equation}
+    \label{eq:printed-gain}
+\end{align}
 This inequality fails within the stated range $\alpha\ge0.9$.
 
 \paragraph{An exact nondegenerate example.}
 On two qubits take
-\[
+\begin{align}
  H=\operatorname{diag}(0,1,1,1),\qquad
  \psi=\lvert00\rangle,\qquad
  v=\sqrt{99/100}\,\lvert00\rangle+\tfrac1{10}\lvert01\rangle.
-\]
+    \label{eq:alvv16_ffg_example_data}
+\end{align}
 The vector $v$ is normalized, $H$ is a positive nearest-neighbour
 interaction bounded by the identity, and its ground space is the line
 spanned by $\psi$. Its gap and norm are both one. The candidate line
 spanned by $v$ is $1/100$-close to this ground space, hence meets the
 $3/200$ root-error condition. For requested error $\eta=1/1000$,
-\[
+\begin{align}
  0.9<\sqrt{99/100}<1-\eta,\qquad 99/100<1-\eta.
-\]
+    \label{eq:alvv16_ffg_example_threshold}
+\end{align}
 Thus the example lies before either the amplitude or squared-overlap
 accuracy threshold. Since $K=I-H$ sends $v$ to the ground line, the new
 normalized squared overlap is one. But the two sides of
 \eqref{eq:printed-gain} are, respectively,
-\[
+\begin{align}
  1\qquad\hbox{and}\qquad \frac{99}{100}\frac32=\frac{297}{200}>1.
-\]
+    \label{eq:alvv16_ffg_example_sides}
+\end{align}
 All vectors and both coefficients in the displayed example are nonzero.
 The example concerns the intermediate gain estimate. The conclusion of
 Theorem~t:alg1 remains a separate claim requiring a corrected argument.
@@ -56,9 +60,10 @@ expand norms on the target, and contract squared norms on the complement
 by $\Delta\ge0$.
 If a candidate is $\delta$-close to the target with $0\le\delta<1$, its
 image is at most
-\[
+\begin{align}
  \delta' = \frac{\Delta\delta}{1-\delta+\Delta\delta}
-\]
+    \label{eq:alvv16_ffg_contracted_error}
+\end{align}
 away from the target. When $\Delta<1$, this contracts the ratio of error
 to success: $\delta'/(1-\delta')=\Delta\delta/(1-\delta)$.
 The estimate follows by choosing a projection preimage of squared norm
@@ -70,14 +75,16 @@ Write $\Delta=1-c$, with $0<c\le1$, and fix $0<\eta\le1$.
 For $0\le\delta\le1/2$, weighted
 comparison with a Schmidt-rank reference and the corrected collective
 trimming constant give the sufficient budgets
-\[
+\begin{align}
  \varepsilon_{\rm ref}\le c^2\eta/1024,\qquad
  \xi\sqrt{mb}\le c\eta/48,
-\]
+    \label{eq:alvv16_ffg_trim_budgets}
+\end{align}
 and the stable upper recurrence
-\[
+\begin{align}
  \delta_{j+1}\le(1-c/4)\delta_j+c\eta/8.
-\]
+    \label{eq:alvv16_ffg_error_recurrence}
+\end{align}
 Here $m$ is the number of actual cuts and $b$ is the rank bound for every
 vector in the reference space. These explicit budgets describe one
 corrected argument; comparison with every printed quantitative choice
@@ -93,6 +100,18 @@ This provides the variational comparison for the $r$ smallest compressed
 eigenvectors. The actual repeated trims, their parameter choices and
 this spectral extraction must be combined before the final source
 algorithm can be marked complete.
+
+\paragraph{Composition with the physical tree.}
+The same-root refinement is now applied to the actual root of the physical
+soft resampling tree. On its joint success event, of probability at least
+$1-(L+1)^{-2}$, the root is $3/200$-close to the ground space in chain
+coordinates, so the literal refinement of that root and its Ritz extraction
+give a subspace of the ground-space dimension, mutually $\eta/2$-close to it,
+consisting of matrix product states of bond dimension polynomial in $L$,
+$\dim G$ and $1/\eta$. The formal statement is
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_soft_tree_refined_ritz_approximation}.
+The printed round count, the identification with literal soft Generate and
+any running-time claim remain open.
 
 \bibliographystyle{unsrt}
 \bibliography{references}

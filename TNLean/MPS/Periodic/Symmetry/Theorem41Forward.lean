@@ -18,6 +18,7 @@ canonicalization premises are not retained.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

@@ -33,14 +33,15 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
+set_option linter.style.longLine false in
 /-- Every positive parent interaction at range at least \(D^4+1\) has a
 positive commutator bound in the constructed primitive quasi-local state.
 The constant is independent of the interval, its position, and the observable.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and Section 6,
 lines 2649--2675; CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
-theorem IsPrimitiveMPS.exists_pos_quasiLocalCommutator_gap_of_isParentInteraction
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_quasiLocalCommutator_gap_of_isParentInteraction
     [NeZero d] [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {R : ℕ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {R : ℕ}
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) (hR : D ^ 4 + 1 ≤ R) :
     let ω := quasiLocalExpectation A hP.norm hP.fixedPoint_psd

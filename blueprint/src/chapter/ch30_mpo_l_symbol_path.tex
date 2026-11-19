@@ -1,0 +1,402 @@
+% The L-symbols along a differentiable symmetric path.
+% Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 1352--1578
+% (MPSs with inequivalent L-symbols belong to different phases).
+\section{The multiplicity symbols along a symmetric path}
+\label{sec:glm_l_symbol_path}
+
+Garre-Rubio, Lootens and Moln\'ar show that a differentiable path of
+symmetric states cannot change the gauge class of the $L$-symbols
+\cite[Section~5]{GarreRubio2023MPOSym}. Along the path the operator blocks,
+the fusion maps and the bond dimensions are fixed. The derivative of each
+action tensor is assumed to lie in the span of the action tensors at the
+same point. The source computes that the first-order change of the
+coefficient matrices is an infinitesimal gauge transformation, and concludes
+that the gauge class is the same along the path. This section proves the
+first-order computation, without assuming that the left inverses of the
+action tensors vary differentiably. The source does not integrate the
+first-order law along the path. Here the integration is carried out on the
+action tensors themselves: a finite family whose derivative stays in its own
+span moves by invertible changes of basis, with no regularity of the
+coefficients of the span.
+
+\begin{lemma}[A first-order quotient rule]
+    \leanok
+    \label{lem:glm_l_path_quotient_rule}
+    \lean{Matrix.hasDerivAt_mul_entries,Matrix.hasDerivAt_trace_of_entries,
+        Matrix.differentiableAt_det_of_entries,
+        Matrix.differentiableAt_inv_of_entries,
+        Matrix.hasDerivAt_entries_of_eventually_eq_mul}
+    Let $R(\gamma)$, $L(\gamma)$ and $P(\gamma)$ be finite complex matrices
+    depending on a real parameter, with $P$ square. Suppose $R=LP$ on a
+    neighbourhood of $\gamma_0$ and $P(\gamma_0)=1$. Suppose also that the
+    entries of $R$ and $P$ are differentiable at $\gamma_0$ with derivatives
+    $R'$ and $P'$. Then the entries of $L$ are differentiable at $\gamma_0$,
+    with derivative $R'-L(\gamma_0)P'$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The determinant of $P$ is a polynomial in its entries. It is therefore
+    differentiable at $\gamma_0$, and it is nonzero near $\gamma_0$ because
+    $\det P(\gamma_0)=1$. By Cramer's rule the entries of $P^{-1}$ are
+    differentiable at $\gamma_0$. Near $\gamma_0$ we have $L=RP^{-1}$, so
+    $L$ is differentiable there. The product rule applied to $R=LP$ gives
+    $R'=L'P(\gamma_0)+L(\gamma_0)P'=L'+L(\gamma_0)P'$.
+\end{proof}
+
+\begin{lemma}[First-order change of the $L$-symbols along a path]
+    \leanok
+    \label{lem:glm_l_path_first_order}
+    \lean{MPOTensor.hasDerivAt_actionLMatrix}
+    \uses{def:glm_boundary_action_l_matrix}
+    Fix operator blocks $O_a$ of positive bond dimensions with exact
+    biorthogonal fusion maps. Let $A_x(\gamma)$ be state blocks of fixed
+    positive bond dimensions $D_x$, and assume the following for $\gamma$
+    near $\gamma_0$.
+    \begin{enumerate}
+        \item The blocks are individually injective and pairwise
+              inequivalent under a virtual gauge and a nonzero scalar. The
+              source restricts ``w.l.o.g.\ to MPSs whose blocks are
+              injective and orthogonal between each other'' (line~317) and
+              recalls in the classification that ``we can assume that the MPS
+              tensors are injective and orthogonal between them''
+              (line~1332). For injective blocks, orthogonality in the
+              thermodynamic limit means pairwise non-proportionality.
+        \item The blocks carry exact biorthogonal action maps
+              $V_{ax}^{y,i}(\gamma)$ and $\widehat V_{ax}^{y,i}(\gamma)$. The
+              source assumes ``that there are action tensors locally realizing
+              this symmetry, i.e.\ Eq.\ (fusiontensors2) is satisfied'' and
+              restricts to paths ``that have an exact MPS ground space through
+              the whole path, so that a set of $L$-symbols can also be defined
+              all along'' (lines~1269--1272).
+    \end{enumerate}
+    Suppose every entry of each analysis map is differentiable at
+    $\gamma_0$, with
+    \begin{align}
+        \frac{d}{d\gamma}V_{ax}^{y,i}(\gamma)\Big|_{\gamma_0}
+         & =\sum_{i'}(X_{ax}^y)_{ii'}V_{ax}^{y,i'}(\gamma_0)
+        \label{eq:glm_l_path_span}
+    \end{align}
+    for some square matrices $X_{ax}^y$. Then every entry of the
+    coefficient matrices $L_{abx}^y(\gamma)$ is differentiable at
+    $\gamma_0$. Writing $L$ for $L_{abx}^y(\gamma_0)$, the derivative is
+    \begin{align}
+        \frac{d}{d\gamma}L_{abx}^y(\gamma)[(z,i,j),(c,k,\mu)]\Big|_{\gamma_0}
+         & =\sum_{i'}(X_{az}^y)_{ii'}L[(z,i',j),(c,k,\mu)]
+        +\sum_{j'}(X_{bx}^z)_{jj'}L[(z,i,j'),(c,k,\mu)]
+        \notag                                                   \\
+         & \quad-\sum_{k'}L[(z,i,j),(c,k',\mu)](X_{cx}^y)_{k'k}.
+        \label{eq:glm_l_path_derivative}
+    \end{align}
+    This is the first-order computation of \cite[Section~5]{GarreRubio2023MPOSym},
+    lines~1387--1551, whose text reads, with the pictured expansion of the
+    action tensors written as the bracketed formula:
+    \begin{quote}
+        Since one can always find a left inverse tensor such that it is
+        continuous we can find without loss of generality a basis change,
+        where $V_{a,x}^{y,i}$ is also continuous (using the fact that the
+        action tensors are linearly independent). Let us absorb this basis
+        change and assume (see below for generalization) that the action
+        tensors are differentiable:
+        [$V^{i}(\gamma+d\gamma)=V^{i}(\gamma)
+            +\sum_{i'}(X_{ax}^y)_{i'}^{i}V^{i'}(\gamma)\,d\gamma$], where we
+        have spanned the term in $d\gamma$ using the orthogonal set of action
+        tensors $\{V_{a,x}^{y,i},i=1,\ldots,M_{a,x}^y\}$ of the subspace of
+        the block $y$. [\dots] Therefore
+        \[
+            ({L'}_{abx}^y)_{c\mu k}^{zij}=\sum_{\hat i,\hat j,\hat k}
+            (L_{abx}^y)^{z\hat i\hat j}_{c\mu\hat k}\big[
+                \delta_{i,\hat i}\delta_{j,\hat j}\delta_{k,\hat k}
+                +(X_{bx}^z)_{\hat j}^{j}\delta_{i,\hat i}\delta_{k,\hat k}
+                +(X_{az}^y)_{\hat i}^{i}\delta_{j,\hat j}\delta_{k,\hat k}
+                -(X_{cx}^y)^{\hat k}_{k}\delta_{i,\hat i}\delta_{j,\hat j}\big].
+        \]
+    \end{quote}
+    The source's $(X_{ax}^y)_{i'}^{i}$ is the entry $(X_{ax}^y)_{ii'}$ here.
+    The symmetry operators and fusion maps are the same along the path
+    (line~1359) and the bond dimension does not change (line~1361). The
+    source's assertion that the new $L$-symbols are differentiable
+    (line~1440) is proved here, not assumed. The statement is first order:
+    it does not assert that the gauge class is constant along the path.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{thm:glm_boundary_action_l_exists,lem:glm_l_path_quotient_rule}
+    Fix $a,b,x,y$. Let $S_q$ be the fusion-then-action synthesis maps at
+    $\gamma_0$, indexed by $q=(c,k,\mu)$. Let $H_{{\rm seq},p}(\gamma)$ and
+    $H_{{\rm fus},q}(\gamma)$ be the sequential and fusion-then-action
+    analysis maps at $\gamma$, with $p=(z,i,j)$. The defining relation
+    (\ref{eq:glm_boundary_action_l_defining}) at $\gamma$, restricted to the
+    final block $y$, reads
+    $H_{{\rm seq},p}(\gamma)=\sum_qL(\gamma)_{pq}H_{{\rm fus},q}(\gamma)$.
+    Multiplying on the right by $S_{q'}$ and taking normalized traces
+    gives $R(\gamma)=L(\gamma)P(\gamma)$, where
+    $R(\gamma)_{pq'}=D_y^{-1}\operatorname{tr}(H_{{\rm seq},p}(\gamma)S_{q'})$
+    and
+    $P(\gamma)_{qq'}=D_y^{-1}\operatorname{tr}(H_{{\rm fus},q}(\gamma)S_{q'})$.
+    Biorthogonality at $\gamma_0$ gives
+    $H_{{\rm fus},q}(\gamma_0)S_{q'}=\delta_{qq'}1$, so $P(\gamma_0)=1$.
+    The maps $H_{\rm fus}$ are linear and $H_{\rm seq}$ bilinear in the
+    action analysis maps. By (\ref{eq:glm_l_path_span}),
+    \begin{align}
+        R'_{pq'}         & =\sum_{i'}(X_{az}^y)_{ii'}L_{(z,i',j)q'}
+        +\sum_{j'}(X_{bx}^z)_{jj'}L_{(z,i,j')q'},
+        \notag                                                              \\
+        P'_{(c,k,\mu)q'} & =\sum_{k'}(X_{cx}^y)_{kk'}\delta_{(c,k',\mu)q'}.
+        \notag
+    \end{align}
+    Lemma~\ref{lem:glm_l_path_quotient_rule} gives the derivative
+    $R'-LP'$, which is (\ref{eq:glm_l_path_derivative}).
+\end{proof}
+
+\begin{lemma}[The first-order change is tangent to a gauge orbit]
+    \leanok
+    \label{lem:glm_l_path_gauge_tangent}
+    \lean{MPOTensor.hasDerivAt_actionLMatrix_gaugeCurve}
+    \uses{lem:glm_mixed_gauge_coefficients}
+    Apply the gauge law (\ref{eq:glm_mixed_gauge_l}) to coefficients $L$
+    with $X_{ax}^y(t)=1+tX_{ax}^y$, with
+    $(\widehat X_{cx}^y(t))_{kk'}=(1-tX_{cx}^y)_{k'k}$, the transposed
+    inverse to first order, and with trivial fusion gauge. The resulting
+    curve of coefficients has velocity at $t=0$ equal to the right side of
+    (\ref{eq:glm_l_path_derivative}). Thus the first-order change of
+    Lemma~\ref{lem:glm_l_path_first_order} is the infinitesimal gauge
+    transformation generated by the matrices $X_{ax}^y$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The curve is a polynomial in $t$. Its derivative at $t=0$ collects the
+    three terms linear in $t$, one for each gauge factor.
+\end{proof}
+
+\begin{lemma}[A frame whose derivative stays in its span]
+    \leanok
+    \label{lem:glm_l_path_frame}
+    \lean{Matrix.hasDerivAt_inv_entries,
+        Matrix.eventually_exists_eq_sum_smul_of_hasDerivAt,
+        Matrix.exists_eq_sum_smul_of_hasDerivAt}
+    Let $U\subseteq\mathbb R$ be open and connected, and let $V^i(\gamma)$,
+    $i=1,\ldots,M$, be complex matrices of a fixed size depending on
+    $\gamma\in U$. Suppose that at every $\gamma\in U$ the entries of each
+    $V^i$ are differentiable, with
+    \[
+        \frac{d}{d\gamma}V^i(\gamma)=\sum_{i'}X(\gamma)_{ii'}V^{i'}(\gamma)
+    \]
+    for some square matrix $X(\gamma)$, and that there are matrices
+    $\widehat V^k(\gamma)$ and a scalar $c(\gamma)$ with
+    $c(\gamma)\operatorname{tr}(V^i(\gamma)\widehat V^k(\gamma))=\delta_{ik}$.
+    Then for $\gamma_0,\gamma\in U$ there is an invertible matrix $G$ with
+    $V^i(\gamma)=\sum_kG_{ik}V^k(\gamma_0)$ for every $i$. No continuity of
+    $\gamma\mapsto X(\gamma)$ is assumed.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:glm_l_path_quotient_rule}
+    Fix $t\in U$ and put
+    $Q(\gamma)_{ik}=c(t)\operatorname{tr}(V^i(\gamma)\widehat V^k(t))$. Then
+    $Q(t)=1$ and $Q'=XQ$ wherever the derivative hypothesis holds. The
+    determinant of $Q$ is differentiable at $t$, so $Q$ is invertible on a
+    ball around $t$. On that ball the entries of $Q^{-1}$ are differentiable
+    by Cramer's rule, and differentiating $Q^{-1}Q=1$ gives
+    $(Q^{-1})'=-Q^{-1}Q'Q^{-1}=-Q^{-1}X$. Hence
+    $(Q^{-1}V)'=-Q^{-1}XV+Q^{-1}XV=0$, so $Q^{-1}V$ is constant on the ball
+    and equals $V(t)$. Thus $V(\gamma)=Q(\gamma)V(t)$ near $t$.
+
+    The relation ``$V(\gamma)=GV(\gamma')$ for an invertible $G$'' is
+    reflexive, symmetric and transitive, and by the first step it holds for
+    all $\gamma$ near any $\gamma'\in U$. Its classes are therefore open, and
+    since $U$ is connected there is only one class.
+\end{proof}
+
+\begin{theorem}[The class of the $L$-symbols is constant along a symmetric
+        path]
+    \leanok
+    \label{thm:glm_l_path_invariance}
+    \lean{MPOTensor.exists_actionLMatrix_regauge_of_hasDerivAt}
+    \uses{def:glm_boundary_action_l_matrix,lem:glm_mixed_gauge_coefficients}
+    % Source anchors: REsubmission.tex line 1361 (fixed bond dimension),
+    % lines 1387--1405 (differentiable action tensors and the span expansion),
+    % line 1551 (conclusion).
+    Let $U\subseteq\mathbb R$ be open and connected. Fix operator blocks
+    $O_a$ of positive bond dimensions with exact biorthogonal fusion maps.
+    Let $A_x(\gamma)$, $\gamma\in U$, be state blocks of fixed positive bond
+    dimensions $D_x$ such that at every $\gamma\in U$ the hypotheses of
+    Lemma~\ref{lem:glm_l_path_first_order} hold: the blocks are individually
+    injective and pairwise inequivalent under a virtual gauge and a nonzero
+    scalar, they carry exact biorthogonal action maps
+    $V_{ax}^{y,i}(\gamma)$ and $\widehat V_{ax}^{y,i}(\gamma)$, and every
+    entry of each analysis map is differentiable at $\gamma$ with
+    \[
+        \frac{d}{d\gamma}V_{ax}^{y,i}(\gamma)
+        =\sum_{i'}(X_{ax}^y(\gamma))_{ii'}V_{ax}^{y,i'}(\gamma)
+    \]
+    for some square matrices $X_{ax}^y(\gamma)$. Then for
+    $\gamma_0,\gamma\in U$ there are invertible matrices $G_{ax}^y$ such
+    that
+    \[
+        L_{abx}^y(\gamma)[(z,i,j),(c,k,\mu)]=\sum_{i',j',k'}
+        (G_{az}^y)_{ii'}(G_{bx}^z)_{jj'}((G_{cx}^y)^{-1})_{k'k}
+        L_{abx}^y(\gamma_0)[(z,i',j'),(c,k',\mu)].
+    \]
+    This is the gauge law (\ref{eq:glm_mixed_gauge_l}) with the invertible
+    gauges $X=G$ and $\widehat X=(G^{-1})^{\mathsf T}$ and the trivial fusion
+    gauge. It is the conclusion of \cite[Section~5]{GarreRubio2023MPOSym},
+    line~1551:
+    \begin{quote}
+        which means that the ${L}'$-symbol is in the same class as the
+        ${L}$-symbol since they are related by a (differentiable) gauge
+        transformation.
+    \end{quote}
+    The fixed bond dimension and the span hypothesis are the source's
+    assumptions: ``we assume for now that the bond dimension does not
+    change'' (line~1361), and ``Let us absorb this basis change and assume
+    \ldots{} that the action tensors are differentiable'', with the displayed
+    expansion of $V(\gamma+d\gamma)$, ``where we have spanned the term in
+    $d\gamma$ using the orthogonal set of action tensors''
+    (lines~1387--1405). No continuity of the generators $X_{ax}^y(\gamma)$ in
+    $\gamma$ is assumed. The source states that similar results hold when the action
+    tensors are only continuous and when the bond dimension grows along the
+    path (line~1551); these extensions are not part of this statement.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:glm_l_path_frame,thm:glm_boundary_action_l_exists,
+        lem:glm_mixed_gauge_coefficients}
+    Biorthogonality at each $\gamma$ gives
+    $D_y^{-1}\operatorname{tr}(V_{ax}^{y,i}(\gamma)\widehat V_{ax}^{y,k}(\gamma))
+        =\delta_{ik}$. By Lemma~\ref{lem:glm_l_path_frame}, applied to each
+    family $V_{ax}^{y,\bullet}$, there are invertible $G_{ax}^y$ with
+    $V_{ax}^{y,i}(\gamma)=\sum_k(G_{ax}^y)_{ik}V_{ax}^{y,k}(\gamma_0)$. Put
+    $\widetilde V_{ax}^{y,k}=\sum_{k'}((G_{ax}^y)^{-1})_{k'k}
+        \widehat V_{ax}^{y,k'}(\gamma_0)$, so that
+    $V_{ax}^{y,k_1}(\gamma)\widetilde V_{ax}^{y,k_2}=\delta_{k_1k_2}1$.
+
+    As in the proof of Lemma~\ref{lem:glm_l_path_first_order}, the defining
+    relation of Lemma~\ref{thm:glm_boundary_action_l_exists} at $\gamma$,
+    paired against the fusion-then-action synthesis maps built from
+    $\widetilde V$, gives $R=L(\gamma)P$. Here $P=1$ by the products above
+    and biorthogonality of the fusion maps, and $R$ is the coefficient matrix
+    computed from the analysis maps $V(\gamma)$ and the synthesis maps
+    $\widetilde V$. Since $V(\gamma)=GV(\gamma_0)$ and
+    $\widetilde V=(G^{-1})^{\mathsf T}\widehat V(\gamma_0)$, the gauge law
+    of Lemma~\ref{lem:glm_mixed_gauge_coefficients}, with trivial fusion
+    gauge, expresses $R$ through $L(\gamma_0)$ as stated.
+\end{proof}
+
+\begin{lemma}[Transport by a continuous matrix differential equation]
+    \leanok
+    \label{lem:glm_l_path_matrix_ode}
+    \lean{Matrix.eqOn_of_hasDerivAt_mul,
+        Matrix.eq_mul_initial_of_hasDerivAt_mul,
+        Matrix.isUnit_of_hasDerivAt_mul,
+        Matrix.eq_mul_initial_of_hasDerivAt_mul_entries,
+        Matrix.eq_mul_initial_mul_inv_of_hasDerivAt,
+        Matrix.eq_kronecker_mul_initial_mul_inv_of_hasDerivAt}
+    Let $I=[\alpha,\beta]$ and $t_0\in I$. A continuous square matrix
+    coefficient $X$ has at most one differentiable solution of $F'=XF$
+    with prescribed value at $t_0$. If $g'=Xg$ and $g(t_0)=1$, then $g(t)$
+    is invertible and $F(t)=g(t)F(t_0)$, also for rectangular $F$.
+    For the two-sided rectangular case, let $X:I\to\mathbb C^{n\times n}$
+    and $Y:I\to\mathbb C^{m\times m}$ be continuous, and let
+    $F:I\to\mathbb C^{n\times m}$, $G:I\to\mathbb C^{n\times n}$ and
+    $H:I\to\mathbb C^{m\times m}$ satisfy
+    \[
+        F'=XF-FY,\qquad G'=XG,\qquad H'=YH,\qquad G(t_0)=1,\quad H(t_0)=1.
+    \]
+    Here the functions are defined in real neighborhoods of the interval so
+    that the derivatives, entrywise for $F$, exist at every point of $I$,
+    including its endpoints. Then $G(t)$ and $H(t)$ are invertible and
+    \[
+        F(t)=G(t)F(t_0)H(t)^{-1}\qquad(t\in I).
+    \]
+    More generally, let $X_1,X_2,X_3$ be continuous matrix coefficients
+    and let $g_\nu'=X_\nu g_\nu$, $g_\nu(t_0)=1$. If
+    $L'= (X_1\otimes1+1\otimes X_2)L-LX_3$, then
+    \begin{align}
+        L(t) & =(g_1(t)\otimes g_2(t))L(t_0)g_3(t)^{-1}.
+        \label{eq:glm_l_path_integrated}
+    \end{align}
+    All derivatives are assumed to exist at every point of $I$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Continuity bounds $\|X(t)\|$ on the compact interval. Uniqueness for a
+    uniformly Lipschitz differential equation applies both forwards and
+    backwards from $t_0$. Comparing $F$ with $gF(t_0)$ gives transport.
+    If $g(t)U=g(t)V$, uniqueness backwards to $t_0$ gives $U=V$;
+    finite dimensionality therefore makes $g(t)$ invertible.
+    Apply transport columnwise to rectangular matrices. For the two-sided
+    equation, the product rule gives
+    \[
+        (FH)'=(XF-FY)H+F(YH)=X(FH),\qquad (FH)(t_0)=F(t_0).
+    \]
+    Rectangular transport yields $F(t)H(t)=G(t)F(t_0)$; multiplying by
+    the inverse of $H(t)$ proves the two-sided formula. The product rule
+    gives $(Lg_3)'=(X_1\otimes1+1\otimes X_2)Lg_3$ and
+    $(g_1\otimes g_2)'=(X_1\otimes1+1\otimes X_2)(g_1\otimes g_2)$.
+    Transport of $Lg_3$, followed by multiplication by $g_3^{-1}$,
+    proves~(\ref{eq:glm_l_path_integrated}).
+\end{proof}
+
+\begin{lemma}[Constancy with continuous generators and fundamental solutions]
+    \leanok
+    \label{lem:glm_l_path_integrated}
+    \lean{MPOTensor.actionLMatrix_gaugeEquiv_of_continuous}
+    \uses{lem:glm_l_path_first_order}
+    On $I=[\alpha,\beta]$, assume the hypotheses of
+    Lemma~\ref{lem:glm_l_path_first_order} at every point, including the
+    stated neighborhood hypotheses at the endpoints. Let $t_0\in I$.
+    Suppose each generator $X_{ax}^y(t)$ is continuous on $I$, and suppose
+    differentiable matrix functions $g_{ax}^y$ satisfy
+    $(g_{ax}^y)'=X_{ax}^y g_{ax}^y$ and $g_{ax}^y(t_0)=1$.
+    Then every $g_{ax}^y(t)$ is invertible and
+    \begin{align}
+        L(t)^{zij}_{ck\mu}
+         & =\sum_{i',j',k'}
+        g_{az}^y(t)_{ii'}g_{bx}^z(t)_{jj'}
+        \bigl(g_{cx}^y(t)^{-1}\bigr)_{k'k}
+        L(t_0)^{zi'j'}_{ck'\mu}.
+        \label{eq:glm_l_path_gauge_transport}
+    \end{align}
+    Thus all these symbols have the same gauge class, with the fusion
+    gauge fixed. Continuity of the generators and existence of the
+    fundamental solutions are explicit additional hypotheses here;
+    the source does not supply the integration argument
+    \cite{gap:glm23_mpo_symmetric_mps_scope}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:glm_l_path_first_order,lem:glm_l_path_matrix_ode}
+    Fix $a,b,c,x,y,z,\mu$ and regard $L^{zij}_{ck\mu}$ as a rectangular
+    matrix with row $(i,j)$ and column $k$. Its derivative from
+    Lemma~\ref{lem:glm_l_path_first_order} is
+    $(X_{az}^y\otimes1+1\otimes X_{bx}^z)L-LX_{cx}^y$.
+    Lemma~\ref{lem:glm_l_path_matrix_ode} yields invertibility of all
+    gauges and~(\ref{eq:glm_l_path_gauge_transport}).
+\end{proof}
+
+
+\begin{lemma}[Constructed gauges for bounded smooth generators]
+    \leanok
+    \label{lem:glm_l_path_constructed}
+    \lean{MPOTensor.exists_actionLMatrix_gaugeEquiv_of_contDiff}
+    \uses{lem:glm_l_path_integrated}
+    Retain the tensor-path assumptions of
+    Lemma~\ref{lem:glm_l_path_integrated}. Suppose each generator
+    $X_{ax}^y$ is continuously differentiable on $\mathbb R$ and bounded
+    there in the matrix operator norm. Then there exist differentiable
+    fundamental solutions $g_{ax}^y$, equal to $1$ at the chosen base
+    point, which are invertible on $I$ and satisfy the gauge law
+    (\ref{eq:glm_l_path_gauge_transport}). The global regularity and
+    boundedness assumptions are stronger than those stated in the source
+    \cite{gap:glm23_mpo_symmetric_mps_scope}.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:glm_l_path_integrated}
+    For each multiplicity space, apply existence for a bounded
+    continuously differentiable matrix coefficient to the shifted equation
+    $U'(s)=X(t_0+s)U(s)$, $U(0)=1$. Set $g(t)=U(t-t_0)$.
+    The chain rule gives $g'=Xg$ and $g(t_0)=1$.
+    Lemma~\ref{lem:glm_l_path_integrated} proves invertibility and the
+    gauge identity.
+\end{proof}

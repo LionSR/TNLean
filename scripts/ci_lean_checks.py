@@ -15,8 +15,13 @@ Commands
 ``focused`` Check the PR's directly changed sources and regression scripts
             before the full build. Select against the explicit feature head's
             merge base, but build and elaborate the actual (possibly merged)
-            checkout. Failures remain failures while independent targets are
-            still diagnosed.
+            checkout. Defer confidently import-only production sources to the
+            full build and post-build strict checks. Failures remain failures
+            while independent targets are still diagnosed. With ``--budget``
+            the step is a shortcut like ``early``: once the budget is spent
+            (a cold dependency cache, a change near the bottom of the import
+            graph) the remaining targets are left, with a warning, to the
+            mandatory full build and post-build strict checks.
 ``strict``  After the full build, elaborate with warnings as errors
 
             * every changed production source file, and
@@ -219,6 +224,35 @@ def early_modules(root: Path, sources: list[str]) -> list[str]:
     return [module_of(path) for path in substantive or sources]
 
 
+def focused_sources(root: Path, sources: list[str], strict_sources: list[str]) -> list[str]:
+    """Defer confidently import-only sources; full strict selection is unchanged."""
+    retained = []
+    for path in sources:
+        if path not in strict_sources:
+            retained.append(path)
+            continue
+        try:
+            text = (root / path).read_bytes().decode("utf-8")
+        except (OSError, UnicodeError):
+            retained.append(path)
+            continue
+        # Python whitespace/comment rules are not Lean's lexer. Keep uncertain
+        # spellings and doc-comment tokens focused, even inside other comments.
+        if any(c.isspace() and c not in " \n" for c in text) or "/--" in text or "/-!" in text:
+            retained.append(path)
+            continue
+        # Comments separate tokens in Lean. Do not let the shared comment
+        # stripper join e.g. im/- comment -/port into an import command.
+        spaced = text.replace("/-", " /-").replace("-/", "-/ ")
+        imports, error = pure_import_modules(spaced)
+        if error is not None or not imports:
+            retained.append(path)
+        else:
+            print(f"Deferring import-only source to full build and post-build strict: {path}",
+                  flush=True)
+    return retained
+
+
 def select(root: Path, base: str | None) -> tuple[list[str], list[str], list[str]]:
     """Return (early modules, strict source files, test files)."""
     files = lean_files(root)
@@ -324,12 +358,10 @@ def _stop_group(proc: subprocess.Popen, grace: int = 30) -> None:
     proc.wait()
 
 
-def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
-    """Fail-fast `lake build` of `modules`. The early build is only a shortcut,
-    since the root build compiles the same modules, so when it exceeds `budget`
-    seconds (for example behind a cold dependency cache) it is stopped with a
-    warning instead of failing the job."""
-    deadline = time.monotonic() + budget if budget else None
+def build_until(modules: list[str], log_path: Path | None, budget: float | None) -> int | None:
+    """Fail-fast `lake build` of `modules`: its exit code, or `None` when it
+    was stopped because it ran for `budget` seconds (`None` means no limit)."""
+    deadline = time.monotonic() + budget if budget is not None else None
     proc = subprocess.Popen(["lake", "--fail-fast", "build", *modules],
                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
                             start_new_session=True)
@@ -358,6 +390,15 @@ def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
             # A descendant that outlived `lake` would keep the pipe open.
             _signal_group(proc.pid, signal.SIGKILL)
             reader.join(timeout=60)
+    return code
+
+
+def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
+    """Fail-fast `lake build` of `modules`. The early build is only a shortcut,
+    since the root build compiles the same modules, so when it exceeds `budget`
+    seconds (for example behind a cold dependency cache) it is stopped with a
+    warning instead of failing the job. Zero means no limit."""
+    code = build_until(modules, log_path, budget or None)
     if code is None:
         print(f"::warning::Early build stopped after {budget}s; "
               "the root build compiles the remaining modules.", flush=True)
@@ -367,30 +408,86 @@ def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
 
 def focused_checks(
     sources: list[str], tests: list[str], graph: dict[str, set[str]],
-    jobs: int, timeout: int, log_path: Path | None,
+    jobs: int, timeout: int, log_path: Path | None, budget: int = 0,
 ) -> int:
-    """Prepare each target, then use the ordinary strict runner.
+    """Prepare the targets, then use the ordinary strict runner.
 
-    Preparation has no success-on-timeout shortcut: the surrounding CI step's
-    timeout is the upper bound. A failed preparation blocks its strict check,
-    not independent targets, and always makes the final result nonzero.
+    A failed preparation blocks its strict check, not independent targets, and
+    always makes the final result nonzero. Without a `budget` the surrounding
+    CI step's timeout is the only bound. With one, the step is a shortcut:
+    targets not prepared or not checked within `budget` seconds are left, with
+    a warning, to the root build and the post-build strict checks, which
+    remain mandatory. Failures found before the budget is spent still fail.
     """
     failed: list[str] = []
+    deferred: list[str] = []
     prepared: dict[str, bool] = {}
+    unprepared: set[str] = set()
+    deadline = time.monotonic() + budget if budget else None
+
+    def expired() -> bool:
+        return deadline is not None and time.monotonic() >= deadline
+
+    def build(modules: list[str]) -> int | None:
+        """Exit code of the dependency build, or `None` if the budget ended it."""
+        if deadline is None:
+            # Zero disables the early shortcut's warning-and-success budget.
+            return early_build(modules, log_path, 0)
+        left = deadline - time.monotonic()
+        return build_until(modules, log_path, left) if left > 0 else None
 
     def prepare(module: str) -> bool:
+        if module in unprepared:
+            return False
         if module not in prepared:
             print(f"Preparing focused target: {module}", flush=True)
-            # Zero disables the early shortcut's warning-and-success budget.
-            code = early_build([module], log_path, 0)
+            code = build([module])
+            if code is None:
+                unprepared.add(module)
+                return False
             prepared[module] = code == 0
             if code != 0:
                 failed.append(f"{module}: dependency build exited {code}")
         return prepared[module]
 
-    for source in sources:
-        if prepare(module_of(source)):
-            failed += run_batch([source], jobs, timeout)
+    def check(paths: list[str]) -> list[str]:
+        if deadline is None:
+            return run_batch(paths, jobs, timeout)
+        # One batch per `jobs` files, so that the budget is consulted at most
+        # one per-file timeout late.
+        out: list[str] = []
+        for start in range(0, len(paths), max(1, jobs)):
+            if expired():
+                deferred.extend(paths[start:])
+                break
+            out += run_batch(paths[start:start + max(1, jobs)], jobs, timeout)
+        return out
+
+    # One `lake build` for every changed module: each separate invocation
+    # re-traverses the whole dependency graph, which for a change touching
+    # hundreds of modules costs more than the step's timeout. A failure falls
+    # back to one build per module, so that each failure is attributed to its
+    # own source and independent sources are still checked.
+    source_modules = sorted({module_of(source) for source in sources})
+    joint_failure: int | None = None
+    if len(source_modules) > 1:
+        print(f"Preparing {len(source_modules)} focused targets together", flush=True)
+        code = build(source_modules)
+        if code == 0:
+            prepared.update(dict.fromkeys(source_modules, True))
+        elif code is None:
+            unprepared.update(source_modules)
+        else:
+            joint_failure = code
+    ready_sources = [source for source in sources if prepare(module_of(source))]
+    if joint_failure is not None and unprepared and not failed:
+        # The budget ended before the fallback reached the failing module; the
+        # failure was observed all the same.
+        failed.append(f"joint dependency build exited {joint_failure}; the budget ended "
+                      "before the failing module was identified")
+    deferred += [source for source in sources if module_of(source) in unprepared]
+    if ready_sources:
+        failed += check(ready_sources)
 
     ready: list[str] = []
     for test in tests:
@@ -398,19 +495,31 @@ def focused_checks(
         required = closure(graph, module)
         missing = required - graph.keys()
         blocked = bool(missing or any(prepared.get(m) is False for m in required))
+        if not blocked and required & unprepared:
+            deferred.append(test)
+            continue
         if not blocked:
             # Build every immediate import, including a root module if the
             # regression script actually imports one; no allowlist.
-            outcomes = [prepare(m) for m in sorted(graph.get(module, set()))]
+            imports = sorted(graph.get(module, set()))
+            outcomes = [prepare(m) for m in imports]
+            if unprepared.intersection(imports):
+                deferred.append(test)
+                continue
             blocked = not all(outcomes)
         if blocked:
             failed.append(f"{test}: blocked by missing or failed dependencies")
         else:
             ready.append(test)
-    failed += run_batch(ready, jobs, timeout)
+    failed += check(ready)
     if failed:
         print("Focused checks failed:", *failed, sep="\n  ", flush=True)
         return 1
+    if deferred:
+        print(f"::warning::Focused checks stopped at their {budget}s budget; the root build "
+              f"and the post-build strict checks cover the remaining {len(deferred)} "
+              "target(s).", flush=True)
+        return 0
     print("All focused checks passed.", flush=True)
     return 0
 
@@ -430,15 +539,22 @@ def main(argv: list[str] | None = None) -> int:
                         help="seconds allowed for each file")
     parser.add_argument("--log", type=Path, help="append early-build output here")
     parser.add_argument("--budget", type=int, default=0,
-                        help="early: stop after this many seconds and leave the rest "
-                             "to the root build (0 means no limit)")
+                        help="early, focused: stop after this many seconds and leave the "
+                             "rest to the root build and the post-build strict checks "
+                             "(0 means no limit)")
     args = parser.parse_args(argv)
 
     os.chdir(args.root)
     if args.command == "focused":
         try:
             sources, tests, graph = select_focused(Path("."), args.base, args.head)
-            return focused_checks(sources, tests, graph, args.jobs, args.timeout, args.log)
+            # Match the later strict phase's verified-merge selection. In a
+            # feature-head/unknown checkout it has no production-source coverage.
+            strict_base = selection_base(args.base, args.pr_head or args.head)
+            strict_sources = select(Path("."), strict_base)[1] if strict_base else []
+            sources = focused_sources(Path("."), sources, strict_sources)
+            return focused_checks(sources, tests, graph, args.jobs, args.timeout, args.log,
+                                  args.budget)
         except (ValueError, OSError, subprocess.CalledProcessError) as exc:
             print(f"::error::Focused checks could not complete: {exc}", file=sys.stderr)
             return 1

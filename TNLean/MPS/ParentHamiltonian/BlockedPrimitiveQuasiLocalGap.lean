@@ -37,6 +37,7 @@ the site grouping at lines 825--836, and Section 6, lines 2649--2675.
 
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d D L R b : ℕ} [NeZero d] [NeZero L]
   {E : Fin b → ℕ} [∀ j, NeZero (E j)]
@@ -50,7 +51,7 @@ theorem exists_pos_quasiLocalCommutator_limit_gap_of_blocked_primitive_family
     (A : MPSTensor d D) (μ : Fin b → ℂ)
     (B : ∀ j, MPSTensor (blockPhysDim d L) (E j)) (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (E j)) (Fin (E j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : E j = E i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i))
     (hJoint : ∀ N, groundSpaceES (blockTensor A L) N =

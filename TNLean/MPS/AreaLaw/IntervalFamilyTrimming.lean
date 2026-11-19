@@ -26,6 +26,8 @@ current space, rather than the unchanged initial sample printed in the
 repeated assignment. See `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped TensorProduct InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw

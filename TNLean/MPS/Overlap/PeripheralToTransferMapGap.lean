@@ -17,9 +17,9 @@ self-overlap `mpvOverlap A A N` converges to `1` as `N → ∞`.
 
 ## Main results
 
-* `IsPrimitiveMPS.overlap_tendsto_one`: a primitive MPS tensor has self-overlap
+* `Kraus.HasComplementaryFixedPointGap.overlap_tendsto_one`: a primitive MPS tensor has self-overlap
   converging to `1`, by `mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one`
-  applied to the hypotheses recorded in the `IsPrimitiveMPS` structure.
+  applied to the hypotheses recorded in the `Kraus.HasComplementaryFixedPointGap` structure.
 * `overlap_tendsto_one_of_peripheralPrimitive_of_irreducible` — irreducible case,
   the corollary obtained from the complementary transfer-map gap established in
   `QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral`.
@@ -33,10 +33,11 @@ namespace MPSTensor
 /-- A primitive MPS tensor has self-overlap converging to 1.
 
 This is a direct application of `mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one`
-from `PrimitiveOverlap.lean`, using the hypotheses recorded in the `IsPrimitiveMPS`
-structure. -/
-theorem IsPrimitiveMPS.overlap_tendsto_one {d D : ℕ} [NeZero D]
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ} (hP : IsPrimitiveMPS A ρ) :
+from `PrimitiveOverlap.lean`, using the hypotheses recorded in the
+`Kraus.HasComplementaryFixedPointGap` structure. -/
+theorem _root_.Kraus.HasComplementaryFixedPointGap.overlap_tendsto_one {d D : ℕ} [NeZero D]
+    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
     Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) :=
   mpvOverlap_tendsto_one_of_transfer_spectralRadius_compl_lt_one A
     hP.norm ρ hP.fixedPoint_is_fixed hP.fixedPoint_ne_zero hP.fixedPoint_psd
@@ -52,8 +53,8 @@ theorem overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
     (hPrim : _root_.IsPrimitive (Kraus.transferMap (d := d) (D := D) A)) :
     Tendsto (fun N ↦ mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
   classical
-  obtain ⟨_, hP⟩ : MPSTensor.HasPrimitiveFixedPoint A :=
+  obtain ⟨_, hP⟩ : Kraus.HasPrimitiveFixedPoint A :=
     Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hNorm hPrim
-  simpa only using MPSTensor.IsPrimitiveMPS.overlap_tendsto_one hP
+  simpa only using Kraus.HasComplementaryFixedPointGap.overlap_tendsto_one hP
 
 end MPSTensor

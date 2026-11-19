@@ -1,0 +1,143 @@
+\section{Endpoint adjoints and the mixed boundary range}
+
+The endpoint boundary ranges do not determine the adjoints of the mixed
+sectors. A sufficient criterion uses the adjoints of the action maps
+as well. Here $T^\dagger$ exchanges and conjugates the physical indices
+without reversing the virtual order.
+
+\begin{lemma}[Adjoints of the mixed sectors]
+    \label{lem:mpo_mixed_endpoint_adjoint}
+    \lean{MPSTensor.MPOSymmetry.physicalAdjointTensor_mixedEndpointMPO,
+        MPSTensor.MPOSymmetry.physicalAdjointTensor_arbitraryPhysicalMixedMPO,
+        MPSTensor.MPOSymmetry.conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO}
+    \leanok
+    \uses{def:mpo_mixed_action_tensor,def:mpo_arbitrary_mixed_operator}
+    For each endpoint $p$, multiplicity $\mu$ and virtual operator
+    index $\alpha$, define square matrices on the state bond by
+    $(V_{p,\mu,\alpha})_{rs}=(V_{p,\mu})_{r,(\alpha,s)}$ and
+    $(W_{p,\mu,\alpha})_{rs}=(W_{p,\mu})_{(\alpha,r),s}$.
+    Suppose primed endpoint data obey
+    \begin{align}
+        T'_p              & =T_p^\dagger,              &
+        V'_{p,\mu,\alpha} & =V_{p,\mu,\alpha}^\dagger, &
+        W'_{p,\mu,\alpha} & =W_{p,\mu,\alpha}^\dagger.
+        \label{eq:mpo_endpoint_adjoint_data}
+    \end{align}
+    Then the square-alphabet mixed operators obey $T'_{\rm mix}=T_{\rm mix}^\dagger$.
+    A rectangular physical change of coordinates preserves this equality.
+    In particular, when the primed and unprimed data coincide, the
+    arbitrary-alphabet common operator satisfies
+    \begin{align}
+        (O^N_{\widetilde T,X})^\dagger
+        =O^N_{\widetilde T,\overline X}
+        \label{eq:mpo_endpoint_adjoint_boundary}
+    \end{align}
+    for every boundary $X$ and every length $N\geq0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Diagonal sectors use $T'_p=T_p^\dagger$. In the first mixed sector,
+    conjugating and exchanging physical indices gives
+    \begin{align}
+        \sum_\mu\overline{(W_0)_{(\alpha,r),k}}
+        \overline{(V_1)_{l,(\beta,s)}}
+        =\sum_\mu(W'_0)_{(\alpha,k),r}(V'_1)_{s,(\beta,l)}.
+        \label{eq:mpo_endpoint_adjoint_cross}
+    \end{align}
+    The other cross sector is identical with endpoints exchanged.
+    Physical changes of coordinates satisfy
+    $(FTF^\dagger)^\dagger=FT^\dagger F^\dagger$, so the polar
+    compressions and the common inclusion preserve the identity.
+    Conjugating a trace of a word conjugates its boundary entrywise,
+    which proves (\ref{eq:mpo_endpoint_adjoint_boundary}).
+\end{proof}
+
+\begin{lemma}[Commutation from endpoint slice adjoints]
+    \label{lem:mpo_mixed_endpoint_adjoint_commutation}
+    \lean{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_commute_of_endpoint_adjoint,
+        MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_of_endpoint_adjoint}
+    \leanok
+    \uses{lem:mpo_mixed_endpoint_adjoint,
+        thm:mpo_arbitrary_parent_commutation_adjoint_closed}
+    Assume exact endpoint action decompositions, injective endpoint
+    tensors of positive bond dimensions, and
+    (\ref{eq:mpo_endpoint_adjoint_data}) with identical primed and
+    unprimed data. For every $\gamma\in[0,1]$ and boundary $X$,
+    $[\widetilde h_\gamma,O^2_{\widetilde T,X}]=0$.
+    For every $N\geq2$,
+    $[\widetilde H_{\gamma,N},O^{(N)}_{\widetilde T}]=0$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Equation~(\ref{eq:mpo_endpoint_adjoint_boundary}) supplies two-site
+    adjoint closure. Apply
+    Lemma~\ref{thm:mpo_arbitrary_parent_commutation_adjoint_closed}.
+\end{proof}
+
+\begin{lemma}[Unitary endpoints do not ensure mixed adjoint closure]
+    \label{lem:mpo_mixed_endpoint_adjoint_obstruction}
+    \lean{MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.virtualInvolution,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.physicalInvolution,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.endpointCoefficients,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.endpoint,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.scalarEndpoint,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.scalarEndpoint_isInjective,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.scalarEndpoint_action,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.endpointMPO,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.scalarMPO,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.mixedMPO,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.virtualInvolution_mul_self,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.endpoint_isInjective,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.endpoint_action,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.endpointCoefficients_posSemidef,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.physicalInvolution_unitary,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.physicalAdjointTensor_endpointMPO,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.physicalAdjointTensor_scalarMPO,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.endpoint_adjoint_closed,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.scalar_adjoint_closed,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.mixedMPO_isInjective,
+        MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.not_mixed_adjoint_closed}
+    \leanok
+    \uses{def:mpo_mixed_action_tensor}
+    Set $S=\bigl(\begin{smallmatrix}2&1\\1&1\end{smallmatrix}\bigr)$,
+    $Q=S\operatorname{diag}(1,-1)S^{-1}
+        =\bigl(\begin{smallmatrix}3&-4\\2&-3\end{smallmatrix}\bigr)$,
+    and $A_0^{rs}=SE_{rs}S^{-1}$. Its unitary physical symmetry
+    $u_0=\operatorname{diag}(1,-1,-1,1)$ acts exactly with
+    $V_0=W_0=Q$. The coefficient matrix $S\otimes S^{-1}$ is positive
+    semidefinite, and $A_0$ is injective. Let the second endpoint and
+    its action maps all be scalar one. Both endpoint boundary ranges
+    are adjoint-closed at every length, but the square-alphabet mixed
+    two-site boundary range is not. The mixed operator tensor is itself
+    one-site injective after combining its physical indices.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The virtual identity $Q^2=\Id$ and the action identity
+    $\sum_{kl}(u_0)_{rs,kl}A_0^{kl}=QA_0^{rs}Q$ follow by direct
+    multiplication. Write $P=S\otimes S^{-1}$. The identities
+    \begin{align}
+        P^{-1} & =\begin{pmatrix}
+                      2 & 1 & -2 & -1 \\1&1&-1&-1\\-2&-1&4&2\\-1&-1&2&2
+                  \end{pmatrix}, &
+        P      & =R^TR,                                            &
+        R      & =\begin{pmatrix}
+                      1 & -1 & 0 & 0 \\0&1&0&0\\1&-1&1&-1\\0&1&0&1
+                  \end{pmatrix}
+        \label{eq:mpo_endpoint_adjoint_gram}
+    \end{align}
+    express every matrix unit in the span of the letters and prove
+    positivity. The endpoint adjoint boundary is $\overline X$.
+    For mixed words $a=((0,0),(0,2))$, $b=((0,0),(1,2))$, write
+    $B_Y=O^2_{T_{\rm mix},Y}$. Direct multiplication gives
+    \begin{align}
+        (B_Y)_{aa} & =3Y_{10},  &
+        (B_Y)_{ab} & =2Y_{10},  &
+        (B_Y)_{ba} & =-4Y_{10}.
+        \label{eq:mpo_endpoint_adjoint_obstruction}
+    \end{align}
+    If $B_Y=B_{E_{10}}^\dagger$, these entries require both
+    $3Y_{10}=3$ and $2Y_{10}=-4$, a contradiction. The mixed letters
+    with equal output and input labels $0,2,6,8$ are respectively
+    $E_{00},3E_{01},3E_{10},E_{11}$, which span the virtual matrix algebra.
+\end{proof}

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.SuppliedFourSpinSourceComparison
 import TNLean.MPS.MPU.TimeReversalLocalSufficiency
+import TNLean.MPS.MPU.StandardFormFromGates
 
 /-!
 # Time reversal for arbitrary supplied standard forms
@@ -15,11 +16,15 @@ Its two independent comparison unitaries combine into one unitary in the
 literal four-spin equation. No normalization of the supplied half factors
 or chosen gauge witness is required.
 
-**Scope restriction (canonical ambient presentation):** Ambient canonical
-form II remains explicit; minimal cut ranks do not eliminate virtual
-padding. The finite-chain hypothesis concerns even standard-form lengths.
-This is not the unrestricted source criterion; see
-`docs/paper-gaps/mpu_canonical_form_full_support.tex` and
+The sufficiency direction needs no canonical form: it holds for every
+supplied square standard form, and in particular for the tensor in standard
+form built from any two unitary gates. The necessity direction keeps ambient
+canonical form II explicit; minimal cut ranks do not eliminate virtual padding.
+This is no restriction relative to the source, whose
+standard forms are those of canonical tensors, and the source proposition is
+`MPOTensor.IsMPUCanonicalFormII.standardForm_even_timeReversal_iff`; see
+`docs/paper-gaps/mpu_standard_form_canonical_convention.tex`. The finite-chain
+hypothesis concerns even standard-form lengths; see
 `docs/paper-gaps/mpu_standard_form_parity_gap.tex`.
 
 Source: arXiv:1703.09188, `PropChiral`, `eq:block-twosites` and
@@ -161,14 +166,16 @@ theorem exists_timeReversal_certificate
 
 
 /-- A supplied square standard form's literal four-spin sign equation
-implies adjoint symmetry on every positive even standard-form ring in the
-explicit ambient canonical scope. All normalized factors and comparison
-gauges are derived internally. Source: CPSV17, `PropChiral`,
-`UUdaggertrick` and `eq:dagger-sym-cond`, lines 1214–1236. -/
+implies adjoint symmetry on every positive even standard-form ring. No
+canonical form of the ambient tensor is needed: the doubled standard form
+of the two-site block carries the local certificate
+(`TwoSiteStandardFormData.mpo_blockTwo_eq_conjTranspose_of_local_sign`).
+Source: CPSV17, `PropChiral`, `UUdaggertrick` and `eq:dagger-sym-cond`,
+lines 1214–1236. -/
 theorem mpo_even_eq_adjoint_of_timeReversal_certificate
     {d D : ℕ} {W : MPOTensor (d * d) D}
     {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
-    (S : TwoSiteStandardFormData W u v) (hW : IsMPUCanonicalFormII W)
+    (S : TwoSiteStandardFormData W u v)
     (σ : ℂ) (hσ : σ = 1 ∨ σ = -1)
     (x : Matrix.unitaryGroup (Fin d × Fin d) ℂ)
     (hlocal : staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u) =
@@ -177,58 +184,18 @@ theorem mpo_even_eq_adjoint_of_timeReversal_certificate
         (staircaseMiddle (A := Fin d) (E := Fin d) v)ᴴ)
     (N : ℕ) (hN : 1 < N) (heven : Even N) : mpo W N = (mpo W N)ᴴ := by
   classical
-  let T := sourceFactors W hW.ρ hW.ρ_posDef
-  have hr : r[W] = d * d := S.sourceRanks_eq.1
-  have hl : ℓ[W] = d * d := S.sourceRanks_eq.2
-  let A := Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr))
-    (Equiv.refl _) (SourceFactors.sourceU W T)
-  let B := Matrix.reindex (Equiv.refl _)
-    (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV W T)
   let e : (Fin d × Fin d) ≃ Fin (d * d) := finProdFinEquiv
-  let p := Equiv.prodCongr e e
   let x' : Matrix.unitaryGroup (Fin (d * d)) ℂ :=
     ⟨Matrix.reindex e e x, Matrix.reindex_mem_unitaryGroup e _ x.property⟩
-  let A₀ := Matrix.reindex p p
-    (staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u))
-  let B₀ := Matrix.reindex p p (staircaseMiddle (A := Fin d) (E := Fin d) v)
-  have hraw : A₀ = σ •
+  have hraw : doubledU u v = σ •
       ((x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
-          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * B₀ᴴ := by
+          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * (doubledV v)ᴴ := by
+    rw [doubledU_eq_reindex_staircase, doubledV_eq_reindex_staircase]
     exact Matrix.reindex_adjoint_certificate e hlocal
-  obtain ⟨X, Y, hu, hv⟩ := S.exists_fourSpin_selected_source_gate_gauges_of_square_ranks hW
-  have hXY := (Matrix.isUnitaryBetween_coe_unitaryGroup X).kronecker _ _
-    (Matrix.isUnitaryBetween_coe_unitaryGroup Y)
-  have hYX := (Matrix.isUnitaryBetween_coe_unitaryGroup Y).kronecker _ _
-    (Matrix.isUnitaryBetween_coe_unitaryGroup X)
-  have hAcancel : ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
-      (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * A = A₀ := by
-    change ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
-        (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) *
-      Matrix.reindex (Equiv.prodCongr (finCongr hl) (finCongr hr))
-        (Equiv.refl _) (SourceFactors.sourceU W T) = A₀
-    rw [hu, ← Matrix.mul_assoc, ← Matrix.conjTranspose_kronecker, hXY.1, Matrix.one_mul]
-  have hBcancel : B *
-      ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) =
-          B₀ := by
-    change Matrix.reindex (Equiv.refl _)
-      (Equiv.prodCongr (finCongr hr) (finCongr hl)) (SourceFactors.sourceV W T) *
-        ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)) =
-            B₀
-    rw [hv, Matrix.mul_assoc, ← Matrix.conjTranspose_kronecker, hYX.1, Matrix.mul_one]
-  have hraw' : ((X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ ⊗ₖ
-      (Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) * A =
-      σ • ((x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
-          (x' : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)ᴴ) *
-        (B * ((Y : Matrix (Fin (d * d)) (Fin (d * d)) ℂ) ⊗ₖ
-            (X : Matrix (Fin (d * d)) (Fin (d * d)) ℂ)))ᴴ := by
-    rw [hAcancel, hBcancel]
-    exact hraw
-  obtain ⟨z, hz⟩ := adjoint_certificate_of_unitary_gate_transport A B
-    (star X) (star Y) x' σ (by
-      simpa only [Unitary.coe_star, Matrix.star_eq_conjTranspose,
-        Matrix.conjTranspose_conjTranspose] using hraw')
-  exact hW.mpo_even_eq_adjoint_of_source_local_certificate
-    (S.isMPUSimple hW) T hr hl σ hσ z hz N hN heven
+  rcases heven with ⟨m, rfl⟩
+  have : NeZero m := ⟨by omega⟩
+  exact mpo_even_eq_conjTranspose_of_blockTwo
+    (S.doubled.mpo_blockTwo_eq_conjTranspose_of_local_sign σ hσ x' hraw m)
 
 /-- The literal local criterion for ANY supplied standard form in an
 explicit canonical ambient tensor, at exactly the even standard-form
@@ -255,8 +222,34 @@ theorem even_timeReversal_iff_exists_certificate
   · exact S.exists_timeReversal_certificate hW
   · rintro ⟨hr, hl, σ, x, hσ, hlocal⟩ N hN heven
     have S₀ := S.reindexRanks (finCongr hl) (finCongr hr)
-    exact S₀.mpo_even_eq_adjoint_of_timeReversal_certificate hW σ hσ x hlocal N hN heven
+    exact S₀.mpo_even_eq_adjoint_of_timeReversal_certificate σ hσ x hlocal N hN heven
 
 end TwoSiteStandardFormData
+
+/-- **Gate-level local certificate for time reversal.** For square unitary gates `u, v`, the
+four-spin sign equation `v₂₃ u₁₂ u₃₄ = σ (x ⊗ x†) v₂₃†` implies that the tensor in standard form
+built from `u, v` generates self-adjoint operators on every ring of an even number of
+standard-form sites.
+
+The equation is the four-spin one, on two standard-form sites. The analogous equation on one
+site, `u = σ (x ⊗ x†) v†`, does not suffice: `u = a ⊗ a†`, `v = 1` with `a = diag(1, i)`
+satisfies it, but the operator `a ⊗ a† ⊗ ⋯ ⊗ a ⊗ a†` is not self-adjoint. The two-site block of
+the tensor in standard form is the tensor of the doubled gates, whose operators are invariant
+under the translation by one standard-form site; the gates themselves have no such symmetry.
+
+Source: CPSV17, `PropChiral`, `UUdaggertrick` and `eq:dagger-sym-cond`, lines 1214–1236. -/
+theorem mpo_standardFormTensorOfGates_even_eq_adjoint_of_timeReversal_certificate
+    {d : ℕ} [NeZero d] {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
+    (hu : u.IsUnitaryBetween) (hv : v.IsUnitaryBetween)
+    (σ : ℂ) (hσ : σ = 1 ∨ σ = -1)
+    (x : Matrix.unitaryGroup (Fin d × Fin d) ℂ)
+    (hlocal : staircaseMiddle (A := Fin d) (E := Fin d) v * (u ⊗ₖ u) =
+      σ • ((x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) ⊗ₖ
+          (x : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)ᴴ) *
+        (staircaseMiddle (A := Fin d) (E := Fin d) v)ᴴ)
+    (N : ℕ) (hN : 1 < N) (heven : Even N) :
+    mpo (standardFormTensorOfGates u v) N = (mpo (standardFormTensorOfGates u v) N)ᴴ :=
+  (standardFormTensorOfGatesData u v hu hv).mpo_even_eq_adjoint_of_timeReversal_certificate
+    σ hσ x hlocal N hN heven
 
 end MPOTensor

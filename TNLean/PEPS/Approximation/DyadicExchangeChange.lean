@@ -30,6 +30,8 @@ the treated guides after it, conditional on Proposition 3.4 through `IsAngularSc
   389–430); Lemma 6.6 `lem:exchange`, `05-frames.tex`.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 open Set Metric Filter Topology
@@ -155,15 +157,15 @@ theorem HasPairChange.reorder {Ω : EuclideanSpace ℂ (ι → Fin q)}
     .comp (c₁.appendTail N₂.regs) (OriginalCircuit.frameList G₁.regs c₂)
   have he0 : e.nonprivateCount = 0 := by
     change (c₁.appendTail N₂.regs).nonprivateCount +
-      (OriginalCircuit.frameList G₁.regs c₂).nonprivateCount = 0
-    rw [OriginalCircuit.nonprivateCount_appendTail, OriginalCircuit.nonprivateCount_frameList,
-      h₁, h₂]
+      OriginalCircuit.nonprivateCount (OriginalCircuit.frameList G₁.regs c₂) = 0
+    rw [OriginalCircuit.nonprivateCount_appendTail, h₁, zero_add]
+    exact (Circuit.gateCount_frameList _ _).trans h₂
   have heval : e.eval (pairRef N₁ N₂ Ω) = pairRef G₁ G₂ Ω := by
     change (OriginalCircuit.frameList G₁.regs c₂).eval ((c₁.appendTail N₂.regs).eval
       ((appendIso N₁.regs N₂.regs).symm (N₁.regRef Ω ⊗ₜ N₂.regRef Ω))) =
       (appendIso G₁.regs G₂.regs).symm (G₁.regRef Ω ⊗ₜ G₂.regRef Ω)
     rw [OriginalCircuit.eval_appendTail_appendIso_symm,
-      OriginalCircuit.eval_frameList_appendIso_symm, Word.eval_toOriginalCircuit,
+      Circuit.eval_frameList_appendIso_symm, Word.eval_toOriginalCircuit,
       Word.eval_toOriginalCircuit]
     exact congrArg₂ (fun x y => (appendIso G₁.regs G₂.regs).symm (x ⊗ₜ y)) (he₁ Ω) (he₂ Ω)
   have hE : ∀ (s : ℝ), e.IsExpansionBounded r s := fun s =>
@@ -370,24 +372,24 @@ theorem edgeExchange_hasPairChange_of (hD : IsAngularScale q G a A₀ m₀ 60 D 
   set out : Hole (cellCenterPos L) q (ProtocolParty k) → Bool :=
     fun hl => decide (hl.patch.center - d ∉ Y)
   have hout : ∀ hl ∈ Gm.holes ++ Ga.holes, out hl = true →
-      Disjoint (hl.patch.outer : Set (SquareLatticeVertex L L))
+      Disjoint hl.patch.outer
         (lensSample (cellCenterPos L) Bl.n e d) := by
     intro hl hhl ho
     obtain ⟨z, hpz, hs⟩ := hside hl hhl
     have hz : z - d ∉ Y := by simpa [out, hpz] using ho
     have hs' : closedBall (z - d) (2 * ε₀ * t) ⊆ Yᶜ := hs.resolve_left fun h => hz (h (hcen z))
     rw [hpz]
-    exact Set.disjoint_left.2 fun x hx hxY =>
-      hs' (hball z x hx) ((mem_lensSample x).1 (Finset.mem_coe.1 hxY))
+    exact Finset.disjoint_left.2 fun x hx hxY =>
+      hs' (hball z x hx) ((mem_lensSample x).1 hxY)
   have hin : ∀ hl ∈ Gm.holes ++ Ga.holes, out hl = false →
-      (hl.patch.outer : Set (SquareLatticeVertex L L)) ⊆
+      hl.patch.outer ⊆
         lensSample (cellCenterPos L) Bl.n e d := by
     intro hl hhl ho
     obtain ⟨z, hpz, hs⟩ := hside hl hhl
     have hz : z - d ∈ Y := by simpa [out, hpz] using ho
     have hs' : closedBall (z - d) (2 * ε₀ * t) ⊆ Y := hs.resolve_right fun h => h (hcen z) hz
     rw [hpz]
-    exact fun x hx => Finset.mem_coe.2 ((mem_lensSample x).2 (hs' (hball z x hx)))
+    exact fun x hx => (mem_lensSample x).2 (hs' (hball z x hx))
   obtain ⟨w, hw, hu, hs, herr⟩ := edgeExchange_step_guideFrame hD hLL hΩ hΩ₁
     (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ ha Bl E e d ((1 : ℝ), (1 : ℝ)) ht htn
     hnL hε hfm hfa (V₁ := Vm) (V₂ := Va) (hV₁ := hdm) (hV₂ := hda) (fun z hz => (hVm z).1 hz)

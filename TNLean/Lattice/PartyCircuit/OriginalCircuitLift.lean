@@ -64,7 +64,7 @@ theorem isExpansionBounded_toOriginalCircuit_of_sourceCount_eq_zero {a b : Layou
   induction w with
   | id => trivial
   | comp w w' ih ih' =>
-      simp only [sourceCount, Nat.add_eq_zero_iff] at h0
+      simp only [sourceCount, Circuit.gateCount, Nat.add_eq_zero_iff] at h0
       exact ⟨ih hw.1 h0.1, ih' hw.2 h0.2⟩
   | localMap => trivial
   | source => exact absurd h0 one_ne_zero
@@ -78,7 +78,7 @@ theorem isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero {a b : Layout
   induction w with
   | id => trivial
   | comp w w' ih ih' =>
-      simp only [sourceCount, Nat.add_eq_zero_iff] at h0
+      simp only [sourceCount, Circuit.gateCount, Nat.add_eq_zero_iff] at h0
       exact ⟨ih hw.1 h0.1, ih' hw.2 h0.2⟩
   | localMap => trivial
   | source => exact absurd h0 one_ne_zero
@@ -86,7 +86,7 @@ theorem isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero {a b : Layout
   | frame r w ih => exact ih hw h0
 
 theorem isReordering_castLayouts {ℓ ℓ' a b : Layout P} {w : Word ℓ ℓ'} (hw : w.IsReordering)
-    (h : ℓ = a) (h' : ℓ' = b) : (w.castLayouts h h').IsReordering := by
+    (h : ℓ = a) (h' : ℓ' = b) : Word.IsReordering (w.castLayouts h h') := by
   cases h
   cases h'
   exact hw
@@ -100,28 +100,10 @@ namespace OriginalCircuit
 
 /-! ### Identifying equal layouts -/
 
-/-- Identify equal input and output layouts without adding an operation. -/
-def castLayouts {a b a' b' : Layout P} (c : OriginalCircuit a b) (ha : a = a') (hb : b = b') :
-    OriginalCircuit a' b' :=
-  ha ▸ hb ▸ c
-
-theorem eval_castLayouts {a b a' b' : Layout P} (c : OriginalCircuit a b) (ha : a = a')
-    (hb : b = b') :
-    (c.castLayouts ha hb).eval =
-      isoL (Layout.memCongr hb) ∘L c.eval ∘L isoL (Layout.memCongr ha).symm := by
-  cases ha
-  cases hb
-  rfl
-
-@[simp] theorem nonprivateCount_castLayouts {a b a' b' : Layout P} (c : OriginalCircuit a b)
-    (ha : a = a') (hb : b = b') : (c.castLayouts ha hb).nonprivateCount = c.nonprivateCount := by
-  cases ha
-  cases hb
-  rfl
-
 theorem participants_castLayouts_subset {S : Set P} {a b a' b' : Layout P}
     (c : OriginalCircuit a b) (ha : a = a') (hb : b = b')
-    (hc : ∀ g, (↑(c.participants g) : Set P) ⊆ S) (g : (c.castLayouts ha hb).nonprivateLocations) :
+    (hc : ∀ g, (↑(c.participants g) : Set P) ⊆ S) (g : OriginalCircuit.nonprivateLocations
+        (c.castLayouts ha hb)) :
     (↑((c.castLayouts ha hb).participants g) : Set P) ⊆ S := by
   cases ha
   cases hb
@@ -129,57 +111,36 @@ theorem participants_castLayouts_subset {S : Set P} {a b a' b' : Layout P}
 
 theorem isExpansionBounded_castLayouts {a b a' b' : Layout P} (c : OriginalCircuit a b)
     (ha : a = a') (hb : b = b') {r : ℕ} {s : ℝ} (hc : c.IsExpansionBounded r s) :
-    (c.castLayouts ha hb).IsExpansionBounded r s := by
+    OriginalCircuit.IsExpansionBounded r s (c.castLayouts ha hb) := by
   cases ha
   cases hb
   exact hc
 
 theorem isMonomialBounded_castLayouts {a b a' b' : Layout P} (c : OriginalCircuit a b)
     (ha : a = a') (hb : b = b') {K : ℕ} (hc : c.IsMonomialBounded K) :
-    (c.castLayouts ha hb).IsMonomialBounded K := by
+    OriginalCircuit.IsMonomialBounded K (c.castLayouts ha hb) := by
   cases ha
   cases hb
   exact hc
 
 /-! ### Spectators in front -/
 
-/-- A circuit framed by a list of untouched registers in front. -/
-def frameList {a b : Layout P} : (rs : Layout P) → OriginalCircuit a b →
-    OriginalCircuit (rs ++ a) (rs ++ b)
-  | [], c => c
-  | r :: rs, c => .frame r (frameList rs c)
-
-/-- Framing by a list acts on the second factor of the concatenated memory. -/
-theorem eval_frameList_appendIso_symm {a b : Layout P} (c : OriginalCircuit a b) :
-    (rs : Layout P) → (x : Mem rs) → (y : Mem a) →
-      (frameList rs c).eval ((appendIso rs a).symm (x ⊗ₜ y)) =
-        (appendIso rs b).symm (x ⊗ₜ c.eval y)
-  | [], x, y => map_smul c.eval x y
-  | r :: rs, x, y => by
-      induction x using TensorProduct.inductionOn with
-      | tmul u v => exact congrArg (fun z ↦ u ⊗ₜ z) (eval_frameList_appendIso_symm c rs v y)
-      | add x z hx hz => simp only [TensorProduct.add_tmul, map_add, hx, hz]
-
-@[simp] theorem nonprivateCount_frameList {a b : Layout P} (c : OriginalCircuit a b) :
-    (rs : Layout P) → (frameList rs c).nonprivateCount = c.nonprivateCount
-  | [] => rfl
-  | _ :: rs => nonprivateCount_frameList c rs
-
 theorem participants_frameList_subset {S : Set P} {a b : Layout P} (c : OriginalCircuit a b)
     (hc : ∀ g, (↑(c.participants g) : Set P) ⊆ S) :
-    (rs : Layout P) → (g : (frameList rs c).nonprivateLocations) →
+    (rs : Layout P) → (g : OriginalCircuit.nonprivateLocations (frameList rs c)) →
       (↑((frameList rs c).participants g) : Set P) ⊆ S
   | [], g => hc g
   | _ :: rs, g => participants_frameList_subset c hc rs g
 
 theorem isExpansionBounded_frameList {a b : Layout P} (c : OriginalCircuit a b) {r : ℕ} {s : ℝ}
     (hc : c.IsExpansionBounded r s) :
-    (rs : Layout P) → (frameList rs c).IsExpansionBounded r s
+    (rs : Layout P) → OriginalCircuit.IsExpansionBounded r s (frameList rs c)
   | [] => hc
   | _ :: rs => isExpansionBounded_frameList c hc rs
 
 theorem isMonomialBounded_frameList {a b : Layout P} (c : OriginalCircuit a b) {K : ℕ}
-    (hc : c.IsMonomialBounded K) : (rs : Layout P) → (frameList rs c).IsMonomialBounded K
+    (hc : c.IsMonomialBounded K) : (rs : Layout P) → OriginalCircuit.IsMonomialBounded K
+        (frameList rs c)
   | [] => hc
   | _ :: rs => isMonomialBounded_frameList c hc rs
 
@@ -203,7 +164,7 @@ theorem eval_appendTail_appendIso_symm {a b : Layout P} (c : OriginalCircuit a b
 
 @[simp] theorem nonprivateCount_appendTail {a b : Layout P} (c : OriginalCircuit a b)
     (t : Layout P) : (c.appendTail t).nonprivateCount = c.nonprivateCount := by
-  simp only [appendTail, nonprivateCount, nonprivateCount_frameList,
+  simp only [appendTail, nonprivateCount, Circuit.gateCount, Circuit.gateCount_frameList,
     Word.nonprivateCount_toOriginalCircuit_of_isReordering (Word.isReordering_exchangeTwo _ _),
     zero_add, add_zero]
 

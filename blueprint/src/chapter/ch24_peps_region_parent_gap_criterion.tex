@@ -10,12 +10,12 @@ Deriving it from properties of a boundary state is a separate question.
 \begin{lemma}[Disjoint regional interactions commute]%
     \label{thm:peps_disjoint_region_interactions_commute}
     \lean{TNLean.PEPS.regionReplaceConfig,
-        TNLean.PEPS.regionLocalTerm_mulVec_apply,
+        TNLean.PEPS.place_mulVec_apply,
         TNLean.PEPS.regionReplaceConfig_apply_of_disjoint,
         TNLean.PEPS.regionReplaceConfig_comm_of_disjoint,
-        TNLean.PEPS.regionLocalTerm_commute_of_disjoint,
-        TNLean.PEPS.regionLocalTermES,
-        TNLean.PEPS.regionLocalTermES_commute_of_disjoint,
+        ManyBody.commute_of_mem_supportedOperators_of_disjoint,
+        TNLean.PEPS.placeES,
+        TNLean.PEPS.placeES_commute_of_disjoint,
         TNLean.PEPS.regionParentHamiltonianES,
         TNLean.PEPS.regionParentHamiltonianES_eq_sum}
     \leanok

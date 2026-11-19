@@ -34,6 +34,8 @@ and seam deformation, lines 1622–1647. No G-isometry is required.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
@@ -51,12 +53,12 @@ variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}
 omit [Fintype G] [DecidableEq G] in
 private theorem directedTransport_of_head_eq {W : Type*} [LinearOrder W]
     {H : SimpleGraph W} (u : Edge H → G) {x y : W} (hxy : H.Adj x y)
-    (hhead : (Edge.ofAdj hxy).1.2 = x) :
-    regularDirectedTransport u hxy = (u (Edge.ofAdj hxy))⁻¹ := by
+    (hhead : (ManyBody.Edge.ofAdj hxy).1.2 = x) :
+    regularDirectedTransport u hxy = (u (ManyBody.Edge.ofAdj hxy))⁻¹ := by
   have hyx : y < x := by
-    rcases Edge.ofAdj_endpoints hxy with ⟨ht, hh⟩ | ⟨ht, hh⟩
+    rcases ManyBody.Edge.ofAdj_endpoints hxy with ⟨ht, hh⟩ | ⟨ht, hh⟩
     · exact (hxy.ne (hhead.symm.trans hh)).elim
-    · simpa only [ht, hhead] using (Edge.ofAdj hxy).2.1
+    · simpa only [ht, hhead] using (ManyBody.Edge.ofAdj hxy).2.1
   simp only [regularDirectedTransport, ite_eq_right (not_lt.mpr hyx.le)]
 
 omit [Fintype G] [DecidableEq G] in
@@ -89,7 +91,7 @@ theorem IsGInjective.commute_of_cornerParent_annihilates_torusGClosure
       (RegionPhysicalConfig (d := d) (R₀)) ℂ)
     (hQ : IsRegionParentInteraction (groupBondTensor (torusIncidentSite a))
       (R₀) Q)
-    (hground : regionLocalTerm (R₀) Q *ᵥ
+    (hground : ManyBody.place («X» := fun _ ↦ Fin _) (R₀) Q *ᵥ
       torusGClosure (width := width) (height := height) (leftRegularMatrix G) a g h = 0) :
     Commute g h := by
   classical
@@ -127,7 +129,7 @@ theorem IsGInjective.regionParent_annihilates_torusGClosure_of_isSimplyConnected
     (g h : G) (hgh : Commute g h)
     (Q : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (hQ : IsRegionParentInteraction (groupBondTensor (torusIncidentSite a)) R Q) :
-    regionLocalTerm R Q *ᵥ
+    ManyBody.place («X» := fun _ ↦ Fin _) R Q *ᵥ
       torusGClosure (width := width) (height := height) (leftRegularMatrix G) a g h = 0 := by
   classical
   obtain ⟨o⟩ := hR.nonempty
@@ -141,7 +143,7 @@ theorem IsGInjective.regionParent_annihilates_torusGClosure_of_isSimplyConnected
       stateCoeff (groupBondTensor (regularTwistedSite (torusIncidentSite a)
         (torusClosureEdgeAssignment g h))) := funext (torusGClosure_eq_stateCoeff_twisted a g h)
   rw [hc]
-  apply (regionLocalTerm_mulVec_eq_zero_iff (groupBondTensor (torusIncidentSite a)) R hQ _).mpr
+  apply (place_mulVec_eq_zero_iff (groupBondTensor (torusIncidentSite a)) R hQ _).mpr
   intro τ
   rw [← hspaces]
   exact stateCoeff_slice_mem_regionGroundSpace _ R τ

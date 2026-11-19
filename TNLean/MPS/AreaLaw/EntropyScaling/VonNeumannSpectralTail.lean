@@ -41,7 +41,7 @@ theorem regionEntropy_le_log_rank_add_spectral_tail {L q D : ℕ}
   have hρ := Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q) R ψ
   have hb := hρ.vonNeumannEntropy_le_log_rank_add_tail
     (by simp [Entropy.trace_regionState, hψ]) htail
-  simpa [Entropy.regionEntropy, Entropy.RegionConfig, Fintype.card_pi, Real.log_pow,
-    mul_assoc] using hb
+  simpa [Entropy.regionEntropy, ManyBody.regionEntropy, Entropy.RegionConfig, Fintype.card_pi,
+    Real.log_pow, mul_assoc] using hb
 
 end TNLean.MPS.AreaLaw

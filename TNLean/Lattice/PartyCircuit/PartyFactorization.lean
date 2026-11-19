@@ -85,7 +85,7 @@ private theorem partitionIso_eval_swap (f : P → Bool) (r t : Reg P) (tail : La
       simp only [map_add, TensorProduct.tmul_add]
       exact congrArg₂ (· + ·) hu hv
   | tmul a b =>
-      simp only [comp_apply, isoL_apply, Word.eval, leftCommL_tmul]
+      simp only [comp_apply, isoL_apply, Circuit.eval, leftCommL_tmul]
       cases hr : f r.owner <;> cases ht : f t.owner
       · apply eq_of_heq
         refine (Layout.partitionIso_cons_cons_false_false_tmul f t r tail ht hr y x a b).trans ?_
@@ -108,7 +108,7 @@ private theorem partitionIso_eval_swap (f : P → Bool) (r t : Reg P) (tail : La
             (by simp [hr]) (by simp [ht]))
           (Layout.partitionIso_cons_cons_false_false_tmul f r t tail hr ht x y a b)
         refine HEq.trans ?_ hm.symm
-        simp only [TensorProduct.mapL_tmul, Word.eval, leftCommL_tmul, id_apply]
+        simp only [TensorProduct.mapL_tmul, Circuit.eval, leftCommL_tmul, id_apply]
         rfl
       · apply eq_of_heq
         refine (Layout.partitionIso_cons_cons_true_false_tmul f t r tail ht hr y x a b).trans ?_
@@ -177,7 +177,7 @@ private theorem partitionIso_eval_swap (f : P → Bool) (r t : Reg P) (tail : La
             (by simp [hr]) (by simp [ht]))
           (Layout.partitionIso_cons_cons_true_true_tmul f r t tail hr ht x y a b)
         refine HEq.trans ?_ hm.symm
-        simp only [TensorProduct.mapL_tmul, Word.eval, leftCommL_tmul, id_apply]
+        simp only [TensorProduct.mapL_tmul, Circuit.eval, leftCommL_tmul, id_apply]
         rfl
 
 private theorem localMap_appendIso_symm {p : P} {a b : Layout P}
@@ -185,7 +185,7 @@ private theorem localMap_appendIso_symm {p : P} {a b : Layout P}
     (U : Mem a →L[ℂ] Mem b) (tail : Layout P) (s : Mem a) (x : Mem tail) :
     (Word.localMap p ha hb U tail).eval ((appendIso a tail).symm (s ⊗ₜ x)) =
       (appendIso b tail).symm (U s ⊗ₜ x) := by
-  simp [Word.eval]
+  simp [Circuit.eval]
 
 /-- Partitioning registers by their owners factors a source-free word into its two
 actual restrictions. Source: polynomial-PEPS manuscript, Theorem 5.2,
@@ -193,12 +193,12 @@ actual restrictions. Source: polynomial-PEPS manuscript, Theorem 5.2,
 theorem Word.partitionIso_eval (f : P → Bool) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ')
     (hs : w.sources = []) :
     isoL (Layout.partitionIso f ℓ') ∘L w.eval =
-      TensorProduct.mapL (w.restrict f hs).eval (w.restrict (fun p ↦ !f p) hs).eval ∘L
+      TensorProduct.mapL (Word.restrict f w hs).eval (Word.restrict (fun p ↦ !f p) w hs).eval ∘L
         isoL (Layout.partitionIso f ℓ) := by
   induction w with
-  | id ℓ => simp [Word.restrict, Word.eval]
+  | id ℓ => simp [Word.restrict, Circuit.eval]
   | comp w w' ih ih' =>
-      simp only [Word.restrict, Word.eval_comp]
+      simp only [Word.restrict, Circuit.eval_comp]
       rw [← comp_assoc, ih' (List.append_eq_nil_iff.mp hs).1, comp_assoc,
         ih (List.append_eq_nil_iff.mp hs).2, ← comp_assoc, ← TensorProduct.mapL_comp]
   | @localMap p a b ha hb U tail =>
@@ -299,12 +299,12 @@ theorem Word.partitionIso_eval (f : P → Bool) {ℓ ℓ' : Layout P} (w : Word 
           refine HEq.trans ?_ hm.symm
           apply heq_of_eq
           rw [show Layout.partitionIso f b (w.eval y) =
-            TensorProduct.mapL (w.restrict f hs).eval
-              (w.restrict (fun p ↦ !f p) hs).eval (Layout.partitionIso f a y) from
+            TensorProduct.mapL (Word.restrict f w hs).eval
+              (Word.restrict (fun p ↦ !f p) w hs).eval (Layout.partitionIso f a y) from
             DFunLike.congr_fun (ih hs) y]
           simpa [leftCommL, TensorProduct.mapL_tmul, lTensor_eq_mapL] using
-            leftComm_mapL (ContinuousLinearMap.id ℂ r.space) (w.restrict f hs).eval
-              (w.restrict (fun p ↦ !f p) hs).eval (x ⊗ₜ Layout.partitionIso f a y)
+            leftComm_mapL (ContinuousLinearMap.id ℂ r.space) (Word.restrict f w hs).eval
+              (Word.restrict (fun p ↦ !f p) w hs).eval (x ⊗ₜ Layout.partitionIso f a y)
       | true =>
           apply eq_of_heq
           refine (Layout.partitionIso_cons_true_tmul f r b hr x (w.eval y)).trans ?_
@@ -328,11 +328,11 @@ theorem Word.partitionIso_eval (f : P → Bool) {ℓ ℓ' : Layout P} (w : Word 
           refine HEq.trans ?_ hm.symm
           apply heq_of_eq
           rw [show Layout.partitionIso f b (w.eval y) =
-            TensorProduct.mapL (w.restrict f hs).eval
-              (w.restrict (fun p ↦ !f p) hs).eval (Layout.partitionIso f a y) from
+            TensorProduct.mapL (Word.restrict f w hs).eval
+              (Word.restrict (fun p ↦ !f p) w hs).eval (Layout.partitionIso f a y) from
             DFunLike.congr_fun (ih hs) y]
           simpa only [TensorProduct.mapL_tmul, id_apply, lTensor_eq_mapL] using
-            assoc_symm_mapL (ContinuousLinearMap.id ℂ r.space) (w.restrict f hs).eval
-              (w.restrict (fun p ↦ !f p) hs).eval (x ⊗ₜ Layout.partitionIso f a y)
+            assoc_symm_mapL (ContinuousLinearMap.id ℂ r.space) (Word.restrict f w hs).eval
+              (Word.restrict (fun p ↦ !f p) w hs).eval (x ⊗ₜ Layout.partitionIso f a y)
 
 end TNLean.Lattice.PartyCircuit

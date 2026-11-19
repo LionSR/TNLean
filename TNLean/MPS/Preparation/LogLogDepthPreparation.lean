@@ -70,6 +70,7 @@ and every chain length `N ≥ N₀` by
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
+open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -158,7 +159,7 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_approximatingMPVState (d s
       (pairLayerOp hN hr fun _ => W) := by
     have := (isImplementationOn_round (d := d) Ls (valid_nil (N := M * q))).isRoundsImplementationOn
     rw [chainPerm_nil, Matrix.one_mul, ← hLsW] at this
-    exact this.mono fun v _ => fun _ _ _ h => h.elim
+    exact this.mono fun v _ => fun _ _ _ h => by simp [TeleportHop.pairSites] at h
   have hall := h₀.append hRsE fun v hv => by
     rw [Set.mem_singleton_iff] at hv
     subst hv

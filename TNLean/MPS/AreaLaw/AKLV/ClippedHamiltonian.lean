@@ -18,10 +18,13 @@ operators; neither a spectral ceiling nor a spatial decomposition is supplied.
 Source: AKLV, arXiv:1301.1162v1, Section 6.1, equation (5) and the subsequent
 definition of the two exterior truncations; Section 4, Lemma 4.2.
 
-**Scope restriction (window width):** The window contains at least six
-interactions. The support convention and the aggregate middle energy shift
+**Scope restriction (window width):** The window contains at least three
+interactions, so that the two clipped exterior sums have disjoint supports. The support convention
+and the aggregate middle energy shift
 are those recorded in `docs/paper-gaps/aklv13_two_block_robustness.tex`.
 -/
+
+open ManyBody (interval)
 
 open Matrix
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
@@ -43,7 +46,7 @@ private theorem two_block_outer_selector :
 
 open Classical in
 private theorem aklv_clipped_hamiltonian_formula {L q a s : ℕ}
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (e : Fin 3 → ℝ) (t : ℝ) :
     let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) h
@@ -104,7 +107,7 @@ open Classical in
 shorter window of width `s-2`. Its central cut is the original central cut.
 AKLV, arXiv:1301.1162v1, Section 6.1, equation (5), and Lemma 4.2. -/
 theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (h i) (interval L i.val (i.val + 2)))
@@ -130,14 +133,13 @@ theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
   have hF (j : Fin 3) : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (F j)
       (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
         ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.succ)) := by
-    exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-      (QuantumCircuit.cfc_mem_supportedOperators _
-        (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hC j)))
+    exact (ManyBody.cfc_mem_supportedOperators _
+        (hC j))
   have hleft : Entropy.IsSupportedOn HL (interval L 0 (a + 2)) := by
-    apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-    exact Submodule.sub_mem _
-      (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hF 0))
-      (Submodule.smul_mem _ _ (QuantumCircuit.one_mem_supportedOperators _))
+    change _ ∈ ManyBody.supportedOperators _ _
+    exact sub_mem
+      (hF 0)
+      (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
   refine ⟨HL, HR, hleft, hF 2, fun j ↦ hsupp _, ?_, by omega⟩
   exact aklv_clipped_hamiltonian_formula hs ha h e t
 
@@ -147,7 +149,7 @@ The energies are the regional lower bounds used in the source normalization;
 only the nonnegativity of the middle minimum is needed for the upper bound.
 AKLV, arXiv:1301.1162v1, Section 6.1, the definition of `H^(t)`. -/
 theorem aklv_clipped_hamiltonian_posSemidef_norm_le {L q a s : ℕ}
-    (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
+    (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (e : Fin 3 → ℝ)

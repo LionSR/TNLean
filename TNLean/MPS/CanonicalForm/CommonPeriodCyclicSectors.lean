@@ -16,6 +16,8 @@ dimensions. Per-block primitivity witnesses are transported along the
 divisibility `periods i ∣ lcmPeriod periods`.
 -/
 
+open Kraus (blockPhysDim blockTensor)
+
 namespace MPSTensor
 
 variable {d k : ℕ}

@@ -22,6 +22,8 @@ consequences supporting ALVV, arXiv:1602.08828v2, Proposition 5.7,
 lines 1332–1333. No open-boundary representation or cap-rank assumption is used.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators Kronecker Matrix
 

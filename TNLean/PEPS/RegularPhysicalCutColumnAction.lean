@@ -23,6 +23,8 @@ hypothesis on the global contraction is used.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped Matrix
 namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]

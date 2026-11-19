@@ -32,6 +32,8 @@ and of a site outside `A`.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.Lattice
 
 variable {Λ : Finset (ℤ × ℤ)} {R : ℕ}
@@ -49,8 +51,8 @@ noncomputable def crossingSites (Λ : Finset (ℤ × ℤ)) (R : ℕ) (A : Finset
 length at most `R` to a site of `A` and to a site outside `A`. -/
 theorem exists_walks_of_mem_crossingSites {A : Finset (Site Λ)} {z : Site Λ}
     (hz : z ∈ crossingSites Λ R A) :
-    ∃ x ∈ A, ∃ y ∉ A, (∃ p : (domainGraph Λ).Walk z x, p.length ≤ R) ∧
-      ∃ p : (domainGraph Λ).Walk z y, p.length ≤ R := by
+    ∃ x ∈ A, ∃ y ∉ A, (∃ p : (planeDomainGraph Λ).Walk z x, p.length ≤ R) ∧
+      ∃ p : (planeDomainGraph Λ).Walk z y, p.length ≤ R := by
   classical
   simp only [crossingSites, Entropy.crossingTerms, Finset.mem_biUnion, Finset.mem_filter,
     Finset.mem_univ, true_and] at hz

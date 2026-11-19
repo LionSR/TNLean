@@ -55,7 +55,8 @@ vector. The only estimates assumed are the local residual and centred-norm bound
 Hastings, arXiv:cond-mat/0508554v3, equation `low` and lines 609–707. -/
 theorem exists_unit_mem_periodicHierarchyProjection (blk : ι → ℕ)
     (a : ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ j, 0 < j → a j ∈ supportedOperators d {i | blk i + 1 = j ∨ blk i = j})
+    (hsupp : ∀ j, 0 < j → a j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j))
     (ha : ∀ j, (a j).IsHermitian)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {K r J Δ : ℝ} (hK : 0 < K)
     {h : ℕ} (hh : 2 ≤ h) (hr : hierarchyProjectionLength h J Δ ≤ r)
@@ -83,7 +84,8 @@ is that of the physical Hamiltonian `H`; the explicit length controls both error
 Hastings, arXiv:cond-mat/0508554v3, lines 709–730. -/
 theorem card_le_two_mul_re_trace_of_periodicHierarchyProjection (blk : ι → ℕ)
     (a : ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (hsupp : ∀ j, 0 < j → a j ∈ supportedOperators d {i | blk i + 1 = j ∨ blk i = j})
+    (hsupp : ∀ j, 0 < j → a j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j))
     (ha : ∀ j, (a j).IsHermitian)
     {ψ : EuclideanSpace ℂ (ι → Fin d)} (hψ : ‖ψ‖ = 1) {K r J Δ : ℝ} (hK : 0 < K)
     {h : ℕ} (hh : 2 ≤ h) (hJ : 0 < J) (hΔ : 0 < Δ)

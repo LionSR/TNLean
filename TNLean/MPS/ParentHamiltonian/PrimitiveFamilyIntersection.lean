@@ -66,11 +66,11 @@ sufficiently large length. Middle-space independence follows from overlap
 decay; the individual intersections follow from period-one periodicity.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 4,
 Proposition forintersection, Lemmas disjoint and intersectionequivalence. -/
-theorem eventually_iSup_groundSpace_restriction_intersection_of_isPrimitiveMPS
+theorem eventually_iSup_groundSpace_restriction_intersection_of_hasComplementaryFixedPointGap
     [∀ j, NeZero (dim j)]
     (A : ∀ j, MPSTensor d (dim j))
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) :
     ∀ᶠ n in atTop,
@@ -96,15 +96,16 @@ theorem exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_o
     [NeZero d] {r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
     (μ : Fin r → ℂ) (A : ∀ j, MPSTensor d (dim j)) (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) :
     ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
       LinearMap.ker (openParentHamiltonianES (toTensorFromBlocks μ A) R N) =
         groundSpaceES (toTensorFromBlocks μ A) N := by
   apply exists_ker_openParentHamiltonianES_eq_groundSpaceES_of_eventually_restriction_intersection
-  filter_upwards [eventually_iSup_groundSpace_restriction_intersection_of_isPrimitiveMPS
-    A ρ hP hρ hDistinct] with n hn
+  filter_upwards [
+    eventually_iSup_groundSpace_restriction_intersection_of_hasComplementaryFixedPointGap
+      A ρ hP hρ hDistinct] with n hn
   simpa only [groundSpace_toTensorFromBlocks_eq_iSup μ A hμ] using hn
 
 /-- A weighted inequivalent primitive family admits a positive canonical
@@ -116,7 +117,7 @@ theorem exists_positive_parent_interaction_of_primitive_overlap
     [NeZero d] {r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
     (μ : Fin r → ℂ) (A : ∀ j, MPSTensor d (dim j)) (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) :
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,

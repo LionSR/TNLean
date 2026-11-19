@@ -7,17 +7,11 @@ import QICLean.Kraus.PrimitiveFixedPoint
 import QICLean.Kraus.Transfer
 
 /-!
-# MPS vocabulary for primitive fixed points
+# Rescaling the fixed point of a complementary fixed-point gap
 
-This module exposes the finite-Kraus complementary fixed-point-gap certificates from
-QICLean under the established matrix-product-state vocabulary. The abbreviations are
-reducible, so the QIC fields and generic methods remain available definitionally, without
-a separate MPS-facing forwarding declaration or conversion theorem.
-
-## Main definitions
-
-* `IsPrimitiveMPS`: MPS-facing name for `Kraus.HasComplementaryFixedPointGap`.
-* `HasPrimitiveFixedPoint`: MPS-facing name for `Kraus.HasPrimitiveFixedPoint`.
+The complementary fixed-point gap `Kraus.HasComplementaryFixedPointGap` of QICLean depends
+on its fixed point only through the ray it spans. This module records that fact and the
+normalization of a positive-definite fixed point to unit trace.
 
 ## Main results
 
@@ -26,7 +20,7 @@ a separate MPS-facing forwarding declaration or conversion theorem.
 * `Matrix.trace_inv_trace_smul`: the normalized representative of the ray has unit trace.
 * `Matrix.PosDef.inv_trace_smul`: the normalized representative of the ray of a
   positive-definite matrix is again positive definite.
-* `MPSTensor.IsPrimitiveMPS.smul_inv_trace`: rescaling a positive-definite primitive fixed
+* `Kraus.HasComplementaryFixedPointGap.smul_inv_trace`: rescaling a positive-definite fixed
   point to unit trace preserves the complementary fixed-point gap.
 -/
 
@@ -58,31 +52,13 @@ theorem Matrix.PosDef.inv_trace_smul {D : ℕ} [NeZero D]
     (hρ : ρ.PosDef) : ((Matrix.trace ρ)⁻¹ • ρ).PosDef :=
   hρ.smul (inv_pos.mpr hρ.trace_pos)
 
-namespace MPSTensor
-
-/-- An MPS tensor is **primitive** (with witness `ρ`) when its finite Kraus family has a
-complementary fixed-point gap at `ρ`.
-
-This reducible abbreviation preserves the public MPS vocabulary while exposing
-`Kraus.HasComplementaryFixedPointGap` and all of its field projections definitionally. -/
-abbrev IsPrimitiveMPS {d D : ℕ} [NeZero D]
-    (A : MPSTensor d D) (ρ : Matrix (Fin D) (Fin D) ℂ) : Prop :=
-  Kraus.HasComplementaryFixedPointGap A ρ
-
-/-- An MPS tensor **has a primitive fixed point** when its finite Kraus family has one.
-
-This reducible abbreviation preserves the existential MPS vocabulary while reusing
-`Kraus.HasPrimitiveFixedPoint` directly. -/
-abbrev HasPrimitiveFixedPoint {d D : ℕ} [NeZero D] (A : MPSTensor d D) : Prop :=
-  Kraus.HasPrimitiveFixedPoint A
-
 /-- Rescaling a positive-definite primitive fixed point to unit trace preserves the
 complementary fixed-point gap. Only the ray through the fixed point enters the gap
 certificate, so the normalized witness carries the same primitivity data. -/
-theorem IsPrimitiveMPS.smul_inv_trace {d D : ℕ} [NeZero D]
+theorem Kraus.HasComplementaryFixedPointGap.smul_inv_trace {d D : ℕ} [NeZero D]
     {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
-    IsPrimitiveMPS A ((Matrix.trace ρ)⁻¹ • ρ) := by
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
+    Kraus.HasComplementaryFixedPointGap A ((Matrix.trace ρ)⁻¹ • ρ) := by
   have htr_ne : Matrix.trace ρ ≠ 0 := ne_of_gt hρ.trace_pos
   have hpd : ((Matrix.trace ρ)⁻¹ • ρ).PosDef := hρ.inv_trace_smul
   have hne : Matrix.trace ((Matrix.trace ρ)⁻¹ • ρ) ≠ 0 := ne_of_gt hpd.trace_pos
@@ -90,5 +66,3 @@ theorem IsPrimitiveMPS.smul_inv_trace {d D : ℕ} [NeZero D]
   · rw [LinearMap.map_smul, hP.fixedPoint_is_fixed]
   · simpa only [fixedPointProj_smul ρ hne htr_ne] using
       hP.complementary_transfer_map_gap
-
-end MPSTensor

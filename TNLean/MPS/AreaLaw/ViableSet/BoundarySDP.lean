@@ -31,6 +31,7 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalArithmeticTraceCost
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalArithmeticTraceHeights
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalCertificateTests
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalCodeHeights
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalCoefficientTraceHeights
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalContraction
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalContractionCost
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalContractionTrace

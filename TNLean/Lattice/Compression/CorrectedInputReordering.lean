@@ -130,8 +130,8 @@ theorem isTensorPartitioned_prepared_reordered_partial {a b : Layout P}
             (ℓ₃ := Layout.mapOwner (affectedOwner A) b)
             (prepareSelected R U V free (fixed ξ) ℓ) (partialResidual A w ξ))) := by
   intro A R U V ℓ C T free fixed p u hu hus ξ
-  have hp : p.IsAllowed := (Word.isAllowed_castLayouts _ _ _).mpr
-    (Word.isAllowed_frameList _ (Word.isAllowed_mapOwner _ p₀ hp₀) _)
+  have hp : p.IsAllowed := (Circuit.isAllowed_castLayouts _ _ _).mpr
+    (Circuit.isAllowed_frameList _ (Word.isAllowed_mapOwner _ p₀ hp₀) _)
   have hps : p.sources = [] := by
     simp only [p, Word.sources_castLayouts, Word.sources_frameList,
       Word.sources_mapOwner, hp₀s, SourceInventory.mapOwner]

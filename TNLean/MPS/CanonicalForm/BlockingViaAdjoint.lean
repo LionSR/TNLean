@@ -20,6 +20,7 @@ The general adjoint-eigenvalue and primitivity lemmas live in
 (induced by the identity matrix) and to MPS transfer maps.
 -/
 open scoped Matrix ComplexOrder MatrixOrder BigOperators
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

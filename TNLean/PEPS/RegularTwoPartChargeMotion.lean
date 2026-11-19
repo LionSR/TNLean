@@ -15,6 +15,8 @@ Source: SCP10, arXiv:1001.3807, the two column swaps in
 external boundary are those of the actual graph contraction. The Gram forms
 of both physical maps are derived separately from local G-isometry.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix Kronecker
 namespace TNLean.PEPS

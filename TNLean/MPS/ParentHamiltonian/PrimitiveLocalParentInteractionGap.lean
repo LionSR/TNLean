@@ -52,9 +52,9 @@ theorem IsParentInteraction.ker_openInteractionHamiltonianES_eq_ker_openParentHa
 with a bulk observable converge to the insertion expectation of the local
 commutator observable. Source: Nachtergaele, arXiv:cond-mat/9410110,
 Section 6, lines 2649--2675. -/
-theorem IsPrimitiveMPS.openInteraction_commutator_energy_tendsto
+theorem _root_.Kraus.HasComplementaryFixedPointGap.openInteraction_commutator_energy_tendsto
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R) (hk : 0 < k)
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
@@ -88,9 +88,9 @@ theorem IsPrimitiveMPS.openInteraction_commutator_energy_tendsto
 from its eventual kernel identity and uniform norm gap. Tensor convergence
 derives the energy, excitation norm, and ground-projection limits.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
-theorem IsPrimitiveMPS.localCommutator_gap_of_openInteraction_gap
+theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_openInteraction_gap
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : (Matrix.toEuclideanLin h).IsPositive)
     (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R) (hk : 0 < k)
@@ -121,21 +121,22 @@ theorem IsPrimitiveMPS.localCommutator_gap_of_openInteraction_gap
     H ψ hγ (Eventually.of_forall fun n => openInteractionHamiltonianES_isPositive hh (N n))
     hGap hKernel hGround hUnit hEnergy
 
+set_option linter.style.longLine false in
 /-- Every positive parent interaction at range at least \(D^4+1\) has one
 positive local commutator bound throughout the normalized primitive sector.
 All finite-volume and limiting estimates are derived internally.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2 and Section 6;
 CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
-theorem IsPrimitiveMPS.exists_pos_localCommutator_gap_of_isParentInteraction
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_pos_localCommutator_gap_of_isParentInteraction
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : IsParentInteraction A R (Matrix.toEuclideanLin h)) (hR : D ^ 4 + 1 ≤ R) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ {k : ℕ} (X : Matrix (Cfg d k) (Cfg d k) ℂ),
       0 < k → observableInsertionExpectation A ρ X = 0 →
         γ * (observableInsertionExpectation A ρ (Xᴴ * X)).re ≤
           (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re := by
-  have hNormal := isNormal_of_isPrimitiveMPS_with_posDef hP hρ
+  have hNormal := isNormal_of_hasComplementaryFixedPointGap_with_posDef hP hρ
   have hD : 0 < D ^ 4 := pow_pos (NeZero.pos D) 4
   have hRpos : 0 < R := by omega
   obtain ⟨δ, hδ, hcanonicalGap⟩ :=

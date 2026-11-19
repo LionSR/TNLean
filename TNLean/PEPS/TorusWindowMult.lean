@@ -53,6 +53,8 @@ unconditionally, which is the §5.2 packaging.
   filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, §5.1--5.2.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

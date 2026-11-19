@@ -29,7 +29,7 @@ theorem endpointRegisterWord_eval_heq_mapOwner_castLayouts {P Q : Type}
     (hb : Layout.mapOwner f (D.map Sigma.fst) = b) :
     HEq (((endpointRegisterWord D).mapOwner f).castLayouts ha hb).eval
       (endpointRegisterWord D).eval :=
-  (Word.eval_castLayouts_heq ((endpointRegisterWord D).mapOwner f) ha hb).trans
+  (Circuit.eval_castLayouts_heq ((endpointRegisterWord D).mapOwner f) ha hb).trans
     (Word.eval_mapOwner_heq f (endpointRegisterWord D))
 
 end TNLean.Lattice.PartyCircuit.SourceInventory

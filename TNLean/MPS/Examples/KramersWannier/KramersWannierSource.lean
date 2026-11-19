@@ -5,7 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.Examples.KramersWannier.KramersWannierPhysical
 import TNLean.Algebra.BinaryCharacterSum
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 import TNLean.Algebra.GeneralizeDecide
 import TNLean.Algebra.FinCyclicInduction
 

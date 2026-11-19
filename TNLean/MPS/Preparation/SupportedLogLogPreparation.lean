@@ -25,6 +25,7 @@ Small rings below the fixed support scale use bounded exact synthesis.
 
 open Matrix MPSTensor QuantumCircuit
 open scoped BigOperators InnerProductSpace
+open Kraus (blockTensor)
 
 namespace MPSPreparation
 

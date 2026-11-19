@@ -27,32 +27,14 @@ and the pending revision and prerequisite gates recorded in
 `docs/audits/2026-10-29_physical_hard_truncation_capstone.md`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ALVV
-
-private theorem canonical_last_eq_minEigenvalue {n : Type*}
-    [Fintype n] [DecidableEq n] [Nonempty n] {M : Matrix n n ℂ}
-    (hM : M.IsHermitian) :
-    let jmin : Fin (Fintype.card n) :=
-      ⟨Fintype.card n - 1, Nat.sub_lt Fintype.card_pos (by decide)⟩
-    hM.eigenvalues₀ jmin = minEigenvalue hM := by
-  intro jmin
-  classical
-  let e : Fin (Fintype.card n) ≃ n := Fintype.equivOfCardEq (Fintype.card_fin _)
-  apply le_antisymm
-  · obtain ⟨i, hi⟩ := minEigenvalue_achieved hM
-    have hle : e.symm i ≤ jmin := by
-      change (e.symm i).val ≤ Fintype.card n - 1
-      omega
-    have h := hM.eigenvalues₀_antitone hle
-    change hM.eigenvalues₀ (e.symm i) = minEigenvalue hM at hi
-    exact h.trans_eq hi
-  · simpa only [IsHermitian.eigenvalues, e, Equiv.symm_apply_apply] using
-      minEigenvalue_le hM (e jmin)
 
 open Classical in
 /-- Actual single-region hard truncation with both physical residuals, ordered
@@ -129,8 +111,8 @@ theorem exists_single_region_hard_truncation_spectral_comparison {L q l r : ℕ}
   have hminF : minEigenvalue hF = E' := by
     simpa using hF.minEigenvalue_eq_add_of_centered_ground 0 E' z' hz'
       (by simpa using hFz') (by simpa using hE'low)
-  have hlastH : hH.eigenvalues₀ jmin = E := (canonical_last_eq_minEigenvalue hH).trans hminH
-  have hlastF : hF.eigenvalues₀ jmin = E' := (canonical_last_eq_minEigenvalue hF).trans hminF
+  have hlastH : hH.eigenvalues₀ jmin = E := hH.eigenvalues₀_last_eq_minEigenvalue.trans hminH
+  have hlastF : hF.eigenvalues₀ jmin = E' := hF.eigenvalues₀_last_eq_minEigenvalue.trans hminF
   have hcompare (δ : ℝ) (hδ : 0 < δ) :=
     hH.groundEnergy_compare_and_isCloseTo_spectralSpanLE_of_norm_domRestrict_le
       hF hFH η ξ δ hη hξ hδ

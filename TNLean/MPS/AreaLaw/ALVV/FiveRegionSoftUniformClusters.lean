@@ -26,6 +26,8 @@ steps. No soft gap or subspace comparison is assumed. See
 `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

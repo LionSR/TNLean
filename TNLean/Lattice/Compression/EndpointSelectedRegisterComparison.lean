@@ -37,7 +37,7 @@ private theorem eval_endpointRegisterWord_cons
       TensorProduct.mapL z.2 (endpointRegisterWord D).eval := by
   apply clm_ext_tmul
   intro x y
-  simp [endpointRegisterWord, Word.localEndpoint, Word.eval, appendIso,
+  simp [endpointRegisterWord, Word.localEndpoint, Circuit.eval, appendIso,
     isoL_apply, LinearIsometryEquiv.symm_lTensor]
   rfl
 

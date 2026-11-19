@@ -49,6 +49,7 @@ supplied left inverse.
 
 open scoped Matrix BigOperators Kronecker
 open Matrix
+open Kraus (blockTensor)
 
 namespace MPSTensor.MultiBlockCompression
 
@@ -178,12 +179,12 @@ variable {p : ℕ}
 
 /-- The paired word of a blocked doubled physical index: the ket and bra words of the block,
 paired letter by letter. -/
-noncomputable def blockedPairWord (p L : ℕ) (I : Fin (MPSTensor.blockPhysDim p L *
-    MPSTensor.blockPhysDim p L)) : List (Fin (p * p)) :=
+noncomputable def blockedPairWord (p L : ℕ) (I : Fin (Kraus.blockPhysDim p L *
+    Kraus.blockPhysDim p L)) : List (Fin (p * p)) :=
   Kraus.wordOfBlock (p * p) L (blockedDoubledIndexEquiv p L I)
 
 theorem blockedPairWord_ne_nil {L : ℕ} (hL : 0 < L)
-    (I : Fin (MPSTensor.blockPhysDim p L * MPSTensor.blockPhysDim p L)) :
+    (I : Fin (Kraus.blockPhysDim p L * Kraus.blockPhysDim p L)) :
     blockedPairWord p L I ≠ [] := by
   intro h
   have := congrArg List.length h
@@ -193,7 +194,7 @@ theorem blockedPairWord_ne_nil {L : ℕ} (hL : 0 < L)
 /-- A letter of a blocked MPO tensor, read as a tensor on the doubled alphabet, is the
 evaluation of the paired word. -/
 theorem toMPSTensor_blockTensor_apply {D : ℕ} (M : MPOTensor p D) (L : ℕ)
-    (I : Fin (MPSTensor.blockPhysDim p L * MPSTensor.blockPhysDim p L)) :
+    (I : Fin (Kraus.blockPhysDim p L * Kraus.blockPhysDim p L)) :
     (blockTensor M L).toMPSTensor I = Kraus.evalWord M.toMPSTensor (blockedPairWord p L I) :=
   congrFun (toMPSTensor_blockTensor M) I
 
@@ -215,8 +216,8 @@ theorem exists_blockTensor_isMPOBlockLeftInverse {g : ℕ} {D : Fin g → ℕ}
     (hD : ∀ c, 0 < D c)
     (hne : MPSTensor.BlocksNotGaugePhaseEquiv (d := p * p) fun c => (T c).toMPSTensor) :
     ∃ L : ℕ, 0 < L ∧ (∀ c, Kraus.IsInjective (blockTensor (T c) L).toMPSTensor) ∧
-      ∃ K : Matrix (MPSTensor.BlockEntryIndex D) (Fin (MPSTensor.blockPhysDim p L) ×
-          Fin (MPSTensor.blockPhysDim p L)) ℂ,
+      ∃ K : Matrix (MPSTensor.BlockEntryIndex D) (Fin (Kraus.blockPhysDim p L) ×
+          Fin (Kraus.blockPhysDim p L)) ℂ,
         MPSTensor.IsMPOBlockLeftInverse (fun c => blockTensor (T c) L) K := by
   have hScaled : ∀ c, ∃ ζ : ℂ, ζ ≠ 0 ∧
       MPSTensor.IsNormalTensor (ζ • (T c).toMPSTensor) := by
@@ -299,7 +300,7 @@ noncomputable def ofCompressionBlocked (hT : ∀ c, Kraus.IsNormal (T c).toMPSTe
     (hne : MPSTensor.BlocksNotGaugePhaseEquiv (d := p * p) fun c => (T c).toMPSTensor)
     (P : ∀ a b, PairCompression T N a b) (hP : ∀ a b, (P a b).remainder = 0) :
     CompleteZipperFusionFamily (Fin g)
-      (MPSTensor.blockPhysDim p (jointBlockLength T hT hD hne)) :=
+      (Kraus.blockPhysDim p (jointBlockLength T hT hD hne)) :=
   let hspec := (exists_blockTensor_isMPOBlockLeftInverse T hT hD hne).choose_spec
   ofCompression hD hspec.2.1
     (fun a b => (P a b).blockTensor hspec.1)
@@ -353,7 +354,7 @@ noncomputable def ofStarBlocked (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor)
     (hstar : ∀ a b, ∀ i, ((mulTensor (T a) (T b)).toMPSTensor i)ᴴ ∈
       Algebra.adjoin ℂ (Set.range (mulTensor (T a) (T b)).toMPSTensor)) :
     CompleteZipperFusionFamily (Fin g)
-      (MPSTensor.blockPhysDim p (jointBlockLength T hT hD hne)) :=
+      (Kraus.blockPhysDim p (jointBlockLength T hT hD hne)) :=
   ofCompressionBlocked hT hD hne
     (fun a b => (MPSTensor.exists_multiBlockCompression_remainder_eq_zero_of_star
       (D := fun s : (c : Fin g) × Fin (N a b c) => D s.1) Finset.univ

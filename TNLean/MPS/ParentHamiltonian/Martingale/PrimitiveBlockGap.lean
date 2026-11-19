@@ -37,11 +37,11 @@ at range \(2p\), uniform over all chain lengths \(pM\) with \(M\geq2\).
 The grouping length \(p\) may be chosen above any prescribed lower bound.
 This is Nachtergaele's grouped estimate, arXiv:cond-mat/9410110,
 Theorem 2.1(ii), and the three-interval estimate of Section 6. -/
-theorem exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS
+theorem exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) (Rmin : ℕ) :
     ∃ p : ℕ, Rmin ≤ p ∧ 0 < p ∧ ∃ γ : ℝ, 0 < γ ∧
@@ -51,7 +51,7 @@ theorem exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveM
         γ * ‖v‖ ≤ ‖openParentHamiltonianES
           (toTensorFromBlocks (d := d) (μ := μ) A) (2 * p) (p * M) v‖ := by
   obtain ⟨L₀, hL₀, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_isPrimitiveMPS
+    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
       μ A hμ ρ hP hρ hDistinct
   obtain ⟨p, hp, hDefect⟩ := ((eventually_ge_atTop (max L₀ Rmin)).and
     (eventually_toTensorFromBlocks_projector_defect_le μ A hμ ρ hP hρ hDistinct
@@ -77,11 +77,11 @@ interaction above every prescribed lower bound on its range. This combines
 Nachtergaele's grouped estimate, Theorem 2.1(ii), with the finite-range
 periodic comparison. The chosen range is twice a sufficiently large overlap
 length; no assertion about every shorter admissible range is made here. -/
-theorem exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS
+theorem exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) (Rmin : ℕ) :
     ∃ R : ℕ, Rmin ≤ R ∧ 0 < R ∧ ∃ γ : ℝ, 0 < γ ∧
@@ -91,7 +91,7 @@ theorem exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS
         γ * ‖v‖ ≤ ‖parentHamiltonianES
           (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
   obtain ⟨p, hRmin, hp, γ, hγ, hOpen⟩ :=
-    exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS
+    exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap
       μ A hμ ρ hP hρ hDistinct Rmin
   obtain ⟨δ, hδ, hPeriodic⟩ :=
     exists_parentHamiltonianES_gap_of_eventually_divisible_openParentHamiltonianES_gap
@@ -104,11 +104,11 @@ theorem exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS
 an interaction range with a uniform positive periodic gap. This is the
 existence-of-range consequence of Nachtergaele's Theorem 2.1(ii) and the
 three-interval estimate of Section 6. -/
-theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS
+theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) :
     ∃ R : ℕ, 0 < R ∧ ∃ γ : ℝ, 0 < γ ∧
@@ -117,7 +117,7 @@ theorem exists_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS
           (toTensorFromBlocks (d := d) (μ := μ) A) R N))ᗮ,
         γ * ‖v‖ ≤ ‖parentHamiltonianES
           (toTensorFromBlocks (d := d) (μ := μ) A) R N v‖ := by
-  exact (exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_isPrimitiveMPS
+  exact (exists_ge_parentHamiltonianES_toTensorFromBlocks_gap_of_hasComplementaryFixedPointGap
     μ A hμ ρ hP hρ hDistinct 0).imp fun _ h ↦ h.2
 
 end MPSTensor

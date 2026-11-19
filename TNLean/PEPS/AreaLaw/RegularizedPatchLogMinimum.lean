@@ -25,14 +25,14 @@ open Set Matrix
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*} [∀ v, Fintype (Out v)]
+variable {Out : V → Type*} [∀ v, DecidableEq (Out v)] [∀ v, Fintype (Out v)]
 variable {m : ℕ} (regions : Fin m → Finset V)
 
 /-- Taking the logarithm preserves the attained norm minimum of the original
 ordered regional filters. Source: OpenAI `03-patches.tex`, lines 425–451. -/
 theorem isLeast_log_regularizedPatchObjective (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
     {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1)) (hΩ : ‖Ω‖ = 1) :
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v)) (hΩ : ‖Ω‖ = 1) :
     IsLeast ((fun x ↦ Real.log (regularizedPatchObjective regions a b Ω x)) ''
       regularizedPatchDomain regions) (Real.log (regularizedPatchMinimum regions a b Ω)) :=
   match exists_isMinOn_regularizedPatchObjective regions a hb Ω hΩ with

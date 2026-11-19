@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.CoarseInformationFromGap
 import TNLean.PEPS.Approximation.SquareCellConditionalInformation
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Cell information from the original spectral gap
@@ -28,7 +29,11 @@ and 304–311, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace SquareInteraction PlaneInteraction)
 
 namespace TNLean.PEPS.Approximation
 
@@ -73,9 +78,11 @@ theorem cell_conditionalMutualInformation_le_closed
     {q R : ℕ} (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) {c : ℝ} (hc : 0 < c) :
     ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
       m₀ ∉ A →
-      ∀ (Λ : Finset (ℤ × ℤ)) (h : Lattice.LocalHamiltonian Λ q R J)
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J)
         (E₀ : ℝ) (Ω : Lattice.StateSpace Λ q),
-        Lattice.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         let G : Finset (Site Λ) :=
           Finset.univ.filter (fun x ↦ x.val ∈ CellPartition.cellSample o s m₀)
         let B : Finset (Site Λ) := Finset.univ.filter
@@ -100,8 +107,10 @@ theorem cell_conditionalMutualInformation_le_square_closed
     {q : ℕ} (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) {c : ℝ} (hc : 0 < c) :
     ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
       m₀ ∉ A →
-      ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+      ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         let G : Finset (Vertex L) :=
           Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
         let B : Finset (Vertex L) := Finset.univ.filter
@@ -129,8 +138,10 @@ theorem exists_cell_conditionalMutualInformation_le_square
     ∃ C₁ K : ℝ, 0 < C₁ ∧ 0 ≤ K ∧
       ∀ s : ℝ, 1 ≤ s → ∀ (o : ℝ × ℝ) (m₀ : ℤ × ℤ) (A : Set (ℤ × ℤ)),
         m₀ ∉ A →
-        ∀ (L : ℕ) (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-          h.IsGappedGroundState E₀ Ω Δ →
+        ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
+            (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           let G : Finset (Vertex L) :=
             Finset.univ.filter (fun v ↦ sitePosition L v ∈ AngularGrid.cell o s m₀)
           let B : Finset (Vertex L) := Finset.univ.filter

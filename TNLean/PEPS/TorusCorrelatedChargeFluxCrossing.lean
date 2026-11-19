@@ -21,6 +21,8 @@ closed-state consequence of the derived eight-site crossing. The complete
 prescribed braid and reunion experiment remain separate; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
@@ -40,7 +42,7 @@ local notation "Γₜ" => torusGraph width height
 /-- The actual remote horizontal charge bond below the crossing strip.
 Source: SCP10, correlated charge pair and crossing, lines 2505–2581. -/
 def torusChargeFluxPartnerEdge (v : X) : Edge Γₜ :=
-  Edge.ofAdj (torusGraph_adj_right (v.1+1) v.2)
+  ManyBody.Edge.ofAdj (torusGraph_adj_right (v.1+1) v.2)
 
 private theorem lowerRow_not_mem (v : X) (x : ZMod width) :
     (x,v.2) ∉ torusChargeFluxCrossingRegion v := by
@@ -58,7 +60,7 @@ including when the horizontal bond reverses at a periodic seam.
 Source: SCP10, lines 2505–2581. -/
 theorem torusChargeFluxPartnerEdge_tail_not_mem (v : X) :
     (torusChargeFluxPartnerEdge v).1.1 ∉ torusChargeFluxCrossingRegion v := by
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right (v.1+1) v.2) with
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right (v.1+1) v.2) with
     ⟨ht,hh⟩ | ⟨ht,hh⟩ <;>
     simpa only [torusChargeFluxPartnerEdge, ht] using lowerRow_not_mem v _
 
@@ -72,10 +74,10 @@ theorem IsGIsometric.exists_unitary_torusCorrelatedChargeFluxCrossing_global {d 
     ∃ W : Matrix ({w : X // w ∈ torusChargeFluxCrossingRegion v} → Fin d)
         ({w : X // w ∈ torusChargeFluxCrossingRegion v} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({w : X // w ∈ torusChargeFluxCrossingRegion v} → Fin d) ℂ ∧
-      regionLocalTerm (torusChargeFluxCrossingRegion v) W ∈
+      ManyBody.place («X» := fun _ ↦ Fin _) (torusChargeFluxCrossingRegion v) W ∈
         Matrix.unitaryGroup (X → Fin d) ℂ ∧
       ∀ (k : G) (χ : G → ℂ) (p : G),
-        regionLocalTerm (torusChargeFluxCrossingRegion v) W *ᵥ
+        ManyBody.place («X» := fun _ ↦ Fin _) (torusChargeFluxCrossingRegion v) W *ᵥ
           regularCorrelatedChargeState (torusIncidentSite a)
             (torusSweptStringInitialOperators v k 1)
             (torusSweptStringChargeEdge v) (torusChargeFluxPartnerEdge v) χ p 1 =
@@ -83,9 +85,9 @@ theorem IsGIsometric.exists_unitary_torusCorrelatedChargeFluxCrossing_global {d 
             (torusSweptStringInitialOperators v k 1)
             (torusSweptStringChargeEdge v) (torusChargeFluxPartnerEdge v) χ p k⁻¹ := by
   obtain ⟨W,hW,hact⟩ := IsGIsometric.exists_unitary_torusCorrelatedChargeFluxCrossing a ha v
-  refine ⟨W,hW,regionLocalTerm_mem_unitaryGroup _ W hW,?_⟩
+  refine ⟨W,hW,place_mem_unitaryGroup _ W hW,?_⟩
   intro k χ p
-  apply regionLocalTerm_mulVec_regularCorrelatedChargeState
+  apply place_mulVec_regularCorrelatedChargeState
     (torusIncidentSite a) (torusChargeFluxCrossingRegion v)
     (torusSweptStringInitialOperators v k 1)
     (torusSweptStringChargeEdge v) (torusChargeFluxPartnerEdge v)

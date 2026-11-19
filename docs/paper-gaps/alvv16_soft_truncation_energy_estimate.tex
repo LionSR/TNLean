@@ -170,6 +170,7 @@ $\varepsilon_J-10\le\varepsilon'_J\le\varepsilon_J$, the bound is
 \begin{align}
     \bigl\|e^{(H_J-\varepsilon'_J I)/8}|_{G_\eta}\bigr\|
     \le 5e^{(17+\eta)/8}.
+    \label{eq:alvv_soft_window_exponential_bound}
 \end{align}
 The construction includes empty intervals and endpoints, and assumes
 neither a spectral gap nor a ground-space dimension. For equal order and
@@ -178,6 +179,7 @@ $\widetilde H_{m,m}\le H$ and
 \begin{align}
     \bigl\|(H-\widetilde H_{m,m})|_{G_\eta}\bigr\|
     \le80e^{(17+\eta)/8-m/16}.
+    \label{eq:alvv_soft_original_window_residual}
 \end{align}
 For $\alpha=(m/2)2^{-m}$ and $m/2\ge10$, the actual centered soft
 ground energy can also be chosen before the bandwidth, with
@@ -186,14 +188,16 @@ space $\widetilde G_\eta$ satisfies the corrected reverse residual bound
 \begin{align}
     \bigl\|(H-\widetilde H_{m,m})|_{\widetilde G_\eta}\bigr\|
     \le80e^{(17+\eta+\alpha)/8-m/16}.
+    \label{eq:alvv_soft_reverse_window_residual}
 \end{align}
 This follows from shifted soft/hard coercivity and an exponential moment on
 the actual soft window. For $\eta,w,\delta>0$, set
-\begin{align*}
+\begin{align}
     \rho                                  & =\min\left\{1,\frac w2,
     \frac{\delta w^2}{2(\eta+2)}\right\}, &
     m                                     & =\left\lceil35+2\eta+16\log(80/\rho)\right\rceil.
-\end{align*}
+    \label{eq:alvv_soft_equal_scale_parameters}
+\end{align}
 This order is uniform in the chain, local dimension and Hamiltonian. Both
 actual residuals are at most $\rho$, and $0\le E_0-E_s\le\rho$.
 The soft space below $E_s+\eta+w$ is $\delta$-close to the original space
@@ -209,25 +213,28 @@ multi-region construction remain separate.
 \subsection{A compatible independent-scale construction}
 
 The exact identity
-\begin{align*}
+\begin{align}
     h_{m,t}(x)=\frac tm h_{m,m}\left(\frac mt x\right)
-\end{align*}
+    \label{eq:alvv_soft_scale_identity}
+\end{align}
 and the weighted scalar remainder imply, for $m\geq1$, $0<t\leq4m$ and
 $x\geq0$,
-\begin{align*}
+\begin{align}
     0\leq x-h_{m,t}(x)\leq16e^{x/8-t/16}.
-\end{align*}
+    \label{eq:alvv_soft_independent_scale_remainder}
+\end{align}
 The same physical moment therefore proves the original and soft-window
 residuals at independent scale, with decay $e^{-t/16}$, correction
 $\alpha=(t/2)2^{-m}$, and actual hard comparator cutoff $t/2-10$.
 No printed power estimate is used.
 
-For $\eta,w,\delta>0$ and the same $\rho$ as above, choose
-\begin{align*}
+For $\eta,w,\delta>0$ and the same $\rho$ as in (\ref{eq:alvv_soft_equal_scale_parameters}), choose
+\begin{align}
     m=\left\lceil12+\frac23\eta+
     \frac{16}{3}\log(80/\rho)\right\rceil,
     \qquad t=3m.
-\end{align*}
+    \label{eq:alvv_soft_independent_scale_parameters}
+\end{align}
 Then $\alpha\leq3/4$, the reverse cutoff condition holds, and both
 residuals are at most $\rho$. The resulting actual soft Hamiltonian has
 both directed window comparisons and actual operator tensors at any

@@ -151,11 +151,11 @@ def embedConfig {N : ℕ} (σ : Fin N → Fin 2) : Fin N → Fin 4 :=
 
 /-- The sitewise inclusion is the rectangular delta matrix on embedded
 configurations. -/
-@[simp] theorem sitewisePhysicalMatrix_inclusion_embedConfig {N : ℕ}
+@[simp] theorem tensorPower_inclusion_embedConfig {N : ℕ}
     (σ τ : Fin N → Fin 2) :
-    sitewisePhysicalMatrix inclusion N (embedConfig σ) τ =
+    Matrix.tensorPower N inclusion (embedConfig σ) τ =
       if σ = τ then 1 else 0 := by
-  simp only [sitewisePhysicalMatrix, embedConfig, inclusion_siteEmbedding]
+  simp only [Matrix.tensorPower_apply, embedConfig, inclusion_siteEmbedding]
   rw [Fintype.prod_boole]
   congr 1
   exact propext funext_iff.symm
@@ -163,9 +163,9 @@ configurations. -/
 /-- The ambient periodic MPO is the sitewise single-Kraus congruence of the
 binary periodic MPO. -/
 theorem mpo_ambientM_eq_singleKrausMap (N : ℕ) :
-    mpo ambientM N = singleKrausMap (sitewisePhysicalMatrix inclusion N)
+    mpo ambientM N = singleKrausMap (Matrix.tensorPower N inclusion)
       (mpo CPSVExample411BinarySupport.M N) :=
-  (singleKrausMap_sitewisePhysicalMatrix_mpo inclusion CPSVExample411BinarySupport.M N).symm
+  (singleKrausMap_tensorPower_mpo inclusion CPSVExample411BinarySupport.M N).symm
 
 /-- Supported positive-length entries of the ambient MPO are exactly the
 binary cycle weights. -/
@@ -175,7 +175,7 @@ theorem mpo_ambientM_supported_apply {N : ℕ} [NeZero N]
       if σ = τ then CPSVExample411BinarySupport.cycleWeight σ else 0 := by
   rw [mpo_ambientM_eq_singleKrausMap, singleKrausMap_apply]
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-    sitewisePhysicalMatrix_inclusion_embedConfig, ite_mul, one_mul, zero_mul,
+    tensorPower_inclusion_embedConfig, ite_mul, one_mul, zero_mul,
     Fintype.sum_ite_eq]
   have hstar (q : Fin N → Fin 2) :
       star (if τ = q then (1 : ℂ) else 0) = if τ = q then 1 else 0 := by

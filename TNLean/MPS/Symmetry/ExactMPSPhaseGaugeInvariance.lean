@@ -26,6 +26,7 @@ virtual factor systems.
 -/
 
 open scoped Matrix
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

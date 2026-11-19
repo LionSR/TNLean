@@ -23,6 +23,8 @@ inserted coefficient of the bond-model-conjugated matrix.
   ([arXiv:1804.04964](https://arxiv.org/abs/1804.04964))
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

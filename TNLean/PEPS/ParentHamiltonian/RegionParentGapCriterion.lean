@@ -41,14 +41,14 @@ def regionReplaceConfig (R : Finset V) (ν : RegionPhysicalConfig (d := d) R)
 
 /-- A regional term acts by summing only the physical indices in its region.
 Source: CPGSV21, arXiv:2011.12127, regional extensions, lines 2003–2011. -/
-theorem regionLocalTerm_mulVec_apply (R : Finset V)
+theorem place_mulVec_apply (R : Finset V)
     (h : Matrix (RegionPhysicalConfig (d := d) R)
       (RegionPhysicalConfig (d := d) R) ℂ) (ψ : (V → Fin d) → ℂ) (σ : V → Fin d) :
-    (regionLocalTerm R h *ᵥ ψ) σ =
+    (ManyBody.place (X := fun _ ↦ Fin _) R h *ᵥ ψ) σ =
       ∑ ν : RegionPhysicalConfig (d := d) R,
         h (fun w => σ w.1) ν * ψ (regionReplaceConfig R ν σ) := by
   classical
-  have hact := regionLocalTerm_mulVec_assemble R h ψ (fun w => σ w.1) (fun w => σ w.1)
+  have hact := place_mulVec_assemble R h ψ (fun w => σ w.1) (fun w => σ w.1)
   have hrec : assembleRegionσ R (fun w => σ w.1) (fun w => σ w.1) = σ := by
     funext v
     simp [assembleRegionσ]
@@ -76,53 +76,29 @@ theorem regionReplaceConfig_comm_of_disjoint {R S : Finset V} (hRS : Disjoint R 
   · by_cases hvS : v ∈ S <;>
       simp [regionReplaceConfig, assembleRegionσ, hvR, hvS]
 
-/-- Regional operators on disjoint vertex sets commute on the full physical
-space. Source: CPGSV21, arXiv:2011.12127, non-overlapping terms, lines 2171–2175. -/
-theorem regionLocalTerm_commute_of_disjoint {R S : Finset V} (hRS : Disjoint R S)
-    (h : Matrix (RegionPhysicalConfig (d := d) R)
-      (RegionPhysicalConfig (d := d) R) ℂ)
-    (k : Matrix (RegionPhysicalConfig (d := d) S)
-      (RegionPhysicalConfig (d := d) S) ℂ) :
-    Commute (regionLocalTerm R h) (regionLocalTerm S k) := by
-  classical
-  change regionLocalTerm R h * regionLocalTerm S k = regionLocalTerm S k * regionLocalTerm R h
-  apply Matrix.toLin'.injective
-  simp only [Matrix.toLin'_mul]
-  refine LinearMap.ext fun ψ => funext fun σ => ?_
-  simp only [LinearMap.comp_apply, Matrix.toLin'_apply]
-  simp_rw [regionLocalTerm_mulVec_apply, Finset.mul_sum]
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro ω hω
-  apply Finset.sum_congr rfl
-  intro ν hν
-  have hS : (fun w : {w : V // w ∈ S} => regionReplaceConfig R ν σ w.1) =
-      fun w => σ w.1 := funext (regionReplaceConfig_apply_of_disjoint hRS ν σ)
-  have hR : (fun w : {w : V // w ∈ R} => regionReplaceConfig S ω σ w.1) =
-      fun w => σ w.1 := funext (regionReplaceConfig_apply_of_disjoint hRS.symm ω σ)
-  rw [hS, hR, regionReplaceConfig_comm_of_disjoint hRS]
-  ring
-
 /-- A regional operator in the full physical Hilbert space with its standard
 inner product. Source: CPGSV21, arXiv:2011.12127, regional extensions, lines 2003–2011. -/
-noncomputable def regionLocalTermES (R : Finset V)
+noncomputable def placeES (R : Finset V)
     (h : Matrix (RegionPhysicalConfig (d := d) R)
       (RegionPhysicalConfig (d := d) R) ℂ) :
     EuclideanSpace ℂ (V → Fin d) →ₗ[ℂ] EuclideanSpace ℂ (V → Fin d) :=
-  Matrix.toEuclideanLin (regionLocalTerm R h)
+  Matrix.toEuclideanLin (ManyBody.place (X := fun _ ↦ Fin _) R h)
 
 /-- Disjoint regional operators commute in Euclidean coordinates.
 Source: CPGSV21, arXiv:2011.12127, non-overlapping terms, lines 2171–2175. -/
-theorem regionLocalTermES_commute_of_disjoint {R S : Finset V} (hRS : Disjoint R S)
+theorem placeES_commute_of_disjoint {R S : Finset V} (hRS : Disjoint R S)
     (h : Matrix (RegionPhysicalConfig (d := d) R)
       (RegionPhysicalConfig (d := d) R) ℂ)
     (k : Matrix (RegionPhysicalConfig (d := d) S)
       (RegionPhysicalConfig (d := d) S) ℂ) :
-    Commute (regionLocalTermES R h) (regionLocalTermES S k) := by
+    Commute (placeES R h) (placeES S k) := by
   classical
-  have hc := congrArg Matrix.toEuclideanLin (regionLocalTerm_commute_of_disjoint hRS h k).eq
-  change regionLocalTermES R h * regionLocalTermES S k =
-    regionLocalTermES S k * regionLocalTermES R h
+  have hc := congrArg Matrix.toEuclideanLin
+      (ManyBody.commute_of_mem_supportedOperators_of_disjoint
+      (ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _) h)
+      (ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _) k) hRS).eq
+  change placeES R h * placeES S k =
+    placeES S k * placeES R h
   rw [Matrix.toLpLin_mul 2 2 2, Matrix.toLpLin_mul 2 2 2] at hc
   exact hc
 
@@ -141,8 +117,8 @@ Source: CPGSV21, arXiv:2011.12127, parent Hamiltonian sum, lines 2003–2011. -/
 theorem regionParentHamiltonianES_eq_sum (R : ι → Finset V)
     (h : (i : ι) → Matrix (RegionPhysicalConfig (d := d) (R i))
       (RegionPhysicalConfig (d := d) (R i)) ℂ) :
-    regionParentHamiltonianES R h = ∑ i, regionLocalTermES (R i) (h i) := by
-  simp only [regionParentHamiltonianES, regionParentHamiltonian, map_sum, regionLocalTermES]
+    regionParentHamiltonianES R h = ∑ i, placeES (R i) (h i) := by
+  simp only [regionParentHamiltonianES, regionParentHamiltonian, map_sum, placeES]
 
 /-- A positive quadratic-form bound gives the same norm gap for a finite PEPS
 parent sum. Source: CPGSV21, arXiv:2011.12127, equivalence of the gap and
@@ -171,7 +147,7 @@ theorem regionParentHamiltonianES_quadraticForm_of_overlap_anticommutator
     (hε : 0 ≤ ε) (hm : 0 < m)
     (hCard : ∀ i, ((Finset.univ.erase i).filter
       (fun j => ¬ Disjoint (R i) (R j))).card ≤ m)
-    (hAnti : let P := fun i => regionLocalTermES (R i) (canonicalRegionParentInteraction A (R i))
+    (hAnti : let P := fun i => placeES (R i) (canonicalRegionParentInteraction A (R i))
       ∀ i j, j ∈ Finset.univ.erase i → ¬ Disjoint (R i) (R j) →
         ∀ ψ : EuclideanSpace ℂ (V → Fin d),
           -ε * ((⟪P i ψ, ψ⟫_ℂ).re + (⟪P j ψ, ψ⟫_ℂ).re) ≤
@@ -180,9 +156,9 @@ theorem regionParentHamiltonianES_quadraticForm_of_overlap_anticommutator
     ∀ ψ : EuclideanSpace ℂ (V → Fin d),
       (1 - (m : ℝ) * ε) * (⟪H ψ, ψ⟫_ℂ).re ≤ (⟪H ψ, H ψ⟫_ℂ).re := by
   classical
-  let P := fun i => regionLocalTermES (R i) (canonicalRegionParentInteraction A (R i))
+  let P := fun i => placeES (R i) (canonicalRegionParentInteraction A (R i))
   have hP : ∀ i, (P i).IsSymmetricProjection :=
-    fun i => regionLocalTerm_canonical_isSymmetricProjection A (R i)
+    fun i => place_canonical_isSymmetricProjection A (R i)
   have hmR : 0 < (m : ℝ) := by exact_mod_cast hm
   have hcoef : -(1 - (1 - (m : ℝ) * ε)) * (m : ℝ)⁻¹ = -ε := by
     field_simp
@@ -192,7 +168,7 @@ theorem regionParentHamiltonianES_quadraticForm_of_overlap_anticommutator
     (fun i j => ¬ Disjoint (R i) (R j)) hm hCard
     (fun j => by simpa only [disjoint_comm] using hCard j)
     (fun i j hij hdis ψ => by
-      have hcomm := regionLocalTermES_commute_of_disjoint (not_not.mp hdis)
+      have hcomm := placeES_commute_of_disjoint (not_not.mp hdis)
         (canonicalRegionParentInteraction A (R i)) (canonicalRegionParentInteraction A (R j))
       have h₁ := (hP i).re_inner_apply_apply_nonneg_of_commute (hP j)
         (fun v => LinearMap.congr_fun hcomm.eq v) ψ
@@ -214,7 +190,7 @@ theorem regionParentHamiltonianES_norm_gap_of_overlap_anticommutator
     (hε : 0 ≤ ε) (hm : 0 < m) (hmε : (m : ℝ) * ε < 1)
     (hCard : ∀ i, ((Finset.univ.erase i).filter
       (fun j => ¬ Disjoint (R i) (R j))).card ≤ m)
-    (hAnti : let P := fun i => regionLocalTermES (R i) (canonicalRegionParentInteraction A (R i))
+    (hAnti : let P := fun i => placeES (R i) (canonicalRegionParentInteraction A (R i))
       ∀ i j, j ∈ Finset.univ.erase i → ¬ Disjoint (R i) (R j) →
         ∀ ψ : EuclideanSpace ℂ (V → Fin d),
           -ε * ((⟪P i ψ, ψ⟫_ℂ).re + (⟪P j ψ, ψ⟫_ℂ).re) ≤
@@ -232,14 +208,14 @@ Source: CPGSV21, arXiv:2011.12127, commuting nonnegative cross terms in the
 projector-sum expansion, lines 2170–2175. Commutation is explicit here. -/
 theorem regionParentHamiltonianES_unit_norm_gap_of_commute (A : Tensor Γ d)
     (R : ι → Finset V)
-    (hComm : let P := fun i => regionLocalTermES (R i) (canonicalRegionParentInteraction A (R i))
+    (hComm : let P := fun i => placeES (R i) (canonicalRegionParentInteraction A (R i))
       ∀ i j, Commute (P i) (P j)) :
     let H := regionParentHamiltonianES R (fun i => canonicalRegionParentInteraction A (R i))
     ∀ ψ ∈ H.kerᗮ, (1 : ℝ) * ‖ψ‖ ≤ ‖H ψ‖ := by
   classical
-  let P := fun i => regionLocalTermES (R i) (canonicalRegionParentInteraction A (R i))
+  let P := fun i => placeES (R i) (canonicalRegionParentInteraction A (R i))
   have hP : ∀ i, (P i).IsSymmetricProjection :=
-    fun i => regionLocalTerm_canonical_isSymmetricProjection A (R i)
+    fun i => place_canonical_isSymmetricProjection A (R i)
   have hQuad := ProjectionGeometry.quadraticForm_sum_projections_of_anticommutator_rowCol
     (γ := 1) (le_refl 1) P hP (fun _ _ => 0)
     (fun _ => by simp) (fun _ => by simp)
@@ -267,7 +243,7 @@ theorem regionParentHamiltonianES_unit_norm_gap_of_pairwise_disjoint (A : Tensor
   intro i j
   rcases eq_or_ne i j with rfl | hij
   · exact Commute.refl _
-  · exact regionLocalTermES_commute_of_disjoint (hDisjoint hij)
+  · exact placeES_commute_of_disjoint (hDisjoint hij)
       (canonicalRegionParentInteraction A (R i)) (canonicalRegionParentInteraction A (R j))
 
 open Classical in
@@ -287,7 +263,7 @@ theorem regionParentHamiltonianES_norm_gap_of_overlap_of_comparison
         regionParentHamiltonian R h)
     (hCard : ∀ i, ((Finset.univ.erase i).filter
       (fun j => ¬ Disjoint (R i) (R j))).card ≤ m)
-    (hAnti : let P := fun i => regionLocalTermES (R i) (canonicalRegionParentInteraction A (R i))
+    (hAnti : let P := fun i => placeES (R i) (canonicalRegionParentInteraction A (R i))
       ∀ i j, j ∈ Finset.univ.erase i → ¬ Disjoint (R i) (R j) →
         ∀ ψ : EuclideanSpace ℂ (V → Fin d),
           -ε * ((⟪P i ψ, ψ⟫_ℂ).re + (⟪P j ψ, ψ⟫_ℂ).re) ≤
@@ -320,7 +296,7 @@ theorem regionParentHamiltonianES_uniform_norm_gap_of_overlap_anticommutator
     (hCard : ∀ L i, ((Finset.univ.erase i).filter
       (fun j => ¬ Disjoint (R L i) (R L j))).card ≤ m)
     (hAnti : ∀ L,
-      let P := fun i => regionLocalTermES (R L i)
+      let P := fun i => placeES (R L i)
         (canonicalRegionParentInteraction (A L) (R L i))
       ∀ i j, j ∈ Finset.univ.erase i → ¬ Disjoint (R L i) (R L j) →
         ∀ ψ : EuclideanSpace ℂ (vertices L → Fin (physicalDim L)),

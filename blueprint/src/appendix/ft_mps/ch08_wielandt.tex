@@ -345,43 +345,13 @@ eigenvector.
     of $\iota(A)$.
 \end{proof}
 
-\begin{lemma}[Wielandt case (2), invertible Kraus operator]%
-    \label{cor:wielandt_case2_generator}
-    \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_isUnit,
-        MPSTensor.iIndex_le_of_isPrimitivePaper_of_isUnit}
-    \leanok
-    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case2_one_step_span, cor:wielandt_case2_one_step_index}
-    Let $A$ be an MPS tensor with bond dimension $D\ge1$, satisfying
-    $\sum_i(A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in the
-    sense of Definition~\ref{def:paper_primitive}.
-    If some Kraus operator $A^{i_0}$ is invertible, then
-    \begin{align}
-        S_{D^2-\krausrk(A)+1}(A)
-         & =\MN{D},
-        \notag                    \\
-        \iota(A)
-         & \le D^2-\krausrk(A)+1.
-        \notag
-    \end{align}
-\end{lemma}
-
-\begin{proof}
-    \leanok
-    \uses{lem:kraus_mem_word_span_one, thm:wielandt_case2_one_step_span, cor:wielandt_case2_one_step_index}
-    Since $X=A^{i_0}$ belongs to $S_1(A)$ by
-    Lemma~\ref{lem:kraus_mem_word_span_one}, the one-step theorem and index
-    bound apply directly.
-\end{proof}
-
 \begin{lemma}[Wielandt case (3), non-invertible Kraus operator]%
     \label{cor:wielandt_case3_generator}
-    \lean{MPSTensor.wordSpan_eq_top_of_isPrimitivePaper_of_noninvertible_eigenvector,
+    \lean{MPSTensor.wordSpan_eq_top_of_isNormal_of_noninvertible_eigenvector,
         MPSTensor.iIndex_le_sq_of_noninvertible_eigenvector}
     \leanok
     \uses{lem:kraus_mem_word_span_one, thm:wielandt_case3_one_step_span, cor:wielandt_case3_one_step_index}
-    Let $A$ be an MPS tensor with bond dimension $D\ge1$, satisfying
-    $\sum_i(A^i)^\dagger A^i=\Id$, and suppose that $A$ is primitive in the
-    sense of Definition~\ref{def:paper_primitive}.
+    Let $A$ be a normal MPS tensor with bond dimension $D\ge1$.
     If some Kraus operator $A^{i_0}$ is non-invertible and has an
     eigenvector $\varphi\neq0$ with nonzero eigenvalue~$\mu$, then
     \begin{align}
@@ -567,7 +537,7 @@ eigenvectors to be transferred to single-index eigenvectors of blocked tensors.
     \uses{def:word_span, def:normal}
     Via a blocked fixed-length construction under normality (whereas the
     quantitative result of \cite[Lemma~2(b)]{Sanz2010Quantum} is
-    Lemma~\ref{thm:rank_one_noninvertible_eigenvector_primitive}), if $A$ is
+    Lemma~\ref{lem:rank_one_noninvertible_eigenvector}), if $A$ is
     a normal MPS tensor with bond dimension $D>0$, then there exists $N$ such
     that $S_N(A)=\MN{D}$.
 \end{lemma}
@@ -591,7 +561,7 @@ overlap convergence, non-vanishing of iterated transfer maps, and fixed-point
 uniqueness.
 
 \begin{lemma}[Primitive overlap convergence]\label{thm:prim_overlap_one}
-    \lean{MPSTensor.IsPrimitiveMPS.overlap_tendsto_one}
+    \lean{Kraus.HasComplementaryFixedPointGap.overlap_tendsto_one}
     \leanok
     \uses{def:primitive_mps, def:mpv_overlap}
     If $A$ is a primitive MPS tensor, then $O_{AA}(N)\to1$.
@@ -623,7 +593,7 @@ uniqueness.
 \end{proof}
 
 \begin{lemma}[Primitive MPS tensors have nonzero word products]\label{lem:prim_nonzero_word}
-    \lean{MPSTensor.exists_nonzero_evalWord_of_isPrimitiveMPS}
+    \lean{MPSTensor.exists_nonzero_evalWord_of_hasComplementaryFixedPointGap}
     \leanok
     \uses{def:primitive_mps, def:eval_word}
     If $A$ is a primitive MPS tensor,
@@ -640,7 +610,7 @@ uniqueness.
 \end{proof}
 
 \begin{lemma}[Iterated transfer does not vanish]\label{lem:transfer_pow_ne_zero}
-    \lean{MPSTensor.transferMap_pow_ne_zero_of_isPrimitiveMPS}
+    \lean{MPSTensor.transferMap_pow_ne_zero_of_hasComplementaryFixedPointGap}
     \leanok
     \uses{def:primitive_mps, def:transfer_map}
     If $A$ is a primitive MPS tensor, then

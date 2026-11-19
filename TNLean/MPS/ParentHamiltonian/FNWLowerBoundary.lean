@@ -404,8 +404,8 @@ theorem fnwLowerBoundaryConstant_pos_of_isNBlkInjective_of_le [NeZero D]
     (fnwLowerBoundaryConstant_mono ρ hρ A hρfix hLm)
 
 /-- Primitive-MPS specialization of lower-boundary monotonicity. -/
-theorem IsPrimitiveMPS.fnwLowerBoundaryConstant_mono [NeZero D]
-    {ρ : Mat} {A : MPSTensor d D} (hP : IsPrimitiveMPS A ρ)
+theorem _root_.Kraus.HasComplementaryFixedPointGap.fnwLowerBoundaryConstant_mono [NeZero D]
+    {ρ : Mat} {A : MPSTensor d D} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) :
     Monotone (fnwLowerBoundaryConstant ρ hρ A) :=
   MPSTensor.fnwLowerBoundaryConstant_mono ρ hρ A hP.fixedPoint_is_fixed

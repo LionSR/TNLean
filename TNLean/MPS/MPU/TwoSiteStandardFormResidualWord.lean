@@ -36,7 +36,7 @@ arXiv:1606.00608, Appendix C.4, lines 1952--2017. -/
 theorem mpo_apply_prefix_twoSiteBlock_suffix
     {d D : ℕ} (U : MPOTensor d D) (k p m s : ℕ)
     (i₀ j₀ : Fin p → Fin d)
-    (i₁ j₁ : Fin m → Fin (MPSTensor.blockPhysDim d (2 * k)))
+    (i₁ j₁ : Fin m → Fin (Kraus.blockPhysDim d (2 * k)))
     (i₂ j₂ : Fin s → Fin d) :
     mpo U (p + (m * (2 * k) + s))
         (Fin.append i₀
@@ -63,17 +63,17 @@ lines 1952--2017. -/
 theorem twoSite_threeBlock_originalSite_residual_intertwiner
     {d D ℓ r : ℕ} (U : MPOTensor d D) (k : ℕ)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
     {v : Matrix
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
     (preI preJ sufI sufJ : List (Fin d))
-    (eL eR : Fin (MPSTensor.blockPhysDim d k))
-    (j₀ j₂ : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))
+    (eL eR : Fin (Kraus.blockPhysDim d k))
+    (j₀ j₂ : Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k))
     (A : Matrix
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ) :
     twoSiteThreeBlockTrace S
         (evalWord U preI preJ) (evalWord U sufI sufJ) eL eR j₀ j₂ * A =
       twoLinkOutputObservable u v A *
@@ -92,18 +92,18 @@ arXiv:1606.00608, Appendix C.4, lines 1952--2017. -/
 theorem originalSite_threeBlock_window_entry
     {d D ℓ r : ℕ} (U : MPOTensor d D) (k p s : ℕ)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
     {v : Matrix
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
     (preI preJ : Fin p → Fin d) (sufI sufJ : Fin s → Fin d)
-    (midI midJ : Fin 3 → Fin (MPSTensor.blockPhysDim d (2 * k)))
-    (eL eR : Fin (MPSTensor.blockPhysDim d k))
-    (j₀ j₂ : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))
-    (x : (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ×
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)))
-    (j : Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+    (midI midJ : Fin 3 → Fin (Kraus.blockPhysDim d (2 * k)))
+    (eL eR : Fin (Kraus.blockPhysDim d k))
+    (j₀ j₂ : Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k))
+    (x : (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ×
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)))
+    (j : Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
     (hI : (fun t => twoSiteDirectBlockEquiv d k (midI t)) =
       ![finProdFinEquiv (eL, x.1.1), finProdFinEquiv (x.1.2, x.2.1),
         finProdFinEquiv (x.2.2, eR)])
@@ -144,21 +144,21 @@ arXiv:1606.00608, Appendix C.4, lines 1952--2017. -/
 theorem originalSite_threeBlock_window_with_buffers_entry
     {d D ℓ r : ℕ} (U : MPOTensor d D) (k p m s : ℕ)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
     {v : Matrix
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
     (resPreI resPreJ : Fin p → Fin d) (resSufI resSufJ : Fin s → Fin d)
-    (midI midJ : Fin m → Fin (MPSTensor.blockPhysDim d (2 * k)))
+    (midI midJ : Fin m → Fin (Kraus.blockPhysDim d (2 * k)))
     (preI preJ sufI sufJ : List
-      (Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)))
+      (Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)))
     (hpre : preI.length = preJ.length)
-    (eL eR : Fin (MPSTensor.blockPhysDim d k))
-    (j₀ j₂ : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))
-    (x : (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ×
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)))
-    (j : Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+    (eL eR : Fin (Kraus.blockPhysDim d k))
+    (j₀ j₂ : Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k))
+    (x : (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ×
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)))
+    (j : Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
     (hI : (List.ofFn midI).map (twoSiteDirectBlockEquiv d k) =
       preI ++ ([finProdFinEquiv (eL, x.1.1), finProdFinEquiv (x.1.2, x.2.1),
         finProdFinEquiv (x.2.2, eR)] ++ sufI))
@@ -191,15 +191,15 @@ original and blocked labels fixed. -/
 noncomputable def originalSiteThreeBlockWindow
     {d D : ℕ} (U : MPOTensor d D) (k p m s : ℕ)
     (resPreI resPreJ : Fin p → Fin d) (resSufI resSufJ : Fin s → Fin d)
-    (midI : ((Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ×
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))) →
-      Fin m → Fin (MPSTensor.blockPhysDim d (2 * k)))
-    (midJ : (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) →
-      Fin m → Fin (MPSTensor.blockPhysDim d (2 * k))) :
+    (midI : ((Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ×
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))) →
+      Fin m → Fin (Kraus.blockPhysDim d (2 * k)))
+    (midJ : (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) →
+      Fin m → Fin (Kraus.blockPhysDim d (2 * k))) :
     Matrix
-      ((Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ×
-        (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ :=
+      ((Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ×
+        (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ :=
   fun x j => mpo U (p + (m * (2 * k) + s))
     (Fin.append resPreI (Fin.append
       (MPSTensor.blockedConfigEquiv d m (2 * k) (midI x)) resSufI))
@@ -216,30 +216,30 @@ Source context: arXiv:1703.09188, equations `uuvv` and `StandardForm`, lines
 theorem originalSite_threeBlock_window_with_buffers_intertwiner
     {d D ℓ r : ℕ} (U : MPOTensor d D) (k p m s : ℕ)
     {u : Matrix (Fin ℓ × Fin r)
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ}
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ}
     {v : Matrix
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
       (Fin r × Fin ℓ) ℂ}
     (S : TwoSiteStandardFormData (blockTwo (blockTensor U k)) u v)
     (resPreI resPreJ : Fin p → Fin d) (resSufI resSufJ : Fin s → Fin d)
-    (midI : ((Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ×
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))) →
-      Fin m → Fin (MPSTensor.blockPhysDim d (2 * k)))
-    (midJ : (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) →
-      Fin m → Fin (MPSTensor.blockPhysDim d (2 * k)))
+    (midI : ((Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ×
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))) →
+      Fin m → Fin (Kraus.blockPhysDim d (2 * k)))
+    (midJ : (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) →
+      Fin m → Fin (Kraus.blockPhysDim d (2 * k)))
     (preI preJ sufI sufJ : List
-      (Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)))
+      (Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)))
     (hpre : preI.length = preJ.length)
-    (eL eR : Fin (MPSTensor.blockPhysDim d k))
-    (j₀ j₂ : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))
+    (eL eR : Fin (Kraus.blockPhysDim d k))
+    (j₀ j₂ : Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k))
     (hI : ∀ x, (List.ofFn (midI x)).map (twoSiteDirectBlockEquiv d k) =
       preI ++ ([finProdFinEquiv (eL, x.1.1), finProdFinEquiv (x.1.2, x.2.1),
         finProdFinEquiv (x.2.2, eR)] ++ sufI))
     (hJ : ∀ j, (List.ofFn (midJ j)).map (twoSiteDirectBlockEquiv d k) =
       preJ ++ ([j₀, finProdFinEquiv j, j₂] ++ sufJ))
     (A : Matrix
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ) :
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ) :
     originalSiteThreeBlockWindow U k p m s
         resPreI resPreJ resSufI resSufJ midI midJ * A =
       twoLinkOutputObservable u v A *

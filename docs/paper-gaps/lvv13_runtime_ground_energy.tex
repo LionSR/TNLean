@@ -621,7 +621,7 @@ it identifies the three-cut reconstruction used by the leading-vector theorem
 with the physical right-extension used by rational-column stability, and returns
 compact rational MPS data that is directly $1/12$-viable.
 Finally,
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_rationalViableMPSData\_of\_approximate\_density}
+\leanid{ManyBody.ChainInteraction.exists\_rationalViableMPSData\_of\_approximate\_density}
 performs the complete composition from an approximate compressed density at
 trace-norm precision $\Delta/(97344L)$.  It extracts the exact compressed
 leading coordinates supplied by the spectral argument and returns the compact
@@ -724,7 +724,7 @@ The target-error rationalization theorem
 \leanid{TNLean.MPS.AreaLaw.exists\_rationalCoordinateViableMPSData\_of\_mulVec\_atTarget}
 therefore feeds one trimming output directly into the next iteration.  At the
 fully executable level,
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_rationalCoordinateData\_of\_canonical\_rational\_search}
+\leanid{ManyBody.ChainInteraction.exists\_rationalCoordinateData\_of\_canonical\_rational\_search}
 propagates this invariant through certificate repair, finite rational search,
 and canonical size trimming, returning error $1/12$ with an explicit updated
 coordinate height and finite-span bond bound. For this executable search
@@ -949,7 +949,7 @@ transfers every returned code back to the exact $Z,K,X$, adding precisely the
 objective, boundary-centre, and coordinate-map losses.  The next physical
 composition can now charge the search rounding increment in the auxiliary
 trace budget, from $\eta$ to $\eta+\rho$, as boundary slack: this is the theorem
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_approx\_sdp\_error\_budget\_with\_trace\_slack},
+\leanid{ManyBody.ChainInteraction.exists\_viable\_vector\_of\_approx\_sdp\_error\_budget\_with\_trace\_slack},
 whose boundary error contains the additional term $e_\eta$.
 The numerical completeness and soundness directions are packaged together by
 \leanid{TNLean.MPS.AreaLaw.IsAllSpectralApproxCompressedBoundarySDPFeasibleAtEnergy.exists\_approx\_data\_search\_result\_and\_exact\_certificate}:
@@ -1001,13 +1001,13 @@ The companion
 extracts the selected codes, approximation witnesses, returned certificate,
 and search equation as a compact package for the physical soundness theorem.
 The final returned-code composition is
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_rational\_search\_result}:
+\leanid{ManyBody.ChainInteraction.exists\_viable\_vector\_of\_rational\_search\_result}:
 under its single displayed LVV margin inequality, exact-data soundness of the
 returned code and the trace-slack estimate produce a normalized vector in the
 retained left support with energy at most $E_0+\Delta/12$ and ground-state
 overlap at least $11/12$.
 The canonical end-to-end physical composition is
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_canonical\_rational\_search}.
+\leanid{ManyBody.ChainInteraction.exists\_viable\_vector\_of\_canonical\_rational\_search}.
 Starting from exact feasible compressed data and entrywise bounds on the fixed
 matrices, it selects the rational codes and canonical thresholds, obtains the
 executable search result, transfers the returned certificate back to exact
@@ -1262,7 +1262,7 @@ finite tester.
 
 The former coordinate-isometry input obstruction is therefore removed.  The
 current theorem
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_coordinate\_finite\_density\_search\_viable\_vector}
+\leanid{ManyBody.ChainInteraction.exists\_coordinate\_finite\_density\_search\_viable\_vector}
 may choose $Z$ classically and then replace it by this rational approximation.
 Soundness retains the exact isometry for physical expansion.  The reverse
 trace-norm transfer
@@ -1318,9 +1318,9 @@ LVV margin condition
 $2(\xi+\lVert B\rVert\tau)\le\Delta/2028$ after using the established
 objective norm bound $4L$ and boundary-operator norm bound $2L$.
 The chain-level theorem
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_approx\_sdp\_error\_budget}
+\leanid{ManyBody.ChainInteraction.exists\_viable\_vector\_of\_approx\_sdp\_error\_budget}
 states this implication directly for one total error budget.  Finally,
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_rational\_fixed\_data\_sdp\_certificate}
+\leanid{ManyBody.ChainInteraction.exists\_viable\_vector\_of\_rational\_fixed\_data\_sdp\_certificate}
 transfers a certificate tested against rational $Q_Z,Q_K,Q_X$ back to the
 exact support isometry, compressed Hamiltonian and boundary center, applies
 the canonical meshes above, and produces the physical LVV viable vector.
@@ -1363,7 +1363,7 @@ schoolbook bound, using the canonical height computed from its rational codes.
 The same conclusion now holds for a rational approximation of the generally
 irrational LVV coordinate isometry, using the fixed-data transfer theorem.
 The returned certificate is composed with the viable-vector conclusion by
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_rational\_search\_result}.
+\leanid{ManyBody.ChainInteraction.exists\_viable\_vector\_of\_rational\_search\_result}.
 Its expanded margin hypothesis follows from independent scalar bounds via
 \leanid{TNLean.MPS.AreaLaw.fullyApproxSDP\_errors\_with\_trace\_energy\_slack\_fit\_lvv\_margin}.
 The solver tolerances need not depend on these realized orders.  The theorem
@@ -1427,7 +1427,7 @@ representatives and certified arithmetic comparisons are classical in this
 exact-density construction.  They are replaced below by rational codes and
 decidable exact comparisons.
 The theorem
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_finite\_density\_search\_viable\_vector}
+\leanid{ManyBody.ChainInteraction.exists\_finite\_density\_search\_viable\_vector}
 now composes this threshold statement with the physical LVV estimate.  If
 $24L\delta\le\Delta/2028$, it selects a least-energy member among the retained
 densities satisfying the enlarged boundary inequality.  This exact density's
@@ -1442,12 +1442,12 @@ $\delta=\Delta/(48672L)$.  It is positive and exactly satisfies
 $24L\delta=\Delta/2028$, so no additional precision choice is needed in an
 application of the finite-search theorem.
 The corollary
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_canonical\_coordinate\_finite\_density\_search\_viable\_vector}
+\leanid{ManyBody.ChainInteraction.exists\_canonical\_coordinate\_finite\_density\_search\_viable\_vector}
 therefore constructs the compressed coordinates, bounded finite family,
 least-energy relaxed-feasible density, and physical viable vector directly at
 this radius, with no remaining mesh parameter or margin hypothesis.
 The further composition
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_coordinate\_finite\_density\_search\_viable\_vector}
+\leanid{ManyBody.ChainInteraction.exists\_coordinate\_finite\_density\_search\_viable\_vector}
 removes the coordinate isometry and initial compressed density from the
 hypotheses.  From the normalized supported glued vector it forms the rank-one
 density, compresses it into coordinates of order $0<n\le |S|m$, and then applies
@@ -1457,13 +1457,13 @@ vector follow directly from the data already supplied by the LVV viability
 step.  The coordinate and density representatives remain classical choices,
 so this composition still makes no algorithmic running-time claim.
 The theorem
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_all\_spectral\_approx\_sdp\_certificate}
+\leanid{ManyBody.ChainInteraction.exists\_viable\_vector\_of\_all\_spectral\_approx\_sdp\_certificate}
 composes these repairs and targets with isometric support expansion and the
 LVV leading-vector estimate. Consequently, any numerical matrices carrying
 the stated certified errors already determine a physical unit vector with
 energy at most $E_0+\Delta/12$ and ground-state overlap at least $11/12$.
 Its uniform-order corollary
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_uniformly\_approx\_sdp\_certificate}
+\leanid{ManyBody.ChainInteraction.exists\_viable\_vector\_of\_uniformly\_approx\_sdp\_certificate}
 uses $n\le |S|m$ and $r\le qm$ directly.  It therefore derives the same
 physical vector from the a priori tolerances
 $\epsilon\le\Delta/(129792L|S|m)$ and
@@ -1471,7 +1471,7 @@ $\epsilon_b\le\Delta/(129792Lqm)$, without requiring the solver precision
 to depend on the subsequently chosen coordinate isometry or realized cone
 orders.
 The wrapper
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_uniform\_approx\_sdp\_feasible}
+\leanid{ManyBody.ChainInteraction.exists\_viable\_vector\_of\_uniform\_approx\_sdp\_feasible}
 states this physical conclusion directly from the unified predicate and the
 four a priori tolerance bounds.
 Exact feasibility is compatible with this numerical statement.  The theorem
@@ -1484,7 +1484,7 @@ the numerical specification is consistent and nonempty whenever the exact
 problem is nonempty.  These existence results do not construct an effective
 semidefinite optimization procedure.
 The theorem
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_boundary\_coordinates\_with\_uniform\_approx\_sdp\_soundness}
+\leanid{ManyBody.ChainInteraction.exists\_boundary\_coordinates\_with\_uniform\_approx\_sdp\_soundness}
 also constructs $0<n\le |S|m$ and the support isometry from the normalized
 supported LVV vector before accepting any numerical matrices.  In these same
 coordinates it exhibits the compressed rank-one density and its positive and
@@ -1613,7 +1613,7 @@ shows that a family approximating the raw trimmed columns at mesh
 retains the \(1/2\)-viability needed for error reduction.
 The proof uses the lower norm bound to control normalization, and requires
 no rationality of Schmidt projections. The composition is stated by
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_rational\_size\_bond\_trimmed\_family}:
+\leanid{ManyBody.ChainInteraction.exists\_rational\_size\_bond\_trimmed\_family}:
 the selected family is independently trimmed and uniformly approximated
 before every ground pair, with unchanged cardinality and bond bound,
 one explicit parameter height, and \(1/2\)-viability for every eligible
@@ -1866,10 +1866,14 @@ For an actual operation list of length \(N\), maximum operand-and-result
 height at most \(2^B\) gives total schoolbook charge at most
 \(8N(B+2)^2\), by
 \leanid{TNLean.MPS.AreaLaw.RationalArithmeticTrace.schoolbookCharge\_le\_of\_maxHeight\_le\_two\_pow}.
-The remaining composition must bound all operations in the full
-coefficient record from the stored-row and partial-sum estimates, and
-extend the same recorded evaluation to weighted overlaps and local
-energy sums. The existing schoolbook charge is a mathematical cost
+For cap and tensor parameter coordinates of height at most \(2^h\), let
+\(b=2hnqD^2\) and \(k=(b+D+h+1)(n+1)\). The full coefficient record
+has schoolbook charge at most \(8(8nD^2+6)(4k+3)^2\), by
+\leanid{TNLean.MPS.AreaLaw.RationalContractionTrace.coefficient\_schoolbookCharge\_le}.
+At each site all partial sums use the same denominator as the completed
+row. The bound includes the final scalar cap and the empty chain.
+The corresponding recorded evaluations for weighted overlaps and local
+energy sums remain to be constructed. The existing schoolbook charge is a mathematical cost
 model; it is not a proved runtime bound for integer multiplication,
 division, greatest common divisors, or reduced-rational normalization.
 Those implementation bounds and the numerical routines that construct
@@ -1976,7 +1980,7 @@ proves these bounds for every unit eigenvector with eigenvalue larger than
 $1/2$; the conclusion therefore does not depend on which dominant
 eigenvector a spectral computation returns.
 The viable-set estimate itself is stable as well.  The theorem
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.leading\_bounds\_of\_approximate\_boundary\_solution}
+\leanid{ManyBody.ChainInteraction.leading\_bounds\_of\_approximate\_boundary\_solution}
 allows an objective error $\xi$ and an additional boundary error $\delta$.
 The original energy bound $E_0+\Delta/12$ and overlap bound $11/12$ remain
 valid provided
@@ -2030,13 +2034,13 @@ The physical gluing map respects this phase by
 \leanid{TNLean.MPS.AreaLaw.gluedVector\_phase\_invariants}
 proves that its energy expectation and absolute ground-state overlap are
 unchanged.  Consequently
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.nearby\_glued\_vector\_viable\_of\_density\_and\_vector\_residual}
+\leanid{ManyBody.ChainInteraction.nearby\_glued\_vector\_viable\_of\_density\_and\_vector\_residual}
 feeds a normalized supported numerical eigenvector directly into the LVV
 viability estimate: when $\mu\ge23/24$ and the residual is at most
 $11\zeta/24$, the physical vector retains the required normalization,
 left support, energy, and overlap.
 The end-to-end theorem
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_viable\_vector\_of\_approximate\_density\_and\_eigenresidual}
+\leanid{ManyBody.ChainInteraction.exists\_viable\_vector\_of\_approximate\_density\_and\_eigenresidual}
 now combines this residual criterion with normalization and isometric expansion
 of the approximate compressed density.  At trace-norm precision
 $\Delta/(97344L)$ it constructs the exact dominant eigenpair used only in the
@@ -2116,7 +2120,7 @@ end-to-end compressed-density theorem retains both the sharper bound
 and, under its stated precision hypothesis, the uniform conclusion
 $\mu_{\max}\ge23/24$.
 Finally,
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.exists\_leading\_vector\_of\_approximate\_compressed\_boundary\_solution}
+\leanid{ManyBody.ChainInteraction.exists\_leading\_vector\_of\_approximate\_compressed\_boundary\_solution}
 composes this estimate with normalization and isometric expansion of the
 compressed numerical density.  Writing $H_L$ for the physical objective and
 $Z$ for the coordinate isometry, trace-norm accuracy $\epsilon$ suffices when
@@ -2136,7 +2140,7 @@ The theorem constructs an exact physical density, a dominant eigenvector and
 the resulting viable chain vector, retaining the bounds $E_0+\Delta/12$ and
 $11/12$.
 The subsequent stability theorem
-\leanid{TNLean.MPS.AreaLaw.ChainHamiltonian.nearby\_glued\_vector\_viable\_of\_density\_and\_vector\_precision}
+\leanid{ManyBody.ChainInteraction.nearby\_glued\_vector\_viable\_of\_density\_and\_vector\_precision}
 also permits a numerical compressed unit vector at Hilbert-space distance
 $\zeta$ from the exact dominant vector.  The two numerical errors share the
 same margin through

@@ -41,14 +41,14 @@ private theorem global_eigen_of_cut
     (Q : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (P : Prop) [Decidable P]
     (hQ : Q * regularPhysicalCutMatrix a R = if P then regularPhysicalCutMatrix a R else 0) :
-    regionLocalTerm R Q *ᵥ stateCoeff (groupBondTensor a) =
+    ManyBody.place («X» := fun _ ↦ Fin _) R Q *ᵥ stateCoeff (groupBondTensor a) =
       if P then stateCoeff (groupBondTensor a) else 0 := by
   funext ξ
   obtain ⟨⟨σ,τ⟩,rfl⟩ := (regionConfigEquiv (d := d) R).symm.surjective ξ
-  change (regionLocalTerm R Q *ᵥ stateCoeff (groupBondTensor a))
+  change (ManyBody.place («X» := fun _ ↦ Fin _) R Q *ᵥ stateCoeff (groupBondTensor a))
     (assembleRegionσ R σ τ) =
       (if P then stateCoeff (groupBondTensor a) else 0) (assembleRegionσ R σ τ)
-  rw [regionLocalTerm_mulVec_assemble]
+  rw [place_mulVec_assemble]
   have H := congrArg (fun N => N σ τ) hQ
   simpa only [Matrix.mul_apply, Matrix.mulVec, dotProduct, regularPhysicalCutMatrix,
     Matrix.ite_apply,
@@ -72,9 +72,11 @@ theorem IsGIsometric.exists_torusSweptPhysicalRoute_commutatorMeasurement
           ({x : X // x ∈ torusVacantPlaquetteMoveRegion (sweptPhysicalBRouteDirection i)
             (torusSweptPhysicalBRouteVertex v i.castSucc)} → Fin d) ℂ,
         W ∈ Matrix.unitaryGroup _ ℂ ∧
-          (M i = regionLocalTerm (torusVacantPlaquetteMoveRegion (sweptPhysicalBRouteDirection i)
+          (M i = ManyBody.place («X» := fun _ ↦ Fin _)
+              (torusVacantPlaquetteMoveRegion (sweptPhysicalBRouteDirection i)
               (torusSweptPhysicalBRouteVertex v i.castSucc)) W ∨
-            M i = (regionLocalTerm (torusVacantPlaquetteMoveRegion (sweptPhysicalBRouteDirection i)
+            M i = (ManyBody.place («X» := fun _ ↦ Fin _)
+                (torusVacantPlaquetteMoveRegion (sweptPhysicalBRouteDirection i)
               (torusSweptPhysicalBRouteVertex v i.castSucc)) W).conjTranspose)) ∧
       torusSweptPhysicalRouteProduct M 12 ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ C, (Q C).IsHermitian ∧ (Q C).PosSemidef) ∧
@@ -88,7 +90,7 @@ theorem IsGIsometric.exists_torusSweptPhysicalRoute_commutatorMeasurement
           (regularTwistedSite a (torusSweptPhysicalRouteOperators v g h 12)))
         U *ᵥ ψ₀ = ψ₁₂ ∧
         ∀ C : Option (ConjClasses G),
-          (regionLocalTerm R (Q C) *ᵥ (U *ᵥ ψ₀) =
+          (ManyBody.place («X» := fun _ ↦ Fin _) R (Q C) *ᵥ (U *ᵥ ψ₀) =
             if C = some (ConjClasses.mk (g*h*g⁻¹*h⁻¹)) then U *ᵥ ψ₀ else 0) ∧
           Q C * (Matrix.of (fun σ τ => (U *ᵥ ψ₀) (assembleRegionσ R σ τ)) :
             Matrix (RegionPhysicalConfig (d := d) R)

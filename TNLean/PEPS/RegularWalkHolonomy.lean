@@ -26,6 +26,8 @@ assume a relation between complement holonomies and boundary transports.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}
@@ -34,20 +36,20 @@ variable {G : Type*} [Group G]
 /-- Transport along an adjacent pair in the native ordered-edge convention.
 The reverse of the ordered orientation uses the inverse operator. -/
 def regularDirectedTransport (u : Edge Γ → G) {v w : V} (h : Γ.Adj v w) : G :=
-  if v < w then u (Edge.ofAdj h) else (u (Edge.ofAdj h))⁻¹
+  if v < w then u (ManyBody.Edge.ofAdj h) else (u (ManyBody.Edge.ofAdj h))⁻¹
 
 /-- A step from the tail to the head uses the assigned bond operator. -/
 theorem regularDirectedTransport_of_lt (u : Edge Γ → G) {v w : V}
     (h : Γ.Adj v w) (hvw : v < w) :
     regularDirectedTransport u h = u ⟨(v, w), hvw, h⟩ := by
-  simp only [regularDirectedTransport, ite_eq_left hvw, Edge.ofAdj_of_lt h hvw]
+  simp only [regularDirectedTransport, ite_eq_left hvw, ManyBody.Edge.ofAdj_of_lt h hvw]
 
 /-- A step from the head to the tail uses the inverse bond operator. -/
 theorem regularDirectedTransport_of_gt (u : Edge Γ → G) {v w : V}
     (h : Γ.Adj v w) (hwv : w < v) :
     regularDirectedTransport u h = (u ⟨(w, v), hwv, h.symm⟩)⁻¹ := by
   simp only [regularDirectedTransport, ite_eq_right (not_lt.mpr hwv.le),
-    Edge.ofAdj_of_gt h hwv]
+    ManyBody.Edge.ofAdj_of_gt h hwv]
 
 /-- Reversing a single step inverts its operator. -/
 theorem regularDirectedTransport_symm (u : Edge Γ → G) {v w : V}

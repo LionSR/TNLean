@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.NormalizedVariableTruncation
 import QICLean.Analysis.ViableSubspaceEntropy
 import QICLean.Channel.MaximalOverlap
@@ -22,6 +22,8 @@ and normalizes the one resulting vector. It supports ALVV,
 arXiv:1602.08828v2, fixed-cut to global approximation at lines 1080–1086
 and the low-density conclusion at lines 1096–1105.
 -/
+
+open ManyBody (interval)
 
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder InnerProductSpace Matrix
 

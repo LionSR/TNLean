@@ -39,6 +39,7 @@ import TNLean.MPS.Periodic.PrescribedBlocking
 import TNLean.MPS.Periodic.ProjectiveRep
 import TNLean.MPS.Periodic.ProportionalOverlap
 import TNLean.MPS.Periodic.RefinementNormalization
+import TNLean.MPS.Periodic.RefinementQubitRootRank
 import TNLean.MPS.Periodic.RefinementRootIrreducibility
 import TNLean.MPS.Periodic.RefinementRootPeriod
 import TNLean.MPS.Periodic.RefinementRootRankChannelSquare

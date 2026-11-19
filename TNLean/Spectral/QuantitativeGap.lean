@@ -94,9 +94,7 @@ theorem exponential_convergence_of_primitive [NeZero D]
   let : NormedAddCommGroup (V →L[ℂ] V) := ContinuousLinearMap.toNormedAddCommGroup
   let : NormedSpace ℂ (V →L[ℂ] V) := ContinuousLinearMap.toNormedSpace
   have hPrim : IsPrimitive E :=
-    isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
-      (isPrimitivePaper_of_hasEventuallyFullKrausRank A
-        ((MPSTensor.hasEventuallyFullKrausRank_iff_isNormal A).2 hA.isNormal))
+    isPrimitive_transferMap_of_isNormal A hNorm hA.isNormal
   have hCh : IsChannel E := by
     simpa only [E] using Kraus.isChannel_mapLM A hNorm
   have hIrr : IsIrreducibleMap E := by
@@ -182,9 +180,7 @@ theorem correlation_length_bound [NeZero D]
   let E : V →ₗ[ℂ] V := Kraus.transferMap (d := d) (D := D) A
   let Φ : (V →ₗ[ℂ] V) ≃ₐ[ℂ] (V →L[ℂ] V) := Module.End.toContinuousLinearMap V
   have hPrim : _root_.IsPrimitive E :=
-    isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
-      (isPrimitivePaper_of_hasEventuallyFullKrausRank A
-        ((MPSTensor.hasEventuallyFullKrausRank_iff_isNormal A).2 hA.isNormal))
+    isPrimitive_transferMap_of_isNormal A hNorm hA.isNormal
   rcases Kraus.spectralRadius_compl_lt_one_of_peripheralPrimitive
       A hA hNorm hPrim with
     ⟨ρ, _hρ_psd, _hρ_ne, hρ_fix, htrρ, hgap⟩
@@ -261,8 +257,8 @@ For an injective TP-normalized MPS tensor, all eigenvalues of the transfer
 map other than 1 have modulus strictly less than 1, with a uniform gap.
 
 The existential bound `∃ δ > 0` follows from: injectivity implies
-`HasEventuallyFullKrausRank` (at index 1), which implies primitivity
-(via `IsPrimitivePaper → IsPeripherallyPrimitive`), primitivity implies
+normality (at index 1), which implies primitivity of the transfer map
+(`isPrimitive_transferMap_of_isNormal`), primitivity implies
 the complementary transfer-map gap (by `compl_eigenvalue_norm_lt_one_of_primitive`),
 and in finite dimensions the maximum over finitely many eigenvalues gives a
 uniform bound. -/
@@ -276,9 +272,7 @@ theorem transfer_map_gap_of_injective [NeZero D]
   set E := Kraus.transferMap (d := d) (D := D) A
   -- Step 1: Kraus.IsInjective → IsPrimitive (Kraus.transferMap A)
   have hPrim : _root_.IsPrimitive E :=
-    isPeripherallyPrimitive_of_isPrimitivePaper A hNorm
-      (isPrimitivePaper_of_hasEventuallyFullKrausRank A
-        ((MPSTensor.hasEventuallyFullKrausRank_iff_isNormal A).2 hA.isNormal))
+    isPrimitive_transferMap_of_isNormal A hNorm hA.isNormal
   -- Step 2: every eigenvalue has ‖μ‖ ≤ 1
   have hE_eq : E = Kraus.mixedMapLM A A := (Kraus.mixedMapLM_self A).symm
   have hbound : ∀ μ : ℂ, Module.End.HasEigenvalue E μ → ‖μ‖ ≤ 1 := by

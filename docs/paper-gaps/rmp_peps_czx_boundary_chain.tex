@@ -131,6 +131,49 @@ support and rank $2^{2w+2h}$. The corresponding statements are
 \leanid{TNLean.PEPS.rank_regionReducedDensity_czxWrappingRectangle}.
 Full-width cylinders are excluded: their boundary topology differs.
 
+\section{The anomaly of the boundary symmetry}
+\emph{Local fix (two-site blocking).} The review states that the CZX model
+is a nontrivial SPT phase because of ``a non trivial MPU symmetry in the
+associated PEPS determined by a nontrivial 3-cocycle'', and that ``the CZX
+model belongs to the non-trivial SPT sector of a global on-site
+$\mathbb{Z}_2$ symmetry''.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, lines 2584 and 2516.}
+The three-cocycle is attached to matrix product operators that ``form a
+representation of the group $G$: $O_g.O_h=O_{gh}$''.\footnote{Source
+    traceability: \path{Papers/2011.12127/TN-Review-main.tex}, line 1464.}
+For the printed matrices the same passage derives
+``${O}(A)^2=(-1)^N I$''.\footnote{Source traceability:
+    \path{Papers/2011.12127/TN-Review-main.tex}, line 2601; the sign is
+    discussed in \path{mpu_czx_tensor_normalization.tex}.}
+At odd $N$ the pair $e\mapsto\Id$, $g\mapsto O_N(A)$ is not a
+representation, so the three-cocycle of the unblocked operator is not
+defined at every length. This is not a false claim on nondegenerate data in
+the setting of the statement: the symmetry is that of a PEPS boundary, and
+every rectangle boundary has even length $P=2w+2h$, where $O_P(A)$ squares to
+the identity and equals $U_P$ above.
+
+The formalization pairs consecutive boundary spins
+$(c_{2k},c_{2k+1})$ into $w+h$ blocked sites, the device the review uses to
+make a symmetric PEPS uniform and to define the CZX tensor itself.\footnote{Source
+    traceability: \path{Papers/2011.12127/TN-Review-main.tex}, lines 1451 and
+    2508.}
+Let $B$ be the printed tensor blocked over two sites. Then $U_RF_R=F_RO_{w+h}(B)$
+under this pairing, and $e\mapsto\Id$, $g\mapsto O_n(B)$ is a representation
+of $\mathbb Z_2$ by normal tensors at every positive blocked length $n$.
+With $S=\operatorname{diag}(1,i)$, the physical change of basis by
+$S\otimes S$ takes $B$ to $-C$, where $C$ is the decorated blocked tensor of
+\path{mpu_czx_tensor_normalization.tex}, and the sign is the character
+$x\mapsto(-1)^x$. Neither operation changes the anomaly three-cochain of a
+choice of fusion tensors, so the anomaly class of the boundary family is that
+of $C$, which is nonzero. The statements are
+\leanid{TNLean.PEPS.regionPhysicalProductMatrix_czxRectangleBoundaryMatrix_czxBoundaryFamily},
+\leanid{TNLean.PEPS.regionPhysicalProductMatrix_czxWrappingRectangleBoundaryMatrix_czxBoundaryFamily},
+\leanid{TNLean.PEPS.czxBoundaryFamily_isNormalRepresentation},
+\leanid{TNLean.PEPS.not_isTrivialGaugeClass_omega_czxBoundaryFamily} and
+\leanid{TNLean.PEPS.czxBoundaryFamily_anomalyClass_ne_zero}. They inherit the
+rectangle scope of the previous sections; that the two-dimensional bulk phase
+is nontrivial is not asserted.
+
 \section{Remaining scope}
 The exact support and its dimension are now proved for positive proper
 bounded and cyclic coordinate rectangles. The explicit trace-normalized

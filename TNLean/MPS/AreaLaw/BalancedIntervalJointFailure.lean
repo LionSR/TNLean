@@ -18,6 +18,8 @@ This is a deterministic auxiliary to the joint-success estimate in ALVV,
 arXiv:1602.08828v2, Figure `fig:algo1` and lines 1777–1817.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- Failure of the interval property at the root or any of its actual

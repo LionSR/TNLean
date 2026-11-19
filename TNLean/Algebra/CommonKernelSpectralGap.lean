@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.CommonKernelGapInterpolation
+import QICLean.Analysis.KernelSpectralGap
 import Mathlib.Analysis.Matrix.Spectrum
 
 /-!
@@ -41,71 +42,21 @@ theorem orthogonal_quadratic_gap_of_spectrum_separated
       x ∈ (LinearMap.ker (Matrix.toEuclideanLin M))ᗮ →
       δ * (∑ i, Complex.normSq (x i)) ≤
         (star x.ofLp ⬝ᵥ (M *ᵥ x.ofLp)).re := by
-  classical
-  let hM := hHermitian
-  let b := hM.eigenvectorBasis
-  let L := Matrix.toEuclideanLin M
-  have hSym : L.IsSymmetric := Matrix.isSymmetric_toEuclideanLin_iff.mpr hM
   intro x hx
-  have hcoord (i : n) : b.repr (L x) i =
-      (hM.eigenvalues i : ℂ) * b.repr x i := by
-    calc
-      b.repr (L x) i = ⟪b i, L x⟫_ℂ := b.repr_apply_apply (L x) i
-      _ = ⟪L (b i), x⟫_ℂ := (hSym (b i) x).symm
-      _ = (hM.eigenvalues i : ℂ) * b.repr x i := by
-        rw [show L (b i) = (hM.eigenvalues i : ℂ) • b i from
-          hM.toEuclideanLin_eigenvectorBasis i]
-        rw [inner_smul_left (b i) x (hM.eigenvalues i : ℂ)]
-        simp [b.repr_apply_apply]
-  have hnorm : (∑ i, Complex.normSq (x i)) =
-      ∑ i, Complex.normSq (b.repr x i) := by
-    calc
-      (∑ i, Complex.normSq (x i)) = ‖x‖ ^ 2 := by
-        rw [EuclideanSpace.norm_sq_eq]
-        simp_rw [Complex.normSq_eq_norm_sq]
-      _ = ‖b.repr x‖ ^ 2 := by rw [b.repr.norm_map]
-      _ = ∑ i, Complex.normSq (b.repr x i) := by
-        rw [EuclideanSpace.norm_sq_eq]
-        simp_rw [Complex.normSq_eq_norm_sq]
-  have hform : (star x.ofLp ⬝ᵥ (M *ᵥ x.ofLp)).re =
-      ∑ i, hM.eigenvalues i * Complex.normSq (b.repr x i) := by
-    have hc : ⟪x, L x⟫_ℂ =
-        ∑ i, (hM.eigenvalues i : ℂ) *
-          (Complex.normSq (b.repr x i) : ℂ) := by
-      calc
-        ⟪x, L x⟫_ℂ = ⟪b.repr x, b.repr (L x)⟫_ℂ :=
-          (b.repr.inner_map_map x (L x)).symm
-        _ = ∑ i, (hM.eigenvalues i : ℂ) *
-            (Complex.normSq (b.repr x i) : ℂ) := by
-          rw [EuclideanSpace.inner_eq_star_dotProduct]
-          simp_rw [dotProduct, hcoord]
-          simp [mul_assoc, Complex.mul_conj]
-    have hleft : (star x.ofLp ⬝ᵥ (M *ᵥ x.ofLp)).re =
-        (⟪x, L x⟫_ℂ).re := by
-      rw [EuclideanSpace.inner_eq_star_dotProduct]
-      change (star x.ofLp ⬝ᵥ (M *ᵥ x.ofLp)).re =
-        ((M *ᵥ x.ofLp) ⬝ᵥ star x.ofLp).re
-      rw [dotProduct_comm]
-    rw [hleft, hc]
-    simp
-  have hbound (i : n) : δ * Complex.normSq (b.repr x i) ≤
-      hM.eigenvalues i * Complex.normSq (b.repr x i) := by
-    have hs : (hM.eigenvalues i : ℂ) ∈ spectrum ℂ M := by
-      rw [hM.spectrum_eq_image_range]
-      exact ⟨hM.eigenvalues i, ⟨i, rfl⟩, rfl⟩
-    rcases hSpec _ hs with hzero | hδ
-    · have hz : hM.eigenvalues i = 0 := by simpa using hzero
-      have hb : b i ∈ LinearMap.ker L := by
-        rw [LinearMap.mem_ker, hM.toEuclideanLin_eigenvectorBasis]
-        simp [hz]
-      have hinner := Submodule.inner_right_of_mem_orthogonal hb hx
-      have hc0 : b.repr x i = 0 := by
-        simpa [b.repr_apply_apply] using hinner
-      simp [hc0]
-    · have hδ' : δ ≤ hM.eigenvalues i := by simpa using hδ
-      exact mul_le_mul_of_nonneg_right hδ' (Complex.normSq_nonneg _)
-  rw [hnorm, hform, Finset.mul_sum]
-  exact Finset.sum_le_sum (fun i hi => hbound i)
+  have hSpecReal : ∀ e ∈ spectrum ℝ M, e = 0 ∨ δ ≤ e := by
+    intro e he
+    simpa only [Complex.ofReal_re] using
+      hSpec (e : ℂ) ((spectrum.algebraMap_mem_iff ℂ).mpr he)
+  have hGap := hHermitian.mul_norm_sq_le_re_inner_of_spectral_gap hSpecReal x (by
+    intro z hz
+    exact Submodule.inner_right_of_mem_orthogonal
+      (show z ∈ LinearMap.ker (Matrix.toEuclideanLin M) from LinearMap.mem_ker.mpr hz) hx)
+  rw [EuclideanSpace.norm_sq_eq] at hGap
+  simp_rw [← Complex.normSq_eq_norm_sq] at hGap
+  rw [EuclideanSpace.inner_eq_star_dotProduct] at hGap
+  change δ * (∑ i, Complex.normSq (x i)) ≤
+    ((M *ᵥ x.ofLp) ⬝ᵥ star x.ofLp).re at hGap
+  simpa only [dotProduct_comm] using hGap
 
 /-- A positive semidefinite matrix with a quadratic-form gap above its kernel
 has no spectral values strictly between zero and the gap. -/

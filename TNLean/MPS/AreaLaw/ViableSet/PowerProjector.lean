@@ -10,6 +10,8 @@ import TNLean.MPS.AreaLaw.Hastings.PartCommutators
 import QICLean.Analysis.PhysicalPowerFilterLowerGap
 import QICLean.Algebra.FiniteSumPowers
 import QICLean.Entropy.SupportedOperatorSchmidtWords
+import QICLean.ManyBody.Hamiltonian.GroundSpace
+import TNLean.Algebra.MatrixHermitianSum
 
 /-!
 # The power approximate ground-state projector on a nearest-neighbour chain
@@ -41,7 +43,7 @@ sites, so the spectral statements and the expansion take `0 < L`, the source's c
 ## Main definitions
 
 * `TNLean.MPS.AreaLaw.bondSupport`: the support `{i, i + 1}` of bond `i`.
-* `TNLean.MPS.AreaLaw.ChainHamiltonian.ofBonds`: a family of bond terms as a range-one chain
+* `ManyBody.ChainInteraction.ofBonds`: a family of bond terms as a range-one chain
   Hamiltonian, so that the viable-set results apply to it.
 * `TNLean.MPS.AreaLaw.paddedBond`, `TNLean.MPS.AreaLaw.bondComplement`,
   `TNLean.MPS.AreaLaw.bondComplementWord`: the bond terms padded by `H_{L-1} = 0`, the letters
@@ -67,8 +69,12 @@ sites, so the spectral statements and the expansion take `0 < L`, the source's c
   expansion `eq:a-exp`, lines 606–609.
 -/
 
+open ManyBody (ChainSupport interval mem_interval)
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -96,7 +102,7 @@ theorem bondSupport_injective : Function.Injective (bondSupport (L := L)) := by
   exact Fin.ext (by omega)
 
 /-- A sum of positive semidefinite bond terms selected by their support is positive
-semidefinite; these sums are the terms of `ChainHamiltonian.ofBonds`. -/
+semidefinite; these sums are the terms of `ManyBody.ChainInteraction.ofBonds`. -/
 private theorem posSemidef_sum_bondSupport_ite
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (X : ChainSupport L 1) :
@@ -105,48 +111,62 @@ private theorem posSemidef_sum_bondSupport_ite
     split_ifs
     exacts [h0 i, PosSemidef.zero]
 
-/-- A family of bond terms `H_i`, supported on `{i, i + 1}` with `0 ≤ H_i ≤ 1`, as a range-one
-chain Hamiltonian of interaction norm at most one. The term at the support `{i, i + 1}` is
-`H_i`, and the single-site terms vanish. This is the Hamiltonian of Landau, Vazirani and Vidick,
-arXiv:1307.5143v1, `algo53.tex`, lines 209–211 and 283. -/
-noncomputable def ChainHamiltonian.ofBonds
+/-- A family of bond terms `H_i`, supported on `{i, i + 1}`, as a range-one chain interaction.
+The term at the support `{i, i + 1}` is `H_i`, and the single-site terms vanish. With
+`0 ≤ H_i ≤ 1` this is the Hamiltonian of Landau, Vazirani and Vidick, arXiv:1307.5143v1,
+`algo53.tex`, lines 209–211 and 283, of interaction norm at most one. -/
+noncomputable def _root_.ManyBody.ChainInteraction.ofBonds
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1) : ChainHamiltonian L q 1 1 where
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2))) :
+    ManyBody.ChainInteraction L q 1 where
   term X := ∑ i, if bondSupport i = X then h i else 0
-  supported X := TNLean.Lattice.isSupportedOn_sum _ fun i _ ↦ by
+  mem X := (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun i _ ↦ by
     split_ifs with hX
     · rw [← hX]
       exact hs i
     · exact ⟨fun _ _ _ ↦ rfl, fun _ _ _ _ _ _ _ _ ↦ rfl⟩
-  hermitian X := (posSemidef_sum_bondSupport_ite h h0 X).isHermitian
-  norm_le X := by
-    classical
-    let S := Finset.univ.filter fun i ↦ bondSupport i = X
-    have hcard : S.card ≤ 1 := Finset.card_le_one.mpr fun i hi j hj ↦
-      bondSupport_injective ((Finset.mem_filter.mp hi).2.trans (Finset.mem_filter.mp hj).2.symm)
-    rw [← Finset.sum_filter]
-    calc
-      ‖∑ i ∈ S, h i‖ ≤ ∑ _ ∈ S, (1 : ℝ) := norm_sum_le_of_le S fun i _ ↦
-          (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 i).nonneg).mpr (h1 i)
-      _ ≤ 1 := by simpa using (show (S.card : ℝ) ≤ 1 by exact_mod_cast hcard)
 
-/-- The Hamiltonian of `ChainHamiltonian.ofBonds` is the sum of the bond terms. -/
-theorem ChainHamiltonian.ofBonds_operator
+/-- The terms of positive semidefinite bonds are Hermitian. -/
+theorem _root_.ManyBody.ChainInteraction.isHermitian_ofBonds_term
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1) :
-    (ChainHamiltonian.ofBonds h hs h0 h1).operator = ∑ i, h i := by
-  simp only [ChainHamiltonian.operator, ChainHamiltonian.ofBonds]
-  rw [Finset.sum_comm]
-  simp
+    (h0 : ∀ i, (h i).PosSemidef) (X : ChainSupport L 1) :
+    ((ManyBody.ChainInteraction.ofBonds h hs).term X).IsHermitian :=
+  (posSemidef_sum_bondSupport_ite h h0 X).isHermitian
 
-/-- The terms of `ChainHamiltonian.ofBonds` are positive semidefinite. -/
-theorem ChainHamiltonian.posSemidef_ofBonds_term
+/-- The terms of bonds with `0 ≤ H_i ≤ 1` have norm at most one. -/
+theorem _root_.ManyBody.ChainInteraction.norm_ofBonds_term_le
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1) (X : ChainSupport L 1) :
-    ((ChainHamiltonian.ofBonds h hs h0 h1).term X).PosSemidef :=
+    ‖(ManyBody.ChainInteraction.ofBonds h hs).term X‖ ≤ 1 := by
+  classical
+  let S := Finset.univ.filter fun i ↦ bondSupport i = X
+  have hcard : S.card ≤ 1 := Finset.card_le_one.mpr fun i hi j hj ↦
+    bondSupport_injective ((Finset.mem_filter.mp hi).2.trans (Finset.mem_filter.mp hj).2.symm)
+  change ‖∑ i, if bondSupport i = X then h i else 0‖ ≤ 1
+  rw [← Finset.sum_filter]
+  calc
+    ‖∑ i ∈ S, h i‖ ≤ ∑ _ ∈ S, (1 : ℝ) := norm_sum_le_of_le S fun i _ ↦
+        (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 i).nonneg).mpr (h1 i)
+    _ ≤ 1 := by simpa using (show (S.card : ℝ) ≤ 1 by exact_mod_cast hcard)
+
+/-- The Hamiltonian of `ManyBody.ChainInteraction.ofBonds` is the sum of the bond terms. -/
+theorem _root_.ManyBody.ChainInteraction.ofBonds_hamiltonian
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
+ :
+    (ManyBody.ChainInteraction.ofBonds h hs).hamiltonian = ∑ i, h i := by
+  simp only [ManyBody.Interaction.hamiltonian, ManyBody.ChainInteraction.ofBonds]
+  rw [Finset.sum_comm]
+  simp
+
+/-- The terms of `ManyBody.ChainInteraction.ofBonds` are positive semidefinite. -/
+theorem _root_.ManyBody.ChainInteraction.posSemidef_ofBonds_term
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
+    (h0 : ∀ i, (h i).PosSemidef) (X : ChainSupport L 1) :
+    ((ManyBody.ChainInteraction.ofBonds h hs).term X).PosSemidef :=
   posSemidef_sum_bondSupport_ite h h0 X
 
 /-! ### The power projector -/
@@ -159,7 +179,7 @@ noncomputable def powerProjector {ι : Type*} [Fintype ι] [DecidableEq ι] (H :
 
 /-- With `L - 1` bonds, one more than their number is the number of sites. -/
 private theorem card_bonds_add_one (hL : 0 < L) :
-    (((Fintype.card (Fin (L - 1)) + 1 : ℕ) : ℝ)) = L := by
+    ((Fintype.card (Fin (L - 1)) + 1 : ℕ) : ℝ) = L := by
   rw [Fintype.card_fin, Nat.sub_add_cancel hL]
 
 /-- The three properties of `A` at line 602, from the QICLean estimate for sums of positive
@@ -168,10 +188,14 @@ private theorem powerProjector_spec (hL : 0 < L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) (m : ℕ) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
     (powerProjector (∑ i, h i) L E₀ m).PosSemidef ∧ ‖powerProjector (∑ i, h i) L E₀ m‖ = 1 ∧
       toEuclideanLin (powerProjector (∑ i, h i) L E₀ m) Γ = Γ := by
-  obtain ⟨hΓ, hHΓ, hgap⟩ := isGappedGroundState_iff.mp hgs
+  have hΓ := hΩ
+  have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgap.posSemidef_sub_smul_one
+    (Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian) hΩ hspan
   have hspec := power_filter_exp_spec_of_posSemidef_terms h h0 h1 hΓ hHΓ hgap hΔ m
   simp only [card_bonds_add_one hL] at hspec
   exact ⟨hspec.1, hspec.2.1, hspec.2.2.1⟩
@@ -182,9 +206,10 @@ theorem posSemidef_powerProjector (hL : 0 < L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) (m : ℕ) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
     (powerProjector (∑ i, h i) L E₀ m).PosSemidef :=
-  (powerProjector_spec hL h h0 h1 hgs hΔ m).1
+  (powerProjector_spec hL h h0 h1 hΩ hgap hspan hΔ m).1
 
 /-- The power projector has operator norm one. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, line 602. -/
@@ -192,9 +217,10 @@ theorem norm_powerProjector (hL : 0 < L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) (m : ℕ) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
     ‖powerProjector (∑ i, h i) L E₀ m‖ = 1 :=
-  (powerProjector_spec hL h h0 h1 hgs hΔ m).2.1
+  (powerProjector_spec hL h h0 h1 hΩ hgap hspan hΔ m).2.1
 
 /-- The power projector fixes the ground state, `AΓ = Γ`. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, line 602. -/
@@ -202,9 +228,10 @@ theorem powerProjector_apply_ground (hL : 0 < L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) (m : ℕ) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
     toEuclideanLin (powerProjector (∑ i, h i) L E₀ m) Γ = Γ :=
-  (powerProjector_spec hL h h0 h1 hgs hΔ m).2.2
+  (powerProjector_spec hL h h0 h1 hΩ hgap hspan hΔ m).2.2
 
 /-- **Equation `e:cutdown`.** For every unit vector `ψ` orthogonal to the ground state,
 `|⟨ψ, A ψ⟩| ≤ ((1 - ε₁/n) / (1 - ε₀/n))^m` with `ε₁ = ε₀ + Δ`. Landau, Vazirani and Vidick,
@@ -213,11 +240,15 @@ theorem norm_inner_powerProjector_le (hL : 0 < L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) (m : ℕ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ)
     {ψ : EuclideanSpace ℂ (Fin L → Fin q)} (hψ : ‖ψ‖ = 1) (horth : ⟪Γ, ψ⟫_ℂ = 0) :
     ‖⟪ψ, toEuclideanLin (powerProjector (∑ i, h i) L E₀ m) ψ⟫_ℂ‖ ≤
       ((1 - (E₀ + Δ) / L) / (1 - E₀ / L)) ^ m := by
-  obtain ⟨hΓ, hHΓ, hgap⟩ := isGappedGroundState_iff.mp hgs
+  have hΓ := hΩ
+  have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgap.posSemidef_sub_smul_one
+    (Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian) hΩ hspan
   set H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
   set N : ℝ := (L : ℝ)
   set P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
@@ -292,11 +323,16 @@ theorem norm_powerProjector_sub_le (hL : 0 < L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState (∑ i, h i) E₀ Γ Δ) (hΔ : 0 < Δ) {η : ℝ} (hη : 0 < η) (m : ℕ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {η : ℝ} (hη : 0 < η)
+    (m : ℕ)
     (hm : ((L - E₀) / Δ) * Real.log (1 / η) ≤ m) :
     ‖powerProjector (∑ i, h i) L E₀ m - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
       η := by
-  obtain ⟨hΓ, hHΓ, hgap⟩ := isGappedGroundState_iff.mp hgs
+  have hΓ := hΩ
+  have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgap.posSemidef_sub_smul_one
+    (Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian) hΩ hspan
   have hm' : ((((Fintype.card (Fin (L - 1)) + 1 : ℕ) : ℝ) - E₀) / Δ) *
       Real.log (1 / η) ≤ (m : ℝ) := by
     rwa [card_bonds_add_one hL]
@@ -372,7 +408,9 @@ private theorem isSupportedOn_bondComplement
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (bondComplement h i) (letterSupport L i) := by
   by_cases hi : i.val < L - 1
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_true, ite_true]
-    exact (Entropy.isSupportedOn_one _).sub (hs ⟨i, hi⟩)
+    change _ ∈ ManyBody.supportedOperators _ _
+    exact sub_mem
+      (Entropy.isSupportedOn_one _) (hs ⟨i, hi⟩)
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_false, ite_false, sub_zero]
     exact Entropy.isSupportedOn_one _
 

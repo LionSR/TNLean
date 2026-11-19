@@ -17,10 +17,11 @@ as $h=I-P$, where $P$ is the orthogonal projector onto the local
 arbitrary-boundary matrix product state support. They average $h$ for a
 group representation, then describe a weak-Hopf extension. Appendix B
 explicitly specifies the weak-Hopf construction on $P$:
-\[
+\begin{align}
     E(P)=\sum\rho(\Omega_{(1)})P\rho(T(\Omega_{(2)})),
     \qquad \rho=(\phi\otimes\phi)\circ\Delta.
-\]
+    \label{eq:glm23_wha_parent_average}
+\end{align}
 The normalization stated there is $E(I)=Q:=\rho(1)$, rather than
 $E(I)=I$.\footnote{Exact source:
     \href{https://arxiv.org/abs/2203.12563v3}{arXiv:2203.12563v3},
@@ -29,9 +30,10 @@ $E(I)=I$.\footnote{Exact source:
     \href{https://arxiv.org/abs/2204.05940v1}{arXiv:2204.05940v1},
     Section 5.5, Theorem 5.4, and Section 6, equations (6.1)--(6.4).}
 Consequently
-\[
+\begin{align}
     E(I-P)=Q-E(P),\qquad I-E(P)=E(I-P)+(I-Q).
-\]
+    \label{eq:glm23_wha_parent_complement}
+\end{align}
 The literal average of the parent and the ambient complement of the
 averaged support are different constructions. If $E(P)$ is the
 orthogonal projector onto the original support, as Appendix B states,
@@ -48,33 +50,37 @@ identities are not, since no argument below uses them.
 Fix $r\ge2$, put $K=\mathbb C^r$, $V=K\otimes K$ and
 $\mathcal A=\operatorname{End}(V)$. For matrix units
 $e_{ij,kl}=|i,j\rangle\langle k,l|$, define
-\[
+\begin{align}
     \Delta(e_{ij,kl})=\frac1r\sum_{a,b}e_{ia,kb}\otimes e_{aj,bl},\quad
     \epsilon(e_{ij,kl})=r\delta_{ij}\delta_{kl},\quad
     S(e_{ij,kl})=e_{lk,ji}.
-\]
-These formulas define a finite-dimensional $C^*$-weak Hopf algebra.
+    \label{eq:glm23_wha_parent_bell_structure}
+\end{align}
+The formulas \eqref{eq:glm23_wha_parent_bell_structure} define a finite-dimensional $C^*$-weak Hopf algebra.
 Indeed, with
-\[
+\begin{align}
     W_2|i,j\rangle=\frac1{\sqrt r}\sum_a|i,a\rangle|a,j\rangle,
     \qquad |\Phi\rangle=\frac1{\sqrt r}\sum_a|a,a\rangle,
-\]
+    \label{eq:glm23_wha_parent_bell_isometry}
+\end{align}
 one has $W_2^*W_2=I$ and $\Delta(x)=W_2xW_2^*$. Coassociativity
 inserts the same two Bell pairs in either order. The weak-unit identity
 is the equality of the product of the two disjoint Bell projections
 with $\Delta^2(1)$. The counit and weak-counit identities follow by
 contracting their Kronecker deltas. The counital maps are
-\[
+\begin{align}
     \epsilon_t(e_{ij,kl})=\delta_{kl}(E_{ij}\otimes I),\qquad
     \epsilon_s(e_{ij,kl})=\delta_{ij}(I\otimes E_{kl}),
-\]
+    \label{eq:glm23_wha_parent_counital_maps}
+\end{align}
 and direct multiplication gives all three antipode identities.
 
 The positive normalized integral and its pulling-through map are
-\[
+\begin{align}
     \Omega=\frac1r\sum_{i,k}e_{ii,kk}=|\Phi\rangle\langle\Phi|,
     \qquad T=S.
-\]
+    \label{eq:glm23_wha_parent_integral}
+\end{align}
 In particular, $\Delta(\Omega)=r^{-2}\sum_{i,k,a,b}
     e_{ia,kb}\otimes e_{ai,bk}$ is cocommutative and nondegenerate, and
 $(1\otimes x)\Delta(\Omega)=(S(x)\otimes1)\Delta(\Omega)$.
@@ -85,20 +91,23 @@ module, and $W_2$ identifies its weak tensor square with itself. Thus
 both representation categories are equivalent to $\mathrm{Vec}$, with
 one simple tensor unit, rather than merely to a multifusion category.
 The unique dual character equals $\Omega$, so the canonical character
-construction gives exactly the displayed normalization.
+construction gives exactly the normalization
+\eqref{eq:glm23_wha_parent_integral}.
 
 Consider the injective matrix product state and operator tensors
-\[
+\begin{align}
     A^{ij}=E_{ij}/\sqrt r,\qquad
     T^{ij,kl}=(E_{ij}\otimes E_{kl})/r.
-\]
+    \label{eq:glm23_wha_parent_tensors}
+\end{align}
 Their matrices span their respective full bond matrix algebras. Define
 $W_n:V\to V^{\otimes n}$ by inserting $n-1$ normalized Bell pairs.
 The arbitrary-boundary state support is $\operatorname{ran}W_n$.
 For an operator boundary $B$, set
-\[
+\begin{align}
     x(B)_{(i,j),(k,l)}=r^{-1}B_{(j,l),(i,k)}.
-\]
+    \label{eq:glm23_wha_parent_boundary_map}
+\end{align}
 The corresponding operator is $O^n_{T,B}=W_nx(B)W_n^*$ at every positive
 length. This length-independent bijection of boundaries proves
 arbitrary-boundary closedness. Its action on state boundary vectors
@@ -109,15 +118,17 @@ insert one normalized Bell pair; their associativity coefficients can
 be chosen $F=L=1$.
 
 At two sites the support is
-\[
+\begin{align}
     P=Q=\Delta(1)=I_K\otimes|\Phi\rangle\langle\Phi|\otimes I_K.
-\]
+    \label{eq:glm23_wha_parent_two_site_support}
+\end{align}
 Writing $Y=W_2^*XW_2$ yields
-\[
+\begin{align}
     E(X)=W_2\left(\frac1{r^2}\sum_{i,a,k,b}
     e_{ia,kb}Y e_{kb,ia}\right)W_2^*
     =\frac{\operatorname{Tr}(QX)}{r^2}Q.
-\]
+    \label{eq:glm23_wha_parent_two_site_average}
+\end{align}
 Thus $E(P)=P$, while $E(I-P)=0$ and
 $\operatorname{rank}(I-P)=r^4-r^2>0$. This disproves unconditional
 nonzeroness for the \emph{uncompleted average}. It is fully consistent
@@ -128,9 +139,10 @@ to the phase-classification theorem is asserted.
  {The local theorem and the remaining\\formalization scope}
 Let $\mathcal B$ be a star-closed family of matrices preserving a
 subspace $G$. For $v\in G^\perp$ and $w\in G$,
-\[
+\begin{align}
     \langle w,Bv\rangle=\langle B^*w,v\rangle=0.
-\]
+    \label{eq:glm23_wha_parent_orthogonal_reduction}
+\end{align}
 Hence both $G$ and $G^\perp$ are invariant, and their orthogonal
 projections commute with every member of $\mathcal B$. Adjoining the
 ambient identity does not change invariance.
@@ -157,9 +169,10 @@ Assume that $A$ is injective after blocking $L_0>0$ sites and that a fixed
 operator boundary $U$ satisfies $O^{L_0}_{T,U}=I$. Write
 $\Gamma_k(X)=\psi^k_{A,X}$ and $Q_n=O^n_{T,U}$. Compatibility gives
 one state boundary $Z$ with
-\[
+\begin{align}
     O^k_{T,U}\Gamma_k(X)=\Gamma_k(Z)
-\]
+    \label{eq:glm23_wha_parent_unit_compatibility}
+\end{align}
 for all $k>0$. At $k=L_0$ this becomes
 $\Gamma_{L_0}(Z)=\Gamma_{L_0}(X)$, so injectivity forces $Z=X$.
 Consequently $Q_n$ fixes every vector of $\mathcal S_A^n$ and
@@ -174,19 +187,22 @@ Now also assume adjoint closure of the entire boundary range at the
 chosen target length $n>0$. Orthogonal reduction gives
 $P_nO^n_{T,Y}=O^n_{T,Y}P_n$ for every boundary $Y$. Let
 $(X_j,Y_j)_{j\in J}$ be finite actual boundary families with
-\[
+\begin{align}
     \sum_{j\in J}O^n_{T,X_j}O^n_{T,Y_j}=Q_n,
     \qquad E_n(B)=\sum_{j\in J}O^n_{T,X_j}BO^n_{T,Y_j}.
-\]
+    \label{eq:glm23_wha_parent_normalized_family}
+\end{align}
 This is the product normalization used in Appendix B. The derived
 commutation and unit-support identities imply
-\[
+\begin{align}
     E_n(P_n)=\sum_{j\in J}(O^n_{T,X_j}O^n_{T,Y_j})P_n=Q_nP_n=P_n.
-\]
+    \label{eq:glm23_wha_parent_support_average}
+\end{align}
 It follows that
-\[
+\begin{align}
     E_n(I-P_n)=Q_n-P_n,\qquad I-E_n(P_n)=I-P_n.
-\]
+    \label{eq:glm23_wha_parent_parent_average}
+\end{align}
 The ambient complement is nonzero whenever $d^n>D^2$, by the dimension
 bound $\dim\mathcal S_A^n\leq D^2$. The literal parent average can
 still vanish when $Q_n=P_n$. The finite index set may be empty and the dimensions may be zero
@@ -235,7 +251,7 @@ Since $\rho_{n+1}(e_{pq})=r^{-n}|u_p\rangle\langle u_q|$, where
 $u_{(i,j)}=\sqrt r^{\,n}W_{n+1}|i,j\rangle$ has entries
 $(E_{\sigma_1}\cdots E_{\sigma_{n+1}})_{ij}$, the evaluation
 $E_n(X)=r^{-2}\operatorname{Tr}(Q_nX)Q_n$ holds at every length $n>0$, and
-at two sites it is the displayed $E(X)=r^{-2}\operatorname{Tr}(QX)Q$. The
+at two sites it is \eqref{eq:glm23_wha_parent_two_site_average}. The
 state tensor $A^{ij}=E_{ij}/\sqrt r$ is injective at one site and
 compatible with the operator tensor, with one output boundary for all
 positive lengths:
@@ -250,9 +266,10 @@ structure of the state boundary space. Let $A$ be compatible and injective
 after blocking $L$ sites, and let $\mathcal F$ be the space of state
 boundaries $Z$ with $Q_m\Gamma_m(Z)=\Gamma_m(Z)$ for every $m>0$. Since
 $\rho_m$ is multiplicative for $m>0$ and $\rho_1(1)=I$,
-\[
+\begin{align}
     (I\otimes Q_m)Q_{m+1}=Q_{m+1}=(Q_m\otimes I)Q_{m+1},
-\]
+    \label{eq:glm23_wha_parent_unit_nesting}
+\end{align}
 so fixing the first or the last site of a vector fixed by $Q_{m+1}$ gives a
 vector fixed by $Q_m$. As
 $\Gamma_{m+1}(Z)(j\sigma)=\Gamma_m(ZA^j)(\sigma)$ and

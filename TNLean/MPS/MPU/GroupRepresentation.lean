@@ -204,7 +204,7 @@ theorem IsRepresentation.sameMPV₂Pos_mulTensor [Group G]
 
 /-- Simultaneously block every tensor in a group family by `L` physical sites. -/
 noncomputable def block (F : GroupFamily G d) (L : ℕ) :
-    GroupFamily G (MPSTensor.blockPhysDim d L) where
+    GroupFamily G (Kraus.blockPhysDim d L) where
   bondDim := F.bondDim
   bondDim_pos := F.bondDim_pos
   tensor g := MPOTensor.blockTensor (F.tensor g) L
@@ -218,7 +218,7 @@ private theorem injective_blockTensor (F : GroupFamily G d) (g : G)
   have hMul : Kraus.IsNBlkInjective (F.tensor g).toMPSTensor (L * 1) :=
     MPSTensor.isNBlkInjective_mul_of_isNBlkInjective
       (F.tensor g).toMPSTensor hL hOne
-  exact (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective
+  exact (Kraus.isNBlkInjective_iff_blockTensor_isInjective
     (F.tensor g).toMPSTensor L).1 (by simpa using hMul)
 
 private theorem operator_one_block [Group G] (F : GroupFamily G d)
@@ -274,7 +274,7 @@ theorem IsRawRepresentation.of_isNBlkInjective [Group G] (F : GroupFamily G d)
   isMPUPos g := (hMPU g).blockTensor L hL
   isInjective g := by
     rw [GroupFamily.block, isInjective_toMPSTensor_blockTensor_iff]
-    exact (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective _ L).1 (hInj g)
+    exact (Kraus.isNBlkInjective_iff_blockTensor_isInjective _ L).1 (hInj g)
   operator_one N hN := operator_one_block F hOne hL N hN
   operator_mul g h N hN := operator_mul_block F hMul hL g h N hN
 

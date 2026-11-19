@@ -29,6 +29,8 @@ is the final conversion that turns an explicit local gauge formula into that
 sharper datum.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

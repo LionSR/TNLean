@@ -293,10 +293,8 @@ theorem intermediateRanks_eq_phys_of_even_mpo_eq_adjoint
     (hTR : ∀ N : ℕ, 1 < N → Even N → mpo W N = (mpo W N)ᴴ) :
     r = d ∧ ℓ = d := by
   have hEq : ∀ N : ℕ, 1 < N → Even N →
-      mpo W N = mpo (physicalAdjointTensor W) N := by
-    intro N hN heven
-    rw [mpo_physicalAdjointTensor_eq_conjTranspose]
-    exact hTR N hN heven
+      mpo W N = mpo (physicalAdjointTensor W) N :=
+    fun N hN heven ↦ (hTR N hN heven).trans (mpo_physicalAdjointTensor_eq_conjTranspose W N).symm
   have hsame := hW.source_ranks_eq_of_mpo_eq_even hW.physicalAdjointTensor hEq
   have hbalanced : ℓ[W] = r[W] := by
     simpa only [rightRank_physicalAdjointTensor] using hsame.1

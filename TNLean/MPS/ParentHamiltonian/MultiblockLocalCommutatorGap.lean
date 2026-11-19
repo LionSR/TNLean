@@ -45,7 +45,7 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem bulkObservable_iSup_groundSpace_projection_norm_sq_tendsto_zero
     (A : ∀ i, MPSTensor d (D i))
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
-    (hP : ∀ i, IsPrimitiveMPS (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
+    (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     (α : ι) {k : ℕ} (hk : 0 < k) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
@@ -85,7 +85,7 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem multiblock_commutator_gap_of_bulkObservable_energy_limit
     (A : ∀ i, MPSTensor d (D i))
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
-    (hP : ∀ i, IsPrimitiveMPS (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
+    (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     (α : ι) {k : ℕ} (hk : 0 < k) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
@@ -137,7 +137,7 @@ Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
 theorem multiblock_localCommutator_gap_of_openInteraction_gap
     (A : ∀ i, MPSTensor d (D i))
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
-    (hP : ∀ i, IsPrimitiveMPS (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
+    (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     (α : ι) {R k : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
@@ -184,7 +184,7 @@ and Section 6; CPGSV21, arXiv:2011.12127, lines 2170--2172. -/
 theorem exists_pos_multiblock_localCommutator_gap_of_isParentInteraction
     (μ : Fin b → ℂ) (A : ∀ i, MPSTensor d (D i)) (hμ : ∀ i, μ i ≠ 0)
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
-    (hP : ∀ i, IsPrimitiveMPS (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
+    (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     {S R : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : IsParentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R
@@ -231,7 +231,7 @@ Section 6, lines 2649--2675. -/
 theorem exists_pos_multiblock_localCommutator_gap_of_wordTupleSpanTop
     (μ : Fin b → ℂ) (A : ∀ i, MPSTensor d (D i)) (hμ : ∀ i, μ i ≠ 0)
     (ρ : ∀ i, Matrix (Fin (D i)) (Fin (D i)) ℂ)
-    (hP : ∀ i, IsPrimitiveMPS (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
+    (hP : ∀ i, Kraus.HasComplementaryFixedPointGap (A i) (ρ i)) (hρ : ∀ i, (ρ i).PosDef)
     {S R : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hR : S + 1 ≤ R) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ α : Fin b, ∀ {k : ℕ}
       (X : Matrix (Cfg d k) (Cfg d k) ℂ),

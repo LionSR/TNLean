@@ -27,6 +27,8 @@ Supporting ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1311–1333,
 and its use in the soft construction, lines 1373–1420.
 -/
 
+open ManyBody (interval)
+
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator
 

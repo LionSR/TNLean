@@ -657,6 +657,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
         MPSTensor.CyclicResetCounterexample.square_isTP,
         MPSTensor.CyclicResetCounterexample.root_isChannel,
         MPSTensor.CyclicResetCounterexample.square_isChannel,
+        MPSTensor.CyclicResetCounterexample.square_map_apply,
         MPSTensor.CyclicResetCounterexample.transferMap_square_eq_pow,
         MPSTensor.CyclicResetCounterexample.square_isIrreducibleFamily,
         MPSTensor.CyclicResetCounterexample.root_isIrreducibleFamily,
@@ -697,6 +698,43 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     selecting a different root remains possible. See
     \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \end{remark}
+
+\begin{lemma}[A bounded alternative root of the cyclic-reset square]
+    \label{lem:periodic_cyclic_reset_alternative_root}
+    \lean{MPSTensor.CyclicResetCounterexample.alternativeRoot,
+        MPSTensor.CyclicResetCounterexample.alternativeRoot_isTP,
+        MPSTensor.CyclicResetCounterexample.alternativeRoot_isChannel,
+        MPSTensor.CyclicResetCounterexample.choiRank_alternativeRoot,
+        MPSTensor.CyclicResetCounterexample.transferMap_square_eq_alternativeRoot_pow,
+        MPSTensor.CyclicResetCounterexample.square_isPRefinable}
+    \leanok
+    \uses{thm:periodic_supplied_root_rank_obstruction, def:p_refinable}
+    The nine-letter cyclic-reset tensor $B$ of
+    Lemma~\ref{thm:periodic_supplied_root_rank_obstruction} is $2$-refinable.
+    In coordinates $0,\ldots,6$, write $E_{ab}=|a\rangle\langle b|$ and set
+    \begin{align}
+        (K_0,\ldots,K_6) & =
+        \left(\frac{E_{10}}{\sqrt2},\frac{E_{20}}{\sqrt2},
+        E_{31}+E_{42},E_{53},E_{54},E_{65},E_{06}\right).
+        \label{eq:periodic_cyclic_reset_alternative_kraus}
+    \end{align}
+    The channel $\mathcal G(X)=\sum_jK_jXK_j^*$ has Choi rank seven
+    and satisfies $\mathcal G^2=\mathcal E_B$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_choi_rank_kraus_span, thm:periodic_refinement_from_bounded_root}
+    Summing $K_j^*K_j$ gives $I_7$. The seven Kraus matrices are
+    linearly independent, as seen from their entries at
+    $(1,0),(2,0),(3,1),(5,3),(5,4),(6,5),(0,6)$.
+    Compared with the original root, only the branch between the two
+    two-dimensional sectors changes: it now carries coordinates $(1,2)$
+    unitarily to $(3,4)$. The preceding reset prepares $I_2/2$, which
+    this unitary preserves, and the following reset takes the trace.
+    Computing the two compositions therefore gives
+    $\mathcal G^2=\mathcal E_B$. Pad the seven Kraus matrices with two
+    zeros and apply Lemma~\ref{thm:periodic_refinement_from_bounded_root}.
+\end{proof}
 
 \begin{lemma}[Refinement from a root with bounded Kraus rank]
     \label{thm:periodic_refinement_from_bounded_root}
@@ -845,6 +883,69 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     Since a completely positive map admits a Kraus representation with as many
     operators as its Choi rank,
     Lemma~\ref{thm:periodic_refinement_from_bounded_root} applies.
+\end{proof}
+
+\begin{lemma}[Dimension of an all-singular qubit matrix space]
+    \label{lem:periodic_qubit_singular_span_dimension}
+    \lean{Matrix.finrank_le_two_of_forall_det_eq_zero_fin_two}
+    \leanok
+    A complex linear subspace $S\subseteq M_2(\C)$ consisting entirely
+    of singular matrices has dimension at most two.
+\end{lemma}
+
+\begin{proof}\leanok
+    Polarizing determinant gives the nondegenerate bilinear form
+    \begin{align}
+        b(A,B) & =\det(A+B)-\det A-\det B\notag                        \\
+               & =A_{00}B_{11}+A_{11}B_{00}-A_{01}B_{10}-A_{10}B_{01}.
+        \notag
+    \end{align}
+    The hypothesis gives $S\subseteq S^{\perp_b}$. Nondegeneracy implies
+    $\dim S^{\perp_b}=4-\dim S$, hence $\dim S\le2$.
+\end{proof}
+
+\begin{lemma}[Root rank for all qubit channels]
+    \label{lem:periodic_qubit_root_rank}
+    \lean{Channel.choiRank_le_pow_fin_two}
+    \leanok
+    Let $\mathcal F$ be a channel on $M_2(\C)$ and let $p>0$. Then
+    $\operatorname{rank}_{\mathrm{Choi}}\mathcal F\le
+        \operatorname{rank}_{\mathrm{Choi}}\mathcal F^p$.
+    The power may be singular or reducible.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_qubit_singular_span_dimension, thm:periodic_root_word_span_dimension,
+        thm:periodic_choi_rank_kraus_span, thm:periodic_injective_composition_choi_rank}
+    Put $r=\operatorname{rank}_{\mathrm{Choi}}\mathcal F$ and
+    $s=\operatorname{rank}_{\mathrm{Choi}}\mathcal F^p$.
+    If $s\le1$, the power has one normalized Kraus matrix and is
+    invertible. Thus $\mathcal F$ is injective and the injective positive
+    rank inequality applies. Otherwise $s\ge2$, so $r\le2$ suffices.
+    If $r>2$, the preceding lemma supplies an invertible member of the
+    root's Kraus span. The word-span inequality then gives $r\le s$.
+\end{proof}
+
+\begin{lemma}[Refinement for every bond-dimension-two tensor]
+    \label{lem:periodic_qubit_refinement}
+    \lean{MPSTensor.isPRefinable_of_isPDivisibleChannel_fin_two}
+    \leanok
+    \uses{def:p_refinable, def:p_divisible_channel}
+    Let $B$ have physical dimension $d$ and bond dimension two. For every $p>0$,
+    $p$-divisibility of $\mathcal E_B$ implies that $B$ is $p$-refinable.
+    This includes singular and reducible transfer maps and assumes no
+    canonical form, bounded root, or invertible root span.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:periodic_qubit_root_rank, thm:periodic_refinement_from_bounded_root}
+    Every channel root $\mathcal F$ with $\mathcal F^p=\E_B$ satisfies
+    \begin{align}
+        \operatorname{rank}C_{\mathcal F}\le
+        \operatorname{rank}C_{\E_B}\le d. \notag
+    \end{align}
+    Choose a minimal Kraus representation of $\mathcal F$, pad it to $d$
+    letters, and apply the bounded-root refinement theorem.
 \end{proof}
 
 \begin{remark}[Continuum-limit application]\notready
