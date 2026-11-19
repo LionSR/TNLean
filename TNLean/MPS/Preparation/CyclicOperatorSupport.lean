@@ -6,13 +6,13 @@ Authors: TNLean contributors
 import TNLean.MPS.Preparation.WindowOperatorSupport
 import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.Algebra.FinCyclicInduction
-import QICLean.ManyBody.Sites.Relabel
+import TNLean.Algebra.SupportedOperatorsSitePermutation
 
 /-!
 # Support of operators on a cyclic bond
 
 Permuting the sites of a chain permutes the support of every operator
-(`QuantumCircuit.supportedOperators_submatrix_siteEquiv`). Translating a
+(`ManyBody.submatrix_comp_perm_mem_supportedOperators`). Translating a
 two-site window around the ring therefore places it in the algebra of its cyclic bond,
 including the bond joining the last site to the first. The argument also applies to a
 two-site ring, whose two oriented bonds have the same underlying support.
@@ -33,24 +33,6 @@ namespace MPSPreparation
 open QuantumCircuit
 
 variable {d N : ℕ}
-
-/-- Relabelling the sites of a configuration by a permutation `p` carries operators supported
-on `S` to operators supported on `p '' S`; the case of
-`ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators` with the identity on labels. -/
-private theorem supportedOperators_submatrix_siteEquiv {ι : Type*} [Fintype ι] [DecidableEq ι]
-    {S : Finset ι} (p : Equiv.Perm ι) {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
-    A.submatrix (fun σ ↦ σ ∘ p) (fun σ ↦ σ ∘ p) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
-        (S.image p) := by
-  have h := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators
-    (X := fun _ : ι ↦ Fin d) (X' := fun _ : ι ↦ Fin d) p (fun _ ↦ Equiv.refl _)
-    (D := S) (D' := S.image p) (fun v ↦ by simp) hA
-  have hsymm : ⇑(ManyBody.siteConfigurationEquiv (X := fun _ : ι ↦ Fin d)
-      (X' := fun _ : ι ↦ Fin d) p (fun _ ↦ Equiv.refl _)).symm = fun σ ↦ σ ∘ p := by
-    funext σ v
-    rw [ManyBody.siteConfigurationEquiv_symm_apply]
-    rfl
-  rwa [Matrix.reindex_apply, hsymm] at h
 
 /-- A two-site operator on a cyclic bond acts on that bond, including the bond crossing
 from the last site to the first. Source context: arXiv:1010.3732, Appendix C,
@@ -79,7 +61,7 @@ theorem embedLocalOperator_twoSite_mem_supportedOperators [NeZero N] (hN : 2 ≤
     · have : k = 1 := Fin.ext (by simpa [Fin.val_one, Nat.mod_eq_of_lt hN] using hk')
       simp [ringBond, this]
   · intro i hi
-    have h := supportedOperators_submatrix_siteEquiv (finRotate N) hi
+    have h := ManyBody.submatrix_comp_perm_mem_supportedOperators (finRotate N) hi
     have himage : (ringBond i).image (finRotate N) = ringBond (i + 1) := by
       ext k
       simp [ringBond, finRotate_apply, add_assoc]

@@ -20,7 +20,7 @@ equations (3.1)–(3.6); applied to the physical-path argument of
 Schuch–Pérez-García–Cirac, arXiv:1010.3732, Section II.F, lines 929–953.
 -/
 
-open TNLean.Lattice Matrix
+open ManyBody Matrix
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
 namespace MPSTensor

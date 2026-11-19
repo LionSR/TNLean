@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.AreaLaw
-import QICLean.ManyBody.Sites.Relabel
+import TNLean.Algebra.SupportedOperatorsSitePermutation
 
 /-!
 # Cyclic relocation of actual finite MPO conjugation
@@ -55,24 +55,6 @@ theorem mpo_adjointConjugation_submatrix_rotateConfig
     ← Matrix.conjTranspose_submatrix]
   simp only [mpo_submatrix_rotateConfig]
 
-/-- Relabelling the sites of a configuration by a permutation `p` carries operators supported
-on `S` to operators supported on `p '' S`; the case of
-`ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators` with the identity on labels. -/
-private theorem supportedOperators_submatrix_siteEquiv {d : ℕ} {ι : Type*} [Fintype ι]
-    [DecidableEq ι] {S : Finset ι} (p : Equiv.Perm ι) {A : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
-    A.submatrix (fun σ ↦ σ ∘ p) (fun σ ↦ σ ∘ p) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
-        (S.image p) := by
-  have h := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators
-    (X := fun _ : ι ↦ Fin d) (X' := fun _ : ι ↦ Fin d) p (fun _ ↦ Equiv.refl _)
-    (D := S) (D' := S.image p) (fun v ↦ by simp) hA
-  have hsymm : ⇑(ManyBody.siteConfigurationEquiv (X := fun _ : ι ↦ Fin d)
-      (X' := fun _ : ι ↦ Fin d) p (fun _ ↦ Equiv.refl _)).symm = fun σ ↦ σ ∘ p := by
-    funext σ v
-    rw [ManyBody.siteConfigurationEquiv_symm_apply]
-    rfl
-  rwa [Matrix.reindex_apply, hsymm] at h
-
 /-- A forward finite MPO support bound relocates with the input through
 the periodic seam. Source context: arXiv:1703.09188, eq:appendix-1,
 lines 2300–2306. -/
@@ -82,7 +64,7 @@ theorem mpo_conjugation_mem_supportedOperators_rotate
     (hA : mpo U N * A * (mpo U N)ᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
     mpo U N * A.submatrix (rotateConfig N d) (rotateConfig N d) * (mpo U N)ᴴ ∈
       ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image (finRotate N)) := by
-  have h := supportedOperators_submatrix_siteEquiv (finRotate N) hA
+  have h := ManyBody.submatrix_comp_perm_mem_supportedOperators (finRotate N) hA
   change (mpo U N * A * (mpo U N)ᴴ).submatrix (rotateConfig N d) (rotateConfig N d) ∈
     ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image (finRotate N)) at h
   simpa only [mpo_conjugation_submatrix_rotateConfig] using h
@@ -98,7 +80,7 @@ theorem mpo_adjointConjugation_mem_supportedOperators_rotate
     (hA : (mpo U N)ᴴ * A * mpo U N ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
     (mpo U N)ᴴ * A.submatrix (rotateConfig N d) (rotateConfig N d) * mpo U N ∈
       ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image (finRotate N)) := by
-  have h := supportedOperators_submatrix_siteEquiv (finRotate N) hA
+  have h := ManyBody.submatrix_comp_perm_mem_supportedOperators (finRotate N) hA
   change ((mpo U N)ᴴ * A * mpo U N).submatrix (rotateConfig N d) (rotateConfig N d) ∈
     ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image (finRotate N)) at h
   simpa only [mpo_adjointConjugation_submatrix_rotateConfig] using h

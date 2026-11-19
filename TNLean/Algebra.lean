@@ -223,6 +223,7 @@ import TNLean.Algebra.StarSubalgebraEquiv
 import TNLean.Algebra.SubmoduleStarProjectionMatrix
 import TNLean.Algebra.Subquotient
 import TNLean.Algebra.SupportedIsometricCompression
+import TNLean.Algebra.SupportedOperatorsSitePermutation
 import TNLean.Algebra.SupportedRangeProjector
 import TNLean.Algebra.SupportedRangeProjectorNorm
 import TNLean.Algebra.SwapKronecker

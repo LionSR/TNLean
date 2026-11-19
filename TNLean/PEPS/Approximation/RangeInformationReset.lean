@@ -63,7 +63,7 @@ noncomputable section
 
 namespace TNLean.PEPS.Approximation
 
-open TNLean.Lattice AreaLaw
+open ManyBody AreaLaw
 
 /-! ### The constants -/
 
@@ -142,7 +142,7 @@ end TNLean.PEPS.Approximation
 
 namespace ManyBody.PlaneInteraction
 
-open TNLean.Lattice
+open ManyBody
 
 open TNLean.PEPS.Approximation TNLean.PEPS.AreaLaw
 
