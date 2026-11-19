@@ -34,6 +34,27 @@ diagrams are drawn by the companion package
 [tenkz](https://github.com/LionSR/tenkz), pinned from `tenkz.toml`. Every
 result is checked by Lean down to the axioms it assumes.
 
+## Highlights
+
+- **The area law in two dimensions.** For every finite domain of the square
+  lattice, a unique ground state of a finite-range Hamiltonian with a
+  spectral gap has entanglement entropy across any cut bounded by a constant
+  times the number of edges crossing it. The constant depends only on the
+  local dimension, the range, the interaction strength and the gap, and is
+  given in closed form.
+- **Gapped ground states are PEPS.** On the `L × L` square grid, such a
+  ground state lies within distance `1/L` of a projected entangled pair
+  state of bond dimension polynomial in `L`.
+- **The fundamental theorem of matrix product states**, in its single-block
+  and general forms, together with the canonical forms, the quantum
+  Perron-Frobenius theory and the quantum Wielandt inequality it rests on.
+- **The one-dimensional theory of gapped chains**: Hastings' area law,
+  approximation by matrix product states of polynomial bond dimension, and
+  the analysis behind the polynomial-time ground-state algorithm.
+- **Scale.** About 5,600 Lean files and 1.2 million lines here, on top of
+  1,800 files and 400,000 lines in QICLean, with no `sorry` and no `axiom`
+  declaration in either source tree at the time of writing.
+
 The first released part of the library is the **fundamental theorem of matrix
 product states** (Pérez-García, Verstraete, Wolf, Cirac 2007; Cirac,
 Pérez-García, Schuch, Verstraete 2017): two tensors generate the same quantum
@@ -111,6 +132,35 @@ of an injective MPS induces a projective representation on the bond space,
 whose cohomology class is a well-defined invariant of the symmetric tensor.
 This is the MPS ingredient in the classification of one-dimensional
 symmetry-protected topological phases.
+
+### Area laws for gapped ground states
+
+The two-dimensional area law is stated for an arbitrary finite set `Λ` of
+sites of the square lattice, with local dimension `q`, interaction range `R`,
+terms of norm at most `J`, and gap `Δ`. The constant `C` is chosen before the
+domain, the Hamiltonian, the state, and the region `A`:
+
+```lean
+theorem TNLean.PEPS.AreaLaw.uniformAreaLaw :
+    ∀ q : ℕ, 1 ≤ q → ∀ R : ℕ, ∀ J Δ : ℝ, 0 < J → 0 < Δ →
+      ∃ C : ℝ, 0 ≤ C ∧
+        ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R,
+          (∀ X, (h.term X).IsHermitian) → (∀ X, ‖h.term X‖ ≤ J) →
+          ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+            ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+            groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+              ∀ A : Finset (Site Λ),
+                regionalEntropy Λ q Ω A ≤ C * (edgeBoundary Λ A).card
+```
+
+(The Lean source names this proposition `UniformAreaLaw`; it is unfolded
+here.) The companion theorem
+`TNLean.PEPS.Approximation.polynomialPEPSApproximation` gives the
+approximation by PEPS of polynomial bond dimension on the square grid. Both
+follow the OpenAI preprints of September 2026 listed in the references and
+were formalized independently from the manuscripts. The one-dimensional
+analogues, the area law and the approximation by MPS, are proved natively on
+the chain in `TNLean/MPS/AreaLaw`.
 
 ### The quantum-information layer
 
