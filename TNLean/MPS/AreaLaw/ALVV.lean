@@ -49,6 +49,8 @@ import TNLean.MPS.AreaLaw.ALVV.LDCanonicalNodeEvent
 import TNLean.MPS.AreaLaw.ALVV.LDCanonicalTree
 import TNLean.MPS.AreaLaw.ALVV.LargeGapComparison
 import TNLean.MPS.AreaLaw.ALVV.LongIntervalSoftImprovingFamily
+import TNLean.MPS.AreaLaw.ALVV.LowDensityAlgorithmOutput
+import TNLean.MPS.AreaLaw.ALVV.LowDensityOutputParameters
 import TNLean.MPS.AreaLaw.ALVV.MergeRounds
 import TNLean.MPS.AreaLaw.ALVV.NativeLongIntervalSoftFamily
 import TNLean.MPS.AreaLaw.ALVV.PhysicalDGRootEnergyAssignment

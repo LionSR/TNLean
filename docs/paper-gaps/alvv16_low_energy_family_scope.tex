@@ -237,21 +237,53 @@ hypothesis is drawn from the printed output clause; the formal statement is
 the existence content above.
 
 \paragraph{The printed output clause.}
-Theorem~6.3 (t:alg2) of \cite{Arad2016RigorousRG}, in the official arXiv v2
-text, specifies as its output $r$ orthonormal states of energy at most
-$E_0+\eta-\mu+\delta$, together with a success probability and a
-quasi-polynomial running time.\footnote{The transcription was recorded in
-    the combined review of the constant-node tree,
-    \url{https://github.com/LionSR/TNLean/pull/10886}.} The comparison of this clause with the
-formalized output is open. The formalized output gives, for the window
-$G(\eta-3w)$, a space of matrix product states of the window's dimension
-that is mutually $\delta$-close to it, and a Ritz space of the same dimension
-whose vectors have energy at most
-$E_0+((1+1/\rho)(\eta-3w)+(1+\rho)\|H-E_0\|\delta)/(1-\delta)$ for every
-$\rho>0$. Whether the number of states, the orthonormality and the printed
-energy bound follow from these, and under which identification of the
-source's $\mu$, $\eta$ and $\delta$ with the parameters here, is not
-established. The running time is outside the formalization; the success
+Theorem~6.3 (t:alg2) of \cite{Arad2016RigorousRG}, lines 1869--1870 of the
+arXiv v2 source, reads: ``Let $H$ be a local Hamiltonian satisfying
+Assumption (LD), $\eta>0$ the associated energy parameter,
+$\mu=\Omega(1/\log n)$ and $\delta\ge\mathrm{poly}^{-1}(n)$. With probability at
+least $1-\frac1n$ the set $\{|z_i\rangle\}$ returned by
+$\mathrm{LOW}(H,\delta,(\eta,\mu))$ is an orthonormal set of $r$ states each
+having energy at most $\varepsilon_0+\eta-\mu+\delta$ with respect to $H$. The
+algorithm runs in time $2^{\mathrm{poly}\log(n)}$.'' The count $r$ is that of
+Assumption (LD), lines 282--284: ``The dimension of the space of all
+eigenvectors of $H$ with eigenvalue in the range
+$[\varepsilon_0,\varepsilon_0+\eta]$, for some constant $\eta>0$, is
+$r=\mathrm{poly}(n)$.'' The remark after the theorem, line 1880, justifies the
+energy bound by noting that ``the closest vectors to
+$H_{[\varepsilon_0,\varepsilon_0+\eta-\mu]}$ in $W$ will have this property''.
+The formalized output is compared with this clause as
+follows.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_low_density_tree_algorithm_output}.}
+Write $x=\eta_{\rm LD}-3w(\lceil\log_2L\rceil+1)$ for the top of the shortened
+window $G(x)$ and $A=\|H-E_0\|$. For every $0<\delta<1$ choose
+$\rho=3x/\delta+1$ and the refinement accuracy
+\begin{align}
+    \delta'=\min\Bigl(\tfrac12,\ \frac{\delta}{3((1+\rho)A+x+\delta+1)}\Bigr),
+    \label{eq:ld_scope_output_accuracy}
+\end{align}
+so that $((1+1/\rho)x+(1+\rho)A\delta')/(1-\delta')\le x+\delta$. The
+refinement at accuracy $\delta'$ then contains, in the Ritz space of $H$
+compressed to it, $\dim G(x)$ orthonormal matrix product states, each of
+energy at most
+\begin{align}
+    E_0+\eta_{\rm LD}-3w(\lceil\log_2L\rceil+1)+\delta.
+    \label{eq:ld_scope_output_energy}
+\end{align}
+Reading the source's $\eta$ as $\eta_{\rm LD}$ and its buffer as
+$w=\mu/(3\log n)$ with the natural logarithm, $\mu\le3w(\lceil\log_2L\rceil+1)$
+for $L\ge2$ and $\mu\ge0$, since
+$\log L\le\lceil\log_2L\rceil\log2\le\lceil\log_2L\rceil+1$. The
+bound~\eqref{eq:ld_scope_output_energy} is therefore at most the printed
+$E_0+\eta-\mu+\delta$. The orthonormality and the energy bound of the printed
+clause are thus recovered. The number of states is not: it is
+$r'=\dim G(x)$, whereas the printed count is $r=\dim G(\eta_{\rm LD})$. Since
+$x<\eta_{\rm LD}$, $r'\le r$, with equality only when $H$ has no eigenvalue in
+$(E_0+x,E_0+\eta_{\rm LD}]$. Whether $r$ orthonormal states of energy at most
+$E_0+\eta-\mu+\delta$ can be extracted is not established; the remark of
+line 1880 argues through the closest vectors to $G(\eta-\mu)$, a space of
+dimension at most $\dim G(\eta-\mu)\le r$. This
+is a \emph{scope restriction}, recorded in the output module. The states are
+an orthonormal basis of a Ritz space, not eigenstates. The running time is
+outside the formalization; the success
 probability is treated in the next paragraph.
 
 \paragraph{Success probability of the sampled tree.}
@@ -338,7 +370,10 @@ orthonormal basis of MPS. The sampled merge tree is constructed as above,
 and its randomly sampled version succeeds outside an event of probability
 at most $(L-1)\beta$; an explicit bound on its reference bond, the root
 output on that event, a running-time bound and identification with the
-printed algorithm remain separate. Closed spectral
+printed algorithm remain separate. For the tree whose samples are asserted to
+exist, the output of orthonormal states of energy at most the printed bound
+is proved, with the number of states left as the scope restriction of the
+paragraph on the printed output clause. Closed spectral
 cutoffs and the absence of a positivity claim for the Chebyshev polynomial
 follow the companion spectral-projector and positivity notes.
 
