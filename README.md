@@ -23,122 +23,42 @@
 
 TNLean is a [Lean 4](https://lean-lang.org/) library, built on
 [Mathlib](https://github.com/leanprover-community/mathlib4), that formalizes
-the mathematics of tensor networks: matrix product states (MPS), their
-canonical forms and gauge structure, and the theorems that classify them;
-parent Hamiltonians, matrix product operators, symmetries, and projected
-entangled pair states (PEPS); the preparation of these states by quantum
-circuits; and area laws for ground states of gapped Hamiltonians. The
-quantum-information theory this rests on lives in the companion library
-[QICLean](https://github.com/LionSR/QICLean), which TNLean builds on. Blueprint
-diagrams are drawn by the companion package
-[tenkz](https://github.com/LionSR/tenkz), pinned from `tenkz.toml`. Every
-result is checked by Lean down to the axioms it assumes.
+the mathematics of tensor networks: matrix product states (MPS), projected
+entangled pair states (PEPS), and the theorems about them. The
+quantum-information theory it rests on lives in the companion library
+[QICLean](https://github.com/LionSR/QICLean).
 
 ## Highlights
 
-- **The area law in two dimensions.** For every finite domain of the square
-  lattice, a unique ground state of a finite-range Hamiltonian with a
-  spectral gap has entanglement entropy across any cut bounded by a constant
-  times the number of edges crossing it. The constant depends only on the
-  local dimension, the range, the interaction strength and the gap, and is
-  given in closed form.
+- **The area law in two dimensions.** On every finite domain of the square
+  lattice, the unique ground state of a gapped finite-range Hamiltonian has
+  entanglement entropy across any cut at most a constant times the number of
+  edges crossing it.
 - **Gapped ground states are PEPS.** On the `L × L` square grid, such a
-  ground state lies within distance `1/L` of a projected entangled pair
-  state of bond dimension polynomial in `L`.
-- **The fundamental theorem of matrix product states**, in its single-block
-  and general forms, together with the canonical forms, the quantum
-  Perron-Frobenius theory and the quantum Wielandt inequality it rests on.
-- **The one-dimensional theory of gapped chains**: Hastings' area law,
-  approximation by matrix product states of polynomial bond dimension, and
-  the analysis behind the polynomial-time ground-state algorithm.
-- **Scale.** About 5,600 Lean files and 1.2 million lines here, on top of
-  1,800 files and 400,000 lines in QICLean, with no `sorry` and no `axiom`
-  declaration in either source tree at the time of writing.
-
-The first released part of the library is the **fundamental theorem of matrix
-product states** (Pérez-García, Verstraete, Wolf, Cirac 2007; Cirac,
-Pérez-García, Schuch, Verstraete 2017): two tensors generate the same quantum
-states at every system size exactly when an invertible change of basis on the
-bond indices, a gauge transformation, relates them. Proving this required
-formalizing the quantum-information theory the proof rests on — channel
-representations, Schwarz inequalities, quantum Perron-Frobenius theory, and
-the quantum Wielandt inequality — now developed in
-[QICLean](https://github.com/LionSR/QICLean) following Wolf's *Quantum
-Channels & Operations*. The library also contains material beyond the fundamental
-theorem, at varying levels of completeness; the sections below say what is
-proved and what is not.
+  ground state lies within distance `1/L` of a PEPS of bond dimension
+  polynomial in `L`.
+- **The fundamental theorem of matrix product states**: two tensors generate
+  the same states at every system size exactly when a gauge transformation
+  relates them.
+- **Gapped chains**: Hastings' area law, approximation by MPS of polynomial
+  bond dimension, and the analysis behind the polynomial-time ground-state
+  algorithm.
+- **Scale.** About 1.2 million lines of Lean here and 400,000 in QICLean.
 
 The mathematics is written up in the
-[blueprint](https://sirui-lu.com/TNLean/blueprint/), which states each
-definition and theorem in ordinary mathematical language and links it to the
-Lean proof. It is available as a
-[web version](https://sirui-lu.com/TNLean/blueprint/), a
-[full PDF](https://sirui-lu.com/TNLean/blueprint.pdf), and a
-[separate FT-MPS PDF](https://sirui-lu.com/TNLean/blueprint-ch01-12.pdf),
-the fundamental-theorem part that is being released first. The generated
-[API documentation](https://sirui-lu.com/TNLean/docs/) covers every
-declaration in the Lean source.
+[blueprint](https://sirui-lu.com/TNLean/blueprint/)
+([PDF](https://sirui-lu.com/TNLean/blueprint.pdf),
+[FT-MPS volume](https://sirui-lu.com/TNLean/blueprint-ch01-12.pdf)), which
+states each result in ordinary mathematical language and links it to its Lean
+proof. The agent-driven workflow behind the library is described in S. Lu,
+E. Tjoa, J. I. Cirac, *Multi-agent Autoformalization of Tensor Network
+Theory*, [arXiv:2607.07857](https://arxiv.org/abs/2607.07857); most of the
+formalization was carried out by agents running on [TeXRA](https://texra.ai).
 
-New to the repository? [`docs/getting_started.md`](docs/getting_started.md)
-walks through building the library, finding your way around the source, and
-making a first contribution.
+## Main theorems
 
-The agent-driven workflow used to build this library is described in the
-companion paper: S. Lu, E. Tjoa, J. I. Cirac, *Multi-agent Autoformalization
-of Tensor Network Theory*,
-[arXiv:2607.07857](https://arxiv.org/abs/2607.07857). Most of the
-formalization was carried out by agents running on
-[TeXRA](https://texra.ai), whose `lean-env-action` also sets up the Lean and
-blueprint toolchain used in the workflows under `.github/workflows/`.
-
-The library loads as a single import (Lean 4 / Mathlib `v4.36.0-rc1`):
-
-```lean
-import TNLean
-```
-
-This is a research formalization in progress, not a finished textbook. Some
-files contain unfinished proofs (`sorry`) or results assumed as axioms; the
-badges above track the current counts.
-
-## What is proved
-
-### The fundamental theorem of matrix product states
-
-An MPS describes a quantum state on a chain by assigning a matrix `A^i` to
-each local basis state; products of these matrices give the state's
-coefficients. The library defines these tensors (`MPSTensor d D`) and proves
-the fundamental theorem in both of its forms.
-
-The single-block case: if a tensor is injective (its matrices span the full
-matrix algebra) and two tensors generate the same states, then they are
-related by a gauge transformation.
-
-```lean
-theorem MPSTensor.fundamentalTheorem_singleBlock {A B : MPSTensor d D}
-    (hA : IsInjective A) (hAB : SameMPV A B) : GaugeEquiv A B
-```
-
-The general case: an arbitrary tensor decomposes into normal blocks, and the
-library constructs this canonical form, the basis of normal tensors that
-makes it unique, and the multi-block theorem
-(`MPSTensor.fundamentalTheorem_equal_canonicalForm`): two canonical forms
-generating the same states at every length are related by a single invertible
-gauge. The exact hypotheses of each theorem are stated in its Lean signature
-and in the blueprint.
-
-As a first physics application, the library proves that an on-site symmetry
-of an injective MPS induces a projective representation on the bond space,
-whose cohomology class is a well-defined invariant of the symmetric tensor.
-This is the MPS ingredient in the classification of one-dimensional
-symmetry-protected topological phases.
-
-### Area laws for gapped ground states
-
-The two-dimensional area law is stated for an arbitrary finite set `Λ` of
-sites of the square lattice, with local dimension `q`, interaction range `R`,
-terms of norm at most `J`, and gap `Δ`. The constant `C` is chosen before the
-domain, the Hamiltonian, the state, and the region `A`:
+The two-dimensional area law, with the constant `C` chosen before the domain
+`Λ`, the Hamiltonian, the state, and the region `A`:
 
 ```lean
 theorem TNLean.PEPS.AreaLaw.uniformAreaLaw :
@@ -153,104 +73,26 @@ theorem TNLean.PEPS.AreaLaw.uniformAreaLaw :
                 regionalEntropy Λ q Ω A ≤ C * (edgeBoundary Λ A).card
 ```
 
-(The Lean source names this proposition `UniformAreaLaw`; it is unfolded
-here.) The companion theorem
-`TNLean.PEPS.Approximation.polynomialPEPSApproximation` gives the
-approximation by PEPS of polynomial bond dimension on the square grid. Both
-follow the OpenAI preprints of September 2026 listed in the references and
-were formalized independently from the manuscripts. The one-dimensional
-analogues, the area law and the approximation by MPS, are proved natively on
-the chain in `TNLean/MPS/AreaLaw`.
+(The source names this proposition `UniformAreaLaw`; it is unfolded here.)
+The PEPS approximation is
+`TNLean.PEPS.Approximation.polynomialPEPSApproximation`. Both follow the
+OpenAI preprints of September 2026 listed in the references.
 
-### The quantum-information layer
-
-The quantum channels, Kadison-Schwarz inequalities, quantum Perron-Frobenius
-theory, and spectral results that MPS theory runs on are developed in
-[QICLean](https://github.com/LionSR/QICLean), which TNLean imports as an
-ordinary Lake dependency. TNLean keeps the tensor-side statements: transfer
-operators of MPS tensors, their spectral gaps, and the overlap and
-correlation-decay estimates phrased in terms of states.
-
-### Quantum Wielandt theory
-
-The quantum Wielandt inequality controls how quickly products of a tensor's
-matrices span the whole matrix algebra, which determines the blocking length
-after which a normal tensor becomes injective. For a normal tensor the
-library proves a spanning length of at most `D^2`, where `D` is the bond
-dimension:
+The fundamental theorem for an injective tensor:
 
 ```lean
-theorem cumulativeSpan_eq_top_of_isNormal_bound [NeZero D]
-    (A : MPSTensor d D) (hN : IsNormal A) :
-    cumulativeSpan A (D ^ 2) = ⊤
+theorem MPSTensor.fundamentalTheorem_singleBlock {A B : MPSTensor d D}
+    (hA : IsInjective A) (hAB : SameMPV A B) : GaugeEquiv A B
 ```
 
-The channel-generic form of this theory lives in QICLean; TNLean keeps the
-tensor-typed statements the canonical-form machinery consumes. Sharpening
-the bound to match the constants in the literature is ongoing.
-
-## Beyond the fundamental theorem
-
-The library has grown well past the released core. The topics below follow
-the parts of the [blueprint](https://sirui-lu.com/TNLean/blueprint/), which
-marks, theorem by theorem, what is formalized.
-
-- **Parent Hamiltonians and correlations.** Local frustration-free
-  Hamiltonians whose ground space is spanned by the MPS: ground spaces and
-  uniqueness of the ground state for injective and normal tensors, the
-  block-diagonal case, spectral-gap bounds, the observables and states of the
-  infinite chain, and exponential decay of correlations.
-- **Matrix product operators.** Matrix-product density operators and their
-  canonical forms, renormalization fixed points of pure and mixed states,
-  matrix-product unitaries with their standard forms and index, and
-  finite-propagation automorphisms of spin chains (quantum cellular
-  automata).
-- **Symmetries and phases.** On-site and virtual symmetries, string order,
-  paths of gapped parent Hamiltonians within a symmetry-protected phase,
-  gauging of matrix-product unitaries, and symmetries given by matrix
-  product operators, their fusion data, and three-cocycle anomalies.
-- **Projected entangled pair states.** The fundamental theorem for normal
-  PEPS on finite graphs, the torus, and the square lattice; injective and
-  $G$-injective tensors; ground spaces of regions and parent Hamiltonians.
-- **Quantum circuits and state preparation.** Local circuits on qudit chains
-  with measurements, teleportation, and channels; light cones and
-  Lieb-Robinson bounds; sequential generation of MPS and their preparation
-  by log-depth circuits, with matching depth lower bounds.
-- **Area laws and approximation by tensor networks.** For ground states of
-  gapped finite-range Hamiltonians: the area law on finite two-dimensional
-  lattice domains (`TNLean.PEPS.AreaLaw.uniformAreaLaw`), approximation of
-  ground states on the square grid by PEPS of polynomial bond dimension
-  (`TNLean.PEPS.Approximation.polynomialPEPSApproximation`), and the
-  one-dimensional area law with approximation by MPS of polynomial bond
-  dimension.
-- **Gapped chains.** Hastings' proof of the one-dimensional area law, the
-  relation between Rényi entropy scaling and MPS approximability, the
-  polynomial filters of Arad, Kitaev, Landau, and Vazirani, and the viable
-  sets behind the polynomial-time ground-state algorithm of Landau, Vazirani,
-  and Vidick.
-- **Examples.** Product, GHZ, W, cluster, AKLT, and Majumdar-Ghosh states,
-  product vacua with boundary states, and the Kitaev chain; symmetry
-  operators of spin chains such as CZX, Kramers-Wannier, Fibonacci, and
-  Ising, with their anomalies and condensation defects.
-
-Where a formal statement does not exactly match its cited source, the
-discrepancy is recorded as a mathematical note under `docs/paper-gaps/`,
-published at [sirui-lu.com/TNLean/paper-gaps](https://sirui-lu.com/TNLean/paper-gaps/).
+The general case, for canonical forms built from a basis of normal tensors,
+is `MPSTensor.fundamentalTheorem_equal_canonicalForm`.
 
 ## Organization of the source
 
-The generated file `TNLean.lean` collects everything imported as one library;
-legacy material in `TNLean/Archive/` is kept out of it. Directory aggregators
-are generated too. Never edit these aggregators by hand. After adding, moving,
-or removing a production `.lean` file, regenerate and check them with:
-
-```bash
-python3 scripts/generate_import_aggregators.py
-python3 scripts/generate_import_aggregators.py --check
-```
-
-See [`docs/import_structure.md`](docs/import_structure.md) for the hierarchy and
-Archive policy. The source is grouped as follows.
+`import TNLean` loads the whole library (Lean 4 / Mathlib `v4.36.0-rc1`).
+`TNLean.lean` and the directory aggregators are generated; see
+[`docs/import_structure.md`](docs/import_structure.md).
 
 | Path | Contents |
 |---|---|
@@ -275,66 +117,22 @@ Archive policy. The source is grouped as follows.
 
 ## Status
 
-The README does not track which individual results are complete; the
-authoritative, always-current picture is:
-
-- the `sorries` and `axioms` badges at the top of this page, counting
-  unfinished proofs and assumed results;
-- the [blueprint](https://sirui-lu.com/TNLean/blueprint/), which marks
-  each theorem as formalized or not; and
-- the [paper-gap notes](https://sirui-lu.com/TNLean/paper-gaps/) (`docs/paper-gaps/`), which record where a formal statement diverges from
-  its cited source.
+This is a research formalization in progress. The `sorries` and `axioms`
+badges above count unfinished proofs and assumed results, the blueprint marks
+each theorem as formalized or not, and the
+[paper-gap notes](https://sirui-lu.com/TNLean/paper-gaps/) record where a
+formal statement differs from its cited source.
 
 ## Building
 
-The Lean version is pinned by `lean-toolchain`; Mathlib is pinned in
-`lakefile.toml` and `lake-manifest.json`.
-
 ```bash
-# Download pre-built Mathlib artifacts first. Never start with `lake build`
-# in a fresh clone: Mathlib would be compiled from source, which takes hours.
+# Fetch pre-built Mathlib first; otherwise Mathlib compiles from source.
 lake exe cache get
-
-# Build the default target, which is TNLean.
 lake build
-
-# Equivalently, build the public Lean library target.
-lake build TNLean
-
-# Verify one module with the package Lean options and Mathlib standard linters.
-lake build TNLean.MPS.FundamentalTheorem.Basic
-
-# Optional fast elaboration only; this does not apply the package Lean options.
-lake env lean TNLean/MPS/FundamentalTheorem/Basic.lean
 ```
 
-On macOS, `scripts/lake_build_locked.sh` does the cache fetch and the build
-under one lock shared by all worktrees of the repository; see
-[`docs/lake_build_cache.md`](docs/lake_build_cache.md).
-
-Repository-specific notes from past Lean/Mathlib upgrades are collected in
-[`docs/upgrade_4_29.md`](docs/upgrade_4_29.md).
-
-## Blueprint and documentation
-
-The blueprint in `blueprint/` states the definitions and theorems in ordinary
-mathematical language and links each one to its Lean proof. It is built with
-`leanblueprint` on top of a successful `lake build`:
-
-```bash
-lake build TNLean
-python3 scripts/fetch_tenkz.py
-cd blueprint
-leanblueprint checkdecls
-leanblueprint web   # or: leanblueprint pdf / leanblueprint all
-```
-
-The FT-MPS release volume is built by
-`scripts/build_blueprint_ch01_12.sh` and published automatically with the
-rest of the site.
-
-Conventions for contributors are collected in `AGENTS.md`, `CLAUDE.md`, and
-`docs/`.
+See [`docs/getting_started.md`](docs/getting_started.md) for the full guide,
+including the blueprint build and the conventions for contributors.
 
 ## License
 
