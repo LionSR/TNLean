@@ -9,6 +9,10 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalLocalEnergyInputBounds
 
 /-!
 # Recorded arithmetic for local two-site matrix elements
+
+A matrix-unit term combines a weighted overlap with its local operator
+coefficient. Two levels of finite sums record the resulting local Hamiltonian
+matrix element and bound the heights of its intermediate rational operations.
 -/
 
 namespace TNLean.MPS.AreaLaw.RationalArithmeticTrace

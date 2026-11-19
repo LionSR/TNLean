@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.LocalEnergyTrace
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.NatBinaryBounds
 
 /-!
 # Polynomial schoolbook charge of a local Hamiltonian matrix element
@@ -15,47 +16,45 @@ the cost of the surrounding boundary minimization algorithm open.
 
 namespace TNLean.MPS.AreaLaw.RationalArithmeticTrace
 
-private theorem bitsMul {a b u v : ℕ} (ha : a ≤ 2 ^ u) (hb : b ≤ 2 ^ v) :
-    a * b ≤ 2 ^ (u + v) := by rw [pow_add]; exact Nat.mul_le_mul ha hb
-
-private theorem bitsMax {a b u v : ℕ} (ha : a ≤ 2 ^ u) (hb : b ≤ 2 ^ v) :
-    max a b ≤ 2 ^ (u + v) := by
-  apply max_le
-  · exact ha.trans (Nat.pow_le_pow_right (by decide) (by omega))
-  · exact hb.trans (Nat.pow_le_pow_right (by decide) (by omega))
-
-private theorem bitsPow {a u : ℕ} (k : ℕ) (ha : a ≤ 2 ^ u) :
-    a ^ k ≤ 2 ^ (u * k) := by rw [pow_mul]; exact Nat.pow_le_pow_left ha k
-
 /-- A coarse common exponent, linear in the bit budget at fixed dimensions. -/
 def localTermsBitBudget (q Da Db n m P h : ℕ) : ℕ :=
   (84 * n + 74) * (2 * P * h + h + 1) + 28 * n * (Da + Db + 2 * q) + 28 * q + 2 * m + 15
 
+/-- Bound the full local matrix-element record height by an explicit binary exponent. -/
 theorem localTermsHeight_le_two_pow {q Da Db n m P H h : ℕ} (hH : H ≤ 2 ^ h) :
     localTermsHeight q Da Db n m (H ^ (2 * P)) (2 * H) ≤
       2 ^ localTermsBitBudget q Da Db n m P h := by
-  have hM := bitsPow (2 * P) hH
-  have hC := bitsMul (show 2 ≤ 2 ^ 1 by decide) hH
+  have hM := pow_le_two_pow_mul (2 * P) hH
+  have hC := mul_le_two_pow_add (show 2 ≤ 2 ^ 1 by decide) hH
   have one : 1 ≤ (2 : ℕ) ^ 0 := by decide
   have two : 2 ≤ (2 : ℕ) ^ 1 := by decide
   have dim (a : ℕ) : a ≤ 2 ^ a := (Nat.lt_two_pow_self).le
-  have hD := bitsMul (dim Da) (dim Db)
-  have hK := bitsMul (bitsPow 2 (dim q)) (bitsPow 3 hC)
-  have hU := bitsMul (bitsPow 3 hM) (bitsMax one hK)
-  have hS := bitsMax hU (bitsPow n (bitsMul (bitsMul (bitsPow 3 hM) hD) (bitsMax one hK)))
-  have hX := bitsMul hM (bitsMax one hC)
-  have hrow := bitsPow n (bitsMul hD hK)
-  have hF := bitsMax hX (bitsMul (bitsPow (3 * n) hM) (bitsMax one hrow))
-  have hg {a u : ℕ} (ha : a ≤ 2 ^ u) := bitsMul two (bitsPow 4 ha)
-  have htransfer := bitsMax (hg (hg hX)) (bitsMul two (bitsPow 2 hU))
-  have hoverlap := bitsMax htransfer (bitsMax (hg hS) (hg (hg hF)))
-  have hV := bitsMul (bitsPow (3 * n + 2) hM) (bitsMax one (bitsMul (bitsPow 2 hC) hrow))
-  have hterm := bitsMax hoverlap (hg (bitsMax hX hV))
-  have hR := bitsMul (bitsPow 4 (dim q)) (bitsMul (bitsPow 3 hC) hrow)
-  have hN := bitsPow (3 * n + 3) hM
-  have hi := bitsMul two (bitsPow 2 (bitsMul hN (bitsMax one hR)))
-  have ho := bitsMul two (bitsPow 2 (bitsMul hN (bitsMax one (bitsMul (dim m) hR))))
-  apply (bitsMax (bitsMax hterm hi) ho).trans
+  have hD := mul_le_two_pow_add (dim Da) (dim Db)
+  have hK := mul_le_two_pow_add (pow_le_two_pow_mul 2 (dim q)) (pow_le_two_pow_mul 3 hC)
+  have hU := mul_le_two_pow_add (pow_le_two_pow_mul 3 hM) (max_le_two_pow_add one hK)
+  have hS := max_le_two_pow_add hU
+    (pow_le_two_pow_mul n (mul_le_two_pow_add (mul_le_two_pow_add (pow_le_two_pow_mul 3 hM) hD)
+      (max_le_two_pow_add one hK)))
+  have hX := mul_le_two_pow_add hM (max_le_two_pow_add one hC)
+  have hrow := pow_le_two_pow_mul n (mul_le_two_pow_add hD hK)
+  have hF := max_le_two_pow_add hX
+    (mul_le_two_pow_add (pow_le_two_pow_mul (3 * n) hM) (max_le_two_pow_add one hrow))
+  have hg {a u : ℕ} (ha : a ≤ 2 ^ u) := mul_le_two_pow_add two (pow_le_two_pow_mul 4 ha)
+  have htransfer := max_le_two_pow_add (hg (hg hX))
+    (mul_le_two_pow_add two (pow_le_two_pow_mul 2 hU))
+  have hoverlap := max_le_two_pow_add htransfer (max_le_two_pow_add (hg hS) (hg (hg hF)))
+  have hV := mul_le_two_pow_add (pow_le_two_pow_mul (3 * n + 2) hM)
+    (max_le_two_pow_add one (mul_le_two_pow_add (pow_le_two_pow_mul 2 hC) hrow))
+  have hterm := max_le_two_pow_add hoverlap (hg (max_le_two_pow_add hX hV))
+  have hR := mul_le_two_pow_add (pow_le_two_pow_mul 4 (dim q))
+    (mul_le_two_pow_add (pow_le_two_pow_mul 3 hC) hrow)
+  have hN := pow_le_two_pow_mul (3 * n + 3) hM
+  have hi := mul_le_two_pow_add two
+    (pow_le_two_pow_mul 2 (mul_le_two_pow_add hN (max_le_two_pow_add one hR)))
+  have ho := mul_le_two_pow_add two
+    (pow_le_two_pow_mul 2 (mul_le_two_pow_add hN
+      (max_le_two_pow_add one (mul_le_two_pow_add (dim m) hR))))
+  apply (max_le_two_pow_add (max_le_two_pow_add hterm hi) ho).trans
   apply Nat.pow_le_pow_right (by decide)
   unfold localTermsBitBudget
   exact le_of_eq (by ring)

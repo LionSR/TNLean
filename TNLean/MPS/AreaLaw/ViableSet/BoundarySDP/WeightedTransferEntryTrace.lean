@@ -8,6 +8,10 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.WeightedTransferBounds
 
 /-!
 # Arithmetic records for physical-pair sums in weighted transfer entries
+
+A transfer entry sums the contributions from all pairs of physical
+indices. A common denominator bounds the prefix sums and all recorded
+operands and results.
 -/
 
 namespace TNLean.MPS.AreaLaw.RationalArithmeticTrace

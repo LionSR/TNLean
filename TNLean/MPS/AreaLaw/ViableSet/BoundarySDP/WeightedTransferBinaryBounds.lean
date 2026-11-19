@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Data.Nat.Basic
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.NatBinaryBounds
 import Mathlib.Tactic.Ring
 
 /-!
@@ -21,21 +21,14 @@ transfer matrix by an explicit power of two. -/
 theorem weightedTransfer_normFactor_le_two_pow {H h Da Db q : ℕ} (hH : H ≤ 2 ^ h) :
     Da * Db * (q ^ 2 * (2 * H) ^ 3) ≤ 2 ^ (Da * Db + 2 * q + 3 * h + 3) := by
   have hq : q ^ 2 ≤ 2 ^ (2 * q) := by
-    calc
-      _ ≤ ((2 : ℕ) ^ q) ^ 2 := Nat.pow_le_pow_left Nat.lt_two_pow_self.le _
-      _ = _ := by rw [← pow_mul]; congr 1; omega
-  have hdouble : 2 * H ≤ 2 ^ (h + 1) := by
-    calc
-      _ ≤ 2 * 2 ^ h := Nat.mul_le_mul_left 2 hH
-      _ = _ := by rw [pow_succ]; ring
-  have hcube : (2 * H) ^ 3 ≤ 2 ^ (3 * h + 3) := by
-    calc
-      _ ≤ ((2 : ℕ) ^ (h + 1)) ^ 3 := Nat.pow_le_pow_left hdouble _
-      _ = _ := by rw [← pow_mul]; congr 1; omega
-  calc
-    _ ≤ 2 ^ (Da * Db) * (2 ^ (2 * q) * 2 ^ (3 * h + 3)) :=
-      Nat.mul_le_mul Nat.lt_two_pow_self.le (Nat.mul_le_mul hq hcube)
-    _ = _ := by simp only [← pow_add]; congr 1; omega
+    rw [Nat.mul_comm]
+    exact pow_le_two_pow_mul 2 Nat.lt_two_pow_self.le
+  have hdouble := mul_le_two_pow_add (show 2 ≤ 2 ^ 1 by decide) hH
+  have hcube := pow_le_two_pow_mul 3 hdouble
+  exact (mul_le_two_pow_add (u := Da * Db) Nat.lt_two_pow_self.le
+    (mul_le_two_pow_add hq hcube)).trans (by
+      apply Nat.pow_le_pow_right (by decide)
+      omega)
 
 /-- The common-denominator prefix height has an explicit polynomial binary
 exponent whenever the common local height is at most `2^h`. -/

@@ -8,6 +8,9 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalCoefficientTraceHeights
 
 /-!
 # Arithmetic records for a materialized weighted transfer matrix
+
+The full transfer matrix records each entry exactly once. The entry
+bounds control the height of the entire record and its schoolbook charge.
 -/
 
 namespace TNLean.MPS.AreaLaw.RationalArithmeticTrace
@@ -39,6 +42,7 @@ theorem weightedTransfer_value_length {q Da Db : ℕ}
   apply value_length_of_run_erase
   rw [erase_weightedTransfer, RationalGramContractionCost.run_weightedTransfer]
 
+/-- The entrywise bound controls all operations in the stored transfer matrix. -/
 theorem weightedTransfer_maxHeight_le {q Da Db M C : ℕ}
     (A : Fin q → RationalRectMatrixCode (Fin Da) (Fin Da))
     (B : Fin q → RationalRectMatrixCode (Fin Db) (Fin Db))
@@ -62,6 +66,7 @@ theorem weightedTransfer_maxHeight_le {q Da Db M C : ℕ}
   exact (maxHeight_le_iff _ _).mp
     (weightedTransferEntry_maxHeight_le A B W a c hM hA hB hW nA nB nW) op hc
 
+/-- Bound the schoolbook charge using the exact matrix operation count and height. -/
 theorem weightedTransfer_schoolbookCharge_le {q Da Db M C : ℕ}
     (A : Fin q → RationalRectMatrixCode (Fin Da) (Fin Da))
     (B : Fin q → RationalRectMatrixCode (Fin Db) (Fin Db))

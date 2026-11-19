@@ -1376,6 +1376,109 @@ a function of the Hamiltonian, the gap parameter and the input set.
     returned value and the displayed length.
 \end{proof}
 
+\begin{lemma}[Height and charge of recorded weighted overlaps]
+    \label{lem:lvv_recorded_weighted_overlap_height_charge}
+    \lean{TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedTerm_maxHeight_le,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedTransferEntry_maxHeight_le,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedTransfer_maxHeight_le,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedTransfer_schoolbookCharge_le,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedOverlapHeightBound,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedOverlap_maxHeight_le,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.weightedOverlap_schoolbookCharge_le}
+    \leanok
+    Write $f(s)=2s^4$. For a weighted summand $\overline{x}wy$ with
+    all input coordinate heights at most $s$, the record height is
+    at most $f(f(s))$.
+    Suppose the site parameters and weights have common denominator
+    $M>0$ and norms at most $C$, with $M,C$ natural. Put
+    \[
+    X=M\max(1,C),\quad K=\max(1,q^2C^3),\quad U=M^3K,
+    \quad V=\max\{f(f(X)),2U^2\}.
+    \]
+    Each transfer entry and the full transfer matrix have record height
+    at most $V$. The matrix charge is at most
+    $8(15q^2D^2)(\lfloor\log_2 V\rfloor+2)^2$.
+    If each cap has coordinate height at most $X$, put
+    \[
+    S=\max\{U,(M^3DK)^n\},\qquad
+    F=\max\{X,M^{3n}\max(1,(Dq^2C^3)^n)\},\qquad
+    J=\max\{V,f(S),f(f(F))\}.
+    \]
+    The complete overlap record has height at most $J$ and charge at most
+    $8[n(15q^2+8)D^2+13](\lfloor\log_2 J\rfloor+2)^2$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_common_rational_denominator,
+        lem:lvv_weighted_transfer_entry_partial_sums,
+        lem:lvv_weighted_transfer_intermediate_bounds,
+        lem:lvv_recorded_coefficient_max_height,
+        lem:lvv_recorded_complex_operation_heights,
+        lem:lvv_recorded_weighted_overlap,
+        lem:lvv_recorded_arithmetic_schoolbook_charge_bound}
+    The two complex products give $f(f(X))$ for a summand.
+    The entry prefixes have denominator $M^3$ and coordinate height
+    at most $U$, giving $2U^2$ for their additions. Taking the maximum
+    over entries preserves $V$. The row-operation estimate bounds
+    propagation by $f(S)$, and the terminal row and caps have height at
+    most $F$. The two cap products give $f(f(F))$.
+    Apply the general charge bound to the respective exact lengths.
+\end{proof}
+
+\begin{lemma}[Height and charge of recorded local matrix elements]
+    \label{lem:lvv_recorded_local_matrix_element_height_charge}
+    \lean{TNLean.MPS.AreaLaw.RationalArithmeticTrace.localWeightedTermHeight,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.localWeightedTerm_maxHeight_le,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.twoSite_maxHeight_le,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.localTermsHeight,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.localTerms_maxHeight_le,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.localTerms_schoolbookCharge_le,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.localTerms_maxHeight_of_inputHeight,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.localTermsBitBudget,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.localTermsHeight_le_two_pow,
+        TNLean.MPS.AreaLaw.RationalArithmeticTrace.localTerms_polynomial_schoolbookCharge}
+    \leanok
+    Suppose the caps, tensor parameters and local coefficients have a
+    common denominator $M>0$ and norms at most a positive integer $C$.
+    With $X,J,D$ as above, put
+    \[
+    A=(Dq^2C^3)^n,\quad
+    G=\max\{J,f(\max\{X,M^{3n+2}\max(1,C^2A)\})\},
+    \quad N=M^{3n+3},\quad R=q^4C^3A.
+    \]
+    A matrix-unit summand has record height at most $G$.
+    The height bound for one two-site term is
+    $H_1=\max\{G,2(N\max(1,R))^2\}$.
+    For the complete sum the height bound is
+    $H_m=\max\{H_1,2(N\max(1,mR))^2\}$, and its charge is at most
+    $8T(\lfloor\log_2 H_m\rfloor+2)^2$, where
+    $T=m[q^4(n(15q^2+8)D^2+21)+2]$.
+
+    Alternatively, if the input coordinate heights are at most $2^h$, set
+    \[
+        P=2+nq(D_a^2+D_b^2)+mq^4,\qquad
+        B=(84n+74)(2Ph+h+1)+28n(D_a+D_b+2q)+28q+2m+15.
+    \]
+    Then the full record has height at most $2^B$ and schoolbook
+    charge at most $T\cdot8(B+2)^2$ in the operation-list cost model.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_recorded_weighted_overlap_height_charge,
+        lem:lvv_capped_weighted_overlap_bounds,
+        lem:lvv_local_energy_partial_sum_bounds,
+        lem:lvv_local_energy_common_input_denominator,
+        lem:lvv_recorded_complex_operation_heights,
+        lem:lvv_recorded_local_matrix_element,
+        lem:lvv_recorded_arithmetic_schoolbook_charge_bound}
+    The overlap value has denominator $M^{3n+2}$ and norm at most
+    $C^2A$. Multiplication by the local coefficient gives the bound $G$.
+    Both sums retain denominator $N$, with norm bounds $R$ and $mR$,
+    giving the two addition heights. For inputs of height at most $H$,
+    take $M\le H^{2P}$ and $C=2H$. When $H\le2^h$, multiplying bounds
+    adds exponents, taking a power scales the exponent, and a maximum
+    is bounded using the sum of the nonnegative exponents. Substitution
+    gives $H_m\le2^B$. Apply the charge bound to the $T$ operations.
+\end{proof}
+
 \begin{definition}[Binary length of a rational coordinate]
     \label{def:lvv_rational_coordinate_storage}
     \lean{TNLean.MPS.AreaLaw.rationalCoordinateBitCount}

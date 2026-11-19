@@ -7,6 +7,10 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.WeightedTransferTrace
 
 /-!
 # Arithmetic records of sequential weighted row contraction
+
+Each site contributes a weighted transfer matrix and a row update. The
+record includes the terminal caps and retains the information needed to
+bound every rational operation in the overlap.
 -/
 
 namespace TNLean.MPS.AreaLaw.RationalArithmeticTrace

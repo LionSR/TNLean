@@ -25,6 +25,7 @@ import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.LocalEnergyBinaryBounds
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.LocalEnergyTrace
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.LocalEnergyTraceCharge
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.LocalOperatorExpansion
+import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.NatBinaryBounds
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.OrthonormalInput
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.PolynomialPrecision
 import TNLean.MPS.AreaLaw.ViableSet.BoundarySDP.RationalAccumulationBounds
