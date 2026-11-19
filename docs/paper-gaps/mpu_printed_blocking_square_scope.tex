@@ -1,0 +1,75 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+\title{Square supplied gates in the printed MPU blocking argument}
+\author{}
+\date{2026-11-16}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source and the proved construction}
+
+The proof of Proposition~\texttt{prop:sigma1-and-sigma2-equal} in
+\cite[lines~1643--1733]{Cirac2017MPU} chooses particular blocked gates,
+\begin{align}
+    u^{(k)} & = (I\otimes v^{\otimes(k-1)}\otimes I)u^{\otimes k},
+    \label{eq:mpu_printed_blocking_square_scope_input_gate}        \\
+    v^{(k)} & = I^{\otimes(k-1)}\otimes v\otimes I^{\otimes(k-1)}.
+    \label{eq:mpu_printed_blocking_square_scope_output_gate}
+\end{align}
+The construction
+\leanid{MPOTensor.TwoSiteStandardFormData.printedBlock} proves that the gates in
+(\ref{eq:mpu_printed_blocking_square_scope_input_gate}) and
+(\ref{eq:mpu_printed_blocking_square_scope_output_gate}) are those of the
+actual positive-length blocked tensor, after its
+explicit physical half-word relabelling. It retains the original bond
+space and constructs both half factors by adjoining identity spectators.
+Its input is supplied square standard-form data: both gates act on two
+copies of the original spin space. No canonical ambient presentation,
+comparison gauge, symmetry, or previously supplied blocked factors are
+premises of this construction.
+
+The theorem
+\leanid{MPOTensor.TwoSiteStandardFormData.printedBlocking_trace_eq_intrinsic}
+identifies the normalized trace of these particular gates with the intrinsic
+trace of the actual blocked tensor. It uses the constructed open standard
+form and invariance of the two-ring exchange trace under a common physical
+basis relabelling.
+The theorem
+\leanid{MPOTensor.TwoSiteStandardFormData.printed_blocking_trace_parity}
+then proves the odd/even trace identities under adjoint symmetry on every
+even ring of length greater than one. It consumes the existing intrinsic
+parity theorem rather than assuming the blocked traces or their parity.
+
+\section{Remaining source integration}
+
+A general supplied standard form permits distinct intermediate dimensions
+$\ell,r$ and rectangular gates between the physical and intermediate pair
+spaces. The new construction starts in the square case $\ell=r=d$.
+The source time-reversal argument first obtains this situation from its
+index and local-symmetry results. The new theorem does not derive that
+reduction from an arbitrary supplied rectangular presentation, nor choose
+a source standard form for an arbitrary MPU. Those are separate results
+with existing owners. The original unrestricted source-labelled parity
+entries therefore remain unfinished.
+
+The local-unitary and sequential-unwinding corollaries that start from
+\leanid{MPOTensor.IsMPUCanonicalFormII} retain their explicitly documented
+canonical ambient restriction; see the full-support note. That hypothesis
+is not present in the new actual blocked supplier or its trace parity.
+The latter asserts identities of normalized traces. It does not by itself
+supply every local time-reversal certificate or replace the general
+local-symmetry criterion.
+
+Removing this scope distinction requires integrating the general
+standard-form and time-reversal rank reductions, transporting the actual
+printed gates through their specified physical identifications, and
+checking the resulting source statement and all review gates. No
+continuous gauge choice is part of this blocking construction.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
