@@ -35,6 +35,9 @@ variable {d D b : ℕ} {m Dj : Fin b → ℕ}
   {Aj : (j : Fin b) → MPSTensor d (Dj j)}
   {ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D}
 
+-- The quadratic-rate algebra adds a layer of `x ^ 2` manipulations over the linear-rate
+-- assembly, pushing elaboration past the default heartbeat budget.
+set_option maxHeartbeats 800000 in
 /-- **Second-order normalized-state error for at least two blocks.** Under the hypotheses
 of `exists_approximationError_le_repeatedOverlappingBlockSum`, the corrected approximating
 state satisfies `ε ≤ C y exp(C y)`, `y = M exp(-2γ q/ξ)`, for every `M ≥ 2` and every
