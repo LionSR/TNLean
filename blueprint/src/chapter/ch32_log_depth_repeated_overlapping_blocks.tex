@@ -278,6 +278,82 @@ $L_j$ of Lemma~\ref{thm:ldp_repeated_block_polar}.
     smallness condition.
 \end{proof}
 
+% This intermediate result does not settle thm:ldp_approximation_error_general.
+\begin{lemma}[Spectral rate of the relative-row overlaps]
+    \label{lem:ldp_relative_overlap_spectral_second_order}
+    \lean{MPSTensor.exists_norm_relative_row_overlap_sub_ite_le_exp_sq}
+    \leanok
+    \uses{lem:ldp_relative_positive_part, lem:ldp_relative_overlaps_second_order}
+    Under the hypotheses of Lemma~\ref{lem:ldp_relative_positive_part}(3), suppose
+    $e^{-\gamma/\xi}<1$. For each pair $j,j'$ there are $C_*>0$ and $q_0$ such that,
+    for every choice of nonzero complex copy weights, every $q\geq\max(q_0,1)$,
+    and every $M\geq2$ with $C_*y<1$, where $y=Me^{-2\gamma q/\xi}$,
+    \begin{align*}
+        \left|\braket{\phi_M(F_j)}{\phi_M(H_{jj'})}-\delta_{jj'}\right|
+        \leq C_*y\,e^{C_*y}.
+    \end{align*}
+    Here $H_{jj'}=L_j^\dagger PC^{-1}L_{j'}$ and $F_j$ is the fixed-point tensor
+    of $\rho_j$. The constants do not depend on the copy weights.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:ldp_relative_positive_part, lem:ldp_relative_overlaps_second_order}
+    Lemma~\ref{lem:ldp_relative_positive_part}(3) bounds every relative block by
+    $\delta=Ke^{-\gamma q/\xi}$, uniformly in the weights beyond a threshold $q_0$.
+    If $C_0$ is the constant in Lemma~\ref{lem:ldp_relative_overlaps_second_order},
+    choose $C_*=C_0K^2+1$. Then $M\delta^2=K^2y$ and
+    $C_0M\delta^2\leq C_*y<1$. Applying that lemma and increasing the coefficient
+    from $C_0K^2$ to $C_*$ gives the asserted estimate.
+\end{proof}
+
+% The source entry remains open, in particular its one-block case.
+\begin{lemma}[Second-order approximation for repeated overlapping blocks]
+    \label{lem:ldp_repeated_approximation_second_order}
+    \lean{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum_sq_of_two_le,
+        MPSTensor.exists_approximationError_le_mul_repeatedOverlappingBlockSum_sq_of_two_le}
+    \leanok
+    \uses{lem:ldp_relative_overlap_spectral_second_order,
+        lem:ldp_repeated_overlapping_overlaps, lem:ldp_overlapping_overlaps,
+        def:ldp_repeated_block_state, def:ldp_pair_family_fixed_point}
+    With the blocks, fixed points and spectral bound of
+    Lemma~\ref{thm:ldp_approximation_error_repeated_overlapping}, let $0<\gamma<1$.
+    There are constants $C,C'>0$ such that, for every choice of nonzero complex copy
+    weights, every block length $q$, and every $M\geq2$ with
+    $\beta_j=\sum_k\mu_{j,k}^{Mq}$ not all zero, the corrected approximating state
+    satisfies, with $y=Me^{-2\gamma q/\xi}$,
+    \begin{align*}
+        \varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy},
+        \qquad \varepsilon(\widetilde\phi_N,\phi_N)\leq C'y.
+    \end{align*}
+    The constants do not depend on the copy weights or on
+    $B=\sum_j\lvert\beta_j\rvert^2>0$; the power sums may cancel arbitrarily closely.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:ldp_relative_overlap_spectral_second_order,
+        lem:ldp_repeated_overlapping_overlaps, lem:ldp_overlapping_overlaps,
+        lem:ldp_shared_overlap_estimates, def:ldp_pair_family_fixed_point,
+        thm:ldp_approximation_error_repeated_overlapping}
+    Put $w_{jj'}=\braket{\phi_M(F_j)}{\phi_M(H_{jj'})}$ and
+    $z_j=\sum_{j'}\beta_{j'}w_{jj'}$. The unnormalized overlap is
+    $B^{-1/2}\sum_j\overline{\beta_j}z_j$, while the approximating vector has norm
+    at most one. Since $\lvert\beta_j\beta_{j'}\rvert\leq B$,
+    \begin{align*}
+        \left|\frac{\sum_j\overline{\beta_j}z_j}{B}-1\right|
+        \leq\sum_{j,j'}\lvert w_{jj'}-\delta_{jj'}\rvert.
+    \end{align*}
+    Choose a common block-length threshold for the finitely many pairs. Beyond it,
+    Lemma~\ref{lem:ldp_relative_overlap_spectral_second_order} makes the right side
+    $O(ye^{O(y)})$ when $Cy<1$. For $t=\lVert\phi_N\rVert/\sqrt B$, the relative
+    target-norm estimate gives $\lvert t^2-1\rvert\leq K e^{-\gamma Mq/\xi}$,
+    at most $K e^{-2\gamma q/\xi}\leq Ky$ because $M\geq2$.
+    The normalization estimate in
+    Lemma~\ref{thm:ldp_approximation_error_repeated_overlapping} combines the two
+    relative errors.
+    The trivial bound $\varepsilon\leq1$ handles short block lengths and $Cy\geq1$,
+    and also removes the exponential factor after increasing the constant.
+\end{proof}
+
 \begin{lemma}[Approximation error for repeated overlapping blocks]
     \label{thm:ldp_approximation_error_repeated_overlapping}
     \lean{MPSTensor.exists_approximationError_le_repeatedOverlappingBlockSum,
