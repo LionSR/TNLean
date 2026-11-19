@@ -9,6 +9,7 @@ import QICLean.ManyBody.Hamiltonian.GaussianFilterTruncation
 import QICLean.ManyBody.Hamiltonian.Translation
 import QICLean.Algebra.ZModDisplacement
 import QICLean.ManyBody.Dynamics.GraphBall
+import TNLean.Algebra.MatrixHermitianSum
 
 /-!
 # Periodic neighbouring-block operators from local Gaussian filters
@@ -19,7 +20,7 @@ The local terms, rather than approximating operators or residual estimates,
 are the input.
 -/
 
-open Matrix QuantumCircuit TNLean.Lattice
+open Matrix QuantumCircuit ManyBody
 open scoped Matrix.Norms.L2Operator InnerProductSpace ComplexOrder MatrixOrder
 
 open ManyBody (IsGapped groundSpace)
@@ -205,11 +206,12 @@ private theorem periodic_local_filter_data {N ℓ d R S m : ℕ} [NeZero d]
       ¬Disjoint (X k) (ManyBody.graphBall G i ℓ) → ∀ x ∈ X i, ∀ y ∈ X k,
         (m : ℕ∞) ≤ G.edist x y :=
     fun k hk _ _ hx _ hy ↦ omitted_centres_separated G hm i k hk hx hy
-  have hdata := ManyBody.truncated_approx_gaussianFilteredTerm G X h hherm hsupp
+  have hdata := ManyBody.truncated_approx_gaussianFilteredTerm G
+    (⟨h, hsupp⟩ : ManyBody.Interaction (fun _ ↦ Fin d) X) hherm
     (2 * R) hdiam S hS (S * J) hbudget (ΔE := Δ) hθ
     (ManyBody.graphBall G i (ℓ - R)) (ManyBody.graphBall G i ℓ) hsK (X i) hXi (hsupp i) J hJ μ hμ m
         hsep
-    (T := θ / Δ) (div_nonneg hθ hΔ.le)
+    (τ := θ / Δ) (div_nonneg hθ hΔ.le)
   rw [ManyBody.exp_neg_sq_div_eq_of_time_eq hΔ.ne'] at hdata
   refine ⟨hdata.1, hdata.2.1.trans (hJ i), hdata.2.2.1 (hherm i), hdata.2.2.2.trans ?_⟩
   have hcount : ((ManyBody.graphBall G i (ℓ - R))ᶜ.filter

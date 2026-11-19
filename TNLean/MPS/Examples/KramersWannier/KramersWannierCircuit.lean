@@ -431,7 +431,7 @@ private theorem exp_circuitPhase (n : ℕ) :
       ((n + 1 : ℕ) : ℂ) * (((-(Real.pi / 4) : ℝ) : ℂ) * I) := by
     push_cast; ring
   have hsqrt : ((Real.sqrt 2 / 2 : ℝ) : ℂ) = invSqrtTwo := by
-    rw [Complex.invSqrtTwo, Real.sqrt_div_self', one_div, Complex.ofReal_inv]
+    rw [Complex.invSqrtTwo, Complex.invSqrt, Real.sqrt_div_self', one_div, Complex.ofReal_inv]
   rw [harg, Complex.exp_nat_mul, Complex.exp_mul_I, ← Complex.ofReal_cos, ← Complex.ofReal_sin,
     Real.cos_neg, Real.sin_neg, Real.cos_pi_div_four, Real.sin_pi_div_four, Complex.ofReal_neg,
     hsqrt]

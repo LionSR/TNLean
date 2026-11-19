@@ -22,7 +22,7 @@ open Finset Matrix SimpleGraph
 
 namespace TNLean.MPS.AreaLaw
 
-open TNLean.Lattice.ClusterExpansion
+open TNLean.Lattice.ClusterExpansion ClusterExpansion
 
 open Classical in
 /-- The actual label-truncated nearest-neighbour operator has rank at most `r² q^r` at every

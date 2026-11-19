@@ -20,7 +20,7 @@ Source: Hastings–Koma, arXiv:math-ph/0507008, Section 3; applied to the
 exact MPS path of SPC11, arXiv:1010.3732, Section II.F, lines 929–953.
 -/
 
-open TNLean.Lattice Matrix QuantumCircuit MPSPreparation GaussianFilter
+open ManyBody Matrix QuantumCircuit MPSPreparation GaussianFilter
 open scoped Matrix.Norms.L2Operator InnerProductSpace NNReal
 
 namespace MPSTensor
@@ -61,12 +61,12 @@ theorem ExactMPSGroundPath.exists_uniform_centered_correlation_gaussian_bound
   refine ⟨Δ, hΔ, ?_⟩
   intro γ hγ N _ hN A B X Y hX hY hA hB hXY hcenter q T a hq hT ha
   obtain ⟨E₀, hH, hline, hgap⟩ := hdata γ hγ N hN
-  have hψ : mpvState (Q.tensor γ) N ∈
-      ManyBody.groundSpace (interactionHamiltonian (P.interaction γ) hN) E₀ := by
-    rw [hline]
-    exact Submodule.mem_span_singleton_self _
+  have hne : ManyBody.groundSpace (interactionHamiltonian (P.interaction γ) hN) E₀ ≠ ⊥ := by
+    rw [hline, Ne, Submodule.span_singleton_eq_bot]
+    exact ((EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm.map_eq_zero_iff).not.mpr
+      (Q.nonzero γ hγ N (by omega))
   apply ManyBody.norm_centered_ground_correlation_le_gaussian hq hΔ hT (by positivity)
-    (by positivity) hH hgap hψ hline A B hcenter
+    (by positivity) hH ((ManyBody.isGapped_iff_eigenvalues hH).mpr ⟨hne, hgap⟩) hline A B hcenter
   intro t
   exact norm_interactionHamiltonian_commutator_le_exp_abs_of_disjoint hN (P.interaction γ)
     (P.hermitian γ hγ) (P.norm_le_one γ hγ) A B X Y hX hY hA hB hXY a ha t
@@ -89,8 +89,9 @@ theorem ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound
         let ψ := mpvState (Q.tensor γ) N
         let s := (q / Δ ^ 2).toNNReal
         let v := 8 * Real.exp a
-        ‖normalizedVectorExpectation ψ (A * B) -
-          normalizedVectorExpectation ψ A * normalizedVectorExpectation ψ B‖ ≤
+        ‖⟪ψ, toEuclideanCLM (𝕜 := ℂ) (A * B) ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) -
+          ⟪ψ, toEuclideanCLM (𝕜 := ℂ) A ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) *
+            (⟪ψ, toEuclideanCLM (𝕜 := ℂ) B ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ))‖ ≤
           2 * ‖A‖ * ‖B‖ * (2 * Real.exp (-q / 2) +
             kernel s⁻¹ 0 *
               ((2 * X.card *
@@ -128,14 +129,16 @@ theorem ExactMPSGroundPath.exists_uniform_connected_correlation_gaussian_bound
     convert h using 1
     dsimp only [B₀, s, v]
     ring
-  have hcov : normalizedVectorExpectation ψ (A * B) -
-      normalizedVectorExpectation ψ A * normalizedVectorExpectation ψ B =
+  have hcov : ⟪ψ, toEuclideanCLM (𝕜 := ℂ) (A * B) ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) -
+      ⟪ψ, toEuclideanCLM (𝕜 := ℂ) A ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) *
+        (⟪ψ, toEuclideanCLM (𝕜 := ℂ) B ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ)) =
         ⟪ψ, toEuclideanCLM (𝕜 := ℂ) (A₀ * B) ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) := by
     dsimp only [A₀]
     rw [ManyBody.inner_centeredObservable_mul]
-    simp only [normalizedVectorExpectation, sub_div, mul_div_assoc]
-  change ‖normalizedVectorExpectation ψ (A * B) -
-      normalizedVectorExpectation ψ A * normalizedVectorExpectation ψ B‖ ≤
+    simp only [sub_div, mul_div_assoc]
+  change ‖⟪ψ, toEuclideanCLM (𝕜 := ℂ) (A * B) ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) -
+      ⟪ψ, toEuclideanCLM (𝕜 := ℂ) A ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) *
+        (⟪ψ, toEuclideanCLM (𝕜 := ℂ) B ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ))‖ ≤
     2 * ‖A‖ * ‖B‖ * B₀
   rw [hcov, norm_div, Complex.norm_real, Real.norm_of_nonneg (sq_nonneg _)]
   apply (div_le_iff₀ (pow_pos (norm_pos_iff.mpr hψne) 2)).mpr

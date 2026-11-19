@@ -30,6 +30,9 @@ Source: Hastings, arXiv:cond-mat/0508554v3, lines 1259–1279 and 1318–1320.
 open Finset Matrix QuantumCircuit
 open scoped MatrixOrder ComplexOrder
 
+open ClusterExpansion
+open SimpleGraph (overlapGraph)
+
 namespace TNLean.Lattice.ClusterExpansion
 
 variable {σ κ : Type*} [Fintype σ] [DecidableEq σ] [Fintype κ] [DecidableEq κ]

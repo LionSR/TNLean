@@ -18,7 +18,7 @@ Source: Hastings–Koma, arXiv:math-ph/0507008, Section 3 and Appendix A;
 the finite physical input for the SPC11 Section II.F gap argument.
 -/
 
-open QuantumCircuit MPSPreparation GaussianFilter TNLean.Lattice
+open QuantumCircuit MPSPreparation GaussianFilter ManyBody
 open scoped Matrix Matrix.Norms.L2Operator NNReal
 
 namespace MPSTensor

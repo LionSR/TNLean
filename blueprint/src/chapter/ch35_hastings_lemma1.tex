@@ -30,8 +30,8 @@ Section~\ref{sec:hastings_three_way_splitting}
 \cite[lines 781--782]{Hastings2007AreaLaw}. Since scalar multiples of $1$
 commute with $H$ and are fixed by the Gaussian filter, centering leaves
 $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
-% Lean: TNLean.Lattice.gaussianFilteredTerm_sub_smul_one and
-% TNLean.Lattice.gaussianFilteredTerm_sub_smul_one_sub (filtering fixes scalars).
+% Lean: ManyBody.gaussianFilteredTerm_sub_smul_one and
+% ManyBody.gaussianFilteredTerm_sub_smul_one_sub (filtering fixes scalars).
 
 \subsection*{Velocity, length and energy units}
 
@@ -133,144 +133,6 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 
 \subsection*{Gaussian-filtered operators}
 
-\begin{definition}[Gaussian-filtered operator]
-    \label{def:hastings_gaussian_filtered_term}
-    \lean{TNLean.Lattice.gaussianFilteredTerm}
-    \leanok
-    For $q>0$ and a matrix $W$, the \emph{Gaussian-filtered operator} is
-    \begin{align}
-        \widetilde W & =\frac{\Delta E}{\sqrt{2\pi q}}\int_{-\infty}^{\infty}
-        e^{iHt}We^{-iHt}\,e^{-(t\Delta E)^2/(2q)}\,dt,
-        \label{eq:hastings_gaussian_filtered_term}
-    \end{align}
-    and $\widetilde W=W$ for $q=0$. Applied to the centered parts
-    $W\in\{H_L,H_B,H_R\}$, (\ref{eq:hastings_gaussian_filtered_term}) gives
-    $\tilde H_L^0,\tilde H_B^0,\tilde H_R^0$ of
-    \cite[lines 783--793]{Hastings2007AreaLaw}.
-\end{definition}
-
-\begin{lemma}[Spectral properties of filtered operators]
-    \label{thm:hastings_gaussian_filtered_spectral}
-    \lean{
-        TNLean.Lattice.inner_gaussianFilteredTerm,
-        TNLean.Lattice.inner_gaussianFilteredTerm_ground,
-        TNLean.Lattice.norm_gaussianFilteredTerm_le,
-        TNLean.Lattice.gaussianFilteredTerm_sum,
-        TNLean.Lattice.gaussianFilteredTerm_self,
-        TNLean.Lattice.sum_gaussianFilteredTerm,
-        ManyBody.mem_groundSpace_iff_mulVec,
-        TNLean.Lattice.inner_eq_zero_of_mem_groundSpace,
-        TNLean.Lattice.norm_sub_starProjection_gaussianFilteredTerm_le
-    }
-    \leanok
-    \uses{def:hastings_gaussian_filtered_term}
-    If $Hv=Ev$ and $Hw=E'w$, then
-    \begin{align}
-        \langle v,\widetilde Ww\rangle
-         & =e^{-q((E-E')/\Delta E)^2/2}\,\langle v,Ww\rangle,
-        \label{eq:hastings_gaussian_filtered_matrix_element}
-    \end{align}
-    so $\langle v,\widetilde Ww\rangle=\langle v,Ww\rangle$ when $E=E'=E_0$.
-    The map $W\mapsto\widetilde W$ is linear, satisfies
-    $\|\widetilde W\|\le\|W\|$ and $\widetilde H=H$, and thus
-    $\sum_i\widetilde H_i=H$ whenever $\sum_iH_i=H$
-    \cite[line 793]{Hastings2007AreaLaw}. For a ground vector $\psi$ and the
-    ground-space projection $P_{\mathrm{gs}}$,
-    $\|(1-P_{\mathrm{gs}})\widetilde W\psi\|\le\|W\|e^{-q/2}\|\psi\|$.
-\end{lemma}
-\begin{proof}\leanok
-    In the $H$-eigenbasis, $\langle v,e^{iHt}We^{-iHt}w\rangle
-        =e^{i(E-E')t}\langle v,Ww\rangle$, whose Gaussian integral is
-    (\ref{eq:hastings_gaussian_filtered_matrix_element}). Unitaries preserve
-    $\|W\|$, and $e^{iHt}He^{-iHt}=H$. Since $|E-E_0|\ge\Delta E$ on the
-    excited subspace, each excited coefficient of $\widetilde W\psi$ is scaled
-    by at most $e^{-q/2}$.
-\end{proof}
-
-\begin{lemma}[Filtered operators without ground components]
-    \label{thm:hastings_filtered_no_ground_component}
-    \lean{
-        TNLean.Lattice.norm_gaussianFilteredTerm_apply_le_commutator,
-        TNLean.Lattice.norm_gaussianFilteredTerm_apply_le_commutator_of_isGapped
-    }
-    \leanok
-    \uses{thm:hastings_gaussian_filtered_spectral}
-    If $H\psi=E_0\psi$ and $P_{\mathrm{gs}}W\psi=0$, then
-    \begin{align}
-        \|\widetilde W\psi\| & \le\Delta E^{-1}e^{-q/2}\,\|[H,W]\psi\|.
-        \label{eq:hastings_filtered_no_ground_component}
-    \end{align}
-    In particular, (\ref{eq:hastings_filtered_no_ground_component}) holds for a
-    unique gapped ground state $\Psi_0$ when $\langle\Psi_0,W\Psi_0\rangle=0$,
-    hence for the centered parts $H_L,H_B,H_R$
-    \cite[lines 794--815]{Hastings2007AreaLaw}.
-\end{lemma}
-\begin{proof}\leanok
-    For an $H$-eigenvector $v_E$ with eigenvalue $E$,
-    $\langle v_E,[H,W]\psi\rangle=(E-E_0)\langle v_E,W\psi\rangle$. Since
-    $\langle v_{E_0},W\psi\rangle=0$ and $E-E_0\ge\Delta E$ on the excited
-    subspace, (\ref{eq:hastings_gaussian_filtered_matrix_element}) gives
-    $|\langle v_E,\widetilde W\psi\rangle|
-        \le\Delta E^{-1}e^{-q/2}|\langle v_E,[H,W]\psi\rangle|$.
-\end{proof}
-
-\begin{lemma}[Locality of filtered operators]
-    \label{thm:hastings_filtered_locality}
-    \lean{
-        TNLean.Lattice.norm_map_gaussianFilteredTerm_le_mass,
-        TNLean.Lattice.norm_commutator_gaussianFilteredTerm_le_mass,
-        TNLean.Lattice.gaussianReal_real_compl_Icc_le_exp,
-        TNLean.Lattice.gaussianFilter_tail_le,
-        TNLean.Lattice.norm_commutator_gaussianFilteredTerm_le
-    }
-    \leanok
-    \uses{def:hastings_gaussian_filtered_term}
-    If $q>0$, $T,\varepsilon\ge0$, and
-    $\|[e^{iHt}We^{-iHt},O]\|\le\varepsilon$ for all $|t|\le T$, then
-    \begin{align}
-        \|[\widetilde W,O]\| & \le\varepsilon
-        +2\|W\|\,\|O\|\,e^{-(T\Delta E)^2/(2q)}.
-        \label{eq:hastings_filtered_locality}
-    \end{align}
-    For $q=0$, $\widetilde W=W$ and $\|[W,O]\|\le\varepsilon$ from $t=0$
-    \cite[lines 816--828]{Hastings2007AreaLaw}.
-\end{lemma}
-\begin{proof}\leanok
-    Split (\ref{eq:hastings_gaussian_filtered_term}) at $|t|=T$. On $[-T,T]$
-    the integrand norm is at most $\varepsilon$; on $\mathbb R\setminus[-T,T]$
-    it is at most $2\|W\|\,\|O\|$, and with $h=q/\Delta E^2$ the substitution
-    $t=T+s$ and $(T+s)^2\ge T^2+s^2$ bound the tail mass by $e^{-T^2/(2h)}$.
-\end{proof}
-
-\begin{lemma}[Localization of filtered operators by partial trace]
-    \label{thm:hastings_filtered_partial_trace}
-    \lean{
-        TNLean.Lattice.norm_sub_regionExpectation_gaussianFilteredTerm_le_mass,
-        TNLean.Lattice.norm_sub_regionExpectation_gaussianFilteredTerm_le
-    }
-    \leanok
-    \uses{thm:hastings_filtered_locality}
-    Let $\mathbb E_K$ be the normalized partial trace over $K^c$ tensored with
-    $1_{K^c}$. If $q>0$, $T,\varepsilon\ge0$, and
-    $\|e^{iHt}We^{-iHt}-\mathbb E_K(e^{iHt}We^{-iHt})\|\le\varepsilon$ for all
-    $|t|\le T$, then $\mathbb E_K(\widetilde W)$ is supported on $K$, satisfies
-    $\|\mathbb E_K(\widetilde W)\|\le\|W\|$, and
-    \begin{align}
-        \|\widetilde W-\mathbb E_K(\widetilde W)\| & \le\varepsilon
-        +2\|W\|\,e^{-(T\Delta E)^2/(2q)}.
-        \label{eq:hastings_filtered_partial_trace}
-    \end{align}
-    For $q=0$, $\|\widetilde W-\mathbb E_K(\widetilde W)\|\le\varepsilon$. This
-    replaces the truncated-evolution approximation of
-    \cite[lines 816--828]{Hastings2007AreaLaw}.
-\end{lemma}
-\begin{proof}\leanok
-    Since $\mathrm{id}-\mathbb E_K$ is continuous and linear with
-    $\|(\mathrm{id}-\mathbb E_K)(M)\|\le2\|M\|$, splitting the time integral at
-    $|t|=T$ as in Lemma~\ref{thm:hastings_filtered_locality} gives
-    (\ref{eq:hastings_filtered_partial_trace}).
-\end{proof}
-
 \subsection*{The localized parts and the cut-offs}
 
 % The source prints the bound J^2 (line 794), which fails already for
@@ -315,9 +177,7 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
         ManyBody.ChainInteraction.isHermitian_bufferPart_localized,
         TNLean.MPS.AreaLaw.isSupportedOn_localized_sub_self}
     \leanok
-    \uses{thm:hastings_filtered_partial_trace, thm:hastings_part_commutators,
-        thm:chain_lieb_robinson, thm:hastings_gaussian_filtered_spectral,
-        thm:hastings_three_way_splitting_sum}
+    \uses{thm:hastings_part_commutators, thm:chain_lieb_robinson, thm:hastings_three_way_splitting_sum}
     In the setting of Lemma~\ref{thm:hastings_part_commutators}, let $q>0$,
     $h=q/\Delta E^2$, $S_B=S_L\cup S_R$, and for $\ell\ge0$ let $K_\bullet$ be
     the $\ell$-neighbourhood of $S_\bullet$ ($\bullet\in\{L,B,R\}$). Define
@@ -351,10 +211,7 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
 
 \begin{lemma}[The cut-offs $O_L$ and $O_R$]
     \label{thm:hastings_cutoffs}
-    \uses{thm:hastings_localized_parts, thm:hastings_filtered_no_ground_component,
-        def:hastings_spectral_cutoff, thm:hastings_spectral_cutoff_obd,
-        thm:hastings_spectral_cutoff_norm, thm:hastings_spectral_cutoff_support,
-        thm:hastings_spectral_cutoff_commute}
+    \uses{thm:hastings_localized_parts, def:hastings_spectral_cutoff, thm:hastings_spectral_cutoff_obd, thm:hastings_spectral_cutoff_norm, thm:hastings_spectral_cutoff_support, thm:hastings_spectral_cutoff_commute}
     For $\theta>0$ and Hermitian $M_L,M_R$ supported on $X_{1,j}$ and
     $X_{j+1,N}$, let $O_L=1_{[-\theta,\theta]}(M_L)$ and
     $O_R=1_{[-\theta,\theta]}(M_R)$. Then $O_L,O_R$ are commuting orthogonal
@@ -367,8 +224,9 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
     \end{align}
     For $q=(l/3)\Delta E/v$, buffer width and localization radius $\propto l$,
     and $\theta=\Delta E^{-1}J^2e^{-l/(6\xi)}$,
-    Lemmas~\ref{thm:hastings_filtered_no_ground_component}
-    and~\ref{thm:hastings_localized_parts} yield
+    the bound on filtered operators without ground components
+    \cite[``Filtered operators without ground components'']{QICLean2026Blueprint}
+    and Lemma~\ref{thm:hastings_localized_parts} yield
     $\|M_\bullet\Psi_0\|\le\mathcal O(\mathrm{poly}(l)e^{-l/(3\xi)})$ and
     $\|(O_\bullet-1)\Psi_0\|\le\mathcal O(\mathrm{poly}(l)e^{-l/(6\xi)})$
     \cite[lines 829--841]{Hastings2007AreaLaw}. Cutting off $|\lambda|\le\theta$
@@ -395,10 +253,9 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
         TNLean.MPS.AreaLaw.partLocalizationError,
         TNLean.MPS.AreaLaw.leftWindow, TNLean.MPS.AreaLaw.rightWindow,
         TNLean.MPS.AreaLaw.chainNeighborhood_interval_subset,
-        TNLean.Lattice.norm_gaussianFilteredTerm_sub_self_le}
+        ManyBody.norm_gaussianFilteredTerm_sub_self_le}
     \leanok
-    \uses{thm:hastings_localized_parts, thm:hastings_cutoffs,
-        thm:hastings_filtered_no_ground_component, thm:hastings_part_commutators}
+    \uses{thm:hastings_localized_parts, thm:hastings_cutoffs, thm:hastings_part_commutators}
     Let $\Psi_0$ be a gapped ground vector of $H$ (range $R$, term norm bound
     $J\ge0$, ground energy $E_0$, gap $\Delta E>0$). For cut $j$, buffer width
     $m$, filter parameter $q\ge0$, and localization radius $k$ with
@@ -425,8 +282,9 @@ $[H,H_\bullet]$ and $\widetilde H_\bullet-H_\bullet$ unchanged.
     \cite[lines 766--842]{Hastings2007AreaLaw}.
 \end{lemma}
 \begin{proof}\leanok
-    By Lemmas~\ref{thm:hastings_filtered_no_ground_component}
-    and~\ref{thm:hastings_localized_parts},
+    By the bound on filtered operators without ground components
+    \cite[``Filtered operators without ground components'']{QICLean2026Blueprint}
+    and Lemma~\ref{thm:hastings_localized_parts},
     $\|M_\bullet\Psi_0\|\le\|\widetilde H_\bullet\Psi_0\|
         +\|\widetilde H_\bullet-M_\bullet\|\le\Delta E^{-1}e^{-q/2}c_RJ^2+\delta$,
     so Lemma~\ref{thm:hastings_cutoffs} gives (\ref{eq:hastings_cutoff_pair}).
@@ -520,13 +378,7 @@ $X_{j-l+1,j+l}$.
         ManyBody.IsGapped.sub_smul_one_self,
         ManyBody.groundSpace_sub_smul_one_self}
     \leanok
-    \uses{thm:hastings_three_way_splitting_sum,
-        thm:hastings_three_way_splitting_supports,
-        thm:hastings_filtered_no_ground_component,
-        thm:hastings_part_commutators, thm:hastings_localized_parts,
-        thm:hastings_cutoffs, thm:hastings_gaussian_time_average_stability,
-        thm:hastings_moved_estimate, thm:hastings_interaction_average_last,
-        thm:hastings_boundary_localization}
+    \uses{thm:hastings_three_way_splitting_sum, thm:hastings_three_way_splitting_supports, thm:hastings_part_commutators, thm:hastings_localized_parts, thm:hastings_cutoffs, thm:hastings_gaussian_time_average_stability, thm:hastings_moved_estimate, thm:hastings_interaction_average_last, thm:hastings_boundary_localization}
     Let $H$ have range $R$, term norm bound $J$, unique ground state $\Psi_0$,
     gap $\Delta E>0$, and ground projector
     $P_0=|\Psi_0\rangle\langle\Psi_0|$. Set $\xi=8\max(2v_0/\Delta E,1)$, where

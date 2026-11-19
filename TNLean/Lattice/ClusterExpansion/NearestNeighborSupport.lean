@@ -21,6 +21,9 @@ unchanged actual operators with designated two-site interactions; see
 
 open Finset SimpleGraph
 
+open ClusterExpansion
+open SimpleGraph (overlapGraph)
+
 namespace TNLean.Lattice.ClusterExpansion
 
 open Classical in

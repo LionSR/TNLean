@@ -61,21 +61,21 @@ theorem registerMatrixSplit_encodeRegisters (e : Fin s ↪ Fin N)
     (X : Matrix (Fin N → Fin m) (Fin N → Fin m) ℂ) :
     registerMatrixSplit e ((OnsiteChannel.encodeRegisters c).map X) =
       singleKrausMap
-        (rectKronecker (fun j => registerEncoding (c (e j))) ⊗ₖ
-          rectKronecker (fun j : {j // j ∉ Set.range e} => registerEncoding (c j.val)))
+        (rectKronecker (fun j => Matrix.initializedBasisMatrix (c (e j))) ⊗ₖ
+          rectKronecker (fun j : {j // j ∉ Set.range e} => Matrix.initializedBasisMatrix (c j.val)))
         (registerMatrixSplit e X) := by
   rw [OnsiteChannel.encodeRegisters_map, singleKrausMap_apply]
   let Eout := registerConfigurationSplit (d := q) e
   let Ein := registerConfigurationSplit (d := m) e
-  let V := rectKronecker fun i => registerEncoding (c i)
+  let V := rectKronecker fun i => Matrix.initializedBasisMatrix (c i)
   change Matrix.reindexLinearEquiv ℂ ℂ Eout Eout (V * X * Vᴴ) = _
   rw [← Matrix.reindexLinearEquiv_mul ℂ ℂ Eout Ein Eout,
     ← Matrix.reindexLinearEquiv_mul ℂ ℂ Eout Ein Ein]
   change Matrix.reindex Eout Ein V * registerMatrixSplit e X *
     (Matrix.reindex Eout Ein V)ᴴ = _
   rw [show Matrix.reindex Eout Ein V =
-      rectKronecker (fun j => registerEncoding (c (e j))) ⊗ₖ
-        rectKronecker (fun j : {j // j ∉ Set.range e} => registerEncoding (c j.val)) from
+      rectKronecker (fun j => Matrix.initializedBasisMatrix (c (e j))) ⊗ₖ
+        rectKronecker (fun j : {j // j ∉ Set.range e} => Matrix.initializedBasisMatrix (c j.val)) from
     reindex_rectKronecker_registerSplit e _]
   rfl
 
@@ -113,12 +113,12 @@ theorem registerChannelLift_encodeRegisters (e : Fin s ↪ Fin N)
       (OnsiteChannel.encodeRegisters (fun j => c (e j))).map ∘ₗ Φ) :
     registerChannelLift e Ψ ∘ₗ (OnsiteChannel.encodeRegisters c).map =
       (OnsiteChannel.encodeRegisters c).map ∘ₗ registerChannelLift e Φ := by
-  have hlocal : Ψ ∘ₗ singleKrausMap (rectKronecker fun j => registerEncoding (c (e j))) =
-      singleKrausMap (rectKronecker fun j => registerEncoding (c (e j))) ∘ₗ Φ := by
+  have hlocal : Ψ ∘ₗ singleKrausMap (rectKronecker fun j => Matrix.initializedBasisMatrix (c (e j))) =
+      singleKrausMap (rectKronecker fun j => Matrix.initializedBasisMatrix (c (e j))) ∘ₗ Φ := by
     simpa only [OnsiteChannel.encodeRegisters_map] using h
   have hglobal := tensorMapId_singleKraus_intertwine
-    (rectKronecker fun j => registerEncoding (c (e j)))
-    (rectKronecker fun j : {j // j ∉ Set.range e} => registerEncoding (c j.val)) Φ Ψ hlocal
+    (rectKronecker fun j => Matrix.initializedBasisMatrix (c (e j)))
+    (rectKronecker fun j : {j // j ∉ Set.range e} => Matrix.initializedBasisMatrix (c j.val)) Φ Ψ hlocal
   apply LinearMap.ext
   intro X
   apply (registerMatrixSplit (d := q) e).injective

@@ -22,6 +22,9 @@ not the minimal physical support of a word product; see
 open Finset SimpleGraph QuantumCircuit
 open scoped Matrix.Norms.L2Operator
 
+open ClusterExpansion
+open SimpleGraph (overlapGraph)
+
 namespace TNLean.Lattice.ClusterExpansion
 
 variable {N : ℕ}

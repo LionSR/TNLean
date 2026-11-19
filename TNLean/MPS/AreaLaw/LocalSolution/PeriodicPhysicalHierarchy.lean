@@ -129,7 +129,8 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
       rw [ManyBody.mem_metricRangeBall]
       exact (Finset.mem_filter.mp hv).2
     have hfilters := ManyBody.gaussianFilteredTerm_full_and_sum_eq_of_zero_range
-      g hsupp' (ManyBody.metricRangeBall (ℓ : ℝ) i) ((ℓ : ℝ) * Δ) Δ i
+      (⟨g, hsupp'⟩ : ManyBody.Interaction (fun _ ↦ Fin d) (ManyBody.metricRangeBall 0))
+      (ManyBody.metricRangeBall (ℓ : ℝ) i) ((ℓ : ℝ) * Δ) Δ i
     have ha : a = g i := by
       have heq : a = ManyBody.gaussianFilteredTerm (1 * (ℓ : ℝ) * Δ) Δ
           (∑ j ∈ ManyBody.metricRangeBall ((ℓ : ℝ) - 0) i, g j) (g i) := rfl
@@ -143,7 +144,9 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
         exact_mod_cast (le_antisymm hv (by positivity))
       rw [hd]
       omega
-    · rw [one_mul, hfilters.1, sub_self, norm_zero, mul_zero, zero_mul]
+    · have h1 : ManyBody.gaussianFilteredTerm ((ℓ : ℝ) * Δ) Δ (∑ j, g j) (g i) = g i :=
+        hfilters.1
+      rw [one_mul, h1, sub_self, norm_zero, mul_zero, zero_mul]
   · have hRp : 0 < R := lt_of_le_of_ne hR (Ne.symm hRzero)
     obtain ⟨c₁, η, C, hc₁, hη, hC, hloc⟩ :=
       ManyBody.exists_metric_truncated_filter_localization hRp (2 * Nat.ceil R + 1) hJ hΔ
@@ -158,7 +161,8 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
       intro v hv
       rw [ManyBody.mem_metricRangeBall]
       exact (Finset.mem_filter.mp hv).2
-    have ha := hloc g hg hsupp' hnorm (card_periodicPhysical_metricRangeBall_le R) (ℓ : ℝ) hℓ i
+    have ha := hloc (⟨g, hsupp'⟩ : ManyBody.Interaction (fun _ ↦ Fin d) (ManyBody.metricRangeBall R))
+      hg hnorm (card_periodicPhysical_metricRangeBall_le R) (ℓ : ℝ) hℓ i
     have heq : ManyBody.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ
         (∑ j ∈ ManyBody.metricRangeBall ((ℓ : ℝ) - R) i, g j) (g i) = a := by
       rfl

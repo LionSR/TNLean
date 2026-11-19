@@ -21,6 +21,9 @@ truncation, not the selector based on the minimal physical support of a product;
 
 open Finset SimpleGraph Matrix
 
+open ClusterExpansion
+open SimpleGraph (overlapGraph)
+
 namespace TNLean.Lattice.ClusterExpansion
 
 open Classical in

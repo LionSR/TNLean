@@ -15,7 +15,7 @@ import QICLean.Analysis.PowerExponential
 The parameter choice of the proof of Lemma 1 (Hastings, arXiv:0705.2024v4, `law16.tex`,
 appendix, lines 766–907): with `ξ = 8 max(2v/ΔE, 1)`, the variance parameter `s = 2l/(3ξ)`,
 the cut-off threshold `θ = e^{-s/4}`, the time cut `T = s/ΔE`, the window radius
-`k = ⌈l/4⌉` and the ClusterExpansion.boundary radius `ℓ' = l - 3R - 2k`, every error term of the construction is
+`k = ⌈l/4⌉` and the boundary radius `ℓ' = l - 3R - 2k`, every error term of the construction is
 at most `(A + B√l) e^{-l/(6ξ)}` for `l ≥ 12R + 8`, with `A`, `B` independent of `l`.
 
 ## Main declarations
@@ -75,7 +75,7 @@ lemma errorBudget_twoMu_div_le {ΔE a cR Rr v T K s η L E μ θ δ : ℝ} (hΔ 
   rw [h1, e1]
   linarith
 
-/-- The ClusterExpansion.boundary term of the error budget: a polynomial prefactor of degree four
+/-- The boundary term of the error budget: a polynomial prefactor of degree four
 against `e^{-ℓ'/4}` with `ℓ' ≥ l/4`. -/
 lemma errorBudget_boundary_le {ΔE a C L ℓ' η Zc ν E : ℝ} (hΔ : 0 < ΔE) (ha : 0 ≤ a)
     (hC : 0 ≤ C) (hL0 : 0 < L) (hsq : sqrt η ≤ L / ΔE) (hZc0 : 0 ≤ Zc)

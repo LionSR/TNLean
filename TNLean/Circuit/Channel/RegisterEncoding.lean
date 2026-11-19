@@ -32,40 +32,23 @@ noncomputable section
 variable {α β : Type*} [Fintype β] [DecidableEq β]
   [Fintype α] [DecidableEq α]
 
-/-- An isometric matrix for an injective assignment of input basis labels to register words. -/
-def registerEncoding (e : α ↪ β) : Matrix β α ℂ :=
-  (1 : Matrix β β ℂ).submatrix id e
-
-omit [Fintype α] in
-/-- The chosen register encoding preserves inner products. -/
-theorem registerEncoding_isIsometry (e : α ↪ β) :
-    (registerEncoding e).IsIsometry := by
-  change ((1 : Matrix β β ℂ).submatrix id e)ᴴ *
-    (1 : Matrix β β ℂ).submatrix id e = 1
-  simp only [Matrix.conjTranspose_submatrix, Matrix.conjTranspose_one]
-  change (1 : Matrix β β ℂ).submatrix e
-    (Equiv.refl _) * (1 : Matrix β β ℂ).submatrix
-      (Equiv.refl _) e = 1
-  rw [Matrix.submatrix_mul_equiv, Matrix.one_mul]
-  exact Matrix.submatrix_one e e.injective
-
 /-- Encoding a local operator into the register is a channel. -/
 theorem registerEncoding_isKrausCPTP (e : α ↪ β) :
-    IsKrausCPTP (singleKrausMap (registerEncoding e)) :=
-  singleKrausMap_isKrausCPTP _ (registerEncoding_isIsometry e)
+    IsKrausCPTP (singleKrausMap (Matrix.initializedBasisMatrix e)) :=
+  singleKrausMap_isKrausCPTP _ (Matrix.initializedBasisMatrix_isIsometry e)
 
 /-- A trace-preserving decoder; the unused register subspace is sent to a fixed state `ρ`. -/
 def registerDecoding (e : α ↪ β) (ρ : Matrix α α ℂ) :
     Matrix β β ℂ →ₗ[ℂ] Matrix α α ℂ :=
-  supportCompletion (singleKrausMap (registerEncoding e)ᴴ)
-    (registerEncoding e * (registerEncoding e)ᴴ) ρ
+  supportCompletion (singleKrausMap (Matrix.initializedBasisMatrix e)ᴴ)
+    (Matrix.initializedBasisMatrix e * (Matrix.initializedBasisMatrix e)ᴴ) ρ
 
 /-- The completed decoder is a channel for every density matrix chosen on the complement. -/
 theorem registerDecoding_isKrausCPTP (e : α ↪ β)
     {ρ : Matrix α α ℂ} (hρ : ρ.PosSemidef) (htr : trace ρ = 1) :
     IsKrausCPTP (registerDecoding e ρ) := by
-  let V := registerEncoding e
-  have hV : Vᴴ * V = 1 := registerEncoding_isIsometry e
+  let V := Matrix.initializedBasisMatrix e
+  have hV : Vᴴ * V = 1 := Matrix.initializedBasisMatrix_isIsometry e
   apply supportCompletion_isKrausCPTP
   · exact singleKrausMap_isKrausCP _
   · exact isHermitian_mul_conjTranspose_self _
@@ -82,9 +65,9 @@ theorem registerDecoding_isKrausCPTP (e : α ↪ β)
 /-- Decoding an encoded operator recovers it exactly, without any positivity assumption. -/
 theorem registerDecoding_encoding (e : α ↪ β)
     (ρ X : Matrix α α ℂ) :
-    registerDecoding e ρ (singleKrausMap (registerEncoding e) X) = X := by
-  let V := registerEncoding e
-  have hV : Vᴴ * V = 1 := registerEncoding_isIsometry e
+    registerDecoding e ρ (singleKrausMap (Matrix.initializedBasisMatrix e) X) = X := by
+  let V := Matrix.initializedBasisMatrix e
+  have hV : Vᴴ * V = 1 := Matrix.initializedBasisMatrix_isIsometry e
   have hP : V * Vᴴ * (V * Vᴴ) = V * Vᴴ := by
     calc V * Vᴴ * (V * Vᴴ) = V * (Vᴴ * V) * Vᴴ := by simp only [Matrix.mul_assoc]
          _ = V * Vᴴ := by rw [hV, Matrix.mul_one]
@@ -101,7 +84,7 @@ theorem registerDecoding_encoding (e : α ↪ β)
 /-- Encoding followed by decoding is the identity channel, as an equality of linear maps. -/
 theorem registerDecoding_comp_encoding (e : α ↪ β)
     (ρ : Matrix α α ℂ) :
-    registerDecoding e ρ ∘ₗ singleKrausMap (registerEncoding e) = LinearMap.id := by
+    registerDecoding e ρ ∘ₗ singleKrausMap (Matrix.initializedBasisMatrix e) = LinearMap.id := by
   apply LinearMap.ext
   exact registerDecoding_encoding e ρ
 
@@ -109,7 +92,7 @@ theorem registerDecoding_comp_encoding (e : α ↪ β)
 theorem registerDecoding_encoding_reference {δ : Type*}
     (e : α ↪ β) (ρ : Matrix α α ℂ) :
     tensorMapIdLM (δ := δ) (registerDecoding e ρ) ∘ₗ
-      tensorMapIdLM (δ := δ) (singleKrausMap (registerEncoding e)) = LinearMap.id := by
+      tensorMapIdLM (δ := δ) (singleKrausMap (Matrix.initializedBasisMatrix e)) = LinearMap.id := by
   rw [← tensorMapIdLM_comp, registerDecoding_comp_encoding, tensorMapIdLM_id]
 
 variable {γ δ : Type*} [Fintype δ] [DecidableEq δ] [Fintype γ] [DecidableEq γ]
@@ -118,7 +101,7 @@ variable {γ δ : Type*} [Fintype δ] [DecidableEq δ] [Fintype γ] [DecidableEq
 def registerEncodedMap (e : α ↪ β) (f : γ ↪ δ)
     (ρ : Matrix α α ℂ) (Φ : Matrix α α ℂ →ₗ[ℂ] Matrix γ γ ℂ) :
     Matrix β β ℂ →ₗ[ℂ] Matrix δ δ ℂ :=
-  singleKrausMap (registerEncoding f) ∘ₗ Φ ∘ₗ registerDecoding e ρ
+  singleKrausMap (Matrix.initializedBasisMatrix f) ∘ₗ Φ ∘ₗ registerDecoding e ρ
 
 /-- The extension outside the code is genuinely CPTP, not a trace-losing compression. -/
 theorem registerEncodedMap_isKrausCPTP (e : α ↪ β) (f : γ ↪ δ)
@@ -133,8 +116,8 @@ omit [DecidableEq γ] in
 theorem registerEncodedMap_encoding (e : α ↪ β) (f : γ ↪ δ)
     (ρ : Matrix α α ℂ) (Φ : Matrix α α ℂ →ₗ[ℂ] Matrix γ γ ℂ)
     (X : Matrix α α ℂ) :
-    registerEncodedMap e f ρ Φ (singleKrausMap (registerEncoding e) X) =
-      singleKrausMap (registerEncoding f) (Φ X) := by
+    registerEncodedMap e f ρ Φ (singleKrausMap (Matrix.initializedBasisMatrix e) X) =
+      singleKrausMap (Matrix.initializedBasisMatrix f) (Φ X) := by
   simp only [registerEncodedMap, LinearMap.comp_apply, registerDecoding_encoding]
 
 omit [Fintype β] [DecidableEq β] [Fintype α] [DecidableEq α] in
@@ -193,16 +176,16 @@ omit [Fintype α] [DecidableEq α] in
 /-- The entries of a register basis inclusion are Kronecker deltas. -/
 theorem registerEncoding_apply {ι : Type*} [Fintype ι]
     (e : α ↪ (ι → Fin d)) (x : ι → Fin d) (a : α) :
-    registerEncoding e x a = if x = e a then 1 else 0 := by
-  simp only [registerEncoding, Matrix.submatrix_apply, id_eq, Matrix.one_apply]
+    Matrix.initializedBasisMatrix e x a = if x = e a then 1 else 0 := by
+  simp only [Matrix.initializedBasisMatrix, Matrix.submatrix_apply, id_eq, Matrix.one_apply]
 
 omit [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β] in
 /-- The joint encoding factors exactly into the two local encoding matrices. -/
 theorem registerEncoding_pair (e : α ↪ (Fin k → Fin d)) (f : β ↪ (Fin k → Fin d))
     (x : Fin (k + k) → Fin d) (a : α) (b : β) :
-    registerEncoding (pairRegisterBasisEmbedding e f) x (a, b) =
-      registerEncoding e (x ∘ Fin.castAdd k) a *
-        registerEncoding f (x ∘ Fin.natAdd k) b := by
+    Matrix.initializedBasisMatrix (pairRegisterBasisEmbedding e f) x (a, b) =
+      Matrix.initializedBasisMatrix e (x ∘ Fin.castAdd k) a *
+        Matrix.initializedBasisMatrix f (x ∘ Fin.natAdd k) b := by
   have hiff : x = Fin.append (e a) (f b) ↔
       x ∘ Fin.castAdd k = e a ∧ x ∘ Fin.natAdd k = f b := by
     constructor

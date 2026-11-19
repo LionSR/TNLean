@@ -24,11 +24,11 @@ noncomputable section
 private theorem registerEncoding_map_single {α β : Type*}
     [Fintype α] [DecidableEq α] [Fintype β] [DecidableEq β]
     (e : α ↪ β) (a b : α) (z : ℂ) :
-    singleKrausMap (registerEncoding e) (single a b z) = single (e a) (e b) z := by
+    singleKrausMap (Matrix.initializedBasisMatrix e) (single a b z) = single (e a) (e b) z := by
   ext x y
   rw [singleKrausMap_apply, Matrix.mul_apply, Finset.sum_eq_single b]
   · rw [Matrix.mul_single_apply_same]
-    simp only [registerEncoding, Matrix.submatrix_apply, id_eq, Matrix.one_apply,
+    simp only [Matrix.initializedBasisMatrix, Matrix.submatrix_apply, id_eq, Matrix.one_apply,
       Matrix.conjTranspose_apply, Matrix.single_apply]
     split_ifs <;> simp_all
   · intro j _ hj
@@ -133,7 +133,7 @@ theorem wordInitialization_data_eq_physicalEncoding (c : Fin d ↪ Fin (d ^ k)) 
   rw [S.apply_symm_apply, reindex_single_eq, data_word_split, data_word_split,
     tensorMapIdLM_apply, tensorMapId_kronecker, ← hbare]
   change single _ _ z =
-    singleKrausMap (registerEncoding (wordCodeConfiguration (bareDataCode c))) (single a b z) ⊗ₖ
+    singleKrausMap (Matrix.initializedBasisMatrix (wordCodeConfiguration (bareDataCode c))) (single a b z) ⊗ₖ
       single (0 : DataReference N k d) 0 (1 : ℂ)
   rw [registerEncoding_map_single, single_kronecker_single, mul_one]
 

@@ -132,7 +132,7 @@ theorem ghzAmplitude_overlappingBlock (N : ℕ) :
     simp [Fin.sum_univ_two]; norm_num
   funext j
   rw [ghzAmplitude, h]
-  fin_cases j <;> simp [invSqrtTwo]
+  fin_cases j <;> simp [invSqrtTwo, Complex.invSqrt]
 
 /-- The overlap `s = (3/5)^q` of the `q`-site states of the two blocks. -/
 noncomputable def overlappingBlockOverlap (q : ℕ) : ℝ := (3 / 5) ^ q

@@ -112,7 +112,7 @@ theorem ExactMPSGroundPath.exists_uniform_window_correlation_bound
     (by dsimp only [N]; omega) Y
   have hCard : (F.card : ℝ) ≤ L := by exact_mod_cast card_window_le N 0 L
   change ‖mpvConnectedCorrelator (Q.tensor γ) N 0 (L + t) X Y‖ ≤ _
-  simp only [mpvConnectedCorrelator, mpvExpectation_eq_normalizedVectorExpectation]
+  simp only [mpvConnectedCorrelator, mpvExpectation_eq_inner_div_norm_sq]
   exact h.trans (by gcongr)
 
 /-- The same physical window estimate holds for every tensor with the

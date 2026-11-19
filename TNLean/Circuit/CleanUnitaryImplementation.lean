@@ -7,6 +7,7 @@ import Mathlib.LinearAlgebra.Matrix.Kronecker
 import TNLean.Circuit.QuantitativeUnitaryGates
 import TNLean.Circuit.ZeroRegisterReflection
 import TNLean.Circuit.PairProductPowers
+import QICLean.Algebra.MatrixUnitaryBetween
 
 /-!
 # Unitary implementations with a reusable initialized workspace
@@ -171,27 +172,6 @@ theorem kronecker_one {J : Matrix ι κ ℂ} {U : Matrix ι ι ℂ} {Z : Matrix 
   rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul, h]
 
 end IsCleanImplementation
-
-/-- The matrix of an injective placement of logical basis vectors among
-ambient basis vectors. Selecting initialized workspace coordinates is a
-special case. Source: the initialized basis inclusions in Section 5 of
-`docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-def initializedBasisMatrix (e : κ ↪ ι) : Matrix ι κ ℂ :=
-  (1 : Matrix ι ι ℂ).submatrix id e
-
-omit [Fintype κ] in
-/-- A basis inclusion is an isometry. This follows from Mathlib's submatrix
-multiplication and injective submatrix identity. Source: the initialized
-subspace in Section 5 of
-`docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem initializedBasisMatrix_isIsometry (e : κ ↪ ι) :
-    (initializedBasisMatrix e).IsIsometry := by
-  simp only [Matrix.IsIsometry, initializedBasisMatrix, Matrix.conjTranspose_submatrix,
-    Matrix.conjTranspose_one]
-  change (1 : Matrix ι ι ℂ).submatrix e (Equiv.refl ι) *
-    (1 : Matrix ι ι ℂ).submatrix (Equiv.refl ι) e = 1
-  rw [Matrix.submatrix_mul_equiv, Matrix.one_mul]
-  exact Matrix.submatrix_one e e.injective
 
 omit [Fintype κ] [DecidableEq κ] in
 /-- Multiplying by a basis inclusion selects the corresponding input columns.

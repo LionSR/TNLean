@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.ClusterExpansion.TruncatedProductForm
+import TNLean.Lattice.ClusterExpansion.AllTemperatures
 import QICLean.Analysis.ClusterExpansion.Temperature
 import QICLean.Analysis.ClusterExpansion.Percolation
 
@@ -38,6 +39,9 @@ recorded in `docs/paper-gaps/hastings05_planar_domain_scope.tex`.
 -/
 
 open scoped MatrixOrder ComplexOrder
+
+open ClusterExpansion
+open SimpleGraph (overlapGraph)
 
 namespace TNLean.Lattice.ClusterExpansion
 

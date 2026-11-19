@@ -37,7 +37,7 @@ and the resulting uniform minimal-transfer spectral bound remain separate.
   794–815: the centered ground-vector estimate through a commutator.
 -/
 
-open TNLean.Lattice Matrix
+open ManyBody GaussianFilter Matrix
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
 namespace MPSTensor

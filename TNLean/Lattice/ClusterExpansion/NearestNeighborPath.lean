@@ -7,6 +7,7 @@ import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SupportedMatrixElements
 import QICLean.Entropy.RegionUnion
 import QICLean.Analysis.ClusterExpansion.Path
+import TNLean.Lattice.ClusterExpansion.ClusterFactorization
 
 /-!
 # The label path of actual nearest-neighbour interactions
@@ -23,6 +24,9 @@ is distinct; see `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
 open Finset SimpleGraph QuantumCircuit
+
+open ClusterExpansion
+open SimpleGraph (overlapGraph)
 
 namespace TNLean.Lattice.ClusterExpansion
 
@@ -70,7 +74,7 @@ theorem truncatedExp_nearestNeighbor_eq_crossing_components {N q r : ℕ}
           clusterOp h C β *
             (F {j ∈ univ | ∀ c ∈ C, j.val + 1 < c.val} *
               F {j ∈ univ | ∀ c ∈ C, c.val + 1 < j.val}) := by
-  exact ClusterExpansion.truncatedExp_pathGraph_eq_crossing_components h
+  convert ClusterExpansion.truncatedExp_pathGraph_eq_crossing_components (r := r) h
     (commute_nearestNeighbor_of_not_adj h hs) p β
 
 end TNLean.Lattice.ClusterExpansion

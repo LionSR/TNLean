@@ -138,7 +138,7 @@ noncomputable def repeatedBlockProj : Matrix (Fin 3) (Fin 3) ℂ :=
   !![2⁻¹, 2⁻¹, 0; 2⁻¹, 2⁻¹, 0; 0, 0, 1]
 
 private lemma invSqrtTwo_nonneg : (0 : ℂ) ≤ invSqrtTwo := by
-  rw [invSqrtTwo, ← Complex.ofReal_inv]
+  rw [invSqrtTwo, Complex.invSqrt, ← Complex.ofReal_inv]
   exact Complex.zero_le_real.mpr (by positivity)
 
 private lemma two_inv_add_two_inv : (2⁻¹ : ℂ) + 2⁻¹ = 1 := by norm_num

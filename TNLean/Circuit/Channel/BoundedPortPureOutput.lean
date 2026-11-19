@@ -52,7 +52,7 @@ theorem IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_pure_output
     (hOutput : Ψ (vecMulVec ψ (star ψ)) = vecMulVec φ (star φ)) :
     let k := Nat.clog d B
     let W := N * (1 + k + k)
-    let V := registerEncoding (PortRegisters.wordCodeConfiguration
+    let V := Matrix.initializedBasisMatrix (PortRegisters.wordCodeConfiguration
       (N := N) (PortRegisters.portWordCode d k))
     ∃ A : ℕ, ∃ owner : Fin A → Fin N,
       ∃ U : Matrix (Fin (W + A) → Fin d) (Fin (W + A) → Fin d) ℂ,
@@ -68,9 +68,9 @@ theorem IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_pure_output
                 (V *ᵥ φ) x * η e := by
   dsimp only
   let k := Nat.clog d B
-  let V := registerEncoding (PortRegisters.wordCodeConfiguration
+  let V := Matrix.initializedBasisMatrix (PortRegisters.wordCodeConfiguration
     (N := N) (PortRegisters.portWordCode d k))
-  have hV : Vᴴ * V = 1 := registerEncoding_isIsometry _
+  have hV : Vᴴ * V = 1 := Matrix.initializedBasisMatrix_isIsometry _
   have hφV : star (V *ᵥ φ) ⬝ᵥ (V *ᵥ φ) = 1 := by
     rw [star_mulVec, ← dotProduct_mulVec, mulVec_mulVec, hV, one_mulVec, hφ]
   have hPure (ξ : (Fin N → Fin d) → ℂ) :

@@ -17,6 +17,9 @@ designated supports. Supporting ALVV, arXiv:1602.08828v2, `eq:rho-expansion`, li
 
 open Finset QuantumCircuit
 
+open ClusterExpansion
+open SimpleGraph (overlapGraph)
+
 namespace TNLean.Lattice.ClusterExpansion
 
 open Classical in

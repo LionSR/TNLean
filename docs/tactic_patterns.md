@@ -360,7 +360,9 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** Unfold the matrix of a site permutation and rewrite the identity
   laws of its two group homomorphisms.
-- **Helper:** `Matrix.sitePermMatrix_one` in `TNLean/Lattice/SiteSymmetry.lean`.
+- **Helper:** `Matrix.sitePermMatrix_one` in `TNLean/Lattice/SiteSymmetry.lean`;
+  moved to QICLean as `ManyBody.sitePermOp_one` in
+  `QICLean/ManyBody/Sites/Relabel.lean`.
 - **Occurrences:** the arbitrary-observable ground-space power formula in
   `TranslationGroundSpace.lean`, and the two translation-orbit arguments in
   `TranslationFiniteOrbitCommutator.lean`.
@@ -373,7 +375,8 @@ abstracted — record why, so it is not re-proposed).
   site. Monotonicity of finite sums of nonnegative weights therefore bounds the
   anchor sum by the support sum.
 - **Helper:** `sum_weight_anchor_le_of_support_budget` in
-  `TNLean/Lattice/GraphDegreeGrowth.lean`.
+  `TNLean/Lattice/GraphDegreeGrowth.lean`; moved to QICLean in
+  `QICLean/ManyBody/Dynamics/GraphGrowth.lean`.
 - **Refactored occurrences:** the two-dimensional basis sum in `LowEnergyBasisUniform.lean`,
   the arbitrary-dimensional sum in `LowEnergyBasisUniformGeneral.lean`, and
   the actual truncated-term sum in `LowEnergyBasisTruncatedUniform.lean`.
@@ -390,7 +393,9 @@ abstracted — record why, so it is not re-proposed).
   compare its operator norm with the ambient compression, and then with the
   original term norm.
 - **Helper:** `norm_groundSpaceCompression_le` in
-  `TNLean/Lattice/LowEnergyBasisConstruction.lean`.
+  `TNLean/Lattice/LowEnergyBasisConstruction.lean`; moved to QICLean, where the
+  ground compression is a `subspaceCompression` and the bound is the
+  `subspaceCompression` norm lemma.
 - **Decision:** The normalized basis arguments use this mathematical norm bound
   rather than repeat the subspace coercion and operator-norm calculation.
 
@@ -517,7 +522,8 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** Five occurrences across three files: three in
   `TNLean/Lattice/ClusterExpansion/ClusterPart.lean` and one each in
   `TNLean/Lattice/ClusterExpansion/ThermalProduct.lean` and
-  `TNLean/Lattice/ClusterExpansion/TruncatedPositivity.lean`.
+  `TNLean/Lattice/ClusterExpansion/TruncatedPositivity.lean`, all three since
+  moved to QICLean's `Analysis/ClusterExpansion`.
 - **Abstraction:** `Matrix.isHermitian_sum_of_subset` in
   `TNLean/Algebra/MatrixHermitianSum.lean`; all five occurrences use the theorem.
 - **Notes:** Retains the additive/star assumptions of `Matrix.isHermitian_sum`;
@@ -531,7 +537,8 @@ abstracted — record why, so it is not re-proposed).
   isSelfAdjoint_sum Finset.univ fun j _ => (hHerm j).isSelfAdjoint
   ```
 - **Seen:** 5 occurrences across 3 files: three in
-  `TNLean/Lattice/GaussianFilteredTermLocalization.lean`, one each in
+  `TNLean/Lattice/GaussianFilteredTermLocalization.lean` (since moved to
+  QICLean), one each in
   `QICLean/ManyBody/Dynamics/GraphLocalization.lean` and
   `QICLean/ManyBody/Dynamics/CommutatorRecursion.lean`.
 - **Abstraction:** `Matrix.isHermitian_sum` in
@@ -547,7 +554,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** The tail specialization in `Lattice/GaussianFilteredIncrement.lean`
   and the independent variance argument in `MPS/AreaLaw/Hastings/GaussianTimeAverage.lean`.
   The additional proof reported in #9945 is already absent from main.
-- **Abstraction:** `TNLean.Lattice.integral_abs_gaussianReal_le_sqrt_two_mul_div_pi`
+- **Abstraction:** `GaussianFilter.integral_abs_gaussianReal_le_sqrt_two_mul_div_pi`
   specializes the existing tail bound to zero; `integral_abs_gaussianReal_le`
   follows by `2 ≤ π`. Both live in `Lattice/GaussianTailMoment.lean`.
 - **Notes:** The filtered increment, time average, interaction picture and
@@ -10051,7 +10058,7 @@ there is no need for a new tactic.
 - **Seen:** Three applications across
   `Lattice/TranslationSupercellCommutator.lean` (the two filtered bounds) and
   `Lattice/TranslationSupercellTruncated.lean` (the truncated bound).
-- **Abstraction:** `TNLean.Lattice.exists_mem_supercell_lt_edist` in
+- **Abstraction:** `ManyBody.exists_mem_supercell_lt_edist` in
   `Lattice/TranslationSupercellSpacing.lean`.
 - **Notes:** This specializes the existing range-dependent coordinate estimate
   to displacement at most one along every edge. The original range-dependent
@@ -10858,7 +10865,8 @@ removed after the dependency audit exposed it.
 - **Pattern:** Group a weighted sum by its anchor and apply a uniform bound on
   the weight of each fibre before summing the nonnegative function on sites.
 - **Promotion:** `sum_weight_mul_comp_le_budget_mul_sum` in
-  `Lattice/GraphDegreeGrowth.lean` expresses the common inequality for any
+  `Lattice/GraphDegreeGrowth.lean` (now `QICLean/ManyBody/Dynamics/GraphGrowth.lean`)
+  expresses the common inequality for any
   nonnegative function. All three grouping proofs now use it.
 - **Reuse:** The lower module also owns the support-to-anchor budget lemma.
   Polynomial sphere sums and bounded-degree exponential tails retain their
@@ -11775,7 +11783,7 @@ removed after the dependency audit exposed it.
   of its encoded vector using `Matrix.mul_vecMulVec`, `Matrix.vecMulVec_mul`
   and `Matrix.star_mulVec`; normalize the target through the code isometry.
 - **Decision:** two occurrences across two files are below the rule of three.
-  Reuse the existing matrix identities and `registerEncoding_isIsometry`.
+  Reuse the existing matrix identities and `Matrix.initializedBasisMatrix_isIsometry`.
   Before adding a third copy, expose the pure-initialization identity at the
   existing product-code owner. No verified parent module is refactored here.
 

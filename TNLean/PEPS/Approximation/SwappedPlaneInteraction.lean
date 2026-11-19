@@ -34,7 +34,7 @@ The sites of the crossing supports and their walks to both sides of `A` are in
 `TNLean.Lattice.CrossingSupports`.
 
 The polynomial-PEPS manuscript treats only site and nearest-neighbour terms on the open square,
-which is range one; this file extends its ClusterExpansion.boundary estimate to range `R`. The range-one
+which is range one; this file extends its boundary estimate to range `R`. The range-one
 statements on the open square, with the constant `8 J L²`, are
 `ManyBody.SquareInteraction.swapped_doubled_boundary_bound` and
 `ManyBody.SquareInteraction.supported_buffer_gaussian_integral`, and are unchanged.

@@ -64,6 +64,9 @@ source's dimensional bound is recorded in `docs/paper-gaps/hastings05_planar_dom
 open Finset Matrix QuantumCircuit
 open scoped Function
 
+open ClusterExpansion
+open SimpleGraph (overlapGraph)
+
 namespace TNLean.Lattice.ClusterExpansion
 
 section Entry

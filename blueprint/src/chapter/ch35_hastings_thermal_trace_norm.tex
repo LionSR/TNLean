@@ -32,35 +32,6 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     the polar decomposition removes the need for $D$ to be Hermitian.
 \end{proof}
 
-\begin{theorem}[The trace-norm form of the cluster-expansion bound]
-    \label{thm:hastings_thermal_trace_norm}
-    \lean{TNLean.Lattice.ClusterExpansion.re_trace_sqrt_sub_le_of_forall_norm_trace_mul_sub_le}
-    \leanok
-    Let $\rho$ and $\sigma$ be square complex matrices with
-    $\operatorname{Re}\operatorname{Tr}\rho\ge0$, and let $\epsilon\ge0$. If
-    \begin{align}
-        |\operatorname{Tr}(O\rho)-\operatorname{Tr}(O\sigma)|
-        \le\epsilon\,\|O\|\operatorname{Re}\operatorname{Tr}\rho
-    \end{align}
-    for every matrix $O$, then
-    $\|\rho-\sigma\|_1\le\epsilon\operatorname{Re}\operatorname{Tr}\rho$. For the
-    thermal state $\rho=\rho(\beta)$, which is positive with
-    $\operatorname{Tr}\rho(\beta)=Z=\|\rho(\beta)\|_1$, and
-    $\sigma=\rho(\beta,l_{\mathrm{proj}})$, the hypothesis is the bound of
-    Lemma~\ref{thm:hastings_percolation_large_diameter} with
-    $\epsilon=\exp[N(xy)^{-1}\exp(-l_{\mathrm{proj}}/\xi_{\mathrm{perc}})]-1$.
-    The factor $(xy)^{-1}$ is the size-threshold correction to eq.~(perc2)
-    \cite{gap:hastings05_percolation_cluster_size}. The conclusion is the
-    corresponding trace-norm bound of \cite[lines 1281--1299]{Hastings2006Solving}.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:hastings_thermal_trace_norm_duality}
-    For $\|O\|\le1$ the hypothesis gives
-    $|\operatorname{Tr}(O(\rho-\sigma))|\le\epsilon\operatorname{Re}\operatorname{Tr}\rho$,
-    since $\epsilon\ge0$. Apply
-    Lemma~\ref{thm:hastings_thermal_trace_norm_duality} to $D=\rho-\sigma$.
-\end{proof}
-
 \begin{theorem}[The matrix product form at every temperature]
     \label{thm:hastings_thermal_all_temperatures}
     \lean{TNLean.Lattice.HasProductForm.pow_of_even,
@@ -92,40 +63,12 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     factors take $m=2(\lceil\beta/\beta_0\rceil+1)$.
 \end{proof}
 
-\begin{lemma}[Positivity of the truncated operator at every temperature]
-    \label{thm:hastings_truncated_positivity}
-    \lean{TNLean.Lattice.ClusterExpansion.isHermitian_clusterPart,
-        TNLean.Lattice.ClusterExpansion.isHermitian_truncatedExp,
-        TNLean.Lattice.ClusterExpansion.posSemidef_truncatedExp_pow}
-    \leanok
-    \uses{def:hastings_truncated_expansion, def:hastings_cluster_part}
-    Let $H=\sum_kH_k$ with Hermitian terms $H_k$. Then every cluster part
-    $\rho(\beta,C)$ and the truncated operator $\rho(\beta,l)$ are Hermitian, and
-    for every even $m$ the power $\rho(\beta,l)^m$ is positive semidefinite. With
-    $\beta/m$ in place of $\beta$, this is the positivity of
-    $\rho(\beta,l_{\mathrm{proj}})=\rho(\beta/m,l_{\mathrm{proj}})^m$ in
-    eq.~(mplt) of \cite[lines 1303--1314]{Hastings2006Solving}, with positive
-    semidefiniteness in place of positive
-    definiteness~\cite{gap:hastings05_mplt_positivity}.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:hastings_truncation_inclusion_exclusion,
-        thm:hastings_thermal_all_temperatures}
-    Each $\rho(\beta,C)$ is a sum of the exponentials $e^{-\beta(H-H_B-H_D)}$ of
-    Hermitian operators with coefficients $\pm1$, hence Hermitian. By
-    Lemma~\ref{thm:hastings_truncation_inclusion_exclusion}, $\rho(\beta,l)$ is a
-    sum of the $\rho(\beta,U)$ with coefficients $\pm1$, hence Hermitian, and
-    Theorem~\ref{thm:hastings_thermal_all_temperatures} gives the positivity of
-    its even powers.
-\end{proof}
-
 \begin{lemma}[The truncated operator at every temperature]
     \label{thm:hastings_truncated_all_temperatures}
     \lean{TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp_pow_of_even,
         TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp_pow_of_even_of_dist_le}
     \leanok
-    \uses{def:hastings_product_form, def:hastings_truncated_expansion,
-        def:hastings_cluster_of_terms}
+    \uses{def:hastings_product_form}
     Let the finite metric lattice be nonempty, let every term $H_k$ be Hermitian and act only
     on a set $S_k$ of sites, with clusters and largeness as in
     Lemma~\ref{thm:hastings_truncated_product_form}, and let $m$ be even.
@@ -138,37 +81,11 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     definiteness~\cite{gap:hastings05_mplt_positivity}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_truncated_product_form, thm:hastings_truncated_positivity,
-        thm:hastings_thermal_all_temperatures}
+    \uses{thm:hastings_truncated_product_form, thm:hastings_thermal_all_temperatures}
     The truncated operator is in matrix product form of range $l$ by
     Lemma~\ref{thm:hastings_truncated_product_form} and Hermitian by
-    Lemma~\ref{thm:hastings_truncated_positivity}, so
+    the positivity of the truncated operator
+    \cite[``Positivity of the truncated operator at every temperature'']{QICLean2026Blueprint}, so
     Theorem~\ref{thm:hastings_thermal_all_temperatures} applies.
 \end{proof}
 
-\begin{lemma}[The least sufficient even number of factors]
-    \label{thm:hastings_even_temperature_factors}
-    \lean{TNLean.Lattice.ClusterExpansion.evenTemperatureFactors,
-        TNLean.Lattice.ClusterExpansion.evenTemperatureFactors_spec,
-        TNLean.Lattice.ClusterExpansion.evenTemperatureFactors_le,
-        TNLean.Lattice.ClusterExpansion.exp_evenTemperatureFactors_mul_sub_one_le}
-    \leanok
-    For $\beta>0$ and $\beta_0>0$, put
-    $n=2\lceil\beta/(2\beta_0)\rceil$. Then $n\ge2$ is the least
-    positive even integer with $\beta/n\le\beta_0$, and
-    \begin{align*}
-        \beta/\beta_0\le n<\beta/\beta_0+2.
-    \end{align*}
-    Consequently, for every $A\ge0$,
-    $e^{nA}-1\le e^{(\beta/\beta_0+2)A}-1$.
-    This supplies the exact rounding bound for the choice in
-    \cite[lines 1307--1312]{Hastings2006Solving} and its corrected
-    error estimate\cite{gap:hastings05_temperature_factor_count}.
-\end{lemma}
-\begin{proof}\leanok
-    The ceiling lies between $\beta/(2\beta_0)$ and
-    $\beta/(2\beta_0)+1$. Multiplication by two gives the displayed
-    interval and $\beta/n\le\beta_0$. Any sufficient positive even
-    integer is $2k$ with $k\ge\beta/(2\beta_0)$, hence is at least $n$.
-    The last inequality follows from monotonicity of the exponential.
-\end{proof}

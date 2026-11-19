@@ -23,7 +23,7 @@ correlations to limiting minimal transfer contractions remains separate.
 
 noncomputable section
 
-open TNLean.Lattice Matrix QuantumCircuit MPSPreparation GaussianFilter
+open ManyBody Matrix QuantumCircuit MPSPreparation GaussianFilter
 open scoped Matrix.Norms.L2Operator InnerProductSpace NNReal
 
 namespace MPSTensor
@@ -52,8 +52,9 @@ theorem ExactMPSGroundPath.exists_uniform_connected_exponential_clustering
       ∀ ℓ : ℝ, 1 ≤ ℓ →
         ℓ ≤ ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY →
         let ψ := mpvState (Q.tensor γ) N
-        ‖normalizedVectorExpectation ψ (A * B) -
-          normalizedVectorExpectation ψ A * normalizedVectorExpectation ψ B‖ ≤
+        ‖⟪ψ, Matrix.toEuclideanCLM (𝕜 := ℂ) (A * B) ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) -
+          ⟪ψ, Matrix.toEuclideanCLM (𝕜 := ℂ) A ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) *
+            (⟪ψ, Matrix.toEuclideanCLM (𝕜 := ℂ) B ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ))‖ ≤
             K * ((X.card : ℝ) + 1) * ‖A‖ * ‖B‖ * Real.exp (-κ * ℓ) := by
   obtain ⟨Δ, hΔ, hEst⟩ := Q.exists_uniform_connected_correlation_gaussian_bound
   let v := 8 * Real.exp (1 : ℝ)
