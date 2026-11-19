@@ -373,3 +373,55 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     Lemma~\ref{lem:window_extraction} in the refinement. Every subspace of $R$
     consists of matrix product states of the bond dimension of $R$.
 \end{proof}
+
+\begin{lemma}[Orthonormal low-energy output of the low-density algorithm]
+    \label{lem:low_density_tree_algorithm_output}
+    \lean{TNLean.MPS.AreaLaw.ALVV.low_density_output_accuracy,
+        TNLean.MPS.AreaLaw.ALVV.exists_orthonormal_ritz_energy_le,
+        TNLean.MPS.AreaLaw.ALVV.exists_low_density_tree_algorithm_output}
+    \leanok
+    \uses{lem:low_density_tree_algorithm}
+    In the setting of Lemma~\ref{lem:low_density_tree_algorithm}, with
+    $3w(\lceil\log_2L\rceil+2)\le\eta_{\rm LD}$ and
+    $x=\eta_{\rm LD}-3w(\lceil\log_2L\rceil+1)$, for every $0<\delta<1$ there
+    are an accuracy $0<\delta'<1$ and a refinement $R$ of the root, either the
+    whole space or the trim of a word image of the root, such that $R$ is
+    $\delta'$-close to $G(x)$ and the Ritz space of $H$ compressed to $R$ of
+    dimension $\dim G(x)$ has an orthonormal basis of matrix product states,
+    each of energy at most $E_0+x+\delta$. This states Theorem~6.3 of the
+    source with the following restriction: the number of output states is
+    $\dim G(x)$, not the source's count, whose comparison with $\dim G(x)$ is
+    not established; the samples are asserted to exist rather than drawn with
+    a success probability; and no running time is asserted.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:low_density_tree_algorithm}
+    Put $A=\|H-E_0\|$, $\rho=3x/\delta+1$ and
+    $\delta'=\min(1/2,\delta/(3((1+\rho)A+x+\delta+1)))$. Then
+    $x/\rho\le\delta/3$, $(1+\rho)A\delta'\le\delta/3$ and
+    $(x+\delta)\delta'\le\delta/3$, so
+    $((1+1/\rho)x+(1+\rho)A\delta')/(1-\delta')\le x+\delta$. Apply
+    Lemma~\ref{lem:low_density_tree_algorithm} at accuracy $\delta'$ and take
+    an orthonormal basis of its Ritz space, whose dimension is $\dim G(x)$.
+    Every vector of this basis is a unit vector of $R$, so its energy is at
+    most $E_0+x+\delta$ and it is a matrix product state.
+\end{proof}
+
+\begin{lemma}[The source's buffer shortens the window by at least its loss]
+    \label{lem:low_density_source_buffer}
+    \lean{TNLean.MPS.AreaLaw.ALVV.source_buffer_le_window_shortening}
+    \leanok
+    For $L\ge2$, $\mu\ge0$ and $w=\mu/(3\log L)$ with the natural logarithm,
+    \begin{align}
+        \mu\le3w(\lceil\log_2L\rceil+1).
+        \label{eq:low_density_source_buffer}
+    \end{align}
+    Hence the energy bound $E_0+\eta_{\rm LD}-3w(\lceil\log_2L\rceil+1)+\delta$
+    of Lemma~\ref{lem:low_density_tree_algorithm_output} is at most
+    $E_0+\eta_{\rm LD}-\mu+\delta$.
+\end{lemma}
+\begin{proof}\leanok
+    Since $L\le2^{\lceil\log_2L\rceil}$ and $\log2\le1$,
+    $\log L\le\lceil\log_2L\rceil\log2\le\lceil\log_2L\rceil+1$; multiply by
+    $\mu/\log L\ge0$.
+\end{proof}
