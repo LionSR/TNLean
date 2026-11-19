@@ -23,6 +23,16 @@ every `η₀ < η₁ ≤ 3t + 4ℓ` a real polynomial `p` of degree `ℓ²` with
 `Δ = 4 exp(−4ℓ² √((η₁ − η₀)/(3t + 4ℓ − η₀)))` and operator Schmidt rank at most `(qℓ)^{68ℓ}`
 across both middle cuts.
 
+The printed statement, lines 981–997, is quoted in
+`docs/paper-gaps/alvv16_approximation_parameters.tex`, subsection "The window range of
+Corollary 4.6".
+
+**Scope restriction (upper window below the norm bound):** the projector is given only for
+`η₁ ≤ 3t + 4ℓ`, the norm bound of `Ht`, whereas the source asserts every `η₁ > η₀`. For larger
+`η₁` no eigenvalue of `Ht` is at least `η₁`. The restriction is inherited from
+`exists_two_window_chebyshev_projector_degree_sq`; see
+`docs/paper-gaps/alvv16_approximation_parameters.tex` for the elimination plan.
+
 **Local fix (explicit constants, cutoff, spectral conditions):** the constants, the cutoff
 `19 + η ≤ t` of the spectral comparison, the closed spectral conditions and the slope near `η₀`
 are those of `GoodProjectorHardTruncation`, which records them. The cutoff corrects the printed
