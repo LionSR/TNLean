@@ -23,7 +23,7 @@ namespace TNLean.MPS.AreaLaw
 
 open Matrix SimpleGraph
 open scoped Matrix.Norms.L2Operator MatrixOrder ComplexOrder
-open TNLean.Lattice.ClusterExpansion
+open ClusterExpansion
 
 open Classical in
 /-- The actual interaction-label truncation is represented by site-dependent operator tensors
