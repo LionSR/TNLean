@@ -45,8 +45,8 @@ private theorem rectKronecker_mem_unitary (A : κ × Bool → Matrix (Fin d) (Fi
 /-- The nominal pair of a gate, with independent permutations of the two legs.
 Source context: the depth-two circuit truncation in arXiv:2405.00439,
 Section V, lines 2081–2087. -/
-def pairedBond (σ : Bool → Equiv.Perm κ) (k : κ) : Set (κ × Bool) :=
-  Set.range fun b ↦ (σ b k, b)
+def pairedBond (σ : Bool → Equiv.Perm κ) (k : κ) : Finset (κ × Bool) :=
+  Finset.univ.image fun b ↦ (σ b k, b)
 
 /-- The product gate with one-site factors `A false` and `A true` on its
 specified pair, extended by identities elsewhere. Source context:
@@ -56,11 +56,13 @@ noncomputable def pairedGate (σ : Bool → Equiv.Perm κ)
     Matrix (κ × Bool → Fin d) (κ × Bool → Fin d) ℂ :=
   rectKronecker fun s ↦ if σ s.2 k = s.1 then A s.2 else 1
 
-omit [Fintype κ] [DecidableEq κ] in
 private theorem pairedBond_disjoint (σ : Bool → Equiv.Perm κ) {k l : κ} (hkl : k ≠ l) :
     Disjoint (pairedBond σ k) (pairedBond σ l) := by
-  rw [Set.disjoint_left]
-  rintro s ⟨b, hb⟩ ⟨b', hb'⟩
+  rw [Finset.disjoint_left]
+  intro s hk hl
+  simp only [pairedBond, Finset.mem_image, Finset.mem_univ, true_and] at hk hl
+  obtain ⟨b, hb⟩ := hk
+  obtain ⟨b', hb'⟩ := hl
   have heq := hb.trans hb'.symm
   have hbb : b = b' := congrArg Prod.snd heq
   subst b'
@@ -68,10 +70,11 @@ private theorem pairedBond_disjoint (σ : Bool → Equiv.Perm κ) {k l : κ} (hk
 
 private theorem pairedGate_supported (σ : Bool → Equiv.Perm κ)
     (A : Bool → Matrix (Fin d) (Fin d) ℂ) (k : κ) :
-    pairedGate σ A k ∈ QuantumCircuit.supportedOperators d (pairedBond σ k) := by
+    pairedGate σ A k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (pairedBond σ k) := by
   apply QuantumCircuit.rectKronecker_mem_supportedOperators
   intro s hs
-  have hne : σ s.2 k ≠ s.1 := fun h ↦ hs ⟨s.2, Prod.ext h rfl⟩
+  have hne : σ s.2 k ≠ s.1 := fun h ↦
+    hs (Finset.mem_image.mpr ⟨s.2, Finset.mem_univ _, Prod.ext h rfl⟩)
   simp [hne]
 
 private theorem pairedGate_unitary (σ : Bool → Equiv.Perm κ)
@@ -106,7 +109,7 @@ private theorem pairedGate_list_prod (σ : Bool → Equiv.Perm κ)
 
 /-- The common two-matching bond geometry. The second component selects a
 circuit layer. Source context: arXiv:2405.00439, Section V, lines 2081–2087. -/
-def pairCircuitBond (σ : Bool → Bool → Equiv.Perm κ) (p : κ × Bool) : Set (κ × Bool) :=
+def pairCircuitBond (σ : Bool → Bool → Equiv.Perm κ) (p : κ × Bool) : Finset (κ × Bool) :=
   pairedBond (σ p.2) p.1
 
 /-- One actual layer of pair gates, retaining the cells in `S`.
@@ -168,14 +171,16 @@ Source context: arXiv:2405.00439, Section V, lines 2081–2087. -/
 def dressedCircuitMatchings (τ : Equiv.Perm κ) (color leg : Bool) : Equiv.Perm κ :=
   if color then if leg then Equiv.refl κ else τ else Equiv.refl κ
 
-omit [Fintype κ] [DecidableEq κ] in
 private theorem pairedBond_subset_cells (σ : Bool → Equiv.Perm κ) (S : Finset κ)
-    (k : κ) : pairedBond σ k ⊆ {s : κ × Bool | s.1 ∈ S} ↔
+    (k : κ) : (pairedBond σ k : Set (κ × Bool)) ⊆ {s : κ × Bool | s.1 ∈ S} ↔
       σ false k ∈ S ∧ σ true k ∈ S := by
+  have hrange : (pairedBond σ k : Set (κ × Bool)) = Set.range (fun b ↦ (σ b k, b)) := by
+    simp [pairedBond, Finset.coe_image]
+  rw [hrange, Set.range_subset_iff]
   constructor
   · intro h
-    exact ⟨h ⟨false, rfl⟩, h ⟨true, rfl⟩⟩
-  · rintro ⟨hf, ht⟩ _ ⟨b, rfl⟩
+    exact ⟨h false, h true⟩
+  · rintro ⟨hf, ht⟩ b
     cases b
     · exact hf
     · exact ht

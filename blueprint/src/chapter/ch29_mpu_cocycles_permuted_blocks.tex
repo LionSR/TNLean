@@ -24,6 +24,63 @@
     % Source anchor: arXiv:2502.20257, eq:omega_and_Ls.
 \end{definition}
 
+\begin{definition}[Permutation coefficients and block coordinates]
+    \label{def:mpug_permutation_coefficients}
+    \lean{TNLean.Algebra.PermutationCochains.permutationMulDistribMulAction,
+        TNLean.Algebra.PermutationCochains.representation,
+        TNLean.Algebra.PermutationCochains.representation_ρ_apply,
+        TNLean.Algebra.PermutationCochains.oneCochainEquiv,
+        TNLean.Algebra.PermutationCochains.twoCochainEquiv}
+    \leanok
+    \uses{def:mpug_l_symbols}
+    Let $M$ be an abelian multiplicative group and let $G$ act on $\mathsf X$.
+    The coefficient group $A=\operatorname{Fun}(\mathsf X,M)$ has left action
+    $(g\cdot f)(x)=f(g^{-1}x)$. Block one-cochains and two-cochains correspond
+    bijectively to the usual inhomogeneous cochains with coefficients in $A$
+    by
+    \begin{align}
+        c_\gamma(g)(x) & =\gamma_{g,g^{-1}x},   \\
+        c_L(g,h)(x)    & =L^{(gh)^{-1}x}_{g,h}.
+    \end{align}
+    The inverse correspondences evaluate at $gx$ and $ghx$, respectively.
+\end{definition}
+
+\begin{lemma}[Coboundaries with permutation coefficients]
+    \label{lem:mpug_permutation_differentials}
+    \lean{TNLean.Algebra.PermutationCochains.d₁₂_oneCochainEquiv_apply,
+        TNLean.Algebra.PermutationCochains.d₂₃_twoCochainEquiv_apply,
+        TNLean.Algebra.PermutationCochains.d₂₃_eq_const_iff}
+    \leanok
+    \uses{def:mpug_permutation_coefficients}
+    For every $x\in\mathsf X$ and $g,h,k\in G$, the inhomogeneous
+    differentials satisfy
+    \begin{align}
+        (dc_\gamma)(g,h)(ghx)
+         & =\frac{\gamma_{g,hx}\gamma_{h,x}}{\gamma_{gh,x}},    \\
+        (dc_L)(g,h,k)(ghkx)
+         & =\frac{L^x_{g,hk}L^x_{h,k}}{L^{kx}_{g,h}L^x_{gh,k}}.
+    \end{align}
+    Thus, for $M=\C^\times$, compatibility with $\omega$ is exactly
+    $dc_L(g,h,k)(x)=\omega(g,h,k)$ for every $x,g,h,k$.
+    These are the coboundaries of \cite{FrancoRubio2025MPUGauging},
+    with the corrected last group index in the two-cochain formula
+    \cite{gap:fbc25_two_cochain_coboundary_index_typo}.
+    % Local fix: docs/paper-gaps/fbc25_two_cochain_coboundary_index_typo.tex.
+    % Source anchors: arXiv:2502.20257, lines 5914--5921 and eq:omega_and_Ls.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Substitute the action $(g\cdot f)(x)=f(g^{-1}x)$ into
+    \begin{align}
+        dc(g,h)   & =(g\cdot c(h))c(gh)^{-1}c(g),                   \\
+        dF(g,h,k) & =(g\cdot F(h,k))F(gh,k)^{-1}F(g,hk)F(g,h)^{-1}.
+    \end{align}
+    Evaluation at $ghx$ and $ghkx$ cancels the inverse group actions.
+    Multiplication by the denominator gives the compatibility identity.
+    Conversely, every block is $ghkx$ for a unique $x$, so that identity
+    determines the differential at every block.
+\end{proof}
+
 \begin{definition}[Joint scalar gauge of L-symbols]
     \label{def:mpug_l_gauge}
     \lean{TNLean.Algebra.ActionTensorGauge,
