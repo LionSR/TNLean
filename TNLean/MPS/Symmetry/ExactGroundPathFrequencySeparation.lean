@@ -54,8 +54,6 @@ theorem ExactMPSGroundPath.negativeFrequency_connected_identity
     · exact hi.ge
     · linarith
   apply ManyBody.inner_ground_connected_eq_negativeFrequency_commutator hH hmin A B
-  · rw [hline]
-    exact Submodule.mem_span_singleton_self _
-  · exact hline
+  rw [hline]
 
 end MPSTensor
