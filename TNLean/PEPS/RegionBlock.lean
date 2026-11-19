@@ -32,6 +32,7 @@ import TNLean.PEPS.RegionBlock.InsertSplit
 import TNLean.PEPS.RegionBlock.Insertion
 import TNLean.PEPS.RegionBlock.InteriorBondInsertion
 import TNLean.PEPS.RegionBlock.KernelDescent
+import TNLean.PEPS.RegionBlock.PartitionBonds
 import TNLean.PEPS.RegionBlock.PhysicalOperation
 import TNLean.PEPS.RegionBlock.ProportionalityFromAbsorbed
 import TNLean.PEPS.RegionBlock.Realization
