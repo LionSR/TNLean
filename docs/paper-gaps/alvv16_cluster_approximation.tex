@@ -263,6 +263,17 @@ It still uses the corrected estimate
 (\ref{eq:alvv_normalized_label_replacement}) in place of the false printed
 one.
 
+The printed lemma, lines 1262--1268, reads: ``Let $t$ and $t'<(\ln(2)/2)t$
+be truncation parameters and $H$ a $n$-qudit local Hamiltonian. For any
+$\xi>0$ there is an MPO representation $\tilde H'$ for the truncated
+Hamiltonian $\tilde H=\tilde H_{t,t'}$ such that $\|\tilde H-\tilde H'\|\le\xi$
+and $\tilde H'$ has bond dimension $\operatorname{poly}(t'2^{t'}n/\xi)$ across
+all bonds. Such an MPO can be constructed in time polynomial in its size.''
+It places no upper bound on $\xi$. For $\xi>2^{m+1}$ the construction at
+$\xi'=\min\{\xi,2^{m+1}\}$ is within $\xi$, so the bound
+(\ref{eq:alvv_scale_free_bond}) with $\xi'$ in place of $\xi$ holds for every
+$\xi>0$.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_softTruncatedHamiltonian_mpo_scaleFree_of_pos}.}
+
 \section{The selector by physical support: the missing step}
 \label{sec:alvv_physical_selector_gap}
 

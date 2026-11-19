@@ -395,21 +395,26 @@ in~\cite{gap:alvv16_low_energy_family_scope}.
     a success probability; and no running time is asserted.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:low_density_tree_algorithm}
+    \uses{lem:physical_ld_sampled_interval_tree,lem:physical_ld_root_refinement,
+        lem:window_extraction}
     Put $A=\|H-E_0\|$, $\rho=3x/\delta+1$ and
     $\delta'=\min(1/2,\delta/(3((1+\rho)A+x+\delta+1)))$. Then
     $x/\rho\le\delta/3$, $(1+\rho)A\delta'\le\delta/3$ and
     $(x+\delta)\delta'\le\delta/3$, so
-    $((1+1/\rho)x+(1+\rho)A\delta')/(1-\delta')\le x+\delta$. Apply
-    Lemma~\ref{lem:low_density_tree_algorithm} at accuracy $\delta'$ and take
-    an orthonormal basis of its Ritz space, whose dimension is $\dim G(x)$.
+    $((1+1/\rho)x+(1+\rho)A\delta')/(1-\delta')\le x+\delta$. As in
+    Lemma~\ref{lem:low_density_tree_algorithm}, run the tree of
+    Lemma~\ref{lem:physical_ld_sampled_interval_tree}, refine its root by
+    Lemma~\ref{lem:physical_ld_root_refinement} at accuracy $\delta'$, apply
+    Lemma~\ref{lem:window_extraction} in the refinement with $c=x$, and take an
+    orthonormal basis of the Ritz space, whose dimension is $\dim G(x)$.
     Every vector of this basis is a unit vector of $R$, so its energy is at
     most $E_0+x+\delta$ and it is a matrix product state.
 \end{proof}
 
 \begin{lemma}[The source's buffer shortens the window by at least its loss]
     \label{lem:low_density_source_buffer}
-    \lean{TNLean.MPS.AreaLaw.ALVV.source_buffer_le_window_shortening}
+    \lean{TNLean.MPS.AreaLaw.ALVV.source_buffer_le_window_shortening,
+        TNLean.MPS.AreaLaw.ALVV.shortened_window_le_source_window}
     \leanok
     For $L\ge2$, $\mu\ge0$ and $w=\mu/(3\log L)$ with the natural logarithm,
     \begin{align}

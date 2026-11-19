@@ -315,6 +315,33 @@ place of the false printed one; see~\cite{gap:alvv16_cluster_approximation}.
     $q^\ell\leq q^2E_0^{\log q/c_0}$.
 \end{proof}
 
+\begin{lemma}[Efficient soft truncation for every accuracy]
+    \label{thm:soft_hamiltonian_mpo_every_accuracy}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_softTruncatedHamiltonian_mpo_scaleFree_of_pos}
+    \leanok
+    \uses{thm:soft_hamiltonian_mpo_scale_free_bond}
+    Keep the hypotheses of
+    Lemma~\ref{thm:soft_hamiltonian_mpo_scale_free_bond}, with any accuracy
+    $\xi>0$, and put $\xi'=\min\{\xi,2^{m+1}\}$ and $E_0'$ for $E_0$ at $\xi'$.
+    Then the full replacement~(\ref{eq:soft_interval_full_operator}) has
+    actual approximating tensors $T$ with $\|\widetilde H-T\|\leq\xi$ and bond
+    dimension at most
+    \begin{align}
+        1+Nq^2+(m+1)\Bigl(2+\frac{\log E_0'}{c_0}\Bigr)^2q^2E_0'^{\log q/c_0},
+        \label{eq:soft_interval_every_accuracy_bond}
+    \end{align}
+    which does not depend on $t$. This is the lemma on efficient soft
+    truncation of~\cite[lines 1262--1268]{Arad2016RigorousRG}, which allows
+    every $\xi>0$, for a positive integer order $m=t'$, with the corrected
+    interaction-label estimate in place of the false printed one
+    \cite{gap:alvv16_cluster_approximation}; no running time is asserted.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:soft_hamiltonian_mpo_scale_free_bond}
+    Apply Lemma~\ref{thm:soft_hamiltonian_mpo_scale_free_bond} at the accuracy
+    $\xi'\leq2^{m+1}$; its tensors are within $\xi'\leq\xi$.
+\end{proof}
+
 The growth of the coefficient budget $t2^{m+1}$ is offset by the faster
 decay of the cluster terms at the short heat times $a/t$. For fixed $q$ the
 bound~(\ref{eq:soft_interval_scale_free_bond}) is polynomial in

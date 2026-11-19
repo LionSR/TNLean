@@ -25,7 +25,8 @@ contains `r' = dim G(η_LD - 3w (⌈log₂ L⌉ + 1))` orthonormal matrix produc
 space, each of energy at most `E₀ + η_LD - 3w (⌈log₂ L⌉ + 1) + δ`. For the source's buffer
 `w = μ / (3 log L)` the shortened window satisfies `η_LD - 3w (⌈log₂ L⌉ + 1) ≤ η_LD - μ`
 (`source_buffer_le_window_shortening`), so these energies are at most the printed
-`E₀ + η - μ + δ` with `η = η_LD`.
+`E₀ + η - μ + δ` with `η = η_LD` (`shortened_window_le_source_window`, in the form of the energy
+bound below).
 
 **Scope restriction (number of output states):** the number of states is the dimension
 `r' = dim G(η_LD - 3w (⌈log₂ L⌉ + 1))` of the shortened window, whereas the printed count is

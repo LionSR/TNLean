@@ -531,6 +531,23 @@ all.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.merge_rounds_lt_of_odd}.}
 Only when $s=D^c$ does $j=(c+1)/2$ give $M=Ds^2$. The odd case is therefore
 a rounding obstruction for this pair of sufficient inequalities. It does not
 exclude a sharper error estimate or another construction attaining $Ds^2$.
+
+\paragraph{The case $c=1$ needs a different construction.}
+For $c=1$ and $s<D^c$, that is $1<s<D$, the obstruction does not depend on the error
+estimate. A parent samples $s$ vectors and applies $j$ whole rounds of a
+family of $D^2$ operators, so its node bound is $D^{2j}s$. The printed bound
+$D^{2j}s\le Ds^2$ means $D^{2j-1}\le s$, and $s<D$ excludes every $j\ge1$.
+With $j=0$ the parent applies no improving operator at all. So no argument
+that applies whole rounds of the family of Theorems~4.2 and~4.3 reaches the
+printed node dimension $Ds^2$ when $s<D$, whatever error estimate it uses;
+this is the typical case for the parameters used here, since $D$ is far
+larger than $s$. Closing it needs a new idea, for example a second improving
+family of $D'^2\le Ds$ operators whose error parameter still meets the
+budget of the error estimate, and no such family is constructed in the
+source or here. The source's number of rounds $\tfrac12\lceil\log_Ds\rceil$
+is $\tfrac12$ in this case, so the printed procedure does not specify a
+parent either.
+
 The formalized bound is
 $M\le D^2s^2$, at most a factor $D$ above the source's: indeed
 $M/(Ds^2)=D^c/s\in[1,D)$, with equality to one when $s=D^c$. For the parameters used, $D=(m\ell^2)^{22\ell}$ with
