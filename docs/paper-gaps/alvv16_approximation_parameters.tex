@@ -531,6 +531,23 @@ all.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.merge_rounds_lt_of_odd}.}
 Only when $s=D^c$ does $j=(c+1)/2$ give $M=Ds^2$. The odd case is therefore
 a rounding obstruction for this pair of sufficient inequalities. It does not
 exclude a sharper error estimate or another construction attaining $Ds^2$.
+
+\paragraph{The case $c=1$ needs a different construction.}
+For $c=1$ and $s<D^c$, that is $1<s<D$, the obstruction does not depend on the error
+estimate. A parent samples $s$ vectors and applies $j$ whole rounds of a
+family of $D^2$ operators, so its node bound is $D^{2j}s$. The printed bound
+$D^{2j}s\le Ds^2$ means $D^{2j-1}\le s$, and $s<D$ excludes every $j\ge1$.
+With $j=0$ the parent applies no improving operator at all. So no argument
+that applies whole rounds of the family of Theorems~4.2 and~4.3 reaches the
+printed node dimension $Ds^2$ when $s<D$, whatever error estimate it uses;
+this is the typical case for the parameters used here, since $D$ is far
+larger than $s$. Closing it needs a new idea, for example a second improving
+family of $D'^2\le Ds$ operators whose error parameter still meets the
+budget of the error estimate, and no such family is constructed in the
+source or here. The source's number of rounds $\tfrac12\lceil\log_Ds\rceil$
+is $\tfrac12$ in this case, so the printed procedure does not specify a
+parent either.
+
 The formalized bound is
 $M\le D^2s^2$, at most a factor $D$ above the source's: indeed
 $M/(Ds^2)=D^c/s\in[1,D)$, with equality to one when $s=D^c$. For the parameters used, $D=(m\ell^2)^{22\ell}$ with
@@ -542,7 +559,92 @@ tree above: it is shown to exist, with no joint sampling probability; its
 leaves are full blocks of length at most $4\ell$; each long parent applies
 one collective trim after its $k$ rounds rather than after each round; the
 parameters use $g=\min\{\gamma,1\}$; and the bond dimension of the output
-grows with $L$ through the trimming threshold.
+grows with $L$ through the trimming threshold. Its success probability is
+the subject of the next subsection.
+
+\subsection*{Success probability of the tree of constant node dimension}
+The same tree can be run with fresh samples. Every interval receives one
+independent coordinate, a Haar unitary of every possible rank of its space,
+fixed before any retained space is known. A long parent writes the
+orthogonal projection of its merged space $W$ in one fixed chart, samples
+the range through the coordinate of its rank, applies all words of length
+$k$ in its family, and trims once. For fixed children, Lemma
+\texttt{l:rs} with its rank-dependent overlap,
+\begin{align}
+    c&=\frac{3\min\{s,Q\}}{32Q},\qquad Q=\dim W,
+    \label{eq:alvv16_approximation_parameters_canonical_overlap}
+\end{align}
+bounds the failure of the sample by $(1+2/\sqrt c)^{2r}Qe^{-s/16}$ when
+$Q>s$; when $Q\le s$ the sample is $W$ itself and does not fail. Since
+$Q\le M^2\le D^{12}s^6$, the failure is at most $e^{-s/64}\le\beta$ for the
+sample size of~(\ref{eq:alvv_approximation_refinement_sample_parameters}).
+On the complementary event the merge error estimate above and one
+collective trim give a $3/200$-viable parent. Every node has dimension at
+most $M$ for every sample, including unsuccessful ones, so the fixed-child
+bound applies at every internal node. Write $E$ for the event that the
+root and all its internal nodes are $3/200$-viable for the original ground
+space, and $\mu$ for the product of the Haar laws. A union bound over the
+$L-1$ internal nodes gives
+\begin{align}
+    \mu(E^{\mathrm c})&\le(L-1)\beta,
+    \label{eq:alvv16_approximation_parameters_tree_failure}
+\end{align}
+and $E$ is Borel.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_canonical_constant_node_tree_failure_le}.}
+The sampled parent is a Borel function of the merged space and of its own
+coordinate, so the shorter children do not depend on the coordinate of
+their parent, which is what the union bound uses.
+
+\paragraph{Comparison with the source.}
+In the maintainer's reading of the official arXiv v2 text, \S6.2,
+Theorem~6.1 (\texttt{t:alg1}) states overall success probability at least
+$1-1/n$, and its proof derives this by a union bound from a failure
+probability at most $1/n^2$ for each merge. The
+bound~(\ref{eq:alvv16_approximation_parameters_tree_failure}) is the same union bound, for an arbitrary per-merge
+failure $\beta$. The parameter $\beta$ and the sample size
+$s=\lceil4096 r(1+\log r+\log D+\log(1/\beta))\rceil$ are a sufficient
+parametrization chosen by the formalization, not the source's formula.
+For $L\ge2$ and $0<\beta'<1$, a failure probability at most $\beta'$ for the
+whole tree follows with $\beta=\beta'/(L-1)$; the choice $\beta=1/L^2$ is
+the source's per-merge bound and gives overall failure $(L-1)/L^2<1/L$.
+For $L\le1$ every interval is a single short leaf, the tree has no internal
+node, and it fails with probability $0$. At a fixed overall failure
+probability $s$ grows like $\log L$, so the node bound is uniform in $L$
+only for fixed $\beta$. The identification of this tree with the source's
+algorithm, its output and its running time is not proved.
+
+\subsection*{The window range of Corollary~4.6}
+
+Corollary~4.6 (c:goodagsphardtrunc), lines 981--997 of the arXiv v2 source,
+reads: ``Let $H$ be a 1D local Hamiltonian with ground energy
+$\varepsilon_0$, and $\mathcal H=\mathcal H_L\otimes\mathcal H_M\otimes
+\mathcal H_R$ a decomposition of the $n$-qudit space in contiguous regions.
+For any integer $\ell\ge1$ and $t>0$ there exists a Hamiltonian $\tilde H$
+such that for any $\varepsilon_0<\eta_0<\eta_1$ there is a $(D,\Delta)$
+spectral AGSP $K$ for $(\tilde H,\eta_0,\eta_1)$ with the following
+properties. (1) $D=(d\ell)^{O(\ell)}$ and
+$\Delta=e^{-\Omega(\frac{\ell^2}{\sqrt{t+\ell}}\sqrt{\eta_1-\eta_0})}$,
+(2) there are universal constants $C,c>0$ such that for $i\in\{0,1\}$,
+$0\le\varepsilon_i-\tilde\varepsilon_i\le Ce^{-c(t-\varepsilon_0)}$, where
+$\varepsilon_i$, $\tilde\varepsilon_i$ are the $i$-th smallest (counted with
+multiplicity) eigenvalues of $H$, $\tilde H$ respectively, (3) the space
+$H_{[\varepsilon_0,\eta_1]}$ is $\delta$-close to
+$\tilde H_{[\tilde\varepsilon_0,\eta_0]}$ and
+$\tilde H_{[\tilde\varepsilon_0,\eta_1]}$ is $\delta$-close to
+$H_{[\varepsilon_0,\eta_0]}$, for
+$\delta=\Theta(\frac{\eta_0-\varepsilon_0}{(\eta_1-\eta_0)^2})
+e^{-\Omega(t-(\eta_0-\varepsilon_0))}$.'' Its proof, lines 999--1005, takes the
+Chebyshev construction of Theorem~4.2 at degree $k=\ell^2$.
+
+The formalized combined statement covers every $\eta_1>\eta_0$, as the
+source does. For $\eta_1\le3t+4\ell$, where $3t+4\ell$ bounds the norm of the
+truncated Hamiltonian, the projector is the Chebyshev polynomial of degree
+$\ell^2$. For $\eta_1>3t+4\ell$ no eigenvalue of $\tilde H$ is at least
+$\eta_1$, so the contraction condition of a spectral AGSP is vacuous, and the
+polynomial $p(x)=(\eta_0+1-x)^{\ell^2}$, with $p(\eta_0)=1$ and $p\ge1$ on
+$(-\infty,\eta_0]$, serves; its image has the two-cut rank bound of every
+polynomial of degree $\ell^2$ in a Hamiltonian of the two-window form. The
+remaining deviations are the explicit constants and the corrected cutoff of
+the hard-truncation note.
 
 \bibliographystyle{unsrt}
 \subsection*{The literal interleaved interval tree}

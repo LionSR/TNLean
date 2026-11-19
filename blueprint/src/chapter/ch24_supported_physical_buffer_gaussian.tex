@@ -117,7 +117,7 @@ on a finite domain $\Lambda$.
 
 \begin{definition}[Crossing supports and the swap coefficient]
     \label{def:peps_crossing_supports}
-    \lean{TNLean.Lattice.crossingSites,
+    \lean{ManyBody.crossingSites,
         TNLean.Lattice.swapBoundaryCoefficient}
     \leanok
     \uses{def:area_law_hamiltonian}
@@ -129,7 +129,7 @@ on a finite domain $\Lambda$.
 
 \begin{lemma}[Crossing supports lie near both sides and are few]
     \label{lem:peps_crossing_supports_near_and_few}
-    \lean{TNLean.Lattice.exists_walks_of_mem_crossingSites,
+    \lean{ManyBody.exists_walks_of_mem_crossingSites,
         TNLean.Lattice.card_admissibleSupport_le}
     \leanok
     \uses{def:peps_crossing_supports}
@@ -149,6 +149,8 @@ on a finite domain $\Lambda$.
 \begin{lemma}[The partially swapped Hamiltonian at range $R$]
     \label{thm:peps_swapped_local_hamiltonian}
     \lean{ManyBody.PlaneInteraction.swappedDoubled,
+        ManyBody.PlaneInteraction.isHermitian_swappedDoubled_term,
+        ManyBody.PlaneInteraction.norm_swappedDoubled_term_le,
         ManyBody.PlaneInteraction.swappedDoubled_hamiltonian,
         ManyBody.PlaneInteraction.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing,
         ManyBody.PlaneInteraction.swapped_doubled_boundary_bound}

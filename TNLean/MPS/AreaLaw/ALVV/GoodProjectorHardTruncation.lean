@@ -345,7 +345,7 @@ theorem exists_three_bulk_hard_truncation_spectral_comparison
 
 /-- The two-cut rank `(qℓ²)^{17(ℓ + ⌊ℓ²/(2ℓ)⌋)}` is at most `(qℓ)^{68ℓ}`, the form
 `D = (dℓ)^{O(ℓ)}` of ALVV, arXiv:1602.08828v2, `c:goodagsphardtrunc`, lines 979–1005. -/
-private theorem two_cut_rank_degree_sq_le {q ℓ : ℕ} (hq : 1 ≤ q) (hℓ : 1 ≤ ℓ) :
+theorem two_cut_rank_degree_sq_le {q ℓ : ℕ} (hq : 1 ≤ q) (hℓ : 1 ≤ ℓ) :
     (q * (ℓ * ℓ)) ^ (17 * (ℓ + ℓ * ℓ / (2 * ℓ))) ≤ (q * ℓ) ^ (68 * ℓ) := by
   have hbase : q * (ℓ * ℓ) ≤ (q * ℓ) ^ 2 := by
     have : q * (ℓ * ℓ) ≤ q * q * (ℓ * ℓ) :=

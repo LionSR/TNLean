@@ -31,6 +31,7 @@ import TNLean.MPS.MPU.BalancedSourceConditioning
 import TNLean.MPS.MPU.Basic
 import TNLean.MPS.MPU.BasisEncodingCoordinates
 import TNLean.MPS.MPU.BlockingRanks
+import TNLean.MPS.MPU.BlockingUnwinding
 import TNLean.MPS.MPU.BondDilationCircuit
 import TNLean.MPS.MPU.BondPadding
 import TNLean.MPS.MPU.BondRegisterBounds
@@ -86,6 +87,16 @@ import TNLean.MPS.MPU.FinalCircuitRegisters
 import TNLean.MPS.MPU.FiniteAlphabetRows
 import TNLean.MPS.MPU.FiniteChainAdjoint
 import TNLean.MPS.MPU.FiniteChainConjugation
+import TNLean.MPS.MPU.FiniteGroupDetectorCircuit
+import TNLean.MPS.MPU.FiniteGroupDetectorClock
+import TNLean.MPS.MPU.FiniteGroupDetectorConstruction
+import TNLean.MPS.MPU.FiniteGroupDetectorDomainWall
+import TNLean.MPS.MPU.FiniteGroupDetectorEndpoint
+import TNLean.MPS.MPU.FiniteGroupDetectorLocalComparison
+import TNLean.MPS.MPU.FiniteGroupDetectorPhase
+import TNLean.MPS.MPU.FiniteGroupDetectorSpatial
+import TNLean.MPS.MPU.FiniteGroupDetectorTensor
+import TNLean.MPS.MPU.FiniteGroupDetectorTransport
 import TNLean.MPS.MPU.FiniteGroupSourceRanks
 import TNLean.MPS.MPU.FiniteWindowSupport
 import TNLean.MPS.MPU.FundamentalTheorem
@@ -189,6 +200,10 @@ import TNLean.MPS.MPU.PolynomialOverheadBounds
 import TNLean.MPS.MPU.PositiveCanonicalGauge
 import TNLean.MPS.MPU.PrefixGramNormalizer
 import TNLean.MPS.MPU.PrefixGramReindex
+import TNLean.MPS.MPU.PrintedBlockingContraction
+import TNLean.MPS.MPU.PrintedBlockingGates
+import TNLean.MPS.MPU.PrintedBlockingHalfFactors
+import TNLean.MPS.MPU.PrintedBlockingTrace
 import TNLean.MPS.MPU.ProductBasisFactorization
 import TNLean.MPS.MPU.ProjectionPhaseIsometries
 import TNLean.MPS.MPU.QCAIndexComparison
@@ -207,6 +222,7 @@ import TNLean.MPS.MPU.ResidualAlgebra
 import TNLean.MPS.MPU.SchmidtSpanCuts
 import TNLean.MPS.MPU.SelectedSourceFactorVirtualGauge
 import TNLean.MPS.MPU.SelectedSourceGateVirtualGauge
+import TNLean.MPS.MPU.SequentialBlockingUnwinding
 import TNLean.MPS.MPU.Simple
 import TNLean.MPS.MPU.SimpleBlocking
 import TNLean.MPS.MPU.SimpleCanonicalRepresentative

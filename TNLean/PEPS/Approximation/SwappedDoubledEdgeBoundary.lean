@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.SwappedLocalHamiltonian
+import TNLean.PEPS.Approximation.SwappedPlaneInteraction
 import TNLean.PEPS.AreaLaw.TailParameter
 
 /-!
@@ -17,7 +17,7 @@ the partial swap changes its doubled Hamiltonian by an operator of norm at most
 This is a finite-range extension of the polynomial-PEPS manuscript,
 `02-information.tex`, lines 416–424 and 513–524. The crossing-support count is
 from the area-law manuscript, `02-initial.tex`, lines 202–206.
-The whole-domain estimate in `SwappedLocalHamiltonian` remains available.
+The whole-domain estimate in `SwappedPlaneInteraction` remains available.
 -/
 
 open Matrix QuantumCircuit

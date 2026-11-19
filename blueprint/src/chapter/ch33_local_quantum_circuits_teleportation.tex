@@ -27,7 +27,7 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 
 \begin{definition}[Fourier and generalized Pauli matrices]
     \label{def:qc_qudit_pauli}
-    \lean{QuantumCircuit.quditRoot, QuantumCircuit.quditFourier,
+    \lean{QuantumCircuit.quditRoot, QuantumCircuit.Qudit.fourier,
         QuantumCircuit.quditPauli}
     \leanok
     Let $\zeta=e^{2\pi i/d}$. For $a,b,x,z\in\mathbb Z_d$, define the Fourier matrix $F_{ab}=d^{-1/2}\zeta^{ab}$ and the generalized Pauli matrix $X^xZ^z\ket q=\zeta^{zq}\ket{q+x}$.
@@ -36,8 +36,8 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 \begin{lemma}[Fourier and Pauli matrices are unitary]
     \label{lem:qc_qudit_pauli_unitary}
     \lean{QuantumCircuit.isPrimitiveRoot_quditRoot,
-        QuantumCircuit.quditFourier_apply,
-        QuantumCircuit.quditFourier_mem_unitary,
+        QuantumCircuit.Qudit.fourier_apply_quditRoot,
+        QuantumCircuit.Qudit.fourier_mem_unitaryGroup,
         QuantumCircuit.quditPauli_apply, QuantumCircuit.quditPauli_mem_unitary}
     \leanok
     \uses{def:qc_qudit_pauli}

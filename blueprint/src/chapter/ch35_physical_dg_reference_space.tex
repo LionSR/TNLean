@@ -1675,3 +1675,138 @@ in~\cite{gap:alvv16_approximation_parameters}.
     of Lemma~\ref{thm:physical_dg_constant_node_tree} in place of the tree
     of node bound $D^6s^3$.
 \end{proof}
+
+\section{The success probability of the tree of constant node dimension}
+
+The tree of Lemma~\ref{thm:physical_dg_constant_node_tree} is shown to exist
+by choosing a successful sample at every node. To run it with fresh samples,
+the randomness of a node must be fixed before the merged space of its
+children is known. Every interval therefore receives one independent
+coordinate: a Haar unitary of every possible rank of its space. A parent
+samples through the coordinate of the rank of its merged space.
+
+\begin{lemma}[The canonical sampled parent]
+    \label{lem:canonical_sampled_parent}
+    \lean{TNLean.MPS.AreaLaw.ALVV.canonicalSampledIntervalWordTrim,
+        TNLean.MPS.AreaLaw.ALVV.measurable_projectionMatrix_canonicalSampledIntervalWordTrim,
+        TNLean.MPS.AreaLaw.ALVV.finrank_canonicalSampledIntervalWordTrim_le,
+        TNLean.MPS.AreaLaw.ALVV.canonicalIntervalRangeSample_eq_self_of_finrank_le,
+        TNLean.MPS.AreaLaw.ALVV.rankUnitaryHaar_not_isViable_canonicalIntervalRangeSample_le}
+    \leanok
+    \uses{thm:physical_dg_collective_trimming}
+    Let $W$ be a subspace of dimension $Q$ of the space of an interval, and
+    let a family of $N$ operators on that space, a number of rounds $k$, a
+    sample size $s$ and a trimming radius be given. Write the orthogonal
+    projection onto $W$ in one fixed orthonormal chart, sample $\min(s,Q)$
+    vectors of its range through the Haar coordinate of rank $Q$, apply all
+    products of $k$ operators of the family, and trim the image once. The
+    resulting space has dimension at most $N^ks$ for every coordinate, and it
+    is a Borel function of the projection onto $W$ and of the coordinate.
+    If $Q\le s$ the sample is $W$. If $W$ is $\delta$-viable for $T$, then
+    with $c=(1-\delta)\min(s,Q)/(8Q)$ the sample fails to be
+    $(1-c)$-viable for $T$ with probability at most
+    $(1+2/\sqrt c)^{2\dim T}\,Q\,e^{-\min(s,Q)/16}$. This is Lemma
+    \texttt{l:rs} of~\cite[lines 530--558]{Arad2016RigorousRG} with the
+    corrected net count recorded in~\cite{gap:alvv16_random_sampling_net_count},
+    carried to the coordinates of the interval.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:physical_dg_collective_trimming}
+    The chart identifies the range of the projection with the range of a
+    matrix of rank $Q$, and the sample with the corresponding sample of that
+    range; the identification is an isometry and carries viability for $T$
+    to viability for its image. The trim of an orthonormal basis of the
+    image depends only on the image, so it is the trim of the range of its
+    projection, which is Borel in the projection.
+\end{proof}
+
+\begin{lemma}[The joint failure of the canonical tree]
+    \label{lem:canonical_word_trim_tree_failure}
+    \lean{TNLean.MPS.AreaLaw.ALVV.finrank_balancedIntervalSpace_canonicalWordTrimOperation_le,
+        TNLean.MPS.AreaLaw.ALVV.measurableSet_canonicalWordTrimTreeGood,
+        TNLean.MPS.AreaLaw.ALVV.intervalSamplingMeasure_canonicalWordTrimTreeGood_compl_le}
+    \leanok
+    \uses{lem:canonical_sampled_parent}
+    Run the balanced tree on the chain of $L$ sites with full leaves of at
+    most $w$ sites and the canonical sampled parent of
+    Lemma~\ref{lem:canonical_sampled_parent} at every longer interval, with
+    one independent coordinate per interval. Suppose every family has at most
+    $D^2$ operators, $q^w\le M$ and $D^{2k}s\le M$. Then every node has
+    dimension at most $M$ for every choice of coordinates. Suppose moreover
+    that for all $\delta$-viable children of dimension at most $M$ the parent
+    fails to be $\delta$-viable with probability at most $\beta$. Then the
+    event that the root and all its internal nodes are $\delta$-viable is
+    Borel and fails with probability at most $(L-1)\beta$. This is the union
+    bound over the merges by which the proof of Theorem~6.1
+    (\texttt{t:alg1}) obtains its success probability, here for an arbitrary
+    per-merge bound $\beta$, see \cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:canonical_sampled_parent}
+    The dimension bound is an induction over the tree. A node depends only on
+    the coordinates of intervals no longer than itself, so the two children
+    of a parent do not depend on the coordinate of the parent. Conditioned on
+    the other coordinates, the probability that both children are viable and
+    the parent is not is therefore at most $\beta$. There are at most $L-1$
+    internal nodes, and the root or an internal node fails only if one of
+    these events occurs.
+\end{proof}
+
+\begin{lemma}[One canonical parent of the degenerate-gap tree]
+    \label{lem:physical_dg_canonical_node_failure}
+    \lean{TNLean.MPS.AreaLaw.ALVV.rankUnitaryHaar_canonical_interval_word_image_failure_le,
+        TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_canonical_interval_node_failure_of_power}
+    \leanok
+    \uses{lem:physical_dg_sampled_node_power,lem:canonical_sampled_parent}
+    Under the hypotheses of Lemma~\ref{lem:physical_dg_sampled_node_power},
+    with the same families, the canonical sampled parent of
+    Lemma~\ref{lem:canonical_sampled_parent} with $k$ rounds and one
+    collective trim, applied to $3/200$-viable children of dimension at most
+    $D^{2k}s$, fails to be $3/200$-viable for $G$ with probability at most the
+    failure probability of Lemma \texttt{l:rs} in
+    Lemma~\ref{lem:physical_dg_sampled_node_power}. The same restrictions
+    apply: one long parent, one final trim and $\min(\gamma,1)$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_dg_sampled_node_power,lem:canonical_sampled_parent}
+    The proof of Lemma~\ref{lem:physical_dg_sampled_node_power} applies to the
+    canonical sample: on the event where it is $(1-c)$-viable, the error
+    estimate of the $k$ rounds and the collective trim give
+    $3/200$-viability, and the failure probability of the sample is bounded
+    by Lemma~\ref{lem:canonical_sampled_parent}.
+\end{proof}
+
+\begin{lemma}[The success probability of the tree of constant node dimension]
+    \label{lem:physical_dg_constant_node_tree_probability}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_canonical_constant_node_tree_failure_le}
+    \leanok
+    \uses{thm:physical_dg_constant_node_tree,lem:canonical_word_trim_tree_failure}
+    Retain the hypotheses, the families and the parameters $s,k,M=D^{2k}s$ of
+    Lemma~\ref{thm:physical_dg_constant_node_tree}, for a trimming radius
+    below the reference bound and $0<\beta<1$. Run the tree with the
+    canonical sampled parent at every interval longer than $4\ell$ and one
+    independent coordinate per interval. Then every node has dimension at most
+    $M\le D^2s^2$ for every choice of coordinates, and the root and all its
+    internal nodes are $3/200$-viable for $G$ outside a Borel set of
+    probability at most $(L-1)\beta$. This is a restricted form of the merge
+    analysis of~\cite[Theorem~\texttt{t:alg1}, lines
+        1777--1818]{Arad2016RigorousRG}: the leaves are blocks, each long
+    parent has one final trim, and the gap is capped at one. In the
+    maintainer's reading of the source, Theorem~6.1 states success at least
+    $1-1/n$, by a union bound from a per-merge failure at most $1/n^2$; the
+    bound $(L-1)\beta$ is that union bound, and $\beta$ with the sample size
+    above is the formalization's own sufficient parametrization. For $L\ge2$,
+    $\beta=1/L^2$ gives failure $(L-1)/L^2<1/L$; for $L\le1$ the tree is a
+    single leaf. The identification with the source's algorithm, output and
+    running time is not proved, as recorded
+    in~\cite{gap:alvv16_approximation_parameters}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:physical_dg_canonical_node_failure,lem:canonical_word_trim_tree_failure}
+    The merged space of two children of dimension at most $M$ has dimension
+    $Q\le M^2\le D^{12}s^6$, so the failure of
+    Lemma~\ref{lem:physical_dg_canonical_node_failure} is at most
+    $e^{-s/64}\le\beta$ for this sample size. The leaves have dimension at
+    most $q^{4\ell}\le D\le M$, and the families have at most $D^2$
+    operators. Lemma~\ref{lem:canonical_word_trim_tree_failure} applies.
+\end{proof}

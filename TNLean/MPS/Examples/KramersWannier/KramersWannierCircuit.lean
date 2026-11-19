@@ -19,9 +19,9 @@ lines 2431–2437: the non-invertible translation
 **Formalized here.** The circuit `𝖣` exactly as printed, and the identity
 `H 𝖣 H = 2^{-(N+1)/2} Kᵀ`, where `H` is the Hadamard gate on every site and `K = kwTensor.mpo N`
 is the raw periodic duality operator: after the Hadamard change of basis the circuit is the
-operator `kwTranslation N` of `TNLean.MPS.Examples.KramersWannier.KramersWannierSource`, with scalar exactly
-one. Consequently the printed local relations of the circuit hold for all `j`, including the
-bond `X_N X_1` that the circuit does not contain, together with `𝖣 η = η 𝖣 = 𝖣`,
+operator `kwTranslation N` of `TNLean.MPS.Examples.KramersWannier.KramersWannierSource`, with
+scalar exactly one. Consequently the printed local relations of the circuit hold for all `j`,
+including the bond `X_N X_1` that the circuit does not contain, together with `𝖣 η = η 𝖣 = 𝖣`,
 `𝖣 𝖣† = 𝖣† 𝖣 = ½(1 + η)`, and `𝖣² = ½(1 + η) T_Ising`, where `T_Ising` is the transposed
 translation `Tᵀ`: it sends `|m_1, …, m_N⟩` to `|m_N, m_1, …, m_{N-1}⟩`, the action of the product
 of swap gates by which the source defines it (lines 2115–2123), and it commutes with `H`.
@@ -431,7 +431,7 @@ private theorem exp_circuitPhase (n : ℕ) :
       ((n + 1 : ℕ) : ℂ) * (((-(Real.pi / 4) : ℝ) : ℂ) * I) := by
     push_cast; ring
   have hsqrt : ((Real.sqrt 2 / 2 : ℝ) : ℂ) = invSqrtTwo := by
-    rw [Complex.invSqrtTwo, Real.sqrt_div_self', one_div, Complex.ofReal_inv]
+    rw [Complex.invSqrtTwo, Complex.invSqrt, Real.sqrt_div_self', one_div, Complex.ofReal_inv]
   rw [harg, Complex.exp_nat_mul, Complex.exp_mul_I, ← Complex.ofReal_cos, ← Complex.ofReal_sin,
     Real.cos_neg, Real.sin_neg, Real.cos_pi_div_four, Real.sin_pi_div_four, Complex.ofReal_neg,
     hsqrt]

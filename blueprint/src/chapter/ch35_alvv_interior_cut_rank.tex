@@ -288,3 +288,41 @@ of~\cite{Arad2016RigorousRG}.
     Since $q\ell^2\le(q\ell)^2$ and $\lfloor\ell^2/(2\ell)\rfloor\le\ell$, the
     rank bound is at most $((q\ell)^2)^{34\ell}$.
 \end{proof}
+
+\begin{lemma}[Corollary 4.6 with the corrected cutoff, as one statement]
+    \label{cor:alvv_good_projector_hard_truncation_combined}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_three_bulk_hard_truncation_good_projector}
+    \leanok
+    \uses{lem:alvv_three_bulk_hard_truncation_spectral_comparison,
+        cor:alvv_good_projector_hard_truncation}
+    Under the hypotheses of
+    Lemma~\ref{lem:alvv_three_bulk_hard_truncation_spectral_comparison}, the
+    truncated Hamiltonian $\tilde H$ of that lemma has all of its properties,
+    and in addition, for every $\eta_0<\eta_1$, there is a real
+    polynomial $p$ of degree $\ell^2$ with $p(\eta_0)=1$ such that
+    $p(\tilde H)$ is a spectral projector for $(\tilde H,\eta_0,\eta_1)$ with
+    \[
+        \Delta=4\exp\Bigl(-4\ell^2\sqrt{(\eta_1-\eta_0)/(3t+4\ell-\eta_0)}\Bigr)
+    \]
+    and operator Schmidt rank at most $(q\ell)^{68\ell}$ across both middle
+    cuts. This is Corollary~4.6 of~\cite{Arad2016RigorousRG} for one and the
+    same truncated Hamiltonian, in the corrected form of the two lemmas it
+    joins: the cutoff $19+\eta\le t$ replaces the printed condition $t>\eta$,
+    under which the truncated-side estimate is false
+    \cite{gap:alvv16_hard_truncation_windows}, the constants are explicit,
+    and the spectral conditions, the slope near $\eta_0$ and the word count
+    are those of Lemma~\ref{thm:alvv_two_window_chebyshev_projector}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv_three_bulk_hard_truncation_spectral_comparison,
+        cor:alvv_good_projector_hard_truncation}
+    Lemma~\ref{lem:alvv_three_bulk_hard_truncation_spectral_comparison} writes
+    $\tilde H$ in the two-window form with $\|\tilde H\|\le3t+4\ell$, so
+    Lemma~\ref{cor:alvv_good_projector_hard_truncation} applies to it with
+    $u=3t+4\ell$ when $\eta_1\le u$. When $\eta_1>u$, no eigenvalue of
+    $\tilde H$ is at least $\eta_1$, so the contraction condition is vacuous;
+    take $p(x)=(\eta_0+1-x)^{\ell^2}$, which satisfies $p(\eta_0)=1$ and
+    $p\ge1$ on $(-\infty,\eta_0]$, and whose image $p(\tilde H)$ has the same
+    two-cut rank bound as every polynomial of degree $\ell^2$ in a Hamiltonian
+    of the two-window form.
+\end{proof}

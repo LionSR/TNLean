@@ -178,7 +178,7 @@ theorem repeatedBlockTensor_infidelity_lower_bound {N T : ℕ} [NeZero N]
     (9 : ℝ) / 5000 ≤ 1 - ‖⟪Matrix.toEuclideanLin U
       (normalizedMPVState repeatedBlockTensor N), normalizedMPVState ghzTensor N⟫_ℂ‖ := by
   rw [normalizedMPVState_repeatedBlockTensor, normalizedMPVState_ghzTensor]
-  simpa only [Matrix.toLpLin_apply, Complex.invSqrtTwo, one_div] using
+  simpa only [Matrix.toLpLin_apply, Complex.invSqrtTwo, Complex.invSqrt, one_div] using
     MPSPreparation.ghz_sector_weight_infidelity_lower_bound hU hN
 
 /-- Overlap error below `9/5000` between the multiplicity-weighted and balanced

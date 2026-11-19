@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.ExactMPSGappedPhase
 import TNLean.MPS.Preparation.WindowCorrelator
-import TNLean.Lattice.ObservableCentering
+import QICLean.ManyBody.Hamiltonian.NegativeFrequency
 
 /-!
 # Normalized correlations depend only on the periodic MPS rays
@@ -23,17 +23,19 @@ open scoped InnerProductSpace
 
 namespace TNLean.Lattice
 
-/-- A nonzero scalar does not change the actual normalized expectation,
+/-- A nonzero scalar does not change the actual normalized expectation
+`⟪ψ, A ψ⟫ / ‖ψ‖²`,
 even when the vector itself is zero. Source: SPC11, arXiv:1010.3732,
 Section II.F, lines 929–953, normalization of physical rays. -/
-theorem normalizedVectorExpectation_smul
+theorem inner_toEuclideanCLM_div_norm_sq_smul
     {n : Type*} [Fintype n] [DecidableEq n]
     (ψ : EuclideanSpace ℂ n) (A : Matrix n n ℂ) {c : ℂ} (hc : c ≠ 0) :
-    normalizedVectorExpectation (c • ψ) A = normalizedVectorExpectation ψ A := by
+    ⟪c • ψ, Matrix.toEuclideanCLM (𝕜 := ℂ) A (c • ψ)⟫_ℂ / ((‖c • ψ‖ ^ 2 : ℝ) : ℂ) =
+      ⟪ψ, Matrix.toEuclideanCLM (𝕜 := ℂ) A ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) := by
   have hnorm (φ : EuclideanSpace ℂ n) :
       ((‖φ‖ ^ 2 : ℝ) : ℂ) = ⟪φ, φ⟫_ℂ := by
     rw [inner_self_eq_norm_sq_to_K]; norm_cast
-  simp only [normalizedVectorExpectation, hnorm, map_smul, inner_smul_left,
+  simp only [hnorm, map_smul, inner_smul_left,
     inner_smul_right, ← mul_assoc]
   exact mul_div_mul_left _ _ (mul_ne_zero hc ((map_ne_zero _).mpr hc))
 
@@ -46,11 +48,12 @@ open TNLean.Lattice
 /-- The window-correlator normalization is the squared-norm expectation
 of the actual unnormalized periodic vector. Source: arXiv:2307.01696,
 Supplemental Material, Lemma 2; SPC11 Section II.F. -/
-theorem mpvExpectation_eq_normalizedVectorExpectation
+theorem mpvExpectation_eq_inner_div_norm_sq
     {d D : ℕ} (A : MPSTensor d D) (N : ℕ) (O : MPOTensor.ChainOperator d N) :
-    mpvExpectation A N O = normalizedVectorExpectation (mpvState A N) O := by
+    mpvExpectation A N O =
+      ⟪mpvState A N, Matrix.toEuclideanCLM (𝕜 := ℂ) O (mpvState A N)⟫_ℂ /
+        ((‖mpvState A N‖ ^ 2 : ℝ) : ℂ) := by
   rw [mpvExpectation_eq_div, inner_self_eq_norm_sq_to_K]
-  unfold normalizedVectorExpectation
   rw [Complex.ofReal_pow]
   rfl
 
@@ -67,9 +70,9 @@ theorem SamePositiveMpvRay.mpvExpectation_eq
     unfold mpvState
     rw [← map_smul]
     exact congrArg (EuclideanSpace.equiv (ι := Cfg d N) (𝕜 := ℂ)).symm hc.symm
-  rw [mpvExpectation_eq_normalizedVectorExpectation,
-    mpvExpectation_eq_normalizedVectorExpectation, hstate,
-    normalizedVectorExpectation_smul _ _ c.ne_zero]
+  rw [mpvExpectation_eq_inner_div_norm_sq,
+    mpvExpectation_eq_inner_div_norm_sq, hstate,
+    inner_toEuclideanCLM_div_norm_sq_smul _ _ c.ne_zero]
 
 /-- Connected window correlations are invariant under equality of the
 actual periodic rays. No injectivity, canonical gauge or nonzero-vector

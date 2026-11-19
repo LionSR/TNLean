@@ -48,7 +48,7 @@ theorem _root_.ManyBody.ChainInteraction.re_inner_sub_le_of_overlap_of_range_one
   let B := toEuclideanCLM (𝕜 := ℂ) h.hamiltonian
   have hB : ‖B‖ ≤ 2 * L := by
     simpa only [B, l2_opNorm_toEuclideanCLM, mul_one] using
-        h.norm_hamiltonian_le_of_range_one hh hhJ
+        h.norm_hamiltonian_le_of_range_one hhJ
   have heig : B Ω = (E₀ : ℂ) • Ω :=
     ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _)
   have hE₀ : ‖(E₀ : ℂ)‖ ≤ ‖B‖ := by

@@ -102,10 +102,6 @@ private lemma sqrt2_ne_zero : (↑(Real.sqrt 2) : ℂ) ≠ 0 := by
 private lemma sqrt3_ne_zero : (↑(Real.sqrt 3) : ℂ) ≠ 0 := by
   exact_mod_cast (Real.sqrt_pos.2 (by norm_num : (0 : ℝ) < 3)).ne'
 
-@[simp] private lemma conj_invSqrtTwo :
-    (starRingEnd ℂ) Complex.invSqrtTwo = Complex.invSqrtTwo :=
-  Complex.star_invSqrtTwo
-
 /-- Source: arXiv:2011.12127, lines 2374–2378. `A^0 = σ_z/√2`. -/
 lemma akltTensorRMP_zero :
     akltTensorRMP 0 = Complex.invSqrtTwo • !![1, 0; 0, -1] := by
@@ -256,7 +252,7 @@ theorem akltTensorRMP_gaugeEquiv : GaugeEquiv (rmpScale • akltTensor) akltTens
   have h2 := sqrt2_ne_zero
   fin_cases s <;> ext i j <;> fin_cases i <;> fin_cases j <;>
     simp [akltTensorRMP_zero, akltTensorRMP_one, akltTensorRMP_two, akltTensor, rmpScale,
-      gaugeSigmaZ, Complex.invSqrtTwo, Matrix.mul_apply, Fin.sum_univ_two] <;>
+      gaugeSigmaZ, Complex.invSqrtTwo, Complex.invSqrt, Matrix.mul_apply, Fin.sum_univ_two] <;>
     field_simp
 
 /-! ### Transferred results -/

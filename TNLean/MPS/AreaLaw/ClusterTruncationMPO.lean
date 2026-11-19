@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ClusterTruncationCutRank
 import TNLean.MPS.AreaLaw.OperatorMPOFromCutRank
-import TNLean.Lattice.ClusterExpansion.NormalizedPathTail
+import QICLean.Analysis.ClusterExpansion.Path
 
 /-!
 # A matrix product operator for the corrected label truncation
@@ -23,7 +23,7 @@ namespace TNLean.MPS.AreaLaw
 
 open Matrix SimpleGraph
 open scoped Matrix.Norms.L2Operator MatrixOrder ComplexOrder
-open TNLean.Lattice.ClusterExpansion
+open ClusterExpansion
 
 open Classical in
 /-- The actual interaction-label truncation is represented by site-dependent operator tensors
@@ -35,7 +35,7 @@ theorem exists_mpo_cluster_truncation {N q r : ℕ} (hq : 1 ≤ q) (hr : 0 < r)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
       (h i) {i.castSucc, i.succ}) (β : ℝ) :
     ∃ A : Fin (N + 1) → MPOTensor q (r ^ 2 * q ^ r),
-      truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β =
+      ClusterExpansion.truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β =
         MPOTensor.traceChainOperator A 1 := by
   exact MPOTensor.exists_traceChainOperator_of_operatorSchmidtRank_le (by omega)
     (Nat.mul_le_mul (one_le_pow₀ hr) (one_le_pow₀ hq)) _
@@ -54,7 +54,7 @@ theorem exists_mpo_cluster_approximation {N q r : ℕ} (hq : 1 ≤ q) (hr : 0 < 
     (lambda β : ℝ) (hlo : (lambda : ℂ) • 1 ≤ ∑ i, h i) (hβ : 0 ≤ β)
     (hsmall : 2 * (Real.exp β - 1) ≤ 1) :
     ∃ A : Fin (N + 1) → MPOTensor q (r ^ 2 * q ^ r),
-      truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β =
+      ClusterExpansion.truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β =
           MPOTensor.traceChainOperator A 1 ∧
       Real.exp (β * lambda) *
         ‖NormedSpace.exp (-(β • ∑ i, h i)) - MPOTensor.traceChainOperator A 1‖ ≤
@@ -62,6 +62,6 @@ theorem exists_mpo_cluster_approximation {N q r : ℕ} (hq : 1 ≤ q) (hr : 0 < 
   obtain ⟨A, hA⟩ := exists_mpo_cluster_truncation hq hr h hs β
   refine ⟨A, hA, ?_⟩
   rw [← hA]
-  exact norm_exp_sub_truncatedExp_pathGraph_le hr h hh hnorm lambda β hlo hβ hsmall
+  exact ClusterExpansion.norm_exp_sub_truncatedExp_pathGraph_le hr h hh hnorm lambda β hlo hβ hsmall
 
 end TNLean.MPS.AreaLaw

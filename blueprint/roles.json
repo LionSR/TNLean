@@ -631,17 +631,9 @@
       }
     },
     "ch:hastings_local_terms": {
-      "theorems": [
-        "thm:hastings05_metric_facld",
-        "thm:hastings05_metric_filter_sum",
-        "thm:hastings_supercell_truncated_small"
-      ],
+      "theorems": [],
       "corollaries": [],
-      "notes": {
-        "thm:hastings05_metric_facld": "Ground states are nearly eigenvectors of the localized filtered terms (Hastings 2006, eq. facld)",
-        "thm:hastings05_metric_filter_sum": "The localized filtered terms sum to the Hamiltonian up to an exponentially small error",
-        "thm:hastings_supercell_truncated_small": "Compressions of the filtered terms nearly commute for translation-invariant systems (Hastings 2006)"
-      }
+      "notes": {}
     },
     "ch:hastings_hierarchy": {
       "theorems": [
@@ -657,19 +649,9 @@
       }
     },
     "ch:hastings_cluster_expansion": {
-      "theorems": [
-        "thm:hastings_thermal_trace_norm",
-        "thm:hastings_thermal_all_temperatures",
-        "thm:hastings_temperature_error_percolation"
-      ],
-      "corollaries": [
-        "cor:hastings_temperature_error_add_two"
-      ],
-      "notes": {
-        "thm:hastings_thermal_trace_norm": "Trace-norm bound for the truncated cluster expansion at high temperature (Hastings 2006)",
-        "thm:hastings_thermal_all_temperatures": "Matrix product form of the truncated thermal operator at every temperature (Hastings 2006, eq. mplt)",
-        "thm:hastings_temperature_error_percolation": "Error of the truncated thermal operator at every temperature (Hastings 2006)"
-      }
+      "theorems": [],
+      "corollaries": [],
+      "notes": {}
     },
     "ch:entropy_scaling": {
       "theorems": [
@@ -1530,13 +1512,11 @@
     },
     "sec:interval_cluster_truncation": {
       "theorems": [
-        "thm:normalized_cluster_label_tail",
         "thm:physical_cluster_label_mpo",
         "thm:soft_hamiltonian_mpo_accuracy"
       ],
       "corollaries": [],
       "notes": {
-        "thm:normalized_cluster_label_tail": "The corrected path estimate specifies interaction labels and retains the lower-energy normalization.",
         "thm:physical_cluster_label_mpo": "The finite label truncation has constructed operator tensors of dimension r squared times q to the r.",
         "thm:soft_hamiltonian_mpo_accuracy": "One complete regional soft replacement at scale at least three times the order has an explicit bond bound at every norm accuracy."
       }

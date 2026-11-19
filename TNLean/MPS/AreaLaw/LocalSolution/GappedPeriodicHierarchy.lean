@@ -20,7 +20,7 @@ arXiv:cond-mat/0508554v3, lines 375–387 and 609–743.
 
 **Scope restriction (unique ground state):** The degenerate-ground-space
 basis construction is separate; see
-`docs/paper-gaps/hastings05_two_dim_ground_basis.tex`.
+https://sirui-lu.com/QICLean/paper-gaps/hastings05_two_dim_ground_basis.pdf.
 
 **Local fix (periodic hierarchy):** the norm deficiency is measured against
 the original ground vector, and a further window controls the closing edge.
@@ -28,7 +28,7 @@ See `docs/paper-gaps/hastings05_hierarchical_projection.tex` and
 `docs/paper-gaps/hastings05_hierarchical_energy.tex`.
 -/
 
-open Matrix QuantumCircuit TNLean.Lattice
+open Matrix QuantumCircuit ManyBody GaussianFilter
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
 open ManyBody (IsGapped groundSpace)

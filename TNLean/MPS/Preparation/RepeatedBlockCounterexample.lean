@@ -138,7 +138,7 @@ noncomputable def repeatedBlockProj : Matrix (Fin 3) (Fin 3) ℂ :=
   !![2⁻¹, 2⁻¹, 0; 2⁻¹, 2⁻¹, 0; 0, 0, 1]
 
 private lemma invSqrtTwo_nonneg : (0 : ℂ) ≤ invSqrtTwo := by
-  rw [invSqrtTwo, ← Complex.ofReal_inv]
+  rw [invSqrtTwo, Complex.invSqrt, ← Complex.ofReal_inv]
   exact Complex.zero_le_real.mpr (by positivity)
 
 private lemma two_inv_add_two_inv : (2⁻¹ : ℂ) + 2⁻¹ = 1 := by norm_num
@@ -205,7 +205,8 @@ theorem nonNormalApproxOverlap_repeatedBlockTensor {q M : ℕ} (hq : q ≠ 0) (h
     simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two,
       Fin.sum_univ_three, repeatedBlockCoord, repeatedBlockSqrt]
     simp only [Nat.succ_eq_add_one, Nat.reduceAdd, one_div, Fin.isValue, cons_val_zero,
-      star_div₀, star_ofNat, RCLike.star_def, conj_ofReal, invSqrtTwo, of_apply, cons_val',
+      star_div₀, star_ofNat, RCLike.star_def, conj_ofReal, invSqrtTwo, Complex.invSqrt, of_apply,
+      cons_val',
       cons_val_fin_one, inv_pow, cons_val_one, cons_val, zero_pow hM, mul_zero, add_zero,
       star_inv₀, one_pow, mul_one, zero_add, ofReal_div, ofReal_add, ofReal_mul, ofReal_ofNat,
       ofReal_inv, ofReal_pow, ofReal_one]

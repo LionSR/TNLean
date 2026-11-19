@@ -6,13 +6,13 @@ Authors: TNLean contributors
 import TNLean.MPS.Preparation.WindowOperatorSupport
 import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.Algebra.FinCyclicInduction
-import TNLean.Circuit.SitePermutationSupport
+import TNLean.Algebra.SupportedOperatorsSitePermutation
 
 /-!
 # Support of operators on a cyclic bond
 
 Permuting the sites of a chain permutes the support of every operator
-(`QuantumCircuit.supportedOperators_submatrix_siteEquiv`). Translating a
+(`ManyBody.submatrix_comp_perm_mem_supportedOperators`). Translating a
 two-site window around the ring therefore places it in the algebra of its cyclic bond,
 including the bond joining the last site to the first. The argument also applies to a
 two-site ring, whose two oriented bonds have the same underlying support.
@@ -61,7 +61,7 @@ theorem embedLocalOperator_twoSite_mem_supportedOperators [NeZero N] (hN : 2 ≤
     · have : k = 1 := Fin.ext (by simpa [Fin.val_one, Nat.mod_eq_of_lt hN] using hk')
       simp [ringBond, this]
   · intro i hi
-    have h := supportedOperators_submatrix_siteEquiv (finRotate N) hi
+    have h := ManyBody.submatrix_comp_perm_mem_supportedOperators (finRotate N) hi
     have himage : (ringBond i).image (finRotate N) = ringBond (i + 1) := by
       ext k
       simp [ringBond, finRotate_apply, add_assoc]

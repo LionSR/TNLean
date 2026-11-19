@@ -64,6 +64,7 @@ noncomputable section
 namespace TNLean.PEPS.Approximation
 
 open TNLean.Lattice AreaLaw
+open ManyBody (crossingSites exists_walks_of_mem_crossingSites)
 
 /-! ### The constants -/
 

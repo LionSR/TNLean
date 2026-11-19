@@ -4,11 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LocalSolution.RoundedPeriodicGeometry
-import TNLean.Lattice.MetricInteractionGraph
 import Mathlib.Data.ZMod.ValMinAbs
 import Mathlib.Data.Int.Interval
 import Mathlib.Topology.MetricSpace.Defs
 import Mathlib.Tactic.Abel
+import QICLean.ManyBody.Dynamics.MetricGraph
 
 /-!
 # The metric of the physical periodic chain
@@ -77,14 +77,14 @@ noncomputable def periodicPhysicalMetricSpace (M : ℕ) [NeZero M] : MetricSpace
 Hastings, arXiv:cond-mat/0508554v3, lines 169–190 and 609–743. -/
 theorem card_periodicPhysical_metricRangeBall_le {M : ℕ} [NeZero M] (R : ℝ) (i : Fin M) :
     letI := periodicPhysicalMetricSpace M
-    (TNLean.Lattice.metricRangeBall R i).card ≤ 2 * Nat.ceil R + 1 := by
+    (ManyBody.metricRangeBall R i).card ≤ 2 * Nat.ceil R + 1 := by
   let _ := periodicPhysicalMetricSpace M
   let f : Fin M → ℤ := fun v ↦ (ZMod.finEquiv M v - ZMod.finEquiv M i).valMinAbs
-  have hf : Set.MapsTo f (↑(TNLean.Lattice.metricRangeBall R i) : Set (Fin M))
+  have hf : Set.MapsTo f (↑(ManyBody.metricRangeBall R i) : Set (Fin M))
       (↑(Finset.Icc (-(Nat.ceil R : ℤ)) (Nat.ceil R : ℤ)) : Set ℤ) := by
     intro v hv
     have hvR : (roundedPeriodicDistance i v : ℝ) ≤ R :=
-      TNLean.Lattice.mem_metricRangeBall.mp hv
+      ManyBody.mem_metricRangeBall.mp hv
     have hvceil : roundedPeriodicDistance i v ≤ Nat.ceil R := by
       exact_mod_cast hvR.trans (Nat.le_ceil R)
     have hd : roundedPeriodicDistance v i = roundedPeriodicDistance i v := by

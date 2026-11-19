@@ -26,9 +26,7 @@ It does not identify the unrestricted local-channel model with the source's phas
 
 \begin{lemma}[Register codes and completed decoding]
     \label{lem:qc_register_code_completion}
-    \lean{QuantumCircuit.registerEncoding,
-        QuantumCircuit.registerEncoding_isIsometry,
-        QuantumCircuit.registerEncoding_isKrausCPTP,
+    \lean{QuantumCircuit.registerEncoding_isKrausCPTP,
         QuantumCircuit.registerDecoding,
         QuantumCircuit.registerDecoding_isKrausCPTP,
         QuantumCircuit.registerDecoding_encoding,
@@ -44,6 +42,7 @@ It does not identify the unrestricted local-channel model with the source's phas
         QuantumCircuit.registerEncoding_apply,
         QuantumCircuit.registerEncoding_pair}
     \leanok
+    \uses{def:mpu_initialized_basis_inclusion, thm:mpu_initialized_isometry_synthesis}
     An injection $e\colon\{0,\dots,m-1\}\hookrightarrow\{0,\dots,d^k-1\}$ defines an isometry $E=\sum_a\ket{e(a)}\bra{a}$ ($E^\dagger E=I_m$) and encoding $\mathcal E(X)=EXE^\dagger$. For a density matrix $\rho$, the completed decoder
     \begin{align}
         D(Y) & =E^\dagger YE+\operatorname{tr}[(I-EE^\dagger)Y(I-EE^\dagger)]\rho\notag

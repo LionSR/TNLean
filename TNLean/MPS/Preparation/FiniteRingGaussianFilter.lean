@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.FiniteRingLiebRobinson
-import TNLean.Lattice.GaussianFilteredLocality
+import QICLean.ManyBody.Hamiltonian.GaussianFilterLocality
 
 /-!
 # Gaussian-filtered commutators on finite periodic chains
@@ -59,8 +59,8 @@ theorem norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le
     (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
     (hXY : Disjoint (X : Set (Fin N)) (Y : Set (Fin N)))
     (a : ℝ) (ha : 0 ≤ a) {q Δ T : ℝ} (hq : 0 ≤ q) (hT : 0 ≤ T) :
-    ‖TNLean.Lattice.gaussianFilteredTerm q Δ (interactionHamiltonian h hN) A * B -
-        B * TNLean.Lattice.gaussianFilteredTerm q Δ (interactionHamiltonian h hN) A‖ ≤
+    ‖ManyBody.gaussianFilteredTerm q Δ (interactionHamiltonian h hN) A * B -
+        B * ManyBody.gaussianFilteredTerm q Δ (interactionHamiltonian h hN) A‖ ≤
       2 * ‖A‖ * ‖B‖ * X.card *
           Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) *
           (Real.exp ((8 * Real.exp a) * T) - 1) +
@@ -68,7 +68,7 @@ theorem norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le
   have hExp : 0 ≤ Real.exp ((8 * Real.exp a) * T) - 1 := by
     apply sub_nonneg.mpr
     exact Real.one_le_exp (by positivity)
-  refine TNLean.Lattice.norm_commutator_gaussianFilteredTerm_le hq
+  refine ManyBody.norm_commutator_gaussianFilteredTerm_le hq
     (interactionHamiltonian_isHermitian hN hHerm) A B hT (by positivity) ?_
   intro t ht
   have htAbs : |t| ≤ T := abs_le.mpr ht
@@ -97,8 +97,8 @@ theorem norm_gaussianFilteredTerm_interactionHamiltonian_commutator_le_exp
     {ℓ Δ : ℝ} (hℓ : 0 < ℓ) (hΔ : 0 < Δ)
     (hDist : ℓ ≤ ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY) :
     let q := ℓ / (16 * Real.exp 1) * Δ
-    ‖TNLean.Lattice.gaussianFilteredTerm q Δ (interactionHamiltonian h hN) A * B -
-        B * TNLean.Lattice.gaussianFilteredTerm q Δ (interactionHamiltonian h hN) A‖ ≤
+    ‖ManyBody.gaussianFilteredTerm q Δ (interactionHamiltonian h hN) A * B -
+        B * ManyBody.gaussianFilteredTerm q Δ (interactionHamiltonian h hN) A‖ ≤
       2 * ‖A‖ * ‖B‖ * X.card * Real.exp (-ℓ / 2) +
         2 * ‖A‖ * ‖B‖ * Real.exp (-ℓ * Δ / (32 * Real.exp 1)) := by
   let T := ℓ / (16 * Real.exp 1)

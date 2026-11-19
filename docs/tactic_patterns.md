@@ -10,6 +10,25 @@
 - **Decision:** Below the three-occurrence promotion threshold. A third use
   should extract the observable and its two properties at their circuit owner.
 
+### Destructuring large existentials in let-heavy goals — candidate (2026-11-18)
+
+- **Seen:** Seven slow `MPS/AreaLaw` proofs: `PhysicalLDTree`,
+  `DyadicRegionalLowDensityFamily`, `CanonicalLowDensityFamily`,
+  `PhysicalDGCanonicalApproximation`, `PhysicalLowEnergyFamily`,
+  `SharpRegionalScalarBudgets` and `SharpRegionalLowDensityFamily`.
+- **Pattern:** `obtain ⟨...⟩ := f args` on a family whose statement has many `let`
+  binders type-checks the instantiated statement, and inside a large dependent goal
+  each `obtain` also re-checks the goal; profiles showed 1–2 s per step. Binding first,
+  `have hf := f args` and then `obtain ⟨...⟩ := hf`, halves that. Inside a large goal,
+  `refine h.elim fun x hx ↦ ?_` with projections `hx.1`, `hx.2.1`, … avoids the goal
+  check altogether; `PhysicalLDTree` went from 30 s to 17 s.
+- **Related:** when an `ActualClippedPolynomialFamily` decomposition is passed to the
+  nested Chebyshev filter, the coordinate types `FiniteProduct.Configuration β J` and
+  `J → Fin q` agree only after unfolding; `have hconj := hM.2; with_reducible exact hconj`
+  stops the unifier from unfolding the continuous-linear composition instead.
+- **Abstraction:** none yet; a lint or a short `obtain`-like macro that eliminates and
+  projects could follow if new slow modules show the same profile.
+
 ### Extending mixed-path identities to the endpoints — candidate (2026-11-17)
 
 - **Seen:** The integral-average formula and local commutation in
@@ -194,7 +213,7 @@ abstracted — record why, so it is not re-proposed).
 
 ### Left compressed Hamiltonian norm bound — promoted (2026-11-04)
 
-- **Pattern:** From `h.operator = HL + B`, `‖h.operator‖ ≤ 2L`, and `‖B‖ ≤ 2L`,
+- **Pattern:** From `h.hamiltonian = HL + B`, `‖h.hamiltonian‖ ≤ 2L`, and `‖B‖ ≤ 2L`,
   derive `‖HL‖ ≤ 4L` and pass the bound through restriction to the left cut,
   tensoring with the bond identity, and isometric compression.
 - **Helper:** `ManyBody.ChainInteraction.leftObjective_norm_bounds` in
@@ -351,7 +370,9 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** Unfold the matrix of a site permutation and rewrite the identity
   laws of its two group homomorphisms.
-- **Helper:** `Matrix.sitePermMatrix_one` in `TNLean/Lattice/SiteSymmetry.lean`.
+- **Helper:** `Matrix.sitePermMatrix_one` in `TNLean/Lattice/SiteSymmetry.lean`;
+  moved to QICLean as `ManyBody.sitePermOp_one` in
+  `QICLean/ManyBody/Sites/Relabel.lean`.
 - **Occurrences:** the arbitrary-observable ground-space power formula in
   `TranslationGroundSpace.lean`, and the two translation-orbit arguments in
   `TranslationFiniteOrbitCommutator.lean`.
@@ -364,7 +385,8 @@ abstracted — record why, so it is not re-proposed).
   site. Monotonicity of finite sums of nonnegative weights therefore bounds the
   anchor sum by the support sum.
 - **Helper:** `sum_weight_anchor_le_of_support_budget` in
-  `TNLean/Lattice/GraphDegreeGrowth.lean`.
+  `TNLean/Lattice/GraphDegreeGrowth.lean`; moved to QICLean in
+  `QICLean/ManyBody/Dynamics/GraphGrowth.lean`.
 - **Refactored occurrences:** the two-dimensional basis sum in `LowEnergyBasisUniform.lean`,
   the arbitrary-dimensional sum in `LowEnergyBasisUniformGeneral.lean`, and
   the actual truncated-term sum in `LowEnergyBasisTruncatedUniform.lean`.
@@ -381,7 +403,9 @@ abstracted — record why, so it is not re-proposed).
   compare its operator norm with the ambient compression, and then with the
   original term norm.
 - **Helper:** `norm_groundSpaceCompression_le` in
-  `TNLean/Lattice/LowEnergyBasisConstruction.lean`.
+  `TNLean/Lattice/LowEnergyBasisConstruction.lean`; moved to QICLean, where the
+  ground compression is a `subspaceCompression` and the bound is the
+  `subspaceCompression` norm lemma.
 - **Decision:** The normalized basis arguments use this mathematical norm bound
   rather than repeat the subspace coercion and operator-norm calculation.
 
@@ -508,7 +532,8 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** Five occurrences across three files: three in
   `TNLean/Lattice/ClusterExpansion/ClusterPart.lean` and one each in
   `TNLean/Lattice/ClusterExpansion/ThermalProduct.lean` and
-  `TNLean/Lattice/ClusterExpansion/TruncatedPositivity.lean`.
+  `TNLean/Lattice/ClusterExpansion/TruncatedPositivity.lean`, all three since
+  moved to QICLean's `Analysis/ClusterExpansion`.
 - **Abstraction:** `Matrix.isHermitian_sum_of_subset` in
   `TNLean/Algebra/MatrixHermitianSum.lean`; all five occurrences use the theorem.
 - **Notes:** Retains the additive/star assumptions of `Matrix.isHermitian_sum`;
@@ -522,7 +547,8 @@ abstracted — record why, so it is not re-proposed).
   isSelfAdjoint_sum Finset.univ fun j _ => (hHerm j).isSelfAdjoint
   ```
 - **Seen:** 5 occurrences across 3 files: three in
-  `TNLean/Lattice/GaussianFilteredTermLocalization.lean`, one each in
+  `TNLean/Lattice/GaussianFilteredTermLocalization.lean` (since moved to
+  QICLean), one each in
   `QICLean/ManyBody/Dynamics/GraphLocalization.lean` and
   `QICLean/ManyBody/Dynamics/CommutatorRecursion.lean`.
 - **Abstraction:** `Matrix.isHermitian_sum` in
@@ -538,7 +564,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** The tail specialization in `Lattice/GaussianFilteredIncrement.lean`
   and the independent variance argument in `MPS/AreaLaw/Hastings/GaussianTimeAverage.lean`.
   The additional proof reported in #9945 is already absent from main.
-- **Abstraction:** `TNLean.Lattice.integral_abs_gaussianReal_le_sqrt_two_mul_div_pi`
+- **Abstraction:** `GaussianFilter.integral_abs_gaussianReal_le_sqrt_two_mul_div_pi`
   specializes the existing tail bound to zero; `integral_abs_gaussianReal_le`
   follows by `2 ≤ π`. Both live in `Lattice/GaussianTailMoment.lean`.
 - **Notes:** The filtered increment, time average, interaction picture and
@@ -9939,9 +9965,9 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 - **Pattern:** Apply closure under powers and list products, unpack membership in a mapped
   list, and prove the factor supported using closure under scalar multiplication and exponentials.
-- **Seen:** Two occurrences in `TNLean/Lattice/ProductForm.lean`, in
-  `hasProductForm_trotterProduct_of_radius` and
-  `ManyBody.PlaneInteraction.hasProductForm_trotterProduct`.
+- **Seen:** Two occurrences in `TNLean/Lattice/ProductForm.lean` (since moved to QICLean), in
+  `hasProductForm_lie_of_radius` and
+  `ManyBody.Interaction.hasProductForm_lie`.
 - **Abstraction:** None yet; the two proofs have different support hypotheses and are below
   the promotion threshold. The supported expansion is shared through
   `hasProductForm_of_mem_supportedOperators_radius`; the diameter theorem is its corollary.
@@ -10042,7 +10068,7 @@ there is no need for a new tactic.
 - **Seen:** Three applications across
   `Lattice/TranslationSupercellCommutator.lean` (the two filtered bounds) and
   `Lattice/TranslationSupercellTruncated.lean` (the truncated bound).
-- **Abstraction:** `TNLean.Lattice.exists_mem_supercell_lt_edist` in
+- **Abstraction:** `ManyBody.exists_mem_supercell_lt_edist` in
   `Lattice/TranslationSupercellSpacing.lean`.
 - **Notes:** This specializes the existing range-dependent coordinate estimate
   to displacement at most one along every edge. The original range-dependent
@@ -10849,7 +10875,8 @@ removed after the dependency audit exposed it.
 - **Pattern:** Group a weighted sum by its anchor and apply a uniform bound on
   the weight of each fibre before summing the nonnegative function on sites.
 - **Promotion:** `sum_weight_mul_comp_le_budget_mul_sum` in
-  `Lattice/GraphDegreeGrowth.lean` expresses the common inequality for any
+  `Lattice/GraphDegreeGrowth.lean` (now `QICLean/ManyBody/Dynamics/GraphGrowth.lean`)
+  expresses the common inequality for any
   nonnegative function. All three grouping proofs now use it.
 - **Reuse:** The lower module also owns the support-to-anchor budget lemma.
   Polynomial sphere sums and bounded-degree exponential tails retain their
@@ -11766,7 +11793,7 @@ removed after the dependency audit exposed it.
   of its encoded vector using `Matrix.mul_vecMulVec`, `Matrix.vecMulVec_mul`
   and `Matrix.star_mulVec`; normalize the target through the code isometry.
 - **Decision:** two occurrences across two files are below the rule of three.
-  Reuse the existing matrix identities and `registerEncoding_isIsometry`.
+  Reuse the existing matrix identities and `Matrix.initializedBasisMatrix_isIsometry`.
   Before adding a third copy, expose the pure-initialization identity at the
   existing product-code owner. No verified parent module is refactored here.
 

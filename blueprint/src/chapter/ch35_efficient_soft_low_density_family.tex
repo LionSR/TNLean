@@ -3,7 +3,7 @@
 
 The low-density improving family of~\cite[lines 1027--1041]{Arad2016RigorousRG}
 uses hard truncation, which has no matrix product description. The efficient
-version, \cite[lines 1435--1457]{Arad2016RigorousRG}, replaces it by soft
+version, \cite[lines 1424--1437]{Arad2016RigorousRG}, replaces it by soft
 truncation. This section builds that version on the five-region chain of
 Section~\ref{sec:uniform_physical_soft_improving_family}, with no spectral gap.
 It uses the corrected cluster estimate and residuals
@@ -226,3 +226,42 @@ the source's use $w$ shrinks with the chain length, and then the bond is no
 longer polynomial for fixed parameters; this is recorded
 in~\cite{gap:alvv16_soft_regional_residuals}. The source's own parameter choice
 and a running-time bound are not formalized.
+
+\begin{lemma}[Efficient approximate ground-space projector, low density]
+    \label{thm:alvv_efficient_low_density_agsp}
+    \notready
+    \uses{lem:calibrated_efficient_soft_low_density_family}
+    Let $H$ be a nearest-neighbour Hamiltonian on $n$ qudits satisfying
+    Assumption (LD) with energy parameter $\eta$, and let $\varepsilon_0$ be
+    the least eigenvalue of $H$. Let $\eta_1\leq\eta$ and $\mu>0$, let
+    $\{0,\ldots,n-1\}=L\cup M\cup R$ with $L=\{0,\ldots,i_1-1\}$,
+    $M=\{i_1,\ldots,i_2-1\}$ and $R=\{i_2,\ldots,n-1\}$, and let
+    $\varepsilon'_M$ satisfy
+    $|\varepsilon_M-\varepsilon'_M|\leq10$, where $\varepsilon_M$ is the least
+    energy of the restriction of $H$ to $M$. Then there are $D^2$ operators
+    $A_i$ on the space of $M$, each a matrix product operator of bond dimension
+    at most $e^{\tilde O(\log^3n)}$, and subspaces $\tilde T_-\subseteq\tilde T$,
+    such that the spectral subspace of $H$ below $\varepsilon_0+\eta_1$ is
+    $.005$-close to $\tilde T$, the space $\tilde T_-$ is $.005$-close to the
+    spectral subspace of $H$ below $\varepsilon_0+\eta_1-\mu/\log n$,
+    $D=e^{\tilde O(\frac{\log n}{\mu}\log^3d)}$, and for some $\Delta>0$ with
+    $D^{12}\Delta<10^{-5}$ every $\delta$-viable subspace for $\tilde T$ is
+    carried by the $A_i$ to a $\Delta/(1-\delta)^2$-viable subspace for
+    $\tilde T_-$. Moreover there is a matrix product operator $\tilde H_M$ with
+    $\|\tilde H_M\|=\tilde O(\log(n)/\mu)$ whose least energy on $\tilde T_-$
+    is within $1/2$ of $\varepsilon_M$.
+    This is~\cite[Theorem~5.9, lines 1424--1437]{Arad2016RigorousRG} without its
+    running time; see~\cite{gap:alvv16_efficient_low_density_agsp}.
+    % Coverage: only restricted versions of the window and improvement clauses,
+    % for a fixed buffer, are formalized; the shrinking buffer, the bond and norm
+    % bounds and the energy estimate are open.
+\end{lemma}
+\begin{proof}\notready
+    \uses{lem:calibrated_efficient_soft_low_density_family}
+    The source chooses window length
+    $\ell=\Theta(\frac{\log n}{\mu}\log\frac{\log n}{\mu})$, filter degree
+    $k=\ell^2$, soft-truncation scale $\Theta(\ell)$ and order four, applies
+    the soft truncation to the three bulk regions and the Chebyshev filter
+    between $\varepsilon_0+\eta_1-\mu/(2\log n)$ and $\varepsilon_0+\eta_1$, and
+    compares the windows of the truncated Hamiltonian with those of $H$.
+\end{proof}

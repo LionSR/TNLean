@@ -18,7 +18,7 @@ the original Hamiltonian. No spectral gap is assumed: these are the inputs of th
 low-density improving family.
 
 This is a corrected auxiliary to ALVV, arXiv:1602.08828v2, `t:aisgaplessefficient`,
-lines 1435–1457, built as the gapped family of `t:aisefficient`, lines 1373–1420.
+lines 1424–1437, built as the gapped family of `t:aisefficient`, lines 1373–1420.
 
 **Local fix (cluster estimate and soft residuals):** the middle operator uses the corrected
 interaction-label cluster estimate and an independent scale `t ≥ 3 m`, and the residuals are
@@ -38,7 +38,7 @@ open Classical in
 admissible soft center. For each center, the represented approximant has a polynomial
 decomposition through the family, and the exact soft Hamiltonian it approximates has both
 buffered windowed comparisons with the original Hamiltonian. No gap is assumed. Auxiliary to
-ALVV, arXiv:1602.08828v2, `t:aisgaplessefficient`, lines 1435–1457. -/
+ALVV, arXiv:1602.08828v2, `t:aisgaplessefficient`, lines 1424–1437. -/
 theorem exists_soft_low_density_polynomial_core
     (q ell m k : ℕ) (t xi : ℝ)
     (hq : 2 ≤ q) (hell : 1 ≤ ell) (hm : 2 ≤ m) (hk : 1 ≤ k)

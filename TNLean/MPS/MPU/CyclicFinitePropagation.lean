@@ -65,7 +65,7 @@ theorem mpo_conjugation_singleton_propagation_of_one
       apply (finRotate N).injective
       simp only [Equiv.apply_symm_apply, finRotate_apply, add_assoc]
     have hA₀ : A₀ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) ({x₀ + i} : Finset (Fin N)) := by
-      have h := QuantumCircuit.supportedOperators_submatrix_siteEquiv (finRotate N).symm hA
+      have h := ManyBody.submatrix_comp_perm_mem_supportedOperators (finRotate N).symm hA
       simpa only [Finset.image_singleton, hpred] using h
     have hcancel : A₀.submatrix (rotateConfig N d) (rotateConfig N d) = A := by
       ext σ τ

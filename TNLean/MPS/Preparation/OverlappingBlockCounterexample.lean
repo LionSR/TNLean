@@ -132,7 +132,7 @@ theorem ghzAmplitude_overlappingBlock (N : ℕ) :
     simp [Fin.sum_univ_two]; norm_num
   funext j
   rw [ghzAmplitude, h]
-  fin_cases j <;> simp [invSqrtTwo]
+  fin_cases j <;> simp [invSqrtTwo, Complex.invSqrt]
 
 /-- The overlap `s = (3/5)^q` of the `q`-site states of the two blocks. -/
 noncomputable def overlappingBlockOverlap (q : ℕ) : ℝ := (3 / 5) ^ q
@@ -261,7 +261,8 @@ theorem nonNormalApproxOverlap_overlappingBlockTensor {q M : ℕ} (hq : q ≠ 0)
     simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two,
       overlappingBlockSqrt]
     simp only [Real.sqrt_one, ofReal_one, inv_one, Nat.ofNat_nonneg, Real.sqrt_mul, ofReal_mul,
-      _root_.mul_inv_rev, one_mul, Nat.succ_eq_add_one, Nat.reduceAdd, invSqrtTwo, Fin.isValue,
+      _root_.mul_inv_rev, one_mul, Nat.succ_eq_add_one, Nat.reduceAdd, invSqrtTwo, Complex.invSqrt,
+      Fin.isValue,
       cons_val_zero, star_inv₀, RCLike.star_def, conj_ofReal, of_apply, cons_val', cons_val_fin_one,
       cons_val_one, ofReal_div, ofReal_add, ofReal_pow]
     have hs2 : Real.sqrt 2 ≠ 0 := by positivity
