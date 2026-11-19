@@ -11,9 +11,11 @@
 
 Schuch, Cirac, and P\'erez-Garc\'ia,
 \href{https://arxiv.org/abs/1001.3807v3}{arXiv:1001.3807v3}~\cite{Schuch2010PEPS},
-Definition 6.1 and Lemma 6.14, source
-\path{Papers/1001.3807/paper_v3.tex}, lines 1692--1700 and 2199--2214,
-provide the regular isometry and local flux-string claim.
+Definition 6.1, source
+\path{Papers/1001.3807/paper_v3.tex}, lines 1692--1700,
+provides the regular-isometry condition. The identities below are derived
+from the corresponding regular-isometric Gram kernel and centrality of the
+inserted labels; they are not a restatement of the string-deformation lemma.
 
 For a finite native graph, take regular $G$-isometric original tensors
 and a central group label $u_e$ on every oriented edge. Centrality makes
@@ -31,14 +33,20 @@ This needs no connectivity or supplied Gram identity.
 If $u_e=1$ on all edges incident to an observation region $R$, the
 observed open-region contraction is unchanged. The complementary
 open-region Gram matrix is unchanged by centrality. Substitution into
-the factorization $M_u=T_R^u(T_{R^c}^u)^{\mathsf T}$ proves
+the factorization $K_u=T_R^u(T_{R^c}^u)^{\mathsf T}$ proves
 \begin{align}
-    M_uM_u^\dagger=M_0M_0^\dagger.
+    K_uK_u^\dagger=K_0K_0^\dagger.
     \label{eq:scp10_central_flux_reduced}
 \end{align}
-Here $M_u$ and $M_0$ are the physical coefficient cuts with the given insertions
-and with identity insertions. Their normalized row Gram matrices are equal
-by taking traces of the displayed identity.
+Here $K_u$ and $K_0$ are the physical coefficient cuts with the given insertions
+and with identity insertions. Equality of the reduced matrices and their traces gives
+\begin{align}
+    \frac{K_uK_u^\dagger}{\operatorname{tr}(K_uK_u^\dagger)}
+    =\frac{K_0K_0^\dagger}{\operatorname{tr}(K_0K_0^\dagger)}.
+    \label{eq:scp10_central_flux_normalized}
+\end{align}
+At zero trace the displayed division means inverse scalar multiplication
+with zero inverse. For nonzero cuts these are the normalized reduced matrices.
 \footnote{\leanid{TNLean.PEPS.regularPhysicalCutMatrix_reduced_eq_of_central};
 \leanid{TNLean.PEPS.regularPhysicalCutMatrix_normalized_reduced_eq_of_central}.}
 These identities supply neither a nonzero-cut premise nor a desired

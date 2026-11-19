@@ -15,14 +15,16 @@ all bonds incident to an observation region, its original open-region map is
 unchanged. Its actual physical reduced matrix is then exactly the vacuum
 reduced matrix, without a connectivity, spanning-tree, or factorization premise.
 
-Source: SCP10, arXiv:1001.3807v3, the regular isometry in Definition 6.1 and
-the local flux-string claim in Lemma 6.14, source lines 1692–1700 and 2199–2214.
+Source: SCP10, arXiv:1001.3807v3, the regular isometry in Definition 6.1,
+source lines 1692–1700. The identities below follow from the corresponding
+regular-isometric Gram kernel and centrality of the inserted labels.
 
 **Scope restriction (central complementary insertions):** Centrality and
 identity on every incident bond are explicit structural hypotheses on the
 insertions. The result covers arbitrary observation regions under those
 hypotheses; it does not infer them from endpoint exclusion. Noncentral flux
 labels and the annular Wilson-loop obstruction remain separate.
+See `docs/paper-gaps/scp10_central_flux_density.tex`.
 -/
 
 noncomputable section
@@ -60,7 +62,7 @@ private theorem site_gram_eq
 
 /-- Central native edge insertions preserve the Gram matrix of the actual
 open-region contraction. All local Gram identities are derived from regular
-G-isometry. Source: SCP10, Definition 6.1 and Lemma 6.14. -/
+G-isometry. Derived from SCP10, Definition 6.1, and centrality. -/
 theorem regularTwistedOpenRegionMatrix_gram_eq_of_central
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ v, IsGIsometric (regularLegRepresentation (IncidentEdge Γ v))
@@ -86,7 +88,7 @@ theorem regularTwistedOpenRegionMatrix_gram_eq_of_central
 /-- Central insertions supported away from every incident physical bond leave
 the actual regional reduced matrix equal to the vacuum one. No topology or
 nonzero-cut hypothesis is required for this unnormalized identity.
-Source: SCP10, the regular-isometric subcase of Lemma 6.14. -/
+Derived from SCP10, Definition 6.1, centrality, and the physical-cut factorization. -/
 theorem regularPhysicalCutMatrix_reduced_eq_of_central
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ v, IsGIsometric (regularLegRepresentation (IncidentEdge Γ v))
@@ -123,7 +125,8 @@ theorem regularPhysicalCutMatrix_reduced_eq_of_central
     _ = _ := by rw [hNt]; simp only [Matrix.mul_assoc]
 
 /-- Normalizing the actual reduced matrices preserves the vacuum equality
-for central complementary insertions. Source: SCP10, Lemma 6.14. -/
+for central complementary insertions. This follows from the unnormalized
+identity by equality of traces. -/
 theorem regularPhysicalCutMatrix_normalized_reduced_eq_of_central
     (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ)
     (ha : ∀ v, IsGIsometric (regularLegRepresentation (IncidentEdge Γ v))
