@@ -28,7 +28,7 @@ See `docs/paper-gaps/hastings05_hierarchical_projection.tex` and
 `docs/paper-gaps/hastings05_hierarchical_energy.tex`.
 -/
 
-open Matrix QuantumCircuit TNLean.Lattice
+open Matrix QuantumCircuit ManyBody GaussianFilter
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
 open ManyBody (IsGapped groundSpace)

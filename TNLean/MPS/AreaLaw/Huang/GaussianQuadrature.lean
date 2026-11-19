@@ -198,7 +198,8 @@ theorem norm_integral_sub_timeMesh_sum_le
     have hbound := norm_integral_sub_setIntegral_le (s := Set.Icc (-T) T)
       (Filter.Eventually.of_forall hnorm) measurableSet_Icc hf
     simpa only [mul_one] using hbound.trans
-      (by simpa only [mul_one] using GaussianFilter.measure_compl_Icc_le h hT)
+      (by simpa only [mul_one] using (GaussianFilter.measure_compl_Icc_le h hT).trans
+        (le_mul_of_one_le_left (Real.exp_pos _).le one_le_two))
   exact (norm_sub_le_norm_sub_add_norm_sub _
     (∫ t in Set.Icc (-T) T, f t ∂gaussianReal 0 h) _).trans
       (add_le_add htail (norm_setIntegral_sub_timeMesh_sum_le h hT hdelta hM f hf hLip))

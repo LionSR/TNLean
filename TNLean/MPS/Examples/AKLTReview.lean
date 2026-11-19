@@ -252,7 +252,7 @@ theorem akltTensorRMP_gaugeEquiv : GaugeEquiv (rmpScale • akltTensor) akltTens
   have h2 := sqrt2_ne_zero
   fin_cases s <;> ext i j <;> fin_cases i <;> fin_cases j <;>
     simp [akltTensorRMP_zero, akltTensorRMP_one, akltTensorRMP_two, akltTensor, rmpScale,
-      gaugeSigmaZ, Complex.invSqrtTwo, Matrix.mul_apply, Fin.sum_univ_two] <;>
+      gaugeSigmaZ, Complex.invSqrtTwo, Complex.invSqrt, Matrix.mul_apply, Fin.sum_univ_two] <;>
     field_simp
 
 /-! ### Transferred results -/
