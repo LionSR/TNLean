@@ -1,3 +1,8 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
 import TNLean.PEPS.Examples.HoneycombCluster
 
 /-! Edgewise contraction of six graph-state bonds with six outgoing legs.
@@ -54,24 +59,35 @@ def vertex : Fin 6 → Site := ![(0,0), (1,0), (2,0), (2,1), (1,1), (0,1)]
 /-- Endpoint outside the face, in the same cyclic order. -/
 def exterior : Fin 6 → Site := ![(5,0), (1,3), (3,0), (3,1), (1,2), (5,1)]
 
+/-- Each face vertex has exactly three neighbours: its cyclic predecessor, its cyclic successor,
+and the exterior endpoint assigned to that vertex. -/
 set_option maxRecDepth 10000 in
 theorem incidence : ∀ (i : Fin 6) (w : Site), graph.Adj (vertex i) w ↔
     w = vertex (i - 1) ∨ w = vertex (i + 1) ∨ w = exterior i := by decide
 
+/-- The six cyclic indices label distinct torus sites, so the face has six vertices. -/
 theorem distinct_sites : ∀ i j, vertex i = vertex j → i = j := by decide
 
+/-- Every listed exterior endpoint lies outside the six-vertex face. -/
 theorem exterior_outside : ∀ i j, exterior i ≠ vertex j := by decide
 
 private def bond (a b : Site) (h : graph.Adj a b) : Edge graph :=
   if hab : a < b then ⟨(a,b), hab, h⟩
   else ⟨(b,a), lt_of_le_of_ne (le_of_not_gt hab) (Ne.symm h.ne), h.symm⟩
 
+/-- The internal bond from a face vertex to its cyclic successor. Its stored endpoints
+are ordered by the ambient torus vertex order. -/
 def inner (i : Fin 6) : Edge graph :=
   bond _ _ ((incidence i _).2 (Or.inr (Or.inl rfl)))
 
+/-- The crossing bond from a face vertex to its unique exterior neighbour. Its stored
+endpoints are ordered by the ambient torus vertex order. -/
 def outer (i : Fin 6) : Edge graph :=
   bond _ _ ((incidence i _).2 (Or.inr (Or.inr rfl)))
 
+/-- With boundary bits fixed, summing the six internal bond indices gives one
+normalized controlled-Z sign per internal bond and one oriented identity or
+Hadamard entry per crossing bond. -/
 theorem contraction (s : Site → Fin 2) (β : Fin 6 → Fin 2) :
     sixBondContraction graph inner outer vertex s β =
       (∏ i, hadamardEntry (s (inner i).1.1) (s (inner i).1.2)) *
