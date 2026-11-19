@@ -314,7 +314,7 @@ $L_j$ of Lemma~\ref{thm:ldp_repeated_block_polar}.
     \leanok
     \uses{lem:ldp_relative_overlap_spectral_second_order,
         lem:ldp_repeated_overlapping_overlaps, lem:ldp_overlapping_overlaps,
-        def:ldp_repeated_block_state}
+        def:ldp_repeated_block_state, def:ldp_pair_family_fixed_point}
     With the blocks, fixed points and spectral bound of
     Lemma~\ref{thm:ldp_approximation_error_repeated_overlapping}, let $0<\gamma<1$.
     There are constants $C,C'>0$ such that, for every choice of nonzero complex copy
@@ -332,7 +332,8 @@ $L_j$ of Lemma~\ref{thm:ldp_repeated_block_polar}.
     \leanok
     \uses{lem:ldp_relative_overlap_spectral_second_order,
         lem:ldp_repeated_overlapping_overlaps, lem:ldp_overlapping_overlaps,
-        lem:ldp_shared_overlap_estimates}
+        lem:ldp_shared_overlap_estimates, def:ldp_pair_family_fixed_point,
+        thm:ldp_approximation_error_repeated_overlapping}
     Put $w_{jj'}=\braket{\phi_M(F_j)}{\phi_M(H_{jj'})}$ and
     $z_j=\sum_{j'}\beta_{j'}w_{jj'}$. The unnormalized overlap is
     $B^{-1/2}\sum_j\overline{\beta_j}z_j$, while the approximating vector has norm
@@ -346,7 +347,9 @@ $L_j$ of Lemma~\ref{thm:ldp_repeated_block_polar}.
     $O(ye^{O(y)})$ when $Cy<1$. For $t=\lVert\phi_N\rVert/\sqrt B$, the relative
     target-norm estimate gives $\lvert t^2-1\rvert\leq K e^{-\gamma Mq/\xi}$,
     at most $K e^{-2\gamma q/\xi}\leq Ky$ because $M\geq2$.
-    Lemma~\ref{lem:ldp_shared_overlap_estimates} combines the two relative errors.
+    The normalization estimate in
+    Lemma~\ref{thm:ldp_approximation_error_repeated_overlapping} combines the two
+    relative errors.
     The trivial bound $\varepsilon\leq1$ handles short block lengths and $Cy\geq1$,
     and also removes the exponential factor after increasing the constant.
 \end{proof}
