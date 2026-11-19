@@ -1871,6 +1871,17 @@ fixed buffer. The shrinking buffer `μ / log n`, the bond bound `e^{Õ(log³ n)}
 norm bound `Õ(log n / μ)` and the energy estimate within `1/2` are open. The
 qualifier `η₁ ≥ 2μ / log n` of Theorem `t:aisgapless` is not added as a hypothesis.
 
+## ALVV: the middle bond of the efficient Chebyshev projector
+
+[`alvv16_chebyshev_middle_bond.tex`](alvv16_chebyshev_middle_bond.tex)
+(scope restriction, open) quotes Proposition 5.7 (`prop:Cheby-AGSP-eff`) of Arad,
+Landau, Vazirani and Vidick, arXiv:1602.08828v2 (source lines 1311–1320, proof
+1322–1333). Read with submultiplicativity of operator Schmidt rank, the printed
+proof gives the member bond `(B̃ + 2)^k` at a cut inside `J_M`, because the window
+terms enter the weighted ordinary sums; whether the printed `B̃^k` holds is open.
+The formalized common middle family has the source's count shape and the bond
+`max(1, B)^(2k)`. The note gives a re-plumbing plan for the bond `(B̃ + 2)^k`.
+
 ## ALVV: the operator-norm cluster approximation
 
 [`alvv16_cluster_approximation.tex`](alvv16_cluster_approximation.tex)
