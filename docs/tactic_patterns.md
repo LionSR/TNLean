@@ -1,5 +1,24 @@
 # Tactic Pattern Ledger
 
+### Destructuring large existentials in let-heavy goals — candidate (2026-11-18)
+
+- **Seen:** Seven slow `MPS/AreaLaw` proofs: `PhysicalLDTree`,
+  `DyadicRegionalLowDensityFamily`, `CanonicalLowDensityFamily`,
+  `PhysicalDGCanonicalApproximation`, `PhysicalLowEnergyFamily`,
+  `SharpRegionalScalarBudgets` and `SharpRegionalLowDensityFamily`.
+- **Pattern:** `obtain ⟨...⟩ := f args` on a family whose statement has many `let`
+  binders type-checks the instantiated statement, and inside a large dependent goal
+  each `obtain` also re-checks the goal; profiles showed 1–2 s per step. Binding first,
+  `have hf := f args` and then `obtain ⟨...⟩ := hf`, halves that. Inside a large goal,
+  `refine h.elim fun x hx ↦ ?_` with projections `hx.1`, `hx.2.1`, … avoids the goal
+  check altogether; `PhysicalLDTree` went from 30 s to 17 s.
+- **Related:** when an `ActualClippedPolynomialFamily` decomposition is passed to the
+  nested Chebyshev filter, the coordinate types `FiniteProduct.Configuration β J` and
+  `J → Fin q` agree only after unfolding; `have hconj := hM.2; with_reducible exact hconj`
+  stops the unifier from unfolding the continuous-linear composition instead.
+- **Abstraction:** none yet; a lint or a short `obtain`-like macro that eliminates and
+  projects could follow if new slow modules show the same profile.
+
 ### Extending mixed-path identities to the endpoints — candidate (2026-11-17)
 
 - **Seen:** The integral-average formula and local commutation in
