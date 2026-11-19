@@ -1241,6 +1241,62 @@ a function of the Hamiltonian, the gap parameter and the input set.
     follow from that contraction's correctness and arithmetic count.
 \end{proof}
 
+\begin{lemma}[Height of the complete coefficient record]
+    \label{lem:lvv_recorded_coefficient_max_height}
+    \lean{TNLean.MPS.AreaLaw.RationalContractionTrace.coefficient_maxHeight_le}
+    \leanok
+    Consider an open-chain tensor with $n$ sites, physical dimension $q$,
+    and bond bound $D$. Fix a physical configuration and rational tensor
+    parameters whose complex values have common Gaussian-integer
+    denominator $M>0$ and norms at most $C>0$, where $M,C$ are natural
+    numbers. Suppose that each reduced rational coordinate of the scalar
+    cap has height at most $H$. With
+    \[
+        S=\max\{H,MC,(MDC)^n\},
+    \]
+    every operand and result in the recorded coefficient contraction has
+    height at most $2S^4$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_contraction_intermediate_bounds,
+        lem:lvv_recorded_complex_operation_heights,
+        lem:lvv_recorded_coefficient_contraction}
+    Zero padding preserves the denominator and norm bounds. The initial
+    basis row has denominator and norm bound one. After $t$ sites the
+    stored row has denominator $M^t$ and entry norms at most $(DC)^t$.
+    In the next row update, every scalar-product prefix has denominator
+    $M^{t+1}$ and norm at most $a(DC)^t C$ after $a\le D$ summands.
+    These bounds control the coordinates entering each multiplication and
+    prefix addition, giving height at most $2S^4$ throughout the row
+    updates. The final row coordinates have height at most $(MDC)^n$.
+    Multiplication by the cap satisfies the same bound, including for
+    the empty chain.
+\end{proof}
+
+\begin{lemma}[Schoolbook charge of the complete coefficient record]
+    \label{lem:lvv_recorded_coefficient_schoolbook_charge}
+    \lean{TNLean.MPS.AreaLaw.RationalContractionTrace.coefficient_schoolbookCharge_le}
+    \leanok
+    Suppose instead that every reduced rational coordinate of the cap
+    and of the tensor parameters has height at most $2^h$, where $h$ is
+    a natural number. Put $b=2hnqD^2$ and $k=(b+D+h+1)(n+1)$.
+    The complete coefficient record has schoolbook charge at most
+    \[
+        8(8nD^2+6)(4k+3)^2.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:lvv_common_rational_denominator,
+        lem:lvv_recorded_coefficient_max_height,
+        lem:lvv_recorded_coefficient_contraction,
+        lem:lvv_recorded_arithmetic_schoolbook_charge_bound}
+    Take a common parameter denominator $M\le 2^b$ and the complex norm
+    bound $C=2^{h+1}$. Since $D\le 2^D$, the height lemma applies with
+    $S\le 2^k$, giving operation height at most $2^{4k+1}$.
+    Apply the schoolbook charge bound to the $8nD^2+6$ operations,
+    including the final cap.
+\end{proof}
+
 \begin{definition}[Binary length of a rational coordinate]
     \label{def:lvv_rational_coordinate_storage}
     \lean{TNLean.MPS.AreaLaw.rationalCoordinateBitCount}
