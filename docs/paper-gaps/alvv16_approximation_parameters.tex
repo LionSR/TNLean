@@ -595,6 +595,40 @@ probability $s$ grows like $\log L$, so the node bound is uniform in $L$
 only for fixed $\beta$. The identification of this tree with the source's
 algorithm, its output and its running time is not proved.
 
+\subsection*{The window range of Corollary~4.6}
+
+Corollary~4.6 (c:goodagsphardtrunc), lines 981--997 of the arXiv v2 source,
+reads: ``Let $H$ be a 1D local Hamiltonian with ground energy
+$\varepsilon_0$, and $\mathcal H=\mathcal H_L\otimes\mathcal H_M\otimes
+\mathcal H_R$ a decomposition of the $n$-qudit space in contiguous regions.
+For any integer $\ell\ge1$ and $t>0$ there exists a Hamiltonian $\tilde H$
+such that for any $\varepsilon_0<\eta_0<\eta_1$ there is a $(D,\Delta)$
+spectral AGSP $K$ for $(\tilde H,\eta_0,\eta_1)$ with the following
+properties. (1) $D=(d\ell)^{O(\ell)}$ and
+$\Delta=e^{-\Omega(\frac{\ell^2}{\sqrt{t+\ell}}\sqrt{\eta_1-\eta_0})}$,
+(2) there are universal constants $C,c>0$ such that for $i\in\{0,1\}$,
+$0\le\varepsilon_i-\tilde\varepsilon_i\le Ce^{-c(t-\varepsilon_0)}$, where
+$\varepsilon_i$, $\tilde\varepsilon_i$ are the $i$-th smallest (counted with
+multiplicity) eigenvalues of $H$, $\tilde H$ respectively, (3) the space
+$H_{[\varepsilon_0,\eta_1]}$ is $\delta$-close to
+$\tilde H_{[\tilde\varepsilon_0,\eta_0]}$ and
+$\tilde H_{[\tilde\varepsilon_0,\eta_1]}$ is $\delta$-close to
+$H_{[\varepsilon_0,\eta_0]}$, for
+$\delta=\Theta(\frac{\eta_0-\varepsilon_0}{(\eta_1-\eta_0)^2})
+e^{-\Omega(t-(\eta_0-\varepsilon_0))}$.'' Its proof, lines 999--1005, takes the
+Chebyshev construction of Theorem~4.2 at degree $k=\ell^2$.
+
+The formalized combined statement covers every $\eta_1>\eta_0$, as the
+source does. For $\eta_1\le3t+4\ell$, where $3t+4\ell$ bounds the norm of the
+truncated Hamiltonian, the projector is the Chebyshev polynomial of degree
+$\ell^2$. For $\eta_1>3t+4\ell$ no eigenvalue of $\tilde H$ is at least
+$\eta_1$, so the contraction condition of a spectral AGSP is vacuous, and the
+polynomial $p(x)=(\eta_0+1-x)^{\ell^2}$, with $p(\eta_0)=1$ and $p\ge1$ on
+$(-\infty,\eta_0]$, serves; its image has the two-cut rank bound of every
+polynomial of degree $\ell^2$ in a Hamiltonian of the two-window form. The
+remaining deviations are the explicit constants and the corrected cutoff of
+the hard-truncation note.
+
 \bibliographystyle{unsrt}
 \subsection*{The literal interleaved interval tree}
 A separate construction now uses the current-space family image followed
