@@ -1,18 +1,16 @@
-\section{The trace-norm bound and every temperature in Hastings' thermal expansion}
+\section{The trace norm from expectation values}
 \label{sec:hastings_thermal_trace_norm}
 
 % Hastings, arXiv:cond-mat/0508554v3, proj3new.tex, lines 1281--1301 (the
-% trace-norm form) and 1303--1320 (eq. mplt, every temperature).
+% trace-norm form).
 
-Two steps of \cite[Section~IV]{Hastings2006Solving} follow the high-temperature
-cluster expansion. The first turns its bound on expectation values into a bound
-in trace norm. The second extends the matrix product form of
-Section~\ref{sec:hastings_product_form} to every temperature by taking an even
-power of the high-temperature form. This section proves both steps for general
-operators. The truncated density matrix $\rho(\beta,l_{\mathrm{proj}})$ of the
-cluster expansion enters only through the hypotheses. Its error bound at
-every temperature \cite[lines 1322--1349]{Hastings2006Solving} is proved in
-Section~\ref{sec:hastings_temperature_error}. The trace norm of a square matrix $D$ is
+The first step of \cite[Section~IV]{Hastings2006Solving} after the
+high-temperature cluster expansion turns its bound on expectation values into
+a bound in trace norm. This section proves the underlying duality for general
+matrices. The trace-norm form of the cluster-expansion bound, the extension of
+the matrix product form to every temperature by an even power, and the error
+at every temperature are developed in the companion volume~\cite[``The trace-norm bound and every temperature in Hastings' thermal expansion'']{QICLean2026Blueprint}.
+The trace norm of a square matrix $D$ is
 $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
 
 \begin{lemma}[The trace norm from expectation values]
@@ -30,62 +28,5 @@ $\|D\|_1=\operatorname{Tr}\sqrt{D^\dagger D}$, and $\|O\|$ is the operator norm.
     Hermitian $D$ this $O$ may be taken to be the operator of signs of the
     eigenvalues of $D$ that \cite[lines 1291--1294]{Hastings2006Solving} uses;
     the polar decomposition removes the need for $D$ to be Hermitian.
-\end{proof}
-
-\begin{theorem}[The matrix product form at every temperature]
-    \label{thm:hastings_thermal_all_temperatures}
-    \lean{TNLean.Lattice.HasProductForm.pow_of_even,
-        ClusterExpansion.posSemidef_pow_of_even,
-        ClusterExpansion.posSemidef_pow_two_mul,
-        ClusterExpansion.exists_even_div_le}
-    \leanok
-    \uses{def:hastings_product_form}
-    Let $\rho$ be a Hermitian operator in matrix product form of range $l$, and
-    let $m$ be even. Then $\rho^m$ is positive semidefinite and in matrix product
-    form of range $l$. For $\beta\ge0$ and $\beta_0>0$ there is an even
-    $m\ge2$ with $\beta/m\le\beta_0$. Applied to the truncated high-temperature
-    form $\rho(\beta/m,l_{\mathrm{proj}})$, which is Hermitian, this is the
-    positivity and the matrix product form of
-    $\rho(\beta,l_{\mathrm{proj}})=\rho(\beta/m,l_{\mathrm{proj}})^m$ in
-    eq.~(mplt) of \cite[lines 1303--1317]{Hastings2006Solving}, with positive
-    semidefiniteness in place of the source's positive definiteness, which
-    would need $\rho(\beta/m,l_{\mathrm{proj}})$ to be
-    invertible~\cite{gap:hastings05_mplt_positivity}. The local index ranges
-    and their growth under powers are proved in
-    Lemma~\ref{thm:hastings_truncated_index_count}.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:hastings_product_form_mul}
-    For $m=2k$, $\rho^m=(\rho^k)^\dagger\rho^k$ since $\rho^k$ is Hermitian, and
-    this is positive semidefinite. Products of operators in matrix product form
-    of range $l$ are again in that form, with the indices at each site grouped
-    into one (Lemma~\ref{thm:hastings_product_form_mul}). For the number of
-    factors take $m=2(\lceil\beta/\beta_0\rceil+1)$.
-\end{proof}
-
-\begin{lemma}[The truncated operator at every temperature]
-    \label{thm:hastings_truncated_all_temperatures}
-    \lean{TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp_pow_of_even,
-        TNLean.Lattice.ClusterExpansion.hasProductForm_truncatedExp_pow_of_even_of_dist_le}
-    \leanok
-    \uses{def:hastings_product_form}
-    Let the finite metric lattice be nonempty, let every term $H_k$ be Hermitian and act only
-    on a set $S_k$ of sites, with clusters and largeness as in
-    Lemma~\ref{thm:hastings_truncated_product_form}, and let $m$ be even.
-    Then $\rho(\beta,l)^m$ is in matrix product form of range $l$ and positive
-    semidefinite. With $\beta/m$ in place of $\beta$, this is the matrix product
-    form and the positivity of
-    $\rho(\beta,l_{\mathrm{proj}})=\rho(\beta/m,l_{\mathrm{proj}})^m$ in
-    eq.~(mplt) of \cite[lines 1303--1317]{Hastings2006Solving}, with positive
-    semidefiniteness in place of positive
-    definiteness~\cite{gap:hastings05_mplt_positivity}.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:hastings_truncated_product_form, thm:hastings_thermal_all_temperatures}
-    The truncated operator is in matrix product form of range $l$ by
-    Lemma~\ref{thm:hastings_truncated_product_form} and Hermitian by
-    the positivity of the truncated operator
-    \cite[``Positivity of the truncated operator at every temperature'']{QICLean2026Blueprint}, so
-    Theorem~\ref{thm:hastings_thermal_all_temperatures} applies.
 \end{proof}
 

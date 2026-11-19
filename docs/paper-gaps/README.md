@@ -1741,7 +1741,7 @@ most `n / (1 − θ)`, by Bessel's inequality; `θ = 1/2` gives `2n`. The genera
 theorem takes the energy under `H` as a hypothesis. The constructed periodic hierarchy
 derives it from the local windows, the truncation bound, and the explicit projection length.
 
-[hastings05_mplt_positivity.tex](hastings05_mplt_positivity.tex)
+[hastings05_mplt_positivity.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings05_mplt_positivity.pdf)
 (local-correction, resolved) records that Hastings' matrix product form at every temperature,
 `ρ(β, l_proj) = ρ(β/n, l_proj)^n` with `n` even (arXiv:cond-mat/0508554v3, source lines
 1303–1314, eq. `mplt`), is positive semidefinite, and positive definite only when the truncated
@@ -1915,7 +1915,7 @@ Tracked in [#9847](https://github.com/LionSR/TNLean/issues/9847).
 
 ## Hastings' high-temperature matrix product form, arXiv:cond-mat/0508554
 
-- [`hastings05_planar_domain_scope.tex`](hastings05_planar_domain_scope.tex)
+- [`hastings05_planar_domain_scope.tex`](https://sirui-lu.com/QICLean/paper-gaps/hastings05_planar_domain_scope.pdf)
   (local correction, resolved) records the local index counts in
   Section IV of Hastings (arXiv:cond-mat/0508554v3). The product form of
   Trotter products, truncated cluster expansions, and their even powers is
@@ -1924,7 +1924,7 @@ Tracked in [#9847](https://github.com/LionSR/TNLean/issues/9847).
   outside interaction supports. The Trotter form now carries one `q²`-valued
   component for each factor that touches the site, and none for other factors.
   Thus `n` steps have at most `nS` components, with per-site index cardinality
-  at most `(q²)^(nS)`, as proved in `TNLean/Lattice/TrotterIndexCount.lean`.
+  at most `(q²)^(nS)`, as proved in QICLean's `ManyBody/Hamiltonian/ClusterExpansion/IndexCount.lean`.
   The truncated operator of the high-temperature expansion (lines 1256–1279) has
   the product form on every nonempty finite set of sites; on the empty set only the
   identity has a product form. Its index cardinality at site `i` is at most

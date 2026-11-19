@@ -11,11 +11,11 @@ import QICLean.Analysis.ClusterExpansion.Path
 # A matrix product operator for the corrected label truncation
 
 The tensors are constructed from the actual nearest-neighbour interactions through their
-finite cluster sum. The same operator satisfies the proved ManyBody.LowEnergyExample.energy-normalized approximation
+finite cluster sum. The same operator satisfies the proved energy-normalized approximation
 bound. Supporting ALVV, arXiv:1602.08828v2, `thm:cluster`, lines 1298–1303 and 2014–2115.
 
 **Local fix (cutoff and normalization):** this theorem uses connected interaction-label
-components, and a supplied lower ManyBody.LowEnergyExample.energy normalizes the error. It does not assert the false
+components, and a supplied lower energy normalizes the error. It does not assert the false
 printed physical-support approximation; see `docs/paper-gaps/alvv16_cluster_approximation.tex`.
 -/
 
@@ -42,9 +42,9 @@ theorem exists_mpo_cluster_truncation {N q r : ℕ} (hq : 1 ≤ q) (hr : 0 < r)
     (operatorSchmidtRank_cluster_truncation_all_cuts_le hq hr h hs β)
 
 open Classical in
-/-- The constructed matrix product operator obeys the corrected ManyBody.LowEnergyExample.energy-normalized tail bound.
+/-- The constructed matrix product operator obeys the corrected energy-normalized tail bound.
 This uses the actual nearest-neighbour Hamiltonian, with arbitrary Hermitian interactions of
-norm at most one and an explicit lower ManyBody.LowEnergyExample.energy. Supporting a corrected version of ALVV,
+norm at most one and an explicit lower energy. Supporting a corrected version of ALVV,
 arXiv:1602.08828v2, `thm:cluster-approx` and `thm:cluster`, lines 1270–1303. -/
 theorem exists_mpo_cluster_approximation {N q r : ℕ} (hq : 1 ≤ q) (hr : 0 < r)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)

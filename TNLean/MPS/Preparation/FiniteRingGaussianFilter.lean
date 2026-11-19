@@ -12,11 +12,11 @@ import QICLean.ManyBody.Hamiltonian.GaussianFilterLocality
 The periodic nearest-neighbor Lieb–Robinson bound supplies the short-time
 input to the existing Gaussian locality estimate. The resulting bound has
 constants independent of ring length and physical dimension, with arbitrary
-ground ManyBody.LowEnergyExample.energy and without frustration freedom.
+ground energy and without frustration freedom.
 
 This is a filtering estimate needed for the physical-gap route to the SPT
 converse. A symmetric Gaussian filter by itself does not isolate the
-positive-ManyBody.LowEnergyExample.energy contribution to an ordinary connected correlation; this
+positive-energy contribution to an ordinary connected correlation; this
 module does not assert exponential clustering or a transfer spectral gap.
 
 ## References

@@ -24,7 +24,7 @@ right generator `0` and input `1`.
 ## Main results
 
 * `TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_groundProjector_le`: if `Ω` is a
-  gapped ground vector of `H` with ManyBody.LowEnergyExample.energy `0` and gap `ΔE > 0`, then
+  gapped ground vector of `H` with energy `0` and gap `ΔE > 0`, then
   `‖P_q(H) - |Ω⟩⟨Ω|‖ ≤ exp(-q/2)` (`law16.tex`, line 848).
 * `TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_le`: for Hermitian `M` and `H`
   and `ΔE > 0`, `‖P_q(M) - P_q(H)‖ ≤ √q / ΔE · ‖M - H‖`.
@@ -94,10 +94,10 @@ theorem sqrt_timeAverageVariance (q : ℝ) {ΔE : ℝ} (hΔ : 0 < ΔE) :
       Real.sqrt_eq_zero'.mpr hq, zero_div]
   · rw [max_eq_left (by positivity), Real.sqrt_div' _ (sq_nonneg _), Real.sqrt_sq hΔ.le]
 
-/-- **Gap bound.** If `Ω` is a gapped ground vector of the Hermitian matrix `H`, with ManyBody.LowEnergyExample.energy
+/-- **Gap bound.** If `Ω` is a gapped ground vector of the Hermitian matrix `H`, with energy
 `0` and gap `ΔE > 0`, then `‖P_q(H) - |Ω⟩⟨Ω|‖ ≤ exp(-q/2)`. Hastings, arXiv:0705.2024v4,
 `law16.tex`, line 848 ("Using the spectral gap we have `‖P_q - P_0‖ ≤ O(exp[-l/3ξ])`"),
-for the unique gapped ground state of lines 126–127 with the ground ManyBody.LowEnergyExample.energy normalized to
+for the unique gapped ground state of lines 126–127 with the ground energy normalized to
 zero as on lines 766–767. The bound is stated for every real `q`. -/
 theorem norm_gaussianTimeAverage_sub_groundProjector_le {H : Matrix n n ℂ}
     (hH : H.IsHermitian) {ΔE : ℝ} {Ω : EuclideanSpace ℂ n}
@@ -162,7 +162,7 @@ theorem norm_gaussianTimeAverage_sub_le {M H : Matrix n n ℂ} (hM : M.IsHermiti
     _ = _ := by rw [sqrt_timeAverageVariance q hΔ, mul_comm]
 
 /-- **Gap bound under perturbation.** If `Ω` is a gapped ground vector of the Hermitian
-matrix `H`, with ManyBody.LowEnergyExample.energy `0` and gap `ΔE > 0`, and `M` is Hermitian, then
+matrix `H`, with energy `0` and gap `ΔE > 0`, and `M` is Hermitian, then
 `‖P_q(M) - |Ω⟩⟨Ω|‖ ≤ exp(-q/2) + √q / ΔE · ‖M - H‖`. This is the estimate of the first
 display after line 848 of Hastings, arXiv:0705.2024v4, `law16.tex`, lines 849–864, for
 `M = M_L + M_B + M_R`, before its integrand is rewritten in the interaction picture. -/

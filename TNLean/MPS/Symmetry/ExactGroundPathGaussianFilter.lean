@@ -11,8 +11,8 @@ import QICLean.ManyBody.Hamiltonian.GaussianFilter
 # Gaussian ground estimates derived from an exact physical path
 
 One physical Hamiltonian gap supplies a single Gaussian decay constant at
-every path parameter and ring length. The least ManyBody.LowEnergyExample.energy supplied by the gap
-condition agrees with the ManyBody.LowEnergyExample.energy of the exact MPS ground line. Its spectral
+every path parameter and ring length. The least energy supplied by the gap
+condition agrees with the energy of the exact MPS ground line. Its spectral
 gap and unique ground line therefore supply the hypotheses of the existing
 Gaussian ground estimates, without assumptions on transfer operators or
 continuous canonical representatives.
@@ -48,8 +48,8 @@ variable {G : Type} [Group G] {d : ℕ}
   {P : SymmetricGappedInteractionPath U h₀ h₁}
 
 /-- The physical path's uniform gap and exact ground lines give a uniform
-eigenvalue dichotomy at the actual MPS ground ManyBody.LowEnergyExample.energy. The ManyBody.LowEnergyExample.energy in the two
-path conditions is identified by their least-ManyBody.LowEnergyExample.energy properties.
+eigenvalue dichotomy at the actual MPS ground energy. The energy in the two
+path conditions is identified by their least-energy properties.
 Source: arXiv:1010.3732, Section II.F, lines 929–953; this is auxiliary
 spectral data for the physical-gap argument, not its transfer conclusion. -/
 theorem ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap

@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Lattice
 
 import TNLean.Lattice.BoundedDegreeImaginaryTime
-import TNLean.Lattice.ClusterExpansion
 import TNLean.Lattice.Compression
 import TNLean.Lattice.DisjointRegionalGround
 import TNLean.Lattice.EntropyComparison
@@ -19,8 +18,6 @@ import TNLean.Lattice.HardTruncation
 import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.PartyCircuit
 import TNLean.Lattice.PhysicalBufferCoordinates
-import TNLean.Lattice.ProductForm
-import TNLean.Lattice.ProductFormIndexRestriction
 import TNLean.Lattice.ProductGroundState
 import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.Lattice.RegionalEntropy
@@ -35,5 +32,4 @@ import TNLean.Lattice.StateSpace
 import TNLean.Lattice.SupportedPolarUnitary
 import TNLean.Lattice.SupportedUnitaryEntropy
 import TNLean.Lattice.TreeBasisCounterexample
-import TNLean.Lattice.TrotterIndexCount
 import TNLean.Lattice.ZeroEntropy

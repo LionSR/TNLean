@@ -14,7 +14,7 @@ import QICLean.ManyBody.Hamiltonian.GaussianFilter
 
 In the proof of Lemma 1 of Hastings, *An area law for one-dimensional quantum systems*
 (arXiv:0705.2024v4, `law16.tex`, appendix, lines 766–842), the Hamiltonian is shifted to
-ground ManyBody.LowEnergyExample.energy zero and split at the cut `c` into a left, a buffer and a right part. The left
+ground energy zero and split at the cut `c` into a left, a buffer and a right part. The left
 and right parts are filtered and localized to operators `M_L`, `M_R` that nearly annihilate the
 ground state, and `O_L`, `O_R` are the spectral projections of `M_L`, `M_R` onto eigenvalues of
 absolute value at most `θ`.
@@ -244,7 +244,7 @@ end Localized
 /-! ### The cut-offs -/
 
 /-- **The cut-offs `O_L`, `O_R` of Lemma 1.** Let `Ω` be a gapped ground state of a chain
-Hamiltonian `H` with ground ManyBody.LowEnergyExample.energy `E₀` and gap `ΔE`, split at the cut `c` with buffer half-width
+Hamiltonian `H` with ground energy `E₀` and gap `ΔE`, split at the cut `c` with buffer half-width
 `m`, and localize the centered left and right parts onto their `k`-windows, with `R + k ≤ m`.
 Let `H₀ = M_L + M_R`, and let `O_L`, `O_R` be the spectral cut-offs of `M_L`, `M_R` at `θ > 0`.
 Then:

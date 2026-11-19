@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.ClusterExpansion.NearestNeighborTruncationRank
+import QICLean.Entropy.ClusterExpansion.NearestNeighbor
 import TNLean.MPS.AreaLaw.OpenMPS
 
 /-!
@@ -22,7 +22,7 @@ open Finset Matrix SimpleGraph
 
 namespace TNLean.MPS.AreaLaw
 
-open TNLean.Lattice.ClusterExpansion ClusterExpansion
+open ClusterExpansion
 
 open Classical in
 /-- The actual label-truncated nearest-neighbour operator has rank at most `r² q^r` at every
@@ -67,13 +67,16 @@ theorem operatorSchmidtRank_cluster_truncation_all_cuts_le {N q r : ℕ}
         rw [hA]
         by_cases hr1 : r = 1
         · subst r
-          have hb := operatorSchmidtRank_truncatedExp_nearestNeighbor_le_count
-            (r := 1) hq h hs p β
+          have hb :=
+            ManyBody.ClusterExpansion.operatorSchmidtRank_truncatedExp_nearestNeighbor_le_count
+              (r := 1) hq (⟨h, hs⟩ : ManyBody.Interaction (fun _ ↦ Fin q) (ManyBody.chainBond N))
+              p β
           have hb' : operatorSchmidtRank (Entropy.cutOperator
               {v ∈ (univ : Finset (Fin (N + 1))) | v.val ≤ p.val}
                 (truncatedExp (pathGraph N) (fun C ↦ 1 ≤ C.card) h β)) ≤ 1 := by
             simpa using hb
           simpa using hb'.trans hq
-        · exact operatorSchmidtRank_truncatedExp_nearestNeighbor_le hq hr h hs p β
+        · exact ManyBody.ClusterExpansion.operatorSchmidtRank_truncatedExp_nearestNeighbor_le hq hr
+            (⟨h, hs⟩ : ManyBody.Interaction (fun _ ↦ Fin q) (ManyBody.chainBond N)) p β
 
 end TNLean.MPS.AreaLaw

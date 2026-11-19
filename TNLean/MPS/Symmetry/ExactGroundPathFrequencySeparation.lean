@@ -31,8 +31,8 @@ variable {G : Type} [Group G] {d : ℕ}
   {P : SymmetricGappedInteractionPath U h₀ h₁}
 
 /-- Ordinary connected correlations of the actual periodic MPS vector equal
-the corresponding actual negative-frequency commutators. Ground ManyBody.LowEnergyExample.energy,
-least-ManyBody.LowEnergyExample.energy ordering and the full ground line are derived from the
+the corresponding actual negative-frequency commutators. Ground energy,
+least-energy ordering and the full ground line are derived from the
 physical path. This is the exact spectral step of Hastings–Koma,
 arXiv:math-ph/0507008, equations (3.1)–(3.6); no exponential bound is
 asserted without the remaining regularized time-integral argument. -/
