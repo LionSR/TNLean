@@ -838,6 +838,77 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
     \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \end{remark}
 
+\begin{lemma}[Choi rank along a channel semigroup]
+    \label{thm:periodic_projected_semigroup_rank}
+    \lean{Channel.choiRank_comp_expSemigroup_mono}
+    \leanok
+    Suppose $\mathcal S_t=e^{t\mathcal L}$ is a channel for every $t\ge0$,
+    and let $\mathcal P$ be any completely positive map. If $0\le s\le t$,
+    then $\operatorname{rank}C_{\mathcal S_s\circ\mathcal P}\le
+        \operatorname{rank}C_{\mathcal S_t\circ\mathcal P}$.
+    The map $\mathcal P$ may be singular and nonunital.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_injective_composition_choi_rank}
+    The linear map $\mathcal S_{t-s}$ is injective because its exponential
+    has linear inverse $e^{-(t-s)\mathcal L}$. It is completely positive
+    since $t-s\ge0$. Apply
+    Lemma~\ref{thm:periodic_injective_composition_choi_rank} to
+    $\mathcal S_t\circ\mathcal P=\mathcal S_{t-s}\circ\mathcal S_s\circ\mathcal P$.
+\end{proof}
+
+\begin{lemma}[Bounded roots of a projected channel semigroup]
+    \label{thm:periodic_projected_semigroup_root}
+    \lean{Channel.exists_root_choiRank_le_of_projected_semigroup}
+    \leanok
+    Suppose $\mathcal S_t=e^{t\mathcal L}$ is a channel for every $t\ge0$.
+    Let $\mathcal P$ be an idempotent channel commuting with $\mathcal L$.
+    For $t\ge0$ and a positive integer $p$, the channel
+    $\mathcal F=\mathcal S_{t/p}\circ\mathcal P$ satisfies
+    $\mathcal F^p=\mathcal S_t\circ\mathcal P$ and
+    $\operatorname{rank}C_{\mathcal F}\le
+        \operatorname{rank}C_{\mathcal S_t\circ\mathcal P}$.
+    No unitality, irreducibility, or invertibility of the target is assumed.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_projected_semigroup_rank}
+    Commutation and $\mathcal P^p=\mathcal P$ give
+    $(\mathcal S_{t/p}\circ\mathcal P)^p=\mathcal S_t\circ\mathcal P$.
+    Since $0\le t/p\le t$, the preceding lemma gives the rank inequality.
+\end{proof}
+
+\begin{lemma}[Refinement from a projected channel semigroup]
+    \label{thm:periodic_refinement_projected_semigroup}
+    \lean{MPSTensor.isPRefinable_of_projected_semigroup_transfer}
+    \leanok
+    \uses{def:p_refinable}
+    Suppose a tensor $B$ has transfer map
+    $\mathcal E_B=e^{t\mathcal L}\circ\mathcal P$, where $t\ge0$,
+    $e^{u\mathcal L}$ is a channel for every $u\ge0$, and $\mathcal P$ is an
+    idempotent channel commuting with $\mathcal L$. Then $B$ is
+    $p$-refinable for every positive integer $p$, on its original physical
+    alphabet and bond space.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:periodic_projected_semigroup_root, thm:periodic_refinement_from_bounded_root}
+    The preceding lemma supplies a channel root whose Choi rank is at most
+    $\operatorname{rank}C_{\mathcal E_B}\le d$, where $d$ is the physical
+    dimension of $B$. Apply
+    Lemma~\ref{thm:periodic_refinement_from_bounded_root}.
+\end{proof}
+
+\begin{remark}
+    The projection-semigroup representation is an explicit restriction
+    relative to the general converse of
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}. This argument does not
+    establish that an arbitrary divisible channel has such a representation;
+    the general singular nonunital case remains open. See
+    \cite{gap:dccsp17_root_kraus_rank_thm41}.
+\end{remark}
+
 \begin{lemma}[Word-span dimension under invertible multiplication]
     \label{thm:periodic_root_word_span_dimension}
     \lean{Kraus.wordSpan_one_finrank_le_of_isUnit_mem_wordSpan_pred,
