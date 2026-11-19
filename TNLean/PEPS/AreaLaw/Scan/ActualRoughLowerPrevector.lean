@@ -24,11 +24,15 @@ Source: OpenAI area-law manuscript, `07-comparators.tex`, lines 130--169,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder Topology
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -46,10 +50,11 @@ theorem exists_actualScan_suppliedPrevector_rough_lower_of_weight
     ∃ c Cf : ℝ, 0 ≤ c ∧ 0 ≤ Cf ∧
       ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)), S.K = Kband →
       ∀ (hm : 0 < S.m) (hM : 0 < S.M)
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
+        (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+            (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
         (Ωt : StateSpace Λ q) (e₀ gap : ℝ),
       ‖Ωt‖ = 1 →
-      ((∑ i, S.truncatedEnergyTerm h Ω Δ L i) - (e₀ : ℂ) • 1 -
+      ((∑ i, S.truncatedEnergyTerm h Ω J Δ L i) - (e₀ : ℂ) • 1 -
         (gap : ℂ) • (1 - vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef →
       0 < gap →
       ∀ (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Sent : ℝ),
@@ -81,18 +86,18 @@ theorem exists_actualScan_suppliedPrevector_rough_lower_of_weight
             (Transport.filteredVector (Dfill.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
           lower (Transport.filteredNormSq (Dfill.rootPath n (a / 2) k p) (pre k))
             ((S.actualFillScanRound hm hM s.val n
-              (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p)) ∧
+              (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p)) ∧
         (‖WithLp.toLp 2
             (Transport.filteredVector (Dcharge.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
           lower (Transport.filteredNormSq (Dcharge.rootPath n (a / 2) k p) (pre k))
             ((S.actualChargeScanRound hm hM s.val n
-              (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p)) := by
+              (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p)) := by
   classical
   obtain ⟨c, Cf, hc, hCf, hlower⟩ :=
     exists_actualScan_rough_lower_norm_of_weight (Λ := Λ) (q := q) (d := d) (R := R) (J := J)
       Kband a ha haSmall
   refine ⟨c, Cf, hc, hCf, ?_⟩
-  intro S hSK hm hM h Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos ell Sent hpre hdim
+  intro S hSK hm hM h hh hhJ Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos ell Sent hpre hdim
     W n pre
   let β := fun _ : Site Λ => Fin q
   refine ⟨tendsto_roughLowerRemainderAtWeight_of_label_dimension ell Sent hdim Kband a c Cf, ?_⟩
@@ -125,7 +130,7 @@ theorem exists_actualScan_suppliedPrevector_rough_lower_of_weight
       Equiv.self_comp_symm, Function.comp_id] using
       congrArg (fun v => v ∘ globalReplicaCopiesEquiv β (Fin d) (Fin d) k) hfixed.2
   simpa only [roughLowerRemainderAtWeight] using!
-    hlower S hSK hm hM (S.n * S.m) h Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos
+    hlower S hSK hm hM (S.n * S.m) h hh hhJ Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos
       pre k hk hprenonzero hprenorm hsym
       (ell k) Sent (roughLowerLabelDefect ell Sent k) hC hR
       (roughLowerLabelDefect_label_bound ell Sent k).2 s p
@@ -143,10 +148,11 @@ theorem exists_actualScan_suppliedPrevector_rough_lower
     ∃ c Cf : ℝ, 0 ≤ c ∧ 0 ≤ Cf ∧
       ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)), S.K = Kband →
       ∀ (hm : 0 < S.m) (hM : 0 < S.M)
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
+        (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+            (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
         (Ωt : StateSpace Λ q) (e₀ gap : ℝ),
       ‖Ωt‖ = 1 →
-      ((∑ i, S.truncatedEnergyTerm h Ω Δ L i) - (e₀ : ℂ) • 1 -
+      ((∑ i, S.truncatedEnergyTerm h Ω J Δ L i) - (e₀ : ℂ) • 1 -
         (gap : ℂ) • (1 - vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef →
       0 < gap →
       ∀ (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Sent : ℝ),
@@ -178,12 +184,12 @@ theorem exists_actualScan_suppliedPrevector_rough_lower
             (Transport.filteredVector (Dfill.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
           lower (Transport.filteredNormSq (Dfill.rootPath n (a / 2) k p) (pre k))
             ((S.actualFillScanRound hm hM s.val n
-              (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p)) ∧
+              (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p)) ∧
         (‖WithLp.toLp 2
             (Transport.filteredVector (Dcharge.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
           lower (Transport.filteredNormSq (Dcharge.rootPath n (a / 2) k p) (pre k))
             ((S.actualChargeScanRound hm hM s.val n
-              (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p)) := by
+              (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p)) := by
   have hKpos : (0 : ℝ) < Kband := by
     exact_mod_cast (lt_of_lt_of_le (by decide : 0 < 8) hKband)
   simpa only [roughLowerRemainder, roughLowerRemainderAtWeight,

@@ -33,6 +33,8 @@ contraction of injective tensors over any finite region is injective.
   complement).
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean
@@ -106,7 +108,7 @@ abbrev RegionPhysicalConfig (R : Finset V) : Type _ :=
 omit [Fintype V] in
 /-- The vertex product over `R` reads a virtual configuration only through edges incident to
 `R`: two configurations agreeing on every `R`-incident edge give the same product. -/
-theorem regionProd_subtype_congr (R : Finset V)
+theorem regionProd_subtype_congr {A : Tensor G d} (R : Finset V)
     (σ : RegionPhysicalConfig (V := V) (d := d) R) {ζ ζ' : VirtualConfig A}
     (h : ∀ e : Edge G, IsRegionIncidentEdge (G := G) R e → ζ e = ζ' e) :
     (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w)) =

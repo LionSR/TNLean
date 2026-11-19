@@ -45,7 +45,7 @@ written together with lecture notes that set the order and choice of results.
   star isomorphism between the two constructions, after which theorems transfer
   in both directions. The namespaces do not collide.
 - **Lieb–Robinson bounds.** TNLean has propagation results in
-  `TNLean/Circuit/LiebRobinson/` and in the PEPS area-law development.
+  `QICLean/ManyBody/Dynamics/` (QICLean dependency) and in the PEPS area-law development.
   LocalityLean proves the analytic bounds and a local-approximation theorem.
   The statements have not been compared in detail.
 - **Gaussian tensor networks.** TNLean has none; BosonicLean and FermionicLean

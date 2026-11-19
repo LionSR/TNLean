@@ -10,7 +10,7 @@ import TNLean.PEPS.AreaLaw.InitialBuffer
 
 The strip is the rectangular induced lattice domain with sites equivalent to
 `Fin L × Fin w`. Interactions are the distinct admissible supports of
-`TNLean.Lattice.LocalHamiltonian`; columns are never blocked into larger physical sites.
+`ManyBody.PlaneInteraction`; columns are never blocked into larger physical sites.
 
 This is geometric input for a strip extension of the one-dimensional note,
 not a theorem stated in that note. Its counting argument is the
@@ -25,6 +25,8 @@ results. They change the constants depending on `q,R`, without changing width sc
 -/
 
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -132,7 +134,8 @@ theorem crossingSupport_meets_stripBand {L w R a b : ℕ}
       (stripInterval L w a b)) :
     ∃ x ∈ stripInterval L w a (a + R) ∪ stripInterval L w (b - R) b, x ∈ X.1 := by
   classical
-  obtain ⟨⟨x, hx, hxA⟩, y, hy, hyA⟩ := (Finset.mem_filter.mp hX).2
+  simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
+  obtain ⟨⟨x, hx, hxA⟩, y, hy, hyA⟩ := hX
   have hxy := stripColumn_le_add_range X hx hy
   have hyx := stripColumn_le_add_range X hy hx
   refine ⟨x, ?_, hx⟩
@@ -148,12 +151,6 @@ theorem card_crossingTerms_stripInterval_le (L w R a b : ℕ) :
       (stripInterval L w a b)).card ≤ stripCrossConst R * w := by
   classical
   let band := stripInterval L w a (a + R) ∪ stripInterval L w (b - R) b
-  have hcover : Entropy.crossingTerms
-      (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1) (stripInterval L w a b) ⊆
-      band.biUnion (fun v ↦ Finset.univ.filter fun X ↦ v ∈ X.1) := by
-    intro X hX
-    obtain ⟨x, hx, hxX⟩ := crossingSupport_meets_stripBand X hX
-    exact Finset.mem_biUnion.mpr ⟨x, hx, Finset.mem_filter.mpr ⟨Finset.mem_univ X, hxX⟩⟩
   have hband : band.card ≤ 2 * R * w := by
     calc _ ≤ _ := Finset.card_union_le _ _
       _ ≤ ((a + R) - a) * w + (b - (b - R)) * w :=
@@ -162,10 +159,9 @@ theorem card_crossingTerms_stripInterval_le (L w R a b : ℕ) :
         have : b - (b - R) ≤ R := by omega
         simp only [Nat.add_sub_cancel_left]
         nlinarith [Nat.mul_le_mul_right w this]
-  calc _ ≤ _ := Finset.card_le_card hcover
-    _ ≤ band.card * 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
-      Finset.card_biUnion_le_card_mul _ _ _ fun v _ ↦
-        TNLean.PEPS.AreaLaw.card_admissibleSupport_containing_le v
+  calc _ ≤ band.card * 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
+      TNLean.PEPS.AreaLaw.card_le_card_mul_of_forall_exists_mem fun X hX ↦
+        crossingSupport_meets_stripBand X hX
     _ ≤ (2 * R * w) * 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
       Nat.mul_le_mul_right _ hband
     _ = stripCrossConst R * w := by
@@ -231,26 +227,22 @@ theorem card_crossingTerms_stripPrefix_le {L w R c : ℕ}
       ((R + 1) * 2 ^ (2 * R * (R + 1))) * w := by
   classical
   let band := stripInterval L w (c - R) (c + 1)
-  have hcover : Entropy.crossingTerms
-      (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1) A ⊆
-      band.biUnion (fun v ↦ Finset.univ.filter fun X ↦ v ∈ X.1) := by
-    intro X hX
-    obtain ⟨⟨x, hx, hxA⟩, y, hy, hyA⟩ := (Finset.mem_filter.mp hX).2
+  have hmeet (X : AdmissibleSupport (stripDomain L w) R)
+      (hX : X ∈ Entropy.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1) A) :
+      ∃ x ∈ band, x ∈ X.1 := by
+    simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
+    obtain ⟨⟨x, hx, hxA⟩, y, hy, hyA⟩ := hX
     have hxcol := mem_stripInterval.mp (hright hxA)
     have hycol : c ≤ stripColumn y := by
       by_contra hn
       exact hyA (hleft (mem_stripInterval.mpr ⟨Nat.zero_le _, by omega⟩))
     have hdist := stripColumn_le_add_range X hx hy
-    have hxband : x ∈ band := by simp only [band, mem_stripInterval]; omega
-    exact Finset.mem_biUnion.mpr
-      ⟨x, hxband, Finset.mem_filter.mpr ⟨Finset.mem_univ X, hx⟩⟩
+    exact ⟨x, by simp only [band, mem_stripInterval]; omega, hx⟩
   have hband : band.card ≤ (R + 1) * w := by
     refine (card_stripInterval_le L w (c - R) (c + 1)).trans ?_
     exact Nat.mul_le_mul_right w (by omega)
-  calc _ ≤ _ := Finset.card_le_card hcover
-    _ ≤ band.card * 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
-      Finset.card_biUnion_le_card_mul _ _ _ fun v _ ↦
-        TNLean.PEPS.AreaLaw.card_admissibleSupport_containing_le v
+  calc _ ≤ band.card * 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
+      TNLean.PEPS.AreaLaw.card_le_card_mul_of_forall_exists_mem hmeet
     _ ≤ ((R + 1) * w) * 2 ^ ((1 + 2 * R * (R + 1)) - 1) :=
       Nat.mul_le_mul_right _ hband
     _ = _ := by simp only [Nat.add_sub_cancel_left]; ring

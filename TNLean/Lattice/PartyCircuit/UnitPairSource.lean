@@ -58,7 +58,7 @@ private def eraseUnit (p : P) (ℓ : Layout P) :
 /-- A scalar register in the vector `1` can be removed without changing its spectators. -/
 private theorem eval_eraseUnit (p : P) (ℓ : Layout P) (x : Mem ℓ) :
     (eraseUnit p ℓ).eval ((1 : ℂ) ⊗ₜ x) = x := by
-  simp [eraseUnit, Word.eval, appendIso]
+  simp [eraseUnit, Circuit.eval, appendIso]
 
 /-- Remove the two scalar registers by local isometries at their owners.
 Source: polynomial-PEPS manuscript, `eq:compression-source-gate`, lines 243–245. -/

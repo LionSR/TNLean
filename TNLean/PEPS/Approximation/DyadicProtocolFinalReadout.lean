@@ -45,6 +45,8 @@ and the final reference vector are arbitrary data satisfying the stated identiti
   and the final reference (lines 669–681).
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 noncomputable section
 
 namespace TNLean.PEPS.Approximation

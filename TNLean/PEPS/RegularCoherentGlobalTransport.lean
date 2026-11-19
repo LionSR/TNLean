@@ -22,6 +22,8 @@ These are auxiliary contraction identities; no energy or parent-Hamiltonian
 membership statement is asserted.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
@@ -51,7 +53,7 @@ theorem openRegionWeight_groupBondTensor_congr_on (R : Finset V)
 /-- A finite coherent identity on every native boundary column gives the same
 identity between actual globally contracted states when the exterior tensors agree.
 Source: SCP10, lines 1935–1957 and Theorem 6.17, lines 2304–2339. -/
-theorem regionLocalTerm_mulVec_stateCoeff_sum_of_openColumns (R : Finset V)
+theorem place_mulVec_stateCoeff_sum_of_openColumns (R : Finset V)
     (a : (v : V) → (IncidentEdge Γ v → X) → Fin d → ℂ)
     (b : I → (v : V) → (IncidentEdge Γ v → X) → Fin d → ℂ)
     (c : I → ℂ)
@@ -59,13 +61,13 @@ theorem regionLocalTerm_mulVec_stateCoeff_sum_of_openColumns (R : Finset V)
     (hcols : ∀ μ, W *ᵥ openRegionWeight (groupBondTensor a) R μ =
       ∑ i, c i • openRegionWeight (groupBondTensor (b i)) R μ)
     (hout : ∀ i v, v ∉ R → a v = b i v) :
-    regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor a) =
+    ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor a) =
       ∑ i, c i • stateCoeff (groupBondTensor (b i)) := by
   classical
   funext ξ
   obtain ⟨⟨σ, τ⟩, rfl⟩ := (regionConfigEquiv (d := d) R).symm.surjective ξ
-  change (regionLocalTerm R W *ᵥ _) (assembleRegionσ R σ τ) = _
-  rw [regionLocalTerm_mulVec_assemble]
+  change (ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ _) (assembleRegionσ R σ τ) = _
+  rw [place_mulVec_assemble]
   simp only [Matrix.mulVec, dotProduct,
     stateCoeff_eq_openRegionComplement
       (groupBondTensor a) R (fun _ => Fintype.card_ne_zero), Finset.mul_sum]
@@ -92,16 +94,16 @@ theorem regionLocalTerm_mulVec_stateCoeff_sum_of_openColumns (R : Finset V)
 /-- An identity on every actual open boundary column passes to the globally
 contracted state when the exterior site tensors agree.
 Source: SCP10, finite cut contraction, lines 1935–1957. -/
-theorem regionLocalTerm_mulVec_stateCoeff_of_openColumns (R : Finset V)
+theorem place_mulVec_stateCoeff_of_openColumns (R : Finset V)
     (a b : (v : V) → (IncidentEdge Γ v → X) → Fin d → ℂ)
     (W : Matrix ({v : V // v ∈ R} → Fin d) ({v : V // v ∈ R} → Fin d) ℂ)
     (hcols : ∀ μ, W *ᵥ openRegionWeight (groupBondTensor a) R μ =
       openRegionWeight (groupBondTensor b) R μ)
     (hout : ∀ v ∉ R, a v = b v) :
-    regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor a) =
+    ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor a) =
       stateCoeff (groupBondTensor b) := by
   simpa only [Fintype.sum_unique, one_smul] using
-    regionLocalTerm_mulVec_stateCoeff_sum_of_openColumns R a
+    place_mulVec_stateCoeff_sum_of_openColumns R a
       (fun _ : Unit => b) (fun _ => 1) W
       (fun μ => by simpa only [Fintype.sum_unique, one_smul] using hcols μ)
       (fun _ v hv => hout v hv)

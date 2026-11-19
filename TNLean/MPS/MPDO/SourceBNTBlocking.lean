@@ -22,6 +22,7 @@ lines 317--345, applied to the basis of normal tensors defined at lines
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim flattenBlockedWord evalWord_blockTensor)
 
 namespace MPSTensor
 
@@ -43,12 +44,12 @@ theorem IsCPSVBasisOfNormalTensors.blockTensor
     {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
     (hBNT : IsCPSVBasisOfNormalTensors A (fun j ↦ ⟨dim j, B j⟩))
     {p : ℕ} (hp : 0 < p) :
-    IsCPSVBasisOfNormalTensors (MPSTensor.blockTensor A p)
-      (fun j ↦ ⟨dim j, MPSTensor.blockTensor (B j) p⟩) := by
+    IsCPSVBasisOfNormalTensors (Kraus.blockTensor A p)
+      (fun j ↦ ⟨dim j, Kraus.blockTensor (B j) p⟩) := by
   classical
   have hBlock {D' : ℕ} (T : MPSTensor d D') {N : ℕ}
       (σ : Fin N → Fin (blockPhysDim d p)) :
-      mpv (MPSTensor.blockTensor T p) σ =
+      mpv (Kraus.blockTensor T p) σ =
         mpv T (blockedConfigEquiv d N p σ) := by
     simp only [mpv, coeff, evalWord_blockTensor]
     rw [ofFn_blockedConfigEquiv]
@@ -60,11 +61,11 @@ theorem IsCPSVBasisOfNormalTensors.blockTensor
     obtain ⟨c, hc⟩ := hBNT.spans_mpv (N * p) (Nat.mul_pos hN hp)
     refine ⟨c, fun σ ↦ ?_⟩
     calc
-      mpv (MPSTensor.blockTensor A p) σ =
+      mpv (Kraus.blockTensor A p) σ =
           mpv A (blockedConfigEquiv d N p σ) := hBlock A σ
       _ = ∑ j : Fin g, c j * mpv (B j) (blockedConfigEquiv d N p σ) :=
         hc (blockedConfigEquiv d N p σ)
-      _ = ∑ j : Fin g, c j * mpv (MPSTensor.blockTensor (B j) p) σ := by
+      _ = ∑ j : Fin g, c j * mpv (Kraus.blockTensor (B j) p) σ := by
         apply Finset.sum_congr rfl
         intro j _
         rw [hBlock (B j) σ]
@@ -72,7 +73,7 @@ theorem IsCPSVBasisOfNormalTensors.blockTensor
     refine ⟨N₀, fun N hN ↦ ?_⟩
     let e := blockedConfigEquiv d N p
     apply linearIndependent_mpvState_of_configEquiv e
-      (fun j ↦ MPSTensor.blockTensor (B j) p) B
+      (fun j ↦ Kraus.blockTensor (B j) p) B
     · intro j σ
       simpa [e] using hBlock (B j) (e.symm σ)
     · have hNp : N₀ < N * p :=
@@ -85,10 +86,10 @@ theorem wordTupleSpanTop_blockTensor_one
     {g : ℕ} {dim : Fin g → ℕ}
     (B : (j : Fin g) → MPSTensor d (dim j)) {L : ℕ}
     (hSpan : WordTupleSpanTop B L) :
-    WordTupleSpanTop (fun j => MPSTensor.blockTensor (B j) L) 1 := by
+    WordTupleSpanTop (fun j => Kraus.blockTensor (B j) L) 1 := by
   unfold WordTupleSpanTop at hSpan ⊢
   have hRange :
-      Set.range (wordTuple (fun j => MPSTensor.blockTensor (B j) L) 1) =
+      Set.range (wordTuple (fun j => Kraus.blockTensor (B j) L) 1) =
         Set.range (wordTuple B L) := by
     ext M
     constructor
@@ -98,7 +99,7 @@ theorem wordTupleSpanTop_blockTensor_one
       refine ⟨τ, ?_⟩
       funext j
       change Kraus.evalWord (B j) (List.ofFn τ) =
-        Kraus.evalWord (MPSTensor.blockTensor (B j) L) (List.ofFn σ)
+        Kraus.evalWord (Kraus.blockTensor (B j) L) (List.ofFn σ)
       rw [evalWord_blockTensor]
       have hτ : List.ofFn τ = flattenBlockedWord d L (List.ofFn σ) := by
         calc
@@ -115,7 +116,7 @@ theorem wordTupleSpanTop_blockTensor_one
         (blockedConfigEquiv d 1 L).symm τ'
       refine ⟨σ, ?_⟩
       funext j
-      change Kraus.evalWord (MPSTensor.blockTensor (B j) L) (List.ofFn σ) =
+      change Kraus.evalWord (Kraus.blockTensor (B j) L) (List.ofFn σ) =
         Kraus.evalWord (B j) (List.ofFn τ)
       rw [evalWord_blockTensor]
       have hcfg : blockedConfigEquiv d 1 L σ = τ' := by
@@ -326,7 +327,7 @@ theorem IsCPSVBasisOfNormalTensors.exists_blocked_wordTupleSpanTop_one
     {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
     (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
     ∃ L : ℕ, 0 < L ∧
-      WordTupleSpanTop (fun j => MPSTensor.blockTensor (B j) L) 1 := by
+      WordTupleSpanTop (fun j => Kraus.blockTensor (B j) L) 1 := by
   obtain ⟨L, hL, hSpan⟩ := hBNT.exists_positive_wordTupleSpanTop
   exact ⟨L, hL, wordTupleSpanTop_blockTensor_one B hSpan⟩
 

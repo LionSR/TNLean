@@ -325,7 +325,7 @@ theorem IsStrongOnSiteSymmetry.map_mul {M : MPOTensor d D} {X : Matrix (Fin D) (
   simp only [mpo_onSite] at hg hk hgk
   have hsplit : (Matrix.finKronecker fun _ : Fin L => U (g * k)) =
       (Matrix.finKronecker fun _ : Fin L => U g) * Matrix.finKronecker fun _ : Fin L => U k := by
-    rw [Matrix.finKronecker_mul, _root_.map_mul]
+    rw [← Matrix.finKronecker_mul, _root_.map_mul]
   refine smul_left_injective ℂ hρ (hgk.symm.trans ?_)
   change _ = (c g L * c k L) • mpoWithBoundary M X L
   rw [hsplit, Matrix.mul_assoc, hk, Matrix.mul_smul, hg, smul_smul, mul_comm (c k L)]

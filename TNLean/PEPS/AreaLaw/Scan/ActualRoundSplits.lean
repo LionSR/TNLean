@@ -36,6 +36,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open Classical in
@@ -70,7 +72,7 @@ open Classical in
 /-- At an old leaf of an actual charge round, a split term has a designated split
 incidence with the old pre-charge partition of some band (`08-scanner.tex`, lines 431–437). -/
 theorem actualChargeScanRound_splitOld_incidence
-    (hgraph : S.graph = domainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩)
@@ -98,7 +100,7 @@ open Classical in
 incidence with the completed partition after the charge (`06-transport.tex`,
 lines 336–352). -/
 theorem actualChargeScanRound_splitNew_incidence
-    (hgraph : S.graph = domainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩)
@@ -126,7 +128,7 @@ open Classical in
 /-- At an old leaf of an actual fill round, a split term has a designated split
 incidence with the completed partition of some band. -/
 theorem actualFillScanRound_splitOld_incidence
-    (hgraph : S.graph = domainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩)
@@ -153,7 +155,7 @@ open Classical in
 /-- At a new leaf of an actual fill round, a split term has a designated split
 incidence with the next pre-charge partition of some band. -/
 theorem actualFillScanRound_splitNew_incidence
-    (hgraph : S.graph = domainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩)
@@ -181,7 +183,7 @@ open Classical in
 /-- At most `10 K n D μ` terms split at an old leaf of an actual charge round, where `μ`
 bounds the number of labels sharing an anchor (Lemma 9.1(2), `08-scanner.tex`, line 207). -/
 theorem actualChargeScanRound_card_splitOld_le
-    (hgraph : S.graph = domainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩)
@@ -207,7 +209,7 @@ open Classical in
 /-- At most `10 K n D μ` terms split at a new leaf of an actual charge round
 (Lemma 9.1(2), `08-scanner.tex`, line 207). -/
 theorem actualChargeScanRound_card_splitNew_le
-    (hgraph : S.graph = domainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩)
@@ -233,7 +235,7 @@ open Classical in
 /-- At most `10 K n D μ` terms split at an old leaf of an actual fill round
 (Lemma 9.1(2), `08-scanner.tex`, line 207). -/
 theorem actualFillScanRound_card_splitOld_le
-    (hgraph : S.graph = domainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩)
@@ -259,7 +261,7 @@ open Classical in
 /-- At most `10 K n D μ` terms split at a new leaf of an actual fill round
 (Lemma 9.1(2), `08-scanner.tex`, line 207). -/
 theorem actualFillScanRound_card_splitNew_le
-    (hgraph : S.graph = domainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩)
@@ -286,7 +288,7 @@ open Classical in
 round on which a fixed term splits sum to at most `10 D / m` (Lemma 9.1(3),
 `08-scanner.tex`, lines 208–210). -/
 theorem actualChargeScanRound_splitWeight_le
-    (hgraph : S.graph = domainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩)
@@ -354,7 +356,7 @@ open Classical in
 round on which a fixed term splits sum to at most `10 D / m` (Lemma 9.1(3),
 `08-scanner.tex`, lines 208–210). -/
 theorem actualFillScanRound_splitWeight_le
-    (hgraph : S.graph = domainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (hgraph : S.graph = planeDomainGraph Λ) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hsupport : ∀ i, E.support i =
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩)

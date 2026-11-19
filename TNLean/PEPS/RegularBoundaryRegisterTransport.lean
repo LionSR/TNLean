@@ -20,6 +20,8 @@ lines 2489–2507. This is the local transport step; no gluing identity or
 factorization of the four-spin charge-motion operation is asserted here.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

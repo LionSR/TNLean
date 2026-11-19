@@ -138,10 +138,12 @@ theorem exists_tagWord_of_perm [NeZero q] {l l' : List (Hole pos q Party)}
       fun _ => rfl⟩, fun t => ?_, .swap _ _ _, Word.isReordering_swap .., fun τ z => ?_⟩
     · change x.patch.branch t.2.1 * (y.patch.branch t.1 * rawProd l t.2.2) =
         y.patch.branch t.1 * (x.patch.branch t.2.1 * rawProd l t.2.2)
-      have hyx : Disjoint (y.patch.outer : Set ι) x.patch.outer :=
-        Finset.disjoint_coe.mpr (List.rel_of_pairwise_cons hd List.mem_cons_self)
-      rw [← mul_assoc, ← mul_assoc, (commute_of_mem_supportedOperators hyx
-        (y.patch.branch_mem_supportedOperators _) (x.patch.branch_mem_supportedOperators _)).eq]
+      have hyx : Disjoint y.patch.outer x.patch.outer :=
+        (List.rel_of_pairwise_cons hd List.mem_cons_self)
+      rw [← mul_assoc, ← mul_assoc,
+          (ManyBody.commute_of_mem_supportedOperators_of_disjoint
+          (y.patch.branch_mem_supportedOperators _)
+          (x.patch.branch_mem_supportedOperators _) hyx).eq]
     · obtain ⟨t, s, τ⟩ := τ
       exact leftCommL_tmul _ _ _
   | trans h₁ _ ih₁ ih₂ =>
@@ -149,7 +151,7 @@ theorem exists_tagWord_of_perm [NeZero q] {l l' : List (Hole pos q Party)}
     obtain ⟨e₂, he₂, w₂, a₂, hw₂⟩ := ih₂ (hd.perm (h₁.map _) fun h => Disjoint.symm h)
     refine ⟨e₁.trans e₂, fun t => (he₂ _).trans (he₁ t), .comp w₁ w₂, a₁.comp a₂,
       fun τ z => ?_⟩
-    rw [Word.eval_comp, ContinuousLinearMap.comp_apply, hw₁, hw₂]
+    rw [Circuit.eval_comp, ContinuousLinearMap.comp_apply, hw₁, hw₂]
     rfl
 
 end TagSplit

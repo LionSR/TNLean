@@ -81,7 +81,7 @@ theorem sources_incidentSourceWord {a b : Layout P} (w : SourceCircuit a b) (p :
       (f : Q → Bool) (g : Q → R) {c' d' : Layout R}
       (hi : Layout.mapOwner g (Layout.restrict f c) = c')
       (ho : Layout.mapOwner g (Layout.restrict f d) = d') :
-      (((u.restrict f hu).mapOwner g).castLayouts hi ho).sources = [] := by
+      Word.sources (((u.restrict f hu).mapOwner g).castLayouts hi ho) = [] := by
     exact (Word.sources_castLayouts _ hi ho).trans
       ((Word.sources_mapOwner g _).trans
         ((congrArg (SourceInventory.mapOwner g) (Word.sources_restrict f u hu)).trans

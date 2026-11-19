@@ -27,6 +27,8 @@ explicitly.  The convention and the zero-dimensional obstruction are
 documented in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

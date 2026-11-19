@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.AreaLawExplicitConstant
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The two-dimensional area law
@@ -38,7 +39,11 @@ The explicit constant is recorded in `docs/notes/arealaw2d_explicit_constant.tex
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -58,9 +63,11 @@ boundaries. -/
 theorem uniformAreaLaw_vertex_boundary_bounds :
     ∀ q : ℕ, 1 ≤ q → ∀ R : ℕ, ∀ J Δ : ℝ, 0 < J → 0 < Δ →
       ∃ C : ℝ, 0 ≤ C ∧
-        ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J,
+        ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
+            (∀ X, ‖H.term X‖ ≤ J) →
           ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-            IsGappedGroundState Λ q H.operator E₀ Ω Δ →
+            ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
+            groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
               ∀ A : Finset (Site Λ),
                 regionalEntropy Λ q Ω A ≤ 4 * C * (innerBoundary Λ A).card ∧
                 regionalEntropy Λ q Ω A ≤ 2 * C * (endpointBoundary Λ A).card :=

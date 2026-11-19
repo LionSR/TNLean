@@ -21,6 +21,8 @@ Source: SCP10, arXiv:1001.3807, lines 1840–1920 and 2043–2072.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix ComplexOrder
 open Matrix
 

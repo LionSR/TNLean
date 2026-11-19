@@ -193,9 +193,10 @@ theorem exists_compl_pow_bound [NeZero D] {A : MPSTensor d D} {L : ℕ} (hL1 : 1
   have hTP : IsTracePreservingMap E := Kraus.isTracePreservingMap_mapLM_of_isTP A hA
   have hr0 : 0 < r := (norm_nonneg _).trans_lt hr
   have hNormal : Kraus.IsNormal A := ⟨L, hL1, hL⟩
-  have hPP : IsPrimitivePaper A := isPrimitivePaper_of_hasEventuallyFullKrausRank A
-    ((hasEventuallyFullKrausRank_iff_isNormal A).2 hNormal)
-  obtain ⟨_, _, _, hPer, hIrr⟩ := (primitivePaper_iff_stronglyIrreducible A hA).1 hPP
+  have hPer : IsPrimitive (Kraus.transferMap A) :=
+    isPrimitive_transferMap_of_isNormal A hA hNormal
+  have hIrr : IsIrreducibleMap (Kraus.transferMap A) :=
+    isIrreducibleMap_transferMap_of_isNormal A hNormal
   have hCh : IsChannel E := Kraus.isChannel_mapLM A hA
   obtain ⟨htr', hgap⟩ := spectralRadius_compl_lt_one_of_primitive_fixedPoint_of_irreducible_channel
     E hCh hIrr hPer ρ hρ.posSemidef (fun h ↦ htr (by rw [h, Matrix.trace_zero])) hρfix

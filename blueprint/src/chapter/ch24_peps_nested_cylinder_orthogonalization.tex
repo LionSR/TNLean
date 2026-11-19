@@ -15,11 +15,9 @@ nested regions and inside subspaces.
 
 \begin{definition}[Regional cylinders]
     \label{def:peps_regional_cylinder}
-    \lean{
-        TNLean.PEPS.dependentRegionCylinder,
+    \lean{TNLean.PEPS.dependentRegionCylinder,
         TNLean.PEPS.mem_dependentRegionCylinder,
-        TNLean.PEPS.dependentRegionCylinder_bot
-    }
+        TNLean.PEPS.dependentRegionCylinder_bot}
     \leanok
     For $S\subseteq\mathcal H_R$, its cylinder is
     $\mathcal C_R(S)=S\otimes\mathcal H_{V\setminus R}$.
@@ -31,10 +29,8 @@ nested regions and inside subspaces.
 
 \begin{lemma}[Projectors onto cylinders]
     \label{thm:peps_cylinder_projector}
-    \lean{
-        TNLean.PEPS.range_dependentRegionOperatorLift,
-        TNLean.PEPS.coordinateRangeProjector_dependentRegionCylinder
-    }
+    \lean{TNLean.PEPS.range_place,
+        TNLean.PEPS.coordinateRangeProjector_dependentRegionCylinder}
     \leanok
     \uses{def:peps_regional_cylinder}
     Let $A$ act on $\mathcal H_R$, and let $P_S$ be the orthogonal projector
@@ -59,12 +55,10 @@ nested regions and inside subspaces.
 
 \begin{lemma}[Sums and images of cylinders]
     \label{thm:peps_cylinder_operations}
-    \lean{
-        TNLean.PEPS.dependentRegionCylinder_sup,
+    \lean{TNLean.PEPS.dependentRegionCylinder_sup,
         TNLean.PEPS.dependentRegionCylinder_iSup,
         TNLean.PEPS.dependentRegionCylinder_subregion,
-        TNLean.PEPS.dependentRegionCylinder_map
-    }
+        TNLean.PEPS.dependentRegionCylinder_map}
     \leanok
     \uses{def:peps_regional_cylinder}
     For a finite family of subspaces $S_i\subseteq\mathcal H_R$, a linear
@@ -90,10 +84,8 @@ nested regions and inside subspaces.
 
 \begin{definition}[Projected images at nested regions]
     \label{def:peps_nested_cylinder_images}
-    \lean{
-        TNLean.PEPS.nestedCylinderEarlierInside,
-        TNLean.PEPS.nestedCylinderInnovation
-    }
+    \lean{TNLean.PEPS.nestedCylinderEarlierInside,
+        TNLean.PEPS.nestedCylinderInnovation}
     \leanok
     \uses{def:peps_regional_cylinder}
     Let $R_0\subseteq\cdots\subseteq R_{n-1}$ and
@@ -113,11 +105,9 @@ nested regions and inside subspaces.
 
 \begin{lemma}[Earlier spans and projected cylinders]
     \label{thm:peps_nested_cylinder_images}
-    \lean{
-        TNLean.PEPS.dependentRegionCylinder_nestedCylinderEarlierInside,
+    \lean{TNLean.PEPS.dependentRegionCylinder_nestedCylinderEarlierInside,
         TNLean.PEPS.dependentRegionCylinder_nestedCylinderInnovation,
-        TNLean.PEPS.nestedCylinderInnovation_eq_bot_of_le
-    }
+        TNLean.PEPS.nestedCylinderInnovation_eq_bot_of_le}
     \leanok
     \uses{def:peps_nested_cylinder_images}
     For $0\leq j<n$, write $\mathcal E_{j-1}=\sum_{i<j}\mathcal C_i$. Then
@@ -146,16 +136,14 @@ nested regions and inside subspaces.
 
 \begin{lemma}[Orthogonal cylinders with the same prefix spans]
     \label{thm:peps_nested_cylinder_orthogonalization}
-    \lean{
-        TNLean.PEPS.finrank_nestedCylinderInnovation_le,
+    \lean{TNLean.PEPS.finrank_nestedCylinderInnovation_le,
         TNLean.PEPS.nestedCylinderInnovation_sup,
         TNLean.PEPS.nestedCylinderInnovation_orthogonalEarlier,
         TNLean.PEPS.nestedCylinderInnovation_prefix_span,
         TNLean.PEPS.nestedCylinderInnovation_span,
         TNLean.PEPS.nestedCylinderInnovation_pairwise_orthogonal,
         TNLean.PEPS.sum_finrank_nestedCylinderInnovation_le,
-        TNLean.PEPS.sum_int_finrank_nestedCylinderInnovation_le
-    }
+        TNLean.PEPS.sum_int_finrank_nestedCylinderInnovation_le}
     \leanok
     \uses{def:peps_nested_cylinder_images}
     The spaces $\widetilde{\mathcal C}_j$ are pairwise orthogonal. For every
@@ -191,10 +179,8 @@ nested regions and inside subspaces.
 
 \begin{lemma}[Sum of the orthogonal cylinder projectors]
     \label{thm:peps_nested_cylinder_projector_sum}
-    \lean{
-        TNLean.PEPS.nestedCylinderInnovation_projector_sum,
-        TNLean.PEPS.nestedCylinder_projector_supported
-    }
+    \lean{TNLean.PEPS.nestedCylinderInnovation_projector_sum,
+        TNLean.PEPS.nestedCylinder_projector_supported}
     \leanok
     \uses{def:peps_nested_cylinder_images}
     Put $\mathcal E=\sum_{j<n}\mathcal C_j$. Its orthogonal projector is

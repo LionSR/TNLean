@@ -15,6 +15,8 @@ obtained by the normalization in AKLV, arXiv:1301.1162v1, Section 6.1.
 No commutator, tail, residual, or gap of the clipped operator is assumed.
 -/
 
+open ManyBody (interval mem_interval)
+
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator InnerProductSpace
 
 noncomputable section
@@ -62,9 +64,7 @@ private theorem commute_separated_bond_sums {L q : ℕ}
     intro v hv hw
     rw [mem_interval] at hv hw
     omega
-  exact QuantumCircuit.commute_of_mem_supportedOperators (Finset.disjoint_coe.mpr hd)
-    (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
-    (QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs j))
+  exact ManyBody.commute_of_mem_supportedOperators_of_disjoint ((hs i)) ((hs j)) hd
 
 /-- Scalar energy shifts preserve pairwise commutation. -/
 private theorem commute_sub_smul_one {n : Type*} [Fintype n] [DecidableEq n]

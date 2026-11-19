@@ -37,7 +37,7 @@ namespace MPUCircuit
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem intervalPacketSites_full_range (d D N : ℕ) :
     Set.range (intervalPacketSites d D N 0 N) = Set.univ := by
-  rw [intervalPacketSites_range, intervalConsecutiveSupport, intervalLogicalSupport_full,
+  rw [intervalPacketSites_range, coe_intervalConsecutiveSupport, intervalLogicalSupport_full,
     Set.image_univ, Equiv.range_eq_univ]
 
 /-- The full interval has a unique configuration on the empty set of outside sites.

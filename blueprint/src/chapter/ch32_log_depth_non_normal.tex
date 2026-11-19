@@ -84,10 +84,10 @@
     \lean{MPSTensor.bntWeight, MPSTensor.ghzAmplitude,
         MPSTensor.sum_norm_sq_pos_of_ne_zero, MPSTensor.ghzAmplitude_norm_sq,
         MPSTensor.nonNormalFixedPointState, MPSTensor.nonNormalApproxState,
-        MPSTensor.pairIsometry, Matrix.tensorPower}
+        MPSTensor.pairIsometry}
     \leanok
     \uses{def:ldp_non_normal_fixed_point, thm:ldpolar_tensor_decomposition,
-        def:qc_ghz_state}
+        def:qc_ghz_state, def:mpdo_sitewise_physical_matrix}
     Let $\omega_1,\dots,\omega_b\in\mathbb C^D\otimes\mathbb C^D$ be any vectors,
     $\alpha\in\mathbb C^b$ any coefficients, and $M\ge0$. The state
     $\ket{\Omega'}=\sum_j\alpha_j\bigotimes_{k=1}^M\ket{\omega_j}_{R_kL_{k+1}}$ is
@@ -102,7 +102,8 @@
     Let $W\colon\mathbb C^b\to\mathbb C^D\otimes\mathbb C^D$,
     $\ket{j}\mapsto\ket{\omega_j}$, be the map whose $j$-th column is $\omega_j$,
     let $X^{\otimes M}$ denote the $M$-fold tensor power of a matrix $X$, with entries
-    $(X^{\otimes M})_{p,s}=\prod_{k=1}^M X_{p_k,s_k}$, and put
+    $(X^{\otimes M})_{p,s}=\prod_{k=1}^M X_{p_k,s_k}$ as in
+    Definition~\ref{def:mpdo_sitewise_physical_matrix}, and put
     $\ket{\chi_M}=\sum_j\alpha_j\ket{j}^{\otimes M}\in(\mathbb C^b)^{\otimes M}$.
     For $\omega_j$ given by the embedded pair state of each normal block $A_j$,
     $\alpha=\alpha^{(N)}$, and $N=qM$, this specializes to

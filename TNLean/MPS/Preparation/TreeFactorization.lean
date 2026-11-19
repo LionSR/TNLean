@@ -55,6 +55,7 @@ the block of `2^{k+1}` sites.
 -/
 
 open scoped Matrix ComplexOrder
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

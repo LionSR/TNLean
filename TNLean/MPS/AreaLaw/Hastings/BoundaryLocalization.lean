@@ -7,7 +7,7 @@ import TNLean.MPS.AreaLaw.Hastings.GaussianTimeAverage
 import TNLean.MPS.AreaLaw.Hastings.InteractionPicture
 import TNLean.MPS.AreaLaw.LiebRobinson
 import TNLean.MPS.AreaLaw.InteractionBudget
-import TNLean.Circuit.ProjectedRelativeEvolution
+import QICLean.ManyBody.Dynamics.ProjectedRelativeEvolution
 import QICLean.Analysis.RectangularTraceNorm
 import TNLean.Algebra.ExpMulSubMonotone
 
@@ -65,6 +65,8 @@ Lieb–Robinson estimates used here; see
 `docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex`.
 -/
 
+open ManyBody (ChainSupport ChainInteraction)
+
 open Matrix MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped Matrix.Norms.L2Operator NNReal
 
@@ -113,55 +115,57 @@ Let `H` be a chain Hamiltonian of range `R` and term norm `J`, let `H₀` be Her
 `‖P_B - O‖ ≤ √η (‖(A + B) - H‖ + ‖A - H₀‖ + a |Z|² ‖H - H₀‖ e^{vT - ℓ/2}) + 4 e^{-T²/2η}`,
 where `P_B = interactionAverage η A B`, `b₀ = 2^{2R+1} J`,
 `a = 2 (2 + 4 |b₀| e^{2R}) e / (1 - e^{-1/2})` and `v = 2 (R+1) |b₀| e^{2R} + 1` are the
-Lieb–Robinson constants of `norm_heisenberg_sub_siteExpectation_chainNeighborhood_le`.
+Lieb–Robinson constants of `norm_heisenberg_sub_regionExpectation_chainNeighborhood_le`.
 
 In the application `A = H₀ = M_L + M_R` and `B = M_B`, so `‖A - H₀‖ = 0`; `Z` is
 the window `X_{j-2l/3,j+1+2l/3}` carrying `H - (M_L + M_R)` (line 899), and
 `η = q/ΔE²`. The source's `O(ΔE⁻¹ J √q e^{-l/6ξ})` follows by taking `ℓ` of order `l/3`
 and `T` of order `ℓ/v`. -/
 theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq : 1 ≤ q)
-    (h : ChainHamiltonian L q R J) {H₀ A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        {H₀ A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hH₀ : H₀.IsHermitian) (hA : A.IsHermitian) (hB : B.IsHermitian) (Z : Finset (Fin L))
-    (hZ : Entropy.IsSupportedOn (n := fun _ ↦ q) (h.operator - H₀) Z)
+    (hZ : Entropy.IsSupportedOn (n := fun _ ↦ q) (h.hamiltonian - H₀) Z)
     (η : ℝ≥0) {ℓ T : ℝ} (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
     let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
       (1 - Real.exp (-(1 / 2)))
     let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
     ∃ O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      O ∈ supportedOperators q (chainNeighborhood Z ℓ : Set (Fin L)) ∧ ‖O‖ ≤ 1 ∧
+      O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainNeighborhood Z ℓ : Finset (Fin L)) ∧
+          ‖O‖ ≤ 1 ∧
       ‖interactionAverage η A B - O‖ ≤
-        √(η : ℝ) * (‖A + B - h.operator‖ + ‖A - H₀‖ +
-          a * (Z.card : ℝ) ^ 2 * ‖h.operator - H₀‖ * Real.exp (v * T - ℓ / 2)) +
+        √(η : ℝ) * (‖A + B - h.hamiltonian‖ + ‖A - H₀‖ +
+          a * (Z.card : ℝ) ^ 2 * ‖h.hamiltonian - H₀‖ * Real.exp (v * T - ℓ / 2)) +
           4 * Real.exp (-T ^ 2 / (2 * (η : ℝ))) := by
   classical
   intro b₀ a v
   have : NeZero q := ⟨by omega⟩
-  set H := h.operator with hHdef
+  set H := h.hamiltonian with hHdef
   set N := chainNeighborhood Z ℓ with hNdef
-  have hH : H.IsHermitian := h.operator_isHermitian
+  have hH : H.IsHermitian := (ManyBody.Interaction.isHermitian_hamiltonian hh)
   have hden : 0 < 1 - Real.exp (-(1 / 2 : ℝ)) :=
     sub_pos.mpr (Real.exp_lt_one_iff.mpr (by norm_num))
   have ha : 0 ≤ a := (div_pos (by positivity) hden).le
   have hv : 0 ≤ v := by positivity
   obtain ⟨U, hU0, hU, hunit, hsupport, _, hcompare⟩ :=
-    exists_supported_projected_relative_evolution q N hH hH₀
+    ManyBody.exists_supported_projected_relative_evolution N hH hH₀
   -- the Lieb–Robinson localization error of the generator, uniform on `[-T, T]`
   set E₃ : ℝ := a * (Z.card : ℝ) ^ 2 * ‖H - H₀‖ * Real.exp (v * T - ℓ / 2) with hE₃
   have hE₃0 : 0 ≤ E₃ := by positivity
   have hgen (s : ℝ) (hs : |s| ≤ T) :
-      ‖heisenbergEvolution H s (H - H₀) -
-        siteExpectation q N (heisenbergEvolution H s (H - H₀))‖ ≤ E₃ := by
-    have hloc := norm_heisenberg_sub_siteExpectation_chainNeighborhood_le
-      (fun X : ChainSupport L R ↦ X) h.term h.hermitian h.supported b₀
-      h.sum_norm_terms_containing_le hq Z hZ ℓ hℓ s
+      ‖ManyBody.heisenbergEvolution H s (H - H₀) -
+        ManyBody.regionExpectation N (ManyBody.heisenbergEvolution H s (H - H₀))‖ ≤ E₃ := by
+    have hloc := norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
+      (fun X : ChainSupport L R ↦ X) h.term hh h.mem b₀
+      (h.sum_norm_terms_containing_le hhJ) Z hZ ℓ hℓ s
     refine hloc.trans (mul_le_mul_of_nonneg_left
       (Real.exp_mul_sub_le_exp_mul_sub hv hs)
       (by positivity))
   have hrel (t : ℝ) (ht : |t| ≤ T) :
       ‖hermitianUnitaryPath H t * hermitianUnitaryPath H₀ (-t) - U t‖ ≤ E₃ * |t| :=
-    hcompare t E₃ (fun s hs ↦ hgen s
-      ((show |s| ≤ |t| by
+    hcompare t E₃ (fun s hs ↦ by
+      exact hgen s ((show |s| ≤ |t| by
         simpa only [sub_zero] using Set.abs_sub_left_of_mem_uIcc hs).trans ht))
   -- the pointwise estimate, with the Gaussian tail beyond `T`
   set ε : ℝ := ‖A + B - H‖ + ‖A - H₀‖ + E₃ with hε
@@ -198,20 +202,21 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
     unfold interactionPropagator
     simpa using this
   have habs : Integrable (fun t : ℝ ↦ |t|) (gaussianReal 0 η) :=
-    ((memLp_one_iff_integrable.1 (memLp_id_gaussianReal (μ := 0) (v := η) 1))).abs
+    (memLp_one_iff_integrable.1 (memLp_id_gaussianReal (μ := 0) (v := η) 1)).abs
   have hind : Integrable ((Set.Icc (-T) T)ᶜ.indicator (fun _ ↦ (2 : ℝ)))
       (gaussianReal 0 η) :=
     (integrable_const (2 : ℝ)).indicator measurableSet_Icc.compl
   have hgint : Integrable g (gaussianReal 0 η) := (habs.mul_const ε).add hind
   -- the operator `O_B`
   refine ⟨∫ t, U t ∂gaussianReal 0 η, ?_, ?_, ?_⟩
-  · have hfix (t : ℝ) : siteExpectation q N (U t) = U t :=
-      siteExpectation_of_mem_supportedOperators N (hsupport t)
-    have hMint : siteExpectation q N (∫ t, U t ∂gaussianReal 0 η) =
+  · have hfix (t : ℝ) : ManyBody.regionExpectation N (U t) = U t :=
+      (ManyBody.regionExpectation_of_mem_supportedOperators (D := N)
+          (hsupport t))
+    have hMint : ManyBody.regionExpectation N (∫ t, U t ∂gaussianReal 0 η) =
         ∫ t, U t ∂gaussianReal 0 η :=
-      ((siteExpectationLM q N).toContinuousLinearMap.integral_comp_comm hUint).symm.trans
+      ((ManyBody.regionExpectationLM N).toContinuousLinearMap.integral_comp_comm hUint).symm.trans
         (integral_congr_ae (Filter.Eventually.of_forall hfix))
-    exact hMint ▸ siteExpectation_mem_supportedOperators N _
+    exact hMint ▸ (ManyBody.regionExpectation_mem_supportedOperators N _)
   · simpa using norm_integral_le_of_norm_le_const (μ := gaussianReal 0 η)
       (Filter.Eventually.of_forall fun t ↦ Matrix.l2_opNorm_unitary_le_one (hunit t))
   · rw [interactionAverage_eq_integral, ← integral_sub hPint hUint]
@@ -229,27 +234,29 @@ This is `exists_supported_interactionAverage_approx` with the time cutoff `T = �
 With `η = q/ΔE²`, `q` proportional to `l` (line 792) and `ℓ` proportional to `l`, the two
 terms depending on `ℓ` decay exponentially in `l`. The remaining term
 `√η (‖(A + B) - H‖ + ‖A - H₀‖)` does not depend on `ℓ`: it vanishes when `A = H₀` and
-`A + B = H`, as in `ChainHamiltonian.exists_boundaryOperator_factorization`, and in the
+`A + B = H`, as in `ManyBody.ChainInteraction.exists_boundaryOperator_factorization`, and in the
 source's application `A = M_L + M_R`, `B = M_B` it is exponentially small in `l`
 (lines 849–850). Together these give the source's `O(ΔE⁻¹ J √q e^{-l/6ξ})`. -/
 theorem exists_supported_interactionAverage_approx_exp {L q R : ℕ} {J : ℝ} (hq : 1 ≤ q)
-    (h : ChainHamiltonian L q R J) {H₀ A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        {H₀ A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hH₀ : H₀.IsHermitian) (hA : A.IsHermitian) (hB : B.IsHermitian) (Z : Finset (Fin L))
-    (hZ : Entropy.IsSupportedOn (n := fun _ ↦ q) (h.operator - H₀) Z)
+    (hZ : Entropy.IsSupportedOn (n := fun _ ↦ q) (h.hamiltonian - H₀) Z)
     (η : ℝ≥0) {ℓ : ℝ} (hℓ : 0 ≤ ℓ) :
     let b₀ : ℝ := ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
       (1 - Real.exp (-(1 / 2)))
     let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
     ∃ O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      O ∈ supportedOperators q (chainNeighborhood Z ℓ : Set (Fin L)) ∧ ‖O‖ ≤ 1 ∧
+      O ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (chainNeighborhood Z ℓ : Finset (Fin L)) ∧
+          ‖O‖ ≤ 1 ∧
       ‖interactionAverage η A B - O‖ ≤
-        √(η : ℝ) * (‖A + B - h.operator‖ + ‖A - H₀‖ +
-          a * (Z.card : ℝ) ^ 2 * ‖h.operator - H₀‖ * Real.exp (-(ℓ / 4))) +
+        √(η : ℝ) * (‖A + B - h.hamiltonian‖ + ‖A - H₀‖ +
+          a * (Z.card : ℝ) ^ 2 * ‖h.hamiltonian - H₀‖ * Real.exp (-(ℓ / 4))) +
           4 * Real.exp (-ℓ ^ 2 / (32 * v ^ 2 * (η : ℝ))) := by
   intro b₀ a v
   have hv : 0 < v := by positivity
-  obtain ⟨O, hO, hOn, hOB⟩ := exists_supported_interactionAverage_approx hq h hH₀ hA hB Z hZ
+  obtain ⟨O, hO, hOn, hOB⟩ := exists_supported_interactionAverage_approx hq h hh hhJ hH₀ hA hB Z hZ
     η hℓ (T := ℓ / (4 * v)) (by positivity)
   refine ⟨O, hO, hOn, hOB.trans_eq ?_⟩
   have h1 : v * (ℓ / (4 * v)) - ℓ / 2 = -(ℓ / 4) := by field_simp; ring

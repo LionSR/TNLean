@@ -18,6 +18,8 @@ Supporting ALVV, arXiv:1602.08828v2, Lemma l:er and Proposition 5.7,
 lines 597–622 and 1332–1333. No new spectral filter is selected.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators Kronecker TensorProduct
 

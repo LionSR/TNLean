@@ -47,7 +47,7 @@ theorem exists_normalized_parentGroundStateFace_classification_of_eventually_ope
         groundSpaceES (toTensorFromBlocks (μ := μ) A) N) :
     ∃ (B : ∀ j, MPSTensor d (D j))
       (ρ : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)
-      (hP : ∀ j, IsPrimitiveMPS (B j) (ρ j)),
+      (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)),
       (∀ j, (ρ j).PosDef) ∧ WordTupleSpanTop B S ∧
       (∀ j N, groundSpace (A j) N = groundSpace (B j) N) ∧
       (∀ N, groundSpaceES (toTensorFromBlocks (μ := μ) A) N =
@@ -61,7 +61,7 @@ theorem exists_normalized_parentGroundStateFace_classification_of_eventually_ope
         (φ ∈ parentGroundStateFace h ∧ IsPureQuasiLocalState d φ) ↔
           ∃ j, φ = ω j) := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, _⟩ :=
-    exists_isPrimitiveMPS_family_of_wordTupleSpanTop A hS hSpan
+    exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
   have hJoint : ∀ N, groundSpaceES (toTensorFromBlocks (μ := μ) A) N =
       groundSpaceES (toTensorFromBlocks (μ := μ) B) N :=
     fun N => congrArg (fun G => G.map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)

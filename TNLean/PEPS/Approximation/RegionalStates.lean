@@ -23,6 +23,8 @@ Source: openai/math at adc7f1241b42e322a6451854ab7e4b4c146bf78a,
 September 24 polynomial PEPS manuscript, introduction lines 20–34.
 -/
 
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+
 noncomputable section
 open scoped BigOperators ComplexOrder
 
@@ -36,7 +38,7 @@ def squareGridStateIsometry (L q : ℕ) :
   LinearIsometryEquiv.refl ℂ _
 
 /-- Exact equality of Euclidean vectors for physical-first tensors. -/
-theorem vector_pinnedTensorToGraphTensor (D : ForwardEdge L → ℕ)
+theorem vector_pinnedTensorToGraphTensor (D : Edge (squareLatticeGraph L L) → ℕ)
     (A : (v : Vertex L) → Pinned.LocalTensor q D v) :
     pepsVector (pinnedTensorToGraphTensor D A) =
       Pinned.contractPEPS D A := by
@@ -52,20 +54,20 @@ theorem vector_vectorTensorToGraphTensor (P : Vector.Tensor q L) :
   exact stateCoeff_vectorTensorToGraphTensor P x
 
 /-- The contracted vector norm is unchanged. -/
-theorem norm_pinnedTensorToGraphTensor (D : ForwardEdge L → ℕ)
+theorem norm_pinnedTensorToGraphTensor (D : Edge (squareLatticeGraph L L) → ℕ)
     (A : (v : Vertex L) → Pinned.LocalTensor q D v) :
     ‖pepsVector (pinnedTensorToGraphTensor D A)‖ =
       ‖Pinned.contractPEPS D A‖ := by rw [vector_pinnedTensorToGraphTensor]
 
 /-- Nonzero contraction is preserved, without any positivity assumption on the dimensions. -/
-theorem nonzero_pinnedTensorToGraphTensor (D : ForwardEdge L → ℕ)
+theorem nonzero_pinnedTensorToGraphTensor (D : Edge (squareLatticeGraph L L) → ℕ)
     (A : (v : Vertex L) → Pinned.LocalTensor q D v) :
     pepsVector (pinnedTensorToGraphTensor D A) ≠ 0 ↔
       Pinned.contractPEPS D A ≠ 0 := by rw [vector_pinnedTensorToGraphTensor]
 
 /-- Every normalized phase-error inequality transfers without loss, for any complex phase.
 The inverse-norm convention also makes the equality valid for the zero vector. -/
-theorem normalized_error_pinnedTensorToGraphTensor (D : ForwardEdge L → ℕ)
+theorem normalized_error_pinnedTensorToGraphTensor (D : Edge (squareLatticeGraph L L) → ℕ)
     (A : (v : Vertex L) → Pinned.LocalTensor q D v)
     (Ω : Pinned.State L q) (z : ℂ) :
     let ψ := pepsVector (pinnedTensorToGraphTensor D A)
@@ -84,19 +86,19 @@ theorem normalized_error_vectorTensorToGraphTensor (P : Vector.Tensor q L)
   rw [vector_vectorTensorToGraphTensor]
 
 /-- All pointwise constraints on edge dimensions transfer in both directions. -/
-theorem graphBondDim_forall (D : ForwardEdge L → ℕ) (P : ℕ → Prop) :
+theorem graphBondDim_forall (D : Edge (squareLatticeGraph L L) → ℕ) (P : ℕ → Prop) :
     (∀ e, P (graphBondDim D e)) ↔ ∀ e, P (D e) := by
   constructor
   · intro h e
-    exact h (forwardSquareEdgeEquiv L e)
+    exact h e
   · intro h e
-    exact h ((forwardSquareEdgeEquiv L).symm e)
+    exact h e
 
 /-- The virtual-first transport preserves the required positivity on every native edge. -/
 theorem vectorTensorToGraphTensor_bondDim_pos (P : Vector.Tensor q L)
     (e : Edge (squareLatticeGraph L L)) :
     0 < (vectorTensorToGraphTensor P).bondDim e :=
-  P.bondDim_pos ((forwardSquareEdgeEquiv L).symm e)
+  P.bondDim_pos e
 
 /-- Maximum-bond bounds are precisely native per-edge bounds. The empty maximum is zero. -/
 theorem maxBondDim_le_iff (P : Vector.Tensor q L) (B : ℕ) :
@@ -118,17 +120,17 @@ theorem maxBondDim_real_le_iff (P : Vector.Tensor q L) (B : ℝ) (hB : 0 ≤ B) 
 
 /-- Crossing edges correspond bijectively, for every region including empty and full regions. -/
 def forwardSquareBoundaryEquiv (R : Finset (Vertex L)) :
-    {e : ForwardEdge L //
+    {e : Edge (squareLatticeGraph L L) //
       (e.val.1 ∈ R ∧ e.val.2 ∉ R) ∨ (e.val.1 ∉ R ∧ e.val.2 ∈ R)} ≃
       {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge R e} where
-  toFun e := ⟨forwardSquareEdgeEquiv L e.val, e.property⟩
-  invFun e := ⟨(forwardSquareEdgeEquiv L).symm e.val, e.property⟩
+  toFun e := ⟨e.val, e.property⟩
+  invFun e := ⟨e.val, e.property⟩
   left_inv _ := rfl
   right_inv _ := rfl
 
 /-- Source and native crossing-boundary cardinalities are equal. -/
 theorem forwardSquareBoundary_card (R : Finset (Vertex L)) :
-    Fintype.card {e : ForwardEdge L //
+    Fintype.card {e : Edge (squareLatticeGraph L L) //
       (e.val.1 ∈ R ∧ e.val.2 ∉ R) ∨ (e.val.1 ∉ R ∧ e.val.2 ∈ R)} =
       Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge R e} :=
   Fintype.card_congr (forwardSquareBoundaryEquiv R)
@@ -156,7 +158,7 @@ theorem regionReducedDensity_eq_piSubtype (A : Tensor (squareLatticeGraph L L) q
   exact Fintype.sum_equiv (squareComplementConfigEquiv (q := q) R) _ _ (fun _ => rfl)
 
 /-- Native regional reduction equals the partial trace of the actual physical-first contraction. -/
-theorem regionReducedDensity_pinnedTensorToGraphTensor (D : ForwardEdge L → ℕ)
+theorem regionReducedDensity_pinnedTensorToGraphTensor (D : Edge (squareLatticeGraph L L) → ℕ)
     (A : (v : Vertex L) → Pinned.LocalTensor q D v) (R : Finset (Vertex L)) :
     regionReducedDensity (pinnedTensorToGraphTensor D A) R =
       Matrix.partialTraceRight (Matrix.vecMulVec
@@ -167,7 +169,7 @@ theorem regionReducedDensity_pinnedTensorToGraphTensor (D : ForwardEdge L → �
 
 /-- The adapted upstream Gram matrix equals the native partial trace, with no
 normalization or scalar factor. The complement conventions agree coordinatewise. -/
-theorem regionReducedDensity_eq_pinnedReducedDensity (D : ForwardEdge L → ℕ)
+theorem regionReducedDensity_eq_pinnedReducedDensity (D : Edge (squareLatticeGraph L L) → ℕ)
     (A : (v : Vertex L) → Pinned.LocalTensor q D v) (R : Finset (Vertex L)) :
     regionReducedDensity (pinnedTensorToGraphTensor D A) R =
       Pinned.reducedDensity (Pinned.contractPEPS D A) R := by
@@ -197,7 +199,7 @@ theorem regionReducedDensity_vectorTensorToGraphTensor (P : Vector.Tensor q L)
 contraction is unchanged. The density has trace `‖Φ‖ ^ 2`, so this is the entanglement
 entropy of the region only for a unit vector.
 This applies QICLean's entropy congruence; it introduces no separate entropy definition. -/
-theorem entropy_pinnedTensorToGraphTensor (D : ForwardEdge L → ℕ)
+theorem entropy_pinnedTensorToGraphTensor (D : Edge (squareLatticeGraph L L) → ℕ)
     (A : (v : Vertex L) → Pinned.LocalTensor q D v) (R : Finset (Vertex L)) :
     let f := Pinned.contractPEPS D A ∘ (regionConfigEquiv (d := q) R).symm
     vonNeumannEntropy (regionReducedDensity (pinnedTensorToGraphTensor D A) R)

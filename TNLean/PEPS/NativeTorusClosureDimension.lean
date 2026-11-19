@@ -19,6 +19,8 @@ closure-span dimension; identification with the actual microscopic parent
 kernel is established separately.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS.NativeTorus
 

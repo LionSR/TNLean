@@ -27,6 +27,7 @@ See `docs/paper-gaps/mswc24_zero_subleading_spectrum_endpoint.tex`.
 -/
 
 open scoped BigOperators ComplexOrder
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

@@ -94,21 +94,21 @@ private lemma blocking_complement_eq_iff {d L : ℕ} [NeZero L] {Λ Γ : Finset 
     calc
       x zΓ = Config.blocking d L Γ ((Config.blocking d L Γ).symm x) zΓ := by
         rw [Equiv.apply_symm_apply]
-      _ = MPSTensor.decodeBlockEquiv d L
+      _ = Kraus.decodeBlockEquiv d L
           (((Config.blocking d L Γ).symm x) q) (Int.divModEquiv L z).2 := by
         rw [Config.blocking_apply]
         congr 2
-      _ = MPSTensor.decodeBlockEquiv d L
+      _ = Kraus.decodeBlockEquiv d L
           (((Config.blocking d L Γ).symm y) q) (Int.divModEquiv L z).2 := by
         exact congrArg
-          (fun w ↦ MPSTensor.decodeBlockEquiv d L w (Int.divModEquiv L z).2) hz
+          (fun w ↦ Kraus.decodeBlockEquiv d L w (Int.divModEquiv L z).2) hz
       _ = Config.blocking d L Γ ((Config.blocking d L Γ).symm y) zΓ := by
         rw [Config.blocking_apply]
         congr 2
       _ = y zΓ := by rw [Equiv.apply_symm_apply]
   · intro hxy
     funext q
-    apply (MPSTensor.decodeBlockEquiv d L).injective
+    apply (Kraus.decodeBlockEquiv d L).injective
     funext r
     let qΓ : Γ := ⟨q, (Finset.mem_sdiff.mp q.2).1⟩
     let z : expandedRegion L Γ :=
@@ -121,8 +121,8 @@ private lemma blocking_complement_eq_iff {d L : ℕ} [NeZero L] {Λ Γ : Finset 
       rw [hzq]
       exact (Finset.mem_sdiff.mp q.2).2
     have hz := congrFun hxy ⟨z, Finset.mem_sdiff.mpr ⟨z.2, hzΛ⟩⟩
-    change MPSTensor.decodeBlockEquiv d L ((Config.blocking d L Γ).symm x qΓ) r =
-      MPSTensor.decodeBlockEquiv d L ((Config.blocking d L Γ).symm y qΓ) r
+    change Kraus.decodeBlockEquiv d L ((Config.blocking d L Γ).symm x qΓ) r =
+      Kraus.decodeBlockEquiv d L ((Config.blocking d L Γ).symm y qΓ) r
     calc
       _ = x ((blockSiteEquiv L Γ).symm (qΓ, r)) := by
         rw [Config.blocking_symm_apply, Equiv.apply_symm_apply]
@@ -133,7 +133,7 @@ private lemma blocking_complement_eq_iff {d L : ℕ} [NeZero L] {Λ Γ : Finset 
 
 /-- Finite-region blocking commutes with canonical local inclusions. -/
 lemma localBlocking_localInclusion {d L : ℕ} [NeZero L] {Λ Γ : Finset ℤ}
-    (h : Λ ⊆ Γ) (A : LocalAlgebra (MPSTensor.blockPhysDim d L) Λ) :
+    (h : Λ ⊆ Γ) (A : LocalAlgebra (Kraus.blockPhysDim d L) Λ) :
     localBlocking d L Γ (localInclusion h A) =
       localInclusion (expandedRegion_mono h) (localBlocking d L Λ A) := by
   ext x y
@@ -152,7 +152,7 @@ lemma localBlocking_localInclusion {d L : ℕ} [NeZero L] {Λ Γ : Finset ℤ}
 /-- Forward blocking of finite representatives induces a star-algebra homomorphism on the
 algebraic local algebra. -/
 noncomputable def algebraicLocalBlockingHom (d L : ℕ) [NeZero L] :
-    AlgebraicLocalAlgebra (MPSTensor.blockPhysDim d L) →⋆ₐ[ℂ]
+    AlgebraicLocalAlgebra (Kraus.blockPhysDim d L) →⋆ₐ[ℂ]
       AlgebraicLocalAlgebra d :=
   algebraicLocalAlgebraLift
     (fun Λ ↦ (localObservable d (expandedRegion L Λ)).comp
@@ -169,7 +169,7 @@ noncomputable def algebraicLocalBlockingHom (d L : ℕ) [NeZero L] :
 representative. -/
 @[simp]
 lemma algebraicLocalBlockingHom_localObservable (d L : ℕ) [NeZero L]
-    (Λ : Finset ℤ) (A : LocalAlgebra (MPSTensor.blockPhysDim d L) Λ) :
+    (Λ : Finset ℤ) (A : LocalAlgebra (Kraus.blockPhysDim d L) Λ) :
     algebraicLocalBlockingHom d L (localObservable _ Λ A) =
       localObservable d (expandedRegion L Λ) (localBlocking d L Λ A) :=
   rfl
@@ -178,9 +178,9 @@ lemma algebraicLocalBlockingHom_localObservable (d L : ℕ) [NeZero L]
 algebraic-local homomorphism. -/
 noncomputable def algebraicLocalUnblockingHom (d L : ℕ) [NeZero L] :
     AlgebraicLocalAlgebra d →⋆ₐ[ℂ]
-      AlgebraicLocalAlgebra (MPSTensor.blockPhysDim d L) :=
+      AlgebraicLocalAlgebra (Kraus.blockPhysDim d L) :=
   algebraicLocalAlgebraLift
-    (fun Δ ↦ (localObservable (MPSTensor.blockPhysDim d L) (blockHull L Δ)).comp
+    (fun Δ ↦ (localObservable (Kraus.blockPhysDim d L) (blockHull L Δ)).comp
       ((localBlocking d L (blockHull L Δ)).symm.toStarAlgHom.comp
         (localInclusion (subset_expandedRegion_blockHull L Δ))))
     (by
@@ -226,7 +226,7 @@ undoing finite blocking. -/
 lemma algebraicLocalUnblockingHom_localObservable (d L : ℕ) [NeZero L]
     (Δ : Finset ℤ) (A : LocalAlgebra d Δ) :
     algebraicLocalUnblockingHom d L (localObservable d Δ A) =
-      localObservable (MPSTensor.blockPhysDim d L) (blockHull L Δ)
+      localObservable (Kraus.blockPhysDim d L) (blockHull L Δ)
         ((localBlocking d L (blockHull L Δ)).symm
           (localInclusion (subset_expandedRegion_blockHull L Δ) A)) :=
   rfl
@@ -235,9 +235,9 @@ private lemma algebraicLocalBlockingHom_injective (d L : ℕ) [NeZero d] [NeZero
     Function.Injective (algebraicLocalBlockingHom d L) := by
   intro X Y hXY
   obtain ⟨Λ, A, rfl⟩ := DirectLimit.exists_eq_mk
-    (localAlgebraMap (MPSTensor.blockPhysDim d L)) X
+    (localAlgebraMap (Kraus.blockPhysDim d L)) X
   obtain ⟨Γ, B, rfl⟩ := DirectLimit.exists_eq_mk
-    (localAlgebraMap (MPSTensor.blockPhysDim d L)) Y
+    (localAlgebraMap (Kraus.blockPhysDim d L)) Y
   let Ω := Λ ∪ Γ
   let hΛ : Λ ⊆ Ω := Finset.subset_union_left
   let hΓ : Γ ⊆ Ω := Finset.subset_union_right
@@ -298,7 +298,7 @@ original algebraic local algebras.
 This is the site-grouping operation used in Cirac--Perez-Garcia--Schuch--Verstraete,
 arXiv:1703.09188, Appendix, lines 2308 and 2313--2320. -/
 noncomputable def algebraicLocalBlocking (d L : ℕ) [NeZero d] [NeZero L] :
-    AlgebraicLocalAlgebra (MPSTensor.blockPhysDim d L) ≃⋆ₐ[ℂ]
+    AlgebraicLocalAlgebra (Kraus.blockPhysDim d L) ≃⋆ₐ[ℂ]
       AlgebraicLocalAlgebra d :=
   StarAlgEquiv.ofBijective (algebraicLocalBlockingHom d L) ⟨
     algebraicLocalBlockingHom_injective d L,
@@ -309,14 +309,14 @@ noncomputable def algebraicLocalBlocking (d L : ℕ) [NeZero d] [NeZero L] :
 /-- Algebraic-local blocking has the same underlying map as its forward lift. -/
 @[simp]
 lemma algebraicLocalBlocking_apply (d L : ℕ) [NeZero d] [NeZero L]
-    (A : AlgebraicLocalAlgebra (MPSTensor.blockPhysDim d L)) :
+    (A : AlgebraicLocalAlgebra (Kraus.blockPhysDim d L)) :
     algebraicLocalBlocking d L A = algebraicLocalBlockingHom d L A :=
   StarAlgEquiv.ofBijective_apply _ _
 
 /-- Algebraic-local blocking sends a finite blocked representative to its expanded original
 representative. -/
 lemma algebraicLocalBlocking_localObservable (d L : ℕ) [NeZero d] [NeZero L]
-    (Λ : Finset ℤ) (A : LocalAlgebra (MPSTensor.blockPhysDim d L) Λ) :
+    (Λ : Finset ℤ) (A : LocalAlgebra (Kraus.blockPhysDim d L) Λ) :
     algebraicLocalBlocking d L (localObservable _ Λ A) =
       localObservable d (expandedRegion L Λ) (localBlocking d L Λ A) := by
   rw [algebraicLocalBlocking_apply]
@@ -336,7 +336,7 @@ and then applies inverse finite blocking. -/
 lemma algebraicLocalBlocking_symm_localObservable (d L : ℕ) [NeZero d] [NeZero L]
     (Δ : Finset ℤ) (A : LocalAlgebra d Δ) :
     (algebraicLocalBlocking d L).symm (localObservable d Δ A) =
-      localObservable (MPSTensor.blockPhysDim d L) (blockHull L Δ)
+      localObservable (Kraus.blockPhysDim d L) (blockHull L Δ)
         ((localBlocking d L (blockHull L Δ)).symm
           (localInclusion (subset_expandedRegion_blockHull L Δ) A)) := by
   rw [algebraicLocalBlocking_symm_apply,
@@ -348,18 +348,18 @@ lemma algebraicLocalBlocking_symm_localObservable_expandedRegion
     (d L : ℕ) [NeZero d] [NeZero L] (Λ : Finset ℤ)
     (A : LocalAlgebra d (expandedRegion L Λ)) :
     (algebraicLocalBlocking d L).symm (localObservable d (expandedRegion L Λ) A) =
-      localObservable (MPSTensor.blockPhysDim d L) Λ ((localBlocking d L Λ).symm A) := by
+      localObservable (Kraus.blockPhysDim d L) Λ ((localBlocking d L Λ).symm A) := by
   apply (algebraicLocalBlocking d L).injective
   change algebraicLocalBlocking d L
       ((algebraicLocalBlocking d L).symm (localObservable d (expandedRegion L Λ) A)) =
     algebraicLocalBlocking d L
-      (localObservable (MPSTensor.blockPhysDim d L) Λ ((localBlocking d L Λ).symm A))
+      (localObservable (Kraus.blockPhysDim d L) Λ ((localBlocking d L Λ).symm A))
   rw [StarAlgEquiv.apply_symm_apply, algebraicLocalBlocking_localObservable,
     StarAlgEquiv.apply_symm_apply]
 
 /-- Algebraic-local blocking preserves the operator norm. -/
 lemma algebraicLocalBlocking_norm (d L : ℕ) [NeZero d] [NeZero L]
-    (A : AlgebraicLocalAlgebra (MPSTensor.blockPhysDim d L)) :
+    (A : AlgebraicLocalAlgebra (Kraus.blockPhysDim d L)) :
     ‖algebraicLocalBlocking d L A‖ = ‖A‖ := by
   induction A using DirectLimit.induction with
   | _ Λ A =>

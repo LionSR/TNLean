@@ -79,20 +79,31 @@ variable {d N : ℕ}
 /-- The sites strictly inside the complete blocks of `B` consecutive sites: the residue modulo
 `B` lies in `{1, …, B - 2}`, and the block `[q B, (q + 1) B)` containing the site,
 `q = ⌊x / B⌋`, is contained in `{0, …, N - 1}`. -/
-def blockInterior (N B : ℕ) : Set (Fin N) :=
-  {x | 1 ≤ x.val % B ∧ x.val % B + 2 ≤ B ∧ (x.val / B + 1) * B ≤ N}
+def blockInterior (N B : ℕ) : Finset (Fin N) :=
+  Finset.univ.filter fun x ↦ 1 ≤ x.val % B ∧ x.val % B + 2 ≤ B ∧ (x.val / B + 1) * B ≤ N
 
 /-- The sites strictly inside a complete block of size `2^{i+1}` for some `i < k`: the sites on
 which the tree of `k` levels needs `|0⟩`. No site of an incomplete block of size `2^{i+1}`
 belongs to it through that block. -/
-def treeInterior (N k : ℕ) : Set (Fin N) := {x | ∃ i < k, x ∈ blockInterior N (2 ^ (i + 1))}
+def treeInterior (N k : ℕ) : Finset (Fin N) :=
+  Finset.univ.filter fun x ↦ ∃ i < k, x ∈ blockInterior N (2 ^ (i + 1))
+
+theorem mem_blockInterior {B : ℕ} {x : Fin N} :
+    x ∈ blockInterior N B ↔ 1 ≤ x.val % B ∧ x.val % B + 2 ≤ B ∧ (x.val / B + 1) * B ≤ N := by
+  simp [blockInterior]
+
+theorem mem_treeInterior {k : ℕ} {x : Fin N} :
+    x ∈ treeInterior N k ↔ ∃ i < k, x ∈ blockInterior N (2 ^ (i + 1)) := by
+  simp [treeInterior]
 
 theorem treeInterior_mono {k k' : ℕ} (h : k ≤ k') : treeInterior N k ⊆ treeInterior N k' :=
-  fun _ ⟨i, hi, hx⟩ => ⟨i, by omega, hx⟩
+  fun _ hx => by
+    obtain ⟨i, hi, hx⟩ := mem_treeInterior.mp hx
+    exact mem_treeInterior.mpr ⟨i, by omega, hx⟩
 
 theorem blockInterior_subset_treeInterior (k : ℕ) :
     blockInterior N (2 ^ (k + 1)) ⊆ treeInterior N (k + 1) :=
-  fun _ hx => ⟨k, Nat.lt_succ_self k, hx⟩
+  fun _ hx => mem_treeInterior.mpr ⟨k, Nat.lt_succ_self k, hx⟩
 
 /-! ### The gates of the tree -/
 
@@ -143,14 +154,15 @@ private theorem val_of_mem_span {i p : ℕ} {hp : p < N / 2 ^ (i + 1)} {x : Fin 
   have h1 := succ_mul_le_of_lt_div hp
   have h2 : 2 ^ (i + 1) = 2 * 2 ^ i := pow_succ' 2 i
   have h3 := Nat.one_le_two_pow (n := i)
-  obtain ⟨t, ht, rfl⟩ := hx
+  obtain ⟨t, ht, rfl⟩ := (treeGate u hu i p hp).mem_span.mp hx
   change t ≤ 2 * (2 ^ i - 1) + 1 at ht
   have hlt : p * 2 ^ (i + 1) + t < N := by rw [Nat.succ_mul] at h1; omega
-  refine ⟨t, by omega, val_natCast_add_natCast hlt, fun ⟨t', h1', h2', he⟩ => ?_⟩
+  refine ⟨t, by omega, val_natCast_add_natCast hlt, fun hint => ?_⟩
+  obtain ⟨t', h1', h2', he⟩ := (treeGate u hu i p hp).mem_interior.mp hint
   change t' ≤ 2 * (2 ^ i - 1) at h2'
   have hL := (treeGate u hu i p hp).lt
   change 2 * (2 ^ i - 1) + 1 < N at hL
-  have := add_natCast_injective (((p * 2 ^ (i + 1) : ℕ) : Fin N)) (j := t) (k := t')
+  have := add_natCast_injective ((p * 2 ^ (i + 1) : ℕ) : Fin N) (j := t) (k := t')
     (by omega) (by omega) he
   omega
 
@@ -174,7 +186,7 @@ theorem pairwise_levelGates (i : ℕ) :
     (levelGates (d := d) (N := N) u hu i).Pairwise fun g g' => Disjoint g.span g'.span := by
   rw [levelGates, List.pairwise_ofFn]
   intro p p' hpp'
-  rw [Set.disjoint_left]
+  rw [Finset.disjoint_left]
   intro x hx hx'
   obtain ⟨t, ht, hxt, -⟩ := val_of_mem_span u hu hx
   obtain ⟨t', ht', hxt', -⟩ := val_of_mem_span u hu hx'
@@ -215,7 +227,7 @@ theorem sum_depth_treeRounds (k : ℕ) :
 
 omit [NeZero N] in
 /-- A product vector with `|0⟩` at the sites of `S` has `|0⟩` at the sites of `S`. -/
-theorem isZeroOn_productVector {S : Set (Fin N)} {v : Fin N → Fin d → ℂ}
+theorem isZeroOn_productVector {S : Finset (Fin N)} {v : Fin N → Fin d → ℂ}
     (hv : ∀ x ∈ S, ∀ j, j ≠ 0 → v x j = 0) : IsZeroOn S (productVector v) := by
   intro y hy x hx
   by_contra h
@@ -247,8 +259,13 @@ theorem isZeroOn_levelOp_mulVec (k : ℕ) {v : Cfg d N → ℂ}
     disjoint_compl_right (list_prod_mem_supportedOperators _ fun A hA => ?_)
   obtain ⟨g, hg, rfl⟩ := List.mem_map.mp hA
   obtain ⟨⟨p, hp⟩, rfl⟩ := List.mem_ofFn.mp hg
-  refine supportedOperators_mono ?_ (LongRangeGate.op_mem_supportedOperators _)
-  rintro x (rfl | rfl) ⟨i, hi, hx1, hx2, -⟩
+  refine ManyBody.supportedOperators_mono ?_ (LongRangeGate.op_mem_supportedOperators _)
+  intro x hx
+  refine Finset.mem_compl.mpr fun hx' => ?_
+  rw [Finset.mem_insert, Finset.mem_singleton] at hx
+  obtain ⟨i, hi, hx'⟩ := mem_treeInterior.mp hx'
+  obtain ⟨hx1, hx2, -⟩ := mem_blockInterior.mp hx'
+  rcases hx with rfl | rfl
   · rw [treeGate_a_val u hu hp] at hx1
     rw [Nat.mod_eq_zero_of_dvd (dvd_mul_of_dvd_right (pow_dvd_pow 2 (by omega)) _)] at hx1
     omega
@@ -274,7 +291,7 @@ theorem interior_subset_blockInterior {i : ℕ} {g : LongRangeGate d N}
     rw [hxt, Nat.mul_comm, Nat.mul_add_mod, Nat.mod_eq_of_lt (by omega)]
   have hdiv : x.val / 2 ^ (i + 1) = p :=
     Nat.div_eq_of_lt_le (by omega) (by rw [Nat.succ_mul]; omega)
-  exact ⟨hmod ▸ h1, hmod ▸ h2, hdiv ▸ succ_mul_le_of_lt_div hp⟩
+  exact mem_blockInterior.mpr ⟨hmod ▸ h1, hmod ▸ h2, hdiv ▸ succ_mul_le_of_lt_div hp⟩
 
 /-- **A binary tree of gates in depth `5k` with measurements.** The rounds of the levels
 `0, …, k - 1`, of total depth `5k`, implement the product of the levels, the coarsest applied

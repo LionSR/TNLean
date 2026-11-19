@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.Examples.AKLT
 import TNLean.PEPS.Examples.CZX
+import TNLean.PEPS.Examples.CZXBoundaryAnomaly
 import TNLean.PEPS.Examples.CZXBoundaryChain
 import TNLean.PEPS.Examples.CZXOnSiteSymmetry
 import TNLean.PEPS.Examples.CZXOpenRegion
@@ -24,6 +25,7 @@ import TNLean.PEPS.Examples.Classical
 import TNLean.PEPS.Examples.Cluster
 import TNLean.PEPS.Examples.ClusterStabilizer
 import TNLean.PEPS.Examples.GHZ
+import TNLean.PEPS.Examples.HoneycombCluster
 import TNLean.PEPS.Examples.QuantumDouble
 import TNLean.PEPS.Examples.QuantumDoubleBondAverage
 import TNLean.PEPS.Examples.QuantumDoubleBondParent

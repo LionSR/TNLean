@@ -34,7 +34,7 @@ theorem exists_squarePatch_integerCoordinates_of_radius_le_four
     (Λ : Finset (ℤ × ℤ)) {q : ℕ} (hq : 1 ≤ q)
     (z : ℝ × ℝ) {u : ℝ} (hu : 0 < u) (hu4 : u ≤ 4)
     (Ω : EuclideanSpace ℂ
-      ((w : (Finset.univ : Finset (Lattice.Site Λ))) → Fin q)) :
+      ((v : Lattice.Site Λ) → Fin q)) :
     letI : LinearOrder (Lattice.Site Λ) :=
       (Fintype.equivFin (Lattice.Site Λ)).linearOrder
     ∃ P : EncodedFrame.SquarePatch
@@ -42,7 +42,7 @@ theorem exists_squarePatch_integerCoordinates_of_radius_le_four
       P.center = z ∧ P.scale = u ∧
       (∑ j, P.dim j) ≤ q ^ 81 ∧
       ‖Lattice.Sheet.act (1 - P.cylSum)
-        (dependentGlobalConfigIsometry (Out := fun _ : Lattice.Site Λ ↦ Fin q) Ω)‖ = 0 := by
+        (Ω)‖ = 0 := by
   classical
   let : LinearOrder (Lattice.Site Λ) :=
     (Fintype.equivFin (Lattice.Site Λ)).linearOrder

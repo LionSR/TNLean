@@ -33,37 +33,11 @@ variable {P : Type}
 
 namespace Word
 
-/-- Identify equal input and output layouts without adding an operation. -/
-def castLayouts {ℓ ℓ' a b : Layout P} (w : Word ℓ ℓ') (h : ℓ = a) (h' : ℓ' = b) :
-    Word a b := h ▸ h' ▸ w
-
 @[simp] theorem sources_castLayouts {ℓ ℓ' a b : Layout P} (w : Word ℓ ℓ')
-    (h : ℓ = a) (h' : ℓ' = b) : (w.castLayouts h h').sources = w.sources := by
+    (h : ℓ = a) (h' : ℓ' = b) : Word.sources (w.castLayouts h h') = w.sources := by
   cases h
   cases h'
   rfl
-
-@[simp] theorem isAllowed_castLayouts {ℓ ℓ' a b : Layout P} (w : Word ℓ ℓ')
-    (h : ℓ = a) (h' : ℓ' = b) : (w.castLayouts h h').IsAllowed ↔ w.IsAllowed := by
-  cases h
-  cases h'
-  rfl
-
-theorem eval_castLayouts_heq {ℓ ℓ' a b : Layout P} (w : Word ℓ ℓ')
-    (h : ℓ = a) (h' : ℓ' = b) : HEq (w.castLayouts h h').eval w.eval := by
-  cases h
-  cases h'
-  rfl
-
-/-- Identifying equal layouts conjugates the operator by their canonical isometries. -/
-theorem eval_castLayouts {ℓ ℓ' a b : Layout P} (w : Word ℓ ℓ')
-    (h : ℓ = a) (h' : ℓ' = b) :
-    (w.castLayouts h h').eval =
-      isoL (Layout.memCongr h') ∘L w.eval ∘L isoL (Layout.memCongr h).symm := by
-  cases h
-  cases h'
-  rfl
-
 /-- Retain the registers and chronological local operations of selected parties.
 Source: polynomial-PEPS manuscript, `eq:compression-source-gate`, lines 233–251. -/
 def restrict (f : P → Bool) : {ℓ ℓ' : Layout P} → (w : Word ℓ ℓ') →
@@ -72,7 +46,7 @@ def restrict (f : P → Bool) : {ℓ ℓ' : Layout P} → (w : Word ℓ ℓ') �
   | _, _, comp w w', hs =>
       comp (restrict f w (List.append_eq_nil_iff.mp hs).2)
         (restrict f w' (List.append_eq_nil_iff.mp hs).1)
-  | _, _, @localMap _ p ℓ₁ ℓ₂ h₁ h₂ U tail, _ =>
+  | _, _, @Circuit.localMap _ _ _ p ℓ₁ ℓ₂ h₁ h₂ U tail _, _ =>
       if hp : f p = true then
         (localMap p h₁ h₂ U (Layout.restrict f tail)).castLayouts
           (by rw [Layout.restrict_append, Layout.restrict_eq_self_of_owner f h₁ hp])
@@ -113,13 +87,12 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–251,
 279–309 and 565–588. -/
 theorem restrict_castLayouts (f : P → Bool) {a b a' b' : Layout P}
     (w : Word a b) (ha : a = a') (hb : b = b') (hs : w.sources = []) :
-    (w.castLayouts ha hb).restrict f ((sources_castLayouts w ha hb).trans hs) =
+    Word.restrict f (w.castLayouts ha hb) ((sources_castLayouts w ha hb).trans hs) =
       (w.restrict f hs).castLayouts (congrArg (Layout.restrict f) ha)
         (congrArg (Layout.restrict f) hb) := by
   cases ha
   cases hb
   rfl
-
 /-- Identifying the input layout alone leaves the evaluation of the restriction
 unchanged up to that identification: the case of `restrict_castLayouts` with
 equal output layouts, followed by evaluation transport. -/
@@ -127,7 +100,7 @@ theorem restrict_castInput_eval_heq (f : P → Bool) {a b a' : Layout P}
     (w : Word a b) (h : a = a') (hs : w.sources = []) :
     HEq (((w.castInput h).restrict f ((sources_castInput w h).trans hs)).eval)
       ((w.restrict f hs).eval) :=
-  (heq_of_eq (congrArg Word.eval (restrict_castLayouts f w h rfl hs))).trans
+  (heq_of_eq (congrArg Circuit.eval (restrict_castLayouts f w h rfl hs))).trans
     (eval_castLayouts_heq _ _ _)
 
 /-- Restriction does not introduce a pair source. -/
@@ -231,18 +204,17 @@ def parties : {ℓ ℓ' : Layout P} → Word ℓ ℓ' → Finset P
   | _, _, comp w w' => by classical exact w.parties ∪ w'.parties
   | _, _, localMap p _ _ _ tail => by
       classical exact insert p (tail.map Reg.owner).toFinset
-  | _, _, @source _ p q _ _ _ _ tail => by
+  | _, _, Circuit.gate (@SourceGate.mk _ p q _ _ _ _ tail) => by
       classical exact insert p (insert q (tail.map Reg.owner).toFinset)
   | _, _, swap r r' tail => by
       classical exact insert r.owner (insert r'.owner (tail.map Reg.owner).toFinset)
   | _, _, frame r w => by classical exact insert r.owner w.parties
 
 @[simp] theorem parties_castLayouts {ℓ ℓ' a b : Layout P} (w : Word ℓ ℓ')
-    (h : ℓ = a) (h' : ℓ' = b) : (w.castLayouts h h').parties = w.parties := by
+    (h : ℓ = a) (h' : ℓ' = b) : Word.parties (w.castLayouts h h') = w.parties := by
   cases h
   cases h'
   rfl
-
 /-- Every input or output register belongs to a party occurring in the word. -/
 theorem owners_mem_parties {ℓ ℓ' : Layout P} (w : Word ℓ ℓ') :
     (∀ r ∈ ℓ, r.owner ∈ w.parties) ∧ (∀ r ∈ ℓ', r.owner ∈ w.parties) := by

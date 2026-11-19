@@ -43,7 +43,7 @@ states*, Proposition 4.1, `03-patches.tex`, `eq:patch-variational-problem`,
 theorem exists_clipped_filter_of_isMinOn_regularizedPatchObjective
     (regions : Fin m → Finset V) (hnested : Monotone regions)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Fin (n v.1)))
+    (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
     (hΩ : ‖Ω‖ = 1)
     (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
       (Entropy.RegionConfig n (regions j)) ℂ)
@@ -55,8 +55,7 @@ theorem exists_clipped_filter_of_isMinOn_regularizedPatchObjective
         (Entropy.RegionConfig n (regions j)) ℂ :=
       fun j ↦ (x j + b • 1) ^ (-(a j) / 2)
     let φ : EuclideanSpace ℂ (Entropy.SiteConfig n) :=
-      dependentGlobalConfigIsometry
-        (normalizedRegularizedPatchOutput (Out := fun v ↦ Fin (n v))
+      (normalizedRegularizedPatchOutput (Out := fun v ↦ Fin (n v))
           regions a b Ω x)
     ∀ j : Fin m,
       K j * Entropy.regionState (regions j) φ =
@@ -75,7 +74,7 @@ theorem exists_clipped_filter_of_isMinOn_regularizedPatchObjective
   obtain ⟨U, s, p, lam, hU, _, hxdiag, hρdiag, hlam, _, hclip⟩ :=
     exists_unitary_diagonal_clipped_of_isMinOn_regularizedPatchObjective
       regions hnested a ha hb Ω hΩ x hx hmin j
-  simpa only [K, φ, dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput,
+  simpa only [K, φ, normalizedRegularizedPatchOutput_eq_patchState,
     normalizedRegularizedPatchMarginal_eq_regionState_patchState] using
     Matrix.exists_clipped_rpow_add_smul_one_of_diagonal_max
       hU hxdiag hρdiag hb hlam (ha j).le hclip

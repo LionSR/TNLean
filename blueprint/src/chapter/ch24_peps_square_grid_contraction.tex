@@ -2,7 +2,8 @@
 
 \begin{definition}[Forward square edges]
     \label{def:peps_forward_square_edges}
-    \lean{TNLean.PEPS.Approximation.Vertex,TNLean.PEPS.Approximation.ForwardAdjacent,TNLean.PEPS.Approximation.ForwardEdge}
+    \lean{TNLean.PEPS.Approximation.Vertex}
+    \uses{def:peps_edge, def:peps_squareLatticeCoordinateRegions}
     \leanok
     For $\Lambda=\{0,\ldots,L-1\}^2$, a forward edge is an ordered pair
     $((x,y),(x+1,y))$ or $((x,y),(x,y+1))$ with both endpoints in $\Lambda$.
@@ -10,11 +11,11 @@
 
 \begin{definition}[Square-edge correspondence]
     \label{def:peps_square_edge_correspondence}
-    \lean{TNLean.PEPS.Approximation.forwardSquareEdgeEquiv,TNLean.PEPS.Approximation.forwardSquareIncidentEquiv,TNLean.PEPS.Approximation.pinnedSquareIncidentEquiv,TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv,TNLean.PEPS.Approximation.forwardSquareEdgeEquiv_val,TNLean.PEPS.Approximation.forwardSquareEdgeEquiv_symm_val,TNLean.PEPS.Approximation.forwardSquareIncidentEquiv_val,TNLean.PEPS.Approximation.pinnedSquareIncidentEquiv_val,TNLean.PEPS.Approximation.graphBondDim,TNLean.PEPS.Approximation.graphBondDim_forward,TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv_incident,TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv_pinnedIncident}
+    \lean{TNLean.PEPS.Approximation.forwardSquareIncidentEquiv,TNLean.PEPS.Approximation.pinnedSquareIncidentEquiv,TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv,TNLean.PEPS.Approximation.forwardSquareIncidentEquiv_val,TNLean.PEPS.Approximation.pinnedSquareIncidentEquiv_val,TNLean.PEPS.Approximation.graphBondDim,TNLean.PEPS.Approximation.graphBondDim_forward,TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv_incident,TNLean.PEPS.Approximation.forwardSquareVirtualConfigEquiv_pinnedIncident}
     \leanok
     \uses{def:peps_forward_square_edges}
-    The forward edges are in bijection with the lexicographically oriented
-    edges of the open square graph by preserving both endpoints.
+    The forward edges are the lexicographically oriented edges of the open
+    square graph, with both endpoints in order.
     For every vertex this gives a bijection of incident edges, and for every
     family of dimensions $(D_e)_e$ it gives a bijection of assignments
     $\prod_e\{0,\ldots,D_e-1\}$, with each coordinate unchanged.

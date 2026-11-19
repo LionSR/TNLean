@@ -20,6 +20,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw
 
 open scoped symmDiff
@@ -27,7 +29,7 @@ open scoped symmDiff
 /-- An unordered physical edge crosses a cut precisely when exactly one endpoint belongs to it. -/
 theorem mem_edgeBoundary_pair_iff {Λ : Finset (ℤ × ℤ)} (A : Finset (Site Λ))
     (x y : Site Λ) :
-    s(x, y) ∈ edgeBoundary Λ A ↔ (domainGraph Λ).Adj x y ∧
+    s(x, y) ∈ edgeBoundary Λ A ↔ (planeDomainGraph Λ).Adj x y ∧
       ((x ∈ A ∧ y ∉ A) ∨ (y ∈ A ∧ x ∉ A)) := by
   classical
   simp only [edgeBoundary, Finset.mem_filter, SimpleGraph.mem_edgeFinset,
@@ -79,7 +81,7 @@ theorem card_edgeBoundary_sdiff_le (Λ : Finset (ℤ × ℤ)) (A B : Finset (Sit
 No ambient edge missing from the physical domain is counted. -/
 theorem card_edgeBoundary_le_of_endpoint_cover (Λ : Finset (ℤ × ℤ))
     (A R : Finset (Site Λ))
-    (hR : ∀ x ∈ A, ∀ y ∉ A, (domainGraph Λ).Adj x y → x ∈ R ∨ y ∈ R) :
+    (hR : ∀ x ∈ A, ∀ y ∉ A, (planeDomainGraph Λ).Adj x y → x ∈ R ∨ y ∈ R) :
     (edgeBoundary Λ A).card ≤ 4 * R.card := by
   classical
   let E (p : ℤ × ℤ) := (latticeNeighbors p).image fun q ↦ s(p, q)
@@ -90,7 +92,7 @@ theorem card_edgeBoundary_le_of_endpoint_cover (Λ : Finset (ℤ × ℤ))
     intro e he
     obtain ⟨f, hf, rfl⟩ := Finset.mem_image.mp he
     obtain ⟨hxy, x, hx, y, hy, rfl⟩ := Finset.mem_filter.mp hf
-    have hadj : (domainGraph Λ).Adj x y := by
+    have hadj : (planeDomainGraph Λ).Adj x y := by
       simpa only [SimpleGraph.mem_edgeFinset, SimpleGraph.mem_edgeSet] using hxy
     have hneigh : y.val ∈ latticeNeighbors x.val := mem_latticeNeighbors_iff.mpr hadj
     rcases hR x hx y hy hadj with hxR | hyR

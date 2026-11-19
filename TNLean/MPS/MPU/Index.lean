@@ -61,9 +61,9 @@ theorem IsMPUCanonicalFormII.rightRank_mul_leftRank_blockTensor
     (hS : IsMPUSimple (MPOTensor.blockTensor U k)) :
     r[MPOTensor.blockTensor U k] * ℓ[MPOTensor.blockTensor U k] = d ^ (2 * k) := by
   have hprod : r[MPOTensor.blockTensor U k] * ℓ[MPOTensor.blockTensor U k] =
-      MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k :=
+      Kraus.blockPhysDim d k * Kraus.blockPhysDim d k :=
     ((hU.blockTensor k hk).isMPUSimple_tfae.out 1 2).mp hS
-  simpa [MPSTensor.blockPhysDim, Kraus.blockPhysDim, pow_mul, pow_two, Nat.mul_comm] using hprod
+  simpa [Kraus.blockPhysDim, Kraus.blockPhysDim, pow_mul, pow_two, Nat.mul_comm] using hprod
 
 private theorem sourceIndexValue_blockTensor_eq_of_le
     (hU : IsMPUCanonicalFormII U) {k₀ k : ℕ}
@@ -172,9 +172,9 @@ theorem IsMPUCanonicalFormII.index_eq_logb_rightRank_div
   exact let hpos := hU.sourceRanks_blockTensor_pos hk hS
     (hU.sourceIndexValue_eq_index hk hS hpos.1 hpos.2).symm.trans
       (by
-        simpa only [MPSTensor.blockPhysDim_eq_pow] using
+        simpa only [Kraus.blockPhysDim_eq_pow] using
           (sourceIndexValue_eq_logb_rightRank_div _ hpos.1 hpos.2
-            (by simpa only [MPSTensor.blockPhysDim_eq_pow] using
+            (by simpa only [Kraus.blockPhysDim_eq_pow] using
               Nat.pow_pos (n := k) (Nat.pos_of_ne_zero hU.neZero_phys.out))
             (by simpa only [pow_two] using
               ((hU.blockTensor k hk).isMPUSimple_tfae.out 1 2).mp hS)))
@@ -188,9 +188,9 @@ theorem IsMPUCanonicalFormII.index_eq_neg_logb_leftRank_div
   exact let hpos := hU.sourceRanks_blockTensor_pos hk hS
     (hU.sourceIndexValue_eq_index hk hS hpos.1 hpos.2).symm.trans
       (by
-        simpa only [MPSTensor.blockPhysDim_eq_pow] using
+        simpa only [Kraus.blockPhysDim_eq_pow] using
           (sourceIndexValue_eq_neg_logb_leftRank_div _ hpos.1 hpos.2
-            (by simpa only [MPSTensor.blockPhysDim_eq_pow] using
+            (by simpa only [Kraus.blockPhysDim_eq_pow] using
               Nat.pow_pos (n := k) (Nat.pos_of_ne_zero hU.neZero_phys.out))
             (by simpa only [pow_two] using
               ((hU.blockTensor k hk).isMPUSimple_tfae.out 1 2).mp hS)))

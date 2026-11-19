@@ -41,8 +41,8 @@ local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 Schrödinger remainder. Hence primitivity bounds every eigenvalue in modulus by
 one strictly. This norm-independent bridge is the spectral step in FNW 1992,
 Lemma 5.2, before the weighted norm in equations (5.9)--(5.10) is chosen. -/
-theorem IsPrimitiveMPS.fnwRemainder_eigenvalue_norm_lt_one [NeZero D]
-    {A : MPSTensor d D} {ρ : Mat} (hP : IsPrimitiveMPS A ρ) (ν : ℂ)
+theorem _root_.Kraus.HasComplementaryFixedPointGap.fnwRemainder_eigenvalue_norm_lt_one [NeZero D]
+    {A : MPSTensor d D} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ) (ν : ℂ)
     (hν : Module.End.HasEigenvalue
       (fnwTransferMap A - fnwLimitMap ρ hP.trace_ne_zero) ν) :
     ‖ν‖ < 1 := by
@@ -104,8 +104,8 @@ private theorem rhoWeighted_spectralRadius_lt_one_of_eigenvalues_lt_one
 radius strictly below one. The proof uses only finite dimensionality and the
 norm-independent eigenvalue bridge, rather than comparing spectral radii
 across different matrix norm instances. -/
-theorem IsPrimitiveMPS.fnwWeightedRemainder_spectralRadius_lt_one [NeZero D]
-    {A : MPSTensor d D} {ρ : Mat} (hP : IsPrimitiveMPS A ρ)
+theorem _root_.Kraus.HasComplementaryFixedPointGap.fnwWeightedRemainder_spectralRadius_lt_one
+    [NeZero D] {A : MPSTensor d D} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) :
     fnwWeightedRemainderSpectralRadius ρ hρ A hP.trace_ne_zero < 1 := by
   simpa only [fnwWeightedRemainderSpectralRadius] using
@@ -147,8 +147,8 @@ the FNW remainder, there is a positive, rate-dependent prefactor bounding
 \(a(n)\) for every positive power. No hypothesis that the prescribed rate is
 below one is needed for this generic power estimate, and no dimension-only
 value of the prefactor is asserted. -/
-theorem IsPrimitiveMPS.exists_fnwMixingQuantity_le_geometric [NeZero D]
-    {A : MPSTensor d D} {ρ : Mat} (hP : IsPrimitiveMPS A ρ)
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_fnwMixingQuantity_le_geometric [NeZero D]
+    {A : MPSTensor d D} {ρ : Mat} (hP : Kraus.HasComplementaryFixedPointGap A ρ)
     (hρ : ρ.PosDef) (htr : Matrix.trace ρ = 1) (rate : ℝ≥0)
     (hrate : fnwWeightedRemainderSpectralRadius ρ hρ A hP.trace_ne_zero <
       (rate : ℝ≥0∞)) :

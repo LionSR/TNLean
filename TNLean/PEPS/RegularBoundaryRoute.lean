@@ -26,6 +26,8 @@ lines 1622–1647, and accessible complement cycle records, lines 1935–1990.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}
@@ -41,7 +43,7 @@ theorem regularWalkHolonomy_inducedWalk (R : Finset V) (u : Edge Γ → G)
       regularDirectedTransport (regularRegionInternalOperators R u) h =
         regularDirectedTransport u
           ((SimpleGraph.Embedding.induce (R : Set V)).toHom.map_adj h) := by
-    unfold regularDirectedTransport regularRegionInternalOperators Edge.ofAdj
+    unfold regularDirectedTransport regularRegionInternalOperators ManyBody.Edge.ofAdj
     split_ifs <;> first | rfl | contradiction
   induction p with
   | nil => simp only [SimpleGraph.Walk.map_nil, regularWalkHolonomy_nil]

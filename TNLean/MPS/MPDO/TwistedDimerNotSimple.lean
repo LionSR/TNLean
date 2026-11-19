@@ -63,7 +63,7 @@ theorem physTraceTransfer_blockTensor (M : MPOTensor d D) (L : ℕ) :
   rw [← verticalLoop_eq_physTraceTransfer M, ← sum_evalWord_diag_eq_verticalLoop_pow]
   unfold physTraceTransfer
   simp only [blockTensor_apply, Kraus.wordOfBlock]
-  exact (MPSTensor.decodeBlockEquiv d L).sum_comp
+  exact (Kraus.decodeBlockEquiv d L).sum_comp
     fun σ => evalWord M (List.ofFn σ) (List.ofFn σ)
 
 namespace TwistedDimer
@@ -78,7 +78,7 @@ Source: arXiv:1606.00608, Section 2.3, lines 214--245, blocked as in lines
 def blockedCanonicalFormData (L : ℕ) (hL : 0 < L) :
     MPSTensor.CPSVCanonicalFormData
       (Kraus.reindexPhysical (blockedDoubledIndexEquiv 8 L)
-        (MPSTensor.blockTensor T.toMPSTensor L)) :=
+        (Kraus.blockTensor T.toMPSTensor L)) :=
   (canonicalFormData.blockTensor L hL).reindexPhysical (blockedDoubledIndexEquiv 8 L)
 
 /-- The retained blocks of the blocked canonical form are the doubled-index
@@ -93,13 +93,13 @@ contraction: the one-site physical-trace transfer vanishes
 (`physTraceTransfer_normalizedBlock_one`), and blocking raises it to a
 positive power. -/
 lemma doubledPhysTraceTransfer_blockedCanonicalFormData_blocks_one (L : ℕ) (hL : 0 < L) :
-    doubledPhysTraceTransfer (MPSTensor.blockPhysDim 8 L)
+    doubledPhysTraceTransfer (Kraus.blockPhysDim 8 L)
       ((blockedCanonicalFormData L hL).blocks (1 : Fin 2)) = 0 := by
-  have h : doubledPhysTraceTransfer (MPSTensor.blockPhysDim 8 L)
+  have h : doubledPhysTraceTransfer (Kraus.blockPhysDim 8 L)
       (blockTensor (normalizedBlock 1) L).toMPSTensor = 0 := by
     rw [doubledPhysTraceTransfer_toMPSTensor, physTraceTransfer_blockTensor,
       physTraceTransfer_normalizedBlock_one, zero_pow hL.ne']
-  exact (congrArg (doubledPhysTraceTransfer (MPSTensor.blockPhysDim 8 L))
+  exact (congrArg (doubledPhysTraceTransfer (Kraus.blockPhysDim 8 L))
     (blockedCanonicalFormData_blocks L hL 1)).trans h
 
 /-- **The twisted quantum dimer is not simple** in the sense of
@@ -127,7 +127,7 @@ theorem T_not_isSimple : ¬ IsSimple T := by
   let k₁ : Fin data.r := (1 : Fin 2)
   apply hAll (data.classCopy k₁).1
   have hGauge : MPSTensor.GaugePhaseEquiv
-      (cast (congr_arg (MPSTensor (MPSTensor.blockPhysDim 8 L * MPSTensor.blockPhysDim 8 L))
+      (cast (congr_arg (MPSTensor (Kraus.blockPhysDim 8 L * Kraus.blockPhysDim 8 L))
           (ref.copyDimEq k₁))
         (data.blocks (data.representativeIndex (data.classCopy k₁).1)))
       (data.blocks k₁) := by
@@ -135,7 +135,7 @@ theorem T_not_isSimple : ¬ IsSimple T := by
       Complex.ne_zero_of_norm_eq_one (ref.copyPhaseNorm k₁), fun i => ?_⟩
     rw [ref.blocksEqListedGaugeConj k₁ i, ref.regroupedBlocksEq k₁]
     simp only [smul_mul_assoc, mul_smul_comm]
-  have hNil : IsNilpotent (doubledPhysTraceTransfer (MPSTensor.blockPhysDim 8 L)
+  have hNil : IsNilpotent (doubledPhysTraceTransfer (Kraus.blockPhysDim 8 L)
       (data.blocks k₁)) := by
     rw [doubledPhysTraceTransfer_blockedCanonicalFormData_blocks_one]
     exact IsNilpotent.zero

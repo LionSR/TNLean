@@ -121,9 +121,9 @@ theorem isAllowed_prepareSelected (R : SourceInventory P)
   | cons r R ih =>
     simp only [prepareSelected]
     split
-    · rw [Word.isAllowed_castLayouts]
+    · rw [Circuit.isAllowed_castLayouts]
       exact ih _ _ _ _ (fun i h ↦ hfixed i.succ h)
-    · rw [Word.isAllowed_castLayouts]
+    · rw [Circuit.isAllowed_castLayouts]
       exact ⟨ih _ _ _ _ (fun i h ↦ hfixed i.succ h), hfixed _ _⟩
 
 /-- The source occurrences are exactly the fixed original slots, in their order.
@@ -151,8 +151,9 @@ private theorem prepareFreeSlots_heq_prepare (R : SourceInventory P)
     (U V : Fin R.length → HSpace) (free : Fin R.length → Bool)
     (ζ : ∀ i, U i ⊗[ℂ] V i) (ℓ : Layout P) (x : Mem ℓ) :
     HEq ((prepareFreeSlots R U V free ζ ℓ).eval x)
-      (((selectedSources R U V free ζ).prepare ℓ).eval x) := by
-  exact Word.eval_castLayouts_apply_heq _ _ _ HEq.rfl
+      (((selectedSources R U V free ζ).prepare ℓ).eval x) :=
+  Word.eval_castLayouts_apply_heq _ rfl
+    (congrArg (· ++ ℓ) (layout_selectedSources_eq R U V free ζ (fun _ ↦ 0))) HEq.rfl
 
 /-- A free head is prepared before the other selected source registers. -/
 private theorem prepareFreeSlots_cons_true_heq (r : PairSource P)
@@ -231,7 +232,7 @@ theorem eval_prepareSelected_prepareFreeSlots (R : SourceInventory P)
         simp [fillSourceVectors, Bool.eq_false_iff.mpr h]
       rw [hzero] at hout
       refine (heq_of_eq ?_).trans hout.symm
-      simp only [Word.eval_comp, comp_apply]
+      simp only [Circuit.eval_comp, comp_apply]
       rw [← comp_apply (prepareSelected R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
         (fun i ↦ free i.succ) (fun i h ↦ fixed i.succ h) ℓ).eval, ih]
       rfl

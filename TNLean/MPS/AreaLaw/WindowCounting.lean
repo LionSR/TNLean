@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.AreaLaw.Counting
 import TNLean.Algebra.FinsetSubtypeSum
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Consecutive-window interactions on a chain
@@ -18,7 +19,7 @@ The interaction family is the existing all-support Hamiltonian. Zero interaction
 omitted only from the finite sum to which the marginal estimate is applied. No new
 Hamiltonian or change in the norm bound is involved.
 
-**Scope restriction (full windows):** the three theorems about `ChainHamiltonian` in
+**Scope restriction (full windows):** the three theorems about chain interactions in
 this module assume that every nonzero interaction occupies a full window of `R + 1`
 consecutive sites contained in the chain; only under that hypothesis are the note's
 crossing count `N_R` and budget `B_R` replaced by `2R` and `B_win`. Recorded in
@@ -31,9 +32,9 @@ crossing count `N_R` and budget `B_R` replaced by `2R` and `B_win`. Recorded in
   `cutBudgetConst` and `cutAreaLawConst` at the crossing count `2R`, so `B_R` and
   `C₀(q, R)` with `N_R` replaced by `2R`.
 
-* `ChainHamiltonian.card_crossingTerms_interval_le_of_consecutive_terms`: the crossing
+* `ManyBody.ChainInteraction.card_crossingTerms_interval_le_of_consecutive_terms`: the crossing
   count for the nonzero interactions.
-* `ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms`: the physical
+* `ManyBody.ChainInteraction.log_surprisalMoment_interval_le_of_consecutive_terms`: the physical
   log-moment estimate with the consecutive-window budget.
 
 ## References
@@ -42,9 +43,13 @@ The one-dimensional area-law note, `part1_arealaw.tex`, Remark `rem:sharper`,
 lines 706–709, and Lemma `lem:tail`, equations `eq:theta` and `eq:mgf`, lines 152–166.
 -/
 
+open ManyBody (ChainSupport card_interval_le interval mem_interval ChainInteraction)
+
 noncomputable section
 
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped ComplexOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
@@ -129,8 +134,8 @@ open Classical in
 /-- At most `2 * R` nonzero consecutive-window interactions cross an interval.
 The window hypothesis concerns the actual nonzero terms of the given Hamiltonian.
 Source: the one-dimensional note, `rem:sharper`, lines 706–709. -/
-theorem ChainHamiltonian.card_crossingTerms_interval_le_of_consecutive_terms
-    (h : ChainHamiltonian L q R J)
+theorem _root_.ManyBody.ChainInteraction.card_crossingTerms_interval_le_of_consecutive_terms
+    (h : ChainInteraction L q R)
     (hwindow : ∀ X : ChainSupport L R, h.term X ≠ 0 →
       ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) (l r : ℕ) :
     (Entropy.crossingTerms
@@ -143,8 +148,8 @@ theorem ChainHamiltonian.card_crossingTerms_interval_le_of_consecutive_terms
 
 /-- The cut logarithmic budget of the actual nonzero consecutive-window terms.
 Source: the one-dimensional note, `rem:sharper`, lines 706–734. -/
-theorem ChainHamiltonian.cutLogBudget_interval_le_of_consecutive_terms
-    (hq : 1 ≤ q) (h : ChainHamiltonian L q R J)
+theorem _root_.ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive_terms
+    (hq : 1 ≤ q) (h : ChainInteraction L q R)
     (hwindow : ∀ X : ChainSupport L R, h.term X ≠ 0 →
       ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) (l r : ℕ) :
     Entropy.cutLogBudget
@@ -186,13 +191,14 @@ corresponding `1 / (32 sqrt ((1 + J/Δ) B))`. No positive-length or nonempty-cut
 hypothesis is imposed.
 Source: the one-dimensional note, `rem:sharper`, lines 706–709, with
 `eq:theta` and `eq:mgf`, lines 152–166. -/
-theorem ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms
+theorem _root_.ManyBody.ChainInteraction.log_surprisalMoment_interval_le_of_consecutive_terms
     {Δ E₀ : ℝ} (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (h : ChainHamiltonian L q R J)
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
     (hwindow : ∀ X : ChainSupport L R, h.term X ≠ 0 →
       ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1))
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (l r : ℕ) {u : ℝ}
     (hu : |u| ≤ Entropy.tailRadius (J / Δ) (windowBudgetConst q R)) :
     Real.log (Entropy.surprisalMoment
@@ -204,7 +210,7 @@ theorem ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms
   let A := {X : ChainSupport L R // h.term X ≠ 0}
   let g : A → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ h.term X.val
   let D : A → Finset (Fin L) := fun X ↦ X.val.1
-  have hsum : (∑ X : A, g X) = h.operator := by
+  have hsum : (∑ X : A, g X) = h.hamiltonian := by
     exact (Finset.sum_eq_sum_subtype_ne_zero h.term h.term (fun _ hX ↦ hX)).symm
   let C := Entropy.crossingTerms D (interval L l r)
   let B : ℝ := windowBudgetConst q R
@@ -223,8 +229,10 @@ theorem ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms
     apply one_div_le_one_div_of_le hpos
     apply mul_le_mul_of_nonneg_left _ (by norm_num)
     exact Real.sqrt_le_sqrt (mul_le_mul_of_nonneg_left hbudget (by linarith))
-  obtain ⟨hΩ, heig, hgap⟩ := hgs
-  change toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω at heig
+  have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
+  have hgap := hgap.posSemidef_sub_smul_one
+      (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan
   have heig' : toEuclideanLin (∑ X : A, g X) Ω = (E₀ : ℂ) • Ω := by
     rw [hsum]
     exact heig
@@ -234,8 +242,8 @@ theorem ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms
     exact hgap
   have hm := Entropy.log_surprisalMoment_cut_le
     (n := fun _ : Fin L ↦ q) (h := g) (D := D) (B := interval L l r)
-    (fun X ↦ h.supported X.val) (fun X ↦ h.hermitian X.val) hJ
-    (fun X ↦ h.norm_le X.val) hΩ hΔ heig' hgap' rfl
+    (fun X ↦ h.mem X.val) (fun X ↦ hh X.val) hJ
+    (fun X ↦ hhJ X.val) hΩ hΔ heig' hgap' rfl
     (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (interval L l r) Ω)
     (hu.trans hradius)
   change Real.log (Entropy.surprisalMoment

@@ -31,7 +31,7 @@ def sourceOrder : {a b : Layout P} → (w : SourceCircuit a b) → List (sourceL
       (sourceOrder v).map (fun e ↦ (⟨Sum.inr e.1, e.2⟩ : sourceLocations (.comp w v))) ++
         (sourceOrder w).map (fun e ↦ (⟨Sum.inl e.1, e.2⟩ : sourceLocations (.comp w v)))
   | _, _, .localMap .. => []
-  | _, _, @SourceCircuit.gate _ _ _ _ _ _ _ _ _ G _ =>
+  | _, _, Circuit.gate (@PreparedGate.mk _ _ _ _ _ _ _ _ _ G _) =>
       List.ofFn (fun i : Fin G.slots.length ↦ ⟨(), i⟩)
   | _, _, .swap .. => []
   | _, _, .frame _ w => sourceOrder w
@@ -102,7 +102,7 @@ def sourceDims : {a b : Layout P} → (w : SourceCircuit a b) → sourceLocation
       | inl g => exact sourceDims w ⟨g, i⟩
       | inr g => exact sourceDims v ⟨g, i⟩
   | _, _, .localMap .. => fun e ↦ nomatch e.1
-  | _, _, @SourceCircuit.gate _ _ _ _ _ _ _ _ _ G _ => fun e ↦
+  | _, _, Circuit.gate (@PreparedGate.mk _ _ _ _ _ _ _ _ _ G _) => fun e ↦
       (G.leftDim e.2, G.rightDim e.2)
   | _, _, .swap .. => fun e ↦ nomatch e.1
   | _, _, .frame _ w => sourceDims w
@@ -126,7 +126,7 @@ def sourceAt (A : P → Bool) : {a b : Layout P} → (w : SourceCircuit a b) →
       | inl g => exact sourceAt A w ξ.1 ⟨g, i⟩
       | inr g => exact sourceAt A v ξ.2 ⟨g, i⟩
   | _, _, .localMap .., _ => fun e ↦ nomatch e.1
-  | _, _, @SourceCircuit.gate _ C ι _ _ owner _ _ _ G _, ξ => by
+  | _, _, Circuit.gate (@PreparedGate.mk _ C ι _ _ owner _ _ _ G _), ξ => by
       classical
       by_cases h : ∃ p : C, A (owner p) = true
       · have j : ι := by simpa only [Choices, ite_eq_left h] using ξ

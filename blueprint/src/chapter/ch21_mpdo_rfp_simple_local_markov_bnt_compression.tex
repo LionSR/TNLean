@@ -578,7 +578,7 @@ strong subadditivity for a normalized three-site reduced state.
 
 \begin{definition}[Sitewise physical action and BNT coefficients]
     \label{def:mpdo_sitewise_physical_matrix}
-    \lean{MPOTensor.sitewisePhysicalMatrix}
+    \lean{Matrix.tensorPower}
     \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor}
     \leanok
     For a one-site matrix $V$, write $V^{\otimes N}$ in the configuration
@@ -591,6 +591,30 @@ strong subadditivity for a normalized three-site reduced state.
     If the copies of the $j$-th normal tensor have common coefficient
     $\mu_j$, set $\mathcal K_j=\mu_j A_j$.
 \end{definition}
+
+\begin{lemma}[Products and adjoints of tensor powers]
+    \label{lem:mpdo_tensor_power_laws}
+    \lean{Matrix.tensorPower_mul, Matrix.conjTranspose_tensorPower,
+        Matrix.tensorPower_one}
+    \leanok
+    \uses{def:mpdo_sitewise_physical_matrix}
+    Let $I,J,K$ be finite sets, $X\in\C^{I\times J}$,
+    $Y\in\C^{J\times K}$, and $N\ge0$. Then
+    $X^{\otimes N}Y^{\otimes N}=(XY)^{\otimes N}$ and
+    $(X^{\otimes N})^\dagger=(X^\dagger)^{\otimes N}$.
+    On every configuration space, $\Id^{\otimes N}=\Id$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{def:mpdo_sitewise_physical_matrix}
+    Distributing finite products over sums gives
+    \begin{align}
+        \sum_{r\in J^N}\prod_{n=1}^{N}X_{s_n,r_n}Y_{r_n,t_n}
+         & =\prod_{n=1}^{N}\sum_{j\in J}X_{s_n,j}Y_{j,t_n}.
+        \notag
+    \end{align}
+    Conjugation distributes over the finite product, and
+    $\prod_n\delta_{s_n,t_n}=\delta_{s,t}$ gives the identity formula.
+\end{proof}
 
 \begin{lemma}[Local selection by the BNT projectors]
     \label{thm:mpdo_bnt_projector_local_selection}

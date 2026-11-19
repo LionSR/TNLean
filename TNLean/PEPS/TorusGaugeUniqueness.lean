@@ -55,6 +55,8 @@ keeps explicit positivity; its callers supply it from the tensor hypothesis.  Do
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean
@@ -313,7 +315,7 @@ theorem torusRightEdge_fst_eq_iff (hw : 2 < width) (q : TorusVertex width height
       (torusRightEdge q).1.1.1 + 1 = (torusRightEdge q).1.2.1 := by
   have h20 : ((2 : ℕ) : ZMod width) ≠ 0 := by
     simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := width) 2 0 (by omega) (by decide)
-  have hends := Edge.ofAdj_endpoints (torusGraph_adj_right q.1 q.2)
+  have hends := ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right q.1 q.2)
   simp only [Prod.mk.eta] at hends
   rcases hends with ⟨h1, h2⟩ | ⟨h1, h2⟩
   · -- Stored in the natural cyclic order.
@@ -349,7 +351,7 @@ theorem torusUpEdge_fst_eq_iff (hh : 2 < height) (q : TorusVertex width height) 
       (torusUpEdge q).1.1.2 + 1 = (torusUpEdge q).1.2.2 := by
   have h20 : ((2 : ℕ) : ZMod height) ≠ 0 := by
     simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 0 (by omega) (by decide)
-  have hends := Edge.ofAdj_endpoints (torusGraph_adj_up q.1 q.2)
+  have hends := ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up q.1 q.2)
   simp only [Prod.mk.eta] at hends
   rcases hends with ⟨h1, h2⟩ | ⟨h1, h2⟩
   · have h1' : (torusUpEdge q).1.1 = q := h1
@@ -465,7 +467,7 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
             rw [ZMod.val_cast_of_lt (by omega : xhStart + 1 < width)]
             omega)).1
     -- The translated reference edge is the right edge at the translated left endpoint.
-    have hEeq : Edge.map (translate a b)
+    have hEeq : ManyBody.Edge.map (translate a b)
         (torusHorizontalReferenceEdge (width := width) (height := height) xhStart yhStart) =
         torusRightEdge ((((xhStart + 1 : ℕ) : ZMod width) + a),
           (((yhStart + 2 : ℕ) : ZMod height) + b)) := by
@@ -475,18 +477,18 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
         ((((xhStart + 1 : ℕ) : ZMod width) + a), (((yhStart + 2 : ℕ) : ZMod height) + b)) := by
       rw [hfst, translate_apply]
     -- The covariance branch condition is the stored-order marker of the translated edge.
-    have hiff : ((Edge.map (translate a b) (torusHorizontalReferenceEdge (width := width)
+    have hiff : ((ManyBody.Edge.map (translate a b) (torusHorizontalReferenceEdge (width := width)
           (height := height) xhStart yhStart)).1.1 =
         translate a b (torusHorizontalReferenceEdge (width := width) (height := height)
           xhStart yhStart).1.1) ↔
-        ((Edge.map (translate a b) (torusHorizontalReferenceEdge (width := width)
+        ((ManyBody.Edge.map (translate a b) (torusHorizontalReferenceEdge (width := width)
           (height := height) xhStart yhStart)).1.1.1 + 1 =
-        (Edge.map (translate a b) (torusHorizontalReferenceEdge (width := width)
+        (ManyBody.Edge.map (translate a b) (torusHorizontalReferenceEdge (width := width)
           (height := height) xhStart yhStart)).1.2.1) := by
       rw [hq, hEeq]
       exact torusRightEdge_fst_eq_iff hw2 _
     -- The two covariance equations at the translated edge.
-    have hbde : B.bondDim (Edge.map (translate a b) (torusHorizontalReferenceEdge
+    have hbde : B.bondDim (ManyBody.Edge.map (translate a b) (torusHorizontalReferenceEdge
         (width := width) (height := height) xhStart yhStart)) =
         B.bondDim (torusHorizontalReferenceEdge (width := width) (height := height)
           xhStart yhStart) := by
@@ -499,7 +501,8 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
       rw [hX'e, hXe, ite_eq_left (hiff.mpr hintr), ite_eq_left (hiff.mpr hintr), glReindex_coe,
         glReindex_coe, hch, map_smul]
     · intro hintr
-      have hcond : ¬((Edge.map (translate a b) (torusHorizontalReferenceEdge (width := width)
+      have hcond : ¬((ManyBody.Edge.map (translate a b)
+          (torusHorizontalReferenceEdge (width := width)
           (height := height) xhStart yhStart)).1.1 =
           translate a b (torusHorizontalReferenceEdge (width := width) (height := height)
             xhStart yhStart).1.1) := fun hcon => hintr (hiff.mp hcon)
@@ -524,7 +527,7 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
         (by change ((yhStart + 1 : ℕ) : ZMod height).val + 1 < height
             rw [ZMod.val_cast_of_lt (by omega : yhStart + 1 < height)]
             omega)).1
-    have hEeq : Edge.map (translate a b)
+    have hEeq : ManyBody.Edge.map (translate a b)
         (torusVerticalReferenceEdge (width := width) (height := height) xhStart yhStart) =
         torusUpEdge ((((xhStart + 2 : ℕ) : ZMod width) + a),
           (((yhStart + 1 : ℕ) : ZMod height) + b)) := by
@@ -533,17 +536,17 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
         xhStart yhStart).1.1 =
         ((((xhStart + 2 : ℕ) : ZMod width) + a), (((yhStart + 1 : ℕ) : ZMod height) + b)) := by
       rw [hfst, translate_apply]
-    have hiff : ((Edge.map (translate a b) (torusVerticalReferenceEdge (width := width)
+    have hiff : ((ManyBody.Edge.map (translate a b) (torusVerticalReferenceEdge (width := width)
           (height := height) xhStart yhStart)).1.1 =
         translate a b (torusVerticalReferenceEdge (width := width) (height := height)
           xhStart yhStart).1.1) ↔
-        ((Edge.map (translate a b) (torusVerticalReferenceEdge (width := width)
+        ((ManyBody.Edge.map (translate a b) (torusVerticalReferenceEdge (width := width)
           (height := height) xhStart yhStart)).1.1.2 + 1 =
-        (Edge.map (translate a b) (torusVerticalReferenceEdge (width := width)
+        (ManyBody.Edge.map (translate a b) (torusVerticalReferenceEdge (width := width)
           (height := height) xhStart yhStart)).1.2.2) := by
       rw [hq, hEeq]
       exact torusUpEdge_fst_eq_iff hh2 _
-    have hbde : B.bondDim (Edge.map (translate a b) (torusVerticalReferenceEdge
+    have hbde : B.bondDim (ManyBody.Edge.map (translate a b) (torusVerticalReferenceEdge
         (width := width) (height := height) xhStart yhStart)) =
         B.bondDim (torusVerticalReferenceEdge (width := width) (height := height)
           xhStart yhStart) := by
@@ -556,7 +559,7 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
       rw [hX'e, hXe, ite_eq_left (hiff.mpr hintr), ite_eq_left (hiff.mpr hintr), glReindex_coe,
         glReindex_coe, hcv, map_smul]
     · intro hintr
-      have hcond : ¬((Edge.map (translate a b) (torusVerticalReferenceEdge (width := width)
+      have hcond : ¬((ManyBody.Edge.map (translate a b) (torusVerticalReferenceEdge (width := width)
           (height := height) xhStart yhStart)).1.1 =
           translate a b (torusVerticalReferenceEdge (width := width) (height := height)
             xhStart yhStart).1.1) := fun hcon => hintr (hiff.mp hcon)

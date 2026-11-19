@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.ClusterExpansion.PathCrossingExpansion
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 
 /-!
 # The label path of actual nearest-neighbour interactions
@@ -46,7 +48,7 @@ theorem commute_nearestNeighbor_of_not_adj {N q : ℕ}
       (h i) {i.castSucc, i.succ}) :
     ∀ j k, ¬ (pathGraph N).Adj j k → Commute (h j) (h k) := by
   have hc := commute_of_not_adj_overlapGraph
-    (fun i ↦ QuantumCircuit.mem_supportedOperators_of_isSupportedOn (hs i))
+    (fun i ↦ (hs i))
   simpa only [overlapGraph_nearestNeighbor_eq_pathGraph] using hc
 
 open Classical in

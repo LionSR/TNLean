@@ -17,6 +17,8 @@ Supporting ALVV, arXiv:1602.08828v2, Figure `fig:algo1`, line 1631,
 and the energy-estimation argument at line 1807.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators ComplexOrder MatrixOrder
 

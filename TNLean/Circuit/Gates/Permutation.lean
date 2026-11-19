@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.PermutationMatrixUnitary
 import TNLean.Circuit.Composition
+import TNLean.Circuit.SitePermutation
 
 /-!
 # Gates permuting the computational basis
@@ -12,7 +13,8 @@ import TNLean.Circuit.Composition
 A permutation `σ` of the configurations of a finite set of sites acts on vectors by its permutation
 matrix, `(P_σ v)(x) = v (σ x)`. When `σ` changes only the sites of a set `S`, by a rule that
 reads only the sites of `S`, the permutation matrix is a unitary acting on `S`
-(`QuantumCircuit.IsLocalPerm.permMatrix_mem_supportedOperators`). A layer of such gates on
+(`QuantumCircuit.IsLocalPerm.permMatrix_mem_supportedOperators`, in
+`TNLean.Circuit.SitePermutation`). A layer of such gates on
 pairwise disjoint neighbouring pairs acts as a single permutation of the configurations, given
 site by site by the gate of the pair containing the site
 (`QuantumCircuit.exists_permLayer_op_mulVec`).
@@ -25,14 +27,10 @@ single-site permutation matrices acts by permuting the label of every site
 
 ## Main definitions
 
-* `QuantumCircuit.IsLocalPerm` — a permutation of configurations changing and reading only
-  the sites of a set.
-* `QuantumCircuit.shiftPerm` — adding a value computed from the other sites to one site.
 * `QuantumCircuit.permLayer` — the layer of permutation gates on disjoint pairs.
 
 ## Main results
 
-* `QuantumCircuit.IsLocalPerm.permMatrix_mem_supportedOperators`.
 * `QuantumCircuit.exists_permLayer_op_mulVec`, `QuantumCircuit.exists_shiftLayer_op_mulVec`.
 * `Matrix.finKronecker_permMatrix_mulVec`.
 -/
@@ -44,101 +42,6 @@ namespace QuantumCircuit
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 
-/-- The permutation `σ` of the configurations changes only the sites of `S`, and the new values
-at the sites of `S` depend only on the old values at the sites of `S`. -/
-def IsLocalPerm (S : Set ι) (σ : Equiv.Perm (ι → Fin d)) : Prop :=
-  (∀ x, ∀ i ∉ S, σ x i = x i) ∧
-    ∀ x y, (∀ j ∈ S, x j = y j) → ∀ i ∈ S, σ x i = σ y i
-
-omit [DecidableEq ι] in
-private theorem permMatrix_cfg_apply (σ : Equiv.Perm (ι → Fin d)) (x y : ι → Fin d) :
-    σ.permMatrix ℂ x y = if σ x = y then 1 else 0 := by
-  simp [Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply]
-
-omit [DecidableEq ι] in
-/-- The permutation matrix of a permutation changing and reading only the sites of `S` acts
-on `S`. -/
-theorem IsLocalPerm.permMatrix_mem_supportedOperators {S : Set ι}
-    {σ : Equiv.Perm (ι → Fin d)} (h : IsLocalPerm S σ) :
-    σ.permMatrix ℂ ∈ supportedOperators d S := by
-  classical
-  let e : Fin (Fintype.card S) → ι := fun j => ((Fintype.equivFin S).symm j : ι)
-  have he : Function.Injective e :=
-    Subtype.val_injective.comp (Fintype.equivFin S).symm.injective
-  have hmem : ∀ i, i ∈ S ↔ ∃ j, e j = i := fun i => by
-    constructor
-    · intro hi
-      exact ⟨Fintype.equivFin S ⟨i, hi⟩, by simp [e]⟩
-    · rintro ⟨j, rfl⟩
-      exact ((Fintype.equivFin S).symm j).prop
-  have hrange : Set.range e = S := Set.ext fun i => (hmem i).symm
-  let X : Matrix (Fin (Fintype.card S) → Fin d) (Fin (Fintype.card S) → Fin d) ℂ :=
-    of fun u w => if ∃ x : ι → Fin d, x ∘ e = u ∧ σ x ∘ e = w then 1 else 0
-  have hX : σ.permMatrix ℂ = embedOp e X := by
-    ext x y
-    rw [permMatrix_cfg_apply, embedOp_apply]
-    simp only [X, of_apply]
-    by_cases hxy : σ x = y
-    · subst hxy
-      have hag : AgreeOff e x (σ x) := fun i hi =>
-        (h.1 x i fun hiS => by obtain ⟨j, hj⟩ := (hmem i).mp hiS; exact hi j hj).symm
-      simp only [hag, ite_true,
-        show ∃ x' : ι → Fin d, x' ∘ e = x ∘ e ∧ σ x' ∘ e = σ x ∘ e from ⟨x, rfl, rfl⟩]
-    · simp only [hxy, ite_false]
-      split_ifs with hag hex
-      · exfalso
-        obtain ⟨x', hx', hσ⟩ := hex
-        refine hxy (funext fun i => ?_)
-        by_cases hi : i ∈ S
-        · obtain ⟨j, rfl⟩ := (hmem _).mp hi
-          have hagree : ∀ k ∈ S, x k = x' k := fun k hk => by
-            obtain ⟨j', rfl⟩ := (hmem k).mp hk
-            exact (congrFun hx' j').symm
-          rw [h.2 x x' hagree _ hi]
-          exact congrFun hσ j
-        · rw [h.1 x i hi]
-          exact hag i fun j hj => hi ((hmem i).mpr ⟨j, hj⟩)
-      · rfl
-      · rfl
-  have hmemX := embedOp_mem_supportedOperators (d := d) he X
-  rw [hrange] at hmemX
-  rwa [hX]
-
-/-! ### Shifting one site -/
-
-section Shift
-
-variable [NeZero d]
-
-/-- The permutation `x ↦ x + f(x) e_t` adding the value `f x` to the site `t`, where `f` does
-not read the site `t`. -/
-def shiftPerm (t : ι) (f : (ι → Fin d) → Fin d)
-    (hf : ∀ x c, f (Function.update x t c) = f x) : Equiv.Perm (ι → Fin d) where
-  toFun x := Function.update x t (x t + f x)
-  invFun x := Function.update x t (x t - f x)
-  left_inv x := by simp [hf]
-  right_inv x := by simp [hf]
-
-omit [Fintype ι] in
-theorem shiftPerm_apply (t : ι) (f : (ι → Fin d) → Fin d)
-    (hf : ∀ x c, f (Function.update x t c) = f x) (x : ι → Fin d) :
-    shiftPerm t f hf x = Function.update x t (x t + f x) :=
-  rfl
-
-omit [Fintype ι] in
-theorem isLocalPerm_shiftPerm {S : Set ι} {t : ι} (ht : t ∈ S)
-    (f : (ι → Fin d) → Fin d)
-    (hf : ∀ x c, f (Function.update x t c) = f x)
-    (hfS : ∀ x y, (∀ j ∈ S, x j = y j) → f x = f y) : IsLocalPerm S (shiftPerm t f hf) := by
-  refine ⟨fun x i hi => ?_, fun x y hxy i hi => ?_⟩
-  · rw [shiftPerm_apply, Function.update_of_ne (by rintro rfl; exact hi ht)]
-  · simp only [shiftPerm_apply]
-    by_cases hit : i = t
-    · subst hit; simp [hxy i ht, hfS x y hxy]
-    · rw [Function.update_of_ne hit, Function.update_of_ne hit, hxy i hi]
-
-end Shift
-
 /-! ### Layers of permutation gates -/
 
 section Layer
@@ -149,7 +52,7 @@ variable {N : ℕ} [NeZero N]
 `{k, k + 1}`, `k ∈ K`. -/
 noncomputable def permLayer (K : Finset (Fin N)) (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond)
     (τ : Fin N → Equiv.Perm (Fin N → Fin d)) (hτ : ∀ k ∈ K, IsLocalPerm (ringBond k) (τ k)) :
-    Layer d N where
+    RingLayer d N where
   bonds := K
   gate k := (τ k).permMatrix ℂ
   gate_mem_unitary _ _ := Equiv.Perm.permMatrix_mem_unitaryGroup _
@@ -176,7 +79,7 @@ private theorem exists_partialOp_permLayer (K : Finset (Fin N))
     obtain ⟨P, hP, h1, h2⟩ := ih hsK
     have hdisj : ∀ k ∈ s, ∀ i ∈ ringBond a, i ∉ ringBond k := fun k hk i hia hik => by
       have hne : a ≠ k := fun h => ha (h ▸ hk)
-      exact Set.disjoint_left.mp (hK haK (hsK hk) hne) hia hik
+      exact Finset.disjoint_left.mp (hK haK (hsK hk) hne) hia hik
     refine ⟨P * τ a, ?_, ?_, ?_⟩
     · change (insert a s).noncommProd _ _ = _
       rw [Finset.noncommProd_insert_of_notMem _ _ _ _ ha, Matrix.permMatrix_mul]

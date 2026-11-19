@@ -10,6 +10,7 @@ import TNLean.PEPS.AreaLaw.Scan.GenericSelectedChargeEnergy
 import TNLean.PEPS.AreaLaw.Scan.SourceEndpointRoughBudget
 import TNLean.PEPS.AreaLaw.Scan.RoughSelectionBudget
 import TNLean.PEPS.AreaLaw.GlobalSchmidtBellPrevector
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # A rough-only physical source selection at arbitrary scanner exponents
@@ -36,13 +37,19 @@ Validation and inherited-dependency scope:
 `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -72,11 +79,13 @@ theorem sourceTarget_selected_actualCharge_rough_comparison_explicit
     {Ctr : ℝ} (hCtrEq : Ctr = latticeTruncationRadiusConstant R J Δ (C_T + 1)) :
       ∀ F : ScannerExponents,
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           F.sourceRoughSelectionThreshold q R Ctr (Δ / positiveNormalization 1 (Δ / 2) J) C₁ C_T
             multiplicity P ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -107,7 +116,8 @@ theorem sourceTarget_selected_actualCharge_rough_comparison_explicit
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -135,7 +145,7 @@ theorem sourceTarget_selected_actualCharge_rough_comparison_explicit
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
             let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-            let energy := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+            let energy := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
             ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
               let pre : (k : ℕ) → Config k (fun v ↦ Fin (dims v)) → ℂ := fun k ↦
                 replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
@@ -201,7 +211,7 @@ theorem sourceTarget_selected_actualCharge_rough_comparison_explicit
       (Δ / positiveNormalization 1 (Δ / 2) J) (C_T + 1) ≤ n) =>
     regionalEntropy_positiveDepthPrefix_le_of_truncationEntropyThreshold_le q hq
       (Δ / positiveNormalization 1 (Δ / 2) J) (C_T + 1) hg hn
-  intro F Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
+  intro F Λ T _ hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear Ce η hsource hrD hDpos hDm
   simp only [ScannerExponents.sourceRoughSelectionThreshold, max_le_iff] at hn
   obtain ⟨hnT, hnC, hnE, hnS⟩ := hn
@@ -222,7 +232,7 @@ theorem sourceTarget_selected_actualCharge_rough_comparison_explicit
     simpa only [ScannerExponents.K, ← hmScale] using hKScale
   obtain ⟨hcard, hX, _, e, Ωt, htrgs, he0, he, _, htrace, _, _, hBX, htail,
       hwindow⟩ :=
-    htarget Λ h S E₀ Ω F T hT hgs hgraph hanchor hnT hr hsize hdepth hrows hclear
+    htarget Λ h hh hhJ S E₀ Ω F T hT hΩ hgap hspan hgraph hanchor hnT hr hsize hdepth hrows hclear
   obtain ⟨_, _, hcoefficient⟩ := F.actualCharge_energy_coefficients_of_threshold_le q hCtr hC₁
     hC_T multiplicity P Cen een hnC Λ T hT R S rfl hmScale hKScale'
     hDScale hr hCeq hsize hgraph hdepth hclear hrows hmult
@@ -242,10 +252,12 @@ theorem sourceTarget_selected_actualCharge_rough_comparison_explicit
   have hz : 0 <
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian.spectralRestrictionMass E :=
     hzEq.symm ▸ hwindow.2.2.1
-  have htr := Matrix.isGappedGroundState_iff.mp htrgs
+  have htrE := ManyBody.mulVec_eq_of_groundSpace_eq_span htrgs.2.2
+  have htrP := htrgs.2.1.posSemidef_sub_smul_one
+    (S.isHermitian_sum_truncatedEnergyTerm h hh hhJ Ω hΔ hΩ L) htrgs.1 htrgs.2.2
   obtain ⟨ell, hphysical, hmass, hdim⟩ :=
-    exists_global_schmidtBellPrevector (∑ i, S.truncatedEnergyTerm h Ω Δ L i)
-      Ωt e htr.1 htr.2.1 X E hz
+    exists_global_schmidtBellPrevector (∑ i, S.truncatedEnergyTerm h Ω J Δ L i)
+      Ωt e htrgs.1 htrE X E hz
   refine ⟨ell, ?_⟩
   intro pre
   have hpre : ∀ k : ℕ, 0 < k →
@@ -261,27 +273,27 @@ theorem sourceTarget_selected_actualCharge_rough_comparison_explicit
       FiniteProduct.entropy β Ωt (positiveDepthPrefix S.A S.depth (j.val : ℤ)) ≤ Bsh := by
     intro j
     simpa only [regionalEntropy_eq_finiteProduct] using
-      hprefix S.n hnE Λ Ω Ωt hgs.1 htr.1 S.A S.depth L hcard htrace
+      hprefix S.n hnE Λ Ω Ωt hΩ htrgs.1 S.A S.depth L hcard htrace
         Ce η hsource j.val (Nat.le_of_lt_succ j.isLt)
   obtain ⟨cU, hcU, hlimU, hupper⟩ :=
     eventually_actualScan_suppliedPrevector_rough_upper hT S hgraph hdepth hm hM a ha
       (show 0 < S.n by omega) (show S.r₀ ≤ S.D by omega) hDpos hDm L hKL hrows
-      Ωt htr.1 E ell Bsh hsh hz hmass
+      Ωt htrgs.1 E ell Bsh hsh hz hmass
   simp only [hzEq, hWa] at hupper
   obtain ⟨cR, Ci, hcR, hCi, _, hend⟩ :=
     eventually_actualScan_suppliedPrevector_endpoint_budget hT S hgraph hdepth hm hM a ha
       (show 0 < S.n by omega) (show S.r₀ ≤ S.D by omega) hDpos hDm L hKL hrows
-      Ωt htr.1 E ell Bsh hsh hz (fun k hk ↦ (hpre k hk).2) hmass
+      Ωt htrgs.1 E ell Bsh hsh hz (fun k hk ↦ (hpre k hk).2) hmass
   simp only [hzEq, hWa] at hend
   obtain ⟨b, rem, Cb, hCb, hb0, hb, hrem0, hrem, hselect⟩ :=
     actualCharges_selection_energy_domainGraph_of_finiteFamilyTransportBound htransport (d := d)
-      h Ω S hT hgraph hdepth hanchor hΔ hgs.1 hn2 hrD hDpos hDm
+      h hh hhJ Ω S hT hgraph hdepth hanchor hΔ hΩ hn2 hrD hDpos hDm
       hKL hCp hCm hrows hmult hclear ha hasmall
   obtain ⟨cL, Cf, hcL, hCf, hlower⟩ :=
     exists_actualScan_suppliedPrevector_rough_lower
       (Λ := Λ) (q := q) (d := d) (R := R) (J := J) S.K hK8
   obtain ⟨hlimL, hlower⟩ :=
-    hlower S rfl hm hM h Ω Δ L Ωt e (g / 2) htr.1 htr.2.2 (half_pos hg)
+    hlower S rfl hm hM h hh hhJ Ω Δ L Ωt e (g / 2) htrgs.1 htrP (half_pos hg)
       ell Sent hpre hdim
   refine ⟨b, rem, Cb, cU, cR, Ci, cL, Cf, hCb, hcU, hcR, hCi, hcL, hCf,
     hb0, hb, hrem0, hrem, hlimU,
@@ -289,7 +301,7 @@ theorem sourceTarget_selected_actualCharge_rough_comparison_explicit
   intro p₀ p₁ hp₀ hp₀₁ hp₁
   filter_upwards [hupper, hend, eventually_gt_atTop 0] with k hupperK hendK hk
   obtain ⟨hnonzero, hsym, heigen⟩ := augmented_prevector_properties_of_global
-    q d k Ωt (ell k) (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e
+    q d k Ωt (ell k) (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e
       (hphysical k hk).1 (hphysical k hk).2.2.1
   obtain ⟨s, p, hp, hQ, henergy⟩ :=
     hselect pre k hk hsym hnonzero e heigen p₀ p₁ hp₀ hp₀₁ hp₁
@@ -302,7 +314,7 @@ theorem sourceTarget_selected_actualCharge_rough_comparison_explicit
       simpa only [hrate] using hQ)
   have hpInterior : p ∈ Set.Ioo (0 : ℝ) 1 :=
     ⟨hp₀.trans_le hp.1, hp.2.trans_lt hp₁⟩
-  have hcoeff := hcoefficient (fun _ ↦ d) J h Ω Δ s.val
+  have hcoeff := hcoefficient (fun _ ↦ d) J h hh hhJ Ω Δ s.val
     (Nat.succ_le_of_lt s.isLt) 4 (by norm_num) k pre hsym hnonzero p hpInterior
   have hcap := S.actualCharge_defect_le_of_density_energy_bound_at_exponent
     hm hM s.val h Ω L hΔ F.ell 4 Cen een _ _ P (rem k) e (by norm_num)
@@ -327,11 +339,13 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFami
     ∃ Ctr : ℝ, 0 < Ctr ∧
       ∀ F : ScannerExponents,
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           F.sourceRoughSelectionThreshold q R Ctr (Δ / positiveNormalization 1 (Δ / 2) J) C₁ C_T
             multiplicity P ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -362,7 +376,8 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFami
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -390,7 +405,7 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison_of_finiteFami
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
             let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-            let energy := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+            let energy := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
             ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
               let pre : (k : ℕ) → Config k (fun v ↦ Fin (dims v)) → ℂ := fun k ↦
                 replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
@@ -467,11 +482,13 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison_of_threshold_
     ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
       ∀ F : ScannerExponents,
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           F.sourceRoughSelectionThreshold q R Ctr (Δ / positiveNormalization 1 (Δ / 2) J) C₁ C_T
             multiplicity P ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -502,7 +519,8 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison_of_threshold_
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -530,7 +548,7 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison_of_threshold_
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
             let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-            let energy := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+            let energy := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
             ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
               let pre : (k : ℕ) → Config k (fun v ↦ Fin (dims v)) → ℂ := fun k ↦
                 replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
@@ -605,11 +623,13 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison
       ∀ F : ScannerExponents, ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧
         ∃ N : ℕ, 2 ≤ N ∧
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = F.m S.n → S.D = F.D S.n → S.K = F.K S.n →
           S.C₁ = C₁ → (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →
@@ -638,7 +658,8 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
           X ⊆ S.truncationSet L ∧
           ∃ (e : ℝ) (Ωt : StateSpace Λ q),
-            IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ L i) e Ωt (g / 2) ∧
+            (‖Ωt‖ = 1 ∧ IsGapped (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e (g / 2) ∧
+              groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt}) ∧
             0 ≤ e ∧ e ≤ ε ∧
             Matrix.traceDistance
                 (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
@@ -666,7 +687,7 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
             let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-            let energy := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+            let energy := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
             ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
               let pre : (k : ℕ) → Config k (fun v ↦ Fin (dims v)) → ℂ := fun k ↦
                 replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k

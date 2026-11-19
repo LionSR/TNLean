@@ -27,18 +27,19 @@ variable {d r : ℕ} {dim : Fin r → ℕ} [NeZero d] [∀ j, NeZero (dim j)]
 space as the open-chain kernel for a direct sum of inequivalent primitive
 blocks. The threshold is independent of the chain length. This is the
 open-segment conclusion of PGVWC07, Theorem 12, lines 1430--1454. -/
-theorem exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES_of_isPrimitiveMPS
+theorem exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) :
     ∃ L₀ : ℕ, 0 < L₀ ∧ ∀ L N : ℕ, L₀ ≤ L → L ≤ N →
       LinearMap.ker
           (openParentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ) A) L N) =
         groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N := by
-  exact (exists_eventually_wordTupleSpanTop_of_isPrimitiveMPS A ρ hP hρ hDistinct).elim
+  exact
+    (exists_eventually_wordTupleSpanTop_of_hasComplementaryFixedPointGap A ρ hP hρ hDistinct).elim
     fun L₀ hSpan ↦ ⟨L₀ + 1, Nat.succ_pos L₀, fun L N hL hLN ↦
       ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
         μ A hμ (fun j ↦ (hP j).norm) hSpan hL hLN⟩

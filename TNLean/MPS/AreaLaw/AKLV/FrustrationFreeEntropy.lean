@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Entropy.AGSPRegionalEntropy
 import TNLean.MPS.AreaLaw.AKLV.FrustrationFreeFilter
+import TNLean.MPS.AreaLaw.AKLV.FrustrationFreeGapBounds
 import TNLean.MPS.AreaLaw.AKLV.FrustrationFreeParameters
 import TNLean.MPS.AreaLaw.AKLV.PhysicalEntropy
 
@@ -17,15 +18,25 @@ fixes that same vector. If the window does not fit, the smaller-side dimension
 bound suffices. No first-excited-energy, product-overlap, spectral-tail, filter,
 or fitting-window hypothesis is supplied.
 
-Source: AKLV, arXiv:1301.1162v1, the proof of `t:ent`, lines 810–846, and the
-favorable approximate-projector entropy consequence `col:half`, lines 350–361.
+`exists_aklv_frustrationFree_entropy_bound_of_mem_spectrum` has the hypotheses of
+the source theorem: the gap `g` is a spectral value of the Hamiltonian, and local
+dimension at least two and `g ≤ 1` are derived. The bound
+`exists_aklv_frustrationFree_physical_entropy_bound`, from which it follows, takes
+instead an explicit projector lower bound `0 < g ≤ 1`, which need not be attained,
+together with `q ≥ 2`.
 
-**Scope restriction (logarithmic rate):** The bound retains
-`1 + log q + log(1/g)` with an explicit lower gap `0 < g ≤ 1` and `q ≥ 2`.
-It does not claim the sharper removal of inverse-gap logarithms from the
-printed rate. The clipping and entropy scope are recorded in
-`docs/paper-gaps/aklv13_two_block_robustness.tex`.
+Source: AKLV, arXiv:1301.1162v1, Theorem `t:ent`, lines 820–846, its proof, lines
+810–846, and the favorable approximate-projector entropy consequence `col:half`,
+lines 350–361.
+
+**Local fix (inverse-gap logarithm):** The bound is
+`C/g · (1 + log q + log(1/g))³`. The printed `O(log³ d/ε)` drops the factor
+`log(s² + s)` at lines 840–843, and that rate is not asserted. The correction is
+recorded in `docs/paper-gaps/aklv13_entropy_inverse_gap_logarithm.tex`; the clipping
+step is recorded in `docs/paper-gaps/aklv13_two_block_robustness.tex`.
 -/
+
+open ManyBody (interval)
 
 open Matrix Polynomial Real
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
@@ -35,8 +46,8 @@ namespace TNLean.MPS.AreaLaw
 /-- A universal inverse-gap cubic-logarithmic entropy bound for the original
 frustration-free unit ground vector, uniformly over chain lengths and cuts.
 The gap is a projector lower bound; it need not be an attained excitation.
-AKLV, arXiv:1301.1162v1, `t:ent`, lines 810–846, with the logarithmic rate
-specified in the module's scope restriction. -/
+AKLV, arXiv:1301.1162v1, `t:ent`, lines 810–846, with the logarithmic rate of the
+module's local fix. -/
 theorem exists_aklv_frustrationFree_physical_entropy_bound :
     ∃ C : ℝ, 0 < C ∧ ∀ (L q : ℕ)
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -136,5 +147,30 @@ theorem exists_aklv_frustrationFree_physical_entropy_bound :
         apply div_le_div_of_nonneg_right _ hg.le
         dsimp only [C]
         linarith
+
+/-- The entropy bound under the hypotheses of the source theorem: a positive
+nearest-neighbour frustration-free chain whose unit ground vector `Ω` is unique, with
+gap `g`, a spectral value of the Hamiltonian. Local dimension at least two and `g ≤ 1`
+are derived, not assumed.
+AKLV, arXiv:1301.1162v1, Theorem `t:ent`, lines 820–846, with the logarithmic rate of
+the module's local fix. -/
+theorem exists_aklv_frustrationFree_entropy_bound_of_mem_spectrum :
+    ∃ C : ℝ, 0 < C ∧ ∀ (L q : ℕ)
+      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
+      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        (h j) (interval L j.val (j.val + 2))) →
+      (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
+      (∑ j, h j) *ᵥ WithLp.ofLp Ω = 0 →
+      ((∑ j, h j) - (g : ℂ) •
+        (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
+      0 < g → g ∈ spectrum ℝ (∑ j, h j) → ∀ k : ℕ, k ≤ L →
+      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω ≤
+        C / g * (1 + log (q : ℝ) + log (1 / g)) ^ 3 := by
+  obtain ⟨C, hC, hbound⟩ := exists_aklv_frustrationFree_physical_entropy_bound
+  refine ⟨C, hC, fun L q h g Ω hsupp h0 h1 hΩ hzero hgap hg hexcited k hk ↦ ?_⟩
+  obtain ⟨hq, hg1⟩ :=
+    aklv_frustrationFree_dimension_and_gap_bounds h hsupp h0 h1 g Ω hΩ hzero hgap hg hexcited
+  exact hbound L q h g Ω hq hsupp h0 h1 hΩ hzero hgap hg hg1 k hk
 
 end TNLean.MPS.AreaLaw

@@ -15,6 +15,8 @@ six-vertex two-plaquette graph to every internal bond. Directed equality on
 these seven edges therefore determines the full internal assignment. This is
 an auxiliary finite-block fact for SCP10, Theorem 6.16, lines 2271–2305.
 -/
+
+open ManyBody (Edge)
 namespace TNLean.PEPS
 private theorem edge_cases {i j : Fin 6} (hij : i < j)
     (hadj : twoPlaquetteGraph.Adj i j) :
@@ -59,15 +61,15 @@ theorem twoPlaquette_internal_eq_of_edgeTransports (R : Finset V)
       regularDirectedTransport w
       (SimpleGraph.induce_adj.mp (φ.map_rel_iff'.mpr (by decide : twoPlaquetteGraph.Adj 4 5))))
     (e : Edge Γ) (he : e.1.1 ∈ R ∧ e.1.2 ∈ R) : u e = w e := by
-  let e₀ := (Edge.equiv φ).symm ((inducedRegionEdgeEquiv R).symm ⟨e, he⟩)
-  have hf : inducedRegionEdgeEquiv R (Edge.equiv φ e₀) = ⟨e, he⟩ := by
+  let e₀ := (ManyBody.Edge.equiv φ).symm ((inducedRegionEdgeEquiv R).symm ⟨e, he⟩)
+  have hf : inducedRegionEdgeEquiv R (ManyBody.Edge.equiv φ e₀) = ⟨e, he⟩ := by
     simp only [e₀, Equiv.apply_symm_apply]
   have ha : Γ.Adj (φ e₀.1.1).1 (φ e₀.1.2).1 :=
     SimpleGraph.induce_adj.mp (φ.map_rel_iff'.mpr e₀.2.2)
-  have hedge : Edge.ofAdj ha = e := by
-    have hm : Edge.ofAdj ha = (inducedRegionEdgeEquiv R (Edge.equiv φ e₀)).1 := by
-      apply Edge.ofAdj_eq_of_endpoints
-      rcases Edge.map_endpoints φ e₀ with ⟨ha', hb'⟩ | ⟨ha', hb'⟩
+  have hedge : ManyBody.Edge.ofAdj ha = e := by
+    have hm : ManyBody.Edge.ofAdj ha = (inducedRegionEdgeEquiv R (ManyBody.Edge.equiv φ e₀)).1 := by
+      apply ManyBody.Edge.ofAdj_eq_of_endpoints
+      rcases ManyBody.Edge.map_endpoints φ e₀ with ⟨ha', hb'⟩ | ⟨ha', hb'⟩
       · exact Or.inl ⟨(congrArg Subtype.val ha').symm, (congrArg Subtype.val hb').symm⟩
       · exact Or.inr ⟨(congrArg Subtype.val hb').symm, (congrArg Subtype.val ha').symm⟩
     exact hm.trans (congrArg Subtype.val hf)
@@ -98,9 +100,9 @@ Source: SCP10, Theorem 6.16, lines 2271–2305. -/
 theorem torusVerticalFluxAssignment_up_transport (p q : X) (b : Bool) (l : G) :
     regularDirectedTransport (torusVerticalFluxAssignment p b l)
       (torusGraph_adj_up q.1 q.2) = 1 := by
-  have hn (y : ZMod height) : Edge.ofAdj (torusGraph_adj_up q.1 q.2) ≠
-      Edge.ofAdj (torusGraph_adj_right p.1 y) := by
-    refine Edge.ofAdj_ne_of_endpoint_coordinates (torusGraph_adj_up q.1 q.2)
+  have hn (y : ZMod height) : ManyBody.Edge.ofAdj (torusGraph_adj_up q.1 q.2) ≠
+      ManyBody.Edge.ofAdj (torusGraph_adj_right p.1 y) := by
+    refine ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates (torusGraph_adj_up q.1 q.2)
       (torusGraph_adj_right p.1 y) Prod.snd rfl ?_
     by_cases h : q.2 = y
     · right
@@ -114,9 +116,9 @@ theorem torusVerticalFluxAssignment_right_transport_of_ne (p q : X) (b : Bool) (
     regularDirectedTransport (torusVerticalFluxAssignment p b l)
       (torusGraph_adj_right q.1 q.2) = 1 := by
   have hn (y : ZMod height) (hy : q.2 ≠ y) :
-      Edge.ofAdj (torusGraph_adj_right q.1 q.2) ≠
-      Edge.ofAdj (torusGraph_adj_right p.1 y) :=
-    Edge.ofAdj_ne_of_endpoint_coordinates (torusGraph_adj_right q.1 q.2)
+      ManyBody.Edge.ofAdj (torusGraph_adj_right q.1 q.2) ≠
+      ManyBody.Edge.ofAdj (torusGraph_adj_right p.1 y) :=
+    ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates (torusGraph_adj_right q.1 q.2)
       (torusGraph_adj_right p.1 y) Prod.snd rfl (Or.inl hy)
   simp [regularDirectedTransport, torusVerticalFluxAssignment, hn _ h₀, hn _ h₁]
 /-- Seven native transports determine the internal ordered coefficients.

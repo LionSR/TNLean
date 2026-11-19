@@ -22,39 +22,42 @@ geometries in lines 1765–1920 and 2380–2415.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 variable {V W : Type*} [LinearOrder V] [LinearOrder W]
 variable {Γ : SimpleGraph V} {Γ' : SimpleGraph W}
 
 /-- Equality of native sorted edges is equality of their unordered endpoints.
 Auxiliary to SCP10, seam-aware flux movement, lines 2271–2305. -/
-theorem Edge.ofAdj_eq_iff_endpoints {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}
+theorem _root_.ManyBody.Edge.ofAdj_eq_iff_endpoints {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}
     {x y a b : V} (hxy : Γ.Adj x y) (hab : Γ.Adj a b) :
-    Edge.ofAdj hxy = Edge.ofAdj hab ↔ (x = a ∧ y = b) ∨ (x = b ∧ y = a) := by
+    ManyBody.Edge.ofAdj hxy = ManyBody.Edge.ofAdj hab ↔ (x = a ∧ y = b) ∨ (x = b ∧ y = a) := by
   constructor
   · intro h
-    rcases Edge.ofAdj_endpoints hxy with ⟨h₀,h₁⟩ | ⟨h₀,h₁⟩ <;>
-      rcases Edge.ofAdj_endpoints hab with ⟨h₂,h₃⟩ | ⟨h₂,h₃⟩ <;> grind
-  · exact Edge.ofAdj_eq_ofAdj hxy hab
+    rcases ManyBody.Edge.ofAdj_endpoints hxy with ⟨h₀,h₁⟩ | ⟨h₀,h₁⟩ <;>
+      rcases ManyBody.Edge.ofAdj_endpoints hab with ⟨h₂,h₃⟩ | ⟨h₂,h₃⟩ <;> grind
+  · exact ManyBody.Edge.ofAdj_eq_ofAdj hxy hab
 
 /-- A constant endpoint coordinate distinguishes two native edges whenever one
 endpoint of the other edge has a different coordinate. Auxiliary to SCP10,
 local flux geometries, lines 2271–2305 and 2380–2415. -/
-theorem Edge.ofAdj_ne_of_endpoint_coordinates {Y : Type*} {x y a b : V}
+theorem _root_.ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates {Y : Type*} {x y a b : V}
     (hxy : Γ.Adj x y) (hab : Γ.Adj a b) (f : V → Y)
     (hc : f a = f b) (hne : f x ≠ f a ∨ f y ≠ f a) :
-    Edge.ofAdj hxy ≠ Edge.ofAdj hab := by
+    ManyBody.Edge.ofAdj hxy ≠ ManyBody.Edge.ofAdj hab := by
   intro heq
-  rcases (Edge.ofAdj_eq_iff_endpoints hxy hab).mp heq with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
+  rcases (ManyBody.Edge.ofAdj_eq_iff_endpoints hxy hab).mp heq with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩
   · exact hne.elim (fun h => h rfl) (fun h => h hc.symm)
   · exact hne.elim (fun h => h hc.symm) (fun h => h rfl)
 
 /-- Adjacency in a transported graph agrees with adjacency of the original
 ordered endpoints, even when their order reverses. Auxiliary to SCP10,
 finite local blocking and flux geometries, lines 1765–1920 and 2380–2415. -/
-theorem Edge.comap_adj_map_iff (φ : Γ ≃g Γ') (T : SimpleGraph V) (e : Edge Γ) :
-    (T.comap φ.symm).Adj (Edge.map φ e).1.1 (Edge.map φ e).1.2 ↔ T.Adj e.1.1 e.1.2 := by
-  rcases Edge.map_endpoints φ e with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+theorem _root_.ManyBody.Edge.comap_adj_map_iff (φ : Γ ≃g Γ') (T : SimpleGraph V) (e : Edge Γ) :
+    (T.comap φ.symm).Adj (ManyBody.Edge.map φ e).1.1 (ManyBody.Edge.map φ e).1.2 ↔
+        T.Adj e.1.1 e.1.2 := by
+  rcases ManyBody.Edge.map_endpoints φ e with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
   · simp only [SimpleGraph.comap_adj, h₁, h₂, RelIso.symm_apply_apply]
   · simp only [SimpleGraph.comap_adj, h₁, h₂, RelIso.symm_apply_apply, SimpleGraph.adj_comm]
 

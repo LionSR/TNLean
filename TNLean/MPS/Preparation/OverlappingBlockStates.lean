@@ -84,6 +84,7 @@ Documented in `docs/paper-gaps/mswc24_measurement_preparation_scope.tex`.
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators InnerProductSpace
 open Matrix
+open Kraus (blockTensor)
 
 /-! ### Telescoping for products of different matrices -/
 

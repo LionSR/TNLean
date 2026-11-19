@@ -31,6 +31,8 @@ both periods at least three and one physical alphabet; no identification with
 a four-block nonuniform-physical parent is asserted here.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS

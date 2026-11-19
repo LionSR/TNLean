@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.FinSumPermutation
 import TNLean.PEPS.KitaevCheckerboardBlocking
 import TNLean.PEPS.KitaevPeriodicTiling
+import TNLean.PEPS.TorusOperatorString
 
 /-!
 # Periodic checkerboard contraction after four-site blocking

@@ -213,30 +213,35 @@ spread supports.
 
 Source: arXiv:2103.13367, Supplemental Material, proof of the area law ("`U_n ∈ LU`, so it
 does not increase" the entanglement across a cut), in the Heisenberg picture. -/
-theorem dual_mem_supportedOperators (Φ : OnsiteChannel d e ι) {X : Set ι}
-    {A : Matrix (ι → Fin e) (ι → Fin e) ℂ} (hA : A ∈ supportedOperators e X) :
-    Φ.dual A ∈ supportedOperators d X := by
-  refine (Submodule.span_le (p := (supportedOperators d X).comap Φ.dual)).mpr ?_ hA
-  rintro _ ⟨m, hm, rfl⟩
-  rw [SetLike.mem_coe, Submodule.mem_comap, dual_rectKronecker]
-  exact rectKronecker_mem_supportedOperators fun i hi ↦ by rw [hm i hi, siteDual_one]
+theorem dual_mem_supportedOperators (Φ : OnsiteChannel d e ι) {X : Finset ι}
+    {A : Matrix (ι → Fin e) (ι → Fin e) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X) :
+    Φ.dual A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) X := by
+  induction hA using ManyBody.supportedOperators_induction with
+  | prod m hm =>
+    rw [prodOp_eq_rectKronecker, dual_rectKronecker]
+    exact rectKronecker_mem_supportedOperators fun i hi ↦ by rw [hm i hi, siteDual_one]
+  | add A B _ _ hA hB => rw [map_add]; exact add_mem hA hB
+  | smul c A _ hA => rw [map_smul]; exact SMulMemClass.smul_mem c hA
 
 /-- The dual of an onsite channel is multiplicative on operators acting on disjoint sets of
 sites. -/
-theorem dual_mul (Φ : OnsiteChannel d e ι) {X Y : Set ι} (hXY : Disjoint X Y)
-    {A B : Matrix (ι → Fin e) (ι → Fin e) ℂ} (hA : A ∈ supportedOperators e X)
-    (hB : B ∈ supportedOperators e Y) : Φ.dual (A * B) = Φ.dual A * Φ.dual B := by
-  have key := eq_of_mem_supportedOperators₂
+theorem dual_mul (Φ : OnsiteChannel d e ι) {X Y : Finset ι} (hXY : Disjoint X Y)
+    {A B : Matrix (ι → Fin e) (ι → Fin e) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) Y) :
+        Φ.dual (A * B) = Φ.dual A * Φ.dual B := by
+  have key := ManyBody.eq_of_mem_supportedOperators₂
     ((LinearMap.mul ℂ (Matrix (ι → Fin e) (ι → Fin e) ℂ)).compr₂ Φ.dual)
     ((LinearMap.mul ℂ (Matrix (ι → Fin d) (ι → Fin d) ℂ)).compl₁₂ Φ.dual Φ.dual)
     (fun m m' hm hm' ↦ by
       simp only [LinearMap.compr₂_apply, LinearMap.compl₁₂_apply, LinearMap.mul_apply']
-      rw [rectKronecker_mul, dual_rectKronecker, dual_rectKronecker, dual_rectKronecker,
-        rectKronecker_mul]
+      rw [prodOp_eq_rectKronecker, prodOp_eq_rectKronecker, rectKronecker_mul,
+        dual_rectKronecker, dual_rectKronecker, dual_rectKronecker, rectKronecker_mul]
       congr 1
       funext i
       by_cases hi : i ∈ X
-      · rw [hm' i (Set.disjoint_left.mp hXY hi), Matrix.mul_one, siteDual_one, Matrix.mul_one]
+      · rw [hm' i (Finset.disjoint_left.mp hXY hi), Matrix.mul_one, siteDual_one, Matrix.mul_one]
       · rw [hm i hi, Matrix.one_mul, siteDual_one, Matrix.one_mul]) hA hB
   simpa only [LinearMap.compr₂_apply, LinearMap.compl₁₂_apply, LinearMap.mul_apply'] using key
 
@@ -436,24 +441,27 @@ theorem exists_dual {T : ℕ}
     (h : IsLocalChannelProtocol T Ψ) :
     ∃ Ψ' : Matrix (Fin N → Fin e) (Fin N → Fin e) ℂ →ₗ[ℂ] Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ,
       (∀ ρ A, trace (Ψ ρ * A) = trace (ρ * Ψ' A)) ∧
-      (∀ X : Set (Fin N), ∀ A ∈ supportedOperators e X,
-        Ψ' A ∈ supportedOperators d (neighbourhood X T)) ∧
-      (∀ X Y : Set (Fin N), Disjoint (neighbourhood X T) (neighbourhood Y T) →
-        ∀ A ∈ supportedOperators e X, ∀ B ∈ supportedOperators e Y,
+      (∀ X : Finset (Fin N), ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X,
+        Ψ' A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (neighbourhood X T)) ∧
+      (∀ X Y : Finset (Fin N), Disjoint (neighbourhood X T) (neighbourhood Y T) →
+        ∀ A ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) X,
+            ∀ B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) Y,
           Ψ' (A * B) = Ψ' A * Ψ' B) := by
   induction h with
   | onsite Φ =>
     refine ⟨Φ.dual, Φ.trace_map_mul, fun X A hA ↦ ?_, fun X Y hXY A hA B hB ↦ ?_⟩
-    · exact supportedOperators_mono (subset_neighbourhood X 0) (Φ.dual_mem_supportedOperators hA)
+    · exact ManyBody.supportedOperators_mono (subset_neighbourhood X 0)
+        (Φ.dual_mem_supportedOperators hA)
     · exact Φ.dual_mul (hXY.mono (subset_neighbourhood X 0) (subset_neighbourhood Y 0)) hA hB
   | @layer e T Ψ _ L ih =>
     obtain ⟨Ψ', hdual, hcone, hmul⟩ := ih
-    have hsub (Z : Set (Fin N)) : neighbourhood (neighbourhood Z 1) T ⊆ neighbourhood Z (T + 1) :=
-      by simpa only [add_comm] using neighbourhood_neighbourhood_subset Z 1 T
+    have hsub (Z : Finset (Fin N)) :
+        neighbourhood (neighbourhood Z 1) T ⊆ neighbourhood Z (T + 1) := by
+      simpa only [add_comm] using neighbourhood_neighbourhood_subset Z 1 T
     refine ⟨Ψ' ∘ₗ L.dual, fun ρ A ↦ ?_, fun X A hA ↦ ?_, fun X Y hXY A hA B hB ↦ ?_⟩
     · rw [LinearMap.comp_apply, LinearMap.comp_apply, ← hdual]
       exact L.trace_map_mul _ A
-    · exact supportedOperators_mono (hsub X) (hcone _ _ (L.dual_mem_supportedOperators hA))
+    · exact ManyBody.supportedOperators_mono (hsub X) (hcone _ _ (L.dual_mem_supportedOperators hA))
     · have hXY' := hXY.mono (hsub X) (hsub Y)
       rw [LinearMap.comp_apply, LinearMap.comp_apply, LinearMap.comp_apply,
         L.dual_mul (hXY'.mono (subset_neighbourhood _ T) (subset_neighbourhood _ T)) hA hB]
@@ -567,9 +575,10 @@ theorem trace_mul_mul_eq_of_isLocalChannelConversion {d' T : ℕ}
     {σ₀ : Fin N → Matrix (Fin d) (Fin d) ℂ} (hσ₀ : ∀ i, trace (σ₀ i) = 1)
     {σ : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ}
     (h : IsLocalChannelConversion T (finKronecker σ₀) σ)
-    {X Y : Set (Fin N)} (hXY : IsSeparatedBy X Y (2 * T))
+    {X Y : Finset (Fin N)} (hXY : IsSeparatedBy X Y (2 * T))
     {A B : Matrix (Fin N → Fin d') (Fin N → Fin d') ℂ}
-    (hA : A ∈ supportedOperators d' X) (hB : B ∈ supportedOperators d' Y) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d') X)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d') Y) :
     trace (σ * (A * B)) = trace (σ * A) * trace (σ * B) := by
   obtain ⟨T', hT', Ψ, hΨ, rfl⟩ := h
   obtain ⟨Ψ', hdual, hcone, hmul⟩ := hΨ.exists_dual

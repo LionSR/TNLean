@@ -48,9 +48,9 @@ theorem permOp_conjTranspose_mul_mul (τ : Equiv.Perm (Fin n))
 
 See the coordinate changes in §5 of the circuit manuscript. -/
 theorem permOp_conjugate_mem_supportedOperators (τ : Equiv.Perm (Fin n))
-    {S : Set (Fin n)} {X : Matrix (Cfg d n) (Cfg d n) ℂ}
-    (hX : X ∈ supportedOperators d S) :
-    permOp τ * X * (permOp τ)ᴴ ∈ supportedOperators d (τ '' S) := by
+    {S : Finset (Fin n)} {X : Matrix (Cfg d n) (Cfg d n) ℂ}
+    (hX : X ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
+    permOp τ * X * (permOp τ)ᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image τ) := by
   have hid : embedOp id X = X := by
     ext x y
     rw [embedOp_apply,
@@ -136,7 +136,7 @@ theorem exists_permuted_encoded_uniform_merging_circuit
     {P : Matrix (Fin r) (Fin r) ℂ} (hP : P.PosDef)
     (siteEquiv : Fin (a + (2 * q + 2)) ≃ Fin L)
     (s : Fin b ↪ Fin (a + (2 * q + 2))) (hpool : b ≤ A) (hpool₂ : 2 ≤ A)
-    (support : Set (Fin L))
+    (support : Finset (Fin L))
     (hinputSupport : Set.range s ⊆ siteEquiv.symm '' support)
     (hpacketSupport :
       Set.range (Fin.natAdd a : Fin (2 * q + 2) → Fin (a + (2 * q + 2))) ⊆
@@ -149,8 +149,8 @@ theorem exists_permuted_encoded_uniform_merging_circuit
       (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := L) (a := A))) C₁ Z₁)
     (hclean₂ : IsCleanImplementation
       (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d) (n := L) (a := A))) C₂ Z₂)
-    (hZ₁support : Z₁ ∈ supportedOperators d support)
-    (hZ₂support : Z₂ ∈ supportedOperators d support)
+    (hZ₁support : Z₁ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support)
+    (hZ₂support : Z₂ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support)
     (V : Matrix (ρ × (Fin r × Fin r))
       ({i : Fin (a + (2 * q + 2)) // i ∉ Set.range s} → Fin d) ℂ)
     (hchild :
@@ -165,7 +165,7 @@ theorem exists_permuted_encoded_uniform_merging_circuit
     ∃ Z : Matrix (Cfg d L) (Cfg d L) ℂ,
     ∃ C : Matrix (Cfg d (L + A)) (Cfg d (L + A)) ℂ,
       Z ∈ unitary (Matrix (Cfg d L) (Cfg d L) ℂ) ∧
-      Z ∈ supportedOperators d support ∧
+      Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support ∧
       IsPairProduct d (L + A)
         (encodedUniformMergingGateCount d q L A b
           (K₁ + 4 * (L + A) ^ 2) (K₂ + 4 * (L + A) ^ 2) r + 4 * (L + A) ^ 2) C ∧
@@ -210,19 +210,21 @@ theorem exists_permuted_encoded_uniform_merging_circuit
   have hnew := isPairProduct_isCleanImplementation_conjugate_workspaceFixedSitePerm
     siteEquiv hW hWclean
   have hZ₁' : Z₁.submatrix (· ∘ siteEquiv.symm) (· ∘ siteEquiv.symm) ∈
-      supportedOperators d (siteEquiv.symm '' support) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin d) (support.image siteEquiv.symm) := by
     rw [← permOp_conjTranspose_mul_mul]
     simpa only [QuantumCircuit.permOp_conjTranspose, Equiv.symm_symm] using
       permOp_conjugate_mem_supportedOperators siteEquiv.symm hZ₁support
   have hZ₂' : Z₂.submatrix (· ∘ siteEquiv.symm) (· ∘ siteEquiv.symm) ∈
-      supportedOperators d (siteEquiv.symm '' support) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin d) (support.image siteEquiv.symm) := by
     rw [← permOp_conjTranspose_mul_mul]
     simpa only [QuantumCircuit.permOp_conjTranspose, Equiv.symm_symm] using
       permOp_conjugate_mem_supportedOperators siteEquiv.symm hZ₂support
-  have hZsupport := hsupport (siteEquiv.symm '' support) hZ₁' hZ₂'
-    hinputSupport hpacketSupport
-  have hreturnedSupport : R * Z * Rᴴ ∈ supportedOperators d support := by
-    simpa only [Set.image_image, Function.comp_def, Equiv.apply_symm_apply, Set.image_id'] using
+  have hZsupport := hsupport (support.image siteEquiv.symm) hZ₁' hZ₂'
+    (by simpa only [Finset.coe_image] using hinputSupport)
+    (by simpa only [Finset.coe_image] using hpacketSupport)
+  have hreturnedSupport : R * Z * Rᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) support := by
+    simpa only [Finset.image_image, Function.comp_def, Equiv.apply_symm_apply,
+        Finset.image_id'] using
       permOp_conjugate_mem_supportedOperators siteEquiv hZsupport
   have hreturnedUnitary := hnew.2.logical_mem_unitary
     (initializedBasisMatrix_isIsometry _) hnew.1.mem_unitary

@@ -26,6 +26,7 @@ largest coordinate. See `docs/paper-gaps/dccsp17_orbit_phase_wraparound.tex`.
 -/
 
 open scoped BigOperators Matrix
+open Kraus (blockPhysDim wordOfBlock length_wordOfBlock blockTensor)
 namespace MPSTensor
 
 variable {d D m : ℕ} [NeZero m]

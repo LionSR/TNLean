@@ -25,6 +25,8 @@ Source: SCP10, arXiv:1001.3807, Theorems 5.4 and 5.5, in the finite native graph
 setting, with explicit faithful physical-coordinate padding.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS
 open TNLean.Lattice

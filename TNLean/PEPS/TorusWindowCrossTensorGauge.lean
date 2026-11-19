@@ -25,6 +25,8 @@ and the two-dimensional reduction at lines 2368--2444 of
 `Papers/1804.04964/paper_normal.tex`.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 open scoped Matrix
 

@@ -54,6 +54,7 @@ matrix product states, canonical form, normality, blocking
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder
 open Filter
+open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 
@@ -67,11 +68,11 @@ For a single block that is TP, has a primitive transfer map, and is irreducible
 
 1. `_root_.IsPrimitive (Kraus.transferMap A)` + `Kraus.IsIrreducibleFamily A` + TP
    → `Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible`
-   → `∃ ρ, IsPrimitiveMPS A ρ`
-2. `IsPrimitiveMPS A ρ` + `Kraus.IsIrreducibleFamily A`
+   → `∃ ρ, Kraus.HasComplementaryFixedPointGap A ρ`
+2. `Kraus.HasComplementaryFixedPointGap A ρ` + `Kraus.IsIrreducibleFamily A`
    → `Kraus.HasComplementaryFixedPointGap.posDef_of_isIrreducibleFamily` → `ρ.PosDef`
-3. `IsPrimitiveMPS A ρ` + `ρ.PosDef`
-   → `isNormal_of_isPrimitiveMPS_with_posDef` → `Kraus.IsNormal A`
+3. `Kraus.HasComplementaryFixedPointGap A ρ` + `ρ.PosDef`
+   → `isNormal_of_hasComplementaryFixedPointGap_with_posDef` → `Kraus.IsNormal A`
 
 We state this chain as a single theorem.
 -/
@@ -85,7 +86,7 @@ projection), the tensor is normal (eventually full Kraus rank).
 The transfer-map primitivity hypothesis says that the only peripheral eigenvalue
 is `1`.  The conclusion is obtained by the following implications:
 
-* TP + peripheral primitivity + irreducibility give an `IsPrimitiveMPS` datum,
+* TP + peripheral primitivity + irreducibility give a `Kraus.HasComplementaryFixedPointGap` datum,
   including a Perron fixed point for the transfer map.
 * Irreducibility upgrades the nonzero positive semidefinite Perron fixed point
   in that datum to a positive definite, faithful fixed point.
@@ -99,7 +100,7 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
     Kraus.IsNormal A := by
   -- Step 1: TP normalization, peripheral primitivity, and irreducibility give
   -- primitive MPS data.
-  have hMPSPrim : MPSTensor.HasPrimitiveFixedPoint A :=
+  have hMPSPrim : Kraus.HasPrimitiveFixedPoint A :=
     Kraus.hasPrimitiveFixedPoint_of_peripheralPrimitive_of_irreducible A hIrr hTP hPrim
   -- Step 2: Extract the Perron fixed point.
   obtain ⟨ρ, hPrimMPS⟩ := hMPSPrim
@@ -107,7 +108,7 @@ theorem isNormal_of_tp_primitive_irreducible [NeZero D]
   have hPD : ρ.PosDef :=
     hPrimMPS.posDef_of_isIrreducibleFamily hIrr
   -- Step 4: Kraus.IsNormal from the primitive complementary gap and a faithful fixed point.
-  exact isNormal_of_isPrimitiveMPS_with_posDef hPrimMPS hPD
+  exact isNormal_of_hasComplementaryFixedPointGap_with_posDef hPrimMPS hPD
 
 /-- A trace-preserving scalar tensor has a nonzero Kraus matrix. -/
 private theorem exists_nonzero_kraus_of_tp [NeZero D]
@@ -173,7 +174,7 @@ theorem exists_pos_blockTensor_isInjective_le_pow_four_of_isNormal_leftCanonical
     simpa [L, iIndex] using (Nat.sInf_mem hNonempty).2
   have hIndexBound : L ≤ (D ^ 2 - krausRank A + 1) * D ^ 2 := by
     simpa [L] using
-      iIndex_le_general_of_isPrimitivePaper A hTP (isPrimitivePaper_of_isNormal A hN)
+      iIndex_le_general_of_isNormal A hN
   have hKraus_pos : 1 ≤ krausRank A := by
     rw [krausRank, Nat.one_le_iff_ne_zero]
     intro hzero
@@ -402,11 +403,11 @@ theorem exists_common_blockTensor_isInjective_two_of_isNormalCanonicalFormBNT
   · intro j
     have hmulN : Kraus.IsNBlkInjective (blocksA j) (LB * LA) :=
       MPSTensor.isNBlkInjective_mul_of_isNBlkInjective (blocksA j) hLB_pos
-        ((MPSTensor.isNBlkInjective_iff_blockTensor_isInjective (blocksA j) LA).2
+        ((Kraus.isNBlkInjective_iff_blockTensor_isInjective (blocksA j) LA).2
           (hLA j))
     have hmulN' : Kraus.IsNBlkInjective (blocksA j) (LA * LB) := by
       simpa [Nat.mul_comm LB LA] using hmulN
-    exact (MPSTensor.isNBlkInjective_iff_blockTensor_isInjective
+    exact (Kraus.isNBlkInjective_iff_blockTensor_isInjective
       (blocksA j) (LA * LB)).1 hmulN'
   · intro k
     exact MPSTensor.blockTensor_isInjective_mul_of_blockTensor_isInjective

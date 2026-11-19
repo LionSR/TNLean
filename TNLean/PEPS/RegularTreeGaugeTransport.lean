@@ -16,6 +16,8 @@ arXiv:1001.3807, lines 1765–1920 and Theorem 6.16, lines 2271–2305.
 They make no assertion about parent Hamiltonians or a prescribed braid.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 variable {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}
 variable {G : Type*} [Group G] [Fintype G]
@@ -43,10 +45,10 @@ normalized endpoint gradient. Source: SCP10, lines 1765–1920. -/
 theorem regularRegionGaugeResidual_eq_one_iff_directedTransport
     (u : Edge Γ → G) {v w : V} (hΓ : Γ.Adj v w) (hv : v ∈ R) (hw : w ∈ R) :
     regularRegionGaugeResidual R (regularRegionTreeGauge R T hT htree o u).1 u
-      ⟨Edge.ofAdj hΓ, by
+      ⟨ManyBody.Edge.ofAdj hΓ, by
         rcases lt_or_gt_of_ne hΓ.ne with hlt | hgt
-        · simpa only [Edge.ofAdj_of_lt hΓ hlt] using And.intro hv hw
-        · simpa only [Edge.ofAdj_of_gt hΓ hgt] using And.intro hw hv⟩ = 1 ↔
+        · simpa only [ManyBody.Edge.ofAdj_of_lt hΓ hlt] using And.intro hv hw
+        · simpa only [ManyBody.Edge.ofAdj_of_gt hΓ hgt] using And.intro hw hv⟩ = 1 ↔
       regularDirectedTransport u hΓ =
         (regularRegionTreeGauge R T hT htree o u).1 ⟨w, hw⟩ *
           ((regularRegionTreeGauge R T hT htree o u).1 ⟨v, hv⟩)⁻¹ := by
@@ -61,9 +63,9 @@ theorem regularRegionGaugeResidual_eq_one_iff_directedTransport
       rw [h]
       group
   rcases lt_or_gt_of_ne hΓ.ne with hlt | hgt
-  · simpa only [regularRegionGaugeResidual, Edge.ofAdj_of_lt hΓ hlt,
+  · simpa only [regularRegionGaugeResidual, ManyBody.Edge.ofAdj_of_lt hΓ hlt,
       regularDirectedTransport_of_lt u hΓ hlt] using hbase (k ⟨w, hw⟩) _ (k ⟨v, hv⟩)
-  · simp only [regularRegionGaugeResidual, Edge.ofAdj_of_gt hΓ hgt,
+  · simp only [regularRegionGaugeResidual, ManyBody.Edge.ofAdj_of_gt hΓ hgt,
       regularDirectedTransport_of_gt u hΓ hgt]
     rw [hbase]
     exact ⟨fun h => by rw [h, mul_inv_rev, inv_inv],

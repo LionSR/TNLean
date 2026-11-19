@@ -8,8 +8,8 @@ import QICLean.Analysis.GaussianFilter.LocalizationParameters
 import QICLean.Analysis.GaussianFilter.Reindex
 import QICLean.Entropy.FiniteProductSplitting
 import QICLean.Entropy.ProductMarginals
-import TNLean.Algebra.GappedGroundState
-import TNLean.Lattice.RegionalSwap
+import QICLean.ManyBody.Hamiltonian.GroundSpace
+import TNLean.Circuit.RegionalSwap
 import TNLean.Lattice.SupportedPolarUnitary
 
 /-!
@@ -53,6 +53,8 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open Matrix MeasureTheory ProbabilityTheory QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator NNReal ComplexOrder
+
+open ManyBody (IsGapped groundSpace mulVec_eq_of_groundSpace_eq_span)
 
 namespace TNLean.Lattice
 
@@ -334,7 +336,8 @@ theorem regional_physicalBuffer_filter {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r
     ∀ {ι : Type u} [Fintype ι] [DecidableEq ι] {N : Type v} [Fintype N] [DecidableEq N]
       (q : ℕ) (R C : Finset ι) (hRC : Disjoint R C) (t : (ι → Fin q) × (ι → Fin q) ≃ N)
       (H : Matrix (ι → Fin q) (ι → Fin q) ℂ) (E₀ : ℝ) (Ω : EuclideanSpace ℂ (ι → Fin q))
-      (b : ℝ), Matrix.IsGappedGroundState H E₀ Ω Δ → 0 ≤ b →
+      (b : ℝ), H.IsHermitian → ‖Ω‖ = 1 → IsGapped H E₀ Δ →
+      groundSpace H E₀ = Submodule.span ℂ {Ω} → 0 ≤ b →
       FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
       let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
       let s := FiniteProduct.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
@@ -361,8 +364,9 @@ theorem regional_physicalBuffer_filter {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r
     (resetVariance_pos hΔ hr) (resetCutoff_pos hΔ hr).le
     (resetVariance_mul_sq_div_two hΔ.ne').ge
     (resetCutoff_sq_div hΔ.ne' (by linarith)).ge
-  intro ι _ _ N _ _ q R C hRC t H E₀ Ω b hgs hb hI P s g K F ψ
-  obtain ⟨hΩ, heigen, hgap⟩ := Matrix.isGappedGroundState_iff.mp hgs
+  intro ι _ _ N _ _ q R C hRC t H E₀ Ω b hH hΩ hgs hspan hb hI P s g K F ψ
+  have heigen := mulVec_eq_of_groundSpace_eq_span hspan
+  have hgap := hgs.posSemidef_sub_smul_one hH hΩ hspan
   let Ωs := FiniteProduct.splitTwoRegionsState (fun _ : ι ↦ Fin q) Ω R C hRC
   have hΩsv : Ωs = WithLp.ofLp Ω ∘ s.symm := rfl
   have hunit : star Ωs ⬝ᵥ Ωs = 1 := FiniteProduct.splitTwoRegionsState_unit _ Ω hΩ R C hRC
@@ -418,7 +422,8 @@ theorem regional_physicalBuffer_filter {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r
 
 /-- **The two-sided Gaussian filter in arbitrary coordinates of the two replicas.** For a gap
 `Δ > 0` and an exponent `r ≥ 0` there are constants `A, T₀` with the following property. Let
-`Ω` be a gapped ground state of `H`, and let `R, C` be disjoint regions with `I_Ω(R : C) ≤ b`.
+`H` be Hermitian and gapped at `E₀`, with ground space the line through the unit vector `Ω`,
+and let `R, C` be disjoint regions with `I_Ω(R : C) ≤ b`.
 On two replicas put `Ψ = Ω ⊗ Ω` and `Φ = F_R Ψ`. Then a contraction `W` on the two copies of
 the buffer `(R ∪ C)ᶜ` and a real `z ≥ exp (-2 b)` are chosen once, and for every `L ≥ 1` the
 Gaussian integral `M` of variance `A B` truncated at `T₀ B`, with `B = 1 + b + log L`, has both
@@ -431,7 +436,8 @@ theorem exists_regional_physicalBuffer_filter {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 
       ∀ {ι : Type u} [Fintype ι] [DecidableEq ι] {N : Type v} [Fintype N] [DecidableEq N]
         (q : ℕ) (R C : Finset ι) (hRC : Disjoint R C) (t : (ι → Fin q) × (ι → Fin q) ≃ N)
         (H : Matrix (ι → Fin q) (ι → Fin q) ℂ) (E₀ : ℝ) (Ω : EuclideanSpace ℂ (ι → Fin q))
-        (b : ℝ), Matrix.IsGappedGroundState H E₀ Ω Δ → 0 ≤ b →
+        (b : ℝ), H.IsHermitian → ‖Ω‖ = 1 → IsGapped H E₀ Δ →
+      groundSpace H E₀ = Submodule.span ℂ {Ω} → 0 ≤ b →
         FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
         let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
         let s := FiniteProduct.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
@@ -468,18 +474,19 @@ residuals are at most `C exp (-8 b) ε` because `z⁻¹ ≤ exp (2 b)`.
 Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-errors` and
 `eq:info-reset-unitary`. -/
 theorem exists_supported_unitary_of_two_sided (S : Finset ι)
-    {M : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hMsupp : M ∈ supportedOperators q (S : Set ι))
+    {M : Matrix (ι → Fin q) (ι → Fin q) ℂ}
+    (hMsupp : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
     {ψ φ : (ι → Fin q) → ℂ} {z b C ε : ℝ} (hb : 0 ≤ b) (hz : Real.exp (-2 * b) ≤ z)
     (hfwd : ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 φ‖ ≤ C * Real.exp (-10 * b) * ε)
     (hrev : ‖WithLp.toLp 2 (Mᴴ *ᵥ φ) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
       C * Real.exp (-10 * b) * ε)
     (hC : 0 ≤ C) (hε : 0 ≤ ε) :
     ∃ U : Matrix (ι → Fin q) (ι → Fin q) ℂ,
-      U ∈ unitaryGroup (ι → Fin q) ℂ ∧ U ∈ supportedOperators q (S : Set ι) ∧
+      U ∈ unitaryGroup (ι → Fin q) ℂ ∧ U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S ∧
       ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 φ‖ ≤ 2 * C * ε := by
   have hz0 : 0 < z := (Real.exp_pos _).trans_le hz
   obtain ⟨U, hU, hUsupp, hcorr⟩ := exists_supported_unitary_polar_correction S
-    (Submodule.smul_mem _ ((z : ℂ)⁻¹) hMsupp)
+    (SMulMemClass.smul_mem ((z : ℂ)⁻¹) hMsupp)
   refine ⟨U, hU, hUsupp, (hcorr ψ φ).trans ?_⟩
   have hzinv : (z : ℂ)⁻¹ = ((z⁻¹ : ℝ) : ℂ) := by push_cast; rfl
   have hstar : star ((z : ℂ)⁻¹) = (z : ℂ)⁻¹ := by

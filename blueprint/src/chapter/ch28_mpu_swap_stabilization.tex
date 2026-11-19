@@ -1,0 +1,287 @@
+\begin{definition}[Physical output matrix with an identity ancilla]
+    \label{def:mpu_physical_identity_matrix}
+    \lean{MPOTensor.physicalIdMatrix,
+        MPOTensor.physicalIdMatrix_apply}
+    \leanok
+    For $Q\in\MN{d}$ and $x\geq0$, let $Q\otimes I_x$ act on
+    $\mathbb C^d\otimes\mathbb C^x$ in the product basis. Its matrix entry
+    at $((i,a),(j,b))$ is $Q_{i,j}\delta_{a,b}$, with pairs encoded in the
+    sitewise coordinates of identity-ancilla attachment from
+    \cite[lines~706--724]{Cirac2017MPU}.
+\end{definition}
+
+\begin{lemma}[Identity-ancilla extension of physical output actions]
+    \label{lem:mpu_ancilla_output_action}
+    \lean{MPOTensor.physicalIdMatrix_one,
+        MPOTensor.physicalIdMatrix_mul,
+        MPOTensor.physicalIdMatrix_conjTranspose,
+        MPOTensor.physicalIdMatrix_transpose,
+        MPOTensor.physicalIdMatrix_map_star,
+        MPOTensor.physicalIdMatrix_mem_unitaryGroup,
+        MPOTensor.ketLeftMul_tensorPhysicalId}
+    \leanok
+    \uses{def:mpu_physical_identity_matrix, thm:mpu_reindex_unitary}
+    Identity-ancilla extension of physical matrices preserves the identity,
+    multiplication, adjunction, and transposition. A real matrix remains
+    real, and a unitary matrix remains unitary. For every local tensor
+    $\mathcal U$ and physical output matrix $Q$,
+    \begin{align}
+        (Q\otimes I_x)\mathcal U^{(x)}
+         & =(Q\mathcal U)^{(x)}.
+        \label{eq:mpu_ancilla_output_action}
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    The matrix assertions follow from Kronecker multiplication and
+    reindexing by the product-basis permutation. For the tensor assertion,
+    the coefficient at output $(i,a)$ and input $(j,b)$ is
+    \begin{align}
+        \sum_{h,c}Q_{i,h}\delta_{a,c}\mathcal U_{h,j}\delta_{c,b}
+         & =\left(\sum_hQ_{i,h}\mathcal U_{h,j}\right)\delta_{a,b},
+    \end{align}
+    which proves~(\ref{eq:mpu_ancilla_output_action}).
+\end{proof}
+
+\begin{definition}[Operator actions with a distinguished local matrix]
+    \label{def:mpu_distinguished_physical_matrix_actions}
+    \lean{MPOTensor.FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix,
+        MPOTensor.FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix}
+    \leanok
+    \uses{def:mpu_finite_chain_operator_symmetry,
+        def:mpdo_sitewise_physical_matrix}
+    For a complex square matrix $Q$ and $N>0$, put $Q_N=Q^{\otimes N}$.
+    Retaining $Q$ as part of the physical data defines the full actions
+    $X\mapsto Q_NX^\dagger Q_N$ and $X\mapsto Q_NX^{\mathsf T}Q_N$.
+    The source symmetry class takes $Q$ real, symmetric, and unitary;
+    the actions themselves are defined for every $Q$.
+    See \cite[lines~1301--1322]{Cirac2017MPU}.
+\end{definition}
+
+\begin{lemma}[Compatibility of distinguished physical actions with ancillas]
+    \label{lem:mpu_distinguished_physical_matrix_ancilla}
+    \lean{MPOTensor.FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_tensorPhysicalId_semiconj,
+        MPOTensor.FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_tensorPhysicalId_semiconj,
+        MPOTensor.conjugationSymmetry_tensorPhysicalId_semiconj}
+    \leanok
+    \uses{def:mpu_distinguished_physical_matrix_actions,
+        def:mpu_physical_identity_matrix, def:mpu_finite_chain_operator_symmetry}
+    Let $J_x(X)=X\otimes I_{x^N}$ in sitewise product coordinates.
+    For every $Q,x,N$, $J_x$ intertwines each of the two actions with
+    its enlarged action specified by $Q\otimes I_x$. It also intertwines
+    ordinary entrywise conjugation with itself. These identities hold on
+    the entire original operator algebra, including at chain length zero.
+\end{lemma}
+
+\begin{proof}\leanok
+    In product coordinates,
+    $J_x(Q_N)=(Q\otimes I_x)^{\otimes N}$.
+    The map $J_x$ preserves products, adjunction, transposition, and
+    entrywise conjugation. Applying these identities to the sandwich
+    products proves the two intertwining assertions; applying the last
+    identity directly proves the conjugation assertion.
+\end{proof}
+
+\begin{definition}[Swap actions fixing a distinguished ancilla]
+    \label{def:mpu_ancilla_swap_actions}
+    \lean{MPOTensor.ancillaSwapMatrix,
+        MPOTensor.ancillaSwapDaggerSymmetry,
+        MPOTensor.ancillaSwapTransposeSymmetry}
+    \leanok
+    \uses{def:mpu_physical_identity_matrix,
+        def:mpu_finite_chain_operator_symmetry,
+        def:mpu_blocked_physical_positive_actions, threeMPU2}
+    On $H\otimes\mathbb C^x$, where
+    $H=\mathbb C^d\otimes\mathbb C^d$, define
+    $Q_x=\mathbb S\otimes I_x$ and $B_{x,k}=Q_x^{\otimes k}$.
+    For every $N>0$, put $C_{x,k,N}=B_{x,k}^{\otimes N}$ and define the
+    following actions on all operators $X$ on the enlarged blocked chain:
+    \begin{align}
+        \mathcal D_{x,k,N}(X) & =C_{x,k,N}X^\dagger C_{x,k,N},    \\
+        \mathcal T_{x,k,N}(X) & =C_{x,k,N}X^{\mathsf T}C_{x,k,N}.
+    \end{align}
+    The conjugation action is $X\mapsto\overline X$. These explicit
+    actions fix the distinguished ancilla and implement the swap on the
+    two original species. They specify the values on the full enlarged
+    operator algebra, as required for paths that leave the identity-ancilla
+    image; see \cite{gap:mpu_symmetry_ancilla_transport}.
+\end{definition}
+
+\begin{lemma}[Swap comparison at fixed common ancilla and blocking]
+    \label{lem:mpu_fixed_ancilla_swap_comparison}
+    \lean{MPOTensor.strictlyEquivalentUnderSymmetry_ancillaSwapDagger_iff,
+        MPOTensor.strictlyEquivalentUnderSymmetry_ancillaSwapTranspose_iff,
+        MPOTensor.strictlyEquivalentUnderSymmetry_ancillaSwapConjugation_iff}
+    \leanok
+    \uses{def:mpu_ancilla_swap_actions, def:strictly-equivalent-symmetry}
+    Let $\mathcal U,\mathcal V$ have physical space
+    $\mathbb C^d\otimes\mathbb C^d$ and arbitrary virtual dimensions.
+    Put $\widetilde{\mathcal U}=\mathbb S\mathcal U$ and
+    $\widetilde{\mathcal V}=\mathbb S\mathcal V$, acting on the physical
+    output. Fix $x,k\geq0$. Then
+    $(\mathcal U^{(x)})^{[k]}$ and $(\mathcal V^{(x)})^{[k]}$ are strictly
+    equivalent under $\mathcal D_{x,k}$, $\mathcal T_{x,k}$, or conjugation,
+    respectively, if and only if
+    $(\widetilde{\mathcal U}^{(x)})^{[k]}$ and
+    $(\widetilde{\mathcal V}^{(x)})^{[k]}$ are strictly equivalent under
+    ordinary adjunction, transposition, or conjugation, respectively.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_ancilla_output_action,
+        lem:mpu_blocked_physical_involution_paths,
+        def:mpdo_physical_adjoint, thm:mpu_one_sided_swap_invariance,
+        thm:threeMPU2_chain_formulas}
+    The matrices $B=B_{x,k}$ and $C=C_{x,k,N}$ are real, symmetric,
+    self-adjoint involutions. Therefore, on every enlarged operator,
+    \begin{align}
+        CX^\dagger C=X    & \iff(CX)^\dagger=CX,     \\
+        CX^{\mathsf T}C=X & \iff(CX)^{\mathsf T}=CX, \\
+        \overline X=X     & \iff\overline{CX}=CX.
+    \end{align}
+    Apply Lemma~\ref{lem:mpu_blocked_physical_involution_paths} with
+    $Q=\mathbb S\otimes I_x$. Its continuous involution
+    $\mathcal W\mapsto B\mathcal W$ transports the full path in either
+    direction, preserves canonical endpoints and commutes with adjoining
+    unused virtual directions. Equation~\ref{eq:mpu_ancilla_output_action}
+    identifies the transformed stabilized endpoints.
+\end{proof}
+
+\begin{lemma}[Swap comparison with arbitrary common positive stabilization]
+    \label{lem:mpu_common_ancilla_swap_comparison}
+    \lean{MPOTensor.exists_strictlyEquivalentUnderSymmetry_ancillaSwapDagger_iff,
+        MPOTensor.exists_strictlyEquivalentUnderSymmetry_ancillaSwapTranspose_iff,
+        MPOTensor.exists_strictlyEquivalentUnderSymmetry_ancillaSwapConjugation_iff}
+    \leanok
+    \uses{def:mpu_ancilla_swap_actions, def:strictly-equivalent-symmetry}
+    For each of the three comparisons of
+    Lemma~\ref{lem:mpu_fixed_ancilla_swap_comparison}, a common ancilla
+    size $x>0$ and common blocking length $k>0$ giving the first strict
+    comparison exist if and only if such $x,k$ giving the transformed
+    strict comparison exist. The same $x,k$ work in both directions.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_fixed_ancilla_swap_comparison}
+    Apply Lemma~\ref{lem:mpu_fixed_ancilla_swap_comparison} for each fixed
+    positive $x,k$, then quantify over those same two integers.
+\end{proof}
+
+\begin{lemma}[A flattened swap does not preserve the ancilla image]
+    \label{lem:mpu_swap_ancilla_image_obstruction}
+    \lean{MPOTensor.shiftSwap_sandwich_not_mem_range_physicalIdMatrix,
+        MPOTensor.not_semiconj_physicalIdMatrix_to_shiftSwapDagger,
+        MPOTensor.not_semiconj_physicalIdMatrix_to_shiftSwapTranspose}
+    \leanok
+    \uses{def:mpu_physical_identity_matrix, threeMPU2,
+        lem:mpu_ancilla_output_action, def:mpdo_physical_adjoint}
+    Let $P=\lvert0\rangle\langle0\rvert$ on $\mathbb C^2$. Then
+    $S_2(P\otimes I_2)S_2=I_2\otimes P$ is not of the form
+    $Y\otimes I_2$ for any two-dimensional matrix $Y$. Consequently no
+    map on two-dimensional matrices can intertwine the identity-ancilla
+    embedding with either $X\mapsto S_2X^\dagger S_2$ or
+    $X\mapsto S_2X^{\mathsf T}S_2$ on four-dimensional matrices.
+\end{lemma}
+
+\begin{proof}\leanok
+    At the product coordinates $(0,0)$ and $(0,1)$, every $Y$ satisfies
+    \[
+        (Y\otimes I_2)_{(0,0),(0,0)}=Y_{0,0}
+        =(Y\otimes I_2)_{(0,1),(0,1)},
+        \qquad
+        (I_2\otimes P)_{(0,0),(0,0)}=1,
+        \quad
+        (I_2\otimes P)_{(0,1),(0,1)}=0.
+    \]
+    Thus the matrices cannot agree. Since $P\otimes I_2$ is
+    self-adjoint and symmetric, either proposed intertwining equation
+    would place this same matrix in the embedding image.
+\end{proof}
+
+\begin{lemma}[A coherent dimension family cannot contain the species swap]
+    \label{lem:mpu_swap_coherent_family_obstruction}
+    \lean{MPOTensor.symmetryFamily_at_ne_shiftSwapDagger,
+        MPOTensor.symmetryFamily_at_ne_shiftSwapTranspose}
+    \leanok
+    \uses{def:mpu_coherent_symmetry_family, def:mpu_swap_comparison_symmetries}
+    Let a family of operator actions commute with every identity-ancilla
+    embedding. If the species space $\mathbb C^d$ has two distinct basis
+    states, then its component at dimension $d^2$ is neither the
+    canonical swap-combined adjunction nor the canonical swap-combined
+    transposition action.
+\end{lemma}
+
+\begin{proof}\leanok
+    Work at chain length one and choose distinct states $a,b$. Apply
+    compatibility from dimension $d$ with ancilla dimension $d$ to the
+    projection $P=\lvert a\rangle\langle a\rvert$. Writing
+    $\iota_d(X)=X\otimes I_d$, coherence and either proposed action give
+    \[
+        \iota_d(F_d(P))=F_{d^2}(\iota_d(P))
+        =\mathbb S(P\otimes I_d)\mathbb S=I_d\otimes P.
+    \]
+    For every $Y$, the two selected diagonal entries satisfy
+    \[
+        (Y\otimes I_d)_{(a,a),(a,a)}=Y_{a,a}
+        =(Y\otimes I_d)_{(a,b),(a,b)},
+        \qquad
+        (I_d\otimes P)_{(a,a),(a,a)}=1,
+        \quad
+        (I_d\otimes P)_{(a,b),(a,b)}=0.
+    \]
+    This contradicts the displayed coherence identity. The same
+    calculation applies to adjunction and transposition because $P$
+    is real symmetric.
+\end{proof}
+
+\begin{lemma}[Flattened swaps at two enlarged dimensions are incompatible]
+    \label{lem:mpu_flattened_swap_ancilla_obstruction}
+    \lean{MPOTensor.physicalIdMatrix_shiftSwap_sandwich_ne,
+        MPOTensor.not_semiconj_physicalIdMatrix_shiftSwapDagger,
+        MPOTensor.not_semiconj_physicalIdMatrix_shiftSwapTranspose}
+    \leanok
+    \uses{def:mpu_physical_identity_matrix, threeMPU2,
+        lem:mpu_ancilla_output_action}
+    Let $P=\lvert0\rangle\langle0\rvert$ on $\mathbb C^4$, and write
+    $S_m$ for the standard flattened swap on
+    $\mathbb C^m\otimes\mathbb C^m$. The identity-ancilla embedding
+    $\iota_4(X)=X\otimes I_4$, in product coordinates, satisfies
+    \begin{align}
+        \iota_4(S_2PS_2) & =P\otimes I_4, \\
+        S_4\iota_4(P)S_4 & =I_4\otimes P.
+    \end{align}
+    These matrices are unequal. Therefore neither swap-combined
+    adjunction nor swap-combined transposition, with the canonical
+    flattened swap chosen separately at dimensions four and sixteen,
+    commutes with this identity-ancilla embedding.
+\end{lemma}
+
+\begin{proof}\leanok
+    Multiplication by a permutation matrix reindexes the appropriate
+    matrix coordinate. At the product coordinate $(0,1)$,
+    \[
+        \bigl(\iota_4(S_2PS_2)\bigr)_{(0,1),(0,1)}=1,
+        \qquad
+        \bigl(S_4\iota_4(P)S_4\bigr)_{(0,1),(0,1)}=0.
+    \]
+    Both $P$ and
+    $\iota_4(P)$ are self-adjoint and symmetric, so the same inequality
+    applies to the adjunction and transposition comparisons.
+\end{proof}
+
+\begin{lemma}[Balanced coprime ancillas at equal dimension]
+    \label{lem:mpu_balanced_coprime_ancilla}
+    \lean{MPOTensor.balanced_coprime_ancilla_eq_one}
+    \leanok
+    If $d>0$, $p_ad=p_bd$, and $\gcd(p_a,p_b)=1$, then $p_a=p_b=1$.
+    In particular the minimal coprime convention of
+    \cite[lines~706--724]{Cirac2017MPU} alone does not admit the later
+    common-ancilla construction of
+    \cite[lines~2210--2215]{Cirac2017MPU} for equal physical dimensions.
+\end{lemma}
+
+\begin{proof}\leanok
+    Cancellation gives $p_a=p_b=p$. Then $\gcd(p,p)=p=1$.
+\end{proof}
+
+\input{chapter/ch28_mpu_labelled_swap_equivalence}

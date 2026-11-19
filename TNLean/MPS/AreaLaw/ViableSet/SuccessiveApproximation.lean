@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.SuccessiveConstruction
 import TNLean.MPS.AreaLaw.ViableSet.FinalMPS
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Uniform polynomial successive viable sets and final-span MPS approximation
@@ -27,8 +28,12 @@ the mathematical construction and its cardinality and bond bounds; no computatio
 running-time statement is asserted.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -45,20 +50,22 @@ theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2
         (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
           (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1),
       (∀ i : ℕ, i ≤ L →
-        (gaussianFilterFactors (Nat.le_of_lt hq) h h0 (lvvSuccessiveError Delta) Delta i).card ≤
+        (gaussianFilterFactors h h0 (lvvSuccessiveError Delta) Delta i).card ≤
           P * (L + 1) ^ d ∧
-        ∀ A ∈ gaussianFilterFactors (Nat.le_of_lt hq) h h0 (lvvSuccessiveError Delta) Delta i,
+        ∀ A ∈ gaussianFilterFactors h h0 (lvvSuccessiveError Delta) Delta i,
           ∀ k, k < i → operatorSchmidtRank
             (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
               (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ P * (L + 1) ^ d) ∧
       (∀ i : ℕ, i ≤ L → (lvvSweep hq h hs h0 h1 Delta i).card ≤ P * (L + 1) ^ d ∧
         (∀ v ∈ lvvSweep hq h hs h0 h1 Delta i, IsLeftOpenMPS (P * (L + 1) ^ d) v) ∧
         ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-          IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
+          ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Delta →
+          groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} →
           IsViable Γ (lvvSuccessiveError Delta / L)
             (lvvSweep hq h hs h0 h1 Delta i : Set (LeftBlockVector L q i))) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-        IsGappedGroundState (∑ j, h j) E₀ Γ Delta →
+        ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Delta →
+        groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} →
         ∃ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 ∧
           1 - lvvSuccessiveError Delta / L ≤ ‖⟪ψ, Γ⟫_ℂ‖ ∧
           IsOpenMPS L q (P * (L + 1) ^ d) (fun x ↦ ψ x) ∧
@@ -89,18 +96,12 @@ theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2
       · exact (le_max_right 1 _).trans hbondBudget
     refine ⟨hcard.trans hsize, ?_, hviable⟩
     intro v hv
-    apply isOpenMPS_of_internal_cutMatrix_rank_le
-      (WithLp.toLp 2 fun x ↦ v (leftConfigOfFin x))
-    intro k hk0 hki
-    have hvMPS : IsOpenMPS i q
-        (max 1 (if i = 0 then 1 else lvvSuccessiveBondBound q Delta L))
-        (fun x ↦ v (leftConfigOfFin x)) := hMPS v hv
-    exact (hvMPS.rank_cutMatrix_le hk0 hki).trans (max_le_max le_rfl hbond)
-  · intro E₀ Γ hgs
+    exact (hMPS v hv).mono (max_le_max le_rfl hbond)
+  · intro E₀ Γ hΩ hgap hspan
     obtain ⟨hcard, hMPS, hviable⟩ := hS L le_rfl
     have hLne : L ≠ 0 := by omega
     simp only [hLne, ite_false] at hcard hMPS
-    obtain ⟨v, hvspan, hvnorm, hoverlap⟩ := (hviable E₀ Γ hgs).exists_fullLeftVector
+    obtain ⟨v, hvspan, hvnorm, hoverlap⟩ := (hviable E₀ Γ hΩ hgap hspan).exists_fullLeftVector
     let ψ := (fullLeftEquiv L q).symm v
     have hψimage : fullLeftEquiv L q ψ = v := (fullLeftEquiv L q).apply_symm_apply v
     have hinner : ⟪ψ, Γ⟫_ℂ = ⟪v, fullLeftEquiv L q Γ⟫_ℂ := by
@@ -109,10 +110,7 @@ theorem exists_uniform_positive_chain_successive_approximation {q : ℕ} (hq : 2
     · simpa only [ψ, LinearIsometryEquiv.norm_map] using hvnorm
     · rwa [hinner]
     · have hspan := isOpenMPS_leftChain_of_mem_span _ hMPS hvspan
-      apply isOpenMPS_of_internal_cutMatrix_rank_le ψ
-      intro k hk0 hkL
-      exact (hspan.rank_cutMatrix_le hk0 hkL).trans
-        ((Nat.mul_le_mul_right _ hcard).trans hspanBudget)
+      exact hspan.mono ((Nat.mul_le_mul_right _ hcard).trans hspanBudget)
     · rwa [hψimage]
 
 end TNLean.MPS.AreaLaw

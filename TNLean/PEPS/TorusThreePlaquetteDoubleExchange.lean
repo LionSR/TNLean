@@ -27,6 +27,8 @@ parent-Hamiltonian interpretation remain separate. See
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS
@@ -119,7 +121,7 @@ theorem IsGIsometric.exists_unitary_torusThreePlaquetteDoubleExchange
     let A := torusIncidentSite (width := width) (height := height) a
     ∃ W : Matrix ({x : X // x ∈ R} → Fin d) ({x : X // x ∈ R} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({x : X // x ∈ R} → Fin d) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (t : Fin 3 → G) (θ : {e : Edge Γₜ // IsRegionBoundaryEdge R e} → G),
         W *ᵥ openRegionWeight (groupBondTensor (regularTwistedSite A
           (torusThreePlaquetteFluxAssignment v t))) R
@@ -128,7 +130,8 @@ theorem IsGIsometric.exists_unitary_torusThreePlaquetteDoubleExchange
           (torusThreePlaquetteFluxAssignment v (torusThreePlaquetteDoubleExchangeTransports t)))) R
           (fun f => Fintype.equivFin G (θ f))) ∧
       ∀ (t : Fin 3 → G) (u : Edge Γₜ → G),
-        regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite A
+        ManyBody.place («X» :=
+            fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite A
           (regularRegionBondExtension R (torusThreePlaquetteFluxAssignment v t) u))) =
         stateCoeff (groupBondTensor (regularTwistedSite A
           (regularRegionBondExtension R

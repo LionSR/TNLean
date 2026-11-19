@@ -30,6 +30,8 @@ and the fluxon string discussion, lines 2181–2197.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
@@ -55,7 +57,7 @@ theorem IsGInjective.torusPlaquetteHolonomy_eq_one_of_parent_annihilates
     (hQ : IsRegionParentInteraction (groupBondTensor (torusIncidentSite a))
       (torusPlaquetteRegion v) Q)
     (hne : stateCoeff (groupBondTensor (regularTwistedSite (torusIncidentSite a) u)) ≠ 0)
-    (hground : regionLocalTerm (torusPlaquetteRegion v) Q *ᵥ
+    (hground : ManyBody.place («X» := fun _ ↦ Fin _) (torusPlaquetteRegion v) Q *ᵥ
       stateCoeff (groupBondTensor (regularTwistedSite (torusIncidentSite a) u)) = 0) :
     regularWalkHolonomy u (torusPlaquetteWalk v) = 1 := by
   classical
@@ -77,7 +79,7 @@ theorem IsGInjective.regionParent_not_annihilates_torusPlaquetteFlux
       (torusPlaquetteRegion v) Q)
     (hne : stateCoeff (groupBondTensor (regularTwistedSite (torusIncidentSite a)
       (torusPlaquetteFluxInsertion v g))) ≠ 0) :
-    regionLocalTerm (torusPlaquetteRegion v) Q *ᵥ
+    ManyBody.place («X» := fun _ ↦ Fin _) (torusPlaquetteRegion v) Q *ᵥ
       stateCoeff (groupBondTensor (regularTwistedSite (torusIncidentSite a)
         (torusPlaquetteFluxInsertion v g))) ≠ 0 := by
   intro hzero

@@ -21,6 +21,8 @@ The argument is the final comparison in arXiv:1804.04964, proof of Theorem 3,
 lines 1544–1571, and applies to all positive window lengths.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 open scoped Matrix
 variable {width height d L K : ℕ} [NeZero width] [NeZero height]

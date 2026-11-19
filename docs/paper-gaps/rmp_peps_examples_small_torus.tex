@@ -94,9 +94,29 @@ self-loops.\footnote{Results: \leanid{TNLean.PEPS.stateCoeff_clusterPEPS},
     \leanid{TNLean.PEPS.stateCoeff_classicalPEPS},
     \leanid{TNLean.PEPS.stateCoeff_ghzPEPS}.}
 
+\section{The honeycomb brick wall}
+Section~IV of \cite{Cirac2021Matrix} places the cluster state on the
+honeycomb lattice, with no restriction on its size.\footnote{Source
+    traceability: \path{Papers/2011.12127/TN-Review-main.tex}, line 1445.}
+The formal honeycomb is the brick wall on $\mathbb Z_w\times\mathbb Z_h$,
+which joins each site to its two horizontal neighbours and to one vertical
+neighbour, above when the coordinate sum is even and below otherwise. For
+even $w$ and $h$ it is the honeycomb lattice. For even $h$ and $w\geq3$
+every site has exactly three distinct neighbours; for $w=2$ the two
+horizontal neighbours coincide, and the simple graph again merges two
+bonds. The graph-state statements (the coefficient, the commuting
+stabilizers, and the unique ground state of their negative sum) hold for
+every finite simple graph, so they apply to the brick wall on every torus
+with $w,h\geq2$; only the identification with the three-neighbour
+honeycomb needs $h$ even and $w\geq3$.\footnote{Results:
+    \leanid{TNLean.PEPS.honeycombGraph_neighborFinset},
+    \leanid{TNLean.PEPS.honeycombGraph_degree},
+    \leanid{TNLean.PEPS.honeycombHamiltonian_eq_neg_card_smul_iff}.}
+
 \section{Elimination plan}
 Formalize PEPS on finite multigraphs, where a torus of width two has two
-edges between neighbouring sites, and restate the five examples there. The
+edges between neighbouring sites, and restate the five examples and the
+honeycomb brick wall there. The
 proofs carry over unchanged once the edges of the torus are parametrized by
 the right and up edges of the sites.
 

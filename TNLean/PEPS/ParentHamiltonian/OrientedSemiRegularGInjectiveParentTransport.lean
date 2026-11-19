@@ -23,6 +23,8 @@ coverage. No assumed parent-space comparison is used.
 Source: SCP10, arXiv:1001.3807, Definition 5.1 and Theorems 5.7 and 5.9.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS

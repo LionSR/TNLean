@@ -115,8 +115,8 @@ at each site after $n$ Trotter steps.
 
 \begin{lemma}[Trotter products with prescribed centres]
     \label{thm:hastings_trotter_product_form_radius}
-    \lean{TNLean.Lattice.hasProductForm_trotterProduct_of_radius,
-        TNLean.Lattice.hasProductForm_trotterProduct_of_dist_le}
+    \lean{TNLean.Lattice.hasProductForm_lie_of_radius,
+        TNLean.Lattice.hasProductForm_lie_of_dist_le}
     \leanok
     \uses{thm:hastings_product_form_supported_radius,thm:hastings_product_form_mul}
     Let every site have the same local dimension $q$.
@@ -150,8 +150,8 @@ at each site after $n$ Trotter steps.
         TNLean.Lattice.ProductForm.card_index_mul,
         TNLean.Lattice.ProductForm.card_index_pow,
         TNLean.Lattice.exists_productForm_list_prod_card_index,
-        TNLean.Lattice.exists_productForm_trotterProduct_card_index,
-        TNLean.Lattice.exists_productForm_trotterProduct_card_index_of_dist_le}
+        TNLean.Lattice.exists_productForm_lie_card_index,
+        TNLean.Lattice.exists_productForm_lie_card_index_of_dist_le}
     \leanok
     \uses{def:hastings_product_form,thm:hastings_product_form_mul}
     Let every local dimension satisfy $d_j\ge1$. Suppose every radius-$R$ ball
@@ -183,9 +183,8 @@ at each site after $n$ Trotter steps.
 \begin{lemma}[Trotter products have a matrix product form]
     \label{thm:hastings_trotter_product_form}
     \lean{
-        TNLean.Lattice.LocalHamiltonian.hasProductForm_trotterProduct,
-        TNLean.Lattice.LocalHamiltonian.trotterProduct,
-        QuantumCircuit.exp_mem_supportedOperators,
+        ManyBody.PlaneInteraction.hasProductForm_lie,
+        ManyBody.exp_mem_supportedOperators,
         QuantumCircuit.apply_eq_apply_of_mem_supportedOperators
     }
     \leanok

@@ -12,12 +12,14 @@ The actual clipped polynomial family is applied to the physical low cluster
 with independent threshold and window scales. The numerical filter condition
 is explicit; spectral bases, supported tensor factors and the original ground
 space are constructed from the nearest-neighbour terms. This supports ALVV,
-arXiv:1602.08828v2, Corollary 4.6 and Theorem 4.9, source line 1080.
+arXiv:1602.08828v2, Theorem 4.7 (`t:ais`, from Corollary 4.6 `c:goodagsphardtrunc`).
 
 **Local fix (closed spectral cutoffs):** The full original ground space is
 retained as documented at
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf.
 -/
+
+open ManyBody (interval)
 
 open scoped BigOperators Kronecker TensorProduct ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator InnerProductSpace
@@ -28,7 +30,7 @@ namespace TNLean.MPS.AreaLaw
 at the independently chosen threshold and window length. The scalar filter
 bound is a numerical condition; no rank, overlap, tensor or spectral-basis
 hypothesis is supplied. Auxiliary to ALVV, arXiv:1602.08828v2,
-Corollary 4.6 and the proof of Theorem 4.9, source line 1080. -/
+Theorem 4.7 (`t:ais`, from Corollary 4.6 `c:goodagsphardtrunc`). -/
 theorem exists_independent_long_middle_actual_dg_family :
     ∀ (m q ell : ℕ) (t g epsilon Delta : ℝ), 2 ≤ q → q ≤ m →
       1 ≤ ell → 21 ≤ t → 0 < g → g ≤ 1 → 0 < epsilon → epsilon ≤ 1 →

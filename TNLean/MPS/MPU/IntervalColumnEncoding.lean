@@ -51,6 +51,7 @@ See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
 theorem intervalPacketSites_range (d D N j k : ℕ) :
     Set.range (intervalPacketSites d D N j k) = intervalConsecutiveSupport d D N j k := by
   classical
+  rw [coe_intervalConsecutiveSupport]
   ext s
   constructor
   · rintro ⟨a, rfl⟩
@@ -64,6 +65,13 @@ theorem intervalPacketSites_range (d D N j k : ℕ) :
             s ∈ intervalLogicalSupport d D N j k}) ⟨a, ha⟩)).val = _
     rw [Equiv.symm_apply_apply]
 
+/-- The packet enumeration contains exactly the interval support, as finite sets.
+
+See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
+theorem image_univ_intervalPacketSites (d D N j k : ℕ) :
+    Finset.univ.image (intervalPacketSites d D N j k) = intervalConsecutiveSupport d D N j k :=
+  Finset.coe_injective (by simpa using intervalPacketSites_range d D N j k)
+
 /-- Adjacent nonempty child interval packets occupy disjoint logical sites.
 
 See `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`, §5. -/
@@ -71,7 +79,7 @@ theorem intervalPacketSites_disjoint {d D N j m k : ℕ} (hjm : j < m) (hmk : m 
     Disjoint (Set.range (intervalPacketSites d D N j m))
       (Set.range (intervalPacketSites d D N m k)) := by
   rw [intervalPacketSites_range, intervalPacketSites_range]
-  exact intervalConsecutiveSupport_disjoint hjm hmk
+  exact Finset.disjoint_coe.mpr (intervalConsecutiveSupport_disjoint hjm hmk)
 
 /-- The typed logical site corresponding to a consecutively indexed interval coordinate.
 

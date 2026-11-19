@@ -25,6 +25,8 @@ No flatness, boundary invariance, or factorization is assumed.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

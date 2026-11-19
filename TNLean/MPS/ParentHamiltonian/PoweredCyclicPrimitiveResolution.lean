@@ -22,6 +22,7 @@ Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675.
 
 open scoped Matrix BigOperators InnerProductSpace ComplexOrder
 open Filter
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d D m : ℕ}
 
@@ -71,7 +72,7 @@ theorem IsPeriodic.exists_powered_cyclic_primitive_sector_resolution
         (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
         (V : (j : Fin m) → Matrix (Fin D) (Fin (dim j)) ℂ)
         (ρ : (j : Fin m) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
-        (∀ j, IsPrimitiveMPS (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
+        (∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
         BlocksNotGaugePhaseEquiv B ∧
         (∀ j, IsOrthogonalProjection (P j)) ∧ (∑ j, P j) = 1 ∧
         (∀ j i, P (j + 1) * A i = A i * P j) ∧
@@ -89,7 +90,7 @@ theorem IsPeriodic.exists_powered_cyclic_primitive_sector_resolution
   let : ∀ j, NeZero (dim j) := fun j => ⟨Nat.ne_of_gt (hdim j)⟩
   let C : (j : Fin m) → MPSTensor (blockPhysDim d (m * q)) (dim j) := fun j =>
     Kraus.reindexPhysical (directIteratedBlockEquiv d m q) (blockTensor (B j) q)
-  have hC (j : Fin m) : IsPrimitiveMPS (C j) (ρ j) :=
+  have hC (j : Fin m) : Kraus.HasComplementaryFixedPointGap (C j) (ρ j) :=
     ((hP j).blockTensor (hρ j) hq).reindexPhysical (directIteratedBlockEquiv d m q)
   have hOne (j : Fin m) : IsPeriodic 1 (B j) :=
     (IsPeriodic.one_iff_primitive (B j)).2

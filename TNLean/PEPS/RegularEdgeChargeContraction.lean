@@ -14,6 +14,8 @@ column, with every other incident label supplied by the native boundary.
 Source: SCP10, arXiv:1001.3807, definition and detection of chargeons,
 lines 2432–2486. No contraction identity or physical measurement is assumed.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

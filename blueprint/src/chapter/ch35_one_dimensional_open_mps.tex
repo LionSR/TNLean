@@ -446,7 +446,6 @@ this bound with the area law to prove Theorem~B.
         Matrix.schmidtCoeffMatrix_kronecker_one_mulVec,
         Matrix.toEuclideanLin_one_apply,
         Matrix.toEuclideanLin_mul_apply,
-        Entropy.localLift_sub,
         Entropy.exists_localLift_eq_localLift_of_subset,
         Entropy.norm_sq_toEuclideanLin_localLift_eq_trace,
         Entropy.norm_toEuclideanLin_localLift_le,
@@ -467,7 +466,7 @@ this bound with the area law to prove Theorem~B.
         TNLean.MPS.AreaLaw.exists_sequentialTruncation
     }
     \leanok
-    \uses{def:chain_open_mps}
+    \uses{def:chain_open_mps, thm:peps_regional_extension_algebra}
     Let $\psi$ be a unit vector on $L$ sites and let $w$ be a real number. For
     each cut $k$,
     $1\le k\le L-1$, let $S_k$ be the entropy of the first $k$ sites, let

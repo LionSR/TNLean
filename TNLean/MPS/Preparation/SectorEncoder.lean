@@ -38,6 +38,7 @@ isometry on all logical amplitudes, without separate circuits or phase choices b
 
 open Matrix MPSTensor QuantumCircuit
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

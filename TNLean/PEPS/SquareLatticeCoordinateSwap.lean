@@ -14,6 +14,9 @@ with the `height × width` lattice. This exchanges horizontal and vertical edges
 and transposes contiguous rectangles.
 -/
 
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph squareLatticeGraph_adj
+  squareLatticeHorizontalNeighbor squareLatticeVerticalNeighbor)
+
 namespace TNLean
 namespace PEPS
 
@@ -58,12 +61,12 @@ def squareLatticeCoordinateSwap {width height : ℕ} :
       squareLatticeCoordinateSwap (width := height) (height := width) :=
   rfl
 
-@[simp] theorem Edge.map_squareLatticeCoordinateSwap_map {width height : ℕ}
+@[simp] theorem _root_.ManyBody.Edge.map_squareLatticeCoordinateSwap_map {width height : ℕ}
     (e : Edge (squareLatticeGraph width height)) :
-    Edge.map (squareLatticeCoordinateSwap (width := height) (height := width))
-        (Edge.map squareLatticeCoordinateSwap e) = e := by
+    ManyBody.Edge.map (squareLatticeCoordinateSwap (width := height) (height := width))
+        (ManyBody.Edge.map squareLatticeCoordinateSwap e) = e := by
   rw [← squareLatticeCoordinateSwap_symm]
-  exact Edge.map_symm_map squareLatticeCoordinateSwap e
+  exact ManyBody.Edge.map_symm_map squareLatticeCoordinateSwap e
 
 /-- Coordinate swap transposes a contiguous square-lattice rectangle. -/
 theorem Region_map_squareLatticeCoordinateSwap_contiguousRectangle
@@ -156,18 +159,18 @@ theorem Region_map_squareLatticeCoordinateSwap_verticalTranslatedEdgeBlue
 
 /-- Coordinate swap sends the distinguished translated vertical edge to the
 translated horizontal edge in the transposed frame. -/
-theorem Edge.map_squareLatticeCoordinateSwap_verticalTranslatedEdge
+theorem _root_.ManyBody.Edge.map_squareLatticeCoordinateSwap_verticalTranslatedEdge
     {width height xStart yStart : ℕ}
     (hx : xStart + 3 ≤ width) (hy : yStart + 3 ≤ height) :
-    Edge.map squareLatticeCoordinateSwap
+    ManyBody.Edge.map squareLatticeCoordinateSwap
         (normalSquareVerticalTranslatedEdge xStart yStart hx hy) =
       normalSquareHorizontalTranslatedEdge yStart xStart hy hx := by
-  apply Edge.ofAdj_eq_of_endpoints
-  rcases Edge.map_endpoints squareLatticeCoordinateSwap
+  apply ManyBody.Edge.ofAdj_eq_of_endpoints
+  rcases ManyBody.Edge.map_endpoints squareLatticeCoordinateSwap
       (normalSquareVerticalTranslatedEdge xStart yStart hx hy) with h | h
   · exact Or.inl ⟨rfl, rfl⟩
   · exfalso
-    have hlt := (Edge.map squareLatticeCoordinateSwap
+    have hlt := (ManyBody.Edge.map squareLatticeCoordinateSwap
       (normalSquareVerticalTranslatedEdge xStart yStart hx hy)).2.1
     rw [h.1, h.2] at hlt
     change toLex

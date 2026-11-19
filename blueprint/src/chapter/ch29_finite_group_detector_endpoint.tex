@@ -1,0 +1,376 @@
+\subsection{Endpoint dependence of the finite-group detector}
+
+\begin{lemma}[Conditional detection from comparisons at every intermediate state]
+    \label{lem:mpug_detector_conditional_transport}
+    \lean{MPOTensor.FiniteGroupDetector.reverse_prod_mulVec_eq_smul_of_steps,
+        MPOTensor.FiniteGroupDetector.detectorTransportWord,
+        MPOTensor.FiniteGroupDetector.detectorTransportWord_mulVec_of_phased_intermediate_states,
+        MPOTensor.FiniteGroupDetector.detectorTransportWord_mulVec_of_intermediate_states,
+        MPOTensor.FiniteGroupDetector.star_dotProduct_detectorTransportWord_of_intermediate_states}
+    \leanok
+    Let $F_0,\ldots,F_m$ be forward interval operators, and let
+    $D_0^{\dagger},\ldots,D_m^{\dagger}$ be the undo operators in
+    chronological order. Suppose reference vectors and coefficients satisfy
+    \begin{align}
+        F_0\psi & =v_0,  & F_{r+1}v_r       & =c_rv_{r+1} &  & (0\leq r<m),\notag     \\
+        w_0     & =v_m,  & D_r^{\dagger}w_r & =w_{r+1}    &  & (0\leq r\leq m),\notag \\
+        w_{m+1} & =\psi. &                  &             &  &
+        \label{eq:mpug_detector_intermediate_comparisons}
+    \end{align}
+    Then
+    \begin{align}
+        D_m^{\dagger}\cdots D_0^{\dagger}F_m\cdots F_0\psi
+         & =\left(\prod_{r=0}^{m-1}c_r\right)\psi.
+        \label{eq:mpug_detector_conditional_transport}
+    \end{align}
+    Its expectation in a normalized $\psi$ is $\prod_{r=0}^{m-1}c_r$.
+    The comparisons in (\ref{eq:mpug_detector_intermediate_comparisons})
+    are explicit additional assumptions. Deriving them for a specified
+    class of truncations, and identifying their forward actions with the
+    domain-wall actions in \cite[Section~V]{GarreRubioSchuch2024DomainWall},
+    are separate requirements for a corrected detection theorem
+    \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+    More generally, if the undo comparisons are
+    $D_r^{\dagger}w_r=e_rw_{r+1}$, the final scalar also contains
+    $\prod_{r=0}^m e_r$. These undo factors cannot be discarded without
+    an additional comparison or normalization argument.
+\end{lemma}
+
+\begin{proof}\leanok
+    Induction on the chronological forward steps gives
+    $F_m\cdots F_0\psi=(\prod_{r=0}^{m-1}c_r)v_m$.
+    Linearity carries the scalar through every undo step, and the second
+    line of (\ref{eq:mpug_detector_intermediate_comparisons}) returns the
+    vector to $\psi$. The normalized expectation follows by taking its
+    inner product with $\psi$.
+\end{proof}
+
+\begin{lemma}[Conditional detection of the inverse cyclic invariant]
+    \label{lem:mpug_detector_domain_wall_transport}
+    \lean{MPOTensor.GroupFamily.BlockActionData.detectorTransportWord_mulVec_eq_inv_cyclicInvariant_of_phased_states,
+        MPOTensor.GroupFamily.BlockActionData.detectorTransportWord_mulVec_eq_inv_cyclicInvariant_of_intermediate_states,
+        MPOTensor.GroupFamily.BlockActionData.star_dotProduct_detectorTransportWord_eq_inv_cyclicInvariant}
+    \leanok
+    In the setting of Lemma~\ref{thm:mpug_domain_wall_interchange},
+    suppose $g^m=1$ and the forward comparisons of
+    (\ref{eq:mpug_detector_intermediate_comparisons}) have coefficients
+    $c_r=B^g_{g^r(gx),g^rx}$. Retain its starting, joining, and finishing
+    comparisons, and suppose instead that the undo intervals are unitary
+    and $D_rw_{r+1}=w_r$ for every $0\leq r\leq m$. Then
+    \begin{align}
+        D_m^{\dagger}\cdots D_0^{\dagger}F_m\cdots F_0\psi
+         & =\left(\prod_{r=0}^{m-1}\omega(g,g^r,g)\right)^{-1}\psi.
+        \label{eq:mpug_detector_inverse_invariant}
+    \end{align}
+    The expectation is this scalar times $\langle\psi|\psi\rangle$.
+    If the adjoint undo actions instead have coefficients $e_r$, the
+    scalar in (\ref{eq:mpug_detector_inverse_invariant}) is multiplied by
+    $\prod_{r=0}^m e_r$. These individual comparisons are additional
+    assumptions on the truncations
+    \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_detector_conditional_transport,
+        thm:mpug_domain_wall_interchange}
+    Unitarity gives $D_r^{\dagger}w_r=w_{r+1}$ from
+    $D_rw_{r+1}=w_r$. Lemma~\ref{lem:mpug_detector_conditional_transport}
+    gives the product of the forward coefficients, retaining the undo
+    coefficients when present. Lemma~\ref{thm:mpug_domain_wall_interchange}
+    identifies that forward product with the inverse cyclic invariant.
+\end{proof}
+
+\begin{lemma}[A canonical string crossing a wall with arbitrary exterior chains]
+    \label{lem:mpug_detector_local_wall_comparison}
+    \lean{MPOTensor.GroupFamily.BlockActionData.groupWallString_mulVec_trace_wall}
+    \leanok
+    In the setting of Definition~\ref{def:mpug_group_domain_wall_string},
+    fix blocks $y,z$ and write
+    $C_{yz}(\sigma,i,\tau)=A_y^{\sigma}e_{yz}^iA_z^{\tau}$ for the
+    one-wall chain. Let $P(p)$ and $Q(q)$ be arbitrary rectangular
+    matrix-valued functions of the configurations outside an interval,
+    with dimensions making the following trace defined. Suppose a vector
+    has coefficients
+    $\psi(p,a,\mu,b,q)=\operatorname{tr}(P(p)A_y^aC_{yz}(\mu)A_z^bQ(q))$.
+    There is a buffer depending on $g,y,z$ such that, whenever the two
+    regions in $\mu$ adjacent to its wall exceed that buffer, the
+    canonical string on the interval with endpoint sites $a,b$ satisfies
+    \begin{align}
+        (O_g\psi)(p,a,\mu,b,q)
+         & =B^g_{y,z}\operatorname{tr}\bigl(P(p)e_{y,gy}^a
+        C_{gy,gz}(\mu)e_{gz,z}^bQ(q)\bigr).
+        \label{eq:mpug_detector_local_wall_comparison}
+    \end{align}
+    The exterior functions may contain other walls. This is a comparison
+    for the canonical string; agreement with an actual circuit truncation
+    is a separate assumption
+    \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_group_domain_wall_string_creation,
+        def:mpug_domain_wall_action, thm:mpug_domain_wall_string_creation}
+    The endpoint contractions give $e_{y,gy}^aV_{g,y}$ and
+    $W_{g,z}e_{gz,z}^b$. The blocked local action on the interior wall is
+    $V_{g,y}(O_g\cdot C_{yz})(\mu)W_{g,z}=B^g_{y,z}C_{gy,gz}(\mu)$.
+    Substituting this identity inside the exterior trace gives
+    (\ref{eq:mpug_detector_local_wall_comparison}).
+\end{proof}
+
+\begin{lemma}[The first crossed truncation comparison]
+    \label{lem:mpug_detector_first_canonical_crossing}
+    \lean{MPOTensor.GroupFamily.BlockActionData.interval_mul_interval_mulVec_mpv_cross_of_canonical_comparisons}
+    \leanok
+    Let the blocks have left inverses with separated supports and a
+    nonzero domain-wall family with the local group action of
+    Definition~\ref{def:mpug_group_domain_wall_string}.
+    Write $S_0=O_g^{[j,r_2]}$ and $S_1=O_g^{[i,r_1]}$ for its canonical
+    strings, where $j<i<r_2<r_1$. Suppose the two regions adjacent to
+    $r_2$ between these endpoints exceed the local-action buffer. Let
+    $\Phi$ be the periodic state with walls $e_{x,gx}$, $e_{gx,g^2x}$,
+    $e_{g^2x,gx}$, $e_{gx,x}$ at these four sites in increasing order,
+    and blocks $A_x,A_{gx},A_{g^2x},A_{gx},A_x$ between them.
+    For $\psi_x=\psi_{A_x}$, assume
+    $T_0\psi_x=S_0\psi_x$ and $T_1S_0\psi_x=S_1S_0\psi_x$.
+    Then $T_1T_0\psi_x=B^g_{gx,x}\Phi$.
+    In particular, the second comparison concerns the excitation
+    $S_0\psi_x$, not only a ground state
+    \cite{gap:gs24_truncation_detector_endpoint_dependence}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_group_domain_wall_exchange}
+    Substitution gives $T_1T_0\psi_x=S_1S_0\psi_x$.
+    The crossed-string contraction in
+    Lemma~\ref{lem:mpug_group_domain_wall_exchange} gives
+    $S_1S_0\psi_x=B^g_{gx,x}\Phi$.
+\end{proof}
+
+\begin{lemma}[The complete retained-circuit detector at even order]
+    \label{lem:mpug_detector_complete_circuit}
+    \lean{MPOTensor.FiniteGroupDetector.detectorRetainedInterval,
+        MPOTensor.FiniteGroupDetector.detectorRetainedInterval_eq_intervalTensor,
+        MPOTensor.FiniteGroupDetector.detectorCircuitWord,
+        MPOTensor.FiniteGroupDetector.detectorCircuitWord_eq_tensorWord,
+        MPOTensor.FiniteGroupDetector.detectorShiftFin,
+        MPOTensor.FiniteGroupDetector.detectorClockFin,
+        MPOTensor.FiniteGroupDetector.detectorShiftFin_pow_order,
+        MPOTensor.FiniteGroupDetector.detectorCircuitWord_clock_even,
+        MPOTensor.FiniteGroupDetector.star_dotProduct_detectorCircuitWord_clock_even,
+        MPOTensor.FiniteGroupDetector.exists_detectorCircuitWord_even}
+    \leanok
+    Let $m=2j>0$, choose a primitive $m$th root of unity, and take the
+    clock and shift matrices on $\mathbb C^m$. On a periodic chain of
+    $N>2m+2$ even--odd cells, fix the two-layer circuit of
+    Lemma~\ref{lem:mpug_detector_endpoint_circuit}. For every interval
+    used in (\ref{eq:mpug_detector_spatial_word}), delete precisely the
+    gates whose nominal two-site pair is not contained in that interval.
+    The resulting complete detector is $-\mathbf 1$, and its expectation
+    in every normalized state is $-1$. The full, untruncated circuit is
+    the on-site cyclic symmetry, whose one-site operator satisfies $u^m=1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpug_detector_endpoint_circuit,
+        lem:mpug_detector_clock_tensor}
+    Every indicated interval has a single entry boundary, including the
+    intervals starting at cell zero, since an exterior cell remains before
+    the periodic wraparound. The retained circuit therefore equals its
+    explicitly dressed tensor interval. Substituting these identities in
+    the complete word gives (\ref{eq:mpug_detector_clock_tensor}).
+    Taking its inner product with a normalized state gives $-1$.
+\end{proof}
+
+\begin{lemma}[The even cyclic clock and shift obstruction]
+    \label{lem:mpug_detector_clock_tensor}
+    \lean{MPOTensor.FiniteGroupDetector.detectorShift,
+        MPOTensor.FiniteGroupDetector.detectorRoot_triangular_even,
+        MPOTensor.FiniteGroupDetector.detectorClock,
+        MPOTensor.FiniteGroupDetector.detectorClockPhase,
+        MPOTensor.FiniteGroupDetector.detectorClockPhase_coe,
+        MPOTensor.FiniteGroupDetector.detectorClockPhase_commute,
+        MPOTensor.FiniteGroupDetector.detectorClock_conjugation,
+        MPOTensor.FiniteGroupDetector.detectorShift_pow_order,
+        MPOTensor.FiniteGroupDetector.detectorClockPhase_pow_order,
+        MPOTensor.FiniteGroupDetector.prod_spatialEndpointWord_clock_even,
+        MPOTensor.FiniteGroupDetector.detectorIntervalTensor,
+        MPOTensor.FiniteGroupDetector.detectorTensorWord,
+        MPOTensor.FiniteGroupDetector.detectorTensorWord_eq_rectKronecker,
+        MPOTensor.FiniteGroupDetector.detectorTensorWord_eq_smul,
+        MPOTensor.FiniteGroupDetector.detectorTensorWord_clock_even}
+    \leanok
+    Let $m=2j>0$, let $\zeta$ be a primitive $m$th root of unity, and let
+    $u,w$ be the cyclic shift and clock matrices on $\mathbb C^m$.
+    Choose the shift convention $w^{-1}uw=\zeta u$.
+    On a chain of $N>2m+2$ even--odd cells, use intervals
+    $T(a,b)=w_{(a,\mathrm{even})}\prod_{s\in[a,b]\times\{\mathrm{even},\mathrm{odd}\}}u_s$.
+    The complete chronological tensor word of
+    (\ref{eq:mpug_detector_spatial_word}) is
+    \begin{align}
+        D_m & =\zeta^{\binom m2}\mathbf 1=-\mathbf 1.
+        \label{eq:mpug_detector_clock_tensor}
+    \end{align}
+    Every site of the finite chain is included in this operator identity.
+\end{lemma}
+
+\begin{proof}\leanok
+    Clock phases are periodic modulo $m$, and direct conjugation gives
+    $w^{-1}uw=\zeta u$. At each odd site the dressing is the identity, so
+    the local interval word cancels. At an even site $1\leq r\leq m$,
+    (\ref{eq:mpug_detector_spatial_factors}) gives the scalar
+    $\zeta^{r-1}$; every other factor is the identity.
+    Multiplicativity of tensor products therefore gives
+    $D_m=\zeta^{\binom m2}\mathbf 1$.
+    Since $\zeta^m=1$ and $\zeta^j=-1$, the even-order reduction gives
+    (\ref{eq:mpug_detector_clock_tensor}).
+\end{proof}
+
+\begin{lemma}[The circuit realizing the dressed interval family]
+    \label{lem:mpug_detector_endpoint_circuit}
+    \lean{MPOTensor.FiniteGroupDetector.pairedBond,
+        MPOTensor.FiniteGroupDetector.pairedGate,
+        MPOTensor.FiniteGroupDetector.pairCircuitBond,
+        MPOTensor.FiniteGroupDetector.pairCircuitLayer,
+        MPOTensor.FiniteGroupDetector.pairCircuitLayer_op,
+        MPOTensor.FiniteGroupDetector.dressedCircuitMatchings,
+        MPOTensor.FiniteGroupDetector.pairCircuitLayer_first_retained,
+        MPOTensor.FiniteGroupDetector.pairCircuitLayer_second_retained,
+        MPOTensor.FiniteGroupDetector.dressedPairCircuit,
+        MPOTensor.FiniteGroupDetector.dressedPairCircuit_length,
+        MPOTensor.FiniteGroupDetector.circuitOp_dressedPairCircuit_univ,
+        MPOTensor.FiniteGroupDetector.circuitOp_dressedPairCircuit_single_entry,
+        MPOTensor.FiniteGroupDetector.cellSuccessor,
+        MPOTensor.FiniteGroupDetector.cellSuccessor_Icc_single_entry}
+    \leanok
+    Let $u,w$ be one-site unitaries. On a periodic chain partitioned into
+    even--odd cells, apply $(wu)\otimes u$ on each cell, followed by
+    $\mathbf 1\otimes w^{\dagger}$ on each pair consisting of a cell's odd
+    site and the next cell's even site. The full circuit has depth two and
+    applies $u$ at every physical site. Retain exactly the gates whose
+    nominal pair lies in a chosen set $S$ of cells. If $a\in S$ is the unique entry boundary,
+    meaning that the predecessor of $k\in S$ is in $S$ exactly when $k\ne a$,
+    the retained circuit is
+    \begin{align}
+        T(S) & =w_{(a,\mathrm{even})}\prod_{s\in S\times\{\mathrm{even},\mathrm{odd}\}}u_s.
+        \label{eq:mpug_endpoint_circuit_interval}
+    \end{align}
+    A nonwrapping interval $[a,b]$ of cells has this entry-boundary
+    property whenever $0<a$ or $b+1<N$, so that an exterior cell remains.
+\end{lemma}
+
+\begin{proof}\leanok
+    The two matchings partition the sites, so gates in each layer have
+    disjoint nominal pairs. Multiplication of their one-site factors gives
+    $w^{\dagger}wu=u$ on every even site and $u$ on every odd site.
+    After deletion, this cancellation occurs on the even sites whose
+    predecessors remain in $S$. The sole uncanceled factor is $w$ at $a$.
+\end{proof}
+
+\begin{lemma}[Spatial factors of the chronological detector]
+    \label{lem:mpug_detector_spatial_endpoint_word}
+    \lean{MPOTensor.FiniteGroupDetector.intervalSiteFactor,
+        MPOTensor.FiniteGroupDetector.spatialEndpointWord,
+        MPOTensor.FiniteGroupDetector.spatialEndpointWord_eq,
+        MPOTensor.FiniteGroupDetector.prod_spatialEndpointWord_eq_pow,
+        MPOTensor.FiniteGroupDetector.prod_spatialEndpointWord_even}
+    \leanok
+    Let $u,w,c$ belong to a group with $cu=uc$ and $w^{-1}uw=cu$.
+    Put $T(a,b;k)=w^{[k=a]}u^{[a\leq k\leq b]}$ and define the local
+    factor of the complete interval word by
+    \begin{align}
+        D_m(k) & =T(0,2m+1;k)^{-1}
+        \left(\prod_{s=1}^m T(s,2m+1-s;k)^{-1}\right)\notag                    \\
+               & \qquad\cdot\left(\prod_{s=1}^m T(s,m+1+s;k)\right)T(0,m+1;k),
+        \label{eq:mpug_detector_spatial_word}
+    \end{align}
+    with both products written in increasing $s$. Then
+    \begin{align}
+        D_m(k) & =\begin{cases}c^{k-1}&1\leq k\leq m,\\1&\text{otherwise},\end{cases}
+               & \prod_{k=1}^m D_m(k)                                                 & =c^{\binom m2}.
+        \label{eq:mpug_detector_spatial_factors}
+    \end{align}
+    If $m=2j$ and $c^{2j}=1$, the last product is $c^j$.
+    This is an identity for the specified interval word; it imposes no
+    hypothesis on a reference state or on the value of the full detector.
+\end{lemma}
+
+\begin{proof}\leanok
+    At $1\leq k\leq m$, the forward interval factors multiply to
+    $u^{k-1}wu$, and the corresponding inverse factors multiply to
+    $u^{-(k-1)}(wu)^{-1}$. Including the two exterior intervals gives
+    $u^{-k-1}w^{-1}u^{k-1}wu^2=c^{k-1}$.
+    At $k=0$ the two copies of $wu$ cancel. At $k>m$ there is no dressing,
+    and the forward and inverse interval multiplicities coincide.
+    Multiplying the remaining phases gives the triangular exponent;
+    its even-order reduction follows from $\binom{2j}2+j=2j^2$.
+\end{proof}
+
+\begin{lemma}[Conjugation phases of local endpoint words]
+    \label{lem:mpug_detector_endpoint_phase}
+    \lean{MPOTensor.FiniteGroupDetector.conjugation_word_eq_zpow,
+        MPOTensor.FiniteGroupDetector.endpointConjugationWord,
+        MPOTensor.FiniteGroupDetector.endpointConjugationWord_eq_pow,
+        MPOTensor.FiniteGroupDetector.prod_endpointConjugationWord_eq_pow,
+        MPOTensor.FiniteGroupDetector.prod_endpointConjugationWord_even}
+    \leanok
+    Let $u,w,c$ belong to a group, with $cu=uc$ and $w^{-1}uw=cu$.
+    For integers $a,b,d$,
+    \begin{align}
+        u^aw^{-1}u^bwu^d & =c^bu^{a+b+d}.
+        \label{eq:mpug_endpoint_conjugation}
+    \end{align}
+    In particular, for $E_r=u^{-r-2}w^{-1}u^rwu^2$ and $m\geq0$,
+    \begin{align}
+        E_0E_1\cdots E_{m-1} & =c^{\binom m2}.
+        \label{eq:mpug_endpoint_phase_product}
+    \end{align}
+    If $m=2k$ and $c^{2k}=1$, the product is $c^k$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Conjugation preserves integer powers, so
+    $w^{-1}u^bw=(cu)^b=c^bu^b$. Commuting $c^b$ past $u^a$ proves
+    (\ref{eq:mpug_endpoint_conjugation}). Substituting $a=-r-2$, $b=r$ and
+    $d=2$ gives $E_r=c^r$. Induction on $m$, using
+    $\binom{m+1}2=\binom m2+m$, proves
+    (\ref{eq:mpug_endpoint_phase_product}).
+    Finally $\binom{2k}2+k=2k^2$, so
+    $c^{\binom{2k}2}c^k=1=(c^k)^2$; canceling the common factor gives
+    $c^{\binom{2k}2}=c^k$.
+\end{proof}
+
+\begin{lemma}[An order-two finite-group detector with nontrivial endpoint phase]
+    \label{lem:mpug_finite_group_detector_endpoint}
+    \lean{Matrix.leftDressedOnSiteInterval,
+        Matrix.cyclicTwoTruncationDetector,
+        Matrix.leftDressedOnSiteInterval_conjTranspose_mul_self,
+        Matrix.cyclicTwoTruncationDetector_leftDressedOnSiteInterval_pauliX,
+        Matrix.star_dotProduct_cyclicTwoTruncationDetector_leftDressedOnSiteInterval_pauliX}
+    \leanok
+    Let $X,Z$ be the Pauli matrices on a chain, and choose cuts
+    $a_0<a_2<a_1<b_0<b_2<b_1$. Put
+    $T_{rs}=Z_{a_r}\prod_{a_r\leq k\leq b_s}X_k$. Every $T_{rs}$ is
+    unitary, and
+    \begin{align}
+        T_{01}^{\dagger}T_{22}^{\dagger}T_{10}^{\dagger}
+        T_{22}T_{11}T_{00} & =-\mathbf 1.
+        \label{eq:mpug_finite_detector_sign}
+    \end{align}
+    Thus its expectation on every normalized state is $-1$. This is the
+    six-factor order-two word of the finite-group detector in
+    \cite[Section~V]{GarreRubioSchuch2024DomainWall}, with the truncations
+    applied in increasing index order and the cut order printed there.
+    The identity concerns the explicitly defined interval operators.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_onsite_truncation_commutator,
+        thm:mpug_truncation_detector_endpoint_dependence}
+    Multiply the six tensor products site by site. At $a_1$, the local
+    product is $XX(ZX)^{\dagger}X(ZX)X=-\mathbf 1$.
+    At $a_0$ it is $(ZX)^{\dagger}(ZX)=\mathbf 1$, and at $a_2$ it is
+    $X(ZX)^{\dagger}(ZX)X=\mathbf 1$. Elsewhere the factors are powers of
+    $X$, and the forward and backward interval coverage multiplicities agree.
+    Consequently every other factor is the identity, proving
+    (\ref{eq:mpug_finite_detector_sign}).
+\end{proof}

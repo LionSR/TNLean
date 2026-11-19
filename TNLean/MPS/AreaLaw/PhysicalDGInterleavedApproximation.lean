@@ -33,6 +33,8 @@ in the projection target `rho`, and is not identified with the printed count.
 See `docs/paper-gaps/alvv16_final_filter_gain.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped InnerProductSpace TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

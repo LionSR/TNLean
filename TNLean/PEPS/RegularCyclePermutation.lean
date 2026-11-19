@@ -22,6 +22,8 @@ lines 1765–1920. This is an auxiliary criterion for physical operations; it do
 not identify a permutation with a particular string deformation or braid.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

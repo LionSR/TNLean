@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.AreaLawExplicitConstant
 import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundBound
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBoxStepBound
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The two-dimensional area law with a constant that iterates no recursion
@@ -38,7 +39,11 @@ Section `sec:top`. Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -88,8 +93,10 @@ lines 803–857. -/
 theorem uniformAreaLaw_elementary (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
     (hΔ : 0 < Δ) :
     0 ≤ uniformAreaLawConstantElementary q R J Δ ∧
-      ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-        IsGappedGroundState Λ q H.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
+      ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
+          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+        ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
           regionalEntropy Λ q Ω A ≤
             uniformAreaLawConstantElementary q R J Δ * (edgeBoundary Λ A).card :=
   uniformAreaLaw_closed_of_le q R hq hJ hΔ (physicalBoxConstantClosed_le_elementary q R hq hJ hΔ)

@@ -18,6 +18,8 @@ Huang, arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. This identification change
 the physical operator nor the spectral hypotheses used by the two constructions.
 -/
 
+open ManyBody (ChainSupport interval mem_interval)
+
 open Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator ComplexOrder MatrixOrder
 
@@ -66,22 +68,35 @@ private theorem forall_nearestNeighborExtension {L q : ℕ}
     simpa only [nearestNeighborChainSupport_injective.extend_apply] using hterm i
   · simpa only [Function.extend_apply' _ _ _ hX] using hzero X
 
-/-- The original positive nearest-neighbor contractions, as a range-one chain Hamiltonian
-with norm bound one. Original pair terms are retained and all other terms are zero.
+/-- The original nearest-neighbor terms as a range-one chain interaction. Original pair terms
+are retained and all other terms are zero; for positive contractions its norm bound is one.
 LVV13, `algo53.tex`, the local Hamiltonian assumptions; Huang, Section 5.4, Lemmas 18--19. -/
-noncomputable def ChainHamiltonian.ofNearestNeighborPositive {L q : ℕ}
+noncomputable def _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive {L q : ℕ}
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+      (interval L i.val (i.val + 2))) : ManyBody.ChainInteraction L q 1 where
+  term := Function.extend nearestNeighborChainSupport h (fun _ ↦ 0)
+  mem := forall_nearestNeighborExtension h
+    (fun X M ↦ Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) M X.val)
+    (fun X ↦ zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) X.val)) hs
+
+/-- The terms of positive nearest-neighbor terms are Hermitian. -/
+theorem _root_.ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term {L q : ℕ}
+    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+      (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) :
+    ∀ X, ((ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term X).IsHermitian :=
+  forall_nearestNeighborExtension h (fun _ M ↦ M.IsHermitian)
+    (fun _ ↦ isHermitian_zero)
+    (fun i ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian)
+
+/-- The terms of positive contractions have norm at most one. -/
+theorem _root_.ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
-    ChainHamiltonian L q 1 1 where
-  term := Function.extend nearestNeighborChainSupport h (fun _ ↦ 0)
-  supported := forall_nearestNeighborExtension h
-    (fun X M ↦ Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) M X.val)
-    (fun _ ↦ isSupportedOn_of_mem_supportedOperators (Submodule.zero_mem _)) hs
-  hermitian := forall_nearestNeighborExtension h (fun _ M ↦ M.IsHermitian)
-    (fun _ ↦ isHermitian_zero)
-    (fun i ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian)
-  norm_le := forall_nearestNeighborExtension h (fun _ M ↦ ‖M‖ ≤ 1) (fun _ ↦ by simp)
+    ∀ X, ‖(ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term X‖ ≤ 1 :=
+  forall_nearestNeighborExtension h (fun _ M ↦ ‖M‖ ≤ 1) (fun _ ↦ by simp)
     (fun i ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 i)).mpr (h1 i))
 
 variable {L q : ℕ}
@@ -91,51 +106,57 @@ variable {L q : ℕ}
 
 /-- The constructed Hamiltonian keeps the actual original term at each adjacent pair.
 LVV13, `algo53.tex`, the nearest-neighbor Hamiltonian convention. -/
-theorem ChainHamiltonian.ofNearestNeighborPositive_term (i : Fin (L - 1)) :
-    (ofNearestNeighborPositive h hs h0 h1).term (nearestNeighborChainSupport i) = h i := by
+theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term (i : Fin (L - 1)) :
+    (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term
+        (nearestNeighborChainSupport i) = h i := by
   change Function.extend nearestNeighborChainSupport h (fun _ ↦ 0)
     (nearestNeighborChainSupport i) = h i
   exact nearestNeighborChainSupport_injective.extend_apply h (fun _ ↦ 0) i
 
 /-- A support not assigned to an original edge receives zero. In particular this
 does not add interactions to the original model of LVV13, `algo53.tex`. -/
-theorem ChainHamiltonian.ofNearestNeighborPositive_term_eq_zero (X : ChainSupport L 1)
+theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero
+    (X : ChainSupport L 1)
     (hX : ¬∃ i, nearestNeighborChainSupport i = X) :
-    (ofNearestNeighborPositive h hs h0 h1).term X = 0 := by
+    (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term X = 0 := by
   change Function.extend nearestNeighborChainSupport h (fun _ ↦ 0) X = 0
   exact Function.extend_apply' h (fun _ ↦ 0) X hX
 
 /-- All singleton terms of the constructed Hamiltonian are zero. This preserves the
 original adjacent-pair model of LVV13, `algo53.tex`. -/
-theorem ChainHamiltonian.ofNearestNeighborPositive_term_eq_zero_of_card_one
+theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero_of_card_one
     (X : ChainSupport L 1) (hX : X.val.card = 1) :
-    (ofNearestNeighborPositive h hs h0 h1).term X = 0 := by
-  apply ofNearestNeighborPositive_term_eq_zero
+    (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term X = 0 := by
+  apply ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero
   rintro ⟨i, rfl⟩
   have := card_nearestNeighborChainSupport i
   omega
 
+include h0 in
 /-- Every term remains positive in the constructed representation of the original
 positive Hamiltonian of LVV13, `algo53.tex`. -/
-theorem ChainHamiltonian.ofNearestNeighborPositive_term_nonneg (X : ChainSupport L 1) :
-    0 ≤ (ofNearestNeighborPositive h hs h0 h1).term X := by
+theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term_nonneg
+    (X : ChainSupport L 1) :
+    0 ≤ (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term X := by
   change 0 ≤ Function.extend nearestNeighborChainSupport h (fun _ ↦ 0) X
   exact forall_nearestNeighborExtension h (fun _ M ↦ 0 ≤ M) (fun _ ↦ le_rfl) h0 X
 
+include h1 in
 /-- Every term remains bounded above by the identity in the constructed representation.
 LVV13, `algo53.tex`, the local positive-contraction assumptions. -/
-theorem ChainHamiltonian.ofNearestNeighborPositive_term_le_one (X : ChainSupport L 1) :
-    (ofNearestNeighborPositive h hs h0 h1).term X ≤ 1 := by
+theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_term_le_one
+    (X : ChainSupport L 1) :
+    (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term X ≤ 1 := by
   change Function.extend nearestNeighborChainSupport h (fun _ ↦ 0) X ≤ 1
   exact forall_nearestNeighborExtension h (fun _ M ↦ M ≤ 1) (fun _ ↦ zero_le_one) h1 X
 
 /-- Summing the constructed range-one interaction family gives exactly the original
 operator. LVV13, `algo53.tex`, the nearest-neighbor Hamiltonian; Huang, Section 5.4. -/
-theorem ChainHamiltonian.ofNearestNeighborPositive_operator :
-    (ofNearestNeighborPositive h hs h0 h1).operator = ∑ i, h i := by
+theorem _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian :
+    (ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).hamiltonian = ∑ i, h i := by
   classical
   let f := nearestNeighborChainSupport (L := L)
-  let H := ofNearestNeighborPositive h hs h0 h1
+  let H := ManyBody.ChainInteraction.ofNearestNeighborPositive h hs
   have hsub : Finset.univ.image f ⊆ (Finset.univ : Finset (ChainSupport L 1)) :=
     Finset.subset_univ _
   calc
@@ -143,10 +164,11 @@ theorem ChainHamiltonian.ofNearestNeighborPositive_operator :
       symm
       apply Finset.sum_subset hsub
       intro X _ hX
-      apply ofNearestNeighborPositive_term_eq_zero
+      apply ManyBody.ChainInteraction.ofNearestNeighborPositive_term_eq_zero
       simpa only [Finset.mem_image, Finset.mem_univ, true_and, f] using hX
     _ = ∑ i, H.term (f i) := Finset.sum_image (fun _ _ _ _ hij ↦
       nearestNeighborChainSupport_injective hij)
-    _ = _ := Finset.sum_congr rfl fun i _ ↦ ofNearestNeighborPositive_term h hs h0 h1 i
+    _ = _ := Finset.sum_congr rfl fun i _ ↦
+        ManyBody.ChainInteraction.ofNearestNeighborPositive_term h hs i
 
 end TNLean.MPS.AreaLaw

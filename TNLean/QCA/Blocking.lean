@@ -108,12 +108,12 @@ namespace Config
 
 /-- A blocked configuration is equivalent to a configuration on the consecutively expanded
 original region.  A blocked spin is decoded from `Fin (d^L)` into its length-`L` word using
-`MPSTensor.decodeBlockEquiv`.
+`Kraus.decodeBlockEquiv`.
 
 Source: arXiv:1703.09188, Appendix, lines 2308 and 2313--2320. -/
 noncomputable def blocking (d L : ℕ) [NeZero L] (Λ : Finset ℤ) :
-    Config (MPSTensor.blockPhysDim d L) Λ ≃ Config d (expandedRegion L Λ) :=
-  ((Equiv.refl Λ).arrowCongr (MPSTensor.decodeBlockEquiv d L)).trans
+    Config (Kraus.blockPhysDim d L) Λ ≃ Config d (expandedRegion L Λ) :=
+  ((Equiv.refl Λ).arrowCongr (Kraus.decodeBlockEquiv d L)).trans
     ((Equiv.curry Λ (Fin L) (Fin d)).symm.trans
       ((blockSiteEquiv L Λ).symm.arrowCongr (Equiv.refl (Fin d))))
 
@@ -121,9 +121,9 @@ noncomputable def blocking (d L : ℕ) [NeZero L] (Λ : Finset ℤ) :
 blocked spin. -/
 @[simp]
 lemma blocking_apply (d L : ℕ) [NeZero L] (Λ : Finset ℤ)
-    (x : Config (MPSTensor.blockPhysDim d L) Λ) (z : expandedRegion L Λ) :
+    (x : Config (Kraus.blockPhysDim d L) Λ) (z : expandedRegion L Λ) :
     blocking d L Λ x z =
-      MPSTensor.decodeBlockEquiv d L (x (blockSiteEquiv L Λ z).1)
+      Kraus.decodeBlockEquiv d L (x (blockSiteEquiv L Λ z).1)
         (blockSiteEquiv L Λ z).2 := rfl
 
 /-- Re-encoding an expanded configuration at a blocked site collects its `L` consecutive
@@ -132,12 +132,12 @@ residues in increasing order. -/
 lemma blocking_symm_apply (d L : ℕ) [NeZero L] (Λ : Finset ℤ)
     (x : Config d (expandedRegion L Λ)) (i : Λ) :
     (blocking d L Λ).symm x i =
-      (MPSTensor.decodeBlockEquiv d L).symm
+      (Kraus.decodeBlockEquiv d L).symm
         (fun r ↦ x ((blockSiteEquiv L Λ).symm (i, r))) := rfl
 
 /-- Decoding blocked configurations commutes with restriction to a smaller blocked region. -/
 lemma restrict_blocking {d L : ℕ} [NeZero L] {Λ Γ : Finset ℤ} (h : Λ ⊆ Γ)
-    (x : Config (MPSTensor.blockPhysDim d L) Γ) :
+    (x : Config (Kraus.blockPhysDim d L) Γ) :
     restrict (expandedRegion_mono h) (blocking d L Γ x) =
       blocking d L Λ (restrict h x) := by
   funext z
@@ -150,14 +150,14 @@ to observables on its consecutively expanded original region.
 
 Source: arXiv:1703.09188, Appendix, lines 2308 and 2313--2320. -/
 noncomputable def localBlocking (d L : ℕ) [NeZero L] (Λ : Finset ℤ) :
-    LocalAlgebra (MPSTensor.blockPhysDim d L) Λ ≃⋆ₐ[ℂ]
+    LocalAlgebra (Kraus.blockPhysDim d L) Λ ≃⋆ₐ[ℂ]
       LocalAlgebra d (expandedRegion L Λ) :=
   CStarMatrix.reindexₐ ℂ ℂ (Config.blocking d L Λ)
 
 /-- Entrywise evaluation of finite-region blocking. -/
 @[simp]
 lemma localBlocking_apply (d L : ℕ) [NeZero L] (Λ : Finset ℤ)
-    (A : LocalAlgebra (MPSTensor.blockPhysDim d L) Λ)
+    (A : LocalAlgebra (Kraus.blockPhysDim d L) Λ)
     (x y : Config d (expandedRegion L Λ)) :
     localBlocking d L Λ A x y =
       A ((Config.blocking d L Λ).symm x) ((Config.blocking d L Λ).symm y) := rfl
@@ -166,7 +166,7 @@ open scoped ComplexOrder in
 /-- Finite-region blocking preserves the C-star operator norm. -/
 @[simp]
 lemma localBlocking_norm (d L : ℕ) [NeZero L] (Λ : Finset ℤ)
-    (A : LocalAlgebra (MPSTensor.blockPhysDim d L) Λ) :
+    (A : LocalAlgebra (Kraus.blockPhysDim d L) Λ) :
     ‖localBlocking d L Λ A‖ = ‖A‖ :=
   StarAlgEquiv.norm_map (localBlocking d L Λ) A
 

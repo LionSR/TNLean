@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.LocalCircuit
+import TNLean.Circuit.SupportedOperators
 import Mathlib.Analysis.CStarAlgebra.Basic
 import Mathlib.Analysis.CStarAlgebra.Matrix
 
@@ -13,7 +13,7 @@ import Mathlib.Analysis.CStarAlgebra.Matrix
 For an operator `B` on the physical sites and a finite spectator `Aux`, its
 oscillation at the physical site `y` is
 `d_y(B) = sup_U ‖(U ⊗ 1) B - B (U ⊗ 1)‖`, where `U` ranges over the unitaries
-in the existing algebra `supportedOperators q {y}`. All norms in this file
+in the existing algebra `ManyBody.supportedOperators (fun _ ↦ Fin q) {y}`. All norms in this file
 are the full matrix operator norm induced by the Euclidean norm. Operators
 need not be Hermitian, and the spectator has arbitrary finite dimension.
 
@@ -44,7 +44,7 @@ Source: area law, `09-amplification.tex`, lines 109–121. -/
 noncomputable def siteOscillation (q : ℕ) (y : ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) : ℝ :=
   sSup {r | ∃ U : Matrix (ι → Fin q) (ι → Fin q) ℂ,
-    U ∈ supportedOperators q ({y} : Set ι) ∧
+    U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset ι) ∧
     U ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) ∧
     ‖(U ⊗ₖ (1 : Matrix Aux Aux ℂ)) * B - B * (U ⊗ₖ 1)‖ = r}
 
@@ -67,7 +67,7 @@ Source: area law, `09-amplification.tex`, line 127, `d_y(C) ≤ 2‖C‖`. -/
 theorem siteOscillation_bddAbove (y : ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     BddAbove {r | ∃ U : Matrix (ι → Fin q) (ι → Fin q) ℂ,
-      U ∈ supportedOperators q ({y} : Set ι) ∧
+      U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset ι) ∧
       U ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) ∧
       ‖(U ⊗ₖ (1 : Matrix Aux Aux ℂ)) * B - B * (U ⊗ₖ 1)‖ = r} := by
   refine ⟨2 * ‖B‖, ?_⟩
@@ -77,17 +77,17 @@ theorem siteOscillation_bddAbove (y : ι)
 private theorem zero_mem_siteOscillation_values (y : ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     0 ∈ {r | ∃ U : Matrix (ι → Fin q) (ι → Fin q) ℂ,
-      U ∈ supportedOperators q ({y} : Set ι) ∧
+      U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset ι) ∧
       U ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) ∧
       ‖(U ⊗ₖ (1 : Matrix Aux Aux ℂ)) * B - B * (U ⊗ₖ 1)‖ = r} := by
-  exact ⟨1, one_mem_supportedOperators _, one_mem _, by simp⟩
+  exact ⟨1, (one_mem (ManyBody.supportedOperators _ _)), one_mem _, by simp⟩
 
 /-- A supported physical unitary's commutator is bounded by the oscillation.
 Source: area law, `09-amplification.tex`, lines 109–113. -/
 theorem norm_commutator_le_siteOscillation (y : ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
     {U : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hSupport : U ∈ supportedOperators q ({y} : Set ι))
+    (hSupport : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset ι))
     (hUnitary : U ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ)) :
     ‖(U ⊗ₖ (1 : Matrix Aux Aux ℂ)) * B - B * (U ⊗ₖ 1)‖ ≤
       siteOscillation q y B :=
@@ -97,7 +97,7 @@ theorem norm_commutator_le_siteOscillation (y : ι)
 theorem norm_commutator_le_siteOscillation_right (y : ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
     {U : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hSupport : U ∈ supportedOperators q ({y} : Set ι))
+    (hSupport : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset ι))
     (hUnitary : U ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ)) :
     ‖B * (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) - (U ⊗ₖ 1) * B‖ ≤
       siteOscillation q y B := by
@@ -113,7 +113,7 @@ theorem siteOscillation_nonneg (y : ι)
 /-- A common upper bound on the defining commutators bounds the oscillation. -/
 theorem siteOscillation_le (y : ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) {r : ℝ}
-    (h : ∀ U ∈ supportedOperators q ({y} : Set ι),
+    (h : ∀ U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset ι),
       U ∈ unitary (Matrix (ι → Fin q) (ι → Fin q) ℂ) →
       ‖(U ⊗ₖ (1 : Matrix Aux Aux ℂ)) * B - B * (U ⊗ₖ 1)‖ ≤ r) :
     siteOscillation q y B ≤ r := by
@@ -148,7 +148,7 @@ theorem siteOscillation_add_le (y : ι)
 at `y`. Source: area law, `09-amplification.tex`, lines 109–115. -/
 theorem siteOscillation_eq_zero_of_commute (y : ι)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ)
-    (h : ∀ U ∈ supportedOperators q ({y} : Set ι),
+    (h : ∀ U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({y} : Finset ι),
       Commute (U ⊗ₖ (1 : Matrix Aux Aux ℂ)) B) :
     siteOscillation q y B = 0 := by
   apply le_antisymm _ (siteOscillation_nonneg y B)

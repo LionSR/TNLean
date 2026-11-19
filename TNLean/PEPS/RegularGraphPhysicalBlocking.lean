@@ -17,6 +17,8 @@ physical spaces and arbitrary local positive isometry factors are retained.
 Source: SCP10, arXiv:1001.3807, Observations 6.4–6.5, lines 1765–1880.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

@@ -13,6 +13,8 @@ its canonical projector coordinates. Source: SCP10, arXiv:1001.3807,
 lines 1765–1820, 2449–2486 and 2569–2581. These are auxiliary contraction
 identities; no decomposition of a diagonal weight into group insertions is used.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

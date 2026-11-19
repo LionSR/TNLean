@@ -35,6 +35,8 @@ open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport PlaneInteraction)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open ActualTerminals
@@ -90,10 +92,11 @@ theorem exists_actualScan_sharp_lower_norm
     ∃ c Cf : ℝ, 0 ≤ c ∧ 0 ≤ Cf ∧
       ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
         (hm : 0 < S.m) (hM : 0 < S.M) (Horizon : ℕ)
-        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
+        (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
+            (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
         (Ωt : StateSpace Λ q) (e₀ gap : ℝ),
       ‖Ωt‖ = 1 →
-      ((∑ i, S.truncatedEnergyTerm h Ω Δ L i) - (e₀ : ℂ) • 1 -
+      ((∑ i, S.truncatedEnergyTerm h Ω J Δ L i) - (e₀ : ℂ) • 1 -
         (gap : ℂ) • (1 - vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef →
       0 < gap →
       let β := fun _ : Site Λ => Fin q
@@ -152,18 +155,18 @@ theorem exists_actualScan_sharp_lower_norm
             (Transport.filteredVector (Dfill.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
           lower (Transport.filteredNormSq (Dfill.rootPath n (a / 2) k p) (pre k))
             ((S.actualFillScanRound hm hM s.val n
-              (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p) Tfill) ∧
+              (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p) Tfill) ∧
         (‖WithLp.toLp 2
             (Transport.filteredVector (Dcharge.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
           lower (Transport.filteredNormSq (Dcharge.rootPath n (a / 2) k p) (pre k))
             ((S.actualChargeScanRound hm hM s.val n
-              (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p) Tcharge) := by
+              (S.actualEnergyTerms h Ω J Δ L (fun _ => d)) a pre).meanEnergy k p) Tcharge) := by
   classical
   obtain ⟨c, Cf, hc, hCf, hlower⟩ :=
     exists_replicaMetric_symProj_bandProduct_sharp_lower_norm
       (fun _ : Site Λ => Fin q) (Fin d) (Fin d) (div_pos ha zero_lt_two)
   refine ⟨c, Cf, hc, hCf, ?_⟩
-  intro S hm hM Horizon h Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos β ι₀ n σ Q Y
+  intro S hm hM Horizon h hh hhJ Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos β ι₀ n σ Q Y
     K rMom hmoment har haone hK pre k hk hpre hprenorm hsym ellC ellR Sent ε e
     hC hR hlabel entropyGap gaps gmax r b lower s p Dfill Dcharge Tfill Tcharge
   let : DecidableEq (Config k ι₀) := Fintype.decidablePiFintype
@@ -207,7 +210,7 @@ theorem exists_actualScan_sharp_lower_norm
       congrArg (fun v : Config k (fun x => Fin (n x)) → ℂ => v ∘ e) hsym
   have hsmall : 20 * (a / 2) = 10 * a := by ring
   have hestimate (T : MeanTree (terminalFamily S.K S.m S.M Horizon)) :=
-    hlower k N hk (∑ i, S.truncatedEnergyTerm h Ω Δ L i) Ωt.ofLp e₀ gap
+    hlower k N hk (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) Ωt.ofLp e₀ gap
       hgap hΩt hgap_pos ZO hZO hZOZO
       (terminalFamily S.K S.m S.M Horizon) S.K Q Y hdisj hnest K rMom hmoment
       (hsmall.symm ▸ har) (hsmall.symm ▸ haone) hK T ellC ellR Sent ε (1 / 4)
@@ -223,7 +226,7 @@ theorem exists_actualScan_sharp_lower_norm
         let v := Transport.filteredVector (D.rootPath n (a / 2) k p) (pre k)
         let vO := v ∘ e
         (star vO ⬝ᵥ (globalReplicaMeanHamiltonian β (Fin d) (Fin d)
-          (∑ i, S.truncatedEnergyTerm h Ω Δ L i) k *ᵥ vO)).re) :
+          (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) k *ᵥ vO)).re) :
       ‖WithLp.toLp 2
           (Transport.filteredVector (D.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
         lower (Transport.filteredNormSq (D.rootPath n (a / 2) k p) (pre k)) μ
@@ -277,7 +280,7 @@ theorem exists_actualScan_sharp_lower_norm
       rfl
     have henergyO : μ =
         (star vO ⬝ᵥ (globalReplicaMeanHamiltonian β (Fin d) (Fin d)
-          (∑ i, S.truncatedEnergyTerm h Ω Δ L i) k *ᵥ vO)).re := by
+          (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) k *ᵥ vO)).re := by
       rw [henergy]
       dsimp only
       rw [hvO]

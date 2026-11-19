@@ -14,6 +14,8 @@ coordinate equivalence. It detects a diagonal irreducible-character insertion
 on the shared bond uniformly in every native boundary label.
 Source: SCP10, arXiv:1001.3807, charge detection, lines 2464–2486.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix ComplexOrder
 namespace TNLean.PEPS

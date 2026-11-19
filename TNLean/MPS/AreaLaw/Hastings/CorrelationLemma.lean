@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalChain
 import TNLean.MPS.AreaLaw.Hastings.PrintedAreaLawSource
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Hastings' correlation lemma at an admissible source length
@@ -32,7 +33,11 @@ Source: Hastings, arXiv:0705.2024v4, Lemma 3, eq. `fwdback`, lines 627–692;
 Lemma 1, lines 246–267; note added, lines 912–1003.
 -/
 
+open ManyBody (interval ChainInteraction)
+
 open Matrix
+
+open ManyBody (IsGapped groundSpace)
 open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw
@@ -49,8 +54,10 @@ Hastings, arXiv:0705.2024v4, Lemma 3, eq. `fwdback`, lines 627–692, with the
 positive-semidefinite and length conventions of the module docstring. -/
 theorem exists_norm_inner_mul_sub_le (R : ℕ) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {J ΔE : ℝ}, 0 ≤ J → 0 < ΔE →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, IsGappedGroundState h.operator E₀ Ω ΔE →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ ΔE →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       let s := max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80
       ∀ (j l : ℕ) {ι : Type*} [Fintype ι] (a : ι → ℂ)
         {ψL : ι → EuclideanSpace ℂ (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L j))}
@@ -71,9 +78,11 @@ theorem exists_norm_inner_mul_sub_le (R : ℕ) :
               Real.exp (-(l / (6 * s))) := by
   obtain ⟨K, hK, hF⟩ := exists_projectorFactorization_posSemidef_source R
   refine ⟨K, hK, ?_⟩
-  intro J ΔE hJ hΔ L q _ h E₀ Ω hgs s j l ι _ a ψL ψR hψL hψR hdec O hO A SA hA hSA hA1
-  obtain ⟨OB, OL, OR, hOB, hOL, hOR, -, hOB1, hsB, hsL, hsR, herr⟩ := hF hJ hΔ h hgs j l
-  exact norm_inner_mul_sub_le_of_factorization hgs.1 a hψL hψR hdec hO hA hSA hA1
+  intro J ΔE hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan s j l ι _ a ψL ψR hψL hψR hdec O hO
+      A SA hA hSA hA1
+  obtain ⟨OB, OL, OR, hOB, hOL, hOR, -, hOB1, hsB, hsL, hsR, herr⟩ := hF hJ hΔ h hh hhJ
+      hΩ hgap hspan j l
+  exact norm_inner_mul_sub_le_of_factorization hΩ a hψL hψR hdec hO hA hSA hA1
     ⟨OB, OL, OR, _, _, _, hOB, nonneg_iff_posSemidef.mp hOL.nonneg,
       nonneg_iff_posSemidef.mp hOR.nonneg, hOB1, hOL.norm_le, hOR.norm_le,
       hsB, subset_rfl, hsL, subset_rfl, hsR, disjoint_compl_left, herr⟩

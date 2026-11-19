@@ -62,7 +62,6 @@ the manuscript; no upstream Lean proof text was reused.
 
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix.Norms.L2Operator
-open TNLean.Lattice (siteLift siteLift_conjTranspose)
 
 noncomputable section
 
@@ -194,8 +193,8 @@ def patchStep (t : p.Tag) : Step ι q := ⟨p.tagSample t, some (p.tagVec t), so
 /-- The step `|v⟩⟨0|` of a hole decoding at a cylinder term. -/
 def decStep (t : p.Tag) : Step ι q := ⟨p.tagSample t, some (p.tagVec t), none⟩
 
-theorem siteLift_empty_zeroVec :
-    siteLift (∅ : Finset ι)
+theorem place_empty_zeroVec :
+    ManyBody.place (X := fun _ ↦ Fin _) (∅ : Finset ι)
       (vecMulVec (zeroVec (q := q) (∅ : Finset ι))
         (star (zeroVec (q := q) (∅ : Finset ι)))) = 1 := by
   have h : vecMulVec (zeroVec (q := q) (∅ : Finset ι))
@@ -205,20 +204,21 @@ theorem siteLift_empty_zeroVec :
     have ha0 : a = 0 := funext fun x => absurd x.2 (Finset.notMem_empty _)
     subst hab ha0
     simp [vecMulVec_apply, zeroVec]
-  rw [h, siteLift, embedOp_one]
+  rw [h, QuantumCircuit.place_eq_embedOp, embedOp_one]
 
 theorem branch_eq_op (t : p.Tag) : p.branch t = (p.encStep t).op := by
   rcases t with t | t
-  · exact siteLift_empty_zeroVec.symm
+  · exact place_empty_zeroVec.symm
   · rfl
 
 theorem cyl_eq_op (t : p.Tag) : p.cyl t = (p.patchStep t).op := by
   rcases t with t | t
-  · exact siteLift_empty_zeroVec.symm
+  · exact place_empty_zeroVec.symm
   · rfl
 
 theorem branch_conjTranspose_eq_op (t : p.Tag) : (p.branch t)ᴴ = (p.decStep t).op := by
-  rw [branch_eq_op, Step.op, Step.op, siteLift_conjTranspose, conjTranspose_vecMulVec, star_star]
+  rw [branch_eq_op, Step.op, Step.op, ← ManyBody.place_conjTranspose, conjTranspose_vecMulVec,
+    star_star]
   rfl
 
 end SquarePatch
@@ -273,7 +273,7 @@ theorem mem_holeSquares_iff_encSteps {x : ι} : (l : List (Hole pos q Party)) �
     (x ∈ holeSquares l t ↔ ∃ s ∈ encSteps l t, x ∈ s.sites)
   | [], _ => by simp [holeSquares, encSteps]
   | h :: l, t => by
-    simp only [holeSquares, encSteps, Set.mem_union, Finset.mem_coe, List.mem_cons,
+    simp only [holeSquares, encSteps, Finset.mem_union, List.mem_cons,
       exists_eq_or_imp, mem_holeSquares_iff_encSteps l t.2]
     rfl
 
@@ -281,7 +281,7 @@ theorem mem_holeSquares_iff_decSteps {x : ι} : (l : List (Hole pos q Party)) �
     (x ∈ holeSquares l t ↔ ∃ s ∈ decSteps l t, x ∈ s.sites)
   | [], _ => by simp [holeSquares, decSteps]
   | h :: l, t => by
-    simp only [holeSquares, decSteps, Set.mem_union, Finset.mem_coe, List.mem_append,
+    simp only [holeSquares, decSteps, Finset.mem_union, List.mem_append,
       List.mem_singleton, mem_holeSquares_iff_decSteps l t.2]
     constructor
     · rintro (hx | ⟨s, hs, hx⟩)
@@ -295,7 +295,7 @@ theorem mem_patchSquares_iff {x : ι} : (l : List (SquarePatch pos q)) → (s : 
     (x ∈ patchSquares l s ↔ ∃ st ∈ patchSteps l s, x ∈ st.sites)
   | [], _ => by simp [patchSquares, patchSteps]
   | p :: l, s => by
-    simp only [patchSquares, patchSteps, Set.mem_union, Finset.mem_coe, List.mem_cons,
+    simp only [patchSquares, patchSteps, Finset.mem_union, List.mem_cons,
       exists_eq_or_imp, mem_patchSquares_iff l s.2]
     rfl
 

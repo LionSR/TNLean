@@ -29,6 +29,7 @@ The source does not treat chains shorter than the block length: its proof of The
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
+open Kraus (blockTensor)
 
 namespace MPSPreparation
 

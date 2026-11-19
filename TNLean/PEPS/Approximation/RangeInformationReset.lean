@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.RangeResetUnitary
 import TNLean.PEPS.Approximation.InformationReset
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The information reset at interaction range `R`
@@ -17,7 +18,8 @@ with `I_Ω(A : C) ≤ b`, and cores `A₀ ⊆ A`, `C₀ ⊆ C` at sup-distance g
 
 The manuscript states Lemma 3.3 for site and nearest-neighbour terms only, which is range
 one; this module extends it to range `R`. The range-one statement on the open square,
-`SquareHamiltonian.information_reset_of_resetThreshold_le` with the width `resetWidth J Δ p`,
+`ManyBody.SquareInteraction.information_reset_of_resetThreshold_le` with the width
+`resetWidth J Δ p`,
 is unchanged.
 
 The proof is the range-one proof with the range-`R` reset unitary of
@@ -33,10 +35,10 @@ soon as `ℓ + R ≤ w`; at range one the offset is `1`.
 * `TNLean.PEPS.Approximation.notMem_rangeResetSupport`: the reset support avoids both cores.
 * `TNLean.PEPS.Approximation.mutualInformation_cores_le_of_sites_reset_unitary`: the entropy
   comparison of the reset on any finite set of sites.
-* `TNLean.Lattice.LocalHamiltonian.information_reset_of_card_le`: the reset on a finite domain
+* `ManyBody.PlaneInteraction.information_reset_of_card_le`: the reset on a finite domain
   with at most `L²` sites.
-* `TNLean.Lattice.LocalHamiltonian.information_reset_of_rangeResetThreshold_le`,
-  `TNLean.Lattice.LocalHamiltonian.information_reset`: Lemma 3.3 at range `R` on the `L × L`
+* `ManyBody.PlaneInteraction.information_reset_of_rangeResetThreshold_le`,
+  `ManyBody.PlaneInteraction.information_reset`: Lemma 3.3 at range `R` on the `L × L`
   square.
 
 ## References
@@ -48,7 +50,13 @@ soon as `ℓ + R ≤ w`; at range one the offset is `1`.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (SquareLatticeVertex PlaneInteraction)
+
 open Matrix QuantumCircuit
+
+open ManyBody (IsGapped groundSpace)
 open scoped Kronecker
 
 noncomputable section
@@ -132,7 +140,9 @@ theorem notMem_rangeResetSupport {Λ : Finset (ℤ × ℤ)} {R : ℕ} {A C A₀ 
 
 end TNLean.PEPS.Approximation
 
-namespace TNLean.Lattice.LocalHamiltonian
+namespace ManyBody.PlaneInteraction
+
+open TNLean.Lattice
 
 open TNLean.PEPS.Approximation TNLean.PEPS.AreaLaw
 
@@ -147,8 +157,10 @@ square case, where `|Λ| = L²`, is `information_reset_of_rangeResetThreshold_le
 Source: `02-information.tex`, Lemma 3.3, lines 334–353, proof lines 355–630, at range `R`. -/
 theorem information_reset_of_card_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ)
     (hp : 0 < p) {L : ℕ} (hL : rangeResetThreshold q R J Δ p ≤ L) (hΛ : Λ.card ≤ L ^ 2)
-    (h : LocalHamiltonian Λ q R J) (E₀ : ℝ) (Ω : StateSpace Λ q)
-    (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ)
+    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (E₀ : ℝ) (Ω : StateSpace Λ q)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A C A₀ C₀ : Finset (Site Λ)) (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A) (hC₀ : C₀ ⊆ C)
     (b : ℝ) (hb : 0 ≤ b) (hI : FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b)
     (hAw : ∀ x ∈ A₀, ∀ y, y ∉ A →
@@ -163,9 +175,10 @@ theorem information_reset_of_card_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} 
   rw [rangeResetThreshold] at hL
   have hL1 : (1 : ℝ) ≤ L := le_trans (le_max_left _ _) hL
   have hLn : 1 ≤ L := by exact_mod_cast hL1
-  have hΩ : ‖Ω‖ = 1 := (Matrix.isGappedGroundState_iff.mp hgs).1
   obtain ⟨-, -, U, hUu, hUs, hUerr⟩ :=
-    h.reset_unitary hq hJ hΔ (r := 2 * p + 10) (by linarith) hLn hΛ E₀ Ω hgs A C hAC b hb hI
+    h.reset_unitary hq hJ hΔ (r := 2 * p + 10) (by linarith) hLn hΛ hh hhJ E₀ Ω hΩ
+        hgap hspan A C hAC
+      b hb hI
   have hB1 : 1 ≤ 1 + b + Real.log L := by linarith [Real.log_nonneg hL1]
   have hℓ : ((⌈rangeResetRadius R J Δ (2 * p + 10) * (1 + b + Real.log L)⌉₊ : ℕ) : ℝ) +
       R ≤ rangeResetWidth R J Δ p * (1 + b + Real.log L) := by
@@ -199,13 +212,15 @@ and let `A, C` be disjoint regions with `I_Ω(A : C) ≤ b`, `b ≥ 0`. If the c
 of `C`, with `C_p = rangeResetWidth R J Δ p`, then `I_Ω(A₀ : C₀) ≤ L^(-p)`.
 
 The manuscript states Lemma 3.3 for range one only; this is its extension to range `R`. The
-range-one statement is `SquareHamiltonian.information_reset_of_resetThreshold_le`.
+range-one statement is `ManyBody.SquareInteraction.information_reset_of_resetThreshold_le`.
 Source: `02-information.tex`, Lemma 3.3 (`lem:reset`), lines 334–353, proof lines 355–630. -/
 theorem information_reset_of_rangeResetThreshold_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ}
     (hΔ : 0 < Δ) (hp : 0 < p) {L : ℕ} (hL : rangeResetThreshold q R J Δ p ≤ L)
-    (h : LocalHamiltonian (rectangularDomain L L) q R J) (E₀ : ℝ)
+    (h : PlaneInteraction (rectangularDomain L L) q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
     (Ω : StateSpace (rectangularDomain L L) q)
-    (hgs : IsGappedGroundState (rectangularDomain L L) q h.operator E₀ Ω Δ)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A C A₀ C₀ : Finset (Site (rectangularDomain L L))) (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A)
     (hC₀ : C₀ ⊆ C) (b : ℝ) (hb : 0 ≤ b)
     (hI : FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b)
@@ -214,7 +229,8 @@ theorem information_reset_of_rangeResetThreshold_le (hq : 1 ≤ q) (hJ : 0 ≤ J
     (hCw : ∀ x ∈ C₀, ∀ y, y ∉ C →
       rangeResetWidth R J Δ p * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) :
     FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A₀ C₀ ≤ (L : ℝ) ^ (-p) :=
-  h.information_reset_of_card_le hq hJ hΔ hp hL (card_rectangularDomain L).le E₀ Ω hgs
+  h.information_reset_of_card_le hq hJ hΔ hp hL (card_rectangularDomain L).le hh hhJ E₀
+      Ω hΩ hgap hspan
     A C A₀ C₀ hAC hA₀ hC₀ b hb hI hAw hCw
 
 /-- **Lemma 3.3 (information reset) at range `R`.** Fix `q ≥ 1`, `J ≥ 0`, a gap `Δ > 0` and
@@ -223,21 +239,25 @@ theorem information_reset_of_rangeResetThreshold_le (hq : 1 ≤ q) (hJ : 0 ≤ J
 only on `q, R, J, Δ, p`.
 
 The manuscript states Lemma 3.3 for range one only; this is its extension to range `R`. The
-range-one statement is `SquareHamiltonian.information_reset`.
+range-one statement is `ManyBody.SquareInteraction.information_reset`.
 Source: `02-information.tex`, Lemma 3.3 (`lem:reset`), lines 334–353, proof lines 355–630. -/
 theorem information_reset (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∃ Cp L₀ : ℝ, 0 < Cp ∧
-      ∀ L : ℕ, L₀ ≤ L → ∀ (h : LocalHamiltonian (rectangularDomain L L) q R J) (E₀ : ℝ)
+      ∀ L : ℕ, L₀ ≤ L → ∀ (h : PlaneInteraction (rectangularDomain L L) q R)
+          (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ)
         (Ω : StateSpace (rectangularDomain L L) q),
-        IsGappedGroundState (rectangularDomain L L) q h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (A C A₀ C₀ : Finset (Site (rectangularDomain L L))), Disjoint A C → A₀ ⊆ A →
         C₀ ⊆ C → ∀ b : ℝ, 0 ≤ b → FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b →
         (∀ x ∈ A₀, ∀ y, y ∉ A → Cp * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) →
         (∀ x ∈ C₀, ∀ y, y ∉ C → Cp * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) →
         FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A₀ C₀ ≤ (L : ℝ) ^ (-p) :=
   ⟨rangeResetWidth R J Δ p, rangeResetThreshold q R J Δ p, rangeResetWidth_pos R hJ hΔ hp,
-    fun _L hL h E₀ Ω hgs A C A₀ C₀ hAC hA₀ hC₀ b hb hI hAw hCw ↦
-      h.information_reset_of_rangeResetThreshold_le hq hJ hΔ hp hL E₀ Ω hgs A C A₀ C₀ hAC hA₀
+    fun _L hL h hh hhJ E₀ Ω hΩ hgap hspan A C A₀ C₀ hAC hA₀ hC₀ b hb hI hAw hCw ↦
+      h.information_reset_of_rangeResetThreshold_le hq hJ hΔ hp hL hh hhJ E₀ Ω hΩ hgap
+          hspan A C A₀ C₀ hAC
+        hA₀
         hC₀ b hb hI hAw hCw⟩
 
-end TNLean.Lattice.LocalHamiltonian
+end ManyBody.PlaneInteraction

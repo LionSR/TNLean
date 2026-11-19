@@ -29,6 +29,8 @@ The source energy estimate compresses the generated soft Hamiltonian;
 closing that estimate requires its own quantitative energy argument.
 -/
 
+open ManyBody (interval mem_interval)
+
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator TensorProduct Kronecker
 
@@ -87,7 +89,8 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
   let A := aklvRegionalHamiltonians l r h 1
   let K := A.submatrix g g
   have hAs : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) A J := by
-    apply TNLean.Lattice.isSupportedOn_sum
+    change _ ∈ ManyBody.supportedOperators _ _
+    apply sum_mem
     intro i hi
     apply (hs i).mono
     intro v hv
@@ -116,7 +119,10 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
     exact hsub
   have hlift (s : ℝ) : Entropy.localLift (n := fun _ : Fin L ↦ q) J
       (K - (s : ℂ) • 1) = A - (s : ℂ) • 1 := by
-    rw [Entropy.localLift_sub, Entropy.localLift_smul, Entropy.localLift_one, ← hAK]
+    have hsub : Entropy.localLift (n := fun _ : Fin L ↦ q) J (K - (s : ℂ) • 1) =
+        Entropy.localLift J K - Entropy.localLift J ((s : ℂ) • 1) :=
+      ManyBody.place_sub _ _
+    rw [hsub, Entropy.localLift_smul, Entropy.localLift_one, ← hAK]
   let e := minEigenvalue hK
   have hKmin : (K - (e : ℂ) • 1).PosSemidef := sub_minEigenvalue_smul_one_posSemidef hK
   have hAlow : (A - (e : ℂ) • 1).PosSemidef := by

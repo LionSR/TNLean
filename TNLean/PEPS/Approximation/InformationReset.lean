@@ -9,6 +9,7 @@ import TNLean.Lattice.SupportedUnitaryEntropy
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.PEPS.AreaLaw.BufferedRectangles
 import TNLean.Lattice.Sheet.SwapCorrection
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The information reset
@@ -23,7 +24,7 @@ dimension.
 The proof treats the two replicas as the sites `V ⊕ V`. The doubled vector `Ψ = Ω ⊗ Ω` keeps
 the original mutual information of the cores in the first replica, and in `Φ = F_R Ψ` the two
 cores come from different replicas, so they have no mutual information. The unitary of
-`TNLean.PEPS.Approximation.SquareHamiltonian.exists_reset_unitary` acts on paired sites at
+`ManyBody.SquareInteraction.exists_reset_unitary` acts on paired sites at
 graph distance at most `⌈K B⌉` from the buffer and from the endpoints of the edges crossing `R`;
 these sites are disjoint from both cores. Continuity of mutual information then costs only the
 physical dimension `q^(L^2)` of a core.
@@ -36,9 +37,9 @@ physical dimension `q^(L^2)` of a core.
 * `TNLean.PEPS.Approximation.resetWidth`, `TNLean.PEPS.Approximation.resetThreshold`: the
   width `C_p` and the size threshold `L₀`, with the closed form
   `C_p = 1280 e² (J/Δ)(2p + 40) + 4p + 52` (`TNLean.PEPS.Approximation.resetWidth_eq`).
-* `TNLean.PEPS.Approximation.SquareHamiltonian.information_reset_of_resetThreshold_le`:
+* `ManyBody.SquareInteraction.information_reset_of_resetThreshold_le`:
   Lemma 3.3 with these constants.
-* `TNLean.PEPS.Approximation.SquareHamiltonian.information_reset`: Lemma 3.3.
+* `ManyBody.SquareInteraction.information_reset`: Lemma 3.3.
 
 ## References
 
@@ -49,7 +50,13 @@ physical dimension `q^(L^2)` of a core.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph SquareInteraction)
+
 open Matrix QuantumCircuit
+
+open ManyBody (IsGapped groundSpace)
 open scoped Kronecker
 open TNLean.Lattice
 
@@ -168,7 +175,8 @@ theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V
     {A C A₀ C₀ : Finset V} (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A) (hC₀ : C₀ ⊆ C)
     (B : Finset V) (hnot : ∀ v ∈ A₀ ∪ C₀, v ∉ B)
     {U : Matrix (V → Fin (q * q)) (V → Fin (q * q)) ℂ}
-    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ supportedOperators (q * q) (B : Set V)) {δ : ℝ} :
+    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B)
+    {δ : ℝ} :
     let p := sitePairConfigurationEquiv V q q
     let F := reindex p p (sheetSwapOp q A)
     let ψ : (V → Fin (q * q)) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
@@ -187,7 +195,7 @@ theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V
       (sheetSwap q A).permMatrix_mem_unitaryGroup) ψ).trans hψn
   set Pe := (Equiv.sumArrowEquivProdArrow V V (Fin q)).trans p with hPe
   set U' := reindex Pe.symm Pe.symm U with hU'
-  have hU's : U' ∈ supportedOperators q ((B.disjSum B : Finset (V ⊕ V)) : Set (V ⊕ V)) :=
+  have hU's : U' ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (B.disjSum B : Finset (V ⊕ V)) :=
     reindex_sumArrow_sitePair_mem_supportedOperators q hUs
   have hU'u : U'ᴴ * U' = 1 :=
     (Matrix.mem_unitaryGroup_iff').mp (reindex_mem_unitaryGroup Pe.symm U hUu)
@@ -212,11 +220,10 @@ theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V
     · simp only [Finset.inl_mem_disjSum] at hv hv'
       exact Finset.disjoint_left.mp hAC (hA₀ hv) (hC₀ hv')
     · simp at hv
-  have hS : Disjoint ((B.disjSum B : Finset (V ⊕ V)) : Set (V ⊕ V))
-      ((A₀.disjSum ∅ ∪ C₀.disjSum ∅ : Finset (V ⊕ V)) : Set (V ⊕ V)) := by
-    rw [Set.disjoint_left]
+  have hS : Disjoint (B.disjSum B : Finset (V ⊕ V)) (A₀.disjSum ∅ ∪ C₀.disjSum ∅) := by
+    rw [Finset.disjoint_left]
     rintro (v | v) hv hv'
-    · simp only [Finset.mem_coe, Finset.inl_mem_disjSum] at hv
+    · simp only [Finset.inl_mem_disjSum] at hv
       have hmem : v ∈ A₀ ∪ C₀ := by
         simpa [Finset.mem_union, Finset.inl_mem_disjSum] using hv'
       exact hnot v hmem hv
@@ -248,7 +255,8 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
     (hnot : ∀ v ∈ R₀ ∪ C₀, rectangleSiteEquiv L L v ∉ B)
     {U : Matrix (Lattice.Configuration (rectangularDomain L L) (q * q))
       (Lattice.Configuration (rectangularDomain L L) (q * q)) ℂ}
-    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ supportedOperators (q * q) (B : Set _)) {δ : ℝ} :
+    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B)
+    {δ : ℝ} :
     let pe := (sitePairConfigurationEquiv (SquareLatticeVertex L L) q q).trans
       (rectangleConfigurationEquiv L L (q * q))
     let F := reindex pe pe (TNLean.Lattice.sheetSwapOp q R)
@@ -261,11 +269,11 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
   set a := rectangleSiteEquiv L L
   set e := rectangleConfigurationEquiv L L (q * q)
   set S := B.image a.symm
-  have hU₀s : reindex e.symm e.symm U ∈ supportedOperators (q * q) (S : Set _) := by
+  have hU₀s : reindex e.symm e.symm U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
     have h₀ : reindex e.symm e.symm U = embedOp a.symm U := by
       rw [embedOp_equiv_eq_reindex]
       rfl
-    rw [h₀, Finset.coe_image]
+    rw [h₀]
     exact embedOp_mem_supportedOperators_image a.symm.injective hUs
   have hnot' : ∀ v ∈ R₀ ∪ C₀, v ∉ S := by
     intro v hv hvS
@@ -321,15 +329,18 @@ theorem resetWidth_eq (J Δ p : ℝ) :
   ring
 
 /-- **Lemma 3.3 (information reset), with explicit constants.** The statement of
-`SquareHamiltonian.information_reset` holds with the reset width `C_p = resetWidth J Δ p`
+`ManyBody.SquareInteraction.information_reset` holds with the reset width `C_p = resetWidth J Δ p`
 and the size threshold `L₀ = resetThreshold q J Δ p`.
 Source: `02-information.tex`, Lemma 3.3 (`lem:reset`), lines 334–353, proof lines 355–630,
 with `A, T₀` at lines 443–450, `K_loc` at lines 551–554 and `C_p` at lines 606–608. -/
-theorem SquareHamiltonian.information_reset_of_resetThreshold_le (q : ℕ) (hq : 1 ≤ q) (J : ℝ)
+theorem _root_.ManyBody.SquareInteraction.information_reset_of_resetThreshold_le (q : ℕ)
+    (hq : 1 ≤ q) (J : ℝ)
     (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∀ L : ℕ, resetThreshold q J Δ p ≤ L →
-      ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-      h.IsGappedGroundState E₀ Ω Δ →
+      ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian) (_ : ∀ i, ‖h.term i‖ ≤ J)
+          (E₀ : ℝ) (Ω : StateSpace L q),
+      ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →
       ∀ b : ℝ, 0 ≤ b → FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
       (∀ x ∈ R₀, ∀ y, y ∉ R → resetWidth J Δ p * (1 + b + Real.log L) <
@@ -337,16 +348,16 @@ theorem SquareHamiltonian.information_reset_of_resetThreshold_le (q : ℕ) (hq :
       (∀ x ∈ C₀, ∀ y, y ∉ C → resetWidth J Δ p * (1 + b + Real.log L) <
         (supDist (rectangleEmbedding x) (rectangleEmbedding y) : ℝ)) →
       FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤ (L : ℝ) ^ (-p) := by
-  have hreset := SquareHamiltonian.reset_unitary q hq J hJ hΔ (r := 2 * p + 10) (by linarith)
+  have hreset := ManyBody.SquareInteraction.reset_unitary q hq J hJ hΔ
+      (r := 2 * p + 10) (by linarith)
   have hK : 0 < resetRadius J Δ (2 * p + 10) := resetRadius_pos hJ hΔ (by linarith)
   have hCu : 0 < resetUnitaryPrefactor J Δ (2 * p + 10) :=
     resetUnitaryPrefactor_pos hJ hΔ (by linarith)
-  intro L hL h E₀ Ω hgs R C R₀ C₀ hRC hR₀ hC₀ b hb hI hRw hCw
+  intro L hL h hh hhJ E₀ Ω hΩ hgap hspan R C R₀ C₀ hRC hR₀ hC₀ b hb hI hRw hCw
   rw [resetThreshold] at hL
   have hL1 : (1 : ℝ) ≤ L := le_trans (le_max_left _ _) hL
   have hLn : 1 ≤ L := by exact_mod_cast hL1
-  have hΩ : ‖Ω‖ = 1 := hgs.1
-  obtain ⟨-, -, U, hUu, hUs, hUerr⟩ := hreset L hLn h E₀ Ω hgs R C hRC b hb hI
+  obtain ⟨-, -, U, hUu, hUs, hUerr⟩ := hreset L hLn h hh hhJ E₀ Ω hΩ hgap hspan R C hRC b hb hI
   have hB1 : 1 ≤ 1 + b + Real.log L := by linarith [Real.log_nonneg hL1]
   have hℓ : ((⌈resetRadius J Δ (2 * p + 10) * (1 + b + Real.log L)⌉₊ : ℕ) : ℝ) + 1 ≤
       resetWidth J Δ p * (1 + b + Real.log L) := by
@@ -379,11 +390,14 @@ gapped ground state of an open `L × L` square Hamiltonian with interaction boun
 are at sup-distance greater than `w = C_p (1 + b + log L)` from the complements of `R` and of
 `C`, then `I_Ω(R₀ : C₀) ≤ L^(-p)`. Only the original full-system gap is assumed.
 Source: `02-information.tex`, Lemma 3.3 (`lem:reset`), lines 334–353, proof lines 355–630. -/
-theorem SquareHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q) (J : ℝ) (hJ : 0 ≤ J)
+theorem _root_.ManyBody.SquareInteraction.information_reset (q : ℕ) (hq : 1 ≤ q)
+    (J : ℝ) (hJ : 0 ≤ J)
     {Δ p : ℝ} (hΔ : 0 < Δ) (hp : 0 < p) :
     ∃ Cp L₀ : ℝ, 0 < Cp ∧
-      ∀ L : ℕ, L₀ ≤ L → ∀ (h : SquareHamiltonian L q J) (E₀ : ℝ) (Ω : StateSpace L q),
-        h.IsGappedGroundState E₀ Ω Δ →
+      ∀ L : ℕ, L₀ ≤ L → ∀ (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
+          (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →
         ∀ b : ℝ, 0 ≤ b → FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
         (∀ x ∈ R₀, ∀ y, y ∉ R → Cp * (1 + b + Real.log L) <
@@ -392,6 +406,6 @@ theorem SquareHamiltonian.information_reset (q : ℕ) (hq : 1 ≤ q) (J : ℝ) (
           (supDist (rectangleEmbedding x) (rectangleEmbedding y) : ℝ)) →
         FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤ (L : ℝ) ^ (-p) :=
   ⟨resetWidth J Δ p, resetThreshold q J Δ p, resetWidth_pos hJ hΔ hp,
-    SquareHamiltonian.information_reset_of_resetThreshold_le q hq J hJ hΔ hp⟩
+    ManyBody.SquareInteraction.information_reset_of_resetThreshold_le q hq J hJ hΔ hp⟩
 
 end TNLean.PEPS.Approximation

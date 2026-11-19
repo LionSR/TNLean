@@ -30,6 +30,8 @@ noncomputable section
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open TensorPower TensorPower.ReplicaTransport
@@ -168,24 +170,18 @@ end Roots
 
 /-- The actual-round entropy telescope at any constants `c₀, C_ent, e_ent, C_en, e_en`
 satisfying the finite-family transport bound, such as QICLean's universal transport constants,
-which depend on none of `q, R, J, Δ`. Source: `08-scanner.tex`, lines 442–457. -/
+which depend on none of `q, R, J, Δ`. The bound involves no Hamiltonian and no target: the entropy
+clause of the transport bound does not involve its energy terms, so the proof takes the empty
+family of energy terms, and only the domain graph and the scan sizes enter. Source:
+`08-scanner.tex`, lines 442–457. -/
 theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBound
     {c₀ Cent eent Cen een : ℝ} (htransport : FiniteFamilyTransportBound c₀ Cent eent Cen een) :
-    ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
+    ∀ {Λ : Finset (ℤ × ℤ)} {q R : ℕ}
       [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
       (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-      (_h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
-      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
-      S.graph = domainGraph Λ →
-      S.depth = (fun x => ambientDepth T hT x.val) →
-      (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
-      ∀ {L : ℕ} (hn : 0 < S.n), S.r₀ ≤ S.D →
-      ∀ (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m),
-      8 * S.K * S.m ≤ L → ∀ (hC : 0 < S.C₁),
-      (∀ d : ℕ, 1 ≤ d → d ≤ L →
-        (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-      (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-        ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+      (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
+      S.graph = planeDomainGraph Λ →
+      ∀ (hn : 0 < S.n) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m) (hC : 0 < S.C₁),
       ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
       let hm : 0 < S.m := by omega
       let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
@@ -205,21 +201,26 @@ theorem actualRounds_entropy_integral_le_domainGraph_of_finiteFamilyTransportBou
               (2 * S.n * S.m : ℕ) *
                 (Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k) := by
   classical
-  intro Λ T q R J Δ _ _ aux _ h Ω S hT hgraph hdepth hanchor hΔ hΩ
-    L hn hr hDpos hD hL hC hrows hclear a ha haℓ
+  intro Λ q R _ _ aux _ S hgraph hn hDpos hD hC a ha haℓ
   let hm : 0 < S.m := by omega
   let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos
   let n := augmentedDimensions (V := Site Λ) q aux
   let D := S.actualRoundData hm hM
   let ℓ := transportLogDimBound q S.r₀
-  obtain ⟨β, rem, Cβ, hCβ, hβ0, hrem0, hβ, hrem, hround⟩ :=
-    actualRounds_transport_domainGraph_of_finiteFamilyTransportBound htransport aux h Ω S hT
-      hgraph hdepth hanchor hΔ hΩ hn hr hDpos hD hL hC
-      hrows hclear ha haℓ
+  have hq : 1 ≤ q := NeZero.pos q
+  have ht : 0 ≤ a / 2 := (half_pos ha).le
+  -- The entropy estimate of the transport bound does not involve the energy terms: take the
+  -- empty family, for which every energy hypothesis holds vacuously.
+  let E₀ : EnergyTerms (Site Λ ⊕ Bool) n Empty := ⟨Empty.elim, Empty.elim⟩
+  have hmove := actualRoundData_logDim_move_le (q := q) aux S hgraph hm hM
+  obtain ⟨β, rem, Cβ, hCβ, hβ0, hrem0, hβ, hrem, hround⟩ := htransport n D E₀
+    (S.actualRoundData_isAdmissible hm hM) (fun i ↦ i.elim) (fun i ↦ i.elim) (fun i ↦ i.elim)
+    (fun _ ↦ by intro _ i; exact i.elim) ha (one_le_transportLogDimBound hq S.r₀) haℓ
+    (fun j k ↦ S.actualRoundData_crossBandCommute hm hM j n ht k) hmove
+    (fun _ i ↦ i.elim)
   refine ⟨β, Cβ, hCβ, hβ0, hβ, ?_⟩
   intro k pre hpre hne
   let err := Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k
-  have ht : 0 ≤ a / 2 := (half_pos ha).le
   have hstep (j : Fin (2 * S.n * S.m)) :
       (k : ℝ) * a * (∫ p in (0 : ℝ)..1, (D j).entropyGain n (a / 2) k pre p) ≤
         Real.log (Transport.filteredNormSq ((D j).rootPath n (a / 2) k 0) pre) -
@@ -260,21 +261,12 @@ norm difference plus exactly `2 * S.n * S.m` copies of the common error
 no physical prevector, energy identification or norm comparison is required. -/
 theorem actualRounds_entropy_integral_le_domainGraph :
     ∃ c₀ Cent eent : ℝ, 0 < c₀ ∧
-      ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
+      ∀ {Λ : Finset (ℤ × ℤ)} {q R : ℕ}
         [NeZero q] [LinearOrder (AdmissibleSupport Λ R)]
         (aux : Bool → ℕ) [∀ b, NeZero (aux b)]
-        (_h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q)
-        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (hT : T.Nonempty),
-        S.graph = domainGraph Λ →
-        S.depth = (fun x => ambientDepth T hT x.val) →
-        (∀ i, S.anchor i ∈ i.val) → 0 < Δ → ‖Ω‖ = 1 →
-        ∀ {L : ℕ} (hn : 0 < S.n), S.r₀ ≤ S.D →
-        ∀ (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m),
-        8 * S.K * S.m ≤ L → ∀ (hC : 0 < S.C₁),
-        (∀ d : ℕ, 1 ≤ d → d ≤ L →
-          (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
-        (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
-          ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
+        (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
+        S.graph = planeDomainGraph Λ →
+        ∀ (hn : 0 < S.n) (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m) (hC : 0 < S.C₁),
         ∀ {a : ℝ}, 0 < a → a * transportLogDimBound q S.r₀ ≤ c₀ →
         let hm : 0 < S.m := by omega
         let hM : 0 < S.M := chargeSlotCount_pos hC (Nat.succ_le_iff.mpr hn) hDpos

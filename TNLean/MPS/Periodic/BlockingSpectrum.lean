@@ -36,6 +36,7 @@ The correct peripheral roots satisfy z^(m/gcd(m,p)) = 1; see
 
 open scoped Matrix BigOperators
 open Fin.NatCast
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

@@ -32,6 +32,8 @@ The robustness comparison uses the corrected spectral-window estimate at
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_hard_truncation_windows.pdf.
 -/
 
+open ManyBody (interval)
+
 open Matrix Polynomial
 open scoped BigOperators InnerProductSpace Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
@@ -151,7 +153,8 @@ theorem exists_aklv_logarithmic_clipped_chebyshev_filter {L q a s : ℕ}
                 (2 * Real.exp (-2 * (ell : ℝ) *
                   Real.sqrt ((9 * g / 10) / (2 * t + s)))) ^ 2 := by
   obtain ⟨hq2, hg1, e, E0, hregional, hEeq, hE0, hE6, hrobust⟩ :=
-    exists_aklv_logarithmic_robustness hs ha h hsupp h0 h1 mu g Ω hΩ hground hgap hg hexcited
+    exists_aklv_logarithmic_robustness (by omega) ha h hsupp h0 h1 mu g Ω hΩ hground hgap hg
+      hexcited
   let : Nonempty (Fin L) := ⟨⟨0, by omega⟩⟩
   let : Nonempty (Fin q) := ⟨⟨0, by omega⟩⟩
   let : Nontrivial (Fin q) := Fin.nontrivial_iff_two_le.mpr hq2
@@ -167,7 +170,8 @@ theorem exists_aklv_logarithmic_clipped_chebyshev_filter {L q a s : ℕ}
       Real.log_nonneg ((le_div_iff₀ hg).mpr (by simpa only [one_mul] using hg1))
     dsimp only [aklvLogarithmicThreshold] at ht
     linarith
-  obtain ⟨hBpos, hBnorm⟩ := aklv_clipped_hamiltonian_posSemidef_norm_le hs ha h h0 h1 e he he1 ht0
+  obtain ⟨hBpos, hBnorm⟩ :=
+    aklv_clipped_hamiltonian_posSemidef_norm_le (by omega) ha h h0 h1 e he he1 ht0
   obtain ⟨hB, j0, φ, hφ, heigen, hnewgap, hclose⟩ := hrobust t ht
   have heigenRaw : B *ᵥ WithLp.ofLp φ =
       (hB.eigenvalues j0 : ℂ) • WithLp.ofLp φ := by
@@ -186,7 +190,7 @@ theorem exists_aklv_logarithmic_clipped_chebyshev_filter {L q a s : ℕ}
   intro ell
   let H := fun j : Fin (s - 2) ↦ h ⟨a + 1 + j.val, by omega⟩
   obtain ⟨HL, HR, hL, hR, hmiddle, hdecomp, hcenter⟩ :=
-    aklv_clipped_hamiltonian_decomposition hs ha h hsupp e t
+    aklv_clipped_hamiltonian_decomposition (by omega) ha h hsupp e t
   have hR' : Entropy.IsSupportedOn HR (interval L (a + 1 + (s - 2)) L) := by
     convert hR using 1
     congr 1
@@ -268,10 +272,6 @@ theorem exists_aklv_clipped_chebyshev_filter {L q a s : ℕ}
       mu g Ω hΩ hground hgap hg hexcited
   refine ⟨e, E0, hregional, hEeq, hE0, hE6, ?_⟩
   intro t ht
-  apply hsharp t
-  apply (aklvLogarithmicThreshold_le_div hg hg1).trans
-  have hnorm : 0 ≤ E0 / g := div_nonneg hE0 hg.le
-  have hcoef : 0 < 1024 / g := div_pos (by norm_num) hg
-  nlinarith
+  exact hsharp t (aklvLogarithmicThreshold_le_of_polynomial hg hg1 hE0 ht)
 
 end TNLean.MPS.AreaLaw

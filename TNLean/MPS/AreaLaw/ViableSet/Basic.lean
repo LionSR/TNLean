@@ -182,7 +182,8 @@ theorem spanProjection_mul_cutMatrix_eq_iff {k : ℕ} {S : Set (LeftBlockVector 
 theorem regionState_leftBlock_eq (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
     Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ =
       cutMatrix ψ k * (cutMatrix ψ k)ᴴ := by
-  simp only [Entropy.regionState, Matrix.partialTraceRight_vecMulVec_eq, cutMatrix]
+  simp only [Entropy.regionState, ManyBody.regionState, Matrix.partialTraceRight_vecMulVec_eq,
+    cutMatrix]
 
 /-- **Support in density form.** The reduced density `ρ` of `ψ` on the first `k` sites is
 supported on `Span(S)`, `P ρ = ρ`, exactly when `ψ ∈ Span(S) ⊗ H_R`. This is the support

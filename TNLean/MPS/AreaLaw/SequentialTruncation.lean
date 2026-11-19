@@ -229,7 +229,7 @@ theorem cutMatrix_localLift (k : ℕ) (K : LeftBlockMatrix L q k)
     cutMatrix (toEuclideanLin (Entropy.localLift (leftBlock L k) K) ψ) k = K * cutMatrix ψ k := by
   ext a b
   rw [mul_apply, cutMatrix_apply]
-  simp only [toLpLin_apply, PiLp.toLp_apply, mulVec, dotProduct, Entropy.localLift,
+  simp only [toLpLin_apply, PiLp.toLp_apply, mulVec, dotProduct, Entropy.localLift, ManyBody.place,
     reindex_apply, submatrix_apply, Equiv.symm_symm, cutMatrix_apply]
   rw [← Equiv.sum_comp (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm]
   simp [Fintype.sum_prod_type, one_apply]
@@ -273,7 +273,7 @@ theorem norm_sub_sequentialTruncation_le (hP : ∀ k, IsStarProjection (P k))
     have hsplit : ψ - cutTruncation P (L - 1 - j) (sequentialTruncation P j ψ) =
         toEuclideanLin (Entropy.localLift (leftBlock L (L - 1 - j)) (1 - P (L - 1 - j))) ψ +
           cutTruncation P (L - 1 - j) (ψ - sequentialTruncation P j ψ) := by
-      simp only [cutTruncation, Entropy.localLift_sub, Entropy.localLift_one, map_sub,
+      simp only [cutTruncation, ManyBody.place_sub, Entropy.localLift_one, map_sub,
         LinearMap.sub_apply, toEuclideanLin_one_apply]
       abel
     rw [hsplit]
@@ -307,7 +307,7 @@ theorem norm_sub_sequentialTruncation_sq_le (hP : ∀ k, IsStarProjection (P k))
     have hsplit : ψ - cutTruncation P (L - 1 - j) (sequentialTruncation P j ψ) =
         toEuclideanLin (Entropy.localLift D Pj) x +
           toEuclideanLin (Entropy.localLift D (1 - Pj)) ψ := by
-      simp only [hx, cutTruncation, Entropy.localLift_sub, Entropy.localLift_one, map_sub,
+      simp only [hx, cutTruncation, ManyBody.place_sub, Entropy.localLift_one, map_sub,
         LinearMap.sub_apply, toEuclideanLin_one_apply]
       abel
     have horth : ⟪toEuclideanLin (Entropy.localLift D Pj) x,
@@ -315,7 +315,7 @@ theorem norm_sub_sequentialTruncation_sq_le (hP : ∀ k, IsStarProjection (P k))
       rw [← LinearMap.adjoint_inner_right, ← toEuclideanLin_conjTranspose_eq_adjoint,
         ← toEuclideanLin_mul_apply, ← Entropy.localLift_conjTranspose, ← Entropy.localLift_mul,
         hPP]
-      simp [Entropy.localLift]
+      simp [Entropy.localLift, ManyBody.place]
     have hcontr : ‖toEuclideanLin (Entropy.localLift D Pj) x‖ ≤ ‖x‖ :=
       Entropy.norm_toEuclideanLin_localLift_le (hP _) x
     have hpy := norm_add_sq_eq_norm_sq_add_norm_sq_of_inner_eq_zero _ _ horth

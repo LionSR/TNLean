@@ -787,11 +787,11 @@ private theorem selectedFixedProduct_reducedBlockState_eq_of_source_eq
         M.reducedBlockState N₁ L hL₁ :=
       data.selectedFixedProduct_reducedBlockState_eq_changePhysicalBasis
         N₁ L hN₁ hL₁
-    _ = singleKrausMap (sitewisePhysicalMatrix U L)
+    _ = singleKrausMap (Matrix.tensorPower L U)
         (K.reducedBlockState N₁ L hL₁) :=
       reducedBlockState_changePhysicalBasis_of_isometry
         U F.physicalCoordinateMatrix_isometry K N₁ L hL₁
-    _ = singleKrausMap (sitewisePhysicalMatrix U L)
+    _ = singleKrausMap (Matrix.tensorPower L U)
         (K.reducedBlockState N₂ L hL₂) := by rw [hsource]
     _ = M.reducedBlockState N₂ L hL₂ := by
       symm

@@ -33,6 +33,8 @@ deletion keeps the graph connected
 (`SimpleGraph.Connected.exists_connected_induce_compl_singleton_of_finite_nontrivial`).
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 open SimpleGraph
 

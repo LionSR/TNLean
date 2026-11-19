@@ -25,6 +25,8 @@ normalization conventions are recorded in
 `docs/paper-gaps/aklv13_two_block_robustness.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix Real
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
 

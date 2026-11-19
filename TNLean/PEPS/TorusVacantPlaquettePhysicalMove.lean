@@ -21,6 +21,8 @@ route's width at least eight and height at least seven. All positions and both
 periodic seams are allowed. It is an elementary-operation statement, not the
 complete braid. See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS
@@ -93,8 +95,9 @@ theorem IsGIsometric.exists_unitary_torusVacantPlaquetteMove {d : ℕ}
       W ∈ Matrix.unitaryGroup
         ({v : X // v ∈ torusVacantPlaquetteMoveRegion direction p} → Fin d) ℂ ∧
       (if reverse direction then
-        (regionLocalTerm (torusVacantPlaquetteMoveRegion direction p) W).conjTranspose
-        else regionLocalTerm (torusVacantPlaquetteMoveRegion direction p) W) ∈
+        (ManyBody.place («X» := fun _ ↦ Fin _)
+            (torusVacantPlaquetteMoveRegion direction p) W).conjTranspose
+        else ManyBody.place («X» := fun _ ↦ Fin _) (torusVacantPlaquetteMoveRegion direction p) W) ∈
           Matrix.unitaryGroup (X → Fin d) ℂ ∧
       (∀ (u : Edge Γₜ → G), regularWalkHolonomy u
           (torusPlaquetteWalk (torusVacantPlaquetteMoveTarget direction p)).reverse = 1 →
@@ -109,8 +112,10 @@ theorem IsGIsometric.exists_unitary_torusVacantPlaquetteMove {d : ℕ}
       ∀ (u : Edge Γₜ → G), regularWalkHolonomy u
           (torusPlaquetteWalk (torusVacantPlaquetteMoveTarget direction p)).reverse = 1 →
         (if reverse direction then
-          (regionLocalTerm (torusVacantPlaquetteMoveRegion direction p) W).conjTranspose
-          else regionLocalTerm (torusVacantPlaquetteMoveRegion direction p) W) *ᵥ
+          (ManyBody.place («X» := fun _ ↦ Fin _)
+              (torusVacantPlaquetteMoveRegion direction p) W).conjTranspose
+          else ManyBody.place («X» := fun _ ↦ Fin _)
+              (torusVacantPlaquetteMoveRegion direction p) W) *ᵥ
           stateCoeff (groupBondTensor (regularTwistedSite a u)) =
         stateCoeff (groupBondTensor (regularTwistedSite a
           (torusVacatingPlaquetteMove direction p u))) := by

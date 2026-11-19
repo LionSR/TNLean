@@ -25,6 +25,7 @@ No convergence rate or approximation-error estimate is used here.
 
 open Matrix
 open scoped BigOperators ComplexOrder InnerProductSpace
+open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 

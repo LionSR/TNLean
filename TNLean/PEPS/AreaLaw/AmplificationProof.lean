@@ -14,6 +14,7 @@ import TNLean.PEPS.AreaLaw.Amplification.SupportedPolarCorrection
 import TNLean.PEPS.AreaLaw.Amplification.RadiusBound
 import TNLean.Lattice.EntropyComparison
 import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Proposition 10.2: amplification
@@ -63,6 +64,9 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 open Matrix MeasureTheory SpectralFilter QuantumCircuit
 open scoped Kronecker NNReal ComplexOrder MatrixOrder InnerProductSpace Matrix.Norms.L2Operator
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace AdmissibleSupport IsAdmissibleSupport graphBall planeDomainGraph
+  PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -186,8 +190,10 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
     (M : ℕ) :
     ∀ n : ℕ, 2 ≤ n → max (amplificationThreshold q R J Δ C₀ C₃ c₃ M)
         (Exponents.collarRadiusThreshold (amplificationConstant q R J Δ C₀ C₃ c₃ M) 1) ≤ n →
-      ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
+          (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
+        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
             ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤
@@ -219,7 +225,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
                 graphNeighborhood Λ (2 * r)
                     (A.filter fun x ↦ x.val ∈ ambientDilation T
                       ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A) := by
-  intro n hn2 hnN Λ h E₀ Ω hgs A T hcard hXcut hYcut hScut hI
+  intro n hn2 hnN Λ h hh hhJ E₀ Ω hΩ hgap hspan A T hcard hXcut hYcut hScut hI
   have hC₂0 := amplificationConstant_nonneg q R J Δ hC₀.le C₃ c₃ M
   have hcol := fun r hr ↦ graphNeighborhood_collar_subset_of_threshold_le _
     ((le_max_right _ _).trans hnN) r hr Λ A T
@@ -233,7 +239,6 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
       exact mul_nonneg hC₂0 (by positivity)
     refine ⟨0, h0, ?_, hcol 0 h0⟩
     intro X' _ Jset _
-    obtain ⟨hΩ, -, -⟩ := Matrix.isGappedGroundState_iff.mp hgs
     have hempty : IsEmpty (Site Λ) := by
       by_contra hne
       rw [not_isEmpty_iff] at hne
@@ -251,7 +256,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
             rw [Finset.mem_singleton] at hx hy
             subst hx hy
             exact ⟨SimpleGraph.Walk.nil, Nat.zero_le _⟩⟩
-        linarith [h.norm_le ⟨{v}, hadm⟩, norm_nonneg (h.term ⟨{v}, hadm⟩)]
+        linarith [hhJ ⟨{v}, hadm⟩, norm_nonneg (h.term ⟨{v}, hadm⟩)]
     rw [Finset.eq_empty_of_isEmpty X']
     calc _ = (0 : ℝ) := by
           simp [FiniteProduct.mutualInformation, FiniteProduct.entropy_empty _ Ω hΩ]
@@ -299,7 +304,6 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
       max (amplificationRadiusCoefficient g C' C₀ α (Exponents.amplificationEpsilon : ℝ) K)
         (8 * √9 * (1 + C₂)) := rfl
   rw [hC₂eq]
-  obtain ⟨hΩ, -, -⟩ := Matrix.isGappedGroundState_iff.mp hgs
   have hn1 : 1 ≤ n := by omega
   have hn0 : (0 : ℝ) < n := by exact_mod_cast hn1
   -- The regions of Proposition 10.2.
@@ -346,8 +350,9 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   refine ⟨r, hr, ?_, hcol r hr⟩
   intro X' hX' Jset hJset
   -- The typical projections and the restoring operator, with the ancillas as spectators.
-  have hfail := typicalProjectors_three_cuts_of_threshold_le hq R hJ hΔ hC₀.le K n hNt Λ h E₀ Ω
-    hgs X Y (X ∪ Y) hXcut hYcut
+  have hfail := typicalProjectors_three_cuts_of_threshold_le hq R hJ hΔ hC₀.le K n hNt
+      Λ h hh hhJ E₀ Ω
+    hΩ hgap hspan X Y (X ∪ Y) hXcut hYcut
     (by rw [hXYS]; exact hScut)
   let x₀ : RegionalConfiguration q X := fun _ => 0
   let blank : RegionalConfiguration q X → ℂ := fun x => if x = x₀ then 1 else 0
@@ -380,7 +385,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
     restoringTransport_restoringColumnGlobal_eq_sum Ω X Y hXY E p blank blank Q Tq
   have hBsum : Bp = ∑ i ∈ E ×ˢ Finset.univ, PB i ⊗ₖ AB i := hBsum
   have hBblocks : ∀ x y : RegionalConfiguration q X × RegionalConfiguration q X,
-      (Matrix.of fun σ τ => Bp (σ, x) (τ, y)) ∈ supportedOperators q (S₀ : Set (Site Λ)) := by
+      (Matrix.of fun σ τ => Bp (σ, x) (τ, y)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S₀ := by
     intro x y
     rw [hBsum, ← hXYS]
     exact block_mem_supportedOperators_of_eq_sum _ hPB AB x y
@@ -392,8 +397,10 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   let a : AdmissibleSupport Λ R → Site Λ := fun Z => Z.2.1.choose
   have ha : ∀ Z, a Z ∈ Z.1 := fun Z => Z.2.1.choose_spec
   let k := fun i : AdmissibleSupport Λ R =>
-    positiveConstraint cs (centeredFilter pw (Δ / 2) h.operator Ω (h.term i))
-  obtain ⟨-, hk, -⟩ := latticePositiveConstraints_of_locality hpw R hJ hΔ htail Λ h a ha E₀ Ω hgs
+    positiveConstraint cs (centeredFilter pw (Δ / 2) h.hamiltonian Ω (h.term i))
+  obtain ⟨-, hk, -⟩ := latticePositiveConstraints_of_locality hpw R hJ hΔ htail Λ h hh
+      hhJ a ha E₀ Ω hΩ
+      hgap hspan
   have hk : ∀ i, 0 ≤ k i ∧ k i ≤ 1 ∧ k i *ᵥ WithLp.ofLp Ω = 0 := hk
   let Pr := fun i : AdmissibleSupport Λ R => a i ∈ graphNeighborhood Λ r S₀
   let tt : ℝ≥0 := ⟨t, ht0⟩
@@ -445,29 +452,35 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
       Matrix (Configuration Λ q) (Configuration Λ q) ℂ := fun u =>
     contractionWord (fun i : {i // Pr i} => k i) (PoissonWord.partitionWords Pr u).1.1
       (PoissonWord.partitionWords Pr u).1.2
-  let kr := fun i : {i // Pr i} => siteExpectation q (graphBall (domainGraph Λ) (a i) r) (k i)
+  let kr := fun i : {i // Pr i} => ManyBody.regionExpectation (graphBall (planeDomainGraph Λ) (a i)
+      r)
+      (k i)
   let Lt : PoissonWord.Word (AdmissibleSupport Λ R) →
       Matrix (Configuration Λ q) (Configuration Λ q) ℂ := fun u =>
     contractionWord kr (PoissonWord.partitionWords Pr u).1.1
       (PoissonWord.partitionWords Pr u).1.2
   let Zrv : PoissonWord.Word (AdmissibleSupport Λ R) → ℝ := fun u => M₀ * ‖Dret u - Lt u‖
-  obtain ⟨hXint, hXle⟩ := latticeConstraintWord_excitedProjection_decay hpw R hJ hΔ Λ h E₀ Ω
-    hgs (WithLp.toLp 2 ζ) tt
+  obtain ⟨hXint, hXle⟩ := latticeConstraintWord_excitedProjection_decay hpw R hJ hΔ Λ h hh hhJ E₀ Ω
+    hΩ hgap hspan (WithLp.toLp 2 ζ) tt
   have hXint : Integrable (fun u => Xrv u ^ 2) μ := hXint
   have hXle : (∫ u, Xrv u ^ 2 ∂μ) ≤ Real.exp (-(Δ / cs) * t) * ‖ξe‖ ^ 2 := hXle
   obtain ⟨hYint, hYle⟩ := latticeConstraintWord_omission_of_positiveConstraints
-    hpw R hC₃ hc₃ (latticePositiveConstraints_of_locality hpw R hJ hΔ htail) Λ h a ha E₀ Ω hgs
+    hpw R hC₃ hc₃ (latticePositiveConstraints_of_locality hpw R hJ hΔ htail) Λ h hh hhJ a
+        ha E₀ Ω hΩ hgap
+      hspan
     _ S₀ Bp hBblocks ξb hξb r tt
   have hYint : Integrable Yrv μ := hYint
   have hYle : (∫ u, Yrv u ∂μ) ≤ Ao * t * S₀.card * ‖Bp‖ *
       Real.exp (vo * t - γ * (r : ℝ) ^ α) := hYle
   obtain ⟨hZint, hZle, hLt⟩ := latticeConstraintWord_truncation_of_positiveConstraints
-    R hC₃ (latticePositiveConstraints_of_locality hpw R hJ hΔ htail) Λ h a ha E₀ Ω hgs S₀ r tt
+    R hC₃ (latticePositiveConstraints_of_locality hpw R hJ hΔ htail) Λ h hh hhJ a ha E₀ Ω
+        hΩ hgap hspan S₀
+      r tt
   have hZint : Integrable (fun u => ‖Dret u - Lt u‖) μ := hZint
   have hZle : (∫ u, ‖Dret u - Lt u‖ ∂μ) ≤ Ct * t * S₀.card * (1 + (r : ℝ)) ^ 2 *
       Real.exp (-(ct * (r : ℝ) ^ α)) := hZle
-  have hLt : ∀ u, ‖Lt u‖ ≤ 1 ∧ Lt u ∈ supportedOperators q
-      (graphNeighborhood Λ (2 * r) S₀ : Set (Site Λ)) := hLt
+  have hLt : ∀ u, ‖Lt u‖ ≤ 1 ∧ Lt u ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (graphNeighborhood Λ (2 * r) S₀ : Finset (Site Λ)) := hLt
   -- Markov's inequality and a union bound: a good realization.
   have hrα : 0 ≤ (r : ℝ) ^ α := Real.rpow_nonneg (Nat.cast_nonneg r) α
   have hS0 : (0 : ℝ) ≤ S₀.card := Nat.cast_nonneg _
@@ -526,11 +539,10 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   let Dfull := contractionWord k u0.1 u0.2
   have hkle : ∀ i, k i ≤ 1 := fun i => (hk i).2.1
   have hkΩ : ∀ i, k i *ᵥ WithLp.ofLp Ω = 0 := fun i => (hk i).2.2
-  have hR₀supp : Rp.submatrix sp sp ∈ supportedOperators q
-      ((N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) :
-        Set (AncillaSites Λ X)) := by
+  have hR₀supp : Rp.submatrix sp sp ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (N.disjSum (Finset.univ.disjSum ∅) : Finset (AncillaSites Λ X)) := by
     rw [hRsum]
-    exact supportedOperators_mono (Finset.coe_subset.mpr
+    exact ManyBody.supportedOperators_mono (Finset.coe_subset.mpr
       (Finset.disjSum_mono (hXYS ▸ hS₀N) le_rfl))
       (sum_kronecker_submatrix_ancillaSplit_mem_supportedOperators E hPR _)
   obtain ⟨U₁, hU₁supp, hU₁unit, hU₁err⟩ := exists_ancilla_unitary_of_good_realization hR₀supp
@@ -609,8 +621,10 @@ theorem amplificationBound_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ)
     (M : ℕ) :
     ∀ n : ℕ, 2 ≤ n → max (amplificationThresholdExplicit q R J Δ C₀ M)
         (Exponents.collarRadiusThreshold (amplificationConstantExplicit q R J Δ C₀ M) 1) ≤ n →
-      ∀ Λ : Finset (ℤ × ℤ), ∀ h : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ,
-        ∀ Ω : StateSpace Λ q, IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, (∀ X, (h.term X).IsHermitian) →
+          (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
+        ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
             ((A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊).card : ℝ) ≤

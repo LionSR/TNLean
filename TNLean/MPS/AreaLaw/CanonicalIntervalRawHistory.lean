@@ -17,6 +17,8 @@ measurable; no sampling-success condition is assumed. Supporting ALVV,
 arXiv:1602.08828v2, lines 749–755 and 1777–1817.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped Matrix.Norms.L2Operator
 

@@ -9,6 +9,7 @@ import TNLean.Lattice.RegionEntropyInequalities
 import QICLean.Entropy.BufferDiscount
 import QICLean.Analysis.HarmonicWeights
 import TNLean.Algebra.TailRadiusWeights
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Conditional entropy in a buffered rectangle
@@ -51,6 +52,9 @@ open Matrix
 open scoped Matrix.Norms.L2Operator
 open TNLean.Lattice
 
+open ManyBody (IsGapped groundSpace AdmissibleSupport
+  latticeL1Distance_le_one_of_planeDomainGraph_adj planeDomainGraph PlaneInteraction)
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- Shifting the index of a finite sum from `0, …, m-1` to `1, …, m`. -/
@@ -66,8 +70,8 @@ theorem sum_range_succ_eq_sum_Icc {M : Type*} [AddCommMonoid M] (f : ℕ → M) 
 theorem supportDim_le {Λ : Finset (ℤ × ℤ)} {q R : ℕ} (hq : 1 ≤ q) (X : AdmissibleSupport Λ R) :
     Entropy.supportDim (fun _ : Site Λ ↦ q) X.1 ≤ q ^ (1 + 2 * R * (R + 1)) := by
   rw [Entropy.supportDim, Finset.prod_const]
-  exact Nat.pow_le_pow_right hq (card_support_le_diamond (G := domainGraph Λ) Subtype.val
-    Subtype.val_injective (fun _ _ h ↦ latticeL1Distance_le_one_of_adj h) X.1 R X.2.2)
+  exact Nat.pow_le_pow_right hq (card_support_le_diamond (G := planeDomainGraph Λ) Subtype.val
+    Subtype.val_injective (fun _ _ ↦ latticeL1Distance_le_one_of_planeDomainGraph_adj) X.1 R X.2.2)
 
 /-- Every admissible support has positive Hilbert-space dimension when the local
 dimension is positive. -/
@@ -134,8 +138,10 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
     (hZT : 128 * Real.sqrt ((1 + J / Δ) * bufferBudgetConst q R) ≤ Zmin) {Cpad : ℕ}
     (hCR : R + 2 < Cpad)
     (hCZ : (2 + ((R + 1 : ℕ) : ℝ)) * Real.exp ((R + 1 : ℕ) * Zmin) ≤ Cpad + 1)
-    {D₀ : ℕ} (hRD₀ : R < D₀) {Λ : Finset (ℤ × ℤ)} (h : LocalHamiltonian Λ q R J) {E₀ : ℝ}
-    {Ω : StateSpace Λ q} (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ)
+    {D₀ : ℕ} (hRD₀ : R < D₀) {Λ : Finset (ℤ × ℤ)} (h : PlaneInteraction Λ q R)
+        (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+    {Ω : StateSpace Λ q} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     {A : Finset (Site Λ)} {Q : IntRect} (hsafe : IsSafe Λ A D₀ Q) {r : ℕ} (hr : 1 ≤ r)
     {Q₀ : IntRect} (hQ₀ : Q₀.size ≤ r) (hpad : (Q₀.dilate (Cpad * r)).toFinset ⊆ Q.toFinset) :
     regionalEntropy Λ q Ω (rectRegion A Q₀ ∪
@@ -144,9 +150,10 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
     regionalEntropy Λ q Ω (rectRegion A Q₀) / 2 +
       (1024 * Real.exp 1 * (J / Δ) * bufferBudgetConst q R + Cpad) / 2 * r := by
   classical
-  obtain ⟨hΩ, heig, hgap⟩ := hgs
-  replace heig : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := by
-    rw [← coe_toEuclideanCLM_eq_toEuclideanLin]; exact heig
+  have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
+  replace hgap := hgap.posSemidef_sub_smul_one
+      (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan
   set K := bufferCrossConst R
   set K' := bufferBudgetConst q R
   set v : ℕ := 1 + 2 * R * (R + 1)
@@ -338,8 +345,8 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
     exact Finset.sdiff_subset_sdiff (rectRegion_dilate_mono A Q₀ (hdle j hj)) le_rfl
   -- the finite-dimensional discount
   have key := Entropy.two_mul_condEntropy_le (n := fun _ : Site Λ ↦ q) X T hT hdisj a ha0 ha2
-    hΩ h.term S (fun i ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.supported i))
-    h.hermitian hJ h.norm_le hsingle hΔ heig hgap (by linarith) hE hu hmass
+    hΩ h.term S (fun i ↦ (h.mem i))
+    hh hJ hhJ hsingle hΔ heig hgap (by linarith) hE hu hmass
     Finset.disjoint_sdiff hTbuf
   -- the error terms
   have herr : ∑ j ∈ Finset.range m, 1024 * Real.exp 1 * (J / Δ) *
@@ -435,8 +442,11 @@ and `C_buf = initialBufferConst q R J Δ`. Source: `02-initial.tex`, lines 240�
 258–585. -/
 theorem condEntropy_le_initialBufferConst (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
     (hΔ : 0 < Δ) {D₀ : ℕ} (hD₀ : 2 * R + 10 < D₀) {Λ : Finset (ℤ × ℤ)}
-    (h : LocalHamiltonian Λ q R J) {E₀ : ℝ} {Ω : StateSpace Λ q}
-    (hgs : IsGappedGroundState Λ q h.operator E₀ Ω Δ) {A : Finset (Site Λ)} {Q : IntRect}
+    (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        {E₀ : ℝ} {Ω : StateSpace Λ q}
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
+        {A : Finset (Site Λ)} {Q : IntRect}
     (hsafe : IsSafe Λ A D₀ Q) {r : ℕ} (hr : 1 ≤ r) {Q₀ : IntRect} (hQ₀ : Q₀.size ≤ r)
     (hpad : (Q₀.dilate (initialPaddingConst q R J Δ * r)).toFinset ⊆ Q.toFinset) :
     regionalEntropy Λ q Ω (rectRegion A Q₀ ∪
@@ -455,7 +465,7 @@ theorem condEntropy_le_initialBufferConst (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ
   have hCR : R + 2 < Cpad := by simp only [Cpad, initialPaddingConst]; omega
   exact condEntropy_le_initialBuffer_of_constants hq hJ hΔ (le_max_left _ _)
     ((le_max_left _ _).trans (le_max_right _ _)) ((le_max_right _ _).trans (le_max_right _ _))
-    hCR hCZ (by omega) h hgs hsafe hr hQ₀ hpad
+    hCR hCZ (by omega) h hh hhJ hΩ hgap hspan hsafe hr hQ₀ hpad
 
 /-- **Integer-clearance specialization of Lemma 3.2: conditional entropy in a buffered
 rectangle** (area-law manuscript,
@@ -470,8 +480,10 @@ theorem exists_condEntropy_le_initialBuffer (q R : ℕ) (hq : 1 ≤ q) {J Δ : �
     (hΔ : 0 < Δ) :
     ∃ Cpad : ℕ, 1 ≤ Cpad ∧ ∃ Cbuf : ℝ, 0 ≤ Cbuf ∧
       ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
-      ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J) (E₀ : ℝ) (Ω : StateSpace Λ q),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace Λ q),
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
       ∀ r : ℕ, 1 ≤ r → ∀ Q₀ : IntRect, Q₀.size ≤ r →
         (Q₀.dilate (Cpad * r)).toFinset ⊆ Q.toFinset →
@@ -480,7 +492,8 @@ theorem exists_condEntropy_le_initialBuffer (q R : ℕ) (hq : 1 ≤ q) {J Δ : �
           regionalEntropy Λ q Ω (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀) ≤
         regionalEntropy Λ q Ω (rectRegion A Q₀) / 2 + Cbuf * r :=
   ⟨initialPaddingConst q R J Δ, one_le_initialPaddingConst q R J Δ, initialBufferConst q R J Δ,
-    initialBufferConst_nonneg q R hJ hΔ, fun _ hD₀ _ h _ _ hgs _ _ hsafe _ hr _ hQ₀ hpad ↦
-      condEntropy_le_initialBufferConst q R hq hJ hΔ hD₀ h hgs hsafe hr hQ₀ hpad⟩
+    initialBufferConst_nonneg q R hJ hΔ,
+        fun _ hD₀ _ h hh hhJ _ _ hΩ hgap hspan _ _ hsafe _ hr _ hQ₀ hpad ↦
+      condEntropy_le_initialBufferConst q R hq hJ hΔ hD₀ h hh hhJ hΩ hgap hspan hsafe hr hQ₀ hpad⟩
 
 end TNLean.PEPS.AreaLaw

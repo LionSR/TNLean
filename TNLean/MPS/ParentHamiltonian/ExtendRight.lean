@@ -32,6 +32,8 @@ open-chain extension theorem `groundSpace_extend_right_of_isNBlkInjective`.
 -/
 
 open scoped Matrix
+open Kraus (blockPhysDim wordOfBlock length_wordOfBlock blockTensor
+  isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 

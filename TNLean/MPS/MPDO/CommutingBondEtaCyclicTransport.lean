@@ -57,8 +57,8 @@ theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
           Matrix.reindex
               (Matrix.etaCyclicEdgeEquiv dl dr e)
               (Matrix.etaCyclicEdgeEquiv dl dr e)
-              (star (sitewisePhysicalMatrix U N) * mpo M N *
-                sitewisePhysicalMatrix U N) =
+              (star (Matrix.tensorPower N U) * mpo M N *
+                Matrix.tensorPower N U) =
             (c : ℂ) • Matrix.blockDiagonal' fun k : Fin N → Fin K ↦
               fun x y ↦ ∏ n : Fin N, η (k n) (k (n + 1)) (x n) (y n) := by
   classical
@@ -83,13 +83,13 @@ theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
     (List.ofFn fun i : Fin N ↦
       embedLocalOperator 2 N hN i data.bondData.bond).prod at hreal
   have hconj :
-      singleKrausMap (sitewisePhysicalMatrix Uᴴ N) (mpo M N) =
+      singleKrausMap (Matrix.tensorPower N Uᴴ) (mpo M N) =
         (c : ℂ) • (List.ofFn fun i : Fin N ↦
           embedLocalOperator 2 N hN i
             (Matrix.reindex (finTwoArrowEquiv (Fin d)).symm
               (finTwoArrowEquiv (Fin d)).symm
               (star (U ⊗ₖ U) * data.pairBond * (U ⊗ₖ U)))).prod := by
-    rw [hreal, (singleKrausMap (sitewisePhysicalMatrix Uᴴ N)).map_smul,
+    rw [hreal, (singleKrausMap (Matrix.tensorPower N Uᴴ)).map_smul,
       singleKrausMap_bondProduct_of_unitary Uᴴ hV hV' hN]
     congr 1
     apply congrArg List.prod
@@ -98,21 +98,21 @@ theorem EtaLocalStructureData.exists_positive_cyclic_eta_block_decomposition
     rw [singleKrausMap_sitewise_conjTranspose_two_eq]
     rfl
   have hglobal :
-      singleKrausMap (sitewisePhysicalMatrix Uᴴ N) (mpo M N) =
-        star (sitewisePhysicalMatrix U N) * mpo M N *
-          sitewisePhysicalMatrix U N := by
-    simp only [singleKrausMap_apply, ← sitewisePhysicalMatrix_conjTranspose,
+      singleKrausMap (Matrix.tensorPower N Uᴴ) (mpo M N) =
+        star (Matrix.tensorPower N U) * mpo M N *
+          Matrix.tensorPower N U := by
+    simp only [singleKrausMap_apply, ← Matrix.conjTranspose_tensorPower,
       Matrix.conjTranspose_conjTranspose, Matrix.star_eq_conjTranspose]
   have hcyclic := reindex_product_embedLocalOperator_of_etaPair_decomposition
     hN dl dr e η (star (U ⊗ₖ U) * data.pairBond * (U ⊗ₖ U)) hB
   calc
     Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
         (Matrix.etaCyclicEdgeEquiv dl dr e)
-        (star (sitewisePhysicalMatrix U N) * mpo M N *
-          sitewisePhysicalMatrix U N) =
+        (star (Matrix.tensorPower N U) * mpo M N *
+          Matrix.tensorPower N U) =
       Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
         (Matrix.etaCyclicEdgeEquiv dl dr e)
-        (singleKrausMap (sitewisePhysicalMatrix Uᴴ N) (mpo M N)) :=
+        (singleKrausMap (Matrix.tensorPower N Uᴴ) (mpo M N)) :=
           congrArg (Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)
             (Matrix.etaCyclicEdgeEquiv dl dr e)) hglobal.symm
     _ = Matrix.reindex (Matrix.etaCyclicEdgeEquiv dl dr e)

@@ -43,6 +43,8 @@ windows, so the partition is genuine.
   filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Step 4.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

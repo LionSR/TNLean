@@ -29,6 +29,8 @@ error bound for the infimum over all phases.
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (squareLatticeGraph)
+
 open Complex
 
 namespace TNLean.PEPS.Approximation

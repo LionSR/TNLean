@@ -29,6 +29,7 @@ forces the overlap to tend to $0$.
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
 open Filter Matrix
+open Kraus (blockPhysDim wordOfBlock blockTensor)
 
 namespace MPSTensor
 

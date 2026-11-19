@@ -37,6 +37,7 @@ estimates.
 
 open Matrix MPSTensor QuantumCircuit
 open scoped BigOperators ComplexOrder InnerProductSpace
+open Kraus (blockTensor)
 
 namespace MPSPreparation
 

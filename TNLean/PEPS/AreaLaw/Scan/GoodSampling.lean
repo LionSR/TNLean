@@ -28,6 +28,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open scoped BigOperators
@@ -41,11 +43,11 @@ omit [Fintype I] [LinearOrder I] in
 from its value at the anchor by at most the charge radius. -/
 theorem abs_depth_sub_anchor_le_domainGraph_of_mem_ball
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (i : I) (y : Site Λ) (hy : y ∈ S.ball i) :
     |S.depth y - S.depth (S.anchor i)| ≤ S.r₀ := by
-  have hball : (domainGraph Λ).edist (S.anchor i) y ≤ (S.r₀ : ℕ∞) := by
+  have hball : (planeDomainGraph Λ).edist (S.anchor i) y ≤ (S.r₀ : ℕ∞) := by
     simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hy
   simpa only [hdepth, abs_sub_comm] using abs_ambientDepth_sub_le_domainGraph T hT hball
 
@@ -54,7 +56,7 @@ omit [Fintype I] [LinearOrder I] in
 lies wholly in `A`, under the clearance of the target from the cut endpoints.
 Source: `08-scanner.tex`, lines 225–233. -/
 theorem ball_subset_of_mem_ball_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L : ℕ}
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
@@ -69,7 +71,7 @@ omit [Fintype I] [LinearOrder I] in
 /-- A charge ball meeting the middle of a partition lies in `A`, once every middle site lies
 in `A` at depth at most `L`. Source: `08-scanner.tex`, lines 225–233. -/
 theorem ball_subset_of_middle_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L : ℕ}
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
@@ -189,7 +191,7 @@ theorem oldChargeState_depth_bounds {k L : ℕ} (h : History S.K S.m S.M k)
 /-- A charge ball meeting the actual old middle of a band lies in `A`.
 Source: `08-scanner.tex`, lines 225–233. -/
 theorem ball_subset_of_oldChargeState_middle_domainGraph {Λ T : Finset (ℤ × ℤ)}
-    (hT : T.Nonempty) (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (hT : T.Nonempty) (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
@@ -206,7 +208,7 @@ move. Only the manuscript's ambient row bound is used for row padding; graph-bal
 depth variation and containment in the chosen color follow from the physical
 graph and the ambient clearance. -/
 theorem good_split_sampling_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L μ : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K) (side : Bool) (i : I)
     (hn : 2 ≤ S.n) (hm : 2 ≤ S.m) (hk : k + 1 ≤ S.n * S.m)

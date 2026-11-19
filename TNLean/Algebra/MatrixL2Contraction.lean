@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Algebra.L2OpNormReindex
 import QICLean.Algebra.MatrixAux
 import QICLean.Analysis.MatrixFramePerturbation
 import QICLean.Analysis.RectangularTraceNorm
@@ -18,7 +19,6 @@ contraction, and products of contractions are contractions.
 
 ## Main declarations
 
-* `Matrix.l2_opNorm_reindex_le`: relabelling rows and columns of a rectangular matrix.
 * `Matrix.l2_opNorm_le_one_of_conjTranspose_mul_self_le_one`: `‖Aᴴ A‖ ≤ 1` gives `‖A‖ ≤ 1`.
 * `Matrix.IsIsometry.l2_opNorm_le_one`: an isometry is a contraction.
 * `Matrix.l2_opNorm_list_prod_le_one`: finite products of contractions, using QICLean's
@@ -35,30 +35,6 @@ namespace Matrix
 
 variable {m n m' n' : Type*} [Fintype m] [Fintype n] [Fintype m'] [Fintype n'] [DecidableEq n]
   [DecidableEq n']
-
-/-- Relabelling the rows and the columns of a rectangular matrix does not increase its operator
-norm. -/
-theorem l2_opNorm_reindex_le (e : m ≃ m') (f : n ≃ n') (A : Matrix m n ℂ) :
-    ‖reindex e f A‖ ≤ ‖A‖ := by
-  refine l2_opNorm_le_of_forall (norm_nonneg _) fun v => ?_
-  have h := A.l2_opNorm_mulVec (WithLp.toLp 2 fun j => v (f j))
-  have hv : ‖(WithLp.toLp 2 fun j => v (f j) : EuclideanSpace ℂ n)‖ =
-      ‖(EuclideanSpace.equiv n' ℂ).symm v‖ := by
-    rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
-    congr 1
-    exact Equiv.sum_comp f (fun j => ‖v j‖ ^ 2)
-  have hA : ‖(EuclideanSpace.equiv m' ℂ).symm (reindex e f A *ᵥ v)‖ =
-      ‖(WithLp.toLp 2 (A *ᵥ fun j => v (f j)) : EuclideanSpace ℂ m)‖ := by
-    rw [EuclideanSpace.norm_eq, EuclideanSpace.norm_eq]
-    congr 1
-    refine (Equiv.sum_comp e fun i' => ‖(reindex e f A *ᵥ v) i'‖ ^ 2).symm.trans ?_
-    refine Finset.sum_congr rfl fun i _ => ?_
-    simp only [reindex_apply, mulVec, dotProduct, submatrix_apply]
-    congr 2
-    rw [← Equiv.sum_comp f]
-    simp
-  rw [hA, ← hv]
-  exact h
 
 /-- A matrix whose Gram matrix has operator norm at most one is a contraction. -/
 theorem l2_opNorm_le_one_of_conjTranspose_mul_self_le_one {A : Matrix m n ℂ}

@@ -20,6 +20,8 @@ injectivity is needed for this inclusion.
 Source: SCP10, Theorem 5.7 and equation `eq:2d:move-strings`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
@@ -73,7 +75,7 @@ theorem torusPlaquette_internal_not_mem_shiftedGraphSeamCut
   · change (torusRightEdge p).1.1 ∈ torusPlaquetteRegion v at ht
     change (torusRightEdge p).1.2 ∈ torusPlaquetteRegion v at hh
     have hp : (p.1 + 1, p.2) ∈ torusPlaquetteRegion v := by
-      rcases Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2) with ht' | hh'
+      rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2) with ht' | hh'
       · simpa only [torusRightEdge, ht'.2] using hh
       · simpa only [torusRightEdge, hh'.1] using ht
     change torusRightEdge p ∉ torusGraphSeamCut (v.1 + 2) (v.2 + 2)
@@ -82,7 +84,7 @@ theorem torusPlaquette_internal_not_mem_shiftedGraphSeamCut
   · change (torusUpEdge p).1.1 ∈ torusPlaquetteRegion v at ht
     change (torusUpEdge p).1.2 ∈ torusPlaquetteRegion v at hh
     have hp : (p.1, p.2 + 1) ∈ torusPlaquetteRegion v := by
-      rcases Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2) with ht' | hh'
+      rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2) with ht' | hh'
       · simpa only [torusUpEdge, ht'.2] using hh
       · simpa only [torusUpEdge, hh'.1] using ht
     change torusUpEdge p ∉ torusGraphSeamCut (v.1 + 2) (v.2 + 2)

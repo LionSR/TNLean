@@ -24,6 +24,7 @@ blocking assumption.
 -/
 
 open scoped Matrix BigOperators ComplexOrder
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

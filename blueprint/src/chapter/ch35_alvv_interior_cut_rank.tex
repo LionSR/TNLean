@@ -90,3 +90,239 @@ operator on each side plus the bulk operator.
     Lemma~\ref{thm:alvv_bulk_cut_polynomial_rank} gives
     (\ref{eq:alvv_two_window_interior_cut_rank}).
 \end{proof}
+
+\section{The Chebyshev projector of a two-window Hamiltonian}
+
+The spectral properties of the Chebyshev filter hold for every self-adjoint
+operator, and the rank estimates hold for every polynomial of bounded degree
+in a two-window family. Applied to one and the same polynomial of the actual
+two-window Hamiltonian, they give the four items of Theorem~4.2
+of~\cite{Arad2016RigorousRG}.
+
+\begin{lemma}[The Chebyshev projector at two cuts]
+    \label{thm:alvv_two_window_chebyshev_projector}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_two_window_chebyshev_spectral_projector}
+    \leanok
+    \uses{thm:chain_two_window_polynomial_rank,
+        thm:alvv_two_window_interior_cut_rank}
+    Let $L,q,\ell,a,b$ be natural numbers with $\ell\ge1$, $a+2\ell\le b$ and
+    $b+2\ell\le L-1$, and let $F_\alpha$ be the two-window family of
+    Lemma~\ref{thm:chain_two_window_polynomial_rank}. Suppose that
+    $H=\sum_\alpha F_\alpha$ is Hermitian and that all its eigenvalues are at
+    most $u$. Let $\eta_0<\eta_1\le u$, put $\gamma=\eta_1-\eta_0$, let
+    $k\ge1$, and put
+    \begin{align}
+        \Delta & =4\exp\Bigl(-4k\sqrt{\gamma/(u-\eta_0)}\Bigr).
+        \label{eq:alvv_two_window_chebyshev_delta}
+    \end{align}
+    There is a real polynomial $p$ of degree $k$ with $p(\eta_0)=1$ such that
+    $K=p(H)$ has the following properties.
+    \begin{enumerate}
+        \item With respect to an orthonormal eigenbasis $(v_j)$ of $H$,
+              $Hv_j=\lambda_jv_j$ and $Kv_j=p(\lambda_j)v_j$; moreover
+              $p(\lambda_j)\ge1$ if $\lambda_j\le\eta_0$ and
+              $p(\lambda_j)^2\le\Delta$ if $\lambda_j\ge\eta_1$.
+        \item For every eigenvalue $\lambda_j\le\eta_1$,
+              \begin{align}
+                  p(\lambda_j) & \ge1-\frac{k\,|\lambda_j-\eta_0|}
+                  {\sqrt{\gamma(u-\eta_0)}}.
+                  \label{eq:alvv_two_window_chebyshev_slope}
+              \end{align}
+        \item For $\delta\in\{0,1\}$ and $J=[a+\ell+\delta,b+\ell+1)$,
+              \begin{align}
+                  \operatorname{OSR}_{J\mid J^c}(K)
+                   & \le(qk)^{17(\ell+\lfloor k/(2\ell)\rfloor)}.
+                  \label{eq:alvv_two_window_chebyshev_rank}
+              \end{align}
+        \item At a cut $[0,c)\mid[c,L)$ inside one of the three bulk regions,
+              in the sense of
+              Lemma~\ref{thm:alvv_two_window_interior_cut_rank}, at which
+              the bulk operator of that region has operator Schmidt rank at
+              most $B$, the operator Schmidt rank of $K$ is at most
+              $(B+2)^{k+1}$.
+    \end{enumerate}
+    This is Theorem~4.2 of~\cite{Arad2016RigorousRG} with $u$ in place of
+    $\|H\|$, which is one admissible choice. Following
+    \cite{gap:alvv16_spectral_projector_boundary}, the spectral conditions
+    are closed at $\eta_0$ and $\eta_1$; positivity of $K$ is not asserted,
+    since the unsquared filter need not be positive
+    \cite{gap:alvv16_chebyshev_filter_positivity}; the printed decrease
+    $O(k|\lambda-\eta_0|\sqrt\Delta/(\gamma\|H\|))$ near $\eta_0$ fails for
+    large $k$ and is replaced by (\ref{eq:alvv_two_window_chebyshev_slope}),
+    valid on the whole range $\lambda\le\eta_1$
+    \cite{gap:alvv16_chebyshev_near_ground_slope}; and the count in
+    (\ref{eq:alvv_two_window_chebyshev_rank}) retains the additional ordered-gap
+    term of \cite{gap:aklv13_interpolation_and_word_count}. The bond dimensions
+    of a matrix-product-operator representation of $K$ and the cost of
+    computing it are separate assertions.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:chain_two_window_polynomial_rank,
+        thm:alvv_two_window_interior_cut_rank}
+    Let $p$ be the normalized Chebyshev polynomial of degree $k$ for the
+    interval $[\eta_0,\eta_1]$ and the upper bound $u$ given by
+    \cite[``The Chebyshev filter near the normalization point'']
+    {QICLean2026Blueprint}. Matrices and operators on Euclidean space
+    correspond by a star-algebra isomorphism, which commutes with polynomial
+    evaluation, so $p(H)$ is the operator of that statement. Its parameter
+    is $(2e^{-2k\sqrt{\gamma/(u-\eta_0)}})^2$, which equals
+    (\ref{eq:alvv_two_window_chebyshev_delta}); this gives the first two
+    items. The complexified polynomial still has degree $k$, so
+    Lemma~\ref{thm:chain_two_window_polynomial_rank} gives
+    (\ref{eq:alvv_two_window_chebyshev_rank}), and
+    Lemma~\ref{thm:alvv_two_window_interior_cut_rank} gives the last item.
+\end{proof}
+
+\begin{lemma}[Hard truncation of three bulks]
+    \label{lem:alvv_three_bulk_hard_truncation_spectral_comparison}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_three_bulk_hard_truncation_spectral_comparison}
+    \leanok
+    \uses{lem:five_region_independent_residual,lem:canonical_spectral_span}
+    Let $0\le h_i\le1$ be the nearest-neighbour terms of a chain of $L$ sites
+    of dimension $q$, let $\ell\ge1$, $a+2\ell\le b$, $b+2\ell\le L-1$ and
+    $t\ge0$.
+    \begin{itemize}
+        \item Cut the chain into three bulks and two windows: the window
+              about the left cut holds the $2\ell$ bonds starting at bond $a$,
+              and the window about the right cut those starting at bond $b$.
+        \item Both $H$ and $\tilde H$ are centred at the sum of the five
+              regional ground energies. $H$ is the original Hamiltonian, and
+              $\tilde H$ truncates each bulk at height $t$ above its own ground
+              energy.
+    \end{itemize}
+    Then there are a unit vector that is a ground vector of all five regional
+    Hamiltonians and a ground energy $0\le E_0\le4$ of $H$, with the
+    following properties.
+    \begin{itemize}
+        \item $\tilde H\le H$ and $\|\tilde H\|\le3t+4\ell$.
+        \item $\tilde H$ is the sum of the $2\ell$ two-site terms of each
+              window and of three operators supported on the three bulks,
+              which is the form required by
+              Lemma~\ref{thm:alvv_two_window_chebyshev_projector}.
+    \end{itemize}
+    For every $\eta\ge0$ with $19+\eta\le t$ put
+    $\xi=288e^{11/8}e^{-(t-\eta)/8}$. Let $E_0'$ be the ground energy of
+    $\tilde H$. Then:
+    \begin{itemize}
+        \item every ordered eigenvalue of $\tilde H$ at most $E_0+\eta$ lies
+              below the corresponding eigenvalue of $H$, by at most $\xi$;
+        \item $E_0'\le E_0\le E_0'+\xi$;
+        \item if $\eta>0$, then for every $\delta>0$, with
+              $\eta'=\eta+\xi+2\xi\sqrt{\lceil\eta/(2\xi)\rceil/\delta}$, the
+              span of the eigenvectors of $\tilde H$ with eigenvalue at most
+              $E_0'+\eta'$ is $\delta$-close to that of $H$ with eigenvalue at
+              most $E_0+\eta$; and the span for $H$ at $E_0+\eta'$ is
+              $\delta$-close to that for $\tilde H$ at $E_0'+\eta$.
+    \end{itemize}
+    This is the spectral part of Corollary~4.6 of~\cite{Arad2016RigorousRG},
+    with explicit constants.
+    \begin{itemize}
+        \item The cutoff $19+\eta\le t$ replaces the asymptotic conditions.
+              This corrects the printed condition rather than adding a
+              hypothesis: with $t>\eta$ alone the estimate on the truncated
+              side is false, as the chain of
+              Example~\ref{ex:hard_truncation_flat_sector} shows
+              \cite{gap:alvv16_hard_truncation_windows}.
+        \item The closeness window uses the ceiling count of the same note.
+    \end{itemize}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:five_region_independent_residual,lem:canonical_spectral_span}
+    \begin{itemize}
+        \item Truncating a bulk lowers it, so $\tilde H\le H$.
+        \item The three-bulk residual bounds the restricted error by $\xi$ on
+              the low spaces of $H$ and of $\tilde H$. It applies to any
+              eigenbasis of either operator.
+        \item The ground vector identifies $E_0$ with the last ordered
+              eigenvalue of $H$.
+        \item From $\tilde H\le H$ and the error on the low space of
+              $\tilde H$: the eigenvalue comparison and the ground-energy
+              shift.
+        \item From both errors and the relative spectral-window comparison:
+              the closeness statements.
+        \item Grouping the bonds of each window with the two crossing bonds
+              at its ends gives the two-window form.
+    \end{itemize}
+\end{proof}
+
+\begin{lemma}[A good projector after hard truncation]
+    \label{cor:alvv_good_projector_hard_truncation}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_two_window_chebyshev_projector_degree_sq}
+    \leanok
+    \uses{thm:alvv_two_window_chebyshev_projector,
+        lem:alvv_three_bulk_hard_truncation_spectral_comparison}
+    Let $H$ be a Hermitian Hamiltonian of the two-window form of
+    Lemma~\ref{thm:alvv_two_window_chebyshev_projector}, with $q\ge1$,
+    $\|H\|\le u$ and $\eta_0<\eta_1\le u$. There is a real polynomial $p$ of
+    degree $\ell^2$ with $p(\eta_0)=1$ such that $K=p(H)$:
+    \begin{itemize}
+        \item satisfies the first two items of
+              Lemma~\ref{thm:alvv_two_window_chebyshev_projector} with
+              $k=\ell^2$, that is with
+              $\Delta=4\exp\bigl(-4\ell^2\sqrt{(\eta_1-\eta_0)/(u-\eta_0)}\bigr)$;
+        \item has operator Schmidt rank at most
+              $(q\ell^2)^{17(\ell+\lfloor\ell/2\rfloor)}\le(q\ell)^{68\ell}$ across
+              both middle cuts.
+    \end{itemize}
+    The truncated Hamiltonian of
+    Lemma~\ref{lem:alvv_three_bulk_hard_truncation_spectral_comparison} has
+    this form with $u=3t+4\ell$. For it, therefore,
+    \[
+        D=(q\ell)^{O(\ell)}
+        \quad\text{and}\quad
+        \Delta=e^{-\Omega(\ell^2\sqrt{\eta_1-\eta_0}/\sqrt{t+\ell})}
+    \]
+    whenever $\eta_0\ge0$. Together with that lemma, this is Corollary~4.6
+    of~\cite{Arad2016RigorousRG}, with explicit constants. The spectral
+    conditions, the slope near $\eta_0$ and the word count are those of
+    Lemma~\ref{thm:alvv_two_window_chebyshev_projector}
+    \cite{gap:alvv16_spectral_projector_boundary,
+        gap:alvv16_chebyshev_filter_positivity,
+        gap:alvv16_chebyshev_near_ground_slope,
+        gap:aklv13_interpolation_and_word_count}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:alvv_two_window_chebyshev_projector}
+    Every eigenvalue of $H$ is at most $\|H\|\le u$. Apply
+    Lemma~\ref{thm:alvv_two_window_chebyshev_projector} with $k=\ell^2$.
+    Since $q\ell^2\le(q\ell)^2$ and $\lfloor\ell^2/(2\ell)\rfloor\le\ell$, the
+    rank bound is at most $((q\ell)^2)^{34\ell}$.
+\end{proof}
+
+\begin{lemma}[Corollary 4.6 with the corrected cutoff, as one statement]
+    \label{cor:alvv_good_projector_hard_truncation_combined}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_three_bulk_hard_truncation_good_projector}
+    \leanok
+    \uses{lem:alvv_three_bulk_hard_truncation_spectral_comparison,
+        cor:alvv_good_projector_hard_truncation}
+    Under the hypotheses of
+    Lemma~\ref{lem:alvv_three_bulk_hard_truncation_spectral_comparison}, the
+    truncated Hamiltonian $\tilde H$ of that lemma has all of its properties,
+    and in addition, for every $\eta_0<\eta_1$, there is a real
+    polynomial $p$ of degree $\ell^2$ with $p(\eta_0)=1$ such that
+    $p(\tilde H)$ is a spectral projector for $(\tilde H,\eta_0,\eta_1)$ with
+    \[
+        \Delta=4\exp\Bigl(-4\ell^2\sqrt{(\eta_1-\eta_0)/(3t+4\ell-\eta_0)}\Bigr)
+    \]
+    and operator Schmidt rank at most $(q\ell)^{68\ell}$ across both middle
+    cuts. This is Corollary~4.6 of~\cite{Arad2016RigorousRG} for one and the
+    same truncated Hamiltonian, in the corrected form of the two lemmas it
+    joins: the cutoff $19+\eta\le t$ replaces the printed condition $t>\eta$,
+    under which the truncated-side estimate is false
+    \cite{gap:alvv16_hard_truncation_windows}, the constants are explicit,
+    and the spectral conditions, the slope near $\eta_0$ and the word count
+    are those of Lemma~\ref{thm:alvv_two_window_chebyshev_projector}.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:alvv_three_bulk_hard_truncation_spectral_comparison,
+        cor:alvv_good_projector_hard_truncation}
+    Lemma~\ref{lem:alvv_three_bulk_hard_truncation_spectral_comparison} writes
+    $\tilde H$ in the two-window form with $\|\tilde H\|\le3t+4\ell$, so
+    Lemma~\ref{cor:alvv_good_projector_hard_truncation} applies to it with
+    $u=3t+4\ell$ when $\eta_1\le u$. When $\eta_1>u$, no eigenvalue of
+    $\tilde H$ is at least $\eta_1$, so the contraction condition is vacuous;
+    take $p(x)=(\eta_0+1-x)^{\ell^2}$, which satisfies $p(\eta_0)=1$ and
+    $p\ge1$ on $(-\infty,\eta_0]$, and whose image $p(\tilde H)$ has the same
+    two-cut rank bound as every polynomial of degree $\ell^2$ in a Hamiltonian
+    of the two-window form.
+\end{proof}

@@ -20,7 +20,7 @@ operator norm of the tail virtual map by the squared entrywise mass of that valu
 
 * `MPSTensor.tailVirtualMapES_adjoint_comp_self_apply`
 * `MPSTensor.tailVirtualMapES_norm_four_pow_le_transferMap_pow_one_entry_norm_sq`
-* `MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_uniform`
+* `Kraus.HasComplementaryFixedPointGap.tailVirtualMapES_norm_uniform`
 -/
 
 open scoped Matrix Kraus
@@ -129,9 +129,9 @@ MPS tensor. Positive transfer-map powers split into the fixed-point projection a
 geometrically bounded complementary power. The entrywise mass from the Gram estimate is
 then controlled by the L² operator norm with an explicit bond-dimension factor. No
 positive-definiteness assumption on the fixed point is needed. -/
-theorem IsPrimitiveMPS.tailVirtualMapES_norm_four_pow_uniform
+theorem _root_.Kraus.HasComplementaryFixedPointGap.tailVirtualMapES_norm_four_pow_uniform
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
     ∃ C : ℝ, 0 < C ∧ ∀ K : ℕ, ‖tailVirtualMapES A K‖ ^ 4 ≤ C := by
   let : NormedRing (Matrix (Fin D) (Fin D) ℂ) := Matrix.instL2OpNormedRing
   let E := Kraus.transferMap (d := d) (D := D) A
@@ -216,9 +216,9 @@ theorem IsPrimitiveMPS.tailVirtualMapES_norm_four_pow_uniform
 independent of the tail length. The proof preserves the fourth-power Gram normalization:
 it first bounds the fourth powers uniformly and then chooses a strictly positive bound for
 the norms themselves. No positive-definiteness assumption on the fixed point is required. -/
-theorem IsPrimitiveMPS.tailVirtualMapES_norm_uniform
+theorem _root_.Kraus.HasComplementaryFixedPointGap.tailVirtualMapES_norm_uniform
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
     ∃ C : ℝ, 0 < C ∧ ∀ K : ℕ, ‖tailVirtualMapES A K‖ ≤ C := by
   obtain ⟨Q, hQ, hbound⟩ := hP.tailVirtualMapES_norm_four_pow_uniform
   refine ⟨Q + 1, by positivity, ?_⟩

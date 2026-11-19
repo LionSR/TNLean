@@ -33,7 +33,7 @@ general predicate `TNLean.PEPS.IsGInjective (linHom ρ ρ) (mpsSiteMap A)`;
 `IsGInjective.mpsSiteMap_concatTensor`, with the explicit left inverse
 `concatLeftInverse` of `eq:noninj:linv` and its left-inverse identity
 `concatLeftInverse_comp_mpsSiteMap`. Words of any positive length and the blocked tensors
-`MPSTensor.blockTensor A L` are `G`-injective as corollaries.
+`Kraus.blockTensor A L` are `G`-injective as corollaries.
 
 The source writes `U_g†`; for a unitary representation this is `ρ(g⁻¹)`, which is the form
 stated here. No unitarity is used, and no semi-regularity: the source needs it only from
@@ -61,6 +61,7 @@ Theorem 4.12 on.
 -/
 
 open Module LinearMap Representation
+open Kraus (decodeBlockEquiv decodeBlockEquiv_apply blockTensor)
 
 namespace TNLean
 namespace PEPS

@@ -313,6 +313,154 @@ representation requires $w,h\ge 2$ \cite{gap:rmp_peps_examples_small_torus}.
     $\Coeff(0)=2^{-N}\neq 0$) with Lemma~\ref{thm:peps_graph_stabilizer_line}.
 \end{proof}
 
+\begin{lemma}[Graph-stabilizer Hamiltonian]
+    \label{thm:peps_graph_stabilizer_hamiltonian}
+    \lean{TNLean.PEPS.graphFlip_graphFlip, TNLean.PEPS.graphFlip_comm,
+        TNLean.PEPS.graphStabilizer_apply_eq, TNLean.PEPS.graphStabilizer_comm,
+        TNLean.PEPS.graphStabilizer_graphStabilizer,
+        TNLean.PEPS.sum_star_mul_graphStabilizer, TNLean.PEPS.graphHamiltonian,
+        TNLean.PEPS.sum_star_mul_graphHamiltonian,
+        TNLean.PEPS.neg_card_mul_le_re_sum_star_mul_graphHamiltonian,
+        TNLean.PEPS.graphHamiltonian_eq_neg_card_smul_iff}
+    \leanok
+    \uses{def:peps_graph_stabilizers}
+    For the loop-free bond family of Definition~\ref{def:peps_graph_stabilizers},
+    the stabilizers $K_v$ commute pairwise, square to the identity, and are
+    self-adjoint. The operator $H=-\sum_{v\in V}K_v$ satisfies
+    \begin{align}
+        \langle\psi,H\psi\rangle
+         & =-|V|\,\|\psi\|^2+\tfrac12\sum_{v\in V}\|\psi-K_v\psi\|^2,
+        \label{eq:peps_graph_stabilizer_energy}
+    \end{align}
+    so $H\geq-|V|$, and $H\psi=-|V|\psi$ if and only if $K_v\psi=\psi$ for
+    every $v$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Since $s_v(\sigma)=g(\sigma\oplus\mathbf{1}_v)g(\sigma)$ and $g^2=1$,
+    $(K_v\psi)(\sigma)=g(\sigma)g(\sigma\oplus\mathbf{1}_v)
+        \psi(\sigma\oplus\mathbf{1}_v)$: the stabilizer is the flip at $v$
+    conjugated by multiplication with the real sign $g$. Flips commute and
+    are involutions, which gives the first three claims. For a self-adjoint
+    involution $K$, $\|\psi-K\psi\|^2=2\langle\psi,\psi-K\psi\rangle$;
+    summing over $v$ gives (\ref{eq:peps_graph_stabilizer_energy}), and the
+    remaining claims follow.
+\end{proof}
+
+\section{The honeycomb cluster state}%
+\label{sec:peps_honeycomb_cluster}
+
+\cite[Section~IV]{Cirac2021Matrix} introduces the cluster state on the
+honeycomb lattice:
+\begin{quote}
+    ``The canonical example for an injective PEPS with global symmetries is
+    the cluster state on the honeycomb lattice, which is the unique ground
+    state of the commuting parent Hamiltonian $\sum_{ijkl}X_iZ_jZ_kZ_l$ of
+    qubits where $j,k,l$ are the nearest neigbours of site $i$. This state
+    has a very simple PEPS representation [\ldots] with [vertex tensor]
+    $=\ket{0000}+\ket{1111}$, [bond matrix]
+    $=\frac{1}{\sqrt{2}}\left(\begin{smallmatrix} 1 & 1\\ 1 &
+                -1\end{smallmatrix}\right)$.''
+\end{quote}
+The printed Hamiltonian has the wrong sign for this claim: its unique ground
+state is the common $-1$ eigenvector of the stabilizers, the product of $Z$
+over all sites applied to the cluster state. The parent Hamiltonian below is
+$-\sum_iX_iZ_jZ_kZ_l$ \cite{gap:rmp_honeycomb_cluster_peps}. The claim that
+the PEPS is injective is false as printed: the vertex tensor maps a virtual
+space of dimension eight to a qubit, and the tensor of two blocked sites maps
+a space of dimension sixteen to one of dimension four. Injectivity holds after
+blocking over hexagonal plaquettes \cite{gap:rmp_honeycomb_cluster_injectivity}.
+The brick wall is the honeycomb on tori of even width and height
+\cite{gap:rmp_peps_examples_small_torus}.
+
+\begin{definition}[Graph-state PEPS and the brick-wall honeycomb]
+    \label{def:peps_honeycomb_cluster}
+    \lean{TNLean.PEPS.hadamardEntry, TNLean.PEPS.graphStateLeg,
+        TNLean.PEPS.graphStatePEPS, TNLean.PEPS.graphStatePEPS_bondDim,
+        TNLean.PEPS.graphStatePEPS_component, TNLean.PEPS.IncidentEdge.other,
+        TNLean.PEPS.IncidentEdge.adj_other,
+        TNLean.PEPS.incidentEdgeEquivNeighborFinset,
+        TNLean.PEPS.honeycombUp, TNLean.PEPS.honeycombGraph,
+        TNLean.PEPS.honeycombClusterPEPS, TNLean.PEPS.honeycombStabilizer,
+        TNLean.PEPS.honeycombHamiltonian, TNLean.PEPS.honeycombVertical}
+    \leanok
+    \uses{def:peps_stateCoeff, def:peps_graph_stabilizers}
+    For a finite simple graph with ordered vertices, the graph-state PEPS
+    has bond dimension two on every edge and the copy tensor
+    $\ket{0\ldots0}+\ket{1\ldots1}$ at every vertex, with the matrix
+    $H=\frac1{\sqrt2}\left(\begin{smallmatrix}1&1\\1&-1\end{smallmatrix}\right)$
+    applied to the leg of each edge at its smaller endpoint; this is the
+    network of a copy tensor at each vertex and $H$ on each bond. The
+    brick-wall honeycomb on the $w\times h$ torus joins $(x,y)$ to
+    $(x\pm1,y)$, and to $(x,y+1)$ when $x+y$ is even. The honeycomb cluster
+    PEPS is the graph-state PEPS of this graph, and its stabilizers and
+    Hamiltonian are $K_v$ and $-\sum_vK_v$ of
+    Definition~\ref{def:peps_graph_stabilizers} for its edges.
+\end{definition}
+
+\begin{lemma}[Graph-state PEPS]
+    \label{thm:peps_graph_state_peps}
+    \lean{TNLean.PEPS.card_incidentEdge,
+        TNLean.PEPS.prod_incidentEdge_eq_prod_edge,
+        TNLean.PEPS.stateCoeff_graphStatePEPS,
+        TNLean.PEPS.not_linearIndependent_graphStatePEPS_component,
+        TNLean.PEPS.graphNeighborSign_edge}
+    \leanok
+    \uses{def:peps_honeycomb_cluster}
+    For a finite simple graph with edge set $E$, the graph-state PEPS has
+    coefficient $\Coeff(\sigma)=2^{-|E|/2}g(\sigma)$, with $g$ the
+    controlled-$Z$ sign over the edges. Its stabilizer at $v$ is
+    $X_v\prod_{w\sim v}Z_w$, and the tensor at a vertex with at least two
+    edges is not injective.
+\end{lemma}
+
+\begin{proof}\leanok
+    The product over vertices of the leg factors is the product over edges
+    of the factors at both endpoints. Contracting the edge between $u<v$
+    gives $\sum_\beta H_{\sigma_u\beta}\delta_{\beta\sigma_v}
+        =H_{\sigma_u\sigma_v}=2^{-1/2}(-1)^{\sigma_u\sigma_v}$. The edges at
+    $v$ correspond to the neighbours of $v$, which gives the stabilizer.
+    At a vertex of degree $k\geq2$ the tensor is a family of $2^k\geq4$
+    vectors in $\C^2$.
+\end{proof}
+
+\begin{lemma}[The honeycomb cluster state]
+    \label{thm:peps_honeycomb_cluster_state}
+    \lean{TNLean.PEPS.honeycombStabilizer_apply,
+        TNLean.PEPS.honeycombGraph_neighborFinset,
+        TNLean.PEPS.honeycombGraph_degree,
+        TNLean.PEPS.stateCoeff_honeycombClusterPEPS,
+        TNLean.PEPS.honeycombStabilizer_comm,
+        TNLean.PEPS.honeycombStabilizer_fixed_iff,
+        TNLean.PEPS.neg_card_mul_le_re_honeycombHamiltonian,
+        TNLean.PEPS.honeycombHamiltonian_eq_neg_card_smul_iff,
+        TNLean.PEPS.stateCoeff_honeycombClusterPEPS_ne_zero,
+        TNLean.PEPS.not_isVertexInjective_honeycombClusterPEPS}
+    \leanok
+    \uses{def:peps_honeycomb_cluster}
+    On the brick-wall honeycomb of a $w\times h$ torus with $w,h\geq2$, the
+    honeycomb cluster PEPS is nonzero and $\Coeff=2^{-|E|/2}g$. The
+    stabilizers $K_v=X_v\prod_{w\sim v}Z_w$ commute, the Hamiltonian
+    $-\sum_vK_v$ is bounded below by $-wh$, and its eigenspace for $-wh$ is
+    $\C\cdot\Coeff$: the cluster state is the unique ground state of this
+    commuting parent Hamiltonian. If $h$ is even and $w\geq3$, every site has
+    exactly the three neighbours $(x\pm1,y)$ and its vertical neighbour. The
+    vertex tensors of the honeycomb cluster PEPS are not injective.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_graph_state_peps, thm:peps_graph_stabilizer_line,
+        thm:peps_graph_stabilizer_hamiltonian}
+    The coefficient and the stabilizer are Lemma~\ref{thm:peps_graph_state_peps}.
+    Lemma~\ref{thm:peps_graph_stabilizer_line} identifies the common fixed
+    space with $\C\cdot\Coeff$, and
+    Lemma~\ref{thm:peps_graph_stabilizer_hamiltonian} identifies it with the
+    ground space. For even $h$ the parity of $x+y$ alternates along each
+    column, so the vertical bond of every site is shared with exactly one
+    neighbour; for $w\geq3$ the horizontal neighbours $(x+1,y)$ and
+    $(x-1,y)$ differ. The origin has the two neighbours $(1,0)$ and $(0,1)$.
+\end{proof}
+
 \section{The CZX model}%
 \label{sec:peps_czx}
 
@@ -489,10 +637,13 @@ bond-dimension-four PEPS in \cite[Appendix~A, ``The CZX model'']{Cirac2021Matrix
 \end{proof}
 
 The boundary MPU 3-cocycle anomaly is formalized in
-Theorem~\ref{thm:mpug_anomaly_three_cocycle}, Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}, and Lemma~\ref{thm:asymex_czx_decorated_anomaly_class}.
+Theorem~\ref{thm:mpug_anomaly_three_cocycle}, Lemma~\ref{thm:mpug_anomaly_three_cocycle_gauge}, and Lemma~\ref{thm:asymex_czx_decorated_anomaly_class};
+the physical boundary action of the CZX PEPS is connected to it in
+Section~\ref{sec:czx_boundary_anomaly}.
 
 \input{chapter/ch24_peps_czx_rectangle_boundary}
 \input{chapter/ch24_peps_czx_wrapping_rectangle}
+\input{chapter/ch24_peps_czx_boundary_anomaly}
 
 \section{The AKLT state}%
 \label{sec:peps_aklt}

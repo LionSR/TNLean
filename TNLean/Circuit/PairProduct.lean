@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Algebra.PermutationMatrixUnitary
-import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.LocalCircuit
+import TNLean.Circuit.SitePermutation
 
 /-!
 # Products of two-site gates on an open chain
@@ -37,7 +37,7 @@ sites.
 Source: arXiv:2307.01696, main text before Theorem 1 (local circuits of two-site gates). -/
 def IsNeighbourGate (Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) : Prop :=
   Z ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) ∧
-    ∃ p p' : Fin n, p'.val = p.val + 1 ∧ Z ∈ supportedOperators d {p, p'}
+    ∃ p p' : Fin n, p'.val = p.val + 1 ∧ Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) {p, p'}
 
 /-- `X` is a product of at most `K` unitary gates, each acting on two neighbouring sites of
 the open chain of `n` sites.
@@ -89,7 +89,7 @@ theorem star {K : ℕ} {X : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ} (hX 
   · simp only [List.mem_reverse, List.mem_map] at hZ
     obtain ⟨Z', hZ', rfl⟩ := hZ
     obtain ⟨hu, p, p', hp, hS⟩ := hg Z' hZ'
-    exact ⟨Unitary.star_mem hu, p, p', hp, star_mem_supportedOperators hS⟩
+    exact ⟨Unitary.star_mem hu, p, p', hp, star_mem hS⟩
   · clear hl hg
     induction l with
     | nil => simp
@@ -127,7 +127,7 @@ theorem IsPairProduct.embedOp {K : ℕ} {e : Fin m → Fin n} (he : Function.Inj
   obtain ⟨hu, p, p', hp, hS⟩ := hg Z' hZ'
   refine ⟨embedOp_mem_unitary he hu, e p, e p', by rw [hea, hea, hp]; ring, ?_⟩
   have := embedOp_mem_supportedOperators_image he hS
-  rwa [Set.image_pair] at this
+  rwa [Finset.image_insert, Finset.image_singleton] at this
 
 /-! ### Operators acting on a subset of the sites -/
 
@@ -135,11 +135,11 @@ theorem IsPairProduct.embedOp {K : ℕ} {e : Fin m → Fin n} (he : Function.Inj
 sites. -/
 theorem exists_embedOp_eq_of_mem_supportedOperators {e : Fin m → Fin n}
     (he : Function.Injective e) {Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ}
-    (hZ : Z ∈ supportedOperators d (Set.range e)) :
+    (hZ : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.image e)) :
     ∃ X : Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ, Z = embedOp e X := by
-  induction hZ using Submodule.span_induction with
-  | mem x hx =>
-    obtain ⟨A, hA, rfl⟩ := hx
+  induction hZ using ManyBody.supportedOperators_induction with
+  | prod A hA =>
+    rw [prodOp_eq_rectKronecker]
     refine ⟨finKronecker (A ∘ e), ?_⟩
     rw [← rectKronecker_eq_finKronecker, embedOp_rectKronecker he]
     congr 1
@@ -148,8 +148,7 @@ theorem exists_embedOp_eq_of_mem_supportedOperators {e : Fin m → Fin n}
     · obtain ⟨j, rfl⟩ := h
       rw [he.extend_apply]; rfl
     · rw [Function.extend_apply' _ _ _ h, Pi.one_apply]
-      exact hA i fun ⟨j, hj⟩ => h ⟨j, hj⟩
-  | zero => exact ⟨0, by simp⟩
+      exact hA i fun hi => h (by simpa using hi)
   | add x y _ _ hx hy =>
     obtain ⟨X, rfl⟩ := hx
     obtain ⟨Y, rfl⟩ := hy
@@ -181,18 +180,6 @@ theorem mem_unitary_of_embedOp_mem_unitary {e : Fin m → Fin n} (he : Function.
 
 /-! ### Moving a gate with SWAP gates -/
 
-/-- The operator permuting the sites of the chain by `τ`: `|x⟩ ↦ |x ∘ τ⁻¹⟩`. -/
-def permOp (τ : Equiv.Perm (Fin n)) : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ :=
-  of fun x y => if y = x ∘ τ then 1 else 0
-
-theorem permOp_mul_mul_conjTranspose (τ : Equiv.Perm (Fin n))
-    (X : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) :
-    permOp τ * X * (permOp τ)ᴴ = X.submatrix (· ∘ τ) (· ∘ τ) := by
-  ext x y
-  simp only [mul_apply, permOp, of_apply, conjTranspose_apply, submatrix_apply, ite_mul,
-    one_mul, zero_mul, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
-  simp [apply_ite star]
-
 theorem embedOp_submatrix_perm (e : Fin m → Fin n) (τ : Equiv.Perm (Fin n))
     (X : Matrix (Fin m → Fin d) (Fin m → Fin d) ℂ) :
     (embedOp e X).submatrix (· ∘ τ) (· ∘ τ) = embedOp (τ ∘ e) X := by
@@ -209,73 +196,12 @@ theorem embedOp_submatrix_perm (e : Fin m → Fin n) (τ : Equiv.Perm (Fin n))
   simp only [this]
   rfl
 
-/-- The SWAP of the two sites of a two-site chain. -/
-def swapTwo : Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ := permOp (Equiv.swap 0 1)
-
-/-- Two sites `i ≠ j` as a map `Fin 2 → Fin n`. -/
-def pairSites (i j : Fin n) : Fin 2 → Fin n := ![i, j]
-
-theorem pairSites_injective {i j : Fin n} (hij : i ≠ j) : Function.Injective (pairSites i j) := by
-  intro a b h
-  fin_cases a <;> fin_cases b <;> simp_all [pairSites, eq_comm]
-
-theorem range_pairSites (i j : Fin n) : Set.range (pairSites i j) = {i, j} := by
-  ext k
-  simp only [Set.mem_range, Set.mem_insert_iff, Set.mem_singleton_iff, pairSites]
-  constructor
-  · rintro ⟨a, rfl⟩; fin_cases a <;> simp
-  · rintro (rfl | rfl)
-    · exact ⟨0, rfl⟩
-    · exact ⟨1, rfl⟩
-
-theorem permOp_swap_eq_embedOp {j j' : Fin n} (hjj' : j ≠ j') :
-    permOp (d := d) (Equiv.swap j j') = embedOp (pairSites j j') swapTwo := by
-  ext x y
-  rw [embedOp_apply]
-  simp only [permOp, swapTwo, of_apply]
-  have key : y = x ∘ Equiv.swap j j' ↔ AgreeOff (pairSites j j') x y ∧
-      y ∘ pairSites j j' = (x ∘ pairSites j j') ∘ Equiv.swap 0 1 := by
-    constructor
-    · rintro rfl
-      refine ⟨fun i hi => ?_, ?_⟩
-      · have h0 : i ≠ j := fun h => hi 0 (by simp [pairSites, h])
-        have h1 : i ≠ j' := fun h => hi 1 (by simp [pairSites, h])
-        simp [Equiv.swap_apply_of_ne_of_ne h0 h1]
-      · funext a; fin_cases a <;> simp [pairSites]
-    · rintro ⟨h, h'⟩
-      funext i
-      by_cases hi0 : i = j
-      · subst hi0; have := congrFun h' 0; simpa [pairSites] using this
-      by_cases hi1 : i = j'
-      · subst hi1; have := congrFun h' 1; simpa [pairSites] using this
-      · rw [Function.comp_apply, Equiv.swap_apply_of_ne_of_ne hi0 hi1]
-        exact (h i fun a ha => by fin_cases a <;> simp_all [pairSites, eq_comm]).symm
-  by_cases h : y = x ∘ Equiv.swap j j'
-  · obtain ⟨h1, h2⟩ := key.1 h
-    rw [ite_eq_left h, ite_eq_left h1, ite_eq_left h2]
-  · rw [ite_eq_right h]
-    split_ifs with h1 h2 <;> first | rfl | exact absurd (key.2 ⟨h1, h2⟩) h
-
-/-- The site permutation `permOp τ` is the permutation matrix of `x ↦ x ∘ τ` on
-configurations. -/
-theorem permOp_eq_permMatrix (τ : Equiv.Perm (Fin n)) :
-    permOp (d := d) τ = Equiv.Perm.permMatrix ℂ (τ.symm.arrowCongr (Equiv.refl (Fin d))) := by
-  ext x y
-  simp only [permOp, Equiv.Perm.permMatrix, Equiv.toPEquiv_apply, PEquiv.toMatrix_apply,
-    Option.mem_def, Option.some.injEq, of_apply]
-  exact if_congr eq_comm rfl rfl
-
-theorem permOp_mem_unitary (τ : Equiv.Perm (Fin n)) :
-    permOp (d := d) τ ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) := by
-  rw [permOp_eq_permMatrix]
-  exact Equiv.Perm.permMatrix_mem_unitaryGroup _
-
 /-- The SWAP gate of two neighbouring sites. -/
 theorem isNeighbourGate_permOp_swap {j j' : Fin n} (hj : j'.val = j.val + 1) :
     IsNeighbourGate (permOp (d := d) (Equiv.swap j j')) := by
   have hjj' : j ≠ j' := fun h => by rw [h] at hj; omega
   refine ⟨permOp_mem_unitary _, j, j', hj, ?_⟩
-  rw [permOp_swap_eq_embedOp hjj', ← range_pairSites]
+  rw [permOp_swap_eq_embedOp hjj', ← image_univ_pairSites]
   exact embedOp_mem_supportedOperators (pairSites_injective hjj') _
 
 theorem embedOp_comp_perm (e : Fin m → Fin n) (σ : Equiv.Perm (Fin m))
@@ -301,7 +227,7 @@ private theorem isPairProduct_embedOp_pairSites_of_lt {g : Matrix (Fin 2 → Fin
     have hne : i ≠ j := fun h => by rw [h] at hij; omega
     refine IsPairProduct.of_isNeighbourGate ⟨embedOp_mem_unitary (pairSites_injective hne) hg,
       i, j, by omega, ?_⟩
-    rw [← range_pairSites]
+    rw [← image_univ_pairSites]
     exact embedOp_mem_supportedOperators (pairSites_injective hne) _
   | succ k ih =>
     intro i j hij
@@ -352,8 +278,9 @@ sites. -/
 theorem isPairProduct_of_mem_supportedOperators_pair (hd : 0 < d) {i j : Fin n} (hij : i ≠ j)
     {Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ}
     (hZu : Z ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ))
-    (hZ : Z ∈ supportedOperators d {i, j}) : IsPairProduct d n (2 * n) Z := by
-  rw [← range_pairSites] at hZ
+    (hZ : Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) {i, j}) :
+        IsPairProduct d n (2 * n) Z := by
+  rw [← image_univ_pairSites] at hZ
   obtain ⟨g, rfl⟩ := exists_embedOp_eq_of_mem_supportedOperators (pairSites_injective hij) hZ
   exact isPairProduct_embedOp_pairSites hij
     (mem_unitary_of_embedOp_mem_unitary (pairSites_injective hij) hd hZu)

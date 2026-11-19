@@ -7,6 +7,7 @@ import TNLean.MPS.AreaLaw.GluingHamiltonian
 import TNLean.MPS.AreaLaw.ViableSet.ViableTrimmedWitness
 import TNLean.MPS.AreaLaw.ViableSet.GluingSupport
 import QICLean.Channel.BoundaryDensityMinimizer
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # A minimizing boundary state and its leading vector
@@ -32,8 +33,12 @@ The net and its cardinality bound (Claim `c:2`) remain an open gap, recorded in
 `docs/paper-gaps/lvv13_leading_net_point.tex`.
 -/
 
+open ManyBody (interval ChainInteraction)
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -43,11 +48,14 @@ variable {L q k : ℕ}
 low-energy vector. This is the library-bond form of LVV13, `algo53.tex`, equation `eq:conv`,
 lines 472–476, and Lemma `l:leading`, lines 493–505. The boundary point is chosen after the
 witness's actual bond space; no optimizer or witness energy bound is assumed. -/
-theorem ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable [NeZero q]
-    (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef)
+theorem _root_.ManyBody.ChainInteraction.exists_boundary_minimizer_leading_vector_of_isViable
+    [NeZero q]
+    (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+        (hpos : ∀ X, (h.term X).PosSemidef)
     (hL : 0 < L) (hq : 2 ≤ q) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     {S : Set (LeftBlockVector L q k)}
     (hviable : IsViable Γ (((Δ / 169) ^ 2) / L) S) :
     let c : ℝ := (Δ / 169) ^ 2
@@ -60,12 +68,12 @@ theorem ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable [N
       (w : EuclideanSpace ℂ (Fin L → Fin q)) (m : ℕ)
       (W : Matrix (CutRight L q k) (Fin m) ℂ)
       (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ),
-      h.operator = HL + B ∧
+      h.hamiltonian = HL + B ∧
       Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k) ∧
       Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ ∧
       ‖B‖ ≤ 2 * L ∧ ‖w‖ = 1 ∧ w ∈ leftSupportSubmodule S ∧
       (cutMatrix w k).rank ≤ D ∧
-      (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √c ∧
+      (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √c ∧
       Wᴴ * W = 1 ∧ m ≤ D ∧
       WithLp.ofLp w ∘ (gluingCut L q k).symm =
         ((1 : Matrix (CutLeft L q k × CutSite L q k)
@@ -92,7 +100,7 @@ theorem ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable [N
           ‖u‖ = 1 ∧ σ *ᵥ WithLp.ofLp u = (μ : ℂ) • WithLp.ofLp u ∧ 1 / 2 < μ ∧
           (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u = WithLp.ofLp u ∧
           ‖v‖ = 1 ∧ v ∈ leftSupportSubmodule S ∧
-          (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+          (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
           1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
   classical
   let c : ℝ := (Δ / 169) ^ 2
@@ -102,10 +110,10 @@ theorem ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable [N
     (Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q) (leftBlock_mono (Nat.sub_le k 1)))
     (spanProjection S)
   obtain ⟨w, m, W, x, hw, hwS, hwD, hwE, hW, hmD, hwx, hxP⟩ :=
-    h.exists_trimmed_witness_of_isViable hpos hL hq hΔ hgs hviable
+    h.exists_trimmed_witness_of_isViable hh hhJ hpos hL hq hΔ hΩ hgap hspan hviable
   change (cutMatrix w k).rank ≤ D at hwD
   change m ≤ D at hmD
-  obtain ⟨HL, B, hsplit, hHL, hBS, hBn⟩ := h.exists_gluing_decomposition_of_range_one k
+  obtain ⟨HL, B, hsplit, hHL, hBS, hBn⟩ := h.exists_gluing_decomposition_of_range_one hhJ k
   have hblock (i : ℕ) : interval L 0 i = leftBlock L i := by
     ext j
     simp [interval, leftBlock]
@@ -136,7 +144,7 @@ theorem ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable [N
     Matrix.exists_boundary_density_minimizer P (leftCutOperator k HL) X η
       (WithLp.toLp 2 x) hxnorm hxP hX
   have hΔ4 : Δ ≤ 4 := by
-    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hL hq hgs
+    simpa only [mul_one] using h.gap_le_four_mul_of_range_one hh hhJ hL hq hΩ hgap hspan
   obtain ⟨hc0, hc, -, hnum, -⟩ := lvv_trimming_constant_bounds hΔ hΔ4
   change 0 < c at hc0
   change c ≤ 1 / 1600 at hc
@@ -163,15 +171,17 @@ theorem ChainHamiltonian.exists_boundary_minimizer_leading_vector_of_isViable [N
     nlinarith only [hh]
   have h4 : 4 * (6 * √c + ‖B‖ * (2 * η)) < Δ := by
     nlinarith only [htwo, hgood, hΔ]
-  have hgs' : IsGappedGroundState (HL + B) E₀ Γ Δ := by
-    rw [← hsplit]
-    exact hgs
+  have hHC : (HL + B).IsHermitian := by rw [← hsplit]; exact
+      (ManyBody.Interaction.isHermitian_hamiltonian hh)
+  have hgapC : IsGapped (HL + B) E₀ Δ := by rw [← hsplit]; exact hgap
+  have hspanC : groundSpace (HL + B) E₀ = Submodule.span ℂ {Γ} := by
+    rw [← hsplit]; exact hspan
   have hwE' : (⟪w, toEuclideanLin (HL + B) w⟫_ℂ).re ≤ E₀ + 6 * √c := by
     rw [← hsplit]
     exact hwE
   obtain ⟨u, μ, hu, hueig, hμ, huE, huov⟩ :=
     exists_leading_eigenvector_chain (L := L) (q := q) (k := k) (e := 6 * √c) (τ := 2 * η)
-      hHL hBS disjoint_compl_left hΔ hgs' W hW x hwx hwE' hσ htr hopt hτ h4
+      hHL hBS disjoint_compl_left hΔ hHC hΩ hgapC hspanC W hW x hwx hwE' hσ htr hopt hτ h4
   have hμ0 : (μ : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr (by linarith only [hμ])
   have hQu : (P ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) *ᵥ WithLp.ofLp u =
       WithLp.ofLp u := by

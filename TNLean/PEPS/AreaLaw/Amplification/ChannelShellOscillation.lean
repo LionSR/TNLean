@@ -44,11 +44,11 @@ theorem siteOscillation_localRootChannel_le_of_notMem (K : Finset ι)
     siteOscillation q y (localRootChannel K k B) ≤ siteOscillation q y B := by
   apply siteOscillation_le
   intro U hU hunitary
-  have hUK : U ∈ supportedOperators q ((K : Set ι)ᶜ) := by
-    apply supportedOperators_mono _ hU
+  have hUK : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Kᶜ := by
+    apply ManyBody.supportedOperators_mono _ hU
     intro z hz
-    have hzy : z = y := Set.mem_singleton_iff.mp hz
-    simpa only [Set.mem_compl_iff, Finset.mem_coe, hzy] using hy
+    rw [Finset.mem_singleton.mp hz]
+    exact Finset.mem_compl.mpr hy
   rw [localRootChannel_commutator K hk₀ hk₁ hUK B]
   exact (norm_localRootChannel_le K hk₀ hk₁ _).trans
     (norm_commutator_le_siteOscillation y B hU hunitary)
@@ -98,8 +98,8 @@ theorem norm_localRootChannelShell_succ_le_sum_siteOscillation
     (regions : ℕ → Finset ι) (hregions : Monotone regions)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
     (l : ℕ) {εNext εPrev : ℝ}
-    (hNext : ‖k - siteExpectation q (regions (l + 1)) k‖ ≤ εNext)
-    (hPrev : ‖k - siteExpectation q (regions l) k‖ ≤ εPrev)
+    (hNext : ‖k - ManyBody.regionExpectation (regions (l + 1)) k‖ ≤ εNext)
+    (hPrev : ‖k - ManyBody.regionExpectation (regions l) k‖ ≤ εPrev)
     (B : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
     ‖localRootChannelShell regions k (l + 1) B‖ ≤
       4 * (Real.sqrt εNext + Real.sqrt εPrev) *

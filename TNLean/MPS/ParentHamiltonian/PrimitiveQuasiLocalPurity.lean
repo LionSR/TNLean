@@ -62,9 +62,9 @@ determines a pure state of the quasi-local algebra. Extremality is taken
 among all states, with no translation-invariance restriction.
 Source: Nachtergaele, arXiv:cond-mat/9410110, lines 1469--1482
 and Section 3. -/
-theorem IsPrimitiveMPS.isPureQuasiLocalState_quasiLocalExpectation [NeZero D]
-    {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+theorem _root_.Kraus.HasComplementaryFixedPointGap.isPureQuasiLocalState_quasiLocalExpectation
+    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     IsPureQuasiLocalState d
       (quasiLocalExpectation A hP.norm hP.fixedPoint_psd
         hP.fixedPoint_is_fixed hP.trace_ne_zero) := by

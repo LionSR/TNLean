@@ -26,12 +26,12 @@ convergence of the ring inverses are also recorded.
 ## Main results
 
 * `MPSTensor.groundSpaceMapES_injective_of_isUnit_groundSpaceGram`
-* `MPSTensor.IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds`
-* `MPSTensor.IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds`
+* `Kraus.HasComplementaryFixedPointGap.groundSpaceGram_geometric_inverse_bounds`
+* `Kraus.HasComplementaryFixedPointGap.groundSpaceMapES_geometric_inverseGram_bounds`
 * `MPSTensor.geometric_smallness_at_c3_lengths`
-* `MPSTensor.IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound`
-* `MPSTensor.IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto`
-* `MPSTensor.IsPrimitiveMPS.eventually_groundSpaceMapES_injective_and_inverseGram_bound`
+* `Kraus.HasComplementaryFixedPointGap.eventually_groundSpaceGram_isUnit_and_inverse_bound`
+* `Kraus.HasComplementaryFixedPointGap.groundSpaceGram_ringInverse_tendsto`
+* `Kraus.HasComplementaryFixedPointGap.eventually_groundSpaceMapES_injective_and_inverseGram_bound`
 -/
 
 open scoped ComplexOrder Matrix
@@ -76,9 +76,9 @@ operator is a unit and both its inverse norm and its displacement from
 
 The direct choice \(g=\sqrt{D^3} C_G\) is obtained by taking square roots
 of the available squared Gram estimate, without an additional dimension loss. -/
-theorem IsPrimitiveMPS.groundSpaceGram_geometric_inverse_bounds
+theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_geometric_inverse_bounds
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     let Kinf := Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
     let Iinf := Ring.inverse Kinf
     ∃ g c r : ℝ, 0 < g ∧ 0 < c ∧ 0 < r ∧ r < 1 ∧
@@ -142,9 +142,9 @@ With \(K_\infty\), \(I_\infty\), \(g\), \(c\), and \(r\) as in
 \(c r^n<1\) has an injective boundary map. Its inverse Gram operator equals the
 ring inverse of the finite Gram operator and satisfies the same inverse-norm
 and inverse-displacement estimates. -/
-theorem IsPrimitiveMPS.groundSpaceMapES_geometric_inverseGram_bounds
+theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceMapES_geometric_inverseGram_bounds
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     let Kinf := Matrix.gramReshuffle (fixedPointProj ρ (ne_of_gt hρ.trace_pos))
     let Iinf := Ring.inverse Kinf
     ∃ g c r : ℝ, 0 < g ∧ 0 < c ∧ 0 < r ∧ r < 1 ∧
@@ -189,6 +189,7 @@ theorem geometric_smallness_at_c3_lengths {c r : ℝ} (hc : 0 < c) (hr_pos : 0 <
     (mul_le_mul_of_nonneg_left (hpow hlm) hc.le).trans_lt hsmall
   exact ⟨hsmall_of_le (by omega), hsmall_of_le (by omega), hsmall_of_le (by omega)⟩
 
+set_option linter.style.longLine false in
 /-- For every relative tolerance \(a\) strictly between zero and one, the
 finite-volume Gram operator of a primitive MPS tensor is eventually a unit.
 Its ring inverse differs from the inverse of the reshuffled fixed-point
@@ -199,9 +200,9 @@ projection by at most
 Positive definiteness of \(\rho\) is explicit: primitivity alone only supplies a
 positive-semidefinite fixed point and does not justify invertibility of the
 limiting Gram operator. -/
-theorem IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound
+theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_groundSpaceGram_isUnit_and_inverse_bound
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {a : ℝ} (ha_pos : 0 < a)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {a : ℝ} (ha_pos : 0 < a)
     (ha_lt_one : a < 1) :
     ∀ᶠ n in Filter.atTop,
       IsUnit (groundSpaceGram A n) ∧
@@ -232,9 +233,9 @@ theorem IsPrimitiveMPS.eventually_groundSpaceGram_isUnit_and_inverse_bound
 tensor converge to the inverse of the nonidentity limiting Gram operator.
 Positive definiteness of the fixed point is required to place the limit in the
 open set of units. -/
-theorem IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto
+theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_ringInverse_tendsto
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     Filter.Tendsto (fun n => Ring.inverse (groundSpaceGram A n)) Filter.atTop
       (nhds (Ring.inverse (Matrix.gramReshuffle
         (fixedPointProj ρ (ne_of_gt hρ.trace_pos))))) := by
@@ -244,6 +245,7 @@ theorem IsPrimitiveMPS.groundSpaceGram_ringInverse_tendsto
     simpa only [Kinf] using hP.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
   exact NormedRing.inverse_tendsto_of_tendsto_of_isUnit hKinf hconv
 
+set_option linter.style.longLine false in
 /-- Eventually the Hilbert-space boundary map is injective. For any relative
 tolerance \(a\in(0,1)\), one may choose an injectivity proof so that its
 inverse-Gram operator is exactly the ring inverse of the finite-volume Gram
@@ -252,9 +254,9 @@ reshuffled fixed-point projection.
 
 The equality is independent of the chosen injectivity proof by proof
 irrelevance. -/
-theorem IsPrimitiveMPS.eventually_groundSpaceMapES_injective_and_inverseGram_bound
+theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_groundSpaceMapES_injective_and_inverseGram_bound
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {a : ℝ} (ha_pos : 0 < a)
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {a : ℝ} (ha_pos : 0 < a)
     (ha_lt_one : a < 1) :
     ∀ᶠ n in Filter.atTop,
       ∃ hInj : Function.Injective (groundSpaceMapES A n),

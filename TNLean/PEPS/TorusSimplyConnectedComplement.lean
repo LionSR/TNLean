@@ -35,6 +35,8 @@ proof of Theorem 6.9, local source lines 1935–1990.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 private theorem walk_reaches_crossing {V : Type*} [Fintype V] [DecidableEq V]

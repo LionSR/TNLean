@@ -7,7 +7,7 @@ no crossing edge and treats the degenerate cases recorded before that lemma.
 
 \begin{lemma}[Gapped ground vectors of a sum over finitely many factors]
     \label{thm:area_law_product_ground_state_family}
-    \lean{TNLean.Lattice.factorOperator, TNLean.Lattice.exists_isGappedGroundState_factors_of_sum_factorOperator}
+    \lean{TNLean.Lattice.factorOperator, TNLean.Lattice.exists_isGapped_factors_of_sum_factorOperator}
     \leanok
     \uses{thm:area_law_product_ground_state}
     Let $k\ge1$, and for $i=1,\dots,k$ let $H_i$ be a Hermitian operator on a
@@ -39,7 +39,7 @@ no crossing edge and treats the degenerate cases recorded before that lemma.
 
 \begin{lemma}[Supports and components]
     \label{thm:area_law_support_components}
-    \lean{TNLean.Lattice.IsAdmissibleSupport.reachable, TNLean.PEPS.AreaLaw.subset_or_disjoint_of_edgeBoundary_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponents_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponent_eq_empty}
+    \lean{ManyBody.IsAdmissibleSupport.reachable, TNLean.PEPS.AreaLaw.subset_or_disjoint_of_edgeBoundary_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponents_eq_empty, TNLean.PEPS.AreaLaw.edgeBoundary_connectedComponent_eq_empty}
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}
     Every support of finite induced-graph diameter lies in one connected

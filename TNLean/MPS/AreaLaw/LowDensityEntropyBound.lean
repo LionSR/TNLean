@@ -25,6 +25,8 @@ statement retains `q ≥ 2` and the fixed-bandwidth quantifiers of Assumption
 (LD), lines 281–284. See `docs/paper-gaps/alvv16_low_energy_family_scope.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

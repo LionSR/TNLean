@@ -20,6 +20,8 @@ and Figure `fig:merge-prime`, lines 1668–1670. These are measurability
 and dependence statements, not an adaptive probability bound.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped Matrix.Norms.L2Operator
 

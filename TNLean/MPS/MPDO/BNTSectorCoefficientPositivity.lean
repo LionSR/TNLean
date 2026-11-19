@@ -80,11 +80,11 @@ theorem singleKrausMap_sitewise_eq_coefficient_smul_of_orthogonalSupport
     (coefficient : Fin g → ℂ) (ρ : ChainOperator d N)
     (hρ : ρ = ∑ s : Fin g, coefficient s • mpo (K s) N)
     (hN : 0 < N) (s : Fin g) :
-    singleKrausMap (sitewisePhysicalMatrix (P s) N) ρ =
+    singleKrausMap (Matrix.tensorPower N (P s)) ρ =
       coefficient s • mpo (K s) N := by
   classical
   rw [hρ, map_sum]
-  simp_rw [map_smul, singleKrausMap_sitewisePhysicalMatrix_mpo,
+  simp_rw [map_smul, singleKrausMap_tensorPower_mpo,
     changePhysicalBasis_eq_ite_of_pairwise_orthogonal_twoSided_physicalSupport
       K P hP hPorth hSupport s]
   rw [Finset.sum_eq_single s]
@@ -125,7 +125,7 @@ theorem exists_nonnegative_sectorCoefficient_of_orthogonalSupport
     rw [← singleKrausMap_sitewise_eq_coefficient_smul_of_orthogonalSupport
       K P hP hPorth hSupport coefficient ρ hρ hN s]
     exact hρpos.mul_mul_conjTranspose_same
-      (B := sitewisePhysicalMatrix (P s) N)
+      (B := Matrix.tensorPower N (P s))
   have hExists (s : Fin g) : ∃ r : ℝ, 0 ≤ r ∧
       (r : ℂ) • mpo (K s) N = coefficient s • mpo (K s) N := by
     by_cases hSectorZero : mpo (K s) N = 0

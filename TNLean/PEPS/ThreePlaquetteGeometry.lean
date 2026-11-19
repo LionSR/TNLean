@@ -25,6 +25,8 @@ both seams, are allowed. No string braiding or parent-Hamiltonian assertion is
 made; see `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS
 
@@ -41,7 +43,7 @@ private instance stripTreeDecidableAdj : DecidableRel stripTree.Adj :=
   inferInstanceAs (DecidableRel (SimpleGraph.pathGraph 8).Adj)
 private theorem stripTree_isTree : stripTree.IsTree := by
   apply SimpleGraph.isTree_iff_connected_and_card.mpr
-  refine ⟨SimpleGraph.pathGraph_connected 7, ?_⟩
+  refine ⟨SimpleGraph.connected_pathGraph_add_one 7, ?_⟩
   rw [Nat.card_eq_fintype_card, Nat.card_eq_fintype_card]
   decide
 private def stripX : Fin 8 → ℕ := ![0, 1, 2, 3, 3, 2, 1, 0]
@@ -199,12 +201,12 @@ def translatedThreePlaquetteCycleBond (v : X) (i : Fin 3) :
     {e : {e : Edge Γₜ // e.1.1 ∈ translatedThreePlaquetteRegion v ∧
       e.1.2 ∈ translatedThreePlaquetteRegion v} //
       ¬ (translatedThreePlaquetteTree v).Adj ⟨e.1.1.1, e.2.1⟩ ⟨e.1.1.2, e.2.2⟩} := by
-  let e := Edge.equiv (stripIso v) (stripCycle i)
+  let e := ManyBody.Edge.equiv (stripIso v) (stripCycle i)
   refine ⟨inducedRegionEdgeEquiv (translatedThreePlaquetteRegion v) e, ?_⟩
   change ¬ (translatedThreePlaquetteTree v).Adj
-    (Edge.map (stripIso v) (stripCycle i)).1.1
-    (Edge.map (stripIso v) (stripCycle i)).1.2
-  exact (Edge.comap_adj_map_iff (stripIso v) stripTree (stripCycle i)).not.mpr
+    (ManyBody.Edge.map (stripIso v) (stripCycle i)).1.1
+    (ManyBody.Edge.map (stripIso v) (stripCycle i)).1.2
+  exact (ManyBody.Edge.comap_adj_map_iff (stripIso v) stripTree (stripCycle i)).not.mpr
     (stripCycle_not_tree i)
 
 /-- The three chosen non-tree vertical bonds are distinct.
@@ -213,7 +215,7 @@ theorem translatedThreePlaquetteCycleBond_injective (v : X) :
     Function.Injective (translatedThreePlaquetteCycleBond v) := by
   intro i j h
   apply stripCycle_injective
-  apply (Edge.equiv (stripIso v)).injective
+  apply (ManyBody.Edge.equiv (stripIso v)).injective
   apply (inducedRegionEdgeEquiv (translatedThreePlaquetteRegion v)).injective
   exact congrArg Subtype.val h
 
@@ -221,11 +223,11 @@ theorem translatedThreePlaquetteCycleBond_injective (v : X) :
 Auxiliary to SCP10, braiding passage, lines 2380–2415. -/
 theorem translatedThreePlaquetteCycleBond_eq_up (v : X) (i : Fin 3) :
     (translatedThreePlaquetteCycleBond v i).1.1 =
-      Edge.ofAdj (torusGraph_adj_up (v.1 + (i.val : ZMod width)) v.2) := by
+      ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1 + (i.val : ZMod width)) v.2) := by
   change (inducedRegionEdgeEquiv (translatedThreePlaquetteRegion v)
-    (Edge.map (stripIso v) (stripCycle i))).1 = _
+    (ManyBody.Edge.map (stripIso v) (stripCycle i))).1 = _
   fin_cases i <;>
-    simp [stripCycle, Edge.map, Edge.ofAdj, inducedRegionEdgeEquiv, stripIso,
+    simp [stripCycle, ManyBody.Edge.map, ManyBody.Edge.ofAdj, inducedRegionEdgeEquiv, stripIso,
       translatedThreePlaquetteVertexEquiv, translatedThreePlaquetteVertex,
       originVertex, stripX, stripY, add_comm] <;> split_ifs <;> rfl
 
@@ -235,7 +237,7 @@ theorem translatedThreePlaquetteRegion_card_internalEdges (v : X) :
     Fintype.card {e : Edge Γₜ // e.1.1 ∈ translatedThreePlaquetteRegion v ∧
       e.1.2 ∈ translatedThreePlaquetteRegion v} = 10 := by
   rw [← Fintype.card_congr (inducedRegionEdgeEquiv (translatedThreePlaquetteRegion v)),
-    ← Fintype.card_congr (Edge.equiv (stripIso v)),
+    ← Fintype.card_congr (ManyBody.Edge.equiv (stripIso v)),
     Fintype.card_congr (orderedEdgeEquivEdgeSet (Γ := stripGraph))]
   decide
 

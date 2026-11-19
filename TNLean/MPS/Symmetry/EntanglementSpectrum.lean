@@ -57,6 +57,7 @@ every eigenspace is the degeneracy the source asserts.
 -/
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder TNLean.Algebra.ScalarCohomology
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

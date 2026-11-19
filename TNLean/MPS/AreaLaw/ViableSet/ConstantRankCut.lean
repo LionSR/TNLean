@@ -9,6 +9,7 @@ import QICLean.Channel.TrimmingEnergy
 import QICLean.Analysis.OverlapTriangle
 import QICLean.Entropy.FilterPrefix
 import QICLean.Entropy.FilterChainEnergy
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Constant rank across one cut
@@ -60,14 +61,14 @@ constants and the printed bound `ε₀ + 6 √δ` does not follow from it. The b
 
 ## Main results
 
-* `TNLean.MPS.AreaLaw.ChainHamiltonian.one_sub_le_re_inner_chainTrim`: Lemma
+* `ManyBody.ChainInteraction.one_sub_le_re_inner_chainTrim`: Lemma
   `constantbondapprox`, the normalized trimmed ground state has overlap at least `1 - δ`.
 * `TNLean.MPS.AreaLaw.re_inner_normalized_chainTrim_le`: the corrected Lemma `l:2`, for a
   Hamiltonian split at the cut and any bond dimension at which the trimmed ground state has
   overlap at least `1 - δ_B`.
-* `TNLean.MPS.AreaLaw.ChainHamiltonian.re_inner_normalized_chainTrim_le`: the corrected Lemma
+* `ManyBody.ChainInteraction.re_inner_normalized_chainTrim_le`: the corrected Lemma
   `l:2` at the bond dimension `B_δ`.
-* `TNLean.MPS.AreaLaw.ChainHamiltonian.exists_rank_cutMatrix_le_constantCutBond`: the
+* `ManyBody.ChainInteraction.exists_rank_cutMatrix_le_constantCutBond`: the
   Corollary `c:1`.
 
 ## References
@@ -81,8 +82,12 @@ constants and the printed bound `ε₀ + 6 √δ` does not follow from it. The b
   systems*, arXiv:1301.1162.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open Matrix
 open scoped Kronecker InnerProductSpace ComplexOrder
+
+open ManyBody (IsGapped groundSpace ChainInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -145,9 +150,11 @@ across that cut, the normalized trimmed vector `v` satisfies `1 - δ ≤ Re ⟨v
 is real and nonnegative. The bond dimension depends neither on `L` nor on `k`. The proof
 compares the trimming projection with the spectral projection of the marginal tail bound by
 Ky Fan's maximum principle. -/
-theorem ChainHamiltonian.one_sub_le_re_inner_chainTrim {R : ℕ} {J Δ : ℝ}
-    (h : ChainHamiltonian L q R J) (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) {E₀ : ℝ}
-    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState h.operator E₀ Ω Δ)
+theorem _root_.ManyBody.ChainInteraction.one_sub_le_re_inner_chainTrim {R : ℕ} {J Δ : ℝ}
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) {E₀ : ℝ}
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     {δ : ℝ} (hδ0 : 0 < δ) (k : ℕ) {P : LeftBlockMatrix L q k}
     (hP : IsTrimmingProjection (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω)
       (constantCutBond q R J Δ δ) P) :
@@ -171,7 +178,7 @@ theorem ChainHamiltonian.one_sub_le_re_inner_chainTrim {R : ℕ} {J Δ : ℝ}
   have hw0 : 0 ≤ w := by
     have := Real.log_nonneg hcδ
     positivity
-  have hb := h.spectralProjectionGE_leftBlock_bounds hq hJ hΔ hgs k w hw0
+  have hb := h.spectralProjectionGE_leftBlock_bounds hh hhJ hq hJ hΔ hΩ hgap hspan k w hw0
   dsimp only at hb
   obtain ⟨hproj, hrank, hmass⟩ := hb
   set Pw := spectralProjectionGE (Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω)
@@ -193,7 +200,7 @@ theorem ChainHamiltonian.one_sub_le_re_inner_chainTrim {R : ℕ} {J Δ : ℝ}
   have hKF := hρ.trace_mul_re_le_kyFanNorm_of_isHermitian_idem hPh hPi hrankB
   have htr : (leftMarginal
       (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω)).trace.re = 1 := by
-    rw [← regionState_leftBlock_eq_leftMarginal, Entropy.trace_regionState_eq_one hgs.1,
+    rw [← regionState_leftBlock_eq_leftMarginal, Entropy.trace_regionState_eq_one hΩ,
       Complex.one_re]
   rw [regionState_leftBlock_eq_leftMarginal, Matrix.sub_mul, Matrix.one_mul, trace_sub,
     Complex.sub_re, htr] at hmassδ
@@ -253,19 +260,6 @@ theorem cutOperator_sub_smul_one (k : ℕ) (X : Matrix (Fin L → Fin q) (Fin L 
   ext a b
   simp [one_apply]
 
-/-- A gapped ground state lies at the bottom of the spectrum: `H - E₀ 1 ≥ 0`. -/
-theorem _root_.Matrix.IsGappedGroundState.posSemidef_sub_smul_one {ι : Type*} [Fintype ι]
-    [DecidableEq ι] {H : Matrix ι ι ℂ} {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ ι}
-    (hgs : IsGappedGroundState H E₀ Ω Δ) (hΔ : 0 ≤ Δ) : (H - (E₀ : ℂ) • 1).PosSemidef := by
-  obtain ⟨hΩ, -, hgap⟩ := isGappedGroundState_iff.mp hgs
-  have hsum : ∑ i, ‖WithLp.ofLp Ω i‖ ^ 2 ≤ 1 := by
-    have h := EuclideanSpace.norm_sq_eq Ω
-    rw [hΩ, one_pow] at h
-    exact h.symm.le
-  have hP := one_sub_vecMulVec_posSemidef_of_sum_normSq_le_one (WithLp.ofLp Ω) hsum
-  have h := hgap.add (hP.smul (Complex.zero_le_real.mpr hΔ))
-  rwa [sub_add_cancel] at h
-
 /-- **Lemma `l:2`**, chain form, corrected (arXiv:1307.5143v1, algo53.tex, lines 347–359).
 Let `H = H_L + H_R + K`, with `H_L` supported on the first `k` sites, `H_R` on the others and
 `0 ≤ K ≤ 1`, have gapped ground state `Ω` with gap `Δ`. Let `B` be a bond dimension at which
@@ -280,7 +274,8 @@ theorem re_inner_normalized_chainTrim_le
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hHR : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HR (leftBlock L k)ᶜ)
     (hK0 : K.PosSemidef) (hK1 : (1 - K).PosSemidef) {E₀ Δ : ℝ}
-    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hgs : IsGappedGroundState H E₀ Ω Δ)
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hH : H.IsHermitian) (hΩ : ‖Ω‖ = 1)
+    (hgap : IsGapped H E₀ Δ) (hspan : groundSpace H E₀ = Submodule.span ℂ {Ω})
     {PΩ : LeftBlockMatrix L q k}
     (hPΩ : IsTrimmingProjection (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω)
       B PΩ)
@@ -298,8 +293,8 @@ theorem re_inner_normalized_chainTrim_le
   · exfalso
     have h0 : w = 0 := Subsingleton.elim _ _
     simp [h0] at hw
-  obtain ⟨hΩ, -, hgap⟩ := isGappedGroundState_iff.mp hgs
-  have hH0 := hgs.posSemidef_sub_smul_one hΔ.le
+  have hH0 := hgap.posSemidef_sub_ground hH hΔ.le
+  have hgap := hgap.posSemidef_sub_smul_one hH hΩ hspan
   -- The energy excess and the trimming loss are nonnegative.
   have hδ : 0 ≤ δ := by
     have := hH0.mul_sq_norm_le_re_inner_toEuclideanLin w
@@ -370,27 +365,30 @@ theorem re_inner_normalized_chainTrim_le
 /-- **Lemma `l:2`** for a chain Hamiltonian, corrected, at the bond dimension
 `B_δ = constantCutBond q R J Δ δ_B` of Lemma `constantbondapprox` (arXiv:1307.5143v1,
 algo53.tex, lines 347–359). -/
-theorem ChainHamiltonian.re_inner_normalized_chainTrim_le {R : ℕ} {J Δ : ℝ}
-    (h : ChainHamiltonian L q R J) (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+theorem _root_.ManyBody.ChainInteraction.re_inner_normalized_chainTrim_le {R : ℕ} {J Δ : ℝ}
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {HL HR K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {k : ℕ}
-    (hsplit : h.operator = HL + HR + K)
+    (hsplit : h.hamiltonian = HL + HR + K)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hHR : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HR (leftBlock L k)ᶜ)
     (hK0 : K.PosSemidef) (hK1 : (1 - K).PosSemidef) {E₀ : ℝ}
-    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState h.operator E₀ Ω Δ)
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     {δB : ℝ} (hδB0 : 0 < δB) {w : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hw : ‖w‖ = 1) {δ : ℝ} (hE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + δ)
+    (hw : ‖w‖ = 1) {δ : ℝ} (hE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + δ)
     {P : LeftBlockMatrix L q k}
     (hP : IsTrimmingProjection (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) w)
       (constantCutBond q R J Δ δB) P)
     {η : ℝ} (hη : 2 * (δ / Δ + δB) ≤ η) (hη2 : 2 * η < 1) :
     (⟪‖chainTrim w k P‖⁻¹ • chainTrim w k P,
-        toEuclideanLin h.operator (‖chainTrim w k P‖⁻¹ • chainTrim w k P)⟫_ℂ).re ≤
+        toEuclideanLin h.hamiltonian (‖chainTrim w k P‖⁻¹ • chainTrim w k P)⟫_ℂ).re ≤
       E₀ + (δ + 2 * √(2 * η)) / (1 - 2 * η) := by
   obtain ⟨PΩ, hPΩ⟩ := exists_isTrimmingProjection
     (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) (constantCutBond q R J Δ δB)
-  exact TNLean.MPS.AreaLaw.re_inner_normalized_chainTrim_le hsplit hHL hHR hK0 hK1 hΔ hgs hPΩ
-    (h.one_sub_le_re_inner_chainTrim hq hJ hΔ hgs hδB0 k hPΩ) hw hE hP hη hη2
+  exact TNLean.MPS.AreaLaw.re_inner_normalized_chainTrim_le hsplit hHL hHR hK0 hK1 hΔ
+      (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hgap hspan hPΩ
+    (h.one_sub_le_re_inner_chainTrim hh hhJ hq hJ hΔ hΩ hgap hspan hδB0 k hPΩ) hw hE hP hη hη2
 
 /-- **Corollary `c:1`**, chain form (arXiv:1307.5143v1, algo53.tex, lines 361–364).
 If the chain Hamiltonian splits at the cut `k` as in Lemma `l:2` and `δ > 0`, there is a unit
@@ -398,33 +396,37 @@ vector of rank at most `B_δ₀` across the cut, with overlap `Re ⟨v, Ω⟩ �
 at most `E₀ + 6 √δ`, where `δ₀ = min δ (1/12)`. The bond dimension is fixed independently of
 the chain length and the cut. Applying the corrected trimming-energy estimate to `Ω` at
 accuracy `δ₀` gives `4 √δ₀ / (1 - 4δ₀) ≤ 6 √δ₀ ≤ 6 √δ`. -/
-theorem ChainHamiltonian.exists_rank_cutMatrix_le_constantCutBond {R : ℕ} {J Δ : ℝ}
-    (h : ChainHamiltonian L q R J) (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+theorem _root_.ManyBody.ChainInteraction.exists_rank_cutMatrix_le_constantCutBond {R : ℕ} {J Δ : ℝ}
+    (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {HL HR K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {k : ℕ}
-    (hsplit : h.operator = HL + HR + K)
+    (hsplit : h.hamiltonian = HL + HR + K)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hHR : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HR (leftBlock L k)ᶜ)
     (hK0 : K.PosSemidef) (hK1 : (1 - K).PosSemidef) {E₀ : ℝ}
-    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hgs : IsGappedGroundState h.operator E₀ Ω Δ)
+    {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     {δ : ℝ} (hδ0 : 0 < δ) :
     ∃ v : EuclideanSpace ℂ (Fin L → Fin q), ‖v‖ = 1 ∧
       (cutMatrix v k).rank ≤ constantCutBond q R J Δ (min δ (1 / 12)) ∧
       1 - δ ≤ (⟪v, Ω⟫_ℂ).re ∧
-      (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + 6 * √δ := by
+      (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + 6 * √δ := by
   have hsmall {d : ℝ} (hd0 : 0 < d) (hd4 : 4 * d < 1) :
       ∃ v : EuclideanSpace ℂ (Fin L → Fin q), ‖v‖ = 1 ∧
         (cutMatrix v k).rank ≤ constantCutBond q R J Δ d ∧
         1 - d ≤ (⟪v, Ω⟫_ℂ).re ∧
-        (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + 4 * √d / (1 - 4 * d) := by
+        (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + 4 * √d / (1 - 4 * d) := by
     obtain ⟨P, hP⟩ := exists_isTrimmingProjection
       (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω) (constantCutBond q R J Δ d)
-    have hov := h.one_sub_le_re_inner_chainTrim hq hJ hΔ hgs hd0 k hP
-    have hEΩ : (⟪Ω, toEuclideanLin h.operator Ω⟫_ℂ).re ≤ E₀ + 0 := by
-      have h2 : toEuclideanLin h.operator Ω = (E₀ : ℂ) • Ω := hgs.2.1
-      rw [h2, inner_smul_right, inner_self_eq_norm_sq_to_K, hgs.1]
+    have hov := h.one_sub_le_re_inner_chainTrim hh hhJ hq hJ hΔ hΩ hgap hspan hd0 k hP
+    have hEΩ : (⟪Ω, toEuclideanLin h.hamiltonian Ω⟫_ℂ).re ≤ E₀ + 0 := by
+      have h2 : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
+        ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _)
+      rw [h2, inner_smul_right, inner_self_eq_norm_sq_to_K, hΩ]
       simp
-    have hE := h.re_inner_normalized_chainTrim_le hq hJ hΔ hsplit hHL hHR hK0 hK1 hgs hd0
-      hgs.1 hEΩ hP (η := 2 * d) (by rw [zero_div, zero_add]) (by linarith)
+    have hE := h.re_inner_normalized_chainTrim_le hh hhJ hq hJ hΔ hsplit hHL hHR hK0 hK1
+        hΩ hgap hspan hd0
+      hΩ hEΩ hP (η := 2 * d) (by rw [zero_div, zero_add]) (by linarith)
     refine ⟨_, norm_normalized_chainTrim_eq_one (by linarith) hov,
       rank_cutMatrix_normalized_chainTrim_le hP, hov, hE.trans (le_of_eq ?_)⟩
     rw [show 2 * (2 * d) = 2 ^ 2 * d by ring, Real.sqrt_mul (by norm_num),

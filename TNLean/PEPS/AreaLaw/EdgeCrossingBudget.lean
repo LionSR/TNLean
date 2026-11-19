@@ -21,13 +21,18 @@ Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground stat
 Independently formalized from the manuscript; no upstream Lean proof text reused.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 open TNLean.Lattice
+
+open ManyBody (planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw
 
 variable {V : Type*} [Fintype V] [DecidableEq V]
 
+omit [DecidableEq V] in
 /-- An on-site designated support never meets both sides of a cut. -/
 theorem not_mem_crossingTerms_singleton (A : Finset V) (v : V) :
     v ∉ Entropy.crossingTerms (fun w : V ↦ {w}) A := by
@@ -60,7 +65,7 @@ variable {Λ : Finset (ℤ × ℤ)} [siteOrder : LinearOrder (Site Λ)]
 
 /-- The physical on-site and nearest-neighbor supports, with each edge counted once. -/
 noncomputable def nearestNeighborSupport :
-    Site Λ ⊕ Edge (domainGraph Λ) → Finset (Site Λ) := by
+    Site Λ ⊕ Edge (planeDomainGraph Λ) → Finset (Site Λ) := by
   classical
   exact Sum.elim (fun v ↦ {v}) (fun e ↦ {e.1.1, e.1.2})
 
@@ -69,20 +74,22 @@ theorem inl_not_mem_crossingTerms (A : Finset (Site Λ))
     (v : Site Λ) : Sum.inl v ∉ Entropy.crossingTerms nearestNeighborSupport A := by
   classical
   intro h
-  have h' := (Finset.mem_filter.mp h).2
+  have h' := h
+  simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at h'
   change (∃ w ∈ ({v} : Finset (Site Λ)), w ∈ A) ∧
     (∃ w ∈ ({v} : Finset (Site Λ)), w ∉ A) at h'
   simp only [Finset.mem_singleton, exists_eq_left, and_not_self] at h'
 
 /-- Crossing of the edge support is precisely membership in the unordered boundary. -/
 theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
-    (e : Edge (domainGraph Λ)) :
+    (e : Edge (planeDomainGraph Λ)) :
     Sum.inr e ∈ Entropy.crossingTerms nearestNeighborSupport A ↔
       s(e.1.1, e.1.2) ∈ edgeBoundary Λ A := by
   classical
   constructor
   · intro h
-    have h' := (Finset.mem_filter.mp h).2
+    have h' := h
+    simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at h'
     change (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∈ A) ∧
       (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∉ A) at h'
     obtain ⟨⟨x, hx, hxA⟩, y, hy, hyA⟩ := h'
@@ -94,8 +101,7 @@ theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
       first | exact absurd hxA hyA | rfl | exact Sym2.eq_swap
   · intro h
     obtain ⟨x, hxA, y, hyA, hxy⟩ := (Finset.mem_filter.mp h).2
-    apply Finset.mem_filter.mpr
-    refine ⟨Finset.mem_univ _, ?_⟩
+    simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
     change (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∈ A) ∧
       (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∉ A)
     rcases Sym2.eq_iff.mp hxy with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;>
@@ -103,7 +109,7 @@ theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
 
 /-- Every crossing term has one inside site, including in the presence of on-site terms. -/
 theorem card_nearestNeighbor_insideConfig (q : ℕ)
-    (A : Finset (Site Λ)) {i : Site Λ ⊕ Edge (domainGraph Λ)}
+    (A : Finset (Site Λ)) {i : Site Λ ⊕ Edge (planeDomainGraph Λ)}
     (hi : i ∈ Entropy.crossingTerms nearestNeighborSupport A) :
     Fintype.card (↥(nearestNeighborSupport i ∩ A) → Fin q) = q := by
   classical
@@ -111,14 +117,15 @@ theorem card_nearestNeighbor_insideConfig (q : ℕ)
   | inl v => exact False.elim (inl_not_mem_crossingTerms A v hi)
   | inr e =>
     apply card_pair_insideConfig_of_crossing
-    exact (Finset.mem_filter.mp hi).2
+    simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hi
+    exact hi
 
 /-- Forgetting the canonical endpoint order counts each unordered boundary edge once. -/
 theorem card_crossingTerms_nearestNeighbor
     (A : Finset (Site Λ)) :
     (Entropy.crossingTerms nearestNeighborSupport A).card = (edgeBoundary Λ A).card := by
   classical
-  let f : Site Λ ⊕ Edge (domainGraph Λ) → Sym2 (Site Λ) :=
+  let f : Site Λ ⊕ Edge (planeDomainGraph Λ) → Sym2 (Site Λ) :=
     Sum.elim (fun v ↦ s(v, v)) (fun e ↦ s(e.1.1, e.1.2))
   apply Finset.card_bij (fun i _ ↦ f i)
   · intro i hi
@@ -142,11 +149,11 @@ theorem card_crossingTerms_nearestNeighbor
           exact False.elim (@lt_asymm (Site Λ) siteOrder.toPreorder _ _ d.2.1 he)
   · intro b hb
     obtain ⟨x, y⟩ := b
-    have hxy : (domainGraph Λ).Adj x y :=
+    have hxy : (planeDomainGraph Λ).Adj x y :=
       SimpleGraph.mem_edgeFinset.mp (Finset.mem_filter.mp hb).1
-    let e := Edge.ofAdj hxy
+    let e := ManyBody.Edge.ofAdj hxy
     have he : s(e.1.1, e.1.2) = s(x, y) := by
-      rcases Edge.ofAdj_endpoints hxy with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+      rcases ManyBody.Edge.ofAdj_endpoints hxy with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
       · exact congrArg₂ (fun x y ↦ s(x, y)) h₁ h₂
       · exact (congrArg₂ (fun x y ↦ s(x, y)) h₁ h₂).trans Sym2.eq_swap
     exact ⟨Sum.inr e, (inr_mem_crossingTerms_iff A e).mpr (he.symm ▸ hb), he⟩

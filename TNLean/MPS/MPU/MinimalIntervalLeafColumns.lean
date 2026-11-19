@@ -384,7 +384,8 @@ theorem exists_normalized_minimalInterval_family_with_placed_leaf_columns_of_uni
             embedOp (leafConsecutiveSites d D N i) Z ∈ unitary
               (Matrix (Cfg d (logicalSiteCount d D N)) (Cfg d (logicalSiteCount d D N)) ℂ) ∧
             embedOp (leafConsecutiveSites d D N i) Z ∈
-              supportedOperators d (intervalConsecutiveSupport d D N i.val (i.val + 1)) ∧
+              ManyBody.supportedOperators (fun _ ↦ Fin d)
+                  (intervalConsecutiveSupport d D N i.val (i.val + 1)) ∧
             IsMinimalIntervalColumnImplementation hd U hU hbound B P i.castSucc i.succ
               (Nat.le_succ i.val) (embedOp (leafConsecutiveSites d D N i) Z) := by
   obtain ⟨B, hB0, hBN, P, hP, hIntervals, h0, hlast, hfull, hLeaves⟩ :=

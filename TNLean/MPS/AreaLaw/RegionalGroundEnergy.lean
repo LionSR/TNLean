@@ -26,6 +26,8 @@ lines 1631–1632, and the energy-estimation argument in the proof of
 `t:alg1`, lines 1805–1806. No gap or simple-ground-space assumption is used.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw

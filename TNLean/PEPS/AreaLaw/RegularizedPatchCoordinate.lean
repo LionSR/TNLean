@@ -25,7 +25,7 @@ open Matrix
 namespace TNLean.PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*} [∀ v, Fintype (Out v)]
+variable {Out : V → Type*} [∀ v, Fintype (Out v)] [∀ v, DecidableEq (Out v)]
 variable {m : ℕ} (regions : Fin m → Finset V)
 
 open Classical in
@@ -93,26 +93,26 @@ private noncomputable def reverseProductInsertion {n : Type*} [Fintype n] [Decid
 
 private noncomputable def dependentRegionLiftLinear (R : Finset V) :
     Matrix ((v : R) → Out v.1) ((v : R) → Out v.1) ℂ →ₗ[ℂ]
-      Matrix ((v : (Finset.univ : Finset V)) → Out v.1)
-        ((v : (Finset.univ : Finset V)) → Out v.1) ℂ where
-  toFun := dependentRegionOperatorLift R
+      Matrix ((v : V) → Out v)
+        ((v : V) → Out v) ℂ where
+  toFun := ManyBody.place R
   map_add' K L := by
     classical
     ext α β
-    simp [dependentRegionOperatorLift, Matrix.reindex_apply, add_mul]
+    simp [ManyBody.place, Matrix.reindex_apply, add_mul]
   map_smul' c K := by
     classical
     ext α β
-    simp [dependentRegionOperatorLift, Matrix.reindex_apply, mul_assoc]
+    simp [ManyBody.place, Matrix.reindex_apply, mul_assoc]
 
 open Classical in
 /-- Insert a local matrix in the selected factor of the reverse ordered
 regularized filter product and apply it to the original vector. -/
 noncomputable def regularizedPatchInsertion (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
     (j : Fin m) : Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ →ₗ[ℂ]
-      EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1) :=
+      EuclideanSpace ℂ ((v : V) → Out v) :=
   ((LinearMap.applyₗ Ω).comp Matrix.toEuclideanLin.toLinearMap).comp
     ((reverseProductInsertion (regularizedPatchFilter regions a b x) j).comp
       (dependentRegionLiftLinear (regions j)))
@@ -120,12 +120,12 @@ noncomputable def regularizedPatchInsertion (a : Fin m → ℝ) (b : ℝ)
 open Classical in
 /-- The insertion formula explicitly uses the original reverse ordered product. -/
 theorem regularizedPatchInsertion_apply (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
     (j : Fin m) (K : Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ) :
     regularizedPatchInsertion regions a b Ω x j K = WithLp.toLp 2
       (((List.ofFn (Function.update (regularizedPatchFilter regions a b x) j
-        (dependentRegionOperatorLift (regions j) K))).reverse).prod *ᵥ Ω) := by
+        (ManyBody.place (regions j) K))).reverse).prod *ᵥ Ω) := by
   classical
   simp [regularizedPatchInsertion, reverseProductInsertion, dependentRegionLiftLinear,
     Matrix.toEuclideanLin, Matrix.toLpLin_apply, List.ofFn_eq_map, List.map_reverse]
@@ -133,7 +133,7 @@ theorem regularizedPatchInsertion_apply (a : Fin m → ℝ) (b : ℝ)
 open Classical in
 /-- Changing a density changes only the corresponding factor in the ordered filtered output. -/
 theorem regularizedPatchOutput_coordinateUpdate (a : Fin m → ℝ) {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     {x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ}
     (hx : x ∈ regularizedPatchDomain regions) (j : Fin m)
     (U : unitary (Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)) :
@@ -155,7 +155,7 @@ theorem regularizedPatchOutput_coordinateUpdate (a : Fin m → ℝ) {b : ℝ} (h
 open Classical in
 /-- Inserting the unchanged local power recovers the ordered filtered output. -/
 theorem regularizedPatchInsertion_self (a : Fin m → ℝ) (b : ℝ)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
     (j : Fin m) :
     regularizedPatchInsertion regions a b Ω x j ((x j + b • 1) ^ (-(a j) / 2)) =
