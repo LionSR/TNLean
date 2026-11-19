@@ -77,4 +77,16 @@ theorem source_buffer_le_window_shortening {L : ℕ} (hL : 2 ≤ L) {μ : ℝ} (
   rw [div_mul_eq_mul_div, le_div_iff₀ hlog]
   nlinarith
 
+/-- The energy bound of the low-density output, `E₀ + (η - 3w) + δ` with
+`η = η_LD - 3w ⌈log₂ L⌉`, is at most the printed `E₀ + η_LD - μ + δ` for the source's buffer
+`w = μ / (3 log L)`, `L ≥ 2` and `μ ≥ 0`. ALVV, arXiv:1602.08828v2, Theorem `t:alg2`,
+lines 1869–1870. -/
+theorem shortened_window_le_source_window {L : ℕ} (hL : 2 ≤ L) {μ : ℝ} (hμ : 0 ≤ μ)
+    (etaLD E₀ δ : ℝ) :
+    let w := μ / (3 * Real.log L)
+    E₀ + ((etaLD - 3 * w * Nat.clog 2 L) - 3 * w) + δ ≤ E₀ + (etaLD - μ) + δ := by
+  intro w
+  have h := source_buffer_le_window_shortening hL hμ
+  linarith
+
 end TNLean.MPS.AreaLaw.ALVV
