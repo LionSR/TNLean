@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Preparation.FiniteRingGaussianFilter
-import TNLean.Lattice.GaussianNegativeFrequencyLocality
+import QICLean.ManyBody.Hamiltonian.NegativeFrequency
 
 /-!
 # Uniform negative-frequency locality on the actual finite ring
@@ -38,14 +38,14 @@ theorem norm_negativeFrequency_interactionHamiltonian_commutator_le
     (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y)
     (hXY : Disjoint (X : Set (Fin N)) (Y : Set (Fin N)))
     (s : ℝ≥0) {ε T a : ℝ} (hε : 0 < ε) (hT : 0 < T) (ha : 0 ≤ a) :
-    ‖gaussianNegativeFrequencyOperator s ε (interactionHamiltonian h hN) A * B -
-        B * gaussianNegativeFrequencyOperator s ε (interactionHamiltonian h hN) A‖ ≤
+    ‖ManyBody.gaussianNegativeFrequencyOperator s ε (interactionHamiltonian h hN) A * B -
+        B * ManyBody.gaussianNegativeFrequencyOperator s ε (interactionHamiltonian h hN) A‖ ≤
       kernel s⁻¹ 0 *
         ((2 * ‖A‖ * ‖B‖ * X.card *
             Real.exp (-a * ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY)) *
             (8 * Real.exp a) * Real.exp ((8 * Real.exp a) * T) +
           (2 * ‖A‖ * ‖B‖ / T) * Real.exp (-T ^ 2 / (2 * (s : ℝ)))) := by
-  apply norm_commutator_gaussianNegativeFrequencyOperator_le s
+  apply ManyBody.norm_commutator_gaussianNegativeFrequencyOperator_le s
     (interactionHamiltonian_isHermitian hN hHerm) A B hε hT (by positivity) (by positivity)
   intro t
   exact norm_interactionHamiltonian_commutator_le_exp_abs_of_disjoint hN h hHerm hNorm

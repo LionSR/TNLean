@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.ClusterExpansion.TruncatedPositivity
 import TNLean.Lattice.ClusterExpansion.TruncatedProductForm
-import TNLean.Lattice.ClusterExpansion.PercolationSource
+import QICLean.Analysis.ClusterExpansion.Temperature
+import QICLean.Analysis.ClusterExpansion.Percolation
 
 /-!
 # The truncated operator at every temperature
@@ -16,7 +16,7 @@ Hastings, *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3,
 positive and in the matrix product form of eq. `mpf`, the `n` indices at each site being grouped
 into one. This file proves both for the actual truncated operator of the cluster expansion: it is
 in product form of range `l` (`hasProductForm_truncatedExp`) and Hermitian when the terms are
-(`isHermitian_truncatedExp`), so `HasProductForm.pow_of_even` applies.
+(`ClusterExpansion.isHermitian_truncatedExp`), so `HasProductForm.pow_of_even` applies.
 
 **Local fix (positivity at every temperature):** the source states positive definiteness; the
 result is positive semidefiniteness. Documented in `docs/paper-gaps/hastings05_mplt_positivity.tex`.
@@ -58,10 +58,10 @@ theorem hasProductForm_truncatedExp_pow_of_even [Nonempty σ] (acts : κ → Fin
     (hherm : ∀ k, (h k).IsHermitian) (near : σ → σ → Prop) (hnear : ∀ i, near i i)
     (β : ℝ) {m : ℕ} (hm : Even m) :
     HasProductForm (fun _ ↦ q) near
-        ((truncatedExp (overlapGraph acts) (IsLargeSupport near acts) h β) ^ m) ∧
-      ((truncatedExp (overlapGraph acts) (IsLargeSupport near acts) h β) ^ m).PosSemidef :=
+        ((ClusterExpansion.truncatedExp (SimpleGraph.overlapGraph acts) (IsLargeSupport near acts) h β) ^ m) ∧
+      ((ClusterExpansion.truncatedExp (SimpleGraph.overlapGraph acts) (IsLargeSupport near acts) h β) ^ m).PosSemidef :=
   (hasProductForm_truncatedExp acts h hh near hnear β).pow_of_even
-    (isHermitian_truncatedExp _ _ hherm β) hm
+    (ClusterExpansion.isHermitian_truncatedExp _ _ hherm β) hm
 
 /-- The source's diameter truncation on an arbitrary finite pseudometric site set has
 matrix product form of range `l`. Hastings, arXiv:cond-mat/0508554v3, lines 1256–1279. -/
@@ -70,10 +70,10 @@ theorem hasProductForm_truncatedExp_of_dist_le [PseudoMetricSpace σ] [Nonempty 
     (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (acts k : Finset σ))
     {l : ℝ} (hl : 0 ≤ l) (β : ℝ) :
     HasProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ l)
-      (truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β) := by
-  have hlarge : IsLargeSupport (fun i j ↦ dist i j ≤ l) acts = IsLargeDiam acts l := by
+      (ClusterExpansion.truncatedExp (SimpleGraph.overlapGraph acts) (ClusterExpansion.IsLargeDiam acts l) h β) := by
+  have hlarge : IsLargeSupport (fun i j ↦ dist i j ≤ l) acts = ClusterExpansion.IsLargeDiam acts l := by
     funext C
-    simp only [IsLargeSupport, IsLargeDiam, not_le]
+    simp only [IsLargeSupport, ClusterExpansion.IsLargeDiam, not_le]
   rw [← hlarge]
   exact hasProductForm_truncatedExp acts h hh (fun i j ↦ dist i j ≤ l)
     (fun i ↦ by simpa using hl) β
@@ -88,9 +88,9 @@ theorem hasProductForm_truncatedExp_pow_of_even_of_dist_le
     (hherm : ∀ k, (h k).IsHermitian) {l : ℝ} (hl : 0 ≤ l) (β : ℝ)
     {m : ℕ} (hm : Even m) :
     HasProductForm (fun _ ↦ q) (fun i j ↦ dist i j ≤ l)
-        ((truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β) ^ m) ∧
-      ((truncatedExp (overlapGraph acts) (IsLargeDiam acts l) h β) ^ m).PosSemidef :=
+        ((ClusterExpansion.truncatedExp (SimpleGraph.overlapGraph acts) (ClusterExpansion.IsLargeDiam acts l) h β) ^ m) ∧
+      ((ClusterExpansion.truncatedExp (SimpleGraph.overlapGraph acts) (ClusterExpansion.IsLargeDiam acts l) h β) ^ m).PosSemidef :=
   (hasProductForm_truncatedExp_of_dist_le acts h hh hl β).pow_of_even
-    (isHermitian_truncatedExp _ _ hherm β) hm
+    (ClusterExpansion.isHermitian_truncatedExp _ _ hherm β) hm
 
 end TNLean.Lattice.ClusterExpansion

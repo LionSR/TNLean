@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LocalSolution.PeriodicCoarsening
-import TNLean.Lattice.GaussianFilteredTruncationGround
-import TNLean.Lattice.TranslationSupercellSpacing
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Hamiltonian.GaussianFilterTruncation
+import QICLean.ManyBody.Hamiltonian.Translation
+import QICLean.Algebra.ZModDisplacement
+import QICLean.ManyBody.Dynamics.GraphBall
 
 /-!
 # Periodic neighbouring-block operators from local Gaussian filters
@@ -141,7 +143,7 @@ within distance `ℓ - R`. Hastings, arXiv:cond-mat/0508554v3, eqs. `mid`,
 noncomputable def periodicLocalFilter {N ℓ d : ℕ} (R : ℕ) (θ Δ : ℝ)
     (h : (Fin N × Fin (2 * ℓ)) → Matrix ((Fin N × Fin (2 * ℓ)) → Fin d)
       ((Fin N × Fin (2 * ℓ)) → Fin d) ℂ) (i : Fin N × Fin (2 * ℓ)) :=
-  gaussianFilteredTerm θ Δ
+  ManyBody.gaussianFilteredTerm θ Δ
     (∑ k ∈ ManyBody.graphBall (periodicPhysicalGraph N ℓ) i (ℓ - R), h k) (h i)
 
 /-- The neighbouring-supersite family constructed from the original local terms.
@@ -186,7 +188,7 @@ private theorem periodic_local_filter_data {N ℓ d R S m : ℕ} [NeZero d]
       (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i ℓ : Finset (Fin N × Fin (2 * ℓ))) ∧
     ‖periodicLocalFilter R θ Δ h i‖ ≤ J ∧
     (periodicLocalFilter R θ Δ h i).IsHermitian ∧
-    ‖gaussianFilteredTerm θ Δ (∑ k, h k) (h i) - periodicLocalFilter R θ Δ h i‖ ≤
+    ‖ManyBody.gaussianFilteredTerm θ Δ (∑ k, h k) (h i) - periodicLocalFilter R θ Δ h i‖ ≤
       periodicFilterError N ℓ R S m J θ Δ μ := by
   let G := periodicPhysicalGraph N ℓ
   let X := fun i ↦ ManyBody.graphBall G i R
@@ -203,12 +205,12 @@ private theorem periodic_local_filter_data {N ℓ d R S m : ℕ} [NeZero d]
       ¬Disjoint (X k) (ManyBody.graphBall G i ℓ) → ∀ x ∈ X i, ∀ y ∈ X k,
         (m : ℕ∞) ≤ G.edist x y :=
     fun k hk _ _ hx _ hy ↦ omitted_centres_separated G hm i k hk hx hy
-  have hdata := truncated_approx_gaussianFilteredTerm G X h hherm hsupp
+  have hdata := ManyBody.truncated_approx_gaussianFilteredTerm G X h hherm hsupp
     (2 * R) hdiam S hS (S * J) hbudget (ΔE := Δ) hθ
     (ManyBody.graphBall G i (ℓ - R)) (ManyBody.graphBall G i ℓ) hsK (X i) hXi (hsupp i) J hJ μ hμ m
         hsep
     (T := θ / Δ) (div_nonneg hθ hΔ.le)
-  rw [exp_neg_sq_div_eq_of_time_eq hΔ.ne'] at hdata
+  rw [ManyBody.exp_neg_sq_div_eq_of_time_eq hΔ.ne'] at hdata
   refine ⟨hdata.1, hdata.2.1.trans (hJ i), hdata.2.2.1 (hherm i), hdata.2.2.2.trans ?_⟩
   have hcount : ((ManyBody.graphBall G i (ℓ - R))ᶜ.filter
       (fun k ↦ ¬Disjoint (X k) (ManyBody.graphBall G i ℓ))).card ≤ periodicTruncationShell N ℓ R :=
@@ -292,7 +294,7 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
       (a i - ((⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ).re : ℂ) • 1) Ω‖ ≤
         J * Real.exp (-θ / 2) + ε := by
     intro i
-    have hb := norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hθ hΔ
+    have hb := ManyBody.norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hθ hΔ
       (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) hΩ hgap hspan (h i) (a i)
     have hreal : ((⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ).re : ℂ) =
         ⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ :=
@@ -305,10 +307,10 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
   have herr : ‖∑ j, M j - ∑ i, h i‖ ≤ (N * (2 * ℓ) : ℕ) * ε := by
     change ‖∑ j, periodicCoarseOperator a j - ∑ i, h i‖ ≤ _
     rw [sum_periodicCoarseOperator]
-    refine (norm_sum_sub_le_of_sum_eq Finset.univ θ Δ
+    refine (ManyBody.norm_sum_sub_le_of_sum_eq Finset.univ θ Δ
       (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) (W := h) rfl).trans ?_
     calc ∑ i : Fin N × Fin (2 * ℓ),
-        ‖gaussianFilteredTerm θ Δ (∑ i, h i) (h i) - a i‖ ≤ ∑ _i, ε :=
+        ‖ManyBody.gaussianFilteredTerm θ Δ (∑ i, h i) (h i) - a i‖ ≤ ∑ _i, ε :=
           Finset.sum_le_sum fun i _ ↦ (hd i).2.2.2
       _ = _ := by simp
   refine ⟨fun j ↦ ⟨hMherm j, ?_, ?_, ?_, ?_⟩, herr, ?_⟩

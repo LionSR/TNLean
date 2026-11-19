@@ -5,8 +5,9 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LocalSolution.RoundedPeriodicCoarsening
 import TNLean.MPS.AreaLaw.LocalSolution.PeriodicChainApproximation
-import TNLean.Lattice.GaussianFilteredTerm
 import TNLean.Algebra.MatrixHermitianSum
+import QICLean.ManyBody.Hamiltonian.GaussianFilter
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The quadratic logarithmic hierarchy on an arbitrary periodic chain
@@ -96,7 +97,7 @@ theorem card_le_two_mul_re_trace_of_roundedPeriodicProjection {M ℓ d : ℕ} (h
     (hrscale : r = η * (ℓ : ℝ))
     (hr : hierarchyProjectionLength (finiteHierarchyDepth (roundedPeriodicBlockCount M ℓ))
       (8 * J / η) Δ ≤ r)
-    (herror : ∀ i, ‖TNLean.Lattice.gaussianFilteredTerm q Δ (∑ k, g k) (g i) - a i‖ ≤
+    (herror : ∀ i, ‖ManyBody.gaussianFilteredTerm q Δ (∑ k, g k) (g i) - a i‖ ≤
       J * Real.exp (-r))
     {P₀ : Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ} (hP₀ : IsStarProjection P₀) {E₀ : ℝ}
     (hgap : ∀ v : EuclideanSpace ℂ (Fin M → Fin d),
@@ -118,12 +119,12 @@ theorem card_le_two_mul_re_trace_of_roundedPeriodicProjection {M ℓ d : ℕ} (h
   have hJeff : 0 < Jeff := by dsimp [Jeff]; positivity
   have hKr : K = Jeff * r := by dsimp [K, Jeff]; rw [hrscale]; field_simp
   have hH : (∑ i, g i).IsHermitian := Matrix.isHermitian_sum _ (fun i _ ↦ hg i)
-  have hsumg : ∑ i, TNLean.Lattice.gaussianFilteredTerm q Δ (∑ k, g k) (g i) = ∑ i, g i :=
-    TNLean.Lattice.sum_gaussianFilteredTerm Finset.univ q Δ hH rfl
+  have hsumg : ∑ i, ManyBody.gaussianFilteredTerm q Δ (∑ k, g k) (g i) = ∑ i, g i :=
+    ManyBody.sum_gaussianFilteredTerm Finset.univ q Δ hH rfl
   have hsumerror : ‖(∑ i, g i) - ∑ i, a i‖ ≤ (M : ℝ) * J * Real.exp (-r) := by
     conv_lhs => rw [← hsumg, ← Finset.sum_sub_distrib]
     calc
-      _ ≤ ∑ i, ‖TNLean.Lattice.gaussianFilteredTerm q Δ (∑ k, g k) (g i) - a i‖ :=
+      _ ≤ ∑ i, ‖ManyBody.gaussianFilteredTerm q Δ (∑ k, g k) (g i) - a i‖ :=
         norm_sum_le _ _
       _ ≤ ∑ i : Fin M, J * Real.exp (-r) := Finset.sum_le_sum fun i _ ↦ herror i
       _ = _ := by simp; ring
@@ -258,7 +259,7 @@ theorem card_le_two_mul_re_trace_of_roundedPeriodicProjection_of_chosen_radius
           roundedPeriodicDistance i v ≤ roundedPeriodicProjectionRadius M J η Δ))
     (ha : ∀ i, (a i).IsHermitian) (hg : ∀ i, (g i).IsHermitian)
     {ψ : EuclideanSpace ℂ (Fin M → Fin d)} (hψ : ‖ψ‖ = 1)
-    (herror : ∀ i, ‖TNLean.Lattice.gaussianFilteredTerm q Δ (∑ k, g k) (g i) - a i‖ ≤
+    (herror : ∀ i, ‖ManyBody.gaussianFilteredTerm q Δ (∑ k, g k) (g i) - a i‖ ≤
       J * Real.exp (-(η * (roundedPeriodicProjectionRadius M J η Δ : ℝ))))
     {P₀ : Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ} (hP₀ : IsStarProjection P₀) {E₀ : ℝ}
     (hgap : ∀ v : EuclideanSpace ℂ (Fin M → Fin d),

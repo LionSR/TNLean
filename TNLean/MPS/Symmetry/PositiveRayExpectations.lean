@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.ExactMPSGappedPhase
 import TNLean.MPS.Preparation.WindowCorrelator
-import TNLean.Lattice.ObservableCentering
+import QICLean.ManyBody.Hamiltonian.NegativeFrequency
 
 /-!
 # Normalized correlations depend only on the periodic MPS rays

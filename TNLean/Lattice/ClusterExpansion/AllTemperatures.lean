@@ -134,7 +134,7 @@ theorem evenTemperatureFactors_le {β β₀ : ℝ} (hβ₀ : 0 < β₀) {m : ℕ
 
 /-- The factor count yields the corrected `β/β₀ + 2` exponential bound for every
 nonnegative cluster weight. Hastings, arXiv:cond-mat/0508554v3, lines 1334–1347;
-`docs/paper-gaps/hastings05_temperature_factor_count.tex`. -/
+https://sirui-lu.com/QICLean/paper-gaps/hastings05_temperature_factor_count.pdf. -/
 theorem exp_evenTemperatureFactors_mul_sub_one_le {β β₀ A : ℝ}
     (hβ : 0 < β) (hβ₀ : 0 < β₀) (hA : 0 ≤ A) :
     Real.exp ((evenTemperatureFactors β β₀ : ℝ) * A) - 1 ≤

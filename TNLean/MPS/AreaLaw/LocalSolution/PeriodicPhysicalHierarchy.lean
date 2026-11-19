@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LocalSolution.PeriodicPhysicalMetric
 import TNLean.MPS.AreaLaw.LocalSolution.RoundedPeriodicApproximation
-import TNLean.Lattice.GaussianFilteredMetricTruncation
-import TNLean.Lattice.GaussianZeroRange
+import QICLean.ManyBody.Hamiltonian.GaussianFilterMetric
+import QICLean.ManyBody.Hamiltonian.GaussianFilterLocality
 
 /-!
 # The physical periodic hierarchy at quadratic logarithmic range
@@ -95,7 +95,7 @@ Hastings, arXiv:cond-mat/0508554v3, eq. `mid`, lines 285–303. -/
 noncomputable def periodicPhysicalTruncatedTerm {M d : ℕ} (c₁ R Δ : ℝ) (ℓ : ℕ)
     (g : Fin M → Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ) (i : Fin M) :
     Matrix (Fin M → Fin d) (Fin M → Fin d) ℂ :=
-  TNLean.Lattice.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ
+  ManyBody.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ
     (∑ j with (roundedPeriodicDistance i j : ℝ) ≤ (ℓ : ℝ) - R, g j) (g i)
 
 /-- Uniform physical localization constants for the actual periodic truncated terms.
@@ -113,7 +113,7 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
           a ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
               (Finset.univ.filter fun v ↦ roundedPeriodicDistance i v ≤ ℓ) ∧
             a.IsHermitian ∧ ‖a‖ ≤ J ∧
-            ‖TNLean.Lattice.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ (∑ j, g j) (g i) - a‖ ≤
+            ‖ManyBody.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ (∑ j, g j) (g i) - a‖ ≤
               J * C * Real.exp (-(η * (ℓ : ℝ))) := by
   by_cases hRzero : R = 0
   · subst R
@@ -122,17 +122,17 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
     let _ : NeZero M := ⟨by omega⟩
     let _ := periodicPhysicalMetricSpace M
     have hsupp' : ∀ j,
-        g j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (TNLean.Lattice.metricRangeBall 0 j) := by
+        g j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ManyBody.metricRangeBall 0 j) := by
       intro j
       apply ManyBody.supportedOperators_mono _ (hsupp j)
       intro v hv
-      rw [TNLean.Lattice.mem_metricRangeBall]
+      rw [ManyBody.mem_metricRangeBall]
       exact (Finset.mem_filter.mp hv).2
-    have hfilters := TNLean.Lattice.gaussianFilteredTerm_full_and_sum_eq_of_zero_range
-      g hsupp' (TNLean.Lattice.metricRangeBall (ℓ : ℝ) i) ((ℓ : ℝ) * Δ) Δ i
+    have hfilters := ManyBody.gaussianFilteredTerm_full_and_sum_eq_of_zero_range
+      g hsupp' (ManyBody.metricRangeBall (ℓ : ℝ) i) ((ℓ : ℝ) * Δ) Δ i
     have ha : a = g i := by
-      have heq : a = TNLean.Lattice.gaussianFilteredTerm (1 * (ℓ : ℝ) * Δ) Δ
-          (∑ j ∈ TNLean.Lattice.metricRangeBall ((ℓ : ℝ) - 0) i, g j) (g i) := rfl
+      have heq : a = ManyBody.gaussianFilteredTerm (1 * (ℓ : ℝ) * Δ) Δ
+          (∑ j ∈ ManyBody.metricRangeBall ((ℓ : ℝ) - 0) i, g j) (g i) := rfl
       rw [heq, one_mul, sub_zero]
       exact hfilters.2
     rw [ha]
@@ -146,26 +146,26 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
     · rw [one_mul, hfilters.1, sub_self, norm_zero, mul_zero, zero_mul]
   · have hRp : 0 < R := lt_of_le_of_ne hR (Ne.symm hRzero)
     obtain ⟨c₁, η, C, hc₁, hη, hC, hloc⟩ :=
-      TNLean.Lattice.exists_metric_truncated_filter_localization hRp (2 * Nat.ceil R + 1) hJ hΔ
+      ManyBody.exists_metric_truncated_filter_localization hRp (2 * Nat.ceil R + 1) hJ hΔ
     refine ⟨c₁, η, C, hc₁, hη, hC, ?_⟩
     intro M d hM g hg hsupp hnorm ℓ hℓ i a
     let _ : NeZero M := ⟨by omega⟩
     let _ := periodicPhysicalMetricSpace M
     have hsupp' : ∀ j,
-        g j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (TNLean.Lattice.metricRangeBall R j) := by
+        g j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (ManyBody.metricRangeBall R j) := by
       intro j
       apply ManyBody.supportedOperators_mono _ (hsupp j)
       intro v hv
-      rw [TNLean.Lattice.mem_metricRangeBall]
+      rw [ManyBody.mem_metricRangeBall]
       exact (Finset.mem_filter.mp hv).2
     have ha := hloc g hg hsupp' hnorm (card_periodicPhysical_metricRangeBall_le R) (ℓ : ℝ) hℓ i
-    have heq : TNLean.Lattice.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ
-        (∑ j ∈ TNLean.Lattice.metricRangeBall ((ℓ : ℝ) - R) i, g j) (g i) = a := by
+    have heq : ManyBody.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ
+        (∑ j ∈ ManyBody.metricRangeBall ((ℓ : ℝ) - R) i, g j) (g i) = a := by
       rfl
     dsimp only at ha
     rw [heq] at ha
     refine ⟨ManyBody.supportedOperators_mono (fun v hv ↦ ?_) ha.1, ha.2.1, ha.2.2.1, ha.2.2.2.1⟩
-    · rw [TNLean.Lattice.mem_metricRangeBall] at hv
+    · rw [ManyBody.mem_metricRangeBall] at hv
       refine Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩
       have hd : (roundedPeriodicDistance i v : ℝ) ≤ (ℓ : ℝ) := hv
       exact_mod_cast hd
@@ -223,7 +223,7 @@ theorem exists_periodicPhysicalHierarchy {R J Δ : ℝ} (hR : 0 ≤ R) (hJ : 0 <
   have haHerm (i : Fin M) : (a i).IsHermitian := (haloc i).2.1
   have haNorm (i : Fin M) : ‖a i‖ ≤ Jb := ((haloc i).2.2.1).trans (le_max_left _ _)
   have haError (i : Fin M) :
-      ‖TNLean.Lattice.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ (∑ j, g j) (g i) - a i‖ ≤
+      ‖ManyBody.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ (∑ j, g j) (g i) - a i‖ ≤
         Jb * Real.exp (-r) := by
     exact ((haloc i).2.2.2).trans
       (mul_le_mul_of_nonneg_right (le_max_right J (J * C)) (Real.exp_pos _).le)

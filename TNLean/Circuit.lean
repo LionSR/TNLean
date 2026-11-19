@@ -43,7 +43,6 @@ import TNLean.Circuit.SiteEmbeddingOrder
 import TNLean.Circuit.SiteOperators
 import TNLean.Circuit.SiteOscillation
 import TNLean.Circuit.SitePermutation
-import TNLean.Circuit.SitePermutationSupport
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.Circuit.SpectatorOscillationSupport
 import TNLean.Circuit.SpectatorSiteExpectation

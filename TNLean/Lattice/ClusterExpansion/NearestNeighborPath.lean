@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.ClusterExpansion.PathCrossingExpansion
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SupportedMatrixElements
 import QICLean.Entropy.RegionUnion
+import QICLean.Analysis.ClusterExpansion.Path
 
 /-!
 # The label path of actual nearest-neighbour interactions
@@ -29,7 +29,7 @@ namespace TNLean.Lattice.ClusterExpansion
 /-- The overlap graph of the designated nearest-neighbour bond supports is exactly the label
 path. Supporting ALVV, arXiv:1602.08828v2, `eq:rho-expansion`, source lines 1971–2013. -/
 theorem overlapGraph_nearestNeighbor_eq_pathGraph (N : ℕ) :
-    overlapGraph (fun i : Fin N ↦ ({i.castSucc, i.succ} : Finset (Fin (N + 1)))) = pathGraph N := by
+    SimpleGraph.overlapGraph (fun i : Fin N ↦ ({i.castSucc, i.succ} : Finset (Fin (N + 1)))) = pathGraph N := by
   ext i j
   change (i ≠ j ∧ (({i.castSucc, i.succ} : Finset (Fin (N + 1))) ∩
     {j.castSucc, j.succ}).Nonempty) ↔ _
@@ -61,16 +61,16 @@ theorem truncatedExp_nearestNeighbor_eq_crossing_components {N q r : ℕ}
     (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
       (h i) {i.castSucc, i.succ}) (p : Fin N) (β : ℝ) :
     let F := fun B : Finset (Fin N) ↦
-      ∑ A ∈ B.powerset with NoLargeCluster (pathGraph N) (fun C ↦ r ≤ C.card) A,
+      ∑ A ∈ B.powerset with ClusterExpansion.NoLargeCluster (pathGraph N) (fun C ↦ r ≤ C.card) A,
         clusterOp h A β
-    truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β =
+    ClusterExpansion.truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β =
       F {j ∈ univ | j.val < p.val} * F {j ∈ univ | p.val < j.val} +
         ∑ C ∈ (univ : Finset (Finset (Fin N))).filter (fun C : Finset (Fin N) ↦
             p ∈ C ∧ ((pathGraph N).induce (C : Set (Fin N))).Connected ∧ C.card < r),
           clusterOp h C β *
             (F {j ∈ univ | ∀ c ∈ C, j.val + 1 < c.val} *
               F {j ∈ univ | ∀ c ∈ C, c.val + 1 < j.val}) := by
-  exact truncatedExp_pathGraph_eq_crossing_components h
+  exact ClusterExpansion.truncatedExp_pathGraph_eq_crossing_components h
     (commute_nearestNeighbor_of_not_adj h hs) p β
 
 end TNLean.Lattice.ClusterExpansion

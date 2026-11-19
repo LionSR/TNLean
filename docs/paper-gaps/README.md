@@ -1467,7 +1467,7 @@ exponents `2m`, and that the printed exponent lacks its minus sign.
 
 ### One-dimensional area law after Hastings: the error of the localized filtered parts
 
-[hastings07_filtered_part_localization.tex](hastings07_filtered_part_localization.tex)
+[hastings07_filtered_part_localization.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings07_filtered_part_localization.pdf)
 (local correction, resolved) records that the bound on the localized filtered parts in
 the appendix of Hastings (arXiv:0705.2024v4, lines 816–828) is printed as
 `‖M_L − H_L‖ ≤ O(ΔE⁻¹J²e^{−l/3ξ})`, while the argument needs and proves
@@ -1491,7 +1491,7 @@ proved is `(√2 + 4) √C₁ e^{-l/(2ξ')}`.
 
 ### Local solution of gapped Hamiltonians after Hastings: the finite-range approximation
 
-[hastings05_filtered_term_approximation.tex](hastings05_filtered_term_approximation.tex)
+[hastings05_filtered_term_approximation.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings05_filtered_term_approximation.pdf)
 (local correction, resolved) records the normalized-partial-trace approximation to a
 Gaussian-filtered term in Hastings, *Solving Gapped Hamiltonians Locally*
 (arXiv:cond-mat/0508554v3, lines 285–320). The printed Gaussian weight
@@ -1506,7 +1506,7 @@ the degenerate case. Its closed neighbourhood must be strictly smaller than
 the support separation; the decay estimate also requires a positive time-window
 slope `c₁` with `v c₁ < 1/2`.
 
-[hastings05_truncated_dynamics.tex](hastings05_truncated_dynamics.tex)
+[hastings05_truncated_dynamics.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings05_truncated_dynamics.pdf)
 (local correction, resolved) records the separate construction using the source's
 truncated Hamiltonian. `GaussianFilteredTruncation.lean` proves the comparison of the two
 evolutions and the actual truncated Gaussian integral, including support, Hermiticity,
@@ -1520,7 +1520,7 @@ and the truncation families are not replaced by the partial-trace construction.
 
 ### Local solution of gapped Hamiltonians: a basis of a degenerate ground space
 
-[hastings05_two_dim_ground_basis.tex](hastings05_two_dim_ground_basis.tex)
+[hastings05_two_dim_ground_basis.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings05_two_dim_ground_basis.pdf)
 (local correction, resolved) records the corrected basis choice in Hastings,
 *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, lines 1678–1708).
 An orthonormal basis is constructed in every finite ground-space dimension. The
@@ -1539,7 +1539,7 @@ localization support parameters. For a radius that grows with the number of site
 perturbation comparison instead adds `(n - 1)` times the total truncation error to the
 original-term bound; that error must also be controlled uniformly.
 
-[hastings05_geometric_growth_scope.tex](hastings05_geometric_growth_scope.tex)
+[hastings05_geometric_growth_scope.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings05_geometric_growth_scope.pdf)
 (scope restriction, resolved) distinguishes the source's metric and finite-range assumptions
 from polynomial shell and sphere bounds. The actual physical metric truncation estimate
 is now proved without such a growth hypothesis.
@@ -1650,7 +1650,7 @@ or unspecified bond-dimension formula is asserted.
 
 ### Local solution of gapped Hamiltonians: the supercell of the translation-invariant case
 
-[hastings05_translation_supercell.tex](hastings05_translation_supercell.tex)
+[hastings05_translation_supercell.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings05_translation_supercell.pdf)
 (clarification, resolved) treats the translation-invariant case of Hastings,
 *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, lines 1603–1654).
 The bounded-denominator argument constructs the supercell from the momentum sectors and
@@ -1760,7 +1760,7 @@ what is formalized.
 
 ### Local solution of gapped Hamiltonians: the boundary of a cluster
 
-[hastings05_cluster_boundary.tex](hastings05_cluster_boundary.tex)
+[hastings05_cluster_boundary.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings05_cluster_boundary.pdf)
 (local correction, resolved) records that the boundary `B(C)` of Hastings, *Solving gapped
 Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines 1131–1134), the terms acting on a
 site of `C`, is too small for the claim at lines 1134–1138 that a term containing `H_C` and
@@ -1771,7 +1771,7 @@ formalization uses the terms whose support meets the support of `H_C`; then `S` 
 
 ### Local solution of gapped Hamiltonians: the number of factors in the error bound
 
-[hastings05_temperature_factor_count.tex](hastings05_temperature_factor_count.tex)
+[hastings05_temperature_factor_count.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings05_temperature_factor_count.pdf)
 (local correction, resolved) records that Hastings' error bound at every temperature
 (arXiv:cond-mat/0508554v3, source lines 1342–1347) prints `β/β₀` in the exponent where the
 source's bound on `ρ_m` (lines 1334–1341) gives the number `n` of factors, the smallest even
@@ -1783,7 +1783,7 @@ exact interval and minimality, and derives the trace-error corollary with
 
 ### Local solution of gapped Hamiltonians: cluster size in the percolation bound
 
-[hastings05_percolation_cluster_size.tex](hastings05_percolation_cluster_size.tex)
+[hastings05_percolation_cluster_size.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings05_percolation_cluster_size.pdf)
 (local correction, resolved) records the start of the sum over cluster sizes in
 Hastings, *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3,
 source lines 1227–1254). A cluster of diameter larger than `l_proj` has at least
@@ -1794,7 +1794,7 @@ hypothesis.
 
 ### Local solution of gapped Hamiltonians: the example of non-commuting low-energy terms
 
-[hastings05_low_energy_example.tex](hastings05_low_energy_example.tex)
+[hastings05_low_energy_example.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings05_low_energy_example.pdf)
 (scope restriction, open) records two slips in the example of Hastings,
 *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, source lines
 1655–1676). The printed terms sum to `H = −S^z_1 + ∑_{i ≥ 2} S^z_i`, not
@@ -1814,7 +1814,7 @@ from the von Neumann Lemma 2 by `S_α ≤ S`, the concavity of the logarithm.
 
 ### Local solution of gapped Hamiltonians: the truncated dynamics of `M_i`
 
-[hastings05_truncated_dynamics.tex](hastings05_truncated_dynamics.tex)
+[hastings05_truncated_dynamics.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings05_truncated_dynamics.pdf)
 (local correction, resolved) records how the approximation `M_i` of Hastings,
 *Solving gapped Hamiltonians locally* (arXiv:cond-mat/0508554v3, eqs. `mid` and
 `apb`, source lines 285–320, proved at lines 1458–1533), is formalized. The
@@ -1828,7 +1828,7 @@ read as that of eq. `thd`. The exponential form `J O(e^{-l_proj/l_fac})` of eq. 
 chosen before the site set and Hamiltonian. A separate polynomial-shell specialization
 remains valid. The printed minimum of decay lengths is corrected to a minimum of rates;
 see
-[hastings05_geometric_growth_scope.tex](hastings05_geometric_growth_scope.tex).
+[hastings05_geometric_growth_scope.tex](https://sirui-lu.com/QICLean/paper-gaps/hastings05_geometric_growth_scope.pdf).
 
 ### One-dimensional area law after Hastings: the decay length of Lemma 1
 

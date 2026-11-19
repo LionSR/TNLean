@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.ClusterExpansion.NearestNeighborIntervalRank
-import TNLean.Lattice.ClusterExpansion.CrossingIntervalCount
 import QICLean.Algebra.OperatorSchmidtBounds
+import QICLean.Analysis.ClusterExpansion.Path
 
 /-!
 # Operator Schmidt rank of the actual interaction-label truncation
@@ -34,13 +34,13 @@ theorem operatorSchmidtRank_truncatedExp_nearestNeighbor_le_count {N q r : ℕ} 
       (h i) {i.castSucc, i.succ}) (p : Fin N) (β : ℝ) :
     operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin (N + 1) ↦ q)
       {v ∈ (univ : Finset (Fin (N + 1))) | v.val ≤ p.val}
-        (truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β)) ≤
+        (ClusterExpansion.truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β)) ≤
       1 + (r - 1) ^ 2 * q ^ r := by
   classical
   let A := {v ∈ (univ : Finset (Fin (N + 1))) | v.val ≤ p.val}
   let R := {v ∈ (univ : Finset (Fin (N + 1))) | p.val < v.val}
   let F := fun B : Finset (Fin N) ↦
-    ∑ S ∈ B.powerset with NoLargeCluster (pathGraph N) (fun C ↦ r ≤ C.card) S,
+    ∑ S ∈ B.powerset with ClusterExpansion.NoLargeCluster (pathGraph N) (fun C ↦ r ≤ C.card) S,
       clusterOp h S β
   let φ := Matrix.reindexAlgEquiv ℂ ℂ (Entropy.cutEquiv (fun _ : Fin (N + 1) ↦ q) A)
   have hleft (B : Finset (Fin N)) (hB : ∀ i ∈ B, i.val < p.val) :
@@ -75,20 +75,20 @@ theorem operatorSchmidtRank_truncatedExp_nearestNeighbor_le_count {N q r : ℕ} 
     rw [map_mul]
     simpa only [Nat.mul_one] using (Matrix.operatorSchmidtRank_mul_le _ _).trans
       (Nat.mul_le_mul he hpairs)
-  have hdec : truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β =
+  have hdec : ClusterExpansion.truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β =
       F {j ∈ univ | j.val < p.val} * F {j ∈ univ | p.val < j.val} +
         ∑ C ∈ T, clusterOp h C β *
           (F {j ∈ univ | ∀ c ∈ C, j.val + 1 < c.val} *
             F {j ∈ univ | ∀ c ∈ C, c.val + 1 < j.val}) :=
     truncatedExp_nearestNeighbor_eq_crossing_components h hs p β
-  change operatorSchmidtRank (φ (truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β)) ≤ _
+  change operatorSchmidtRank (φ (ClusterExpansion.truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β)) ≤ _
   rw [hdec, map_add, map_sum]
   refine (Matrix.operatorSchmidtRank_add_le _ _).trans
     ((Nat.add_le_add (hprod _ _ (fun i hi ↦ (mem_filter.mp hi).2)
       (fun i hi ↦ (mem_filter.mp hi).2)) (Matrix.operatorSchmidtRank_sum_le T _)).trans ?_)
   refine (Nat.add_le_add_left (Finset.sum_le_sum hcross) 1).trans ?_
   simpa [T] using Nat.add_le_add_left
-    (Nat.mul_le_mul_right (q ^ r) (card_crossing_intervals_le p r)) 1
+    (Nat.mul_le_mul_right (q ^ r) (ClusterExpansion.card_crossing_intervals_le p r)) 1
 
 open Classical in
 /-- The actual nearest-neighbour label truncation has operator Schmidt rank at most `r² q^r`
@@ -101,7 +101,7 @@ theorem operatorSchmidtRank_truncatedExp_nearestNeighbor_le {N q r : ℕ}
       (h i) {i.castSucc, i.succ}) (p : Fin N) (β : ℝ) :
     operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin (N + 1) ↦ q)
       {v ∈ (univ : Finset (Fin (N + 1))) | v.val ≤ p.val}
-        (truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β)) ≤ r ^ 2 * q ^ r := by
+        (ClusterExpansion.truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β)) ≤ r ^ 2 * q ^ r := by
   refine (operatorSchmidtRank_truncatedExp_nearestNeighbor_le_count hq h hs p β).trans ?_
   have hr1 : r - 1 + 1 = r := by omega
   have hpow : 1 ≤ q ^ r := one_le_pow₀ hq

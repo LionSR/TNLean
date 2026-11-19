@@ -3,9 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.ClusterExpansion.Truncation
 import TNLean.Lattice.ProductForm
 import Mathlib.Combinatorics.SimpleGraph.Connectivity.Subgraph
+import QICLean.Analysis.ClusterExpansion.Truncation
+import QICLean.Algebra.OverlapGraph
 
 /-!
 # The truncated operator as a sum of products over clusters
@@ -74,11 +75,11 @@ Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1268–1269. -/
 noncomputable def clusterOp (h : κ → Matrix ι ι ℂ) (A : Finset κ) (β : ℝ) : Matrix ι ι ℂ :=
   ∑ D ∈ A.powerset, (-1 : ℂ) ^ #(A \ D) • NormedSpace.exp (-(β • ∑ k ∈ D, h k))
 
-/-- `E_A` is the cluster part with the boundary `Aᶜ`: the words containing every term of `A` and
+/-- `E_A` is the cluster part with the ClusterExpansion.boundary `Aᶜ`: the words containing every term of `A` and
 no other term. -/
 theorem clusterOp_eq_clusterPart [Fintype κ] (h : κ → Matrix ι ι ℂ) (A : Finset κ) (β : ℝ) :
-    clusterOp h A β = clusterPart (∑ k, h k) h Aᶜ A β := by
-  rw [clusterPart_eq_sum_powerset, clusterOp]
+    clusterOp h A β = ClusterExpansion.clusterPart (∑ k, h k) h Aᶜ A β := by
+  rw [ClusterExpansion.clusterPart_eq_sum_powerset, clusterOp]
   refine Finset.sum_congr rfl fun E hE ↦ ?_
   have h0 : ∑ k, h k - ∑ k ∈ Aᶜ, h k - ∑ k ∈ A, h k = 0 := by
     rw [← Finset.sum_add_sum_compl A h]
@@ -93,7 +94,7 @@ theorem hasSum_words_clusterOp [Fintype κ] (h : κ → Matrix ι ι ℂ) (A : F
         ∑ w : Fin n → κ with univ.image w = A, (List.ofFn fun i ↦ h (w i)).prod)
       (clusterOp h A β) := by
   rw [clusterOp_eq_clusterPart]
-  convert hasSum_words_clusterPart rfl
+  convert ClusterExpansion.hasSum_words_clusterPart rfl
     (disjoint_left.2 fun _ h h' ↦ mem_compl.1 h h') β using 4 with n
   refine Finset.filter_congr fun w _ ↦ ?_
   constructor
@@ -121,16 +122,16 @@ open Classical in
 the sum over the sets `A` of terms none of whose clusters is large. The words are grouped by
 their set of letters. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1103–1107. -/
 theorem hasSum_truncatedExpTerm_clusterOp (h : κ → Matrix ι ι ℂ) (β : ℝ) :
-    HasSum (truncatedExpTerm G large h β)
-      (∑ A with NoLargeCluster G large A, clusterOp h A β) := by
-  have key : ∀ n, truncatedExpTerm G large h β n =
-      ∑ A with NoLargeCluster G large A, ((-β) ^ n / n.factorial : ℝ) •
+    HasSum (ClusterExpansion.truncatedExpTerm G large h β)
+      (∑ A with ClusterExpansion.NoLargeCluster G large A, clusterOp h A β) := by
+  have key : ∀ n, ClusterExpansion.truncatedExpTerm G large h β n =
+      ∑ A with ClusterExpansion.NoLargeCluster G large A, ((-β) ^ n / n.factorial : ℝ) •
         ∑ w : Fin n → κ with univ.image w = A, (List.ofFn fun i ↦ h (w i)).prod := by
     intro n
-    rw [truncatedExpTerm, ← Finset.smul_sum]
+    rw [ClusterExpansion.truncatedExpTerm, ← Finset.smul_sum]
     congr 1
     rw [← Finset.sum_fiberwise_of_maps_to (g := fun w : Fin n → κ ↦ univ.image w)
-      (t := {A | NoLargeCluster G large A}) (fun w hw ↦ by simpa using hw)]
+      (t := {A | ClusterExpansion.NoLargeCluster G large A}) (fun w hw ↦ by simpa using hw)]
     refine Finset.sum_congr rfl fun A hA ↦ ?_
     rw [Finset.filter_filter]
     refine Finset.sum_congr (Finset.filter_congr fun w _ ↦ ?_) fun _ _ ↦ rfl
@@ -147,7 +148,7 @@ open Classical in
 /-- **`ρ(β, l) = ∑_A E_A`**, the sum over the sets `A` of terms none of whose clusters is large.
 Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1103–1107. -/
 theorem truncatedExp_eq_sum_clusterOp (h : κ → Matrix ι ι ℂ) (β : ℝ) :
-    truncatedExp G large h β = ∑ A with NoLargeCluster G large A, clusterOp h A β :=
+    ClusterExpansion.truncatedExp G large h β = ∑ A with ClusterExpansion.NoLargeCluster G large A, clusterOp h A β :=
   (hasSum_truncatedExpTerm_clusterOp G large h β).tsum_eq
 
 end Truncation
@@ -241,9 +242,9 @@ open Classical in
 /-- The clusters of a set `A` of terms: the connected subsets of `A` to which no other term of `A`
 is adjacent. Hastings, arXiv:cond-mat/0508554v3, `proj3new.tex`, lines 1096–1102. -/
 noncomputable def clusters (A : Finset κ) : Finset (Finset κ) :=
-  {C ∈ A.powerset | IsCluster G A C}
+  {C ∈ A.powerset | ClusterExpansion.IsCluster G A C}
 
-theorem mem_clusters {A C : Finset κ} : C ∈ clusters G A ↔ IsCluster G A C := by
+theorem mem_clusters {A C : Finset κ} : C ∈ clusters G A ↔ ClusterExpansion.IsCluster G A C := by
   classical
   simp only [clusters, mem_filter, mem_powerset, and_iff_right_iff_imp]
   exact fun hC ↦ hC.1
@@ -251,7 +252,7 @@ theorem mem_clusters {A C : Finset κ} : C ∈ clusters G A ↔ IsCluster G A C 
 /-- Every term of `A` lies in a cluster of `A`: a connected subset of `A` containing it with the
 largest number of terms. -/
 theorem exists_isCluster_mem {A : Finset κ} {k : κ} (hk : k ∈ A) :
-    ∃ C, IsCluster G A C ∧ k ∈ C := by
+    ∃ C, ClusterExpansion.IsCluster G A C ∧ k ∈ C := by
   classical
   set T : Finset (Finset κ) := {C ∈ A.powerset | k ∈ C ∧ (G.induce (C : Set κ)).Connected}
   have hT : ({k} : Finset κ) ∈ T := by
@@ -261,7 +262,7 @@ theorem exists_isCluster_mem {A : Finset κ} {k : κ} (hk : k ∈ A) :
   obtain ⟨C, hCT, hmax⟩ := Finset.exists_max_image T card ⟨_, hT⟩
   simp only [T, mem_filter, mem_powerset] at hCT
   refine ⟨C, ⟨hCT.1, hCT.2.2, Finset.disjoint_left.2 fun j hjA hjB ↦ ?_⟩, hCT.2.1⟩
-  obtain ⟨hjC, i, hi, hji⟩ := (mem_boundary G).1 hjB
+  obtain ⟨hjC, i, hi, hji⟩ := (ClusterExpansion.mem_boundary G).1 hjB
   have hconn : (G.induce ((insert j C : Finset κ) : Set κ)).Connected := by
     have := SimpleGraph.connected_induce_union (G := G) hCT.2.2.preconnected
       (t := {j}) (.of_subsingleton) hi rfl hji.symm
@@ -290,10 +291,10 @@ theorem pairwise_clusters (A : Finset κ) :
   have hd : Disjoint C C' := by
     rw [Finset.disjoint_iff_inter_eq_empty]
     by_contra hn
-    exact hne (eq_of_isCluster_of_inter_nonempty G hC hC' (nonempty_iff_ne_empty.2 hn))
+    exact hne (ClusterExpansion.eq_of_isCluster_of_inter_nonempty G hC hC' (nonempty_iff_ne_empty.2 hn))
   refine ⟨hd, fun j hj k hk hjk ↦ ?_⟩
-  have hb : k ∈ boundary G C :=
-    (mem_boundary G).2 ⟨Finset.disjoint_right.1 hd hk, j, hj, hjk.symm⟩
+  have hb : k ∈ ClusterExpansion.boundary G C :=
+    (ClusterExpansion.mem_boundary G).2 ⟨Finset.disjoint_right.1 hd hk, j, hj, hjk.symm⟩
   exact Finset.disjoint_left.1 hC.2.2 (hC'.1 hk) hb
 
 end Clusters
@@ -331,8 +332,8 @@ open Classical in
 product over the clusters `C` of `A`. -/
 theorem truncatedExp_eq_sum_noncommProd_clusters {h : κ → Matrix ι ι ℂ}
     (hcomm : ∀ j k, ¬ G.Adj j k → Commute (h j) (h k)) (β : ℝ) :
-    truncatedExp G large h β =
-      ∑ A with NoLargeCluster G large A,
+    ClusterExpansion.truncatedExp G large h β =
+      ∑ A with ClusterExpansion.NoLargeCluster G large A,
         (clusters G A).noncommProd (fun C ↦ clusterOp h C β)
           (pairwise_commute_clusterOp_clusters G hcomm A β) := by
   rw [truncatedExp_eq_sum_clusterOp]
@@ -368,7 +369,7 @@ they commute. This discharges the commutation hypothesis of the cluster products
 theorem commute_of_not_adj_overlapGraph {h : κ → Matrix (σ → Fin d) (σ → Fin d) ℂ}
     {acts : κ → Finset σ}
     (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (acts k : Finset σ)) :
-    ∀ j k, ¬ (overlapGraph acts).Adj j k → Commute (h j) (h k) := by
+    ∀ j k, ¬ (SimpleGraph.overlapGraph acts).Adj j k → Commute (h j) (h k) := by
   intro j k hjk
   by_cases hjk' : j = k
   · subst hjk'
@@ -387,9 +388,9 @@ theorem truncatedExp_eq_sum_noncommProd_clusters_overlapGraph [Fintype κ]
     (large : Finset κ → Prop) {h : κ → Matrix (σ → Fin d) (σ → Fin d) ℂ}
     {acts : κ → Finset σ}
     (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (acts k : Finset σ)) (β : ℝ) :
-    truncatedExp (overlapGraph acts) large h β =
-      ∑ A with NoLargeCluster (overlapGraph acts) large A,
-        (clusters (overlapGraph acts) A).noncommProd (fun C ↦ clusterOp h C β)
+    ClusterExpansion.truncatedExp (SimpleGraph.overlapGraph acts) large h β =
+      ∑ A with ClusterExpansion.NoLargeCluster (SimpleGraph.overlapGraph acts) large A,
+        (clusters (SimpleGraph.overlapGraph acts) A).noncommProd (fun C ↦ clusterOp h C β)
           (pairwise_commute_clusterOp_clusters _ (commute_of_not_adj_overlapGraph hh) A β) :=
   truncatedExp_eq_sum_noncommProd_clusters _ large (commute_of_not_adj_overlapGraph hh) β
 

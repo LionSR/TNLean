@@ -5,14 +5,14 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.ExactMPSGappedPhase
 import TNLean.MPS.Preparation.FiniteRingGaussianFilter
-import TNLean.Lattice.GaussianFilteredGround
+import QICLean.ManyBody.Hamiltonian.GaussianFilter
 
 /-!
 # Gaussian ground estimates derived from an exact physical path
 
 One physical Hamiltonian gap supplies a single Gaussian decay constant at
-every path parameter and ring length. The least energy supplied by the gap
-condition agrees with the energy of the exact MPS ground line. Its spectral
+every path parameter and ring length. The least ManyBody.LowEnergyExample.energy supplied by the gap
+condition agrees with the ManyBody.LowEnergyExample.energy of the exact MPS ground line. Its spectral
 gap and unique ground line therefore supply the hypotheses of the existing
 Gaussian ground estimates, without assumptions on transfer operators or
 continuous canonical representatives.
@@ -48,8 +48,8 @@ variable {G : Type} [Group G] {d : ℕ}
   {P : SymmetricGappedInteractionPath U h₀ h₁}
 
 /-- The physical path's uniform gap and exact ground lines give a uniform
-eigenvalue dichotomy at the actual MPS ground energy. The energy in the two
-path conditions is identified by their least-energy properties.
+eigenvalue dichotomy at the actual MPS ground ManyBody.LowEnergyExample.energy. The ManyBody.LowEnergyExample.energy in the two
+path conditions is identified by their least-ManyBody.LowEnergyExample.energy properties.
 Source: arXiv:1010.3732, Section II.F, lines 929–953; this is auxiliary
 spectral data for the physical-gap argument, not its transfer conclusion. -/
 theorem ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap
@@ -98,7 +98,7 @@ theorem ExactMPSGroundPath.exists_uniform_gaussian_ground_bounds
       ∀ (q : ℝ), 0 ≤ q → ∀ W : MPOTensor.ChainOperator d N,
         let H := interactionHamiltonian (P.interaction γ) hN
         let ψ := mpvState (Q.tensor γ) N
-        let y := Matrix.toEuclideanLin (gaussianFilteredTerm q Δ H W) ψ
+        let y := Matrix.toEuclideanLin (ManyBody.gaussianFilteredTerm q Δ H W) ψ
         ‖y - (Submodule.span ℂ {ψ}).starProjection y‖ ≤
             ‖W‖ * Real.exp (-q / 2) * ‖ψ‖ ∧
           (⟪ψ, Matrix.toEuclideanLin W ψ⟫_ℂ = 0 →
@@ -115,9 +115,9 @@ theorem ExactMPSGroundPath.exists_uniform_gaussian_ground_bounds
     exact Submodule.mem_span_singleton_self ψ
   constructor
   · simpa only [hline] using
-      norm_sub_starProjection_gaussianFilteredTerm_le hq hΔ hH hgap W hψ
+      ManyBody.norm_sub_starProjection_gaussianFilteredTerm_le hq hΔ hH hgap W hψ
   · intro hcenter
-    apply norm_gaussianFilteredTerm_apply_le_commutator hq hΔ hH hgap W hψ
+    apply ManyBody.norm_gaussianFilteredTerm_apply_le_commutator hq hΔ hH hgap W hψ
     intro φ hφ
     rw [hline, Submodule.mem_span_singleton] at hφ
     obtain ⟨c, rfl⟩ := hφ

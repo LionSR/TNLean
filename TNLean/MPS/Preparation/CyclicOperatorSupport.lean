@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.MPS.Preparation.WindowOperatorSupport
 import TNLean.MPS.MPDO.GSNNCHSectorSum
 import TNLean.Algebra.FinCyclicInduction
-import TNLean.Circuit.SitePermutationSupport
 
 /-!
 # Support of operators on a cyclic bond

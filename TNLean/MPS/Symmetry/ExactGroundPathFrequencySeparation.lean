@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.ExactGroundPathGaussianFilter
-import TNLean.Lattice.NegativeFrequencyGroundCorrelation
+import QICLean.ManyBody.Hamiltonian.NegativeFrequency
 
 /-!
 # Actual finite-ring correlations as negative-frequency commutators
@@ -31,8 +31,8 @@ variable {G : Type} [Group G] {d : ℕ}
   {P : SymmetricGappedInteractionPath U h₀ h₁}
 
 /-- Ordinary connected correlations of the actual periodic MPS vector equal
-the corresponding actual negative-frequency commutators. Ground energy,
-least-energy ordering and the full ground line are derived from the
+the corresponding actual negative-frequency commutators. Ground ManyBody.LowEnergyExample.energy,
+least-ManyBody.LowEnergyExample.energy ordering and the full ground line are derived from the
 physical path. This is the exact spectral step of Hastings–Koma,
 arXiv:math-ph/0507008, equations (3.1)–(3.6); no exponential bound is
 asserted without the remaining regularized time-integral argument. -/
@@ -45,15 +45,15 @@ theorem ExactMPSGroundPath.negativeFrequency_connected_identity
     ⟪ψ, toEuclideanCLM (𝕜 := ℂ) A (toEuclideanCLM (𝕜 := ℂ) B ψ)⟫_ℂ -
         ⟪ψ, toEuclideanCLM (𝕜 := ℂ) A ψ⟫_ℂ *
           ⟪ψ, toEuclideanCLM (𝕜 := ℂ) B ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) =
-      ⟪ψ, ((negativeFrequencyPart (H := H) hH A).comp (toEuclideanCLM (𝕜 := ℂ) B) -
-        (toEuclideanCLM (𝕜 := ℂ) B).comp (negativeFrequencyPart hH A)) ψ⟫_ℂ := by
+      ⟪ψ, ((ManyBody.negativeFrequencyPart (H := H) hH A).comp (toEuclideanCLM (𝕜 := ℂ) B) -
+        (toEuclideanCLM (𝕜 := ℂ) B).comp (ManyBody.negativeFrequencyPart hH A)) ψ⟫_ℂ := by
   obtain ⟨Δ, hΔ, hdata⟩ := Q.exists_uniform_ground_line_spectral_gap
   obtain ⟨E₀, hH, hline, hgap⟩ := hdata γ hγ N hN
   have hmin (i) : E₀ ≤ hH.eigenvalues i := by
     rcases hgap i with hi | hi
     · exact hi.ge
     · linarith
-  apply inner_ground_connected_eq_negativeFrequency_commutator hH hmin A B
+  apply ManyBody.inner_ground_connected_eq_negativeFrequency_commutator hH hmin A B
   · rw [hline]
     exact Submodule.mem_span_singleton_self _
   · exact hline

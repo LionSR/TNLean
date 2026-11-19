@@ -5,16 +5,16 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.ChainLocalizedParts
 import TNLean.MPS.AreaLaw.Hastings.SpectralCutoff
-import TNLean.Lattice.GaussianFilteredGround
 import TNLean.MPS.AreaLaw.OpenMPS
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Hamiltonian.GaussianFilter
 
 /-!
 # The cut-offs `O_L`, `O_R` of Hastings' Lemma 1
 
 In the proof of Lemma 1 of Hastings, *An area law for one-dimensional quantum systems*
 (arXiv:0705.2024v4, `law16.tex`, appendix, lines 766–842), the Hamiltonian is shifted to
-ground energy zero and split at the cut `c` into a left, a buffer and a right part. The left
+ground ManyBody.LowEnergyExample.energy zero and split at the cut `c` into a left, a buffer and a right part. The left
 and right parts are filtered and localized to operators `M_L`, `M_R` that nearly annihilate the
 ground state, and `O_L`, `O_R` are the spectral projections of `M_L`, `M_R` onto eigenvalues of
 absolute value at most `θ`.
@@ -38,7 +38,7 @@ printed `J²` bound on `[H, H_L]`, which fails for range-one terms. Documented i
 
 **Local fix (error of the localized parts, lines 816–828):** the localization bound is on
 `‖W_tilde - M‖`, which the next step of the source uses, not on the printed `‖M - H_L‖`.
-Documented in `docs/paper-gaps/hastings07_filtered_part_localization.tex`.
+Documented in https://sirui-lu.com/QICLean/paper-gaps/hastings07_filtered_part_localization.pdf.
 
 ## Main declarations
 
@@ -81,7 +81,7 @@ noncomputable def _root_.ManyBody.ChainInteraction.localizedPart (h : ChainInter
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (s ΔE : ℝ) (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (K : Finset (Fin L)) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   groundCentered Ω P +
-    ManyBody.regionExpectation K (gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) -
+    ManyBody.regionExpectation K (ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) -
       groundCentered Ω P)
 
 /-- The `k`-neighbourhood of an interval lies in the interval widened by `k` on each side. -/
@@ -104,25 +104,25 @@ include hh in
 /-- Centering does not change `W_tilde - W`. -/
 theorem _root_.ManyBody.ChainInteraction.gaussianFilteredTerm_groundCentered_sub
     (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - groundCentered Ω P =
-      gaussianFilteredTerm s ΔE h.hamiltonian P - P := by
+    ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - groundCentered Ω P =
+      ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian P - P := by
   rw [groundCentered]
-  exact gaussianFilteredTerm_sub_smul_one_sub s ΔE
+  exact ManyBody.gaussianFilteredTerm_sub_smul_one_sub s ΔE
       (ManyBody.Interaction.isHermitian_hamiltonian hh) P _
 
 include hh in
 /-- The localization error of the centered part equals that of the part. -/
 theorem _root_.ManyBody.ChainInteraction.gaussianFilteredTerm_groundCentered_sub_localizedPart
     (P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (K : Finset (Fin L)) :
-    gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - h.localizedPart Ω s ΔE P K =
-      gaussianFilteredTerm s ΔE h.hamiltonian P -
-        (P + ManyBody.regionExpectation K (gaussianFilteredTerm s ΔE h.hamiltonian P - P)) := by
-  set D := gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - groundCentered Ω P
-  calc gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - h.localizedPart Ω s ΔE P K
+    ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - h.localizedPart Ω s ΔE P K =
+      ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian P -
+        (P + ManyBody.regionExpectation K (ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian P - P)) := by
+  set D := ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - groundCentered Ω P
+  calc ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) - h.localizedPart Ω s ΔE P K
       = D - ManyBody.regionExpectation K D := by
         rw [ManyBody.ChainInteraction.localizedPart]; simp only [D]; abel
-    _ = (gaussianFilteredTerm s ΔE h.hamiltonian P - P) -
-          ManyBody.regionExpectation K (gaussianFilteredTerm s ΔE h.hamiltonian P - P) := by
+    _ = (ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian P - P) -
+          ManyBody.regionExpectation K (ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian P - P) := by
         simp only [D, h.gaussianFilteredTerm_groundCentered_sub hh Ω s ΔE P]
     _ = _ := by abel
 
@@ -154,9 +154,9 @@ theorem groundCentered_zero :
 /-- The centered localized part of `0` is `0`. -/
 theorem _root_.ManyBody.ChainInteraction.localizedPart_zero (K : Finset (Fin L)) :
     h.localizedPart Ω s ΔE 0 K = 0 := by
-  have hG : gaussianFilteredTerm s ΔE h.hamiltonian (0 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+  have hG : ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian (0 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       = 0 := by
-    simp [gaussianFilteredTerm, gaussianIntertwiner]
+    simp [ManyBody.gaussianFilteredTerm, gaussianIntertwiner]
   rw [ManyBody.ChainInteraction.localizedPart, groundCentered_zero, hG, sub_zero, zero_add,
     ← ManyBody.regionExpectationLM_apply, map_zero]
 
@@ -215,18 +215,18 @@ theorem _root_.ManyBody.ChainInteraction.norm_localizedPart_apply_le {E₀ : ℝ
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 < ΔE) (hs : 0 ≤ s)
     {P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hP : P.IsHermitian) (K : Finset (Fin L))
     {cP δ : ℝ} (hc : ‖h.hamiltonian * P - P * h.hamiltonian‖ ≤ cP)
-    (hδ : ‖gaussianFilteredTerm s ΔE h.hamiltonian P -
-      (P + ManyBody.regionExpectation K (gaussianFilteredTerm s ΔE h.hamiltonian P - P))‖ ≤ δ) :
+    (hδ : ‖ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian P -
+      (P + ManyBody.regionExpectation K (ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian P - P))‖ ≤ δ) :
     ‖toEuclideanLin (h.localizedPart Ω s ΔE P K) Ω‖ ≤
       ΔE⁻¹ * Real.exp (-s / 2) * cP + δ := by
   have hop (A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) : ‖toEuclideanLin A Ω‖ ≤ ‖A‖ := by
     rw [← coe_toEuclideanCLM_eq_toEuclideanLin, ← l2_opNorm_toEuclideanCLM]
     simpa [hΩ] using (toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) A).le_opNorm Ω
   set W := groundCentered Ω P
-  set G := gaussianFilteredTerm s ΔE h.hamiltonian W
+  set G := ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian W
   have hsplit : h.localizedPart Ω s ΔE P K = G - (G - h.localizedPart Ω s ΔE P K) := by abel
   have hG : ‖toEuclideanLin G Ω‖ ≤ ΔE⁻¹ * Real.exp (-s / 2) * cP := by
-    refine (norm_gaussianFilteredTerm_apply_le_commutator_of_isGapped hs hΔ
+    refine (ManyBody.norm_gaussianFilteredTerm_apply_le_commutator_of_isGapped hs hΔ
         (ManyBody.Interaction.isHermitian_hamiltonian hh)
       hgap hspan W (inner_groundCentered hP hΩ)).trans ?_
     rw [h.commutator_groundCentered]
@@ -244,7 +244,7 @@ end Localized
 /-! ### The cut-offs -/
 
 /-- **The cut-offs `O_L`, `O_R` of Lemma 1.** Let `Ω` be a gapped ground state of a chain
-Hamiltonian `H` with ground energy `E₀` and gap `ΔE`, split at the cut `c` with buffer half-width
+Hamiltonian `H` with ground ManyBody.LowEnergyExample.energy `E₀` and gap `ΔE`, split at the cut `c` with buffer half-width
 `m`, and localize the centered left and right parts onto their `k`-windows, with `R + k ≤ m`.
 Let `H₀ = M_L + M_R`, and let `O_L`, `O_R` be the spectral cut-offs of `M_L`, `M_R` at `θ > 0`.
 Then:
@@ -310,8 +310,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
     rw [← coe_toEuclideanCLM_eq_toEuclideanLin]
     exact ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self _)
   have hsum := h.groundCentered_parts_sum_of_eigen hΩ hE c m
-  set DL := gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω PL) - groundCentered Ω PL
-  set DR := gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω PR) - groundCentered Ω PR
+  set DL := ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω PL) - groundCentered Ω PL
+  set DR := ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω PR) - groundCentered Ω PR
   have hrem : h.hamiltonian - (E₀ : ℂ) • 1 - (ML + MR) =
       groundCentered Ω (h.bufferPart c m) - ManyBody.regionExpectation KL DL -
         ManyBody.regionExpectation KR DR := by
@@ -351,12 +351,12 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
         (hc : ‖h.hamiltonian * P - P * h.hamiltonian‖ ≤ partCommutatorConst R * J ^ 2)
         (K : Finset (Fin L)) :
         ‖ManyBody.regionExpectation K
-            (gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) -
+            (ManyBody.gaussianFilteredTerm s ΔE h.hamiltonian (groundCentered Ω P) -
           groundCentered Ω P)‖ ≤
           Real.sqrt (2 * (s / ΔE ^ 2).toNNReal / Real.pi) * (partCommutatorConst R * J ^ 2) := by
       refine (ManyBody.norm_regionExpectation_le (D := K) _).trans ?_
       rw [h.gaussianFilteredTerm_groundCentered_sub hh]
-      exact (norm_gaussianFilteredTerm_sub_self_le s ΔE
+      exact (ManyBody.norm_gaussianFilteredTerm_sub_self_le s ΔE
           (ManyBody.Interaction.isHermitian_hamiltonian hh) P).trans
         (by gcongr)
     rw [hrem]

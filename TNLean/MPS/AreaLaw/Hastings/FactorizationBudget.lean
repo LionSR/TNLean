@@ -7,7 +7,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 import Mathlib.Analysis.SpecialFunctions.Exponential
 import Mathlib.Analysis.Real.Pi.Bounds
-import TNLean.Algebra.PowerExponential
+import QICLean.Analysis.PowerExponential
 
 /-!
 # The error budget of Lemma 1 of Hastings' area law
@@ -15,7 +15,7 @@ import TNLean.Algebra.PowerExponential
 The parameter choice of the proof of Lemma 1 (Hastings, arXiv:0705.2024v4, `law16.tex`,
 appendix, lines 766–907): with `ξ = 8 max(2v/ΔE, 1)`, the variance parameter `s = 2l/(3ξ)`,
 the cut-off threshold `θ = e^{-s/4}`, the time cut `T = s/ΔE`, the window radius
-`k = ⌈l/4⌉` and the boundary radius `ℓ' = l - 3R - 2k`, every error term of the construction is
+`k = ⌈l/4⌉` and the ClusterExpansion.boundary radius `ℓ' = l - 3R - 2k`, every error term of the construction is
 at most `(A + B√l) e^{-l/(6ξ)}` for `l ≥ 12R + 8`, with `A`, `B` independent of `l`.
 
 ## Main declarations
@@ -54,7 +54,7 @@ lemma errorBudget_twoMu_div_le {ΔE a cR Rr v T K s η L E μ θ δ : ℝ} (hΔ 
   have e3 : T * (a * Rr ^ 2 * cR) * (exp (v * T - K / 2) * exp (s / 4)) ≤
       L / ΔE * (a * Rr ^ 2 * cR) * exp (-(L / 16)) := by gcongr
   have e4 : L * exp (-(L / 16)) ≤ 48 * E := by
-    have h := pow_mul_exp_neg_add_le (r := 1 / 48) (δ := 1 / 24) (by norm_num) hL0.le 1
+    have h := Real.pow_mul_exp_neg_add_le (r := 1 / 48) (δ := 1 / 24) (by norm_num) hL0.le 1
     have hc : 1 / (exp 1 * (1 / 24)) ≤ (48 : ℝ) := by
       rw [div_le_iff₀ (by positivity)]; linarith [add_one_le_exp (1 : ℝ)]
     simp only [pow_one, Nat.cast_one] at h
@@ -75,7 +75,7 @@ lemma errorBudget_twoMu_div_le {ΔE a cR Rr v T K s η L E μ θ δ : ℝ} (hΔ 
   rw [h1, e1]
   linarith
 
-/-- The boundary term of the error budget: a polynomial prefactor of degree four
+/-- The ClusterExpansion.boundary term of the error budget: a polynomial prefactor of degree four
 against `e^{-ℓ'/4}` with `ℓ' ≥ l/4`. -/
 lemma errorBudget_boundary_le {ΔE a C L ℓ' η Zc ν E : ℝ} (hΔ : 0 < ΔE) (ha : 0 ≤ a)
     (hC : 0 ≤ C) (hL0 : 0 < L) (hsq : sqrt η ≤ L / ΔE) (hZc0 : 0 ≤ Zc)
@@ -83,7 +83,7 @@ lemma errorBudget_boundary_le {ΔE a C L ℓ' η Zc ν E : ℝ} (hΔ : 0 < ΔE) 
     (hE48 : exp (-(L / 48)) ≤ E) :
     sqrt η * (a * Zc ^ 2 * ν * exp (-(ℓ' / 4))) ≤ 9 * a * C / ΔE * (48 ^ 4 * 24) * E := by
   have h4 : L ^ 4 * exp (-(L / 16)) ≤ 48 ^ 4 * 24 * exp (-(L / 48)) := by
-    have h := pow_mul_exp_neg_add_le (r := 1 / 48) (δ := 1 / 24) (by norm_num) hL0.le 4
+    have h := Real.pow_mul_exp_neg_add_le (r := 1 / 48) (δ := 1 / 24) (by norm_num) hL0.le 4
     have hc : ((4 : ℕ) : ℝ) / (exp 1 * (1 / 24)) ≤ 48 := by
       rw [div_le_iff₀ (by positivity)]; push_cast; linarith [add_one_le_exp (1 : ℝ)]
     rw [show (1 / 48 + 1 / 24 : ℝ) * L = L / 16 by ring,

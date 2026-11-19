@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.AreaLaw
-import TNLean.Circuit.SitePermutationSupport
 
 /-!
 # Cyclic relocation of actual finite MPO conjugation
@@ -71,7 +70,7 @@ theorem mpo_conjugation_mem_supportedOperators_rotate
 
 /-- A finite support bound for the actual adjoint conjugation rotates
 through the periodic seam with the input observable. This is the cyclic
-relocation step toward the boundary-free inverse propagation statement,
+relocation step toward the ClusterExpansion.boundary-free inverse propagation statement,
 not an assumed inverse-family compatibility condition.
 Source context: arXiv:1703.09188, eq:appendix-1, lines 2300–2306. -/
 theorem mpo_adjointConjugation_mem_supportedOperators_rotate
