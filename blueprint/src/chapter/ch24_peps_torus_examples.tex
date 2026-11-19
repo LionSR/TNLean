@@ -490,6 +490,31 @@ The brick wall is the honeycomb on tori of even width and height
     $2^{-6}$, giving \eqref{eq:peps_honeycomb_concrete_gram}.
 \end{proof}
 
+\begin{lemma}[Injective hexagonal blocks on compatible rectangular tori]
+    \label{lem:peps_honeycomb_strip_cover}
+    \lean{HoneycombStrip.injective_cover, HoneycombStrip.actual_columnGram}
+    \leanok
+    \uses{def:peps_honeycomb_cluster, def:peps_open_region_contraction}
+    Let $a\geq 1$ and $b\geq 2$. The sites of the $6a\times 2b$ brick-wall torus
+    are partitioned by staggered six-site cells. Each cell has an injective
+    open-region map with coefficient Gram matrix $I_{64}/64$.
+\end{lemma}
+
+\begin{proof}\leanok
+    In strip $s$, cell $t$ contains the offsets $(i,j)$ with $0\leq i<3$
+    and $0\leq j<2$ at $(3s+i,2t+j+(s\bmod2))$, with cyclic coordinates.
+    Division of the horizontal coordinate by three determines the strip and
+    horizontal offset. Undoing the stagger and dividing the cyclic vertical
+    coordinate by two determines the pair of rows and the vertical offset.
+    The even periods preserve the parity of the local offsets. Each site
+    has its two cyclic face neighbors and one crossing edge. Sorting the
+    endpoints of each bond preserves this enumeration. Reindexing the
+    open-region contraction gives six internal Hadamard factors and six
+    crossing legs. The internal factors each contribute $1/2$ to the
+    Gram calculation, and the crossing legs each contribute an identity
+    Gram factor. Thus the column Gram matrix is $I_{64}/64$.
+\end{proof}
+
 \section{The CZX model}%
 \label{sec:peps_czx}
 

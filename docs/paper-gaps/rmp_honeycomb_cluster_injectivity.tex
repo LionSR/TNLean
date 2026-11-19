@@ -71,12 +71,16 @@ With the boundary indices $\beta$ fixed, the blocked tensor sends $\beta$ to
 up to normalization, where each $M_u$ is the identity or $H$ according to the
 side on which the bond matrix of the leaving bond is placed. Both maps in
 (\ref{eq:rmp_honeycomb_cluster_injectivity_plaquette_block}) are invertible, so
-the blocked tensor is injective. The finite result establishes plaquette blocking on this torus.
+the blocked tensor is injective. For every $6a\times 2b$ torus with $a\geq1$ and $b\geq2$, staggered
+three-column strips give a disjoint cover by hexagonal cells. Each cell has
+an injective open-region map with coefficient Gram matrix $I_{64}/64$.
+\footnote{\leanid{HoneycombStrip.injective_cover},
+    \leanid{HoneycombStrip.actual_columnGram}, in
+    \doclink{TNLean/PEPS/Examples/HoneycombStripInjectivity}.}
 
 \section{Elimination plan}
-For general torus sizes, characterize when the hexagonal blocking partitions
-the sites, prove injectivity of the blocked tensors and identify the blocked
-network. The rectangular blocking needed for normality as defined by the
+The classification of compatible sizes and the construction of a blocked
+network remain open. The rectangular blocking needed for normality as defined by the
 review, and the application of its fundamental theorem, remain open.
 
 \bibliographystyle{alpha}
