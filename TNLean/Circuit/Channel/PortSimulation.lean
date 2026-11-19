@@ -164,9 +164,9 @@ theorem exists_bounded_matching_simulation {d B m N : ℕ} [NeZero N]
         registerEncodedMap (boundedPairRegisterCode hd hm) (boundedPairRegisterCode hd hm)
           ρ (Φ i)) ∧
       (∀ i ∈ K, ∀ X,
-        rectangularKrausMap (A i) (singleKrausMap (registerEncoding
+        rectangularKrausMap (A i) (singleKrausMap (Matrix.initializedBasisMatrix
           (boundedPairRegisterCode hd hm)) X) =
-        singleKrausMap (registerEncoding (boundedPairRegisterCode hd hm)) (Φ i X)) ∧
+        singleKrausMap (Matrix.initializedBasisMatrix (boundedPairRegisterCode hd hm)) (Φ i X)) ∧
       IsPhysicalPortProtocol (PortRegisters.layout N (Nat.clog d B))
         (2 * Nat.clog d B) (PortRegisters.matchingChannel hN A K hK) := by
   classical

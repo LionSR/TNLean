@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.ExactGroundPathGaussianCorrelation
-import TNLean.Lattice.GaussianFrequencyClusteringRate
+import QICLean.Analysis.GaussianFilter.CauchyTransform
 
 /-!
 # Ordinary exponential clustering from the actual physical MPS gap
@@ -23,7 +23,7 @@ correlations to limiting minimal transfer contractions remains separate.
 
 noncomputable section
 
-open TNLean.Lattice Matrix QuantumCircuit MPSPreparation GaussianFilter
+open ManyBody Matrix QuantumCircuit MPSPreparation GaussianFilter
 open scoped Matrix.Norms.L2Operator InnerProductSpace NNReal
 
 namespace MPSTensor
@@ -52,13 +52,14 @@ theorem ExactMPSGroundPath.exists_uniform_connected_exponential_clustering
       ∀ ℓ : ℝ, 1 ≤ ℓ →
         ℓ ≤ ringSupportDistance (X : Set (Fin N)) (Y : Set (Fin N)) hX hY →
         let ψ := mpvState (Q.tensor γ) N
-        ‖normalizedVectorExpectation ψ (A * B) -
-          normalizedVectorExpectation ψ A * normalizedVectorExpectation ψ B‖ ≤
+        ‖⟪ψ, Matrix.toEuclideanCLM (𝕜 := ℂ) (A * B) ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) -
+          ⟪ψ, Matrix.toEuclideanCLM (𝕜 := ℂ) A ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ) *
+            (⟪ψ, Matrix.toEuclideanCLM (𝕜 := ℂ) B ψ⟫_ℂ / ((‖ψ‖ ^ 2 : ℝ) : ℂ))‖ ≤
             K * ((X.card : ℝ) + 1) * ‖A‖ * ‖B‖ * Real.exp (-κ * ℓ) := by
   obtain ⟨Δ, hΔ, hEst⟩ := Q.exists_uniform_connected_correlation_gaussian_bound
   let v := 8 * Real.exp (1 : ℝ)
   have hv : 0 < v := by dsimp only [v]; positivity
-  obtain ⟨C, κ, hC, hκ, hRate⟩ := exists_gaussianFrequencyClusteringRate Δ v hΔ hv
+  obtain ⟨C, κ, hC, hκ, hRate⟩ := GaussianFilter.exists_gaussianFrequencyClusteringRate Δ v hΔ hv
   refine ⟨2 * C, κ, mul_pos (by norm_num) hC, hκ, ?_⟩
   intro γ hγ N _ hN A B X Y hX hY hA hB hXY ℓ hℓ hDist
   have hℓpos : 0 < ℓ := lt_of_lt_of_le zero_lt_one hℓ
@@ -86,7 +87,7 @@ theorem ExactMPSGroundPath.exists_uniform_connected_exponential_clustering
     dsimp only [q]
     field_simp [hT.ne', hΔ.ne']
   have hc : kernel s⁻¹ 0 = Real.sqrt (ℓ / (4 * Real.pi * v * Δ)) := by
-    rw [kernel_inv_zero_eq_sqrt, hs]
+    rw [GaussianFilter.kernel_inv_zero_eq_sqrt, hs]
     congr 1
     dsimp only [T]
     field_simp [hv.ne', hΔ.ne', Real.pi_ne_zero]

@@ -298,10 +298,7 @@ corrected deficiency and the additional closing window of
         TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalTruncatedTerm_localization,
         TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalHierarchy}
     \leanok
-    \uses{thm:hastings_periodic_physical_metric,
-        thm:hastings_periodic_physical_log_squared,
-        thm:hastings05_metric_facld,
-        thm:hastings_zero_range_exact}
+    \uses{thm:hastings_periodic_physical_metric, thm:hastings_periodic_physical_log_squared}
     Fix $R\ge0$, $J>0$ and $\Delta>0$. There are constants $c_1,\eta>0$
     and $C\ge0$, independent of physical chain length, with the following
     property. Let $H=\sum_iH_i$ be a Hermitian local Hamiltonian on a
@@ -333,11 +330,7 @@ corrected deficiency and the additional closing window of
     or gap of an approximating Hamiltonian is an additional premise.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_periodic_physical_metric,
-        thm:hastings_periodic_physical_log_squared,
-        thm:hastings_periodic_chosen_radius,
-        thm:hastings05_metric_facld,
-        thm:hastings_zero_range_exact}
+    \uses{thm:hastings_periodic_physical_metric, thm:hastings_periodic_physical_log_squared, thm:hastings_periodic_chosen_radius}
     The physical ball count gives a uniform finite-range metric
     localization estimate for $R>0$. Thus the displayed $M_i$ are
     Hermitian, supported in their radius-$\ell$ balls, have norm at
@@ -355,8 +348,7 @@ corrected deficiency and the additional closing window of
     \label{thm:hastings_periodic_unique_ground_hierarchy}
     \lean{TNLean.MPS.AreaLaw.LocalSolution.exists_periodicPhysicalHierarchy_of_isGapped}
     \leanok
-    \uses{thm:hastings_periodic_physical_hierarchy, thm:hastings05_facld,
-        thm:hastings05_metric_facld,thm:hastings_periodic_physical_log_squared}
+    \uses{thm:hastings_periodic_physical_hierarchy, thm:hastings_periodic_physical_log_squared}
     Fix $R\ge0$, $J>0$ and $\Delta>0$. There are $c_1,\eta>0$ and
     $C\ge0$, chosen before the chain and its ground-state data, with the
     following property. Let $H=\sum_iH_i$ on a nonempty periodic chain,

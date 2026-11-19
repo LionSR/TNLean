@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.AreaLaw
-import TNLean.Circuit.SitePermutationSupport
+import TNLean.Algebra.SupportedOperatorsSitePermutation
 
 /-!
 # Cyclic relocation of actual finite MPO conjugation
@@ -64,7 +64,7 @@ theorem mpo_conjugation_mem_supportedOperators_rotate
     (hA : mpo U N * A * (mpo U N)ᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
     mpo U N * A.submatrix (rotateConfig N d) (rotateConfig N d) * (mpo U N)ᴴ ∈
       ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image (finRotate N)) := by
-  have h := QuantumCircuit.supportedOperators_submatrix_siteEquiv (finRotate N) hA
+  have h := ManyBody.submatrix_comp_perm_mem_supportedOperators (finRotate N) hA
   change (mpo U N * A * (mpo U N)ᴴ).submatrix (rotateConfig N d) (rotateConfig N d) ∈
     ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image (finRotate N)) at h
   simpa only [mpo_conjugation_submatrix_rotateConfig] using h
@@ -80,7 +80,7 @@ theorem mpo_adjointConjugation_mem_supportedOperators_rotate
     (hA : (mpo U N)ᴴ * A * mpo U N ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) :
     (mpo U N)ᴴ * A.submatrix (rotateConfig N d) (rotateConfig N d) * mpo U N ∈
       ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image (finRotate N)) := by
-  have h := QuantumCircuit.supportedOperators_submatrix_siteEquiv (finRotate N) hA
+  have h := ManyBody.submatrix_comp_perm_mem_supportedOperators (finRotate N) hA
   change ((mpo U N)ᴴ * A * mpo U N).submatrix (rotateConfig N d) (rotateConfig N d) ∈
     ManyBody.supportedOperators (fun _ ↦ Fin d) (S.image (finRotate N)) at h
   simpa only [mpo_adjointConjugation_submatrix_rotateConfig] using h

@@ -56,7 +56,7 @@ private theorem grouped_wordCodeConfiguration (c : Fin d ↪ (Fin w → Fin d))
 def wordInitialization (c : Fin d ↪ (Fin w → Fin d)) :
     Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ →ₗ[ℂ]
       Matrix (Fin (N * w) → Fin d) (Fin (N * w) → Fin d) ℂ :=
-  singleKrausMap (registerEncoding (wordCodeConfiguration c))
+  singleKrausMap (Matrix.initializedBasisMatrix (wordCodeConfiguration c))
 
 /-- Product code initialization preserves trace and complete positivity. -/
 theorem wordInitialization_isKrausCPTP (c : Fin d ↪ (Fin w → Fin d)) :
@@ -67,11 +67,11 @@ theorem wordInitialization_isKrausCPTP (c : Fin d ↪ (Fin w → Fin d)) :
 theorem wordInitialization_eq (c : Fin d ↪ (Fin w → Fin d)) :
     wordInitialization (N := N) c = (nativeMatrixEquiv N w d).toLinearMap ∘ₗ
       (OnsiteChannel.encodeRegisters fun _ : Fin N => nativeWordCode c).map := by
-  let U := rectKronecker fun _ : Fin N => registerEncoding (nativeWordCode c)
-  have hV : registerEncoding (wordCodeConfiguration (N := N) c) =
+  let U := rectKronecker fun _ : Fin N => Matrix.initializedBasisMatrix (nativeWordCode c)
+  have hV : Matrix.initializedBasisMatrix (wordCodeConfiguration (N := N) c) =
       U.submatrix (groupedConfigurations N w d) id := by
     ext x y
-    simp only [U, registerEncoding, Matrix.submatrix_apply, id_eq, Matrix.one_apply,
+    simp only [U, Matrix.initializedBasisMatrix, Matrix.submatrix_apply, id_eq, Matrix.one_apply,
       rectKronecker_apply, Fintype.prod_boole]
     congr 1
     apply propext

@@ -59,7 +59,7 @@ actual site before it can be used as a zero-depth operation.
 
 ## Reusable interfaces
 
-- `registerEncoding` and its completed decoder handle local code subspaces. Decoding
+- The basis inclusion `Matrix.initializedBasisMatrix` (QICLean) and its completed decoder handle local code subspaces. Decoding
   must be trace preserving on the entire ambient input space, not only on valid codes.
 - `registerChannelLift` places a channel independently of its Kraus representation.
   Its composition and Kraus identities are the shared entry point for all placements.

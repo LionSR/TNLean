@@ -36,11 +36,11 @@ namespace MPSTensor
 
 private lemma clusterTensorRMP_zero_smul :
     clusterTensorRMP 0 = Complex.invSqrtTwo • !![1, 1; 0, 0] := by
-  simp [clusterTensorRMP, Complex.invSqrtTwo, one_div]
+  simp [clusterTensorRMP, Complex.invSqrtTwo, Complex.invSqrt, one_div]
 
 private lemma clusterTensorRMP_one_smul :
     clusterTensorRMP 1 = Complex.invSqrtTwo • !![0, 0; 1, -1] := by
-  simp [clusterTensorRMP, Complex.invSqrtTwo, one_div]
+  simp [clusterTensorRMP, Complex.invSqrtTwo, Complex.invSqrt, one_div]
 
 /-- The physical transfer map for the printed cluster tensor, in coordinates.
 Source: arXiv:0802.0447, Example 2 and display `EU`. -/

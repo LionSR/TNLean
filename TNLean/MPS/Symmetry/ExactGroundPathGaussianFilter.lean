@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.ExactMPSGappedPhase
 import TNLean.MPS.Preparation.FiniteRingGaussianFilter
-import TNLean.Lattice.GaussianFilteredGround
+import QICLean.ManyBody.Hamiltonian.GaussianFilter
 
 /-!
 # Gaussian ground estimates derived from an exact physical path
@@ -37,7 +37,7 @@ and the resulting uniform minimal-transfer spectral bound remain separate.
   794–815: the centered ground-vector estimate through a commutator.
 -/
 
-open TNLean.Lattice Matrix
+open ManyBody GaussianFilter Matrix
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
 namespace MPSTensor
@@ -98,7 +98,7 @@ theorem ExactMPSGroundPath.exists_uniform_gaussian_ground_bounds
       ∀ (q : ℝ), 0 ≤ q → ∀ W : MPOTensor.ChainOperator d N,
         let H := interactionHamiltonian (P.interaction γ) hN
         let ψ := mpvState (Q.tensor γ) N
-        let y := Matrix.toEuclideanLin (gaussianFilteredTerm q Δ H W) ψ
+        let y := Matrix.toEuclideanLin (ManyBody.gaussianFilteredTerm q Δ H W) ψ
         ‖y - (Submodule.span ℂ {ψ}).starProjection y‖ ≤
             ‖W‖ * Real.exp (-q / 2) * ‖ψ‖ ∧
           (⟪ψ, Matrix.toEuclideanLin W ψ⟫_ℂ = 0 →
@@ -115,9 +115,9 @@ theorem ExactMPSGroundPath.exists_uniform_gaussian_ground_bounds
     exact Submodule.mem_span_singleton_self ψ
   constructor
   · simpa only [hline] using
-      norm_sub_starProjection_gaussianFilteredTerm_le hq hΔ hH hgap W hψ
+      ManyBody.norm_sub_starProjection_gaussianFilteredTerm_le hq hΔ hH hgap W hψ
   · intro hcenter
-    apply norm_gaussianFilteredTerm_apply_le_commutator hq hΔ hH hgap W hψ
+    apply ManyBody.norm_gaussianFilteredTerm_apply_le_commutator hq hΔ hH hgap W hψ
     intro φ hφ
     rw [hline, Submodule.mem_span_singleton] at hφ
     obtain ⟨c, rfl⟩ := hφ

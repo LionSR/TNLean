@@ -1883,7 +1883,7 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{definition}[Initialized basis inclusion]
     \label{def:mpu_initialized_basis_inclusion}
-    \lean{QuantumCircuit.initializedBasisMatrix, QuantumCircuit.zeroWorkspaceEmbedding}
+    \lean{Matrix.initializedBasisMatrix, QuantumCircuit.zeroWorkspaceEmbedding}
     \leanok
     For an injection of logical basis vectors into a larger basis,
     let $J$ be its inclusion matrix. Appending an all-zero temporary
@@ -1921,7 +1921,7 @@ left multiplication, right vector $b$ and left functional the trace.
 
 \begin{lemma}[Encoding and implementing isometric columns]
     \label{thm:mpu_initialized_isometry_synthesis}
-    \lean{QuantumCircuit.exists_isPairProduct_mul_initializedBasisMatrix_eq, QuantumCircuit.initializedBasisMatrix_isIsometry, QuantumCircuit.mul_initializedBasisMatrix, QuantumCircuit.exists_isPairProduct_isCleanImplementation, QuantumCircuit.isCleanImplementation_zeroRegisterReflection}
+    \lean{QuantumCircuit.exists_isPairProduct_mul_initializedBasisMatrix_eq, Matrix.initializedBasisMatrix_isIsometry, QuantumCircuit.mul_initializedBasisMatrix, QuantumCircuit.exists_isPairProduct_isCleanImplementation, QuantumCircuit.isCleanImplementation_zeroRegisterReflection}
     \leanok
     \uses{def:mpu_initialized_basis_inclusion,
         thm:mpu_quantitative_unitary_synthesis,

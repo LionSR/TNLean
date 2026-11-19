@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import QICLean.Analysis.GaussianFilter.GroundEstimate
 import QICLean.Analysis.GlobalGap
 import QICLean.Analysis.UnitaryEvolution
-import TNLean.Lattice.GaussianTailMoment
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.Analysis.GaussianFilter.Kernel
 
 /-!
 # The Gaussian time average of a gapped Hamiltonian
@@ -158,7 +158,7 @@ theorem norm_gaussianTimeAverage_sub_le {M H : Matrix n n ℂ} (hM : M.IsHermiti
         (Filter.Eventually.of_forall (Matrix.norm_hermitianUnitaryPath_sub_le hM hH))
     _ = ‖M - H‖ * ∫ t, |t| ∂gaussianReal 0 h := integral_const_mul _ _
     _ ≤ ‖M - H‖ * Real.sqrt h :=
-      mul_le_mul_of_nonneg_left (Lattice.integral_abs_gaussianReal_le h) (norm_nonneg _)
+      mul_le_mul_of_nonneg_left (GaussianFilter.integral_abs_gaussianReal_le h) (norm_nonneg _)
     _ = _ := by rw [sqrt_timeAverageVariance q hΔ, mul_comm]
 
 /-- **Gap bound under perturbation.** If `Ω` is a gapped ground vector of the Hermitian

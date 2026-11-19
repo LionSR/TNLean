@@ -3,12 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.CrossingSupports
 import TNLean.Lattice.PhysicalBufferCoordinates
 import TNLean.Lattice.RegionalSwapSupport
 import TNLean.PEPS.Approximation.SheetSwapDoubledTermNorm
 import TNLean.PEPS.AreaLaw.BufferedRectangles
 import TNLean.PEPS.AreaLaw.SupportedGaussianIntegral
+import QICLean.ManyBody.Sites.Lattice.Plane
 
 /-!
 # The partially swapped doubled Hamiltonian at interaction range `R`
@@ -23,7 +23,7 @@ site, and conjugate by the swap `F_A` of the replicas on `A`. This file shows:
   (`ManyBody.PlaneInteraction.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing`), the
   crossing
   terms `Entropy.crossingTerms` of the supports at the cut `A`, so the difference is supported
-  on the sites `crossingSites` of these supports and has norm at most `4 μ_R J |Λ|`,
+  on the sites `ManyBody.crossingSites` of these supports and has norm at most `4 μ_R J |Λ|`,
   with `μ_R = 2^(v_R - 1)` and `v_R = 1 + 2R(R + 1)`
   (`ManyBody.PlaneInteraction.swapped_doubled_boundary_bound`);
 * the supported Gaussian approximation of the physical buffer holds at range `R` with the
@@ -211,7 +211,7 @@ theorem swapped_doubled_boundary_bound (h : PlaneInteraction Λ q R)
     let K := Matrix.reindex p p (doubledHamiltonian h.hamiltonian)
     let F := Matrix.reindex p p (sheetSwapOp q A)
     F * K * Fᴴ - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
-        (crossingSites Λ R A : Finset (Site Λ)) ∧
+        (ManyBody.crossingSites Λ R A : Finset (Site Λ)) ∧
       ‖F * K * Fᴴ - K‖ ≤ swapBoundaryCoefficient R * J * (Λ.card : ℝ) := by
   classical
   intro p K F
@@ -242,7 +242,8 @@ theorem swapped_doubled_boundary_bound (h : PlaneInteraction Λ q R)
         (R := ∅) hM (Or.inr (by simp))] using!
       reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators ∅ S hM
   have hsupport : F * K * Fᴴ - K ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (crossingSites Λ R A : Finset (Site Λ)) :=
+      ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
+        (ManyBody.crossingSites Λ R A : Finset (Site Λ)) :=
     hsum.symm ▸ sum_mem
       fun X hX ↦ ManyBody.supportedOperators_mono
         (Finset.coe_subset.mpr (Finset.subset_biUnion_of_mem
@@ -297,7 +298,7 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
     let K := reindex p p (doubledHamiltonian h.hamiltonian)
     let F := reindex p p (sheetSwapOp q A)
     let K' := F * K * Fᴴ
-    let Z := crossingSites Λ R A
+    let Z := ManyBody.crossingSites Λ R A
     ∀ W : Matrix ((Q → Fin q) × (Q → Fin q)) ((Q → Fin q) × (Q → Fin q)) ℂ,
       let V := reindex (g.symm.trans p) (g.symm.trans p)
         ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W)

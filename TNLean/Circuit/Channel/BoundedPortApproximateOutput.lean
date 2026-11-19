@@ -52,7 +52,7 @@ theorem IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_approximate_o
     (herror : chainTraceNorm (Ψ (vecMulVec ψ (star ψ)) - vecMulVec φ (star φ)) ≤ ε) :
     let k := Nat.clog d B
     let W := N * (1 + k + k)
-    let V := registerEncoding (PortRegisters.wordCodeConfiguration
+    let V := Matrix.initializedBasisMatrix (PortRegisters.wordCodeConfiguration
       (N := N) (PortRegisters.portWordCode d k))
     ∃ A : ℕ, ∃ owner : Fin A → Fin N,
       ∃ U : Matrix (Fin (W + A) → Fin d) (Fin (W + A) → Fin d) ℂ,
@@ -70,9 +70,9 @@ theorem IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_approximate_o
   dsimp only
   let k := Nat.clog d B
   let W := N * (1 + k + k)
-  let V := registerEncoding (PortRegisters.wordCodeConfiguration
+  let V := Matrix.initializedBasisMatrix (PortRegisters.wordCodeConfiguration
     (N := N) (PortRegisters.portWordCode d k))
-  have hV : Vᴴ * V = 1 := registerEncoding_isIsometry _
+  have hV : Vᴴ * V = 1 := Matrix.initializedBasisMatrix_isIsometry _
   have hUnit (ξ : (Fin N → Fin d) → ℂ) (hξ : star ξ ⬝ᵥ ξ = 1) :
       ‖(WithLp.toLp 2 (V *ᵥ ξ) : EuclideanSpace ℂ (Fin W → Fin d))‖ = 1 := by
     have hξV : star (V *ᵥ ξ) ⬝ᵥ (V *ᵥ ξ) = 1 := by

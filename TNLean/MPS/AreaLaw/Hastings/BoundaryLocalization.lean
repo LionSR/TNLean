@@ -223,8 +223,9 @@ theorem exists_supported_interactionAverage_approx {L q R : ℕ} {J : ℝ} (hq :
     refine (norm_integral_le_of_norm_le hgint (Filter.Eventually.of_forall hpoint)).trans ?_
     rw [integral_add (habs.mul_const ε) hind, integral_mul_const,
       integral_indicator_const _ measurableSet_Icc.compl, smul_eq_mul]
-    have hm := Lattice.integral_abs_gaussianReal_le η
+    have hm := GaussianFilter.integral_abs_gaussianReal_le η
     have ht := GaussianFilter.measure_compl_Icc_le η hT
+    have hexp := Real.exp_pos (-T ^ 2 / (2 * (η : ℝ)))
     nlinarith
 
 /-- **Localization of `P_B`, exponential form.** Hastings, arXiv:0705.2024v4, `law16.tex`,

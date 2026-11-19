@@ -114,7 +114,7 @@ theorem ghzAmplitude_one_vec {z : ℂ} (hz : ‖z‖ = 1) :
     ghzAmplitude ![1, z] = ![invSqrtTwo, invSqrtTwo * z] := by
   funext j
   rw [ghzAmplitude, sum_norm_sq_one_vec hz]
-  fin_cases j <;> simp [invSqrtTwo, div_eq_inv_mul]
+  fin_cases j <;> simp [invSqrtTwo, Complex.invSqrt, div_eq_inv_mul]
 
 /-- For `q ≥ 1` the Gram matrix of the blocked tensor is the identity: the `q`-site states of
 the two blocks are orthogonal and normalized. -/
@@ -157,7 +157,7 @@ theorem nonNormalApproxOverlap_phaseBlockTensor_of_norm {μ : ℂ} (hμ : ‖μ�
   rw [nonNormalApproxOverlap_diagonal (phaseBlockDiag μ) q M α (fun j => j) (X := 1) (Y := 2)]
   · rw [polarPos_phaseBlockTensor hμ hq]
     simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two]
-    simp [zero_pow hM, invSqrtTwo]
+    simp [zero_pow hM, invSqrtTwo, Complex.invSqrt]
     ring
   · rw [polarSupport_phaseBlockTensor hμ hq]
     simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two]
@@ -191,7 +191,7 @@ theorem nonNormalApproxOverlap_phaseBlockTensor {μ : ℂ} (hμ : ‖μ‖ = 1) 
     have hs : star invSqrtTwo = invSqrtTwo := star_invSqrtTwo
     rw [hs]
     linear_combination (1 + star μ ^ (M * q)) * invSqrtTwo_mul_self
-  · simp [hμN, invSqrtTwo]
+  · simp [hμN, invSqrtTwo, Complex.invSqrt]
     norm_num
 
 /-- **With `βⱼ = |μⱼ|^N` the approximating state is exact.** For `|μ| = 1`, the coefficients
@@ -210,7 +210,7 @@ theorem nonNormalApproxOverlap_phaseBlockTensor_norm {μ : ℂ} (hμ : ‖μ‖ 
   rw [hβ, ghzAmplitude_one_vec norm_one, nonNormalApproxOverlap_phaseBlockTensor_of_norm hμ hq hM]
   · simp only [Fin.isValue, cons_val_zero, cons_val_one, mul_one, star_invSqrtTwo]
     linear_combination 2 * invSqrtTwo_mul_self
-  · simp [invSqrtTwo]
+  · simp [invSqrtTwo, Complex.invSqrt]
     norm_num
 
 /-- **For `μ = -1` and odd `N` the error is `1`.** For odd block length `q` and odd number of
