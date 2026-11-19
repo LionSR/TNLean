@@ -232,10 +232,11 @@ and a running-time bound are not formalized.
     \notready
     \uses{lem:calibrated_efficient_soft_low_density_family}
     Let $H$ be a nearest-neighbour Hamiltonian on $n$ qudits satisfying
-    Assumption (LD) with energy parameter $\eta$, let $\eta_1\leq\eta$ and
-    $\mu>0$, let $\{1,\ldots,n\}=L\cup M\cup R$ with
-    $L=\{1,\ldots,i_1\}$, $M=\{i_1+1,\ldots,i_2\}$ and
-    $R=\{i_2+1,\ldots,n\}$, and let $\varepsilon'_M$ satisfy
+    Assumption (LD) with energy parameter $\eta$, and let $\varepsilon_0$ be
+    the least eigenvalue of $H$. Let $\eta_1\leq\eta$ and $\mu>0$, let
+    $\{0,\ldots,n-1\}=L\cup M\cup R$ with $L=\{0,\ldots,i_1-1\}$,
+    $M=\{i_1,\ldots,i_2-1\}$ and $R=\{i_2,\ldots,n-1\}$, and let
+    $\varepsilon'_M$ satisfy
     $|\varepsilon_M-\varepsilon'_M|\leq10$, where $\varepsilon_M$ is the least
     energy of the restriction of $H$ to $M$. Then there are $D^2$ operators
     $A_i$ on the space of $M$, each a matrix product operator of bond dimension
