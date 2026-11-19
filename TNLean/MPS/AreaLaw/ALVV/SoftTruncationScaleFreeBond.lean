@@ -19,6 +19,8 @@ the two growths cancel. The resulting bond is bounded by an explicit expression 
 `1 + N q² + (m + 1) (2 + log E₀ / c₀)² q² E₀^{log q / c₀}`, where
 `E₀ = 2 max {1, N²} 2^{m+1} 2 √2 m / ξ` and `c₀ = -log (2 (√2 - 1))`. For fixed local
 dimension this is polynomial in `m 2^m N / ξ`, the quantity of the printed bound.
+The bound is stated for `ξ ≤ 2^{m+1}`; for every `ξ > 0`, as the source allows, the same bound
+holds at `min {ξ, 2^{m+1}}` (`exists_softTruncatedHamiltonian_mpo_scaleFree_of_pos`).
 
 **Local fix (cluster estimate):** the proof uses the corrected interaction-label cluster
 estimate in place of the false printed one; no computational running time is asserted.
@@ -222,5 +224,36 @@ theorem exists_softTruncatedHamiltonian_mpo_scaleFree {N q m : ℕ}
   have := mul_le_mul_of_nonneg_left hbond hm1
   dsimp only [E0, c0] at this ⊢
   linarith
+
+/-- **Lemma 5.4 for every accuracy, with a bond independent of the scale.** For every positive
+order `m`, scale with `m < (ln 2 / 2) t` and accuracy `ξ > 0`, the actual soft-truncated
+Hamiltonian has operator tensors within `ξ` whose bond dimension is at most
+`1 + N q² + (m + 1) (2 + log E₀ / c₀)² q² E₀^{log q / c₀}`, where `ξ' = min {ξ, 2^{m+1}}`,
+`E₀ = 2 max {1, N²} 2^{m+1} 2 √2 m / ξ'` and `c₀ = -log (2 (√2 - 1))`; the bound does not
+depend on `t`. ALVV, arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 1262–1268, under the
+local fix of this module. -/
+theorem exists_softTruncatedHamiltonian_mpo_scaleFree_of_pos {N q m : ℕ}
+    (hq : 1 ≤ q) (hm : 0 < m)
+    (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+      (h i) {i.castSucc, i.succ})
+    (hh : ∀ i, (h i).IsHermitian) (hnorm : ∀ i, ‖h i‖ ≤ 1)
+    (I : Finset (Fin N)) (eps t xi : ℝ) (hlo : (eps : ℂ) • 1 ≤ ∑ i ∈ I, h i)
+    (hscale : (m : ℝ) < Real.log 2 / 2 * t) (hxi : 0 < xi) :
+    let xi' := min xi ((2 : ℝ) ^ (m + 1))
+    let c0 := -Real.log (2 * (Real.sqrt 2 - 1))
+    let E0 := 2 * max 1 ((N : ℝ) ^ 2) * (2 : ℝ) ^ (m + 1) * (2 * Real.sqrt 2 * m) / xi'
+    ∃ (D : ℕ) (A : Fin (N + 1) → MPOTensor q D),
+      ‖((∑ i, h i) - (∑ i ∈ I, h i) + (eps : ℂ) • 1 +
+          cfc (Real.softTruncation t m)
+            ((∑ i ∈ I, h i) - (eps : ℂ) • 1)) -
+        MPOTensor.traceChainOperator A 1‖ ≤ xi ∧
+      (D : ℝ) ≤ 1 + N * q ^ 2 +
+        (m + 1) * ((2 + Real.log E0 / c0) ^ 2 * ((q : ℝ) ^ 2 * E0 ^ (Real.log q / c0))) := by
+  intro xi' c0 E0
+  have hxi' : 0 < xi' := lt_min hxi (by positivity)
+  obtain ⟨⟨A, hA⟩, hD⟩ := exists_softTruncatedHamiltonian_mpo_scaleFree hq hm h hs hh hnorm I
+    eps t xi' hlo hscale hxi'
+  exact ⟨_, A, hA.trans (min_le_left _ _), hD (min_le_right _ _)⟩
 
 end TNLean.MPS.AreaLaw.ALVV
