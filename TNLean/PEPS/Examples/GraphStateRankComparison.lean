@@ -1,5 +1,12 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
 import TNLean.PEPS.Examples.GraphStatePhysicalCutRank
 import TNLean.PEPS.Examples.GraphStateCutRank
+
+/-! # Physical coefficient rank and the virtual boundary maps of a graph-state cut -/
 
 namespace TNLean.PEPS.PhysicalCut
 open BinaryCutCharacters GraphStateCut
@@ -41,6 +48,26 @@ theorem physical_rank_le_open : (physical G R).rank ≤
   change 2 ^ Module.finrank F B.range ≤ _
   simpa only [Module.card_eq_pow_finrank (K := F) (V := B.range), Fintype.card_fun,
     ZMod.card] using bound
+
+/-- Exchanging the physical sides transposes the coefficient matrix up to reindexing. -/
+theorem physical_rank_compl : (physical G Rᶜ).rank = (physical G R).rank := by
+  classical
+  let a : {v : V // v ∈ Rᶜ} ≃ {v : V // v ∉ R} := Equiv.subtypeEquivRight (by simp)
+  let b : {v : V // v ∉ Rᶜ} ≃ {v : V // v ∈ R} := Equiv.subtypeEquivRight (by simp)
+  let rows := Equiv.arrowCongr a (Equiv.refl F)
+  let cols := Equiv.arrowCongr b (Equiv.refl F)
+  have he : physical G Rᶜ = (physical G R).transpose.submatrix rows cols := by
+    ext x y
+    apply congrArg (stateCoeff (graphStatePEPS G))
+    funext v
+    by_cases hv : v ∈ R <;> simp [L,T,hv,rows,cols,a,b,Equiv.arrowCongr] <;> rfl
+  rw [he,Matrix.rank_submatrix,Matrix.rank_transpose]
+
+/-- Both open-region image dimensions bound the physical coefficient rank. -/
+theorem physical_rank_le_min_open : (physical G R).rank ≤
+    min (Module.finrank ℂ (LinearMap.range (openRegionMap (graphStatePEPS G) R)))
+      (Module.finrank ℂ (LinearMap.range (openRegionMap (graphStatePEPS G) Rᶜ))) :=
+  le_min (physical_rank_le_open G R) ((physical_rank_compl G R) ▸ physical_rank_le_open G Rᶜ)
 
 end TNLean.PEPS.PhysicalCut
 

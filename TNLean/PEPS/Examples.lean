@@ -28,8 +28,10 @@ import TNLean.PEPS.Examples.ClusterStabilizer
 import TNLean.PEPS.Examples.GHZ
 import TNLean.PEPS.Examples.GraphStateCutAlgebra
 import TNLean.PEPS.Examples.GraphStateCutConverse
+import TNLean.PEPS.Examples.GraphStateCutRank
 import TNLean.PEPS.Examples.GraphStateCutRegion
 import TNLean.PEPS.Examples.GraphStatePhysicalCutRank
+import TNLean.PEPS.Examples.GraphStateRankComparison
 import TNLean.PEPS.Examples.HoneycombCluster
 import TNLean.PEPS.Examples.HoneycombFacePartition
 import TNLean.PEPS.Examples.HoneycombPlaquette
