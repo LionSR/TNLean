@@ -68,7 +68,7 @@ private theorem pairedBond_disjoint (σ : Bool → Equiv.Perm κ) {k l : κ} (hk
 
 private theorem pairedGate_supported (σ : Bool → Equiv.Perm κ)
     (A : Bool → Matrix (Fin d) (Fin d) ℂ) (k : κ) :
-    pairedGate σ A k ∈ QuantumCircuit.supportedOperators d (pairedBond σ k) := by
+    pairedGate σ A k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (pairedBond σ k) := by
   apply QuantumCircuit.rectKronecker_mem_supportedOperators
   intro s hs
   have hne : σ s.2 k ≠ s.1 := fun h ↦ hs ⟨s.2, Prod.ext h rfl⟩
