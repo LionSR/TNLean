@@ -161,7 +161,8 @@ theorem exists_periodicPhysicalTruncatedTerm_localization {R J Δ : ℝ}
       intro v hv
       rw [ManyBody.mem_metricRangeBall]
       exact (Finset.mem_filter.mp hv).2
-    have ha := hloc (⟨g, hsupp'⟩ : ManyBody.Interaction (fun _ ↦ Fin d) (ManyBody.metricRangeBall R))
+    have ha := hloc
+      (⟨g, hsupp'⟩ : ManyBody.Interaction (fun _ ↦ Fin d) (ManyBody.metricRangeBall R))
       hg hnorm (card_periodicPhysical_metricRangeBall_le R) (ℓ : ℝ) hℓ i
     have heq : ManyBody.gaussianFilteredTerm (c₁ * (ℓ : ℝ) * Δ) Δ
         (∑ j ∈ ManyBody.metricRangeBall ((ℓ : ℝ) - R) i, g j) (g i) = a := by

@@ -242,7 +242,8 @@ theorem swapped_doubled_boundary_bound (h : PlaneInteraction Λ q R)
         (R := ∅) hM (Or.inr (by simp))] using!
       reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators ∅ S hM
   have hsupport : F * K * Fᴴ - K ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (ManyBody.crossingSites Λ R A : Finset (Site Λ)) :=
+      ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
+        (ManyBody.crossingSites Λ R A : Finset (Site Λ)) :=
     hsum.symm ▸ sum_mem
       fun X hX ↦ ManyBody.supportedOperators_mono
         (Finset.coe_subset.mpr (Finset.subset_biUnion_of_mem

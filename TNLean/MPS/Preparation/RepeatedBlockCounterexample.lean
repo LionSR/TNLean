@@ -205,7 +205,8 @@ theorem nonNormalApproxOverlap_repeatedBlockTensor {q M : ℕ} (hq : q ≠ 0) (h
     simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two,
       Fin.sum_univ_three, repeatedBlockCoord, repeatedBlockSqrt]
     simp only [Nat.succ_eq_add_one, Nat.reduceAdd, one_div, Fin.isValue, cons_val_zero,
-      star_div₀, star_ofNat, RCLike.star_def, conj_ofReal, invSqrtTwo, Complex.invSqrt, of_apply, cons_val',
+      star_div₀, star_ofNat, RCLike.star_def, conj_ofReal, invSqrtTwo, Complex.invSqrt, of_apply,
+      cons_val',
       cons_val_fin_one, inv_pow, cons_val_one, cons_val, zero_pow hM, mul_zero, add_zero,
       star_inv₀, one_pow, mul_one, zero_add, ofReal_div, ofReal_add, ofReal_mul, ofReal_ofNat,
       ofReal_inv, ofReal_pow, ofReal_one]

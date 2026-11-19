@@ -72,26 +72,27 @@ theorem map_eq_id_of_siteMap_eq_id (Φ : OnsiteChannel m m ι)
 /-- Independent isometric basis encodings at all sites. -/
 noncomputable def encodeRegisters (e : ι → (Fin m ↪ Fin q)) : OnsiteChannel m q ι where
   r _ := 1
-  kraus i _ := Matrix.initializedBasisMatrix (e i)
+  kraus i _ := initializedBasisMatrix (e i)
   sum_kraus i := by
-    simpa only [Fin.sum_univ_one, Matrix.IsIsometry] using Matrix.initializedBasisMatrix_isIsometry (e i)
+    simpa only [Fin.sum_univ_one, Matrix.IsIsometry] using initializedBasisMatrix_isIsometry (e i)
 
 omit [Fintype ι] [DecidableEq ι] in
 /-- The site encoder is its single isometric Kraus map. -/
 theorem encodeRegisters_siteMap (e : ι → (Fin m ↪ Fin q)) (i : ι) :
-    (encodeRegisters e).siteMap i = singleKrausMap (Matrix.initializedBasisMatrix (e i)) := by
+    (encodeRegisters e).siteMap i = singleKrausMap (initializedBasisMatrix (e i)) := by
   apply LinearMap.ext
   intro X
-  change (∑ _ : Fin 1, Matrix.initializedBasisMatrix (e i) * X * (Matrix.initializedBasisMatrix (e i))ᴴ) = _
+  change (∑ _ : Fin 1, initializedBasisMatrix (e i) * X * (initializedBasisMatrix (e i))ᴴ) = _
   simp only [Fin.sum_univ_one, singleKrausMap_apply]
 
 /-- The global encoding is the tensor product of the local isometries. -/
 theorem encodeRegisters_map (e : ι → (Fin m ↪ Fin q)) :
-    (encodeRegisters e).map = singleKrausMap (rectKronecker fun i => Matrix.initializedBasisMatrix (e i)) := by
+    (encodeRegisters e).map =
+      singleKrausMap (rectKronecker fun i => initializedBasisMatrix (e i)) := by
   apply LinearMap.ext
   intro X
-  change (∑ _ : ι → Fin 1, rectKronecker (fun i => Matrix.initializedBasisMatrix (e i)) * X *
-    (rectKronecker (fun i => Matrix.initializedBasisMatrix (e i)))ᴴ) = _
+  change (∑ _ : ι → Fin 1, rectKronecker (fun i => initializedBasisMatrix (e i)) * X *
+    (rectKronecker (fun i => initializedBasisMatrix (e i)))ᴴ) = _
   simp only [Finset.univ_unique, Finset.sum_singleton, singleKrausMap_apply]
 
 /-- Decode independently at each site, completing only that site's unused code subspace. -/
