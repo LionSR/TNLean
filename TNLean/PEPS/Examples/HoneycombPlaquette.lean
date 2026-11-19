@@ -59,9 +59,9 @@ def vertex : Fin 6 → Site := ![(0,0), (1,0), (2,0), (2,1), (1,1), (0,1)]
 /-- Endpoint outside the face, in the same cyclic order. -/
 def exterior : Fin 6 → Site := ![(5,0), (1,3), (3,0), (3,1), (1,2), (5,1)]
 
+set_option maxRecDepth 10000 in
 /-- Each face vertex has exactly three neighbours: its cyclic predecessor, its cyclic successor,
 and the exterior endpoint assigned to that vertex. -/
-set_option maxRecDepth 10000 in
 theorem incidence : ∀ (i : Fin 6) (w : Site), graph.Adj (vertex i) w ↔
     w = vertex (i - 1) ∨ w = vertex (i + 1) ∨ w = exterior i := by decide
 
