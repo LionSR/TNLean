@@ -27,20 +27,47 @@ The following files are maintained by this project and may record TNLean-specifi
 rules, blueprint conventions, GitHub workflow, and source-faithfulness
 requirements.
 
+Process and conventions:
+
 - `CONTRIBUTING.md`
-- `blueprint_style_guide.md`
-- `ci-automation.md`
-- `counterexamples.md`
-- `deploy.md`
 - `getting_started.md`
-- `paper-gaps/`
-- `pr_review_management.md`
 - `project_conventions.md`
+- `blueprint_style_guide.md`
+- `glossary.md`
+- `counterexamples.md`
+- `pr_review_management.md`
+- `ci-automation.md`
 - `stale_issue_audit.md`
+- `deploy.md`
+- `blueprint_dependency_graphs.md`
+- `openai-math-provenance.md`
+
+Architecture and build:
+
+- `import_structure.md`
+- `many_body_circuit_architecture.md`
+- `circuit_channel_architecture.md`
+- `related_libraries.md`
+- `lake_build_cache.md`
+- `upgrade_4_29.md`
+
+Proof maintenance:
+
 - `tactic_development.md`
 - `tactic_patterns.md`
-- `tenkz/`
-- `upgrade_4_29.md`
+- `proof_debt.md`
+- `proof_debt_ledger.md`
+
+Source faithfulness and working notes:
+
+- `paper-gaps/`
+- `formalization/`
+- `campaign/`
+- `wolf_source_numbering.md`
+- `wolf_theorem_numbering_audit.md`
+
+Other material: `slides/` (talk decks), `archive/` (frozen blueprint
+volumes), `validation/` (render-validation records).
 
 When a TNLean rule concerns Lean docstrings or blueprint prose, put it in
 the prose section of [`project_conventions.md`](project_conventions.md) or
