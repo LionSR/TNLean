@@ -34,6 +34,8 @@ as required by the existing simple-graph realization of the native bonds.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {width height : ℕ} [NeZero width] [NeZero height]
@@ -159,7 +161,7 @@ theorem torusRegionLiftGauge_gradient {R : Finset (TorusVertex width height)}
       (torusRegionLiftGauge R L g h ⟨(torusRightEdge v).1.1, he.1⟩)⁻¹ =
         torusClosureEdgeAssignment g h (torusRightEdge v)
     rw [torusClosureEdgeAssignment_right]
-    rcases Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨ht, hh⟩ | ⟨ht, hh⟩
+    rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨ht, hh⟩ | ⟨ht, hh⟩
     · change (torusRightEdge v).1.1 = v at ht
       change (torusRightEdge v).1.2 = (v.1 + 1, v.2) at hh
       have hv : v ∈ R := ht ▸ he.1
@@ -184,7 +186,7 @@ theorem torusRegionLiftGauge_gradient {R : Finset (TorusVertex width height)}
       (torusRegionLiftGauge R L g h ⟨(torusUpEdge v).1.1, he.1⟩)⁻¹ =
         torusClosureEdgeAssignment g h (torusUpEdge v)
     rw [torusClosureEdgeAssignment_up]
-    rcases Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨ht, hh⟩ | ⟨ht, hh⟩
+    rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨ht, hh⟩ | ⟨ht, hh⟩
     · change (torusUpEdge v).1.1 = v at ht
       change (torusUpEdge v).1.2 = (v.1, v.2 + 1) at hh
       have hv : v ∈ R := ht ▸ he.1

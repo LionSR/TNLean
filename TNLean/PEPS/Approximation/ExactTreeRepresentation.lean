@@ -24,6 +24,8 @@ revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. The proof below works for a
 connected spanning subgraph; it does not assume the contraction identity.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 
 open scoped BigOperators
@@ -110,9 +112,9 @@ def Ports.ofConnected [Nontrivial V] (hT : T ≤ G) (hconn : T.Connected) :
     let w := (hconn.preconnected.exists_adj_of_nontrivial v).choose
     have hvw : T.Adj v w :=
       (hconn.preconnected.exists_adj_of_nontrivial v).choose_spec
-    let e := Edge.ofAdj (hT hvw)
+    let e := ManyBody.Edge.ofAdj (hT hvw)
     refine ⟨e, ?_⟩
-    rcases Edge.ofAdj_endpoints (hT hvw) with h | h
+    rcases ManyBody.Edge.ofAdj_endpoints (hT hvw) with h | h
     · exact Or.inl h.1
     · exact Or.inr h.2
   active v := by
@@ -120,8 +122,8 @@ def Ports.ofConnected [Nontrivial V] (hT : T ≤ G) (hconn : T.Connected) :
     let w := (hconn.preconnected.exists_adj_of_nontrivial v).choose
     have hvw : T.Adj v w :=
       (hconn.preconnected.exists_adj_of_nontrivial v).choose_spec
-    change T.Adj (Edge.ofAdj (hT hvw)).1.1 (Edge.ofAdj (hT hvw)).1.2
-    rcases Edge.ofAdj_endpoints (hT hvw) with h | h
+    change T.Adj (ManyBody.Edge.ofAdj (hT hvw)).1.1 (ManyBody.Edge.ofAdj (hT hvw)).1.2
+    rcases ManyBody.Edge.ofAdj_endpoints (hT hvw) with h | h
     · simpa only [h.1, h.2] using hvw
     · simpa only [h.1, h.2] using hvw.symm
 
@@ -189,18 +191,18 @@ theorem localLabel_eq_of_adj (η : (e : Edge G) → Fin (bondDim T q e))
     (hT : T ≤ G) {u v : V} (huv : T.Adj u v) :
     localLabel q P u (fun ie => η ie.1) = localLabel q P v (fun ie => η ie.1) := by
   classical
-  let e := Edge.ofAdj (hT huv)
+  let e := ManyBody.Edge.ofAdj (hT huv)
   have he : T.Adj e.1.1 e.1.2 := by
-    change T.Adj (Edge.ofAdj (hT huv)).1.1 (Edge.ofAdj (hT huv)).1.2
-    rcases Edge.ofAdj_endpoints (hT huv) with h | h
+    change T.Adj (ManyBody.Edge.ofAdj (hT huv)).1.1 (ManyBody.Edge.ofAdj (hT huv)).1.2
+    rcases ManyBody.Edge.ofAdj_endpoints (hT huv) with h | h
     · simpa only [h.1, h.2] using huv
     · simpa only [h.1, h.2] using huv.symm
   have heu : e.1.1 = u ∨ e.1.2 = u := by
-    rcases Edge.ofAdj_endpoints (hT huv) with h | h
+    rcases ManyBody.Edge.ofAdj_endpoints (hT huv) with h | h
     · exact Or.inl h.1
     · exact Or.inr h.2
   have hev : e.1.1 = v ∨ e.1.2 = v := by
-    rcases Edge.ofAdj_endpoints (hT huv) with h | h
+    rcases ManyBody.Edge.ofAdj_endpoints (hT huv) with h | h
     · exact Or.inr h.2
     · exact Or.inl h.1
   exact ((hc u).2 ⟨e, heu⟩ he).symm.trans ((hc v).2 ⟨e, hev⟩ he)

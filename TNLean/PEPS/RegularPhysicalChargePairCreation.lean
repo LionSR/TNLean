@@ -16,6 +16,8 @@ canonical column. Local G-isometry then supplies physical unitary transport.
 Source: SCP10, arXiv:1001.3807, charge-pair creation, lines 2505–2558.
 These finite-region formulas do not assume a Gram or boundary-column identity.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

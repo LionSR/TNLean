@@ -24,6 +24,8 @@ in place of the energy-dependent power sampler of LVV; see
 `docs/paper-gaps/lvv13_runtime_ground_energy.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
@@ -32,11 +34,11 @@ namespace TNLean.MPS.AreaLaw
 /-- **The Gaussian filter approximants of Huang's construction.** At each node of the
 energy mesh, the Gaussian approximant of the positive chain with Huang's variance, time
 window and accuracy. Huang, arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
-noncomputable def huangFilterApproximant {L q : ℕ} (hq : 1 ≤ q)
+noncomputable def huangFilterApproximant {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ i, 0 ≤ h i)
     (c Delta : ℝ) (j : Fin (huangEnergyCount c Delta L)) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  positiveChainGaussianApproximant hq h h0 (huangFilterVariance c Delta L)
+  positiveChainGaussianApproximant h h0 (huangFilterVariance c Delta L)
     (timeMeshNode L (huangEnergyMesh c Delta L) j) (huangFilterTime c Delta L)
     (huangFilterEta c L) (huangFilterEta c L)
 
@@ -50,10 +52,10 @@ theorem huangFilterApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (j : Fin (huangEnergyCount c Delta L)) :
     (∀ cut, operatorSchmidtRank
       (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut)
-        (huangFilterApproximant hq h h0 c Delta j)) ≤ huangFilterRankBound q c Delta L) ∧
+        (huangFilterApproximant h h0 c Delta j)) ≤ huangFilterRankBound q c Delta L) ∧
     ‖GaussianFilter.gaussianIntertwiner (huangFilterVariance c Delta L)
       ((∑ i, h i) - (timeMeshNode L (huangEnergyMesh c Delta L) j : ℂ) • 1) 0 1 -
-        huangFilterApproximant hq h h0 c Delta j‖ ≤ 3 * huangFilterEta c L := by
+        huangFilterApproximant h h0 c Delta j‖ ≤ 3 * huangFilterEta c L := by
   classical
   have hL : 0 ≤ (L : ℝ) := Nat.cast_nonneg L
   have hη := (huangFilterEta_bounds hc L).1
@@ -88,7 +90,7 @@ theorem exists_positive_chain_filter_family {L q : ℕ} (hq : 1 ≤ q)
       ∀ j, ‖GaussianFilter.gaussianIntertwiner (huangFilterVariance c Delta L)
         ((∑ i, h i) - (timeMeshNode L (huangEnergyMesh c Delta L) j : ℂ) • 1) 0 1 - Q j‖ ≤
           3 * huangFilterEta c L :=
-  ⟨huangFilterApproximant hq h h0 c Delta,
+  ⟨huangFilterApproximant h h0 c Delta,
     fun j ↦ (huangFilterApproximant_spec hq h hs h0 h1 hc hDelta j).1,
     fun j ↦ (huangFilterApproximant_spec hq h hs h0 h1 hc hDelta j).2⟩
 
@@ -129,7 +131,7 @@ theorem exists_huangFilterApproximant_near_ground {L q : ℕ} (hq : 1 ≤ q)
       (1 - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ)))).PosSemidef) :
     ∃ (j : Fin (huangEnergyCount c Delta L)) (a : ℝ),
       1 / 2 ≤ a ∧ a ≤ 1 ∧
-      ‖huangFilterApproximant hq h h0 c Delta j -
+      ‖huangFilterApproximant h h0 c Delta j -
         (a : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
           4 * huangFilterEta c L := by
   have hQerror (j : Fin (huangEnergyCount c Delta L)) :=
@@ -154,7 +156,7 @@ theorem exists_huangFilterApproximant_near_ground {L q : ℕ} (hq : 1 ≤ q)
   have hsuppression := huangFilterVariance_suppression_le hc hDelta L
   have hfirst := hQerror j
   rw [norm_sub_rev] at hfirst
-  have htriangle := (norm_sub_le_norm_sub_add_norm_sub (huangFilterApproximant hq h h0 c Delta j)
+  have htriangle := (norm_sub_le_norm_sub_add_norm_sub (huangFilterApproximant h h0 c Delta j)
     (GaussianFilter.gaussianIntertwiner (huangFilterVariance c Delta L)
       ((∑ i, h i) - (E : ℂ) • 1) 0 1)
     ((a : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ)))).trans
@@ -184,7 +186,7 @@ theorem exists_positive_chain_ground_filter_family {L q : ℕ} (hq : 1 ≤ q)
           1 / 2 ≤ a ∧ a ≤ 1 ∧
           ‖Q j - (a : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
             4 * huangFilterEta c L :=
-  ⟨huangFilterApproximant hq h h0 c Delta,
+  ⟨huangFilterApproximant h h0 c Delta,
     fun j ↦ (huangFilterApproximant_spec hq h hs h0 h1 hc hDelta j).1,
     fun E₀ Γ hΓ hHΓ hgap ↦
       exists_huangFilterApproximant_near_ground hq h hs h0 h1 hc hDelta E₀ Γ hΓ hHΓ hgap⟩

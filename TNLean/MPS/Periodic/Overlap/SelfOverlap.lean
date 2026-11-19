@@ -29,6 +29,7 @@ non-repetition lemmas developed in `SelfOverlapSetup`.
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace Kraus
 open Filter Matrix
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

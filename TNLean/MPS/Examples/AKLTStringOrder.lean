@@ -43,6 +43,7 @@ is in `AKLTPhysicalStringOrder`.
 
 open scoped Matrix BigOperators
 open Matrix Finset MPSTensor
+open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 noncomputable section
 
@@ -119,9 +120,7 @@ private theorem aklt_sum_conjTranspose_mul :
     simp only [Fin.isValue, Fin.zero_eta, Fin.mk_one, Matrix.cons_val_zero,
       Matrix.cons_val_one, one_ne_zero, zero_ne_one, ite_true, ite_false, mul_zero,
       zero_mul, mul_one, add_zero, zero_add, neg_zero, mul_neg, neg_mul, neg_neg] <;>
-    first
-      | rfl
-      | exact hdiag
+    exact hdiag
 
 /-- The blocked AKLT transfer map is unital: `∑ Bᵢ Bᵢ† = 1`.  Right-canonicity of
 the single-site letters propagates to length-`2` words. -/

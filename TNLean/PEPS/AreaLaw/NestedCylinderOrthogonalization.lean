@@ -123,7 +123,7 @@ private theorem projector_finset_sup {ι κ : Type*} [Fintype κ]
     exact Finset.sum_eq_zero fun i hi => h (ne_of_mem_of_not_mem hi ha).symm
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*} [∀ v, Fintype (Out v)] {n : ℕ}
+variable {Out : V → Type*} [∀ v, Fintype (Out v)] [∀ v, DecidableEq (Out v)] {n : ℕ}
 
 /-- The earlier cylinders expressed inside the current region, using the identity
 extensions of their original range projectors. -/
@@ -131,7 +131,7 @@ noncomputable def nestedCylinderEarlierInside (R : Fin n → Finset V) (hR : Mon
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (j : Fin n) : Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ) :=
   ⨆ i : {i : Fin n // i < j},
-    (dependentSubregionOperatorLift (R i.1) (R j) (hR i.2.le)
+    (ManyBody.subregionPlace (hR i.2.le)
       (coordinateRangeProjector (S i.1))).mulVecLin.range
 
 /-- The projected-image innovation \((I-P_{W_j})S_j\), which need not equal
@@ -142,8 +142,9 @@ noncomputable def nestedCylinderInnovation (R : Fin n → Finset V) (hR : Monoto
   (S j).map (LinearMap.id -
     (coordinateRangeProjector (nestedCylinderEarlierInside R hR S j)).mulVecLin)
 
+omit [Fintype V] in
 /-- The inside earlier subspace has exactly the span of the earlier global cylinders. -/
-theorem dependentRegionCylinder_nestedCylinderEarlierInside
+theorem dependentRegionCylinder_nestedCylinderEarlierInside [Finite V]
     (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (j : Fin n) :
@@ -169,23 +170,25 @@ theorem dependentRegionCylinder_nestedCylinderInnovation
         (1 - coordinateRangeProjector (nestedCylinderEarlierInside R hR S j)).mulVecLin := by
     ext x α
     simp
-  rw [nestedCylinderInnovation, hm, dependentRegionCylinder_map, dependentRegionOperatorLift_sub,
-    dependentRegionOperatorLift_one (Out := Out),
+  rw [nestedCylinderInnovation, hm, dependentRegionCylinder_map, ManyBody.place_sub,
+    ManyBody.place_one (X := Out),
     ← coordinateRangeProjector_dependentRegionCylinder,
     dependentRegionCylinder_nestedCylinderEarlierInside,
     ← Matrix.toLin'_apply', map_sub, Matrix.toLin'_one]
   rfl
 
+omit [Fintype V] in
 /-- Orthogonalization does not increase the inside dimension. -/
-theorem finrank_nestedCylinderInnovation_le (R : Fin n → Finset V) (hR : Monotone R)
+theorem finrank_nestedCylinderInnovation_le [Finite V] (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (j : Fin n) : Module.finrank ℂ (nestedCylinderInnovation R hR S j) ≤
       Module.finrank ℂ (S j) := by
   classical
   exact Submodule.finrank_map_le _ _
 
+omit [Fintype V] in
 /-- Adjoining the projected-image innovation gives exactly the enlarged original span. -/
-theorem nestedCylinderInnovation_sup (R : Fin n → Finset V) (hR : Monotone R)
+theorem nestedCylinderInnovation_sup [Finite V] (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (j : Fin n) :
     (⨆ i : {i : Fin n // i < j}, dependentRegionCylinder (R i.1) (S i.1)) ⊔
@@ -193,6 +196,7 @@ theorem nestedCylinderInnovation_sup (R : Fin n → Finset V) (hR : Monotone R)
       (⨆ i : {i : Fin n // i < j}, dependentRegionCylinder (R i.1) (S i.1)) ⊔
         dependentRegionCylinder (R j) (S j) := by
   classical
+  have := Fintype.ofFinite V
   rw [dependentRegionCylinder_nestedCylinderInnovation]
   simpa only [← Matrix.toLin'_apply', map_sub, Matrix.toLin'_one] using
     sup_map_one_sub_projector
@@ -225,7 +229,8 @@ theorem nestedCylinderInnovation_orthogonalEarlier
         (nestedCylinderInnovation R hR S j))) :=
   coordinate_ortho_of_mul_eq_zero _ _ (earlier_projector_mul_innovation_eq_zero R hR S j)
 
-private theorem innovation_le_original_prefix
+omit [Fintype V] in
+private theorem innovation_le_original_prefix [Finite V]
     (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (j : Fin n) :
@@ -237,7 +242,8 @@ private theorem innovation_le_original_prefix
   exact sup_le (iSup_le fun i => le_iSup_of_le ⟨i.1, i.2.le⟩ le_rfl)
     (le_iSup_of_le ⟨j, le_rfl⟩ le_rfl)
 
-private theorem original_le_innovation_prefix
+omit [Fintype V] in
+private theorem original_le_innovation_prefix [Finite V]
     (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (j : Fin n) :
@@ -253,9 +259,10 @@ private theorem original_le_innovation_prefix
     refine sup_le (iSup_le fun i => (ih i.1 i.2).trans ?_) (le_iSup_of_le ⟨j, le_rfl⟩ le_rfl)
     exact iSup_le fun k => le_iSup_of_le ⟨k.1, k.2.trans i.2.le⟩ le_rfl
 
+omit [Fintype V] in
 /-- Every prefix of innovation cylinders spans exactly the corresponding original prefix.
 The bound may be zero or larger than the family length. -/
-theorem nestedCylinderInnovation_prefix_span
+theorem nestedCylinderInnovation_prefix_span [Finite V]
     (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (k : ℕ) :
@@ -268,8 +275,9 @@ theorem nestedCylinderInnovation_prefix_span
   · refine iSup_le fun i => (original_le_innovation_prefix R hR S i.1).trans ?_
     exact iSup_le fun j => le_iSup_of_le ⟨j.1, lt_of_le_of_lt j.2 i.2⟩ le_rfl
 
+omit [Fintype V] in
 /-- All innovation cylinders have the same span as the original cylinders. -/
-theorem nestedCylinderInnovation_span
+theorem nestedCylinderInnovation_span [Finite V]
     (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ)) :
     (⨆ i, dependentRegionCylinder (R i) (nestedCylinderInnovation R hR S i)) =
@@ -323,7 +331,7 @@ theorem nestedCylinderInnovation_projector_sum
     (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ)) :
     coordinateRangeProjector (⨆ i, dependentRegionCylinder (R i) (S i)) =
-      ∑ i, dependentRegionOperatorLift (R i)
+      ∑ i, ManyBody.place (R i)
         (coordinateRangeProjector (nestedCylinderInnovation R hR S i)) := by
   classical
   rw [← nestedCylinderInnovation_span R hR S, ← Finset.sup_univ_eq_iSup]
@@ -340,16 +348,18 @@ theorem nestedCylinderInnovation_projector_sum
   rw [projector_finset_sup _ hp]
   simp only [coordinateRangeProjector_dependentRegionCylinder]
 
+omit [Fintype V] in
 /-- The sum of inside innovation dimensions is no larger than the original inside-rank sum. -/
-theorem sum_finrank_nestedCylinderInnovation_le
+theorem sum_finrank_nestedCylinderInnovation_le [Finite V]
     (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ)) :
     (∑ i, Module.finrank ℂ (nestedCylinderInnovation R hR S i)) ≤
       ∑ i, Module.finrank ℂ (S i) :=
   Finset.sum_le_sum fun i _ => finrank_nestedCylinderInnovation_le R hR S i
 
+omit [Fintype V] in
 /-- The integer inside-rank sum satisfies the same bound; no outside dimension enters it. -/
-theorem sum_int_finrank_nestedCylinderInnovation_le
+theorem sum_int_finrank_nestedCylinderInnovation_le [Finite V]
     (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ)) :
     (∑ i, (Module.finrank ℂ (nestedCylinderInnovation R hR S i) : ℤ)) ≤
@@ -364,14 +374,15 @@ theorem nestedCylinder_projector_supported
     (U : Finset V) (hU : ∀ i, R i ⊆ U) :
     ∃ T : Submodule ℂ (((w : {w : V // w ∈ U}) → Out w.1) → ℂ),
       coordinateRangeProjector (⨆ i, dependentRegionCylinder (R i) (S i)) =
-        dependentRegionOperatorLift U (coordinateRangeProjector T) := by
-  refine ⟨⨆ i, (dependentSubregionOperatorLift (R i) U (hU i)
+        ManyBody.place U (coordinateRangeProjector T) := by
+  refine ⟨⨆ i, (ManyBody.subregionPlace (hU i)
     (coordinateRangeProjector (S i))).mulVecLin.range, ?_⟩
   rw [← coordinateRangeProjector_dependentRegionCylinder, dependentRegionCylinder_iSup]
   simp only [dependentRegionCylinder_subregion]
 
+omit [Fintype V] in
 /-- A current inside space already contained in the earlier inside span contributes zero. -/
-theorem nestedCylinderInnovation_eq_bot_of_le
+theorem nestedCylinderInnovation_eq_bot_of_le [Finite V]
     (R : Fin n → Finset V) (hR : Monotone R)
     (S : (j : Fin n) → Submodule ℂ (((w : {w : V // w ∈ R j}) → Out w.1) → ℂ))
     (j : Fin n) (hS : S j ≤ nestedCylinderEarlierInside R hR S j) :

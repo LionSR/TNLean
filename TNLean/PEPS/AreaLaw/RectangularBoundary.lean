@@ -22,9 +22,13 @@ September 24, 2026, Corollary 1.2 (`cor:rectangles`), at immutable revision
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph)
+
 noncomputable section
 
 open TNLean.Lattice
+
+open ManyBody (planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -54,7 +58,7 @@ theorem card_edgeBoundary_rectangular {width height : ℕ}
   classical
   let σ := rectangleSiteEquiv width height
   have hadj : ∀ a b : SquareLatticeVertex width height,
-      (domainGraph (rectangularDomain width height)).Adj (σ a) (σ b) ↔
+      (planeDomainGraph (rectangularDomain width height)).Adj (σ a) (σ b) ↔
         (squareLatticeGraph width height).Adj a b :=
     fun a b ↦ (rectangleGraphIso width height).map_rel_iff
   have hmem : ∀ a : SquareLatticeVertex width height,
@@ -89,12 +93,12 @@ theorem card_edgeBoundary_rectangular {width height : ℕ}
       obtain ⟨b, rfl⟩ := σ.surjective y
       rw [hadj] at hxy
       rw [hmem, hmem] at hcut
-      refine ⟨Edge.ofAdj hxy, ?_, ?_⟩
+      refine ⟨ManyBody.Edge.ofAdj hxy, ?_, ?_⟩
       · rw [Finset.mem_filter]
         refine ⟨Finset.mem_univ _, ?_⟩
-        unfold IsRegionBoundaryEdge Edge.ofAdj
+        unfold IsRegionBoundaryEdge ManyBody.Edge.ofAdj
         split_ifs <;> tauto
-      · unfold Edge.ofAdj
+      · unfold ManyBody.Edge.ofAdj
         split_ifs
         · rfl
         · exact Sym2.eq_swap
@@ -103,7 +107,7 @@ theorem card_edgeBoundary_rectangular {width height : ℕ}
 Source: Corollary 1.2, definition of `Z_A`. -/
 theorem mem_endpointBoundary_iff_adj {Λ : Finset (ℤ × ℤ)}
     (A : Finset (Site Λ)) (x : Site Λ) :
-    x ∈ endpointBoundary Λ A ↔ ∃ y, (domainGraph Λ).Adj x y ∧
+    x ∈ endpointBoundary Λ A ↔ ∃ y, (planeDomainGraph Λ).Adj x y ∧
       ((x ∈ A ∧ y ∉ A) ∨ (y ∈ A ∧ x ∉ A)) := by
   classical
   simp only [endpointBoundary, Finset.mem_biUnion, Sym2.mem_toFinset,
@@ -124,7 +128,7 @@ theorem map_rectangleInnerBoundary {width height : ℕ}
   classical
   let σ := rectangleSiteEquiv width height
   have hadj (a b : SquareLatticeVertex width height) :
-      (domainGraph (rectangularDomain width height)).Adj (σ a) (σ b) ↔
+      (planeDomainGraph (rectangularDomain width height)).Adj (σ a) (σ b) ↔
         (squareLatticeGraph width height).Adj a b :=
     (rectangleGraphIso width height).map_rel_iff
   have hmem (a : SquareLatticeVertex width height) :
@@ -153,7 +157,7 @@ theorem map_rectangleEndpointBoundary {width height : ℕ}
   classical
   let σ := rectangleSiteEquiv width height
   have hadj (a b : SquareLatticeVertex width height) :
-      (domainGraph (rectangularDomain width height)).Adj (σ a) (σ b) ↔
+      (planeDomainGraph (rectangularDomain width height)).Adj (σ a) (σ b) ↔
         (squareLatticeGraph width height).Adj a b :=
     (rectangleGraphIso width height).map_rel_iff
   have hmem (a : SquareLatticeVertex width height) :

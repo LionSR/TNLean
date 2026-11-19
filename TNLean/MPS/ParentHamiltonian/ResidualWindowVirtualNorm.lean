@@ -21,6 +21,7 @@ nor a fixed-point hypothesis.
 -/
 
 open scoped Matrix Matrix.Norms.Frobenius InnerProductSpace BigOperators
+open Kraus (blockPhysDim)
 namespace MPSTensor
 variable {d D E L : ℕ}
 

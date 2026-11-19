@@ -37,6 +37,8 @@ smaller viable space. See the companion note
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_low_density_sampling.pdf.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator TensorProduct
 
 namespace TNLean.MPS.AreaLaw

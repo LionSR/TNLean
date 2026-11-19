@@ -291,7 +291,7 @@ theorem rectangularTraceNorm_replacement_density_sub_le [DecidableEq Phys]
       w.originalPhysicalDensity K x) ≤ 4 * δ * w.expandedGateCount := by
   let m := stackLength r S δ
   let := w.finiteDimensional_auxiliary m
-  have hR := SourceCircuit.norm_eval_le_one _ (w.isAllowed_replacement hδ hw hb)
+  have hR := Circuit.norm_eval_le_one _ (w.isAllowed_replacement hδ hw hb)
   have hu : ‖(w.replacement hδ hw hb).eval x‖ ≤ 1 :=
     ((w.replacement hδ hw hb).eval.le_opNorm_of_le hx).trans
       (by simpa only [mul_one] using hR)

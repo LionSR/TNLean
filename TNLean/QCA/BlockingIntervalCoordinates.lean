@@ -46,17 +46,17 @@ private theorem finiteChainConfigEquiv_blocking_symm (d L : ℕ) [NeZero L]
     (a : ℤ) (N : ℕ)
     (hs : expandedRegion L (finiteChainRegion a N) ⊆ finiteChainRegion (a * L) (N * L))
     (σ : Fin (N * L) → Fin d) :
-    (finiteChainConfigEquiv (MPSTensor.blockPhysDim d L) N a).symm
+    (finiteChainConfigEquiv (Kraus.blockPhysDim d L) N a).symm
       ((Config.blocking d L (finiteChainRegion a N)).symm
         (Config.restrict hs (finiteChainConfigEquiv d (N * L) (a * L) σ))) =
       (MPSTensor.blockedConfigEquiv d N L).symm σ := by
   funext i
-  change (MPSTensor.decodeBlockEquiv d L).symm
+  change (Kraus.decodeBlockEquiv d L).symm
       (fun r => Config.restrict hs (finiteChainConfigEquiv d (N * L) (a * L) σ)
         ((blockSiteEquiv L (finiteChainRegion a N)).symm (finiteChainSiteEquiv a N i, r))) =
-    (MPSTensor.decodeBlockEquiv d L).symm
+    (Kraus.decodeBlockEquiv d L).symm
       (fun r => σ (finProdFinEquiv (i, r)))
-  apply congrArg (MPSTensor.decodeBlockEquiv d L).symm
+  apply congrArg (Kraus.decodeBlockEquiv d L).symm
   funext r
   change σ _ = σ _
   apply congrArg σ
@@ -73,12 +73,12 @@ indices by the blocked-configuration equivalence. The local inclusion
 transports across the equality of the two interval regions.
 Source: CPGSV17, arXiv:1703.09188, Appendix, lines 2308 and 2313--2320. -/
 theorem intervalCoordinates_localBlocking (d L : ℕ) [NeZero L] (a : ℤ) (N : ℕ)
-    (X : Matrix (Fin N → Fin (MPSTensor.blockPhysDim d L))
-      (Fin N → Fin (MPSTensor.blockPhysDim d L)) ℂ) :
+    (X : Matrix (Fin N → Fin (Kraus.blockPhysDim d L))
+      (Fin N → Fin (Kraus.blockPhysDim d L)) ℂ) :
     intervalCoordinates d (a * L) (N * L)
       (localInclusion (expandedRegion_finiteChainRegion L a N).le
         (localBlocking d L (finiteChainRegion a N)
-          ((intervalCoordinates (MPSTensor.blockPhysDim d L) a N).symm X))) =
+          ((intervalCoordinates (Kraus.blockPhysDim d L) a N).symm X))) =
       Matrix.reindex (MPSTensor.blockedConfigEquiv d N L)
         (MPSTensor.blockedConfigEquiv d N L) X := by
   ext σ τ
@@ -92,8 +92,8 @@ theorem intervalCoordinates_localBlocking (d L : ℕ) [NeZero L] (a : ℤ) (N : 
     exact (hz.2 ((expandedRegion_finiteChainRegion L a N).ge hz.1)).elim
   simp only [intervalCoordinates_apply, localInclusion_apply, localBlocking_apply,
     hcomp, ite_true, mul_one]
-  change X ((finiteChainConfigEquiv (MPSTensor.blockPhysDim d L) N a).symm _)
-    ((finiteChainConfigEquiv (MPSTensor.blockPhysDim d L) N a).symm _) =
+  change X ((finiteChainConfigEquiv (Kraus.blockPhysDim d L) N a).symm _)
+    ((finiteChainConfigEquiv (Kraus.blockPhysDim d L) N a).symm _) =
       X ((MPSTensor.blockedConfigEquiv d N L).symm σ)
         ((MPSTensor.blockedConfigEquiv d N L).symm τ)
   rw [finiteChainConfigEquiv_blocking_symm, finiteChainConfigEquiv_blocking_symm]
@@ -104,10 +104,10 @@ block order. Source: CPGSV17, arXiv:1703.09188, Appendix,
 lines 2308 and 2313--2320. -/
 theorem quasiLocalBlocking_quasiLocalIntervalObservable (d L : ℕ)
     [NeZero d] [NeZero L] (a : ℤ) (N : ℕ)
-    (X : Matrix (Fin N → Fin (MPSTensor.blockPhysDim d L))
-      (Fin N → Fin (MPSTensor.blockPhysDim d L)) ℂ) :
+    (X : Matrix (Fin N → Fin (Kraus.blockPhysDim d L))
+      (Fin N → Fin (Kraus.blockPhysDim d L)) ℂ) :
     quasiLocalBlocking d L
-        (quasiLocalIntervalObservable (MPSTensor.blockPhysDim d L) a N X) =
+        (quasiLocalIntervalObservable (Kraus.blockPhysDim d L) a N X) =
       quasiLocalIntervalObservable d (a * L) (N * L)
         (Matrix.reindex (MPSTensor.blockedConfigEquiv d N L)
           (MPSTensor.blockedConfigEquiv d N L) X) := by

@@ -58,18 +58,18 @@ length, every block ground space, and the span of the periodic component
 vectors. No inequivalence or normalization hypothesis is required on the
 original family. Source: CPGSV21, arXiv:2011.12127, Section IV.C,
 block-injective canonical form and closure, lines 2114--2129. -/
-theorem exists_isPrimitiveMPS_family_of_wordTupleSpanTop
+theorem exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop
     [∀ j, NeZero (dim j)] (A : (j : Fin r) → MPSTensor d (dim j))
     {S : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) :
     ∃ (B : (j : Fin r) → MPSTensor d (dim j))
       (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
-      (∀ j, IsPrimitiveMPS (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
+      (∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
       WordTupleSpanTop B S ∧
       (∀ j L, groundSpace (A j) L = groundSpace (B j) L) ∧
       (∀ N, bntMPSVectorSpan A N = bntMPSVectorSpan B N) := by
   classical
   choose B ζ ρ hζ hGauge hmpv hP hρ hGS _hPI _hCGS using
-    fun j ↦ exists_isPrimitiveMPS_gauge_of_isNormal
+    fun j ↦ exists_hasComplementaryFixedPointGap_gauge_of_isNormal
       ⟨S, hS, isNBlkInjective_of_wordTupleSpanTop A hSpan j⟩
   refine ⟨B, ρ, hP, hρ,
     wordTupleSpanTop_of_family_gaugeEquiv
@@ -87,19 +87,19 @@ theorem exists_isPrimitiveMPS_family_of_wordTupleSpanTop
 /-- Primitive normalization preserves the supplied simultaneous injectivity
 length and both sides of the periodic parent ground-space identity.
 Source: CPGSV21, arXiv:2011.12127, Section IV.C, lines 2114--2129. -/
-theorem exists_isPrimitiveMPS_family_parentHamiltonian_eq_of_wordTupleSpanTop
+theorem exists_hasComplementaryFixedPointGap_family_parentHamiltonian_eq_of_wordTupleSpanTop
     [∀ j, NeZero (dim j)]
     (μ : Fin r → ℂ) (A : (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ j, μ j ≠ 0) {S : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S) :
     ∃ (B : (j : Fin r) → MPSTensor d (dim j))
       (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ),
-      (∀ j, IsPrimitiveMPS (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
+      (∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) ∧ (∀ j, (ρ j).PosDef) ∧
       WordTupleSpanTop B S ∧
       (∀ L N, parentHamiltonian (toTensorFromBlocks (d := d) (μ := μ) A) L N =
         parentHamiltonian (toTensorFromBlocks (d := d) (μ := μ) B) L N) ∧
       (∀ N, bntMPSVectorSpan A N = bntMPSVectorSpan B N) := by
   obtain ⟨B, ρ, hP, hρ, hSpanB, hGS, hBNT⟩ :=
-    exists_isPrimitiveMPS_family_of_wordTupleSpanTop A hS hSpan
+    exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop A hS hSpan
   refine ⟨B, ρ, hP, hρ, hSpanB, ?_, hBNT⟩
   intro L N
   exact parentHamiltonian_eq_of_groundSpace_eq

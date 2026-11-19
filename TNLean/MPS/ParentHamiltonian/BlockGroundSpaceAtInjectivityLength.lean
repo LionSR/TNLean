@@ -41,7 +41,7 @@ theorem chainGroundSpace_toTensorFromBlocks_eq_of_wordTupleSpanTop
     chainGroundSpace (toTensorFromBlocks (d := d) (μ := μ) A) L N =
       bntMPSVectorSpan A N := by
   obtain ⟨B, ρ, hP, _hρ, hSpanB, hHam, hBNT⟩ :=
-    exists_isPrimitiveMPS_family_parentHamiltonian_eq_of_wordTupleSpanTop
+    exists_hasComplementaryFixedPointGap_family_parentHamiltonian_eq_of_wordTupleSpanTop
       μ A hμ hS hSpan
   rw [← ker_parentHamiltonian_eq_chainGroundSpace _ (by omega) hLN, hHam, hBNT]
   exact ker_parentHamiltonian_toTensorFromBlocks_eq_of_wordTupleSpanTop_of_tracePreserving

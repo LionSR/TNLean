@@ -21,6 +21,8 @@ Source: SCP10, arXiv:1001.3807, Observation 6.6, lines 1888–1909.
 Scope: untwisted torus with both coarse periods at least three.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

@@ -12,6 +12,8 @@ This file contains the open-edge version of gauge cancellation used in the
 post-absorption edge-insertion identity of arXiv:1804.04964, Section 3.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

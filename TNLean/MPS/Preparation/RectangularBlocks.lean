@@ -25,23 +25,17 @@ its endpoint bond, whose padding is a corner projection rather than the ambient 
 
 open Matrix MPSTensor
 open scoped BigOperators
+open Kraus (blockPhysDim decodeBlockEquiv)
 
 namespace MPSChainTensor
-
-/-- Ordered multiplication on the actual bond spaces of a rectangular chain. -/
-abbrev rectangularEval {d : ℕ} : {n : ℕ} → (b : ℕ → ℕ) →
-    (∀ i : Fin n, Fin d → Matrix (Fin (b i.val)) (Fin (b (i.val + 1))) ℂ) →
-    (Fin n → Fin d) → Matrix (Fin (b 0)) (Fin (b n)) ℂ :=
-  @Kraus.rectangularEval d
 
 /-- Zero padding commutes with a nonempty ordered rectangular tensor product. -/
 theorem zeroPad_rectangularEval {d D n : ℕ} (b : ℕ → ℕ)
     (hb : ∀ i, b i ≤ D)
     (A : ∀ i : Fin n, Fin d → Matrix (Fin (b i.val)) (Fin (b (i.val + 1))) ℂ)
     (s : Fin n → Fin d) (hn : 0 < n) :
-    Matrix.zeroPad D (rectangularEval b A s) =
+    Matrix.zeroPad D (Kraus.rectangularEval b A s) =
       eval (fun i k => Matrix.zeroPad D (A i k)) s := by
-  change Matrix.zeroPad D (Kraus.rectangularEval b A s) = _
   induction n generalizing b with
   | zero => omega
   | succ n ih =>
@@ -51,20 +45,6 @@ theorem zeroPad_rectangularEval {d D n : ℕ} (b : ℕ → ℕ)
       rw [Kraus.rectangularEval, eval_succ, Matrix.zeroPad_mul _ _ (hb 1),
         ih (fun i => b (i + 1)) (fun i => hb (i + 1)) _ _ (Nat.succ_pos _)]
       rfl
-
-/-- The ordered composition of the actual rectangular transfer maps. -/
-noncomputable abbrev rectangularTransfer {d : ℕ} : {n : ℕ} → (b : ℕ → ℕ) →
-    (∀ i : Fin n, Fin d → Matrix (Fin (b i.val)) (Fin (b (i.val + 1))) ℂ) →
-    (Matrix (Fin (b n)) (Fin (b n)) ℂ →ₗ[ℂ]
-      Matrix (Fin (b 0)) (Fin (b 0)) ℂ) :=
-  @Kraus.rectangularTransfer d
-
-/-- The actual rectangular product has exactly the ordered site transfer map. -/
-theorem rectangularTransfer_apply {d n : ℕ} (b : ℕ → ℕ)
-    (A : ∀ i : Fin n, Fin d → Matrix (Fin (b i.val)) (Fin (b (i.val + 1))) ℂ)
-    (X : Matrix (Fin (b n)) (Fin (b n)) ℂ) :
-    rectangularTransfer b A X = ∑ s, rectangularEval b A s * X * (rectangularEval b A s)ᴴ :=
-  Kraus.rectangularTransfer_apply b A X
 
 end MPSChainTensor
 
@@ -113,7 +93,7 @@ def rectangularBlockSites (A : VaryingBondChain d D N) {ℓ : Fin M → ℕ}
 noncomputable def rectangularBlockTensor (A : VaryingBondChain d D N) {ℓ : Fin M → ℕ}
     (hN : ∑ j, ℓ j = N) (k : Fin M) (s : Fin (blockPhysDim d (ℓ k))) :
     Matrix (Fin (blockBondDim A ℓ k 0)) (Fin (rightBond A ℓ k)) ℂ :=
-  (MPSChainTensor.rectangularEval (blockBondDim A ℓ k) (rectangularBlockSites A hN k)
+  (Kraus.rectangularEval (blockBondDim A ℓ k) (rectangularBlockSites A hN k)
     (decodeBlockEquiv d (ℓ k) s)).submatrix id (Fin.cast (blockBondDim_length A hN k).symm)
 
 /-- The rectangular blocked tensor pads to exactly the blocked padded tensor. -/

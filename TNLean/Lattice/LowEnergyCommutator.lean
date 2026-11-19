@@ -22,7 +22,7 @@ when the ground space is degenerate.
 * `norm_commutator_gaussianFilteredTerm_le_of_disjoint`: on a finite graph, if `W` acts on `S`
   and `B` acts on a set disjoint from the sites within distance `l` of `S`, then `‖[W_tilde, B]‖`
   is at most `2 ‖B‖` times the localization bound of
-  `norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood`.
+  `norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood`.
 * `norm_groundCompression_commutator_le_graphNeighborhood`: the two combined, so that the
   low-energy commutator of two separated local operators is small.
 * `abs_sub_mul_norm_inner_le_norm_commutator`, `norm_inner_le_norm_commutator_div`: if `A` is
@@ -74,6 +74,8 @@ the degenerate ground space at lines 395–491, eq. `lc` (lines 1548–1561), eq
 open GaussianFilter Matrix QuantumCircuit
 open scoped Matrix.Norms.L2Operator InnerProductSpace
 
+open ManyBody (groundSpace mem_groundSpace_iff_mulVec)
+
 namespace TNLean.Lattice
 
 section Ground
@@ -85,22 +87,22 @@ as an operator on the Euclidean space, where `P` is the orthogonal projection on
 eigenspace. This is `P_low W P_low` in Hastings, arXiv:cond-mat/0508554v3, lines 1562–1601. -/
 noncomputable def groundCompression (H : Matrix n n ℂ) (E₀ : ℝ) (W : Matrix n n ℂ) :
     EuclideanSpace ℂ n →L[ℂ] EuclideanSpace ℂ n :=
-  (groundEigenspace H E₀).starProjection * toEuclideanCLM (n := n) (𝕜 := ℂ) W *
-    (groundEigenspace H E₀).starProjection
+  (groundSpace H E₀).starProjection * toEuclideanCLM (n := n) (𝕜 := ℂ) W *
+    (groundSpace H E₀).starProjection
 
 /-- The filtered operator and `W` have the same compression to the ground space:
 `P W_tilde P = P W P`. Hastings, arXiv:cond-mat/0508554v3, line 1562. -/
 theorem groundCompression_gaussianFilteredTerm {q ΔE : ℝ} (hq : 0 ≤ q) {H : Matrix n n ℂ}
     (hH : H.IsHermitian) (E₀ : ℝ) (W : Matrix n n ℂ) :
     groundCompression H E₀ (gaussianFilteredTerm q ΔE H W) = groundCompression H E₀ W := by
-  set K := groundEigenspace H E₀
+  set K := groundSpace H E₀
   ext1 x
   refine ext_inner_left ℂ fun y => ?_
   simp only [groundCompression, mul_apply_eq_comp]
   rw [← K.inner_starProjection_left_eq_right, ← K.inner_starProjection_left_eq_right]
   exact inner_gaussianFilteredTerm_ground hq hH W
-    (mem_groundEigenspace_iff.mp (K.starProjection_apply_mem y))
-    (mem_groundEigenspace_iff.mp (K.starProjection_apply_mem x))
+    (mem_groundSpace_iff_mulVec.mp (K.starProjection_apply_mem y))
+    (mem_groundSpace_iff_mulVec.mp (K.starProjection_apply_mem x))
 
 /-- The filtered operator maps the ground space nearly into itself:
 `‖(1 - P) W_tilde P‖ ≤ ‖W‖ e^{-q/2}`. Hastings, arXiv:cond-mat/0508554v3, line 1585,
@@ -108,10 +110,10 @@ following eq. `gs`. -/
 theorem norm_one_sub_starProjection_mul_gaussianFilteredTerm_mul_le {q ΔE : ℝ} (hq : 0 ≤ q)
     (hΔE : 0 < ΔE) {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k) (W : Matrix n n ℂ) :
-    ‖(1 - (groundEigenspace H E₀).starProjection) *
+    ‖(1 - (groundSpace H E₀).starProjection) *
         toEuclideanCLM (n := n) (𝕜 := ℂ) (gaussianFilteredTerm q ΔE H W) *
-        (groundEigenspace H E₀).starProjection‖ ≤ ‖W‖ * Real.exp (-q / 2) := by
-  set K := groundEigenspace H E₀
+        (groundSpace H E₀).starProjection‖ ≤ ‖W‖ * Real.exp (-q / 2) := by
+  set K := groundSpace H E₀
   refine ContinuousLinearMap.opNorm_le_bound _ (by positivity) fun x => ?_
   simp only [mul_apply_eq_comp, _root_.sub_apply, one_apply_eq_self]
   refine (norm_sub_starProjection_gaussianFilteredTerm_le hq hΔE hH hgap W
@@ -124,10 +126,10 @@ theorem norm_one_sub_starProjection_mul_gaussianFilteredTerm_mul_le {q ΔE : ℝ
 theorem norm_starProjection_mul_gaussianFilteredTerm_mul_one_sub_le {q ΔE : ℝ} (hq : 0 ≤ q)
     (hΔE : 0 < ΔE) {H : Matrix n n ℂ} (hH : H.IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k) (W : Matrix n n ℂ) :
-    ‖(groundEigenspace H E₀).starProjection *
+    ‖(groundSpace H E₀).starProjection *
         toEuclideanCLM (n := n) (𝕜 := ℂ) (gaussianFilteredTerm q ΔE H W) *
-        (1 - (groundEigenspace H E₀).starProjection)‖ ≤ ‖W‖ * Real.exp (-q / 2) := by
-  set P := (groundEigenspace H E₀).starProjection
+        (1 - (groundSpace H E₀).starProjection)‖ ≤ ‖W‖ * Real.exp (-q / 2) := by
+  set P := (groundSpace H E₀).starProjection
   have hP : star P = P := (isSelfAdjoint_starProjection _).star_eq
   have hstar : star (toEuclideanCLM (n := n) (𝕜 := ℂ) (gaussianFilteredTerm q ΔE H W)) =
       toEuclideanCLM (n := n) (𝕜 := ℂ) (gaussianFilteredTerm q ΔE H Wᴴ) := by
@@ -154,11 +156,11 @@ theorem norm_groundCompression_commutator_le {q ΔE : ℝ} (hq : 0 ≤ q) (hΔE 
   have hlow := norm_one_sub_starProjection_mul_gaussianFilteredTerm_mul_le hq hΔE hH hgap W
   have hhigh := norm_starProjection_mul_gaussianFilteredTerm_mul_one_sub_le hq hΔE hH hgap W
   rw [← groundCompression_gaussianFilteredTerm (ΔE := ΔE) hq hH E₀ W]
-  set P := (groundEigenspace H E₀).starProjection
+  set P := (groundSpace H E₀).starProjection
   set A := toEuclideanCLM (n := n) (𝕜 := ℂ) (gaussianFilteredTerm q ΔE H W)
   set B' := toEuclideanCLM (n := n) (𝕜 := ℂ) B
-  have hPP : P * P = P := (groundEigenspace H E₀).isIdempotentElem_starProjection.eq
-  have hP : ‖P‖ ≤ 1 := (groundEigenspace H E₀).starProjection_norm_le
+  have hPP : P * P = P := (groundSpace H E₀).isIdempotentElem_starProjection.eq
+  have hP : ‖P‖ ≤ 1 := (groundSpace H E₀).starProjection_norm_le
   have hB : ‖B'‖ = ‖B‖ := l2_opNorm_toEuclideanCLM B
   have hWe : 0 ≤ ‖W‖ * Real.exp (-q / 2) := mul_nonneg (norm_nonneg _) (Real.exp_pos _).le
   have hAB : ‖A * B' - B' * A‖ =
@@ -203,19 +205,19 @@ end Ground
 section Graph
 
 variable {d : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
-  (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι) (ha : ∀ k, a k ∈ X k)
+  (G : SimpleGraph ι) (X : κ → Finset ι)
   (h : κ → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-  (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+  (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
   (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
   (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
   (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
 
-include ha hHerm hSupport hDiam hCard hBudget
+include hHerm hSupport hDiam hCard hBudget
 
 /-- **The commutator of a filtered term with a separated operator, eq. `lc`.** Let `W` act on
 `S`, and let `B` act on a set `Y` disjoint from the set of sites within graph distance `l` of
 `S`. Then `‖[W_tilde, B]‖` is at most `2 ‖B‖` times the bound of
-`norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood`, for every `T ≥ 0`: the
+`norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood`, for every `T ≥ 0`: the
 partial trace of `W_tilde` onto that neighbourhood commutes with `B`. Hastings,
 arXiv:cond-mat/0508554v3, eq. `lc` (lines 1548–1561), with the localization term in place of
 `N_M g(c₁ l, l)`. -/
@@ -223,9 +225,9 @@ theorem norm_commutator_gaussianFilteredTerm_le_of_disjoint [NeZero d] (Kg : ℝ
     (hGrowth : ∀ x (r : ℕ),
       ((Finset.univ.filter fun y => G.edist x y = r).card : ℝ) ≤ Kg * ((r : ℝ) + 1) ^ kg)
     {q ΔE : ℝ} (hq : 0 ≤ q) (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι)) (l : ℕ) (Y : Set ι)
-    (hY : Disjoint ((S.biUnion fun x => graphBall G x l : Finset ι) : Set ι) Y)
-    (hB : B ∈ supportedOperators d Y) {T : ℝ} (hT : 0 ≤ T) :
+    (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (l : ℕ) (Y : Finset ι)
+    (hY : Disjoint (S.biUnion fun x => ManyBody.graphBall G x l) Y)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) {T : ℝ} (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q ΔE (∑ k, h k) W * B - B * gaussianFilteredTerm q ΔE (∑ k, h k) W‖ ≤
       2 * ‖B‖ *
         ((2 + 4 * |b₀| * Real.exp (2 * R)) * (S.card : ℝ) ^ 2 * ‖W‖ * Kg *
@@ -233,11 +235,12 @@ theorem norm_commutator_gaussianFilteredTerm_le_of_disjoint [NeZero d] (Kg : ℝ
             Real.exp ((2 * vR * |b₀| * Real.exp (2 * R) + 1) * T - l / 2) +
           2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q))) := by
   set F := gaussianFilteredTerm q ΔE (∑ k, h k) W
-  set M := siteExpectation d (S.biUnion fun x => graphBall G x l) F
-  have hloc := norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood G X a ha h
+  set M := ManyBody.regionExpectation (S.biUnion fun x => ManyBody.graphBall G x l) F
+  have hloc := norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood G X h
     hHerm hSupport R hDiam vR hCard b₀ hBudget Kg kg hGrowth (ΔE := ΔE) hq S hW l hT
   have hcomm : Commute M B :=
-    commute_of_mem_supportedOperators hY (siteExpectation_mem_supportedOperators _ _) hB
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint
+        (ManyBody.regionExpectation_mem_supportedOperators _ _) hB hY
   have hsplit : F * B - B * F = (F - M) * B - B * (F - M) := by
     rw [sub_mul, mul_sub, hcomm.eq]; abel
   rw [hsplit]
@@ -252,7 +255,7 @@ let `B` act on a set disjoint from the sites within graph distance `l` of `S`. T
 compressions to the ground space satisfy
 `‖[P W P, P B P]‖ ≤ 2 ‖B‖ (C' |S|² ‖W‖ e^{vT - l/2} + 2 ‖W‖ e^{-(TΔE)²/(2q)}) +
 2 ‖W‖ ‖B‖ e^{-q/2}` for all `q ≥ 0` and `T ≥ 0`, with the constants of
-`norm_gaussianFilteredTerm_sub_siteExpectation_le_graphNeighborhood`. Hastings,
+`norm_gaussianFilteredTerm_sub_regionExpectation_le_graphNeighborhood`. Hastings,
 arXiv:cond-mat/0508554v3, eq. `blecm` (lines 1562–1601), with `W = M_i` and `B = M_j`; the
 source takes `T = c₁ l` and `q = c₁ l ΔE`. -/
 theorem norm_groundCompression_commutator_le_graphNeighborhood [NeZero d] (Kg : ℝ) (kg : ℕ)
@@ -261,9 +264,9 @@ theorem norm_groundCompression_commutator_le_graphNeighborhood [NeZero d] (Kg : 
     {q ΔE : ℝ} (hq : 0 ≤ q) (hΔE : 0 < ΔE) (hH : (∑ k, h k).IsHermitian) {E₀ : ℝ}
     (hgap : ∀ k, hH.eigenvalues k = E₀ ∨ E₀ + ΔE ≤ hH.eigenvalues k)
     (S : Finset ι) {W B : Matrix (ι → Fin d) (ι → Fin d) ℂ}
-    (hW : W ∈ supportedOperators d (S : Set ι)) (l : ℕ) (Y : Set ι)
-    (hY : Disjoint ((S.biUnion fun x => graphBall G x l : Finset ι) : Set ι) Y)
-    (hB : B ∈ supportedOperators d Y) {T : ℝ} (hT : 0 ≤ T) :
+    (hW : W ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S) (l : ℕ) (Y : Finset ι)
+    (hY : Disjoint (S.biUnion fun x => ManyBody.graphBall G x l) Y)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) Y) {T : ℝ} (hT : 0 ≤ T) :
     ‖groundCompression (∑ k, h k) E₀ W * groundCompression (∑ k, h k) E₀ B -
         groundCompression (∑ k, h k) E₀ B * groundCompression (∑ k, h k) E₀ W‖ ≤
       2 * ‖B‖ *
@@ -273,7 +276,7 @@ theorem norm_groundCompression_commutator_le_graphNeighborhood [NeZero d] (Kg : 
             2 * ‖W‖ * Real.exp (-(T * ΔE) ^ 2 / (2 * q))) +
         2 * ‖W‖ * ‖B‖ * Real.exp (-q / 2) :=
   (norm_groundCompression_commutator_le hq hΔE hH hgap W B).trans <| add_le_add_left
-    (norm_commutator_gaussianFilteredTerm_le_of_disjoint G X a ha h hHerm hSupport R hDiam vR
+    (norm_commutator_gaussianFilteredTerm_le_of_disjoint G X h hHerm hSupport R hDiam vR
       hCard b₀ hBudget Kg kg hGrowth hq S hW l Y hY hB hT) _
 
 end Graph

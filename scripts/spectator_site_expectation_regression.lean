@@ -46,27 +46,25 @@ example :
       (1 : Matrix (Unit → Fin 2) (Unit → Fin 2) ℂ) ⊗ₖ
         diagonal ![(1 / 2 : ℂ), 2] := by
   ext ⟨σ, a⟩ ⟨τ, b⟩
-  simp only [spectatorSiteExpectation, siteExpectation, traceOutside, embedOp,
-    Matrix.of_apply, Matrix.smul_apply, smul_eq_mul, Fintype.card_unique]
-  rw [sum_empty_complement]
-  have hglue (u : (∅ : Finset Unit) → Fin 2) (i : Fin 2) :
-      glueCfg ∅ u (fun _ => i) = fun _ => i := by
+  rw [spectatorSiteExpectation_apply, ManyBody.regionExpectation_apply]
+  have hcard : Fintype.card (ManyBody.ComplConfig (fun _ : Unit => Fin 2) ∅) = 2 := by
+    simp [ManyBody.ComplConfig]
+  have hglue (ρ : Unit → Fin 2) (y : ManyBody.ComplConfig (fun _ : Unit => Fin 2) ∅) :
+      (ManyBody.cutEquiv (fun _ : Unit => Fin 2) ∅).symm
+          ((ManyBody.cutEquiv (fun _ : Unit => Fin 2) ∅ ρ).1, y) =
+        fun _ => y ⟨(), Finset.notMem_empty ()⟩ := by
     funext x
-    simp [glueCfg]
-  simp only [hglue, Matrix.vecMulVec_apply, Pi.star_apply]
-  have hAgree : AgreeOff (fun x : (∅ : Finset Unit) => (x : Unit)) σ τ ↔ σ = τ := by
-    constructor
-    · intro h
-      funext x
-      exact h x (fun j => False.elim ((Finset.notMem_empty _) j.property))
-    · rintro rfl x _
-      rfl
-  simp only [hAgree]
+    exact ManyBody.cutEquiv_symm_apply_not_mem _ _ (Finset.notMem_empty x)
+  have hagree : (∀ v ∉ (∅ : Finset Unit), σ v = τ v) ↔ σ = τ :=
+    ⟨fun h => funext fun v => h v (Finset.notMem_empty v), fun h v _ => h ▸ rfl⟩
+  simp only [hcard, hglue, hagree, Matrix.of_apply]
+  rw [sum_empty_complement]
+  simp only [Matrix.vecMulVec_apply, Pi.star_apply]
   fin_cases a <;> fin_cases b <;>
     simp [entangled, Matrix.kroneckerMap_apply, Matrix.one_apply]
 
 -- No Hermiticity hypothesis is allowed for the spectator factor.
-example {q : ℕ} [NeZero q] {ι Aux : Type*} [Fintype ι] [DecidableEq ι]
+example {q : ℕ} {ι Aux : Type*} [Fintype ι] [DecidableEq ι] [Fintype Aux] [DecidableEq Aux]
     (K : Finset ι) (S : Matrix Aux Aux ℂ) :
     spectatorSiteExpectation q K ((1 : Matrix (ι → Fin q) (ι → Fin q) ℂ) ⊗ₖ S) =
       (1 : Matrix (ι → Fin q) (ι → Fin q) ℂ) ⊗ₖ S :=
@@ -85,7 +83,7 @@ example (B : Matrix ((Unit → Fin 2) × Fin 2) ((Unit → Fin 2) × Fin 2) ℂ)
   spectatorSiteExpectation_univ B
 
 -- With local dimension one, even averaging every physical site is the identity.
-example {ι Aux : Type*} [Fintype ι] [DecidableEq ι]
+example {ι Aux : Type*} [Fintype ι] [DecidableEq ι] [Fintype Aux] [DecidableEq Aux]
     (K : Finset ι) (B : Matrix ((ι → Fin 1) × Aux) ((ι → Fin 1) × Aux) ℂ) :
     spectatorSiteExpectation 1 K B = B := by
   let S : Matrix Aux Aux ℂ := Matrix.of fun a b => B (default, a) (default, b)
@@ -125,14 +123,6 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms spectatorSiteExpectation_kronecker
-/--
-info: 'QuantumCircuit.spectatorSiteExpectation_eq_average'
-depends on axioms: [propext, Classical.choice, Quot.sound]
----
-info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms spectatorSiteExpectation_eq_average
 /--
 info: 'QuantumCircuit.spectatorSiteExpectation_commute'
 depends on axioms: [propext, Classical.choice, Quot.sound]
@@ -177,53 +167,3 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 end AxiomChecks
 
 end SpectatorSiteExpectationRegression
-
--- Existing native proofs exposed for the spectator argument.
-
-/--
-info: 'QuantumCircuit.partialWeyl' depends on axioms: [propext, Classical.choice, Quot.sound]
----
-info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms QuantumCircuit.partialWeyl
-
-/--
-info: 'QuantumCircuit.partialWeyl_mem_unitary' depends on axioms: [propext, Classical.choice, Quot.sound]
----
-info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms QuantumCircuit.partialWeyl_mem_unitary
-
-/--
-info: 'QuantumCircuit.outsideWeyl_eq_partialWeyl' depends on axioms: [propext, Classical.choice, Quot.sound]
----
-info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms QuantumCircuit.outsideWeyl_eq_partialWeyl
-
-/--
-info: 'QuantumCircuit.partialWeyl_insert' depends on axioms: [propext, Classical.choice, Quot.sound]
----
-info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms QuantumCircuit.partialWeyl_insert
-
-/--
-info: 'QuantumCircuit.partialWeyl_singleton_mem' depends on axioms: [propext, Classical.choice, Quot.sound]
----
-info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms QuantumCircuit.partialWeyl_singleton_mem
-
-/--
-info: 'QuantumCircuit.norm_commutator_mul_le' depends on axioms: [propext, Classical.choice, Quot.sound]
----
-info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
--/
-#guard_msgs (whitespace := lax) in
-#print axioms QuantumCircuit.norm_commutator_mul_le

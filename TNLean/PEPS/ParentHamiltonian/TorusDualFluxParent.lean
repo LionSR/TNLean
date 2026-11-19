@@ -45,7 +45,7 @@ theorem torusDualFluxState_parent_annihilates_of_ne
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hP : IsRegionParentInteraction (groupBondTensor (torusNativeIncidentSite A))
       (torusPlaquetteRegion v) P) :
-    regionLocalTerm (torusPlaquetteRegion v) P *ᵥ
+    ManyBody.place («X» := fun _ ↦ Fin _) (torusPlaquetteRegion v) P *ᵥ
       torusDualFluxState U (fun _ => A) g p = 0 :=
   torusParent_annihilates_torusBondNetwork_of_holonomy_eq_one U A hA
     (torusDualFluxLabels g p) v
@@ -57,7 +57,7 @@ theorem torusDualFluxState_canonicalParent_annihilates_of_ne
     (U : G →* Matrix V V ℂ) (A : V → V → V → V → Fin d → ℂ)
     (hA : ∀ g, siteMap A ∘ₗ torusLegRep U g = siteMap A)
     (g : G) {a b : X} (p : TorusDualPath a b) (v : X) (hva : v ≠ a) (hvb : v ≠ b) :
-    regionLocalTerm (torusPlaquetteRegion v)
+    ManyBody.place («X» := fun _ ↦ Fin _) (torusPlaquetteRegion v)
         (canonicalRegionParentInteraction (groupBondTensor (torusNativeIncidentSite A))
           (torusPlaquetteRegion v)) *ᵥ torusDualFluxState U (fun _ => A) g p = 0 :=
   torusDualFluxState_parent_annihilates_of_ne U A hA g p v hva hvb _
@@ -70,7 +70,7 @@ theorem torusDualFluxState_canonicalParent_annihilates_loop
     (U : G →* Matrix V V ℂ) (A : V → V → V → V → Fin d → ℂ)
     (hA : ∀ g, siteMap A ∘ₗ torusLegRep U g = siteMap A)
     (g : G) {a : X} (p : TorusDualPath a a) (v : X) :
-    regionLocalTerm (torusPlaquetteRegion v)
+    ManyBody.place («X» := fun _ ↦ Fin _) (torusPlaquetteRegion v)
         (canonicalRegionParentInteraction (groupBondTensor (torusNativeIncidentSite A))
           (torusPlaquetteRegion v)) *ᵥ torusDualFluxState U (fun _ => A) g p = 0 :=
   canonicalTorusParent_annihilates_torusBondNetwork_of_holonomy_eq_one U A hA

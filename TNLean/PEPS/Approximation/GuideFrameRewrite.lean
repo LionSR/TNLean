@@ -335,7 +335,7 @@ private theorem mem_map_holeAt_tag {g : ℝ × ℝ → κ} {hole : ℝ × ℝ �
 private theorem exists_of_mem_untouchedFootprint (h : G.UntouchedAgree) {x : ι}
     (hx : x ∈ (G.toSmallPatchRewrite h).untouchedFootprint) :
     ∃ c ∈ G.untouched, dist (pos x) (G.holeOld c).center ≤ 2 * (G.holeOld c).scale := by
-  obtain ⟨P, hP, hxP⟩ := hx
+  obtain ⟨P, hP, hxP⟩ := mem_footprint.mp hx
   obtain ⟨h', hh', rfl⟩ := List.mem_map.1 hP
   obtain ⟨c, hc, he⟩ := mem_map_holeAt hh'
   exact ⟨c, hc, he ▸ mem_outer_iff.1 hxP⟩
@@ -349,8 +349,8 @@ private theorem le_dist_of_notMem_innerUnion {g : ℝ × ℝ → κ} {hole : ℝ
     ∀ c ∈ s ∪ t, (hole c).scale ≤ dist (pos x) (hole c).center := by
   intro c hc
   by_contra hlt
-  refine hx ⟨hole c, List.mem_map.2 ⟨G.holeAt g hole c, ?_, rfl⟩,
-    mem_inner_iff.2 (le_of_lt (not_le.1 hlt))⟩
+  refine hx (mem_innerUnion.mpr ⟨hole c, List.mem_map.2 ⟨G.holeAt g hole c, ?_, rfl⟩,
+    mem_inner_iff.2 (le_of_lt (not_le.1 hlt))⟩)
   rcases Finset.mem_union.1 hc with hc | hc
   · exact List.mem_append_left _ (List.mem_map.2 ⟨c, Finset.mem_toList.2 hc, rfl⟩)
   · exact List.mem_append_right _ (List.mem_map.2 ⟨c, Finset.mem_toList.2 hc, rfl⟩)
@@ -362,11 +362,11 @@ theorem PlaneConditions.conditions (h : G.PlaneConditions) :
     (G.toSmallPatchRewrite h.untouched_agree).Conditions where
   patch_avoid P hP := by
     obtain ⟨z, hz, rfl⟩ := List.mem_map.1 hP
-    refine Set.disjoint_left.2 fun x hx hxU => ?_
+    refine Finset.disjoint_left.2 fun x hx hxU => ?_
     obtain ⟨c, hc, hxc⟩ := exists_of_mem_untouchedFootprint h.untouched_agree hxU
     exact (h.patch_avoid z (Finset.mem_toList.1 hz) c hc _ (mem_outer_iff.1 hx)).not_ge hxc
   affected_avoid h' hh' := by
-    refine Set.disjoint_left.2 fun x hx hxU => ?_
+    refine Finset.disjoint_left.2 fun x hx hxU => ?_
     obtain ⟨c, hc, hxc⟩ := exists_of_mem_untouchedFootprint h.untouched_agree hxU
     rcases List.mem_append.1 hh' with hh' | hh'
     · obtain ⟨a, ha, he⟩ := mem_map_holeAt hh'
@@ -377,18 +377,20 @@ theorem PlaneConditions.conditions (h : G.PlaneConditions) :
       exact (h.newAffected_avoid a ha c hc _ (mem_outer_iff.1 hx)).not_ge hxc
   changed_mem x hx := by
     obtain ⟨z, hz, hxz⟩ := h.changed_mem (pos x) hx
-    exact ⟨G.patch z, List.mem_map.2 ⟨z, Finset.mem_toList.2 hz, rfl⟩, mem_inner_iff.2 hxz⟩
+    exact mem_innerUnion.mpr
+      ⟨G.patch z, List.mem_map.2 ⟨z, Finset.mem_toList.2 hz, rfl⟩, mem_inner_iff.2 hxz⟩
   affected_subset h' hh' x hx := by
     have key : ∀ p : ℝ × ℝ, (∃ z ∈ G.centers, dist p (G.patch z).center ≤ (G.patch z).scale) →
         p = pos x → x ∈ innerUnion (G.toSmallPatchRewrite h.untouched_agree).patches := by
       rintro p ⟨z, hz, hpz⟩ rfl
-      exact ⟨G.patch z, List.mem_map.2 ⟨z, Finset.mem_toList.2 hz, rfl⟩, mem_inner_iff.2 hpz⟩
+      exact mem_innerUnion.mpr
+        ⟨G.patch z, List.mem_map.2 ⟨z, Finset.mem_toList.2 hz, rfl⟩, mem_inner_iff.2 hpz⟩
     rcases List.mem_append.1 hh' with hh' | hh'
     · obtain ⟨a, ha, he⟩ := mem_map_holeAt hh'
-      rw [Finset.mem_coe, he] at hx
+      rw [he] at hx
       exact key _ (h.oldAffected_subset a ha _ (mem_outer_iff.1 hx)) rfl
     · obtain ⟨a, ha, he⟩ := mem_map_holeAt hh'
-      rw [Finset.mem_coe, he] at hx
+      rw [he] at hx
       exact key _ (h.newAffected_subset a ha _ (mem_outer_iff.1 hx)) rfl
   old_owners P hP := by
     obtain ⟨z, hz, rfl⟩ := List.mem_map.1 hP
@@ -415,7 +417,7 @@ theorem PlaneConditions.conditions (h : G.PlaneConditions) :
     exact le_dist_of_notMem_innerUnion (G := G) hxi'
   raw_owners_mem x hx := by
     refine h.owners_mem (pos x) ?_
-    rcases hx with ⟨P, hP, hxP⟩ | ⟨P, hP, hxP⟩
+    rcases Finset.mem_union.mp hx with hx | hx <;> obtain ⟨P, hP, hxP⟩ := mem_footprint.mp hx
     · obtain ⟨z, hz, rfl⟩ := List.mem_map.1 hP
       exact Or.inl ⟨z, Finset.mem_toList.1 hz, mem_outer_iff.1 hxP⟩
     · obtain ⟨h', hh', rfl⟩ := List.mem_map.1 hP

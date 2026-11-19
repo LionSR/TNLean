@@ -21,6 +21,8 @@ The representation data are reused from the existing closed-state existence
 result, without constructing a second Fourier decomposition.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix BigOperators
 namespace TNLean.PEPS

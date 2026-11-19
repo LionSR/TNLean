@@ -29,15 +29,15 @@ variable {d r : ℕ} {dim : Fin r → ℕ} [∀ j, NeZero (dim j)]
 matrix algebra at all sufficiently large word lengths. This is the eventual
 form of the direct-sum separation argument in PGVWC07,
 arXiv:quant-ph/0608197, the direct-sum lemma, lines 1346--1408. -/
-theorem exists_eventually_wordTupleSpanTop_of_isPrimitiveMPS
+theorem exists_eventually_wordTupleSpanTop_of_hasComplementaryFixedPointGap
     (A : (j : Fin r) → MPSTensor d (dim j))
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i)) :
     ∃ L₀ : ℕ, ∀ L ≥ L₀, WordTupleSpanTop A L := by
   have hNormal : ∀ j, Kraus.IsNormal (A j) :=
-    fun j ↦ isNormal_of_isPrimitiveMPS_with_posDef (hP j) (hρ j)
+    fun j ↦ isNormal_of_hasComplementaryFixedPointGap_with_posDef (hP j) (hρ j)
   obtain ⟨p, hp, hAtP⟩ := exists_common_isNBlkInjective_of_isNormal_leftCanonical
     A (fun j ↦ (hP j).norm) (fun j ↦ NeZero.ne (dim j)) hNormal
   have hPair := hasPairBlockSeparatingWords_threeBlock_of_blocksNotGaugePhaseEquiv_c1

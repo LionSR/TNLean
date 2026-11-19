@@ -63,6 +63,8 @@ past the end of the chain: the chain end needs no separate hypothesis, because e
   P08024, arXiv:0705.2024v4.
 -/
 
+open ManyBody (card_interval_le interval)
+
 open TNLean.Lattice
 
 namespace TNLean.MPS.AreaLaw.Hastings
@@ -87,7 +89,7 @@ theorem cutEntropy_sub_le (hΩ : ‖Ω‖ = 1) {i k : ℕ} (hik : i ≤ k) :
         ((k : ℝ) - i) * Real.log q ≤
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 k) Ω := by
   have hAL := regionEntropy_le_union_add (q := q) hΩ
-    (TNLean.MPS.AreaLaw.disjoint_interval_interval 0 i k)
+    (ManyBody.disjoint_interval_interval 0 i k)
   rw [interval_union_interval (Nat.zero_le i) hik] at hAL
   have hT := regionEntropy_le_card_mul_log (q := q) hΩ (interval L i k)
   have hcard : ((interval L i k).card : ℝ) ≤ (k : ℝ) - i := by
@@ -226,7 +228,7 @@ theorem windowEntropy_two_mul_le (hΩ : ‖Ω‖ = 1) (i l₀ l : ℕ) :
       ring
     rw [hsplit]
     refine (regionEntropy_union_le hΩ
-      (TNLean.MPS.AreaLaw.disjoint_interval_interval _ _ _)).trans ?_
+      (ManyBody.disjoint_interval_interval _ _ _)).trans ?_
     have h1 := regionEntropy_le_windowEntropy (Ω := Ω) hia (show a + l ≤ i + l₀ by omega)
     have h2 := regionEntropy_le_windowEntropy (Ω := Ω) (show i ≤ a + l by omega)
       (show a + l + l ≤ i + l₀ by omega)

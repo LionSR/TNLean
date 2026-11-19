@@ -63,6 +63,7 @@ open Matrix MPSTensor
 open MPSChainTensor (eval)
 open scoped BigOperators InnerProductSpace
 open QuantumCircuit
+open Kraus (blockPhysDim)
 
 namespace MPSPreparation
 

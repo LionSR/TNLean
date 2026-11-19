@@ -121,7 +121,16 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   and RVB tensors are placed on the simple torus graph, on which a torus of width or
   height two has a single edge between neighbouring sites, so their state
   formulas are stated for tori of width and height at least three; the GHZ
-  example holds on every torus.
+  example holds on every torus. It also records the brick-wall honeycomb of the
+  cluster state, which has three distinct neighbours per site for even height and
+  width at least three.
+- `rmp_honeycomb_cluster_peps.tex` (local correction, resolved) records that
+  the printed honeycomb parent Hamiltonian, the sum of the terms `X Z Z Z`, has
+  the common `-1` eigenvector as ground state, so the sign is reversed.
+- `rmp_honeycomb_cluster_injectivity.tex` (false source claim, open) records
+  that the honeycomb cluster PEPS, called injective by the source, has
+  non-injective vertex tensors and a non-injective two-site blocked tensor,
+  while blocking over hexagonal plaquettes gives injectivity (not formalized).
 - `rmp_peps_czx_bond_orientation.tex` (false source claim) records that the
   printed CZX tensor, contracted with equal labels at the two ends of each
   bond, gives GHZ states on diagonal loops rather than the plaquette state,
@@ -132,8 +141,10 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
   contraction has a faithful effective plaquette-spin basis, intertwines the
   physical symmetry with the printed CZX operator, and has the same support
   as the actual reduced density, of rank `2^(2*w+2*h)` even after trace
-  normalization. Nonzero spectral values, entropy, isometric normalization
-  and general nonrectangular regions remain open.
+  normalization. It also records the two-site blocking under which this
+  boundary symmetry is a `ℤ₂` representation with nonzero anomaly class, since
+  the printed operator squares to `(-1)^N`. Nonzero spectral values, entropy,
+  isometric normalization and general nonrectangular regions remain open.
 - `rmp_peps_quantum_double_g_isometry.tex` records that the formal notions of
   `G`-injectivity and `G`-isometry of arXiv:1001.3807 take the representation
   as a parameter and allow a positive factor in the isometry, because the
@@ -167,6 +178,9 @@ For the two-dimensional PEPS examples of arXiv:2011.12127, Appendix A:
 
 For the MPU index of arXiv:1703.09188:
 
+- `mpu_conjugation_example_r_side.tex` (local correction, resolved) puts the
+  matrix `R` on the input of the shifted gate `v'` of the all-phases example
+  under conjugation, as in Corollary `cor:sympl-to-orthogonal`.
 - `mpu_czx_tensor_normalization.tex` records the checked failure of the literal
   normalized-Hadamard CZX tensor, and distinguishes the unnormalized blue
   tensors and physical Z gates of the 2025 diagram. The corrected
@@ -193,6 +207,33 @@ For the MPU index of arXiv:1703.09188:
   source gate's weight. In the source's diagonal canonical-form-II coordinates,
   $\rho^{\mathsf T}=\rho$ closes the retained source-$u$ contraction and proves
   $u^\dagger u=I$ for the supplied fixed pair.
+- `mpu_standard_form_canonical_convention.tex` (local correction, resolved)
+  records, from the source's standing canonical-form convention and its
+  explicit "not necessarily in CF" qualifiers elsewhere, that a tensor in
+  standard form is the two-site block of a simple canonical tensor, so the
+  time-reversal and transposition criteria and the sign results apply to every
+  such standard form without a further hypothesis.
+- `mpu_standard_form_path_cross_section.tex` (clarification, resolved) records
+  that the proof of the continuous standard form along a path cites the slice
+  theorem of Montgomery and Yang, and that the formalization replaces it by a
+  direct local cross-section of the local-unitary action on the gates, built
+  from the nearest Kronecker product and the polar factor; the continuity of
+  the second gate is read off the circuits on two and three blocks.
+- `mpu_time_reversal_blocking_parity_route.tex` (local correction, resolved)
+  records that the blocking parity of the time-reversal sign is proved, for
+  arbitrary standard forms of the blocked tensors, through the intrinsic trace
+  of the blocked periodic operators instead of the source's unwinding of its
+  explicit blocked gates.
+- `mpu_canonical_form_full_support.tex` (scope restriction, partly superseded)
+  records that the reduced canonical-form-II representative must be
+  constructed rather than inferred from bare canonical form, and the
+  reduced full-support data assumed by the admissible Chapter 28 entries.
+  Entries whose source-labelled counterparts are proved under the canonical
+  convention above (the Index Theorem, source-rank constancy, the local
+  time-reversal and transposition criteria, and the time-reversal sign
+  results) are superseded and deleted, as is the continuous-standard-form entry,
+  superseded by Corollary `coruvSF`; the conjugation, blocking-parity,
+  equivalence-necessity, MPS-class, and example entries remain restricted.
 - `mpu_standard_form_parity_gap.tex` records a nondegenerate sign obstruction
   to the unblocked all-length converse printed in the Fundamental Theorem of
   MPU. The tensors $\mathcal U^{ij}=\delta_{ij}$ and
@@ -200,6 +241,23 @@ For the MPU index of arXiv:1703.09188:
   standard forms with local gauges $x=y=-I_2$, $z=1$, but their periodic
   operators differ at odd lengths. The blocked-family reading and the
   unaffected forward implication are kept distinct.
+- `mpu_index_classification_tensor_to_gates.tex` (clarification, resolved)
+  records the step omitted in the "if" half of clause (iv) of the Index
+  Theorem: a blocked tensor is joined through MPU tensors to the tensor built
+  from its own standard-form gates, by a path of virtual gauges to canonical
+  form II and an interpolation of half factors that keeps the gates fixed.
+- `mpu_symmetry_path_criterion_blocking.tex` (scope restriction, open)
+  records that Lemma `lem:equivalent-symmetry` uses the same `U^(N)` in both
+  directions, while its proof through Corollary `coruvSF` yields gates only
+  after blocking `2k₀` sites. The reverse direction is formalized for every
+  blocking length, including the standard-form chain; the forward direction
+  is formalized after the extra blocking, and the unblocked forward claim is
+  open.
+- `mpu_conjugation_symplectic_uniqueness_transpose.tex` (local correction,
+  resolved) records that the Case II uniqueness clause of Proposition
+  `corconj` prints `v'' = v' (S_rᵀ ⊗ S_ℓᵀ)`, while the Fundamental Theorem gives
+  `v'' = v' (S_r† ⊗ S_ℓ†)`; a unitary symplectic `S` need not be real, and
+  `S_ℓ = diag(i, -i)` separates the two. The Case I clause is unaffected.
 - `mpu_shift_supplied_standard_forms.tex` records that the shift-family gates
   of Section VII are formalized as explicit two-site decompositions with
   supplied gates and normalized half factors. Only the blocked
@@ -793,6 +851,41 @@ For the matrix product operator symmetries of arXiv:2203.12563:
   invariance, derives integrality of the action coefficients from it, and
   formalizes the single-block obstruction only in its fusion-ring form, not
   the cohomological form of the source.
+- `glm23_mixed_path_parent_commutation.tex` (scope restriction, open) records
+  that Section 5 takes the canonical parent along the mixed path without
+  showing that it commutes with the common operators, gives an explicit
+  non-unitary involutive on-site symmetry with every action, fusion and
+  equal-L-matrix hypothesis satisfied for which the canonical parent does not
+  commute, and shows that for `Z₂` acting by unitary on-site representations
+  the outcome depends on the virtual gauge of the endpoint tensors, which the
+  source does not fix: in a canonical gauge the two-site boundary range of the
+  common operator is closed under the adjoint and the canonical path commutes,
+  while in a gauge whose action gauge is not proportional to a Hermitian
+  matrix both fail (checked by
+  `scripts/check_glm23_unitary_mixed_adjoint_closure.py`); it formalizes
+  commutation along the closed interval under adjoint closure of the two-site
+  boundary range.
+- `glm23_mixed_operator_one_site_injectivity.tex` (false source claim,
+  resolved) records that the one-site injectivity of the common operator of
+  the Section 5 interpolation fails in the full aligned setting: for
+  `Rep(A₄)`, two injective endpoint states with injective endpoint operators,
+  common fusion tensors and equal F- and L-symbols, the crossed corners of the
+  three-dimensional object are not spanned, for every gauge of the action
+  tensors preserving the L-symbols (checked by
+  `scripts/check_glm23_mixed_operator_one_site_injectivity.py`); the claim
+  holds with multiplicity one, and three-site normality is the formalized
+  substitute.
+- `glm23_block_injective_mixed_path.tex` (scope restriction, open) records
+  that the block-injective interpolation of Section 5 uses no commutation of
+  the path Hamiltonians, so its exact action and fusion are formalized without
+  adjoint closure, while any commutation statement inherits the one-block
+  counterexample. In the open interval the periodic ground space of the
+  two-site canonical parent is spanned by the linearly independent block
+  states, its projection is continuous, and compact subintervals have a gap
+  uniform over all ring lengths; the ground projections converge to the span
+  of the block states at the endpoints. The one-site injectivity of the common
+  operators fails already for one block; the endpoint Hamiltonians and the
+  derivation of sector-separated blocks remain open.
 - `glm23_fibonacci_module_rank_scope.tex` records that the source's claim that
   the Fibonacci algebra has only the two-block invariant subspace is
   formalized for at most two blocks, where the nonnegative integer
@@ -1066,7 +1159,11 @@ For the log-depth preparation of matrix product states in arXiv:2307.01696:
   assuming `K N^k exp(-r q)` at every scale `1 ≤ q ≤ N` for some partition
   with lengths between `q` and `2q` is proved separately, including exact linear-depth preparation
   when the selected block length exceeds the ring length.
-- `mswc24_measurement_preparation_scope.tex` records the scope of the
+- `mswc24_measurement_preparation_scope.tex` (scope restriction, open) records
+  the remaining original-site and all-length obligations for arbitrary tensors.
+  A fixed positive blocking now gives normal sectors and both measurement depth
+  bounds without supplied canonical data, on grouped sites. The note also records
+  the scope of the
   preparation with measurements of a tensor that is not normal (paragraph
   "Long-range MPS using measurements"). The first formal statement takes
   orthogonal `q`-site states of distinct blocks, block lengths dividing `N`, and
@@ -1763,6 +1860,28 @@ norm. It states the actual central replacement, its positive regional matrix,
 attained minimum and energy bound on the original ground space. Transfer to
 the generated soft target and the recursive energy invariant remain separate.
 
+## ALVV: the efficient projector under low density
+
+[`alvv16_efficient_low_density_agsp.tex`](alvv16_efficient_low_density_agsp.tex)
+(scope restriction, open) quotes Theorem 5.9 (`t:aisgaplessefficient`) of Arad,
+Landau, Vazirani and Vidick, arXiv:1602.08828v2 (source lines 1424–1437, proof
+1439–1457), and records which of its clauses the formalized efficient soft
+low-density families cover. They give the window and improvement clauses for a
+fixed buffer. The shrinking buffer `μ / log n`, the bond bound `e^{Õ(log³ n)}`, the
+norm bound `Õ(log n / μ)` and the energy estimate within `1/2` are open. The
+qualifier `η₁ ≥ 2μ / log n` of Theorem `t:aisgapless` is not added as a hypothesis.
+
+## ALVV: the middle bond of the efficient Chebyshev projector
+
+[`alvv16_chebyshev_middle_bond.tex`](alvv16_chebyshev_middle_bond.tex)
+(scope restriction, open) quotes Proposition 5.7 (`prop:Cheby-AGSP-eff`) of Arad,
+Landau, Vazirani and Vidick, arXiv:1602.08828v2 (source lines 1311–1320, proof
+1322–1333). Read with submultiplicativity of operator Schmidt rank, the printed
+proof gives the member bond `(B̃ + 2)^k` at a cut inside `J_M`, because the window
+terms enter the weighted ordinary sums; whether the printed `B̃^k` holds is open.
+The formalized common middle family has the source's count shape and the bond
+`max(1, B)^(2k)`. The note gives a re-plumbing plan for the bond `(B̃ + 2)^k`.
+
 ## ALVV: the operator-norm cluster approximation
 
 [`alvv16_cluster_approximation.tex`](alvv16_cluster_approximation.tex)
@@ -1970,6 +2089,14 @@ For Arad, Kitaev, Landau and Vazirani, arXiv:1301.1162v1, Section 5:
   `log D ≤ C[u³/g + (z²/g)^{1/3}(u + log(z + 1))]` with
   `u = 1 + log q + log(1/g)` and `z = log(2048(L+1)/ε²)`, under the source's
   hypotheses; for accuracy `n^{-c}` it is of order `log^{2/3} n · log log n`.
+- [`aklv13_entropy_inverse_gap_logarithm.tex`](aklv13_entropy_inverse_gap_logarithm.tex)
+  (local correction, resolved) records that the printed entropy rate
+  `O(log³ d/ε)` of Theorem 4.3 (lines 820–846), of the general theorem
+  (lines 995–1000) and of Lemma 6.3 (lines 1003–1052) drops the factor
+  `log(s² + s)` at lines 840–843, and proves that no parameter choice avoids
+  it: any favorable pair of the Chebyshev shrinking and polynomial rank
+  certificates has `log D > c³(log q + 2 log(1/g))³/(16g)`. The proved rate
+  `C(1 + log q + log(1/g))³/g` is optimal for the route up to the constant.
 
 ## Independent scales and the ground-space recursive witness
 
@@ -2019,3 +2146,14 @@ normalizing power, as the published Methods retain. The energy-dependent
 normalization, Corollary 2.14 and the cut-wise error reduction are formalized;
 the joint power-and-ground-projection sample, its all-cut operator Schmidt
 rank and the ground-line cut factors are not yet.
+
+### The ALVV merge tree for a unique frustration-free ground state
+
+[`alvv16_unique_ground_state_tree.tex`](alvv16_unique_ground_state_tree.tex)
+(scope restriction, open) records that the existence content of arXiv:1602.08828v2,
+Theorem t:unique, lines 1829–1855, is proved with the source's hypotheses by
+specializing the degenerate-gap resampling tree and its refinement to ground
+energy zero and multiplicity one. The per-node families are not the
+frustration-free family of Theorem t:aisff, so the intermediate dimension grows
+with the chain length instead of the source's constant `D s²`; no running time
+is asserted.

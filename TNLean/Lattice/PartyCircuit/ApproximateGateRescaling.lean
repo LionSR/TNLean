@@ -82,9 +82,9 @@ def rescaledOriginal {δ : ℝ} (hδ : 0 ≤ δ) :
   | _, _, .id a, _, _ => .id a
   | _, _, .comp w v, G, h =>
       .comp (w.rescaledOriginal hδ G.1 h.1) (v.rescaledOriginal hδ G.2 h.2)
-  | _, _, .localMap p ha hb A tail, _, h => .privateMap p ha hb A h tail
-  | _, _, @EffectCircuit.gate _ _ _ owner a b L tail, G, h =>
-      .nonprivateGate owner h.1 (rescalePartyGate δ L)
+  | _, _, .localMap p ha hb A tail, _, h => OriginalCircuit.privateMap p ha hb A h tail
+  | _, _, Circuit.gate (@EffectGate.mk _ _ _ owner a b L tail), G, h =>
+      OriginalCircuit.nonprivateGate owner h.1 (rescalePartyGate δ L)
         (isAllowed_rescalePartyGate δ L h.2.1) (by
           rw [gate_rescalePartyGate]
           exact norm_inv_one_add_smul_le_one hδ

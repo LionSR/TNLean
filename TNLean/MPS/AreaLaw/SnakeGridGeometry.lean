@@ -25,7 +25,11 @@ The result includes empty grids, one-site grids, and prefixes beyond the last si
   truncation argument used after this geometry.
 -/
 
+open ManyBody (squareLatticeGraph)
+
 open TNLean.Lattice TNLean.PEPS TNLean.PEPS.AreaLaw
+
+open ManyBody (planeDomainGraph)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -213,7 +217,7 @@ theorem card_edgeBoundary_snakeGridPrefix_le (L k : ℕ) :
     obtain ⟨he, x, hx, y, hy, rfl⟩ := Finset.mem_filter.mp he
     obtain ⟨a, rfl⟩ := (rectangleSiteEquiv L L).surjective x
     obtain ⟨b, rfl⟩ := (rectangleSiteEquiv L L).surjective y
-    have hadj : (domainGraph (rectangularDomain L L)).Adj
+    have hadj : (planeDomainGraph (rectangularDomain L L)).Adj
         (rectangleSiteEquiv L L a) (rectangleSiteEquiv L L b) := by
       simpa only [SimpleGraph.mem_edgeFinset, SimpleGraph.mem_edgeSet] using he
     have ha : (snakeIndex L a).val < k := by

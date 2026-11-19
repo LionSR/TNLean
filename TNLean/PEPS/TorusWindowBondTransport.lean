@@ -68,6 +68,8 @@ comparison; by itself it does not prove `hmul`.
   multiplicativity verdict.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

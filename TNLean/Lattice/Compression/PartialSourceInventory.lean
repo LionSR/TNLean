@@ -47,7 +47,7 @@ def expandedSources (A : P → Bool) : {a b : Layout P} → (w : SourceCircuit a
   | _, _, .id _, _ => []
   | _, _, .comp w v, ξ => expandedSources A v ξ.2 ++ expandedSources A w ξ.1
   | _, _, .localMap .., _ => []
-  | _, _, @SourceCircuit.gate _ C ι _ _ owner _ _ _ G _, ξ => by
+  | _, _, Circuit.gate (@PreparedGate.mk _ C ι _ _ owner _ _ _ G _), ξ => by
       classical
       by_cases h : ∃ p : C, A (owner p) = true
       · have i : ι := by simpa only [Choices, ite_eq_left h] using ξ

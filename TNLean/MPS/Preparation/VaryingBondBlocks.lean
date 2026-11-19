@@ -33,6 +33,7 @@ for matrix product states "with bond dimension at most `D`".
 -/
 
 open scoped BigOperators Matrix
+open Kraus (blockPhysDim)
 
 namespace VaryingBondChain
 

@@ -55,7 +55,7 @@ quadratic graph-ball growth, through the summable second moment of the
 stretched exponential. Source: area law, `09-amplification.tex`, lines 188–212. -/
 theorem sum_graph_singleton_exponentialDistanceProfile_le
     (G : SimpleGraph ι) {K c α : ℝ} (hK : 0 ≤ K) (hc : 0 < c) (hα : 0 < α)
-    (hball : ∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
+    (hball : ∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
     (s : ι) :
     letI := graphPseudoEMetricSpace G
     (∑ z, Metric.exponentialDistanceProfile {s} c α z) ≤
@@ -81,7 +81,7 @@ theorem sum_graph_singleton_exponentialDistanceProfile_le
     intro z hz
     obtain ⟨hzT, hzn⟩ := Finset.mem_filter.mp hz
     have hreach : G.Reachable s z := (Finset.mem_filter.mp hzT).2
-    apply mem_graphBall.mpr
+    apply ManyBody.mem_graphBall.mpr
     rw [← hreach.coe_dist_eq_edist, hzn]
   calc
     _ = ∑ z ∈ T, Real.exp (-c * (G.dist s z : ℝ) ^ α) := by
@@ -109,7 +109,7 @@ cardinality, including zero mass for the empty support. Source: area law,
 `09-amplification.tex`, lines 188–212. -/
 theorem sum_graph_exponentialDistanceProfile_le
     (G : SimpleGraph ι) {K c α : ℝ} (hK : 0 ≤ K) (hc : 0 < c) (hα : 0 < α)
-    (hball : ∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
+    (hball : ∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
     (S : Finset ι) :
     letI := graphPseudoEMetricSpace G
     (∑ z, Metric.exponentialDistanceProfile (S : Set ι) c α z) ≤
@@ -134,7 +134,7 @@ distance to the support gives a zero on both sides. Source: area law,
 theorem exp_mul_graph_exponentialDistanceProfile_le_of_anchor_far
     (G : SimpleGraph ι) (S : Finset ι) {b β α r : ℝ}
     (hb : 0 < b) (hβ : 0 < β) (hα : 0 < α) (hα₁ : α ≤ 1) (hr : 0 ≤ r)
-    {x z : ι} {l : ℕ} (hz : z ∈ graphBall G x l)
+    {x z : ι} {l : ℕ} (hz : z ∈ ManyBody.graphBall G x l)
     (hfar : ∀ s ∈ S, ENNReal.ofReal r < (G.edist x s : ℝ≥0∞)) :
     letI := graphPseudoEMetricSpace G
     Real.exp (-b * (l : ℝ) ^ α) * Metric.exponentialDistanceProfile (S : Set ι) β α z ≤
@@ -146,12 +146,12 @@ theorem exp_mul_graph_exponentialDistanceProfile_le_of_anchor_far
   by_cases hzS : Metric.infEDist z (S : Set ι) = ⊤
   · simp [Metric.exponentialDistanceProfile, hzS]
   have hxz' : G.edist x z ≠ ⊤ :=
-    ne_top_of_le_ne_top (by simp) (mem_graphBall.mp hz)
+    ne_top_of_le_ne_top (by simp) (ManyBody.mem_graphBall.mp hz)
   have hxz : edist x z ≠ ⊤ := by
     simpa only [graphPseudoEMetricSpace_edist, ENat.toENNReal_ne_top] using hxz'
   have hdist : (edist x z).toReal ≤ (l : ℝ) := by
     rw [graphPseudoEMetricSpace_edist_toReal]
-    exact_mod_cast G.natCast_dist_le_edist.trans (mem_graphBall.mp hz)
+    exact_mod_cast G.natCast_dist_le_edist.trans (ManyBody.mem_graphBall.mp hz)
   have htriangle : Metric.infEDist x (S : Set ι) ≤
       edist x z + Metric.infEDist z (S : Set ι) := Metric.infEDist_le_edist_add_infEDist
   have hxS : Metric.infEDist x (S : Set ι) ≠ ⊤ :=
@@ -191,25 +191,25 @@ Source: area law,
 `09-amplification.tex`, lines 188–212. -/
 theorem sum_graphBall_site_function_le (G : SimpleGraph ι) (a : κ → ι)
     {K μ : ℝ} (hμ : 0 ≤ μ)
-    (hball : ∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
+    (hball : ∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
     (hfiber : ∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ)
     (f : ι → ℝ) (hf : ∀ z, 0 ≤ f z) (l : ℕ) :
-    (∑ i, ∑ z ∈ graphBall G (a i) l, f z) ≤
+    (∑ i, ∑ z ∈ ManyBody.graphBall G (a i) l, f z) ≤
       μ * K * ((l : ℝ) + 1) ^ 2 * ∑ z, f z := by
   classical
   have hcount (z : ι) :
-      ((Finset.univ.filter fun i : κ => z ∈ graphBall G (a i) l).card : ℝ) ≤
+      ((Finset.univ.filter fun i : κ => z ∈ ManyBody.graphBall G (a i) l).card : ℝ) ≤
         μ * K * ((l : ℝ) + 1) ^ 2 := by
     calc
-      _ ≤ μ * (graphBall G z l).card := card_graphBall_anchors_le G a hfiber z l
+      _ ≤ μ * (ManyBody.graphBall G z l).card := card_graphBall_anchors_le G a hfiber z l
       _ ≤ μ * (K * ((l : ℝ) + 1) ^ 2) := mul_le_mul_of_nonneg_left (hball z l) hμ
       _ = _ := by ring
   calc
     _ = ∑ z, ((Finset.univ.filter fun i : κ =>
-        z ∈ graphBall G (a i) l).card : ℝ) * f z := by
+        z ∈ ManyBody.graphBall G (a i) l).card : ℝ) * f z := by
       calc
-        _ = ∑ i, ∑ z, if z ∈ graphBall G (a i) l then f z else 0 := by simp
-        _ = ∑ z, ∑ i, if z ∈ graphBall G (a i) l then f z else 0 := Finset.sum_comm
+        _ = ∑ i, ∑ z, if z ∈ ManyBody.graphBall G (a i) l then f z else 0 := by simp
+        _ = ∑ z, ∑ i, if z ∈ ManyBody.graphBall G (a i) l then f z else 0 := Finset.sum_comm
         _ = _ := by
           apply Finset.sum_congr rfl
           intro z _
@@ -227,12 +227,12 @@ Source: area law, `09-amplification.tex`, lines 188–212. -/
 theorem sum_graphBall_exponentialDistanceProfile_le
     (G : SimpleGraph ι) (a : κ → ι) {K μ b β α : ℝ}
     (hK : 0 ≤ K) (hμ : 0 ≤ μ) (hb : 0 < b) (hβ : 0 < β) (hα : 0 < α)
-    (hball : ∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
+    (hball : ∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
     (hfiber : ∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ)
     (S : Finset ι) (N : ℕ) :
     letI := graphPseudoEMetricSpace G
     (∑ i, ∑ l ∈ Finset.range (N + 1), Real.exp (-b * (l : ℝ) ^ α) *
-      ∑ z ∈ graphBall G (a i) l, Metric.exponentialDistanceProfile (S : Set ι) β α z) ≤
+      ∑ z ∈ ManyBody.graphBall G (a i) l, Metric.exponentialDistanceProfile (S : Set ι) β α z) ≤
       μ * K ^ 2 *
         (∑' n : ℕ, (1 + (n : ℝ)) ^ 2 * Real.exp (-b * (n : ℝ) ^ α)) *
         (∑' n : ℕ, (1 + (n : ℝ)) ^ 2 * Real.exp (-β * (n : ℝ) ^ α)) * S.card := by
@@ -242,7 +242,8 @@ theorem sum_graphBall_exponentialDistanceProfile_le
   have hM (c : ℝ) : 0 ≤ M c := tsum_nonneg fun _ => by positivity
   have hsite := sum_graph_exponentialDistanceProfile_le G hK hβ hα hball S
   have hshell (l : ℕ) :
-      (∑ i, ∑ z ∈ graphBall G (a i) l, Metric.exponentialDistanceProfile (S : Set ι) β α z) ≤
+      (∑ i, ∑ z ∈ ManyBody.graphBall G (a i) l, Metric.exponentialDistanceProfile (S : Set ι) β α
+          z) ≤
         μ * K ^ 2 * M β * S.card * (1 + (l : ℝ)) ^ 2 := by
     calc
       _ ≤ μ * K * ((l : ℝ) + 1) ^ 2 *
@@ -254,7 +255,7 @@ theorem sum_graphBall_exponentialDistanceProfile_le
       _ = _ := by ring
   calc
     _ = ∑ l ∈ Finset.range (N + 1), Real.exp (-b * (l : ℝ) ^ α) *
-        ∑ i, ∑ z ∈ graphBall G (a i) l,
+        ∑ i, ∑ z ∈ ManyBody.graphBall G (a i) l,
           Metric.exponentialDistanceProfile (S : Set ι) β α z := by
       rw [Finset.sum_comm]
       simp only [Finset.mul_sum]
@@ -295,13 +296,13 @@ theorem sum_omitted_graphBall_exponentialDistanceProfile_le
     (hb : 0 < b) (hβ : 0 < β) (hα : 0 < α) (hα₁ : α ≤ 1) :
     ∀ (ι κ : Type*) [Fintype ι] [DecidableEq ι] [Fintype κ]
       (G : SimpleGraph ι) (a : κ → ι),
-      (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
+      (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
       (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
       ∀ (E : Finset κ) (S : Finset ι) (N : ℕ) (r : ℝ), 0 ≤ r →
         (∀ i ∈ E, ∀ s ∈ S, ENNReal.ofReal r < (G.edist (a i) s : ℝ≥0∞)) →
         letI := graphPseudoEMetricSpace G
         (∑ i ∈ E, ∑ l ∈ Finset.range (N + 1), Real.exp (-b * (l : ℝ) ^ α) *
-          ∑ z ∈ graphBall G (a i) l,
+          ∑ z ∈ ManyBody.graphBall G (a i) l,
             Metric.exponentialDistanceProfile (S : Set ι) β α z) ≤
           omittedAnchorTailConstant K μ b β α * S.card *
             Real.exp (-((min b β) / 2) * r ^ α) := by
@@ -311,7 +312,7 @@ theorem sum_omitted_graphBall_exponentialDistanceProfile_le
   let := graphPseudoEMetricSpace G
   let F (c d : ℝ) (i : κ) := ∑ l ∈ Finset.range (N + 1),
     Real.exp (-c * (l : ℝ) ^ α) *
-      ∑ z ∈ graphBall G (a i) l, Metric.exponentialDistanceProfile (S : Set ι) d α z
+      ∑ z ∈ ManyBody.graphBall G (a i) l, Metric.exponentialDistanceProfile (S : Set ι) d α z
   have hF (c d : ℝ) (i : κ) : 0 ≤ F c d i := by
     apply Finset.sum_nonneg
     intro l _
@@ -356,13 +357,13 @@ theorem exists_sum_omitted_graphBall_exponentialDistanceProfile_le
     ∃ C γ : ℝ, 0 ≤ C ∧ 0 < γ ∧ γ = (min b β) / 2 ∧
       ∀ (ι κ : Type*) [Fintype ι] [DecidableEq ι] [Fintype κ]
         (G : SimpleGraph ι) (a : κ → ι),
-        (∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
+        (∀ x l, ((ManyBody.graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2) →
         (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
         ∀ (E : Finset κ) (S : Finset ι) (N : ℕ) (r : ℝ), 0 ≤ r →
           (∀ i ∈ E, ∀ s ∈ S, ENNReal.ofReal r < (G.edist (a i) s : ℝ≥0∞)) →
           letI := graphPseudoEMetricSpace G
           (∑ i ∈ E, ∑ l ∈ Finset.range (N + 1), Real.exp (-b * (l : ℝ) ^ α) *
-            ∑ z ∈ graphBall G (a i) l,
+            ∑ z ∈ ManyBody.graphBall G (a i) l,
               Metric.exponentialDistanceProfile (S : Set ι) β α z) ≤
             C * S.card * Real.exp (-γ * r ^ α) :=
   ⟨_, _, omittedAnchorTailConstant_nonneg hμ K b β α, by positivity, rfl,

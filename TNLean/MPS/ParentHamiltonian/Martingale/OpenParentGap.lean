@@ -227,9 +227,9 @@ theorem openParentHamiltonianES_norm_gap_of_fixedAmbient_c3
 /-- A primitive MPS has a uniform nonwrapping open-parent-Hamiltonian gap.
 The witnesses use the same \(l\) and \(\epsilon_l\) as the physical C3
 estimate, uniformly for every \(N\) with \(l+1\leq N\). -/
-theorem IsPrimitiveMPS.exists_openParentHamiltonianES_gap
+theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_openParentHamiltonianES_gap
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) :
     ∃ l : ℕ, ∃ ε : ℝ, ∃ _hl : 1 < l, ∃ _hInj : Kraus.IsNBlkInjective A l,
       0 ≤ ε ∧ ε < 1 / Real.sqrt ((l + 1 : ℕ) : ℝ) ∧
       ∀ N : ℕ, l + 1 ≤ N → ∀ v ∈ (groundSpaceES A N)ᗮ,

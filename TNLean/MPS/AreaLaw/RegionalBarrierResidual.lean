@@ -19,6 +19,8 @@ The physical construction must derive the interior commutation and the projectio
 no physical reverse comparison is concluded from independently supplied data here.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

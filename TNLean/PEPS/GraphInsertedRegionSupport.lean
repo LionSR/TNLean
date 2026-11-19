@@ -19,6 +19,8 @@ Source: SCP10, arXiv:1001.3807, local closure deformation in Theorem 5.5,
 lines 1440–1545, and regional contraction, lines 1935–1990.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

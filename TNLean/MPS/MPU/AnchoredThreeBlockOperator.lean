@@ -59,25 +59,25 @@ private def threeTupleEquiv (B : Type*) :
 four neighboring half-blocks and the two exposed exterior half-blocks.
 Source context: arXiv:1703.09188, `StandardForm`, lines 603--622. -/
 noncomputable def threeBlockOutputEquiv (d k : ℕ) :
-    ((Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ×
-      (((Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ×
-        (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))))) ≃
-      (Fin 3 → Fin (MPSTensor.blockPhysDim d (2 * k))) := by
-  let P := Fin (MPSTensor.blockPhysDim d k)
-  let Q := Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)
+    ((Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ×
+      (((Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ×
+        (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))))) ≃
+      (Fin 3 → Fin (Kraus.blockPhysDim d (2 * k))) := by
+  let P := Fin (Kraus.blockPhysDim d k)
+  let Q := Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)
   let e₁ := sixCellShuffle P
   let e₂ := threeTupleEquiv (P × P)
   let e₃ : (Fin 3 → P × P) ≃ (Fin 3 → Q) :=
     Equiv.arrowCongr (Equiv.refl _) finProdFinEquiv
-  let e₄ : (Fin 3 → Q) ≃ (Fin 3 → Fin (MPSTensor.blockPhysDim d (2 * k))) :=
+  let e₄ : (Fin 3 → Q) ≃ (Fin 3 → Fin (Kraus.blockPhysDim d (2 * k))) :=
     Equiv.arrowCongr (Equiv.refl _) (twoSiteDirectBlockEquiv d k).symm
   exact ((e₁.trans e₂).trans e₃).trans e₄
 
 /-- The output relabeling has the shifted order of the source three-block word. -/
 theorem threeBlockOutputEquiv_apply (d k : ℕ)
-    (eL eR : Fin (MPSTensor.blockPhysDim d k))
-    (x : ((Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ×
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)))) :
+    (eL eR : Fin (Kraus.blockPhysDim d k))
+    (x : ((Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ×
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)))) :
     threeBlockOutputEquiv d k ((eL, eR), x) =
       fun t => (twoSiteDirectBlockEquiv d k).symm
         (![finProdFinEquiv (eL, x.1.1), finProdFinEquiv (x.1.2, x.2.1),
@@ -91,12 +91,12 @@ theorem threeBlockOutputEquiv_apply (d k : ℕ)
 outer complete input blocks. Source context: arXiv:1703.09188,
 `StandardForm`, lines 603--622. -/
 noncomputable def threeBlockInputEquiv (d k : ℕ) :
-    ((Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) ×
-      Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)) ×
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))) ≃
-      (Fin 3 → Fin (MPSTensor.blockPhysDim d (2 * k))) := by
-  let P := Fin (MPSTensor.blockPhysDim d k)
-  let Q := Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)
+    ((Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k) ×
+      Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)) ×
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))) ≃
+      (Fin 3 → Fin (Kraus.blockPhysDim d (2 * k))) := by
+  let P := Fin (Kraus.blockPhysDim d k)
+  let Q := Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)
   let e₁ : ((Q × Q) × (P × P)) ≃ ((Q × Q) × Q) :=
     (Equiv.refl _).prodCongr finProdFinEquiv
   let e₁' : ((Q × Q) × Q) ≃ ((Q × Q) × Q) :=
@@ -105,14 +105,14 @@ noncomputable def threeBlockInputEquiv (d k : ℕ) :
       left_inv := by intro ⟨⟨_, _⟩, _⟩; rfl
       right_inv := by intro ⟨⟨_, _⟩, _⟩; rfl }
   let e₂ := threeTupleEquiv Q
-  let e₃ : (Fin 3 → Q) ≃ (Fin 3 → Fin (MPSTensor.blockPhysDim d (2 * k))) :=
+  let e₃ : (Fin 3 → Q) ≃ (Fin 3 → Fin (Kraus.blockPhysDim d (2 * k))) :=
     Equiv.arrowCongr (Equiv.refl _) (twoSiteDirectBlockEquiv d k).symm
   exact ((e₁.trans e₁').trans e₂).trans e₃
 
 /-- The central input pair is the middle letter in the three-block word. -/
 theorem threeBlockInputEquiv_apply (d k : ℕ)
-    (j₀ j₂ : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k))
-    (j : Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) :
+    (j₀ j₂ : Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k))
+    (j : Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) :
     threeBlockInputEquiv d k ((j₀, j₂), j) =
       fun t => (twoSiteDirectBlockEquiv d k).symm
         (![j₀, finProdFinEquiv j, j₂] t) := by
@@ -132,11 +132,11 @@ end MPOTensor
 
 namespace MPOTensor
 
-private abbrev Half (d k : ℕ) := Fin (MPSTensor.blockPhysDim d k)
+private abbrev Half (d k : ℕ) := Fin (Kraus.blockPhysDim d k)
 private abbrev Pair (d k : ℕ) := Half d k × Half d k
 private abbrev Quad (d k : ℕ) := Pair d k × Pair d k
 private abbrev PairLabel (d k : ℕ) :=
-  Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)
+  Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)
 private abbrev OutputExterior (d k p s : ℕ) :=
   (((Fin p → Fin d) × (Half d k × Half d k)) × (Fin s → Fin d))
 private abbrev InputExterior (d k p s : ℕ) :=

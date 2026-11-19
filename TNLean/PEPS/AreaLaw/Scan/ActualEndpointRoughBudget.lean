@@ -29,6 +29,8 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 /-- The rough Bell remainder together with the initial root's logarithmic
@@ -65,7 +67,7 @@ theorem eventually_actualScan_suppliedPrevector_endpoint_budget
     {q : ℕ} [NeZero q] {I : Type} [Fintype I] [LinearOrder I]
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I)
-    (hgraph : S.graph = domainGraph Λ)
+    (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
     (hm : 0 < S.m) (hM : 0 < S.M)
     (a : ℝ) (ha : 0 < a)

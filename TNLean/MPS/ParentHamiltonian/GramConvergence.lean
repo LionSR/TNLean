@@ -20,8 +20,8 @@ reshuffling identity with geometric decay of the complementary transfer map.
 
 - `MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric`
 - `MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj`
-- `MPSTensor.IsPrimitiveMPS.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric`
-- `MPSTensor.IsPrimitiveMPS.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj`
+- `Kraus.HasComplementaryFixedPointGap.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric`
+- `Kraus.HasComplementaryFixedPointGap.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj`
 -/
 
 open scoped Matrix Matrix.Norms.L2Operator NNReal ENNReal Kraus
@@ -115,11 +115,12 @@ theorem groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
   rw [← tendsto_sub_nhds_zero_iff, tendsto_zero_iff_norm_tendsto_zero]
   exact hnorm
 
+set_option linter.style.longLine false in
 /-- A primitive MPS tensor satisfies the quantitative geometric bound for convergence of
 its ground-space Gram operators to the reshuffled fixed-point projection. -/
-theorem IsPrimitiveMPS.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
+theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r < 1 ∧ ∀ n, 1 ≤ n →
       ‖groundSpaceGram A n - Matrix.gramReshuffle
         (fixedPointProj ρ (by
@@ -131,11 +132,12 @@ theorem IsPrimitiveMPS.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
     A ρ _ (Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm) hP.fixedPoint_is_fixed
     hP.complementary_transfer_map_gap
 
+set_option linter.style.longLine false in
 /-- The ground-space Gram operators of a primitive MPS tensor converge to the reshuffled
 fixed-point projection. -/
-theorem IsPrimitiveMPS.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
+theorem _root_.Kraus.HasComplementaryFixedPointGap.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) :
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) :
     Filter.Tendsto (fun n => groundSpaceGram A n) Filter.atTop
       (nhds (Matrix.gramReshuffle
         (fixedPointProj ρ (by

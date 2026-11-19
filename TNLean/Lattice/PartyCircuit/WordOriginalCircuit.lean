@@ -88,7 +88,7 @@ theorem gate_toGate_singleGate {C : Type} {a b : Layout C} (M : PartyChain a b) 
 /-- The single pair source of a two-party gate, on the empty spectator layout. -/
 abbrev sourceMonomial (U V : HSpace) (η : U ⊗[ℂ] V) :
     PartyChain ([] : Layout Bool) [⟨false, U⟩, ⟨true, V⟩] :=
-  .final (.source Bool.false_ne_true U V η [])
+  .final (Word.source Bool.false_ne_true U V η [])
 
 /-- The single pair effect of a two-party gate, on the empty spectator layout. -/
 abbrev effectMonomial (α β : Type) [Fintype α] [Fintype β] (η : EuclideanSpace ℂ (α × β)) :
@@ -98,7 +98,7 @@ abbrev effectMonomial (α β : Type) [Fintype α] [Fintype β] (η : EuclideanSp
 theorem norm_gate_sourceMonomial_le (U V : HSpace) {η : U ⊗[ℂ] V} (hη : ‖η‖ = 1) :
     ‖gate (toGate (singleGate (sourceMonomial U V η)))‖ ≤ 1 := by
   rw [gate_toGate_singleGate]
-  exact Word.norm_eval_le_one (.source Bool.false_ne_true U V η []) hη
+  exact Circuit.norm_eval_le_one (Word.source Bool.false_ne_true U V η []) hη
 
 theorem norm_gate_effectMonomial_le (α β : Type) [Fintype α] [Fintype β]
     {η : EuclideanSpace ℂ (α × β)} (hη : ‖η‖ = 1) :
@@ -111,7 +111,8 @@ theorem norm_gate_effectMonomial_le (α β : Type) [Fintype α] [Fintype β]
 Polynomial-PEPS manuscript, `04-compression.tex`, lines 25–35. -/
 def sourceCircuit {p q : P} (hpq : p ≠ q) (U V : HSpace) (η : U ⊗[ℂ] V) (hη : ‖η‖ = 1)
     (ℓ : Layout P) : OriginalCircuit ℓ (⟨p, U⟩ :: ⟨q, V⟩ :: ℓ) :=
-  .nonprivateGate (pairOwner hpq) card_bool_ne_one (singleGate (sourceMonomial U V η))
+  OriginalCircuit.nonprivateGate (pairOwner hpq) card_bool_ne_one (singleGate
+      (sourceMonomial U V η))
     (fun m hm => by rw [List.mem_singleton.mp hm]; exact hη)
     (norm_gate_sourceMonomial_le U V hη) ℓ
 
@@ -120,7 +121,8 @@ Polynomial-PEPS manuscript, `04-compression.tex`, lines 25–35. -/
 def effectCircuit {p q : P} (hpq : p ≠ q) (α β : Type) [Fintype α] [Fintype β]
     (η : EuclideanSpace ℂ (α × β)) (hη : ‖η‖ = 1) (ℓ : Layout P) :
     OriginalCircuit (⟨p, euc α⟩ :: ⟨q, euc β⟩ :: ℓ) ℓ :=
-  .nonprivateGate (pairOwner hpq) card_bool_ne_one (singleGate (effectMonomial α β η))
+  OriginalCircuit.nonprivateGate (pairOwner hpq) card_bool_ne_one (singleGate
+      (effectMonomial α β η))
     (fun m hm => by rw [List.mem_singleton.mp hm]; exact ⟨trivial, hη, trivial⟩)
     (norm_gate_effectMonomial_le α β hη) ℓ
 
@@ -148,7 +150,8 @@ theorem eval_sourceCircuit {p q : P} (hpq : p ≠ q) (U V : HSpace) (η : U ⊗[
     · rfl
   rw [hw] at hm
   ext x
-  simp only [sourceCircuit, OriginalCircuit.eval, comp_apply, isoL_apply]
+  simp only [sourceCircuit, Circuit.eval, GateFamily.eval, OriginalGate.toEffectGate,
+    EffectGate.eval, SourceGate.eval, comp_apply, isoL_apply]
   rw [gate_toGate_singleGate]
   have hx : appendIso (Layout.mapOwner (pairOwner hpq) []) ℓ x =
       (show Mem (Layout.mapOwner (pairOwner hpq) ([] : Layout Bool)) from (1 : ℂ)) ⊗ₜ x := rfl
@@ -169,8 +172,8 @@ theorem OriginalCircuit.eval_nonprivateGate_appendIso_symm
       (appendIso (Layout.mapOwner owner b) tail).symm
         (Layout.mapOwnerIso owner b (gate (toGate L) ((Layout.mapOwnerIso owner a).symm u)) ⊗ₜ
           t) := by
-  simp only [OriginalCircuit.eval, comp_apply, isoL_apply, LinearIsometryEquiv.apply_symm_apply,
-    rTensor_tmul]
+  simp only [Circuit.eval, GateFamily.eval, OriginalGate.toEffectGate, EffectGate.eval,
+    comp_apply, isoL_apply, LinearIsometryEquiv.apply_symm_apply, rTensor_tmul]
 
 theorem eval_effectCircuit {p q : P} (hpq : p ≠ q) (α β : Type) [Fintype α] [Fintype β]
     (η : EuclideanSpace ℂ (α × β)) (hη : ‖η‖ = 1) (ℓ : Layout P) :
@@ -200,7 +203,7 @@ are kept. Polynomial-PEPS manuscript, `04-compression.tex`, lines 21–43. -/
 def toOriginalCircuit : {a b : Layout P} → (w : Word a b) → w.IsAllowed → OriginalCircuit a b
   | _, _, id a, _ => .id a
   | _, _, comp w w', h => .comp (toOriginalCircuit w h.1) (toOriginalCircuit w' h.2)
-  | _, _, localMap p h₁ h₂ U ℓ, h => .privateMap p h₁ h₂ U h ℓ
+  | _, _, localMap p h₁ h₂ U ℓ, h => OriginalCircuit.privateMap p h₁ h₂ U h ℓ
   | _, _, source hpq U V η ℓ, h => sourceCircuit hpq U V η h ℓ
   | _, _, swap r r' ℓ, _ => .swap r r' ℓ
   | _, _, frame r w, h => .frame r (toOriginalCircuit w h)
@@ -211,12 +214,12 @@ theorem eval_toOriginalCircuit {a b : Layout P} (w : Word a b) (hw : w.IsAllowed
   induction w with
   | id => rfl
   | comp w w' ih ih' =>
-      simp only [toOriginalCircuit, OriginalCircuit.eval, eval_comp, ih, ih']
+      simp only [toOriginalCircuit, Circuit.eval, eval_comp, ih, ih']
   | localMap => rfl
   | source hpq U V η ℓ => exact eval_sourceCircuit hpq U V η hw ℓ
   | swap => rfl
   | frame r w ih =>
-      simp only [toOriginalCircuit, OriginalCircuit.eval, eval_frame]
+      simp only [toOriginalCircuit, Circuit.eval, eval_frame]
       rw [ih hw]
 
 /-- One nonprivate gate for each pair source of the word. -/
@@ -225,7 +228,8 @@ theorem nonprivateCount_toOriginalCircuit {a b : Layout P} (w : Word a b)
   induction w with
   | id => rfl
   | comp w w' ih ih' =>
-      simp only [toOriginalCircuit, OriginalCircuit.nonprivateCount, sourceCount, ih, ih']
+      simp only [toOriginalCircuit, OriginalCircuit.nonprivateCount, Circuit.gateCount, sourceCount,
+        ih, ih']
   | localMap => rfl
   | source => rfl
   | swap => rfl
@@ -296,7 +300,7 @@ theorem eval_toOriginalCircuit {a b : Layout P} (M : PartyChain a b) (hM : M.IsA
   induction M with
   | final w => exact w.eval_toOriginalCircuit hM
   | effect hpq α β ℓS w η rest ih =>
-      simp only [toOriginalCircuit, OriginalCircuit.eval, Word.eval_toOriginalCircuit,
+      simp only [toOriginalCircuit, Circuit.eval, Word.eval_toOriginalCircuit,
         eval_effectCircuit, ih, EffectChain.eval]
       rfl
 
@@ -307,7 +311,7 @@ theorem nonprivateCount_toOriginalCircuit {a b : Layout P} (M : PartyChain a b)
   induction M with
   | final w => exact w.nonprivateCount_toOriginalCircuit hM
   | effect hpq α β ℓS w η rest ih =>
-      simp only [toOriginalCircuit, OriginalCircuit.nonprivateCount,
+      simp only [toOriginalCircuit, OriginalCircuit.nonprivateCount, Circuit.gateCount,
         Word.nonprivateCount_toOriginalCircuit, ih, sourceCount, EffectChain.effectCount]
       change w.sourceCount + (1 + _) = _
       omega

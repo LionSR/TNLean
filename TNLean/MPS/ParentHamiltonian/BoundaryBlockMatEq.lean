@@ -44,6 +44,7 @@ comparison at the periodic boundary.
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim wordOfBlock flattenBlockedWord)
 
 namespace MPSTensor
 

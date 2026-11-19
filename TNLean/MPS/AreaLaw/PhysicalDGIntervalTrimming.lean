@@ -24,6 +24,8 @@ it does not establish the printed tree parameters or a recursively selected
 viable family.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

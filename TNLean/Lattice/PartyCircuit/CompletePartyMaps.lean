@@ -52,7 +52,7 @@ theorem Word.exists_complete_source_preparation [Finite P] {ℓ ℓ' : Layout P}
     · exact ⟨(hU s hs).1, (hU s hs).2.1⟩
     · exact (hks ((hK s.partyPair).mp (List.mem_map_of_mem hs))).elim
   · simp only [Word.sources, hds, hvs, List.nil_append]
-  · rw [Word.eval_comp, comp_assoc, hde, he]
+  · rw [Circuit.eval_comp, comp_assoc, hde, he]
 
 /-- Factor an allowed monomial into normalized preparations on every pair of distinct
 gate parties and a tensor product of local contractions in the same party order.

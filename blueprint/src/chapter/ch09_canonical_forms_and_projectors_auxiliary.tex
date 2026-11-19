@@ -35,7 +35,7 @@ coefficients.
     \label{thm:is_normal_tensor_of_is_normal_left_canonical}
     \lean{MPSTensor.isNormalTensor_of_isNormal_leftCanonical}
     \leanok
-    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv, def:strongly_irreducible_paper}
+    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv, thm:normalized_normal_strongly_irreducible}
     Let $D>0$. If $A$ is algebraically normal and left-canonical, then
     \begin{align}
         A
@@ -45,11 +45,11 @@ coefficients.
 \end{lemma}
 
 \begin{proof}\leanok
-    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv, def:strongly_irreducible_paper}
+    \uses{def:normal, def:left_canonical_tensor, def:nt_cpsv, thm:normalized_normal_strongly_irreducible}
     Algebraic normality together with
-    $\sum_i(A^i)^\dagger A^i=\Id$ makes the transfer map strongly irreducible.
-    It consequently has a positive-definite fixed point, no nontrivial
-    invariant projection, and peripheral spectrum $\{1\}$. The fixed-point
+    $\sum_i(A^i)^\dagger A^i=\Id$ gives the transfer map a positive-definite
+    fixed point, no nontrivial invariant projection, and peripheral spectrum
+    $\{1\}$ (Lemma~\ref{thm:normalized_normal_strongly_irreducible}). The fixed-point
     eigenvalue and left-canonical normalization give $r(\E_A)=1$. Thus no
     scalar rescaling remains, and the two conditions in
     Definition~\ref{def:nt_cpsv} hold for $A$ itself.
@@ -439,7 +439,8 @@ coefficients.
 
 \begin{lemma}[CPSV canonical-form representative after blocking]
     \label{thm:cpsv_canonical_form_representative_after_blocking}
-    \lean{MPSTensor.exists_cpsvCanonicalForm_representative_after_blocking}
+    \lean{MPSTensor.exists_cpsvCanonicalForm_representative_after_blocking,
+        MPSTensor.exists_leftCanonical_cpsvCanonicalFormData_after_blocking}
     \leanok
     \uses{def:cpsv_canonical_form, def:blocked_tensor, def:same_mpv2_pos, thm:unconditional_common_primitive_irreducible_blocks, thm:normal_tp_primitive_irred, thm:is_normal_tensor_of_is_normal_left_canonical}
     % Maintainer source anchor: CPSV16 lines 214--251, especially
@@ -453,7 +454,8 @@ coefficients.
         \label{eq:cpsv_canonical_form_representative_after_blocking}
     \end{align}
     Here $B$ generates the same positive-length MPV family and satisfies the
-    canonical-form condition in its own bond coordinates.
+    canonical-form condition in its own bond coordinates. Its displayed
+    normal blocks can be chosen left-canonical.
 \end{lemma}
 
 \begin{proof}\leanok

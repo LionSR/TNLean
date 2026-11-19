@@ -13,6 +13,8 @@ Arbitrary matrices on crossing and exterior edges only change its boundary.
 Auxiliary regional contraction for SCP10, Theorem 5.7, lines 1527–1558.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

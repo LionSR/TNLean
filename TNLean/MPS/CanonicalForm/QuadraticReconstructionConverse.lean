@@ -127,7 +127,7 @@ theorem exists_isNBlkInjective_le_of_canonical [NeZero D] {A : MPSTensor d D}
   have hL : Kraus.IsNBlkInjective K (L + 1) :=
     (hKinj _).mpr (isNBlkInjective_of_le_of_canonical ⟨Cd⟩ hC1 (Nat.le_succ L))
   have hnormal : Kraus.IsNormal K := ⟨L + 1, Nat.succ_pos L, hL⟩
-  have hq := iIndex_le_general_of_isPrimitivePaper K hNorm (isPrimitivePaper_of_isNormal K hnormal)
+  have hq := iIndex_le_general_of_isNormal K hnormal
   have hmem : 0 < iIndex K ∧ Kraus.wordSpan K (iIndex K) = ⊤ :=
     Nat.sInf_mem (s := {n : ℕ | 0 < n ∧ Kraus.wordSpan K n = ⊤}) ⟨L + 1, Nat.succ_pos L, hL⟩
   have hrank : 2 ≤ krausRank K := by

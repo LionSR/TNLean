@@ -32,6 +32,8 @@ auxiliaries are those of the corrected band construction. See
 `docs/paper-gaps/tnlean_one_dimensional_band_sweep_corrections.tex`.
 -/
 
+open ManyBody (interval mem_interval)
+
 noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep

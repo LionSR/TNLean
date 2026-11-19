@@ -18,6 +18,7 @@ forward implication of arXiv:1708.00029, Theorem 4.1, lines 717--731. See
 -/
 
 open scoped Matrix BigOperators
+open Kraus (blockPhysDim singleBlockEquiv blockTensor)
 
 namespace MPSTensor
 

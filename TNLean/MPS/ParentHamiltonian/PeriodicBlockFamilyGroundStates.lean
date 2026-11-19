@@ -37,6 +37,7 @@ docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
 open SpinChain
+open Kraus (blockPhysDim blockTensor)
 namespace MPSTensor
 variable {d r R : ℕ} [NeZero d] {dim : Fin r → ℕ}
 
@@ -63,7 +64,7 @@ theorem exists_parentGroundStateFace_classification_of_periodic_family
         let _ : ∀ j, NeZero (bdim j) := fun j => ⟨Nat.ne_of_gt (hdim j)⟩
         ∃ (B : ∀ j, MPSTensor (blockPhysDim d L) (bdim j))
           (ρ : ∀ j, Matrix (Fin (bdim j)) (Fin (bdim j)) ℂ)
-          (hP : ∀ j, IsPrimitiveMPS (B j) (ρ j)),
+          (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)),
           (∀ j, (ρ j).PosDef) ∧ BlocksNotGaugePhaseEquiv B ∧
           (∀ N, groundSpaceES (blockTensor (toTensorFromBlocks μ A) L) N =
             groundSpaceES (toTensorFromBlocks (fun _ => 1) B) N) ∧

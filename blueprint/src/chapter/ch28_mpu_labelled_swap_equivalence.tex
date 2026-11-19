@@ -1,0 +1,297 @@
+\begin{lemma}[Regrouping a sitewise physical matrix]
+    \label{lem:mpu_sitewise_matrix_regrouping}
+    \lean{MPOTensor.tensorPower_blockKron_reindex}
+    \leanok
+    \uses{def:mpdo_sitewise_physical_matrix, lem:eval_word_block}
+    For every local matrix $Q$ and $N,k\geq0$, the canonical blocked
+    configuration identification gives
+    \[
+        Q^{\otimes Nk}=(Q^{\otimes k})^{\otimes N}.
+    \]
+\end{lemma}
+
+\begin{proof}\leanok
+    In each matrix entry, regroup the finite product according to
+    $r=nk+j$:
+    \[
+        \prod_{r<Nk}Q_{\sigma(r),\tau(r)}
+        =\prod_{n<N}\prod_{j<k}Q_{\sigma(nk+j),\tau(nk+j)}.
+    \]
+    Empty products give the same identity when $N=0$ or $k=0$.
+\end{proof}
+
+\begin{definition}[Blocked physical actions on positive chains]
+    \label{def:mpu_blocked_physical_positive_actions}
+    \lean{MPOTensor.FiniteChainOperatorSymmetry.blockedDaggerWithPhysicalMatrix,
+        MPOTensor.FiniteChainOperatorSymmetry.blockedTransposeWithPhysicalMatrix}
+    \leanok
+    \uses{def:mpu_distinguished_physical_matrix_actions,
+        def:mpu_blocked_finite_chain_symmetry}
+    Fix a local matrix $Q$ and $k\geq0$. Canonically regroup the
+    adjunction or transposition sandwich action through $k$ sites,
+    and test the resulting action on every positive blocked chain
+    length $N$. This retains the positive-chain convention at $k=0$.
+\end{definition}
+
+\begin{lemma}[Full blocked action identities including zero]
+    \label{lem:mpu_blocked_physical_positive_action_identities}
+    \lean{MPOTensor.FiniteChainOperatorSymmetry.blockedDaggerWithPhysicalMatrix_eq,
+        MPOTensor.FiniteChainOperatorSymmetry.blockedTransposeWithPhysicalMatrix_eq}
+    \leanok
+    \uses{def:mpu_blocked_physical_positive_actions,
+        def:mpu_distinguished_physical_matrix_actions,
+        def:mpu_blocked_finite_chain_symmetry,
+        lem:mpu_sitewise_matrix_regrouping}
+    For every $k\geq0$, these actions are exactly
+    \[
+        X\longmapsto (Q^{\otimes k})^{\otimes N}
+        X^\dagger (Q^{\otimes k})^{\otimes N},
+        \qquad
+        X\longmapsto (Q^{\otimes k})^{\otimes N}
+        X^{\mathsf T}(Q^{\otimes k})^{\otimes N},
+    \]
+    with applicable lengths $N>0$. At $k=0$ this set differs from
+    the inverse image condition $Nk>0$ of unrestricted canonical blocking.
+\end{lemma}
+
+\begin{proof}\leanok
+    Regroup the sitewise matrix as
+    $Q^{\otimes Nk}=(Q^{\otimes k})^{\otimes N}$ in canonical blocked
+    coordinates. Reindexing commutes with multiplication, adjunction
+    and transposition. The prescribed positive applicable lengths
+    agree on both sides even when $k=0$.
+\end{proof}
+
+\begin{lemma}[Blocked path transport for a physical involution]
+    \label{lem:mpu_blocked_physical_involution_paths}
+    \lean{MPOTensor.strictlyEquivalentUnderSymmetry_blockedDaggerWithPhysicalMatrix_iff,
+        MPOTensor.strictlyEquivalentUnderSymmetry_blockedTransposeWithPhysicalMatrix_iff,
+        MPOTensor.strictlyEquivalentUnderSymmetry_blockedConjugationWithPhysicalMatrix_iff}
+    \leanok
+    \uses{lem:mpu_blocked_physical_positive_action_identities,
+        thm:mpu_symmetry_path_transport,
+        thm:mpu_physical_left_action_blocking,
+        thm:mpu_pointwise_symmetry_invariance_comparison,
+        thm:mpu_involution_combined_fixed_equation,
+        lem:on_site_tensor_pow_mul, thm:mpdo_eta_local_sigma_nk2,
+        thm:threeMPU2_chain_formulas}
+    Let $Q$ be a unitary involution, let $U,V$ have the same physical
+    dimension and arbitrary virtual dimensions, and fix $k\geq0$.
+    Left multiplication by $Q^{\otimes k}$ identifies the following
+    strict path comparisons, with positive blocked chain lengths:
+    \[
+        B_k(U)\sim_{\mathcal D_{Q,k}}B_k(V)
+        \ \Longleftrightarrow\ B_k(QU)\sim_\dagger B_k(QV)
+        \quad\text{if }Q^\dagger=Q,
+    \]
+    \[
+        B_k(U)\sim_{\mathcal T_{Q,k}}B_k(V)
+        \ \Longleftrightarrow\ B_k(QU)\sim_{\mathsf T}B_k(QV)
+        \quad\text{if }Q^{\mathsf T}=Q,
+    \]
+    \[
+        B_k(U)\sim_*B_k(V)
+        \ \Longleftrightarrow\ B_k(QU)\sim_*B_k(QV)
+        \quad\text{if }\overline Q=Q.
+    \]
+    Here $\mathcal D_{Q,k}$ and $\mathcal T_{Q,k}$ denote the
+    two blocked sandwich actions just defined, $B_k$ denotes canonical
+    blocking, and $QU$ denotes output multiplication. Paths range over
+    the full physical space, and the assertions include $k=0$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The blocked matrix $Q^{\otimes k}$ is again a unitary involution
+    with the required adjunction, transposition or reality property.
+    If $A=(Q^{\otimes k})^{\otimes N}$, then $A^2=I$, and
+    $AX^\dagger A=X$ is equivalent to $(AX)^\dagger=AX$ in the
+    self-adjoint case; the transpose calculation is identical.
+    For real $A$, $\overline{AX}=A\overline X$. Output multiplication
+    therefore identifies the invariant tensors at every virtual
+    dimension. Its continuous involutive action transports the paths,
+    preserves endpoint canonical form and commutes with virtual padding.
+\end{proof}
+
+\begin{lemma}[Canonical blocking of physical-matrix actions]
+    \label{lem:mpu_physical_matrix_canonical_blocking}
+    \lean{MPOTensor.FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_block,
+        MPOTensor.FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_block,
+        MPOTensor.FiniteChainOperatorSymmetry.daggerWithPhysicalMatrix_one,
+        MPOTensor.FiniteChainOperatorSymmetry.transposeWithPhysicalMatrix_one,
+        MPOTensor.conjugationSymmetry_block}
+    \leanok
+    \uses{def:mpu_distinguished_physical_matrix_actions,
+        def:mpu_finite_chain_operator_symmetry,
+        def:mpu_blocked_finite_chain_symmetry,
+        def:mpu_swap_comparison_symmetries,
+        lem:mpu_blocked_physical_positive_action_identities,
+        thm:mpdo_eta_local_sigma_nk2}
+    Let $Q$ be a local physical matrix and $k>0$. Canonical blocking of
+    the actions specified by $Q$ gives the actions specified by
+    $Q^{\otimes k}$ on every blocked chain. Canonical blocking preserves
+    ordinary conjugation. The identity physical matrix gives ordinary
+    adjunction and transposition.
+\end{lemma}
+
+\begin{proof}\leanok
+    Regrouping the factors in $Q^{\otimes Nk}$ gives
+    $(Q^{\otimes k})^{\otimes N}$. Reindexing by the real configuration
+    permutation preserves matrix multiplication, adjunction, transposition,
+    and conjugation. Since $k>0$, $Nk>0$ if and only if $N>0$.
+\end{proof}
+
+\begin{definition}[Three physical-matrix symmetry operations]
+    \label{def:mpu_physical_matrix_symmetry_operations}
+    \lean{MPOTensor.PhysicalSymmetryKind,
+        MPOTensor.PhysicalSymmetryKind.withMatrix}
+    \leanok
+    \uses{def:mpu_distinguished_physical_matrix_actions,
+        def:mpu_swap_comparison_symmetries}
+    Retain the three operations $\sharp\in\{\dagger,\mathsf T,\mathsf K\}$.
+    A local matrix $Q$ specifies the full adjunction and transposition
+    actions from Definition~\ref{def:mpu_distinguished_physical_matrix_actions}.
+    The operation $\mathsf K$ is ordinary entrywise conjugation and is
+    independent of $Q$.
+\end{definition}
+
+\begin{definition}[Equivalence on a labelled physical space]
+    \label{def:mpu_labelled_physical_matrix_equivalence}
+    \lean{MPOTensor.EquivalentUnderPhysicalMatrixSymmetry}
+    \leanok
+    \uses{def:mpu_physical_matrix_symmetry_operations,
+        def:mpu_physical_identity_matrix, def:strictly-equivalent-symmetry,
+        def:mpu_blocked_finite_chain_symmetry, def:blocked_tensor}
+    Let $\mathcal U,\mathcal V$ be MPUs on the same labelled physical
+    space, and retain its local symmetry matrix $Q$. Write
+    $\mathcal U\sim^{Q}_{\sharp}\mathcal V$ when there are common
+    integers $x,k>0$ such that
+    $(\mathcal U^{(x)})^{[k]}$ and $(\mathcal V^{(x)})^{[k]}$ are strictly
+    equivalent under the canonical $k$-site blocking of the full action
+    specified by $Q\otimes I_x$. Strict equivalence includes canonical
+    endpoints and a path in a common enlarged virtual dimension.
+    For conjugation write $\sim_{\mathsf K}$.
+    This retains the original physical labels and fixes the ancillary
+    spin, as in \cite[lines~1356--1366 and 2210--2234]{Cirac2017MPU}.
+\end{definition}
+
+\begin{lemma}[Stabilized transport for a retained physical involution]
+    \label{lem:mpu_general_physical_matrix_equivalence_transport}
+    \lean{MPOTensor.equivalentUnderPhysicalMatrixSymmetry_dagger_iff,
+        MPOTensor.equivalentUnderPhysicalMatrixSymmetry_transpose_iff,
+        MPOTensor.equivalentUnderPhysicalMatrixSymmetry_conjugation_iff}
+    \leanok
+    \uses{def:mpu_labelled_physical_matrix_equivalence,
+        lem:mpu_blocked_physical_involution_paths,
+        lem:mpu_physical_matrix_canonical_blocking,
+        lem:mpu_blocked_physical_positive_action_identities,
+        lem:mpu_ancilla_output_action, lem:on_site_tensor_pow_mul,
+        thm:mpu_continuous_involutive_left_action,
+        thm:threeMPU2_chain_formulas}
+    Let $Q$ be a unitary involution on a fixed labelled physical space.
+    For tensors $U,V$ with arbitrary virtual dimensions, output
+    multiplication identifies the stabilized comparisons
+    \[
+        U\simeq_{\dagger,Q}V\quad\Longleftrightarrow\quad
+        QU\simeq_{\dagger,I}QV\quad\text{if }Q^\dagger=Q,
+    \]
+    \[
+        U\simeq_{{\mathsf T},Q}V\quad\Longleftrightarrow\quad
+        QU\simeq_{{\mathsf T},I}QV\quad\text{if }Q^{\mathsf T}=Q,
+    \]
+    \[
+        U\simeq_{*,Q}V\quad\Longleftrightarrow\quad
+        QU\simeq_{*,I}QV\quad\text{if }\overline Q=Q.
+    \]
+    The same common positive identity ancilla and positive blocking
+    length witness each direction.
+\end{lemma}
+
+\begin{proof}\leanok
+    Since $Q$ is unitary and $Q^2=I$, output multiplication gives
+    \[
+        U\text{ is an MPU}\quad\Longleftrightarrow\quad
+        QU\text{ is an MPU},
+    \]
+    and the same equivalence holds for $V$. After attaching an identity
+    ancilla, the matrix $Q\otimes I_x$ has the same required properties.
+    Apply the full blocked-path comparison at each $x,k>0$ and quantify
+    over those unchanged witnesses.
+\end{proof}
+
+\begin{lemma}[Labelled-spin swap comparison with arbitrary common stabilization]
+    \label{thm:mpu_labelled_swap_equivalence}
+    \lean{MPOTensor.equivalentUnderPhysicalMatrixSymmetry_swap_dagger_iff,
+        MPOTensor.equivalentUnderPhysicalMatrixSymmetry_swap_transpose_iff,
+        MPOTensor.equivalentUnderPhysicalMatrixSymmetry_swap_conjugation_iff}
+    \leanok
+    \uses{def:mpu_labelled_physical_matrix_equivalence, threeMPU2}
+    Let $\mathcal U,\mathcal V$ have physical space
+    $\mathbb C^d\otimes\mathbb C^d$ and arbitrary virtual dimensions.
+    Put $\widetilde{\mathcal U}=\mathbb S\mathcal U$ and
+    $\widetilde{\mathcal V}=\mathbb S\mathcal V$, acting on physical output.
+    Then $\mathcal U\sim^{\mathbb S}_{\dagger}\mathcal V$ if and only if
+    $\widetilde{\mathcal U}\sim^{I}_{\dagger}\widetilde{\mathcal V}$;
+    the same assertion holds for transposition. Also
+    $\mathcal U\sim_{\mathsf K}\mathcal V$ if and only if
+    $\widetilde{\mathcal U}\sim_{\mathsf K}\widetilde{\mathcal V}$.
+    The same positive ancilla and blocking witnesses work in both directions.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_common_ancilla_swap_comparison,
+        lem:mpu_physical_matrix_canonical_blocking,
+        lem:mpu_blocked_physical_positive_action_identities,
+        lem:mpu_ancilla_output_action, lem:on_site_tensor_pow_mul,
+        thm:mpu_continuous_involutive_left_action,
+        thm:mpu_one_sided_swap_invariance, thm:threeMPU2_chain_formulas}
+    Apply Lemma~\ref{lem:mpu_common_ancilla_swap_comparison} to the
+    common positive ancilla and blocking witnesses. Since
+    $\mathbb S$ is unitary and $\mathbb S^2=I$,
+    \[
+        \mathcal U\text{ is an MPU}\quad\Longleftrightarrow\quad
+        \widetilde{\mathcal U}\text{ is an MPU},
+    \]
+    and the same holds for $\mathcal V$. These are precisely the remaining
+    endpoint conditions in the labelled equivalence relation.
+\end{proof}
+
+\begin{definition}[Finite families of the three source examples]
+    \label{def:mpu_three_labelled_source_families}
+    \lean{MPOTensor.shiftExampleFamilyBondDim,
+        MPOTensor.shiftExampleFamily,
+        MPOTensor.shiftExampleTildeFamily}
+    \leanok
+    \uses{threeMPU, threeMPU2}
+    Index the source tensors in their printed order by
+    $i\in\{0,1,2\}$, writing
+    \[
+        \mathcal A_i=\mathcal U_{i+1},\qquad
+        \widetilde{\mathcal A}_i=\widetilde{\mathcal U}_{i+1}.
+    \]
+    Thus the zero-based family index preserves the paper's names
+    $\mathcal U_1,\mathcal U_2,\mathcal U_3$. The virtual dimensions of
+    $\mathcal A_0,\mathcal A_1,\mathcal A_2$ are $1,d^2,d^2$, respectively.
+\end{definition}
+
+\begin{lemma}[Swap comparison for all pairs of the three labelled examples]
+    \label{thm:mpu_three_labelled_source_swap_comparison}
+    \lean{MPOTensor.labelledShiftExamples_swap_dagger_iff,
+        MPOTensor.labelledShiftExamples_swap_transpose_iff,
+        MPOTensor.labelledShiftExamples_swap_conjugation_iff}
+    \leanok
+    \uses{def:mpu_three_labelled_source_families,
+        thm:mpu_labelled_swap_equivalence}
+    For every $i,j\in\{0,1,2\}$, the three comparisons of
+    Lemma~\ref{thm:mpu_labelled_swap_equivalence} hold for the source
+    tensors $\mathcal A_i,\mathcal A_j$ and their transformed tensors
+    $\widetilde{\mathcal A}_i,\widetilde{\mathcal A}_j$.
+    This uses the labelled physical-space convention of
+    Definition~\ref{def:mpu_labelled_physical_matrix_equivalence}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:mpu_labelled_swap_equivalence}
+    Specialize the three general comparisons to each of the nine ordered
+    pairs of source tensors. The transformed tensors are the one-sided
+    swaps from their defining formulas.
+\end{proof}

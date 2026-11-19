@@ -71,47 +71,47 @@ theorem trace_mpo_changePhysicalBasis_of_isometry
     (M : MPOTensor d D) (N : ℕ) :
     Matrix.trace (mpo (changePhysicalBasis V M) N) =
       Matrix.trace (mpo M N) := by
-  rw [← singleKrausMap_sitewisePhysicalMatrix_mpo]
-  exact (singleKrausMap_isKrausCPTP (sitewisePhysicalMatrix V N)
-    (sitewisePhysicalMatrix_isometry V hV N)).trace_map (mpo M N)
+  rw [← singleKrausMap_tensorPower_mpo]
+  exact (singleKrausMap_isKrausCPTP (Matrix.tensorPower N V)
+    (tensorPower_isometry V hV N)).trace_map (mpo M N)
 
 /-- Normalization commutes with an isometric physical inclusion. -/
 theorem normalizedMPO_changePhysicalBasis_of_isometry
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
     (M : MPOTensor d D) (N : ℕ) :
     normalizedMPO (changePhysicalBasis V M) N =
-      singleKrausMap (sitewisePhysicalMatrix V N) (normalizedMPO M N) := by
+      singleKrausMap (Matrix.tensorPower N V) (normalizedMPO M N) := by
   rw [normalizedMPO, normalizedMPO,
     trace_mpo_changePhysicalBasis_of_isometry V hV M N,
-    ← singleKrausMap_sitewisePhysicalMatrix_mpo]
-  exact ((singleKrausMap (sitewisePhysicalMatrix V N)).map_smul _ _).symm
+    ← singleKrausMap_tensorPower_mpo]
+  exact ((singleKrausMap (Matrix.tensorPower N V)).map_smul _ _).symm
 
 /-- After splitting a chain into a prefix and suffix, the sitewise physical
 matrix is the Kronecker product of the corresponding prefix and suffix
 matrices. -/
-theorem reindex_sitewisePhysicalMatrix_blockSplit
+theorem reindex_tensorPower_blockSplit
     (V : Matrix (Fin e) (Fin d) ℂ) (L K : ℕ) :
     Matrix.reindex (blockSplitEquiv e L K)
         (blockSplitEquiv d L K)
-        (sitewisePhysicalMatrix V (L + K)) =
+        (Matrix.tensorPower (L + K) V) =
       Matrix.kroneckerMap (· * ·)
-        (sitewisePhysicalMatrix V L) (sitewisePhysicalMatrix V K) := by
+        (Matrix.tensorPower L V) (Matrix.tensorPower K V) := by
   ext ⟨a, b⟩ ⟨x, y⟩
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, sitewisePhysicalMatrix,
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.tensorPower_apply,
     Matrix.kroneckerMap_apply, blockSplitEquiv_symm_apply]
   rw [Fin.prod_univ_add]
   simp
 
 /-- Reassociating the chain length from `N` to `L + (N - L)` does not alter
 the sitewise physical matrix. -/
-theorem reindex_sitewisePhysicalMatrix_blockReindex
+theorem reindex_tensorPower_blockReindex
     (V : Matrix (Fin e) (Fin d) ℂ) (N L : ℕ) (hL : L ≤ N) :
     Matrix.reindex (blockReindexEquiv e N L hL)
-        (blockReindexEquiv d N L hL) (sitewisePhysicalMatrix V N) =
-      sitewisePhysicalMatrix V (L + (N - L)) := by
+        (blockReindexEquiv d N L hL) (Matrix.tensorPower N V) =
+      Matrix.tensorPower (L + (N - L)) V := by
   ext s t
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
-    sitewisePhysicalMatrix, blockReindexEquiv, Equiv.arrowCongr_symm,
+    Matrix.tensorPower_apply, blockReindexEquiv, Equiv.arrowCongr_symm,
     Equiv.refl_symm, Equiv.arrowCongr_apply, Equiv.coe_refl,
     finCongr_symm]
   exact Fintype.prod_equiv (finCongr (Nat.add_sub_cancel' hL)).symm
@@ -126,18 +126,18 @@ theorem blockReducedState_singleKraus_sitewise
     (L K : ℕ)
     (X : Matrix (Fin (L + K) → Fin d) (Fin (L + K) → Fin d) ℂ) :
     blockReducedState e L K
-        (singleKrausMap (sitewisePhysicalMatrix V (L + K)) X) =
-      singleKrausMap (sitewisePhysicalMatrix V L)
+        (singleKrausMap (Matrix.tensorPower (L + K) V) X) =
+      singleKrausMap (Matrix.tensorPower L V)
         (blockReducedState d L K X) := by
   change Matrix.partialTraceRight
       (Matrix.reindex (blockSplitEquiv e L K) (blockSplitEquiv e L K)
-        (singleKrausMap (sitewisePhysicalMatrix V (L + K)) X)) = _
+        (singleKrausMap (Matrix.tensorPower (L + K) V) X)) = _
   rw [Matrix.reindex_singleKrausMap
       (blockSplitEquiv d L K) (blockSplitEquiv e L K),
-    reindex_sitewisePhysicalMatrix_blockSplit]
+    reindex_tensorPower_blockSplit]
   exact Matrix.partialTraceRight_kronecker_conj_of_right_isometry
-    (sitewisePhysicalMatrix V L) (sitewisePhysicalMatrix V K)
-    (sitewisePhysicalMatrix_isometry V hV K)
+    (Matrix.tensorPower L V) (Matrix.tensorPower K V)
+    (tensorPower_isometry V hV K)
     (Matrix.reindex (blockSplitEquiv d L K) (blockSplitEquiv d L K) X)
 
 /-- Every contiguous marginal of a physically included MPO is the isometric
@@ -146,18 +146,18 @@ theorem reducedBlockState_changePhysicalBasis_of_isometry
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
     (M : MPOTensor d D) (N L : ℕ) (hL : L ≤ N) :
     reducedBlockState (changePhysicalBasis V M) N L hL =
-      singleKrausMap (sitewisePhysicalMatrix V L)
+      singleKrausMap (Matrix.tensorPower L V)
         (reducedBlockState M N L hL) := by
   rw [reducedBlockState, reducedBlockState,
     normalizedMPO_changePhysicalBasis_of_isometry V hV]
   change blockReducedState e L (N - L)
       (Matrix.reindex (blockReindexEquiv e N L hL)
         (blockReindexEquiv e N L hL)
-        (singleKrausMap (sitewisePhysicalMatrix V N)
+        (singleKrausMap (Matrix.tensorPower N V)
           (normalizedMPO M N))) = _
   rw [Matrix.reindex_singleKrausMap
       (blockReindexEquiv d N L hL) (blockReindexEquiv e N L hL),
-    reindex_sitewisePhysicalMatrix_blockReindex]
+    reindex_tensorPower_blockReindex]
   exact blockReducedState_singleKraus_sitewise V hV L (N - L)
     (Matrix.reindex (blockReindexEquiv d N L hL)
       (blockReindexEquiv d N L hL) (normalizedMPO M N))
@@ -170,16 +170,16 @@ theorem blockEntropy_changePhysicalBasis_of_isometry
     (hM : (mpo M N).PosSemidef) :
     blockEntropy (changePhysicalBasis V M) N L hL
         (by
-          rw [← singleKrausMap_sitewisePhysicalMatrix_mpo]
+          rw [← singleKrausMap_tensorPower_mpo]
           exact hM.mul_mul_conjTranspose_same
-            (sitewisePhysicalMatrix V N)) =
+            (Matrix.tensorPower N V)) =
       blockEntropy M N L hL hM := by
   let hM' : (mpo (changePhysicalBasis V M) N).PosSemidef := by
-    rw [← singleKrausMap_sitewisePhysicalMatrix_mpo]
-    exact hM.mul_mul_conjTranspose_same (sitewisePhysicalMatrix V N)
+    rw [← singleKrausMap_tensorPower_mpo]
+    exact hM.mul_mul_conjTranspose_same (Matrix.tensorPower N V)
   let hρ := reducedBlockState_isHermitian M N L hL hM
   let hρ' := Matrix.isHermitian_mul_mul_conjTranspose
-    (sitewisePhysicalMatrix V L) hρ
+    (Matrix.tensorPower L V) hρ
   change vonNeumannEntropy
       (reducedBlockState (changePhysicalBasis V M) N L hL)
         (reducedBlockState_isHermitian
@@ -189,11 +189,11 @@ theorem blockEntropy_changePhysicalBasis_of_isometry
     V hV M N L hL
   calc
     _ = vonNeumannEntropy
-        (singleKrausMap (sitewisePhysicalMatrix V L)
+        (singleKrausMap (Matrix.tensorPower L V)
           (reducedBlockState M N L hL)) hρ' :=
       vonNeumannEntropy_congr hred _ _
     _ = _ := vonNeumannEntropy_singleKraus_isometry
-      (sitewisePhysicalMatrix V L) (sitewisePhysicalMatrix_isometry V hV L)
+      (Matrix.tensorPower L V) (tensorPower_isometry V hV L)
       (reducedBlockState M N L hL) hρ
 
 /-- An isometric physical inclusion does not change the mutual information
@@ -204,9 +204,9 @@ theorem mutualInfoChain_changePhysicalBasis_of_isometry
     (hM : (mpo M N).PosSemidef) :
     mutualInfoChain (changePhysicalBasis V M) N L hL
         (by
-          rw [← singleKrausMap_sitewisePhysicalMatrix_mpo]
+          rw [← singleKrausMap_tensorPower_mpo]
           exact hM.mul_mul_conjTranspose_same
-            (sitewisePhysicalMatrix V N)) =
+            (Matrix.tensorPower N V)) =
       mutualInfoChain M N L hL hM := by
   simp only [mutualInfoChain]
   rw [blockEntropy_changePhysicalBasis_of_isometry V hV,

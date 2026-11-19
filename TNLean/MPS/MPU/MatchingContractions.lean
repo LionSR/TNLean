@@ -90,10 +90,10 @@ theorem IsMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power
     let ρ' : Fin (D * D) → ℂ := fun i ↦ ρ.vec (finProdFinEquiv.symm i)
     let Φ' : Fin (D * D) → ℂ := fun i ↦
       (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm i)
-    (∀ i j : Fin (MPSTensor.blockPhysDim d (J * (D * D))),
+    (∀ i j : Fin (Kraus.blockPhysDim d (J * (D * D))),
       Φ' ⬝ᵥ (doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *ᵥ ρ') =
         if i = j then 1 else 0) ∧
-    (∀ i j k l : Fin (MPSTensor.blockPhysDim d (J * (D * D))),
+    (∀ i j k l : Fin (Kraus.blockPhysDim d (J * (D * D))),
       doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *
           doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) k l =
         doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *
@@ -118,8 +118,8 @@ theorem IsMPU.blockTensor_mul_sq_simple_contractions_of_transfer_power
     change normalizedDiagonal (doubleLayerTensor (MPOTensor.blockTensor U J)) = _
     rw [normalizedDiagonal_doubleLayerTensor_blockTensor, hpower]
     rfl
-  let : NeZero (MPSTensor.blockPhysDim d J) := ⟨by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  let : NeZero (Kraus.blockPhysDim d J) := ⟨by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_ne_zero J (NeZero.ne d)⟩
   have hs := hVmpu.blockTensor_sq_simple_contractions_of_normalizedDiagonal_eq_vecMulVec
     ρ' Φ' hpair hVE
@@ -155,10 +155,10 @@ theorem IsMPUCanonicalFormII.forced_block_simple_contractions
     let ρ' : Fin (D * D) → ℂ := fun i ↦ hU.ρ.vec (finProdFinEquiv.symm i)
     let Φ' : Fin (D * D) → ℂ := fun i ↦
       (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm i)
-    (∀ i j : Fin (MPSTensor.blockPhysDim d (J * (D * D))),
+    (∀ i j : Fin (Kraus.blockPhysDim d (J * (D * D))),
       Φ' ⬝ᵥ (doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *ᵥ ρ') =
         if i = j then 1 else 0) ∧
-    (∀ i j k l : Fin (MPSTensor.blockPhysDim d (J * (D * D))),
+    (∀ i j k l : Fin (Kraus.blockPhysDim d (J * (D * D))),
       doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *
           doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) k l =
         doubleLayerTensor (MPOTensor.blockTensor U (J * (D * D))) i j *

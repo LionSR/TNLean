@@ -22,6 +22,8 @@ Source: arXiv:1804.04964, the algebra assignment at lines 563--582 and the two-d
 end-window comparison at lines 2368--2444 of `Papers/1804.04964/paper_normal.tex`.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 open scoped BigOperators Matrix
 

@@ -19,6 +19,8 @@ replaces an iterate. Error convergence, physical parameter selection and
 final spectral extraction are separate consequences.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- The literal repeated filter and collective trim, starting from the

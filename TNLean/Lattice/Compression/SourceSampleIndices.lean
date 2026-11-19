@@ -79,7 +79,7 @@ def sourcePairEquiv : {a b : Layout P} → (w : SourceCircuit a b) →
       | inl g => exact sourcePairEquiv w g
       | inr g => exact sourcePairEquiv v g
   | _, _, .localMap .., g => nomatch g
-  | _, _, @SourceCircuit.gate _ _ _ _ _ owner _ _ _ G _, _ =>
+  | _, _, Circuit.gate (@PreparedGate.mk _ _ _ _ _ owner _ _ _ G _), _ =>
       (SourceInventory.pairIndexEquiv G.slots G.pair_nodup G.pair_complete).trans
         (participantPairEquiv owner)
   | _, _, .swap .., g => nomatch g

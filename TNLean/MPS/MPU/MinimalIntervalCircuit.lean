@@ -42,7 +42,7 @@ def IsMinimalIntervalCircuitImplementation {d D N : ℕ} [NeZero d]
     Prop :=
   Z ∈ unitary (Matrix (Cfg d (logicalSiteCount d D N))
       (Cfg d (logicalSiteCount d D N)) ℂ) ∧
-    Z ∈ supportedOperators d (intervalConsecutiveSupport d D N j.val k.val) ∧
+    Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (intervalConsecutiveSupport d D N j.val k.val) ∧
     IsPairProduct d (globalSiteCount d D N) K C ∧
     IsCleanImplementation
       (initializedBasisMatrix (zeroWorkspaceEmbedding (d := d)

@@ -11,7 +11,7 @@ import TNLean.MPS.Preparation.ShortChainPreparation
 import TNLean.MPS.Preparation.RemainderBlocks
 
 /-!
-# Every translation-invariant MPS with measurements in depth `O(log(N/ε))`
+# Normal-sector expansions with measurements in logarithmic depth
 
 arXiv:2307.01696, paragraph "Long-range MPS using measurements", prepares a translation-invariant
 MPS that is not normal with measurements: "First create `|χ_{N/q}⟩`, which can be done in
@@ -63,8 +63,15 @@ maps of distinct blocks, whose spectral radius is assumed below one. Documented 
 `O(q)` rather than in constant depth. Documented in
 `docs/paper-gaps/mswc24_measurement_preparation_scope.tex`.
 
+The preparation estimate also holds for any tensor whose positive-length vectors have
+an expansion in the same normal family, with arbitrary length-dependent coefficients.
+`ArbitraryTensorAfterBlocking` derives such an expansion from an arbitrary tensor after
+fixed blocking; the original-site and unrestricted-length source assertion remains open.
+
 ## Main declarations
 
+* `exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum`
+  — logarithmic preparation from an exact normal-sector expansion.
 * `exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of_isInjectiveOn`
   — the preparation of `∑ⱼ αⱼ (⊗ₖ V_k) ⊗ₖ |ω_j⟩` in depth `O(L)`.
 * `MPSPreparation.exists_blockIsometryState_eq_smul` — a chain of one block.
@@ -87,6 +94,7 @@ maps of distinct blocks, whose spectral radius is assumed below one. Documented 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSPreparation
 
@@ -304,43 +312,26 @@ theorem exists_blockIsometryState_eq_smul {D b : ℕ} {Dj : Fin b → ℕ}
 
 /-! ### Error `ε` in depth `O(log(N/ε))` -/
 
-/-- **Every translation-invariant MPS with measurements, in depth `O(log(N/ε))`.** Let
-`Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` (arXiv:2307.01696, Supplemental Material,
-eq. (S2)) with nonzero complex weights, every block `A_j` normal in the gauge of eq. (5):
-`∑ᵢ (A_jⁱ)† A_jⁱ = 1`, `E_{A_j}(σ_j) = σ_j`, `σ_j > 0`, `Tr σ_j = 1`, and let the mixed transfer
-maps `E_{jj'}` of distinct blocks have all eigenvalues of modulus below one. There is `c`,
-depending only on `A`, with the following property. For every `N ≥ 2` and `0 < ε ≤ 1` at which
-the periodic state `|φ_N(A)⟩` does not vanish, some unit vector `|ψ⟩` with
-`1 - |⟨ψ|φ_N⟩| ≤ ε` is prepared with measurements and a circuit in depth at most `c log(N/ε)`.
-
-arXiv:2307.01696, paragraph "Long-range MPS using measurements": "If instead measurements are
-only used for the preparation of `|χ_{N/q}⟩`, the depth is `O(log(N/ε))`", for MPS
-"short- or long-range correlated". The `q`-site states of distinct blocks need not be
-orthogonal, the multiplicities and the weights are arbitrary, and `N` need not be a multiple of
-the block length: for `q = ⌈a log(N/ε) + b⌉ ≤ N` the chain is cut into blocks "all of the same
-size, `q_N`, except for the last one, which may be larger" (Supplemental Material, proof of
-Theorem 1), the state `∑ⱼ αⱼ (⊗ₖ V_k) ⊗ₖ |ω_j⟩` of the direct sum with unit weights has error at
-most `ε` (`MPSTensor.exists_one_sub_norm_inner_sum_blockIsometryState_le`) and is prepared in
-depth `O(q)`
-(`exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of_isInjectiveOn`);
-for `N < q`, `|φ_N⟩` itself is prepared, as the state of one block
-(`exists_blockIsometryState_eq_smul`) or, below a fixed length, in bounded depth. The periodic
-state is assumed nonzero, as the normalization of the source presupposes. -/
-theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero
-    {D b : ℕ} {m : Fin b → ℕ} {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}
-    {ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D}
-    (hι : ∀ j k, Function.Injective (ι j k))
-    (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
-    (μ : CopyWeights b m) (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
+/-- A positive-length MPV expansion in a fixed normal family suffices for logarithmic
+measurement preparation. The coefficients can be arbitrary complex functions of length;
+only the target vector must be nonzero. The proof uses the unweighted sum of the normal
+blocks and is uniform over all sector amplitudes.
+Source: arXiv:2307.01696, "Long-range MPS using measurements", eqs. (S2)--(S4). -/
+theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum
+    {D b : ℕ} (A : MPSTensor d D) {Dj : Fin b → ℕ}
+    {Aj : (j : Fin b) → MPSTensor d (Dj j)}
+    (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
     {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ} (hσ : ∀ j, (σ j).PosDef)
     (htr : ∀ j, (σ j).trace = 1) (hfix : ∀ j, Kraus.transferMap (Aj j) (σ j) = σ j)
     (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
-      ‖μ'‖ < 1) :
+      ‖μ'‖ < 1) (coeff : ℕ → Fin b → ℂ)
+    (hexpand : ∀ (N : ℕ) [NeZero N] (s : Fin N → Fin d),
+      mpv A s = ∑ j, coeff N j * mpv (Aj j) s) :
     ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N →
-      mpvState (repeatedBlockSum Aj ι μ) N ≠ 0 →
+      mpvState A N ≠ 0 →
       ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
         IsPreparedWithMeasurementsAndCircuitInDepth T (fun s => ψ s) ∧
-        1 - ‖⟪ψ, normalizedMPVState (repeatedBlockSum Aj ι μ) N⟫_ℂ‖ ≤ ε := by
+        1 - ‖⟪ψ, normalizedMPVState A N⟫_ℂ‖ ≤ ε := by
   classical
   -- The target itself, used for short chains.
   have hself : ∀ (N : ℕ) (v : MPVSpace d N) (ε : ℝ), 0 < ε → ‖v‖ = 1 →
@@ -354,14 +345,14 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne
     refine isPreparedWithMeasurementsAndCircuitInDepth_of_isPreparedInDepth
       (isPreparedInDepth_zero_of_le_one (by omega) _) fun h => ?_
     have h1 := norm_normalizedMPVState h0
-    rw [show normalizedMPVState (repeatedBlockSum Aj ι μ) N = 0 from by
+    rw [show normalizedMPVState A N = 0 from by
       ext s; exact congrFun h s] at h1
     simp at h1
   rcases Nat.eq_zero_or_pos b with rfl | hb
   · -- Without blocks the periodic state vanishes.
     refine ⟨0, fun ε _ _ N _ _ h0 => absurd ?_ h0⟩
     ext s
-    rw [mpvState_apply, mpv_repeatedBlockSum hι hdisj μ (NeZero.ne N)]
+    rw [mpvState_apply, hexpand N]
     simp
   have : NeZero b := ⟨hb.ne'⟩
   have hd : 0 < d := by omega
@@ -443,11 +434,11 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne
     rw [add_mul, add_mul]
     rcases hT with h | h | h <;> linarith
   -- The target as a combination of the states of the blocks.
-  set β := bntWeight μ N
-  have hφ : ∀ s, mpvState (repeatedBlockSum Aj ι μ) N s = ∑ j, β j * mpv (Aj j) s := fun s => by
-    rw [mpvState_apply, mpv_repeatedBlockSum hι hdisj μ (NeZero.ne N)]
-  have hnormφ : normalizedMPVState (repeatedBlockSum Aj ι μ) N =
-      ((‖mpvState (repeatedBlockSum Aj ι μ) N‖ : ℂ)⁻¹) • mpvState (repeatedBlockSum Aj ι μ) N :=
+  set β := coeff N
+  have hφ : ∀ s, mpvState A N s = ∑ j, β j * mpv (Aj j) s := fun s => by
+    rw [mpvState_apply, hexpand N]
+  have hnormφ : normalizedMPVState A N =
+      ((‖mpvState A N‖ : ℂ)⁻¹) • mpvState A N :=
     rfl
   set q := ⌈Q⌉₊ with hqdef
   have hQq : Q ≤ q := Nat.le_ceil Q
@@ -511,12 +502,12 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne
       obtain ⟨ω₁, hω₁, hω₁S, heq⟩ := exists_blockIsometryState_eq_smul hι' hdisj' hN1 hinjN β _
         hφ h0
       have hprep : IsPreparedInDepth (Ce * N) fun s =>
-          normalizedMPVState (repeatedBlockSum Aj ι μ) N s := by
+          normalizedMPVState A N s := by
         rw [hnormφ, ← heq, blockIsometryState_eq_chainBlockIsometryState]
         exact hCe (fun _ : Fin 1 => N) hN1 (fun _ => AJ) (fun _ => blockPairs ι')
           (fun _ => ω₁) (fun _ => hω₁) hω₁S N (fun _ => by omega) (fun _ => le_rfl)
           fun _ => by rw [chainBlockTensor_const]; exact hinjN
-      refine ⟨normalizedMPVState (repeatedBlockSum Aj ι μ) N, Ce * N, hψ1,
+      refine ⟨normalizedMPVState A N, Ce * N, hψ1,
         hc _ (Or.inr (Or.inl ?_)), ?_, hself N _ ε hε hψ1⟩
       · push_cast
         have : (0 : ℝ) ≤ Ce := Nat.cast_nonneg _
@@ -525,19 +516,60 @@ theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne
           _ = Ce * c₀ * Real.log (N / ε) := by ring
       · refine isPreparedWithMeasurementsAndCircuitInDepth_of_isPreparedInDepth hprep fun h => ?_
         have h1 := hψ1
-        rw [show normalizedMPVState (repeatedBlockSum Aj ι μ) N = 0 from by
+        rw [show normalizedMPVState A N = 0 from by
           ext s; exact congrFun h s] at h1
         simp at h1
-    · refine ⟨normalizedMPVState (repeatedBlockSum Aj ι μ) N, Ks, hψ1,
+    · refine ⟨normalizedMPVState A N, Ks, hψ1,
         hc _ (Or.inr (Or.inr ?_)), ?_, hself N _ ε hε hψ1⟩
       · rw [div_mul_eq_mul_div, le_div_iff₀ hl2]
         exact mul_le_mul_of_nonneg_left hlog (Nat.cast_nonneg _)
       · refine isPreparedWithMeasurementsAndCircuitInDepth_of_isPreparedInDepth
           (hKs N hN2 (by omega) _ hψ1) fun h => ?_
         have h1 := hψ1
-        rw [show normalizedMPVState (repeatedBlockSum Aj ι μ) N = 0 from by
+        rw [show normalizedMPVState A N = 0 from by
           ext s; exact congrFun h s] at h1
         simp at h1
+
+/-- **Every translation-invariant MPS with measurements, in depth `O(log(N/ε))`.** Let
+`Aⁱ = ⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_jⁱ` (arXiv:2307.01696, Supplemental Material,
+eq. (S2)) with nonzero complex weights, every block `A_j` normal in the gauge of eq. (5):
+`∑ᵢ (A_jⁱ)† A_jⁱ = 1`, `E_{A_j}(σ_j) = σ_j`, `σ_j > 0`, `Tr σ_j = 1`, and let the mixed transfer
+maps `E_{jj'}` of distinct blocks have all eigenvalues of modulus below one. There is `c`,
+depending only on `A`, with the following property. For every `N ≥ 2` and `0 < ε ≤ 1` at which
+the periodic state `|φ_N(A)⟩` does not vanish, some unit vector `|ψ⟩` with
+`1 - |⟨ψ|φ_N⟩| ≤ ε` is prepared with measurements and a circuit in depth at most `c log(N/ε)`.
+
+arXiv:2307.01696, paragraph "Long-range MPS using measurements": "If instead measurements are
+only used for the preparation of `|χ_{N/q}⟩`, the depth is `O(log(N/ε))`", for MPS
+"short- or long-range correlated". The `q`-site states of distinct blocks need not be
+orthogonal, the multiplicities and the weights are arbitrary, and `N` need not be a multiple of
+the block length: for `q = ⌈a log(N/ε) + b⌉ ≤ N` the chain is cut into blocks "all of the same
+size, `q_N`, except for the last one, which may be larger" (Supplemental Material, proof of
+Theorem 1), the state `∑ⱼ αⱼ (⊗ₖ V_k) ⊗ₖ |ω_j⟩` of the direct sum with unit weights has error at
+most `ε` (`MPSTensor.exists_one_sub_norm_inner_sum_blockIsometryState_le`) and is prepared in
+depth `O(q)`
+(`exists_isPreparedWithMeasurementsAndCircuitInDepth_blockIsometryState_of_isInjectiveOn`);
+for `N < q`, `|φ_N⟩` itself is prepared, as the state of one block
+(`exists_blockIsometryState_eq_smul`) or, below a fixed length, in bounded depth. The periodic
+state is assumed nonzero, as the normalization of the source presupposes. -/
+theorem exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero
+    {D b : ℕ} {m : Fin b → ℕ} {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (Dj j)}
+    {ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D}
+    (hι : ∀ j k, Function.Injective (ι j k))
+    (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
+    (μ : CopyWeights b m) (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
+    {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ} (hσ : ∀ j, (σ j).PosDef)
+    (htr : ∀ j, (σ j).trace = 1) (hfix : ∀ j, Kraus.transferMap (Aj j) (σ j) = σ j)
+    (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
+      ‖μ'‖ < 1) :
+    ∃ c : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (N : ℕ) [NeZero N], 2 ≤ N →
+      mpvState (repeatedBlockSum Aj ι μ) N ≠ 0 →
+      ∃ (ψ : MPVSpace d N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
+        IsPreparedWithMeasurementsAndCircuitInDepth T (fun s => ψ s) ∧
+        1 - ‖⟪ψ, normalizedMPVState (repeatedBlockSum Aj ι μ) N⟫_ℂ‖ ≤ ε := by
+  exact exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpv_eq_sum
+    (repeatedBlockSum Aj ι μ) hN hA hσ htr hfix hmix (bntWeight μ)
+    (fun N _ s => mpv_repeatedBlockSum hι hdisj μ (NeZero.ne N) s)
 
 /-- **The periodic state does not vanish on long chains.** In the setting of
 `exists_isPreparedWithMeasurementsAndCircuitInDepth_le_log_of_mpvState_ne_zero`, there is `N₀`

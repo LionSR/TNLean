@@ -20,9 +20,11 @@ $\varepsilon_1$ replaced by $\varepsilon_0+\Delta$.
     \label{def:lvv_bond_hamiltonian}
     \lean{TNLean.MPS.AreaLaw.bondSupport,
         TNLean.MPS.AreaLaw.bondSupport_injective,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.ofBonds,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.ofBonds_operator,
-        TNLean.MPS.AreaLaw.ChainHamiltonian.posSemidef_ofBonds_term}
+        ManyBody.ChainInteraction.ofBonds,
+        ManyBody.ChainInteraction.isHermitian_ofBonds_term,
+        ManyBody.ChainInteraction.norm_ofBonds_term_le,
+        ManyBody.ChainInteraction.ofBonds_hamiltonian,
+        ManyBody.ChainInteraction.posSemidef_ofBonds_term}
     \leanok
     \uses{def:chain_model}
     A family of bond terms $H_0,\ldots,H_{L-2}$ as above defines a Hamiltonian of

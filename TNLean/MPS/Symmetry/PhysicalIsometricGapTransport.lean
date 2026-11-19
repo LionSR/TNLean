@@ -42,9 +42,9 @@ theorem isometricInteractionExtension_zero_translate_commute {d m N : ℕ}
         1 - MPOTensor.embedLocalOperator 2 N hN k
           (MPOTensor.twoSiteSectorProjection (E * Eᴴ)) := by
     change (MPOTensor.embedLocalOperatorAlgHom (d := m) 2 N hN k)
-      (1 - singleKrausMap (MPOTensor.sitewisePhysicalMatrix E 2) (1 - 0)) = _
+      (1 - singleKrausMap (Matrix.tensorPower 2 E) (1 - 0)) = _
     simp only [sub_zero, singleKrausMap_apply, Matrix.mul_one,
-      MPOTensor.sitewisePhysicalMatrix_two_mul_conjTranspose, map_sub, map_one]
+      MPOTensor.tensorPower_two_mul_conjTranspose, map_sub, map_one]
     rfl
   rw [heq, heq]
   exact (Commute.one_left _).sub_left ((Commute.one_right _).sub_right
@@ -56,7 +56,7 @@ theorem isometricInteractionExtension_zero_ker_eq_range {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1) (hN : 2 ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin
       (interactionHamiltonian (isometricInteractionExtension E 0) hN)) =
-        LinearMap.range (Matrix.toEuclideanLin (MPOTensor.sitewisePhysicalMatrix E N)) := by
+        LinearMap.range (Matrix.toEuclideanLin (Matrix.tensorPower N E)) := by
   have hzero : interactionHamiltonian (0 : MPOTensor.ChainOperator d 2) hN = 0 := by
     unfold interactionHamiltonian
     apply Finset.sum_eq_zero
@@ -108,7 +108,7 @@ theorem isometricInteractionExtension_inactive_energy_lower_bound {d m N : ℕ}
     {A : MPOTensor.ChainOperator d 2} (hA : A.PosSemidef) (hN : 2 ≤ N)
     (v : EuclideanSpace ℂ (Cfg m N))
     (hv : v ∈ (LinearMap.range
-      (Matrix.toEuclideanLin (MPOTensor.sitewisePhysicalMatrix E N)))ᗮ) :
+      (Matrix.toEuclideanLin (Matrix.tensorPower N E)))ᗮ) :
     ‖v‖ ^ 2 ≤ (⟪Matrix.toEuclideanLin
       (interactionHamiltonian (isometricInteractionExtension E A) hN) v, v⟫_ℂ).re := by
   let P := interactionHamiltonian (isometricInteractionExtension E 0) hN
@@ -138,18 +138,18 @@ theorem isometricInteractionExtension_inactive_energy_lower_bound {d m N : ℕ}
 private noncomputable def physicalChainLinearIsometry {d m : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1) (N : ℕ) :
     EuclideanSpace ℂ (Cfg d N) →ₗᵢ[ℂ] EuclideanSpace ℂ (Cfg m N) := by
-  let T := Matrix.toEuclideanLin (MPOTensor.sitewisePhysicalMatrix E N)
+  let T := Matrix.toEuclideanLin (Matrix.tensorPower N E)
   have hT : T.adjoint ∘ₗ T = LinearMap.id := by
     simpa only [T, ← Matrix.toEuclideanLin_conjTranspose_eq_adjoint,
       Matrix.toEuclideanLin, Matrix.toLpLin_mul_same, Matrix.toLpLin_one] using
-      congrArg Matrix.toEuclideanLin (MPOTensor.sitewisePhysicalMatrix_isometry E hE N)
+      congrArg Matrix.toEuclideanLin (MPOTensor.tensorPower_isometry E hE N)
   exact T.isometryOfInner fun x y => by
     rw [← LinearMap.adjoint_inner_right, ← LinearMap.comp_apply, hT, LinearMap.id_apply]
 
 private theorem physicalChainLinearIsometry_toLinearMap {d m : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1) (N : ℕ) :
     (physicalChainLinearIsometry E hE N).toLinearMap =
-      Matrix.toEuclideanLin (MPOTensor.sitewisePhysicalMatrix E N) := rfl
+      Matrix.toEuclideanLin (Matrix.tensorPower N E) := rfl
 
 private theorem physicalChainLinearIsometry_intertwines {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
@@ -190,7 +190,7 @@ theorem isometricInteractionExtension_ker_eq_map_of_posSemidef {d m N : ℕ}
     LinearMap.ker (Matrix.toEuclideanLin
       (interactionHamiltonian (isometricInteractionExtension E A) hN)) =
       (LinearMap.ker (Matrix.toEuclideanLin (interactionHamiltonian A hN))).map
-        (Matrix.toEuclideanLin (MPOTensor.sitewisePhysicalMatrix E N)) := by
+        (Matrix.toEuclideanLin (Matrix.tensorPower N E)) := by
   simpa only [physicalChainLinearIsometry_toLinearMap] using
     (physicalChainLinearIsometry E hE N).ker_eq_map_of_intertwines_of_inactive_bound
       (physicalChainLinearIsometry_intertwines E hE hA.isHermitian hN)
@@ -207,7 +207,7 @@ theorem isometricInteractionExtension_ker_eq_span_of_posSemidef {d m N : ℕ}
       Submodule.span ℂ {ψ}) :
     LinearMap.ker (Matrix.toEuclideanLin
       (interactionHamiltonian (isometricInteractionExtension E A) hN)) =
-      Submodule.span ℂ {Matrix.toEuclideanLin (MPOTensor.sitewisePhysicalMatrix E N) ψ} := by
+      Submodule.span ℂ {Matrix.toEuclideanLin (Matrix.tensorPower N E) ψ} := by
   rw [isometricInteractionExtension_ker_eq_map_of_posSemidef E hE hA hN,
     hground, Submodule.map_span, Set.image_singleton]
 

@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import Mathlib.Combinatorics.SimpleGraph.Hasse
 
-import TNLean.PEPS.SquareLatticeGraph
+import QICLean.ManyBody.Sites.Lattice.Square
+import TNLean.PEPS.NormalBlocking
 
 /-!
 # Connectivity of finite rectangular square lattices
@@ -19,6 +20,9 @@ These are geometric facts about the rectangular lattice used in
 arXiv:1804.04964, Section 3, Theorem 3. They also supply the connectivity
 hypotheses for exact finite-graph PEPS constructions.
 -/
+
+open ManyBody (SquareLatticeVertex squareLatticeGraph squareLatticeGraph_adj
+  squareLatticeHorizontalNeighbor squareLatticeVerticalNeighbor)
 
 namespace TNLean.PEPS
 
@@ -37,8 +41,8 @@ a walk, including the vacuous cases with a zero dimension. -/
 theorem squareLatticeGraph_preconnected (width height : ℕ) :
     (squareLatticeGraph width height).Preconnected := by
   rw [squareLatticeGraph_eq_boxProd]
-  exact (SimpleGraph.pathGraph_preconnected width).boxProd
-    (SimpleGraph.pathGraph_preconnected height)
+  exact (SimpleGraph.preconnected_pathGraph width).boxProd
+    (SimpleGraph.preconnected_pathGraph height)
 
 /-- A finite rectangular square lattice with positive dimensions is connected. -/
 theorem squareLatticeGraph_connected {width height : ℕ}

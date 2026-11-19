@@ -91,26 +91,26 @@ theorem adaptivePatchSupply_of_closedSquare_cylinders
           ((AreaLaw.Geometry.closedSquareSample (AreaLaw.rectangularDomain L L) z (r u j) →
             Fin q) → ℂ))
         (v : EuclideanSpace ℂ
-          ((w : (Finset.univ : Finset (Lattice.Site (AreaLaw.rectangularDomain L L)))) →
-            Fin q)),
+          ((v : Lattice.Site (AreaLaw.rectangularDomain L L)) → Fin q)),
         (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤ (L : ℝ) ^ R₀) ∧
         v.ofLp ∈ (⨆ j, dependentRegionCylinder (Out := fun _ ↦ Fin q)
           (AreaLaw.Geometry.closedSquareSample (AreaLaw.rectangularDomain L L) z (r u j))
           (S j)) ∧
-        ‖dependentGlobalConfigIsometry.symm (squareAreaLawState Ω) - v‖ ≤ (L : ℝ) ^ (-p)) :
+        ‖(AreaLaw.rectangleAreaLawState Ω) - v‖ ≤
+            (L : ℝ) ^ (-p)) :
     AdaptivePatchSupply (latticePos L) Ω B₀ (adaptivePatchPrefactor q B₀) (R₀ + 1) p L := by
   classical
   intro z u hu huL
   suffices hpatch : HasAdaptivePatch
       (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
-        ((x.1.1 : ℝ), (x.1.2 : ℝ))) (squareAreaLawState Ω)
+        ((x.1.1 : ℝ), (x.1.2 : ℝ))) (AreaLaw.rectangleAreaLawState Ω)
       (adaptivePatchPrefactor q B₀) (R₀ + 1) p L (z - (1, 1)) u by
     have ht := (hpatch.relabel (AreaLaw.rectangleSiteEquiv L L).symm).translate (1, 1)
     have hΩ : (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
         (Equiv.arrowCongr (AreaLaw.rectangleSiteEquiv L L).symm (Equiv.refl (Fin q))))
-        (squareAreaLawState Ω) = Ω := by
+        (AreaLaw.rectangleAreaLawState Ω) = Ω := by
       ext σ
-      simp [squareAreaLawState, AreaLaw.rectangleConfigurationEquiv,
+      simp [AreaLaw.rectangleAreaLawState, AreaLaw.rectangleConfigurationEquiv,
         LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft',
         Equiv.arrowCongr, Function.comp_def]
     simpa only [Equiv.symm_symm, integerCoordinates_add_one_eq_latticePos,
@@ -122,10 +122,10 @@ theorem adaptivePatchSupply_of_closedSquare_cylinders
         Finset (Lattice.Site (AreaLaw.rectangularDomain L L))) : Prop :=
       ∃ (S : (j : Fin (m u)) → Submodule ℂ ((regions j → Fin q) → ℂ))
         (v : EuclideanSpace ℂ
-          ((w : (Finset.univ : Finset (Lattice.Site (AreaLaw.rectangularDomain L L)))) → Fin q)),
+          ((v : Lattice.Site (AreaLaw.rectangularDomain L L)) → Fin q)),
         (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤ (L : ℝ) ^ R₀) ∧
         v.ofLp ∈ (⨆ j, dependentRegionCylinder (Out := fun _ ↦ Fin q) (regions j) (S j)) ∧
-        ‖dependentGlobalConfigIsometry.symm (squareAreaLawState Ω) - v‖ ≤ (L : ℝ) ^ (-p)
+        ‖(AreaLaw.rectangleAreaLawState Ω) - v‖ ≤ (L : ℝ) ^ (-p)
     have hc : P (fun j ↦ squareSample
         (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
           ((x.1.1 : ℝ), (x.1.2 : ℝ))) (z - (1, 1)) (r u j)) := by
@@ -142,7 +142,7 @@ theorem adaptivePatchSupply_of_closedSquare_cylinders
         (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
           ((x.1.1 : ℝ), (x.1.2 : ℝ))) (z - (1, 1)) hu (r u)
         (fun i j hij ↦ hr u hij) (hle u) (hle₂ u hu.le)
-        S (dependentGlobalConfigIsometry.symm (squareAreaLawState Ω)) v hv
+        S ((AreaLaw.rectangleAreaLawState Ω)) v hv
     refine ⟨Q, hz, hs, ?_, by simpa only [LinearIsometryEquiv.apply_symm_apply] using he.trans herr⟩
     have htotal : ((∑ j, Q.dim j : ℕ) : ℝ) ≤ (m u : ℝ) * (L : ℝ) ^ R₀ := by
       calc
@@ -156,7 +156,7 @@ theorem adaptivePatchSupply_of_closedSquare_cylinders
   · obtain ⟨Q, hz, hs, hd, he⟩ :=
       exists_squarePatch_integerCoordinates_of_radius_le_four
         (AreaLaw.rectangularDomain L L) hq (z - (1, 1)) hu
-        (lt_of_not_ge hu4).le (dependentGlobalConfigIsometry.symm (squareAreaLawState Ω))
+        (lt_of_not_ge hu4).le ((AreaLaw.rectangleAreaLawState Ω))
     refine ⟨Q, hz, hs, ?_, ?_⟩
     · exact (show ((∑ j, Q.dim j : ℕ) : ℝ) ≤ (q : ℝ) ^ 81 by exact_mod_cast hd).trans
         ((le_max_left _ _).trans (le_mul_of_one_le_right (adaptivePatchPrefactor_pos q hB₀.le).le
@@ -179,7 +179,7 @@ theorem SquareEntropyAreaLawAt.adaptivePatchSupply
     ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q, IsSquareGroundState q J Δ L Ω →
         AdaptivePatchSupply (latticePos L) Ω B₀ (adaptivePatchPrefactor q B₀)
           (adaptivePatchExponent q J Δ B₀ p C_A) p L := by
-  intro L hL Ω ⟨h, E₀, hgs⟩
+  intro L hL Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩
   refine adaptivePatchSupply_of_closedSquare_cylinders (by omega) hB₀
     (nestedPatchRadiusExponent_pos C_A (by omega) hJ hΔ hB₀.le hp.le).le hL Ω
     AreaLaw.Geometry.nestedPatchCount (fun u j ↦ AreaLaw.Geometry.nestedPatchRadius u j.val)
@@ -188,8 +188,9 @@ theorem SquareEntropyAreaLawAt.adaptivePatchSupply
     (fun u j ↦ AreaLaw.Geometry.le_nestedPatchRadius u j.val)
     (fun u hu j ↦ AreaLaw.Geometry.nestedPatchRadius_le_two_mul hu j.isLt)
     (fun u hu huL ↦ ?_)
-    (fun z u hu4 huL ↦ hA.uniform_nestedPatch_cylinders hq hJ hΔ hB₀ hp L hL h E₀ Ω hgs z u
-      hu4 huL)
+    (fun z u hu4 huL ↦ hA.uniform_nestedPatch_cylinders hq hJ hΔ hB₀ hp L hL h hh hhJ E₀
+        Ω hΩ hgap hspan
+      z u hu4 huL)
   have hf : (⌊u / 2⌋₊ : ℝ) ≤ u / 2 :=
     Nat.floor_le (R := ℝ) (a := u / 2) (div_nonneg hu zero_le_two)
   simp only [AreaLaw.Geometry.nestedPatchCount, Nat.cast_add, Nat.cast_one]

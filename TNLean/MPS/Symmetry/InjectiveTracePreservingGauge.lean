@@ -40,8 +40,7 @@ theorem exists_posDef_fixedPoint_trace_one_of_isInjective_isTP
     (hTP : ∑ i, (B i)ᴴ * B i = 1) :
     ∃ ρ : Matrix (Fin D) (Fin D) ℂ,
       ρ.PosDef ∧ Kraus.transferMap B ρ = ρ ∧ Matrix.trace ρ = 1 := by
-  obtain ⟨ρ, hρ, hfix, _⟩ :=
-    isNormal_implies_stronglyIrreducible B hTP hB.isNormal
+  obtain ⟨ρ, hρ, hfix⟩ := exists_posDef_fixedPoint_of_isNormal B hTP hB.isNormal
   have htr : 0 < Matrix.trace ρ := hρ.trace_pos
   refine ⟨(Matrix.trace ρ)⁻¹ • ρ, hρ.smul (inv_pos.mpr htr), ?_, ?_⟩
   · rw [map_smul, hfix]

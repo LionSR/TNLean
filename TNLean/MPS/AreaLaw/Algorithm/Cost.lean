@@ -32,6 +32,8 @@ Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--219 (Theorem 1) and 6
 `docs/paper-gaps/lvv13_cost_model.tex`.
 -/
 
+open ManyBody (interval ChainInteraction)
+
 open Matrix Cslib
 open scoped ComplexOrder MatrixOrder
 
@@ -104,7 +106,7 @@ theorem cost_feasible_ite_le (L k b m : ℕ) (S : Finset (LeftBlockVector L q k)
 
 /-- Step 2 issues, for every bond dimension up to the uniform cut bound, one net query and
 at most two convex-program queries per net point. -/
-theorem cost_sizeTrimmingProgram_le (L k b : ℕ) (h : ChainHamiltonian L q 1 1) (hL : 0 < L)
+theorem cost_sizeTrimmingProgram_le (L k b : ℕ) (h : ChainInteraction L q 1) (hL : 0 < L)
     (hq : 2 ≤ q) {Δ : ℝ} (hΔ : 0 < Δ) (S : Finset (LeftBlockVector L q k)) :
     let c : ℝ := (Δ / 169) ^ 2
     let D := constantCutBond q 1 1 Δ c
@@ -196,14 +198,14 @@ theorem cost_sweepStepProgram_le {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
-    FreeM.cost honestOracle queryCost (sweepStepProgram hq h hs h0 h1 Delta hi S) ≤
+    FreeM.cost honestOracle queryCost (sweepStepProgram hq h hs h0 Delta hi S) ≤
       sweepStepCostBound q Delta L S.card := by
   classical
   have hc : 0 < lvvSuccessiveError Delta := lvvSuccessiveError_pos hDelta
   simp only [sweepStepProgram, FreeM.cost_bind, FreeM.eval_lift, eval_extensionProgram,
     eval_sizeTrimmingProgram, eval_bondTrimmingProgram, honestOracle_gaussianFilterFactors,
     sweepStepCostBound]
-  set chain := ChainHamiltonian.ofNearestNeighborPositive h hs h0 h1 with hchain
+  set chain := ManyBody.ChainInteraction.ofNearestNeighborPositive h hs with hchain
   set b := lvvSuccessiveBondBound q Delta L with hb
   set m := bondTrimmingRadius L (lvvReferenceBond q Delta L) with hm
   set c := lvvSuccessiveError Delta with hcdef
@@ -211,13 +213,13 @@ theorem cost_sweepStepProgram_le {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
   set S₁ := AreaLaw.extend (i + 1) S with hS₁
   set S₂ := chain.sizeTrimmingSelection hq Delta S₁ with hS₂
   set S₃ := bondTrimSet hi m S₂ with hS₃
-  set F := gaussianFilterFactors (Nat.le_of_lt hq) h h0 c Delta (i + 1) with hF
+  set F := gaussianFilterFactors h h0 c Delta (i + 1) with hF
   set E := huangEnergyCount c Delta L with hE
   set Rk := huangFilterRankBound q c Delta L with hRk
   set size := lvvSizeTrimmingCoefficient q Delta * L ^ lvvSizeTrimmingDegree q Delta with hsize
   have hcard₁ : S₁.card ≤ q * S.card := card_extend_le (i + 1) S
   have hcard₂ : S₂.card ≤ size :=
-    ChainHamiltonian.card_sizeTrimmingSelection_le_polynomial chain hL hq hDelta S₁
+    ManyBody.ChainInteraction.card_sizeTrimmingSelection_le_polynomial chain hL hq hDelta S₁
   have hcard₃ : S₃.card ≤ S₂.card := card_bondTrimSet_le hi m S₂
   have hcardF : F.card ≤ E * Rk :=
     card_gaussianFilterFactors_le (Nat.le_of_lt hq) h hs h0 h1 hc hDelta

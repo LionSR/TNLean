@@ -74,10 +74,10 @@ intervals exactly when it is a convex combination of the primitive sector
 states. The coefficients are derived; translation invariance is unnecessary.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.1,
 lines 854--926, and Section 3. -/
-theorem groundSpace_supported_iff_convex_combination_of_isPrimitiveMPS
+theorem groundSpace_supported_iff_convex_combination_of_hasComplementaryFixedPointGap
     (μ : Fin b → ℂ) (A : ∀ j, MPSTensor d (D j)) (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) (hφ : φ ∈ quasiLocalStateSpace d) :
@@ -100,10 +100,10 @@ theorem groundSpace_supported_iff_convex_combination_of_isPrimitiveMPS
 precisely the constructed primitive sector states. Purity is taken among all
 states. Source: Nachtergaele, arXiv:cond-mat/9410110,
 lines 854--887 and 1469--1482, and Theorem 1.1. -/
-theorem isPure_groundSpace_supported_iff_sector_of_isPrimitiveMPS
+theorem isPure_groundSpace_supported_iff_sector_of_hasComplementaryFixedPointGap
     (μ : Fin b → ℂ) (A : ∀ j, MPSTensor d (D j)) (hμ : ∀ j, μ j ≠ 0)
     (ρ : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)
-    (hP : ∀ j, IsPrimitiveMPS (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
+    (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) :
@@ -115,7 +115,7 @@ theorem isPure_groundSpace_supported_iff_sector_of_isPrimitiveMPS
   constructor
   · rintro ⟨hSupport, hPure⟩
     obtain ⟨w, hw, hsum, hdecomp⟩ :=
-      (groundSpace_supported_iff_convex_combination_of_isPrimitiveMPS
+      (groundSpace_supported_iff_convex_combination_of_hasComplementaryFixedPointGap
         μ A hμ ρ hP hρ hDistinct φ hPure.1).mp hSupport
     exact exists_eq_of_isPureQuasiLocalState_of_finite_decomposition φ hPure
       (fun j => quasiLocalExpectation (A j) (hP j).norm (hP j).fixedPoint_psd

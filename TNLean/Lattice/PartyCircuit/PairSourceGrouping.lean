@@ -94,14 +94,14 @@ namespace Expands
   obtain ⟨w', hw', hs', he'⟩ := hST ℓ
   refine ⟨.comp w w', ⟨hw, hw'⟩, ?_, ?_⟩
   · simp only [Word.sources, hs, hs', List.nil_append]
-  · rw [Word.eval_comp, comp_assoc, he, he']
+  · rw [Circuit.eval_comp, comp_assoc, he, he']
 
 /-- A common source can be retained while the remaining inventory is expanded. -/
 theorem cons (s : PairSource P) {G S : SourceInventory P} (h : G.Expands S) :
     Expands (s :: G) (s :: S) := by
   intro ℓ
   obtain ⟨w, hw, hs, he⟩ := h ℓ
-  refine ⟨Word.frameList s.layout w, Word.isAllowed_frameList _ hw _, ?_, ?_⟩
+  refine ⟨Word.frameList s.layout w, Circuit.isAllowed_frameList _ hw _, ?_, ?_⟩
   · exact (Word.sources_frameList w s.layout).trans hs
   · ext1 x
     change (Word.frameList s.layout w).eval

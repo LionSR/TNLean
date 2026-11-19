@@ -5,14 +5,13 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.RetainedCoreFamilies
 import TNLean.MPS.AreaLaw.TraceCoreSlices
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SupportedMatrixElements
 import QICLean.Entropy.LocalLift
 import QICLean.Entropy.RegionUnion
 import QICLean.Entropy.FilterOutputCovariance
 import Mathlib.Data.List.OfFn
-import TNLean.Circuit.EntropySupport
 import Mathlib.Order.Interval.Finset.Nat
 import TNLean.Circuit.PairProduct
 import TNLean.MPS.MPDO.TraceChainOperator
@@ -32,6 +31,8 @@ configurations exist. These are coordinate and contraction identities
 supporting ALVV, arXiv:1602.08828v2, equation H-mid-cut and Proposition 5.7,
 lines 810–821 and 1324–1333.
 -/
+
+open ManyBody (card_interval_le interval interval_mono mem_interval)
 
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker Matrix
@@ -489,15 +490,16 @@ theorem exists_traceChainOperator_of_supported_interval
   let eI := intervalShiftOrderIso hcd hd
   let e : Fin (d - c) → Fin L := fun u ↦ (eI u).val
   have he : Function.Injective e := Subtype.val_injective.comp eI.injective
-  have hrange : Set.range e = (interval L c d : Set (Fin L)) := by
+  have hrange : Finset.univ.image e = interval L c d := by
     ext i
+    simp only [Finset.mem_image, Finset.mem_univ, true_and]
     constructor
     · rintro ⟨u, rfl⟩
       exact (eI u).property
     · intro hi
       refine ⟨eI.symm ⟨i, hi⟩, ?_⟩
       exact congrArg Subtype.val (eI.apply_symm_apply ⟨i, hi⟩)
-  have hs := QuantumCircuit.mem_supportedOperators_of_isSupportedOn hA
+  have hs := hA
   rw [← hrange] at hs
   obtain ⟨M, hM⟩ := QuantumCircuit.exists_embedOp_eq_of_mem_supportedOperators he hs
   obtain ⟨B, Acore, C0, hcore⟩ := MPOTensor.exists_traceChainOperator_of_finite_matrix M

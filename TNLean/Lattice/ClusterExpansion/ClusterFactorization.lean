@@ -350,12 +350,15 @@ variable {σ κ : Type*} [Fintype σ] [DecidableEq σ] [DecidableEq κ] {d : ℕ
 `acts k`, then `E_C` acts on `⋃_{k ∈ C} acts k`. Hastings, arXiv:cond-mat/0508554v3,
 `proj3new.tex`, lines 1268–1269. -/
 theorem clusterOp_mem_supportedOperators {h : κ → Matrix (σ → Fin d) (σ → Fin d) ℂ}
-    {acts : κ → Finset σ} (hh : ∀ k, h k ∈ supportedOperators d (acts k : Set σ))
+    {acts : κ → Finset σ}
+    (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (acts k : Finset σ))
     (C : Finset κ) (β : ℝ) :
-    clusterOp h C β ∈ supportedOperators d (C.biUnion acts : Set σ) := by
-  refine Submodule.sum_mem _ fun D hD ↦ Submodule.smul_mem _ _ (exp_mem_supportedOperators ?_)
-  refine Submodule.neg_mem _ (Submodule.smul_of_tower_mem _ β (Submodule.sum_mem _ fun k hk ↦ ?_))
-  exact supportedOperators_mono (coe_subset.2 (subset_biUnion_of_mem acts
+    clusterOp h C β ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (C.biUnion acts : Finset σ) := by
+  refine sum_mem fun D hD ↦ SMulMemClass.smul_mem _ (ManyBody.exp_mem_supportedOperators ?_)
+  refine neg_mem (Submodule.smul_of_tower_mem
+    (Subalgebra.toSubmodule (ManyBody.supportedOperators _ _).toSubalgebra) β
+    (sum_mem fun k hk ↦ ?_))
+  exact ManyBody.supportedOperators_mono (coe_subset.2 (subset_biUnion_of_mem acts
     (mem_powerset.1 hD hk))) (hh k)
 
 omit [DecidableEq κ] in
@@ -363,14 +366,15 @@ omit [DecidableEq κ] in
 terms that are not adjacent in the overlap graph are equal or act on disjoint sets of sites, so
 they commute. This discharges the commutation hypothesis of the cluster products. -/
 theorem commute_of_not_adj_overlapGraph {h : κ → Matrix (σ → Fin d) (σ → Fin d) ℂ}
-    {acts : κ → Finset σ} (hh : ∀ k, h k ∈ supportedOperators d (acts k : Set σ)) :
+    {acts : κ → Finset σ}
+    (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (acts k : Finset σ)) :
     ∀ j k, ¬ (overlapGraph acts).Adj j k → Commute (h j) (h k) := by
   intro j k hjk
   by_cases hjk' : j = k
   · subst hjk'
     exact Commute.refl _
-  refine commute_of_mem_supportedOperators ?_ (hh j) (hh k)
-  rw [Finset.disjoint_coe, Finset.disjoint_iff_inter_eq_empty, ← Finset.not_nonempty_iff_eq_empty]
+  refine ManyBody.commute_of_mem_supportedOperators_of_disjoint (hh j) (hh k) ?_
+  rw [Finset.disjoint_iff_inter_eq_empty, ← Finset.not_nonempty_iff_eq_empty]
   exact fun hne ↦ hjk ⟨hjk', hne⟩
 
 open Classical in
@@ -381,7 +385,8 @@ over the sets `A` of terms with no large cluster of the product over the cluster
 each `E_C` acts on `⋃_{k ∈ C} acts k` (`clusterOp_mem_supportedOperators`). -/
 theorem truncatedExp_eq_sum_noncommProd_clusters_overlapGraph [Fintype κ]
     (large : Finset κ → Prop) {h : κ → Matrix (σ → Fin d) (σ → Fin d) ℂ}
-    {acts : κ → Finset σ} (hh : ∀ k, h k ∈ supportedOperators d (acts k : Set σ)) (β : ℝ) :
+    {acts : κ → Finset σ}
+    (hh : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (acts k : Finset σ)) (β : ℝ) :
     truncatedExp (overlapGraph acts) large h β =
       ∑ A with NoLargeCluster (overlapGraph acts) large A,
         (clusters (overlapGraph acts) A).noncommProd (fun C ↦ clusterOp h C β)

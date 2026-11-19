@@ -22,6 +22,7 @@ not asserted by channel divisibility alone; see
 -/
 
 open scoped Matrix
+open Kraus (blockTensor)
 
 namespace MPSTensor
 

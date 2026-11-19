@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import QICLean.Probability.RankUnitaryProductHaar
 
 /-!
@@ -16,6 +16,8 @@ coordinates permits one probability space to be fixed before the retained
 subspace ranks are known. Supporting ALVV, arXiv:1602.08828v2,
 Figure `fig:algo1` and lines 1777–1817.
 -/
+
+open ManyBody (interval)
 
 open MeasureTheory
 

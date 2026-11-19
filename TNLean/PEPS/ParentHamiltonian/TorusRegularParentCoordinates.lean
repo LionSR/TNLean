@@ -28,6 +28,8 @@ smaller-period statements remain separate; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
@@ -45,15 +47,15 @@ theorem exists_torusPlaquetteRegion_contains_edge (e : Edge Γₜ) :
   obtain ⟨z, rfl⟩ := torusEdgeEquiv.surjective e
   rcases z with v | v
   · refine ⟨v, ?_⟩
-    change (Edge.ofAdj (torusGraph_adj_right v.1 v.2)).1.1 ∈ _ ∧
-      (Edge.ofAdj (torusGraph_adj_right v.1 v.2)).1.2 ∈ _
-    rcases Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with
+    change (ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 v.2)).1.1 ∈ _ ∧
+      (ManyBody.Edge.ofAdj (torusGraph_adj_right v.1 v.2)).1.2 ∈ _
+    rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with
       ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩ <;>
       simp [h₁, h₂, torusPlaquetteRegion, torusPlaquetteWalk, SimpleGraph.Walk.support]
   · refine ⟨v, ?_⟩
-    change (Edge.ofAdj (torusGraph_adj_up v.1 v.2)).1.1 ∈ _ ∧
-      (Edge.ofAdj (torusGraph_adj_up v.1 v.2)).1.2 ∈ _
-    rcases Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with
+    change (ManyBody.Edge.ofAdj (torusGraph_adj_up v.1 v.2)).1.1 ∈ _ ∧
+      (ManyBody.Edge.ofAdj (torusGraph_adj_up v.1 v.2)).1.2 ∈ _
+    rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with
       ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩ <;>
       simp [h₁, h₂, torusPlaquetteRegion, torusPlaquetteWalk, SimpleGraph.Walk.support]
 
@@ -71,7 +73,7 @@ theorem globalDependentPhysicalMap_regularInverse_eq_zero_of_torusPlaquetteHolon
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hP : IsRegionParentInteraction (groupBondTensor a) (torusPlaquetteRegion v) P)
     (Ψ : (X → Fin d) → ℂ)
-    (hΨ : regionLocalTerm (torusPlaquetteRegion v) P *ᵥ Ψ = 0)
+    (hΨ : ManyBody.place («X» := fun _ ↦ Fin _) (torusPlaquetteRegion v) P *ᵥ Ψ = 0)
     (α : RegularHalfEdgeConfig Γₜ G)
     (hhol : regularWalkHolonomy (regularHalfEdgeOperators α) (torusPlaquetteWalk v) ≠ 1) :
     globalDependentPhysicalMap F Ψ (fun w => α w.1) = 0 := by
@@ -93,7 +95,7 @@ theorem IsGInjective.exists_torusParentCoordinates
     (hP : ∀ v, IsRegionParentInteraction (groupBondTensor (torusIncidentSite a))
       (torusPlaquetteRegion v) (P v))
     (Ψ : (X → Fin d) → ℂ)
-    (hΨ : ∀ v, regionLocalTerm (torusPlaquetteRegion v) (P v) *ᵥ Ψ = 0) :
+    (hΨ : ∀ v, ManyBody.place («X» := fun _ ↦ Fin _) (torusPlaquetteRegion v) (P v) *ᵥ Ψ = 0) :
     ∃ F : (v : X) → Matrix (IncidentEdge Γₜ v → G) (Fin d) ℂ,
       (∀ v α η, (∑ s : Fin d, F v α s * torusIncidentSite a v η s) =
         regularLegProjector (IncidentEdge Γₜ v) α η) ∧
@@ -114,7 +116,7 @@ theorem IsGInjective.exists_torusParentCoordinates
       (groupBondTensor (torusIncidentSite a)) torusPlaquetteRegion := by
     rw [mem_regionParentGroundSpace_iff]
     intro v τ
-    exact (regionLocalTerm_mulVec_eq_zero_iff _ _ (hP v) Ψ).mp (hΨ v) τ
+    exact (place_mulVec_eq_zero_iff _ _ (hP v) Ψ).mp (hΨ v) τ
   have hcover : ∀ v : X, ∃ w, v ∈ torusPlaquetteRegion w :=
     fun v => ⟨v, mem_torusPlaquetteRegion_self v⟩
   refine ⟨F, hF,

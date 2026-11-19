@@ -14,6 +14,8 @@ observation to conclude Theorem 6.1(b). The residual is controlled entirely
 by the boundary interaction and the already proved energy tails.
 -/
 
+open ManyBody (interval)
+
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator InnerProductSpace
 
 noncomputable section

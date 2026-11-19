@@ -30,6 +30,8 @@ unrestricted source scope are recorded in
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 
 noncomputable section
 open scoped BigOperators Matrix
@@ -55,13 +57,13 @@ private theorem global_creation_of_columns
       γ • ∑ z : G, openRegionWeight (groupBondTensor (regularTwistedSite a
         (regularTreeCycleAssignment R T (fun f => if f = e then z * g * z⁻¹ else 1)))) R
         (fun f => Fintype.equivFin G (θ f))) (u : Edge Γ → G) :
-    regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
+    ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
       (regularRegionBondExtension R (regularTreeCycleAssignment R T (fun _ => 1)) u))) =
     γ • ∑ z : G, stateCoeff (groupBondTensor (regularTwistedSite a
       (regularRegionBondExtension R (regularTreeCycleAssignment R T
         (fun f => if f = e then z * g * z⁻¹ else 1)) u))) := by
   rw [Finset.smul_sum]
-  apply regionLocalTerm_mulVec_stateCoeff_sum_of_openColumns R
+  apply place_mulVec_stateCoeff_sum_of_openColumns R
     (regularTwistedSite a (regularRegionBondExtension R
       (regularTreeCycleAssignment R T (fun _ => 1)) u))
     (fun z : G => regularTwistedSite a (regularRegionBondExtension R
@@ -92,9 +94,9 @@ theorem exists_unitary_regularCycleGlobalFluxCreation_bondOperators
     (e : RC (Γ := Γ) R T) (g : G) :
     ∃ W : Matrix (RV R → Fin d) (RV R → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV R → Fin d) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
+      ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
       ∀ u : Edge Γ → G,
-        regionLocalTerm R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
+        ManyBody.place (X := fun _ ↦ Fin _) R W *ᵥ stateCoeff (groupBondTensor (regularTwistedSite a
           (regularRegionBondExtension R (regularTreeCycleAssignment R T (fun _ => 1)) u))) =
         (Real.sqrt ((Fintype.card G : ℝ) *
           Nat.card (Subgroup.centralizer ({g} : Set G))) : ℂ)⁻¹ •
@@ -106,6 +108,6 @@ theorem exists_unitary_regularCycleGlobalFluxCreation_bondOperators
   have hinv : ∀ x v η s, a v (fun f => x * η f) s = a v η s := by
     intro x v η s
     exact (ha v).toIsGInjective.regularSiteMap_translation x η s
-  exact ⟨W, hW, regionLocalTerm_mem_unitaryGroup R W hW,
+  exact ⟨W, hW, place_mem_unitaryGroup R W hW,
     global_creation_of_columns R T a hinv e g _ W hcreate⟩
 end TNLean.PEPS

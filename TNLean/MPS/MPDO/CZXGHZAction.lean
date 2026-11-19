@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.Examples.GHZ
+import TNLean.MPS.Core.GHZ
 import TNLean.MPS.MPDO.CZXTensor
 
 /-!
@@ -26,15 +26,15 @@ namespace MPOTensor.CZX
 /-- The actual GHZ tensor blocked once, in the CZX physical order $2a+b$.
 Source: arXiv:2502.20257, lines 4660–4670. -/
 def blockedGHZTensor : MPSTensor 4 2 :=
-  Kraus.reindexPhysical (twoSiteBlockEquiv 2) (MPSTensor.blockTensor MPSTensor.ghzTensor 2)
+  Kraus.reindexPhysical (twoSiteBlockEquiv 2) (Kraus.blockTensor MPSTensor.ghzTensor 2)
 
 /-- The two once-blocked GHZ sectors are precisely $|00\rangle$ and
 $|11\rangle$, as displayed in arXiv:2502.20257, lines 4660–4670. -/
 theorem blockTensor_ghzSectorTensor_apply (x : Fin 2) (i : Fin 4) :
-    MPSTensor.blockTensor (MPSTensor.ghzSectorTensor x) 2 (twoSiteBlockEquiv 2 i) =
+    Kraus.blockTensor (MPSTensor.ghzSectorTensor x) 2 (twoSiteBlockEquiv 2 i) =
       if i = finProdFinEquiv (x, x) then 1 else 0 := by
   fin_cases x <;> fin_cases i <;>
-    norm_num [MPSTensor.blockTensor, Kraus.blockTensor, twoSiteBlockEquiv,
+    norm_num [Kraus.blockTensor, Kraus.blockTensor, twoSiteBlockEquiv,
       Kraus.wordOfBlock, MPSTensor.ghzSectorTensor, finProdFinEquiv, Fin.divNat, Fin.modNat]
 
 /-- Each letter of the blocked GHZ tensor is the diagonal projector onto the
@@ -43,7 +43,7 @@ theorem blockedGHZTensor_apply (i : Fin 4) :
     blockedGHZTensor i = Matrix.diagonal (fun x : Fin 2 ↦
       if i = finProdFinEquiv (x, x) then (1 : ℂ) else 0) := by
   fin_cases i <;>
-    norm_num [blockedGHZTensor, Kraus.reindexPhysical, MPSTensor.blockTensor,
+    norm_num [blockedGHZTensor, Kraus.reindexPhysical, Kraus.blockTensor,
       Kraus.blockTensor, twoSiteBlockEquiv, Kraus.wordOfBlock,
       finProdFinEquiv, Fin.divNat, Fin.modNat, Pi.single_apply]
 
@@ -90,13 +90,13 @@ the maintained two-site blocking equivalence, not a numerical cast.
 Source: arXiv:2502.20257, lines 4660–4670. -/
 theorem mpo_tensor_mulVec_blockedGHZ {N : ℕ} [NeZero N] :
     mpo tensor N *ᵥ (fun s : Fin N → Fin 4 ↦
-      MPSTensor.mpv (MPSTensor.blockTensor MPSTensor.ghzTensor 2)
+      MPSTensor.mpv (Kraus.blockTensor MPSTensor.ghzTensor 2)
         (fun n ↦ twoSiteBlockEquiv 2 (s n))) =
       (fun s : Fin N → Fin 4 ↦
-        MPSTensor.mpv (MPSTensor.blockTensor MPSTensor.ghzTensor 2)
+        MPSTensor.mpv (Kraus.blockTensor MPSTensor.ghzTensor 2)
           (fun n ↦ twoSiteBlockEquiv 2 (s n))) := by
   have hv : (fun s : Fin N → Fin 4 ↦
-      MPSTensor.mpv (MPSTensor.blockTensor MPSTensor.ghzTensor 2)
+      MPSTensor.mpv (Kraus.blockTensor MPSTensor.ghzTensor 2)
         (fun n ↦ twoSiteBlockEquiv 2 (s n))) = MPSTensor.mpv blockedGHZTensor := by
     funext s
     exact (MPSTensor.mpv_reindexPhysical _ _ s).symm

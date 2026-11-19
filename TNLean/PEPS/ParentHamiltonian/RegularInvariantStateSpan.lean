@@ -28,6 +28,8 @@ representation orbit calculation, not the full semiregular closure theorem.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean.PEPS

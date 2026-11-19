@@ -8,11 +8,13 @@ import QICLean.Channel.SingleKrausPositivity
 import TNLean.Algebra.ListProduct
 import TNLean.MPS.MPDO.FirstSite
 import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
+import TNLean.Algebra.MatrixTensorPower
 
 /-!
 # Sitewise physical matrices on periodic MPOs
 
-A one-site matrix `V` acts on a chain by its sitewise tensor power. Acting on
+A one-site matrix `V` acts on a chain by its sitewise tensor power
+`Matrix.tensorPower N V`, with entries `∏ₙ V (s n) (t n)`. Acting on
 the ket leg at every site left-multiplies the closed MPO by this tensor power.
 Acting on both physical legs is the same as changing the physical basis of
 every local MPO matrix before closing the virtual trace.
@@ -49,13 +51,6 @@ variable {d D e f : ℕ}
 
 open PhysicalSectorFactorization
 
-/-- The sitewise tensor power of a one-site physical matrix, indexed by
-physical configurations rather than by nested tensor products. -/
-noncomputable def sitewisePhysicalMatrix
-    (V : Matrix (Fin e) (Fin d) ℂ) (N : ℕ) :
-    Matrix (Fin N → Fin e) (Fin N → Fin d) ℂ :=
-  fun s t ↦ ∏ n : Fin N, V (s n) (t n)
-
 private theorem trace_mul_evalWord_ketLeftMul_ofFn
     (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ) {N : ℕ}
     (X : Matrix (Fin D) (Fin D) ℂ) (σ τ : Fin N → Fin d) :
@@ -87,93 +82,37 @@ private theorem trace_mul_evalWord_ketLeftMul_ofFn
 MPO by its sitewise tensor power. -/
 theorem mpo_ketLeftMul (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
-    mpo (M.ketLeftMul P) N = sitewisePhysicalMatrix P N * mpo M N := by
+    mpo (M.ketLeftMul P) N = Matrix.tensorPower N P * mpo M N := by
   ext σ τ
-  simp only [Matrix.mul_apply, mpo_apply, mpoMatrixEntry, sitewisePhysicalMatrix]
+  simp only [Matrix.mul_apply, mpo_apply, mpoMatrixEntry, Matrix.tensorPower_apply]
   simpa only [Matrix.one_mul] using
     trace_mul_evalWord_ketLeftMul_ofFn M P (1 : Matrix (Fin D) (Fin D) ℂ) σ τ
 
-/-- Sitewise tensor powers preserve rectangular matrix multiplication. -/
-theorem sitewisePhysicalMatrix_mul
-    (V : Matrix (Fin e) (Fin d) ℂ)
-    (W : Matrix (Fin d) (Fin f) ℂ) (N : ℕ) :
-    sitewisePhysicalMatrix V N * sitewisePhysicalMatrix W N =
-      sitewisePhysicalMatrix (V * W) N := by
-  classical
-  ext s t
-  simp only [Matrix.mul_apply, sitewisePhysicalMatrix]
-  simp_rw [← Finset.prod_mul_distrib]
-  rw [← Fintype.piFinset_univ]
-  rw [← Finset.prod_univ_sum
-    (fun _ : Fin N ↦ (Finset.univ : Finset (Fin d)))
-    (fun n a ↦ V (s n) a * W a (t n))]
-
-/-- Conjugate transpose commutes with the sitewise tensor power. -/
-theorem sitewisePhysicalMatrix_conjTranspose
-    (V : Matrix (Fin e) (Fin d) ℂ) (N : ℕ) :
-    (sitewisePhysicalMatrix V N)ᴴ = sitewisePhysicalMatrix Vᴴ N := by
-  ext s t
-  simp [Matrix.conjTranspose_apply, sitewisePhysicalMatrix, star_prod]
-
 /-- The sitewise tensor power of a one-site isometry is an isometry. -/
-theorem sitewisePhysicalMatrix_isometry
+theorem tensorPower_isometry
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1) (N : ℕ) :
-    (sitewisePhysicalMatrix V N)ᴴ * sitewisePhysicalMatrix V N = 1 := by
-  classical
-  ext x y
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-    sitewisePhysicalMatrix]
-  simp_rw [star_prod, ← Finset.prod_mul_distrib]
-  rw [← Fintype.piFinset_univ]
-  rw [← Finset.prod_univ_sum
-    (fun _ : Fin N ↦ (Finset.univ : Finset (Fin e)))
-    (fun n a ↦ star (V a (x n)) * V a (y n))]
-  have hentry : ∀ n : Fin N,
-      (∑ a : Fin e, star (V a (x n)) * V a (y n)) =
-        if x n = y n then 1 else 0 := by
-    intro n
-    exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one
-      V hV (x n) (y n)
-  simp_rw [hentry]
-  rw [Fintype.prod_boole]
-  congr 1
-  exact propext funext_iff.symm
+    (Matrix.tensorPower N V)ᴴ * Matrix.tensorPower N V = 1 := by
+  rw [Matrix.conjTranspose_tensorPower, Matrix.tensorPower_mul, hV]
+  exact Matrix.tensorPower_one N
 
 /-- The product of a sitewise tensor power with its conjugate transpose is the
 sitewise tensor power of the corresponding one-site product. -/
-theorem sitewisePhysicalMatrix_mul_conjTranspose
+theorem tensorPower_mul_conjTranspose
     (V : Matrix (Fin d) (Fin e) ℂ) (N : ℕ) :
-    sitewisePhysicalMatrix V N * (sitewisePhysicalMatrix V N)ᴴ =
-      sitewisePhysicalMatrix (V * Vᴴ) N := by
-  classical
-  ext s t
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-    sitewisePhysicalMatrix, star_prod]
-  simp_rw [← Finset.prod_mul_distrib]
-  rw [← Fintype.piFinset_univ]
-  rw [← Finset.prod_univ_sum
-    (fun _ : Fin N ↦ (Finset.univ : Finset (Fin e)))
-    (fun n a ↦ V (s n) a * star (V (t n) a))]
+    Matrix.tensorPower N V * (Matrix.tensorPower N V)ᴴ =
+      Matrix.tensorPower N (V * Vᴴ) := by
+  rw [Matrix.conjTranspose_tensorPower]
+  exact Matrix.tensorPower_mul N V Vᴴ
 
 /-- On two sites, the configuration-indexed tensor power is the Kronecker square. -/
-theorem reindex_sitewisePhysicalMatrix_two
+theorem reindex_tensorPower_two
     (V : Matrix (Fin e) (Fin d) ℂ) :
     Matrix.reindex (_root_.finTwoArrowEquiv (Fin e))
         (_root_.finTwoArrowEquiv (Fin d))
-        (sitewisePhysicalMatrix V 2) = V ⊗ₖ V := by
+        (Matrix.tensorPower 2 V) = V ⊗ₖ V := by
   ext ⟨i, j⟩ ⟨a, b⟩
-  simp [Matrix.reindex_apply, sitewisePhysicalMatrix,
+  simp [Matrix.reindex_apply, Matrix.tensorPower_apply,
     Matrix.kroneckerMap_apply, _root_.finTwoArrowEquiv]
-
-/-- The sitewise tensor power of the identity matrix is the identity matrix. -/
-@[simp] theorem sitewisePhysicalMatrix_one (d N : ℕ) :
-    sitewisePhysicalMatrix (1 : Matrix (Fin d) (Fin d) ℂ) N = 1 := by
-  classical
-  ext x y
-  simp only [sitewisePhysicalMatrix, Matrix.one_apply]
-  rw [Fintype.prod_boole]
-  congr 1
-  exact propext funext_iff.symm
 
 /-- Reindex a pair of bra and ket configurations as a configuration of pairs. -/
 def braKetFunctionsEquiv {i a b : Type*} :
@@ -205,14 +144,14 @@ of `M` to the corresponding closure after changing the physical basis.
 This is the configuration-index form of
 \((V^{\otimes N})\rho_X^{(N)}(M)(V^{\otimes N})^\dagger\), with the same
 virtual boundary matrix \(X\) on both sides. -/
-theorem singleKrausMap_sitewisePhysicalMatrix_physCloseN
+theorem singleKrausMap_tensorPower_physCloseN
     (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) (N : ℕ)
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    singleKrausMap (sitewisePhysicalMatrix V N) (physCloseN M N X) =
+    singleKrausMap (Matrix.tensorPower N V) (physCloseN M N X) =
       physCloseN (changePhysicalBasis V M) N X := by
   ext s t
   simp only [singleKrausMap_apply, Matrix.mul_apply,
-    Matrix.conjTranspose_apply, sitewisePhysicalMatrix, physCloseN_apply,
+    Matrix.conjTranspose_apply, Matrix.tensorPower_apply, physCloseN_apply,
     evalWord_changePhysicalBasis_ofFn, Matrix.sum_mul, Matrix.smul_mul,
     Matrix.trace_sum, Matrix.trace_smul, smul_eq_mul, star_prod]
   have hexpand :
@@ -277,12 +216,12 @@ changing every local physical matrix by `V`.
 This is the configuration-index form of
 \((V^{\otimes N})\rho^{(N)}(M)(V^{\otimes N})^\dagger\).
 -/
-theorem singleKrausMap_sitewisePhysicalMatrix_mpo
+theorem singleKrausMap_tensorPower_mpo
     (V : Matrix (Fin e) (Fin d) ℂ) (M : MPOTensor d D) (N : ℕ) :
-    singleKrausMap (sitewisePhysicalMatrix V N) (mpo M N) =
+    singleKrausMap (Matrix.tensorPower N V) (mpo M N) =
       mpo (changePhysicalBasis V M) N := by
   simpa only [physCloseN_identity_eq_mpo] using
-    singleKrausMap_sitewisePhysicalMatrix_physCloseN V M N
+    singleKrausMap_tensorPower_physCloseN V M N
       (1 : Matrix (Fin D) (Fin D) ℂ)
 
 /-- If an MPO is positive after an isometric physical inclusion, then it was
@@ -293,16 +232,16 @@ theorem isMPDO_of_changePhysicalBasis_isMPDO_of_isometry
     IsMPDO M := by
   intro N hN
   apply Matrix.posSemidef_of_singleKraus_isometry
-    (sitewisePhysicalMatrix V N) (sitewisePhysicalMatrix_isometry V hV N)
-  rw [singleKrausMap_sitewisePhysicalMatrix_mpo]
+    (Matrix.tensorPower N V) (tensorPower_isometry V hV N)
+  rw [singleKrausMap_tensorPower_mpo]
   exact hM N hN
 
 /-- The sitewise tensor power of a Hermitian one-site matrix is Hermitian. -/
-theorem sitewisePhysicalMatrix_isHermitian
+theorem tensorPower_isHermitian
     {P : Matrix (Fin d) (Fin d) ℂ} (hP : P.IsHermitian) (N : ℕ) :
-    (sitewisePhysicalMatrix P N).IsHermitian := by
+    (Matrix.tensorPower N P).IsHermitian := by
   ext s t
-  simp only [Matrix.conjTranspose_apply, sitewisePhysicalMatrix, star_prod]
+  simp only [Matrix.conjTranspose_apply, Matrix.tensorPower_apply, star_prod]
   apply Finset.prod_congr rfl
   intro n _
   exact hP.apply (s n) (t n)

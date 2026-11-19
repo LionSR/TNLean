@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.GraphInteractionBudget
-import TNLean.PEPS.AreaLaw.GraphLatticeDiamond
+import QICLean.ManyBody.Sites.Lattice.Diamond
 import Mathlib.Analysis.Normed.Group.Basic
 
 /-!
@@ -29,6 +29,8 @@ The proofs are independently written; no upstream Lean proof text is copied or a
 -/
 
 open scoped BigOperators
+
+open ManyBody (card_le_diamond_of_walks latticeL1Distance)
 
 namespace TNLean.PEPS.AreaLaw
 

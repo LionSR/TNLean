@@ -8,7 +8,7 @@ import QICLean.Algebra.OperatorSchmidtPrescribedFactors
 import QICLean.Algebra.OperatorSchmidtRealignment
 import QICLean.Algebra.OperatorSchmidtReindex
 import QICLean.Entropy.SupportedMarginalTails
-import TNLean.Lattice.RegionSplit
+import TNLean.Circuit.RegionSplit
 
 /-!
 # Matrix-entry slices over the complement of a region

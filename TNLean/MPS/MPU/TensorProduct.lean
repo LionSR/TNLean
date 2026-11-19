@@ -69,8 +69,8 @@ component words as a pair of blocked letters.
 
 Source: arXiv:1703.09188, proof of Theorem `IndexTh` (ii), lines 824--847. -/
 noncomputable def tensorProductBlockEquiv (d e L : ℕ) :
-    Fin (MPSTensor.blockPhysDim (d * e) L) ≃
-      Fin (MPSTensor.blockPhysDim d L * MPSTensor.blockPhysDim e L) :=
+    Fin (Kraus.blockPhysDim (d * e) L) ≃
+      Fin (Kraus.blockPhysDim d L * Kraus.blockPhysDim e L) :=
   (Kraus.decodeBlockEquiv (d * e) L).trans
     (finTupleProdEquiv L d e) |>.trans
     (Equiv.prodCongr (Kraus.decodeBlockEquiv d L).symm
@@ -80,17 +80,17 @@ noncomputable def tensorProductBlockEquiv (d e L : ℕ) :
 /-- Decoding the first blocked component gives the pointwise quotient of the
 blocked product letters. -/
 @[simp] theorem decodeBlock_tensorProductBlockEquiv_divNat (d e L : ℕ)
-    (I : Fin (MPSTensor.blockPhysDim (d * e) L)) (k : Fin L) :
-    MPSTensor.decodeBlock d L ((tensorProductBlockEquiv d e L I).divNat) k =
-      (MPSTensor.decodeBlock (d * e) L I k).divNat := by
+    (I : Fin (Kraus.blockPhysDim (d * e) L)) (k : Fin L) :
+    Kraus.decodeBlock d L ((tensorProductBlockEquiv d e L I).divNat) k =
+      (Kraus.decodeBlock (d * e) L I k).divNat := by
   simp [tensorProductBlockEquiv]
 
 /-- Decoding the second blocked component gives the pointwise remainder of the
 blocked product letters. -/
 @[simp] theorem decodeBlock_tensorProductBlockEquiv_modNat (d e L : ℕ)
-    (I : Fin (MPSTensor.blockPhysDim (d * e) L)) (k : Fin L) :
-    MPSTensor.decodeBlock e L ((tensorProductBlockEquiv d e L I).modNat) k =
-      (MPSTensor.decodeBlock (d * e) L I k).modNat := by
+    (I : Fin (Kraus.blockPhysDim (d * e) L)) (k : Fin L) :
+    Kraus.decodeBlock e L ((tensorProductBlockEquiv d e L I).modNat) k =
+      (Kraus.decodeBlock (d * e) L I k).modNat := by
   simp [tensorProductBlockEquiv]
 
 private theorem evalWord_tensorProduct (U : MPOTensor d D) (V : MPOTensor e E)

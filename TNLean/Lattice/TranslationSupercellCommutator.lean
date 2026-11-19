@@ -69,7 +69,7 @@ up to the errors of eq. `apb`, see `norm_groundCompression_commutator_truncated_
 theorem norm_groundCompression_commutator_le_of_momenta [NeZero d]
     (G : SimpleGraph ι) (X : ι → Finset ι) (hX : ∀ k, k ∈ X k)
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+    (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
     (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
     (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
@@ -101,7 +101,7 @@ theorem norm_groundCompression_commutator_le_of_momenta [NeZero d]
     exists_mem_supercell_lt_edist hN hden G π hπ e he (2 * R + l) hl i j
   have hsep := disjoint_biUnion_graphBall_of_lt_edist G X id hX R hDiam
     (g • j) i l hfar
-  have hmain := norm_groundCompression_commutator_le_of_supercell_separation G X id hX h hHerm
+  have hmain := norm_groundCompression_commutator_le_of_supercell_separation G X h hHerm
     hSupport R hDiam vR hCard b₀ hBudget hcov Kg kg hGrowth hr hq hΔE hH hgap
     (supercell Γ d (∑ k, h k) E₀)
     (fun g hg v hv ↦ sitePermMatrix_mulVec_eq_of_mem_supercell hInv hg v hv) hg i j l hsep hT
@@ -170,7 +170,7 @@ see `norm_groundCompression_truncatedTerm_commutator_le_of_momenta`. -/
 theorem norm_groundCompression_commutator_truncated_le_of_momenta [NeZero d]
     (G : SimpleGraph ι) (X : ι → Finset ι) (hX : ∀ k, k ∈ X k)
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+    (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
     (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
     (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
@@ -222,7 +222,7 @@ The filtered-term scope is recorded in
 theorem norm_groundCompression_commutator_le_of_momenta_exp [NeZero d]
     (G : SimpleGraph ι) (X : ι → Finset ι) (hX : ∀ k, k ∈ X k)
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, h k ∈ supportedOperators d (X k : Set ι))
+    (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (X k : Finset ι))
     (R : ℕ) (hDiam : ∀ k, ∀ x ∈ X k, ∀ z ∈ X k, G.edist x z ≤ R)
     (vR : ℕ) (hCard : ∀ k, (X k).card ≤ vR)
     (b₀ : ℝ) (hBudget : ∀ x, ∑ j ∈ Finset.univ.filter (fun j => x ∈ X j), ‖h j‖ ≤ b₀)
@@ -263,7 +263,7 @@ theorem norm_groundCompression_commutator_le_of_momenta_exp [NeZero d]
       rw [Nat.cast_sub hsize]
       push_cast
       ring
-    have hmain := norm_groundCompression_commutator_le_exp G X id hX h hHerm hSupport R
+    have hmain := norm_groundCompression_commutator_le_exp G X id h hHerm hSupport R
       hDiam vR hCard b₀ hBudget Kg kg hGrowth hΔE hH hgap (g • j) i l hsep
     rw [← groundCompression_commutator_eq_of_mem_supercell r ΔE hInv hH hcov
       (supercell Γ d (∑ k, h k) E₀)

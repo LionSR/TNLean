@@ -27,6 +27,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open scoped BigOperators
@@ -173,7 +175,7 @@ choice. Ambient geometry supplies all selected slots; no sampling certificate
 is assumed (`08-scanner.tex`, lines 331–337). -/
 theorem good_splitIncidenceCost_le_expected_chargeMoveCost_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L μ : ℕ}
     (h : History S.K S.m S.M k) (cost : Fin S.K → Bool → Finset (Site Λ) → ℝ)
     (hcost : ∀ g side B, 0 ≤ cost g side B)

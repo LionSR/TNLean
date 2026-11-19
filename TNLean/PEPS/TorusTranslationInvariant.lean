@@ -40,6 +40,8 @@ obligation 6.
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean
@@ -74,7 +76,7 @@ the translation automorphism `translate a b`: both push the endpoints through th
 translation and reorder them into the `Edge` convention. -/
 theorem translateEdge_eq_map (a : ZMod width) (b : ZMod height)
     (e : Edge (torusGraph width height)) :
-    translateEdge a b e = Edge.map (translate a b) e :=
+    translateEdge a b e = ManyBody.Edge.map (translate a b) e :=
   rfl
 
 /-- The state coefficient of a translation-invariant tensor is invariant under the
@@ -121,8 +123,8 @@ theorem bondDim_translateEdge_of_translationInvariant
   rw [← hb]
   congr 1
   -- Edge.map (translate a b).symm (translateEdge a b e) = e
-  change Edge.map (translate a b).symm (Edge.map (translate a b) e) = e
-  exact Edge.map_symm_map (translate a b) e
+  change ManyBody.Edge.map (translate a b).symm (ManyBody.Edge.map (translate a b) e) = e
+  exact ManyBody.Edge.map_symm_map (translate a b) e
 
 /-! ### Normal form of horizontal and vertical torus edges
 
@@ -137,12 +139,12 @@ endpoint of another carries the whole edge across. -/
 /-- The horizontal torus edge with left endpoint `p`, i.e. the edge on the adjacent
 pair `(p, p + (1, 0))`. -/
 def torusRightEdge (p : TorusVertex width height) : Edge (torusGraph width height) :=
-  Edge.ofAdj (torusGraph_adj_right p.1 p.2)
+  ManyBody.Edge.ofAdj (torusGraph_adj_right p.1 p.2)
 
 /-- The vertical torus edge with lower endpoint `p`, i.e. the edge on the adjacent
 pair `(p, p + (0, 1))`. -/
 def torusUpEdge (p : TorusVertex width height) : Edge (torusGraph width height) :=
-  Edge.ofAdj (torusGraph_adj_up p.1 p.2)
+  ManyBody.Edge.ofAdj (torusGraph_adj_up p.1 p.2)
 
 /-- Every horizontal torus edge is the right edge of a left endpoint `p`: its
 unordered endpoints are `p` and `p + (1, 0)`.
@@ -157,12 +159,12 @@ theorem isHorizontalTorusEdge_eq_rightEdge {e : Edge (torusGraph width height)}
   · refine ⟨e.1.1, ?_⟩
     rw [torusRightEdge]
     symm
-    apply Edge.ofAdj_eq_of_endpoints
+    apply ManyBody.Edge.ofAdj_eq_of_endpoints
     exact Or.inl ⟨rfl, Prod.ext (by exact h2) (by simpa using hc)⟩
   · refine ⟨e.1.2, ?_⟩
     rw [torusRightEdge]
     symm
-    apply Edge.ofAdj_eq_of_endpoints
+    apply ManyBody.Edge.ofAdj_eq_of_endpoints
     exact Or.inr ⟨rfl, Prod.ext (by exact h2) (by simpa using hc.symm)⟩
 
 /-- Every vertical torus edge is the up edge of a lower endpoint `p`: its unordered
@@ -178,12 +180,12 @@ theorem isVerticalTorusEdge_eq_upEdge {e : Edge (torusGraph width height)}
   · refine ⟨e.1.1, ?_⟩
     rw [torusUpEdge]
     symm
-    apply Edge.ofAdj_eq_of_endpoints
+    apply ManyBody.Edge.ofAdj_eq_of_endpoints
     exact Or.inl ⟨rfl, Prod.ext (by simpa using hc) (by exact h2)⟩
   · refine ⟨e.1.2, ?_⟩
     rw [torusUpEdge]
     symm
-    apply Edge.ofAdj_eq_of_endpoints
+    apply ManyBody.Edge.ofAdj_eq_of_endpoints
     exact Or.inr ⟨rfl, Prod.ext (by simpa using hc.symm) (by exact h2)⟩
 
 /-! ### Orientation and injectivity of right and up edges -/
@@ -192,7 +194,7 @@ theorem isVerticalTorusEdge_eq_upEdge {e : Edge (torusGraph width height)}
 theorem isHorizontalTorusEdge_torusRightEdge (p : TorusVertex width height) :
     IsHorizontalTorusEdge (torusRightEdge p) := by
   unfold IsHorizontalTorusEdge torusRightEdge
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;>
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;>
     rw [h1, h2]
   · exact ⟨rfl, Or.inl rfl⟩
   · exact ⟨rfl, Or.inr rfl⟩
@@ -201,7 +203,7 @@ theorem isHorizontalTorusEdge_torusRightEdge (p : TorusVertex width height) :
 theorem isVerticalTorusEdge_torusUpEdge (p : TorusVertex width height) :
     IsVerticalTorusEdge (torusUpEdge p) := by
   unfold IsVerticalTorusEdge torusUpEdge
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;>
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2) with ⟨h1, h2⟩ | ⟨h1, h2⟩ <;>
     rw [h1, h2]
   · exact ⟨rfl, Or.inl rfl⟩
   · exact ⟨rfl, Or.inr rfl⟩
@@ -220,9 +222,9 @@ theorem zmod_not_add_one_eq_and_add_one_eq {n : ℕ} [Fact (2 < n)] (x y : ZMod 
 theorem torusRightEdge_injective [Fact (2 < width)] :
     Function.Injective (torusRightEdge (width := width) (height := height)) := by
   intro p q h
-  have hp := Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2)
-  have hq := Edge.ofAdj_endpoints (torusGraph_adj_right q.1 q.2)
-  change Edge.ofAdj _ = Edge.ofAdj _ at h
+  have hp := ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2)
+  have hq := ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right q.1 q.2)
+  change ManyBody.Edge.ofAdj _ = ManyBody.Edge.ofAdj _ at h
   rw [h] at hp
   rcases hp with ⟨a1, a2⟩ | ⟨a1, a2⟩ <;> rcases hq with ⟨b1, b2⟩ | ⟨b1, b2⟩
   · exact (a1.symm.trans b1)
@@ -242,9 +244,9 @@ theorem torusRightEdge_injective [Fact (2 < width)] :
 theorem torusUpEdge_injective [Fact (2 < height)] :
     Function.Injective (torusUpEdge (width := width) (height := height)) := by
   intro p q h
-  have hp := Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2)
-  have hq := Edge.ofAdj_endpoints (torusGraph_adj_up q.1 q.2)
-  change Edge.ofAdj _ = Edge.ofAdj _ at h
+  have hp := ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2)
+  have hq := ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up q.1 q.2)
+  change ManyBody.Edge.ofAdj _ = ManyBody.Edge.ofAdj _ at h
   rw [h] at hp
   rcases hp with ⟨a1, a2⟩ | ⟨a1, a2⟩ <;> rcases hq with ⟨b1, b2⟩ | ⟨b1, b2⟩
   · exact (a1.symm.trans b1)
@@ -277,9 +279,9 @@ the same bond dimension throughout each orientation class. -/
 theorem translateEdge_torusRightEdge (a : ZMod width) (b : ZMod height)
     (p : TorusVertex width height) :
     translateEdge a b (torusRightEdge p) = torusRightEdge (p.1 + a, p.2 + b) := by
-  rw [torusRightEdge, torusRightEdge, translateEdge_eq_map, Edge.map]
-  apply Edge.ofAdj_eq_ofAdj
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2) with ⟨o1, o2⟩ | ⟨o1, o2⟩
+  rw [torusRightEdge, torusRightEdge, translateEdge_eq_map, ManyBody.Edge.map]
+  apply ManyBody.Edge.ofAdj_eq_ofAdj
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2) with ⟨o1, o2⟩ | ⟨o1, o2⟩
   · exact Or.inl ⟨by rw [o1]; apply Prod.ext <;> simp [translate_apply],
       by rw [o2]; apply Prod.ext <;> simp [translate_apply]; ring⟩
   · exact Or.inr ⟨by rw [o1]; apply Prod.ext <;> simp [translate_apply]; ring,
@@ -289,9 +291,9 @@ theorem translateEdge_torusRightEdge (a : ZMod width) (b : ZMod height)
 theorem translateEdge_torusUpEdge (a : ZMod width) (b : ZMod height)
     (p : TorusVertex width height) :
     translateEdge a b (torusUpEdge p) = torusUpEdge (p.1 + a, p.2 + b) := by
-  rw [torusUpEdge, torusUpEdge, translateEdge_eq_map, Edge.map]
-  apply Edge.ofAdj_eq_ofAdj
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2) with ⟨o1, o2⟩ | ⟨o1, o2⟩
+  rw [torusUpEdge, torusUpEdge, translateEdge_eq_map, ManyBody.Edge.map]
+  apply ManyBody.Edge.ofAdj_eq_ofAdj
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2) with ⟨o1, o2⟩ | ⟨o1, o2⟩
   · exact Or.inl ⟨by rw [o1]; apply Prod.ext <;> simp [translate_apply],
       by rw [o2]; apply Prod.ext <;> simp [translate_apply]; ring⟩
   · exact Or.inr ⟨by rw [o1]; apply Prod.ext <;> simp [translate_apply]; ring,

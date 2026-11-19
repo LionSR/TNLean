@@ -29,6 +29,7 @@ the omitted exponent in the paper; see `docs/paper-gaps/dccsp17_blocking_periphe
 
 open scoped Matrix BigOperators
 open Fin.NatCast
+open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 

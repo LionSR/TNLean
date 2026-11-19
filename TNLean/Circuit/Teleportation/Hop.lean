@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.ComplementaryWeylTwirl
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 import TNLean.Circuit.Measurement.Rounds
 import TNLean.Circuit.Gates.Permutation
 
@@ -41,8 +41,6 @@ is a correction.
 * `QuantumCircuit.quditFourier`, `QuantumCircuit.quditPauli` — `F` and `X^x Z^z`.
 * `QuantumCircuit.IsZeroOn` — a vector with `|0⟩` at the sites of a set, for any type of
   sites.
-* `QuantumCircuit.cfgPerm` — the permutation of configurations induced by a permutation of
-  the sites, for any finite type of sites.
 * `QuantumCircuit.TeleportHop`, `QuantumCircuit.TeleportHop.pre`,
   `QuantumCircuit.TeleportHop.frame`.
 
@@ -52,8 +50,6 @@ is a correction.
   orthogonality of the powers of `ζ` and the unitarity of the diagonal factor are QICLean's
   `Matrix.sum_rootOfUnity_pow_eq` and `Matrix.weylClock_mem_unitary`, the labels `Fin d` being
   `ZMod d`.
-* `QuantumCircuit.permMatrix_cfgPerm_mul_rectKronecker` — moving single-site operators across a
-  permutation of sites, with the chain form `QuantumCircuit.permMatrix_cfgPerm_mul_finKronecker`.
 * `QuantumCircuit.TeleportHop.pre_mulVec` — one hop.
 
 ## References
@@ -226,17 +222,17 @@ variable [NeZero d] {ι : Type*}
 
 /-- The vector `v` has `|0⟩` at the sites of `S`: it vanishes at every configuration with a
 nonzero label at a site of `S`. -/
-def IsZeroOn (S : Set ι) (v : (ι → Fin d) → ℂ) : Prop :=
+def IsZeroOn (S : Finset ι) (v : (ι → Fin d) → ℂ) : Prop :=
   ∀ x, v x ≠ 0 → ∀ i ∈ S, x i = 0
 
-theorem IsZeroOn.mono {S S' : Set ι} {v : (ι → Fin d) → ℂ} (h : IsZeroOn S' v)
+theorem IsZeroOn.mono {S S' : Finset ι} {v : (ι → Fin d) → ℂ} (h : IsZeroOn S' v)
     (hS : S ⊆ S') : IsZeroOn S v := fun x hx i hi => h x hx i (hS hi)
 
-theorem IsZeroOn.smul {S : Set ι} {v : (ι → Fin d) → ℂ} (h : IsZeroOn S v) (c : ℂ) :
+theorem IsZeroOn.smul {S : Finset ι} {v : (ι → Fin d) → ℂ} (h : IsZeroOn S v) (c : ℂ) :
     IsZeroOn S (c • v) := fun x hx => h x fun h0 => hx (by simp [h0])
 
 /-- A single-site operator at a site outside `S` keeps `|0⟩` at the sites of `S`. -/
-theorem IsZeroOn.finKronecker_update_one_mulVec {N : ℕ} {S : Set (Fin N)}
+theorem IsZeroOn.finKronecker_update_one_mulVec {N : ℕ} {S : Finset (Fin N)}
     {v : (Fin N → Fin d) → ℂ} (h : IsZeroOn S v) {t : Fin N} (ht : t ∉ S)
     (u : Matrix (Fin d) (Fin d) ℂ) :
     IsZeroOn S
@@ -253,54 +249,7 @@ section SitePermutation
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
-/-- The permutation `x ↦ x ∘ π` of the configurations induced by a permutation `π` of the
-sites. -/
-def cfgPerm (π : Equiv.Perm ι) : Equiv.Perm (ι → Fin d) where
-  toFun x := x ∘ π
-  invFun x := x ∘ π.symm
-  left_inv x := by funext i; simp
-  right_inv x := by funext i; simp
-
-omit [Fintype ι] [DecidableEq ι] in
-theorem cfgPerm_apply (π : Equiv.Perm ι) (x : ι → Fin d) : cfgPerm π x = x ∘ π := rfl
-
-theorem permMatrix_cfgPerm_mul_permMatrix_cfgPerm (π σ : Equiv.Perm ι) :
-    (cfgPerm (d := d) π).permMatrix ℂ * (cfgPerm σ).permMatrix ℂ =
-      (cfgPerm (π * σ)).permMatrix ℂ := by
-  rw [← Matrix.permMatrix_mul]
-  congr 1
-
-omit [DecidableEq ι] in
-theorem permMatrix_cfgPerm_one : (cfgPerm (d := d) (1 : Equiv.Perm ι)).permMatrix ℂ = 1 := by
-  have : cfgPerm (d := d) (1 : Equiv.Perm ι) = 1 := by ext x i; rfl
-  rw [this, Matrix.permMatrix_one]
-
-/-- **Moving single-site operators across a permutation of sites.** -/
-theorem permMatrix_cfgPerm_mul_rectKronecker (π : Equiv.Perm ι)
-    (g : ι → Matrix (Fin d) (Fin d) ℂ) :
-    (cfgPerm π).permMatrix ℂ * rectKronecker g =
-      rectKronecker (fun i => g (π.symm i)) * (cfgPerm π).permMatrix ℂ := by
-  classical
-  ext x y
-  simp only [mul_apply, Equiv.Perm.permMatrix, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply,
-    Option.mem_def, Option.some.injEq, ite_mul, one_mul, zero_mul, mul_ite, mul_one, mul_zero,
-    Finset.sum_ite_eq, Finset.mem_univ, ite_true, rectKronecker_apply]
-  rw [Finset.sum_eq_single ((cfgPerm π).symm y)]
-  · simp only [Equiv.apply_symm_apply, ite_true]
-    refine Fintype.prod_equiv π _ _ fun i => ?_
-    simp [cfgPerm]
-  · intro z _ hz
-    rw [ite_eq_right fun h => hz (by rw [← h, Equiv.symm_apply_apply])]
-  · simp
-
-/-- The chain form of `permMatrix_cfgPerm_mul_rectKronecker`, for the sites `Fin N`. -/
-theorem permMatrix_cfgPerm_mul_finKronecker {N : ℕ} (π : Equiv.Perm (Fin N))
-    (g : Fin N → Matrix (Fin d) (Fin d) ℂ) :
-    (cfgPerm π).permMatrix ℂ * finKronecker g =
-      finKronecker (fun i => g (π.symm i)) * (cfgPerm π).permMatrix ℂ :=
-  permMatrix_cfgPerm_mul_rectKronecker π g
-
-theorem IsZeroOn.permMatrix_cfgPerm_mulVec [NeZero d] {S : Set ι} {v : (ι → Fin d) → ℂ}
+theorem IsZeroOn.permMatrix_cfgPerm_mulVec [NeZero d] {S : Finset ι} {v : (ι → Fin d) → ℂ}
     (h : IsZeroOn S v) {π : Equiv.Perm ι} (hπ : ∀ i ∈ S, π i = i) :
     IsZeroOn S ((cfgPerm π).permMatrix ℂ *ᵥ v) := by
   intro y hy i hi
@@ -372,22 +321,24 @@ theorem gate₂_mem_unitary : h.gate₂ (d := d) ∈ unitary (Matrix (Fin N → 
     (Equiv.Perm.permMatrix_mem_unitaryGroup _)
 
 theorem gate₁_mem_supportedOperators :
-    h.gate₁ (d := d) ∈ supportedOperators d ({h.e, h.f} : Set (Fin N)) := by
-  refine mul_mem_supportedOperators
+    h.gate₁ (d := d) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        ({h.e, h.f} : Finset (Fin N)) := by
+  refine mul_mem
     (IsLocalPerm.permMatrix_mem_supportedOperators
-      (isLocalPerm_shiftPerm (ι := Fin N) (Or.inr rfl) _ _ fun x y hxy => by
-        rw [hxy h.e (Or.inl rfl)]))
+      (isLocalPerm_shiftPerm (ι := Fin N) (by simp) _ _ fun x y hxy => by
+        rw [hxy h.e (by simp)]))
     (finKronecker_mem_supportedOperators fun i hi => ?_)
-  rw [Function.update_of_ne fun h' => hi (Or.inl h')]
+  rw [Function.update_of_ne fun h' => hi (by simp [h'])]
   rfl
 
 theorem gate₂_mem_supportedOperators :
-    h.gate₂ (d := d) ∈ supportedOperators d ({h.c, h.e} : Set (Fin N)) := by
-  refine mul_mem_supportedOperators (finKronecker_mem_supportedOperators fun i hi => ?_)
+    h.gate₂ (d := d) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        ({h.c, h.e} : Finset (Fin N)) := by
+  refine mul_mem (finKronecker_mem_supportedOperators fun i hi => ?_)
     (IsLocalPerm.permMatrix_mem_supportedOperators
-      (isLocalPerm_shiftPerm (ι := Fin N) (Or.inr rfl) _ _ fun x y hxy => by
-        rw [hxy h.c (Or.inl rfl)]))
-  rw [Function.update_of_ne fun h' => hi (Or.inl h')]
+      (isLocalPerm_shiftPerm (ι := Fin N) (by simp) _ _ fun x y hxy => by
+        rw [hxy h.c (by simp)]))
+  rw [Function.update_of_ne fun h' => hi (by simp [h'])]
   rfl
 
 /-- The operator of one hop before the correction, for the outcomes `z_c` and `z_e`: the two gates
@@ -438,9 +389,9 @@ theorem pre_mulVec (z : Fin N → Fin d) {v : (Fin N → Fin d) → ℂ} (hv : I
     push_cast
     rfl
   have hve : ∀ x, x h.e ≠ 0 → v x = 0 := fun x hx => by
-    by_contra hne; exact hx (hv x hne h.e (Or.inl rfl))
+    by_contra hne; exact hx (hv x hne h.e (by simp))
   have hvf : ∀ x, x h.f ≠ 0 → v x = 0 := fun x hx => by
-    by_contra hne; exact hx (hv x hne h.f (Or.inr rfl))
+    by_contra hne; exact hx (hv x hne h.f (by simp))
   -- The first layer.
   have h1 : finKronecker (Function.update 1 h.e (quditFourier d)) *ᵥ v =
       fun w => s * v (Function.update w h.e 0) := by
@@ -484,7 +435,7 @@ theorem pre_mulVec (z : Fin N → Fin d) {v : (Fin N → Fin d) → ℂ} (hv : I
       finKronecker (Function.update 1 h.c (Equiv.Perm.permMatrix ℂ (Equiv.subRight (z h.c)))) *
         (finKronecker (Function.update 1 h.e (Equiv.Perm.permMatrix ℂ (Equiv.subRight (z h.e)))) *
           finKronecker (Function.update 1 h.f (quditPauli (z h.c) (z h.e)))) := by
-    rw [finKronecker_mul, finKronecker_mul]
+    rw [← finKronecker_mul, ← finKronecker_mul]
     congr 1
     funext i
     simp only [frame, Function.update_apply, Pi.one_apply]

@@ -16,6 +16,8 @@ coefficients of the global operator.
 Source: SCP10, arXiv:1001.3807, Section 7, lines 2977–3019.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

@@ -20,6 +20,8 @@ at `openai/math@adc7f124`.
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open TensorPower.ReplicaTransport
@@ -32,7 +34,7 @@ namespace CollarScan
 derived from the geometric scanner hypotheses rather than supplied as a premise. -/
 theorem fillTransportData_supportCompatible_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (histTree : Matrix.MeanTree (History S.K S.m S.M k))
     (hn : 0 < S.n) (hk : k + 1 ≤ S.n * S.m)

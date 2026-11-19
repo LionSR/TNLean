@@ -31,6 +31,8 @@ this hypothesis are recorded in
 mathematical obligations".
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean
 namespace PEPS
 

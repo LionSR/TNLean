@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.UniformSuccessAttenuation
-import TNLean.Circuit.UniformPostselection
-import TNLean.Circuit.ExactAmplificationBudget
+import QICLean.Circuit.Gate.UniformSuccessAttenuation
+import QICLean.Circuit.Gate.UniformPostselection
+import QICLean.Circuit.Gate.ExactAmplificationBudget
 import Mathlib.Tactic.Linarith
 
 /-!

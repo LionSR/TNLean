@@ -174,7 +174,6 @@ private theorem mapL_eval_apply_of_heq {X₁ Y₁ Z₁ X₂ Y₂ Z₂ : Layout P
   cases h₂
   cases hu
   rfl
-
 end Lattice.PartyCircuit
 namespace Lattice.PartyCircuit.Word
 

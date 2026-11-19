@@ -29,6 +29,7 @@ and the transfer-map fixed-point equations used in canonical forms.
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kraus
+open Kraus (isNBlkInjective_iff_blockTensor_isInjective)
 
 variable {d D : ℕ}
 
@@ -107,8 +108,7 @@ theorem IsNormal.mapStar {A : MPSTensor d D} (hA : IsNormal A) :
   refine ⟨N, hN, ?_⟩
   change IsNBlkInjective A N at hInj
   rw [isNBlkInjective_iff_blockTensor_isInjective] at hInj ⊢
-  change IsInjective (MPSTensor.blockTensor A N) at hInj
-  change IsInjective (MPSTensor.blockTensor (MPSTensor.mapStar A) N)
+  change IsInjective (Kraus.blockTensor A N) at hInj
   have hConj := hInj.mapStar
   convert hConj using 1
   ext σ β α

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Data.Matrix.PEquiv
 import TNLean.Algebra.MatrixL2Contraction
+import QICLean.Analysis.KroneckerOperatorNorm
 
 /-!
 # Kronecker products, relabellings and the `L²` operator norm
@@ -16,7 +17,8 @@ their coordinates along equivalences, used when two copies of a system are rearr
 
 * `Matrix.kronecker_kronecker_eq_submatrix`: `(A₁ ⊗ B₁) ⊗ (A₂ ⊗ B₂)` is `(A₁ ⊗ A₂) ⊗ (B₁ ⊗ B₂)`
   in the coordinates `Equiv.prodProdProdComm`.
-* `Matrix.l2_opNorm_kronecker_le`: `‖A ⊗ B‖ ≤ ‖A‖ ‖B‖`.
+* `Matrix.l2_opNorm_kronecker_le_one`: the Kronecker product of two contractions is a
+  contraction, from QICLean's `Matrix.l2_opNorm_kronecker_le`.
 * `Matrix.l2_opNorm_toMatrix_toPEquiv_le`: the matrix of a bijection of coordinates is a
   contraction.
 * `Matrix.norm_submatrix_equiv_le`, `Commute.submatrix_equiv`: relabelling both coordinates of a
@@ -49,29 +51,6 @@ section Norms
 
 variable {m n m' n' : Type*} [Fintype m] [Fintype n] [Fintype m'] [Fintype n'] [DecidableEq m]
   [DecidableEq n] [DecidableEq m'] [DecidableEq n']
-
-omit [DecidableEq m'] in
-/-- `‖1 ⊗ B‖ ≤ ‖B‖` for a rectangular matrix `B`; the square case is QICLean's
-`Matrix.l2_opNorm_one_kronecker_le`. -/
-theorem l2_opNorm_one_kronecker_rect_le (B : Matrix m' n ℂ) :
-    ‖(1 : Matrix m m ℂ) ⊗ₖ B‖ ≤ ‖B‖ := by
-  have h : (1 : Matrix m m ℂ) ⊗ₖ B =
-      reindex (Equiv.prodComm m' m) (Equiv.prodComm n m) (B ⊗ₖ (1 : Matrix m m ℂ)) := by
-    ext ⟨i, j⟩ ⟨k, l⟩
-    simp [kroneckerMap_apply, mul_comm]
-  rw [h]
-  exact (l2_opNorm_reindex_le _ _ _).trans (l2_opNorm_kronecker_one_le B)
-
-omit [DecidableEq m'] [DecidableEq n'] in
-/-- `‖A ⊗ B‖ ≤ ‖A‖ ‖B‖`. -/
-theorem l2_opNorm_kronecker_le (A : Matrix m' m ℂ) (B : Matrix n' n ℂ) :
-    ‖A ⊗ₖ B‖ ≤ ‖A‖ * ‖B‖ := by
-  classical
-  have h : A ⊗ₖ B = (A ⊗ₖ (1 : Matrix n' n' ℂ)) * ((1 : Matrix m m ℂ) ⊗ₖ B) := by
-    rw [← mul_kronecker_mul, Matrix.mul_one, Matrix.one_mul]
-  rw [h]
-  exact (l2_opNorm_mul _ _).trans (mul_le_mul (l2_opNorm_kronecker_one_le A)
-    (l2_opNorm_one_kronecker_rect_le B) (norm_nonneg _) (norm_nonneg _))
 
 omit [DecidableEq m'] [DecidableEq n'] in
 /-- The Kronecker product of two contractions is a contraction. -/

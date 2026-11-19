@@ -1,0 +1,267 @@
+\section{An efficient soft improving family for low-density spectra}
+\label{sec:efficient_soft_low_density_family}
+
+The low-density improving family of~\cite[lines 1027--1041]{Arad2016RigorousRG}
+uses hard truncation, which has no matrix product description. The efficient
+version, \cite[lines 1424--1437]{Arad2016RigorousRG}, replaces it by soft
+truncation. This section builds that version on the five-region chain of
+Section~\ref{sec:uniform_physical_soft_improving_family}, with no spectral gap.
+It uses the corrected cluster estimate and residuals
+of~\cite{gap:alvv16_cluster_approximation,gap:alvv16_soft_regional_residuals},
+and the losses and contraction are stated for explicit parameters rather
+than for the source's parameter choice.
+
+\begin{lemma}[A polynomial family with windowed comparisons]
+    \label{lem:soft_low_density_polynomial_core}
+    \lean{TNLean.MPS.AreaLaw.ALVV.actual_three_bulk_replacement_sum,
+        TNLean.MPS.AreaLaw.ALVV.exists_soft_low_density_polynomial_core}
+    \leanok
+
+    \uses{thm:uniform_physical_soft_improving_family,
+        lem:alvv_same_soft_representation}
+    Keep the chain, the cuts, the interactions and the parameters $q\geq2$,
+    $\ell,k\geq1$, $m\geq2$, $t\geq3m$, $\xi>0$ of
+    Theorem~\ref{thm:uniform_physical_soft_improving_family}. The original
+    interactions determine attained regional minima $e_j$, the centered
+    Hamiltonian $H$ with ground energy $0\leq E\leq4$, and a family of
+    $n\leq(mk+1)(qk)^{36\ell+4\lfloor k/\ell\rfloor}$ middle operators, each a
+    matrix product operator of open bond $\max\{1,D_0\}^{2k}$, where
+    $D_0=2(m+1)r^2q^r$ and $r$ is the logarithmic cluster order. For every
+    estimate $e_j-10\leq p_j\leq e_j$ on the three bulks, the soft
+    Hamiltonian $G$ and its represented approximant $\widehat G$ satisfy
+    $\|G-\widehat G\|\leq\xi$ and $\|\widehat G\|\leq3t(1+\log m)+4\ell+34+\xi$.
+    Every polynomial of degree at most $k$ in $\widehat G$ is a sum of
+    products of the middle operators with exterior matrices. The soft ground
+    energy satisfies $-30\leq\mu\leq E$. With $C\leq4$ the number of crossing
+    terms, $U=2(\eta+3C+32)$ and $\eta\ge0$, $h,w>0$, $U\leq t$, $U\leq T$
+    and $T\ge\eta+3C+12$, put
+    \begin{align}
+        \rho_H & =3\bigl(8Ce^{-(T-\eta-3C-12)/8}+(t/m)(T/t)^m\bigr), &
+        \rho_G & =3\bigl(8Ce^{-(T-U)/8}+(t/m)(T/t)^m\bigr).
+    \end{align}
+    Then $0\leq E-\mu\leq\rho_G$, and with $c=\lceil(\eta+h)/(2h)\rceil$ the
+    window of $G$ at $\mu+\eta+\rho_G+w$ is
+    $c(\rho_H+h)^2/(w+h)^2$-close to the window of $H$ at $E+\eta$, and the
+    window of $H$ at $E+\eta+w$ is $c(\rho_G+h)^2/(w+h)^2$-close to the window
+    of $G$ at $\mu+\eta$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:uniform_physical_soft_improving_family,
+        lem:alvv_same_soft_representation}
+    Construct the regional data and the windowed comparisons for $G$ by
+    Lemma~\ref{lem:alvv_same_soft_representation} at the three bulks. From
+    the same lower regional minimum construct the native soft middle operator
+    and its common polynomial closing family, as in the proof of
+    Theorem~\ref{thm:uniform_physical_soft_improving_family}. The two-window
+    alphabet sums to $\widehat G$, which gives the polynomial decomposition.
+    The norm bound for $G$ is the three-bulk bound, and the windows do not
+    depend on the eigenbasis of $G$.
+\end{proof}
+
+\begin{lemma}[Bracketing the original bands by windows of the approximant]
+    \label{lem:soft_low_density_window_closeness}
+    \lean{TNLean.MPS.AreaLaw.ALVV.softWindowPerturbationLoss,
+        TNLean.MPS.AreaLaw.ALVV.softWindowPerturbationLoss_nonneg,
+        TNLean.MPS.AreaLaw.ALVV.soft_low_density_window_closeness}
+    \leanok
+
+    Let $G,\widehat G$ be Hermitian with $\|G-\widehat G\|\leq\xi$, and let
+    $w,\xi>0$. For $R,c$ real put
+    \begin{align}
+        \delta_R(c) & =\Bigl\lceil\frac{c-\min\{c-1,-(R+\xi)\}}{2\xi}\Bigr\rceil
+        \frac{(2\xi)^2}{(w/2+\xi)^2}.
+    \end{align}
+    Suppose the window of $G$ at $\mu+\eta-3w+\rho_1+w/2$ is $L_1$-close to
+    the window of $H$ at $E+\eta-3w$, and the window of $H$ at $E+\eta$ is
+    $L_2$-close to the window of $G$ at $\mu+\eta-w/2$, with $L_2\geq0$. Put
+    $c_1=\mu+\eta-w$ and $c_0=\mu+\eta-2w+\rho_1$. Then the window of $H$ at
+    $E+\eta$ is $2(L_2+\delta_{\|G\|}(c_1))$-close to the window of
+    $\widehat G$ at $c_1$, and the window of $\widehat G$ at $c_0$ is
+    $2(\delta_{\|G\|}(c_0-w/2)+L_1)$-close to the window of $H$ at
+    $E+\eta-3w$.
+\end{lemma}
+\begin{proof}\leanok
+    The buffered norm perturbation with buffer $w/2$ compares the windows of
+    $G$ and $\widehat G$ in both directions with loss $\delta_{\|G\|}$.
+    Compose each perturbation with the given comparison; composition of
+    closeness doubles the sum of the losses.
+\end{proof}
+
+\begin{lemma}[Nested Chebyshev improvement for a decomposed approximant]
+    \label{lem:soft_low_density_chebyshev_viability}
+    \lean{TNLean.MPS.AreaLaw.ALVV.soft_low_density_chebyshev_viability}
+    \leanok
+
+    Let $\widehat G$ be Hermitian with $\|\widehat G\|\leq M$, and suppose
+    every polynomial of degree at most $k$ in $\widehat G$ is a sum
+    $\sum_iM_i\otimes W_i$ over a fixed family of $n$ middle matrices $W_i$.
+    For $c_0<c_1\leq M$ and
+    $\Delta=(2e^{-2k\sqrt{(c_1-c_0)/(M-c_0)}})^2$, the family $W$ maps every
+    $\delta$-viable subspace $S$ for the window of $\widehat G$ at $c_1$,
+    with $\delta<1$, to a subspace of dimension at most $n\dim S$ that is
+    $\Delta/(1-\delta)^2$-viable for the window at $c_0$.
+\end{lemma}
+\begin{proof}\leanok
+    Pass to the middle-first tensor coordinates, where the decomposition
+    becomes a sum of tensor products, and apply the nested Chebyshev
+    viability theorem to the windows $c_0<c_1$.
+\end{proof}
+
+\begin{lemma}[An efficient soft improving family for low-density spectra]
+    \label{thm:efficient_soft_low_density_family}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_efficient_soft_low_density_family}
+    \leanok
+
+    \uses{lem:soft_low_density_polynomial_core,
+        lem:soft_low_density_window_closeness,
+        lem:soft_low_density_chebyshev_viability}
+    Keep the data of Lemma~\ref{lem:soft_low_density_polynomial_core}, and
+    write $M=3t(1+\log m)+4\ell+34+\xi$. The middle operators are chosen
+    before every estimate $p$ and every band width. For each estimate, let
+    $\eta,T,h,w$ satisfy $h,w>0$, $3w\leq\eta$, $U=2(\eta+3C+32)\leq t$,
+    $U\leq T$ and $T\geq\eta+3C+12$. Let $\rho_1$ and $\rho_H^{(1)}$ be the
+    residual scales $\rho_G$ and $\rho_H$ of
+    Lemma~\ref{lem:soft_low_density_polynomial_core} at the band width
+    $\eta-3w$, and $\rho_2$ the scale $\rho_G$ at $\eta-w/2$, and suppose
+    $\rho_1<w$. Put
+    \begin{align}
+        L_1 & =\Bigl\lceil\frac{\eta-3w+h}{2h}\Bigr\rceil\frac{(\rho_H^{(1)}+h)^2}{(w/2+h)^2}, \\
+        L_2 & =\Bigl\lceil\frac{\eta-w/2+h}{2h}\Bigr\rceil\frac{(\rho_2+h)^2}{(w/2+h)^2},      \\
+        c_1 & =\mu+\eta-w,\qquad c_0=\mu+\eta-2w+\rho_1,
+    \end{align}
+    and let $T_{\mathrm{hi}},T_{\mathrm{lo}}$ be the windows of $\widehat G$
+    at $c_1$ and $c_0$. Then $T_{\mathrm{lo}}\subseteq T_{\mathrm{hi}}$, the
+    window of $H$ at $E+\eta$ is $2(L_2+\delta_{\|G\|}(c_1))$-close to
+    $T_{\mathrm{hi}}$, $T_{\mathrm{lo}}$ is
+    $2(\delta_{\|G\|}(c_0-w/2)+L_1)$-close to the window of $H$ at
+    $E+\eta-3w$, and the family improves every $\delta$-viable subspace for
+    $T_{\mathrm{hi}}$, $\delta<1$, into a subspace of dimension at most
+    $n\dim S$ that is $\Delta/(1-\delta)^2$-viable for $T_{\mathrm{lo}}$, with
+    $\Delta=(2e^{-2k\sqrt{(c_1-c_0)/(M-c_0)}})^2$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:soft_low_density_polynomial_core,
+        lem:soft_low_density_window_closeness,
+        lem:soft_low_density_chebyshev_viability}
+    Apply the windowed comparisons of
+    Lemma~\ref{lem:soft_low_density_polynomial_core} with buffer $w/2$ at
+    the band widths $\eta-3w\geq0$ and $\eta-w/2$; their conditions follow
+    from those at $\eta$. Lemma~\ref{lem:soft_low_density_window_closeness}
+    gives the two closeness statements. As $\mu\leq E\leq4$ and
+    $M\geq3t\geq3U$, we have $c_1\leq M$, and $c_0<c_1$ since $\rho_1<w$.
+    Lemma~\ref{lem:soft_low_density_chebyshev_viability} gives the
+    improvement.
+\end{proof}
+
+For fixed $m$, $k$, $\ell$ and $t$, the bond $\max\{1,D_0\}^{2k}$ is polynomial
+in $N$ and $1/\xi$, since the cluster order $r$ is logarithmic in
+$N^2t2^{m+1}/\xi$; it also grows polynomially with $t$, since the base of the
+cluster order here is the constant $2(e^{1/3}-1)$ rather than the scale-adapted
+base of Lemma~\ref{thm:soft_hamiltonian_mpo_scale_free_bond}.
+The next two statements choose the parameters.
+
+\begin{lemma}[Scalar budgets for the low-density calibration]
+    \label{lem:soft_low_density_calibration_budgets}
+    \lean{TNLean.MPS.AreaLaw.ALVV.soft_residual_le_of_floor_le,
+        TNLean.MPS.AreaLaw.ALVV.soft_window_loss_le,
+        TNLean.MPS.AreaLaw.ALVV.softWindowPerturbationLoss_le,
+        TNLean.MPS.AreaLaw.ALVV.soft_low_density_contraction_le,
+        TNLean.MPS.AreaLaw.ALVV.exists_soft_low_density_calibration_data,
+        TNLean.MPS.AreaLaw.ALVV.soft_low_density_calibrated_losses}
+    \leanok
+
+    \uses{lem:soft_low_density_window_closeness}
+    Let $q\geq2$ and $0<w\leq1$, and put $g=w^2/2$. There is an integer $u\geq2$
+    such that $\ell=u^8$, $m=u^{10}$, $t=3m$, $k=u^{16}$ and $T=u^9$, with the
+    count $D$, the ceiling $M=3t(1+\log m)+4\ell+34$, $\tau=(D^{24}M^{10})^{-1}$ and
+    $\xi=\min\{1,\tau g^2/(20000(M+g+8))\}$, satisfy the following for every
+    $3w\leq\eta\leq34$, every $-30\leq\mu\leq E\leq4$, every crossing count
+    $C\leq4$ and every $R\leq M+2$. With the window resolution
+    $h=w^2/(1000(8\eta+24))$, every residual scale is at most $w^2/(2\cdot10^6)$,
+    the conditions of Lemma~\ref{thm:efficient_soft_low_density_family} hold,
+    $2(L_2+\delta_R(c_1))\leq1/200$, $2(\delta_R(c_0-w/2)+L_1)\leq1/200$ and
+    $D^{12}\Delta\leq10^{-5}$. The member bond is at most $C_{\mathrm{pol}}(N+1)^{p}$
+    for natural constants chosen before $N$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:soft_low_density_window_closeness}
+    The calibration of the gapped family at the gap $g$ gives the residual bound
+    $\tau g/10^6\leq w^2/(2\cdot10^6)$ at the floor $156+2g\geq2(\eta+44)$, and
+    every residual scale with a smaller floor and at most four crossing terms is
+    smaller. With $\rho\leq h$ and $\lceil x\rceil\leq x+1$, each windowed loss is
+    at most $(8h\eta+24h^2)/w^2\leq1/1000$. The precision satisfies
+    $\xi\leq w^4/(80000(M+8))$, which bounds each perturbation loss by
+    $(M+74)w^2/(10^4(M+8))\leq1/1000$. The two windows are separated by at least
+    $w/2$, and $c_0\geq-30$, so the exponent of $\Delta$ is at least that of the
+    calibrated contraction at the gap $g$, which is at most $(D^{12}M^{10})^{-1}$.
+\end{proof}
+
+\begin{lemma}[The calibrated efficient soft family for low-density spectra]
+    \label{lem:calibrated_efficient_soft_low_density_family}
+    \lean{TNLean.MPS.AreaLaw.ALVV.exists_calibrated_efficient_soft_low_density_family}
+    \leanok
+
+    \uses{thm:efficient_soft_low_density_family,
+        lem:soft_low_density_calibration_budgets}
+    Let $q\geq2$ and $0<w\leq1$. The parameters of
+    Lemma~\ref{lem:soft_low_density_calibration_budgets} and a polynomial bound
+    $C_{\mathrm{pol}}(N+1)^{p}$ for the member bond are chosen before the chain
+    length. For every chain and every estimate, and every band width
+    $3w\leq\eta\leq34$, the windows of $\widehat G$ at $c_1$ and $c_0$ satisfy:
+    the window of $H$ at $E+\eta$ is $1/200$-close to the window at $c_1$, the
+    window at $c_0$ is $1/200$-close to the window of $H$ at $E+\eta-3w$, and the
+    family improves viability from the first window to the second with
+    $D^{12}\Delta\leq10^{-5}$.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:efficient_soft_low_density_family,
+        lem:soft_low_density_calibration_budgets}
+    Apply Lemma~\ref{thm:efficient_soft_low_density_family} at these parameters,
+    with $T=u^9$ and the window resolution $h$, and bound its losses by
+    Lemma~\ref{lem:soft_low_density_calibration_budgets}.
+\end{proof}
+
+The band width is at most $34$ and the parameters depend on the buffer $w$. In
+the source's use $w$ shrinks with the chain length, and then the bond is no
+longer polynomial for fixed parameters; this is recorded
+in~\cite{gap:alvv16_soft_regional_residuals}. The source's own parameter choice
+and a running-time bound are not formalized.
+
+\begin{lemma}[Efficient approximate ground-space projector, low density]
+    \label{thm:alvv_efficient_low_density_agsp}
+    \notready
+    \uses{lem:calibrated_efficient_soft_low_density_family}
+    Let $H$ be a nearest-neighbour Hamiltonian on $n$ qudits satisfying
+    Assumption (LD) with energy parameter $\eta$, and let $\varepsilon_0$ be
+    the least eigenvalue of $H$. Let $\eta_1\leq\eta$ and $\mu>0$, let
+    $\{0,\ldots,n-1\}=L\cup M\cup R$ with $L=\{0,\ldots,i_1-1\}$,
+    $M=\{i_1,\ldots,i_2-1\}$ and $R=\{i_2,\ldots,n-1\}$, and let
+    $\varepsilon'_M$ satisfy
+    $|\varepsilon_M-\varepsilon'_M|\leq10$, where $\varepsilon_M$ is the least
+    energy of the restriction of $H$ to $M$. Then there are $D^2$ operators
+    $A_i$ on the space of $M$, each a matrix product operator of bond dimension
+    at most $e^{\tilde O(\log^3n)}$, and subspaces $\tilde T_-\subseteq\tilde T$,
+    such that the spectral subspace of $H$ below $\varepsilon_0+\eta_1$ is
+    $.005$-close to $\tilde T$, the space $\tilde T_-$ is $.005$-close to the
+    spectral subspace of $H$ below $\varepsilon_0+\eta_1-\mu/\log n$,
+    $D=e^{\tilde O(\frac{\log n}{\mu}\log^3d)}$, and for some $\Delta>0$ with
+    $D^{12}\Delta<10^{-5}$ every $\delta$-viable subspace for $\tilde T$ is
+    carried by the $A_i$ to a $\Delta/(1-\delta)^2$-viable subspace for
+    $\tilde T_-$. Moreover there is a matrix product operator $\tilde H_M$ with
+    $\|\tilde H_M\|=\tilde O(\log(n)/\mu)$ whose least energy on $\tilde T_-$
+    is within $1/2$ of $\varepsilon_M$.
+    This is~\cite[Theorem~5.9, lines 1424--1437]{Arad2016RigorousRG} without its
+    running time; see~\cite{gap:alvv16_efficient_low_density_agsp}.
+    % Coverage: only restricted versions of the window and improvement clauses,
+    % for a fixed buffer, are formalized; the shrinking buffer, the bond and norm
+    % bounds and the energy estimate are open.
+\end{lemma}
+\begin{proof}\notready
+    \uses{lem:calibrated_efficient_soft_low_density_family}
+    The source chooses window length
+    $\ell=\Theta(\frac{\log n}{\mu}\log\frac{\log n}{\mu})$, filter degree
+    $k=\ell^2$, soft-truncation scale $\Theta(\ell)$ and order four, applies
+    the soft truncation to the three bulk regions and the Chebyshev filter
+    between $\varepsilon_0+\eta_1-\mu/(2\log n)$ and $\varepsilon_0+\eta_1$, and
+    compares the windows of the truncated Hamiltonian with those of $H$.
+\end{proof}

@@ -8,6 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Lattice
 
+import TNLean.Lattice.BoundedDegreeImaginaryTime
 import TNLean.Lattice.ClusterExpansion
 import TNLean.Lattice.Compression
 import TNLean.Lattice.ConnectedSetCount
@@ -44,9 +45,9 @@ import TNLean.Lattice.GaussianVariationalLowerBound
 import TNLean.Lattice.GaussianZeroRange
 import TNLean.Lattice.GraphDegreeGrowth
 import TNLean.Lattice.GraphDegreeTail
+import TNLean.Lattice.HardTruncation
 import TNLean.Lattice.HeisenbergDuhamel
 import TNLean.Lattice.IntegerLatticeBallCount
-import TNLean.Lattice.LocalHamiltonian
 import TNLean.Lattice.LowEnergyBasis
 import TNLean.Lattice.LowEnergyBasisConstruction
 import TNLean.Lattice.LowEnergyBasisIteration
@@ -64,7 +65,6 @@ import TNLean.Lattice.LowEnergyCommutatorExample
 import TNLean.Lattice.LowEnergyCommutatorSum
 import TNLean.Lattice.LowEnergyDecayKernel
 import TNLean.Lattice.LowEnergyMetricCommutator
-import TNLean.Lattice.LowEnergyObservableDecay
 import TNLean.Lattice.MarginalTails
 import TNLean.Lattice.MetricInteractionGraph
 import TNLean.Lattice.NegativeFrequencyGroundCorrelation
@@ -75,17 +75,16 @@ import TNLean.Lattice.ProductForm
 import TNLean.Lattice.ProductFormIndexRestriction
 import TNLean.Lattice.ProductGroundState
 import TNLean.Lattice.RegionEntropyInequalities
-import TNLean.Lattice.RegionSplit
 import TNLean.Lattice.RegionalEntropy
 import TNLean.Lattice.RegionalEntropyBridge
 import TNLean.Lattice.RegionalReset
 import TNLean.Lattice.RegionalResetEntropy
-import TNLean.Lattice.RegionalSwap
 import TNLean.Lattice.RegionalSwapSupport
 import TNLean.Lattice.ReplicaSwap
 import TNLean.Lattice.Sheet
 import TNLean.Lattice.SiteRelabelEntropy
 import TNLean.Lattice.SiteSymmetry
+import TNLean.Lattice.StateSpace
 import TNLean.Lattice.SupportedPolarUnitary
 import TNLean.Lattice.SupportedUnitaryEntropy
 import TNLean.Lattice.TranslationFiniteOrbit
@@ -100,7 +99,6 @@ import TNLean.Lattice.TranslationSupercellDecay
 import TNLean.Lattice.TranslationSupercellSpacing
 import TNLean.Lattice.TranslationSupercellTruncated
 import TNLean.Lattice.TreeBasisCounterexample
-import TNLean.Lattice.TrotterActiveIndices
 import TNLean.Lattice.TrotterIndexCount
 import TNLean.Lattice.VariationalLowerBound
 import TNLean.Lattice.ZeroEntropy

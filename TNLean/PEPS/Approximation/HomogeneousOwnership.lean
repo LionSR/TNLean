@@ -87,7 +87,7 @@ theorem mem_birthEnv {x : ι} : x ∈ F.birthEnv P ↔ F.owner x ≠ P ∨ x ∈
   unfold birthEnv
   simp
 
-theorem outerHoles_subset_birthEnv : F.outerHoles ⊆ (F.birthEnv P : Set ι) := fun _ hx =>
+theorem outerHoles_subset_birthEnv : F.outerHoles ⊆ F.birthEnv P := fun _ hx =>
   (F.mem_birthEnv).mpr (Or.inr hx)
 
 /-- Every register outside `E` is owned by `P∘`. -/
@@ -105,12 +105,12 @@ theorem changeOwner_owner_of_notMem_birthEnv {x : ι} (hx : x ∉ F.birthEnv P) 
 
 /-- `T` and `E` are disjoint when `T` is owned by `P∘` and avoids every outer hole footprint. -/
 theorem disjoint_birthEnv (hTP : ∀ x ∈ T, F.owner x = P)
-    (hTH : Disjoint (T : Set ι) F.outerHoles) : Disjoint T (F.birthEnv P) := by
+    (hTH : Disjoint T F.outerHoles) : Disjoint T (F.birthEnv P) := by
   rw [Finset.disjoint_left]
   intro x hxT hxE
   rcases (F.mem_birthEnv).mp hxE with h | h
   · exact h (hTP x hxT)
-  · exact Set.disjoint_left.mp hTH hxT h
+  · exact Finset.disjoint_left.mp hTH hxT h
 
 /-- The ownership facts used by both directions of a homogeneous birth: when `T` is owned by `P∘`
 and avoids every outer hole footprint, the sites outside `T ∪ E` are owned by `P∘` both before and
@@ -119,7 +119,7 @@ are unchanged.
 
 Polynomial-PEPS manuscript, proof of Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 413–446. -/
 theorem changeOwner_birth_owners (hTP : ∀ x ∈ T, F.owner x = P)
-    (hTH : Disjoint (T : Set ι) F.outerHoles) :
+    (hTH : Disjoint T F.outerHoles) :
     (∀ x ∈ (T ∪ F.birthEnv P)ᶜ, F.owner x = P) ∧ (∀ x ∈ T, (F.changeOwner T Q).owner x = Q) ∧
       (∀ x ∈ (T ∪ F.birthEnv P)ᶜ, (F.changeOwner T Q).owner x = P) ∧
       ∀ x ∈ F.birthEnv P, (F.changeOwner T Q).owner x = F.owner x := by
@@ -149,7 +149,7 @@ The change of owner from `P∘` to `Q∘` is the content of the bounded-change c
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 396–407; proof lines
 413–437. -/
 theorem birth [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
-    (hTH : Disjoint (T : Set ι) F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
+    (hTH : Disjoint T F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     {L : ℝ}
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
@@ -186,7 +186,7 @@ and the set `E`, are those of the frame after the death (`05-frames.tex`, lines 
 Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 407–410; proof lines
 439–446. -/
 theorem death [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
-    (hTH : Disjoint (T : Set ι) F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
+    (hTH : Disjoint T F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     {L : ℝ}
     (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :

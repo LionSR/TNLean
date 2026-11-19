@@ -22,6 +22,8 @@ Source: SCP10, arXiv:1001.3807, lines 2560–2581.
 is not identified with the complete prescribed braid or its reunion experiment.
 See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS
@@ -260,7 +262,7 @@ private theorem source_treeGauge (v : X) (k : G) :
 omit [Fintype G] in
 private theorem source_up_left (v : X) (k : G) :
     torusSweptStringInitialOperators v k 1
-      (Edge.ofAdj (torusGraph_adj_up (v.1-1) (v.2+1))) = 1 := by
+      (ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1-1) (v.2+1))) = 1 := by
   have hx : ∀ i : Fin 4, v.1-1 ≠ v.1 + (i.val : ZMod width) := by
     intro i hi
     rw [sub_eq_add_neg] at hi
@@ -297,12 +299,12 @@ def torusChargeFluxCrossingChargeBond (v : X) :
   have h3 : (v.1+2,v.2+1) ∈ R v := by
     have h := (E v 3).2
     simpa [vertex_table] using h
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right (v.1+1) (v.2+1)) with
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right (v.1+1) (v.2+1)) with
     ⟨ht,hh⟩ | ⟨ht,hh⟩
-  · change (Edge.ofAdj _).1.1 ∈ _ ∧ (Edge.ofAdj _).1.2 ∈ _
+  · change (ManyBody.Edge.ofAdj _).1.1 ∈ _ ∧ (ManyBody.Edge.ofAdj _).1.2 ∈ _
     rw [ht,hh]
     simpa only [add_assoc, one_add_one_eq_two] using And.intro h2 h3
-  · change (Edge.ofAdj _).1.1 ∈ _ ∧ (Edge.ofAdj _).1.2 ∈ _
+  · change (ManyBody.Edge.ofAdj _).1.1 ∈ _ ∧ (ManyBody.Edge.ofAdj _).1.2 ∈ _
     rw [ht,hh]
     simpa only [add_assoc, one_add_one_eq_two] using And.intro h3 h2
 
@@ -314,7 +316,7 @@ private theorem source_charge_tail (v : X) (k : G) :
       ⟨(torusChargeFluxCrossingChargeBond v).1.1.1,
         (torusChargeFluxCrossingChargeBond v).2.1⟩ = 1 := by
   rw [source_treeGauge]
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right (v.1+1) (v.2+1)) with
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right (v.1+1) (v.2+1)) with
     ⟨ht,hh⟩ | ⟨ht,hh⟩ <;>
     simp [rowGauge, torusChargeFluxCrossingChargeBond, torusSweptStringChargeEdge, ht]
 
@@ -326,7 +328,7 @@ private theorem source_cycle_residual (v : X) (k : G) :
       (translatedThreePlaquetteCycleBond (base v) 0) =
       if (v.1-1,v.2+1) < (v.1-1,v.2+2) then k⁻¹ else k := by
   let b := translatedThreePlaquetteCycleBond (base v) 0
-  have hb : b.1.1 = Edge.ofAdj (torusGraph_adj_up (v.1-1) (v.2+1)) := by
+  have hb : b.1.1 = ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1-1) (v.2+1)) := by
     simpa [b, base] using translatedThreePlaquetteCycleBond_eq_up (base v) 0
   have hu : torusSweptStringInitialOperators v k 1 b.1.1 = 1 := by
     rw [hb]
@@ -345,7 +347,7 @@ private theorem source_cycle_residual (v : X) (k : G) :
   rw [source_treeGauge]
   by_cases ho : (v.1-1,v.2+1) < (v.1-1,v.2+2)
   · have hp : (b.1.1).1 = ((v.1-1,v.2+1),(v.1-1,v.2+2)) := by
-      rw [hb, Edge.ofAdj_of_lt _ (by simpa only [add_assoc, one_add_one_eq_two] using ho)]
+      rw [hb, ManyBody.Edge.ofAdj_of_lt _ (by simpa only [add_assoc, one_add_one_eq_two] using ho)]
       simp only [add_assoc, one_add_one_eq_two]
     simp [regularRegionGaugeResidual, rowGauge, hu, hp, ho, h21]
   · have hr : (v.1-1,v.2+2) < (v.1-1,v.2+1) := by
@@ -353,7 +355,7 @@ private theorem source_cycle_residual (v : X) (k : G) :
       intro he
       exact h21 (add_left_cancel (congrArg Prod.snd he))
     have hp : (b.1.1).1 = ((v.1-1,v.2+2),(v.1-1,v.2+1)) := by
-      rw [hb, Edge.ofAdj_of_gt _ (by simpa only [add_assoc, one_add_one_eq_two] using hr)]
+      rw [hb, ManyBody.Edge.ofAdj_of_gt _ (by simpa only [add_assoc, one_add_one_eq_two] using hr)]
       simp only [add_assoc, one_add_one_eq_two]
     simp [regularRegionGaugeResidual, rowGauge, hu, hp, ho, h21]
 

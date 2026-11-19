@@ -26,38 +26,13 @@ namespace TNLean.Lattice.PartyCircuit.SourceCircuit
 
 variable {P : Type}
 
-/-- Nonprivate gate occurrences, retaining their positions in the composition.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 342–364. -/
-def gateLocations : {a b : Layout P} → SourceCircuit a b → Type
-  | _, _, .id _ => Empty
-  | _, _, .comp w v => gateLocations w ⊕ gateLocations v
-  | _, _, .localMap .. => Empty
-  | _, _, @SourceCircuit.gate _ _ _ _ _ _ _ _ _ _ _ => Unit
-  | _, _, .swap .. => Empty
-  | _, _, .frame _ w => gateLocations w
-
-/-- A finite composition has finitely many nonprivate gate occurrences, even
-when the global party type is infinite. Source: polynomial-PEPS Theorem 5.2,
-`04-compression.tex`, lines 342–364. -/
-instance gateLocationsFintype : {a b : Layout P} →
-    (w : SourceCircuit a b) → Fintype (gateLocations w)
-  | _, _, .id _ => inferInstanceAs (Fintype Empty)
-  | _, _, .comp w v => by
-      letI := gateLocationsFintype w
-      letI := gateLocationsFintype v
-      exact inferInstanceAs (Fintype (gateLocations w ⊕ gateLocations v))
-  | _, _, .localMap .. => inferInstanceAs (Fintype Empty)
-  | _, _, @SourceCircuit.gate _ _ _ _ _ _ _ _ _ _ _ => inferInstanceAs (Fintype Unit)
-  | _, _, .swap .. => inferInstanceAs (Fintype Empty)
-  | _, _, .frame _ w => gateLocationsFintype w
-
 /-- The fixed number of source positions of the gate at an occurrence.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–267 and 342–355. -/
 def slotCount : {a b : Layout P} → (w : SourceCircuit a b) → gateLocations w → ℕ
   | _, _, .id _ => Empty.elim
   | _, _, .comp w v => Sum.elim (slotCount w) (slotCount v)
   | _, _, .localMap .. => Empty.elim
-  | _, _, @SourceCircuit.gate _ _ _ _ _ _ _ _ _ G _ => fun _ ↦ G.slots.length
+  | _, _, Circuit.gate (@PreparedGate.mk _ _ _ _ _ _ _ _ _ G _) => fun _ ↦ G.slots.length
   | _, _, .swap .. => Empty.elim
   | _, _, .frame _ w => slotCount w
 
@@ -73,17 +48,6 @@ positions is finite. Source: polynomial-PEPS Theorem 5.2,
 instance sourceLocationsFintype {a b : Layout P} (w : SourceCircuit a b) :
     Fintype (sourceLocations w) := inferInstanceAs (Fintype (Σ g, Fin (slotCount w g)))
 
-/-- The actual participating parties of a nonprivate gate occurrence.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 356–364. -/
-def participants : {a b : Layout P} → (w : SourceCircuit a b) →
-    gateLocations w → Finset P
-  | _, _, .id _ => Empty.elim
-  | _, _, .comp w v => Sum.elim (participants w) (participants v)
-  | _, _, .localMap .. => Empty.elim
-  | _, _, @SourceCircuit.gate _ _ _ _ _ owner _ _ _ _ _ => fun _ ↦ Finset.univ.map owner
-  | _, _, .swap .. => Empty.elim
-  | _, _, .frame _ w => participants w
-
 /-- The two original parties of a source position, transported by its gate's
 participant embedding. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 342–364. -/
@@ -95,7 +59,7 @@ def endpoints : {a b : Layout P} → (w : SourceCircuit a b) → sourceLocations
       | inl g => exact endpoints w ⟨g, i⟩
       | inr g => exact endpoints v ⟨g, i⟩
   | _, _, .localMap .. => fun e ↦ nomatch e.1
-  | _, _, @SourceCircuit.gate _ _ _ _ _ owner _ _ _ G _ => fun e ↦
+  | _, _, Circuit.gate (@PreparedGate.mk _ _ _ _ _ owner _ _ _ G _) => fun e ↦
       (owner (G.slots.get e.2).left, owner (G.slots.get e.2).right)
   | _, _, .swap .. => fun e ↦ nomatch e.1
   | _, _, .frame _ w => endpoints w
@@ -150,7 +114,7 @@ def branchLabels : {a b : Layout P} → (w : SourceCircuit a b) → gateLocation
   | _, _, .id _ => Empty.elim
   | _, _, .comp w v => Sum.elim (branchLabels w) (branchLabels v)
   | _, _, .localMap .. => Empty.elim
-  | _, _, @SourceCircuit.gate _ _ ι _ _ _ _ _ _ _ _ => fun _ ↦ ι
+  | _, _, Circuit.gate (@PreparedGate.mk _ _ ι _ _ _ _ _ _ _ _) => fun _ ↦ ι
   | _, _, .swap .. => Empty.elim
   | _, _, .frame _ w => branchLabels w
 
@@ -165,7 +129,7 @@ instance branchLabelsFintype : {a b : Layout P} → (w : SourceCircuit a b) →
       | inl g => exact branchLabelsFintype w g
       | inr g => exact branchLabelsFintype v g
   | _, _, .localMap .. => fun g ↦ nomatch g
-  | _, _, @SourceCircuit.gate _ _ ι _ _ _ _ _ _ _ _ =>
+  | _, _, Circuit.gate (@PreparedGate.mk _ _ ι _ _ _ _ _ _ _ _) =>
       fun _ ↦ inferInstanceAs (Fintype ι)
   | _, _, .swap .. => fun g ↦ nomatch g
   | _, _, .frame _ w => branchLabelsFintype w
@@ -182,7 +146,7 @@ def branchCoefficient : {a b : Layout P} → (w : SourceCircuit a b) →
       | inl g => exact branchCoefficient w g
       | inr g => exact branchCoefficient v g
   | _, _, .localMap .. => fun g ↦ nomatch g
-  | _, _, @SourceCircuit.gate _ _ _ _ _ _ _ _ c _ _ => fun _ ↦ c
+  | _, _, Circuit.gate (@PreparedGate.mk _ _ _ _ _ _ _ _ c _ _) => fun _ ↦ c
   | _, _, .swap .. => fun g ↦ nomatch g
   | _, _, .frame _ w => branchCoefficient w
 

@@ -27,6 +27,8 @@ space, rather than assumed. The numerical specialization does not identify
 any particular group's irreducible representations.
 -/
 
+open ManyBody (Edge)
+
 open scoped Matrix ComplexOrder
 namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]

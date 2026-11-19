@@ -23,7 +23,7 @@ MARGINAL = ROOT / "blueprint/src/chapter/ch24_peps_regularized_patch_stationarit
 GENERIC_DECLS = {
     "dependentRegionFinEquiv", "dependentGlobalFinEquiv",
     "dependentGlobalFinIsometry", "dependentGlobalFinIsometry_apply",
-    "reindex_dependentRegionOperatorLift", "dependentGlobalFinIsometry_lift",
+    "reindex_place", "dependentGlobalFinIsometry_place",
     "reindex_reducedPure_eq_regionState",
 }
 EXPECTED_ATOMS = [

@@ -26,6 +26,8 @@ tensors and contains no assumption about the Gram operator of the region.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

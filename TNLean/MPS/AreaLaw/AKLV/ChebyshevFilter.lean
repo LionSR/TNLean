@@ -22,6 +22,8 @@ Source: AKLV, arXiv:1301.1162v1, Section 4, Lemmas 4.1 and 4.2, lines 530--663.
 The hard-truncation robustness theorem and subsequent entropy arguments are separate.
 -/
 
+open ManyBody (interval)
+
 open Matrix Polynomial
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator ComplexOrder
 

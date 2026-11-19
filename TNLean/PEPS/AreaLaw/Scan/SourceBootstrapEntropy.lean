@@ -11,6 +11,7 @@ import TNLean.PEPS.AreaLaw.Scan.BootstrapScannerExponents
 import TNLean.PEPS.AreaLaw.Scan.FixedWeightTransportSmallness
 import TNLean.PEPS.AreaLaw.Scan.ScannerRoundedAdmissibility
 import TNLean.PEPS.AreaLaw.Scan.TypicalReplicaAbsorption
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Original-state entropy improvement from the actual rough scanner
@@ -35,12 +36,18 @@ Validation and inherited-dependency scope:
 `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -150,11 +157,13 @@ theorem sourceBootstrap_entropy_improvement_explicit
     ∀ Ce : ℝ, 0 ≤ Ce →
       ∀ η : ℝ, (Exponents.boxError : ℝ) < η → η ≤ e₀ →
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-        (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+        (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+            (_ : ∀ X, ‖h.term X‖ ≤ J)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
         (Ω : StateSpace Λ q),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
         sourceBootstrapEntropyThreshold q R he₀pos he₀₁ Ctr ct Cent eent Cen een
           (Δ / positiveNormalization 1 (Δ / 2) J) C₁ C_T Ce multiplicity ≤ S.n →
         S.r₀ = roundedLogRadius Ctr S.n →
@@ -217,7 +226,8 @@ theorem sourceBootstrap_entropy_improvement_explicit
   have hinterval := fun n (hn : Real.natRpowThreshold F.nu 4 ≤ n) =>
     Real.le_natCast_rpow_of_natRpowThreshold_le F.nu_pos hn
   have hlog := fun n (hn : 3 ≤ n) => Real.one_le_log_natCast_of_three_le hn
-  intro η hη hηe₀ Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
+  intro η hη hηe₀ Λ T _ hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale
+      hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix
   have hthresholds := hn
   simp only [sourceBootstrapEntropyThreshold, max_le_iff] at hthresholds
@@ -228,7 +238,7 @@ theorem sourceBootstrap_entropy_improvement_explicit
   have hadm := hadmissible S.n hnA
   simp only [← hmScale, ← hDScale, ← hKScale, ← hr] at hadm
   obtain ⟨hrD, hDpos, hDm, _, _⟩ := hadm
-  obtain ⟨hm, hM, hdata⟩ := hsource Λ T hT h S E₀ Ω hgs hgraph hanchor hnS
+  obtain ⟨hm, hM, hdata⟩ := hsource Λ T hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hnS
     hr hmScale hDScale hKScale hCeq hsize hdepth hrows hmult hclear
     Ce η hprefix hrD hDpos hDm
   let L := F.L S.n
@@ -255,7 +265,7 @@ theorem sourceBootstrap_entropy_improvement_explicit
   let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
     (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
   let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-  let energy := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+  let energy := S.actualEnergyTerms h Ω J Δ L (fun _ ↦ d)
   obtain ⟨ell, hpre, hdim, hweights⟩ := hpdata
   let pre : (k : ℕ) → Config k (fun v ↦ Fin (dims v)) → ℂ := fun k ↦
     replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
@@ -267,10 +277,10 @@ theorem sourceBootstrap_entropy_improvement_explicit
   obtain ⟨b, rem, Cb, cU, cR, Ci, cL, Cf,
       _, _, _, _, _, _, _, _, _, hrem, hlimU, hlimR, hlimL, hpoints⟩ :=
     hweights hsmallN.2.2
-  have hΩt : ‖Ωt‖ = 1 := (Matrix.isGappedGroundState_iff.mp htrgs).1
+  have hΩt : ‖Ωt‖ = 1 := htrgs.1
   have hXcard : (X.card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 :=
     (Nat.cast_le.mpr (Finset.card_le_card hX)).trans hcard
-  have hcont := htarget S.n hnT Λ Ω Ωt hgs.1 hΩt X hXcard htrace
+  have hcont := htarget S.n hnT Λ Ω Ωt hΩ hΩt X hXcard htrace
   have hSt : regionalEntropy Λ q Ωt X ≤
       Ce * (S.n : ℝ) ^ (1 + η) + (S.n : ℝ) ^ (-247 : ℝ) := by
     linarith [(abs_le.mp hcont).2]
@@ -413,11 +423,13 @@ theorem exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
     ∃ Ctr : ℝ, 0 < Ctr ∧ ∀ Ce : ℝ, 0 ≤ Ce →
       ∀ η : ℝ, (Exponents.boxError : ℝ) < η → η ≤ e₀ →
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-        (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+        (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+            (_ : ∀ X, ‖h.term X‖ ≤ J)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
         (Ω : StateSpace Λ q),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
         sourceBootstrapEntropyThreshold q R he₀pos he₀₁ Ctr ct Cent eent Cen een
           (Δ / positiveNormalization 1 (Δ / 2) J) C₁ C_T Ce multiplicity ≤ S.n →
         S.r₀ = roundedLogRadius Ctr S.n →
@@ -460,11 +472,13 @@ theorem exists_sourceBootstrap_entropy_improvement_of_threshold_le
     ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧ ∀ Ce : ℝ, 0 ≤ Ce →
       ∀ η : ℝ, (Exponents.boxError : ℝ) < η → η ≤ e₀ →
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-        (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+        (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+            (_ : ∀ X, ‖h.term X‖ ≤ J)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
         (Ω : StateSpace Λ q),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
         sourceBootstrapEntropyThreshold q R he₀pos he₀₁ Ctr ct Cent eent Cen een
           (Δ / positiveNormalization 1 (Δ / 2) J) C₁ C_T Ce multiplicity ≤ S.n →
         S.r₀ = roundedLogRadius Ctr S.n →
@@ -505,11 +519,13 @@ theorem exists_sourceBootstrap_entropy_improvement
     ∃ Ctr Cout : ℝ, 0 < Ctr ∧ 0 < Cout ∧ ∃ N : ℕ, 2 ≤ N ∧
       ∀ η : ℝ, (Exponents.boxError : ℝ) < η → η ≤ e₀ →
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-        (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+        (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+            (_ : ∀ X, ‖h.term X‖ ≤ J)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
         (Ω : StateSpace Λ q),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-        S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
         S.r₀ = roundedLogRadius Ctr S.n →
         S.m = F.m S.n → S.D = F.D S.n → S.K = F.K S.n →
         S.C₁ = C₁ → (T.card : ℝ) ≤ C_T * (S.n : ℝ) ^ 2 →

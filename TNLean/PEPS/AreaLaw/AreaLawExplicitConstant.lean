@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.BoundaryTheoremFromTwoFamilies
 import TNLean.PEPS.AreaLaw.Geometry.TwoFamilyAssembly
 import TNLean.PEPS.AreaLaw.RectangularSpecialization
 import TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The two-dimensional area law with an explicit constant
@@ -45,7 +46,11 @@ The explicit constant is recorded in `docs/notes/arealaw2d_explicit_constant.tex
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -104,8 +109,10 @@ theorem uniformAreaLaw_explicit_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (h
     (htr : Scan.CollarScan.FiniteFamilyTransportBound c₀ Cent eent Cen een) {B : ℝ}
     (hB : Scan.physicalBoxConstantExplicit q R J Δ c₀ Cent eent Cen een ≤ B) :
     0 ≤ uniformAreaLawConstantAt q R J Δ B c₀ Cent eent Cen een ∧
-      ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-        IsGappedGroundState Λ q H.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
+      ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
+          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+        ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
           regionalEntropy Λ q Ω A ≤
             uniformAreaLawConstantAt q R J Δ B c₀ Cent eent Cen een *
               (edgeBoundary Λ A).card := by
@@ -143,8 +150,10 @@ theorem uniformAreaLaw_explicit (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 
     {c₀ Cent eent Cen een : ℝ} (hc₀ : 0 < c₀)
     (htr : Scan.CollarScan.FiniteFamilyTransportBound c₀ Cent eent Cen een) :
     0 ≤ uniformAreaLawConstantExplicit q R J Δ c₀ Cent eent Cen een ∧
-      ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-        IsGappedGroundState Λ q H.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
+      ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
+          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+        ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
           regionalEntropy Λ q Ω A ≤
             uniformAreaLawConstantExplicit q R J Δ c₀ Cent eent Cen een *
               (edgeBoundary Λ A).card :=
@@ -173,8 +182,10 @@ lines 803–857; the constant is tabulated in `docs/notes/arealaw2d_explicit_con
 Section `sec:top`. -/
 theorem uniformAreaLaw_closed (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     0 ≤ uniformAreaLawConstantClosed q R J Δ ∧
-      ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-        IsGappedGroundState Λ q H.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
+      ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
+          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+        ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
           regionalEntropy Λ q Ω A ≤
             uniformAreaLawConstantClosed q R J Δ * (edgeBoundary Λ A).card :=
   uniformAreaLaw_explicit q R hq hJ hΔ TensorPower.ReplicaTransport.transportThreshold_pos
@@ -220,8 +231,10 @@ This is an auxiliary result whose only hypothesis beyond those of Theorem 1.1
 theorem uniformAreaLaw_closed_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)
     (hΔ : 0 < Δ) {B : ℝ} (hB : physicalBoxConstantClosed q R J Δ ≤ B) :
     0 ≤ uniformAreaLawConstantClosedAt q R J Δ B ∧
-      ∀ Λ : Finset (ℤ × ℤ), ∀ H : LocalHamiltonian Λ q R J, ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
-        IsGappedGroundState Λ q H.operator E₀ Ω Δ → ∀ A : Finset (Site Λ),
+      ∀ Λ : Finset (ℤ × ℤ), ∀ H : PlaneInteraction Λ q R, (∀ X, (H.term X).IsHermitian) →
+          (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
+        ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
           regionalEntropy Λ q Ω A ≤
             uniformAreaLawConstantClosedAt q R J Δ B * (edgeBoundary Λ A).card :=
   uniformAreaLaw_explicit_of_le q R hq hJ hΔ TensorPower.ReplicaTransport.transportThreshold_pos

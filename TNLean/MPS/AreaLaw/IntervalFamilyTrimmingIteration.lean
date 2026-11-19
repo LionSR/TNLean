@@ -24,6 +24,8 @@ The integer round count is explicit and is not identified with the
 possibly nonintegral choice printed in `eq:algo-sk-dg`.
 -/
 
+open ManyBody (interval)
+
 open scoped TensorProduct InnerProductSpace
 
 namespace TNLean.MPS.AreaLaw

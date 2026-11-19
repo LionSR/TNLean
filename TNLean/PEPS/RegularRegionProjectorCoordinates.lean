@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ComplexSqrt
+import QICLean.Algebra.ComplexSqrt
 import TNLean.PEPS.RegularRegionCoordinates
 import TNLean.PEPS.RegularProjectorOpenRegion
 import TNLean.Algebra.FinSumPermutation
@@ -25,6 +25,8 @@ formula is derived from the original internal-bond summation; no factorization i
 - [arXiv:1001.3807](https://arxiv.org/abs/1001.3807) -- N. Schuch, J. I. Cirac,
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
+
+open ManyBody (Edge)
 
 open scoped BigOperators Matrix
 

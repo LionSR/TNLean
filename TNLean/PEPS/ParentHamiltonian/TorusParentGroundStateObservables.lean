@@ -32,6 +32,8 @@ Theorem 6.7, Corollary 6.8, Theorem 6.9, and Corollary 6.10;
 local source lines 1995–2090 for the observable and entropy conclusions.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix ComplexOrder
 
 namespace TNLean.PEPS

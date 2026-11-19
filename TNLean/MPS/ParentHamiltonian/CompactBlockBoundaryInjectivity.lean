@@ -73,12 +73,12 @@ theorem exists_uniform_blockGroundSpaceMapES_injective_of_compact_wordTupleSpanT
 /-- A compact continuous family of inequivalent normalized primitive blocks admits one common
 joint-boundary injectivity threshold. Fixed-point matrices need not vary continuously.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
-theorem exists_uniform_blockGroundSpaceMapES_injective_of_compact_isPrimitiveMPS
+theorem exists_uniform_blockGroundSpaceMapES_injective_of_compact_hasComplementaryFixedPointGap
     {X : Type*} [TopologicalSpace X] [∀ j, NeZero (dim j)]
     (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hA : ∀ j, Continuous fun x => A x j) {S : Set X} (hS : IsCompact S)
     (ρ : X → ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
-    (hP : ∀ x ∈ S, ∀ j, IsPrimitiveMPS (A x j) (ρ x j))
+    (hP : ∀ x ∈ S, ∀ j, Kraus.HasComplementaryFixedPointGap (A x j) (ρ x j))
     (hρ : ∀ x ∈ S, ∀ j, (ρ x j).PosDef)
     (hDistinct : ∀ x ∈ S, ∀ i j, i ≠ j → ∀ h : dim j = dim i,
       ¬ GaugePhaseEquiv (h ▸ A x j) (A x i)) :
@@ -87,7 +87,7 @@ theorem exists_uniform_blockGroundSpaceMapES_injective_of_compact_isPrimitiveMPS
   apply exists_uniform_blockGroundSpaceMapES_injective_of_compact_wordTupleSpanTop
     A hA hS (fun x hx j => (hP x hx j).norm)
   intro x hx
-  obtain ⟨L, hL⟩ := exists_eventually_wordTupleSpanTop_of_isPrimitiveMPS
+  obtain ⟨L, hL⟩ := exists_eventually_wordTupleSpanTop_of_hasComplementaryFixedPointGap
     (A x) (ρ x) (hP x hx) (hρ x hx) (hDistinct x hx)
   exact ⟨L, hL L le_rfl⟩
 

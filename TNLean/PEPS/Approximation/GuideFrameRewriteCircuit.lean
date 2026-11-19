@@ -175,7 +175,7 @@ theorem PlaneConditions.exists_originalCircuit_isSourceBounded (h : G.PlaneCondi
     hw₃.isAllowed)), ?_, ?_, ?_, ?_, ?_,
     ⟨OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero h₁ _, hsrc,
       OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero h₃ _⟩⟩
-  · simp only [OriginalCircuit.nonprivateCount, h₁, h₃, zero_add, add_zero]
+  · simp only [OriginalCircuit.nonprivateCount, Circuit.gateCount, h₁, h₃, zero_add, add_zero]
     exact hcount
   · rintro (g | g | g)
     · exact Word.participants_toOriginalCircuit_subset _ _ (hw₁.usesOnly _) g
@@ -187,7 +187,7 @@ theorem PlaneConditions.exists_originalCircuit_isSourceBounded (h : G.PlaneCondi
   · exact ⟨Word.isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
       hw₁.sourceCount_eq _, hmono,
       Word.isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _ hw₃.sourceCount_eq _⟩
-  · simp only [OriginalCircuit.eval, ContinuousLinearMap.comp_apply,
+  · simp only [Circuit.eval, ContinuousLinearMap.comp_apply,
       Word.eval_toOriginalCircuit, hr₁]
     rw [← hr₃, ← map_sub, hn₃, ← R.newFrame.regIso.norm_map, map_sub,
       LinearIsometryEquiv.apply_symm_apply, hc₀, LinearIsometryEquiv.apply_symm_apply]

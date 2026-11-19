@@ -3,7 +3,7 @@
 \begin{lemma}[Entropy bounded by the smaller side]
     \label{lem:aklv_region_entropy_short_side}
     \lean{TNLean.MPS.AreaLaw.aklv_regionEntropy_le_short_side}
-    \notready
+    \leanok
     Let $\Omega$ be a unit vector on an $L$-site chain of local dimension
     $q$. For every $0\le k\le L$,
     \begin{align}
@@ -11,16 +11,16 @@
         \notag
     \end{align}
 \end{lemma}
-\begin{proof}\notready
+\begin{proof}\leanok
     The actual cut coefficient matrix has rank at most
     $q^{\min(k,L-k)}$. Its Gram matrix is the regional density matrix,
     with trace one. Bound its entropy by the logarithm of its rank.
 \end{proof}
 
-\begin{theorem}[Uniform entropy of a frustration-free ground vector]
-    \label{thm:aklv_frustration_free_entropy}
+\begin{lemma}[Entropy under a lower gap bound]
+    \label{lem:aklv_frustration_free_entropy_lower_gap}
     \lean{TNLean.MPS.AreaLaw.exists_aklv_frustrationFree_physical_entropy_bound}
-    \notready
+    \leanok
     There is a universal $C>0$ with the following property. Let $q\ge2$,
     let $0\le h_i\le I$ be nearest-neighbour terms on an $L$-site chain,
     and let $\Omega$ be a unit vector satisfying
@@ -31,12 +31,10 @@
         \left(1+\log q+\log\frac1g\right)^3.
         \label{eq:aklv_ff_entropy_bound}
     \end{align}
-    This is a sufficient logarithmic rate for the frustration-free
-    construction in~\cite[Section~4]{Arad2013AreaLaw}; the logarithm of
-    the inverse gap is retained as in
-    \cite{gap:aklv13_two_block_robustness}.
-\end{theorem}
-\begin{proof}\notready
+    Here $g$ is only a lower bound for the gap and need not be an
+    eigenvalue of $H$.
+\end{lemma}
+\begin{proof}\leanok
     \uses{lem:aklv_region_entropy_short_side,
         lem:aklv_frustration_free_filter,
         lem:aklv_frustration_free_scalar_parameters}
@@ -55,4 +53,34 @@
     The smaller-side bound gives
     $S_\Omega(k)\le s\log q\le Wu^3/g$, since $\log q\le u$.
     Taking $C=4R+W$ proves~(\ref{eq:aklv_ff_entropy_bound}).
+\end{proof}
+
+\begin{theorem}[Uniform entropy of a frustration-free ground vector]
+    \label{thm:aklv_frustration_free_entropy}
+    \lean{TNLean.MPS.AreaLaw.exists_aklv_frustrationFree_entropy_bound_of_mem_spectrum}
+    \leanok
+    There is a universal $C>0$ with the following property. Let
+    $0\le h_i\le I$ be nearest-neighbour terms on an $L$-site chain of
+    local dimension $q$, put $H=\sum_i h_i$, and let $\Omega$ be a unit
+    vector with $H\Omega=0$. Suppose $\Omega$ spans the ground space of
+    $H$ with gap $g>0$: that is, $H\ge g(I-|\Omega\rangle\langle\Omega|)$
+    and $g$ is an eigenvalue of $H$. Then every $0\le k\le L$ satisfies
+    \begin{align}
+        S_\Omega(k)\le\frac Cg
+        \left(1+\log q+\log\frac1g\right)^3.
+        \label{eq:aklv_ff_entropy_bound_gap}
+    \end{align}
+    This is Theorem~4.3 of~\cite{Arad2013AreaLaw} with the logarithm of
+    the inverse gap retained, as in
+    \cite{gap:aklv13_entropy_inverse_gap_logarithm}; it cannot be removed
+    within this route, by Lemma~\ref{thm:aklv_certificate_log_rank_lower_bound}.
+    The printed rate $O(\log^3q/g)$ is not asserted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:aklv_ff_dimension_gap,
+        lem:aklv_frustration_free_entropy_lower_gap}
+    The eigenvalues $0$ and $g$ of $H$ give $q\ge2$ and $g\le1$, by
+    Lemma~\ref{lem:aklv_ff_dimension_gap}. Then
+    Lemma~\ref{lem:aklv_frustration_free_entropy_lower_gap} gives
+    (\ref{eq:aklv_ff_entropy_bound_gap}).
 \end{proof}

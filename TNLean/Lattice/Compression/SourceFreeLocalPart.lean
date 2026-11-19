@@ -54,7 +54,7 @@ theorem restrict_localPart_eval_heq_of_sources_nil (f : P → Bool) {a b : Layou
       unfold localPart
       refine (restrict_castInput_eval_heq f _ _ hraw).trans ?_
       exact eval_comp_heq
-        ((frameList v.sources.layout w.localPart).restrict f
+        (Word.restrict f (frameList v.sources.layout w.localPart)
           ((sources_frameList w.localPart v.sources.layout).trans w.sources_localPart))
         (v.localPart.restrict f v.sources_localPart) (w.restrict f hsw) (v.restrict f hsv)
         (by simp only [hW, hV, List.nil_append])

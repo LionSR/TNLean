@@ -328,7 +328,7 @@ theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2
   let e := (readoutCircuit d M Fs [] hd hd1).castLayouts
     (congrArg (stackRegs · []) hfin).symm rfl
   have he0 : e.nonprivateCount = 0 := by
-    simp only [e, OriginalCircuit.nonprivateCount_castLayouts, nonprivateCount_readoutCircuit]
+    simp only [e, Circuit.gateCount_castLayouts, nonprivateCount_readoutCircuit]
   have hN : paddedSide L = 2 ^ k :=
     le_antisymm (paddedSide_le_of_le_pow hkL) (pow_le_paddedSide hk2)
   let D : DyadicProtocol L q (ProtocolParty k) :=

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixL2Contraction
 import TNLean.Circuit.SiteEmbedding
-import TNLean.Lattice.RegionSplit
+import TNLean.Circuit.RegionSplit
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.Lattice.Sheet.Operators
 
@@ -15,7 +15,7 @@ import TNLean.Lattice.Sheet.Operators
 A *sheet* has one raw register `ℂ^q` at every site of a finite lattice `Λ`, and an owner for
 every register. Its raw configurations are the functions `Λ → Fin q`, and a vector on the
 sheet is a vector of `EuclideanSpace ℂ (Λ → Fin q)`. An operator `X` on the sites of a set
-`D ⊆ Λ` acts on the sheet as `X ⊗ 1` (`TNLean.Lattice.siteLift`).
+`D ⊆ Λ` acts on the sheet as `X ⊗ 1` (`ManyBody.place`).
 
 Around a center `c` in the plane and at scale `h > 0`, the inner and outer squares
 `Q^±(c, h)` are the closed sup-norm balls of radii `h` and `2h`; their physical samples are the
@@ -79,7 +79,6 @@ disjointness of their physical samples, which it implies; `Frame` records the la
 
 open Matrix QuantumCircuit
 open scoped BigOperators Matrix.Norms.L2Operator
-open TNLean.Lattice (siteLift siteLift_conjTranspose siteLift_mem_supportedOperators siteLift_mul)
 
 noncomputable section
 
@@ -139,8 +138,10 @@ structure SquarePatch (pos : ι → ℝ × ℝ) (q : ℕ) where
   norm_vec : ∀ j ℓ, ‖vec j ℓ‖ = 1
   /-- The cylinder projectors have mutually orthogonal ranges. -/
   orthogonal : ∀ s s' : (j : Fin n) × Fin (dim j), s ≠ s' →
-    siteLift (squareSample pos center (radius s.1)) (rankOne (vec s.1 s.2)) *
-      siteLift (squareSample pos center (radius s'.1)) (rankOne (vec s'.1 s'.2)) = 0
+    ManyBody.place (X := fun _ ↦ Fin _) (squareSample pos center (radius s.1))
+        (rankOne (vec s.1 s.2)) *
+      ManyBody.place (X := fun _ ↦ Fin _) (squareSample pos center (radius s'.1))
+        (rankOne (vec s'.1 s'.2)) = 0
 
 namespace SquarePatch
 
@@ -177,7 +178,7 @@ abbrev Tag : Type :=
 the identity tag of an empty outer sample. -/
 def cyl : p.Tag → Matrix (ι → Fin q) (ι → Fin q) ℂ
   | .inl _ => 1
-  | .inr s => siteLift (p.sample s.1.1) (rankOne (p.vec s.1.1 s.1.2))
+  | .inr s => ManyBody.place (X := fun _ ↦ Fin _) (p.sample s.1.1) (rankOne (p.vec s.1.1 s.1.2))
 
 /-- The projector `P_{c,h} = ∑_{j,ℓ} |v_{jℓ}⟩⟨v_{jℓ}|_{D_j} ⊗ 1`; it is the identity when the
 outer sample is empty. -/
@@ -187,7 +188,7 @@ def proj : Matrix (ι → Fin q) (ι → Fin q) ℂ := ∑ s, p.cyl s
 the identity at the identity tag of an empty outer sample. -/
 def branch [NeZero q] : p.Tag → Matrix (ι → Fin q) (ι → Fin q) ℂ
   | .inl _ => 1
-  | .inr s => siteLift (p.sample s.1.1)
+  | .inr s => ManyBody.place (X := fun _ ↦ Fin _) (p.sample s.1.1)
       (vecMulVec (zeroVec (p.sample s.1.1)) (star ⇑(p.vec s.1.1 s.1.2)))
 
 /-- The selected square of a tag: the sample `D_j` at a tag `(j, ℓ)`, and the empty set at the
@@ -228,12 +229,12 @@ theorem proj_of_outer_eq_empty (h : p.outer = ∅) : p.proj = 1 := by
 theorem cyl_conjTranspose (s : p.Tag) : (p.cyl s)ᴴ = p.cyl s := by
   cases s with
   | inl _ => exact conjTranspose_one
-  | inr s => rw [cyl, siteLift_conjTranspose, rankOne_conjTranspose]
+  | inr s => rw [cyl, ← ManyBody.place_conjTranspose, rankOne_conjTranspose]
 
 theorem cyl_mul_self (s : p.Tag) : p.cyl s * p.cyl s = p.cyl s := by
   cases s with
   | inl _ => exact mul_one _
-  | inr s => rw [cyl, siteLift_mul, rankOne_mul_self (p.norm_vec _ _)]
+  | inr s => rw [cyl, ← ManyBody.place_mul, rankOne_mul_self (p.norm_vec _ _)]
 
 theorem cyl_mul_cyl_of_ne {s s' : p.Tag} (h : s ≠ s') : p.cyl s * p.cyl s' = 0 := by
   rcases s with s | s <;> rcases s' with s' | s'
@@ -262,26 +263,27 @@ theorem branch_conjTranspose_mul_self [NeZero q] (s : p.Tag) :
     (p.branch s)ᴴ * p.branch s = p.cyl s := by
   rcases s with s | s
   · simp [branch, cyl]
-  rw [branch, siteLift_conjTranspose, siteLift_mul, conjTranspose_vecMulVec,
+  rw [branch, ← ManyBody.place_conjTranspose, ← ManyBody.place_mul, conjTranspose_vecMulVec,
     Matrix.vecMulVec_mul_vecMulVec, star_star, star_zeroVec_dotProduct_zeroVec, one_smul, cyl,
     rankOne]
 
 theorem cyl_mem_supportedOperators (s : p.Tag) :
-    p.cyl s ∈ supportedOperators q (p.outer : Set ι) := by
+    p.cyl s ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) p.outer := by
   rcases s with s | s
-  · exact one_mem_supportedOperators _
-  · exact supportedOperators_mono (Finset.coe_subset.mpr (p.sample_subset_outer s.1.1))
-      (siteLift_mem_supportedOperators _ _)
+  · exact (one_mem (ManyBody.supportedOperators _ _))
+  · exact ManyBody.supportedOperators_mono (Finset.coe_subset.mpr (p.sample_subset_outer s.1.1))
+      (ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _) _)
 
 theorem branch_mem_supportedOperators [NeZero q] (s : p.Tag) :
-    p.branch s ∈ supportedOperators q (p.outer : Set ι) := by
+    p.branch s ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) p.outer := by
   rcases s with s | s
-  · exact one_mem_supportedOperators _
-  · exact supportedOperators_mono (Finset.coe_subset.mpr (p.sample_subset_outer s.1.1))
-      (siteLift_mem_supportedOperators _ _)
+  · exact (one_mem (ManyBody.supportedOperators _ _))
+  · exact ManyBody.supportedOperators_mono (Finset.coe_subset.mpr (p.sample_subset_outer s.1.1))
+      (ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _) _)
 
-theorem proj_mem_supportedOperators : p.proj ∈ supportedOperators q (p.outer : Set ι) :=
-  Submodule.sum_mem _ fun s _ => p.cyl_mem_supportedOperators s
+theorem proj_mem_supportedOperators :
+    p.proj ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) p.outer :=
+  sum_mem fun s _ => p.cyl_mem_supportedOperators s
 
 /-- The hole encoder `K_{c,h} = ∑_{j,ℓ} |j, ℓ⟩ ⊗ (|0⟩^{⊗ D_j}⟨v_{jℓ}|_{D_j} ⊗ 1)`
 (`eq:hole-encoder`). It keeps a raw register at every site. -/
@@ -318,10 +320,20 @@ end SquarePatch
 variable {pos : ι → ℝ × ℝ}
 
 /-- The union of the physical outer footprints of a list of square patches. -/
-def footprint (l : List (SquarePatch pos q)) : Set ι := {x | ∃ p ∈ l, x ∈ p.outer}
+def footprint (l : List (SquarePatch pos q)) : Finset ι :=
+  Finset.univ.filter fun x ↦ ∃ p ∈ l, x ∈ p.outer
 
 /-- The union of the physical inner samples of a list of square patches. -/
-def innerUnion (l : List (SquarePatch pos q)) : Set ι := {x | ∃ p ∈ l, x ∈ p.inner}
+def innerUnion (l : List (SquarePatch pos q)) : Finset ι :=
+  Finset.univ.filter fun x ↦ ∃ p ∈ l, x ∈ p.inner
+
+theorem mem_footprint {l : List (SquarePatch pos q)} {x : ι} :
+    x ∈ footprint l ↔ ∃ p ∈ l, x ∈ p.outer := by
+  simp [footprint]
+
+theorem mem_innerUnion {l : List (SquarePatch pos q)} {x : ι} :
+    x ∈ innerUnion l ↔ ∃ p ∈ l, x ∈ p.inner := by
+  simp [innerUnion]
 
 /-- The outer samples of distinct entries of the list are disjoint. -/
 def PairwiseDisjointOuter (l : List (SquarePatch pos q)) : Prop :=
@@ -335,12 +347,12 @@ theorem footprint_nil : footprint ([] : List (SquarePatch pos q)) = ∅ := by
   simp [footprint]
 
 theorem footprint_cons (p : SquarePatch pos q) (l : List (SquarePatch pos q)) :
-    footprint (p :: l) = (p.outer : Set ι) ∪ footprint l := by
+    footprint (p :: l) = p.outer ∪ footprint l := by
   ext x; simp [footprint]
 
 theorem footprint_append (l₁ l₂ : List (SquarePatch pos q)) :
     footprint (l₁ ++ l₂) = footprint l₁ ∪ footprint l₂ := by
-  ext x; simp only [footprint, List.mem_append, Set.mem_ofPred_eq, Set.mem_union]
+  ext x; simp only [mem_footprint, List.mem_append, Finset.mem_union]
   constructor
   · rintro ⟨p, hp | hp, hx⟩
     · exact Or.inl ⟨p, hp, hx⟩
@@ -349,22 +361,26 @@ theorem footprint_append (l₁ l₂ : List (SquarePatch pos q)) :
     · exact ⟨p, Or.inl hp, hx⟩
     · exact ⟨p, Or.inr hp, hx⟩
 
-theorem disjoint_footprint_of_forall {l : List (SquarePatch pos q)} {S : Set ι}
-    (h : ∀ p ∈ l, Disjoint (p.outer : Set ι) S) : Disjoint (footprint l) S := by
-  rw [Set.disjoint_left]
-  rintro x ⟨p, hp, hx⟩
-  exact Set.disjoint_left.mp (h p hp) hx
+theorem disjoint_footprint_of_forall {l : List (SquarePatch pos q)} {S : Finset ι}
+    (h : ∀ p ∈ l, Disjoint p.outer S) : Disjoint (footprint l) S := by
+  rw [Finset.disjoint_left]
+  intro x hx
+  obtain ⟨p, hp, hx⟩ := mem_footprint.mp hx
+  exact Finset.disjoint_left.mp (h p hp) hx
 
 theorem subset_footprint {p : SquarePatch pos q} {l : List (SquarePatch pos q)} (hp : p ∈ l) :
-    (p.outer : Set ι) ⊆ footprint l := fun _ hx => ⟨p, hp, hx⟩
+    p.outer ⊆ footprint l := fun _ hx => mem_footprint.mpr ⟨p, hp, hx⟩
 
 theorem innerUnion_subset_footprint (l : List (SquarePatch pos q)) :
-    innerUnion l ⊆ footprint l := fun _ ⟨p, hp, hx⟩ => ⟨p, hp, p.inner_subset_outer hx⟩
+    innerUnion l ⊆ footprint l := fun _ hx => by
+  obtain ⟨p, hp, hx⟩ := mem_innerUnion.mp hx
+  exact mem_footprint.mpr ⟨p, hp, p.inner_subset_outer hx⟩
 
 theorem disjoint_outer_footprint {p : SquarePatch pos q} {l : List (SquarePatch pos q)}
-    (h : PairwiseDisjointOuter (p :: l)) : Disjoint (p.outer : Set ι) (footprint l) := by
-  rw [Set.disjoint_left]
-  rintro x hx ⟨b, hb, hxb⟩
+    (h : PairwiseDisjointOuter (p :: l)) : Disjoint p.outer (footprint l) := by
+  rw [Finset.disjoint_left]
+  intro x hx hx'
+  obtain ⟨b, hb, hxb⟩ := mem_footprint.mp hx'
   exact Finset.disjoint_left.mp (List.rel_of_pairwise_cons h hb) hx hxb
 
 theorem PairwiseDisjointOuter.of_cons {p : SquarePatch pos q} {l : List (SquarePatch pos q)}
@@ -372,15 +388,17 @@ theorem PairwiseDisjointOuter.of_cons {p : SquarePatch pos q} {l : List (SquareP
   List.Pairwise.of_cons h
 
 theorem projProd_mem_supportedOperators :
-    (l : List (SquarePatch pos q)) → projProd l ∈ supportedOperators q (footprint l)
+    (l : List (SquarePatch pos q)) →
+        projProd l ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (footprint l)
   | [] => by
     rw [footprint_nil]
-    simpa [projProd] using one_mem_supportedOperators (d := q) (∅ : Set ι)
+    simp [projProd]
   | p :: l => by
     rw [projProd, List.map_cons, List.prod_cons, footprint_cons]
-    exact mul_mem_supportedOperators
-      (supportedOperators_mono Set.subset_union_left p.proj_mem_supportedOperators)
-      (supportedOperators_mono Set.subset_union_right (projProd_mem_supportedOperators l))
+    exact mul_mem
+      (ManyBody.supportedOperators_mono Finset.subset_union_left p.proj_mem_supportedOperators)
+      (ManyBody.supportedOperators_mono Finset.subset_union_right
+          (projProd_mem_supportedOperators l))
 
 theorem projProd_append (l₁ l₂ : List (SquarePatch pos q)) :
     projProd (l₁ ++ l₂) = projProd l₁ * projProd l₂ := by
@@ -394,8 +412,8 @@ theorem projProd_isStarProjection :
   | p :: l, h => by
     rw [projProd, List.map_cons, List.prod_cons]
     exact p.proj_isStarProjection.mul (projProd_isStarProjection l h.of_cons)
-      (commute_of_mem_supportedOperators (disjoint_outer_footprint h)
-        p.proj_mem_supportedOperators (projProd_mem_supportedOperators l))
+      (ManyBody.commute_of_mem_supportedOperators_of_disjoint p.proj_mem_supportedOperators
+          (projProd_mem_supportedOperators l) (disjoint_outer_footprint h))
 
 theorem norm_projProd_le_one (l : List (SquarePatch pos q)) : ‖projProd l‖ ≤ 1 :=
   l2_opNorm_list_prod_le_one _ fun A hA => by
@@ -470,17 +488,20 @@ def frameEncoder [NeZero q] (l : List (Hole pos q Party)) :
 
 theorem rawProd_mem_supportedOperators [NeZero q] :
     (l : List (Hole pos q Party)) → (t : TagSpace l) →
-      rawProd l t ∈ supportedOperators q (footprint (l.map Hole.patch))
-  | [], _ => one_mem_supportedOperators _
+      rawProd l t ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (footprint (l.map Hole.patch))
+  | [], _ => (one_mem (ManyBody.supportedOperators _ _))
   | h :: l, t => by
     rw [List.map_cons, footprint_cons]
-    exact mul_mem_supportedOperators
-      (supportedOperators_mono Set.subset_union_left (h.patch.branch_mem_supportedOperators t.1))
-      (supportedOperators_mono Set.subset_union_right (rawProd_mem_supportedOperators l t.2))
+    exact mul_mem
+      (ManyBody.supportedOperators_mono Finset.subset_union_left
+        (h.patch.branch_mem_supportedOperators t.1))
+      (ManyBody.supportedOperators_mono Finset.subset_union_right
+          (rawProd_mem_supportedOperators l t.2))
 
 theorem rawProd_conjTranspose_mem_supportedOperators [NeZero q] (l : List (Hole pos q Party))
-    (t : TagSpace l) : (rawProd l t)ᴴ ∈ supportedOperators q (footprint (l.map Hole.patch)) :=
-  star_mem_supportedOperators (rawProd_mem_supportedOperators l t)
+    (t : TagSpace l) :
+    (rawProd l t)ᴴ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (footprint (l.map Hole.patch)) :=
+  star_mem (rawProd_mem_supportedOperators l t)
 
 /-- Encodings of a concatenation factor through the encodings of the two parts. -/
 theorem rawProd_append [NeZero q] :
@@ -503,8 +524,8 @@ Polynomial-PEPS manuscript, `05-frames.tex`, lines 84–85. -/
 theorem rawProd_commute [NeZero q] {l₁ l₂ : List (Hole pos q Party)}
     (h : Disjoint (footprint (l₁.map Hole.patch)) (footprint (l₂.map Hole.patch)))
     (t₁ : TagSpace l₁) (t₂ : TagSpace l₂) : Commute (rawProd l₁ t₁) (rawProd l₂ t₂) :=
-  commute_of_mem_supportedOperators h (rawProd_mem_supportedOperators l₁ t₁)
-    (rawProd_mem_supportedOperators l₂ t₂)
+  ManyBody.commute_of_mem_supportedOperators_of_disjoint (rawProd_mem_supportedOperators l₁ t₁)
+      (rawProd_mem_supportedOperators l₂ t₂) h
 
 /-- **Canonical identification of tag orderings.** If `l'` lists the holes of `l`, whose outer
 footprints are pairwise disjoint, in another order, then some relabelling `e` of the tag
@@ -527,10 +548,11 @@ theorem exists_tagEquiv_of_perm [NeZero q] {l l' : List (Hole pos q Party)}
       fun _ => rfl⟩, fun t => ?_⟩
     change x.patch.branch t.2.1 * (y.patch.branch t.1 * rawProd l t.2.2) =
       y.patch.branch t.1 * (x.patch.branch t.2.1 * rawProd l t.2.2)
-    have hyx : Disjoint (y.patch.outer : Set ι) x.patch.outer :=
-      Finset.disjoint_coe.mpr (List.rel_of_pairwise_cons hd List.mem_cons_self)
-    rw [← mul_assoc, ← mul_assoc, (commute_of_mem_supportedOperators hyx
-      (y.patch.branch_mem_supportedOperators _) (x.patch.branch_mem_supportedOperators _)).eq]
+    have hyx : Disjoint y.patch.outer x.patch.outer :=
+      (List.rel_of_pairwise_cons hd List.mem_cons_self)
+    rw [← mul_assoc, ← mul_assoc,
+        (ManyBody.commute_of_mem_supportedOperators_of_disjoint
+        (y.patch.branch_mem_supportedOperators _) (x.patch.branch_mem_supportedOperators _) hyx).eq]
   | trans h₁ _ ih₁ ih₂ =>
     obtain ⟨e₁, he₁⟩ := ih₁ hd
     obtain ⟨e₂, he₂⟩ := ih₂ (hd.perm (h₁.map _) fun h => Disjoint.symm h)
@@ -558,8 +580,8 @@ theorem sum_rawProd_conjTranspose_mul_self [NeZero q] :
   | h :: l, hl => by
     have ih := sum_rawProd_conjTranspose_mul_self l hl.of_cons
     have hc (t : TagSpace l) : Commute h.patch.proj (rawProd l t)ᴴ :=
-      commute_of_mem_supportedOperators (disjoint_outer_footprint hl)
-        h.patch.proj_mem_supportedOperators (rawProd_conjTranspose_mem_supportedOperators l t)
+      ManyBody.commute_of_mem_supportedOperators_of_disjoint h.patch.proj_mem_supportedOperators
+          (rawProd_conjTranspose_mem_supportedOperators l t) (disjoint_outer_footprint hl)
     change ∑ t : h.patch.Tag × TagSpace l, (h.patch.branch t.1 * rawProd l t.2)ᴴ *
       (h.patch.branch t.1 * rawProd l t.2) = _
     rw [Fintype.sum_prod_type, Finset.sum_comm]
@@ -620,10 +642,10 @@ variable (F : Frame pos q Party)
 def patches : List (SquarePatch pos q) := F.holes.map Hole.patch
 
 /-- The union `H^-(F)` of the physical samples of the inner hole squares. -/
-def innerHoles : Set ι := innerUnion F.patches
+def innerHoles : Finset ι := innerUnion F.patches
 
 /-- The union `H^+(F)` of the physical samples of the outer hole squares. -/
-def outerHoles : Set ι := footprint F.patches
+def outerHoles : Finset ι := footprint F.patches
 
 /-- The layout of a frame: its tag registers followed by the raw registers of its sheet. -/
 abbrev Layout : Type _ := TagSpace F.holes × (ι → Fin q)

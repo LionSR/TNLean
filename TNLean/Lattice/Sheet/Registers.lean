@@ -200,11 +200,11 @@ theorem eval_groupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈ 
             (t ⊗ₜ siteVec own (listE S T E) c)) :
         Mem (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
           (ℓ₀ ++ siteRegs q own (listE S T E)))) := by
-  simp only [groupWord, Word.eval_comp, ContinuousLinearMap.comp_apply]
-  rw [Word.eval_frameList_appendIso_symm, eval_partWord, Word.eval_frameList_appendIso_symm,
-    Word.eval_frameList_appendIso_symm, eval_partWord, Word.eval_exchangeBlocks_appendIso_symm,
+  simp only [groupWord, Circuit.eval_comp, ContinuousLinearMap.comp_apply]
+  rw [Circuit.eval_frameList_appendIso_symm, eval_partWord, Circuit.eval_frameList_appendIso_symm,
+    Circuit.eval_frameList_appendIso_symm, eval_partWord, Word.eval_exchangeBlocks_appendIso_symm,
     eval_localMap, isoL_apply, LinearIsometryEquiv.trans_apply, groupIso_listT_siteVec,
-    appendIso_one_symm, Word.eval_frame, Word.eval_frame, lTensor_tmul,
+    appendIso_one_symm, Circuit.eval_frame, Circuit.eval_frame, lTensor_tmul,
     Word.eval_exchangeBlocks_appendIso_symm, lTensor_tmul, eval_localMap, isoL_apply,
     LinearIsometryEquiv.trans_apply, groupIso_listU_siteVec, appendIso_one_symm]
 
@@ -221,8 +221,8 @@ theorem eval_ungroupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x �
           Mem (⟨pA, euc (T → Fin q)⟩ :: ⟨pB, euc (↥(T ∪ E)ᶜ → Fin q)⟩ ::
             (ℓ₀ ++ siteRegs q own (listE S T E)))) =
       (appendIso ℓ₀ _).symm (t ⊗ₜ siteVec own S c) := by
-  simp only [ungroupWord, Word.eval_comp, ContinuousLinearMap.comp_apply]
-  rw [Word.eval_frame, Word.eval_frame, lTensor_tmul,
+  simp only [ungroupWord, Circuit.eval_comp, ContinuousLinearMap.comp_apply]
+  rw [Circuit.eval_frame, Circuit.eval_frame, lTensor_tmul,
     ← appendIso_one_symm pB (ℓ₀ ++ siteRegs q own (listE S T E))
       (EuclideanSpace.single (fun x : ↥(T ∪ E)ᶜ => c x) (1 : ℂ)),
     eval_localMap, isoL_apply, LinearIsometryEquiv.trans_apply,
@@ -234,8 +234,8 @@ theorem eval_ungroupWord (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x �
     eval_localMap, isoL_apply, LinearIsometryEquiv.trans_apply,
     LinearIsometryEquiv.apply_symm_apply, ← groupIso_listT_siteVec own hS hall c,
     LinearIsometryEquiv.symm_apply_apply, Word.eval_exchangeBlocks_appendIso_symm,
-    Word.eval_frameList_appendIso_symm, Word.eval_frameList_appendIso_symm,
-    Word.eval_frameList_appendIso_symm, eval_unpartWord, eval_unpartWord]
+    Circuit.eval_frameList_appendIso_symm, Circuit.eval_frameList_appendIso_symm,
+    Circuit.eval_frameList_appendIso_symm, eval_unpartWord, eval_unpartWord]
 
 /-- Grouping is an allowed word using only the owners of the two regions, without pair
 sources. -/
@@ -255,8 +255,8 @@ theorem groupWord_props (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈
   refine ⟨⟨a.isAllowed, b.isAllowed, e₁.isAllowed, LinearIsometry.norm_toContinuousLinearMap_le _,
       e₂.isAllowed, LinearIsometry.norm_toContinuousLinearMap_le _⟩,
     ⟨a.usesOnly V, b.usesOnly V, e₁.usesOnly V, hpA, e₂.usesOnly V, hpB⟩, ?_⟩
-  simp only [groupWord, Word.sourceCount, a.sourceCount_eq, b.sourceCount_eq, e₁.sourceCount_eq,
-    e₂.sourceCount_eq]
+  simp only [groupWord, Word.sourceCount, Circuit.gateCount, a.sourceCount_eq, b.sourceCount_eq,
+    e₁.sourceCount_eq, e₂.sourceCount_eq]
 
 /-- Ungrouping is an allowed word using only the owners of the two regions, without pair
 sources. -/
@@ -276,8 +276,8 @@ theorem ungroupWord_props (own : ι → Party) (hS : S.Nodup) (hall : ∀ x, x �
   refine ⟨⟨LinearIsometry.norm_toContinuousLinearMap_le _, e₁.isAllowed,
       LinearIsometry.norm_toContinuousLinearMap_le _, e₂.isAllowed, b.isAllowed, a.isAllowed⟩,
     ⟨hpB, e₁.usesOnly V, hpA, e₂.usesOnly V, b.usesOnly V, a.usesOnly V⟩, ?_⟩
-  simp only [ungroupWord, Word.sourceCount, a.sourceCount_eq, b.sourceCount_eq, e₁.sourceCount_eq,
-    e₂.sourceCount_eq]
+  simp only [ungroupWord, Word.sourceCount, Circuit.gateCount, a.sourceCount_eq, b.sourceCount_eq,
+    e₁.sourceCount_eq, e₂.sourceCount_eq]
 
 end Group
 
@@ -369,8 +369,8 @@ theorem eval_place (own own' : ι → Party) (hS : S.Nodup) (hall : ∀ x, x ∈
   refine Finset.sum_congr rfl fun ab _ => ?_
   rw [map_smul, map_smul]
   congr 1
-  rw [relabelRest, Word.eval_frame, lTensor_tmul, Word.eval_frame, lTensor_tmul,
-    Word.eval_frameList_appendIso_symm, eval_relabelSites, ← merge_restrict_T h ab c,
+  rw [relabelRest, Circuit.eval_frame, lTensor_tmul, Circuit.eval_frame, lTensor_tmul,
+    Circuit.eval_frameList_appendIso_symm, eval_relabelSites, ← merge_restrict_T h ab c,
     ← merge_restrict_U h ab c, siteVec_congr own' (listE S T E) (c' := merge h ab c)
       fun x hx => (merge_of_mem_E h ab c ((mem_listE hall h x).mp hx)).symm]
   exact eval_ungroupWord own' hS hall ℓ₀ hA' hB' t (merge h ab c)

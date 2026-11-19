@@ -30,6 +30,8 @@ and accessible regular coordinates, lines 1765–1920.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS
@@ -212,14 +214,14 @@ theorem regionPhysicalMap_slice_apply_eq_zero_of_parent_annihilates
     (hT : T ≤ Γ.induce (R : Set V)) (htree : T.IsTree) (o : {v : V // v ∈ R})
     (Q : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (hQ : IsRegionParentInteraction (groupBondTensor a) R Q)
-    (Ψ : (V → Fin d) → ℂ) (hground : regionLocalTerm R Q *ᵥ Ψ = 0)
+    (Ψ : (V → Fin d) → ℂ) (hground : ManyBody.place (X := fun _ ↦ Fin _) R Q *ᵥ Ψ = 0)
     (τ : RegionPhysicalConfig (d := d) (Finset.univ \ R))
     (c : RegularRegionCoordinates (Γ := Γ) (G := G) R T o) (hc : c.2.2.2 ≠ 1) :
     regionPhysicalMap R F (regionSliceMap R τ Ψ)
       ((regularRegionCoordinatesEquiv R T hT htree o).symm c) = 0 := by
   exact regionPhysicalMap_apply_eq_zero_of_mem_regularGroundSpace_of_cycle_ne_one
     a F hF R T hT htree o
-    ((regionLocalTerm_mulVec_eq_zero_iff (groupBondTensor a) R hQ Ψ).mp hground τ) c hc
+    ((place_mulVec_eq_zero_iff (groupBondTensor a) R hQ Ψ).mp hground τ) c hc
 
 /-- A nontrivial residual of the inserted internal bonds separates the two
 canonical regional coefficient ranges. Auxiliary to SCP10, Theorem 5.5,
@@ -342,7 +344,7 @@ theorem regularWalkHolonomy_eq_one_of_regionParent_annihilates_twistedState
     (Q : Matrix (RegionPhysicalConfig (d := d) R) (RegionPhysicalConfig (d := d) R) ℂ)
     (hQ : IsRegionParentInteraction (groupBondTensor a) R Q)
     (hne : stateCoeff (groupBondTensor (regularTwistedSite a u)) ≠ 0)
-    (hground : regionLocalTerm R Q *ᵥ
+    (hground : ManyBody.place (X := fun _ ↦ Fin _) R Q *ᵥ
       stateCoeff (groupBondTensor (regularTwistedSite a u)) = 0) :
     regularWalkHolonomy (regularRegionInternalOperators R u) p = 1 := by
   classical
@@ -358,7 +360,7 @@ theorem regularWalkHolonomy_eq_one_of_regionParent_annihilates_twistedState
     apply hσ
     have he := congrFun hz (fun w => σ w.1)
     simpa only [φ, hrec, Pi.zero_apply] using he
-  have hφ := (regionLocalTerm_mulVec_eq_zero_iff (groupBondTensor a) R hQ _).mp hground τ
+  have hφ := (place_mulVec_eq_zero_iff (groupBondTensor a) R hQ _).mp hground τ
   exact regularWalkHolonomy_eq_one_of_mem_regionGroundSpace_of_mem_twisted
     a ha R hR u o p hφne hφ
     (stateCoeff_slice_mem_regionGroundSpace (groupBondTensor (regularTwistedSite a u)) R τ)

@@ -16,6 +16,8 @@ The identity and the local Gram operator are derived from the coefficient sums.
 Source: SCP10, arXiv:1001.3807, Observations 6.5–6.6, lines 1825–1909.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS

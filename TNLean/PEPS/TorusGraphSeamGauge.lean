@@ -14,6 +14,8 @@ These are the actual native graph edges, not a proposed boundary-space equality.
 The simple-graph torus has both periods at least three.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {width height : ℕ} [NeZero width] [NeZero height]

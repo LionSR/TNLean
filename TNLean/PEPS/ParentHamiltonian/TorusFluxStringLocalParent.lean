@@ -147,7 +147,7 @@ theorem torusBondNetwork_slice_mem_plaquetteGroundSpace_of_holonomy_eq_one
     change (torusRightEdge w).1.2 ∈ torusPlaquetteRegion v at hh
     change torusGraphBondMatrix _ _ (torusRightEdge w) = 1
     have hw : w ∈ torusPlaquetteRegion v ∧ (w.1 + 1, w.2) ∈ torusPlaquetteRegion v := by
-      rcases Edge.ofAdj_endpoints (torusGraph_adj_right w.1 w.2) with h | h
+      rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right w.1 w.2) with h | h
       · exact ⟨by simpa only [torusRightEdge, h.1] using ht,
           by simpa only [torusRightEdge, h.2] using hh⟩
       · exact ⟨by simpa only [torusRightEdge, h.2] using hh,
@@ -157,7 +157,7 @@ theorem torusBondNetwork_slice_mem_plaquetteGroundSpace_of_holonomy_eq_one
     change (torusUpEdge w).1.2 ∈ torusPlaquetteRegion v at hh
     change torusGraphBondMatrix _ _ (torusUpEdge w) = 1
     have hw : w ∈ torusPlaquetteRegion v ∧ (w.1, w.2 + 1) ∈ torusPlaquetteRegion v := by
-      rcases Edge.ofAdj_endpoints (torusGraph_adj_up w.1 w.2) with h | h
+      rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up w.1 w.2) with h | h
       · exact ⟨by simpa only [torusUpEdge, h.1] using ht,
           by simpa only [torusUpEdge, h.2] using hh⟩
       · exact ⟨by simpa only [torusUpEdge, h.2] using hh,
@@ -176,10 +176,10 @@ theorem torusParent_annihilates_torusBondNetwork_of_holonomy_eq_one
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hP : IsRegionParentInteraction (groupBondTensor (torusNativeIncidentSite a))
       (torusPlaquetteRegion v) P) :
-    regionLocalTerm (torusPlaquetteRegion v) P *ᵥ
+    ManyBody.place (X := fun _ ↦ Fin _) (torusPlaquetteRegion v) P *ᵥ
       (fun σ ↦ torusBondNetwork (fun w c ↦ a c.1 c.2.1 c.2.2.1 c.2.2.2 (σ w))
         (fun w ↦ U (p.1 w)) (fun w ↦ U (p.2 w))) = 0 := by
-  apply (regionLocalTerm_mulVec_eq_zero_iff _ _ hP _).mpr
+  apply (place_mulVec_eq_zero_iff _ _ hP _).mpr
   exact torusBondNetwork_slice_mem_plaquetteGroundSpace_of_holonomy_eq_one U a ha p v hp
 
 /-- The canonical orthogonal parent projector annihilates the same actual
@@ -190,7 +190,7 @@ theorem canonicalTorusParent_annihilates_torusBondNetwork_of_holonomy_eq_one
     (ha : ∀ g, siteMap a ∘ₗ torusLegRep U g = siteMap a)
     (p : TorusBondLabels width height G) (v : TV)
     (hp : torusBondPlaquetteHolonomy p v = 1) :
-    regionLocalTerm (torusPlaquetteRegion v)
+    ManyBody.place (X := fun _ ↦ Fin _) (torusPlaquetteRegion v)
         (canonicalRegionParentInteraction (groupBondTensor (torusNativeIncidentSite a))
           (torusPlaquetteRegion v)) *ᵥ
       (fun σ ↦ torusBondNetwork (fun w c ↦ a c.1 c.2.1 c.2.2.1 c.2.2.2 (σ w))
@@ -211,7 +211,7 @@ theorem torusParent_annihilates_torusBondNetwork_zpow_of_curl_eq_zero
       (RegionPhysicalConfig (d := d) (torusPlaquetteRegion v)) ℂ)
     (hP : IsRegionParentInteraction (groupBondTensor (torusNativeIncidentSite a))
       (torusPlaquetteRegion v) P) :
-    regionLocalTerm (torusPlaquetteRegion v) P *ᵥ
+    ManyBody.place (X := fun _ ↦ Fin _) (torusPlaquetteRegion v) P *ᵥ
       (fun σ ↦ torusBondNetwork (fun w c ↦ a c.1 c.2.1 c.2.2.1 c.2.2.2 (σ w))
         (fun w ↦ U (g ^ h w)) (fun w ↦ U (g ^ k w))) = 0 := by
   apply torusParent_annihilates_torusBondNetwork_of_holonomy_eq_one U a ha

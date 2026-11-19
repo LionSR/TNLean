@@ -24,6 +24,8 @@ joint projector with the physical regional parent projector is a separate step.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean.PEPS

@@ -36,9 +36,9 @@ variable {d D : ℕ}
 /-- The squared norm of an interior excitation converges to the expectation
 of the squared observable, for every varying unit boundary ground vector.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
-theorem IsPrimitiveMPS.bulkObservable_groundState_norm_sq_tendsto
+theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_groundState_norm_sq_tendsto
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {k : ℕ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {k : ℕ}
     (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     {ι : Type*} {f : Filter ι} {ℓ r : ι → ℕ}
     (hℓ : Tendsto ℓ f atTop) (hr : Tendsto r f atTop)
@@ -69,9 +69,9 @@ theorem IsPrimitiveMPS.bulkObservable_groundState_norm_sq_tendsto
 primitive sector. Both the excitation norm limit and the vanishing full
 ground-space projection are derived from the tensor, rather than assumed.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6, lines 2649--2675. -/
-theorem IsPrimitiveMPS.commutator_gap_of_bulkObservable_energy_limit
+theorem _root_.Kraus.HasComplementaryFixedPointGap.commutator_gap_of_bulkObservable_energy_limit
     [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef) {k : ℕ}
+    (hP : Kraus.HasComplementaryFixedPointGap A ρ) (hρ : ρ.PosDef) {k : ℕ}
     (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     (hcenter : observableInsertionExpectation A ρ X = 0)
     {ℓ r : ℕ → ℕ} (hℓ : Tendsto ℓ atTop atTop) (hr : Tendsto r atTop atTop)

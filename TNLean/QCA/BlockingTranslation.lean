@@ -176,10 +176,10 @@ private lemma expandedRegion_translateRegion_subset (L : ℕ) [NeZero L]
   rw [expandedRegion_translateRegion]
 
 private lemma localBlocking_translation (d L : ℕ) [NeZero L] (a : ℤ)
-    (Λ : Finset ℤ) (A : LocalAlgebra (MPSTensor.blockPhysDim d L) Λ) :
+    (Λ : Finset ℤ) (A : LocalAlgebra (Kraus.blockPhysDim d L) Λ) :
     localInclusion (expandedRegion_translateRegion_subset L a Λ)
         (localBlocking d L (translateRegion a Λ)
-          (localTranslation (MPSTensor.blockPhysDim d L) a Λ A)) =
+          (localTranslation (Kraus.blockPhysDim d L) a Λ A)) =
       localTranslation d (a * L) (expandedRegion L Λ) (localBlocking d L Λ A) := by
   ext x y
   rw [localInclusion_apply]
@@ -195,13 +195,13 @@ private lemma localBlocking_translation (d L : ℕ) [NeZero L] (a : ℤ)
   rw [ite_eq_left hcomp, mul_one, localBlocking_apply, localTranslation_apply,
     localTranslation_apply, localBlocking_apply]
   have hconfig (w : Config d (translateRegion (a * L) (expandedRegion L Λ))) :
-      (Config.translation (MPSTensor.blockPhysDim d L) a Λ).symm
+      (Config.translation (Kraus.blockPhysDim d L) a Λ).symm
           ((Config.blocking d L (translateRegion a Λ)).symm
             (Config.restrict (expandedRegion_translateRegion_subset L a Λ) w)) =
         (Config.blocking d L Λ).symm
           ((Config.translation d (a * L) (expandedRegion L Λ)).symm w) := by
     funext i
-    apply (MPSTensor.decodeBlockEquiv d L).injective
+    apply (Kraus.decodeBlockEquiv d L).injective
     funext r
     rw [Config.translation_symm_apply, Config.blocking_symm_apply,
       Config.blocking_symm_apply]
@@ -219,7 +219,7 @@ private lemma localBlocking_translation (d L : ℕ) [NeZero L] (a : ℤ)
 
 Source: arXiv:1703.09188, Appendix, lines 2308 and 2313--2320. -/
 lemma algebraicLocalBlocking_translation (d L : ℕ) [NeZero d] [NeZero L] (a : ℤ)
-    (A : AlgebraicLocalAlgebra (MPSTensor.blockPhysDim d L)) :
+    (A : AlgebraicLocalAlgebra (Kraus.blockPhysDim d L)) :
     algebraicLocalBlocking d L (algebraicLocalTranslation _ a A) =
       algebraicLocalTranslation d (a * L) (algebraicLocalBlocking d L A) := by
   induction A using DirectLimit.induction with
@@ -242,12 +242,12 @@ lemma algebraicLocalBlocking_translation (d L : ℕ) [NeZero d] [NeZero L] (a : 
 
 Source: arXiv:1703.09188, Appendix, lines 2308 and 2313--2320. -/
 lemma quasiLocalBlocking_translation (d L : ℕ) [NeZero d] [NeZero L] (a : ℤ)
-    (A : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L)) :
+    (A : QuasiLocalAlgebra (Kraus.blockPhysDim d L)) :
     quasiLocalBlocking d L (quasiLocalTranslation _ a A) =
       quasiLocalTranslation d (a * L) (quasiLocalBlocking d L A) := by
   induction A using UniformSpace.Completion.induction_on with
   | hp =>
-      change IsClosed {A : QuasiLocalAlgebra (MPSTensor.blockPhysDim d L) |
+      change IsClosed {A : QuasiLocalAlgebra (Kraus.blockPhysDim d L) |
         quasiLocalBlocking d L (quasiLocalTranslation _ a A) =
           quasiLocalTranslation d (a * L) (quasiLocalBlocking d L A)}
       exact isClosed_eq

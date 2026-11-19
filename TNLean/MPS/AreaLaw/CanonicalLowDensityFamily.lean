@@ -28,14 +28,14 @@ see `docs/paper-gaps/alvv16_low_energy_family_scope.tex`. Extension to a
 fixed arbitrary physical interval as the scale grows remains separate.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
 
 open Matrix
 
-set_option maxHeartbeats 800000 in
--- The retained tensor decompositions involve dependent finite configuration types.
 /-- The actual physical low-energy family in one canonical raw-Hamiltonian
 normalization. The constant precedes the physical data; the middle family
 precedes every cutoff and viable subspace. All original spectral targets
@@ -133,34 +133,54 @@ theorem exists_fixed_bandwidth_five_region_canonical_low_energy_family
               Module.finrank ℂ grow ≤ N * Module.finrank ℂ S ∧
                 Submodule.IsViable (F := EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
                   (Delta / (1 - delta) ^ 2) grow (lower.map Tm.toLinearEquiv.toLinearMap) := by
-  obtain ⟨C, hC, hCeta, hfamily⟩ :=
+  have :=
     exists_fixed_bandwidth_five_region_low_energy_family etaLD hLD
+  refine this.elim fun C hspec ↦ hspec.elim fun hC hspec ↦ hspec.elim fun hCeta hspec ↦ ?_
+  have hfamily := hspec
   refine ⟨C, hC, hCeta, ?_⟩
-  intro L q m a b w hq hqm hw g u ell D hab hbL h hs h0 h1 config H hRaw
-  let : Nonempty (Fin L → Fin q) := config
-  obtain ⟨hell, hlogD, hdata⟩ :=
+  intro L q m a b w hq hqm hw
+  -- Normalize the statement abbreviations before transporting the family, so
+  -- identical tensor-coordinate types do not require repeated unfolding.
+  dsimp only
+  intro hab hbL h hs h0 h1
+  let : Nonempty (Fin L → Fin q) :=
+    ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
+  have hRaw : (∑ i, h i).IsHermitian :=
+    (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
+  have :=
     hfamily L q m a b w hq hqm hw hab hbL h hs h0 h1
+  refine this.elim fun hell hspec ↦ hspec.elim fun hlogD hspec ↦ ?_
+  have hdata := hspec
   refine ⟨hell, hlogD, ?_⟩
-  intro k A Cross Y K B
-  obtain ⟨e, E0, x, z, hO, hClip, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
-    hE0, hE04, hnorm, htargets⟩ := hdata
-  obtain ⟨hminimum, hidentity⟩ :=
+  refine hdata.elim fun e hspec ↦ hspec.elim fun E0 hspec ↦ hspec.elim fun x hspec ↦
+    hspec.elim fun z hspec ↦ hspec.elim fun hO hspec ↦ hspec.elim fun hClip hspec ↦
+    hspec.elim fun hxunit hspec ↦ hspec.elim fun hx hspec ↦ hspec.elim fun hlo hspec ↦
+    hspec.elim fun hcenter hspec ↦ hspec.elim fun hzunit hspec ↦ hspec.elim fun hz hspec ↦
+    hspec.elim fun hE0low hspec ↦ hspec.elim fun hE0 hspec ↦ hspec.elim fun hE04 hspec ↦
+    hspec.elim fun hnorm hspec ↦ ?_
+  have htargets := hspec
+  have :=
     hRaw.spectralSpanLE_centered_ground_of_eq hO (∑ j, e j) E0 z
       hcenter hzunit hz hE0low
+  refine this.elim fun hminimum hspec ↦ ?_
+  have hidentity := hspec
   refine ⟨e, E0, x, z, hO, hClip, hxunit, hx, hlo, hcenter, hzunit, hz, hE0low,
     hE0, hE04, hminimum, hidentity, hnorm, ?_⟩
-  intro J beta tau U Phi Tm
-  obtain ⟨N, W, hN, hfilters⟩ := htargets
+  refine htargets.elim fun N hspec ↦ hspec.elim fun W hspec ↦ hspec.elim fun hN hspec ↦ ?_
+  have hfilters := hspec
   refine ⟨N, W, hN, ?_⟩
-  intro eta hbuffer hetaLD lower higher Delta
-  obtain ⟨hnest, hupperClose, hlowerClose, htrade, p, hpdegree, hp0, M, hM, himprove⟩ :=
+  intro eta hbuffer hetaLD
+  have :=
     hfilters eta hbuffer hetaLD
+  refine this.elim fun hnest hspec ↦ hspec.elim fun hupperClose hspec ↦
+    hspec.elim fun hlowerClose hspec ↦ hspec.elim fun htrade hspec ↦ ?_
+  have hpolynomial := hspec
   have hidentityLower :
       Submodule.spectralSpanLE hO.eigenvectorBasis hO.eigenvalues (E0 + eta - 3 * w) =
         Submodule.spectralSpanLE hRaw.eigenvectorBasis hRaw.eigenvalues
           (minEigenvalue hRaw + eta - 3 * w) := by
     simpa only [add_sub_assoc] using hidentity (eta - 3 * w)
-  refine ⟨hnest, ?_, ?_, htrade, p, hpdegree, hp0, M, hM, himprove⟩
+  refine ⟨hnest, ?_, ?_, htrade, hpolynomial⟩
   · simpa only [hidentity eta] using hupperClose
   · simpa only [hidentityLower] using hlowerClose
 

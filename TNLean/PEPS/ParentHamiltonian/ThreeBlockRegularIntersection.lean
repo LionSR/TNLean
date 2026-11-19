@@ -20,6 +20,8 @@ the source theorem for arbitrary semi-regular representations or arbitrary
 G-injective site maps.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 /-- Three four-legged core vertices and eight distinct exterior endpoints. -/

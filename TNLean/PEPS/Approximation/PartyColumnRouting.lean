@@ -51,6 +51,8 @@ the protocol and the compression theorem in
   code is copied or adapted.
 -/
 
+open ManyBody (Edge squareLatticeGraph)
+
 noncomputable section
 
 open scoped BigOperators Matrix

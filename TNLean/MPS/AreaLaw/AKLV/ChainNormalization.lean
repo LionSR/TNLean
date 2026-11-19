@@ -18,6 +18,8 @@ arXiv:1301.1162v1, Section 6.1, lines 901–925. Scalar shifts preserve the
 ground vector and the full-system projector gap.
 -/
 
+open ManyBody (disjoint_interval_interval interval mem_interval)
+
 open scoped Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator InnerProductSpace
 
 noncomputable section
@@ -31,9 +33,9 @@ private theorem isSupportedOn_bond_sum {L q : ℕ}
     (I : Finset (Fin (L - 1))) (S : Finset (Fin L))
     (hIS : ∀ i ∈ I, interval L i.val (i.val + 2) ⊆ S) :
     Entropy.IsSupportedOn (n := fun _ ↦ q) (∑ i ∈ I, h i) S := by
-  exact QuantumCircuit.isSupportedOn_of_mem_supportedOperators
-    (Submodule.sum_mem _ fun i hi ↦
-      QuantumCircuit.mem_supportedOperators_of_isSupportedOn ((hs i).mono (hIS i hi)))
+  change _ ∈ ManyBody.supportedOperators _ _
+  exact (sum_mem fun i hi ↦
+      ((hs i).mono (hIS i hi)))
 
 /-- The original positive nearest-neighbour chain admits the regional shifts
 and bounded ground energy used in the truncation proof. The shifts, positive

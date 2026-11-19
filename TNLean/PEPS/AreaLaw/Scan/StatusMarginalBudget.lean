@@ -23,6 +23,8 @@ at `openai/math@adc7f124`.
 
 open TNLean.Lattice
 
+open ManyBody (AdmissibleSupport planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 variable {V : Type*} [Fintype V] [DecidableEq V]
@@ -92,7 +94,7 @@ theorem statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ)
     {Cr : ℝ} (hCr : 0 ≤ Cr) :
     ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
       (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
-      S.graph = domainGraph Λ →
+      S.graph = planeDomainGraph Λ →
       S.depth = (fun x ↦ ambientDepth T hT x.val) →
       (∀ i, S.anchor i ∈ i.val) →
       ∀ L : ℕ, 2 ≤ S.n →
@@ -163,7 +165,7 @@ theorem exists_statusMarginal_cutBudget_le_log {q : ℕ} (hq : 1 ≤ q) (R : ℕ
     ∃ CB : ℝ, 0 < CB ∧
       ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)] (hT : T.Nonempty)
         (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)),
-        S.graph = domainGraph Λ →
+        S.graph = planeDomainGraph Λ →
         S.depth = (fun x ↦ ambientDepth T hT x.val) →
         (∀ i, S.anchor i ∈ i.val) →
         ∀ L : ℕ, 2 ≤ S.n →

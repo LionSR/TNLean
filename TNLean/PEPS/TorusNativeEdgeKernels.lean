@@ -18,6 +18,8 @@ the incidence coordinates translates every position in this full product.
 Source: arXiv:1804.04964, Applications, lines 1891–1894.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 
 open scoped BigOperators Matrix
@@ -252,7 +254,7 @@ private theorem torusOutgoingEdgeEquiv_endpoints (z : Bool × TorusVertex width 
   rcases z with ⟨r, p⟩
   cases r
   · simpa [torusOutgoingNeighbor, torusRightEdge, translateEquiv_apply] using
-      Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2)
+      ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2)
   · rw [torusOutgoingEdgeEquiv_vertical]
     have hhead : torusOutgoingNeighbor true p = (p.1, p.2 - 1) := by
       simp [torusOutgoingNeighbor, translateEquiv_apply, sub_eq_add_neg]
@@ -261,7 +263,7 @@ private theorem torusOutgoingEdgeEquiv_endpoints (z : Bool × TorusVertex width 
       (torusUpEdge (p.1, p.2 - 1)).1.2 = (p.1, p.2 - 1)) ∨
       ((torusUpEdge (p.1, p.2 - 1)).1.1 = (p.1, p.2 - 1) ∧
         (torusUpEdge (p.1, p.2 - 1)).1.2 = p)
-    rcases Edge.ofAdj_endpoints (torusGraph_adj_up p.1 (p.2 - 1)) with h | h
+    rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up p.1 (p.2 - 1)) with h | h
     · exact Or.inr ⟨h.1, by simpa [torusUpEdge] using h.2⟩
     · exact Or.inl ⟨by simpa [torusUpEdge] using h.1, h.2⟩
 

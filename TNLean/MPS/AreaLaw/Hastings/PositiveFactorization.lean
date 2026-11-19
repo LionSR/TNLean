@@ -5,7 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.PositiveFactorRepair
 import QICLean.Entropy.LocalLift
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.Entropy.SupportedOperatorAlgebra
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.OpenMPS
 
 /-!
@@ -39,17 +40,10 @@ unchanged. Documented in `docs/paper-gaps/hastings07_lemma1_positivity_rate.tex`
   consumed by `entropy_le_of_overlap_schmidtRank_mixture_of_factorization`.
 -/
 
+open ManyBody (interval mem_interval)
+
 open Matrix Real
 open scoped Matrix.Norms.L2Operator ComplexOrder
-
-/-- The adjoint of an operator supported on `D` is supported on `D`. -/
-theorem Entropy.IsSupportedOn.conjTranspose {V : Type*} {n : V → ℕ} {D : Finset V}
-    {X : Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ}
-    (hX : Entropy.IsSupportedOn X D) : Entropy.IsSupportedOn Xᴴ D := by
-  refine ⟨fun σ τ ⟨v, hv, hne⟩ ↦ ?_, fun σ τ σ' τ' h1 h2 h3 h4 ↦ ?_⟩
-  · rw [conjTranspose_apply, hX.1 τ σ ⟨v, hv, Ne.symm hne⟩, star_zero]
-  · rw [conjTranspose_apply, conjTranspose_apply,
-      hX.2 τ σ τ' σ' h2 h1 (fun v hv ↦ (h3 v hv).symm) (fun v hv ↦ (h4 v hv).symm)]
 
 namespace TNLean.MPS.AreaLaw.Hastings
 
@@ -119,9 +113,9 @@ theorem IsFactorizationAt.conjTranspose_mul_self {Ω : EuclideanSpace ℂ (Fin L
   have hε0 : 0 ≤ ε := (norm_nonneg _).trans hBLR
   have hsupp : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (OBᴴ * OB)
       (interval L (c - l) (c + l)) := by
-    rcases isEmpty_or_nonempty (Fin L → Fin q) with hE | hne
-    · exact ⟨fun σ ↦ (hE.false σ).elim, fun σ ↦ (hE.false σ).elim⟩
-    · exact hBs.conjTranspose.mul hBs hne.some
+    change _ ∈ ManyBody.supportedOperators _ _
+    exact (mul_mem (star_mem hBs) hBs : star OB * OB ∈
+      ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) (interval L (c - l) (c + l)))
   refine ⟨hpos, hL, hR, hLR, hnorm, hsupp, hLs, hRs, ?_⟩
   rcases le_or_gt ε 1 with h1 | h1
   · exact herr.trans (sqrt_one_sub_sq_add_le hε0 h1)

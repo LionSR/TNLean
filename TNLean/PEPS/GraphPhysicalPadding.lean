@@ -18,6 +18,8 @@ is the existing graph PEPS tensor, so its parent is the existing positive
 regional parent rather than a replacement definition.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped BigOperators
 namespace TNLean.PEPS

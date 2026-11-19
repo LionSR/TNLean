@@ -19,6 +19,8 @@ This is the final one-site comparison in arXiv:1804.04964, proof of Theorem 3,
 lines 1544–1571, stated for an arbitrary reference region.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 open scoped Matrix
 variable {width height d : ℕ} [NeZero width] [NeZero height]

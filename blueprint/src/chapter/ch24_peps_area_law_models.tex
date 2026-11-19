@@ -12,7 +12,7 @@ state the two models separately following
         TNLean.Lattice.Site,
         TNLean.Lattice.Configuration,
         TNLean.Lattice.StateSpace,
-        TNLean.Lattice.domainGraph,
+        ManyBody.planeDomainGraph,
         TNLean.Lattice.graphNeighborhood,
         TNLean.Lattice.configurationSplit,
         TNLean.Lattice.card_configuration,
@@ -45,21 +45,18 @@ state the two models separately following
 \begin{definition}[Finite-range interactions and boundary]
     \label{def:area_law_hamiltonian}
     \lean{
-        TNLean.Lattice.IsAdmissibleSupport,
-        TNLean.Lattice.AdmissibleSupport,
-        TNLean.Lattice.LocalHamiltonian,
-        TNLean.Lattice.LocalHamiltonian.operator,
-        TNLean.Lattice.LocalHamiltonian.operator_isHermitian,
-        TNLean.Lattice.LocalHamiltonian.zero,
-        TNLean.Lattice.localLift,
-        TNLean.Lattice.localLift_mem_supportedOperators,
-        TNLean.Lattice.localLift_eq_entropyLocalLift,
+        ManyBody.IsAdmissibleSupport,
+        ManyBody.AdmissibleSupport,
+        ManyBody.PlaneInteraction,
+        ManyBody.Interaction.hamiltonian,
+        ManyBody.Interaction.isHermitian_hamiltonian,
+        ManyBody.place_mem_supportedOperators,
         TNLean.Lattice.edgeBoundary,
         TNLean.Lattice.edgeBoundary_empty,
         TNLean.Lattice.edgeBoundary_univ
     }
     \leanok
-    \uses{def:area_law_domain}
+    \uses{def:area_law_domain, def:peps_regional_operator_extension}
     Fix an integer $R\ge0$ and $J>0$. For each nonempty $X\subseteq\Lambda$ with
     $\operatorname{diam}_{d_\Lambda}X\le R$, assign one Hermitian operator
     $h_X=h_X^*$ supported on $X$ (extended by $I_{\Lambda\setminus X}$, possibly
@@ -78,10 +75,10 @@ state the two models separately following
 \begin{lemma}[Interaction range and rectangular coordinates]
     \label{thm:area_law_domain_identifications}
     \lean{
-        TNLean.Lattice.exists_walk_length_le_iff_edist_le,
-        TNLean.Lattice.isAdmissibleSupport_zero_iff,
-        TNLean.Lattice.isAdmissibleSupport_singleton,
-        TNLean.Lattice.isAdmissibleSupport_pair_of_adj,
+        ManyBody.exists_walk_length_le_iff_edist_le,
+        ManyBody.isAdmissibleSupport_zero_iff,
+        ManyBody.isAdmissibleSupport_singleton,
+        ManyBody.isAdmissibleSupport_pair_of_adj,
         TNLean.PEPS.AreaLaw.rectangleEmbedding,
         TNLean.PEPS.AreaLaw.rectangleEmbedding_injective,
         TNLean.PEPS.AreaLaw.rectangularDomain,
@@ -112,9 +109,9 @@ state the two models separately following
 \begin{definition}[Ground vector and regional entropy]
     \label{def:area_law_ground_entropy}
     \lean{
-        Matrix.IsGappedGroundState,
-        Matrix.isGappedGroundState_iff,
-        TNLean.Lattice.IsGappedGroundState,
+        ManyBody.IsGapped,
+        ManyBody.groundSpace,
+        ManyBody.isGapped_and_groundSpace_eq_span_iff,
         TNLean.Lattice.reducedState,
         TNLean.Lattice.reducedState_isHermitian,
         TNLean.Lattice.regionalEntropy,
@@ -132,6 +129,9 @@ state the two models separately following
         \label{eq:area_law_projector_gap}
         H-E_0I  & \ge\Delta(I-|\Omega\rangle\langle\Omega|).
     \end{align}
+    For $\Delta>0$ these conditions hold exactly when $H$ is Hermitian, every
+    eigenvalue of $H$ other than $E_0$ is at least $E_0+\Delta$, and the
+    eigenspace of $H$ at $E_0$ is the line spanned by $\Omega$.
     For $A\subseteq\Lambda$, the Hermitian reduced state and natural-logarithm
     von Neumann entropy ($0\log0=0$) are
     \begin{align}
@@ -147,7 +147,7 @@ state the two models separately following
 
 \begin{lemma}[Uniqueness from a positive global gap]
     \label{thm:area_law_ground_eigenspace}
-    \lean{Matrix.IsGappedGroundState.eigenspace_eq_span}
+    \lean{Matrix.PosSemidef.eigenspace_eq_span_of_gap}
     \leanok
     \uses{def:area_law_ground_entropy}
     Let $H$ be a finite-dimensional complex matrix, $E_0\in\mathbb R$, and
@@ -365,9 +365,8 @@ state the two models separately following
     \lean{
         TNLean.PEPS.Approximation.Configuration,
         TNLean.PEPS.Approximation.StateSpace,
-        TNLean.PEPS.Approximation.SquareHamiltonian,
-        TNLean.PEPS.Approximation.SquareHamiltonian.operator,
-        TNLean.PEPS.Approximation.SquareHamiltonian.IsGappedGroundState,
+        ManyBody.SquareInteraction,
+        TNLean.PEPS.Approximation.IsSquareGroundState,
         TNLean.PEPS.Approximation.pepsVector,
         TNLean.PEPS.Approximation.HasPEPSApproximation,
         TNLean.PEPS.Approximation.PolynomialPEPSApproximation
@@ -425,7 +424,7 @@ state the two models separately following
 
 \begin{definition}[Original interaction labels]
     \label{def:square_interaction_labels}
-    \lean{TNLean.PEPS.Approximation.SquareInteraction}
+    \lean{ManyBody.SquareLatticeSiteOrEdge}
     \leanok
     \uses{def:polynomial_peps_model}
     Let $\mathcal I_L$ be the disjoint union of the vertices of the open
@@ -436,18 +435,31 @@ state the two models separately following
 
 \begin{definition}[Designated interaction supports]
     \label{def:square_interaction_support}
-    \lean{TNLean.PEPS.Approximation.squareInteractionSupport}
+    \lean{ManyBody.squareLatticeSiteOrEdgeSupport}
     \leanok
     \uses{def:square_interaction_labels}
     For $i\in\mathcal I_L$, define its support $S_i=\{v\}$ if $i=v$ and
     $S_i=\{v,w\}$ if $i=(v,w)$.
 \end{definition}
 
+\begin{lemma}[Distinct interactions have distinct supports]
+    \label{thm:square_interaction_support_injective}
+    \lean{TNLean.PEPS.AreaLaw.squareLatticeSiteOrEdgeSupport_injective}
+    \leanok
+    \uses{def:square_interaction_support}
+    On the sites and edges of a rectangular square lattice of any width and
+    height, the map $i\mapsto S_i$ is injective.
+\end{lemma}
+\begin{proof}\leanok
+    A site has a one-point support and an edge a two-point support, since the
+    endpoints of an edge are distinct. An edge is determined by the unordered
+    pair of its endpoints, so two edges with the same support coincide.
+\end{proof}
+
 \begin{definition}[Hermitian local terms]
     \label{def:square_hermitian_term}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm}
     \leanok
-    \uses{def:square_interaction_labels}
+    \uses{def:square_interaction_labels,thm:rectangular_hermitian_terms}
     For the Hermitian replacement of local terms in
     \cite[Theorem~1.1]{OpenAI2026PolynomialPEPS}, set
     $A_i^{\mathrm h}=(A_i+A_i^*)/2$ for each $i\in\mathcal I_L$.
@@ -455,13 +467,8 @@ state the two models separately following
 
 \begin{lemma}[Support and norm of the Hermitian terms]
     \label{thm:square_hermitian_term_properties}
-    \lean{
-        TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm_supported,
-        TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm_isHermitian,
-        TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm_norm_le
-    }
     \leanok
-    \uses{def:square_interaction_support,def:square_hermitian_term}
+    \uses{def:square_interaction_support,def:square_hermitian_term,thm:rectangular_hermitian_terms}
     For every $L,q\ge0$, $J\in\mathbb R$, and $i\in\mathcal I_L$, the term
     $A_i^{\mathrm h}$ is supported on $S_i$ and satisfies
     $(A_i^{\mathrm h})^*=A_i^{\mathrm h}$ and $\|A_i^{\mathrm h}\|\le J$.
@@ -475,9 +482,8 @@ state the two models separately following
 
 \begin{lemma}[The sum of the Hermitian terms]
     \label{thm:square_hermitian_term_sum}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.sum_hermitianTerm}
     \leanok
-    \uses{def:square_hermitian_term}
+    \uses{def:square_hermitian_term,thm:rectangular_hermitian_terms}
     For the Hermitian Hamiltonian $H=H^*$,
     $\sum_{i\in\mathcal I_L} A_i^{\mathrm h}=H$.
 \end{lemma}
@@ -489,9 +495,8 @@ state the two models separately following
 
 \begin{definition}[Original interaction supports in the integer rectangle]
     \label{def:square_area_law_support}
-    \lean{TNLean.PEPS.Approximation.squareAreaLawSupport}
     \leanok
-    \uses{def:square_interaction_support,thm:area_law_domain_identifications}
+    \uses{def:square_interaction_support,thm:area_law_domain_identifications,thm:rectangular_domain_hamiltonian}
     For $L\ge0$, let $\sigma$ be the coordinate bijection from the open
     $L\times L$ square to $\Lambda=\{0,\ldots,L-1\}^2$, and set
     $X_i=\sigma(S_i)$ for each $i\in\mathcal I_L$
@@ -500,7 +505,7 @@ state the two models separately following
 
 \begin{lemma}[Relabelling the original interaction supports]
     \label{thm:square_interaction_support_relabel}
-    \lean{TNLean.PEPS.Approximation.squareAreaLawSupport_val_eq_nearestNeighborSupport}
+    \lean{TNLean.PEPS.Approximation.rectangleAreaLawSupport_val_eq_nearestNeighborSupport}
     \leanok
     \uses{def:square_area_law_support,def:peps_square_edge_correspondence}
     With any total order on $\Lambda=\{0,\ldots,L-1\}^2$, let $e$ map $v\mapsto\sigma(v)$
@@ -516,9 +521,8 @@ state the two models separately following
 
 \begin{lemma}[Designated supports are admissible at range one]
     \label{thm:square_area_law_support_admissible}
-    \lean{TNLean.PEPS.Approximation.squareAreaLawSupport_isAdmissibleSupport}
     \leanok
-    \uses{def:square_area_law_support,thm:area_law_domain_identifications}
+    \uses{def:square_area_law_support,thm:area_law_domain_identifications,thm:rectangular_domain_hamiltonian}
     For every $i\in\mathcal I_L$, $X_i\ne\varnothing$ and
     $\operatorname{diam}_{d_\Lambda}X_i\le1$.
 \end{lemma}
@@ -531,9 +535,9 @@ state the two models separately following
 
 \begin{lemma}[Distinct designated supports]
     \label{thm:square_area_law_support_injective}
-    \lean{TNLean.PEPS.Approximation.squareAreaLawSupport_injective}
     \leanok
-    \uses{def:square_area_law_support,thm:square_area_law_support_admissible}
+    \uses{def:square_area_law_support,thm:square_area_law_support_admissible,
+        thm:square_interaction_support_injective,thm:rectangular_domain_hamiltonian}
     The map $i\mapsto X_i$ on $\mathcal I_L$ is injective.
 \end{lemma}
 \begin{proof}\leanok
@@ -544,9 +548,8 @@ state the two models separately following
 
 \begin{definition}[The original state in integer coordinates]
     \label{def:square_area_law_state}
-    \lean{TNLean.PEPS.Approximation.squareAreaLawState}
     \leanok
-    \uses{thm:area_law_domain_identifications}
+    \uses{thm:area_law_domain_identifications,thm:rectangular_domain_hamiltonian}
     For an integer $q\ge0$, let $U$ be the unitary on configuration spaces
     induced by the site bijection $\sigma$, mapping an original vector $\Omega$
     to $U\Omega\in\mathcal H_\Lambda$.
@@ -554,9 +557,8 @@ state the two models separately following
 
 \begin{lemma}[Norm in integer coordinates]
     \label{thm:norm_square_area_law_state}
-    \lean{TNLean.PEPS.Approximation.norm_squareAreaLawState}
     \leanok
-    \uses{def:square_area_law_state}
+    \uses{def:square_area_law_state,thm:rectangular_domain_hamiltonian}
     For every $\Omega$, $\|U\Omega\|=\|\Omega\|$.
 \end{lemma}
 \begin{proof}\leanok
@@ -565,9 +567,8 @@ state the two models separately following
 
 \begin{lemma}[Supported Hermitian parts]
     \label{thm:square_hermitian_term_supported_algebra}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm_mem_supportedOperators}
     \leanok
-    \uses{def:square_hermitian_term}
+    \uses{def:square_hermitian_term,thm:rectangular_hermitian_terms}
     For every $i\in\mathcal I_L$, $A_i^{\mathrm h}$ belongs to the algebra of
     operators supported on $S_i$.
 \end{lemma}
@@ -578,12 +579,11 @@ state the two models separately following
 
 \begin{definition}[The original square Hamiltonian as a finite-domain interaction]
     \label{def:square_area_law_hamiltonian}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.toAreaLawHamiltonian}
     \leanok
     \uses{def:square_area_law_support,thm:square_area_law_support_admissible,
         thm:square_area_law_support_injective,
         def:square_area_law_state,thm:square_hermitian_term_properties,
-        thm:square_hermitian_term_supported_algebra}
+        thm:square_hermitian_term_supported_algebra,thm:rectangular_domain_hamiltonian}
     For a Hermitian square Hamiltonian $H=\sum_{i\in\mathcal I_L} A_i$ with
     bound $J\in\mathbb R$ ($L,q\ge0$), define a range-$1$ interaction family on
     $\Lambda$ by
@@ -600,9 +600,8 @@ state the two models separately following
 
 \begin{lemma}[Exact Hamiltonian in integer coordinates]
     \label{thm:square_area_law_hamiltonian_operator}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.toAreaLawHamiltonian_operator}
     \leanok
-    \uses{def:square_area_law_hamiltonian,thm:square_hermitian_term_sum}
+    \uses{def:square_area_law_hamiltonian,thm:square_hermitian_term_sum,thm:rectangular_domain_hamiltonian}
     The interaction family of Definition~\ref{def:square_area_law_hamiltonian}
     has total Hamiltonian $H_{\mathrm{int}}=UHU^*$.
 \end{lemma}
@@ -615,7 +614,7 @@ state the two models separately following
 
 \begin{lemma}[The original nearest-neighbor interaction family]
     \label{thm:square_nearest_neighbor_terms}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_nearestNeighbor_terms}
+    \lean{ManyBody.SquareInteraction.exists_nearestNeighbor_terms}
     \leanok
     \uses{def:polynomial_peps_model,def:square_area_law_hamiltonian,
         def:area_law_nearest_neighbor_support}
@@ -649,9 +648,8 @@ state the two models separately following
 
 \begin{lemma}[The same ground vector and full-system gap]
     \label{thm:square_area_law_ground_gap}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian}
     \leanok
-    \uses{thm:square_area_law_hamiltonian_operator,thm:norm_square_area_law_state}
+    \uses{thm:square_area_law_hamiltonian_operator,thm:norm_square_area_law_state,thm:rectangular_domain_hamiltonian}
     Let $E_0,\Delta\in\mathbb R$. If a unit vector $\Omega$ satisfies
     $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$,
     then $\|U\Omega\|=1$ and

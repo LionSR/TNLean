@@ -75,8 +75,8 @@ theorem IsPeriodic.exists_eventually_cyclic_wordSpan
     refine ⟨-(ZMod.finEquiv m j), ?_⟩
     change V j * (V j)ᴴ = Q ((ZMod.finEquiv m).symm (- -(ZMod.finEquiv m j)))
     rw [neg_neg, RingEquiv.symm_apply_apply, hV]
-  obtain ⟨q, hq⟩ := exists_eventually_wordTupleSpanTop_of_isPrimitiveMPS B ρ hP hρ
-    hDistinct.forall_ne_transport
+  obtain ⟨q, hq⟩ := exists_eventually_wordTupleSpanTop_of_hasComplementaryFixedPointGap B ρ hP
+    hρ hDistinct.forall_ne_transport
   have hSumV : ∑ j, V j * (V j)ᴴ = 1 := by simpa only [hV] using hsum
   have hSpan := wordSpan_eq_cyclicMatrixSubspace_of_blocked_sector_span
     A P B V hiso hSumV hInt hVP hCycle (hq q le_rfl)

@@ -8,6 +8,7 @@ import TNLean.MPS.AreaLaw.ProtocolConditionalPreparation
 import TNLean.MPS.AreaLaw.ProtocolStageArity
 import TNLean.MPS.AreaLaw.ProtocolSweepGeometry
 import TNLean.Algebra.ExplicitThresholds
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Physical preparation by a logarithmic-width chain sweep
@@ -35,11 +36,15 @@ constant is selected for information exponent 24 before the physical data
 and may be enlarged to satisfy the geometric width bounds.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 namespace TNLean.MPS.AreaLaw.ChainSweep
 
 open TNLean.Lattice TNLean.Lattice.PartyCircuit TNLean.Lattice.Sheet ContinuousLinearMap
+
+open ManyBody (IsGapped groundSpace ChainInteraction)
 
 /-- An explicit uniform length cutoff controls the rounded logarithmic width
 and its physical dimensions. The prefactor retains the ceiling's additive one.
@@ -128,9 +133,10 @@ theorem exists_preparation_of_gappedGroundState
       ∀ (L : ℕ) (hsize : L₀ ≤ L),
         let w := ⌈D * Real.log (L : ℝ)⌉₊
         let hL : 0 < L := Nat.lt_of_lt_of_le Nat.zero_lt_one (hL₀.trans hsize)
-        ∀ (h : ChainHamiltonian L q R J)
+        ∀ (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
           (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
-          Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         let Fs := initialFrames L w
         let holder : Sheet (Fin L) (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
         let H := fun p ↦ framesSpace (Sheet.regs q) (Fs.filter fun F ↦ holder F = p)
@@ -201,7 +207,7 @@ theorem exists_preparation_of_gappedGroundState
   refine ⟨D, (q : ℝ) ^ 80, ⌈80 * D * Real.log (q : ℝ)⌉₊, L₀, hL₀, hD, hK, ?_⟩
   intro L hsize
   dsimp only
-  intro h Ω E₀ hgs
+  intro h hh hhJ Ω E₀ hΩ hgap hspan
   let w := ⌈D * Real.log (L : ℝ)⌉₊
   have hL : 0 < L := Nat.lt_of_lt_of_le Nat.zero_lt_one (hL₀.trans hsize)
   have hwidthCut : max 120 ⌈Real.logPowThreshold (60 * D) (1 / 2) 1 1⌉₊ ≤ L :=
@@ -213,7 +219,7 @@ theorem exists_preparation_of_gappedGroundState
   have hwidth : D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) :=
     (mul_le_mul_of_nonneg_right (le_max_left _ _) hlog).trans (Nat.le_ceil _)
   have hfamily := hphysical L ((le_max_left _ _).trans hsize)
-    h Ω E₀ hgs w hw hwidth
+    h hh hhJ Ω E₀ hΩ hgap hspan w hw hwidth
   choose c hc using hfamily
   let Fs := initialFrames L w
   let holder : Sheet (Fin L) (Party L w) → Party L w := fun F ↦ F.owner ⟨0, hL⟩
@@ -230,7 +236,7 @@ theorem exists_preparation_of_gappedGroundState
   let := A.symm.toLinearEquiv.finiteDimensional
   obtain ⟨hx, C, hpart, hcount, hsource, hexp, hmono, hnorm, hXi, hsplit,
       hdensity, hsupport, harity, hlocality⟩ :=
-    exists_preparation_of_local_circuits c Ω hc hL hgs.1
+    exists_preparation_of_local_circuits c Ω hc hL hΩ
   let X := ProductInput.ofAllParties H
     (fun p ↦ framesVec (Sheet.refFamily Ω) (Fs.filter fun F ↦ holder F = p)) hx
   let Ψ := C.eval X.vector

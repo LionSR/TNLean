@@ -27,6 +27,7 @@ This module contains the statement of the source proposition
 
 open scoped Matrix BigOperators ComplexOrder InnerProductSpace
 open Filter Matrix
+open Kraus (blockPhysDim)
 
 namespace MPSTensor
 

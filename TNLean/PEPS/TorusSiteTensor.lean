@@ -52,6 +52,8 @@ on the cluster and CZX examples is documented in
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators
 
 namespace TNLean
@@ -133,27 +135,27 @@ theorem torusDownEdge_add_one (v : TorusVertex width height) :
 
 theorem torusRightEdge_incident (v : TorusVertex width height) :
     (torusRightEdge v).1.1 = v ∨ (torusRightEdge v).1.2 = v := by
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨h, _⟩ | ⟨_, h⟩
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right v.1 v.2) with ⟨h, _⟩ | ⟨_, h⟩
   · exact Or.inl h
   · exact Or.inr h
 
 theorem torusUpEdge_incident (v : TorusVertex width height) :
     (torusUpEdge v).1.1 = v ∨ (torusUpEdge v).1.2 = v := by
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨h, _⟩ | ⟨_, h⟩
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 v.2) with ⟨h, _⟩ | ⟨_, h⟩
   · exact Or.inl h
   · exact Or.inr h
 
 theorem torusLeftEdge_incident (v : TorusVertex width height) :
     (torusLeftEdge v).1.1 = v ∨ (torusLeftEdge v).1.2 = v := by
   have hv : ((v.1 - 1 + 1, v.2) : TorusVertex width height) = v := by simp
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right (v.1 - 1) v.2) with ⟨_, h⟩ | ⟨h, _⟩
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right (v.1 - 1) v.2) with ⟨_, h⟩ | ⟨h, _⟩
   · exact Or.inr (h.trans hv)
   · exact Or.inl (h.trans hv)
 
 theorem torusDownEdge_incident (v : TorusVertex width height) :
     (torusDownEdge v).1.1 = v ∨ (torusDownEdge v).1.2 = v := by
   have hv : ((v.1, v.2 - 1 + 1) : TorusVertex width height) = v := by simp
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_up v.1 (v.2 - 1)) with ⟨_, h⟩ | ⟨h, _⟩
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up v.1 (v.2 - 1)) with ⟨_, h⟩ | ⟨h, _⟩
   · exact Or.inr (h.trans hv)
   · exact Or.inl (h.trans hv)
 

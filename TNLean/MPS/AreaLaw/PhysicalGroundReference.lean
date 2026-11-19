@@ -21,6 +21,8 @@ No reference is taken from a sampled tree or its output.
 gap `min gamma 1`; see `docs/paper-gaps/alvv16_approximation_parameters.tex`.
 -/
 
+open ManyBody (interval)
+
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder
 
 namespace TNLean.MPS.AreaLaw

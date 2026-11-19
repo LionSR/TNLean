@@ -33,6 +33,8 @@ ring. The distinction is documented in
   proof lines 1424--1456.
 -/
 
+open Kraus (blockPhysDim blockPhysDim_eq_pow)
+
 namespace MPSTensor
 
 variable {d D : ℕ}
@@ -54,11 +56,11 @@ theorem IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighborParentHamiltoni
       ∃ B : (j : Fin g) → MPSTensor d (dim j),
       IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩) ∧
       ∃ p, 0 < p ∧ p ≤ 3 * D ^ 5 ∧
-        IsCPSVBasisOfNormalTensors (MPSTensor.blockTensor A p)
-          (fun j => ⟨dim j, MPSTensor.blockTensor (B j) p⟩) ∧
+        IsCPSVBasisOfNormalTensors (Kraus.blockTensor A p)
+          (fun j => ⟨dim j, Kraus.blockTensor (B j) p⟩) ∧
         HasParentHamiltonianGroundSpaceSpanning
-          (MPSTensor.blockTensor A p) 2
-          (fun j => MPSTensor.blockTensor (B j) p) := by
+          (Kraus.blockTensor A p) 2
+          (fun j => Kraus.blockTensor (B j) p) := by
   let data := Classical.choice hA
   let ref := data.bntRefinement
   let dim : Fin data.phaseClasses.g → ℕ := fun j =>
@@ -70,12 +72,12 @@ theorem IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighborParentHamiltoni
   obtain ⟨p, hp, hpBound, hSpan⟩ :=
     hBNT.exists_positive_wordTupleSpanTop_le_three_cap_pow_five
       (NeZero.pos D) (by simpa [dim] using data.sum_representative_dim_le)
-  have hOne : WordTupleSpanTop (fun j => MPSTensor.blockTensor (B j) p) 1 :=
+  have hOne : WordTupleSpanTop (fun j => Kraus.blockTensor (B j) p) 1 :=
     wordTupleSpanTop_blockTensor_one B hSpan
   have hLocal :
-      groundSpace (MPSTensor.blockTensor A p) 2 =
+      groundSpace (Kraus.blockTensor A p) 2 =
         ⨆ j : Fin data.phaseClasses.g,
-          groundSpace (MPSTensor.blockTensor (B j) p) 2 := by
+          groundSpace (Kraus.blockTensor (B j) p) 2 := by
     simpa [B] using
       data.groundSpace_blockTensor_eq_iSup_representatives ref hp (by omega : 0 < 2)
   refine ⟨data.phaseClasses.g, dim, B, hBNT, p, hp, hpBound,
@@ -94,7 +96,7 @@ theorem IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighborParentHamiltoni
   · let : NeZero d := ⟨hd⟩
     let blocks : (j : Fin data.phaseClasses.g) →
         MPSTensor (blockPhysDim d p) (dim j) :=
-      fun j ↦ MPSTensor.blockTensor (B j) p
+      fun j ↦ Kraus.blockTensor (B j) p
     let : ∀ j : Fin data.phaseClasses.g, NeZero (dim j) := fun j ↦
       ⟨(hBNT.blocks_normal j).bondDim_ne_zero⟩
     have hDirect :
@@ -109,7 +111,7 @@ theorem IsCPSVCanonicalForm.exists_bnt_blocked_hasNearestNeighborParentHamiltoni
           ⨆ j : Fin data.phaseClasses.g, groundSpace (blocks j) 2 :=
       groundSpace_toTensorFromBlocks_eq_iSup (fun _ ↦ 1) blocks (by simp) 2
     have hActualDirect :
-        groundSpace (MPSTensor.blockTensor A p) 2 =
+        groundSpace (Kraus.blockTensor A p) 2 =
           groundSpace
             (toTensorFromBlocks (d := blockPhysDim d p) (fun _ ↦ 1) blocks) 2 := by
       exact hLocal.trans hDirectLocal.symm

@@ -1,0 +1,178 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{./command}
+\title{Endpoint Adjoint Closure and the Mixed Operator}
+\author{}
+\date{2026-11-16}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The proposed implication}
+The mixed sectors of the interpolation in
+\cite[Section~5]{GarreRubio2023MPOSym} contract synthesis at one
+endpoint with analysis at the other. Adjoint closure of the endpoint
+boundary ranges does not control those contractions. In particular,
+unitarity of the physical endpoint operators does not imply adjoint
+closure of the boundary range of this particular mixed operator.
+This concerns the proposed elimination of the extra hypothesis in
+\texttt{glm23\_mixed\_path\_parent\_commutation.tex}; it does not
+exclude a different choice of virtual coordinates or a different path.
+\footnote{Source traceability: \path{Papers/2203.12563/REsubmission.tex},
+    lines 1600--1631, the mixed sectors preceding \texttt{Agammasym}.
+    The proposed implication is issue \#10763, not a separately stated
+    theorem of the paper.}
+
+\section{Unitary involutive endpoint data}
+Let the first endpoint have physical dimension four and bond dimension
+two. With matrix units indexed from zero, set
+\begin{align}
+    S & =\begin{pmatrix}2&1\\1&1\end{pmatrix},            &
+    Z & =\begin{pmatrix}1&0\\0&-1\end{pmatrix},           &
+    Q & =SZS^{-1}=\begin{pmatrix}3&-4\\2&-3\end{pmatrix}.
+    \label{eq:mea_virtual}
+\end{align}
+Define $A_0^{rs}=SE_{rs}S^{-1}$ and
+$u_0=\operatorname{diag}(1,-1,-1,1)$. Then $Q^2=I$, $u_0$ is
+unitary and Hermitian, and
+\begin{align}
+    \sum_{kl}(u_0)_{rs,kl}A_0^{kl}=QA_0^{rs}Q.
+    \label{eq:mea_action}
+\end{align}
+Thus $V_0=W_0=Q$ give an exact action decomposition with multiplicity
+one and $V_0W_0=I$. The letters are linearly independent. The second
+endpoint has physical and bond dimensions one, $A_1=1$, $u_1=1$,
+and $V_1=W_1=1$. Both endpoint MPO bond dimensions are one.
+Their arbitrary-boundary operators are scalar multiples of
+$u_p^{\otimes N}$, so both ranges are adjoint-closed at every length.
+
+These data extend to the two-element group: the identity label has
+identity physical and virtual actions. The generator squares to the
+identity both physically and virtually. All fusion and action
+multiplicities are one and all chosen $L$-symbols are one at both
+endpoints. Consequently matching the algebraic group data does not
+remove the obstruction below.
+
+\section{The two-site obstruction}
+Use mixed physical labels $(r,s)$ with $r,s\in\{0,1,2\}$ and regard
+$2$ as the second endpoint. The first cross sector has the physical
+matrix $Q^T$, since its coefficient at output $(r,2)$ and input
+$(k,2)$ is $Q_{kr}$. Let $\widetilde T$ be the mixed MPO and put
+$B_X=O^2_{\widetilde T,X}$. For the two physical words
+$a=((0,0),(0,2))$ and $b=((0,0),(1,2))$, direct contraction gives
+\begin{align}
+    (B_Y)_{a,a} & =3Y_{10},  &
+    (B_Y)_{a,b} & =2Y_{10},  &
+    (B_Y)_{b,a} & =-4Y_{10}.
+    \label{eq:mea_entries}
+\end{align}
+Choose $X=E_{10}$. If $B_Y=B_X^\dagger$, the diagonal entry in
+(\ref{eq:mea_entries}) forces $Y_{10}=1$, while the $(a,b)$ entry
+forces $2Y_{10}=-4$, a contradiction. Thus the mixed two-site
+boundary range is not adjoint-closed. Moreover, the letters with equal
+output and input labels $0,2,6,8$ are $E_{00},3E_{01},3E_{10},E_{11}$.
+They span the full virtual matrix algebra, so the mixed operator is
+one-site injective after its physical indices are combined.
+\footnote{The square-alphabet assertion is expressed by
+    \leanid{MPSTensor.MPOSymmetry.MixedEndpointAdjointObstruction.not_mixed_adjoint_closed}.
+    The endpoint action, injectivity, physical unitarity and endpoint
+    boundary closure are separate supporting declarations in
+    \doclink{TNLean/MPS/Symmetry/MPOSymmetry/MixedEndpointAdjointObstruction}.}
+
+\section{Polar compression does not remove this example}
+The coefficient matrix of $A_0$, with rows $(r,s)$ and columns $(i,j)$,
+is positive definite:
+\begin{align}
+    P=S\otimes S^{-1}
+      & =\begin{pmatrix}
+             2 & -2 & 1 & -1 \\-2&4&-1&2\\1&-1&1&-1\\-1&2&-1&2
+         \end{pmatrix}=R^TR,\notag \\
+    R & =\begin{pmatrix}
+             1 & -1 & 0 & 0 \\0&1&0&0\\1&-1&1&-1\\0&1&0&1
+         \end{pmatrix},      & \det R & =1.
+    \label{eq:mea_polar}
+\end{align}
+Hence its polar isometry is the identity and its positive polar tensor
+is $A_0$ itself. The scalar endpoint has the same property. The
+arbitrary-alphabet construction therefore first forms exactly
+$\widetilde T$, then includes its nine-dimensional physical space
+isometrically into the fourteen-dimensional common physical space.
+Compression back to that space takes each enlarged boundary operator
+to $B_Y$ and commutes with adjunction. Adjoint closure of the enlarged
+range would imply the closure refuted in (\ref{eq:mea_entries}).
+
+The Gram identity and the square-alphabet obstruction have explicit
+formal statements. The identification of this example's polar
+isometry and the final compression argument in this section are
+written mathematics; they are not claimed as a checked theorem about
+the arbitrary-alphabet counterexample.
+
+\section{A sufficient local adjoint criterion}
+For each endpoint $p$, action multiplicity $\mu$ and MPO bond index
+$\alpha$, regard
+\begin{align}
+    (V_{p,\mu,\alpha})_{rs} & =(V_{p,\mu})_{r,(\alpha,s)}, &
+    (W_{p,\mu,\alpha})_{rs} & =(W_{p,\mu})_{(\alpha,r),s}
+    \label{eq:mea_slices}
+\end{align}
+as square matrices on the MPS bond. Suppose primed endpoint data
+satisfy physical adjoint equality $T'_p=T_p^\dagger$ without
+reversing virtual order, and $V'_{p,\mu,\alpha}=V_{p,\mu,\alpha}^\dagger$,
+$W'_{p,\mu,\alpha}=W_{p,\mu,\alpha}^\dagger$. Then
+\begin{align}
+    \widetilde T(T'_0,T'_1,V'_0,V'_1,W'_0,W'_1)
+    =\widetilde T(T_0,T_1,V_0,V_1,W_0,W_1)^\dagger.
+    \label{eq:mea_dual}
+\end{align}
+Indeed, diagonal sectors use the endpoint identities. In a cross
+sector the conjugated coefficient is
+$\sum_\mu\overline{(W_0)_{(\alpha,r),k}}
+    \overline{(V_1)_{l,(\beta,s)}}$, which is precisely the primed
+coefficient by (\ref{eq:mea_slices}).
+\footnote{\leanid{MPSTensor.MPOSymmetry.physicalAdjointTensor_mixedEndpointMPO}.}
+
+A rectangular physical change of coordinates preserves this identity,
+since $(FTF^\dagger)^\dagger=FT^\dagger F^\dagger$. In the self-adjoint
+case, polar compression and common-space inclusion therefore give
+\begin{align}
+    \bigl(O^N_{\widetilde T,X}\bigr)^\dagger
+    =O^N_{\widetilde T,\overline X}
+    \label{eq:mea_boundary}
+\end{align}
+at every length, including zero. For injective endpoint tensors with
+exact action decompositions, (\ref{eq:mea_boundary}) discharges the
+adjoint-closure hypothesis of the existing commutation theorem. The
+mixed interaction commutes with every two-site boundary operator for
+all $\gamma\in[0,1]$, and the periodic Hamiltonian commutes with the
+periodic common MPO at every length at least two.
+\footnote{\leanid{MPSTensor.MPOSymmetry.conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO},
+    \leanid{MPSTensor.MPOSymmetry.arbitraryPhysicalMixedInteraction_commute_of_endpoint_adjoint}
+    and
+    \leanid{MPSTensor.MPOSymmetry.interactionHamiltonian_arbitraryPhysicalMixedInteraction_commute_of_endpoint_adjoint}.}
+
+This sufficient criterion adds conditions on the action maps, not
+merely on the endpoint boundary ranges. For on-site involutive unitary
+symmetries, the existing Hermitian-gauge theorem already derives closure
+when each action gauge is proportional to a Hermitian matrix. It derives
+that condition for injective canonical endpoint tensors whose transfer
+map fixes the identity and whose adjoint transfer map has a positive
+definite fixed point.\footnote{\leanid{MPSTensor.MPOSymmetry.exists_isHermitian_smul_bondOneActionGauge}
+    and
+    \leanid{MPSTensor.MPOSymmetry.exists_conjTranspose_mpoWithBoundary_arbitraryPhysicalMixedMPO_eq},
+    in \doclink{TNLean/MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalMixedHermitianGauge}.}
+The present criterion instead permits arbitrary endpoint MPO bond
+dimensions and multiplicities, with exact slice-adjoint identities,
+and also describes dual pairs. Deriving suitable identities after a
+general allowed virtual normalization, and treating non-self-dual labels
+by a common adjoint-closed family, remain separate obligations.
+Even for a unitary group representation a single label's
+boundary range need not be adjoint-closed: the adjoint may belong to the
+inverse label. The group family and each individual operator must be
+distinguished.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

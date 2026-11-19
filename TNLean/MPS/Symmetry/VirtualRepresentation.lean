@@ -60,40 +60,6 @@ open TNLean.Algebra
 
 variable {G : Type} [Group G]
 
-/-- Twisting commutes with virtual conjugation. -/
-private lemma twistedTensor_gaugeEquiv
-    (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (Y : GL (Fin D) ℂ) (g : G) :
-    twistedTensor (fun j =>
-      (Y : Matrix (Fin D) (Fin D) ℂ) * A j * invMat Y) U g =
-      fun i =>
-        (Y : Matrix (Fin D) (Fin D) ℂ) * twistedTensor A U g i * invMat Y := by
-  funext i
-  simp only [twistedTensor]
-  rw [Finset.mul_sum, Finset.sum_mul]
-  congr 1
-  ext j
-  simp [Matrix.mul_assoc]
-
-/-- The product `X(h) * X(g)` intertwines `A` with `twist(g * h)`. -/
-private lemma gauge_product_intertwines
-    (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (X : G → GL (Fin D) ℂ)
-    (hX : ∀ g i, twistedTensor A U g i =
-      (X g : Matrix (Fin D) (Fin D) ℂ) * A i * invMat (X g))
-    (g h : G) (i : Fin d) :
-    twistedTensor A U (g * h) i =
-      ((X h * X g : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
-        invMat (X h * X g) := by
-  rw [twistedTensor_mul]
-  conv_lhs =>
-    rw [show twistedTensor A U h = fun j =>
-      (X h : Matrix (Fin D) (Fin D) ℂ) * A j * invMat (X h) from funext (hX h)]
-  rw [twistedTensor_gaugeEquiv A U (X h) g]
-  simp only
-  rw [hX g i]
-  simp only [invMat, Matrix.GeneralLinearGroup.coe_mul, mul_inv_rev, Matrix.mul_assoc]
-
 /-- Virtual covariance on an injective tensor determines a projective
 representation after inversion of the group index. The chosen virtual
 matrices are retained, so unitarity can be preserved. Source:

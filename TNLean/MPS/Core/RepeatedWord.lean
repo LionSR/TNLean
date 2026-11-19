@@ -18,6 +18,7 @@ consequence, `mpv_const_eq_trace_pow`, which packages that identity as an
 -/
 
 open scoped Matrix
+open Kraus (evalWord_replicate)
 
 namespace MPSTensor
 

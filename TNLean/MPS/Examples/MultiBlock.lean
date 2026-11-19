@@ -8,7 +8,9 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.MPS.Examples.MultiBlock
 
+import TNLean.MPS.Examples.MultiBlock.ArbitraryCounterexamples
 import TNLean.MPS.Examples.MultiBlock.ElementaryStates
+import TNLean.MPS.Examples.MultiBlock.EmbeddingSharpness
 import TNLean.MPS.Examples.MultiBlock.FlagVectors
 import TNLean.MPS.Examples.MultiBlock.GHZSectors
 import TNLean.MPS.Examples.MultiBlock.JordanBoundary
@@ -25,5 +27,6 @@ import TNLean.MPS.Examples.MultiBlock.RunningFactorization
 import TNLean.MPS.Examples.MultiBlock.SharpnessOneBlock
 import TNLean.MPS.Examples.MultiBlock.SharpnessOneBlockGeneral
 import TNLean.MPS.Examples.MultiBlock.StackedPairGauge
+import TNLean.MPS.Examples.MultiBlock.WeightedCounterexamples
 import TNLean.MPS.Examples.MultiBlock.Worked
 import TNLean.MPS.Examples.MultiBlock.WorkedAdaptedBasis

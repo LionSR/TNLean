@@ -2672,8 +2672,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Uniform tail virtual-map bound]
     \label{thm:primitive_tail_virtual_map_norm_uniform}
-    \lean{MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_four_pow_uniform}
-    \lean{MPSTensor.IsPrimitiveMPS.tailVirtualMapES_norm_uniform}
+    \lean{Kraus.HasComplementaryFixedPointGap.tailVirtualMapES_norm_four_pow_uniform}
+    \lean{Kraus.HasComplementaryFixedPointGap.tailVirtualMapES_norm_uniform}
     \leanok
     \uses{def:primitive_mps, thm:spectator_boundary_hilbert_factorization}
     Let $A$ be a primitive MPS tensor with nonzero virtual dimension, and let
@@ -3104,7 +3104,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Primitive whole-increment centered residual bound]
     \label{thm:primitive_whole_increment_centered_residual_bound}
-    \lean{MPSTensor.IsPrimitiveMPS.wholeIncrementCenteredResidualES_norm_le}
+    \lean{Kraus.HasComplementaryFixedPointGap.wholeIncrementCenteredResidualES_norm_le}
     \leanok
     \uses{def:primitive_mps, thm:whole_increment_centered_residual_bound_left_canonical}
     Let $A$ be a primitive MPS tensor with positive-definite fixed point
@@ -3165,7 +3165,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \lean{MPSTensor.c3RightOverlapFactorES_norm_le}
     \lean{MPSTensor.c3_centeredVirtualResidualES_eq_overlapFactors}
     \lean{MPSTensor.c3_centeredVirtualResidualES_norm_le}
-    \lean{MPSTensor.IsPrimitiveMPS.c3_centeredVirtualResidualES_norm_sq_le_geometric}
+    \lean{Kraus.HasComplementaryFixedPointGap.c3_centeredVirtualResidualES_norm_sq_le_geometric}
     \leanok
     \uses{def:c3_centered_overlap_factors_residual, def:ground_space_gram, def:primitive_mps, thm:whole_increment_left_overlap_factor_apply, thm:whole_increment_right_overlap_factor_apply, thm:whole_increment_overlap_factor_norms}
     For every $K\in\N$, the common overlap factors have fiber formulas
@@ -3479,7 +3479,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Uniform decay of the individual-block projector error]
     \label{thm:primitive_whole_increment_defect_decay}
-    \lean{MPSTensor.IsPrimitiveMPS.eventually_wholeIncrement_groundProjection_defect_le}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_wholeIncrement_groundProjection_defect_le}
     \leanok
     \uses{def:primitive_mps, def:reassociated_tail_boundary_map,
         def:spectator_boundary_maps_es, def:ground_space_es}
@@ -3506,7 +3506,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Uniform whole-increment defect at the coefficient $7/16$]
     \label{thm:uniform_whole_increment_defect_seven_sixteenths}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_uniform_wholeIncrement_defect_le_seven_sixteenths}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_uniform_wholeIncrement_defect_le_seven_sixteenths}
     \leanok
     \uses{def:primitive_mps, def:l_blk_injective,
         def:reassociated_tail_boundary_map, def:spectator_boundary_maps_es,
@@ -3535,7 +3535,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Three-block whole-increment defect at the coefficient $7/16$]
     \label{thm:three_block_whole_increment_defect_seven_sixteenths}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_threeBlock_wholeIncrement_defect_le_seven_sixteenths}
     \leanok
     \uses{thm:uniform_whole_increment_defect_seven_sixteenths}
     Under the same hypotheses, there is an integer $p>0$, measured in sites of
@@ -3558,8 +3558,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Uniform open-chain projector-defect threshold]
     \label{thm:nachtergaele_c3_blocked_length}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_openChain_groundProjection_defect_lt_c3_threshold}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_openChain_groundProjection_defect_lt_c3_threshold}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_re_inner_openChain_anticommutator_ge_c3_threshold}
     \leanok
     \uses{def:primitive_mps, def:l_blk_injective, def:open_chain_ground_subspaces_es, def:ground_space_es}
     Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
@@ -3591,7 +3591,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094.
 \begin{lemma}[Open-chain martingale condition C3]
     \label{thm:literal_open_chain_martingale_c3}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_openChain_martingaleDifference_norm_lt_c3_threshold}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_openChain_martingaleDifference_norm_lt_c3_threshold}
     \leanok
     \uses{thm:nachtergaele_c3_blocked_length, thm:exact_c3_martingale_difference_identity}
     Let $A$ be a primitive MPS tensor with nonzero bond dimension and a
@@ -3638,7 +3638,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         MPSTensor.openIntervalGroundProjectionES_comp_martingaleDifference_conj_rightSpectator,
         MPSTensor.norm_openIntervalGroundProjectionES_comp_martingaleDifference_le_openChain,
         MPSTensor.fixedAmbient_martingaleDifference_norm_le_of_openChain,
-        MPSTensor.IsPrimitiveMPS.exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold}
+        Kraus.HasComplementaryFixedPointGap.exists_fixedAmbient_martingaleDifference_norm_lt_c3_threshold}
     \leanok
     \uses{lem:right-spectator-extension,
         thm:fixed-volume-c3-projector-conjugacy,
@@ -3758,7 +3758,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 % lines 1083--1094; Theorem 2.1(i), lines 1119--1130; proof lines 1195--1259.
 \begin{lemma}[Uniform gap for primitive compatible open chains]
     \label{thm:primitive_open_parent_hamiltonian_gap}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_openParentHamiltonianES_gap}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_openParentHamiltonianES_gap}
     \leanok
     \uses{thm:literal_fixed_volume_martingale_c3,
         thm:open_parent_hamiltonian_fixed_c3_gap}
@@ -3832,8 +3832,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Uniform gap for a blocked primitive MPS parent Hamiltonian]
     \label{thm:martingale_mps}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gap_eighth,
-        MPSTensor.IsPrimitiveMPS.exists_blockTensor_parentHamiltonianES_gapped}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_blockTensor_parentHamiltonianES_gap_eighth,
+        Kraus.HasComplementaryFixedPointGap.exists_blockTensor_parentHamiltonianES_gapped}
     \leanok
     \uses{def:primitive_mps, def:l_blk_injective, def:blocked_tensor, def:parent_ground_space_es, def:parent_hamiltonian_es}
     Let $A$ be a primitive MPS tensor with nonzero physical and bond dimensions,
@@ -4376,7 +4376,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{theorem}[Uniform finite-range gap for primitive MPS parent Hamiltonians]
     \label{thm:primitive_parent_hamiltonian_finite_range_knabe_gap}
-    \lean{MPSTensor.IsPrimitiveMPS.exists_parentHamiltonianES_gap_of_finiteRangeKnabe}
+    \lean{Kraus.HasComplementaryFixedPointGap.exists_parentHamiltonianES_gap_of_finiteRangeKnabe}
     \leanok
     \uses{thm:primitive_open_parent_hamiltonian_gap,
         thm:open_parent_hamiltonian_kernel_ground_space,
@@ -4533,7 +4533,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Uniform decay of block ground-space overlaps]
     \label{thm:block_ground_space_overlap_decay}
-    \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_mixed_gap}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_groundSpaceES_le_of_mixed_gap}
     \leanok
     \uses{thm:mixed_boundary_gram_decay, thm:ground_space_overlap_mixed_gram,
         thm:primitive_ground_space_gram_eventual_inverse_bound,
@@ -4581,7 +4581,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Asymptotic orthogonality of inequivalent blocks]
     \label{thm:inequivalent_block_ground_space_overlap_decay}
-    \lean{MPSTensor.IsPrimitiveMPS.eventually_norm_inner_groundSpaceES_le_of_inequivalent}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_groundSpaceES_le_of_inequivalent}
     \leanok
     \uses{thm:block_ground_space_overlap_decay, thm:transfer_operator_gap_irr_tp,
         thm:transfer_operator_gap_rect_irr_tp, lem:irreducible_map_from_primitive}

@@ -26,6 +26,8 @@ terminal image convention are documented at
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory Matrix QuantumCircuit
 open scoped BigOperators Kronecker TensorProduct Matrix.Norms.L2Operator
   MatrixOrder ComplexOrder ENNReal

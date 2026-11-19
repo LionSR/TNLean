@@ -23,6 +23,8 @@ The clipped filter error and original-window viability error are distinct.
 See `docs/paper-gaps/alvv16_low_energy_family_buffers.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct InnerProductSpace Matrix.Norms.L2Operator
   ComplexOrder MatrixOrder
