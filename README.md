@@ -24,7 +24,10 @@
 TNLean is a [Lean 4](https://lean-lang.org/) library, built on
 [Mathlib](https://github.com/leanprover-community/mathlib4), that formalizes
 the mathematics of tensor networks: matrix product states (MPS), their
-canonical forms and gauge structure, and the theorems that classify them. The
+canonical forms and gauge structure, and the theorems that classify them;
+parent Hamiltonians, matrix product operators, symmetries, and projected
+entangled pair states (PEPS); the preparation of these states by quantum
+circuits; and area laws for ground states of gapped Hamiltonians. The
 quantum-information theory this rests on lives in the companion library
 [QICLean](https://github.com/LionSR/QICLean), which TNLean builds on. Blueprint
 diagrams are drawn by the companion package
@@ -136,26 +139,49 @@ The channel-generic form of this theory lives in QICLean; TNLean keeps the
 tensor-typed statements the canonical-form machinery consumes. Sharpening
 the bound to match the constants in the literature is ongoing.
 
-## What is in progress
+## Beyond the fundamental theorem
 
-Beyond the released core, the library develops several neighboring topics,
-each at an earlier stage.
+The library has grown well past the released core. The topics below follow
+the parts of the [blueprint](https://sirui-lu.com/TNLean/blueprint/), which
+marks, theorem by theorem, what is formalized.
 
-- **Parent Hamiltonians.** Local Hamiltonians whose ground space is the MPS,
-  with frustration-freeness and ground-state uniqueness proved for injective
-  and normal tensors. The estimates that would give a spectral gap are not
-  yet done.
-- **Matrix-product density operators.** Mixed-state analogues of MPS, their
-  canonical and zero-correlation-length forms, and renormalization fixed
-  points. This is a foundation, not yet a complete classification.
-- **Projected entangled pair states (PEPS).** The two-dimensional
-  generalization of MPS, with fundamental-theorem results for normal PEPS on
-  finite graphs.
-- **Matrix-product unitaries and quantum cellular automata.** Standard forms
-  of MPU tensors and finite-propagation automorphisms of spin chains.
-- **Examples.** Concrete states such as AKLT, GHZ, even parity, and the
-  $\mathbb{Z}/2\mathbb{Z}$ models, alongside algebraic variants of the
-  fundamental theorem.
+- **Parent Hamiltonians and correlations.** Local frustration-free
+  Hamiltonians whose ground space is spanned by the MPS: ground spaces and
+  uniqueness of the ground state for injective and normal tensors, the
+  block-diagonal case, spectral-gap bounds, the observables and states of the
+  infinite chain, and exponential decay of correlations.
+- **Matrix product operators.** Matrix-product density operators and their
+  canonical forms, renormalization fixed points of pure and mixed states,
+  matrix-product unitaries with their standard forms and index, and
+  finite-propagation automorphisms of spin chains (quantum cellular
+  automata).
+- **Symmetries and phases.** On-site and virtual symmetries, string order,
+  paths of gapped parent Hamiltonians within a symmetry-protected phase,
+  gauging of matrix-product unitaries, and symmetries given by matrix
+  product operators, their fusion data, and three-cocycle anomalies.
+- **Projected entangled pair states.** The fundamental theorem for normal
+  PEPS on finite graphs, the torus, and the square lattice; injective and
+  $G$-injective tensors; ground spaces of regions and parent Hamiltonians.
+- **Quantum circuits and state preparation.** Local circuits on qudit chains
+  with measurements, teleportation, and channels; light cones and
+  Lieb-Robinson bounds; sequential generation of MPS and their preparation
+  by log-depth circuits, with matching depth lower bounds.
+- **Area laws and approximation by tensor networks.** For ground states of
+  gapped finite-range Hamiltonians: the area law on finite two-dimensional
+  lattice domains (`TNLean.PEPS.AreaLaw.uniformAreaLaw`), approximation of
+  ground states on the square grid by PEPS of polynomial bond dimension
+  (`TNLean.PEPS.Approximation.polynomialPEPSApproximation`), and the
+  one-dimensional area law with approximation by MPS of polynomial bond
+  dimension.
+- **Gapped chains.** Hastings' proof of the one-dimensional area law, the
+  relation between Rényi entropy scaling and MPS approximability, the
+  polynomial filters of Arad, Kitaev, Landau, and Vazirani, and the viable
+  sets behind the polynomial-time ground-state algorithm of Landau, Vazirani,
+  and Vidick.
+- **Examples.** Product, GHZ, W, cluster, AKLT, and Majumdar-Ghosh states,
+  product vacua with boundary states, and the Kitaev chain; symmetry
+  operators of spin chains such as CZX, Kramers-Wannier, Fibonacci, and
+  Ising, with their anomalies and condensation defects.
 
 Where a formal statement does not exactly match its cited source, the
 discrepancy is recorded as a mathematical note under `docs/paper-gaps/`,
@@ -178,18 +204,23 @@ Archive policy. The source is grouped as follows.
 
 | Path | Contents |
 |---|---|
-| `TNLean/Algebra` | Matrix algebra specific to the fundamental theorem: trace pairings, Gram matrices, Skolem-Noether, Burnside's theorem, and cocycle cohomology. |
+| `TNLean/Algebra` | Tensor-network-facing algebra not owned by QICLean: matrix and finite-sum lemmas, cocycle cohomology, and exact-ring certificates for the worked examples. |
+| `TNLean/Circuit` | Local quantum circuits on qudit chains: supported operators, layers and light cones, measurements, teleportation, and circuits of channels. |
+| `TNLean/Lattice` | Finite lattice domains, local Hamiltonians, Gaussian spectral filters, and regional entropy, shared by the one- and two-dimensional area laws. |
 | `TNLean/Spectral` | Transfer-operator spectral gaps, overlap matrices, and correlation-decay estimates for MPS. |
-| `TNLean/MPS/Core`, `TNLean/MPS/Chain`, `TNLean/MPS/Overlap` | Matrix product states: tensors, words, blocking, transfer maps, and overlap matrices. |
+| `TNLean/MPS/Defs.lean`, `TNLean/MPS/Core`, `TNLean/MPS/Chain`, `TNLean/MPS/Overlap` | Matrix product states: tensors, words, blocking, transfer maps, and overlap matrices. |
 | `TNLean/MPS/FundamentalTheorem`, `.../BNT`, `.../CanonicalForm`, `.../Periodic`, `.../Structure`, `.../Irreducible` | The fundamental theorem in its single-block, multi-block, canonical-form, and periodic versions. |
-| `TNLean/MPS/Symmetry` | On-site and virtual symmetry, cohomology of cocycles, and string order. |
-| `TNLean/MPS/ParentHamiltonian` | Parent Hamiltonians, their ground spaces, and uniqueness of the ground state. |
-| `TNLean/MPS/MPDO`, `TNLean/MPS/RFP` | Matrix-product density operators and renormalization fixed points. |
-| `TNLean/MPS/Examples` | Worked examples (AKLT, GHZ, even parity, $\mathbb{Z}/2\mathbb{Z}$). |
+| `TNLean/MPS/Symmetry` | On-site and virtual symmetry, cohomology of cocycles, string order, symmetry-protected phases, and matrix-product-operator symmetries. |
+| `TNLean/MPS/ParentHamiltonian` | Parent Hamiltonians, their ground spaces, uniqueness of the ground state, and spectral gaps. |
+| `TNLean/MPS/MPDO`, `TNLean/MPS/RFP` | Matrix-product operators and density operators, and renormalization fixed points. |
 | `TNLean/MPS/MPU`, `TNLean/QCA` | Matrix-product unitaries and quantum cellular automata. |
+| `TNLean/MPS/Preparation` | Sequential generation and log-depth preparation of MPS, with depth lower bounds. |
+| `TNLean/MPS/AreaLaw` | The one-dimensional area law and MPS approximation for gapped chains, Hastings' proof, entropy scaling, and the ground-state algorithms. |
+| `TNLean/MPS/Examples` | Worked examples: AKLT, GHZ, cluster, Majumdar-Ghosh, the Kitaev chain, and symmetry operators such as CZX, Kramers-Wannier, Fibonacci, and Ising. |
 | `TNLean/Wielandt` | The quantum Wielandt inequality and primitivity for MPS tensors. |
-| `TNLean/PEPS` | Projected entangled pair states on finite graphs. |
+| `TNLean/PEPS` | Projected entangled pair states: the fundamental theorem, $G$-injectivity, regions and parent Hamiltonians, the two-dimensional area law (`PEPS/AreaLaw`), and approximation of gapped ground states (`PEPS/Approximation`). |
 | `TNLean/PiAlgebra` | Algebraic variants of the fundamental theorem. |
+| `TNLean/Tactic`, `TNLean/MPS/Tactic` | Project tactics and simp sets. |
 | `blueprint/`, `docs/` | The mathematical companion text, conventions, and notes on gaps from the sources. |
 
 ## Status
@@ -210,7 +241,8 @@ The Lean version is pinned by `lean-toolchain`; Mathlib is pinned in
 `lakefile.toml` and `lake-manifest.json`.
 
 ```bash
-# Optional but recommended: download pre-built Mathlib artifacts.
+# Download pre-built Mathlib artifacts first. Never start with `lake build`
+# in a fresh clone: Mathlib would be compiled from source, which takes hours.
 lake exe cache get
 
 # Build the default target, which is TNLean.
@@ -225,6 +257,10 @@ lake build TNLean.MPS.FundamentalTheorem.Basic
 # Optional fast elaboration only; this does not apply the package Lean options.
 lake env lean TNLean/MPS/FundamentalTheorem/Basic.lean
 ```
+
+On macOS, `scripts/lake_build_locked.sh` does the cache fetch and the build
+under one lock shared by all worktrees of the repository; see
+[`docs/lake_build_cache.md`](docs/lake_build_cache.md).
 
 Repository-specific notes from past Lean/Mathlib upgrades are collected in
 [`docs/upgrade_4_29.md`](docs/upgrade_4_29.md).
@@ -303,6 +339,30 @@ The formalization draws principally on the following sources.
   *Mathematical open problems in projected entangled pair states*,
   [arXiv:1903.09439](https://arxiv.org/abs/1903.09439),
   Rev. Mat. Complut. **32**, 579--599 (2019).
+- C. Schön, E. Solano, F. Verstraete, J. I. Cirac, M. M. Wolf,
+  *Sequential Generation of Entangled Multiqubit States*,
+  [arXiv:quant-ph/0501096](https://arxiv.org/abs/quant-ph/0501096),
+  Phys. Rev. Lett. **95**, 110503 (2005).
+- D. Malz, G. Styliaris, Z.-Y. Wei, J. I. Cirac,
+  *Preparation of Matrix Product States with Log-Depth Quantum Circuits*,
+  [arXiv:2307.01696](https://arxiv.org/abs/2307.01696),
+  Phys. Rev. Lett. **132**, 040404 (2024).
+- M. B. Hastings,
+  *An area law for one-dimensional quantum systems*,
+  [arXiv:0705.2024](https://arxiv.org/abs/0705.2024),
+  J. Stat. Mech. **2007**, P08024 (2007).
+- I. Arad, A. Kitaev, Z. Landau, U. Vazirani,
+  *An area law and sub-exponential algorithm for 1D systems*,
+  [arXiv:1301.1162](https://arxiv.org/abs/1301.1162) (2013).
+- Z. Landau, U. Vazirani, T. Vidick,
+  *A polynomial-time algorithm for the ground state of 1D gapped local Hamiltonians*,
+  [arXiv:1307.5143](https://arxiv.org/abs/1307.5143) (2013).
+- I. Arad, Z. Landau, U. Vazirani, T. Vidick,
+  *Rigorous RG algorithms and area laws for low energy eigenstates in 1D*,
+  [arXiv:1602.08828](https://arxiv.org/abs/1602.08828) (2017).
+- OpenAI, *A two-dimensional area law from a global spectral gap* and
+  *Polynomial PEPS approximation of gapped square-grid ground states*,
+  preprints in [openai/math](https://github.com/openai/math) (September 2026).
 - M. M. Wolf, *Quantum Channels & Operations: Guided Tour* (2012).
 - [Mathlib4](https://github.com/leanprover-community/mathlib4), the Lean 4
   mathematics library.
