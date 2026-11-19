@@ -1860,6 +1860,17 @@ norm. It states the actual central replacement, its positive regional matrix,
 attained minimum and energy bound on the original ground space. Transfer to
 the generated soft target and the recursive energy invariant remain separate.
 
+## ALVV: the efficient projector under low density
+
+[`alvv16_efficient_low_density_agsp.tex`](alvv16_efficient_low_density_agsp.tex)
+(scope restriction, open) quotes Theorem 5.9 (`t:aisgaplessefficient`) of Arad,
+Landau, Vazirani and Vidick, arXiv:1602.08828v2 (source lines 1424–1437, proof
+1439–1457), and records which of its clauses the formalized efficient soft
+low-density families cover. They give the window and improvement clauses for a
+fixed buffer. The shrinking buffer `μ / log n`, the bond bound `e^{Õ(log³ n)}`, the
+norm bound `Õ(log n / μ)` and the energy estimate within `1/2` are open. The
+qualifier `η₁ ≥ 2μ / log n` of Theorem `t:aisgapless` is not added as a hypothesis.
+
 ## ALVV: the operator-norm cluster approximation
 
 [`alvv16_cluster_approximation.tex`](alvv16_cluster_approximation.tex)

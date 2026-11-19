@@ -17,7 +17,7 @@ residual scale with a smaller floor, a window resolution `h = w² / (1000 (8 η 
 the windowed loss at most `1 / 1000`, a precision `ξ ≤ w⁴ / (80000 (M + 8))` makes the
 perturbation loss at most `1 / 1000`, and the contraction at the calibrated gap `w² / 2`
 dominates the contraction between the two windows. Numerical auxiliaries to ALVV,
-arXiv:1602.08828v2, `t:aisgaplessefficient`, lines 1435–1457.
+arXiv:1602.08828v2, `t:aisgaplessefficient`, lines 1424–1437.
 -/
 
 namespace TNLean.MPS.AreaLaw.ALVV
@@ -141,7 +141,7 @@ theorem soft_low_density_contraction_le {w c0 c1 M xi k : ℝ} (hw : 0 < w) (hw1
 `ξ` at the gap `g = w² / 2`, such that the residual at the floor `156 + 2 g` is at most
 `τ g / 10⁶`, the contraction at the gap `g` is at most `(D¹² M¹⁰)⁻¹`, and the member bond is
 bounded by a natural polynomial in the chain length. Numerical auxiliary to ALVV,
-arXiv:1602.08828v2, `t:aisgaplessefficient`, lines 1435–1457. -/
+arXiv:1602.08828v2, `t:aisgaplessefficient`, lines 1424–1437. -/
 theorem exists_soft_low_density_calibration_data (q : ℕ) (hq : 2 ≤ q) (w : ℝ) (hw : 0 < w) :
     ∃ u : ℕ, 2 ≤ u ∧ ∃ Cpoly ppoly : ℕ, 1 ≤ Cpoly ∧
       ∀ (ell m k : ℕ) (t T Dc Mc tau g xi : ℝ),
