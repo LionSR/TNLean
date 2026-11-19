@@ -5,7 +5,13 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Examples.GraphStateCutConverse
 
-/-! # Exact dimension of the graph-state open-region image -/
+/-! # Exact dimension of the graph-state open-region image
+
+The open-region map takes virtual labels on all crossing edges to physical amplitudes
+inside the region. Its image dimension counts one independent bit per occupied inside
+endpoint. The physical Schmidt rank concerns the bipartition after contraction with
+the complementary region.
+-/
 
 open scoped BigOperators
 namespace TNLean.PEPS.GraphStateCut
@@ -16,6 +22,7 @@ private noncomputable def row (t : Occupied G R → Fin 2) (u : Crossing G R →
   ∏ e, graphStateLeg G (inside G R e).1 e.1 (u e) (t ⟨_,e,rfl⟩)
 
 open scoped Classical in
+/-- Boundary rows indexed by spins on the occupied sites are orthonormal. -/
 theorem boundary_row_orthogonal (t s : Occupied G R → Fin 2) :
     ∑ u, row G R t u * star (row G R s u) = if t = s then 1 else 0 := by
   classical
@@ -37,6 +44,7 @@ theorem boundary_row_orthogonal (t s : Occupied G R → Fin 2) :
   · obtain ⟨⟨_,e,rfl⟩,hne⟩ := Function.ne_iff.mp h
     exact (Finset.prod_eq_zero (Finset.mem_univ e) (ite_eq_right hne)).trans (ite_eq_right h).symm
 
+/-- The conjugate boundary rows lift arbitrary amplitudes on occupied-site assignments. -/
 theorem boundaryPart_surjective : Function.Surjective (boundaryPart G R) := by
   classical
   intro y
@@ -63,6 +71,7 @@ private noncomputable def physicalPart :
   map_smul' _ _ := by ext; simp [mul_left_comm]
 
 open scoped Classical in
+/-- Each distinct inside endpoint of a crossing edge doubles the open-region image dimension. -/
 theorem finrank_range_openRegionMap :
     Module.finrank ℂ (LinearMap.range (openRegionMap (graphStatePEPS G) R)) =
       2 ^ Fintype.card (Occupied G R) := by
