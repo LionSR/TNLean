@@ -45,8 +45,8 @@ private theorem rectKronecker_mem_unitary (A : κ × Bool → Matrix (Fin d) (Fi
 /-- The nominal pair of a gate, with independent permutations of the two legs.
 Source context: the depth-two circuit truncation in arXiv:2405.00439,
 Section V, lines 2081–2087. -/
-def pairedBond (σ : Bool → Equiv.Perm κ) (k : κ) : Set (κ × Bool) :=
-  Set.range fun b ↦ (σ b k, b)
+def pairedBond (σ : Bool → Equiv.Perm κ) (k : κ) : Finset (κ × Bool) :=
+  Finset.univ.image fun b ↦ (σ b k, b)
 
 /-- The product gate with one-site factors `A false` and `A true` on its
 specified pair, extended by identities elsewhere. Source context:
@@ -56,11 +56,13 @@ noncomputable def pairedGate (σ : Bool → Equiv.Perm κ)
     Matrix (κ × Bool → Fin d) (κ × Bool → Fin d) ℂ :=
   rectKronecker fun s ↦ if σ s.2 k = s.1 then A s.2 else 1
 
-omit [Fintype κ] [DecidableEq κ] in
+omit [Fintype κ] in
 private theorem pairedBond_disjoint (σ : Bool → Equiv.Perm κ) {k l : κ} (hkl : k ≠ l) :
     Disjoint (pairedBond σ k) (pairedBond σ l) := by
-  rw [Set.disjoint_left]
-  rintro s ⟨b, hb⟩ ⟨b', hb'⟩
+  rw [Finset.disjoint_left]
+  intro s hs hs'
+  obtain ⟨b, _, hb⟩ := Finset.mem_image.mp hs
+  obtain ⟨b', _, hb'⟩ := Finset.mem_image.mp hs'
   have heq := hb.trans hb'.symm
   have hbb : b = b' := congrArg Prod.snd heq
   subst b'
@@ -68,10 +70,11 @@ private theorem pairedBond_disjoint (σ : Bool → Equiv.Perm κ) {k l : κ} (hk
 
 private theorem pairedGate_supported (σ : Bool → Equiv.Perm κ)
     (A : Bool → Matrix (Fin d) (Fin d) ℂ) (k : κ) :
-    pairedGate σ A k ∈ QuantumCircuit.supportedOperators d (pairedBond σ k) := by
+    pairedGate σ A k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (pairedBond σ k) := by
   apply QuantumCircuit.rectKronecker_mem_supportedOperators
   intro s hs
-  have hne : σ s.2 k ≠ s.1 := fun h ↦ hs ⟨s.2, Prod.ext h rfl⟩
+  have hne : σ s.2 k ≠ s.1 := fun h ↦
+    hs (Finset.mem_image.mpr ⟨s.2, Finset.mem_univ _, Prod.ext h rfl⟩)
   simp [hne]
 
 private theorem pairedGate_unitary (σ : Bool → Equiv.Perm κ)
@@ -106,7 +109,7 @@ private theorem pairedGate_list_prod (σ : Bool → Equiv.Perm κ)
 
 /-- The common two-matching bond geometry. The second component selects a
 circuit layer. Source context: arXiv:2405.00439, Section V, lines 2081–2087. -/
-def pairCircuitBond (σ : Bool → Bool → Equiv.Perm κ) (p : κ × Bool) : Set (κ × Bool) :=
+def pairCircuitBond (σ : Bool → Bool → Equiv.Perm κ) (p : κ × Bool) : Finset (κ × Bool) :=
   pairedBond (σ p.2) p.1
 
 /-- One actual layer of pair gates, retaining the cells in `S`.
@@ -168,14 +171,16 @@ Source context: arXiv:2405.00439, Section V, lines 2081–2087. -/
 def dressedCircuitMatchings (τ : Equiv.Perm κ) (color leg : Bool) : Equiv.Perm κ :=
   if color then if leg then Equiv.refl κ else τ else Equiv.refl κ
 
-omit [Fintype κ] [DecidableEq κ] in
+omit [Fintype κ] in
 private theorem pairedBond_subset_cells (σ : Bool → Equiv.Perm κ) (S : Finset κ)
-    (k : κ) : pairedBond σ k ⊆ {s : κ × Bool | s.1 ∈ S} ↔
+    (k : κ) : ↑(pairedBond σ k) ⊆ {s : κ × Bool | s.1 ∈ S} ↔
       σ false k ∈ S ∧ σ true k ∈ S := by
   constructor
   · intro h
-    exact ⟨h ⟨false, rfl⟩, h ⟨true, rfl⟩⟩
-  · rintro ⟨hf, ht⟩ _ ⟨b, rfl⟩
+    exact ⟨h (Finset.mem_image.mpr ⟨false, Finset.mem_univ _, rfl⟩),
+      h (Finset.mem_image.mpr ⟨true, Finset.mem_univ _, rfl⟩)⟩
+  · rintro ⟨hf, ht⟩ s hs
+    obtain ⟨b, _, rfl⟩ := Finset.mem_image.mp hs
     cases b
     · exact hf
     · exact ht
@@ -189,7 +194,7 @@ theorem pairCircuitLayer_first_retained (τ : Equiv.Perm κ)
     (p : κ × Bool) :
     p ∈ (pairCircuitLayer (dressedCircuitMatchings τ) false A hA S).bonds ↔
       p ∈ (pairCircuitLayer (dressedCircuitMatchings τ) false A hA Finset.univ).bonds ∧
-        pairCircuitBond (dressedCircuitMatchings τ) p ⊆ {s | s.1 ∈ S} := by
+        ↑(pairCircuitBond (dressedCircuitMatchings τ) p) ⊆ {s : κ × Bool | s.1 ∈ S} := by
   rcases p with ⟨k, b⟩
   cases b <;> simp [pairCircuitLayer, pairCircuitBond, pairedBond_subset_cells,
     dressedCircuitMatchings]
@@ -205,7 +210,7 @@ theorem pairCircuitLayer_second_retained (τ : Equiv.Perm κ)
     p ∈ (pairCircuitLayer (dressedCircuitMatchings τ) true A hA
       (S.filter fun k ↦ τ k ∈ S)).bonds ↔
       p ∈ (pairCircuitLayer (dressedCircuitMatchings τ) true A hA Finset.univ).bonds ∧
-        pairCircuitBond (dressedCircuitMatchings τ) p ⊆ {s | s.1 ∈ S} := by
+        ↑(pairCircuitBond (dressedCircuitMatchings τ) p) ⊆ {s : κ × Bool | s.1 ∈ S} := by
   rcases p with ⟨k, b⟩
   cases b <;> simp [pairCircuitLayer, pairCircuitBond, pairedBond_subset_cells,
     dressedCircuitMatchings, and_comm]
