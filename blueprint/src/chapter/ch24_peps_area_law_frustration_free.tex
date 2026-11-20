@@ -123,7 +123,7 @@ localization errors of the amplification stage.
 
 \begin{lemma}[Greedy colouring]
     \label{thm:frustration_free_area_law_greedy_colouring}
-    \lean{SimpleGraph.exists_colouring_list_of_forall_degree_le, SimpleGraph.colorable_succ_of_forall_degree_le}
+    \lean{SimpleGraph.exists_coloring_list_of_forall_degree_le, SimpleGraph.colorable_succ_of_forall_degree_le}
     \leanok
     A finite graph in which every vertex has at most $d$ neighbours has a
     proper colouring with $d+1$ colours.
@@ -136,7 +136,7 @@ localization errors of the amplification stage.
 
 \begin{lemma}[Colour layers of the supports]
     \label{thm:frustration_free_area_law_colour_layers}
-    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.overlapDegreeBound, TNLean.PEPS.AreaLaw.FrustrationFree.degree_overlapGraph_le, TNLean.PEPS.AreaLaw.FrustrationFree.exists_overlapColouring, TNLean.PEPS.AreaLaw.FrustrationFree.sweepWord, TNLean.PEPS.AreaLaw.FrustrationFree.mem_sweepWord, TNLean.PEPS.AreaLaw.FrustrationFree.nodup_sweepWord, TNLean.PEPS.AreaLaw.FrustrationFree.pairwise_disjoint_colourLayer}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.overlapDegreeBound, TNLean.PEPS.AreaLaw.FrustrationFree.degree_overlapGraph_le, TNLean.PEPS.AreaLaw.FrustrationFree.exists_overlapColoring, TNLean.PEPS.AreaLaw.FrustrationFree.sweepWord, TNLean.PEPS.AreaLaw.FrustrationFree.mem_sweepWord, TNLean.PEPS.AreaLaw.FrustrationFree.nodup_sweepWord, TNLean.PEPS.AreaLaw.FrustrationFree.pairwise_disjoint_colorLayer}
     \leanok
     \uses{thm:frustration_free_area_law_greedy_colouring,def:area_law_hamiltonian}
     On a finite domain of the square lattice, a support of graph diameter at
@@ -177,7 +177,7 @@ localization errors of the amplification stage.
 
 \begin{lemma}[The light cone of $t$ sweeps]
     \label{thm:frustration_free_area_law_sweep_light_cone}
-    \lean{TNLean.Lattice.mem_graphNeighborhood, TNLean.Lattice.subset_graphNeighborhood, TNLean.Lattice.graphNeighborhood_mono, TNLean.Lattice.graphNeighborhood_graphNeighborhood_subset, TNLean.Lattice.subset_graphNeighborhood_of_isAdmissibleSupport, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_colourLayer_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_flatten_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_sweepWord_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_sweepWord_pow_subset}
+    \lean{TNLean.Lattice.mem_graphNeighborhood, TNLean.Lattice.subset_graphNeighborhood, TNLean.Lattice.graphNeighborhood_mono, TNLean.Lattice.graphNeighborhood_graphNeighborhood_subset, TNLean.Lattice.subset_graphNeighborhood_of_isAdmissibleSupport, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_colorLayer_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_flatten_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_sweepWord_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_sweepWord_pow_subset}
     \leanok
     \uses{thm:frustration_free_area_law_colour_layers,thm:frustration_free_area_law_light_cone}
     For the word of $t$ sweeps of the supports, colour by colour, the final
