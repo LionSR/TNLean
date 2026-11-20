@@ -1,0 +1,62 @@
+\chapter{The frustration-free area law by an exact sweep}
+\label{ch:peps_area_law_frustration_free}
+
+This chapter follows the reading note \cite{TNLean2026FrustrationFreeNote}, which
+specializes the two-dimensional area law \cite[Theorem~1.1]{OpenAI2026AreaLaw}
+to frustration-free Hamiltonians of finite range. Each local term annihilates
+the ground vector, so a product of local filters suppresses the excited part of
+any vector while a local perturbation of the ground vector spreads by an exactly
+bounded distance. This replaces the time-filtered constraints and the
+localization errors of the amplification stage.
+
+\section{Contraction of one sweep}
+\label{sec:ff_area_law_sweep}
+
+\begin{lemma}[One sweep of projections]
+    \label{thm:ff_area_law_sweep_contraction}
+    \lean{ContinuousLinearMap.complementProd_apply_of_forall_apply_eq_zero, ContinuousLinearMap.inner_complementProd_of_forall_apply_eq_zero, ContinuousLinearMap.norm_sq_complementProd_le_of_gap, ContinuousLinearMap.norm_pow_complementProd_le_of_gap}
+    \leanok
+    Let $\Pi_1,\dots,\Pi_m$ be orthogonal projections on a Hilbert space, each
+    failing to commute with at most $d$ of the others, and let $\Omega$ be a
+    vector with $\Pi_i\Omega=0$ for all $i$. Suppose that $\gamma\ge0$ and
+    $\langle v,\sum_i\Pi_iv\rangle\ge\gamma\|v\|^2$ for every $v\perp\Omega$.
+    Put $D=(I-\Pi_m)\cdots(I-\Pi_1)$. Then $D\Omega=\Omega$,
+    $\langle\Omega,Dv\rangle=\langle\Omega,v\rangle$ for every $v$, and for
+    $v\perp\Omega$
+    \[
+        \bigl((d+1)^2+\gamma\bigr)\|Dv\|^2\le(d+1)^2\|v\|^2,\qquad
+        \|D^tv\|\le\theta^t\|v\|,\qquad
+        \theta=\bigl(1+\gamma/(d+1)^2\bigr)^{-1/2}.
+    \]
+    This is the contraction \cite[eq.~(sweep)]{TNLean2026FrustrationFreeNote}
+    for filters that are projections; the note states it for positive
+    contractions $k_i$ with the factors $(I-k_i)^{1/2}$. The restriction is
+    recorded in \cite{gap:ff2d_sweep_range_projections}.
+\end{lemma}
+
+\begin{proof}\leanok
+    The detectability lemma \cite{AnshuAradVidick2016} gives
+    $\langle Dv,\sum_i\Pi_iDv\rangle\le d^2(\|v\|^2-\|Dv\|^2)$. Each factor
+    $I-\Pi_i$ is self-adjoint and fixes $\Omega$, so $Dv\perp\Omega$ and the
+    left side is at least $\gamma\|Dv\|^2$. Adding $(2d+1)\|Dv\|^2\le(2d+1)\|v\|^2$
+    gives the first bound. Since $D$ preserves the orthogonal complement of
+    $\Omega$, the second bound follows by induction on $t$.
+\end{proof}
+
+\begin{lemma}[Range projections of positive local terms]
+    \label{thm:ff_area_law_range_projection}
+    \lean{Matrix.rangeProj, Matrix.isStarProjection_rangeProj, Matrix.rangeProj_eq_cfc_inv_mul, Matrix.rangeProj_mulVec_eq_zero, Matrix.le_smul_rangeProj, ManyBody.rangeProj_mem_supportedOperators}
+    \leanok
+    For a Hermitian matrix $A$, let $\Pi_A=f(A)$ with $f(0)=0$ and $f(x)=1$ for
+    $x\ne0$. Then $\Pi_A$ is an orthogonal projection, $\Pi_A=A^{+}A$ with the
+    pseudo-inverse $A^{+}$, so $\Pi_A v=0$ whenever $Av=0$. If $0\le A\le J$,
+    then $A\le J\Pi_A$. If $A$ acts on a set of sites $D$, so does $\Pi_A$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The first three claims are identities of functions on the spectrum of $A$:
+    $f^2=f$, $f(x)=x^{-1}x$ with $0^{-1}=0$, and $x\le Jf(x)$ for
+    $0\le x\le J$. An operator acts on $D$ exactly when it commutes with every
+    operator acting on the complement of $D$, and functions of $A$ inherit
+    this commutation.
+\end{proof}
