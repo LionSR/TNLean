@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.OrderedSpectralSpan
+import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import TNLean.MPS.AreaLaw.AKLV.TwoBlockTruncation
 
 /-!

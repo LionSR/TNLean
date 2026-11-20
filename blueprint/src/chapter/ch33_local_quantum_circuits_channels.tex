@@ -50,8 +50,7 @@ of a local circuit that may add product ancillas and discard them
     \label{lem:qc_channel_light_cone}
     \uses{def:qc_local_channel_circuit, def:qc_light_cone_geometry,
         lem:qc_light_cone_geometries}
-    \lean{QuantumCircuit.IsProtocol.traceAdjointMap_mem_supportedOperators_ringBall,
-        QuantumCircuit.Circuit.dual_mem_supportedOperators_lightCone,
+    \lean{QuantumCircuit.Circuit.dual_mem_supportedOperators_lightCone,
         QuantumCircuit.BondChannelLayer.dual_mem_supportedOperators}
     \leanok
     If $\Phi$ is a local channel circuit of depth $T$ and $Z\in\mathcal A_X$, then $\Phi^\dagger(Z)\in\mathcal A_{\mathcal L_T(X)}$ (on the ring, within ring distance $T$ of $X$).
@@ -64,9 +63,7 @@ of a local circuit that may add product ancillas and discard them
 \begin{lemma}[No connected correlations beyond the light cone of channels]
     \label{lem:qc_channel_light_cone_correlations}
     \uses{lem:qc_channel_light_cone, lem:qc_local_channel_circuit_properties}
-    \lean{QuantumCircuit.IsConversion.trace_mul_mul_eq_of_isRingSeparated,
-        QuantumCircuit.IsProtocol.traceAdjointMap_mul_of_disjoint_ringBall,
-        QuantumCircuit.Circuit.dual_mul_of_disjoint_lightCone,
+    \lean{QuantumCircuit.Circuit.dual_mul_of_disjoint_lightCone,
         QuantumCircuit.BondChannelLayer.dual_mul,
         QuantumCircuit.trace_rectKronecker_mul_mul}
     \leanok

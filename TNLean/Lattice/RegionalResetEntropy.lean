@@ -57,7 +57,7 @@ theorem mutualInformation_cores_le_of_reset_unitary
     (Matrix.norm_toLp_mulVec_of_unitary hF ψ).trans hψn
   let Pe := sumArrowSitePair (ι) q
   let U' := Matrix.reindex Pe.symm Pe.symm U
-  let Ψ := FiniteProduct.sumSitesProduct Ω Ω
+  let Ψ := FiniteProduct.sumSitesProduct (X := fun _ : ι ⊕ ι ↦ Fin q) Ω Ω
   let Φ := FiniteProduct.relabelSites (replicaSwap D) Ψ
   have hΨ : Ψ = WithLp.toLp 2 (ψ ∘ Pe) := by
     apply WithLp.ofLp_injective 2
@@ -95,9 +95,10 @@ theorem mutualInformation_cores_le_of_reset_unitary
     · simp at hv'
   have hprod := mutualInformation_relabelSites_replicaSwap_eq_zero hΩ hR₀
     hC₀
-  have hent := FiniteProduct.mutualInformation_le_of_supported_unitary _
-    hΨn hΦn hXJ hSsum hU's hU'u hprod
-  rw [FiniteProduct.mutualInformation_sumSitesProduct_inl hΩ hΩ] at hent
+  have hent := FiniteProduct.mutualInformation_le_of_supported_unitary
+    (fun _ : ι ⊕ ι ↦ Fin q) (φ := Ψ) (η := Φ) hΨn hΦn hXJ hSsum hU's hU'u hprod
+  rw [FiniteProduct.mutualInformation_sumSitesProduct_inl (X := fun _ : ι ⊕ ι ↦ Fin q)
+    (f := Ω) (g := Ω) hΩ hΩ] at hent
   have hcard : Fintype.card (FiniteProduct.Configuration
       (fun _ : ι ⊕ ι ↦ Fin q) (R₀.disjSum ∅)) = q ^ R₀.card := by
     simp only [FiniteProduct.Configuration, Fintype.card_fun, Fintype.card_fin,
