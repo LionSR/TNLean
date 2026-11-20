@@ -41,6 +41,10 @@ Module `FrustrationFree/Model.lean`.
   `IsFrustrationFreeGapped.groundSpace_eq : groundSpace h.hamiltonian 0 = span {Ω}`, from
   `ManyBody.isGapped_and_groundSpace_eq_span_iff`.
 * `IsFrustrationFreeGapped.isHermitian`, `.norm_term_le : ‖h_X‖ ≤ J`.
+* The model is `IsFrustrationFree h.term J Δ Ω` (`FrustrationFree/Family.lean`): the conditions
+  on a family of terms without their supports, shared with the positive quasi-local constraints
+  of Proposition 4.3. The gap, the norm bound and the range-projection estimates are proved for
+  the family.
 * `FrustrationFreeAreaLaw : Prop`: `eq:goal` for every `q ≥ 1`, `R`, `J, Δ > 0`.
 * `frustrationFreeAreaLaw_of_uniformAreaLaw : FrustrationFreeAreaLaw`, a corollary of the
   general `uniformAreaLaw`. This checks the statement. It is not the short route: its proof

@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.FrustrationFree.Amplification
 import TNLean.PEPS.AreaLaw.FrustrationFree.AreaLaw
+import TNLean.PEPS.AreaLaw.FrustrationFree.Family
 import TNLean.PEPS.AreaLaw.FrustrationFree.LightCone
 import TNLean.PEPS.AreaLaw.FrustrationFree.Model
 import TNLean.PEPS.AreaLaw.FrustrationFree.PlanarSweep

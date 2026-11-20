@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.TheoremStatements
-import TNLean.PEPS.AreaLaw.FrustrationFree.RangeProjection
+import TNLean.PEPS.AreaLaw.FrustrationFree.Family
 
 /-!
 # Frustration-free gapped Hamiltonians on planar domains
@@ -22,16 +22,14 @@ of the special case, assembled in later modules of this directory.
 
 ## Main definitions
 
-* `TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped`: the model `eq:model`.
+* `TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped`: the model `eq:model`, the
+  frustration-free family (`IsFrustrationFree`) of the terms of a finite-range interaction.
 * `TNLean.PEPS.AreaLaw.FrustrationFree.FrustrationFreeAreaLaw`: the goal `eq:goal`.
 
 ## Main statements
 
 * `IsFrustrationFreeGapped.isGapped`, `IsFrustrationFreeGapped.groundSpace_eq`: the model has
   gap `Δ` at energy zero and ground space `span {Ω}`.
-* `IsFrustrationFreeGapped.norm_term_le`: `‖h_X‖ ≤ J`.
-* `IsFrustrationFreeGapped.smul_sub_le_sum_supportProj`: the range projections of the terms keep
-  the gap, `(Δ/J) (1 - P) ≤ ∑_X Π_{h_X}`.
 * `UniformAreaLaw.frustrationFreeAreaLaw`: the general area law implies the goal.
 
 ## References
@@ -53,21 +51,12 @@ namespace TNLean.PEPS.AreaLaw.FrustrationFree
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ}
 
 /-- **The frustration-free model** (`eq:model` of the frustration-free area-law note,
-`docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`, "Setting"): every term
-satisfies `0 ≤ h_X ≤ J` and annihilates the unit vector `Ω`, and the Hamiltonian satisfies
-`H ≥ Δ (1 - |Ω⟩⟨Ω|)`. -/
-structure IsFrustrationFreeGapped (h : PlaneInteraction Λ q R) (J Δ : ℝ) (Ω : StateSpace Λ q) :
-    Prop where
-  /-- Every term is positive semidefinite. -/
-  posSemidef : ∀ X, (h.term X).PosSemidef
-  /-- Every term is at most `J`. -/
-  le_bound : ∀ X, h.term X ≤ J • (1 : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-  /-- Every term annihilates `Ω`. -/
-  mulVec_eq_zero : ∀ X, h.term X *ᵥ WithLp.ofLp Ω = 0
-  /-- `Ω` is a unit vector. -/
-  norm_eq_one : ‖Ω‖ = 1
-  /-- The gap inequality `H ≥ Δ (1 - |Ω⟩⟨Ω|)`. -/
-  gap : (Δ : ℂ) • (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤ h.hamiltonian
+`docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`, "Setting"): the terms of a
+finite-range interaction form a frustration-free family, `0 ≤ h_X ≤ J`, `h_X Ω = 0` for the unit
+vector `Ω`, and `H ≥ Δ (1 - |Ω⟩⟨Ω|)`. -/
+abbrev IsFrustrationFreeGapped (h : PlaneInteraction Λ q R) (J Δ : ℝ) (Ω : StateSpace Λ q) :
+    Prop :=
+  IsFrustrationFree h.term J Δ Ω
 
 /-- **The frustration-free area law** (`eq:goal` of the frustration-free area-law note): for
 `q ≥ 1`, `R`, and `J, Δ > 0` there is a constant `C`, chosen before the domain, the Hamiltonian
@@ -83,62 +72,20 @@ namespace IsFrustrationFreeGapped
 
 variable {h : PlaneInteraction Λ q R} {J Δ : ℝ} {Ω : StateSpace Λ q}
 
-/-- The terms are Hermitian. -/
-theorem isHermitian (hff : IsFrustrationFreeGapped h J Δ Ω) (X) : (h.term X).IsHermitian :=
-  (hff.posSemidef X).isHermitian
-
 /-- The Hamiltonian annihilates `Ω`. -/
 theorem hamiltonian_mulVec_eq_zero (hff : IsFrustrationFreeGapped h J Δ Ω) :
-    h.hamiltonian *ᵥ WithLp.ofLp Ω = 0 := by
-  rw [ManyBody.Interaction.hamiltonian, sum_mulVec]
-  exact Finset.sum_eq_zero fun X _ ↦ hff.mulVec_eq_zero X
-
-/-- The model is gapped at energy zero with gap `Δ` and has the ground space `span {Ω}`, in the
-form of `ManyBody.isGapped_and_groundSpace_eq_span_iff`. -/
-theorem isGapped_and_groundSpace_eq (hff : IsFrustrationFreeGapped h J Δ Ω) (hΔ : 0 < Δ) :
-    IsGapped h.hamiltonian 0 Δ ∧ groundSpace h.hamiltonian 0 = Submodule.span ℂ {Ω} := by
-  have hiff := (ManyBody.isGapped_and_groundSpace_eq_span_iff (H := h.hamiltonian) (E₀ := 0)
-    hΔ Ω).mp ⟨hff.norm_eq_one, ?_, ?_⟩
-  · exact ⟨hiff.2.2.1, hiff.2.2.2⟩
-  · rw [Complex.ofReal_zero, zero_smul]
-    change WithLp.toLp 2 (h.hamiltonian *ᵥ WithLp.ofLp Ω) = 0
-    rw [hff.hamiltonian_mulVec_eq_zero]
-    rfl
-  · have := Matrix.le_iff.mp hff.gap
-    simpa using this
+    h.hamiltonian *ᵥ WithLp.ofLp Ω = 0 :=
+  IsFrustrationFree.sum_mulVec_eq_zero hff
 
 /-- The model is gapped at energy zero with gap `Δ`. -/
 theorem isGapped (hff : IsFrustrationFreeGapped h J Δ Ω) (hΔ : 0 < Δ) :
     IsGapped h.hamiltonian 0 Δ :=
-  (hff.isGapped_and_groundSpace_eq hΔ).1
+  IsFrustrationFree.isGapped hff hΔ
 
 /-- The ground space of the model is the line through `Ω`. -/
 theorem groundSpace_eq (hff : IsFrustrationFreeGapped h J Δ Ω) (hΔ : 0 < Δ) :
     groundSpace h.hamiltonian 0 = Submodule.span ℂ {Ω} :=
-  (hff.isGapped_and_groundSpace_eq hΔ).2
-
-/-- Every term has operator norm at most `J`. -/
-theorem norm_term_le (hff : IsFrustrationFreeGapped h J Δ Ω) (hJ : 0 ≤ J) (X) :
-    ‖h.term X‖ ≤ J :=
-  (CStarAlgebra.norm_le_iff_le_algebraMap _ hJ (hff.posSemidef X).nonneg).mpr
-    (by simpa [Algebra.algebraMap_eq_smul_one] using hff.le_bound X)
-
-/-- **The range projections keep the gap.** With `Π_X` the range projection of `h_X`,
-`(Δ / J) (1 - |Ω⟩⟨Ω|) ≤ ∑_X Π_X`. Source:
-`docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`, "Contraction in one sweep",
-where `∑_i k_i ≥ g (1 - P)` with `g = Δ / J`; here `Π_X ≥ h_X / J`. -/
-theorem smul_sub_le_sum_supportProj (hff : IsFrustrationFreeGapped h J Δ Ω) (hJ : 0 < J) :
-    ((Δ / J : ℝ) : ℂ) • (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ≤
-      ∑ X, (hff.posSemidef X).supportProj := by
-  have hsum : h.hamiltonian ≤ J • ∑ X, (hff.posSemidef X).supportProj := by
-    rw [ManyBody.Interaction.hamiltonian, Finset.smul_sum]
-    exact Finset.sum_le_sum fun X _ ↦ (hff.posSemidef X).le_smul_supportProj (hff.le_bound X)
-  have h1 := hff.gap.trans hsum
-  have hJ' : (0 : ℝ) < J⁻¹ := inv_pos.mpr hJ
-  have h2 := smul_le_smul_of_nonneg_left h1 hJ'.le
-  rw [smul_smul, inv_mul_cancel₀ hJ.ne', one_smul] at h2
-  convert h2 using 1
-  rw [div_eq_inv_mul, Complex.ofReal_mul, mul_smul, Complex.coe_smul]
+  IsFrustrationFree.groundSpace_eq hff hΔ
 
 end IsFrustrationFreeGapped
 

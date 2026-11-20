@@ -63,15 +63,53 @@ localization errors of the amplification stage.
 \section{The model and the statement}
 \label{sec:frustration_free_area_law_model}
 
+\begin{definition}[Frustration-free families]
+    \label{def:frustration_free_family}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFree}
+    \leanok
+    A finite family of matrices $(k_i)$ on one space is frustration-free with
+    strength $J$ and gap $\Delta$ at a vector $\Omega$ when
+    \[
+        0\le k_i\le J,\qquad k_i\Omega=0,\qquad\|\Omega\|=1,\qquad
+        \sum_ik_i\ge\Delta\bigl(I-|\Omega\rangle\langle\Omega|\bigr).
+    \]
+    No supports enter. The terms of the model below form such a family, and so
+    do the positive quasi-local constraints of
+    \cite[Proposition~4.3]{OpenAI2026AreaLaw}, with strength $1$.
+\end{definition}
+
+\begin{lemma}[Frustration-free families are gapped]
+    \label{thm:frustration_free_family_gapped}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFree.isHermitian, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFree.sum_mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFree.isGapped_and_groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFree.isGapped, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFree.groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFree.norm_term_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFree.smul_sub_le_sum_supportProj, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFree.termProj, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFree.termProj_mulVec, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFree.factor_mulVec, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFree.conjTranspose_factor_mulVec, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFree.smul_sub_le_sum_termProj, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFree.mul_norm_sq_le_re_inner_sum_termProj}
+    \leanok
+    \uses{def:frustration_free_family,thm:frustration_free_area_law_range_projection}
+    For a frustration-free family, every term is Hermitian and
+    $\sum_ik_i\Omega=0$. If $\Delta>0$, every other eigenvalue of $\sum_ik_i$
+    is at least $\Delta$ and the ground space is the line through $\Omega$. If
+    $J\ge0$, then $\|k_i\|\le J$. If $J>0$, the range projections $\Pi_i$ of
+    the terms annihilate $\Omega$ and satisfy
+    $\sum_i\Pi_i\ge(\Delta/J)(I-|\Omega\rangle\langle\Omega|)$, so
+    $\langle v,\sum_i\Pi_iv\rangle\ge(\Delta/J)\|v\|^2$ for $v\perp\Omega$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Summing $k_i\Omega=0$ gives $\sum_ik_i\Omega=0$, and the gap inequality then
+    identifies the ground space and the gap. A positive operator below $J$
+    has norm at most $J$. Finally $\sum_ik_i\le J\sum_i\Pi_i$ termwise by
+    Lemma~\ref{thm:frustration_free_area_law_range_projection}, and
+    $|\Omega\rangle\langle\Omega|$ vanishes on $v\perp\Omega$.
+\end{proof}
+
 \begin{definition}[Frustration-free gapped Hamiltonians]
     \label{def:frustration_free_area_law_model}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped}
     \leanok
-    \uses{def:area_law_domain,def:area_law_hamiltonian}
+    \uses{def:area_law_domain,def:area_law_hamiltonian,def:frustration_free_family}
     Let $\Lambda\subset\mathbb Z^2$ be finite with local dimension $q$, and let
     $H=\sum_Xh_X$ have one term for each support $X$ of induced graph
     diameter at most $R$. For $J,\Delta$ and a vector $\Omega$, the
-    Hamiltonian is frustration-free and gapped when
+    Hamiltonian is frustration-free and gapped when its terms form a
+    frustration-free family,
     \[
         0\le h_X\le J,\qquad h_X\Omega=0,\qquad\|\Omega\|=1,\qquad
         H\ge\Delta\bigl(I-|\Omega\rangle\langle\Omega|\bigr).
@@ -81,29 +119,24 @@ localization errors of the amplification stage.
 
 \begin{lemma}[The model is gapped]
     \label{thm:frustration_free_area_law_model_gapped}
-    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isHermitian, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.hamiltonian_mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isGapped_and_groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isGapped, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_term_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.smul_sub_le_sum_supportProj}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.hamiltonian_mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isGapped, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.groundSpace_eq}
     \leanok
-    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_range_projection}
-    In the model of Definition~\ref{def:frustration_free_area_law_model}, every term is
-    Hermitian and $H\Omega=0$. If $\Delta>0$, every other eigenvalue of $H$ is
-    at least $\Delta$ and the ground space is the line through $\Omega$. If
-    $J\ge0$, then $\|h_X\|\le J$. If $J>0$, the range projections $\Pi_X$ of
-    the terms satisfy
-    $\sum_X\Pi_X\ge(\Delta/J)(I-|\Omega\rangle\langle\Omega|)$.
+    \uses{def:frustration_free_area_law_model,thm:frustration_free_family_gapped}
+    In the model of Definition~\ref{def:frustration_free_area_law_model},
+    $H\Omega=0$, and if $\Delta>0$, every other eigenvalue of $H$ is at least
+    $\Delta$ and the ground space is the line through $\Omega$.
 \end{lemma}
 
 \begin{proof}\leanok
-    Summing $h_X\Omega=0$ gives $H\Omega=0$, and the gap inequality then
-    identifies the ground space and the gap. A positive operator below $J$
-    has norm at most $J$. Finally $H\le J\sum_X\Pi_X$ termwise by
-    Lemma~\ref{thm:frustration_free_area_law_range_projection}.
+    The Hamiltonian is the sum of the terms, so this is
+    Lemma~\ref{thm:frustration_free_family_gapped}.
 \end{proof}
 
 \begin{theorem}[The frustration-free area law]
     \label{thm:frustration_free_area_law}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.FrustrationFreeAreaLaw, TNLean.PEPS.AreaLaw.UniformAreaLaw.frustrationFreeAreaLaw, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAreaLaw_of_uniformAreaLaw}
     \leanok
-    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_model_gapped,thm:openai_uniform_area_law}
+    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_model_gapped,thm:frustration_free_family_gapped,thm:openai_uniform_area_law}
     For $q\ge1$, $R\ge0$ and $J,\Delta>0$ there is a constant
     $C=C(q,R,J,\Delta)$ such that every instance of
     Definition~\ref{def:frustration_free_area_law_model} on every finite domain satisfies
@@ -192,9 +225,9 @@ localization errors of the amplification stage.
 
 \begin{lemma}[The sweep of a frustration-free Hamiltonian]
     \label{thm:frustration_free_area_law_sweep}
-    \lean{ContinuousLinearMap.complementProd_congr, TNLean.PEPS.AreaLaw.FrustrationFree.wordProjections, TNLean.PEPS.AreaLaw.FrustrationFree.sum_range_option_elim, TNLean.PEPS.AreaLaw.FrustrationFree.toEuclideanCLM_sweepProd, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_nonneg, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_lt_one, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_pos, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.termProj, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp_mulVec_self, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp_pow_mulVec_self, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.mul_norm_sq_le_re_inner_sum_termProj, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_sweepOp_pow_apply_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.exists_sweepOp_pow_lightCone}
+    \lean{ContinuousLinearMap.complementProd_congr, TNLean.PEPS.AreaLaw.FrustrationFree.wordProjections, TNLean.PEPS.AreaLaw.FrustrationFree.sum_range_option_elim, TNLean.PEPS.AreaLaw.FrustrationFree.toEuclideanCLM_sweepProd, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_nonneg, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_lt_one, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_pos, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp_mulVec_self, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp_pow_mulVec_self, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_sweepOp_pow_apply_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.exists_sweepOp_pow_lightCone}
     \leanok
-    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_model_gapped,thm:frustration_free_area_law_sweep_contraction,thm:frustration_free_area_law_range_projection,thm:frustration_free_area_law_sweep_light_cone}
+    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_model_gapped,thm:frustration_free_family_gapped,thm:frustration_free_area_law_sweep_contraction,thm:frustration_free_area_law_range_projection,thm:frustration_free_area_law_sweep_light_cone}
     In the model of Definition~\ref{def:frustration_free_area_law_model} with $J,\Delta>0$,
     let $D=\prod_X(I-\Pi_X)$ be the product over the supports, colour by
     colour, of the complements of the range projections of the terms. Then

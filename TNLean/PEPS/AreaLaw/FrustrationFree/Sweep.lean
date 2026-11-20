@@ -137,11 +137,6 @@ namespace IsFrustrationFreeGapped
 
 variable (hff : IsFrustrationFreeGapped h J Δ Ω)
 
-/-- The range projection `Π_X` of the term `h_X`. -/
-noncomputable def termProj (X : AdmissibleSupport Λ R) :
-    Matrix (Configuration Λ q) (Configuration Λ q) ℂ :=
-  (hff.isHermitian X).supportProj
-
 /-- The sweep `D = ∏_X (1 - Π_X)`, the supports taken colour by colour. -/
 noncomputable def sweepOp (c : SupportColouring Λ R) :
     Matrix (Configuration Λ q) (Configuration Λ q) ℂ :=
@@ -151,25 +146,9 @@ theorem termProj_mem (X : AdmissibleSupport Λ R) :
     hff.termProj X ∈ supportedOperators (fun _ : Site Λ ↦ Fin q) X.1 :=
   supportProj_mem_supportedOperators (hff.isHermitian X) (h.mem X)
 
-theorem termProj_mulVec (X : AdmissibleSupport Λ R) :
-    hff.termProj X *ᵥ WithLp.ofLp Ω = 0 :=
-  (hff.isHermitian X).supportProj_mulVec_eq_zero_of_mulVec_eq_zero _ (hff.mulVec_eq_zero X)
-
 theorem factor_mem (X : AdmissibleSupport Λ R) :
     1 - hff.termProj X ∈ supportedOperators (fun _ : Site Λ ↦ Fin q) X.1 :=
   sub_mem (one_mem _) (hff.termProj_mem X)
-
-theorem factor_mulVec (X : AdmissibleSupport Λ R) :
-    (1 - hff.termProj X) *ᵥ WithLp.ofLp Ω = WithLp.ofLp Ω := by
-  have h0 := hff.termProj_mulVec X
-  unfold termProj at h0 ⊢
-  rw [sub_mulVec, one_mulVec, h0, sub_zero]
-
-theorem conjTranspose_factor_mulVec (X : AdmissibleSupport Λ R) :
-    (1 - hff.termProj X)ᴴ *ᵥ WithLp.ofLp Ω = WithLp.ofLp Ω := by
-  have h0 := hff.factor_mulVec X
-  unfold termProj at h0 ⊢
-  rw [conjTranspose_sub, conjTranspose_one, (hff.isHermitian X).supportProj_isHermitian.eq, h0]
 
 /-- The sweep fixes `Ω`. -/
 theorem sweepOp_mulVec_self
@@ -191,29 +170,6 @@ theorem sweepOp_pow_mulVec_self
   induction t with
   | zero => simp
   | succ t ih => rw [pow_succ, ← mulVec_mulVec, hff.sweepOp_mulVec_self, ih]
-
-/-- The quadratic form of the range projections dominates `(Δ / J) ‖v‖²` on `Ω^⊥`. -/
-theorem mul_norm_sq_le_re_inner_sum_termProj (hJ : 0 < J) {v : StateSpace Λ q}
-    (hv : ⟪Ω, v⟫_ℂ = 0) :
-    Δ / J * ‖v‖ ^ 2 ≤
-      RCLike.re ⟪v, clm (∑ X, hff.termProj X) v⟫_ℂ := by
-  have hle := Matrix.le_iff.mp (hff.smul_sub_le_sum_supportProj hJ)
-  have h0 := (isPositive_toEuclideanLin_iff.mpr hle).re_inner_nonneg_right v
-  have hP : toEuclideanLin (vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) v = 0 := by
-    have : star (WithLp.ofLp Ω) ⬝ᵥ WithLp.ofLp v = 0 := by
-      rw [← hv, EuclideanSpace.inner_eq_star_dotProduct, dotProduct_comm]
-    ext c
-    simp [toEuclideanLin, vecMulVec_mulVec, this]
-  rw [map_sub, LinearMap.sub_apply, map_smul, LinearMap.smul_apply, map_sub,
-    LinearMap.sub_apply, hP, sub_zero, inner_sub_right, inner_smul_right] at h0
-  have h1 : toEuclideanLin (1 : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) v = v := by
-    simp
-  rw [h1, inner_self_eq_norm_sq_to_K, map_sub, sub_nonneg] at h0
-  refine le_of_eq_of_le ?_ h0
-  simp only [RCLike.re_to_complex]
-  norm_cast
-  rw [Complex.re_ofReal_mul]
-  rfl
 
 open scoped Classical in
 /-- **One sweep contracts `Ω^⊥`** (`eq:sweep` of the frustration-free area-law note): for every
