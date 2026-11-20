@@ -84,11 +84,12 @@ localization errors of the amplification stage.
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isHermitian, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.hamiltonian_mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isGapped_and_groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isGapped, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_term_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.smul_sub_le_sum_supportProj}
     \leanok
     \uses{def:ff_area_law_model,thm:ff_area_law_range_projection}
-    In the model of Definition~\ref{def:ff_area_law_model} with $\Delta>0$,
-    every term is Hermitian with $\|h_X\|\le J$, $H\Omega=0$, every other
-    eigenvalue of $H$ is at least $\Delta$, and the ground space is the line
-    through $\Omega$. If $J>0$, the range projections $\Pi_X$ of the terms
-    satisfy $\sum_X\Pi_X\ge(\Delta/J)(I-|\Omega\rangle\langle\Omega|)$.
+    In the model of Definition~\ref{def:ff_area_law_model}, every term is
+    Hermitian and $H\Omega=0$. If $\Delta>0$, every other eigenvalue of $H$ is
+    at least $\Delta$ and the ground space is the line through $\Omega$. If
+    $J\ge0$, then $\|h_X\|\le J$. If $J>0$, the range projections $\Pi_X$ of
+    the terms satisfy
+    $\sum_X\Pi_X\ge(\Delta/J)(I-|\Omega\rangle\langle\Omega|)$.
 \end{lemma}
 
 \begin{proof}\leanok
