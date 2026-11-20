@@ -642,6 +642,75 @@ Definition~\ref{def:mpug_group_representation}.
     cocycle conditions agree.
 \end{proof}
 
+\begin{definition}[Third cohomology with a coefficient action]
+    \label{def:mpug_h3_coefficient_action}
+    \lean{groupCohomology.cochainsIso₄,
+        groupCohomology.d₃₄,
+        groupCohomology.comp_d₃₄_eq,
+        groupCohomology.eq_d₃₄_comp_inv,
+        groupCohomology.d₂₃_comp_d₃₄,
+        groupCohomology.shortComplexH3,
+        groupCohomology.cocycles₃,
+        groupCohomology.cocycles₃.coe_mk,
+        groupCohomology.cocycles₃.val_eq_coe,
+        groupCohomology.cocycles₃_ext,
+        groupCohomology.mem_cocycles₃_def,
+        groupCohomology.mem_cocycles₃_iff,
+        groupCohomology.d₂₃_apply_mem_cocycles₃,
+        groupCohomology.cocycles₃.d₃₄_apply,
+        groupCohomology.coboundaries₃,
+        groupCohomology.coboundaries₃_le_cocycles₃,
+        groupCohomology.IsMulCocycle₃,
+        groupCohomology.IsMulCoboundary₃,
+        groupCohomology.cocyclesOfIsMulCocycle₃,
+        groupCohomology.isMulCocycle₃_of_mem_cocycles₃,
+        groupCohomology.coboundariesOfIsMulCoboundary₃,
+        groupCohomology.isMulCoboundary₃_of_mem_coboundaries₃,
+        groupCohomology.d₂₃_toMul,
+        groupCohomology.isoShortComplexH3,
+        groupCohomology.isoCocycles₃,
+        groupCohomology.isoCocycles₃_hom_comp_i,
+        groupCohomology.isoCocycles₃_inv_comp_iCocycles,
+        groupCohomology.H3,
+        groupCohomology.H3π}
+    \leanok
+    Let $A$ be a module over a commutative ring, with a linear action $\rho$
+    of $G$. On cochains $f\colon G^3\to A$, set
+    \begin{align*}
+        (d^3f)(a,b,c,d)
+         & =\rho(a)f(b,c,d)-f(ab,c,d)+f(a,bc,d) \\
+         & \quad -f(a,b,cd)+f(a,b,c).
+    \end{align*}
+    Write $Z^3=\ker d^3$ and $B^3=\operatorname{im}d^2$.
+    Since $d^3d^2=0$, the quotient $H^3(G,A)=Z^3/B^3$ is defined,
+    with projection $\pi_3\colon Z^3\to H^3(G,A)$.
+    For multiplicative abelian coefficients $M$, the same definitions on
+    the underlying additive group give
+    \begin{align*}
+        f(ab,c,d)f(a,b,cd)
+         & =(a\cdot f(b,c,d))f(a,bc,d)f(a,b,c),                          \\
+        (d^2\beta)(a,b,c)
+         & =\frac{(a\cdot\beta(b,c))\beta(a,bc)}{\beta(ab,c)\beta(a,b)}.
+    \end{align*}
+    Neither the cochains nor the coboundaries are required to be normalized.
+\end{definition}
+
+\begin{lemma}[Equality of third cohomology classes]
+    \label{lem:mpug_h3_coefficient_action_eq}
+    \lean{groupCohomology.H3π_eq_zero_iff,
+        groupCohomology.H3π_eq_iff,
+        groupCohomology.H3_induction_on}
+    \leanok
+    \uses{def:mpug_h3_coefficient_action}
+    For $x,y\in Z^3$, one has $\pi_3(x)=\pi_3(y)$ if and only if
+    $x-y\in B^3$. In particular, $\pi_3(x)=0$ if and only if $x\in B^3$.
+    Every third cohomology class has a representative in $Z^3$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The projection onto a quotient is surjective, and its kernel is $B^3$.
+\end{proof}
+
 \begin{definition}[Scalar three-cocycles in degree-three group cohomology]
     \label{def:mpug_h3_group_cohomology}
     \lean{TNLean.Algebra.scalarRepresentationEquiv,
