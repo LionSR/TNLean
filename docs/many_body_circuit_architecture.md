@@ -465,7 +465,7 @@ outcome.
 
 ## `TNLean/Lattice`
 
-`TNLean/Lattice` (363 modules, 55,671 lines; 371 and 58,208 before pin move 6, 469 and
+`TNLean/Lattice` (363 modules, 55,609 lines; 371 and 58,208 before pin move 6, 469 and
 77,689 before pin move 5)
 has the same shape as `TNLean/Circuit`: its transitive imports inside TNLean
 are itself, 15 modules of `Algebra` and 9 modules of `Circuit`, and nothing
@@ -473,7 +473,7 @@ from `MPS` or `PEPS`. It can leave TNLean once the
 Sites layer has. It holds three unrelated things:
 
 - Local Hamiltonians and their analysis on finite sets of sites (the root
-  directory, 17 modules, 2,422 lines; 25 modules and 4,959 lines before pin
+  directory, 17 modules, 2,360 lines; 25 modules and 4,959 lines before pin
   move 6; with `ClusterExpansion`, 124 modules and 24,532 lines before step
   3H.1). Gaussian filtering and truncation, low-energy
   bases, translations, the variational bound, product forms and Trotter index
