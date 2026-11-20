@@ -76,7 +76,7 @@ noncomputable def wordProjections (P : κ → Matrix (Config X) (Config X) ℂ) 
 omit [Fintype V] [DecidableEq V] [∀ v, Fintype (X v)] [∀ v, DecidableEq (X v)] in
 /-- A sum over the positions of a word without repetition that contains every letter is the sum
 over the letters. -/
-theorem sum_range_getElem?_elim {M : Type*} [Fintype κ] [AddCommMonoid M]
+theorem sum_range_option_elim {M : Type*} [Fintype κ] [AddCommMonoid M]
     (g : κ → M) {w : List κ} (hw : w.Nodup) (hall : ∀ x, x ∈ w) :
     ∑ i ∈ Finset.range w.length, (w[i]?).elim 0 g = ∑ x, g x := by
   classical
@@ -270,7 +270,7 @@ theorem norm_sweepOp_pow_apply_le (hJ : 0 < J) (hΔ : 0 < Δ)
       exact (nodup_sweepWord c).getElem_inj_iff.mp hjk
   have hsum : ∑ i ∈ Finset.range w.length, P i = clm (∑ X, hff.termProj X) := by
     rw [map_sum]
-    exact sum_range_getElem?_elim _ (nodup_sweepWord c) (mem_sweepWord c)
+    exact sum_range_option_elim _ (nodup_sweepWord c) (mem_sweepWord c)
   have hgap : ∀ u : StateSpace Λ q, ⟪Ω, u⟫_ℂ = 0 →
       Δ / J * ‖u‖ ^ 2 ≤ RCLike.re ⟪u, (∑ i ∈ Finset.range w.length, P i) u⟫_ℂ := by
     intro u hu
