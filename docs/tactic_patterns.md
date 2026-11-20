@@ -414,14 +414,16 @@ abstracted — record why, so it is not re-proposed).
 
 - **Pattern:** Convert the range condition of `ChainSupport L R` to an upper
   bound on the path-graph distance between two sites of the support.
-- **Defined in:** `TNLean/MPS/AreaLaw/LiebRobinson.lean`,
-  `ChainSupport.edist_le`.
-- **Refactored occurrences:** the existing propagation and localization proofs
-  in that file and the finite-support numerical propagation proof in
-  `MPS/AreaLaw/Hastings/LiebRobinson.lean`.
-- **Notes:** The existing private proof is now a public theorem; the new
-  propagation estimate uses it instead of repeating the conversion to natural
-  distance. The mathematical range condition is unchanged.
+- **Defined in:** `QICLean/ManyBody/Sites/Lattice/Chain.lean`,
+  `ManyBody.ChainSupport.edist_le` (QICLean dependency).
+- **Refactored occurrences:** `MPS/AreaLaw/LiebRobinson.lean`,
+  `MPS/AreaLaw/Hastings/LiebRobinson.lean`,
+  `MPS/AreaLaw/RelativeGeneratorLocalization.lean` and
+  `MPS/AreaLaw/SupportedGaussianIntegral.lean`.
+- **Notes:** Originally promoted from a private proof in TNLean; the local
+  copy was removed on 2026-11-18 in favor of the QICLean owner. The five
+  propagation and localization calls use it directly. The mathematical range
+  condition is unchanged.
 
 ### Eventual equality of scalar cocycle classes — promoted (2026-10-29)
 
@@ -5869,7 +5871,7 @@ no additional helper is proposed.
   of `norm_mul_le_of_le`.
 - **Seen:** Two chain occurrences: the common local argument in
   `ManyBody.ChainInteraction.partialSwap_term_difference_spec` in
-  `MPS/AreaLaw/PartialSwap.lean`, and the norm field of
+  `MPS/AreaLaw/PartialSwap.lean`, and the term norm estimate for
   `ManyBody.ChainInteraction.swappedDoubled` in `MPS/AreaLaw/SwappedDoubledHamiltonian.lean`.
 - **Abstraction:** The standard norm inequalities suffice for these short
   arguments; no new lemma or tactic is introduced at two occurrences.

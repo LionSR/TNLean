@@ -203,12 +203,14 @@ private def secondShift (k : Fin (M * 2)) : Equiv.Perm (Fin (M * 2) → Fin b) :
 
 private theorem isLocalPerm_firstShift (k : Fin (M * 2)) :
     IsLocalPerm (ringBond k) (firstShift (b := b) k) :=
-  isLocalPerm_shiftPerm (S := ringBond k) ((by simp [ringBond])) _ _ fun x y h => by
+  isLocalPerm_shiftPerm (S := (ringBond k : Set (Fin (M * 2))))
+    (by simp [ringBond]) _ _ fun x y h => by
     rw [h k ((by simp [ringBond]))]
 
 private theorem isLocalPerm_secondShift (k : Fin (M * 2)) :
     IsLocalPerm (ringBond k) (secondShift (b := b) k) :=
-  isLocalPerm_shiftPerm (S := ringBond k) ((by simp [ringBond])) _ _ fun x y h => by
+  isLocalPerm_shiftPerm (S := (ringBond k : Set (Fin (M * 2))))
+    (by simp [ringBond]) _ _ fun x y h => by
     rw [h (k + 1) ((by simp [ringBond]))]
 
 /-- The first layer of controlled shifts. -/

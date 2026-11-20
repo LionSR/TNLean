@@ -41,6 +41,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace AdmissibleSupport graphBall planeDomainGraph PlaneInteraction)
 
+open scoped ComplexOrder
+
 namespace TNLean.PEPS.AreaLaw
 
 /-- The Euclidean norm of a product vector is the product of the two norms. -/
@@ -281,8 +283,9 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
     (hpos : ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
         (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+        ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+          (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+        Ω ∈ groundSpace h.hamiltonian E₀ →
         let cs := positiveNormalization p (Δ / 2) J
         let k := fun i => positiveConstraint cs
             (centeredFilter p (Δ / 2) h.hamiltonian Ω (h.term i))
@@ -303,8 +306,9 @@ theorem latticeConstraintWord_omission_of_positiveConstraints {p : ℕ} (hp : 1 
     ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R)
         (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
       (a : AdmissibleSupport Λ R → Site Λ), (∀ X, a X ∈ X.1) →
-      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+      ∀ (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+        (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+      Ω ∈ groundSpace h.hamiltonian E₀ →
       ∀ (Aux : Type*) [Fintype Aux] [DecidableEq Aux] (S : Finset (Site Λ))
         (B : Matrix (Configuration Λ q × Aux) (Configuration Λ q × Aux) ℂ),
         (∀ x y : Aux, (Matrix.of fun σ τ => B (σ, x) (τ, y)) ∈
@@ -382,9 +386,17 @@ theorem latticeConstraintWord_omission_of_locality {p : ℕ} (hp : 1 ≤ p) (R :
           (∫ w, F w ∂PoissonWord.measure (AdmissibleSupport Λ R) t) ≤
             latticeOmissionPrefactor R C₃ c₃ p * t * S.card * ‖B‖ *
               Real.exp (latticeOmissionRate R C₃ c₃ p * t -
-                latticeOmissionExponent c₃ p * (r : ℝ) ^ kernelExponent p) :=
-  latticeConstraintWord_omission_of_positiveConstraints hp R hC₃ hc₃
-    (latticePositiveConstraints_of_locality hp R hJ hΔ htail)
+                latticeOmissionExponent c₃ p * (r : ℝ) ^ kernelExponent p) := by
+  intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
+  refine latticeConstraintWord_omission_of_positiveConstraints hp R hC₃ hc₃ ?_
+    Λ h hh hhJ a ha E₀ Ω hΩ
+    (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+    (hspan ▸ Submodule.mem_span_singleton_self _)
+  intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hpsd hmem
+  obtain ⟨-, -, hgap, hspan⟩ :=
+      (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+        ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
+  exact latticePositiveConstraints_of_locality hp R hJ hΔ htail Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
 
 /-- **Omission of distant events for the exact positive constraints, at the named constants**
 (Lemma 10.1, `eq:amplification-product-omission`; `09-amplification.tex`, lines 42–72 and
@@ -420,10 +432,18 @@ theorem latticeConstraintWord_omission_explicit {p : ℕ} (hp : 1 ≤ p) (R : �
               Real.exp (latticeOmissionRate R (latticePositiveConstraintConst R J Δ p)
                   (latticePositiveConstraintRate R J Δ p) p * t -
                 latticeOmissionExponent (latticePositiveConstraintRate R J Δ p) p *
-                  (r : ℝ) ^ kernelExponent p) :=
-  latticeConstraintWord_omission_of_positiveConstraints hp R
+                  (r : ℝ) ^ kernelExponent p) := by
+  intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
+  refine latticeConstraintWord_omission_of_positiveConstraints hp R
     (latticePositiveConstraintConst_nonneg R J Δ p) (latticePositiveConstraintRate_pos hp R J hΔ)
-    (latticePositiveConstraints_explicit hp R hJ hΔ)
+    ?_ Λ h hh hhJ a ha E₀ Ω hΩ
+    (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+    (hspan ▸ Submodule.mem_span_singleton_self _)
+  intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hpsd hmem
+  obtain ⟨-, -, hgap, hspan⟩ :=
+    (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+      ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
+  exact latticePositiveConstraints_explicit hp R hJ hΔ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
 
 /-- **Omission of distant events for the exact positive constraints**
 (Lemma 10.1, `eq:amplification-product-omission`, applied to the constraints
@@ -463,6 +483,16 @@ theorem exists_latticeConstraintWord_omission {p : ℕ} (hp : 1 ≤ p) (R : ℕ)
   obtain ⟨C, c, hC, hc, hpos⟩ := exists_latticePositiveConstraints hp R hJ hΔ
   exact ⟨_, _, _, channelOmissionPrefactor_nonneg (Nat.cast_nonneg _) C 2 c _,
     channelOmissionRate_pos (Nat.cast_nonneg _) C 2 c _, channelOmissionExponent_pos hc _,
-    latticeConstraintWord_omission_of_positiveConstraints hp R hC hc hpos⟩
+    by
+      intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan
+      refine latticeConstraintWord_omission_of_positiveConstraints hp R hC hc ?_
+        Λ h hh hhJ a ha E₀ Ω hΩ
+        (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+        (hspan ▸ Submodule.mem_span_singleton_self _)
+      intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hpsd hmem
+      obtain ⟨-, -, hgap, hspan⟩ :=
+          (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+            ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
+      exact hpos Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan⟩
 
 end TNLean.PEPS.AreaLaw

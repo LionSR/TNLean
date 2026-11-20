@@ -1,0 +1,166 @@
+./workspace/scratch/7637e06d0fc2/tn-integration/scripts/ci_lean_checks.py:401: ResourceWarning: unclosed file <_io.TextIOWrapper name=3 encoding='UTF-8'>
+  code = build_until(modules, log_path, budget or None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./workspace/scratch/7637e06d0fc2/tn-integration/scripts/ci_lean_checks.py:401: ResourceWarning: unclosed file <_io.TextIOWrapper name=3 encoding='UTF-8'>
+  code = build_until(modules, log_path, budget or None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./workspace/scratch/7637e06d0fc2/tn-integration/scripts/ci_lean_checks.py:401: ResourceWarning: unclosed file <_io.TextIOWrapper name=3 encoding='UTF-8'>
+  code = build_until(modules, log_path, budget or None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./workspace/scratch/7637e06d0fc2/tn-integration/scripts/ci_lean_checks.py:437: ResourceWarning: unclosed file <_io.TextIOWrapper name=3 encoding='UTF-8'>
+  return build_until(modules, log_path, left) if left > 0 else None
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./workspace/scratch/7637e06d0fc2/tn-integration/scripts/ci_lean_checks.py:401: ResourceWarning: unclosed file <_io.TextIOWrapper name=3 encoding='UTF-8'>
+  code = build_until(modules, log_path, budget or None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+./workspace/scratch/7637e06d0fc2/tn-integration/scripts/ci_lean_checks.py:401: ResourceWarning: unclosed file <_io.TextIOWrapper name=3 encoding='UTF-8'>
+  code = build_until(modules, log_path, budget or None)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+........building --fail-fast build TNLean.Core
+building --fail-fast build TNLean.ZLeaf
+building --fail-fast build TNLean.Core
+Preparing 2 focused targets together
+::warning::Focused checks stopped at their 100s budget; the root build and the post-build strict checks cover the remaining 3 target(s).
+.Preparing 7 focused targets together
+::warning::Focused checks stopped at their 60s budget; the root build and the post-build strict checks cover the remaining 4 target(s).
+.Preparing 2 focused targets together
+Preparing focused target: TNLean.Bad
+Preparing focused target: TNLean.Good
+Focused checks failed:
+  TNLean.Bad: dependency build exited 3
+.Preparing focused target: TNLean.Core
+Focused checks failed:
+  TNLean.Core: dependency build exited 1
+  scripts/uses_regression.lean: blocked by missing or failed dependencies
+.Preparing 2 focused targets together
+Preparing focused target: TNLean.Bad
+Preparing focused target: TNLean.Good
+Focused checks failed:
+  TNLean.Bad: dependency build exited 3
+.Preparing 2 focused targets together
+Preparing focused target: TNLean.Agood
+Preparing focused target: TNLean.Zbad
+Focused checks failed:
+  joint dependency build exited 3; the budget ended before the failing module was identified
+.Focused checks failed:
+  scripts/uses_regression.lean: blocked by missing or failed dependencies
+.Preparing 2 focused targets together
+All focused checks passed.
+.Preparing focused target: TNLean.Core
+Preparing focused target: TNLean.Other
+All focused checks passed.
+.Preparing focused target: TNLean
+All focused checks passed.
+.Preparing 3 focused targets together
+All focused checks passed.
+.Preparing focused target: TNLean.Good
+Focused checks failed:
+  TNLean/Good.lean
+Preparing focused target: TNLean.Good
+Focused checks failed:
+  TNLean.Good: dependency build exited 124
+.Preparing 2 focused targets together
+Focused checks failed:
+  TNLean/B.lean
+.Preparing focused target: TNLean.Bad
+Preparing focused target: TNLean.Good
+Focused checks failed:
+  TNLean.Bad: dependency build exited 1
+  scripts/bad_regression.lean: blocked by missing or failed dependencies
+.Focused PR range: 476610f8fb74cc85eec2a2adfccd6511371e56f3..33cb0d89e5882cd9af17ebece91bcd9438f961ec; elaborating checkout HEAD.
+Focused selection: 2 direct source(s), 1 direct regression script(s).
+Selecting changes against tested PR merge base parent 476610f8fb74cc85eec2a2adfccd6511371e56f3.
+Deferring import-only source to full build and post-build strict: TNLean/Uses.lean
+Focused PR range: 476610f8fb74cc85eec2a2adfccd6511371e56f3..33cb0d89e5882cd9af17ebece91bcd9438f961ec; elaborating checkout HEAD.
+Focused selection: 2 direct source(s), 1 direct regression script(s).
+Selecting changes against tested PR merge base parent 476610f8fb74cc85eec2a2adfccd6511371e56f3.
+Deferring import-only source to full build and post-build strict: TNLean/Uses.lean
+Strict checks: 2 changed source file(s), 1 test file(s).
+.1 strict Lean check(s) failed:
+  TNLean/Uses.lean
+Focused PR range: 476610f8fb74cc85eec2a2adfccd6511371e56f3..476610f8fb74cc85eec2a2adfccd6511371e56f3; elaborating checkout HEAD.
+Focused selection: 0 direct source(s), 0 direct regression script(s).
+::warning::Cannot verify the PR merge parents; checking every test.
+All focused checks passed.
+Focused PR range: 476610f8fb74cc85eec2a2adfccd6511371e56f3..e2cfb2bb1aa2875f928990a2767095e491cadafb; elaborating checkout HEAD.
+Focused selection: 1 direct source(s), 0 direct regression script(s).
+Selecting changes against tested PR merge base parent 476610f8fb74cc85eec2a2adfccd6511371e56f3.
+Deferring import-only source to full build and post-build strict: TNLean/Uses.lean
+All focused checks passed.
+.Focused PR range: 48f6df9452f1619d766d0a3d5343562138de8838..cf0b0737c7f12f068f671654030bcec3b6fd11a3; elaborating checkout HEAD.
+Focused selection: 0 direct source(s), 0 direct regression script(s).
+Focused PR range: 48f6df9452f1619d766d0a3d5343562138de8838..364c7f5e52ce97299e8a72206a866801e918f6b7; elaborating checkout HEAD.
+Focused selection: 1 direct source(s), 0 direct regression script(s).
+.Focused PR range: 48f6df9452f1619d766d0a3d5343562138de8838..9a16d80ebb6dc8b195468d5aad04c846cb602b43; elaborating checkout HEAD.
+Focused selection: 0 direct source(s), 1 direct regression script(s).
+.Focused PR range: 48f6df9452f1619d766d0a3d5343562138de8838..f58690104adc1fd2a90d0ca0f930a5efcfa4eb7a; elaborating checkout HEAD.
+Focused selection: 1 direct source(s), 0 direct regression script(s).
+.Focused PR range: 48f6df9452f1619d766d0a3d5343562138de8838..cf0b0737c7f12f068f671654030bcec3b6fd11a3; elaborating checkout HEAD.
+Focused selection: 1 direct source(s), 0 direct regression script(s).
+.Focused PR range: 48f6df9452f1619d766d0a3d5343562138de8838..f58690104adc1fd2a90d0ca0f930a5efcfa4eb7a; elaborating checkout HEAD.
+Focused selection: 1 direct source(s), 0 direct regression script(s).
+..::error::Focused checks could not complete: Command '['git', 'rev-parse', '--verify', '--end-of-options', 'missing-ref^{commit}']' returned non-zero exit status 128.
+..Focused PR range: 48f6df9452f1619d766d0a3d5343562138de8838..6a16a229e35b2e65d0e069a471bd37ec11daa699; elaborating checkout HEAD.
+Focused selection: 1 direct source(s), 0 direct regression script(s).
+::warning::Cannot verify the PR merge parents; checking every test.
+Preparing focused target: TNLean.Orphan
+Focused checks failed:
+  TNLean.Orphan: dependency build exited 1
+::warning::Cannot verify the PR merge parents; checking every test.
+.Focused PR range: 48f6df9452f1619d766d0a3d5343562138de8838..96a0977ca4b6806c328833f19ab84cd81e23bdbb; elaborating checkout HEAD.
+Focused selection: 0 direct source(s), 0 direct regression script(s).
+.Selecting changes against tested PR merge base parent 5f1275954d31a257a8f562ae714e074629008e88.
+Focused PR range: 5f1275954d31a257a8f562ae714e074629008e88..6d4cf0d2af9acce684bf9e15224798ee5d12b42f; elaborating checkout HEAD.
+Focused selection: 1 direct source(s), 0 direct regression script(s).
+Selecting changes against tested PR merge base parent 5f1275954d31a257a8f562ae714e074629008e88.
+Preparing focused target: TNLean.Orphan
+Focused checks failed:
+  TNLean.Orphan: dependency build exited 1
+.::error::Focused checks could not complete: unreadable
+.Focused PR range: 48f6df9452f1619d766d0a3d5343562138de8838..6a16a229e35b2e65d0e069a471bd37ec11daa699; elaborating checkout HEAD.
+Focused selection: 1 direct source(s), 0 direct regression script(s).
+Selecting changes against tested PR merge base parent 48f6df9452f1619d766d0a3d5343562138de8838.
+Deferring import-only source to full build and post-build strict: TNLean/Orphan.lean
+All focused checks passed.
+Selecting changes against tested PR merge base parent 48f6df9452f1619d766d0a3d5343562138de8838.
+Strict checks: 1 changed source file(s), 0 test file(s).
+.1 strict Lean check(s) failed:
+  TNLean/Orphan.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Other.lean
+..Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+.Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+.Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+...Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+Deferring import-only source to full build and post-build strict: TNLean/Aggregator.lean
+..Deferring import-only source to full build and post-build strict: TNLean/Other.lean
+Deferring import-only source to full build and post-build strict: TNLean/Other.lean
+Deferring import-only source to full build and post-build strict: TNLean/Other.lean
+.....................::warning::Cannot verify the PR merge parents; checking every test.
+...Selecting changes against tested PR merge base parent cf1b02d376c90632b86edda6d6c2eb45f57fae17.
+...::warning::Cannot verify the PR merge parents; checking every test.
+.Selecting changes against tested PR merge base parent 9d61240b94364ce7fe5f92ba7c52f19c25cb0e57.
+..Selecting changes against tested PR merge base parent 9d61240b94364ce7fe5f92ba7c52f19c25cb0e57.
+.::warning::Cannot verify the PR merge parents; checking every test.
+.
+----------------------------------------------------------------------
+Ran 84 tests in 7.789s
+
+OK

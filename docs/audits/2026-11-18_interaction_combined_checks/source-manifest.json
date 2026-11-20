@@ -1,0 +1,1167 @@
+[
+  {
+    "lane": "shared",
+    "path": "TNLean/Lattice/LocalHamiltonian.lean",
+    "source_sha256": "07d6cd441488ac3c0da7a87aefe0b1e8066f4b05ff4f531ee4695f8c549e7a08"
+  },
+  {
+    "lane": "shared",
+    "path": "TNLean/Lattice/MarginalTails.lean",
+    "source_sha256": "1ee732d64fa20bef622174da3dcd9146914d2334a41dfdf50b1ec8d18dd8069c"
+  },
+  {
+    "lane": "shared",
+    "path": "TNLean/Lattice/ProductForm.lean",
+    "source_sha256": "b2d5e0e31bcb95f7f0083f94f2e10d4499ddbc7cac9f07539437146dd755d2a8"
+  },
+  {
+    "lane": "shared",
+    "path": "TNLean/MPS/AreaLaw/ComponentReduction.lean",
+    "source_sha256": "072cc7781f625092d8a6461ce98ba5d8e9b91654822ef9a22a3fb8038c95a406"
+  },
+  {
+    "lane": "shared",
+    "path": "TNLean/MPS/AreaLaw/Hamiltonian.lean",
+    "source_sha256": "0f98330169d6e56cb59373a9289b6e66b2f8b63478bbba65e425a837d4f9c18a"
+  },
+  {
+    "lane": "shared",
+    "path": "TNLean/PEPS/AreaLaw/RectangularHamiltonian.lean",
+    "source_sha256": "0faf6b9f10d9a8e65c900dc071e40a65f2b2899d21bd96b495766d622b8ec9b6"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/Cost.lean",
+    "source_sha256": "b70e2742273a6f3d7e6f7ba1f470a03b2d58e3f56e34b10dc5917ade9ad9f55d"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean",
+    "source_sha256": "c2a7d41ce41e9dadb692885205fb245152df508f573e9ba2eea40eccb8f90325"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SampledCost.lean",
+    "source_sha256": "3ee96700881442a821f65379bce5328b58fb62d0690ca3b70d4a0a4a0a4a94d5"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean",
+    "source_sha256": "8e696bf9b06f775d8796f38b4b030f867bb4e78f602aa6bbfa20cc8b96663fde"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SweepProgram.lean",
+    "source_sha256": "6c9bb1694452b6be03b0834743b63843ed1e3c8952a030867329a8cce3db0ff1"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean",
+    "source_sha256": "b2f72c5bf361ad8b0e0a3a2d3a12ba22750cd9de9a33d4e379a3ad7fef2bbe01"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleCost.lean",
+    "source_sha256": "2db0a1f8114e64120c52c3b234332c87ec9f0ad79f3748ebcd545be78b7cab1a"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean",
+    "source_sha256": "aef33c0f0b32eaf4630865d9e3225a9023eef898c90cabb66e21b7caf83eec93"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampledCost.lean",
+    "source_sha256": "47c3a38f7e8aae5dcc255efc0809aea2fd6abcdb744a7626269dbf66a46aec14"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/AreaLaw.lean",
+    "source_sha256": "cd43a8fcc7042c16e564c9f425b108b361fffe50bd5998513779bdf5021c7a09"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/BandInformation.lean",
+    "source_sha256": "db1ec461c4ace651ac57ccc8b04f2b67d69d79d1ceb4032ff477cbb457441cd0"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/BoundaryGap.lean",
+    "source_sha256": "ba0001b75bb7a491152b7f825a0a92c43ff7911aa648e63fb905c37e788fe479"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/BufferDiscount.lean",
+    "source_sha256": "d8c856a036d7e291d7d500f4ffa2965a549c111f355fa5712a7abe9f3949ae8c"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/DomainInteractionBudget.lean",
+    "source_sha256": "f817189d7179b9622d110dc9a1ae09f61a2836796c7754289537441c37631243"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/DomainIntervalNeighborhoodEntropy.lean",
+    "source_sha256": "7650e0e72dd9a6f7bc90c5f2c09826acdfee24413712c0476ff298904b6f98f2"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/DomainLogarithmicSeparation.lean",
+    "source_sha256": "3da545e0502acace958c96cb222ea17eec871907803de0b341d725876c5f824a"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/DomainPartialSwap.lean",
+    "source_sha256": "7461dc08adc7d128f80f032794aa4a04e26c59f5207ddda1850db2f849fbcc4a"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/DoubledHamiltonian.lean",
+    "source_sha256": "4bd626c815323872bec31071aa5630d35235c0b875d61f9cb597d3bb1f5ec78a"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/GluingHamiltonian.lean",
+    "source_sha256": "7915a8dd6cbf17f7d35b7768d9f3e39d0577742c79583d4eabcd050fcddadb3c"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean",
+    "source_sha256": "f7d8e52de647bd4275cbcce07ec438f218942b7edf24d5511bb96df2c30372c2"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/BootstrapLemma.lean",
+    "source_sha256": "9e1e3b4f4e07f390d014cad7987add5e1fc10625fd12cbac5fecbe61f33890d1"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/BoundaryFactorization.lean",
+    "source_sha256": "9f8a7f6470c928a5b7ac0454b9b6012bf83d945681a93b02f50561ff7841635c"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/BoundaryLocalization.lean",
+    "source_sha256": "151bb9a5bb3f0a90bcfc5d136c2b30aa0adaeeaff819b95a53e9207b4846279b"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/ChainLocalizedParts.lean",
+    "source_sha256": "65329546020446e5cb8793117bb73388ccd9e5d32fc2aa0b91a5464fd77a2925"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/CorrelationLemma.lean",
+    "source_sha256": "cb9fb5b0f6b84010ff9b7516c0465e2f1ea76e747cd612bfa1c1f9b6e56b4dda"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/CutoffPair.lean",
+    "source_sha256": "a7964541bdccda3a9fa37c1b3a34e162d1e29414f726805fac0cc43222076248"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean",
+    "source_sha256": "ab3228fff31b4a124553f74fb463f425b0513bf6d2da0279c0ca9d5142f3665b"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/LemmaOneConstant.lean",
+    "source_sha256": "8b053b19e95eec2041f1d226e8c6f37d149db5bcb0606d7db232a92ba6329100"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+    "source_sha256": "ea6d014ce73b50530808901a8e3e058884c660bfd537561eecfd4820fd70ab04"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean",
+    "source_sha256": "aee14b8f260f6e5063963d7975a7fdc276323fa7f6cd0c2bf39282dbb7ef47ef"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/PartCommutators.lean",
+    "source_sha256": "ede41b5124e5aa84a7a51b882eddac117cad40f85f943ea0ef687fae76957bda"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/PrintedAreaLaw.lean",
+    "source_sha256": "24a6ceab2df7c0902098cc74c91a19721335eb25b736be72ebe5c67e7a5c83e9"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/PrintedAreaLawSource.lean",
+    "source_sha256": "1488e187b838fa6b76ca3b7dd67e40f7d2d0b2de6daf84a7410114f5c7b26a6a"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/ProjectorFactorization.lean",
+    "source_sha256": "07c07fa1a8cb8cfcdf8b1531ba0e709a8449b7c7e24f150976b7b3ee7469d5f9"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/ProjectorFactorizationScaling.lean",
+    "source_sha256": "acd5458b8cfc8de179b5269af3621b95caeb7401f42ad80c0b754c846146937d"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/RelentGapped.lean",
+    "source_sha256": "30bc5c79762b3a6430a91f486a1f92d16f3f2f40375aed8bb8501d468eb2ced9"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/RenyiBootstrapLemma.lean",
+    "source_sha256": "524d006470b2b49633406758331059bc82d34ac4ea478378e657c188166b1cbf"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/SourceConsequences.lean",
+    "source_sha256": "4b0d575495ff532096a601e95eb55d890c19e8a0e7e450c94741773ccef4d61e"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/SourceLength.lean",
+    "source_sha256": "c529705300999029c165c0690a8a333fd9d1191bb92fdfcba813ca455f0a5658"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean",
+    "source_sha256": "6eacb1bc1b20eb4693aea19d0b25f839dd1b0daa1b98866befefb2d767435704"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/Huang/PositiveChainHamiltonian.lean",
+    "source_sha256": "a6674145590507e75afa6462d6e114dbf1797d71c3de5148a9b1d9fc02237289"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/InformationReset.lean",
+    "source_sha256": "e7ebf2a150b867bcea19e76b90bfa9eab170688bc99b991d049086426dd89f16"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/InteractionBudget.lean",
+    "source_sha256": "2dc260cbb71cfbe20bd21e8dff147e92ce1ec854bc49eaed3be9b2c36c0250e7"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/LogarithmicAreaLaw.lean",
+    "source_sha256": "c97c7e9392528a33273f22fc7c329a9b620a28b6f60d6800e1354fd590ba05e8"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/LogarithmicSeparation.lean",
+    "source_sha256": "801d4922b81a72470e1df036b5a44d1f7a6574a1901cecfd97058664aca4ed04"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/MPSApproximation.lean",
+    "source_sha256": "59da7c139af2e9539f1d5cfab96036d22dab18e26e186ea8ec11f385b54765b8"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/OverlapEnergy.lean",
+    "source_sha256": "3033399bc2d2d10eca9a5db7788ac2a333a281da96a751534aea1e7c3afe286d"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/PartialSwap.lean",
+    "source_sha256": "2d1379df39f6eb148d91ffd5dca69e453b087ccbd0b9ca2b77596c0351ea2aca"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ProtocolMPSApproximation.lean",
+    "source_sha256": "458cf71c184350727bca476dd6b38864c6e30bb5f93dd3f3d06a1d4121c5b126"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ProtocolPhysicalPreparation.lean",
+    "source_sha256": "7219a7abacd8559f86df21ac91d0b535c5a3724575d643727af0887cf8c0a601"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ProtocolStageInformation.lean",
+    "source_sha256": "8876f661d66e9092bcaab1037a7ace69f68c1c860441605a2f25ed87dce06c7b"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ProtocolStagePhysicalCircuits.lean",
+    "source_sha256": "b04f83558b08281567d6f9ed29550579f53e4ece1690ad508f2a43d1999df41a"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ProtocolUniformPreparation.lean",
+    "source_sha256": "00e078ffe349f45fc19cd3ddba4b5a2815b5892ee4099cfe8969553fa4efcab9"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/RangeOneCut.lean",
+    "source_sha256": "2a3c401863e508d8ea74e21b974f7fbd1e51ea56a7ed1847f3054593b4be9835"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/RangeOneSupport.lean",
+    "source_sha256": "eb06514071a6cbf5045417939f1740587c717824589013af15bccf51146552cb"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+    "source_sha256": "f93e47e6ec768c4acc0f3d7ef84480c46c7aaf8a370ca5005bb3ad539872a100"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/RenyiEntropy.lean",
+    "source_sha256": "d8e3a97bf6ed5c4129a2f5bdb51b2fc1fce002da13616d753c7ea80d7e25d80c"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/SharpPhysicalCompression.lean",
+    "source_sha256": "9a10c40f651a4f99f0e61c69af75f419fafcd9776091df4e95abbba0fd4ed515"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/SnakeGridApproximation.lean",
+    "source_sha256": "987094fd63438c9177d4b70a3a85b86fef730459e5eb5f19b5620bee2072f034"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/SnakeGridAreaLaw.lean",
+    "source_sha256": "bd1096dd74bc43a1f3bf91915843313ccac379e6d8db9186527529cd5afd7ada"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/StripApproximation.lean",
+    "source_sha256": "208ebbe87536c06aabef635d5b028ba5d15e14274d261e06b741b748a9e8af2d"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/StripBufferDiscount.lean",
+    "source_sha256": "77f8f1cba708c7a437b7655c48e2a324a392e83f8b661b68ce9ef6e3cd70fe35"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/StripGeometry.lean",
+    "source_sha256": "ad9eca1f73e63fdc66b5a2b0517c37e1f6593d109b8dc88e7b6ad2063d3b7aa8"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean",
+    "source_sha256": "8660a731939d688387fb4f87762b942947f20ddd40d3603af27e2e9161bb160b"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/SwappedDoubledHamiltonian.lean",
+    "source_sha256": "db0752edd424e94168ba83b755a0674b3af183b0ab56ab434c9bc9e549e713fe"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/BondTrimmingReference.lean",
+    "source_sha256": "6511cba84b03231e4f0788e61a9b974e94022ddb0f25e26922ce92637eff2adc"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ConstantRankCut.lean",
+    "source_sha256": "daa40363de458c879fbec30c8757fbef833d719ecb4024343a836a66f3dbb516"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/PowerProjector.lean",
+    "source_sha256": "0ba60809ed675dc14a97139b398533d229528a31402707df54ec4353b11af615"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/RationalBondTrimming.lean",
+    "source_sha256": "dccc75f74b3c5399a19922b9c5b7bdef5feb0aaaccb05e6782b65667d1b74c91"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/RationalSampledSuccessiveConstruction.lean",
+    "source_sha256": "f8e9243c01cb202feef23fbc529dd9148c2c841191e75a7feed909fbd0b54deb"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SampledSuccessiveConstruction.lean",
+    "source_sha256": "f13a33a500396a4fc435d780ca28f5911eda6c25f7c805f90b1e81c1dce78e27"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeBondTrimming.lean",
+    "source_sha256": "9111536d8a18645509cc4bd522eff430ddde312436515527c5c905ac13942aaa"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/ApproximateCertificates.lean",
+    "source_sha256": "c3f82e4253094640ff8d6a6dc31d2ea7560d6ad1695aed685c21923c974607f4"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean",
+    "source_sha256": "ad85e3572423620f5af4c91fcdc2ec94f97cc943999d9dbac9545c562832f37d"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CompressedSolutions.lean",
+    "source_sha256": "8a632e004230cea1a32d89e662474b221a883c6b11f60558d7313f4333120e98"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean",
+    "source_sha256": "a1fdf8961ec6955183473ec64b7cd707ff1689de9b5e0f69f549d090fc5672d5"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/PowerIteration.lean",
+    "source_sha256": "b8656dc0e1c0d01a63b5865f332ce8a57a0794c1db779627151c5142c1687565"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/RationalSearch.lean",
+    "source_sha256": "b73921cef449505ae0d05b57931151560cac517a041bcd7a222a12449cc52c79"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/Selection.lean",
+    "source_sha256": "614cbbc523df7b2e5906416a18f647ee2c505f3e7978823f38d39a1af89ce29d"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/UniformCertificates.lean",
+    "source_sha256": "32732403b8feba9dac2773d5c9f627d438669ac685c23e7dc744cd575349a1ef"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SuccessiveConstruction.lean",
+    "source_sha256": "abb92ace490dd863dbab438565d2abba9445c9d0f8803d34b9fa2a1777d5af9e"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SuccessiveStep.lean",
+    "source_sha256": "ff1147930e40848351680979775bcac06683c89e83ae155df122166ecb975fa3"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean",
+    "source_sha256": "10af5993239f9b7c7680613575d5a8be200ae788b1a8b65f71daf5bececfb951"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean",
+    "source_sha256": "34caa1e876abce92f1dd1da67ac0e85dc8a35d5f8b0ec619dab22fe911d7e64a"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean",
+    "source_sha256": "5ec18fb1c7b8c8595f102ebfb5800fc019146a57dd7335e02e87e7b0ac6931ce"
+  },
+  {
+    "lane": "mps",
+    "path": "TNLean/MPS/AreaLaw/WindowCounting.lean",
+    "source_sha256": "b244f4e514914c1d7ea92b159ba0c282458de069d28d883e6c44c882ff636357"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/CellConditionalInformation.lean",
+    "source_sha256": "aa4ae41ae180a1e1ca73a4322e2abec9bd69bbcded00da0952c2307525b110dc"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/CellConditionalInformationFromGap.lean",
+    "source_sha256": "93397d2e8a3fe23617769fd6a2376263de6798a733d3d1e283cb4c47704b1d6b"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/CoarseInformation.lean",
+    "source_sha256": "e9e8c6619539329f00b47c021157e17061a1dc590a9c46c1fd533328163f8367"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/CoarseInformationFromGap.lean",
+    "source_sha256": "63267cfbf7e17e910a7314ba01acb2ee952a051fee889e989ead54e5f77ae569"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/NestedPatchEnergy.lean",
+    "source_sha256": "90a0e75fdf5c9dbfe5b8fd78102be6e3a9fdc7f1ad527d950fc84c230633a1bf"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/NestedPatchMarginalCloseness.lean",
+    "source_sha256": "d4587f343f375e5898070126e59961742113720cff8b5e7bc2352cd366b22b29"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/PinnedZeroFloorOptimizer.lean",
+    "source_sha256": "bac3e4fe3da33d8e95b20c0311103a920524db5707957a93ec8fe4b20795d5f4"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/RangeAngularInformation.lean",
+    "source_sha256": "63c53d3235dc8d7b6e85f215247c27e189552c05cd7d98600fcc6c0d7181470a"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/RangeInformationReset.lean",
+    "source_sha256": "0de0181432539fb54cf8bf7e468fb8633e7a15a0f2ad9657087bfff1627b9666"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean",
+    "source_sha256": "3c02e370f59f15caa25dc89e5d1a4d0dac039c6ff83aaa4a7d7de8cb66a8efdf"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean",
+    "source_sha256": "5007e41f55e523c216c5544788430f2ea035e0a766e261785a302da5c9fbaf83"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean",
+    "source_sha256": "54ccc32492de362aab4d285dd423ca72e9a69e9aff811712aab883b3c8c051d1"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/RangeResetUnitary.lean",
+    "source_sha256": "a9fa595056ed4d3dfd7d56f1581bdd84d7fcb5f1bbb39e6bb82e823f643bb08e"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/RangeSquareGroundState.lean",
+    "source_sha256": "3167acb58cdc58f1be39113c4acf3176508ae5afbfd47c9de31a95c755c23b8f"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean",
+    "source_sha256": "fc7ed0857eea20d99ecc076b8eb98f038b073b4c6157b855bcc11a12ad0ae2e2"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean",
+    "source_sha256": "48942671491f35e32a8cbb66b79087a09f05cc636e08a432f636279dc7dcdcac"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SquareInteractionTerms.lean",
+    "source_sha256": "22bfacccc11f1072f5fc2873447b8ba22aa8c1f7de9149333a6ebf69dc956b3a"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean",
+    "source_sha256": "f69524b5b4b89468f28e98c0ccdbada17ac73df14f3b3c5dacd59cf7cf7f5324"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SupportedPhysicalBufferGaussian.lean",
+    "source_sha256": "0e72048ae22cb3cd0376ffc3f6d40c27e29035e78274f026bd7685f161c077f4"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SwappedDoubledEdgeBoundary.lean",
+    "source_sha256": "acc42c6ed1a021f0319d98da34ca35f62d60e250aeef602cb2f4a6740c7b7200"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SwappedLocalHamiltonian.lean",
+    "source_sha256": "bf5c6fa165ea55befea6771134334a7f4842840d8fce85bcdf9cfc948e9f6f85"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/Approximation/SwappedSquareHamiltonianInteraction.lean",
+    "source_sha256": "f8ce3a366c96593dbde5a2dc1460aad7a3b65ce1e95bf41a241852e0e4e00570"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean",
+    "source_sha256": "697b049859609b349e9649afce849da27b4f04ed556dbb2071feb8122d6e442c"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelPoissonGrowth.lean",
+    "source_sha256": "a9be555270e2aeff46a87e448389bff6028d1a1d2166ffd5c318e2f649033dab"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelPoissonThinning.lean",
+    "source_sha256": "e16d95086662c4cac56907748d4a5427df6cc2dd1f46ff02d904c88b5af2a7da"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean",
+    "source_sha256": "f2bece04bb425e7e15f6afc8ac70a5dcc6a29dd684a4c8ffc5f7d8e05ed18782"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelWeightedRow.lean",
+    "source_sha256": "0b77198d7b98ac74a0ac8e26f80252a69a1150fd9fcf5138422fb666de87f722"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeExcitedDecay.lean",
+    "source_sha256": "b205a188e20c05d87579a5fb5ba931b3c54695df0f0938cec5369b20569c9139"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeRestoring.lean",
+    "source_sha256": "ff321f8e4d0d48cb8dbbdc2d0aeb748a8f3c3a3781c0c44ffabee9ea52b1f356"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Amplification/TypicalProjectors.lean",
+    "source_sha256": "5c6a3229c3328615cda608e2428bceadadce8a93ec095eb38b6779c8c3088433"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean",
+    "source_sha256": "a34b0c8cfb204ec6895d1eb5a0bafd2af11ffa21971bdedfc76182eb5230e54c"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/AmplificationProof.lean",
+    "source_sha256": "4b5ab9ea9d4d9728d946000c01dd341c92b41b038ff5817521b38ef87c8b0f31"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/AreaLawElementaryConstant.lean",
+    "source_sha256": "8a559b70b986c072e203c4db68e1444f413d473ea154105676336e48607d6e0c"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/AreaLawExplicitConstant.lean",
+    "source_sha256": "6db4f2f707c743e3c2cee0ee6787900be52e0e56b96c402bea97aa98dc1d7d0a"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/AreaLawTheorem.lean",
+    "source_sha256": "e5add1df08cb482b0b6dbde9870aec334db89427db03493433d9cd455a33eca0"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/BoundaryTheorem.lean",
+    "source_sha256": "a53cf9e1182adbe4c8877bd382fa45f21d267141d1a399fd882d5b68407a3841"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/CollarInformation.lean",
+    "source_sha256": "3c0619c14883a006e57d23854479bab24b016eeb2bba23383613d96129e10d72"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/GraphPropagation.lean",
+    "source_sha256": "8c2595f0a5f750972ff6d7fdf99c751587b744f73eccf2bd53c538dea7b56a56"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean",
+    "source_sha256": "388498b1f22665d38abd12abcb38105ae4b3def33bd8098d2c3f35539cde2308"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/InitialBuffer.lean",
+    "source_sha256": "5a556707fe0609741a8b60ddc74aaff2701b13b1c2ed08f1fe3df8a32ab091c7"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/InitialBufferReal.lean",
+    "source_sha256": "ef161c696c0d555d16cf7b5f34bef468341ae9b0c2169ce6a61d3fbb4bcfe8ee"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/InitialRoundedCollarEntropy.lean",
+    "source_sha256": "43928e1bdedb8d805d9c25c53989f97b40076bf06bb20cdc83637fa5d3c686af"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean",
+    "source_sha256": "b65d344f543e55b136711baf4ade69b093648c6ac0d754be7f135269c22bfed1"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/InitialWeakRectangleShellEntropy.lean",
+    "source_sha256": "b6cf74d93c51d54ff9a6e07c04927312dcf3ea14c34801b3ac254b588be7da4f"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/LatticeConstraints.lean",
+    "source_sha256": "67a46e1a90362f15adff88e0c426b326e3570e3c6e1653513e35f35e2a7ff7db"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean",
+    "source_sha256": "ca6cf8069989569caf57651314ebd8764352c834f4838da242bfd7472dff6bf9"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean",
+    "source_sha256": "e0dbb7aa948d3f8bf3cd07f6082b05b79937dabe55e263aeefbba2430a1abbf4"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/RectangularSpecialization.lean",
+    "source_sha256": "bffaf207d94a72c4aeafe1c0bc1d65432923e75c67e42c02962c955f709f9750"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/RegionOperatorLocalization.lean",
+    "source_sha256": "2060b8187aad80829150955dd22c644686426b122c65fa90a11f6d540f826a92"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/SafeRectangleAreaLaw.lean",
+    "source_sha256": "0e1e93176c7ad9966ec8c6f64a5ec16a7ba3748bcef8438dab74815656dd92ef"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyBound.lean",
+    "source_sha256": "6c662e2a4ec0cc24aab0ea99554c7148ba6b14a8556783acf5c61c901368aaae"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyCoefficients.lean",
+    "source_sha256": "a132aebf3c571da638f2f81cb0c4c2c1855830a9c6448ac459c70f32e1f5b498"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEnergyDecay.lean",
+    "source_sha256": "9c9eb4bf237633eb2bdf8847a4824cc702b5eb50b426ebaf1a48ffb02ff69831"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeEntropySum.lean",
+    "source_sha256": "528aa1b6031ee8f8b33ef6e08c68f9cfe30d69d8f4e4ccea3dc6927c9a8f587a"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeParameterBound.lean",
+    "source_sha256": "119178738dea94eba2e96ac9ad346d37a5be1bd5253e105f78068ea0130d5f75"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualChargeSelectionBound.lean",
+    "source_sha256": "982c3792a57c01ee012e83c338f5097889089341eefea536029381c2e068c7bf"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualEnergyTerms.lean",
+    "source_sha256": "61fbcfbae4aae2a7720417e2ae95c4ae87272f28b6b742ea378251eace01dd1e"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualGlobalReplicaEnergy.lean",
+    "source_sha256": "304fe927bbdcfa236b2a13789bf31ccdd66830fbea2ef301e015a13b33b12e97"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualMarginalTails.lean",
+    "source_sha256": "0992bf5f1b1a73573020456f4519c780567e06a0c296f178e1ab276155eed8a8"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualReplicaDefect.lean",
+    "source_sha256": "a9cd188c7447d36ba1788c9e6d1d45789625d3dd838de1a9768d060f6ece713b"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoughLower.lean",
+    "source_sha256": "088f628b307996558f6e293b1cc6d4cea1774a4b7229a60e7acc4181ec0f3c58"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoughLowerPrevector.lean",
+    "source_sha256": "a4335914c4a463d3ea7f9dee373a47509fb78bcfc3495887b7a2502b6930d896"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoundEntropy.lean",
+    "source_sha256": "15c86279a1cee3041a4c98dfae85401adc3128656491f158c8394a87cb0a065d"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualRoundTransport.lean",
+    "source_sha256": "5bfa01e395e3451d3cf56b599bc99c9e351cbd041e9872c847aedb11f740c578"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanMeasures.lean",
+    "source_sha256": "617fcea6af8103e6d8bbba73c29197fa39809d19b08f4632de16e048fe00c4a3"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualScanTransportInputs.lean",
+    "source_sha256": "ddecb60a7f3c53af32e1f4b32ee5ffc824a58fe9361d1805f7391cda11217510"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedChargeDensityEnergy.lean",
+    "source_sha256": "92fe84f6ff2dee8641c32e8295b79ac906e95318574d080020d641a765de4817"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedChargeEnergy.lean",
+    "source_sha256": "bcb705370a712d97aff3001836fe804189233d3f56131e778ca258617cb8c1f9"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSelectedSharpComparison.lean",
+    "source_sha256": "4497e9acaf4f9790b76fbd4fa9d7e94f4c5dfe756f929bd27206cf1dfb815ed3"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpComparison.lean",
+    "source_sha256": "9ce34a49150390ea7197d336085bf21771f358a003332bc6336ab5bc5ef4035b"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpLower.lean",
+    "source_sha256": "b2d8bdad88fca0b67c2230abdded644afdbc2550880940868d1063681fd46542"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualSharpLowerPrevector.lean",
+    "source_sha256": "a44ec307a17df6ca9a68920fbae5be5002b8940618778c323850e2f04a3b4653"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ActualTransportEstimates.lean",
+    "source_sha256": "31d1b592f4eaf2945392af8b85dbab171b4e30a4d09419448251a18049393f3b"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean",
+    "source_sha256": "25d2fb6440767d3def9a63907659920832570b432cd82d4428e7ae96adf7dccc"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean",
+    "source_sha256": "0413da02d840e162d4faa21a06f167b2950c460f5013ac0862600405feb8dc16"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/GenericChargeEnergy.lean",
+    "source_sha256": "e7061b5f555b560251a835e329073b6257e7720440d4b8397dfba8951d2e838c"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/GenericSelectedChargeEnergy.lean",
+    "source_sha256": "64d8ed2fe378e49289a2bf71c25775caa62707463d255aec86f323658eb9c22a"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean",
+    "source_sha256": "64044a638580b516e971152a5bed7a91cf31f77b2e5f0de8948bb921856e542a"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalScanner.lean",
+    "source_sha256": "27b1e3a3213a5b19886163dab01d7739e3694f75578cf47cd6137957f1caa236"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalTemplateInformation.lean",
+    "source_sha256": "75b7ce36eb932f871feac447e9c7f47b69c79afce64028029ebf666f096d87d1"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/ScanTruncationInputs.lean",
+    "source_sha256": "7f26185f4cc9d9272b83f565e71236d5b52544d8122ea80dfbcf8c9386e8c8aa"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceActualInformation.lean",
+    "source_sha256": "e5f71f33cd959c535ce97777d1165a3afd4884ba27ee661de585db6a5f72bd20"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceBootstrapEntropy.lean",
+    "source_sha256": "0a1b8b447e6de5c2a7a0d3368ae98902a176bb1d7ae2503c20573f98e357a32c"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceChargeSelection.lean",
+    "source_sha256": "62854621196cf42e94cfa86bac548dc8a31309d6626508625d24d19ca22b0f5b"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceFinalInformation.lean",
+    "source_sha256": "139a11b9bf2e3755b439b1dcc64da52ea9975435ab0c6181bb060a862a97f49d"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceRoughSelection.lean",
+    "source_sha256": "2f2b06abe8cfe78b6f4210eb79f55c89e0afd2cb08a99961e0f40af8c7bb1800"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceRoundedInformation.lean",
+    "source_sha256": "a69607f7b9617b43e326e69e01ab5b27d20eba920a0b702a6c5759634e80f868"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean",
+    "source_sha256": "7811fca0a783e1b2ea72f790d7680b5121e2e35d1a0533910e46e3863cc51a40"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedDensity.lean",
+    "source_sha256": "51a9689b552d1dec65aa5a7ff7b70f327316635758b55ca224556334eb042521"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedEnergy.lean",
+    "source_sha256": "cc8179d1a76f4de780dd463cf6115cc73b91590335fc6e8ab2b2b8d842dd8dd4"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpComparison.lean",
+    "source_sha256": "ab702b4e54435576c8dec7ff34589ea279958716def82b2dec30b0c08cbdd1df"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpDensity.lean",
+    "source_sha256": "299c6e22892423bbf6d15d9f2298e10883b1871a0715c23836f0059845bfb74b"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpEnergy.lean",
+    "source_sha256": "5c070743a4393f9721c2df5bff6784e1b080dc2e9456b1573ec1fe25fb2cd599"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceStatusMarginalMoments.lean",
+    "source_sha256": "5f0729282ffa5cebfb3e45c9513f5a7ad44fbbe769bff3070fdcd4fcbc692501"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpMoments.lean",
+    "source_sha256": "332becc3ec36fac3ec2fb8815ad283d3d3b10c52405e22ccc048fbb471735496"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpUpper.lean",
+    "source_sha256": "6db84f07ed22e6193fc6529609f56135537e11c4650ad82fdaabb0b313f308af"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/StatusMarginalMoments.lean",
+    "source_sha256": "2a7b053207a33d9fe7be1fc7a5367cfbb276f1822fda59016f03ca63e97b5eef"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetNormAttachment.lean",
+    "source_sha256": "e844962572d187a06a486cc91e59688bfe9409c2044256c68d53cd2d856d9be8"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/SuppliedTargetStatusMoments.lean",
+    "source_sha256": "19e135e17c2b713a50d51be27eb5433a3f9e74af55245dbcac395a62ec45b38b"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/TargetTypicalWindow.lean",
+    "source_sha256": "e2cb55798e1c01bb54381a3d86985c2f30254ee1ee690f3f78e9f6ad5e55083b"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean",
+    "source_sha256": "58ad54ecdc2e5e8b381fe94673e66c1e2ee3fe671ad6da6df6a3cdc5d365820b"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean",
+    "source_sha256": "9142d90fffe17edf63c91110b7d20b7b9d6ade41fce6cd0b0e43587f908de3f9"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/SupportedGaussianIntegral.lean",
+    "source_sha256": "915179220529618080a11b29fc5409fb16f809e29b315fc06afe262bcea6808b"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/TailParameter.lean",
+    "source_sha256": "3f70a77c2e7bb797ce95d159b29913897d5ef89a48eb4dce1b294ebe0b7877ed"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/TheoremStatements.lean",
+    "source_sha256": "cccaa7ccf3c6120ca1398864fb605917ccce30c22792f4f61458beb2dcce3cec"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/VertexBoundaryCorollaries.lean",
+    "source_sha256": "79c713263f353496a1ecbcab959f34987a974fafccc0aa578ca28f68e4e2fad2"
+  },
+  {
+    "lane": "peps",
+    "path": "TNLean/PEPS/AreaLaw/ZeroBoundary.lean",
+    "source_sha256": "f2db667bc1b8a913c43bb0ecb80f2a0b7e87e6ea9999dd062127c4fea771037b"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch24_peps_area_law_marginal_tails.tex",
+    "source_sha256": "4c79328dbe1d5b03bf98556210304507f778fbaa61f759698f9f41a0871b48e3"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch24_peps_area_law_models.tex",
+    "source_sha256": "23de51600327b6ad095e3a9f9d7f7ae473e19ea6578f3dffe1213450876f3aac"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch24_peps_area_law_scan_histories.tex",
+    "source_sha256": "7341abc62f9b6670c28c738c6bb118ac2b23803173abafaf7f471e259c5aba26"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch24_peps_information_reset.tex",
+    "source_sha256": "2166df9b15dcaffaecdcb09e035d0d4233b4d84dcbfa1475575bef8afac70dcb"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch24_peps_rectangular_specialization.tex",
+    "source_sha256": "bce4935e93150c31ffe0ef771d551de050c94596ea765291f0fb541cb98dab8b"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch24_peps_regularized_patch_stationarity.tex",
+    "source_sha256": "a413a7afcd1eee02c7c4d78cc08e971c01d28a83b5b6546789e3a76d0c303b1f"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch24_peps_reset_unitary.tex",
+    "source_sha256": "c3688ee6da5e29e587cbf5aeee796cecd6c52e9626bc9f89803f485f84000f57"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch24_supported_physical_buffer_gaussian.tex",
+    "source_sha256": "ffd06275eae733fcfb3a7c84dcb8514d2af00ef36a79924434f12faa39e8a76a"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch34_area_law_graph_propagation.tex",
+    "source_sha256": "198a5c4f611246bf3411c5ef59eed99981305873246abda24a7b5eae936f354d"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch35_chain_gluing.tex",
+    "source_sha256": "a1a6aa97a05f9ad1b7cc62f34f980acefbf8355e84f3f4258fe117537ddd9c40"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch35_chain_trimming.tex",
+    "source_sha256": "04b2b6980472e695621737811224f3b15a1e14ec0c11bbe83263881f90431e92"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch35_hastings_boundary_factorization.tex",
+    "source_sha256": "6cb5652d86759e60c1cfd67cf9de1dc692820ec8fb196a1d496bb069f691495d"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch35_hastings_lemma1.tex",
+    "source_sha256": "1380f9b13d0b3b4a004422c7fead829d4e40d920a1723bf397f3d2d6de3e68eb"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch35_hastings_product_form.tex",
+    "source_sha256": "9f664ebeaa4b5ffcfef659d9ee671e784e965f48a8142c7ea710c6b66d419b14"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch35_hastings_source_length.tex",
+    "source_sha256": "6855de80996d555e84cc6c1e15fdb8d0a1bf454fb022b4a0ca1e4316277f146e"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch35_hastings_three_way_splitting.tex",
+    "source_sha256": "936b084e7f5ba5efb751f6fcc561f5a7682f49cf04b922f07034cc0a9b1167c0"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch35_huang_positive_chain.tex",
+    "source_sha256": "05bf84fe357c81436aa9b1f348936864aa1f4d0b046bdb3bb489d8ae41b4b5c8"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch35_lvv_power_projector.tex",
+    "source_sha256": "bf5e1abd3e16f9eb156988110f0582e8c3552d12227aa807410f503dd92711f0"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch35_lvv_size_trimming.tex",
+    "source_sha256": "d4f93fbfc824630bdd7c0f2b598d78cd87d7e752e28320440f585ee2a2dcfa6e"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch35_lvv_successive_trimming.tex",
+    "source_sha256": "190a3b7179fd02d82008b46868cdf41bc78b35f6faa304b2af6429f60f0f0e84"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch35_one_dimensional_chain.tex",
+    "source_sha256": "b7b4513adcf018dbdbb3bc73cda67e3cb15649c63bb956e439bb929a587259be"
+  },
+  {
+    "lane": "docs",
+    "path": "blueprint/src/chapter/ch35_one_dimensional_preliminaries.tex",
+    "source_sha256": "328a66d9bb33c97c8a8f852d5c6a17371ff593344031fcf94bba8bf0bc5ddc38"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/formalization/one-dimensional-chain.md",
+    "source_sha256": "ae6379e47db71278bfaab03992c1f86dd54a03170d83f35d796067b8f7817ac5"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/formalization/openai-area-law-peps.md",
+    "source_sha256": "1c16c33eb0e576dfe63a607c09c711e5bb3d721aeee7c5a95a3540ec9d3054ae"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/glossary.md",
+    "source_sha256": "1397ddd51039692198f30ebccfc55a5e0a54aab2a0beadd7642f1b4c7442255b"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/many_body_circuit_architecture.md",
+    "source_sha256": "43c35fb9e73a39565522bf34822b4eee8829cc233d8d5a2f3e2ca1d93f37d9d1"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex",
+    "source_sha256": "e046fa8427d7635303b188b35fb403d03452ace3c4cd0a8bd4fdffa9e1267041"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/paper-gaps/hastings07_commutator_constant.tex",
+    "source_sha256": "7d99e3bf9f21b0b1e08dfb84cfc0522b575e58903746834a8fb590488fbceb31"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/paper-gaps/hastings07_lemma1_decay_length.tex",
+    "source_sha256": "ead0392dafcfcea2d30ce6e488ff5c6aa1fa310d04567a1b4177ccbe23f52077"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/paper-gaps/lvv13_constant_bond.tex",
+    "source_sha256": "73ebd6ef35e1c433f9dab39bd9050edd8d76189a73e36e08e6df96f4ef035186"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/paper-gaps/lvv13_leading_net_point.tex",
+    "source_sha256": "9d5a16d4415b63380d9b78b54e5a034f5fc3041805e5ea5a1c747d102e3e37ae"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/paper-gaps/lvv13_runtime_ground_energy.tex",
+    "source_sha256": "3e6b29f8d445967d810608abb9785289d0a0a19a6f71464b94872ab428472579"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex",
+    "source_sha256": "04b0cbd897ecc79c1250721582117ed81928395158c21fdeaa2776ef69c525e2"
+  },
+  {
+    "lane": "docs",
+    "path": "docs/tactic_patterns.md",
+    "source_sha256": "7e98f054d39d575491df70ebc3c36a62e9a265ba289daf8b5b27ea72d096796c"
+  }
+]

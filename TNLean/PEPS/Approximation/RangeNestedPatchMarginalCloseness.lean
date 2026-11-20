@@ -77,7 +77,8 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
               (1 / 16 : ℝ) := by
   intro Λ H hH hHJ E₀ Ψ hΩ hgap hspan center u b hu hb m regions a Ψᵤ x hx hmin X
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
-  have henergy := (H.rangeNestedPatch_minimizer_energy_le hH hHJ hR hJ Ψ hΩ hspan center u κ b
+  have henergy := (H.rangeNestedPatch_minimizer_energy_le hH hHJ hR hJ Ψ hΩ
+    (hspan ▸ Submodule.mem_span_singleton_self Ψ) center u κ b
     hu hκ (hκhalf.trans (by norm_num)) hb x hx hmin).trans hsmall
   have hnorm := norm_normalizedRegularizedPatchOutput
     (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a

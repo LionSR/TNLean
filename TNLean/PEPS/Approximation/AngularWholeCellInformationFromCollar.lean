@@ -34,6 +34,8 @@ open TNLean.Lattice
 
 open ManyBody (IsGapped groundSpace SquareInteraction)
 
+open scoped ComplexOrder
+
 namespace TNLean.PEPS.Approximation
 
 open AngularGrid
@@ -59,8 +61,9 @@ theorem mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt
         (∀ i, i ∈ S ↔ touches o s r A i ∧ ¬ touches o s r Aold i) →
         ∀ (L : ℕ) (h : SquareInteraction L q) (_ : h.hamiltonian.IsHermitian)
             (_ : ∀ i, ‖h.term i‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace L q),
-          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
-          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+          ‖Ω‖ = 1 → (h.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+            (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef →
+          Ω ∈ groundSpace h.hamiltonian E₀ →
           ∀ (E : Finset (Vertex L)) (b₀ : ℝ),
             (∀ x ∈ selectedRegion o s r A, ∀ v ∈ E,
               c * s ≤ dist x (sitePosition L v)) →
@@ -119,6 +122,11 @@ theorem exists_mutualInformation_selectedRegion_le_square_of_sublinearCollarBoun
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
   exact ⟨_, _, cellInformationConstant_pos q c Ctpl N Ca Na,
     (cellInformationExponent_pos c Ctpl N Ca Na).le,
-    mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt hcol hamp hc⟩
+    by
+      intro s hs o r Aold A hA S hS L h hh hhJ E₀ Ω hΩ hgap hspan
+      exact mutualInformation_selectedRegion_le_square_of_sublinearCollarBoundAt hcol hamp hc
+        s hs o r Aold A hA S hS L h hh hhJ E₀ Ω hΩ
+        (hgap.posSemidef_sub_smul_one hh hΩ hspan)
+        (hspan ▸ Submodule.mem_span_singleton_self _)⟩
 
 end TNLean.PEPS.Approximation

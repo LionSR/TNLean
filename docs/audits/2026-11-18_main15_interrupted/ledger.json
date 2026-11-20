@@ -1,0 +1,1043 @@
+{
+  "head": "9a440ee87474b5564ed26c297c7f63e0ab81aeac",
+  "started_utc": "2026-11-18T09:11:57Z",
+  "targets": [
+    "TNLean/MPS/AreaLaw/ALVV/MergeRounds.lean",
+    "TNLean/PEPS/Examples/HoneycombCluster.lean",
+    "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeEvent.lean",
+    "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeParent.lean",
+    "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeTree.lean",
+    "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeTreeApproximation.lean",
+    "TNLean/MPS/AreaLaw/ALVV/EfficientSoftLowDensityCore.lean",
+    "TNLean/MPS/AreaLaw/ALVV/EfficientSoftLowDensityFamily.lean",
+    "TNLean/MPS/AreaLaw/ALVV/EfficientSoftLowDensityCalibration.lean",
+    "TNLean/MPS/AreaLaw/ALVV/FrustrationFreeTree.lean",
+    "TNLean/MPS/AreaLaw/ALVV.lean",
+    "TNLean/PEPS/Examples.lean",
+    "TNLean/MPS/AreaLaw.lean",
+    "TNLean/PEPS.lean",
+    "TNLean/MPS.lean"
+  ],
+  "results": [
+    {
+      "file": "TNLean/MPS/AreaLaw/ALVV/MergeRounds.lean",
+      "build": {
+        "command": [
+          "lake",
+          "--fail-fast",
+          "build",
+          "TNLean.MPS.AreaLaw.ALVV.MergeRounds"
+        ],
+        "exit": 0,
+        "seconds": 6.013,
+        "free_before": 5052563456,
+        "free_after": 5051998208,
+        "resource_stop": false,
+        "log": "01.build.log"
+      },
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-j1",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/AreaLaw/ALVV/MergeRounds.lean"
+        ],
+        "exit": 0,
+        "seconds": 6.01,
+        "free_before": 5051998208,
+        "free_after": 5051998208,
+        "resource_stop": false,
+        "log": "01.strict.log"
+      }
+    },
+    {
+      "file": "TNLean/PEPS/Examples/HoneycombCluster.lean",
+      "build": {
+        "command": [
+          "lake",
+          "--fail-fast",
+          "build",
+          "TNLean.PEPS.Examples.HoneycombCluster"
+        ],
+        "exit": 0,
+        "seconds": 15.004,
+        "free_before": 5051998208,
+        "free_after": 5047779328,
+        "resource_stop": false,
+        "log": "02.build.log"
+      },
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-j1",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/PEPS/Examples/HoneycombCluster.lean"
+        ],
+        "exit": 0,
+        "seconds": 6.005,
+        "free_before": 5047779328,
+        "free_after": 5047779328,
+        "resource_stop": false,
+        "log": "02.strict.log"
+      }
+    },
+    {
+      "file": "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeEvent.lean",
+      "build": {
+        "command": [
+          "lake",
+          "--fail-fast",
+          "build",
+          "TNLean.MPS.AreaLaw.ALVV.DGConstantNodeEvent"
+        ],
+        "exit": 1,
+        "seconds": 342.218,
+        "free_before": 5047779328,
+        "free_after": 4923113472,
+        "resource_stop": false,
+        "log": "03.build.log"
+      }
+    },
+    {
+      "file": "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeEvent.lean",
+      "head": "2c1ac009c7f88b74029d056e29e2a8ac4ee10a8e",
+      "attempt": 2,
+      "build": {
+        "command": [
+          "lake",
+          "--fail-fast",
+          "build",
+          "TNLean.MPS.AreaLaw.ALVV.DGConstantNodeEvent"
+        ],
+        "exit": 0,
+        "seconds": 15.014,
+        "free_before": 4923052032,
+        "free_after": 4928344064,
+        "resource_stop": false,
+        "log": "03-attempt2.build.log"
+      },
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-j1",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeEvent.lean"
+        ],
+        "exit": 0,
+        "seconds": 9.022,
+        "free_before": 4928344064,
+        "free_after": 4928344064,
+        "resource_stop": false,
+        "log": "03-attempt2.strict.log"
+      }
+    },
+    {
+      "file": "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeParent.lean",
+      "head": "2c1ac009c7f88b74029d056e29e2a8ac4ee10a8e",
+      "attempt": 1,
+      "build": {
+        "command": [
+          "lake",
+          "--fail-fast",
+          "build",
+          "TNLean.MPS.AreaLaw.ALVV.DGConstantNodeParent"
+        ],
+        "exit": 1,
+        "seconds": 15.02,
+        "free_before": 4928344064,
+        "free_after": 4921102336,
+        "resource_stop": false,
+        "log": "04-attempt1.build.log"
+      }
+    },
+    {
+      "file": "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeParent.lean",
+      "head": "2a6ca0769016e17b3d479ef8c066655748aa2806",
+      "attempt": 2,
+      "build": {
+        "command": [
+          "lake",
+          "--fail-fast",
+          "build",
+          "TNLean.MPS.AreaLaw.ALVV.DGConstantNodeParent"
+        ],
+        "exit": 0,
+        "seconds": 15.006,
+        "free_before": 4921061376,
+        "free_after": 4924633088,
+        "resource_stop": false,
+        "log": "04-attempt2.build.log"
+      },
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-j1",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeParent.lean"
+        ],
+        "exit": 0,
+        "seconds": 12.017,
+        "free_before": 4924633088,
+        "free_after": 4924633088,
+        "resource_stop": false,
+        "log": "04-attempt2.strict.log"
+      }
+    },
+    {
+      "file": "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeTree.lean",
+      "head": "2a6ca0769016e17b3d479ef8c066655748aa2806",
+      "attempt": 1,
+      "build": {
+        "command": [
+          "lake",
+          "--fail-fast",
+          "build",
+          "TNLean.MPS.AreaLaw.ALVV.DGConstantNodeTree"
+        ],
+        "exit": 1,
+        "seconds": 30.028,
+        "free_before": 4924628992,
+        "free_after": 4913623040,
+        "resource_stop": false,
+        "log": "05-attempt1.build.log"
+      }
+    },
+    {
+      "file": "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeTree.lean",
+      "head": "9a440ee87474b5564ed26c297c7f63e0ab81aeac",
+      "attempt": 2,
+      "build": {
+        "command": [
+          "lake",
+          "--fail-fast",
+          "build",
+          "TNLean.MPS.AreaLaw.ALVV.DGConstantNodeTree"
+        ],
+        "exit": 0,
+        "seconds": 24.018,
+        "free_before": 4913582080,
+        "free_after": 4915802112,
+        "resource_stop": false,
+        "log": "05-attempt2.build.log"
+      },
+      "strict": {
+        "command": [
+          "lake",
+          "env",
+          "lean",
+          "-j1",
+          "-DautoImplicit=false",
+          "-DrelaxedAutoImplicit=false",
+          "-Dpp.unicode.fun=true",
+          "-DmaxSynthPendingDepth=3",
+          "-Dlinter.mathlibStandardSet=true",
+          "-DwarningAsError=true",
+          "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeTree.lean"
+        ],
+        "exit": 0,
+        "seconds": 21.021,
+        "free_before": 4915802112,
+        "free_after": 4915802112,
+        "resource_stop": false,
+        "log": "05-attempt2.strict.log"
+      }
+    },
+    {
+      "file": "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeTreeApproximation.lean",
+      "head": "9a440ee87474b5564ed26c297c7f63e0ab81aeac",
+      "attempt": 1,
+      "build": {
+        "command": [
+          "lake",
+          "--fail-fast",
+          "build",
+          "TNLean.MPS.AreaLaw.ALVV.DGConstantNodeTreeApproximation"
+        ],
+        "exit": 1,
+        "seconds": 63.041,
+        "free_before": 4915802112,
+        "free_after": 4898021376,
+        "resource_stop": false,
+        "log": "06-attempt1.build.log"
+      }
+    },
+    {
+      "file": "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeTreeApproximation.lean",
+      "head": "9a440ee87474b5564ed26c297c7f63e0ab81aeac",
+      "attempt": 2,
+      "build": {
+        "command": [
+          "lake",
+          "--fail-fast",
+          "build",
+          "TNLean.MPS.AreaLaw.ALVV.DGConstantNodeTreeApproximation"
+        ],
+        "exit": 1,
+        "seconds": 24.008,
+        "free_before": 4898017280,
+        "free_after": 4897452032,
+        "resource_stop": false,
+        "log": "06-attempt2.build.log"
+      }
+    }
+  ],
+  "cleanup": [
+    {
+      "module": "TNLean.MPS.AreaLaw.ALVV.MergeRounds",
+      "bytes": 1392904
+    },
+    {
+      "module": "TNLean.PEPS.TorusLatticeGraph",
+      "bytes": 876463
+    },
+    {
+      "module": "TNLean.PEPS.RegionTransport",
+      "bytes": 890317
+    },
+    {
+      "module": "TNLean.PEPS.TorusTranslation",
+      "bytes": 878687
+    },
+    {
+      "module": "TNLean.PEPS.TorusTranslationInvariant",
+      "bytes": 948890
+    },
+    {
+      "module": "TNLean.PEPS.TorusSiteTensor",
+      "bytes": 949021
+    },
+    {
+      "module": "TNLean.PEPS.Examples.Cluster",
+      "bytes": 1139847
+    },
+    {
+      "module": "TNLean.PEPS.Examples.ClusterStabilizer",
+      "bytes": 1139980
+    },
+    {
+      "module": "TNLean.PEPS.Examples.HoneycombCluster",
+      "bytes": 1252334
+    },
+    {
+      "module": "QICLean.Analysis.ViableSubspaceOrder",
+      "bytes": 1884554
+    },
+    {
+      "module": "QICLean.Entropy.RegionTraceNorm",
+      "bytes": 2238647
+    },
+    {
+      "module": "QICLean.Entropy.SubregionCut",
+      "bytes": 2283086
+    },
+    {
+      "module": "QICLean.Analysis.ViableSubspaceTensorTransport",
+      "bytes": 1931056
+    },
+    {
+      "module": "QICLean.Analysis.TensorProductWeights",
+      "bytes": 1930349
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.EntropyScaling.CutReducedState",
+      "bytes": 2289488
+    },
+    {
+      "module": "QICLean.Analysis.BallNet",
+      "bytes": 1775880
+    },
+    {
+      "module": "QICLean.Entropy.RegionalViability",
+      "bytes": 2285793
+    },
+    {
+      "module": "QICLean.Analysis.SpectralProjectorPower",
+      "bytes": 1930875
+    },
+    {
+      "module": "QICLean.Analysis.ViableNodeParameters",
+      "bytes": 2163560
+    },
+    {
+      "module": "QICLean.Probability.ComplexGaussian.RatioTail",
+      "bytes": 2649140
+    },
+    {
+      "module": "QICLean.Analysis.TensorOperatorPower",
+      "bytes": 1931192
+    },
+    {
+      "module": "QICLean.Probability.HaarProjection",
+      "bytes": 2649989
+    },
+    {
+      "module": "TNLean.Algebra.MatrixFactorExchange",
+      "bytes": 1065730
+    },
+    {
+      "module": "TNLean.Algebra.TwoWindowSum",
+      "bytes": 573204
+    },
+    {
+      "module": "QICLean.Entropy.RegionTensorSplitting",
+      "bytes": 2286135
+    },
+    {
+      "module": "QICLean.Analysis.ChebyshevSpectralProjector",
+      "bytes": 1971143
+    },
+    {
+      "module": "TNLean.Algebra.CoreWordCoefficients",
+      "bytes": 1090342
+    },
+    {
+      "module": "TNLean.MPS.MPDO.Defs",
+      "bytes": 1929057
+    },
+    {
+      "module": "QICLean.Analysis.ViableSubspaceRandomSampling",
+      "bytes": 2655426
+    },
+    {
+      "module": "TNLean.MPS.MPDO.IdentityTensor",
+      "bytes": 1929174
+    },
+    {
+      "module": "QICLean.Entropy.RegionalTensorMerge",
+      "bytes": 2286297
+    },
+    {
+      "module": "TNLean.MPS.MPDO.FirstSite",
+      "bytes": 1929169
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.AdjacentIntervalMerge",
+      "bytes": 2310258
+    },
+    {
+      "module": "QICLean.Algebra.NewtonGirard",
+      "bytes": 1242934
+    },
+    {
+      "module": "QICLean.Analysis.ChebyshevViability",
+      "bytes": 2378400
+    },
+    {
+      "module": "QICLean.Algebra.ScalarPowerSumIdentity",
+      "bytes": 1259752
+    },
+    {
+      "module": "QICLean.Analysis.MatrixTensorCoordinates",
+      "bytes": 1930780
+    },
+    {
+      "module": "TNLean.MPS.FundamentalTheorem.SectorWeightComparison",
+      "bytes": 2186500
+    },
+    {
+      "module": "QICLean.Analysis.ViableSubspaceBootstrap",
+      "bytes": 2656461
+    },
+    {
+      "module": "TNLean.MPS.FundamentalTheorem.SectorBNT.Basic",
+      "bytes": 2195831
+    },
+    {
+      "module": "QICLean.Analysis.ViableSubspaceSampleOrFull",
+      "bytes": 2656634
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.IntervalCollectiveTrimming",
+      "bytes": 2775100
+    },
+    {
+      "module": "TNLean.MPS.Core.PhysicalReindexTransport",
+      "bytes": 2243242
+    },
+    {
+      "module": "QICLean.Channel.KrausCornerCompression",
+      "bytes": 2180246
+    },
+    {
+      "module": "QICLean.Analysis.ViableSubspaceSamplingEvent",
+      "bytes": 2656811
+    },
+    {
+      "module": "QICLean.Channel.Peripheral.CyclicDecomposition.Primitivity",
+      "bytes": 2184376
+    },
+    {
+      "module": "TNLean.MPS.CanonicalForm.CyclicSectors.Basic",
+      "bytes": 2243246
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.IntervalGenerators",
+      "bytes": 2775249
+    },
+    {
+      "module": "TNLean.MPS.Irreducible.PeriodicBlocking",
+      "bytes": 2178078
+    },
+    {
+      "module": "QICLean.Analysis.SampledOperatorImage",
+      "bytes": 2657464
+    },
+    {
+      "module": "QICLean.Channel.Peripheral.CyclicDecomposition",
+      "bytes": 2234034
+    },
+    {
+      "module": "QICLean.Analysis.ChebyshevWordPower",
+      "bytes": 2379042
+    },
+    {
+      "module": "TNLean.MPS.MPDO.OperatorProduct",
+      "bytes": 1930745
+    },
+    {
+      "module": "TNLean.MPS.SharedInfra.WordTupleGauge",
+      "bytes": 1928999
+    },
+    {
+      "module": "QICLean.Analysis.SampledWordImageBounds",
+      "bytes": 2657794
+    },
+    {
+      "module": "TNLean.MPS.MPDO.PhysicalAdjoint",
+      "bytes": 1930874
+    },
+    {
+      "module": "TNLean.MPS.CanonicalForm.CyclicSectors.Compression",
+      "bytes": 2235318
+    },
+    {
+      "module": "TNLean.MPS.MPDO.VerticalCF",
+      "bytes": 2191331
+    },
+    {
+      "module": "TNLean.MPS.CanonicalForm.CyclicSectors.CommutingProj",
+      "bytes": 2244956
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.IntervalSampledImage",
+      "bytes": 2777508
+    },
+    {
+      "module": "TNLean.MPS.MPDO.PerCopyHorizontalCF",
+      "bytes": 2191459
+    },
+    {
+      "module": "TNLean.MPS.CanonicalForm.CyclicSectors.CornerBridge",
+      "bytes": 2235652
+    },
+    {
+      "module": "TNLean.MPS.CanonicalForm.CyclicSectors.FixedAdjoint",
+      "bytes": 2245126
+    },
+    {
+      "module": "TNLean.MPS.FundamentalTheorem.UnitaryGauge",
+      "bytes": 6582851
+    },
+    {
+      "module": "TNLean.MPS.CanonicalForm.SectorComparison.PrimitiveBlocks",
+      "bytes": 6608636
+    },
+    {
+      "module": "TNLean.MPS.MPDO.BiCFDerivation.Core",
+      "bytes": 2192049
+    },
+    {
+      "module": "TNLean.MPS.MPDO.FirstSiteBlocking",
+      "bytes": 2191837
+    },
+    {
+      "module": "TNLean.MPS.Periodic.SectorIrreducibility.ProjectionOrtho",
+      "bytes": 2245445
+    },
+    {
+      "module": "TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorRelation",
+      "bytes": 2245306
+    },
+    {
+      "module": "TNLean.MPS.MPDO.SitewiseOperatorProduct",
+      "bytes": 1931001
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.FixedConfigurationExtension",
+      "bytes": 2207213
+    },
+    {
+      "module": "TNLean.MPS.Periodic.Overlap.GaugePhase",
+      "bytes": 6583602
+    },
+    {
+      "module": "TNLean.MPS.MPDO.BiCFDerivation.Blocking",
+      "bytes": 2192570
+    },
+    {
+      "module": "TNLean.MPS.MPDO.RepresentativeGroupedLemmaL",
+      "bytes": 2192657
+    },
+    {
+      "module": "TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorFamily",
+      "bytes": 6608834
+    },
+    {
+      "module": "TNLean.MPS.MPDO.BiCFDerivation.Selectors",
+      "bytes": 2192191
+    },
+    {
+      "module": "TNLean.MPS.MPDO.BiCFDerivation.DirectSumInput",
+      "bytes": 2192319
+    },
+    {
+      "module": "TNLean.MPS.Periodic.SectorIrreducibility.OrbitSum",
+      "bytes": 2245617
+    },
+    {
+      "module": "TNLean.MPS.MPDO.TraceChainOperator",
+      "bytes": 1929178
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.IntervalSlice",
+      "bytes": 2207199
+    },
+    {
+      "module": "QICLean.Algebra.OperatorSchmidtPrescribedFactors",
+      "bytes": 1176344
+    },
+    {
+      "module": "TNLean.MPS.Periodic.Overlap.SelfOverlapNonrep",
+      "bytes": 6593518
+    },
+    {
+      "module": "TNLean.MPS.MPDO.BiCFDerivation.DirectSumGroundSpace",
+      "bytes": 2195340
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.TwoCutEdgeSupports",
+      "bytes": 682716
+    },
+    {
+      "module": "TNLean.MPS.Periodic.SectorIrreducibility.HLift",
+      "bytes": 2245779
+    },
+    {
+      "module": "TNLean.Algebra.TwoMarkerMiddleFactors",
+      "bytes": 1176518
+    },
+    {
+      "module": "TNLean.Lattice.Sheet.SupportedSchmidtRank",
+      "bytes": 2297876
+    },
+    {
+      "module": "TNLean.Lattice.Sheet.LeftSupportedSchmidtRank",
+      "bytes": 2297880
+    },
+    {
+      "module": "TNLean.Lattice.Sheet.RegionalOperatorForms",
+      "bytes": 2297734
+    },
+    {
+      "module": "TNLean.MPS.MPDO.BiCFDerivation.DirectSumUniqueness",
+      "bytes": 2199827
+    },
+    {
+      "module": "QICLean.Algebra.IntegerGridInterpolation",
+      "bytes": 1230426
+    },
+    {
+      "module": "QICLean.Algebra.TwoMarkerWordCoefficients",
+      "bytes": 933823
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.TwoWindowFamilyCardinality",
+      "bytes": 462312
+    },
+    {
+      "module": "QICLean.Algebra.LowFrequencyWordPartition",
+      "bytes": 930681
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.ThreeRegionSupport",
+      "bytes": 2322136
+    },
+    {
+      "module": "TNLean.Algebra.TwoMarkerScalarRecovery",
+      "bytes": 1270603
+    },
+    {
+      "module": "TNLean.MPS.CanonicalForm.SectorComparison.CyclicSectorDecomposition",
+      "bytes": 6611264
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.IndependentTruncationParameters",
+      "bytes": 1394245
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.IndependentFiveRegionResidual",
+      "bytes": 2330089
+    },
+    {
+      "module": "TNLean.Algebra.TwoWindowPolynomialRecovery",
+      "bytes": 1273249
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.ShortRegionViableFamily",
+      "bytes": 2656632
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.SelectedMiddleData",
+      "bytes": 2322604
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.SharpApproximationParameters",
+      "bytes": 1394409
+    },
+    {
+      "module": "QICLean.Analysis.LogRankRounding",
+      "bytes": 1336910
+    },
+    {
+      "module": "TNLean.MPS.CanonicalForm.SectorComparison.CommonBlockedCyclicSectorConstruction",
+      "bytes": 6611478
+    },
+    {
+      "module": "QICLean.Analysis.ViableTrimmingRadius",
+      "bytes": 2163560
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.SelectedCoefficientDecomposition",
+      "bytes": 2322759
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.IndependentFiveRegionCluster",
+      "bytes": 2331198
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.SharpRankCount",
+      "bytes": 1394556
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.MPSReferenceSpace",
+      "bytes": 2207482
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.RegionalMiddleFactors",
+      "bytes": 2323054
+    },
+    {
+      "module": "TNLean.MPS.CanonicalForm.SectorComparison.CommonSectorData",
+      "bytes": 6611681
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.FiveRegionTruncationResidual",
+      "bytes": 2332012
+    },
+    {
+      "module": "TNLean.MPS.Periodic.Overlap.SelfOverlapSetup",
+      "bytes": 6612144
+    },
+    {
+      "module": "TNLean.MPS.Periodic.Overlap.SelfOverlap",
+      "bytes": 6612451
+    },
+    {
+      "module": "TNLean.MPS.Periodic.NormalizedSelfOverlap",
+      "bytes": 6613238
+    },
+    {
+      "module": "TNLean.MPS.BNT.DirectSumSelectors",
+      "bytes": 6619823
+    },
+    {
+      "module": "TNLean.MPS.FundamentalTheorem.SectorBNT.Blocking",
+      "bytes": 6613541
+    },
+    {
+      "module": "TNLean.MPS.MPDO.PostBlockedRepresentativeSpan",
+      "bytes": 6620709
+    },
+    {
+      "module": "TNLean.MPS.MPDO.HorizontalCFMPVRepresentation",
+      "bytes": 6620866
+    },
+    {
+      "module": "TNLean.MPS.MPDO.InvariantProjection",
+      "bytes": 6621130
+    },
+    {
+      "module": "TNLean.MPS.MPDO.PeriodicExclusion",
+      "bytes": 6621893
+    },
+    {
+      "module": "TNLean.MPS.MPDO.StackedLayers",
+      "bytes": 6622149
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.TraceCoreSlices",
+      "bytes": 6627259
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.RetainedCoreFamilies",
+      "bytes": 6628127
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.RetainedCoreTracePresentation",
+      "bytes": 6628281
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.PhysicalIntervalTransport",
+      "bytes": 6633162
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.SelectedMiddleMPOFamily",
+      "bytes": 6643296
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.IntervalMPOTransfer",
+      "bytes": 6643413
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.TraceIntervalTransfer",
+      "bytes": 6643558
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.CommonMiddleMPOFamily",
+      "bytes": 6644156
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.TwoWindowPolynomialMPOFamily",
+      "bytes": 6646073
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.PhysicalPolynomialTensorFamily",
+      "bytes": 6646406
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.ActualClippedPolynomialFamily",
+      "bytes": 6649152
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.IndependentPhysicalDGPower",
+      "bytes": 6657740
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.PhysicalDGViability",
+      "bytes": 6657555
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.IndependentPhysicalDGViability",
+      "bytes": 6657901
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.PhysicalDGApproximation",
+      "bytes": 6659202
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.PhysicalDGSharpApproximation",
+      "bytes": 6659491
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.PhysicalDGGlobalApproximation",
+      "bytes": 6680219
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.PhysicalDGReferenceSpace",
+      "bytes": 6680643
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.PhysicalDGIntervalTrimming",
+      "bytes": 6683024
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.PhysicalDGSampledNode",
+      "bytes": 6685260
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.ALVV.DGConstantNodeEvent",
+      "bytes": 6685547
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.ALVV.DGConstantNodeParent",
+      "bytes": 6685701
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.BalancedIntervalTree",
+      "bytes": 1712890
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.IntervalFullSpaceProfile",
+      "bytes": 2775396
+    },
+    {
+      "module": "QICLean.Analysis.ViableNodeSamplingParameters",
+      "bytes": 2163568
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.IntervalSamplingTree",
+      "bytes": 2778131
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.ALVV.DGConstantNodeTree",
+      "bytes": 6686477
+    },
+    {
+      "module": "QICLean.Analysis.ViableSubspaceReferenceTrimming",
+      "bytes": 2215986
+    },
+    {
+      "module": "QICLean.Analysis.ViableTrimmingRank",
+      "bytes": 2163722
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.FullIntervalMPS",
+      "bytes": 2859199
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.IntervalReferenceTrimming",
+      "bytes": 2775442
+    },
+    {
+      "module": "QICLean.Analysis.ViableFilterTrimmingIteration",
+      "bytes": 669600
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.FullIntervalViability",
+      "bytes": 2859340
+    },
+    {
+      "module": "QICLean.Analysis.QuantitativeFilterIteration",
+      "bytes": 1338430
+    },
+    {
+      "module": "QICLean.Analysis.CenteredGroundOperator",
+      "bytes": 2178267
+    },
+    {
+      "module": "QICLean.Analysis.ProjectionQuadraticBounds",
+      "bytes": 1884560
+    },
+    {
+      "module": "QICLean.Analysis.ViableSubspaceSharpErrorReduction",
+      "bytes": 1884568
+    },
+    {
+      "module": "QICLean.Analysis.ViableRefinementParameters",
+      "bytes": 1027335
+    },
+    {
+      "module": "QICLean.Analysis.ViableProjectionNonzero",
+      "bytes": 1884558
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.FullIntervalTrimmingMPS",
+      "bytes": 2859954
+    },
+    {
+      "module": "QICLean.Analysis.RitzSubspace",
+      "bytes": 1888109
+    },
+    {
+      "module": "QICLean.Analysis.ViableSubspaceSymmetry",
+      "bytes": 1884557
+    },
+    {
+      "module": "QICLean.Analysis.RitzCompression",
+      "bytes": 1888260
+    },
+    {
+      "module": "QICLean.Analysis.ViableSubspaceReferenceFilterTrimming",
+      "bytes": 2216712
+    },
+    {
+      "module": "QICLean.Analysis.ProjectedTrialSpaceEnergy",
+      "bytes": 1884904
+    },
+    {
+      "module": "QICLean.Analysis.RitzGroundSpace",
+      "bytes": 1897366
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.FullIntervalFilterTrimming",
+      "bytes": 2860544
+    },
+    {
+      "module": "QICLean.Analysis.RitzGroundSpaceCloseness",
+      "bytes": 2179753
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.FullIntervalFilterIteration",
+      "bytes": 2860702
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.PhysicalDGFilterTrimming",
+      "bytes": 2861395
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.PhysicalDGFilterIteration",
+      "bytes": 2861886
+    },
+    {
+      "module": "TNLean.MPS.AreaLaw.PhysicalDGAutomaticRefinement",
+      "bytes": 6688116
+    }
+  ],
+  "editing_seconds": 0,
+  "status": "build_failed",
+  "source_edits": [
+    {
+      "file": "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeEvent.lean",
+      "change": "open canonical ManyBody.interval after observed unknown identifier errors",
+      "edit_started_utc": 1794993519.3897085,
+      "edit_finished_utc": 1794993519.3914077
+    },
+    {
+      "file": "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeParent.lean",
+      "change": "open canonical ManyBody.interval after observed build failure",
+      "edit_started_utc": 1794993597.886186,
+      "edit_finished_utc": 1794993597.888207
+    },
+    {
+      "file": "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeTree.lean",
+      "change": "open canonical ManyBody.interval after observed build failure",
+      "edit_started_utc": 1794993671.2259605,
+      "edit_finished_utc": 1794993671.2284367
+    },
+    {
+      "file": "TNLean/MPS/AreaLaw/ALVV/DGConstantNodeTreeApproximation.lean",
+      "change": "open canonical ManyBody.interval after observed build failure",
+      "edit_started_utc": 1794993800.341185,
+      "edit_finished_utc": 1794993800.343342
+    }
+  ],
+  "initial_head": "e06a33e5101309cdc063d5d475e06c2ba0c48b64"
+}

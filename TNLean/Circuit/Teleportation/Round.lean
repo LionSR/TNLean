@@ -419,10 +419,10 @@ theorem chainPre_mulVec : ∀ {hs : List (TeleportHop N)}, Valid hs → ∀ (z :
       · exact Function.update_self ..
       · rw [Function.update_of_ne h.c_ne_e.symm, hge]
       · rw [Function.update_of_ne h.c_ne_f.symm, hgf]
-    have hw : IsZeroOn {h.e, h.f} w :=
-      (hz.mono Finset.subset_union_left).chainPerm_mulVec hef
+    have hw : IsZeroOn {h.e, h.f} w := by
+      simpa using (hz.mono Finset.subset_union_left).chainPerm_mulVec hef
     have hw' : IsZeroOn {h.e, h.f} (finKronecker (Function.update 1 h.c U) *ᵥ w) :=
-      hw.finKronecker_update_one_mulVec hc U
+      hw.finKronecker_update_one_mulVec (by simpa using hc) U
     have hswap : h.swapPerm.permMatrix ℂ * finKronecker (Function.update 1 h.c U) =
         finKronecker (Function.update 1 h.f U) * h.swapPerm.permMatrix ℂ := by
       rw [swapPerm, permMatrix_cfgPerm_mul_finKronecker]

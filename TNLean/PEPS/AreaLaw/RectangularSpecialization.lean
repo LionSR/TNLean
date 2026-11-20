@@ -101,7 +101,11 @@ theorem RectangularEntropyAreaLaw.squareEntropyAreaLaw (harea : RectangularEntro
     Approximation.SquareEntropyAreaLaw := by
   intro q hq J Δ hJ hΔ
   obtain ⟨C, hC, hbound⟩ := harea q (by omega) J Δ hJ hΔ
-  exact ⟨C, hC, fun L Ω ⟨h, hH, hΦ, E₀, hΩ, hgap, hspan⟩ A ↦
-    (hbound L L h hH hΦ E₀ Ω hΩ hgap hspan A).1⟩
+  refine ⟨C, hC, ?_⟩
+  rintro L Ω ⟨h, hH, hΦ, E₀, hΩ, hgap, hmem⟩ A
+  obtain ⟨-, -, hgap, hspan⟩ :=
+    (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+      ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hgap⟩
+  exact (hbound L L h hH hΦ E₀ Ω hΩ hgap hspan A).1
 
 end TNLean.PEPS.AreaLaw

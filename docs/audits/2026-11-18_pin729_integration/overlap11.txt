@@ -1,0 +1,11 @@
+TNLean/PEPS/Approximation/AdaptivePatchConstraintFromAreaLaw.lean
+TNLean/PEPS/Approximation/NestedPatchApproximation.lean
+TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean
+TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean
+TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean
+blueprint/src/chapter/ch24_peps_area_law_models.tex
+blueprint/src/chapter/ch24_peps_edge_crossing_budget.tex
+docs/audits/2026-11-17_qiclean_pin_49b9aa93_followups.md
+docs/glossary.md
+docs/paper-gaps/polypeps_square_zero_floor_optimizer_scope.tex
+docs/tactic_patterns.md

@@ -1,0 +1,12 @@
+{
+  "sync_ok": false,
+  "total_blueprint_refs": 35615,
+  "total_lean_decls": 45886,
+  "missing_declarations": 976,
+  "leanok_missing": 975,
+  "exit_code": 1,
+  "command": "BLUEPRINT_SYNC_FETCH_DEPS=0 python scripts/blueprint_lean_sync.py --ci --report /tmp/interaction-docs-staged-sync.json",
+  "log_sha256": "a6feafe50a55c1b6160e24a6709902b8f33db6103b70a66092e2bbe39a318128",
+  "report_sha256": "b53a47a8a53f9ac3dee1363ea9ccf3826cb0691c77571762e3f8c34b2dd1216c",
+  "limitations": "b2 staged consumers not migrated; exact dependency checkouts unavailable in this worktree; no compilation"
+}

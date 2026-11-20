@@ -35,6 +35,7 @@ namespace QuantumCircuit
 variable {q : ℕ} {ι : Type*} [Fintype ι] [DecidableEq ι]
 variable {Aux : Type*} [Fintype Aux] [DecidableEq Aux]
 
+omit [Fintype Aux] [DecidableEq Aux] in
 /-- A spectator operator is fixed by the native site expectation precisely
 when each physical matrix block is supported on the retained sites.
 Source: area law, `09-amplification.tex`, lines 114–121 and 173. -/

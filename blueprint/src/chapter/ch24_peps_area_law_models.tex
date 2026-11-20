@@ -57,7 +57,7 @@ state the two models separately following
     }
     \leanok
     \uses{def:area_law_domain, def:peps_regional_operator_extension}
-    Fix an integer $R\ge0$ and $J>0$. For each nonempty $X\subseteq\Lambda$ with
+    Fix an integer $R\ge0$ and a real bound $J$. For each nonempty $X\subseteq\Lambda$ with
     $\operatorname{diam}_{d_\Lambda}X\le R$, assign one Hermitian operator
     $h_X=h_X^*$ supported on $X$ (extended by $I_{\Lambda\setminus X}$, possibly
     $h_X=0$) with Euclidean operator norm $\|h_X\|\le J$. For
@@ -1037,6 +1037,16 @@ state the two models separately following
     and $10^6/(10^6+1)>1-10^{-6}$.
 \end{proof}
 
+The next two conditional bounds are defined for every real $\Delta$.
+Their state hypotheses are $\|\Omega\|=1$, $H\Omega=E_0\Omega$, and
+\begin{align}
+    H-E_0I-\Delta\bigl(I-|\Omega\rangle\langle\Omega|\bigr) & \succeq0.
+    \label{eq:area_law_conditional_projector_gap}
+\end{align}
+They do not assume that the $E_0$ eigenspace is one-dimensional.
+The theorems establishing the physical collar and amplification bounds retain
+$\Delta>0$; no unconditional nonpositive-gap area law is asserted here.
+
 \begin{definition}[The sublinear collar bound]
     \label{def:area_law_collar_bound}
     \lean{TNLean.PEPS.AreaLaw.SublinearCollarBound,
@@ -1046,8 +1056,9 @@ state the two models separately following
     \uses{def:area_law_ground_entropy,def:area_law_template,thm:area_law_exponent_gaps}
     Fix $q,R,J,\Delta$ and $D_0,C_{\rm tpl}$. The sublinear collar bound
     \cite[Proposition~9.6]{OpenAI2026AreaLaw} holds with constant $C$ and
-    threshold $N$ if for every $n\ge N$, every gapped ground vector $\Omega$ of
-    an admissible Hamiltonian on a finite induced domain $\Lambda$, every
+    threshold $N$ if for every $n\ge N$, every unit eigenvector $\Omega$ of
+    an admissible Hamiltonian on a finite induced domain $\Lambda$ satisfying the
+    projector inequality~(\ref{eq:area_law_conditional_projector_gap}), every
     $A\subseteq\Lambda$, and every template $T$ with parameters $(n,s_0)$
     separated from $Z$ with $L=\lfloor n^{1-\varepsilon}\rfloor\le s_0$, setting
     $X=A\cap T$ and $S_0=A\cap T_L$ gives
@@ -1069,8 +1080,8 @@ state the two models separately following
     Fix $q,R,J,\Delta$. The amplification bound
     \cite[Proposition~10.2]{OpenAI2026AreaLaw} holds at $(C_0,M)$ ($C_0>0$,
     $M\ge1$) with constant $C_M$ and threshold $N$ if for every
-    $n\ge\max(2,N)$, every gapped ground vector $\Omega$ of an admissible
-    Hamiltonian on $\Lambda$, every $A\subseteq\Lambda$, and every finite
+    $n\ge\max(2,N)$, every unit eigenvector $\Omega$ of an admissible
+    Hamiltonian on $\Lambda$ satisfying the projector inequality~(\ref{eq:area_law_conditional_projector_gap}), every $A\subseteq\Lambda$, and every finite
     $T\subset\mathbb Z^2$, setting $L=\lfloor n^{1-\varepsilon}\rfloor$,
     $X=A\cap T$, $S_0=A\cap T_L$, and $Y=S_0\setminus X$, the hypotheses
     $|S_0|\le C_0n^2$, $|\partial_\Lambda X|,|\partial_\Lambda Y|,|\partial_\Lambda S_0|\le C_0n$,

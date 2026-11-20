@@ -124,7 +124,7 @@ noncomputable def _root_.ManyBody.ChainInteraction.ofBonds
     split_ifs with hX
     · rw [← hX]
       exact hs i
-    · exact ⟨fun _ _ _ ↦ rfl, fun _ _ _ _ _ _ _ _ ↦ rfl⟩
+    · exact zero_mem _
 
 /-- The terms of positive semidefinite bonds are Hermitian. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_ofBonds_term
@@ -154,8 +154,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_ofBonds_term_le
 /-- The Hamiltonian of `ManyBody.ChainInteraction.ofBonds` is the sum of the bond terms. -/
 theorem _root_.ManyBody.ChainInteraction.ofBonds_hamiltonian
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
- :
+    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2))) :
     (ManyBody.ChainInteraction.ofBonds h hs).hamiltonian = ∑ i, h i := by
   simp only [ManyBody.Interaction.hamiltonian, ManyBody.ChainInteraction.ofBonds]
   rw [Finset.sum_comm]

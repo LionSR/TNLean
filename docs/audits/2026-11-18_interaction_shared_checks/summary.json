@@ -1,0 +1,25 @@
+{
+  "owner_head": "b992c791dc35580cb84e1161150b98b9963284bb",
+  "qic_pin": "729428582b78ab7529b3796099193649f947354a",
+  "strict_passed": [
+    "TNLean.Lattice.LocalHamiltonian",
+    "TNLean.MPS.AreaLaw.Hamiltonian",
+    "TNLean.Lattice.MarginalTails",
+    "TNLean.Lattice.ProductForm",
+    "TNLean.PEPS.AreaLaw.RectangularHamiltonian"
+  ],
+  "method": "direct Lean overlay compilation and repository strict flags; NOT lake build/full-library",
+  "seconds_all_commands": 55.395456471975194,
+  "initial_setup_failure": "Models first compile could not locate warm Interaction.olean because overlay namespace shadowing; fixed using read-only per-file cache symlinks; original failure retained",
+  "component_reduction": "blocked on unmigrated MPS dependency APIs; see component-blocked.json",
+  "preaudit_report": "69b8 full five-fixture preaudit report not retrieved: room search returned none, personal context unavailable; requested exact location/full report; no claim of reading it",
+  "wrapper_fixture": "unchanged pending preaudit and MPS/PEPS API completion",
+  "active_compilers": 0,
+  "source_hashes": {
+    "TNLean.Lattice.LocalHamiltonian": "07d6cd441488ac3c0da7a87aefe0b1e8066f4b05ff4f531ee4695f8c549e7a08",
+    "TNLean.MPS.AreaLaw.Hamiltonian": "0f98330169d6e56cb59373a9289b6e66b2f8b63478bbba65e425a837d4f9c18a",
+    "TNLean.Lattice.MarginalTails": "1ee732d64fa20bef622174da3dcd9146914d2334a41dfdf50b1ec8d18dd8069c",
+    "TNLean.Lattice.ProductForm": "b2d5e0e31bcb95f7f0083f94f2e10d4499ddbc7cac9f07539437146dd755d2a8",
+    "TNLean.PEPS.AreaLaw.RectangularHamiltonian": "0faf6b9f10d9a8e65c900dc071e40a65f2b2899d21bd96b495766d622b8ec9b6"
+  }
+}

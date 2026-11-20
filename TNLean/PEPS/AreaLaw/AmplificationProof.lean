@@ -465,18 +465,23 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
     hΩ hgap hspan (WithLp.toLp 2 ζ) tt
   have hXint : Integrable (fun u => Xrv u ^ 2) μ := hXint
   have hXle : (∫ u, Xrv u ^ 2 ∂μ) ≤ Real.exp (-(Δ / cs) * t) * ‖ξe‖ ^ 2 := hXle
-  obtain ⟨hYint, hYle⟩ := latticeConstraintWord_omission_of_positiveConstraints
-    hpw R hC₃ hc₃ (latticePositiveConstraints_of_locality hpw R hJ hΔ htail) Λ h hh hhJ a
-        ha E₀ Ω hΩ hgap
+  obtain ⟨hYint, hYle⟩ := latticeConstraintWord_omission_of_locality
+    hpw R hJ hΔ hC₃ hc₃ htail Λ h hh hhJ a ha E₀ Ω hΩ hgap
       hspan
     _ S₀ Bp hBblocks ξb hξb r tt
   have hYint : Integrable Yrv μ := hYint
   have hYle : (∫ u, Yrv u ∂μ) ≤ Ao * t * S₀.card * ‖Bp‖ *
       Real.exp (vo * t - γ * (r : ℝ) ^ α) := hYle
   obtain ⟨hZint, hZle, hLt⟩ := latticeConstraintWord_truncation_of_positiveConstraints
-    R hC₃ (latticePositiveConstraints_of_locality hpw R hJ hΔ htail) Λ h hh hhJ a ha E₀ Ω
-        hΩ hgap hspan S₀
-      r tt
+    R hC₃ (by
+      intro q _ Λ h hh hhJ a ha E₀ Ω hΩ hpsd hmem
+      obtain ⟨-, -, hgap, hspan⟩ :=
+        (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+          ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
+      exact latticePositiveConstraints_of_locality hpw R hJ hΔ htail
+        Λ h hh hhJ a ha E₀ Ω hΩ hgap hspan) Λ h hh hhJ a ha E₀ Ω hΩ
+      (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+      (hspan ▸ Submodule.mem_span_singleton_self _) S₀ r tt
   have hZint : Integrable (fun u => ‖Dret u - Lt u‖) μ := hZint
   have hZle : (∫ u, ‖Dret u - Lt u‖ ∂μ) ≤ Ct * t * S₀.card * (1 + (r : ℝ)) ^ 2 *
       Real.exp (-(ct * (r : ℝ) ^ α)) := hZle
@@ -676,8 +681,13 @@ theorem amplificationBoundAt_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < �
     (M : ℕ) :
     AmplificationBoundAt q R J Δ C₀ M (amplificationConstantExplicit q R J Δ C₀ M)
       (max (amplificationThresholdExplicit q R J Δ C₀ M)
-        (Exponents.collarRadiusThreshold (amplificationConstantExplicit q R J Δ C₀ M) 1)) :=
-  amplificationBound_explicit (J := J) q R hΔ hC₀ M
+        (Exponents.collarRadiusThreshold (amplificationConstantExplicit q R J Δ C₀ M) 1)) := by
+  intro n hn hnN Λ h hh hhJ E₀ Ω hΩ hpsd hmem
+  obtain ⟨-, -, hgap, hspan⟩ :=
+    (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+      ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
+  exact amplificationBound_explicit (J := J) q R hΔ hC₀ M
+    n hn hnN Λ h hh hhJ E₀ Ω hΩ hgap hspan
 
 /-- **Proposition 10.2** (`prop:amplification`, `09-amplification.tex` lines 261–296, proof at
 lines 298–576), for the Hamiltonian parameters `q, R, J` and every gap `Δ > 0`. Fix `C₀ > 0`
@@ -689,7 +699,7 @@ the Hamiltonian, the cut and the target, the collar hypotheses give an integer r
 `amplificationBound_explicit`. -/
 theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) : AmplificationBound q R J Δ := by
   intro C₀ hC₀ M _
-  exact ⟨_, _, amplificationBound_explicit (J := J) q R hΔ hC₀ M⟩
+  exact ⟨_, _, amplificationBoundAt_explicit (J := J) q R hΔ hC₀ M⟩
 
 /-- **Theorem 1.1 from Propositions 9.6 and 11.2.** With Proposition 10.2 proved, the uniform
 area law follows from the sublinear collar bound and the two-family decomposition. This is

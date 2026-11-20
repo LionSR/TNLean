@@ -353,11 +353,12 @@ theorem isZeroOn_chainPerm_forwardChain (a : Fin N) (L : ℕ) (hL : 2 * L < N)
   | succ L ih =>
     have hv' : IsZeroOn ((Finset.Icc 1 (2 * L)).image fun j : ℕ => a + (j : Fin N)) v :=
       hv.mono (Finset.image_subset_image (Finset.Icc_subset_Icc_right (by omega)))
-    have hrest : IsZeroOn {a + ((2 * L + 1 : ℕ) : Fin N), a + ((2 * L + 2 : ℕ) : Fin N)} v := by
+    have hrest : IsZeroOn
+        ({a + ((2 * L + 1 : ℕ) : Fin N), a + ((2 * L + 2 : ℕ) : Fin N)} : Finset (Fin N)) v := by
       refine hv.mono ?_
       intro i hi
-      simp only [Finset.mem_insert, Finset.mem_singleton] at hi
-      simp only [Finset.mem_image, Finset.mem_Icc]
+      simp only [Finset.mem_coe, Finset.mem_insert, Finset.mem_singleton] at hi
+      simp only [Finset.mem_coe, Finset.mem_image, Finset.mem_Icc]
       rcases hi with rfl | rfl <;> exact ⟨_, ⟨by omega, by omega⟩, rfl⟩
     have hrest' := hrest.chainPerm_mulVec (hs := forwardChain a L (by omega)) (by
       rw [Finset.disjoint_left]
@@ -369,7 +370,7 @@ theorem isZeroOn_chainPerm_forwardChain (a : Fin N) (L : ℕ) (hL : 2 * L < N)
       · exact add_natCast_ne a (by omega) (by omega) (by omega) hi
       · exact add_natCast_ne a (by omega) (by omega) (by omega) hi)
     have hall : IsZeroOn (((Finset.range (2 * L)).image fun j : ℕ => a + (j : Fin N)) ∪
-        {a + ((2 * L + 1 : ℕ) : Fin N), a + ((2 * L + 2 : ℕ) : Fin N)})
+        {a + ((2 * L + 1 : ℕ) : Fin N), a + ((2 * L + 2 : ℕ) : Fin N)} : Finset (Fin N))
         (chainPerm (forwardChain a L (by omega)) *ᵥ v) :=
       fun y hy i hi => (Finset.mem_union.mp hi).elim (ih (by omega) hv' y hy i) (hrest' y hy i)
     rw [forwardChain, chainPerm_cons, ← mulVec_mulVec, swapPerm]
@@ -377,7 +378,8 @@ theorem isZeroOn_chainPerm_forwardChain (a : Fin N) (L : ℕ) (hL : 2 * L < N)
     intro i hi
     obtain ⟨j, hj, rfl⟩ := Finset.mem_image.mp hi
     rw [Finset.mem_range] at hj
-    simp only [chainHop, Finset.mem_image, Finset.mem_union, Finset.mem_range, Finset.mem_insert,
+    simp only [Finset.mem_coe, chainHop, Finset.mem_image, Finset.mem_union, Finset.mem_range,
+      Finset.mem_insert,
       Finset.mem_singleton]
     rcases Nat.lt_or_ge j (2 * L) with hj' | hj'
     · refine ⟨a + (j : Fin N), Or.inl ⟨j, hj', rfl⟩, ?_⟩

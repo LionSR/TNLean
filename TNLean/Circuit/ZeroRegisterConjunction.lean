@@ -237,8 +237,9 @@ theorem isPairProduct_zeroConjunctionStep (hd : 2 ≤ d) (j : Fin a) :
   classical
   have hu := Equiv.Perm.permMatrix_mem_unitaryGroup (zeroConjunctionStep (d := d) j)
   by_cases hj : j.val = 0
-  · have hs :=
-      (zeroConjunctionStep_isLocalPerm_first (d := d) j hj).permMatrix_mem_supportedOperators
+  · have hs := IsLocalPerm.permMatrix_mem_supportedOperators
+      (S := {Fin.castAdd a j, Fin.natAdd a j})
+      (by simpa using zeroConjunctionStep_isLocalPerm_first (d := d) j hj)
     have hpair := isPairProduct_of_mem_supportedOperators_pair (by omega)
       (Fin.castAdd_ne_natAdd j j) hu hs
     exact hpair.mono (by

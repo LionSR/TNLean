@@ -1,0 +1,762 @@
+[
+  {
+    "path": "TNLean/Circuit/Channel/Layer.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "e0839e6a9f88b5717e0e658eb94f87cbdb4933f8",
+      "207cc00e5": "29c0d2af5131a7fb7c609e725f25bedbc7ff364c",
+      "origin/main": "e0839e6a9f88b5717e0e658eb94f87cbdb4933f8"
+    }
+  },
+  {
+    "path": "TNLean/Circuit/Geometry.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "42dfafcc39ff3fbe8d2b71d1d3f7b36c6d1a506f",
+      "207cc00e5": "919067aa002cf2fd5d58ec76221d46fe5c76b77c",
+      "origin/main": "42dfafcc39ff3fbe8d2b71d1d3f7b36c6d1a506f"
+    }
+  },
+  {
+    "path": "TNLean/Circuit/LocalCircuit.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "17ec2fc00ce1d66e41961c465c4483fe6085d9c1",
+      "207cc00e5": "35c80e8a2484abbd3dd464e6cc66699b38f2d811",
+      "origin/main": "17ec2fc00ce1d66e41961c465c4483fe6085d9c1"
+    }
+  },
+  {
+    "path": "TNLean/Circuit/Measurement/GHZ.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "556927c6fd41f12d97c31bd14e8fb1f1bf6f59fd",
+      "207cc00e5": "32cd83f0312c74bf33a419ada74e1ef2c4394089",
+      "origin/main": "556927c6fd41f12d97c31bd14e8fb1f1bf6f59fd"
+    }
+  },
+  {
+    "path": "TNLean/Circuit/SitePermutation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "1a1d66a85525d56eacf1cba61c6f566582a72380",
+      "207cc00e5": "f68c386ffec5f675ed5d809ddc52fd41bfcbd6ec",
+      "origin/main": "1a1d66a85525d56eacf1cba61c6f566582a72380"
+    }
+  },
+  {
+    "path": "TNLean/Circuit/SpectatorSiteExpectation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "67e8f2deb4f3755811d261fbf85f14882fa4255c",
+      "207cc00e5": "64bf01fd3d13fe81e9b022c074cba0b1822c4a80",
+      "origin/main": "67e8f2deb4f3755811d261fbf85f14882fa4255c"
+    }
+  },
+  {
+    "path": "TNLean/Circuit/Teleportation/Chains.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "dfe836bf26ed093a46cce59a7ac6a0258319bb99",
+      "207cc00e5": "76609f795747c026b772d6969fdc21054afbfaf0",
+      "origin/main": "dfe836bf26ed093a46cce59a7ac6a0258319bb99"
+    }
+  },
+  {
+    "path": "TNLean/Circuit/Teleportation/Hop.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "4ff26e6ef4bfb5d61c59fac09d41ffcda1255876",
+      "207cc00e5": "25ff81f7a38ef8e48d972c0999f2fbf430317658",
+      "origin/main": "4ff26e6ef4bfb5d61c59fac09d41ffcda1255876"
+    }
+  },
+  {
+    "path": "TNLean/Circuit/Teleportation/Round.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "3e2ebfdc8d52f7c99ed42b7b413bc4591ae1a236",
+      "207cc00e5": "a99891cea4f85b119661f2e4a2895d7678003149",
+      "origin/main": "3e2ebfdc8d52f7c99ed42b7b413bc4591ae1a236"
+    }
+  },
+  {
+    "path": "TNLean/Circuit/Teleportation/ZeroSubspace.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "e68991f31da5167bfb690e0979c794b89e2d9362",
+      "207cc00e5": "2b91812c3b721de2b659b46c698b214066c6e93c",
+      "origin/main": "e68991f31da5167bfb690e0979c794b89e2d9362"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/AKLV/FavorableFilter.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "cfd4e9268260015e7ea14a55644ebbfc8f0ac160",
+      "207cc00e5": "2abac26e3168f1a775f1b2a85cedf352a78b0f64",
+      "origin/main": "cfd4e9268260015e7ea14a55644ebbfc8f0ac160"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/AKLV/FrustrationFreeMPSApproximation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "1eee36e20549f1a5eba62ae491c8d98411582c5c",
+      "207cc00e5": "d762c34ea532fdc355d06781eee3291f4b4e981d",
+      "origin/main": "1eee36e20549f1a5eba62ae491c8d98411582c5c"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/AKLV/PhysicalRobustness.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "b02f314dba2522d4ae1b05314c0d8857ae465e0f",
+      "207cc00e5": "fab286459490e0730ece741671c79c7568c9d3a8",
+      "origin/main": "b02f314dba2522d4ae1b05314c0d8857ae465e0f"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/AKLV/SharpPerCutApproximation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "d2c10c081e058cf67676afee4bcf8a7a404d432e",
+      "207cc00e5": "1c42763730bf7eaad51e4a2d53bf0a1d90bc2071",
+      "origin/main": "d2c10c081e058cf67676afee4bcf8a7a404d432e"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/GroundStateProgram.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "850e50ae486cefdcb79d706a347b766ea5065f42",
+      "207cc00e5": "54b97d1fb00de0c5709c11d2ab1d1f33b50349d7",
+      "origin/main": "850e50ae486cefdcb79d706a347b766ea5065f42"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SampledCost.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "0ee39bc8f741d72ce179175ef0899571f59f3b60",
+      "207cc00e5": "98703321b6522b28ef72696b731a2d13029a2c3a",
+      "origin/main": "0ee39bc8f741d72ce179175ef0899571f59f3b60"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/SampledProgram.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "398f71bb4f89603bcac8edef641cee8f9f707b11",
+      "207cc00e5": "c3dbc9f9e5c7d7b6c5640ee98f29add48a83c035",
+      "origin/main": "398f71bb4f89603bcac8edef641cee8f9f707b11"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracle.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "d54daa029073f6e72c87fbab7792ef0cada936e2",
+      "207cc00e5": "ca93b5c5717259da19960cf9420b678505794ce6",
+      "origin/main": "d54daa029073f6e72c87fbab7792ef0cada936e2"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampled.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "948dbe58676e99a4faf3907dc0a644b541ffc5e9",
+      "207cc00e5": "4046f60653b835eb639b4afb86651ce3fd9eef5b",
+      "origin/main": "948dbe58676e99a4faf3907dc0a644b541ffc5e9"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Algorithm/ValidOracleSampledCost.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "e4e7a36803f8373f69eb6d80ff8977d90f55966b",
+      "207cc00e5": "a31392bf259cd22455d7b2bfffe5e13faf21422c",
+      "origin/main": "e4e7a36803f8373f69eb6d80ff8977d90f55966b"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/BoundaryGap.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "92c7bb95e0fb8f89d7b943cfe2309b68e4cd7982",
+      "207cc00e5": "67b3f8936625f8ec877539155847489d1c1f7839",
+      "origin/main": "92c7bb95e0fb8f89d7b943cfe2309b68e4cd7982"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/AreaLaw.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "30950f9b289a22f4b7895a3bd1a3366d585e93eb",
+      "207cc00e5": "c10c3f44d274ab4ad427deebe304dbc662ea7195",
+      "origin/main": "30950f9b289a22f4b7895a3bd1a3366d585e93eb"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/GappedAreaLaw.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "977f1c4e9d7f3d3f8d7ef35d639128ece873a871",
+      "207cc00e5": "791185d10c27ebbeefa41c52f7678864b636aeaf",
+      "origin/main": "977f1c4e9d7f3d3f8d7ef35d639128ece873a871"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/LiebRobinson.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "e7d84cf208275252b8aedaaa20ed2f18abe0167c",
+      "207cc00e5": "c9956202c14a998980f73d3acfbeebdcbc577dd7",
+      "origin/main": "e7d84cf208275252b8aedaaa20ed2f18abe0167c"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/MPSGroundState.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "ffc421a31ec86e0b4efe2e54985739e9c7e77f78",
+      "207cc00e5": "a04a6e773bc47df628af92b0578de12818157c50",
+      "origin/main": "ffc421a31ec86e0b4efe2e54985739e9c7e77f78"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/Hastings/ThreeWaySplitting.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "ed5c3c6646c873f4bbe7e26fb8d4028afcd6fbac",
+      "207cc00e5": "1cdc0830b3a13048b122753358a2d60ac5b8997f",
+      "origin/main": "ed5c3c6646c873f4bbe7e26fb8d4028afcd6fbac"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/LiebRobinson.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "f17dd669e5b95d241921f0063b8c4dff178c8268",
+      "207cc00e5": "efb0eb614800fffbf39bfa4cee3c8469d764c140",
+      "origin/main": "f17dd669e5b95d241921f0063b8c4dff178c8268"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/OverlapEnergy.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "3093cdc730966b56b2fc893eaef8d19a56e54be8",
+      "207cc00e5": "9bacbc65e5f7ce90e31b9fe60a292cc69f3c0f8b",
+      "origin/main": "3093cdc730966b56b2fc893eaef8d19a56e54be8"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/RelativeGeneratorLocalization.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "121c751f9d156f686d40b1883072abde50d8c8d9",
+      "207cc00e5": "2642b45e0b8f5462a852cc12ae7092ce552a6486",
+      "origin/main": "121c751f9d156f686d40b1883072abde50d8c8d9"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/SupportedGaussianIntegral.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "2e964474a0cc8b97ab0664edceaac3a0b62b28eb",
+      "207cc00e5": "9919707c921f18a8eef8c12f491c3ccd9b962aeb",
+      "origin/main": "2e964474a0cc8b97ab0664edceaac3a0b62b28eb"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/RationalSampledSuccessiveConstruction.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "ca71a96f7068a9490ab2abc3440363fb1d62479a",
+      "207cc00e5": "07f88c93190dd2aed341c30ecdf8576cea5c9bd2",
+      "origin/main": "ca71a96f7068a9490ab2abc3440363fb1d62479a"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SampledProjector.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "ef2339ac024737015d2a5175c2f2cd0d9c6af46b",
+      "207cc00e5": "96e071e22bb0f4a83637c689f83ab6d1878d5dc7",
+      "origin/main": "ef2339ac024737015d2a5175c2f2cd0d9c6af46b"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SampledSuccessiveConstruction.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "56e8a895c7519b2d2dd6c2c1404086080ba4b142",
+      "207cc00e5": "8edc60d64a0a3f1d9832e16f4786134c17741dc1",
+      "origin/main": "56e8a895c7519b2d2dd6c2c1404086080ba4b142"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/CanonicalSearch.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "7dfe29215560df0e7a4f3def144399b8feb6a479",
+      "207cc00e5": "fa9228d74a4a578ecb672933f0419dfacd8bc7a1",
+      "origin/main": "7dfe29215560df0e7a4f3def144399b8feb6a479"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/SizeTrimming/LeadingVectorPrecision.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "0c8321c0e30c1fc7c398e00141008ccb33bdcac7",
+      "207cc00e5": "c6b5bd3fc4ccc4ce76a704109f952a6a26c4eebc",
+      "origin/main": "0c8321c0e30c1fc7c398e00141008ccb33bdcac7"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingBounds.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "450ac1387a5736b32febc9bd79788aad005e3cae",
+      "207cc00e5": "cdd6db50fa387431786182dd9ff0028792ee4ab8",
+      "origin/main": "450ac1387a5736b32febc9bd79788aad005e3cae"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableLeadingVector.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "49649dd799e0137d0d219f4880afa892eaba777a",
+      "207cc00e5": "56349438a21fb9034fdbeec9457eaaee3144b0dd",
+      "origin/main": "49649dd799e0137d0d219f4880afa892eaba777a"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ViableSet/ViableTrimmedWitness.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "3b82a9251f018238b2aad3c454439ae554d8cb0e",
+      "207cc00e5": "4b0ffd4ca9981902d97191554c6cc9a265e305cb",
+      "origin/main": "3b82a9251f018238b2aad3c454439ae554d8cb0e"
+    }
+  },
+  {
+    "path": "TNLean/MPS/Preparation/CoherentBlockTreePreparation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "59757006f265ad9d0e5a5ea79cd5eae972ddc020",
+      "207cc00e5": "8002099fde1f30fce935977eaa397b2682ddbf29",
+      "origin/main": "59757006f265ad9d0e5a5ea79cd5eae972ddc020"
+    }
+  },
+  {
+    "path": "TNLean/MPS/Preparation/UnequalTreePreparation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "e74225bf12180b421fc5c5d492bc28b484818098",
+      "207cc00e5": "4ee5775f5e5fff79bbc63372f5972b495286de40",
+      "origin/main": "e74225bf12180b421fc5c5d492bc28b484818098"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/AdaptivePatchConstraintFromAreaLaw.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "5a569a9ef7e85a52fad495960f56da2e5436afbf",
+      "207cc00e5": "9b675e714a254cb69da5d0676bb01c537a3db909",
+      "origin/main": "5a569a9ef7e85a52fad495960f56da2e5436afbf"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/AngularInformationBound.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "0f3655f919c6b7bdd59792281f26b6ec06f2e44f",
+      "207cc00e5": "d21b333d9fa157d17fa736e3088739122c4cdd81",
+      "origin/main": "0f3655f919c6b7bdd59792281f26b6ec06f2e44f"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/AngularInformationFromCollar.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "427133c63f727a7f023e805da4f047c88bf56032",
+      "207cc00e5": "10efd69f5a60bf02efda1dd1f7fa0bbd3d2c0424",
+      "origin/main": "427133c63f727a7f023e805da4f047c88bf56032"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/AngularInformationReset.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "8c39ae2d835ef7dc9ce45731d3d764eddb633c3d",
+      "207cc00e5": "e03cfdb5206a6f8a4a4062fb066fff5139396f87",
+      "origin/main": "8c39ae2d835ef7dc9ce45731d3d764eddb633c3d"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/AngularSingleScaleReset.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "231663d4308d805dcce72d1e990bd4461b9c3e4e",
+      "207cc00e5": "dab945219b07aaf3f3132b237a2a548933cb3928",
+      "origin/main": "231663d4308d805dcce72d1e990bd4461b9c3e4e"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/AngularWholeCellInformationFromCollar.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "8a6264041d7b46c6db2cf591bfd5d6dcc6a81aad",
+      "207cc00e5": "cb48bf047ee548d512ba256dedbc130ddfc87f05",
+      "origin/main": "8a6264041d7b46c6db2cf591bfd5d6dcc6a81aad"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/Basic.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "461a1cd30475c7317043362fa97d209ad99e289f",
+      "207cc00e5": "c09d7a6e3e396e8fe2e5941e947a0e24c8f3ddd4",
+      "origin/main": "461a1cd30475c7317043362fa97d209ad99e289f"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/CellConditionalInformation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "dca74114d21811d06b40a84ee8c0da8fd88e95fc",
+      "207cc00e5": "d8e28c00c5b18eef542f4165bbab631c14ecc205",
+      "origin/main": "dca74114d21811d06b40a84ee8c0da8fd88e95fc"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/CoarseInformation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "8e920163a0d9cfe4ea005ff4844012b2729ef000",
+      "207cc00e5": "dfa98b4b8e743a9b66ee7b3d0550bd0d064afe20",
+      "origin/main": "8e920163a0d9cfe4ea005ff4844012b2729ef000"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/ExactFiniteException.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "f644a8faee5598111276d3e0c41e41fb8945f423",
+      "207cc00e5": "0f9305e47840c109e24b01d0b4bffd79683d30f3",
+      "origin/main": "f644a8faee5598111276d3e0c41e41fb8945f423"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/NestedPatchApproximation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "d1aacad797690d15f6b63b8b8323ffb13696d741",
+      "207cc00e5": "e5787ad53f5cd82bd5f0ebcbeb5440424d13ba5d",
+      "origin/main": "d1aacad797690d15f6b63b8b8323ffb13696d741"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PinnedZeroFloorOptimizer.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "4f54e754ea97427c7a439c35a938fddb221110c2",
+      "207cc00e5": "8ab48214f203b249b872a6adc087032f572db605",
+      "origin/main": "4f54e754ea97427c7a439c35a938fddb221110c2"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/PolynomialPEPSClosedConstant.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "bfb12526bc5152a88187fa5b99ea8f4ce4d00547",
+      "207cc00e5": "eeedd668b72672325351cb9159ad3569a06809cf",
+      "origin/main": "bfb12526bc5152a88187fa5b99ea8f4ce4d00547"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/RangeAngularInformation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "03b135d8113b5af1ce81edb5f6c42f2dd1fb7011",
+      "207cc00e5": "530da71f289a90114a495fe3ab632e0244fd5c61",
+      "origin/main": "03b135d8113b5af1ce81edb5f6c42f2dd1fb7011"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchApproximation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "14cb2d13a280e329607f2faa285b3413eac52cc1",
+      "207cc00e5": "da834627e8c684ca01c240cb3205897af1297dd3",
+      "origin/main": "14cb2d13a280e329607f2faa285b3413eac52cc1"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchEnergy.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "182af0c02734735b1e6acd55f7d9f3f302ea316d",
+      "207cc00e5": "1d1500a641c694fad932b27cb3a00e024b3ffc94",
+      "origin/main": "182af0c02734735b1e6acd55f7d9f3f302ea316d"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/RangeNestedPatchMarginalCloseness.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "45f3333e9c957195b4fbfaa9c36ee7e7f514325b",
+      "207cc00e5": "41fb7a2a7f7b45f008cb87139ff1c47b7e9e973d",
+      "origin/main": "45f3333e9c957195b4fbfaa9c36ee7e7f514325b"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/RangePolynomialPEPS.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "1b0062a9071b383a2fe934df8509b2fa231f6427",
+      "207cc00e5": "663b570ede10660c6379e3b139bbf448b7d3520e",
+      "origin/main": "1b0062a9071b383a2fe934df8509b2fa231f6427"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/RangeSquareGroundState.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "3eb78fc2465581f32e22629c3a8da1159793d8cd",
+      "207cc00e5": "8f2a74ab243463570537c8d401b404babb537fac",
+      "origin/main": "3eb78fc2465581f32e22629c3a8da1159793d8cd"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SquareAreaLawSpecialization.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "a7d1d8912c98d145dd0cab563131b695cdeaa659",
+      "207cc00e5": "1ec3dae445bd3d168c9511cab0306d8bc3e745dc",
+      "origin/main": "a7d1d8912c98d145dd0cab563131b695cdeaa659"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SquareCellConditionalInformation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "3251c670c4d27f6147c362f7d6869bd6fa85d811",
+      "207cc00e5": "ecc8b58cc04146b8e31b26c2fc3d991361940fb6",
+      "origin/main": "3251c670c4d27f6147c362f7d6869bd6fa85d811"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/Approximation/SquareZeroFloorOptimizer.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "0f3dc7b1595ce26be0ae423057e51ebc8d2efac9",
+      "207cc00e5": "8e56b82eba01276169b2aa1e35e36a27a83ec53b",
+      "origin/main": "0f3dc7b1595ce26be0ae423057e51ebc8d2efac9"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Amplification/ConstraintWordTruncation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "7d87fc08ad23064581327b4e60a954a7bbe170a0",
+      "207cc00e5": "bf69b71d80505e3847da5798f7a708329c9119b3",
+      "origin/main": "7d87fc08ad23064581327b4e60a954a7bbe170a0"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Amplification/LatticeChannelSpatialOmission.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "c726a39f14fe22bd39bfb421f081764fbd7b11c6",
+      "207cc00e5": "f5535f0944fc300ca7145b0bd3b7b30623e30790",
+      "origin/main": "c726a39f14fe22bd39bfb421f081764fbd7b11c6"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/AmplificationCutClearance.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "23d374f35ef704b5b31e3186ab1ef03bf6649ca7",
+      "207cc00e5": "8057d6468fce42f328dbbfff45241de403b8fbb6",
+      "origin/main": "23d374f35ef704b5b31e3186ab1ef03bf6649ca7"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/AmplificationProof.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "a3dbe2eb859effa42a00878889d014724869ed47",
+      "207cc00e5": "366ca9c13ae9bdfafc9244b58235e33aec9efdd7",
+      "origin/main": "a3dbe2eb859effa42a00878889d014724869ed47"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/BoundaryTheorem.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "186c4535210f6484d935c2d319a3275516d68f94",
+      "207cc00e5": "429fc3219f0e23c8097399d6f0123069b804413e",
+      "origin/main": "186c4535210f6484d935c2d319a3275516d68f94"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/CollarInformation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "7336c57294c9bc14c53f00b97dceed6ae52056d7",
+      "207cc00e5": "400ba2acbd26a5c5b45812139685e33b3fb26e6c",
+      "origin/main": "7336c57294c9bc14c53f00b97dceed6ae52056d7"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "63fd465b61f573dccf0f8c63e144ce9f400a7a55",
+      "207cc00e5": "6bbf5253f1bcf174eb81912eaae2216d1c116525",
+      "origin/main": "63fd465b61f573dccf0f8c63e144ce9f400a7a55"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/InitialSafeRectangleEntropy.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "2bf7f949de2898c36fad3ded0a80b2cc5af01469",
+      "207cc00e5": "da57cd4ac4248f0a758e64d6cc0d64a8e3b7b260",
+      "origin/main": "2bf7f949de2898c36fad3ded0a80b2cc5af01469"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/PhysicalCollarInformation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "e2c5d26bc95284737ea200bb785c598950fe96fe",
+      "207cc00e5": "cee1d4103cd38bb206ff665be23e69dca00edc23",
+      "origin/main": "e2c5d26bc95284737ea200bb785c598950fe96fe"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/PhysicalSafeBox.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "dbec97718234f968d17a932651439b5c6915fc27",
+      "207cc00e5": "451316e149c59c33125753ef751560504b82eac0",
+      "origin/main": "dbec97718234f968d17a932651439b5c6915fc27"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/RectangularHamiltonian.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "8950846f178cf43471d8bf6cacf210fe302a07aa",
+      "207cc00e5": "953340e362beef3332c30b967c4a8be8ec08eac4",
+      "origin/main": "8950846f178cf43471d8bf6cacf210fe302a07aa"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/RectangularSpecialization.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "788d4195be5ade7105d057c95bf56d33cd2783a9",
+      "207cc00e5": "b3f926acfd2aa7810bf4744d823a2129b2ae4f5d",
+      "origin/main": "788d4195be5ade7105d057c95bf56d33cd2783a9"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "301a9f92d6cdbcd3aa339a6d0c0c6661c64e5b60",
+      "207cc00e5": "acaeb8af183aa15fded0258817a6e65e02943d8c",
+      "origin/main": "301a9f92d6cdbcd3aa339a6d0c0c6661c64e5b60"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/BoxEntropySupremum.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "1cf5dd9c3da8a3cb429446dbf8f28a3d9e1828a0",
+      "207cc00e5": "150b09b3fcdc9caf384d487491593188b1efd6be",
+      "origin/main": "1cf5dd9c3da8a3cb429446dbf8f28a3d9e1828a0"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "39dbdafb761839eaebf8e9cb1f09a3adbb7f5494",
+      "207cc00e5": "fbed29f9c2a6bc11a5a30d63d636bd41afcba625",
+      "origin/main": "39dbdafb761839eaebf8e9cb1f09a3adbb7f5494"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/SourceScanner.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "00fc5165ecc817c96da1a28ae1dc95e2027a0138",
+      "207cc00e5": "b649124538614eb8a7ae863fbc1bdf7a148c2550",
+      "origin/main": "00fc5165ecc817c96da1a28ae1dc95e2027a0138"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "37eb2215eb34bfc7e651424079823fe3369b956c",
+      "207cc00e5": "65b58fee2e4d145c0cb3aacefaf41b292a6a5c94",
+      "origin/main": "37eb2215eb34bfc7e651424079823fe3369b956c"
+    }
+  },
+  {
+    "path": "TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy.lean",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "7be96928afd0e737604b371cd175b2c2fede21ca",
+      "207cc00e5": "a3a5d9a71d6adef9115bb14e505201ae8a9eee16",
+      "origin/main": "7be96928afd0e737604b371cd175b2c2fede21ca"
+    }
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_peps_rectangular_specialization.tex",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "1b86edb32084ebe827afe3e7da3f478d34346175",
+      "207cc00e5": "6aaa564455ef795b07a68dae5a022e2f215008ae",
+      "origin/main": "1b86edb32084ebe827afe3e7da3f478d34346175"
+    }
+  },
+  {
+    "path": "blueprint/src/chapter/ch33_area_law_site_oscillation.tex",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "7c350b0ebea6ae9ab362e24d08eb4f804644403e",
+      "207cc00e5": "45a0874e9123faba57a6ee99e3419ae40dd747ab",
+      "origin/main": "7c350b0ebea6ae9ab362e24d08eb4f804644403e"
+    }
+  },
+  {
+    "path": "docs/audits/2026-11-17_qiclean_pin_49b9aa93_followups.md",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "d4666f82cbc5bac7ce3d316e100f60a0818f23cd",
+      "207cc00e5": "fe796d4dec72e9341ac8232b0c2ee475870eaa71",
+      "origin/main": "d4666f82cbc5bac7ce3d316e100f60a0818f23cd"
+    }
+  },
+  {
+    "path": "docs/glossary.md",
+    "reason": "main blob equals original squash input; retain reviewed subsequent corrections",
+    "blobs": {
+      "4c32f124": "2fa682908ea2b5756ffb7e65c1528924ebcd995b",
+      "207cc00e5": "8fd7fd83c1f13298f2b89600c74f8b7770b9a30d",
+      "origin/main": "2fa682908ea2b5756ffb7e65c1528924ebcd995b"
+    }
+  },
+  {
+    "path": "TNLean/MPS/AreaLaw/ALVV/EfficientSoftLowDensityCore.lean",
+    "reason": "retain main canonical support/cfc proof spelling; theorem header unchanged"
+  }
+]

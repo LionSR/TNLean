@@ -180,6 +180,9 @@ theorem SquareEntropyAreaLawAt.adaptivePatchSupply
         AdaptivePatchSupply (latticePos L) Ω B₀ (adaptivePatchPrefactor q B₀)
           (adaptivePatchExponent q J Δ B₀ p C_A) p L := by
   intro L hL Ω ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩
+  obtain ⟨-, -, hgap, hspan⟩ :=
+    (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+      ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hspan, hgap⟩
   refine adaptivePatchSupply_of_closedSquare_cylinders (by omega) hB₀
     (nestedPatchRadiusExponent_pos C_A (by omega) hJ hΔ hB₀.le hp.le).le hL Ω
     AreaLaw.Geometry.nestedPatchCount (fun u j ↦ AreaLaw.Geometry.nestedPatchRadius u j.val)

@@ -1,0 +1,2 @@
+blueprint/src/chapter/ch24_peps_rectangular_specialization.tex
+blueprint/src/chapter/ch35_hastings_lemma1.tex

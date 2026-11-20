@@ -193,18 +193,18 @@ section Sites
 variable [NeZero d] {ι : Type*}
 
 /-- The vector `v` has `|0⟩` at the sites of `S`: it vanishes at every configuration with a
-nonzero label at a site of `S`. -/
-def IsZeroOn (S : Finset ι) (v : (ι → Fin d) → ℂ) : Prop :=
+nonzero label at a site of `S`. Neither the site type nor `S` is required to be finite. -/
+def IsZeroOn (S : Set ι) (v : (ι → Fin d) → ℂ) : Prop :=
   ∀ x, v x ≠ 0 → ∀ i ∈ S, x i = 0
 
-theorem IsZeroOn.mono {S S' : Finset ι} {v : (ι → Fin d) → ℂ} (h : IsZeroOn S' v)
+theorem IsZeroOn.mono {S S' : Set ι} {v : (ι → Fin d) → ℂ} (h : IsZeroOn S' v)
     (hS : S ⊆ S') : IsZeroOn S v := fun x hx i hi => h x hx i (hS hi)
 
-theorem IsZeroOn.smul {S : Finset ι} {v : (ι → Fin d) → ℂ} (h : IsZeroOn S v) (c : ℂ) :
+theorem IsZeroOn.smul {S : Set ι} {v : (ι → Fin d) → ℂ} (h : IsZeroOn S v) (c : ℂ) :
     IsZeroOn S (c • v) := fun x hx => h x fun h0 => hx (by simp [h0])
 
 /-- A single-site operator at a site outside `S` keeps `|0⟩` at the sites of `S`. -/
-theorem IsZeroOn.finKronecker_update_one_mulVec {N : ℕ} {S : Finset (Fin N)}
+theorem IsZeroOn.finKronecker_update_one_mulVec {N : ℕ} {S : Set (Fin N)}
     {v : (Fin N → Fin d) → ℂ} (h : IsZeroOn S v) {t : Fin N} (ht : t ∉ S)
     (u : Matrix (Fin d) (Fin d) ℂ) :
     IsZeroOn S
@@ -221,7 +221,7 @@ section SitePermutation
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
-theorem IsZeroOn.permMatrix_cfgPerm_mulVec [NeZero d] {S : Finset ι} {v : (ι → Fin d) → ℂ}
+theorem IsZeroOn.permMatrix_cfgPerm_mulVec [NeZero d] {S : Set ι} {v : (ι → Fin d) → ℂ}
     (h : IsZeroOn S v) {π : Equiv.Perm ι} (hπ : ∀ i ∈ S, π i = i) :
     IsZeroOn S ((cfgPerm π).permMatrix ℂ *ᵥ v) := by
   intro y hy i hi

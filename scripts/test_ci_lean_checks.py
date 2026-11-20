@@ -950,5 +950,24 @@ class EarlyBuildTest(unittest.TestCase):
         self.assertIn("::warning::Focused checks stopped at their 2s budget", out.getvalue())
 
 
+class BondGeometryRegressionSelectionTest(unittest.TestCase):
+    def test_real_fixture_selected_for_each_geometry_owner(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        fixture = "scripts/bond_geometry_regression.lean"
+        self.assertIn(fixture, ci.lean_files(root))
+        # Read the actual fixture/import headers: an accidental lost import or
+        # discovery suffix must not silently drop this scope regression.
+        for changed in (
+            fixture,
+            "TNLean/Circuit/Geometry.lean",
+            "TNLean/Circuit/LocalCircuit.lean",
+            "TNLean/Circuit/Channel/Layer.lean",
+        ):
+            with self.subTest(changed=changed), mock.patch.object(
+                ci, "changed_paths", return_value=[changed]
+            ):
+                self.assertIn(fixture, ci.select(root, "unused-base")[2])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,79 @@
+{
+  "TNLean.Lattice.LocalHamiltonian": [
+    "QICLean.ManyBody.Sites.Lattice.PathGraph",
+    "QICLean.ManyBody.Sites.Lattice.Chain",
+    "QICLean.ManyBody.Sites.Lattice.Line",
+    "QICLean.ManyBody.Sites.Lattice.Edge",
+    "QICLean.ManyBody.Sites.Lattice.Square",
+    "QICLean.ManyBody.Hamiltonian.Models",
+    "TNLean.Lattice.LocalHamiltonian"
+  ],
+  "TNLean.MPS.AreaLaw.Hamiltonian": [
+    "QICLean.ManyBody.Sites.Lattice.PathGraph",
+    "QICLean.ManyBody.Sites.Lattice.Chain",
+    "QICLean.ManyBody.Sites.Lattice.Line",
+    "QICLean.ManyBody.Sites.Lattice.Edge",
+    "QICLean.ManyBody.Sites.Lattice.Square",
+    "QICLean.ManyBody.Hamiltonian.Models",
+    "TNLean.MPS.AreaLaw.Hamiltonian"
+  ],
+  "TNLean.PEPS.AreaLaw.RectangularHamiltonian": [
+    "QICLean.ManyBody.Sites.Lattice.PathGraph",
+    "QICLean.ManyBody.Sites.Lattice.Chain",
+    "QICLean.ManyBody.Sites.Lattice.Line",
+    "QICLean.ManyBody.Sites.Lattice.Edge",
+    "QICLean.ManyBody.Sites.Lattice.Square",
+    "QICLean.ManyBody.Hamiltonian.Models",
+    "TNLean.Lattice.LocalHamiltonian",
+    "TNLean.PEPS.Defs",
+    "TNLean.PEPS.InjectiveRegion",
+    "TNLean.PEPS.NormalEdgeBlockingData",
+    "TNLean.PEPS.NormalBlocking",
+    "TNLean.PEPS.AreaLaw.RectangularDomain",
+    "QICLean.ManyBody.Hamiltonian.HermitianPart",
+    "TNLean.PEPS.AreaLaw.RectangularHamiltonian"
+  ],
+  "TNLean.Lattice.MarginalTails": [
+    "QICLean.ManyBody.Sites.Lattice.PathGraph",
+    "QICLean.ManyBody.Sites.Lattice.Chain",
+    "QICLean.ManyBody.Sites.Lattice.Line",
+    "QICLean.ManyBody.Sites.Lattice.Edge",
+    "QICLean.ManyBody.Sites.Lattice.Square",
+    "QICLean.ManyBody.Hamiltonian.Models",
+    "TNLean.Lattice.LocalHamiltonian",
+    "TNLean.Lattice.RegionalEntropy",
+    "TNLean.Lattice.MarginalTails"
+  ],
+  "TNLean.Lattice.ProductForm": [
+    "QICLean.ManyBody.Sites.Lattice.PathGraph",
+    "QICLean.ManyBody.Sites.Lattice.Chain",
+    "QICLean.ManyBody.Sites.Lattice.Line",
+    "QICLean.ManyBody.Sites.Lattice.Edge",
+    "QICLean.ManyBody.Sites.Lattice.Square",
+    "QICLean.ManyBody.Hamiltonian.Models",
+    "TNLean.Lattice.LocalHamiltonian",
+    "TNLean.Lattice.ProductForm"
+  ],
+  "TNLean.MPS.AreaLaw.ComponentReduction": [
+    "QICLean.ManyBody.Sites.Lattice.PathGraph",
+    "QICLean.ManyBody.Sites.Lattice.Chain",
+    "QICLean.ManyBody.Sites.Lattice.Line",
+    "QICLean.ManyBody.Sites.Lattice.Edge",
+    "QICLean.ManyBody.Sites.Lattice.Square",
+    "QICLean.ManyBody.Hamiltonian.Models",
+    "TNLean.MPS.AreaLaw.Hamiltonian",
+    "TNLean.MPS.AreaLaw.Counting",
+    "TNLean.Algebra.TailRadiusWeights",
+    "QICLean.Entropy.FilterChainEnergy",
+    "QICLean.Entropy.FilterPrefix",
+    "QICLean.Entropy.FilterPower",
+    "QICLean.Entropy.FilterZeroFloor",
+    "QICLean.Entropy.BufferDiscount",
+    "TNLean.MPS.AreaLaw.BufferDiscount",
+    "TNLean.MPS.AreaLaw.EntropyInequalities",
+    "TNLean.Algebra.FinsetSubtypeSum",
+    "TNLean.MPS.AreaLaw.WindowCounting",
+    "TNLean.MPS.AreaLaw.AreaLaw",
+    "TNLean.MPS.AreaLaw.ComponentReduction"
+  ]
+}

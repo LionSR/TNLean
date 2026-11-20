@@ -218,4 +218,30 @@ theorem isGapped_toAreaLawHamiltonian (Φ : RectangleInteraction width height q)
   exact ⟨(norm_rectangleAreaLawState Ω).trans hΩ, (ManyBody.isGapped_reindex_iff _).mpr hgap,
     ManyBody.groundSpace_reindex_eq_span _ hspan⟩
 
+/-- Coordinate transport of the projector gap inequality, valid for every real `Δ`.
+Source: polynomial-PEPS `eq:global-gap`. No uniqueness is assumed. -/
+theorem projectorGap_toAreaLawHamiltonian (Φ : RectangleInteraction width height q)
+    (hH : Φ.hamiltonian.IsHermitian)
+    {E₀ Δ : ℝ} {Ω : RectangleStateSpace width height q} (hΩ : ‖Ω‖ = 1)
+    (hgap : (Φ.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ Ω x) (star (fun x ↦ Ω x)))).PosSemidef)
+    (hmem : Ω ∈ groundSpace Φ.hamiltonian E₀) :
+    ‖rectangleAreaLawState Ω‖ = 1 ∧ (Φ.toAreaLawHamiltonian.hamiltonian - (E₀ : ℂ) • 1 - (Δ : ℂ) •
+      (1 - Matrix.vecMulVec (fun x ↦ rectangleAreaLawState Ω x)
+        (star (fun x ↦ rectangleAreaLawState Ω x)))).PosSemidef ∧
+      rectangleAreaLawState Ω ∈ groundSpace Φ.toAreaLawHamiltonian.hamiltonian E₀ := by
+  classical
+  let e := rectangleConfigurationEquiv width height q
+  rw [Φ.toAreaLawHamiltonian_hamiltonian hH]
+  refine ⟨(norm_rectangleAreaLawState Ω).trans hΩ, ?_, ?_⟩
+  · have hg := hgap.submatrix e.symm
+    convert hg using 1
+    ext i j
+    simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.sub_apply,
+      Matrix.smul_apply, Matrix.one_apply, Matrix.vecMulVec_apply, Pi.star_apply,
+      e.symm.injective.eq_iff]
+    rfl
+  · apply (ManyBody.mem_groundSpace_reindex_iff e).mpr
+    simpa only [rectangleAreaLawState, e, LinearIsometryEquiv.symm_apply_apply] using hmem
+
 end ManyBody.RectangleInteraction

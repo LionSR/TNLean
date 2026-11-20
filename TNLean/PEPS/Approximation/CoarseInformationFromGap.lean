@@ -79,10 +79,15 @@ Propositions 9.5 and 9.6, `08-scanner.tex`, lines 681–827 and 942–943, with 
 theorem sublinearCollarBoundAt_closed {q R : ℕ} (hq : 1 ≤ q) {J Δ D₀ : ℝ} (hJ : 0 ≤ J)
     (hΔ : 0 < Δ) (hD₀ : 2 * (R : ℝ) + 10 < D₀) :
     AreaLaw.SublinearCollarBoundAt q R J Δ D₀ 24 (collarConstantClosed q R J Δ)
-      (collarThresholdClosed q R J Δ) :=
-  AreaLaw.sublinearCollarBound_real_explicit (D₀ := D₀) (Ctpl := 24) q R hq hJ hΔ hD₀
+      (collarThresholdClosed q R J Δ) := by
+  intro n s hn Λ h hh hhJ E₀ Ω hΩ hpsd hmem
+  obtain ⟨-, -, hgap, hspan⟩ :=
+    (ManyBody.isGapped_and_groundSpace_eq_span_iff hΔ Ω).mp
+      ⟨hΩ, ManyBody.mem_groundSpace_iff.mp hmem, hpsd⟩
+  exact AreaLaw.sublinearCollarBound_real_explicit (D₀ := D₀) (Ctpl := 24) q R hq hJ hΔ hD₀
     (by norm_num) _ _ _ _ _ TensorPower.ReplicaTransport.transportThreshold_pos
     AreaLaw.Scan.CollarScan.finiteFamilyTransportBound_explicit
+    n s hn Λ h hh hhJ E₀ Ω hΩ hgap hspan
 
 /-- The constant of Proposition 3.1 at range `R` at closed-form constants: the amplification
 constant of Proposition 10.2 at the collar constant `collarConstantClosed q R J Δ`, made
@@ -127,8 +132,11 @@ theorem coarse_mutualInformation_le_closed {q R : ℕ} (hq : 1 ≤ q) {J Δ : �
               coarseInformationConstantClosed q R J Δ := by
   have hcol := sublinearCollarBoundAt_closed (R := R) (D₀ := 2 * (R : ℝ) + 11) hq hJ hΔ
     (by linarith)
+  intro u hu Λ h hh hhJ E₀ Ω hΩ hgap hspan
   exact coarse_mutualInformation_le_of_sublinearCollarBoundAt hcol
-    (amplificationBoundAt_collarAmplification hΔ _) N₀ A₀
+    (amplificationBoundAt_collarAmplification hΔ _) N₀ A₀ u hu Λ h hh hhJ E₀ Ω hΩ
+    (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
+    (hspan ▸ Submodule.mem_span_singleton_self _)
 
 /-- Coarse mutual information on any finite induced domain, from the original
 Hamiltonian and its full-system gap. The constants are uniform in the finite

@@ -152,8 +152,6 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpect
   intro K K' C Z B G b₀ a v
   have : NeZero (q * q) := ⟨Nat.pos_iff_ne_zero.mp (Nat.mul_pos hq hq)⟩
   let g := h.swappedDoubled D
-  let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin (q * q)) (fun X : ChainSupport L R ↦ X.1) :=
-    ⟨g.term, g.mem⟩
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
   let T (X : ChainSupport L R) (b : Bool) := Matrix.reindex e e
@@ -166,8 +164,8 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpect
       h.swappedDoubled_hamiltonian D]
     exact hsum
   have hgen := norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
-    (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
-    (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le)
+    (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) g
+    (fun X ↦ ManyBody.ChainSupport.edist_le X) (fun X ↦ X.2.card_le)
         (h.isHermitian_swappedDoubled_term hh D) b₀
     (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ)
         (fun p ↦ p.1.1) Z
@@ -219,8 +217,6 @@ theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpec
   intro K K' C Z B G b₀ a v
   have : NeZero (q * q) := ⟨Nat.pos_iff_ne_zero.mp (Nat.mul_pos hq hq)⟩
   let g := h.swappedDoubled D
-  let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin (q * q))
-      (fun X : DomainSupport Λ R ↦ X.1) := ⟨g.term, g.mem⟩
   let e := sitePairConfigurationEquiv (Fin Λ.card) q q
   let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
   let T (X : DomainSupport Λ R) (b : Bool) := Matrix.reindex e e
@@ -232,7 +228,7 @@ theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpec
     rw [Finset.sum_product]
     exact hsum
   have hgen := norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
-    (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) Φ
+    (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) g
     (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) (h.isHermitian_swappedDoubled_term hh D) b₀
     (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ)
         (fun p ↦ p.1.1) Z

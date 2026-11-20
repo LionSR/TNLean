@@ -21,8 +21,9 @@ namespace QuantumCircuit
 
 variable {d : ℕ} [NeZero d] {ι : Type*}
 
-/-- The subspace of states with basis label zero at every site of `S`. -/
-def zeroOnSubmodule (S : Finset ι) : Submodule ℂ ((ι → Fin d) → ℂ) where
+/-- The subspace of complex-valued functions on configurations with basis label zero
+at every site of `S`. The site type and `S` need not be finite. -/
+def zeroOnSubmodule (S : Set ι) : Submodule ℂ ((ι → Fin d) → ℂ) where
   carrier := {v | IsZeroOn S v}
   zero_mem' := fun _ hx => (hx rfl).elim
   add_mem' := by
@@ -32,7 +33,7 @@ def zeroOnSubmodule (S : Finset ι) : Submodule ℂ ((ι → Fin d) → ℂ) whe
     · exact hu x hux i hi
   smul_mem' := fun c v hv => hv.smul c
 
-@[simp] theorem mem_zeroOnSubmodule {S : Finset ι} {v : (ι → Fin d) → ℂ} :
+@[simp] theorem mem_zeroOnSubmodule {S : Set ι} {v : (ι → Fin d) → ℂ} :
     v ∈ zeroOnSubmodule S ↔ IsZeroOn S v := Iff.rfl
 
 end QuantumCircuit

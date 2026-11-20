@@ -1,0 +1,112 @@
+[
+  {
+    "path": "blueprint/src/chapter/ch24_peps_area_law_marginal_tails.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_peps_area_law_models.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_peps_area_law_scan_histories.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_peps_information_reset.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_peps_rectangular_specialization.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_peps_regularized_patch_stationarity.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_peps_reset_unitary.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch24_supported_physical_buffer_gaussian.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch34_area_law_graph_propagation.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_chain_gluing.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_chain_trimming.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_hastings_boundary_factorization.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_hastings_lemma1.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_hastings_product_form.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_hastings_source_length.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_hastings_three_way_splitting.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_huang_positive_chain.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_lvv_power_projector.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_lvv_size_trimming.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_lvv_successive_trimming.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_one_dimensional_chain.tex",
+    "exit_code": 0,
+    "format_changed": false
+  },
+  {
+    "path": "blueprint/src/chapter/ch35_one_dimensional_preliminaries.tex",
+    "exit_code": 0,
+    "format_changed": false
+  }
+]

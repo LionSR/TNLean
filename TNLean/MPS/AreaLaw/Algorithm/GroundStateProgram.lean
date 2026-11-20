@@ -173,9 +173,10 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
     have hspanC : groundSpace chain.hamiltonian E = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
-        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
+        (ManyBody.Interaction.isHermitian_hamiltonian
+          (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0))
         (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hΩ
-        hspanC hw'norm hover
+        (hspanC ▸ Submodule.mem_span_singleton_self _) hw'norm hover
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E).trans henergy

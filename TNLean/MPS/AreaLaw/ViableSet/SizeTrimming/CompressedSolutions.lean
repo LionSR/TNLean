@@ -623,4 +623,3 @@ theorem exists_canonical_coordinate_finite_density_search_viable_vector
       (lvvFiniteDensityMesh_pos hL hΔ) (lvvFiniteDensityMesh_fits hL).le
 
 end ManyBody.ChainInteraction
-
