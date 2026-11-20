@@ -71,9 +71,10 @@ theorem exists_five_region_soft_structure {L q k1 k2 k3 k4 : ℕ}
   let R := fun j : Fin 5 ↦ interval L (k j.castSucc) (k j.succ)
   obtain ⟨hk, hR, hsA, hA, hY, hYC, hJ, hsum⟩ :=
     five_region_original_bond_data L q k1 k2 k3 k4 h12 h23 h34 h4L h hs h0 h1
+  haveI : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hx, hxe, he, hclip⟩ :=
-    (haveI : NeZero q := ⟨hq.ne'⟩
-      ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q)) R A (fun j ↦ (I j).card)
+    ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q) R A
+      (fun j ↦ (I j).card)
       hR hsA (fun j ↦ (hA j).1) (fun j ↦ (hA j).2) Y J.card hY hYC
   obtain ⟨hBraw, _hx0, _hc0, _ho0, _hcap0, _hnorm0,
       E, z, hz, hHz, hE, hE0, hEC⟩ := hclip 0 le_rfl ∅

@@ -128,7 +128,8 @@ theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedStat
     (A : Finset (Site Λ)) (n : ℕ) (M : ℝ) :
     1 - ((n : ℝ) + 2) ^ (-M) ≤
       Entropy.typicalMass (reducedState_isHermitian Λ q Ω A).eigenvalues
-        (regionalEntropy Λ q Ω A) (Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M) := by
+        (regionalEntropy Λ q Ω A)
+        (Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M) := by
   have hpsd := ((Matrix.posSemidef_vecMulVec_self_star (fun x ↦ Ω x)).submatrix
     (configurationSplit Λ q A).symm).partialTraceRight
   have hp : ∀ i, 0 ≤ (reducedState_isHermitian Λ q Ω A).eigenvalues i :=
@@ -158,7 +159,8 @@ theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedStat
     have : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
     positivity)
   have hexp : 2 * Real.exp (Real.exp 1 / 2) *
-      Real.exp (-(Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M / (32 * Rr))) = ((n : ℝ) + 2) ^ (-M) := by
+      Real.exp (-(Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M / (32 * Rr))) =
+        ((n : ℝ) + 2) ^ (-M) := by
     have hw : Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M / (32 * Rr) =
         M * Real.log (n + 2) + Real.exp 1 / 2 + Real.log 2 := by
       unfold Entropy.concentrationWidth

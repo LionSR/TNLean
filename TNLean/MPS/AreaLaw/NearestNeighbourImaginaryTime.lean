@@ -170,7 +170,7 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
       interval L i.val (i.val + 2)) :=
     ⟨fun i ↦ if i ∈ s then h i else 0, fun i ↦ by
       by_cases hi : i ∈ s
-      · simpa only [hi, if_true] using hs i hi
+      · simpa only [hi, if_true] using (show h i ∈ _ from hs i hi)
       · simpa only [hi, if_false] using zero_mem _⟩
   have hsumΦ : ∑ i ∈ s, Φ.term i = ∑ i ∈ s, h i :=
     Finset.sum_congr rfl fun i hi ↦ if_pos hi

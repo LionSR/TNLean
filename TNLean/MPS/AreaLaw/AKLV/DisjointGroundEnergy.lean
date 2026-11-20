@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.HermitianHelpers
 import QICLean.Algebra.KroneckerFactorPositivity
+import QICLean.ManyBody.Hamiltonian.KroneckerSum
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SupportedMatrixElements
 import QICLean.Entropy.RegionUnion

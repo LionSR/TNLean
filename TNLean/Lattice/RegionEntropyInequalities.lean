@@ -107,12 +107,12 @@ theorem regionEntropy_le_union_add (hΩ : ‖Ω‖ = 1) {X T : Finset V} (hXT : 
 /-- The empty region of a unit vector has zero entropy. -/
 theorem regionEntropy_empty (hΩ : ‖Ω‖ = 1) :
     Entropy.regionEntropy (n := fun _ : V ↦ q) ∅ Ω = 0 := by
-  rw [Entropy.regionEntropy, ManyBody.regionEntropy_eq_entropy, FiniteProduct.entropy_empty _ Ω hΩ]
+  rw [ManyBody.regionEntropy_eq_entropy, FiniteProduct.entropy_empty _ Ω hΩ]
 
 /-- The set of all sites has zero entropy for a unit vector. -/
 theorem regionEntropy_univ (hΩ : ‖Ω‖ = 1) :
     Entropy.regionEntropy (n := fun _ : V ↦ q) Finset.univ Ω = 0 := by
-  rw [Entropy.regionEntropy, ManyBody.regionEntropy_eq_entropy, FiniteProduct.entropy_univ _ Ω hΩ]
+  rw [ManyBody.regionEntropy_eq_entropy, FiniteProduct.entropy_univ _ Ω hΩ]
 
 /-- The dimension bound `S(A) ≤ |A| log q`: the entropy of a region of a unit vector is at most
 the logarithm of the dimension of its state space. -/

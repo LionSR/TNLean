@@ -293,8 +293,8 @@ at most `C_int(q, R, J, Δ)` times the number of edges of `∂_Λ A`.
 
 The proof is the component reduction of the note. At an edge of the chain of `|Λ|` sites
 that joins sites at nonconsecutive integers no support crosses, so the prefix ending there
-has zero entropy (`ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint`), and flipping the
-region on that prefix changes neither its entropy nor any boundary edge but that one. After
+has zero entropy (`ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint`), and
+flipping the region on that prefix changes neither its entropy nor any boundary edge but that one. After
 the flips at the boundary edges of this kind, the region has exactly `|∂_Λ A|` boundary edges
 on the chain, and the chain bound `regionEntropy_le_mul_card_boundaryEdges` applies.
 TNLean note, `part0_preamble.tex`, Theorem A (`thm:A`), and `part1_arealaw.tex`, Section 2
