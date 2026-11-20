@@ -103,7 +103,7 @@ localization errors of the amplification stage.
     \label{thm:frustration_free_area_law}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.FrustrationFreeAreaLaw, TNLean.PEPS.AreaLaw.UniformAreaLaw.frustrationFreeAreaLaw, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAreaLaw_of_uniformAreaLaw}
     \leanok
-    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_model_gapped,thm:openai_uniform_area_law}
+    \uses{def:frustration_free_area_law_model}
     For $q\ge1$, $R\ge0$ and $J,\Delta>0$ there is a constant
     $C=C(q,R,J,\Delta)$ such that every instance of
     Definition~\ref{def:frustration_free_area_law_model} on every finite domain satisfies
@@ -112,6 +112,7 @@ localization errors of the amplification stage.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:frustration_free_area_law_model_gapped,thm:openai_uniform_area_law}
     By Lemma~\ref{thm:frustration_free_area_law_model_gapped} every instance satisfies the
     hypotheses of the general area law \cite[Theorem~1.1]{OpenAI2026AreaLaw}
     at energy zero. This proof passes through the general amplification stage;
