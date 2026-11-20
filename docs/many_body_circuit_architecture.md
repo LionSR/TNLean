@@ -269,7 +269,8 @@ not built on that pattern.
 ## What is wrong now
 
 Counts are from the sixth pin move (the approximate-conversion, imaginary-time,
-truncation and entropy modules moved to QICLean deleted), re-measured with the script of the first audit (TNLean `3d3507f`, QICLean
+truncation and entropy modules moved to QICLean deleted), re-measured with the
+script of the first audit (TNLean `3d3507f`, QICLean
 `c62f178`); where a figure of that audit is kept for comparison, it says so.
 
 ### The directory holds two libraries

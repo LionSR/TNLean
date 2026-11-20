@@ -170,19 +170,19 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
       interval L i.val (i.val + 2)) :=
     ⟨fun i ↦ if i ∈ s then h i else 0, fun i ↦ by
       by_cases hi : i ∈ s
-      · simpa only [hi, if_true] using (show h i ∈ _ from hs i hi)
-      · simpa only [hi, if_false] using zero_mem _⟩
+      · simpa only [hi, ↓reduceIte] using (show h i ∈ _ from hs i hi)
+      · simpa only [hi, ↓reduceIte] using zero_mem _⟩
   have hsumΦ : ∑ i ∈ s, Φ.term i = ∑ i ∈ s, h i :=
-    Finset.sum_congr rfl fun i hi ↦ if_pos hi
+    Finset.sum_congr rfl fun i hi ↦ by simp only [Φ, hi, ↓reduceIte]
   have hbound := ManyBody.Interaction.norm_commutator_sum_le_card Φ s
     (fun i ↦ by
       by_cases hi : i ∈ s
-      · simpa only [Φ, hi, if_true] using h0 i hi
-      · simp only [Φ, hi, if_false, le_refl])
+      · simpa only [Φ, hi, ↓reduceIte] using h0 i hi
+      · simp only [Φ, hi, ↓reduceIte, le_refl])
     (fun i ↦ by
       by_cases hi : i ∈ s
-      · simpa only [Φ, hi, if_true] using h1 i hi
-      · simpa only [Φ, hi, if_false] using (zero_le_one : (0 : Matrix (Fin L → Fin q)
+      · simpa only [Φ, hi, ↓reduceIte] using h1 i hi
+      · simpa only [Φ, hi, ↓reduceIte] using (zero_le_one : (0 : Matrix (Fin L → Fin q)
           (Fin L → Fin q) ℂ) ≤ 1))
     (S := interval L (c - m) (c + 2 + m)) hX
   rw [hsumΦ] at hbound

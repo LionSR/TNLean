@@ -142,7 +142,7 @@ theorem exists_aklv_energy_normalization {L q a s : ℕ} (hq : 0 < q)
       Y ≤ (J.card : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :=
     Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms J h
       (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
-  haveI : NeZero q := ⟨hq.ne'⟩
+  have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hxunit, hx, he, hclip⟩ :=
     ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q) R A
       (fun j ↦ (I j).card) hR hAs (fun j ↦ (hA j).1)

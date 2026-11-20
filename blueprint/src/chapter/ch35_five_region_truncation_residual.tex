@@ -43,7 +43,9 @@
 \end{lemma}
 \begin{proof}
     \leanok
-    \uses{thm:five_region_original_bond_bounds, thm:five_region_independent_budget, thm:consecutive_regional_truncation_low, thm:physical_dg_scalar_parameters, thm:physical_chebyshev_endpoints}
+    \uses{thm:five_region_original_bond_bounds, thm:five_region_independent_budget,
+        thm:consecutive_regional_truncation_low, thm:physical_dg_scalar_parameters,
+        thm:physical_chebyshev_endpoints}
     The original regional minima and the common vector give the centered
     ground energy $E_0\in[0,4]$. The two uncut buffers have at most
     $2\ell-2$ internal bonds each, and at most four bonds cross the cuts;
@@ -109,7 +111,8 @@
     \label{lem:five_region_independent_residual}
     \lean{TNLean.MPS.AreaLaw.exists_five_region_independent_truncation_residual}
     \leanok
-    \uses{thm:five_region_original_bond_bounds, thm:five_region_independent_budget, thm:consecutive_regional_truncation_low}
+    \uses{thm:five_region_original_bond_bounds, thm:five_region_independent_budget,
+        thm:consecutive_regional_truncation_low}
     Let $q\ge1$, $\ell\ge1$, $t\ge0$, $a+2\ell\le b+1$ and
     $b+2\ell\le L$. Let $H$ be an original nearest-neighbour Hamiltonian
     with supported positive contraction terms. Use the five cuts

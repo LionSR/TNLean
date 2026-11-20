@@ -88,7 +88,7 @@ theorem exists_interval_regional_exponential_moment
         omega)
     exact hc.trans Finset.card_le_two
   let R : Fin 5 → Finset (Fin L) := fun j ↦ interval L (k j.castSucc) (k j.succ)
-  haveI : NeZero q := ⟨hq.ne'⟩
+  have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hxunit, hx, he, hclip⟩ :=
     ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q)
       R A (fun j ↦ (I j).card) hR hAs (fun j ↦ (hAcap j).1)

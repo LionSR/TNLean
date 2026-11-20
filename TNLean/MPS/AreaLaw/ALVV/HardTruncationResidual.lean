@@ -191,7 +191,7 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
         Y.PosSemidef ∧ Y ≤ (J.card : ℝ) • 1 ∧ J.card ≤ 2 ∧
         (∑ i, h i) = (∑ j, A j) + Y :=
     three_region_data hlr hrL h hs h0 h1
-  haveI : NeZero q := ⟨hq.ne'⟩
+  have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hx, hxe, he, hclip⟩ :=
     ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q) R A
       (fun j ↦ (I j).card)

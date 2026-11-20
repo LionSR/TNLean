@@ -48,7 +48,7 @@ theorem exists_disjoint_regional_energy_merge {L q : ℕ}
       D ≤ (⌈‖D‖⌉₊ : ℝ) • 1 := by
     simpa only [Algebra.algebraMap_eq_smul_one] using
       (CStarAlgebra.norm_le_iff_le_algebraMap D (by positivity) hD.nonneg).mp (Nat.le_ceil ‖D‖)
-  haveI : NeZero q := ⟨hq.ne'⟩
+  have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hx, hxe, he, hclip⟩ :=
     ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q)
       ![S, T] ![A, B] ![⌈‖A‖⌉₊, ⌈‖B‖⌉₊]

@@ -127,7 +127,7 @@ theorem exists_five_region_independent_truncation_residual
     five_region_original_bond_data L q (a + 1) (a + 2 * ell) (b + 1)
       (b + 2 * ell) h12 hab h34 hbL h hs h0 h1
   let R : Fin 5 → Finset (Fin L) := fun j ↦ interval L (k j.castSucc) (k j.succ)
-  haveI : NeZero q := ⟨hq.ne'⟩
+  have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hxunit, hx, hlo, hclip⟩ :=
     ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q) R A
       (fun j ↦ (I j).card) hR hAs (fun j ↦ (hAcap j).1)
