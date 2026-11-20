@@ -76,8 +76,8 @@ choice functions `J`.
 ## Follow-ups
 
 Approximate conversions in trace norm and mutual asymptotic conversion in polylogarithmic
-depth are treated in `TNLean.Circuit.Channel.ApproximateConversion` and
-`TNLean.Circuit.Channel.AsymptoticConversion`, for the same class of local channels. Blocking
+depth are QICLean's `QuantumCircuit.IsApproxConversion` and
+`QuantumCircuit.IsAsymptoticConversion` at the ring geometry. Blocking
 a fixed number of sites into one, which changes the number of sites, is treated in
 `TNLean.Circuit.Channel.SiteBlocking`.
 Finite adaptive channels on arbitrary inputs and their composition are treated separately

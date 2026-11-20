@@ -70,8 +70,8 @@ theorem SquareEntropyAreaLawAt.closedSquareSample_entropy_le
     Function.Embedding.mk_id, Finset.map_refl] at hcut
   have hbound : Entropy.regionEntropy D (AreaLaw.rectangleAreaLawState Ω) ≤
       C_A * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) D).card := by
-    simpa only [Entropy.regionEntropy_eq_entropy, AreaLaw.rectangleAreaLawState,
-      AreaLaw.rectangleConfigurationEquiv] using hcut
+    simpa only [Entropy.regionEntropy, ManyBody.regionEntropy_eq_entropy,
+      AreaLaw.rectangleAreaLawState, AreaLaw.rectangleConfigurationEquiv] using hcut
   have hu : 0 ≤ u := by linarith
   have hedge : ((Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) D).card : ℝ) ≤
       16 * u + 4 := by

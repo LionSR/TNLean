@@ -79,8 +79,8 @@ estimate are subsequent conclusions.
     No gap, unique ground vector, or minimum-energy witness is assumed.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:disjoint_regional_clipping}
-    Choose a common regional minimizing vector using disjoint supports.
+    Choose a common regional minimizing vector using disjoint
+    supports~\cite[``One set of regional minima for every clipping'']{QICLean2026Blueprint}.
     The centered operator $X=A-e_AI+B-e_BI$ is positive and vanishes
     on that vector. The minimum $E$ of $X+Y$ therefore belongs to $[0,1]$.
     Adding back the two regional energies gives

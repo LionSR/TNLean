@@ -14,7 +14,7 @@
     norm at most $C/(u-e-C)$.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:chain_local_imaginary_time,thm:regional_truncation_low_from_conjugation}
+    \uses{thm:chain_local_imaginary_time}
     The original-bond imaginary-time estimate bounds both the conjugated
     boundary operator and its forcing term by $C$. Restriction to the
     actual high projection range and the actual low spectral space gives
@@ -57,8 +57,7 @@
     \cite{gap:alvv16_soft_truncation_energy_estimate}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{def:five_region_bond_partition,thm:disjoint_regional_clipping,
-        thm:nearest_neighbour_weighted_low_restriction}
+    \uses{def:five_region_bond_partition, thm:nearest_neighbour_weighted_low_restriction}
     Use repeated cuts to realize the three intervals as a consecutive
     five-region partition with two empty regions. Its actual crossing
     set has at most two bonds. Disjoint regional minimizers give

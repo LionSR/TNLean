@@ -180,7 +180,7 @@ theorem exists_physical_low_energy_interval_family
   · let : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, by omega⟩⟩
     have hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
-    obtain ⟨E0, z, hz, hzunit, hE0low⟩ := hH.exists_unit_eigenvector_le
+    obtain ⟨E0, z, hz, hzunit, hE0low⟩ := exists_unit_eigenvector_minEigenvalue hH
     refine ⟨0, E0, H, hH, z, by simp, hzunit, hz, hE0low, ?_⟩
     intro Gup Glo
     obtain ⟨F, Delta, hDelta, hbudget, hpair⟩ :=

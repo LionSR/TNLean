@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.HardTruncation
+import QICLean.Analysis.OrderedSpectralSpan
+import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import TNLean.MPS.AreaLaw.AKLV.TwoBlockTruncation
 
 /-!
@@ -190,8 +191,10 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
         Y.PosSemidef ∧ Y ≤ (J.card : ℝ) • 1 ∧ J.card ≤ 2 ∧
         (∑ i, h i) = (∑ j, A j) + Y :=
     three_region_data hlr hrL h hs h0 h1
+  have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hx, hxe, he, hclip⟩ :=
-    Matrix.exists_disjoint_regional_clipping_structure hq R A (fun j ↦ (I j).card)
+    ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q) R A
+      (fun j ↦ (I j).card)
       hR hsA (fun j ↦ (hA j).1) (fun j ↦ (hA j).2) Y J.card hY hYC
   let B (t : ℝ) (T : Finset (Fin 3)) :=
     (∑ j, ((if j ∈ T then energyTruncation (A j) (e j + t) else A j) -

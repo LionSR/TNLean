@@ -10,7 +10,7 @@ import QICLean.Entropy.FiniteProductSplitting
 import QICLean.Entropy.ProductMarginals
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.Circuit.RegionalSwap
-import TNLean.Lattice.SupportedPolarUnitary
+import QICLean.ManyBody.Sites.SupportedUnitary
 
 /-!
 # The two-sided filter and the polar step of the information reset
@@ -265,68 +265,6 @@ theorem resetCutoff_sq_div {Δ r : ℝ} (hΔ : Δ ≠ 0) (hr : 30 + r ≠ 0) :
     resetCutoff Δ r ^ 2 / (2 * resetVariance Δ r) = 30 + r := by
   unfold resetCutoff resetVariance; field_simp
 
-/-- Any Gaussian constants `A, T₀` meeting the two numerical conditions of the manuscript
-give the dimension-uniform physical-buffer filter. This is the argument of
-`GaussianFilter.exists_uniform_physicalBuffer_filter` with the constants kept visible.
-Source: `02-information.tex`, lines 395–452. -/
-private theorem uniform_physicalBuffer_filter_of_parameters {Δ r A T₀ : ℝ} (hΔ : 0 < Δ)
-    (hr : 0 ≤ r) (hA : 0 < A) (hT₀ : 0 ≤ T₀) (hgap : 30 + r ≤ A * Δ ^ 2 / 2)
-    (htail : 30 + r ≤ T₀ ^ 2 / (2 * A)) :
-    ∀ (R : Type u) (C : Type v) (Q : Type w)
-      [Fintype R] [Fintype C] [Fintype Q]
-      [DecidableEq R] [DecidableEq C] [DecidableEq Q]
-      (H : Matrix ((R × C) × Q) ((R × C) × Q) ℂ)
-      (Ω : (R × C) × Q → ℂ) (E₀ b : ℝ),
-      star Ω ⬝ᵥ Ω = 1 → H *ᵥ Ω = (E₀ : ℂ) • Ω →
-      (H - (E₀ : ℂ) • 1 -
-        (Δ : ℂ) • (1 - vecMulVec Ω (star Ω))).PosSemidef → 0 ≤ b →
-      quantumRelativeEntropy
-        (partialTraceRight (vecMulVec Ω (star Ω)))
-        (partialTraceRight (partialTraceRight (vecMulVec Ω (star Ω))) ⊗ₖ
-          partialTraceLeft (partialTraceRight (vecMulVec Ω (star Ω)))) ≤ b →
-      let e := Equiv.doubledRegroup (R × C) Q
-      let ψ := doubledRegroup Ω
-      let φ := physicalLeftSwap ψ
-      let S := partialSwap R C ⊗ₖ (1 : Matrix (Q × Q) (Q × Q) ℂ)
-      let K := reindex e e (doubledHamiltonian H)
-      let K' := S * K * Sᴴ
-      let Ψ : EuclideanSpace ℂ _ := WithLp.toLp 2 ψ
-      let Φ : EuclideanSpace ℂ _ := WithLp.toLp 2 φ
-      ∃ (W : Matrix (Q × Q) (Q × Q) ℂ) (z : ℝ),
-        let V := (1 : Matrix ((R × C) × (R × C)) ((R × C) × (R × C)) ℂ) ⊗ₖ W
-        W.IsHermitian ∧ ‖W‖ ≤ 1 ∧ Real.exp (-2 * b) ≤ z ∧
-        star φ ⬝ᵥ (V *ᵥ ψ) = (z : ℂ) ∧
-        ∀ L : ℝ, 1 ≤ L →
-          let B := 1 + b + Real.log L
-          let h := Real.toNNReal (A * B)
-          let T := T₀ * B
-          let M := GaussianFilter.gaussianIntertwinerTruncated h T K' K V
-          (h : ℝ) = A * B ∧ 0 < (h : ℝ) ∧ 0 ≤ T ∧ ‖M‖ ≤ 1 ∧
-            ‖toEuclideanLin M Ψ - (z : ℂ) • Φ‖ ≤
-              3 * Real.exp (-10 * b) * L ^ (-r) ∧
-            ‖toEuclideanLin Mᴴ Φ - (z : ℂ) • Ψ‖ ≤
-              3 * Real.exp (-10 * b) * L ^ (-r) := by
-  intro R C Q _ _ _ _ _ _ H Ω E₀ b hΩ heigen hgap' hb hbound
-  obtain ⟨W, z, hWherm, hW, hz, hoverlap, hfilter⟩ :=
-    GaussianFilter.exists_physicalBuffer_gaussian_filter H Ω hΩ heigen hgap' hΔ hb hbound
-  refine ⟨W, z, hWherm, hW, hz, hoverlap, ?_⟩
-  intro L hL
-  let B := 1 + b + Real.log L
-  let h := Real.toNNReal (A * B)
-  let T := T₀ * B
-  have hs := GaussianFilter.gaussian_error_bounds_of_parameter_constants hA hT₀ hr hgap htail
-    hb hL
-  have hh : (h : ℝ) = A * B := Real.coe_toNNReal _ hs.1.le
-  obtain ⟨hM, hforward, hreverse⟩ := (hfilter h).2.2.2 T hs.2.1
-  have hsum : Real.exp (-(h : ℝ) * Δ ^ 2 / 2) +
-      2 * Real.exp (-T ^ 2 / (2 * (h : ℝ))) ≤
-        3 * Real.exp (-10 * b) * L ^ (-r) := by
-    rw [hh]
-    nlinarith only [hs.2.2.1, hs.2.2.2]
-  refine ⟨hh, ?_, hs.2.1, hM, hforward.trans hsum, hreverse.trans hsum⟩
-  rw [hh]
-  exact hs.1
-
 /-- **The two-sided Gaussian filter in arbitrary coordinates of the two replicas, with
 explicit constants.** The statement of `exists_regional_physicalBuffer_filter` holds with
 the variance coefficient `A = resetVariance Δ r = 2 (30 + r) / Δ²` and the cutoff coefficient
@@ -360,9 +298,8 @@ theorem regional_physicalBuffer_filter {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r
             3 * Real.exp (-10 * b) * L ^ (-r) ∧
           ‖WithLp.toLp 2 (Mᴴ *ᵥ (F *ᵥ ψ)) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
             3 * Real.exp (-10 * b) * L ^ (-r) := by
-  have hfilter := uniform_physicalBuffer_filter_of_parameters.{0, 0, u} hΔ hr
-    (resetVariance_pos hΔ hr) (resetCutoff_pos hΔ hr).le
-    (resetVariance_mul_sq_div_two hΔ.ne').ge
+  have hfilter := GaussianFilter.physicalBuffer_filter_of_le.{0, 0, u} hΔ hr
+    (resetCutoff_pos hΔ hr).le (resetVariance_mul_sq_div_two hΔ.ne').ge
     (resetCutoff_sq_div hΔ.ne' (by linarith)).ge
   intro ι _ _ N _ _ q R C hRC t H E₀ Ω b hH hΩ hgs hspan hb hI P s g K F ψ
   have heigen := mulVec_eq_of_groundSpace_eq_span hspan
@@ -485,9 +422,9 @@ theorem exists_supported_unitary_of_two_sided (S : Finset ι)
       U ∈ unitaryGroup (ι → Fin q) ℂ ∧ U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S ∧
       ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 φ‖ ≤ 2 * C * ε := by
   have hz0 : 0 < z := (Real.exp_pos _).trans_le hz
-  obtain ⟨U, hU, hUsupp, hcorr⟩ := exists_supported_unitary_polar_correction S
+  obtain ⟨U, hU, hUsupp, hcorr⟩ := ManyBody.exists_supported_unitary_polar_correction (S := S)
     (SMulMemClass.smul_mem ((z : ℂ)⁻¹) hMsupp)
-  refine ⟨U, hU, hUsupp, (hcorr ψ φ).trans ?_⟩
+  refine ⟨U, hU, hUsupp, (hcorr (WithLp.toLp 2 ψ) (WithLp.toLp 2 φ)).trans ?_⟩
   have hzinv : (z : ℂ)⁻¹ = ((z⁻¹ : ℝ) : ℂ) := by push_cast; rfl
   have hstar : star ((z : ℂ)⁻¹) = (z : ℂ)⁻¹ := by
     rw [hzinv, Complex.star_def, Complex.conj_ofReal]
@@ -497,7 +434,10 @@ theorem exists_supported_unitary_of_two_sided (S : Finset ι)
     rw [← Real.norm_of_nonneg (inv_nonneg.mpr hz0.le), ← Complex.norm_real, ← hzinv,
       ← norm_smul, smul_sub, smul_smul, inv_mul_cancel₀ (by exact_mod_cast hz0.ne'),
       one_smul, WithLp.toLp_smul]
-  rw [conjTranspose_smul, hstar, smul_mulVec, smul_mulVec, hscale, hscale]
+  rw [conjTranspose_smul, hstar]
+  change ‖WithLp.toLp 2 (((z : ℂ)⁻¹ • M) *ᵥ ψ) - WithLp.toLp 2 φ‖ +
+      ‖WithLp.toLp 2 (((z : ℂ)⁻¹ • Mᴴ) *ᵥ φ) - WithLp.toLp 2 ψ‖ ≤ 2 * C * ε
+  rw [smul_mulVec, smul_mulVec, hscale, hscale]
   have hzb : z⁻¹ ≤ Real.exp (2 * b) := by
     have h₁ := inv_anti₀ (Real.exp_pos (-2 * b)) hz
     rwa [← Real.exp_neg, show -(-2 * b) = 2 * b by ring] at h₁

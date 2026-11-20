@@ -6,7 +6,8 @@ Authors: TNLean contributors
 import QICLean.Analysis.RelativeLowEnergyCloseness
 import QICLean.Representation.CoherentSymbolFunction
 import QICLean.ManyBody.Sites.Twirl
-import TNLean.Lattice.HardTruncation
+import QICLean.Analysis.OrderedSpectralSpan
+import QICLean.Analysis.EuclideanEigenvectorBasis
 import TNLean.MPS.AreaLaw.ALVV.SpectralProjector
 import TNLean.MPS.AreaLaw.IndependentFiveRegionResidual
 

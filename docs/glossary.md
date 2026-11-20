@@ -2257,76 +2257,15 @@ in `MPS/Preparation/` uses it.
   classical feedforward. The full phase equivalence in arXiv:2103.13367 and
   blocking of sites are not formalized here.
 
-#### `QuantumCircuit.IsApproxLocalChannelConversion`
+#### Approximate and asymptotic local channel conversion
 
-- **Declaration:** `QuantumCircuit.IsApproxLocalChannelConversion T ε ρ σ : Prop`,
-  for `T : ℕ`, `ε : ℝ`, `[NeZero N]`, and operators on `N`-site chains whose
-  fixed local dimensions may differ.
-- **Defined in:** `TNLean/Circuit/Channel/ApproximateConversion.lean`.
-- **Meaning:** there are `S ≤ T` and a map `Ψ` with
-  `IsLocalChannelProtocol S Ψ` such that $\lVert\Psi(\rho)-\sigma\rVert_1\le\varepsilon$.
-  The trace norm is `QuantumCircuit.chainTraceNorm`, the sum of singular
-  values after enumerating the chain configurations.
-- **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, p. 3, paragraph
-  "Phases of matter", for the trace-norm criterion. The protocol class here
-  uses enlarged-site channels without classical feedforward.
-- **Sanctioned bridges:** `IsApproxLocalChannelConversion.refl`,
-  `IsApproxLocalChannelConversion.mono` (both bounds may increase),
-  `IsApproxLocalChannelConversion.trans` (depths and errors add for Hermitian
-  source and intermediate operators), and
-  `QuantumCircuit.isApproxLocalChannelConversion_zero_iff` (zero error is exact
-  local channel conversion).
-- **Caveat:** the definition does not require density matrices or Hermiticity;
-  the composition theorem requires the stated Hermiticity hypotheses.
-  Intermediate dimensions are unrestricted and two-site layers on enlarged
-  sites have unit depth. Classical feedforward is excluded, but no uniform
-  simulation or inclusion in the source relation is established; see
-  `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
-
-#### `QuantumCircuit.IsAsymptoticLocalChannelConversion`
-
-- **Declaration:** `QuantumCircuit.IsAsymptoticLocalChannelConversion ρ σ : Prop`,
-  for operator families on `N`-site chains with fixed, possibly different,
-  local dimensions.
-- **Defined in:** `TNLean/Circuit/Channel/AsymptoticConversion.lean`.
-- **Meaning:** there are $k\in\mathbb N$, $C\ge0$, and errors
-  $\varepsilon_N\to0$ such that, for all sufficiently large positive `N`, an
-  approximate local channel conversion from $\rho_N$ to $\sigma_N$ has depth
-  $T_N\le C(1+\log(N+1))^k$ and trace-norm error at most $\varepsilon_N$.
-- **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, p. 3, paragraph
-  "Phases of matter", for the trace-norm criterion. The protocol class here
-  uses enlarged-site channels without classical feedforward.
-- **Sanctioned bridges:** `IsAsymptoticLocalChannelConversion.refl` and
-  `IsAsymptoticLocalChannelConversion.trans`, the latter for eventually
-  Hermitian source and intermediate families.
-- **Caveat:** only the tails of the families matter; the logarithmic shift
-  fixes small sizes. The relation is directed, and its definition does not
-  assume density matrices. Intermediate local dimensions may grow with `N`
-  without changing the unit cost per two-site layer. No uniform-depth
-  inclusion in the source `QCcc` relation is established; see
-  `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
-
-#### `QuantumCircuit.IsLocalChannelPhaseEquivalent`
-
-- **Declaration:** `QuantumCircuit.IsLocalChannelPhaseEquivalent ρ σ : Prop`,
-  for operator families on `N`-site chains with fixed, possibly different,
-  local dimensions.
-- **Defined in:** `TNLean/Circuit/Channel/AsymptoticConversion.lean`.
-- **Meaning:** asymptotic local channel conversion holds in both directions.
-- **Source:** Piroli--Styliaris--Cirac, arXiv:2103.13367, p. 3, paragraph
-  "Phases of matter", for the trace-norm criterion. The protocol class here
-  uses enlarged-site channels without classical feedforward.
-- **Sanctioned bridges:** `IsLocalChannelPhaseEquivalent.refl`,
-  `IsLocalChannelPhaseEquivalent.symm`, and
-  `IsLocalChannelPhaseEquivalent.trans` (for three eventually Hermitian
-  families). `IsLocalChannelPhaseEquivalent.equivalence` gives an equivalence
-  relation on eventually Hermitian families of one fixed local dimension.
-- **Caveat:** density-matrix families satisfy the Hermiticity condition, but
-  arbitrary operator families are not asserted to form an equivalence
-  relation. The enlarged-site gate convention and absence of classical
-  feedforward differ from the source model; no inclusion in its phase
-  relation or source `QCcc` classification is asserted. See
-  `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
+Approximate conversion in trace norm, asymptotic conversion in polylogarithmic depth and phase
+equivalence of local channel protocols are QICLean's `QuantumCircuit.IsApproxConversion`,
+`QuantumCircuit.IsAsymptoticConversion` and `QuantumCircuit.IsPhaseEquivalent`, defined in
+`QICLean/Circuit/Model/Approximate.lean` (QICLean dependency) for a circuit geometry and used
+here at the ring `Geometry.ring N`. The trace norm of a chain operator on the TNLean side is
+`QuantumCircuit.chainTraceNorm`. The scope of the local channel model relative to the source
+`QCcc` relation is recorded in `docs/paper-gaps/psc21_local_channel_phase_scope.tex`.
 
 ### Lieb–Robinson propagation on finite graphs
 
@@ -3497,7 +3436,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.regionalEntropy_eq_zero_of_edgeBoundary_eq_empty` | A cut with no crossing edge has zero regional entropy in a gapped ground vector | Area-law Lemma 2.2 (`lem:zero-boundary`), `01-preliminaries.tex`, lines 123–134; proved, using only the gapped ground-vector hypothesis with `Δ > 0`. |
 | `ManyBody.graphBall` | The closed ball `N_l(a) = {x : d_G(a,x) ≤ l}` of a finite graph in the extended graph distance | Area-law `03-quasilocal.tex`, line 17; sites in other connected components are at infinite distance and never belong to a ball. Defined in `QICLean/ManyBody/Dynamics/GraphLocalization.lean`. |
 | `TNLean.Lattice.cutLogBudget` | The parameter `ℬ_A = 1 + ∑ log²(e q^{|X|})` of a cut, summed over the admissible supports meeting both `A` and its complement | Area-law Lemma 3.1 (`lem:tail`), `02-initial.tex`, lines 47–55; the lattice instance of QICLean's `Entropy.cutLogBudget`, bounded by the number of crossing supports in `cutLogBudget_le_card`. |
-| `TNLean.Lattice.concentrationWidth` | The width `32 √((1 + J/Δ) ℬ_A) (M log(n+2) + e/2 + log 2)` at which the marginal tail of Lemma 3.1 is at most `(n+2)^{-M}` | Area-law `02-initial.tex`, lines 207–212; an explicit width in terms of `ℬ_A`, used in `ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedState`. |
+| `Entropy.concentrationWidth` | The width `32 √((1 + ϑ) ℬ) (M log(n+2) + e/2 + log 2)` at which the marginal tail of Lemma 3.1 is at most `(n+2)^{-M}`; on the lattice `ϑ = J/Δ` and `ℬ = ℬ_A` | Area-law `02-initial.tex`, lines 207–212; defined in `QICLean/Entropy/TypicalMarginalMass.lean` (QICLean dependency), used in `ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedState` at `Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M`. |
 | `TNLean.PEPS.AreaLaw.tailParameterConstant` | The constant `C = v_R μ_R log²(e q^{v_R})`, with `v_R = 1 + 2R(R+1)` and `μ_R = 2^{v_R - 1}`, in `ℬ_A ≤ C(1 + |∂_Λ A|)` | Area-law `eq:initial-local-tail-parameter`, `02-initial.tex`, lines 202–206; depends only on `q` and `R`, at least one for `q ≥ 1`; the bound is `cutLogBudget_le_edgeBoundary`. |
 | `TNLean.PEPS.AreaLaw.typicalWidthConstant` | The constant `C_M = 32 √((1 + J/Δ) C) (M + (e/2 + log 2)/log 2)` with `C = tailParameterConstant q R` | Area-law `02-initial.tex`, lines 207–212; depends only on `q, R, J, Δ, M`; bounds the concentration width by `C_M √(1 + |∂_Λ A|) log(n+2)` in `concentrationWidth_le`. |
 | `TNLean.PEPS.AreaLaw.IntRect` | A product `[x₀,x₁] × [y₀,y₁]` of two nonempty finite integer intervals, with `size` the larger number of sites along an axis and `dilate d` the rectangle `Q^{+d}` | Area-law `02-initial.tex`, lines 222–232; an ambient rectangle, not a set of sites of the domain. |
