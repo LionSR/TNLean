@@ -8,5 +8,7 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.FrustrationFree
 
+import TNLean.PEPS.AreaLaw.FrustrationFree.Model
 import TNLean.PEPS.AreaLaw.FrustrationFree.RangeProjection
 import TNLean.PEPS.AreaLaw.FrustrationFree.SweepContraction
+import TNLean.PEPS.AreaLaw.FrustrationFree.ViaGeneralTheorem
