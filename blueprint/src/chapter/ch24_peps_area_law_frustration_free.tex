@@ -100,6 +100,22 @@ localization errors of the amplification stage.
     $|\Omega\rangle\langle\Omega|$ vanishes on $v\perp\Omega$.
 \end{proof}
 
+\begin{lemma}[The positive quasi-local constraints are frustration-free]
+    \label{thm:frustration_free_family_quasilocal}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.exists_isFrustrationFree_latticePositiveConstraints}
+    \leanok
+    \uses{def:frustration_free_family,thm:al_lattice_positive_replacement}
+    For $p\ge1$, $R$, $J\ge0$ and $\Delta>0$, the constraints $k_i$ of
+    Theorem~\ref{thm:al_lattice_positive_replacement}, built from a gapped
+    instance with unique ground vector $\Omega$, form a frustration-free family
+    with strength $1$ and gap $\Delta/c$, where $c>0$ is their normalization.
+\end{lemma}
+
+\begin{proof}\leanok
+    The theorem gives $0\le k_i\le1$, $k_i\Omega=0$ and
+    $\sum_ik_i\ge(\Delta/c)(I-|\Omega\rangle\langle\Omega|)$.
+\end{proof}
+
 \begin{definition}[Frustration-free gapped Hamiltonians]
     \label{def:frustration_free_area_law_model}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped}
