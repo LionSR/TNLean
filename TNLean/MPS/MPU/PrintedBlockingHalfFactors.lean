@@ -25,25 +25,25 @@ namespace MPOTensor
 /-- Concatenate two decoded half words into the original ordered spins.
 Source: arXiv:1703.09188, lines 1689--1698. -/
 noncomputable def printedHalfWordEquiv (d k : ℕ) :
-    (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ≃
+    (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ≃
       (Fin (2 * k) → Fin d) :=
-  ((MPSTensor.decodeBlockEquiv d k).prodCongr (MPSTensor.decodeBlockEquiv d k)).trans
+  ((Kraus.decodeBlockEquiv d k).prodCongr (Kraus.decodeBlockEquiv d k)).trans
     ((Fin.appendEquiv k k).trans
       (Equiv.arrowCongr (finCongr (by omega : k + k = 2 * k)) (Equiv.refl (Fin d))))
 
 private theorem halfWord_left {d k : ℕ}
-    (a b : Fin (MPSTensor.blockPhysDim d k)) (p : Fin k) :
+    (a b : Fin (Kraus.blockPhysDim d k)) (p : Fin k) :
     printedHalfWordEquiv d k (a, b) ⟨p.val, by have := p.isLt; omega⟩ =
-      MPSTensor.decodeBlock d k a p := by
-  change Fin.append (MPSTensor.decodeBlock d k a) (MPSTensor.decodeBlock d k b)
+      Kraus.decodeBlock d k a p := by
+  change Fin.append (Kraus.decodeBlock d k a) (Kraus.decodeBlock d k b)
     (Fin.castAdd k p) = _
   exact Fin.addCases_left p
 
 private theorem halfWord_right {d k : ℕ}
-    (a b : Fin (MPSTensor.blockPhysDim d k)) (p : Fin k) :
+    (a b : Fin (Kraus.blockPhysDim d k)) (p : Fin k) :
     printedHalfWordEquiv d k (a, b) ⟨k + p.val, by have := p.isLt; omega⟩ =
-      MPSTensor.decodeBlock d k b p := by
-  change Fin.append (MPSTensor.decodeBlock d k a) (MPSTensor.decodeBlock d k b)
+      Kraus.decodeBlock d k b p := by
+  change Fin.append (Kraus.decodeBlock d k a) (Kraus.decodeBlock d k b)
     (Fin.natAdd k p) = _
   exact Fin.addCases_right p
 
@@ -51,8 +51,8 @@ private theorem halfWord_right {d k : ℕ}
 Source: arXiv:1703.09188, lines 1689--1694. -/
 noncomputable def printedBlockedInputGate {d : ℕ} (k : ℕ) (hk : 0 < k)
     (u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
-    Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ :=
+    Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ :=
   Matrix.reindex (printedHalfWordEquiv d k).symm (printedHalfWordEquiv d k).symm
     (printedInputCircuit k hk u v)
 
@@ -60,8 +60,8 @@ noncomputable def printedBlockedInputGate {d : ℕ} (k : ℕ) (hk : 0 < k)
 Source: arXiv:1703.09188, lines 1695--1698. -/
 noncomputable def printedBlockedOutputGate {d : ℕ} (k : ℕ) (hk : 0 < k)
     (v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
-    Matrix (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k))
-      (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ :=
+    Matrix (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k))
+      (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ :=
   Matrix.reindex (printedHalfWordEquiv d k).symm (printedHalfWordEquiv d k).symm
     (printedOutputCircuit k hk v)
 
@@ -71,12 +71,12 @@ noncomputable def printedBlockedHalfLeft {d D k : ℕ}
     {W : MPOTensor (d * d) D}
     {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
     (S : TwoSiteStandardFormData W u v) :
-    Matrix (Fin D × Fin (MPSTensor.blockPhysDim d (k + 1)))
-      (Fin (MPSTensor.blockPhysDim d (k + 1))) ℂ := fun i t ↦
-  if Fin.tail (MPSTensor.decodeBlock d (k + 1) i.2) =
-      Fin.tail (MPSTensor.decodeBlock d (k + 1) t) then
-    S.X₂ (i.1, MPSTensor.decodeBlock d (k + 1) i.2 0)
-      (MPSTensor.decodeBlock d (k + 1) t 0) else 0
+    Matrix (Fin D × Fin (Kraus.blockPhysDim d (k + 1)))
+      (Fin (Kraus.blockPhysDim d (k + 1))) ℂ := fun i t ↦
+  if Fin.tail (Kraus.decodeBlock d (k + 1) i.2) =
+      Fin.tail (Kraus.decodeBlock d (k + 1) t) then
+    S.X₂ (i.1, Kraus.decodeBlock d (k + 1) i.2 0)
+      (Kraus.decodeBlock d (k + 1) t 0) else 0
 
 /-- Extend the supplied right half factor by identity on its preceding
 spectator spins. Source: arXiv:1703.09188, lines 1689--1698. -/
@@ -84,12 +84,12 @@ noncomputable def printedBlockedHalfRight {d D k : ℕ}
     {W : MPOTensor (d * d) D}
     {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
     (S : TwoSiteStandardFormData W u v) :
-    Matrix (Fin (MPSTensor.blockPhysDim d (k + 1)) × Fin D)
-      (Fin (MPSTensor.blockPhysDim d (k + 1))) ℂ := fun i s ↦
-  if Fin.init (MPSTensor.decodeBlock d (k + 1) i.1) =
-      Fin.init (MPSTensor.decodeBlock d (k + 1) s) then
-    S.X₁ (MPSTensor.decodeBlock d (k + 1) i.1 (Fin.last k), i.2)
-      (MPSTensor.decodeBlock d (k + 1) s (Fin.last k)) else 0
+    Matrix (Fin (Kraus.blockPhysDim d (k + 1)) × Fin D)
+      (Fin (Kraus.blockPhysDim d (k + 1))) ℂ := fun i s ↦
+  if Fin.init (Kraus.decodeBlock d (k + 1) i.1) =
+      Fin.init (Kraus.decodeBlock d (k + 1) s) then
+    S.X₁ (Kraus.decodeBlock d (k + 1) i.1 (Fin.last k), i.2)
+      (Kraus.decodeBlock d (k + 1) s (Fin.last k)) else 0
 
 /-- The two half-word versions of the literal circuits remain unitary.
 Source: arXiv:1703.09188, lines 1689--1698. -/
@@ -98,9 +98,9 @@ theorem printedBlockedGates_mem_unitaryGroup {d : ℕ} (k : ℕ) (hk : 0 < k)
     (hu : u ∈ Matrix.unitaryGroup (Fin d × Fin d) ℂ)
     (hv : v ∈ Matrix.unitaryGroup (Fin d × Fin d) ℂ) :
     printedBlockedInputGate k hk u v ∈ Matrix.unitaryGroup
-        (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ ∧
+        (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ ∧
       printedBlockedOutputGate k hk v ∈ Matrix.unitaryGroup
-        (Fin (MPSTensor.blockPhysDim d k) × Fin (MPSTensor.blockPhysDim d k)) ℂ := by
+        (Fin (Kraus.blockPhysDim d k) × Fin (Kraus.blockPhysDim d k)) ℂ := by
   obtain ⟨hi, ho⟩ := printedBlockingCircuits_mem_unitaryGroup k hk u v hu hv
   exact ⟨Matrix.reindex_mem_unitaryGroup _ _ hi, Matrix.reindex_mem_unitaryGroup _ _ ho⟩
 
@@ -110,37 +110,37 @@ first spin of the second half.
 Source: arXiv:1703.09188, lines 1695--1698. -/
 theorem printedBlockedOutputGate_apply {d k : ℕ}
     (v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ)
-    (a b s t : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+    (a b s t : Fin (Kraus.blockPhysDim d (k + 1))) :
     printedBlockedOutputGate (k + 1) (by omega) v (a, b) (s, t) =
-      if Fin.init (MPSTensor.decodeBlock d (k + 1) a) =
-          Fin.init (MPSTensor.decodeBlock d (k + 1) s) ∧
-        Fin.tail (MPSTensor.decodeBlock d (k + 1) b) =
-          Fin.tail (MPSTensor.decodeBlock d (k + 1) t) then
-        v (MPSTensor.decodeBlock d (k + 1) a (Fin.last k),
-            MPSTensor.decodeBlock d (k + 1) b 0)
-          (MPSTensor.decodeBlock d (k + 1) s (Fin.last k),
-            MPSTensor.decodeBlock d (k + 1) t 0) else 0 := by
+      if Fin.init (Kraus.decodeBlock d (k + 1) a) =
+          Fin.init (Kraus.decodeBlock d (k + 1) s) ∧
+        Fin.tail (Kraus.decodeBlock d (k + 1) b) =
+          Fin.tail (Kraus.decodeBlock d (k + 1) t) then
+        v (Kraus.decodeBlock d (k + 1) a (Fin.last k),
+            Kraus.decodeBlock d (k + 1) b 0)
+          (Kraus.decodeBlock d (k + 1) s (Fin.last k),
+            Kraus.decodeBlock d (k + 1) t 0) else 0 := by
   have hout : (∀ p : Fin (2 * (k + 1)), p.val < k ∨ k + 2 ≤ p.val →
       printedHalfWordEquiv d (k + 1) (a, b) p =
         printedHalfWordEquiv d (k + 1) (s, t) p) ↔
-      Fin.init (MPSTensor.decodeBlock d (k + 1) a) =
-        Fin.init (MPSTensor.decodeBlock d (k + 1) s) ∧
-      Fin.tail (MPSTensor.decodeBlock d (k + 1) b) =
-        Fin.tail (MPSTensor.decodeBlock d (k + 1) t) := by
+      Fin.init (Kraus.decodeBlock d (k + 1) a) =
+        Fin.init (Kraus.decodeBlock d (k + 1) s) ∧
+      Fin.tail (Kraus.decodeBlock d (k + 1) b) =
+        Fin.tail (Kraus.decodeBlock d (k + 1) t) := by
     constructor
     · intro h
       constructor
       · funext p
         have hh := h ⟨p.val, by have := p.isLt; omega⟩ (Or.inl p.isLt)
-        change MPSTensor.decodeBlock d (k + 1) a p.castSucc =
-          MPSTensor.decodeBlock d (k + 1) s p.castSucc
+        change Kraus.decodeBlock d (k + 1) a p.castSucc =
+          Kraus.decodeBlock d (k + 1) s p.castSucc
         exact (halfWord_left a b p.castSucc).symm.trans
           (hh.trans (halfWord_left s t p.castSucc))
       · funext p
         have hh := h ⟨k + 1 + p.succ.val, by have := p.isLt; omega⟩
           (Or.inr (by change k + 2 ≤ k + 1 + p.succ.val; simp; omega))
-        change MPSTensor.decodeBlock d (k + 1) b p.succ =
-          MPSTensor.decodeBlock d (k + 1) t p.succ
+        change Kraus.decodeBlock d (k + 1) b p.succ =
+          Kraus.decodeBlock d (k + 1) t p.succ
         exact (halfWord_right a b p.succ).symm.trans
           (hh.trans (halfWord_right s t p.succ))
     · rintro ⟨hleft, hright⟩ p hp
@@ -162,12 +162,12 @@ theorem printedBlockedOutputGate_apply {d k : ℕ}
     (printedHalfWordEquiv d (k + 1) (a, b))
     (printedHalfWordEquiv d (k + 1) (s, t)) = _
   rw [printedPairGate_apply]
-  have hfirst (x y : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+  have hfirst (x y : Fin (Kraus.blockPhysDim d (k + 1))) :
       printedHalfWordEquiv d (k + 1) (x, y) ⟨k, by omega⟩ =
-        MPSTensor.decodeBlock d (k + 1) x (Fin.last k) := halfWord_left x y (Fin.last k)
-  have hlast (x y : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+        Kraus.decodeBlock d (k + 1) x (Fin.last k) := halfWord_left x y (Fin.last k)
+  have hlast (x y : Fin (Kraus.blockPhysDim d (k + 1))) :
       printedHalfWordEquiv d (k + 1) (x, y) ⟨k + 1, by omega⟩ =
-        MPSTensor.decodeBlock d (k + 1) y 0 := by
+        Kraus.decodeBlock d (k + 1) y 0 := by
     simpa only [Fin.val_zero, Nat.add_zero] using halfWord_right x y 0
   simp only [hout, hfirst, hlast]
 
@@ -178,15 +178,15 @@ theorem TwoSiteStandardFormData.printedBlocked_output_contraction {d D k : ℕ}
     {W : MPOTensor (d * d) D}
     {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
     (S : TwoSiteStandardFormData W u v)
-    (a b s t : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+    (a b s t : Fin (Kraus.blockPhysDim d (k + 1))) :
     printedBlockedOutputGate (k + 1) (by omega) v (a, b) (s, t) =
       ∑ β : Fin D, printedBlockedHalfRight S (a, β) s *
         printedBlockedHalfLeft S (β, b) t := by
   rw [printedBlockedOutputGate_apply]
-  by_cases hleft : Fin.init (MPSTensor.decodeBlock d (k + 1) a) =
-      Fin.init (MPSTensor.decodeBlock d (k + 1) s) <;>
-    by_cases hright : Fin.tail (MPSTensor.decodeBlock d (k + 1) b) =
-      Fin.tail (MPSTensor.decodeBlock d (k + 1) t) <;>
+  by_cases hleft : Fin.init (Kraus.decodeBlock d (k + 1) a) =
+      Fin.init (Kraus.decodeBlock d (k + 1) s) <;>
+    by_cases hright : Fin.tail (Kraus.decodeBlock d (k + 1) b) =
+      Fin.tail (Kraus.decodeBlock d (k + 1) t) <;>
     simp only [printedBlockedHalfRight, printedBlockedHalfLeft, hleft, hright,
       ite_true, ite_false, and_self, false_and, and_false, mul_zero, zero_mul,
       Finset.sum_const_zero, S.v_apply]
@@ -196,26 +196,26 @@ k original spins, each encoded as a half word. The original physical
 pairs are preserved before this middle cut.
 Source: arXiv:1703.09188, lines 1689--1698. -/
 noncomputable def printedBlockedPhysicalEquiv (d k : ℕ) :
-    Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k) ≃
-      Fin (MPSTensor.blockPhysDim (d * d) k) :=
+    Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k) ≃
+      Fin (Kraus.blockPhysDim (d * d) k) :=
   finProdFinEquiv.symm |>.trans (printedHalfWordEquiv d k) |>.trans
     (Equiv.arrowCongr (finCongr (Nat.mul_comm k 2)) (Equiv.refl (Fin d))).symm |>.trans
     (twoSiteChainConfigEquiv d k).symm |>.trans
-    (twoSitePairConfigEquiv d k) |>.trans (MPSTensor.decodeBlockEquiv (d * d) k).symm
+    (twoSitePairConfigEquiv d k) |>.trans (Kraus.decodeBlockEquiv (d * d) k).symm
 
 private theorem sum_blocked_half_left {d D k : ℕ}
     {W : MPOTensor (d * d) D}
     {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
     (S : TwoSiteStandardFormData W u v)
-    (α : Fin D) (a : Fin (MPSTensor.blockPhysDim d (k + 1)))
-    (F : Fin (MPSTensor.blockPhysDim d (k + 1)) → ℂ) :
+    (α : Fin D) (a : Fin (Kraus.blockPhysDim d (k + 1)))
+    (F : Fin (Kraus.blockPhysDim d (k + 1)) → ℂ) :
     (∑ t, printedBlockedHalfLeft S (α, a) t * F t) =
-      ∑ x : Fin d, S.X₂ (α, MPSTensor.decodeBlock d (k + 1) a 0) x *
-        F ((MPSTensor.decodeBlockEquiv d (k + 1)).symm
-          (Fin.cons x (Fin.tail (MPSTensor.decodeBlock d (k + 1) a)))) := by
-  rw [← (MPSTensor.decodeBlockEquiv d (k + 1)).symm.sum_comp
+      ∑ x : Fin d, S.X₂ (α, Kraus.decodeBlock d (k + 1) a 0) x *
+        F ((Kraus.decodeBlockEquiv d (k + 1)).symm
+          (Fin.cons x (Fin.tail (Kraus.decodeBlock d (k + 1) a)))) := by
+  rw [← (Kraus.decodeBlockEquiv d (k + 1)).symm.sum_comp
     (fun t ↦ printedBlockedHalfLeft S (α, a) t * F t)]
-  simp only [printedBlockedHalfLeft, MPSTensor.decodeBlock_decodeBlockEquiv_symm]
+  simp only [printedBlockedHalfLeft, Kraus.decodeBlock_decodeBlockEquiv_symm]
   rw [Matrix.sum_fin_cons]
   simp only [Fin.tail_cons, Fin.cons_zero, ite_mul, zero_mul, Finset.sum_ite_eq,
     Finset.mem_univ, ite_true]
@@ -224,26 +224,26 @@ private theorem sum_blocked_half_right {d D k : ℕ}
     {W : MPOTensor (d * d) D}
     {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
     (S : TwoSiteStandardFormData W u v)
-    (γ : Fin D) (b : Fin (MPSTensor.blockPhysDim d (k + 1)))
-    (F : Fin (MPSTensor.blockPhysDim d (k + 1)) → ℂ) :
+    (γ : Fin D) (b : Fin (Kraus.blockPhysDim d (k + 1)))
+    (F : Fin (Kraus.blockPhysDim d (k + 1)) → ℂ) :
     (∑ s, F s * printedBlockedHalfRight S (b, γ) s) =
-      ∑ y : Fin d, F ((MPSTensor.decodeBlockEquiv d (k + 1)).symm
-          (Fin.snoc (Fin.init (MPSTensor.decodeBlock d (k + 1) b)) y)) *
-        S.X₁ (MPSTensor.decodeBlock d (k + 1) b (Fin.last k), γ) y := by
-  rw [← (MPSTensor.decodeBlockEquiv d (k + 1)).symm.sum_comp
+      ∑ y : Fin d, F ((Kraus.decodeBlockEquiv d (k + 1)).symm
+          (Fin.snoc (Fin.init (Kraus.decodeBlock d (k + 1) b)) y)) *
+        S.X₁ (Kraus.decodeBlock d (k + 1) b (Fin.last k), γ) y := by
+  rw [← (Kraus.decodeBlockEquiv d (k + 1)).symm.sum_comp
     (fun s ↦ F s * printedBlockedHalfRight S (b, γ) s)]
-  simp only [printedBlockedHalfRight, MPSTensor.decodeBlock_decodeBlockEquiv_symm]
+  simp only [printedBlockedHalfRight, Kraus.decodeBlock_decodeBlockEquiv_symm]
   rw [← (Fin.snocEquiv (fun _ : Fin (k + 1) ↦ Fin d)).sum_comp]
   simp only [Fintype.sum_prod_type, Fin.snocEquiv_apply, Fin.init_snoc, Fin.snoc_last,
     mul_ite, mul_zero, Finset.sum_ite_eq, Finset.mem_univ, ite_true]
 
 private theorem halfWord_boundary {d k : ℕ}
-    (a b : Fin (MPSTensor.blockPhysDim d (k + 1))) (x y : Fin d) :
+    (a b : Fin (Kraus.blockPhysDim d (k + 1))) (x y : Fin d) :
     printedHalfWordEquiv d (k + 1)
-      ((MPSTensor.decodeBlockEquiv d (k + 1)).symm
-          (Fin.cons x (Fin.tail (MPSTensor.decodeBlock d (k + 1) a))),
-        (MPSTensor.decodeBlockEquiv d (k + 1)).symm
-          (Fin.snoc (Fin.init (MPSTensor.decodeBlock d (k + 1) b)) y)) =
+      ((Kraus.decodeBlockEquiv d (k + 1)).symm
+          (Fin.cons x (Fin.tail (Kraus.decodeBlock d (k + 1) a))),
+        (Kraus.decodeBlockEquiv d (k + 1)).symm
+          (Fin.snoc (Fin.init (Kraus.decodeBlock d (k + 1) b)) y)) =
       fun q ↦ if q.val = 0 then x else if q.val = 2 * k + 1 then y else
         printedHalfWordEquiv d (k + 1) (a, b) q := by
   have hcons (w : Fin (k + 1) → Fin d) :
@@ -263,7 +263,7 @@ private theorem halfWord_boundary {d k : ℕ}
   by_cases hq : q.val < k + 1
   · let p : Fin (k + 1) := ⟨q.val, hq⟩
     have he : q = ⟨p.val, by have := p.isLt; omega⟩ := rfl
-    rw [he, halfWord_left, halfWord_left, MPSTensor.decodeBlock_decodeBlockEquiv_symm,
+    rw [he, halfWord_left, halfWord_left, Kraus.decodeBlock_decodeBlockEquiv_symm,
       hcons]
     have hlast : p.val ≠ 2 * k + 1 := by have := p.isLt; omega
     simp only [hlast, ite_false]
@@ -272,7 +272,7 @@ private theorem halfWord_boundary {d k : ℕ}
       apply Fin.ext
       dsimp only [p]
       omega
-    rw [he, halfWord_right, halfWord_right, MPSTensor.decodeBlock_decodeBlockEquiv_symm,
+    rw [he, halfWord_right, halfWord_right, Kraus.decodeBlock_decodeBlockEquiv_symm,
       hsnoc]
     have hfirst : k + 1 + p.val ≠ 0 := by omega
     have hlast : k + 1 + p.val = 2 * k + 1 ↔ p.val = k := by omega
@@ -282,16 +282,16 @@ private theorem blocked_halves_contract_input {d D k : ℕ}
     {W : MPOTensor (d * d) D}
     {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
     (S : TwoSiteStandardFormData W u v)
-    (α γ : Fin D) (a b c e : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+    (α γ : Fin D) (a b c e : Fin (Kraus.blockPhysDim d (k + 1))) :
     (∑ t, ∑ s, printedBlockedHalfLeft S (α, a) t *
       printedBlockedInputGate (k + 1) (by omega) u v (t, s) (c, e) *
         printedBlockedHalfRight S (b, γ) s) =
-      ∑ x : Fin d, ∑ y : Fin d, S.X₂ (α, MPSTensor.decodeBlock d (k + 1) a 0) x *
+      ∑ x : Fin d, ∑ y : Fin d, S.X₂ (α, Kraus.decodeBlock d (k + 1) a 0) x *
         printedInputCircuit (k + 1) (by omega) u v
           (fun p ↦ if p.val = 0 then x else if p.val = 2 * k + 1 then y else
             printedHalfWordEquiv d (k + 1) (a, b) p)
           (printedHalfWordEquiv d (k + 1) (c, e)) *
-            S.X₁ (MPSTensor.decodeBlock d (k + 1) b (Fin.last k), γ) y := by
+            S.X₁ (Kraus.decodeBlock d (k + 1) b (Fin.last k), γ) y := by
   simp only [mul_assoc, ← Finset.mul_sum]
   rw [sum_blocked_half_left]
   apply Finset.sum_congr rfl
@@ -308,15 +308,15 @@ private theorem blocked_halves_contract_input {d D k : ℕ}
 configuration associated to the two half words.
 Source: arXiv:1703.09188, lines 1689--1698. -/
 theorem printedBlockedPhysicalEquiv_decode (d k : ℕ)
-    (I : Fin (MPSTensor.blockPhysDim d k * MPSTensor.blockPhysDim d k)) :
+    (I : Fin (Kraus.blockPhysDim d k * Kraus.blockPhysDim d k)) :
     let e := (twoSiteChainConfigEquiv d k).trans
       (Equiv.arrowCongr (finCongr (Nat.mul_comm k 2)) (Equiv.refl (Fin d)))
-    MPSTensor.decodeBlock (d * d) k (printedBlockedPhysicalEquiv d k I) =
+    Kraus.decodeBlock (d * d) k (printedBlockedPhysicalEquiv d k I) =
       twoSitePairConfigEquiv d k (e.symm
         (printedHalfWordEquiv d k (finProdFinEquiv.symm I))) := by
-  change MPSTensor.decodeBlock (d * d) k
-    ((MPSTensor.decodeBlockEquiv (d * d) k).symm _) = _
-  rw [MPSTensor.decodeBlock_decodeBlockEquiv_symm]
+  change Kraus.decodeBlock (d * d) k
+    ((Kraus.decodeBlockEquiv (d * d) k).symm _) = _
+  rw [Kraus.decodeBlock_decodeBlockEquiv_symm]
   rfl
 
 /-- The original tensor at arbitrary positive blocking has the open
@@ -327,7 +327,7 @@ theorem TwoSiteStandardFormData.printedBlocked_input_contraction {d D k : ℕ}
     {W : MPOTensor (d * d) D}
     {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
     (S : TwoSiteStandardFormData W u v)
-    (I J : Fin (MPSTensor.blockPhysDim d (k + 1) * MPSTensor.blockPhysDim d (k + 1)))
+    (I J : Fin (Kraus.blockPhysDim d (k + 1) * Kraus.blockPhysDim d (k + 1)))
     (α γ : Fin D) :
     reindexPhysical (printedBlockedPhysicalEquiv d (k + 1))
         (blockTensor W (k + 1)) I J α γ =
@@ -338,18 +338,18 @@ theorem TwoSiteStandardFormData.printedBlocked_input_contraction {d D k : ℕ}
     (Equiv.arrowCongr (finCongr (Nat.mul_comm (k + 1) 2)) (Equiv.refl (Fin d)))
   let i := e.symm (printedHalfWordEquiv d (k + 1) (finProdFinEquiv.symm I))
   let j := e.symm (printedHalfWordEquiv d (k + 1) (finProdFinEquiv.symm J))
-  have hp (K : Fin (MPSTensor.blockPhysDim d (k + 1) * MPSTensor.blockPhysDim d (k + 1))) :
-      MPSTensor.decodeBlock (d * d) (k + 1) (printedBlockedPhysicalEquiv d (k + 1) K) =
+  have hp (K : Fin (Kraus.blockPhysDim d (k + 1) * Kraus.blockPhysDim d (k + 1))) :
+      Kraus.decodeBlock (d * d) (k + 1) (printedBlockedPhysicalEquiv d (k + 1) K) =
         fun p ↦ finProdFinEquiv
           (e.symm (printedHalfWordEquiv d (k + 1) (finProdFinEquiv.symm K)) p) :=
     printedBlockedPhysicalEquiv_decode d (k + 1) K
-  have hfirst (a b : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+  have hfirst (a b : Fin (Kraus.blockPhysDim d (k + 1))) :
       printedHalfWordEquiv d (k + 1) (a, b) ⟨0, by omega⟩ =
-        MPSTensor.decodeBlock d (k + 1) a 0 := by
+        Kraus.decodeBlock d (k + 1) a 0 := by
     simpa only [Fin.val_zero] using halfWord_left a b 0
-  have hlast (a b : Fin (MPSTensor.blockPhysDim d (k + 1))) :
+  have hlast (a b : Fin (Kraus.blockPhysDim d (k + 1))) :
       printedHalfWordEquiv d (k + 1) (a, b) ⟨2 * k + 1, by omega⟩ =
-        MPSTensor.decodeBlock d (k + 1) b (Fin.last k) := by
+        Kraus.decodeBlock d (k + 1) b (Fin.last k) := by
     have hh := halfWord_right a b (Fin.last k)
     simpa only [Fin.val_last, show k + 1 + k = 2 * k + 1 from by omega] using hh
   calc
@@ -379,8 +379,8 @@ noncomputable def TwoSiteStandardFormData.printedBlock {d D : ℕ}
   obtain ⟨hu, hv⟩ := printedBlockedGates_mem_unitaryGroup k hk u v
     ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup u).mp S.u_unitary)
     ((Matrix.isUnitaryBetween_iff_mem_unitaryGroup v).mp S.v_unitary)
-  have hpos : 0 < MPSTensor.blockPhysDim d k := by
-    rw [MPSTensor.blockPhysDim_eq_pow]
+  have hpos : 0 < Kraus.blockPhysDim d k := by
+    rw [Kraus.blockPhysDim_eq_pow]
     exact pow_pos S.phys_pos _
   cases k with
   | zero => omega

@@ -895,6 +895,15 @@
         "thm:area_law_two_family_entropy": "Two-family entropy bound (area-law manuscript, Lemma 11.1), first topic of the opening"
       }
     },
+    "ch:peps_area_law_frustration_free": {
+      "theorems": [
+        "thm:ff_area_law"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:ff_area_law": "The frustration-free area law, the goal the chapter exists to prove (reading note, eq. (goal))"
+      }
+    },
     "ch:peps_approximation": {
       "theorems": [
         "thm:peps_angular_information_from_gap"
