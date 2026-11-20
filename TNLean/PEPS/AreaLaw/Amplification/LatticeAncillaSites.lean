@@ -239,9 +239,10 @@ theorem mutualInformation_ancillaProduct_copy_eq_zero {X : Finset (Site Λ)}
     rw [← hχ]
     exact EuclideanSpace.norm_toLp_comp_equiv (Equiv.sumArrowEquivProdArrow _ _ _) χ
   have hvec : WithLp.toLp 2 ((fun c => Ω c.1 * χ c.2) ∘ ancillaSplit q X) =
-      FiniteProduct.sumSitesProduct (F := Fin q) Ω g := rfl
+      FiniteProduct.sumSitesProduct (X := fun _ : AncillaSites Λ X => Fin q) Ω g := rfl
   rw [hvec, ancillaCopyRegion, ancillaPhysicalRegion]
-  exact FiniteProduct.mutualInformation_sumSitesProduct_inr_inl hΩ hg _ J
+  exact FiniteProduct.mutualInformation_sumSitesProduct_inr_inl
+    (X := fun _ : AncillaSites Λ X => Fin q) (f := Ω) (g := g) hΩ hg _ J
 
 /-- **The copied vector carries the original reduction of the target, on `e'`.** Let `φ` be
 the vector whose value at a physical configuration `c` and an ancillary pair `(s, e)` is
@@ -277,18 +278,20 @@ theorem mutualInformation_ancillaCopy_eq {X Y : Finset (Site Λ)} (hXY : Disjoin
       RegionalConfiguration q X) => a c.2.1 * b (restoringSplit q X Y hXY c.1).1.1 *
         Ω ((restoringSplit q X Y hXY).symm ((c.2.2, (restoringSplit q X Y hXY c.1).1.2),
           (restoringSplit q X Y hXY c.1).2))) ∘ ancillaSplit q X) =
-      FiniteProduct.relabelSites (ancillaSwap X) (FiniteProduct.sumSitesProduct Ω g) := by
+      FiniteProduct.relabelSites (ancillaSwap X) (FiniteProduct.sumSitesProduct
+        (X := fun _ : AncillaSites Λ X => Fin q) Ω g) := by
     congr 1
     funext c
     simp only [Function.comp_apply, ancillaSplit_apply, restoringSplit_symm_replace,
       FiniteProduct.sumSitesProduct, g, PiLp.toLp_apply]
-    have h1 : (c ∘ (ancillaSwap X).symm) ∘ Sum.inl =
+    have h1 : (fun v => c ((ancillaSwap X).symm (Sum.inl v))) =
         fun v => if hv : v ∈ X then c (Sum.inr (Sum.inr ⟨v, hv⟩)) else c (Sum.inl v) := by
       funext v
-      simp only [Function.comp_apply, hσ, ancillaSwapFun]
+      simp only [hσ, ancillaSwapFun]
       split_ifs <;> rfl
-    have h2 : ((c ∘ (ancillaSwap X).symm) ∘ Sum.inr) ∘ Sum.inl = c ∘ Sum.inr ∘ Sum.inl := rfl
-    have h3 : ((c ∘ (ancillaSwap X).symm) ∘ Sum.inr) ∘ Sum.inr =
+    have h2 : (fun b => c ((ancillaSwap X).symm (Sum.inr b))) ∘ Sum.inl =
+        c ∘ Sum.inr ∘ Sum.inl := rfl
+    have h3 : (fun b => c ((ancillaSwap X).symm (Sum.inr b))) ∘ Sum.inr =
         fun x : ↥X => c (Sum.inl x.val) := rfl
     rw [h1, h2, h3]
     have h4 : (restoringSplit q X Y hXY (c ∘ Sum.inl)).1.1 = fun x : ↥X => c (Sum.inl x.val) :=
@@ -326,6 +329,7 @@ theorem mutualInformation_ancillaCopy_eq {X Y : Finset (Site Λ)} (hXY : Disjoin
     · have hyJ : (y : Site Λ) ∉ J := fun h => Finset.disjoint_left.mp hJ h y.2
       simp [ancillaSwapFun, ancillaPhysicalRegion, hyJ]
   rw [hvec, FiniteProduct.mutualInformation_relabelSites, hcopy, hphys]
-  exact FiniteProduct.mutualInformation_sumSitesProduct_inl hΩ hg _ _
+  exact FiniteProduct.mutualInformation_sumSitesProduct_inl
+    (X := fun _ : AncillaSites Λ X => Fin q) (f := Ω) (g := g) hΩ hg _ _
 
 end TNLean.PEPS.AreaLaw
