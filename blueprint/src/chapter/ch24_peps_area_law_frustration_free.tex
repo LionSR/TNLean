@@ -31,7 +31,7 @@ localization errors of the amplification stage.
     This is the contraction \cite[eq.~(sweep)]{TNLean2026FrustrationFreeNote}
     for filters that are projections; the note states it for positive
     contractions $k_i$ with the factors $(I-k_i)^{1/2}$. The restriction is
-    recorded in \cite{gap:ff2d_sweep_range_projections}.
+    recorded in \cite{gap:ffarealaw_sweep_range_projections}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -189,7 +189,7 @@ localization errors of the amplification stage.
     $\chi t$ colour layers enlarges the region by at most $R$.
 \end{proof}
 
-\begin{theorem}[The sweep of a frustration-free Hamiltonian]
+\begin{lemma}[The sweep of a frustration-free Hamiltonian]
     \label{thm:ff_area_law_sweep}
     \lean{ContinuousLinearMap.complementProd_congr, ManyBody.LightCone.wordProjections, ManyBody.LightCone.sum_range_getElem?_elim, ManyBody.LightCone.toEuclideanCLM_sweepProd, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_nonneg, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_lt_one, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_pos, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.termProj, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp_mulVec_self, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp_pow_mulVec_self, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.mul_norm_sq_le_re_inner_sum_termProj, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_sweepOp_pow_apply_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.exists_sweepOp_pow_lightCone}
     \leanok
@@ -204,11 +204,11 @@ localization errors of the amplification stage.
     If every block of an operator $B$ on the sites and a register acts on $U$,
     there is an operator $L$ acting on $N_{R\chi t}(U)$ with $L\Omega=\Omega$,
     $L^\dagger\Omega=\Omega$ and $(D^t\otimes I)B(\Omega\otimes\xi)
-    =(L\otimes I)B(\Omega\otimes\xi)$. These are
+        =(L\otimes I)B(\Omega\otimes\xi)$. These are
     \cite[eqs.~(sweep) and (cone)]{TNLean2026FrustrationFreeNote}, with the
     range projections in place of the square roots of the note
-    \cite{gap:ff2d_sweep_range_projections}.
-\end{theorem}
+    \cite{gap:ffarealaw_sweep_range_projections}.
+\end{lemma}
 
 \begin{proof}\leanok
     The range projections are projections annihilating $\Omega$, a pair of
@@ -250,7 +250,7 @@ localization errors of the amplification stage.
     $\log n\le\tfrac53n^{3/5}$ by multiples of $n^{(1-\varepsilon)/\alpha}$.
 \end{proof}
 
-\begin{theorem}[Amplification with the frustration-free terms]
+\begin{lemma}[Amplification with the frustration-free terms]
     \label{thm:ff_area_law_amplification}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.ffAmplificationConstant, TNLean.PEPS.AreaLaw.FrustrationFree.ffAmplificationThreshold, TNLean.PEPS.AreaLaw.FrustrationFree.ffAmplificationBound, TNLean.PEPS.AreaLaw.FrustrationFree.norm_toLp_single_eq_one', TNLean.PEPS.AreaLaw.FrustrationFree.sqrt_inv_pow_eq_rpow', TNLean.PEPS.AreaLaw.FrustrationFree.unitary_error_le'}
     \leanok
@@ -268,13 +268,13 @@ localization errors of the amplification stage.
     sup-distance more than $L+n^\beta$ from the cut endpoints. This is
     \cite[eq.~(far)]{TNLean2026FrustrationFreeNote}, the conclusion of
     \cite[Proposition~10.2]{OpenAI2026AreaLaw} for the frustration-free model.
-\end{theorem}
+\end{lemma}
 
 \begin{proof}\leanok
     Take the typical projections, the restoring operator $R_0$ with
     $\|R_0\|\le M_0$, and the vectors $\varphi,\eta$ of the general proof, and
     $K=4(M+2)$. With $t$ as in Lemma~\ref{thm:ff_area_law_radius} and the
-    sweep $D$ of Theorem~\ref{thm:ff_area_law_sweep}, the ground part of
+    sweep $D$ of Lemma~\ref{thm:ff_area_law_sweep}, the ground part of
     $R_0\varphi$ is fixed by $D^t$ and the excited part is at most
     $\theta^tM_0\le n^{-K}$ after $D^t$, by
     Lemma~\ref{thm:ff_area_law_spectator}. Since $R_0\varphi$ is a column
@@ -315,7 +315,7 @@ localization errors of the amplification stage.
 \begin{proof}\leanok
     Combine the sublinear collar bound, which holds for every gapped instance
     and in particular for the frustration-free model, with
-    Theorem~\ref{thm:ff_area_law_amplification} at $M=100$ and the two-family
+    Lemma~\ref{thm:ff_area_law_amplification} at $M=100$ and the two-family
     decomposition in Lemma~\ref{thm:ff_area_law_assembly_at}; the two-family
     entropy identity cancels the tile entropies. The collar bound is still the
     general one; the replacement of its scanner input by the terms

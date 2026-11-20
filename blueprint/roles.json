@@ -850,6 +850,17 @@
       "corollaries": [],
       "notes": {}
     },
+    "ch:peps_area_law_frustration_free": {
+      "theorems": [
+        "thm:ff_area_law",
+        "thm:ff_area_law_sweep_route"
+      ],
+      "corollaries": [],
+      "notes": {
+        "thm:ff_area_law": "The frustration-free area law, the result the chapter exists to prove (frustration-free note, eq. (goal))",
+        "thm:ff_area_law_sweep_route": "The same statement proved along the note's route, the chapter's main formalization"
+      }
+    },
     "ch:peps_area_law_amplification_and_shells": {
       "theorems": [
         "thm:area_law_amplification"
