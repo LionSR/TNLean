@@ -25,7 +25,7 @@ range projections of the terms, from QICLean's detectability lemma
 **Scope restriction (projections):** the note states `eq:sweep` for positive contractions `k_i`
 and factors `(1 - k_i)^{1/2}`; this module proves it for projections only. The amplification step
 applies it to the range projections of the terms, which satisfy every property of the filters the
-note uses. Documented in `docs/paper-gaps/ff2d_sweep_range_projections.tex`.
+note uses. Documented in `docs/paper-gaps/ffarealaw_sweep_range_projections.tex`.
 
 ## Main statements
 

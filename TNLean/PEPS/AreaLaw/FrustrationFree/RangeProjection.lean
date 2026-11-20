@@ -18,7 +18,7 @@ the sites on which `A` acts.
 The frustration-free area-law note sweeps with the factors `(1 - h_i / J)^{1/2}`. Replacing them
 by `1 - Π_{h_i}` keeps the three properties the note uses: each factor fixes the ground vector,
 acts on the support of its term, and `Π_{h_i} ≥ h_i / J`, so the gap
-`∑ Π_{h_i} ≥ (Δ/J)(1 - P)` persists. See `docs/paper-gaps/ff2d_sweep_range_projections.tex`.
+`∑ Π_{h_i} ≥ (Δ/J)(1 - P)` persists. See `docs/paper-gaps/ffarealaw_sweep_range_projections.tex`.
 
 ## Main statements
 
