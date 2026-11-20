@@ -126,16 +126,18 @@ planned after Step 4.
 
 | Step | Statements | State |
 |---|---|---|
-| 0 | model, statement, corollary of the general theorem | proved, #10936 |
-| 1 | sweep contraction, range projections | proved, #10935 |
-| 2 | colouring, light cone, sweep of an instance | proved, #10937 |
-| 3 | amplification `ffAmplificationBound` | proved, #10938 |
-| 4 | instance-wise assembly, `frustrationFreeAreaLaw` | proved, #10938 |
+| 0 | model, statement, corollary of the general theorem | in review, #10936 |
+| 1 | sweep contraction, range projections | in review, #10935 |
+| 2 | colouring, light cone, sweep of an instance | in review, #10937 |
+| 3 | amplification `ffAmplificationBound` | in review, #10938 |
+| 4 | instance-wise assembly, `frustrationFreeAreaLaw` | in review, #10938 |
 | — | scanner on the raw terms, `eq:identity` | deferred |
 
-`frustrationFreeAreaLaw` uses only the axioms `propext`, `Classical.choice`, `Quot.sound`, and
-its proof does not depend on `amplificationBound` or `amplificationBound_of_locality`; it still
-depends on the general collar bound `sublinearCollarBound_real`.
+No step is on `main` yet: each row is an open pull request, stacked in the order of the table.
+On the head of #10938, checked in a scratch file that is not committed, `frustrationFreeAreaLaw`
+uses only the axioms `propext`, `Classical.choice`, `Quot.sound`, and its proof does not depend on
+`amplificationBound` or `amplificationBound_of_locality`; it still depends on the general collar
+bound `sublinearCollarBound_real`. Recheck after the stack lands.
 
 ## Deviations from the note
 
