@@ -350,7 +350,7 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
   have hRsum : Rp = ∑ x ∈ E, PR x ⊗ₖ (Entropy.basisColumn x blank ⊗ₖ
       (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)) := hRsum
   -- The sweep and its light cone.
-  obtain ⟨c⟩ := exists_overlapColouring (Λ := Λ) (R := R)
+  obtain ⟨c⟩ := exists_overlapColoring (Λ := Λ) (R := R)
   set D := hff.sweepOp c ^ t
   obtain ⟨Lt, hLsupp, -, hLadj, hcone⟩ := hff.exists_sweepOp_pow_lightCone c t hBblocks ξb
   let N := graphNeighborhood Λ (2 * r) S₀

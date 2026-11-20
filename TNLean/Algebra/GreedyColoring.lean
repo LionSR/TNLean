@@ -31,7 +31,7 @@ variable {V : Type*} [Fintype V] (G : SimpleGraph V) [DecidableRel G.Adj]
 
 /-- Greedy colouring along a list: some colouring with `d + 1` colours separates every pair of
 adjacent vertices of the list. -/
-theorem exists_colouring_list_of_forall_degree_le {d : ℕ} (hd : ∀ v, G.degree v ≤ d)
+theorem exists_coloring_list_of_forall_degree_le {d : ℕ} (hd : ∀ v, G.degree v ≤ d)
     (l : List V) : ∃ c : V → Fin (d + 1), ∀ u ∈ l, ∀ w ∈ l, G.Adj u w → c u ≠ c w := by
   classical
   induction l with
@@ -64,7 +64,7 @@ Source: `docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`, par
 "Contraction in one sweep". -/
 theorem colorable_succ_of_forall_degree_le {d : ℕ} (hd : ∀ v, G.degree v ≤ d) :
     G.Colorable (d + 1) := by
-  obtain ⟨c, hc⟩ := G.exists_colouring_list_of_forall_degree_le hd Finset.univ.toList
+  obtain ⟨c, hc⟩ := G.exists_coloring_list_of_forall_degree_le hd Finset.univ.toList
   exact ⟨Coloring.mk c fun {u w} huw ↦ hc u (by simp) w (by simp) huw⟩
 
 end SimpleGraph

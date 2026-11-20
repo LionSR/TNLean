@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.FrustrationFree.LightCone
 import TNLean.PEPS.AreaLaw.BufferedRectangles
-import TNLean.Algebra.GreedyColouring
+import TNLean.Algebra.GreedyColoring
 import QICLean.Algebra.OverlapGraph
 
 /-!
@@ -27,7 +27,7 @@ frustration-free area-law note.
 ## Main statements
 
 * `degree_overlapGraph_le`: every support meets at most `d_R` others.
-* `exists_overlapColouring`: a colouring with `d_R + 1` colours.
+* `exists_overlapColoring`: a colouring with `d_R + 1` colours.
 * `retainedSet_sweepWord_pow_subset`: the light cone of `t` sweeps lies in `N_{R χ t}(U)`.
 
 ## References
@@ -119,24 +119,24 @@ abbrev SupportColouring (Λ : Finset (ℤ × ℤ)) (R : ℕ) :=
 /-- **A colouring of the supports with `d_R + 1` colours.** Source:
 `docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`, "Contraction in one sweep":
 "Color it in `χ ≤ d + 1` colors and order the terms by color". -/
-theorem exists_overlapColouring :
+theorem exists_overlapColoring :
     Nonempty (SupportColouring Λ R) :=
   colorable_succ_of_forall_degree_le _ degree_overlapGraph_le
 
 /-- The supports of one colour. -/
-noncomputable def colourLayer (c : SupportColouring Λ R)
+noncomputable def colorLayer (c : SupportColouring Λ R)
     (i : Fin (overlapDegreeBound R + 1)) : List (AdmissibleSupport Λ R) :=
   (Finset.univ.filter fun X ↦ c X = i).toList
 
 /-- The supports, colour by colour: the word of one sweep. -/
 noncomputable def sweepWord (c : SupportColouring Λ R) :
     List (AdmissibleSupport Λ R) :=
-  (List.ofFn (colourLayer c)).flatten
+  (List.ofFn (colorLayer c)).flatten
 
 theorem mem_sweepWord (c : SupportColouring Λ R)
     (X : AdmissibleSupport Λ R) : X ∈ sweepWord c := by
   simp only [sweepWord, List.mem_flatten, List.mem_ofFn]
-  exact ⟨colourLayer c (c X), ⟨c X, rfl⟩, by simp [colourLayer]⟩
+  exact ⟨colorLayer c (c X), ⟨c X, rfl⟩, by simp [colorLayer]⟩
 
 theorem nodup_sweepWord (c : SupportColouring Λ R) :
     (sweepWord c).Nodup := by
@@ -145,39 +145,39 @@ theorem nodup_sweepWord (c : SupportColouring Λ R) :
   · obtain ⟨i, rfl⟩ := List.mem_ofFn.mp hl
     exact Finset.nodup_toList _
   · refine List.pairwise_ofFn.mpr fun i j hij ↦ List.disjoint_left.mpr fun X hXi hXj ↦ ?_
-    simp only [colourLayer, Finset.mem_toList, Finset.mem_filter] at hXi hXj
+    simp only [colorLayer, Finset.mem_toList, Finset.mem_filter] at hXi hXj
     exact hij.ne (hXi.2.symm.trans hXj.2)
 
 /-- The supports of one colour are pairwise disjoint. -/
-theorem pairwise_disjoint_colourLayer
+theorem pairwise_disjoint_colorLayer
     (c : SupportColouring Λ R)
     (i : Fin (overlapDegreeBound R + 1)) :
-    (colourLayer c i).Pairwise fun X Y ↦ Disjoint X.1 Y.1 :=
+    (colorLayer c i).Pairwise fun X Y ↦ Disjoint X.1 Y.1 :=
   (Finset.nodup_toList _).pairwise_of_forall_ne fun X hX Y hY hXY ↦ by
     simp only [Finset.mem_toList, Finset.mem_filter] at hX hY
     exact c.disjoint_of_overlapGraph hXY (hX.2.trans hY.2.symm)
 
 /-- One layer of a colour moves the light cone by at most `R`. -/
-theorem retainedSet_colourLayer_subset
+theorem retainedSet_colorLayer_subset
     (c : SupportColouring Λ R)
     (i : Fin (overlapDegreeBound R + 1)) (U : Finset (Site Λ)) :
-    retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (colourLayer c i) ⊆
+    retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (colorLayer c i) ⊆
       graphNeighborhood Λ R U :=
   retainedSet_subset_of_pairwise_disjoint (subset_graphNeighborhood R U)
-    (pairwise_disjoint_colourLayer c i) fun X _ hXU ↦
+    (pairwise_disjoint_colorLayer c i) fun X _ hXU ↦
       subset_graphNeighborhood_of_isAdmissibleSupport X.2 hXU
 
 /-- A word of `m` layers moves the light cone by at most `R m`. -/
 theorem retainedSet_flatten_subset
     (c : SupportColouring Λ R)
     (Ls : List (Fin (overlapDegreeBound R + 1))) (U : Finset (Site Λ)) :
-    retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (Ls.map (colourLayer c)).flatten ⊆
+    retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (Ls.map (colorLayer c)).flatten ⊆
       graphNeighborhood Λ (R * Ls.length) U := by
   induction Ls generalizing U with
   | nil => exact subset_graphNeighborhood _ U
   | cons i Ls ih =>
     rw [List.map_cons, List.flatten_cons, retainedSet_append]
-    refine (ih _).trans ((graphNeighborhood_mono _ (retainedSet_colourLayer_subset c i U)).trans
+    refine (ih _).trans ((graphNeighborhood_mono _ (retainedSet_colorLayer_subset c i U)).trans
       ((graphNeighborhood_graphNeighborhood_subset _ _ U).trans ?_))
     exact le_of_eq (by rw [List.length_cons]; congr 1; ring)
 
