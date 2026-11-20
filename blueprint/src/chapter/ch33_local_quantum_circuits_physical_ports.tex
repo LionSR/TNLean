@@ -167,20 +167,32 @@ It does not identify the unrestricted local-channel model with the source's phas
 \begin{lemma}[Uniform bounded-register matching simulation]
     \label{thm:qc_bounded_physical_port_simulation}
     \uses{def:qc_physical_port_protocol, lem:qc_register_code_completion, lem:qc_port_data_scratch}
-    \lean{QuantumCircuit.PortRegisters.pairChannel,
-        QuantumCircuit.PortRegisters.pairChannel_commute,
-        QuantumCircuit.PortRegisters.matchingChannel,
-        QuantumCircuit.PortRegisters.matchingChannel_isPhysicalPortProtocol,
-        QuantumCircuit.boundedPairRegisterCode,
-        QuantumCircuit.exists_bounded_matching_simulation,
-        QuantumCircuit.IsPhysicalPortProtocol.list_prod_uniform}
+    \lean{QuantumCircuit.Layer.exists_portRing,
+        QuantumCircuit.IsBoundedProtocol.exists_portRing}
     \leanok
-    Fix $d\ge2$, $B\ge1$, $m\le B$, and $k=\lceil\log_d B\rceil$. For every ring of $N\ge2$ sites and matching $M$ of CPTP pair channels $\Phi_i$ ($i\in M$), the encoded pair channels $\widehat\Phi_i=\mathcal E_{\rm out}\circ\Phi_i\circ D_{\rm in}$ on $(d_i,d_{i+1})$ satisfy $\widehat\Phi_i\circ\mathcal E_{\rm in}=\mathcal E_{\rm out}\circ\Phi_i$, commute for distinct $i\in M$, and their placed product $\prod_{i\in M}\operatorname{Lift}_{d_i,d_{i+1}}(\widehat\Phi_i)$ has a physical-port protocol of depth at most $2k$. A composition of $L$ such layers has depth at most $2kL$ ($0$ when $B=1$).
+    Fix $d\ge1$ and $k\ge0$, and consider a ring of $N\ge2$ sites with $2k+1$ qudits of dimension
+    $d$ at every site: the physical port, $k$ data qudits and $k$ scratch qudits. Let
+    $\mathcal E_{\rm data}$ place a register of $k$ digits at every site into its data qudits.
+    Every layer $L$ of CPTP pair channels on a matching of the ring of registers of $k$ digits has
+    a physical-port protocol $\Gamma_L$ of depth at most $2k$ with
+    $\Gamma_L\circ\mathcal E_{\rm data}=\mathcal E_{\rm data}\circ L$. Consequently, if $\Psi$ is
+    a native protocol of depth $T$ whose local dimensions along the protocol are at most
+    $B\le d^k$, and its input and output bases are encoded into registers by $\mathcal E_{\rm in}$
+    and $\mathcal E_{\rm out}$, there is a physical-port protocol $\Gamma$ of depth at most $2kT$
+    with
+    $\Gamma\circ\mathcal E_{\rm data}\circ\mathcal E_{\rm in}
+        =\mathcal E_{\rm data}\circ\mathcal E_{\rm out}\circ\Psi$;
+    for $d\ge2$ one may take $k=\lceil\log_d B\rceil$.
 \end{lemma}
 \begin{proof}
     \uses{lem:qc_register_code_completion, lem:qc_port_data_scratch, thm:qc_port_shared_channel_routing}
     \leanok
-    By Lemma~\ref{lem:qc_register_code_completion}, each $\widehat\Phi_i$ is CPTP with a normalized Kraus representation and intertwines with $\Phi_i$. By Lemma~\ref{lem:qc_port_data_scratch}, the depth-$k$ routing $R_M$ colocates $(d_i,d_{i+1})$ inside $s^{-1}(i+1)$ for all $i\in M$ simultaneously, so Lemma~\ref{thm:qc_port_shared_channel_routing} gives depth at most $2k$, and $L$-fold composition gives $2kL$.
+    By Lemma~\ref{lem:qc_port_data_scratch}, the depth-$k$ routing $R_M$ colocates the registers
+    of $i$ and $i+1$ inside $s^{-1}(i+1)$ for all $i\in M$ simultaneously, so
+    Lemma~\ref{thm:qc_port_shared_channel_routing} gives depth at most $2k$ for one layer. For the
+    protocol, encode the bases of every intermediate step into registers by
+    Lemma~\ref{lem:qc_register_code_completion}, so that each encoded layer acts on the code as
+    the original layer; the $T$ layers then compose to depth at most $2kT$.
 \end{proof}
 
 \begin{lemma}[Product onsite coding on arbitrary chain inputs]
@@ -736,51 +748,59 @@ start, and is discarded only after the circuit has finished.
 \begin{lemma}[Pure output and environment decoupling]
     \label{thm:qc_physical_port_pure_output}
     \uses{thm:qc_physical_port_unitary_dilation}
-    \lean{QuantumCircuit.IsPhysicalPortProtocol.exists_appended_unitary_dilation_pure_output}
+    \lean{QuantumCircuit.IsProtocol.isUnitaryDilation,
+        QuantumCircuit.Circuit.exists_unit_product_approx}
     \leanok
-    Suppose a physical-port channel $\Phi$ of intersite depth at most $T$
-    satisfies $\Phi(\ketbra{\psi}{\psi})=\ketbra{\phi}{\phi}$, where
-    $\langle\phi,\phi\rangle=1$. Its same-depth unitary realization can
-    be chosen with the existing product-zero environment initializer so that
+    Let $\Phi$ be a protocol of depth at most $T$ on nonempty local bases, for
+    any assignment of costs to the gates, such as the physical-port one. Then
+    $\Phi=\mathcal D_A\circ\operatorname{Ad}_U\circ\mathcal I_A$ for a
+    unitary circuit $U$ of depth at most $T$, where $\mathcal I_A$ prepares
+    local environments in basis states $\ket{0^A}$ and $\mathcal D_A$ discards
+    the output environments. If
+    $\|\Phi(\ketbra{\psi}{\psi})-\ketbra{\phi}{\phi}\|_1\le\varepsilon$
+    for unit vectors $\psi,\phi$, then there is a unit environment vector
+    $\eta$ with
     \[
-        U(\psi\otimes\ket{0^A})=\phi\otimes\eta,
-        \qquad \langle\eta,\eta\rangle=1.
+        \|U(\psi\otimes\ket{0^A})-\phi\otimes\eta\|_2\le\sqrt{2\varepsilon}.
     \]
-    The unitary retains the same physical ports and the full channel
-    identity of Lemma~\ref{thm:qc_physical_port_unitary_dilation}.
-    The environment vector $\eta$ need not factor over spatial sites or
-    equal its initial zero state.
+    In particular, if $\Phi(\ketbra{\psi}{\psi})=\ketbra{\phi}{\phi}$,
+    then $U(\psi\otimes\ket{0^A})=\phi\otimes\eta$ with
+    $\langle\eta,\eta\rangle=1$. The environment vector $\eta$ need not
+    factor over spatial sites or equal its initial zero state.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:qc_physical_port_unitary_dilation}
-    Take $U$ from Lemma~\ref{thm:qc_physical_port_unitary_dilation} and let
-    $C_{s,e}=\bigl(U(\psi\otimes\ket{0^A})\bigr)_{s,e}$ be the coefficient
-    matrix of the joint output. Its first marginal is
+    The dilation is built as in Lemma~\ref{thm:qc_physical_port_unitary_dilation}:
+    each layer is dilated with fresh local environments at no extra depth, and
+    compositions carry the environments of each factor through the other.
+    Let $C_{s,e}=\bigl(U(\psi\otimes\ket{0^A})\bigr)_{s,e}$ be the
+    coefficient matrix of the joint output, a unit vector since $U$ is
+    unitary. Its first marginal is
     \begin{align}
-        CC^\dagger      & =\tr_A\bigl(U(\ketbra{\psi}{\psi}\otimes Z_A)U^\dagger\bigr)
-        =\Phi(\ketbra{\psi}{\psi})=\ketbra{\phi}{\phi}=:P,\notag                       \\
-        (I-P)CC^\dagger & =(I-P)P=P-P^2=0.\notag
+        CC^\dagger & =\tr_A\bigl(U(\ketbra{\psi}{\psi}\otimes Z_A)U^\dagger\bigr)
+        =\Phi(\ketbra{\psi}{\psi}).\notag
     \end{align}
-    Since $MM^\dagger=0$ implies $M=0$, applied to $M=(I-P)C$, we get
-    $C=PC$. Set $\eta=\phi^\dagger C$. Then $C_{s,e}=\phi_s\eta_e$, and
-    $\langle\eta,\eta\rangle=\tr CC^\dagger=\tr P=\langle\phi,\phi\rangle=1$.
-    No factorization assumption is used.
+    Project $C$ onto $\phi$: the row $\phi^\dagger C$ has squared norm
+    $\langle\phi,CC^\dagger\phi\rangle\ge1-\varepsilon$, and normalizing
+    it gives $\eta$ with $\|C-\phi\eta^{\mathsf T}\|_2^2\le2\varepsilon$.
+    If the row is zero, then $\varepsilon\ge1$ and any unit vector $\eta$
+    suffices. For $\varepsilon=0$ the bound is the equality
+    $C=\phi\eta^{\mathsf T}$. No factorization assumption is used.
 \end{proof}
 
 
 \begin{lemma}[Environment measurement branches of a pure output]
     \label{cor:qc_physical_port_pure_output_branches}
     \uses{thm:qc_physical_port_pure_output}
-    \lean{QuantumCircuit.IsPhysicalPortProtocol.exists_environmentKraus_pure_output}
-    \leanok
-    Under the hypotheses of Lemma~\ref{thm:qc_physical_port_pure_output}, measuring the final environment in its standard product basis gives branch operators $K_e$ satisfying
+    Under the hypotheses of Lemma~\ref{thm:qc_physical_port_pure_output} with an exact pure output,
+    $\Phi(\ketbra{\psi}{\psi})=\ketbra{\phi}{\phi}$, measuring the final environment in its standard product basis gives branch operators $K_e$ satisfying
     \[
         \Phi(X)=\sum_e K_e X K_e^\dagger,\qquad K_e\psi=\eta_e\phi,\qquad \sum_e|\eta_e|^2=1.
     \]
     Thus every outcome of nonzero probability leaves the same pure system state. The circuit has the same physical ports and intersite depth as in that theorem. This does not impose a fixed number of source QCcc blocks or their internal control restrictions.
 \end{lemma}
 
-\begin{proof}\leanok
+\begin{proof}
     \uses{thm:qc_physical_port_pure_output}
     Let $K_e=(I_W\otimes\bra{e})U(I_W\otimes\ket{0^A})$ be the block of the
     compiled unitary in the initialized environment column. Then
@@ -796,8 +816,6 @@ start, and is discarded only after the circuit has finished.
 
 \begin{lemma}[Bounded pure-state conversion on the original ports]
     \label{lem:qc_bounded_port_pure_output}
-    \lean{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_pure_output}
-    \leanok
     \discussion{8640}
     \uses{def:qc_dimension_bounded_protocol, thm:qc_physical_port_codes,
         thm:qc_bounded_physical_port_io, thm:qc_physical_port_pure_output}
@@ -825,7 +843,7 @@ start, and is discarded only after the circuit has finished.
     sites. For a uniform family bound, $B$ and $d$ are fixed independently
     of $N$. No adaptive protocol-block or control condition is asserted.
 \end{lemma}
-\begin{proof}\leanok
+\begin{proof}
     \uses{lem:qc_register_code_completion, thm:qc_bounded_physical_port_io,
         thm:qc_physical_port_pure_output}
     The explicit port code is an isometry, so $V_{\rm port}\phi$ is
@@ -845,7 +863,6 @@ start, and is discarded only after the circuit has finished.
 
 \begin{lemma}[Approximate pure-state conversion on the original ports]
     \label{lem:qc_bounded_port_approximate_output}
-    \lean{QuantumCircuit.IsDimensionBoundedLocalChannelProtocol.exists_physicalPort_approximate_output}
     \notready
     \discussion{8640}
     \uses{def:qc_dimension_bounded_protocol, thm:qc_physical_port_codes,

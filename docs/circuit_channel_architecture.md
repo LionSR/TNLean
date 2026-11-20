@@ -92,7 +92,11 @@ The bounded compiler chooses physical dimension `d` and a bound `B` on every pos
 intermediate local dimension, then uses `k = Nat.clog d B`. One entire matching shares
 one forward/backward routing, costing `2*k` intersite layers. A depth-`T` native
 protocol therefore has bound `2*k*T`. A family-level constant requires fixing `d,B`
-before the chain length.
+before the chain length. The matching step and the protocol bound are QICLean's
+`QuantumCircuit.Layer.exists_portRing` and `QuantumCircuit.IsBoundedProtocol.exists_portRing`
+on `QuantumCircuit.Geometry.portRing`, and pure or approximately pure outputs of a
+same-depth unitary dilation are `QuantumCircuit.Circuit.exists_unit_product_approx`
+composed with `QuantumCircuit.IsProtocol.isUnitaryDilation`.
 
 Preparation adapters should state their additional input/output obligations explicitly:
 encoded logical input, original physical-port input, designated memory reset, and
@@ -112,8 +116,8 @@ Changes to placement, encoding, layout or compiler interfaces should retain:
 - physical-port ownership, unchanged original ports, and disjoint parallel routing;
 - capstone audits reporting only standard axioms, with strict Lean/linter checks.
 
-The CI suites are `PhysicalPortSimulation`, `PhysicalProtocolCompilation`,
-`PhysicalPortIO` and `PhysicalPortDilation`. QICLean separately tests correlated old
+The CI suites are `PhysicalProtocolCompilation`, `PhysicalPortIO` and
+`PhysicalPortDilation`. QICLean separately tests correlated old
 environments and distinct fresh environments in its `EnvironmentDilation` suite. Run focused package-option checks during
 development, then the exact published-head root and blueprint checks. A concatenated
 source probe is diagnostic assistance, not a substitute for individual module checks.

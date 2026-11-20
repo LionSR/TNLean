@@ -2161,17 +2161,14 @@ in `MPS/Preparation/` uses it.
   `IsLocalChannelProtocol.channelCircuitMap_comp` (appending a local channel
   circuit of `n` layers adds `n` to the depth), and
   `IsLocalChannelProtocol.exists_dual` (light cone of radius `T` of the
-  Heisenberg dual). Grouping `k` consecutive sites is constructed in
-  `Circuit/Channel/RegroupedProtocol.lean`:
-  for positive block count, block size, and input local dimension,
-  `IsLocalChannelProtocol.exists_regrouped` gives depth at most `2T` for
-  even block counts and `3T` in general, with exact equality on all operators
-  and arbitrary external references. The dimension-bounded version raises
-  the budget from `B` to `B^k`. `IsLocalChannelConversion.then_blocked`
-  composes an unblocked conversion followed by a blocked conversion with
-  bound `2T+U` or `3T+U`. One block admits depth zero; the generic two-block
-  bound is `2T`. The six-site seam matching projects to a triangle after
-  grouping pairs, obstructing its direct partition into two block matchings.
+  Heisenberg dual). Grouping `k` consecutive sites is QICLean's
+  `QuantumCircuit.IsProtocol.block` with `QuantumCircuit.Geometry.ringBlocking`:
+  for positive block count and nonempty input bases it gives depth at most
+  `2T` for even block counts and `3T` in general, with exact equality on all
+  operators. No dimension bound is carried through the blocking.
+  `QuantumCircuit.IsConversion.block_trans` composes an unblocked conversion
+  followed by a blocked conversion with bound `2T+U` or `3T+U`; the
+  two-block bound is `2T`.
 - **Caveat:** the depth `T` counts the two-site layers exactly; onsite channels
   are free. Onsite channels may enlarge the dimension, and a layer on the
   enlarged sites still costs one depth unit. No uniform intermediate-dimension
@@ -3214,19 +3211,21 @@ involve no boundary.
   arXiv:2103.13367, Supplement pp. 7–8, with the scope recorded in
   `docs/paper-gaps/psc21_physical_port_simulation_scope.tex`.
 - **Sanctioned bridges:** `.isKrausCPTP`, `.of_register_routing`,
-  `.of_routed_family`, `.list_prod_uniform`,
-  `PortRegisters.matchingChannel_isPhysicalPortProtocol`,
-  `exists_bounded_matching_simulation`, `PortRegisters.dataChannelLift_word`,
+  `.of_routed_family`, `PortRegisters.dataChannelLift_word`,
   `IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation`,
   `.exists_appended_unitary_dilation`, and
   `.exists_appended_unitary_dilation_reference`. These construct an
   actual same-depth unitary on a port-preserving extension, with fresh local
   product-zero environments initialized once and discarded only at the end.
-  When the channel output of a pure input is pure,
-  `.exists_appended_unitary_dilation_pure_output` derives a normalized
-  environment vector and a system/environment product output, and
-  `.exists_environmentKraus_pure_output` identifies the environment-basis
-  branches, their normalized amplitudes and their common pure system output.
+  The matching simulation and its protocol bound are QICLean's
+  `QuantumCircuit.Layer.exists_portRing` and
+  `QuantumCircuit.IsBoundedProtocol.exists_portRing`, stated for
+  `QuantumCircuit.IsProtocol (QuantumCircuit.Geometry.portRing N (2 * k + 1))`.
+  When the channel output of a pure input is pure or close to pure,
+  `QuantumCircuit.Circuit.exists_unit_product_approx`, applied to the
+  dilation `QuantumCircuit.IsProtocol.isUnitaryDilation`, derives a
+  normalized environment vector and a system/environment product output
+  within `√(2ε)`.
 - **Caveat:** source pure-state conditions and the fixed number of composed
   `QCcc` blocks with their internal measurement/control rules remain separate.
   The appended environments need not reset, and their total number is only
