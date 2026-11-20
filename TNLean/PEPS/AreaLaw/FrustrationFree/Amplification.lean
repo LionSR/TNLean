@@ -143,7 +143,7 @@ noncomputable def frustrationFreeRadiusConstant (R : ℕ) (J Δ C₀ : ℝ) (K :
 
 /-- **The radius bound.** With `M₀ = e^{(𝓘 + 3w)/2}`, `w = n^{3/5}`, `𝓘 ≤ C₀ n^{1-ε}`, the radius
 `r = R χ t` of `t` sweeps is at most `frustrationFreeRadiusConstant · n^{(1-ε)/α}`. -/
-theorem radius_le_ffRadiusConstant {R : ℕ} {J Δ C₀ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ)
+theorem radius_le_frustrationFreeRadiusConstant {R : ℕ} {J Δ C₀ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ)
     (hC₀ : 0 ≤ C₀) (K : ℕ)
     {n : ℕ} (hn : 1 ≤ n) {I : ℝ} (hI0 : 0 ≤ I)
     (hI : I ≤ C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))) :
@@ -303,7 +303,7 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
   set t := ⌈(Real.log M₀ + K * Real.log n) / (-Real.log θ)⌉₊ with htdef
   set r := R * (overlapDegreeBound R + 1) * t with hrdef
   have hr : (r : ℝ) ≤ C * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) :=
-    (radius_le_ffRadiusConstant hJ hΔ hC₀.le K hn1 hI0 hII).trans
+    (radius_le_frustrationFreeRadiusConstant hJ hΔ hC₀.le K hn1 hI0 hII).trans
       (mul_le_mul_of_nonneg_right (le_max_left _ _) (by positivity))
   refine ⟨r, hr, ?_, hcolr r hr⟩
   intro X' hX' Jset hJset

@@ -227,8 +227,8 @@ localization errors of the amplification stage.
     \label{thm:frustration_free_area_law_spectator}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.norm_kronecker_one_mulVec_le_of_slices}
     \leanok
-    If $\|Av_a\|\le c\|v_a\|$ for every slice $v_a$ of a vector $v$ on a
-    system and a register, then $\|(A\otimes I)v\|\le c\|v\|$.
+    Let $c\ge0$. If $\|Av_a\|\le c\|v_a\|$ for every slice $v_a$ of a vector
+    $v$ on a system and a register, then $\|(A\otimes I)v\|\le c\|v\|$.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -237,7 +237,7 @@ localization errors of the amplification stage.
 
 \begin{lemma}[The number of sweeps and the radius]
     \label{thm:frustration_free_area_law_radius}
-    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.pow_ceil_mul_le, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeRadiusConstant, TNLean.PEPS.AreaLaw.FrustrationFree.radius_le_ffRadiusConstant}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.pow_ceil_mul_le, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeRadiusConstant, TNLean.PEPS.AreaLaw.FrustrationFree.radius_le_frustrationFreeRadiusConstant}
     \leanok
     For $0<\theta<1$, $M_0>0$ and $t=\lceil(\log M_0+K\log n)/|\log\theta|\rceil$
     one has $\theta^tM_0\le n^{-K}$. If $M_0=e^{(\mathcal I+3w)/2}$ with
@@ -255,7 +255,7 @@ localization errors of the amplification stage.
     \label{thm:frustration_free_area_law_amplification}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAmplificationConstant, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAmplificationThreshold, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAmplificationBound, TNLean.PEPS.AreaLaw.FrustrationFree.norm_toLp_single_eq_one', TNLean.PEPS.AreaLaw.FrustrationFree.sqrt_inv_pow_eq_rpow', TNLean.PEPS.AreaLaw.FrustrationFree.unitary_error_le'}
     \leanok
-    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_model_gapped,thm:frustration_free_area_law_sweep,thm:frustration_free_area_law_spectator,thm:frustration_free_area_law_radius}
+    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_model_gapped,thm:frustration_free_area_law_sweep,thm:frustration_free_area_law_spectator,thm:frustration_free_area_law_radius,thm:al_amp_enlarged_steps,thm:area_law_amplification_cut_clearance}
     Fix $C_0>0$ and an integer $M$. There are $C$ and $N$, depending only on
     $q,R,J,\Delta,C_0,M$, with the following property for every instance of
     Definition~\ref{def:frustration_free_area_law_model}, every ambient set $T$ and every
@@ -283,10 +283,11 @@ localization errors of the amplification stage.
     gives $D^tR_0\varphi=L_tR_0\varphi$ exactly, with $L_t$ acting on
     $N_{R\chi t}(S_0)\subseteq N_{2r}(S_0)$ for $r=R\chi t$, and
     $L_t^\dagger\Omega=\Omega$. So the omission and truncation errors of the
-    general polar correction vanish, it gives a unitary on $N_{2r}(S_0)$ and
-    the copy register moving $\varphi$ within $9n^{-K/2}$ of $\eta$, and the
-    entropy comparison gives the information bound. The inclusion in $A$ is
-    the collar clearance of the general proof.
+    general polar correction vanish, it gives a unitary $U$ on $N_{2r}(S_0)$
+    and the copy register with $\|U\varphi-\eta\|\le9n^{-K/2}$, and the
+    entropy comparison gives the information bound
+    (Lemma~\ref{thm:al_amp_enlarged_steps}). The inclusion in $A$ is the
+    collar clearance of Lemma~\ref{thm:area_law_amplification_cut_clearance}.
 \end{proof}
 
 \begin{lemma}[The area law at one Hamiltonian and one cut]
@@ -294,9 +295,16 @@ localization errors of the amplification stage.
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_of_collar_amplification_twoFamilies_at}
     \leanok
     \uses{thm:area_law_conditional_assembly_constants}
-    The proof of Lemma~\ref{thm:area_law_conditional_assembly_constants} uses
-    the collar and amplification bounds only at the given Hamiltonian, ground
-    vector and cut, and the two-family decomposition only at the given cut.
+    Fix a finite induced domain $\Lambda$, an admissible Hamiltonian with
+    gapped ground vector $\Omega$, and $A\subseteq\Lambda$. Suppose the
+    hypotheses of Lemma~\ref{thm:area_law_conditional_assembly_constants} hold
+    with the collar and amplification bounds required only at this
+    Hamiltonian, ground vector and cut, and the two-family decomposition only
+    at this cut. Then
+    \[
+        S_\Omega(A)\le C(q,C_2,C_3)\,|\partial_\Lambda A|,
+    \]
+    the inequality~\eqref{eq:area_law_conditional_assembly} at this instance.
 \end{lemma}
 
 \begin{proof}\leanok
