@@ -82,7 +82,7 @@ def FrustrationFreeAreaLaw : Prop :=
     ∃ C : ℝ, 0 ≤ C ∧
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, ∀ Ω : StateSpace Λ q,
         IsFrustrationFreeGapped h J Δ Ω →
-          ∀ A : Finset (Site Λ), regionalEntropy Λ q Ω A ≤ C * (edgeBoundary Λ A).card
+          ∀ A : Finset (Site Λ), ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary Λ A).card
 
 namespace IsFrustrationFreeGapped
 

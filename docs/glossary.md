@@ -971,7 +971,7 @@ out.
 #### `TNLean.PEPS.normalizedRegularizedPatchMarginal`
 
 - **Defined in:** `TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean`.
-- **Meaning:** `FiniteProduct.reducedPure` of the same normalized final filtered
+- **Meaning:** `ManyBody.regionState` of the same normalized final filtered
   vector for every region, after the explicit univ-subtype/global configuration
   isometry. These are canonical reduced states, not freely supplied densities.
 - **Source:** the September 24, 2026 manuscript,
@@ -1741,7 +1741,7 @@ in `MPS/Preparation/` uses it.
   copy; circuits on `d`-level sites use `ManyBody.supportedOperators (fun _ ↦ Fin d) S`.
 - **Meaning:** the operators acting on the sites of `D`, that is `M^{⊗ D} ⊗ 1`.
   Its carrier is the matrix-entry condition `ManyBody.IsSupportedOn`
-  (`Entropy.IsSupportedOn` for dimensions `n : V → ℕ`), and
+  (`ManyBody.IsSupportedOn` for a family of basis types), and
   `ManyBody.supportedOperators_toSubmodule_eq_span` identifies it with the span of
   the product operators `⊗ᵥ mᵥ` with `mᵥ = 1` off `D`.
 - **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
@@ -3707,16 +3707,16 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ## Two-family regional entropy
 
-- `FiniteProduct.entropy` (QICLean): canonical von Neumann entropy of the actual
+- `ManyBody.regionEntropy` (QICLean): canonical von Neumann entropy of the actual
   regional reduced pure-state matrix, for arbitrary finite dependent local bases.
-- `FiniteProduct.entropy_le_remainder_add_half_sum` (QICLean): exact normalized
+- `ManyBody.regionEntropy_le_remainder_add_half_sum` (QICLean): exact normalized
   pure-state two-family cancellation, with coefficient `1/2` and the entire
   exterior-plus-earlier-same-family mutual-information assumptions.
 - `TNLean.PEPS.AreaLaw.regionalEntropy_le_residual_add_half_sum`: the finite-domain
   specialization using the existing `OrderedTwoFamilyPartition` and regional
   entropy. It assumes no Hamiltonian, gap, geometry, nonempty family, or separate
   nonnegative error bound. Source: OpenAI (September 24, 2026), area-law Lemma 11.1.
-- `FiniteProduct.conditionalMutualInformation` (QICLean): the physical regional
+- `ManyBody.conditionalMutualInformation` (QICLean): the physical regional
   entropy combination. Generic difference, finite-chain and pure-duality
   identities are available; canonical tripartite identification, exceptional-site
   dimension bounds and the full PEPS conditional-cell theorem remain separate.
