@@ -129,7 +129,6 @@ section GraphNeighborhood
 
 variable {Λ : Finset (ℤ × ℤ)}
 
-
 /-- Membership in `N_r(S)`: a walk of length at most `r` from a point of `S`. -/
 theorem mem_graphNeighborhood {r : ℕ} {S : Finset (Site Λ)} {y : Site Λ} :
     y ∈ graphNeighborhood Λ r S ↔
