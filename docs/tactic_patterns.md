@@ -10231,7 +10231,9 @@ there is no need for a new tactic.
 
 ### Pure output Gram projection — library zero criterion (2026-10-29)
 
-- **Seen:** `Circuit/Channel/PhysicalPortPureOutput.lean`.
+- **Seen:** `Circuit/Channel/PhysicalPortPureOutput.lean`; moved to QICLean, where
+  the exact case is `QuantumCircuit.Circuit.exists_unit_product_approx` at `ε = 0`
+  in `QICLean/Circuit/Compile/DilationOutput.lean`.
 - **Pattern:** A pure marginal gives C*C†=P with P²=P; derive that every
   actual output column is fixed by P before extracting its environment factor.
 - **Reuse:** Mathlib's `Matrix.mul_self_mul_conjTranspose_eq_zero` turns
@@ -11775,10 +11777,11 @@ removed after the dependency audit exposed it.
   proof copy, without duplicating a generic channel contractivity theory.
 
 
-### Pure output under an explicit product code — candidate (2026-10-29)
+### Pure output under an explicit product code — retired (2026-10-29)
 
 - **Seen:** the local `hPure` facts in `Circuit/Channel/BoundedPortPureOutput.lean`
-  and `Circuit/Channel/BoundedPortApproximateOutput.lean`.
+  and `Circuit/Channel/BoundedPortApproximateOutput.lean`. Both modules were
+  deleted when the port chain moved to QICLean, so no occurrence remains.
 - **Pattern:** identify the actual initialized pure projector with the projector
   of its encoded vector using `Matrix.mul_vecMulVec`, `Matrix.vecMulVec_mul`
   and `Matrix.star_mulVec`; normalize the target through the code isometry.
