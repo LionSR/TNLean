@@ -31,9 +31,9 @@ comparison of the general proof give `eq:far`.
 
 ## Main statements
 
-* `TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAmplificationBound`: the amplification bound for the
-  frustration-free model, with the explicit constant `frustrationFreeAmplificationConstant` and threshold
-  `frustrationFreeAmplificationThreshold`.
+* `TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAmplificationBound`: the amplification
+  bound for the frustration-free model, with the explicit constant
+  `frustrationFreeAmplificationConstant` and threshold `frustrationFreeAmplificationThreshold`.
 
 ## References
 
@@ -220,13 +220,14 @@ ambient target `T` with `L = ⌊n^{1-ε}⌋`, `X = A ∩ T`, `S₀ = A ∩ T_L`,
 `|S₀| ≤ C₀ n²`, the cuts of `X, Y, S₀` have at most `C₀ n` edges and `I_Ω(X : Λ ∖ S₀) ≤ C₀ n^{1-ε}`,
 then at every `n ≥ max 2 N` there is a radius `r ≤ C n^{(1-ε)/α}` such that every subset of `X`
 has mutual information at most `C n^{-M}` with every set avoiding `N_{2r}(S₀)`, and
-`N_{2r}(S₀) ⊆ A` when `dist_∞(T, Z) > L + n^β`. The constant `C = frustrationFreeAmplificationConstant` and the
-threshold `N = frustrationFreeAmplificationThreshold` are chosen before `n, Λ, h, A, T`. This is the conclusion
-of Proposition 10.2 for the model `eq:model`, with the sweep of the note in place of the
+`N_{2r}(S₀) ⊆ A` when `dist_∞(T, Z) > L + n^β`. The constant
+`C = frustrationFreeAmplificationConstant` and the threshold
+`N = frustrationFreeAmplificationThreshold` are chosen before `n, Λ, h, A, T`. This is the
+conclusion of Proposition 10.2 for the model `eq:model`, with the sweep of the note in place of the
 time-filtered clocks. Source: `docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`,
 Section "Amplification with the original frustration-free terms". -/
-theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ)
-    (hC₀ : 0 < C₀) (M : ℕ) :
+theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ : ℝ} (hJ : 0 < J)
+    (hΔ : 0 < Δ) (hC₀ : 0 < C₀) (M : ℕ) :
     ∀ n : ℕ, 2 ≤ n → frustrationFreeAmplificationThreshold q R J Δ C₀ M ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, ∀ Ω : StateSpace Λ q,
         IsFrustrationFreeGapped h J Δ Ω →
