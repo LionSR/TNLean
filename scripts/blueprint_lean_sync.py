@@ -37,7 +37,7 @@ _LEAN_DECL_RE = re.compile(
     r"^\s*(?:@\[.*?\]\s*)?"
     r"(?:(?:noncomputable|protected|private|scoped)\s+)*"
     r"(def|theorem|lemma|abbrev|instance|class|structure|inductive|axiom|opaque|alias)\s+"
-    r"((?![\d.])[\w'?!]+(?:\.(?![\d.])[\w'?!]+)*)",
+    r"((?![\d.])[\w']+(?:\.(?![\d.])[\w']+)*)",
     re.MULTILINE,
 )
 # Matches a line consisting solely of a declaration keyword (with optional
