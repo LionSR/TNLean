@@ -27,12 +27,13 @@ way, so that one sweep is a product of at most `d + 1` layers of terms with disj
 
 namespace SimpleGraph
 
-variable {V : Type*} [Fintype V] (G : SimpleGraph V) [DecidableRel G.Adj] [DecidableEq V]
+variable {V : Type*} [Fintype V] (G : SimpleGraph V) [DecidableRel G.Adj]
 
 /-- Greedy colouring along a list: some colouring with `d + 1` colours separates every pair of
 adjacent vertices of the list. -/
 theorem exists_colouring_list_of_forall_degree_le {d : ℕ} (hd : ∀ v, G.degree v ≤ d)
     (l : List V) : ∃ c : V → Fin (d + 1), ∀ u ∈ l, ∀ w ∈ l, G.Adj u w → c u ≠ c w := by
+  classical
   induction l with
   | nil => exact ⟨fun _ ↦ 0, by simp⟩
   | cons v l ih =>

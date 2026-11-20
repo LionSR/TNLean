@@ -60,6 +60,11 @@ theorem graphNeighborhood_mono (r : ℕ) {S S' : Finset (Site Λ)} (h : S ⊆ S'
   obtain ⟨x, hx, p, hp⟩ := hy
   exact ⟨x, h hx, p, hp⟩
 
+theorem graphNeighborhood_mono_radius {a b : ℕ} (hab : a ≤ b) (S : Finset (Site Λ)) :
+    graphNeighborhood Λ a S ⊆ graphNeighborhood Λ b S := fun y hy ↦ by
+  obtain ⟨x, hx, p, hp⟩ := mem_graphNeighborhood.mp hy
+  exact mem_graphNeighborhood.mpr ⟨x, hx, p, hp.trans hab⟩
+
 theorem graphNeighborhood_graphNeighborhood_subset (a b : ℕ) (S : Finset (Site Λ)) :
     graphNeighborhood Λ a (graphNeighborhood Λ b S) ⊆ graphNeighborhood Λ (b + a) S :=
   fun y hy ↦ by
@@ -107,29 +112,33 @@ theorem degree_overlapGraph_le (X : AdmissibleSupport Λ R) :
   obtain ⟨v, hv⟩ := hY.2
   exact ⟨v, (Finset.mem_inter.mp hv).1, (Finset.mem_inter.mp hv).2⟩
 
+/-- The colourings of the supports with `d_R + 1` colours. -/
+abbrev SupportColouring (Λ : Finset (ℤ × ℤ)) (R : ℕ) :=
+  (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1))
+
 /-- **A colouring of the supports with `d_R + 1` colours.** Source:
 `docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`, "Contraction in one sweep":
 "Color it in `χ ≤ d + 1` colors and order the terms by color". -/
 theorem exists_overlapColouring :
-    Nonempty ((supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1))) :=
+    Nonempty (SupportColouring Λ R) :=
   colorable_succ_of_forall_degree_le _ degree_overlapGraph_le
 
 /-- The supports of one colour. -/
-noncomputable def colourLayer (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1)))
+noncomputable def colourLayer (c : SupportColouring Λ R)
     (i : Fin (overlapDegreeBound R + 1)) : List (AdmissibleSupport Λ R) :=
   (Finset.univ.filter fun X ↦ c X = i).toList
 
 /-- The supports, colour by colour: the word of one sweep. -/
-noncomputable def sweepWord (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1))) :
+noncomputable def sweepWord (c : SupportColouring Λ R) :
     List (AdmissibleSupport Λ R) :=
   (List.ofFn (colourLayer c)).flatten
 
-theorem mem_sweepWord (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1)))
+theorem mem_sweepWord (c : SupportColouring Λ R)
     (X : AdmissibleSupport Λ R) : X ∈ sweepWord c := by
   simp only [sweepWord, List.mem_flatten, List.mem_ofFn]
   exact ⟨colourLayer c (c X), ⟨c X, rfl⟩, by simp [colourLayer]⟩
 
-theorem nodup_sweepWord (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1))) :
+theorem nodup_sweepWord (c : SupportColouring Λ R) :
     (sweepWord c).Nodup := by
   rw [sweepWord, List.nodup_flatten]
   refine ⟨fun l hl ↦ ?_, ?_⟩
@@ -141,7 +150,7 @@ theorem nodup_sweepWord (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDe
 
 /-- The supports of one colour are pairwise disjoint. -/
 theorem pairwise_disjoint_colourLayer
-    (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1)))
+    (c : SupportColouring Λ R)
     (i : Fin (overlapDegreeBound R + 1)) :
     (colourLayer c i).Pairwise fun X Y ↦ Disjoint X.1 Y.1 :=
   (Finset.nodup_toList _).pairwise_of_forall_ne fun X hX Y hY hXY ↦ by
@@ -152,16 +161,17 @@ open ManyBody.LightCone
 
 /-- One layer of a colour moves the light cone by at most `R`. -/
 theorem retainedSet_colourLayer_subset
-    (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1)))
+    (c : SupportColouring Λ R)
     (i : Fin (overlapDegreeBound R + 1)) (U : Finset (Site Λ)) :
     retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (colourLayer c i) ⊆
       graphNeighborhood Λ R U :=
   retainedSet_subset_of_pairwise_disjoint (subset_graphNeighborhood R U)
-    (pairwise_disjoint_colourLayer c i) fun X _ hXU ↦ subset_graphNeighborhood_of_isAdmissibleSupport X.2 hXU
+    (pairwise_disjoint_colourLayer c i) fun X _ hXU ↦
+      subset_graphNeighborhood_of_isAdmissibleSupport X.2 hXU
 
 /-- A word of `m` layers moves the light cone by at most `R m`. -/
 theorem retainedSet_flatten_subset
-    (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1)))
+    (c : SupportColouring Λ R)
     (Ls : List (Fin (overlapDegreeBound R + 1))) (U : Finset (Site Λ)) :
     retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (Ls.map (colourLayer c)).flatten ⊆
       graphNeighborhood Λ (R * Ls.length) U := by
@@ -175,7 +185,7 @@ theorem retainedSet_flatten_subset
 
 /-- **The light cone of one sweep** lies in `N_{R χ}(U)`, `χ = d_R + 1`. -/
 theorem retainedSet_sweepWord_subset
-    (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1)))
+    (c : SupportColouring Λ R)
     (U : Finset (Site Λ)) :
     retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (sweepWord c) ⊆
       graphNeighborhood Λ (R * (overlapDegreeBound R + 1)) U := by
@@ -187,7 +197,7 @@ frustration-free area-law note). Source:
 `docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`, "Exact localization on the
 perturbed vector": "a physical product `L_t` supported on `N_{χ R t}(S₀)`". -/
 theorem retainedSet_sweepWord_pow_subset
-    (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1)))
+    (c : SupportColouring Λ R)
     (U : Finset (Site Λ)) (t : ℕ) :
     retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (List.replicate t (sweepWord c)).flatten ⊆
       graphNeighborhood Λ (R * (overlapDegreeBound R + 1) * t) U := by

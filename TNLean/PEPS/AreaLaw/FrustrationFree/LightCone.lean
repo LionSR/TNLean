@@ -235,6 +235,7 @@ theorem kronecker_one_mulVec_sweep_eq_retained (hf : ∀ k, f k ∈ supportedOpe
       rw [← mulVec_mulVec] at h
       rw [h, hsplit, ← mulVec_mulVec]
 
+omit [Fintype V] in
 /-- **One layer of disjoint factors.** Let `grow U` contain `U` and every region of the layer that
 meets `U`. If the regions of the factors of a word are pairwise disjoint, then processing the word
 from any `W` with `U ⊆ W ⊆ grow U`, whose regions avoid `W \ U`, ends inside `grow U`. In

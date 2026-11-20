@@ -218,3 +218,107 @@ localization errors of the amplification stage.
     Lemma~\ref{thm:ff_area_law_sweep_contraction} with $d=d_R$ and
     Lemma~\ref{thm:ff_area_law_sweep_light_cone}.
 \end{proof}
+
+\section{Amplification and the area law}
+\label{sec:ff_area_law_amplification}
+
+\begin{lemma}[Spectator registers]
+    \label{thm:ff_area_law_spectator}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.norm_kronecker_one_mulVec_le_of_slices}
+    \leanok
+    If $\|Av_a\|\le c\|v_a\|$ for every slice $v_a$ of a vector $v$ on a
+    system and a register, then $\|(A\otimes I)v\|\le c\|v\|$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Square and sum over the register.
+\end{proof}
+
+\begin{lemma}[The number of sweeps and the radius]
+    \label{thm:ff_area_law_radius}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.pow_ceil_mul_le, TNLean.PEPS.AreaLaw.FrustrationFree.ffRadiusConstant, TNLean.PEPS.AreaLaw.FrustrationFree.radius_le_ffRadiusConstant}
+    \leanok
+    For $0<\theta<1$, $M_0>0$ and $t=\lceil(\log M_0+K\log n)/|\log\theta|\rceil$
+    one has $\theta^tM_0\le n^{-K}$. If $M_0=e^{(\mathcal I+3w)/2}$ with
+    $w=n^{3/5}$ and $0\le\mathcal I\le C_0n^{1-\varepsilon}$, then
+    $R\chi t\le Cn^{(1-\varepsilon)/\alpha}$ with $C$ depending only on
+    $R,J,\Delta,C_0,K$.
+\end{lemma}
+
+\begin{proof}\leanok
+    $\theta^t=e^{-t|\log\theta|}$. Bound $n^{1-\varepsilon}$, $n^{3/5}$ and
+    $\log n\le\tfrac53n^{3/5}$ by multiples of $n^{(1-\varepsilon)/\alpha}$.
+\end{proof}
+
+\begin{theorem}[Amplification with the frustration-free terms]
+    \label{thm:ff_area_law_amplification}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.ffAmplificationConstant, TNLean.PEPS.AreaLaw.FrustrationFree.ffAmplificationThreshold, TNLean.PEPS.AreaLaw.FrustrationFree.ffAmplificationBound, TNLean.PEPS.AreaLaw.FrustrationFree.norm_toLp_single_eq_one', TNLean.PEPS.AreaLaw.FrustrationFree.sqrt_inv_pow_eq_rpow', TNLean.PEPS.AreaLaw.FrustrationFree.unitary_error_le'}
+    \leanok
+    \uses{def:ff_area_law_model,thm:ff_area_law_model_gapped,thm:ff_area_law_sweep,thm:ff_area_law_spectator,thm:ff_area_law_radius}
+    Fix $C_0>0$ and an integer $M$. There are $C$ and $N$, depending only on
+    $q,R,J,\Delta,C_0,M$, with the following property for every instance of
+    Definition~\ref{def:ff_area_law_model}, every ambient set $T$ and every
+    $n\ge\max(2,N)$. Put $L=\lfloor n^{1-\varepsilon}\rfloor$, $X=A\cap T$,
+    $S_0=A\cap T_L$ and $Y=S_0\setminus X$. If $|S_0|\le C_0n^2$, the cuts of
+    $X$, $Y$ and $S_0$ have at most $C_0n$ edges and
+    $I_\Omega(X:\Lambda\setminus S_0)\le C_0n^{1-\varepsilon}$, then there is
+    $r\le Cn^{(1-\varepsilon)/\alpha}$ such that every subset of $X$ has
+    mutual information at most $Cn^{-M}$ with every set avoiding
+    $N_{2r}(S_0)$, and $N_{2r}(S_0)\subseteq A$ when every point of $T$ is at
+    sup-distance more than $L+n^\beta$ from the cut endpoints. This is
+    \cite[eq.~(far)]{TNLean2026FrustrationFreeNote}, the conclusion of
+    \cite[Proposition~10.2]{OpenAI2026AreaLaw} for the frustration-free model.
+\end{theorem}
+
+\begin{proof}\leanok
+    Take the typical projections, the restoring operator $R_0$ with
+    $\|R_0\|\le M_0$, and the vectors $\varphi,\eta$ of the general proof, and
+    $K=4(M+2)$. With $t$ as in Lemma~\ref{thm:ff_area_law_radius} and the
+    sweep $D$ of Theorem~\ref{thm:ff_area_law_sweep}, the ground part of
+    $R_0\varphi$ is fixed by $D^t$ and the excited part is at most
+    $\theta^tM_0\le n^{-K}$ after $D^t$, by
+    Lemma~\ref{thm:ff_area_law_spectator}. Since $R_0\varphi$ is a column
+    operator acting on $S_0$ applied to $\Omega\otimes\xi$, the light cone
+    gives $D^tR_0\varphi=L_tR_0\varphi$ exactly, with $L_t$ acting on
+    $N_{R\chi t}(S_0)\subseteq N_{2r}(S_0)$ for $r=R\chi t$, and
+    $L_t^\dagger\Omega=\Omega$. So the omission and truncation errors of the
+    general polar correction vanish, it gives a unitary on $N_{2r}(S_0)$ and
+    the copy register moving $\varphi$ within $9n^{-K/2}$ of $\eta$, and the
+    entropy comparison gives the information bound. The inclusion in $A$ is
+    the collar clearance of the general proof.
+\end{proof}
+
+\begin{lemma}[The area law at one Hamiltonian and one cut]
+    \label{thm:ff_area_law_assembly_at}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_of_collar_amplification_twoFamilies_at}
+    \leanok
+    \uses{thm:area_law_conditional_assembly_constants}
+    The proof of Lemma~\ref{thm:area_law_conditional_assembly_constants} uses
+    the collar and amplification bounds only at the given Hamiltonian, ground
+    vector and cut, and the two-family decomposition only at the given cut.
+\end{lemma}
+
+\begin{proof}\leanok
+    The same argument, with the three inputs taken at the given instance.
+\end{proof}
+
+\begin{theorem}[The frustration-free area law by the sweep]
+    \label{thm:ff_area_law_sweep_route}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAreaLaw}
+    \leanok
+    \uses{thm:ff_area_law,thm:ff_area_law_amplification,thm:ff_area_law_assembly_at,thm:area_law_sublinear_collar,thm:area_law_two_family_decomposition}
+    The statement of Theorem~\ref{thm:ff_area_law}, proved along the route of
+    \cite{TNLean2026FrustrationFreeNote}: the time-filtered amplification of
+    the general proof is not used.
+\end{theorem}
+
+\begin{proof}\leanok
+    Combine the sublinear collar bound, which holds for every gapped instance
+    and in particular for the frustration-free model, with
+    Theorem~\ref{thm:ff_area_law_amplification} at $M=100$ and the two-family
+    decomposition in Lemma~\ref{thm:ff_area_law_assembly_at}; the two-family
+    entropy identity cancels the tile entropies. The collar bound is still the
+    general one; the replacement of its scanner input by the terms
+    themselves \cite[eq.~(identity)]{TNLean2026FrustrationFreeNote} is not
+    used.
+\end{proof}
