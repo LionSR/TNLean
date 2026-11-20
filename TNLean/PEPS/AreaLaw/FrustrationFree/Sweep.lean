@@ -25,7 +25,7 @@ colour by colour. This module proves the two properties of `D` the amplification
   acting on `N_{R χ t}(U)` with `L Ω = Ω` and `Lᴴ Ω = Ω`.
 
 The note writes the factors as `(1 - h_X/J)^{1/2}`; the range projections are used here, see
-`docs/paper-gaps/ff2d_sweep_range_projections.tex`.
+`docs/paper-gaps/ffarealaw_sweep_range_projections.tex`.
 
 ## Main definitions
 
