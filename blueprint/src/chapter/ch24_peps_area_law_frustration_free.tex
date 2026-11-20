@@ -10,10 +10,10 @@ bounded distance. This replaces the time-filtered constraints and the
 localization errors of the amplification stage.
 
 \section{Contraction of one sweep}
-\label{sec:ff_area_law_sweep}
+\label{sec:frustration_free_area_law_sweep}
 
 \begin{lemma}[One sweep of projections]
-    \label{thm:ff_area_law_sweep_contraction}
+    \label{thm:frustration_free_area_law_sweep_contraction}
     \lean{ContinuousLinearMap.complementProd_apply_of_forall_apply_eq_zero, ContinuousLinearMap.inner_complementProd_of_forall_apply_eq_zero, ContinuousLinearMap.norm_sq_complementProd_le_of_gap, ContinuousLinearMap.norm_pow_complementProd_le_of_gap}
     \leanok
     Let $\Pi_1,\dots,\Pi_m$ be orthogonal projections on a Hilbert space, each
@@ -31,7 +31,7 @@ localization errors of the amplification stage.
     This is the contraction \cite[eq.~(sweep)]{TNLean2026FrustrationFreeNote}
     for filters that are projections; the note states it for positive
     contractions $k_i$ with the factors $(I-k_i)^{1/2}$. The restriction is
-    recorded in \cite{gap:ffarealaw_sweep_range_projections}.
+    recorded in \cite{gap:frustrationfree_sweep_range_projections}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -44,7 +44,7 @@ localization errors of the amplification stage.
 \end{proof}
 
 \begin{lemma}[Range projections of positive local terms]
-    \label{thm:ff_area_law_range_projection}
+    \label{thm:frustration_free_area_law_range_projection}
     \lean{Matrix.PosSemidef.le_smul_supportProj, TNLean.PEPS.AreaLaw.FrustrationFree.supportProj_mem_supportedOperators}
     \leanok
     For a positive semidefinite matrix $A$, let $\Pi_A$ be the orthogonal
@@ -61,10 +61,10 @@ localization errors of the amplification stage.
 \end{proof}
 
 \section{The model and the statement}
-\label{sec:ff_area_law_model}
+\label{sec:frustration_free_area_law_model}
 
 \begin{definition}[Frustration-free gapped Hamiltonians]
-    \label{def:ff_area_law_model}
+    \label{def:frustration_free_area_law_model}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped}
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}
@@ -80,11 +80,11 @@ localization errors of the amplification stage.
 \end{definition}
 
 \begin{lemma}[The model is gapped]
-    \label{thm:ff_area_law_model_gapped}
+    \label{thm:frustration_free_area_law_model_gapped}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isHermitian, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.hamiltonian_mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isGapped_and_groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isGapped, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_term_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.smul_sub_le_sum_supportProj}
     \leanok
-    \uses{def:ff_area_law_model,thm:ff_area_law_range_projection}
-    In the model of Definition~\ref{def:ff_area_law_model}, every term is
+    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_range_projection}
+    In the model of Definition~\ref{def:frustration_free_area_law_model}, every term is
     Hermitian and $H\Omega=0$. If $\Delta>0$, every other eigenvalue of $H$ is
     at least $\Delta$ and the ground space is the line through $\Omega$. If
     $J\ge0$, then $\|h_X\|\le J$. If $J>0$, the range projections $\Pi_X$ of
@@ -96,33 +96,33 @@ localization errors of the amplification stage.
     Summing $h_X\Omega=0$ gives $H\Omega=0$, and the gap inequality then
     identifies the ground space and the gap. A positive operator below $J$
     has norm at most $J$. Finally $H\le J\sum_X\Pi_X$ termwise by
-    Lemma~\ref{thm:ff_area_law_range_projection}.
+    Lemma~\ref{thm:frustration_free_area_law_range_projection}.
 \end{proof}
 
 \begin{theorem}[The frustration-free area law]
-    \label{thm:ff_area_law}
+    \label{thm:frustration_free_area_law}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.FrustrationFreeAreaLaw, TNLean.PEPS.AreaLaw.UniformAreaLaw.frustrationFreeAreaLaw, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAreaLaw_of_uniformAreaLaw}
     \leanok
-    \uses{def:ff_area_law_model,thm:ff_area_law_model_gapped,thm:openai_uniform_area_law}
+    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_model_gapped,thm:openai_uniform_area_law}
     For $q\ge1$, $R\ge0$ and $J,\Delta>0$ there is a constant
     $C=C(q,R,J,\Delta)$ such that every instance of
-    Definition~\ref{def:ff_area_law_model} on every finite domain satisfies
+    Definition~\ref{def:frustration_free_area_law_model} on every finite domain satisfies
     $S_\Omega(A)\le C|\partial_\Lambda A|$ for every set of sites $A$. This is
     \cite[eq.~(goal)]{TNLean2026FrustrationFreeNote}.
 \end{theorem}
 
 \begin{proof}\leanok
-    By Lemma~\ref{thm:ff_area_law_model_gapped} every instance satisfies the
+    By Lemma~\ref{thm:frustration_free_area_law_model_gapped} every instance satisfies the
     hypotheses of the general area law \cite[Theorem~1.1]{OpenAI2026AreaLaw}
     at energy zero. This proof passes through the general amplification stage;
     the shorter proof of the note is assembled in the following sections.
 \end{proof}
 
 \section{The exact light cone of the sweep}
-\label{sec:ff_area_law_light_cone}
+\label{sec:frustration_free_area_law_light_cone}
 
 \begin{lemma}[Greedy colouring]
-    \label{thm:ff_area_law_greedy_colouring}
+    \label{thm:frustration_free_area_law_greedy_colouring}
     \lean{SimpleGraph.exists_colouring_list_of_forall_degree_le, SimpleGraph.colorable_succ_of_forall_degree_le}
     \leanok
     A finite graph in which every vertex has at most $d$ neighbours has a
@@ -135,10 +135,10 @@ localization errors of the amplification stage.
 \end{proof}
 
 \begin{lemma}[Colour layers of the supports]
-    \label{thm:ff_area_law_colour_layers}
+    \label{thm:frustration_free_area_law_colour_layers}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.overlapDegreeBound, TNLean.PEPS.AreaLaw.FrustrationFree.degree_overlapGraph_le, TNLean.PEPS.AreaLaw.FrustrationFree.exists_overlapColouring, TNLean.PEPS.AreaLaw.FrustrationFree.sweepWord, TNLean.PEPS.AreaLaw.FrustrationFree.mem_sweepWord, TNLean.PEPS.AreaLaw.FrustrationFree.nodup_sweepWord, TNLean.PEPS.AreaLaw.FrustrationFree.pairwise_disjoint_colourLayer}
     \leanok
-    \uses{thm:ff_area_law_greedy_colouring,def:area_law_hamiltonian}
+    \uses{thm:frustration_free_area_law_greedy_colouring,def:area_law_hamiltonian}
     On a finite domain of the square lattice, a support of graph diameter at
     most $R$ meets at most $d_R=v_R\mu_R$ other supports, with
     $v_R=1+2R(R+1)$ and $\mu_R=2^{v_R-1}$. Hence the supports have a colouring
@@ -148,11 +148,11 @@ localization errors of the amplification stage.
 
 \begin{proof}\leanok
     A support has at most $v_R$ sites and every site lies in at most $\mu_R$
-    supports. Apply Lemma~\ref{thm:ff_area_law_greedy_colouring}.
+    supports. Apply Lemma~\ref{thm:frustration_free_area_law_greedy_colouring}.
 \end{proof}
 
 \begin{lemma}[The light cone of a word of local factors]
-    \label{thm:ff_area_law_light_cone}
+    \label{thm:frustration_free_area_law_light_cone}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.sweepProd, TNLean.PEPS.AreaLaw.FrustrationFree.retainedProd, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet, TNLean.PEPS.AreaLaw.FrustrationFree.kronecker_one_mulVec_eq_self, TNLean.PEPS.AreaLaw.FrustrationFree.kronecker_one_mulVec_sweep_eq_retained, TNLean.PEPS.AreaLaw.FrustrationFree.retainedProd_mem_supportedOperators, TNLean.PEPS.AreaLaw.FrustrationFree.retainedProd_mulVec_eq_self, TNLean.PEPS.AreaLaw.FrustrationFree.conjTranspose_retainedProd_mulVec_eq_self, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_subset_of_pairwise_disjoint}
     \leanok
     Let $f_1,\dots,f_m$ be operators on a system of sites, $f_k$ acting on
@@ -176,12 +176,12 @@ localization errors of the amplification stage.
 \end{proof}
 
 \begin{lemma}[The light cone of $t$ sweeps]
-    \label{thm:ff_area_law_sweep_light_cone}
+    \label{thm:frustration_free_area_law_sweep_light_cone}
     \lean{TNLean.Lattice.mem_graphNeighborhood, TNLean.Lattice.subset_graphNeighborhood, TNLean.Lattice.graphNeighborhood_mono, TNLean.Lattice.graphNeighborhood_graphNeighborhood_subset, TNLean.Lattice.subset_graphNeighborhood_of_isAdmissibleSupport, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_colourLayer_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_flatten_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_sweepWord_subset, TNLean.PEPS.AreaLaw.FrustrationFree.retainedSet_sweepWord_pow_subset}
     \leanok
-    \uses{thm:ff_area_law_colour_layers,thm:ff_area_law_light_cone}
+    \uses{thm:frustration_free_area_law_colour_layers,thm:frustration_free_area_law_light_cone}
     For the word of $t$ sweeps of the supports, colour by colour, the final
-    region of Lemma~\ref{thm:ff_area_law_light_cone} started from $U$ lies in
+    region of Lemma~\ref{thm:frustration_free_area_law_light_cone} started from $U$ lies in
     the graph neighbourhood $N_{R\chi t}(U)$.
 \end{lemma}
 
@@ -191,11 +191,11 @@ localization errors of the amplification stage.
 \end{proof}
 
 \begin{lemma}[The sweep of a frustration-free Hamiltonian]
-    \label{thm:ff_area_law_sweep}
+    \label{thm:frustration_free_area_law_sweep}
     \lean{ContinuousLinearMap.complementProd_congr, TNLean.PEPS.AreaLaw.FrustrationFree.wordProjections, TNLean.PEPS.AreaLaw.FrustrationFree.sum_range_option_elim, TNLean.PEPS.AreaLaw.FrustrationFree.toEuclideanCLM_sweepProd, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_nonneg, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_lt_one, TNLean.PEPS.AreaLaw.FrustrationFree.sweepContraction_pos, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.termProj, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp_mulVec_self, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.sweepOp_pow_mulVec_self, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.mul_norm_sq_le_re_inner_sum_termProj, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_sweepOp_pow_apply_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.exists_sweepOp_pow_lightCone}
     \leanok
-    \uses{def:ff_area_law_model,thm:ff_area_law_model_gapped,thm:ff_area_law_sweep_contraction,thm:ff_area_law_range_projection,thm:ff_area_law_sweep_light_cone}
-    In the model of Definition~\ref{def:ff_area_law_model} with $J,\Delta>0$,
+    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_model_gapped,thm:frustration_free_area_law_sweep_contraction,thm:frustration_free_area_law_range_projection,thm:frustration_free_area_law_sweep_light_cone}
+    In the model of Definition~\ref{def:frustration_free_area_law_model} with $J,\Delta>0$,
     let $D=\prod_X(I-\Pi_X)$ be the product over the supports, colour by
     colour, of the complements of the range projections of the terms. Then
     $D\Omega=\Omega$ and $\|D^tv\|\le\theta^t\|v\|$ for $v\perp\Omega$, with
@@ -208,14 +208,14 @@ localization errors of the amplification stage.
         =(L\otimes I)B(\Omega\otimes\xi)$. These are
     \cite[eqs.~(sweep) and (cone)]{TNLean2026FrustrationFreeNote}, with the
     range projections in place of the square roots of the note
-    \cite{gap:ffarealaw_sweep_range_projections}.
+    \cite{gap:frustrationfree_sweep_range_projections}.
 \end{lemma}
 
 \begin{proof}\leanok
     The range projections are projections annihilating $\Omega$, a pair of
     them fails to commute only when their supports meet, and their sum is at
     least $(\Delta/J)(I-|\Omega\rangle\langle\Omega|)$
-    (Lemma~\ref{thm:ff_area_law_model_gapped}). Apply
-    Lemma~\ref{thm:ff_area_law_sweep_contraction} with $d=d_R$ and
-    Lemma~\ref{thm:ff_area_law_sweep_light_cone}.
+    (Lemma~\ref{thm:frustration_free_area_law_model_gapped}). Apply
+    Lemma~\ref{thm:frustration_free_area_law_sweep_contraction} with $d=d_R$ and
+    Lemma~\ref{thm:frustration_free_area_law_sweep_light_cone}.
 \end{proof}
