@@ -48,12 +48,10 @@ and `t:alg1`, lines 1809–1817, within the stated quantitative scope. -/
 theorem exists_physical_dg_interleaved_tree_ritz_approximation :
     ∃ Ctail C Ktree Kfinal : ℝ,
     21 ≤ Ctail ∧ 21 ≤ C ∧ 0 < Ktree ∧ 0 < Kfinal ∧ ∀ (L q : ℕ),
-    ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+    ∀ (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
     0 < gamma →
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -155,11 +153,11 @@ theorem exists_physical_dg_interleaved_tree_ritz_approximation :
     exists_physical_dg_interleaved_interval_tree
   obtain ⟨Kfinal, hKfinal, hrefine⟩ := exists_physical_dg_automatic_same_candidate_refinement
   refine ⟨Ctail, C, Ktree, Kfinal, hCtail, hC, hKtree, hKfinal, ?_⟩
-  intro L q h hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g m w v ell D s a tau epsilon t Delta
   obtain ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff,
     B, hB, hlogB, Utree, hdimUtree, hUMPS, hxiMax, hfamilies⟩ :=
-    htree L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    htree L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff, ?_⟩
   intro u bref
   refine ⟨B, hB, hlogB, Utree, hdimUtree, hUMPS, ?_⟩
@@ -190,7 +188,7 @@ theorem exists_physical_dg_interleaved_tree_ritz_approximation :
     have hb := mul_le_mul_of_nonneg_right haN (mul_pos hDref0 hroot).le
     nlinarith only [hb, (mul_pos hDref0 hroot).le]
   obtain ⟨Bfinal, hBfinal, hlogBfinal, hfinal⟩ :=
-    hrefine L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hrefine L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       ETree D hETree hD1 eta heta
   refine ⟨Bfinal, hBfinal, hlogBfinal, ?_⟩
   intro b Dcommon Nfinal xi

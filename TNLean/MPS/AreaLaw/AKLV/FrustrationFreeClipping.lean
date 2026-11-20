@@ -38,29 +38,27 @@ Source: AKLV, arXiv:1301.1162v1, Section 4, lines 810–818, and Theorem 6.1(a).
 The source's unique-ground-vector setting is expressed by the original
 projector-gap hypothesis; no gap or comparison for the clipped operator is supplied. -/
 lemma frustrationFree_twoSidedEnergyTruncation_ground_gap {L q : ℕ}
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (a b : Fin (L - 1)) (hab : a.val < b.val)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (g t : ℝ) (hg : 0 < g) (hg1 : g ≤ 1) (ht : 1024 / g ≤ t)
-    (hzero : (∑ i, h i) *ᵥ WithLp.ofLp Ω = 0)
-    (hgap : ((∑ i, h i) - (g : ℂ) •
+    (hzero : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0)
+    (hgap : (Φ.hamiltonian - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef) :
-    let X := leftCutBlock h a 0
-    let N := middleCutBlock h a b 0
-    let Y := rightCutBlock h b 0
-    let K := twoSidedEnergyTruncation X (N + (h a + h b)) Y t
-    K.PosSemidef ∧ K ≤ ∑ i, h i ∧ K *ᵥ WithLp.ofLp Ω = 0 ∧
+    let X := leftCutBlock Φ a 0
+    let N := middleCutBlock Φ a b 0
+    let Y := rightCutBlock Φ b 0
+    let K := twoSidedEnergyTruncation X (N + (Φ.term a + Φ.term b)) Y t
+    K.PosSemidef ∧ K ≤ ∑ i, Φ.term i ∧ K *ᵥ WithLp.ofLp Ω = 0 ∧
       (K - ((g / 2 : ℝ) : ℂ) •
         (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef := by
   intro X N Y K
   classical
-  let H := ∑ i, h i
-  let A := h a + h b
+  let H := Φ.hamiltonian
+  let A := Φ.term a + Φ.term b
   let ι := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-  have hsumpos (S : Finset (Fin (L - 1))) : (∑ i ∈ S, h i).PosSemidef :=
+  have hsumpos (S : Finset (Fin (L - 1))) : (Φ.partialHamiltonian S).PosSemidef :=
     Matrix.posSemidef_sum S fun i _ ↦ Matrix.nonneg_iff_posSemidef.mp (h0 i)
   have hX : X.PosSemidef := by
     simpa only [X, leftCutBlock, Complex.ofReal_zero, zero_smul, sub_zero] using
@@ -74,10 +72,10 @@ lemma frustrationFree_twoSidedEnergyTruncation_ground_gap {L q : ℕ}
   have hA : A.PosSemidef := Matrix.nonneg_iff_posSemidef.mp (add_nonneg (h0 a) (h0 b))
   have hAcap : A ≤ (2 : ℂ) • 1 := by
     simpa only [A, two_smul] using add_le_add (h1 a) (h1 b)
-  obtain ⟨hXN, hXY, hNY⟩ := normalizedCutBlock_commutations h hs a b hab 0 0 0
+  obtain ⟨hXN, hXY, hNY⟩ := normalizedCutBlock_commutations Φ a b hab 0 0 0
   have hsum : X + N + Y + A = H := by
     simpa only [H, X, N, Y, A, zero_add, Complex.ofReal_zero, zero_smul, sub_zero] using
-      normalizedCutBlock_sum h a b hab 0 0 0
+      normalizedCutBlock_sum Φ a b hab 0 0 0
   have hH : X + (N + A) + Y = H := by rw [← hsum]; abel
   have ht0 : 0 < t := (div_pos (by norm_num : (0 : ℝ) < 1024) hg).trans_le ht
   obtain ⟨hK, hKle⟩ := twoSidedEnergyTruncation_posSemidef_le X (N + A) Y

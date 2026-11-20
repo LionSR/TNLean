@@ -50,11 +50,11 @@ members of rank at most `D` at the internal cuts, a half-viable family is taken 
 `4 η`-viable family when the sampled projector is within `η < 1/2` of the ground projection.
 LVV13, `algo53.tex`, Claim `c:errorreduction`, lines 584--592. -/
 theorem isViableMPS_errorReductionSet_of_admissible_sampled {i : ℕ} (hi : i ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) {D : ℕ} {F : Finset (LeftBlockMatrix L q i)}
     (hdec : ∃ (ι : Type) (J : Finset ι) (A : ι → LeftBlockMatrix L q i)
       (B : ι → RightBlockMatrix L q i),
-      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector h E₀ I) =
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector Φ E₀ I) =
           ∑ t ∈ J, A t ⊗ₖ B t ∧ ∀ t ∈ J, A t ∈ F)
     (hcard : F.card ≤ ℓ * D)
     (hrank : ∀ A ∈ F, ∀ k, k < i → operatorSchmidtRank
@@ -62,7 +62,7 @@ theorem isViableMPS_errorReductionSet_of_admissible_sampled {i : ℕ} (hi : i �
         (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΓ : ‖Γ‖ = 1) {s b : ℕ}
     {S : Finset (LeftBlockVector L q i)} (hS : IsViableMPS Γ s b (1 / 2) S) {η : ℝ}
-    (hKP : ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤ η)
+    (hKP : ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤ η)
     (hη : η < 1 / 2) :
     IsViableMPS Γ (ℓ * D * s) (D * max 1 b) (4 * η) (errorReductionSet F id S) := by
   classical
@@ -86,20 +86,19 @@ theorem isViableMPS_errorReductionSet_of_admissible_sampled {i : ℕ} (hi : i �
 /-- Under a valid oracle, one sampled step is the step with the oracle's sampled factors
 applied to the selection of the oracle's nets and solver. -/
 theorem eval_sampledSweepStepProgram_of_valid (hv : IsValidOracle o) (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
+    (Φ : ManyBody.BondInteraction L q)
         (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
-    FreeM.eval o (sampledSweepStepProgram hq h hs E₀ Δ I b D hi S) =
+    FreeM.eval o (sampledSweepStepProgram hq Φ E₀ Δ I b D hi S) =
       haveI : NeZero q := ⟨by omega⟩
       successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
-        (o (LinearAlgebraQuery.sampledFactors L (i + 1) h E₀ ℓ m D I)) id
-        ((ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩).sizeTrimmingSelectionWith hq Δ
+        (o (LinearAlgebraQuery.sampledFactors L (i + 1) Φ E₀ ℓ m D I)) id
+        ((ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩).sizeTrimmingSelectionWith hq Δ
           (AreaLaw.extend (i + 1) S) (oracleNets o L (i + 1) ((Δ / 169) ^ 2 / (2 * L)))
           (oracleSolver o L (i + 1) b (AreaLaw.extend (i + 1) S)
             (leftCutOperator (i + 1)
-              ((ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩).partialHamiltonian
+              ((ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩).partialHamiltonian
                 (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 (i + 1))))
             ((Δ / 169) ^ 2 / (2 * L)))) := by
   simp only [sampledSweepStepProgram, FreeM.eval_bind, FreeM.eval_lift,
@@ -109,27 +108,26 @@ theorem eval_sampledSweepStepProgram_of_valid (hv : IsValidOracle o) (hq : 2 ≤
 /-- **One sampled step preserves viability on good words under every valid oracle**, with
 the explicit size and bond bounds of the honest step. -/
 theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L) (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
-    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, (Φ.term j).PosSemidef) (h1 : ∀ j, Φ.term j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
-    (hgood : GoodWords h E₀ m (δ / 8) κ I) (b : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
+    (hgood : GoodWords Φ E₀ m (δ / 8) κ I) (b : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) (hS : IsViable Γ δ (S : Set (LeftBlockVector L q i))) :
     IsViableMPS Γ (ℓ * q ^ (2 * κ) *
         (lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ))
       (q ^ (2 * κ) * max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L))) δ
-      (FreeM.eval o (sampledSweepStepProgram hq h hs E₀ Δ I b (q ^ (2 * κ)) hi S)) := by
+      (FreeM.eval o (sampledSweepStepProgram hq Φ E₀ Δ I b (q ^ (2 * κ)) hi S)) := by
   classical
   let : NeZero q := ⟨by omega⟩
-  rw [eval_sampledSweepStepProgram_of_valid hv hq h hs E₀ Δ I b (q ^ (2 * κ)) hi S]
-  let chain := ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩
+  rw [eval_sampledSweepStepProgram_of_valid hv hq Φ E₀ Δ I b (q ^ (2 * κ)) hi S]
+  let chain := ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩
   have hgapC : IsGapped chain.hamiltonian E₀ Δ := by
-    rwa [show chain.hamiltonian = ∑ j, h j from ManyBody.Interaction.hamiltonian_extend]
+    rwa [show chain.hamiltonian = ∑ j, Φ.term j from ManyBody.Interaction.hamiltonian_extend]
   have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
-    rwa [show chain.hamiltonian = ∑ j, h j from ManyBody.Interaction.hamiltonian_extend]
+    rwa [show chain.hamiltonian = ∑ j, Φ.term j from ManyBody.Interaction.hamiltonian_extend]
   have hext : IsViable Γ ((Δ / 169) ^ 2 / L)
       (AreaLaw.extend (i + 1) S : Set (LeftBlockVector L q (i + 1))) :=
     (hS.extend (by omega) hi).mono hδc
@@ -156,21 +154,21 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
           Matrix.PosSemidef.zero h0) hL hq hi hΔ
         (AreaLaw.extend (i + 1) S) hnet hsol E₀ Γ hΩ hgapC hspanC hext⟩
   have hrank : ∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L k) (bondComplementWord h (I t))) ≤ q ^ (2 * κ) := fun t k ↦
-    operatorSchmidtRank_cutOperator_bondComplementWord_le_all (by omega) h hs (I t)
+      (leftBlock L k) (bondComplementWord Φ (I t))) ≤ q ^ (2 * κ) := fun t k ↦
+    operatorSchmidtRank_cutOperator_bondComplementWord_le_all (by omega) Φ (I t)
       (hgood.2 t) k
-  obtain ⟨hdec, hcardF, hrankF⟩ := hv.sampledFactors L (i + 1) h E₀ ℓ m (q ^ (2 * κ)) I hrank
-  have hKP : ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
+  obtain ⟨hdec, hcardF, hrankF⟩ := hv.sampledFactors L (i + 1) Φ E₀ ℓ m (q ^ (2 * κ)) I hrank
+  have hKP : ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
       δ / 4 := by
     calc
-      _ ≤ ‖sampledProjector h E₀ I - powerProjector (∑ j, h j) L E₀ m‖ +
-          ‖powerProjector (∑ j, h j) L E₀ m -
+      _ ≤ ‖sampledProjector Φ E₀ I - powerProjector Φ.hamiltonian L E₀ m‖ +
+          ‖powerProjector Φ.hamiltonian L E₀ m -
             vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ :=
           norm_sub_le_norm_sub_add_norm_sub _ _ _
       _ ≤ δ / 8 + δ / 8 := add_le_add hgood.1.le
-          (norm_powerProjector_sub_le hL h h0 h1 hΩ hgap hspan hΔ (by positivity) m hm)
+          (norm_powerProjector_sub_le hL Φ h0 h1 hΩ hgap hspan hΔ (by positivity) m hm)
       _ = δ / 4 := by ring
-  have hout := isViableMPS_errorReductionSet_of_admissible_sampled hi h E₀ I hdec hcardF
+  have hout := isViableMPS_errorReductionSet_of_admissible_sampled hi Φ E₀ I hdec hcardF
     (hrankF hi) hΩ hT hKP (by linarith)
   have hδeq : 4 * (δ / 4) = δ := by ring
   rw [hδeq] at hout
@@ -179,15 +177,14 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
 /-- **The sampled sweep program on good words under every valid oracle** is viable at every
 cut, with the uniform size and bond bounds at every positive cut. -/
 theorem sampledSweepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L) (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
-    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, (Φ.term j).PosSemidef) (h1 : ∀ j, Φ.term j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
-    (hgood : ∀ i, GoodWords h E₀ m (δ / 8) κ (I i)) (b : ℕ) (i : ℕ) (hi : i ≤ L) :
-    let S := FreeM.eval o (sampledSweepProgram hq h hs h0 h1 E₀ Δ I b (q ^ (2 * κ)) i)
+    (hgood : ∀ i, GoodWords Φ E₀ m (δ / 8) κ (I i)) (b : ℕ) (i : ℕ) (hi : i ≤ L) :
+    let S := FreeM.eval o (sampledSweepProgram hq Φ h0 h1 E₀ Δ I b (q ^ (2 * κ)) i)
     S.card ≤ (if i = 0 then 1 else ℓ * q ^ (2 * κ) *
         (lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ)) ∧
       (∀ v ∈ S, IsLeftOpenMPS
@@ -204,21 +201,20 @@ theorem sampledSweepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L) (h
     obtain ⟨-, -, hviable⟩ := ih (by omega)
     simp only [S, sampledSweepProgram, hi, ↓reduceDIte, FreeM.eval_bind, Nat.succ_ne_zero,
       ↓reduceIte]
-    exact sampledSweepStepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc _
+    exact sampledSweepStepProgram_spec_of_valid hv hL hq Φ h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc _
         hm
       (hgood ⟨i, by omega⟩) b hi _ hviable
 
 /-- **On good words the sampled program finds the ground state under every valid oracle.** -/
 theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L)
-    (hq : 2 ≤ q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
-    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
+    (hq : 2 ≤ q) (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, (Φ.term j).PosSemidef) (h1 : ∀ j, Φ.term j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
-    (hgood : ∀ i, GoodWords h E₀ m (δ / 8) κ (I i)) (b : ℕ) :
-    let ψ := FreeM.eval o (sampledGroundStateProgram hq h hs h0 h1 E₀ Δ I b (q ^ (2 * κ)))
+    (hgood : ∀ i, GoodWords Φ E₀ m (δ / 8) κ (I i)) (b : ℕ) :
+    let ψ := FreeM.eval o (sampledGroundStateProgram hq Φ h0 h1 E₀ Δ I b (q ^ (2 * κ)))
     ‖ψ‖ = 1 ∧ 1 - 8 * L * δ / Δ ≤ ‖⟪Γ, ψ⟫_ℂ‖ ∧
       IsOpenMPS L q ((ℓ * q ^ (2 * κ) *
           (lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ)) *
@@ -227,13 +223,13 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
   classical
   intro ψ
   set e := fullLeftEquiv L q with he
-  set S := FreeM.eval o (sampledSweepProgram hq h hs h0 h1 E₀ Δ I b (q ^ (2 * κ)) L) with hSdef
-  have hψ : ψ = o (LinearAlgebraQuery.energyMinimizer L b (∑ j, h j)
+  set S := FreeM.eval o (sampledSweepProgram hq Φ h0 h1 E₀ Δ I b (q ^ (2 * κ)) L) with hSdef
+  have hψ : ψ = o (LinearAlgebraQuery.energyMinimizer L b Φ.hamiltonian
       (S.image fun w ↦ e.symm w)) := by
     simp only [ψ, sampledGroundStateProgram, FreeM.eval_bind, FreeM.eval_lift]
     rfl
   obtain ⟨hcard, hmps, hviable⟩ :=
-    sampledSweepProgram_spec_of_valid hv hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood b
+    sampledSweepProgram_spec_of_valid hv hL hq Φ h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood b
       L le_rfl
   simp only [show L ≠ 0 by omega, ↓reduceIte] at hcard hmps
   obtain ⟨v, hv', hvnorm, hover⟩ := hviable.exists_fullLeftVector
@@ -253,7 +249,7 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
     rw [this, norm_zero] at hw'norm
     exact zero_ne_one hw'norm
   obtain ⟨hψU, hψnorm, hψmin⟩ :=
-    hv.energyMinimizer L b (∑ j, h j) (S.image fun w ↦ e.symm w) hUne
+    hv.energyMinimizer L b Φ.hamiltonian (S.image fun w ↦ e.symm w) hUne
   rw [← hψ] at hψU hψnorm hψmin
   refine ⟨hψnorm, ?_, ?_⟩
   · have hΓ := hΩ
@@ -265,8 +261,8 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
         rw [← e.inner_map_map, e.apply_symm_apply]
       rw [← norm_inner_symm, this]
       exact hover
-    let chain := ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩
-    have hchain : chain.hamiltonian = ∑ j, h j := ManyBody.Interaction.hamiltonian_extend
+    let chain := ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩
+    have hchain : chain.hamiltonian = Φ.hamiltonian := ManyBody.Interaction.hamiltonian_extend
     have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
@@ -275,7 +271,7 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
           (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 j).nonneg).mpr (h1 j))
         hΩ hspanC hw'norm hover'
     rw [hchain] at henergy
-    have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E₀ ≤ 8 * L * δ :=
+    have hψenergy : (⟪ψ, toEuclideanLin Φ.hamiltonian ψ⟫_ℂ).re - E₀ ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E₀).trans henergy
     exact Entropy.norm_inner_ge_of_gap hΔ hgap hΓ hψnorm hψenergy
   · have hψU' : ψ ∈ U := hψU
@@ -292,15 +288,14 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
 valid oracle.** -/
 theorem measureReal_sampledGroundStateProgram_success_of_valid [NeZero L]
     (hv : IsValidOracle o) (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
-    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, (Φ.term j).PosSemidef) (h1 : ∀ j, Φ.term j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) (b : ℕ) :
     1 - 1 / (2 * (L : ℝ) ^ 2) ≤
       (stepWordsMeasure L (sampledWordCount q L E₀ Δ δ) (sampledPower L E₀ Δ δ)).real
-        {I | let ψ := FreeM.eval o (sampledGroundStateProgram hq h hs h0 h1 E₀ Δ I b
+        {I | let ψ := FreeM.eval o (sampledGroundStateProgram hq Φ h0 h1 E₀ Δ I b
             (sampledRankBound q L E₀ Δ δ))
           ‖ψ‖ = 1 ∧ 1 - 8 * L * δ / Δ ≤ ‖⟪Γ, ψ⟫_ℂ‖ ∧
             IsOpenMPS L q ((sampledWordCount q L E₀ Δ δ * sampledRankBound q L E₀ Δ δ *
@@ -308,9 +303,9 @@ theorem measureReal_sampledGroundStateProgram_success_of_valid [NeZero L]
               max 1 (sampledRankBound q L E₀ Δ δ *
                 max 1 (bondTrimmingRadius L (lvvReferenceBond q Δ L))))
               (fun x ↦ ψ x)} := by
-  refine (measureReal_forall_goodWords_ge h h0 h1 hΩ hgap hspan hΔ hδ0).trans (measureReal_mono ?_)
+  refine (measureReal_forall_goodWords_ge Φ h0 h1 hΩ hgap hspan hΔ hδ0).trans (measureReal_mono ?_)
   intro I hI
-  exact sampledGroundStateProgram_spec_of_valid hv (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hΩ hgap
+  exact sampledGroundStateProgram_spec_of_valid hv (Nat.pos_of_neZero L) hq Φ h0 h1 hΔ hΩ hgap
       hspan
     hδ0 hδ1 hδc I (Nat.le_ceil _) hI b
 

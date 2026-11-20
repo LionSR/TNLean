@@ -31,44 +31,44 @@ energy shift. Supporting AKL14, arXiv:1406.3898, low70.tex, lines 817–877.
 No conjugation or residual estimate is supplied as a hypothesis. -/
 private theorem norm_exp_conjugation_nearestNeighbour_boundary_sum_le
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i ∈ I ∪ J, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
+    (Φ : ManyBody.BondInteraction L q)
+    (hs : ∀ i ∈ I ∪ J, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Φ.term i)
       (interval L i.val (i.val + 2)))
-    (h0 : ∀ i ∈ I ∪ J, 0 ≤ h i) (h1 : ∀ i ∈ I ∪ J, h i ≤ 1)
+    (h0 : ∀ i ∈ I ∪ J, 0 ≤ Φ.term i) (h1 : ∀ i ∈ I ∪ J, Φ.term i ≤ 1)
     (z : ℂ) (t : ℝ) (ht0 : 0 ≤ t) (ht : t ≤ 1 / 8) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ I, h i
-    ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * (∑ j ∈ J, h j) *
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ I, Φ.term i
+    ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * (Φ.partialHamiltonian J) *
       NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 * (J.card : ℝ) := by
   intro H
-  have hsI : ∀ i ∈ I, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
+  have hsI : ∀ i ∈ I, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Φ.term i)
       (interval L i.val (i.val + 2)) :=
     fun i hi ↦ hs i (Finset.mem_union_left J hi)
-  have h0I : ∀ i ∈ I, 0 ≤ h i := fun i hi ↦ h0 i (Finset.mem_union_left J hi)
-  have h1I : ∀ i ∈ I, h i ≤ 1 := fun i hi ↦ h1 i (Finset.mem_union_left J hi)
+  have h0I : ∀ i ∈ I, 0 ≤ Φ.term i := fun i hi ↦ h0 i (Finset.mem_union_left J hi)
+  have h1I : ∀ i ∈ I, Φ.term i ≤ 1 := fun i hi ↦ h1 i (Finset.mem_union_left J hi)
   have hnorm1 : ‖(1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)‖ ≤ 1 :=
     IsStarProjection.norm_le _
       (IsStarProjection.one (Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
   have hterm (j : Fin (L - 1)) (hj : j ∈ J) :
-      ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * h j *
+      ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * Φ.term j *
         NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 := by
     have hjunion : j ∈ I ∪ J := Finset.mem_union_right I hj
-    have hjnorm : ‖h j‖ ≤ 1 :=
+    have hjnorm : ‖Φ.term j‖ ≤ 1 :=
       (CStarAlgebra.norm_le_norm_of_le_of_nonneg (h1 j hjunion) (h0 j hjunion)).trans
         hnorm1
     calc
-      ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * h j *
-          NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 * ‖h j‖ :=
+      ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * Φ.term j *
+          NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 * ‖Φ.term j‖ :=
         norm_exp_conjugation_nearest_neighbour_shift_le_two (c := j.val)
-          I h hsI h0I h1I (h j) (hs j hjunion) z t ht0 ht
+          I Φ hsI h0I h1I (Φ.term j) (hs j hjunion) z t ht0 ht
       _ ≤ 2 * 1 := mul_le_mul_of_nonneg_left hjnorm (by norm_num)
       _ = 2 := mul_one 2
   calc
-    ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * (∑ j ∈ J, h j) *
+    ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * (Φ.partialHamiltonian J) *
         NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ =
-        ‖∑ j ∈ J, NormedSpace.exp ((t : ℂ) • (H - z • 1)) * h j *
+        ‖∑ j ∈ J, NormedSpace.exp ((t : ℂ) • (H - z • 1)) * Φ.term j *
           NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ := by
       rw [Finset.mul_sum, Finset.sum_mul]
-    _ ≤ ∑ j ∈ J, ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * h j *
+    _ ≤ ∑ j ∈ J, ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * Φ.term j *
         NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ := norm_sum_le _ _
     _ ≤ ∑ _j ∈ J, (2 : ℝ) := Finset.sum_le_sum hterm
     _ = (J.card : ℝ) * 2 := by simp only [Finset.sum_const, nsmul_eq_mul]
@@ -85,21 +85,21 @@ arXiv:1406.3898, Theorem lowspec, lines 1102--1168. It is not the full physical
 truncation-error or subspace-closeness theorem. -/
 theorem exists_nearestNeighbour_weighted_low_restriction
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i ∈ I ∪ J, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
+    (Φ : ManyBody.BondInteraction L q)
+    (hs : ∀ i ∈ I ∪ J, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Φ.term i)
       (interval L i.val (i.val + 2)))
-    (h0 : ∀ i ∈ I ∪ J, 0 ≤ h i) (h1 : ∀ i ∈ I ∪ J, h i ≤ 1)
+    (h0 : ∀ i ∈ I ∪ J, 0 ≤ Φ.term i) (h1 : ∀ i ∈ I ∪ J, Φ.term i ≤ 1)
     (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (r u e s : ℝ)
     (hs0 : 0 < s) (hs1 : s ≤ 1 / 8)
-    (hXA : Commute X (∑ i ∈ I, h i))
-    (horder : u • Matrix.spectralProjectionGE (∑ i ∈ I, h i) (r + u) ≤ X)
+    (hXA : Commute X (Φ.partialHamiltonian I))
+    (horder : u • Matrix.spectralProjectionGE (Φ.partialHamiltonian I) (r + u) ≤ X)
     (b : OrthonormalBasis (Fin L → Fin q) ℂ
       (EuclideanSpace ℂ (Fin L → Fin q)))
     (a : (Fin L → Fin q) → ℝ)
     (hEigen : ∀ j, Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-      (X + ∑ j ∈ J, h j) (b j) = (a j : ℂ) • b j)
+      (X + ∑ j ∈ J, Φ.term j) (b j) = (a j : ℂ) • b j)
     (hgap : 2 * (J.card : ℝ) < u - e) :
-    let A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ I, h i
+    let A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ I, Φ.term i
     let Q := Matrix.spectralProjectionGE A (r + u)
     let W := NormedSpace.exp (s • (A - (r + u) •
       (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)))
@@ -114,7 +114,7 @@ theorem exists_nearestNeighbour_weighted_low_restriction
     (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i hi ↦
       h0 i (Finset.mem_union_left J hi))).isHermitian
   have hconj := norm_exp_conjugation_nearestNeighbour_boundary_sum_le
-    I J h hs h0 h1 ((r + u : ℝ) : ℂ) s hs0.le hs1
+    I J Φ hs h0 h1 ((r + u : ℝ) : ℂ) s hs0.le hs1
   simp only [Complex.coe_smul] at hconj
   exact Matrix.exists_weighted_low_restriction_of_conjugation_le A X _ hA r u e s _ hs0
     hXA horder b a hEigen hconj hgap
@@ -126,10 +126,8 @@ current-order or norm estimate is supplied. Auxiliary to ALVV,
 arXiv:1602.08828v2, Corollary c:goodagsphardtrunc, lines 979–1005. -/
 theorem norm_consecutive_regional_truncation_low_le
     {L q m : ℕ} (k : Fin (m + 1) → ℕ) (hk : Monotone k)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (e : Fin m → ℝ) (T : Finset (Fin m)) (j : Fin m)
     (J : Finset (Fin (L - 1))) (u ε s t : ℝ)
     (hs0 : 0 < s) (hs1 : s ≤ 1 / 8) (hu : 0 ≤ u) (hut : u ≤ t)
@@ -137,13 +135,13 @@ theorem norm_consecutive_regional_truncation_low_le
     (a : (Fin L → Fin q) → ℝ) :
     let A : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun i ↦
       ∑ r ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-        (fun r ↦ k i.castSucc ≤ r.val ∧ r.val + 1 < k i.succ), h r
+        (fun r ↦ k i.castSucc ≤ r.val ∧ r.val + 1 < k i.succ), Φ.term r
     let X := ∑ i, ((if i ∈ T then cfc (fun x : ℝ ↦ min x (e i + t)) (A i)
       else A i) - (e i : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
     let ι := Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
     let G := Submodule.spectralSpanLE b a ε
     (∀ i, (e i : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ≤ A i) →
-    (∀ v, ι (X + ∑ r ∈ J, h r) (b v) = (a v : ℂ) • b v) →
+    (∀ v, ι (X + ∑ r ∈ J, Φ.term r) (b v) = (a v : ℂ) • b v) →
     2 * (J.card : ℝ) < u - ε →
     ‖(ι (A j - cfc (fun x : ℝ ↦ min x (e j + t)) (A j))).domRestrict G‖ ≤
       (Real.exp (-s * (t - u) - 1) / s) *
@@ -153,11 +151,11 @@ theorem norm_consecutive_regional_truncation_low_le
     (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun r _ ↦ h0 r)).isHermitian
   have hconj := norm_exp_conjugation_nearestNeighbour_boundary_sum_le
     ((Finset.univ : Finset (Fin (L - 1))).filter
-      (fun r ↦ k j.castSucc ≤ r.val ∧ r.val + 1 < k j.succ)) J h
-    (fun r _ ↦ hs r) (fun r _ ↦ h0 r) (fun r _ ↦ h1 r) ((e j + u : ℝ) : ℂ) s hs0.le hs1
+      (fun r ↦ k j.castSucc ≤ r.val ∧ r.val + 1 < k j.succ)) J Φ
+    (fun r _ ↦ Φ.mem r) (fun r _ ↦ h0 r) (fun r _ ↦ h1 r) ((e j + u : ℝ) : ℂ) s hs0.le hs1
   simp only [Complex.coe_smul] at hconj
   exact Matrix.norm_partially_clipped_truncation_low_le A hA
-    (pairwise_commute_sum_internal_consecutive_regions k hk h hs) e he T j _ u ε s t _
+    (pairwise_commute_sum_internal_consecutive_regions k hk Φ) e he T j _ u ε s t _
     hs0 hu hut b a hEigen hconj hgap
 
 end TNLean.MPS.AreaLaw

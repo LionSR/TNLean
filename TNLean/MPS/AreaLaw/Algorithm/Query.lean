@@ -132,13 +132,13 @@ inductive LinearAlgebraQuery (q : ℕ) : Type → Type
   with terms `h` at precision `c` for the gap parameter `Delta`. Huang, arXiv:1406.6355v6,
   Section 5.4; LVV13 algorithm step 4, lines 572--592. -/
   | gaussianFilterFactors (L i : ℕ) (hq : 1 ≤ q)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ j, 0 ≤ h j)
+      (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j)
       (c Delta : ℝ) : LinearAlgebraQuery q (Finset (LeftBlockMatrix L q i))
   /-- The left factors, at the cut after `i` sites, of the sampled projector of the words
   `I`, `ℓ` words of length `m` whose factors have rank at most `D`, for the chain with
   terms `h` at ground energy `E₀`. Definition `d:sagsp`, line 611; algorithm step 4,
   lines 572--592. -/
-  | sampledFactors (L i : ℕ) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+  | sampledFactors (L i : ℕ) (Φ : ManyBody.BondInteraction L q)
       (E₀ : ℝ) (ℓ m D : ℕ) (I : Fin ℓ → Fin m → Fin L) :
       LinearAlgebraQuery q (Finset (LeftBlockMatrix L q i))
   /-- The application of a left factor `A` of operator-Schmidt rank at most `r` to a
@@ -209,17 +209,17 @@ theorem LinearAlgebraQuery.honestOracle_schmidtTrim (L i : ℕ) (hi : i ≤ L) (
 
 @[simp]
 theorem LinearAlgebraQuery.honestOracle_gaussianFilterFactors (L i : ℕ) (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ j, 0 ≤ h j)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j)
     (c Delta : ℝ) :
-    honestOracle (LinearAlgebraQuery.gaussianFilterFactors L i hq h h0 c Delta) =
-      AreaLaw.gaussianFilterFactors h h0 c Delta i := rfl
+    honestOracle (LinearAlgebraQuery.gaussianFilterFactors L i hq Φ h0 c Delta) =
+      AreaLaw.gaussianFilterFactors Φ h0 c Delta i := rfl
 
 @[simp]
 theorem LinearAlgebraQuery.honestOracle_sampledFactors (L i : ℕ)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) (ℓ m D : ℕ)
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) (ℓ m D : ℕ)
     (I : Fin ℓ → Fin m → Fin L) :
-    honestOracle (LinearAlgebraQuery.sampledFactors L i h E₀ ℓ m D I) =
-      AreaLaw.sampledFactors h E₀ I i := rfl
+    honestOracle (LinearAlgebraQuery.sampledFactors L i Φ E₀ ℓ m D I) =
+      AreaLaw.sampledFactors Φ E₀ I i := rfl
 
 @[simp]
 theorem LinearAlgebraQuery.honestOracle_applyFactor (L i r b : ℕ) (A : LeftBlockMatrix L q i)
@@ -315,17 +315,17 @@ theorem LinearAlgebraQuery.queryCost_schmidtTrim (L i : ℕ) (hi : i ≤ L) (b m
 
 @[simp]
 theorem LinearAlgebraQuery.queryCost_gaussianFilterFactors (L i : ℕ) (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (h0 : ∀ j, 0 ≤ h j)
+    (Φ : ManyBody.BondInteraction L q) (h0 : ∀ j, 0 ≤ Φ.term j)
     (c Delta : ℝ) :
-    queryCost (LinearAlgebraQuery.gaussianFilterFactors L i hq h h0 c Delta) =
+    queryCost (LinearAlgebraQuery.gaussianFilterFactors L i hq Φ h0 c Delta) =
       filterFactorsCost L q (huangEnergyCount c Delta L) (huangFilterRankBound q c Delta L) :=
   rfl
 
 @[simp]
 theorem LinearAlgebraQuery.queryCost_sampledFactors (L i : ℕ)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) (ℓ m D : ℕ)
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) (ℓ m D : ℕ)
     (I : Fin ℓ → Fin m → Fin L) :
-    queryCost (LinearAlgebraQuery.sampledFactors L i h E₀ ℓ m D I) =
+    queryCost (LinearAlgebraQuery.sampledFactors L i Φ E₀ ℓ m D I) =
       filterFactorsCost L q ℓ D := rfl
 
 @[simp]

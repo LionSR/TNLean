@@ -55,13 +55,11 @@ theorem exists_fixed_bandwidth_long_interval_dyadic_low_energy_word_family
       let ell : ℕ := ⌈C * u ^ 2 / g⌉₊
       let D := (mi * ell ^ 2) ^ (22 * ell)
       let nu := (1 / 200 : ℝ) / 2 ^ (4 * i)
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ (h0 : ∀ i, 0 ≤ Φ.term i), (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       21 ≤ ell ∧
@@ -101,7 +99,7 @@ theorem exists_fixed_bandwidth_long_interval_dyadic_low_energy_word_family
   obtain ⟨C, hC, hCeta, hregional⟩ :=
     exists_fixed_bandwidth_regional_dyadic_low_energy_word_family etaLD hLD
   refine ⟨C, hC, hCeta, ?_⟩
-  intro L q m p r i w hq hqm hpr hrL hw mi g u ell D nu h hs h0 h1 config H hRaw
+  intro L q m p r i w hq hqm hpr hrL hw mi g u ell D nu Φ h0 h1 config H hRaw
   let : Nonempty (Fin L → Fin q) := config
   obtain ⟨hell, hlogD, _⟩ := hregional L q m 0 0 i w hq hqm hw
   refine ⟨hell, hlogD, ?_⟩
@@ -120,7 +118,7 @@ theorem exists_fixed_bandwidth_long_interval_dyadic_low_energy_word_family
     exact hcollar
   obtain ⟨_, _, hphysical⟩ := hregional L q m a b i w hq hqm hw
   obtain ⟨e, E0, _x, z, hO, hClip, _hxunit, _hx, _hlo, hcenter, hzunit, hz, hE0low,
-    _hE0, _hE04, _hnorm, hfamilies⟩ := hphysical hab hbL J hcost h hs h0 h1
+    _hE0, _hE04, _hnorm, hfamilies⟩ := hphysical hab hbL J hcost Φ h0 h1
   obtain ⟨_hminimum, hidentity⟩ :=
     hRaw.spectralSpanLE_centered_ground_of_eq hO (∑ j, e j) E0 z
       hcenter hzunit hz hE0low
@@ -164,13 +162,11 @@ theorem exists_fixed_bandwidth_long_interval_dyadic_low_energy_family
       let ell : ℕ := ⌈C * u ^ 2 / g⌉₊
       let D := (mi * ell ^ 2) ^ (22 * ell)
       let nu := (1 / 200 : ℝ) / 2 ^ (4 * i)
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ (h0 : ∀ i, 0 ≤ Φ.term i), (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       21 ≤ ell ∧
@@ -209,9 +205,9 @@ theorem exists_fixed_bandwidth_long_interval_dyadic_low_energy_family
   obtain ⟨C, hC, hCeta, hword⟩ :=
     exists_fixed_bandwidth_long_interval_dyadic_low_energy_word_family etaLD hLD
   refine ⟨C, hC, hCeta, ?_⟩
-  intro L q m p r i w hq hqm hpr hrL hw mi g u ell D nu h hs h0 h1 config H hRaw
+  intro L q m p r i w hq hqm hpr hrL hw mi g u ell D nu Φ h0 h1 config H hRaw
   let : Nonempty (Fin L → Fin q) := config
-  obtain ⟨hell, hlogD, hrest⟩ := hword L q m p r i w hq hqm hpr hrL hw h hs h0 h1
+  obtain ⟨hell, hlogD, hrest⟩ := hword L q m p r i w hq hqm hpr hrL hw Φ h0 h1
   refine ⟨hell, hlogD, ?_⟩
   intro hlong J beta tau U Phi Tm EM EE
   obtain ⟨N, F, hN, hfamily⟩ := hrest hlong

@@ -75,25 +75,23 @@ constructed internally. Auxiliary
 to AKLV, arXiv:1301.1162v1, Theorem 6.1 and its proof in Section 6.3. -/
 theorem exists_aklv_cut_scaled_low_cluster {L q a s l r : ℕ} (hq : 0 < q)
     (hs : 1 ≤ s) (ha : a + s + 1 ≤ L) (hlr : l ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (hΩ : ‖Ω‖ = 1)
-    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
-    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+    (hground : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
     (hg : 0 < g)
-    (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s h j -
-      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians l r h j) :
+    (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s Φ j -
+      (e j : ℂ) • 1).PosSemidef) → ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians l r Φ j) :
     ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
-        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
-        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+        (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ tau t : ℝ, 0 < tau → tau ≤ 1 → aklvTwoBlockThreshold g tau ≤ t →
-        let B := aklvTwoBlockHamiltonian l r h e t
+        let B := aklvTwoBlockHamiltonian l r Φ e t
         ∃ hB : ∀ T, (B T).IsHermitian,
           let v := (hB Finset.univ).eigenvectorBasis
           let lam := (hB Finset.univ).eigenvalues
@@ -109,18 +107,18 @@ theorem exists_aklv_cut_scaled_low_cluster {L q a s l r : ℕ} (hq : 0 < q)
               (∀ j, j ≠ j0 → lam j0 + 9 * g / 10 ≤ lam j) ∧
               ∃ θ : ℝ, ‖v j0 - Complex.exp (θ * Complex.I) • Ω‖ ^ 2 ≤ tau / 100 := by
   obtain ⟨e, x, z, E0, hx, hxe, he, _he0, hz, hzE, hE, hE0, hE6, hres⟩ :=
-    exists_aklv_normalized_cut_residual hq hs ha hlr hrL h hsupp h0 h1 hcut
+    exists_aklv_normalized_cut_residual hq hs ha hlr hrL Φ h0 h1 hcut
   let S : ℝ := ∑ j, e j
-  let H := (∑ i, h i) - (S : ℂ) • 1
+  let H := Φ.hamiltonian - (S : ℂ) • 1
   have hΩunit : star (WithLp.ofLp Ω) ⬝ᵥ WithLp.ofLp Ω = 1 := by
     rw [dotProduct_comm, ← EuclideanSpace.inner_eq_star_dotProduct, inner_self_eq_norm_sq_to_K, hΩ]
     norm_num
   have hQ := Matrix.one_sub_vecMulVec_posSemidef_of_sum_normSq_le_one
     (WithLp.ofLp Ω) (by simpa only [← EuclideanSpace.norm_sq_eq, hΩ, one_pow]
       using (le_refl (1 : ℝ)))
-  have hrawlow : ((∑ i, h i) - (mu : ℂ) • 1).PosSemidef := by
+  have hrawlow : (Φ.hamiltonian - (mu : ℂ) • 1).PosSemidef := by
     simpa only [sub_add_cancel] using hgap.add (hQ.smul (Complex.zero_le_real.mpr hg.le))
-  have hshift : H - ((mu - S : ℝ) : ℂ) • 1 = (∑ i, h i) - (mu : ℂ) • 1 := by
+  have hshift : H - ((mu - S : ℝ) : ℂ) • 1 = Φ.hamiltonian - (mu : ℂ) • 1 := by
     dsimp only [H]
     rw [Complex.ofReal_sub, sub_smul]
     abel
@@ -165,9 +163,9 @@ theorem exists_aklv_cut_scaled_low_cluster {L q a s l r : ℕ} (hq : 0 < q)
         (g ≤ a0 j - E0 ∧ ⟪b0 j, Ω⟫_ℂ = 0) :=
     GaussianFilter.eigenvector_ground_or_gap (hB ∅) hΩ hBΩ hBgap hg j
   have hspec (j : Fin L → Fin q) : a0 j = E0 ∨ E0 + g ≤ a0 j := by
-    rcases hdich j with h | h
-    · exact Or.inl h.1
-    · exact Or.inr (by linarith [h.1])
+    rcases hdich j with Φ.term | Φ.term
+    · exact Or.inl Φ.1
+    · exact Or.inr (by linarith [Φ.term.1])
   have hsmall (T : Finset (Fin 2)) (η : ℝ) (hη : η ≤ g) :
       ‖(ι (B ∅) - ι (B Finset.univ)).domRestrict
         (Submodule.spectralSpanLE (hB T).eigenvectorBasis (hB T).eigenvalues (E0 + η))‖ ≤ ξ := by
@@ -200,18 +198,18 @@ theorem exists_aklv_cut_scaled_low_cluster {L q a s l r : ℕ} (hq : 0 < q)
     · apply Submodule.span_le.mpr
       rintro _ ⟨j, hj, rfl⟩
       change a0 j ≤ E0 at hj
-      rcases hdich j with h | h
-      · rw [h.2]
+      rcases hdich j with Φ.term | Φ.term
+      · rw [Φ.term.2]
         exact Submodule.smul_mem _ _ (Submodule.subset_span (Set.mem_singleton Ω))
       · exfalso
-        linarith [h.1]
+        linarith [Φ.term.1]
     · apply (Submodule.span_singleton_le_iff_mem _ _).mpr
       rw [Submodule.mem_spectralSpanLE_iff]
       intro j hj
-      rcases hdich j with h | h
+      rcases hdich j with Φ.term | Φ.term
       · exfalso
-        linarith [h.1]
-      · rw [OrthonormalBasis.repr_apply_apply, h.2]
+        linarith [Φ.term.1]
+      · rw [OrthonormalBasis.repr_apply_apply, Φ.term.2]
   have hdimG : Module.finrank ℂ (Submodule.span ℂ {Ω}) = 1 :=
     finrank_span_singleton (by intro hzero; simp [hzero] at hΩ : Ω ≠ 0)
   let U := Submodule.spectralSpanLE v lam (E0 + g / 20)
@@ -274,23 +272,21 @@ constructed internally. Auxiliary
 to AKLV, arXiv:1301.1162v1, Theorem 6.1 and its proof in Section 6.3. -/
 theorem exists_aklv_two_block_scaled_low_cluster {L q a s : ℕ} (hq : 0 < q)
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (hΩ : ‖Ω‖ = 1)
-    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
-    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+    (hground : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
     (hg : 0 < g) :
     ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
-        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
-        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+        (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ tau t : ℝ, 0 < tau → tau ≤ 1 → aklvTwoBlockThreshold g tau ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t
+        let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t
         ∃ hB : ∀ T, (B T).IsHermitian,
           let v := (hB Finset.univ).eigenvectorBasis
           let lam := (hB Finset.univ).eigenvalues
@@ -305,9 +301,9 @@ theorem exists_aklv_two_block_scaled_low_cluster {L q a s : ℕ} (hq : 0 < q)
             ∃ j0, lam j0 ≤ E0 + g / 20 ∧
               (∀ j, j ≠ j0 → lam j0 + 9 * g / 10 ≤ lam j) ∧
               ∃ θ : ℝ, ‖v j0 - Complex.exp (θ * Complex.I) • Ω‖ ^ 2 ≤ tau / 100 :=
-  exists_aklv_cut_scaled_low_cluster hq (by omega) ha (by omega) (by omega) h hsupp h0 h1
+  exists_aklv_cut_scaled_low_cluster hq (by omega) ha (by omega) (by omega) Φ h0 h1
     mu g Ω hΩ hground hgap hg
-    (fun e he ↦ aklv_normalization_le_two_block_regions hs h h0 e he)
+    (fun e he ↦ aklv_normalization_le_two_block_regions hs Φ h0 e he)
 
 open Classical in
 /-- The reference arrangement, clipping the two reference sums at the cuts `a+1`
@@ -319,23 +315,21 @@ whose enlarged exteriors overlap, are included. Auxiliary to AKLV,
 arXiv:1301.1162v1, Theorem 6.1 and its proof in Section 6.3. -/
 theorem exists_aklv_reference_scaled_low_cluster {L q a s : ℕ} (hq : 0 < q)
     (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
     (hΩ : ‖Ω‖ = 1)
-    (hground : (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
-    (hgap : ((∑ i, h i) - (mu : ℂ) • 1 - (g : ℂ) •
+    (hground : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω)
+    (hgap : (Φ.hamiltonian - (mu : ℂ) • 1 - (g : ℂ) •
       (1 - Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
     (hg : 0 < g) :
     ∃ (e : Fin 3 → ℝ) (E0 : ℝ),
       (∃ x : (Fin L → Fin q) → ℂ, star x ⬝ᵥ x = 1 ∧
-        (∀ j, aklvNormalizationHamiltonians a s h j *ᵥ x = (e j : ℂ) • x) ∧
-        ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef) ∧
+        (∀ j, aklvNormalizationHamiltonians a s Φ j *ᵥ x = (e j : ℂ) • x) ∧
+        ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       E0 + (∑ j, e j) = mu ∧ 0 ≤ E0 ∧ E0 ≤ 6 ∧
       ∀ tau t : ℝ, 0 < tau → tau ≤ 1 → aklvTwoBlockThreshold g tau ≤ t →
-        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) h e t
+        let B := aklvTwoBlockHamiltonian (a + 1) (a + s) Φ e t
         ∃ hB : ∀ T, (B T).IsHermitian,
           let v := (hB Finset.univ).eigenvectorBasis
           let lam := (hB Finset.univ).eigenvalues
@@ -350,7 +344,7 @@ theorem exists_aklv_reference_scaled_low_cluster {L q a s : ℕ} (hq : 0 < q)
             ∃ j0, lam j0 ≤ E0 + g / 20 ∧
               (∀ j, j ≠ j0 → lam j0 + 9 * g / 10 ≤ lam j) ∧
               ∃ θ : ℝ, ‖v j0 - Complex.exp (θ * Complex.I) • Ω‖ ^ 2 ≤ tau / 100 :=
-  exists_aklv_cut_scaled_low_cluster hq hs ha (by omega) (by omega) h hsupp h0 h1
-    mu g Ω hΩ hground hgap hg (fun e he ↦ aklv_normalization_le_reference_regions h h0 e he)
+  exists_aklv_cut_scaled_low_cluster hq hs ha (by omega) (by omega) Φ h0 h1
+    mu g Ω hΩ hground hgap hg (fun e he ↦ aklv_normalization_le_reference_regions Φ h0 e he)
 
 end TNLean.MPS.AreaLaw

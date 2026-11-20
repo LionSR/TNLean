@@ -51,11 +51,9 @@ theorem exists_physical_dg_interleaved_ritz_polynomial_approximation_with_consta
       (k : ℝ) ≤ Cdegree *
         (1 + Real.log (max q 50 : ℕ) + Real.log (1 / min gamma 1)) ^ 10 /
           (min gamma 1) ^ 2 ∧ ∀ (L : ℕ)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu : ℝ),
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu : ℝ),
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -131,7 +129,7 @@ theorem exists_physical_dg_interleaved_ritz_polynomial_approximation_with_consta
     exact hdegree.trans (by
       apply div_le_div_of_nonneg_right _ (sq_nonneg g)
       exact mul_le_mul_of_nonneg_right (le_max_left Cdegree Ccoefficient) (by positivity))
-  intro L h hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G r eta heta
+  intro L Φ hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G r eta heta
   let w := 1 + Real.log (r : ℝ) + 2 * Real.log ((L : ℝ) + 1)
   let v := U0 + Real.log (1 + w)
   let ell := Nat.ceil (Cscale * (v ^ 6 / g + Real.sqrt w * v ^ 3 / Real.sqrt g))
@@ -159,11 +157,11 @@ theorem exists_physical_dg_interleaved_ritz_polynomial_approximation_with_consta
       hAlog hg hU0 hw hrawLog
   obtain ⟨hell, hD2, hs, _ha, _haSmall, _hepsilon, _hepsilon1, _ht, _htail, _htrade,
     Btree, hBtree, hlogBtree, _Utree, _hdimU, _hUMPS, _hxiMax, hfamilies⟩ :=
-    hconstruct L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hconstruct L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   have hD : 1 ≤ D := (by decide : 1 ≤ 2).trans hD2
   obtain ⟨_hw, _hs, hsUpper, _hsLog⟩ := Real.interleaved_sample_size_bounds r L D hr hD2
   obtain ⟨_hM, hA, _hc, hc1, _hfix, _hKGo, _hhigh⟩ :=
-    physical_dg_normalized_ground_filter_spec h h0 mu nu gamma hgamma hmu hnu hmunu hgap
+    physical_dg_normalized_ground_filter_spec Φ h0 mu nu gamma hgamma hmu hnu hmunu hgap
   change 0 < A at hA
   have hgammaA : gamma ≤ A := (div_le_one hA).mp hc1
   have hmu0 : 0 ≤ mu := spectrum_nonneg_of_nonneg
@@ -171,7 +169,7 @@ theorem exists_physical_dg_interleaved_ritz_polynomial_approximation_with_consta
   have hnorm : ‖H‖ ≤ (L : ℝ) + 1 := by
     have hb : ‖H‖ ≤ ((L - 1 : ℕ) : ℝ) := by
       simpa using norm_sum_le_of_le (Finset.univ : Finset (Fin (L - 1)))
-        (fun i _ ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg (h i) (h0 i)).mpr (h1 i))
+        (fun i _ ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg (Φ.term i) (h0 i)).mpr (h1 i))
     exact hb.trans (by exact_mod_cast (show L - 1 ≤ L + 1 by omega))
   have hAL : A ≤ (L : ℝ) + 1 := by dsimp only [A]; linarith only [hnorm, hmu0]
   let Dref := r ^ 2 * Btree
@@ -208,11 +206,9 @@ theorem exists_physical_dg_interleaved_ritz_polynomial_approximation_with_degree
       (k : ℝ) ≤ Cdegree *
         (1 + Real.log (max q 50 : ℕ) + Real.log (1 / min gamma 1)) ^ 10 /
           (min gamma 1) ^ 2 ∧ ∀ (L : ℕ)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu : ℝ),
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu : ℝ),
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -240,11 +236,9 @@ ALVV, arXiv:1602.08828v2, `t:alg1`, lines 1777–1817, in the stated scope. -/
 theorem exists_physical_dg_interleaved_ritz_polynomial_approximation
     (q : ℕ) (gamma : ℝ) (hgamma : 0 < gamma) :
     ∃ C : ℝ, 0 < C ∧ ∃ k : ℕ, ∀ (L : ℕ)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu : ℝ),
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu : ℝ),
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →

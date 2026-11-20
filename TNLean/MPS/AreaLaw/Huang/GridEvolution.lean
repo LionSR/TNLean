@@ -71,37 +71,34 @@ variable {L q w : ℕ}
 /-- The explicitly constructed block Hamiltonians commute pairwise.
 Osborne, arXiv:quant-ph/0508031v2, Figure 2. -/
 theorem commute_chainGridBlockHamiltonian (hw : 0 < w)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2))) :
+    (Φ : ManyBody.BondInteraction L q)
+:
     Pairwise fun j k : Fin (L / w + 1) ↦
-      Commute (chainGridBlockHamiltonian hw h j) (chainGridBlockHamiltonian hw h k) := by
+      Commute (chainGridBlockHamiltonian hw Φ j) (chainGridBlockHamiltonian hw Φ k) := by
   intro j k hjk
   have hdisj := pairwise_disjoint_chainGridBlock L w
     (show j.val ≠ k.val from fun heq ↦ hjk (Fin.ext heq))
   exact ManyBody.commute_of_mem_supportedOperators_of_disjoint
-      (chainGridBlockHamiltonian_mem_supported hw h hs j)
-      (chainGridBlockHamiltonian_mem_supported hw h hs k) hdisj
+      (chainGridBlockHamiltonian_mem_supported hw Φ j)
+      (chainGridBlockHamiltonian_mem_supported hw Φ k) hdisj
 
 /-- The retained Hamiltonian has an exact product of its actual block evolutions.
 The support layout and each factor are constructed from the original interaction terms.
 Osborne, arXiv:quant-ph/0508031v2, Figures 1--2 and equation (3). -/
 theorem hermitianUnitaryPath_chainGridRetained_eq_prod (hw : 0 < w)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2))) (t : ℝ) :
-    hermitianUnitaryPath (chainGridRetainedHamiltonian hw h) t =
-      (List.ofFn fun j ↦ hermitianUnitaryPath (chainGridBlockHamiltonian hw h j) t).prod :=
-  hermitianUnitaryPath_fin_sum_of_commute _ (commute_chainGridBlockHamiltonian hw h hs) t
+    (Φ : ManyBody.BondInteraction L q)
+(t : ℝ) :
+    hermitianUnitaryPath (chainGridRetainedHamiltonian hw Φ) t =
+      (List.ofFn fun j ↦ hermitianUnitaryPath (chainGridBlockHamiltonian hw Φ j) t).prod :=
+  hermitianUnitaryPath_fin_sum_of_commute _ (commute_chainGridBlockHamiltonian hw Φ) t
 
 /-- Every factor of the exact block evolution is supported on its own grid block.
 Osborne, arXiv:quant-ph/0508031v2, Figure 2. -/
 theorem chainGridBlockEvolution_mem_supported [NeZero q] (hw : 0 < w)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2))) (j : Fin (L / w + 1)) (t : ℝ) :
-    hermitianUnitaryPath (chainGridBlockHamiltonian hw h j) t ∈
+    (Φ : ManyBody.BondInteraction L q)
+(j : Fin (L / w + 1)) (t : ℝ) :
+    hermitianUnitaryPath (chainGridBlockHamiltonian hw Φ j) t ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q) (chainGridBlock L w j.val : Finset (Fin L)) :=
-  hermitianUnitaryPath_mem_supported q _ (chainGridBlockHamiltonian_mem_supported hw h hs j) t
+  hermitianUnitaryPath_mem_supported q _ (chainGridBlockHamiltonian_mem_supported hw Φ j) t
 
 end TNLean.MPS.AreaLaw

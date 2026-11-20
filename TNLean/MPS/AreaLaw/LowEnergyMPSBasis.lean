@@ -42,13 +42,11 @@ theorem exists_fixed_bandwidth_low_energy_orthonormal_mps_basis
     (etaLD : ℝ) (hLD : 0 < etaLD) :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q : ℕ) (v : ℝ) (hq : 0 < q), 0 < v →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1),
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, hq⟩⟩
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let G := fun c : ℝ ↦ Submodule.spectralSpanLE
@@ -83,7 +81,7 @@ theorem exists_fixed_bandwidth_low_energy_orthonormal_mps_basis
   obtain ⟨K, hK, hactual⟩ :=
     exists_fixed_bandwidth_low_energy_designated_isOpenMPS_approximation etaLD hLD
   refine ⟨K, hK, ?_⟩
-  intro L q v hq hv h hs h0 h1 config H hH G rInner rOuter g u
+  intro L q v hq hv Φ hs h0 h1 config H hH G rInner rOuter g u
     delta hdelta hdelta1 eps a
   let : Nonempty (Fin L → Fin q) := config
   have heps : 0 < eps := by dsimp only [eps]; positivity
@@ -92,7 +90,7 @@ theorem exists_fixed_bandwidth_low_energy_orthonormal_mps_basis
     have hn : 0 ≤ (rInner : ℝ) := Nat.cast_nonneg rInner
     linarith only [hdelta1, hn]
   obtain ⟨Bs, B, hBs, hBsg, _hlogs, hlogB, hvec⟩ :=
-    hactual L q v hq hv h hs h0 h1 eps heps heps1
+    hactual L q v hq hv Φ hs h0 h1 eps heps heps1
   have hscale : 128 * ((L : ℝ) + 1) / eps =
       1024 * ((L : ℝ) + 1) * ((rInner : ℝ) + 1) / delta := by
     dsimp only [eps]

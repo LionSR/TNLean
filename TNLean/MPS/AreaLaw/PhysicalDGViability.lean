@@ -58,12 +58,10 @@ MPO construction is a separate result of the source. -/
 theorem exists_physical_dg_viable_family :
     ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
       0 < gamma →
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -102,7 +100,7 @@ theorem exists_physical_dg_viable_family :
   classical
   obtain ⟨A, hA, hA21, hall⟩ := exists_long_middle_actual_dg_family
   refine ⟨A, hA, hA21, ?_⟩
-  intro L q p r hpr hrL h hs h0 h1 mu nu gamma hgamma H hH
+  intro L q p r hpr hrL Φ hs h0 h1 mu nu gamma hgamma H hH
     hmu hnu hmunu hgap G g u ell D cA J beta tau U Phi Tm EM EE
   have hq : 2 ≤ q :=
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
@@ -129,7 +127,7 @@ theorem exists_physical_dg_viable_family :
     exact himprove (G.map (Tm.toLinearEquiv :
       EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ] (EM ⊗[ℂ] EE))) S delta hS hdelta
   · obtain ⟨T, Delta, W, hTG, hGT, hDelta, hbudget, himprove⟩ :=
-      hlong L p r hpr hrL (Nat.lt_of_not_ge hshort) h hs h0 h1 mu hmu hgapg
+      hlong L p r hpr hrL (Nat.lt_of_not_ge hshort) Φ hs h0 h1 mu hmu hgapg
     refine ⟨W, T, Delta, hTG, hGT, hDelta, hbudget, ?_⟩
     intro S delta hS hdelta
     exact (himprove S delta hS hdelta).2
@@ -161,12 +159,10 @@ This theorem is not the unrestricted-subset proposition. -/
 theorem exists_physical_interval_viable_subspace :
     ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
       0 < gamma →
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -197,10 +193,10 @@ theorem exists_physical_interval_viable_subspace :
   classical
   obtain ⟨A, hA, hA21, hfamily⟩ := exists_physical_dg_viable_family
   refine ⟨A, hA, hA21, ?_⟩
-  intro L q p r hpr hrL h hs h0 h1 mu nu gamma hgamma H hH
+  intro L q p r hpr hrL Φ hs h0 h1 mu nu gamma hgamma H hH
     hmu hnu hmunu hgap G g u ell D cA J beta tau U Phi Tm EM EE
   obtain ⟨hlogD, Fops, T, Delta, hTG, hGT, _hDelta0, hbudget, himprove⟩ :=
-    hfamily L q p r hpr hrL h hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hfamily L q p r hpr hrL Φ hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨hlogD, ?_⟩
   have hq : 2 ≤ q :=
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
@@ -273,12 +269,10 @@ input, and no efficient construction is asserted. -/
 private theorem exists_accuracy_physical_dg_viable_family :
     ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧
       ∀ (L q m p r : ℕ), q ≤ m → p ≤ r → r ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
       0 < gamma →
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -319,7 +313,7 @@ private theorem exists_accuracy_physical_dg_viable_family :
   classical
   obtain ⟨A, hA, hA21, hall⟩ := exists_accuracy_long_middle_actual_dg_family
   refine ⟨A, hA, hA21, ?_⟩
-  intro L q m p r hqm hpr hrL h hs h0 h1 mu nu gamma hgamma H hH
+  intro L q m p r hqm hpr hrL Φ hs h0 h1 mu nu gamma hgamma H hH
     hmu hnu hmunu hgap G g u ell D cA J beta tau U Phi Tm EM EE
   have hq : 2 ≤ q :=
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
@@ -346,7 +340,7 @@ private theorem exists_accuracy_physical_dg_viable_family :
     exact himprove (G.map (Tm.toLinearEquiv :
       EuclideanSpace ℂ (Fin L → Fin q) →ₗ[ℂ] (EM ⊗[ℂ] EE))) S delta hS hdelta
   · obtain ⟨T, Delta, W, hTG, hGT, hdim, hDelta, hbudget, himprove⟩ :=
-      hlong L p r hpr hrL (Nat.lt_of_not_ge hshort) h hs h0 h1 mu hmu hgapg
+      hlong L p r hpr hrL (Nat.lt_of_not_ge hshort) Φ hs h0 h1 mu hmu hgapg
     refine ⟨W, T, Delta, hTG, hGT, hdim, hDelta, hbudget, ?_⟩
     intro S delta hS hdelta
     exact (himprove S delta hS hdelta).2
@@ -370,12 +364,10 @@ those of the actual interval. -/
 theorem exists_accuracy_physical_interval_family_and_bootstrap :
     ∃ A : ℝ, 1 ≤ A ∧ 21 ≤ A ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
       0 < gamma →
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -427,11 +419,11 @@ theorem exists_accuracy_physical_interval_family_and_bootstrap :
   classical
   obtain ⟨A, hA, hA21, hfamily⟩ := exists_accuracy_physical_dg_viable_family
   refine ⟨A, hA, hA21, ?_⟩
-  intro L q p r hpr hrL h hs h0 h1 mu nu gamma hgamma H hH
+  intro L q p r hpr hrL Φ hs h0 h1 mu nu gamma hgamma H hH
     hmu hnu hmunu hgap G g u ell D cA J beta tau U Phi Tm EM EE
   obtain ⟨_hell, _hqD, hD, hlogD, Fops, T, Delta, hTG, hGT,
     hdimT, _hDelta0, hbudget, himprove⟩ :=
-    hfamily L q q p r le_rfl hpr hrL h hs h0 h1 mu nu gamma
+    hfamily L q q p r le_rfl hpr hrL Φ hs h0 h1 mu nu gamma
       hgamma hmu hnu hmunu hgap
   have hq : 2 ≤ q :=
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
@@ -468,7 +460,7 @@ theorem exists_accuracy_physical_interval_family_and_bootstrap :
   refine ⟨hD, hlogD, W0, ?_, hWviable, ?_⟩
   · simpa only [hdimMap] using hWdim
   · intro m hqm um ellm Dm
-    exact hfamily L q m p r hqm hpr hrL h hs h0 h1 mu nu gamma
+    exact hfamily L q m p r hqm hpr hrL Φ hs h0 h1 mu nu gamma
       hgamma hmu hnu hmunu hgap
 end TNLean.MPS.AreaLaw
 end

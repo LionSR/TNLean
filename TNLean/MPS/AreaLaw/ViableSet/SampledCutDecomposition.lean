@@ -50,12 +50,11 @@ private theorem operatorSchmidtRank_cutOperator_endpoint_le_one {L q k : ℕ}
 endpoints. LVV13, `algo53.tex`, lines 584–591 and 626–649. -/
 theorem operatorSchmidtRank_cutOperator_bondComplementWord_le_all {L q m κ : ℕ}
     (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i (i + 2))) (I : Fin m → Fin L)
+    (Φ : ManyBody.BondInteraction L q)
+(I : Fin m → Fin L)
     (hI : ∀ j, letterCount I j ≤ κ) (k : ℕ) :
     operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L k) (bondComplementWord h I)) ≤ q ^ (2 * κ) := by
+      (leftBlock L k) (bondComplementWord Φ I)) ≤ q ^ (2 * κ) := by
   by_cases hk0 : k = 0
   · exact (operatorSchmidtRank_cutOperator_endpoint_le_one (Or.inl hk0) _).trans
       (Nat.one_le_pow _ _ hq)
@@ -63,7 +62,7 @@ theorem operatorSchmidtRank_cutOperator_bondComplementWord_le_all {L q m κ : �
   · let b : Fin (L - 1) := ⟨k - 1, by omega⟩
     have hb : b.val + 1 = k := by dsimp [b]; omega
     rw [← hb]
-    apply operatorSchmidtRank_cutOperator_bondComplementWord_le h hs b I
+    apply operatorSchmidtRank_cutOperator_bondComplementWord_le Φ b I
     simpa only [letterCount, Fin.ext_iff] using hI ⟨b.val, by omega⟩
   · exact (operatorSchmidtRank_cutOperator_endpoint_le_one (Or.inr (by omega)) _).trans
       (Nat.one_le_pow _ _ hq)
@@ -72,21 +71,21 @@ theorem operatorSchmidtRank_cutOperator_bondComplementWord_le_all {L q m κ : �
 internal left cuts. LVV13, `algo53.tex`, decomposition `e:decomp`, lines 584–591. -/
 theorem exists_sampledProjector_cutDecomposition {L q ℓ m i D : ℕ}
     (hi : i ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (E₀ : ℝ) (I : Fin ℓ → Fin m → Fin L)
     (hrank : ∀ t k, operatorSchmidtRank
       (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k)
-        (bondComplementWord h (I t))) ≤ D) :
+        (bondComplementWord Φ (I t))) ≤ D) :
     ∃ (N : ℕ) (A : Fin N → LeftBlockMatrix L q i)
       (B : Fin N → RightBlockMatrix L q i),
       N ≤ ℓ * D ∧ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
-        (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B j ∧
+        (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B j ∧
       ∀ j k, 0 < k → k < i → operatorSchmidtRank
         (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
           ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D := by
   classical
   choose N A B hN hdec hleft using fun t ↦
-    exists_cutDecomposition_of_operatorSchmidtRank_le hi (bondComplementWord h (I t))
+    exists_cutDecomposition_of_operatorSchmidtRank_le hi (bondComplementWord Φ (I t))
       (hrank t)
   let J := (t : Fin ℓ) × Fin (N t)
   let e := (Fintype.equivFin J).symm

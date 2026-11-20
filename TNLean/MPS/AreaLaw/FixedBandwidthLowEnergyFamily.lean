@@ -53,20 +53,18 @@ theorem exists_fixed_bandwidth_five_region_low_energy_family
       let ell : ℕ := ⌈C * u ^ 2 / g⌉₊
       let D := (m * ell ^ 2) ^ (22 * ell)
       a + 2 * ell ≤ b → b + 2 * ell ≤ L - 1 →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      (∀ i, 0 ≤ Φ.term i) → (∀ i, Φ.term i ≤ 1) →
       21 ≤ ell ∧
       Real.log (D : ℝ) ≤ 22 * (C + 1) * (6 + 2 * Real.log (C + 1)) / g * u ^ 3 ∧
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     let Cross : Finset (Fin (L - 1)) := Finset.univ.filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ Cross, h i
+    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ Cross, Φ.term i
     let K : Finset (Fin 5) := {0, 2, 4}
     let B : ℝ → (Fin 5 → ℝ) → Finset (Fin 5) →
         Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun t e T ↦
@@ -77,7 +75,7 @@ theorem exists_fixed_bandwidth_five_region_low_energy_family
       (hO : (B (ell : ℝ) e ∅).IsHermitian) (hC : (B (ell : ℝ) e K).IsHermitian),
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
-      B (ell : ℝ) e ∅ = (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1 ∧
+      B (ell : ℝ) e ∅ = Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1 ∧
       star z ⬝ᵥ z = 1 ∧ B (ell : ℝ) e ∅ *ᵥ z = (E0 : ℂ) • z ∧
       (B (ell : ℝ) e ∅ - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 4 ∧
       ‖B (ell : ℝ) e K‖ ≤ 7 * (ell : ℝ) ∧
@@ -124,13 +122,13 @@ theorem exists_fixed_bandwidth_five_region_low_energy_family
   obtain ⟨C, hC, hCeta, hregional⟩ :=
     exists_fixed_bandwidth_five_region_regional_low_energy_family etaLD hLD
   refine ⟨C, hC, hCeta, ?_⟩
-  intro L q m a b w hq hqm hw g u ell D hab hbL h hs h0 h1
+  intro L q m a b w hq hqm hw g u ell D hab hbL Φ h0 h1
   obtain ⟨hell, hlogD, hphysical⟩ := hregional L q m a b w hq hqm hw
   have hcollar :
       (interval L (a + ell) (b + ell + 1) \ interval L (a + ell) (b + ell + 1)).card +
         (interval L (a + ell) (b + ell + 1) \ interval L (a + ell) (b + ell + 1)).card ≤
           2 * ell := by simp
   exact ⟨hell, hlogD, hphysical hab hbL
-    (interval L (a + ell) (b + ell + 1)) hcollar h hs h0 h1⟩
+    (interval L (a + ell) (b + ell + 1)) hcollar Φ h0 h1⟩
 
 end TNLean.MPS.AreaLaw

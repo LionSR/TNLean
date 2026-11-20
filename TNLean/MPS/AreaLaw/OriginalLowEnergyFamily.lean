@@ -48,18 +48,16 @@ theorem exists_five_region_original_low_energy_filter_family
     (hbuffer : 3 * w < eta) (hw : 0 < w) (hepsilon : 0 < epsilon)
     (hq : 2 ≤ q) (hell : 1 ≤ ell)
     (hab : a + 2 * ell ≤ b) (hbL : b + 2 * ell ≤ L - 1)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     let Cross : Finset (Fin (L - 1)) := Finset.univ.filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ Cross, h i
+    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ Cross, Φ.term i
     let K : Finset (Fin 5) := {0, 2, 4}
     let B : ℝ → (Fin 5 → ℝ) → Finset (Fin 5) →
         Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun t e T ↦
@@ -73,7 +71,7 @@ theorem exists_five_region_original_low_energy_filter_family
       21 ≤ t ∧ 19 + eta ≤ t ∧
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
-      B t e ∅ = (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1 ∧
+      B t e ∅ = Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1 ∧
       star z ⬝ᵥ z = 1 ∧ B t e ∅ *ᵥ z = (E0 : ℂ) • z ∧
       (B t e ∅ - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 4 ∧
       ‖B t e K‖ ≤ 3 * t + 4 * (ell : ℝ) ∧
@@ -107,7 +105,7 @@ theorem exists_five_region_original_low_energy_filter_family
   obtain ⟨t, e, E0, x, z, hO, hC, htformula, ht, hcut, hxunit, hx, hlo,
     hcenter, hzunit, hz, hE0low, hE0, hE04, hnorm, htargets⟩ :=
     exists_five_region_physical_low_energy_filter_family L q a b ell eta w epsilon
-      hbuffer hw hepsilon hq hell hab hbL h hs h0 h1
+      hbuffer hw hepsilon hq hell hab hbL Φ h0 h1
   change (B t e ∅).IsHermitian at hO
   change (B t e K).IsHermitian at hC
   refine ⟨t, e, E0, x, z, hO, htformula, ht, hcut, hxunit, hx, hlo,

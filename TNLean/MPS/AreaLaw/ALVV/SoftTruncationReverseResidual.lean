@@ -34,17 +34,15 @@ open Classical in
 regional sum away from its crossing bonds, and obeys the derived high-projection order.
 Auxiliary to ALVV, arXiv:1602.08828v2, `lem:exp-approx`, lines 1195–1255. -/
 private theorem three_region_soft_order {L q l r : ℕ} (hlr : l ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (e : Fin 3 → ℝ)
-    (he : ∀ j, (aklvRegionalHamiltonians l r h j - (e j : ℂ) • 1).PosSemidef)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (e : Fin 3 → ℝ)
+    (he : ∀ j, (aklvRegionalHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef)
     (t : ℝ) (m : ℕ) (ht : 0 < t) (hm : 1 ≤ m) :
-    let A := aklvRegionalHamiltonians l r h
+    let A := aklvRegionalHamiltonians l r Φ
     let J := Finset.univ.filter
       (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
-    let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+    let Y := ∑ i ∈ J, Φ.term i
+    let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
     let X := A 1 - (e 1 : ℂ) • 1
     let B := (A 0 - (e 0 : ℂ) • 1) + cfc (Real.softTruncation t m) X +
       (A 2 - (e 2 : ℂ) • 1)
@@ -60,7 +58,7 @@ private theorem three_region_soft_order {L q l r : ℕ} (hlr : l ≤ r) (hrL : r
     intro i
     fin_cases i <;> simp [k] <;> omega
   have hcomm : Pairwise fun i j : Fin 3 ↦ Commute (A i) (A j) :=
-    pairwise_commute_sum_internal_consecutive_regions k hk h hs
+    pairwise_commute_sum_internal_consecutive_regions k hk Φ
   have hX : X.PosSemidef := he 1
   have hA1 : (A 1).IsHermitian := by
     dsimp only [A, aklvRegionalHamiltonians]
@@ -75,7 +73,7 @@ private theorem three_region_soft_order {L q l r : ℕ} (hlr : l ≤ r) (hrL : r
       (X.finite_real_spectrum.continuousOn _) (X.finite_real_spectrum.continuousOn _)
   have hB : B.PosSemidef := ((he 0).add hf0.posSemidef).add (he 2)
   have hY : Y.PosSemidef := posSemidef_sum _ (fun i _ ↦ (h0 i).posSemidef)
-  have hsum : (∑ i, h i) = (∑ j, A j) + Y := sum_three_regions_add_crossings hlr h
+  have hsum : Φ.hamiltonian = (∑ j, A j) + Y := sum_three_regions_add_crossings hlr Φ
   have hGY : G = B + Y := by
     dsimp only [G, H, B, X]
     rw [hsum]
@@ -135,20 +133,18 @@ This corrected auxiliary to ALVV, arXiv:1602.08828v2, `lem:exp-approx`, lines 11
 retains order at least two and the explicit reverse scale margin. -/
 theorem exists_single_region_soft_truncation_residuals {L q l r : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
-      star x ⬝ᵥ x = 1 ∧ (∀ j, aklvRegionalHamiltonians l r h j *ᵥ x = (e j : ℂ) • x) ∧
-      (∀ j, (aklvRegionalHamiltonians l r h j - (e j : ℂ) • 1).PosSemidef) ∧
+      star x ⬝ᵥ x = 1 ∧ (∀ j, aklvRegionalHamiltonians l r Φ j *ᵥ x = (e j : ℂ) • x) ∧
+      (∀ j, (aklvRegionalHamiltonians l r Φ j - (e j : ℂ) • 1).PosSemidef) ∧
       (∀ j, 0 ≤ e j) ∧
-      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E : ℂ) • z ∧
       (H - (E : ℂ) • 1).PosSemidef ∧ 0 ≤ E ∧ E ≤ 2 ∧
       ∃ hH : H.IsHermitian,
         ∀ t : ℝ, ∀ m : ℕ, 0 < t → 2 ≤ m →
-          let X := aklvRegionalHamiltonians l r h 1 - (e 1 : ℂ) • 1
+          let X := aklvRegionalHamiltonians l r Φ 1 - (e 1 : ℂ) • 1
           let G := H - X + cfc (Real.softTruncation t m) X
           ∃ (mu : ℝ) (w : (Fin L → Fin q) → ℂ) (hG : G.IsHermitian),
             G.PosSemidef ∧ G ≤ H ∧ star w ⬝ᵥ w = 1 ∧ G *ᵥ w = (mu : ℂ) • w ∧
@@ -167,19 +163,19 @@ theorem exists_single_region_soft_truncation_residuals {L q l r : ℕ}
                 16 * Real.exp (-(T - 2 * (eta + 8)) / 8) +
                   (t / (m : ℝ)) * (T / t) ^ m) := by
   obtain ⟨e, x, z, E, hx, hxe, he, he0, hz, hHz, hE, hE0, hE2, hH, hforward⟩ :=
-    exists_single_region_original_soft_truncation_residual hq hlr hrL h hs h0 h1
-  let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+    exists_single_region_original_soft_truncation_residual hq hlr hrL Φ h0 h1
+  let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
   refine ⟨e, x, z, E, hx, hxe, he, he0, hz, hHz, hE, hE0, hE2, hH, ?_⟩
   intro t m ht hm X G
   have hm' : 1 ≤ m := by omega
-  let A := aklvRegionalHamiltonians l r h
+  let A := aklvRegionalHamiltonians l r Φ
   let J := Finset.univ.filter
     (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))
-  let Y := ∑ i ∈ J, h i
+  let Y := ∑ i ∈ J, Φ.term i
   let B := (A 0 - (e 0 : ℂ) • 1) + cfc (Real.softTruncation t m) X +
     (A 2 - (e 2 : ℂ) • 1)
   obtain ⟨hJ, hGY, hBpos, hGpos, hGH, hA1, hBA, hproj⟩ :=
-    three_region_soft_order hlr hrL h hs h0 e he t m ht hm'
+    three_region_soft_order hlr hrL Φ h0 e he t m ht hm'
   change G = B + Y at hGY
   change G.PosSemidef at hGpos
   change G ≤ H at hGH
@@ -207,7 +203,7 @@ theorem exists_single_region_soft_truncation_residuals {L q l r : ℕ}
     let S := Submodule.spectralSpanLE hG.eigenvectorBasis hG.eigenvalues (mu + eta)
     let I := Finset.univ.filter
       (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r)
-    have hmid : A 1 = ∑ i ∈ I, h i := rfl
+    have hmid : A 1 = ∑ i ∈ I, Φ.term i := rfl
     have hmargin := Real.softTruncation_reverse_barrier_margin t m eta mu J.card
       hm heta hmu2 hJ hscale
     have hU0 : 0 ≤ U := hmargin.1
@@ -217,20 +213,20 @@ theorem exists_single_region_soft_truncation_residuals {L q l r : ℕ}
     have hT0 : 0 ≤ T := hU0.trans hUT
     have hEigen (v : Fin L → Fin q) :
         toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-          (B + ∑ i ∈ J, h i) (hG.eigenvectorBasis v) =
+          (B + ∑ i ∈ J, Φ.term i) (hG.eigenvectorBasis v) =
           (hG.eigenvalues v : ℂ) • hG.eigenvectorBasis v := by
       change toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
         (B + Y) (hG.eigenvectorBasis v) = _
       rw [← hGY]
       exact hG.toEuclideanCLM_eigenvectorBasis v
-    have hBA' : Commute B (∑ i ∈ I, h i) := by
+    have hBA' : Commute B (Φ.partialHamiltonian I) := by
       rw [← hmid]
       exact hBA
-    have hproj' : b0 • spectralProjectionGE (∑ i ∈ I, h i) (e 1 + U) ≤ B := by
+    have hproj' : b0 • spectralProjectionGE (Φ.partialHamiltonian I) (e 1 + U) ≤ B := by
       rw [← hmid]
       exact hproj U hU0
-    have htail := norm_hard_residual_low_of_barrier I J h
-      (fun i _ ↦ hs i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) B
+    have htail := norm_hard_residual_low_of_barrier I J Φ
+      (fun i _ ↦ Φ.mem i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) B
       (e 1 + U) b0 (mu + eta) (1 / 8) (e 1 + T)
       (by norm_num) (by norm_num) (_root_.add_le_add (le_refl (e 1)) hUT)
       hBA' hproj' hG.eigenvectorBasis hG.eigenvalues hEigen hgap

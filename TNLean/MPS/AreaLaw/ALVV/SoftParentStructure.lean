@@ -90,17 +90,15 @@ Figure `fig:generate`, lines 1348–1392; no efficient-generation claim is made.
 theorem exists_soft_parent_structure {L q l u v r ell : ℕ}
     (hq : 0 < q) (hlu : l ≤ u) (huv : u ≤ v) (hvr : v ≤ r) (hrL : r ≤ L)
     (hleft : u - l ≤ 2 * ell) (hright : r - v ≤ 2 * ell)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
-    let hp := intervalBondRestriction l r h
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
+    let hp := intervalBondRestriction l r Φ
     let k : Fin 6 → ℕ := ![0, l, u, v, r, L]
     let I := fun j : Fin 5 ↦ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
     let A := fun j : Fin 5 ↦ ∑ i ∈ I j, hp i
     let P := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), h i
+      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), Φ.term i
     ∃ (e : Fin 5 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧ (∀ j, 0 ≤ e j) ∧
@@ -124,9 +122,9 @@ theorem exists_soft_parent_structure {L q l u v r ell : ℕ}
   let Cross := Finset.univ.filter
     (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, u, v, r} : Finset ℕ))
   let Y := ∑ i ∈ Cross, hp i
-  have hps (i) := intervalBondRestriction_supported l r h hs i
-  have hp0 (i) := (intervalBondRestriction_bounds l r h h0 h1 i).1
-  have hp1 (i) := (intervalBondRestriction_bounds l r h h0 h1 i).2
+  have hps (i) := intervalBondRestriction_supported l r Φ i
+  have hp0 (i) := (intervalBondRestriction_bounds l r Φ h0 h1 i).1
+  have hp1 (i) := (intervalBondRestriction_bounds l r Φ h0 h1 i).2
   obtain ⟨hCross, e, x, z, E, hx, hxe, he, hz, hHz, hE, hE0, hEC,
       _hH, _bH, _aH, _hEigH, hfamily⟩ :=
     exists_five_region_soft_residuals hq hlu huv hvr hrL hp hps hp0 hp1
@@ -134,7 +132,7 @@ theorem exists_soft_parent_structure {L q l u v r ell : ℕ}
     five_region_original_bond_data L q l u v r hlu huv hvr hrL hp hps hp0 hp1
   have he0 (j : Fin 5) : 0 ≤ e j :=
     (hA j).1.nonneg_of_normalized_eigenvector (e j) x (hxe j) hx
-  have hP : ∑ i, hp i = P := sum_intervalBondRestriction l r h
+  have hP : ∑ i, hp i = P := sum_intervalBondRestriction l r Φ
   have hsum : P = (∑ j, A j) + Y := hP.symm.trans hsum0
   let s := ∑ j, e j
   let C := P - (s : ℂ) • 1
@@ -200,8 +198,8 @@ theorem exists_soft_parent_structure {L q l u v r ell : ℕ}
   have hmu10 : -10 ≤ mu := by
     simpa only [S, Finset.card_singleton, Nat.cast_one, mul_one] using hmuD
   refine ⟨mu, w, hB, hBpos, hBC, hw, hBw, hBlow, hmu10, hmuE, ?_, ?_⟩
-  · have hA0 : A 0 = 0 := (sum_exterior_intervalBondRestriction l r h).1
-    have hA4 : A 4 = 0 := (sum_exterior_intervalBondRestriction l r h).2
+  · have hA0 : A 0 = 0 := (sum_exterior_intervalBondRestriction l r Φ).1
+    have hA4 : A 4 = 0 := (sum_exterior_intervalBondRestriction l r Φ).2
     have hcard1 : (I 1).card ≤ 2 * ell :=
       (card_internal_bonds_le L l u).trans (by omega)
     have hcard3 : (I 3).card ≤ 2 * ell :=

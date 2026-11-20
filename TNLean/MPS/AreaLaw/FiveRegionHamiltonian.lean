@@ -8,6 +8,7 @@ import Mathlib.Order.Interval.Finset.Nat
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum
 import QICLean.Analysis.GroundEnergyBounds
+import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SupportedMatrixElements
 import QICLean.Entropy.RegionUnion
@@ -78,15 +79,14 @@ theorem card_internal_bonds_le (L lo hi : ℕ) :
 Auxiliary to ALVV's regional hard truncation, `def:hard-trunc`, lines 873–886.
 This is only a support statement and requires no local dimension hypothesis. -/
 theorem isSupportedOn_sum_internal_bonds (L q lo hi : ℕ)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2))) :
+    (Φ : ManyBody.BondInteraction L q)
+:
     ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-        (fun j ↦ lo ≤ j.val ∧ j.val + 1 < hi), h i) (interval L lo hi) := by
+        (fun j ↦ lo ≤ j.val ∧ j.val + 1 < hi), Φ.term i) (interval L lo hi) := by
   change _ ∈ ManyBody.supportedOperators _ _
   exact sum_mem fun i hiI ↦
-    (hs i).mono (internal_bond_support_subset hiI)
+    (Φ.mem i).mono (internal_bond_support_subset hiI)
 end TNLean.MPS.AreaLaw
 
 namespace TNLean.MPS.AreaLaw
@@ -122,20 +122,19 @@ Auxiliary to ALVV, arXiv:1602.08828v2, `def:hard-trunc`, lines 873–886,
 and Theorem `t:ais`, lines 1010–1024. -/
 theorem pairwise_commute_sum_internal_consecutive_regions
     {L q m : ℕ} (k : Fin (m + 1) → ℕ) (hk : Monotone k)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2))) :
+    (Φ : ManyBody.BondInteraction L q)
+:
     Pairwise fun i j : Fin m ↦
       Commute
         (∑ r ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-          (fun r ↦ k i.castSucc ≤ r.val ∧ r.val + 1 < k i.succ), h r)
+          (fun r ↦ k i.castSucc ≤ r.val ∧ r.val + 1 < k i.succ), Φ.term r)
         (∑ r ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-          (fun r ↦ k j.castSucc ≤ r.val ∧ r.val + 1 < k j.succ), h r) := by
+          (fun r ↦ k j.castSucc ≤ r.val ∧ r.val + 1 < k j.succ), Φ.term r) := by
   intro i j hij
   refine ManyBody.commute_of_mem_supportedOperators_of_disjoint ?_ ?_
     (pairwise_disjoint_consecutive_intervals k hk hij)
-  · exact (isSupportedOn_sum_internal_bonds L q (k i.castSucc) (k i.succ) h hs)
-  · exact (isSupportedOn_sum_internal_bonds L q (k j.castSucc) (k j.succ) h hs)
+  · exact (isSupportedOn_sum_internal_bonds L q (k i.castSucc) (k i.succ) Φ)
+  · exact (isSupportedOn_sum_internal_bonds L q (k j.castSucc) (k j.succ) Φ)
 end TNLean.MPS.AreaLaw
 end
 end
@@ -239,26 +238,24 @@ Coincident cuts, empty regions, and empty chains are included. -/
 theorem five_region_original_bond_data
     (L q k1 k2 k3 k4 : ℕ) (h12 : k1 ≤ k2) (h23 : k2 ≤ k3)
     (h34 : k3 ≤ k4) (h4L : k4 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, k1, k2, k3, k4, L]
     let R : Fin 5 → Finset (Fin L) := fun j ↦ interval L (k j.castSucc) (k j.succ)
     let I : Fin 5 → Finset (Fin (L - 1)) := fun j ↦
       Finset.univ.filter (fun i ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-      fun j ↦ ∑ i ∈ I j, h i
+      fun j ↦ ∑ i ∈ I j, Φ.term i
     let J : Finset (Fin (L - 1)) := Finset.univ.filter
       (fun i ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ))
-    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ J, h i
+    let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ J, Φ.term i
     Monotone k ∧ (Pairwise fun i j ↦ Disjoint (R i) (R j)) ∧
       (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (A j) (R j)) ∧
       (∀ j, (A j).PosSemidef ∧
         A j ≤ ((I j).card : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)) ∧
       Y.PosSemidef ∧
       Y ≤ (J.card : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ∧
-      J.card ≤ 4 ∧ (∑ i, h i) = (∑ j, A j) + Y := by
+      J.card ≤ 4 ∧ Φ.hamiltonian = (∑ j, A j) + Y := by
   intro k R I A J Y
   have hk : Monotone k := by
     apply Fin.monotone_iff_le_succ.mpr
@@ -279,33 +276,33 @@ theorem five_region_original_bond_data
     · exact (hRordered j i hji).symm
   have hAs (j : Fin 5) :
       ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (A j) (R j) :=
-    isSupportedOn_sum_internal_bonds L q (k j.castSucc) (k j.succ) h hs
+    isSupportedOn_sum_internal_bonds L q (k j.castSucc) (k j.succ) Φ
   have hA (j : Fin 5) : (A j).PosSemidef ∧
       A j ≤ ((I j).card : ℝ) •
         (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :=
-    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms (I j) h
+    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms (I j) Φ
       (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
   have hY : Y.PosSemidef ∧
       Y ≤ (J.card : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :=
-    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms J h
+    Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms J Φ
       (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
   have hJ : J.card ≤ 4 := Finset.card_four_cut_crossing_le L k1 k2 k3 k4
   refine ⟨hk, hR, hAs, hA, hY.1, hY.2, hJ, ?_⟩
   rw [Fin.sum_univ_five]
-  change (∑ i : Fin (L - 1), h i) =
+  change (∑ i : Fin (L - 1), Φ.term i) =
     (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-      (fun i ↦ 0 ≤ i.val ∧ i.val + 1 < k1), h i) +
+      (fun i ↦ 0 ≤ i.val ∧ i.val + 1 < k1), Φ.term i) +
     (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-      (fun i ↦ k1 ≤ i.val ∧ i.val + 1 < k2), h i) +
+      (fun i ↦ k1 ≤ i.val ∧ i.val + 1 < k2), Φ.term i) +
     (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-      (fun i ↦ k2 ≤ i.val ∧ i.val + 1 < k3), h i) +
+      (fun i ↦ k2 ≤ i.val ∧ i.val + 1 < k3), Φ.term i) +
     (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-      (fun i ↦ k3 ≤ i.val ∧ i.val + 1 < k4), h i) +
+      (fun i ↦ k3 ≤ i.val ∧ i.val + 1 < k4), Φ.term i) +
     (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-      (fun i ↦ k4 ≤ i.val ∧ i.val + 1 < L), h i) +
+      (fun i ↦ k4 ≤ i.val ∧ i.val + 1 < L), Φ.term i) +
     (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
-      (fun i ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ)), h i)
-  exact Finset.sum_five_internal_regions_add_crossings h12 h23 h34 h
+      (fun i ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ)), Φ.term i)
+  exact Finset.sum_five_internal_regions_add_crossings h12 h23 h34 Φ
 end TNLean.MPS.AreaLaw
 end
 

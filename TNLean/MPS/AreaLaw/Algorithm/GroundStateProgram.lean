@@ -43,38 +43,36 @@ open LinearAlgebraQuery
 `2 R²` sites and return the solution of the final convex program over the final family, read
 on the original chain. LVV13, `algo53.tex`, lines 652--678. -/
 noncomputable def groundStateProgram {L : ℕ} (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (Delta : ℝ) (R : ℕ) : LVVProgram q (EuclideanSpace ℂ (Fin L → Fin q)) :=
   let N := L + 2 * R ^ 2
   let hi : L ≤ N := Nat.le_add_right _ _
   let z : Fin q := ⟨0, by omega⟩
   open Classical in do
-    let S ← sweepProgram hq (paddedInteraction hi z h) (paddedInteraction_supported hi z h hs)
-      (fun j ↦ (paddedInteraction_nonneg_le_one hi z h h0 h1 j).1)
-      (fun j ↦ (paddedInteraction_nonneg_le_one hi z h h0 h1 j).2) (min Delta 1) L
+    let S ← sweepProgram hq (paddedInteraction hi z Φ) (paddedInteraction_supported hi z Φ)
+      (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
+      (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) (min Delta 1) L
     FreeM.lift (LinearAlgebraQuery.energyMinimizer L (lvvSuccessiveBondBound q (min Delta 1) N)
-      (∑ j, h j)
+      Φ.hamiltonian
       (S.image fun w ↦
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (leftConfigOfFinEquiv (q := q) hi)).symm w))
 
 /-- With the honest oracle, the program returns the chosen energy minimizer over the final
 family of the padded sweep, read on the original chain. -/
 theorem eval_groundStateProgram {L : ℕ} (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (Delta : ℝ) (R : ℕ) :
     let N := L + 2 * R ^ 2
     let hi : L ≤ N := Nat.le_add_right _ _
     let z : Fin q := ⟨0, by omega⟩
-    FreeM.eval honestOracle (groundStateProgram hq h hs h0 h1 Delta R) =
+    FreeM.eval honestOracle (groundStateProgram hq Φ h0 h1 Delta R) =
       open Classical in
-      energyMinimizer (∑ j, h j)
-        ((lvvSweep hq (paddedInteraction hi z h) (paddedInteraction_supported hi z h hs)
-          (fun j ↦ (paddedInteraction_nonneg_le_one hi z h h0 h1 j).1)
-          (fun j ↦ (paddedInteraction_nonneg_le_one hi z h h0 h1 j).2) (min Delta 1) L).image
+      energyMinimizer Φ.hamiltonian
+        ((lvvSweep hq (paddedInteraction hi z Φ) (paddedInteraction_supported hi z Φ)
+          (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
+          (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) (min Delta 1) L).image
           fun w ↦
             (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
               (leftConfigOfFinEquiv (q := q) hi)).symm w) := by
@@ -103,15 +101,14 @@ ground state, and an open-boundary matrix product state whose bond dimension is 
 the cardinality budget times the bond budget of the sweep on the padded chain. LVV13,
 `algo53.tex`, lines 213--216 and 652--678. -/
 theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {R : ℕ} (hR : 1 ≤ R)
     (E : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E Delta)
-    (hspan : groundSpace (∑ j, h j) E = Submodule.span ℂ {Γ}) :
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E Delta)
+    (hspan : groundSpace Φ.hamiltonian E = Submodule.span ℂ {Γ}) :
     let N := L + 2 * R ^ 2
-    let ψ := FreeM.eval honestOracle (groundStateProgram hq h hs h0 h1 Delta R)
+    let ψ := FreeM.eval honestOracle (groundStateProgram hq Φ h0 h1 Delta R)
     ‖ψ‖ = 1 ∧ 1 - 4 * L / (R ^ 2 * Delta) ≤ ‖⟪Γ, ψ⟫_ℂ‖ ∧
       IsOpenMPS L q (lvvSuccessiveCardBound q (min Delta 1) N *
         max 1 (lvvSuccessiveBondBound q (min Delta 1) N)) (fun x ↦ ψ x) := by
@@ -120,17 +117,17 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
   have hi : L ≤ N := Nat.le_add_right _ _
   let z : Fin q := ⟨0, by omega⟩
   let e := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (leftConfigOfFinEquiv (q := q) hi)
-  let hs' := paddedInteraction_supported hi z h hs
-  let h0' := fun j ↦ (paddedInteraction_nonneg_le_one hi z h h0 h1 j).1
-  let h1' := fun j ↦ (paddedInteraction_nonneg_le_one hi z h h0 h1 j).2
-  set S := lvvSweep hq (paddedInteraction hi z h) hs' h0' h1' (min Delta 1) L with hSdef
-  have hψ : ψ = energyMinimizer (∑ j, h j) (S.image fun w ↦ e.symm w) :=
-    eval_groundStateProgram hq h hs h0 h1 Delta R
+  let hs' := paddedInteraction_supported hi z Φ
+  let h0' := fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1
+  let h1' := fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2
+  set S := lvvSweep hq (paddedInteraction hi z Φ) hs' h0' h1' (min Delta 1) L with hSdef
+  have hψ : ψ = energyMinimizer Φ.hamiltonian (S.image fun w ↦ e.symm w) :=
+    eval_groundStateProgram hq Φ h0 h1 Delta R
   have hg : 0 < min Delta 1 := lt_min hDelta zero_lt_one
   have hN : 1 ≤ N := hL.trans hi
-  obtain ⟨hcard, hmps, hviable⟩ := lvvSweep_spec hq (paddedInteraction hi z h) hs' h0' h1' hg L hi
+  obtain ⟨hcard, hmps, hviable⟩ := lvvSweep_spec hq (paddedInteraction hi z Φ) hs' h0' h1' hg L hi
   simp only [show L ≠ 0 by omega, ↓reduceIte] at hcard hmps
-  obtain ⟨hpn, hpg, hps⟩ := isGapped_paddedInteraction hL hi z h
+  obtain ⟨hpn, hpg, hps⟩ := isGapped_paddedInteraction hL hi z Φ
       (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hgap
         hspan hDelta
   have hNreal : (0 : ℝ) < N := by exact_mod_cast hN
@@ -157,7 +154,7 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
     have : e.symm w = 0 := by simpa only [hbot, Submodule.mem_bot] using hw'U
     rw [this, norm_zero] at hw'norm
     exact zero_ne_one hw'norm
-  obtain ⟨hψU, hψnorm, hψmin⟩ := energyMinimizer_spec (∑ j, h j) (S.image fun w ↦ e.symm w) hUne
+  obtain ⟨hψU, hψnorm, hψmin⟩ := energyMinimizer_spec Φ.hamiltonian (S.image fun w ↦ e.symm w) hUne
   rw [← hψ] at hψU hψnorm hψmin
   refine ⟨hψnorm, ?_, ?_⟩
   · -- Overlap: least energy in the span, then the gap.
@@ -167,8 +164,8 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
       (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hspan
     have hover : 1 - δ ≤ ‖⟪Γ, e.symm w⟫_ℂ‖ :=
       one_sub_le_norm_inner_of_norm_sub_sq_le hw'norm hΩ herror
-    let chain := ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩
-    have hchain : chain.hamiltonian = ∑ j, h j := ManyBody.Interaction.hamiltonian_extend
+    let chain := ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩
+    have hchain : chain.hamiltonian = Φ.hamiltonian := ManyBody.Interaction.hamiltonian_extend
     have hspanC : groundSpace chain.hamiltonian E = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
@@ -178,7 +175,7 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
           (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 j)).mpr (h1 j)) hΩ
         hspanC hw'norm hover
     rw [hchain] at henergy
-    have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E ≤ 8 * L * δ :=
+    have hψenergy : (⟪ψ, toEuclideanLin Φ.hamiltonian ψ⟫_ℂ).re - E ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E).trans henergy
     have hbound := Entropy.norm_inner_ge_of_gap hDelta hgap hΓ hψnorm hψenergy
     refine le_trans ?_ hbound

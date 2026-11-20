@@ -35,13 +35,11 @@ theorem exists_fixed_bandwidth_interval_low_energy_strict_approximation
     (etaLD : ℝ) (hLD : 0 < etaLD) :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q p r : ℕ) (v : ℝ) (hq : 0 < q), p ≤ r → r ≤ L → 0 < v →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ h0 : ∀ i, 0 ≤ h i, (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ h0 : ∀ i, 0 ≤ Φ.term i, (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let J := interval L p r
@@ -72,11 +70,11 @@ theorem exists_fixed_bandwidth_interval_low_energy_strict_approximation
   obtain ⟨K, hK, hactual⟩ :=
     exists_fixed_bandwidth_interval_low_energy_normalized_approximation etaLD hLD
   refine ⟨K, hK, ?_⟩
-  intro L q p r v hq hpr hrL hv h hs h0 h1 config H hRaw
+  intro L q p r v hq hpr hrL hv Φ h0 h1 config H hRaw
     J beta tau U Phi Tm G e b g u delta hdelta hdelta1 a ψ hψG hψ
   by_cases hq2 : 2 ≤ q
   · obtain ⟨φ, hφ, hoverlap, hrank⟩ :=
-      hactual L q p r v hq2 hpr hrL hv h hs h0 h1
+      hactual L q p r v hq2 hpr hrL hv Φ h0 h1
         (delta / 2) (by positivity) (by linarith only [hdelta1]) ψ hψG hψ
     have hrecip : 1 / (delta / 2) = 2 / delta := by field_simp
     rw [hrecip] at hrank
@@ -97,8 +95,8 @@ theorem exists_fixed_bandwidth_interval_low_energy_strict_approximation
         (u ^ 3 / g + (1 / g) ^ (1 / 4 : ℝ) * a ^ (3 / 4 : ℝ) * u) *
           (1 + Real.log a) := by positivity
     have hrank : Matrix.schmidtRank (WithLp.ofLp (e ψ)) ≤ 1 := by
-      have h := Matrix.schmidtRank_le_left (WithLp.ofLp (e ψ))
-      simpa only [Fintype.card_fun, Fintype.card_fin, one_pow] using h
+      have Φ.term := Matrix.schmidtRank_le_left (WithLp.ofLp (e ψ))
+      simpa only [Fintype.card_fun, Fintype.card_fin, one_pow] using Φ.term
     refine ⟨ψ, hψ, ?_, ?_⟩
     · have hi : ‖⟪ψ, ψ⟫_ℂ‖ = 1 := by norm_num [inner_self_eq_norm_sq_to_K, hψ]
       rw [hi]

@@ -10,6 +10,7 @@ import QICLean.Analysis.MatrixTensorCoordinates
 import QICLean.Analysis.SupportProjectionOrder
 import QICLean.Analysis.ViableSubspaceCoordinates
 import QICLean.Analysis.WeightedProjection
+import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Sites.SplitOperatorSchmidt
 import TNLean.Algebra.CommonKernelSpectralGap
 import QICLean.ManyBody.Sites.Twirl
@@ -316,14 +317,12 @@ private theorem exists_long_frustrationFree_family
     (L q p r ℓ a b d : ℕ) (hqd : q = d) (hq : 2 ≤ q) (hell : 1 ≤ ℓ) (hab : a + 2 * ℓ ≤ b)
     (hb : b + 2 * ℓ ≤ L - 1) (hsub : interval L (a + ℓ) (b + ℓ + 1) ⊆ interval L p r)
     (hcollar : (interval L p r \ interval L (a + ℓ) (b + ℓ + 1)).card ≤ 2 * ℓ)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2)))
-    (hh : ∀ i, IsStarProjection (h i)) (g : ℝ) (hg : 0 < g) (hg1 : g ≤ 1)
-    (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
-      g * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ)
+    (Φ : ManyBody.BondInteraction L q)
+    (hh : ∀ i, IsStarProjection (Φ.term i)) (g : ℝ) (hg : 0 < g) (hg1 : g ≤ 1)
+    (hgap : ∀ y ∈ (LinearMap.ker (chainOperator Φ).toLinearMap)ᗮ,
+      g * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator Φ y⟫_ℂ)
     (G₀ : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q)))
-    (hG₀ : LinearMap.ker (chainOperator h).toLinearMap = G₀)
+    (hG₀ : LinearMap.ker (chainOperator Φ).toLinearMap = G₀)
     (htrade : ∀ R : ℝ, 0 < R → R ≤ 2 * 80 * (ℓ : ℝ) →
       (((d * ℓ ^ 2) ^ (22 * ℓ) : ℕ) : ℝ) ^ 12 *
         (4 * Real.exp (-(4 * (ℓ : ℝ) ^ 2 * Real.sqrt ((4 * g / 5) / R)))) ≤ 1 / 100000) :
@@ -355,9 +354,9 @@ private theorem exists_long_frustrationFree_family
   classical
   have hq1 : 1 ≤ q := by omega
   set Ht : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-    ∑ α, threeRegionFamily h a b ℓ α
+    ∑ α, threeRegionFamily Φ a b ℓ α
   set C := Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-  have hpos : (C Ht).IsPositive := isPositive_toEuclideanCLM_threeRegion hh hs a b ℓ
+  have hpos : (C Ht).IsPositive := isPositive_toEuclideanCLM_threeRegion hh Φ.mem a b ℓ
   have hsymC : (Matrix.toEuclideanLin Ht).IsSymmetric := hpos.isSelfAdjoint.isSymmetric
   have hHerm : Ht.IsHermitian := Matrix.isSymmetric_toEuclideanLin_iff.mp hsymC
   set v := hHerm.eigenvectorBasis
@@ -365,7 +364,7 @@ private theorem exists_long_frustrationFree_family
   have hv : ∀ i, Ht.toEuclideanLin (v i) = (lam i : ℂ) • v i :=
     hHerm.toEuclideanCLM_eigenvectorBasis
   have hvC : ∀ i, C Ht (v i) = (lam i : ℂ) • v i := hv
-  have hker := ker_threeRegion hh hs a b ℓ
+  have hker := ker_threeRegion hh Φ.mem a b ℓ
   have hlam_eq : ∀ i, lam i = Complex.re ⟪v i, C Ht (v i)⟫_ℂ := by
     intro i
     rw [hvC, inner_smul_right, inner_self_eq_norm_sq_to_K, v.orthonormal.norm_eq_one i]
@@ -381,10 +380,10 @@ private theorem exists_long_frustrationFree_family
       have hne : (lam i : ℂ) ≠ 0 := by exact_mod_cast hi.ne'
       change C Ht ((lam i : ℂ)⁻¹ • v i) = v i
       rw [map_smul, hvC, smul_smul, inv_mul_cancel₀ hne, one_smul]
-    have hmem' : v i ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ := by
+    have hmem' : v i ∈ (LinearMap.ker (chainOperator Φ).toLinearMap)ᗮ := by
       rw [← hker]
       exact hmem
-    have h3 := threeRegion_gap hh hs hg hgap hab hb (v.orthonormal.norm_eq_one i) hmem'
+    have h3 := threeRegion_gap hh Φ.mem hg hgap hab hb (v.orthonormal.norm_eq_one i) hmem'
     rw [← hlam_eq] at h3
     have h15 := gap_ratio_le hg hg1
     norm_num only [show (2 : ℝ) ^ 2 = 4 by norm_num] at h15
@@ -398,7 +397,7 @@ private theorem exists_long_frustrationFree_family
     · intro hx j hj
       exact hx j (by linarith [hlam_gap j hj])
   have hspan0 : Submodule.spectralSpanLE v lam 0 =
-      LinearMap.ker (chainOperator h).toLinearMap := by
+      LinearMap.ker (chainOperator Φ).toLinearMap := by
     rw [← hker]
     ext x
     rw [Submodule.mem_spectralSpanLE_iff, LinearMap.mem_ker]
@@ -420,8 +419,8 @@ private theorem exists_long_frustrationFree_family
       rw [hrepr] at h0
       have hne : (lam j : ℂ) ≠ 0 := by exact_mod_cast hj.ne'
       exact (mul_eq_zero.mp h0).resolve_left hne
-  have hℓR : (1 : ℝ) ≤ ℓ := by exact_mod_cast hell
-  have hnorm : ‖Ht‖ ≤ 10 * (ℓ : ℝ) := (norm_threeRegion_le hh hs a b ℓ).trans (by linarith)
+  have Φ.termℓR : (1 : ℝ) ≤ ℓ := by exact_mod_cast hell
+  have hnorm : ‖Ht‖ ≤ 10 * (ℓ : ℝ) := (norm_threeRegion_le hh Φ.mem a b ℓ).trans (by linarith)
   obtain ⟨hK, hgapK, hupperK, hmapK⟩ :=
     exists_canonical_isometric_spectral_data Ht hHerm v lam hv 0 (g / 20) (10 * ℓ)
       hcluster hnorm Tm
@@ -454,7 +453,7 @@ private theorem exists_long_frustrationFree_family
       (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := ↥Jᶜ → Fin q) (M r)) := hfilter.trans hconj
   have hNle : N ≤ D ^ 2 := by
     rw [hN]
-    exact operatorSchmidtRank_aeval_threeRegion_region_le hq1 hs hell hab hb Qc hQdeg J hsub
+    exact operatorSchmidtRank_aeval_threeRegion_region_le hq1 Φ.mem hell hab hb Qc hQdeg J hsub
       hcollar
   refine ⟨N, slice,
     (2 * Real.exp (-2 * ((ℓ ^ 2 : ℕ) : ℝ) * Real.sqrt ((g / 20 - 0) / (10 * ℓ - 0)))) ^ 2,
@@ -464,7 +463,7 @@ private theorem exists_long_frustrationFree_family
       (le_of_eq (by ring))
   · intro j c
     exact (operatorSchmidtRank_regionalSlice_le J (interval L 0 c) P _ _).trans
-      (operatorSchmidtRank_aeval_threeRegion_cut_le hq1 hs hab (ℓ ^ 2) Qc hQdeg c)
+      (operatorSchmidtRank_aeval_threeRegion_cut_le hq1 Φ.mem hab (ℓ ^ 2) Qc hQdeg c)
   · intro k S δ hS hδ
     exact (Submodule.IsViable.word_power_of_tensor_decomposition (M := EM) (R := EE)
       (T := G) (Polynomial.aeval Hm Qc)
@@ -530,15 +529,13 @@ reduction of ALVV, arXiv:1602.08828v2, line 1457, is applied in
 private theorem exists_improving_family_core :
     ∃ A : ℝ, 1 ≤ A ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-          (interval L i.val (i.val + 2))) →
-        (∀ i, IsStarProjection (h i)) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+        (∀ i, IsStarProjection (Φ.term i)) →
       ∀ (γ : ℝ) (G₀ : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q))), 0 < γ →
         LinearMap.ker (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-          (∑ i, h i)).toLinearMap = G₀ →
+          Φ.hamiltonian).toLinearMap = G₀ →
         (∀ y ∈ G₀ᗮ, γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ)
-          (n := Fin L → Fin q) (∑ i, h i) y⟫_ℂ) →
+          (n := Fin L → Fin q) Φ.hamiltonian y⟫_ℂ) →
       let g := min γ 1
       let d := max q 2
       let u : ℝ := 1 + Real.log (d : ℝ) + Real.log (1 / g)
@@ -570,7 +567,7 @@ private theorem exists_improving_family_core :
                 EM →ₗ[ℂ] EM)) G := by
   obtain ⟨A, hA, hA21, -, -, hall⟩ := Real.exists_dg_scalar_parameters 80 0 (by norm_num)
   refine ⟨A, hA, ?_⟩
-  intro L q p r hpr hrL h hs hh γ G₀ hγ hG₀ hgap g d u ℓ D J tau U Phi Tm EM EE G cut
+  intro L q p r hpr hrL Φ hh γ G₀ hγ hG₀ hgap g d u ℓ D J tau U Phi Tm EM EE G cut
   have hd : 2 ≤ d := le_max_right q 2
   have hg : 0 < g := lt_min hγ one_pos
   have hg1 : g ≤ 1 := min_le_right γ 1
@@ -658,10 +655,10 @@ private theorem exists_improving_family_core :
   · have hlong : 4 * ℓ < r - p := by omega
     obtain ⟨-, -, hab, hb, -, -, -, -, -, -, -, hsub, hcollar⟩ :=
       inward_effective_cuts L ℓ p r (by omega) hpr hrL hlong
-    have hker : LinearMap.ker (chainOperator h).toLinearMap = G₀ := by
+    have hker : LinearMap.ker (chainOperator Φ).toLinearMap = G₀ := by
       rw [chainOperator_eq_toEuclideanCLM_sum, hG₀]
-    have hgapC : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
-        g * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ := by
+    have hgapC : ∀ y ∈ (LinearMap.ker (chainOperator Φ).toLinearMap)ᗮ,
+        g * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator Φ y⟫_ℂ := by
       intro y hy
       rw [hker] at hy
       rw [chainOperator_eq_toEuclideanCLM_sum]
@@ -670,7 +667,7 @@ private theorem exists_improving_family_core :
         mul_le_mul_of_nonneg_right (min_le_left γ 1) (sq_nonneg _)
       exact h2.trans h1
     exact exists_long_frustrationFree_family L q p r ℓ
-      _ _ d hdq.symm hq (by omega) hab hb hsub hcollar h hs hh g hg hg1 hgapC G₀ hker htrade
+      _ _ d hdq.symm hq (by omega) hab hb hsub hcollar Φ hh g hg hg1 hgapC G₀ hker htrade
 
 /-- **Words in the frustration-free improving family.** Arad, Landau, Vazirani and Vidick,
 arXiv:1602.08828v2, Theorem `t:aisff`, lines 1580–1609, in the form used by the merge,
@@ -692,12 +689,10 @@ https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf. 
 theorem exists_frustrationFree_improving_family_words :
     ∃ A : ℝ, 1 ≤ A ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-          (interval L i.val (i.val + 2))) →
-        (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+        (∀ i, 0 ≤ Φ.term i) → (∀ i, Φ.term i ≤ 1) →
       ∀ γ : ℝ, 0 < γ →
-      let H := Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, h i)
+      let H := Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian
       (∀ y ∈ (LinearMap.ker H.toLinearMap)ᗮ, γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, H y⟫_ℂ) →
       let g := min γ 1
       let d := max q 2
@@ -730,8 +725,8 @@ theorem exists_frustrationFree_improving_family_words :
                 EM →ₗ[ℂ] EM)) G := by
   obtain ⟨A, hA, hcore⟩ := exists_improving_family_core
   refine ⟨A, hA, ?_⟩
-  intro L q p r hpr hrL h hs h0 h1 γ hγ H hgap
-  have hpsd (i : Fin (L - 1)) : (h i).PosSemidef := Matrix.nonneg_iff_posSemidef.mp (h0 i)
+  intro L q p r hpr hrL Φ h0 h1 γ hγ H hgap
+  have hpsd (i : Fin (L - 1)) : (Φ.term i).PosSemidef := Matrix.nonneg_iff_posSemidef.mp (h0 i)
   let P : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun i ↦ (hpsd i).supportProj
   have hPp : ∀ i, IsStarProjection (P i) := fun i ↦
     (hpsd i).isHermitian.isStarProjection_supportProj
@@ -740,7 +735,7 @@ theorem exists_frustrationFree_improving_family_words :
     intro i
     have hmem := ManyBody.cfc_mem_supportedOperators
       (fun x : ℝ ↦ if x ≠ 0 then 1 else 0)
-      (hs i)
+      (Φ.mem i)
     rw [← (hpsd i).isHermitian.supportProj_eq_cfc] at hmem
     exact hmem
   have hzero (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -753,9 +748,9 @@ theorem exists_frustrationFree_improving_family_words :
     simp only [LinearMap.mem_ker, ContinuousLinearMap.coe_coe, H]
     rw [hzero, hzero]
     exact Matrix.PosSemidef.sum_supportProj_mulVec_eq_zero_iff hpsd x.ofLp
-  have hle : (∑ i, h i) ≤ ∑ i, P i := Finset.sum_le_sum fun i _ ↦
+  have hle : Φ.hamiltonian ≤ ∑ i, P i := Finset.sum_le_sum fun i _ ↦
     (hpsd i).le_supportProj_of_norm_le_one
-      ((CStarAlgebra.norm_le_one_iff_of_nonneg (h i) (h0 i)).mpr (h1 i))
+      ((CStarAlgebra.norm_le_one_iff_of_nonneg (Φ.term i) (h0 i)).mpr (h1 i))
   have hform (y : EuclideanSpace ℂ (Fin L → Fin q)) :
       Complex.re ⟪y, H y⟫_ℂ ≤ Complex.re ⟪y, Matrix.toEuclideanCLM (𝕜 := ℂ)
         (n := Fin L → Fin q) (∑ i, P i) y⟫_ℂ := by
@@ -801,12 +796,10 @@ https://sirui-lu.com/QICLean/paper-gaps/alvv16_spectral_projector_boundary.pdf. 
 theorem exists_frustrationFree_improving_family :
     ∃ A : ℝ, 1 ≤ A ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-          (interval L i.val (i.val + 2))) →
-        (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+        (∀ i, 0 ≤ Φ.term i) → (∀ i, Φ.term i ≤ 1) →
       ∀ γ : ℝ, 0 < γ →
-      let H := Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, h i)
+      let H := Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian
       (∀ y ∈ (LinearMap.ker H.toLinearMap)ᗮ, γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, H y⟫_ℂ) →
       let g := min γ 1
       let d := max q 2
@@ -838,9 +831,9 @@ theorem exists_frustrationFree_improving_family :
               EM →ₗ[ℂ] EM)) G := by
   obtain ⟨A, hA, hwords⟩ := exists_frustrationFree_improving_family_words
   refine ⟨A, hA, ?_⟩
-  intro L q p r hpr hrL h hs h0 h1 γ hγ H hgap g d u ℓ D J tau U Phi Tm EM EE G cut
+  intro L q p r hpr hrL Φ h0 h1 γ hγ H hgap g d u ℓ D J tau U Phi Tm EM EE G cut
   obtain ⟨hlogD, hlogR, N, W, Δ, hN, hΔ, hbudget, hbond, himprove⟩ :=
-    hwords L q p r hpr hrL h hs h0 h1 γ hγ hgap
+    hwords L q p r hpr hrL Φ h0 h1 γ hγ hgap
   refine ⟨hlogD, hlogR, ?_⟩
   obtain ⟨f, B, hBf, hBzero, hspanB⟩ := Submodule.exists_clm_family_extension_of_card_le
     (by simpa only [Fintype.card_fin] using hN)

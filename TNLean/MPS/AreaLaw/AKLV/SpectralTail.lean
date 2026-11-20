@@ -189,16 +189,14 @@ shifts of that sum are allowed. Auxiliary to AKLV, arXiv:1301.1162v1,
 Lemma 6.6(2); the coefficient is one after centering the boundary term. -/
 theorem norm_boundary_spectral_offDiagonal_le {L q : ℕ}
     (I : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (a : Fin (L - 1)) (z t u : ℝ) (hut : u ≤ t) :
-    let B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := (∑ i ∈ I, h i) - (z : ℂ) • 1
-    ‖Matrix.spectralProjectionGE B t * h a *
+    let B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := (Φ.partialHamiltonian I) - (z : ℂ) • 1
+    ‖Matrix.spectralProjectionGE B t * Φ.term a *
       (1 - Matrix.spectralProjectionGE B u)‖ ≤ Real.exp (-(t - u) / 8) := by
   intro B
-  let O := h a - (1 / 2 : ℂ) • 1
+  let O := Φ.term a - (1 / 2 : ℂ) • 1
   have hB : B.IsHermitian := by
     change IsSelfAdjoint B
     apply IsSelfAdjoint.sub
@@ -209,14 +207,14 @@ theorem norm_boundary_spectral_offDiagonal_le {L q : ℕ}
       (interval L a.val (a.val + 2)) := by
     change _ ∈ ManyBody.supportedOperators _ _
     exact sub_mem
-      (hs a)
+      (Φ.mem a)
       (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
-  have hnorm : ‖O‖ ≤ (1 / 2 : ℝ) := norm_sub_half_one_le (h a) (h0 a) (h1 a)
-  have hconj := norm_exp_conjugation_nearest_neighbour_shift_le_two I h
-    (fun i _ ↦ hs i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) O hO (z : ℂ)
+  have hnorm : ‖O‖ ≤ (1 / 2 : ℝ) := norm_sub_half_one_le (Φ.term a) (h0 a) (h1 a)
+  have hconj := norm_exp_conjugation_nearest_neighbour_shift_le_two I Φ
+    (fun i _ ↦ Φ.mem i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i) O hO (z : ℂ)
     (1 / 8) (by norm_num) le_rfl
   have hzero := hB.spectralProjectionGE_mul_one_sub_eq_zero hut
-  have hcenter : Matrix.spectralProjectionGE B t * h a *
+  have hcenter : Matrix.spectralProjectionGE B t * Φ.term a *
       (1 - Matrix.spectralProjectionGE B u) =
       Matrix.spectralProjectionGE B t * O * (1 - Matrix.spectralProjectionGE B u) := by
     dsimp [O]
@@ -241,19 +239,17 @@ AKLV, arXiv:1301.1162v1, Lemma 6.6(2). The generator consists of original
 positive unit nearest-neighbour terms and an arbitrary real scalar shift. -/
 theorem norm_two_boundary_spectral_offDiagonal_le {L q : ℕ}
     (I : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (a b : Fin (L - 1)) (z t u : ℝ) (hut : u ≤ t) :
-    let B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := (∑ i ∈ I, h i) - (z : ℂ) • 1
-    ‖Matrix.spectralProjectionGE B t * (h a + h b) *
+    let B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := (Φ.partialHamiltonian I) - (z : ℂ) • 1
+    ‖Matrix.spectralProjectionGE B t * (Φ.term a + Φ.term b) *
       (1 - Matrix.spectralProjectionGE B u)‖ ≤ 2 * Real.exp (-(t - u) / 8) := by
   intro B
   rw [mul_add, add_mul]
   exact (norm_add_le _ _).trans (by
-    have ha := norm_boundary_spectral_offDiagonal_le I h hs h0 h1 a z t u hut
-    have hb := norm_boundary_spectral_offDiagonal_le I h hs h0 h1 b z t u hut
+    have ha := norm_boundary_spectral_offDiagonal_le I Φ h0 h1 a z t u hut
+    have hb := norm_boundary_spectral_offDiagonal_le I Φ h0 h1 b z t u hut
     dsimp only at ha hb
     linarith)
 

@@ -96,13 +96,11 @@ theorem exists_physical_ld_canonical_tree_failure_le (etaLD : ℝ) (hLD : 0 < et
       let u := 1 + Real.log (mi : ℝ) + Real.log (1 / g)
       let ell : ℕ := ⌈C * u ^ 2 / g⌉₊
       let D := (mi * ell ^ 2) ^ (22 * ell)
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ (h0 : ∀ i, 0 ≤ Φ.term i), (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let G := fun eta : ℝ ↦ Submodule.spectralSpanLE
@@ -141,11 +139,11 @@ theorem exists_physical_ld_canonical_tree_failure_le (etaLD : ℝ) (hLD : 0 < et
   obtain ⟨_Kref, _hKref, hbasis⟩ :=
     exists_fixed_bandwidth_low_energy_orthonormal_mps_basis etaLD hLD
   refine ⟨C, hC, hCeta, ?_⟩
-  intro L q m w hq hqm hw mi g u ell D h hsupp h0 h1 config H hRaw G rG
+  intro L q m w hq hqm hw mi g u ell D Φ h0 h1 config H hRaw G rG
   let : Nonempty (Fin L → Fin q) := config
   have hm4 : m * 2 ^ 2 = mi := by dsimp only [mi]; ring
   have hfamily (p r : ℕ) (hpr : p ≤ r) (hrL : r ≤ L) := by
-    have hfam := hlong L q m p r 2 w hq hqm hpr hrL hw h hsupp h0 h1
+    have hfam := hlong L q m p r 2 w hq hqm hpr hrL hw Φ h0 h1
     rw [hm4, show (1 / 200 : ℝ) / 2 ^ (4 * 2) = 1 / 51200 by norm_num] at hfam
     exact hfam
   obtain ⟨hell, hlogD, -⟩ := hfamily 0 0 le_rfl (Nat.zero_le L)
@@ -189,7 +187,7 @@ theorem exists_physical_ld_canonical_tree_failure_le (etaLD : ℝ) (hLD : 0 < et
         have : (1 : ℝ) ≤ K := by exact_mod_cast hK
         positivity
       obtain ⟨B, _hB, _hlogB, _phi, _hphi, hrest⟩ :=
-        hbasis L q (3 * w * K) (by omega) hv h hsupp h0 h1 (1 / 10000) (by norm_num) (by norm_num)
+        hbasis L q (3 * w * K) (by omega) hv Φ h0 h1 (1 / 10000) (by norm_num) (by norm_num)
       obtain ⟨_hinj, _hdim, _hdimle, _hspan, hVG, hGV, _hGV', hMPS, _⟩ := hrest
       exact ⟨_, _ + 1, Nat.le_add_left 1 _, fun _ ↦ ⟨hGV, hVG,
         fun v hv' ↦ (hMPS v hv').mono (Nat.le_succ _)⟩⟩

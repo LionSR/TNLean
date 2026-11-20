@@ -63,23 +63,21 @@ theorem exists_fixed_bandwidth_sharp_regional_low_energy_family
       ∀ Jtarget : Finset (Fin L),
       (interval L (a + ell) (b + ell + 1) \ Jtarget).card +
         (Jtarget \ interval L (a + ell) (b + ell + 1)).card ≤ 2 * ell →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ h0 : ∀ i, 0 ≤ h i, (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ h0 : ∀ i, 0 ≤ Φ.term i, (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
       let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
         ∑ i ∈ Finset.univ.filter
-          (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+          (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
       let Cross : Finset (Fin (L - 1)) := Finset.univ.filter
         (fun i ↦ i.val + 1 ∈
           ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-      let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ Cross, h i
+      let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ Cross, Φ.term i
       let K : Finset (Fin 5) := {0, 2, 4}
       let B : ℝ → (Fin 5 → ℝ) → Finset (Fin 5) →
           Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun t e T ↦
@@ -90,7 +88,7 @@ theorem exists_fixed_bandwidth_sharp_regional_low_energy_family
         (hO : (B t e ∅).IsHermitian) (hC : (B t e K).IsHermitian),
         star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
         (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
-        B t e ∅ = (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1 ∧
+        B t e ∅ = Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1 ∧
         star z ⬝ᵥ z = 1 ∧ B t e ∅ *ᵥ z = (E0 : ℂ) • z ∧
         (B t e ∅ - (E0 : ℂ) • 1).PosSemidef ∧ 0 ≤ E0 ∧ E0 ≤ 4 ∧
         ‖B t e K‖ ≤ 3 * t + 4 * (ell : ℝ) ∧
@@ -158,13 +156,13 @@ theorem exists_fixed_bandwidth_sharp_regional_low_energy_family
       (by positivity))
   have ht0 : 0 ≤ t := by linarith only [ht, hLD]
   refine ⟨ell, hell, hbound, ?_⟩
-  intro L q m a b hq hqm D nu hab hbL Jtarget hcollar h hs h0 h1 config H hRaw
+  intro L q m a b hq hqm D nu hab hbL Jtarget hcollar Φ h0 h1 config H hRaw
     k A Cross Y K B
   let : Nonempty (Fin L → Fin q) := config
   have hspec :=
     exists_sharp_regional_family_of_scalar_budgets ell t etaLD w epsilon g
       hell hw hepsilon hgw ht0 ht hxi1 hsmall hfilter
-      L q m a b hq hqm hab hbL Jtarget hcollar h hs h0 h1
+      L q m a b hq hqm hab hbL Jtarget hcollar Φ h0 h1
   refine hspec.elim fun e hspec ↦ hspec.elim fun E0 hspec ↦ hspec.elim fun x hspec ↦
     hspec.elim fun z hspec ↦ hspec.elim fun hO hspec ↦ hspec.elim fun hC hspec ↦
     hspec.elim fun hxunit hspec ↦ hspec.elim fun hx hspec ↦ hspec.elim fun hlo hspec ↦

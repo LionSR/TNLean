@@ -44,16 +44,14 @@ are constructed from the original bonds. Auxiliary to ALVV,
 arXiv:1602.08828v2, Figure `fig:algo1`, lines 1631–1632. -/
 theorem exists_regional_ground_energy_bound {L q l r : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let _ : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
-    let H := ∑ i, h i
+    let H := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues (minEigenvalue hH)
-    let A := aklvRegionalHamiltonians l r h 1
+    let A := aklvRegionalHamiltonians l r Φ 1
     ∃ (e : ℝ) (x : (Fin L → Fin q) → ℂ),
       star x ⬝ᵥ x = 1 ∧ A *ᵥ x = (e : ℂ) • x ∧
       let C := A - (e : ℂ) • 1
@@ -71,13 +69,13 @@ theorem exists_regional_ground_energy_bound {L q l r : ℕ}
   intro config H hH G A
   let : Nonempty (Fin L → Fin q) := config
   obtain ⟨e, x, z, E, hx, hxe, he, he0, hz, hHz, hE, hE0, hE2, _htruncation⟩ :=
-    ALVV.exists_single_region_hard_truncation_residuals hq hlr hrL h hs h0 h1
+    ALVV.exists_single_region_hard_truncation_residuals hq hlr hrL Φ h0 h1
   clear _htruncation
   refine ⟨e 1, x, hx, hxe 1, ?_⟩
   intro C
   have hC : C.PosSemidef := he 1
   let I := Finset.univ.filter (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r)
-  have hAeq : A = ∑ i ∈ I, h i := rfl
+  have hAeq : A = ∑ i ∈ I, Φ.term i := rfl
   have hcard : I.card ≤ L := by
     calc
       I.card ≤ Fintype.card (Fin (L - 1)) := Finset.card_le_univ I
@@ -85,9 +83,9 @@ theorem exists_regional_ground_energy_bound {L q l r : ℕ}
       _ ≤ L := Nat.sub_le _ _
   have hcapA : A ≤ (L : ℝ) • 1 := by
     calc
-      A = ∑ i ∈ I, h i := hAeq
+      A = ∑ i ∈ I, Φ.term i := hAeq
       _ ≤ (I.card : ℝ) • 1 :=
-        (sum_posSemidef_and_le_card_of_positive_unit_terms I h
+        (sum_posSemidef_and_le_card_of_positive_unit_terms I Φ
           (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)).2
       _ ≤ (L : ℝ) • 1 := smul_le_smul_of_nonneg_right (by exact_mod_cast hcard) zero_le_one
   have hcapC : C ≤ (L : ℝ) • 1 := by
@@ -101,15 +99,15 @@ theorem exists_regional_ground_energy_bound {L q l r : ℕ}
   have hmin : minEigenvalue hH = E + S :=
     hH.minEigenvalue_eq_add_of_centered_ground S E z hz hHz hE
   let Y := ∑ i ∈ Finset.univ.filter
-    (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), h i
-  have hrest : ((aklvRegionalHamiltonians l r h 0 - (e 0 : ℂ) • 1) +
-      (aklvRegionalHamiltonians l r h 2 - (e 2 : ℂ) • 1) + Y).PosSemidef :=
+    (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), Φ.term i
+  have hrest : ((aklvRegionalHamiltonians l r Φ 0 - (e 0 : ℂ) • 1) +
+      (aklvRegionalHamiltonians l r Φ 2 - (e 2 : ℂ) • 1) + Y).PosSemidef :=
     ((he 0).add (he 2)).add (posSemidef_sum _ (fun i _ ↦ (h0 i).posSemidef))
   have hsplit : H - (S : ℂ) • 1 - C =
-      (aklvRegionalHamiltonians l r h 0 - (e 0 : ℂ) • 1) +
-        (aklvRegionalHamiltonians l r h 2 - (e 2 : ℂ) • 1) + Y := by
+      (aklvRegionalHamiltonians l r Φ 0 - (e 0 : ℂ) • 1) +
+        (aklvRegionalHamiltonians l r Φ 2 - (e 2 : ℂ) • 1) + Y := by
     dsimp only [H, S, C, A, Y]
-    rw [sum_three_regions_add_crossings hlr h]
+    rw [sum_three_regions_add_crossings hlr Φ]
     simp only [Fin.sum_univ_three, Complex.ofReal_add, add_smul]
     abel
   have hpos : (H - (S : ℂ) • 1 - C).PosSemidef := by rw [hsplit]; exact hrest

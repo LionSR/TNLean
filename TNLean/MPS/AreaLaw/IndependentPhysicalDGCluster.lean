@@ -47,12 +47,10 @@ theorem exists_independent_physical_dg_cluster_parameters :
       (∀ R : ℝ, 0 < R → R ≤ 3 * t + 4 * (ell : ℝ) →
         u ≤ (ell : ℝ) ^ 2 * Real.sqrt ((4 * g / 5) / R)) ∧
       ∀ (L q a b : ℕ), 0 < q → a + 2 * ell ≤ b + 1 → b + 2 * ell ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1)
+      ∀ (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1)
     (mu : ℝ),
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
@@ -61,11 +59,11 @@ theorem exists_independent_physical_dg_cluster_parameters :
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     let J : Finset (Fin (L - 1)) := Finset.univ.filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
+    let Y := ∑ i ∈ J, Φ.term i
     ∃ (e : Fin 5 → ℝ) (E0 : ℝ),
       let S := ∑ j, e j
       let K : Finset (Fin 5) := {0, 2, 4}
@@ -102,8 +100,8 @@ theorem exists_independent_physical_dg_cluster_parameters :
       (by linarith only [hC]) (by linarith only [hg]) (by linarith only [hg1]) hu
   obtain ⟨ht, htail⟩ := hthreshold g tau hg hg1 htau htau1
   refine ⟨ell, hell, hbound, hfilter, ?_⟩
-  intro L q a b hq hab hbL h hs h0 h1 mu H hH G hmu hgap k A J Y
+  intro L q a b hq hab hbL Φ hs h0 h1 mu H hH G hmu hgap k A J Y
   exact exists_five_region_independent_scaled_low_cluster L q a b ell t hq hell ht hab hbL
-    h hs h0 h1 mu g (tau * g / 1000000) tau hg hg1 htau htau1 htail le_rfl hmu hgap
+    Φ hs h0 h1 mu g (tau * g / 1000000) tau hg hg1 htau htau1 htail le_rfl hmu hgap
 
 end TNLean.MPS.AreaLaw

@@ -37,12 +37,10 @@ update of the same width. Corrected auxiliary to ALVV,
 arXiv:1602.08828v2, Figure `fig:algo1`, line 1631, and line 1807. -/
 theorem exists_physical_dg_interleaved_tree_with_energy_updates :
     ∃ Ctail C Kref : ℝ, 21 ≤ Ctail ∧ 21 ≤ C ∧ 0 < Kref ∧ ∀ (L q : ℕ),
-    ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+    ∀ (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
     0 < gamma →
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -124,17 +122,17 @@ theorem exists_physical_dg_interleaved_tree_with_energy_updates :
           let S1 := balancedIntervalSpace operation width hwidth J.val.1 k
           let S2 := balancedIntervalSpace operation width hwidth k J.val.2
           ALVV.HasSoftWordNodeEnergyUpdate
-            (u := J.val.1 + ell) (v := J.val.2 - ell) hq hpk hkr h (F J) S1 S2 := by
+            (u := J.val.1 + ell) (v := J.val.2 - ell) hq hpk hkr Φ (F J) S1 S2 := by
   classical
   obtain ⟨Ctail, C, Kref, hCtail, hC, hKref, hfactory⟩ :=
     exists_physical_dg_interleaved_interval_tree_with_word_powers
   refine ⟨Ctail, C, Kref, hCtail, hC, hKref, ?_⟩
-  intro L q h hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g m w v ell D s a tau epsilon t Delta
   obtain ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff,
     B, hB, hlogB, Uref, hdimU, hUMPS, hxiMax, hwidth, T, N, F,
     hN, htargets, htrees⟩ :=
-    hfactory L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hfactory L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   change 21 ≤ ell at hell
   refine ⟨hell, hD, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff, ?_⟩
   intro u bref
@@ -216,7 +214,7 @@ theorem exists_physical_dg_interleaved_tree_with_energy_updates :
       (Entropy.regionTensorCoordinates q (interval L k J.val.2)).toLinearEquiv.toLinearMap)) hmin)
     hS2Raw
   exact ALVV.exists_soft_word_node_energy_update hq hlu huv hvr J.property.2.1
-    hleft hright hell hD hcount hs h hsupp h0 h1 (T J) (F J)
+    hleft hright hell hD hcount hs Φ hsupp h0 h1 (T J) (F J)
     hdimCanonical hGTCanonical hone k hpk hkr S1 S2 hS1Canonical hS2Canonical
 
 end TNLean.MPS.AreaLaw

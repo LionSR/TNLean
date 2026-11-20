@@ -64,13 +64,11 @@ theorem exists_fixed_bandwidth_interval_low_energy_viable_subspace
       let u := fun j ↦ 1 + Real.log (m : ℝ) + Real.log (1 / g j)
       let ell := fun j ↦ ⌈C * u j ^ 2 / g j⌉₊
       let D := fun j ↦ (m * ell j ^ 2) ^ (22 * ell j)
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ (h0 : ∀ i, 0 ≤ Φ.term i), (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let J := interval L p r
@@ -94,7 +92,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_viable_subspace
   obtain ⟨C, hC, hCeta, hfamily⟩ :=
     exists_fixed_bandwidth_interval_low_energy_family etaLD hLD
   refine ⟨C, hC, hCeta, ?_⟩
-  intro L q m p r v hq hqm hlogm hpr hrL hv vbar w g u ell D h hs h0 h1 config H hRaw
+  intro L q m p r v hq hqm hlogm hpr hrL hv vbar w g u ell D Φ h0 h1 config H hRaw
   let : Nonempty (Fin L → Fin q) := config
   intro J beta tau U Phi Tm G EM EE
   have hvbar : 0 < vbar := lt_min hv (by positivity)
@@ -138,7 +136,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_viable_subspace
       C vbar m rho hC hvbar (hq.trans hqm) hlogm T hT hrho htarget
     intro j
     obtain ⟨_hell, _hlogD, A, hA⟩ :=
-      hfamily L q m p r (w j) hq hqm hpr hrL (hw j) h hs h0 h1
+      hfamily L q m p r (w j) hq hqm hpr hrL (hw j) Φ h0 h1
     have hbuffer : 6 * w j ≤ etaLD - 3 * w j := by
       linarith only [hwcap j, hLD]
     have heta : etaLD - 3 * w j ≤ etaLD := by linarith only [hw j]

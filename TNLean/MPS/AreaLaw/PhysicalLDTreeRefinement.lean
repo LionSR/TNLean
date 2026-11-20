@@ -90,13 +90,11 @@ arXiv:1602.08828v2, Theorem `t:alg2`, lines 1869–1878, in the
 theorem exists_physical_ld_root_refinement (etaLD : ℝ) (hLD : 0 < etaLD) :
     ∃ C K : ℝ, 100 ≤ C ∧ 19 + etaLD ≤ C ∧ 0 < K ∧
       ∀ (L q m : ℕ) (w : ℝ) (hq : 2 ≤ q), q ≤ m → 0 < w →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ (h0 : ∀ i, 0 ≤ Φ.term i), (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let G := fun eta : ℝ ↦ Submodule.spectralSpanLE
@@ -149,7 +147,7 @@ theorem exists_physical_ld_root_refinement (etaLD : ℝ) (hLD : 0 < etaLD) :
   obtain ⟨K, hK, hbasis⟩ :=
     exists_fixed_bandwidth_low_energy_orthonormal_mps_basis etaLD hLD
   refine ⟨C, K, hC, hCeta, hK, ?_⟩
-  intro L q m w hq hqm hw h hs h0 h1 config H hRaw G eta hbuffer hetaLD count S0 hS0 hdim0
+  intro L q m w hq hqm hw Φ h0 h1 config H hRaw G eta hbuffer hetaLD count S0 hS0 hdim0
     delta hdelta hdelta1 i mi g u ell D a v rInner rOuter gRef uRef aRef
   let : Nonempty (Fin L → Fin q) := config
   have hGmono {x y : ℝ} (hxy : x ≤ y) : G x ≤ G y :=
@@ -163,7 +161,7 @@ theorem exists_physical_ld_root_refinement (etaLD : ℝ) (hLD : 0 < etaLD) :
   -- The reference matrix product space for the lower window.
   have hv : 0 < v := by dsimp only [v]; linarith only [hetaLD, hw]
   obtain ⟨B, hB, hlogB, _phi, _hphi, hrest⟩ :=
-    hbasis L q v (by omega) hv h hs h0 h1 (delta / 48) (by positivity) (by linarith only [hdelta1])
+    hbasis L q v (by omega) hv Φ h0 h1 (delta / 48) (by positivity) (by linarith only [hdelta1])
   obtain ⟨_hinj, _hdim, _hdimle, _hspan, hVG0, hGV0, _hGV', hMPS0, _⟩ := hrest
   obtain ⟨Uref, hVG, hGV, hMPS⟩ : ∃ Uref : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q)),
       Submodule.IsCloseTo (delta / 48) Uref (G (etaLD - v)) ∧
@@ -234,7 +232,7 @@ theorem exists_physical_ld_root_refinement (etaLD : ℝ) (hLD : 0 < etaLD) :
   · -- A long chain: the word image of the given space, trimmed.
     have hlongL : 4 * ell < L - 0 := by omega
     obtain ⟨_hell, _hlogD, hfamily⟩ :=
-      hlong L q m 0 L i w hq hqm (Nat.zero_le L) le_rfl hw h hs h0 h1
+      hlong L q m 0 L i w hq hqm (Nat.zero_le L) le_rfl hw Φ h0 h1
     obtain ⟨N, F, hN, hwords⟩ := hfamily hlongL
     obtain ⟨Tlo, Thi, Delta, _hnest, hupper, hlower, hDelta, htrade, himprove⟩ :=
       hwords eta hbuffer hetaLD
@@ -344,13 +342,11 @@ Theorem `t:alg2`, lines 1869–1878, in the `δ`-viability form of Theorem
 theorem exists_physical_ld_tree_refined_approximation (etaLD : ℝ) (hLD : 0 < etaLD) :
     ∃ Ct C K : ℝ, 100 ≤ Ct ∧ 100 ≤ C ∧ 0 < K ∧
       ∀ (L q m : ℕ) (w : ℝ) (hq : 2 ≤ q), q ≤ m → 0 < w →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ (h0 : ∀ i, 0 ≤ Φ.term i), (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let G := fun eta : ℝ ↦ Submodule.spectralSpanLE
@@ -393,17 +389,17 @@ theorem exists_physical_ld_tree_refined_approximation (etaLD : ℝ) (hLD : 0 < e
   obtain ⟨Ct, hCt, _hCteta, htree⟩ := exists_physical_ld_sampled_interval_tree etaLD hLD
   obtain ⟨C, K, hC, _hCeta, hK, hrefine⟩ := exists_physical_ld_root_refinement etaLD hLD
   refine ⟨Ct, C, K, hCt, hC, hK, ?_⟩
-  intro L q m w hq hqm hw h hs h0 h1 config H hRaw G rG gt ut ellt Dt At st count eta hdeep
+  intro L q m w hq hqm hw Φ h0 h1 config H hRaw G rG gt ut ellt Dt At st count eta hdeep
     delta hdelta hdelta1
   let : Nonempty (Fin L → Fin q) := config
-  obtain ⟨_hell, _hlogD, _N, _F, _hN, hspaces⟩ := htree L q m w hq hqm hw h hs h0 h1
+  obtain ⟨_hell, _hlogD, _N, _F, _hN, hspaces⟩ := htree L q m w hq hqm hw Φ h0 h1
   have hK0 : (0 : ℝ) ≤ Nat.clog 2 L := Nat.cast_nonneg _
   obtain ⟨_Dref, _hDref, hbeta⟩ := hspaces (by nlinarith only [hdeep, hw, hK0])
   obtain ⟨_hs, _operation, _hliteral, hnodes, hroot, _hMPS⟩ :=
     hbeta (1 / 2) (by norm_num) (by norm_num)
   have hdim := (hnodes 0 L (Nat.zero_le L) le_rfl).2.1
   obtain ⟨B, hB, hlogB, R, _hdesc, hclose, _hspan, hMPS⟩ :=
-    hrefine L q m w hq hqm hw h hs h0 h1 eta
+    hrefine L q m w hq hqm hw Φ h0 h1 eta
       (by dsimp only [eta]; nlinarith only [hdeep, hw, hK0])
       (by dsimp only [eta]; nlinarith only [hw, hK0])
       count _ hroot hdim delta hdelta hdelta1

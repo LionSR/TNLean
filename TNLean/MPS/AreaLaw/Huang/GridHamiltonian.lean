@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.AreaLaw.Huang.ChainGrid
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SupportedMatrixElements
@@ -92,25 +93,25 @@ theorem chainGridEdge_subset_ownerBlock (hw : 0 < w) (i : Fin (L - 1))
 
 /-- The sum of original terms internal to one explicit grid block. Osborne, Figure 2. -/
 noncomputable def chainGridBlockHamiltonian (hw : 0 < w)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (j : Fin (L / w + 1)) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  ∑ i ∈ Finset.univ.filter (fun i ↦ i ∉ chainGridBoundaryEdges hw ∧ chainGridEdgeOwner w i = j), h i
+  ∑ i ∈ Finset.univ.filter (fun i ↦ i ∉ chainGridBoundaryEdges hw ∧ chainGridEdgeOwner w i = j), Φ.term i
 
 /-- The retained interaction is the sum of the within-block Hamiltonians. Osborne, Figure 2. -/
 noncomputable def chainGridRetainedHamiltonian (hw : 0 < w)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :=
-  ∑ j, chainGridBlockHamiltonian hw h j
+    (Φ : ManyBody.BondInteraction L q) :=
+  ∑ j, chainGridBlockHamiltonian hw Φ j
 
 /-- The signed omitted term gives the convention `H = A - ∑ B_k`. Osborne, equations (2)--(3). -/
 noncomputable def chainGridBoundaryTerm (hw : 0 < w)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (k : Fin ((L - 1) / w)) := -h (chainGridBoundaryEdge hw k)
+    (Φ : ManyBody.BondInteraction L q)
+    (k : Fin ((L - 1) / w)) := -Φ.term (chainGridBoundaryEdge hw k)
 
 /-- The block sum retains exactly the edges not crossing grid boundaries. Osborne, Figure 2. -/
 theorem chainGridRetainedHamiltonian_eq_sum_filter (hw : 0 < w)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    chainGridRetainedHamiltonian hw h =
-      ∑ i ∈ Finset.univ.filter (fun i ↦ i ∉ chainGridBoundaryEdges hw), h i := by
+    (Φ : ManyBody.BondInteraction L q) :
+    chainGridRetainedHamiltonian hw Φ =
+      ∑ i ∈ Finset.univ.filter (fun i ↦ i ∉ chainGridBoundaryEdges hw), Φ.term i := by
   classical
   unfold chainGridRetainedHamiltonian chainGridBlockHamiltonian
   simp only [Finset.sum_filter]
@@ -125,17 +126,17 @@ theorem chainGridRetainedHamiltonian_eq_sum_filter (hw : 0 < w)
 All terms and labels are constructed from the original nearest-neighbor interactions.
 Osborne, arXiv:quant-ph/0508031v2, equations (2)--(3) and Figure 2. -/
 theorem sum_eq_chainGridRetained_sub_boundary (hw : 0 < w)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    (∑ i, h i) = chainGridRetainedHamiltonian hw h - ∑ k, chainGridBoundaryTerm hw h k := by
+    (Φ : ManyBody.BondInteraction L q) :
+    Φ.hamiltonian = chainGridRetainedHamiltonian hw Φ - ∑ k, chainGridBoundaryTerm hw Φ k := by
   classical
-  have himage : (∑ i ∈ chainGridBoundaryEdges hw, h i) =
-      ∑ k, h (chainGridBoundaryEdge hw k) := by
+  have himage : (Φ.partialHamiltonian (chainGridBoundaryEdges hw)) =
+      ∑ k, Φ.term (chainGridBoundaryEdge hw k) := by
     rw [chainGridBoundaryEdges, Finset.sum_image]
-    exact fun _ _ _ _ h ↦ chainGridBoundaryEdge_injective hw h
+    exact fun _ _ _ _ Φ ↦ chainGridBoundaryEdge_injective hw Φ
   have hfilter : Finset.univ.filter (fun i : Fin (L - 1) ↦ i ∈ chainGridBoundaryEdges hw) =
       chainGridBoundaryEdges hw := by ext i; simp
   have hsplit := Finset.sum_filter_not_add_sum_filter Finset.univ
-    (fun i : Fin (L - 1) ↦ i ∈ chainGridBoundaryEdges hw) h
+    (fun i : Fin (L - 1) ↦ i ∈ chainGridBoundaryEdges hw) Φ
   rw [hfilter, himage] at hsplit
   rw [chainGridRetainedHamiltonian_eq_sum_filter]
   simpa only [chainGridBoundaryTerm, Finset.sum_neg_distrib, sub_neg_eq_add] using hsplit.symm
@@ -143,10 +144,9 @@ theorem sum_eq_chainGridRetained_sub_boundary (hw : 0 < w)
 /-- A constructed block Hamiltonian is supported on its own block.
 Osborne, Figure 2. -/
 theorem chainGridBlockHamiltonian_mem_supported (hw : 0 < w)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i.val (i.val + 2))) (j : Fin (L / w + 1)) :
-    chainGridBlockHamiltonian hw h j ∈
+    (Φ : ManyBody.BondInteraction L q)
+(j : Fin (L / w + 1)) :
+    chainGridBlockHamiltonian hw Φ j ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q) (chainGridBlock L w j.val : Finset (Fin L)) := by
   classical
   apply sum_mem
@@ -154,14 +154,14 @@ theorem chainGridBlockHamiltonian_mem_supported (hw : 0 < w)
   obtain ⟨hinot, hiowner⟩ := (Finset.mem_filter.mp hi).2
   have hsub := chainGridEdge_subset_ownerBlock hw i hinot
   rw [hiowner] at hsub
-  exact ((hs i).mono hsub)
+  exact ((Φ.mem i).mono hsub)
 
 /-- Hermiticity of each original term implies Hermiticity of each retained block.
 Osborne, equations (2)--(3). -/
 theorem isHermitian_chainGridBlockHamiltonian (hw : 0 < w)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hHerm : ∀ i, (h i).IsHermitian) (j : Fin (L / w + 1)) :
-    (chainGridBlockHamiltonian hw h j).IsHermitian :=
+    (Φ : ManyBody.BondInteraction L q)
+    (hHerm : ∀ i, (Φ.term i).IsHermitian) (j : Fin (L / w + 1)) :
+    (chainGridBlockHamiltonian hw Φ j).IsHermitian :=
   Matrix.isHermitian_sum _ fun i _ ↦ hHerm i
 
 end TNLean.MPS.AreaLaw

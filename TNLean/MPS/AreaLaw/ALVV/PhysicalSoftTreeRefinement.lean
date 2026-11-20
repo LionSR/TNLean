@@ -52,11 +52,9 @@ theorem exists_physical_soft_tree_refined_ritz_approximation
     let D := (m * k + 1) * (q * k) ^ (36 * ell + 4 * (k / ell))
     let width := 4 * ell
     ∀ (L : ℕ)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu : ℝ),
-    let H := ∑ i, h i
+      (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu : ℝ),
+    let H := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H →
@@ -96,14 +94,14 @@ theorem exists_physical_soft_tree_refined_ritz_approximation
   obtain ⟨C, hC, kexp, href⟩ :=
     exists_physical_same_root_polynomial_refinement q 1 (by omega) le_rfl gamma hgamma
   refine ⟨u, Ccount, hu, hCcount, K, hK, C, hC, kexp, ?_⟩
-  intro ell m k D width L h hs h0 h1 mu H hH hmu hgap G rho threshold rounds count Kraw
+  intro ell m k D width L Φ hs h0 h1 mu H hH hmu hgap G rho threshold rounds count Kraw
   obtain ⟨_hD, _hM, _htau, _htau1, _hprec, _hprec1, _htfloor, _hTfloor, _hT0, _hO, _hR,
     _hDelta, _heps, _hrev, _hSmall, _Cxi, _hCxi, _Pxi, hall⟩ := hrest
   obtain ⟨xiInit, hxi, _hxi1, _hinv, hwidth, N, F, _hFam, hGood, hprob, _hshort, hcount,
-    hsize, _henergy⟩ := hall L h hs h0 h1 mu hmu hgap
+    hsize, _henergy⟩ := hall L Φ hs h0 h1 mu hmu hgap
   refine ⟨xiInit, hxi, hwidth, N, F, hGood, hprob, hcount, ?_⟩
   intro eta heta Z
-  obtain ⟨roundsRef, xiRef, Bscale, hxiRef, hB, hout⟩ := href L h hs h0 h1 mu hmu hgap eta heta
+  obtain ⟨roundsRef, xiRef, Bscale, hxiRef, hB, hout⟩ := href L Φ hs h0 h1 mu hmu hgap eta heta
   refine ⟨roundsRef, xiRef, Bscale, hxiRef, hB, ?_⟩
   intro U hU
   have hroot := (hsize U 0 L (Nat.zero_le L) le_rfl).1

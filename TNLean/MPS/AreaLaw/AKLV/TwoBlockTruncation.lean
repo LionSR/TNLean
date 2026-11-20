@@ -36,26 +36,26 @@ namespace TNLean.MPS.AreaLaw
 /-- The three actual consecutive regional sums used for clipping the two exterior
 blocks. AKLV, arXiv:1301.1162v1, Section 6.1, the definition of `H^(t)` after (5). -/
 def aklvRegionalHamiltonians {L q : ℕ} (l r : ℕ)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
+    (Φ : ManyBody.BondInteraction L q) :
     Fin 3 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   let k : Fin 4 → ℕ := ![0, l, r, L]
   fun j ↦ ∑ i ∈ Finset.univ.filter
-    (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+    (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
 
 open Classical in
 /-- The centered partially clipped Hamiltonian: the selector `T : Finset (Fin 2)`
 can select only the left and right blocks. The middle block is never clipped.
 AKLV, arXiv:1301.1162v1, Section 6.1, the definition of `H^(t)` after (5). -/
 noncomputable def aklvTwoBlockHamiltonian {L q : ℕ} (l r : ℕ)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (e : Fin 3 → ℝ) (t : ℝ) (T : Finset (Fin 2)) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  let A := aklvRegionalHamiltonians l r h
+  let A := aklvRegionalHamiltonians l r Φ
   let O := T.image (fun j ↦ (⟨2 * j.val, by omega⟩ : Fin 3))
   (∑ j, ((if j ∈ O then cfc (fun x : ℝ ↦ min x (e j + t)) (A j) else A j) -
     (e j : ℂ) • 1)) +
     ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), h i
+      (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), Φ.term i
 
 /-- At most two original neighbouring-site bonds cross two prescribed cuts, with a
 coincident crossing counted once. Auxiliary to ALVV, arXiv:1602.08828v2,
@@ -78,19 +78,19 @@ the crossing bonds. Empty regions and coincident cuts are included. Auxiliary to
 arXiv:1301.1162v1, Section 6.1, and ALVV, arXiv:1602.08828v2, `def:hard-trunc`,
 lines 873–886. -/
 theorem sum_three_regions_add_crossings {L q l r : ℕ} (hlr : l ≤ r)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    (∑ i, h i) = (∑ j, aklvRegionalHamiltonians l r h j) +
+    (Φ : ManyBody.BondInteraction L q) :
+    Φ.hamiltonian = (∑ j, aklvRegionalHamiltonians l r Φ j) +
       ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), h i := by
+        (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ)), Φ.term i := by
   have hempty (c : ℕ) :
       (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-        c ≤ i.val ∧ i.val + 1 < c), h i) = 0 := by
+        c ≤ i.val ∧ i.val + 1 < c), Φ.term i) = 0 := by
     apply Finset.sum_eq_zero
     intro i hi
     have := (Finset.mem_filter.mp hi).2
     omega
   have hsum := Finset.sum_five_internal_regions_add_crossings
-    (L := L) (k1 := l) (k2 := l) (k3 := r) (k4 := r) le_rfl hlr le_rfl h
+    (L := L) (k1 := l) (k2 := l) (k3 := r) (k4 := r) le_rfl hlr le_rfl Φ
   rw [hsum]
   simp [aklvRegionalHamiltonians, Fin.sum_univ_three, hempty]
   abel
@@ -124,15 +124,13 @@ is supplied. AKLV, arXiv:1301.1162v1, Section 6.1, equation (5) and Theorem 6.1.
 This bounded residual statement does not assert that theorem's gap preservation. -/
 theorem norm_aklv_two_block_truncation_low_le {L q l r : ℕ}
     (hlr : l ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (e : Fin 3 → ℝ) (ε t : ℝ) (hε : 0 ≤ ε) (ht : ε + 5 ≤ t)
-    (he : ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians l r h j) :
-    let B := aklvTwoBlockHamiltonian l r h e t
+    (he : ∀ j, (e j : ℂ) • 1 ≤ aklvRegionalHamiltonians l r Φ j) :
+    let B := aklvTwoBlockHamiltonian l r Φ e t
     ∃ hB : ∀ T, (B T).IsHermitian,
-      B ∅ = (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1 ∧
+      B ∅ = Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1 ∧
       ∀ T : Finset (Fin 2),
         let G := Submodule.spectralSpanLE (hB T).eigenvectorBasis (hB T).eigenvalues ε
         ‖((Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
@@ -140,10 +138,10 @@ theorem norm_aklv_two_block_truncation_low_le {L q l r : ℕ}
             64 * Real.exp (-(t - ε) / 8) := by
   intro B
   let k : Fin 4 → ℕ := ![0, l, r, L]
-  let A := aklvRegionalHamiltonians l r h
+  let A := aklvRegionalHamiltonians l r Φ
   let J := (Finset.univ : Finset (Fin (L - 1))).filter
     (fun i ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))
-  let Y := ∑ i ∈ J, h i
+  let Y := ∑ i ∈ J, Φ.term i
   let O : Finset (Fin 3) := {0, 2}
   let clip (T : Finset (Fin 2)) := T.image (fun j ↦ (⟨2 * j.val, by omega⟩ : Fin 3))
   let X (T : Finset (Fin 2)) := ∑ j,
@@ -161,8 +159,8 @@ theorem norm_aklv_two_block_truncation_low_le {L q l r : ℕ}
     obtain ⟨hX, _⟩ := Matrix.centered_partially_clipped_sum_posSemidef_and_mulVec_eq_zero
       A e t (clip T) hA he (0 : (Fin L → Fin q) → ℂ) (by intro j; simp) (by linarith)
     exact (hX.add hY).isHermitian
-  have hcenter : B ∅ = (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1 := by
-    have hsum := sum_three_regions_add_crossings hlr h
+  have hcenter : B ∅ = Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1 := by
+    have hsum := sum_three_regions_add_crossings hlr Φ
     simp only [B, aklvTwoBlockHamiltonian, Finset.image_empty, Finset.notMem_empty,
       ite_false, Finset.sum_sub_distrib]
     rw [hsum]
@@ -181,7 +179,7 @@ theorem norm_aklv_two_block_truncation_low_le {L q l r : ℕ}
       ‖((Matrix.toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
         (A j - cfc (fun x : ℝ ↦ min x (e j + t)) (A j))).domRestrict G)‖ ≤
           32 * Real.exp (-(t - ε) / 8) := by
-    have htail := norm_consecutive_regional_truncation_low_le k hk h hs h0 h1
+    have htail := norm_consecutive_regional_truncation_low_le k hk Φ h0 h1
       e (clip T) j J (ε + 5) ε (1 / 8) t
       (by norm_num) (by norm_num) (by linarith) ht
       (hB T).eigenvectorBasis (hB T).eigenvalues he hEigen (by linarith)

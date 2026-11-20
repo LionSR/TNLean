@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.AreaLaw.ViableSet.ChainPaddingCoordinates
 import QICLean.ManyBody.Hamiltonian.KroneckerSum
 
@@ -43,23 +44,23 @@ theorem norm_paddedGroundVector {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
 spans the ground space of the actual padded interaction, which is gapped with gap the
 minimum of the original gap and one. -/
 theorem isGapped_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
-    (z : Fin q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    {E Delta : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hH : (∑ j, h j).IsHermitian)
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E Delta)
-    (hspan : groundSpace (∑ j, h j) E = Submodule.span ℂ {Γ}) (hDelta : 0 < Delta) :
-    ‖paddedGroundVector hi z Γ‖ = 1 ∧ IsGapped (∑ j, paddedInteraction hi z h j) E (min Delta 1) ∧
-      groundSpace (∑ j, paddedInteraction hi z h j) E =
+    (z : Fin q) (Φ : ManyBody.BondInteraction L q)
+    {E Delta : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hH : Φ.hamiltonian.IsHermitian)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E Delta)
+    (hspan : groundSpace Φ.hamiltonian E = Submodule.span ℂ {Γ}) (hDelta : 0 < Delta) :
+    ‖paddedGroundVector hi z Γ‖ = 1 ∧ IsGapped (∑ j, paddedInteraction hi z Φ j) E (min Delta 1) ∧
+      groundSpace (∑ j, paddedInteraction hi z Φ j) E =
         Submodule.span ℂ {paddedGroundVector hi z Γ} := by
   classical
   let e := leftConfigOfFinEquiv (q := q) hi
-  let H := ∑ j, h j
+  let H := Φ.hamiltonian
   let b0 : (v : {v : Fin N // v ∉ leftBlock N L}) → Fin q := fun _ ↦ z
   let A := Matrix.reindex e e H
   let B := QuantumCircuit.productBasisPenalty b0
   let c := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N L)
-  have hpad : ManyBody.cutOperator (leftBlock N L) (∑ j, paddedInteraction hi z h j) =
+  have hpad : ManyBody.cutOperator (leftBlock N L) (∑ j, paddedInteraction hi z Φ j) =
       A ⊗ₖ 1 + 1 ⊗ₖ B := by
-    rw [sum_paddedInteraction hL hi z h]
+    rw [sum_paddedInteraction hL hi z Φ]
     change ManyBody.cutOperator (leftBlock N L) (QuantumCircuit.embedOp (Fin.castLE hi) H) +
       ManyBody.cutOperator (leftBlock N L)
         (∑ v : {v : Fin N // v ∉ leftBlock N L},
@@ -77,9 +78,9 @@ theorem isGapped_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
   rw [add_zero, ← hpad] at hgK hsK
   have hsP := ManyBody.groundSpace_reindex_eq_span c.symm hsK
   rw [show Matrix.reindex c.symm c.symm (ManyBody.cutOperator (leftBlock N L)
-      (∑ j, paddedInteraction hi z h j)) = ∑ j, paddedInteraction hi z h j by
+      (∑ j, paddedInteraction hi z Φ j)) = ∑ j, paddedInteraction hi z Φ j by
     ext σ τ
-    exact congrArg₂ (∑ j, paddedInteraction hi z h j) (c.symm_apply_apply σ)
+    exact congrArg₂ (∑ j, paddedInteraction hi z Φ j) (c.symm_apply_apply σ)
       (c.symm_apply_apply τ)] at hsP
   refine ⟨(norm_paddedGroundVector hi z Γ).trans hΩ, (ManyBody.isGapped_reindex_iff c).mp hgK,
     hsP.trans ?_⟩

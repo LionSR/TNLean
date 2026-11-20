@@ -232,9 +232,8 @@ radius, and apply the Gaussian filter factors, with the bond budget `b_L` of the
 declared for the vectors handled. LVV13, `algo53.tex`, algorithm steps 1--4, lines
 379--592, with Huang, Section 5.4, Lemmas 18--19 for the error-reduction operator. -/
 noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
+    (Φ : ManyBody.BondInteraction L q)
+(h0 : ∀ j, 0 ≤ Φ.term j)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     LVVProgram q (Finset (LeftBlockVector L q (i + 1))) :=
   let b := lvvSuccessiveBondBound q Delta L
@@ -243,20 +242,19 @@ noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
   do
     let S₁ ← extensionProgram L (i + 1) b S
     let S₂ ← sizeTrimmingProgram L (i + 1) b
-      (ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩) hq Delta S₁
+      (ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩) hq Delta S₁
     let S₃ ← bondTrimmingProgram L (i + 1) hi b m S₂
     let F ← FreeM.lift
-      (LinearAlgebraQuery.gaussianFilterFactors L (i + 1) (Nat.le_of_lt hq) h h0 c Delta)
+      (LinearAlgebraQuery.gaussianFilterFactors L (i + 1) (Nat.le_of_lt hq) Φ h0 c Delta)
     errorReductionProgram L (i + 1) (huangFilterRankBound q c Delta L) (max 1 m) F S₃
 
 /-- With the honest oracle, one step of the program computes one step of the sweep. -/
 theorem eval_sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
+    (Φ : ManyBody.BondInteraction L q)
+(h0 : ∀ j, 0 ≤ Φ.term j)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
-    FreeM.eval honestOracle (sweepStepProgram hq h hs h0 Delta hi S) =
-      lvvSweepStep hq h hs h0 Delta hi S := by
+    FreeM.eval honestOracle (sweepStepProgram hq Φ h0 Delta hi S) =
+      lvvSweepStep hq Φ h0 Delta hi S := by
   simp only [sweepStepProgram, FreeM.eval_bind, FreeM.eval_lift,
     honestOracle_gaussianFilterFactors, eval_extensionProgram, eval_sizeTrimmingProgram,
     eval_bondTrimmingProgram, eval_errorReductionProgram, lvvSweepStep, successiveStep]
@@ -264,31 +262,29 @@ theorem eval_sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
 /-- **The sweep as a program.** Start from the scalar singleton and apply the step at every
 cut of the chain. LVV13, `algo53.tex`, proof of Theorem 1, lines 652--668. -/
 noncomputable def sweepProgram {L : ℕ} (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (Delta : ℝ) : (i : ℕ) → LVVProgram q (Finset (LeftBlockVector L q i))
   | 0 => pure {emptyLeftVector L q}
   | i + 1 =>
     if hi : i + 1 ≤ L then do
-      let S ← sweepProgram hq h hs h0 h1 Delta i
-      sweepStepProgram hq h hs h0 Delta hi S
+      let S ← sweepProgram hq Φ h0 h1 Delta i
+      sweepStepProgram hq Φ h0 Delta hi S
     else pure ∅
 
 /-- With the honest oracle, the program computes the sweep at every cut. -/
 theorem eval_sweepProgram {L : ℕ} (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (Delta : ℝ) (i : ℕ) :
-    FreeM.eval honestOracle (sweepProgram hq h hs h0 h1 Delta i) =
-      lvvSweep hq h hs h0 h1 Delta i := by
+    FreeM.eval honestOracle (sweepProgram hq Φ h0 h1 Delta i) =
+      lvvSweep hq Φ h0 h1 Delta i := by
   induction i with
   | zero => rfl
   | succ i ih =>
     by_cases hi : i + 1 ≤ L
     · simp only [sweepProgram, hi, ↓reduceDIte, FreeM.eval_bind, ih, eval_sweepStepProgram,
-        lvvSweep_succ hq h hs h0 h1 Delta hi]
+        lvvSweep_succ hq Φ h0 h1 Delta hi]
     · simp only [sweepProgram, hi, ↓reduceDIte, FreeM.eval_pure, lvvSweep]
 
 end TNLean.MPS.AreaLaw

@@ -32,20 +32,18 @@ frustration-free unit ground vector force local dimension at least two and `g �
 This is the normalization of AKLV, arXiv:1301.1162v1, Section 5, before equation (4),
 at ground energy zero. -/
 theorem aklv_frustrationFree_dimension_and_gap_bounds {L q : ℕ}
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h j) (interval L j.val (j.val + 2)))
-    (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
-    (hzero : (∑ j, h j) *ᵥ WithLp.ofLp Ω = 0)
-    (hgap : ((∑ j, h j) - (g : ℂ) •
+    (hzero : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0)
+    (hgap : (Φ.hamiltonian - (g : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
-    (hg : 0 < g) (hexcited : g ∈ spectrum ℝ (∑ j, h j)) :
+    (hg : 0 < g) (hexcited : g ∈ spectrum ℝ Φ.hamiltonian) :
     2 ≤ q ∧ g ≤ 1 := by
   classical
-  have hH : (∑ j, h j).IsHermitian :=
+  have hH : Φ.hamiltonian.IsHermitian :=
     (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian
-  have hground : (∑ j, h j) *ᵥ WithLp.ofLp Ω = ((0 : ℝ) : ℂ) • WithLp.ofLp Ω := by
+  have hground : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = ((0 : ℝ) : ℂ) • WithLp.ofLp Ω := by
     rw [hzero, Complex.ofReal_zero, zero_smul]
   have hmu := Matrix.mem_spectrum_real_of_mulVec_eq_smul
     (by intro hz; simp only [hz, norm_zero, zero_ne_one] at hΩ) hground
@@ -65,6 +63,6 @@ theorem aklv_frustrationFree_dimension_and_gap_bounds {L q : ℕ}
     ⟨hΩ, by rw [← (WithLp.ofLp_injective 2).eq_iff, Matrix.ofLp_toEuclideanCLM,
       WithLp.ofLp_smul]; exact hground, by simpa only [Complex.ofReal_zero, zero_smul, sub_zero]
         using hgap⟩
-  exact ⟨hq, gap_le_one_of_positive_nearest_neighbor_terms hL hq h hsupp h0 h1 hΩ hgap hspan⟩
+  exact ⟨hq, gap_le_one_of_positive_nearest_neighbor_terms hL hq Φ h0 h1 hΩ hgap hspan⟩
 
 end TNLean.MPS.AreaLaw

@@ -45,13 +45,11 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_capped
     (etaLD : ℝ) (hLD : 0 < etaLD) :
     ∃ Kb Cf : ℝ, 0 < Kb ∧ 100 ≤ Cf ∧
       ∀ (L q p r : ℕ) (v : ℝ) (hq : 2 ≤ q), p ≤ r → r ≤ L → 0 < v →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ (h0 : ∀ i, 0 ≤ Φ.term i), (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let J := interval L p r
@@ -72,7 +70,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_capped
   obtain ⟨Cf, hCf, _hCfeta, hrefine⟩ :=
     exists_fixed_bandwidth_interval_low_energy_dyadic_refinement etaLD hLD
   refine ⟨Kb, Cf, hKb, hCf, ?_⟩
-  intro L q p r v hq hpr hrL hv h hs h0 h1 config H hRaw
+  intro L q p r v hq hpr hrL hv Φ h0 h1 config H hRaw
   let : Nonempty (Fin L → Fin q) := config
   intro J G b g m u ψ hψG hψ
   let beta := fun _ : Fin L ↦ Fin q
@@ -95,7 +93,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_capped
     Submodule.spectralSpanLE_mono_cutoff hRaw.eigenvectorBasis hRaw.eigenvalues
       (by linarith only [hac])
   obtain ⟨W0, hWdim, hW0⟩ :=
-    hinitial L q p r (b / 2) hq hpr hrL (by positivity) h hs h0 h1
+    hinitial L q p r (b / 2) hq hpr hrL (by positivity) Φ h0 h1
   have hψupper : ψ ∈ G (etaLD - b / 2) :=
     hG (by linarith only [hbv, hb]) hψG
   have hupperne : (G (etaLD - b / 2)).map Tm.toLinearEquiv.toLinearMap ≠ ⊥ := by
@@ -122,8 +120,8 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_capped
   have hlogInitial : Real.log (Module.finrank ℂ W0 : ℝ) ≤
       Real.log (Module.finrank ℂ (G etaLD) : ℝ) +
         Kb / (b / 2) * (1 + Real.log (q : ℝ) + Real.log (1 + 1 / (b / 2))) ^ 3 := by
-    have h := Real.log_le_log hr0R hWdim
-    rwa [Real.log_mul hrR.ne' (Real.exp_ne_zero _), Real.log_exp] at h
+    have Φ.term := Real.log_le_log hr0R hWdim
+    rwa [Real.log_mul hrR.ne' (Real.exp_ne_zero _), Real.log_exp] at Φ.term
   obtain ⟨hqm, hm, _hlogm, _hlogmup⟩ := Real.regularized_filter_count_base_bounds q hq
   let D : ℕ → ℕ := fun i ↦
     let mi := m * 2 ^ i
@@ -156,7 +154,7 @@ theorem exists_fixed_bandwidth_interval_low_energy_entropy_bound_capped
         Module.finrank ℂ W0 * D 0 ^ 24 * D i ^ 2 ≤ a.val), probability a) ≤
           1 / (2 : ℝ) ^ (i + 1) := by
     obtain ⟨_hell, _hlog, A, hA⟩ :=
-      hrefine L q m p r i (b / 6) hq hqm hpr hrL hw h hs h0 h1
+      hrefine L q m p r i (b / 6) hq hqm hpr hrL hw Φ h0 h1
     have hbuffer : 6 * (b / 6) ≤ etaLD - b / 2 := by linarith only [hbcap, hb]
     obtain ⟨hdim, hV⟩ := hA (etaLD - b / 2) hbuffer (by linarith only [hb]) W0 hW0
     have hVraw : Submodule.IsViable (F := EE) (1 / (2 : ℝ) ^ (i + 1))

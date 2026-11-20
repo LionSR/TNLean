@@ -46,23 +46,22 @@ and simultaneous internal rank bounds are those of the exact construction.
 Source: LVV13, `algo53.tex`, Claim `c:errorreduction`, lines 580–592, and
 Corollary `c:agsp`, lines 626–649, with the correction stated above. -/
 theorem exists_rational_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-      (interval L i (i + 2))) (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+(h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ)
     {δ : ℝ} (hδ : 0 < δ) (hδ1 : δ ≤ 1) :
     let η := δ / 16
     let m := ⌈((L - E₀) / Δ) * Real.log (1 / η)⌉₊
     let ℓ := sampledProjectorWordCount q L E₀ η m
     let D := q ^ (2 * sampledProjectorLetterBound L ℓ m)
     ∃ I : Fin ℓ → Fin m → Fin L,
-      ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 8 ∧
+      ‖sampledProjector Φ E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 8 ∧
       ∀ n : ℕ, n + 1 ≤ L → ∃ (N : ℕ) (A : Fin N → LeftBlockMatrix L q (n + 1))
         (B : Fin N → RightBlockMatrix L q (n + 1)),
         N ≤ ℓ * D ∧ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (n + 1))
-          (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B j ∧
+          (sampledProjector Φ E₀ I) = ∑ j, A j ⊗ₖ B j ∧
         (∀ j k, 0 < k → k < n + 1 → operatorSchmidtRank
           (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock (n + 1) k)
             ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D) ∧
@@ -81,7 +80,7 @@ theorem exists_rational_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 �
             IsViableMPS Γ (ℓ * D * s) ((ℓ * D * s) * max 1 (D * max 1 b)) δ T := by
   classical
   intro η m ℓ D
-  have hexact := exists_sampled_errorReduction hq h hs h0 h1 hΩ hgap hspan hΔ
+  have hexact := exists_sampled_errorReduction hq Φ h0 h1 hΩ hgap hspan hΔ
     (δ := δ / 2) (by positivity) (by linarith)
   dsimp only at hexact
   rw [show δ / 2 / 8 = δ / 16 by ring] at hexact

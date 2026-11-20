@@ -124,11 +124,9 @@ theorem exists_physical_low_energy_interval_family
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (_h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1),
-      let H := ∑ i, h i
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (_h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1),
+      let H := Φ.hamiltonian
       ∃ (s E0 : ℝ) (C : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (hC : C.IsHermitian) (z : (Fin L → Fin q) → ℂ),
         C = H - (s : ℂ) • 1 ∧ star z ⬝ᵥ z = 1 ∧ C *ᵥ z = (E0 : ℂ) • z ∧
@@ -173,7 +171,7 @@ theorem exists_physical_low_energy_interval_family
     positivity
   refine ⟨hell, Real.low_energy_count_le_source_scale L q mu etaLD Kcount (D : ℝ)
     hL (by omega) hmu hK (hband.trans hetaUpper) hlogD, ?_⟩
-  intro p r hpr hrL J beta tau U Phi Tm h hs h0 h1 H
+  intro p r hpr hrL J beta tau U Phi Tm Φ hs h0 h1 H
   have hell1 : 1 ≤ ell := by omega
   classical
   by_cases hshort : r - p ≤ 4 * ell
@@ -207,15 +205,15 @@ theorem exists_physical_low_energy_interval_family
     obtain ⟨t, e, E0, z, hO, hC, htformula, _ht, hcut, hcenter,
       hzunit, hz, hE0low, hE0, hE04, hnorm, hfamily⟩ :=
       exists_five_region_low_energy_family_on_larger_region L q a b ell J
-        eta w (1 / 200) hbuffer hw (by norm_num) hq hell1 hab hbL hsub hcollar h hs h0 h1
+        eta w (1 / 200) hbuffer hw (by norm_num) hq hell1 hab hbL hsub hcollar Φ hs h0 h1
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
     let Areg : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     let Cross : Finset (Fin (L - 1)) := Finset.univ.filter
       (fun i ↦ i.val + 1 ∈
         ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ))
-    let Y := ∑ i ∈ Cross, h i
+    let Y := ∑ i ∈ Cross, Φ.term i
     let K : Finset (Fin 5) := {0, 2, 4}
     let B : Finset (Fin 5) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun T ↦
       (∑ j, ((if j ∈ T then cfc (fun r : ℝ ↦ min r (e j + t)) (Areg j)
@@ -272,11 +270,9 @@ theorem exists_physical_original_low_energy_interval_family
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
         (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (_h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1),
-      let H := ∑ i, h i
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (_h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1),
+      let H := Φ.hamiltonian
       ∃ (s E0 : ℝ) (C : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (hC : C.IsHermitian) (z : (Fin L → Fin q) → ℂ),
         C = H - (s : ℂ) • 1 ∧ star z ⬝ᵥ z = 1 ∧ C *ᵥ z = (E0 : ℂ) • z ∧
@@ -311,9 +307,9 @@ theorem exists_physical_original_low_energy_interval_family
   intro L q mu eta hL hq hmu hetaLower hetaUpper w g u ell D Kcount
   obtain ⟨hell, hlogD, hinterval⟩ := hall L q mu eta hL hq hmu hetaLower hetaUpper
   refine ⟨hell, hlogD, ?_⟩
-  intro p r hpr hrL J beta tau U Phi Tm h hs h0 h1 H
+  intro p r hpr hrL J beta tau U Phi Tm Φ hs h0 h1 H
   obtain ⟨s, E0, C, hC, z, hshift, hzunit, hz, hground, hfamily⟩ :=
-    hinterval p r hpr hrL h hs h0 h1
+    hinterval p r hpr hrL Φ hs h0 h1
   refine ⟨s, E0, C, hC, z, hshift, hzunit, hz, hground, ?_⟩
   intro Gup Glo
   obtain ⟨Tlo, Thi, Delta, F, hsub, hupper, hlower, hDelta, hbudget, hclip⟩ := hfamily

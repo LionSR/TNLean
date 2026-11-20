@@ -43,16 +43,14 @@ Auxiliary to ALVV, arXiv:1602.08828v2, `def:soft-trunc` and `lem:exp-approx`,
 lines 1175–1255; the full soft spectral comparison is not asserted. -/
 theorem exists_interval_regional_exponential_moment
     (L q p r : ℕ) (hq : 0 < q) (hpr : p ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, p, r, r, r, L]
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     ∃ (e : Fin 5 → ℝ) (E0 : ℝ) (x z : (Fin L → Fin q) → ℂ),
-      let Hc := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      let Hc := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       ∃ hHc : Hc.IsHermitian,
         star x ⬝ᵥ x = 1 ∧
         (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
@@ -71,9 +69,9 @@ theorem exists_interval_regional_exponential_moment
     (fun i ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
   let J : Finset (Fin (L - 1)) := Finset.univ.filter
     (fun i ↦ i.val + 1 ∈ ({p, r, r, r} : Finset ℕ))
-  let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ J, h i
+  let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ J, Φ.term i
   obtain ⟨_hk, hR, hAs, hAcap, hY, hYC, _hJ4, hH⟩ :=
-    five_region_original_bond_data L q p r r r hpr le_rfl le_rfl hrL h hs h0 h1
+    five_region_original_bond_data L q p r r r hpr le_rfl le_rfl hrL Φ h0 h1
   have hJ2 : J.card ≤ 2 := by
     have hc := Finset.card_le_card_of_injOn (fun i : Fin (L - 1) ↦ i.val + 1)
       (s := J) (t := {p, r})
@@ -95,7 +93,7 @@ theorem exists_interval_regional_exponential_moment
       (fun j ↦ (hAcap j).2) Y J.card hY hYC
   let X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
     ∑ j, (A j - (e j : ℂ) • 1)
-  have hcenter : X + Y = (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1 := by
+  have hcenter : X + Y = Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1 := by
     dsimp only [X]
     rw [hH, Finset.sum_sub_distrib]
     push_cast
@@ -139,7 +137,7 @@ theorem exists_interval_regional_exponential_moment
     dsimp only [u, C]
     linarith
   obtain ⟨Z, hZ, hZn⟩ := exists_nearestNeighbour_weighted_low_restriction
-    (I 1) J h (fun i _ ↦ hs i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
+    (I 1) J Φ (fun i _ ↦ Φ.mem i) (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
     X (e 1) u (E0 + eta) (1 / 8) (by norm_num) (by norm_num)
     (hcomm 1) (horder 1 u hu0 le_rfl)
     hHc.eigenvectorBasis hHc.eigenvalues hEigen hgap

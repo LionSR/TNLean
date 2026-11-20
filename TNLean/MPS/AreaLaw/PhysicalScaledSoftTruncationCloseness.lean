@@ -40,17 +40,15 @@ theorem exists_interval_physical_scaled_soft_low_energy_closeness
     let rho := min 1 (min (w / 2) (delta * w ^ 2 / (2 * (eta + 2))))
     ∃ m : ℕ, m = ⌈12 + (2 / 3 : ℝ) * eta + (16 / 3 : ℝ) * Real.log (80 / rho)⌉₊ ∧ 0 < m ∧
       ∀ (L q p r : ℕ) (hq : 0 < q) (_hpr : p ≤ r) (_hrL : r ≤ L)
-        (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2))) →
-        (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) →
+        (Φ : ManyBody.BondInteraction L q),
+        (∀ i, 0 ≤ Φ.term i) → (∀ i, Φ.term i ≤ 1) →
         let : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
         let k : Fin 6 → ℕ := ![0, p, r, r, r, L]
         let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
           ∑ i ∈ Finset.univ.filter
-            (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+            (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
         ∃ (e : Fin 5 → ℝ) (E0 : ℝ) (x : (Fin L → Fin q) → ℂ),
-          let H := ∑ i, h i
+          let H := Φ.hamiltonian
           let Hc := H - (((∑ j, e j) : ℝ) : ℂ) • 1
           ∃ hHc : Hc.IsHermitian,
             star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
@@ -86,9 +84,9 @@ theorem exists_interval_physical_scaled_soft_low_energy_closeness
   obtain ⟨m, hmformula, hm, htau, ha0, _ha4, hscale, hbudget⟩ :=
     Real.exists_softTruncation_scaled_order_of_residual_budget eta rho heta.le hrho hrho1
   refine ⟨m, hmformula, hm, ?_⟩
-  intro L q p r hq hpr hrL h hs h0 h1 _inst k A
+  intro L q p r hq hpr hrL Φ h0 h1 _inst k A
   obtain ⟨e, E0, x, hO, hxunit, hx, he, hEcan, hE0, hE2, hresiduals⟩ :=
-    exists_interval_physical_scaled_soft_residuals L q p r hq hpr hrL h hs h0 h1
+    exists_interval_physical_scaled_soft_residuals L q p r hq hpr hrL Φ h0 h1
   refine ⟨e, E0, x, ?_⟩
   intro H Hc
   refine ⟨hO, hxunit, hx, he, hEcan, hE0, hE2, ?_⟩

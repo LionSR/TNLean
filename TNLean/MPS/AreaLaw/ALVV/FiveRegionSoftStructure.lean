@@ -34,22 +34,20 @@ lines 1178–1185 and 1373–1392; no spectral gap is assumed. -/
 theorem exists_five_region_soft_structure {L q k1 k2 k3 k4 : ℕ}
     (hq : 0 < q) (h12 : k1 ≤ k2) (h23 : k2 ≤ k3)
     (h34 : k3 ≤ k4) (h4L : k4 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, k1, k2, k3, k4, L]
     let I := fun j : Fin 5 ↦ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-    let A := fun j : Fin 5 ↦ ∑ i ∈ I j, h i
+    let A := fun j : Fin 5 ↦ ∑ i ∈ I j, Φ.term i
     let J := Finset.univ.filter
       (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
+    let Y := ∑ i ∈ J, Φ.term i
     J.card ≤ 4 ∧ ∃ (e : Fin 5 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
       let Braw := ∑ j, (A j - (e j : ℂ) • 1)
-      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       H = Braw + Y ∧ Braw.PosSemidef ∧ star z ⬝ᵥ z = 1 ∧
       H *ᵥ z = (E : ℂ) • z ∧ (H - (E : ℂ) • 1).PosSemidef ∧
       0 ≤ E ∧ E ≤ (J.card : ℝ) ∧
@@ -70,7 +68,7 @@ theorem exists_five_region_soft_structure {L q k1 k2 k3 k4 : ℕ}
   intro k I A J Y
   let R := fun j : Fin 5 ↦ interval L (k j.castSucc) (k j.succ)
   obtain ⟨hk, hR, hsA, hA, hY, hYC, hJ, hsum⟩ :=
-    five_region_original_bond_data L q k1 k2 k3 k4 h12 h23 h34 h4L h hs h0 h1
+    five_region_original_bond_data L q k1 k2 k3 k4 h12 h23 h34 h4L Φ h0 h1
   have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hx, hxe, he, hclip⟩ :=
     ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q) R A
@@ -79,7 +77,7 @@ theorem exists_five_region_soft_structure {L q k1 k2 k3 k4 : ℕ}
   obtain ⟨hBraw, _hx0, _hc0, _ho0, _hcap0, _hnorm0,
       E, z, hz, hHz, hE, hE0, hEC⟩ := hclip 0 le_rfl ∅
   let Braw := ∑ j, (A j - (e j : ℂ) • 1)
-  let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+  let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
   have hHY : H = Braw + Y := by
     dsimp only [H, Braw]
     rw [hsum, Finset.sum_sub_distrib]
@@ -100,7 +98,7 @@ theorem exists_five_region_soft_structure {L q k1 k2 k3 k4 : ℕ}
   refine ⟨hJ, e, x, z, E, hx, hxe, he, hHY, hBraw', hz, hHz', hE', hE0, hEC, hH, ?_⟩
   intro S p t m hpl hpu ht hm B D G
   have hcomm : Pairwise fun i j : Fin 5 ↦ Commute (A i) (A j) :=
-    pairwise_commute_sum_internal_consecutive_regions k hk h hs
+    pairwise_commute_sum_internal_consecutive_regions k hk Φ
   obtain ⟨hBpos, hBle, hBA, hproj⟩ := softTruncation_commuting_family_bounds A e p S
     (fun j ↦ (hA j).1.isHermitian) (fun j ↦ le_iff.mpr (he j)) hpl hpu hcomm t m ht hm
   change (B + (D : ℂ) • 1).PosSemidef at hBpos

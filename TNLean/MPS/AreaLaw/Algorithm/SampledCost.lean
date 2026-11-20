@@ -67,25 +67,25 @@ theorem sampledStepCostBound_mono (q : ℕ) (Δ : ℝ) (L : ℕ) {ℓ ℓ' D D' 
 /-- One sampled step costs at most the budget at the cardinality of the input, when the
 sampled factors number at most `ℓ D`. -/
 theorem cost_sampledSweepStepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2))) (E₀ : ℝ)
+    (Φ : ManyBody.BondInteraction L q)
+(E₀ : ℝ)
         {Δ : ℝ} (hΔ : 0 < Δ)
     {ℓ m : ℕ} (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
-    (S : Finset (LeftBlockVector L q i)) (hF : (sampledFactors h E₀ I (i + 1)).card ≤ ℓ * D) :
-    FreeM.cost honestOracle queryCost (sampledSweepStepProgram hq h hs E₀ Δ I b D hi S) ≤
+    (S : Finset (LeftBlockVector L q i)) (hF : (sampledFactors Φ E₀ I (i + 1)).card ≤ ℓ * D) :
+    FreeM.cost honestOracle queryCost (sampledSweepStepProgram hq Φ E₀ Δ I b D hi S) ≤
       sampledStepCostBound q Δ L ℓ D b S.card := by
   classical
   simp only [sampledSweepStepProgram, FreeM.cost_bind, FreeM.eval_lift, eval_extensionProgram,
     eval_sizeTrimmingProgram, eval_bondTrimmingProgram, honestOracle_sampledFactors,
     FreeM.cost_lift, queryCost_sampledFactors, sampledStepCostBound]
-  set chain := ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩ with hchain
+  set chain := ManyBody.BondInteraction.toChainInteraction ⟨Φ.term, Φ.mem⟩ with hchain
   set m' := bondTrimmingRadius L (lvvReferenceBond q Δ L) with hm'
   set c : ℝ := (Δ / 169) ^ 2 with hc
   set D' := constantCutBond q 1 1 Δ c with hD'
   set S₁ := AreaLaw.extend (i + 1) S with hS₁
   set S₂ := chain.sizeTrimmingSelection hq Δ S₁ with hS₂
   set S₃ := bondTrimSet hi m' S₂ with hS₃
-  set F := sampledFactors h E₀ I (i + 1) with hF'
+  set F := sampledFactors Φ E₀ I (i + 1) with hF'
   set size := lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ with hsize
   have hcard₁ : S₁.card ≤ q * S.card := card_extend_le (i + 1) S
   have hcard₂ : S₂.card ≤ size :=
@@ -109,31 +109,30 @@ noncomputable def sampledSizeBudget (q : ℕ) (Δ : ℝ) (L ℓ D : ℕ) : ℕ :
 /-- On good words, the sampled sweep up to cut `i ≤ L` costs at most `i` steps at the size
 budget, with the rank bound `q^{2κ}` declared at least as large as the rank of the words. -/
 theorem cost_sampledSweepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
-    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, (Φ.term j).PosSemidef) (h1 : ∀ j, Φ.term j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
-    (hgood : ∀ i, GoodWords h E₀ m (δ / 8) κ (I i)) (b D : ℕ) (hD : q ^ (2 * κ) ≤ D)
+    (hgood : ∀ i, GoodWords Φ E₀ m (δ / 8) κ (I i)) (b D : ℕ) (hD : q ^ (2 * κ) ≤ D)
     (i : ℕ) (hi : i ≤ L) :
-    FreeM.cost honestOracle queryCost (sampledSweepProgram hq h hs h0 h1 E₀ Δ I b D i) ≤
+    FreeM.cost honestOracle queryCost (sampledSweepProgram hq Φ h0 h1 E₀ Δ I b D i) ≤
       i * sampledStepCostBound q Δ L ℓ D b (max 1 (sampledSizeBudget q Δ L ℓ (q ^ (2 * κ)))) := by
   induction i with
   | zero => simp [sampledSweepProgram]
   | succ i ih =>
     have hi' : i + 1 ≤ L := hi
     simp only [sampledSweepProgram, hi', ↓reduceDIte, FreeM.cost_bind, eval_sampledSweepProgram]
-    have hF : (sampledFactors h E₀ (I ⟨i, by omega⟩) (i + 1)).card ≤ ℓ * D :=
-      (card_sampledFactors_le h E₀ (I ⟨i, by omega⟩) (i + 1) fun t ↦
-        operatorSchmidtRank_cutOperator_bondComplementWord_le_all (by omega) h hs _
+    have hF : (sampledFactors Φ E₀ (I ⟨i, by omega⟩) (i + 1)).card ≤ ℓ * D :=
+      (card_sampledFactors_le Φ E₀ (I ⟨i, by omega⟩) (i + 1) fun t ↦
+        operatorSchmidtRank_cutOperator_bondComplementWord_le_all (by omega) Φ _
           ((hgood ⟨i, by omega⟩).2 t) (i + 1)).trans (Nat.mul_le_mul_left ℓ hD)
-    have hstep := cost_sampledSweepStepProgram_le hL hq h hs E₀ hΔ (I ⟨i, by omega⟩) b D
-      hi' (sampledSweep hq h hs h0 h1 E₀ Δ I i) hF
-    have hcard : (sampledSweep hq h hs h0 h1 E₀ Δ I i).card ≤
+    have hstep := cost_sampledSweepStepProgram_le hL hq Φ E₀ hΔ (I ⟨i, by omega⟩) b D
+      hi' (sampledSweep hq Φ h0 h1 E₀ Δ I i) hF
+    have hcard : (sampledSweep hq Φ h0 h1 E₀ Δ I i).card ≤
         max 1 (sampledSizeBudget q Δ L ℓ (q ^ (2 * κ))) := by
-      refine (sampledSweep_spec hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood i
+      refine (sampledSweep_spec hL hq Φ h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood i
         (by omega)).1.trans ?_
       unfold sampledSizeBudget
       split_ifs <;> simp
@@ -161,26 +160,25 @@ theorem sampledGroundStateCostBound_mono (q : ℕ) (Δ : ℝ) (L : ℕ) {ℓ ℓ
 /-- On good words, the sampled ground-state program costs at most its budget, with the rank
 bound `q^{2κ}` declared. -/
 theorem cost_sampledGroundStateProgram_le (hL : 0 < L) (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
-    (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
-    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
-    (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, (Φ.term j).PosSemidef) (h1 : ∀ j, Φ.term j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
+    {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ})
     {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) (hδc : δ ≤ (Δ / 169) ^ 2 / L) {ℓ m κ : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (hm : ((L - E₀) / Δ) * Real.log (1 / (δ / 8)) ≤ m)
-    (hgood : ∀ i, GoodWords h E₀ m (δ / 8) κ (I i)) (b D : ℕ) (hD : q ^ (2 * κ) ≤ D) :
-    FreeM.cost honestOracle queryCost (sampledGroundStateProgram hq h hs h0 h1 E₀ Δ I b D) ≤
+    (hgood : ∀ i, GoodWords Φ E₀ m (δ / 8) κ (I i)) (b D : ℕ) (hD : q ^ (2 * κ) ≤ D) :
+    FreeM.cost honestOracle queryCost (sampledGroundStateProgram hq Φ h0 h1 E₀ Δ I b D) ≤
       sampledGroundStateCostBound q Δ L ℓ D b := by
   classical
   simp only [sampledGroundStateProgram, FreeM.cost_bind, FreeM.cost_lift,
     eval_sampledSweepProgram, queryCost_energyMinimizer, sampledGroundStateCostBound]
-  have hsweep := cost_sampledSweepProgram_le hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm
+  have hsweep := cost_sampledSweepProgram_le hL hq Φ h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm
       hgood b D hD
     L le_rfl
-  have hcard : ((sampledSweep hq h hs h0 h1 E₀ Δ I L).image fun w ↦
+  have hcard : ((sampledSweep hq Φ h0 h1 E₀ Δ I L).image fun w ↦
       (fullLeftEquiv L q).symm w).card ≤ max 1 (sampledSizeBudget q Δ L ℓ D) := by
     refine Finset.card_image_le.trans ?_
-    refine (sampledSweep_spec hL hq h hs h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood L
+    refine (sampledSweep_spec hL hq Φ h0 h1 hΔ hΩ hgap hspan hδ0 hδ1 hδc I hm hgood L
         le_rfl).1.trans ?_
     simp only [show L ≠ 0 by omega, ↓reduceIte]
     exact le_max_of_le_right (Nat.mul_le_mul_right _ (Nat.mul_le_mul_left ℓ hD))
@@ -285,50 +283,49 @@ are `P ≥ 1` and `d` such that on every good family of words the program costs 
 theorem exists_sampledGroundStateProgram_cost_polynomial (hq : 2 ≤ q) {Δ B η : ℝ}
     (hΔ : 0 < Δ) (hη : 0 < η) (C p : ℕ) :
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ (L : ℕ) [NeZero L]
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
-      (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ : ℝ)
+      (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ j, (Φ.term j).PosSemidef) (h1 : ∀ j, Φ.term j ≤ 1) (E₀ : ℝ)
       (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-      ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →
-      groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
+      ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E₀ Δ →
+      groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ} → E₀ / Δ ≤ B →
       let δ := sampledPrecisionConstant Δ η / L
       ∀ I : Fin L → Fin (sampledWordCount q L E₀ Δ δ) → Fin (sampledPower L E₀ Δ δ) → Fin L,
-        (∀ i, GoodWords h E₀ (sampledPower L E₀ Δ δ) (δ / 8) (sampledLetterBound q L E₀ Δ δ)
+        (∀ i, GoodWords Φ E₀ (sampledPower L E₀ Δ δ) (δ / 8) (sampledLetterBound q L E₀ Δ δ)
           (I i)) →
         FreeM.countQueries honestOracle
-            (sampledGroundStateProgram hq h hs h0 h1 E₀ Δ I (C * L ^ p)
+            (sampledGroundStateProgram hq Φ h0 h1 E₀ Δ I (C * L ^ p)
               (sampledRankBound q L E₀ Δ δ)) ≤
           FreeM.cost honestOracle queryCost
-            (sampledGroundStateProgram hq h hs h0 h1 E₀ Δ I (C * L ^ p)
+            (sampledGroundStateProgram hq Φ h0 h1 E₀ Δ I (C * L ^ p)
               (sampledRankBound q L E₀ Δ δ)) ∧
         FreeM.cost honestOracle queryCost
-            (sampledGroundStateProgram hq h hs h0 h1 E₀ Δ I (C * L ^ p)
+            (sampledGroundStateProgram hq Φ h0 h1 E₀ Δ I (C * L ^ p)
               (sampledRankBound q L E₀ Δ δ)) ≤
           P * (L + 1) ^ d := by
   obtain ⟨C₁, p₁, hC₁, hbud⟩ := exists_sampled_budgets_polynomial (B := B) hq hΔ hη
   obtain ⟨P, d, hP, hbound⟩ := (isNatPolynomialBounded_sampledGroundStateCostBound hΔ
     (max C₁ C) (max p₁ p) C p).exists_one_le
   refine ⟨P, d, hP, ?_⟩
-  intro L _ h hs h0 h1 E₀ Γ hΩ hgap hspan hEB δ I hgood
+  intro L _ Φ h0 h1 E₀ Γ hΩ hgap hspan hEB δ I hgood
   refine ⟨countQueries_le_cost honestOracle queryCost one_le_queryCost _, ?_⟩
   have hL : 1 ≤ L := Nat.pos_of_neZero L
-  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le h h0 h1 hΩ hspan
-  obtain ⟨hℓD, hD⟩ := hbud L E₀ hL hE₀ hE₀L hEB
+  obtain ⟨hE₀, hE₀L⟩ := groundEnergy_nonneg_and_le Φ h0 h1 hΩ hspan
+  obtain ⟨Φ.termℓD, hD⟩ := hbud L E₀ hL hE₀ hE₀L hEB
   obtain ⟨hδ0, hδ1, hδc, -⟩ := sampledPrecision_spec hΔ hη hL
   have hD1 : 1 ≤ sampledRankBound q L E₀ Δ δ := Nat.one_le_pow _ _ (by omega)
-  have hℓ : sampledWordCount q L E₀ Δ δ ≤ C₁ * L ^ p₁ :=
-    (Nat.le_mul_of_pos_right _ hD1).trans hℓD
+  have Φ.termℓ : sampledWordCount q L E₀ Δ δ ≤ C₁ * L ^ p₁ :=
+    (Nat.le_mul_of_pos_right _ hD1).trans ΦℓD
   have hpow' : C₁ * L ^ p₁ ≤ max C₁ C * L ^ max p₁ p :=
     Nat.mul_le_mul (le_max_left _ _) (Nat.pow_le_pow_right hL (le_max_left _ _))
   calc
     _ ≤ sampledGroundStateCostBound q Δ L (sampledWordCount q L E₀ Δ δ)
           (sampledRankBound q L E₀ Δ δ) (C * L ^ p) :=
-        cost_sampledGroundStateProgram_le (Nat.pos_of_neZero L) hq h hs h0 h1 hΔ hΩ hgap hspan hδ0
+        cost_sampledGroundStateProgram_le (Nat.pos_of_neZero L) hq Φ h0 h1 hΔ hΩ hgap hspan hδ0
           hδ1 hδc
           I (Nat.le_ceil _) hgood (C * L ^ p) (sampledRankBound q L E₀ Δ δ) le_rfl
     _ ≤ sampledGroundStateCostBound q Δ L (max C₁ C * L ^ max p₁ p) (max C₁ C * L ^ max p₁ p)
           (C * L ^ p) :=
-        sampledGroundStateCostBound_mono q Δ L (hℓ.trans hpow') (hD.trans hpow') le_rfl
+        sampledGroundStateCostBound_mono q Δ L (Φ.termℓ.trans hpow') (hD.trans hpow') le_rfl
     _ ≤ P * (L + 1) ^ d := hbound L hL
 
 end TNLean.MPS.AreaLaw

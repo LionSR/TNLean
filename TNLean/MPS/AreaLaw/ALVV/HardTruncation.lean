@@ -47,17 +47,15 @@ minimum, eigenbasis or spectral gap is an input. The displayed spectral spaces
 belong to the actual operators with their common derived scalar shift. -/
 theorem exists_single_region_hard_truncation_spectral_comparison {L q l r : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
-    let A := aklvRegionalHamiltonians l r h
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
+    let A := aklvRegionalHamiltonians l r Φ
     let J := Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
+    let Y := ∑ i ∈ J, Φ.term i
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧ (∀ j, 0 ≤ e j) ∧
-      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E : ℂ) • z ∧
       (H - (E : ℂ) • 1).PosSemidef ∧ 0 ≤ E ∧ E ≤ 2 ∧
       ∀ η t : ℝ, 0 < η → η + 7 ≤ t →
@@ -96,7 +94,7 @@ theorem exists_single_region_hard_truncation_spectral_comparison {L q l r : ℕ}
   classical
   let : Nonempty (Fin q) := ⟨⟨0, hq⟩⟩
   obtain ⟨e, x, z, E, hx, hxe, he, he0, hz, hHz, hElow, hE0, hE2, hclip⟩ :=
-    exists_single_region_hard_truncation_residuals hq hlr hrL h hs h0 h1
+    exists_single_region_hard_truncation_residuals hq hlr hrL Φ h0 h1
   refine ⟨e, x, z, E, hx, hxe, he, he0, hz, hHz, hElow, hE0, hE2, ?_⟩
   intro η t hη ht F
   obtain ⟨hH, hF, E', z', hFH, hz', hFz', hE'low, hE'0, hE'2, hresH, hresF⟩ :=
@@ -117,10 +115,10 @@ theorem exists_single_region_hard_truncation_spectral_comparison {L q l r : ℕ}
     hH.groundEnergy_compare_and_isCloseTo_spectralSpanLE_of_norm_domRestrict_le
       hF hFH η ξ δ hη hξ hδ
   have hresult (δ : ℝ) (hδ : 0 < δ) := by
-    have h := hcompare δ hδ
-    dsimp only at h
-    rw [hlastH, hlastF] at h
-    exact h hresH hresF
+    have Φ.term := hcompare δ hδ
+    dsimp only at Φ.term
+    rw [hlastH, hlastF] at Φ.term
+    exact Φ.term hresH hresF
   obtain ⟨hgroundLower, hgroundUpper, _hcloseH, _hcloseF⟩ := hresult 1 zero_lt_one
   refine ⟨hH, hF, E', z', hFH, hz', hFz', hE'low, hE'0, hE'2,
     hresH, hresF, ?_, hgroundLower, hgroundUpper, ?_⟩

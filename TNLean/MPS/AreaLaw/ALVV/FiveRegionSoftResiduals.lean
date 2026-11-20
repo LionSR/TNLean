@@ -38,21 +38,19 @@ lines 1178–1255 and 1373–1392. No successful approximation, gap or denominat
 theorem exists_five_region_soft_residuals {L q k1 k2 k3 k4 : ℕ}
     (hq : 0 < q) (h12 : k1 ≤ k2) (h23 : k2 ≤ k3)
     (h34 : k3 ≤ k4) (h4L : k4 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, k1, k2, k3, k4, L]
     let I := fun j : Fin 5 ↦ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
-    let A := fun j : Fin 5 ↦ ∑ i ∈ I j, h i
+    let A := fun j : Fin 5 ↦ ∑ i ∈ I j, Φ.term i
     let J := Finset.univ.filter
       (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ))
-    let Y := ∑ i ∈ J, h i
+    let Y := ∑ i ∈ J, Φ.term i
     J.card ≤ 4 ∧ ∃ (e : Fin 5 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
       star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
       (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧
-      let H := (∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1
+      let H := Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1
       star z ⬝ᵥ z = 1 ∧ H *ᵥ z = (E : ℂ) • z ∧
       (H - (E : ℂ) • 1).PosSemidef ∧ 0 ≤ E ∧ E ≤ (J.card : ℝ) ∧
       H.IsHermitian ∧
@@ -89,7 +87,7 @@ theorem exists_five_region_soft_residuals {L q k1 k2 k3 k4 : ℕ}
   intro k I A J Y
   obtain ⟨hJ, e, x, z, E, hx, hxe, he, hHY, _hBraw, hz, hHz,
       hE, hE0, hEC, hH, hfamily⟩ :=
-    exists_five_region_soft_structure hq h12 h23 h34 h4L h hs h0 h1
+    exists_five_region_soft_structure hq h12 h23 h34 h4L Φ h0 h1
   refine ⟨hJ, e, x, z, E, hx, hxe, he, hz, hHz, hE, hE0, hEC, hH,
     hH.eigenvectorBasis, hH.eigenvalues, hH.toEuclideanCLM_eigenvectorBasis, ?_⟩
   intro S p t m hpl hpu ht hm B D G
@@ -109,20 +107,20 @@ theorem exists_five_region_soft_residuals {L q k1 k2 k3 k4 : ℕ}
           (hH.eigenvalues v : ℂ) • hH.eigenvectorBasis v := by
       rw [← hHY]
       exact hH.toEuclideanCLM_eigenvectorBasis v
-    have hres := norm_simultaneous_soft_original_residual k hk J h hs h0 h1
+    have hres := norm_simultaneous_soft_original_residual k hk J Φ h0 h1
       e p S t m ht hm' hpl hpu he hH.eigenvectorBasis hH.eigenvalues hEigenH
         E eta T hEC heta hT
     have hdiff : ((∑ j, (A j - (e j : ℂ) • 1)) + Y) - G =
-        ((∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1) - G := by
+        (Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1) - G := by
       rw [← hHY]
     rw [hdiff] at hres
     exact hres
   · intro eta T heta U hscale hT
-    have hres := norm_simultaneous_soft_reverse_residual k hk J h hs h0 h1
+    have hres := norm_simultaneous_soft_reverse_residual k hk J Φ h0 h1
       e p S t m ht hm hpl hpu he hG.eigenvectorBasis hG.eigenvalues
         hG.toEuclideanCLM_eigenvectorBasis mu eta T hmuC heta hscale hT
     have hdiff : ((∑ j, (A j - (e j : ℂ) • 1)) + Y) - G =
-        ((∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1) - G := by
+        (Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1) - G := by
       rw [← hHY]
     rw [hdiff] at hres
     exact hres

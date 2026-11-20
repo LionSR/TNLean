@@ -88,11 +88,9 @@ theorem exists_physical_soft_sampling_data
             (1 / (q : ℝ)) / ((len : ℝ) + 2) ^ 4) ∧
         ∃ C : ℝ, 0 < C ∧ ∃ P : ℕ,
       ∀ (L : ℕ)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu : ℝ),
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu : ℝ),
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H →
@@ -155,11 +153,11 @@ theorem exists_physical_soft_sampling_data
     exists_physical_ground_reference_trimming_profile q (by omega) gamma hgamma
   refine ⟨K, Ccount, hK, hCcount, hCeq, ?_, C, hC, P, ?_⟩
   · intro r len Q hQ
-    have h := hschedule len r
-    exact ⟨h.2.1.trans hQ, h.2.2.1 Q hQ⟩
-  · intro L h hs h0 h1 mu H hH hmu hgap G r Z
+    have Φ.term := hschedule len r
+    exact ⟨Φ.term.2.1.trans hQ, Φ.term.2.2.1 Q hQ⟩
+  · intro L Φ hs h0 h1 mu H hH hmu hgap G r Z
     obtain ⟨B, hB, U, hdim, hUG, hGU, hUMPS, hbound, hxi,
-      hbudget, hinv, hcost, hinterval⟩ := href L h hs h0 h1 mu hmu hgap
+      hbudget, hinv, hcost, hinterval⟩ := href L Φ hs h0 h1 mu hmu hgap
     let d := r ^ 2 * B
     let bRef := d ^ 2
     let xi := 1 / (1000 * (d : ℝ) * Real.sqrt ((L : ℝ) + 1))

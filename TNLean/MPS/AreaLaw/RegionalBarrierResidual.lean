@@ -31,20 +31,20 @@ restriction argument. The boundary forcing is still derived from the original bo
 Auxiliary to ALVV, arXiv:1602.08828v2, `lem:exp-approx`, lines 1195–1255. -/
 theorem norm_hard_residual_low_of_barrier
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (hs : ∀ i ∈ I ∪ J, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i ∈ I ∪ J, 0 ≤ h i) (h1 : ∀ i ∈ I ∪ J, h i ≤ 1)
+      (Φ.term i) (interval L i.val (i.val + 2)))
+    (h0 : ∀ i ∈ I ∪ J, 0 ≤ Φ.term i) (h1 : ∀ i ∈ I ∪ J, Φ.term i ≤ 1)
     (B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (c b0 energy s cut : ℝ) (hs0 : 0 < s) (hs1 : s ≤ 1 / 8) (hcut : c ≤ cut)
-    (hBA : Commute B (∑ i ∈ I, h i))
-    (hproj : b0 • spectralProjectionGE (∑ i ∈ I, h i) c ≤ B)
+    (hBA : Commute B (Φ.partialHamiltonian I))
+    (hproj : b0 • spectralProjectionGE (Φ.partialHamiltonian I) c ≤ B)
     (basis : OrthonormalBasis (Fin L → Fin q) ℂ (EuclideanSpace ℂ (Fin L → Fin q)))
     (a : (Fin L → Fin q) → ℝ)
     (hEigen : ∀ v, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-      (B + ∑ i ∈ J, h i) (basis v) = (a v : ℂ) • basis v)
+      (B + ∑ i ∈ J, Φ.term i) (basis v) = (a v : ℂ) • basis v)
     (hgap : 2 * (J.card : ℝ) < b0 - energy) :
-    let A := ∑ i ∈ I, h i
+    let A := ∑ i ∈ I, Φ.term i
     let S := Submodule.spectralSpanLE basis a energy
     ‖(toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
       (A - energyTruncation A cut)).domRestrict S‖ ≤
@@ -54,7 +54,7 @@ theorem norm_hard_residual_low_of_barrier
   have hproj' : b0 • spectralProjectionGE A ((c - b0) + b0) ≤ B := by
     simpa only [sub_add_cancel] using hproj
   obtain ⟨Z, hZ, hZn⟩ := exists_nearestNeighbour_weighted_low_restriction
-    I J h hs h0 h1 B (c - b0) b0 energy s hs0 hs1 hBA hproj' basis a hEigen hgap
+    I J Φ hs h0 h1 B (c - b0) b0 energy s hs0 hs1 hBA hproj' basis a hEigen hgap
   have hA : A.IsHermitian :=
     (isSelfAdjoint_sum I fun i hi ↦
       IsSelfAdjoint.of_nonneg (h0 i (Finset.mem_union_left J hi))).isHermitian
@@ -71,22 +71,22 @@ map and the hard-to-soft comparison are derived. Auxiliary to ALVV,
 arXiv:1602.08828v2, `lem:exp-approx`, lines 1195–1255. -/
 theorem norm_soft_residual_low_of_barrier
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (hs : ∀ i ∈ I ∪ J, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i ∈ I ∪ J, 0 ≤ h i) (h1 : ∀ i ∈ I ∪ J, h i ≤ 1)
+      (Φ.term i) (interval L i.val (i.val + 2)))
+    (h0 : ∀ i ∈ I ∪ J, 0 ≤ Φ.term i) (h1 : ∀ i ∈ I ∪ J, Φ.term i ≤ 1)
     (B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (p c b0 energy s t T : ℝ) (m : ℕ)
-    (hp : (p : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ≤ ∑ i ∈ I, h i)
+    (hp : (p : ℂ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ≤ ∑ i ∈ I, Φ.term i)
     (hs0 : 0 < s) (hs1 : s ≤ 1 / 8) (ht : 0 < t) (hm : 1 ≤ m) (hT : 0 ≤ T)
-    (hcut : c ≤ p + T) (hBA : Commute B (∑ i ∈ I, h i))
-    (hproj : b0 • spectralProjectionGE (∑ i ∈ I, h i) c ≤ B)
+    (hcut : c ≤ p + T) (hBA : Commute B (Φ.partialHamiltonian I))
+    (hproj : b0 • spectralProjectionGE (Φ.partialHamiltonian I) c ≤ B)
     (basis : OrthonormalBasis (Fin L → Fin q) ℂ (EuclideanSpace ℂ (Fin L → Fin q)))
     (a : (Fin L → Fin q) → ℝ)
     (hEigen : ∀ v, toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-      (B + ∑ i ∈ J, h i) (basis v) = (a v : ℂ) • basis v)
+      (B + ∑ i ∈ J, Φ.term i) (basis v) = (a v : ℂ) • basis v)
     (hgap : 2 * (J.card : ℝ) < b0 - energy) :
-    let A := ∑ i ∈ I, h i
+    let A := ∑ i ∈ I, Φ.term i
     let S := Submodule.spectralSpanLE basis a energy
     ‖(toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
       (A - (p : ℂ) • 1 - cfc (Real.softTruncation t m) (A - (p : ℂ) • 1))).domRestrict S‖ ≤
@@ -94,7 +94,7 @@ theorem norm_soft_residual_low_of_barrier
         ((2 * (J.card : ℝ)) / (b0 - energy - 2 * (J.card : ℝ))) +
           (t / (m : ℝ)) * (T / t) ^ m := by
   intro A S
-  have htail := norm_hard_residual_low_of_barrier I J h hs h0 h1 B
+  have htail := norm_hard_residual_low_of_barrier I J Φ hs h0 h1 B
     c b0 energy s (p + T) hs0 hs1 hcut hBA hproj basis a hEigen hgap
   have hA : A.IsHermitian :=
     (isSelfAdjoint_sum I fun i hi ↦

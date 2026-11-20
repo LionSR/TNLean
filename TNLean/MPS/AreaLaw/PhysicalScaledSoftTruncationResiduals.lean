@@ -35,17 +35,15 @@ identified with the canonical minima of the actual centered matrices.
 Supporting ALVV, arXiv:1602.08828v2, `lem:exp-approx`, lines 1195–1255. -/
 theorem exists_interval_physical_scaled_soft_residuals
     (L q p r : ℕ) (hq : 0 < q) (hpr : p ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
     let k : Fin 6 → ℕ := ![0, p, r, r, r, L]
     let A : Fin 5 → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun j ↦
       ∑ i ∈ Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), h i
+        (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ), Φ.term i
     ∃ (e : Fin 5 → ℝ) (E0 : ℝ) (x : (Fin L → Fin q) → ℂ),
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let Hc := H - (((∑ j, e j) : ℝ) : ℂ) • 1
       ∃ hHc : Hc.IsHermitian,
         star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
@@ -71,17 +69,17 @@ theorem exists_interval_physical_scaled_soft_residuals
   classical
   intro _inst k A
   obtain ⟨e, E0, x, z, hO, hxunit, hx, he, hzunit, hz, hElow, hE0, hE2, hforward⟩ :=
-    exists_interval_physical_scaled_soft_truncation_residual L q p r hq hpr hrL h hs h0 h1
+    exists_interval_physical_scaled_soft_truncation_residual L q p r hq hpr hrL Φ h0 h1
   obtain ⟨er, Er, xr, zr, hOr, hxrunit, hxr, her, hzrunit, hzr, hErlow,
     _hEr0, _hEr2, hreverse⟩ :=
-    exists_interval_physical_scaled_soft_reverse_residual L q p r hq hpr hrL h hs h0 h1
+    exists_interval_physical_scaled_soft_reverse_residual L q p r hq hpr hrL Φ h0 h1
   have heq : er = e := by
     funext j
     exact Matrix.groundEnergy_eq_of_normalized_eigenvectors (A j) (er j) (e j)
       xr x (hxr j) hxrunit (hx j) hxunit (her j) (he j)
   subst er
   have hEq : Er = E0 := Matrix.groundEnergy_eq_of_normalized_eigenvectors
-    ((∑ i, h i) - (((∑ j, e j) : ℝ) : ℂ) • 1) Er E0 zr z
+    (Φ.hamiltonian - (((∑ j, e j) : ℝ) : ℂ) • 1) Er E0 zr z
       hzr hzrunit hz hzunit hErlow hElow
   subst Er
   refine ⟨e, E0, x, ?_⟩

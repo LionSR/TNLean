@@ -46,20 +46,18 @@ and Figure `fig:algo1`, line 1631. -/
 theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
     (hq : 0 < q) (hlu : l ≤ u) (huv : u ≤ v) (hvr : v ≤ r) (hrL : r ≤ L)
     (hleft : u - l ≤ 2 * ell) (hright : r - v ≤ 2 * ell)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let _ : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
-    let H := ∑ i, h i
+    let H := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues (minEigenvalue hH)
     let J := interval L l r
     let P := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), h i
+      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), Φ.term i
     let M := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v), h i
+      (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v), Φ.term i
     ∃ (eP eM : ℝ) (xP xM : (Fin L → Fin q) → ℂ),
       star xP ⬝ᵥ xP = 1 ∧ P *ᵥ xP = (eP : ℂ) • xP ∧
       (P - (eP : ℂ) • 1).PosSemidef ∧
@@ -84,14 +82,14 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
   classical
   intro config H hH G J P M
   let : Nonempty (Fin L → Fin q) := config
-  let hp := intervalBondRestriction l r h
+  let hp := intervalBondRestriction l r Φ
   let k : Fin 6 → ℕ := ![0, l, u, v, r, L]
   let I := fun j : Fin 5 ↦ Finset.univ.filter
     (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
   let A := fun j : Fin 5 ↦ ∑ i ∈ I j, hp i
   obtain ⟨e, x, z, E, hx, hxe, he, _he0, hz, hHz, hE, _hE0, _hE4, hfamily⟩ :=
-    exists_soft_parent_structure hq hlu huv hvr hrL hleft hright h hs h0 h1
-  have hAM : A 2 = M := sum_internal_intervalBondRestriction_eq hlu hvr h
+    exists_soft_parent_structure hq hlu huv hvr hrL hleft hright Φ h0 h1
+  have hAM : A 2 = M := sum_internal_intervalBondRestriction_eq hlu hvr Φ
   let s := ∑ j, e j
   let eP := E + s
   have hPz : P *ᵥ z = (eP : ℂ) • z := by
@@ -107,7 +105,7 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
     rw [Complex.ofReal_add, add_smul]
     abel
   obtain ⟨e0, x0, hx0, hPx0, hP0, _hPnorm, hGenergy, _hprojection⟩ :=
-    exists_regional_ground_energy_bound hq (hlu.trans (huv.trans hvr)) hrL h hs h0 h1
+    exists_regional_ground_energy_bound hq (hlu.trans (huv.trans hvr)) hrL Φ h0 h1
   have heP : e0 = eP := groundEnergy_eq_of_normalized_eigenvectors P e0 eP x0 z
     hPx0 hx0 hPz hz hP0 hPmin
   have hMxe : M *ᵥ x = (e 2 : ℂ) • x := by rw [← hAM]; exact hxe 2
@@ -136,9 +134,9 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
     rw [Complex.ofReal_add, add_smul]
     abel
   have hPs : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) P J :=
-    isSupportedOn_sum_internal_bonds L q l r h hs
+    isSupportedOn_sum_internal_bonds L q l r Φ
   have hMs : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) M J := by
-    apply (isSupportedOn_sum_internal_bonds L q u v h hs).mono
+    apply (isSupportedOn_sum_internal_bonds L q u v Φ).mono
     intro i hi
     simp only [J, mem_interval] at hi ⊢
     omega

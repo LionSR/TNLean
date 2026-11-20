@@ -47,17 +47,17 @@ private theorem two_block_outer_selector :
 open Classical in
 private theorem aklv_clipped_hamiltonian_formula {L q a s : ℕ}
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (e : Fin 3 → ℝ) (t : ℝ) :
-    let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) h
+    let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ
     let F := fun j : Fin 3 ↦ cfc (fun x : ℝ ↦ min x (e j + t)) (C j)
-    let H := fun j : Fin (s - 2) ↦ h ⟨a + 1 + j.val, by omega⟩
-    aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t Finset.univ =
+    let H := fun j : Fin (s - 2) ↦ Φ.term ⟨a + 1 + j.val, by omega⟩
+    aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ =
       (F 0 - (((∑ j, e j) : ℝ) : ℂ) • 1) + (∑ j, H j) + F 2 := by
   intro C F H
   have hmiddle : (∑ j, H j) =
       ∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-        a + 1 ≤ i.val ∧ i.val < a + s - 1), h i := by
+        a + 1 ≤ i.val ∧ i.val < a + s - 1), Φ.term i := by
     refine Finset.sum_bij (fun j _ ↦ (⟨a + 1 + j.val, by omega⟩ : Fin (L - 1)))
       ?_ ?_ ?_ ?_
     · intro j _
@@ -77,10 +77,10 @@ private theorem aklv_clipped_hamiltonian_formula {L q a s : ℕ}
       rfl
   have hretained : C 1 +
       (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-        i.val + 1 ∈ ({a + 2, a + s - 1} : Finset ℕ)), h i) = ∑ j, H j := by
+        i.val + 1 ∈ ({a + 2, a + s - 1} : Finset ℕ)), Φ.term i) = ∑ j, H j := by
     rw [hmiddle]
     change (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-        a + 2 ≤ i.val ∧ i.val + 1 < a + s - 1), h i) + _ = _
+        a + 2 ≤ i.val ∧ i.val + 1 < a + s - 1), Φ.term i) + _ = _
     simp only [Finset.sum_filter, Finset.mem_insert, Finset.mem_singleton,
       ← Finset.sum_add_distrib]
     apply Finset.sum_congr rfl
@@ -95,7 +95,7 @@ private theorem aklv_clipped_hamiltonian_formula {L q a s : ℕ}
     show (2 : Fin 3) ∈ ({0, 2} : Finset (Fin 3)) by decide, ite_true, ite_false]
   rw [show (∑ j, H j) = C 1 +
       (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
-        i.val + 1 ∈ ({a + 2, a + s - 1} : Finset ℕ)), h i) from hretained.symm,
+        i.val + 1 ∈ ({a + 2, a + s - 1} : Finset ℕ)), Φ.term i) from hretained.symm,
     Fin.sum_univ_three]
   push_cast
   rw [add_smul, add_smul]
@@ -108,12 +108,10 @@ shorter window of width `s-2`. Its central cut is the original central cut.
 AKLV, arXiv:1301.1162v1, Section 6.1, equation (5), and Lemma 4.2. -/
 theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
+    (Φ : ManyBody.BondInteraction L q)
     (e : Fin 3 → ℝ) (t : ℝ) :
-    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t Finset.univ
-    let H := fun j : Fin (s - 2) ↦ h ⟨a + 1 + j.val, by omega⟩
+    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
+    let H := fun j : Fin (s - 2) ↦ Φ.term ⟨a + 1 + j.val, by omega⟩
     ∃ HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       ManyBody.IsSupportedOn HL (interval L 0 (a + 2)) ∧
       ManyBody.IsSupportedOn HR (interval L (a + s - 1) L) ∧
@@ -122,14 +120,14 @@ theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
       B = HL + (∑ j, H j) + HR ∧
       a + 1 + (s - 2) / 2 = a + s / 2 := by
   intro B H
-  let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) h
+  let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ
   let F (j : Fin 3) := cfc (fun x : ℝ ↦ min x (e j + t)) (C j)
   let HL := F 0 - (((∑ j, e j) : ℝ) : ℂ) • 1
   let HR := F 2
   have hC (j : Fin 3) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (C j)
       (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
         ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.succ)) :=
-    isSupportedOn_sum_internal_bonds L q _ _ h hsupp
+    isSupportedOn_sum_internal_bonds L q _ _ Φ
   have hF (j : Fin 3) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (F j)
       (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
         ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.succ)) := by
@@ -140,8 +138,8 @@ theorem aklv_clipped_hamiltonian_decomposition {L q a s : ℕ}
     exact sub_mem
       (hF 0)
       (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
-  refine ⟨HL, HR, hleft, hF 2, fun j ↦ hsupp _, ?_, by omega⟩
-  exact aklv_clipped_hamiltonian_formula hs ha h e t
+  refine ⟨HL, HR, hleft, hF 2, fun j ↦ Φ.mem _, ?_, by omega⟩
+  exact aklv_clipped_hamiltonian_formula hs ha Φ e t
 
 open Classical in
 /-- The actual clipped Hamiltonian is positive and has norm at most `2*t+s`.
@@ -150,29 +148,29 @@ only the nonnegativity of the middle minimum is needed for the upper bound.
 AKLV, arXiv:1301.1162v1, Section 6.1, the definition of `H^(t)`. -/
 theorem aklv_clipped_hamiltonian_posSemidef_norm_le {L q a s : ℕ}
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (e : Fin 3 → ℝ)
-    (he : ∀ j, (aklvNormalizationHamiltonians a s h j - (e j : ℂ) • 1).PosSemidef)
+    (he : ∀ j, (aklvNormalizationHamiltonians a s Φ j - (e j : ℂ) • 1).PosSemidef)
     (he1 : 0 ≤ e 1) {t : ℝ} (ht : 0 ≤ t) :
-    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t Finset.univ
+    let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ e t Finset.univ
     B.PosSemidef ∧ ‖B‖ ≤ 2 * t + s := by
   intro B
-  let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) h
+  let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) Φ
   let F (j : Fin 3) := cfc (fun x : ℝ ↦ min x (e j + t)) (C j)
-  let H := fun j : Fin (s - 2) ↦ h ⟨a + 1 + j.val, by omega⟩
+  let H := fun j : Fin (s - 2) ↦ Φ.term ⟨a + 1 + j.val, by omega⟩
   let J := Finset.univ.filter (fun i : Fin (L - 1) ↦
     i.val + 1 ∈ ({a + 2, a + s - 1} : Finset ℕ))
   have hC (j : Fin 3) : (C j).PosSemidef :=
     Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i)
-  have heC := aklv_normalization_le_two_block_regions hs h h0 e he
+  have heC := aklv_normalization_le_two_block_regions hs Φ h0 e he
   have hcenter := (Matrix.centered_partially_clipped_sum_posSemidef_and_mulVec_eq_zero
     C e t ({0, 2} : Finset (Fin 3)) (fun j ↦ (hC j).isHermitian) heC
     0 (fun j ↦ by simp) ht).1
   have hB0 : B.PosSemidef := by
     change ((∑ j, ((if j ∈ (Finset.univ : Finset (Fin 2)).image
       (fun j ↦ (⟨2 * j.val, by omega⟩ : Fin 3)) then F j else C j) -
-      (e j : ℂ) • 1)) + ∑ i ∈ J, h i).PosSemidef
+      (e j : ℂ) • 1)) + ∑ i ∈ J, Φ.term i).PosSemidef
     rw [two_block_outer_selector]
     exact hcenter.add (Matrix.nonneg_iff_posSemidef.mp
       (Finset.sum_nonneg fun i _ ↦ h0 i))
@@ -189,7 +187,7 @@ theorem aklv_clipped_hamiltonian_posSemidef_norm_le {L q a s : ℕ}
   have hBcap : B ≤ (2 * t + s) •
       (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) := by
     dsimp only [B]
-    rw [aklv_clipped_hamiltonian_formula hs ha h e t]
+    rw [aklv_clipped_hamiltonian_formula hs ha Φ e t]
     calc
       _ ≤ ((e 0 + t) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) -
           (((∑ j, e j) : ℝ) : ℂ) • 1) +

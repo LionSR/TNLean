@@ -41,11 +41,9 @@ theorem exists_physical_same_root_polynomial_refinement
     (q Dfilter : ℕ) (hq : 1 ≤ q) (hDfilter : 1 ≤ Dfilter)
     (gamma : ℝ) (hgamma : 0 < gamma) :
     ∃ C : ℝ, 0 < C ∧ ∃ k : ℕ, ∀ (L : ℕ)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu : ℝ),
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu : ℝ),
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H →
@@ -80,7 +78,7 @@ theorem exists_physical_same_root_polynomial_refinement
   obtain ⟨C0, hC0, k, hpoly⟩ := Real.exists_refinement_output_polynomial_bound
     gamma g u 0 Kref Dfilter hgamma hg hg1 hu (by norm_num) hKref.le hDfilter
   refine ⟨max C0 1, lt_max_of_lt_left hC0, k, ?_⟩
-  intro L h hs h0 h1 mu H hH hmu hgap G r Kraw eta heta Z
+  intro L Φ hs h0 h1 mu H hH hmu hgap G r Kraw eta heta Z
   have hr : 1 ≤ r := Submodule.one_le_finrank_iff.mpr
     (hH.spectralSpanLE_ne_bot_of_mem_spectrum hmu le_rfl)
   by_cases hexcited : ∃ nu ∈ spectrum ℝ H, mu < nu
@@ -90,20 +88,20 @@ theorem exists_physical_same_root_polynomial_refinement
     let rho := eta * gamma / (2 * A + eta * gamma)
     let rounds := Nat.ceil (4 / c * Real.log (1 / rho)) + 1
     obtain ⟨_hM, hA, _hc, hc1, _hfix, _hKGo, _hhigh⟩ :=
-      physical_dg_normalized_ground_filter_spec h h0 mu nu gamma hgamma hmu hnu hmunu hgap
+      physical_dg_normalized_ground_filter_spec Φ h0 mu nu gamma hgamma hmu hnu hmunu hgap
     have hgammaA : gamma ≤ A := (div_le_one hA).mp hc1
     have hmu0 : 0 ≤ mu := spectrum_nonneg_of_nonneg
       (show 0 ≤ H from Finset.sum_nonneg fun i _ ↦ h0 i) hmu
     have hnorm : ‖H‖ ≤ ((L - 1 : ℕ) : ℝ) := by
       simpa using norm_sum_le_of_le (Finset.univ : Finset (Fin (L - 1)))
-        (fun i _ ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg (h i) (h0 i)).mpr (h1 i))
+        (fun i _ ↦ (CStarAlgebra.norm_le_one_iff_of_nonneg (Φ.term i) (h0 i)).mpr (h1 i))
     have hAL : A ≤ (L : ℝ) + 1 := by
       have hlen : ((L - 1 : ℕ) : ℝ) ≤ (L : ℝ) + 1 := by
         exact_mod_cast (show L - 1 ≤ L + 1 by omega)
       dsimp only [A]
       linarith only [hnorm, hmu0, hlen]
     obtain ⟨B, hB, hlogB, hprecision⟩ :=
-      hautomatic L q h hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+      hautomatic L q Φ hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
         1 Dfilter (by norm_num) hDfilter eta heta
     let b := r ^ 2 * B
     let common := max 1 b

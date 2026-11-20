@@ -75,12 +75,10 @@ of Theorem `t:aisff` carries over unchanged; see `exists_frustrationFree_improvi
 theorem exists_frustrationFree_improving_family_words_regionTensorCoordinates :
     ∃ A : ℝ, 1 ≤ A ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
-          (interval L i.val (i.val + 2))) →
-        (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+        (∀ i, 0 ≤ Φ.term i) → (∀ i, Φ.term i ≤ 1) →
       ∀ γ : ℝ, 0 < γ → ∀ Γ : EuclideanSpace ℂ (Fin L → Fin q),
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       H *ᵥ Γ.ofLp = 0 →
       (∀ x : EuclideanSpace ℂ (Fin L → Fin q), H *ᵥ x.ofLp = 0 → x ∈ ℂ ∙ Γ) →
       (∀ z ∈ spectrum ℝ H, z = 0 ∨ γ ≤ z) →
@@ -107,7 +105,7 @@ theorem exists_frustrationFree_improving_family_words_regionTensorCoordinates :
                 EuclideanSpace ℂ (J → Fin q) →ₗ[ℂ] EuclideanSpace ℂ (J → Fin q))) G := by
   obtain ⟨A, hA, hff⟩ := exists_frustrationFree_improving_family_words
   refine ⟨A, hA, ?_⟩
-  intro L q p r hpr hrL h hs h0 h1 γ hγ Γ H hΓ huniq hgap g d u ℓ D J G cut
+  intro L q p r hpr hrL Φ h0 h1 γ hγ Γ H hΓ huniq hgap g d u ℓ D J G cut
   have hH : H.IsHermitian :=
     (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
   have hker := ker_toEuclideanCLM_eq_span_singleton Γ hΓ huniq
@@ -117,7 +115,7 @@ theorem exists_frustrationFree_improving_family_words_regionTensorCoordinates :
     fun y hy ↦ hH.mul_norm_sq_le_re_inner_of_spectral_gap hgap y fun z hz ↦
       Submodule.inner_right_of_mem_orthogonal (LinearMap.mem_ker.mpr hz) hy
   obtain ⟨hlogD, hlogR, N, W, Δ, hN, hΔ, hbudget, hrank, himprove⟩ :=
-    hff L q p r hpr hrL h hs h0 h1 γ hγ hgapQ
+    hff L q p r hpr hrL Φ h0 h1 γ hγ hgapQ
   refine ⟨hlogD, hlogR, N, W, Δ, hN, hΔ, hbudget, hrank, ?_⟩
   have hcoords := (Entropy.regionTensorCoordinates_eq_exteriorFirst q J).symm
   rw [hker] at himprove

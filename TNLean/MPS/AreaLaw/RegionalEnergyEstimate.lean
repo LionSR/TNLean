@@ -45,12 +45,10 @@ Subtracting three gives a one-sided estimate. Auxiliary to ALVV,
 arXiv:1602.08828v2, Figure `fig:algo1`, lines 1631–1632, and lines 1793–1807. -/
 theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) :
     let _ : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
-    let H := ∑ i, h i
+    let H := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues (minEigenvalue hH)
@@ -64,7 +62,7 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
       (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
       (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
     ∃ (K : Matrix (J → Fin q) (J → Fin q) ℂ) (hK : K.IsHermitian),
-      aklvRegionalHamiltonians l r h 1 = ManyBody.place (X := fun _ ↦ Fin q) J K ∧
+      aklvRegionalHamiltonians l r Φ 1 = ManyBody.place (X := fun _ ↦ Fin q) J K ∧
       let _ : Nonempty (J → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
       let e := minEigenvalue hK
       ∀ (δ : ℝ) (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))),
@@ -86,13 +84,13 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
   have hginj : Function.Injective g := by
     intro x y heq
     exact congrArg Prod.fst ((ManyBody.cutEquiv (fun _ ↦ Fin q) J).symm.injective heq)
-  let A := aklvRegionalHamiltonians l r h 1
+  let A := aklvRegionalHamiltonians l r Φ 1
   let K := A.submatrix g g
   have hAs : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A J := by
     change _ ∈ ManyBody.supportedOperators _ _
     apply sum_mem
     intro i hi
-    apply (hs i).mono
+    apply (Φ.mem i).mono
     intro v hv
     have hi' : l ≤ i.val ∧ i.val + 1 < r := (Finset.mem_filter.mp hi).2
     rw [mem_interval] at hv ⊢
@@ -109,7 +107,7 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
     rw [hKK']
     exact hAK'
   obtain ⟨e0, x0, hx0, hAx0, hC, hCnorm, hground, hproject⟩ :=
-    exists_regional_ground_energy_bound hq hlr hrL h hs h0 h1
+    exists_regional_ground_energy_bound hq hlr hrL Φ h0 h1
   have hKlow : (K - (e0 : ℂ) • 1).PosSemidef := by
     have hC' : (A - (e0 : ℂ) • 1).PosSemidef := hC
     have hsub := hC'.submatrix g

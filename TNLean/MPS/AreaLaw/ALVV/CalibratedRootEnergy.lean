@@ -33,10 +33,8 @@ Supporting ALVV, arXiv:1602.08828v2, Figure `fig:algo1`, lines 1631 and 1807. -/
 theorem exists_canonical_root_energy_of_calibrated_words {L q ell D s : ℕ}
     (hq : 0 < q) (hell : 21 ≤ ell) (hD2 : 2 ≤ D) (hsample : 1 ≤ s)
     (hDdef : D = (max q 50 * ell ^ 2) ^ (22 * ell))
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (mu gamma : ℝ) (hgamma : 0 < gamma) (hwidth : 1 ≤ 4 * ell)
     (T : LongIntervalIndex L (4 * ell) →
       Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q)))
@@ -44,7 +42,7 @@ theorem exists_canonical_root_energy_of_calibrated_words {L q ell D s : ℕ}
     (F : ∀ J : LongIntervalIndex L (4 * ell),
       Fin (N J) → EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q) →L[ℂ]
         EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q)) :
-    let H := ∑ i, h i
+    let H := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H →
@@ -68,9 +66,9 @@ theorem exists_canonical_root_energy_of_calibrated_words {L q ell D s : ℕ}
     ∀ (xi : ℝ) (seed : IntervalSamplingChoices L q),
       seed ∈ canonicalIntervalSamplingTreeGood D s hwidth N F xi G (3 / 200 : ℝ) 0 L →
     ∃ estimate : ℕ → ℕ → ℝ,
-      ALVV.IsRegionalLowerEnergyEstimate h 0 L (49 / 16) (estimate 0 L) ∧
+      ALVV.IsRegionalLowerEnergyEstimate Φ 0 L (49 / 16) (estimate 0 L) ∧
       (L - 0 ≤ (4 * ell) →
-        ALVV.IsRegionalLowerEnergyEstimate h 0 L 0 (estimate 0 L)) ∧
+        ALVV.IsRegionalLowerEnergyEstimate Φ 0 L 0 (estimate 0 L)) ∧
       (∀ J : LongIntervalIndex L (4 * ell),
         J.val ∈ balancedIntervalMergeList (4 * ell) hwidth 0 L →
         let l := J.val.1
@@ -80,11 +78,11 @@ theorem exists_canonical_root_energy_of_calibrated_words {L q ell D s : ℕ}
         let hkr : k ≤ r :=
           (Nat.add_le_add_left (Nat.div_le_self (r - l) 2) l).trans_eq
             (Nat.add_sub_of_le J.property.1)
-        ALVV.IsRegionalLowerEnergyEstimate h l r (49 / 16) (estimate l r) ∧
-        (k - l ≤ (4 * ell) → ALVV.IsRegionalLowerEnergyEstimate h l k 0 (estimate l k)) ∧
-        (r - k ≤ (4 * ell) → ALVV.IsRegionalLowerEnergyEstimate h k r 0 (estimate k r)) ∧
+        ALVV.IsRegionalLowerEnergyEstimate Φ l r (49 / 16) (estimate l r) ∧
+        (k - l ≤ (4 * ell) → ALVV.IsRegionalLowerEnergyEstimate Φ l k 0 (estimate l k)) ∧
+        (r - k ≤ (4 * ell) → ALVV.IsRegionalLowerEnergyEstimate Φ k r 0 (estimate k r)) ∧
         ALVV.IsSoftWordNodeEnergyRealization (u := l + ell) (v := r - ell)
-          hq hpk hkr h (F J)
+          hq hpk hkr Φ (F J)
           (balancedIntervalSpace (canonicalIntervalSamplingOperation D s N F xi seed)
             (4 * ell) hwidth l k)
           (balancedIntervalSpace (canonicalIntervalSamplingOperation D s N F xi seed)
@@ -149,7 +147,7 @@ theorem exists_canonical_root_energy_of_calibrated_words {L q ell D s : ℕ}
       htargetEq) hgood
   obtain ⟨estimate, hrootEnergy, hshortEnergy, hnodesEnergy⟩ :=
     ALVV.exists_canonical_interval_root_energy_assignment
-      hq hell hD2 hcount hsample h hsupp h0 h1 T N F henergyTargets
+      hq hell hD2 hcount hsample Φ h0 h1 T N F henergyTargets
       xi seed 0 L (Nat.zero_le L) le_rfl hgoodMin
   exact ⟨estimate, hrootEnergy, hshortEnergy, hnodesEnergy⟩
 

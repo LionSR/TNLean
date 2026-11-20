@@ -47,11 +47,9 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
     ∀ (q : ℕ) (gamma : ℝ), 0 < gamma →
     ∃ C : ℝ, 0 < C ∧ ∃ k : ℕ,
     ∀ (L : ℕ),
-    ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu : ℝ),
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    ∀ (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu : ℝ),
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -197,9 +195,9 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
     hspec.elim fun k hspec ↦ hspec.elim fun _hk hspec ↦ ?_
   have hpoly := hspec
   refine ⟨C, hC, k, ?_⟩
-  intro L h hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G rG
+  intro L Φ hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G rG
     g0 m0 w v ell D s a tau epsilon t Delta
-  have hfactoryL := hfactory L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+  have hfactoryL := hfactory L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine hfactoryL.elim fun hell hspec ↦ hspec.elim fun hD2 hspec ↦ hspec.elim fun hs hspec ↦
     hspec.elim fun ha hspec ↦ hspec.elim fun haSmall hspec ↦ hspec.elim fun hepsilon hspec ↦
     hspec.elim fun hepsilon1 hspec ↦ hspec.elim fun ht hspec ↦ hspec.elim fun htail hspec ↦
@@ -240,7 +238,7 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
     have hb := mul_le_mul_of_nonneg_right haN (mul_pos hDref0 hroot).le
     nlinarith only [hb, (mul_pos hDref0 hroot).le]
   have :=
-    hauto L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hauto L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       Dtree D hDtree hD1 eta heta
   refine this.elim fun Bfinal hspec ↦ hspec.elim fun hBfinal hspec ↦
     hspec.elim fun hlogBfinal hspec ↦ ?_
@@ -281,7 +279,7 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
     hspec.elim fun hsUpper hspec ↦ ?_
   have _hsLog := hspec
   have :=
-    physical_dg_normalized_ground_filter_spec h h0 mu nu gamma hgamma hmu hnu hmunu hgap
+    physical_dg_normalized_ground_filter_spec Φ h0 mu nu gamma hgamma hmu hnu hmunu hgap
   refine this.elim fun _hM hspec ↦ hspec.elim fun hA hspec ↦ hspec.elim fun hc hspec ↦
     hspec.elim fun hc1 hspec ↦ hspec.elim fun _hfix hspec ↦ hspec.elim fun _hKGo hspec ↦ ?_
   have _hhigh := hspec
@@ -296,7 +294,7 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation :
       A ≤ ‖H‖ := sub_le_self _ hmu0
       _ ≤ ∑ _i : Fin (L - 1), (1 : ℝ) :=
         norm_sum_le_of_le Finset.univ fun i _ ↦
-          (CStarAlgebra.norm_le_one_iff_of_nonneg (h i) (h0 i)).mpr (h1 i)
+          (CStarAlgebra.norm_le_one_iff_of_nonneg (Φ.term i) (h0 i)).mpr (h1 i)
       _ = ((L - 1 : ℕ) : ℝ) := by simp
       _ ≤ (L : ℝ) + 1 := by exact_mod_cast (show L - 1 ≤ L + 1 by omega)
   have hbound : (Bout : ℝ) ≤

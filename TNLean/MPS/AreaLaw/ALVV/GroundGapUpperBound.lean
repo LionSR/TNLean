@@ -7,6 +7,7 @@ import QICLean.Analysis.EuclideanEigenvectorBasis
 import QICLean.Analysis.LowEnergyCoordinates
 import QICLean.Analysis.LowEnergyPerturbation
 import QICLean.Entropy.FilterChainEnergy
+import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Sites.Lattice.Chain
 /-!
 # The gap above a degenerate ground space is logarithmic in its dimension
@@ -251,11 +252,9 @@ satisfies `m < L` and `q ^ m ≤ dim G`. The positive-contraction normalization
 and the gap are those of ALVV, arXiv:1602.08828v2, lines 267, 806 and
 Assumption (DG), lines 275–279; the source states no bound on `γ`. -/
 theorem pow_le_finrank_ground_of_lt_gap :
-    ∀ (L q : ℕ) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    ∀ (L q : ℕ) (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -263,7 +262,7 @@ theorem pow_le_finrank_ground_of_lt_gap :
       let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
       ∀ m : ℕ, (m : ℝ) < gamma → m < L ∧ q ^ m ≤ Module.finrank ℂ G := by
   classical
-  intro L q h hs h0 h1 mu nu gamma H hH hmu hnu hmunu hgap G
+  intro L q Φ hs h0 h1 mu nu gamma H hH hmu hnu hmunu hgap G
   have hq : 2 ≤ q :=
     hH.two_le_local_dimension_of_two_spectral_values hmu hnu (ne_of_lt hmunu)
   set Hc := (toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) H).toLinearMap
@@ -288,7 +287,7 @@ theorem pow_le_finrank_ground_of_lt_gap :
         Matrix ((({v // v ∈ B}) → Fin q) × (({v // v ∉ B}) → Fin q))
           ((({v // v ∈ B}) → Fin q) × (({v // v ∉ B}) → Fin q)) ℂ :=
       fun X ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) B X
-    have hcut_sum : ∀ (s : Finset (Fin (L - 1))), cut (∑ i ∈ s, h i) = ∑ i ∈ s, cut (h i) := by
+    have hcut_sum : ∀ (s : Finset (Fin (L - 1))), cut (Φ.partialHamiltonian s) = ∑ i ∈ s, cut (Φ.term i) := by
       intro s
       exact map_sum (reindexLinearEquiv ℂ ℂ e e) _ s
     have hcut_psd : ∀ X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ, X.PosSemidef →
@@ -297,11 +296,11 @@ theorem pow_le_finrank_ground_of_lt_gap :
     obtain ⟨σ₀⟩ : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, by omega⟩⟩
     set y₀ := (e σ₀).2
     -- Left part in Kronecker form.
-    set M := ∑ i ∈ S, fun x x' ↦ cut (h i) (x, y₀) (x', y₀)
-    have hleft : cut (∑ i ∈ S, h i) = M ⊗ₖ (1 : Matrix _ _ ℂ) := by
+    set M := ∑ i ∈ S, fun x x' ↦ cut (Φ.term i) (x, y₀) (x', y₀)
+    have hleft : cut (Φ.partialHamiltonian S) = M ⊗ₖ (1 : Matrix _ _ ℂ) := by
       rw [hcut_sum]
-      have hterm : ∀ i ∈ S, cut (h i) =
-          (fun x x' ↦ cut (h i) (x, y₀) (x', y₀)) ⊗ₖ (1 : Matrix _ _ ℂ) := by
+      have hterm : ∀ i ∈ S, cut (Φ.term i) =
+          (fun x x' ↦ cut (Φ.term i) (x, y₀) (x', y₀)) ⊗ₖ (1 : Matrix _ _ ℂ) := by
         intro i hi
         exact (hs i).cutOperator_eq_kronecker_one
           (interval_subset_interval_zero (Finset.mem_filter.mp hi).2) y₀
@@ -310,15 +309,15 @@ theorem pow_le_finrank_ground_of_lt_gap :
       simp only [kroneckerMap, Matrix.of_apply, Matrix.sum_apply, M, Finset.sum_apply,
         Finset.sum_mul]
     -- Right part bounded by the number of right terms.
-    set N := cut (∑ i ∈ Sᶜ, h i)
+    set N := cut (Φ.partialHamiltonian Sᶜ)
     have hN0 : N.PosSemidef :=
       hcut_psd _ (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun i _ ↦ h0 i))
     have hcard : (Sᶜ).card ≤ m := by
       have := card_filter_not_le_le L c (by omega)
       rw [Finset.compl_filter]
       omega
-    have hNle : ∑ i ∈ Sᶜ, h i ≤ ((m : ℝ) : ℂ) • (1 : Matrix (Fin L → Fin q) _ ℂ) := by
-      calc ∑ i ∈ Sᶜ, h i ≤ ∑ _i ∈ Sᶜ, (1 : Matrix (Fin L → Fin q) _ ℂ) :=
+    have hNle : ∑ i ∈ Sᶜ, Φ.term i ≤ ((m : ℝ) : ℂ) • (1 : Matrix (Fin L → Fin q) _ ℂ) := by
+      calc ∑ i ∈ Sᶜ, Φ.term i ≤ ∑ _i ∈ Sᶜ, (1 : Matrix (Fin L → Fin q) _ ℂ) :=
             Finset.sum_le_sum fun i _ ↦ h1 i
         _ = ((Sᶜ).card : ℂ) • (1 : Matrix (Fin L → Fin q) _ ℂ) := by
             rw [Finset.sum_const, ← Nat.cast_smul_eq_nsmul ℂ]
@@ -331,14 +330,14 @@ theorem pow_le_finrank_ground_of_lt_gap :
             exact Complex.zero_le_real.mpr (by linarith)
     have hN1 : (((m : ℝ) : ℂ) • (1 : Matrix _ _ ℂ) - N).PosSemidef := by
       have h' := hcut_psd _ (Matrix.le_iff.mp hNle)
-      have hlin : cut (((m : ℝ) : ℂ) • (1 : Matrix (Fin L → Fin q) _ ℂ) - ∑ i ∈ Sᶜ, h i) =
+      have hlin : cut (((m : ℝ) : ℂ) • (1 : Matrix (Fin L → Fin q) _ ℂ) - ∑ i ∈ Sᶜ, Φ.term i) =
           ((m : ℝ) : ℂ) • cut 1 - N :=
         rfl
       rwa [hlin, hcut_one] at h'
     have hHc : cut H = M ⊗ₖ (1 : Matrix _ _ ℂ) + N := by
       rw [← hleft]
-      change cut (∑ i, h i) = cut (∑ i ∈ S, h i) + cut (∑ i ∈ Sᶜ, h i)
-      rw [← Finset.sum_add_sum_compl S h]
+      change cut Φ.hamiltonian = cut (Φ.partialHamiltonian S) + cut (Φ.partialHamiltonian Sᶜ)
+      rw [← Finset.sum_add_sum_compl S Φ]
       exact map_add (reindexLinearEquiv ℂ ℂ e e) _ _
     -- A nonzero ground vector and its energy.
     have hGne : G ≠ ⊥ := hH.spectralSpanLE_ne_bot_of_mem_spectrum hmu le_rfl
@@ -432,11 +431,9 @@ one.** In particular a unique ground state has gap at most one, so the capped
 gap `min γ 1` of the formal estimates is the gap itself. ALVV,
 arXiv:1602.08828v2, Assumption (DG), lines 275–279. -/
 theorem gap_le_one_of_finrank_lt (L q : ℕ)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ) :
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -446,7 +443,7 @@ theorem gap_le_one_of_finrank_lt (L q : ℕ)
   intro H hH hmu hnu hmunu hgap G hlt
   by_contra hγ
   push Not at hγ
-  have := (pow_le_finrank_ground_of_lt_gap L q h hs h0 h1 mu nu gamma hmu hnu hmunu hgap 1
+  have := (pow_le_finrank_ground_of_lt_gap L q Φ h0 h1 mu nu gamma hmu hnu hmunu hgap 1
     (by exact_mod_cast hγ)).2
   rw [pow_one] at this
   exact (not_le.mpr hlt) this
@@ -456,11 +453,9 @@ satisfies `γ ≤ 1 + log r / log q`. ALVV, arXiv:1602.08828v2, Assumption (DG),
 lines 275–279, together with the normalization `0 ≤ h_i ≤ 1` of lines 267
 and 806. -/
 theorem gap_le_one_add_log_div_log (L q : ℕ)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ) :
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ) :
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -485,7 +480,7 @@ theorem gap_le_one_add_log_div_log (L q : ℕ)
   have hmγ : (m : ℝ) < gamma := by
     rw [hm]
     linarith [Nat.ceil_lt_add_one hγ.le]
-  have hpow := (pow_le_finrank_ground_of_lt_gap L q h hs h0 h1 mu nu gamma hmu hnu hmunu hgap
+  have hpow := (pow_le_finrank_ground_of_lt_gap L q Φ h0 h1 mu nu gamma hmu hnu hmunu hgap
     m hmγ).2
   have hlog : (m : ℝ) * Real.log q ≤ Real.log (Module.finrank ℂ G : ℝ) := by
     rw [← Real.log_pow]

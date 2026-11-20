@@ -72,12 +72,10 @@ construct the sampled viable spaces of the merge tree. -/
 theorem exists_physical_dg_collective_trimming_bound :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q : ℕ),
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
       0 < gamma →
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -106,10 +104,10 @@ theorem exists_physical_dg_collective_trimming_bound :
             Set (LeftBlockVector L q i))) G := by
   obtain ⟨K, hK, hreference⟩ := exists_physical_dg_isOpenMPS_reference_subspace
   refine ⟨K, hK, ?_⟩
-  intro L q h hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G r g u
+  intro L q Φ hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap G r g u
     epsilon hepsilon hepsilon1 b
   obtain ⟨B, hB, hlogB, U, _hdim, hUG, hGU, hU⟩ :=
-    hreference L q h hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hreference L q Φ hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       epsilon hepsilon hepsilon1
   refine ⟨B, hB, hlogB, fun i hi S delta hdelta xi hxi hS ↦ ?_⟩
   simpa only [Nat.cast_mul, Nat.cast_pow] using

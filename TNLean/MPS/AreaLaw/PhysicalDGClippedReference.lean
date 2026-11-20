@@ -39,12 +39,10 @@ Figure `fig:merge-prime`, lines 1668–1670, and lines 1801–1805. -/
 theorem exists_physical_dg_common_reference_for_clipped_targets :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q : ℕ),
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
       0 < gamma →
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -72,7 +70,7 @@ theorem exists_physical_dg_common_reference_for_clipped_targets :
   classical
   obtain ⟨K, hK, hreference⟩ := exists_physical_dg_isOpenMPS_reference_subspace
   refine ⟨K, hK, ?_⟩
-  intro L q h hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ hs h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G r g u a ha ha1 tau b
   have htau : 0 < tau := by dsimp only [tau]; positivity
   have htau1 : tau ≤ 1 := by
@@ -80,7 +78,7 @@ theorem exists_physical_dg_common_reference_for_clipped_targets :
     dsimp only [tau]
     linarith
   obtain ⟨B, hB, hlogB, U, hdimU, hUG, hGU, hUMPS⟩ :=
-    hreference L q h hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap tau htau htau1
+    hreference L q Φ hs h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap tau htau htau1
   refine ⟨B, hB, hlogB, U, hdimU, hUG, hGU, hUMPS, ?_, ?_⟩
   · dsimp only [tau]
     nlinarith [sq_nonneg a]

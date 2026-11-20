@@ -39,12 +39,10 @@ arXiv:1602.08828v2, `t:alg1`, lines 1777–1817, and LVV13,
 arXiv:1307.5143v1, Claim `c:2`, lines 520–527. -/
 theorem exists_physical_dg_interval_tree_mps :
     ∃ C K : ℝ, 1 ≤ C ∧ 0 < K ∧ ∀ (L q : ℕ),
-    ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+    ∀ (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
     0 < gamma →
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -118,10 +116,10 @@ theorem exists_physical_dg_interval_tree_mps :
   classical
   obtain ⟨C, K, hC, hK, hphysical⟩ := exists_physical_dg_interval_tree
   refine ⟨C, K, hC, hK, ?_⟩
-  intro L q h hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g u epsilonRef b m v ell D
   obtain ⟨hell, hlogD, B, hB, hlogB, hfamilies⟩ :=
-    hphysical L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hphysical L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
   refine ⟨hell, hlogD, B, hB, hlogB, ?_⟩
   intro Dref xi width hwidth
   obtain ⟨N, F, hN, hparents⟩ := hfamilies

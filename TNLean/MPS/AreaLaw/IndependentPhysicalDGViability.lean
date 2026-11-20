@@ -50,11 +50,9 @@ theorem exists_independent_long_middle_actual_dg_family :
       let Tm := Tcoord.trans (TensorProduct.commIsometry ℂ
         (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtargetᶜ))
         (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtarget)))
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-          (h i) (interval L i.val (i.val + 2)))
-        (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu : ℝ),
-      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+      ∀ (Φ : ManyBody.BondInteraction L q)
+        (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu : ℝ),
+      let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
       let hH : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
@@ -82,11 +80,11 @@ theorem exists_independent_long_middle_actual_dg_family :
                   EuclideanSpace ℂ (↥(Jtargetᶜ) → Fin q)))) := by
   classical
   intro m q ell t g epsilon Delta hq hqm hell ht hg hg1 hepsilon hepsilon1 htail hfilter
-    D L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm h hs h0 h1 mu H hH G hmu hgap
+    D L p r hpr hrL hlong Jtarget β tau U Phi Tcoord Tm Φ hs h0 h1 mu H hH G hmu hgap
   obtain ⟨T, N, CW, hN, hTG, hGT, hdim, hpower⟩ :=
     exists_independent_long_middle_actual_dg_word_family m q ell t g epsilon Delta
       hq hqm hell ht hg hg1 hepsilon hepsilon1 htail hfilter
-      L p r hpr hrL hlong h hs h0 h1 mu hmu hgap
+      L p r hpr hrL hlong Φ hs h0 h1 mu hmu hgap
   obtain ⟨_f, F, _hF, _hzero, hspan⟩ :=
     Submodule.exists_clm_family_extension_of_card_le
       (by simpa only [Fintype.card_fin] using hN) CW

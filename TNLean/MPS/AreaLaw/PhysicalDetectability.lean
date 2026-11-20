@@ -7,6 +7,7 @@ import QICLean.Analysis.DetectabilityLemma
 import QICLean.Analysis.ComplementProdKernel
 import QICLean.Analysis.ComplementProdPartition
 import QICLean.Analysis.ProjectionGeometry
+import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.Algebra.MatrixHermitianSum
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SupportedMatrixElements
@@ -41,52 +42,50 @@ namespace TNLean.MPS.AreaLaw
 variable {L q : ℕ}
 
 private noncomputable def parityTerm
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (p k : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (p k : ℕ) :
     EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ] EuclideanSpace ℂ (Fin L → Fin q) :=
   if hk : k < L - 1 then
     if k % 2 = p then Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-      (h ⟨k, hk⟩) else 0
+      (Φ.term ⟨k, hk⟩) else 0
   else 0
 
 /-- The product of the complements on one parity of the physical bond starts.
 With sites numbered from one, parity zero comprises the odd source terms.
 ALVV, arXiv:1602.08828v2, `def:DLO`, lines 1496–1501. -/
 noncomputable def physicalParityProduct
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (p : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (p : ℕ) :
     EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ] EuclideanSpace ℂ (Fin L → Fin q) :=
-  ContinuousLinearMap.complementProd (parityTerm h p) (L - 1)
+  ContinuousLinearMap.complementProd (parityTerm Φ p) (L - 1)
 
 /-- The actual even-then-odd detectability operator; the odd source terms act
 first. ALVV, arXiv:1602.08828v2, `def:DLO`, lines 1496–1501. -/
 noncomputable def physicalDetectability
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
+    (Φ : ManyBody.BondInteraction L q) :
     EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ] EuclideanSpace ℂ (Fin L → Fin q) :=
-  physicalParityProduct h 1 * physicalParityProduct h 0
+  physicalParityProduct Φ 1 * physicalParityProduct Φ 0
 
 private theorem commute_bonds_of_separated
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
+    (Φ : ManyBody.BondInteraction L q)
     (i j : Fin (L - 1)) (hsep : i.val + 1 < j.val ∨ j.val + 1 < i.val) :
-    Commute (h i) (h j) := by
-  refine ManyBody.commute_of_mem_supportedOperators_of_disjoint (hs i) (hs j) ?_
+    Commute (Φ.term i) (Φ.term j) := by
+  refine ManyBody.commute_of_mem_supportedOperators_of_disjoint (Φ.mem i) (Φ.mem j) ?_
   rw [Finset.disjoint_left]
   intro x hx hy
   rw [mem_interval] at hx hy
   omega
 
 private noncomputable def orderedTerm
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (k : ℕ) :
+    (Φ : ManyBody.BondInteraction L q) (k : ℕ) :
     EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ] EuclideanSpace ℂ (Fin L → Fin q) :=
-  if k < L - 1 then parityTerm h 0 k else parityTerm h 1 (k - (L - 1))
+  if k < L - 1 then parityTerm Φ 0 k else parityTerm Φ 1 (k - (L - 1))
 
 private def orderedPosition (m r : ℕ) : ℕ := if r % 2 = 0 then r else m + r
 
 private theorem exists_bond_of_orderedTerm_ne_zero
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    {k : ℕ} (hk : k < 2 * (L - 1)) (hne : orderedTerm h k ≠ 0) :
+    (Φ : ManyBody.BondInteraction L q)
+    {k : ℕ} (hk : k < 2 * (L - 1)) (hne : orderedTerm Φ k ≠ 0) :
     ∃ i : Fin (L - 1), k = orderedPosition (L - 1) i.val ∧
-      orderedTerm h k = Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (h i) := by
+      orderedTerm Φ k = Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Φ.term i) := by
   by_cases hkm : k < L - 1
   · have hp : k % 2 = 0 := by
       by_contra hp
@@ -105,24 +104,23 @@ private theorem exists_bond_of_orderedTerm_ne_zero
 
 open scoped Classical in
 private theorem orderedTerm_noncommutation_count
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2))) :
+    (Φ : ManyBody.BondInteraction L q)
+:
     ∀ i < 2 * (L - 1),
       ((Finset.range (2 * (L - 1))).filter
-        (fun j ↦ j ≠ i ∧ ¬Commute (orderedTerm h i) (orderedTerm h j))).card ≤ 2 := by
+        (fun j ↦ j ≠ i ∧ ¬Commute (orderedTerm Φ i) (orderedTerm Φ j))).card ≤ 2 := by
   intro i hi
-  by_cases hz : orderedTerm h i = 0
+  by_cases hz : orderedTerm Φ i = 0
   · simp [hz, Commute.zero_left]
-  obtain ⟨r, _hrpos, hreq⟩ := exists_bond_of_orderedTerm_ne_zero h hi hz
+  obtain ⟨r, _hrpos, hreq⟩ := exists_bond_of_orderedTerm_ne_zero Φ hi hz
   have hsub : ((Finset.range (2 * (L - 1))).filter
-      (fun j ↦ j ≠ i ∧ ¬Commute (orderedTerm h i) (orderedTerm h j))) ⊆
+      (fun j ↦ j ≠ i ∧ ¬Commute (orderedTerm Φ i) (orderedTerm Φ j))) ⊆
       {orderedPosition (L - 1) (r.val - 1), orderedPosition (L - 1) (r.val + 1)} := by
     intro j hj
     obtain ⟨hjrange, _hji, hc⟩ := Finset.mem_filter.mp hj
-    obtain ⟨s, hspos, hseq⟩ := exists_bond_of_orderedTerm_ne_zero h
+    obtain ⟨s, hspos, hseq⟩ := exists_bond_of_orderedTerm_ne_zero Φ
       (Finset.mem_range.mp hjrange) (fun hz ↦ hc (by simp [hz, Commute.zero_right]))
-    have hn : ¬Commute (h r) (h s) := by
+    have hn : ¬Commute (Φ.term r) (Φ.term s) := by
       intro hrs
       apply hc
       rw [hreq, hseq]
@@ -132,7 +130,7 @@ private theorem orderedTerm_noncommutation_count
       have hne : r.val ≠ s.val := by
         intro heq
         exact hn (by rw [Fin.ext heq])
-      exact hn (commute_bonds_of_separated h hs r s (by omega))
+      exact hn (commute_bonds_of_separated Φ r s (by omega))
     simp only [Finset.mem_insert, Finset.mem_singleton]
     rcases hadj with hadj | hadj
     · exact Or.inl (hspos.trans (congrArg (orderedPosition (L - 1)) hadj))
@@ -144,9 +142,9 @@ private theorem orderedTerm_noncommutation_count
   omega
 
 private theorem parityTerm_isStarProjection
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hp : ∀ i, IsStarProjection (h i)) (p k : ℕ) :
-    IsStarProjection (parityTerm h p k) := by
+    (Φ : ManyBody.BondInteraction L q)
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (p k : ℕ) :
+    IsStarProjection (parityTerm Φ p k) := by
   unfold parityTerm
   split_ifs with hk hkpar
   · exact (hp ⟨k, hk⟩).map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
@@ -154,19 +152,18 @@ private theorem parityTerm_isStarProjection
   · exact IsStarProjection.zero _
 
 private theorem orderedTerm_isStarProjection
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hp : ∀ i, IsStarProjection (h i)) (k : ℕ) :
-    IsStarProjection (orderedTerm h k) := by
+    (Φ : ManyBody.BondInteraction L q)
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (k : ℕ) :
+    IsStarProjection (orderedTerm Φ k) := by
   unfold orderedTerm
   split_ifs
-  · exact parityTerm_isStarProjection h hp _ _
-  · exact parityTerm_isStarProjection h hp _ _
+  · exact parityTerm_isStarProjection Φ hp _ _
+  · exact parityTerm_isStarProjection Φ hp _ _
 
 private theorem parityTerm_commute
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2))) (p i j : ℕ) :
-    Commute (parityTerm h p i) (parityTerm h p j) := by
+    (Φ : ManyBody.BondInteraction L q)
+(p i j : ℕ) :
+    Commute (parityTerm Φ p i) (parityTerm Φ p j) := by
   by_cases hi : i < L - 1
   · by_cases hj : j < L - 1
     · by_cases hip : i % 2 = p
@@ -177,7 +174,7 @@ private theorem parityTerm_commute
           have hsep : i + 1 < j ∨ j + 1 < i := by omega
           simpa only [parityTerm, dite_eq_left hi, dite_eq_left hj,
             ite_eq_left hip, ite_eq_left hjp] using
-            (commute_bonds_of_separated h hs ⟨i, hi⟩ ⟨j, hj⟩ hsep).map
+            (commute_bonds_of_separated Φ ⟨i, hi⟩ ⟨j, hj⟩ hsep).map
               (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
         · simp [parityTerm, hj, hjp, Commute.zero_right]
       · simp [parityTerm, hi, hip, Commute.zero_left]
@@ -185,12 +182,12 @@ private theorem parityTerm_commute
   · simp [parityTerm, hi, Commute.zero_left]
 
 private theorem complementProd_orderedTerm
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    ContinuousLinearMap.complementProd (orderedTerm h) (2 * (L - 1)) =
-      physicalDetectability h := by
+    (Φ : ManyBody.BondInteraction L q) :
+    ContinuousLinearMap.complementProd (orderedTerm Φ) (2 * (L - 1)) =
+      physicalDetectability Φ := by
   have hfirst : ∀ n ≤ L - 1,
-      ContinuousLinearMap.complementProd (orderedTerm h) n =
-        ContinuousLinearMap.complementProd (parityTerm h 0) n := by
+      ContinuousLinearMap.complementProd (orderedTerm Φ) n =
+        ContinuousLinearMap.complementProd (parityTerm Φ 0) n := by
     intro n
     induction n with
     | zero => intro _; rfl
@@ -201,9 +198,9 @@ private theorem complementProd_orderedTerm
       congr 1
       simp only [orderedTerm, ite_eq_left (show n < L - 1 by omega)]
   have hsecond : ∀ n,
-      ContinuousLinearMap.complementProd (orderedTerm h) ((L - 1) + n) =
-        ContinuousLinearMap.complementProd (parityTerm h 1) n *
-          ContinuousLinearMap.complementProd (parityTerm h 0) (L - 1) := by
+      ContinuousLinearMap.complementProd (orderedTerm Φ) ((L - 1) + n) =
+        ContinuousLinearMap.complementProd (parityTerm Φ 1) n *
+          ContinuousLinearMap.complementProd (parityTerm Φ 0) (L - 1) := by
     intro n
     induction n with
     | zero => simpa using hfirst (L - 1) le_rfl
@@ -215,10 +212,10 @@ private theorem complementProd_orderedTerm
   simpa only [two_mul, physicalDetectability, physicalParityProduct] using hsecond (L - 1)
 
 private theorem sum_parityTerm
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    (∑ k ∈ Finset.range (L - 1), parityTerm h 0 k) +
-      (∑ k ∈ Finset.range (L - 1), parityTerm h 1 k) =
-      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, h i) := by
+    (Φ : ManyBody.BondInteraction L q) :
+    (∑ k ∈ Finset.range (L - 1), parityTerm Φ 0 k) +
+      (∑ k ∈ Finset.range (L - 1), parityTerm Φ 1 k) =
+      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian := by
   rw [← Finset.sum_add_distrib, Finset.sum_range, map_sum]
   refine Finset.sum_congr rfl ?_
   intro i _
@@ -228,46 +225,44 @@ private theorem sum_parityTerm
     simp [parityTerm, i.isLt, hp1]
 
 private theorem sum_orderedTerm
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    (∑ k ∈ Finset.range (2 * (L - 1)), orderedTerm h k) =
-      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, h i) := by
+    (Φ : ManyBody.BondInteraction L q) :
+    (∑ k ∈ Finset.range (2 * (L - 1)), orderedTerm Φ k) =
+      Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian := by
   rw [two_mul, Finset.sum_range_add]
-  have hfirst : (∑ k ∈ Finset.range (L - 1), orderedTerm h k) =
-      ∑ k ∈ Finset.range (L - 1), parityTerm h 0 k := by
+  have hfirst : (∑ k ∈ Finset.range (L - 1), orderedTerm Φ k) =
+      ∑ k ∈ Finset.range (L - 1), parityTerm Φ 0 k := by
     refine Finset.sum_congr rfl ?_
     intro k hk
     simp only [orderedTerm, ite_eq_left (Finset.mem_range.mp hk)]
-  have hsecond : (∑ k ∈ Finset.range (L - 1), orderedTerm h ((L - 1) + k)) =
-      ∑ k ∈ Finset.range (L - 1), parityTerm h 1 k := by
+  have hsecond : (∑ k ∈ Finset.range (L - 1), orderedTerm Φ ((L - 1) + k)) =
+      ∑ k ∈ Finset.range (L - 1), parityTerm Φ 1 k := by
     refine Finset.sum_congr rfl ?_
     intro k _
     simp [orderedTerm]
   rw [hfirst, hsecond]
-  exact sum_parityTerm h
+  exact sum_parityTerm Φ
 
 /-- A physical parity product splits over any selection of its bonds.
 Commutativity follows from the original nearest-neighbour supports; no
 projection hypothesis is needed for this algebraic identity. ALVV,
 arXiv:1602.08828v2, `def:FF-tH` and `thm:FF-tH`, lines 1467–1487 and 1543–1550. -/
 theorem physicalParityProduct_partition
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
+    (Φ : ManyBody.BondInteraction L q)
     (s : Fin (L - 1) → Prop) [DecidablePred s] (p : ℕ) :
-    physicalParityProduct h p =
-      physicalParityProduct (fun i ↦ if s i then h i else 0) p *
-        physicalParityProduct (fun i ↦ if s i then 0 else h i) p := by
+    physicalParityProduct Φ p =
+      physicalParityProduct (fun i ↦ if s i then Φ.term i else 0) p *
+        physicalParityProduct (fun i ↦ if s i then 0 else Φ.term i) p := by
   classical
   let t (k : ℕ) : Prop := if hk : k < L - 1 then s ⟨k, hk⟩ else False
-  have heq := ContinuousLinearMap.complementProd_partition (parityTerm_commute h hs p)
+  have heq := ContinuousLinearMap.complementProd_partition (parityTerm_commute Φ p)
     t (L - 1)
-  have hu : (fun k ↦ if t k then parityTerm h p k else 0) =
-      parityTerm (fun i ↦ if s i then h i else 0) p := by
+  have hu : (fun k ↦ if t k then parityTerm Φ p k else 0) =
+      parityTerm (fun i ↦ if s i then Φ.term i else 0) p := by
     funext k
     unfold parityTerm
     split_ifs <;> simp_all [t]
-  have hv : (fun k ↦ if t k then 0 else parityTerm h p k) =
-      parityTerm (fun i ↦ if s i then 0 else h i) p := by
+  have hv : (fun k ↦ if t k then 0 else parityTerm Φ p k) =
+      parityTerm (fun i ↦ if s i then 0 else Φ.term i) p := by
     funext k
     unfold parityTerm
     split_ifs <;> simp_all [t]
@@ -277,27 +272,26 @@ theorem physicalParityProduct_partition
 commutation is derived from physical support. ALVV, arXiv:1602.08828v2,
 `def:DLO` and `def:HLeven-odd`, lines 1475–1501. -/
 theorem physicalParityProduct_isStarProjection
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2))) (p : ℕ) :
-    IsStarProjection (physicalParityProduct h p) :=
+    (Φ : ManyBody.BondInteraction L q)
+    (hp : ∀ i, IsStarProjection (Φ.term i))
+(p : ℕ) :
+    IsStarProjection (physicalParityProduct Φ p) :=
   ContinuousLinearMap.isStarProjection_complementProd
-    (parityTerm_isStarProjection h hp p) (parityTerm_commute h hs p) (L - 1)
+    (parityTerm_isStarProjection Φ hp p) (parityTerm_commute Φ p) (L - 1)
 
 /-- The fixed vectors of an actual parity product are precisely the vectors
 annihilated by its selected physical bonds. This assertion requires no
 commutativity or support hypothesis. ALVV, arXiv:1602.08828v2,
 `def:FF-tH` and `thm:FF-tH`, lines 1467–1487 and 1543–1550. -/
 theorem physicalParityProduct_apply_eq_self_iff
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hp : ∀ i, IsStarProjection (h i)) (p : ℕ)
+    (Φ : ManyBody.BondInteraction L q)
+    (hp : ∀ i, IsStarProjection (Φ.term i)) (p : ℕ)
     (x : EuclideanSpace ℂ (Fin L → Fin q)) :
-    physicalParityProduct h p x = x ↔
+    physicalParityProduct Φ p x = x ↔
       ∀ i : Fin (L - 1), i.val % 2 = p →
-        Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (h i) x = 0 := by
+        Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Φ.term i) x = 0 := by
   rw [physicalParityProduct, ContinuousLinearMap.complementProd_apply_eq_self_iff
-    (parityTerm_isStarProjection h hp p)]
+    (parityTerm_isStarProjection Φ hp p)]
   constructor
   · intro hx i hi
     simpa only [parityTerm, dite_eq_left i.isLt, ite_eq_left hi] using hx i.val i.isLt
@@ -310,29 +304,27 @@ theorem physicalParityProduct_apply_eq_self_iff
 energy. The vector need not be normalized. ALVV, arXiv:1602.08828v2,
 `lem:dl-converse` and `thm:FF-tH`, lines 1528–1550. -/
 theorem sum_norm_sq_sub_physicalParityProduct_le
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
+    (Φ : ManyBody.BondInteraction L q)
+    (hp : ∀ i, IsStarProjection (Φ.term i))
     (x : EuclideanSpace ℂ (Fin L → Fin q)) :
-    ‖x - physicalParityProduct h 0 x‖ ^ 2 +
-      ‖x - physicalParityProduct h 1 x‖ ^ 2 ≤
+    ‖x - physicalParityProduct Φ 0 x‖ ^ 2 +
+      ‖x - physicalParityProduct Φ 1 x‖ ^ 2 ≤
         (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-          (∑ i, h i) x⟫_ℂ).re := by
+          Φ.hamiltonian x⟫_ℂ).re := by
   have h0 := ContinuousLinearMap.norm_sq_sub_norm_sq_complementProd_le
-    (parityTerm_isStarProjection h hp 0) (parityTerm_commute h hs 0) x (L - 1)
+    (parityTerm_isStarProjection Φ hp 0) (parityTerm_commute Φ 0) x (L - 1)
   have h1 := ContinuousLinearMap.norm_sq_sub_norm_sq_complementProd_le
-    (parityTerm_isStarProjection h hp 1) (parityTerm_commute h hs 1) x (L - 1)
+    (parityTerm_isStarProjection Φ hp 1) (parityTerm_commute Φ 1) x (L - 1)
   have hpy (p : ℕ) := ContinuousLinearMap.IsStarProjection.norm_sq_eq
-    (physicalParityProduct_isStarProjection h hp hs p) x
+    (physicalParityProduct_isStarProjection Φ hp Φ.mem p) x
   have hsum :
-      (⟪x, (∑ k ∈ Finset.range (L - 1), parityTerm h 0 k) x⟫_ℂ).re +
-        (⟪x, (∑ k ∈ Finset.range (L - 1), parityTerm h 1 k) x⟫_ℂ).re =
+      (⟪x, (∑ k ∈ Finset.range (L - 1), parityTerm Φ 0 k) x⟫_ℂ).re +
+        (⟪x, (∑ k ∈ Finset.range (L - 1), parityTerm Φ 1 k) x⟫_ℂ).re =
           (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-            (∑ i, h i) x⟫_ℂ).re := by
+            Φ.hamiltonian x⟫_ℂ).re := by
     simpa only [_root_.add_apply, inner_add_right, Complex.add_re] using
       congrArg (fun A : EuclideanSpace ℂ (Fin L → Fin q) →L[ℂ]
-        EuclideanSpace ℂ (Fin L → Fin q) ↦ (⟪x, A x⟫_ℂ).re) (sum_parityTerm h)
+        EuclideanSpace ℂ (Fin L → Fin q) ↦ (⟪x, A x⟫_ℂ).re) (sum_parityTerm Φ)
   simp only [physicalParityProduct, RCLike.re_to_complex] at h0 h1 hpy ⊢
   linarith only [h0, h1, hpy 0, hpy 1, hsum]
 
@@ -340,46 +332,43 @@ theorem sum_norm_sq_sub_physicalParityProduct_le
 every unit vector. The constant three strengthens the stated constant four.
 ALVV, arXiv:1602.08828v2, `lem:dl-converse`, lines 1528–1537. -/
 theorem one_sub_three_mul_le_norm_sq_physicalDetectability
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
+    (Φ : ManyBody.BondInteraction L q)
+    (hp : ∀ i, IsStarProjection (Φ.term i))
     {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1) :
     1 - 3 * (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-      (∑ i, h i) x⟫_ℂ).re ≤ ‖physicalDetectability h x‖ ^ 2 := by
+      Φ.hamiltonian x⟫_ℂ).re ≤ ‖physicalDetectability Φ x‖ ^ 2 := by
   have hconv := ContinuousLinearMap.one_sub_three_mul_le_norm_sq_complementProd_comp
-    (parityTerm_isStarProjection h hp 1) (parityTerm_commute h hs 1)
-    (parityTerm_isStarProjection h hp 0) (parityTerm_commute h hs 0)
+    (parityTerm_isStarProjection Φ hp 1) (parityTerm_commute Φ 1)
+    (parityTerm_isStarProjection Φ hp 0) (parityTerm_commute Φ 0)
     (L - 1) (L - 1) hx
-  rw [add_comm (∑ k ∈ Finset.range (L - 1), parityTerm h 1 k), sum_parityTerm] at hconv
+  rw [add_comm (∑ k ∈ Finset.range (L - 1), parityTerm Φ 1 k), sum_parityTerm] at hconv
   exact hconv
 
 /-- The energy decrease estimate for the actual physical even/odd product.
 Each bond has at most two noncommuting neighbours, derived from support.
 ALVV, arXiv:1602.08828v2, `lem:dl`, lines 1508–1519. -/
 theorem re_inner_physicalDetectability_le
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2))) (x : EuclideanSpace ℂ (Fin L → Fin q)) :
-    (⟪physicalDetectability h x,
+    (Φ : ManyBody.BondInteraction L q)
+    (hp : ∀ i, IsStarProjection (Φ.term i))
+(x : EuclideanSpace ℂ (Fin L → Fin q)) :
+    (⟪physicalDetectability Φ x,
       Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-        (∑ i, h i) (physicalDetectability h x)⟫_ℂ).re ≤
-      4 * (‖x‖ ^ 2 - ‖physicalDetectability h x‖ ^ 2) := by
+        Φ.hamiltonian (physicalDetectability Φ x)⟫_ℂ).re ≤
+      4 * (‖x‖ ^ 2 - ‖physicalDetectability Φ x‖ ^ 2) := by
   have hDL := ContinuousLinearMap.re_inner_sum_complementProd_le
-    (orderedTerm_isStarProjection h hp) (orderedTerm_noncommutation_count h hs) x
+    (orderedTerm_isStarProjection Φ hp) (orderedTerm_noncommutation_count Φ) x
   rw [complementProd_orderedTerm, sum_orderedTerm] at hDL
   norm_num at hDL
   simpa only [map_sum, _root_.sum_apply] using hDL
 
 private theorem bond_apply_eq_zero_of_sum
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hp : ∀ i, IsStarProjection (h i)) {z : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hz : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, h i) z = 0)
+    (Φ : ManyBody.BondInteraction L q)
+    (hp : ∀ i, IsStarProjection (Φ.term i)) {z : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hz : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian z = 0)
     (i : Fin (L - 1)) :
-    Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (h i) z = 0 := by
+    Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Φ.term i) z = 0 := by
   refine ProjectionGeometry.apply_eq_zero_of_sum_apply_eq_zero
-    (fun j ↦ (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (h j)).toLinearMap)
+    (fun j ↦ (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Φ.term j)).toLinearMap)
     (fun j ↦ ContinuousLinearMap.IsStarProjection.isSymmetricProjection
       ((hp j).map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)))) ?_ i
   simpa only [map_sum, _root_.sum_apply, LinearMap.sum_apply,
@@ -389,41 +378,39 @@ private theorem bond_apply_eq_zero_of_sum
 ALVV, arXiv:1602.08828v2, `def:DLO` and the frustration-free condition,
 lines 1457–1460 and 1496–1501. No uniqueness is required. -/
 theorem physicalParityProduct_fixes_kernel
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hp : ∀ i, IsStarProjection (h i)) {z : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hz : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, h i) z = 0)
-    (p : ℕ) : physicalParityProduct h p z = z := by
-  apply (physicalParityProduct_apply_eq_self_iff h hp p z).mpr
+    (Φ : ManyBody.BondInteraction L q)
+    (hp : ∀ i, IsStarProjection (Φ.term i)) {z : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hz : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian z = 0)
+    (p : ℕ) : physicalParityProduct Φ p z = z := by
+  apply (physicalParityProduct_apply_eq_self_iff Φ hp p z).mpr
   intro i _
-  exact bond_apply_eq_zero_of_sum h hp hz i
+  exact bond_apply_eq_zero_of_sum Φ hp hz i
 
 /-- The actual detectability operator fixes the entire original ground kernel.
 ALVV, arXiv:1602.08828v2, `def:DLO`, lines 1496–1501. -/
 theorem physicalDetectability_fixes_kernel
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hp : ∀ i, IsStarProjection (h i)) {z : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hz : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, h i) z = 0) :
-    physicalDetectability h z = z := by
-  change physicalParityProduct h 1 (physicalParityProduct h 0 z) = z
-  rw [physicalParityProduct_fixes_kernel h hp hz, physicalParityProduct_fixes_kernel h hp hz]
+    (Φ : ManyBody.BondInteraction L q)
+    (hp : ∀ i, IsStarProjection (Φ.term i)) {z : EuclideanSpace ℂ (Fin L → Fin q)}
+    (hz : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian z = 0) :
+    physicalDetectability Φ z = z := by
+  change physicalParityProduct Φ 1 (physicalParityProduct Φ 0 z) = z
+  rw [physicalParityProduct_fixes_kernel Φ hp hz, physicalParityProduct_fixes_kernel Φ hp hz]
 
 /-- The physical detectability operator preserves the inner product with
 every ground-kernel vector, hence preserves the kernel's orthogonal complement.
 ALVV, arXiv:1602.08828v2, the use of `lem:dl` in `thm:FF-tH`, lines 1562–1568.
 This assertion does not assume that the kernel is one-dimensional. -/
 theorem inner_physicalDetectability_eq
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
+    (Φ : ManyBody.BondInteraction L q)
+    (hp : ∀ i, IsStarProjection (Φ.term i))
     {z : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hz : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, h i) z = 0)
-    (x : EuclideanSpace ℂ (Fin L → Fin q)) : ⟪z, physicalDetectability h x⟫_ℂ = ⟪z, x⟫_ℂ := by
-  change ⟪z, physicalParityProduct h 1 (physicalParityProduct h 0 x)⟫_ℂ = ⟪z, x⟫_ℂ
+    (hz : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) Φ.hamiltonian z = 0)
+    (x : EuclideanSpace ℂ (Fin L → Fin q)) : ⟪z, physicalDetectability Φ x⟫_ℂ = ⟪z, x⟫_ℂ := by
+  change ⟪z, physicalParityProduct Φ 1 (physicalParityProduct Φ 0 x)⟫_ℂ = ⟪z, x⟫_ℂ
   rw [← ContinuousLinearMap.IsStarProjection.inner_apply_left
-    (physicalParityProduct_isStarProjection h hp hs 1), physicalParityProduct_fixes_kernel h hp hz]
+    (physicalParityProduct_isStarProjection Φ hp Φ.mem 1), physicalParityProduct_fixes_kernel Φ hp hz]
   rw [← ContinuousLinearMap.IsStarProjection.inner_apply_left
-    (physicalParityProduct_isStarProjection h hp hs 0), physicalParityProduct_fixes_kernel h hp hz]
+    (physicalParityProduct_isStarProjection Φ hp Φ.mem 0), physicalParityProduct_fixes_kernel Φ hp hz]
 
 /-- A gap above the frustration-free ground vector contracts the orthogonal
 complement under the actual physical detectability operator. The estimate
@@ -431,27 +418,25 @@ uses squared norms and retains the full denominator, with no upper bound on
 the gap. ALVV, arXiv:1602.08828v2, `lem:dl` and its application in `thm:FF-tH`,
 lines 1508–1519 and 1562–1568. -/
 theorem norm_sq_physicalDetectability_le_of_gappedGroundState
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
+    (Φ : ManyBody.BondInteraction L q)
+    (hp : ∀ i, IsStarProjection (Φ.term i))
     {Gamma x : EuclideanSpace ℂ (Fin L → Fin q)} {gamma : ℝ}
-    (hΩ : ‖Gamma‖ = 1) (hgap : IsGapped (∑ i, h i) 0 gamma)
-    (hspan : groundSpace (∑ i, h i) 0 = Submodule.span ℂ {Gamma})
+    (hΩ : ‖Gamma‖ = 1) (hgap : IsGapped Φ.hamiltonian 0 gamma)
+    (hspan : groundSpace Φ.hamiltonian 0 = Submodule.span ℂ {Gamma})
     (hgamma : 0 < gamma) (hx : ‖x‖ = 1) (horth : ⟪Gamma, x⟫_ℂ = 0) :
-    ‖physicalDetectability h x‖ ^ 2 ≤ 4 / (4 + gamma) := by
+    ‖physicalDetectability Φ x‖ ^ 2 ≤ 4 / (4 + gamma) := by
   have hGamma : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-      (∑ i, h i) Gamma = 0 := by
+      Φ.hamiltonian Gamma = 0 := by
     have h0 := ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Gamma)
     rw [Complex.ofReal_zero, zero_smul] at h0
     exact h0
-  have horth' : ⟪Gamma, physicalDetectability h x⟫_ℂ = 0 :=
-    (inner_physicalDetectability_eq h hp hs hGamma x).trans horth
-  have hH : (∑ i, h i).IsHermitian := Matrix.isHermitian_sum _ fun i _ ↦ (hp i).isSelfAdjoint
-  have hgap := (hgap.posSemidef_sub_smul_one hH hΩ hspan).gap_le (physicalDetectability h x)
+  have horth' : ⟪Gamma, physicalDetectability Φ x⟫_ℂ = 0 :=
+    (inner_physicalDetectability_eq Φ hp Φ.mem hGamma x).trans horth
+  have hH : Φ.hamiltonian.IsHermitian := Matrix.isHermitian_sum _ fun i _ ↦ (hp i).isSelfAdjoint
+  have hgap := (hgap.posSemidef_sub_smul_one hH hΩ hspan).gap_le (physicalDetectability Φ x)
   rw [horth', norm_zero, zero_pow (by decide : (2 : ℕ) ≠ 0), sub_zero,
     zero_mul, sub_zero] at hgap
-  have henergy := re_inner_physicalDetectability_le h hp hs x
+  have henergy := re_inner_physicalDetectability_le Φ hp Φ.mem x
   rw [hx, one_pow] at henergy
   rw [le_div_iff₀ (show 0 < 4 + gamma by linarith only [hgamma])]
   rw [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin] at hgap

@@ -45,31 +45,28 @@ cut after `i + 1` sites is the step `lvvSweepStep` applied to the family at the 
 function of the chain terms and the gap parameter alone. LVV13, `algo53.tex`,
 lines 652--678, with Huang's Gaussian error reduction. -/
 noncomputable def lvvSweep (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (Delta : ℝ) : (i : ℕ) → Finset (LeftBlockVector L q i)
   | 0 => {emptyLeftVector L q}
   | i + 1 =>
-    if hi : i + 1 ≤ L then lvvSweepStep hq h hs h0 Delta hi (lvvSweep hq h hs h0 h1 Delta i)
+    if hi : i + 1 ≤ L then lvvSweepStep hq Φ h0 Delta hi (lvvSweep hq Φ h0 h1 Delta i)
     else ∅
 
 /-- The sweep starts from the scalar singleton. LVV13, `algo53.tex`, line 655. -/
 theorem lvvSweep_zero (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1) (Delta : ℝ) :
-    lvvSweep hq h hs h0 h1 Delta 0 = {emptyLeftVector L q} := rfl
+    (Φ : ManyBody.BondInteraction L q)
+(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1) (Delta : ℝ) :
+    lvvSweep hq Φ h0 h1 Delta 0 = {emptyLeftVector L q} := rfl
 
 /-- Each family of the sweep is the step applied to the previous one.
 LVV13, `algo53.tex`, lines 652--678. -/
 theorem lvvSweep_succ (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1) (Delta : ℝ)
+    (Φ : ManyBody.BondInteraction L q)
+(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1) (Delta : ℝ)
     {i : ℕ} (hi : i + 1 ≤ L) :
-    lvvSweep hq h hs h0 h1 Delta (i + 1) =
-      lvvSweepStep hq h hs h0 Delta hi (lvvSweep hq h hs h0 h1 Delta i) := by
+    lvvSweep hq Φ h0 h1 Delta (i + 1) =
+      lvvSweepStep hq Φ h0 Delta hi (lvvSweep hq Φ h0 h1 Delta i) := by
   simp only [lvvSweep, hi, ↓reduceDIte]
 
 /-- **The sweep produces viable families of polynomial size and bond dimension.** Positive
@@ -78,19 +75,18 @@ and for every ground pair with the prescribed gap every family of the sweep is v
 LVV13, `algo53.tex`, lines 652--678, with the documented quadratic trimming correction and
 Huang's Gaussian error reduction. -/
 theorem lvvSweep_spec (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (i : ℕ) (hi : i ≤ L) :
-    (lvvSweep hq h hs h0 h1 Delta i).card ≤
+    (lvvSweep hq Φ h0 h1 Delta i).card ≤
         (if i = 0 then 1 else lvvSuccessiveCardBound q Delta L) ∧
-      (∀ v ∈ lvvSweep hq h hs h0 h1 Delta i, IsLeftOpenMPS
+      (∀ v ∈ lvvSweep hq Φ h0 h1 Delta i, IsLeftOpenMPS
         (if i = 0 then 1 else lvvSuccessiveBondBound q Delta L) v) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-        ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Delta →
-        groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} →
+        ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E₀ Delta →
+        groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ} →
         IsViable Γ (lvvSuccessiveError Delta / L)
-          (lvvSweep hq h hs h0 h1 Delta i : Set (LeftBlockVector L q i)) := by
+          (lvvSweep hq Φ h0 h1 Delta i : Set (LeftBlockVector L q i)) := by
   induction i with
   | zero =>
     refine ⟨by simp [lvvSweep], ?_, ?_⟩
@@ -109,11 +105,11 @@ theorem lvvSweep_spec (hq : 2 ≤ q)
       linarith
   | succ i ih =>
     obtain ⟨-, -, hviable⟩ := ih (by omega)
-    rw [lvvSweep_succ hq h hs h0 h1 Delta hi]
+    rw [lvvSweep_succ hq Φ h0 h1 Delta hi]
     simp only [Nat.succ_ne_zero, ↓reduceIte]
-    exact ⟨card_lvvSweepStep_le hq h hs h0 h1 hDelta hi _,
-      fun v hv ↦ isLeftOpenMPS_of_mem_lvvSweepStep hq h hs h0 h1 hDelta hi _ hv,
-      fun E₀ Γ hΩ hgap hspan ↦ isViable_lvvSweepStep hq h hs h0 h1 hDelta hi _ E₀ Γ hΩ hgap hspan
+    exact ⟨card_lvvSweepStep_le hq Φ h0 h1 hDelta hi _,
+      fun v hv ↦ isLeftOpenMPS_of_mem_lvvSweepStep hq Φ h0 h1 hDelta hi _ hv,
+      fun E₀ Γ hΩ hgap hspan ↦ isViable_lvvSweepStep hq Φ h0 h1 hDelta hi _ E₀ Γ hΩ hgap hspan
         (hviable E₀ Γ hΩ hgap hspan)⟩
 
 /-- The scalar singleton and the successive steps give one sequence of viable families
@@ -121,22 +117,21 @@ before every ground pair: the existence form of `lvvSweep_spec`. LVV13, `algo53.
 lines 652--678, with the documented quadratic trimming correction and Huang's Gaussian
 error reduction. -/
 theorem exists_positive_chain_successive_viable_sets (hq : 2 ≤ q)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
-      (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+(h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i),
       S 0 = {emptyLeftVector L q} ∧
-      (∀ i : ℕ, (hi : i + 1 ≤ L) → S (i + 1) = lvvSweepStep hq h hs h0 Delta hi (S i)) ∧
+      (∀ i : ℕ, (hi : i + 1 ≤ L) → S (i + 1) = lvvSweepStep hq Φ h0 Delta hi (S i)) ∧
       ∀ i : ℕ, i ≤ L →
         (S i).card ≤ (if i = 0 then 1 else lvvSuccessiveCardBound q Delta L) ∧
         (∀ v ∈ S i, IsLeftOpenMPS
           (if i = 0 then 1 else lvvSuccessiveBondBound q Delta L) v) ∧
         ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
-          ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Delta →
-          groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ} →
+          ‖Γ‖ = 1 → IsGapped Φ.hamiltonian E₀ Delta →
+          groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ} →
           IsViable Γ (lvvSuccessiveError Delta / L) (S i : Set (LeftBlockVector L q i)) :=
-  ⟨lvvSweep hq h hs h0 h1 Delta, rfl, fun _ hi ↦ lvvSweep_succ hq h hs h0 h1 Delta hi,
-    fun i hi ↦ lvvSweep_spec hq h hs h0 h1 hDelta i hi⟩
+  ⟨lvvSweep hq Φ h0 h1 Delta, rfl, fun _ hi ↦ lvvSweep_succ hq Φ h0 h1 Delta hi,
+    fun i hi ↦ lvvSweep_spec hq Φ h0 h1 hDelta i hi⟩
 
 end TNLean.MPS.AreaLaw

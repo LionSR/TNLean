@@ -99,13 +99,11 @@ theorem exists_low_density_tree_algorithm_output (etaLD : ℝ) (hLD : 0 < etaLD)
       let u := 1 + Real.log (mi : ℝ) + Real.log (1 / g)
       let ell : ℕ := ⌈C * u ^ 2 / g⌉₊
       let D := (mi * ell ^ 2) ^ (22 * ell)
-      ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2))) →
-      ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
+      ∀ (Φ : ManyBody.BondInteraction L q),
+      ∀ (h0 : ∀ i, 0 ≤ Φ.term i), (∀ i, Φ.term i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let G := fun eta : ℝ ↦ Submodule.spectralSpanLE
@@ -185,10 +183,10 @@ theorem exists_low_density_tree_algorithm_output (etaLD : ℝ) (hLD : 0 < etaLD)
   classical
   obtain ⟨Cr, K, hCr, _hCreta, hK, hrefine⟩ := exists_physical_ld_root_refinement etaLD hLD
   obtain ⟨C, hC, hCeta, htree⟩ := exists_physical_ld_sampled_interval_tree_of_clause etaLD hLD
-    (fun L q m w hq h h0 count Dref S0 ↦
+    (fun L q m w hq Φ h0 count Dref S0 ↦
       let _ : Nonempty (Fin L → Fin q) :=
         ⟨fun _ ↦ ⟨0, lt_of_lt_of_le (by decide : 0 < 2) hq⟩⟩
-      let H := ∑ i, h i
+      let H := Φ.hamiltonian
       let hRaw : H.IsHermitian :=
         (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
       let G := fun eta : ℝ ↦ Submodule.spectralSpanLE
@@ -222,7 +220,7 @@ theorem exists_low_density_tree_algorithm_output (etaLD : ℝ) (hLD : 0 < etaLD)
         ∀ i, (inner ℂ (ψ i) (Matrix.toEuclideanLin H (ψ i))).re ≤
           minEigenvalue hRaw + (eta - 3 * w) + δ))
     (by
-      intro L q m w hq hqm hw h hs h0 h1 config H hRaw G count Dref S0 hroot hdim hrootMPS
+      intro L q m w hq hqm hw Φ h0 h1 config H hRaw G count Dref S0 hroot hdim hrootMPS
       let : Nonempty (Fin L → Fin q) := config
       refine ⟨hroot, hrootMPS, fun hdepth ↦ ?_⟩
       intro eta δ hδ hδ1
@@ -234,7 +232,7 @@ theorem exists_low_density_tree_algorithm_output (etaLD : ℝ) (hLD : 0 < etaLD)
         (norm_nonneg (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
           (H - (minEigenvalue hRaw : ℂ) • 1))) hδ
       obtain ⟨B, -, -, R, hdesc, hclose, -, hRMPS⟩ :=
-        hrefine L q m w hq hqm hw h hs h0 h1 eta heta6 hetaLD count S0 hroot hdim _ hd0 hd1.le
+        hrefine L q m w hq hqm hw Φ h0 h1 eta heta6 hetaLD count S0 hroot hdim _ hd0 hd1.le
       obtain ⟨bond, hRMPS⟩ : ∃ bond : ℕ, ∀ v ∈ R, IsOpenMPS L q bond (fullIntervalRead L q v) :=
         ⟨_, hRMPS⟩
       obtain ⟨ψ, hψ, hψmem, hψE⟩ :=

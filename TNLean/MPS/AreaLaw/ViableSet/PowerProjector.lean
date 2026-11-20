@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.ManyBody.Hamiltonian.Models
 import TNLean.MPS.AreaLaw.Hamiltonian
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.Algebra.ToEuclideanLinApply
@@ -93,78 +94,78 @@ private theorem card_bonds_add_one (hL : 0 < L) :
 /-- The three properties of `A` at line 602, from the QICLean estimate for sums of positive
 contractions with a lower bound on the gap. -/
 private theorem powerProjector_spec (hL : 0 < L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
-    (powerProjector (∑ i, h i) L E₀ m).PosSemidef ∧ ‖powerProjector (∑ i, h i) L E₀ m‖ = 1 ∧
-      toEuclideanLin (powerProjector (∑ i, h i) L E₀ m) Γ = Γ := by
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
+    (powerProjector Φ.hamiltonian L E₀ m).PosSemidef ∧ ‖powerProjector Φ.hamiltonian L E₀ m‖ = 1 ∧
+      toEuclideanLin (powerProjector Φ.hamiltonian L E₀ m) Γ = Γ := by
   have hΓ := hΩ
   have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
   have hgap := hgap.posSemidef_sub_smul_one
     (Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian) hΩ hspan
-  have hspec := power_filter_exp_spec_of_posSemidef_terms h h0 h1 hΓ hHΓ hgap hΔ m
+  have hspec := power_filter_exp_spec_of_posSemidef_terms Φ h0 h1 hΓ hHΓ hgap hΔ m
   simp only [card_bonds_add_one hL] at hspec
   exact ⟨hspec.1, hspec.2.1, hspec.2.2.1⟩
 
 /-- The power projector is positive semidefinite. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, line 602. -/
 theorem posSemidef_powerProjector (hL : 0 < L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
-    (powerProjector (∑ i, h i) L E₀ m).PosSemidef :=
-  (powerProjector_spec hL h h0 h1 hΩ hgap hspan hΔ m).1
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
+    (powerProjector Φ.hamiltonian L E₀ m).PosSemidef :=
+  (powerProjector_spec hL Φ h0 h1 hΩ hgap hspan hΔ m).1
 
 /-- The power projector has operator norm one. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, line 602. -/
 theorem norm_powerProjector (hL : 0 < L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
-    ‖powerProjector (∑ i, h i) L E₀ m‖ = 1 :=
-  (powerProjector_spec hL h h0 h1 hΩ hgap hspan hΔ m).2.1
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
+    ‖powerProjector Φ.hamiltonian L E₀ m‖ = 1 :=
+  (powerProjector_spec hL Φ h0 h1 hΩ hgap hspan hΔ m).2.1
 
 /-- The power projector fixes the ground state, `AΓ = Γ`. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, line 602. -/
 theorem powerProjector_apply_ground (hL : 0 < L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
-    toEuclideanLin (powerProjector (∑ i, h i) L E₀ m) Γ = Γ :=
-  (powerProjector_spec hL h h0 h1 hΩ hgap hspan hΔ m).2.2
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ) :
+    toEuclideanLin (powerProjector Φ.hamiltonian L E₀ m) Γ = Γ :=
+  (powerProjector_spec hL Φ h0 h1 hΩ hgap hspan hΔ m).2.2
 
 /-- **Equation `e:cutdown`.** For every unit vector `ψ` orthogonal to the ground state,
 `|⟨ψ, A ψ⟩| ≤ ((1 - ε₁/n) / (1 - ε₀/n))^m` with `ε₁ = ε₀ + Δ`. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, line 603. Here `Δ` is any positive lower bound on the gap. -/
 theorem norm_inner_powerProjector_le (hL : 0 < L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) (m : ℕ)
     {ψ : EuclideanSpace ℂ (Fin L → Fin q)} (hψ : ‖ψ‖ = 1) (horth : ⟪Γ, ψ⟫_ℂ = 0) :
-    ‖⟪ψ, toEuclideanLin (powerProjector (∑ i, h i) L E₀ m) ψ⟫_ℂ‖ ≤
+    ‖⟪ψ, toEuclideanLin (powerProjector Φ.hamiltonian L E₀ m) ψ⟫_ℂ‖ ≤
       ((1 - (E₀ + Δ) / L) / (1 - E₀ / L)) ^ m := by
   have hΓ := hΩ
   have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
   have hgap := hgap.posSemidef_sub_smul_one
     (Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian) hΩ hspan
-  set H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+  set H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
   set N : ℝ := (L : ℝ)
   set P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
     vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))
   have hH : H.IsHermitian := (posSemidef_sum Finset.univ fun i _ ↦ h0 i).isHermitian
   have hHu : H ≤ ((L - 1 : ℕ) : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) := by
     simpa only [H, Finset.card_univ, Fintype.card_fin, Nat.cast_smul_eq_nsmul] using
-      Finset.sum_le_card_nsmul Finset.univ h 1 fun i _ ↦ h1 i
+      Finset.sum_le_card_nsmul Finset.univ Φ 1 fun i _ ↦ h1 i
   have hcardN : ((L - 1 : ℕ) : ℝ) < N := by
     simp only [N, Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr hL.ne'), Nat.cast_one]
     linarith
@@ -228,14 +229,14 @@ theorem norm_inner_powerProjector_le (hL : 0 < L)
 where `m = Θ((n/ε) log (q(n)/c_ε))` makes the bound `e:cutdown` at most `c_ε/(2 q(n))`. Here
 `Δ` is any positive lower bound on the gap. -/
 theorem norm_powerProjector_sub_le (hL : 0 < L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, (Φ.term i).PosSemidef) (h1 : ∀ i, Φ.term i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
-    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {η : ℝ} (hη : 0 < η)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped Φ.hamiltonian E₀ Δ)
+    (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) (hΔ : 0 < Δ) {η : ℝ} (hη : 0 < η)
     (m : ℕ)
     (hm : ((L - E₀) / Δ) * Real.log (1 / η) ≤ m) :
-    ‖powerProjector (∑ i, h i) L E₀ m - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
+    ‖powerProjector Φ.hamiltonian L E₀ m - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
       η := by
   have hΓ := hΩ
   have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
@@ -244,7 +245,7 @@ theorem norm_powerProjector_sub_le (hL : 0 < L)
   have hm' : ((((Fintype.card (Fin (L - 1)) + 1 : ℕ) : ℝ) - E₀) / Δ) *
       Real.log (1 / η) ≤ (m : ℝ) := by
     rwa [card_bonds_add_one hL]
-  have hthr := norm_power_filter_sub_ground_le_of_lower_gap_log_threshold h h0 h1 hΓ hHΓ hgap
+  have hthr := norm_power_filter_sub_ground_le_of_lower_gap_log_threshold Φ h0 h1 hΓ hHΓ hgap
     hΔ hη m hm'
   simp only [card_bonds_add_one hL] at hthr
   exact hthr
@@ -254,26 +255,26 @@ theorem norm_powerProjector_sub_le (hL : 0 < L)
 /-- The bond terms padded by a zero term at the last site: `H_i` for `i < L - 1` and `0` for
 `i = L - 1`. This is the reading `H_n = 0` of the sum in Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, lines 606–609. -/
-noncomputable def paddedBond (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+noncomputable def paddedBond (Φ : ManyBody.BondInteraction L q)
     (i : Fin L) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  if hi : i.val < L - 1 then h ⟨i, hi⟩ else 0
+  if hi : i.val < L - 1 then Φ.term ⟨i, hi⟩ else 0
 
 /-- The letters `P_i = 1 - H_i` of the expansion, with `P_{L-1} = 1`. Landau, Vazirani and
 Vidick, arXiv:1307.5143v1, `algo53.tex`, line 606. -/
-noncomputable def bondComplement (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+noncomputable def bondComplement (Φ : ManyBody.BondInteraction L q)
     (i : Fin L) : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  1 - paddedBond h i
+  1 - paddedBond Φ i
 
 /-- The ordered product `P_I = P_{i_1} ⋯ P_{i_m}` of a word `I`. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, line 608. -/
 noncomputable def bondComplementWord
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) {m : ℕ} (I : Fin m → Fin L) :
+    (Φ : ManyBody.BondInteraction L q) {m : ℕ} (I : Fin m → Fin L) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  (List.ofFn fun j ↦ bondComplement h (I j)).prod
+  (List.ofFn fun j ↦ bondComplement Φ (I j)).prod
 
 /-- Padding by a zero term does not change the sum of the bond terms. -/
-theorem sum_paddedBond (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    ∑ i, paddedBond h i = ∑ i, h i := by
+theorem sum_paddedBond (Φ : ManyBody.BondInteraction L q) :
+    ∑ i, paddedBond Φ i = Φ.hamiltonian := by
   symm
   refine Fintype.sum_of_injective (Fin.castLE (Nat.sub_le L 1)) (Fin.castLE_injective _) _ _
     (fun i hi ↦ ?_) (fun i ↦ ?_)
@@ -285,16 +286,16 @@ theorem sum_paddedBond (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → 
 running over all words `I` of length `m` in the `n` letters, the last of which is the identity.
 Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, lines 606–609. -/
 theorem powerProjector_eq_sum_bondComplementWord (hL : 0 < L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) (m : ℕ) :
-    powerProjector (∑ i, h i) L E₀ m =
+    (Φ : ManyBody.BondInteraction L q) (E₀ : ℝ) (m : ℕ) :
+    powerProjector Φ.hamiltonian L E₀ m =
       ((((1 - E₀ / L)⁻¹ : ℝ) : ℂ) ^ m / (L : ℂ) ^ m) •
-        ∑ I : Fin m → Fin L, bondComplementWord h I := by
+        ∑ I : Fin m → Fin L, bondComplementWord Φ I := by
   have : Nonempty (Fin L) := ⟨⟨0, hL⟩⟩
-  have hexp := Fintype.smul_sub_average_pow_eq_sum_ordered_words (paddedBond h)
+  have hexp := Fintype.smul_sub_average_pow_eq_sum_ordered_words (paddedBond Φ)
     (((1 - E₀ / L)⁻¹ : ℝ) : ℂ) m
   rw [Fintype.card_fin, sum_paddedBond, div_pow] at hexp
-  have hA : powerProjector (∑ i, h i) L E₀ m =
-      ((((1 - E₀ / L)⁻¹ : ℝ) : ℂ) • (1 - (L : ℂ)⁻¹ • ∑ i, h i)) ^ m := by
+  have hA : powerProjector Φ.hamiltonian L E₀ m =
+      ((((1 - E₀ / L)⁻¹ : ℝ) : ℂ) • (1 - (L : ℂ)⁻¹ • Φ.hamiltonian)) ^ m := by
     rw [powerProjector, ← Complex.coe_smul, ← Complex.coe_smul]
     push_cast
     rfl
@@ -310,15 +311,14 @@ private def letterSupport (L : ℕ) (i : Fin L) : Finset (Fin L) :=
 
 /-- The letter `P_i` is supported on the sites of its bond. -/
 private theorem isSupportedOn_bondComplement
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
+    (Φ : ManyBody.BondInteraction L q)
     (i : Fin L) :
-    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (bondComplement h i) (letterSupport L i) := by
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (bondComplement Φ i) (letterSupport L i) := by
   by_cases hi : i.val < L - 1
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_true, ite_true]
     change _ ∈ ManyBody.supportedOperators _ _
     exact sub_mem
-      (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)) (hs ⟨i, hi⟩)
+      (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)) (Φ.mem ⟨i, hi⟩)
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_false, ite_false, sub_zero]
     exact one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)
 
@@ -382,19 +382,18 @@ in a word `I`, then `P_I` has operator Schmidt rank at most `q^{2k}` across the 
 sites `b` and `b + 1`, the cut crossed only by the bond `b`. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, lines 584–588. -/
 theorem operatorSchmidtRank_cutOperator_bondComplementWord_le
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
+    (Φ : ManyBody.BondInteraction L q)
     (b : Fin (L - 1)) {m k : ℕ} (I : Fin m → Fin L)
     (hk : (Finset.univ.filter fun j ↦ (I j).val = b.val).card ≤ k) :
     Matrix.operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
-      (leftBlock L (b + 1)) (bondComplementWord h I)) ≤ q ^ (2 * k) := by
+      (leftBlock L (b + 1)) (bondComplementWord Φ I)) ≤ q ^ (2 * k) := by
   classical
-  have hword : bondComplementWord h I = ((List.ofFn I).map (bondComplement h)).prod := by
+  have hword : bondComplementWord Φ I = ((List.ofFn I).map (bondComplement Φ)).prod := by
     rw [bondComplementWord, List.map_ofFn]
     rfl
   have hrank := Entropy.operatorSchmidtRank_cutOperator_list_prod_le (q := q)
-    (leftBlock L (b + 1)) (letterSupport L) (bondComplement h)
-    (isSupportedOn_bondComplement h hs) (List.ofFn I)
+    (leftBlock L (b + 1)) (letterSupport L) (bondComplement Φ)
+    (isSupportedOn_bondComplement Φ) (List.ofFn I)
   rw [← hword, sum_crossing_eq_countP] at hrank
   have hcount : (List.ofFn I).countP (fun t ↦ t.val = b.val) =
       (Finset.univ.filter fun j ↦ (I j).val = b.val).card := by

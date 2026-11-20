@@ -45,11 +45,9 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation_with_energy :
     ∀ (q : ℕ) (gamma : ℝ), 0 < gamma →
     ∃ C : ℝ, 0 < C ∧ ∃ k : ℕ,
     ∀ (L : ℕ),
-    ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu : ℝ),
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    ∀ (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu : ℝ),
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -147,9 +145,9 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation_with_energy :
       (Bout : ℝ) ≤ C * (((L : ℝ) + 1) * ((rG : ℝ) + 1) * (1 + 1 / eta)) ^ k ∧
       ∀ seed ∈ Good,
         ∃ estimate : ℕ → ℕ → ℝ,
-          ALVV.IsRegionalLowerEnergyEstimate h 0 L (49 / 16) (estimate 0 L) ∧
+          ALVV.IsRegionalLowerEnergyEstimate Φ 0 L (49 / 16) (estimate 0 L) ∧
           (L - 0 ≤ width →
-            ALVV.IsRegionalLowerEnergyEstimate h 0 L 0 (estimate 0 L)) ∧
+            ALVV.IsRegionalLowerEnergyEstimate Φ 0 L 0 (estimate 0 L)) ∧
           (∀ J : LongIntervalIndex L width,
             J.val ∈ balancedIntervalMergeList width hwidth 0 L →
             let l := J.val.1
@@ -159,11 +157,11 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation_with_energy :
             let hkr : k ≤ r :=
               (Nat.add_le_add_left (Nat.div_le_self (r - l) 2) l).trans_eq
                 (Nat.add_sub_of_le J.property.1)
-            ALVV.IsRegionalLowerEnergyEstimate h l r (49 / 16) (estimate l r) ∧
-            (k - l ≤ width → ALVV.IsRegionalLowerEnergyEstimate h l k 0 (estimate l k)) ∧
-            (r - k ≤ width → ALVV.IsRegionalLowerEnergyEstimate h k r 0 (estimate k r)) ∧
+            ALVV.IsRegionalLowerEnergyEstimate Φ l r (49 / 16) (estimate l r) ∧
+            (k - l ≤ width → ALVV.IsRegionalLowerEnergyEstimate Φ l k 0 (estimate l k)) ∧
+            (r - k ≤ width → ALVV.IsRegionalLowerEnergyEstimate Φ k r 0 (estimate k r)) ∧
             ALVV.IsSoftWordNodeEnergyRealization (u := l + ell) (v := r - ell)
-              hq hpk hkr h (F J)
+              hq hpk hkr Φ (F J)
               (balancedIntervalSpace (canonicalIntervalSamplingOperation D s N F xi seed)
                 width hwidth l k)
               (balancedIntervalSpace (canonicalIntervalSamplingOperation D s N F xi seed)
@@ -188,12 +186,12 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation_with_energy :
   intro q gamma hgamma
   obtain ⟨C, hC, k, hmain⟩ := hmain q gamma hgamma
   refine ⟨C, hC, k, ?_⟩
-  intro L h hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G rG
+  intro L Φ hsupp h0 h1 mu nu H hH hmu hnu hmunu hgap G rG
     g m w v ell D s a tau epsilon t Delta
   obtain ⟨hell, hD2, hs, ha, haSmall, hepsilon, hepsilon1, ht, htail, htradeoff,
     Btree, hBtree, hlogBtree, Utree, hdimUtree, hUtreeMPS, hxiMax,
     hwidth, T, N, F, hN, htargets, haccuracy⟩ :=
-    hmain L h hsupp h0 h1 mu nu hmu hnu hmunu hgap
+    hmain L Φ hsupp h0 h1 mu nu hmu hnu hmunu hgap
   change 21 ≤ ell at hell
   change 2 ≤ D at hD2
   change 1 ≤ s at hs
@@ -208,7 +206,7 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation_with_energy :
   refine ⟨hwidth, hq, T, N, F, hN, htargets, ?_⟩
   have henergy := exists_canonical_root_energy_of_calibrated_words
     (L := L) (q := q) (ell := ell) (D := D) (s := s) hq hell hD2 hs rfl
-    h hsupp h0 h1 mu gamma hgamma hwidth T N F hmu hgap
+    Φ hsupp h0 h1 mu gamma hgamma hwidth T N F hmu hgap
     (fun J ↦ ⟨(htargets J).1, (htargets J).2.2.1, (htargets J).2.2.2.2.2⟩)
   intro Dtree A c Kraw eta heta rho n epsilonFinal bfinal
   obtain ⟨Bfinal, hBfinal, hlogBfinal, Ufinal, hdimUfinal, hUG, hGU, hUfinalMPS,

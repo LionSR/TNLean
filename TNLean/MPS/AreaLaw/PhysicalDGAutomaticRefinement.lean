@@ -49,12 +49,10 @@ physical tree construction. Supporting ALVV, arXiv:1602.08828v2,
 `eq:algo-xi-dg`, lines 1800–1805, and `t:alg1`, lines 1809–1817. -/
 theorem exists_physical_dg_automatic_same_candidate_refinement :
     ∃ Kref : ℝ, 0 < Kref ∧ ∀ (L q : ℕ),
-    ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
+    ∀ (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu nu gamma : ℝ),
     0 < gamma →
-    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
+    let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H → nu ∈ spectrum ℝ H → mu < nu →
@@ -103,12 +101,12 @@ theorem exists_physical_dg_automatic_same_candidate_refinement :
   classical
   obtain ⟨Kref, hKref, hreference⟩ := exists_physical_dg_isOpenMPS_reference_subspace
   refine ⟨Kref, hKref, ?_⟩
-  intro L q h hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
+  intro L q Φ hsupp h0 h1 mu nu gamma hgamma H hH hmu hnu hmunu hgap
     G rG g u A c Kraw Dtree Dfilter hDtree hDfilter eta heta rho n epsilonRef bref
   have hrG : 1 ≤ rG := Submodule.one_le_finrank_iff.mpr
     (hH.spectralSpanLE_ne_bot_of_mem_spectrum hmu le_rfl)
   obtain ⟨_hM, hA, _hc, hc1, _hfix, _hKGo, _hhigh⟩ :=
-    physical_dg_normalized_ground_filter_spec h h0 mu nu gamma hgamma hmu hnu hmunu hgap
+    physical_dg_normalized_ground_filter_spec Φ h0 mu nu gamma hgamma hmu hnu hmunu hgap
   change 0 < A at hA
   change gamma / A ≤ 1 at hc1
   have hgammaA : gamma ≤ A := (div_le_one hA).mp hc1
@@ -116,7 +114,7 @@ theorem exists_physical_dg_automatic_same_candidate_refinement :
     hepsilonBudget, henergy⟩ := Real.viable_refinement_error_parameters hgamma hgammaA heta
   have hepsilon1 : epsilonRef ≤ 1 := hepsilonSmall.trans (by norm_num)
   obtain ⟨B, hB, hlogB, U, hdimU, hUG, hGU, hUMPS⟩ :=
-    hreference L q h hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
+    hreference L q Φ hsupp h0 h1 mu nu gamma hgamma hmu hnu hmunu hgap
       epsilonRef hepsilon hepsilon1
   refine ⟨B, hB, hlogB, ?_⟩
   intro b Dcommon N xi
@@ -133,7 +131,7 @@ theorem exists_physical_dg_automatic_same_candidate_refinement :
   have hxiBudget' : xi * Real.sqrt (((L - 1 : ℕ) : ℝ) * (b ^ 2 : ℕ)) ≤ c * rho / 48 := by
     simpa only [Nat.cast_pow] using hxiBudget
   obtain ⟨hn, hcloseW, hdimS, _hrecorded⟩ :=
-    physical_dg_filterTrimIterate_ceil_log_isCloseTo h h0 mu nu gamma hgamma
+    physical_dg_filterTrimIterate_ceil_log_isCloseTo Φ h0 mu nu gamma hgamma
       hmu hnu hmunu hgap b hb U epsilonRef rho xi (3 / 200)
       hepsilon.le hrho hrho1.le hxi (by norm_num) (by norm_num)
       hGU hUG hUMPS hepsilonBudget hxiBudget' S0 hcloseS0

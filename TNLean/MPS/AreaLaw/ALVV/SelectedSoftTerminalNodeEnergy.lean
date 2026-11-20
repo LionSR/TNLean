@@ -44,10 +44,8 @@ theorem exists_selected_soft_terminal_node_energy_update
     {L q l u v r ell : ℕ} {ι : Type*} [Fintype ι]
     (hq : 0 < q) (hlu : l ≤ u) (huv : u ≤ v) (hvr : v ≤ r) (hrL : r ≤ L)
     (hleft : u - l ≤ 2 * ell) (hright : r - v ≤ 2 * ell)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h i) (interval L i.val (i.val + 2)))
-    (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ i, 0 ≤ Φ.term i) (h1 : ∀ i, Φ.term i ≤ 1)
     (g : ℝ) (hg : 0 < g) (t Tcut : ℝ) (m D : ℕ)
     (hm : 2 ≤ m) (hD : 2 ≤ D)
     (ht : 156 + 2 * g ≤ t) (hTcut : 156 + 2 * g ≤ Tcut)
@@ -56,16 +54,16 @@ theorem exists_selected_soft_terminal_node_energy_update
     (A : ι → EuclideanSpace ℂ (interval L l r → Fin q) →L[ℂ]
       EuclideanSpace ℂ (interval L l r → Fin q)) :
     let _ : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
-    let H := ∑ i, h i
+    let H := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues mu
     let J := interval L l r
     let coords := Entropy.regionTensorCoordinates q J
     let P := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), h i
+      (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), Φ.term i
     let M := ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v), h i
+      (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v), Φ.term i
     let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
     let y0 := ((ManyBody.cutEquiv (fun _ ↦ Fin q) J) sigma0).2
     let native := fun x : J → Fin q ↦
@@ -88,16 +86,16 @@ theorem exists_selected_soft_terminal_node_energy_update
       (P - (eP : ℂ) • 1).PosSemidef ∧
       ∃ (eLeft eRight : ℝ) (xLeft xRight : (Fin L → Fin q) → ℂ),
         star xLeft ⬝ᵥ xLeft = 1 ∧
-        aklvRegionalHamiltonians l u h 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
-        (aklvRegionalHamiltonians l u h 1 - (eLeft : ℂ) • 1).PosSemidef ∧
+        aklvRegionalHamiltonians l u Φ 1 *ᵥ xLeft = (eLeft : ℂ) • xLeft ∧
+        (aklvRegionalHamiltonians l u Φ 1 - (eLeft : ℂ) • 1).PosSemidef ∧
         star xRight ⬝ᵥ xRight = 1 ∧
-        aklvRegionalHamiltonians v r h 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
-        (aklvRegionalHamiltonians v r h 1 - (eRight : ℂ) • 1).PosSemidef ∧
+        aklvRegionalHamiltonians v r Φ 1 *ᵥ xRight = (eRight : ℂ) • xRight ∧
+        (aklvRegionalHamiltonians v r Φ 1 - (eRight : ℂ) • 1).PosSemidef ∧
         ∀ (k : ℕ), l ≤ k → k ≤ r → ∀ p1 p2 : ℝ,
-          IsRegionalLowerEnergyEstimate h l k (49 / 16) p1 →
-          IsRegionalLowerEnergyEstimate h k r (49 / 16) p2 →
+          IsRegionalLowerEnergyEstimate Φ l k (49 / 16) p1 →
+          IsRegionalLowerEnergyEstimate Φ k r (49 / 16) p2 →
           let center := p1 + p2 - eLeft - eRight - 2
-          IsRegionalLowerEnergyEstimate h u v 10 center ∧
+          IsRegionalLowerEnergyEstimate Φ u v 10 center ∧
           eSelected - 10 ≤ center ∧ center ≤ eSelected ∧
           let R := P - M + (center : ℂ) • 1 +
             cfc (Real.softTruncation t m) (M - (center : ℂ) • 1)
@@ -134,7 +132,7 @@ theorem exists_selected_soft_terminal_node_energy_update
     eLeft, eRight, xLeft, xRight, hxLeft, hLeft, hLeftMin,
     hxRight, hRight, hRightMin, hchildren⟩ :=
     exists_calibrated_soft_terminal_node_energy_update (ι := ι)
-      hq hlu huv hvr hrL hleft hright h hs h0 h1 g hg t Tcut m D hm hD ht hTcut
+      hq hlu huv hvr hrL hleft hright Φ h0 h1 g hg t Tcut m D hm hD ht hTcut
       Delta hDelta0 hDelta htail
   have heM : eM = eSelected := groundEnergy_eq_of_normalized_eigenvectors M
     eM eSelected xM xSelected hMxM hxM hMSelected hxSelected hMmin hSelectedMin

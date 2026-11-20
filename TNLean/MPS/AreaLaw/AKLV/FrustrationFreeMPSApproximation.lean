@@ -54,14 +54,12 @@ within eight times its squared shrinking amplitude, at rank at most `D₀D₁`.
 AKLV, arXiv:1301.1162v1, Section 5, lines 862–868, with Lemma 2.2 (`lem:mu1`). -/
 theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
     (hq : 1 ≤ q) (hs0 : 6 ≤ s0) (hs : s = s0 + 2 * m) (ha : a + s + 1 ≤ L)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-      (h j) (interval L j.val (j.val + 2)))
-    (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
+    (Φ : ManyBody.BondInteraction L q)
+    (h0 : ∀ j, 0 ≤ Φ.term j) (h1 : ∀ j, Φ.term j ≤ 1)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     (g : ℝ) (hg : 0 < g) (hg1 : g ≤ 1)
-    (hzero : (∑ j, h j) *ᵥ WithLp.ofLp Ω = 0)
-    (hgap : ((∑ j, h j) - (g : ℂ) •
+    (hzero : Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0)
+    (hgap : (Φ.hamiltonian - (g : ℂ) •
       (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef)
     (htrade : (((q * (s0 ^ 2 + 1)) ^ (32 * (2 * s0 + 1)) : ℕ) : ℝ) *
       (4 * exp (-(4 * ((s0 ^ 2 : ℕ) : ℝ) * sqrt ((g / 2) / (2 * (1024 / g) + s0))))) ≤
@@ -85,10 +83,10 @@ theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
   -- The filter at the initial window and its product-overlap initialization.
   obtain ⟨-, -, -, -, -, hfilter0⟩ :=
     exists_aklv_frustrationFree_chebyshev_filter (a := a + m) (s := s0) hq hs0 ha0
-      h hsupp h0 h1 Ω hΩ g t hg hg1 le_rfl hzero hgap
+      Φ h0 h1 Ω hΩ g t hg hg1 le_rfl hzero hgap
   obtain ⟨p0, -, -, hfix0, -, -, hrank0, hperp0⟩ := hfilter0 (s0 ^ 2)
   let K0 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval
-    (aklvTwoBlockHamiltonian (a + m + 2) (a + m + s0 - 1) h (fun _ ↦ 0) t Finset.univ) p0
+    (aklvTwoBlockHamiltonian (a + m + 2) (a + m + s0 - 1) Φ (fun _ ↦ 0) t Finset.univ) p0
   have hrank0' : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) K0) ≤ D0 := by
     rw [← hk0]
@@ -118,10 +116,10 @@ theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
   -- The filter of degree `s²` at the enlarged window.
   obtain ⟨-, -, -, -, -, hfilter1⟩ :=
     exists_aklv_frustrationFree_chebyshev_filter (a := a) (s := s) hq (by omega) ha
-      h hsupp h0 h1 Ω hΩ g t hg hg1 le_rfl hzero hgap
+      Φ h0 h1 Ω hΩ g t hg hg1 le_rfl hzero hgap
   obtain ⟨p1, -, -, hfix1, -, -, hrank1, hperp1⟩ := hfilter1 (s ^ 2)
   let K1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval
-    (aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h (fun _ ↦ 0) t Finset.univ) p1
+    (aklvTwoBlockHamiltonian (a + 2) (a + s - 1) Φ (fun _ ↦ 0) t Finset.univ) p1
   have hrank1' : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) K1) ≤ D1 := by
     change _ ≤ (q * (s ^ 2 + 1)) ^ (32 * (2 * s + 1))
@@ -173,14 +171,14 @@ AKLV, arXiv:1301.1162v1, Section 5, lines 862–870, with the rate of the module
 local fix. -/
 theorem exists_aklv_frustrationFree_per_cut_approximation :
     ∃ C : ℝ, 0 < C ∧ ∀ (L q : ℕ)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (Φ : ManyBody.BondInteraction L q)
       (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
       2 ≤ q →
       (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h j) (interval L j.val (j.val + 2))) →
-      (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
-      (∑ j, h j) *ᵥ WithLp.ofLp Ω = 0 →
-      ((∑ j, h j) - (g : ℂ) •
+        (Φ.term j) (interval L j.val (j.val + 2))) →
+      (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
+      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0 →
+      (Φ.hamiltonian - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
       0 < g → g ≤ 1 → ∀ rho : ℝ, 0 < rho → rho ≤ 1 →
       let u := 1 + log (q : ℝ) + log (1 / g)
@@ -197,7 +195,7 @@ theorem exists_aklv_frustrationFree_per_cut_approximation :
   have hW : 0 ≤ W := by dsimp only [W]; positivity
   have hR : 0 ≤ R := by dsimp only [R]; positivity
   refine ⟨10001 * R + W + 8400000, by positivity, ?_⟩
-  intro L q h g Ω hq hsupp h0 h1 hΩ hzero hgap hg hg1 rho hrho hrho1 u z
+  intro L q Φ g Ω hq hsupp h0 h1 hΩ hzero hgap hg hg1 rho hrho hrho1 u z
   let g0 := g / 8192
   let u0 := 1 + log (q : ℝ) + log (1 / g0)
   let s0 : ℕ := ⌈A * u0 ^ 2 / g0⌉₊
@@ -236,7 +234,7 @@ theorem exists_aklv_frustrationFree_per_cut_approximation :
       hfit | hexact
     · obtain ⟨a, hcenter, ha⟩ := hfit
       obtain ⟨y, hy, hyerror, hyrank⟩ := exists_aklv_frustrationFree_two_filter_approximant
-        (s0 := s0) (m := m) (s := s) (by omega) (by omega) rfl ha h hsupp h0 h1 Ω hΩ g hg hg1
+        (s0 := s0) (m := m) (s := s) (by omega) (by omega) rfl ha Φ hsupp h0 h1 Ω hΩ g hg hg1
         hzero hgap htrade
       rw [hcenter] at hyrank
       refine ⟨y, hy, ?_, hyrank.trans (le_max_left _ _)⟩
@@ -278,15 +276,15 @@ AKLV, arXiv:1301.1162v1, Section 5, lines 851–870. The hypotheses are those of
 source; the rate is that of the module's local fix. -/
 theorem exists_aklv_frustrationFree_sequential_mps_approximation :
     ∃ C : ℝ, 0 < C ∧ ∀ (L q : ℕ)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+      (Φ : ManyBody.BondInteraction L q)
       (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
       (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h j) (interval L j.val (j.val + 2))) →
-      (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
-      (∑ j, h j) *ᵥ WithLp.ofLp Ω = 0 →
-      ((∑ j, h j) - (g : ℂ) •
+        (Φ.term j) (interval L j.val (j.val + 2))) →
+      (∀ j, 0 ≤ Φ.term j) → (∀ j, Φ.term j ≤ 1) → ‖Ω‖ = 1 →
+      Φ.hamiltonian *ᵥ WithLp.ofLp Ω = 0 →
+      (Φ.hamiltonian - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
-      0 < g → g ∈ spectrum ℝ (∑ j, h j) →
+      0 < g → g ∈ spectrum ℝ Φ.hamiltonian →
       ∀ epsilon : ℝ, 0 < epsilon → epsilon ≤ 1 →
       let rho := epsilon ^ 2 / (16 * ((L : ℝ) + 1))
       let u := 1 + log (q : ℝ) + log (1 / g)
@@ -299,9 +297,9 @@ theorem exists_aklv_frustrationFree_sequential_mps_approximation :
         ‖aklvNormalizedSpectralTruncation Ω D - Ω‖ ≤ epsilon := by
   obtain ⟨C, hC, hcut⟩ := exists_aklv_frustrationFree_per_cut_approximation
   refine ⟨C, hC, ?_⟩
-  intro L q h g Ω hsupp h0 h1 hΩ hzero hgap hg hexcited epsilon hepsilon hepsilon1 rho u z
+  intro L q Φ g Ω hsupp h0 h1 hΩ hzero hgap hg hexcited epsilon hepsilon hepsilon1 rho u z
   obtain ⟨hq, hg1⟩ :=
-    aklv_frustrationFree_dimension_and_gap_bounds h hsupp h0 h1 g Ω hΩ hzero hgap hg hexcited
+    aklv_frustrationFree_dimension_and_gap_bounds Φ hsupp h0 h1 g Ω hΩ hzero hgap hg hexcited
   have hrho : 0 < rho := by dsimp only [rho]; positivity
   have hrho1 : rho ≤ 1 := by
     dsimp only [rho]
@@ -309,7 +307,7 @@ theorem exists_aklv_frustrationFree_sequential_mps_approximation :
     have hL : (0 : ℝ) ≤ L := Nat.cast_nonneg _
     have he2 : epsilon ^ 2 ≤ 1 := pow_le_one₀ hepsilon.le hepsilon1
     linarith only [hL, he2]
-  obtain ⟨D, hlog, hcuts⟩ := hcut L q h g Ω hq hsupp h0 h1 hΩ hzero hgap hg hg1 rho hrho hrho1
+  obtain ⟨D, hlog, hcuts⟩ := hcut L q Φ g Ω hq hsupp h0 h1 hΩ hzero hgap hg hg1 rho hrho hrho1
   refine ⟨D, hlog, ?_⟩
   have htail (k : ℕ) (hk : k ≤ L) :
       1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)

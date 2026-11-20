@@ -43,7 +43,7 @@ close to the ground space for which the terminal untrimmed image on the literal 
 `0.04`-viable candidate is viable. Supporting ALVV, arXiv:1602.08828v2, `t:alg1`,
 lines 1777--1818. -/
 def IsPhysicalTerminalCertificate {L q width : ℕ} (ell : ℕ)
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (t : ℝ) (m D threshold rounds : ℕ) (xiInit g precision Msoft tau Delta mu : ℝ)
     (G : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q))) (rho : ℕ)
     (J : LongIntervalIndex L width) (n : ℕ)
@@ -61,9 +61,9 @@ def IsPhysicalTerminalCertificate {L q width : ℕ} (ell : ℕ)
   let Sbulk : Finset (Fin 5) := {0, 2, 4}
   let cuts : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
   let A := fun j : Fin 5 ↦ ∑ i ∈ Finset.univ.filter
-    (fun i : Fin (L - 1) ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ), h i
+    (fun i : Fin (L - 1) ↦ cuts j.castSucc ≤ i.val ∧ i.val + 1 < cuts j.succ), Φ.term i
   let Y := ∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val + 1 ∈
-    ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)), h i
+    ({a + 1, a + 2 * ell, b + 1, b + 2 * ell} : Finset ℕ)), Φ.term i
   ∃ (e : Fin 5 → ℝ) (x : (Fin L → Fin q) → ℂ) (E : ℝ),
     star x ⬝ᵥ x = 1 ∧ (∀ j, A j *ᵥ x = (e j : ℂ) • x) ∧
     (∀ j, (A j - (e j : ℂ) • 1).PosSemidef) ∧ 0 ≤ E ∧ E ≤ 4 ∧
@@ -100,19 +100,19 @@ open Classical in
 hypothesis of the energy induction: the middle region with its attained minimum and the exact
 center target. Supporting ALVV, arXiv:1602.08828v2, `t:alg1`, lines 1777--1818. -/
 private theorem terminalCertificate_of_isPhysicalTerminalCertificate {L q width ell : ℕ}
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
+    (Φ : ManyBody.BondInteraction L q)
     (t : ℝ) (m D threshold rounds : ℕ) (xiInit g precision Msoft tau Delta mu : ℝ)
     (G : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q))) (rho : ℕ) (hrho : Module.finrank ℂ G = rho)
     (J : LongIntervalIndex L width) (n : ℕ)
     (Aops : Fin n → EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q) →L[ℂ]
       EuclideanSpace ℂ (interval L J.val.1 J.val.2 → Fin q)) :
-    IsPhysicalTerminalCertificate ell h t m D threshold rounds xiInit g precision Msoft tau Delta
+    IsPhysicalTerminalCertificate ell Φ t m D threshold rounds xiInit g precision Msoft tau Delta
       mu G rho J n Aops →
     let l := J.val.1
     let r := J.val.2
     let coords := Entropy.regionTensorCoordinates q (interval L l r)
     let regional := fun (a b : ℕ) ↦ ∑ i ∈ Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ a ≤ i.val ∧ i.val + 1 < b), h i
+      (fun i : Fin (L - 1) ↦ a ≤ i.val ∧ i.val + 1 < b), Φ.term i
     ∃ u v : ℕ, l ≤ u ∧ u ≤ v ∧ v ≤ r ∧ u - l ≤ 2 * ell ∧ r - v ≤ 2 * ell ∧
       (∃ (e2 : ℝ) (x2 : (Fin L → Fin q) → ℂ), star x2 ⬝ᵥ x2 = 1 ∧
         regional u v *ᵥ x2 = (e2 : ℂ) • x2 ∧ (regional u v - (e2 : ℂ) • 1).PosSemidef) ∧
@@ -165,11 +165,9 @@ theorem exists_physical_soft_resampling_tree
     3 * tau / 200 ≤ 1 / 200 ∧ (D : ℝ) ^ 12 * Delta ≤ 1 / 100000 ∧
     ∃ Cxi : ℝ, 0 < Cxi ∧ ∃ Pxi : ℕ,
     ∀ (L : ℕ)
-      (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
-        (h i) (interval L i.val (i.val + 2)))
-      (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu : ℝ),
-    let H := ∑ i, h i
+      (Φ : ManyBody.BondInteraction L q)
+      (h0 : ∀ i, 0 ≤ Φ.term i) (_h1 : ∀ i, Φ.term i ≤ 1) (mu : ℝ),
+    let H := Φ.hamiltonian
     let hH : H.IsHermitian :=
       (IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)).isHermitian
     mu ∈ spectrum ℝ H →
@@ -182,7 +180,7 @@ theorem exists_physical_soft_resampling_tree
     let count := max (q ^ width) (D ^ 2 * threshold)
     ∃ xiInit : ℝ, 0 < xiInit ∧ xiInit ≤ 1 ∧ (xiInit⁻¹) ^ 2 ≤ Cxi * Z ^ Pxi ∧
     ∃ hwidth : 1 ≤ width,
-    let Certificate := IsPhysicalTerminalCertificate (width := width) ell h t m D threshold
+    let Certificate := IsPhysicalTerminalCertificate (width := width) ell Φ t m D threshold
       rounds xiInit g precision Msoft tau Delta mu G rho
     ∃ (N : LongIntervalIndex L width → ℕ)
       (F : ∀ J : LongIntervalIndex L width,
@@ -201,7 +199,7 @@ theorem exists_physical_soft_resampling_tree
           D rounds thresholdFamily N F xiInit U) width hwidth p r
         Module.finrank ℂ S ≤ count ∧
           IsIntervalSpanWithRankBound L q p r count xiInit S) ∧
-      ∀ U ∈ Good, IsTerminalRitzEnergyAssignment (Nat.lt_of_lt_of_le two_pos hq) hwidth h ell t m
+      ∀ U ∈ Good, IsTerminalRitzEnergyAssignment (Nat.lt_of_lt_of_le two_pos hq) hwidth Φ ell t m
         D rounds thresholdFamily N F xiInit U := by
   classical
   obtain ⟨u, hu, hnumeric, hprofile⟩ :=
@@ -237,10 +235,10 @@ theorem exists_physical_soft_resampling_tree
     hO, hR, hDelta, hepsilon, hreverse, hSmall,
     1000000 * C, mul_pos (by norm_num) hC, P + 1, ?_⟩
   clear hM hprecision hprecision1
-  intro L h hs h0 h1 mu H hH hmu hgap G rho Z threshold rounds count
+  intro L Φ hs h0 h1 mu H hH hmu hgap G rho Z threshold rounds count
   obtain ⟨B, hB, Ref, hdim, hRefG, hGRef, hRefMPS, hRefBound, hxi,
     hxi1, hbudget, hinv, hcost, hschedule, hRefIntervals⟩ :=
-    href L h hs h0 h1 mu hmu hgap
+    href L Φ hs h0 h1 mu hmu hgap
   clear href hdim hRefMPS hRefBound hcost
   let dRef := rho ^ 2 * B
   let bRef := dRef ^ 2
@@ -277,7 +275,7 @@ theorem exists_physical_soft_resampling_tree
             exists_physical_soft_interval_history q ell m k g tau t
               T T
               hq hell hm hk hg htau htau1 le_rfl hT0 htfloor hTfloor hO hR
-              L0 J.val.1 J.val.2 J.property.1 J.property.2.1 J.property.2.2 h hs h0 h1
+              L0 J.val.1 J.val.2 J.property.1 J.property.2.1 J.property.2.2 Φ hs h0 h1
               K rho rounds bRef xiInit (1 / 100000)
               hD hK hThreshold hSmall hepsilon hreverse hxi (by norm_num) le_rfl
               mu hmu hgapg Ref hGRef hRefG
@@ -303,10 +301,10 @@ theorem exists_physical_soft_resampling_tree
   have hq0 : 0 < q := Nat.lt_of_lt_of_le two_pos hq
   have hm2 : 2 ≤ m := hu.trans (Nat.le_self_pow (by norm_num) u)
   have hlow : ∀ z ∈ spectrum ℝ H, mu ≤ z := fun z hz ↦
-    (hgap z hz).elim (fun h ↦ h.ge) (fun h ↦ by linarith)
-  refine exists_successful_tree_energy_induction (ell := ell) hq0 hwidth h hs h0 h1 g hg t T m D
+    (hgap z hz).elim (fun Φ.term ↦ Φ.term.ge) (fun Φ.term ↦ by linarith)
+  refine exists_successful_tree_energy_induction (ell := ell) hq0 hwidth Φ hs h0 h1 g hg t T m D
     hm2 hD htfloor hTfloor Delta (by positivity) mu rounds _ N F xiInit hmu hlow hDelta hR ?_ U hU
-  exact fun J ↦ terminalCertificate_of_isPhysicalTerminalCertificate h t m D threshold rounds
+  exact fun J ↦ terminalCertificate_of_isPhysicalTerminalCertificate Φ t m D threshold rounds
     xiInit g precision Msoft tau Delta mu G rho rfl J (N J) (F J) (hFamilies J).1
 
 end TNLean.MPS.AreaLaw.ALVV
