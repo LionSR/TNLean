@@ -14,7 +14,7 @@ in the source relation is asserted here
     \label{def:qc_approx_local_channel_conversion}
     \uses{def:qc_local_channel_conversion}
     \lean{QuantumCircuit.chainTraceNorm,
-        QuantumCircuit.IsApproxLocalChannelConversion}
+        QuantumCircuit.IsApproxConversion}
     \leanok
     A chain operator $\rho$ is approximately converted into $\sigma$ in
     depth $T$ with error $\varepsilon$ if there is a local channel protocol
@@ -27,8 +27,8 @@ in the source relation is asserted here
     \label{thm:qc_chain_trace_norm}
     \uses{def:qc_approx_local_channel_conversion}
     \lean{QuantumCircuit.chainTraceNorm_nonneg,
-        QuantumCircuit.chainTraceNorm_zero,
-        QuantumCircuit.chainTraceNorm_eq_zero_iff,
+        Matrix.rectangularTraceNorm_zero,
+        Matrix.rectangularTraceNorm_eq_zero_iff,
         QuantumCircuit.chainTraceNorm_add_le}
     \leanok
     For chain operators $A,B$, the trace norm satisfies
@@ -46,10 +46,10 @@ in the source relation is asserted here
 \begin{lemma}[Zero error and monotonicity]
     \label{thm:qc_approx_conversion_properties}
     \uses{def:qc_approx_local_channel_conversion}
-    \lean{QuantumCircuit.IsLocalChannelConversion.approx,
-        QuantumCircuit.IsApproxLocalChannelConversion.refl,
-        QuantumCircuit.IsApproxLocalChannelConversion.mono,
-        QuantumCircuit.isApproxLocalChannelConversion_zero_iff}
+    \lean{QuantumCircuit.IsConversion.isApproxConversion,
+        QuantumCircuit.IsApproxConversion.refl,
+        QuantumCircuit.IsApproxConversion.mono,
+        QuantumCircuit.isApproxConversion_zero_iff}
     \leanok
     Every operator is converted into itself with depth and error zero.
     Increasing the depth or error bound preserves approximate conversion.
@@ -67,8 +67,8 @@ in the source relation is asserted here
 \begin{lemma}[Composition of approximate conversions]
     \label{thm:qc_approx_conversion_trans}
     \uses{def:qc_approx_local_channel_conversion}
-    \lean{QuantumCircuit.IsLocalChannelProtocol.chainTraceNorm_map_le,
-        QuantumCircuit.IsApproxLocalChannelConversion.trans}
+    \lean{QuantumCircuit.IsProtocol.rectangularTraceNorm_map_le,
+        QuantumCircuit.IsApproxConversion.trans}
     \leanok
     Let $\rho$ and $\sigma$ be Hermitian. If $\rho$ is approximately converted
     into $\sigma$ with depth $T_1$ and error $\varepsilon_1$, and $\sigma$ into
@@ -96,8 +96,8 @@ in the source relation is asserted here
 \begin{definition}[Asymptotic local channel conversion]
     \label{def:qc_asymptotic_local_channel_conversion}
     \uses{def:qc_approx_local_channel_conversion}
-    \lean{QuantumCircuit.IsAsymptoticLocalChannelConversion,
-        QuantumCircuit.IsLocalChannelPhaseEquivalent}
+    \lean{QuantumCircuit.IsAsymptoticConversion,
+        QuantumCircuit.IsPhaseEquivalent}
     \leanok
     Let $\rho_N$ and $\sigma_N$ be families of operators on chains of $N$
     sites, with fixed local dimensions that may differ between the families.
@@ -112,12 +112,12 @@ in the source relation is asserted here
 \begin{lemma}[Local channel phase equivalence]
     \label{thm:qc_local_channel_phase_equivalence}
     \uses{def:qc_asymptotic_local_channel_conversion}
-    \lean{QuantumCircuit.IsAsymptoticLocalChannelConversion.refl,
-        QuantumCircuit.IsAsymptoticLocalChannelConversion.trans,
-        QuantumCircuit.IsLocalChannelPhaseEquivalent.refl,
-        QuantumCircuit.IsLocalChannelPhaseEquivalent.symm,
-        QuantumCircuit.IsLocalChannelPhaseEquivalent.trans,
-        QuantumCircuit.IsLocalChannelPhaseEquivalent.equivalence}
+    \lean{QuantumCircuit.IsAsymptoticConversion.refl,
+        QuantumCircuit.IsAsymptoticConversion.trans,
+        QuantumCircuit.IsPhaseEquivalent.refl,
+        QuantumCircuit.IsPhaseEquivalent.symm,
+        QuantumCircuit.IsPhaseEquivalent.trans,
+        QuantumCircuit.isPhaseEquivalent_equivalence}
     \leanok
     Local channel phase equivalence is an equivalence relation on eventually
     Hermitian families, and in particular on density-matrix families.

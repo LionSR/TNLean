@@ -90,7 +90,7 @@ def partCommutatorConst (R : ℕ) : ℕ := 2 * chainCrossConst R * ((R + 1) * 2 
 /-- At most `(R + 1) 2^{2R+1}` supports of range `R` meet a given support: each of its at
 most `R + 1` sites lies in at most `2^{2R+1}` supports.
 Hastings, arXiv:0705.2024v4, `law16.tex`, line 794. -/
-theorem card_filter_not_disjoint_le {L R : ℕ} (S : Finset (ChainSupport L R))
+theorem Finset.card_filter_not_disjoint_le {L R : ℕ} (S : Finset (ChainSupport L R))
     (X : ChainSupport L R) :
     (S.filter fun Y ↦ ¬Disjoint Y.1 X.1).card ≤ (R + 1) * 2 ^ (2 * R + 1) := by
   classical
@@ -161,7 +161,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_term_commutator_termSum_le
   refine (norm_sum_le _ _).trans ?_
   refine (Finset.sum_le_card_nsmul _ _ _ fun Y _ ↦ h.norm_term_commutator_le hhJ X Y).trans ?_
   rw [nsmul_eq_mul]
-  exact mul_le_mul_of_nonneg_right (by exact_mod_cast card_filter_not_disjoint_le S X)
+  exact mul_le_mul_of_nonneg_right (by exact_mod_cast Finset.card_filter_not_disjoint_le S X)
     (by positivity)
 
 /-- The commutator of two sums of terms, expanded over the terms of the first sum.

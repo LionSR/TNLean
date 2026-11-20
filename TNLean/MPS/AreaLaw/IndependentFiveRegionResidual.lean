@@ -9,7 +9,7 @@ import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Ring
 import QICLean.Analysis.EnergyTruncation
-import TNLean.Lattice.DisjointRegionalGround
+import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.RegionalTruncationResidual
 
@@ -127,8 +127,9 @@ theorem exists_five_region_independent_truncation_residual
     five_region_original_bond_data L q (a + 1) (a + 2 * ell) (b + 1)
       (b + 2 * ell) h12 hab h34 hbL h hs h0 h1
   let R : Fin 5 → Finset (Fin L) := fun j ↦ interval L (k j.castSucc) (k j.succ)
+  have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hxunit, hx, hlo, hclip⟩ :=
-    Matrix.exists_disjoint_regional_clipping_structure hq R A
+    ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q) R A
       (fun j ↦ (I j).card) hR hAs (fun j ↦ (hAcap j).1)
       (fun j ↦ (hAcap j).2) Y J.card hY hYC
   let S : ℝ := ∑ j, e j

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.Lattice.RegionalEntropyBridge
-import TNLean.Lattice.ZeroEntropy
+import QICLean.Entropy.ZeroEntropy
 import TNLean.Lattice.RegionEntropyInequalities
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
@@ -22,7 +22,7 @@ component and in particular inside `A` or inside `Aᶜ`. In the split
 coordinates the Hamiltonian is therefore `H_A ⊗ 1 + 1 ⊗ H_{Aᶜ}`, and the
 gapped ground vector is a product vector across the cut, whose reduced state has
 zero entropy. This last step holds on any finite set of sites and is the shared
-lemma `TNLean.Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint`, read
+lemma `ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint`, read
 on the domain through `regionalEntropy_eq_regionEntropy`.
 
 The same argument covers the degenerate cases of Section 2: range `R = 0`
@@ -154,9 +154,9 @@ theorem regionalEntropy_eq_zero_of_forall_subset_or_disjoint (h : PlaneInteracti
     (hsplit : ∀ X : AdmissibleSupport Λ R, X.1 ⊆ A ∨ Disjoint X.1 A) :
     regionalEntropy Λ q Ω A = 0 := by
   rw [regionalEntropy_eq_regionEntropy]
-  exact regionEntropy_eq_zero_of_forall_subset_or_disjoint
-    (fun X ↦ (h.mem X))
-    hh hΔ hΩ hgap hspan A hsplit
+  exact (ManyBody.regionEntropy_eq_entropy _ _).trans
+    (ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint (Φ := h) hh hΔ hΩ hgap
+      hspan (B := A) hsplit)
 
 /-- **A cut with no crossing edge** (area-law preprint, Lemma 2.2,
 `lem:zero-boundary`, `01-preliminaries.tex` lines 123–134). Under the

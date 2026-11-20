@@ -275,7 +275,8 @@ theorem mutualInformation_le_of_ancilla_unitary {Ω : StateSpace Λ q} (hΩ : �
     rw [Fintype.card_pi, Finset.prod_const, Fintype.card_fin, Finset.card_univ,
       Fintype.card_coe, hc, Nat.cast_pow, Real.log_pow]
     exact hdim
-  have hfinal := mutualInformation_le_inv_pow_of_supported_unitary (φ := WithLp.toLp 2 (φ ∘ sp))
+  have hfinal := FiniteProduct.mutualInformation_le_inv_pow_of_supported_unitary _
+    (φ := WithLp.toLp 2 (φ ∘ sp))
     (η := WithLp.toLp 2 (η ∘ sp)) (by rw [hTn]; exact hφ) (by rw [hTn]; exact hη)
     (disjoint_ancillaCopyRegion_ancillaPhysicalRegion _ _)
     (disjoint_disjSum_ancillaCopyRegion_union hJ _)

@@ -11,7 +11,7 @@ import QICLean.Analysis.GroundEnergyBounds
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SupportedMatrixElements
 import QICLean.Entropy.RegionUnion
-import TNLean.Lattice.ZeroEntropy
+import QICLean.Entropy.ZeroEntropy
 import QICLean.ManyBody.Sites.Lattice.Chain
 /-!
 # Five consecutive regions and their original bonds

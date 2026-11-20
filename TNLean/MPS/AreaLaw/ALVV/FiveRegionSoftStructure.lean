@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
-import TNLean.Lattice.DisjointRegionalGround
+import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import QICLean.Analysis.SoftTruncationCommutingFamily
 
 /-!
@@ -71,8 +71,10 @@ theorem exists_five_region_soft_structure {L q k1 k2 k3 k4 : ℕ}
   let R := fun j : Fin 5 ↦ interval L (k j.castSucc) (k j.succ)
   obtain ⟨hk, hR, hsA, hA, hY, hYC, hJ, hsum⟩ :=
     five_region_original_bond_data L q k1 k2 k3 k4 h12 h23 h34 h4L h hs h0 h1
+  have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hx, hxe, he, hclip⟩ :=
-    Matrix.exists_disjoint_regional_clipping_structure hq R A (fun j ↦ (I j).card)
+    ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q) R A
+      (fun j ↦ (I j).card)
       hR hsA (fun j ↦ (hA j).1) (fun j ↦ (hA j).2) Y J.card hY hYC
   obtain ⟨hBraw, _hx0, _hc0, _ho0, _hcap0, _hnorm0,
       E, z, hz, hHz, hE, hE0, hEC⟩ := hclip 0 le_rfl ∅
@@ -115,7 +117,7 @@ theorem exists_five_region_soft_structure {L q k1 k2 k3 k4 : ℕ}
     convert hp using 1
     abel
   have : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
-  obtain ⟨mu, w, hGw, hw, hGlow⟩ := hG.exists_unit_eigenvector_le
+  obtain ⟨mu, w, hGw, hw, hGlow⟩ := exists_unit_eigenvector_minEigenvalue hG
   have hmuD : -D ≤ mu := by
     have hv : (G + (D : ℂ) • 1) *ᵥ w = ((mu + D : ℝ) : ℂ) • w := by
       rw [add_mulVec, smul_mulVec, one_mulVec, hGw, Complex.ofReal_add, add_smul]

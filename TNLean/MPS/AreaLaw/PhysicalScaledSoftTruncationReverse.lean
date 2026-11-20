@@ -126,7 +126,7 @@ theorem exists_interval_physical_scaled_soft_reverse_residual
   obtain ⟨hsoft, hsoftH, _hres⟩ := hforward eps 0 m t hepslo hepshi le_rfl hm ht htm
   have hHsc : Hsc.IsHermitian := hsoft.sub (isHermitian_one.smul (by simp [isSelfAdjoint_iff]))
   let : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
-  obtain ⟨Es, zs, hzs, hzsunit, hEslow⟩ := hHsc.exists_unit_eigenvector_le
+  obtain ⟨Es, zs, hzs, hzsunit, hEslow⟩ := exists_unit_eigenvector_minEigenvalue hHsc
   have hElowsoft : -alpha ≤ Es := by
     have hpos : (Hsc + (alpha : ℂ) • 1).PosSemidef := by
       have heq : Xs + (alpha : ℂ) • 1 + Y = Hsc + (alpha : ℂ) • 1 := by rw [← hsplit]; abel

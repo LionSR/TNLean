@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.RegionalGroundEnergy
-import TNLean.Lattice.ZeroEntropy
+import QICLean.Entropy.ZeroEntropy
 import QICLean.Analysis.QuadraticScalarShift
 import QICLean.Entropy.RegionalOperatorCoordinates
 import QICLean.Analysis.CompressionEnergyInterval

@@ -177,7 +177,7 @@ of~\cite{Arad2016RigorousRG}.
     \label{lem:alvv_three_bulk_hard_truncation_spectral_comparison}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_three_bulk_hard_truncation_spectral_comparison}
     \leanok
-    \uses{lem:five_region_independent_residual,lem:canonical_spectral_span}
+    \uses{lem:five_region_independent_residual}
     Let $0\le h_i\le1$ be the nearest-neighbour terms of a chain of $L$ sites
     of dimension $q$, let $\ell\ge1$, $a+2\ell\le b$, $b+2\ell\le L-1$ and
     $t\ge0$.
@@ -227,7 +227,7 @@ of~\cite{Arad2016RigorousRG}.
     \end{itemize}
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:five_region_independent_residual,lem:canonical_spectral_span}
+    \uses{lem:five_region_independent_residual}
     \begin{itemize}
         \item Truncating a bulk lowers it, so $\tilde H\le H$.
         \item The three-bulk residual bounds the restricted error by $\xi$ on

@@ -180,11 +180,11 @@ theorem regionEntropy_copyRegions_le_sum
   classical
   have hn : ‖copyProduct η‖ = 1 := by simp [norm_copyProduct, hη]
   have hempty : Entropy.regionEntropy ∅ (copyProduct η) = 0 := by
-    rw [Entropy.regionEntropy_eq_entropy, FiniteProduct.entropy_empty _ _ hn]
+    exact (ManyBody.regionEntropy_eq_entropy _ _).trans (FiniteProduct.entropy_empty _ _ hn)
   have hsub (A B : Finset (Fin (K * L))) (hAB : Disjoint A B) :
       Entropy.regionEntropy (A ∪ B) (copyProduct η) ≤
         Entropy.regionEntropy A (copyProduct η) + Entropy.regionEntropy B (copyProduct η) := by
-    simp only [Entropy.regionEntropy_eq_entropy]
+    simp only [Entropy.regionEntropy, ManyBody.regionEntropy_eq_entropy]
     exact FiniteProduct.entropy_union_le _ _ hn A B hAB
   have hdis : ((Finset.univ : Finset (Fin K)) : Set (Fin K)).PairwiseDisjoint
       (fun i ↦ copyRegion i (R i)) := by
@@ -274,9 +274,9 @@ theorem regionEntropy_interval_copyProduct_le
       (copyProduct (fun _ : Fin K ↦ η)) ≤ 2 * B := by
   classical
   have hzero : Entropy.regionEntropy ∅ η = 0 := by
-    rw [Entropy.regionEntropy_eq_entropy, FiniteProduct.entropy_empty _ _ hη]
+    exact (ManyBody.regionEntropy_eq_entropy _ _).trans (FiniteProduct.entropy_empty _ _ hη)
   have hfull : Entropy.regionEntropy Finset.univ η = 0 := by
-    rw [Entropy.regionEntropy_eq_entropy, FiniteProduct.entropy_univ _ _ hη]
+    exact (ManyBody.regionEntropy_eq_entropy _ _).trans (FiniteProduct.entropy_univ _ _ hη)
   have hB0 : 0 ≤ B := by simpa only [hzero] using hB ∅
   let R := copyIntervalRegion L a b (K := K)
   let S : Finset (Fin K) := Finset.univ.filter fun i ↦ R i ≠ ∅ ∧ R i ≠ Finset.univ

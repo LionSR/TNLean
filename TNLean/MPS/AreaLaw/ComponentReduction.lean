@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AreaLaw
-import TNLean.Lattice.ZeroEntropy
+import QICLean.Entropy.ZeroEntropy
 import QICLean.ManyBody.Sites.Lattice.Line
 import Mathlib.Combinatorics.SimpleGraph.Metric
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -45,7 +45,7 @@ entropy of unions of components; only the two-factor product lemma is used.
 ## Main results
 
 The zero entropy of a cut that splits no term and the flips of regions of zero entropy are the
-site-generic lemmas `TNLean.Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint` and
+site-generic lemmas `ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint` and
 `TNLean.Lattice.regionEntropy_symmDiff_eq_of_eq_zero`.
 
 * `regionEntropy_le_mul_card_domainBoundaryEdges`: Theorem A on `Λ` with the constant
@@ -274,8 +274,9 @@ theorem _root_.ManyBody.DomainInteraction.exists_regionEntropy_eq_card_boundaryE
     intro p hp
     obtain ⟨hpb, hpe⟩ := Finset.mem_filter.mp hp
     have hp1 := (mem_boundaryEdges.mp hpb).1
-    refine ⟨hp1, regionEntropy_eq_zero_of_forall_subset_or_disjoint (h := h.term)
-      (D := fun X ↦ X.1) h.mem hh hΔ hΩ hgap hspan _ fun X ↦ ?_⟩
+    refine ⟨hp1, (ManyBody.regionEntropy_eq_entropy _ _).trans
+      (ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint (Φ := h) hh hΔ hΩ hgap
+        hspan (B := interval Λ.card 0 (p + 1)) fun X ↦ ?_)⟩
     exact X.2.subset_or_disjoint_of_gap hp1 fun he ↦ hpe ⟨hp1, he⟩
   obtain ⟨A', hS, hB⟩ :=
     exists_regionEntropy_eq_boundaryEdges_eq_symmDiff hΩ G hG (domainRegion Λ A)
@@ -292,10 +293,10 @@ at most `C_int(q, R, J, Δ)` times the number of edges of `∂_Λ A`.
 
 The proof is the component reduction of the note. At an edge of the chain of `|Λ|` sites
 that joins sites at nonconsecutive integers no support crosses, so the prefix ending there
-has zero entropy (`regionEntropy_eq_zero_of_forall_subset_or_disjoint`), and flipping the
-region on that prefix changes neither its entropy nor any boundary edge but that one. After
-the flips at the boundary edges of this kind, the region has exactly `|∂_Λ A|` boundary edges
-on the chain, and the chain bound `regionEntropy_le_mul_card_boundaryEdges` applies.
+has zero entropy (`ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint`), and
+flipping the region on that prefix changes neither its entropy nor any boundary edge but that
+one. After the flips at the boundary edges of this kind, the region has exactly `|∂_Λ A|`
+boundary edges on the chain, and the chain bound `regionEntropy_le_mul_card_boundaryEdges` applies.
 TNLean note, `part0_preamble.tex`, Theorem A (`thm:A`), and `part1_arealaw.tex`, Section 2
 (`sec:setting`), first reduction. -/
 theorem regionEntropy_le_mul_card_domainBoundaryEdges (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
