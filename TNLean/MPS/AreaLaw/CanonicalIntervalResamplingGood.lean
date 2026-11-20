@@ -21,6 +21,8 @@ interval index. Supporting ALVV, arXiv:1602.08828v2,
 lines 749–755 and the balanced construction at lines 1777–1817.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 
 namespace TNLean.MPS.AreaLaw

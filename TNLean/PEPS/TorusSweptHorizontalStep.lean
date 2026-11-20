@@ -23,6 +23,8 @@ handles the first rightward step; it does not establish the complete prescribed
 braid. See `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS
 variable {width height : ℕ} [NeZero width] [NeZero height]
@@ -67,9 +69,9 @@ theorem torusSweptStringRightStepOperators_right_transport (v p : X) (g h : G) :
     simp only [torusSweptStringRightStepOperators,
       ite_eq_right (torusRightEdge_ne_torusUpEdge p (v.1+2,v.2+1))]
   change torusSweptStringRightStepOperators v g h
-    (Edge.ofAdj (torusGraph_adj_right p.1 p.2)) =
+    (ManyBody.Edge.ofAdj (torusGraph_adj_right p.1 p.2)) =
       torusSweptStringInitialOperators v g h
-        (Edge.ofAdj (torusGraph_adj_right p.1 p.2)) at he
+        (ManyBody.Edge.ofAdj (torusGraph_adj_right p.1 p.2)) at he
   simpa only [regularDirectedTransport, he] using
     torusSweptStringInitialOperators_right_transport v p g h
 
@@ -94,9 +96,9 @@ theorem torusSweptStringRightStepOperators_up_transport (v p : X) (g h : G) :
       simp only [torusSweptStringRightStepOperators,
         ite_eq_right ((torusUpEdge_injective (width := width) (height := height)).ne hp)]
     change torusSweptStringRightStepOperators v g h
-      (Edge.ofAdj (torusGraph_adj_up p.1 p.2)) =
+      (ManyBody.Edge.ofAdj (torusGraph_adj_up p.1 p.2)) =
         torusSweptStringInitialOperators v g h
-          (Edge.ofAdj (torusGraph_adj_up p.1 p.2)) at he
+          (ManyBody.Edge.ofAdj (torusGraph_adj_up p.1 p.2)) at he
     simpa only [regularDirectedTransport, he, ite_eq_right hp] using
       torusSweptStringInitialOperators_up_transport v p g h
 

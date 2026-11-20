@@ -17,6 +17,8 @@ Source: Schuch, Wolf, Verstraete, and Cirac, arXiv:0705.0292v2,
 `paper_v2.tex`, lines 421–430.
 -/
 
+open ManyBody (interval)
+
 namespace TNLean.MPS.AreaLaw.EntropyScaling
 
 /-- The source's state on `2N³` sites, indexed as `N²` consecutive blocks of

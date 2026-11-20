@@ -91,6 +91,7 @@ after one blocking (lines~1456--1458 and~1556--1561):
 \begin{align}
     u^{(2)}_{11',22'} & = v_{1'2}u_{11'}u_{22'}, &
     v^{(2)}_{11',22'} & = v_{1'2},
+    \label{eq:mpu_symmetry_path_criterion_blocking_1}
 \end{align}
 so that $\det(u^{(2)}v^{(2)})=\det(uv)^{2r\ell}=1$, and, for gates in
 orthogonal or symplectic form, $\det u^{(2)}=(\det(u)^2\det v)^{r\ell}=1$ and
@@ -202,6 +203,79 @@ $\prod_j\mathrm{CZ}_{j,j+1}$. Both have $\det(uv)=1$, while $\det u=1$ and
 $\det u=-1$ respectively. A path joining them would have to leave the MPUs that
 admit a standard form on one standard-form site. Whether they are strictly
 equivalent under conjugation is unknown.
+
+\paragraph{A heuristic reading of $\det u$.} The following explains why the
+invariant behaves as it does; it is not a proof. In Case~I a real
+nearest-neighbour automaton on the chain of standard-form sites has real
+support algebras $R_x\cong M_r(\mathbb R)$ and $L_{x+1}\cong M_\ell(\mathbb R)$,
+and the standard form identifies the physical pair space $\mathbb R^{d^2}$ with
+$\mathbb R^r\otimes\mathbb R^\ell$. A single real matrix algebra does not orient
+its module, since conjugation by an orthogonal matrix of determinant $-1$ is
+inner; but for $r,\ell$ even the orientation of $\mathbb R^r\otimes\mathbb R^\ell$
+does not depend on orientations of the factors. Read this way, $\det u$
+compares the standard orientation of $\mathbb R^{d^2}$ with an orientation
+attached to the support algebras, which explains its invariance under the gauge
+$O_\ell\otimes O_r$.
+
+\paragraph{Where it is an invariant.} Along a path of real automata that stay
+nearest-neighbour on the standard-form chain, the support algebras vary
+continuously with fixed dimensions, which suggests that $\det u$ cannot jump;
+the argument through continuous gates above makes this precise for paths of
+standard forms. Real two-layer circuits (an on-site layer followed by an
+inter-site layer) and three-layer circuits of the order on-site, inter-site,
+on-site are nearest-neighbour. Other layer orders need not be: with each site
+written as two qubits $(a_i,b_i)$, an inter-site, an on-site and another
+inter-site layer of swaps send $a_i$ to $b_{i-2}$ and $b_i$ to $a_{i+2}$, an
+automaton of range two built from real layers. A path from the identity to the
+brickwork $\prod_j\mathrm{CZ}_{j,j+1}$ must therefore pass through real automata
+of range at least two on the standard-form chain.
+
+\paragraph{Why blocking loses it.} After blocking $k\ge2$ standard-form sites,
+the blocked gate $u^{(k)}=(\Id\otimes v^{\otimes(k-1)}\otimes\Id)u^{\otimes k}$
+has a determinant in which $\det u$ enters with an even exponent, so no blocked
+standard form sees it. The same parity makes $\det U^{(N)}$ for $N\ge2$ see
+only $\det(uv)$. After blocking two sites, the two test MPUs have trivial
+blocked determinants and the same case, so the ``if'' direction of
+Theorem~\texttt{prop:conjsym-strict-equiv} at the blocked level is expected to
+join them by a path invariant under translation by two sites only. The
+obstruction is translation invariance by one standard-form site.
+
+\paragraph{Approaches that do not decide the question.}
+\begin{itemize}
+    \item Interpolating the gates: $\mathrm{CZ}\in O(4)$ has determinant $-1$;
+          with a spectator qubit $\mathrm{CZ}\otimes\Id\in SO(8)$, but the
+          overlapping three-qubit gates break invariance under translation by
+          one site unless further layers are added, and no such circuit for
+          the brickwork is known.
+    \item Conjugating the on-site layer of $\mathrm{CZ}$ into the inter-site
+          layer: the conjugating automaton has nonzero index, so no conjugation
+          path starting at the identity works.
+    \item Moving the sign between layers by single-qubit reflections: these have
+          determinant $+1$ on $\mathbb C^2\otimes\mathbb C^2$.
+    \item Determinants of $U^{(N)}$, also on translation sectors: they see only
+          $\det(uv)$.
+    \item The sign of $Z\overline Z$ for the conjugation gauge
+          $\overline{\mathcal W}=Z\mathcal WZ^{-1}$: this is the case of
+          Proposition~\texttt{corconj}, blind to $\det u$.
+\end{itemize}
+
+\paragraph{The open question.} A multiplicative $\mathbb Z_2$-valued function on
+all real automata invariant under translation by one standard-form site cannot
+extend $\det u$. Let $S$ shift only the first qubit of every site by one site.
+It is real, of finite range and translation invariant, and it conjugates the
+on-site layer $A$ of $\mathrm{CZ}$, with $\det u=-1$, into the inter-site layer
+$B$, with $\det u=1$; a multiplicative function into the abelian group
+$\mathbb Z_2$ takes the same value on $A$ and $SAS^{-1}$. Since $S$ has nonzero
+index, this does not produce a path. The question is therefore whether
+$\det u$ extends to a $\mathbb Z_2$-valued function on the real automata of
+index zero, of any range, that is constant along paths and multiplicative under
+composition. If it does, the brickwork $AB$ has the value $-1$, so it is
+separated from the identity and the ``only if'' direction of
+Theorem~\texttt{prop:conjsym-strict-equiv} holds for this pair. Such an
+extension is a sufficient route to separation, not a necessary one: its
+nonexistence would not by itself produce a symmetric path between the two
+standard forms, and a counterexample to the source claim needs an actual path.
+Whether the source claim holds is undecided.
 
 \section{Formal statements}
 

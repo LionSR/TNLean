@@ -439,7 +439,8 @@ coefficients.
 
 \begin{lemma}[CPSV canonical-form representative after blocking]
     \label{thm:cpsv_canonical_form_representative_after_blocking}
-    \lean{MPSTensor.exists_cpsvCanonicalForm_representative_after_blocking}
+    \lean{MPSTensor.exists_cpsvCanonicalForm_representative_after_blocking,
+        MPSTensor.exists_leftCanonical_cpsvCanonicalFormData_after_blocking}
     \leanok
     \uses{def:cpsv_canonical_form, def:blocked_tensor, def:same_mpv2_pos, thm:unconditional_common_primitive_irreducible_blocks, thm:normal_tp_primitive_irred, thm:is_normal_tensor_of_is_normal_left_canonical}
     % Maintainer source anchor: CPSV16 lines 214--251, especially
@@ -453,7 +454,8 @@ coefficients.
         \label{eq:cpsv_canonical_form_representative_after_blocking}
     \end{align}
     Here $B$ generates the same positive-length MPV family and satisfies the
-    canonical-form condition in its own bond coordinates.
+    canonical-form condition in its own bond coordinates. Its displayed
+    normal blocks can be chosen left-canonical.
 \end{lemma}
 
 \begin{proof}\leanok

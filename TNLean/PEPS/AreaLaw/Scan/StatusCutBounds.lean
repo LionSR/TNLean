@@ -20,6 +20,8 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open scoped symmDiff
@@ -105,7 +107,7 @@ each of U, UY, Y, P₀, V, with sharper constants for all but Y. No prefix,
 edge-count, or good-history certificate is assumed. -/
 theorem state_cut_bounds_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K)
     (hn : 0 < S.n) (hk : k ≤ S.n * S.m)
@@ -138,7 +140,7 @@ each of U, UY, Y, P₀, V, with sharper constants for all but Y. No prefix,
 edge-count, or good-history certificate is assumed. -/
 theorem oldChargeState_cut_bounds_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
     (h : History S.K S.m S.M k) (g : Fin S.K)
     (hn : 0 < S.n) (hk : (k + 1) ≤ S.n * S.m)

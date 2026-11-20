@@ -32,6 +32,8 @@ Supporting locality algebra for ALVV, arXiv:1602.08828v2,
 equation H-mid-cut, lines 810–821, and Proposition 5.7, lines 1324–1333.
 -/
 
+open ManyBody (card_interval_le disjoint_interval_interval interval interval_mono mem_interval)
+
 open Matrix QuantumCircuit
 open scoped BigOperators Kronecker
 open TNLean.Lattice.Sheet
@@ -148,7 +150,7 @@ private theorem mem_span_embedOp_single_of_isSupportedOn_singleton
       ext x y
       exact Fin.elim0 (x e₀)
     rw [hzero]
-    exact Submodule.zero_mem _
+    exact zero_mem _
   · let e : Fin 1 → E := fun _ ↦ e₀
     let S : Finset E := {e₀}
     let σ₀ : E → Fin q := fun _ ↦ ⟨0, Nat.pos_of_ne_zero hq⟩
@@ -190,16 +192,16 @@ private theorem mem_span_embedOp_single_of_isSupportedOn_singleton
     rw [hX]
     change Φ X ∈ Submodule.span ℂ (Set.range N)
     rw [Matrix.matrix_eq_sum_single X, map_sum]
-    apply Submodule.sum_mem
+    apply sum_mem
     intro i _
     rw [map_sum]
-    apply Submodule.sum_mem
+    apply sum_mem
     intro j _
     have hsingle : Matrix.single i j (X i j) =
         (X i j) • Matrix.single i j (1 : ℂ) := by
       simp
     rw [hsingle, map_smul]
-    apply Submodule.smul_mem
+    apply SMulMemClass.smul_mem
     apply Submodule.subset_span
     refine ⟨finProdFinEquiv (i 0, j 0), ?_⟩
     have hi : (fun _ : Fin 1 ↦ i 0) = i :=
@@ -315,8 +317,8 @@ private theorem exists_threeSplit_two_window_late_exterior
     HM (Sum.inr 0) = 0 → HM (Sum.inr 2) = 0 →
     HL₀ (Sum.inr 1) = 0 → HR₀ (Sum.inr 1) = 0 →
     ∀ (PL PR : Matrix (V → Fin q) (V → Fin q) ℂ),
-      PL ∈ supportedOperators q (T : Set V) →
-      PR ∈ supportedOperators q ((T ∪ E)ᶜ : Set V) →
+      PL ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) T →
+      PR ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ((T ∪ E)ᶜ : Finset V) →
       let F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
           Matrix (V → Fin q) (V → Fin q) ℂ :=
         Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
@@ -339,14 +341,11 @@ private theorem exists_threeSplit_two_window_late_exterior
   classical
   intro g F₀ hlocal hMleft hMright hLmid hRmid PL PR hPL hPR F
   obtain ⟨BL, hBL⟩ := exists_threeSplit_eq_kronecker_one_kronecker_one
-    (ι := V) (q := q) (T := T) (E := E) (D := (T : Set V)) (A := PL)
-    hTE (Set.Subset.rfl) hPL
+    (ι := V) (q := q) (T := T) (E := E) (D := T) (A := PL)
+    hTE (Finset.Subset.refl T) hPL
   obtain ⟨BR, hBR⟩ := exists_threeSplit_eq_one_kronecker
     (ι := V) (q := q) (T := T) (E := E)
-    (D := ((T ∪ E)ᶜ : Set V)) (A := PR) hTE
-    (by simpa only [Finset.coe_compl, Finset.coe_union] using
-      (Set.Subset.rfl : ((T : Set V) ∪ (E : Set V))ᶜ ⊆
-        ((T : Set V) ∪ (E : Set V))ᶜ)) hPR
+    (D := (T ∪ E)ᶜ) (A := PR) hTE (Finset.Subset.refl _) hPR
   have hF₀mid : F₀ (Sum.inr 1) = Pmid := by
     change (if (1 : Fin 3) = 1 then Pmid else 0) = Pmid
     exact ite_eq_left rfl
@@ -567,32 +566,33 @@ theorem exists_physical_selected_window_fixed_middle_data
   have hF₀right : F₀ (Sum.inr 2) = 0 := by
     change (if (2 : Fin 3) = 1 then Pmid else 0) = 0
     exact ite_eq_right (by decide)
-  have hFleft : ∀ r, F₀ (Sum.inl (Sum.inl r)) ∈ supportedOperators q
-      (interval L (a + r.val) (a + r.val + 2) : Set (Fin L)) := by
+  have hFleft : ∀ r, F₀ (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L)) := by
     intro r
-    change WL r ∈ supportedOperators q
-      (interval L (a + r.val) (a + r.val + 2) : Set (Fin L))
-    exact mem_supportedOperators_of_isSupportedOn (hleft r)
-  have hFright : ∀ r, F₀ (Sum.inl (Sum.inr r)) ∈ supportedOperators q
-      (interval L (b + r.val) (b + r.val + 2) : Set (Fin L)) := by
+    change WL r ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (a + r.val) (a + r.val + 2) : Finset (Fin L))
+    exact (hleft r)
+  have hFright : ∀ r, F₀ (Sum.inl (Sum.inr r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L)) := by
     intro r
-    change WR r ∈ supportedOperators q
-      (interval L (b + r.val) (b + r.val + 2) : Set (Fin L))
-    exact mem_supportedOperators_of_isSupportedOn (hright r)
-  have hFleftBulk : F₀ (Sum.inr 0) ∈ supportedOperators q
-      (interval L 0 (a + 1) : Set (Fin L)) := by
+    change WR r ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (b + r.val) (b + r.val + 2) : Finset (Fin L))
+    exact (hright r)
+  have hFleftBulk : F₀ (Sum.inr 0) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L 0 (a + 1) : Finset (Fin L)) := by
     rw [hF₀left]
-    exact Submodule.zero_mem _
-  have hPmid : Pmid ∈ supportedOperators q (K : Set (Fin L)) :=
-    TNLean.Lattice.siteLift_mem_supportedOperators K M
-  have hFmiddleBulk : F₀ (Sum.inr 1) ∈ supportedOperators q
-      (interval L (a + 2 * ℓ) (b + 1) : Set (Fin L)) := by
+    exact zero_mem _
+  have hPmid : Pmid ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) K := by
+    rw [show Pmid = _ from (QuantumCircuit.place_eq_embedOp K M).symm]
+    exact ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _) M
+  have hFmiddleBulk : F₀ (Sum.inr 1) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (a + 2 * ℓ) (b + 1) : Finset (Fin L)) := by
     rw [hF₀middle]
     exact hPmid
-  have hFrightBulk : F₀ (Sum.inr 2) ∈ supportedOperators q
-      (interval L (b + 2 * ℓ) L : Set (Fin L)) := by
+  have hFrightBulk : F₀ (Sum.inr 2) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
+      (interval L (b + 2 * ℓ) L : Finset (Fin L)) := by
     rw [hF₀right]
-    exact Submodule.zero_mem _
+    exact zero_mem _
   obtain ⟨HL₀, HM, HR₀, UL, VR, hlocal₀, hUL₀, hVR₀, _hULrank, _hVRrank,
       hMleftBulk, hMrightBulk, hLmiddleZero, hRmiddleZero, hLzero, hRzero, hLsupp, hRsupp⟩ :=
     exists_threeSplit_two_window_factors_with_collars F₀ hFleft hFright hFleftBulk hFmiddleBulk
@@ -624,13 +624,13 @@ theorem exists_physical_selected_window_fixed_middle_data
       Entropy.IsSupportedOn (n := fun _ : E ↦ q) (N e₀ z) C := by
     have hinj : Function.Injective (fun _ : Fin 1 ↦ e₀) :=
       fun _ _ _ ↦ Subsingleton.elim _ _
-    have hmem : N e₀ z ∈ supportedOperators q (({e₀} : Finset E) : Set E) := by
-      simpa only [N, Set.range_const, Finset.coe_singleton] using
+    have hmem : N e₀ z ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ({e₀} : Finset E) := by
+      simpa only [N, Finset.univ_nonempty, Finset.image_const] using
         QuantumCircuit.embedOp_mem_supportedOperators hinj
           (Matrix.single
             (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).1)
             (fun _ : Fin 1 ↦ (finProdFinEquiv.symm z).2) (1 : ℂ))
-    exact (isSupportedOn_of_mem_supportedOperators (S := {e₀}) hmem).mono
+    exact Entropy.IsSupportedOn.mono hmem
       (Finset.singleton_subset_iff.mpr he₀)
   have hweighted : ∀ z : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) → ℂ,
       ∃ Kz : Matrix (E → Fin q) (E → Fin q) ℂ,
@@ -644,16 +644,15 @@ theorem exists_physical_selected_window_fixed_middle_data
   refine ⟨eL, eR, HM, UL, VR, AL, BR, heL, heR, hmiddle, hUL, hVR,
     hAL, hBR, hNsupport eL heLC, hNsupport eR heRC, hweighted, ?_⟩
   intro PL PR hPL hPR F
-  have hPLT : PL ∈ supportedOperators q (T : Set (Fin L)) :=
-    supportedOperators_mono
-      (Finset.coe_subset.mpr (interval_mono (by omega) (by omega)))
-      (mem_supportedOperators_of_isSupportedOn hPL)
-  have hPRU : PR ∈ supportedOperators q ((T ∪ E)ᶜ : Set (Fin L)) := by
-    apply supportedOperators_mono ?_ (mem_supportedOperators_of_isSupportedOn hPR)
+  have hPLT : PL ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) T :=
+    ManyBody.supportedOperators_mono
+      (interval_mono (by omega) (by omega))
+      hPL
+  have hPRU : PR ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) ((T ∪ E)ᶜ : Finset (Fin L)) := by
+    apply ManyBody.supportedOperators_mono ?_ hPR
     intro x hx
     have hx' := mem_interval.mp hx
-    change ¬(x ∈ T ∨ x ∈ E)
-    simp only [T, E, mem_interval]
+    simp only [Finset.mem_compl, Finset.mem_union, T, E, mem_interval]
     have hp := p.isLt
     have hs := s.isLt
     omega

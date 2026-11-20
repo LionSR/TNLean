@@ -35,6 +35,8 @@ not a bondwise Fundamental Theorem.
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (Edge)
+
 open scoped Matrix ComplexOrder
 
 namespace TNLean.PEPS
@@ -130,7 +132,7 @@ theorem canonical_regionParentHamiltonian_eq_of_regionGroundSpace_eq [Fintype ι
   unfold regionParentHamiltonian
   apply Finset.sum_congr rfl
   intro i _
-  exact congrArg (regionLocalTerm (R i))
+  exact congrArg (ManyBody.place (X := fun _ ↦ Fin _) (R i))
     (canonicalRegionParentInteraction_eq_of_regionGroundSpace_eq (hR i))
 
 variable {G H : Type*} [Group G] [Fintype G] [Group H] [Fintype H]

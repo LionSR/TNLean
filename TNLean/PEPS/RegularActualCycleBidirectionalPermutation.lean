@@ -16,6 +16,8 @@ lines 2271–2305. This is an auxiliary chosen-tree statement, not the
 complete prescribed braid or a parent-Hamiltonian assertion.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS
@@ -43,7 +45,7 @@ theorem exists_unitary_regularActualCycleBidirectionalPermutation {d : ℕ}
     (hφ : ∀ z x, φ (fun e => x * z e * x⁻¹) = fun e => x * φ z e * x⁻¹) :
     ∃ W : Matrix ({v : V // v ∈ R} → Fin d) ({v : V // v ∈ R} → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup ({v : V // v ∈ R} → Fin d) ℂ ∧
-      regionLocalTerm R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
+      ManyBody.place (X := fun _ ↦ Fin _) R W ∈ Matrix.unitaryGroup (V → Fin d) ℂ ∧
       (∀ (reverse : Bool) (u : Edge Γ → G)
           (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G),
         (if reverse then W.conjTranspose else W) *ᵥ
@@ -53,7 +55,8 @@ theorem exists_unitary_regularActualCycleBidirectionalPermutation {d : ℕ}
           (regularActualCycleDirectionalPermutation R T hT htree o φ reverse u))) R
           (fun f => Fintype.equivFin G (θ f))) ∧
       ∀ (reverse : Bool) (u : Edge Γ → G),
-        (if reverse then (regionLocalTerm R W).conjTranspose else regionLocalTerm R W) *ᵥ
+        (if reverse then (ManyBody.place (X := fun _ ↦ Fin _) R W).conjTranspose else
+            ManyBody.place (X := fun _ ↦ Fin _) R W) *ᵥ
           stateCoeff (groupBondTensor (regularTwistedSite a u)) =
         stateCoeff (groupBondTensor (regularTwistedSite a
           (regularActualCycleDirectionalPermutation R T hT htree o φ reverse u))) := by

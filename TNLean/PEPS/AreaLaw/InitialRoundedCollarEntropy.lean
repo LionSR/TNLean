@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.InitialWeakRectangleShellEntropy
 import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.RoundedScalePower
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Initial entropy estimate for the rounded bootstrap collar
@@ -28,7 +29,11 @@ The numerical estimates are independent formalizations; no upstream Lean proof
 text is reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -41,9 +46,11 @@ theorem exists_regionalEntropy_initial_rounded_collar_le_rpow
     ∃ C e₀ : ℝ, 0 ≤ C ∧ 0 < e₀ ∧ e₀ < 1 ∧
       ∀ C₂ : ℝ, 0 < C₂ → ∃ N : ℕ, 1 ≤ N ∧
         ∀ D₀ : ℕ, 2 * R + 10 < D₀ →
-          ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+          ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
             (E₀ : ℝ) (Ω : StateSpace Λ q),
-            IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+            ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+            groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
               N ≤ Q.size →
               let η := 1 - Scan.BootstrapParameters.ell e₀
@@ -60,7 +67,7 @@ theorem exists_regionalEntropy_initial_rounded_collar_le_rpow
   obtain ⟨_, _, _, hℓ₁, _⟩ := Scan.BootstrapParameters.parameter_bounds he₀ he₀₁
   obtain ⟨N, hN₁, hN⟩ := Scan.exists_bootstrap_collar_clearance hC₂ he₀ he₀₁
   refine ⟨N, hN₁, ?_⟩
-  intro D₀ hD₀ Λ h E₀ Ω hgs A Q hsafe hs
+  intro D₀ hD₀ Λ h hh hhJ E₀ Ω hΩ hgap hspan A Q hsafe hs
   dsimp only
   intro j hj
   have hs₁ : 1 ≤ Q.size := hN₁.trans hs
@@ -78,7 +85,7 @@ theorem exists_regionalEntropy_initial_rounded_collar_le_rpow
     _ ≤ C * (24 + 64 / ((2 : ℝ) ^ e₀ - 1)) * (Q.size : ℝ) *
         (Nat.floor ((Nat.ceil (C₂ * (Q.size : ℝ)) : ℝ) ^
           (1 - Scan.BootstrapParameters.ell e₀)) : ℝ) ^ e₀ :=
-      hshell D₀ hD₀ Λ h E₀ Ω hgs A Q hsafe j _ hj hL hbudget
+      hshell D₀ hD₀ Λ h hh hhJ E₀ Ω hΩ hgap hspan A Q hsafe j _ hj hL hbudget
     _ ≤ C * (24 + 64 / ((2 : ℝ) ^ e₀ - 1)) * (Q.size : ℝ) *
         ((C₂ + 1) ^ ((1 - Scan.BootstrapParameters.ell e₀) * e₀) *
           (Q.size : ℝ) ^ ((1 - Scan.BootstrapParameters.ell e₀) * e₀)) :=

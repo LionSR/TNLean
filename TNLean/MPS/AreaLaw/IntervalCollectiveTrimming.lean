@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.EntropyScaling.CutReducedState
 import QICLean.Entropy.RegionalViability
 import QICLean.Analysis.ViableSubspaceBootstrap
@@ -22,6 +22,8 @@ arXiv:1602.08828v2, `def:trimming`, `lem:trimming`, lines 646–697,
 and the reference-space argument following `t:alg1`, lines 1801–1805.
 No sampled tree or recursive merge construction is asserted here.
 -/
+
+open ManyBody (interval interval_mono mem_interval)
 
 open Matrix
 open scoped BigOperators InnerProductSpace TensorProduct ComplexOrder MatrixOrder

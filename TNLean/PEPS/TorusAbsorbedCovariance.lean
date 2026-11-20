@@ -35,6 +35,8 @@ the class with the orientation of the edge convention accounted for.
   of `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean
@@ -78,11 +80,11 @@ translation: pushing an edge through `(a, b)` and then `(c, g)` lands on its `(a
 translate. -/
 theorem translateEdge_translateEdge (a c : ZMod width) (b g : ZMod height)
     (e : Edge (torusGraph width height)) :
-    Edge.map (translate c g) (Edge.map (translate a b) e) =
-      Edge.map (translate (a + c) (b + g)) e := by
-  apply Edge.ofAdj_eq_of_endpoints
-  rcases Edge.map_endpoints (translate (a + c) (b + g)) e with ⟨o1, o2⟩ | ⟨o1, o2⟩ <;>
-    rcases Edge.map_endpoints (translate a b) e with ⟨p1, p2⟩ | ⟨p1, p2⟩
+    ManyBody.Edge.map (translate c g) (ManyBody.Edge.map (translate a b) e) =
+      ManyBody.Edge.map (translate (a + c) (b + g)) e := by
+  apply ManyBody.Edge.ofAdj_eq_of_endpoints
+  rcases ManyBody.Edge.map_endpoints (translate (a + c) (b + g)) e with ⟨o1, o2⟩ | ⟨o1, o2⟩ <;>
+    rcases ManyBody.Edge.map_endpoints (translate a b) e with ⟨p1, p2⟩ | ⟨p1, p2⟩
   · exact Or.inl ⟨by rw [p1, o1]; apply Prod.ext <;> simp <;> ring,
       by rw [p2, o2]; apply Prod.ext <;> simp <;> ring⟩
   · exact Or.inr ⟨by rw [p1, o2]; apply Prod.ext <;> simp <;> ring,
@@ -102,8 +104,8 @@ family with any other translation reaching the same edge. -/
 /-- For `2 < width`, the translation carrying a right edge to a given edge is unique. -/
 theorem translate_param_unique_right (hw : 2 < width) (p : TorusVertex width height)
     {a a' : ZMod width} {b b' : ZMod height}
-    (h : Edge.map (translate a b) (torusRightEdge p) =
-      Edge.map (translate a' b') (torusRightEdge p)) :
+    (h : ManyBody.Edge.map (translate a b) (torusRightEdge p) =
+      ManyBody.Edge.map (translate a' b') (torusRightEdge p)) :
     a = a' ∧ b = b' := by
   rw [← translateEdge_eq_map, ← translateEdge_eq_map, translateEdge_torusRightEdge,
     translateEdge_torusRightEdge] at h
@@ -114,8 +116,8 @@ theorem translate_param_unique_right (hw : 2 < width) (p : TorusVertex width hei
 /-- For `2 < height`, the translation carrying an up edge to a given edge is unique. -/
 theorem translate_param_unique_up (hh : 2 < height) (p : TorusVertex width height)
     {a a' : ZMod width} {b b' : ZMod height}
-    (h : Edge.map (translate a b) (torusUpEdge p) =
-      Edge.map (translate a' b') (torusUpEdge p)) :
+    (h : ManyBody.Edge.map (translate a b) (torusUpEdge p) =
+      ManyBody.Edge.map (translate a' b') (torusUpEdge p)) :
     a = a' ∧ b = b' := by
   rw [← translateEdge_eq_map, ← translateEdge_eq_map, translateEdge_torusUpEdge,
     translateEdge_torusUpEdge] at h
@@ -135,7 +137,7 @@ theorem boundaryEdgeMap_translate_fst_or
     (boundaryEdgeMap (translate a b) R f).1.1.1 = translate a b f.1.1.1 ∨
       (boundaryEdgeMap (translate a b) R f).1.1.1 = translate a b f.1.1.2 := by
   rw [boundaryEdgeMap_coe]
-  rcases Edge.map_endpoints (translate a b) f.1 with ⟨h1, _⟩ | ⟨h1, _⟩
+  rcases ManyBody.Edge.map_endpoints (translate a b) f.1 with ⟨h1, _⟩ | ⟨h1, _⟩
   · exact Or.inl h1
   · exact Or.inr h1
 
@@ -299,9 +301,9 @@ Source: arXiv:1804.04964, Section 3, proof of Theorem 3, line 1498 of
 def IsTranslationCovariantGaugeFamily (B : Tensor (torusGraph width height) d)
     (X : (e : Edge (torusGraph width height)) → GL (Fin (B.bondDim e)) ℂ) : Prop :=
   ∀ (a : ZMod width) (b : ZMod height) (e : Edge (torusGraph width height))
-    (h : B.bondDim e = B.bondDim (Edge.map (translate a b) e)),
-    X (Edge.map (translate a b) e) =
-      if (Edge.map (translate a b) e).1.1 = translate a b e.1.1 then glReindex h (X e)
+    (h : B.bondDim e = B.bondDim (ManyBody.Edge.map (translate a b) e)),
+    X (ManyBody.Edge.map (translate a b) e) =
+      if (ManyBody.Edge.map (translate a b) e).1.1 = translate a b e.1.1 then glReindex h (X e)
       else glReindex h ((glTranspose (X e))⁻¹)
 
 end PEPS

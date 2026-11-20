@@ -46,6 +46,8 @@ single-vertex realization (which needs `IsVertexInjective` through the spanning
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean
@@ -64,8 +66,8 @@ weights. The inner-sum realization `region_innerSum_eq_realized`
 in-region endpoint operator of `N.transpose`, applied to the second tensor's region
 weight vector at the reindexed boundary configuration, evaluated at the endpoint
 leg. This is the second-tensor counterpart of the v-side row `vSideRow`
-(`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`), which reads the *first* tensor's operator on
-the same weight vectors; matching the two rows is the coefficient transfer. -/
+(`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`), which reads the *first* tensor's operator
+on the same weight vectors; matching the two rows is the coefficient transfer. -/
 
 /-- **The complement row as the second tensor's in-region endpoint operator.** At a
 complement boundary configuration `w` of `univ \ R`, the explicit complement row of
@@ -145,8 +147,8 @@ and the explicit complement row `regionComplementRow B R f N σ` (read by
 `regionComplementRow_eq_regionInsertionOp` as the second tensor's operator on the
 same weight vectors). The hypothesis matches them, so `hCB` injectivity forces the
 coefficients equal through `regionInsertedCoeff_eq_of_complementRow_eq`
-(`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`). The argument is region-injective: it inverts
-only the second tensor's complement block, never the single vertex `v`.
+(`TNLean.PEPS.RegionBlock.RecoveryCoefficientTransfer`). The argument is region-injective: it
+inverts only the second tensor's complement block, never the single vertex `v`.
 
 Source: arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254--582 of
 `Papers/1804.04964/paper_normal.tex`. -/

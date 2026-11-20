@@ -30,7 +30,7 @@ namespace MPOTensor.CaseIIAbsorptionCounterexample
 open Complex (invSqrtTwo invSqrtTwo_ne_zero invSqrtTwo_mul_self star_invSqrtTwo)
 
 private lemma norm_invSqrtTwo : ‖invSqrtTwo‖ = (Real.sqrt 2)⁻¹ := by
-  rw [invSqrtTwo, norm_inv, Complex.norm_real, Real.norm_eq_abs,
+  rw [invSqrtTwo, Complex.invSqrt, norm_inv, Complex.norm_real, Real.norm_eq_abs,
     abs_of_pos (Real.sqrt_pos.2 (by norm_num))]
 
 /-- The first normal representative, supported on doubled symbols `(0,0)` and `(1,1)`,

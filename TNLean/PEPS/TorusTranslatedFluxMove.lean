@@ -34,6 +34,8 @@ unrestricted lattice scope is recorded in
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS
@@ -56,8 +58,8 @@ private def translatedFluxInsertionElement (v : X) (g : G) : G :=
 to the middle bond. Its ordered operator is inverted at the vertical seam.
 Source: SCP10, Theorem 6.16, lines 2271–2305. -/
 def torusTranslatedFluxAssignment (v : X) (extend : Bool) (g : G) (e : Edge Γₜ) : G :=
-  if e = Edge.ofAdj (torusGraph_adj_up v.1 v.2) ∨
-    (extend = true ∧ e = Edge.ofAdj (torusGraph_adj_up (v.1 + 1) v.2))
+  if e = ManyBody.Edge.ofAdj (torusGraph_adj_up v.1 v.2) ∨
+    (extend = true ∧ e = ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1 + 1) v.2))
   then translatedFluxInsertionElement v g else 1
 
 /-- The actual directed insertion is the derived tree-cycle assignment, using
@@ -90,8 +92,8 @@ theorem torusTranslatedFluxAssignment_up_transport (v : X) (extend : Bool) (g : 
     regularDirectedTransport (torusTranslatedFluxAssignment v extend g)
       (torusGraph_adj_up (v.1+1) v.2) = (if extend then g else 1) := by
   classical
-  have hne : Edge.ofAdj (torusGraph_adj_up (v.1+1) v.2) ≠
-      Edge.ofAdj (torusGraph_adj_up v.1 v.2) := by
+  have hne : ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1+1) v.2) ≠
+      ManyBody.Edge.ofAdj (torusGraph_adj_up v.1 v.2) := by
     intro h
     have hc : translatedTwoPlaquetteCycleBond v 1 = translatedTwoPlaquetteCycleBond v 0 := by
       apply Subtype.ext
@@ -104,8 +106,9 @@ theorem torusTranslatedFluxAssignment_up_transport (v : X) (extend : Bool) (g : 
   by_cases h : v.2.val < (v.2+1).val <;> cases extend <;> simp [h]
 
 private theorem horizontal_ne_vertical (x a : ZMod width) (y b : ZMod height) :
-    Edge.ofAdj (torusGraph_adj_right x y) ≠ Edge.ofAdj (torusGraph_adj_up a b) := by
-  apply Edge.ofAdj_ne_of_endpoint_coordinates (torusGraph_adj_right x y)
+    ManyBody.Edge.ofAdj (torusGraph_adj_right x y) ≠
+        ManyBody.Edge.ofAdj (torusGraph_adj_up a b) := by
+  apply ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates (torusGraph_adj_right x y)
     (torusGraph_adj_up a b) Prod.fst rfl
   by_cases hx : x = a
   · exact Or.inr (by rw [← hx]; simp)
@@ -136,12 +139,12 @@ theorem regularWalkHolonomy_torusTranslatedFluxAssignment
     exact htwo (add_left_cancel h')
   have hx₂₁ : v.1+1+1 ≠ v.1+1 := by simp
   have hV : regularDirectedTransport u (torusGraph_adj_up (v.1+1+1) v.2) = 1 := by
-    have h₀ : Edge.ofAdj (torusGraph_adj_up (v.1+1+1) v.2) ≠
-        Edge.ofAdj (torusGraph_adj_up v.1 v.2) :=
-      Edge.ofAdj_ne_of_endpoint_coordinates _ _ Prod.fst rfl (Or.inl hx₂)
-    have h₁ : Edge.ofAdj (torusGraph_adj_up (v.1+1+1) v.2) ≠
-        Edge.ofAdj (torusGraph_adj_up (v.1+1) v.2) :=
-      Edge.ofAdj_ne_of_endpoint_coordinates _ _ Prod.fst rfl (Or.inl hx₂₁)
+    have h₀ : ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1+1+1) v.2) ≠
+        ManyBody.Edge.ofAdj (torusGraph_adj_up v.1 v.2) :=
+      ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates _ _ Prod.fst rfl (Or.inl hx₂)
+    have h₁ : ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1+1+1) v.2) ≠
+        ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1+1) v.2) :=
+      ManyBody.Edge.ofAdj_ne_of_endpoint_coordinates _ _ Prod.fst rfl (Or.inl hx₂₁)
     simp [u, regularDirectedTransport, torusTranslatedFluxAssignment, h₀, h₁]
   obtain ⟨hL,hM⟩ := torusTranslatedFluxAssignment_up_transport v extend g
   change regularDirectedTransport u (torusGraph_adj_up v.1 v.2) = g at hL
@@ -201,9 +204,9 @@ theorem IsGIsometric.exists_unitary_torusTranslatedGlobalFluxMove
     ∃ W : Matrix (RV v → Fin d)
         (RV v → Fin d) ℂ,
       W ∈ Matrix.unitaryGroup (RV v → Fin d) ℂ ∧
-      regionLocalTerm (R v) W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) (R v) W ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       ∀ (g : G) (u : Edge Γₜ → G),
-        regionLocalTerm (R v) W *ᵥ stateCoeff
+        ManyBody.place («X» := fun _ ↦ Fin _) (R v) W *ᵥ stateCoeff
           (groupBondTensor (regularTwistedSite
             (torusIncidentSite (width := width) (height := height) a)
             (regularRegionBondExtension (R v)

@@ -197,8 +197,11 @@ theorem norm_integral_sub_timeMesh_sum_le
       2 * Real.exp (-T ^ 2 / (2 * (h : ℝ))) := by
     have hbound := norm_integral_sub_setIntegral_le (s := Set.Icc (-T) T)
       (Filter.Eventually.of_forall hnorm) measurableSet_Icc hf
-    simpa only [mul_one] using hbound.trans
-      (by simpa only [mul_one] using GaussianFilter.measure_compl_Icc_le h hT)
+    have htail2 : (gaussianReal 0 h).real (Set.Icc (-T) T)ᶜ ≤
+        2 * Real.exp (-T ^ 2 / (2 * (h : ℝ))) :=
+      (GaussianFilter.measure_compl_Icc_le h hT).trans
+        (le_mul_of_one_le_left (Real.exp_pos _).le one_le_two)
+    simpa only [mul_one] using hbound.trans (by simpa only [mul_one] using htail2)
   exact (norm_sub_le_norm_sub_add_norm_sub _
     (∫ t in Set.Icc (-T) T, f t ∂gaussianReal 0 h) _).trans
       (add_le_add htail (norm_setIntegral_sub_timeMesh_sum_le h hT hdelta hM f hf hLip))

@@ -8,10 +8,11 @@ import Mathlib.Order.Interval.Finset.Nat
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum
 import QICLean.Analysis.GroundEnergyBounds
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import TNLean.Lattice.ZeroEntropy
-import TNLean.MPS.AreaLaw.Basic
-
+import QICLean.ManyBody.Sites.Lattice.Chain
 /-!
 # Five consecutive regions and their original bonds
 
@@ -22,6 +23,8 @@ unit-term budgets.
 These results support ALVV, arXiv:1602.08828v2,
 `def:hard-trunc`, lines 873–886, and Theorem `t:ais`, lines 1010–1024.
 -/
+
+open ManyBody (interval mem_interval)
 
 section
 
@@ -81,7 +84,8 @@ theorem isSupportedOn_sum_internal_bonds (L q lo hi : ℕ)
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
       (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
         (fun j ↦ lo ≤ j.val ∧ j.val + 1 < hi), h i) (interval L lo hi) := by
-  exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun i hiI ↦
+  change _ ∈ ManyBody.supportedOperators _ _
+  exact sum_mem fun i hiI ↦
     (hs i).mono (internal_bond_support_subset hiI)
 end TNLean.MPS.AreaLaw
 
@@ -128,12 +132,10 @@ theorem pairwise_commute_sum_internal_consecutive_regions
         (∑ r ∈ (Finset.univ : Finset (Fin (L - 1))).filter
           (fun r ↦ k j.castSucc ≤ r.val ∧ r.val + 1 < k j.succ), h r) := by
   intro i j hij
-  apply QuantumCircuit.commute_of_mem_supportedOperators
-    (Finset.disjoint_coe.mpr (pairwise_disjoint_consecutive_intervals k hk hij))
-  · exact QuantumCircuit.mem_supportedOperators_of_isSupportedOn
-      (isSupportedOn_sum_internal_bonds L q (k i.castSucc) (k i.succ) h hs)
-  · exact QuantumCircuit.mem_supportedOperators_of_isSupportedOn
-      (isSupportedOn_sum_internal_bonds L q (k j.castSucc) (k j.succ) h hs)
+  refine ManyBody.commute_of_mem_supportedOperators_of_disjoint ?_ ?_
+    (pairwise_disjoint_consecutive_intervals k hk hij)
+  · exact (isSupportedOn_sum_internal_bonds L q (k i.castSucc) (k i.succ) h hs)
+  · exact (isSupportedOn_sum_internal_bonds L q (k j.castSucc) (k j.succ) h hs)
 end TNLean.MPS.AreaLaw
 end
 end

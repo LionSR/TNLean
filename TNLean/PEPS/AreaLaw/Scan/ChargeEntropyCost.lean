@@ -28,6 +28,8 @@ and 442–451, at `openai/math@adc7f124`.
 
 open TNLean.Lattice
 
+open ManyBody (planeDomainGraph)
+
 namespace TNLean.PEPS.AreaLaw.Scan
 
 open TensorPower TensorPower.ReplicaTransport
@@ -131,7 +133,7 @@ designated splitting incidence with coefficient `c / (nD)`, where
 This is a pointwise entropy inequality, before coherent or Fourier integration. -/
 theorem good_designatedEntropyCost_le_expected_chargeEta_domainGraph
     {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = planeDomainGraph Λ)
     (hdepth : S.depth = fun x => ambientDepth T hT x.val) {k L μ : ℕ}
     (h : History S.K S.m S.M k) (n : Site Λ ⊕ Bool → ℕ)
     (θ : EuclideanSpace ℂ (SiteConfig n))

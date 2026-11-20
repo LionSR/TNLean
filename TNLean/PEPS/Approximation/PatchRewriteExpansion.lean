@@ -124,20 +124,23 @@ theorem card_patchTags_le {D : ℕ} :
 of every entry of the list. The selected square of a tag `(j, ℓ)` is `D_j`, and that of the
 identity tag of a patch with empty outer sample is empty. Since `s` chooses a term for every
 position of the list, a patch listed twice may carry two different terms. -/
-def patchSquares : (l : List (SquarePatch pos q)) → PatchTags l → Set ι
+def patchSquares : (l : List (SquarePatch pos q)) → PatchTags l → Finset ι
   | [], _ => ∅
-  | p :: l, s => (p.tagSample s.1 : Set ι) ∪ patchSquares l s.2
+  | p :: l, s => p.tagSample s.1 ∪ patchSquares l s.2
 
 theorem innerUnion_subset_patchSquares :
     (l : List (SquarePatch pos q)) → (s : PatchTags l) → innerUnion l ⊆ patchSquares l s
   | [], _ => by
-    rintro x ⟨p, hp, -⟩
+    intro x hx
+    obtain ⟨p, hp, -⟩ := mem_innerUnion.mp hx
     exact absurd hp List.not_mem_nil
   | p :: l, s => by
-    rintro x ⟨p', hp', hx⟩
+    intro x hx'
+    obtain ⟨p', hp', hx⟩ := mem_innerUnion.mp hx'
     rcases List.mem_cons.mp hp' with rfl | hp'
-    · exact Or.inl (p'.inner_subset_tagSample s.1 hx)
-    · exact Or.inr (innerUnion_subset_patchSquares l s.2 ⟨p', hp', hx⟩)
+    · exact Finset.mem_union_left _ (p'.inner_subset_tagSample s.1 hx)
+    · exact Finset.mem_union_right _
+        (innerUnion_subset_patchSquares l s.2 (mem_innerUnion.mpr ⟨p', hp', hx⟩))
 
 variable {Party : Type*}
 
@@ -155,28 +158,30 @@ theorem card_tagSpace_le {D : ℕ} :
 
 /-- The union of the selected squares of a list of holes, for a tag `t` of every entry of the
 list. -/
-def holeSquares : (l : List (Hole pos q Party)) → TagSpace l → Set ι
+def holeSquares : (l : List (Hole pos q Party)) → TagSpace l → Finset ι
   | [], _ => ∅
-  | h :: l, t => (h.patch.tagSample t.1 : Set ι) ∪ holeSquares l t.2
+  | h :: l, t => h.patch.tagSample t.1 ∪ holeSquares l t.2
 
 theorem inner_subset_holeSquares {h : Hole pos q Party} :
     (l : List (Hole pos q Party)) → h ∈ l → (t : TagSpace l) →
-      (h.patch.inner : Set ι) ⊆ holeSquares l t
+      h.patch.inner ⊆ holeSquares l t
   | [], hh, _ => absurd hh List.not_mem_nil
   | h' :: l, hh, t => by
     rcases List.mem_cons.mp hh with rfl | hh
-    · exact fun x hx => Or.inl (h.patch.inner_subset_tagSample t.1 hx)
-    · exact fun x hx => Or.inr (inner_subset_holeSquares l hh t.2 hx)
+    · exact fun x hx => Finset.mem_union_left _ (h.patch.inner_subset_tagSample t.1 hx)
+    · exact fun x hx => Finset.mem_union_right _ (inner_subset_holeSquares l hh t.2 hx)
 
 theorem holeSquares_subset_footprint :
     (l : List (Hole pos q Party)) → (t : TagSpace l) →
-      holeSquares l t ⊆ {x | ∃ h ∈ l, x ∈ h.patch.outer}
-  | [], _ => fun x hx => absurd hx (Set.notMem_empty x)
+      holeSquares l t ⊆ Finset.univ.filter fun x ↦ ∃ h ∈ l, x ∈ h.patch.outer
+  | [], _ => fun x hx => absurd hx (Finset.notMem_empty x)
   | h :: l, t => by
-    rintro x (hx | hx)
-    · exact ⟨h, List.mem_cons_self, h.patch.tagSample_subset_outer t.1 hx⟩
-    · obtain ⟨h', hh', hx'⟩ := holeSquares_subset_footprint l t.2 hx
-      exact ⟨h', List.mem_cons_of_mem _ hh', hx'⟩
+    intro x hx
+    rw [Finset.mem_filter]
+    rcases Finset.mem_union.mp hx with hx | hx
+    · exact ⟨Finset.mem_univ _, h, List.mem_cons_self, h.patch.tagSample_subset_outer t.1 hx⟩
+    · obtain ⟨-, h', hh', hx'⟩ := Finset.mem_filter.mp (holeSquares_subset_footprint l t.2 hx)
+      exact ⟨Finset.mem_univ _, h', List.mem_cons_of_mem _ hh', hx'⟩
 
 /-- The entries of `stack B * X * (stack A)ᴴ`. -/
 theorem stack_mul_mul_stack_conjTranspose_apply {S T m : Type*} [Fintype m]
@@ -298,7 +303,7 @@ Polynomial-PEPS manuscript, `05-frames.tex`, lines 285–288. -/
 theorem oldSample_subset_patchSquares (hR : R.Conditions) (s : PatchTags R.patches)
     (b : TagSpace R.oldAffected) :
     holeSquares R.oldAffected b ⊆ patchSquares R.patches s := fun x hx => by
-  obtain ⟨h, hh, hxh⟩ := holeSquares_subset_footprint _ b hx
+  obtain ⟨-, h, hh, hxh⟩ := Finset.mem_filter.mp (holeSquares_subset_footprint _ b hx)
   exact innerUnion_subset_patchSquares _ s
     (hR.affected_subset h (List.mem_append_left _ hh) hxh)
 
@@ -310,7 +315,7 @@ Polynomial-PEPS manuscript, `05-frames.tex`, lines 288–291. -/
 theorem newSample_subset_patchSquares (hR : R.Conditions) (s : PatchTags R.patches)
     (a : TagSpace R.newAffected) :
     holeSquares R.newAffected a ⊆ patchSquares R.patches s := fun x hx => by
-  obtain ⟨h, hh, hxh⟩ := holeSquares_subset_footprint _ a hx
+  obtain ⟨-, h, hh, hxh⟩ := Finset.mem_filter.mp (holeSquares_subset_footprint _ a hx)
   exact innerUnion_subset_patchSquares _ s
     (hR.affected_subset h (List.mem_append_right _ hh) hxh)
 
@@ -321,7 +326,7 @@ Polynomial-PEPS manuscript, `05-frames.tex`, lines 282–300. -/
 theorem exists_mem_inner_of_notMem_untouched {a : List (Hole pos q Party)} {x : ι}
     (hx : x ∉ R.untouchedFootprint) (hH : x ∈ innerUnion ((R.untouched ++ a).map Hole.patch)) :
     ∃ h ∈ a, x ∈ h.patch.inner := by
-  obtain ⟨p, hp, hxp⟩ := hH
+  obtain ⟨p, hp, hxp⟩ := mem_innerUnion.mp hH
   obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hp
   rcases List.mem_append.mp hh with hu | ha
   · exact absurd (subset_footprint (List.mem_map_of_mem hu) (h.patch.inner_subset_outer hxp)) hx
@@ -332,13 +337,13 @@ old hole: by condition (i) it is not in an untouched hole. -/
 theorem mem_oldAffected_inner_of_mem_innerHoles (hR : R.Conditions) {P : SquarePatch pos q}
     (hP : P ∈ R.patches) {x : ι} (hx : x ∈ P.outer) (hH : x ∈ R.oldFrame.innerHoles) :
     ∃ h ∈ R.oldAffected, x ∈ h.patch.inner :=
-  R.exists_mem_inner_of_notMem_untouched (Set.disjoint_left.mp (hR.patch_avoid P hP) hx) hH
+  R.exists_mem_inner_of_notMem_untouched (Finset.disjoint_left.mp (hR.patch_avoid P hP) hx) hH
 
 /-- The new-frame analogue of `mem_oldAffected_inner_of_mem_innerHoles`. -/
 theorem mem_newAffected_inner_of_mem_innerHoles (hR : R.Conditions) {P : SquarePatch pos q}
     (hP : P ∈ R.patches) {x : ι} (hx : x ∈ P.outer) (hH : x ∈ R.newFrame.innerHoles) :
     ∃ h ∈ R.newAffected, x ∈ h.patch.inner :=
-  R.exists_mem_inner_of_notMem_untouched (Set.disjoint_left.mp (hR.patch_avoid P hP) hx) hH
+  R.exists_mem_inner_of_notMem_untouched (Finset.disjoint_left.mp (hR.patch_avoid P hP) hx) hH
 
 /-- **Open inputs of a patch bra have at most two old owners.** Let `P` be a patch of the list
 and `j` any of its cylinder terms, so that `P.tagSample j` is the selected square of any entry of
@@ -393,8 +398,9 @@ theorem owners_mem_parties_of_mem_sample (hR : R.Conditions) {x : ι}
     R.ownerOld x ∈ R.parties ∧ R.ownerNew x ∈ R.parties := by
   refine hR.raw_owners_mem x ?_
   rcases hx with ⟨P, hP, j, hxj⟩ | ⟨h, hh, j, hxj⟩
-  · exact Or.inl (subset_footprint hP (P.sample_subset_outer j hxj))
-  · exact Or.inr (subset_footprint (List.mem_map_of_mem hh) (h.patch.sample_subset_outer j hxj))
+  · exact Finset.mem_union_left _ (subset_footprint hP (P.sample_subset_outer j hxj))
+  · exact Finset.mem_union_right _
+      (subset_footprint (List.mem_map_of_mem hh) (h.patch.sample_subset_outer j hxj))
 
 /-! ### The reference error of an approximation -/
 

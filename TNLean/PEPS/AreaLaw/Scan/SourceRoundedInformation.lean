@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.SourceFinalInformation
 import TNLean.PEPS.AreaLaw.Scan.FinalScannerAdmissibility
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Final physical information from the literal rounded scales
@@ -24,13 +25,19 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 Independently proved from the manuscript; no upstream Lean proof text reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 open Matrix TensorPower TensorPower.ReplicaTransport PermutationRepresentation Filter
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
   Matrix.Norms.L2Operator Topology
 
 open TNLean.Lattice
+
+open ManyBody (AdmissibleSupport planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
@@ -68,11 +75,13 @@ theorem sourceTarget_finalScale_mutualInformation_of_rounded_scales_explicit
     {Ctr : ℝ} (hCtrEq : Ctr = latticeTruncationRadiusConstant R J Δ (C_T + 1)) :
       ∀ Ce : ℝ, 0 ≤ Ce →
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceRoundedInformationThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr ct Cent eent Cen een ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -109,12 +118,13 @@ theorem sourceTarget_finalScale_mutualInformation_of_rounded_scales_explicit
     multiplicity hmultiplicity P hP hct htransport hCtrEq
   have hCtr : 0 < Ctr := by
     rw [hCtrEq]; exact latticeTruncationRadiusConstant_pos R hΔ (by positivity)
-  intro Ce hCe Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
+  intro Ce hCe Λ T _ hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix
   have hscales := finalScanner_admissibility_of_threshold_le hCtr.le
     ((le_max_right _ _).trans hn)
   simp only [roundedLogRadius, ← hmScale, ← hDScale, ← hKScale, ← hr] at hscales
-  exact hsource Ce hCe Λ T hT h S E₀ Ω hgs hgraph hanchor ((le_max_left _ _).trans hn) hr
+  exact hsource Ce hCe Λ T hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor
+      ((le_max_left _ _).trans hn) hr
     hmScale hDScale hKScale hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix
     hscales.1 hscales.2.1 hscales.2.2.1
 
@@ -133,11 +143,13 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales_of_th
     ∃ Ctr ct Cent eent Cen een : ℝ, 0 < Ctr ∧ 0 < ct ∧
       ∀ Ce : ℝ, 0 ≤ Ce →
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) →
           sourceRoundedInformationThreshold q R (Δ / positiveNormalization 1 (Δ / 2) J) C_T C₁
             multiplicity P Ce Ctr ct Cent eent Cen een ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
@@ -191,11 +203,13 @@ theorem exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales
     ∃ Ctr : ℝ, 0 < Ctr ∧
       ∀ Ce : ℝ, 0 ≤ Ce → ∃ C : ℝ, 0 < C ∧ ∃ N : ℕ, 2 ≤ N ∧
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
-          (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
+          (hT : T.Nonempty) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+              (_ : ∀ X, ‖h.term X‖ ≤ J)
           (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ)
           (Ω : StateSpace Λ q),
-          IsGappedGroundState Λ q h.operator E₀ Ω Δ →
-          S.graph = domainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
+          ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+          groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
+          S.graph = planeDomainGraph Λ → (∀ i, S.anchor i ∈ i.val) → N ≤ S.n →
           S.r₀ = ⌈Ctr * Real.log (S.n : ℝ) ^ 2⌉₊ →
           S.m = ⌊(S.n : ℝ) ^ (Exponents.scannerMu : ℝ)⌋₊ →
           S.D = ⌈(S.n : ℝ) ^ (Exponents.scannerKappa : ℝ)⌉₊ →

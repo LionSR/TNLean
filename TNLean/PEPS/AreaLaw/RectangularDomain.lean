@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.FiniteDomain
-import TNLean.PEPS.SquareLatticeGraph
+import QICLean.ManyBody.Sites.Lattice.Square
+import TNLean.PEPS.NormalBlocking
 
 /-!
 # Open rectangular domains in integer coordinates
@@ -24,7 +25,12 @@ both coordinates by one gives the convention of the polynomial-PEPS manuscript.
 Independently formalized from the manuscripts; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (Edge SquareLatticeVertex squareLatticeGraph squareLatticeGraph_adj
+  squareLatticeHorizontalNeighbor squareLatticeVerticalNeighbor squareLatticeSiteOrEdgeSupport)
+
 open TNLean.Lattice
+
+open ManyBody (IsAdmissibleSupport isAdmissibleSupport_pair_of_adj planeDomainGraph)
 
 namespace TNLean.PEPS.AreaLaw
 
@@ -59,11 +65,11 @@ noncomputable def rectangleSiteEquiv (width height : ℕ) :
 /-- The open rectangular graph is exactly the induced lattice graph on its domain.
 Source: area-law Corollary 1.2 and polynomial-PEPS Section 1. -/
 noncomputable def rectangleGraphIso (width height : ℕ) :
-    squareLatticeGraph width height ≃g domainGraph (rectangularDomain width height) where
+    squareLatticeGraph width height ≃g planeDomainGraph (rectangularDomain width height) where
   toEquiv := rectangleSiteEquiv width height
   map_rel_iff' := by
     intro v w
-    simp only [domainGraph, rectangleSiteEquiv_val, rectangleEmbedding,
+    simp only [planeDomainGraph, rectangleSiteEquiv_val, rectangleEmbedding,
       squareLatticeGraph_adj, squareLatticeHorizontalNeighbor, squareLatticeVerticalNeighbor]
     norm_cast
     simp only [Fin.ext_iff]
@@ -82,5 +88,23 @@ theorem isAdmissibleSupport_rectangle_pair_of_adj {width height : ℕ}
     IsAdmissibleSupport (rectangularDomain width height) 1
       {rectangleSiteEquiv width height v, rectangleSiteEquiv width height w} :=
   isAdmissibleSupport_pair_of_adj ((rectangleGraphIso width height).map_rel_iff.mpr h)
+
+/-- Distinct sites and edges of the square lattice have distinct supports: a site is the only
+label with a one-point support, and an edge is determined by its two endpoints. Source:
+polynomial-PEPS `eq:model`, one term per site and nearest-neighbor edge. -/
+theorem squareLatticeSiteOrEdgeSupport_injective (width height : ℕ) :
+    Function.Injective (squareLatticeSiteOrEdgeSupport (width := width) (height := height)) := by
+  have hcard (e : Edge (squareLatticeGraph width height)) :
+      ({e.1.1, e.1.2} : Finset _).card = 2 :=
+    Finset.card_pair ((squareLatticeGraph width height).ne_of_adj e.2.2)
+  rintro (v | e) (w | f) h <;> simp only [squareLatticeSiteOrEdgeSupport] at h
+  · rw [Finset.singleton_inj.mp h]
+  · simpa [← h] using hcard f
+  · simpa [h] using hcard e
+  · have hs : ({e.1.1, e.1.2} : Set _) = {f.1.1, f.1.2} := by
+      rw [← Finset.coe_pair, h, Finset.coe_pair]
+    exact congrArg Sum.inr
+      ((ManyBody.Edge.ofAdj_eq_of_endpoints e.2.2 e (Or.inl ⟨rfl, rfl⟩)).symm.trans
+        (ManyBody.Edge.ofAdj_eq_of_endpoints e.2.2 f (Set.pair_eq_pair_iff.mp hs)))
 
 end TNLean.PEPS.AreaLaw

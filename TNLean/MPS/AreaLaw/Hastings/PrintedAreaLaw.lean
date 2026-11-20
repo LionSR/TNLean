@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.Hastings.GappedAreaLaw
 import Mathlib.Analysis.Complex.ExponentialBounds
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # The entropy bound for an enlarged Lieb–Robinson length
@@ -21,9 +22,15 @@ Source: Hastings, arXiv:0705.2024v4, main theorem, eqs. `entbd` and `smd`,
 lines 124–144, and the doubling iteration, lines 197–231.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (interval ChainInteraction)
+
 namespace TNLean.MPS.AreaLaw.Hastings
 
 open Real
+
+open ManyBody (IsGapped groundSpace)
 
 /-- The remainder in the bootstrap entropy estimate is bounded uniformly in the
 local dimension. Hastings, arXiv:0705.2024v4, Lemma 2, lines 280–390. -/
@@ -149,8 +156,10 @@ is numerical. Hastings, arXiv:0705.2024v4, main theorem, eqs. `entbd` and `smd`,
 lines 124–144. The larger length absorbs the corrected fixed-length doubling exponent. -/
 theorem exists_regionEntropy_prefix_le_printed (R : ℕ) :
     ∃ c₀ : ℝ, 0 < c₀ ∧ ∀ {J Δ : ℝ}, 0 ≤ J → 0 < Δ →
-      ∀ {L q : ℕ} [NeZero q] (h : ChainHamiltonian L q R J) {E₀ : ℝ}
-      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+      ∀ {L q : ℕ} [NeZero q] (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
+      {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ s : ℝ, 2 * lemmaOneEndpointLength R J Δ ≤ s → ∀ i : ℕ,
         Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
           c₀ * (6 * s) * log (6 * s) * log q * (2 : ℝ) ^ ((6 * s) * log q) := by
@@ -163,7 +172,7 @@ theorem exists_regionEntropy_prefix_le_printed (R : ℕ) :
   let c₀ := 6 * (2 * a + 5) * (2 : ℝ) ^ (9 / log 2 + 1) + 2 * a + 20
   have hc₀ : 0 < c₀ := by dsimp only [c₀]; positivity
   refine ⟨c₀, hc₀, ?_⟩
-  intro J Δ hJ hΔ L q _ h E₀ Ω hgs s hs i
+  intro J Δ hJ hΔ L q _ h hh hhJ E₀ Ω hΩ hgap hspan s hs i
   by_cases hq : 2 ≤ q
   · let ζ := lemmaOneEndpointLength R J Δ
     have hζ : 20 ≤ ζ := by
@@ -176,7 +185,7 @@ theorem exists_regionEntropy_prefix_le_printed (R : ℕ) :
       (log_max_cubic_le hK (by linarith only [hζ]) hξ (by linarith only [hζ])) hq
     change 2 * ζ ≤ s at hs
     have hlogq : 0 ≤ log q := log_nonneg (by exact_mod_cast (by omega : 1 ≤ q))
-    refine (hbound hJ hΔ h hgs i).trans (hscalar.trans ?_)
+    refine (hbound hJ hΔ h hh hhJ hΩ hgap hspan i).trans (hscalar.trans ?_)
     change c₀ * (6 * ζ) * log (6 * ζ) * log q * (2 : ℝ) ^ (2 * (6 * ζ * log q)) ≤ _
     have hzs : 6 * ζ ≤ 6 * s := by linarith only [hs, hζ]
     have hs0 : 0 ≤ s := by linarith only [hs, hζ]
@@ -194,6 +203,6 @@ theorem exists_regionEntropy_prefix_le_printed (R : ℕ) :
   · have hq1 : q = 1 := by have := NeZero.one_le (n := q); omega
     subst q
     simpa only [Nat.cast_one, log_one, mul_zero, zero_mul] using
-      TNLean.Lattice.regionEntropy_le_card_mul_log hgs.1 (interval L 0 i)
+      TNLean.Lattice.regionEntropy_le_card_mul_log hΩ (interval L 0 i)
 
 end TNLean.MPS.AreaLaw.Hastings

@@ -28,6 +28,8 @@ No measurable dependence on earlier choices, joint adaptive success bound,
 low-density construction or final spectral extraction is asserted.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

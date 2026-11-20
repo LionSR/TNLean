@@ -56,7 +56,7 @@ theorem boxEntropy_power_le_of_succ_clearance
   convert boxEntropy_power_le_of_large_rectangles (R := R) (D₀ := D) (J := J) (Δ := Δ)
     hq (show 0 ≤ 4 * C by positivity) hp 2 ?_ using 1
   · norm_num
-  · intro Λ h E₀ Ω hgs A Q hsafe hQ
+  · intro Λ h hh hhJ E₀ Ω hΩ hgap hspan A Q hsafe hQ
     let r := (Q.size + 1) / 2
     have hr : 1 ≤ r := by omega
     have hQtwo : Q.size ≤ 2 * r := by omega
@@ -73,7 +73,7 @@ theorem boxEntropy_power_le_of_succ_clearance
         ((Nat.mul_le_mul_left (D + 1) (IntRect.size_child_le (Q := Q) i.1 i.2 hr)).trans
           hclear) (hsafe e he z hz p (hsub i hp))
     have hbound : ∀ i : ι, regionalEntropy Λ q Ω (Xs i) ≤ C * (Q.size : ℝ) ^ p := fun i ↦
-      (regionalEntropy_le_boxEntropy hq h hgs (hsafe_child i)
+      (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan (hsafe_child i)
         (IntRect.size_le_of_subset (hsub i))).trans (hbox Q.size Q.one_le_size)
     have hunion : Finset.univ.biUnion Xs = rectRegion A Q := by
       ext x
@@ -94,9 +94,9 @@ theorem boxEntropy_power_le_of_succ_clearance
       simp only [regionalEntropy_eq_finiteProduct]
       have hu := Entropy.OrderedSetFunction.union_biUnion_le_sum
         (FiniteProduct.entropy (fun _ : Site Λ ↦ Fin q) Ω)
-        (FiniteProduct.entropy_union_le _ Ω hgs.1) ∅ Xs Finset.univ
+        (FiniteProduct.entropy_union_le _ Ω hΩ) ∅ Xs Finset.univ
         (by intros; simp) (fun i _ j _ hij ↦ hdisj hij)
-      simpa only [Finset.empty_union, FiniteProduct.entropy_empty _ Ω hgs.1,
+      simpa only [Finset.empty_union, FiniteProduct.entropy_empty _ Ω hΩ,
         zero_add, hunion] using hu
     have hcard : Fintype.card ι ≤ 4 := by
       simpa only [ι, Fintype.card_prod, Fintype.card_fin] using hcount

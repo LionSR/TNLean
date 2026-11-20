@@ -31,6 +31,7 @@ import TNLean.PEPS.AreaLaw.EdgeCrossingBudget
 import TNLean.PEPS.AreaLaw.FiniteSetTruncation
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationSchmidtBellPrevector
+import TNLean.PEPS.AreaLaw.FrustrationFree
 import TNLean.PEPS.AreaLaw.GapMarginalCloseness
 import TNLean.PEPS.AreaLaw.Geometry
 import TNLean.PEPS.AreaLaw.GlobalSchmidtBellPrevector
@@ -42,8 +43,6 @@ import TNLean.PEPS.AreaLaw.GraphInteractionChain
 import TNLean.PEPS.AreaLaw.GraphInteractionDiamondCounting
 import TNLean.PEPS.AreaLaw.GraphInteractionSeries
 import TNLean.PEPS.AreaLaw.GraphInteractionTarget
-import TNLean.PEPS.AreaLaw.GraphLatticeDiamond
-import TNLean.PEPS.AreaLaw.GraphLatticeDistance
 import TNLean.PEPS.AreaLaw.GraphNeighborhoodCutClearance
 import TNLean.PEPS.AreaLaw.GraphPropagation
 import TNLean.PEPS.AreaLaw.InitialBoxEstimate

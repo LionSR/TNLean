@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.Sheet.Splitting
-import TNLean.Circuit.EntropySupport
+import TNLean.Circuit.SiteEmbedding
+import TNLean.Circuit.SupportedMatrixElements
+import QICLean.Entropy.RegionUnion
 import QICLean.Algebra.OperatorSchmidt
 import QICLean.Entropy.SupportedMarginalTails
 
@@ -39,7 +41,7 @@ theorem exists_threeSplit_eq_reindex_one_kronecker_rank_le
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     {T E D : Finset ι} (hTE : Disjoint T E) (hDT : Disjoint D T)
     {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : A ∈ supportedOperators q (D : Set ι)) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) D) :
     ∃ V : Matrix ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
         ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ,
       A.submatrix (threeSplit q T E hTE).symm (threeSplit q T E hTE).symm =
@@ -54,7 +56,7 @@ theorem exists_threeSplit_eq_reindex_one_kronecker_rank_le
   · let σ₀ : ι → Fin q := Classical.choice hconfig
     let t₀ : T → Fin q := fun v ↦ σ₀ v
     let e₀ : E → Fin q := fun v ↦ σ₀ v
-    have hDTset : Disjoint (D : Set ι) (T : Set ι) := Finset.disjoint_coe.mpr hDT
+    have hDTset : Disjoint D T := hDT
     obtain ⟨V, hV⟩ :=
       exists_threeSplit_eq_reindex_one_kronecker hTE hDTset hA
     let γ : (↥(T ∪ E)ᶜ → Fin q) → ((v : {v // v ∉ E}) → Fin q) :=
@@ -98,7 +100,7 @@ theorem exists_threeSplit_eq_reindex_one_kronecker_rank_le
           V (e, u) (e', u') at hentry
       simpa only [Matrix.one_apply_eq, one_mul] using hentry
     have hsupp : Entropy.IsSupportedOn (n := fun _ : ι ↦ q) A D :=
-      isSupportedOn_of_mem_supportedOperators hA
+      hA
     obtain ⟨M, L, R, hM, hdec, _⟩ :=
       hsupp.hasProductDecomposition_inner (B := E) σ₀ (c₀ := ‖A‖) le_rfl
     have hVdec : HasOperatorSchmidtDecomposition V M := by

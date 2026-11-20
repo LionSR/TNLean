@@ -89,6 +89,24 @@ theorem arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_mem_Ioo
   exact (isBoundaryCompatible_arbitraryPhysicalMixedInterpolation A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁
     h₀ h₁ γ).parentInteraction_matrix_commute_mpoWithBoundary (by norm_num) hstar X
 
+/-- An operator that commutes with the enlarged mixed interaction at every
+parameter of the open interval commutes with it on the closed interval,
+including both endpoints, because the interaction is continuous there.
+Source: arXiv:2203.12563, Section 5, lines 1689–1692. -/
+theorem arbitraryPhysicalMixedInteraction_commute_of_forall_mem_Ioo
+    [NeZero D₀] [NeZero D₁]
+    (hInj₀ : Kraus.IsInjective A₀) (hInj₁ : Kraus.IsInjective A₁)
+    {B : MPOTensor.ChainOperator ((((D₀ + D₁) * (D₀ + D₁)) + d₀) + d₁) 2}
+    (hB : ∀ γ ∈ Set.Ioo (0 : ℝ) 1, Commute (arbitraryPhysicalMixedInteraction A₀ A₁ γ) B)
+    {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) :
+    Commute (arbitraryPhysicalMixedInteraction A₀ A₁ γ) B := by
+  have hf := continuous_arbitraryPhysicalMixedInteraction A₀ A₁ hInj₀ hInj₁
+  have hclosed : IsClosed {t : ℝ | arbitraryPhysicalMixedInteraction A₀ A₁ t * B =
+      B * arbitraryPhysicalMixedInteraction A₀ A₁ t} :=
+    isClosed_eq (hf.matrix_mul continuous_const) (continuous_const.matrix_mul hf)
+  rw [← closure_Ioo (zero_ne_one' ℝ)] at hγ
+  exact closure_minimal (fun t ht ↦ (hB t ht).eq) hclosed hγ
+
 /-- On the closed interval, including both endpoints where it is not the
 canonical parent of the mixed tensor, the enlarged mixed interaction commutes
 with every two-site boundary operator of the common MPO, given adjoint
@@ -107,18 +125,10 @@ theorem arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary
           MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) Y 2)
     {γ : ℝ} (hγ : γ ∈ Set.Icc (0 : ℝ) 1) (X : Matrix (Fin (χ₀ + χ₁)) (Fin (χ₀ + χ₁)) ℂ) :
     Commute (arbitraryPhysicalMixedInteraction A₀ A₁ γ)
-      (MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) X 2) := by
-  set B := MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) X 2
-  have hf := continuous_arbitraryPhysicalMixedInteraction A₀ A₁ hInj₀ hInj₁
-  have hclosed : IsClosed {t : ℝ | arbitraryPhysicalMixedInteraction A₀ A₁ t * B =
-      B * arbitraryPhysicalMixedInteraction A₀ A₁ t} :=
-    isClosed_eq (hf.matrix_mul continuous_const) (continuous_const.matrix_mul hf)
-  have hsub : Set.Ioo (0 : ℝ) 1 ⊆ {t : ℝ | arbitraryPhysicalMixedInteraction A₀ A₁ t * B =
-      B * arbitraryPhysicalMixedInteraction A₀ A₁ t} := fun t ht =>
-    (arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_mem_Ioo
-      A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ h₀ h₁ hstar ht X).eq
-  rw [← closure_Ioo (zero_ne_one' ℝ)] at hγ
-  exact closure_minimal hsub hclosed hγ
+      (MPOTensor.mpoWithBoundary (arbitraryPhysicalMixedMPO A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁) X 2) :=
+  arbitraryPhysicalMixedInteraction_commute_of_forall_mem_Ioo A₀ A₁ hInj₀ hInj₁
+    (fun _ ht ↦ arbitraryPhysicalMixedInteraction_commute_mpoWithBoundary_of_mem_Ioo
+      A₀ A₁ T₀ T₁ V₀ V₁ W₀ W₁ h₀ h₁ hstar ht X) hγ
 
 /-- On every periodic ring of length at least two and at every parameter of
 the closed interval, the enlarged mixed path Hamiltonian commutes with every

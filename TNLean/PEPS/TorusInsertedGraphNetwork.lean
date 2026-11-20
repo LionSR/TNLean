@@ -15,6 +15,8 @@ ordered graph edge transposes its inserted matrix. Reindexing all virtual
 endpoint labels identifies the two actual contraction formulas.
 Source: SCP10, arXiv:1001.3807, equation `eq:2d:peps-with-ug-uh`.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
@@ -70,12 +72,12 @@ private theorem torusGraphBondMatrix_right_apply (Oh Ov : TV → Matrix X X ℂ)
   rw [torusGraphBondMatrix_right]
   by_cases hv : v < (v.1 + 1, v.2)
   · simp [graphSiteBondEndpointEquiv, torusRightEdge,
-      Edge.ofAdj_of_lt _ hv, torusRightLeg, torusLeftLeg, torusLeftEdge,
+      ManyBody.Edge.ofAdj_of_lt _ hv, torusRightLeg, torusLeftLeg, torusLeftEdge,
       edgeRightIncident, edgeLeftIncident]
   · have hr : (v.1 + 1, v.2) < v :=
       lt_of_le_of_ne (le_of_not_gt hv) (torusGraph_adj_right v.1 v.2).ne.symm
     simp [graphSiteBondEndpointEquiv, torusRightEdge,
-      Edge.ofAdj_of_gt _ hr, torusRightLeg, torusLeftLeg, torusLeftEdge,
+      ManyBody.Edge.ofAdj_of_gt _ hr, torusRightLeg, torusLeftLeg, torusLeftEdge,
       edgeRightIncident, edgeLeftIncident, ne_of_lt hr]
 
 omit [Fintype X] [DecidableEq X] in
@@ -89,12 +91,12 @@ private theorem torusGraphBondMatrix_up_apply (Oh Ov : TV → Matrix X X ℂ)
   rw [torusGraphBondMatrix_up]
   by_cases hv : v < (v.1, v.2 + 1)
   · simp [graphSiteBondEndpointEquiv, torusUpEdge,
-      Edge.ofAdj_of_lt _ hv, torusTopLeg, torusDownLeg, torusDownEdge,
+      ManyBody.Edge.ofAdj_of_lt _ hv, torusTopLeg, torusDownLeg, torusDownEdge,
       edgeRightIncident, edgeLeftIncident]
   · have hr : (v.1, v.2 + 1) < v :=
       lt_of_le_of_ne (le_of_not_gt hv) (torusGraph_adj_up v.1 v.2).ne.symm
     simp [graphSiteBondEndpointEquiv, torusUpEdge,
-      Edge.ofAdj_of_gt _ hr, torusTopLeg, torusDownLeg, torusDownEdge,
+      ManyBody.Edge.ofAdj_of_gt _ hr, torusTopLeg, torusDownLeg, torusDownEdge,
       edgeRightIncident, edgeLeftIncident, ne_of_lt hr]
 
 omit [DecidableEq X] in

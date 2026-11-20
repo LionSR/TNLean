@@ -48,6 +48,8 @@ the inserted matrix (transposed per the orientation convention of `edgeGaugeAt`,
   `Papers/1804.04964/paper_normal.tex`](https://arxiv.org/abs/1804.04964)
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

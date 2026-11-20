@@ -75,41 +75,6 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
     of $e^{iMt},e^{-iMs},e^{iHs}$ gives~(\ref{eq:hastings_unitary_path_difference}).
 \end{proof}
 
-\begin{lemma}[First absolute moment of a Gaussian tail]
-    \label{thm:hastings_gaussian_absolute_moment_tail}
-    \lean{TNLean.Lattice.integral_compl_Icc_abs_gaussianReal_le}
-    \leanok
-    For $h,T\ge0$ (with the right-hand side $0$ when $h=0$),
-    \begin{align}
-        \int_{|t|>T}|t|\,d\gamma_h(t)
-        \le \sqrt{2h/\pi}\,e^{-T^2/(2h)}.
-        \label{eq:hastings_gaussian_absolute_moment_tail}
-    \end{align}
-\end{lemma}
-\begin{proof}\leanok
-    For $h=0$, $\gamma_0=\delta_0$ gives $0$. For $h>0$, with
-    $\varphi_h(t)=(2\pi h)^{-1/2}e^{-t^2/(2h)}$ and $(-h\varphi_h)'=t\varphi_h$,
-    \begin{align}
-        \int_{|t|>T}|t|\,d\gamma_h(t)=2\int_T^\infty t\varphi_h(t)\,dt
-        =2h\varphi_h(T)=\sqrt{2h/\pi}\,e^{-T^2/(2h)}.
-        \notag
-    \end{align}
-\end{proof}
-
-\begin{lemma}[First absolute moment of a Gaussian]
-    \label{thm:hastings_gaussian_absolute_moment}
-    \lean{TNLean.Lattice.integral_abs_gaussianReal_le_sqrt_two_mul_div_pi,
-        TNLean.Lattice.integral_abs_gaussianReal_le}
-    \leanok
-    For every $h\ge0$,
-    $\int|t|\,d\gamma_h(t)\le\sqrt{2h/\pi}\le\sqrt h$.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:hastings_gaussian_absolute_moment_tail}
-    Set $T=0$ in~(\ref{eq:hastings_gaussian_absolute_moment_tail}) and use
-    $2\le\pi$.
-\end{proof}
-
 \begin{lemma}[Stability of the Gaussian time average]
     \label{thm:hastings_gaussian_time_average_stability}
     \lean{TNLean.MPS.AreaLaw.Hastings.norm_gaussianTimeAverage_sub_le,
@@ -133,11 +98,10 @@ $P_q(H)$ and bounds the perturbation $\|P_q(M)-P_q(H)\|$.
     first inequality of \cite[lines 849--864]{Hastings2007AreaLaw}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:hastings_unitary_path_difference,
-        thm:hastings_gaussian_absolute_moment,
-        thm:hastings_gaussian_time_average_gap}
+    \uses{thm:hastings_unitary_path_difference, thm:hastings_gaussian_time_average_gap}
     Integrating~(\ref{eq:hastings_unitary_path_difference}) against $\gamma_h$
-    and applying Lemma~\ref{thm:hastings_gaussian_absolute_moment} gives
+    and applying the first absolute moment of a Gaussian
+    \cite[``First absolute moment of a Gaussian'']{QICLean2026Blueprint} gives
     $\|P_q(M)-P_q(H)\|\le\|M-H\|\int|t|\,d\gamma_h\le(\sqrt q/\Delta E)\|M-H\|$,
     and combining~(\ref{eq:hastings_gaussian_stability_diff}) with
     (\ref{eq:hastings_gaussian_time_average_gap}) gives

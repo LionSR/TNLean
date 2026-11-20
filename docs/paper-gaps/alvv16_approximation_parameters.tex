@@ -258,12 +258,13 @@ At every longer parent, one actual family is chosen from the Hamiltonian
 before the sampling size and the child spaces. Its literal ordered words
 act on the actual Haar coordinate sample, followed by one collective trim.
 Writing $D_{\rm ref}=r^2B$, take
-\[
+\begin{align}
     A=1+\log r+\log D+\log(1/\beta),\qquad
     s=\lceil4096rA\rceil,\qquad
     M=D^6s^3,\qquad
     \xi=(1000D_{\rm ref}\sqrt{n+1})^{-1}.
-\]
+    \label{eq:alvv_approximation_bounded_witness_parameters}
+\end{align}
 The corrected fixed-input failure bound
 (\url{https://sirui-lu.com/QICLean/paper-gaps/alvv16_random_sampling_net_count.pdf})
 is at most $\beta<1$, uniformly
@@ -293,14 +294,16 @@ the modified witness is established in the refinement below.
 The numerical tail and filter conditions in the bounded witness above can
 be derived uniformly from the physical input. Choose a universal $C\ge1$
 from the scalar parameter theorem, before the chain and Hamiltonian, and put
-\[
+\begin{align}
     m=\max\{q,50\},\quad v=1+\log m+\log(1/g),\quad
     \ell=\lceil Cv^2/g\rceil,\quad D=(m\ell^2)^{22\ell}.
-\]
+    \label{eq:alvv_approximation_automatic_window_parameters}
+\end{align}
 Then $\ell\ge21$ and
-\[
+\begin{align}
     \log D\le22(C+1)(6+2\log(C+1))v^3/g.
-\]
+    \label{eq:alvv_approximation_automatic_count_bound}
+\end{align}
 Take $t=\ell$ and $\Delta=10^{-5}D^{-12}$. The scalar contraction
 estimate holds uniformly up to $8\ell$, hence throughout the required
 range $R\le3t+4\ell=7\ell$. The truncation tail estimate is at most
@@ -324,9 +327,10 @@ The actual recursively selected root space can be read on the original
 chain coordinates. Its regional internal cuts are the native chain cuts.
 If its at most $M$ recorded generators have ranks at most
 $R=10^6D_{\rm ref}^2(n+1)M$, the finite-span estimate gives bond at most
-\[
+\begin{align}
     MR=10^6D_{\rm ref}^2(n+1)M^2
-\]
+    \label{eq:alvv_approximation_root_bond_bound}
+\end{align}
 for every vector in this actual root space. The extra factor $M$ is
 retained: the per-generator bound is not assigned unchanged to the whole
 span. The families, actual recursive operations and original-ground-space
@@ -345,9 +349,10 @@ therefore exactly the closeness inequality for the native image $S$ of
 the same recursively constructed root. Let $P_S$ be its orthogonal
 projection. For every unit $\Gamma\in G$, this gives
 $\|P_S\Gamma\|^2\ge197/200$. The actual normalized projection
-\[
+\begin{align}
     \phi=\frac{P_S\Gamma}{\|P_S\Gamma\|}\in S
-\]
+    \label{eq:alvv_approximation_normalized_witness}
+\end{align}
 has squared overlap at least $197/200$ and squared distance at most
 $3/100$, with $\langle\phi,\Gamma\rangle=\|P_S\Gamma\|$ real and
 nonnegative. It retains the all-span native MPS bound
@@ -364,45 +369,50 @@ refinement and extraction for the modified common-threshold tree.
 Let $\mu$ be the original ground energy, $\gamma$ the gap, and $r$ the
 actual ground-space dimension. The same physical improving families can
 be selected before every requested accuracy $\eta>0$. Put
-\[
+\begin{align}
     A=\|H\|-\mu,\qquad c=\gamma/A,\qquad
     \rho=\frac{\eta\gamma}{2A+\eta\gamma},\qquad
     \varepsilon=\frac{c^2\rho}{32768}.
-\]
+    \label{eq:alvv_approximation_refinement_accuracy_parameters}
+\end{align}
 Choose the physical reference space at accuracy $\varepsilon$, with
 all-span MPS bond bound $b$, and let $b_0$ be the reference bound used in
 the tree. With $D$ the common filter count parameter, choose
-\[
+\begin{align}
     b_* =\max\{b_0,b\},\qquad
     N=\left\lceil\frac{100D^{12}}{c\rho}\right\rceil,\qquad
     \xi=\frac1{1000b_*N\sqrt{n+1}}.
-\]
+    \label{eq:alvv_approximation_refinement_threshold_parameters}
+\end{align}
 This threshold satisfies both the tree bound and the final refinement
 budgets, including the strict inequality
 $\sqrt{nrb}\,\xi<\eta/(10000D^{12})$.
 Fix $0<\beta<1$, and put
-\[
+\begin{align}
     s=\left\lceil4096r\bigl(1+\log r+\log D+\log(1/\beta)\bigr)\right\rceil,
     \qquad M=D^6s^3.
-\]
+    \label{eq:alvv_approximation_refinement_sample_parameters}
+\end{align}
 Construct the actual balanced tree using this same $\xi$ at every long
 parent. Write $S_0$ for its root; $M$ bounds the number of its recorded
 generators.
 
 Starting from this actual root, apply the literal raw filter
 $K=I-H/\|H\|$ followed by collective trimming at $\xi$, for
-\[
+\begin{align}
     j_* =\left\lceil(4/c)\log(1/\rho)\right\rceil+1
-\]
+    \label{eq:alvv_approximation_refinement_step_count}
+\end{align}
 steps. The retained space $W$ is $\rho$-close to the original full ground
 space, and its dimension is at most $M$. Let $R$ be the actual lowest
 $r$-dimensional Ritz space of the compression of the original $H$ to
 $W$. Then $R\subseteq W$, $\dim R=r$, and its two projection errors
 relative to the original ground space are at most $\eta/2$.
 Indeed the projected trial space has excess energy at most
-\[
+\begin{align}
     \frac{A\rho}{1-\rho}=\frac{\eta\gamma}{2},
-\]
+    \label{eq:alvv_approximation_trial_energy_excess}
+\end{align}
 and the original gap and the variational principle give the Ritz bounds.
 Every vector in $R$ has native MPS bond at most
 $10^6(b_*N)^2(n+1)M^2$. The factor $M^2$ is retained for the whole span.
@@ -455,11 +465,12 @@ round. Its right-hand side is independent of the current $V$, so every
 positive number of repetitions returns the same subspace. The subsequent
 analysis, which compounds the error reduction and the dimension growth
 across rounds, requires the intended recursive assignment
-\[
+\begin{align}
     V_0=W',\qquad
     V_{j+1}=\operatorname{Trim}_{\xi}
     \bigl(\operatorname{span}\{A_iV_j:i\}\bigr).
-\]
+    \label{eq:alvv_approximation_recursive_assignment}
+\end{align}
 This is a local correction of the assignment, not an identification of a
 single trim after an operator-word image with those interleaved trims.
 An analysis of the corrected procedure must control the actual trim and
@@ -480,6 +491,161 @@ its stated bounds are not the printed count with a missing rounding
 argument. Neither correction alone establishes the adaptive probability,
 energy-estimation invariant or computational cost of the source algorithm.
 
+\paragraph{Local fix (rounding of the number of rounds).}
+The merge tree is now also formalized with the rounded number of rounds
+$k=\lceil\lceil\log_Ds\rceil/2\rceil$, the least integer with $D^{2k}\ge s$,
+the families of Theorems~4.2 and~4.3 on every long interval, and the
+sampling size $s=\lceil4096r(1+\log r+\log D+\log(1/\beta))\rceil$. Every
+node carries a $3/200$-viable space for the original ground space of
+dimension at most
+\begin{align}
+    M=D^{2k}s\le D^2s^2,
+    \label{eq:alvv16_approximation_parameters_rounded_node_bound}
+\end{align}
+which has no additional dependence on $L$ or the trimming threshold when
+$q,g,r=\dim G$ and $\beta$ are fixed. If $r$ or $\beta$ varies with $L$,
+this is not a uniform bound in $L$. The root, after the
+final filter-and-trim iterates and the Ritz extraction, gives an
+$r$-dimensional space of matrix product states mutually $\eta/2$-close to the
+ground
+space.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_sampled_interval_node_event_of_power},
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_constant_node_tree} and
+\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_constant_node_tree_ritz_approximation}.}
+When $c=\lceil\log_Ds\rceil$ is even, $k=c/2$ is the source's number of rounds
+and $M\le Ds^2$, the printed bound.
+
+When $c$ is odd and $s<D^c$, no integer number of rounds
+satisfies both the printed count bound and the sufficient condition used
+in the following error estimate. The node bound after $j$
+rounds is $D^{2j}s$, so $D^{2j}s\le Ds^2$ means $D^{2j}\le Ds$. The error
+estimate used here assumes $s\le D^{2j}$: a merged space has dimension
+$Q\le(D^{2j}s)^2$, a sample of dimension $\min(s,Q)$ overlaps the target by at least
+$3/(32D^{4j}s)$, and the error after $j$ rounds is at most
+$(1024/9)\Delta^jD^{8j}s^2$. This proof uses the sufficient condition
+$s^2\le D^{4j}$ to bound this by $(1024/9)(D^{12}\Delta)^j$, then applies
+the budget $D^{12}\Delta\le10^{-5}$. If $s<D^c$,
+the two conditions are incompatible: $D^{2j}\le Ds<D^{c+1}$ gives
+$2j\le c$, hence $2j\le c-1$ and $D^{2j}\le D^{c-1}<s$; in particular $c=1$
+leaves only $j=0$, with no improvement at
+all.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.merge_rounds_lt_of_odd}.}
+Only when $s=D^c$ does $j=(c+1)/2$ give $M=Ds^2$. The odd case is therefore
+a rounding obstruction for this pair of sufficient inequalities. It does not
+exclude a sharper error estimate or another construction attaining $Ds^2$.
+
+\paragraph{The case $c=1$ needs a different construction.}
+For $c=1$ and $s<D^c$, that is $1<s<D$, the obstruction does not depend on the error
+estimate. A parent samples $s$ vectors and applies $j$ whole rounds of a
+family of $D^2$ operators, so its node bound is $D^{2j}s$. The printed bound
+$D^{2j}s\le Ds^2$ means $D^{2j-1}\le s$, and $s<D$ excludes every $j\ge1$.
+With $j=0$ the parent applies no improving operator at all. So no argument
+that applies whole rounds of the family of Theorems~4.2 and~4.3 reaches the
+printed node dimension $Ds^2$ when $s<D$, whatever error estimate it uses;
+this is the typical case for the parameters used here, since $D$ is far
+larger than $s$. Closing it needs a new idea, for example a second improving
+family of $D'^2\le Ds$ operators whose error parameter still meets the
+budget of the error estimate, and no such family is constructed in the
+source or here. The source's number of rounds $\tfrac12\lceil\log_Ds\rceil$
+is $\tfrac12$ in this case, so the printed procedure does not specify a
+parent either.
+
+The formalized bound is
+$M\le D^2s^2$, at most a factor $D$ above the source's: indeed
+$M/(Ds^2)=D^c/s\in[1,D)$, with equality to one when $s=D^c$. For the parameters used, $D=(m\ell^2)^{22\ell}$ with
+$\ell\ge21$ is far larger than $s$ unless $r$ or $1/\beta$ is enormous, so
+typically $c=1$, $k=1$ and $M=D^2s$.
+
+The tree of constant node dimension keeps the scope restrictions of the
+tree above: it is shown to exist, with no joint sampling probability; its
+leaves are full blocks of length at most $4\ell$; each long parent applies
+one collective trim after its $k$ rounds rather than after each round; the
+parameters use $g=\min\{\gamma,1\}$; and the bond dimension of the output
+grows with $L$ through the trimming threshold. Its success probability is
+the subject of the next subsection.
+
+\subsection*{Success probability of the tree of constant node dimension}
+The same tree can be run with fresh samples. Every interval receives one
+independent coordinate, a Haar unitary of every possible rank of its space,
+fixed before any retained space is known. A long parent writes the
+orthogonal projection of its merged space $W$ in one fixed chart, samples
+the range through the coordinate of its rank, applies all words of length
+$k$ in its family, and trims once. For fixed children, Lemma
+\texttt{l:rs} with its rank-dependent overlap,
+\begin{align}
+    c&=\frac{3\min\{s,Q\}}{32Q},\qquad Q=\dim W,
+    \label{eq:alvv16_approximation_parameters_canonical_overlap}
+\end{align}
+bounds the failure of the sample by $(1+2/\sqrt c)^{2r}Qe^{-s/16}$ when
+$Q>s$; when $Q\le s$ the sample is $W$ itself and does not fail. Since
+$Q\le M^2\le D^{12}s^6$, the failure is at most $e^{-s/64}\le\beta$ for the
+sample size of~(\ref{eq:alvv_approximation_refinement_sample_parameters}).
+On the complementary event the merge error estimate above and one
+collective trim give a $3/200$-viable parent. Every node has dimension at
+most $M$ for every sample, including unsuccessful ones, so the fixed-child
+bound applies at every internal node. Write $E$ for the event that the
+root and all its internal nodes are $3/200$-viable for the original ground
+space, and $\mu$ for the product of the Haar laws. A union bound over the
+$L-1$ internal nodes gives
+\begin{align}
+    \mu(E^{\mathrm c})&\le(L-1)\beta,
+    \label{eq:alvv16_approximation_parameters_tree_failure}
+\end{align}
+and $E$ is Borel.\footnote{\leanid{TNLean.MPS.AreaLaw.ALVV.exists_physical_dg_canonical_constant_node_tree_failure_le}.}
+The sampled parent is a Borel function of the merged space and of its own
+coordinate, so the shorter children do not depend on the coordinate of
+their parent, which is what the union bound uses.
+
+\paragraph{Comparison with the source.}
+In the maintainer's reading of the official arXiv v2 text, \S6.2,
+Theorem~6.1 (\texttt{t:alg1}) states overall success probability at least
+$1-1/n$, and its proof derives this by a union bound from a failure
+probability at most $1/n^2$ for each merge. The
+bound~(\ref{eq:alvv16_approximation_parameters_tree_failure}) is the same union bound, for an arbitrary per-merge
+failure $\beta$. The parameter $\beta$ and the sample size
+$s=\lceil4096 r(1+\log r+\log D+\log(1/\beta))\rceil$ are a sufficient
+parametrization chosen by the formalization, not the source's formula.
+For $L\ge2$ and $0<\beta'<1$, a failure probability at most $\beta'$ for the
+whole tree follows with $\beta=\beta'/(L-1)$; the choice $\beta=1/L^2$ is
+the source's per-merge bound and gives overall failure $(L-1)/L^2<1/L$.
+For $L\le1$ every interval is a single short leaf, the tree has no internal
+node, and it fails with probability $0$. At a fixed overall failure
+probability $s$ grows like $\log L$, so the node bound is uniform in $L$
+only for fixed $\beta$. The identification of this tree with the source's
+algorithm, its output and its running time is not proved.
+
+\subsection*{The window range of Corollary~4.6}
+
+Corollary~4.6 (c:goodagsphardtrunc), lines 981--997 of the arXiv v2 source,
+reads: ``Let $H$ be a 1D local Hamiltonian with ground energy
+$\varepsilon_0$, and $\mathcal H=\mathcal H_L\otimes\mathcal H_M\otimes
+\mathcal H_R$ a decomposition of the $n$-qudit space in contiguous regions.
+For any integer $\ell\ge1$ and $t>0$ there exists a Hamiltonian $\tilde H$
+such that for any $\varepsilon_0<\eta_0<\eta_1$ there is a $(D,\Delta)$
+spectral AGSP $K$ for $(\tilde H,\eta_0,\eta_1)$ with the following
+properties. (1) $D=(d\ell)^{O(\ell)}$ and
+$\Delta=e^{-\Omega(\frac{\ell^2}{\sqrt{t+\ell}}\sqrt{\eta_1-\eta_0})}$,
+(2) there are universal constants $C,c>0$ such that for $i\in\{0,1\}$,
+$0\le\varepsilon_i-\tilde\varepsilon_i\le Ce^{-c(t-\varepsilon_0)}$, where
+$\varepsilon_i$, $\tilde\varepsilon_i$ are the $i$-th smallest (counted with
+multiplicity) eigenvalues of $H$, $\tilde H$ respectively, (3) the space
+$H_{[\varepsilon_0,\eta_1]}$ is $\delta$-close to
+$\tilde H_{[\tilde\varepsilon_0,\eta_0]}$ and
+$\tilde H_{[\tilde\varepsilon_0,\eta_1]}$ is $\delta$-close to
+$H_{[\varepsilon_0,\eta_0]}$, for
+$\delta=\Theta(\frac{\eta_0-\varepsilon_0}{(\eta_1-\eta_0)^2})
+e^{-\Omega(t-(\eta_0-\varepsilon_0))}$.'' Its proof, lines 999--1005, takes the
+Chebyshev construction of Theorem~4.2 at degree $k=\ell^2$.
+
+The formalized combined statement covers every $\eta_1>\eta_0$, as the
+source does. For $\eta_1\le3t+4\ell$, where $3t+4\ell$ bounds the norm of the
+truncated Hamiltonian, the projector is the Chebyshev polynomial of degree
+$\ell^2$. For $\eta_1>3t+4\ell$ no eigenvalue of $\tilde H$ is at least
+$\eta_1$, so the contraction condition of a spectral AGSP is vacuous, and the
+polynomial $p(x)=(\eta_0+1-x)^{\ell^2}$, with $p(\eta_0)=1$ and $p\ge1$ on
+$(-\infty,\eta_0]$, serves; its image has the two-cut rank bound of every
+polynomial of degree $\ell^2$ in a Hamiltonian of the two-window form. The
+remaining deviations are the explicit constants and the corrected cutoff of
+the hard-truncation note.
+
 \bibliographystyle{unsrt}
 \subsection*{The literal interleaved interval tree}
 A separate construction now uses the current-space family image followed
@@ -493,10 +659,11 @@ internal-cut ranks. The parent equality records an actual chosen Haar
 unitary for the actual recursive children.
 
 Here the calibrated window is
-\[
+\begin{align}
     \ell=\left\lceil C\left(v^6/g+\sqrt w\,v^3/\sqrt g\right)\right\rceil,
     \qquad w=1+\log r+2\log(L+1),
-\]
+    \label{eq:alvv_approximation_calibrated_window}
+\end{align}
 with $v=1+\log m+\log(1/g)+\log(1+w)$ and
 $D=(m\ell^2)^{22\ell}$. Thus $D$ is honest but length- and rank-dependent.
 The construction retains full leaves of length at most $4\ell$, the capped
@@ -510,9 +677,10 @@ fixed $q$ and $\gamma>0$, constants $C>0$ and $k\in\mathbb N$ precede
 all physical inputs and give the bound $CZ^k$, where
 $Z=(L+1)(r+1)(1+\eta^{-1})$. Moreover, there is a universal
 $C_{\rm deg}$ such that
-\[
+\begin{align}
     k\le C_{\rm deg}\frac{(1+\log\max\{q,50\}+\log(1/g))^{10}}{g^2}.
-\]
+    \label{eq:alvv_approximation_degree_bound}
+\end{align}
 The prefactor can be controlled at the same scale: there is one
 universal $C_0>0$, chosen before $q,\gamma$, with
 $\log\max\{C,1\}\le C_0(1+\log\max\{q,50\}+\log(1/g))^{10}/g^2$

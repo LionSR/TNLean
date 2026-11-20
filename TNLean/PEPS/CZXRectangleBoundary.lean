@@ -28,6 +28,8 @@ and both positive rectangle sides are shorter than their periods. See
 - [arXiv:1106.4752](https://arxiv.org/abs/1106.4752), CZX model boundary, lines 330–345.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 /-- The first plaquette corner of each clockwise perimeter segment, in
@@ -165,7 +167,7 @@ private theorem rectangle_boundary_up (xStart yStart w h : ℕ)
     simp only [mem_torusContiguousRectangle]
     exact fun hm => rectangle_interval_end_out yStart h hh hy hp ⟨hm.2.2.1, hm.2.2.2⟩
   unfold IsRegionBoundaryEdge torusUpEdge
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_up
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up
     ((xStart + k : ℕ) : ZMod width) ((yStart + h - 1 : ℕ) : ZMod height)) with
     ⟨h1, h2⟩ | ⟨h1, h2⟩
   · rw [h1, h2, hstep]
@@ -189,7 +191,7 @@ private theorem rectangle_boundary_down (xStart yStart w h : ℕ)
     simp only [mem_torusContiguousRectangle]
     exact fun hm => rectangle_interval_pred_out yStart h hh hy hp ⟨hm.2.2.1, hm.2.2.2⟩
   unfold IsRegionBoundaryEdge torusUpEdge
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_up
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up
     ((xStart + k : ℕ) : ZMod width) ((yStart : ZMod height) - 1)) with
     ⟨h1, h2⟩ | ⟨h1, h2⟩
   · rw [h1, h2, sub_add_cancel]
@@ -221,7 +223,7 @@ private theorem rectangle_boundary_right (xStart yStart w h : ℕ)
     simp only [mem_torusContiguousRectangle]
     exact fun hm => rectangle_interval_end_out xStart w hw hx hp ⟨hm.1, hm.2.1⟩
   unfold IsRegionBoundaryEdge torusRightEdge
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right
     ((xStart + w - 1 : ℕ) : ZMod width) ((yStart + k : ℕ) : ZMod height)) with
     ⟨h1, h2⟩ | ⟨h1, h2⟩
   · rw [h1, h2, hstep]
@@ -245,7 +247,7 @@ private theorem rectangle_boundary_left (xStart yStart w h : ℕ)
     simp only [mem_torusContiguousRectangle]
     exact fun hm => rectangle_interval_pred_out xStart w hw hx hp ⟨hm.1, hm.2.1⟩
   unfold IsRegionBoundaryEdge torusRightEdge
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right
     ((xStart : ZMod width) - 1) ((yStart + k : ℕ) : ZMod height)) with
     ⟨h1, h2⟩ | ⟨h1, h2⟩
   · rw [h1, h2, sub_add_cancel]

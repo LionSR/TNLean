@@ -52,6 +52,8 @@ end-pair equality, needing only injectivity of the completed corner `Q` and neve
   filled-in derivation in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`, Steps 2--3.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 
 namespace TNLean

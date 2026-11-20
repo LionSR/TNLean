@@ -29,6 +29,8 @@ running time is asserted. Rank bounds concern the recorded generators,
 not every vector in their span.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

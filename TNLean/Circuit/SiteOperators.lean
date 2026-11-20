@@ -70,7 +70,7 @@ theorem ctrlProj_conjTranspose (S : Finset ι) (c : ι → Fin d) :
   congr 1; funext x; simp only [Pi.star_apply]; split_ifs <;> simp
 
 theorem ctrlProj_mem_supportedOperators (S : Finset ι) (c : ι → Fin d) :
-    ctrlProj S c ∈ supportedOperators d (S : Set ι) := by
+    ctrlProj S c ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S := by
   classical
   have : ctrlProj S c = rectKronecker fun i =>
       if i ∈ S then diagonal (fun a : Fin d => if a = c i then (1 : ℂ) else 0) else 1 := by
@@ -129,10 +129,10 @@ theorem siteOp_mem_unitary (t : ι) {u : Matrix (Fin d) (Fin d) ℂ}
   exact ⟨rfl, rfl⟩
 
 theorem siteOp_mem_supportedOperators (t : ι) (u : Matrix (Fin d) (Fin d) ℂ) :
-    siteOp t u ∈ supportedOperators d {t} := by
+    siteOp t u ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) {t} := by
   have := embedOp_mem_supportedOperators (siteSites_injective t)
     (u.submatrix (Equiv.funUnique (Fin 1) (Fin d)) (Equiv.funUnique (Fin 1) (Fin d)))
-  rwa [Matrix.range_cons, Matrix.range_empty, Set.union_empty] at this
+  rwa [show Finset.univ.image ![t] = {t} by ext; simp [eq_comm]] at this
 
 theorem siteOp_diagonal (t : ι) (f : Fin d → ℂ) :
     siteOp t (diagonal f) = diagonal fun x : (ι → Fin d) => f (x t) := by
@@ -184,7 +184,7 @@ theorem siteOp_sub (t : ι) (u v : Matrix (Fin d) (Fin d) ℂ) :
 
 theorem commute_ctrlProj_siteOp {S : Finset ι} {t : ι} (ht : t ∉ S) (c : ι → Fin d)
     (u : Matrix (Fin d) (Fin d) ℂ) : Commute (ctrlProj S c) (siteOp t u) :=
-  commute_of_mem_supportedOperators (Set.disjoint_singleton_right.mpr (by simpa using ht))
-    (ctrlProj_mem_supportedOperators S c) (siteOp_mem_supportedOperators t u)
+  ManyBody.commute_of_mem_supportedOperators_of_disjoint (ctrlProj_mem_supportedOperators S c)
+      (siteOp_mem_supportedOperators t u) (Finset.disjoint_singleton_right.mpr ht)
 
 end QuantumCircuit

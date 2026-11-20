@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.Lattice.Sheet.BoundedChanges
 import TNLean.Lattice.Sheet.SheetStack
 
@@ -36,6 +36,8 @@ The construction uses a particular adjacent main/auxiliary occurrence in a stack
 identifies auxiliary copies by their geometric centre: a repeated centre at a different stage
 or side is a different stack occurrence, preserved among the spectators until activated.
 -/
+
+open ManyBody (interval mem_interval)
 
 noncomputable section
 

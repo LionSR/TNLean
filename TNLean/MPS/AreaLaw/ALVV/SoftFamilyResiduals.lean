@@ -18,6 +18,8 @@ This conditional auxiliary to ALVV, arXiv:1602.08828v2, `lem:exp-approx` and
 constructed regional minima and soft ground-energy cap. It assumes no residual or gap.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators Matrix ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

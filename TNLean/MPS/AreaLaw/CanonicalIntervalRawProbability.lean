@@ -26,6 +26,8 @@ https://sirui-lu.com/QICLean/paper-gaps/alvv16_bootstrap_constants.pdf.
 It is not a running-time or complete physical construction theorem.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped Matrix.Norms.L2Operator ENNReal
 

@@ -25,6 +25,8 @@ explicit. No region isometry or entropy assertion is made here.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}
@@ -38,8 +40,8 @@ theorem regionLabels_eq_of_internalEdge_eq (R : Finset V)
       q ⟨e.1.1, h₁⟩ = q ⟨e.1.2, h₂⟩) (u v : {v : V // v ∈ R}) :
     q u = q v := by
   have hAdj (u v : {v : V // v ∈ R}) (h : Γ.Adj u.1 v.1) : q u = q v := by
-    let e := Edge.ofAdj h
-    rcases Edge.ofAdj_endpoints h with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+    let e := ManyBody.Edge.ofAdj h
+    rcases ManyBody.Edge.ofAdj_endpoints h with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
     · have hu : e.1.1 ∈ R := by rw [show e.1.1 = u.1 from h₁]; exact u.2
       have hv : e.1.2 ∈ R := by rw [show e.1.2 = v.1 from h₂]; exact v.2
       have hu' : (⟨e.1.1, hu⟩ : {v : V // v ∈ R}) = u := Subtype.ext h₁

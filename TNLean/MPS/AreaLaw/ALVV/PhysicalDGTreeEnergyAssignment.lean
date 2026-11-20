@@ -24,6 +24,8 @@ or a running-time statement. See
 `docs/paper-gaps/alvv16_soft_regional_energy_centering.tex`.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

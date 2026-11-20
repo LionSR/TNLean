@@ -26,6 +26,8 @@ construction preceding Theorem 6.9, local source lines 1935–1990.
   D. Pérez-García, *PEPS as ground states: degeneracy and topology*
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {width height : ℕ} [NeZero width] [NeZero height]

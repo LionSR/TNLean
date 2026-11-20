@@ -7,6 +7,7 @@ import TNLean.MPS.AreaLaw.AreaLaw
 import TNLean.MPS.AreaLaw.InformationReset
 import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import QICLean.Entropy.ConditionalTwoFamilies
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Information at logarithmic separation
@@ -27,19 +28,24 @@ Source: TNLean one-dimensional note, Lemma `lem:logsep`,
 `part2a_mps_information.tex`, lines 472–488.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (IsGapped groundSpace interval ChainInteraction)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- A union of at most `k₀` intervals has polynomially small mutual information
 with every region at logarithmic separation. Source: TNLean note,
 Lemma `lem:logsep`, `part2a_mps_information.tex:472–488`. -/
-theorem ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
+theorem _root_.ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_separation
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hΔ : 0 < Δ)
     (p : ℝ) (hp : 0 < p) (k₀ : ℕ) (hk₀ : 1 ≤ k₀) :
     ∃ (Dp : ℝ) (L₀ : ℕ), 0 < Dp ∧ 1 ≤ L₀ ∧
       ∀ (L : ℕ), L₀ ≤ L →
-      ∀ (h : ChainHamiltonian L q R J)
+      ∀ (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian) (_ : ∀ X, ‖h.term X‖ ≤ J)
         (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (E₀ : ℝ),
-        Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ T E : Finset (Fin L),
           (∃ (n : ℕ) (a z : Fin n → ℕ), n ≤ k₀ ∧
             T = Finset.univ.biUnion (fun i ↦ interval L (a i) (z i))) →
@@ -54,10 +60,10 @@ theorem ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
   have hk₀r : 0 ≤ (k₀ : ℝ) := by exact_mod_cast (Nat.zero_le 1).trans hk₀
   have hb : 0 ≤ b := mul_nonneg (mul_nonneg (by norm_num) hk₀r) hc
   obtain ⟨Cp, Lreset, hCp, hLreset, hreset⟩ :=
-    ChainHamiltonian.information_reset q hq R J Δ hΔ p hp
+    ManyBody.ChainInteraction.information_reset q hq R J Δ hΔ p hp
   refine ⟨3 * Cp * (2 + b) + 3, max Lreset ⌈Real.exp 1⌉₊,
     by positivity, hLreset.trans (le_max_left _ _), ?_⟩
-  intro L hL h Ω E₀ hgs T E hT hdist
+  intro L hL h hh hhJ Ω E₀ hΩ hgap hspan T E hT hdist
   have hLn : 1 ≤ L := hLreset.trans ((le_max_left _ _).trans hL)
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hLn
   have hLexp : Real.exp 1 ≤ (L : ℝ) :=
@@ -107,13 +113,14 @@ theorem ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
       exact_mod_cast (Nat.dist.triangle_inequality x.val y.val e.val).trans_eq
         (congrArg (Nat.dist x.val y.val + ·) (Nat.dist_comm y.val e.val))
     linarith only [htri, hxy, hsep, hdist x hx e he]
-  have hJ : 0 ≤ J := h.norm_bound_nonneg ⟨0, hLn⟩
+  have hJ : 0 ≤ J := h.norm_bound_nonneg hhJ ⟨0, hLn⟩
   have hI : ∀ a z : ℕ,
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a z) Ω ≤ c :=
-    fun a z ↦ (regionEntropy_interval_le hq hJ hΔ h hgs a z).trans (le_max_right _ _)
+    fun a z ↦ (regionEntropy_interval_le hq hJ hΔ h hh hhJ hΩ hgap hspan a z).trans
+        (le_max_right _ _)
   have hD : Entropy.regionEntropy (n := fun _ : Fin L ↦ q) D Ω ≤ (k₀ : ℝ) * c := by
     obtain ⟨n, a, z, hn, hT⟩ := hT
-    have hbound := regionEntropy_chainNeighborhood_biUnion_intervals_le hgs.1 hI
+    have hbound := regionEntropy_chainNeighborhood_biUnion_intervals_le hΩ hI
       (Finset.univ : Finset (Fin n)) a z (w + 1) (by linarith only [hw])
     dsimp only at hbound
     change Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
@@ -123,11 +130,11 @@ theorem ChainHamiltonian.mutualInformation_le_of_logarithmic_separation
     exact hbound.trans (mul_le_mul_of_nonneg_right (by exact_mod_cast hn) hc)
   have hMI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω D C ≤ b := by
     have hbound := FiniteProduct.mutualInformation_le_two_entropy
-      (fun _ : Fin L ↦ Fin q) Ω hgs.1 D C hDC
+      (fun _ : Fin L ↦ Fin q) Ω hΩ D C hDC
     rw [← Entropy.regionEntropy_eq_entropy] at hbound
     dsimp only [b]
     nlinarith only [hbound, hD, mul_nonneg hk₀r hc]
-  exact hreset L ((le_max_left _ _).trans hL) h Ω E₀ hgs
+  exact hreset L ((le_max_left _ _).trans hL) h hh hhJ Ω E₀ hΩ hgap hspan
     D C T E hDC hTD hEC b hMI hmarginT hmarginE
 
 end TNLean.MPS.AreaLaw

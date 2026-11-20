@@ -29,6 +29,8 @@ in `docs/paper-gaps/alvv16_approximation_parameters.tex`. Joint tree
 probability and runtime remain separate assertions.
 -/
 
+open ManyBody (interval)
+
 open MeasureTheory
 open scoped TensorProduct ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

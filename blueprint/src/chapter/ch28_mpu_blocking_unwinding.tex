@@ -1,0 +1,509 @@
+\section{The local relation for sequential blocking}
+
+The two-block representatives used in the time-reversal blocking argument
+are $u^{(2)}=v_{23}(u_{12}\otimes u_{34})$ and $v^{(2)}=v_{23}$, with the
+identity on the exterior spins understood. The following calculation
+derives the local relation used in the blocking argument of \cite{Cirac2017MPU}
+from these particular representatives.
+
+\begin{lemma}[Eight-spin factorization]\label{lem:mpu_blocking_network}
+    \lean{MPOTensor.blocking_network_eq_kronecker}
+    \leanok
+    \uses{def:mpug_staircase_middle}
+    Let $u,v,x$ be square matrices on two spins of dimension $d$, and let
+    $\sigma\in\mathbb C$. Suppose that
+    \begin{align}
+        v_{23}u_{12}u_{34}v_{23}
+         & =\sigma x_{12}x_{34}^{\dagger}.
+        \label{eq:mpu_unwind_one}
+    \end{align}
+    Then the literal eight-spin two-block network satisfies
+    \begin{align}
+        v_{45}(v_{23}u_{12}u_{34})(v_{67}u_{56}u_{78})v_{45}
+         & =\sigma\bigl[v_{23}(u_{12}\otimes x_{34})\bigr]
+        \otimes\bigl[v_{67}(x_{56}^{\dagger}\otimes u_{78})\bigr].
+        \label{eq:mpu_unwind_eight}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    The three gates $v_{23},v_{45},v_{67}$ have disjoint supports and commute.
+    Move $v_{23}v_{67}$ to the left and use
+    (\ref{eq:mpu_unwind_one}) on spins $3,4,5,6$. The exterior factors
+    $u_{12},u_{78}$ give (\ref{eq:mpu_unwind_eight}).
+\end{proof}
+
+\begin{lemma}[Local unwinding from two time-reversal equations]
+    \label{lem:mpu_unwind_local}
+    \lean{MPOTensor.unwind_dagger_trick_of_local_relations}
+    \leanok
+    \uses{lem:mpu_blocking_network}
+    Suppose that $u,v,x$ are unitary, that $\sigma_1^2=1$, and that
+    (\ref{eq:mpu_unwind_one}) holds with $\sigma=\sigma_1$.
+    Suppose also that $X$ is a unitary on four spins and that the
+    left-hand side of (\ref{eq:mpu_unwind_eight}) equals
+    $\sigma_2 X_{1234}\otimes X_{5678}^{\dagger}$.
+    For $\zeta=\sigma_1\sigma_2$,
+    \begin{align}
+        \zeta\bigl[v_{23}(u_{12}\otimes x_{34})\bigr]^{\dagger}
+         & =v_{23}(x_{12}^{\dagger}\otimes u_{34}).
+        \label{eq:mpu_unwind_local}
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    Put $A=v_{23}(u_{12}\otimes x_{34})$ and
+    $B=v_{23}(x_{12}^{\dagger}\otimes u_{34})$.
+    Equation~(\ref{eq:mpu_unwind_eight}) gives
+    $A\otimes B=\zeta X\otimes X^{\dagger}$.
+    Contract the entries with row $(i,k)$ and column $(k,j)$ over $k$.
+    This yields $AB=\zeta XX^{\dagger}=\zeta I$.
+    Multiplication by $A^{\dagger}$ gives $B=\zeta A^{\dagger}$.
+\end{proof}
+
+\begin{lemma}[Unwinding for the printed two-block standard form]
+    \label{lem:mpu_unwind_supplied}
+    \lean{MPOTensor.TwoSiteStandardFormData.unwind_dagger_trick}
+    \leanok
+    \uses{lem:mpu_unwind_local, lem:mpu_supplied_printed_two_block_standard_form}
+    Let $W$ have a supplied square two-site standard form with gates $u,v$.
+    Suppose its one-block time-reversal equation holds with sign
+    $\sigma_1\in\{1,-1\}$ and unitary $x$, and the time-reversal equation
+    for its printed two-block gates $u^{(2)},v^{(2)}$ holds with scalar
+    $\sigma_2$ and unitary $X$. Then (\ref{eq:mpu_unwind_local}) holds
+    with $\zeta=\sigma_1\sigma_2$.
+\end{lemma}
+\begin{proof}\leanok
+    Multiply each local equation on the right by its shifted gate.
+    Unitarity cancels the adjoint factor. Relabel each ordered spin pair
+    by its product basis and apply Lemma~\ref{lem:mpu_unwind_local}.
+\end{proof}
+
+\begin{lemma}[Canonical supplied standard forms admit local unwinding]
+    \label{lem:mpu_unwind_canonical}
+    \lean{MPOTensor.TwoSiteStandardFormData.exists_unwind_dagger_trick}
+    \leanok
+    \uses{lem:mpu_unwind_supplied, lem:mpu_supplied_forward_local_time_reversal}
+    Let $W$ have a supplied square two-site standard form with gates $u,v$
+    and a reduced full-support canonical-form-II presentation. Suppose
+    $W^{(N)}=W^{(N)\dagger}$ for every even $N>1$.
+    There is a unitary $x$ satisfying (\ref{eq:mpu_unwind_local}) with
+    $\zeta=\sigma(u,v)\sigma(u^{(2)},v^{(2)})$, where $\sigma$ denotes
+    the normalized four-spin time-reversal trace.
+    % Canonical ambient restriction: mpu_canonical_form_full_support.tex.
+    % This lemma does not complete prop:sigma1-and-sigma2-equal.
+\end{lemma}
+\begin{proof}\leanok
+    Positive blocking and bijective physical relabelling preserve the
+    chosen canonical presentation. The printed two-block tensor inherits
+    adjoint symmetry from the original even rings. Apply the supplied
+    local characterization to $W$ and to its printed two-block form.
+    Each resulting scalar equals its normalized four-spin trace.
+    Lemma~\ref{lem:mpu_unwind_supplied} gives the conclusion.
+\end{proof}
+
+\subsection{Finite circuits at arbitrary blocking length}
+
+All spin labels in this subsection refer to the original spins, ordered
+from left to right. The identities below concern finite matrices. For supplied
+square standard-form data, the final construction below identifies these
+matrices with the standard form of the actual arbitrarily blocked tensor.
+
+\begin{definition}[Placed pair gates and consecutive layers]
+    \label{def:mpu_printed_layers}
+    \lean{MPOTensor.printedPairGate, MPOTensor.printedCellLayer, MPOTensor.printedLinkLayer}
+    \leanok
+    For a matrix $A$ on two spins, write $A_{p,p+1}$ for its action on
+    consecutive spins $p,p+1$, with identity on all exterior spins.
+    On a chain of $2k$ spins, put
+    \begin{align*}
+        C_{a,m}(A) & =\prod_{j=0}^{m-1}A_{2(a+j)+1,2(a+j)+2}, \\
+        L_{a,m}(A) & =\prod_{j=0}^{m-1}A_{2(a+j)+2,2(a+j)+3}.
+    \end{align*}
+    The products are ordered by increasing $j$. Require $a+m\leq k$
+    for $C_{a,m}$ and $a+m+1\leq k$ for $L_{a,m}$.
+\end{definition}
+
+\begin{lemma}[Placement and support]
+    \label{lem:mpu_printed_placement}
+    \lean{MPOTensor.printedPairGate_prod_congr, MPOTensor.printedPairGate_apply, MPOTensor.printedPairGate_embed, MPOTensor.printedPairGate_commute, MPOTensor.printedPairGate_mem_unitaryGroup, MPOTensor.printedPairGate_conjTranspose}
+    \leanok
+    \uses{def:mpu_printed_layers}
+    The entry of $A_{p,p+1}$ is the corresponding entry of $A$ if all
+    exterior row and column spins agree, and is zero otherwise.
+    Consecutive placement inside a consecutive interval adds the two
+    offsets. Gates on disjoint pairs commute, placement preserves
+    unitarity, and $(A_{p,p+1})^\dagger=(A^\dagger)_{p,p+1}$.
+    Equal placement offsets give the same ordered product of pair gates.
+\end{lemma}
+\begin{proof}\leanok
+    Split a spin configuration into its selected pair and its complement.
+    Matrix multiplication sums only over the selected pair; the
+    complementary entries are Kronecker deltas. For disjoint pairs the
+    two independent sums commute.
+\end{proof}
+
+\begin{lemma}[Layer identities]
+    \label{lem:mpu_printed_layer_identities}
+    \lean{MPOTensor.printedCellLayer_zero, MPOTensor.printedLinkLayer_zero, MPOTensor.printedCellLayer_succ, MPOTensor.printedLinkLayer_succ, MPOTensor.printedCellLayer_succ_last, MPOTensor.printedLinkLayer_succ_last, MPOTensor.printedCellLayer_embed, MPOTensor.printedLinkLayer_embed, MPOTensor.printedPairGate_commute_cellLayer, MPOTensor.printedPairGate_commute_linkLayer, MPOTensor.printedCellLayer_conjTranspose, MPOTensor.printedLinkLayer_conjTranspose, MPOTensor.printedCellLayer_mem_unitaryGroup, MPOTensor.printedLinkLayer_mem_unitaryGroup}
+    \leanok
+    \uses{lem:mpu_printed_placement}
+    Empty layers are the identity. A nonempty layer splits into its first
+    gate followed by the remaining layer, or its initial layer followed
+    by the last gate. Consecutive placement by $2b$ spins replaces $a$
+    by $a+b$. A pair gate commutes with a layer lying wholly to its left
+    or wholly to its right. Taking the adjoint of a layer replaces each
+    gate by its adjoint, and a layer of unitary gates is unitary.
+\end{lemma}
+\begin{proof}\leanok
+    Split the finite products at the first or last factor. Placement
+    preserves products. The factors within each layer have disjoint
+    supports, so they commute; this also permits reversal of their order
+    after taking adjoints.
+\end{proof}
+
+\begin{definition}[The printed finite circuits]
+    \label{def:mpu_printed_circuits}
+    \lean{MPOTensor.printedInputCircuit, MPOTensor.printedOutputCircuit}
+    \leanok
+    \uses{def:mpu_printed_layers}
+    For $k>0$, define matrices on $2k$ original spins by
+    \begin{align*}
+        U_k & =L_{0,k-1}(v)C_{0,k}(u), \\
+        V_k & =v_{k,k+1}.
+    \end{align*}
+    These are the circuits displayed in the blocking argument of
+    \cite{Cirac2017MPU}, with identity spectators retained.
+\end{definition}
+
+\begin{lemma}[Unitarity and extension of the printed circuits]
+    \label{lem:mpu_printed_circuit_extension}
+    \lean{MPOTensor.printedBlockingCircuits_mem_unitaryGroup, MPOTensor.printedInputCircuit_succ}
+    \leanok
+    \uses{def:mpu_printed_circuits, lem:mpu_printed_layer_identities}
+    If $u,v$ are unitary, then $U_k,V_k$ are unitary for every $k>0$.
+    Writing $\iota$ for placement on the first $2k$ spins of a chain of
+    $2k+2$ spins, one has, for arbitrary $u,v$,
+    \begin{align*}
+        U_{k+1} & =v_{2k,2k+1}\,\iota(U_k)\,u_{2k+1,2k+2}.
+    \end{align*}
+\end{lemma}
+\begin{proof}\leanok
+    Products and placements preserve unitarity. For the extension
+    identity, split off the last gate of each layer. The new shifted gate
+    commutes with all preceding shifted gates; move it to the left.
+\end{proof}
+
+\subsection{Every step of the sequential unwinding}
+
+\begin{lemma}[Local unwinding with exterior spins]
+    \label{lem:mpu_printed_window_unwind}
+    \lean{MPOTensor.printedPairGate_unwind}
+    \leanok
+    \uses{lem:mpu_printed_placement, lem:mpu_unwind_local}
+    Suppose square two-spin matrices $u,v,x$ and $\zeta\in\mathbb C$
+    satisfy (\ref{eq:mpu_unwind_local}). On any consecutive four-spin
+    interval $p,p+1,p+2,p+3$ inside any longer chain,
+    \begin{align*}
+        v_{p+1,p+2}x_{p,p+1}^\dagger u_{p+2,p+3}
+         & =\zeta u_{p,p+1}^\dagger x_{p+2,p+3}^\dagger v_{p+1,p+2}^\dagger.
+    \end{align*}
+\end{lemma}
+\begin{proof}\leanok
+    Relabel four consecutive spins as two ordered pairs. Expanding the
+    adjoint in (\ref{eq:mpu_unwind_local}) gives the stated identity.
+    Placement inside the longer chain preserves products, adjoints and
+    scalar multiplication.
+\end{proof}
+
+\begin{definition}[The source's sequential matrices and left factor]
+    \label{def:mpu_printed_unwinding_sequence}
+    \lean{MPOTensor.printedUnwindingSequence, MPOTensor.printedUnwindingFactor}
+    \leanok
+    \uses{def:mpu_printed_layers}
+    For $0\leq s<k$, put
+    \begin{align*}
+        Y_s={} & \sigma\zeta^s L_{s,k-1-s}(v)C_{0,s}(u^\dagger)
+        x_{2s+1,2s+2}^\dagger C_{s+1,k-1-s}(u)L_{0,s}(v)^\dagger, \\
+        X={}   & L_{0,k-1}(v)C_{0,k-1}(u)x_{2k-1,2k}.
+    \end{align*}
+    All matrices act on the same chain of $2k$ original spins.
+\end{definition}
+
+\begin{lemma}[Consecutive steps and endpoints]
+    \label{lem:mpu_printed_sequence_steps}
+    \lean{MPOTensor.printedUnwindingSequence_step, MPOTensor.printedUnwindingSequence_eq_zero, MPOTensor.printedUnwindingSequence_zero, MPOTensor.printedUnwindingSequence_last}
+    \leanok
+    \uses{def:mpu_printed_unwinding_sequence, lem:mpu_printed_window_unwind, lem:mpu_printed_layer_identities}
+    Under (\ref{eq:mpu_unwind_local}), $Y_s=Y_{s+1}$ whenever $s+1<k$,
+    and $Y_0=Y_s$ for every $s<k$. The endpoints, for arbitrary matrices,
+    are
+    \begin{align*}
+        Y_0     & =\sigma L_{0,k-1}(v)x_{1,2}^\dagger C_{1,k-1}(u), \\
+        Y_{k-1} & =\sigma\zeta^{k-1}X^\dagger.
+    \end{align*}
+\end{lemma}
+\begin{proof}\leanok
+    Fix $s+1<k$ and put $m=k-2-s$. Split the first shifted gate and
+    the first forward cell, writing
+    \begin{align*}
+        L & =v_{2s+2,2s+3},         \\
+        V & =L_{s+1,m}(v),          \\
+        P & =C_{0,s}(u^\dagger),    \\
+        Z & =x_{2s+1,2s+2}^\dagger, \\
+        U & =u_{2s+3,2s+4},         \\
+        R & =C_{s+2,m}(u),          \\
+        T & =L_{0,s}(v)^\dagger,    \\
+        A & =u_{2s+1,2s+2}^\dagger, \\
+        B & =x_{2s+3,2s+4}^\dagger.
+    \end{align*}
+    Disjoint supports and Lemma~\ref{lem:mpu_printed_window_unwind} give
+    \begin{align*}
+        LV          & =VL,                \\
+        LP          & =PL,                \\
+        L^\dagger R & =RL^\dagger,        \\
+        LZU         & =\zeta ABL^\dagger.
+    \end{align*}
+    Consequently,
+    \begin{align*}
+        (LV)PZ(UR)T
+         & =VP(LZU)RT                                      \\
+         & =\zeta VPABL^\dagger RT                         \\
+         & =\zeta V(PA)BR(L^\dagger T),                    \\
+        Y_s
+         & =\sigma\zeta^s(LV)PZ(UR)T                       \\
+         & =\sigma\zeta^{s+1}V(PA)BR(L^\dagger T)=Y_{s+1}.
+    \end{align*}
+    The last product has one more adjoint cell and adjoint link, with
+    $x^\dagger$ on the next cell. Induction gives $Y_0=Y_s$.
+    Empty layers give the initial endpoint. At the last endpoint,
+    expand $X^\dagger$ and commute its final pair past the disjoint
+    adjoint cell layer.
+\end{proof}
+
+\begin{lemma}[Full finite-spin sequential unwinding]
+    \label{lem:mpu_printed_sequential_unwinding}
+    \lean{MPOTensor.printed_sequential_unwinding, MPOTensor.printedUnwindingFactor_mem_unitaryGroup}
+    \leanok
+    \uses{lem:mpu_printed_sequence_steps, lem:mpu_printed_layer_identities}
+    For every $k>0$, (\ref{eq:mpu_unwind_local}) implies
+    \begin{align*}
+        \sigma L_{0,k-1}(v)x_{1,2}^\dagger C_{1,k-1}(u)
+         & =\sigma\zeta^{k-1}X^\dagger.
+    \end{align*}
+    If $u,v,x$ are unitary, so is $X$.
+\end{lemma}
+\begin{proof}\leanok
+    Use $Y_0=Y_{k-1}$ and substitute both endpoint formulas.
+    The matrix $X$ is a product of placed unitary gates.
+\end{proof}
+
+\begin{lemma}[Canonical supplied forms unwind at every positive length]
+    \label{lem:mpu_canonical_printed_sequential_unwinding}
+    \lean{MPOTensor.TwoSiteStandardFormData.exists_printed_sequential_unwinding}
+    \leanok
+    \uses{lem:mpu_unwind_canonical, lem:mpu_printed_sequential_unwinding}
+    Under the hypotheses of Lemma~\ref{lem:mpu_unwind_canonical}, there
+    is a single unitary $x$ for which the finite-spin sequential identity
+    holds for every $k>0$, with $\sigma=\sigma(u,v)$ and
+    $\zeta=\sigma(u,v)\sigma(u^{(2)},v^{(2)})$.
+    % The canonical presentation is a premise only of this local-unitary corollary.
+\end{lemma}
+\begin{proof}\leanok
+    Choose $x$ from Lemma~\ref{lem:mpu_unwind_canonical} once, and apply
+    Lemma~\ref{lem:mpu_printed_sequential_unwinding} at each length.
+\end{proof}
+
+\subsection{The actual blocked tensor and its printed standard form}
+
+\begin{lemma}[Entries of the open layers]
+    \label{lem:mpu_printed_open_layer_entries}
+    \lean{MPOTensor.printedCellLayer_full_apply, MPOTensor.printedLinkLayer_full_apply}
+    \leanok
+    \uses{def:mpu_printed_layers}
+    The entry of $C_{0,k}(u)$ is the product of the $k$ unshifted pair
+    entries. The entry of $L_{0,k-1}(v)$ is the product of the $k-1$
+    internal shifted pair entries when the first and last row spins agree
+    with their column spins, and is zero otherwise.
+\end{lemma}
+\begin{proof}\leanok
+    The ranges of the pair placements are disjoint. The product-entry
+    formula for disjoint placements leaves exactly the exterior
+    Kronecker deltas; the unshifted layer covers the whole chain.
+\end{proof}
+
+\begin{definition}[Open printed contraction]
+    \label{def:mpu_printed_open_contraction}
+    \lean{MPOTensor.printedOpenGateContraction}
+    \leanok
+    \uses{def:mpu_supplied_two_site_standard_form}
+    Let $W$ have supplied square standard-form data $u,v,X_1,X_2$.
+    For ordered physical pair words $i,j$ of positive length $k$, define
+    the matrix with virtual endpoints $\alpha,\gamma$ by
+    \begin{align*}
+        G(i,j)_{\alpha\gamma}
+         & =\sum_{h_1,\ldots,h_k}(X_2)_{(\alpha,i_{1,1}),h_{1,1}}
+        \left[\prod_{p=1}^{k-1}v_{(i_{p,2},i_{p+1,1}),(h_{p,2},h_{p+1,1})}\right] \\
+         & \quad\cdot\left[\prod_{p=1}^{k}u_{h_p,j_p}\right]
+        (X_1)_{(i_{k,2},\gamma),h_{k,2}},
+    \end{align*}
+    where each $h_p$ is an ordered pair of original-spin indices.
+\end{definition}
+
+\begin{lemma}[Actual open words and the printed input circuit]
+    \label{lem:mpu_actual_printed_open_contraction}
+    \lean{MPOTensor.TwoSiteStandardFormData.evalWord_eq_printedOpenGateContraction, MPOTensor.TwoSiteStandardFormData.blockTensor_eq_printedOpenGateContraction, MPOTensor.TwoSiteStandardFormData.evalWord_eq_printedInputCircuit}
+    \leanok
+    \uses{def:mpu_printed_open_contraction, lem:mpu_printed_open_layer_entries, def:mpu_printed_circuits}
+    The actual ordered product of the $k$ letters of $W$ equals $G(i,j)$.
+    In particular this gives the actual length-$k$ blocked tensor after
+    decoding its physical words. If $\bar i,\bar j$ are the flattened
+    words on $2k$ original spins, the same entry is
+    \begin{align*}
+         & \sum_{a,b}(X_2)_{(\alpha,\bar i_1),a}
+        (U_k)_{\bar i[1\mapsto a,\,2k\mapsto b],\,\bar j}
+        (X_1)_{(\bar i_{2k},\gamma),b}.
+    \end{align*}
+    These are identities with both virtual endpoints free.
+\end{lemma}
+\begin{proof}\leanok
+    Induct on the positive word length. Expanding the first letter leaves
+    its right half factor next to the left half factor of the remaining
+    word; summing their common bond gives $v$. Separating the first
+    intermediate pair in the finite sum gives the same recurrence for
+    $G$. At length one the identity is the supplied open standard form.
+    For the circuit expression, use
+    Lemma~\ref{lem:mpu_printed_open_layer_entries}. Its two exterior
+    deltas select $a=h_{1,1}$ and $b=h_{k,2}$, leaving precisely $G$.
+\end{proof}
+
+\begin{definition}[Half-word coordinates and spectator half factors]
+    \label{def:mpu_printed_blocked_half_factors}
+    \lean{MPOTensor.printedHalfWordEquiv, MPOTensor.printedBlockedPhysicalEquiv, MPOTensor.printedBlockedInputGate, MPOTensor.printedBlockedOutputGate, MPOTensor.printedBlockedHalfLeft, MPOTensor.printedBlockedHalfRight}
+    \leanok
+    \uses{def:mpu_printed_circuits, def:mpu_supplied_two_site_standard_form}
+    Set $q=d^k$. Identify an ordered pair of $q$-dimensional indices with
+    the concatenation of its two decoded length-$k$ words. The physical
+    relabelling $e_k$ sends the two encoded half words to the actual
+    blocked alphabet by concatenating their spins and regrouping the
+    original ordered pairs before encoding.
+    Write $\widehat U_k,\widehat V_k$ for $U_k,V_k$ in this basis.
+    For words $A,B,T,S$ of length $k$, put
+    \begin{align*}
+        (\widehat X_2)_{(\alpha,A),T}
+         & =\delta_{A_{2:k},T_{2:k}}(X_2)_{(\alpha,A_1),T_1},     \\
+        (\widehat X_1)_{(B,\gamma),S}
+         & =\delta_{B_{1:k-1},S_{1:k-1}}(X_1)_{(B_k,\gamma),S_k}.
+    \end{align*}
+    Empty spectator words impose no restriction.
+\end{definition}
+
+\begin{lemma}[Relabelling and unitary blocked gates]
+    \label{lem:mpu_printed_blocked_coordinates}
+    \lean{MPOTensor.printedBlockedPhysicalEquiv_decode, MPOTensor.printedBlockedGates_mem_unitaryGroup}
+    \leanok
+    \uses{def:mpu_printed_blocked_half_factors, lem:mpu_printed_circuit_extension}
+    Decoding $e_k$ recovers the original ordered physical pair word.
+    If $u,v$ are unitary, then $\widehat U_k,\widehat V_k$ are unitary.
+\end{lemma}
+\begin{proof}\leanok
+    The physical relabelling composes the word decoding, original-spin
+    concatenation and half-word splitting bijections. These cancel on
+    decoding. Unitarity is preserved by bijective reindexing.
+\end{proof}
+
+\begin{lemma}[Both blocked half-factor contractions]
+    \label{lem:mpu_printed_blocked_contractions}
+    \lean{MPOTensor.printedBlockedOutputGate_apply, MPOTensor.TwoSiteStandardFormData.printedBlocked_output_contraction, MPOTensor.TwoSiteStandardFormData.printedBlocked_input_contraction}
+    \leanok
+    \uses{def:mpu_printed_blocked_half_factors, lem:mpu_actual_printed_open_contraction}
+    For every $k>0$, the spectator half factors satisfy
+    \begin{align*}
+        (\widehat V_k)_{(A,B),(S,T)}
+         & =\sum_\beta (\widehat X_1)_{(A,\beta),S}
+        (\widehat X_2)_{(\beta,B),T},               \\
+        (W_k)^{IJ}_{\alpha\gamma}
+         & =\sum_{T,S}(\widehat X_2)_{(\alpha,A),T}
+        (\widehat U_k)_{(T,S),(C,D)}
+        (\widehat X_1)_{(B,\gamma),S},
+    \end{align*}
+    where $W_k$ is the actual blocked tensor in the $e_k$ coordinates,
+    $I=(A,B)$, and $J=(C,D)$. The first entry is zero unless
+    $A_{1:k-1}=S_{1:k-1}$ and $B_{2:k}=T_{2:k}$; otherwise it is
+    $v_{(A_k,B_1),(S_k,T_1)}$.
+\end{lemma}
+\begin{proof}\leanok
+    In the first contraction the spectator deltas are independent of
+    $\beta$; the remaining sum is the original contraction giving $v$.
+    In the second contraction split $T$ into its first spin and tail,
+    and $S$ into its prefix and last spin. The spectator deltas select
+    those tail and prefix words. The two surviving spins replace exactly
+    the exterior output spins in
+    Lemma~\ref{lem:mpu_actual_printed_open_contraction}.
+\end{proof}
+
+\begin{lemma}[The actual printed arbitrary-blocking standard form]
+    \label{lem:mpu_actual_printed_blocked_standard_form}
+    \lean{MPOTensor.TwoSiteStandardFormData.printedBlock}
+    \leanok
+    \uses{lem:mpu_printed_blocked_coordinates, lem:mpu_printed_blocked_contractions}
+    Let $W$ have supplied square standard-form data with positive physical
+    and bond dimensions. For every $k>0$, its actual blocked tensor in
+    the $e_k$ coordinates has standard form
+    $\widehat U_k,\widehat V_k,\widehat X_1,\widehat X_2$.
+    Its virtual bond space is the original bond space of $W$.
+\end{lemma}
+\begin{proof}\leanok
+    The half-word dimensions are positive. The preceding two lemmas give
+    both unitary gates and the two required open contractions.
+\end{proof}
+
+\begin{lemma}[Actual printed-gate traces and their parity]
+    \label{lem:mpu_actual_printed_blocking_trace_parity}
+    \lean{MPOTensor.TwoSiteStandardFormData.printedBlocking_trace_eq_intrinsic, MPOTensor.TwoSiteStandardFormData.printed_blocking_trace_parity}
+    \leanok
+    \uses{lem:mpu_actual_printed_blocked_standard_form, lem:mpu_source_time_reversal_sign_independent, lem:mpu_intrinsic_blocking_parity}
+    For the supplied square standard form above, the normalized trace
+    $\tau_k=\sigma(\widehat U_k,\widehat V_k)$ equals the intrinsic trace
+    of the actual length-$k$ block. If $W^{(N)}=W^{(N)\dagger}$ on every
+    even ring with $N>1$, then
+    \begin{align*}
+        \tau_k & =\begin{cases}
+                      \sigma(u,v),             & k\text{ odd},  \\
+                      \sigma(u^{(2)},v^{(2)}), & k\text{ even}.
+                  \end{cases}
+    \end{align*}
+    No canonical ambient presentation is required for these identities.
+    The square supplied-gate hypothesis is explicit. Its reduction from
+    a general rectangular presentation remains separate, as explained in
+    \cite{gap:mpu_printed_blocking_square_scope}.
+\end{lemma}
+\begin{proof}\leanok
+    The gate-trace identity applies to the actual constructed standard
+    form. For a tensor $Z$ with nonempty finite physical alphabet
+    $\mathcal I$, its intrinsic trace is
+    \begin{align*}
+        \mathfrak t(Z) & =\frac{1}{|\mathcal I|}
+        \sum_{c,d\in\mathcal I}Z^{(2)}_{(d,c),(c,d)}.
+    \end{align*}
+    Let $e:\mathcal J\to\mathcal I$ be a bijection and write $Z_e$
+    for $Z$ after applying this relabelling to both physical indices.
+    Then $|\mathcal J|=|\mathcal I|$ and
+    \begin{align*}
+        \mathfrak t(Z_e)
+         & =\frac{1}{|\mathcal J|}
+        \sum_{a,b\in\mathcal J}(Z_e)^{(2)}_{(b,a),(a,b)}         \\
+         & =\frac{1}{|\mathcal J|}
+        \sum_{a,b\in\mathcal J}Z^{(2)}_{(e(b),e(a)),(e(a),e(b))} \\
+         & =\frac{1}{|\mathcal I|}
+        \sum_{c,d\in\mathcal I}Z^{(2)}_{(d,c),(c,d)}
+        =\mathfrak t(Z).
+    \end{align*}
+    Apply this calculation to the actual length-$k$ block $W_k$ and
+    $e=e_k$ to obtain $\tau_k=\mathfrak t(W_k)$. Intrinsic blocking
+    parity applies to the MPU supplied by the original standard form.
+    The original and printed two-block standard forms give, respectively,
+    \begin{align*}
+        \mathfrak t(W)   & =\sigma(u,v),             \\
+        \mathfrak t(W_2) & =\sigma(u^{(2)},v^{(2)}),
+    \end{align*}
+    which identify the odd and even values.
+\end{proof}

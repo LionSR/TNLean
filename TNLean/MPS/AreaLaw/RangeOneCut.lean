@@ -17,6 +17,8 @@ This is the Hamiltonian decomposition used by Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `References/1307.5143/algo53.tex`, lines 283 and 409–410.
 -/
 
+open ManyBody (ChainSupport IsChainSupport interval mem_interval ChainInteraction)
+
 open Matrix
 open scoped Matrix.Norms.L2Operator ComplexOrder MatrixOrder
 
@@ -46,10 +48,11 @@ theorem IsChainSupport.eq_interval_of_splits_of_range_one {L k : ℕ} {X : Finse
 /-- Positive range-one interactions of norm at most one split at every cut as
 `H = H_L + H_R + K`, with the two parts supported on their respective sides and
 `0 ≤ K ≤ 1`. Source: LVV13, `algo53.tex`, line 283 and lines 409–410. -/
-theorem ChainHamiltonian.exists_cut_decomposition_of_range_one {L q : ℕ}
-    (h : ChainHamiltonian L q 1 1) (hpos : ∀ X, (h.term X).PosSemidef) (k : ℕ) :
+theorem _root_.ManyBody.ChainInteraction.exists_cut_decomposition_of_range_one {L q : ℕ}
+    (h : ChainInteraction L q 1) (hhJ : ∀ X, ‖h.term X‖ ≤ 1)
+        (hpos : ∀ X, (h.term X).PosSemidef) (k : ℕ) :
     ∃ HL HR K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      h.operator = HL + HR + K ∧
+      h.hamiltonian = HL + HR + K ∧
       Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (interval L 0 k) ∧
       Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HR (interval L 0 k)ᶜ ∧
       K.PosSemidef ∧ (1 - K).PosSemidef := by
@@ -63,7 +66,7 @@ theorem ChainHamiltonian.exists_cut_decomposition_of_range_one {L q : ℕ}
       X.1 = interval L (k - 1) (k + 1) := by
     have hnotL := (Finset.mem_filter.mp (Finset.mem_filter.mp hXC).1).2
     have hnotR := (Finset.mem_filter.mp hXC).2
-    apply X.2.eq_interval_of_splits_of_range_one
+    apply IsChainSupport.eq_interval_of_splits_of_range_one X.2
     constructor
     · obtain ⟨x, hx, hxA⟩ := Finset.not_subset.mp hnotR
       exact ⟨x, hx, by simpa [A, mem_interval] using hxA⟩
@@ -77,22 +80,22 @@ theorem ChainHamiltonian.exists_cut_decomposition_of_range_one {L q : ℕ}
   have hK : K.PosSemidef := posSemidef_sum C fun X _ ↦ hpos X
   have hKn : ‖K‖ ≤ 1 := by
     calc
-      ‖K‖ ≤ ∑ _ ∈ C, (1 : ℝ) := norm_sum_le_of_le C fun X _ ↦ h.norm_le X
+      ‖K‖ ≤ ∑ _ ∈ C, (1 : ℝ) := norm_sum_le_of_le C fun X _ ↦ hhJ X
       _ ≤ 1 := by simpa using (show (C.card : ℝ) ≤ 1 by exact_mod_cast hcard)
   have hK1 : (1 - K).PosSemidef :=
     Matrix.le_iff.mp ((CStarAlgebra.norm_le_one_iff_of_nonneg _ hK.nonneg).mp hKn)
   let HL := ∑ X ∈ S, h.term X
   let HR := ∑ X ∈ T, h.term X
   refine ⟨HL, HR, K, ?_, ?_, ?_, hK, hK1⟩
-  · have hSU : h.operator = HL + ∑ X ∈ U, h.term X :=
+  · have hSU : h.hamiltonian = HL + ∑ X ∈ U, h.term X :=
       (Finset.sum_filter_add_sum_filter_not Finset.univ
         (fun X : ChainSupport L 1 ↦ X.1 ⊆ A) h.term).symm
     have hTC : (∑ X ∈ U, h.term X) = HR + K :=
       (Finset.sum_filter_add_sum_filter_not U (fun X ↦ X.1 ⊆ Aᶜ) h.term).symm
     rw [hSU, hTC, add_assoc]
-  · exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
-      (h.supported X).mono (Finset.mem_filter.mp hX).2
-  · exact (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
-      (h.supported X).mono (Finset.mem_filter.mp hX).2
+  · change _ ∈ ManyBody.supportedOperators _ _
+    exact sum_mem fun X hX ↦ Entropy.IsSupportedOn.mono (h.mem X) (Finset.mem_filter.mp hX).2
+  · change _ ∈ ManyBody.supportedOperators _ _
+    exact sum_mem fun X hX ↦ Entropy.IsSupportedOn.mono (h.mem X) (Finset.mem_filter.mp hX).2
 
 end TNLean.MPS.AreaLaw

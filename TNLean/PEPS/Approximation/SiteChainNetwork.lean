@@ -53,7 +53,6 @@ the manuscript; no upstream Lean proof text was reused.
 
 open Matrix QuantumCircuit
 open scoped BigOperators
-open TNLean.Lattice (siteLift)
 
 noncomputable section
 
@@ -129,12 +128,12 @@ variable [Fintype ι] (s : Step ι q)
 
 /-- The operator `|k⟩⟨b|_S ⊗ 1` of the step. -/
 def op : Matrix (ι → Fin q) (ι → Fin q) ℂ :=
-  siteLift s.sites (vecMulVec ⇑s.ketVec (star ⇑s.braVec))
+  ManyBody.place (X := fun _ ↦ Fin _) s.sites (vecMulVec ⇑s.ketVec (star ⇑s.braVec))
 
 theorem op_apply (ρ ρ' : ι → Fin q) :
     s.op ρ ρ' = if ∀ x ∉ s.sites, ρ x = ρ' x then
       s.ketVec (fun x => ρ x) * star (s.braVec (fun x => ρ' x)) else 0 := by
-  rw [op, siteLift, embedOp_apply]
+  rw [op, QuantumCircuit.place_eq_embedOp, embedOp_apply]
   have h : AgreeOff (Subtype.val : s.sites → ι) ρ ρ' ↔ ∀ x ∉ s.sites, ρ x = ρ' x :=
     forall_congr' fun x => imp_congr_left
       ⟨fun h hx => h ⟨x, hx⟩ rfl, fun h j hj => h (hj ▸ j.2)⟩

@@ -11,6 +11,7 @@ import TNLean.MPS.AreaLaw.ViableSet.LeadingPower
 import TNLean.MPS.AreaLaw.ViableSet.Span
 import TNLean.MPS.AreaLaw.ViableSet.ViableLeadingBounds
 import TNLean.MPS.AreaLaw.ViableSet.SizeTrimming.ApproximateCertificates
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Viability from finite rational certificate search
@@ -35,21 +36,25 @@ https://sirui-lu.com/QICLean/paper-gaps/lvv13_trace_norm_net.pdf.
 open Matrix
 open scoped InnerProductSpace ComplexOrder Kronecker MatrixOrder Matrix.Norms.L2Operator
 
+open ManyBody (IsGapped groundSpace ChainInteraction)
+
 namespace TNLean.MPS.AreaLaw
 
 /-- A code returned by the executable rational search yields the physical LVV viable
 vector once its exact-data error budget fits the available margin.  The differences
 between the rational trace and energy thresholds and their physical targets are charged
 as `eη` and `eK`. -/
-theorem ChainHamiltonian.exists_viable_vector_of_rational_search_result
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q)
+theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_rational_search_result
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ) {S : Set (LeftBlockVector L q k)}
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ)
@@ -57,7 +62,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_rational_search_result
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -99,7 +104,7 @@ theorem ChainHamiltonian.exists_viable_vector_of_rational_search_result
           ((κ : ℝ) + 2 * n * (ε : ℝ)))) ≤ Δ / 2028) :
     ∃ v : EuclideanSpace ℂ (Fin L → Fin q),
       ‖v‖ = 1 ∧ v ∈ leftSupportSubmodule S ∧
-      (⟪v, toEuclideanLin h.operator v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
+      (⟪v, toEuclideanLin h.hamiltonian v⟫_ℂ).re ≤ E₀ + Δ / 12 ∧
       1 - 1 / 12 ≤ ‖⟪Γ, v⟫_ℂ‖ := by
   let K := Zᴴ * (leftCutOperator k HL ⊗ₖ (1 : Matrix (Fin m) (Fin m) ℂ)) * Z
   let Ephys := (vecMulVec x (star x) * (leftCutOperator k HL ⊗ₖ
@@ -120,8 +125,8 @@ theorem ChainHamiltonian.exists_viable_vector_of_rational_search_result
       (κ : ℝ) (ε : ℝ) (εb : ℝ) δ'
       c.1.decode c.2.1.decode c.2.2.1.decode := by
     convert hexact using 1 <;> dsimp [eη, eK, Ephys, δ', r, C] <;> ring
-  apply h.exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack
-    hL hq hΔ HL B hsplit hHL hBS hBn hgs W hW x hwx hwE X hX Z hZ hZZ hcert
+  apply h.exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack hh hhJ
+    hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan W hW x hwx hwE X hX Z hZ hZZ hcert
   · exact heη
   · simpa only [eη, eK, Ephys, δ', r, C, K] using hbudget
 
@@ -129,15 +134,17 @@ theorem ChainHamiltonian.exists_viable_vector_of_rational_search_result
 compact rational viable MPS data.  Besides the ordinary repaired-certificate margin,
 the sharp overlap budget reserves `2 * ξrat` for rationalizing the physical left columns.
 This is the executable rational-output step of LVV13, `algo53.tex`, lines 493--527. -/
-theorem ChainHamiltonian.exists_rationalViableMPSData_of_rational_search_result
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q)
+theorem _root_.ManyBody.ChainInteraction.exists_rationalViableMPSData_of_rational_search_result
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     (S : Finset (LeftBlockVector L q k)) {b Hv : ℕ}
     (hS : ∀ u : S, RationalLeftOpenMPSRepresentationOfHeight Hv b u.1)
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
@@ -147,7 +154,7 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_rational_search_result
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -245,7 +252,7 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_rational_search_result
         ((rectangularTraceNorm_nonneg _).trans hcert.hresidual))
       hrepair0
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hleadingExact :
@@ -288,8 +295,8 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_rational_search_result
           2 * L * (2 * (((Δ / 169) ^ 2) / (2 * L)) + boundaryError)) / Δ +
             2 * ξrat := by ring
       _ ≤ 1 / 12 := hrational'
-  apply h.exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack
-    hL hq hΔ HL B hsplit hHL hBS hBn hgs S hS W hW x hwx hwE X hX Z hZ hZZ
+  apply h.exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack hh hhJ
+    hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan S hS W hW x hwx hwE X hX Z hZ hZZ
       hcert hleadingExact hξrat hξrat1
   simpa only [K, Hleft, repair, boundaryError] using hrationalExact
 
@@ -297,15 +304,17 @@ theorem ChainHamiltonian.exists_rationalViableMPSData_of_rational_search_result
 coordinate-rational viable-MPS invariant through the repaired certificate and column
 rationalization.  This is the successive-iteration form of LVV13, `algo53.tex`,
 lines 493--527. -/
-theorem ChainHamiltonian.exists_rationalCoordinateData_of_rational_search_result
-    {L q k : ℕ} [NeZero q] (h : ChainHamiltonian L q 1 1) (hL : 0 < L) (hq : 2 ≤ q)
+theorem _root_.ManyBody.ChainInteraction.exists_rationalCoordinateData_of_rational_search_result
+    {L q k : ℕ} [NeZero q] (h : ChainInteraction L q 1) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (hL : 0 < L) (hq : 2 ≤ q)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsplit : h.operator = HL + B)
+    (hsplit : h.hamiltonian = HL + B)
     (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
     (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
-    (hgs : IsGappedGroundState h.operator E₀ Γ Δ)
+    (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
     (S : Finset (LeftBlockVector L q k)) {s₀ b Hv : ℕ} {δin : ℝ}
     (D : RationalCoordinateViableMPSDataOfHeight Hv Γ s₀ b δin S)
     {m n : ℕ} [Nonempty (Fin n)] [Nonempty (CutSite L q k × Fin m)]
@@ -315,7 +324,7 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_rational_search_result
     (hwx : WithLp.ofLp w ∘ (gluingCut L q k).symm =
       ((1 : Matrix (CutLeft L q k × CutSite L q k)
         (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ x)
-    (hwE : (⟪w, toEuclideanLin h.operator w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
+    (hwE : (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √((Δ / 169) ^ 2))
     (X : Matrix (CutSite L q k × Fin m) (CutSite L q k × Fin m) ℂ)
     (hX : rectangularTraceNorm (partialTraceFirst (vecMulVec x (star x)) - X) ≤
       ((Δ / 169) ^ 2) / (2 * L))
@@ -415,7 +424,7 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_rational_search_result
         ((rectangularTraceNorm_nonneg _).trans hcert.hresidual))
       hrepair0
   have hHleft : ‖Hleft‖ ≤ 4 * L :=
-    (h.leftObjective_norm_bounds HL B hsplit hHL hBn).2
+    (h.leftObjective_norm_bounds hhJ HL B hsplit hHL hBn).2
   have hKn : ‖K‖ ≤ 4 * L :=
     (l2_opNorm_isometricCompression_le Z hZ Hleft).trans hHleft
   have hleadingExact :
@@ -458,8 +467,8 @@ theorem ChainHamiltonian.exists_rationalCoordinateData_of_rational_search_result
           2 * L * (2 * (((Δ / 169) ^ 2) / (2 * L)) + boundaryError)) / Δ +
             2 * ξrat := by ring
       _ ≤ 1 / 12 := hrational'
-  apply h.exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slack
-    hL hq hΔ HL B hsplit hHL hBS hBn hgs S D W hW x hwx hwE X hX Z hZ hZZ
+  apply h.exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slack hh hhJ
+    hL hq hΔ HL B hsplit hHL hBS hBn hΩ hgap hspan S D W hW x hwx hwE X hX Z hZ hZZ
       hcert hleadingExact hξrat hξrat1
   simpa only [K, Hleft, repair, boundaryError] using hrationalExact
 

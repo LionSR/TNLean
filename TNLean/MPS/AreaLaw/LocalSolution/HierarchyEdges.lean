@@ -59,18 +59,22 @@ section Support
 
 open Matrix QuantumCircuit
 
-variable {ι : Type*} [Fintype ι] {d : ℕ}
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {d : ℕ}
 
 /-- A nearest-neighbour edge acts on the parent block containing both its endpoints.
 Hastings, arXiv:cond-mat/0508554v3, lines 609–628 and 668–685. -/
 theorem hierarchyEdge_mem_supportedOperators (blk : ι → ℕ)
     (a : ℕ → Matrix (ι → Fin d) (ι → Fin d) ℂ)
-    (ha : ∀ j, 0 < j → a j ∈ supportedOperators d {i | blk i + 1 = j ∨ blk i = j})
-    (m k : ℕ) : hierarchyEdge a m k ∈ supportedOperators d (levelBlock blk (m + 1) k) := by
-  apply supportedOperators_mono (S := {i | blk i + 1 = (2 * k + 1) * 2 ^ m ∨
+    (ha : ∀ j, 0 < j → a j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+        (Finset.univ.filter fun i ↦ blk i + 1 = j ∨ blk i = j))
+    (m k : ℕ) :
+        hierarchyEdge a m k ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+    (levelBlock blk (m + 1) k) := by
+  apply ManyBody.supportedOperators_mono (D := {i | blk i + 1 = (2 * k + 1) * 2 ^ m ∨
     blk i = (2 * k + 1) * 2 ^ m}) _ (ha _ (by positivity))
   intro i hi
-  change blk i / 2 ^ (m + 1) = k
+  simp only [Finset.mem_filter, Finset.mem_univ, true_and] at hi
+  rw [mem_levelBlock]
   apply Nat.div_eq_of_lt_le
   all_goals
     have := Nat.one_le_two_pow (n := m)

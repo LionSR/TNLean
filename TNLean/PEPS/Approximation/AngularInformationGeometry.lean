@@ -24,6 +24,8 @@ lines 168–175, 334–353, and 694–745, revision
 Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
+open ManyBody (SquareLatticeVertex)
+
 namespace TNLean.PEPS.Approximation.AngularGrid
 
 /-- The clearance of a selected ambient cell also holds on its closure.

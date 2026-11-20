@@ -4,8 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.DomainIntervalNeighborhood
+import TNLean.MPS.AreaLaw.IntervalNeighborhoodEntropy
 import QICLean.Entropy.FiniteProductInformation
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Entropy on intrinsic neighborhoods of interval unions
@@ -19,7 +21,13 @@ Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 482–4
 and the interval area-law estimate in Part I.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
+open ManyBody (interval lineDomainGraph DomainInteraction)
+
 open SimpleGraph QuantumCircuit
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -34,53 +42,30 @@ theorem regionEntropy_domainNeighborhood_biUnion_intervals_le
     (s : Finset κ) (a b : κ → ℕ) (m : ℕ) :
     Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
       ((s.biUnion (fun i ↦ interval Λ.card (a i) (b i))).biUnion
-        (fun x ↦ graphBall (domainGraph Λ) x m)) Ω ≤ (s.card : ℝ) * c := by
-  classical
-  have hn (X : Finset (Fin Λ.card)) :
-      0 ≤ Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) X Ω :=
-    vonNeumannEntropy_nonneg_of_posSemidef_trace_one
-      (Entropy.regionState_posSemidef X Ω) (Entropy.trace_regionState_eq_one hΩ)
-  have hsub (X Y : Finset (Fin Λ.card)) :
-      Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (X ∪ Y) Ω ≤
-        Entropy.regionEntropy X Ω + Entropy.regionEntropy Y Ω := by
-    linarith [TNLean.Lattice.regionEntropy_union_add_inter_le (Ω := Ω) X Y, hn (X ∩ Y)]
-  have hsum : Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
-      (s.biUnion (fun i ↦ (interval Λ.card (a i) (b i)).biUnion
-        (fun x ↦ graphBall (domainGraph Λ) x m))) Ω ≤
-      ∑ i ∈ s, Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
-        ((interval Λ.card (a i) (b i)).biUnion
-          (fun x ↦ graphBall (domainGraph Λ) x m)) Ω := by
-    simpa only [Finset.sup_eq_biUnion] using
-      (Finset.apply_sup_le_sum
-        (f := fun X : Finset (Fin Λ.card) ↦
-          Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) X Ω)
-        (TNLean.Lattice.regionEntropy_empty hΩ) (fun {X Y} ↦ hsub X Y)
-        (s := fun i ↦ (interval Λ.card (a i) (b i)).biUnion
-          (fun x ↦ graphBall (domainGraph Λ) x m)) s)
-  have hNi (i : κ) : Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
-      ((interval Λ.card (a i) (b i)).biUnion
-        (fun x ↦ graphBall (domainGraph Λ) x m)) Ω ≤ c := by
-    obtain ⟨u, v, hgeo⟩ := domainNeighborhood_interval_eq Λ (a i) (b i) m
-    simpa only [hgeo] using hI u v
-  simpa only [Finset.biUnion_biUnion, Finset.sum_const, nsmul_eq_mul] using
-    hsum.trans (Finset.sum_le_sum (fun i _ ↦ hNi i))
+        (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)) Ω ≤ (s.card : ℝ) * c := by
+  exact regionEntropy_biUnion_neighborhood_intervals_le hΩ hI _
+    (domainNeighborhood_interval_eq Λ · · m) s a b
 
 /-- The original gapped domain Hamiltonian bounds entropy on an intrinsic neighborhood
 of a finite interval union.
 Source: TNLean note, `part2a_mps_information.tex`, lines 482–487, together with the
 interval area-law bound from Part I. -/
-theorem DomainHamiltonian.regionEntropy_neighborhood_biUnion_intervals_le
+theorem _root_.ManyBody.DomainInteraction.regionEntropy_neighborhood_biUnion_intervals_le
     {Λ : Finset ℤ} {q R : ℕ} {J Δ : ℝ} {κ : Type*}
-    (h : DomainHamiltonian Λ q R J) (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
+    (h : DomainInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
+        (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ)
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (s : Finset κ) (a b : κ → ℕ) (m : ℕ) :
     Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
       ((s.biUnion (fun i ↦ interval Λ.card (a i) (b i))).biUnion
-        (fun x ↦ graphBall (domainGraph Λ) x m)) Ω ≤
+        (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)) Ω ≤
           (s.card : ℝ) * chainIntervalEntropyBound q R J Δ := by
-  exact regionEntropy_domainNeighborhood_biUnion_intervals_le hgs.1
-    (fun u v ↦ regionEntropy_interval_le hq hJ hΔ (h.toChain hJ)
-      (by simpa only [h.toChain_operator hJ] using hgs) u v) s a b m
+  exact regionEntropy_domainNeighborhood_biUnion_intervals_le hΩ
+    (fun u v ↦ regionEntropy_interval_le hq hJ hΔ (h.toChain) (h.isHermitian_toChain_term hh)
+        (h.norm_toChain_term_le hhJ hJ)
+      hΩ (by simpa only [h.toChain_hamiltonian] using hgap)
+      (by simpa only [h.toChain_hamiltonian] using hspan) u v) s a b m
 
 end TNLean.MPS.AreaLaw

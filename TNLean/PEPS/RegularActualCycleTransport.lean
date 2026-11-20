@@ -15,6 +15,8 @@ permuted assignment is obtained by endpoint reconstruction. These identities
 are auxiliary to SCP10, arXiv:1001.3807, lines 1765–1920 and Theorem 6.16,
 lines 2271–2305. No coefficient, state or Gram identity is assumed.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 namespace TNLean.PEPS
 variable {V : Type*} [LinearOrder V]
@@ -62,7 +64,7 @@ with inversion precisely in the reverse ordered orientation.
 Source: SCP10, lines 1765–1920. -/
 theorem regularTreeCycleAssignment_directedTransport
     (z : RegionCycleEdge (Γ := Γ) R T → G) (e : RegionCycleEdge (Γ := Γ) R T)
-    {v w : V} (h : Γ.Adj v w) (he : Edge.ofAdj h = e.1.1) :
+    {v w : V} (h : Γ.Adj v w) (he : ManyBody.Edge.ofAdj h = e.1.1) :
     regularDirectedTransport (regularTreeCycleAssignment R T z) h =
       if v < w then z e else (z e)⁻¹ := by
   simp only [regularDirectedTransport, he]

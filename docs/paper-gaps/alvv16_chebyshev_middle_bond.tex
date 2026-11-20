@@ -1,0 +1,165 @@
+\documentclass{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{command}
+\title{The bond dimension of the middle factors of the efficient Chebyshev projector}
+\author{}
+\date{2026-11-19}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source statement}
+
+Proposition~5.7 (\texttt{prop:Cheby-AGSP-eff}) of Arad, Landau, Vazirani and
+Vidick~\cite{Arad2016RigorousRG}, arXiv:1602.08828v2, file
+\path{local_alg_arxiv_v2.tex}, lines 1311--1320, reads, with its proof at
+lines 1322--1333:
+\begin{quote}
+Let $H$ be a Hamiltonian having a decomposition of the form described
+in~\texttt{eq:H-mid-cut}, $k$ an integer, and $K = P_k(H)$ the associated
+degree-$k$ Chebyshev AGSP as defined in Definition~\texttt{def:Cheby-AGSP}.
+Assume that $H_M$ (but not necessarily $H_L$ or $H_R$) is specified by an MPO
+with bond dimensions at most $\tilde{B}$.
+
+Then there exists $D \leq (dk)^{O(\ell + k/\ell)}$ such that a family of $D^2$
+MPO $\{A_1,\ldots,A_{D^2}\}$ of bond dimension at most $\tilde{B}^k$ each such
+that there exists $B_1,\ldots,B_{D^2}$ with $K=\sum A_i\otimes B_i$ can be
+computed in time $nD^2\tilde{B}^{O(k)}$. Here the $A_i$ act on qudits
+$\{i_1,i_1+1,\ldots,i_2\}$ and the $B_i$ on the remaining qudits. This
+computation does not require knowledge of $\eta_0,\eta_1$.
+
+Furthermore, if $H_L$ and $H_R$ are also given as MPO with bond dimension at
+most $\tilde{B}$ then the $B_i$ can be computed as well.
+\end{quote}
+The decomposition \texttt{eq:H-mid-cut} is the one of Theorem
+\texttt{thm:Cheby-AGSP} (lines 809--834). For $i_1<i_2$ in $\{1,\ldots,n\}$
+and $3\leq\ell\leq(i_2-i_1)/2$ it reads
+\begin{align}
+ H={}&H_L+h_{i_1-\ell}+\cdots+h_{i_1}+\cdots+h_{i_1+\ell-1}\notag\\
+ &+H_M+h_{i_2-\ell}+\cdots+h_{i_2}+\cdots+h_{i_2+\ell-1}+H_R,
+ \label{eq:alvv16_cmb_midcut}
+\end{align}
+where each $h_i$ is a two-local operator on the qudits $\{i,i+1\}$, and $H_L$,
+$H_M$, $H_R$ act on
+\begin{align}
+ J_L=\{1,\ldots,i_1-\ell\},\qquad
+ J_M=\{i_1+\ell,\ldots,i_2-\ell\},\qquad
+ J_R=\{i_2+\ell,\ldots,n\}.
+ \label{eq:alvv16_cmb_regions}
+\end{align}
+The quotation keeps the source's labelling of the sites by $1,\ldots,n$. The
+running time and the computability of the $B_i$ are out of scope; only the
+existence content of the proposition is considered. The two groups of terms
+$h_{i_1-\ell},\ldots,h_{i_1+\ell-1}$ and $h_{i_2-\ell},\ldots,h_{i_2+\ell-1}$
+are called the left and right windows. The bound $\tilde B$ concerns $H_M$
+alone, not the windows.
+
+\section{What the printed proof gives}
+
+The proof refers to the proof of Lemma~4.2 of~\cite{Arad2013AreaLaw}. It expands $K$
+through the operators $P_{u_1u_2,kj_1j_2}(Z)$, the sum of the terms of
+$(H_L+\cdots+H_R)^k$ with exactly $j_1$ occurrences of $h_{u_1}$ and $j_2$
+occurrences of $h_{u_2}$, for crossing positions $u_1,u_2$ in the two windows,
+and with the remaining window terms weighted by the complex variables $Z$.
+Between consecutive occurrences of the markers $h_{u_1}$ and $h_{u_2}$ such a
+term therefore contains powers of the weighted ordinary sum
+\begin{align}
+ G_Z=z_MH_M+\sum_{u}z_uh_u ,
+ \label{eq:alvv16_cmb_ordinary}
+\end{align}
+where $u$ runs over the window positions other than $u_1,u_2$, together with
+the terms of $H_L$ and $H_R$.
+
+Fix a cut inside $J_M$. Every window term lies entirely on one side of it, so
+the left windows contribute one operator of the form $X\otimes 1$ and the right
+windows one of the form $1\otimes Y$. With $H_M$ of operator Schmidt rank at
+most $\tilde B$ at the cut, the factor (\ref{eq:alvv16_cmb_ordinary}) has
+operator Schmidt rank at most $\tilde B+2$ there, the markers have rank one,
+and submultiplicativity bounds a product of at most $k$ such factors by
+\begin{align}
+ (\tilde B+2)^k .
+ \label{eq:alvv16_cmb_bound}
+\end{align}
+Expanding the operators on the qudits of the two windows inside
+$\{i_1,\ldots,i_2\}$ in a product basis, the step of the proof that multiplies
+the number of operators by at most $d^{4\ell}$, contracts the window qudits
+with fixed configurations and does not increase the rank at a cut inside
+$J_M$. The printed argument, read in this way, gives the bound
+(\ref{eq:alvv16_cmb_bound}) at every cut inside $J_M$. It gives no argument
+that removes the two summands contributed by the windows, and whether the
+printed bound $\tilde B^k$ holds is open. The bound
+(\ref{eq:alvv16_cmb_bound}) is not a refutation of the proposition, and it is
+at most $(2\tilde B)^k$ for $\tilde B\geq2$.
+
+\section{What is formalized}
+
+The formalization reads an MPO for $H_M$ as a site-dependent trace contraction
+of tensors of virtual dimension $B$ with a closing matrix. Its common middle
+family for every polynomial of degree at most $k$,
+\leanid{TNLean.MPS.AreaLaw.exists_common_physical_polynomial_mpo_family_fin},
+has the source's count shape, with at most $D^2$ members for
+$D=(qk)^{18\ell+2\lfloor k/\ell\rfloor}$, and the members act on the fixed
+middle interval. Each member has open-boundary bond dimension at most
+\begin{align}
+ \max(1,B)^{2k},
+ \label{eq:alvv16_cmb_formal_bond}
+\end{align}
+and a trace presentation of virtual dimension at most $\max(1,B)^k$. The
+square in (\ref{eq:alvv16_cmb_formal_bond}) comes from the bottom of the
+chain. There, the selected-coefficient family
+\leanid{TNLean.MPS.AreaLaw.exists_common_physical_twoMarkerCoefficient_mpo_family}
+splits each middle word by its number $t$ of factors of $H_M$ into members
+that are trace contractions of the $t$-fold stacked tensor with a closing
+matrix of size $B^t$. Reading such a member in open-boundary form costs the
+square $(B^t)^2$, because the closing matrix collects the summed
+configurations of the window qudits and has no small rank in general. The
+square is carried unchanged through the selected-middle family, the
+fixed-middle family, the crossing-frequency grid and the polynomial family,
+and the efficient soft families state their member bond in the form
+(\ref{eq:alvv16_cmb_formal_bond}).
+
+\section{Plan}
+
+The bound (\ref{eq:alvv16_cmb_bound}) can be reached by re-plumbing the
+existing chain, without a parallel one.
+\begin{enumerate}
+ \item Replace the members at the bottom by the blocks
+  $\Pi_\eta\Psi_w\Pi_\theta$ of each middle word $\Psi_w$, where $\eta,\theta$
+  run over the configurations of the window qudits inside the middle interval
+  and $\Pi_\eta$ is the corresponding product of one-site projections. Such a
+  block has operator Schmidt rank one at a cut among the window qudits and at
+  most the rank of $\Psi_w$ at a cut inside the strict core. The split by the
+  number of factors of $H_M$ is no longer needed, so the factor $k+1$ leaves
+  the count.
+ \item Strengthen the prescribed-middle decomposition so that the ordinary
+  sum on the window qudits is given as $K_L+K_R$, with $K_L$ supported on the
+  left windows and $K_R$ on the right ones. At present only its support in
+  the union of the two is recorded.
+ \item Take the input as an open-boundary MPO, or directly as an operator
+  Schmidt rank bound $\tilde B$ for $H_M$ at every cut, and bound the rank of
+  $\Psi_w$ at a cut inside the strict core by (\ref{eq:alvv16_cmb_bound}) using
+  the existing submultiplicativity of operator Schmidt rank.
+ \item Restate the bond clause of the four upper levels with
+  $(\tilde B+2)^k$ in place of (\ref{eq:alvv16_cmb_formal_bond}), and adjust
+  the efficient soft families that consume it.
+\end{enumerate}
+The change touches about six modules and is estimated at 1500--2500 lines.
+With it, the proposition would be formalized with the bond
+(\ref{eq:alvv16_cmb_bound}) as a local fix of the printed $\tilde B^k$.
+
+\section{Verdict}
+
+Scope restriction, open. The existence of a common middle family with the
+source's count is formalized with the bond (\ref{eq:alvv16_cmb_formal_bond}).
+The printed proof supports the bond (\ref{eq:alvv16_cmb_bound}) at cuts inside
+$J_M$; whether $\tilde B^k$ holds is open. The re-plumbing of the plan is not
+started.
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

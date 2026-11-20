@@ -25,6 +25,8 @@ not the complete prescribed braid. See
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
 
+open ManyBody (Edge)
+
 noncomputable section
 namespace TNLean.PEPS
 variable {width height : ℕ} [NeZero width] [NeZero height]
@@ -127,15 +129,15 @@ theorem regularRegionTreeCycleResidual_middle_eq_one_iff_rightPlaquette
     simpa using translatedTwoPlaquetteIso_vertex_coordinates p 4
   have ha : (Γₜ).Adj (φ 1).1 (φ 4).1 :=
     SimpleGraph.induce_adj.mp (φ.map_rel_iff'.mpr (by decide : twoPlaquetteGraph.Adj 1 4))
-  have he : Edge.ofAdj ha = (translatedTwoPlaquetteCycleBond p 1).1.1 := by
+  have he : ManyBody.Edge.ofAdj ha = (translatedTwoPlaquetteCycleBond p 1).1.1 := by
     rw [translatedTwoPlaquetteCycleBond_eq_up]
     simpa only [Fin.val_one, Nat.cast_one] using
-      Edge.ofAdj_eq_ofAdj ha (torusGraph_adj_up (p.1 + 1) p.2) (Or.inl ⟨hv₁, hv₄⟩)
+      ManyBody.Edge.ofAdj_eq_ofAdj ha (torusGraph_adj_up (p.1 + 1) p.2) (Or.inl ⟨hv₁, hv₄⟩)
   have H := regularRegionGaugeResidual_eq_one_iff_directedTransport
     (translatedTwoPlaquetteRegion p) (translatedTwoPlaquetteTree p)
     (translatedTwoPlaquetteTree_le p) (translatedTwoPlaquetteTree_isTree p)
     (φ 0) u ha (φ 1).2 (φ 4).2
-  have hs : (⟨Edge.ofAdj ha, by
+  have hs : (⟨ManyBody.Edge.ofAdj ha, by
       rw [he]
       exact (translatedTwoPlaquetteCycleBond p 1).1.2⟩ : {e : Edge Γₜ //
       e.1.1 ∈ translatedTwoPlaquetteRegion p ∧ e.1.2 ∈ translatedTwoPlaquetteRegion p}) =

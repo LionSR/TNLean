@@ -276,10 +276,9 @@ class ImportLayerPolicyTests(unittest.TestCase):
         self.assertEqual(layers.layer_of("TNLean.Algebra.FinKronecker"), "algebra")
         self.assertEqual(layers.layer_of("TNLean.Circuit.SiteEmbedding"), "sites")
         self.assertEqual(layers.layer_of("TNLean.Circuit.SiteEmbeddingNorm"), "sites")
-        self.assertEqual(layers.layer_of("TNLean.Circuit.LiebRobinson.Volterra"), "dynamics")
         self.assertEqual(layers.layer_of("TNLean.Circuit.LocalCircuit"), "circuit")
         self.assertEqual(layers.layer_of("TNLean.Lattice.PartyCircuit.PartyWord"), "party")
-        self.assertEqual(layers.layer_of("TNLean.Lattice.LocalHamiltonian"), "hamiltonian")
+        self.assertEqual(layers.layer_of("TNLean.Lattice.StateSpace"), "hamiltonian")
         self.assertIsNone(layers.layer_of("TNLean.MPS.Defs"))
 
     def test_upward_and_sideways_imports_are_violations(self) -> None:
@@ -287,18 +286,18 @@ class ImportLayerPolicyTests(unittest.TestCase):
             "TNLean.Algebra.A": "import TNLean.Circuit.SiteEmbedding\ntheorem a : True := trivial\n",
             "TNLean.Circuit.SiteEmbedding": "import TNLean.Algebra.A\ndef e := 0\n",
             "TNLean.Circuit.LocalCircuit": (
-                "import TNLean.Circuit.SiteEmbedding\nimport TNLean.Lattice.LocalHamiltonian\n"
+                "import TNLean.Circuit.SiteEmbedding\nimport TNLean.Lattice.StateSpace\n"
                 "def c := 0\n"
             ),
-            "TNLean.Lattice.LocalHamiltonian": "import TNLean.MPS.Defs\ndef h := 0\n",
-            "TNLean.MPS.Defs": "import TNLean.Lattice.LocalHamiltonian\ndef t := 0\n",
+            "TNLean.Lattice.StateSpace": "import TNLean.MPS.Defs\ndef h := 0\n",
+            "TNLean.MPS.Defs": "import TNLean.Lattice.StateSpace\ndef t := 0\n",
         }
         self.assertEqual(
             layers.violations(sources),
             {
                 "TNLean.Algebra.A -> TNLean.Circuit.SiteEmbedding",
-                "TNLean.Circuit.LocalCircuit -> TNLean.Lattice.LocalHamiltonian",
-                "TNLean.Lattice.LocalHamiltonian -> TNLean.MPS.Defs",
+                "TNLean.Circuit.LocalCircuit -> TNLean.Lattice.StateSpace",
+                "TNLean.Lattice.StateSpace -> TNLean.MPS.Defs",
             },
         )
 
@@ -354,13 +353,13 @@ class ImportLayerPolicyTests(unittest.TestCase):
     def test_party_layer_may_import_circuits_but_not_hamiltonians(self) -> None:
         sources = {
             "TNLean.Lattice.PartyCircuit.Example": (
-                "import TNLean.Circuit.LocalCircuit\nimport TNLean.Lattice.LocalHamiltonian\n"
+                "import TNLean.Circuit.LocalCircuit\nimport TNLean.Lattice.StateSpace\n"
                 "def p := 0\n"
             ),
         }
         self.assertEqual(
             layers.violations(sources),
-            {"TNLean.Lattice.PartyCircuit.Example -> TNLean.Lattice.LocalHamiltonian"},
+            {"TNLean.Lattice.PartyCircuit.Example -> TNLean.Lattice.StateSpace"},
         )
 
     def test_debt_may_only_shrink_against_the_base(self) -> None:

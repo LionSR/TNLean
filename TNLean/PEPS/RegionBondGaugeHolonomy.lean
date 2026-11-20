@@ -14,6 +14,8 @@ closed walk there has identity holonomy. This elementary group statement has
 no representation, dimension, injectivity, or spanning hypothesis.
 -/
 
+open ManyBody (Edge)
+
 namespace TNLean.PEPS
 
 variable {V : Type*} [LinearOrder V] {Γ : SimpleGraph V}
@@ -32,12 +34,12 @@ theorem regularWalkHolonomy_eq_relative_of_region (R : Finset V)
     | @cons v w z h γ ih =>
       have hv : v ∈ R := hγ v (by simp)
       have hw : w ∈ R := hγ w (by simp)
-      have htail : (Edge.ofAdj h).1.1 ∈ R := by
-        rcases Edge.ofAdj_endpoints h with ⟨ht, _⟩ | ⟨ht, _⟩
+      have htail : (ManyBody.Edge.ofAdj h).1.1 ∈ R := by
+        rcases ManyBody.Edge.ofAdj_endpoints h with ⟨ht, _⟩ | ⟨ht, _⟩
         · simpa only [ht] using hv
         · simpa only [ht] using hw
-      have hhead : (Edge.ofAdj h).1.2 ∈ R := by
-        rcases Edge.ofAdj_endpoints h with ⟨_, hh⟩ | ⟨_, hh⟩
+      have hhead : (ManyBody.Edge.ofAdj h).1.2 ∈ R := by
+        rcases ManyBody.Edge.ofAdj_endpoints h with ⟨_, hh⟩ | ⟨_, hh⟩
         · simpa only [hh] using hw
         · simpa only [hh] using hv
       rw [regularWalkHolonomy_cons, regularWalkHolonomy_cons,

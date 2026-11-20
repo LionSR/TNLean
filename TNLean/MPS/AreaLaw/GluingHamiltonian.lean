@@ -18,6 +18,8 @@ arXiv:1307.5143v1, `algo53.tex`, lines 409–410, given as the named parts `cutL
 one-site terms and arbitrary Hermitian contractions.
 -/
 
+open ManyBody (ChainSupport interval mem_interval ChainInteraction)
+
 open Matrix
 open scoped Matrix.Norms.L2Operator
 
@@ -27,35 +29,42 @@ variable {L q : ℕ}
 
 /-- The sum of the interactions wholly inside the first `k` sites.
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 409–410, the term `H_L`. -/
-noncomputable def ChainHamiltonian.cutLeftPart (h : ChainHamiltonian L q 1 1) (k : ℕ) :
+noncomputable def _root_.ManyBody.ChainInteraction.cutLeftPart
+    (h : ChainInteraction L q 1) (k : ℕ) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   ∑ X ∈ Finset.univ.filter (fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k), h.term X
 
 /-- The sum of the interactions not wholly inside the first `k` sites: those acting on the
 boundary site `k - 1` and the right part of the chain.
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 409–410, the term `H_R + H_i`. -/
-noncomputable def ChainHamiltonian.cutBoundaryPart (h : ChainHamiltonian L q 1 1) (k : ℕ) :
+noncomputable def _root_.ManyBody.ChainInteraction.cutBoundaryPart
+    (h : ChainInteraction L q 1) (k : ℕ) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
   ∑ X ∈ Finset.univ.filter (fun X : ChainSupport L 1 ↦ ¬ X.1 ⊆ interval L 0 k), h.term X
 
 /-- The Hamiltonian is the sum of its left part and its boundary part at every cut. -/
-theorem ChainHamiltonian.cutLeftPart_add_cutBoundaryPart (h : ChainHamiltonian L q 1 1) (k : ℕ) :
-    h.operator = h.cutLeftPart k + h.cutBoundaryPart k :=
+theorem _root_.ManyBody.ChainInteraction.cutLeftPart_add_cutBoundaryPart
+    (h : ChainInteraction L q 1) (k : ℕ) :
+    h.hamiltonian = h.cutLeftPart k + h.cutBoundaryPart k :=
   (Finset.sum_filter_add_sum_filter_not Finset.univ
     (fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k) h.term).symm
 
 /-- The left part is supported on the first `k` sites. -/
-theorem ChainHamiltonian.cutLeftPart_isSupportedOn (h : ChainHamiltonian L q 1 1) (k : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutLeftPart k) (interval L 0 k) :=
-  (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
-    (h.supported X).mono (Finset.mem_filter.mp hX).2
+theorem _root_.ManyBody.ChainInteraction.cutLeftPart_isSupportedOn
+    (h : ChainInteraction L q 1) (k : ℕ) :
+    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutLeftPart k) (interval L 0 k) := by
+  change _ ∈ ManyBody.supportedOperators _ _
+  exact sum_mem fun X hX ↦
+    Entropy.IsSupportedOn.mono (h.mem X) (Finset.mem_filter.mp hX).2
 
 /-- The boundary part is supported from the boundary site onward. -/
-theorem ChainHamiltonian.cutBoundaryPart_isSupportedOn (h : ChainHamiltonian L q 1 1) (k : ℕ) :
+theorem _root_.ManyBody.ChainInteraction.cutBoundaryPart_isSupportedOn
+    (h : ChainInteraction L q 1) (k : ℕ) :
     Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutBoundaryPart k)
       (interval L 0 (k - 1))ᶜ := by
-  refine (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun X hX ↦
-    (h.supported X).mono ?_
+  change _ ∈ ManyBody.supportedOperators _ _
+  refine sum_mem fun X hX ↦
+    Entropy.IsSupportedOn.mono (h.mem X) ?_
   have hX' := (Finset.mem_filter.mp hX).2
   obtain ⟨y, hy, hyA⟩ := Finset.not_subset.mp hX'
   have hyk : k ≤ y.val := by simpa [mem_interval, not_lt] using hyA
@@ -64,14 +73,15 @@ theorem ChainHamiltonian.cutBoundaryPart_isSupportedOn (h : ChainHamiltonian L q
   simpa [mem_interval, not_lt] using hxk
 
 /-- The boundary part has norm at most `2L`. -/
-theorem ChainHamiltonian.norm_cutBoundaryPart_le (h : ChainHamiltonian L q 1 1) (k : ℕ) :
+theorem _root_.ManyBody.ChainInteraction.norm_cutBoundaryPart_le (h : ChainInteraction L q 1)
+    (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (k : ℕ) :
     ‖h.cutBoundaryPart k‖ ≤ 2 * (L : ℝ) := by
   classical
   set U := Finset.univ.filter (fun X : ChainSupport L 1 ↦ ¬ X.1 ⊆ interval L 0 k)
   have hcard : U.card ≤ 2 * L :=
     (Finset.card_le_univ U).trans (card_chainSupport_range_one_le L)
   calc
-    _ ≤ ∑ _ ∈ U, (1 : ℝ) := norm_sum_le_of_le U fun X _ ↦ h.norm_le X
+    _ ≤ ∑ _ ∈ U, (1 : ℝ) := norm_sum_le_of_le U fun X _ ↦ hhJ X
     _ ≤ 2 * (L : ℝ) := by
       simpa using (show (U.card : ℝ) ≤ 2 * (L : ℝ) by exact_mod_cast hcard)
 
@@ -79,15 +89,15 @@ theorem ChainHamiltonian.norm_cutBoundaryPart_le (h : ChainHamiltonian L q 1 1) 
 supported from the boundary site onward, whose norm is at most `2L`: the existence form
 of the named decomposition `cutLeftPart` plus `cutBoundaryPart`.
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 409–410. -/
-theorem ChainHamiltonian.exists_gluing_decomposition_of_range_one
-    (h : ChainHamiltonian L q 1 1) (k : ℕ) :
+theorem _root_.ManyBody.ChainInteraction.exists_gluing_decomposition_of_range_one
+    (h : ChainInteraction L q 1) (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (k : ℕ) :
     ∃ HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      h.operator = HL + B ∧
+      h.hamiltonian = HL + B ∧
       Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (interval L 0 k) ∧
       Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (interval L 0 (k - 1))ᶜ ∧
       ‖B‖ ≤ 2 * (L : ℝ) :=
   ⟨h.cutLeftPart k, h.cutBoundaryPart k, h.cutLeftPart_add_cutBoundaryPart k,
     h.cutLeftPart_isSupportedOn k, h.cutBoundaryPart_isSupportedOn k,
-    h.norm_cutBoundaryPart_le k⟩
+    h.norm_cutBoundaryPart_le hhJ k⟩
 
 end TNLean.MPS.AreaLaw

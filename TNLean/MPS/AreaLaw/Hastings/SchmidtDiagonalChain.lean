@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.MatrixL2Contraction
-import TNLean.MPS.AreaLaw.Basic
+import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalCorrelation
 import TNLean.MPS.AreaLaw.Hastings.SchmidtDiagonalOperators
@@ -49,6 +49,8 @@ is supplied.
   `References/0705.2024/law16.tex`: Lemma 3, lines 627–692; Lemma 1, lines 246–267; note
   added, lines 912–943.
 -/
+
+open ManyBody (interval)
 
 open Matrix
 open scoped InnerProductSpace Matrix.Norms.L2Operator ComplexOrder Kronecker

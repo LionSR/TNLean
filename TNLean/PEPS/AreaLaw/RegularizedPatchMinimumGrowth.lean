@@ -43,7 +43,7 @@ Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 453–481. -/
 theorem log_regularizedPatchMinimum_exp_neg_le_of_regulator_trace
     (regions : Fin m → Finset V) (hnested : Monotone regions)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Fin (n v.1)))
+    (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
     (hΩ : ‖Ω‖ = 1) {Rstart R : ℝ} (hstart : 0 ≤ Rstart) (hR : Rstart ≤ R)
     (hreg : ∀ r ∈ Ico Rstart R,
       ∀ x ∈ regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions,
@@ -121,13 +121,13 @@ Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 362–481. -/
 theorem log_regularizedPatchMinimum_exp_neg_le_of_entropy_distance
     (regions : Fin m → Finset V) (hnested : Monotone regions)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
-    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Fin (n v.1)))
+    (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
     (hΩ : ‖Ω‖ = 1) {C u R : ℝ} (hC : 0 < C) (hu : 0 ≤ u)
     (hR : (16 * C + Real.log 8) * (1 + u) ≤ R)
     (hS : ∀ j : Fin m, _root_.vonNeumannEntropy
-      (Entropy.regionState (regions j) (dependentGlobalConfigIsometry Ω))
+      (Entropy.regionState (regions j) (Ω))
       (Entropy.regionState_posSemidef (regions j)
-        (dependentGlobalConfigIsometry Ω)).isHermitian ≤ C * (1 + u))
+        (Ω)).isHermitian ≤ C * (1 + u))
     (hd : ∀ r ∈ Ico ((16 * C + Real.log 8) * (1 + u)) R,
       ∀ x ∈ regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions,
       IsMinOn (regularizedPatchObjective (Out := fun v ↦ Fin (n v)) regions a (Real.exp (-r)) Ω)
@@ -135,7 +135,7 @@ theorem log_regularizedPatchMinimum_exp_neg_le_of_entropy_distance
       ∀ j : Fin m, (CFC.abs
         (normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
             regions a (Real.exp (-r)) Ω x (regions j) -
-          Entropy.regionState (regions j) (dependentGlobalConfigIsometry Ω))).trace.re ≤
+          Entropy.regionState (regions j) (Ω))).trace.re ≤
         1 / 16) :
     Real.log (regularizedPatchMinimum (Out := fun v ↦ Fin (n v))
         regions a (Real.exp (-R)) Ω) ≤

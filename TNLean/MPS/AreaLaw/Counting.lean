@@ -31,6 +31,8 @@ interval that are `R` apart are split by disjoint sets of supports.
   Section 4, the single-split property of the shells.
 -/
 
+open ManyBody (ChainSupport IsChainSupport card_interval_le interval mem_interval)
+
 namespace TNLean.MPS.AreaLaw
 
 variable {L q R : ℕ}

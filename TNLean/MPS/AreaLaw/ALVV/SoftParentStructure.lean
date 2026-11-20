@@ -27,6 +27,8 @@ corrected as documented at
 https://sirui-lu.com/QICLean/paper-gaps/alvv16_soft_truncation_log_bound.pdf.
 -/
 
+open ManyBody (interval)
+
 open Matrix
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 

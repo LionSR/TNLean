@@ -19,6 +19,8 @@ construction of witnesses in arXiv:1804.04964, Section 3, proof of Theorem 3,
 lines 1449--1544 of `Papers/1804.04964/paper_normal.tex`.
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators Matrix
 namespace TNLean.PEPS
 variable {width height d : ℕ} [NeZero width] [NeZero height]
@@ -26,7 +28,8 @@ variable [Fact (1 < width)] [Fact (1 < height)]
 
 private noncomputable def translate_rightEdge_from (p : TorusVertex width height)
     {e : Edge (torusGraph width height)} (he : IsHorizontalTorusEdge e) :
-    {ab : ZMod width × ZMod height // e = Edge.map (translate ab.1 ab.2) (torusRightEdge p)} :=
+    {ab : ZMod width × ZMod height // e =
+        ManyBody.Edge.map (translate ab.1 ab.2) (torusRightEdge p)} :=
   ⟨((isHorizontalTorusEdge_eq_rightEdge he).choose.1 - p.1,
     (isHorizontalTorusEdge_eq_rightEdge he).choose.2 - p.2), by
     conv_lhs => rw [(isHorizontalTorusEdge_eq_rightEdge he).choose_spec]
@@ -36,7 +39,8 @@ private noncomputable def translate_rightEdge_from (p : TorusVertex width height
 
 private noncomputable def translate_upEdge_from (p : TorusVertex width height)
     {e : Edge (torusGraph width height)} (he : IsVerticalTorusEdge e) :
-    {ab : ZMod width × ZMod height // e = Edge.map (translate ab.1 ab.2) (torusUpEdge p)} :=
+    {ab : ZMod width × ZMod height // e =
+        ManyBody.Edge.map (translate ab.1 ab.2) (torusUpEdge p)} :=
   ⟨((isVerticalTorusEdge_eq_upEdge he).choose.1 - p.1,
     (isVerticalTorusEdge_eq_upEdge he).choose.2 - p.2), by
     conv_lhs => rw [(isVerticalTorusEdge_eq_upEdge he).choose_spec]
@@ -128,11 +132,11 @@ private theorem exists_torusCovariantAbsorbedGaugeFamily_of_referenceWitnesses
   -- The family at any translate of the horizontal reference edge is the transported absorbing
   -- gauge of that translate: the chosen translation agrees with the given one by rigidity.
   have hUh : ∀ (a : ZMod width) (b : ZMod height),
-      X (Edge.map (translate a b) (torusRightEdge ph)) =
+      X (ManyBody.Edge.map (translate a b) (torusRightEdge ph)) =
         transportedAbsorbedGauge B hB Rh fh Zh a b := by
     intro a b
     have hhor : IsHorizontalTorusEdge
-        (Edge.map (translate a b) (torusRightEdge ph)) := by
+        (ManyBody.Edge.map (translate a b) (torusRightEdge ph)) := by
       rw [← translateEdge_eq_map]
       exact translateEdge_isHorizontal a b
         (isHorizontalTorusEdge_torusRightEdge ph)
@@ -142,23 +146,23 @@ private theorem exists_torusCovariantAbsorbedGaugeFamily_of_referenceWitnesses
     generalize translate_rightEdge_from ph hhor
       = pq
     obtain ⟨⟨a', b'⟩, hspec⟩ := pq
-    have hmap : Edge.map (translate a' b') (torusRightEdge ph) =
-        Edge.map (translate a b) (torusRightEdge ph) := hspec.symm
+    have hmap : ManyBody.Edge.map (translate a' b') (torusRightEdge ph) =
+        ManyBody.Edge.map (translate a b) (torusRightEdge ph) := hspec.symm
     obtain ⟨ha, hb⟩ := translate_param_unique_right hw _ hmap
     subst a'
     subst b'
     exact glReindex_self _ _
   have hUv : ∀ (a : ZMod width) (b : ZMod height),
-      X (Edge.map (translate a b) (torusUpEdge pv)) =
+      X (ManyBody.Edge.map (translate a b) (torusUpEdge pv)) =
         transportedAbsorbedGauge B hB Rv fv Zv a b := by
     intro a b
     have hver : IsVerticalTorusEdge
-        (Edge.map (translate a b) (torusUpEdge pv)) := by
+        (ManyBody.Edge.map (translate a b) (torusUpEdge pv)) := by
       rw [← translateEdge_eq_map]
       exact translateEdge_isVertical a b
         (isVerticalTorusEdge_torusUpEdge pv)
     have hnh : ¬ IsHorizontalTorusEdge
-        (Edge.map (translate a b) (torusUpEdge pv)) := fun hcon =>
+        (ManyBody.Edge.map (translate a b) (torusUpEdge pv)) := fun hcon =>
       torusEdge_not_horizontal_and_vertical _ ⟨hcon, hver⟩
     rw [hXdef]
     simp only
@@ -166,8 +170,8 @@ private theorem exists_torusCovariantAbsorbedGaugeFamily_of_referenceWitnesses
     generalize translate_upEdge_from pv
       ((torusEdge_horizontal_or_vertical _).resolve_left hnh) = pq
     obtain ⟨⟨a', b'⟩, hspec⟩ := pq
-    have hmap : Edge.map (translate a' b') (torusUpEdge pv) =
-        Edge.map (translate a b) (torusUpEdge pv) := hspec.symm
+    have hmap : ManyBody.Edge.map (translate a' b') (torusUpEdge pv) =
+        ManyBody.Edge.map (translate a b) (torusUpEdge pv) := hspec.symm
     obtain ⟨ha, hb⟩ := translate_param_unique_up hh _ hmap
     subst a'
     subst b'

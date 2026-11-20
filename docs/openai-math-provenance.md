@@ -25,7 +25,7 @@ transcripts or other evidence archives.
 
 | TNLean module | Upstream file | Declarations |
 | --- | --- | --- |
-| `TNLean/PEPS/Approximation/SquareGridSource.lean` | `lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean` | `Vertex`, `ForwardAdjacent`, `ForwardEdge`, `Pinned.IncidentEdge`, `Pinned.State`, `Pinned.LocalTensor`, `Pinned.contractPEPS` |
+| `TNLean/PEPS/Approximation/SquareGridSource.lean` | `lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean` | `Vertex`, `Pinned.IncidentEdge`, `Pinned.State`, `Pinned.LocalTensor`, `Pinned.contractPEPS` |
 | `TNLean/PEPS/Approximation/SquareGridSource.lean` | `lean/OAI/MathematicalPhysics/TensorNetwork/VectorColumn.lean` | `Vector.IncidentEdge`, `Vector.State`, `Vector.Tensor`, `Vector.Tensor.contract`, `Vector.Tensor.maxBondDim` |
 | `TNLean/PEPS/Approximation/PinnedRegionalState.lean` | `lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean` | `Pinned.RegionConfiguration`, `Pinned.joinConfigurations`, `Pinned.coefficientMatrix`, `Pinned.reducedDensity` |
 | `TNLean/PEPS/Approximation/SourceApproximation.lean` | `lean/OAI/MathematicalPhysics/PEPSFilters/Basic.lean` | `Pinned.HasPEPSApproximation` |

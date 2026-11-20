@@ -25,8 +25,8 @@
 
 \begin{lemma}[Supported Gaussian approximation of the physical buffer]
     \label{thm:peps_supported_physical_buffer_gaussian}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_supported_buffer_gaussian_integral,
-        TNLean.PEPS.Approximation.SquareHamiltonian.supported_buffer_gaussian_integral}
+    \lean{ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integral,
+        ManyBody.SquareInteraction.supported_buffer_gaussian_integral}
     \leanok
     \uses{def:polynomial_peps_model,def:qc_site_pair_coordinates,
         def:peps_frame_sheet_swap,def:qc_site_expectation,
@@ -117,7 +117,7 @@ on a finite domain $\Lambda$.
 
 \begin{definition}[Crossing supports and the swap coefficient]
     \label{def:peps_crossing_supports}
-    \lean{TNLean.Lattice.crossingSites,
+    \lean{ManyBody.crossingSites,
         TNLean.Lattice.swapBoundaryCoefficient}
     \leanok
     \uses{def:area_law_hamiltonian}
@@ -129,7 +129,7 @@ on a finite domain $\Lambda$.
 
 \begin{lemma}[Crossing supports lie near both sides and are few]
     \label{lem:peps_crossing_supports_near_and_few}
-    \lean{TNLean.Lattice.exists_walks_of_mem_crossingSites,
+    \lean{ManyBody.exists_walks_of_mem_crossingSites,
         TNLean.Lattice.card_admissibleSupport_le}
     \leanok
     \uses{def:peps_crossing_supports}
@@ -148,10 +148,12 @@ on a finite domain $\Lambda$.
 
 \begin{lemma}[The partially swapped Hamiltonian at range $R$]
     \label{thm:peps_swapped_local_hamiltonian}
-    \lean{TNLean.Lattice.LocalHamiltonian.swappedDoubled,
-        TNLean.Lattice.LocalHamiltonian.swappedDoubled_operator,
-        TNLean.Lattice.LocalHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing,
-        TNLean.Lattice.LocalHamiltonian.swapped_doubled_boundary_bound}
+    \lean{ManyBody.PlaneInteraction.swappedDoubled,
+        ManyBody.PlaneInteraction.isHermitian_swappedDoubled_term,
+        ManyBody.PlaneInteraction.norm_swappedDoubled_term_le,
+        ManyBody.PlaneInteraction.swappedDoubled_hamiltonian,
+        ManyBody.PlaneInteraction.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing,
+        ManyBody.PlaneInteraction.swapped_doubled_boundary_bound}
     \leanok
     \uses{def:area_law_hamiltonian,def:qc_site_pair_coordinates,
         def:peps_frame_sheet_swap,def:peps_crossing_supports}
@@ -179,7 +181,7 @@ on a finite domain $\Lambda$.
 
 \begin{lemma}[Edge-boundary norm of the partially swapped Hamiltonian]
     \label{thm:peps_swapped_doubled_edge_boundary}
-    \lean{TNLean.Lattice.LocalHamiltonian.swapped_doubled_boundary_bound_edgeBoundary}
+    \lean{ManyBody.PlaneInteraction.swapped_doubled_boundary_bound_edgeBoundary}
     \leanok
     \uses{def:area_law_hamiltonian,def:qc_site_pair_coordinates,
         def:peps_frame_sheet_swap,def:peps_crossing_supports}
@@ -207,7 +209,7 @@ on a finite domain $\Lambda$.
 
 \begin{lemma}[Supported Gaussian approximation of the physical buffer at range $R$]
     \label{thm:peps_supported_physical_buffer_gaussian_range}
-    \lean{TNLean.Lattice.LocalHamiltonian.supported_buffer_gaussian_integral}
+    \lean{ManyBody.PlaneInteraction.supported_buffer_gaussian_integral}
     \leanok
     \uses{thm:peps_swapped_local_hamiltonian,
         thm:peps_physical_buffer_coordinates,

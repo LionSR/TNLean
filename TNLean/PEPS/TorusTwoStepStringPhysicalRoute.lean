@@ -68,9 +68,9 @@ theorem torusSweptStringRightStep_extension_initial (v : X) (g h : G) :
     simpa only [add_assoc, one_add_one_eq_two] using H
   have he : (torusUpEdge ((v.1 + 2, v.2 + 1) : X)).1.1 ∈ R ∧
       (torusUpEdge ((v.1 + 2, v.2 + 1) : X)).1.2 ∈ R := by
-    change (Edge.ofAdj (torusGraph_adj_up (v.1 + 2) (v.2 + 1))).1.1 ∈ R ∧
-      (Edge.ofAdj (torusGraph_adj_up (v.1 + 2) (v.2 + 1))).1.2 ∈ R
-    rcases Edge.ofAdj_endpoints (torusGraph_adj_up (v.1 + 2) (v.2 + 1)) with
+    change (ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1 + 2) (v.2 + 1))).1.1 ∈ R ∧
+      (ManyBody.Edge.ofAdj (torusGraph_adj_up (v.1 + 2) (v.2 + 1))).1.2 ∈ R
+    rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_up (v.1 + 2) (v.2 + 1)) with
       ⟨ha, hb⟩ | ⟨ha, hb⟩
     · simpa only [ha, hb] using And.intro hx hy
     · simpa only [ha, hb] using And.intro hy hx
@@ -95,9 +95,10 @@ theorem IsGIsometric.exists_unitary_torusTwoStepStringRoute
     ∃ W₂ : Matrix ({x : X // x ∈ R₂} → Fin d) ({x : X // x ∈ R₂} → Fin d) ℂ,
       W₁ ∈ Matrix.unitaryGroup ({x : X // x ∈ R₁} → Fin d) ℂ ∧
       W₂ ∈ Matrix.unitaryGroup ({x : X // x ∈ R₂} → Fin d) ℂ ∧
-      regionLocalTerm R₁ W₁ ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
-      regionLocalTerm R₂ W₂ ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
-      regionLocalTerm R₂ W₂ * regionLocalTerm R₁ W₁ ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) R₁ W₁ ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) R₂ W₂ ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
+      ManyBody.place («X» := fun _ ↦ Fin _) R₂ W₂ * ManyBody.place («X» :=
+          fun _ ↦ Fin _) R₁ W₁ ∈ Matrix.unitaryGroup (X → Fin d) ℂ ∧
       ∀ g h : G,
         let ψ₀ := stateCoeff (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a)
@@ -108,9 +109,10 @@ theorem IsGIsometric.exists_unitary_torusTwoStepStringRoute
         let ψ₂ := stateCoeff (groupBondTensor (regularTwistedSite
           (torusIncidentSite (width := width) (height := height) a)
           (torusSecondStringCrossingOutput v g h)))
-        regionLocalTerm R₁ W₁ *ᵥ ψ₀ = ψ₁ ∧
-        regionLocalTerm R₂ W₂ *ᵥ ψ₁ = ψ₂ ∧
-        (regionLocalTerm R₂ W₂ * regionLocalTerm R₁ W₁) *ᵥ ψ₀ = ψ₂ := by
+        ManyBody.place («X» := fun _ ↦ Fin _) R₁ W₁ *ᵥ ψ₀ = ψ₁ ∧
+        ManyBody.place («X» := fun _ ↦ Fin _) R₂ W₂ *ᵥ ψ₁ = ψ₂ ∧
+        (ManyBody.place («X» := fun _ ↦ Fin _) R₂ W₂ * ManyBody.place («X» := fun _ ↦ Fin _) R₁ W₁)
+            *ᵥ ψ₀ = ψ₂ := by
   obtain ⟨W₁, hW₁, hT₁, _, hact₁⟩ :=
     ha.exists_unitary_torusInitialStringRightPhysicalStep v
   obtain ⟨W₂, hW₂, hT₂, _, hact₂⟩ :=

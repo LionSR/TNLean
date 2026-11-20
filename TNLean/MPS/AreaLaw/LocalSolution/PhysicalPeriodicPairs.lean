@@ -4,8 +4,12 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.LocalSolution.PeriodicCoarsening
-import TNLean.Lattice.GaussianFilteredTruncationGround
-import TNLean.Lattice.TranslationSupercellSpacing
+import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Hamiltonian.GaussianFilterTruncation
+import QICLean.ManyBody.Hamiltonian.Translation
+import QICLean.Algebra.ZModDisplacement
+import QICLean.ManyBody.Dynamics.GraphBall
+import TNLean.Algebra.MatrixHermitianSum
 
 /-!
 # Periodic neighbouring-block operators from local Gaussian filters
@@ -16,8 +20,10 @@ The local terms, rather than approximating operators or residual estimates,
 are the input.
 -/
 
-open Matrix QuantumCircuit TNLean.Lattice
+open Matrix QuantumCircuit ManyBody
 open scoped Matrix.Norms.L2Operator InnerProductSpace ComplexOrder MatrixOrder
+
+open ManyBody (IsGapped groundSpace)
 
 namespace TNLean.MPS.AreaLaw.LocalSolution
 
@@ -49,7 +55,7 @@ private theorem ring_step_le_one {n : ℕ} [NeZero n] (x y : Fin n)
     rw [Fin.val_sub, ZMod.natCast_mod, Nat.cast_add, Nat.cast_sub u.isLt.le,
       ZMod.natCast_self]
     ring
-  have hone : ((1 : ZMod n)).valMinAbs.natAbs ≤ 1 := by
+  have hone : (1 : ZMod n).valMinAbs.natAbs ≤ 1 := by
     rw [ZMod.valMinAbs_natAbs_eq_min]
     exact (min_le_left _ _).trans (by rw [ZMod.val_one_eq_one_mod]; exact Nat.mod_le 1 n)
   rcases SimpleGraph.cycleGraph_adj'.mp h with h | h
@@ -78,54 +84,56 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι]
 
 omit [DecidableEq ι] in
 private theorem radius_support_diameter (G : SimpleGraph ι) (R : ℕ)
-    (i : ι) {x y : ι} (hx : x ∈ graphBall G i R) (hy : y ∈ graphBall G i R) :
+    (i : ι) {x y : ι} (hx : x ∈ ManyBody.graphBall G i R) (hy : y ∈ ManyBody.graphBall G i R) :
     G.edist x y ≤ (2 * R : ℕ) := by
   have hx' : G.edist x i ≤ (R : ℕ∞) := by
-    simpa only [SimpleGraph.edist_comm] using mem_graphBall.mp hx
+    simpa only [SimpleGraph.edist_comm] using ManyBody.mem_graphBall.mp hx
   calc G.edist x y ≤ G.edist x i + G.edist i y := G.edist_triangle
-    _ ≤ (R : ℕ∞) + R := add_le_add hx' (mem_graphBall.mp hy)
+    _ ≤ (R : ℕ∞) + R := add_le_add hx' (ManyBody.mem_graphBall.mp hy)
     _ = (2 * R : ℕ) := by push_cast; ring
 
 omit [DecidableEq ι] in
 private theorem truncated_centres_supported (G : SimpleGraph ι) {R ℓ : ℕ}
-    (hR : R ≤ ℓ) (i k : ι) (hk : k ∈ graphBall G i (ℓ - R)) :
-    graphBall G k R ⊆ graphBall G i ℓ := by
+    (hR : R ≤ ℓ) (i k : ι) (hk : k ∈ ManyBody.graphBall G i (ℓ - R)) :
+    ManyBody.graphBall G k R ⊆ ManyBody.graphBall G i ℓ := by
   intro x hx
-  apply mem_graphBall.mpr
+  apply ManyBody.mem_graphBall.mpr
   calc G.edist i x ≤ G.edist i k + G.edist k x := G.edist_triangle
-    _ ≤ ((ℓ - R : ℕ) : ℕ∞) + R := add_le_add (mem_graphBall.mp hk) (mem_graphBall.mp hx)
+    _ ≤ ((ℓ - R : ℕ) : ℕ∞) + R := add_le_add (ManyBody.mem_graphBall.mp hk)
+        (ManyBody.mem_graphBall.mp hx)
     _ = (ℓ : ℕ∞) := by rw [← Nat.cast_add, Nat.sub_add_cancel hR]
 
 omit [DecidableEq ι] in
 private theorem omitted_centres_separated (G : SimpleGraph ι) {R ℓ m : ℕ}
-    (hm : m + 3 * R ≤ ℓ) (i k : ι) (hk : k ∉ graphBall G i (ℓ - R))
-    {x y : ι} (hx : x ∈ graphBall G i R) (hy : y ∈ graphBall G k R) :
+    (hm : m + 3 * R ≤ ℓ) (i k : ι) (hk : k ∉ ManyBody.graphBall G i (ℓ - R))
+    {x y : ι} (hx : x ∈ ManyBody.graphBall G i R) (hy : y ∈ ManyBody.graphBall G k R) :
     (m : ℕ∞) ≤ G.edist x y := by
   by_contra h
   have hxy : G.edist x y ≤ (m : ℕ∞) := (lt_of_not_ge h).le
   have hy' : G.edist y k ≤ (R : ℕ∞) := by
-    simpa only [SimpleGraph.edist_comm] using mem_graphBall.mp hy
+    simpa only [SimpleGraph.edist_comm] using ManyBody.mem_graphBall.mp hy
   apply hk
-  apply mem_graphBall.mpr
+  apply ManyBody.mem_graphBall.mpr
   calc G.edist i k ≤ G.edist i x + G.edist x y + G.edist y k :=
       (G.edist_triangle (u := i) (v := y) (w := k)).trans
         (add_le_add (G.edist_triangle (u := i) (v := x) (w := y)) le_rfl)
-    _ ≤ (R : ℕ∞) + m + R := add_le_add (add_le_add (mem_graphBall.mp hx) hxy) hy'
+    _ ≤ (R : ℕ∞) + m + R := add_le_add (add_le_add (ManyBody.mem_graphBall.mp hx) hxy) hy'
     _ ≤ ((ℓ - R : ℕ) : ℕ∞) := by exact_mod_cast (by omega : R + m + R ≤ ℓ - R)
 
 private theorem radius_interaction_budget (G : SimpleGraph ι) {d R S : ℕ}
     (h : ι → Matrix (ι → Fin d) (ι → Fin d) ℂ) {J : ℝ}
     (hJ0 : 0 ≤ J) (hJ : ∀ i, ‖h i‖ ≤ J)
-    (hS : ∀ i, (graphBall G i R).card ≤ S) (x : ι) :
-    ∑ i ∈ Finset.univ.filter (fun i ↦ x ∈ graphBall G i R), ‖h i‖ ≤ S * J := by
-  have he : Finset.univ.filter (fun i ↦ x ∈ graphBall G i R) = graphBall G x R := by
+    (hS : ∀ i, (ManyBody.graphBall G i R).card ≤ S) (x : ι) :
+    ∑ i ∈ Finset.univ.filter (fun i ↦ x ∈ ManyBody.graphBall G i R), ‖h i‖ ≤ S * J := by
+  have he : Finset.univ.filter (fun i ↦ x ∈ ManyBody.graphBall G i R) = ManyBody.graphBall G x R :=
+      by
     ext i
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and, mem_graphBall,
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, ManyBody.mem_graphBall,
       SimpleGraph.edist_comm]
   rw [he]
-  calc ∑ i ∈ graphBall G x R, ‖h i‖ ≤ ∑ _i ∈ graphBall G x R, J :=
+  calc ∑ i ∈ ManyBody.graphBall G x R, ‖h i‖ ≤ ∑ _i ∈ ManyBody.graphBall G x R, J :=
       Finset.sum_le_sum fun i _ ↦ hJ i
-    _ = (graphBall G x R).card * J := by simp
+    _ = (ManyBody.graphBall G x R).card * J := by simp
     _ ≤ S * J := mul_le_mul_of_nonneg_right (by exact_mod_cast hS x) hJ0
 
 end Truncation
@@ -136,8 +144,8 @@ within distance `ℓ - R`. Hastings, arXiv:cond-mat/0508554v3, eqs. `mid`,
 noncomputable def periodicLocalFilter {N ℓ d : ℕ} (R : ℕ) (θ Δ : ℝ)
     (h : (Fin N × Fin (2 * ℓ)) → Matrix ((Fin N × Fin (2 * ℓ)) → Fin d)
       ((Fin N × Fin (2 * ℓ)) → Fin d) ℂ) (i : Fin N × Fin (2 * ℓ)) :=
-  gaussianFilteredTerm θ Δ
-    (∑ k ∈ graphBall (periodicPhysicalGraph N ℓ) i (ℓ - R), h k) (h i)
+  ManyBody.gaussianFilteredTerm θ Δ
+    (∑ k ∈ ManyBody.graphBall (periodicPhysicalGraph N ℓ) i (ℓ - R), h k) (h i)
 
 /-- The neighbouring-supersite family constructed from the original local terms.
 Hastings, arXiv:cond-mat/0508554v3, lines 609–639. -/
@@ -152,9 +160,9 @@ supplied as approximation data. Hastings, arXiv:cond-mat/0508554v3, lines 309–
 noncomputable def periodicTruncationShell (N ℓ R : ℕ) : ℕ := by
   classical
   exact Finset.univ.sup fun i : Fin N × Fin (2 * ℓ) ↦
-    ((graphBall (periodicPhysicalGraph N ℓ) i (ℓ - R))ᶜ.filter fun k ↦
-      ¬Disjoint (graphBall (periodicPhysicalGraph N ℓ) k R)
-        (graphBall (periodicPhysicalGraph N ℓ) i ℓ)).card
+    ((ManyBody.graphBall (periodicPhysicalGraph N ℓ) i (ℓ - R))ᶜ.filter fun k ↦
+      ¬Disjoint (ManyBody.graphBall (periodicPhysicalGraph N ℓ) k R)
+        (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i ℓ)).card
 
 /-- The explicit uniform local-filter error, with the actual omitted-shell count.
 The interaction-ball count `S` is the finite-range hypothesis of Hastings,
@@ -172,45 +180,47 @@ private theorem periodic_local_filter_data {N ℓ d R S m : ℕ} [NeZero d]
     (h : (Fin N × Fin (2 * ℓ)) → Matrix ((Fin N × Fin (2 * ℓ)) → Fin d)
       ((Fin N × Fin (2 * ℓ)) → Fin d) ℂ)
     (hherm : ∀ i, (h i).IsHermitian)
-    (hsupp : ∀ i, h i ∈ supportedOperators d
-      (graphBall (periodicPhysicalGraph N ℓ) i R : Set (Fin N × Fin (2 * ℓ))))
+    (hsupp : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i R : Finset (Fin N × Fin (2 * ℓ))))
     (hJ : ∀ i, ‖h i‖ ≤ J)
-    (hS : ∀ i, (graphBall (periodicPhysicalGraph N ℓ) i R).card ≤ S)
+    (hS : ∀ i, (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i R).card ≤ S)
     (i : Fin N × Fin (2 * ℓ)) :
-    periodicLocalFilter R θ Δ h i ∈ supportedOperators d
-      (graphBall (periodicPhysicalGraph N ℓ) i ℓ : Set (Fin N × Fin (2 * ℓ))) ∧
+    periodicLocalFilter R θ Δ h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i ℓ : Finset (Fin N × Fin (2 * ℓ))) ∧
     ‖periodicLocalFilter R θ Δ h i‖ ≤ J ∧
     (periodicLocalFilter R θ Δ h i).IsHermitian ∧
-    ‖gaussianFilteredTerm θ Δ (∑ k, h k) (h i) - periodicLocalFilter R θ Δ h i‖ ≤
+    ‖ManyBody.gaussianFilteredTerm θ Δ (∑ k, h k) (h i) - periodicLocalFilter R θ Δ h i‖ ≤
       periodicFilterError N ℓ R S m J θ Δ μ := by
   let G := periodicPhysicalGraph N ℓ
-  let X := fun i ↦ graphBall G i R
+  let X := fun i ↦ ManyBody.graphBall G i R
   have hR : R ≤ ℓ := by omega
-  have hself : ∀ i, i ∈ X i := by intro i; exact mem_graphBall.mpr (by simp)
   have hdiam : ∀ i, ∀ x ∈ X i, ∀ y ∈ X i, G.edist x y ≤ (2 * R : ℕ) :=
     fun i _ hx _ hy ↦ radius_support_diameter G R i hx hy
   have hbudget := radius_interaction_budget G h hJ0 hJ hS
   have hsK := truncated_centres_supported G hR i
-  have hXi : X i ⊆ graphBall G i ℓ := by
+  have hXi : X i ⊆ ManyBody.graphBall G i ℓ := by
     intro x hx
-    apply mem_graphBall.mpr
-    exact (mem_graphBall.mp hx).trans (by exact_mod_cast hR)
-  have hsep : ∀ k ∉ graphBall G i (ℓ - R),
-      ¬Disjoint (X k) (graphBall G i ℓ) → ∀ x ∈ X i, ∀ y ∈ X k,
+    apply ManyBody.mem_graphBall.mpr
+    exact (ManyBody.mem_graphBall.mp hx).trans (by exact_mod_cast hR)
+  have hsep : ∀ k ∉ ManyBody.graphBall G i (ℓ - R),
+      ¬Disjoint (X k) (ManyBody.graphBall G i ℓ) → ∀ x ∈ X i, ∀ y ∈ X k,
         (m : ℕ∞) ≤ G.edist x y :=
     fun k hk _ _ hx _ hy ↦ omitted_centres_separated G hm i k hk hx hy
-  have hdata := truncated_approx_gaussianFilteredTerm G X id hself h hherm hsupp
+  have hdata := ManyBody.truncated_approx_gaussianFilteredTerm G
+    (⟨h, hsupp⟩ : ManyBody.Interaction (fun _ ↦ Fin d) X) hherm
     (2 * R) hdiam S hS (S * J) hbudget (ΔE := Δ) hθ
-    (graphBall G i (ℓ - R)) (graphBall G i ℓ) hsK (X i) hXi (hsupp i) J hJ μ hμ m hsep
-    (T := θ / Δ) (div_nonneg hθ hΔ.le)
-  rw [exp_neg_sq_div_eq_of_time_eq hΔ.ne'] at hdata
+    (ManyBody.graphBall G i (ℓ - R)) (ManyBody.graphBall G i ℓ) hsK (X i) hXi (hsupp i) J hJ μ hμ m
+        hsep
+    (τ := θ / Δ) (div_nonneg hθ hΔ.le)
+  rw [ManyBody.exp_neg_sq_div_eq_of_time_eq hΔ.ne'] at hdata
   refine ⟨hdata.1, hdata.2.1.trans (hJ i), hdata.2.2.1 (hherm i), hdata.2.2.2.trans ?_⟩
-  have hcount : ((graphBall G i (ℓ - R))ᶜ.filter
-      (fun k ↦ ¬Disjoint (X k) (graphBall G i ℓ))).card ≤ periodicTruncationShell N ℓ R := by
+  have hcount : ((ManyBody.graphBall G i (ℓ - R))ᶜ.filter
+      (fun k ↦ ¬Disjoint (X k) (ManyBody.graphBall G i ℓ))).card ≤ periodicTruncationShell N ℓ R :=
+          by
     classical
     exact Finset.le_sup (f := fun i : Fin N × Fin (2 * ℓ) ↦
-      ((graphBall G i (ℓ - R))ᶜ.filter fun k ↦
-        ¬Disjoint (X k) (graphBall G i ℓ)).card) (Finset.mem_univ i)
+      ((ManyBody.graphBall G i (ℓ - R))ᶜ.filter fun k ↦
+        ¬Disjoint (X k) (ManyBody.graphBall G i ℓ)).card) (Finset.mem_univ i)
   unfold periodicFilterError
   push_cast
   gcongr
@@ -256,16 +266,18 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
     (h : (Fin N × Fin (2 * ℓ)) → Matrix ((Fin N × Fin (2 * ℓ)) → Fin d)
       ((Fin N × Fin (2 * ℓ)) → Fin d) ℂ)
     (hherm : ∀ i, (h i).IsHermitian)
-    (hsupp : ∀ i, h i ∈ supportedOperators d
-      (graphBall (periodicPhysicalGraph N ℓ) i R : Set (Fin N × Fin (2 * ℓ))))
+    (hsupp : ∀ i, h i ∈ ManyBody.supportedOperators (fun _ ↦ Fin d)
+      (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i R : Finset (Fin N × Fin (2 * ℓ))))
     (hJ : ∀ i, ‖h i‖ ≤ J)
-    (hS : ∀ i, (graphBall (periodicPhysicalGraph N ℓ) i R).card ≤ S)
+    (hS : ∀ i, (ManyBody.graphBall (periodicPhysicalGraph N ℓ) i R).card ≤ S)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ ((Fin N × Fin (2 * ℓ)) → Fin d)}
-    (hgs : Matrix.IsGappedGroundState (∑ i, h i) E₀ Ω Δ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
+    (hspan : groundSpace (∑ i, h i) E₀ = Submodule.span ℂ {Ω}) :
     let M := periodicFilteredPair R θ Δ h
     let ε := periodicFilterError N ℓ R S m J θ Δ μ
     (∀ j, (M j).IsHermitian ∧
-      M j ∈ supportedOperators d {v | v.1 = j ∨ finRotate N v.1 = j} ∧
+      M j ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (Finset.univ.filter fun v ↦ v.1 = j ∨
+          finRotate N v.1 = j) ∧
       ‖M j‖ ≤ (2 * ℓ : ℕ) * J ∧
       ‖M j - ((⟪Ω, toEuclideanLin (M j) Ω⟫_ℂ).re : ℂ) • 1‖ ≤ 4 * (ℓ : ℝ) * J ∧
       ‖toEuclideanLin (M j - ((⟪Ω, toEuclideanLin (M j) Ω⟫_ℂ).re : ℂ) • 1) Ω‖ ≤
@@ -284,7 +296,8 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
       (a i - ((⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ).re : ℂ) • 1) Ω‖ ≤
         J * Real.exp (-θ / 2) + ε := by
     intro i
-    have hb := norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hθ hΔ hgs (h i) (a i)
+    have hb := ManyBody.norm_apply_sub_inner_smul_le_of_gaussianFilteredTerm hθ hΔ
+      (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) hΩ hgap hspan (h i) (a i)
     have hreal : ((⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ).re : ℂ) =
         ⟪Ω, toEuclideanLin (a i) Ω⟫_ℂ :=
       (isSymmetric_toEuclideanLin_iff.mpr (haH i)).coe_re_inner_self_apply Ω
@@ -296,26 +309,29 @@ theorem periodicFilteredPair_properties {N ℓ d R S m : ℕ} [NeZero d]
   have herr : ‖∑ j, M j - ∑ i, h i‖ ≤ (N * (2 * ℓ) : ℕ) * ε := by
     change ‖∑ j, periodicCoarseOperator a j - ∑ i, h i‖ ≤ _
     rw [sum_periodicCoarseOperator]
-    refine (norm_sum_sub_le_of_sum_eq Finset.univ θ Δ
+    refine (ManyBody.norm_sum_sub_le_of_sum_eq Finset.univ θ Δ
       (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) (W := h) rfl).trans ?_
     calc ∑ i : Fin N × Fin (2 * ℓ),
-        ‖gaussianFilteredTerm θ Δ (∑ i, h i) (h i) - a i‖ ≤ ∑ _i, ε :=
+        ‖ManyBody.gaussianFilteredTerm θ Δ (∑ i, h i) (h i) - a i‖ ≤ ∑ _i, ε :=
           Finset.sum_le_sum fun i _ ↦ (hd i).2.2.2
       _ = _ := by simp
   refine ⟨fun j ↦ ⟨hMherm j, ?_, ?_, ?_, ?_⟩, herr, ?_⟩
   · apply edgePartition_mem_supportedOperators
     intro i hi
-    apply supportedOperators_mono _ ((hd i).1)
+    apply ManyBody.supportedOperators_mono _ ((hd i).1)
     intro v hv
+    refine Finset.mem_filter.mpr ⟨Finset.mem_univ _, ?_⟩
     exact periodicCoarseEdge_support_all hℓ i v hi
       (by
-        have hdv := (periodicPhysicalDistance_le_edist hN hℓ i v).trans (mem_graphBall.mp hv)
+        have hdv := (periodicPhysicalDistance_le_edist hN hℓ i v).trans (ManyBody.mem_graphBall.mp
+            hv)
         exact_mod_cast hdv)
   · exact norm_edgePartition_le_of_fibre_card periodicCoarseEdge a hJ0 haJ j
       (card_periodicCoarseEdge_fibre j).le
-  · exact centeredNorm_periodicCoarseOperator_le a hgs.1 hJ0 haJ j
+  · exact centeredNorm_periodicCoarseOperator_le a hΩ hJ0 haJ j
   · exact residual_periodicCoarseOperator_le a Ω (by positivity) hares j
   · exact norm_error_gap_transfer (Matrix.isHermitian_sum _ fun i _ ↦ hherm i)
-      (Matrix.isHermitian_sum _ fun j _ ↦ hMherm j) hgs.2.2 herr
+      (Matrix.isHermitian_sum _ fun j _ ↦ hMherm j) (hgap.posSemidef_sub_smul_one
+        (Matrix.isHermitian_sum _ fun i _ ↦ hherm i) hΩ hspan) herr
 
 end TNLean.MPS.AreaLaw.LocalSolution

@@ -45,7 +45,7 @@ variable {d m n : ℕ}
 
 /-- The sites `a, a + 1, …, a + m - 1` of the open chain of `n` sites, cut off at the right
 end of the chain. -/
-def windowSites (n a m : ℕ) : Set (Fin n) := {p | a ≤ p.val ∧ p.val < a + m}
+def windowSites (n a m : ℕ) : Finset (Fin n) := Finset.univ.filter fun p ↦ a ≤ p.val ∧ p.val < a + m
 
 /-- A unitary gate acting on a window of `m` consecutive sites of the open chain of `n` sites.
 
@@ -53,7 +53,7 @@ Source: arXiv:2307.01696, main text before Theorem 1 and paragraph "The sequenti
 (unitaries "with constant support"). -/
 def IsWindowGate (m : ℕ) (Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) : Prop :=
   Z ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ) ∧
-    ∃ a, Z ∈ supportedOperators d (windowSites n a m)
+    ∃ a, Z ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) (windowSites n a m)
 
 /-- `X` is a product of at most `K` unitary gates, each acting on a window of `m` consecutive
 sites of the open chain of `n` sites.
@@ -71,19 +71,20 @@ theorem isWindowGate_embedOp {l : ℕ} (hl : l ≤ m) {e : Fin l → Fin n}
     {X : Matrix (Fin l → Fin d) (Fin l → Fin d) ℂ}
     (hX : X ∈ unitary (Matrix (Fin l → Fin d) (Fin l → Fin d) ℂ)) :
     IsWindowGate m (embedOp e X) := by
-  refine ⟨embedOp_mem_unitary he hX, a, supportedOperators_mono ?_
+  refine ⟨embedOp_mem_unitary he hX, a, ManyBody.supportedOperators_mono ?_
     (embedOp_mem_supportedOperators he X)⟩
-  rintro _ ⟨i, rfl⟩
-  simp only [windowSites, Set.mem_ofPred_eq, hea]
+  intro p hp
+  obtain ⟨i, -, rfl⟩ := Finset.mem_image.mp hp
+  simp only [windowSites, Finset.mem_filter, Finset.mem_univ, true_and, hea]
   omega
 
 /-- A unitary on all the sites of a chain of `n ≤ m` sites is a gate on a window of `m`
 sites. -/
 theorem isWindowGate_of_le {Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ} (hnm : n ≤ m)
     (hZ : Z ∈ unitary (Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ)) : IsWindowGate m Z :=
-  ⟨hZ, 0, supportedOperators_mono
-    (fun p _ => show 0 ≤ p.val ∧ p.val < 0 + m from ⟨Nat.zero_le _, by omega⟩)
-    (mem_supportedOperators_univ Z)⟩
+  ⟨hZ, 0, ManyBody.supportedOperators_mono
+    (fun p _ => Finset.mem_filter.mpr ⟨Finset.mem_univ _, Nat.zero_le _, by omega⟩)
+    (show Z ∈ ManyBody.supportedOperators _ Finset.univ by simp)⟩
 
 namespace IsWindowProduct
 
@@ -126,10 +127,11 @@ theorem embedOp {n' K : ℕ} {e : Fin n → Fin n'} (he : Function.Injective e) 
     embedOp_list_prod he l⟩
   obtain ⟨Z', hZ', rfl⟩ := List.mem_map.mp hZ
   obtain ⟨hu, b, hS⟩ := hg Z' hZ'
-  refine ⟨embedOp_mem_unitary he hu, a + b, supportedOperators_mono ?_
+  refine ⟨embedOp_mem_unitary he hu, a + b, ManyBody.supportedOperators_mono ?_
     (embedOp_mem_supportedOperators_image he hS)⟩
-  rintro _ ⟨i, hi, rfl⟩
-  simp only [windowSites, Set.mem_ofPred_eq, hea] at hi ⊢
+  intro p hp
+  obtain ⟨i, hi, rfl⟩ := Finset.mem_image.mp hp
+  simp only [windowSites, Finset.mem_filter, Finset.mem_univ, true_and, hea] at hi ⊢
   omega
 
 /-- On a chain of at least two sites, a gate on a window of two sites is a gate on two
@@ -138,10 +140,10 @@ theorem _root_.QuantumCircuit.IsWindowGate.isNeighbourGate (hn : 2 ≤ n)
     {Z : Matrix (Fin n → Fin d) (Fin n → Fin d) ℂ} (hZ : IsWindowGate 2 Z) : IsNeighbourGate Z := by
   obtain ⟨hu, a, hS⟩ := hZ
   refine ⟨hu, ⟨min a (n - 2), by omega⟩, ⟨min a (n - 2) + 1, by omega⟩, rfl,
-    supportedOperators_mono ?_ hS⟩
+    ManyBody.supportedOperators_mono ?_ hS⟩
   intro p hp
-  simp only [windowSites, Set.mem_ofPred_eq] at hp
-  simp only [Set.mem_insert_iff, Set.mem_singleton_iff, Fin.ext_iff]
+  simp only [windowSites, Finset.mem_filter, Finset.mem_univ, true_and] at hp
+  simp only [Finset.mem_insert, Finset.mem_singleton, Fin.ext_iff]
   omega
 
 /-- On a chain of at least two sites, a product of gates on windows of two sites is a product of
@@ -179,12 +181,13 @@ theorem exists_isPairProduct (hd : 0 < d) (hm : 2 ≤ m) :
     set a' := min a (n - w) with ha'
     let e : Fin w → Fin n := fun j => ⟨a' + j.val, by omega⟩
     have he : Function.Injective e := fun j j' h => Fin.ext (by simpa [e] using h)
-    have hsub : windowSites n a m ⊆ Set.range e := by
+    have hsub : windowSites n a m ⊆ Finset.univ.image e := by
       intro p hp
-      simp only [windowSites, Set.mem_ofPred_eq] at hp
-      exact ⟨⟨p.val - a', by omega⟩, Fin.ext (by simp [e]; omega)⟩
+      simp only [windowSites, Finset.mem_filter, Finset.mem_univ, true_and] at hp
+      exact Finset.mem_image.mpr ⟨⟨p.val - a', by omega⟩, Finset.mem_univ _,
+        Fin.ext (by simp [e]; omega)⟩
     obtain ⟨Y, rfl⟩ := exists_embedOp_eq_of_mem_supportedOperators he
-      (supportedOperators_mono hsub hS)
+      (ManyBody.supportedOperators_mono hsub hS)
     have hY := hf w (by omega) Y (mem_unitary_of_embedOp_mem_unitary he hd hu)
     refine (hY.embedOp he (a := a') fun i => rfl).mono ?_
     exact Finset.single_le_sum (fun _ _ => Nat.zero_le _) (Finset.mem_range.mpr (by omega))

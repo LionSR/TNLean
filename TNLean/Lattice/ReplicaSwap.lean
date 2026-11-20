@@ -86,22 +86,21 @@ theorem reindex_sumArrow_sitePair_embedOp (q : ℕ) (e : κ → ι)
           · exact hi j (Sum.inr_injective hj))]
   simp only [hagree, hcomp]
 
-omit [DecidableEq ι] in
 /-- **An operator on paired sites acts on both replicas of the same sites.**
 Source: `02-information.tex`, lines 416–424 and 597–609. -/
 theorem reindex_sumArrow_sitePair_mem_supportedOperators (q : ℕ) {S : Finset ι}
     {A : Matrix (ι → Fin (q * q)) (ι → Fin (q * q)) ℂ}
-    (hA : A ∈ supportedOperators (q * q) (S : Set ι)) :
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S) :
     reindex (sumArrowSitePair ι q).symm (sumArrowSitePair ι q).symm A ∈
-      supportedOperators q ((S.disjSum S : Finset (ι ⊕ ι)) : Set (ι ⊕ ι)) := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q) (S.disjSum S : Finset (ι ⊕ ι)) := by
   classical
   obtain ⟨A', hA'⟩ := TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators hA
   have hAeq : A = embedOp (fun x : S ↦ x.val) A' := by
     rw [embedOp_val_eq_kronecker_one_submatrix, ← hA']
     simp
   rw [hAeq, reindex_sumArrow_sitePair_embedOp q Subtype.val]
-  have hrange : Set.range (Sum.map (fun x : S ↦ x.val) (fun x : S ↦ x.val)) =
-      ((S.disjSum S : Finset (ι ⊕ ι)) : Set (ι ⊕ ι)) := by
+  have hrange : Finset.univ.image (Sum.map (fun x : S ↦ x.val) (fun x : S ↦ x.val)) =
+      (S.disjSum S : Finset (ι ⊕ ι)) := by
     ext z
     rcases z with z | z <;> simp
   rw [← hrange]

@@ -49,7 +49,7 @@ private theorem prod_ofFn_add_eq_sum_first_head_add_prod
         (ih (fun i ↦ H i.succ) (fun i ↦ T i.succ))
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
-variable {Out : V → Type*} [∀ v, Fintype (Out v)] {m : ℕ}
+variable {Out : V → Type*} [∀ v, DecidableEq (Out v)] [∀ v, Fintype (Out v)] {m : ℕ}
 
 /-- A feasible ordered filter tuple gives an approximation in a sum of regional
 cylinders. Each inside dimension is at most the reciprocal spectral threshold.
@@ -63,15 +63,15 @@ regions, zero weights, singular densities, and an empty family of filters. -/
 theorem exists_mem_iSup_dependentRegionCylinder_norm_sub_le
     (regions : Fin m → Finset V) (hregions : Monotone regions)
     (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j) {b : ℝ} (hb : 0 < b)
-    (Ω : EuclideanSpace ℂ ((w : (Finset.univ : Finset V)) → Out w.1))
+    (Ω : EuclideanSpace ℂ ((v : V) → Out v))
     (_hΩ : ‖Ω‖ = 1)
     {x : ∀ j, Matrix ((w : regions j) → Out w.1)
       ((w : regions j) → Out w.1) ℂ}
     (hx : x ∈ regularizedPatchDomain (Out := Out) regions) :
     ∃ (S : (j : Fin m) → Submodule ℂ (((w : regions j) → Out w.1) → ℂ))
-      (v : EuclideanSpace ℂ ((w : (Finset.univ : Finset V)) → Out w.1)),
+      (v : EuclideanSpace ℂ ((v : V) → Out v)),
       (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤ 1 / b) ∧
-      (v : (((w : (Finset.univ : Finset V)) → Out w.1) → ℂ)) ∈
+      (v : (((v : V) → Out v) → ℂ)) ∈
         (⨆ j, dependentRegionCylinder (Out := Out) (regions j) (S j)) ∧
       ‖Ω - v‖ ≤ regularizedPatchObjective regions a b Ω x *
         (2 * b) ^ ((∑ j, a j) / 2) := by
@@ -80,8 +80,7 @@ theorem exists_mem_iSup_dependentRegionCylinder_norm_sub_le
   let T (j : Fin m) := Matrix.shiftedPowerTail (x j) b (a j / 2)
   let P (j : Fin m) :=
     (List.ofFn fun i : Fin j.val ↦
-      dependentSubregionOperatorLift
-        (regions ⟨i.val, Nat.lt_trans i.isLt j.isLt⟩) (regions j)
+      ManyBody.subregionPlace
         (hregions (Fin.le_iff_val_le_val.mpr (Nat.le_of_lt i.isLt)))
         (T ⟨i.val, Nat.lt_trans i.isLt j.isLt⟩)).prod
   let S (j : Fin m) := ((P j * H j).mulVecLin).range
@@ -91,28 +90,28 @@ theorem exists_mem_iSup_dependentRegionCylinder_norm_sub_le
         ((hx j).1.rank_shiftedPowerHead_le (hx j).2 hb (a j / 2))
   let lift (j : Fin m) :
       Matrix ((w : regions j) → Out w.1) ((w : regions j) → Out w.1) ℂ →*
-        Matrix ((w : (Finset.univ : Finset V)) → Out w.1)
-          ((w : (Finset.univ : Finset V)) → Out w.1) ℂ :=
-    { toFun := dependentRegionOperatorLift (Out := Out) (regions j)
-      map_one' := dependentRegionOperatorLift_one (Out := Out) (regions j)
-      map_mul' := dependentRegionOperatorLift_mul (Out := Out) (regions j) }
+        Matrix ((v : V) → Out v)
+          ((v : V) → Out v) ℂ :=
+    { toFun := ManyBody.place (X := Out) (regions j)
+      map_one' := ManyBody.place_one (X := Out)
+      map_mul' := fun K L ↦ ManyBody.place_mul (X := Out) K L }
   have hP (j : Fin m) : lift j (P j) =
       (List.ofFn fun i : Fin j.val ↦
-        dependentRegionOperatorLift (regions ⟨i.val, Nat.lt_trans i.isLt j.isLt⟩)
+        ManyBody.place (regions ⟨i.val, Nat.lt_trans i.isLt j.isLt⟩)
           (T ⟨i.val, Nat.lt_trans i.isLt j.isLt⟩)).prod := by
     simp only [P, map_list_prod, List.map_ofFn, Function.comp_def, lift,
-      MonoidHom.coe_mk, OneHom.coe_mk, dependentRegionOperatorLift_subregion]
+      MonoidHom.coe_mk, OneHom.coe_mk, ManyBody.place_subregionPlace]
   have hrange (j : Fin m) : (lift j (P j * H j)).mulVecLin.range =
       dependentRegionCylinder (Out := Out) (regions j) (S j) :=
-    range_dependentRegionOperatorLift (Out := Out) (regions j) (P j * H j)
+    range_place (Out := Out) (regions j) (P j * H j)
   have hcancel (j : Fin m) :
-      dependentRegionOperatorLift (Out := Out) (regions j)
+      ManyBody.place (X := Out) (regions j)
           ((x j + b • 1) ^ (a j / 2)) *
         regularizedPatchFilter regions a b x j = 1 := by
-    rw [regularizedPatchFilter, ← dependentRegionOperatorLift_mul, neg_div,
+    rw [regularizedPatchFilter, ← ManyBody.place_mul, neg_div,
       (hx j).1.add_smul_one_rpow_mul_neg hb (a j / 2),
-      dependentRegionOperatorLift_one (Out := Out)]
-  let F (j : Fin m) := dependentRegionOperatorLift (Out := Out) (regions j)
+      ManyBody.place_one (X := Out)]
+  let F (j : Fin m) := ManyBody.place (X := Out) (regions j)
     ((x j + b • 1) ^ (a j / 2))
   have hcancelList (l : List (Fin m)) : (l.map F).prod *
       ((l.map (regularizedPatchFilter regions a b x)).reverse).prod = 1 := by
@@ -130,11 +129,11 @@ theorem exists_mem_iSup_dependentRegionCylinder_norm_sub_le
     simpa only [List.ofFn_eq_map, regularizedPatchOperator] using
       hcancelList (List.finRange m)
   have hsplit (j : Fin m) : lift j (H j) + lift j (T j) = F j := by
-    change dependentRegionOperatorLift (Out := Out) (regions j) (H j) +
-      dependentRegionOperatorLift (Out := Out) (regions j) (T j) =
-      dependentRegionOperatorLift (Out := Out) (regions j) _
+    change ManyBody.place (X := Out) (regions j) (H j) +
+      ManyBody.place (X := Out) (regions j) (T j) =
+      ManyBody.place (X := Out) (regions j) _
     rw [← Matrix.shiftedPowerHead_add_shiftedPowerTail, ← eq_sub_iff_add_eq,
-      ← dependentRegionOperatorLift_sub, add_sub_cancel_right]
+      ← ManyBody.place_sub, add_sub_cancel_right]
   have hexpand := prod_ofFn_add_eq_sum_first_head_add_prod
     (fun j ↦ lift j (H j)) (fun j ↦ lift j (T j))
   simp only [hsplit] at hexpand
@@ -153,9 +152,9 @@ theorem exists_mem_iSup_dependentRegionCylinder_norm_sub_le
       (List.ofFn fun j ↦ lift j (T j)).prod := by
     simpa only [G, hPtake, map_mul] using hexpand
   let ξ := regularizedPatchOutput regions a b Ω x
-  let v : EuclideanSpace ℂ ((w : (Finset.univ : Finset V)) → Out w.1) :=
+  let v : EuclideanSpace ℂ ((v : V) → Out v) :=
     WithLp.toLp 2 ((∑ j, G j) *ᵥ ξ)
-  have hv : (v : (((w : (Finset.univ : Finset V)) → Out w.1) → ℂ)) ∈
+  have hv : (v : (((v : V) → Out v) → ℂ)) ∈
       (⨆ j, dependentRegionCylinder (Out := Out) (regions j) (S j)) := by
     change ((∑ j, G j) *ᵥ ξ) ∈ _
     rw [Matrix.sum_mulVec]
@@ -175,14 +174,14 @@ theorem exists_mem_iSup_dependentRegionCylinder_norm_sub_le
     ext η
     exact congrFun (sub_eq_iff_eq_add.mpr hrecover) η
   have hT (j : Fin m)
-      (ζ : EuclideanSpace ℂ ((w : (Finset.univ : Finset V)) → Out w.1)) :
+      (ζ : EuclideanSpace ℂ ((v : V) → Out v)) :
       ‖WithLp.toLp 2 (lift j (T j) *ᵥ ζ)‖ ≤ (2 * b) ^ (a j / 2) * ‖ζ‖ :=
-    (norm_dependentRegionOperatorLift_mulVec_le (regions j) (T j) ζ).trans
+    (norm_place_mulVec_le (regions j) (T j) ζ).trans
       (mul_le_mul_of_nonneg_right
         ((hx j).1.l2_opNorm_shiftedPowerTail_le hb (div_nonneg (ha j) (by positivity)))
         (norm_nonneg ζ))
   have htail (l : List (Fin m))
-      (ζ : EuclideanSpace ℂ ((w : (Finset.univ : Finset V)) → Out w.1)) :
+      (ζ : EuclideanSpace ℂ ((v : V) → Out v)) :
       ‖WithLp.toLp 2 ((l.map fun j ↦ lift j (T j)).prod *ᵥ ζ)‖ ≤
         (l.map fun j ↦ (2 * b) ^ (a j / 2)).prod * ‖ζ‖ := by
     induction l generalizing ζ with

@@ -52,7 +52,7 @@ variable {N : ℕ} [NeZero N]
 `{k, k + 1}`, `k ∈ K`. -/
 noncomputable def permLayer (K : Finset (Fin N)) (hK : (K : Set (Fin N)).PairwiseDisjoint ringBond)
     (τ : Fin N → Equiv.Perm (Fin N → Fin d)) (hτ : ∀ k ∈ K, IsLocalPerm (ringBond k) (τ k)) :
-    Layer d N where
+    RingLayer d N where
   bonds := K
   gate k := (τ k).permMatrix ℂ
   gate_mem_unitary _ _ := Equiv.Perm.permMatrix_mem_unitaryGroup _
@@ -79,7 +79,7 @@ private theorem exists_partialOp_permLayer (K : Finset (Fin N))
     obtain ⟨P, hP, h1, h2⟩ := ih hsK
     have hdisj : ∀ k ∈ s, ∀ i ∈ ringBond a, i ∉ ringBond k := fun k hk i hia hik => by
       have hne : a ≠ k := fun h => ha (h ▸ hk)
-      exact Set.disjoint_left.mp (hK haK (hsK hk) hne) hia hik
+      exact Finset.disjoint_left.mp (hK haK (hsK hk) hne) hia hik
     refine ⟨P * τ a, ?_, ?_, ?_⟩
     · change (insert a s).noncommProd _ _ = _
       rw [Finset.noncommProd_insert_of_notMem _ _ _ _ ha, Matrix.permMatrix_mul]

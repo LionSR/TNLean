@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.RangeNestedPatchEnergy
 import TNLean.PEPS.AreaLaw.GapMarginalCloseness
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Uniform marginal closeness at interaction range `R`
@@ -29,6 +30,8 @@ Independently formalized from the manuscripts; no upstream Lean text is reused.
 -/
 
 open Matrix
+
+open ManyBody (IsGapped groundSpace PlaneInteraction)
 open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 open TNLean.Lattice
 
@@ -46,9 +49,11 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
     (q R : ℕ) (hR : 1 ≤ R) {J Δ κ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hκ : 0 < κ) (hκhalf : κ ≤ 1 / 2)
     (hsmall : rangePatchEnergyConstant q R J * κ ^ 2 ≤ Δ / 1024) :
-    ∀ (Λ : Finset (ℤ × ℤ)) (H : LocalHamiltonian Λ q R J) (E₀ : ℝ)
+    ∀ (Λ : Finset (ℤ × ℤ)) (H : PlaneInteraction Λ q R) (_ : ∀ X, (H.term X).IsHermitian)
+        (_ : ∀ X, ‖H.term X‖ ≤ J) (E₀ : ℝ)
       (Ψ : Lattice.StateSpace Λ q),
-      Lattice.IsGappedGroundState Λ q H.operator E₀ Ψ Δ →
+      ‖Ψ‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
+      groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ψ} →
       ∀ (center : ℝ × ℝ) (u b : ℝ), 0 ≤ u → 0 < b →
         letI : LinearOrder (Lattice.Site Λ) :=
           (Fintype.equivFin (Lattice.Site Λ)).linearOrder
@@ -56,9 +61,7 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
         let regions : Fin m → Finset (Lattice.Site Λ) :=
           fun j ↦ AreaLaw.Geometry.rangeNestedPatch Λ center R u j
         let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
-        let U := dependentGlobalConfigIsometry
-          (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-        let Ψᵤ := U.symm Ψ
+        let Ψᵤ := Ψ
         ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
           x ∈ regularizedPatchDomain
             (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →
@@ -72,23 +75,25 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
                 (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ψᵤ x X -
                 Entropy.regionState (n := fun _ : Lattice.Site Λ ↦ q) X Ψ)).trace.re ≤
               (1 / 16 : ℝ) := by
-  intro Λ H E₀ Ψ hgs center u b hu hb m regions a U Ψᵤ x hx hmin X
+  intro Λ H hH hHJ E₀ Ψ hΩ hgap hspan center u b hu hb m regions a Ψᵤ x hx hmin X
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
-  have henergy := (H.rangeNestedPatch_minimizer_energy_le hR hJ Ψ hgs center u κ b
+  have henergy := (H.rangeNestedPatch_minimizer_energy_le hH hHJ hR hJ Ψ hΩ hspan center u κ b
     hu hκ (hκhalf.trans (by norm_num)) hb x hx hmin).trans hsmall
   have hnorm := norm_normalizedRegularizedPatchOutput
     (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a
     (fun _ ↦ div_nonneg hκ.le (Nat.cast_nonneg m)) hb Ψᵤ
-    ((U.symm.norm_map _).trans hgs.1) hx
+    (hΩ) hx
   have hgap := FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy
-    (fun _ : Lattice.Site Λ ↦ Fin q) hgs hΔ ((U.norm_map _).trans hnorm) henergy X
+    (fun _ : Lattice.Site Λ ↦ Fin q) (ManyBody.Interaction.isHermitian_hamiltonian hH)
+        hΩ hgap hspan hΔ
+    (hnorm) henergy X
   have hρ := reindex_reducedPure_eq_regionState
     (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) X Ψᵤ
   simp only [dependentRegionFinEquiv, Equiv.piCongrRight_refl,
     Matrix.reindex_refl_refl] at hρ
   have hU : dependentGlobalFinIsometry
-      (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) Ψᵤ = U Ψᵤ := rfl
-  have hΨeq : dependentGlobalConfigIsometry Ψᵤ = Ψ := U.apply_symm_apply _
+      (fun _ : Lattice.Site Λ ↦ Equiv.refl (Fin q)) Ψᵤ = Ψᵤ := rfl
+  have hΨeq : Ψᵤ = Ψ := rfl
   rw [hU, hΨeq] at hρ
   simpa only [normalizedRegularizedPatchMarginal, hρ] using hgap
 
@@ -103,9 +108,11 @@ Extension of polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 335–365,
 theorem exists_uniform_rangeNestedPatch_minimizer_marginal_closeness
     (q R : ℕ) (hR : 1 ≤ R) {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     ∃ κ : ℝ, 0 < κ ∧ κ ≤ 1 / 2 ∧
-      ∀ (Λ : Finset (ℤ × ℤ)) (H : LocalHamiltonian Λ q R J) (E₀ : ℝ)
+      ∀ (Λ : Finset (ℤ × ℤ)) (H : PlaneInteraction Λ q R) (_ : ∀ X, (H.term X).IsHermitian)
+          (_ : ∀ X, ‖H.term X‖ ≤ J) (E₀ : ℝ)
         (Ψ : Lattice.StateSpace Λ q),
-        Lattice.IsGappedGroundState Λ q H.operator E₀ Ψ Δ →
+        ‖Ψ‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
+        groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ψ} →
         ∀ (center : ℝ × ℝ) (u b : ℝ), 0 ≤ u → 0 < b →
           letI : LinearOrder (Lattice.Site Λ) :=
             (Fintype.equivFin (Lattice.Site Λ)).linearOrder
@@ -113,9 +120,7 @@ theorem exists_uniform_rangeNestedPatch_minimizer_marginal_closeness
           let regions : Fin m → Finset (Lattice.Site Λ) :=
             fun j ↦ AreaLaw.Geometry.rangeNestedPatch Λ center R u j
           let a : Fin m → ℝ := fun _ ↦ κ / (m : ℝ)
-          let U := dependentGlobalConfigIsometry
-            (V := Lattice.Site Λ) (Out := fun _ ↦ Fin q)
-          let Ψᵤ := U.symm Ψ
+          let Ψᵤ := Ψ
           ∀ x : ∀ j, Matrix ((v : regions j) → Fin q) ((v : regions j) → Fin q) ℂ,
             x ∈ regularizedPatchDomain
               (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions →

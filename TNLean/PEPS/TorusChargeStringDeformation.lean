@@ -26,6 +26,8 @@ physical spins. They do not identify a sequence of physical crossing operations
 or its reunion measurement with a braid; see
 `docs/paper-gaps/rmp_peps_quantum_double_g_isometry.tex`.
 -/
+
+open ManyBody (Edge)
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS
@@ -46,14 +48,14 @@ variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
 /-- The literal central charge edge in the three-row deformation figure.
 Source: SCP10, lines 2569–2581. -/
 def torusSweptStringChargeEdge (v : X) : Edge Γₜ :=
-  Edge.ofAdj (torusGraph_adj_right (v.1 + 1) (v.2 + 1))
+  ManyBody.Edge.ofAdj (torusGraph_adj_right (v.1 + 1) (v.2 + 1))
 
 /-- Both endpoints of the charge diagonal are actually swept; native edge
 sorting therefore does not alter its inverse-flux factor.
 Source: SCP10, lines 2569–2581. -/
 theorem torusSweptStringChargeEdge_tail_mem (v : X) (second : Bool) :
     (torusSweptStringChargeEdge v).1.1 ∈ torusSweptStringVertices v second := by
-  rcases Edge.ofAdj_endpoints (torusGraph_adj_right (v.1 + 1) (v.2 + 1)) with
+  rcases ManyBody.Edge.ofAdj_endpoints (torusGraph_adj_right (v.1 + 1) (v.2 + 1)) with
     ⟨ht, _⟩ | ⟨ht, _⟩
   · rw [torusSweptStringChargeEdge, ht]
     cases second <;> simp [torusSweptStringVertices]

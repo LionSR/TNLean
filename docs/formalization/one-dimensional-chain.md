@@ -15,8 +15,8 @@ Theorem B by the preparation protocol).
 The model is stated natively on the chain of `L` sites (`Fin L`), with local
 dimension `q`, supports of range `R` (nonempty sets of sites of diameter at most
 `R`), one Hermitian term of norm at most `J` per support acting as the identity
-off its support, and a gapped ground vector in the sense of
-`Matrix.IsGappedGroundState`. Regional entropies are QICLean's
+off its support, and a unit vector spanning the ground space of a gapped
+Hamiltonian (`ManyBody.IsGapped` and `ManyBody.groundSpace`). Regional entropies are QICLean's
 `Entropy.regionEntropy`. The chain proof uses only the site-generic layer
 `TNLean/Lattice/` and QICLean: no module of `TNLean/MPS/AreaLaw/` imports
 `TNLean.PEPS`, directly or transitively. The two finite-dimensional cores (the
@@ -31,11 +31,11 @@ site of the chain, with no encoded holes.
 
 | Note statement | Formal statement | Status |
 |---|---|---|
-| Setting: the chain of `L` sites, intervals, supports, Hamiltonians (`eq:ham`, `eq:gap`) | `MPS.AreaLaw.interval`, `MPS.AreaLaw.IsChainSupport`, `MPS.AreaLaw.ChainHamiltonian`, `Matrix.IsGappedGroundState` | Definitions. |
-| Lemma 3.1 (marginal tail bound) at a cut | `MPS.AreaLaw.ChainHamiltonian.surprisalTail_regionState_le` with the budget `MPS.AreaLaw.cutLogBudget` | Proved, from the QICLean core. |
-| Rényi entropies near one (`rem:renyi`) | `MPS.AreaLaw.ChainHamiltonian.near_one_renyi_entropy_interval_bounds` | Proved on the full closed order interval `[1-u₀, 1]`, with the linear coefficient `512e` and uniform bound `16e √((1 + J/Δ) B_R)`. The statement includes order one, zero eigenvalues and the spectral power formula. |
+| Setting: the chain of `L` sites, intervals, supports, Hamiltonians (`eq:ham`, `eq:gap`) | `ManyBody.interval`, `ManyBody.IsChainSupport`, `ManyBody.ChainInteraction`, `ManyBody.IsGapped`, `ManyBody.groundSpace` | Definitions. |
+| Lemma 3.1 (marginal tail bound) at a cut | `ManyBody.ChainInteraction.surprisalTail_regionState_le` with the budget `MPS.AreaLaw.cutLogBudget` | Proved, from the QICLean core. |
+| Rényi entropies near one (`rem:renyi`) | `ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds` | Proved on the full closed order interval `[1-u₀, 1]`, with the linear coefficient `512e` and uniform bound `16e √((1 + J/Δ) B_R)`. The statement includes order one, zero eigenvalues and the spectral power formula. |
 | `eq:count`, `eq:BR`: split interactions and cut budget of an interval | `MPS.AreaLaw.card_crossingTerms_interval_le` (`N_R = 2·2^{2R}`), `MPS.AreaLaw.cutLogBudget_interval_le` (`B_R = 1 + N_R log²(e q^{R+1})`) | Proved; the constants are those of the note. |
-| Remark on sharper constants (`rem:sharper`, lines 706–709): full consecutive windows | `MPS.AreaLaw.ChainHamiltonian.card_crossingTerms_interval_le_of_consecutive_terms`, `MPS.AreaLaw.ChainHamiltonian.log_surprisalMoment_interval_le_of_consecutive_terms` | Proved when every nonzero term has a full `(R+1)`-site window as its designated support. Active crossing count `2R`; physical moment budget `1 + 2R log²(e q^(R+1))` for the original gapped vector. The original all-support Hamiltonian is retained; the restriction concerns every nonzero designated support and excludes shorter boundary windows unless their terms vanish. |
+| Remark on sharper constants (`rem:sharper`, lines 706–709): full consecutive windows | `ManyBody.ChainInteraction.card_crossingTerms_interval_le_of_consecutive_terms`, `ManyBody.ChainInteraction.log_surprisalMoment_interval_le_of_consecutive_terms` | Proved when every nonzero term has a full `(R+1)`-site window as its designated support. Active crossing count `2R`; physical moment budget `1 + 2R log²(e q^(R+1))` for the original gapped vector. The original all-support Hamiltonian is retained; the restriction concerns every nonzero designated support and excludes shorter boundary windows unless their terms vanish. |
 | Single-splitting lemma (Part I, Section 4) | `MPS.AreaLaw.single_splitting_shells`, with `MPS.AreaLaw.not_splits_two_shells` as a corollary | Proved, including the initial index zero, later containment, earlier disjointness, and uniqueness. The coordinate-interval statement also permits arbitrary endpoints and range zero. |
 | Lemma 4.2 (buffered discount) | `MPS.AreaLaw.two_mul_condEntropy_interval_le`, with `MPS.AreaLaw.chainShellCount` (`m`) and `MPS.AreaLaw.chainDiscountConst` | Proved. Shells of width `R` as in the note; the shell count uses the smaller of the note's energy threshold and the logarithmic one of Remark 6.3 (`Entropy.two_mul_condEntropy_le_logarithmic` in QICLean); energy threshold `Δ/2` in place of the note's `Δ/4`, overlap losses `m log 2` in place of the note's `2 C_E/Δ`, and the shell count omits the note's fourth entry `4096 e (1 + ϑ) B_R`, the term `4096 e ϑ B_R / m` staying explicit in the discount: `docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex`. |
 | Lemma 4.2 for a finite family of supports | `MPS.AreaLaw.two_mul_condEntropy_interval_le_of_family_budget` | Proved for any finite family of supports of range `R` such that every interval is split by at most `N` supports with cut budget at most `B ≥ 1`, with the same three-entry shell count (`N_R`, `B_R` replaced by `N`, `B`) and discount `4096 e ϑ B/m + m log 2`. The chain lemma is the case of all supports. |
@@ -43,25 +43,25 @@ site of the chain, with no encoded holes.
 | Original interval constant (`eq:final`) | `MPS.AreaLaw.regionEntropy_interval_le_polynomial` | Proved with `C_int = 8 m R log q + 1 + 2 C_E/Δ`, using the same original `C_E` and four-entry `m`, for every clipped coordinate interval. |
 | Prescribed accuracy with the original interval constant (extension of the printed `1/L` statement) | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_polynomial` | Proved for `L ≥ 1` and `0 < ε ≤ 1`: a unit MPS has error at most `ε` and bond dimension at most `⌊exp(C_int + 64 s log(2 L c₀/ε))⌋`, with `s = √((1 + J/Δ) B_R)` and `c₀ = √(2 exp(e/2))`, using the original printed `C_int`. |
 | Quantitative two-line MPS bound (`thm:Bshort`) with the original constants | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_polynomial` | Proved for every `L ≥ 2`: a unit nonzero open MPS has error at most `1/L`, explicit integer bond dimension `⌊exp(C_int + 64 s log(2 L² c₀))⌋`, and the printed upper bound `2 exp(C_int) (32 exp(e/2) L⁴)^(1/u₀)`, where `u₀ = 1/(32 s)`. Normalization and phase adjustment follow with phase zero. |
-| Component factorization with the same gap (`lem:reductions`) | `Lattice.exists_isGappedGroundState_factors_of_kronecker_sum`, `Lattice.exists_isGappedGroundState_factors_of_sum_factorOperator` | Proved for two Hermitian factors and for every nonempty finite family of them: the ground vector is the product of normalized factor ground vectors, the energies add, and each factor is a gapped ground vector with the original gap `Δ`. The finite-domain Theorem A below does not use it. |
+| Component factorization with the same gap (`lem:reductions`) | `Lattice.exists_isGapped_factors_of_kronecker_sum`, `Lattice.exists_isGapped_factors_of_sum_factorOperator` | Proved for two Hermitian factors and for every nonempty finite family of them: the ground vector is the product of normalized factor ground vectors, the energies add, and each factor is a gapped ground vector with the original gap `Δ`. The finite-domain Theorem A below does not use it. |
 | Araki–Lieb closure, reductions (Section 2) | `Lattice.regionEntropy_le_union_add`, `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges_of_intervals` | Proved. |
 | Theorem A for intervals | `MPS.AreaLaw.regionEntropy_interval_le` with the explicit `MPS.AreaLaw.chainIntervalEntropyBound` | Proved; no existential constant. |
 | Theorem A, constant linear in `1 + J/Δ` | `MPS.AreaLaw.chainIntervalEntropyBound_le`, `MPS.AreaLaw.chainAreaLawConst` | Proved. |
 | Theorem A for subsets of the chain | `MPS.AreaLaw.regionEntropy_le_mul_card_boundaryEdges`, `MPS.AreaLaw.chainAreaLaw` | Proved on the chain of `L` sites (connected domains). |
 | Fixed-range logarithmic dimension dependence (`rem:sharper`, lines 711–745) | `MPS.AreaLaw.chainAreaLawConst_le_mul_log_cube`, `MPS.AreaLaw.regionEntropy_le_log_cube_mul_card_boundaryEdges` | For `q ≥ 2`, `C₀(q,R) ≤ K_R log³q`, where `K_R log³2` is `C₀(2,R)` with its energy entry `E_R` replaced by the logarithmic entry `64 e N_R log²(e 2^(R+1))`; the physical bound holds for `q ≥ 1`, with zero entropy when `q = 1`. |
-| Full contained consecutive windows (`rem:sharper`, lines 706–748) | `MPS.AreaLaw.ChainHamiltonian.cutLogBudget_interval_le_of_consecutive_terms`, `MPS.AreaLaw.chainAreaLaw_of_consecutive_terms`, `MPS.AreaLaw.chainAreaLaw_of_consecutive_terms_polynomial_range` | For nonzero terms assigned to full `(R+1)`-site windows contained in the chain, `B_win = 1 + 2R log²(e q^(R+1))`, and `C₀,win` is `C₀(q,R)` with `N_R` replaced by `2R` and `B_R` by `B_win`. One constant `C = C₀,win(q,R)(1+J/Δ)` precedes all lengths, Hamiltonians, normalized gapped ground vectors and regions. An absolute positive constant, chosen before all physical data, gives `S_Ω(A) ≤ C_abs(1+J/Δ) R log³(q^R) card(∂A)`. Range zero and local dimension one give zero entropy, including the empty chain. |
-| Zero interaction range | `MPS.AreaLaw.ChainHamiltonian.regionEntropy_eq_zero_of_range_zero` | Every region of a gapped range-zero ground vector has zero entropy, without an added sign or positivity assumption on `J` or `q`. |
-| Setting on a finite `Λ ⊂ ℤ` (induced path graph, `eq:ham`, `∂_Λ A`) | `MPS.AreaLaw.sitePos`, `MPS.AreaLaw.domainGraph`, `MPS.AreaLaw.IsDomainSupport`, `MPS.AreaLaw.DomainHamiltonian`, `MPS.AreaLaw.domainBoundaryEdges` | Definitions; the sites of `Λ` are labelled in increasing order. |
+| Full contained consecutive windows (`rem:sharper`, lines 706–748) | `ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive_terms`, `MPS.AreaLaw.chainAreaLaw_of_consecutive_terms`, `MPS.AreaLaw.chainAreaLaw_of_consecutive_terms_polynomial_range` | For nonzero terms assigned to full `(R+1)`-site windows contained in the chain, `B_win = 1 + 2R log²(e q^(R+1))`, and `C₀,win` is `C₀(q,R)` with `N_R` replaced by `2R` and `B_R` by `B_win`. One constant `C = C₀,win(q,R)(1+J/Δ)` precedes all lengths, Hamiltonians, normalized gapped ground vectors and regions. An absolute positive constant, chosen before all physical data, gives `S_Ω(A) ≤ C_abs(1+J/Δ) R log³(q^R) card(∂A)`. Range zero and local dimension one give zero entropy, including the empty chain. |
+| Zero interaction range | `ManyBody.ChainInteraction.regionEntropy_eq_zero_of_range_zero` | Every region of a gapped range-zero ground vector has zero entropy, without an added sign or positivity assumption on `J` or `q`. |
+| Setting on a finite `Λ ⊂ ℤ` (induced path graph, `eq:ham`, `∂_Λ A`) | `ManyBody.sitePos`, `ManyBody.lineDomainGraph`, `ManyBody.IsDomainSupport`, `ManyBody.DomainInteraction`, `MPS.AreaLaw.domainBoundaryEdges` | Definitions; the sites of `Λ` are labelled in increasing order. |
 | Theorem A on a finite `Λ ⊂ ℤ`; first reduction (Section 2) | `MPS.AreaLaw.regionEntropy_le_mul_card_domainBoundaryEdges`, `MPS.AreaLaw.domainAreaLaw` | Proved, with the constant `C₀(q, R)(1 + J/Δ)` of the chain. The reduction uses the zero entropy of the prefixes ending at the gaps of `Λ` (`Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint`) and flips of the region on them (`Lattice.regionEntropy_symmDiff_eq_of_eq_zero`) in place of the factorization over components: `docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex` (resolved). |
 | Polynomial-range full-window area law on finite domains | `MPS.AreaLaw.domainAreaLaw_of_consecutive_terms_polynomial_range` | Proved on every finite `Λ ⊂ ℤ` when every nonzero designated physical support is a full `(R+1)`-site interval contained in `Λ`. The same absolute `C_abs`, fixed before all physical data, gives `S_Ω(A∩Λ) ≤ C_abs (1+J/Δ) R log³(q^R) card(∂_Λ A)`, including range zero, local dimension one and the empty domain. Sorted labelling preserves the original terms, `J`, sum and global gap; zero-entropy prefix flips preserve entropy and the exact physical boundary cardinality, with no component factor. |
-| Part II, `lem:reset` (information reset) | `MPS.AreaLaw.ChainHamiltonian.information_reset` | Proved on the contiguous chain, with only the original full-system gap. The constants precede all system, region and information-bound data. |
-| Part II, `lem:logsep` (information at logarithmic separation) | `MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation` | Proved on the contiguous chain for a union of at most k₀ intervals and an arbitrary region at distance at least Dₚ log L, including empty or overlapping interval components. |
+| Part II, `lem:reset` (information reset) | `ManyBody.ChainInteraction.information_reset` | Proved on the contiguous chain, with only the original full-system gap. The constants precede all system, region and information-bound data. |
+| Part II, `lem:logsep` (information at logarithmic separation) | `ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_separation` | Proved on the contiguous chain for a union of at most k₀ intervals and an arbitrary region at distance at least Dₚ log L, including empty or overlapping interval components. |
 | Matrix product states, cut matrices | `MPS.AreaLaw.IsOpenMPS`, `MPS.AreaLaw.cutMatrix` | Definitions. |
 | Cut ranks bound the bond dimension | `MPS.AreaLaw.isOpenMPS_of_cutMatrix_rank_le` | Proved. |
 | Growth between two cuts | `MPS.AreaLaw.rank_cutMatrix_add_le`, `rank_cutMatrix_le_add`, `rank_cutMatrix_le_pow_min_mul`, `rank_cutMatrix_le_pow_forty_mul` | Proved for arbitrary vectors: moving `d` sites across a cut costs at most `q^d` in either direction. Endpoint rank bounds `R` on an interval of length at most `80w` give internal ranks at most `q^(40w) R` when `q ≥ 1`. The endpoint bounds remain hypotheses of this auxiliary result. |
 | Proposition 7.1 (`prop:VC`, sequential truncation at prescribed bond dimension) | `MPS.AreaLaw.isOpenMPS_sequentialTruncation_leadingEigenprojection`, with the general form `MPS.AreaLaw.prefixBasisProjection`, `MPS.AreaLaw.isOpenMPS_sequentialTruncation_prefixBasisProjection` | Proved. For a unit vector, projecting each internal cut onto the `D` leading eigenvectors of its marginal gives internal bond dimensions at most `D` and error at most `∑_k √ε_k(D)`, with `ε_k(D)` the sum of the discarded eigenvalues, as in the source. The general form holds for every vector and every ordered orthonormal basis at the internal cuts, which covers every choice within a repeated eigenvalue: `docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex` (resolved). |
 | Sequential truncation at an entropy threshold | `MPS.AreaLaw.exists_sequentialTruncation` | Proved, as a separate statement: eigenvalues at least `exp(-(S_k + w))` are retained, with cut ranks at most `max 1 (exp(S_k + w))` and error `∑_k √tail_k(w)`. The threshold and prescribed-dimension projectors need not coincide; see `docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex`. |
-| Prefix-cut projection bounds in the proof of Theorem B | `MPS.AreaLaw.ChainHamiltonian.spectralProjectionGE_leftBlock_bounds` | Proved for every natural cut index and `w ≥ 0`: the actual reduced state's projection at `exp(-(C_int + w))` has rank at most `exp(C_int + w)` and discarded mass at most `2 exp(e/2) exp(-w/(32 s))`, where `s = √((1 + J/Δ) B_R)`. |
+| Prefix-cut projection bounds in the proof of Theorem B | `ManyBody.ChainInteraction.spectralProjectionGE_leftBlock_bounds` | Proved for every natural cut index and `w ≥ 0`: the actual reduced state's projection at `exp(-(C_int + w))` has rank at most `exp(C_int + w)` and discarded mass at most `2 exp(e/2) exp(-w/(32 s))`, where `s = √((1 + J/Δ) B_R)`. |
 | Approximation at prescribed accuracy, by the argument for Theorem B | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error` | Proved for `0 < ε ≤ 1`, with a normalized approximant and bond bound `⌊exp(C_int + 64 s log(2 L c₀ / ε))⌋`, where `s = √((1 + J/Δ) B_R)` and `c₀ = √(2 exp(e/2))`. |
 | Prescribed-accuracy MPS approximation for full contained consecutive windows | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le_of_error_of_consecutive_terms` | Fix `q ≥ 1`, `R`, `J ≥ 0` and `Δ > 0`. The constants `B_win` and `C = C₀,win(q,R)(1+J/Δ)` precede every `L ≥ 1`, Hamiltonian satisfying the full-window condition, normalized gapped ground vector and `0 < ε ≤ 1`. There is a normalized approximant to `Ω` itself with error at most `ε` and bond dimension at most `⌊exp(C + 64 √((1+J/Δ)B_win) log(2 L c₀/ε))⌋`, where `c₀ = √(2 exp(e/2))`. Local dimension one and range zero are admitted. |
 | Theorem B | `MPS.AreaLaw.exists_isOpenMPS_norm_sub_le` with `MPS.AreaLaw.chainBondDimension`; polynomial form `MPS.AreaLaw.chainBondDimension_le_mul_rpow` | Proved; the bond dimension is `⌊exp(C_int + w(L))⌋ ≤ e^{C_int} (2 c₀)^{64 s} L^{128 s}` with `s = √((1 + J/Δ) B_R)`. The approximant is normalized and within `1/L` of `Ω` itself (the note allows a phase). |
@@ -119,26 +119,26 @@ estimates remain separate from this contiguous-chain proof.
 ## Analytic estimates for the physical protocol
 
 For the commutator estimate in Part II, Lemma `lem:LR`,
-`QuantumCircuit.norm_heisenberg_commutator_le_graphDistance_finset` proves
+`ManyBody.norm_heisenberg_commutator_le_graphDistance_finset` proves
 graph propagation from an arbitrary finite support S, with prefactor |S| and
 constants independent of its diameter, the number of sites and the local
 dimension. Its restricted-norm version is
-`QuantumCircuit.heisenbergCommutatorNorm_le_graphDistance_finset`.
+`ManyBody.heisenbergCommutatorNorm_le_graphDistance_finset`.
 For support diameter R, support cardinality bound v_R and per-site norm budget
 b₀, the explicit constants are C = 2 + 4|b₀| exp(2μR) and
 v = 2v_R|b₀| exp(2μR) + 1, for μ ≥ 0.
 
 For localization, under polynomial sphere growth K_g(d + 1)^k,
-`QuantumCircuit.norm_heisenberg_sub_siteExpectation_graphNeighborhood_le`
+`ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le`
 bounds the error of the normalized partial trace onto the union of the radius-ℓ
 balls about S by C |S|² ‖A‖ K_g T_k exp(v|t| − ℓ/2), for natural ℓ. Here
 C and v are the preceding constants at μ = 1, and
 T_k = 2^k k! exp(1/2) / (1 − exp(−1/2)). The pure graph tail estimate is
-`QuantumCircuit.sum_exp_neg_edist_compl_graphBall_le`.
+`ManyBody.sum_exp_neg_edist_compl_graphBall_le`.
 Neither result requires a diameter bound or nonemptiness assumption on S.
 
 For the undoubled Hamiltonian on the contiguous chain,
-`MPS.AreaLaw.ChainHamiltonian.sum_norm_terms_containing_le` proves the per-site
+`ManyBody.ChainInteraction.sum_norm_terms_containing_le` proves the per-site
 budget ∑_{X∋x} ‖h_X‖ ≤ 2^(2R+1) J, with the original real bound J.
 No sign assumption is added: an actual site supplies the admissible singleton
 {x}, whose norm bound implies J ≥ 0; the assertion is vacuous on an empty
@@ -152,16 +152,15 @@ chain length. These statements include the empty chain and all natural
 radii. They concern the contiguous path; coordinate distance does not replace
 graph distance across holes in a disconnected domain.
 
-The matrix-entry condition for support is equivalent to membership in the
-supported-operator algebra by `QuantumCircuit.mem_supportedOperators_of_isSupportedOn`
-and its converse. The paired two-copy construction
-`MPS.AreaLaw.ChainHamiltonian.doubled` keeps the same physical supports and
+The matrix-entry condition for support is the carrier of the
+supported-operator algebra `ManyBody.supportedOperators` of QICLean. The paired two-copy construction
+`ManyBody.ChainInteraction.doubled` keeps the same physical supports and
 has local dimension q² and term bound 2J. The equality
-`MPS.AreaLaw.ChainHamiltonian.doubled_operator` identifies its sum exactly
+`ManyBody.ChainInteraction.doubled_hamiltonian` identifies its sum exactly
 with H⊗1+1⊗H in paired coordinates.
 
 On a contiguous chain, `MPS.AreaLaw.norm_heisenberg_commutator_le_chainDistance`
-and `MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_chainNeighborhood_le`
+and `MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_chainNeighborhood_le`
 prove both estimates with common decay exponent μ = 1/2 and velocity
 v = 2(R + 1)|b₀| exp(2R) + 1. The commutator coefficient is
 C = 2 + 4|b₀| exp(2R); the localization coefficient is
@@ -191,15 +190,15 @@ preservation under isomorphism and component inclusion, gives
 sphere has at most two sites; no distance is measured across a missing integer.
 
 With q ≥ 1, the extension
-`MPS.AreaLaw.norm_heisenberg_sub_siteExpectation_domainNeighborhood_le`
+`MPS.AreaLaw.norm_heisenberg_sub_regionExpectation_domainNeighborhood_le`
 gives localization on every finite integer domain with the same C′ and v
 as the contiguous chain. At a real radius ℓ ≥ 0 its neighborhood is exactly
-`S.biUnion (fun x ↦ QuantumCircuit.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)`.
+`S.biUnion (fun x ↦ ManyBody.graphBall (domainGraph Λ) x ⌊ℓ⌋₊)`.
 The bound retains |S|², allows empty S, and requires neither a ground state
 nor a spectral gap. This completes the two propagation/localization
 estimates on finite domains. The additional theorems
-`MPS.AreaLaw.DomainHamiltonian.information_reset` and
-`MPS.AreaLaw.DomainHamiltonian.mutualInformation_le_of_logarithmic_separation`
+`ManyBody.DomainInteraction.information_reset` and
+`ManyBody.DomainInteraction.mutualInformation_le_of_logarithmic_separation`
 establish reset and logarithmic physical separation on the original finite
 domain, using only its original global gap. Their constants precede the domain
 and instance data. The chain preparation protocol uses only the chain versions.
@@ -210,31 +209,31 @@ split support in a window [p+1−R,p+1+R) about an actual boundary edge {p,p+1}.
 `MPS.AreaLaw.card_crossingTerms_le_mul_card_boundaryEdges` therefore bounds
 the number of such supports by 2^(2R)|∂D|, including zero range and empty
 boundaries. The theorem
-`MPS.AreaLaw.ChainHamiltonian.partialSwap_difference_eq_sum_crossing`
+`ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing`
 expresses the actual perturbation FĤF† − Ĥ as a sum of the two replica
 terms over these crossing supports, with at most N_R|∂D| labelled terms.
 Each difference is Hermitian, remains supported on its original support,
 and has norm at most 2J by
-`MPS.AreaLaw.ChainHamiltonian.partialSwap_term_difference_spec`.
-The theorem `MPS.AreaLaw.ChainHamiltonian.partialSwap_boundary_spec` places
+`ManyBody.ChainInteraction.partialSwap_term_difference_spec`.
+The theorem `ManyBody.ChainInteraction.partialSwap_boundary_spec` places
 the perturbation on the actual union of crossing supports, within distance
 R of the boundary positions, and bounds its norm by 2J N_R|∂D|.
 These assertions retain the original real J and include the empty chain,
 zero local dimension and zero range.
 
-The model `MPS.AreaLaw.ChainHamiltonian.swappedDoubled` conjugates every
+The model `ManyBody.ChainInteraction.swappedDoubled` conjugates every
 doubled interaction by the actual paired swap. It retains the same supports
 and range, local dimension q² and term bound 2J; its operator identity is
-`MPS.AreaLaw.ChainHamiltonian.swappedDoubled_operator`.
+`ManyBody.ChainInteraction.swappedDoubled_hamiltonian`.
 The theorem
-`MPS.AreaLaw.ChainHamiltonian.doubled_swappedDoubled_isGappedGroundState`
+`ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped`
 constructs the two ground-state predicates for the actual paired tensor
 square Ψ and its swap image Φ. Both vectors are normalized, have energy
 2E₀ and inherit the lower gap Δ from the original ground-state predicate
 and Δ > 0. No additional positivity or nonemptiness assumption is imposed.
 
 The theorem
-`MPS.AreaLaw.ChainHamiltonian.norm_relativeGenerator_sub_siteExpectation_le`
+`ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpectation_le`
 localizes the actual relative-evolution generator
 G(t) = exp(itK′)(K′−K)exp(−itK′) onto the exact radius-ℓ neighborhood of Z.
 Its error is bounded by 4|J| a (R+1)² N_R L exp(v|t|−ℓ/2), where a and v
@@ -260,7 +259,7 @@ neighborhood of Q∪Z is disjoint from the cores whenever ℓ+R≤w. This
 geometric statement allows empty cores and all real margins and radii,
 without a quantum-state assumption.
 
-The theorem `MPS.AreaLaw.ChainHamiltonian.information_reset` completes the
+The theorem `ManyBody.ChainInteraction.information_reset` completes the
 contiguous-chain information-reset argument. For every p > 0, it chooses
 Cₚ > 0 and a natural L₀ ≥ 1 before the length, Hamiltonian, ground vector,
 regions and mutual-information bound b. If D,C are disjoint, R₀ ⊆ D,
@@ -272,12 +271,12 @@ and the product marginal after the actual regional replica swap. Only the
 original full-system ground-state gap is assumed. The additive constant in
 log(e q^|R₀|) is retained, including q = 1. This is the chain setting of
 Part II. The additional theorem
-`MPS.AreaLaw.DomainHamiltonian.information_reset` proves reset on arbitrary
+`ManyBody.DomainInteraction.information_reset` proves reset on arbitrary
 finite induced-path domains, with intrinsic extended-distance margins and no
 additional physical hypothesis; see the connected-domain scope note.
 
 The theorem
-`MPS.AreaLaw.ChainHamiltonian.mutualInformation_le_of_logarithmic_separation`
+`ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_separation`
 proves the contiguous-chain form of `lem:logsep`. For fixed p > 0 and
 k₀ ≥ 1, it chooses Dₚ > 0 and a natural L₀ before all system data.
 If T is a union of at most k₀ intervals and E is at pairwise coordinate
@@ -291,10 +290,10 @@ the uniform interval bound, including overlaps. With c̄ = max(0,C_int),
 b = 4k₀c̄ and w = Cₚ(1+b+log L), the proof uses the actual regions
 D = N_(w+1)(T) and C = complement N_(2w+2)(T). Their mutual information
 is at most 2S(D) ≤ b, and Dₚ = 3Cₚ(2+b)+3 gives both strict reset
-margins once log L ≥ 1. `MPS.AreaLaw.ChainHamiltonian.norm_bound_nonneg`
+margins once log L ≥ 1. `ManyBody.ChainInteraction.norm_bound_nonneg`
 supplies the sign of J from an actual singleton interaction.
 These Part II estimates concern the chain used in Theorem B. The additional
-theorem `MPS.AreaLaw.DomainHamiltonian.mutualInformation_le_of_logarithmic_separation`
+theorem `ManyBody.DomainInteraction.mutualInformation_le_of_logarithmic_separation`
 proves the same decay for finite integer domains, with separation in their
 original integer positions. Its natural-neighborhood geometry and domain
 information-reset theorem retain the original global gap. The arbitrary-domain

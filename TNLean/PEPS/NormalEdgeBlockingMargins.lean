@@ -29,6 +29,10 @@ mathematical obligations".
   Section 3, Theorem 3]
 -/
 
+open ManyBody (Edge IsHorizontalSquareLatticeEdge IsVerticalSquareLatticeEdge SquareLatticeVertex
+  squareLatticeEdge_not_horizontal_and_vertical squareLatticeGraph squareLatticeRightEdge
+  squareLatticeRightEdge_isHorizontal squareLatticeUpEdge squareLatticeUpEdge_isVertical)
+
 namespace TNLean
 namespace PEPS
 

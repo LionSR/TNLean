@@ -1,0 +1,80 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+\input{./command}
+\title{The Honeycomb Cluster State: Sign of the Parent Hamiltonian}
+\author{}
+\date{2026-11-18}
+\begin{document}
+\maketitle
+\gapnote{local-correction}{resolved}
+
+\section{The source claim}
+Section~IV of \cite{Cirac2021Matrix} introduces the cluster state as follows:
+\begin{quote}
+    ``The canonical example for an injective PEPS with global symmetries is
+    the cluster state on the honeycomb lattice, which is the unique ground
+    state of the commuting parent Hamiltonian $\sum_{ijkl}X_iZ_jZ_kZ_l$ of
+    qubits where $j,k,l$ are the nearest neigbours of site $i$. This state
+    has a very simple PEPS representation: [figure] with [vertex tensor]
+    $=\ket{0000}+\ket{1111}$, [bond matrix]
+    $=\frac{1}{\sqrt{2}}\left(\begin{smallmatrix} 1 & 1\\ 1 &
+                -1\end{smallmatrix}\right)$.
+    It exhibits the global symmetry $Y^{\otimes N}$, as this is just the
+    product of all (commuting) terms of the Hamiltonian. To use the
+    fundamental theorem of PEPS, we first block two sites of this PEPS such
+    as to make it uniform [\ldots]''
+\end{quote}
+\footnote{Source traceability: \path{Papers/2011.12127/TN-Review-main.tex},
+    lines 1445--1452.}
+
+\section{What is formalized}
+For a finite simple graph with vertex set $V$ and edge set $E$, put a copy
+tensor $\ket{0\ldots0}+\ket{1\ldots1}$ at every vertex and the matrix
+$H=\frac1{\sqrt2}\left(\begin{smallmatrix}1&1\\1&-1\end{smallmatrix}\right)$
+on every bond. Contracting the network gives the coefficients
+\begin{align}
+    \psi(\sigma)=2^{-|E|/2}\prod_{\{u,v\}\in E}(-1)^{\sigma_u\sigma_v},
+    \label{eq:rmp_honeycomb_cluster_peps_coefficient}
+\end{align}
+which is $2^{(|V|-|E|)/2}$ times the controlled-$Z$ circuit applied to
+$\ket{+}^{\otimes V}$. In the formal tensor the bond matrix is absorbed into
+the leg at the smaller endpoint of each bond, which leaves the contraction
+unchanged. The stabilizers $K_i=X_i\prod_{j\sim i}Z_j$ commute and square
+to the identity, the operator $-\sum_iK_i$ is bounded below by $-|V|$, and
+the eigenspace for $-|V|$ is the line spanned by $\psi$. These statements
+are specialized to a brick-wall honeycomb on the torus, where every site
+has three nearest neighbours.\footnote{\leanid{TNLean.PEPS.stateCoeff_honeycombClusterPEPS},
+    \leanid{TNLean.PEPS.honeycombStabilizer_comm},
+    \leanid{TNLean.PEPS.honeycombHamiltonian_eq_neg_card_smul_iff},
+    \leanid{TNLean.PEPS.honeycombGraph_degree}, in
+    \doclink{TNLean/PEPS/Examples/HoneycombCluster}.}
+
+\section{The sign of the parent Hamiltonian}
+The cluster state $\ket{C}$ satisfies $K_i\ket{C}=\ket{C}$ for every $i$.
+Since the $K_i$ commute and square to the identity, the spectrum of
+$\sum_iK_i$ is contained in $\{-|V|,\ldots,|V|\}$, and its lowest eigenvalue
+$-|V|$ is attained exactly on the common $-1$ eigenspace. That space is
+spanned by $\prod_iZ_i\ket{C}$: the operator $Z_i$ anticommutes with $K_i$
+and commutes with $K_j$ for $j\neq i$. So the printed Hamiltonian
+$+\sum X_iZ_jZ_kZ_l$ has the unique ground state $\prod_iZ_i\ket{C}$, which
+is not the cluster state, although the two are related by a product of
+on-site unitaries. The other statements of the passage are insensitive to
+the sign: the product of all terms is $\pm\prod_i X_iZ_i^3$, a multiple of
+$Y^{\otimes N}$ either way.
+
+\textbf{Local fix.} The parent Hamiltonian is taken to be
+$-\sum_iX_iZ_jZ_kZ_l$, the usual stabilizer convention, under which the
+source's claim holds. In Lean this is \leanid{TNLean.PEPS.honeycombHamiltonian}.
+
+\section{Related records}
+The same passage calls the PEPS injective. That claim is false as printed and
+is recorded in \cite{gap:rmp_honeycomb_cluster_injectivity}. The brick-wall
+torus on which the formal statements are made is recorded with the other
+torus examples in \cite{gap:rmp_peps_examples_small_torus}.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

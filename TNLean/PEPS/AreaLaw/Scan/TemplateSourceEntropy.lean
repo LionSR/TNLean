@@ -8,6 +8,7 @@ import TNLean.PEPS.AreaLaw.Geometry.Exponents
 import TNLean.PEPS.AreaLaw.InitialBoxEstimate
 import TNLean.PEPS.AreaLaw.Scan.ActualHistory
 import TNLean.PEPS.AreaLaw.Scan.PrefixBoundary
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Original-state scanner entropy from one safe-box exponent
@@ -32,9 +33,13 @@ and 828--844, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 noncomputable section
 
 open TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction)
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
@@ -188,9 +193,11 @@ theorem template_final_source_entropy_bounds_of_boxEntropy
     (hCbox : 0 ≤ Cbox)
     (hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
       Cbox * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ))) :
-    ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+    ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+        (_ : ∀ X, ‖h.term X‖ ≤ J)
       (E₀ : ℝ) (Ω : StateSpace Λ q),
-      IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
         {Ctpl : ℝ} {s₀ : ℕ} (T : Template Ctpl S.n s₀),
         24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ S.A) →
@@ -205,14 +212,14 @@ theorem template_final_source_entropy_bounds_of_boxEntropy
                 ((S.n : ℝ) * (L : ℝ) ^ (Exponents.boxError : ℝ) + S.n)) := by
   have hsource := template_source_entropy_bounds q hq (Exponents.boxError : ℝ) Cbox
     (by norm_num [Exponents.boxError]) hCbox
-  intro Λ h E₀ Ω hgs S Ctpl s₀ T hC hsep hdepth L hLpos hL
+  intro Λ h hh hhJ E₀ Ω hΩ hgap hspan S Ctpl s₀ T hC hsep hdepth L hLpos hL
   have hrect : ∀ Q : IntRect, IsSafe Λ S.A D₀ Q →
       regionalEntropy Λ q Ω (rectRegion S.A Q) ≤
         Cbox * (Q.size : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
     intro Q hsafe
-    exact (regionalEntropy_le_boxEntropy hq h hgs hsafe le_rfl).trans
+    exact (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe le_rfl).trans
       (hbox Q.size Q.one_le_size)
-  obtain ⟨hcore, hprefix⟩ := hsource Λ Ω hgs.1 S.A D₀ hD T hC hsep hrect
+  obtain ⟨hcore, hprefix⟩ := hsource Λ Ω hΩ S.A D₀ hD T hC hsep hrect
   refine ⟨hcore, ?_⟩
   simpa only [hdepth] using (hprefix L hLpos hL).1
 
@@ -228,9 +235,11 @@ theorem exists_template_final_source_entropy_bounds_of_boxEntropy
     (hbox : ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
       Cbox * (r : ℝ) ^ (1 + (Exponents.boxError : ℝ))) :
     ∃ Ce : ℝ, 0 ≤ Ce ∧
-      ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J)
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : PlaneInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
+          (_ : ∀ X, ‖h.term X‖ ≤ J)
         (E₀ : ℝ) (Ω : StateSpace Λ q),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+        ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+        groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R))
           {Ctpl : ℝ} {s₀ : ℕ} (T : Template Ctpl S.n s₀),
           24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ S.A) →

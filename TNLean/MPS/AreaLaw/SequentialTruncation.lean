@@ -273,7 +273,7 @@ theorem norm_sub_sequentialTruncation_le (hP : ∀ k, IsStarProjection (P k))
     have hsplit : ψ - cutTruncation P (L - 1 - j) (sequentialTruncation P j ψ) =
         toEuclideanLin (Entropy.localLift (leftBlock L (L - 1 - j)) (1 - P (L - 1 - j))) ψ +
           cutTruncation P (L - 1 - j) (ψ - sequentialTruncation P j ψ) := by
-      simp only [cutTruncation, Entropy.localLift_sub, Entropy.localLift_one, map_sub,
+      simp only [cutTruncation, ManyBody.place_sub, Entropy.localLift_one, map_sub,
         LinearMap.sub_apply, toEuclideanLin_one_apply]
       abel
     rw [hsplit]
@@ -307,7 +307,7 @@ theorem norm_sub_sequentialTruncation_sq_le (hP : ∀ k, IsStarProjection (P k))
     have hsplit : ψ - cutTruncation P (L - 1 - j) (sequentialTruncation P j ψ) =
         toEuclideanLin (Entropy.localLift D Pj) x +
           toEuclideanLin (Entropy.localLift D (1 - Pj)) ψ := by
-      simp only [hx, cutTruncation, Entropy.localLift_sub, Entropy.localLift_one, map_sub,
+      simp only [hx, cutTruncation, ManyBody.place_sub, Entropy.localLift_one, map_sub,
         LinearMap.sub_apply, toEuclideanLin_one_apply]
       abel
     have horth : ⟪toEuclideanLin (Entropy.localLift D Pj) x,

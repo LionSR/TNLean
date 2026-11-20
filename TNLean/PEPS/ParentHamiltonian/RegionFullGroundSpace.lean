@@ -26,6 +26,8 @@ is a term on the entire graph; no nearest-neighbour uniqueness theorem is assert
   Concepts, symmetries, theorems*
 -/
 
+open ManyBody (Edge)
+
 open scoped BigOperators ComplexOrder Matrix MatrixOrder
 
 namespace TNLean.PEPS
@@ -184,8 +186,8 @@ theorem canonicalRegionParentInteraction_spectrum_subset (A : Tensor Γ d) (R : 
 /-- A single canonical interaction on the full graph has precisely the PEPS
 span as its kernel. Source: CPGSV21, arXiv:2011.12127, consequence of regional
 parent kernels, lines 2003–2011; this interaction acts on the full region. -/
-theorem ker_regionLocalTerm_univ_canonical (A : Tensor Γ d) :
-    (Matrix.mulVecLin (regionLocalTerm Finset.univ
+theorem ker_place_univ_canonical (A : Tensor Γ d) :
+    (Matrix.mulVecLin (ManyBody.place (X := fun _ ↦ Fin _) Finset.univ
       (canonicalRegionParentInteraction A Finset.univ))).ker =
       Submodule.span ℂ {stateCoeff A} := by
   classical
@@ -197,40 +199,43 @@ theorem ker_regionLocalTerm_univ_canonical (A : Tensor Γ d) :
 /-- Extending a canonical parent projector by the identity preserves idempotence.
 Source: CPGSV21, arXiv:2011.12127, regional extensions, lines 2003–2011,
 and projector interactions, line 2170. -/
-theorem regionLocalTerm_canonical_isIdempotentElem (A : Tensor Γ d) (R : Finset V) :
-    IsIdempotentElem (regionLocalTerm R (canonicalRegionParentInteraction A R)) := by
+theorem place_canonical_isIdempotentElem (A : Tensor Γ d) (R : Finset V) :
+    IsIdempotentElem
+        (ManyBody.place (X := fun _ ↦ Fin _) R (canonicalRegionParentInteraction A R)) := by
   classical
-  change regionLocalTerm R (canonicalRegionParentInteraction A R) *
-    regionLocalTerm R (canonicalRegionParentInteraction A R) =
-      regionLocalTerm R (canonicalRegionParentInteraction A R)
-  unfold regionLocalTerm
+  change ManyBody.place (X := fun _ ↦ Fin _) R (canonicalRegionParentInteraction A R) *
+    ManyBody.place (X := fun _ ↦ Fin _) R (canonicalRegionParentInteraction A R) =
+      ManyBody.place (X := fun _ ↦ Fin _) R (canonicalRegionParentInteraction A R)
+  rw [place_eq_regionConfigEquiv]
   rw [Matrix.submatrix_mul_equiv, ← Matrix.mul_kronecker_mul,
     (canonicalRegionParentInteraction_isIdempotentElem A R).eq, mul_one]
 
 /-- In the full physical Hilbert space each canonical local term is an orthogonal
 projection. Source: CPGSV21, arXiv:2011.12127, regional extensions, lines 2003–2011,
 and projector interactions, line 2170. -/
-theorem regionLocalTerm_canonical_isSymmetricProjection (A : Tensor Γ d) (R : Finset V) :
+theorem place_canonical_isSymmetricProjection (A : Tensor Γ d) (R : Finset V) :
     (Matrix.toEuclideanLin
-      (regionLocalTerm R (canonicalRegionParentInteraction A R))).IsSymmetricProjection := by
+      (ManyBody.place (X :=
+          fun _ ↦ Fin _) R (canonicalRegionParentInteraction A R))).IsSymmetricProjection := by
   classical
   have hp := Matrix.isPositive_toEuclideanLin_iff.mpr
-    (regionLocalTerm_posSemidef R (canonicalRegionParentInteraction_posSemidef A R))
+    (ManyBody.posSemidef_place (X := fun _ ↦ Fin _)
+        (canonicalRegionParentInteraction_posSemidef A R))
   refine ⟨?_, hp.isSymmetric⟩
-  have h := congrArg Matrix.toEuclideanLin (regionLocalTerm_canonical_isIdempotentElem A R).eq
+  have h := congrArg Matrix.toEuclideanLin (place_canonical_isIdempotentElem A R).eq
   rw [Matrix.toLpLin_mul 2 2 2] at h
   exact h
 
 /-- The lifted canonical projector has unit norm gap on its excitation space.
 Source: CPGSV21, arXiv:2011.12127, projector parent interactions, line 2170. -/
-theorem regionLocalTerm_canonical_unit_norm_gap (A : Tensor Γ d) (R : Finset V) :
+theorem place_canonical_unit_norm_gap (A : Tensor Γ d) (R : Finset V) :
     ∀ ψ ∈ (Matrix.toEuclideanLin
-      (regionLocalTerm R (canonicalRegionParentInteraction A R))).kerᗮ,
+      (ManyBody.place (X := fun _ ↦ Fin _) R (canonicalRegionParentInteraction A R))).kerᗮ,
       (1 : ℝ) * ‖ψ‖ ≤ ‖Matrix.toEuclideanLin
-        (regionLocalTerm R (canonicalRegionParentInteraction A R)) ψ‖ := by
+        (ManyBody.place (X := fun _ ↦ Fin _) R (canonicalRegionParentInteraction A R)) ψ‖ := by
   classical
   intro ψ hψ
-  have hP := regionLocalTerm_canonical_isSymmetricProjection A R
+  have hP := place_canonical_isSymmetricProjection A R
   rw [← hP.isSymmetric.orthogonal_range, Submodule.orthogonal_orthogonal] at hψ
   rw [(LinearMap.IsIdempotentElem.mem_range_iff hP.isIdempotentElem).mp hψ, one_mul]
 

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.StripBufferDiscount
 import TNLean.MPS.AreaLaw.MPSApproximation
 import QICLean.Entropy.RegionCovariance
+import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
 # Physical-site snake prefixes of a bounded-width strip
@@ -19,7 +20,11 @@ tail bound and sequential truncation argument. It does not treat the
 strip as a chain of `q^w`-dimensional sites.
 -/
 
+open scoped Matrix.Norms.L2Operator
+
 open Matrix TNLean.Lattice
+
+open ManyBody (IsGapped groundSpace AdmissibleSupport PlaneInteraction)
 
 namespace TNLean.MPS.AreaLaw
 
@@ -92,9 +97,11 @@ theorem card_snakePrefix_sdiff_le {L w k : ℕ} (hw : 1 ≤ w) :
 /-- Entropy of an actual snake prefix, including the partial final column. -/
 theorem regionEntropy_stripSnakePrefix_le {L w q R : ℕ} {J Δ : ℝ}
     (hq : 1 ≤ q) (hw : 1 ≤ w) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (h : LocalHamiltonian (stripDomain L w) q R J) {E₀ : ℝ}
+    (h : PlaneInteraction (stripDomain L w) q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
     {Ω : StateSpace (stripDomain L w) q}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (k : ℕ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (k : ℕ) :
     Entropy.regionEntropy (n := fun _ : Site (stripDomain L w) ↦ q)
       (stripSnakePrefix L w k) Ω ≤
       stripAreaLawConst q R * (1 + J / Δ) * (w : ℝ) ^ 2 + w * Real.log q := by
@@ -102,10 +109,10 @@ theorem regionEntropy_stripSnakePrefix_le {L w q R : ℕ} {J Δ : ℝ}
   let D := stripSnakePrefix L w k \ P
   have hPD : P ∪ D = stripSnakePrefix L w k :=
     Finset.union_sdiff_of_subset (stripInterval_subset_snakePrefix hw)
-  have hu := regionEntropy_union_le hgs.1 (show Disjoint P D from Finset.disjoint_sdiff)
+  have hu := regionEntropy_union_le hΩ (show Disjoint P D from Finset.disjoint_sdiff)
   rw [hPD] at hu
-  have hP := regionEntropy_stripInterval_le hq hw hJ hΔ h hgs 0 (k / w)
-  have hD := regionEntropy_le_card_mul_log hgs.1 D
+  have hP := regionEntropy_stripInterval_le hq hw hJ hΔ h hh hhJ hΩ hgap hspan 0 (k / w)
+  have hD := regionEntropy_le_card_mul_log hΩ D
   have hcard : (D.card : ℝ) ≤ w := by exact_mod_cast card_snakePrefix_sdiff_le hw
   have hlog : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
   have hb := hD.trans (mul_le_mul_of_nonneg_right hcard hlog)
@@ -141,9 +148,11 @@ open scoped Matrix.Norms.L2Operator in
 /-- The actual lattice marginal at every snake prefix has the gap-controlled tail. -/
 theorem surprisalTail_stripSnakePrefix_le {L w q R : ℕ} {J Δ : ℝ}
     (hq : 1 ≤ q) (hw : 1 ≤ w) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (h : LocalHamiltonian (stripDomain L w) q R J) {E₀ : ℝ}
+    (h : PlaneInteraction (stripDomain L w) q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
     {Ω : StateSpace (stripDomain L w) q}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (k : ℕ) (u : ℝ) (hu : 0 ≤ u) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (k : ℕ) (u : ℝ) (hu : 0 ≤ u) :
     Entropy.surprisalTail
       (Entropy.regionState_isHermitian (n := fun _ : Site (stripDomain L w) ↦ q)
         (stripSnakePrefix L w k) Ω).eigenvalues
@@ -158,12 +167,14 @@ theorem surprisalTail_stripSnakePrefix_le {L w q R : ℕ} {J Δ : ℝ}
   have hb1 : 1 ≤ budget := Entropy.one_le_cutLogBudget _ _
   have hθ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
   have hs : 0 < Real.sqrt ((1 + J / Δ) * budget) := Real.sqrt_pos.mpr (by nlinarith)
-  obtain ⟨hΩ, heig, hgap⟩ := hgs
-  change toEuclideanLin (∑ X, h.term X) Ω = (E₀ : ℂ) • Ω at heig
+  have heig : toEuclideanLin (∑ X, h.term X) Ω = (E₀ : ℂ) • Ω :=
+    ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
+  have hgap := hgap.posSemidef_sub_smul_one
+      (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan
   have ht := Entropy.surprisalTail_cut_le (n := fun _ : Site (stripDomain L w) ↦ q)
     (h := h.term) (D := fun X ↦ X.1) (B := A)
-    (fun X ↦ QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.supported X))
-    h.hermitian hJ h.norm_le hΩ hΔ heig hgap rfl
+    (fun X ↦ (h.mem X))
+    hh hJ hhJ hΩ hΔ heig hgap rfl
     (Entropy.regionState_isHermitian A Ω) u
   refine (ht.trans (min_le_right _ _)).trans ?_
   apply mul_le_mul_of_nonneg_left _ (by positivity)
@@ -211,9 +222,11 @@ theorem regionEntropy_stripSnakeState {L w q : ℕ} (Ω : StateSpace (stripDomai
 /-- The actual chain marginal inherits the physical prefix tail under the snake bijection. -/
 theorem surprisalTail_stripSnakeState_le {L w q R : ℕ} {J Δ : ℝ}
     (hq : 1 ≤ q) (hw : 1 ≤ w) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (h : LocalHamiltonian (stripDomain L w) q R J) {E₀ : ℝ}
+    (h : PlaneInteraction (stripDomain L w) q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
     {Ω : StateSpace (stripDomain L w) q}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) (k : ℕ) (u : ℝ) (hu : 0 ≤ u) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (k : ℕ) (u : ℝ) (hu : 0 ≤ u) :
     Entropy.surprisalTail
       (Entropy.regionState_isHermitian (n := fun _ : Fin (L * w) ↦ q)
         (leftBlock (L * w) k) (stripSnakeState q Ω)).eigenvalues
@@ -233,7 +246,7 @@ theorem surprisalTail_stripSnakeState_le {L w q R : ℕ} {J Δ : ℝ}
     apply (Matrix.IsHermitian.eigenvalues_eq_eigenvalues_iff _ _).mpr
     exact congrArg Matrix.charpoly hrho
   rw [he, surprisalTail_submatrix_equiv, regionEntropy_stripSnakeState]
-  exact surprisalTail_stripSnakePrefix_le hq hw hJ hΔ h hgs k u hu
+  exact surprisalTail_stripSnakePrefix_le hq hw hJ hΔ h hh hhJ hΩ hgap hspan k u hu
 
 /-- Sequential truncation and normalization from uniform prefix entropy bounds and the
 two-sided surprisal tail at the chosen width. Source: the one-dimensional note,
@@ -425,9 +438,11 @@ private theorem strip_bond_bound {q R L w : ℕ} {J Δ : ℝ}
 in the original lattice Hilbert space. -/
 theorem exists_stripMPS_norm_sub_le {L w q R : ℕ} {J Δ : ℝ}
     (hL : 1 ≤ L) (hw : 1 ≤ w) (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (h : LocalHamiltonian (stripDomain L w) q R J) {E₀ : ℝ}
+    (h : PlaneInteraction (stripDomain L w) q R) (hh : ∀ X, (h.term X).IsHermitian)
+        (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ}
     {Ω : StateSpace (stripDomain L w) q}
-    (hgs : Matrix.IsGappedGroundState h.operator E₀ Ω Δ) :
+    (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
+    (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) :
     ∃ (D : ℕ) (Φ : StateSpace (stripDomain L w) q), ‖Φ‖ = 1 ∧
       IsOpenMPS (L * w) q D (fun x ↦ stripSnakeState q Φ x) ∧ ‖Φ - Ω‖ ≤ 1 / (L : ℝ) ∧
       (D : ℝ) ≤ Real.exp (stripApproximationConst q R * (1 + J / Δ) * (w : ℝ) ^ 2) *
@@ -450,7 +465,7 @@ theorem exists_stripMPS_norm_sub_le {L w q R : ℕ} {J Δ : ℝ}
     have : 0 < 1 + J / Δ := by linarith only [hθ]
     positivity
   have hN : 1 ≤ L * w := (Nat.mul_le_mul hL hw)
-  have hΩ : ‖stripSnakeState q Ω‖ = 1 := (norm_stripSnakeState Ω).trans hgs.1
+  have hΩs : ‖stripSnakeState q Ω‖ = 1 := (norm_stripSnakeState Ω).trans hΩ
   have hLp : (0 : ℝ) < L := by exact_mod_cast (by omega : 0 < L)
   have hε : 0 < 1 / (L : ℝ) := one_div_pos.mpr hLp
   have hε1 : 1 / (L : ℝ) ≤ 1 := by
@@ -460,9 +475,9 @@ theorem exists_stripMPS_norm_sub_le {L w q R : ℕ} {J Δ : ℝ}
       (leftBlock (L * w) k) (stripSnakeState q Ω) ≤ C := by
     intro k
     rw [regionEntropy_stripSnakeState]
-    exact regionEntropy_stripSnakePrefix_le hq hw hJ hΔ h hgs k
-  obtain ⟨Ψ, hΨ, hmps, hdist⟩ := strip_approximation_of_prefix_bounds hC hs hN hΩ hε hε1 hS
-    (fun hu k _ ↦ surprisalTail_stripSnakeState_le hq hw hJ hΔ h hgs k _ hu)
+    exact regionEntropy_stripSnakePrefix_le hq hw hJ hΔ h hh hhJ hΩ hgap hspan k
+  obtain ⟨Ψ, hΨ, hmps, hdist⟩ := strip_approximation_of_prefix_bounds hC hs hN hΩs hε hε1 hS
+    (fun hu k _ ↦ surprisalTail_stripSnakeState_le hq hw hJ hΔ h hh hhJ hΩ hgap hspan k _ hu)
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (Entropy.siteConfigurationEquiv (n := fun _ : Site (stripDomain L w) ↦ q)
       (n' := fun _ : Fin (L * w) ↦ q) (stripSnakeEquiv L w).symm (fun _ ↦ Equiv.refl _))
@@ -483,9 +498,11 @@ Hamiltonian data. This extends the one-dimensional note's MPS approximation to s
 theorem stripMPSApproximation (q R : ℕ) :
     ∃ C c : ℝ, 0 ≤ C ∧ 0 ≤ c ∧ ∀ L w : ℕ, 1 ≤ L → 1 ≤ w → 1 ≤ q →
       ∀ J Δ : ℝ, 0 ≤ J → 0 < Δ →
-      ∀ h : LocalHamiltonian (stripDomain L w) q R J, ∀ E₀ : ℝ,
+      ∀ h : PlaneInteraction (stripDomain L w) q R, (∀ X, (h.term X).IsHermitian) →
+          (∀ X, ‖h.term X‖ ≤ J) → ∀ E₀ : ℝ,
       ∀ Ω : StateSpace (stripDomain L w) q,
-      Matrix.IsGappedGroundState h.operator E₀ Ω Δ →
+      ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
+      groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∃ (D : ℕ) (Φ : StateSpace (stripDomain L w) q), ‖Φ‖ = 1 ∧
         IsOpenMPS (L * w) q D (fun x ↦ stripSnakeState q Φ x) ∧ ‖Φ - Ω‖ ≤ 1 / (L : ℝ) ∧
         (D : ℝ) ≤ Real.exp (C * (1 + J / Δ) * (w : ℝ) ^ 2) *
@@ -498,7 +515,7 @@ theorem stripMPSApproximation (q R : ℕ) :
     positivity
   · unfold stripApproximationExponent
     positivity
-  · intro L w hL hw hq J Δ hJ hΔ h E₀ Ω hgs
-    exact exists_stripMPS_norm_sub_le hL hw hq hJ hΔ h hgs
+  · intro L w hL hw hq J Δ hJ hΔ h hh hhJ E₀ Ω hΩ hgap hspan
+    exact exists_stripMPS_norm_sub_le hL hw hq hJ hΔ h hh hhJ hΩ hgap hspan
 
 end TNLean.MPS.AreaLaw

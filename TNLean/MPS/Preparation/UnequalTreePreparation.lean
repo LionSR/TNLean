@@ -269,13 +269,15 @@ theorem exists_isPreparedWithMeasurementRoundsInDepth_blockIsometryState (d s c 
       (pairLayerOp hN hr fun _ => W) := by
     have := (isImplementationOn_round (d := d) Ls (valid_nil (N := N))).isRoundsImplementationOn
     rw [chainPerm_nil, Matrix.one_mul, ← hLsW] at this
-    exact this.mono fun v _ => fun _ _ _ h => h.elim
+    exact this.mono fun v _ => fun _ _ _ h => by simp [TeleportHop.pairSites] at h
   have hall := (h₀.append hRsE fun v hv => by
     rw [Set.mem_singleton_iff] at hv
     subst hv
     refine (isZeroOn_pairLayerOp_mulVec_productVector hN hr _).mono ?_
-    rintro x ⟨b, y, hy1, hy2, rfl⟩
-    exact ⟨b, y, hy1, by have := (hT b).le; simp only at hy2; omega, rfl⟩)
+    intro x hx
+    obtain ⟨b, y, hy1, hy2, rfl⟩ := mem_treeCentralSites.mp hx
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, b, y, hy1,
+      by have := (hT b).le; omega, rfl⟩)
   have hprep := hall.isPreparedWithMeasurementRoundsInDepth hv₀ rfl
   have hdepth : (([round Ls [] valid_nil] ++ Rs).map MeasurementRound.depth).sum ≤
       (K + C + 2) * (h + 1) := by
