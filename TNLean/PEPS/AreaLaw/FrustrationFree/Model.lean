@@ -113,7 +113,8 @@ theorem isFrustrationFree (hff : IsFrustrationFreeGapped h J Δ Ω) : h.IsFrustr
     hff.posSemidef ?_
   rw [hff.groundSpace_eq, Ne, Submodule.span_singleton_eq_bot]
   intro h0
-  simp [h0] at hff.norm_eq_one
+  have h1 := hff.norm_eq_one
+  simp [h0] at h1
 
 /-- The gap inequality `H ≥ Δ (1 - |Ω⟩⟨Ω|)` of the note, for `Δ > 0`. -/
 theorem gap (hff : IsFrustrationFreeGapped h J Δ Ω) (hΔ : 0 < Δ) :
