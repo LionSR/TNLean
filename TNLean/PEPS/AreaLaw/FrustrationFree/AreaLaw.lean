@@ -14,7 +14,7 @@ import TNLean.PEPS.AreaLaw.BoundaryTheorem
 The goal `eq:goal` of the frustration-free area-law note, proved along the note's route: the
 sublinear collar bound (Proposition 9.6, `sublinearCollarBound_real`, valid for every gapped
 instance and hence for the frustration-free model), the amplification by the exact sweep of the
-range projections of the terms (`ffAmplificationBound`), and the two-family cancellation of tile
+range projections of the terms (`frustrationFreeAmplificationBound`), and the two-family cancellation of tile
 entropies (Proposition 11.2, `twoFamilyDecomposition`, and Lemma 11.1 in
 `regionalEntropy_le_of_collar_amplification_twoFamilies_at`). The proof does not use the
 time-filtered amplification `amplificationBound` of the general theorem.
@@ -49,8 +49,8 @@ theorem frustrationFreeAreaLaw : FrustrationFreeAreaLaw := by
   intro q hq R J Δ hJ hΔ
   obtain ⟨C₁, N₁, hcol⟩ := sublinearCollarBound_real q R hq (J := J) (D₀ := 2 * R + 11)
     (Ctpl := 24) hJ.le hΔ (by linarith) le_rfl
-  set C₂ := ffAmplificationConstant q R J Δ (max C₁ 1) 100
-  set N₂ := ffAmplificationThreshold q R J Δ (max C₁ 1) 100
+  set C₂ := frustrationFreeAmplificationConstant q R J Δ (max C₁ 1) 100
+  set N₂ := frustrationFreeAmplificationThreshold q R J Δ (max C₁ 1) 100
   obtain ⟨C₃, hdec⟩ := twoFamilyDecomposition (2 * R + 11) 24 (uniformAreaLawScale N₁ N₂ C₂)
     (one_le_two.trans (two_le_uniformAreaLawScale N₁ N₂ C₂))
   refine ⟨uniformAreaLawConstantOf q C₂ C₃, uniformAreaLawConstantOf_nonneg hq C₂ C₃,
@@ -59,7 +59,7 @@ theorem frustrationFreeAreaLaw : FrustrationFreeAreaLaw := by
     hff.norm_eq_one (hff.isGapped hΔ) (hff.groundSpace_eq hΔ) A
     (fun n s₀ hn ↦ hcol n s₀ hn Λ h hff.isHermitian (hff.norm_term_le hJ.le) 0 Ω
       hff.norm_eq_one (hff.isGapped hΔ) (hff.groundSpace_eq hΔ) A)
-    (fun n hn2 hn ↦ ffAmplificationBound hq hJ hΔ (lt_max_of_lt_right one_pos) 100 n hn2 hn Λ h Ω
+    (fun n hn2 hn ↦ frustrationFreeAmplificationBound hq hJ hΔ (lt_max_of_lt_right one_pos) 100 n hn2 hn Λ h Ω
       hff A)
     (hdec Λ A)
 

@@ -31,9 +31,9 @@ comparison of the general proof give `eq:far`.
 
 ## Main statements
 
-* `TNLean.PEPS.AreaLaw.FrustrationFree.ffAmplificationBound`: the amplification bound for the
-  frustration-free model, with the explicit constant `ffAmplificationConstant` and threshold
-  `ffAmplificationThreshold`.
+* `TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAmplificationBound`: the amplification bound for the
+  frustration-free model, with the explicit constant `frustrationFreeAmplificationConstant` and threshold
+  `frustrationFreeAmplificationThreshold`.
 
 ## References
 
@@ -137,19 +137,19 @@ theorem pow_ceil_mul_le {θ M₀ : ℝ} (hθ0 : 0 < θ) (hθ1 : θ < 1) (hM : 0 
 
 /-- The radius constant of the frustration-free amplification:
 `R χ ((C₀/2 + 3/2 + 2K)/|log θ| + 1)`, `χ = d_R + 1`. -/
-noncomputable def ffRadiusConstant (R : ℕ) (J Δ C₀ : ℝ) (K : ℕ) : ℝ :=
+noncomputable def frustrationFreeRadiusConstant (R : ℕ) (J Δ C₀ : ℝ) (K : ℕ) : ℝ :=
   (R * (overlapDegreeBound R + 1) : ℕ) *
     ((C₀ / 2 + 3 / 2 + 2 * K) / (-Real.log (sweepContraction R J Δ)) + 1)
 
 /-- **The radius bound.** With `M₀ = e^{(𝓘 + 3w)/2}`, `w = n^{3/5}`, `𝓘 ≤ C₀ n^{1-ε}`, the radius
-`r = R χ t` of `t` sweeps is at most `ffRadiusConstant · n^{(1-ε)/α}`. -/
+`r = R χ t` of `t` sweeps is at most `frustrationFreeRadiusConstant · n^{(1-ε)/α}`. -/
 theorem radius_le_ffRadiusConstant {R : ℕ} {J Δ C₀ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ)
     (hC₀ : 0 ≤ C₀) (K : ℕ)
     {n : ℕ} (hn : 1 ≤ n) {I : ℝ} (hI0 : 0 ≤ I)
     (hI : I ≤ C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))) :
     ((R * (overlapDegreeBound R + 1) * ⌈(Real.log (Real.exp ((I + 3 * (n : ℝ) ^ ((3 : ℝ) / 5)) / 2))
         + K * Real.log n) / (-Real.log (sweepContraction R J Δ))⌉₊ : ℕ) : ℝ) ≤
-      ffRadiusConstant R J Δ C₀ K * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) := by
+      frustrationFreeRadiusConstant R J Δ C₀ K * (n : ℝ) ^ (Exponents.radiusExponent : ℝ) := by
   set θ := sweepContraction R J Δ
   set lam := -Real.log θ
   have hlam : 0 < lam := neg_pos.mpr (Real.log_neg (sweepContraction_pos hJ hΔ)
@@ -196,7 +196,7 @@ theorem radius_le_ffRadiusConstant {R : ℕ} {J Δ C₀ : ℝ} (hJ : 0 < J) (hΔ
       rw [div_mul_eq_mul_div]
       exact div_le_div_of_nonneg_right hxle hlam.le
     nlinarith [div_nonneg hC₀' hlam.le]
-  rw [ffRadiusConstant, Nat.cast_mul, mul_assoc]
+  rw [frustrationFreeRadiusConstant, Nat.cast_mul, mul_assoc]
   exact mul_le_mul_of_nonneg_left ht (Nat.cast_nonneg _)
 
 /-! ### The amplification bound -/
@@ -204,14 +204,14 @@ theorem radius_le_ffRadiusConstant {R : ℕ} {J Δ C₀ : ℝ} (hJ : 0 < J) (hΔ
 /-- The constant of the frustration-free amplification bound at the integer `M`, with
 `K = 4(M + 2)`: the larger of the radius constant and the entropy-comparison constant
 `8 √9 (1 + C₀ log q)` of the general proof. -/
-noncomputable def ffAmplificationConstant (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) : ℝ :=
-  max (ffRadiusConstant R J Δ C₀ (4 * (M + 2))) (8 * √9 * (1 + C₀ * Real.log q))
+noncomputable def frustrationFreeAmplificationConstant (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) : ℝ :=
+  max (frustrationFreeRadiusConstant R J Δ C₀ (4 * (M + 2))) (8 * √9 * (1 + C₀ * Real.log q))
 
 /-- The threshold of the frustration-free amplification bound: that of the typical projections and
 that of the collar clearance. -/
-noncomputable def ffAmplificationThreshold (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) : ℕ :=
+noncomputable def frustrationFreeAmplificationThreshold (q R : ℕ) (J Δ C₀ : ℝ) (M : ℕ) : ℕ :=
   max (typicalProjectionThreshold q R J Δ C₀ (4 * (M + 2)))
-    (Exponents.collarRadiusThreshold (ffAmplificationConstant q R J Δ C₀ M) 1)
+    (Exponents.collarRadiusThreshold (frustrationFreeAmplificationConstant q R J Δ C₀ M) 1)
 
 open SimpleGraph in
 /-- **Amplification for frustration-free terms** (`eq:far` of the frustration-free area-law note).
@@ -220,14 +220,14 @@ ambient target `T` with `L = ⌊n^{1-ε}⌋`, `X = A ∩ T`, `S₀ = A ∩ T_L`,
 `|S₀| ≤ C₀ n²`, the cuts of `X, Y, S₀` have at most `C₀ n` edges and `I_Ω(X : Λ ∖ S₀) ≤ C₀ n^{1-ε}`,
 then at every `n ≥ max 2 N` there is a radius `r ≤ C n^{(1-ε)/α}` such that every subset of `X`
 has mutual information at most `C n^{-M}` with every set avoiding `N_{2r}(S₀)`, and
-`N_{2r}(S₀) ⊆ A` when `dist_∞(T, Z) > L + n^β`. The constant `C = ffAmplificationConstant` and the
-threshold `N = ffAmplificationThreshold` are chosen before `n, Λ, h, A, T`. This is the conclusion
+`N_{2r}(S₀) ⊆ A` when `dist_∞(T, Z) > L + n^β`. The constant `C = frustrationFreeAmplificationConstant` and the
+threshold `N = frustrationFreeAmplificationThreshold` are chosen before `n, Λ, h, A, T`. This is the conclusion
 of Proposition 10.2 for the model `eq:model`, with the sweep of the note in place of the
 time-filtered clocks. Source: `docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`,
 Section "Amplification with the original frustration-free terms". -/
-theorem ffAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ)
+theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ : ℝ} (hJ : 0 < J) (hΔ : 0 < Δ)
     (hC₀ : 0 < C₀) (M : ℕ) :
-    ∀ n : ℕ, 2 ≤ n → ffAmplificationThreshold q R J Δ C₀ M ≤ n →
+    ∀ n : ℕ, 2 ≤ n → frustrationFreeAmplificationThreshold q R J Δ C₀ M ≤ n →
       ∀ Λ : Finset (ℤ × ℤ), ∀ h : PlaneInteraction Λ q R, ∀ Ω : StateSpace Λ q,
         IsFrustrationFreeGapped h J Δ Ω →
           ∀ (A : Finset (Site Λ)) (T : Finset (ℤ × ℤ)),
@@ -246,14 +246,14 @@ theorem ffAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ : ℝ} (hJ : 
                 (A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
               C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) →
-            ∃ r : ℕ, (r : ℝ) ≤ ffAmplificationConstant q R J Δ C₀ M *
+            ∃ r : ℕ, (r : ℝ) ≤ frustrationFreeAmplificationConstant q R J Δ C₀ M *
                 (n : ℝ) ^ (Exponents.radiusExponent : ℝ) ∧
               (∀ X ⊆ A.filter (fun x ↦ x.val ∈ T), ∀ Jset : Finset (Site Λ),
                 Disjoint Jset (graphNeighborhood Λ (2 * r)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
                 FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
-                  ffAmplificationConstant q R J Δ C₀ M * ((n : ℝ) ^ M)⁻¹) ∧
+                  frustrationFreeAmplificationConstant q R J Δ C₀ M * ((n : ℝ) ^ M)⁻¹) ∧
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
                       (n : ℝ) ^ (Exponents.beta : ℝ) <
@@ -267,7 +267,7 @@ theorem ffAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ : ℝ} (hJ : 
   have hgap := hff.isGapped hΔ
   have hspan := hff.groundSpace_eq hΔ
   have hΩ := hff.norm_eq_one
-  set C := ffAmplificationConstant q R J Δ C₀ M with hCdef
+  set C := frustrationFreeAmplificationConstant q R J Δ C₀ M with hCdef
   have hcolr := fun r hr ↦ graphNeighborhood_collar_subset_of_threshold_le C
     ((le_max_right _ _).trans hnN) r hr Λ A T
   have hNt : typicalProjectionThreshold q R J Δ C₀ (4 * (M + 2)) ≤ n :=
