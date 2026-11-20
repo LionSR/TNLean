@@ -206,7 +206,7 @@ theorem reset_localized_filter (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ :
       _ = Cg * (1 + c * J) * (L : ℝ) ^ 4 * (1 + T₀ * (1 + b + Real.log L)) *
           Real.exp (v * T₀ * (1 + b + Real.log L) - 1 / 2 * ⌈K * (1 + b + Real.log L)⌉₊) := by
           ring
-  obtain ⟨h₁, h₂⟩ := norm_two_sided_le_of_norm_sub_le hψn hφn (hMerr.trans hδ) hfwd hrev
+  obtain ⟨h₁, h₂⟩ := TNLean.Lattice.norm_two_sided_le_of_norm_sub_le hψn hφn (hMerr.trans hδ) hfwd hrev
   refine ⟨hψn, hφn, z, _, hz, hMsupp, hMnorm.trans hW, h₁.trans_eq ?_, h₂.trans_eq ?_⟩ <;>
     rw [rangeResetFilterPrefactor, ← hCgdef, ← hT₀def, ← hcdef] <;> ring
 
@@ -240,7 +240,8 @@ theorem reset_unitary (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) 
   intro p F ψ B
   obtain ⟨hψn, hφn, z, M, hz, hMsupp, -, hfwd, hrev⟩ :=
     h.reset_localized_filter hq hJ hΔ hr hL hΛ hh hhJ E₀ Ω hΩ hgap hspan A C hAC b hb hI
-  obtain ⟨U, hU, hUsupp, hUerr⟩ := exists_supported_unitary_of_two_sided B hMsupp hb hz hfwd hrev
+  obtain ⟨U, hU, hUsupp, hUerr⟩ :=
+    TNLean.Lattice.exists_supported_unitary_of_two_sided B hMsupp hb hz hfwd hrev
     (rangeResetFilterPrefactor_pos R hJ hΔ hr).le (by positivity)
   exact ⟨hψn, hφn, U, hU, hUsupp, hUerr.trans_eq (by rw [rangeResetUnitaryPrefactor])⟩
 

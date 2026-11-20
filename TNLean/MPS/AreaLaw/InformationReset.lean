@@ -225,7 +225,7 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
         mul_le_mul_of_nonneg_right hV (by positivity)
       _ ≤ ε := by simpa only [one_mul] using hlocalError
   obtain ⟨hMfwd, hMrev⟩ :=
-    norm_two_sided_le_of_norm_sub_le hψn hφn hMclose hfwd hrev
+    TNLean.Lattice.norm_two_sided_le_of_norm_sub_le hψn hφn hMclose hfwd hrev
   have hresidual : ε + 3 * Real.exp (-10 * b) * (L : ℝ) ^ (-r) =
       4 * Real.exp (-10 * b) * (L : ℝ) ^ (-r) := by dsimp only [ε]; ring
   rw [hresidual] at hMfwd hMrev
