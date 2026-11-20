@@ -70,31 +70,6 @@ open ManyBody (IsGapped groundSpace AdmissibleSupport IsAdmissibleSupport graphB
 
 namespace TNLean.PEPS.AreaLaw
 
-/-- The square root of `(n^K)⁻¹` is `n^(-K/2)`. -/
-private theorem sqrt_inv_pow_eq_rpow (n K : ℕ) :
-    √(((n : ℝ) ^ K)⁻¹) = (n : ℝ) ^ (-(K : ℝ) / 2) := by
-  rw [Real.sqrt_eq_rpow, ← Real.rpow_natCast, ← Real.rpow_neg (Nat.cast_nonneg n),
-    ← Real.rpow_mul (Nat.cast_nonneg n)]
-  ring_nf
-
-/-- A unit blank vector on a nonempty finite set. -/
-private theorem norm_toLp_single_eq_one {α : Type*} [Fintype α] [DecidableEq α] (a : α) :
-    ‖WithLp.toLp 2 (fun x : α => if x = a then (1 : ℂ) else 0)‖ = 1 := by
-  rw [EuclideanSpace.norm_eq, Real.sqrt_eq_one]
-  rw [Finset.sum_eq_single a (fun b _ hb => by simp [hb]) (by simp)]
-  simp
-
-/-- The final scale estimate: `4ε + √(14ε + 9ε²) ≤ 9 √ε` for `0 ≤ ε ≤ 1`. -/
-private theorem unitary_error_le {ε : ℝ} (h0 : 0 ≤ ε) (h1 : ε ≤ 1) :
-    (3 * ε + ε) + √(2 * (3 * ε + ε) + 6 * ε + 9 * ε ^ 2) ≤ 9 * √ε := by
-  have hs : ε ≤ √ε := Real.le_sqrt_of_sq_le (by nlinarith)
-  have hsq : √(2 * (3 * ε + ε) + 6 * ε + 9 * ε ^ 2) ≤ 5 * √ε := by
-    rw [show (5 : ℝ) * √ε = √(25 * ε) by
-      rw [Real.sqrt_mul (by norm_num), show √(25 : ℝ) = 5 by
-        rw [show (25 : ℝ) = 5 ^ 2 by norm_num, Real.sqrt_sq (by norm_num)]]]
-    exact Real.sqrt_le_sqrt (by nlinarith)
-  nlinarith
-
 /-- The spectral gap `g_a = Δ / c_*` of the positive-constraint Hamiltonian `∑ᵢ kᵢ` at the
 power `p = 10⁶`, with `c_* = positiveNormalization p (Δ / 2) J = max 1 (J (‖f_{p,Δ/2}‖₁ + 1))`.
 It is linear in `Δ` through the numerator and decays like `1 / J` once `J (‖f‖₁ + 1) ≥ 1`; the

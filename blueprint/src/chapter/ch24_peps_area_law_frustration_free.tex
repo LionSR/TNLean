@@ -240,8 +240,9 @@ localization errors of the amplification stage.
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.pow_ceil_mul_le, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeRadiusConstant, TNLean.PEPS.AreaLaw.FrustrationFree.radius_le_frustrationFreeRadiusConstant}
     \leanok
     For $0<\theta<1$, $M_0>0$ and $t=\lceil(\log M_0+K\log n)/|\log\theta|\rceil$
-    one has $\theta^tM_0\le n^{-K}$. If $M_0=e^{(\mathcal I+3w)/2}$ with
-    $w=n^{3/5}$ and $0\le\mathcal I\le C_0n^{1-\varepsilon}$, then
+    one has $\theta^tM_0\le n^{-K}$. If $J,\Delta>0$, $\theta$ is the sweep
+    contraction, $M_0=e^{(\mathcal I+3w)/2}$ with $w=n^{3/5}$ and
+    $0\le\mathcal I\le C_0n^{1-\varepsilon}$, then
     $R\chi t\le Cn^{(1-\varepsilon)/\alpha}$ with $C$ depending only on
     $R,J,\Delta,C_0,K$.
 \end{lemma}
@@ -253,10 +254,10 @@ localization errors of the amplification stage.
 
 \begin{lemma}[Amplification with the frustration-free terms]
     \label{thm:frustration_free_area_law_amplification}
-    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAmplificationConstant, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAmplificationThreshold, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAmplificationBound, TNLean.PEPS.AreaLaw.FrustrationFree.norm_toLp_single_eq_one', TNLean.PEPS.AreaLaw.FrustrationFree.sqrt_inv_pow_eq_rpow', TNLean.PEPS.AreaLaw.FrustrationFree.unitary_error_le'}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAmplificationConstant, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAmplificationThreshold, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAmplificationBound, TNLean.PEPS.AreaLaw.norm_toLp_single_eq_one, TNLean.PEPS.AreaLaw.sqrt_inv_pow_eq_rpow, TNLean.PEPS.AreaLaw.unitary_error_le}
     \leanok
     \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_model_gapped,thm:frustration_free_area_law_sweep,thm:frustration_free_area_law_spectator,thm:frustration_free_area_law_radius,thm:al_amp_enlarged_steps,thm:area_law_amplification_cut_clearance}
-    Fix $C_0>0$ and an integer $M$. There are $C$ and $N$, depending only on
+    Let $J,\Delta>0$, and fix $C_0>0$ and an integer $M$. There are $C$ and $N$, depending only on
     $q,R,J,\Delta,C_0,M$, with the following property for every instance of
     Definition~\ref{def:frustration_free_area_law_model}, every ambient set $T$ and every
     $n\ge\max(2,N)$. Put $L=\lfloor n^{1-\varepsilon}\rfloor$, $X=A\cap T$,

@@ -81,34 +81,7 @@ theorem norm_kronecker_one_mulVec_le_of_slices (A : Matrix (Config X) (Config X)
 
 end Spectator
 
-/-! ### Two numerical facts of the general proof -/
-
-/-- `√(n^{-K}) = n^{-K/2}`. -/
-theorem sqrt_inv_pow_eq_rpow' (n K : ℕ) :
-    √(((n : ℝ) ^ K)⁻¹) = (n : ℝ) ^ (-(K : ℝ) / 2) := by
-  rw [Real.sqrt_eq_rpow, ← Real.rpow_natCast, ← Real.rpow_neg (Nat.cast_nonneg n),
-    ← Real.rpow_mul (Nat.cast_nonneg n)]
-  ring_nf
-
-/-- `4ε + √(14ε + 9ε²) ≤ 9 √ε` for `0 ≤ ε ≤ 1`. -/
-theorem unitary_error_le' {ε : ℝ} (h0 : 0 ≤ ε) (h1 : ε ≤ 1) :
-    (3 * ε + ε) + √(2 * (3 * ε + ε) + 6 * ε + 9 * ε ^ 2) ≤ 9 * √ε := by
-  have hs : ε ≤ √ε := Real.le_sqrt_of_sq_le (by nlinarith)
-  have hsq : √(2 * (3 * ε + ε) + 6 * ε + 9 * ε ^ 2) ≤ 5 * √ε := by
-    rw [show (5 : ℝ) * √ε = √(25 * ε) by
-      rw [Real.sqrt_mul (by norm_num), show √(25 : ℝ) = 5 by
-        rw [show (25 : ℝ) = 5 ^ 2 by norm_num, Real.sqrt_sq (by norm_num)]]]
-    exact Real.sqrt_le_sqrt (by nlinarith)
-  nlinarith
-
-/-- A unit vector supported at one point. -/
-theorem norm_toLp_single_eq_one' {α : Type*} [Fintype α] [DecidableEq α] (a : α) :
-    ‖WithLp.toLp 2 (fun x : α => if x = a then (1 : ℂ) else 0)‖ = 1 := by
-  rw [EuclideanSpace.norm_eq, Real.sqrt_eq_one]
-  rw [Finset.sum_eq_single a (fun b _ hb => by simp [hb]) (by simp)]
-  simp
-
-/-! ### The number of sweeps and the radius -/
+/-! ### The number of sweeps -/
 
 /-- **The number of sweeps** `t = ⌈(log M₀ + K log n) / |log θ|⌉` makes the excited part small:
 `θ^t M₀ ≤ n^{-K}`. Source: `docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`,
@@ -312,7 +285,7 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
       Λ h hh hhJ 0 Ω hΩ hgap hspan X Y (X ∪ Y) hXcut hYcut (by rw [hXYS]; exact hScut)
   let x₀ : RegionalConfiguration q X := fun _ => 0
   let blank : RegionalConfiguration q X → ℂ := fun x => if x = x₀ then 1 else 0
-  have hblank : ‖WithLp.toLp 2 blank‖ = 1 := norm_toLp_single_eq_one' x₀
+  have hblank : ‖WithLp.toLp 2 blank‖ = 1 := norm_toLp_single_eq_one x₀
   let U := restoringEigenbasis Ω X
   obtain ⟨hU, hU'⟩ := restoringEigenbasis_unitary Ω X
   let 𝒲 := restoringTransport Ω X Y hXY
@@ -436,8 +409,8 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
   -- The entropy comparison on the enlarged sites.
   have hδ : ‖WithLp.toLp 2 (U₁ *ᵥ (φ ∘ ancillaSplit q X)) -
       WithLp.toLp 2 (η ∘ ancillaSplit q X)‖ ≤ 9 * (n : ℝ) ^ (-(K : ℝ) / 2) := by
-    rw [← sqrt_inv_pow_eq_rpow']
-    exact hU₁err.trans (unitary_error_le' hε0 hε1)
+    rw [← sqrt_inv_pow_eq_rpow]
+    exact hU₁err.trans (unitary_error_le hε0 hε1)
   have hdim : (X.card : ℝ) * Real.log q ≤ C₀ * Real.log q * (n : ℝ) ^ 2 := by
     have hX : (X.card : ℝ) ≤ C₀ * (n : ℝ) ^ 2 :=
       (Nat.cast_le.mpr (Finset.card_le_card hXS)).trans hcard
