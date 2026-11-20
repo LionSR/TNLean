@@ -268,7 +268,7 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[A unitary polar factor on the same support]
     \label{thm:peps_supported_polar_unitary}
-    \lean{QuantumCircuit.exists_supported_unitary_polar_correction}
+    \lean{ManyBody.exists_supported_unitary_polar_correction}
     \leanok
     For any operator $D$ supported on a site set $S$, there exists a unitary $U$ supported on $S$ such that for all vectors $x,y$,
     \begin{align}
@@ -362,8 +362,7 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{lemma}[A supported unitary and the mutual information of untouched sets]
     \label{lem:lattice_supported_unitary_entropy}
-    \lean{TNLean.Lattice.mutualInformation_le_of_supported_unitary,
-        TNLean.Lattice.exists_one_kronecker_unitary_of_mem_supportedOperators}
+    \lean{FiniteProduct.mutualInformation_le_of_supported_unitary}
     \leanok
     Let $X,J\subseteq\Lambda$ be disjoint on a finite lattice $\Lambda$ with local space $\C^q$, and let $\varphi,\eta$ be unit vectors with $I_\eta(X:J)=0$. If $U$ is a unitary supported on $S\subseteq\Lambda\setminus(X\cup J)$, then $U=\id_X\otimes U_2$ on $\mathcal H_X\otimes\mathcal H_{\Lambda\setminus X}$ and
     \begin{align}
@@ -416,8 +415,7 @@ sum of Hamiltonians on two factors is a product vector
 
 \begin{theorem}[Gapped ground vectors of a sum of factor Hamiltonians]
     \label{thm:area_law_product_ground_state}
-    \lean{TNLean.Lattice.exists_isGapped_factors_of_kronecker_sum, TNLean.Lattice.exists_eq_mul_of_gap, TNLean.Lattice.vonNeumannEntropy_partialTraceRight_eq_zero_of_gap}
-    \leanok
+    \lean{ManyBody.exists_isGapped_factors_of_kronecker_sum}
     Let $H=H_A\otimes I+I\otimes H_B$ with $H_A,H_B$ Hermitian. If a unit
     vector $\omega$ satisfies $H\omega=E_0\omega$ and
     $H-E_0I\ge\Delta(I-|\omega\rangle\langle\omega|)$ with $\Delta>0$, then

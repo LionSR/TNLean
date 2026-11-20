@@ -80,7 +80,7 @@ theorem regionEntropy_union_le (hΩ : ‖Ω‖ = 1) {X T : Finset V} (hXT : Disj
     Entropy.regionEntropy (n := fun _ : V ↦ q) (X ∪ T) Ω ≤
       Entropy.regionEntropy (n := fun _ : V ↦ q) X Ω +
         Entropy.regionEntropy (n := fun _ : V ↦ q) T Ω := by
-  simp only [Entropy.regionEntropy_eq_entropy]
+  simp only [Entropy.regionEntropy, ManyBody.regionEntropy_eq_entropy]
   exact FiniteProduct.entropy_union_le _ Ω hΩ X T hXT
 
 /-- The Araki–Lieb inequality for regional entropies of a pure unit vector: for disjoint
@@ -107,12 +107,12 @@ theorem regionEntropy_le_union_add (hΩ : ‖Ω‖ = 1) {X T : Finset V} (hXT : 
 /-- The empty region of a unit vector has zero entropy. -/
 theorem regionEntropy_empty (hΩ : ‖Ω‖ = 1) :
     Entropy.regionEntropy (n := fun _ : V ↦ q) ∅ Ω = 0 := by
-  rw [Entropy.regionEntropy_eq_entropy, FiniteProduct.entropy_empty _ Ω hΩ]
+  exact (ManyBody.regionEntropy_eq_entropy _ _).trans (FiniteProduct.entropy_empty _ Ω hΩ)
 
 /-- The set of all sites has zero entropy for a unit vector. -/
 theorem regionEntropy_univ (hΩ : ‖Ω‖ = 1) :
     Entropy.regionEntropy (n := fun _ : V ↦ q) Finset.univ Ω = 0 := by
-  rw [Entropy.regionEntropy_eq_entropy, FiniteProduct.entropy_univ _ Ω hΩ]
+  exact (ManyBody.regionEntropy_eq_entropy _ _).trans (FiniteProduct.entropy_univ _ Ω hΩ)
 
 /-- The dimension bound `S(A) ≤ |A| log q`: the entropy of a region of a unit vector is at most
 the logarithm of the dimension of its state space. -/
@@ -132,7 +132,7 @@ theorem regionEntropy_union_add_inter_le (X T : Finset V) :
         Entropy.regionEntropy (n := fun _ : V ↦ q) (X ∩ T) Ω ≤
       Entropy.regionEntropy (n := fun _ : V ↦ q) X Ω +
         Entropy.regionEntropy (n := fun _ : V ↦ q) T Ω := by
-  simp only [Entropy.regionEntropy_eq_entropy]
+  simp only [Entropy.regionEntropy, ManyBody.regionEntropy_eq_entropy]
   exact FiniteProduct.entropy_submodular _ Ω X T
 
 /-- Inside a region `P` of zero entropy, complementary subregions have equal entropy:

@@ -268,20 +268,21 @@ not built on that pattern.
 
 ## What is wrong now
 
-Counts are from the fifth pin move (the Hamiltonian part of `Lattice` deleted
-in favour of QICLean), re-measured with the script of the first audit (TNLean `3d3507f`, QICLean
+Counts are from the sixth pin move (the approximate-conversion, imaginary-time,
+truncation and entropy modules moved to QICLean deleted), re-measured with the
+script of the first audit (TNLean `3d3507f`, QICLean
 `c62f178`); where a figure of that audit is kept for comparison, it says so.
 
 ### The directory holds two libraries
 
-`TNLean/Circuit` has 106 modules and 20,815 lines (125 and 25,197 at the
+`TNLean/Circuit` has 105 modules and 20,544 lines (125 and 25,197 at the
 first audit). More than twenty root-level modules of `TNLean/Circuit` (`SiteEmbedding*`,
 `SiteExpectation*`, `Supported*`, `EntropySupport`, `ProductVector`,
 `ExpectationBounds`, ...) and all of `Circuit/LiebRobinson` mention no layer,
 gate or depth. Until step 0.3 they imported `Circuit/LocalCircuit`, only
 because the definition of `supportedOperators` sat in that file above
 `BondLayer`. Outside
-`TNLean/Circuit`, 279 modules mention `QuantumCircuit` and 249 open the
+`TNLean/Circuit`, 280 modules mention `QuantumCircuit` and 249 open the
 namespace (356 and 279 at the first audit); these counts now include uses of
 QICLean's circuit core, which shares the namespace. Nearly all of them (`Lattice`, `MPS/AreaLaw`, `PEPS`) use only
 these lemmas on supported operators. The circuit models proper are consumed by
@@ -464,19 +465,35 @@ outcome.
 
 ## `TNLean/Lattice`
 
-`TNLean/Lattice` (371 modules, 58,208 lines; 469 and 77,689 on `main` before pin move 5)
+`TNLean/Lattice` (363 modules, 55,609 lines; 371 and 58,208 before pin move 6, 469 and
+77,689 before pin move 5)
 has the same shape as `TNLean/Circuit`: its transitive imports inside TNLean
 are itself, 15 modules of `Algebra` and 9 modules of `Circuit`, and nothing
 from `MPS` or `PEPS`. It can leave TNLean once the
 Sites layer has. It holds three unrelated things:
 
 - Local Hamiltonians and their analysis on finite sets of sites (the root
-  directory, 25 modules, 4,959 lines; with `ClusterExpansion`, 124 modules and
-  24,532 lines before step 3H.1). Gaussian filtering and truncation, low-energy
+  directory, 17 modules, 2,360 lines; 25 modules and 4,959 lines before pin
+  move 6; with `ClusterExpansion`, 124 modules and 24,532 lines before step
+  3H.1). Gaussian filtering and truncation, low-energy
   bases, translations, the variational bound, product forms and Trotter index
   counts, and the whole cluster expansion moved to QICLean in step 3H.1. What
   stays is regional entropy, the regional swap and reset, and the finite
   domains and buffers of the area laws.
+
+  Kept until step 4.0, by decision at pin move 6: `RegionEntropyInequalities`,
+  `StateSpace`, `RegionalEntropy`, `RegionalEntropyBridge`, `EntropyDimension`,
+  the relabelling half of `SiteRelabelEntropy` and the cut-budget part of
+  `MarginalTails`. Their statements are QICLean's mathematics written with the
+  other spelling of the regional entropy (`Entropy.regionEntropy` on vectors
+  over `V → Fin q`, against `FiniteProduct.entropy`); restating them as
+  one-line corollaries would only move about forty call sites twice. They are
+  repaired only as far as a pin forces, and their call sites move at step 4.0,
+  when the two spellings are unified. Pin move 6 deleted the modules whose
+  statements moved (`ZeroEntropy`, `EntropyComparison`,
+  `SupportedUnitaryEntropy`, `SupportedPolarUnitary`, the sum-of-sites half of
+  `SiteRelabelEntropy`, the typical-mass part of `MarginalTails`, and the
+  imaginary-time, hard-truncation, disjoint-ground and product-ground modules).
 - A calculus of distributed circuits and operator networks on a set of parties
   (`PartyCircuit`, `Compression`, `Sheet`, 343 modules, 52,901 lines).
   This is not lattice theory, and it is the second circuit library described
@@ -576,7 +593,8 @@ Wave 3, two tracks that share no file:
   part of `Lattice` restated on it and moved (LionSR/QICLean#1138, #1141, #1144,
   #1145, #1146 and #1148). Pin move 5 deletes 98 modules of `Lattice`, among
   them all of `Lattice/ClusterExpansion`, and `Circuit/SitePermutationSupport`;
-  what stays is described under `TNLean/Lattice` above.
+  pin move 6 (LionSR/QICLean#1150, #1151) deletes eight more and three of
+  `Algebra`; what stays is described under `TNLean/Lattice` above.
 - **3H.2** (TNLean, pin move 2; done in #10905 by F8 phase 2 and its follow-up
   #10910, apart from the deletion of `Lattice/RegionalEntropyBridge`). `ChainHamiltonian`, `DomainHamiltonian`,
   `Lattice.LocalHamiltonian`, `SquareHamiltonian` and `RectangularHamiltonian`
@@ -620,7 +638,13 @@ Wave 3, two tracks that share no file:
   | Sites | 22 | 3,227 | the Sites renames, `embedOp` to `place` (4.2) |
   | Aggregators | 4 | 97 | their members |
 
-  The directory is not smaller after this pin for two reasons. The ring
+  Pin move 6 (LionSR/QICLean#1149) deletes `Channel/AsymptoticConversion` (154
+  lines) and reduces `Channel/ApproximateConversion` from 173 lines to the 55
+  lines of the chain trace norm; the approximate and asymptotic conversion
+  predicates are QICLean's `QICLean/Circuit/Model/Approximate`. The
+  ring-geometry group is now 6 modules and 1,746 lines.
+
+  The directory was not smaller after pin move 5 for two reasons. The ring
   geometry (`ringBall`, ring separation, the ring as a circuit geometry) was
   not yet on QICLean `main`, so the ring-geometry group could not be
   restated. The channel modules that carry the system type are still used by

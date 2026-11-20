@@ -22,7 +22,7 @@ Ancillary systems are included by enlarging $V$.
 
 \begin{lemma}[Trace distance of pure states]
     \label{lem:al_amp_pure_trace_distance}
-    \lean{TNLean.Lattice.traceDistance_vecMulVec_le_norm_sub,
+    \lean{Matrix.traceDistance_vecMulVec_le_norm_sub,
         FiniteProduct.traceDistance_reducedPure_le}
     \leanok
     For unit vectors $\psi,\varphi$ in a finite-dimensional Hilbert space,
@@ -46,10 +46,6 @@ Ancillary systems are included by enlarging $V$.
 
 \begin{lemma}[A unitary away from a region]
     \label{lem:al_amp_unitary_complement}
-    \lean{FiniteProduct.reducedPure_unitary_compl,
-        FiniteProduct.mutualInformation_eq_of_reducedPure_union_eq,
-        FiniteProduct.trace_reducedPure_eq_norm_sq}
-    \leanok
     Let $R\subseteq V$ and let $U$ be a unitary on $\mathcal H_{V\setminus R}$.
     For every $\varphi\in\mathcal H$, the vectors $\varphi$ and
     $(I_R\otimes U)\varphi$ have the same reduced state on $R$. In particular,
@@ -86,8 +82,6 @@ Ancillary systems are included by enlarging $V$.
 
 \begin{lemma}[Entropy comparison after the local unitary]
     \label{thm:al_amp_entropy_comparison}
-    \lean{FiniteProduct.mutualInformation_le_of_unitary_sub_le}
-    \leanok
     \uses{lem:al_amp_unitary_complement, lem:al_amp_continuity_product}
     Let $X,J\subseteq V$ be disjoint, let $U$ be a unitary on
     $\mathcal H_{V\setminus(X\cup J)}$, and let $\varphi,\eta\in\mathcal H$
@@ -107,9 +101,6 @@ Ancillary systems are included by enlarging $V$.
 
 \begin{lemma}[Polynomial decay of the amplified information]
     \label{thm:al_amp_entropy_comparison_scale}
-    \lean{FiniteProduct.mutualInformation_le_rpow_of_unitary_sub_le,
-        FiniteProduct.mutualInformation_le_inv_pow_of_unitary_sub_le}
-    \leanok
     \uses{thm:al_amp_entropy_comparison}
     In the setting of Lemma~\ref{thm:al_amp_entropy_comparison}, let
     $n\ge1$ be an integer and suppose that $\delta\le C_1n^{-K/2}$ and

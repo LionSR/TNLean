@@ -54,7 +54,6 @@ import TNLean.Algebra.EuclideanExtendByZero
 import TNLean.Algebra.EuclideanFiberwiseMap
 import TNLean.Algebra.EuclideanFiberwiseProjection
 import TNLean.Algebra.EventuallyConstantCycleWeights
-import TNLean.Algebra.ExpConjugation
 import TNLean.Algebra.ExpMulSubMonotone
 import TNLean.Algebra.ExpectationOverlap
 import TNLean.Algebra.ExplicitThresholds
@@ -106,7 +105,6 @@ import TNLean.Algebra.KleinCocycleCompleteness
 import TNLean.Algebra.KleinCocyclePhase
 import TNLean.Algebra.KleinCocycleTable
 import TNLean.Algebra.KrausSpanRank
-import TNLean.Algebra.KroneckerLeastEigenvalue
 import TNLean.Algebra.KroneckerLocalSection
 import TNLean.Algebra.KroneckerPathLifting
 import TNLean.Algebra.LSymbol
@@ -269,7 +267,6 @@ import TNLean.Algebra.UnitaryMulVecInner
 import TNLean.Algebra.UnitaryRepresentationAlgebra
 import TNLean.Algebra.UnitaryRepresentationBlocks
 import TNLean.Algebra.UnitaryVectorSwap
-import TNLean.Algebra.WeightedLowRestriction
 import TNLean.Algebra.WordAlgebra
 import TNLean.Algebra.WordAlgebraNilpotent
 import TNLean.Algebra.ZMod2Representation

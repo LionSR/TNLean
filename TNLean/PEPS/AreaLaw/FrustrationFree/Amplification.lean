@@ -238,8 +238,8 @@ theorem frustrationFreeAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ 
   intro n hn2 hnN Λ h Ω hff A T hcard hXcut hYcut hScut hI
   have hh := hff.isHermitian
   have hhJ := hff.norm_term_le hJ.le
-  have hgap := hff.isGapped hΔ
-  have hspan := hff.groundSpace_eq hΔ
+  have hgap := hff.isGapped
+  have hspan := hff.groundSpace_eq
   have hΩ := hff.norm_eq_one
   set C := frustrationFreeAmplificationConstant q R J Δ C₀ M with hCdef
   have hcolr := fun r hr ↦ graphNeighborhood_collar_subset_of_threshold_le C

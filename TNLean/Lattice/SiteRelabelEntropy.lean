@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Entropy.FiniteProduct
 import QICLean.Analysis.EntropyDecomposition
+import QICLean.Entropy.SumSitesProduct
 
 /-!
 # Regional entropies after relabelling sites and adjoining systems
@@ -26,13 +27,14 @@ of `A`.
 ## Main definitions
 
 * `FiniteProduct.relabelSites`: a vector moved along a bijection of the sites.
-* `FiniteProduct.sumSitesProduct`: the product vector `f ⊗ g` on the sites `A ⊕ B`.
+
+The product vector `f ⊗ g` on the sites `A ⊕ B` and its entropies are QICLean's
+`FiniteProduct.sumSitesProduct`, `FiniteProduct.entropy_sumSitesProduct` and the two
+mutual-information statements, in `QICLean/Entropy/SumSitesProduct.lean`.
 
 ## Main statements
 
 * `FiniteProduct.entropy_relabelSites`, `FiniteProduct.mutualInformation_relabelSites`.
-* `FiniteProduct.entropy_sumSitesProduct`, `FiniteProduct.mutualInformation_sumSitesProduct_inl`,
-  `FiniteProduct.mutualInformation_sumSitesProduct_inr_inl`.
 
 ## References
 
@@ -123,124 +125,5 @@ theorem mutualInformation_relabelSites (σ : V ≃ W) (ψ : EuclideanSpace ℂ (
 
 end Relabel
 
-section Sum
-
-variable {A B : Type*} [Fintype A] [DecidableEq A] [Fintype B] [DecidableEq B]
-
-/-- The product vector `f ⊗ g` on the sites `A ⊕ B`. -/
-noncomputable def sumSitesProduct (f : EuclideanSpace ℂ (A → F)) (g : EuclideanSpace ℂ (B → F)) :
-    EuclideanSpace ℂ (A ⊕ B → F) :=
-  WithLp.toLp 2 fun c => f (c ∘ Sum.inl) * g (c ∘ Sum.inr)
-
-/-- Configurations of a region `R ⊔ T` of `A ⊕ B` as pairs of configurations. -/
-def disjSumRegionEquiv (R : Finset A) (T : Finset B) :
-    Configuration (fun _ : A ⊕ B => F) (R.disjSum T) ≃
-      Configuration (fun _ : A => F) R × Configuration (fun _ : B => F) T :=
-  (Equiv.arrowCongr (Equiv.subtypeSum.trans (Equiv.sumCongr
-    (Equiv.subtypeEquivRight fun _ => Finset.inl_mem_disjSum)
-    (Equiv.subtypeEquivRight fun _ => Finset.inr_mem_disjSum))) (Equiv.refl F)).trans
-    (Equiv.sumArrowEquivProdArrow _ _ _)
-
-/-- Configurations of the complement of `R ⊔ T` as pairs of configurations. -/
-def disjSumComplEquiv (R : Finset A) (T : Finset B) :
-    Configuration (fun _ : A ⊕ B => F) (R.disjSum T)ᶜ ≃
-      Configuration (fun _ : A => F) Rᶜ × Configuration (fun _ : B => F) Tᶜ :=
-  (Equiv.arrowCongr (Equiv.subtypeSum.trans (Equiv.sumCongr
-    (Equiv.subtypeEquivRight fun _ => by simp)
-    (Equiv.subtypeEquivRight fun _ => by simp))) (Equiv.refl F)).trans
-    (Equiv.sumArrowEquivProdArrow _ _ _)
-
-omit [Fintype F] [DecidableEq F] in
-theorem splitEquiv_symm_comp_inl (R : Finset A) (T : Finset B)
-    (a : Configuration (fun _ : A ⊕ B => F) (R.disjSum T))
-    (d : Configuration (fun _ : A ⊕ B => F) (R.disjSum T)ᶜ) :
-    (splitEquiv (fun _ : A ⊕ B => F) (R.disjSum T)).symm (a, d) ∘ Sum.inl =
-      (splitEquiv (fun _ : A => F) R).symm
-        ((disjSumRegionEquiv R T a).1, (disjSumComplEquiv R T d).1) := by
-  funext x
-  by_cases hx : x ∈ R
-  · rw [Function.comp_apply, splitEquiv_symm_apply_of_mem _ _ _ _ _
-      (Finset.inl_mem_disjSum.mpr hx), splitEquiv_symm_apply_of_mem _ _ _ _ _ hx]
-    rfl
-  · rw [Function.comp_apply, splitEquiv_symm_apply_of_notMem _ _ _ _ _
-      (fun h => hx (Finset.inl_mem_disjSum.mp h)), splitEquiv_symm_apply_of_notMem _ _ _ _ _ hx]
-    rfl
-
-omit [Fintype F] [DecidableEq F] in
-theorem splitEquiv_symm_comp_inr (R : Finset A) (T : Finset B)
-    (a : Configuration (fun _ : A ⊕ B => F) (R.disjSum T))
-    (d : Configuration (fun _ : A ⊕ B => F) (R.disjSum T)ᶜ) :
-    (splitEquiv (fun _ : A ⊕ B => F) (R.disjSum T)).symm (a, d) ∘ Sum.inr =
-      (splitEquiv (fun _ : B => F) T).symm
-        ((disjSumRegionEquiv R T a).2, (disjSumComplEquiv R T d).2) := by
-  funext x
-  by_cases hx : x ∈ T
-  · rw [Function.comp_apply, splitEquiv_symm_apply_of_mem _ _ _ _ _
-      (Finset.inr_mem_disjSum.mpr hx), splitEquiv_symm_apply_of_mem _ _ _ _ _ hx]
-    rfl
-  · rw [Function.comp_apply, splitEquiv_symm_apply_of_notMem _ _ _ _ _
-      (fun h => hx (Finset.inr_mem_disjSum.mp h)), splitEquiv_symm_apply_of_notMem _ _ _ _ _ hx]
-    rfl
-
-omit [DecidableEq F] in
-/-- The reduced state of a product vector on `R ⊔ T` is the Kronecker product of the
-reduced states of the two factors. -/
-theorem reducedPure_sumSitesProduct (f : EuclideanSpace ℂ (A → F))
-    (g : EuclideanSpace ℂ (B → F)) (R : Finset A) (T : Finset B) :
-    reducedPure (fun _ : A ⊕ B => F) (sumSitesProduct f g) (R.disjSum T) =
-      (reducedPure (fun _ : A => F) f R ⊗ₖ reducedPure (fun _ : B => F) g T).submatrix
-        (disjSumRegionEquiv R T) (disjSumRegionEquiv R T) := by
-  ext a b
-  simp only [reducedPure, reducedMatrix_apply, submatrix_apply, kroneckerMap_apply,
-    vecMulVec_apply, Pi.star_apply, sumSitesProduct]
-  rw [← (disjSumComplEquiv R T).symm.sum_comp, Fintype.sum_prod_type, Finset.sum_mul_sum]
-  refine Finset.sum_congr rfl fun d₁ _ => Finset.sum_congr rfl fun d₂ _ => ?_
-  rw [splitEquiv_symm_comp_inl, splitEquiv_symm_comp_inl, splitEquiv_symm_comp_inr,
-    splitEquiv_symm_comp_inr]
-  simp only [Equiv.apply_symm_apply, star_mul]
-  ring
-
-/-- **Entropy of a region of a product vector.** For unit vectors `f` on the sites `A` and
-`g` on the sites `B`, the region `R ⊔ T` of `f ⊗ g` has entropy `S_f(R) + S_g(T)`. -/
-theorem entropy_sumSitesProduct {f : EuclideanSpace ℂ (A → F)} {g : EuclideanSpace ℂ (B → F)}
-    (hf : ‖f‖ = 1) (hg : ‖g‖ = 1) (R : Finset A) (T : Finset B) :
-    entropy (fun _ : A ⊕ B => F) (sumSitesProduct f g) (R.disjSum T) =
-      entropy (fun _ : A => F) f R + entropy (fun _ : B => F) g T := by
-  unfold entropy
-  have hR := reducedPure_posSemidef (fun _ : A => F) f R
-  have hT := reducedPure_posSemidef (fun _ : B => F) g T
-  rw [vonNeumannEntropy_congr (reducedPure_sumSitesProduct f g R T) _
-    (((hR.kronecker hT).submatrix _).isHermitian),
-    vonNeumannEntropy_submatrix_equiv _ _ (hR.kronecker hT).isHermitian]
-  exact vonNeumannEntropy_kronecker hR hT (trace_reducedPure _ f hf R)
-    (trace_reducedPure _ g hg T)
-
-/-- **Adjoining sites in a product state** does not change the mutual information of two
-regions of `A`. -/
-theorem mutualInformation_sumSitesProduct_inl {f : EuclideanSpace ℂ (A → F)}
-    {g : EuclideanSpace ℂ (B → F)} (hf : ‖f‖ = 1) (hg : ‖g‖ = 1) (R T : Finset A) :
-    mutualInformation (fun _ : A ⊕ B => F) (sumSitesProduct f g) (R.disjSum ∅)
-        (T.disjSum ∅) = mutualInformation (fun _ : A => F) f R T := by
-  have hunion : R.disjSum (∅ : Finset B) ∪ T.disjSum ∅ = (R ∪ T).disjSum ∅ := by
-    ext x
-    rcases x with x | x <;> simp
-  simp only [mutualInformation, hunion, entropy_sumSitesProduct hf hg, entropy_empty _ g hg,
-    add_zero]
-
-/-- **A region of the adjoined sites** has no mutual information with a region of `A` in a
-product vector. -/
-theorem mutualInformation_sumSitesProduct_inr_inl {f : EuclideanSpace ℂ (A → F)}
-    {g : EuclideanSpace ℂ (B → F)} (hf : ‖f‖ = 1) (hg : ‖g‖ = 1) (T : Finset B)
-    (R : Finset A) :
-    mutualInformation (fun _ : A ⊕ B => F) (sumSitesProduct f g) ((∅ : Finset A).disjSum T)
-        (R.disjSum ∅) = 0 := by
-  have hunion : (∅ : Finset A).disjSum T ∪ R.disjSum ∅ = R.disjSum T := by
-    ext x
-    rcases x with x | x <;> simp
-  simp only [mutualInformation, hunion, entropy_sumSitesProduct hf hg, entropy_empty _ g hg,
-    entropy_empty _ f hf]
-  ring
-
-end Sum
 
 end FiniteProduct

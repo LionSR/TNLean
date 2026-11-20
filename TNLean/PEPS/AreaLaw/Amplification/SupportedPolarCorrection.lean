@@ -7,7 +7,7 @@ import TNLean.PEPS.AreaLaw.Amplification.GoodRealizationUnitary
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Algebra.MatrixKroneckerContraction
-import TNLean.Lattice.SupportedUnitaryEntropy
+import QICLean.Entropy.MutualInformationPerturbation
 
 /-!
 # The local unitary of a good realization, on a set of sites
@@ -25,7 +25,7 @@ restoring operator `R₀` and the truncated product `L'` act on `S`, the unitary
   `eq:amplification-unitary-error`, acting on `S`.
 
 The entropy comparison for a unitary acting away from both regions,
-`TNLean.Lattice.mutualInformation_le_inv_pow_of_supported_unitary`, does not depend on the
+`FiniteProduct.mutualInformation_le_inv_pow_of_supported_unitary`, does not depend on the
 geometry of the sites and is stated in `TNLean.Lattice.SupportedUnitaryEntropy`.
 
 ## References

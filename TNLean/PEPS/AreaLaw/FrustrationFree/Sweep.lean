@@ -193,11 +193,11 @@ theorem sweepOp_pow_mulVec_self
   | succ t ih => rw [pow_succ, ← mulVec_mulVec, hff.sweepOp_mulVec_self, ih]
 
 /-- The quadratic form of the range projections dominates `(Δ / J) ‖v‖²` on `Ω^⊥`. -/
-theorem mul_norm_sq_le_re_inner_sum_termProj (hJ : 0 < J) {v : StateSpace Λ q}
+theorem mul_norm_sq_le_re_inner_sum_termProj (hJ : 0 < J) (hΔ : 0 < Δ) {v : StateSpace Λ q}
     (hv : ⟪Ω, v⟫_ℂ = 0) :
     Δ / J * ‖v‖ ^ 2 ≤
       RCLike.re ⟪v, clm (∑ X, hff.termProj X) v⟫_ℂ := by
-  have hle := Matrix.le_iff.mp (hff.smul_sub_le_sum_supportProj hJ)
+  have hle := Matrix.le_iff.mp (hff.smul_sub_le_sum_supportProj hJ hΔ)
   have h0 := (isPositive_toEuclideanLin_iff.mpr hle).re_inner_nonneg_right v
   have hP : toEuclideanLin (vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) v = 0 := by
     have : star (WithLp.ofLp Ω) ⬝ᵥ WithLp.ofLp v = 0 := by
@@ -274,7 +274,7 @@ theorem norm_sweepOp_pow_apply_le (hJ : 0 < J) (hΔ : 0 < Δ)
       Δ / J * ‖u‖ ^ 2 ≤ RCLike.re ⟪u, (∑ i ∈ Finset.range w.length, P i) u⟫_ℂ := by
     intro u hu
     rw [hsum]
-    exact hff.mul_norm_sq_le_re_inner_sum_termProj hJ hu
+    exact hff.mul_norm_sq_le_re_inner_sum_termProj hJ hΔ hu
   have key := ContinuousLinearMap.norm_pow_complementProd_le_of_gap hP hPΩ hdeg
     (div_nonneg hΔ.le hJ.le) hgap t hv
   rw [map_pow, hD]

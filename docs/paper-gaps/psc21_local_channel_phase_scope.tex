@@ -33,8 +33,8 @@ uniform bound. The model has no classical feedforward between separated
 sites. For this class, approximate conversion
 means $\lVert\Psi(\rho)-\sigma\rVert_1\le\varepsilon$, with protocol depth at
 most $T$.\footnote{Formal declaration:
-    \leanid{QuantumCircuit.IsApproxLocalChannelConversion} in
-    \doclink{TNLean/Circuit/Channel/ApproximateConversion}.}
+    \leanid{QuantumCircuit.IsApproxConversion} in
+    QICLean's \path{QICLean/Circuit/Model/Approximate}.}
 For Hermitian input operators, composition adds the depths and errors:
 \begin{align}
     \lVert\Psi_2(\Psi_1(\rho))-\tau\rVert_1
@@ -51,9 +51,9 @@ For families, the error tends to zero and the depth is eventually bounded
 by $C(1+\log(N+1))^p$, for a nonnegative constant $C$ and integer $p\ge0$.
 Mutual conversion is an equivalence relation on eventually Hermitian
 families, and in particular on families of density matrices.\footnote{Formal
-    declarations: \leanid{QuantumCircuit.IsAsymptoticLocalChannelConversion} and
-    \leanid{QuantumCircuit.IsLocalChannelPhaseEquivalent.equivalence} in
-    \doclink{TNLean/Circuit/Channel/AsymptoticConversion}.}
+    declarations: \leanid{QuantumCircuit.IsAsymptoticConversion} and
+    \leanid{QuantumCircuit.isPhaseEquivalent_equivalence} in
+    QICLean's \path{QICLean/Circuit/Model/Approximate}.}
 The shift in the logarithm only affects the bound at small system sizes.
 Finite compositions are already included: their depths add, and a finite sum
 of polylogarithmic bounds is polylogarithmic. No bound on the dimension of
