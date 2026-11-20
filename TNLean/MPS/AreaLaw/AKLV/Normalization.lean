@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.DisjointRegionalGround
+import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import TNLean.MPS.AreaLaw.AKLV.TwoBlockTruncation
 
 /-!
@@ -142,8 +142,9 @@ theorem exists_aklv_energy_normalization {L q a s : ℕ} (hq : 0 < q)
       Y ≤ (J.card : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :=
     Matrix.sum_posSemidef_and_le_card_of_positive_unit_terms J h
       (fun i _ ↦ h0 i) (fun i _ ↦ h1 i)
+  have : NeZero q := ⟨hq.ne'⟩
   obtain ⟨e, x, hxunit, hx, he, hclip⟩ :=
-    Matrix.exists_disjoint_regional_clipping_structure hq R A
+    ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q) R A
       (fun j ↦ (I j).card) hR hAs (fun j ↦ (hA j).1)
       (fun j ↦ (hA j).2) Y J.card hY.1 hY.2
   obtain ⟨_, _, _, _, _, _, E0, z, hzunit, hz, hElow, hE0, hE6⟩ :=

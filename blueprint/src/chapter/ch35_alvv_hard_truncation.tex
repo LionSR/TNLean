@@ -4,8 +4,8 @@
     \label{lem:alvv_single_region_residuals}
     \lean{TNLean.MPS.AreaLaw.ALVV.exists_single_region_hard_truncation_residuals}
     \leanok
-    \uses{def:chain_model,thm:disjoint_regional_clipping,
-        thm:five_region_original_bond_bounds,thm:consecutive_regional_truncation_low}
+    \uses{def:chain_model, thm:five_region_original_bond_bounds,
+        thm:consecutive_regional_truncation_low}
     Let $q\ge1$, let $0\le h_i\le I$ be nearest-neighbour terms on an
     $L$-site chain, and take $0\le l\le r\le L$.
     The three intervals ${\lbrack 0,l)}$, ${\lbrack l,r)}$ and ${\lbrack r,L)}$ determine their actual
@@ -36,8 +36,7 @@
     in~\cite{gap:alvv16_hard_truncation_windows}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:disjoint_regional_clipping,thm:five_region_original_bond_bounds,
-        thm:consecutive_regional_truncation_low,lem:canonical_spectral_span}
+    \uses{thm:five_region_original_bond_bounds, thm:consecutive_regional_truncation_low}
     Apply the five-region decomposition with cuts $l,l,r,r$ and remove the
     two empty regions. The disjoint regional minima give the common test
     vector. The crossing interaction is positive and bounded by $2I$,
@@ -80,7 +79,7 @@
     \cite{gap:alvv16_hard_truncation_windows}.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{lem:alvv_single_region_residuals,lem:canonical_spectral_span}
+    \uses{lem:alvv_single_region_residuals}
     The normalized minimum eigenvectors and positive lower certificates
     identify the actual ground energies with the last ordered eigenvalues.
     The derived inequality $F\le H$ gives the lower eigenvalue comparison;
@@ -93,101 +92,3 @@
 
 \section{One regional clipping on a lattice of bounded interactions}
 
-\begin{lemma}[Ordered spectra and the canonical spectral spans]
-    \label{lem:canonical_spectral_span}
-    \lean{Matrix.IsHermitian.eigenvalues₀_last_eq_minEigenvalue,
-        Matrix.IsHermitian.spectralSpanLE_eigenvectorBasis_eq}
-    \leanok
-    For a Hermitian matrix on a nonempty finite index set, the last eigenvalue
-    in decreasing order is the minimum eigenvalue. Reindexing an orthonormal
-    eigenbasis does not change its closed spectral span below any energy.
-\end{lemma}
-\begin{proof}\leanok
-    The decreasing order is antitone and attains the minimum; reindexing is a
-    bijection preserving the eigenvalue attached to each vector.
-\end{proof}
-
-\begin{lemma}[Restricted errors for a regional hard truncation on a lattice]
-    \label{lem:lattice_region_hard_truncation_residuals}
-    \lean{TNLean.Lattice.exists_region_hard_truncation_residuals}
-    \leanok
-    \uses{thm:disjoint_regional_clipping,thm:bounded_degree_imaginary_time,
-        thm:regional_truncation_low_from_conjugation,lem:canonical_spectral_span}
-    Let $V$ be a finite set of sites of local dimension $q\ge1$, and let
-    $k,g\ge1$. For $i$ in a finite set, let $0\le h_i\le\Id$ be supported on
-    $D_i\subseteq V$ with $|D_i|\le k$, and suppose every site lies in at most
-    $g$ of the sets $D_i$. For a region $\Lambda\subseteq V$ let $H_{\rm in}$
-    be the sum of the terms with $D_i\subseteq\Lambda$, $H_{\rm out}$ the sum
-    of the terms with $D_i\cap\Lambda=\emptyset$ and $D_i\not\subseteq\Lambda$,
-    and $Y$ the sum of the remaining $b$ terms. Thus
-    $\sum_ih_i=H_{\rm in}+H_{\rm out}+Y$ and $0\le Y\le b\Id$.
-
-    There exist the genuine minimum energies $e_{\rm in},e_{\rm out}\ge0$ of
-    $H_{\rm in}$ and $H_{\rm out}$ and one common unit vector attaining both.
-    Set $S=e_{\rm in}+e_{\rm out}$ and $H=\sum_ih_i-SI$. Its attained ground
-    energy $E$ belongs to $[0,b]$. For $\eta>0$ and $t\ge\eta+3b+1$, put
-    \begin{align}
-        F   & =\min(H_{\rm in},(e_{\rm in}+t)I)+H_{\rm out}+Y-SI,\notag \\
-        \xi & =4gk(b+1)\exp\Bigl(-\frac{t-\eta-3b-1}{2gk}\Bigr).\notag
-    \end{align}
-    Then $F\le H$, the attained ground energy $E'$ of $F$ belongs to $[0,b]$,
-    and, writing $T_M(c)$ for the closed spectral space of $M$ at energies at
-    most $c$,
-    \begin{align}
-        \|(H-F)|_{T_H(E+\eta)}\| & \le\xi,       &
-        \|(H-F)|_{T_F(E+\eta)}\| & \le\xi.\notag
-    \end{align}
-    This is the lattice truncation of
-    \cite[Theorem~2.6]{Arad2014Connecting}, quoted as
-    \cite[Definition~4.3 and Proposition~4.4(1)]{Arad2016RigorousRG}, with the
-    displayed sufficient cutoff and constants; the cutoff qualification is
-    recorded in~\cite{gap:alvv16_hard_truncation_windows}.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{thm:disjoint_regional_clipping,thm:bounded_degree_imaginary_time,
-        thm:regional_truncation_low_from_conjugation,lem:canonical_spectral_span}
-    The inner and outer sums act on the disjoint sets $\Lambda$ and its
-    complement, so the disjoint regional minima give the common vector, and
-    the crossing sum gives both ground energies in $[0,b]$. With $s=1/(2gk)$
-    and $u=\eta+3b+1$, Lemma~\ref{thm:bounded_degree_imaginary_time} bounds
-    the conjugation of $Y$ by $2b$. Apply
-    Lemma~\ref{thm:regional_truncation_low_from_conjugation} to the original
-    and the inner-clipped families with $\varepsilon=E+\eta$. The denominator
-    $u-\varepsilon-2b$ is at least one, since $E\le b$, and the resulting
-    coefficient is at most $\xi$.
-\end{proof}
-
-\begin{lemma}[Ordered energies and relative spectral spaces on a lattice]
-    \label{lem:lattice_region_hard_truncation_spectral_comparison}
-    \lean{TNLean.Lattice.exists_region_hard_truncation_spectral_comparison}
-    \leanok
-    \uses{lem:lattice_region_hard_truncation_residuals,lem:canonical_spectral_span}
-    In the setting of Lemma~\ref{lem:lattice_region_hard_truncation_residuals},
-    with $\eta>0$ and $t\ge\eta+3b+1$, number the eigenvalues of each matrix in
-    decreasing order. Whenever $\lambda_i(F)\le E+\eta$,
-    \begin{equation}
-        \lambda_i(F)\le\lambda_i(H)\le\lambda_i(F)+\xi,\notag
-    \end{equation}
-    and $E'\le E\le E'+\xi$. For any $\delta>0$, set
-    \begin{equation}
-        \eta'=\eta+\xi+2\xi
-        \sqrt{\frac{\lceil\eta/(2\xi)\rceil}{\delta}}.\notag
-    \end{equation}
-    The enlarged clipped space $T_F(E'+\eta')$ is $\delta$-close to
-    $T_H(E+\eta)$, and the enlarged original space $T_H(E+\eta')$ is
-    $\delta$-close to $T_F(E'+\eta)$. Arbitrary ground degeneracy is allowed.
-    For a nearest-neighbour chain $b\le2$, so the cutoff is $t\ge\eta+7$, as in
-    Lemma~\ref{lem:alvv_single_region_spectral_comparison}.
-    This is the sufficient-cutoff form of
-    \cite[Theorem~2.6]{Arad2014Connecting} and
-    \cite[Proposition~4.4 and Lemma~4.5]{Arad2016RigorousRG}, with the finite
-    window count corrected as in \cite{gap:alvv16_hard_truncation_windows}.
-\end{lemma}
-\begin{proof}\leanok
-    \uses{lem:lattice_region_hard_truncation_residuals,lem:canonical_spectral_span}
-    The normalized ground vectors identify $E,E'$ with the last ordered
-    eigenvalues. The inequality $F\le H$ gives the lower eigenvalue comparison,
-    and the error on the clipped low space its upper comparison. The two
-    relative spectral-window comparisons applied to both errors give the
-    closeness statements.
-\end{proof}

@@ -143,9 +143,11 @@ comparison treats the two copies as additional sites.
 
 \begin{definition}[Relabelled and product vectors on finite site sets]
     \label{def:al_amp_site_relabel}
-    \lean{FiniteProduct.relabelSites, FiniteProduct.regionRelabel,
-        FiniteProduct.complRelabel, FiniteProduct.sumSitesProduct,
-        FiniteProduct.disjSumRegionEquiv, FiniteProduct.disjSumComplEquiv}
+    \lean{FiniteProduct.relabelSites,
+        FiniteProduct.regionRelabel,
+        FiniteProduct.complRelabel,
+        FiniteProduct.sumSitesProduct,
+        FiniteProduct.disjSumEquiv}
     \leanok
     For a bijection $\sigma:A\to B$ between finite site sets with a common local
     alphabet, $(\sigma_*\psi)(c)=\psi(c\circ\sigma)$. For vectors $f$ on $A$
@@ -155,10 +157,11 @@ comparison treats the two copies as additional sites.
 \begin{lemma}[Regional entropies of relabelled and product vectors]
     \label{thm:al_amp_site_entropy}
     \lean{FiniteProduct.splitEquiv_symm_comp_relabel,
-        FiniteProduct.reducedPure_relabelSites, FiniteProduct.entropy_relabelSites,
+        FiniteProduct.reducedPure_relabelSites,
+        FiniteProduct.entropy_relabelSites,
         FiniteProduct.mutualInformation_relabelSites,
-        FiniteProduct.splitEquiv_symm_comp_inl, FiniteProduct.splitEquiv_symm_comp_inr,
-        FiniteProduct.reducedPure_sumSitesProduct, FiniteProduct.entropy_sumSitesProduct,
+        FiniteProduct.reducedPure_sumSitesProduct,
+        FiniteProduct.entropy_sumSitesProduct,
         FiniteProduct.mutualInformation_sumSitesProduct_inl,
         FiniteProduct.mutualInformation_sumSitesProduct_inr_inl}
     \leanok
@@ -231,7 +234,7 @@ comparison treats the two copies as additional sites.
     \lean{QuantumCircuit.embedOp_val_eq_kronecker_one_submatrix,
         QuantumCircuit.kronecker_one_submatrix_mem_supportedOperators,
         TNLean.PEPS.AreaLaw.exists_supported_unitary_of_good_realization,
-        TNLean.Lattice.mutualInformation_le_inv_pow_of_supported_unitary}
+        FiniteProduct.mutualInformation_le_inv_pow_of_supported_unitary}
     \leanok
     \uses{thm:area_law_amplification_unitary_error,thm:al_amp_entropy_comparison_scale}
     On a finite site set with local dimension $q$, suppose $R_0$ and $L'$ are

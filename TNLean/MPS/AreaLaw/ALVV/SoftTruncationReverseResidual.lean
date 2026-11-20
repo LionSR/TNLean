@@ -186,7 +186,7 @@ theorem exists_single_region_soft_truncation_residuals {L q l r : ℕ}
   change J.card ≤ 2 at hJ
   let hG := hGpos.isHermitian
   have : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
-  obtain ⟨mu, w, hGw, hw, hGlow⟩ := hG.exists_unit_eigenvector_le
+  obtain ⟨mu, w, hGw, hw, hGlow⟩ := exists_unit_eigenvector_minEigenvalue hG
   have hmu0 : 0 ≤ mu := hGpos.nonneg_of_normalized_eigenvector mu w hGw hw
   have hmuE : mu ≤ E := by
     have hpos : (H - (mu : ℂ) • 1).PosSemidef := by

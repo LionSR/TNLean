@@ -174,7 +174,11 @@ theorem sheetSwapOp_mulVec_comp_sumArrow {N : Type*} [Fintype N]
     funext v
     by_cases hv : v ∈ R <;>
       simp [sheetSwap, replicaSwap, replicaSwapFun, hv]
-  simp [FiniteProduct.relabelSites, FiniteProduct.sumSitesProduct, ← h₁, ← h₂]
+  simp only [FiniteProduct.relabelSites, FiniteProduct.sumSitesProduct, Function.comp_apply]
+  simp only [Equiv.trans_apply, Equiv.symm_apply_apply, Equiv.symm_symm]
+  change Ω.ofLp (sheetSwap q R (x ∘ Sum.inl, x ∘ Sum.inr)).1 *
+    Ω.ofLp (sheetSwap q R (x ∘ Sum.inl, x ∘ Sum.inr)).2 = _
+  rw [h₁, h₂]
   rfl
 
 /-- **The cores of the exchanged vector are uncorrelated.** In `F_R (Ω ⊗ Ω)` the core
@@ -206,7 +210,8 @@ theorem mutualInformation_relabelSites_replicaSwap_eq_zero {Ω : EuclideanSpace 
     rcases z with v | v <;> by_cases hv : v ∈ R <;>
       simp [replicaSwap, replicaSwapFun, hv, Finset.disjoint_right.mp hC₀]
   rw [hX, hJ]
-  exact FiniteProduct.mutualInformation_sumSitesProduct_inr_inl hΩ hΩ R₀ C₀
+  exact FiniteProduct.mutualInformation_sumSitesProduct_inr_inl (X := fun _ : V ⊕ V ↦ Fin q)
+    (f := Ω) (g := Ω) hΩ hΩ R₀ C₀
 
 end Replicas
 

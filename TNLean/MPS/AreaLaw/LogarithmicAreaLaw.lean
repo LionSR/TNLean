@@ -281,8 +281,9 @@ theorem _root_.ManyBody.ChainInteraction.regionEntropy_eq_zero_of_range_zero
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A : Finset (Fin L)) :
     Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω = 0 := by
-  refine regionEntropy_eq_zero_of_forall_subset_or_disjoint
-    h.mem hh hΔ hΩ hgap hspan A ?_
+  refine (ManyBody.regionEntropy_eq_entropy _ _).trans
+    (ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint (Φ := h) hh hΔ hΩ hgap
+      hspan (B := A) ?_)
   intro X
   have hcard := X.property.card_le
   grind [Finset.card_le_one_iff, Finset.disjoint_left]

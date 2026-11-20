@@ -87,7 +87,7 @@ theorem finiteProductEntropy_relabel (σ : V ≃ W) (q : ℕ)
       FiniteProduct.entropy (fun _ : V ↦ Fin q) Ω A := by
   have h := Entropy.regionEntropy_relabel (n := fun _ : V ↦ q) (n' := fun _ : W ↦ q)
     A (A.map σ.toEmbedding) σ (by simp) (fun _ ↦ Equiv.refl _) Ω
-  rw [Entropy.regionEntropy_eq_entropy, Entropy.regionEntropy_eq_entropy] at h
+  simp only [Entropy.regionEntropy, ManyBody.regionEntropy_eq_entropy] at h
   convert h using 2
   ext x
   rfl
