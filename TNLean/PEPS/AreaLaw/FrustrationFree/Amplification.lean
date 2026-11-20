@@ -46,7 +46,7 @@ comparison of the general proof give `eq:far`.
   continuity steps (lines 330–364, 501–561) are reused.
 -/
 
-open Matrix ManyBody.LightCone TNLean.Lattice
+open Matrix TNLean.Lattice
 open ManyBody (PlaneInteraction Config)
 open scoped InnerProductSpace Kronecker Matrix.Norms.L2Operator
 
@@ -338,7 +338,8 @@ theorem ffAmplificationBound {q R : ℕ} (hq : 1 ≤ q) {J Δ C₀ : ℝ} (hJ : 
   obtain ⟨PB, AB, hPB, hBsum⟩ :=
     restoringTransport_restoringColumnGlobal_eq_sum Ω X Y hXY E p blank blank Q Tq
   have hBsum : Bp = ∑ i ∈ E ×ˢ Finset.univ, PB i ⊗ₖ AB i := hBsum
-  have hBblocks : BlocksSupportedOn (X := fun _ : Site Λ ↦ Fin q) Bp S₀ := by
+  have hBblocks : ∀ a b, Bp.submatrix (fun σ ↦ (σ, a)) (fun τ ↦ (τ, b)) ∈
+      ManyBody.supportedOperators (fun _ : Site Λ ↦ Fin q) S₀ := by
     intro x y
     have h := block_mem_supportedOperators_of_eq_sum (E ×ˢ Finset.univ) hPB AB x y
     rw [← hBsum, hXYS] at h
