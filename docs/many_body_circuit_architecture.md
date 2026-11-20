@@ -268,14 +268,14 @@ not built on that pattern.
 
 ## What is wrong now
 
-Counts are from the sixth pin move (the approximate-conversion, imaginary-time,
-truncation and entropy modules moved to QICLean deleted), re-measured with the
+Counts are from the seventh pin move (the blocking and port-output modules of
+`TNLean/Circuit` moved to QICLean deleted), re-measured with the
 script of the first audit (TNLean `3d3507f`, QICLean
 `c62f178`); where a figure of that audit is kept for comparison, it says so.
 
 ### The directory holds two libraries
 
-`TNLean/Circuit` has 105 modules and 20,544 lines (125 and 25,197 at the
+`TNLean/Circuit` has 99 modules and 18,974 lines (125 and 25,197 at the
 first audit). More than twenty root-level modules of `TNLean/Circuit` (`SiteEmbedding*`,
 `SiteExpectation*`, `Supported*`, `EntropySupport`, `ProductVector`,
 `ExpectationBounds`, ...) and all of `Circuit/LiebRobinson` mention no layer,
@@ -643,6 +643,16 @@ Wave 3, two tracks that share no file:
   lines of the chain trace norm; the approximate and asymptotic conversion
   predicates are QICLean's `QICLean/Circuit/Model/Approximate`. The
   ring-geometry group is now 6 modules and 1,746 lines.
+
+  Pin move 7 (LionSR/QICLean#1155, #1157) deletes the blocking group
+  (`Channel/{SiteBlocking, RegroupedProtocol}`) and four port modules
+  (`PortSimulation`, `PhysicalPortPureOutput`, `BoundedPortPureOutput`,
+  `BoundedPortApproximateOutput`), 1,565 lines. The four physical-port dilation
+  modules (`PhysicalPort{UnitaryCompilation, LocalDilation, Dilation,
+  EnvironmentComposition}`) wait for the dilation with local environments
+  (LionSR/QICLean#1162); through `PhysicalPortIO`, `PhysicalPortEmbedding` and
+  `RegisterEnvironment` they keep 23 more port and register modules (3,661
+  lines), which go with them.
 
   The directory was not smaller after pin move 5 for two reasons. The ring
   geometry (`ringBall`, ring separation, the ring as a circuit geometry) was
