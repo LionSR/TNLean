@@ -68,10 +68,11 @@ contribution vanishes after its factor, so the bound has `d²` in place of `(d+1
 
 Module `FrustrationFree/RangeProjection.lean`, on matrices.
 
-4. `rangeProj A := cfc (fun x ↦ x * x⁻¹) A`. For a positive semidefinite `A ≤ J • 1`:
-   `IsStarProjection`, `rangeProj A *ᵥ Ω = 0` when `A *ᵥ Ω = 0`, `A ≤ J • rangeProj A`, and
-   `rangeProj A ∈ supportedOperators X D` when `A` is (by `ManyBody.cfc_mem_supportedOperators`).
-5. `sum_rangeProj_ge`: under `eq:model`, `∑ Π_X ≥ (Δ/J) (1 - P)`.
+4. QICLean's support projection `Π_A = hA.supportProj` of a positive semidefinite `A`
+   (`QICLean/Analysis/SupportProjectionOrder.lean`, `QICLean/Algebra/PosSemidefSupport.lean`)
+   is an orthogonal projection annihilating `ker A`. New: `A ≤ J • Π_A` when `A ≤ J`, and
+   `Π_A ∈ supportedOperators X D` when `A` is (by `ManyBody.cfc_mem_supportedOperators`).
+5. `sum_supportProj_ge`: under `eq:model`, `∑ Π_X ≥ (Δ/J) (1 - P)`.
 
 ## Step 2: exact light cone, `eq:cone`
 
