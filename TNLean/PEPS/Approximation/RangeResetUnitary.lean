@@ -127,7 +127,7 @@ theorem reset_localized_filter (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ :
     (E₀ : ℝ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A C : Finset (Site Λ)) (hAC : Disjoint A C) (b : ℝ) (hb : 0 ≤ b)
-    (hI : FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b) :
+    (hI : ManyBody.regionMutualInformation Ω A C ≤ b) :
     let p := sitePairConfigurationEquiv (Site Λ) q q
     let F := reindex p p (sheetSwapOp q A)
     let ψ : Configuration Λ (q * q) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
@@ -226,7 +226,7 @@ theorem reset_unitary (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ r : ℝ} (hΔ : 0 < Δ) 
     (E₀ : ℝ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A C : Finset (Site Λ)) (hAC : Disjoint A C) (b : ℝ) (hb : 0 ≤ b)
-    (hI : FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b) :
+    (hI : ManyBody.regionMutualInformation Ω A C ≤ b) :
     let p := sitePairConfigurationEquiv (Site Λ) q q
     let F := reindex p p (sheetSwapOp q A)
     let ψ : Configuration Λ (q * q) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2

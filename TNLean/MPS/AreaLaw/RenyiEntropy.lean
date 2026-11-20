@@ -58,8 +58,8 @@ private theorem _root_.ManyBody.ChainInteraction.log_surprisalMoment_region_le
     (X : Finset (Fin L)) {u : ℝ}
     (hu : |u| ≤ Entropy.tailRadius (J / Δ) (cutLogBudget L q R X)) :
     Real.log (Entropy.surprisalMoment
-      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) X Ω).eigenvalues u) ≤
-    u * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω +
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) X Ω).eigenvalues u) ≤
+    u * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω X +
       512 * Real.exp 1 * (J / Δ) * cutLogBudget L q R X * u ^ 2 := by
   have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
     ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
@@ -67,7 +67,7 @@ private theorem _root_.ManyBody.ChainInteraction.log_surprisalMoment_region_le
       (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan
   exact Entropy.log_surprisalMoment_cut_le (n := fun _ : Fin L ↦ q) (B := X)
     h.mem hh hJ hhJ hΩ hΔ heig hgap rfl
-    (Entropy.regionState_isHermitian X Ω) hu
+    (ManyBody.regionState_isHermitian X Ω) hu
 
 /-- Increasing the cut budget decreases the admissible moment radius.
 Source: the one-dimensional note, `part1_arealaw.tex`, `eq:theta`, lines 152–155. -/
@@ -97,9 +97,9 @@ theorem _root_.ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (l r : ℕ) :
     let X := interval L l r
-    let p := (Entropy.regionState_isHermitian
-      (n := fun _ : Fin L ↦ q) X Ω).eigenvalues
-    let S := Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω
+    let p := (ManyBody.regionState_isHermitian
+      (X := fun _ ↦ Fin q) X Ω).eigenvalues
+    let S := ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω X
     let u₀ := Entropy.tailRadius (J / Δ) (chainBudgetConst q R)
     let H : ℝ → ℝ := fun α ↦
       if α = 1 then S
@@ -127,24 +127,24 @@ theorem _root_.ManyBody.ChainInteraction.near_one_renyi_entropy_interval_bounds
   · simp only [ite_true, sub_self, mul_zero, add_zero, le_refl, abs_zero, true_and, and_true]
     positivity
   · simp only [ite_eq_right hαlt.ne]
-    set p := (Entropy.regionState_isHermitian
-      (n := fun _ : Fin L ↦ q) (interval L l r) Ω).eigenvalues
-    set S := Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω
+    set p := (ManyBody.regionState_isHermitian
+      (X := fun _ ↦ Fin q) (interval L l r) Ω).eigenvalues
+    set S := ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L l r)
     set u := 1 - α
     have hu0 : 0 < u := sub_pos.mpr hαlt
     have hu : u ≤ Entropy.tailRadius (J / Δ) (chainBudgetConst q R) := by
       linarith only [hαlo]
     have hp : ∀ i, 0 ≤ p i :=
-      (Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q)
+      (ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q)
         (interval L l r) Ω).eigenvalues_nonneg
     have hpSum : ∑ i, p i = 1 :=
       Entropy.sum_eigenvalues_partialTraceRight_eq_one
-        (Ψ := Entropy.cutVector (interval L l r) Ω)
+        (Ψ := ManyBody.cutVector (interval L l r) Ω)
         (by rw [Entropy.norm_cutVector, hΩ]) rfl
-        (Entropy.regionState_isHermitian (interval L l r) Ω)
+        (ManyBody.regionState_isHermitian (interval L l r) Ω)
     have hlo : S ≤ Real.log (Entropy.surprisalMoment p u) / u :=
       (le_div_iff₀ hu0).mpr (by
-        simpa only [S, Entropy.regionEntropy, ManyBody.regionEntropy, vonNeumannEntropy, p,
+        simpa only [S, ManyBody.regionEntropy, ManyBody.regionEntropy, vonNeumannEntropy, p,
           mul_comm] using
           mul_entropy_le_log_surprisalMoment hp hpSum u)
     have hcut := cutLogBudget_interval_le (L := L) (R := R) hq l r

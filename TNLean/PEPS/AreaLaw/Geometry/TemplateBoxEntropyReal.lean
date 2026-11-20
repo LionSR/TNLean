@@ -44,26 +44,26 @@ theorem template_entropy_bounds_of_real_safe_box
     (hbox : ∀ Q : IntRect,
       (∀ x ∈ Q.toFinset, ∀ z ∈ boundaryEndpoints Λ A,
         D₀ * (Q.size : ℝ) < (supDist x z : ℝ)) →
-      regionalEntropy Λ q Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e)) :
+      ManyBody.regionEntropy Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e)) :
     ∀ {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀),
       24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ A) →
-      (regionalEntropy Λ q Ω (A.filter fun x ↦ x.1 ∈ T.points) ≤
+      (ManyBody.regionEntropy Ω (A.filter fun x ↦ x.1 ∈ T.points) ≤
         max C 0 * (18 + 4 / ((2 : ℝ) ^ e - 1)) * n * (s₀ : ℝ) ^ e) ∧
       (∀ j L : ℕ, 1 ≤ L → j ≤ L → L ≤ s₀ →
-        regionalEntropy Λ q Ω
+        ManyBody.regionEntropy Ω
           (A.filter fun x ↦ x.1 ∈ ambientDilation T.points j \ T.points) ≤
           max C 0 * (2 + 14 / ((2 : ℝ) ^ e - 1)) * n * (L : ℝ) ^ e) ∧
       (∀ j L : ℕ, 1 ≤ j → j ≤ L → L ≤ s₀ →
         ∀ Y : Finset (ℤ × ℤ),
           Y ⊆ ambientDilation T.points j \ ambientDilation T.points (j - 1) →
-          regionalEntropy Λ q Ω
+          ManyBody.regionEntropy Ω
             (A.filter fun x ↦ x.1 ∈ (ambientDilation T.points (j - 1) \ T.points) ∪ Y) ≤
             max C 0 * (2 + 14 / ((2 : ℝ) ^ e - 1)) * n * (L : ℝ) ^ e + n * Real.log q) := by
   classical
   intro Ctpl n s₀ T hC hsep
   have hcover (S : Finset (ℤ × ℤ)) (j K : ℕ) (hj : j ≤ s₀)
       (hcap : 2 ^ K ≤ s₀) (hS : S ⊆ ambientDilation T.points j) :
-      regionalEntropy Λ q Ω (A.filter fun x ↦ x.1 ∈ S) ≤
+      ManyBody.regionEntropy Ω (A.filter fun x ↦ x.1 ∈ S) ≤
         max C 0 * (cappedDyadicPartition S K).sum
           (fun c ↦ ((2 : ℝ) ^ c.1) ^ (1 + e)) := by
     refine regionalEntropy_filter_le_weighted_cover_of_forall Λ q Ω hΩ A S K e
@@ -83,7 +83,7 @@ theorem template_entropy_bounds_of_real_safe_box
       (mul_le_mul_of_nonneg_right (le_max_left C 0)
         (Real.rpow_nonneg (Nat.cast_nonneg _) _))
   have hshell (j L : ℕ) (hLpos : 1 ≤ L) (hj : j ≤ L) (hL : L ≤ s₀) :
-      regionalEntropy Λ q Ω
+      ManyBody.regionEntropy Ω
         (A.filter fun x ↦ x.1 ∈ ambientDilation T.points j \ T.points) ≤
         max C 0 * (2 + 14 / ((2 : ℝ) ^ e - 1)) * n * (L : ℝ) ^ e := by
     refine (hcover (ambientDilation T.points j \ T.points) j (Nat.log 2 L)

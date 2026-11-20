@@ -162,7 +162,7 @@ theorem exists_calibrated_uniform_physical_soft_improving_family
     let Family := fun (ell m k : ℕ) (tau t : ℝ) (N a b : ℕ)
       (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ N)
       (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-      (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+      (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval (N + 1) i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) ↦
   (by
@@ -192,12 +192,12 @@ theorem exists_calibrated_uniform_physical_soft_improving_family
         (Nat.succ_le_succ ((Nat.add_le_add_left
           (Nat.le_mul_of_pos_left ell (by decide : 0 < 2)) b).trans hb))
       let beta := fun _ : Fin (N + 1) ↦ Fin q
-      let midConfig := FiniteProduct.Configuration beta J
-      let extConfig := FiniteProduct.Configuration beta Jᶜ
+      let midConfig := ManyBody.RegionConfig beta J
+      let extConfig := ManyBody.RegionConfig beta Jᶜ
       let HM := EuclideanSpace ℂ midConfig
       let HE := EuclideanSpace ℂ extConfig
       let HT := HM ⊗[ℂ] HE
-      let split := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
       let Phi := ((EuclideanSpace.basisFun (extConfig) ℂ).tensorProduct
         (EuclideanSpace.basisFun (midConfig) ℂ)).repr
@@ -302,7 +302,7 @@ theorem exists_calibrated_uniform_physical_soft_improving_family
           (max 1 B) ^ (2 * k) ≤ Cpoly * (N + 1) ^ ppoly ∧
           ∀ (a b : ℕ) (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ N)
             (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-            (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+            (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
               (h i) (interval (N + 1) i.val (i.val + 2)))
             (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1),
             Family ell m k tau t N a b hab hb h hs h0 h1)) := by
@@ -321,7 +321,7 @@ theorem exists_calibrated_uniform_physical_soft_improving_family
         (t / m) * (T / t) ^ m) ≤ tau * g / 1000000)
       (N a b : ℕ) (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ N)
       (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-      (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+      (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval (N + 1) i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
       Family ell m k tau t N a b hab hb h hs h0 h1 := by

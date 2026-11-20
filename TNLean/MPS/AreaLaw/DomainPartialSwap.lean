@@ -134,7 +134,7 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_term_difference_spec
       (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
         else h.term X ⊗ₖ (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ))
     let K := F * T * Fᴴ - T
-    Entropy.IsSupportedOn (n := fun _ ↦ q * q) K X.1 ∧ K.IsHermitian ∧ ‖K‖ ≤ 2 * J := by
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin (q * q)) K X.1 ∧ K.IsHermitian ∧ ‖K‖ ≤ 2 * J := by
   have hs :=
     (h.toChain).partialSwap_term_difference_spec (h.isHermitian_toChain_term hh)
         (h.norm_toChain_term_le hhJ (norm_bound_nonneg_of_support h hhJ X))
@@ -152,7 +152,7 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing
     let T (X : DomainSupport Λ R) (b : Bool) := Matrix.reindex e e
       (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
         else h.term X ⊗ₖ (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ))
-    let C := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
+    let C := ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
     ((h.swappedDoubled D).hamiltonian - h.doubled.hamiltonian =
       ∑ X ∈ C, ∑ b : Bool, (F * T X b * Fᴴ - T X b)) ∧
       C.card * 2 ≤ chainCrossConst R * Λ.card := by
@@ -162,13 +162,13 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing
   let T (X : DomainSupport Λ R) (b : Bool) := Matrix.reindex e e
     (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ))
-  let C := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
+  let C := ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
   let δ : Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ →ₗ[ℂ]
       Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ :=
     LinearMap.mulLeftRight ℂ (F, Fᴴ) - LinearMap.id
   have hcancel (X : DomainSupport Λ R) (hX : X ∉ C) : δ (h.doubled.term X) = 0 := by
     have hside : X.1 ⊆ D ∨ Disjoint X.1 D := by
-      simp only [C, Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
+      simp only [C, ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
       simp only [Finset.disjoint_left]
       grind
     change F * Matrix.reindex e e (doubledHamiltonian (h.term X)) * Fᴴ -

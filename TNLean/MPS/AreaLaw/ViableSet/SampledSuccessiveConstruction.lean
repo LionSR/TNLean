@@ -68,7 +68,7 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p₀ D r₀ : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+      (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
         (interval L j (j + 2)))
       (_ : ∀ j, (h j).PosSemidef) (_ : ∀ j, h j ≤ 1)
       (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -80,7 +80,7 @@ theorem exists_sampled_viable_successor_polynomial_explicit_energy_degree
         (A : Fin N → LeftBlockMatrix L q i) (B' : Fin N → RightBlockMatrix L q i),
         ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
           lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
-        Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i)
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
           (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         IsViableMPS Γ (C * L ^ (sampledProjectorTotalDegree q a Δ B + p₀))
           (D * L ^ (sampledProjectorTotalDegree q a Δ B + r₀))
@@ -176,7 +176,7 @@ theorem exists_sampled_viable_successor_polynomial {q : ℕ} (hq : 2 ≤ q) (a :
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p D r : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+      (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
         (interval L j (j + 2)))
       (_ : ∀ j, (h j).PosSemidef) (_ : ∀ j, h j ≤ 1)
       (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -188,7 +188,7 @@ theorem exists_sampled_viable_successor_polynomial {q : ℕ} (hq : 2 ≤ q) (a :
         (A : Fin N → LeftBlockMatrix L q i) (B' : Fin N → RightBlockMatrix L q i),
         ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
           lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
-        Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i)
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
           (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         IsViableMPS Γ (C * L ^ p) (D * L ^ r) (lvvViabilityPrecision Δ η / (L : ℝ) ^ a)
           (successiveStep hiL (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
@@ -213,7 +213,7 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p₀ D r₀ : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+      (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
         (interval L j (j + 2)))
       (_ : ∀ j, (h j).PosSemidef) (_ : ∀ j, h j ≤ 1)
       (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -227,7 +227,7 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
             (B' : Fin N → RightBlockMatrix L q (i + 1)),
             ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
               lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
-            Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (i + 1))
+            ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
               (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
             S (i + 1) = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
               Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
@@ -264,7 +264,7 @@ theorem exists_sampled_successive_viable_sets_polynomial_explicit_energy_degree
         (B' : Fin N → RightBlockMatrix L q (i + 1)),
         ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
           lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
-        Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (i + 1))
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
           (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         T = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L)) Finset.univ A
           (ManyBody.ChainInteraction.sizeTrimmingSelection
@@ -300,7 +300,7 @@ theorem exists_sampled_successive_viable_sets_polynomial_total_cardinality
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p₀ D r₀ : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
         (interval L j (j + 2))) →
       (∀ j, (h j).PosSemidef) → (∀ j, h j ≤ 1) →
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -353,7 +353,7 @@ theorem exists_sampled_successive_viable_sets_polynomial {q : ℕ} (hq : 2 ≤ q
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p D r : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ (L : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+      (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
         (interval L j (j + 2)))
       (_ : ∀ j, (h j).PosSemidef) (_ : ∀ j, h j ≤ 1)
       (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -367,7 +367,7 @@ theorem exists_sampled_successive_viable_sets_polynomial {q : ℕ} (hq : 2 ≤ q
             (B' : Fin N → RightBlockMatrix L q (i + 1)),
             ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ <
               lvvViabilityPrecision Δ η / (L : ℝ) ^ a / 4 ∧
-            Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (i + 1))
+            ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
               (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
             S (i + 1) = successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
               Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
@@ -390,7 +390,7 @@ theorem exists_sampled_groundState_openMPS_polynomial_explicit_energy_degree
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p₀ : ℕ, 1 ≤ C ∧ ∀ (L : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
         (interval L j (j + 2))) →
       (∀ j, (h j).PosSemidef) → (∀ j, h j ≤ 1) →
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -432,7 +432,7 @@ theorem exists_sampled_groundState_openMPS_polynomial {q : ℕ} (hq : 2 ≤ q)
     (a : ℕ) (ha : 1 ≤ a) {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p : ℕ, 1 ≤ C ∧ ∀ (L : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
         (interval L j (j + 2))) →
       (∀ j, (h j).PosSemidef) → (∀ j, h j ≤ 1) →
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),

@@ -79,11 +79,11 @@ theorem IsRangeSquareGroundState.squareCellInformationBound {q R : ℕ} (hq : 1 
 square, for the corresponding sets of sites. -/
 theorem mutualInformation_squareAreaLawState {q L : ℕ} (Ω : StateSpace L q)
     (X Y : Finset (SquareLatticeVertex L L)) :
-    FiniteProduct.mutualInformation (fun _ : Site (rectangularDomain L L) ↦ Fin q)
+    ManyBody.regionMutualInformation
         (AreaLaw.rectangleAreaLawState Ω) (X.map (rectangleSiteEquiv L L).toEmbedding)
         (Y.map (rectangleSiteEquiv L L).toEmbedding) =
-      FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω X Y := by
-  simp only [FiniteProduct.mutualInformation, AreaLaw.rectangleAreaLawState,
+      ManyBody.regionMutualInformation Ω X Y := by
+  simp only [ManyBody.regionMutualInformation, AreaLaw.rectangleAreaLawState,
     show rectangleConfigurationEquiv L L q =
       (rectangleSiteEquiv L L).arrowCongr (Equiv.refl (Fin q)) from rfl,
     ← Finset.map_union, finiteProductEntropy_relabel]

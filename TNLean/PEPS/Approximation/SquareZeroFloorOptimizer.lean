@@ -76,12 +76,12 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
         i = j)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) (ha1 : ∀ j, a j ≤ 1) :
     ∃ K : (j : Fin m) → Matrix
-        (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j))
-        (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j)) ℂ,
+        (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j))
+        (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j)) ℂ,
       (∀ j : Fin m, Entropy.IsFeasibleFilter 0 (a j) (K j)) ∧
       (∀ K' : (j : Fin m) → Matrix
-          (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j))
-          (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (D j)) ℂ,
+          (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j))
+          (ManyBody.RegionConfig (fun _ ↦ Fin q) (D j)) ℂ,
         (∀ j : Fin m, Entropy.IsFeasibleFilter 0 (a j) (K' j)) →
         ‖toEuclideanLin (Entropy.liftProd (Entropy.chainList D K' fun _ ↦ True))
             (AreaLaw.rectangleAreaLawState Ω)‖ ≤
@@ -110,7 +110,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
     intro i j hj k hk
     have hc (l : Fin m)
         (hl : l ∈ Entropy.splitIndices (AreaLaw.nearestNeighborSupport i) D m) :
-        i ∈ Entropy.crossingTerms AreaLaw.nearestNeighborSupport (D l) :=
+        i ∈ ManyBody.crossingTerms AreaLaw.nearestNeighborSupport (D l) :=
       by
         simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and]
         exact Entropy.mem_splitIndices.mp hl
@@ -129,13 +129,13 @@ theorem _root_.ManyBody.SquareInteraction.exists_zero_floor_maximizer_energy_fid
       D hD a ha ha1 hΩ0 T AreaLaw.nearestNeighborSupport hT hTH hTJ hsplit heig
   have hbudget :
       (∑ j : Fin m, a j ^ 2 *
-        ∑ i ∈ Entropy.crossingTerms AreaLaw.nearestNeighborSupport (D j),
-          (Fintype.card (Entropy.InnerConfig
+        ∑ i ∈ ManyBody.crossingTerms AreaLaw.nearestNeighborSupport (D j),
+          (Fintype.card (ManyBody.InnerConfig
             (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
             (D j) (AreaLaw.nearestNeighborSupport i)) : ℝ) ^ 2 * J) =
         (q : ℝ) ^ 2 * J * ∑ j : Fin m,
           a j ^ 2 * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
-    simp_rw [Entropy.card_innerConfig]
+    simp_rw [ManyBody.card_innerConfig]
     simpa only [Finset.prod_const, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe] using
       AreaLaw.nearestNeighbor_crossing_budget q J (fun j : Fin m ↦ D j) a
   rw [hsum, hbudget] at henergy

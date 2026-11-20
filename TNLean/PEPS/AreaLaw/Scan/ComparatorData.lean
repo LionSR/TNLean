@@ -216,11 +216,11 @@ theorem exists_prevector_labels
     (H : Matrix ((v : ι) → β v) ((v : ι) → β v) ℂ)
     (Ω : EuclideanSpace ℂ ((v : ι) → β v)) (E₀ : ℝ)
     (hΩ : ‖Ω‖ = 1) (hE : H *ᵥ Ω.ofLp = (E₀ : ℂ) • Ω.ofLp)
-    (X : Finset ι) (E : Finset (FiniteProduct.Configuration β X))
-    (hz : 0 < (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.spectralRestrictionMass
+    (X : Finset ι) (E : Finset (ManyBody.RegionConfig β X))
+    (hz : 0 < (ManyBody.regionState_posSemidef X Ω).isHermitian.spectralRestrictionMass
       E) :
-    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (FiniteProduct.splitEquiv β X) Ω
-    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.splitEquiv β X) Ω
+    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
       (∀ k : ℕ, 0 < k →
@@ -234,10 +234,10 @@ theorem exists_prevector_labels
       (∀ᶠ k : ℕ in atTop,
         (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
           ‖WithLp.toLp 2
-            (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-              (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+            (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+              (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
               labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-              (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+              (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
                 (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) ∧
       Asymptotics.IsLittleO atTop
         (fun k : ℕ ↦ Real.log (ell k).dim - (k : ℝ) *
@@ -247,8 +247,8 @@ theorem exists_prevector_labels
   intro ΩX ψ
   have hψ : ‖WithLp.toLp 2 ψ‖ = 1 :=
     ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      ((Equiv.prodComm E (FiniteProduct.Configuration β Xᶜ)).trans
-        ((Equiv.refl (FiniteProduct.Configuration β Xᶜ)).prodCongr
+      ((Equiv.prodComm E (ManyBody.RegionConfig β Xᶜ)).trans
+        ((Equiv.refl (ManyBody.RegionConfig β Xᶜ)).prodCongr
           (Finset.equivFin E)))).norm_map
       (compressedTypicalPureState ΩX E)).trans
       (norm_compressedTypicalPureState ΩX E hz)
@@ -301,12 +301,12 @@ open Classical in
 marginal of the normalized typical Schmidt vector, whose labels are selected. -/
 theorem vonNeumannEntropy_compressedTypicalPureState_eq_sum
     (Ω : EuclideanSpace ℂ ((v : ι) → β v)) (X : Finset ι)
-    (E : Finset (FiniteProduct.Configuration β X))
-    (hz : 0 < (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.spectralRestrictionMass
+    (E : Finset (ManyBody.RegionConfig β X))
+    (hz : 0 < (ManyBody.regionState_posSemidef X Ω).isHermitian.spectralRestrictionMass
       E) :
-    let p := (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.eigenvalues
-    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (FiniteProduct.splitEquiv β X) Ω
-    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let p := (ManyBody.regionState_posSemidef X Ω).isHermitian.eigenvalues
+    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.splitEquiv β X) Ω
+    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     vonNeumannEntropy (partialTraceLeft (vecMulVec ψ (star ψ)))
         (posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian =
@@ -334,21 +334,21 @@ theorem surprisalMoment_eq_sum_rpow {n : Type*} [Fintype n] (p : n → ℝ)
 (`07-comparators.tex`, lines 37–45). The `p_i` are the eigenvalues of the reduced density
 of `X`, that is, the squared Schmidt coefficients across `X`. -/
 structure IsTypicalSchmidtSet (Ω : EuclideanSpace ℂ ((v : ι) → β v)) (X : Finset ι)
-    (E : Finset (FiniteProduct.Configuration β X)) (w : ℝ) : Prop where
+    (E : Finset (ManyBody.RegionConfig β X)) (w : ℝ) : Prop where
   /-- `E` is a nonempty set of Schmidt indices of `X` (line 38). -/
   nonempty : E.Nonempty
   /-- Its indices are positive Schmidt indices, `p_i > 0` (line 38). -/
-  pos : ∀ i ∈ E, 0 < (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.eigenvalues i
+  pos : ∀ i ∈ E, 0 < (ManyBody.regionState_posSemidef X Ω).isHermitian.eigenvalues i
   /-- The width satisfies `w ≥ 0` (line 39). -/
   width_nonneg : 0 ≤ w
   /-- `e^{-S_X-w} ≤ p_i ≤ e^{-S_X+w}` for `i ∈ E`, with `S_X = S(X)` (lines 38–41). -/
   window : ∀ i ∈ E,
-    Real.exp (-FiniteProduct.entropy β Ω X - w) ≤
-        (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.eigenvalues i ∧
-      (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.eigenvalues i ≤
-        Real.exp (-FiniteProduct.entropy β Ω X + w)
+    Real.exp (-ManyBody.regionEntropy Ω X - w) ≤
+        (ManyBody.regionState_posSemidef X Ω).isHermitian.eigenvalues i ∧
+      (ManyBody.regionState_posSemidef X Ω).isHermitian.eigenvalues i ≤
+        Real.exp (-ManyBody.regionEntropy Ω X + w)
   /-- The mass `z = ∑_{i ∈ E} p_i` is positive (line 42). -/
-  mass_pos : 0 < ∑ i ∈ E, (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.eigenvalues i
+  mass_pos : 0 < ∑ i ∈ E, (ManyBody.regionState_posSemidef X Ω).isHermitian.eigenvalues i
 
 /-- **A finite collection of status partitions** with target `X`
 (`07-comparators.tex`, lines 19–31). A status `j` consists of `K` partitions
@@ -383,13 +383,13 @@ structure IsPrefixData (Ω : EuclideanSpace ℂ ((v : ι) → β v)) {St : Type}
   /-- Every member of `𝓡` is disjoint from `X` (line 57). -/
   disjoint : ∀ B ∈ R, Disjoint X B
   /-- `S(B) ≤ B_sh` for `B ∈ 𝓡` (line 61). -/
-  entropy_le : ∀ B ∈ R, FiniteProduct.entropy β Ω B ≤ Bsh
+  entropy_le : ∀ B ∈ R, ManyBody.regionEntropy Ω B ≤ Bsh
   /-- For every status and band, each of `Q = U_g` and `Q = U_gY_g` has a matched member
   `B` of `𝓡` containing it or contained in it, with
   `1 + log dim H_{B △ Q} ≤ B_exc` (lines 57–65). -/
   matched : ∀ j g (Q : Finset ι), Q = U j g ∨ Q = U j g ∪ Y j g →
     ∃ B ∈ R, (B ⊆ Q ∨ Q ⊆ B) ∧
-      1 + Real.log (Fintype.card (FiniteProduct.Configuration β (B ∆ Q))) ≤ Bexc
+      1 + Real.log (Fintype.card (ManyBody.RegionConfig β (B ∆ Q))) ≤ Bexc
 
 /-- **The marginal moment assumption** of the sharp bounds, `comparator:mgf-data`
 (`07-comparators.tex`, lines 70–85): for every `Q ∈ {XU_g, V_g, Y_g, U_g, U_gY_g}` the
@@ -403,10 +403,10 @@ structure IsMarginalMomentData (Ω : EuclideanSpace ℂ ((v : ι) → β v)) {St
   moment : ∀ j g (Q : Finset ι),
     Q = X ∪ U j g ∨ Q = V j g ∨ Q = Y j g ∨ Q = U j g ∨ Q = U j g ∪ Y j g →
     ∀ u : ℝ, |u| ≤ c₀ / Real.sqrt B →
-      Real.log (∑ i, if 0 < (FiniteProduct.reducedPure_posSemidef β Ω Q).isHermitian.eigenvalues i
-          then (FiniteProduct.reducedPure_posSemidef β Ω Q).isHermitian.eigenvalues i ^ (1 - u)
+      Real.log (∑ i, if 0 < (ManyBody.regionState_posSemidef Q Ω).isHermitian.eigenvalues i
+          then (ManyBody.regionState_posSemidef Q Ω).isHermitian.eigenvalues i ^ (1 - u)
           else 0) ≤
-        u * FiniteProduct.entropy β Ω Q + C₀ * B * u ^ 2
+        u * ManyBody.regionEntropy Ω Q + C₀ * B * u ^ 2
 
 namespace IsStatusFamily
 
@@ -483,9 +483,9 @@ theorem IsMarginalMomentData.surprisalMoment_le {Ω : EuclideanSpace ℂ ((v : �
     (hQ : Q = X ∪ U j l ∨ Q = V j l ∨ Q = Y j l ∨ Q = U j l ∨ Q = U j l ∪ Y j l)
     (u : ℝ) (hu : |u| ≤ c₀ / Real.sqrt B) :
     Real.log (Entropy.surprisalMoment
-      (FiniteProduct.reducedPure_posSemidef β Ω Q).isHermitian.eigenvalues u) ≤
-        u * FiniteProduct.entropy β Ω Q + C₀ * B * u ^ 2 := by
-  rw [surprisalMoment_eq_sum_rpow _ (FiniteProduct.reducedPure_posSemidef β Ω Q).eigenvalues_nonneg]
+      (ManyBody.regionState_posSemidef Q Ω).isHermitian.eigenvalues u) ≤
+        u * ManyBody.regionEntropy Ω Q + C₀ * B * u ^ 2 := by
+  rw [surprisalMoment_eq_sum_rpow _ (ManyBody.regionState_posSemidef Q Ω).eigenvalues_nonneg]
   exact h.moment j l Q hQ u hu
 
 /-- A band-and-tree average times the total weight is the weight times the weighted sum. -/

@@ -7,7 +7,7 @@ import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.EntropyScaling.CutReducedState
 import QICLean.Entropy.RegionalViability
 import QICLean.Analysis.ViableSubspaceBootstrap
-import QICLean.Analysis.ViableSubspaceTrimming
+import QICLean.Entropy.ViableSampling.ViableSubspaceTrimming
 import QICLean.Analysis.ViableSubspaceCoordinates
 
 /-!
@@ -102,7 +102,7 @@ theorem schmidtRank_cutVector_intervalTrimVector_le {L q p r s : ℕ}
     {S : Submodule ℂ (EuclideanSpace ℂ (interval L p r → Fin q))}
     (u : OrthonormalBasis (Fin s) ℂ S) {j : ℕ} (hj : j < r - p - 1) (k : Fin s) :
     xi ^ 2 * Matrix.schmidtRank (WithLp.ofLp
-      (Entropy.cutVector (n := fun _ : interval L p r ↦ q)
+      (ManyBody.cutVector (X := fun _ ↦ Fin q)
         (intervalTrimCut L p r j)
         (intervalTrimVector L q p r xi (fun t ↦ (u t : _)) k))) ≤ s :=
   Entropy.schmidtRank_cutVector_trimmed_le (intervalTrimCut_mono L p r) hxi u hj k

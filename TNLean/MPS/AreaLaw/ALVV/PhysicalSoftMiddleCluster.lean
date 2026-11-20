@@ -60,7 +60,7 @@ theorem exists_physical_soft_middle_cluster {g tau : ℝ}
         Real.log (Real.log (1 + xi / W))) / (-Real.log clusterBase)⌉₊
       let bond := ((1 + N * q ^ 2) + (order ^ 2 * q ^ order) * (m + 1)) * 2
       ∀ (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-        (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (h i) (interval (N + 1) i.val (i.val + 2)))
         (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1),
       let cuts : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, N + 1]

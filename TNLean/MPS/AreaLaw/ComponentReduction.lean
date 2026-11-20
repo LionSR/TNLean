@@ -124,10 +124,10 @@ inner edge cut of zero entropy, then every region `A` has a region `A'` of the s
 whose boundary edges are those of `A` toggled exactly at the edges of `G`. -/
 theorem exists_regionEntropy_eq_boundaryEdges_eq_symmDiff (hΩ : ‖Ω‖ = 1) (G : Finset ℕ)
     (hG : ∀ p ∈ G, p + 1 < L ∧
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 (p + 1)) Ω = 0)
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 (p + 1)) = 0)
     (A : Finset (Fin L)) :
-    ∃ A' : Finset (Fin L), Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A' Ω =
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ∧
+    ∃ A' : Finset (Fin L), ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A' =
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A ∧
       boundaryEdges L A' = boundaryEdges L A ∆ G := by
   induction G using Finset.induction_on with
   | empty => exact ⟨A, rfl, by ext; simp [Finset.mem_symmDiff]⟩
@@ -264,13 +264,13 @@ theorem _root_.ManyBody.DomainInteraction.exists_regionEntropy_eq_card_boundaryE
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A : Finset ℤ) :
     ∃ A' : Finset (Fin Λ.card),
-      Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) A' Ω =
-        Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ∧
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A' =
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (domainRegion Λ A) ∧
       (boundaryEdges Λ.card A').card = (domainBoundaryEdges Λ A).card := by
   classical
   set G := (boundaryEdges Λ.card (domainRegion Λ A)).filter fun p ↦ ¬ IsDomainEdge Λ p
-  have hG : ∀ p ∈ G, p + 1 < Λ.card ∧ Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
-      (interval Λ.card 0 (p + 1)) Ω = 0 := by
+  have hG : ∀ p ∈ G, p + 1 < Λ.card ∧ ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+      Ω (interval Λ.card 0 (p + 1)) = 0 := by
     intro p hp
     obtain ⟨hpb, hpe⟩ := Finset.mem_filter.mp hp
     have hp1 := (mem_boundaryEdges.mp hpb).1
@@ -304,7 +304,7 @@ theorem regionEntropy_le_mul_card_domainBoundaryEdges (hq : 1 ≤ q) (hJ : 0 ≤
         {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset ℤ) :
-    Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (domainRegion Λ A) ≤
       chainIntervalEntropyBound q R J Δ * (domainBoundaryEdges Λ A).card := by
   obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hh hΔ hΩ hgap hspan A
   rw [← h.toChain_hamiltonian] at hgap hspan
@@ -324,7 +324,7 @@ theorem domainAreaLaw (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
         ∀ Ω : EuclideanSpace ℂ (Fin Λ.card → Fin q),
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset ℤ,
-            Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) (domainRegion Λ A) Ω ≤
+            ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (domainRegion Λ A) ≤
               C * (domainBoundaryEdges Λ A).card := by
   have hle := chainIntervalEntropyBound_le (q := q) (R := R) hq hJ hΔ
   have h0 := chainIntervalEntropyBound_nonneg (q := q) (R := R) hq hJ hΔ

@@ -62,9 +62,9 @@ theorem entropy_le_residual_add_half_sum (P : OrderedTwoFamilyPartition A)
     (β : ι → Type*) [∀ v, Fintype (β v)] [∀ v, DecidableEq (β v)]
     (ψ : EuclideanSpace ℂ ((v : ι) → β v)) (hψ : ‖ψ‖ = 1)
     (ε : Fin P.pieceCount → ℝ)
-    (hε : ∀ i, FiniteProduct.mutualInformation β ψ (P.piece i)
+    (hε : ∀ i, ManyBody.regionMutualInformation ψ (P.piece i)
       (Aᶜ ∪ P.earlierSameFamily i) ≤ ε i) :
-    FiniteProduct.entropy β ψ A ≤ FiniteProduct.entropy β ψ P.residual +
+    ManyBody.regionEntropy ψ A ≤ ManyBody.regionEntropy ψ P.residual +
       (1 / 2) * ∑ i, ε i := by
   classical
   have hcover : A = P.residual ∪ (P.familyIndices 0).biUnion P.piece ∪
@@ -86,12 +86,12 @@ theorem entropy_le_residual_add_half_sum (P : OrderedTwoFamilyPartition A)
     rw [hi0] at hj1
     exact Fin.zero_ne_one hj1
   have hbound (f : Fin 2) (i : Fin P.pieceCount) (hi : i ∈ P.familyIndices f) :
-      FiniteProduct.mutualInformation β ψ (P.piece i)
+      ManyBody.regionMutualInformation ψ (P.piece i)
         (Aᶜ ∪ Entropy.OrderedSetFunction.past P.piece (P.familyIndices f) i) ≤ ε i := by
     have hif := (Finset.mem_filter.mp hi).2
     rw [← hif, past_familyIndices]
     exact hε i
-  have h := FiniteProduct.entropy_le_remainder_add_half_sum β ψ hψ A P.residual
+  have h := ManyBody.regionEntropy_le_remainder_add_half_sum β ψ hψ A P.residual
     P.piece (P.familyIndices 0) P.piece (P.familyIndices 1) hcover
     (fun i _ ↦ P.residual_disjoint i) (fun i _ ↦ P.residual_disjoint i)
     (hfamily 0) (hfamily 1) hcross ε ε (hbound 0) (hbound 1)
@@ -111,10 +111,9 @@ theorem regionalEntropy_le_residual_add_half_sum
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     (A : Finset (Site Λ)) (P : Geometry.OrderedTwoFamilyPartition A)
     (ε : Fin P.pieceCount → ℝ)
-    (hε : ∀ i, FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω (P.piece i)
+    (hε : ∀ i, ManyBody.regionMutualInformation Ω (P.piece i)
       (Aᶜ ∪ P.earlierSameFamily i) ≤ ε i) :
-    regionalEntropy Λ q Ω A ≤ regionalEntropy Λ q Ω P.residual + (1 / 2) * ∑ i, ε i := by
-  simp only [regionalEntropy_eq_finiteProduct]
+    ManyBody.regionEntropy Ω A ≤ ManyBody.regionEntropy Ω P.residual + (1 / 2) * ∑ i, ε i := by
   exact P.entropy_le_residual_add_half_sum _ Ω hΩ ε hε
 
 end TNLean.PEPS.AreaLaw

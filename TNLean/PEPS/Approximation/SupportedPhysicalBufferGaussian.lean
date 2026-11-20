@@ -78,7 +78,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
       (R C₀ : Finset (SquareLatticeVertex L L)) (hRC : Disjoint R C₀),
       let Q := (R ∪ C₀)ᶜ
       let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C₀ → Fin q))
-      let s := FiniteProduct.splitTwoRegionsEquiv
+      let s := ManyBody.splitTwoRegionsEquiv
         (fun _ : SquareLatticeVertex L L ↦ Fin q) R C₀ hRC
       let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (Q → Fin q))
       let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
@@ -186,7 +186,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integ
         (R C₀ : Finset (SquareLatticeVertex L L)) (hRC : Disjoint R C₀),
         let Q := (R ∪ C₀)ᶜ
         let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C₀ → Fin q))
-        let s := FiniteProduct.splitTwoRegionsEquiv
+        let s := ManyBody.splitTwoRegionsEquiv
           (fun _ : SquareLatticeVertex L L ↦ Fin q) R C₀ hRC
         let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (Q → Fin q))
         let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q

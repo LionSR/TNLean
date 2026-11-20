@@ -33,7 +33,7 @@ arXiv:1602.08828v2, `t:aisefficient` and `t:aisgaplessefficient`, lines 1412–1
 theorem exists_regional_softTruncations_mpo_buffered_spectral_comparison {N q m s : ℕ}
     (hq : 1 ≤ q) (hm : 0 < m)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ})
     (hh : ∀ i, (h i).IsHermitian) (hnorm : ∀ i, ‖h i‖ ≤ 1)
     (I : Fin s → Finset (Fin N)) (eps : Fin s → ℝ) (t xi z : ℝ)

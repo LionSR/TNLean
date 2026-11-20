@@ -195,9 +195,9 @@ sites has regional entropy at most `C`, then every region `A` has regional entro
 times the number of edges of the chain leaving `A`. -/
 theorem regionEntropy_le_mul_card_boundaryEdges_of_intervals
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) {C : ℝ} (hC : 0 ≤ C)
-    (hI : ∀ a b : ℕ, Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a b) Ω ≤ C)
+    (hI : ∀ a b : ℕ, ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L a b) ≤ C)
     (A : Finset (Fin L)) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤ C * (boundaryEdges L A).card := by
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A ≤ C * (boundaryEdges L A).card := by
   induction A using Finset.strongInduction with
   | H A ih =>
     by_cases hA : A = Finset.univ
@@ -209,15 +209,15 @@ theorem regionEntropy_le_mul_card_boundaryEdges_of_intervals
       simp
     obtain ⟨a, b, hIA, hIne, hss⟩ := exists_interval_subset_boundaryEdges_sdiff_ssubset hne hA
     have h1 := ih _ (Finset.sdiff_ssubset hIA hIne)
-    have h2 : Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a b) Ω +
-          Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (A \ interval L a b) Ω := by
+    have h2 : ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A ≤
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L a b) +
+          ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (A \ interval L a b) := by
       conv_lhs => rw [← Finset.union_sdiff_of_subset hIA]
       exact regionEntropy_union_le hΩ Finset.disjoint_sdiff
     have h3 : ((boundaryEdges L (A \ interval L a b)).card : ℝ) + 1 ≤
         (boundaryEdges L A).card := by
       exact_mod_cast Nat.succ_le_of_lt (Finset.card_lt_card hss)
-    calc Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω
+    calc ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A
         ≤ C + C * (boundaryEdges L (A \ interval L a b)).card := by linarith [hI a b]
       _ = C * ((boundaryEdges L (A \ interval L a b)).card + 1) := by ring
       _ ≤ C * (boundaryEdges L A).card := by gcongr

@@ -39,8 +39,8 @@ operator, with the outermost factor first.
 Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 68–99,
 `eq:patch-variational-problem`. -/
 def regularizedPatchFactorList (regions : Fin m → Finset V) (a : Fin m → ℝ)
-    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ) : List (Entropy.PatchFactor n) :=
+    (x : ∀ j, Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ) : List (Entropy.PatchFactor n) :=
   (List.ofFn fun j ↦ ⟨regions j, a j, x j⟩).reverse
 
 /-- The ordered regularized output is the ordered patch-list output.
@@ -48,21 +48,21 @@ Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 68–99. -/
 theorem regularizedPatchOutput_eq_patchOutput
     (regions : Fin m → Finset V) (a : Fin m → ℝ) (b : ℝ)
     (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
-    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ) :
+    (x : ∀ j, Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ) :
     regularizedPatchOutput (Out := fun v ↦ Fin (n v)) regions a b Ω x =
       Entropy.patchOutput b (regularizedPatchFactorList regions a x) Ω := by
   classical
   have hL (j : Fin m) :
       regularizedPatchFilter (Out := fun v ↦ Fin (n v)) regions a b x j =
-        Entropy.localLift (regions j)
+        ManyBody.place (regions j)
           (Entropy.PatchFactor.filter b ⟨regions j, a j, x j⟩).2 := by
     unfold regularizedPatchFilter Entropy.PatchFactor.filter
-    have hp (d₁ d₂ : DecidableEq (Entropy.RegionConfig n (regions j))) :
+    have hp (d₁ d₂ : DecidableEq (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))) :
         (letI := d₁; (x j + b • 1) ^ (-(a j) / 2)) =
           (letI := d₂; (x j + b • 1) ^ (-(a j) / 2)) := by
       exact congrArg
-        (fun d : DecidableEq (Entropy.RegionConfig n (regions j)) ↦
+        (fun d : DecidableEq (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ↦
           letI := d; (x j + b • 1) ^ (-(a j) / 2)) (Subsingleton.elim d₁ d₂)
     exact congrArg (ManyBody.place (X := fun v ↦ Fin (n v)) (regions j)) (hp _ _)
   have hprod :
@@ -80,8 +80,8 @@ Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 68–99,
 theorem regularizedPatchObjective_eq_norm_patchOutput
     (regions : Fin m → Finset V) (a : Fin m → ℝ) (b : ℝ)
     (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
-    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ) :
+    (x : ∀ j, Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ) :
     regularizedPatchObjective (Out := fun v ↦ Fin (n v)) regions a b Ω x =
       ‖Entropy.patchOutput b (regularizedPatchFactorList regions a x)
         (Ω)‖ := by
@@ -98,8 +98,8 @@ Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 68–99,
 theorem isPatchMinimizer_regularizedPatchFactorList
     (regions : Fin m → Finset V) (a : Fin m → ℝ) (b : ℝ)
     (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
-    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ)
+    (x : ∀ j, Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ)
     (hmin : IsMinOn
       (regularizedPatchObjective (Out := fun v ↦ Fin (n v)) regions a b Ω)
       (regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions) x) :
@@ -138,8 +138,8 @@ Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 68–99 and
 theorem normalizedRegularizedPatchOutput_eq_patchState
     (regions : Fin m → Finset V) (a : Fin m → ℝ) (b : ℝ)
     (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
-    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ) :
+    (x : ∀ j, Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ) :
     normalizedRegularizedPatchOutput (Out := fun v ↦ Fin (n v)) regions a b Ω x =
       Entropy.patchState b (regularizedPatchFactorList regions a x) Ω := by
   simp only [normalizedRegularizedPatchOutput, Entropy.patchState,
@@ -155,13 +155,13 @@ Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 68–99 and
 theorem normalizedRegularizedPatchMarginal_eq_regionState_patchState
     (regions : Fin m → Finset V) (a : Fin m → ℝ) (b : ℝ)
     (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
-    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ) (R : Finset V) :
+    (x : ∀ j, Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ) (R : Finset V) :
     normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
         regions a b Ω x R =
-      Entropy.regionState R
-        (Entropy.patchState b (regularizedPatchFactorList regions a x)
-          (Ω)) := by
+      ManyBody.regionState (Entropy.patchState b (regularizedPatchFactorList regions a x)
+          (Ω))
+        R := by
   exact (reindex_normalizedRegularizedPatchMarginal regions
     (fun v ↦ Equiv.refl (Fin (n v))) a b Ω x R).trans
     (congrArg (Entropy.regionState R)
@@ -184,14 +184,14 @@ Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 68–99,
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 theorem map_filter_regularizedPatchFactorList_eq_chainList
     (D : ℕ → Finset V) (a : Fin m → ℝ) (b : ℝ)
-    (x : (j : Fin m) → Matrix (Entropy.RegionConfig n (D j))
-      (Entropy.RegionConfig n (D j)) ℂ) :
+    (x : (j : Fin m) → Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (D j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (D j)) ℂ) :
     (regularizedPatchFactorList (fun j : Fin m ↦ D j) a x).map
         (Entropy.PatchFactor.filter b) =
       Entropy.chainList D
         (fun j : Fin m ↦
-          (x j + b • (1 : Matrix (Entropy.RegionConfig n (D j))
-            (Entropy.RegionConfig n (D j)) ℂ)) ^ (-(a j) / 2))
+          (x j + b • (1 : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (D j))
+            (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (D j)) ℂ)) ^ (-(a j) / 2))
         (fun _ ↦ True) := by
   simp [regularizedPatchFactorList, Entropy.chainList, Entropy.PatchFactor.filter,
     List.ofFn_eq_map, List.map_reverse, List.map_map, Function.comp_def]

@@ -75,9 +75,8 @@ variable {Λ : Finset (ℤ × ℤ)} {q : ℕ}
 model: `S(X | T) ≤ S(X | T')` for `T' ⊆ T` disjoint from `X`. -/
 theorem regionalEntropy_cond_anti (Ω : StateSpace Λ q) {X T' T : Finset (Site Λ)}
     (hXT : Disjoint X T) (hT' : T' ⊆ T) :
-    regionalEntropy Λ q Ω (X ∪ T) - regionalEntropy Λ q Ω T ≤
-      regionalEntropy Λ q Ω (X ∪ T') - regionalEntropy Λ q Ω T' := by
-  simp only [regionalEntropy_eq_regionEntropy]
+    ManyBody.regionEntropy Ω (X ∪ T) - ManyBody.regionEntropy Ω T ≤
+      ManyBody.regionEntropy Ω (X ∪ T') - ManyBody.regionEntropy Ω T' := by
   exact Entropy.regionEntropy_cond_anti (n := fun _ ↦ q) hXT hT' Ω
 
 /-- **The chain rule averaged over rotated color orders.** Let `Ω` be a unit vector, `X_i`
@@ -91,11 +90,11 @@ theorem regionalEntropy_biUnion_le_rotations (Ω : StateSpace Λ q) (hΩ : ‖Ω
     (hdisj : Pairwise fun i j ↦ Disjoint (Xs i) (Xs j)) {N : ℕ} (col : ι → ℕ)
     (hcol : ∀ i, col i < N) (good : Finset ι) (T : ι → Finset (Site Λ)) (β : ℝ)
     (hT : ∀ i ∈ good, T i ⊆ (Finset.univ.filter fun j ↦ col j ≠ col i).biUnion Xs)
-    (hbuf : ∀ i ∈ good, regionalEntropy Λ q Ω (Xs i ∪ T i) - regionalEntropy Λ q Ω (T i) ≤
-      regionalEntropy Λ q Ω (Xs i) / 2 + β) :
-    regionalEntropy Λ q Ω (Finset.univ.biUnion Xs) ≤
-      ∑ i, regionalEntropy Λ q Ω (Xs i) -
-        (∑ i ∈ good, regionalEntropy Λ q Ω (Xs i)) / (2 * N) + good.card * β / N := by
+    (hbuf : ∀ i ∈ good, ManyBody.regionEntropy Ω (Xs i ∪ T i) - ManyBody.regionEntropy Ω (T i) ≤
+      ManyBody.regionEntropy Ω (Xs i) / 2 + β) :
+    ManyBody.regionEntropy Ω (Finset.univ.biUnion Xs) ≤
+      ∑ i, ManyBody.regionEntropy Ω (Xs i) -
+        (∑ i ∈ good, ManyBody.regionEntropy Ω (Xs i)) / (2 * N) + good.card * β / N := by
   classical
   -- `N > 0` unless the index set is empty
   rcases isEmpty_or_nonempty ι with hι | hι

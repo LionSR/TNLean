@@ -32,7 +32,7 @@ No conjugation or residual estimate is supplied as a hypothesis. -/
 private theorem norm_exp_conjugation_nearestNeighbour_boundary_sum_le
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i ∈ I ∪ J, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i ∈ I ∪ J, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ I ∪ J, 0 ≤ h i) (h1 : ∀ i ∈ I ∪ J, h i ≤ 1)
     (z : ℂ) (t : ℝ) (ht0 : 0 ≤ t) (ht : t ≤ 1 / 8) :
@@ -40,7 +40,7 @@ private theorem norm_exp_conjugation_nearestNeighbour_boundary_sum_le
     ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * (∑ j ∈ J, h j) *
       NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 * (J.card : ℝ) := by
   intro H
-  have hsI : ∀ i ∈ I, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+  have hsI : ∀ i ∈ I, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)) :=
     fun i hi ↦ hs i (Finset.mem_union_left J hi)
   have h0I : ∀ i ∈ I, 0 ≤ h i := fun i hi ↦ h0 i (Finset.mem_union_left J hi)
@@ -86,7 +86,7 @@ truncation-error or subspace-closeness theorem. -/
 theorem exists_nearestNeighbour_weighted_low_restriction
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i ∈ I ∪ J, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i ∈ I ∪ J, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ I ∪ J, 0 ≤ h i) (h1 : ∀ i ∈ I ∪ J, h i ≤ 1)
     (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (r u e s : ℝ)
@@ -127,7 +127,7 @@ arXiv:1602.08828v2, Corollary c:goodagsphardtrunc, lines 979–1005. -/
 theorem norm_consecutive_regional_truncation_low_le
     {L q m : ℕ} (k : Fin (m + 1) → ℕ) (hk : Monotone k)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (e : Fin m → ℝ) (T : Finset (Fin m)) (j : Fin m)

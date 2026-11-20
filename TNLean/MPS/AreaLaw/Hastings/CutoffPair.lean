@@ -139,8 +139,8 @@ theorem _root_.ManyBody.ChainInteraction.localizedPart_isHermitian
 /-- The centered localized part of a part supported on `D` is supported on `D ∪ K`. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart
     {P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {D : Finset (Fin L)}
-    (hP : Entropy.IsSupportedOn (n := fun _ ↦ q) P D) (K : Finset (Fin L)) :
-    Entropy.IsSupportedOn (n := fun _ ↦ q) (h.localizedPart Ω s ΔE P K) (D ∪ K) := by
+    (hP : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) P D) (K : Finset (Fin L)) :
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.localizedPart Ω s ΔE P K) (D ∪ K) := by
   change _ ∈ ManyBody.supportedOperators _ _
   refine (add_mem ?_ ?_)
   · exact ManyBody.supportedOperators_mono (by simp)
@@ -175,7 +175,7 @@ noncomputable def rightWindow (L R c m k : ℕ) : Finset (Fin L) :=
 the sites `i < c`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 816–842. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c m k : ℕ}
     (hmk : R + k ≤ m) :
-    Entropy.IsSupportedOn (n := fun _ ↦ q)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h.localizedPart Ω s ΔE (h.leftPart c m) (leftWindow L R c m k)) (leftBlock L c) := by
   by_cases hcm : c ≤ m
   · rw [h.leftPart_eq_zero_of_le hcm, h.localizedPart_zero]
@@ -191,7 +191,7 @@ theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_leftPart {c
 on the sites `i ≥ c`. Hastings, arXiv:0705.2024v4, `law16.tex`, lines 816–842. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_localizedPart_rightPart {c m k : ℕ}
     (hmk : R + k ≤ m) :
-    Entropy.IsSupportedOn (n := fun _ ↦ q)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h.localizedPart Ω s ΔE (h.rightPart c m) (rightWindow L R c m k)) (leftBlock L c)ᶜ := by
   refine (h.isSupportedOn_localizedPart Ω s ΔE (h.isSupportedOn_rightPart c m) _).mono ?_
   refine Finset.union_subset (fun x hx ↦ ?_) ((chainNeighborhood_interval_subset _ _ _).trans
@@ -264,13 +264,13 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
     {c m k : ℕ} (hmk : R + k ≤ m) {θ T : ℝ} (hθ : 0 < θ) (hT : 0 ≤ T) :
     ∃ H₀ OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       H₀.IsHermitian ∧ IsStarProjection OL ∧ IsStarProjection OR ∧ Commute OL OR ∧
-      Entropy.IsSupportedOn (n := fun _ ↦ q) OL (leftBlock L c) ∧
-      Entropy.IsSupportedOn (n := fun _ ↦ q) OR (leftBlock L c)ᶜ ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL (leftBlock L c) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR (leftBlock L c)ᶜ ∧
       ‖H₀ * (OL * OR)‖ ≤ 2 * θ ∧
       ‖Ω - toEuclideanLin (OL * OR) Ω‖ ≤
         2 * (ΔE⁻¹ * Real.exp (-s / 2) * (partCommutatorConst R * J ^ 2) +
           partLocalizationError R J s ΔE T k) / θ ∧
-      Entropy.IsSupportedOn (n := fun _ ↦ q) (h.hamiltonian - (E₀ : ℂ) • 1 - H₀)
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.hamiltonian - (E₀ : ℂ) • 1 - H₀)
         (interval L (c - m - 2 * R - k) (c + m + 2 * R + k)) ∧
       ‖h.hamiltonian - (E₀ : ℂ) • 1 - H₀‖ ≤
         2 * ((2 * (m + R) * 2 ^ (2 * R + 1) : ℕ) * J) +
@@ -287,11 +287,11 @@ theorem _root_.ManyBody.ChainInteraction.exists_cutoffPair [NeZero q] (h : Chain
   have hPR : PR.IsHermitian := h.rightPart_isHermitian hh c m
   have hML : ML.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPL KL
   have hMR : MR.IsHermitian := h.localizedPart_isHermitian hh Ω s ΔE hPR KR
-  have hsL : Entropy.IsSupportedOn (n := fun _ ↦ q) ML (leftBlock L c) :=
+  have hsL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) ML (leftBlock L c) :=
     h.isSupportedOn_localizedPart_leftPart Ω s ΔE hmk
-  have hsR : Entropy.IsSupportedOn (n := fun _ ↦ q) MR (leftBlock L c)ᶜ :=
+  have hsR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) MR (leftBlock L c)ᶜ :=
     h.isSupportedOn_localizedPart_rightPart Ω s ΔE hmk
-  let σ₀ : Entropy.SiteConfig (fun _ : Fin L ↦ q) := fun _ ↦ ⟨0, NeZero.pos q⟩
+  let σ₀ : ((_ : Fin L) → Fin q) := fun _ ↦ ⟨0, NeZero.pos q⟩
   have hcomm : Commute (spectralCutoff ML θ) (spectralCutoff MR θ) :=
     commute_spectralCutoff_of_isSupportedOn disjoint_compl_right hML hMR hsL hsR σ₀ θ θ
   -- the bounds `‖M Ω‖ ≤ μ`

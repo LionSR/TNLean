@@ -45,7 +45,7 @@ theorem exists_common_collar_filter_family
     let ep := intervalShiftOrderIso (hpc.trans (hcd.trans hdr)) hrL
     let HM := EuclideanSpace ℂ (J → Fin q)
     let HE := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)
-    let tau := (FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _)
+    let tau := (ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
     let Phi := ((EuclideanSpace.basisFun (↥(Jᶜ) → Fin q) ℂ).tensorProduct
       (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
@@ -62,8 +62,8 @@ theorem exists_common_collar_filter_family
         0 ≤ Delta →
         (∃ M0 : Fin n0 → Matrix (↥(Eᶜ) → Fin q) (↥(Eᶜ) → Fin q) ℂ,
           Z = (∑ i, M0 i ⊗ₖ W0 i).submatrix
-            ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))
-            ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))) →
+            ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))
+            ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))) →
         (∀ t ∈ T, Kwhole t ∈ T) → (∀ z ∈ Tᗮ, Kwhole z ∈ Tᗮ) →
         (∀ t ∈ T, ‖t‖ ≤ ‖Kwhole t‖) →
         (∀ z ∈ Tᗮ, ‖Kwhole z‖ ^ 2 ≤ Delta * ‖z‖ ^ 2) →

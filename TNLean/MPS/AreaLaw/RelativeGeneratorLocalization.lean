@@ -75,7 +75,7 @@ theorem norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
     {γ : Type*} (C : Finset γ) (U : γ → Finset ι) (Z : Finset ι)
     (hUZ : ∀ c ∈ C, U c ⊆ Z) (hU : ∀ c ∈ C, (U c).card ≤ R + 1)
     (P : γ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
-    (hP : ∀ c ∈ C, Entropy.IsSupportedOn (n := fun _ ↦ q) (P c) (U c))
+    (hP : ∀ c ∈ C, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (P c) (U c))
     (ε : ℝ) (hPε : ∀ c ∈ C, ‖P c‖ ≤ ε) (ℓ t : ℝ) :
     let B := Z.biUnion fun x ↦ ManyBody.graphBall G x ⌊ℓ⌋₊
     let E := ManyBody.heisenbergEvolution Φ.hamiltonian t (∑ c ∈ C, P c)
@@ -137,7 +137,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpect
     (D : Finset (Fin L)) (hq : 1 ≤ q) (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
     let K := h.doubled.hamiltonian
     let K' := (h.swappedDoubled D).hamiltonian
-    let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
+    let C := ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
     let Z := C.biUnion (fun X ↦ X.1)
     let B := chainNeighborhood Z ℓ
     let G := ManyBody.heisenbergEvolution K' t (K' - K)
@@ -204,7 +204,7 @@ theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpec
     (D : Finset (Fin Λ.card)) (hq : 1 ≤ q) (m : ℕ) (t : ℝ) :
     let K := h.doubled.hamiltonian
     let K' := (h.swappedDoubled D).hamiltonian
-    let C := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
+    let C := ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
     let Z := C.biUnion (fun X ↦ X.1)
     let B := Z.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)
     let G := ManyBody.heisenbergEvolution K' t (K' - K)

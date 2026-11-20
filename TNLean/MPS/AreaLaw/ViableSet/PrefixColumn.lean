@@ -31,9 +31,9 @@ theorem sum_norm_cutColumn_sq {N q i : ℕ}
   simp_rw [EuclideanSpace.norm_sq_eq]
   rw [Finset.sum_comm]
   change (∑ a, ∑ b, ‖ψ
-    ((Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i)).symm (a, b))‖ ^ 2) = _
+    ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm (a, b))‖ ^ 2) = _
   simpa only [Fintype.sum_prod_type] using
-    Equiv.sum_comp (Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i)).symm
+    Equiv.sum_comp (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm
       (fun σ ↦ ‖ψ σ‖ ^ 2)
 
 /-- A cut column has norm at most the norm of its full vector.
@@ -54,8 +54,8 @@ noncomputable def rightBasisExtension {N q i : ℕ} (v : LeftBlockVector N q i)
     EuclideanSpace ℂ (Fin N → Fin q) := by
   classical
   exact WithLp.toLp 2 fun σ ↦
-    if ((Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i)) σ).2 = b then
-      v (((Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i)) σ).1) else 0
+    if ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)) σ).2 = b then
+      v (((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)) σ).1) else 0
 
 /-- Only the column at the selected right configuration is nonzero.
 Auxiliary to the product-ancilla use of LVV13, `def:viable`. -/
@@ -64,10 +64,10 @@ theorem cutColumn_rightBasisExtension {N q i : ℕ} (v : LeftBlockVector N q i)
     cutColumn (rightBasisExtension v b) i b' = if b' = b then v else 0 := by
   classical
   ext a
-  change (if ((Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i))
-    ((Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i)).symm (a, b'))).2 = b then
-      v (((Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i))
-        ((Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i)).symm (a, b'))).1) else 0) = _
+  change (if ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i))
+    ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm (a, b'))).2 = b then
+      v (((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i))
+        ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm (a, b'))).1) else 0) = _
   rw [Equiv.apply_symm_apply]
   split_ifs <;> rfl
 
@@ -78,24 +78,24 @@ theorem inner_rightBasisExtension {N q i : ℕ}
     (b : (j : {j : Fin N // j ∉ leftBlock N i}) → Fin q) :
     ⟪ψ, rightBasisExtension v b⟫_ℂ = ⟪cutColumn ψ i b, v⟫_ℂ := by
   classical
-  have heval (a : Entropy.RegionConfig (fun _ : Fin N ↦ q) (leftBlock N i))
+  have heval (a : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock N i)))
       (b' : (j : {j : Fin N // j ∉ leftBlock N i}) → Fin q) :
       rightBasisExtension v b
-        ((Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i)).symm (a, b')) =
+        ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm (a, b')) =
         if b' = b then v a else 0 := by
-    change (if ((Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i))
-      ((Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i)).symm (a, b'))).2 = b then
-        v (((Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i))
-          ((Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i)).symm (a, b'))).1) else 0) = _
+    change (if ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i))
+      ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm (a, b'))).2 = b then
+        v (((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i))
+          ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm (a, b'))).1) else 0) = _
     rw [Equiv.apply_symm_apply]
   have hsum := Equiv.sum_comp
-    (Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i)).symm
+    (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm
     (fun σ ↦ rightBasisExtension v b σ * star (ψ σ))
   simp only [Fintype.sum_prod_type, heval, ite_mul, zero_mul] at hsum
   simp only [EuclideanSpace.inner_eq_star_dotProduct, dotProduct, Pi.star_apply]
   change (∑ σ, rightBasisExtension v b σ * star (ψ σ)) =
     ∑ a, v a * star (ψ
-      ((Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N i)).symm (a, b)))
+      ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N i)).symm (a, b)))
   simpa only [Finset.sum_ite_eq', Finset.mem_univ, ite_true] using hsum.symm
 
 /-- Attaching a right basis configuration preserves the Hilbert norm.

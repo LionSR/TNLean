@@ -74,8 +74,8 @@ theorem nestedPatch_minimizer_marginal_closeness
             (CFC.abs
               (normalizedRegularizedPatchMarginal
                 (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ωᵤ x R -
-                Entropy.regionState (n := fun _ : Lattice.Site Λ ↦ q) R
-                  (AreaLaw.rectangleAreaLawState Ω))).trace.re ≤ (1 / 16 : ℝ) := by
+                ManyBody.regionState (X := fun _ ↦ Fin q) (AreaLaw.rectangleAreaLawState Ω)
+                  R)).trace.re ≤ (1 / 16 : ℝ) := by
   intro L h hh hhJ E₀ Ω hΩ hgap hspan center u b hu hb Λ m regions a Ωᵤ x hx hmin R
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   have henergy := (h.nestedPatch_minimizer_energy_le hh hhJ hJ hΔ Ω hΩ hgap hspan center u κ b
@@ -136,8 +136,8 @@ theorem exists_uniform_nestedPatch_minimizer_marginal_closeness
               (CFC.abs
                 (normalizedRegularizedPatchMarginal
                   (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ωᵤ x R -
-                  Entropy.regionState (n := fun _ : Lattice.Site Λ ↦ q) R
-                    (AreaLaw.rectangleAreaLawState Ω))).trace.re ≤ (1 / 16 : ℝ) := by
+                  ManyBody.regionState (X := fun _ ↦ Fin q) (AreaLaw.rectangleAreaLawState Ω)
+                    R)).trace.re ≤ (1 / 16 : ℝ) := by
   rcases (show (0 : ℝ) ≤ 36 * (q : ℝ) ^ 2 * J by positivity).eq_or_lt with hC | hC
   · exact ⟨1 / 2, by norm_num, le_rfl, nestedPatch_minimizer_marginal_closeness q hJ hΔ
       (by norm_num) le_rfl (by rw [← hC, zero_mul]; positivity)⟩

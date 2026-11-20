@@ -70,14 +70,14 @@ Source: TNLean note, part1_arealaw.tex, eq:count, and
 part2a_mps_information.tex, lines 355–363. -/
 lemma card_domain_crossingTerms_le_mul_card_boundaryEdges (Λ : Finset ℤ) (R : ℕ)
     (D : Finset (Fin Λ.card)) :
-    (Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).card ≤
+    (ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).card ≤
       2 ^ (2 * R) * (boundaryEdges Λ.card D).card := by
   refine (Finset.card_le_card_of_injOn
     DomainSupport.toChainSupport ?_
     DomainSupport.toChainSupport_injective.injOn).trans
       (card_crossingTerms_le_mul_card_boundaryEdges Λ.card R D)
   exact fun X hX ↦ by
-    simpa only [Entropy.crossingTerms, Finset.mem_coe, Finset.mem_filter,
+    simpa only [ManyBody.crossingTerms, Finset.mem_coe, Finset.mem_filter,
       Finset.mem_univ, true_and, DomainSupport.toChainSupport] using hX
 
 /-- Counting both replicas of the actual crossing supports gives a bound linear
@@ -85,7 +85,7 @@ in the number of domain sites, with the same range constant as on a chain.
 Source: TNLean note, part2a_mps_information.tex, lines 355–363. -/
 lemma card_domain_crossingTerms_mul_two_le (Λ : Finset ℤ) (R : ℕ)
     (D : Finset (Fin Λ.card)) :
-    (Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).card * 2 ≤
+    (ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).card * 2 ≤
       chainCrossConst R * Λ.card := by
   have hb : (boundaryEdges Λ.card D).card ≤ Λ.card :=
     (Finset.card_filter_le _ _).trans

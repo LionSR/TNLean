@@ -10,7 +10,7 @@ import QICLean.Analysis.MatrixTensorCoordinates
 import QICLean.Analysis.SupportProjectionOrder
 import QICLean.Analysis.ViableSubspaceCoordinates
 import QICLean.Analysis.WeightedProjection
-import QICLean.Channel.FiniteProductOperatorSchmidt
+import QICLean.ManyBody.Sites.SplitOperatorSchmidt
 import TNLean.Algebra.CommonKernelSpectralGap
 import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeThreeRegion
@@ -93,7 +93,7 @@ private theorem mem_supportedOperators_side {X : Matrix (Fin L → Fin q) (Fin L
 /-- A nearest-neighbour bond has operator Schmidt rank at most `q²` at every cut. -/
 private theorem rank_bond_le {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hq : 1 ≤ q)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (i c : ℕ) :
     operatorSchmidtRank ((bondTermExtension h i).reindex (sheetSplit q (interval L 0 c))
       (sheetSplit q (interval L 0 c))) ≤ q ^ 2 := by
@@ -105,7 +105,7 @@ private theorem rank_bond_le {h : Fin m → Matrix (Fin L → Fin q) (Fin L → 
 three-region family lies on one side. -/
 private theorem rank_window_cut_le {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hq : 1 ≤ q)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {a b ℓ c : ℕ} (hab : a + 2 * ℓ ≤ b)
     (hwin : (a + 1 ≤ c ∧ c ≤ a + 2 * ℓ) ∨ (b + 1 ≤ c ∧ c ≤ b + 2 * ℓ))
     (k : ℕ) (P : Polynomial ℂ) (hdeg : P.natDegree ≤ k) :
@@ -150,7 +150,7 @@ the proof of Theorem `t:aisff`, line 1606, with the regional rank `q² + 2` of
 `rank_regionTermMatrix_le` and a crossing bond of rank `q²` in the windows. -/
 theorem operatorSchmidtRank_aeval_threeRegion_cut_le
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {a b ℓ : ℕ} (hab : a + 2 * ℓ ≤ b)
     (k : ℕ) (P : Polynomial ℂ) (hdeg : P.natDegree ≤ k) (c : ℕ) :
     operatorSchmidtRank ((Polynomial.aeval (∑ α, threeRegionFamily h a b ℓ α) P).reindex
@@ -183,7 +183,7 @@ ALVV, arXiv:1602.08828v2, Theorem `thm:Cheby-AGSP`, item 5, lines 831–832, and
 Proposition 5.7, lines 1311–1333, in the proof of Theorem `t:aisff`, line 1604. -/
 theorem operatorSchmidtRank_aeval_threeRegion_region_le
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {a b ℓ : ℕ} (hℓ : 1 ≤ ℓ) (hab : a + 2 * ℓ ≤ b)
     (hb : b + 2 * ℓ ≤ L - 1) (P : Polynomial ℂ) (hdeg : P.natDegree ≤ ℓ ^ 2)
     (J : Finset (Fin L)) (hsub : interval L (a + ℓ) (b + ℓ + 1) ⊆ J)
@@ -196,7 +196,7 @@ theorem operatorSchmidtRank_aeval_threeRegion_region_le
   have hk : 1 ≤ ℓ ^ 2 := Nat.one_le_pow _ _ hℓ
   have htwo := operatorSchmidtRank_aeval_two_window_le_pow _ hWL hWR hPL hPM hPR hab hb hℓ
     (ℓ ^ 2) hk P hdeg 0
-  have hchange := FiniteProduct.operatorSchmidtRank_splitEquiv_le q J0 J
+  have hchange := ManyBody.operatorSchmidtRank_splitEquiv_le q J0 J
     (Polynomial.aeval (∑ α, threeRegionFamily h a b ℓ α) P)
   have hsymm : symmDiff J0 J = J \ J0 := by
     rw [symmDiff_def, Finset.sdiff_eq_empty_iff_subset.mpr hsub, Finset.sup_eq_union,
@@ -317,7 +317,7 @@ private theorem exists_long_frustrationFree_family
     (hb : b + 2 * ℓ ≤ L - 1) (hsub : interval L (a + ℓ) (b + ℓ + 1) ⊆ interval L p r)
     (hcollar : (interval L p r \ interval L (a + ℓ) (b + ℓ + 1)).card ≤ 2 * ℓ)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (hh : ∀ i, IsStarProjection (h i)) (g : ℝ) (hg : 0 < g) (hg1 : g ≤ 1)
     (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
@@ -531,7 +531,7 @@ private theorem exists_improving_family_core :
     ∃ A : ℝ, 1 ≤ A ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+        (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
           (interval L i.val (i.val + 2))) →
         (∀ i, IsStarProjection (h i)) →
       ∀ (γ : ℝ) (G₀ : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q))), 0 < γ →
@@ -693,7 +693,7 @@ theorem exists_frustrationFree_improving_family_words :
     ∃ A : ℝ, 1 ≤ A ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+        (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
           (interval L i.val (i.val + 2))) →
         (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) →
       ∀ γ : ℝ, 0 < γ →
@@ -735,7 +735,7 @@ theorem exists_frustrationFree_improving_family_words :
   let P : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun i ↦ (hpsd i).supportProj
   have hPp : ∀ i, IsStarProjection (P i) := fun i ↦
     (hpsd i).isHermitian.isStarProjection_supportProj
-  have hPs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (P i)
+  have hPs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (P i)
       (interval L i.val (i.val + 2)) := by
     intro i
     have hmem := ManyBody.cfc_mem_supportedOperators
@@ -802,7 +802,7 @@ theorem exists_frustrationFree_improving_family :
     ∃ A : ℝ, 1 ≤ A ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+        (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
           (interval L i.val (i.val + 2))) →
         (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) →
       ∀ γ : ℝ, 0 < γ →

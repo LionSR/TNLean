@@ -117,7 +117,7 @@ The term at the support `{i, i + 1}` is `H_i`, and the single-site terms vanish.
 `algo53.tex`, lines 209–211 and 283, of interaction norm at most one. -/
 noncomputable def _root_.ManyBody.ChainInteraction.ofBonds
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2))) :
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2))) :
     ManyBody.ChainInteraction L q 1 where
   term X := ∑ i, if bondSupport i = X then h i else 0
   mem X := (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun i _ ↦ by
@@ -129,7 +129,7 @@ noncomputable def _root_.ManyBody.ChainInteraction.ofBonds
 /-- The terms of positive semidefinite bonds are Hermitian. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_ofBonds_term
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
     (h0 : ∀ i, (h i).PosSemidef) (X : ChainSupport L 1) :
     ((ManyBody.ChainInteraction.ofBonds h hs).term X).IsHermitian :=
   (posSemidef_sum_bondSupport_ite h h0 X).isHermitian
@@ -137,7 +137,7 @@ theorem _root_.ManyBody.ChainInteraction.isHermitian_ofBonds_term
 /-- The terms of bonds with `0 ≤ H_i ≤ 1` have norm at most one. -/
 theorem _root_.ManyBody.ChainInteraction.norm_ofBonds_term_le
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1) (X : ChainSupport L 1) :
     ‖(ManyBody.ChainInteraction.ofBonds h hs).term X‖ ≤ 1 := by
   classical
@@ -154,7 +154,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_ofBonds_term_le
 /-- The Hamiltonian of `ManyBody.ChainInteraction.ofBonds` is the sum of the bond terms. -/
 theorem _root_.ManyBody.ChainInteraction.ofBonds_hamiltonian
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
  :
     (ManyBody.ChainInteraction.ofBonds h hs).hamiltonian = ∑ i, h i := by
   simp only [ManyBody.Interaction.hamiltonian, ManyBody.ChainInteraction.ofBonds]
@@ -164,7 +164,7 @@ theorem _root_.ManyBody.ChainInteraction.ofBonds_hamiltonian
 /-- The terms of `ManyBody.ChainInteraction.ofBonds` are positive semidefinite. -/
 theorem _root_.ManyBody.ChainInteraction.posSemidef_ofBonds_term
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
     (h0 : ∀ i, (h i).PosSemidef) (X : ChainSupport L 1) :
     ((ManyBody.ChainInteraction.ofBonds h hs).term X).PosSemidef :=
   posSemidef_sum_bondSupport_ite h h0 X
@@ -403,16 +403,16 @@ private def letterSupport (L : ℕ) (i : Fin L) : Finset (Fin L) :=
 /-- The letter `P_i` is supported on the sites of its bond. -/
 private theorem isSupportedOn_bondComplement
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
     (i : Fin L) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (bondComplement h i) (letterSupport L i) := by
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (bondComplement h i) (letterSupport L i) := by
   by_cases hi : i.val < L - 1
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_true, ite_true]
     change _ ∈ ManyBody.supportedOperators _ _
     exact sub_mem
-      (Entropy.isSupportedOn_one _) (hs ⟨i, hi⟩)
+      (one_mem (ManyBody.supportedOperators (fun v ↦ Fin (n v)) _)) (hs ⟨i, hi⟩)
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_false, ite_false, sub_zero]
-    exact Entropy.isSupportedOn_one _
+    exact one_mem (ManyBody.supportedOperators (fun v ↦ Fin (n v)) _)
 
 /-- A letter meets both sides of the cut after the sites `0, …, b` exactly when it is the bond
 `b`, and then it has one site on the left. -/
@@ -475,10 +475,10 @@ sites `b` and `b + 1`, the cut crossed only by the bond `b`. Landau, Vazirani an
 arXiv:1307.5143v1, `algo53.tex`, lines 584–588. -/
 theorem operatorSchmidtRank_cutOperator_bondComplementWord_le
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
     (b : Fin (L - 1)) {m k : ℕ} (I : Fin m → Fin L)
     (hk : (Finset.univ.filter fun j ↦ (I j).val = b.val).card ≤ k) :
-    Matrix.operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    Matrix.operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L (b + 1)) (bondComplementWord h I)) ≤ q ^ (2 * k) := by
   classical
   have hword : bondComplementWord h I = ((List.ofFn I).map (bondComplement h)).prod := by

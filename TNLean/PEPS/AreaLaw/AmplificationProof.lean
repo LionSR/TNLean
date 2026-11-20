@@ -206,7 +206,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
             ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
               C₀ * n →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+            ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -217,7 +217,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
                 Disjoint Jset (graphNeighborhood Λ (2 * r)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
-                FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
+                ManyBody.regionMutualInformation Ω X Jset ≤
                   amplificationConstant q R J Δ C₀ C₃ c₃ M * ((n : ℝ) ^ M)⁻¹) ∧
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +
@@ -260,7 +260,7 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
         linarith [hhJ ⟨{v}, hadm⟩, norm_nonneg (h.term ⟨{v}, hadm⟩)]
     rw [Finset.eq_empty_of_isEmpty X']
     calc _ = (0 : ℝ) := by
-          simp [FiniteProduct.mutualInformation, FiniteProduct.entropy_empty _ Ω hΩ]
+          simp [ManyBody.regionMutualInformation, ManyBody.regionEntropy_empty _ Ω hΩ]
       _ ≤ _ := mul_nonneg hC₂0 (by positivity)
   push Not at hdeg
   obtain ⟨hq0, hJ⟩ := hdeg
@@ -321,11 +321,11 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   -- The scales `w = n^{3/5}`, `t_*` and `r`.
   set w : ℝ := (n : ℝ) ^ ((3 : ℝ) / 5) with hwdef
   have hw0 : 0 ≤ w := Real.rpow_nonneg hn0.le _
-  set I := FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X (X ∪ Y)ᶜ with hIdef
+  set I := ManyBody.regionMutualInformation Ω X (X ∪ Y)ᶜ with hIdef
   have hII : I ≤ C₀ * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
     rw [hIdef, hXYS]
     exact hI
-  have hI0 : 0 ≤ I := FiniteProduct.mutualInformation_nonneg _ Ω hΩ _ _
+  have hI0 : 0 ≤ I := ManyBody.regionMutualInformation_nonneg _ Ω hΩ _ _
     (disjoint_compl_right.mono_left Finset.subset_union_left)
   set t : ℝ := amplificationTime g I w K n with htdef
   have hKlog : 0 ≤ (K : ℝ) * Real.log n :=
@@ -361,8 +361,8 @@ theorem amplificationBound_of_locality {q R : ℕ} {J Δ C₀ C₃ c₃ : ℝ} (
   let U := restoringEigenbasis Ω X
   obtain ⟨hU, hU'⟩ := restoringEigenbasis_unitary Ω X
   let 𝒲 := restoringTransport Ω X Y hXY
-  let p := (reducedState_isHermitian Λ q Ω X).eigenvalues
-  let E := Entropy.typicalSet p (regionalEntropy Λ q Ω X) w
+  let p := (ManyBody.regionState_isHermitian X Ω).eigenvalues
+  let E := Entropy.typicalSet p (ManyBody.regionEntropy Ω X) w
   let Tq := typicalProjection Λ q Ω Y w
   let Q := restoringCutProjection Ω X Y hXY w
   let ψ := restoringVector Ω X Y hXY
@@ -637,7 +637,7 @@ theorem amplificationBound_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ)
             ((edgeBoundary Λ (A.filter fun x ↦ x.val ∈ ambientDilation T
                 ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)).card : ℝ) ≤
               C₀ * n →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω
+            ManyBody.regionMutualInformation Ω
                 (A.filter fun x ↦ x.val ∈ T)
                 (A.filter fun x ↦ x.val ∈ ambientDilation T
                   ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)ᶜ ≤
@@ -648,7 +648,7 @@ theorem amplificationBound_explicit (q R : ℕ) {J Δ C₀ : ℝ} (hΔ : 0 < Δ)
                 Disjoint Jset (graphNeighborhood Λ (2 * r)
                   (A.filter fun x ↦ x.val ∈ ambientDilation T
                     ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊)) →
-                FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X Jset ≤
+                ManyBody.regionMutualInformation Ω X Jset ≤
                   amplificationConstantExplicit q R J Δ C₀ M * ((n : ℝ) ^ M)⁻¹) ∧
               ((∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
                   (⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊ : ℝ) +

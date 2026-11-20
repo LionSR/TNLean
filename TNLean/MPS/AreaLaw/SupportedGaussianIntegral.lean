@@ -171,7 +171,7 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
         (ℓ : ℝ), 0 ≤ ℓ →
         let K := h.doubled.hamiltonian
         let K' := (h.swappedDoubled D).hamiltonian
-        let crossing := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
+        let crossing := ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
         let Z := crossing.biUnion (fun X ↦ X.1)
         let N := fun S : Finset (Fin L) ↦
           chainNeighborhood S ℓ
@@ -235,7 +235,7 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
         (D : Finset (Fin Λ.card)) (m : ℕ),
         let K := h.doubled.hamiltonian
         let K' := (h.swappedDoubled D).hamiltonian
-        let crossing := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
+        let crossing := ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
         let Z := crossing.biUnion (fun X ↦ X.1)
         let N := fun S : Finset (Fin Λ.card) ↦
           S.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)

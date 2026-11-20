@@ -244,7 +244,7 @@ theorem chainOperator_eq_toEuclideanCLM_sum
 The commutations are derived from support and are not additional premises. -/
 theorem chainTerm_commute_of_not_adjacent
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (i j : ℕ) (hij : i + 1 ≠ j) (hji : j + 1 ≠ i) :
     Commute (chainTerm h i) (chainTerm h j) := by
   classical
@@ -257,14 +257,13 @@ theorem chainTerm_commute_of_not_adjacent
     simp only [mem_interval] at hx hy
     omega
   have hc : Commute (bondTermExtension h i) (bondTermExtension h j) :=
-    Entropy.commute_of_isSupportedOn_disjoint (bondTermExtension_supported hsupp i)
-      (bondTermExtension_supported hsupp j) hd
-      (fun _ : Fin L ↦ (⟨0, Nat.lt_of_lt_of_le Nat.zero_lt_one hq⟩ : Fin q))
+    ManyBody.commute_of_mem_supportedOperators_of_disjoint (bondTermExtension_supported hsupp i)
+        (bondTermExtension_supported hsupp j) hd.symm
   exact hc.map (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)).toMonoidHom
 
 private theorem chain_parity_commute
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b : ℕ) :
     (∀ i ∈ evenBonds a b, ∀ j ∈ evenBonds a b, Commute (chainTerm h i) (chainTerm h j)) ∧
     (∀ i ∈ oddBonds a b, ∀ j ∈ oddBonds a b, Commute (chainTerm h i) (chainTerm h j)) := by
@@ -298,7 +297,7 @@ from locality. ALVV, Theorem 5.14(1), including degenerate ground spaces. -/
 theorem ker_chainReplacement
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b : ℕ) :
     LinearMap.ker (chainReplacement h a b).toLinearMap =
       LinearMap.ker (chainOperator h).toLinearMap := by
@@ -339,7 +338,7 @@ Theorem `t:aisff`, lines 1597–1599, is the same argument. -/
 theorem parityReplacement_gap
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
     (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
       γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ) {s t : Finset ℕ}
@@ -374,7 +373,7 @@ ALVV, Theorem 5.14(3), with squared norms and the constant-three converse. -/
 theorem chainReplacement_gap
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
     (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
       γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ) (a b : ℕ)
@@ -390,7 +389,7 @@ all original terms are projections. ALVV, Theorem 5.14(1). -/
 theorem chainReplacement_frustrationFree
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b : ℕ) {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : chainOperator h Ω = 0) :
     (1 - regionalProjection (chainTerm h) (evenBonds a b) m) Ω = 0 ∧
@@ -405,7 +404,7 @@ for every unit vector orthogonal to the full ground space. ALVV, Theorem 5.14(3)
 theorem chainReplacement_gap_linear
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ) (hγ1 : γ ≤ 1)
     (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
       γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ) (a b : ℕ)
@@ -429,7 +428,7 @@ The source's false unrestricted bound is not asserted. -/
 theorem frustrationFree_regionalReplacement_chain
     (h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (hq : 1 ≤ q)
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
     (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
       γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ)
@@ -444,10 +443,10 @@ theorem frustrationFree_regionalReplacement_chain
     ((1 - regionalProjection (chainTerm h) (evenBonds a b) m) Ω = 0 ∧
       (1 - regionalProjection (chainTerm h) (oddBonds a b) m) Ω = 0 ∧
       ∀ i < m, i ∉ evenBonds a b ∪ oddBonds a b → chainTerm h i Ω = 0) ∧
-    (∀ k, operatorSchmidtRank (Entropy.cutOperator (interval L 0 k)
+    (∀ k, operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k)
       (regionalReplacementMatrix (bondTermExtension h) (evenBonds a b) (oddBonds a b) m)) ≤
         q ^ 2 + 3) ∧
-    ((a = 0 ∨ m ≤ b) → ∀ k, operatorSchmidtRank (Entropy.cutOperator (interval L 0 k)
+    ((a = 0 ∨ m ≤ b) → ∀ k, operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k)
       (regionalReplacementMatrix (bondTermExtension h) (evenBonds a b) (oddBonds a b) m)) ≤
         q ^ 2 + 2) ∧
     (∀ x ∈ (LinearMap.ker (chainReplacement h a b).toLinearMap)ᗮ, ‖x‖ = 1 →

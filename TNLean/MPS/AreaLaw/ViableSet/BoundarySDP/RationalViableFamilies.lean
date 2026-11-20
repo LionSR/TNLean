@@ -133,7 +133,7 @@ structure RationalCoordinateViableMPSDataOfHeight (H : ℕ)
   card_le : S.card ≤ s
   isLeftOpenMPS : ∀ v : S, IsLeftOpenMPS b v.1
   coordinate_height : ∀ v : S,
-    ∀ x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i),
+    ∀ x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)),
       HasRationalComplexCoordinatesOfHeight H (v.1 x)
   viable : IsViable Γ δ (S : Set (LeftBlockVector L q i))
 

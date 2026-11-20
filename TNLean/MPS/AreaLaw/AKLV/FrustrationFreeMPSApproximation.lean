@@ -55,7 +55,7 @@ AKLV, arXiv:1301.1162v1, Section 5, lines 862–868, with Lemma 2.2 (`lem:mu1`).
 theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
     (hq : 1 ≤ q) (hs0 : 6 ≤ s0) (hs : s = s0 + 2 * m) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h j) (interval L j.val (j.val + 2)))
     (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
@@ -89,7 +89,7 @@ theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
   obtain ⟨p0, -, -, hfix0, -, -, hrank0, hperp0⟩ := hfilter0 (s0 ^ 2)
   let K0 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval
     (aklvTwoBlockHamiltonian (a + m + 2) (a + m + s0 - 1) h (fun _ ↦ 0) t Finset.univ) p0
-  have hrank0' : operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+  have hrank0' : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) K0) ≤ D0 := by
     rw [← hk0]
     change _ ≤ (q * (s0 ^ 2 + 1)) ^ (32 * (2 * s0 + 1))
@@ -122,7 +122,7 @@ theorem exists_aklv_frustrationFree_two_filter_approximant {L q a s0 m s : ℕ}
   obtain ⟨p1, -, -, hfix1, -, -, hrank1, hperp1⟩ := hfilter1 (s ^ 2)
   let K1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval
     (aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h (fun _ ↦ 0) t Finset.univ) p1
-  have hrank1' : operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+  have hrank1' : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) K1) ≤ D1 := by
     change _ ≤ (q * (s ^ 2 + 1)) ^ (32 * (2 * s + 1))
     obtain ⟨hdiv, hsqrt⟩ := hsquare s (by omega)
@@ -176,7 +176,7 @@ theorem exists_aklv_frustrationFree_per_cut_approximation :
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
       2 ≤ q →
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
       (∑ j, h j) *ᵥ WithLp.ofLp Ω = 0 →
@@ -280,7 +280,7 @@ theorem exists_aklv_frustrationFree_sequential_mps_approximation :
     ∃ C : ℝ, 0 < C ∧ ∀ (L q : ℕ)
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
       (∑ j, h j) *ᵥ WithLp.ofLp Ω = 0 →
@@ -312,7 +312,7 @@ theorem exists_aklv_frustrationFree_sequential_mps_approximation :
   obtain ⟨D, hlog, hcuts⟩ := hcut L q h g Ω hq hsupp h0 h1 hΩ hzero hgap hg hg1 rho hrho hrho1
   refine ⟨D, hlog, ?_⟩
   have htail (k : ℕ) (hk : k ≤ L) :
-      1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (leftBlock L k) Ω).kyFanNorm D ≤ rho := by
     obtain ⟨y, hy, herror, hrank⟩ := hcuts k hk
     exact one_sub_kyFanNorm_le_of_unit_cut_rank_approximation Ω y hΩ hy herror hrank

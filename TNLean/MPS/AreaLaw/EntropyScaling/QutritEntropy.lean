@@ -25,7 +25,7 @@ namespace TNLean.MPS.AreaLaw.EntropyScaling
 
 private noncomputable def regionalMatrix {N : ℕ} (A : Finset (Fin (N + N)))
     (ψ : EuclideanSpace ℂ (Fin (N + N) → Fin 3)) :=
-  schmidtCoeffMatrix (WithLp.ofLp (Entropy.cutVector A ψ))
+  schmidtCoeffMatrix (WithLp.ofLp (ManyBody.cutVector A ψ))
 
 private theorem regionalMatrix_sum {N : ℕ} (A : Finset (Fin (N + N)))
     {ι : Type*} [Fintype ι] (ψ : ι → EuclideanSpace ℂ (Fin (N + N) → Fin 3)) :
@@ -41,8 +41,8 @@ private theorem regionalMatrix_basis {N : ℕ} (A : Finset (Fin (N + N)))
     (w : Fin (N + N) → Fin 3) :
     regionalMatrix A (EuclideanSpace.basisFun _ ℂ w) =
       Matrix.vecMulVec
-        (EuclideanSpace.basisFun _ ℂ ((Entropy.cutEquiv (fun _ ↦ 3) A w).1))
-        (EuclideanSpace.basisFun _ ℂ ((Entropy.cutEquiv (fun _ ↦ 3) A w).2)) := by
+        (EuclideanSpace.basisFun _ ℂ ((ManyBody.cutEquiv (fun _ ↦ Fin 3) A w).1))
+        (EuclideanSpace.basisFun _ ℂ ((ManyBody.cutEquiv (fun _ ↦ Fin 3) A w).2)) := by
   ext a b
   simp [regionalMatrix, schmidtCoeffMatrix, EuclideanSpace.basisFun_apply,
     Matrix.vecMulVec, Equiv.symm_apply_eq, Prod.ext_iff, ite_and]
@@ -110,12 +110,12 @@ private theorem regionalMatrix_zero {N : ℕ} (A : Finset (Fin (N + N))) :
 
 private theorem regionalMatrix_one_flagColumn {N : ℕ}
     {A : Finset (Fin (N + N))} (hA : A ≠ Finset.univ)
-    (a : Entropy.RegionConfig (fun _ : Fin (N + N) ↦ 3) A) :
+    (a : (ManyBody.RegionConfig (fun _ ↦ Fin 3) A)) :
     regionalMatrix A (qutritState N 1) a (fun _ ↦ 2) = 0 := by
   obtain ⟨v, hv⟩ := (show ∃ v, v ∉ A by
     simpa only [ne_eq, Finset.eq_univ_iff_forall, not_forall] using hA)
   exact qutritState_one_apply_eq_zero _ v
-    (Entropy.cutEquiv_symm_apply_not_mem (n := fun _ : Fin (N + N) ↦ 3) a (fun _ ↦ 2) hv)
+    (ManyBody.cutEquiv_symm_apply_not_mem (X := fun _ ↦ Fin 3) a (fun _ ↦ 2) hv)
 
 private theorem regionalMatrix_cross_eq_zero {N : ℕ}
     {A : Finset (Fin (N + N))} (hA : A ≠ Finset.univ) :
@@ -130,14 +130,14 @@ arXiv:0705.0292v2, `eq:magicstate`, lines 382–386. The endpoints are included.
 theorem regionState_qutritState_decomposition {N : ℕ}
     {A : Finset (Fin (N + N))} (hA : A ≠ Finset.univ)
     {p : ℝ} (hp : 0 ≤ p) (hp' : p ≤ 1) :
-    Entropy.regionState A (qutritState N p) =
-      ((1 - p : ℝ) : ℂ) • Entropy.regionState A (qutritState N 0) +
-      (p : ℂ) • Entropy.regionState A (qutritState N 1) := by
+    ManyBody.regionState (qutritState N p) A =
+      ((1 - p : ℝ) : ℂ) • ManyBody.regionState (qutritState N 0) A +
+      (p : ℂ) • ManyBody.regionState (qutritState N 1) A := by
   have hcross := regionalMatrix_cross_eq_zero hA
   have hcross' := congrArg Matrix.conjTranspose hcross
   simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_conjTranspose,
     Matrix.conjTranspose_zero] at hcross'
-  simp only [Entropy.regionState]
+  simp only [ManyBody.regionState]
   change regionalMatrix A (qutritState N p) * (regionalMatrix A (qutritState N p))ᴴ =
     ((1 - p : ℝ) : ℂ) •
         (regionalMatrix A (qutritState N 0) * (regionalMatrix A (qutritState N 0))ᴴ) +
@@ -152,14 +152,14 @@ theorem regionState_qutritState_decomposition {N : ℕ}
 
 private theorem rank_regionalMatrix_one_le {N : ℕ} (A : Finset (Fin (N + N))) :
     (regionalMatrix A (qutritState N 1)).rank ≤ 2 ^ N := by
-  let L : Matrix (Entropy.RegionConfig (fun _ : Fin (N + N) ↦ 3) A)
+  let L : Matrix (ManyBody.RegionConfig (fun _ ↦ Fin 3) A)
       (Fin N → Fin 2) ℂ := fun a x ↦
     (Real.sqrt (1 / (2 : ℝ) ^ N) : ℂ) * EuclideanSpace.basisFun _ ℂ
-      ((Entropy.cutEquiv (fun _ ↦ 3) A
+      ((ManyBody.cutEquiv (fun _ ↦ Fin 3) A
         (Fin.append (qutritWord N (.inr x)) (qutritWord N (.inr x)))).1) a
   let R : Matrix (Fin N → Fin 2) ({v : Fin (N + N) // v ∉ A} → Fin 3) ℂ := fun x b ↦
     EuclideanSpace.basisFun _ ℂ
-      ((Entropy.cutEquiv (fun _ ↦ 3) A
+      ((ManyBody.cutEquiv (fun _ ↦ Fin 3) A
         (Fin.append (qutritWord N (.inr x)) (qutritWord N (.inr x)))).2) b
   have hfact : regionalMatrix A (qutritState N 1) = L * R := by
     rw [qutritState_split]
@@ -173,13 +173,13 @@ private theorem rank_regionalMatrix_one_le {N : ℕ} (A : Finset (Fin (N + N))) 
   exact (Matrix.rank_mul_le_left L R).trans (by simpa using Matrix.rank_le_card_width L)
 
 private theorem rank_regionState_one_le {N : ℕ} (A : Finset (Fin (N + N))) :
-    (Entropy.regionState A (qutritState N 1)).rank ≤ 2 ^ N := by
-  rw [Entropy.regionState, partialTraceRight_vecMulVec_eq]
+    (ManyBody.regionState (qutritState N 1) A).rank ≤ 2 ^ N := by
+  rw [ManyBody.regionState, partialTraceRight_vecMulVec_eq]
   exact (Matrix.rank_mul_le_left _ _).trans (rank_regionalMatrix_one_le A)
 
 private theorem rank_regionState_zero_le {N : ℕ} (A : Finset (Fin (N + N))) :
-    (Entropy.regionState A (qutritState N 0)).rank ≤ 1 := by
-  rw [Entropy.regionState, partialTraceRight_vecMulVec_eq]
+    (ManyBody.regionState (qutritState N 0) A).rank ≤ 1 := by
+  rw [ManyBody.regionState, partialTraceRight_vecMulVec_eq]
   change (regionalMatrix A (qutritState N 0) * (regionalMatrix A (qutritState N 0))ᴴ).rank ≤ 1
   refine (Matrix.rank_mul_le_left _ _).trans ?_
   rw [regionalMatrix_zero]
@@ -187,24 +187,24 @@ private theorem rank_regionState_zero_le {N : ℕ} (A : Finset (Fin (N + N))) :
 
 private theorem trace_regionState_qutritState {N : ℕ} (hN : 0 < N)
     (A : Finset (Fin (N + N))) {p : ℝ} (hp : 0 ≤ p) (hp' : p ≤ 1) :
-    (Entropy.regionState A (qutritState N p)).trace = 1 := by
-  simp [Entropy.trace_regionState, norm_qutritState hN hp hp']
+    (ManyBody.regionState (qutritState N p) A).trace = 1 := by
+  simp [ManyBody.trace_regionState, norm_qutritState hN hp hp']
 
 private theorem regionEntropy_qutritState_zero {N : ℕ} (hN : 0 < N)
-    (A : Finset (Fin (N + N))) : Entropy.regionEntropy A (qutritState N 0) = 0 :=
-  vonNeumannEntropy_eq_zero_of_rank_le_one (Entropy.regionState_posSemidef _ _)
+    (A : Finset (Fin (N + N))) : ManyBody.regionEntropy (qutritState N 0) A = 0 :=
+  vonNeumannEntropy_eq_zero_of_rank_le_one (ManyBody.regionState_posSemidef _ _)
     (trace_regionState_qutritState hN A le_rfl zero_le_one) (rank_regionState_zero_le A)
 
 private theorem regionEntropy_qutritState_one_le {N : ℕ} (hN : 0 < N)
     (A : Finset (Fin (N + N))) :
-    Entropy.regionEntropy A (qutritState N 1) ≤ (N : ℝ) * Real.log 2 := by
-  have hρ := Entropy.regionState_posSemidef A (qutritState N 1)
+    ManyBody.regionEntropy (qutritState N 1) A ≤ (N : ℝ) * Real.log 2 := by
+  have hρ := ManyBody.regionState_posSemidef A (qutritState N 1)
   have htr := trace_regionState_qutritState hN A zero_le_one le_rfl
   refine (vonNeumannEntropy_le_log_rank hρ htr).trans ?_
   have hlog := Real.log_le_log
-    (show (0 : ℝ) < (Entropy.regionState A (qutritState N 1)).rank by
+    (show (0 : ℝ) < (ManyBody.regionState (qutritState N 1) A).rank by
       exact_mod_cast hρ.rank_pos_of_trace_one htr)
-    (show ((Entropy.regionState A (qutritState N 1)).rank : ℝ) ≤ (2 : ℝ) ^ N by
+    (show ((ManyBody.regionState (qutritState N 1) A).rank : ℝ) ≤ (2 : ℝ) ^ N by
       exact_mod_cast rank_regionState_one_le A)
   simpa only [Real.log_pow] using hlog
 
@@ -212,10 +212,10 @@ private theorem regionEntropy_qutritState_one_le {N : ℕ} (hN : 0 < N)
 Source: arXiv:0705.0292v2, `eq:magicstate`, lines 382–386. -/
 theorem regionEntropy_qutritState_univ {N : ℕ} (hN : 0 < N)
     {p : ℝ} (hp : 0 ≤ p) (hp' : p ≤ 1) :
-    Entropy.regionEntropy Finset.univ (qutritState N p) = 0 := by
+    ManyBody.regionEntropy (qutritState N p) Finset.univ = 0 := by
   apply vonNeumannEntropy_eq_zero_of_rank_le_one
-    (Entropy.regionState_posSemidef _ _) (trace_regionState_qutritState hN _ hp hp')
-  rw [Entropy.regionState, partialTraceRight_vecMulVec_eq]
+    (ManyBody.regionState_posSemidef _ _) (trace_regionState_qutritState hN _ hp hp')
+  rw [ManyBody.regionState, partialTraceRight_vecMulVec_eq]
   refine (Matrix.rank_mul_le_left _ _).trans ?_
   change (regionalMatrix Finset.univ (qutritState N p)).rank ≤ 1
   simpa using Matrix.rank_le_card_width (regionalMatrix Finset.univ (qutritState N p))
@@ -225,24 +225,24 @@ theorem regionEntropy_qutritState_univ {N : ℕ} (hN : 0 < N)
 logarithms. Source: arXiv:0705.0292v2, lines 382–388 and 426–430. -/
 theorem regionEntropy_qutritState_le {N : ℕ} (hN : 0 < N)
     (A : Finset (Fin (N + N))) {p : ℝ} (hp : 0 ≤ p) (hp' : p ≤ 1) :
-    Entropy.regionEntropy A (qutritState N p) ≤
+    ManyBody.regionEntropy (qutritState N p) A ≤
       Real.binEntropy p + p * (N : ℝ) * Real.log 2 := by
   by_cases hA : A = Finset.univ
   · subst A
     rw [regionEntropy_qutritState_univ hN hp hp']
     exact add_nonneg (Real.binEntropy_nonneg hp hp') (by positivity)
-  have h0 := Entropy.regionState_posSemidef A (qutritState N 0)
-  have h1 := Entropy.regionState_posSemidef A (qutritState N 1)
+  have h0 := ManyBody.regionState_posSemidef A (qutritState N 0)
+  have h1 := ManyBody.regionState_posSemidef A (qutritState N 1)
   have htr0 := trace_regionState_qutritState hN A le_rfl zero_le_one
   have htr1 := trace_regionState_qutritState hN A zero_le_one le_rfl
   have hadd := vonNeumannEntropy_add_le
     (h0.smul (show (0 : ℂ) ≤ ((1 - p : ℝ) : ℂ) by exact_mod_cast sub_nonneg.mpr hp'))
     (h1.smul (show (0 : ℂ) ≤ (p : ℂ) by exact_mod_cast hp))
   rw [vonNeumannEntropy_smul h0 htr0, vonNeumannEntropy_smul h1 htr1] at hadd
-  have hmix : Entropy.regionEntropy A (qutritState N p) ≤
-      (1 - p) * Entropy.regionEntropy A (qutritState N 0) + Real.negMulLog (1 - p) +
-        (p * Entropy.regionEntropy A (qutritState N 1) + Real.negMulLog p) := by
-    simpa only [Entropy.regionEntropy, ManyBody.regionEntropy,
+  have hmix : ManyBody.regionEntropy (qutritState N p) A ≤
+      (1 - p) * ManyBody.regionEntropy (qutritState N 0) A + Real.negMulLog (1 - p) +
+        (p * ManyBody.regionEntropy (qutritState N 1) A + Real.negMulLog p) := by
+    simpa only [ManyBody.regionEntropy, ManyBody.regionEntropy,
       regionState_qutritState_decomposition hA hp hp']
       using hadd
   rw [regionEntropy_qutritState_zero hN A, mul_zero, zero_add] at hmix
@@ -255,21 +255,21 @@ theorem regionEntropy_qutritState_le {N : ℕ} (hN : 0 < N)
 `eq:magicstate`, lines 382–386. -/
 theorem regionEntropy_qutritState_empty {N : ℕ} (hN : 0 < N)
     {p : ℝ} (hp : 0 ≤ p) (hp' : p ≤ 1) :
-    Entropy.regionEntropy ∅ (qutritState N p) = 0 := by
+    ManyBody.regionEntropy (qutritState N p) ∅ = 0 := by
   apply vonNeumannEntropy_eq_zero_of_rank_le_one
-    (Entropy.regionState_posSemidef _ _) (trace_regionState_qutritState hN _ hp hp')
-  simpa using Matrix.rank_le_card_width (Entropy.regionState ∅ (qutritState N p))
+    (ManyBody.regionState_posSemidef _ _) (trace_regionState_qutritState hN _ hp hp')
+  simpa using Matrix.rank_le_card_width (ManyBody.regionState (qutritState N p) ∅)
 
 /-- Every region of the source's choice `p_N = 1/N` has entropy at most two bits.
 The displayed inequality uses natural logarithms. Source: arXiv:0705.0292v2,
 lines 387–388 and 426–430. -/
 theorem regionEntropy_qutritFamily_le {N : ℕ} (hN : 0 < N)
     (A : Finset (Fin (N + N))) :
-    Entropy.regionEntropy A (qutritFamily N) ≤ 2 * Real.log 2 := by
+    ManyBody.regionEntropy (qutritFamily N) A ≤ 2 * Real.log 2 := by
   have hNpos : (0 : ℝ) < N := by exact_mod_cast hN
   have hNge : (1 : ℝ) ≤ N := by exact_mod_cast hN
   calc
-    Entropy.regionEntropy A (qutritFamily N) ≤
+    ManyBody.regionEntropy (qutritFamily N) A ≤
         Real.binEntropy ((N : ℝ)⁻¹) + (N : ℝ)⁻¹ * N * Real.log 2 :=
       regionEntropy_qutritState_le hN A (inv_nonneg.mpr hNpos.le)
         (inv_le_one_of_one_le₀ hNge)

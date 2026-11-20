@@ -77,7 +77,7 @@ every cutoff that produces the orthogonal bound. -/
 theorem robust_ground_of_clipped_ground_gap {L q : ℕ}
     (I : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (z e g t : ℝ)
@@ -158,7 +158,7 @@ from their disjoint supports; no tail, residual or new gap is assumed. -/
 theorem exists_robust_ground_twoSidedEnergyTruncation {L q : ℕ}
     (I : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (z e g t : ℝ)

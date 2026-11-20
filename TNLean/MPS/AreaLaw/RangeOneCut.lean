@@ -53,8 +53,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_cut_decomposition_of_range_one {
         (hpos : ∀ X, (h.term X).PosSemidef) (k : ℕ) :
     ∃ HL HR K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       h.hamiltonian = HL + HR + K ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (interval L 0 k) ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HR (interval L 0 k)ᶜ ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HR (interval L 0 k)ᶜ ∧
       K.PosSemidef ∧ (1 - K).PosSemidef := by
   classical
   let A := interval L 0 k
@@ -94,8 +94,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_cut_decomposition_of_range_one {
       (Finset.sum_filter_add_sum_filter_not U (fun X ↦ X.1 ⊆ Aᶜ) h.term).symm
     rw [hSU, hTC, add_assoc]
   · change _ ∈ ManyBody.supportedOperators _ _
-    exact sum_mem fun X hX ↦ Entropy.IsSupportedOn.mono (h.mem X) (Finset.mem_filter.mp hX).2
+    exact sum_mem fun X hX ↦ ManyBody.IsSupportedOn.mono (h.mem X) (Finset.mem_filter.mp hX).2
   · change _ ∈ ManyBody.supportedOperators _ _
-    exact sum_mem fun X hX ↦ Entropy.IsSupportedOn.mono (h.mem X) (Finset.mem_filter.mp hX).2
+    exact sum_mem fun X hX ↦ ManyBody.IsSupportedOn.mono (h.mem X) (Finset.mem_filter.mp hX).2
 
 end TNLean.MPS.AreaLaw

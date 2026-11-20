@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Entropy.FiniteProduct
+import QICLean.Entropy.RegionEntropy
 import TNLean.PEPS.Approximation.AngularSeparationBridges
 import TNLean.PEPS.Approximation.Basic
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -90,7 +90,7 @@ def AngularInformationBound (q : ℕ) (J Δ : ℝ) : Prop :=
         ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →
           (∀ x ∈ X, ∀ y ∈ X, dist (sitePosition L x) (sitePosition L y) ≤ A₀ * n) →
           AngularSeparation (sitePosition L '' X) (sitePosition L '' E) n (D * Real.log L) a V →
-          FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω X E ≤
+          ManyBody.regionMutualInformation Ω X E ≤
             (L : ℝ) ^ (-p)
 
 /-- **One slope and one threshold for Proposition 3.4 at accuracy `L^{-p}`.** For every
@@ -113,7 +113,7 @@ def IsAngularScale (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (a A₀ 
       ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →
         (∀ x ∈ X, ∀ y ∈ X, dist (pos x) (pos y) ≤ A₀ * n) →
         AngularSeparation (pos '' X) (pos '' E) n (D * Real.log L) a V →
-        FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω X E ≤
+        ManyBody.regionMutualInformation Ω X E ≤
           (L : ℝ) ^ (-(p : ℤ))
 
 /-- **A slope and threshold of Proposition 3.4 at the sites `Λ_L` give an angular scale.** If
@@ -130,7 +130,7 @@ theorem IsAngularScale.of_sitePosition {q : ℕ} {G : ∀ L : ℕ, StateSpace L 
         ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →
           (∀ x ∈ X, ∀ y ∈ X, dist (sitePosition L x) (sitePosition L y) ≤ A₀ * n) →
           AngularSeparation (sitePosition L '' X) (sitePosition L '' E) n (D * Real.log L) a V →
-          FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω X E ≤
+          ManyBody.regionMutualInformation Ω X E ≤
             (L : ℝ) ^ (-(p : ℝ))) :
     IsAngularScale q G a A₀ m₀ p D L₀ := by
   classical

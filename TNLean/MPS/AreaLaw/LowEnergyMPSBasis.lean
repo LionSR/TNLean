@@ -43,7 +43,7 @@ theorem exists_fixed_bandwidth_low_energy_orthonormal_mps_basis
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q : ℕ) (v : ℝ) (hq : 0 < q), 0 < v →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (h i) (interval L i.val (i.val + 2)))
         (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1),
       let _ : Nonempty (Fin L → Fin q) :=

@@ -33,15 +33,15 @@ matrix approximation error. -/
 theorem regionEntropy_le_log_rank_add_spectral_tail {L q D : ℕ}
     (ψ : EuclideanSpace ℂ (Fin L → Fin q))
     (hψ : ‖ψ‖ = 1) (R : Finset (Fin L)) {ε : ℝ}
-    (htail : ∑ i ∈ Finset.Ico D (Fintype.card (Entropy.RegionConfig (fun _ : Fin L ↦ q) R)),
-      (Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q) R ψ).isHermitian.descEigenvalue i
+    (htail : ∑ i ∈ Finset.Ico D (Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin q) R)),
+      (ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) R ψ).isHermitian.descEigenvalue i
         ≤ ε) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) R ψ ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) ψ R ≤
       Real.log D + ε * (R.card : ℝ) * Real.log q + Real.log 2 := by
-  have hρ := Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q) R ψ
+  have hρ := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) R ψ
   have hb := hρ.vonNeumannEntropy_le_log_rank_add_tail
-    (by simp [Entropy.trace_regionState, hψ]) htail
-  simpa [Entropy.regionEntropy, ManyBody.regionEntropy, Entropy.RegionConfig, Fintype.card_pi,
+    (by simp [ManyBody.trace_regionState, hψ]) htail
+  simpa [ManyBody.regionEntropy, ManyBody.regionEntropy, Entropy.RegionConfig, Fintype.card_pi,
     Real.log_pow, mul_assoc] using hb
 
 end TNLean.MPS.AreaLaw

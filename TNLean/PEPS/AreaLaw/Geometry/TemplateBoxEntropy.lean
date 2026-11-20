@@ -46,8 +46,8 @@ theorem Template.regionalEntropy_core_le_of_safe_box
     (K : ℕ) (hlo : 2 ^ K ≤ s₀) (hhi : s₀ < 2 ^ (K + 1))
     (e C : ℝ) (he : 0 < e) (hCbox : 0 ≤ C)
     (hbox : ∀ Q : IntRect, IsSafe Λ A D₀ Q →
-      regionalEntropy Λ q Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e)) :
-    regionalEntropy Λ q Ω (A.filter fun x ↦ x.1 ∈ T.points) ≤
+      ManyBody.regionEntropy Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e)) :
+    ManyBody.regionEntropy Ω (A.filter fun x ↦ x.1 ∈ T.points) ≤
       C * (18 + 4 / ((2 : ℝ) ^ e - 1)) * n * (s₀ : ℝ) ^ e := by
   have h := regionalEntropy_filter_le_weighted_cover Λ q D₀ Ω hΩ A T.points K e C
     (fun c hc ↦ hsep.isSafe_cappedDyadicPartition_core hD K c.1 c.2 hlo hc) hbox
@@ -65,8 +65,8 @@ theorem Template.regionalEntropy_shell_le_of_safe_box
     (hlo : 2 ^ K ≤ L) (hhi : L < 2 ^ (K + 1))
     (e C : ℝ) (he : 0 < e) (hCbox : 0 ≤ C)
     (hbox : ∀ Q : IntRect, IsSafe Λ A D₀ Q →
-      regionalEntropy Λ q Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e)) :
-    regionalEntropy Λ q Ω
+      ManyBody.regionEntropy Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e)) :
+    ManyBody.regionEntropy Ω
       (A.filter fun x ↦ x.1 ∈ ambientDilation T.points j \ T.points) ≤
       C * (2 + 14 / ((2 : ℝ) ^ e - 1)) * n * (L : ℝ) ^ e := by
   have h := regionalEntropy_filter_le_weighted_cover Λ q D₀ Ω hΩ A
@@ -90,8 +90,8 @@ theorem Template.regionalEntropy_prefix_le_of_safe_box
     (hY : Y ⊆ ambientDilation T.points j \ ambientDilation T.points (j - 1))
     (e C : ℝ) (he : 0 < e) (hCbox : 0 ≤ C)
     (hbox : ∀ Q : IntRect, IsSafe Λ A D₀ Q →
-      regionalEntropy Λ q Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e)) :
-    regionalEntropy Λ q Ω
+      ManyBody.regionEntropy Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e)) :
+    ManyBody.regionEntropy Ω
       (A.filter fun x ↦ x.1 ∈ (ambientDilation T.points (j - 1) \ T.points) ∪ Y) ≤
       C * (2 + 14 / ((2 : ℝ) ^ e - 1)) * n * (L : ℝ) ^ e + n * Real.log q := by
   have hs := Template.regionalEntropy_shell_le_of_safe_box Λ q D₀ Ω hΩ A T hC hsep hD
@@ -111,20 +111,20 @@ theorem exists_template_entropy_bounds_of_arbitrary_safe_box
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
     (hbox : ∀ ε : ℝ, 0 < ε → ε < 1 → ∃ C : ℝ, 0 ≤ C ∧
       ∀ Q : IntRect, IsSafe Λ A D₀ Q →
-        regionalEntropy Λ q Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + ε))
+        ManyBody.regionEntropy Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + ε))
     (e : ℝ) (he : 0 < e) (he₁ : e < 1) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀),
       24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ A) →
-      (regionalEntropy Λ q Ω (A.filter fun x ↦ x.1 ∈ T.points) ≤
+      (ManyBody.regionEntropy Ω (A.filter fun x ↦ x.1 ∈ T.points) ≤
         C * (18 + 4 / ((2 : ℝ) ^ e - 1)) * n * (s₀ : ℝ) ^ e) ∧
       (∀ j L : ℕ, 1 ≤ L → j ≤ L → L ≤ s₀ →
-        regionalEntropy Λ q Ω
+        ManyBody.regionEntropy Ω
           (A.filter fun x ↦ x.1 ∈ ambientDilation T.points j \ T.points) ≤
           C * (2 + 14 / ((2 : ℝ) ^ e - 1)) * n * (L : ℝ) ^ e) ∧
       (∀ j L : ℕ, 1 ≤ j → j ≤ L → L ≤ s₀ →
         ∀ Y : Finset (ℤ × ℤ),
           Y ⊆ ambientDilation T.points j \ ambientDilation T.points (j - 1) →
-          regionalEntropy Λ q Ω
+          ManyBody.regionEntropy Ω
             (A.filter fun x ↦ x.1 ∈ (ambientDilation T.points (j - 1) \ T.points) ∪ Y) ≤
             C * (2 + 14 / ((2 : ℝ) ^ e - 1)) * n * (L : ℝ) ^ e + n * Real.log q) := by
   obtain ⟨C, hCbox, hb⟩ := hbox e he he₁

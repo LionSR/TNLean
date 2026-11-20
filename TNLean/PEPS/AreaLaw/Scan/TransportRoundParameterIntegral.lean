@@ -44,7 +44,7 @@ omit [Fintype H] [DecidableEq H] [∀ h, Fintype (C h)]
     [∀ h, DecidableEq (C h)] [∀ v, NeZero (n v)] in
 /-- The old split-entropy sum is continuous in the coherent vector. -/
 private theorem continuous_chargeDefectSymbol (h : H) :
-    Continuous (fun θ : SiteConfig n → ℂ =>
+    Continuous (fun θ : (∀ v, Fin (n v)) → ℂ =>
       ∑ i, D.splitEta E i ⟨h, none⟩ ((EuclideanSpace.equiv _ ℂ).symm θ)) :=
   continuous_finsetSum _ fun i _ => D.continuous_splitEta n E i _
 
@@ -56,7 +56,7 @@ theorem aestronglyMeasurable_transportScanRound_chargeDefect
       (fun p => (transportScanRound D n E good t pre).chargeDefect k p)
       (volume.restrict (Ioo 0 1)) := by
   classical
-  let F (h : H) (θ : SiteConfig n → ℂ) :=
+  let F (h : H) (θ : (∀ v, Fin (n v)) → ℂ) :=
     ∑ i, D.splitEta E i ⟨h, none⟩ ((EuclideanSpace.equiv _ ℂ).symm θ)
   have hF (h : H) : Continuous (F h) := continuous_chargeDefectSymbol D n E h
   refine (D.aestronglyMeasurable_sum_oldFourierCoherentIntegral n hD ht hcomm
@@ -71,7 +71,7 @@ theorem intervalIntegrable_transportScanRound_chargeDefect
     IntervalIntegrable
       (fun p => (transportScanRound D n E good t pre).chargeDefect k p) volume 0 1 := by
   classical
-  let F (h : H) (θ : SiteConfig n → ℂ) :=
+  let F (h : H) (θ : (∀ v, Fin (n v)) → ℂ) :=
     ∑ i, D.splitEta E i ⟨h, none⟩ ((EuclideanSpace.equiv _ ℂ).symm θ)
   have hF (h : H) : Continuous (F h) := continuous_chargeDefectSymbol D n E h
   have heq : (fun p => (transportScanRound D n E good t pre).chargeDefect k p) =

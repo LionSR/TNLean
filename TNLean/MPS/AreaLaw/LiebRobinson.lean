@@ -71,12 +71,12 @@ theorem norm_heisenberg_commutator_le_graphDistance_inf
     (hCard : ∀ k, (T k).card ≤ R + 1)
     (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, Entropy.IsSupportedOn (n := fun _ ↦ q) (h k) (T k))
+    (hSupport : ∀ k, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h k) (T k))
     (b₀ : ℝ)
     (hBudget : ∀ x : ι, ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ T k), ‖h k‖ ≤ b₀)
     (S : Finset ι) {A B : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S) (y : ι)
-    (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B {y}) (t : ℝ) :
+    (hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A S) (y : ι)
+    (hB : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B {y}) (t : ℝ) :
     let δ : ℕ∞ := S.inf (fun x ↦ G.edist x y)
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A * B -
         B * ManyBody.heisenbergEvolution (∑ k, h k) t A‖ ≤
@@ -120,11 +120,11 @@ theorem norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_
     (hSphere : ∀ x : ι, ∀ d : ℕ, (Finset.univ.filter fun y ↦ G.edist x y = d).card ≤ 2)
     (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, Entropy.IsSupportedOn (n := fun _ ↦ q) (h k) (T k))
+    (hSupport : ∀ k, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h k) (T k))
     (b₀ : ℝ)
     (hBudget : ∀ x : ι, ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ T k), ‖h k‖ ≤ b₀)
     (S : Finset ι) {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S)
+    (hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A S)
     (ℓ : ℝ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A -
         ManyBody.regionExpectation
@@ -202,13 +202,13 @@ theorem norm_heisenberg_commutator_le_chainDistance
     (X : κ → ChainSupport L R)
     (h : κ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, Entropy.IsSupportedOn (n := fun _ ↦ q) (h k) (X k).1)
+    (hSupport : ∀ k, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h k) (X k).1)
     (b₀ : ℝ)
     (hBudget : ∀ x : Fin L,
       ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ (X k).1), ‖h k‖ ≤ b₀)
     (S : Finset (Fin L)) {A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S) (y : Fin L)
-    (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B {y}) (t : ℝ) :
+    (hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A S) (y : Fin L)
+    (hB : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B {y}) (t : ℝ) :
     let δ : ℕ∞ := S.inf (fun x ↦ (SimpleGraph.pathGraph L).edist x y)
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A * B -
         B * ManyBody.heisenbergEvolution (∑ k, h k) t A‖ ≤
@@ -226,13 +226,13 @@ theorem norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
     (X : κ → ChainSupport L R)
     (h : κ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, Entropy.IsSupportedOn (n := fun _ ↦ q) (h k) (X k).1)
+    (hSupport : ∀ k, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h k) (X k).1)
     (b₀ : ℝ)
     (hBudget : ∀ x : Fin L,
       ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ (X k).1), ‖h k‖ ≤ b₀)
     (S : Finset (Fin L))
     {A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S)
+    (hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A S)
     (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A -
         ManyBody.regionExpectation
@@ -257,14 +257,14 @@ theorem norm_heisenberg_commutator_le_domainDistance
     (X : κ → DomainSupport Λ R)
     (h : κ → Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ)
     (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, Entropy.IsSupportedOn (n := fun _ ↦ q) (h k) (X k).1)
+    (hSupport : ∀ k, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h k) (X k).1)
     (b₀ : ℝ)
     (hBudget : ∀ x : Fin Λ.card,
       ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ (X k).1), ‖h k‖ ≤ b₀)
     (S : Finset (Fin Λ.card))
     {A B : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ}
-    (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S) (y : Fin Λ.card)
-    (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B {y}) (t : ℝ) :
+    (hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A S) (y : Fin Λ.card)
+    (hB : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B {y}) (t : ℝ) :
     let δ : ℕ∞ := S.inf (fun x ↦ (lineDomainGraph Λ).edist x y)
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A * B -
         B * ManyBody.heisenbergEvolution (∑ k, h k) t A‖ ≤
@@ -283,13 +283,13 @@ theorem norm_heisenberg_sub_regionExpectation_domainNeighborhood_le
     (X : κ → DomainSupport Λ R)
     (h : κ → Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ)
     (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, Entropy.IsSupportedOn (n := fun _ ↦ q) (h k) (X k).1)
+    (hSupport : ∀ k, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h k) (X k).1)
     (b₀ : ℝ)
     (hBudget : ∀ x : Fin Λ.card,
       ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ (X k).1), ‖h k‖ ≤ b₀)
     (S : Finset (Fin Λ.card))
     {A : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ}
-    (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S)
+    (hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A S)
     (ℓ : ℝ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A -
         ManyBody.regionExpectation

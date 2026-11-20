@@ -45,7 +45,7 @@ lines 1195–1255, and `t:aisefficient`, lines 1373–1420. -/
 theorem exists_single_region_original_soft_truncation_residual {L q l r : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),

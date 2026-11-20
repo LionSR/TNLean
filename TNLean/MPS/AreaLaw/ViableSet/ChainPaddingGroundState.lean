@@ -56,12 +56,12 @@ theorem isGapped_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
   let b0 : (v : {v : Fin N // v ∉ leftBlock N L}) → Fin q := fun _ ↦ z
   let A := Matrix.reindex e e H
   let B := QuantumCircuit.productBasisPenalty b0
-  let c := Entropy.cutEquiv (fun _ : Fin N ↦ q) (leftBlock N L)
-  have hpad : Entropy.cutOperator (leftBlock N L) (∑ j, paddedInteraction hi z h j) =
+  let c := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock N L)
+  have hpad : ManyBody.cutOperator (leftBlock N L) (∑ j, paddedInteraction hi z h j) =
       A ⊗ₖ 1 + 1 ⊗ₖ B := by
     rw [sum_paddedInteraction hL hi z h]
-    change Entropy.cutOperator (leftBlock N L) (QuantumCircuit.embedOp (Fin.castLE hi) H) +
-      Entropy.cutOperator (leftBlock N L)
+    change ManyBody.cutOperator (leftBlock N L) (QuantumCircuit.embedOp (Fin.castLE hi) H) +
+      ManyBody.cutOperator (leftBlock N L)
         (∑ v : {v : Fin N // v ∉ leftBlock N L},
           QuantumCircuit.siteOp v.val (QuantumCircuit.siteBasisPenalty z)) = _
     rw [cutOperator_embedOp_prefix hi b0 H,
@@ -76,7 +76,7 @@ theorem isGapped_paddedInteraction {L N q : ℕ} (hL : 1 ≤ L) (hi : L ≤ N)
     (QuantumCircuit.groundSpace_productBasisPenalty b0)
   rw [add_zero, ← hpad] at hgK hsK
   have hsP := ManyBody.groundSpace_reindex_eq_span c.symm hsK
-  rw [show Matrix.reindex c.symm c.symm (Entropy.cutOperator (leftBlock N L)
+  rw [show Matrix.reindex c.symm c.symm (ManyBody.cutOperator (leftBlock N L)
       (∑ j, paddedInteraction hi z h j)) = ∑ j, paddedInteraction hi z h j by
     ext σ τ
     exact congrArg₂ (∑ j, paddedInteraction hi z h j) (c.symm_apply_apply σ)

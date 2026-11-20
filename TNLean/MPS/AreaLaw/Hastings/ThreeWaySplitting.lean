@@ -155,10 +155,10 @@ end Centering
 /-- Centering preserves the support: the identity is supported on every region.
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 781–782. -/
 theorem _root_.Entropy.IsSupportedOn.groundCentered {V : Type*} [Fintype V] [DecidableEq V]
-    {n : V → ℕ} {M : Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ}
-    {D : Finset V} (hM : Entropy.IsSupportedOn M D)
-    (Ψ : EuclideanSpace ℂ (Entropy.SiteConfig n)) :
-    Entropy.IsSupportedOn (groundCentered Ψ M) D := by
+    {n : V → ℕ} {M : Matrix (∀ v, Fin (n v)) (∀ v, Fin (n v)) ℂ}
+    {D : Finset V} (hM : ManyBody.IsSupportedOn M D)
+    (Ψ : EuclideanSpace ℂ (∀ v, Fin (n v))) :
+    ManyBody.IsSupportedOn (groundCentered Ψ M) D := by
   have h1 := Entropy.isSupportedOn_one (n := n) D
   refine ⟨fun σ τ hστ ↦ ?_, fun σ τ σ' τ' ha hb hc hd ↦ ?_⟩
   · unfold TNLean.MPS.AreaLaw.Hastings.groundCentered
@@ -291,10 +291,10 @@ theorem _root_.ManyBody.ChainInteraction.norm_termSum_le (h : ChainInteraction L
 Hastings, arXiv:0705.2024v4, `law16.tex`, lines 88–89 (finite range). -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_termSum (h : ChainInteraction L q R)
     {S : Finset (ChainSupport L R)} {D : Finset (Fin L)} (hS : ∀ X ∈ S, X.1 ⊆ D) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.termSum S) D := by
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.termSum S) D := by
   change _ ∈ ManyBody.supportedOperators _ _
   exact sum_mem fun X hX ↦
-    Entropy.IsSupportedOn.mono (h.mem X) (hS X hX)
+    ManyBody.IsSupportedOn.mono (h.mem X) (hS X hX)
 
 /-! ### The parts `H_L`, `H_B`, `H_R` -/
 
@@ -384,21 +384,21 @@ theorem _root_.ManyBody.ChainInteraction.isGapped_groundCentered_parts_sum
 cut. Hastings, arXiv:0705.2024v4, `law16.tex`, line 776. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_leftPart
     (h : ChainInteraction L q R) (j m : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.leftPart j m) (interval L 0 (j - m)) :=
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.leftPart j m) (interval L 0 (j - m)) :=
   h.isSupportedOn_termSum fun _ hX ↦ (Finset.mem_filter.mp hX).2
 
 /-- The right part is supported on the sites `i ≥ j + m`, at distance at least `m` from the
 cut. Hastings, arXiv:0705.2024v4, `law16.tex`, line 778. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_rightPart
     (h : ChainInteraction L q R) (j m : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.rightPart j m) (interval L (j + m) L) :=
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.rightPart j m) (interval L (j + m) L) :=
   h.isSupportedOn_termSum fun _ hX ↦ (Finset.mem_filter.mp hX).2
 
 /-- The buffer part is supported on the window `[j - m - R, j + m + R)`.
 Hastings, arXiv:0705.2024v4, `law16.tex`, line 777. -/
 theorem _root_.ManyBody.ChainInteraction.isSupportedOn_bufferPart
     (h : ChainInteraction L q R) (j m : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.bufferPart j m)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.bufferPart j m)
       (interval L (j - m - R) (j + m + R)) :=
   h.isSupportedOn_termSum fun _ hX ↦ subset_window_of_mem_bufferSupports hX
 

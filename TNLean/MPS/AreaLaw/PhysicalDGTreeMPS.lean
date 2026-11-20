@@ -40,7 +40,7 @@ arXiv:1307.5143v1, Claim `c:2`, lines 520–527. -/
 theorem exists_physical_dg_interval_tree_mps :
     ∃ C K : ℝ, 1 ≤ C ∧ 0 < K ∧ ∀ (L q : ℕ),
     ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
     0 < gamma →
@@ -108,7 +108,7 @@ theorem exists_physical_dg_interval_tree_mps :
               S = Submodule.span ℂ (Set.range u) ∧
               ∀ j : ℕ, j < r - p - 1 → ∀ i : Fin n,
                 Matrix.schmidtRank (WithLp.ofLp
-                  (Entropy.cutVector (n := fun _ : interval L p r ↦ q)
+                  (ManyBody.cutVector (X := fun _ ↦ Fin q)
                     (intervalTrimCut L p r j) (u i))) ≤
                   1000000 * Dref ^ 2 * (L + 1) * count) ∧
         ∀ v : EuclideanSpace ℂ (interval L 0 L → Fin q),
@@ -135,7 +135,7 @@ theorem exists_physical_dg_interval_tree_mps :
   let R := 1000000 * Dref ^ 2 * (L + 1) * count
   have hgenerators : ∀ (i : Fin n) (j : ℕ), j < L - 1 →
       Matrix.schmidtRank (WithLp.ofLp
-        (Entropy.cutVector (intervalTrimCut L 0 L j) (generators i))) ≤ R := by
+        (ManyBody.cutVector (intervalTrimCut L 0 L j) (generators i))) ≤ R := by
     intro i j hj
     exact hranks j (by simpa only [Nat.sub_zero] using hj) i
   rw [hspan] at hvector

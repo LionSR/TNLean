@@ -58,7 +58,7 @@ theorem exists_rational_sampled_viable_successor_polynomial
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p D r E : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ L : ℕ, 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+        (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
           (interval L j (j + 2)))
         (_ : ∀ j, (h j).PosSemidef) (_ : ∀ j, h j ≤ 1)
         (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -76,7 +76,7 @@ theorem exists_rational_sampled_viable_successor_polynomial
           Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
             (ManyBody.ChainInteraction.ofBonds h hs) hq Δ (AreaLaw.extend (n + 1) S))
         ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 8 ∧
-        Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (n + 1))
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (n + 1))
           (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         T.card ≤ V.card ∧
         (∀ v ∈ T, Nonempty (RationalLeftOpenMPSRepresentationOfHeight
@@ -219,7 +219,7 @@ theorem exists_rational_sampled_successive_viable_sets_polynomial
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p D r E : ℕ, 1 ≤ C ∧ 1 ≤ D ∧ ∀ L : ℕ, 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+        (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
           (interval L j (j + 2)))
         (_ : ∀ j, (h j).PosSemidef) (_ : ∀ j, h j ≤ 1)
         (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
@@ -242,7 +242,7 @@ theorem exists_rational_sampled_successive_viable_sets_polynomial
               Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
                 (ManyBody.ChainInteraction.ofBonds h hs) hq Δ (AreaLaw.extend (i + 1) (S i)))
             ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 8 ∧
-            Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (i + 1))
+            ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
               (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
             (S (i + 1)).card ≤ V.card ∧
             ∀ (Γ' : EuclideanSpace ℂ (Fin L → Fin q)) (ε : ℝ),
@@ -285,7 +285,7 @@ theorem exists_rational_sampled_successive_viable_sets_polynomial
           Finset.univ A (ManyBody.ChainInteraction.sizeTrimmingSelection
             (ManyBody.ChainInteraction.ofBonds h hs) hq Δ (AreaLaw.extend (i + 1) S))
         ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 8 ∧
-        Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (i + 1))
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (i + 1))
           (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B' j ∧
         T.card ≤ V.card ∧
         ∀ (Γ' : EuclideanSpace ℂ (Fin L → Fin q)) (ε : ℝ),

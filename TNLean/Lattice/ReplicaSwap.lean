@@ -146,9 +146,9 @@ theorem doubledVector_comp_sumArrow {N : Type*} (t : (V → Fin q) × (V → Fin
     (Ω : EuclideanSpace ℂ (V → Fin q)) :
     (fun c ↦ Ω (t.symm c).1 * Ω (t.symm c).2) ∘
         ((Equiv.sumArrowEquivProdArrow V V (Fin q)).trans t) =
-      WithLp.ofLp (FiniteProduct.sumSitesProduct Ω Ω) := by
+      WithLp.ofLp (ManyBody.sumSitesProduct Ω Ω) := by
   funext x
-  simp [FiniteProduct.sumSitesProduct]
+  simp [ManyBody.sumSitesProduct]
   rfl
 
 /-- **The exchanged vector relabels the replicas.** `F_R (Ω ⊗ Ω)` is `Ω ⊗ Ω` read through the
@@ -160,7 +160,7 @@ theorem sheetSwapOp_mulVec_comp_sumArrow {N : Type*} [Fintype N]
         fun c ↦ Ω (t.symm c).1 * Ω (t.symm c).2) ∘
         ((Equiv.sumArrowEquivProdArrow V V (Fin q)).trans t) =
       WithLp.ofLp (FiniteProduct.relabelSites (replicaSwap R)
-        (FiniteProduct.sumSitesProduct Ω Ω)) := by
+        (ManyBody.sumSitesProduct Ω Ω)) := by
   funext x
   rw [reindex_apply, submatrix_mulVec_equiv, sheetSwapOp,
     PEquiv.toMatrix_toPEquiv_mulVec]
@@ -174,7 +174,7 @@ theorem sheetSwapOp_mulVec_comp_sumArrow {N : Type*} [Fintype N]
     funext v
     by_cases hv : v ∈ R <;>
       simp [sheetSwap, replicaSwap, replicaSwapFun, hv]
-  simp only [FiniteProduct.relabelSites, FiniteProduct.sumSitesProduct, Function.comp_apply]
+  simp only [FiniteProduct.relabelSites, ManyBody.sumSitesProduct, Function.comp_apply]
   simp only [Equiv.trans_apply, Equiv.symm_apply_apply, Equiv.symm_symm]
   change Ω.ofLp (sheetSwap q R (x ∘ Sum.inl, x ∘ Sum.inr)).1 *
     Ω.ofLp (sheetSwap q R (x ∘ Sum.inl, x ∘ Sum.inr)).2 = _
@@ -187,8 +187,8 @@ theorem sheetSwapOp_mulVec_comp_sumArrow {N : Type*} [Fintype N]
 Source: `02-information.tex`, lines 612–616. -/
 theorem mutualInformation_relabelSites_replicaSwap_eq_zero {Ω : EuclideanSpace ℂ (V → Fin q)}
     (hΩ : ‖Ω‖ = 1) {R R₀ C₀ : Finset V} (hR₀ : R₀ ⊆ R) (hC₀ : Disjoint C₀ R) :
-    FiniteProduct.mutualInformation (fun _ : V ⊕ V ↦ Fin q)
-      (FiniteProduct.relabelSites (replicaSwap R) (FiniteProduct.sumSitesProduct Ω Ω))
+    ManyBody.regionMutualInformation
+      (FiniteProduct.relabelSites (replicaSwap R) (ManyBody.sumSitesProduct Ω Ω))
       (R₀.disjSum ∅) (C₀.disjSum ∅) = 0 := by
   rw [FiniteProduct.mutualInformation_relabelSites]
   have hs : (replicaSwap R).symm = replicaSwap R := Equiv.ext fun _ ↦ rfl
@@ -210,7 +210,7 @@ theorem mutualInformation_relabelSites_replicaSwap_eq_zero {Ω : EuclideanSpace 
     rcases z with v | v <;> by_cases hv : v ∈ R <;>
       simp [replicaSwap, replicaSwapFun, hv, Finset.disjoint_right.mp hC₀]
   rw [hX, hJ]
-  exact FiniteProduct.mutualInformation_sumSitesProduct_inr_inl (X := fun _ : V ⊕ V ↦ Fin q)
+  exact ManyBody.regionMutualInformation_sumSitesProduct_inr_inl (X := fun _ : V ⊕ V ↦ Fin q)
     (f := Ω) (g := Ω) hΩ hΩ R₀ C₀
 
 end Replicas

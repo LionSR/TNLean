@@ -87,11 +87,11 @@ at every cut. Unitarity is unnecessary. Osborne, arXiv:quant-ph/0508031v2, Figur
 and Huang, arXiv:1406.6355v6, Section 5.4, Lemma 19. -/
 theorem operatorSchmidtRank_disjoint_interval_prod_le {ι : Type*}
     (hq : 1 ≤ q) (a b : ι → ℕ) (P : ι → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hP : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (P j) (interval L (a j) (b j)))
+    (hP : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (P j) (interval L (a j) (b j)))
     (w : List ι)
     (hdisj : w.Pairwise fun j k ↦ Disjoint (interval L (a j) (b j)) (interval L (a k) (b k)))
     (width : ℕ) (hwidth : ∀ j ∈ w, b j - a j ≤ width) (cut : ℕ) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L cut) ((w.map P).prod)) ≤ q ^ (2 * width) := by
   classical
   exact (Entropy.operatorSchmidtRank_cutOperator_list_prod_le
@@ -106,14 +106,14 @@ theorem operatorSchmidtRank_two_interval_layers_le {ι κ : Type*}
     (hq : 1 ≤ q) (a b : ι → ℕ) (c d : κ → ℕ)
     (P : ι → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (Q : κ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hP : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (P j) (interval L (a j) (b j)))
-    (hQ : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (Q j) (interval L (c j) (d j)))
+    (hP : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (P j) (interval L (a j) (b j)))
+    (hQ : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Q j) (interval L (c j) (d j)))
     (u : List ι) (v : List κ)
     (hu : u.Pairwise fun j k ↦ Disjoint (interval L (a j) (b j)) (interval L (a k) (b k)))
     (hv : v.Pairwise fun j k ↦ Disjoint (interval L (c j) (d j)) (interval L (c k) (d k)))
     (width₀ width₁ : ℕ)
     (hwidth₀ : ∀ j ∈ u, b j - a j ≤ width₀) (hwidth₁ : ∀ j ∈ v, d j - c j ≤ width₁) :
-    ∀ cut : ℕ, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    ∀ cut : ℕ, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L cut) ((u.map P).prod * (v.map Q).prod)) ≤ q ^ (2 * (width₀ + width₁)) := by
   intro cut
   rw [Entropy.cutOperator_mul]
@@ -131,21 +131,21 @@ theorem operatorSchmidtRank_weighted_chain_sum_le {σ : Type*}
     (J : Finset σ) (c : σ → ℂ)
     (K : σ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (D : ℕ)
     (hK : ∀ j ∈ J, ∀ cut : ℕ, operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K j)) ≤ D) :
-    ∀ cut : ℕ, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K j)) ≤ D) :
+    ∀ cut : ℕ, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L cut) (∑ j ∈ J, c j • K j)) ≤ J.card * D := by
   classical
   intro cut
-  have heq : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut)
+  have heq : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut)
       (∑ j ∈ J, c j • K j) =
-      ∑ j ∈ J, c j • Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K j) := by
+      ∑ j ∈ J, c j • ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K j) := by
     ext x y
-    simp only [Entropy.cutOperator, Matrix.reindex_apply, Matrix.submatrix_apply,
+    simp only [ManyBody.cutOperator, Matrix.reindex_apply, Matrix.submatrix_apply,
       Matrix.sum_apply, Matrix.smul_apply]
   rw [heq]
   calc
     _ ≤ ∑ j ∈ J, operatorSchmidtRank
-        (c j • Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K j)) :=
+        (c j • ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K j)) :=
       operatorSchmidtRank_sum_le J _
     _ ≤ ∑ _j ∈ J, D := Finset.sum_le_sum fun j hj ↦
       (operatorSchmidtRank_smul_le _ _).trans (hK j hj cut)
@@ -160,15 +160,15 @@ theorem operatorSchmidtRank_weighted_two_interval_layers_le {σ ι κ : Type*}
     (P : σ → ι → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (Q : σ → κ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hP : ∀ t ∈ J, ∀ j,
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (P t j) (interval L (a j) (b j)))
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (P t j) (interval L (a j) (b j)))
     (hQ : ∀ t ∈ J, ∀ j,
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (Q t j) (interval L (c j) (d j)))
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Q t j) (interval L (c j) (d j)))
     (u : List ι) (v : List κ)
     (hu : u.Pairwise fun j k ↦ Disjoint (interval L (a j) (b j)) (interval L (a k) (b k)))
     (hv : v.Pairwise fun j k ↦ Disjoint (interval L (c j) (d j)) (interval L (c k) (d k)))
     (width₀ width₁ : ℕ)
     (hwidth₀ : ∀ j ∈ u, b j - a j ≤ width₀) (hwidth₁ : ∀ j ∈ v, d j - c j ≤ width₁) :
-    ∀ cut : ℕ, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    ∀ cut : ℕ, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L cut) (∑ t ∈ J, coeff t • ((u.map (P t)).prod * (v.map (Q t)).prod))) ≤
         J.card * q ^ (2 * (width₀ + width₁)) := by
   apply operatorSchmidtRank_weighted_chain_sum_le

@@ -66,8 +66,7 @@ def canonicalRegions (X : Fin m → Finset (Vertex L)) (k : ℕ) :
 
 /-- Regional configuration coordinates, using the existing dependent equivalence. -/
 def regionEquiv (X : Fin m → Finset (Vertex L)) (j : Fin m) :
-    RegionConfiguration q (X j) ≃ Entropy.RegionConfig
-      (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (canonicalRegions X j) :=
+    RegionConfiguration q (X j) ≃ (ManyBody.RegionConfig (fun _ ↦ Fin q) (canonicalRegions X j)) :=
   Entropy.regionConfigurationEquiv (n := fun _ : Vertex L ↦ q)
     (n' := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
     (X j) (canonicalRegions X j) (AreaLaw.rectangleSiteEquiv L L)
@@ -76,10 +75,8 @@ def regionEquiv (X : Fin m → Finset (Vertex L)) (j : Fin m) :
 /-- All regional matrix families on the transported supplied regions. -/
 abbrev CanonicalFamily (q : ℕ) (X : Fin m → Finset (Vertex L)) :=
   (j : Fin m) → Matrix
-    (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
-      (canonicalRegions X j))
-    (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
-      (canonicalRegions X j)) ℂ
+    (ManyBody.RegionConfig (fun _ ↦ Fin q) (canonicalRegions X j))
+    (ManyBody.RegionConfig (fun _ ↦ Fin q) (canonicalRegions X j)) ℂ
 
 /-- The regional matrices of a bundled family in canonical square coordinates. -/
 def canonicalMatrices (F : FilterFamily q m X) : CanonicalFamily q X :=
@@ -132,17 +129,17 @@ theorem squareAreaLawState_eq_relabelVector (Ω : State L q) :
   rfl
 
 private def extendedMatrices (F : FilterFamily q m X) :
-    (j : Fin m) → Matrix (Entropy.RegionConfig (fun _ : Vertex L ↦ q) (extendRegions X j))
-      (Entropy.RegionConfig (fun _ : Vertex L ↦ q) (extendRegions X j)) ℂ :=
+    (j : Fin m) → Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (extendRegions X j))
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) (extendRegions X j)) ℂ :=
   fun j x y ↦ (F j).matrix
     (fun v ↦ x ⟨v.1, (extendRegions_fin X j).symm ▸ v.2⟩)
     (fun v ↦ y ⟨v.1, (extendRegions_fin X j).symm ▸ v.2⟩)
 
 private theorem localLift_extendedMatrices (F : FilterFamily q m X) (j : Fin m) :
-    Entropy.localLift (extendRegions X j) (extendedMatrices F j) =
-      Entropy.localLift (X j) (F j).matrix := by
+    ManyBody.place (extendRegions X j) (extendedMatrices F j) =
+      ManyBody.place (X j) (F j).matrix := by
   ext x y
-  simp only [Entropy.localLift_apply, extendedMatrices, extendRegions_fin]
+  simp only [ManyBody.place_apply, extendedMatrices, extendRegions_fin]
 
 private theorem reindex_extendedMatrices (F : FilterFamily q m X) (j : Fin m)
     (hD : ∀ v, v ∈ extendRegions X j ↔

@@ -127,7 +127,7 @@ theorem decode_twoSiteMatrixElementOfRationalParameters {q Da Db n : ℕ}
     (hPB : ∀ e, decodeRationalComplex (PB e) = parameters B e)
     {p r : Fin n} (hpr : p ≠ r) (σ₀ : Fin n → Fin q)
     (X : Matrix (Fin n → Fin q) (Fin n → Fin q) ℂ)
-    (hX : Entropy.IsSupportedOn X {p, r})
+    (hX : ManyBody.IsSupportedOn X {p, r})
     (K : RationalRectMatrixCode (Fin q × Fin q) (Fin q × Fin q))
     (hK : ∀ a b c d, decodeRationalComplex (K (a, c) (b, d)) =
       X (twoSiteConfig σ₀ p r a c) (twoSiteConfig σ₀ p r b d)) :
@@ -167,7 +167,7 @@ theorem decode_matrixElementOfLocalTerms {q Da Db n m : ℕ}
     (p r : Fin m → Fin n) (hpr : ∀ i, p i ≠ r i)
     (σ₀ : Fin n → Fin q)
     (X : Fin m → Matrix (Fin n → Fin q) (Fin n → Fin q) ℂ)
-    (hX : ∀ i, Entropy.IsSupportedOn (X i) {p i, r i})
+    (hX : ∀ i, ManyBody.IsSupportedOn (X i) {p i, r i})
     (K : Fin m → RationalRectMatrixCode (Fin q × Fin q) (Fin q × Fin q))
     (hK : ∀ i a b c d, decodeRationalComplex (K i (a, c) (b, d)) =
       X i (twoSiteConfig σ₀ (p i) (r i) a c) (twoSiteConfig σ₀ (p i) (r i) b d)) :

@@ -122,14 +122,14 @@ theorem place_eq_kronecker_one_submatrix (S : Finset (Site Λ))
     (K : Matrix (RegionalConfiguration q S) (RegionalConfiguration q S) ℂ) :
     ManyBody.place S K = (K ⊗ₖ (1 : Matrix (RegionalConfiguration q Sᶜ)
       (RegionalConfiguration q Sᶜ) ℂ)).submatrix
-        (FiniteProduct.splitEquiv (fun _ : Site Λ ↦ Fin q) S)
-        (FiniteProduct.splitEquiv (fun _ : Site Λ ↦ Fin q) S) := by
+        (ManyBody.splitEquiv (fun _ : Site Λ ↦ Fin q) S)
+        (ManyBody.splitEquiv (fun _ : Site Λ ↦ Fin q) S) := by
   ext c c'
   simp only [QuantumCircuit.place_eq_embedOp, QuantumCircuit.embedOp_apply, submatrix_apply,
     kroneckerMap_apply, one_apply]
   have hagree : QuantumCircuit.AgreeOff (fun x : ↥S ↦ x.val) c c' ↔
-      (FiniteProduct.splitEquiv (fun _ : Site Λ ↦ Fin q) S c).2 =
-        (FiniteProduct.splitEquiv (fun _ : Site Λ ↦ Fin q) S c').2 := by
+      (ManyBody.splitEquiv (fun _ : Site Λ ↦ Fin q) S c).2 =
+        (ManyBody.splitEquiv (fun _ : Site Λ ↦ Fin q) S c').2 := by
     constructor
     · intro h
       funext v
@@ -151,7 +151,7 @@ theorem ancillaPhysical_mem_supportedOperators (X Y : Finset (Site Λ)) (hXY : D
       (RegionalConfiguration q X × RegionalConfiguration q Y) ℂ) :
     ancillaPhysical U (restoringSplit q X Y hXY) M ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q) (X ∪ Y : Finset (Site Λ)) := by
-  set uE := FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY
+  set uE := ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY
   have h : ancillaPhysical U (restoringSplit q X Y hXY) M =
       ManyBody.place (X ∪ Y) (((U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
         (RegionalConfiguration q Y) ℂ)) * M * (U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y)
@@ -167,7 +167,7 @@ theorem ancillaPhysical_mem_supportedOperators (X Y : Finset (Site Λ)) (hXY : D
 eigenbasis `{|x⟩}`. Source: `09-amplification.tex`, lines 324–325. -/
 noncomputable abbrev restoringEigenbasis (Ω : StateSpace Λ q) (X : Finset (Site Λ)) :
     Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ :=
-  ((reducedState_isHermitian Λ q Ω X).eigenvectorUnitary :
+  ((ManyBody.regionState_isHermitian X Ω).eigenvectorUnitary :
     Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)
 
 theorem restoringEigenbasis_unitary (Ω : StateSpace Λ q) (X : Finset (Site Λ)) :
@@ -282,20 +282,20 @@ most one, and `‖((L' ⊗ 1) R₀)^† η - φ‖ ≤ 3 √δ + ‖L'^† Ω - 
 Source: `09-amplification.tex`, lines 324–447 and 470–473. -/
 theorem restoringTransport_estimates (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     (X Y : Finset (Site Λ)) (hXY : Disjoint X Y) (w δ : ℝ)
-    (hδX : 1 - (reducedState Λ q Ω X * typicalProjection Λ q Ω X w).trace.re ≤ δ)
-    (hδY : 1 - (reducedState Λ q Ω Y * typicalProjection Λ q Ω Y w).trace.re ≤ δ)
-    (hδS : 1 - (reducedState Λ q Ω (X ∪ Y) * typicalProjection Λ q Ω (X ∪ Y) w).trace.re ≤
+    (hδX : 1 - (ManyBody.regionState Ω X * typicalProjection Λ q Ω X w).trace.re ≤ δ)
+    (hδY : 1 - (ManyBody.regionState Ω Y * typicalProjection Λ q Ω Y w).trace.re ≤ δ)
+    (hδS : 1 - (ManyBody.regionState Ω (X ∪ Y) * typicalProjection Λ q Ω (X ∪ Y) w).trace.re ≤
       δ)
     (sBlank xBlank eBlank : RegionalConfiguration q X → ℂ)
     (hs : ‖WithLp.toLp 2 sBlank‖ = 1) (hx : ‖WithLp.toLp 2 xBlank‖ = 1)
     (he : ‖WithLp.toLp 2 eBlank‖ = 1) :
     let 𝒲 := restoringTransport Ω X Y hXY
-    let p := (reducedState_isHermitian Λ q Ω X).eigenvalues
-    let E := Entropy.typicalSet p (regionalEntropy Λ q Ω X) w
+    let p := (ManyBody.regionState_isHermitian X Ω).eigenvalues
+    let E := Entropy.typicalSet p (ManyBody.regionEntropy Ω X) w
     let T := typicalProjection Λ q Ω Y w
     let Q := restoringCutProjection Ω X Y hXY w
     let ψ := restoringVector Ω X Y hXY
-    let I := FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X (X ∪ Y)ᶜ
+    let I := ManyBody.regionMutualInformation Ω X (X ∪ Y)ᶜ
     let R := 𝒲 * Entropy.restoringGlobal E p sBlank xBlank Q T * 𝒲ᴴ
     let B := 𝒲 * Entropy.restoringColumnGlobal E p sBlank eBlank Q T * 𝒲ᴴ
     let φ := 𝒲 *ᵥ (Entropy.restoringCopy sBlank xBlank ψ).ofLp
@@ -345,9 +345,9 @@ theorem restoringTransport_estimates (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
         (RegionalConfiguration q X) ℂ) ⊗ₖ U) *ᵥ
           fun a => if a.1 = a.2 then (Real.sqrt (p a.1) : ℂ) else 0) c.2 :=
       restoringTransport_restored Ω X Y hXY p
-    have hp0 : ∀ x, 0 ≤ p x := (reducedState_posSemidef Λ q Ω X).eigenvalues_nonneg
+    have hp0 : ∀ x, 0 ≤ p x := (ManyBody.regionState_posSemidef X Ω).eigenvalues_nonneg
     have hpsum : ∑ x, p x = 1 := by
-      have h := (reducedState_isHermitian Λ q Ω X).trace_eq_sum_eigenvalues
+      have h := (ManyBody.regionState_isHermitian X Ω).trace_eq_sum_eigenvalues
       rw [trace_reducedState Ω hΩ X] at h
       have h' : ((∑ x, p x : ℝ) : ℂ) = 1 := by push_cast; exact h.symm
       exact_mod_cast h'

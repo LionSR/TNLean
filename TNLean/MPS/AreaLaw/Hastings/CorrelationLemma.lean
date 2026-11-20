@@ -60,18 +60,18 @@ theorem exists_norm_inner_mul_sub_le (R : ℕ) :
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       let s := max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80
       ∀ (j l : ℕ) {ι : Type*} [Fintype ι] (a : ι → ℂ)
-        {ψL : ι → EuclideanSpace ℂ (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L j))}
+        {ψL : ι → EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L j))}
         {ψR : ι → EuclideanSpace ℂ ((v : {v // v ∉ leftBlock L j}) → Fin q)},
         Orthonormal ℂ ψL → Orthonormal ℂ ψR →
-        WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) =
+        WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) Ω) =
           (fun p ↦ ∑ α, a α * (WithLp.ofLp (ψL α) p.1 * WithLp.ofLp (ψR α) p.2)) →
         ∀ {O : ι → ℂ}, (∀ α, ‖O α‖ ≤ 1) →
         ∀ {A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} {SA : Finset (Fin L)},
-        Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) A SA →
+        ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A SA →
         Disjoint SA (interval L (j - l) (j + l)) → ‖A‖ ≤ 1 →
-        ‖⟪Ω, T (A * Entropy.localLift (leftBlock L j) (schmidtDiagonal O ψL)) Ω⟫_ℂ -
+        ‖⟪Ω, T (A * ManyBody.place (leftBlock L j) (schmidtDiagonal O ψL)) Ω⟫_ℂ -
             ⟪Ω, T A Ω⟫_ℂ *
-              ⟪Ω, T (Entropy.localLift (leftBlock L j) (schmidtDiagonal O ψL)) Ω⟫_ℂ‖ ≤
+              ⟪Ω, T (ManyBody.place (leftBlock L j) (schmidtDiagonal O ψL)) Ω⟫_ℂ‖ ≤
           3 * Real.sqrt (2 * (K * s ^ 3 *
               Real.exp (-(l / (6 * s))))) +
             K * s ^ 3 *

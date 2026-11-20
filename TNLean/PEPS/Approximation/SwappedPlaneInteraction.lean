@@ -22,7 +22,7 @@ site, and conjugate by the swap `F_A` of the replicas on `A`. This file shows:
 * it differs from the doubled Hamiltonian only through the terms whose support crosses `A`
   (`ManyBody.PlaneInteraction.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing`), the
   crossing
-  terms `Entropy.crossingTerms` of the supports at the cut `A`, so the difference is supported
+  terms `ManyBody.crossingTerms` of the supports at the cut `A`, so the difference is supported
   on the sites `ManyBody.crossingSites` of these supports and has norm at most `4 μ_R J |Λ|`,
   with `μ_R = 2^(v_R - 1)` and `v_R = 1 + 2R(R + 1)`
   (`ManyBody.PlaneInteraction.swapped_doubled_boundary_bound`);
@@ -172,15 +172,15 @@ theorem sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing (h : PlaneInter
     (A : Finset (Site Λ)) :
     let F := sheetSwapOp q A
     F * doubledHamiltonian h.hamiltonian * Fᴴ - doubledHamiltonian h.hamiltonian =
-      ∑ X ∈ Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A,
+      ∑ X ∈ ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A,
         (F * doubledHamiltonian (h.term X) * Fᴴ - doubledHamiltonian (h.term X)) := by
   classical
   intro F
   have hcancel (X : AdmissibleSupport Λ R)
-      (hX : X ∉ Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A) :
+      (hX : X ∉ ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A) :
       F * doubledHamiltonian (h.term X) * Fᴴ - doubledHamiltonian (h.term X) = 0 := by
     have hX : X.1 ⊆ A ∨ Disjoint X.1 A := by
-      simp only [Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and, not_and,
+      simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and, not_and,
         not_exists, not_not] at hX
       by_cases hXA : ∃ v ∈ X.1, v ∈ A
       · exact Or.inl fun v hv ↦ hX hXA v hv
@@ -215,7 +215,7 @@ theorem swapped_doubled_boundary_bound (h : PlaneInteraction Λ q R)
       ‖F * K * Fᴴ - K‖ ≤ swapBoundaryCoefficient R * J * (Λ.card : ℝ) := by
   classical
   intro p K F
-  set T := Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A
+  set T := ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A
   have hsum := congrArg (Matrix.reindex p p)
     (h.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing A)
   simp only [← Matrix.coe_reindexRingEquiv, map_sum, map_sub, map_mul] at hsum
@@ -292,7 +292,7 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
         (A C : Finset (Site Λ)) (hAC : Disjoint A C) :
     let Q := (A ∪ C)ᶜ
     let P := Fin (Fintype.card (A → Fin q)) × Fin (Fintype.card (C → Fin q))
-    let s := FiniteProduct.splitTwoRegionsEquiv (fun _ : Site Λ ↦ Fin q) A C hAC
+    let s := ManyBody.splitTwoRegionsEquiv (fun _ : Site Λ ↦ Fin q) A C hAC
     let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (Q → Fin q))
     let p := sitePairConfigurationEquiv (Site Λ) q q
     let K := reindex p p (doubledHamiltonian h.hamiltonian)

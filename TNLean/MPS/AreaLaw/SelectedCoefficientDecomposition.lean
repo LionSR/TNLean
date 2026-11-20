@@ -164,9 +164,9 @@ Proposition 5.7, lines 1324–1333. -/
 theorem exists_physical_twoMarkerCoefficient_prescribed_middle_decomposition
     {L q ℓ a b : ℕ}
     (WL WR : Fin (2 * ℓ) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, Entropy.IsSupportedOn (WL r)
+    (hleft : ∀ r, ManyBody.IsSupportedOn (WL r)
       (interval L (a + r.val) (a + r.val + 2)))
-    (hright : ∀ r, Entropy.IsSupportedOn (WR r)
+    (hright : ∀ r, ManyBody.IsSupportedOn (WR r)
       (interval L (b + r.val) (b + r.val + 2)))
     (hab : a + 2 * ℓ ≤ b) (hb : b + 2 * ℓ ≤ L - 1)
     (p s : Fin (2 * ℓ))
@@ -195,14 +195,14 @@ theorem exists_physical_twoMarkerCoefficient_prescribed_middle_decomposition
           (fun _ : Fin 1 ↦ (finProdFinEquiv.symm t).2) (1 : ℂ))
     ∃ (eL eR : E) (A Kz : Matrix (E → Fin q) (E → Fin q) ℂ),
       eL.val.val = a + p.val + 1 ∧ eR.val.val = b + s.val ∧
-      A = z (Sum.inr 1) • ME + Kz ∧ Entropy.IsSupportedOn Kz C ∧
-      (∀ t, Entropy.IsSupportedOn (N eL t) C) ∧
-      (∀ t, Entropy.IsSupportedOn (N eR t) C) ∧
+      A = z (Sum.inr 1) • ME + Kz ∧ ManyBody.IsSupportedOn Kz C ∧
+      (∀ t, ManyBody.IsSupportedOn (N eL t) C) ∧
+      (∀ t, ManyBody.IsSupportedOn (N eR t) C) ∧
       let Psi := fun f : TwoMarkerMiddleIndex k i j (q * q) (q * q) ↦
         twoMarkerMiddleFactor A (N eL) (N eR) f
       ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
-        Entropy.IsSupportedOn PR (interval L (b + 2 * ℓ) L) →
+        ManyBody.IsSupportedOn PL (interval L 0 (a + 1)) →
+        ManyBody.IsSupportedOn PR (interval L (b + 2 * ℓ) L) →
         let F : ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) →
             Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]

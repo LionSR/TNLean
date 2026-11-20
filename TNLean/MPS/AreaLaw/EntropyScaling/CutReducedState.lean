@@ -26,8 +26,8 @@ Eq. (eps-lower), lines 247–264. -/
 theorem IsOpenMPS.rank_regionState_leftBlock_le {L q D : ℕ}
     {φ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hφ : IsOpenMPS L q D (fun x ↦ φ x)) {k : ℕ} (hk0 : 0 < k) (hkL : k < L) :
-    (Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) φ).rank ≤ D := by
-  simpa only [Entropy.regionState, ManyBody.regionState, ManyBody.cutVector,
+    (ManyBody.regionState (X := fun _ ↦ Fin q) φ (leftBlock L k)).rank ≤ D := by
+  simpa only [ManyBody.regionState, ManyBody.regionState, ManyBody.cutVector,
     Matrix.partialTraceRight_vecMulVec_eq,
     Matrix.rank_self_mul_conjTranspose, cutMatrix] using hφ.rank_cutMatrix_le hk0 hkL
 
@@ -37,8 +37,8 @@ Source: SWVC08, arXiv:0705.0292v2, Eq. (eps-lower), lines 247–264. -/
 theorem rectangularTraceNorm_regionState_leftBlock_sub_le {L q : ℕ}
     (ψ φ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
     Matrix.rectangularTraceNorm
-      (Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ -
-        Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) φ) ≤
+      (ManyBody.regionState (X := fun _ ↦ Fin q) ψ (leftBlock L k) -
+        ManyBody.regionState (X := fun _ ↦ Fin q) φ (leftBlock L k)) ≤
       Matrix.rectangularTraceNorm
         (Matrix.euclideanOuterProduct ψ ψ - Matrix.euclideanOuterProduct φ φ) := by
   exact Entropy.rectangularTraceNorm_regionState_sub_le ψ φ (leftBlock L k)
@@ -50,8 +50,8 @@ theorem IsOpenMPS.rank_regionState_sdiff_leftBlock_le_sq {L q D : ℕ}
     {φ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hφ : IsOpenMPS L q D (fun x ↦ φ x)) {a b : ℕ}
     (ha : 0 < a) (hab : a ≤ b) (hb : b < L) :
-    (Entropy.regionState (n := fun _ : Fin L ↦ q)
-      (leftBlock L b \ leftBlock L a) φ).rank ≤ D ^ 2 := by
+    (ManyBody.regionState (X := fun _ ↦ Fin q)
+      φ (leftBlock L b \ leftBlock L a)).rank ≤ D ^ 2 := by
   have hsub : leftBlock L a ⊆ leftBlock L b :=
     fun _ hi ↦ mem_leftBlock.mpr ((mem_leftBlock.mp hi).trans_le hab)
   simpa only [pow_two] using (Entropy.rank_regionState_sdiff_le φ hsub).trans
@@ -64,7 +64,7 @@ This is an elementary consequence of the internal-cut bound and endpoint ranks. 
 theorem IsOpenMPS.rank_regionState_leftBlock_le_max {L q D : ℕ}
     {φ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hφ : IsOpenMPS L q D (fun x ↦ φ x)) (k : ℕ) :
-    (Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) φ).rank ≤ max 1 D := by
+    (ManyBody.regionState (X := fun _ ↦ Fin q) φ (leftBlock L k)).rank ≤ max 1 D := by
   have hcut : (cutMatrix φ k).rank ≤ max 1 D := by
     by_cases hk0 : k = 0
     · subst k
@@ -73,7 +73,7 @@ theorem IsOpenMPS.rank_regionState_leftBlock_le_max {L q D : ℕ}
     · exact (rank_cutMatrix_le_one_of_le hkL φ).trans (le_max_left _ _)
     exact (hφ.rank_cutMatrix_le (Nat.pos_of_ne_zero hk0) (Nat.lt_of_not_ge hkL)).trans
       (le_max_right _ _)
-  simpa only [Entropy.regionState, ManyBody.regionState, ManyBody.cutVector,
+  simpa only [ManyBody.regionState, ManyBody.regionState, ManyBody.cutVector,
     Matrix.partialTraceRight_vecMulVec_eq,
     Matrix.rank_self_mul_conjTranspose, cutMatrix] using hcut
 
@@ -83,8 +83,8 @@ of equality of complementary ranks and the product bound for disjoint regions. -
 theorem IsOpenMPS.rank_regionState_sdiff_leftBlock_le_max_sq {L q D : ℕ}
     {φ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hφ : IsOpenMPS L q D (fun x ↦ φ x)) {a b : ℕ} (hab : a ≤ b) :
-    (Entropy.regionState (n := fun _ : Fin L ↦ q)
-      (leftBlock L b \ leftBlock L a) φ).rank ≤ (max 1 D) ^ 2 := by
+    (ManyBody.regionState (X := fun _ ↦ Fin q)
+      φ (leftBlock L b \ leftBlock L a)).rank ≤ (max 1 D) ^ 2 := by
   have hsub : leftBlock L a ⊆ leftBlock L b :=
     fun _ hi ↦ mem_leftBlock.mpr ((mem_leftBlock.mp hi).trans_le hab)
   simpa only [pow_two] using (Entropy.rank_regionState_sdiff_le φ hsub).trans

@@ -55,22 +55,21 @@ def RectangularEntropyAreaLaw : Prop :=
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ A : Finset (SquareLatticeVertex width height),
-            FiniteProduct.entropy (fun _ : SquareLatticeVertex width height ↦ Fin q) Ω A ≤
+            ManyBody.regionEntropy Ω A ≤
               C * Fintype.card
                 {e : Edge (squareLatticeGraph width height) // IsRegionBoundaryEdge A e} ∧
-            FiniteProduct.entropy (fun _ : SquareLatticeVertex width height ↦ Fin q) Ω A ≤
+            ManyBody.regionEntropy Ω A ≤
               4 * C * (rectangleInnerBoundary A).card ∧
-            FiniteProduct.entropy (fun _ : SquareLatticeVertex width height ↦ Fin q) Ω A ≤
+            ManyBody.regionEntropy Ω A ≤
               2 * C * (rectangleEndpointBoundary A).card
 
 /-- The original regional entropy is exactly the transported domain entropy.
 Source: Corollary 1.2, relabeling the same tensor factors. -/
 theorem regionalEntropy_rectangleAreaLawState {width height q : ℕ}
     (Ω : RectangleStateSpace width height q) (A : Finset (SquareLatticeVertex width height)) :
-    regionalEntropy (rectangularDomain width height) q (rectangleAreaLawState Ω)
+    ManyBody.regionEntropy (rectangleAreaLawState Ω)
         (A.map (rectangleSiteEquiv width height).toEmbedding) =
-      FiniteProduct.entropy (fun _ : SquareLatticeVertex width height ↦ Fin q) Ω A := by
-  rw [regionalEntropy_eq_finiteProduct]
+      ManyBody.regionEntropy Ω A := by
   exact Approximation.finiteProductEntropy_relabel (rectangleSiteEquiv width height) q Ω A
 
 /-- The finite-domain area law implies all three native rectangular bounds

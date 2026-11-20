@@ -70,11 +70,11 @@ theorem isAdmissibleSampledFactors_sampledFactors {L : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (i : ℕ) :
     ∃ (ι : Type) (J : Finset ι) (A : ι → LeftBlockMatrix L q i) (B : ι → RightBlockMatrix L q i),
-      Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) (sampledProjector h E₀ I) =
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector h E₀ I) =
           ∑ t ∈ J, A t ⊗ₖ B t ∧
         ∀ t ∈ J, A t ∈ AreaLaw.sampledFactors h E₀ I i := by
   classical
-  refine ⟨(t : Fin ℓ) × Fin (operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+  refine ⟨(t : Fin ℓ) × Fin (operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
     (leftBlock L i) (bondComplementWord h (I t)))), Finset.univ,
     fun p ↦ sampledLeftFactor h E₀ I i p.1 p.2,
     fun p ↦ cutRightFactor (bondComplementWord h (I p.1)) p.2,
@@ -116,30 +116,30 @@ structure LinearAlgebraQuery.IsValidOracle (o : {ι : Type} → LinearAlgebraQue
       (o (LinearAlgebraQuery.gaussianFilterFactors L i hq h h0 c Delta))
   gaussianFilterFactors_card : ∀ (L i : ℕ) (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (_hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (_hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (_h1 : ∀ j, h j ≤ 1)
     (c Delta : ℝ), 0 < c → 0 < Delta →
     (o (LinearAlgebraQuery.gaussianFilterFactors L i hq h h0 c Delta)).card ≤
       huangEnergyCount c Delta L * huangFilterRankBound q c Delta L
   gaussianFilterFactors_rank : ∀ (L i : ℕ) (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (_hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (_hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (_h1 : ∀ j, h j ≤ 1)
     (c Delta : ℝ), 0 < c → 0 < Delta → i ≤ L →
     ∀ A ∈ o (LinearAlgebraQuery.gaussianFilterFactors L i hq h h0 c Delta), ∀ k, k < i →
-      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
         (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ huangFilterRankBound q c Delta L
   sampledFactors : ∀ (L i : ℕ) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (E₀ : ℝ) (ℓ m D : ℕ) (I : Fin ℓ → Fin m → Fin L),
-    (∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k)
+    (∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k)
       (bondComplementWord h (I t))) ≤ D) →
     (∃ (ι : Type) (J : Finset ι) (A : ι → LeftBlockMatrix L q i) (B : ι → RightBlockMatrix L q i),
-      Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) (sampledProjector h E₀ I) =
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector h E₀ I) =
           ∑ t ∈ J, A t ⊗ₖ B t ∧
         ∀ t ∈ J, A t ∈ o (LinearAlgebraQuery.sampledFactors L i h E₀ ℓ m D I)) ∧
     (o (LinearAlgebraQuery.sampledFactors L i h E₀ ℓ m D I)).card ≤ ℓ * D ∧
     (i ≤ L → ∀ A ∈ o (LinearAlgebraQuery.sampledFactors L i h E₀ ℓ m D I), ∀ k, k < i →
-      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
         (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
   applyFactor : ∀ (L i r b : ℕ) (A : LeftBlockMatrix L q i) (s : LeftBlockVector L q i),
     o (LinearAlgebraQuery.applyFactor L i r b A s) = toEuclideanLin A s
@@ -288,7 +288,7 @@ theorem eval_errorReductionProgram_of_valid (hv : IsValidOracle o) (L i r b : �
 filter factors to the size-trimming selection of the oracle's nets and solver. -/
 theorem eval_sweepStepProgram_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     FreeM.eval o (sweepStepProgram hq h hs h0 Delta hi S) =
@@ -344,7 +344,7 @@ theorem card_oracleNets_le (hv : IsValidOracle o) {L k : ℕ} (hL : 0 < L) (hq :
 cardinality and bond budgets of the sweep. -/
 theorem sweepStepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
@@ -424,7 +424,7 @@ viable for every ground pair with the prescribed gap, with the size and bond bud
 the sweep. LVV13, `algo53.tex`, lines 652--668. -/
 theorem sweepProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (i : ℕ) (hi : i ≤ L) :
     let S := FreeM.eval o (sweepProgram hq h hs h0 h1 Delta i)
@@ -457,7 +457,7 @@ budget times the bond budget of the sweep on the padded chain. LVV13, `algo53.te
 theorem groundStateProgram_spec_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 1 ≤ L)
     (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {R : ℕ} (hR : 1 ≤ R)
     (E : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))

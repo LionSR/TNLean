@@ -77,7 +77,7 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
         groundSpace H E₀ = Submodule.span ℂ {Ω} →
         ∀ (D C R₀ C₀ : Finset (ι)), Disjoint D C → R₀ ⊆ D → C₀ ⊆ C →
         ∀ b : ℝ,
-          FiniteProduct.mutualInformation (fun _ : ι ↦ Fin q) Ω D C ≤ b →
+          ManyBody.regionMutualInformation Ω D C ≤ b →
           let w := Cp * (1 + b + Real.log (Fintype.card ι : ℝ))
           let e := sitePairConfigurationEquiv (ι) q q
           let F := Matrix.reindex e e (sheetSwapOp q D)
@@ -96,7 +96,7 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
                 ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K W‖ ≤
                   ‖W‖ * Cint * (Fintype.card ι : ℝ) ^ 2 * (1 + T) * Real.exp (v * T - ℓ / 2)) →
           (∀ ℓ : ℕ, (ℓ : ℝ) + R ≤ w → Disjoint (N ℓ ((D ∪ C)ᶜ ∪ Z)) (R₀ ∪ C₀)) →
-          FiniteProduct.mutualInformation (fun _ : ι ↦ Fin q) Ω R₀ C₀ ≤
+          ManyBody.regionMutualInformation Ω R₀ C₀ ≤
             (Fintype.card ι : ℝ) ^ (-p) := by
   classical
   let r := 2 * p + 10
@@ -116,7 +116,7 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
   have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast hLn
   have hLthreshold : 8 * Real.sqrt 8 * (1 + Real.log (q : ℝ)) ≤ (L : ℝ) :=
     (Nat.le_ceil _).trans (by exact_mod_cast (le_max_right _ _).trans hL)
-  have hb : 0 ≤ b := (FiniteProduct.mutualInformation_nonneg _ Ω hΩ D C hDC).trans hI
+  have hb : 0 ≤ b := (ManyBody.regionMutualInformation_nonneg _ Ω hΩ D C hDC).trans hI
   let B := 1 + b + Real.log (L : ℝ)
   have hB : 1 ≤ B := by dsimp [B]; linarith [Real.log_nonneg hL1]
   let ℓ := Nat.ceil (Kloc * B)
@@ -179,7 +179,7 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
       _ = ε := one_mul _
   let Q := (D ∪ C)ᶜ
   let Pconf := Fin (Fintype.card (D → Fin q)) × Fin (Fintype.card (C → Fin q))
-  let s := FiniteProduct.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) D C hDC
+  let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) D C hDC
   let g := (s.prodCongr s).trans (Equiv.doubledRegroup Pconf (Q → Fin q))
   let ψ := fun c ↦ Ω (e.symm c).1 * Ω (e.symm c).2
   obtain ⟨hψn, hφn, W, z, hW, hz, hgauss⟩ :=
@@ -267,13 +267,13 @@ theorem _root_.ManyBody.ChainInteraction.information_reset (q : ℕ) (hq : 1 ≤
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (D C R₀ C₀ : Finset (Fin L)), Disjoint D C → R₀ ⊆ D → C₀ ⊆ C →
         ∀ b : ℝ,
-          FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω D C ≤ b →
+          ManyBody.regionMutualInformation Ω D C ≤ b →
           let w := Cp * (1 + b + Real.log (L : ℝ))
           (∀ x ∈ R₀, ∀ y : Fin L, y ∉ D →
             w < (Nat.dist x.val y.val : ℝ)) →
           (∀ x ∈ C₀, ∀ y : Fin L, y ∉ C →
             w < (Nat.dist x.val y.val : ℝ)) →
-          FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω R₀ C₀ ≤
+          ManyBody.regionMutualInformation Ω R₀ C₀ ≤
             (L : ℝ) ^ (-p) := by
   classical
   obtain ⟨Cint, v, hCint, hv, hlocal⟩ := exists_supported_gaussian_integral R J
@@ -284,7 +284,7 @@ theorem _root_.ManyBody.ChainInteraction.information_reset (q : ℕ) (hq : 1 ≤
   have hK : Matrix.reindex (sitePairConfigurationEquiv (Fin L) q q)
       (sitePairConfigurationEquiv (Fin L) q q) (doubledHamiltonian h.hamiltonian) =
         h.doubled.hamiltonian := h.doubled_hamiltonian.symm
-  let Z := (Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D).biUnion (fun X ↦ X.1)
+  let Z := (ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) D).biUnion (fun X ↦ X.1)
   have hreset' := hreset (Fin L) (by simpa only [Fintype.card_fin] using hL)
   simp only [Fintype.card_fin] at hreset'
   refine hreset' h.hamiltonian Ω E₀ (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hgap hspan
@@ -313,13 +313,13 @@ theorem _root_.ManyBody.DomainInteraction.information_reset (q : ℕ) (hq : 1 �
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (D C R₀ C₀ : Finset (Fin Λ.card)), Disjoint D C → R₀ ⊆ D → C₀ ⊆ C →
         ∀ b : ℝ,
-          FiniteProduct.mutualInformation (fun _ : Fin Λ.card ↦ Fin q) Ω D C ≤ b →
+          ManyBody.regionMutualInformation Ω D C ≤ b →
           let w := Cp * (1 + b + Real.log (Λ.card : ℝ))
           (∀ x ∈ R₀, ∀ y : Fin Λ.card, y ∉ D → ∀ d : ℕ,
             (lineDomainGraph Λ).edist x y = (d : ℕ∞) → w < (d : ℝ)) →
           (∀ x ∈ C₀, ∀ y : Fin Λ.card, y ∉ C → ∀ d : ℕ,
             (lineDomainGraph Λ).edist x y = (d : ℕ∞) → w < (d : ℝ)) →
-          FiniteProduct.mutualInformation (fun _ : Fin Λ.card ↦ Fin q) Ω R₀ C₀ ≤
+          ManyBody.regionMutualInformation Ω R₀ C₀ ≤
             (Λ.card : ℝ) ^ (-p) := by
   classical
   obtain ⟨Cint, v, hCint, hv, hlocal⟩ := exists_supported_gaussian_integral_domain R J
@@ -330,7 +330,7 @@ theorem _root_.ManyBody.DomainInteraction.information_reset (q : ℕ) (hq : 1 �
   have hK : Matrix.reindex (sitePairConfigurationEquiv (Fin Λ.card) q q)
       (sitePairConfigurationEquiv (Fin Λ.card) q q) (doubledHamiltonian h.hamiltonian) =
         h.doubled.hamiltonian := h.doubled_hamiltonian.symm
-  let Z := (Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).biUnion (fun X ↦ X.1)
+  let Z := (ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D).biUnion (fun X ↦ X.1)
   have hreset' := hreset (Fin Λ.card) (by simpa only [Fintype.card_fin] using hL)
   simp only [Fintype.card_fin] at hreset'
   refine hreset' h.hamiltonian Ω E₀ (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hgap hspan

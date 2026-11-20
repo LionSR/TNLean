@@ -54,10 +54,10 @@ theorem exists_condEntropy_le_initialBuffer_real
             D₀ * (Q.size : ℝ) < (supDist t z : ℝ)) →
           ∀ r : ℕ, 1 ≤ r → ∀ Q₀ : IntRect, Q₀.size ≤ r →
             (Q₀.dilate (Cpad * r)).toFinset ⊆ Q.toFinset →
-            regionalEntropy Λ q Ω (rectRegion A Q₀ ∪
+            ManyBody.regionEntropy Ω (rectRegion A Q₀ ∪
                 (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀)) -
-              regionalEntropy Λ q Ω (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀) ≤
-            regionalEntropy Λ q Ω (rectRegion A Q₀) / 2 + Cbuf * r := by
+              ManyBody.regionEntropy Ω (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀) ≤
+            ManyBody.regionEntropy Ω (rectRegion A Q₀) / 2 + Cbuf * r := by
   set Zmin : ℝ := max 4 (max
     (32 * bufferCrossConst R * (q : ℝ) ^ (2 * (1 + 2 * R * (R + 1))) * J / Δ)
     (128 * Real.sqrt ((1 + J / Δ) * bufferBudgetConst q R)))

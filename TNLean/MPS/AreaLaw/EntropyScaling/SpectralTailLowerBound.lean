@@ -29,9 +29,8 @@ theorem IsOpenMPS.sum_descEigenvalue_leftBlock_tail_le_traceNorm
     {L q D : ℕ} {ψ φ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hφ : IsOpenMPS L q D (fun x ↦ φ x)) (hψ : ‖ψ‖ = 1)
     {k : ℕ} (hk0 : 0 < k) (hkL : k < L) :
-    ∑ i ∈ Finset.Ico D (Fintype.card (Entropy.RegionConfig (fun _ : Fin L ↦ q)
-      (leftBlock L k))),
-      (Entropy.regionState_posSemidef (leftBlock L k) ψ).isHermitian.descEigenvalue i ≤
+    ∑ i ∈ Finset.Ico D (Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))),
+      (ManyBody.regionState_posSemidef (leftBlock L k) ψ).isHermitian.descEigenvalue i ≤
         Matrix.rectangularTraceNorm
           (Matrix.euclideanOuterProduct ψ ψ - Matrix.euclideanOuterProduct φ φ) := by
   classical
@@ -41,14 +40,14 @@ theorem IsOpenMPS.sum_descEigenvalue_leftBlock_tail_le_traceNorm
       ψ φ hψ (leftBlock L k) (hφ.rank_regionState_leftBlock_le hk0 hkL) hsmall le_rfl
     exact ht.trans (half_le_self (Matrix.rectangularTraceNorm_nonneg _))
   · apply le_trans (b := (1 : ℝ)) ?_ (le_of_not_gt hsmall)
-    have htotal : (Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q)
+    have htotal : (ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q)
         (leftBlock L k) ψ).isHermitian.kyFanNorm
-        (Fintype.card (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k))) = 1 := by
+        (Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) = 1 := by
       rw [Matrix.IsHermitian.kyFanNorm_card_eq_trace_re]
-      simp [Entropy.trace_regionState, hψ]
+      simp [ManyBody.trace_regionState, hψ]
     rw [← htotal]
     apply Finset.sum_le_sum_of_subset_of_nonneg
     · exact fun i hi ↦ Finset.mem_range.mpr (Finset.mem_Ico.mp hi).2
-    · exact fun i _ _ ↦ (Entropy.regionState_posSemidef (leftBlock L k) ψ).descEigenvalue_nonneg i
+    · exact fun i _ _ ↦ (ManyBody.regionState_posSemidef (leftBlock L k) ψ).descEigenvalue_nonneg i
 
 end TNLean.MPS.AreaLaw

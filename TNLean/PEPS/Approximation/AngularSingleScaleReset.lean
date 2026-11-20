@@ -97,9 +97,9 @@ theorem angular_single_scale_reset_of_bounds {q : ℕ} {G : ∀ L : ℕ, StateSp
                 (fun v ↦ sitePosition L v ∈ near (a' * s) A)
               let C₀ : Finset (Vertex L) := Finset.univ.filter
                 (fun v ↦ sitePosition L v ∈ near (a' * s) E)
-              FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q)
+              ManyBody.regionMutualInformation
                 Ω Rold Cs ≤ (L : ℝ) ^ (-p) →
-              FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q)
+              ManyBody.regionMutualInformation
                 Ω R₀ C₀ ≤ (L : ℝ) ^ (-p) := by
   let c := angularClearance a a' d
   have hc : 0 < c := div_pos (angular_clearance_pos ha' ha'a hda) hd
@@ -134,7 +134,7 @@ theorem angular_single_scale_reset_of_bounds {q : ℕ} {G : ∀ L : ℕ, StateSp
   let b := (L : ℝ) ^ (-p) + (M : ℝ) * (C₁ * (1 + Real.log (d * s)) ^ K)
   have hb : 0 ≤ b := add_nonneg (Real.rpow_nonneg (Nat.cast_nonneg L) _)
     (mul_nonneg (Nat.cast_nonneg M) hcost)
-  have hbound : FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q) Ω R Cs ≤ b :=
+  have hbound : ManyBody.regionMutualInformation Ω R Cs ≤ b :=
     hMI.trans (add_le_add (le_refl _) (mul_le_mul_of_nonneg_right hcard hcost))
   have hw' : Cp * (1 + b + Real.log (L : ℝ)) ≤ a' * s / 2 := by
     dsimp [b]
@@ -183,9 +183,9 @@ theorem angular_single_scale_reset_of_sublinearCollarBoundAt
                 (fun v ↦ sitePosition L v ∈ near (a' * s) A)
               let C₀ : Finset (Vertex L) := Finset.univ.filter
                 (fun v ↦ sitePosition L v ∈ near (a' * s) E)
-              FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q)
+              ManyBody.regionMutualInformation
                 Ω Rold Cs ≤ (L : ℝ) ^ (-p) →
-              FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q)
+              ManyBody.regionMutualInformation
                 Ω R₀ C₀ ≤ (L : ℝ) ^ (-p) := by
   let c := angularClearance a a' d
   have hc : 0 < c := div_pos (angular_clearance_pos ha' ha'a hda) hd
@@ -241,9 +241,9 @@ theorem exists_angular_single_scale_reset_of_sublinearCollarBound
                   (fun v ↦ sitePosition L v ∈ near (a' * s) A)
                 let C₀ : Finset (Vertex L) := Finset.univ.filter
                   (fun v ↦ sitePosition L v ∈ near (a' * s) E)
-                FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q)
+                ManyBody.regionMutualInformation
                   Ω Rold C ≤ (L : ℝ) ^ (-p) →
-                FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q)
+                ManyBody.regionMutualInformation
                   Ω R₀ C₀ ≤ (L : ℝ) ^ (-p) := by
   obtain ⟨C, Ncol, Ca, Na, hcol, hamp⟩ :=
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol

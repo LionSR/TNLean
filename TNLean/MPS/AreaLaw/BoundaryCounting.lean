@@ -79,15 +79,15 @@ boundary cardinality. Source: TNLean note, `eq:count`, and
 `part2a_mps_information.tex`, lines 359–360, before counting the two replicas. -/
 lemma card_crossingTerms_le_mul_card_boundaryEdges
     (L R : ℕ) (D : Finset (Fin L)) :
-    (Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D).card ≤
+    (ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) D).card ≤
       2 ^ (2 * R) * (boundaryEdges L D).card := by
   classical
   let W (p : ℕ) := interval L (p + 1 - R) (p + 1 + R)
   let F (p : ℕ) := Finset.univ.filter (fun X : ChainSupport L R ↦ X.1 ⊆ W p)
-  have hcover : Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D ⊆
+  have hcover : ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) D ⊆
       (boundaryEdges L D).biUnion F := by
     intro X hX
-    simp only [Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
+    simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
     obtain ⟨p, hp, hsub⟩ := IsChainSupport.exists_boundary_window_of_split X.2 hX
     exact Finset.mem_biUnion.mpr ⟨p, hp, Finset.mem_filter.mpr ⟨Finset.mem_univ _, hsub⟩⟩
   have hcard (p : ℕ) : (F p).card ≤ 2 ^ (2 * R) :=

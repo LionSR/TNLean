@@ -72,13 +72,13 @@ theorem terminalPartition_collar_entropy_identity
     let Q := receiving σ false
     let Y := middle σ
     let V := receiving σ true
-    let gpre := FiniteProduct.entropy β Ωt Q + FiniteProduct.entropy β Ωt (Q ∪ Y)ᶜ -
-      FiniteProduct.entropy β Ωt Y
-    let gpost := regionalEntropy Λ q Ωt (positiveNear S.depth σ) +
-      regionalEntropy Λ q Ωt (positiveNearMiddle S.depth σ) - regionalEntropy Λ q Ωt Y
-    2 * regionalEntropy Λ q Ωt X + gpre - gpost =
-      FiniteProduct.mutualInformation β Ωt X V +
-        FiniteProduct.mutualInformation β Ωt X (Y ∪ V) := by
+    let gpre := ManyBody.regionEntropy Ωt Q + ManyBody.regionEntropy Ωt (Q ∪ Y)ᶜ -
+      ManyBody.regionEntropy Ωt Y
+    let gpost := ManyBody.regionEntropy Ωt (positiveNear S.depth σ) +
+      ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth σ) - ManyBody.regionEntropy Ωt Y
+    2 * ManyBody.regionEntropy Ωt X + gpre - gpost =
+      ManyBody.regionMutualInformation Ωt X V +
+        ManyBody.regionMutualInformation Ωt X (Y ∪ V) := by
   classical
   intro β X σ Q Y V gpre gpost
   obtain ⟨hnear, hUYeq, hfar, hXU, hXY, hXV, hUY, hUV, hYV, hcover, _⟩ :=
@@ -88,24 +88,24 @@ theorem terminalPartition_collar_entropy_identity
   change V = (Q ∪ Y)ᶜ at hfar
   have hpre : FiniteProduct.collarPreQuantity β Ωt X (positiveNear S.depth σ) Y V =
       gpre := by
-    change FiniteProduct.entropy β Ωt (X ∪ positiveNear S.depth σ) +
-      FiniteProduct.entropy β Ωt V - FiniteProduct.entropy β Ωt Y =
-      FiniteProduct.entropy β Ωt Q + FiniteProduct.entropy β Ωt (Q ∪ Y)ᶜ -
-        FiniteProduct.entropy β Ωt Y
+    change ManyBody.regionEntropy Ωt (X ∪ positiveNear S.depth σ) +
+      ManyBody.regionEntropy Ωt V - ManyBody.regionEntropy Ωt Y =
+      ManyBody.regionEntropy Ωt Q + ManyBody.regionEntropy Ωt (Q ∪ Y)ᶜ -
+        ManyBody.regionEntropy Ωt Y
     rw [← hnear, hfar]
   have hpost : FiniteProduct.collarPostQuantity β Ωt (positiveNear S.depth σ) Y =
       gpost := by
     unfold FiniteProduct.collarPostQuantity
     rw [hUYeq]
-    simp only [gpost, β, regionalEntropy_eq_finiteProduct]
-  have hid : 2 * FiniteProduct.entropy β Ωt X +
+    simp only [gpost, β]
+  have hid : 2 * ManyBody.regionEntropy Ωt X +
       (FiniteProduct.collarPreQuantity β Ωt X (positiveNear S.depth σ) Y V -
         FiniteProduct.collarPostQuantity β Ωt (positiveNear S.depth σ) Y) =
-      FiniteProduct.mutualInformation β Ωt X V +
-        FiniteProduct.mutualInformation β Ωt X (Y ∪ V) :=
+      ManyBody.regionMutualInformation Ωt X V +
+        ManyBody.regionMutualInformation Ωt X (Y ∪ V) :=
     FiniteProduct.collarLeaf_entropy_identity β Ωt hXU hXY hXV hUY hUV hYV hcover
   rw [hpre, hpost] at hid
-  simpa only [regionalEntropy_eq_finiteProduct, sub_eq_add_neg, add_assoc] using hid
+  simpa only [sub_eq_add_neg, add_assoc] using hid
 
 open Classical in
 /-- The exact terminal-tree and band average bounds twice the mutual
@@ -124,15 +124,15 @@ theorem two_mutualInformation_le_actualTerminal_average
     let σ := terminalPartition S H
     let Q := fun j g ↦ receiving (σ j g) false
     let Y := fun j g ↦ middle (σ j g)
-    let gpre := fun j g ↦ FiniteProduct.entropy β Ωt (Q j g) +
-      FiniteProduct.entropy β Ωt (Q j g ∪ Y j g)ᶜ - FiniteProduct.entropy β Ωt (Y j g)
-    let gpost := fun j g ↦ regionalEntropy Λ q Ωt (positiveNear S.depth (σ j g)) +
-      regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j g)) -
-      regionalEntropy Λ q Ωt (middle (σ j g))
+    let gpre := fun j g ↦ ManyBody.regionEntropy Ωt (Q j g) +
+      ManyBody.regionEntropy Ωt (Q j g ∪ Y j g)ᶜ - ManyBody.regionEntropy Ωt (Y j g)
+    let gpost := fun j g ↦ ManyBody.regionEntropy Ωt (positiveNear S.depth (σ j g)) +
+      ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j g)) -
+      ManyBody.regionEntropy Ωt (middle (σ j g))
     let Gpre := (∑ g, ∑ j, tree.weight j * gpre j g) / (S.K : ℝ)
     let Gpost := (∑ g, ∑ j, tree.weight j * gpost j g) / (S.K : ℝ)
-    2 * FiniteProduct.mutualInformation β Ωt X (S.truncationSet L)ᶜ ≤
-      2 * regionalEntropy Λ q Ωt X + Gpre - Gpost := by
+    2 * ManyBody.regionMutualInformation Ωt X (S.truncationSet L)ᶜ ≤
+      2 * ManyBody.regionEntropy Ωt X + Gpre - Gpost := by
   classical
   intro β X σ Q Y gpre gpost Gpre Gpost
   let U := fun j g ↦ positiveNear S.depth (σ j g)
@@ -148,19 +148,19 @@ theorem two_mutualInformation_le_actualTerminal_average
     terminalPartition_collar_geometry hT S hdepth H L hL j g
   have hpre (j) (g) : FiniteProduct.collarPreQuantity β Ωt X (U j g) (Y j g) (V j g) =
       gpre j g := by
-    change FiniteProduct.entropy β Ωt (X ∪ U j g) + FiniteProduct.entropy β Ωt (V j g) -
-      FiniteProduct.entropy β Ωt (Y j g) =
-      FiniteProduct.entropy β Ωt (Q j g) + FiniteProduct.entropy β Ωt (Q j g ∪ Y j g)ᶜ -
-        FiniteProduct.entropy β Ωt (Y j g)
+    change ManyBody.regionEntropy Ωt (X ∪ U j g) + ManyBody.regionEntropy Ωt (V j g) -
+      ManyBody.regionEntropy Ωt (Y j g) =
+      ManyBody.regionEntropy Ωt (Q j g) + ManyBody.regionEntropy Ωt (Q j g ∪ Y j g)ᶜ -
+        ManyBody.regionEntropy Ωt (Y j g)
     rw [← (hgeom j g).1, (hgeom j g).2.2.1]
   have hpost (j) (g) : FiniteProduct.collarPostQuantity β Ωt (U j g) (Y j g) =
       gpost j g := by
     unfold FiniteProduct.collarPostQuantity
     rw [(hgeom j g).2.1]
-    simp only [gpost, U, Y, β, regionalEntropy_eq_finiteProduct]
+    simp only [gpost, U, Y, β]
   have hband (g : Fin S.K) :
-      2 * FiniteProduct.mutualInformation β Ωt X (S.truncationSet L)ᶜ ≤
-        2 * regionalEntropy Λ q Ωt X +
+      2 * ManyBody.regionMutualInformation Ωt X (S.truncationSet L)ᶜ ≤
+        2 * ManyBody.regionEntropy Ωt X +
           ∑ j, tree.weight j * (gpre j g - gpost j g) := by
     have havg := FiniteProduct.two_mutualInformation_le_collarLeaf_average β Ωt
       Finset.univ tree.weight (fun j _ ↦ tree.weight_nonneg j)
@@ -174,9 +174,9 @@ theorem two_mutualInformation_le_actualTerminal_average
       (fun j _ ↦ (hgeom j g).2.2.2.2.2.2.2.2.1)
       (fun j _ ↦ (hgeom j g).2.2.2.2.2.2.2.2.2.1)
       (fun j _ ↦ (hgeom j g).2.2.2.2.2.2.2.2.2.2)
-    simpa only [hpre, hpost, regionalEntropy_eq_finiteProduct] using havg
+    simpa only [hpre, hpost] using havg
   exact band_average_le hK tree.weight gpre gpost
-    (2 * FiniteProduct.mutualInformation β Ωt X (S.truncationSet L)ᶜ)
-    (2 * regionalEntropy Λ q Ωt X) hband
+    (2 * ManyBody.regionMutualInformation Ωt X (S.truncationSet L)ᶜ)
+    (2 * ManyBody.regionEntropy Ωt X) hband
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

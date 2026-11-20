@@ -57,20 +57,20 @@ theorem source_actualTerminal_preEntropy_bounds_of_truncationEntropyThreshold_le
       Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (gap / 4) / gap) →
     ∀ Ce η : ℝ,
     (∀ i : ℕ, i ≤ L →
-      regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (i : ℤ)) ≤
+      ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (i : ℤ)) ≤
         Ce * ((n : ℝ) * (L : ℝ) ^ η + n)) →
     let β := fun _ : Site Λ ↦ Fin q
     let X := S.A.filter fun x ↦ x.val ∈ T
     let σ := terminalPartition S (S.n * S.m)
-    let gpre := fun j g ↦ FiniteProduct.entropy β Ωt (receiving (σ j g) false) +
-      FiniteProduct.entropy β Ωt (receiving (σ j g) false ∪ middle (σ j g))ᶜ -
-      FiniteProduct.entropy β Ωt (middle (σ j g))
+    let gpre := fun j g ↦ ManyBody.regionEntropy Ωt (receiving (σ j g) false) +
+      ManyBody.regionEntropy Ωt (receiving (σ j g) false ∪ middle (σ j g))ᶜ -
+      ManyBody.regionEntropy Ωt (middle (σ j g))
     let gaps := (Finset.univ :
       Finset (terminalFamily S.K S.m S.M (S.n * S.m) × Fin S.K)).image
         (fun j ↦ gpre j.1 j.2)
     let gmax := (insert (0 : ℝ) gaps).max' (Finset.insert_nonempty _ _)
     let Bsh := Ce * ((n : ℝ) * (L : ℝ) ^ η + n) + (n : ℝ) ^ (-247 : ℝ)
-    let B := 2 * regionalEntropy Λ q Ωt X +
+    let B := 2 * ManyBody.regionEntropy Ωt X +
       2 * Bsh + 6 * (n : ℝ) * (S.D : ℝ) * Real.log q
     0 ≤ gmax ∧ gmax ≤ max 0 B ∧
       ∀ tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m)),
@@ -82,7 +82,7 @@ theorem source_actualTerminal_preEntropy_bounds_of_truncationEntropyThreshold_le
   intro I _ _ Λ T hT S hSn hgraph hdepth hn hK hr hDpos hD
     L hL hrows Ω Ωt hΩ hΩt hcard htrace Ce η hsource β X σ gpre gaps gmax Bsh B
   have hsh : ∀ i : Fin (L + 1),
-      regionalEntropy Λ q Ωt (positiveDepthPrefix S.A S.depth (i.val : ℤ)) ≤ Bsh := by
+      ManyBody.regionEntropy Ωt (positiveDepthPrefix S.A S.depth (i.val : ℤ)) ≤ Bsh := by
     intro i
     exact htransfer Λ Ω Ωt hΩ hΩt S.A S.depth L hcard htrace Ce η hsource
       i.val (Nat.le_of_lt_succ i.isLt)
@@ -112,20 +112,20 @@ theorem eventually_source_actualTerminal_preEntropy_bounds
         Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (gap / 4) / gap) →
       ∀ Ce η : ℝ,
       (∀ i : ℕ, i ≤ L →
-        regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (i : ℤ)) ≤
+        ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (i : ℤ)) ≤
           Ce * ((n : ℝ) * (L : ℝ) ^ η + n)) →
       let β := fun _ : Site Λ ↦ Fin q
       let X := S.A.filter fun x ↦ x.val ∈ T
       let σ := terminalPartition S (S.n * S.m)
-      let gpre := fun j g ↦ FiniteProduct.entropy β Ωt (receiving (σ j g) false) +
-        FiniteProduct.entropy β Ωt (receiving (σ j g) false ∪ middle (σ j g))ᶜ -
-        FiniteProduct.entropy β Ωt (middle (σ j g))
+      let gpre := fun j g ↦ ManyBody.regionEntropy Ωt (receiving (σ j g) false) +
+        ManyBody.regionEntropy Ωt (receiving (σ j g) false ∪ middle (σ j g))ᶜ -
+        ManyBody.regionEntropy Ωt (middle (σ j g))
       let gaps := (Finset.univ :
         Finset (terminalFamily S.K S.m S.M (S.n * S.m) × Fin S.K)).image
           (fun j ↦ gpre j.1 j.2)
       let gmax := (insert (0 : ℝ) gaps).max' (Finset.insert_nonempty _ _)
       let Bsh := Ce * ((n : ℝ) * (L : ℝ) ^ η + n) + (n : ℝ) ^ (-247 : ℝ)
-      let B := 2 * regionalEntropy Λ q Ωt X +
+      let B := 2 * ManyBody.regionEntropy Ωt X +
         2 * Bsh + 6 * (n : ℝ) * (S.D : ℝ) * Real.log q
       0 ≤ gmax ∧ gmax ≤ max 0 B ∧
         ∀ tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m)),

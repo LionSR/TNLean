@@ -31,16 +31,16 @@ window estimate at any target cut. AKLV, arXiv:1301.1162v1, Lemma 4.2, lines 626
 theorem operatorSchmidtRank_aklv_full_frequency_slice_target_le {L q a s : ℕ}
     (hq : 1 ≤ q) (hspace : a + s + 1 ≤ L)
     (H : Fin s → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hH : ∀ j, Entropy.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
+    (hH : ∀ j, ManyBody.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
     (HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hL : Entropy.IsSupportedOn HL (interval L 0 (a + 1)))
-    (hR : Entropy.IsSupportedOn HR (interval L (a + s) L))
+    (hL : ManyBody.IsSupportedOn HL (interval L 0 (a + 1)))
+    (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L))
     (u : Fin s) (m k target : ℕ) :
     let A := Fin s ⊕ Fin 2
     let F := (@Finset.piAntidiag A ℕ (Classical.decEq A) _ _ _ Finset.univ (m + k)).filter
       (fun β ↦ β (Sum.inl u) = k)
     ∀ weight : (A → ℕ) → ℂ, operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L target)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L target)
         (∑ β ∈ F, weight β •
           WordMultiplicity.wordCoefficient (aklvWindowFamily H HL HR) (m + k) β)) ≤
       (m + s).choose s * (m + 2 * k + 1).choose (2 * k + 1) *

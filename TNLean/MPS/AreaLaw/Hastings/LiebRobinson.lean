@@ -42,8 +42,8 @@ theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_numeric
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (X Y : Finset (Fin L))
     {A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A X)
-    (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B Y)
+    (hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A X)
+    (hB : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B Y)
     (d : ℕ) (hd : ∀ x ∈ X, ∀ y ∈ Y, d ≤ Nat.dist x.val y.val) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution h.hamiltonian t A * B - B *
         ManyBody.heisenbergEvolution h.hamiltonian
@@ -75,8 +75,8 @@ theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings
         (hhJ : ∀ X, ‖h.term X‖ ≤ J) {v ξC : ℝ}
     (hvpos : 0 < v) (hv : 8 * (chainLRVelocity R J - 1) ≤ v) (hξC : 8 ≤ ξC)
     (X Y : Finset (Fin L)) {A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A X)
-    (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B Y)
+    (hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A X)
+    (hB : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B Y)
     (d : ℕ) (hd : ∀ x ∈ X, ∀ y ∈ Y, d ≤ Nat.dist x.val y.val)
     (t : ℝ) (ht : |t| ≤ d / v) :
     ‖ManyBody.heisenbergEvolution h.hamiltonian t A * B - B *
@@ -151,8 +151,8 @@ theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_hastings_
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         {Δ κ : ℝ} (hΔ : 0 < Δ) (hκ : 8 ≤ κ)
     (X Y : Finset (Fin L)) {A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A X)
-    (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B Y)
+    (hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A X)
+    (hB : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B Y)
     (d : ℕ) (hd : ∀ x ∈ X, ∀ y ∈ Y, d ≤ Nat.dist x.val y.val)
     (t : ℝ) (ht : |t| ≤ d / (κ * Δ * chainLRVelocity R (J / Δ))) :
     ‖ManyBody.heisenbergEvolution h.hamiltonian t A * B - B *

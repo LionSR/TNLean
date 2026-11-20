@@ -44,7 +44,7 @@ Source: area-law `sec:prelim`, lines 10–25, normalized density operators
 and partial trace; the positivity statement does not require normalization. -/
 theorem reducedState_posSemidef (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
-    (reducedState Λ q Ω A).PosSemidef :=
+    (ManyBody.regionState Ω A).PosSemidef :=
   ((Matrix.posSemidef_vecMulVec_self_star (fun x ↦ Ω x)).submatrix
     (configurationSplit Λ q A).symm).partialTraceRight
 
@@ -52,13 +52,13 @@ theorem reducedState_posSemidef (Λ : Finset (ℤ × ℤ)) (q : ℕ)
 singular marginals. -/
 theorem reducedState_isHermitian (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
-    (reducedState Λ q Ω A).IsHermitian :=
-  (reducedState_posSemidef Λ q Ω A).isHermitian
+    (ManyBody.regionState Ω A).IsHermitian :=
+  (ManyBody.regionState_posSemidef A Ω).isHermitian
 
 /-- Entanglement entropy with natural logarithms and the convention `0 log 0 = 0`.
 Source: area-law Section 1, definition of `SΩ(A)`. -/
 noncomputable def regionalEntropy (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (A : Finset (Site Λ)) : ℝ :=
-  vonNeumannEntropy (reducedState Λ q Ω A) (reducedState_isHermitian Λ q Ω A)
+  vonNeumannEntropy (ManyBody.regionState Ω A) (ManyBody.regionState_isHermitian A Ω)
 
 end TNLean.Lattice

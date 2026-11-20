@@ -50,7 +50,7 @@ private theorem native_filter_image {V : Type*} [Fintype V] [DecidableEq V]
     let HE := EuclideanSpace ℂ (↥(Jᶜ) → Fin q)
     let Fops := fun i ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W i)
     let Rop := fun i ↦ Matrix.toEuclideanCLM (𝕜 := ℂ) (n := ↥(Jᶜ) → Fin q) (M i)
-    let split := (FiniteProduct.splitEquiv (fun _ : V ↦ Fin q) J).trans (Equiv.prodComm _ _)
+    let split := (ManyBody.splitEquiv (fun _ : V ↦ Fin q) J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
     let Phi := ((EuclideanSpace.basisFun (↥(Jᶜ) → Fin q) ℂ).tensorProduct
       (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
@@ -110,7 +110,7 @@ theorem exists_uniform_native_long_interval_soft_improving_family
       (t / m) * (T1 / t) ^ m) ≤ tau * g / 1000000)
     (N p r : ℕ) (hpr : p ≤ r) (hrN : r ≤ N + 1) (hlong : 4 * ell < r - p)
       (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-      (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+      (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval (N + 1) i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     ∃ (a b : ℕ) (_hab : a + 2 * ell ≤ b) (_hb : b + 2 * ell ≤ N),
@@ -134,7 +134,7 @@ theorem exists_uniform_native_long_interval_soft_improving_family
     let extConfig := ↥(Jᶜ) → Fin q
     let HM := EuclideanSpace ℂ midConfig
     let Hfull := EuclideanSpace ℂ (Fin (N + 1) → Fin q)
-    let split := (FiniteProduct.splitEquiv (fun _ : Fin (N + 1) ↦ Fin q) J).trans
+    let split := (ManyBody.splitEquiv (fun _ : Fin (N + 1) ↦ Fin q) J).trans
       (Equiv.prodComm _ _)
     let coords := Entropy.regionTensorCoordinates q J
     let order := max 1 ⌈(Real.log (max 1 ((N : ℝ) ^ 2)) -

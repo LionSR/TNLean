@@ -73,17 +73,17 @@ are retained and all other terms are zero; for positive contractions its norm bo
 LVV13, `algo53.tex`, the local Hamiltonian assumptions; Huang, Section 5.4, Lemmas 18--19. -/
 noncomputable def _root_.ManyBody.ChainInteraction.ofNearestNeighborPositive {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) : ManyBody.ChainInteraction L q 1 where
   term := Function.extend nearestNeighborChainSupport h (fun _ ↦ 0)
   mem := forall_nearestNeighborExtension h
-    (fun X M ↦ Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) M X.val)
+    (fun X M ↦ ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) M X.val)
     (fun X ↦ zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) X.val)) hs
 
 /-- The terms of positive nearest-neighbor terms are Hermitian. -/
 theorem _root_.ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) :
     ∀ X, ((ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term X).IsHermitian :=
   forall_nearestNeighborExtension h (fun _ M ↦ M.IsHermitian)
@@ -93,7 +93,7 @@ theorem _root_.ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_t
 /-- The terms of positive contractions have norm at most one. -/
 theorem _root_.ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     ∀ X, ‖(ManyBody.ChainInteraction.ofNearestNeighborPositive h hs).term X‖ ≤ 1 :=
   forall_nearestNeighborExtension h (fun _ M ↦ ‖M‖ ≤ 1) (fun _ ↦ by simp)
@@ -101,7 +101,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le 
 
 variable {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
 
 /-- The constructed Hamiltonian keeps the actual original term at each adjacent pair.

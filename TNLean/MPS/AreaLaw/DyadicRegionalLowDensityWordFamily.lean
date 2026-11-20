@@ -58,7 +58,7 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_word_family
       (interval L (a + ell) (b + ell + 1) \ Jtarget).card +
         (Jtarget \ interval L (a + ell) (b + ell + 1)).card ≤ 2 * ell →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2))) →
       (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) →
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
@@ -85,13 +85,13 @@ theorem exists_fixed_bandwidth_regional_dyadic_low_energy_word_family
       ‖B (ell : ℝ) e K‖ ≤ 7 * (ell : ℝ) ∧
       let J := Jtarget
       let beta := fun _ : Fin L ↦ Fin q
-      let tau := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration beta Jᶜ) ℂ).tensorProduct
-        (EuclideanSpace.basisFun (FiniteProduct.Configuration beta J) ℂ)).repr
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+        (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
       let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ))
-        (EuclideanSpace ℂ (FiniteProduct.Configuration beta J)))
+        (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+        (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
       ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ), N ≤ D ^ 2 ∧
         ∀ eta : ℝ, 6 * w ≤ eta → eta ≤ etaLD →
       let lower := Submodule.spectralSpanLE hC.eigenvectorBasis hC.eigenvalues

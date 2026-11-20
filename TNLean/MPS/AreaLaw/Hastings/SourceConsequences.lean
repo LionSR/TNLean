@@ -54,7 +54,7 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
         (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q)), (∀ i, 0 ≤ w i) →
         (∀ i, (cutMatrix (ψ i) j).rank ≤ k) → ∑ i, w i * ‖ψ i‖ ^ 2 = 1 →
         ∀ {P : ℝ}, 0 < P → ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P →
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 j) Ω ≤
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) ≤
           Real.log k + 6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) *
             Real.log
               (2 * (K * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3) ^ 2 / P) *
@@ -71,7 +71,7 @@ theorem exists_entropy_le_of_overlap_schmidtRank_mixture_source (R : ℕ) :
   · -- For `q ≤ 1` the entropy vanishes and the right side is nonnegative.
     have hq1 : q = 1 := by have := NeZero.one_le (n := q); omega
     subst hq1
-    refine (regionEntropy_le_card_mul_log hΩ _).trans ?_
+    refine (ManyBody.regionEntropy_le_card_mul_log hΩ _).trans ?_
     have hk0 : 0 ≤ Real.log k := Real.log_nonneg (by exact_mod_cast hk)
     have hξ0 : 0 ≤ Real.log
         (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) / 2 + 1) :=
@@ -185,10 +185,10 @@ theorem exists_relent_of_isGapped_source (R : ℕ) :
       (l + 6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) *
           Real.log (K * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3)) * Real.log q +
           bootstrapRemainder (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)) q ≤
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 c) Ω →
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L (c - l) (c + l)) Ω ≤
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L (c - l) c) Ω +
-          Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L c (c + l)) Ω -
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 c) →
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) (c + l)) ≤
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) c) +
+          ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L c (c + l)) -
           (1 - 2 * ((2 * (K * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) ^ 3)) *
             Real.exp (-(l / (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80)))))) *
             (l / (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80))) +
@@ -208,7 +208,7 @@ theorem exists_relent_of_isGapped_source (R : ℕ) :
   · -- For `q = 1` the window condition fails: the entropy vanishes and `F(ξ', 1) > 0`.
     have hq1 : q = 1 := by have := NeZero.one_le (n := q); omega
     subst hq1
-    have hS0 := TNLean.Lattice.regionEntropy_le_card_mul_log hΩ (interval L 0 c)
+    have hS0 := ManyBody.regionEntropy_le_card_mul_log hΩ (interval L 0 c)
     have hξ0 : 0 ≤ Real.log
         (6 * (max (2 * (40 * (chainLRVelocity R J - 1)) / ΔE) 80) / 2 + 1) :=
       Real.log_nonneg (by linarith)
@@ -239,7 +239,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_source (R : ℕ) :
       ∀ {k' : ℕ}, ⌈exp (2 * Smax) / 2⌉₊ ≤ k' →
         let k₀ := ⌈exp (2 * Smax) / 2⌉₊
         let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-          (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+          (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
             Ω).leadingEigenprojection k'
         let Φ := sequentialTruncation P (L - 1) Ω
         IsOpenMPS L q k' (fun x ↦ Φ x) ∧
@@ -259,7 +259,7 @@ theorem exists_isOpenMPS_norm_sub_sq_le_of_isGapped_source (R : ℕ) :
       (mul_le_mul_of_nonneg_right (le_max_left _ _) (exp_pos _).le)⟩
   · have hj := hS hJ hΔ h hh hhJ hΩ hgap hspan j
     rw [← leftBlock_eq_interval] at hj
-    calc exp (2 * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) / 2
+    calc exp (2 * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L j)) / 2
         ≤ exp (2 * Smax) / 2 := by gcongr
       _ ≤ ⌈exp (2 * Smax) / 2⌉₊ := Nat.le_ceil _
 

@@ -45,24 +45,24 @@ theorem _root_.ManyBody.ChainInteraction.gap_le_four_mul_of_range_one (h : Chain
   classical
   let x : Fin L := ⟨0, hL⟩
   obtain ⟨U, hU⟩ := Matrix.IsHermitian.exists_unitary_trace_mul_eq_zero
-    (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) {x} Ω)
+    (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) {x} Ω)
       (by simpa [Entropy.RegionConfig, Fintype.card_pi] using hq)
-  let K := Entropy.localLift (n := fun _ : Fin L ↦ q) {x} (U : Matrix _ _ ℂ)
+  let K := ManyBody.place (X := fun _ ↦ Fin q) {x} (U : Matrix _ _ ℂ)
   have hUunit :
-      (U : Matrix (Entropy.RegionConfig (fun _ : Fin L ↦ q) {x})
-        (Entropy.RegionConfig (fun _ : Fin L ↦ q) {x}) ℂ)ᴴ * (U : Matrix _ _ ℂ) = 1 := by
+      (U : Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) {x})
+        (ManyBody.RegionConfig (fun _ ↦ Fin q) {x}) ℂ)ᴴ * (U : Matrix _ _ ℂ) = 1 := by
     convert U.property.1 using 1
     ext i j
     simp only [Matrix.one_apply]
     split_ifs <;> rfl
   have hK : Kᴴ * K = 1 := by
-    simpa only [K, Entropy.localLift_mul, Entropy.localLift_conjTranspose,
-      Entropy.localLift_one] using
-      congrArg (Entropy.localLift (n := fun _ : Fin L ↦ q) {x}) hUunit
+    simpa only [K, ManyBody.place_mul, ManyBody.place_conjTranspose,
+      ManyBody.place_one] using
+      congrArg (ManyBody.place (X := fun _ ↦ Fin q) {x}) hUunit
   have hφ : ‖toEuclideanLin K Ω‖ = 1 :=
     (Entropy.norm_toEuclideanLin_of_conjTranspose_mul_self hK Ω).trans hΩ
   have horth : ⟪Ω, toEuclideanLin K Ω⟫_ℂ = 0 := by
-    simpa only [K, Entropy.inner_localLift] using hU
+    simpa only [K, ManyBody.inner_place] using hU
   have hgap : Δ ≤
       (⟪toEuclideanLin K Ω, toEuclideanLin h.hamiltonian (toEuclideanLin K Ω)⟫_ℂ).re - E₀ := by
     simpa [hφ, horth] using
@@ -149,7 +149,7 @@ change its expectation, and the change is at most one because the bond lies betw
 zero and the identity. The rank-one gap inequality is essential to the conclusion. -/
 theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
@@ -157,24 +157,24 @@ theorem gap_le_one_of_positive_nearest_neighbor_terms {L q : ℕ} (hL : 0 < L) (
   classical
   let x : Fin L := ⟨0, hL⟩
   obtain ⟨U, hU⟩ := Matrix.IsHermitian.exists_unitary_trace_mul_eq_zero
-    (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) {x} Ω)
+    (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) {x} Ω)
       (by simpa [Entropy.RegionConfig, Fintype.card_pi] using hq)
-  let K := Entropy.localLift (n := fun _ : Fin L ↦ q) {x} (U : Matrix _ _ ℂ)
+  let K := ManyBody.place (X := fun _ ↦ Fin q) {x} (U : Matrix _ _ ℂ)
   have hUunit :
-      (U : Matrix (Entropy.RegionConfig (fun _ : Fin L ↦ q) {x})
-        (Entropy.RegionConfig (fun _ : Fin L ↦ q) {x}) ℂ)ᴴ * (U : Matrix _ _ ℂ) = 1 := by
+      (U : Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) {x})
+        (ManyBody.RegionConfig (fun _ ↦ Fin q) {x}) ℂ)ᴴ * (U : Matrix _ _ ℂ) = 1 := by
     convert U.property.1 using 1
     ext i j
     simp only [Matrix.one_apply]
     split_ifs <;> rfl
   have hK : Kᴴ * K = 1 := by
-    simpa only [K, Entropy.localLift_mul, Entropy.localLift_conjTranspose,
-      Entropy.localLift_one] using
-      congrArg (Entropy.localLift (n := fun _ : Fin L ↦ q) {x}) hUunit
+    simpa only [K, ManyBody.place_mul, ManyBody.place_conjTranspose,
+      ManyBody.place_one] using
+      congrArg (ManyBody.place (X := fun _ ↦ Fin q) {x}) hUunit
   have hφ : ‖toEuclideanLin K Ω‖ = 1 :=
     (Entropy.norm_toEuclideanLin_of_conjTranspose_mul_self hK Ω).trans hΩ
   have horth : ⟪Ω, toEuclideanLin K Ω⟫_ℂ = 0 := by
-    simpa only [K, Entropy.inner_localLift] using hU
+    simpa only [K, ManyBody.inner_place] using hU
   have hgap : Δ ≤
       (⟪toEuclideanLin K Ω, toEuclideanLin (∑ i, h i) (toEuclideanLin K Ω)⟫_ℂ).re - E₀ := by
     simpa [hφ, horth] using (hgap.posSemidef_sub_smul_one

@@ -35,7 +35,7 @@ variable (D : TransportData V K H C) (n : V → ℕ) [∀ v, NeZero (n v)]
 /-- The actual old-state integral of the zero supplied vector is zero, at
 all interpolation parameters and every replica count. -/
 @[simp] theorem oldFourierCoherentIntegral_zero_pre (t : ℝ) (k : ℕ) (p : ℝ) (h : H)
-    (F : (SiteConfig n → ℂ) → ℝ) :
+    (F : ((∀ v, Fin (n v)) → ℂ) → ℝ) :
     D.oldFourierCoherentIntegral n t k 0 p h F = 0 := by
   have hv : Matrix.Transport.filteredVector (D.rootPath n t k p) 0 = 0 := by
     simp [Matrix.Transport.filteredVector, Matrix.Transport.filteredRaw]
@@ -53,7 +53,7 @@ expectation in the actual old state, including the endpoints. -/
 theorem oldFourierCoherentIntegral_eq_integral_hermPart (hD : D.IsAdmissible)
     {t : ℝ} (ht : 0 ≤ t) {k : ℕ} (hcomm : D.CrossBandCommute n t k)
     (pre : Config k (fun v => Fin (n v)) → ℂ) (p : ℝ) (h : H)
-    {F : (SiteConfig n → ℂ) → ℝ} (hF : Continuous F) :
+    {F : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hF : Continuous F) :
     D.oldFourierCoherentIntegral n t k pre p h F =
       ∫ u, Matrix.Transport.fourierWeight u *
         (D.state n t k pre p ⟨h, none⟩ u *
@@ -74,7 +74,7 @@ old-state Fourier/coherent integral. The supplied vector may be zero. -/
 theorem aestronglyMeasurable_oldFourierCoherentIntegral (hD : D.IsAdmissible)
     {t : ℝ} (ht : 0 ≤ t) {k : ℕ} (hcomm : D.CrossBandCommute n t k)
     (pre : Config k (fun v => Fin (n v)) → ℂ) (h : H)
-    {F : (SiteConfig n → ℂ) → ℝ} (hF : Continuous F) :
+    {F : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hF : Continuous F) :
     AEStronglyMeasurable (fun p => D.oldFourierCoherentIntegral n t k pre p h F)
       (volume.restrict (Ioo 0 1)) := by
   by_cases hpre : pre = 0
@@ -92,7 +92,7 @@ The zero-vector case uses its actual zero state. -/
 theorem abs_oldFourierCoherentIntegral_le (hD : D.IsAdmissible)
     {t : ℝ} (ht : 0 ≤ t) {k : ℕ} (hcomm : D.CrossBandCommute n t k)
     (pre : Config k (fun v => Fin (n v)) → ℂ) {p : ℝ} (hp : p ∈ Ioo (0 : ℝ) 1)
-    (h : H) {F : (SiteConfig n → ℂ) → ℝ} (hF : Continuous F) :
+    (h : H) {F : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hF : Continuous F) :
     |D.oldFourierCoherentIntegral n t k pre p h F| ≤
       ‖hermPart (coherentAverage k (base n) F)‖ / 2 := by
   by_cases hpre : pre = 0
@@ -107,7 +107,7 @@ theorem abs_oldFourierCoherentIntegral_le (hD : D.IsAdmissible)
 theorem integrableOn_Ioo_oldFourierCoherentIntegral (hD : D.IsAdmissible)
     {t : ℝ} (ht : 0 ≤ t) {k : ℕ} (hcomm : D.CrossBandCommute n t k)
     (pre : Config k (fun v => Fin (n v)) → ℂ) (h : H)
-    {F : (SiteConfig n → ℂ) → ℝ} (hF : Continuous F) :
+    {F : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hF : Continuous F) :
     IntegrableOn (fun p => D.oldFourierCoherentIntegral n t k pre p h F) (Ioo 0 1) := by
   refine ⟨D.aestronglyMeasurable_oldFourierCoherentIntegral n hD ht hcomm pre h hF,
     HasFiniteIntegral.restrict_of_bounded
@@ -120,7 +120,7 @@ theorem integrableOn_Ioo_oldFourierCoherentIntegral (hD : D.IsAdmissible)
 theorem intervalIntegrable_oldFourierCoherentIntegral (hD : D.IsAdmissible)
     {t : ℝ} (ht : 0 ≤ t) {k : ℕ} (hcomm : D.CrossBandCommute n t k)
     (pre : Config k (fun v => Fin (n v)) → ℂ) (h : H)
-    {F : (SiteConfig n → ℂ) → ℝ} (hF : Continuous F) :
+    {F : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hF : Continuous F) :
     IntervalIntegrable (fun p => D.oldFourierCoherentIntegral n t k pre p h F) volume 0 1 :=
   (intervalIntegrable_iff_integrableOn_Ioo_of_le zero_le_one).mpr
     (D.integrableOn_Ioo_oldFourierCoherentIntegral n hD ht hcomm pre h hF)
@@ -129,7 +129,7 @@ theorem intervalIntegrable_oldFourierCoherentIntegral (hD : D.IsAdmissible)
 theorem integrableOn_Icc_oldFourierCoherentIntegral (hD : D.IsAdmissible)
     {t : ℝ} (ht : 0 ≤ t) {k : ℕ} (hcomm : D.CrossBandCommute n t k)
     (pre : Config k (fun v => Fin (n v)) → ℂ) (h : H)
-    {F : (SiteConfig n → ℂ) → ℝ} (hF : Continuous F) :
+    {F : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hF : Continuous F) :
     IntegrableOn (fun p => D.oldFourierCoherentIntegral n t k pre p h F) (Icc 0 1) :=
   (intervalIntegrable_iff_integrableOn_Icc_of_le zero_le_one).mp
     (D.intervalIntegrable_oldFourierCoherentIntegral n hD ht hcomm pre h hF)
@@ -138,7 +138,7 @@ theorem integrableOn_Icc_oldFourierCoherentIntegral (hD : D.IsAdmissible)
 theorem aestronglyMeasurable_Icc_oldFourierCoherentIntegral (hD : D.IsAdmissible)
     {t : ℝ} (ht : 0 ≤ t) {k : ℕ} (hcomm : D.CrossBandCommute n t k)
     (pre : Config k (fun v => Fin (n v)) → ℂ) (h : H)
-    {F : (SiteConfig n → ℂ) → ℝ} (hF : Continuous F) :
+    {F : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hF : Continuous F) :
     AEStronglyMeasurable (fun p => D.oldFourierCoherentIntegral n t k pre p h F)
       (volume.restrict (Icc 0 1)) :=
   (D.integrableOn_Icc_oldFourierCoherentIntegral n hD ht hcomm pre h hF).aestronglyMeasurable
@@ -151,7 +151,7 @@ theorem aestronglyMeasurable_sum_oldFourierCoherentIntegral (hD : D.IsAdmissible
     {t : ℝ} (ht : 0 ≤ t) {k : ℕ} (hcomm : D.CrossBandCommute n t k)
     (pre : Config k (fun v => Fin (n v)) → ℂ)
     (good : H → Prop) [DecidablePred good] (w : H → ℝ)
-    (F : H → (SiteConfig n → ℂ) → ℝ) (hF : ∀ h, Continuous (F h)) :
+    (F : H → ((∀ v, Fin (n v)) → ℂ) → ℝ) (hF : ∀ h, Continuous (F h)) :
     AEStronglyMeasurable (fun p => ∑ h, if good h then
       w h * D.oldFourierCoherentIntegral n t k pre p h (F h) else 0)
       (volume.restrict (Ioo 0 1)) := by
@@ -170,7 +170,7 @@ theorem intervalIntegrable_sum_oldFourierCoherentIntegral (hD : D.IsAdmissible)
     {t : ℝ} (ht : 0 ≤ t) {k : ℕ} (hcomm : D.CrossBandCommute n t k)
     (pre : Config k (fun v => Fin (n v)) → ℂ)
     (good : H → Prop) [DecidablePred good] (w : H → ℝ)
-    (F : H → (SiteConfig n → ℂ) → ℝ) (hF : ∀ h, Continuous (F h)) :
+    (F : H → ((∀ v, Fin (n v)) → ℂ) → ℝ) (hF : ∀ h, Continuous (F h)) :
     IntervalIntegrable (fun p => ∑ h, if good h then
       w h * D.oldFourierCoherentIntegral n t k pre p h (F h) else 0) volume 0 1 := by
   have hint (h : H) : IntervalIntegrable (fun p => if good h then

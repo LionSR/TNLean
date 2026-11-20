@@ -85,7 +85,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundaryOperator_factorization (
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         {H₀ OL OR P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hH₀ : H₀.IsHermitian) (E₀ : ℝ) (Z : Finset (Fin L))
-    (hZ : Entropy.IsSupportedOn (n := fun _ ↦ q) (h.hamiltonian - (E₀ : ℂ) • 1 - H₀) Z)
+    (hZ : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.hamiltonian - (E₀ : ℂ) • 1 - H₀) Z)
     (hOL : IsStarProjection OL) (hOR : IsStarProjection OR) (η : ℝ≥0) {θ ε₀ ℓ' : ℝ}
     (hℓ' : 0 ≤ ℓ') (hθ : ‖H₀ * (OL * OR)‖ ≤ θ)
     (hε₀ : ‖GaussianFilter.gaussianIntertwiner η (h.hamiltonian - (E₀ : ℂ) • 1) 0 1 * (OL * OR) -

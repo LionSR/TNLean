@@ -264,28 +264,28 @@ theorem primitive_information_of_logarithmic_separation
         (∀ x ∈ interval L a (a + w), own x = A) →
         (∀ x ∈ interval L (a + w) (a + 2 * w), own x = B) →
         D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) →
-        (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+        (ManyBody.regionMutualInformation Ω
           (interval L (a - 6 * w) (a - w))
           ((aux₀ (L := L) C).birthEnv C) ≤ (L : ℝ) ^ (-24 : ℤ)) ∧
-        (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+        (ManyBody.regionMutualInformation Ω
           (interval L (a - 5 * w) (a - 2 * w))
           ((aux₁ (L := L) B C a w).birthEnv B) ≤ (L : ℝ) ^ (-24 : ℤ)) ∧
-        (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+        (ManyBody.regionMutualInformation Ω
           (interval L (a - 4 * w) (a - 3 * w))
           ((aux₂ (L := L) A B C a w).birthEnv A) ≤ (L : ℝ) ^ (-24 : ℤ)) ∧
-        (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+        (ManyBody.regionMutualInformation Ω
           (exchangeTSet own A B C a w) (exchangeESet own A B C a w) ≤
             (L : ℝ) ^ (-24 : ℤ)) ∧
-        (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+        (ManyBody.regionMutualInformation Ω
           (interval L (a - 4 * w) a)
           ((main₅ own A B C a w).birthEnv A) ≤ (L : ℝ) ^ (-24 : ℤ)) ∧
-        (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+        (ManyBody.regionMutualInformation Ω
           (interval L (a - 5 * w) (a + w))
           ((main₆ own A B C a w).birthEnv B) ≤ (L : ℝ) ^ (-24 : ℤ)) ∧
-        (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+        (ManyBody.regionMutualInformation Ω
           (interval L (a - 3 * w) a)
           ((main₆ own A B C a w).birthEnv B) ≤ (L : ℝ) ^ (-24 : ℤ)) ∧
-        (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+        (ManyBody.regionMutualInformation Ω
           (interval L (a - 6 * w) (a - 3 * w))
           ((main₈ own A B C a w).birthEnv C) ≤ (L : ℝ) ^ (-24 : ℤ)) := by
   classical
@@ -299,7 +299,7 @@ theorem primitive_information_of_logarithmic_separation
       hAC hBC hw hleft hC hA hB
   have hinterval (b c : ℕ) (E : Finset (Fin L))
       (hd : ∀ x ∈ interval L b c, ∀ y ∈ E, w ≤ Nat.dist x.val y.val) :
-      FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+      ManyBody.regionMutualInformation Ω
         (interval L b c) E ≤ (L : ℝ) ^ (-24 : ℤ) := by
     have hT : ∃ (n : ℕ) (a z : Fin n → ℕ), n ≤ 1 ∧
         interval L b c = Finset.univ.biUnion (fun i ↦ interval L (a i) (z i)) :=

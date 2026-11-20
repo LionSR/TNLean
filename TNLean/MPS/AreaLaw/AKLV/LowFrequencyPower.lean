@@ -35,14 +35,14 @@ lines 604--662. The source interaction index is `u.val + 1`. -/
 theorem exists_aklv_low_frequency_power_decomposition {L q a s : ℕ}
     (hq : 1 ≤ q) (hs : 0 < s) (hspace : a + s + 1 ≤ L)
     (H : Fin s → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hH : ∀ j, Entropy.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
+    (hH : ∀ j, ManyBody.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
     (HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hL : Entropy.IsSupportedOn HL (interval L 0 (a + 1)))
-    (hR : Entropy.IsSupportedOn HR (interval L (a + s) L)) (ell : ℕ) :
+    (hL : ManyBody.IsSupportedOn HL (interval L 0 (a + 1)))
+    (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L)) (ell : ℕ) :
     ∃ Q : Fin s × Fin (ell / s + 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       (HL + (∑ j, H j) + HR) ^ ell = ∑ b, Q b ∧
       ∀ b, operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (a + s / 2)) (Q b)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (a + s / 2)) (Q b)) ≤
         (ell - b.2.val + s).choose s * (ell + b.2.val + 1).choose (2 * b.2.val + 1) *
           q ^ (2 * b.2.val + 2 * Nat.dist (b.1.val + 1) (s / 2)) := by
   let A := Fin s ⊕ Fin 2
@@ -95,7 +95,7 @@ theorem exists_aklv_low_frequency_power_decomposition {L q a s : ℕ}
     have hrank := operatorSchmidtRank_aklv_full_frequency_slice_target_le
       hq hspace H hH HL HR hL hR b.1 (ell - b.2.val) b.2.val (a + s / 2) weight
     change operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (a + s / 2))
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (a + s / 2))
         (∑ β ∈ (@Finset.piAntidiag A ℕ (Classical.decEq A) _ _ _ Finset.univ
           (ell - b.2.val + b.2.val)).filter (fun β ↦ β (Sum.inl b.1) = b.2.val),
           weight β • WordMultiplicity.wordCoefficient (aklvWindowFamily H HL HR)
@@ -110,11 +110,11 @@ choice of the window width. -/
 theorem operatorSchmidtRank_aklv_power_le_sum {L q a s : ℕ}
     (hq : 1 ≤ q) (hs : 0 < s) (hspace : a + s + 1 ≤ L)
     (H : Fin s → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hH : ∀ j, Entropy.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
+    (hH : ∀ j, ManyBody.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
     (HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hL : Entropy.IsSupportedOn HL (interval L 0 (a + 1)))
-    (hR : Entropy.IsSupportedOn HR (interval L (a + s) L)) (ell : ℕ) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    (hL : ManyBody.IsSupportedOn HL (interval L 0 (a + 1)))
+    (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L)) (ell : ℕ) :
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L (a + s / 2)) ((HL + (∑ j, H j) + HR) ^ ell)) ≤
       ∑ b : Fin s × Fin (ell / s + 1),
         (ell - b.2.val + s).choose s * (ell + b.2.val + 1).choose (2 * b.2.val + 1) *
@@ -122,11 +122,11 @@ theorem operatorSchmidtRank_aklv_power_le_sum {L q a s : ℕ}
   obtain ⟨Q, hQ, hrank⟩ := exists_aklv_low_frequency_power_decomposition
     hq hs hspace H hH HL HR hL hR ell
   rw [hQ]
-  have hcut : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L (a + s / 2))
-      (∑ b, Q b) = ∑ b, Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+  have hcut : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L (a + s / 2))
+      (∑ b, Q b) = ∑ b, ManyBody.cutOperator (X := fun _ ↦ Fin q)
         (leftBlock L (a + s / 2)) (Q b) := by
     ext x y
-    simp only [Entropy.cutOperator, Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.sum_apply]
+    simp only [ManyBody.cutOperator, Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.sum_apply]
   rw [hcut]
   exact (operatorSchmidtRank_sum_le Finset.univ _).trans
     (Finset.sum_le_sum fun b _ ↦ hrank b)

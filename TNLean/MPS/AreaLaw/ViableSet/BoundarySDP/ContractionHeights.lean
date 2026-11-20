@@ -81,7 +81,7 @@ so the estimate is independent of the physical dimension. -/
 theorem RationalLeftOpenMPSRepresentationOfHeight.coordinate_height_common_denominator
     {L q k H b : ℕ} {v : LeftBlockVector L q k}
     (R : RationalLeftOpenMPSRepresentationOfHeight H b v) (hk : k ≤ L)
-    (x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)) :
+    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
     let D := max 1 b
     let P := 1 + k * D ^ 2
     HasRationalComplexCoordinatesOfHeight
@@ -134,7 +134,7 @@ the selected tensor entries, independently of the number of virtual paths. -/
 theorem RationalLeftOpenMPSRepresentationOfHeight.coordinate_height_le
     {L q k H b : ℕ} (_hH : 0 < H) {v : LeftBlockVector L q k}
     (R : RationalLeftOpenMPSRepresentationOfHeight H b v) (hk : k ≤ L)
-    (x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)) :
+    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
     HasRationalComplexCoordinatesOfHeight
       (RationalLeftOpenMPSRepresentationOfHeight.coordinateHeightBound H b k) (v x) :=
   R.coordinate_height_common_denominator hk x
@@ -169,7 +169,7 @@ theorem RationalLeftOpenMPSRepresentationOfHeight.coordinate_height_le_two_pow
     {L q k H b h B : ℕ} {v : LeftBlockVector L q k}
     (R : RationalLeftOpenMPSRepresentationOfHeight H b v) (hk : k ≤ L)
     (hH : H ≤ 2 ^ h) (hb : max 1 b ≤ B)
-    (x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)) :
+    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
     HasRationalComplexCoordinatesOfHeight
       (2 ^ ((2 * h * (1 + k * B ^ 2) + 1 + h + B) * (k + 1))) (v x) :=
   (R.coordinate_height_common_denominator hk x).mono (contractionHeight_le_two_pow hH hb)

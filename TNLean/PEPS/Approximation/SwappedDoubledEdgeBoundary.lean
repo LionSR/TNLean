@@ -63,12 +63,12 @@ theorem swapped_doubled_boundary_bound_edgeBoundary
     (TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le A (h.term X)).trans
       (mul_le_mul_of_nonneg_left (hhJ X) (by norm_num))
   refine (Finset.sum_le_card_nsmul _ _ (4 * J) (fun X _ ↦ hterm X)).trans ?_
-  have hcard : ((Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card : ℝ) ≤
+  have hcard : ((ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card : ℝ) ≤
       ((edgeBoundary Λ A).card : ℝ) *
         (((1 + 2 * R * (R + 1)) * 2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) := by
     exact_mod_cast TNLean.PEPS.AreaLaw.card_crossingTerms_le_edgeBoundary Λ R A
   calc
-    _ = ((Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card : ℝ) * (4 * J) :=
+    _ = ((ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A).card : ℝ) * (4 * J) :=
       nsmul_eq_mul _ _
     _ ≤ (((edgeBoundary Λ A).card : ℝ) *
         (((1 + 2 * R * (R + 1)) * 2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ)) * (4 * J) :=

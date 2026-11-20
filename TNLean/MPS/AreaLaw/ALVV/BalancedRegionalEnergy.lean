@@ -74,7 +74,7 @@ private theorem realize_node_update {L q N l k u v r : ℕ} (hq : 0 < q)
 
 private theorem exists_leaf_energy {L q : ℕ} (hq : 0 < q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (l r : ℕ) (hlr : l ≤ r) (hrL : r ≤ L) :
@@ -301,7 +301,7 @@ Figure `fig:algo1`, line 1631, and line 1807. -/
 theorem exists_balanced_regional_energy_assignment {L q ell : ℕ}
     (hq : 0 < q) (hwidth : 1 ≤ 4 * ell)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (N : LongIntervalIndex L (4 * ell) → ℕ)
@@ -356,7 +356,7 @@ extension. Auxiliary to ALVV, arXiv:1602.08828v2, lines 1631 and 1807. -/
 theorem exists_balanced_root_regional_energy_assignment {L q ell : ℕ}
     (hq : 0 < q) (hwidth : 1 ≤ 4 * ell)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (N : LongIntervalIndex L (4 * ell) → ℕ)

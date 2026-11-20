@@ -35,12 +35,12 @@ in AKLV, arXiv:1301.1162v1, Lemma 4.2, before shorter-window regrouping. -/
 theorem operatorSchmidtRank_aklv_polynomial_of_width_le {L q a s ell : ℕ}
     (hq : 1 ≤ q) (hs : 0 < s) (hwidth : s ≤ ell + 1) (hspace : a + s + 1 ≤ L)
     (H : Fin s → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hH : ∀ j, Entropy.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
+    (hH : ∀ j, ManyBody.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
     (HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hL : Entropy.IsSupportedOn HL (interval L 0 (a + 1)))
-    (hR : Entropy.IsSupportedOn HR (interval L (a + s) L))
+    (hL : ManyBody.IsSupportedOn HL (interval L 0 (a + 1)))
+    (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L))
     (P : Polynomial ℂ) (hP : P.natDegree ≤ ell) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L (a + s / 2))
       (Polynomial.aeval (HL + (∑ j, H j) + HR) P)) ≤
       (q * (ell + 1)) ^ (3 * s + 6 * (ell / s) + 5) := by
@@ -49,12 +49,12 @@ theorem operatorSchmidtRank_aklv_polynomial_of_width_le {L q a s ell : ℕ}
   let e := 3 * s + 6 * (ell / s) + 4
   have hbase : ell + 1 ≤ B := by dsimp [B]; nlinarith
   have hpower (r : ℕ) (hr : r ≤ ell) :
-      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
         (leftBlock L (a + s / 2)) (G ^ r)) ≤ B ^ e :=
     (operatorSchmidtRank_aklv_power_le_sum hq hs hspace H hH HL HR hL hR r).trans
       (Nat.aklv_frequency_sum_le hq hwidth hr)
   let φ := Matrix.reindexAlgEquiv ℂ ℂ
-    (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L (a + s / 2)))
+    (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L (a + s / 2)))
   change operatorSchmidtRank (φ (Polynomial.aeval G P)) ≤ _
   rw [Polynomial.aeval_eq_sum_range' (Nat.lt_succ_of_le hP) G]
   simp only [map_sum, map_smul]

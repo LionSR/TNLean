@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.Algebra.MatrixKroneckerContraction
 import TNLean.Circuit.RegionSplit
 import TNLean.Lattice.Sheet.Operators
-import QICLean.Entropy.FiniteProduct
+import QICLean.Entropy.RegionEntropy
 import QICLean.Entropy.PurificationSplitting
 
 /-!
@@ -32,7 +32,7 @@ depends on a geometry of the sites.
   `‖(1_{TE} ⊗ V) Ω - s ⊗ s'‖ ≤ L^{-30}`. It is QICLean's
   `Matrix.exists_isIsometry_norm_sub_tensorPurification_le` read in the coordinates
   `threeSplit T E`, with the relative entropy of the source identified with the regional mutual
-  information `FiniteProduct.mutualInformation`.
+  information `ManyBody.regionMutualInformation`.
 
 ## References
 
@@ -96,7 +96,7 @@ and on `U = (T ∪ E)ᶜ`, for disjoint `T` and `E`. -/
 def threeSplit (q : ℕ) (T E : Finset ι) (h : Disjoint T E) :
     (ι → Fin q) ≃ ((T → Fin q) × (E → Fin q)) × (↥(T ∪ E)ᶜ → Fin q) :=
   (sheetSplit q (T ∪ E)).trans
-    ((FiniteProduct.unionEquiv (fun _ : ι => Fin q) T E h).prodCongr (Equiv.refl _))
+    ((ManyBody.unionEquiv (fun _ : ι => Fin q) T E h).prodCongr (Equiv.refl _))
 
 section ThreeSplit
 
@@ -118,20 +118,20 @@ theorem threeSplit_apply_snd (x : ι → Fin q) (v : ↥(T ∪ E)ᶜ) :
 theorem threeSplit_symm_apply_of_mem_left (t : T → Fin q) (e : E → Fin q)
     (u : ↥(T ∪ E)ᶜ → Fin q) {v : ι} (hv : v ∈ T) :
     (threeSplit q T E h).symm ((t, e), u) v = t ⟨v, hv⟩ := by
-  simp [threeSplit, FiniteProduct.splitEquiv_symm_apply_of_mem _ _ _ _ _
-    (Finset.mem_union_left E hv), FiniteProduct.unionEquiv, hv]
+  simp [threeSplit, ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _
+    (Finset.mem_union_left E hv), ManyBody.unionEquiv, hv]
 
 theorem threeSplit_symm_apply_of_mem_right (t : T → Fin q) (e : E → Fin q)
     (u : ↥(T ∪ E)ᶜ → Fin q) {v : ι} (hv : v ∈ E) :
     (threeSplit q T E h).symm ((t, e), u) v = e ⟨v, hv⟩ := by
   have hvT : v ∉ T := fun hvT => Finset.disjoint_left.mp h hvT hv
-  simp [threeSplit, FiniteProduct.splitEquiv_symm_apply_of_mem _ _ _ _ _
-    (Finset.mem_union_right T hv), FiniteProduct.unionEquiv, hvT]
+  simp [threeSplit, ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _
+    (Finset.mem_union_right T hv), ManyBody.unionEquiv, hvT]
 
 theorem threeSplit_symm_apply_of_notMem (t : T → Fin q) (e : E → Fin q)
     (u : ↥(T ∪ E)ᶜ → Fin q) {v : ι} (hv : v ∉ T ∪ E) :
     (threeSplit q T E h).symm ((t, e), u) v = u ⟨v, Finset.mem_compl.mpr hv⟩ := by
-  simp [threeSplit, FiniteProduct.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hv]
+  simp [threeSplit, ManyBody.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hv]
 
 /-- A product operator in the coordinates of `threeSplit T E` is the Kronecker product of its
 restrictions to `T`, to `E` and to `(T ∪ E)ᶜ`. -/
@@ -245,18 +245,18 @@ theorem exists_threeSplit_eq_reindex_one_kronecker
   obtain ⟨B, hB⟩ :=
     TNLean.Lattice.exists_one_kronecker_of_mem_supportedOperators
       (q := q) (S := T) hD hA
-  let c := FiniteProduct.complementUnionEquiv (fun _ : ι ↦ Fin q) T E h
+  let c := ManyBody.complementUnionEquiv (fun _ : ι ↦ Fin q) T E h
   refine ⟨B.submatrix c.symm c.symm, ?_⟩
   ext ⟨⟨t, e⟩, u⟩ ⟨⟨t', e'⟩, u'⟩
   change A
-      ((FiniteProduct.splitEquiv (fun _ : ι ↦ Fin q) (T ∪ E)).symm
-        ((FiniteProduct.unionEquiv (fun _ : ι ↦ Fin q) T E h).symm (t, e), u))
-      ((FiniteProduct.splitEquiv (fun _ : ι ↦ Fin q) (T ∪ E)).symm
-        ((FiniteProduct.unionEquiv (fun _ : ι ↦ Fin q) T E h).symm (t', e'), u')) =
+      ((ManyBody.splitEquiv (fun _ : ι ↦ Fin q) (T ∪ E)).symm
+        ((ManyBody.unionEquiv (fun _ : ι ↦ Fin q) T E h).symm (t, e), u))
+      ((ManyBody.splitEquiv (fun _ : ι ↦ Fin q) (T ∪ E)).symm
+        ((ManyBody.unionEquiv (fun _ : ι ↦ Fin q) T E h).symm (t', e'), u')) =
     (1 : Matrix (T → Fin q) (T → Fin q) ℂ) t t' *
       B (c.symm (e, u)) (c.symm (e', u'))
-  rw [FiniteProduct.split_union_symm (fun _ : ι ↦ Fin q) T E h t e u,
-    FiniteProduct.split_union_symm (fun _ : ι ↦ Fin q) T E h t' e' u']
+  rw [ManyBody.split_union_symm (fun _ : ι ↦ Fin q) T E h t e u,
+    ManyBody.split_union_symm (fun _ : ι ↦ Fin q) T E h t' e' u']
   exact congrFun
     (congrFun hB (t, c.symm (e, u))) (t', c.symm (e', u'))
 
@@ -280,9 +280,9 @@ theorem star_splitVec_dotProduct_splitVec {Ω : EuclideanSpace ℂ (ι → Fin q
 coordinate vector `splitVec Ω`. -/
 theorem partialTraceRight_splitVec (Ω : EuclideanSpace ℂ (ι → Fin q)) :
     partialTraceRight (vecMulVec (splitVec h Ω) (star (splitVec h Ω))) =
-      (FiniteProduct.reducedPure (fun _ : ι => Fin q) Ω (T ∪ E)).submatrix
-        (FiniteProduct.unionEquiv (fun _ : ι => Fin q) T E h).symm
-        (FiniteProduct.unionEquiv (fun _ : ι => Fin q) T E h).symm := by
+      (ManyBody.regionState Ω (T ∪ E)).submatrix
+        (ManyBody.unionEquiv (fun _ : ι => Fin q) T E h).symm
+        (ManyBody.unionEquiv (fun _ : ι => Fin q) T E h).symm := by
   ext a b
   rfl
 
@@ -293,22 +293,22 @@ theorem quantumRelativeEntropy_splitVec_eq_mutualInformation (Ω : EuclideanSpac
     {ρ : Matrix ((T → Fin q) × (E → Fin q)) ((T → Fin q) × (E → Fin q)) ℂ}
     (hρ : partialTraceRight (vecMulVec (splitVec h Ω) (star (splitVec h Ω))) = ρ) :
     quantumRelativeEntropy ρ (partialTraceRight ρ ⊗ₖ partialTraceLeft ρ) =
-      FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T E := by
+      ManyBody.regionMutualInformation Ω T E := by
   have hpsd : ρ.PosSemidef := hρ ▸ (posSemidef_vecMulVec_self_star _).partialTraceRight
   have hρeq := hρ.symm.trans (partialTraceRight_splitVec h Ω)
-  have hR : partialTraceRight ρ = FiniteProduct.reducedPure (fun _ : ι => Fin q) Ω T := by
+  have hR : partialTraceRight ρ = ManyBody.regionState Ω T := by
     rw [hρeq]
-    exact FiniteProduct.partialTraceRight_reducedMatrix_union _ _ T E h
-  have hL : partialTraceLeft ρ = FiniteProduct.reducedPure (fun _ : ι => Fin q) Ω E := by
+    exact ManyBody.partialTraceRight_regionMatrix_union _ _ T E h
+  have hL : partialTraceLeft ρ = ManyBody.regionState Ω E := by
     rw [hρeq]
-    exact FiniteProduct.partialTraceLeft_reducedMatrix_union _ _ T E h
+    exact ManyBody.partialTraceLeft_regionMatrix_union _ _ T E h
   rw [quantumRelativeEntropy_product_marginals hpsd,
-    vonNeumannEntropy_congr hR _ (FiniteProduct.reducedPure_posSemidef _ Ω T).isHermitian,
-    vonNeumannEntropy_congr hL _ (FiniteProduct.reducedPure_posSemidef _ Ω E).isHermitian,
+    vonNeumannEntropy_congr hR _ (ManyBody.regionState_posSemidef T Ω).isHermitian,
+    vonNeumannEntropy_congr hL _ (ManyBody.regionState_posSemidef E Ω).isHermitian,
     vonNeumannEntropy_congr hρeq _ ((isHermitian_submatrix_equiv _).mpr
-      (FiniteProduct.reducedPure_posSemidef _ Ω (T ∪ E)).isHermitian),
+      (ManyBody.regionState_posSemidef (T ∪ E) Ω).isHermitian),
     vonNeumannEntropy_submatrix_equiv _ _
-      (FiniteProduct.reducedPure_posSemidef _ Ω (T ∪ E)).isHermitian]
+      (ManyBody.regionState_posSemidef (T ∪ E) Ω).isHermitian]
   rfl
 
 /-- **Splitting data** for a pair of disjoint sets of sites `T`, `E` with `U = (T ∪ E)ᶜ`
@@ -346,10 +346,10 @@ Polynomial-PEPS manuscript, Lemma 6.4 `lem:splitting`, `05-frames.tex`, lines 35
 theorem exists_sheetSplitting {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) :
     ∃ σ : SplittingData q T E,
       σ.error h Ω ≤
-        √(2 * (1 - Real.exp (-(FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T E
+        √(2 * (1 - Real.exp (-(ManyBody.regionMutualInformation Ω T E
           / 2)))) ∧
-      √(2 * (1 - Real.exp (-(FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T E
-          / 2)))) ≤ √(FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T E) := by
+      √(2 * (1 - Real.exp (-(ManyBody.regionMutualInformation Ω T E
+          / 2)))) ≤ √(ManyBody.regionMutualInformation Ω T E) := by
   obtain ⟨V, s, s', hV, hs, hs', hnorm⟩ :=
     exists_isIsometry_norm_sub_tensorPurification_le (splitVec h Ω)
       (star_splitVec_dotProduct_splitVec h hΩ) rfl
@@ -362,7 +362,7 @@ sentence). If `I_Ω(T:E) ≤ L^{-60}`, the splitting error is at most `L^{-30}`.
 
 Polynomial-PEPS manuscript, Lemma 6.4 `lem:splitting`, `05-frames.tex`, lines 366–367. -/
 theorem exists_sheetSplitting_zpow {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
-    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T E ≤ L ^ (-60 : ℤ)) :
+    (hI : ManyBody.regionMutualInformation Ω T E ≤ L ^ (-60 : ℤ)) :
     ∃ σ : SplittingData q T E, σ.error h Ω ≤ L ^ (-30 : ℤ) := by
   obtain ⟨σ, h₁, h₂⟩ := exists_sheetSplitting h hΩ
   refine ⟨σ, h₁.trans (h₂.trans ?_)⟩
@@ -380,7 +380,7 @@ Polynomial-PEPS manuscript, Lemma 6.4 `lem:splitting`, `05-frames.tex`, lines 36
 with `p = 30`. -/
 theorem exists_sheetSplitting_rpow {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     {L p : ℝ} (hL : 0 ≤ L)
-    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T E ≤ L ^ (-(2 * p))) :
+    (hI : ManyBody.regionMutualInformation Ω T E ≤ L ^ (-(2 * p))) :
     ∃ σ : SplittingData q T E, σ.error h Ω ≤ L ^ (-p) := by
   obtain ⟨σ, h₁, h₂⟩ := exists_sheetSplitting h hΩ
   refine ⟨σ, h₁.trans (h₂.trans ?_)⟩

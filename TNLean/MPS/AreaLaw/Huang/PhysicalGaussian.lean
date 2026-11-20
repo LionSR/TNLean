@@ -70,7 +70,7 @@ has cut rank at most the number of nodes times the propagator rank at every cut.
 arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
 theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (variance : ℝ≥0) (energy : ℝ) {T eta rho : ℝ}
     (hT : 0 ≤ T) (heta : 0 < eta) (hrho : 0 < rho) :
@@ -82,7 +82,7 @@ theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
       ‖GaussianFilter.gaussianIntertwiner variance (H - (energy : ℂ) • 1) 0 1 - Q‖ ≤
         2 * Real.exp (-T ^ 2 / (2 * (variance : ℝ))) + eta + rho ∧
       ∀ cut : ℕ, operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) Q) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) Q) ≤
           N * q ^ (8 * r + 8) := by
   classical
   let : NeZero q := ⟨by omega⟩
@@ -164,7 +164,7 @@ theorem positiveChainGaussianApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
 Lemmas 18--19. -/
 theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (variance : ℝ≥0) (energy : ℝ) {T eta rho : ℝ}
     (hT : 0 ≤ T) (heta : 0 < eta) (hrho : 0 < rho) :
@@ -175,7 +175,7 @@ theorem exists_positive_chain_gaussian_approximation {L q : ℕ} (hq : 1 ≤ q)
       ‖GaussianFilter.gaussianIntertwiner variance (H - (energy : ℂ) • 1) 0 1 - Q‖ ≤
         2 * Real.exp (-T ^ 2 / (2 * (variance : ℝ))) + eta + rho ∧
       ∀ cut : ℕ, operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) Q) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) Q) ≤
           N * q ^ (8 * r + 8) :=
   ⟨positiveChainGaussianSampleCount h energy T eta,
     positiveChainGaussianApproximant h h0 variance energy T eta rho,

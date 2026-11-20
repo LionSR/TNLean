@@ -264,7 +264,7 @@ private theorem exists_kronecker_one_of_mem_supportedOperators_some {i : ι}
     by_cases hab : a = b
     · subst hab
       rw [ite_eq_left rfl, mul_one]
-      refine ManyBody.apply_eq_of_mem_supportedOperators hU (fun v hv ↦ ?_) (fun v hv ↦ ?_)
+      refine ManyBody.IsSupportedOn.apply_eq hU (fun v hv ↦ ?_) (fun v hv ↦ ?_)
         fun v hv ↦ ?_
       · rw [Finset.mem_singleton.mp hv]; rfl
       · rw [Finset.mem_singleton.mp hv]; rfl

@@ -31,8 +31,8 @@ namespace TNLean.MPS.AreaLaw
 /-- Placing an original prefix operator preserves its interval support. -/
 theorem isSupportedOn_embedOp_prefix {L N q a b : ℕ} (hi : L ≤ N)
     {X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hX : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) X (interval L a b)) :
-    Entropy.IsSupportedOn (n := fun _ : Fin N ↦ q)
+    (hX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X (interval L a b)) :
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (QuantumCircuit.embedOp (Fin.castLE hi) X) (interval N a b) := by
   have h := QuantumCircuit.embedOp_mem_supportedOperators_image
     (Fin.castLE_injective hi) hX
@@ -88,9 +88,9 @@ noncomputable def paddedInteraction {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
 /-- Every padded term has its actual nearest-neighbour support. -/
 theorem paddedInteraction_supported {L N q : ℕ} (hi : L ≤ N) (z : Fin q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h j) (interval L j.val (j.val + 2))) (j : Fin (N - 1)) :
-    Entropy.IsSupportedOn (n := fun _ : Fin N ↦ q)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (paddedInteraction hi z h j) (interval N j.val (j.val + 2)) := by
   unfold paddedInteraction
   split_ifs with hj

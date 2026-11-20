@@ -40,8 +40,8 @@ theorem normalizedRegularizedPatchMarginal_stationarity_of_isMinOn
     (regions : Fin m → Finset V) (hnested : Monotone regions)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) {b : ℝ} (hb : 0 < b)
     (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
-    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ)
+    (x : ∀ j, Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ)
     (hx : x ∈ regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions)
     (hmin : IsMinOn
       (regularizedPatchObjective (Out := fun v ↦ Fin (n v)) regions a b Ω)
@@ -82,8 +82,8 @@ theorem commute_filter_normalizedRegularizedPatchMarginal_of_isMinOn
     (regions : Fin m → Finset V) (hnested : Monotone regions)
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) {b : ℝ} (hb : 0 < b)
     (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
-    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ)
+    (x : ∀ j, Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ)
     (hx : x ∈ regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions)
     (hmin : IsMinOn
       (regularizedPatchObjective (Out := fun v ↦ Fin (n v)) regions a b Ω)

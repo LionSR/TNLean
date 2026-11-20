@@ -81,13 +81,13 @@ basis maps. Source: polynomial-PEPS `01-preliminaries.tex`, lines 23–31,
 definition of `S_ω(A)`. -/
 theorem finiteProductEntropy_relabel (σ : V ≃ W) (q : ℕ)
     (Ω : EuclideanSpace ℂ (V → Fin q)) (A : Finset V) :
-    FiniteProduct.entropy (fun _ : W ↦ Fin q)
+    ManyBody.regionEntropy
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (σ.arrowCongr (Equiv.refl (Fin q))) Ω)
         (A.map σ.toEmbedding) =
-      FiniteProduct.entropy (fun _ : V ↦ Fin q) Ω A := by
+      ManyBody.regionEntropy Ω A := by
   have h := Entropy.regionEntropy_relabel (n := fun _ : V ↦ q) (n' := fun _ : W ↦ q)
     A (A.map σ.toEmbedding) σ (by simp) (fun _ ↦ Equiv.refl _) Ω
-  simp only [Entropy.regionEntropy, ManyBody.regionEntropy_eq_entropy] at h
+  simp only [ManyBody.regionEntropy] at h
   convert h using 2
   ext x
   rfl
@@ -161,7 +161,7 @@ Source: polynomial-PEPS Proposition 2.1 (`prop:area-law`),
 def SquareEntropyAreaLawAt (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (C_A : ℝ) : Prop :=
   0 ≤ C_A ∧
     ∀ L : ℕ, ∀ Ω : StateSpace L q, G L Ω → ∀ A : Finset (Vertex L),
-        FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
+        ManyBody.regionEntropy Ω A ≤
           C_A * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e}
 
 /-- The square-grid entropy area law of the polynomial-PEPS paper: for fixed
@@ -192,12 +192,12 @@ theorem finiteProductEntropy_le_of_areaLawBound {q : ℕ} {J Δ C : ℝ}
       ∀ Ω : Lattice.StateSpace Λ q, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ A : Finset (Lattice.Site Λ),
-          Lattice.regionalEntropy Λ q Ω A ≤ C * (Lattice.edgeBoundary Λ A).card)
+          ManyBody.regionEntropy Ω A ≤ C * (Lattice.edgeBoundary Λ A).card)
     {L : ℕ} (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
         {E₀ : ℝ} {Ω : StateSpace L q}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Vertex L)) :
-    FiniteProduct.entropy (fun _ : Vertex L ↦ Fin q) Ω A ≤
+    ManyBody.regionEntropy Ω A ≤
       C * Fintype.card {e : Edge (squareLatticeGraph L L) // IsRegionBoundaryEdge A e} := by
   obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hh hΩ hgap hspan
   have := hbound (AreaLaw.rectangularDomain L L) h.toAreaLawHamiltonian

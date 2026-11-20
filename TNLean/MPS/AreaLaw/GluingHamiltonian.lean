@@ -52,19 +52,19 @@ theorem _root_.ManyBody.ChainInteraction.cutLeftPart_add_cutBoundaryPart
 /-- The left part is supported on the first `k` sites. -/
 theorem _root_.ManyBody.ChainInteraction.cutLeftPart_isSupportedOn
     (h : ChainInteraction L q 1) (k : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutLeftPart k) (interval L 0 k) := by
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.cutLeftPart k) (interval L 0 k) := by
   change _ ∈ ManyBody.supportedOperators _ _
   exact sum_mem fun X hX ↦
-    Entropy.IsSupportedOn.mono (h.mem X) (Finset.mem_filter.mp hX).2
+    ManyBody.IsSupportedOn.mono (h.mem X) (Finset.mem_filter.mp hX).2
 
 /-- The boundary part is supported from the boundary site onward. -/
 theorem _root_.ManyBody.ChainInteraction.cutBoundaryPart_isSupportedOn
     (h : ChainInteraction L q 1) (k : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h.cutBoundaryPart k)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.cutBoundaryPart k)
       (interval L 0 (k - 1))ᶜ := by
   change _ ∈ ManyBody.supportedOperators _ _
   refine sum_mem fun X hX ↦
-    Entropy.IsSupportedOn.mono (h.mem X) ?_
+    ManyBody.IsSupportedOn.mono (h.mem X) ?_
   have hX' := (Finset.mem_filter.mp hX).2
   obtain ⟨y, hy, hyA⟩ := Finset.not_subset.mp hX'
   have hyk : k ≤ y.val := by simpa [mem_interval, not_lt] using hyA
@@ -93,8 +93,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_gluing_decomposition_of_range_on
     (h : ChainInteraction L q 1) (hhJ : ∀ X, ‖h.term X‖ ≤ 1) (k : ℕ) :
     ∃ HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       h.hamiltonian = HL + B ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (interval L 0 k) ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (interval L 0 (k - 1))ᶜ ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (interval L 0 k) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (interval L 0 (k - 1))ᶜ ∧
       ‖B‖ ≤ 2 * (L : ℝ) :=
   ⟨h.cutLeftPart k, h.cutBoundaryPart k, h.cutLeftPart_add_cutBoundaryPart k,
     h.cutLeftPart_isSupportedOn k, h.cutBoundaryPart_isSupportedOn k,

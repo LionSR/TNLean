@@ -77,16 +77,16 @@ theorem eventually_actualScan_suppliedPrevector_endpoint_budget
     (hrows : ∀ j : ℕ, 1 ≤ j → j ≤ L →
       (ambientDilation T j \ ambientDilation T (j - 1)).card ≤ S.n)
     (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
-    (E : Finset (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q)
+    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q)
       (S.A.filter fun x ↦ x.val ∈ T)))
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Bsh : ℝ)
     (hsh : ∀ j : Fin (L + 1),
-      FiniteProduct.entropy (fun _ : Site Λ ↦ Fin q) Ωt
+      ManyBody.regionEntropy Ωt
         (positiveDepthPrefix S.A S.depth (j.val : ℤ)) ≤ Bsh) :
     let X := S.A.filter fun x ↦ x.val ∈ T
     let β := fun _ : Site Λ ↦ Fin q
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (FiniteProduct.splitEquiv β X) Ωt
+      (ManyBody.splitEquiv β X) Ωt
     let z := Matrix.IsHermitian.spectralRestrictionMass
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
     0 < z →
@@ -94,7 +94,7 @@ theorem eventually_actualScan_suppliedPrevector_endpoint_budget
     let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
     let pre : (k : ℕ) → Config k (fun v ↦ Fin (n v)) → ℂ := fun k ↦
       replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
-    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     (∀ k : ℕ, 0 < k →
       ‖WithLp.toLp 2 (replicaPrevector Ωt d k (ell k) ∘
@@ -102,10 +102,10 @@ theorem eventually_actualScan_suppliedPrevector_endpoint_budget
     (∀ᶠ k : ℕ in atTop,
       (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
         ‖WithLp.toLp 2
-          (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-            (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+          (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+            (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
             labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-            (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+            (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
               (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) →
     ∃ c Ci : ℝ, 0 ≤ c ∧ 0 ≤ Ci ∧
       Tendsto (roughEndpointRemainder d c S.K Ci) atTop (𝓝 0) ∧
@@ -121,7 +121,7 @@ theorem eventually_actualScan_suppliedPrevector_endpoint_budget
   classical
   intro X β ΩX z hz d n pre ψ hpre hmass
   have hzQ :
-      0 < (FiniteProduct.reducedPure_posSemidef β Ωt X).isHermitian.spectralRestrictionMass E :=
+      0 < (ManyBody.regionState_posSemidef X Ωt).isHermitian.spectralRestrictionMass E :=
     hz
   have hd : 0 < d := Finset.card_pos.mpr
     (Finset.nonempty_iff_ne_empty.mpr fun hE ↦ by

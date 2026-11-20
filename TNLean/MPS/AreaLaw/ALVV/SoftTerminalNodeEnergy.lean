@@ -41,7 +41,7 @@ theorem exists_calibrated_soft_terminal_node_energy_update
     (hq : 0 < q) (hlu : l ≤ u) (huv : u ≤ v) (hvr : v ≤ r) (hrL : r ≤ L)
     (hleft : u - l ≤ 2 * ell) (hright : r - v ≤ 2 * ell)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (g : ℝ) (hg : 0 < g) (t Tcut : ℝ) (m D : ℕ)
@@ -55,21 +55,21 @@ theorem exists_calibrated_soft_terminal_node_energy_update
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues (minEigenvalue hH)
     let J := interval L l r
     let beta := fun _ : Fin L ↦ Fin q
-    let split := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
-    let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration beta Jᶜ) ℂ).tensorProduct
-      (EuclideanSpace.basisFun (FiniteProduct.Configuration beta J) ℂ)).repr
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
     let coords := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ))
-      (EuclideanSpace ℂ (FiniteProduct.Configuration beta J)))
+      (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+      (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
     let P := ∑ i ∈ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), h i
     let M := ∑ i ∈ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v), h i
     let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
-    let y0 := ((Entropy.cutEquiv (fun _ : Fin L ↦ q) J) sigma0).2
+    let y0 := ((ManyBody.cutEquiv (fun _ ↦ Fin q) J) sigma0).2
     let native := fun x : J → Fin q ↦
-      (Entropy.cutEquiv (fun _ : Fin L ↦ q) J).symm (x, y0)
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) J).symm (x, y0)
     let budget := t * (1 + Real.log (m : ℝ)) + 4 * (ell : ℝ) + 14
     let Msoft := 3 * t * (1 + Real.log (m : ℝ)) + 4 * (ell : ℝ) + 34
     let tau := 1 / ((D : ℝ) ^ 24 * Msoft ^ 10)
@@ -100,7 +100,7 @@ theorem exists_calibrated_soft_terminal_node_energy_update
             cfc (Real.softTruncation t m) (M - (center : ℂ) • 1)
           let Rnat := R.submatrix native native
           Rnat.IsHermitian ∧ ∃ (eSoft : ℝ) (w : (Fin L → Fin q) → ℂ),
-            R = Entropy.localLift (n := fun _ : Fin L ↦ q) J Rnat ∧
+            R = ManyBody.place (X := fun _ ↦ Fin q) J Rnat ∧
             star w ⬝ᵥ w = 1 ∧ R *ᵥ w = (eSoft : ℂ) • w ∧
             (Rnat - (eSoft : ℂ) • 1).PosSemidef ∧
             ‖R - (eSoft : ℂ) • 1‖ ≤ budget ∧

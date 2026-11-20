@@ -47,11 +47,11 @@ cut, and lies within `3 η` of the Gaussian filter at its mesh node. Huang,
 arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
 theorem huangFilterApproximant_spec {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (j : Fin (huangEnergyCount c Delta L)) :
     (∀ cut, operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut)
         (huangFilterApproximant h h0 c Delta j)) ≤ huangFilterRankBound q c Delta L) ∧
     ‖GaussianFilter.gaussianIntertwiner (huangFilterVariance c Delta L)
       ((∑ i, h i) - (timeMeshNode L (huangEnergyMesh c Delta L) j : ℂ) • 1) 0 1 -
@@ -80,12 +80,12 @@ cut-rank bounds: the existence form of `huangFilterApproximant_spec`. Huang,
 arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
 theorem exists_positive_chain_filter_family {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) :
     ∃ Q : Fin (huangEnergyCount c Delta L) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       (∀ j cut, operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (Q j)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (Q j)) ≤
           huangFilterRankBound q c Delta L) ∧
       ∀ j, ‖GaussianFilter.gaussianIntertwiner (huangFilterVariance c Delta L)
         ((∑ i, h i) - (timeMeshNode L (huangEnergyMesh c Delta L) j : ℂ) • 1) 0 1 - Q j‖ ≤
@@ -122,7 +122,7 @@ multiple `a |Γ⟩⟨Γ|`, `1/2 ≤ a ≤ 1`, of the ground projection. Huang, a
 Section 5.4, Lemmas 18--19. -/
 theorem exists_huangFilterApproximant_near_ground {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta)
     (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (hΓ : ‖Γ‖ = 1)
@@ -171,12 +171,12 @@ of the ground projection for every gapped ground pair: the existence form of
 arXiv:1406.6355v6, Section 5.4, Lemmas 18--19. -/
 theorem exists_positive_chain_ground_filter_family {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) :
     ∃ Q : Fin (huangEnergyCount c Delta L) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       (∀ j cut, operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (Q j)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (Q j)) ≤
           huangFilterRankBound q c Delta L) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)), ‖Γ‖ = 1 →
         (∑ i, h i) *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ →

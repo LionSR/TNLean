@@ -34,8 +34,8 @@ additive error `ξ`. This is the choice-independent finite-precision form of LVV
 `algo53.tex`, Lemma `l:leading`, lines 493–505. -/
 theorem leading_eigenvector_bounds_chain_with_objective_slack [NeZero q] {k : ℕ}
     {HL K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k)) {D : Finset (Fin L)}
-    (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k)) {D : Finset (Fin L)}
+    (hK : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ ξ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
     (hH : (HL + K).IsHermitian) (hΩ : ‖Γ‖ = 1)
@@ -94,8 +94,8 @@ one half satisfies the chain gluing energy and overlap bounds. Auxiliary choice-
 form of LVV13, `algo53.tex`, Lemma `l:leading`, lines 493–505. -/
 theorem leading_eigenvector_bounds_chain [NeZero q] {k : ℕ}
     {HL K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k)) {D : Finset (Fin L)}
-    (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k)) {D : Finset (Fin L)}
+    (hK : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
     (hH : (HL + K).IsHermitian) (hΩ : ‖Γ‖ = 1)

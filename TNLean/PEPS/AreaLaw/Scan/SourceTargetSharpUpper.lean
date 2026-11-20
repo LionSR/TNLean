@@ -114,54 +114,54 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
                 |u| ≤ Entropy.tailRadius (2 / g)
                   (cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y) →
                 Real.log (Entropy.surprisalMoment
-                  (reducedState_isHermitian Λ q Ωt Y).eigenvalues u) ≤
-                    u * regionalEntropy Λ q Ωt Y +
+                  (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
+                    u * ManyBody.regionEntropy Ωt Y +
                       C₀ * cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y * u ^ 2) ∧
               (∀ (Y : Finset (Site Λ)) (v : ℝ),
-                Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt Y).eigenvalues
-                  (regionalEntropy Λ q Ωt Y) v ≤
+                Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
+                  (ManyBody.regionEntropy Ωt Y) v ≤
                     min 1 (2 * Real.exp (Real.exp 1 / 2) *
                       Real.exp (-(v / (32 * Real.sqrt ((1 + 2 / g) *
                         cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y)))))) ∧
               cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
                 Ctarget * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
-              Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-                (regionalEntropy Λ q Ωt X) w ≤ δ ∧
-              let p := (reducedState_isHermitian Λ q Ωt X).eigenvalues
-              let E := Entropy.typicalSet p (regionalEntropy Λ q Ωt X) w
-              let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+              Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+                (ManyBody.regionEntropy Ωt X) w ≤ δ ∧
+              let p := (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+              let E := Entropy.typicalSet p (ManyBody.regionEntropy Ωt X) w
+              let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
               (0 < 1 - δ ∧ 1 - δ ≤ z ∧ 0 < z ∧ z ≤ 1 ∧ E.Nonempty ∧
                 ∀ i ∈ E, 0 < p i ∧
-                  Real.exp (-regionalEntropy Λ q Ωt X - w) ≤ p i ∧
-                  p i ≤ Real.exp (-regionalEntropy Λ q Ωt X + w)) ∧
+                  Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤ p i ∧
+                  p i ≤ Real.exp (-ManyBody.regionEntropy Ωt X + w)) ∧
               ∃ hmpos : 0 < S.m, ∀ W : ℝ, 0 < W → W ≤ (S.n : ℝ) ^ ω →
                 let a := W / (S.K : ℝ)
                 let β := fun _ : Site Λ ↦ Fin q
                 let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-                  (FiniteProduct.splitEquiv β X) Ωt
+                  (ManyBody.splitEquiv β X) Ωt
                 let d := E.card
                 let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
                 ∀ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
                   let pre : (k : ℕ) → Config k (fun v ↦ Fin (n v)) → ℂ := fun k ↦
                     replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
-                  let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+                  let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
                     compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
                   (∀ᶠ k : ℕ in atTop,
                     (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
                       ‖WithLp.toLp 2
-                        (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-                          (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+                        (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+                          (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
                           labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-                          (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+                          (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
                             (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) →
                   ∃ c : ℝ, 0 ≤ c ∧
                     Tendsto (Real.bellOverlapRemainder d c S.K) atTop (𝓝 0) ∧
                     ∀ᶠ k : ℕ in atTop, ∀ (s : ℕ) (hs : s + 1 ≤ S.n * S.m) (p : ℝ),
                       let σ := terminalPartition S (S.n * S.m)
                       let gpost := fun j g ↦
-                        regionalEntropy Λ q Ωt (positiveNear S.depth (σ j g)) +
-                          regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j g)) -
-                            regionalEntropy Λ q Ωt (middle (σ j g))
+                        ManyBody.regionEntropy Ωt (positiveNear S.depth (σ j g)) +
+                          ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j g)) -
+                            ManyBody.regionEntropy Ωt (middle (σ j g))
                       let p₀ := Set.projIcc (0 : ℝ) 1 zero_le_one p
                       let bound := fun (tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m))) ↦
                         2 * Real.log (d : ℝ) - Real.log z +
@@ -249,14 +249,14 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
       (s ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state hist band),
         ∀ u : ℝ, |u| ≤ c₀ / Real.sqrt B →
           Real.log (Entropy.surprisalMoment
-            (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-            u * regionalEntropy Λ q Ωt Q + (C₀ * B) * u ^ 2) ∧
+            (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+            u * ManyBody.regionEntropy Ωt Q + (C₀ * B) * u ^ 2) ∧
       (s + 1 ≤ S.n * S.m →
         ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist band),
           ∀ u : ℝ, |u| ≤ c₀ / Real.sqrt B →
             Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt Q + (C₀ * B) * u ^ 2) := by
+              (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+              u * ManyBody.regionEntropy Ωt Q + (C₀ * B) * u ^ 2) := by
     intro s hist band
     constructor
     · intro hs Q hQ u hu
@@ -265,10 +265,10 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
     · intro hs Q hQ u hu
       exact S.log_surprisalMoment_truncated_reducedState_le_common h hh hhJ Ω
         hgraph hanchor hΔ hΩ L htrgs.1 htrgs.2.1 htrgs.2.2 Q ((hcut s hist band).2 hs Q hQ) hu
-  have hρ : reducedState Λ q Ωt X =
+  have hρ : ManyBody.regionState Ωt X =
       Matrix.partialTraceRight (Matrix.vecMulVec ΩX (star ΩX)) :=
     (reducedState_eq_finiteProduct Λ q Ωt X).trans
-      (FiniteProduct.reducedPure_eq_partialTrace β Ωt X)
+      (ManyBody.regionState_eq_partialTrace β Ωt X)
   have hzEq :
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian.spectralRestrictionMass E =
         z := by

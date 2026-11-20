@@ -195,9 +195,9 @@ theorem coordinate_height_of_input
     {H Hv : ℕ} {S T : Finset (LeftBlockVector L q k)}
     (E : RationalSpanFamilyEncodingOfHeight H S T)
     (hS : ∀ s : S,
-      ∀ x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k),
+      ∀ x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)),
         HasRationalComplexCoordinatesOfHeight Hv (s.1 x))
-    (t : T) (x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)) :
+    (t : T) (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
     HasRationalComplexCoordinatesOfHeight
       (linearCombinationCoordinateHeight H Hv S.card) (t.1 x) := by
   rw [E.linearCombination_eq t]
@@ -210,7 +210,7 @@ number with a uniform explicit height bound. -/
 theorem coordinate_height {H Hv b : ℕ} {S T : Finset (LeftBlockVector L q k)}
     (E : RationalSpanFamilyEncodingOfHeight H S T) (hHv : 0 < Hv) (hk : k ≤ L)
     (hS : ∀ s : S, RationalLeftOpenMPSRepresentationOfHeight Hv b s.1)
-    (t : T) (x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)) :
+    (t : T) (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
     HasRationalComplexCoordinatesOfHeight
       (outputCoordinateHeight H Hv b k S.card) (t.1 x) := by
   exact E.coordinate_height_of_input
@@ -221,7 +221,7 @@ Gaussian rational. -/
 theorem coordinate_rational {H Hv b : ℕ} {S T : Finset (LeftBlockVector L q k)}
     (E : RationalSpanFamilyEncodingOfHeight H S T) (hHv : 0 < Hv) (hk : k ≤ L)
     (hS : ∀ s : S, RationalLeftOpenMPSRepresentationOfHeight Hv b s.1)
-    (t : T) (x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)) :
+    (t : T) (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
     HasRationalComplexCoordinates (t.1 x) :=
   (E.coordinate_height hHv hk hS t x).forget
 
@@ -442,7 +442,7 @@ theorem coordinate_height
     (E : RationalIndexedSpanEncodingOfHeight H I J input output)
     (hinput : ∀ a x,
       HasRationalComplexCoordinatesOfHeight Hv (input a x))
-    (j : J) (x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)) :
+    (j : J) (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
     HasRationalComplexCoordinatesOfHeight
       (RationalSpanFamilyEncodingOfHeight.linearCombinationCoordinateHeight
         H Hv (Fintype.card I)) (output j x) := by
@@ -604,7 +604,7 @@ theorem coordinate_height
     {S T : Finset (LeftBlockVector L q k)}
     (D : RationalSpanViableMPSDataOfHeight H Hv Γ s b δ S T)
     (hHv : 0 < Hv) (hk : k ≤ L) (t : T)
-    (x : Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)) :
+    (x : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k))) :
     HasRationalComplexCoordinatesOfHeight
       (RationalSpanFamilyEncodingOfHeight.outputCoordinateHeight H Hv b k S.card)
       (t.1 x) :=

@@ -47,58 +47,58 @@ theorem actualCharge_two_mutualInformation_le_selectedSharpExpression
     (hm : 0 < S.m) (hM : 0 < S.M) (hK : 0 < S.K)
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L)
     (Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1)
-    (E : Finset (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q)
+    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q)
       (S.A.filter fun x ↦ x.val ∈ T))) (w : ℝ)
-    (hz : 0 < (reducedState_isHermitian Λ q Ωt
-      (S.A.filter fun x ↦ x.val ∈ T)).spectralRestrictionMass E)
+    (hz : 0 < (ManyBody.regionState_isHermitian (S.A.filter fun x ↦ x.val ∈ T)
+      Ωt).spectralRestrictionMass E)
     (hE : ∀ i ∈ E,
-      Real.exp (-regionalEntropy Λ q Ωt (S.A.filter fun x ↦ x.val ∈ T) - w) ≤
-          (reducedState_isHermitian Λ q Ωt (S.A.filter fun x ↦ x.val ∈ T)).eigenvalues i ∧
-        (reducedState_isHermitian Λ q Ωt (S.A.filter fun x ↦ x.val ∈ T)).eigenvalues i ≤
-          Real.exp (-regionalEntropy Λ q Ωt (S.A.filter fun x ↦ x.val ∈ T) + w))
+      Real.exp (-ManyBody.regionEntropy Ωt (S.A.filter fun x ↦ x.val ∈ T) - w) ≤
+          (ManyBody.regionState_isHermitian (S.A.filter fun x ↦ x.val ∈ T) Ωt).eigenvalues i ∧
+        (ManyBody.regionState_isHermitian (S.A.filter fun x ↦ x.val ∈ T) Ωt).eigenvalues i ≤
+          Real.exp (-ManyBody.regionEntropy Ωt (S.A.filter fun x ↦ x.val ∈ T) + w))
     (s : Fin (S.n * S.m)) (p : ℝ) :
     let β := fun _ : Site Λ ↦ Fin q
     let X := S.A.filter fun x ↦ x.val ∈ T
-    let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
-    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (FiniteProduct.splitEquiv β X) Ωt
-    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
+    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.splitEquiv β X) Ωt
+    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
       (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
     let σ := terminalPartition S (S.n * S.m)
     let Q := fun j g ↦ receiving (σ j g) false
     let Y := fun j g ↦ middle (σ j g)
-    let gpre := fun j g ↦ FiniteProduct.entropy β Ωt (Q j g) +
-      FiniteProduct.entropy β Ωt (Q j g ∪ Y j g)ᶜ - FiniteProduct.entropy β Ωt (Y j g)
-    let gpost := fun j g ↦ regionalEntropy Λ q Ωt (positiveNear S.depth (σ j g)) +
-      regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j g)) -
-      regionalEntropy Λ q Ωt (middle (σ j g))
+    let gpre := fun j g ↦ ManyBody.regionEntropy Ωt (Q j g) +
+      ManyBody.regionEntropy Ωt (Q j g ∪ Y j g)ᶜ - ManyBody.regionEntropy Ωt (Y j g)
+    let gpost := fun j g ↦ ManyBody.regionEntropy Ωt (positiveNear S.depth (σ j g)) +
+      ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j g)) -
+      ManyBody.regionEntropy Ωt (middle (σ j g))
     let tree := ((S.actualChargeData hm hM s.val).tree
       (Set.projIcc (0 : ℝ) 1 zero_le_one p)).map
         (chargeTerminalIndex S.K S.m S.M (S.n * S.m) s)
     let Gpre := (∑ g, ∑ j, tree.weight j * gpre j g) / (S.K : ℝ)
     let Gpost := (∑ g, ∑ j, tree.weight j * gpost j g) / (S.K : ℝ)
-    2 * FiniteProduct.mutualInformation β Ωt X (S.truncationSet L)ᶜ ≤
+    2 * ManyBody.regionMutualInformation Ωt X (S.truncationSet L)ᶜ ≤
       2 * Sent + Gpre - Gpost + 2 * (w - Real.log z) ∧
     ∀ Ω : StateSpace Λ q, ‖Ω‖ = 1 →
-      2 * FiniteProduct.mutualInformation β Ω X (S.truncationSet L)ᶜ ≤
+      2 * ManyBody.regionMutualInformation Ω X (S.truncationSet L)ᶜ ≤
         2 * Sent + Gpre - Gpost + 2 * (w - Real.log z) +
           16 * Real.sqrt (Matrix.traceDistance
             (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
             (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp))) *
-              Real.log (Real.exp 1 * Fintype.card (FiniteProduct.Configuration β X)) := by
+              Real.log (Real.exp 1 * Fintype.card (ManyBody.RegionConfig β X)) := by
   classical
   intro β X z ΩX ψ Sent σ Q Y gpre gpost tree Gpre Gpost
   have hMI := two_mutualInformation_le_actualTerminal_average hT S hdepth hK
     (S.n * S.m) L hL Ωt tree
   have hselected := (abs_log_card_and_selectedSchmidtEntropy_sub_le Ωt hΩt X E w hz hE).2
-  change |Sent - regionalEntropy Λ q Ωt X| ≤ w - Real.log z at hselected
+  change |Sent - ManyBody.regionEntropy Ωt X| ≤ w - Real.log z at hselected
   have htarget := (abs_le.mp hselected).1
   have htruncated :
-      2 * FiniteProduct.mutualInformation β Ωt X (S.truncationSet L)ᶜ ≤
+      2 * ManyBody.regionMutualInformation Ωt X (S.truncationSet L)ᶜ ≤
         2 * Sent + Gpre - Gpost + 2 * (w - Real.log z) := by
-    change 2 * FiniteProduct.mutualInformation β Ωt X (S.truncationSet L)ᶜ ≤
-      2 * regionalEntropy Λ q Ωt X + Gpre - Gpost at hMI
+    change 2 * ManyBody.regionMutualInformation Ωt X (S.truncationSet L)ᶜ ≤
+      2 * ManyBody.regionEntropy Ωt X + Gpre - Gpost at hMI
     linarith only [hMI, htarget]
   refine ⟨htruncated, ?_⟩
   intro Ω hΩ

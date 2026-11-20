@@ -190,7 +190,7 @@ Lemma 6.6(2); the coefficient is one after centering the boundary term. -/
 theorem norm_boundary_spectral_offDiagonal_le {L q : ℕ}
     (I : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a : Fin (L - 1)) (z t u : ℝ) (hut : u ≤ t) :
@@ -205,7 +205,7 @@ theorem norm_boundary_spectral_offDiagonal_le {L q : ℕ}
     · exact IsSelfAdjoint.of_nonneg (Finset.sum_nonneg fun i _ ↦ h0 i)
     · rw [Complex.coe_smul]
       exact (IsSelfAdjoint.all z).smul (IsSelfAdjoint.one _)
-  have hO : Entropy.IsSupportedOn (n := fun _ ↦ q) O
+  have hO : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) O
       (interval L a.val (a.val + 2)) := by
     change _ ∈ ManyBody.supportedOperators _ _
     exact sub_mem
@@ -242,7 +242,7 @@ positive unit nearest-neighbour terms and an arbitrary real scalar shift. -/
 theorem norm_two_boundary_spectral_offDiagonal_le {L q : ℕ}
     (I : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (z t u : ℝ) (hut : u ≤ t) :

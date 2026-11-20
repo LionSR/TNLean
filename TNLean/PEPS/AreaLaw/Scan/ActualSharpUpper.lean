@@ -126,26 +126,24 @@ private theorem sharpUpper_marginalMoment_finiteProduct
     {Λ : Finset (ℤ × ℤ)} {q : ℕ}
     (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (Q : Finset (Site Λ)) (Kmom u : ℝ)
     (h : Real.log (Entropy.surprisalMoment
-      (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-        u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2) :
+      (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+        u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2) :
     Real.log (Entropy.surprisalMoment
-      (FiniteProduct.reducedPure_posSemidef
-        (fun _ : Site Λ ↦ Fin q) Ωt Q).isHermitian.eigenvalues u) ≤
-      u * vonNeumannEntropy (FiniteProduct.reducedPure (fun _ : Site Λ ↦ Fin q) Ωt Q)
-        (FiniteProduct.reducedPure_posSemidef
-          (fun _ : Site Λ ↦ Fin q) Ωt Q).isHermitian + Kmom * u ^ 2 := by
+      (ManyBody.regionState_posSemidef Q Ωt).isHermitian.eigenvalues u) ≤
+      u * vonNeumannEntropy (ManyBody.regionState Ωt Q)
+        (ManyBody.regionState_posSemidef Q Ωt).isHermitian + Kmom * u ^ 2 := by
   classical
   let β := fun _ : Site Λ ↦ Fin q
-  have hEigen := congrArg (fun A : {A : Matrix (FiniteProduct.Configuration β Q)
-      (FiniteProduct.Configuration β Q) ℂ // A.IsHermitian} ↦ A.2.eigenvalues)
+  have hEigen := congrArg (fun A : {A : Matrix (ManyBody.RegionConfig β Q)
+      (ManyBody.RegionConfig β Q) ℂ // A.IsHermitian} ↦ A.2.eigenvalues)
     (Subtype.ext
-      (a1 := ⟨reducedState Λ q Ωt Q, reducedState_isHermitian Λ q Ωt Q⟩)
-      (a2 := ⟨FiniteProduct.reducedPure β Ωt Q,
-        (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian⟩)
+      (a1 := ⟨ManyBody.regionState Ωt Q, ManyBody.regionState_isHermitian Q Ωt⟩)
+      (a2 := ⟨ManyBody.regionState Ωt Q,
+        (ManyBody.regionState_posSemidef Q Ωt).isHermitian⟩)
       (reducedState_eq_finiteProduct Λ q Ωt Q))
   change Real.log (Entropy.surprisalMoment
-    (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian.eigenvalues u) ≤
-      u * FiniteProduct.entropy β Ωt Q + Kmom * u ^ 2
+    (ManyBody.regionState_posSemidef Q Ωt).isHermitian.eigenvalues u) ≤
+      u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2
   rw [← hEigen, ← regionalEntropy_eq_finiteProduct Λ q Ωt Q]
   exact h
 
@@ -162,14 +160,14 @@ private theorem actualTerminal_sharpUpper_moments
       (s ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state hist g),
         ∀ u : ℝ, |u| ≤ r →
           Real.log (Entropy.surprisalMoment
-            (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-            u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2) ∧
+            (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+            u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2) ∧
       (s + 1 ≤ S.n * S.m →
         ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist g),
           ∀ u : ℝ, |u| ≤ r →
             Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2)) :
+              (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+              u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2)) :
     let β := fun _ : Site Λ ↦ Fin q
     let σ := terminalPartition S (S.n * S.m)
     let U := fun j g ↦ positiveNear S.depth (σ j g)
@@ -179,17 +177,17 @@ private theorem actualTerminal_sharpUpper_moments
       Q = U j g ∨ Q = U j g ∪ Y j g ∨ Q = Y j g →
       ∀ u : ℝ, |u| ≤ r →
         Real.log (Entropy.surprisalMoment
-          (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian.eigenvalues u) ≤
-          u * vonNeumannEntropy (FiniteProduct.reducedPure β Ωt Q)
-            (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian + Kmom * u ^ 2 := by
+          (ManyBody.regionState_posSemidef Q Ωt).isHermitian.eigenvalues u) ≤
+          u * vonNeumannEntropy (ManyBody.regionState Ωt Q)
+            (ManyBody.regionState_posSemidef Q Ωt).isHermitian + Kmom * u ^ 2 := by
   classical
   intro β σ U Y hUYeq
   have hmomStatus : ∀ j g (Q : Finset (Site Λ)),
       Q ∈ statusMarginalRegions S.depth (σ j g) →
       ∀ u : ℝ, |u| ≤ r →
         Real.log (Entropy.surprisalMoment
-          (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-          u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2 := fun
+          (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+          u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2 := fun
     | Sum.inl ⟨s, hist⟩, g, Q, hQ, u, hu =>
       (hmom s.val hist g).1 (Nat.le_of_lt_succ s.isLt) Q hQ u hu
     | Sum.inr ⟨s, hist⟩, g, Q, hQ, u, hu =>
@@ -387,7 +385,7 @@ private theorem actualRoot_sharpUpper_of_compressed
       let M := (List.ofFn fun g ↦ tree.eval (fun j ↦ ZOᴴ * A j g * ZO)).prod
       let Nsq := ‖toEuclideanLin (M ^ (-(1 / 4 : ℝ))) (toEuclideanLin ZOᴴ v)‖ ^ 2
       let entropy := fun Q : Finset (Site Λ) ↦ vonNeumannEntropy
-        (FiniteProduct.reducedPure β Ωt Q) (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian
+        (ManyBody.regionState Ωt Q) (ManyBody.regionState_posSemidef Q Ωt).isHermitian
       0 < Nsq ∧ -Real.log Nsq / (k : ℝ) ≤
         2 * Real.log (d : ℝ) - Real.log z +
           2 * (1 / 4) * a * (∑ g, ∑ j, tree.weight j *
@@ -402,9 +400,9 @@ private theorem actualRoot_sharpUpper_of_compressed
       (_hparts : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g)) (p : ℝ),
       let Nsq := Transport.filteredNormSq (D.rootPath n (a / 2) k p) pre
       let tree := (D.tree (Set.projIcc (0 : ℝ) 1 zero_le_one p)).map f
-      let gpost := fun j g ↦ regionalEntropy Λ q Ωt (U j g) +
-        regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j g)) -
-          regionalEntropy Λ q Ωt (Y j g)
+      let gpost := fun j g ↦ ManyBody.regionEntropy Ωt (U j g) +
+        ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j g)) -
+          ManyBody.regionEntropy Ωt (Y j g)
       0 < Nsq ∧ -Real.log Nsq / (k : ℝ) ≤
         2 * Real.log (d : ℝ) - Real.log z +
           (a / 2) * (∑ g, ∑ j, tree.weight j * gpost j g) +
@@ -427,13 +425,13 @@ private theorem actualRoot_sharpUpper_of_compressed
   have hestimate := hupper ((D.tree (Set.projIcc (0 : ℝ) 1 zero_le_one p)).map f)
   refine ⟨hestimate.1, hestimate.2.trans_eq ?_⟩
   have hentropy (Q : Finset (Site Λ)) :
-      vonNeumannEntropy (FiniteProduct.reducedPure β Ωt Q)
-        (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian =
-          regionalEntropy Λ q Ωt Q :=
+      vonNeumannEntropy (ManyBody.regionState Ωt Q)
+        (ManyBody.regionState_posSemidef Q Ωt).isHermitian =
+          ManyBody.regionEntropy Ωt Q :=
     (regionalEntropy_eq_finiteProduct Λ q Ωt Q).symm
   have hunion (j : terminalFamily S.K S.m S.M (S.n * S.m)) (g : Fin S.K) :
-      regionalEntropy Λ q Ωt (U j g ∪ Y j g) =
-        regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j g)) :=
+      ManyBody.regionEntropy Ωt (U j g ∪ Y j g) =
+        ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j g)) :=
     congrArg (regionalEntropy Λ q Ωt) (hUYeq j g)
   simp only [hcoef, hquad, hmasscoef, gpost, tree, hentropy, hunion]
 
@@ -483,7 +481,7 @@ private theorem actualScan_sharpUpper_of_compressed
       let M := (List.ofFn fun g ↦ tree.eval (fun j ↦ ZOᴴ * A j g * ZO)).prod
       let Nsq := ‖toEuclideanLin (M ^ (-(1 / 4 : ℝ))) (toEuclideanLin ZOᴴ v)‖ ^ 2
       let entropy := fun Q : Finset (Site Λ) ↦ vonNeumannEntropy
-        (FiniteProduct.reducedPure β Ωt Q) (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian
+        (ManyBody.regionState Ωt Q) (ManyBody.regionState_posSemidef Q Ωt).isHermitian
       0 < Nsq ∧ -Real.log Nsq / (k : ℝ) ≤
         2 * Real.log (d : ℝ) - Real.log z +
           2 * (1 / 4) * a * (∑ g, ∑ j, tree.weight j *
@@ -492,9 +490,9 @@ private theorem actualScan_sharpUpper_of_compressed
             Real.bellOverlapRemainder d c S.K k) →
     ∀ (s : ℕ) (hs : s + 1 ≤ S.n * S.m) (p : ℝ),
       let p₀ := Set.projIcc (0 : ℝ) 1 zero_le_one p
-      let gpost := fun j g ↦ regionalEntropy Λ q Ωt (U j g) +
-        regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j g)) -
-          regionalEntropy Λ q Ωt (Y j g)
+      let gpost := fun j g ↦ ManyBody.regionEntropy Ωt (U j g) +
+        ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j g)) -
+          ManyBody.regionEntropy Ωt (Y j g)
       let bound := fun (tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m))) ↦
         2 * Real.log (d : ℝ) - Real.log z +
           (a / 2) * (∑ g, ∑ j, tree.weight j * gpost j g) +
@@ -565,25 +563,25 @@ theorem eventually_actualScan_suppliedPrevector_sharp_upper
     (a Kmom r : ℝ) (ha : 0 < a) (har : 6 * a ≤ r) (ha1 : 6 * a ≤ 1)
     (L : ℕ) (hL : 8 * S.K * S.m ≤ L)
     (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
-    (E : Finset (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q)
+    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q)
       (S.A.filter fun x ↦ x.val ∈ T)))
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)))
     (hmom : ∀ (s : ℕ) (hist : History S.K S.m S.M s) (g : Fin S.K),
       (s ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state hist g),
         ∀ u : ℝ, |u| ≤ r →
           Real.log (Entropy.surprisalMoment
-            (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-            u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2) ∧
+            (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+            u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2) ∧
       (s + 1 ≤ S.n * S.m →
         ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist g),
           ∀ u : ℝ, |u| ≤ r →
             Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2)) :
+              (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+              u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2)) :
     let X := S.A.filter fun x ↦ x.val ∈ T
     let β := fun _ : Site Λ ↦ Fin q
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (FiniteProduct.splitEquiv β X) Ωt
+      (ManyBody.splitEquiv β X) Ωt
     let z := Matrix.IsHermitian.spectralRestrictionMass
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
     0 < z →
@@ -591,24 +589,24 @@ theorem eventually_actualScan_suppliedPrevector_sharp_upper
     let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
     let pre : (k : ℕ) → Config k (fun v ↦ Fin (n v)) → ℂ := fun k ↦
       replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
-    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     (∀ᶠ k : ℕ in atTop,
       (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
         ‖WithLp.toLp 2
-          (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-            (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+          (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+            (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
             labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-            (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+            (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
               (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) →
     ∃ c : ℝ, 0 ≤ c ∧
       Tendsto (Real.bellOverlapRemainder d c S.K) atTop (𝓝 0) ∧
       ∀ᶠ k : ℕ in atTop, ∀ (s : ℕ) (hs : s + 1 ≤ S.n * S.m) (p : ℝ),
         let σ := terminalPartition S (S.n * S.m)
         let gpost := fun j g ↦
-          regionalEntropy Λ q Ωt (positiveNear S.depth (σ j g)) +
-            regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j g)) -
-              regionalEntropy Λ q Ωt (middle (σ j g))
+          ManyBody.regionEntropy Ωt (positiveNear S.depth (σ j g)) +
+            ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j g)) -
+              ManyBody.regionEntropy Ωt (middle (σ j g))
         let p₀ := Set.projIcc (0 : ℝ) 1 zero_le_one p
         let bound := fun (tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m))) ↦
           2 * Real.log (d : ℝ) - Real.log z +
@@ -631,7 +629,7 @@ theorem eventually_actualScan_suppliedPrevector_sharp_upper
   obtain ⟨hUYeq, hnest, hUY, hXY, hregions⟩ :=
     actualTerminal_sharpUpper_geometry hT S hdepth L hL
   have hzQ :
-      0 < (FiniteProduct.reducedPure_posSemidef β Ωt X).isHermitian.spectralRestrictionMass E :=
+      0 < (ManyBody.regionState_posSemidef X Ωt).isHermitian.spectralRestrictionMass E :=
     hz
   have hd : 0 < d := Finset.card_pos.mpr
     (Finset.nonempty_iff_ne_empty.mpr fun hE ↦ by
@@ -640,7 +638,7 @@ theorem eventually_actualScan_suppliedPrevector_sharp_upper
   let U := fun j g ↦ positiveNear S.depth (terminalPartition S (S.n * S.m) j g)
   let Y := fun j g ↦ middle (terminalPartition S (S.n * S.m) j g)
   have hmomQ := actualTerminal_sharpUpper_moments S Kmom r Ωt hmom hUYeq
-  have hgeneric := FiniteProduct.eventually_suppliedReplicaPrevector_sharp_upper β
+  have hgeneric := ManyBody.eventually_suppliedReplicaPrevector_sharp_upper β
   specialize hgeneric Ωt
   specialize hgeneric X
   specialize hgeneric E

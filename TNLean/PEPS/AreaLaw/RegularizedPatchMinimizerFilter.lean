@@ -45,27 +45,27 @@ theorem exists_clipped_filter_of_isMinOn_regularizedPatchObjective
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j) {b : ℝ} (hb : 0 < b)
     (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
     (hΩ : ‖Ω‖ = 1)
-    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ)
+    (x : ∀ j, Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ)
     (hx : x ∈ regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions)
     (hmin : IsMinOn
       (regularizedPatchObjective (Out := fun v ↦ Fin (n v)) regions a b Ω)
       (regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions) x) :
-    let K : ∀ j : Fin m, Matrix (Entropy.RegionConfig n (regions j))
-        (Entropy.RegionConfig n (regions j)) ℂ :=
+    let K : ∀ j : Fin m, Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+        (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ :=
       fun j ↦ (x j + b • 1) ^ (-(a j) / 2)
-    let φ : EuclideanSpace ℂ (Entropy.SiteConfig n) :=
+    let φ : EuclideanSpace ℂ (∀ v, Fin (n v)) :=
       (normalizedRegularizedPatchOutput (Out := fun v ↦ Fin (n v))
           regions a b Ω x)
     ∀ j : Fin m,
-      K j * Entropy.regionState (regions j) φ =
-          Entropy.regionState (regions j) φ * K j ∧
-        ∃ (W : Matrix (Entropy.RegionConfig n (regions j))
-            (Entropy.RegionConfig n (regions j)) ℂ)
-          (l p : Entropy.RegionConfig n (regions j) → ℝ),
+      K j * ManyBody.regionState φ (regions j) =
+          ManyBody.regionState φ (regions j) * K j ∧
+        ∃ (W : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+            (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ)
+          (l p : (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) → ℝ),
           Wᴴ * W = 1 ∧ (∀ i, 0 < l i) ∧
           K j = W * diagonal (fun i ↦ (l i : ℂ)) * Wᴴ ∧
-          Entropy.regionState (regions j) φ =
+          ManyBody.regionState φ (regions j) =
             W * diagonal (fun i ↦ (p i : ℂ)) * Wᴴ ∧
           ∀ i k, 0 < p i → 0 < p k →
             |Real.log (l i) - Real.log (l k)| ≤

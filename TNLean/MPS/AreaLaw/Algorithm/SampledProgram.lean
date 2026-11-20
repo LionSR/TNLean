@@ -118,7 +118,7 @@ and apply the sampled factors of the words `I` at the cut after `i + 1` sites. L
 `algo53.tex`, algorithm steps 1--4, lines 379--592. -/
 noncomputable def sampledSweepStep (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
         (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     Finset (LeftBlockVector L q (i + 1)) :=
@@ -130,7 +130,7 @@ noncomputable def sampledSweepStep (hq : 2 ≤ q)
 LVV13, `algo53.tex`, lines 652--668. -/
 noncomputable def sampledSweep (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) : (i : ℕ) → Finset (LeftBlockVector L q i)
   | 0 => {emptyLeftVector L q}
@@ -141,7 +141,7 @@ noncomputable def sampledSweep (hq : 2 ≤ q)
 
 theorem sampledSweep_succ (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) {i : ℕ} (hi : i + 1 ≤ L) :
     sampledSweep hq h hs h0 h1 E₀ Δ I (i + 1) =
@@ -156,7 +156,7 @@ taken to a `δ`-viable family of at most `ℓ q^{2κ} C L^p` members of bond dim
 `c:errorreduction`, lines 379--592. -/
 theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
@@ -189,7 +189,7 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
           (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1)
         (ManyBody.ChainInteraction.posSemidef_ofBonds_term h hs h0) hL hq hi hΔ
         (AreaLaw.extend (i + 1) S) E₀ Γ hΩ hgapC hspanC hext⟩
-  have hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+  have hrank : ∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) (bondComplementWord h (I t))) ≤ q ^ (2 * κ) := fun t k ↦
     operatorSchmidtRank_cutOperator_bondComplementWord_le_all (by omega) h hs (I t)
       (hgood.2 t) k
@@ -213,7 +213,7 @@ theorem isViableMPS_sampledSweepStep (hL : 0 < L) (hq : 2 ≤ q)
 bond bounds at every positive cut. LVV13, `algo53.tex`, lines 652--668. -/
 theorem sampledSweep_spec (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
@@ -247,7 +247,7 @@ open LinearAlgebraQuery
 `I` obtained by one query, and the bond budget `b` and rank budget `D` declared. -/
 noncomputable def sampledSweepStepProgram (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
         (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) : LVVProgram q (Finset (LeftBlockVector L q (i + 1))) :=
@@ -263,7 +263,7 @@ noncomputable def sampledSweepStepProgram (hq : 2 ≤ q)
 sweep. -/
 theorem eval_sampledSweepStepProgram (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
         (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
@@ -276,7 +276,7 @@ theorem eval_sampledSweepStepProgram (hq : 2 ≤ q)
 /-- **The sampled sweep as a program.** -/
 noncomputable def sampledSweepProgram (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (b D : ℕ) :
     (i : ℕ) → LVVProgram q (Finset (LeftBlockVector L q i))
@@ -290,7 +290,7 @@ noncomputable def sampledSweepProgram (hq : 2 ≤ q)
 /-- With the honest oracle, the program computes the sampled sweep at every cut. -/
 theorem eval_sampledSweepProgram (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (b D : ℕ) (i : ℕ) :
     FreeM.eval honestOracle (sampledSweepProgram hq h hs h0 h1 E₀ Δ I b D i) =
@@ -308,7 +308,7 @@ solution of the final convex program over the final family. LVV13, `algo53.tex`,
 652--678. -/
 noncomputable def sampledGroundStateProgram (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (b D : ℕ) :
     LVVProgram q (EuclideanSpace ℂ (Fin L → Fin q)) :=
@@ -319,7 +319,7 @@ noncomputable def sampledGroundStateProgram (hq : 2 ≤ q)
 
 theorem eval_sampledGroundStateProgram (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin L → Fin ℓ → Fin m → Fin L) (b D : ℕ) :
     FreeM.eval honestOracle (sampledGroundStateProgram hq h hs h0 h1 E₀ Δ I b D) =
@@ -339,7 +339,7 @@ the size budget times the bond budget of the sampled sweep. LVV13, `algo53.tex`,
 652--678. -/
 theorem sampledGroundStateProgram_spec (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
@@ -478,7 +478,7 @@ the output is a unit matrix product state with overlap at least `1 - 8 L δ / Δ
 ground state. LVV13, `algo53.tex`, lines 213--216 and 652--678. -/
 theorem measureReal_sampledGroundStateProgram_success [NeZero L] (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
@@ -615,7 +615,7 @@ theorem exists_sampledGroundStateProgram_success_polynomial (hq : 2 ≤ q) {Δ B
     (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p : ℕ, 1 ≤ C ∧ ∀ (L : ℕ) [NeZero L]
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+      (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
       (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ : ℝ)
       (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
       ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →

@@ -124,7 +124,7 @@ theorem cost_errorReductionProgram_le_of_valid (L i r b : ℕ) (F : Finset (Left
 /-- One step of the sweep under a valid oracle costs at most the honest step budget. -/
 theorem cost_sweepStepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 0 < L)
     (hq : 2 ≤ q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
@@ -173,7 +173,7 @@ theorem cost_sweepStepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL :
 /-- The sweep under a valid oracle costs at most `i` honest step budgets. -/
 theorem cost_sweepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (i : ℕ) (hi : i ≤ L) :
     FreeM.cost o queryCost (sweepProgram hq h hs h0 h1 Delta i) ≤
@@ -196,7 +196,7 @@ theorem cost_sweepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 0 <
 /-- The ground-state program under a valid oracle costs at most the honest budget. -/
 theorem cost_groundStateProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 1 ≤ L)
     (hq : 2 ≤ q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (R : ℕ) :
     FreeM.cost o queryCost (groundStateProgram hq h hs h0 h1 Delta R) ≤
@@ -238,7 +238,7 @@ theorem exists_groundStateProgram_cost_polynomial_of_valid (hq : 2 ≤ q) {Delta
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ (o : {ι : Type} → LinearAlgebraQuery q ι → ι), IsValidOracle o →
       ∀ (L R : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+        (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
           (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1),
       FreeM.countQueries o (groundStateProgram hq h hs h0 h1 Delta R) ≤
         FreeM.cost o queryCost (groundStateProgram hq h hs h0 h1 Delta R) ∧

@@ -73,7 +73,7 @@ theorem rangeNestedPatch_minimizer_marginal_closeness
             (CFC.abs
               (normalizedRegularizedPatchMarginal
                 (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ψᵤ x X -
-                Entropy.regionState (n := fun _ : Lattice.Site Λ ↦ q) X Ψ)).trace.re ≤
+                ManyBody.regionState (X := fun _ ↦ Fin q) Ψ X)).trace.re ≤
               (1 / 16 : ℝ) := by
   intro Λ H hH hHJ E₀ Ψ hΩ hgap hspan center u b hu hb m regions a Ψᵤ x hx hmin X
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
@@ -132,7 +132,7 @@ theorem exists_uniform_rangeNestedPatch_minimizer_marginal_closeness
               (CFC.abs
                 (normalizedRegularizedPatchMarginal
                   (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ψᵤ x X -
-                  Entropy.regionState (n := fun _ : Lattice.Site Λ ↦ q) X Ψ)).trace.re ≤
+                  ManyBody.regionState (X := fun _ ↦ Fin q) Ψ X)).trace.re ≤
                 (1 / 16 : ℝ) := by
   rcases (rangePatchEnergyConstant_nonneg q R hJ).eq_or_lt with hC | hC
   · exact ⟨1 / 2, by norm_num, le_rfl, rangeNestedPatch_minimizer_marginal_closeness q R hR

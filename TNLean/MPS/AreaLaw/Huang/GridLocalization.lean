@@ -69,9 +69,9 @@ theorem card_nearestNeighborChainSupport_containing_le_two (x : Fin L) :
 
 private theorem retained_support (hw : 0 < w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (i : Fin (L - 1)) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (chainGridRetainedTerm hw h i)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (chainGridRetainedTerm hw h i)
       (nearestNeighborChainSupport i).val := by
   change _ ∈ ManyBody.supportedOperators _ _
   classical
@@ -117,9 +117,9 @@ theorem chainGridRetained_site_budget (hw : 0 < w)
 Osborne, Figure 1 and equation (3). -/
 theorem chainGridBoundaryTerm_supported (hw : 0 < w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (k : Fin ((L - 1) / w)) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (chainGridBoundaryTerm hw h k)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (chainGridBoundaryTerm hw h k)
       (chainCutPair L (chainGridCut w k.val)) := by
   change _ ∈ ManyBody.supportedOperators _ _
   have hneg := neg_mem (show _ ∈ ManyBody.supportedOperators _ _ from
@@ -151,7 +151,7 @@ Osborne, arXiv:quant-ph/0508031v2, equations (6)--(12), and Huang, Lemma 19. -/
 theorem norm_chainGridBoundaryTerm_sub_regionExpectation_le
     (hw : 0 < w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
     (hnorm : ∀ i, ‖h i‖ ≤ 1) (k : Fin ((L - 1) / w)) (r : ℕ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw h) t (chainGridBoundaryTerm hw h

@@ -67,18 +67,18 @@ theorem isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy [NeZero q]
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) {ξ' C₁ : ℝ} (hξ' : 0 < ξ')
     (hfact : ∀ j ∈ Finset.Ico 1 L, ∀ m : ℕ, j + m ≤ L →
       ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (SB SL SR : Finset (Fin L)),
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL SL ∧ SL ⊆ leftBlock L j ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L j ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')))
     {k₀ : ℕ}
     (hk₀ : ∀ j ∈ Finset.Ico 1 L,
-      Real.exp (2 * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) / 2 ≤
+      Real.exp (2 * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L j)) / 2 ≤
         k₀)
     {k' : ℕ} (hk' : k₀ ≤ k') :
     let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
         Ω).leadingEigenprojection k'
     let Φ := sequentialTruncation P (L - 1) Ω
     IsOpenMPS L q k' (fun x ↦ Φ x) ∧
@@ -107,14 +107,14 @@ theorem isOpenMPS_norm_sub_sq_le_of_factorization_of_entropy [NeZero q]
       refine ⟨hmps, ?_⟩
       have hk'1 : 1 ≤ k' := le_trans (by exact_mod_cast hk₀pos) hk'
       have hzero : ∀ j ∈ Finset.Ico 1 L, Real.sqrt (1 -
-          (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ 1) (leftBlock L j)
+          (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin 1) (leftBlock L j)
             Ω).kyFanNorm k') = 0 := by
         intro j _
         refine Real.sqrt_eq_zero'.2 ?_
-        have hpsd := Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ 1) (leftBlock L j) Ω
+        have hpsd := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin 1) (leftBlock L j) Ω
         have hcard := hpsd.isHermitian.kyFanNorm_card_eq_trace_re
-        rw [Entropy.trace_regionState, hΩ] at hcard
-        have hc1 : Fintype.card (Entropy.RegionConfig (fun _ : Fin L ↦ 1) (leftBlock L j)) ≤ k' :=
+        rw [ManyBody.trace_regionState, hΩ] at hcard
+        have hc1 : Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin 1) (leftBlock L j)) ≤ k' :=
           (Fintype.card_le_one_iff_subsingleton.2 inferInstance).trans hk'1
         have := hpsd.kyFanNorm_mono hc1
         simp only [one_pow, Complex.ofReal_one, Complex.one_re] at hcard
@@ -136,11 +136,11 @@ theorem isOpenMPS_norm_sub_sq_le_of_isFactorizationAt_of_entropy [NeZero q]
         IsFactorizationAt Ω j m (C₁ * Real.exp (-(m / ξ'))) OB OL OR)
     {k₀ : ℕ}
     (hk₀ : ∀ j ∈ Finset.Ico 1 L,
-      Real.exp (2 * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) / 2 ≤
+      Real.exp (2 * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L j)) / 2 ≤
         k₀)
     {k' : ℕ} (hk' : k₀ ≤ k') :
     let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k)
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L k)
         Ω).leadingEigenprojection k'
     let Φ := sequentialTruncation P (L - 1) Ω
     IsOpenMPS L q k' (fun x ↦ Φ x) ∧

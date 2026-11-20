@@ -31,8 +31,7 @@ logarithm of the local dimension. Source: area-law proof of Theorem 1.1,
 theorem regionalEntropy_le_card_mul_log
     (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ)) :
-    regionalEntropy Λ q Ω A ≤ (A.card : ℝ) * Real.log q := by
-  rw [regionalEntropy_eq_regionEntropy]
-  exact regionEntropy_le_card_mul_log hΩ A
+    ManyBody.regionEntropy Ω A ≤ (A.card : ℝ) * Real.log q := by
+  exact ManyBody.regionEntropy_le_card_mul_log hΩ A
 
 end TNLean.Lattice

@@ -34,7 +34,7 @@ arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 1262–1268. -/
 theorem exists_native_interval_slice_of_mpo_approximation {N q l r D : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ N + 1)
     (P : Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hPs : Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hPs : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       P (interval (N + 1) l r))
     (Aglobal : Fin (N + 1) → MPOTensor q D)
     (hA : (MPOTensor.traceChainOperator Aglobal 1).IsHermitian)

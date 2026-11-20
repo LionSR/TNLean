@@ -43,7 +43,7 @@ theorem IsOpenMPS.regionEntropy_leftBlock_le_log_add_half_error {L q D : ℕ}
     {δ : ℝ} (hδ : δ < 1)
     (herror : Matrix.rectangularTraceNorm
       (Matrix.euclideanOuterProduct ψ ψ - Matrix.euclideanOuterProduct φ φ) ≤ δ) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) ψ (leftBlock L k) ≤
       Real.log D + δ / 2 * ((leftBlock L k).card : ℝ) * Real.log q + Real.log 2 := by
   have ht := Entropy.sum_descEigenvalue_regionState_tail_le_half_pure_trace_error
     ψ φ hψ (leftBlock L k) (hφ.rank_regionState_leftBlock_le_max k) hδ herror
@@ -59,8 +59,8 @@ theorem IsOpenMPS.regionEntropy_sdiff_leftBlock_le_two_log_add_half_error {L q D
     {a b : ℕ} (hab : a ≤ b) {δ : ℝ} (hδ : δ < 1)
     (herror : Matrix.rectangularTraceNorm
       (Matrix.euclideanOuterProduct ψ ψ - Matrix.euclideanOuterProduct φ φ) ≤ δ) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
-      (leftBlock L b \ leftBlock L a) ψ ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+      ψ (leftBlock L b \ leftBlock L a) ≤
       2 * Real.log D + δ / 2 * ((leftBlock L b \ leftBlock L a).card : ℝ) *
         Real.log q + Real.log 2 := by
   have ht := Entropy.sum_descEigenvalue_regionState_tail_le_half_pure_trace_error

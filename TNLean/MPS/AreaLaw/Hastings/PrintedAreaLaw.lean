@@ -161,7 +161,7 @@ theorem exists_regionEntropy_prefix_le_printed (R : ℕ) :
       {Ω : EuclideanSpace ℂ (Fin L → Fin q)}, ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ s : ℝ, 2 * lemmaOneEndpointLength R J Δ ≤ s → ∀ i : ℕ,
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 i) ≤
           c₀ * (6 * s) * log (6 * s) * log q * (2 : ℝ) ^ ((6 * s) * log q) := by
   obtain ⟨K, hK, hbound⟩ := exists_regionEntropy_prefix_le R
   let a := log (K + 1) + 3
@@ -203,6 +203,6 @@ theorem exists_regionEntropy_prefix_le_printed (R : ℕ) :
   · have hq1 : q = 1 := by have := NeZero.one_le (n := q); omega
     subst q
     simpa only [Nat.cast_one, log_one, mul_zero, zero_mul] using
-      TNLean.Lattice.regionEntropy_le_card_mul_log hΩ (interval L 0 i)
+      ManyBody.regionEntropy_le_card_mul_log hΩ (interval L 0 i)
 
 end TNLean.MPS.AreaLaw.Hastings

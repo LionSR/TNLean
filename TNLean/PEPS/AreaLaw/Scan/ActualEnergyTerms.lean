@@ -61,9 +61,9 @@ The product is indexed by the two independent auxiliary dimensions.
 Source: `06-transport.tex`, lines 335–337. -/
 def augmentOperator (q : ℕ) (aux : Bool → ℕ)
     (h : Matrix (V → Fin q) (V → Fin q) ℂ) :
-    Matrix (SiteConfig (augmentedDimensions (V := V) q aux))
-      (SiteConfig (augmentedDimensions (V := V) q aux)) ℂ :=
-  let e : SiteConfig (augmentedDimensions (V := V) q aux) ≃
+    Matrix (∀ v, Fin ((augmentedDimensions (V := V) q aux) v))
+      (∀ v, Fin ((augmentedDimensions (V := V) q aux) v)) ℂ :=
+  let e : (∀ v, Fin ((augmentedDimensions (V := V) q aux) v)) ≃
       (V → Fin q) × ((b : Bool) → Fin (aux b)) :=
     Equiv.sumPiEquivProdPi (fun v => Fin (augmentedDimensions q aux v))
   (h ⊗ₖ (1 : Matrix ((b : Bool) → Fin (aux b))
@@ -120,8 +120,8 @@ omit [Fintype V] [DecidableEq V] in
 have unequal dimensions. The designated support need not be minimal. -/
 theorem augmentOperator_isSupportedOn (q : ℕ) (aux : Bool → ℕ)
     {h : Matrix (V → Fin q) (V → Fin q) ℂ} {D : Finset V}
-    (hh : IsSupportedOn (n := fun _ => q) h D) :
-    IsSupportedOn (augmentOperator q aux h) (physicalRegion D) := by
+    (hh : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) h D) :
+    ManyBody.IsSupportedOn (augmentOperator q aux h) (physicalRegion D) := by
   classical
   refine ⟨?_, ?_⟩
   · intro σ τ hex
@@ -224,7 +224,7 @@ support has induced-graph diameter at most `R`, including in disconnected domain
 theorem truncatedEnergyTerm_isSupportedOn [NeZero q]
     (hgraph : S.graph = planeDomainGraph Λ) (hanchor : ∀ i, S.anchor i ∈ i.val)
     (hΔ : 0 < Δ) (L : ℕ) (i : AdmissibleSupport Λ R) :
-    IsSupportedOn (n := fun _ => q) (S.truncatedEnergyTerm h Ω J Δ L i)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (S.truncatedEnergyTerm h Ω J Δ L i)
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)) := by
   change _ ∈ ManyBody.supportedOperators _ _
   apply truncatedConstraint_mem_supportedOperators
@@ -243,7 +243,7 @@ theorem actualEnergyTerms_spec [NeZero q]
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (L : ℕ) (aux : Bool → ℕ) :
     (∀ i, 0 ≤ (S.actualEnergyTerms h Ω J Δ L aux).term i) ∧
     (∀ i, (S.actualEnergyTerms h Ω J Δ L aux).term i ≤ 1) ∧
-    (∀ i, IsSupportedOn ((S.actualEnergyTerms h Ω J Δ L aux).term i)
+    (∀ i, ManyBody.IsSupportedOn ((S.actualEnergyTerms h Ω J Δ L aux).term i)
       ((S.actualEnergyTerms h Ω J Δ L aux).support i)) := by
   have hc := fun i => S.truncatedEnergyTerm_mem_Icc h hh hhJ Ω hΔ hΩ L i
   have ha := fun i => augmentOperator_mem_Icc q aux (hc i).1 (hc i).2

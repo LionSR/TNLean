@@ -34,8 +34,8 @@ theorem IsEfficientlyApproximableByMPS.exists_vonNeumann_bound
     (happrox : IsEfficientlyApproximableByMPS ψ) (hψ : ∀ N, ‖ψ N‖ = 1)
     (a b : lengths → ℕ) (hab : ∀ N, a N ≤ b N) {ε : ℝ} (hε : 0 < ε) :
     ∃ K : ℝ, ∃ m : ℕ, ∀ N : lengths,
-      Entropy.regionEntropy (n := fun _ : Fin N.val ↦ q)
-        (leftBlock N.val (b N) \ leftBlock N.val (a N)) (ψ N) ≤
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+        (ψ N) (leftBlock N.val (b N) \ leftBlock N.val (a N)) ≤
         K + (m : ℝ) * Real.log ((N.val : ℝ) + 1) + ε * N.val := by
   let δ := min (1 / 2 : ℝ) (ε / (Real.log q + 1))
   have hlq := Real.log_natCast_nonneg q
@@ -98,8 +98,8 @@ theorem not_isEfficientlyApproximableByMPS_of_linear_vonNeumann_growth
       η * (N.val : ℝ) ≤ ((leftBlock N.val (b N) \ leftBlock N.val (a N)).card : ℝ))
     (hentropy : ∀ N : lengths, N₀ ≤ N.val →
       c * ((leftBlock N.val (b N) \ leftBlock N.val (a N)).card : ℝ) ≤
-        Entropy.regionEntropy (n := fun _ : Fin N.val ↦ q)
-          (leftBlock N.val (b N) \ leftBlock N.val (a N)) (ψ N)) :
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+          (ψ N) (leftBlock N.val (b N) \ leftBlock N.val (a N))) :
     ¬ IsEfficientlyApproximableByMPS ψ := by
   intro happrox
   have hcη : 0 < c * η := mul_pos hc hη

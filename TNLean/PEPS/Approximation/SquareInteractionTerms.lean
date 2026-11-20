@@ -33,8 +33,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_nearestNeighbor_terms {L q : �
         Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L))) →
         Matrix (Lattice.Configuration (AreaLaw.rectangularDomain L L) q)
           (Lattice.Configuration (AreaLaw.rectangularDomain L L) q) ℂ,
-      (∀ i, Entropy.IsSupportedOn
-        (n := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
+      (∀ i, ManyBody.IsSupportedOn
+        (X := fun _ ↦ Fin q)
         (T i) (AreaLaw.nearestNeighborSupport i)) ∧
       (∀ i, (T i).IsHermitian) ∧ (∀ i, ‖T i‖ ≤ J) ∧
       (∑ i, T i) = h.toAreaLawHamiltonian.hamiltonian := by

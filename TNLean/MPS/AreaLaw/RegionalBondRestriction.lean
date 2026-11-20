@@ -37,9 +37,9 @@ def intervalBondRestriction {L q : ℕ} (l r : ℕ)
 Auxiliary to ALVV, arXiv:1602.08828v2, Figure `fig:generate`, lines 1348–1392. -/
 theorem intervalBondRestriction_supported {L q : ℕ} (l r : ℕ)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (i : Fin (L - 1)) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (intervalBondRestriction l r h i) (interval L i.val (i.val + 2)) := by
   unfold intervalBondRestriction
   split_ifs

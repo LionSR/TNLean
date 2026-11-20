@@ -72,7 +72,7 @@ lines 549--592. -/
 theorem isLeftOpenMPS_of_mem_successiveStep (hi : i ≤ L) {m D : ℕ} {J : Finset ι}
     {A : ι → LeftBlockMatrix L q i}
     (hA : ∀ j ∈ J, ∀ k, 0 < k → k < i → operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
         ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
     (T₀ : Finset (LeftBlockVector L q i)) {v : LeftBlockVector L q i}
     (hv : v ∈ successiveStep hi m J A T₀) : IsLeftOpenMPS (D * max 1 m) v :=
@@ -86,7 +86,7 @@ filter factor at the cut after `i + 1` sites. LVV13, `algo53.tex`, algorithm ste
 lines 379--592, with Huang, Section 5.4, Lemmas 18--19 for the error-reduction operator. -/
 noncomputable def lvvSweepStep (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
     (Delta : ℝ) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     Finset (LeftBlockVector L q (i + 1)) :=
@@ -99,7 +99,7 @@ noncomputable def lvvSweepStep (hq : 2 ≤ q)
 LVV13, `algo53.tex`, Claims `c:2` and `c:errorreduction`, lines 520--592. -/
 theorem card_lvvSweepStep_le (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     (lvvSweepStep hq h hs h0 Delta hi S).card ≤ lvvSuccessiveCardBound q Delta L := by
@@ -125,7 +125,7 @@ dimension at most `b_L`. LVV13, `algo53.tex`, Claims `c:trim` and `c:errorreduct
 lines 549--592. -/
 theorem isLeftOpenMPS_of_mem_lvvSweepStep (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i))
     {v : LeftBlockVector L q (i + 1)} (hv : v ∈ lvvSweepStep hq h hs h0 Delta hi S) :
@@ -141,7 +141,7 @@ algorithm steps 1--4, lines 379--592, using Huang, Section 5.4, Lemmas 18--19 fo
 error-reduction operator. -/
 theorem isViable_lvvSweepStep (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i))
     (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
@@ -177,7 +177,7 @@ bond budgets. LVV13, `algo53.tex`, algorithm steps 1--4, lines 379--592, using H
 Section 5.4, Lemmas 18--19 for the error-reduction operator. -/
 theorem exists_positive_chain_successive_step (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :

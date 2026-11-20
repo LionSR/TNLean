@@ -45,7 +45,7 @@ noncomputable def leftFilterFactors {L q i M : ℕ}
 theorem cutLeftFactor_mem_leftFilterFactors {L q i M : ℕ}
     (Q : Fin M → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (j : Fin M)
     (k : Fin (operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) (Q j)))) :
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (Q j)))) :
     cutLeftFactor (Q j) k ∈ leftFilterFactors (i := i) Q := by
   classical
   exact Finset.mem_biUnion.mpr ⟨j, Finset.mem_univ _,
@@ -56,7 +56,7 @@ at the chosen cut. -/
 theorem card_leftFilterFactors_le {L q i M R : ℕ}
     (Q : Fin M → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hQ : ∀ j, operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) (Q j)) ≤ R) :
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (Q j)) ≤ R) :
     (leftFilterFactors (i := i) Q).card ≤ M * R := by
   classical
   calc
@@ -64,7 +64,7 @@ theorem card_leftFilterFactors_le {L q i M R : ℕ}
       ≤ ∑ j : Fin M, (Finset.univ.image (cutLeftFactor (i := i) (Q j))).card :=
       Finset.card_biUnion_le
     _ ≤ ∑ j : Fin M, operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) (Q j)) :=
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (Q j)) :=
       Finset.sum_le_sum fun j _ ↦ (Finset.card_image_le).trans_eq
         (by rw [Finset.card_univ, Fintype.card_fin])
     _ ≤ ∑ _ : Fin M, R := Finset.sum_le_sum fun j _ ↦ hQ j
@@ -75,9 +75,9 @@ family at every internal left cut. -/
 theorem operatorSchmidtRank_of_mem_leftFilterFactors {L q i M R : ℕ} (hi : i ≤ L)
     (Q : Fin M → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hQ : ∀ j k, operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) (Q j)) ≤ R)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) (Q j)) ≤ R)
     {A : LeftBlockMatrix L q i} (hA : A ∈ leftFilterFactors (i := i) Q) (k : ℕ) (hki : k < i) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
       (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ R := by
   classical
   obtain ⟨j, -, hj⟩ := Finset.mem_biUnion.mp hA
@@ -90,14 +90,14 @@ Claim c:errorreduction, lines 584--591. -/
 theorem exists_finite_left_filter_factors {L q i M R : ℕ} (hi : i ≤ L)
     (Q : Fin M → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hQ : ∀ j k, operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) (Q j)) ≤ R) :
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) (Q j)) ≤ R) :
     ∃ F : Finset (LeftBlockMatrix L q i), F.card ≤ M * R ∧
       (∀ A ∈ F, ∀ k, 0 < k → k < i → operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
           (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ R) ∧
       ∀ j, ∃ (N : ℕ) (A : Fin N → LeftBlockMatrix L q i)
         (B : Fin N → RightBlockMatrix L q i),
-        Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) (Q j) =
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (Q j) =
           ∑ k, A k ⊗ₖ B k ∧ ∀ k, A k ∈ F :=
   ⟨leftFilterFactors Q, card_leftFilterFactors_le Q (fun j ↦ hQ j i),
     fun _ hA k _ hki ↦ operatorSchmidtRank_of_mem_leftFilterFactors hi Q hQ hA k hki,
@@ -117,7 +117,7 @@ noncomputable def gaussianFilterFactors {L q : ℕ}
 rank bound. -/
 theorem card_gaussianFilterFactors_le {L q i : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) :
     (gaussianFilterFactors h h0 c Delta i).card ≤
@@ -128,12 +128,12 @@ theorem card_gaussianFilterFactors_le {L q i : ℕ} (hq : 1 ≤ q)
 at every internal left cut. -/
 theorem operatorSchmidtRank_of_mem_gaussianFilterFactors {L q i : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hi : i ≤ L)
     {A : LeftBlockMatrix L q i} (hA : A ∈ gaussianFilterFactors h h0 c Delta i)
     (k : ℕ) (hki : k < i) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
       (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ huangFilterRankBound q c Delta L :=
   operatorSchmidtRank_of_mem_leftFilterFactors hi _
     (fun j ↦ (huangFilterApproximant_spec hq h hs h0 h1 hc hDelta j).1) hA k hki
@@ -146,7 +146,7 @@ Section 5.4, Lemmas 18--19, composed with the deterministic LVV error-reduction 
 `algo53.tex`, Claim `c:errorreduction`, lines 580--592. -/
 theorem isViable_errorReductionSet_gaussianFilterFactors {L q i : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hL : 1 ≤ L)
     (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (hΓ : ‖Γ‖ = 1)
@@ -162,7 +162,7 @@ theorem isViable_errorReductionSet_gaussianFilterFactors {L q i : ℕ} (hq : 1 �
     exists_huangFilterApproximant_near_ground hq h hs h0 h1 hc hDelta E₀ Γ hΓ hHΓ hgap
   have ha0 : 0 < a := by linarith
   set Q := huangFilterApproximant h h0 c Delta j with hQ
-  have hdecomp' : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) Q =
+  have hdecomp' : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) Q =
       ∑ k ∈ (Finset.univ : Finset (Fin _)), cutLeftFactor Q k ⊗ₖ cutRightFactor Q k := by
     simpa using cutOperator_eq_sum_cutLeftFactor_kronecker (i := i) Q
   have hsmall := huangFilterEta_amplitude_budget hc L ha
@@ -197,7 +197,7 @@ def IsAdmissibleFilterFactors {L q : ℕ}
     (c Delta : ℝ) (i : ℕ) (F : Finset (LeftBlockMatrix L q i)) : Prop :=
   ∀ j : Fin (huangEnergyCount c Delta L), ∃ (ι : Type) (J : Finset ι)
     (A : ι → LeftBlockMatrix L q i) (B : ι → RightBlockMatrix L q i),
-    Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i)
+    ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
         (huangFilterApproximant h h0 c Delta j) = ∑ t ∈ J, A t ⊗ₖ B t ∧
       ∀ t ∈ J, A t ∈ F
 
@@ -219,7 +219,7 @@ under every admissible family of factors. Huang, arXiv:1406.6355v6, Section 5.4,
 18--19, with LVV13, Claim `c:errorreduction`, lines 584--592. -/
 theorem isViable_errorReductionSet_of_isAdmissibleFilterFactors {L q i : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hL : 1 ≤ L)
     (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)) (hΓ : ‖Γ‖ = 1)
@@ -260,13 +260,13 @@ pair and every input family: the existence form of `gaussianFilterFactors` and
 `isViable_errorReductionSet_gaussianFilterFactors`. -/
 theorem exists_positive_chain_error_reduction_factors {L q i : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hL : 1 ≤ L) (hi : i ≤ L) :
     ∃ F : Finset (LeftBlockMatrix L q i),
       F.card ≤ huangEnergyCount c Delta L * huangFilterRankBound q c Delta L ∧
       (∀ A ∈ F, ∀ k, 0 < k → k < i → operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
           (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ huangFilterRankBound q c Delta L) ∧
       ∀ (E₀ : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q)), ‖Γ‖ = 1 →
         (∑ j, h j) *ᵥ WithLp.ofLp Γ = (E₀ : ℂ) • WithLp.ofLp Γ →
@@ -288,7 +288,7 @@ bond bound `b`. LVV13, `algo53.tex`, Claim `c:errorreduction`, line 591. -/
 theorem isLeftOpenMPS_of_mem_errorReductionSet {L q i : ℕ} {ι : Type*} (hi : i ≤ L)
     {D b : ℕ} {J : Finset ι} {A : ι → LeftBlockMatrix L q i}
     (hA : ∀ j ∈ J, ∀ k, 0 < k → k < i → operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
         ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
     {S : Finset (LeftBlockVector L q i)} (hS : ∀ v ∈ S, IsLeftOpenMPS b v)
     {v : LeftBlockVector L q i} (hv : v ∈ errorReductionSet J A S) :
@@ -303,7 +303,7 @@ the existence form of `exists_positive_chain_error_reduction_factors`, with the 
 Lemmas 18--19, composed with the deterministic LVV error-reduction step. -/
 theorem exists_positive_chain_error_reduced_set {L q i s b : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {c Delta : ℝ} (hc : 0 < c) (hDelta : 0 < Delta) (hL : 1 ≤ L) (hi : i ≤ L)
     (S : Finset (LeftBlockVector L q i)) (hcard : S.card ≤ s)

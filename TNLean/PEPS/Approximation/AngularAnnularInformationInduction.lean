@@ -67,20 +67,20 @@ theorem mutualInformation_le_of_annular_reset {L q : ℕ}
           touches (0, 0) (d * s j) ((3 / 2) * a' * s j) (A j) i ∧
           ¬ touches (0, 0) (d * s j) ((3 / 2) * a' * s j) Aold i) →
         S.card ≤ (m₀ + 1) * (2 * ⌈(max A₀ 2 + (3 / 2) * a') / d⌉₊ + 3) ^ 2 →
-        FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω (R j Aold) (C j) ≤ ε →
-        FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω (R₀ j) (C₀ j) ≤ ε) →
-      FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω X E ≤ ε := by
+        ManyBody.regionMutualInformation Ω (R j Aold) (C j) ≤ ε →
+        ManyBody.regionMutualInformation Ω (R₀ j) (C₀ j) ≤ ε) →
+      ManyBody.regionMutualInformation Ω X E ≤ ε := by
   classical
   intro sample A s R C R₀ C₀ hstep
   have hmono (P P' Q Q' : Finset (SquareLatticeVertex L L))
       (hP : P ⊆ P') (hQ : Q ⊆ Q') (hPQ : Disjoint P' Q') :
-      FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω P Q ≤
-        FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω P' Q' := by
-    have hleft := FiniteProduct.mutualInformation_mono_left
+      ManyBody.regionMutualInformation Ω P Q ≤
+        ManyBody.regionMutualInformation Ω P' Q' := by
+    have hleft := ManyBody.regionMutualInformation_mono_left
       (fun _ ↦ Fin q) Ω P P' Q hP (hPQ.mono_right hQ)
-    have hright := FiniteProduct.mutualInformation_mono_left
+    have hright := ManyBody.regionMutualInformation_mono_left
       (fun _ ↦ Fin q) Ω Q Q' P' hQ hPQ.symm
-    exact hleft.trans (by simpa only [FiniteProduct.mutualInformation,
+    exact hleft.trans (by simpa only [ManyBody.regionMutualInformation,
       Finset.union_comm, add_comm] using hright)
   have hsep' (j : ℕ) (hj : j ≤ c.last) (x : ℝ × ℝ) (hx : x ∈ A j)
       (y : ℝ × ℝ) (hy : y ∈ sitePosition L '' E) :
@@ -100,7 +100,7 @@ theorem mutualInformation_le_of_annular_reset {L q : ℕ}
       dist x y ≤ A₀ * n := by
     simpa only [Set.forall_mem_image, Finset.mem_coe] using hdiam
   have hI : ∀ j : ℕ, j ≤ c.last →
-      FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω (R₀ j) (C₀ j) ≤ ε := by
+      ManyBody.regionMutualInformation Ω (R₀ j) (C₀ j) ≤ ε := by
     intro j
     induction j with
     | zero =>
@@ -111,8 +111,8 @@ theorem mutualInformation_le_of_annular_reset {L q : ℕ}
         · simpa [A, s, touches, near] using hS
         · have hRempty : R 0 ∅ = ∅ := by
             simp [R, sample, selectedRegion, touches, near]
-          simpa only [hRempty, FiniteProduct.mutualInformation, Finset.empty_union,
-            FiniteProduct.entropy_empty (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω hΩ,
+          simpa only [hRempty, ManyBody.regionMutualInformation, Finset.empty_union,
+            ManyBody.regionEntropy_empty (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω hΩ,
             zero_add, sub_self] using hε
     | succ j ih =>
         intro hj

@@ -76,7 +76,7 @@ theorem exists_frustrationFree_improving_family_words_regionTensorCoordinates :
     ∃ A : ℝ, 1 ≤ A ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+        (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
           (interval L i.val (i.val + 2))) →
         (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) →
       ∀ γ : ℝ, 0 < γ → ∀ Γ : EuclideanSpace ℂ (Fin L → Fin q),
@@ -123,7 +123,7 @@ theorem exists_frustrationFree_improving_family_words_regionTensorCoordinates :
   rw [hker] at himprove
   have himprove' : ∀ (k : ℕ) (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))) (δ : ℝ),
       Submodule.IsViable δ S ((ℂ ∙ Γ).map (((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+        ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
           (Equiv.prodComm _ _))).trans
             (Submodule.euclideanTensorEquiv (↥(Jᶜ) → Fin q) (J → Fin q))).trans
           (TensorProduct.commIsometry ℂ (EuclideanSpace ℂ (↥(Jᶜ) → Fin q))
@@ -133,7 +133,7 @@ theorem exists_frustrationFree_improving_family_words_regionTensorCoordinates :
           Matrix.toEuclideanCLM (𝕜 := ℂ) (n := J → Fin q) (W (w j))).prod :
             EuclideanSpace ℂ (J → Fin q) →ₗ[ℂ] EuclideanSpace ℂ (J → Fin q)))
         ((ℂ ∙ Γ).map (((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+        ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
           (Equiv.prodComm _ _))).trans
             (Submodule.euclideanTensorEquiv (↥(Jᶜ) → Fin q) (J → Fin q))).trans
           (TensorProduct.commIsometry ℂ (EuclideanSpace ℂ (↥(Jᶜ) → Fin q))

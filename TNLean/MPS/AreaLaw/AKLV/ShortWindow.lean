@@ -30,16 +30,16 @@ exterior operators preserves the actual Hamiltonian and physical supports.
 AKLV, arXiv:1301.1162v1, Lemma 4.2, lines 586--603 and 658--663. -/
 theorem exists_aklv_subwindow_regrouping {L q a s b m : ℕ} (hsub : b + m ≤ s)
     (H : Fin s → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hH : ∀ j, Entropy.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
+    (hH : ∀ j, ManyBody.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
     (HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hL : Entropy.IsSupportedOn HL (interval L 0 (a + 1)))
-    (hR : Entropy.IsSupportedOn HR (interval L (a + s) L)) :
+    (hL : ManyBody.IsSupportedOn HL (interval L 0 (a + 1)))
+    (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L)) :
     let H' : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
       fun j ↦ H ⟨b + j.val, by omega⟩
     ∃ HL' HR' : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
-      Entropy.IsSupportedOn HL' (interval L 0 (a + b + 1)) ∧
-      Entropy.IsSupportedOn HR' (interval L (a + b + m) L) ∧
-      (∀ j, Entropy.IsSupportedOn (H' j)
+      ManyBody.IsSupportedOn HL' (interval L 0 (a + b + 1)) ∧
+      ManyBody.IsSupportedOn HR' (interval L (a + b + m) L) ∧
+      (∀ j, ManyBody.IsSupportedOn (H' j)
         (interval L (a + b + j.val) (a + b + j.val + 2))) ∧
       HL + (∑ j, H j) + HR = HL' + (∑ j, H' j) + HR' := by
   classical
@@ -50,7 +50,7 @@ theorem exists_aklv_subwindow_regrouping {L q a s b m : ℕ} (hsub : b + m ≤ s
     (Sum.elim (fun j ↦ b + m ≤ j.val) (fun t ↦ t.val = 1))
   let HL' := ∑ t ∈ left, aklvWindowFamily H HL HR t
   let HR' := ∑ t ∈ right, aklvWindowFamily H HL HR t
-  have hleft : Entropy.IsSupportedOn HL' (interval L 0 (a + b + 1)) := by
+  have hleft : ManyBody.IsSupportedOn HL' (interval L 0 (a + b + 1)) := by
     change _ ∈ ManyBody.supportedOperators _ _
     apply sum_mem
     intro t ht
@@ -67,7 +67,7 @@ theorem exists_aklv_subwindow_regrouping {L q a s b m : ℕ} (hsub : b + m ≤ s
       · exact hL.mono (interval_mono (by omega) (by omega))
       · simp only [Sum.elim_inr] at hp
         contradiction
-  have hright : Entropy.IsSupportedOn HR' (interval L (a + b + m) L) := by
+  have hright : ManyBody.IsSupportedOn HR' (interval L (a + b + m) L) := by
     change _ ∈ ManyBody.supportedOperators _ _
     apply sum_mem
     intro t ht

@@ -48,7 +48,7 @@ theorem exists_regionalEntropy_safe_rect_le_rpow
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
-            regionalEntropy Λ q Ω (rectRegion A Q) ≤
+            ManyBody.regionEntropy Ω (rectRegion A Q) ≤
               C * (Q.size : ℝ) ^ (1 + e₀) := by
   obtain ⟨C₀, e₀, he₀, he₀', hbox⟩ := exists_boxEntropy_le_rpow q R hq hJ hΔ
   have hC₀ : 0 ≤ C₀ := by

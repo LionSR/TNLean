@@ -321,7 +321,7 @@ theorem continuous_log_filteredNormSq_actualRoundData {a : ℝ} (ha : 0 ≤ a)
 /-- A property of the literal round of the actual transport datum holds for the actual round
 at the same position. -/
 theorem actualScanRound_of_transportScanRound
-    (P : ScanRound I (CoherentSphere (SiteConfig n)) → Prop) (j : ℕ) (hj : j < 2 * S.n * S.m)
+    (P : ScanRound I (CoherentSphere (∀ v, Fin (n v))) → Prop) (j : ℕ) (hj : j < 2 * S.n * S.m)
     (hP : P (transportScanRound (S.actualRoundData hm hM ⟨j, hj⟩) n E S.IsGoodOldHistory
       (a / 2) pre)) :
     P (S.actualScanRound hm hM n E a pre j) := by
@@ -445,7 +445,7 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
   have hcomm (j : Fin (2 * S.n * S.m)) (k : ℕ) :=
     S.actualRoundData_crossBandCommute hm hM j (augmentedDimensions (V := Site Λ) q aux) ha2 k
   have key (P : ScanRound (AdmissibleSupport Λ R)
-      (CoherentSphere (SiteConfig (augmentedDimensions (V := Site Λ) q aux))) → Prop)
+      (CoherentSphere (∀ v, Fin ((augmentedDimensions (V := Site Λ) q aux) v))) → Prop)
       (r : Fin (X.rounds N))
       (hP : P (transportScanRound (S.actualRoundData hm hM ⟨r.val, hj r⟩)
         (augmentedDimensions (V := Site Λ) q aux) (S.actualEnergyTerms h Ω J Δ (X.L N) aux)

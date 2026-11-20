@@ -55,15 +55,15 @@ vector. Area-law manuscript, `04-conditional.tex`, lines 122–124 and 138–139
 `05-replicas.tex`, lines 491–492. -/
 theorem movementEta_eq_condMutualInfo_left {P x Y F : Finset (Site Λ)}
     (h : Entropy.FourPartition P x Y F) (Ω : StateSpace Λ q) :
-    regionalEntropy Λ q Ω (P ∪ x) - regionalEntropy Λ q Ω P +
-        (regionalEntropy Λ q Ω (x ∪ Y) - regionalEntropy Λ q Ω Y) =
-      regionalEntropy Λ q Ω (x ∪ P) + regionalEntropy Λ q Ω (F ∪ P) -
-        regionalEntropy Λ q Ω (x ∪ F ∪ P) - regionalEntropy Λ q Ω P := by
-  have e1 := Entropy.regionEntropy_compl (n := fun _ ↦ q) (x ∪ Y) Ω
-  have e2 := Entropy.regionEntropy_compl (n := fun _ ↦ q) Y Ω
+    ManyBody.regionEntropy Ω (P ∪ x) - ManyBody.regionEntropy Ω P +
+        (ManyBody.regionEntropy Ω (x ∪ Y) - ManyBody.regionEntropy Ω Y) =
+      ManyBody.regionEntropy Ω (x ∪ P) + ManyBody.regionEntropy Ω (F ∪ P) -
+        ManyBody.regionEntropy Ω (x ∪ F ∪ P) - ManyBody.regionEntropy Ω P := by
+  have e1 := ManyBody.regionEntropy_compl (β := fun _ ↦ Fin q) Ω (x ∪ Y)
+  have e2 := ManyBody.regionEntropy_compl (β := fun _ ↦ Fin q) Ω Y
   rw [h.compl_union_xY] at e1
   rw [h.compl_Y] at e2
-  simp only [regionalEntropy_eq_regionEntropy, Finset.union_comm P x] at *
+  simp only [Finset.union_comm P x] at *
   linarith
 
 /-- `S(x|P) + S(x|Y) = I(x:F|Y)` for four regions partitioning the domain and a unit
@@ -71,10 +71,10 @@ vector. Area-law manuscript, `04-conditional.tex`, lines 122–124 and 138–139
 `05-replicas.tex`, lines 491–492. -/
 theorem movementEta_eq_condMutualInfo_right {P x Y F : Finset (Site Λ)}
     (h : Entropy.FourPartition P x Y F) (Ω : StateSpace Λ q) :
-    regionalEntropy Λ q Ω (P ∪ x) - regionalEntropy Λ q Ω P +
-        (regionalEntropy Λ q Ω (x ∪ Y) - regionalEntropy Λ q Ω Y) =
-      regionalEntropy Λ q Ω (x ∪ Y) + regionalEntropy Λ q Ω (F ∪ Y) -
-        regionalEntropy Λ q Ω (x ∪ F ∪ Y) - regionalEntropy Λ q Ω Y := by
+    ManyBody.regionEntropy Ω (P ∪ x) - ManyBody.regionEntropy Ω P +
+        (ManyBody.regionEntropy Ω (x ∪ Y) - ManyBody.regionEntropy Ω Y) =
+      ManyBody.regionEntropy Ω (x ∪ Y) + ManyBody.regionEntropy Ω (F ∪ Y) -
+        ManyBody.regionEntropy Ω (x ∪ F ∪ Y) - ManyBody.regionEntropy Ω Y := by
   have h' : Entropy.FourPartition Y x P F :=
     ⟨h.xY.symm, h.PY.symm, h.YF, h.Px.symm, h.xF, h.PF,
       fun v ↦ by rcases h.cover v with h1 | h1 | h1 | h1 <;> simp [h1]⟩
@@ -87,9 +87,9 @@ theorem movementEta_eq_condMutualInfo_right {P x Y F : Finset (Site Λ)}
 `04-conditional.tex`, lines 138–139. -/
 theorem movementEta_nonneg {P x Y F : Finset (Site Λ)} (h : Entropy.FourPartition P x Y F)
     (Ω : StateSpace Λ q) :
-    0 ≤ regionalEntropy Λ q Ω (P ∪ x) - regionalEntropy Λ q Ω P +
-        (regionalEntropy Λ q Ω (x ∪ Y) - regionalEntropy Λ q Ω Y) := by
-  simpa only [regionalEntropy_eq_regionEntropy, Entropy.regionalMovementEta] using
+    0 ≤ ManyBody.regionEntropy Ω (P ∪ x) - ManyBody.regionEntropy Ω P +
+        (ManyBody.regionEntropy Ω (x ∪ Y) - ManyBody.regionEntropy Ω Y) := by
+  simpa only [Entropy.regionalMovementEta] using
     Entropy.regionalMovementEta_nonneg (n := fun _ ↦ q) h Ω
 
 /-! ### Lemma 5.1 -/
@@ -114,26 +114,25 @@ theorem exists_norm_movement_le :
             ‖(WithLp.toLp 2
                 ((ManyBody.place (P ∪ x) (cfc (fun t : ℝ ↦ t ^ (a / 2)) σ) *
                   ManyBody.place P (cfc (fun t : ℝ ↦ t ^ (-a / 2))
-                    (kernelCompletion (reducedState Λ q θ P))) *
+                    (kernelCompletion (ManyBody.regionState θ P))) *
                   ManyBody.place (x ∪ Y) (cfc (fun t : ℝ ↦ t ^ (a / 2)) τ) *
                   ManyBody.place Y (cfc (fun t : ℝ ↦ t ^ (-a / 2))
-                    (kernelCompletion (reducedState Λ q θ Y)))) *ᵥ θ.ofLp) :
+                    (kernelCompletion (ManyBody.regionState θ Y)))) *ᵥ θ.ofLp) :
                 StateSpace Λ q)‖ ≤
-              Real.exp (-(a / 2) * (regionalEntropy Λ q θ (P ∪ x) - regionalEntropy Λ q θ P +
-                  (regionalEntropy Λ q θ (x ∪ Y) - regionalEntropy Λ q θ Y)) +
+              Real.exp (-(a / 2) * (ManyBody.regionEntropy θ (P ∪ x) - ManyBody.regionEntropy θ P +
+                  (ManyBody.regionEntropy θ (x ∪ Y) - ManyBody.regionEntropy θ Y)) +
                 C * a ^ (5 / 4 : ℝ) * Real.log (Real.exp 1 * (q : ℝ) ^ x.card) ^ 2) := by
   obtain ⟨C, c, hC, hc, H⟩ := Entropy.regionalMovement_norm_le
   refine ⟨C, c, hC, hc, ?_⟩
   intro Λ q P x Y F h θ hθ σ τ hσ hσtr hτ hτtr a ha hsmall
-  have hcard : (Fintype.card (Entropy.RegionConfig (fun _ : Site Λ ↦ q) x) : ℝ) =
+  have hcard : (Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin q) x) : ℝ) =
       (q : ℝ) ^ x.card := by
     rw [card_regionConfig]; push_cast; rfl
   have key := H (n := fun _ : Site Λ ↦ q) h θ hθ σ τ hσ hσtr hτ hτtr a ha (by rwa [hcard])
   rw [hcard, Entropy.FourPartition.movementEta_frameVector] at key
   simp only [Entropy.regionalMoveOperator, Entropy.FourPartition.frameMarginalP_eq,
     Entropy.FourPartition.frameMarginalY_eq] at key
-  simpa only [reducedState_eq_regionState, regionalEntropy_eq_regionEntropy,
-    Entropy.regionalMovementEta] using key
+  simpa only [Entropy.regionalMovementEta] using key
 
 /-! ### Lemma 5.3 -/
 
@@ -144,18 +143,17 @@ lines 495–500. -/
 noncomputable def skewSymbol (Λ : Finset (ℤ × ℤ)) (q : ℕ) (t : ℝ) (P Y : Finset (Site Λ))
     (h : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (θ : StateSpace Λ q) : ℂ :=
   star θ.ofLp ⬝ᵥ
-    ((ManyBody.place P (cfc (TensorPower.suppRpow t) (reducedState Λ q θ P)) *
-      ManyBody.place Y (cfc (TensorPower.suppRpow (-t)) (reducedState Λ q θ Y)) * h *
-      ManyBody.place P (cfc (TensorPower.suppRpow (-t)) (reducedState Λ q θ P)) *
-      ManyBody.place Y (cfc (TensorPower.suppRpow t) (reducedState Λ q θ Y))) *ᵥ θ.ofLp)
+    ((ManyBody.place P (cfc (TensorPower.suppRpow t) (ManyBody.regionState θ P)) *
+      ManyBody.place Y (cfc (TensorPower.suppRpow (-t)) (ManyBody.regionState θ Y)) * h *
+      ManyBody.place P (cfc (TensorPower.suppRpow (-t)) (ManyBody.regionState θ P)) *
+      ManyBody.place Y (cfc (TensorPower.suppRpow t) (ManyBody.regionState θ Y))) *ᵥ θ.ofLp)
 
 /-- The lattice skew symbol equals the marked scalar symbol on the physical tensor product. -/
 theorem skewSymbol_eq_markedScalarSymbol (t : ℝ) (P Y : Finset (Site Λ))
     (h : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (θ : StateSpace Λ q) :
     skewSymbol Λ q t P Y h θ =
       TensorPower.markedScalarSymbol (n := fun _ ↦ q) t P Y h θ.ofLp := by
-  simp only [skewSymbol, TensorPower.markedScalarSymbol, TensorPower.regionPow,
-    reducedState_eq_regionState, WithLp.toLp_ofLp]
+  simp only [skewSymbol, TensorPower.markedScalarSymbol, TensorPower.regionPow, WithLp.toLp_ofLp]
 
 /-- **Lemma 5.3 on lattice regions** (area-law manuscript, `lem:skew`, `04-conditional.tex`,
 lines 487–507; regional form `05-replicas.tex`, lines 640–660 and 838–843). Let
@@ -175,10 +173,10 @@ theorem skewSymbol_skew_le {P₀ P₁ x U F : Finset (Site Λ)}
         (skewSymbol Λ q (a / 2) (P₀ ∪ P₁) (x ∪ U) (ManyBody.place (P₀ ∪ x) K) θ).re ≤
       Entropy.ConditionalSkew.skewConst * a ^ 2 *
         Real.log (Real.exp 1 * (q : ℝ) ^ (P₀.card + x.card)) ^ 4 *
-        (regionalEntropy Λ q θ ((P₀ ∪ P₁) ∪ x) - regionalEntropy Λ q θ (P₀ ∪ P₁) +
-          (regionalEntropy Λ q θ (x ∪ U) - regionalEntropy Λ q θ U)) ^ (1 / 8 : ℝ) := by
-  have hcard : (Fintype.card (Entropy.RegionConfig (fun _ : Site Λ ↦ q) P₀) : ℝ) *
-      Fintype.card (Entropy.RegionConfig (fun _ : Site Λ ↦ q) x) =
+        (ManyBody.regionEntropy θ ((P₀ ∪ P₁) ∪ x) - ManyBody.regionEntropy θ (P₀ ∪ P₁) +
+          (ManyBody.regionEntropy θ (x ∪ U) - ManyBody.regionEntropy θ U)) ^ (1 / 8 : ℝ) := by
+  have hcard : (Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin q) P₀) : ℝ) *
+      Fintype.card (ManyBody.RegionConfig (fun _ ↦ Fin q) x) =
       (q : ℝ) ^ (P₀.card + x.card) := by
     rw [card_regionConfig, card_regionConfig, pow_add]; push_cast; rfl
   have hθ' : θ.ofLp ∈ TensorPower.unitSphere := by
@@ -188,7 +186,7 @@ theorem skewSymbol_skew_le {P₀ P₁ x U F : Finset (Site Λ)}
     simpa using h
   have key := hp.markedScalarSymbol_skew_le (n := fun _ ↦ q) hK0 hK1 ha (by rwa [hcard]) hθ'
   rw [hcard, hp.skewEta_transport, WithLp.toLp_ofLp] at key
-  simpa only [skewSymbol_eq_markedScalarSymbol, regionalEntropy_eq_regionEntropy,
+  simpa only [skewSymbol_eq_markedScalarSymbol,
     Entropy.regionalMovementEta] using key
 
 end TNLean.PEPS.AreaLaw

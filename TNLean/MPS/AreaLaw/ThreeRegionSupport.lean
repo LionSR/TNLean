@@ -53,9 +53,9 @@ support. This supplies the zero-local-dimension branches without adding a
 nonempty-site or nonempty-configuration premise. -/
 private theorem isSupportedOn_of_subsingleton_siteConfig
     {V : Type*} {n : V → ℕ}
-    [Subsingleton (Entropy.SiteConfig n)]
-    (X : Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ) (D : Finset V) :
-    Entropy.IsSupportedOn X D := by
+    [Subsingleton (∀ v, Fin (n v))]
+    (X : Matrix (∀ v, Fin (n v)) (∀ v, Fin (n v)) ℂ) (D : Finset V) :
+    ManyBody.IsSupportedOn X D := by
   refine ⟨?_, ?_⟩
   · intro σ τ hστ
     obtain ⟨v, _hv, hne⟩ := hστ
@@ -71,14 +71,14 @@ theorem operatorBlock_isSupportedOn_of_threeSplit_left
     {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
     (T E D : Finset V) (hTE : Disjoint T E)
     (P : Matrix (V → Fin q) (V → Fin q) ℂ)
-    (hP : Entropy.IsSupportedOn (n := fun _ : V ↦ q) P D)
+    (hP : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) P D)
     (UL : Matrix ((T → Fin q) × (E → Fin q))
       ((T → Fin q) × (E → Fin q)) ℂ)
     (hUL : P.submatrix (threeSplit q T E hTE).symm
         (threeSplit q T E hTE).symm =
       UL ⊗ₖ (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ))
     (a b : T → Fin q) :
-    Entropy.IsSupportedOn (n := fun _ : E ↦ q) (Matrix.operatorBlock UL a b)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Matrix.operatorBlock UL a b)
       (Finset.univ.filter (fun e : E ↦ e.val ∈ D)) := by
   classical
   by_cases hq : q = 0
@@ -90,7 +90,7 @@ theorem operatorBlock_isSupportedOn_of_threeSplit_left
     let g := threeSplit q T E hTE
     let r₀ : ↥(T ∪ E)ᶜ → Fin q := fun _ ↦ ⟨0, hqpos⟩
     let DE : Finset E := Finset.univ.filter (fun e : E ↦ e.val ∈ D)
-    change Entropy.IsSupportedOn (n := fun _ : E ↦ q) (Matrix.operatorBlock UL a b) DE
+    change ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Matrix.operatorBlock UL a b) DE
     have hslice (x y : E → Fin q) :
         Matrix.operatorBlock UL a b x y = P (g.symm ((a, x), r₀))
           (g.symm ((b, y), r₀)) := by
@@ -159,13 +159,13 @@ private theorem isSupportedOn_of_threeSplit_middle
     {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
     (T E D : Finset V) (hTE : Disjoint T E)
     (P : Matrix (V → Fin q) (V → Fin q) ℂ)
-    (hP : Entropy.IsSupportedOn (n := fun _ : V ↦ q) P D)
+    (hP : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) P D)
     (W : Matrix (E → Fin q) (E → Fin q) ℂ)
     (hW : P.submatrix (threeSplit q T E hTE).symm
         (threeSplit q T E hTE).symm =
       ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ W) ⊗ₖ
         (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)) :
-    Entropy.IsSupportedOn (n := fun _ : E ↦ q) W
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) W
       (Finset.univ.filter (fun e : E ↦ e.val ∈ D)) := by
   classical
   by_cases hq : q = 0
@@ -240,9 +240,9 @@ theorem exists_threeSplit_two_window_factors_with_collars
       HL (Sum.inr 1) = 0 ∧ HR (Sum.inr 1) = 0 ∧
       (∀ r, r ≤ p → HM (Sum.inl (Sum.inl r)) = 0) ∧
       (∀ r, s ≤ r → HM (Sum.inl (Sum.inr r)) = 0) ∧
-      (∀ r, Entropy.IsSupportedOn (n := fun _ : E ↦ q)
+      (∀ r, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (HM (Sum.inl (Sum.inl r))) C) ∧
-      (∀ r, Entropy.IsSupportedOn (n := fun _ : E ↦ q)
+      (∀ r, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (HM (Sum.inl (Sum.inr r))) C) := by
   classical
   intro T E hTE g C
@@ -264,7 +264,7 @@ theorem exists_threeSplit_two_window_factors_with_collars
     simpa only [E, hvE, Finset.card_singleton, Nat.mul_one] using hrVR
   have hp := p.isLt
   have hs := s.isLt
-  have hzero : Entropy.IsSupportedOn (n := fun _ : E ↦ q)
+  have hzero : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (0 : Matrix (E → Fin q) (E → Fin q) ℂ) C := by
     change _ ∈ ManyBody.supportedOperators _ _
     exact zero_mem (ManyBody.supportedOperators (fun _ : E ↦ Fin q) C)
@@ -276,7 +276,7 @@ theorem exists_threeSplit_two_window_factors_with_collars
               (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
             ((1 : Matrix (T → Fin q) (T → Fin q) ℂ) ⊗ₖ W) ⊗ₖ
               (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ)) ∧
-        (r ≤ p → W = 0) ∧ Entropy.IsSupportedOn (n := fun _ : E ↦ q) W C := by
+        (r ≤ p → W = 0) ∧ ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) W C := by
     intro r
     by_cases hrp : r = p
     · subst r
@@ -326,7 +326,7 @@ theorem exists_threeSplit_two_window_factors_with_collars
               (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) +
             (1 : Matrix ((T → Fin q) × (E → Fin q))
               ((T → Fin q) × (E → Fin q)) ℂ) ⊗ₖ B) ∧
-        (s ≤ r → W = 0) ∧ Entropy.IsSupportedOn (n := fun _ : E ↦ q) W C := by
+        (s ≤ r → W = 0) ∧ ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) W C := by
     intro r
     by_cases hrs : r = s
     · subst r
@@ -443,7 +443,7 @@ theorem leftBlock_isSupportedOn_of_threeSplit_right
     {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
     (T E D : Finset V) (hTE : Disjoint T E)
     (P : Matrix (V → Fin q) (V → Fin q) ℂ)
-    (hP : Entropy.IsSupportedOn (n := fun _ : V ↦ q) P D)
+    (hP : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) P D)
     (VR : Matrix ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q))
       ((E → Fin q) × (↥(T ∪ E)ᶜ → Fin q)) ℂ)
     (hVR : P.submatrix (threeSplit q T E hTE).symm
@@ -452,7 +452,7 @@ theorem leftBlock_isSupportedOn_of_threeSplit_right
         (Equiv.prodAssoc (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)).symm
         (Equiv.prodAssoc (T → Fin q) (E → Fin q) (↥(T ∪ E)ᶜ → Fin q)).symm)
     (a b : ↥(T ∪ E)ᶜ → Fin q) :
-    Entropy.IsSupportedOn (n := fun _ : E ↦ q)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (fun x y : E → Fin q ↦ VR (x, a) (y, b))
       (Finset.univ.filter (fun e : E ↦ e.val ∈ D)) := by
   classical
@@ -465,7 +465,7 @@ theorem leftBlock_isSupportedOn_of_threeSplit_right
     let g := threeSplit q T E hTE
     let ℓ₀ : T → Fin q := fun _ ↦ ⟨0, hqpos⟩
     let DE : Finset E := Finset.univ.filter (fun e : E ↦ e.val ∈ D)
-    change Entropy.IsSupportedOn (n := fun _ : E ↦ q)
+    change ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (fun x y : E → Fin q ↦ VR (x, a) (y, b)) DE
     have hslice (x y : E → Fin q) :
         VR (x, a) (y, b) = P (g.symm ((ℓ₀, x), a))
@@ -630,15 +630,15 @@ theorem exists_weighted_ordinary_middle_eq_central_add_supported
     (hR0 : HM (Sum.inr (2 : Fin 3)) = 0)
     (hleft0 : ∀ r : Fin (2 * ℓ), r ≤ p → HM (Sum.inl (Sum.inl r)) = 0)
     (hleftC : ∀ r : Fin (2 * ℓ), p < r →
-      Entropy.IsSupportedOn (n := fun _ : E ↦ q) (HM (Sum.inl (Sum.inl r))) C)
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (HM (Sum.inl (Sum.inl r))) C)
     (hright0 : ∀ r : Fin (2 * ℓ), s ≤ r → HM (Sum.inl (Sum.inr r)) = 0)
     (hrightC : ∀ r : Fin (2 * ℓ), r < s →
-      Entropy.IsSupportedOn (n := fun _ : E ↦ q) (HM (Sum.inl (Sum.inr r))) C) :
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (HM (Sum.inl (Sum.inr r))) C) :
     let O : Finset ((Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) :=
       (Finset.univ.erase (Sum.inl (Sum.inl p))).erase (Sum.inl (Sum.inr s))
     ∃ K : Matrix (E → Fin q) (E → Fin q) ℂ,
       (∑ i ∈ O, z i • HM i) = z (Sum.inr (1 : Fin 3)) • HM (Sum.inr (1 : Fin 3)) + K ∧
-        Entropy.IsSupportedOn (n := fun _ : E ↦ q) K C := by
+        ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K C := by
   classical
   let := Fintype.ofFinite E
   intro O

@@ -46,6 +46,6 @@ def UniformAreaLaw : Prop :=
         ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-            ∀ A : Finset (Site Λ), regionalEntropy Λ q Ω A ≤ C * (edgeBoundary Λ A).card
+            ∀ A : Finset (Site Λ), ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary Λ A).card
 
 end TNLean.PEPS.AreaLaw

@@ -246,12 +246,12 @@ theorem _root_.ManyBody.ChainInteraction.isViable_sizeTrimmingSelectionWith {L q
         (h.sizeTrimmingSelectionWith hq Δ S net sol : Set (LeftBlockVector L q k)) ∧
       ∃ (m : ℕ) (W : Matrix (CutRight L q k) (Fin m) ℂ)
         (u : EuclideanSpace ℂ
-          (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m)),
+          ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m)),
         Wᴴ * W = 1 ∧ m ≤ D ∧ ‖u‖ = 1 ∧
         (∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈
           h.sizeTrimmingSelectionWith hq Δ S net sol) ∧
         1 - 1 / 12 ≤ ‖⟪Γ, WithLp.toLp 2 (fun z ↦ rightApply W u
-          (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z))⟫_ℂ‖ := by
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z))⟫_ℂ‖ := by
   classical
   intro c D
   let : NeZero q := ⟨by omega⟩
@@ -348,11 +348,11 @@ theorem _root_.ManyBody.ChainInteraction.isViable_sizeTrimmingSelection {L q k :
     IsViable Γ (1 / 12) (h.sizeTrimmingSelection hq Δ S : Set (LeftBlockVector L q k)) ∧
       ∃ (m : ℕ) (W : Matrix (CutRight L q k) (Fin m) ℂ)
         (u : EuclideanSpace ℂ
-          (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m)),
+          ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m)),
         Wᴴ * W = 1 ∧ m ≤ D ∧ ‖u‖ = 1 ∧
         (∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ h.sizeTrimmingSelection hq Δ S) ∧
         1 - 1 / 12 ≤ ‖⟪Γ, WithLp.toLp 2 (fun z ↦ rightApply W u
-          (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z))⟫_ℂ‖ := by
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z))⟫_ℂ‖ := by
   let : NeZero q := ⟨by omega⟩
   have hc : 0 < (Δ / 169) ^ 2 := sq_pos_of_pos (div_pos hΔ (by norm_num))
   have hη : 0 < (Δ / 169) ^ 2 / (2 * L) :=

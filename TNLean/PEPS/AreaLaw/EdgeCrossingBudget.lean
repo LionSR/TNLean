@@ -35,9 +35,9 @@ variable {V : Type*} [Fintype V] [DecidableEq V]
 omit [DecidableEq V] in
 /-- An on-site designated support never meets both sides of a cut. -/
 theorem not_mem_crossingTerms_singleton (A : Finset V) (v : V) :
-    v ∉ Entropy.crossingTerms (fun w : V ↦ {w}) A := by
+    v ∉ ManyBody.crossingTerms (fun w : V ↦ {w}) A := by
   classical
-  simp [Entropy.crossingTerms]
+  simp [ManyBody.crossingTerms]
 
 omit [Fintype V] in
 /-- The inside portion of a crossing two-site support is a singleton. -/
@@ -71,7 +71,7 @@ noncomputable def nearestNeighborSupport :
 
 /-- The combined interaction list has no crossing on-site terms. -/
 theorem inl_not_mem_crossingTerms (A : Finset (Site Λ))
-    (v : Site Λ) : Sum.inl v ∉ Entropy.crossingTerms nearestNeighborSupport A := by
+    (v : Site Λ) : Sum.inl v ∉ ManyBody.crossingTerms nearestNeighborSupport A := by
   classical
   intro h
   have h' := h
@@ -83,7 +83,7 @@ theorem inl_not_mem_crossingTerms (A : Finset (Site Λ))
 /-- Crossing of the edge support is precisely membership in the unordered boundary. -/
 theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
     (e : Edge (planeDomainGraph Λ)) :
-    Sum.inr e ∈ Entropy.crossingTerms nearestNeighborSupport A ↔
+    Sum.inr e ∈ ManyBody.crossingTerms nearestNeighborSupport A ↔
       s(e.1.1, e.1.2) ∈ edgeBoundary Λ A := by
   classical
   constructor
@@ -110,7 +110,7 @@ theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
 /-- Every crossing term has one inside site, including in the presence of on-site terms. -/
 theorem card_nearestNeighbor_insideConfig (q : ℕ)
     (A : Finset (Site Λ)) {i : Site Λ ⊕ Edge (planeDomainGraph Λ)}
-    (hi : i ∈ Entropy.crossingTerms nearestNeighborSupport A) :
+    (hi : i ∈ ManyBody.crossingTerms nearestNeighborSupport A) :
     Fintype.card (↥(nearestNeighborSupport i ∩ A) → Fin q) = q := by
   classical
   cases i with
@@ -123,7 +123,7 @@ theorem card_nearestNeighbor_insideConfig (q : ℕ)
 /-- Forgetting the canonical endpoint order counts each unordered boundary edge once. -/
 theorem card_crossingTerms_nearestNeighbor
     (A : Finset (Site Λ)) :
-    (Entropy.crossingTerms nearestNeighborSupport A).card = (edgeBoundary Λ A).card := by
+    (ManyBody.crossingTerms nearestNeighborSupport A).card = (edgeBoundary Λ A).card := by
   classical
   let f : Site Λ ⊕ Edge (planeDomainGraph Λ) → Sym2 (Site Λ) :=
     Sum.elim (fun v ↦ s(v, v)) (fun e ↦ s(e.1.1, e.1.2))
@@ -161,7 +161,7 @@ theorem card_crossingTerms_nearestNeighbor
 /-- The exact generic crossing budget for on-site and nearest-neighbor terms. -/
 theorem nearestNeighbor_crossing_budget (q : ℕ) (J : ℝ)
     {m : ℕ} (regions : Fin m → Finset (Site Λ)) (a : Fin m → ℝ) :
-    (∑ j : Fin m, a j ^ 2 * ∑ i ∈ Entropy.crossingTerms nearestNeighborSupport (regions j),
+    (∑ j : Fin m, a j ^ 2 * ∑ i ∈ ManyBody.crossingTerms nearestNeighborSupport (regions j),
       (Fintype.card (↥(nearestNeighborSupport i ∩ regions j) → Fin q) : ℝ) ^ 2 * J) =
       (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 * (edgeBoundary Λ (regions j)).card := by
   classical
@@ -169,9 +169,9 @@ theorem nearestNeighbor_crossing_budget (q : ℕ) (J : ℝ)
   apply Finset.sum_congr rfl
   intro j _
   have hsum :
-      (∑ i ∈ Entropy.crossingTerms nearestNeighborSupport (regions j),
+      (∑ i ∈ ManyBody.crossingTerms nearestNeighborSupport (regions j),
         (Fintype.card (↥(nearestNeighborSupport i ∩ regions j) → Fin q) : ℝ) ^ 2 * J) =
-      ∑ _i ∈ Entropy.crossingTerms nearestNeighborSupport (regions j), (q : ℝ) ^ 2 * J := by
+      ∑ _i ∈ ManyBody.crossingTerms nearestNeighborSupport (regions j), (q : ℝ) ^ 2 * J := by
     apply Finset.sum_congr rfl
     intro i hi
     rw [card_nearestNeighbor_insideConfig q _ hi]

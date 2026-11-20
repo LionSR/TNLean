@@ -44,9 +44,9 @@ no source-sharp bond, spectral contraction or running-time assertion is made. -/
 private theorem exists_common_physical_aeval_mpo_clm_family_fin
     {L q ell a b B k : ℕ}
     (WL WR : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, Entropy.IsSupportedOn (WL r)
+    (hleft : ∀ r, ManyBody.IsSupportedOn (WL r)
       (interval L (a + r.val) (a + r.val + 2)))
-    (hright : ∀ r, Entropy.IsSupportedOn (WR r)
+    (hright : ∀ r, ManyBody.IsSupportedOn (WR r)
       (interval L (b + r.val) (b + r.val + 2)))
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
     (hell : 1 ≤ ell) (hq : 2 ≤ q) (hk : 1 ≤ k)
@@ -65,10 +65,10 @@ private theorem exists_common_physical_aeval_mpo_clm_family_fin
     (show b + ell + 1 ≤ L by omega)
   let D := (q * k) ^ (18 * ell + 2 * (k / ell))
   let β := fun _ : Fin L ↦ Fin q
-  let tau := (FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _)
+  let tau := (ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-  let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration β Jᶜ) ℂ).tensorProduct
-    (EuclideanSpace.basisFun (FiniteProduct.Configuration β J) ℂ)).repr
+  let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jᶜ) ℂ).tensorProduct
+    (EuclideanSpace.basisFun (ManyBody.RegionConfig β J) ℂ)).repr
   let T := U.trans Phi.symm
   ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),
     N ≤ D ^ 2 ∧
@@ -77,8 +77,8 @@ private theorem exists_common_physical_aeval_mpo_clm_family_fin
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).1)
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2))) ∧
       ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
-        Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
+        ManyBody.IsSupportedOn PL (interval L 0 (a + 1)) →
+        ManyBody.IsSupportedOn PR (interval L (b + 2 * ell) L) →
         let F : ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) →
             Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
@@ -86,22 +86,22 @@ private theorem exists_common_physical_aeval_mpo_clm_family_fin
           ∃ M : Fin N → Matrix ((Jᶜ : Finset (Fin L)) → Fin q) ((Jᶜ : Finset (Fin L)) → Fin q) ℂ,
             Polynomial.aeval (∑ a, F a) P =
               (∑ r, M r ⊗ₖ W r).submatrix
-                ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _))
-                ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _)) ∧
             T.toContinuousLinearEquiv.toContinuousLinearMap ∘L
                 Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
                   (Polynomial.aeval (∑ a, F a) P) =
               (∑ r, TensorProduct.mapL
                 (Matrix.toEuclideanCLM (𝕜 := ℂ)
-                  (n := FiniteProduct.Configuration β Jᶜ) (M r))
+                  (n := ManyBody.RegionConfig β Jᶜ) (M r))
                 (Matrix.toEuclideanCLM (𝕜 := ℂ)
-                  (n := FiniteProduct.Configuration β J) (W r))) ∘L
+                  (n := ManyBody.RegionConfig β J) (W r))) ∘L
                 T.toContinuousLinearEquiv.toContinuousLinearMap := by
   let J := interval L (a + ell) (b + ell + 1)
   let β := fun _ : Fin L ↦ Fin q
-  let tau := (FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _)
+  let tau := (ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)
   obtain ⟨N, W, hN, hW, _hTrace, hdecomp⟩ :=
     exists_common_physical_aeval_mpo_family_fin
       WL WR hleft hright hab hb hell hq hk Acore C0
@@ -123,9 +123,9 @@ bond bound; no spectral contraction, tradeoff or running-time assertion is made.
 theorem exists_common_physical_aeval_mpo_middleFirst_family_fin
     {L q ell a b B k : ℕ}
     (WL WR : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, Entropy.IsSupportedOn (WL r)
+    (hleft : ∀ r, ManyBody.IsSupportedOn (WL r)
       (interval L (a + r.val) (a + r.val + 2)))
-    (hright : ∀ r, Entropy.IsSupportedOn (WR r)
+    (hright : ∀ r, ManyBody.IsSupportedOn (WR r)
       (interval L (b + r.val) (b + r.val + 2)))
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
     (hell : 1 ≤ ell) (hq : 2 ≤ q) (hk : 1 ≤ k)
@@ -144,19 +144,19 @@ theorem exists_common_physical_aeval_mpo_middleFirst_family_fin
     (show b + ell + 1 ≤ L by omega)
   let D := (q * k) ^ (18 * ell + 2 * (k / ell))
   let β := fun _ : Fin L ↦ Fin q
-  let tau := (FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _)
+  let tau := (ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-  let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration β Jᶜ) ℂ).tensorProduct
-    (EuclideanSpace.basisFun (FiniteProduct.Configuration β J) ℂ)).repr
+  let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jᶜ) ℂ).tensorProduct
+    (EuclideanSpace.basisFun (ManyBody.RegionConfig β J) ℂ)).repr
   let T : EuclideanSpace ℂ (Fin L → Fin q) ≃ₗᵢ[ℂ]
-      (EuclideanSpace ℂ (FiniteProduct.Configuration β Jᶜ) ⊗[ℂ]
-        EuclideanSpace ℂ (FiniteProduct.Configuration β J)) := U.trans Phi.symm
+      (EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ) ⊗[ℂ]
+        EuclideanSpace ℂ (ManyBody.RegionConfig β J)) := U.trans Phi.symm
   let Tm : EuclideanSpace ℂ (Fin L → Fin q) ≃ₗᵢ[ℂ]
-      (EuclideanSpace ℂ (FiniteProduct.Configuration β J) ⊗[ℂ]
-        EuclideanSpace ℂ (FiniteProduct.Configuration β Jᶜ)) :=
+      (EuclideanSpace ℂ (ManyBody.RegionConfig β J) ⊗[ℂ]
+        EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ)) :=
     T.trans (TensorProduct.commIsometry ℂ
-    (EuclideanSpace ℂ (FiniteProduct.Configuration β Jᶜ))
-    (EuclideanSpace ℂ (FiniteProduct.Configuration β J)))
+    (EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ))
+    (EuclideanSpace ℂ (ManyBody.RegionConfig β J)))
   ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),
     N ≤ D ^ 2 ∧
       (∀ r, IsOpenMPS ((b + ell + 1) - (a + ell)) (q * q)
@@ -164,8 +164,8 @@ theorem exists_common_physical_aeval_mpo_middleFirst_family_fin
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).1)
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2))) ∧
       ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-        Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
-        Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
+        ManyBody.IsSupportedOn PL (interval L 0 (a + 1)) →
+        ManyBody.IsSupportedOn PR (interval L (b + 2 * ell) L) →
         let F : ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) →
             Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
           Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]
@@ -173,18 +173,18 @@ theorem exists_common_physical_aeval_mpo_middleFirst_family_fin
           ∃ M : Fin N → Matrix ((Jᶜ : Finset (Fin L)) → Fin q) ((Jᶜ : Finset (Fin L)) → Fin q) ℂ,
             Polynomial.aeval (∑ a, F a) P =
               (∑ r, M r ⊗ₖ W r).submatrix
-                ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _))
-                ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
+                ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans
                   (Equiv.prodComm _ _)) ∧
             (Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
                 Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
                   (Polynomial.aeval (∑ a, F a) P) =
               (∑ r, TensorProduct.mapL
                 (Matrix.toEuclideanCLM (𝕜 := ℂ)
-                  (n := FiniteProduct.Configuration β J) (W r))
+                  (n := ManyBody.RegionConfig β J) (W r))
                 (Matrix.toEuclideanCLM (𝕜 := ℂ)
-                  (n := FiniteProduct.Configuration β Jᶜ) (M r))) ∘L
+                  (n := ManyBody.RegionConfig β Jᶜ) (M r))) ∘L
                 Tm.toContinuousLinearEquiv.toContinuousLinearMap) ∧
             Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
                 Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
@@ -192,9 +192,9 @@ theorem exists_common_physical_aeval_mpo_middleFirst_family_fin
                 Tm.symm.toContinuousLinearEquiv.toContinuousLinearMap =
               ∑ r, TensorProduct.mapL
                 (Matrix.toEuclideanCLM (𝕜 := ℂ)
-                  (n := FiniteProduct.Configuration β J) (W r))
+                  (n := ManyBody.RegionConfig β J) (W r))
                 (Matrix.toEuclideanCLM (𝕜 := ℂ)
-                  (n := FiniteProduct.Configuration β Jᶜ) (M r)) := by
+                  (n := ManyBody.RegionConfig β Jᶜ) (M r)) := by
   intro Ksites eK Mphys Pmid J eJ D β tau U Phi T Tm
   obtain ⟨N, W, hN, hW, hdecomp⟩ :=
     exists_common_physical_aeval_mpo_clm_family_fin
@@ -205,13 +205,13 @@ theorem exists_common_physical_aeval_mpo_middleFirst_family_fin
   refine ⟨M, hM, ?_⟩
   exact TensorProduct.intertwining_sum_mapL_commIsometry
     (𝕜 := ℂ) (E := EuclideanSpace ℂ (Fin L → Fin q))
-    (L := EuclideanSpace ℂ (FiniteProduct.Configuration β Jᶜ))
-    (R := EuclideanSpace ℂ (FiniteProduct.Configuration β J)) (ι := Fin N) T
+    (L := EuclideanSpace ℂ (ManyBody.RegionConfig β Jᶜ))
+    (R := EuclideanSpace ℂ (ManyBody.RegionConfig β J)) (ι := Fin N) T
     (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
       (Polynomial.aeval (∑ a, F a) P))
     (fun r ↦ Matrix.toEuclideanCLM (𝕜 := ℂ)
-      (n := FiniteProduct.Configuration β Jᶜ) (M r))
+      (n := ManyBody.RegionConfig β Jᶜ) (M r))
     (fun r ↦ Matrix.toEuclideanCLM (𝕜 := ℂ)
-      (n := FiniteProduct.Configuration β J) (W r)) hT
+      (n := ManyBody.RegionConfig β J) (W r)) hT
 
 end TNLean.MPS.AreaLaw

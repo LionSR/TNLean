@@ -31,7 +31,7 @@ noncomputable def adjacentIntervalMerge (L q p k r : ℕ) (hpk : p ≤ k) (hkr :
   (Entropy.regionTensorMerge q (interval L p k) (interval L k r)
     (disjoint_interval_interval p k r) S1 S2).map
       (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (FiniteProduct.configurationCongr (fun _ : Fin L ↦ Fin q)
+        (ManyBody.configurationCongr (fun _ : Fin L ↦ Fin q)
           (interval_union_interval hpk hkr))).toLinearEquiv.toLinearMap
 
 /-- Viable spaces on actual adjacent intervals merge with the sum of their

@@ -77,7 +77,7 @@ private theorem card_crossingTerms_consecutive_le {ι : Type*} [Fintype ι]
     (S : ι → ChainSupport L R) (hS : Function.Injective S)
     (hwindow : ∀ i, ∃ a : ℕ,
       a + R + 1 ≤ L ∧ (S i).1 = interval L a (a + R + 1)) (l r : ℕ) :
-    (Entropy.crossingTerms (fun i ↦ (S i).1) (interval L l r)).card ≤ 2 * R := by
+    (ManyBody.crossingTerms (fun i ↦ (S i).1) (interval L l r)).card ≤ 2 * R := by
   classical
   let start : ι → Fin L := fun i ↦ (S i).1.min' (S i).2.1
   have hstart (i : ι) :
@@ -100,14 +100,14 @@ private theorem card_crossingTerms_consecutive_le {ι : Type*} [Fintype ι]
     apply hS
     apply Subtype.ext
     rw [hstart i, hstart j, hij]
-  let C := Entropy.crossingTerms (fun i ↦ (S i).1) (interval L l r)
+  let C := ManyBody.crossingTerms (fun i ↦ (S i).1) (interval L l r)
   have hcover : C.image start ⊆
       interval L (l - R) l ∪ interval L (r - R) r := by
     intro s hs
     obtain ⟨i, hi, rfl⟩ := Finset.mem_image.mp hs
     have hsplit : (∃ x ∈ (S i).1, x ∈ interval L l r) ∧
         ∃ y ∈ (S i).1, y ∉ interval L l r := by
-      simpa only [C, Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ,
+      simpa only [C, ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ,
         true_and] using hi
     obtain ⟨⟨x, hx, hxlr⟩, y, hy, hyout⟩ := hsplit
     rw [hstart i, mem_interval] at hx hy
@@ -138,7 +138,7 @@ theorem _root_.ManyBody.ChainInteraction.card_crossingTerms_interval_le_of_conse
     (h : ChainInteraction L q R)
     (hwindow : ∀ X : ChainSupport L R, h.term X ≠ 0 →
       ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) (l r : ℕ) :
-    (Entropy.crossingTerms
+    (ManyBody.crossingTerms
       (fun X : {X : ChainSupport L R // h.term X ≠ 0} ↦ X.val.1)
       (interval L l r)).card ≤ 2 * R := by
   classical
@@ -153,7 +153,7 @@ theorem _root_.ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive
     (hwindow : ∀ X : ChainSupport L R, h.term X ≠ 0 →
       ∃ a : ℕ, a + R + 1 ≤ L ∧ X.1 = interval L a (a + R + 1)) (l r : ℕ) :
     Entropy.cutLogBudget
-      (Entropy.crossingTerms
+      (ManyBody.crossingTerms
         (fun X : {X : ChainSupport L R // h.term X ≠ 0} ↦ X.val.1)
         (interval L l r))
       (Entropy.supportDim (fun _ : Fin L ↦ q) ∘
@@ -163,7 +163,7 @@ theorem _root_.ManyBody.ChainInteraction.cutLogBudget_interval_le_of_consecutive
   unfold windowBudgetConst cutBudgetConst
   let A := {X : ChainSupport L R // h.term X ≠ 0}
   let D : A → Finset (Fin L) := fun X ↦ X.val.1
-  let C := Entropy.crossingTerms D (interval L l r)
+  let C := ManyBody.crossingTerms D (interval L l r)
   let B : ℝ := 1 + (2 * R : ℕ) * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2
   let budget := Entropy.cutLogBudget C (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ D)
   have hcard : (C.card : ℝ) ≤ (2 * R : ℕ) := by
@@ -202,9 +202,9 @@ theorem _root_.ManyBody.ChainInteraction.log_surprisalMoment_interval_le_of_cons
     (l r : ℕ) {u : ℝ}
     (hu : |u| ≤ Entropy.tailRadius (J / Δ) (windowBudgetConst q R)) :
     Real.log (Entropy.surprisalMoment
-      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (interval L l r) Ω).eigenvalues u) ≤
-      u * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +
+      u * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L l r) +
         512 * Real.exp 1 * (J / Δ) * windowBudgetConst q R * u ^ 2 := by
   classical
   let A := {X : ChainSupport L R // h.term X ≠ 0}
@@ -212,7 +212,7 @@ theorem _root_.ManyBody.ChainInteraction.log_surprisalMoment_interval_le_of_cons
   let D : A → Finset (Fin L) := fun X ↦ X.val.1
   have hsum : (∑ X : A, g X) = h.hamiltonian := by
     exact (Finset.sum_eq_sum_subtype_ne_zero h.term h.term (fun _ hX ↦ hX)).symm
-  let C := Entropy.crossingTerms D (interval L l r)
+  let C := ManyBody.crossingTerms D (interval L l r)
   let B : ℝ := windowBudgetConst q R
   let budget := Entropy.cutLogBudget C (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ D)
   have hbudget : budget ≤ B :=
@@ -244,12 +244,12 @@ theorem _root_.ManyBody.ChainInteraction.log_surprisalMoment_interval_le_of_cons
     (n := fun _ : Fin L ↦ q) (h := g) (D := D) (B := interval L l r)
     (fun X ↦ h.mem X.val) (fun X ↦ hh X.val) hJ
     (fun X ↦ hhJ X.val) hΩ hΔ heig' hgap' rfl
-    (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (interval L l r) Ω)
+    (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (interval L l r) Ω)
     (hu.trans hradius)
   change Real.log (Entropy.surprisalMoment
-      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (interval L l r) Ω).eigenvalues u) ≤
-    u * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +
+    u * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L l r) +
       512 * Real.exp 1 * (J / Δ) * budget * u ^ 2 at hm
   have hcoef : 0 ≤ 512 * Real.exp 1 * (J / Δ) := by positivity
   exact hm.trans (add_le_add le_rfl

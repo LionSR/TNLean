@@ -75,7 +75,7 @@ theorem exists_low_density_tree_algorithm (etaLD : ℝ) (hLD : 0 < etaLD) :
       let ell : ℕ := ⌈C * u ^ 2 / g⌉₊
       let D := (mi * ell ^ 2) ^ (22 * ell)
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2))) →
       ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=

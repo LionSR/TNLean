@@ -152,8 +152,7 @@ theorem regionalEntropy_eq_zero_of_forall_subset_or_disjoint (h : PlaneInteracti
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ))
     (hsplit : ∀ X : AdmissibleSupport Λ R, X.1 ⊆ A ∨ Disjoint X.1 A) :
-    regionalEntropy Λ q Ω A = 0 := by
-  rw [regionalEntropy_eq_regionEntropy]
+    ManyBody.regionEntropy Ω A = 0 := by
   exact (ManyBody.regionEntropy_eq_entropy _ _).trans
     (ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint (Φ := h) hh hΔ hΩ hgap
       hspan (B := A) hsplit)
@@ -169,7 +168,7 @@ theorem regionalEntropy_eq_zero_of_edgeBoundary_eq_empty (h : PlaneInteraction �
     {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : StateSpace Λ q}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) {A : Finset (Site Λ)}
-    (hA : edgeBoundary Λ A = ∅) : regionalEntropy Λ q Ω A = 0 :=
+    (hA : edgeBoundary Λ A = ∅) : ManyBody.regionEntropy Ω A = 0 :=
   regionalEntropy_eq_zero_of_forall_subset_or_disjoint h hh hΔ hΩ hgap hspan A
     (subset_or_disjoint_of_edgeBoundary_eq_empty hA)
 
@@ -181,7 +180,7 @@ theorem regionalEntropy_eq_zero_of_range_eq_zero (h : PlaneInteraction Λ q 0)
     {E₀ Δ : ℝ} (hΔ : 0 < Δ) {Ω : StateSpace Λ q}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ)) :
-    regionalEntropy Λ q Ω A = 0 := by
+    ManyBody.regionEntropy Ω A = 0 := by
   refine regionalEntropy_eq_zero_of_forall_subset_or_disjoint h hh hΔ hΩ hgap hspan A fun X ↦ ?_
   obtain ⟨x, hx⟩ := Finset.card_eq_one.mp ((isAdmissibleSupport_zero_iff Λ X.1).mp X.2)
   rw [hx]
@@ -191,30 +190,28 @@ theorem regionalEntropy_eq_zero_of_range_eq_zero (h : PlaneInteraction Λ q 0)
 
 /-- The reduced state of a unit vector has unit trace. -/
 theorem trace_reducedState (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ)) :
-    (reducedState Λ q Ω A).trace = 1 := by
-  rw [reducedState_eq_regionState]
-  exact Entropy.trace_regionState_eq_one hΩ
+    (ManyBody.regionState Ω A).trace = 1 := by
+  exact ManyBody.trace_regionState_eq_one hΩ
 
 /-- A regional entropy vanishes when the regional configuration space has at
 most one element. -/
 theorem regionalEntropy_eq_zero_of_card_le_one (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     (A : Finset (Site Λ)) (hcard : Fintype.card ({x : Site Λ // x ∈ A} → Fin q) ≤ 1) :
-    regionalEntropy Λ q Ω A = 0 := by
+    ManyBody.regionEntropy Ω A = 0 := by
   classical
-  exact vonNeumannEntropy_eq_zero_of_rank_le_one (reducedState_posSemidef Λ q Ω A)
+  exact vonNeumannEntropy_eq_zero_of_rank_le_one (ManyBody.regionState_posSemidef A Ω)
     (trace_reducedState Ω hΩ A) ((rank_le_card_width _).trans hcard)
 
 /-- **Local dimension one** (area-law preprint, `01-preliminaries.tex`,
 line 116): for `q = 1` every regional entropy of every unit vector vanishes. -/
 theorem regionalEntropy_eq_zero_of_q_eq_one {Ω : StateSpace Λ 1} (hΩ : ‖Ω‖ = 1)
-    (A : Finset (Site Λ)) : regionalEntropy Λ 1 Ω A = 0 := by
-  rw [regionalEntropy_eq_regionEntropy]
+    (A : Finset (Site Λ)) : ManyBody.regionEntropy Ω A = 0 := by
   exact TNLean.Lattice.regionEntropy_eq_zero_of_localDimension_one hΩ A
 
 /-- **Empty domain** (area-law preprint, `01-preliminaries.tex`, line 116): on
 the empty domain every regional entropy of every unit vector vanishes. -/
 theorem regionalEntropy_eq_zero_of_domain_eq_empty {Ω : StateSpace ∅ q} (hΩ : ‖Ω‖ = 1)
-    (A : Finset (Site ∅)) : regionalEntropy ∅ q Ω A = 0 :=
+    (A : Finset (Site ∅)) : ManyBody.regionEntropy Ω A = 0 :=
   regionalEntropy_eq_zero_of_card_le_one Ω hΩ A (by
     rw [Fintype.card_fun]
     simp)
@@ -230,7 +227,7 @@ theorem regionalEntropy_connectedComponents_eq_zero (h : PlaneInteraction Λ q R
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (s : Set (planeDomainGraph Λ).ConnectedComponent) :
-    regionalEntropy Λ q Ω
+    ManyBody.regionEntropy Ω
       (Finset.univ.filter fun x ↦ (planeDomainGraph Λ).connectedComponentMk x ∈ s) = 0 :=
   regionalEntropy_eq_zero_of_edgeBoundary_eq_empty h hh hΔ hΩ hgap hspan
     (edgeBoundary_connectedComponents_eq_empty s)

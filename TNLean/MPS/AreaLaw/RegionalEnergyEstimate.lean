@@ -10,7 +10,7 @@ import QICLean.Entropy.RegionalOperatorCoordinates
 import QICLean.Analysis.CompressionEnergyInterval
 import QICLean.Analysis.MatrixTensorCoordinates
 import QICLean.Analysis.ViableSubspaceCoordinates
-import QICLean.Channel.FiniteProduct
+import QICLean.ManyBody.Sites.RegionMatrix
 import QICLean.Entropy.RegionUnion
 import QICLean.Representation.RelativePin
 
@@ -46,7 +46,7 @@ arXiv:1602.08828v2, Figure `fig:algo1`, lines 1631–1632, and lines 1793–1807
 theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     let _ : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
@@ -56,15 +56,15 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues (minEigenvalue hH)
     let J := interval L l r
     let beta := fun _ : Fin L ↦ Fin q
-    let tau := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-    let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration beta Jᶜ) ℂ).tensorProduct
-      (EuclideanSpace.basisFun (FiniteProduct.Configuration beta J) ℂ)).repr
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
     let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ))
-      (EuclideanSpace ℂ (FiniteProduct.Configuration beta J)))
+      (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+      (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
     ∃ (K : Matrix (J → Fin q) (J → Fin q) ℂ) (hK : K.IsHermitian),
-      aklvRegionalHamiltonians l r h 1 = Entropy.localLift (n := fun _ : Fin L ↦ q) J K ∧
+      aklvRegionalHamiltonians l r h 1 = ManyBody.place (X := fun _ ↦ Fin q) J K ∧
       let _ : Nonempty (J → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
       let e := minEigenvalue hK
       ∀ (δ : ℝ) (S : Submodule ℂ (EuclideanSpace ℂ (J → Fin q))),
@@ -80,15 +80,15 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
   let : Nonempty (Fin L → Fin q) := config
   let : Nonempty (J → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
   let σ0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
-  let y0 := ((Entropy.cutEquiv (fun _ : Fin L ↦ q) J) σ0).2
+  let y0 := ((ManyBody.cutEquiv (fun _ ↦ Fin q) J) σ0).2
   let g : (J → Fin q) → (Fin L → Fin q) := fun x ↦
-    (Entropy.cutEquiv (fun _ : Fin L ↦ q) J).symm (x, y0)
+    (ManyBody.cutEquiv (fun _ ↦ Fin q) J).symm (x, y0)
   have hginj : Function.Injective g := by
     intro x y heq
-    exact congrArg Prod.fst ((Entropy.cutEquiv (fun _ : Fin L ↦ q) J).symm.injective heq)
+    exact congrArg Prod.fst ((ManyBody.cutEquiv (fun _ ↦ Fin q) J).symm.injective heq)
   let A := aklvRegionalHamiltonians l r h 1
   let K := A.submatrix g g
-  have hAs : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) A J := by
+  have hAs : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A J := by
     change _ ∈ ManyBody.supportedOperators _ _
     apply sum_mem
     intro i hi
@@ -99,12 +99,12 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
     omega
   have hApos : A.PosSemidef := (Finset.sum_nonneg fun i _ ↦ h0 i).posSemidef
   have hK : K.IsHermitian := hApos.isHermitian.submatrix g
-  have hAK : A = Entropy.localLift (n := fun _ : Fin L ↦ q) J K := by
+  have hAK : A = ManyBody.place (X := fun _ ↦ Fin q) J K := by
     obtain ⟨K', hAK'⟩ := hAs.exists_localLift σ0
     have hKK' : K = K' := by
       ext x y
-      change Entropy.cutOperator J A (x, y0) (y, y0) = K' x y
-      rw [hAK', Entropy.cutOperator_localLift]
+      change ManyBody.cutOperator J A (x, y0) (y, y0) = K' x y
+      rw [hAK', ManyBody.cutOperator_place]
       simp
     rw [hKK']
     exact hAK'
@@ -117,12 +117,12 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
       (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ).submatrix g g).PosSemidef at hsub
     rw [submatrix_one g hginj] at hsub
     exact hsub
-  have hlift (s : ℝ) : Entropy.localLift (n := fun _ : Fin L ↦ q) J
+  have hlift (s : ℝ) : ManyBody.place (X := fun _ ↦ Fin q) J
       (K - (s : ℂ) • 1) = A - (s : ℂ) • 1 := by
-    have hsub : Entropy.localLift (n := fun _ : Fin L ↦ q) J (K - (s : ℂ) • 1) =
-        Entropy.localLift J K - Entropy.localLift J ((s : ℂ) • 1) :=
+    have hsub : ManyBody.place (X := fun _ ↦ Fin q) J (K - (s : ℂ) • 1) =
+        ManyBody.place J K - ManyBody.place J ((s : ℂ) • 1) :=
       ManyBody.place_sub _ _
-    rw [hsub, Entropy.localLift_smul, Entropy.localLift_one, ← hAK]
+    rw [hsub, ManyBody.place_smul, ManyBody.place_one, ← hAK]
   let e := minEigenvalue hK
   have hKmin : (K - (e : ℂ) • 1).PosSemidef := sub_minEigenvalue_smul_one_posSemidef hK
   have hAlow : (A - (e : ℂ) • 1).PosSemidef := by
@@ -130,7 +130,7 @@ theorem exists_native_regional_compressed_energy_estimate {L q l r : ℕ}
     exact (hKmin.kronecker (PosSemidef.one :
       (1 : Matrix ({v : Fin L // v ∉ J} → Fin q)
         ({v : Fin L // v ∉ J} → Fin q) ℂ).PosSemidef)).submatrix
-      (Entropy.cutEquiv (fun _ : Fin L ↦ q) J)
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) J)
   have he0 : e0 = e :=
     minEigenvalue_eq_of_attained_lower_bounds A K hK e0 x0 hx0 hAx0 hKlow hAlow
   have hTA (v : EuclideanSpace ℂ (Fin L → Fin q)) :

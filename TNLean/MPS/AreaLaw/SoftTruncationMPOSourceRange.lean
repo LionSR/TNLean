@@ -149,7 +149,7 @@ nearest-neighbour interactions. ALVV, arXiv:1602.08828v2, `def:soft-trunc` and
 theorem exists_softTruncatedHamiltonian_mpo_of_lt_log_two {N q m : ℕ}
     (hq : 1 ≤ q) (hm : 0 < m)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ})
     (hh : ∀ i, (h i).IsHermitian) (hnorm : ∀ i, ‖h i‖ ≤ 1)
     (I : Finset (Fin N)) (eps t xi : ℝ) (hlo : (eps : ℂ) • 1 ≤ ∑ i ∈ I, h i)

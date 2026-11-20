@@ -67,7 +67,7 @@ theorem _root_.ManyBody.DomainInteraction.mutualInformation_le_of_logarithmic_se
           (∀ x ∈ T, ∀ y ∈ E,
             Dp * Real.log (Λ.card : ℝ) ≤
               |(sitePos Λ x : ℝ) - (sitePos Λ y : ℝ)|) →
-          FiniteProduct.mutualInformation (fun _ : Fin Λ.card ↦ Fin q) Ω T E ≤
+          ManyBody.regionMutualInformation Ω T E ≤
             (Λ.card : ℝ) ^ (-p) := by
   classical
   let c := max 0 (chainIntervalEntropyBound q R J Δ)
@@ -141,17 +141,16 @@ theorem _root_.ManyBody.DomainInteraction.mutualInformation_le_of_logarithmic_se
     push_cast at hcoord
     linarith only [hcoord, hdist x hx e he, hsep, hnhi]
   have hJ : 0 ≤ J := h.norm_bound_nonneg hhJ ⟨0, hLn⟩
-  have hD : Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q) D Ω ≤ (k₀ : ℝ) * c := by
+  have hD : ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω D ≤ (k₀ : ℝ) * c := by
     obtain ⟨n₀, a, z, hn₀, hT⟩ := hT
     have hbound := h.regionEntropy_neighborhood_biUnion_intervals_le hh hhJ hq hJ hΔ hΩ hgap hspan
       (Finset.univ : Finset (Fin n₀)) a z n
     rw [← hT, Finset.card_univ, Fintype.card_fin] at hbound
     exact hbound.trans ((mul_le_mul_of_nonneg_left (le_max_right _ _) (by positivity)).trans
       (mul_le_mul_of_nonneg_right (by exact_mod_cast hn₀) hc))
-  have hMI : FiniteProduct.mutualInformation (fun _ : Fin Λ.card ↦ Fin q) Ω D C ≤ b := by
-    have hbound := FiniteProduct.mutualInformation_le_two_entropy
+  have hMI : ManyBody.regionMutualInformation Ω D C ≤ b := by
+    have hbound := ManyBody.regionMutualInformation_le_two_regionEntropy
       (fun _ : Fin Λ.card ↦ Fin q) Ω hΩ D C hDC
-    rw [← ManyBody.regionEntropy_eq_entropy] at hbound
     dsimp only [b]
     nlinarith only [hbound, hD, mul_nonneg hk₀r hc]
   exact hreset Λ ((le_max_left _ _).trans hL) h hh hhJ Ω E₀ hΩ hgap hspan

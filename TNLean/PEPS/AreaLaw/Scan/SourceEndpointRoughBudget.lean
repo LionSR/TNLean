@@ -62,9 +62,9 @@ theorem source_actualScan_suppliedPrevector_endpoint_budget_of_threshold_le
             Real.sqrt (2 * min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g) →
           ∀ Ce e : ℝ,
             (∀ j : ℕ, j ≤ L →
-              regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+              ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
                 Ce * ((S.n : ℝ) * (L : ℝ) ^ e + S.n)) →
-          ∀ (E : Finset (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q)
+          ∀ (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q)
             (S.A.filter fun x ↦ x.val ∈ T)))
             (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))),
           let Bsh := Ce * ((S.n : ℝ) * (L : ℝ) ^ e + S.n) +
@@ -72,7 +72,7 @@ theorem source_actualScan_suppliedPrevector_endpoint_budget_of_threshold_le
           let X := S.A.filter fun x ↦ x.val ∈ T
           let β := fun _ : Site Λ ↦ Fin q
           let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-            (FiniteProduct.splitEquiv β X) Ωt
+            (ManyBody.splitEquiv β X) Ωt
           let z := Matrix.IsHermitian.spectralRestrictionMass
             (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
           0 < z →
@@ -80,7 +80,7 @@ theorem source_actualScan_suppliedPrevector_endpoint_budget_of_threshold_le
           let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
           let pre : (k : ℕ) → Config k (fun v ↦ Fin (n v)) → ℂ := fun k ↦
             replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
-          let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+          let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
             compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
           (∀ k : ℕ, 0 < k →
             ‖WithLp.toLp 2 (replicaPrevector Ωt d k (ell k) ∘
@@ -88,10 +88,10 @@ theorem source_actualScan_suppliedPrevector_endpoint_budget_of_threshold_le
           (∀ᶠ k : ℕ in atTop,
             (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
               ‖WithLp.toLp 2
-                (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-                  (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+                (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+                  (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
                   labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-                  (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+                  (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
                     (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) →
           ∃ c Ci : ℝ, 0 ≤ c ∧ 0 ≤ Ci ∧
             Tendsto (roughEndpointRemainder d c S.K Ci) atTop (𝓝 0) ∧
@@ -114,10 +114,10 @@ theorem source_actualScan_suppliedPrevector_endpoint_budget_of_threshold_le
   have hcard' : ((depthPrefix S.A S.depth (L : ℤ)).card : ℝ) ≤
       Cvol * (S.n : ℝ) ^ 2 := hcard
   have hsh : ∀ j : Fin (L + 1),
-      FiniteProduct.entropy (fun _ : Site Λ ↦ Fin q) Ωt
+      ManyBody.regionEntropy Ωt
         (positiveDepthPrefix S.A S.depth (j.val : ℤ)) ≤ Bsh := by
     intro j
-    simpa only [regionalEntropy_eq_finiteProduct] using
+    simpa only [] using
       htransfer Λ Ω Ωt hΩ hΩt S.A S.depth L hcard' hdist Ce e hsource
         j.val (Nat.le_of_lt_succ j.isLt)
   exact eventually_actualScan_suppliedPrevector_endpoint_budget hT S hgraph hdepth
@@ -149,9 +149,9 @@ theorem exists_source_actualScan_suppliedPrevector_endpoint_budget
             Real.sqrt (2 * min ((S.n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g) →
           ∀ Ce e : ℝ,
             (∀ j : ℕ, j ≤ L →
-              regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+              ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
                 Ce * ((S.n : ℝ) * (L : ℝ) ^ e + S.n)) →
-          ∀ (E : Finset (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q)
+          ∀ (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q)
             (S.A.filter fun x ↦ x.val ∈ T)))
             (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))),
           let Bsh := Ce * ((S.n : ℝ) * (L : ℝ) ^ e + S.n) +
@@ -159,7 +159,7 @@ theorem exists_source_actualScan_suppliedPrevector_endpoint_budget
           let X := S.A.filter fun x ↦ x.val ∈ T
           let β := fun _ : Site Λ ↦ Fin q
           let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-            (FiniteProduct.splitEquiv β X) Ωt
+            (ManyBody.splitEquiv β X) Ωt
           let z := Matrix.IsHermitian.spectralRestrictionMass
             (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
           0 < z →
@@ -167,7 +167,7 @@ theorem exists_source_actualScan_suppliedPrevector_endpoint_budget
           let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
           let pre : (k : ℕ) → Config k (fun v ↦ Fin (n v)) → ℂ := fun k ↦
             replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
-          let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+          let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
             compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
           (∀ k : ℕ, 0 < k →
             ‖WithLp.toLp 2 (replicaPrevector Ωt d k (ell k) ∘
@@ -175,10 +175,10 @@ theorem exists_source_actualScan_suppliedPrevector_endpoint_budget
           (∀ᶠ k : ℕ in atTop,
             (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
               ‖WithLp.toLp 2
-                (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-                  (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+                (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+                  (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
                   labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-                  (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+                  (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
                     (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) →
           ∃ c Ci : ℝ, 0 ≤ c ∧ 0 ≤ Ci ∧
             Tendsto (roughEndpointRemainder d c S.K Ci) atTop (𝓝 0) ∧

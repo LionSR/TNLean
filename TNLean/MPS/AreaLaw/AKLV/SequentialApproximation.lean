@@ -27,8 +27,8 @@ namespace TNLean.MPS.AreaLaw
 noncomputable def aklvSpectralTruncation {L q : ℕ}
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (D : ℕ) :
     EuclideanSpace ℂ (Fin L → Fin q) :=
-  sequentialTruncation (fun k ↦ (Entropy.regionState_isHermitian
-    (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω).leadingEigenprojection D) (L - 1) Ω
+  sequentialTruncation (fun k ↦ (ManyBody.regionState_isHermitian
+    (X := fun _ ↦ Fin q) (leftBlock L k) Ω).leadingEigenprojection D) (L - 1) Ω
 
 /-- The normalization of the actual ordered spectral truncation. -/
 noncomputable def aklvNormalizedSpectralTruncation {L q : ℕ}
@@ -43,7 +43,7 @@ theorem aklvNormalizedSpectralTruncation_spec {L q D : ℕ}
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
     {epsilon : ℝ} (hepsilon : 0 < epsilon) (hepsilon1 : epsilon ≤ 1)
     (htail : ∀ k ∈ Finset.Ico 1 L,
-      1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (leftBlock L k) Ω).kyFanNorm D ≤ epsilon ^ 2 / (16 * ((L : ℝ) + 1))) :
     aklvSpectralTruncation Ω D ≠ 0 ∧
       ‖aklvNormalizedSpectralTruncation Ω D‖ = 1 ∧
@@ -54,7 +54,7 @@ theorem aklvNormalizedSpectralTruncation_spec {L q D : ℕ}
     rw [Nat.card_Ico]
     exact_mod_cast (by omega : L - 1 ≤ L + 1)
   have hsum : (∑ k ∈ Finset.Ico 1 L,
-      (1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      (1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (leftBlock L k) Ω).kyFanNorm D)) ≤ epsilon ^ 2 / 16 := by
     calc
       _ ≤ (Finset.Ico 1 L).card • (epsilon ^ 2 / (16 * ((L : ℝ) + 1))) :=

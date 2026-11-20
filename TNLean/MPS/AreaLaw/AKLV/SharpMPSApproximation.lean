@@ -55,7 +55,7 @@ theorem exists_aklv_sharp_physical_sequential_mps_approximation :
       ∀ (L q : ℕ)
         (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
       (∑ j, h j) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
@@ -74,7 +74,7 @@ theorem exists_aklv_sharp_physical_sequential_mps_approximation :
       Real.log (D : ℝ) ≤ 11 * C * (u ^ 3 / g) *
         Real.log (2048 * ((L : ℝ) + 1) / epsilon ^ 2) ∧
       (∀ k : ℕ, k ≤ L →
-        1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+        1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
           (leftBlock L k) Ω).kyFanNorm D ≤ rho) ∧
       aklvSpectralTruncation Ω D ≠ 0 ∧
       ‖aklvNormalizedSpectralTruncation Ω D‖ = 1 ∧
@@ -97,7 +97,7 @@ theorem exists_aklv_sharp_physical_sequential_mps_approximation :
     rw [← aklvAccuracyLog_sequential hepsilon]
     exact hlogLVV
   have htail (k : ℕ) (hk : k ≤ L) :
-      1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (leftBlock L k) Ω).kyFanNorm D ≤ rho := by
     obtain ⟨y, hy, herror, _hoverlap, hrank, _hactual⟩ := hcut k hk
     exact one_sub_kyFanNorm_le_of_unit_cut_rank_approximation Ω y hΩ hy herror hrank
@@ -116,7 +116,7 @@ theorem exists_aklv_fixed_gap_physical_sequential_mps_approximation :
       ∀ (L q : ℕ)
         (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
       (∑ j, h j) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →

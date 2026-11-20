@@ -145,7 +145,7 @@ theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq :
       ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
-      FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
+      ManyBody.regionMutualInformation Ω R C₀ ≤ b →
       let Q := (R ∪ C₀)ᶜ
       let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
       let Λ := AreaLaw.rectangularDomain L L
@@ -247,7 +247,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_localized_filter (q : ℕ
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
-        FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
+        ManyBody.regionMutualInformation Ω R C₀ ≤ b →
         let Q := (R ∪ C₀)ᶜ
         let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
         let Λ := AreaLaw.rectangularDomain L L
@@ -287,7 +287,7 @@ theorem _root_.ManyBody.SquareInteraction.reset_unitary (q : ℕ) (hq : 1 ≤ q)
       ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
-      FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
+      ManyBody.regionMutualInformation Ω R C₀ ≤ b →
       let Q := (R ∪ C₀)ᶜ
       let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
       let Λ := AreaLaw.rectangularDomain L L
@@ -335,7 +335,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_unitary (q : ℕ) (hq : 1
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (R C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C₀ → ∀ b : ℝ, 0 ≤ b →
-        FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C₀ ≤ b →
+        ManyBody.regionMutualInformation Ω R C₀ ≤ b →
         let Q := (R ∪ C₀)ᶜ
         let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
         let Λ := AreaLaw.rectangularDomain L L

@@ -48,16 +48,16 @@ theorem terminalPartition_preEntropy_bounds
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1) (Bsh : ℝ)
     (hsh : ∀ i : Fin (L + 1),
-      regionalEntropy Λ q Ωt (positiveDepthPrefix S.A S.depth (i.val : ℤ)) ≤ Bsh)
+      ManyBody.regionEntropy Ωt (positiveDepthPrefix S.A S.depth (i.val : ℤ)) ≤ Bsh)
     (j : terminalFamily S.K S.m S.M (S.n * S.m)) (g : Fin S.K) :
     let β := fun _ : Site Λ ↦ Fin q
     let X := S.A.filter fun x ↦ x.val ∈ T
     let σ := terminalPartition S (S.n * S.m) j g
     let Q := receiving σ false
     let Y := middle σ
-    let gpre := FiniteProduct.entropy β Ωt Q +
-      FiniteProduct.entropy β Ωt (Q ∪ Y)ᶜ - FiniteProduct.entropy β Ωt Y
-    0 ≤ gpre ∧ gpre ≤ 2 * regionalEntropy Λ q Ωt X +
+    let gpre := ManyBody.regionEntropy Ωt Q +
+      ManyBody.regionEntropy Ωt (Q ∪ Y)ᶜ - ManyBody.regionEntropy Ωt Y
+    0 ≤ gpre ∧ gpre ≤ 2 * ManyBody.regionEntropy Ωt X +
       2 * Bsh + 6 * (S.n : ℝ) * (S.D : ℝ) * Real.log q := by
   classical
   intro β X σ Q Y gpre
@@ -79,24 +79,23 @@ theorem terminalPartition_preEntropy_bounds
     cases hx : σ x with
     | none => simp [Q, V, Y, receiving, middle, hx]
     | some side => cases side <;> simp [Q, V, Y, receiving, middle, hx]
-  have hnonneg := FiniteProduct.entropy_union_le β Ωt hΩt Q V hQV
-  rw [hQVeq, FiniteProduct.entropy_compl] at hnonneg
-  have hpreEq : gpre = FiniteProduct.entropy β Ωt (X ∪ U) +
-      FiniteProduct.entropy β Ωt (X ∪ (U ∪ Y)) - FiniteProduct.entropy β Ωt Y := by
-    simp only [gpre, hnear, FiniteProduct.entropy_compl, Finset.union_assoc]
+  have hnonneg := ManyBody.regionEntropy_union_le β Ωt hΩt Q V hQV
+  rw [hQVeq, ManyBody.regionEntropy_compl] at hnonneg
+  have hpreEq : gpre = ManyBody.regionEntropy Ωt (X ∪ U) +
+      ManyBody.regionEntropy Ωt (X ∪ (U ∪ Y)) - ManyBody.regionEntropy Ωt Y := by
+    simp only [gpre, hnear, ManyBody.regionEntropy_compl, Finset.union_assoc]
   have hXUY : Disjoint X (U ∪ Y) := Finset.disjoint_left.mpr fun x hx hu ↦ by
     rcases Finset.mem_union.mp hu with hu | hy
     · exact Finset.disjoint_left.mp hXU hx hu
     · exact Finset.disjoint_left.mp hXY hx hy
-  have hN := FiniteProduct.entropy_union_le β Ωt hΩt X U hXU
-  have hF := FiniteProduct.entropy_union_le β Ωt hΩt X (U ∪ Y) hXUY
+  have hN := ManyBody.regionEntropy_union_le β Ωt hΩt X U hXU
+  have hF := ManyBody.regionEntropy_union_le β Ωt hΩt X (U ∪ Y) hXUY
   obtain ⟨hU, hUY⟩ := terminalPartition_positiveEntropy_le hT S hgraph hdepth hn hr
     hDpos hD L hL hrows Ωt hΩt Bsh hsh j g
   have hY := regionalEntropy_nonneg Λ q Ωt hΩt Y
   rw [← hUYeq] at hUY
-  simp only [regionalEntropy_eq_finiteProduct] at hU hUY hY ⊢
   constructor
-  · have hV : FiniteProduct.entropy β Ωt V = FiniteProduct.entropy β Ωt (Q ∪ Y)ᶜ := by
+  · have hV : ManyBody.regionEntropy Ωt V = ManyBody.regionEntropy Ωt (Q ∪ Y)ᶜ := by
       rw [hfar]
     dsimp only [gpre]
     rw [← hV]
@@ -120,18 +119,18 @@ theorem terminalPartition_preEntropy_max_average_bounds
       (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
     (Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1) (Bsh : ℝ)
     (hsh : ∀ i : Fin (L + 1),
-      regionalEntropy Λ q Ωt (positiveDepthPrefix S.A S.depth (i.val : ℤ)) ≤ Bsh) :
+      ManyBody.regionEntropy Ωt (positiveDepthPrefix S.A S.depth (i.val : ℤ)) ≤ Bsh) :
     let β := fun _ : Site Λ ↦ Fin q
     let X := S.A.filter fun x ↦ x.val ∈ T
     let σ := terminalPartition S (S.n * S.m)
-    let gpre := fun j g ↦ FiniteProduct.entropy β Ωt (receiving (σ j g) false) +
-      FiniteProduct.entropy β Ωt (receiving (σ j g) false ∪ middle (σ j g))ᶜ -
-      FiniteProduct.entropy β Ωt (middle (σ j g))
+    let gpre := fun j g ↦ ManyBody.regionEntropy Ωt (receiving (σ j g) false) +
+      ManyBody.regionEntropy Ωt (receiving (σ j g) false ∪ middle (σ j g))ᶜ -
+      ManyBody.regionEntropy Ωt (middle (σ j g))
     let gaps := (Finset.univ :
       Finset (terminalFamily S.K S.m S.M (S.n * S.m) × Fin S.K)).image
         (fun j ↦ gpre j.1 j.2)
     let gmax := (insert (0 : ℝ) gaps).max' (Finset.insert_nonempty _ _)
-    let B := 2 * regionalEntropy Λ q Ωt X +
+    let B := 2 * ManyBody.regionEntropy Ωt X +
       2 * Bsh + 6 * (S.n : ℝ) * (S.D : ℝ) * Real.log q
     0 ≤ gmax ∧ gmax ≤ max 0 B ∧
       ∀ tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m)),

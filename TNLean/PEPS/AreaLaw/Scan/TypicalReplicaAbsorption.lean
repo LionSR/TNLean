@@ -49,14 +49,14 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
     {Λ : Finset (ℤ × ℤ)} {q : ℕ}
     (Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1)
     (X : Finset (Site Λ))
-    (E : Finset (FiniteProduct.Configuration (fun _ : Site Λ => Fin q) X))
+    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ => Fin q) X))
     (w : ℝ)
-    (hz : 0 < (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E)
+    (hz : 0 < (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E)
     (hE : ∀ i ∈ E,
-      Real.exp (-regionalEntropy Λ q Ωt X - w) ≤
-          (reducedState_isHermitian Λ q Ωt X).eigenvalues i ∧
-        (reducedState_isHermitian Λ q Ωt X).eigenvalues i ≤
-          Real.exp (-regionalEntropy Λ q Ωt X + w))
+      Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤
+          (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ∧
+        (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ≤
+          Real.exp (-ManyBody.regionEntropy Ωt X + w))
     {C τ a Edef Bsh Bexc : ℝ}
     {F d rᵤ rₗ rₑ : ℕ → ℝ}
     (hC : 0 ≤ C) (hτ : 0 < τ) (_hτhalf : τ < 1 / 2)
@@ -67,12 +67,12 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
     (hrₑ : Tendsto rₑ atTop (𝓝 0))
     (hdefect : ∀ᶠ k in atTop, d k ≤ Edef + rₑ k) :
     let β := fun _ : Site Λ => Fin q
-    let split := FiniteProduct.splitEquiv β X
+    let split := ManyBody.splitEquiv β X
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split Ωt
-    let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
-    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x =>
+    let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
+    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x =>
       Matrix.compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
-    let S := regionalEntropy Λ q Ωt X
+    let S := ManyBody.regionEntropy Ωt X
     let S' := vonNeumannEntropy
       (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
       (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -88,10 +88,10 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
   intro β split ΩX z ψ S S' η hupper hlower
   have hbounds := TNLean.PEPS.AreaLaw.abs_log_card_and_selectedSchmidtEntropy_sub_le
     Ωt hΩt X E w hz hE
-  have hρ : reducedState Λ q Ωt X = Matrix.partialTraceRight
+  have hρ : ManyBody.regionState Ωt X = Matrix.partialTraceRight
       (Matrix.vecMulVec ΩX (star ΩX)) :=
     (reducedState_eq_finiteProduct Λ q Ωt X).trans
-      (FiniteProduct.reducedPure_eq_partialTrace β Ωt X)
+      (ManyBody.regionState_eq_partialTrace β Ωt X)
   have hS' : 0 ≤ S' :=
     let hp := (Matrix.posSemidef_vecMulVec_self_star ΩX).partialTraceRight
     let hzX : 0 < hp.isHermitian.spectralRestrictionMass E :=

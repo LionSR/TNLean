@@ -75,9 +75,9 @@ variable {L : ℕ}
 matrix. This is the general fact for any finite type `V` of sites. -/
 theorem regionEntropy_nonneg {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
     {Ω : EuclideanSpace ℂ (V → Fin q)} (hΩ : ‖Ω‖ = 1) (A : Finset V) :
-    0 ≤ Entropy.regionEntropy (n := fun _ : V ↦ q) A Ω :=
-  vonNeumannEntropy_nonneg_of_posSemidef_trace_one (Entropy.regionState_posSemidef A Ω)
-    (Entropy.trace_regionState_eq_one hΩ)
+    0 ≤ ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A :=
+  vonNeumannEntropy_nonneg_of_posSemidef_trace_one (ManyBody.regionState_posSemidef A Ω)
+    (ManyBody.trace_regionState_eq_one hΩ)
 
 variable {q : ℕ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
 
@@ -85,13 +85,13 @@ variable {q : ℕ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
 `S([0, k)) ≥ S([0, i)) - (k - i) ln q`, by the Araki–Lieb inequality and the dimension bound
 on the `k - i` added sites. Hastings, arXiv:0705.2024v4, lines 150–151. -/
 theorem cutEntropy_sub_le (hΩ : ‖Ω‖ = 1) {i k : ℕ} (hik : i ≤ k) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω -
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 i) -
         ((k : ℝ) - i) * Real.log q ≤
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 k) Ω := by
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k) := by
   have hAL := regionEntropy_le_union_add (q := q) hΩ
     (ManyBody.disjoint_interval_interval 0 i k)
   rw [interval_union_interval (Nat.zero_le i) hik] at hAL
-  have hT := regionEntropy_le_card_mul_log (q := q) hΩ (interval L i k)
+  have hT := ManyBody.regionEntropy_le_card_mul_log (q := q) hΩ (interval L i k)
   have hcard : ((interval L i k).card : ℝ) ≤ (k : ℝ) - i := by
     rw [← Nat.cast_sub hik]
     exact_mod_cast card_interval_le i k
@@ -128,9 +128,9 @@ window length satisfies `l₀ ln q ≤ S_max / 3`, then every cut `k` with `i �
 `S([0, k)) ≥ 2 S_max / 3`. Hastings, arXiv:0705.2024v4, lines 149–165. -/
 theorem two_mul_div_three_le_cutEntropy (hΩ : ‖Ω‖ = 1) {Smax : ℝ} {i l₀ k : ℕ}
     (hl₀ : (l₀ : ℝ) * Real.log q ≤ Smax / 3)
-    (hi : Smax < Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω)
+    (hi : Smax < ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 i))
     (hik : i ≤ k) (hk : k ≤ i + l₀) :
-    2 * Smax / 3 ≤ Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 k) Ω := by
+    2 * Smax / 3 ≤ ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 k) := by
   have hcut := cutEntropy_sub_le hΩ hik
   have hki : (k : ℝ) - i ≤ l₀ := by
     have : (k : ℝ) ≤ i + l₀ := by exact_mod_cast hk
@@ -160,18 +160,18 @@ fits, `l₀ < l`, it is `0`. Hastings, arXiv:0705.2024v4, lines 166–170. -/
 noncomputable def windowEntropy (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (i l₀ l : ℕ) : ℝ :=
   if hl : l ≤ l₀ then
     (windowStarts i l₀ l).sup' (windowStarts_nonempty hl) fun a ↦
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a (a + l)) Ω
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L a (a + l))
   else 0
 
 /-- Every interval of `l` sites inside the window has entropy at most the window entropy.
 Hastings, arXiv:0705.2024v4, lines 166–170. -/
 theorem regionEntropy_le_windowEntropy {i l₀ l a : ℕ} (hia : i ≤ a) (hal : a + l ≤ i + l₀) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a (a + l)) Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L a (a + l)) ≤
       windowEntropy Ω i l₀ l := by
   have hl : l ≤ l₀ := by omega
   rw [windowEntropy, dite_eq_left hl]
   exact Finset.le_sup' (fun a ↦
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a (a + l)) Ω)
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L a (a + l)))
     (mem_windowStarts.mpr ⟨hia, hal⟩)
 
 /-- The window entropy is attained: when an interval of `l` sites fits in the window, some
@@ -180,9 +180,9 @@ arXiv:0705.2024v4, lines 166–170. -/
 theorem exists_windowEntropy_eq {i l₀ l : ℕ} (hl : l ≤ l₀) :
     ∃ a, i ≤ a ∧ a + l ≤ i + l₀ ∧
       windowEntropy Ω i l₀ l =
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a (a + l)) Ω := by
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L a (a + l)) := by
   obtain ⟨a, ha, heq⟩ := Finset.exists_mem_eq_sup' (windowStarts_nonempty (i := i) hl)
-    fun a ↦ Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a (a + l)) Ω
+    fun a ↦ ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L a (a + l))
   obtain ⟨hia, hal⟩ := mem_windowStarts.mp ha
   exact ⟨a, hia, hal, by rw [windowEntropy, dite_eq_left hl, heq]⟩
 
@@ -203,7 +203,7 @@ theorem windowEntropy_le (hΩ : ‖Ω‖ = 1) (i l₀ l : ℕ) :
   by_cases hl : l ≤ l₀
   · obtain ⟨a, -, -, heq⟩ := exists_windowEntropy_eq (Ω := Ω) (i := i) hl
     rw [heq]
-    refine (regionEntropy_le_card_mul_log hΩ _).trans ?_
+    refine (ManyBody.regionEntropy_le_card_mul_log hΩ _).trans ?_
     have hcard : ((interval L a (a + l)).card : ℝ) ≤ l := by
       have := card_interval_le (L := L) a (a + l)
       rw [Nat.add_sub_cancel_left] at this
@@ -244,9 +244,9 @@ two adjacent intervals of `l` sites, each of entropy at most `S_l`. Hastings,
 arXiv:0705.2024v4, lines 201–204 and 234–242. -/
 theorem windowEntropy_two_mul_le_of_relent {i l₀ : ℕ} {ξ' C₁ C₂ : ℝ}
     (hrelent : ∀ a l : ℕ, i ≤ a → a + 2 * l ≤ i + l₀ →
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a (a + 2 * l)) Ω ≤
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a (a + l)) Ω +
-          Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L (a + l) (a + 2 * l)) Ω -
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L a (a + 2 * l)) ≤
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L a (a + l)) +
+          ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (a + l) (a + 2 * l)) -
           (1 - 2 * C₁ * Real.exp (-(l / ξ'))) * (l / ξ') + Real.log C₁ + C₂) :
     ∀ l : ℕ, 2 * (l : ℝ) ≤ l₀ →
       windowEntropy Ω i l₀ (2 * l) ≤ 2 * windowEntropy Ω i l₀ l -

@@ -54,9 +54,9 @@ variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J : ℝ}
 
 /-- The regional state is the marginal of the ground vector in cut coordinates. -/
 theorem partialTraceRight_cutVector (Ω : StateSpace Λ q) (A : Finset (Site Λ)) :
-    partialTraceRight (vecMulVec (WithLp.ofLp (Entropy.cutVector (n := fun _ ↦ q) A Ω))
-      (star (WithLp.ofLp (Entropy.cutVector (n := fun _ ↦ q) A Ω)))) =
-      reducedState Λ q Ω A := by
+    partialTraceRight (vecMulVec (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) A Ω))
+      (star (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) A Ω)))) =
+      ManyBody.regionState Ω A := by
   ext a b
   simp [reducedState, configurationSplit, vecMulVec_apply]
 
@@ -64,7 +64,7 @@ theorem partialTraceRight_cutVector (Ω : StateSpace Λ q) (A : Finset (Site Λ)
 and a cut `A`, the sum running over the admissible supports that meet both sides.
 Area-law manuscript, Lemma 3.1, `02-initial.tex`, lines 47–55. -/
 noncomputable def cutLogBudget (Λ : Finset (ℤ × ℤ)) (q R : ℕ) (A : Finset (Site Λ)) : ℝ :=
-  Entropy.cutLogBudget (Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A)
+  Entropy.cutLogBudget (ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1) A)
     (Entropy.supportDim (fun _ ↦ q) ∘ fun X : AdmissibleSupport Λ R ↦ X.1)
 
 /-- **Lemma 3.1 for a finite-range lattice Hamiltonian, moment bound.** For a gapped
@@ -79,8 +79,8 @@ theorem _root_.ManyBody.PlaneInteraction.log_surprisalMoment_reducedState_le
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ)) {u : ℝ}
     (hu : |u| ≤ Entropy.tailRadius (J / Δ) (cutLogBudget Λ q R A)) :
-    Real.log (Entropy.surprisalMoment (reducedState_isHermitian Λ q Ω A).eigenvalues u) ≤
-      u * regionalEntropy Λ q Ω A +
+    Real.log (Entropy.surprisalMoment (ManyBody.regionState_isHermitian A Ω).eigenvalues u) ≤
+      u * ManyBody.regionEntropy Ω A +
         512 * Real.exp 1 * (J / Δ) * cutLogBudget Λ q R A * u ^ 2 := by
   have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
     mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
@@ -89,7 +89,7 @@ theorem _root_.ManyBody.PlaneInteraction.log_surprisalMoment_reducedState_le
     hh hJ hhJ hΩ hΔ heig
     (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
         (partialTraceRight_cutVector Ω A)
-    (reducedState_isHermitian Λ q Ω A) hu
+    (ManyBody.regionState_isHermitian A Ω) hu
 
 /-- **Lemma 3.1 for a finite-range lattice Hamiltonian, tail bound.** Under the hypotheses
 of `ManyBody.PlaneInteraction.log_surprisalMoment_reducedState_le`, for every real `w` (the
@@ -102,8 +102,8 @@ theorem _root_.ManyBody.PlaneInteraction.surprisalTail_reducedState_le (h : Plan
     (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : StateSpace Λ q} (hΔ : 0 < Δ)
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Site Λ)) (w : ℝ) :
-    Entropy.surprisalTail (reducedState_isHermitian Λ q Ω A).eigenvalues
-        (regionalEntropy Λ q Ω A) w ≤
+    Entropy.surprisalTail (ManyBody.regionState_isHermitian A Ω).eigenvalues
+        (ManyBody.regionEntropy Ω A) w ≤
       min 1 (2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A))))) := by
   have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
@@ -113,7 +113,7 @@ theorem _root_.ManyBody.PlaneInteraction.surprisalTail_reducedState_le (h : Plan
     hh hJ hhJ hΩ hΔ heig
     (hgap.posSemidef_sub_smul_one (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan)
         (partialTraceRight_cutVector Ω A)
-    (reducedState_isHermitian Λ q Ω A) w
+    (ManyBody.regionState_isHermitian A Ω) w
 
 /-- **Typical marginal spectrum.** The positive eigenvalues of the regional state whose
 surprisal lies within the concentration width of `S_Ω(A)` carry mass at least
@@ -127,16 +127,16 @@ theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedStat
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A : Finset (Site Λ)) (n : ℕ) (M : ℝ) :
     1 - ((n : ℝ) + 2) ^ (-M) ≤
-      Entropy.typicalMass (reducedState_isHermitian Λ q Ω A).eigenvalues
-        (regionalEntropy Λ q Ω A)
+      Entropy.typicalMass (ManyBody.regionState_isHermitian A Ω).eigenvalues
+        (ManyBody.regionEntropy Ω A)
         (Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M) := by
   have hpsd := ((Matrix.posSemidef_vecMulVec_self_star (fun x ↦ Ω x)).submatrix
     (configurationSplit Λ q A).symm).partialTraceRight
-  have hp : ∀ i, 0 ≤ (reducedState_isHermitian Λ q Ω A).eigenvalues i :=
+  have hp : ∀ i, 0 ≤ (ManyBody.regionState_isHermitian A Ω).eigenvalues i :=
     hpsd.eigenvalues_nonneg
-  have hs : ∑ i, (reducedState_isHermitian Λ q Ω A).eigenvalues i = 1 := by
-    have htr := (reducedState_isHermitian Λ q Ω A).trace_eq_sum_eigenvalues
-    have h1 : (reducedState Λ q Ω A).trace = 1 := by
+  have hs : ∑ i, (ManyBody.regionState_isHermitian A Ω).eigenvalues i = 1 := by
+    have htr := (ManyBody.regionState_isHermitian A Ω).trace_eq_sum_eigenvalues
+    have h1 : (ManyBody.regionState Ω A).trace = 1 := by
       have hn := hΩ
       rw [reducedState, Matrix.trace_partialTraceRight]
       change (Matrix.reindex (configurationSplit Λ q A) (configurationSplit Λ q A)
@@ -151,7 +151,7 @@ theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedStat
     exact Finset.sum_congr rfl fun i _ ↦ by simp
   have htail := h.surprisalTail_reducedState_le hh hhJ hJ hΔ hΩ hgap hspan A
     (Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M)
-  have hmass := Entropy.one_sub_surprisalTail_le_typicalMass hp hs (regionalEntropy Λ q Ω A)
+  have hmass := Entropy.one_sub_surprisalTail_le_typicalMass hp hs (ManyBody.regionEntropy Ω A)
     (Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M)
   set Rr := Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A)
   have hB : 1 ≤ cutLogBudget Λ q R A := Entropy.one_le_cutLogBudget _ _

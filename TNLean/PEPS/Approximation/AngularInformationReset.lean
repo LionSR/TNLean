@@ -38,12 +38,12 @@ Source: `02-information.tex`, Lemma 3.3, lines 334–353. -/
 def SquareResetBound (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Prop) (p Cp L₀ : ℝ) : Prop :=
   ∀ L : ℕ, L₀ ≤ L → ∀ Ω : StateSpace L q, G L Ω →
     ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →
-    ∀ b : ℝ, 0 ≤ b → FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
+    ∀ b : ℝ, 0 ≤ b → ManyBody.regionMutualInformation Ω R C ≤ b →
     (∀ x ∈ R₀, ∀ y, y ∉ R → Cp * (1 + b + Real.log L) <
       (AreaLaw.supDist (AreaLaw.rectangleEmbedding x) (AreaLaw.rectangleEmbedding y) : ℝ)) →
     (∀ x ∈ C₀, ∀ y, y ∉ C → Cp * (1 + b + Real.log L) <
       (AreaLaw.supDist (AreaLaw.rectangleEmbedding x) (AreaLaw.rectangleEmbedding y) : ℝ)) →
-    FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤ (L : ℝ) ^ (-p)
+    ManyBody.regionMutualInformation Ω R₀ C₀ ≤ (L : ℝ) ^ (-p)
 
 section
 
@@ -67,9 +67,9 @@ theorem angular_information_reset_of_squareResetBound {q : ℕ}
         let C₀ : Finset (SquareLatticeVertex L L) := Finset.univ.filter
           (fun v ↦ sitePosition L v ∈ near (a' * s) E)
         Disjoint R C → ∀ b : ℝ, 0 ≤ b →
-          FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
+          ManyBody.regionMutualInformation Ω R C ≤ b →
           Cp * (1 + b + Real.log L) ≤ a' * s / 2 →
-          FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤ (L : ℝ) ^ (-p) := by
+          ManyBody.regionMutualInformation Ω R₀ C₀ ≤ (L : ℝ) ^ (-p) := by
   intro L hL Ω hΩ o A E a' d s ha' hd hs R C R₀ C₀ hRC b hb hI hw
   have hsub := angular_core_subsets (o := o) Set.univ A E ha' hd hs
   have hR₀ : R₀ ⊆ R := fun v hv ↦
@@ -135,9 +135,9 @@ theorem angular_information_reset_of_resetThreshold_le (q : ℕ) (hq : 1 ≤ q)
           let C₀ : Finset (SquareLatticeVertex L L) := Finset.univ.filter
             (fun v ↦ sitePosition L v ∈ AngularGrid.near (a' * s) E)
           Disjoint R C → ∀ b : ℝ, 0 ≤ b →
-            FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
+            ManyBody.regionMutualInformation Ω R C ≤ b →
             resetWidth J Δ p * (1 + b + Real.log L) ≤ a' * s / 2 →
-            FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤
+            ManyBody.regionMutualInformation Ω R₀ C₀ ≤
               (L : ℝ) ^ (-p) := by
   intro L hL h hh hhJ E₀ Ω hΩ hgap hspan
   exact angular_information_reset_of_squareResetBound
@@ -170,9 +170,9 @@ theorem exists_angular_information_reset (q : ℕ) (hq : 1 ≤ q)
             let C₀ : Finset (SquareLatticeVertex L L) := Finset.univ.filter
               (fun v ↦ sitePosition L v ∈ AngularGrid.near (a' * s) E)
             Disjoint R C → ∀ b : ℝ, 0 ≤ b →
-              FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
+              ManyBody.regionMutualInformation Ω R C ≤ b →
               Cp * (1 + b + Real.log L) ≤ a' * s / 2 →
-              FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤
+              ManyBody.regionMutualInformation Ω R₀ C₀ ≤
                 (L : ℝ) ^ (-p) :=
   ⟨resetWidth J Δ p, resetThreshold q J Δ p, resetWidth_pos hJ hΔ hp,
     angular_information_reset_of_resetThreshold_le q hq J hJ hΔ hp⟩

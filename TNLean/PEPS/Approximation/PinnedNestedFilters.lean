@@ -15,7 +15,6 @@ counting retain the source conventions. No upstream Lean proof text is copied.
 -/
 import TNLean.PEPS.Approximation.PinnedRegionalState
 import QICLean.ManyBody.Sites.Placement
-import QICLean.ManyBody.Sites.Placement
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.LinearAlgebra.Matrix.PosDef

@@ -32,7 +32,7 @@ Auxiliary to ALVV, arXiv:1602.08828v2, `lem:exp-approx`, lines 1195–1255. -/
 theorem norm_hard_residual_low_of_barrier
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i ∈ I ∪ J, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i ∈ I ∪ J, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ I ∪ J, 0 ≤ h i) (h1 : ∀ i ∈ I ∪ J, h i ≤ 1)
     (B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
@@ -72,7 +72,7 @@ arXiv:1602.08828v2, `lem:exp-approx`, lines 1195–1255. -/
 theorem norm_soft_residual_low_of_barrier
     {L q : ℕ} (I J : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i ∈ I ∪ J, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i ∈ I ∪ J, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ I ∪ J, 0 ≤ h i) (h1 : ∀ i ∈ I ∪ J, h i ≤ 1)
     (B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)

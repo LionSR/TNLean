@@ -168,7 +168,7 @@ theorem angularInformation_of_bounds {q : ℕ} {G : ∀ L : ℕ, StateSpace L q 
       ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →
         (∀ x ∈ X, ∀ y ∈ X, dist (sitePosition L x) (sitePosition L y) ≤ A₀ * n) →
         AngularSeparation (sitePosition L '' X) (sitePosition L '' E) n (D * Real.log L) a V →
-        FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω X E ≤
+        ManyBody.regionMutualInformation Ω X E ≤
           (L : ℝ) ^ (-p) := by
   classical
   obtain ⟨ha', ha'a, hd, hda', hd1⟩ := angularMargin_cellSide_bounds ha
@@ -241,7 +241,7 @@ theorem angularInformationBound_of_sublinearCollarBoundAt_le {q : ℕ} (hq : 1 �
         ∀ n : ℝ, D * Real.log L ≤ n → n ≤ A₀ * L →
           (∀ x ∈ X, ∀ y ∈ X, dist (sitePosition L x) (sitePosition L y) ≤ A₀ * n) →
           AngularSeparation (sitePosition L '' X) (sitePosition L '' E) n (D * Real.log L) a V →
-          FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω X E ≤
+          ManyBody.regionMutualInformation Ω X E ≤
             (L : ℝ) ^ (-p) := by
   obtain ⟨ha', ha'a, hd, hda', -⟩ := angularMargin_cellSide_bounds ha
   set c := angularClearance a (angularMargin a) (angularCellSide a)

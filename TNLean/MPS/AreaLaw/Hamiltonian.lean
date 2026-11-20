@@ -78,7 +78,7 @@ lemma _root_.ManyBody.ChainInteraction.norm_bound_nonneg (h : ChainInteraction L
 the sum running over the supports of range `R` that meet both `A` and its complement.
 Area-law manuscript, Lemma 3.1, `02-initial.tex`, lines 47–55. -/
 noncomputable def cutLogBudget (L q R : ℕ) (A : Finset (Fin L)) : ℝ :=
-  Entropy.cutLogBudget (Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) A)
+  Entropy.cutLogBudget (ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) A)
     (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ fun X : ChainSupport L R ↦ X.1)
 
 /-- The cut budget is at least one. -/
@@ -96,8 +96,8 @@ theorem _root_.ManyBody.ChainInteraction.surprisalTail_regionState_le (h : Chain
     (hJ : 0 ≤ J) {E₀ Δ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ)
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Fin L)) (w : ℝ) :
-    Entropy.surprisalTail (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) A Ω).eigenvalues
-        (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω) w ≤
+    Entropy.surprisalTail (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) A Ω).eigenvalues
+        (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A) w ≤
       min 1 (2 * Real.exp (Real.exp 1 / 2) *
         Real.exp (-(w / (32 * Real.sqrt ((1 + J / Δ) * cutLogBudget L q R A))))) := by
   have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
@@ -105,6 +105,6 @@ theorem _root_.ManyBody.ChainInteraction.surprisalTail_regionState_le (h : Chain
   have hgap := hgap.posSemidef_sub_smul_one
       (ManyBody.Interaction.isHermitian_hamiltonian hh) hΩ hspan
   exact Entropy.surprisalTail_cut_le (n := fun _ : Fin L ↦ q) (B := A) h.mem hh hJ
-    hhJ hΩ hΔ heig hgap rfl (Entropy.regionState_isHermitian A Ω) w
+    hhJ hΩ hΔ heig hgap rfl (ManyBody.regionState_isHermitian A Ω) w
 
 end TNLean.MPS.AreaLaw

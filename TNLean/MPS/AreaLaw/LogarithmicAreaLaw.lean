@@ -147,7 +147,7 @@ theorem regionEntropy_le_log_cube_mul_card_boundaryEdges (hq : 1 ≤ q)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Fin L)) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A ≤
       chainLogCubeConst R * (1 + J / Δ) *
         Real.log (q : ℝ) ^ 3 * (boundaryEdges L A).card := by
   by_cases hq2 : 2 ≤ q
@@ -280,7 +280,7 @@ theorem _root_.ManyBody.ChainInteraction.regionEntropy_eq_zero_of_range_zero
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A : Finset (Fin L)) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω = 0 := by
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A = 0 := by
   refine (ManyBody.regionEntropy_eq_entropy _ _).trans
     (ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint (Φ := h) hh hΔ hΩ hgap
       hspan (B := A) ?_)
@@ -304,7 +304,7 @@ theorem chainAreaLaw_of_consecutive_terms_polynomial_range :
             ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
             groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset (Fin L),
-              Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
+              ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A ≤
                 Cabs * (1 + J / Δ) * (R : ℝ) * Real.log ((q : ℝ) ^ R) ^ 3 *
                   (boundaryEdges L A).card := by
   obtain ⟨hC, hK, hscalar⟩ := consecutive_window_coefficient_le_range_log_cube
@@ -367,8 +367,8 @@ theorem domainAreaLaw_of_consecutive_terms_polynomial_range :
             ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
             groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset ℤ,
-              Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
-                (domainRegion Λ A) Ω ≤
+              ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+                Ω (domainRegion Λ A) ≤
                 Cabs * (1 + J / Δ) * (R : ℝ) * Real.log ((q : ℝ) ^ R) ^ 3 *
                   (domainBoundaryEdges Λ A).card := by
   obtain ⟨Cabs, hCabs, hCeq, hchain⟩ :=

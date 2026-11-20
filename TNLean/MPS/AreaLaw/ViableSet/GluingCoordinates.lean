@@ -46,7 +46,7 @@ lines 477–478 and 493–505. -/
 noncomputable def gluingLeftCoordinates (L q k m : ℕ) :
     EuclideanSpace ℂ ((CutLeft L q k × CutSite L q k) × Fin m) ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ
-        (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m) :=
+        ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     ((Entropy.subsetSplitEquiv (fun _ : Fin L ↦ q)
       (leftBlock_mono (Nat.sub_le k 1))).symm.prodCongr (Equiv.refl _))
@@ -61,14 +61,14 @@ theorem gluingLeftCoordinates_rightApply
         ((((1 : Matrix (CutLeft L q k × CutSite L q k)
           (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) ∘ gluingCut L q k) =
       WithLp.toLp 2 (fun z ↦ rightApply W (gluingLeftCoordinates L q k m u)
-        (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z)) := by
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z)) := by
   classical
   ext z
   change (((1 : Matrix (CutLeft L q k × CutSite L q k)
       (CutLeft L q k × CutSite L q k) ℂ) ⊗ₖ W) *ᵥ WithLp.ofLp u) (gluingCut L q k z) =
     schmidtCoeffMatrix (WithLp.ofLp (rightApply W (gluingLeftCoordinates L q k m u)))
-      (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z).1
-      (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z).2
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z).1
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z).2
   rw [schmidtCoeffMatrix_ofLp_rightApply]
   simp [gluingCut, Entropy.threeCutEquiv_eq_trans, gluingLeftCoordinates,
     mulVec, dotProduct, Fintype.sum_prod_type, one_apply, mul_apply, mul_comm]

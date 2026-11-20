@@ -46,7 +46,7 @@ function of the chain terms and the gap parameter alone. LVV13, `algo53.tex`,
 lines 652--678, with Huang's Gaussian error reduction. -/
 noncomputable def lvvSweep (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     (Delta : ℝ) : (i : ℕ) → Finset (LeftBlockVector L q i)
   | 0 => {emptyLeftVector L q}
@@ -57,7 +57,7 @@ noncomputable def lvvSweep (hq : 2 ≤ q)
 /-- The sweep starts from the scalar singleton. LVV13, `algo53.tex`, line 655. -/
 theorem lvvSweep_zero (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1) (Delta : ℝ) :
     lvvSweep hq h hs h0 h1 Delta 0 = {emptyLeftVector L q} := rfl
 
@@ -65,7 +65,7 @@ theorem lvvSweep_zero (hq : 2 ≤ q)
 LVV13, `algo53.tex`, lines 652--678. -/
 theorem lvvSweep_succ (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1) (Delta : ℝ)
     {i : ℕ} (hi : i + 1 ≤ L) :
     lvvSweep hq h hs h0 h1 Delta (i + 1) =
@@ -79,7 +79,7 @@ LVV13, `algo53.tex`, lines 652--678, with the documented quadratic trimming corr
 Huang's Gaussian error reduction. -/
 theorem lvvSweep_spec (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (i : ℕ) (hi : i ≤ L) :
     (lvvSweep hq h hs h0 h1 Delta i).card ≤
@@ -122,7 +122,7 @@ lines 652--678, with the documented quadratic trimming correction and Huang's Ga
 error reduction. -/
 theorem exists_positive_chain_successive_viable_sets (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) :
     ∃ S : (i : ℕ) → Finset (LeftBlockVector L q i),

@@ -34,7 +34,7 @@ theorem exists_canonical_root_energy_of_calibrated_words {L q ell D s : ℕ}
     (hq : 0 < q) (hell : 21 ≤ ell) (hD2 : 2 ≤ D) (hsample : 1 ≤ s)
     (hDdef : D = (max q 50 * ell ^ 2) ^ (22 * ell))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (mu gamma : ℝ) (hgamma : 0 < gamma) (hwidth : 1 ≤ 4 * ell)

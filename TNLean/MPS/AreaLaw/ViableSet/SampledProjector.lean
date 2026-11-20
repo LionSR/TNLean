@@ -661,7 +661,7 @@ operator Schmidt rank at most `q^{2κ}` across every cut. Landau, Vazirani and V
 arXiv:1307.5143v1, `algo53.tex`, lines 584–588, 602–603 and 626–649. -/
 theorem exists_sampledProjector [NeZero L]
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
     (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
@@ -674,8 +674,8 @@ theorem exists_sampledProjector [NeZero L]
       ‖sampledProjector h E₀ I - powerProjector (∑ i, h i) L E₀ m‖ < η ∧
       (∀ k j, letterCount (I k) j ≤
         sampledProjectorLetterBound L (sampledProjectorWordCount q L E₀ η m) m) ∧
-      ∀ k (b : Fin (L - 1)), Matrix.operatorSchmidtRank (Entropy.cutOperator
-        (n := fun _ : Fin L ↦ q) (leftBlock L (b + 1)) (bondComplementWord h (I k))) ≤
+      ∀ k (b : Fin (L - 1)), Matrix.operatorSchmidtRank (ManyBody.cutOperator
+        (X := fun _ ↦ Fin q) (leftBlock L (b + 1)) (bondComplementWord h (I k))) ≤
         q ^ (2 * sampledProjectorLetterBound L (sampledProjectorWordCount q L E₀ η m) m) := by
   set ℓ := sampledProjectorWordCount q L E₀ η m
   set κ := sampledProjectorLetterBound L ℓ m

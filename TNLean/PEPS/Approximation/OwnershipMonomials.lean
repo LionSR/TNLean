@@ -88,7 +88,7 @@ Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 396–
 theorem birth_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     (hTH : Disjoint T F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     {L : ℝ}
-    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (F.birthEnv P) ≤
+    (hI : ManyBody.regionMutualInformation Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
     ∃ σ : SplittingData q T (F.birthEnv P),
       σ.error (F.disjoint_birthEnv hTP hTH) Ω ≤ L ^ (-30 : ℤ) ∧
@@ -133,7 +133,7 @@ Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 407–
 theorem death_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     (hTH : Disjoint T F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     {L : ℝ}
-    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (F.birthEnv P) ≤
+    (hI : ManyBody.regionMutualInformation Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
     ∃ σ : SplittingData q T (F.birthEnv P),
       σ.error (F.disjoint_birthEnv hTP hTH) Ω ≤ L ^ (-30 : ℤ) ∧

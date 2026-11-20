@@ -51,7 +51,7 @@ theorem softHeat_base_bounds :
 corrected ALVV, arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 1262–1268. -/
 theorem exists_softTruncation_mpo_of_accuracy_of_base {N q m : ℕ} (hq : 1 ≤ q)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ})
     (hh : ∀ i, (h i).IsHermitian) (hnorm : ∀ i, ‖h i‖ ≤ 1)
     (eps t xi b : ℝ) (hlo : (eps : ℂ) • 1 ≤ ∑ i, h i) (ht : 0 < t) (hxi : 0 < xi)
@@ -86,7 +86,7 @@ Supporting a corrected ALVV,
 arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 1262–1268. -/
 theorem exists_softTruncation_mpo_of_accuracy {N q m : ℕ} (hq : 1 ≤ q) (hm : 0 < m)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ})
     (hh : ∀ i, (h i).IsHermitian) (hnorm : ∀ i, ‖h i‖ ≤ 1)
     (eps t xi : ℝ) (hlo : (eps : ℂ) • 1 ≤ ∑ i, h i)

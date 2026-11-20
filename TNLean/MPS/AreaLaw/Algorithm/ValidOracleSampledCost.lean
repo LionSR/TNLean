@@ -55,11 +55,11 @@ open LinearAlgebraQuery
 the input, when every word has rank at most `D` at every cut. -/
 theorem cost_sampledSweepStepProgram_le_of_valid (hv : IsValidOracle o) (hL : 0 < L)
     (hq : 2 ≤ q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2))) (E₀ : ℝ)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2))) (E₀ : ℝ)
         {Δ : ℝ} (hΔ : 0 < Δ)
     {ℓ m : ℕ} (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i))
-    (hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    (hrank : ∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) (bondComplementWord h (I t))) ≤ D) :
     FreeM.cost o queryCost (sampledSweepStepProgram hq h hs E₀ Δ I b D hi S) ≤
       sampledStepCostBound q Δ L ℓ D b S.card := by
@@ -102,7 +102,7 @@ theorem cost_sampledSweepStepProgram_le_of_valid (hv : IsValidOracle o) (hL : 0 
 `i` steps at the size budget. -/
 theorem cost_sampledSweepProgram_le_of_valid (hv : IsValidOracle o) (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
@@ -137,7 +137,7 @@ theorem cost_sampledSweepProgram_le_of_valid (hv : IsValidOracle o) (hL : 0 < L)
 budget. -/
 theorem cost_sampledGroundStateProgram_le_of_valid (hv : IsValidOracle o) (hL : 0 < L)
     (hq : 2 ≤ q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
@@ -177,7 +177,7 @@ theorem exists_sampledGroundStateProgram_success_cost_polynomial_of_valid (hq : 
     {Δ B η : ℝ} (hΔ : 0 < Δ) (hη : 0 < η) :
     ∃ C p P d : ℕ, 1 ≤ C ∧ 1 ≤ P ∧ ∀ (L : ℕ) [NeZero L]
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+      (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
       (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ : ℝ)
       (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
       ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →

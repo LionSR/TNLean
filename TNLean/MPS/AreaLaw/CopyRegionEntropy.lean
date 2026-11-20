@@ -41,8 +41,8 @@ private theorem mem_copyRegion (i j : Fin K) (k : Fin L) (R : Finset (Fin L)) :
 
 /-- Restriction identifies the configurations of an embedded copy region. -/
 def copyRegionConfigurationEquiv (i : Fin K) (R : Finset (Fin L)) :
-    Entropy.RegionConfig (fun _ : Fin (K * L) ↦ q) (copyRegion i R) ≃
-      Entropy.RegionConfig (fun _ : Fin L ↦ q) R where
+    (ManyBody.RegionConfig (fun _ ↦ Fin q) (copyRegion i R)) ≃
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) R) where
   toFun σ j := σ ⟨finProdFinEquiv (i, j.1), (mem_copyRegion i i j.1 R).mpr ⟨rfl, j.2⟩⟩
   invFun τ s := τ ⟨(finProdFinEquiv.symm s.1).2,
     (Finset.mem_filter.mp s.2).2.2⟩
@@ -65,11 +65,11 @@ def copyRegionConfigurationEquiv (i : Fin K) (R : Finset (Fin L)) :
 other copies. -/
 private def copyRegionSplit (i : Fin K) (R : Finset (Fin L)) :
     (Fin (K * L) → Fin q) ≃
-      Entropy.RegionConfig (fun _ : Fin L ↦ q) R ×
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) R) ×
         (((j : {j : Fin L // j ∉ R}) → Fin q) ×
           ({j : Fin K // j ≠ i} → Fin L → Fin q)) :=
   ((copyConfigurationEquiv K L q).trans (Equiv.piSplitAt i (fun _ ↦ Fin L → Fin q))).trans
-    (((Entropy.cutEquiv (fun _ : Fin L ↦ q) R).prodCongr (Equiv.refl _)).trans
+    (((ManyBody.cutEquiv (fun _ ↦ Fin q) R).prodCongr (Equiv.refl _)).trans
       (Equiv.prodAssoc _ _ _))
 
 /-- The explicit three-part coordinates split precisely along the embedded region. -/
@@ -99,18 +99,18 @@ private theorem isRegionSplit_copyRegion (i : Fin K) (R : Finset (Fin L)) :
 from the product of all other copies. -/
 private theorem copyProduct_copyRegionSplit_symm
     (η : Fin K → EuclideanSpace ℂ (Fin L → Fin q)) (i : Fin K) (R : Finset (Fin L))
-    (a : Entropy.RegionConfig (fun _ : Fin L ↦ q) R)
+    (a : (ManyBody.RegionConfig (fun _ ↦ Fin q) R))
     (b : (j : {j : Fin L // j ∉ R}) → Fin q)
     (c : {j : Fin K // j ≠ i} → Fin L → Fin q) :
     copyProduct η ((copyRegionSplit i R).symm (a, (b, c))) =
-      η i ((Entropy.cutEquiv (fun _ : Fin L ↦ q) R).symm (a, b)) *
+      η i ((ManyBody.cutEquiv (fun _ ↦ Fin q) R).symm (a, b)) *
         EuclideanSpace.piTensor (fun j : {j : Fin K // j ≠ i} ↦ η j.1) c := by
   classical
   let σ := (copyRegionSplit (q := q) i R).symm (a, (b, c))
   have hc := (copyRegionSplit (q := q) i R).apply_symm_apply (a, (b, c))
   have hlocal : copyConfigurationEquiv K L q σ i =
-      (Entropy.cutEquiv (fun _ : Fin L ↦ q) R).symm (a, b) := by
-    apply (Entropy.cutEquiv (fun _ : Fin L ↦ q) R).injective
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) R).symm (a, b) := by
+    apply (ManyBody.cutEquiv (fun _ ↦ Fin q) R).injective
     rw [Equiv.apply_symm_apply]
     have hca := congrArg Prod.fst hc
     have hcb := congrArg (fun z ↦ z.2.1) hc
@@ -127,10 +127,10 @@ private theorem copyProduct_copyRegionSplit_symm
 state, after the explicit configuration identification. -/
 theorem regionState_copyProduct (η : Fin K → EuclideanSpace ℂ (Fin L → Fin q))
     (hη : ∀ j, ‖η j‖ = 1) (i : Fin K) (R : Finset (Fin L)) :
-    (Entropy.regionState (copyRegion i R) (copyProduct η)).submatrix
+    (ManyBody.regionState (copyProduct η) (copyRegion i R)).submatrix
       (copyRegionConfigurationEquiv (q := q) i R).symm
       (copyRegionConfigurationEquiv (q := q) i R).symm =
-        Entropy.regionState R (η i) := by
+        ManyBody.regionState (η i) R := by
   classical
   let ν := EuclideanSpace.piTensor (fun j : {j : Fin K // j ≠ i} ↦ η j.1)
   have hn : ‖ν‖ = 1 := by simp [ν, EuclideanSpace.norm_piTensor, hη]
@@ -144,7 +144,7 @@ theorem regionState_copyProduct (η : Fin K → EuclideanSpace ℂ (Fin L → Fi
   ext a a'
   simp only [Matrix.partialTraceRight_apply, Matrix.vecMulVec_apply, Pi.star_apply,
     Function.comp_apply, Fintype.sum_prod_type, copyProduct_copyRegionSplit_symm]
-  let ω := Entropy.cutVector R (η i)
+  let ω := ManyBody.cutVector R (η i)
   change (∑ b, ∑ c, (ω (a, b) * ν c) * star (ω (a', b) * ν c)) =
     ∑ b, ω (a, b) * star (ω (a', b))
   calc
@@ -162,12 +162,12 @@ theorem regionState_copyProduct (η : Fin K → EuclideanSpace ℂ (Fin L → Fi
 its entropy. The identity includes empty and full local regions. -/
 theorem regionEntropy_copyProduct (η : Fin K → EuclideanSpace ℂ (Fin L → Fin q))
     (hη : ∀ j, ‖η j‖ = 1) (i : Fin K) (R : Finset (Fin L)) :
-    Entropy.regionEntropy (copyRegion i R) (copyProduct η) =
-      Entropy.regionEntropy R (η i) := by
+    ManyBody.regionEntropy (copyProduct η) (copyRegion i R) =
+      ManyBody.regionEntropy (η i) R := by
   unfold Entropy.regionEntropy ManyBody.regionEntropy
   rw [← vonNeumannEntropy_submatrix_equiv (copyRegionConfigurationEquiv (q := q) i R).symm
-    (Entropy.regionState (copyRegion i R) (copyProduct η))
-    (Entropy.regionState_isHermitian (copyRegion i R) (copyProduct η))]
+    (ManyBody.regionState (copyProduct η) (copyRegion i R))
+    (ManyBody.regionState_isHermitian (copyRegion i R) (copyProduct η))]
   exact vonNeumannEntropy_congr (regionState_copyProduct η hη i R) _ _
 
 /-- Regional subadditivity over disjoint copies, with each term identified with
@@ -175,17 +175,17 @@ its actual single-copy marginal. -/
 theorem regionEntropy_copyRegions_le_sum
     (η : Fin K → EuclideanSpace ℂ (Fin L → Fin q)) (hη : ∀ j, ‖η j‖ = 1)
     (R : Fin K → Finset (Fin L)) :
-    Entropy.regionEntropy (Finset.univ.biUnion fun i ↦ copyRegion i (R i)) (copyProduct η) ≤
-      ∑ i, Entropy.regionEntropy (R i) (η i) := by
+    ManyBody.regionEntropy (copyProduct η) (Finset.univ.biUnion fun i ↦ copyRegion i (R i)) ≤
+      ∑ i, ManyBody.regionEntropy (η i) (R i) := by
   classical
   have hn : ‖copyProduct η‖ = 1 := by simp [norm_copyProduct, hη]
-  have hempty : Entropy.regionEntropy ∅ (copyProduct η) = 0 := by
-    exact (ManyBody.regionEntropy_eq_entropy _ _).trans (FiniteProduct.entropy_empty _ _ hn)
+  have hempty : ManyBody.regionEntropy (copyProduct η) ∅ = 0 := by
+    exact (ManyBody.regionEntropy_eq_entropy _ _).trans (ManyBody.regionEntropy_empty _ _ hn)
   have hsub (A B : Finset (Fin (K * L))) (hAB : Disjoint A B) :
-      Entropy.regionEntropy (A ∪ B) (copyProduct η) ≤
-        Entropy.regionEntropy A (copyProduct η) + Entropy.regionEntropy B (copyProduct η) := by
-    simp only [Entropy.regionEntropy, ManyBody.regionEntropy_eq_entropy]
-    exact FiniteProduct.entropy_union_le _ _ hn A B hAB
+      ManyBody.regionEntropy (copyProduct η) (A ∪ B) ≤
+        ManyBody.regionEntropy (copyProduct η) A + ManyBody.regionEntropy (copyProduct η) B := by
+    simp only [ManyBody.regionEntropy]
+    exact ManyBody.regionEntropy_union_le _ _ hn A B hAB
   have hdis : ((Finset.univ : Finset (Fin K)) : Set (Fin K)).PairwiseDisjoint
       (fun i ↦ copyRegion i (R i)) := by
     intro i _ j _ hij
@@ -193,7 +193,7 @@ theorem regionEntropy_copyRegions_le_sum
     intro s hi hj
     exact hij ((Finset.mem_filter.mp hi).2.1.symm.trans (Finset.mem_filter.mp hj).2.1)
   have h := Entropy.OrderedSetFunction.union_biUnion_le_sum
-    (fun A ↦ Entropy.regionEntropy A (copyProduct η)) hsub ∅
+    (fun A ↦ ManyBody.regionEntropy (copyProduct η) A) hsub ∅
     (fun i ↦ copyRegion i (R i)) Finset.univ (by simp) hdis
   simpa only [Finset.empty_union, hempty, zero_add, regionEntropy_copyProduct η hη] using h
 
@@ -269,33 +269,33 @@ Source: arXiv:0705.0292v2, lines 421–479. Only the two partially intersected
 copies contribute; no factorization of reduced states is assumed. -/
 theorem regionEntropy_interval_copyProduct_le
     {η : EuclideanSpace ℂ (Fin L → Fin q)} (hη : ‖η‖ = 1) {B : ℝ}
-    (hB : ∀ R : Finset (Fin L), Entropy.regionEntropy R η ≤ B) (K a b : ℕ) :
-    Entropy.regionEntropy (interval (K * L) a b)
-      (copyProduct (fun _ : Fin K ↦ η)) ≤ 2 * B := by
+    (hB : ∀ R : Finset (Fin L), ManyBody.regionEntropy η R ≤ B) (K a b : ℕ) :
+    ManyBody.regionEntropy (copyProduct (fun _ : Fin K ↦ η))
+      (interval (K * L) a b) ≤ 2 * B := by
   classical
-  have hzero : Entropy.regionEntropy ∅ η = 0 := by
-    exact (ManyBody.regionEntropy_eq_entropy _ _).trans (FiniteProduct.entropy_empty _ _ hη)
-  have hfull : Entropy.regionEntropy Finset.univ η = 0 := by
-    exact (ManyBody.regionEntropy_eq_entropy _ _).trans (FiniteProduct.entropy_univ _ _ hη)
+  have hzero : ManyBody.regionEntropy η ∅ = 0 := by
+    exact (ManyBody.regionEntropy_eq_entropy _ _).trans (ManyBody.regionEntropy_empty _ _ hη)
+  have hfull : ManyBody.regionEntropy η Finset.univ = 0 := by
+    exact (ManyBody.regionEntropy_eq_entropy _ _).trans (ManyBody.regionEntropy_univ _ _ hη)
   have hB0 : 0 ≤ B := by simpa only [hzero] using hB ∅
   let R := copyIntervalRegion L a b (K := K)
   let S : Finset (Fin K) := Finset.univ.filter fun i ↦ R i ≠ ∅ ∧ R i ≠ Finset.univ
-  have hout (i : Fin K) (hi : i ∉ S) : Entropy.regionEntropy (R i) η = 0 := by
+  have hout (i : Fin K) (hi : i ∉ S) : ManyBody.regionEntropy η (R i) = 0 := by
     by_cases he : R i = ∅
     · rw [he, hzero]
     · have hf : R i = Finset.univ := by
         by_contra hf
         exact hi (Finset.mem_filter.mpr ⟨Finset.mem_univ i, he, hf⟩)
       rw [hf, hfull]
-  have hsum : (∑ i, Entropy.regionEntropy (R i) η) =
-      ∑ i ∈ S, Entropy.regionEntropy (R i) η :=
+  have hsum : (∑ i, ManyBody.regionEntropy η (R i)) =
+      ∑ i ∈ S, ManyBody.regionEntropy η (R i) :=
     (Finset.sum_subset (Finset.subset_univ S) (fun i _ hi ↦ hout i hi)).symm
   have hcard : S.card ≤ 2 := card_partialCopies_le_two K L a b
   calc
-    _ ≤ ∑ i, Entropy.regionEntropy (R i) η := by
+    _ ≤ ∑ i, ManyBody.regionEntropy η (R i) := by
       simpa only [R, biUnion_copyIntervalRegion] using
         regionEntropy_copyRegions_le_sum (fun _ : Fin K ↦ η) (fun _ ↦ hη) R
-    _ = ∑ i ∈ S, Entropy.regionEntropy (R i) η := hsum
+    _ = ∑ i ∈ S, ManyBody.regionEntropy η (R i) := hsum
     _ ≤ ∑ _i ∈ S, B := Finset.sum_le_sum fun i _ ↦ hB (R i)
     _ = (S.card : ℝ) * B := by simp
     _ ≤ 2 * B := mul_le_mul_of_nonneg_right (by exact_mod_cast hcard) hB0

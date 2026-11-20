@@ -42,7 +42,7 @@ theorem exists_common_collar_mpo_tensor_family
     let E := interval L c d
     let J := interval L p r
     let ep := intervalShiftOrderIso (hpc.trans (hcd.trans hdr)) hrL
-    let tau := (FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _)
+    let tau := (ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
     let Phi := ((EuclideanSpace.basisFun (↥(Jᶜ) → Fin q) ℂ).tensorProduct
       (EuclideanSpace.basisFun (J → Fin q) ℂ)).repr
@@ -56,8 +56,8 @@ theorem exists_common_collar_mpo_tensor_family
       ∀ Z : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
         (∃ M0 : Fin n → Matrix (↥(Eᶜ) → Fin q) (↥(Eᶜ) → Fin q) ℂ,
           Z = (∑ j, M0 j ⊗ₖ W0 j).submatrix
-            ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))
-            ((FiniteProduct.splitEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))) →
+            ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))
+            ((ManyBody.splitEquiv (fun _ : Fin L ↦ Fin q) E).trans (Equiv.prodComm _ _))) →
         ∃ M : Fin N → Matrix (↥(Jᶜ) → Fin q) (↥(Jᶜ) → Fin q) ℂ,
           Z = (∑ j, M j ⊗ₖ W j).submatrix tau tau ∧
           Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
@@ -69,9 +69,9 @@ theorem exists_common_collar_mpo_tensor_family
   classical
   intro E J ep tau U Phi Tm
   let beta := fun _ : Fin L ↦ Fin q
-  let I := Fin n × (FiniteProduct.Configuration beta (E \ J) ×
-    FiniteProduct.Configuration beta (E \ J)) ×
-    (FiniteProduct.Configuration beta (J \ E) × FiniteProduct.Configuration beta (J \ E))
+  let I := Fin n × (ManyBody.RegionConfig beta (E \ J) ×
+    ManyBody.RegionConfig beta (E \ J)) ×
+    (ManyBody.RegionConfig beta (J \ E) × ManyBody.RegionConfig beta (J \ E))
   let Wall := FiniteProduct.changingRegionalMiddleFamily beta E J W0
   let number := Fintype.equivFin I
   have hsub : E ⊆ J := interval_mono hpc hdr

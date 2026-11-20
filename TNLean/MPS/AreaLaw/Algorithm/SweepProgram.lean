@@ -232,7 +232,7 @@ declared for the vectors handled. LVV13, `algo53.tex`, algorithm steps 1--4, lin
 379--592, with Huang, Section 5.4, Lemmas 18--19 for the error-reduction operator. -/
 noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     LVVProgram q (Finset (LeftBlockVector L q (i + 1))) :=
@@ -251,7 +251,7 @@ noncomputable def sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
 /-- With the honest oracle, one step of the program computes one step of the sweep. -/
 theorem eval_sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j)
     (Delta : ℝ) {i : ℕ} (hi : i + 1 ≤ L) (S : Finset (LeftBlockVector L q i)) :
     FreeM.eval honestOracle (sweepStepProgram hq h hs h0 Delta hi S) =
@@ -264,7 +264,7 @@ theorem eval_sweepStepProgram {L : ℕ} (hq : 2 ≤ q)
 cut of the chain. LVV13, `algo53.tex`, proof of Theorem 1, lines 652--668. -/
 noncomputable def sweepProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     (Delta : ℝ) : (i : ℕ) → LVVProgram q (Finset (LeftBlockVector L q i))
   | 0 => pure {emptyLeftVector L q}
@@ -277,7 +277,7 @@ noncomputable def sweepProgram {L : ℕ} (hq : 2 ≤ q)
 /-- With the honest oracle, the program computes the sweep at every cut. -/
 theorem eval_sweepProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     (Delta : ℝ) (i : ℕ) :
     FreeM.eval honestOracle (sweepProgram hq h hs h0 h1 Delta i) =

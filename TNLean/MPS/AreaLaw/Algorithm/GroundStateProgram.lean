@@ -44,7 +44,7 @@ open LinearAlgebraQuery
 on the original chain. LVV13, `algo53.tex`, lines 652--678. -/
 noncomputable def groundStateProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     (Delta : ℝ) (R : ℕ) : LVVProgram q (EuclideanSpace ℂ (Fin L → Fin q)) :=
   let N := L + 2 * R ^ 2
@@ -63,7 +63,7 @@ noncomputable def groundStateProgram {L : ℕ} (hq : 2 ≤ q)
 family of the padded sweep, read on the original chain. -/
 theorem eval_groundStateProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     (Delta : ℝ) (R : ℕ) :
     let N := L + 2 * R ^ 2
@@ -104,7 +104,7 @@ the cardinality budget times the bond budget of the sweep on the padded chain. L
 `algo53.tex`, lines 213--216 and 652--678. -/
 theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {R : ℕ} (hR : 1 ≤ R)
     (E : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))

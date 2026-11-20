@@ -70,11 +70,11 @@ theorem cutColumn_full (ψ : EuclideanSpace ℂ (Fin L → Fin q))
     (b : (v : {v : Fin L // v ∉ leftBlock L L}) → Fin q) :
     cutColumn ψ L b = fullLeftEquiv L q ψ := by
   ext a
-  change ψ ((Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L L)).symm (a, b)) =
+  change ψ ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L L)).symm (a, b)) =
     ψ ((leftConfigOfFinEquiv (le_refl L)).symm a)
   apply congrArg ψ
   funext v
-  rw [Entropy.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr v.isLt)]
+  rw [ManyBody.cutEquiv_symm_apply_mem _ _ (mem_leftBlock.mpr v.isLt)]
   rfl
 
 /-- A viable final family contains a unit vector of the asserted overlap in its span.

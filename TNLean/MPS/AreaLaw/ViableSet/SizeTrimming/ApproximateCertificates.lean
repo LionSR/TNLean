@@ -50,8 +50,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_all_spectral_ap
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
-    (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
@@ -138,8 +138,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_viable_vector_of_approx_sdp_erro
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
-    (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
@@ -224,8 +224,8 @@ theorem exists_viable_vector_of_approx_sdp_error_budget_with_trace_slack
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
-    (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ}) {S : Set (LeftBlockVector L q k)}
@@ -314,8 +314,8 @@ theorem exists_rationalViableMPSData_of_approx_sdp_error_budget_with_trace_slack
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
-    (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})
@@ -398,8 +398,8 @@ theorem exists_rationalCoordinateData_of_approx_sdp_error_budget_with_trace_slac
     {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     (HL B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hsplit : h.hamiltonian = HL + B)
-    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
-    (hBS : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
+    (hBS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ)
     (hBn : ‖B‖ ≤ 2 * L) {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Γ})

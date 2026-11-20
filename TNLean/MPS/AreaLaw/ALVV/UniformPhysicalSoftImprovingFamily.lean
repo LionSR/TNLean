@@ -119,7 +119,7 @@ private theorem exists_uniform_physical_soft_polynomial_family
       (t / m) * (T1 / t) ^ m) ≤ tau * g / 1000000)
     (N a b : ℕ) (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ N)
       (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-      (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+      (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval (N + 1) i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
   (by
@@ -147,9 +147,9 @@ private theorem exists_uniform_physical_soft_polynomial_family
         (Nat.succ_le_succ ((Nat.add_le_add_left
           (Nat.le_mul_of_pos_left ell (by decide : 0 < 2)) b).trans hb))
       let beta := fun _ : Fin (N + 1) ↦ Fin q
-      let midConfig := FiniteProduct.Configuration beta J
-      let extConfig := FiniteProduct.Configuration beta Jᶜ
-      let split := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let midConfig := ManyBody.RegionConfig beta J
+      let extConfig := ManyBody.RegionConfig beta Jᶜ
+      let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
       let heatWeight := t * (2 : ℝ) ^ (m + 1)
       let clusterBase := 2 * (Real.exp (1 / 3 : ℝ) - 1)
       let order := max 1 ⌈(Real.log (max 1 ((N : ℝ) ^ 2)) -
@@ -232,9 +232,9 @@ private theorem exists_uniform_physical_soft_polynomial_family
     fun r ↦ h ⟨a + r.val, by omega⟩
   let WR : Fin (2 * ell) → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ :=
     fun r ↦ h ⟨b + r.val, by omega⟩
-  have hWL (r : Fin (2 * ell)) : Entropy.IsSupportedOn (WL r)
+  have hWL (r : Fin (2 * ell)) : ManyBody.IsSupportedOn (WL r)
       (interval (N + 1) (a + r.val) (a + r.val + 2)) := hs _
-  have hWR (r : Fin (2 * ell)) : Entropy.IsSupportedOn (WR r)
+  have hWR (r : Fin (2 * ell)) : ManyBody.IsSupportedOn (WR r)
       (interval (N + 1) (b + r.val) (b + r.val + 2)) := hs _
   obtain ⟨n, W, hn, hWbond, hWpoly⟩ :=
     exists_common_physical_polynomial_closing_family_fin
@@ -290,7 +290,7 @@ private theorem exists_uniform_physical_soft_polynomial_family
   refine ⟨hshift, hclosed, hdim, htargetOriginal, horiginalTarget, ?_⟩
   let PL := Fraw 0 - ∑ j, (e j : ℂ) • (1 : Matrix (Fin (N + 1) → Fin q)
     (Fin (N + 1) → Fin q) ℂ) + (p 2 : ℂ) • 1
-  have hFsupport (j : Fin 5) : Entropy.IsSupportedOn (Fraw j)
+  have hFsupport (j : Fin 5) : ManyBody.IsSupportedOn (Fraw j)
       (interval (N + 1) (cuts j.castSucc) (cuts j.succ)) := by
     change _ ∈ ManyBody.supportedOperators _ _
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
@@ -300,7 +300,7 @@ private theorem exists_uniform_physical_soft_polynomial_family
     exact add_mem (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
       (ManyBody.cfc_mem_supportedOperators _
         (sub_mem hAmem (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))))
-  have hPL : Entropy.IsSupportedOn PL (interval (N + 1) 0 (a + 1)) := by
+  have hPL : ManyBody.IsSupportedOn PL (interval (N + 1) 0 (a + 1)) := by
     change _ ∈ ManyBody.supportedOperators _ _
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)
       (interval (N + 1) 0 (a + 1) : Finset (Fin (N + 1)))
@@ -309,7 +309,7 @@ private theorem exists_uniform_physical_soft_polynomial_family
     exact add_mem (sub_mem hFmem (sum_mem fun j _ ↦
       SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _))))
       (SMulMemClass.smul_mem _ (one_mem (ManyBody.supportedOperators _ _)))
-  have hPR : Entropy.IsSupportedOn (Fraw 4) (interval (N + 1) (b + 2 * ell) (N + 1)) :=
+  have hPR : ManyBody.IsSupportedOn (Fraw 4) (interval (N + 1) (b + 2 * ell) (N + 1)) :=
     hFsupport 4
   have hAlphabet : (∑ i, Sum.elim (Sum.elim WL WR) ![PL, Zphys (z : ℂ), Fraw 4] i) = Ghat :=
     actual_three_bulk_replacement_sum (N + 1) a b ell hell hab (by simpa using hb) h
@@ -427,7 +427,7 @@ theorem exists_uniform_physical_soft_improving_family
       (t / m) * (T1 / t) ^ m) ≤ tau * g / 1000000)
     (N a b : ℕ) (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ N)
       (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-      (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+      (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval (N + 1) i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
   (by
@@ -457,12 +457,12 @@ theorem exists_uniform_physical_soft_improving_family
         (Nat.succ_le_succ ((Nat.add_le_add_left
           (Nat.le_mul_of_pos_left ell (by decide : 0 < 2)) b).trans hb))
       let beta := fun _ : Fin (N + 1) ↦ Fin q
-      let midConfig := FiniteProduct.Configuration beta J
-      let extConfig := FiniteProduct.Configuration beta Jᶜ
+      let midConfig := ManyBody.RegionConfig beta J
+      let extConfig := ManyBody.RegionConfig beta Jᶜ
       let HM := EuclideanSpace ℂ midConfig
       let HE := EuclideanSpace ℂ extConfig
       let HT := HM ⊗[ℂ] HE
-      let split := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+      let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
       let Phi := ((EuclideanSpace.basisFun (extConfig) ℂ).tensorProduct
         (EuclideanSpace.basisFun (midConfig) ℂ)).repr

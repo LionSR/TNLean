@@ -69,13 +69,13 @@ theorem eventually_exists_selected_actualCharge_sharp_comparison
     let near := fun j band ↦ receiving (σ j band) false
     let middleRegion := fun j band ↦ middle (σ j band)
     let gpre := fun j band ↦
-      FiniteProduct.entropy β Ωt (near j band) +
-        FiniteProduct.entropy β Ωt (near j band ∪ middleRegion j band)ᶜ -
-        FiniteProduct.entropy β Ωt (middleRegion j band)
+      ManyBody.regionEntropy Ωt (near j band) +
+        ManyBody.regionEntropy Ωt (near j band ∪ middleRegion j band)ᶜ -
+        ManyBody.regionEntropy Ωt (middleRegion j band)
     let gpost := fun j band ↦
-      regionalEntropy Λ q Ωt (positiveNear S.depth (σ j band)) +
-        regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j band)) -
-        regionalEntropy Λ q Ωt (middle (σ j band))
+      ManyBody.regionEntropy Ωt (positiveNear S.depth (σ j band)) +
+        ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j band)) -
+        ManyBody.regionEntropy Ωt (middle (σ j band))
     let gaps := (Finset.univ :
       Finset (terminalFamily S.K S.m S.M (S.n * S.m) × Fin S.K)).image
         (fun j ↦ gpre j.1 j.2)

@@ -104,7 +104,7 @@ Hastings, arXiv:0705.2024v4, `law16.tex`, appendix, lines 816–828 (`M_L - H_L`
 the cut). -/
 theorem isSupportedOn_localized_sub_self (K : Finset ι)
     (W X : Matrix (ι → Fin d) (ι → Fin d) ℂ) :
-    Entropy.IsSupportedOn (n := fun _ ↦ d) (W + regionExpectation K X - W) K := by
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin d) (W + regionExpectation K X - W) K := by
   rw [add_sub_cancel_left]
   exact (ManyBody.regionExpectation_mem_supportedOperators K X)
 
@@ -132,7 +132,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_sub_localized
     (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
         (hq : 1 ≤ q) (q' ΔE : ℝ)
     (W : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (S : Finset (Fin L)) (n : ℕ) (c : ℝ)
-    (hS : Entropy.IsSupportedOn (n := fun _ ↦ q) (h.hamiltonian * W - W * h.hamiltonian) S)
+    (hS : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h.hamiltonian * W - W * h.hamiltonian) S)
     (hSn : S.card ≤ n) (hc : ‖h.hamiltonian * W - W * h.hamiltonian‖ ≤ c)
     {ℓ T : ℝ} (hℓ : 0 ≤ ℓ) (hT : 0 ≤ T) :
     ‖gaussianFilteredTerm q' ΔE h.hamiltonian W -
@@ -147,7 +147,7 @@ theorem _root_.ManyBody.ChainInteraction.norm_gaussianFilteredTerm_sub_localized
   have hc0 : 0 ≤ c := (norm_nonneg _).trans hc
   have ha := chainLRPrefactor_nonneg R J
   have hv := chainLRVelocity_nonneg R J
-  have hA : Entropy.IsSupportedOn (n := fun _ ↦ q) (Complex.I • C) S := by
+  have hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (Complex.I • C) S := by
     change _ ∈ ManyBody.supportedOperators _ _
     exact (SMulMemClass.smul_mem _ hS)
   have hloc : ∀ s ∈ Set.Icc (-T) T,

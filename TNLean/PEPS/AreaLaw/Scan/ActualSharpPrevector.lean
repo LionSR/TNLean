@@ -48,29 +48,29 @@ theorem exists_actualScan_schmidtBellPrevector_sharp_upper
     (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
     (H : Matrix (Site Λ → Fin q) (Site Λ → Fin q) ℂ) (E₀ : ℝ)
     (hE : H *ᵥ Ωt.ofLp = (E₀ : ℂ) • Ωt.ofLp)
-    (E : Finset (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q)
+    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q)
       (S.A.filter fun x ↦ x.val ∈ T)))
     (hmom : ∀ (s : ℕ) (hist : History S.K S.m S.M s) (g : Fin S.K),
       (s ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state hist g),
         ∀ u : ℝ, |u| ≤ r →
           Real.log (Entropy.surprisalMoment
-            (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-            u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2) ∧
+            (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+            u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2) ∧
       (s + 1 ≤ S.n * S.m →
         ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist g),
           ∀ u : ℝ, |u| ≤ r →
             Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2)) :
+              (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+              u * ManyBody.regionEntropy Ωt Q + Kmom * u ^ 2)) :
     let X := S.A.filter fun x ↦ x.val ∈ T
     let β := fun _ : Site Λ ↦ Fin q
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (FiniteProduct.splitEquiv β X) Ωt
+      (ManyBody.splitEquiv β X) Ωt
     let z := Matrix.IsHermitian.spectralRestrictionMass
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
     0 < z →
     let d := E.card
-    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
       let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
@@ -102,11 +102,11 @@ theorem exists_actualScan_schmidtBellPrevector_sharp_upper
       (∀ᶠ k : ℕ in Filter.atTop,
         (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
           ‖WithLp.toLp 2
-            (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-              (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+            (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+              (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
               PermutationRepresentation.labelProj
                 (TensorPower.copyPerm (Fin E.card) k) (ell k)) *ᵥ
-              (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+              (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
                 (Fin k → Fin E.card) => ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) ∧
       (Asymptotics.IsLittleO Filter.atTop
         (fun k : ℕ => Real.log (ell k).dim - (k : ℝ) *
@@ -119,9 +119,9 @@ theorem exists_actualScan_schmidtBellPrevector_sharp_upper
         ∀ᶠ k : ℕ in atTop, ∀ (s : ℕ) (hs : s + 1 ≤ S.n * S.m) (p : ℝ),
           let σ := terminalPartition S (S.n * S.m)
           let gpost := fun j g ↦
-            regionalEntropy Λ q Ωt (positiveNear S.depth (σ j g)) +
-              regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j g)) -
-                regionalEntropy Λ q Ωt (middle (σ j g))
+            ManyBody.regionEntropy Ωt (positiveNear S.depth (σ j g)) +
+              ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j g)) -
+                ManyBody.regionEntropy Ωt (middle (σ j g))
           let p₀ := Set.projIcc (0 : ℝ) 1 zero_le_one p
           let bound := fun (tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m))) ↦
             2 * Real.log (d : ℝ) - Real.log z +

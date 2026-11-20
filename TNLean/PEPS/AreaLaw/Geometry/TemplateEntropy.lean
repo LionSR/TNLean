@@ -34,9 +34,8 @@ pure-state complementarity of the actual regional reductions. -/
 theorem abs_regionalEntropy_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (R B : Finset (Site Λ))
     (hRB : Disjoint R B) :
-    |regionalEntropy Λ q Ω (R ∪ B) - regionalEntropy Λ q Ω R| ≤
-      regionalEntropy Λ q Ω B := by
-  simp only [regionalEntropy_eq_regionEntropy]
+    |ManyBody.regionEntropy Ω (R ∪ B) - ManyBody.regionEntropy Ω R| ≤
+      ManyBody.regionEntropy Ω B := by
   have hu := regionEntropy_union_le hΩ hRB
   have hl := regionEntropy_le_union_add hΩ hRB
   exact abs_le.mpr ⟨by linarith, by linarith⟩
@@ -47,8 +46,8 @@ Source: Lemma 9.4, partial-row step, `08-scanner.tex`, lines 666–667. -/
 theorem abs_regionalEntropy_filter_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (hq : 1 ≤ q) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
     (X Y : Finset (ℤ × ℤ)) (hXY : Disjoint X Y) :
-    |regionalEntropy Λ q Ω (A.filter fun x ↦ x.val ∈ X ∪ Y) -
-      regionalEntropy Λ q Ω (A.filter fun x ↦ x.val ∈ X)| ≤ Y.card * Real.log q := by
+    |ManyBody.regionEntropy Ω (A.filter fun x ↦ x.val ∈ X ∪ Y) -
+      ManyBody.regionEntropy Ω (A.filter fun x ↦ x.val ∈ X)| ≤ Y.card * Real.log q := by
   classical
   let R := A.filter fun x ↦ x.val ∈ X
   let B := A.filter fun x ↦ x.val ∈ Y
@@ -63,9 +62,9 @@ theorem abs_regionalEntropy_filter_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : 
       exact (Finset.mem_filter.mp hz).2
   rw [he]
   calc
-    |regionalEntropy Λ q Ω (R ∪ B) - regionalEntropy Λ q Ω R| ≤
-        regionalEntropy Λ q Ω B := abs_regionalEntropy_union_sub_le Λ q Ω hΩ R B hd
-    _ ≤ B.card * Real.log q := regionalEntropy_le_card_mul_log Λ q Ω hΩ B
+    |ManyBody.regionEntropy Ω (R ∪ B) - ManyBody.regionEntropy Ω R| ≤
+        ManyBody.regionEntropy Ω B := abs_regionalEntropy_union_sub_le Λ q Ω hΩ R B hd
+    _ ≤ B.card * Real.log q := ManyBody.regionEntropy_le_card_mul_log hΩ B
     _ ≤ Y.card * Real.log q := mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
       (Real.log_nonneg (by exact_mod_cast hq))
 
@@ -82,9 +81,9 @@ theorem template_partial_row_entropy_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (A : Finset (Site Λ)) (j : ℕ) (hj : 1 ≤ j) (hjs : j ≤ s₀)
     (Y : Finset (ℤ × ℤ))
     (hY : Y ⊆ ambientDilation T.points j \ ambientDilation T.points (j - 1)) :
-    |regionalEntropy Λ q Ω
+    |ManyBody.regionEntropy Ω
         (A.filter fun x ↦ x.val ∈ (ambientDilation T.points (j - 1) \ T.points) ∪ Y) -
-      regionalEntropy Λ q Ω
+      ManyBody.regionEntropy Ω
         (A.filter fun x ↦ x.val ∈ ambientDilation T.points (j - 1) \ T.points)| ≤
       n * Real.log q := by
   have hXY : Disjoint (ambientDilation T.points (j - 1) \ T.points) Y :=

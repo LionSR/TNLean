@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.OpenMPS
 import QICLean.Algebra.OneMarkerWeightedSchmidtRank
-import QICLean.Entropy.SupportedOperatorSchmidtRank
+import QICLean.ManyBody.Sites.OperatorSchmidtRank
 import Mathlib.LinearAlgebra.Matrix.Reindex
 
 /-!
@@ -41,13 +41,13 @@ theorem operatorSchmidtRank_one_marker_of_chain_supports_le
     {L q cut : ℕ} {ι : Type*} [Fintype ι] (hq : 1 ≤ q)
     (hcut0 : 0 < cut) (hcutL : cut < L)
     (H : ι → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (X : ι → Finset (Fin L)) (hH : ∀ a, Entropy.IsSupportedOn (H a) (X a))
+    (X : ι → Finset (Fin L)) (hH : ∀ a, ManyBody.IsSupportedOn (H a) (X a))
     (hside : ∀ a, X a ⊆ leftBlock L cut ∨ Disjoint (X a) (leftBlock L cut))
     (T : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hT : Entropy.IsSupportedOn T (interval L (cut - 1) (cut + 1))) (t k : ℕ) :
+    (hT : ManyBody.IsSupportedOn T (interval L (cut - 1) (cut + 1))) (t k : ℕ) :
     let E := Finset.piAntidiag (Finset.univ : Finset ι) t
     ∀ weight : E → ℂ, operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut)
         (∑ α : E, weight α • WordMultiplicity.oneMarkerCoefficient H T t k α.val)) ≤
       E.card * ((t + 2 * k + 1).choose (2 * k + 1) * q ^ (2 * k)) := by
   classical
@@ -57,14 +57,14 @@ theorem operatorSchmidtRank_one_marker_of_chain_supports_le
     Classical.decEq _
   let : DecidableEq ((v : {v : Fin L // v ∉ leftBlock L cut}) → Fin q) :=
     Classical.decEq _
-  let e := Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L cut)
+  let e := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L cut)
   let σ₀ : Fin L → Fin q := fun _ ↦ 0
   have hfactors (a : ι) :
       ∃ (A : Matrix ((v : {v : Fin L // v ∈ leftBlock L cut}) → Fin q)
           ((v : {v : Fin L // v ∈ leftBlock L cut}) → Fin q) ℂ)
         (B : Matrix ((v : {v : Fin L // v ∉ leftBlock L cut}) → Fin q)
           ((v : {v : Fin L // v ∉ leftBlock L cut}) → Fin q) ℂ),
-        Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (H a) =
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (H a) =
           A ⊗ₖ 1 + 1 ⊗ₖ B := by
     have hone := (hside a).elim
       (fun hs ↦ (hH a).isOneSided_of_subset hs (e σ₀).2)
@@ -90,28 +90,28 @@ theorem operatorSchmidtRank_one_marker_of_chain_supports_le
       Fin.ext_iff, x]
     omega
   have hTrank : operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) T) ≤ q ^ 2 := by
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) T) ≤ q ^ 2 := by
     simpa only [hsites, Finset.prod_singleton] using
       (hT.operatorSchmidtRank_cutOperator_le (A := leftBlock L cut))
   let φ := Matrix.reindexAlgEquiv ℂ ℂ e
   have hmap (α : E) :
       φ (WordMultiplicity.oneMarkerCoefficient H T t k α.val) =
         WordMultiplicity.oneMarkerCoefficient
-          (fun a ↦ Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (H a))
-          (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) T) t k α.val :=
+          (fun a ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (H a))
+          (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) T) t k α.val :=
     WordMultiplicity.map_oneMarkerCoefficient φ.toRingHom H T t k α.val
-  have heq : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut)
+  have heq : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut)
       (∑ α : E, weight α • WordMultiplicity.oneMarkerCoefficient H T t k α.val) =
       ∑ α : E, weight α • WordMultiplicity.oneMarkerCoefficient
-        (fun a ↦ Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (H a))
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) T) t k α.val := by
+        (fun a ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (H a))
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) T) t k α.val := by
     change φ (∑ α : E, weight α • WordMultiplicity.oneMarkerCoefficient H T t k α.val) = _
     simp only [map_sum, map_smul, hmap]
   rw [heq]
   simpa only [← pow_mul] using
     Matrix.operatorSchmidtRank_sum_smul_one_marker_counts_le
-      (fun a ↦ Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (H a))
+      (fun a ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (H a))
       HL HR hlocal
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) T) hTrank t k weight
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) T) hTrank t k weight
 
 end TNLean.MPS.AreaLaw

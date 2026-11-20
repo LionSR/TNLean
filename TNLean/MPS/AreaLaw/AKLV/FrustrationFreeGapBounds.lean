@@ -33,7 +33,7 @@ This is the normalization of AKLV, arXiv:1301.1162v1, Section 5, before equation
 at ground energy zero. -/
 theorem aklv_frustrationFree_dimension_and_gap_bounds {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h j) (interval L j.val (j.val + 2)))
     (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)

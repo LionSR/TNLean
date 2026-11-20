@@ -81,7 +81,7 @@ theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 
       (_count _Dref : ℕ), Submodule ℂ (EuclideanSpace ℂ (interval L 0 L → Fin q)) → Prop)
     (hQ : ∀ (L q m : ℕ) (w : ℝ) (hq : 2 ≤ q), q ≤ m → 0 < w →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2))) →
       ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
@@ -106,7 +106,7 @@ theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 
       let ell : ℕ := ⌈C * u ^ 2 / g⌉₊
       let D := (mi * ell ^ 2) ^ (22 * ell)
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2))) →
       ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
@@ -277,7 +277,7 @@ theorem exists_physical_ld_sampled_interval_tree_of_clause (etaLD : ℝ) (hLD : 
   intro v hv
   have hrank (i : Fin n) (j : ℕ) (hj : j < L - 1) :
       Matrix.schmidtRank (WithLp.ofLp
-        (Entropy.cutVector (intervalTrimCut L 0 L j) (vectors i))) ≤
+        (ManyBody.cutVector (intervalTrimCut L 0 L j) (vectors i))) ≤
         1000000 * Dref ^ 2 * (L + 1) * count :=
     Real.viable_node_trimming_rank_bound hDref (hranks j hj i)
   have hmem : v ∈ Submodule.span ℂ (Set.range vectors) := by

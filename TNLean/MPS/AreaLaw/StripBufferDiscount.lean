@@ -42,7 +42,7 @@ theorem one_le_stripBudgetConst (q R : ℕ) : 1 ≤ stripBudgetConst q R := by
 theorem cutLogBudget_stripInterval_le_mul {q w : ℕ} (hq : 1 ≤ q) (hw : 1 ≤ w)
     (L R a b : ℕ) :
     Entropy.cutLogBudget
-      (Entropy.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1)
+      (ManyBody.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1)
         (stripInterval L w a b))
       (Entropy.supportDim (fun _ : Site (stripDomain L w) ↦ q) ∘ fun X ↦ X.1) ≤
       stripBudgetConst q R * w := by
@@ -78,9 +78,9 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (a b : ℕ) :
     let m := stripShellCount q R w J Δ
     let T := stripInterval L w (a - m * R) (b + m * R) \ stripInterval L w a b
-    2 * (Entropy.regionEntropy (n := fun _ : Site (stripDomain L w) ↦ q)
-          (stripInterval L w a b ∪ T) Ω - Entropy.regionEntropy T Ω) ≤
-      Entropy.regionEntropy (stripInterval L w a b) Ω +
+    2 * (ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+          Ω (stripInterval L w a b ∪ T) - ManyBody.regionEntropy Ω T) ≤
+      ManyBody.regionEntropy Ω (stripInterval L w a b) +
         4096 * Real.exp 1 * (J / Δ) * (stripBudgetConst q R * w) / m +
         m * Real.log 2 := by
   classical
@@ -113,7 +113,7 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
   have hmass : ∑ j ∈ Finset.range m, weights j = 2 := by
     simp only [weights, Finset.sum_const, Finset.card_range, nsmul_eq_mul]
     field_simp
-  have hbudget : ∀ j, Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+  have hbudget : ∀ j, Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
       (Entropy.supportDim (fun _ : Site (stripDomain L w) ↦ q) ∘ S) ≤ B := by
     intro j
     rw [show X ∪ T j = _ from union_stripShell L w R a b j]
@@ -125,10 +125,10 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     rw [show X ∪ T j' = _ from union_stripShell L w R a b j'] at hj'
     exact strip_single_splitting Y hj hj'
   have henergy : ∑ j ∈ Finset.range m, 8 * Real.exp 1 * weights j ^ 2 *
-      ∑ Y ∈ Entropy.crossingTerms S (X ∪ T j),
+      ∑ Y ∈ ManyBody.crossingTerms S (X ∪ T j),
         Real.log (Real.exp 1 * Entropy.supportDim
           (fun _ : Site (stripDomain L w) ↦ q) (S Y)) ^ 2 * J ≤ Δ / 2 := by
-    have hsum (j : ℕ) : ∑ Y ∈ Entropy.crossingTerms S (X ∪ T j),
+    have hsum (j : ℕ) : ∑ Y ∈ ManyBody.crossingTerms S (X ∪ T j),
         Real.log (Real.exp 1 * Entropy.supportDim
           (fun _ : Site (stripDomain L w) ↦ q) (S Y)) ^ 2 * J ≤ B * J := by
       rw [← Finset.sum_mul]
@@ -137,7 +137,7 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
       simp only [Function.comp_apply] at hb
       exact mul_le_mul_of_nonneg_right (by linarith) hJ
     have hterm : ∀ j ∈ Finset.range m, 8 * Real.exp 1 * weights j ^ 2 *
-        ∑ Y ∈ Entropy.crossingTerms S (X ∪ T j),
+        ∑ Y ∈ ManyBody.crossingTerms S (X ∪ T j),
           Real.log (Real.exp 1 * Entropy.supportDim
             (fun _ : Site (stripDomain L w) ↦ q) (S Y)) ^ 2 * J ≤
         32 * Real.exp 1 * (B * J) / (m : ℝ) ^ 2 := by
@@ -156,7 +156,7 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
       ring
     nlinarith only [hE']
   have hu : ∀ j < m, weights j / (1 - weights j) ≤
-      Entropy.tailRadius (J / Δ) (Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+      Entropy.tailRadius (J / Δ) (Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
         (Entropy.supportDim (fun _ : Site (stripDomain L w) ↦ q) ∘ S)) := by
     intro j _
     have h₁ := Entropy.harmonic_weight_ratio_le hm4 (le_refl (1 : ℝ))
@@ -183,7 +183,7 @@ theorem two_mul_condEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     hh hJ hhJ hsingle hΔ heig hgap (E := Δ / 2)
     (by linarith) henergy hu hmass Finset.disjoint_sdiff hbuf
   have herr : ∑ j ∈ Finset.range m, 1024 * Real.exp 1 * (J / Δ) *
-      Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+      Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
         (Entropy.supportDim (fun _ : Site (stripDomain L w) ↦ q) ∘ S) * weights j ^ 2 ≤
       4096 * Real.exp 1 * (J / Δ) * B / m := by
     calc _ ≤ ∑ j ∈ Finset.range m,
@@ -299,18 +299,18 @@ theorem regionEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     {Ω : StateSpace (stripDomain L w) q}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (a b : ℕ) :
-    Entropy.regionEntropy (n := fun _ : Site (stripDomain L w) ↦ q)
-      (stripInterval L w a b) Ω ≤ stripAreaLawConst q R * (1 + J / Δ) * (w : ℝ) ^ 2 := by
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+      Ω (stripInterval L w a b) ≤ stripAreaLawConst q R * (1 + J / Δ) * (w : ℝ) ^ 2 := by
   let m := stripShellCount q R w J Δ
   let B : ℝ := stripBudgetConst q R * w
   let T := stripInterval L w (a - m * R) (b + m * R) \ stripInterval L w a b
   have hdisc := two_mul_condEntropy_stripInterval_le hq hw hJ hΔ h hh hhJ hΩ hgap hspan a b
-  change 2 * (Entropy.regionEntropy (stripInterval L w a b ∪ T) Ω -
-    Entropy.regionEntropy T Ω) ≤ Entropy.regionEntropy (stripInterval L w a b) Ω +
+  change 2 * (ManyBody.regionEntropy Ω (stripInterval L w a b ∪ T) -
+    ManyBody.regionEntropy Ω T) ≤ ManyBody.regionEntropy Ω (stripInterval L w a b) +
       4096 * Real.exp 1 * (J / Δ) * B / m + m * Real.log 2 at hdisc
   have hAL := regionEntropy_le_union_add hΩ
     (show Disjoint (stripInterval L w a b) T from Finset.disjoint_sdiff)
-  have hT := regionEntropy_le_card_mul_log hΩ T
+  have hT := ManyBody.regionEntropy_le_card_mul_log hΩ T
   have hcard : (T.card : ℝ) ≤ 2 * (m : ℝ) * R * w := by
     have hc := card_stripInterval_enlargement_sdiff_le L w a b (m * R)
     change T.card ≤ _ at hc
@@ -318,7 +318,7 @@ theorem regionEntropy_stripInterval_le {L w q R : ℕ} {J Δ : ℝ}
     simpa only [mul_assoc] using hc'
   have hlog : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
   have hTb := hT.trans (mul_le_mul_of_nonneg_right hcard hlog)
-  have hint : Entropy.regionEntropy (stripInterval L w a b) Ω ≤
+  have hint : ManyBody.regionEntropy Ω (stripInterval L w a b) ≤
       8 * (m : ℝ) * R * w * Real.log q +
         4096 * Real.exp 1 * (J / Δ) * B / m + m * Real.log 2 := by
     linarith only [hdisc, hAL, hTb]
@@ -333,8 +333,8 @@ theorem stripAreaLaw (q R : ℕ) :
       ∀ Ω : StateSpace (stripDomain L w) q,
       ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ a b : ℕ,
-      Entropy.regionEntropy (n := fun _ : Site (stripDomain L w) ↦ q)
-        (stripInterval L w a b) Ω ≤ C * (1 + J / Δ) * (w : ℝ) ^ 2 := by
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+        Ω (stripInterval L w a b) ≤ C * (1 + J / Δ) * (w : ℝ) ^ 2 := by
   refine ⟨stripAreaLawConst q R, ?_, ?_⟩
   · unfold stripAreaLawConst stripShellConst stripBudgetConst
     positivity

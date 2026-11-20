@@ -144,10 +144,10 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     {A : Finset (Site Λ)} {Q : IntRect} (hsafe : IsSafe Λ A D₀ Q) {r : ℕ} (hr : 1 ≤ r)
     {Q₀ : IntRect} (hQ₀ : Q₀.size ≤ r) (hpad : (Q₀.dilate (Cpad * r)).toFinset ⊆ Q.toFinset) :
-    regionalEntropy Λ q Ω (rectRegion A Q₀ ∪
+    ManyBody.regionEntropy Ω (rectRegion A Q₀ ∪
         (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀)) -
-      regionalEntropy Λ q Ω (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀) ≤
-    regionalEntropy Λ q Ω (rectRegion A Q₀) / 2 +
+      ManyBody.regionEntropy Ω (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀) ≤
+    ManyBody.regionEntropy Ω (rectRegion A Q₀) / 2 +
       (1024 * Real.exp 1 * (J / Δ) * bufferBudgetConst q R + Cpad) / 2 * r := by
   classical
   have heig : toEuclideanLin h.hamiltonian Ω = (E₀ : ℂ) • Ω :=
@@ -236,7 +236,7 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
   -- crossing budgets
   set S : AdmissibleSupport Λ R → Finset (Site Λ) := fun X ↦ X.1
   have hcross : ∀ j < m,
-      ((Entropy.crossingTerms S (X ∪ T j)).card : ℝ) ≤ K * c j := fun j hj ↦ by
+      ((ManyBody.crossingTerms S (X ∪ T j)).card : ℝ) ≤ K * c j := fun j hj ↦ by
     rw [hXT j hj]
     have hdR : R + 1 ≤ d j := by
       have : D ≤ (j + 1) * D := Nat.le_mul_of_pos_left D (by omega)
@@ -244,14 +244,14 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
     have hQ : (Q₀.dilate (d j)).toFinset ⊆ Q.toFinset :=
       (Q₀.toFinset_dilate_mono (hdle j hj)).trans hpad
     have := card_crossingTerms_rectRegion_le hsafe hRD₀ hdR hQ
-    have h' : ((Entropy.crossingTerms S (rectRegion A (Q₀.dilate (d j)))).card : ℝ) ≤
+    have h' : ((ManyBody.crossingTerms S (rectRegion A (Q₀.dilate (d j)))).card : ℝ) ≤
         K * ((Q₀.size : ℝ) + d j) := by
       simp only [K, bufferCrossConst]; exact_mod_cast this
     refine h'.trans (mul_le_mul_of_nonneg_left ?_ hK)
     have : (Q₀.size : ℝ) ≤ r := by exact_mod_cast hQ₀
     linarith [hc j]
   have hB : ∀ j < m,
-      Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+      Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
         (Entropy.supportDim (fun _ : Site Λ ↦ q) ∘ S) ≤ K' * c j := fun j hj ↦ by
     refine (cutLogBudget_le_card hq _).trans ?_
     have := mul_le_mul_of_nonneg_right (hcross j hj)
@@ -300,18 +300,18 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
     · exact hjj
     · exact (key j' j hjj hj h2 h1).elim
   have hE : ∑ j ∈ Finset.range m, 4 * a j ^ 2 *
-      ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+      ∑ i ∈ ManyBody.crossingTerms S (X ∪ T j),
         (Entropy.supportDim (fun _ : Site Λ ↦ q) (S i) : ℝ) ^ 2 * J ≤ Δ / 2 := by
     have hqJ : 0 ≤ (q : ℝ) ^ (2 * v) * J := by positivity
     have hterm : ∀ j ∈ Finset.range m, 4 * a j ^ 2 *
-        ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+        ∑ i ∈ ManyBody.crossingTerms S (X ∪ T j),
           (Entropy.supportDim (fun _ : Site Λ ↦ q) (S i) : ℝ) ^ 2 * J ≤
         4 * K * ((q : ℝ) ^ (2 * v) * J) * (c j * a j ^ 2) := by
       intro j hj
       have hj := Finset.mem_range.mp hj
-      have hsum : ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+      have hsum : ∑ i ∈ ManyBody.crossingTerms S (X ∪ T j),
           (Entropy.supportDim (fun _ : Site Λ ↦ q) (S i) : ℝ) ^ 2 * J ≤
-          (Entropy.crossingTerms S (X ∪ T j)).card * ((q : ℝ) ^ (2 * v) * J) := by
+          (ManyBody.crossingTerms S (X ∪ T j)).card * ((q : ℝ) ^ (2 * v) * J) := by
         rw [← nsmul_eq_mul]
         refine Finset.sum_le_card_nsmul _ _ _ fun i _ ↦ ?_
         have h2 : (Entropy.supportDim (fun _ : Site Λ ↦ q) (S i) : ℝ) ≤ (q : ℝ) ^ v := by
@@ -320,9 +320,9 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
         calc (Entropy.supportDim (fun _ : Site Λ ↦ q) (S i) : ℝ) ^ 2 * J ≤
             ((q : ℝ) ^ v) ^ 2 * J := mul_le_mul_of_nonneg_right (pow_le_pow_left₀ h0 h2 2) hJ
           _ = (q : ℝ) ^ (2 * v) * J := by rw [← pow_mul, mul_comm v 2]
-      calc 4 * a j ^ 2 * ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+      calc 4 * a j ^ 2 * ∑ i ∈ ManyBody.crossingTerms S (X ∪ T j),
             (Entropy.supportDim (fun _ : Site Λ ↦ q) (S i) : ℝ) ^ 2 * J
-          ≤ 4 * a j ^ 2 * ((Entropy.crossingTerms S (X ∪ T j)).card *
+          ≤ 4 * a j ^ 2 * ((ManyBody.crossingTerms S (X ∪ T j)).card *
               ((q : ℝ) ^ (2 * v) * J)) := by gcongr
         _ ≤ 4 * a j ^ 2 * (K * c j * ((q : ℝ) ^ (2 * v) * J)) := by
             gcongr; exact hcross j hj
@@ -334,7 +334,7 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
     rw [mul_div_assoc', div_le_div_iff₀ hZpos two_pos]
     nlinarith
   have hu : ∀ j < m, a j / (1 - a j) ≤ Entropy.tailRadius (J / Δ)
-      (Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+      (Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
         (Entropy.supportDim (fun _ : Site Λ ↦ q) ∘ S)) := fun j hj ↦ by
     rw [ha_eq]
     exact (Entropy.harmonic_weight_ratio_le hZ4' (hc1 j)).trans
@@ -350,18 +350,18 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
     Finset.disjoint_sdiff hTbuf
   -- the error terms
   have herr : ∑ j ∈ Finset.range m, 1024 * Real.exp 1 * (J / Δ) *
-      Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+      Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
         (Entropy.supportDim (fun _ : Site Λ ↦ q) ∘ S) * a j ^ 2 ≤
       1024 * Real.exp 1 * (J / Δ) * K' := by
     have h0 : 0 ≤ 1024 * Real.exp 1 * (J / Δ) := by positivity
     have hterm : ∀ j ∈ Finset.range m, 1024 * Real.exp 1 * (J / Δ) *
-        Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+        Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
           (Entropy.supportDim (fun _ : Site Λ ↦ q) ∘ S) * a j ^ 2 ≤
         1024 * Real.exp 1 * (J / Δ) * K' * (c j * a j ^ 2) := by
       intro j hj
       have := hB j (Finset.mem_range.mp hj)
       calc _ = 1024 * Real.exp 1 * (J / Δ) * (Entropy.cutLogBudget
-              (Entropy.crossingTerms S (X ∪ T j))
+              (ManyBody.crossingTerms S (X ∪ T j))
               (Entropy.supportDim (fun _ : Site Λ ↦ q) ∘ S) * a j ^ 2) := by ring
         _ ≤ 1024 * Real.exp 1 * (J / Δ) * (K' * c j * a j ^ 2) := by gcongr
         _ = _ := by ring
@@ -383,13 +383,12 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
     have hm0 : (0 : ℝ) ≤ m := Nat.cast_nonneg m
     nlinarith
   -- conclusion
-  simp only [regionalEntropy_eq_regionEntropy]
   have hr1 : (1 : ℝ) ≤ r := by exact_mod_cast hr
   have hE1 : 0 ≤ 1024 * Real.exp 1 * (J / Δ) * K' := by positivity
   have hE1r : 1024 * Real.exp 1 * (J / Δ) * K' ≤ 1024 * Real.exp 1 * (J / Δ) * K' * r :=
     le_mul_of_one_le_right hE1 hr1
-  change 2 * (Entropy.regionEntropy (X ∪ Tbuf) Ω - Entropy.regionEntropy Tbuf Ω) ≤
-    Entropy.regionEntropy X Ω + _ - _ at key
+  change 2 * (ManyBody.regionEntropy Ω (X ∪ Tbuf) - ManyBody.regionEntropy Ω Tbuf) ≤
+    ManyBody.regionEntropy Ω X + _ - _ at key
   rw [sub_eq_add_neg] at key
   have := add_le_add herr hlog
   linarith
@@ -449,11 +448,11 @@ theorem condEntropy_le_initialBufferConst (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ
         {A : Finset (Site Λ)} {Q : IntRect}
     (hsafe : IsSafe Λ A D₀ Q) {r : ℕ} (hr : 1 ≤ r) {Q₀ : IntRect} (hQ₀ : Q₀.size ≤ r)
     (hpad : (Q₀.dilate (initialPaddingConst q R J Δ * r)).toFinset ⊆ Q.toFinset) :
-    regionalEntropy Λ q Ω (rectRegion A Q₀ ∪
+    ManyBody.regionEntropy Ω (rectRegion A Q₀ ∪
         (rectRegion A (Q₀.dilate (initialPaddingConst q R J Δ * r)) \ rectRegion A Q₀)) -
-      regionalEntropy Λ q Ω
+      ManyBody.regionEntropy Ω
         (rectRegion A (Q₀.dilate (initialPaddingConst q R J Δ * r)) \ rectRegion A Q₀) ≤
-    regionalEntropy Λ q Ω (rectRegion A Q₀) / 2 + initialBufferConst q R J Δ * r := by
+    ManyBody.regionEntropy Ω (rectRegion A Q₀) / 2 + initialBufferConst q R J Δ * r := by
   set Zmin := initialPaddingScale q R J Δ
   set Cpad := initialPaddingConst q R J Δ
   have hCZ : (2 + ((R + 1 : ℕ) : ℝ)) * Real.exp ((R + 1 : ℕ) * Zmin) ≤ Cpad + 1 := by
@@ -487,10 +486,10 @@ theorem exists_condEntropy_le_initialBuffer (q R : ℕ) (hq : 1 ≤ q) {J Δ : �
       ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
       ∀ r : ℕ, 1 ≤ r → ∀ Q₀ : IntRect, Q₀.size ≤ r →
         (Q₀.dilate (Cpad * r)).toFinset ⊆ Q.toFinset →
-        regionalEntropy Λ q Ω (rectRegion A Q₀ ∪
+        ManyBody.regionEntropy Ω (rectRegion A Q₀ ∪
             (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀)) -
-          regionalEntropy Λ q Ω (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀) ≤
-        regionalEntropy Λ q Ω (rectRegion A Q₀) / 2 + Cbuf * r :=
+          ManyBody.regionEntropy Ω (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀) ≤
+        ManyBody.regionEntropy Ω (rectRegion A Q₀) / 2 + Cbuf * r :=
   ⟨initialPaddingConst q R J Δ, one_le_initialPaddingConst q R J Δ, initialBufferConst q R J Δ,
     initialBufferConst_nonneg q R hJ hΔ,
         fun _ hD₀ _ h hh hhJ _ _ hΩ hgap hspan _ _ hsafe _ hr _ hQ₀ hpad ↦

@@ -60,21 +60,21 @@ theorem one_sub_kyFanNorm_le_of_factorization (hq : 1 ≤ q)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (j : ℕ) {ξ' C₁ : ℝ}
     (hfact : ∀ m : ℕ, j + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL SL ∧ SL ⊆ leftBlock L j ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L j ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')))
     {k : ℕ} (hk : 1 ≤ k)
-    (hlead : 1 / 2 ≤ (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L j)
+    (hlead : 1 / 2 ≤ (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L j)
       Ω).kyFanNorm k)
     (m n : ℕ) (hn : k * q ^ (2 * m) ≤ n) :
-    1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω).kyFanNorm n
+    1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L j) Ω).kyFanNorm n
       ≤ 4 * C₁ ^ 2 * Real.exp (-(2 * m) / ξ') := by
   classical
-  set hρ := Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω
+  set hρ := ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L j) Ω
     with hρdef
-  have hρpsd := Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω
+  have hρpsd := ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) (leftBlock L j) Ω
   set e := Real.exp (-(2 * m) / ξ') with he
   have he' : Real.exp (-(2 * (m : ℝ) / ξ')) = e := by rw [he, neg_div]
   have hmono : hρ.kyFanNorm (k * q ^ (2 * m)) ≤ hρ.kyFanNorm n := hρpsd.kyFanNorm_mono hn
@@ -83,7 +83,7 @@ theorem one_sub_kyFanNorm_le_of_factorization (hq : 1 ≤ q)
   have hspec := hρ.leadingEigenprojection_spec k
   have hE : IsStarProjection E :=
     ⟨hspec.2.1, Matrix.isHermitian_iff_isSelfAdjoint.mp hspec.1⟩
-  set ψ0 := toEuclideanLin (Entropy.localLift (leftBlock L j) E) Ω with hψ0
+  set ψ0 := toEuclideanLin (ManyBody.place (leftBlock L j) E) Ω with hψ0
   set P := ‖ψ0‖ ^ 2 with hPdef0
   have hPk : P = hρ.kyFanNorm k := by
     rw [hPdef0, hψ0, Entropy.norm_sq_toEuclideanLin_localLift_eq_trace hE]
@@ -96,8 +96,8 @@ theorem one_sub_kyFanNorm_le_of_factorization (hq : 1 ≤ q)
     rw [h, hE.isIdempotentElem.eq]
   have hinner : ⟪ψ0, ψ0⟫_ℂ = ⟪Ω, ψ0⟫_ℂ := by
     rw [hψ0, ← LinearMap.adjoint_inner_right, ← toEuclideanLin_conjTranspose_eq_adjoint,
-      ← Matrix.toEuclideanLin_mul_apply, ← Entropy.localLift_conjTranspose,
-      ← Entropy.localLift_mul, hPP]
+      ← Matrix.toEuclideanLin_mul_apply, ← ManyBody.place_conjTranspose,
+      ← ManyBody.place_mul, hPP]
   have hov0 : ‖⟪ψ0, Ω⟫_ℂ‖ = P := by
     rw [norm_inner_symm, ← hinner, inner_self_eq_norm_sq_to_K, norm_pow]
     simp [hPdef0]
@@ -119,7 +119,7 @@ theorem one_sub_kyFanNorm_le_of_factorization (hq : 1 ≤ q)
       (by simp only [Finset.univ_unique, Finset.sum_singleton, hov0]; field_simp) hs
   -- Pass to the coefficient vector across the cut.
   set cv : EuclideanSpace ℂ (Fin L → Fin q) → _ := fun x ↦
-    WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L j) x) with hcv
+    WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) x) with hcv
   have hdot : ∀ x y, star (cv x) ⬝ᵥ cv y = ⟪x, y⟫_ℂ := fun x y ↦ star_cutVector_dotProduct j x y
   have hnormsq : ∀ x : EuclideanSpace ℂ (Fin L → Fin q), (star (cv x) ⬝ᵥ cv x).re = ‖x‖ ^ 2 := by
     intro x
@@ -132,12 +132,12 @@ theorem one_sub_kyFanNorm_le_of_factorization (hq : 1 ≤ q)
     (fun i ↦ cv (ψ' i)) hw' hrank' (by simp only [hnormsq]; exact hpos')
     (by simp only [hnormsq]; simp only [hdot]; exact hov')
   -- The marginal is `C Cᴴ` for the cut matrix `C`.
-  have hρeq : Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω =
+  have hρeq : ManyBody.regionState (X := fun _ ↦ Fin q) Ω (leftBlock L j) =
       cutMatrix Ω j * (cutMatrix Ω j)ᴴ := by
-    unfold Entropy.regionState
+    unfold ManyBody.regionState
     exact partialTraceRight_vecMulVec_eq _
-  have hkf : ∀ {A B : Matrix (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L j))
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L j)) ℂ} (_ : A = B)
+  have hkf : ∀ {A B : Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L j))
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L j)) ℂ} (_ : A = B)
       (hA : A.IsHermitian) (hB : B.IsHermitian), hA.kyFanNorm (k * q ^ (2 * m)) =
         hB.kyFanNorm (k * q ^ (2 * m)) := by
     rintro A B rfl hA hB; rfl
@@ -194,21 +194,21 @@ theorem one_sub_kyFanNorm_le_of_factorization_of_entropy (hq : 1 ≤ q)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (j : ℕ) {ξ' C₁ : ℝ}
     (hfact : ∀ m : ℕ, j + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL SL ∧ SL ⊆ leftBlock L j ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L j ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')))
     {k : ℕ}
-    (hk : Real.exp (2 * Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω) / 2 ≤
+    (hk : Real.exp (2 * ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L j)) / 2 ≤
       k)
     (m n : ℕ) (hn : k * q ^ (2 * m) ≤ n) :
-    1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω).kyFanNorm n
+    1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) (leftBlock L j) Ω).kyFanNorm n
       ≤ 4 * C₁ ^ 2 * Real.exp (-(2 * m) / ξ') := by
   have hk1 : 1 ≤ k := Nat.cast_pos.mp (lt_of_lt_of_le (by positivity) hk)
   exact one_sub_kyFanNorm_le_of_factorization hq hΩ j hfact hk1
     (one_half_le_kyFanNorm_of_exp_two_mul_vonNeumannEntropy_le
-      (Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω)
-      (Entropy.trace_regionState_eq_one hΩ) hk) m n hn
+      (ManyBody.regionState_posSemidef (X := fun _ ↦ Fin q) (leftBlock L j) Ω)
+      (ManyBody.trace_regionState_eq_one hΩ) hk) m n hn
 
 end TNLean.MPS.AreaLaw.Hastings

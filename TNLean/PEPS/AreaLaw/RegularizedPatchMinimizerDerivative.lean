@@ -34,8 +34,8 @@ theorem hasDerivAt_log_regularizedPatchObjective_exp_neg_of_isMinOn
     (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
     (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
     (hΩ : ‖Ω‖ = 1)
-    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ)
+    (x : ∀ j, Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ)
     (hx : x ∈ regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions) (R : ℝ)
     (hmin : IsMinOn
       (regularizedPatchObjective (Out := fun v ↦ Fin (n v))

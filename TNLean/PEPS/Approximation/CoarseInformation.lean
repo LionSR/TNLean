@@ -83,9 +83,9 @@ private theorem boundaryEndpoints_univ (Λ : Finset (ℤ × ℤ)) :
 /-- The mutual information of the empty region with any region vanishes. -/
 private theorem mutualInformation_empty_left {V : Type*} [Fintype V] [DecidableEq V]
     (q : ℕ) (Ω : EuclideanSpace ℂ (V → Fin q)) (hΩ : ‖Ω‖ = 1) (E : Finset V) :
-    FiniteProduct.mutualInformation (fun _ : V ↦ Fin q) Ω ∅ E = 0 := by
-  simp only [FiniteProduct.mutualInformation, Finset.empty_union,
-    FiniteProduct.entropy_empty _ Ω hΩ]
+    ManyBody.regionMutualInformation Ω ∅ E = 0 := by
+  simp only [ManyBody.regionMutualInformation, Finset.empty_union,
+    ManyBody.regionEntropy_empty _ Ω hΩ]
   ring
 
 /-- The scale factor `K = (max(C_tpl, 0) + 1)(N₀ + 1)(max(A₀, 1) + 4)` of Proposition 3.1: the
@@ -146,7 +146,7 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
           ∀ E : Finset (Site Λ),
             (∀ t ∈ T, ∀ y ∈ E,
               u ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t y.val : ℝ)) →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X E ≤ max Ca 0 := by
+            ManyBody.regionMutualInformation Ω X E ≤ max Ca 0 := by
   classical
   unfold coarseInformationThreshold coarseScaleFactor
   set C₀ : ℝ := max C 1 with hC₀
@@ -282,7 +282,7 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBoundAt {q R : ℕ}
   have hninv : 0 ≤ ((n : ℝ) ^ (1 : ℕ))⁻¹ ∧ ((n : ℝ) ^ (1 : ℕ))⁻¹ ≤ 1 := by
     rw [pow_one]
     exact ⟨inv_nonneg.mpr hn0', inv_le_one_of_one_le₀ (by linarith)⟩
-  calc FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X E
+  calc ManyBody.regionMutualInformation Ω X E
       ≤ Ca * ((n : ℝ) ^ (1 : ℕ))⁻¹ := hfinal
     _ ≤ max Ca 0 * ((n : ℝ) ^ (1 : ℕ))⁻¹ :=
         mul_le_mul_of_nonneg_right (le_max_left _ _) hninv.1
@@ -362,7 +362,7 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D�
           ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
           ∀ E : Finset (Site Λ),
             (∀ t ∈ T, ∀ y ∈ E, u ^ β < (Scan.ambientSupDistance t y.val : ℝ)) →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X E ≤ C := by
+            ManyBody.regionMutualInformation Ω X E ≤ C := by
   obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol
   exact ⟨_, beta_lt_one, _, _,
@@ -373,11 +373,11 @@ regions are relabeled. Source: polynomial-PEPS `01-preliminaries.tex`, lines 23�
 theorem finiteProductMutualInformation_relabel {V W : Type*} [Fintype V] [DecidableEq V]
     [Fintype W] [DecidableEq W] (σ : V ≃ W) (q : ℕ) (Ω : EuclideanSpace ℂ (V → Fin q))
     (X E : Finset V) :
-    FiniteProduct.mutualInformation (fun _ : W ↦ Fin q)
+    ManyBody.regionMutualInformation
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (σ.arrowCongr (Equiv.refl (Fin q))) Ω)
         (X.map σ.toEmbedding) (E.map σ.toEmbedding) =
-      FiniteProduct.mutualInformation (fun _ : V ↦ Fin q) Ω X E := by
-  simp only [FiniteProduct.mutualInformation, ← Finset.map_union,
+      ManyBody.regionMutualInformation Ω X E := by
+  simp only [ManyBody.regionMutualInformation, ← Finset.map_union,
     finiteProductEntropy_relabel]
 
 /-- **Proposition 3.1 on the square grid, from the sublinear collar bound.** Fix `q`,
@@ -405,7 +405,7 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
           ∀ E : Finset (Vertex L),
             (∀ t ∈ T, ∀ v ∈ E,
               u ^ β < (Scan.ambientSupDistance t (rectangleEmbedding v + c) : ℝ)) →
-            FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q) Ω X E ≤ C := by
+            ManyBody.regionMutualInformation Ω X E ≤ C := by
   classical
   obtain ⟨β, hβ, C, u₀, hmain⟩ :=
     coarse_mutualInformation_le_of_sublinearCollarBound hΔ hcol N₀ A₀

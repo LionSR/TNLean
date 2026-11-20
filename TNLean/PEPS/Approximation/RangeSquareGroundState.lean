@@ -96,7 +96,7 @@ theorem squareEntropyAreaLawAt_range_of_areaLawBound {q R : ℕ} {J Δ C : ℝ} 
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ A : Finset (Lattice.Site Λ),
-          Lattice.regionalEntropy Λ q Ω A ≤ C * (Lattice.edgeBoundary Λ A).card) :
+          ManyBody.regionEntropy Ω A ≤ C * (Lattice.edgeBoundary Λ A).card) :
     SquareEntropyAreaLawAt q (IsRangeSquareGroundState q R J Δ) C := by
   refine ⟨hC, fun L Ω ⟨H, hH, hHJ, E₀, hΩ, hgap, hspan⟩ A ↦ ?_⟩
   have := hbound (AreaLaw.rectangularDomain L L) H hH hHJ E₀

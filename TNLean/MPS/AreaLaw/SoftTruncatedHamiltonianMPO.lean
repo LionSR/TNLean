@@ -36,7 +36,7 @@ arXiv:1602.08828v2, `def:soft-trunc` and `lem:exp-approx-eff`, lines 1178–1185
 theorem exists_softTruncatedHamiltonian_mpo_of_accuracy_of_base {N q m : ℕ}
     (hq : 1 ≤ q)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ})
     (hh : ∀ i, (h i).IsHermitian) (hnorm : ∀ i, ‖h i‖ ≤ 1)
     (I : Finset (Fin N)) (eps t xi : ℝ) (hlo : (eps : ℂ) • 1 ≤ ∑ i ∈ I, h i)
@@ -55,10 +55,10 @@ theorem exists_softTruncatedHamiltonian_mpo_of_accuracy_of_base {N q m : ℕ}
   intro W r
   let g : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ :=
     fun i ↦ if i ∈ I then h i else 0
-  have hgs (i : Fin N) : Entropy.IsSupportedOn (g i) {i.castSucc, i.succ} := by
+  have hgs (i : Fin N) : ManyBody.IsSupportedOn (g i) {i.castSucc, i.succ} := by
     by_cases hi : i ∈ I
     · simpa only [g, ite_eq_left hi] using hs i
-    · simp [g, hi, Entropy.IsSupportedOn, ManyBody.IsSupportedOn]
+    · simp [g, hi, ManyBody.IsSupportedOn, ManyBody.IsSupportedOn]
   have hgh (i : Fin N) : (g i).IsHermitian := by
     by_cases hi : i ∈ I <;> simp [g, hi, hh i]
   have hgn (i : Fin N) : ‖g i‖ ≤ 1 := by
@@ -69,11 +69,11 @@ theorem exists_softTruncatedHamiltonian_mpo_of_accuracy_of_base {N q m : ℕ}
   rw [hgsum] at hA
   let f : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ :=
     fun i ↦ if i ∈ Iᶜ then h i else 0
-  have hfs (i : Fin N) : Entropy.IsSupportedOn (f i) {i.castSucc, i.succ} := by
+  have hfs (i : Fin N) : ManyBody.IsSupportedOn (f i) {i.castSucc, i.succ} := by
     by_cases hi : i ∈ Iᶜ
     · simpa only [f, ite_eq_left hi] using hs i
     · have hiI : i ∈ I := by simpa using hi
-      simp [f, hiI, Entropy.IsSupportedOn, ManyBody.IsSupportedOn]
+      simp [f, hiI, ManyBody.IsSupportedOn, ManyBody.IsSupportedOn]
   have hfsum : (∑ i, f i) = ∑ i ∈ Iᶜ, h i := by
     simp only [f, Finset.sum_ite_mem, Finset.univ_inter]
   have hcomp : (∑ i ∈ Iᶜ, h i) = (∑ i, h i) - ∑ i ∈ I, h i :=
@@ -94,7 +94,7 @@ arXiv:1602.08828v2, `def:soft-trunc` and `lem:exp-approx-eff`, lines 1178–1185
 theorem exists_softTruncatedHamiltonian_mpo_of_accuracy {N q m : ℕ}
     (hq : 1 ≤ q) (hm : 0 < m)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ})
     (hh : ∀ i, (h i).IsHermitian) (hnorm : ∀ i, ‖h i‖ ≤ 1)
     (I : Finset (Fin N)) (eps t xi : ℝ) (hlo : (eps : ℂ) • 1 ≤ ∑ i ∈ I, h i)

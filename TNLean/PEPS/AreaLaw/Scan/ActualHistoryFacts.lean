@@ -61,19 +61,19 @@ variable {V : Type*} [Fintype V] [DecidableEq V] (n : V → ℕ) [∀ v, NeZero 
 /-- A valid move has entropy at most twice the logarithmic dimension of its moved
 subsystem (`06-transport.tex`, lines 315–322; `08-scanner.tex`, lines 434–440). -/
 theorem moveEta_le_two_mul_logDim (π : PYF V) (hπ : π.IsPartition) (m : Move V)
-    (hm : m.IsValid π) (θ : EuclideanSpace ℂ (SiteConfig n)) (hθ : ‖θ‖ = 1) :
+    (hm : m.IsValid π) (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) (hθ : ‖θ‖ = 1) :
     moveEta n π m θ ≤ 2 * logDim n m.subsystem := by
   cases m with
   | stay => simp [moveEta, Move.subsystem, logDim]
   | toP x =>
     have hxY : x ⊆ π.Y := hm
-    exact (FiniteProduct.conditionalMutualInformation_le_two_entropy _ θ hθ x π.F π.P
+    exact (ManyBody.conditionalMutualInformation_le_two_regionEntropy _ θ hθ x π.F π.P
       (hπ.2.2.1.mono_left hxY) (hπ.1.symm.mono_left hxY)).trans
       (mul_le_mul_of_nonneg_left (entropy_le_logDim_of_subset n θ hθ subset_rfl)
         (by norm_num))
   | toF x =>
     have hxY : x ⊆ π.Y := hm
-    exact (FiniteProduct.conditionalMutualInformation_le_two_entropy _ θ hθ x π.P π.F
+    exact (ManyBody.conditionalMutualInformation_le_two_regionEntropy _ θ hθ x π.P π.F
       (hπ.1.symm.mono_left hxY) (hπ.2.2.1.mono_left hxY)).trans
       (mul_le_mul_of_nonneg_left (entropy_le_logDim_of_subset n θ hθ subset_rfl)
         (by norm_num))
@@ -89,7 +89,7 @@ dimension at most `ℓ`: each band contributes one probability average of move e
 (`08-scanner.tex`, lines 434–440). -/
 theorem choiceEntropySymbol_le_of_logDim_move_le (hD : D.IsAdmissible) {ℓ : ℝ}
     (hmove : ∀ h c g, logDim n (D.move h c g).subsystem ≤ ℓ) (h : H)
-    (θ : EuclideanSpace ℂ (SiteConfig n)) (hθ : ‖θ‖ = 1) :
+    (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) (hθ : ‖θ‖ = 1) :
     D.choiceEntropySymbol n h (fun x => θ x) ≤ K * (2 * ℓ) := by
   classical
   unfold choiceEntropySymbol
@@ -119,7 +119,7 @@ variable {V I : Type} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]
 /-- The rounds of the actual scan: `nm` fills and `nm` charges, interleaved with a fill
 first (`08-scanner.tex`, lines 106–107), so round `j` is the fill or charge after `⌊j/2⌋`
 completed fill/charge pairs. Every round uses the same supplied replica vectors. -/
-def actualScanRound (j : ℕ) : ScanRound I (CoherentSphere (SiteConfig n)) :=
+def actualScanRound (j : ℕ) : ScanRound I (CoherentSphere (∀ v, Fin (n v))) :=
   if IsChargeRound j then S.actualChargeScanRound hm hM (j / 2) n E a pre
   else S.actualFillScanRound hm hM (j / 2) n E a pre
 
@@ -134,7 +134,7 @@ theorem actualScanRound_of_fill {j : ℕ} (hj : ¬IsChargeRound j) :
   simp only [actualScanRound, hj, ↓reduceIte]
 
 /-- Prove a property of an actual round from the corresponding charge and fill rounds. -/
-theorem actualScanRound_cases (P : ScanRound I (CoherentSphere (SiteConfig n)) → Prop) (j : ℕ)
+theorem actualScanRound_cases (P : ScanRound I (CoherentSphere (∀ v, Fin (n v))) → Prop) (j : ℕ)
     (hcharge : IsChargeRound j → P (S.actualChargeScanRound hm hM (j / 2) n E a pre))
     (hfill : ¬IsChargeRound j → P (S.actualFillScanRound hm hM (j / 2) n E a pre)) :
     P (S.actualScanRound hm hM n E a pre j) := by
@@ -247,13 +247,13 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
       transportLogDimBound q S.r₀ :=
     S.fillTransportData_logDim_move_le (historyMeanTree S.K S.m S.M hm hM s) dims hq hphysical
   -- The choice-averaged gain is at most `K · 2ℓ`.
-  have hgainC : ∀ s h (θ : CoherentSphere (SiteConfig dims)),
+  have hgainC : ∀ s h (θ : CoherentSphere (∀ v, Fin (dims v))),
       (S.actualChargeData hm hM s).choiceEntropySymbol dims h (fun x => θ.1 x) ≤
         C * X.K N * Real.log N ^ Cl := fun s h θ ↦
     ((S.actualChargeData hm hM s).choiceEntropySymbol_le_of_logDim_move_le dims (hadmC s)
       (hmoveC s) h θ.1 θ.2).trans (by
         rw [hSK]; nlinarith [show (0 : ℝ) ≤ X.K N by positivity])
-  have hgainF : ∀ s h (θ : CoherentSphere (SiteConfig dims)),
+  have hgainF : ∀ s h (θ : CoherentSphere (∀ v, Fin (dims v))),
       (S.actualFillData hm hM s).choiceEntropySymbol dims h (fun x => θ.1 x) ≤
         C * X.K N * Real.log N ^ Cl := fun s h θ ↦
     ((S.actualFillData hm hM s).choiceEntropySymbol_le_of_logDim_move_le dims (hadmF s)

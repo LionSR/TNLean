@@ -75,28 +75,30 @@ theorem trace_regularizedPatchRegulator_le_quarter_of_isMinOn
     (Ω : EuclideanSpace ℂ ((v : V) → Fin (n v)))
     (hΩ : ‖Ω‖ = 1) {C u R : ℝ} (hC : 0 < C) (hu : 0 ≤ u)
     (hR : (16 * C + Real.log 8) * (1 + u) ≤ R)
-    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ)
+    (x : ∀ j, Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ)
     (hx : x ∈ regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions)
     (hmin : IsMinOn
       (regularizedPatchObjective (Out := fun v ↦ Fin (n v))
         regions a (Real.exp (-R)) Ω)
       (regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions) x)
     (j : Fin m) :
-    let ρ : Matrix (Entropy.RegionConfig n (regions j))
-        (Entropy.RegionConfig n (regions j)) ℂ :=
+    let ρ : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+        (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ :=
       normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
         regions a (Real.exp (-R)) Ω x (regions j)
-    let σ : Matrix (Entropy.RegionConfig n (regions j))
-        (Entropy.RegionConfig n (regions j)) ℂ :=
-      Entropy.regionState (regions j) (Ω)
+    let σ : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+        (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ :=
+      ManyBody.regionState (Ω) (regions j)
     _root_.vonNeumannEntropy σ
-        (Entropy.regionState_posSemidef (regions j)
+        (ManyBody.regionState_posSemidef (regions j)
           (Ω)).isHermitian ≤ C * (1 + u) →
       (CFC.abs (ρ - σ)).trace.re ≤ 1 / 16 →
       (Real.exp (-R) •
-        (ρ * (x j + Real.exp (-R) • (1 : Matrix (Entropy.RegionConfig n (regions j))
-          (Entropy.RegionConfig n (regions j)) ℂ))⁻¹)).trace.re ≤ 1 / 4 := by
+        (ρ *
+            (x j + Real.exp (-R) •
+            (1 : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+          (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ))⁻¹)).trace.re ≤ 1 / 4 := by
   intro ρ σ hS hd
   have hρ : ρ.PosSemidef :=
     normalizedRegularizedPatchMarginal_posSemidef (Out := fun v ↦ Fin (n v))
@@ -105,18 +107,19 @@ theorem trace_regularizedPatchRegulator_le_quarter_of_isMinOn
     trace_normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v)) regions a
       (fun k ↦ (ha k).le) (Real.exp_pos (-R)) Ω hΩ hx (regions j)
   have hσ : σ.PosSemidef :=
-    Entropy.regionState_posSemidef (regions j) (Ω)
+    ManyBody.regionState_posSemidef (regions j) (Ω)
   have hσ1 : σ.trace = 1 := by
     dsimp only [σ]
-    rw [Entropy.trace_regionState, hΩ]
+    rw [ManyBody.trace_regionState, hΩ]
     norm_num
   obtain ⟨hcomm, hle⟩ := normalizedRegularizedPatchMarginal_stationarity_of_isMinOn
     regions hnested a ha (Real.exp_pos (-R)) Ω x hx hmin j
   have hcomm' : Commute ρ (x j) := hcomm.symm
-  have hle' : ρ ≤ x j + Real.exp (-R) • (1 : Matrix (Entropy.RegionConfig n (regions j))
-      (Entropy.RegionConfig n (regions j)) ℂ) := hle
+  have hle' : ρ ≤ x j + Real.exp (-R) •
+      (1 : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j)) ℂ) := hle
   exact trace_shiftedRegulator_le_quarter_of_entropy_distance
-    (ι := Entropy.RegionConfig n (regions j)) (x := x j) (ρ := ρ) (σ := σ)
+    (ι := (ManyBody.RegionConfig (fun v ↦ Fin (n v)) (regions j))) (x := x j) (ρ := ρ) (σ := σ)
     (hx j).1 hρ hσ hρ1 hσ1 hcomm' hC hu hR hS hd hle'
 
 end TNLean.PEPS

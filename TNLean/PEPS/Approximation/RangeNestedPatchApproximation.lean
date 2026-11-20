@@ -79,9 +79,10 @@ theorem SquareEntropyAreaLawAt.rangeNestedPatch_entropy_le
     ∀ (L : ℕ) (Ω : StateSpace L q), G L Ω →
       ∀ (z : ℝ × ℝ) (u : ℝ), 0 ≤ u →
         ∀ j : Fin (AreaLaw.Geometry.rangeNestedPatchCount R u),
-          Entropy.regionEntropy
-            (AreaLaw.Geometry.rangeNestedPatch (AreaLaw.rectangularDomain L L) z R u j.val)
-            (AreaLaw.rectangleAreaLawState Ω) ≤ max 1 (16 * C_A) * (1 + u) := fun L Ω hΩ z u hu j ↦
+          ManyBody.regionEntropy
+            (AreaLaw.rectangleAreaLawState Ω)
+            (AreaLaw.Geometry.rangeNestedPatch (AreaLaw.rectangularDomain L L) z R u j.val) ≤ max 1
+                (16 * C_A) * (1 + u) := fun L Ω hΩ z u hu j ↦
   hA.closedSquareSample_entropy_le L Ω hΩ z u _
     (hu.trans (AreaLaw.Geometry.le_rangeNestedPatchRadius R u j.val))
     (AreaLaw.Geometry.rangeNestedPatchRadius_le_two_mul hu j.isLt)

@@ -54,11 +54,11 @@ theorem isViableMPS_errorReductionSet_of_admissible_sampled {i : ℕ} (hi : i �
     (I : Fin ℓ → Fin m → Fin L) {D : ℕ} {F : Finset (LeftBlockMatrix L q i)}
     (hdec : ∃ (ι : Type) (J : Finset ι) (A : ι → LeftBlockMatrix L q i)
       (B : ι → RightBlockMatrix L q i),
-      Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) (sampledProjector h E₀ I) =
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector h E₀ I) =
           ∑ t ∈ J, A t ⊗ₖ B t ∧ ∀ t ∈ J, A t ∈ F)
     (hcard : F.card ≤ ℓ * D)
     (hrank : ∀ A ∈ F, ∀ k, k < i → operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
         (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΓ : ‖Γ‖ = 1) {s b : ℕ}
     {S : Finset (LeftBlockVector L q i)} (hS : IsViableMPS Γ s b (1 / 2) S) {η : ℝ}
@@ -87,7 +87,7 @@ theorem isViableMPS_errorReductionSet_of_admissible_sampled {i : ℕ} (hi : i �
 applied to the selection of the oracle's nets and solver. -/
 theorem eval_sampledSweepStepProgram_of_valid (hv : IsValidOracle o) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
         (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
@@ -108,7 +108,7 @@ theorem eval_sampledSweepStepProgram_of_valid (hv : IsValidOracle o) (hq : 2 ≤
 the explicit size and bond bounds of the honest step. -/
 theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
@@ -149,7 +149,7 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
           (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1)
         (ManyBody.ChainInteraction.posSemidef_ofBonds_term h hs h0) hL hq hi hΔ
         (AreaLaw.extend (i + 1) S) hnet hsol E₀ Γ hΩ hgapC hspanC hext⟩
-  have hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+  have hrank : ∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) (bondComplementWord h (I t))) ≤ q ^ (2 * κ) := fun t k ↦
     operatorSchmidtRank_cutOperator_bondComplementWord_le_all (by omega) h hs (I t)
       (hgood.2 t) k
@@ -174,7 +174,7 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
 cut, with the uniform size and bond bounds at every positive cut. -/
 theorem sampledSweepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
@@ -205,7 +205,7 @@ theorem sampledSweepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L) (h
 /-- **On good words the sampled program finds the ground state under every valid oracle.** -/
 theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L)
     (hq : 2 ≤ q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
@@ -285,7 +285,7 @@ valid oracle.** -/
 theorem measureReal_sampledGroundStateProgram_success_of_valid [NeZero L]
     (hv : IsValidOracle o) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})

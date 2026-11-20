@@ -181,7 +181,7 @@ theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V
     let F := reindex p p (sheetSwapOp q A)
     let ψ : (V → Fin (q * q)) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
     ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ δ →
-    FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A₀ C₀ ≤
+    ManyBody.regionMutualInformation Ω A₀ C₀ ≤
       8 * √δ * Real.log (Real.exp 1 * ((q : ℝ) ^ A₀.card)) := by
   intro p F ψ hUerr
   have hΩsum : ∑ i, ‖WithLp.ofLp Ω i‖ ^ 2 = 1 := by
@@ -199,7 +199,7 @@ theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V
     reindex_sumArrow_sitePair_mem_supportedOperators q hUs
   have hU'u : U'ᴴ * U' = 1 :=
     (Matrix.mem_unitaryGroup_iff').mp (reindex_mem_unitaryGroup Pe.symm U hUu)
-  set Ψ := FiniteProduct.sumSitesProduct (X := fun _ : V ⊕ V ↦ Fin q) Ω Ω with hΨdef
+  set Ψ := ManyBody.sumSitesProduct (X := fun _ : V ⊕ V ↦ Fin q) Ω Ω with hΨdef
   set Φ := FiniteProduct.relabelSites (replicaSwap A) Ψ with hΦdef
   have hΨ : Ψ = WithLp.toLp 2 (ψ ∘ Pe) := by
     apply WithLp.ofLp_injective 2
@@ -231,14 +231,14 @@ theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V
   have hprod := mutualInformation_relabelSites_replicaSwap_eq_zero (q := q) hΩ hA₀
     (Finset.disjoint_of_subset_left hC₀ hAC.symm)
   have hent :=
-    FiniteProduct.mutualInformation_le_of_supported_unitary (fun _ : V ⊕ V ↦ Fin q)
+    ManyBody.regionMutualInformation_le_of_supported_unitary (fun _ : V ⊕ V ↦ Fin q)
       (φ := Ψ) (η := Φ) hΨn hΦn hXJ hS hU's hU'u hprod
-  rw [hΨdef, FiniteProduct.mutualInformation_sumSitesProduct_inl (X := fun _ : V ⊕ V ↦ Fin q)
+  rw [hΨdef, ManyBody.regionMutualInformation_sumSitesProduct_inl (X := fun _ : V ⊕ V ↦ Fin q)
     (f := Ω) (g := Ω) hΩ hΩ] at hent
   refine hent.trans ?_
-  have hcard : Fintype.card (FiniteProduct.Configuration (fun _ : V ⊕ V ↦ Fin q)
+  have hcard : Fintype.card (ManyBody.RegionConfig (fun _ : V ⊕ V ↦ Fin q)
       (A₀.disjSum ∅)) = q ^ A₀.card := by
-    simp only [FiniteProduct.Configuration, Fintype.card_fun, Fintype.card_fin,
+    simp only [ManyBody.RegionConfig, Fintype.card_fun, Fintype.card_fin,
       Fintype.card_coe, Finset.card_disjSum, Finset.card_empty, add_zero]
   rw [hcard]
   push_cast
@@ -267,7 +267,7 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
     let ψ : Lattice.Configuration (rectangularDomain L L) (q * q) → ℂ := fun c ↦
       Ω (pe.symm c).1 * Ω (pe.symm c).2
     ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ δ →
-    FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤
+    ManyBody.regionMutualInformation Ω R₀ C₀ ≤
       8 * √δ * Real.log (Real.exp 1 * ((q : ℝ) ^ R₀.card)) := by
   intro pe F ψ hUerr
   set a := rectangleSiteEquiv L L
@@ -346,12 +346,12 @@ theorem _root_.ManyBody.SquareInteraction.information_reset_of_resetThreshold_le
       ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →
-      ∀ b : ℝ, 0 ≤ b → FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
+      ∀ b : ℝ, 0 ≤ b → ManyBody.regionMutualInformation Ω R C ≤ b →
       (∀ x ∈ R₀, ∀ y, y ∉ R → resetWidth J Δ p * (1 + b + Real.log L) <
         (supDist (rectangleEmbedding x) (rectangleEmbedding y) : ℝ)) →
       (∀ x ∈ C₀, ∀ y, y ∉ C → resetWidth J Δ p * (1 + b + Real.log L) <
         (supDist (rectangleEmbedding x) (rectangleEmbedding y) : ℝ)) →
-      FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤ (L : ℝ) ^ (-p) := by
+      ManyBody.regionMutualInformation Ω R₀ C₀ ≤ (L : ℝ) ^ (-p) := by
   have hreset := ManyBody.SquareInteraction.reset_unitary q hq J hJ hΔ
       (r := 2 * p + 10) (by linarith)
   have hK : 0 < resetRadius J Δ (2 * p + 10) := resetRadius_pos hJ hΔ (by linarith)
@@ -403,12 +403,12 @@ theorem _root_.ManyBody.SquareInteraction.information_reset (q : ℕ) (hq : 1 �
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (R C R₀ C₀ : Finset (SquareLatticeVertex L L)), Disjoint R C → R₀ ⊆ R → C₀ ⊆ C →
-        ∀ b : ℝ, 0 ≤ b → FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
+        ∀ b : ℝ, 0 ≤ b → ManyBody.regionMutualInformation Ω R C ≤ b →
         (∀ x ∈ R₀, ∀ y, y ∉ R → Cp * (1 + b + Real.log L) <
           (supDist (rectangleEmbedding x) (rectangleEmbedding y) : ℝ)) →
         (∀ x ∈ C₀, ∀ y, y ∉ C → Cp * (1 + b + Real.log L) <
           (supDist (rectangleEmbedding x) (rectangleEmbedding y) : ℝ)) →
-        FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤ (L : ℝ) ^ (-p) :=
+        ManyBody.regionMutualInformation Ω R₀ C₀ ≤ (L : ℝ) ^ (-p) :=
   ⟨resetWidth J Δ p, resetThreshold q J Δ p, resetWidth_pos hJ hΔ hp,
     ManyBody.SquareInteraction.information_reset_of_resetThreshold_le q hq J hJ hΔ hp⟩
 

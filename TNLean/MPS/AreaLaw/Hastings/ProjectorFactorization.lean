@@ -111,12 +111,12 @@ theorem lemmaOneConst_nonneg (R : ℕ) {J ΔE : ℝ} (hΔ : 0 < ΔE) (ξ' : ℝ)
 with error `1`. -/
 theorem isFactorizationAt_zero_one_one {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
     (c l : ℕ) : IsFactorizationAt Ω c l 1 0 1 1 := by
-  have h1 : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+  have h1 : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (leftBlock L c) :=
-    Entropy.isSupportedOn_one _
+    one_mem (ManyBody.supportedOperators (fun v ↦ Fin (n v)) _)
   refine ⟨IsStarProjection.one _, IsStarProjection.one _, Commute.one_left 1, by simp,
     zero_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _), h1,
-    Entropy.isSupportedOn_one _, ?_⟩
+    one_mem (ManyBody.supportedOperators (fun v ↦ Fin (n v)) _), ?_⟩
   simpa using (isStarProjection_vecMulVec_of_norm_eq_one hΩ).norm_le
 
 /-- **Lemma 1 with the square-root error.** For a gapped ground state `Ω` of a chain
@@ -183,7 +183,7 @@ theorem exists_isFactorizationAt_sqrt_decay (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ 
     ManyBody.ChainInteraction.exists_boundaryOperator_factorization hq1 h hh hhJ hH₀ E₀ _ hZ hOL hOR
       (timeAverageVariance s ΔE) (ℓ' := (ℓn : ℝ)) (Nat.cast_nonneg _) hθ' hmoved
   refine ⟨OB, OL, OR, hOL, hOR, hcomm, hOB1, ?_, hsL, hsR, ?_⟩
-  · refine Entropy.IsSupportedOn.mono hOBs
+  · refine ManyBody.IsSupportedOn.mono hOBs
       ((chainNeighborhood_interval_subset _ _ ℓn).trans fun x hx ↦ ?_)
     simp only [mem_interval] at hx ⊢
     omega

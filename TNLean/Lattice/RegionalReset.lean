@@ -69,7 +69,7 @@ theorem splitTwoRegions_sheetSwap (q : ℕ) (R C : Finset ι) (hRC : Disjoint R 
     (x : (ι → Fin q) × (ι → Fin q)) :
     let Q := (R ∪ C)ᶜ
     let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
-    let s := FiniteProduct.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
+    let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
     let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (Q → Fin q))
     g (sheetSwap q R x) =
       (Equiv.partialSwap (Fin (Fintype.card (R → Fin q))) (Fin (Fintype.card (C → Fin q)))
@@ -80,7 +80,7 @@ theorem splitTwoRegions_sheetSwap (q : ℕ) (R C : Finset ι) (hRC : Disjoint R 
     Finset.mem_compl.mp v.2 (Finset.mem_union_left C hv)
   simp only [g, s, Equiv.trans_apply, Equiv.prodCongr_apply, Prod.map,
     Equiv.doubledRegroup, Equiv.bipartiteRegroup, Equiv.coe_fn_mk,
-    FiniteProduct.splitTwoRegionsEquiv, FiniteProduct.unionEquiv, Equiv.refl_apply,
+    ManyBody.splitTwoRegionsEquiv, ManyBody.unionEquiv, Equiv.refl_apply,
     Equiv.partialSwap_apply, sheetSwap]
   refine Prod.ext (Prod.ext (Prod.ext ?_ ?_) (Prod.ext ?_ ?_)) (Prod.ext ?_ ?_) <;>
     dsimp only
@@ -98,7 +98,7 @@ theorem submatrix_partialSwap_kronecker_one_eq_sheetSwapOp (q : ℕ) (R C : Fins
     (hRC : Disjoint R C) :
     let Q := (R ∪ C)ᶜ
     let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
-    let s := FiniteProduct.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
+    let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
     let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (Q → Fin q))
     (partialSwap (Fin (Fintype.card (R → Fin q))) (Fin (Fintype.card (C → Fin q))) ⊗ₖ
         (1 : Matrix ((Q → Fin q) × (Q → Fin q)) ((Q → Fin q) × (Q → Fin q)) ℂ)).submatrix
@@ -127,16 +127,16 @@ marginals is their regional mutual information.
 Source: `02-information.tex`, lines 368–375. -/
 theorem quantumRelativeEntropy_splitTwoRegionsState_eq_mutualInformation (q : ℕ)
     (Ω : EuclideanSpace ℂ (ι → Fin q)) (R C : Finset ι) (hRC : Disjoint R C) :
-    let ψ := FiniteProduct.splitTwoRegionsState (fun _ : ι ↦ Fin q) Ω R C hRC
+    let ψ := ManyBody.splitTwoRegionsState (fun _ : ι ↦ Fin q) Ω R C hRC
     quantumRelativeEntropy (partialTraceRight (vecMulVec ψ (star ψ)))
         (partialTraceRight (partialTraceRight (vecMulVec ψ (star ψ))) ⊗ₖ
           partialTraceLeft (partialTraceRight (vecMulVec ψ (star ψ)))) =
-      FiniteProduct.mutualInformation (fun _ : ι ↦ Fin q) Ω R C := by
+      ManyBody.regionMutualInformation Ω R C := by
   intro ψ
-  rw [FiniteProduct.partialTraceRight_splitTwoRegionsState,
+  rw [ManyBody.partialTraceRight_splitTwoRegionsState,
     quantumRelativeEntropy_product_marginals
-      (FiniteProduct.jointMatrix_posSemidef (fun _ : ι ↦ Fin q) Ω R C hRC),
-    FiniteProduct.mutualInformation_eq_matrix (fun _ : ι ↦ Fin q) Ω R C hRC]
+      (ManyBody.jointMatrix_posSemidef (fun _ : ι ↦ Fin q) Ω R C hRC),
+    ManyBody.regionMutualInformation_eq_matrix (fun _ : ι ↦ Fin q) Ω R C hRC]
   rfl
 
 end Coordinates
@@ -188,7 +188,7 @@ Source: `02-information.tex`, lines 416–424. -/
 theorem reindex_regional_doubledHamiltonian (q : ℕ) (R C : Finset ι) (hRC : Disjoint R C)
     (t : (ι → Fin q) × (ι → Fin q) ≃ N) (H : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
     let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
-    let s := FiniteProduct.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
+    let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
     let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q))
     reindex (g.symm.trans t) (g.symm.trans t)
         (reindex (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q))
@@ -205,7 +205,7 @@ Source: `02-information.tex`, lines 362–365 and 398–410. -/
 theorem reindex_regional_partialSwap (q : ℕ) (R C : Finset ι) (hRC : Disjoint R C)
     (t : (ι → Fin q) × (ι → Fin q) ≃ N) :
     let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
-    let s := FiniteProduct.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
+    let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
     let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q))
     reindex (g.symm.trans t) (g.symm.trans t)
         (partialSwap (Fin (Fintype.card (R → Fin q))) (Fin (Fintype.card (C → Fin q))) ⊗ₖ
@@ -222,15 +222,15 @@ replicas. -/
 theorem doubledRegroup_splitTwoRegionsState_comp (q : ℕ) (R C : Finset ι) (hRC : Disjoint R C)
     (t : (ι → Fin q) × (ι → Fin q) ≃ N) (Ω : EuclideanSpace ℂ (ι → Fin q)) :
     let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
-    let s := FiniteProduct.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
+    let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
     let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q))
-    doubledRegroup (FiniteProduct.splitTwoRegionsState (fun _ : ι ↦ Fin q) Ω R C hRC) ∘
+    doubledRegroup (ManyBody.splitTwoRegionsState (fun _ : ι ↦ Fin q) Ω R C hRC) ∘
         (g.symm.trans t).symm =
       fun c ↦ Ω (t.symm c).1 * Ω (t.symm c).2 := by
   intro P s g
   funext c
   simp [g, s, doubledRegroup, Equiv.doubledRegroup, Equiv.bipartiteRegroup,
-    FiniteProduct.splitTwoRegionsState]
+    ManyBody.splitTwoRegionsState]
 
 end RegionalCoordinates
 
@@ -276,9 +276,9 @@ theorem regional_physicalBuffer_filter {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r
       (H : Matrix (ι → Fin q) (ι → Fin q) ℂ) (E₀ : ℝ) (Ω : EuclideanSpace ℂ (ι → Fin q))
       (b : ℝ), H.IsHermitian → ‖Ω‖ = 1 → IsGapped H E₀ Δ →
       groundSpace H E₀ = Submodule.span ℂ {Ω} → 0 ≤ b →
-      FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
+      ManyBody.regionMutualInformation Ω R C ≤ b →
       let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
-      let s := FiniteProduct.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
+      let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
       let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q))
       let K := reindex t t (doubledHamiltonian H)
       let F := reindex t t (sheetSwapOp q R)
@@ -304,9 +304,9 @@ theorem regional_physicalBuffer_filter {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 0 ≤ r
   intro ι _ _ N _ _ q R C hRC t H E₀ Ω b hH hΩ hgs hspan hb hI P s g K F ψ
   have heigen := mulVec_eq_of_groundSpace_eq_span hspan
   have hgap := hgs.posSemidef_sub_smul_one hH hΩ hspan
-  let Ωs := FiniteProduct.splitTwoRegionsState (fun _ : ι ↦ Fin q) Ω R C hRC
+  let Ωs := ManyBody.splitTwoRegionsState (fun _ : ι ↦ Fin q) Ω R C hRC
   have hΩsv : Ωs = WithLp.ofLp Ω ∘ s.symm := rfl
-  have hunit : star Ωs ⬝ᵥ Ωs = 1 := FiniteProduct.splitTwoRegionsState_unit _ Ω hΩ R C hRC
+  have hunit : star Ωs ⬝ᵥ Ωs = 1 := ManyBody.splitTwoRegionsState_unit _ Ω hΩ R C hRC
   have heigs : reindex s s H *ᵥ Ωs = (E₀ : ℂ) • Ωs := by
     rw [hΩsv, Matrix.reindex_mulVec, heigen]
     rfl
@@ -375,9 +375,9 @@ theorem exists_regional_physicalBuffer_filter {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 
         (H : Matrix (ι → Fin q) (ι → Fin q) ℂ) (E₀ : ℝ) (Ω : EuclideanSpace ℂ (ι → Fin q))
         (b : ℝ), H.IsHermitian → ‖Ω‖ = 1 → IsGapped H E₀ Δ →
       groundSpace H E₀ = Submodule.span ℂ {Ω} → 0 ≤ b →
-        FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R C ≤ b →
+        ManyBody.regionMutualInformation Ω R C ≤ b →
         let P := Fin (Fintype.card (R → Fin q)) × Fin (Fintype.card (C → Fin q))
-        let s := FiniteProduct.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
+        let s := ManyBody.splitTwoRegionsEquiv (fun _ : ι ↦ Fin q) R C hRC
         let g := (s.prodCongr s).trans (Equiv.doubledRegroup P (↥(R ∪ C)ᶜ → Fin q))
         let K := reindex t t (doubledHamiltonian H)
         let F := reindex t t (sheetSwapOp q R)

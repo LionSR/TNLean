@@ -95,9 +95,9 @@ open TNLean.MPS.AreaLaw
 
 private theorem entropy_eq {L q : ℕ} (A : Finset (Fin L))
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :
-    AreaLawComparator.entropy A Ω = Entropy.regionEntropy A Ω :=
-  (vonNeumannEntropy_eq_charpoly_roots (Entropy.regionState A Ω)
-    (Entropy.regionState_isHermitian A Ω)).symm
+    AreaLawComparator.entropy A Ω = ManyBody.regionEntropy Ω A :=
+  (vonNeumannEntropy_eq_charpoly_roots (ManyBody.regionState Ω A)
+    (ManyBody.regionState_isHermitian A Ω)).symm
 
 /-- The qualitative area law of Hastings, arXiv:0705.2024v4, eq. (entbd). -/
 theorem hastings_area_law : AreaLawComparator.Statement := by

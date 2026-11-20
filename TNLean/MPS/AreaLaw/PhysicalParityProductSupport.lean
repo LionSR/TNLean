@@ -28,8 +28,8 @@ lines 1467–1487 and 1543–1568. -/
 theorem isSupportedOn_physicalParityProduct
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (p : ℕ) (D : Finset (Fin L))
-    (hs : ∀ i, i.val % 2 = p → Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) D) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, i.val % 2 = p → ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) D) :
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       ((T).symm (physicalParityProduct h p)) D := by
   change _ ∈ ManyBody.supportedOperators _ _
   apply QuantumCircuit.mem_supportedOperators_complementProd
@@ -50,9 +50,9 @@ nearest-neighbour terms. ALVV, arXiv:1602.08828v2, `def:FF-tH`,
 lines 1467--1487. -/
 theorem isSupportedOn_regionalParityProduct
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b p : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       ((T).symm (physicalParityProduct (intervalBondRestriction a b h) p)) (interval L a b) := by
   change _ ∈ ManyBody.supportedOperators _ _
   classical

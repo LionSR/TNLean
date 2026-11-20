@@ -46,7 +46,7 @@ open Classical in
 unique receiving side contributes precisely the split entropy. -/
 theorem incidence_sum_eq_splitBandEta (n : V → ℕ) (π : PYF V) (hπ : π.IsPartition)
     (B : Finset V) (hcase : π.Contains B ∨ π.SplitsToP B ∨ π.SplitsToF B)
-    (θ : EuclideanSpace ℂ (SiteConfig n)) :
+    (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) :
     (if (B ∩ π.F).Nonempty ∧ (B ∩ π.Y).Nonempty then
         moveEta n π (.toF (B ∩ π.Y)) θ else 0) +
       (if (B ∩ π.P).Nonempty ∧ (B ∩ π.Y).Nonempty then
@@ -107,7 +107,7 @@ private theorem physical_incidence_sum (n : V ⊕ Bool → ℕ)
     (hcase : (augmentedPartition σ).Contains (B.map ⟨Sum.inl, Sum.inl_injective⟩) ∨
       (augmentedPartition σ).SplitsToP (B.map ⟨Sum.inl, Sum.inl_injective⟩) ∨
       (augmentedPartition σ).SplitsToF (B.map ⟨Sum.inl, Sum.inl_injective⟩))
-    (θ : EuclideanSpace ℂ (SiteConfig n)) :
+    (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) :
     (∑ side : Bool, if (B ∩ receiving σ side).Nonempty ∧ (B ∩ middle σ).Nonempty then
       moveEta n (augmentedPartition σ) (augmentedMove σ side (B ∩ middle σ)) θ else 0) =
       if (augmentedPartition σ).Contains (B.map ⟨Sum.inl, Sum.inl_injective⟩) then 0 else
@@ -143,7 +143,7 @@ theorem designatedSplitIncidenceCost_eq_sum_splitEta {k L : ℕ}
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
         ⟨Sum.inl, Sum.inl_injective⟩)
     (hcompat : (S.chargeTransportData histTree choiceTree).SupportCompatible E)
-    (h : History S.K S.m S.M k) (θ : EuclideanSpace ℂ (SiteConfig n)) :
+    (h : History S.K S.m S.M k) (θ : EuclideanSpace ℂ (∀ v, Fin (n v))) :
     S.designatedSplitIncidenceCost L h (S.chargeEntropyCost n h θ) =
       ∑ i, (S.chargeTransportData histTree choiceTree).splitEta E i ⟨h, none⟩ θ := by
   classical

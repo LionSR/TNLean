@@ -62,18 +62,17 @@ theorem pairwiseDisjoint_rectRegion_cappedDyadicPartition {Λ : Finset (ℤ × �
 theorem regionalEntropy_filter_le_sum_rectRegion (Λ : Finset (ℤ × ℤ)) (q : ℕ)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
     (S : Finset (ℤ × ℤ)) (K : ℕ) :
-    regionalEntropy Λ q Ω (A.filter fun x ↦ x.1 ∈ S) ≤
+    ManyBody.regionEntropy Ω (A.filter fun x ↦ x.1 ∈ S) ≤
       ∑ c ∈ cappedDyadicPartition S K,
-        regionalEntropy Λ q Ω (rectRegion A (latticeDyadicRect c.1 c.2)) := by
+        ManyBody.regionEntropy Ω (rectRegion A (latticeDyadicRect c.1 c.2)) := by
   classical
-  simp only [regionalEntropy_eq_finiteProduct]
   have h := Entropy.OrderedSetFunction.union_biUnion_le_sum
-    (FiniteProduct.entropy (fun _ : Site Λ ↦ Fin q) Ω)
-    (FiniteProduct.entropy_union_le _ Ω hΩ) ∅
+    (ManyBody.regionEntropy Ω)
+    (ManyBody.regionEntropy_union_le _ Ω hΩ) ∅
     (fun c : ℕ × (ℤ × ℤ) ↦ rectRegion A (latticeDyadicRect c.1 c.2))
     (cappedDyadicPartition S K) (by intros; simp)
     (pairwiseDisjoint_rectRegion_cappedDyadicPartition A S K)
-  simpa only [Finset.empty_union, FiniteProduct.entropy_empty _ Ω hΩ, zero_add,
+  simpa only [Finset.empty_union, ManyBody.regionEntropy_empty _ Ω hΩ, zero_add,
     biUnion_rectRegion_cappedDyadicPartition] using h
 
 /-- Entropy of the physical intersection is bounded by the weighted sum of
@@ -83,9 +82,9 @@ theorem regionalEntropy_filter_le_weighted_cover_of_forall
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     (A : Finset (Site Λ)) (S : Finset (ℤ × ℤ)) (K : ℕ) (e C : ℝ)
     (hcell : ∀ c ∈ cappedDyadicPartition S K,
-      regionalEntropy Λ q Ω (rectRegion A (latticeDyadicRect c.1 c.2)) ≤
+      ManyBody.regionEntropy Ω (rectRegion A (latticeDyadicRect c.1 c.2)) ≤
         C * ((latticeDyadicRect c.1 c.2).size : ℝ) ^ (1 + e)) :
-    regionalEntropy Λ q Ω (A.filter fun x ↦ x.1 ∈ S) ≤
+    ManyBody.regionEntropy Ω (A.filter fun x ↦ x.1 ∈ S) ≤
       C * ∑ c ∈ cappedDyadicPartition S K, ((2 : ℝ) ^ c.1) ^ (1 + e) := by
   classical
   refine (regionalEntropy_filter_le_sum_rectRegion Λ q Ω hΩ A S K).trans ?_
@@ -101,8 +100,8 @@ theorem regionalEntropy_filter_le_weighted_cover
     (A : Finset (Site Λ)) (S : Finset (ℤ × ℤ)) (K : ℕ) (e C : ℝ)
     (hsafe : ∀ c ∈ cappedDyadicPartition S K, IsSafe Λ A D₀ (latticeDyadicRect c.1 c.2))
     (hbox : ∀ Q : IntRect, IsSafe Λ A D₀ Q →
-      regionalEntropy Λ q Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e)) :
-    regionalEntropy Λ q Ω (A.filter fun x ↦ x.1 ∈ S) ≤
+      ManyBody.regionEntropy Ω (rectRegion A Q) ≤ C * (Q.size : ℝ) ^ (1 + e)) :
+    ManyBody.regionEntropy Ω (A.filter fun x ↦ x.1 ∈ S) ≤
       C * ∑ c ∈ cappedDyadicPartition S K, ((2 : ℝ) ^ c.1) ^ (1 + e) :=
   regionalEntropy_filter_le_weighted_cover_of_forall Λ q Ω hΩ A S K e C
     fun c hc ↦ hbox _ (hsafe c hc)

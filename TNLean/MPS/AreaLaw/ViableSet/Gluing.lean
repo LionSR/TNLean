@@ -114,7 +114,7 @@ noncomputable def leftCutOperator [NeZero q] (k : ℕ)
 the left block. -/
 theorem norm_leftCutOperator_eq [NeZero q] {k : ℕ}
     {X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hX : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) X (leftBlock L k)) :
+    (hX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X (leftBlock L k)) :
     ‖leftCutOperator k X‖ = ‖X‖ := by
   classical
   have hform := hX.reindex_threeCutEquiv_eq_kronecker_one
@@ -138,8 +138,8 @@ noncomputable def rightCutOperator [NeZero q] (k : ℕ)
 supported off the first `k - 1` sites, then in the three-way cut coordinates
 `H_L + K = H_L' ⊗ 1 + 1 ⊗ K'`. -/
 theorem reindex_gluingCut_eq [NeZero q] {k : ℕ} {HL K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k)) {D : Finset (Fin L)}
-    (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k)) {D : Finset (Fin L)}
+    (hK : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) :
     reindex (gluingCut L q k) (gluingCut L q k) (HL + K) =
       leftCutOperator k HL ⊗ₖ (1 : Matrix (CutRight L q k) (CutRight L q k) ℂ) +
@@ -259,8 +259,8 @@ leading-vector lemma holds with `e` replaced by `e + ξ`. This is the form used 
 the size-trimming convex program to finite precision. -/
 theorem exists_leading_eigenvector_chain_with_objective_slack [NeZero q] {k : ℕ}
     {HL K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k)) {D : Finset (Fin L)}
-    (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k)) {D : Finset (Fin L)}
+    (hK : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ ξ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hH : (HL + K).IsHermitian)
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (HL + K) E₀ Δ)
@@ -366,8 +366,8 @@ of Lemma `l:within`, `x` its left state and `σ` the solution of the size-trimmi
 `‖K‖ ≤ n` and `τ = c_ε/n` the energy bound is `E₀ + 2 (e + c_ε)`. -/
 theorem exists_leading_eigenvector_chain [NeZero q] {k : ℕ}
     {HL K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k)) {D : Finset (Fin L)}
-    (hK : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) K D)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k)) {D : Finset (Fin L)}
+    (hK : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) K D)
     (hDA : Disjoint D (leftBlock L (k - 1))) {E₀ Δ e τ : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΔ : 0 < Δ) (hH : (HL + K).IsHermitian)
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (HL + K) E₀ Δ)

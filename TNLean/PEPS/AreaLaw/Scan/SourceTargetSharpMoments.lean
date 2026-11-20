@@ -114,39 +114,39 @@ theorem truncated_target_sharp_moments_explicit {q : ℕ} [NeZero q]
                 |u| ≤ Entropy.tailRadius (2 / g)
                   (cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y) →
                 Real.log (Entropy.surprisalMoment
-                  (reducedState_isHermitian Λ q Ωt Y).eigenvalues u) ≤
-                    u * regionalEntropy Λ q Ωt Y +
+                  (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
+                    u * ManyBody.regionEntropy Ωt Y +
                       C₀ * cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y * u ^ 2) ∧
               (∀ (Y : Finset (Site Λ)) (v : ℝ),
-                Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt Y).eigenvalues
-                  (regionalEntropy Λ q Ωt Y) v ≤
+                Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
+                  (ManyBody.regionEntropy Ωt Y) v ≤
                     min 1 (2 * Real.exp (Real.exp 1 / 2) *
                       Real.exp (-(v / (32 * Real.sqrt ((1 + 2 / g) *
                         cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y)))))) ∧
               cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
                 targetBudgetConstant q R Ctr * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
-              Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-                (regionalEntropy Λ q Ωt X) w ≤ δ ∧
-              let p := (reducedState_isHermitian Λ q Ωt X).eigenvalues
-              let E := Entropy.typicalSet p (regionalEntropy Λ q Ωt X) w
-              let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+              Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+                (ManyBody.regionEntropy Ωt X) w ≤ δ ∧
+              let p := (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+              let E := Entropy.typicalSet p (ManyBody.regionEntropy Ωt X) w
+              let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
               (0 < 1 - δ ∧ 1 - δ ≤ z ∧ 0 < z ∧ z ≤ 1 ∧ E.Nonempty ∧
                 ∀ i ∈ E, 0 < p i ∧
-                  Real.exp (-regionalEntropy Λ q Ωt X - w) ≤ p i ∧
-                  p i ≤ Real.exp (-regionalEntropy Λ q Ωt X + w)) ∧
+                  Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤ p i ∧
+                  p i ≤ Real.exp (-ManyBody.regionEntropy Ωt X + w)) ∧
               (∀ (s : ℕ) (hist : History S.K S.m S.M s) (band : Fin S.K),
                 (s ≤ S.n * S.m →
                   ∀ Q ∈ statusMarginalRegions S.depth (S.state hist band),
                     ∀ u : ℝ, |u| ≤ c₀ / Real.sqrt B →
                       Real.log (Entropy.surprisalMoment
-                        (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-                        u * regionalEntropy Λ q Ωt Q + (C₀ * B) * u ^ 2) ∧
+                        (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+                        u * ManyBody.regionEntropy Ωt Q + (C₀ * B) * u ^ 2) ∧
                 (s + 1 ≤ S.n * S.m →
                   ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist band),
                     ∀ u : ℝ, |u| ≤ c₀ / Real.sqrt B →
                       Real.log (Entropy.surprisalMoment
-                        (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-                        u * regionalEntropy Λ q Ωt Q + (C₀ * B) * u ^ 2)) ∧
+                        (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+                        u * ManyBody.regionEntropy Ωt Q + (C₀ * B) * u ^ 2)) ∧
               ∀ W : ℝ, 0 < W → W ≤ (S.n : ℝ) ^ ω →
                 let a := W / (S.K : ℝ)
                 0 < a ∧ 10 * a ≤ c₀ / Real.sqrt B ∧ 10 * a ≤ 1 ∧
@@ -295,39 +295,39 @@ theorem exists_truncated_target_sharp_moments_of_targetSharpMomentThreshold_le {
                 |u| ≤ Entropy.tailRadius (2 / g)
                   (cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y) →
                 Real.log (Entropy.surprisalMoment
-                  (reducedState_isHermitian Λ q Ωt Y).eigenvalues u) ≤
-                    u * regionalEntropy Λ q Ωt Y +
+                  (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
+                    u * ManyBody.regionEntropy Ωt Y +
                       C₀ * cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y * u ^ 2) ∧
               (∀ (Y : Finset (Site Λ)) (v : ℝ),
-                Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt Y).eigenvalues
-                  (regionalEntropy Λ q Ωt Y) v ≤
+                Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
+                  (ManyBody.regionEntropy Ωt Y) v ≤
                     min 1 (2 * Real.exp (Real.exp 1 / 2) *
                       Real.exp (-(v / (32 * Real.sqrt ((1 + 2 / g) *
                         cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y)))))) ∧
               cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
                 targetBudgetConstant q R Ctr * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
-              Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-                (regionalEntropy Λ q Ωt X) w ≤ δ ∧
-              let p := (reducedState_isHermitian Λ q Ωt X).eigenvalues
-              let E := Entropy.typicalSet p (regionalEntropy Λ q Ωt X) w
-              let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+              Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+                (ManyBody.regionEntropy Ωt X) w ≤ δ ∧
+              let p := (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+              let E := Entropy.typicalSet p (ManyBody.regionEntropy Ωt X) w
+              let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
               (0 < 1 - δ ∧ 1 - δ ≤ z ∧ 0 < z ∧ z ≤ 1 ∧ E.Nonempty ∧
                 ∀ i ∈ E, 0 < p i ∧
-                  Real.exp (-regionalEntropy Λ q Ωt X - w) ≤ p i ∧
-                  p i ≤ Real.exp (-regionalEntropy Λ q Ωt X + w)) ∧
+                  Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤ p i ∧
+                  p i ≤ Real.exp (-ManyBody.regionEntropy Ωt X + w)) ∧
               (∀ (s : ℕ) (hist : History S.K S.m S.M s) (band : Fin S.K),
                 (s ≤ S.n * S.m →
                   ∀ Q ∈ statusMarginalRegions S.depth (S.state hist band),
                     ∀ u : ℝ, |u| ≤ c₀ / Real.sqrt B →
                       Real.log (Entropy.surprisalMoment
-                        (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-                        u * regionalEntropy Λ q Ωt Q + (C₀ * B) * u ^ 2) ∧
+                        (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+                        u * ManyBody.regionEntropy Ωt Q + (C₀ * B) * u ^ 2) ∧
                 (s + 1 ≤ S.n * S.m →
                   ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist band),
                     ∀ u : ℝ, |u| ≤ c₀ / Real.sqrt B →
                       Real.log (Entropy.surprisalMoment
-                        (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-                        u * regionalEntropy Λ q Ωt Q + (C₀ * B) * u ^ 2)) ∧
+                        (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+                        u * ManyBody.regionEntropy Ωt Q + (C₀ * B) * u ^ 2)) ∧
               ∀ W : ℝ, 0 < W → W ≤ (S.n : ℝ) ^ ω →
                 let a := W / (S.K : ℝ)
                 0 < a ∧ 10 * a ≤ c₀ / Real.sqrt B ∧ 10 * a ≤ 1 ∧
@@ -396,39 +396,39 @@ theorem exists_truncated_target_sharp_moments {q : ℕ} [NeZero q]
                 |u| ≤ Entropy.tailRadius (2 / g)
                   (cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y) →
                 Real.log (Entropy.surprisalMoment
-                  (reducedState_isHermitian Λ q Ωt Y).eigenvalues u) ≤
-                    u * regionalEntropy Λ q Ωt Y +
+                  (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
+                    u * ManyBody.regionEntropy Ωt Y +
                       C₀ * cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y * u ^ 2) ∧
               (∀ (Y : Finset (Site Λ)) (v : ℝ),
-                Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt Y).eigenvalues
-                  (regionalEntropy Λ q Ωt Y) v ≤
+                Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ωt).eigenvalues
+                  (ManyBody.regionEntropy Ωt Y) v ≤
                     min 1 (2 * Real.exp (Real.exp 1 / 2) *
                       Real.exp (-(v / (32 * Real.sqrt ((1 + 2 / g) *
                         cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor Y)))))) ∧
               cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
                 Ctarget * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
-              Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-                (regionalEntropy Λ q Ωt X) w ≤ δ ∧
-              let p := (reducedState_isHermitian Λ q Ωt X).eigenvalues
-              let E := Entropy.typicalSet p (regionalEntropy Λ q Ωt X) w
-              let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+              Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+                (ManyBody.regionEntropy Ωt X) w ≤ δ ∧
+              let p := (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+              let E := Entropy.typicalSet p (ManyBody.regionEntropy Ωt X) w
+              let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
               (0 < 1 - δ ∧ 1 - δ ≤ z ∧ 0 < z ∧ z ≤ 1 ∧ E.Nonempty ∧
                 ∀ i ∈ E, 0 < p i ∧
-                  Real.exp (-regionalEntropy Λ q Ωt X - w) ≤ p i ∧
-                  p i ≤ Real.exp (-regionalEntropy Λ q Ωt X + w)) ∧
+                  Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤ p i ∧
+                  p i ≤ Real.exp (-ManyBody.regionEntropy Ωt X + w)) ∧
               (∀ (s : ℕ) (hist : History S.K S.m S.M s) (band : Fin S.K),
                 (s ≤ S.n * S.m →
                   ∀ Q ∈ statusMarginalRegions S.depth (S.state hist band),
                     ∀ u : ℝ, |u| ≤ c₀ / Real.sqrt B →
                       Real.log (Entropy.surprisalMoment
-                        (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-                        u * regionalEntropy Λ q Ωt Q + (C₀ * B) * u ^ 2) ∧
+                        (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+                        u * ManyBody.regionEntropy Ωt Q + (C₀ * B) * u ^ 2) ∧
                 (s + 1 ≤ S.n * S.m →
                   ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist band),
                     ∀ u : ℝ, |u| ≤ c₀ / Real.sqrt B →
                       Real.log (Entropy.surprisalMoment
-                        (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-                        u * regionalEntropy Λ q Ωt Q + (C₀ * B) * u ^ 2)) ∧
+                        (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+                        u * ManyBody.regionEntropy Ωt Q + (C₀ * B) * u ^ 2)) ∧
               ∀ W : ℝ, 0 < W → W ≤ (S.n : ℝ) ^ ω →
                 let a := W / (S.K : ℝ)
                 0 < a ∧ 10 * a ≤ c₀ / Real.sqrt B ∧ 10 * a ≤ 1 ∧

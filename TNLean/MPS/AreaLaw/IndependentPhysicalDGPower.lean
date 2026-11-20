@@ -53,16 +53,16 @@ theorem exists_independent_long_middle_actual_dg_filter_family :
       ∀ (L p r : ℕ), p ≤ r → r ≤ L → 4 * ell < r - p →
       let Jtarget := interval L p r
       let β := fun _ : Fin L ↦ Fin q
-      let tau := (FiniteProduct.splitEquiv β Jtarget).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.splitEquiv β Jtarget).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration β Jtargetᶜ) ℂ).tensorProduct
-        (EuclideanSpace.basisFun (FiniteProduct.Configuration β Jtarget) ℂ)).repr
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtargetᶜ) ℂ).tensorProduct
+        (EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtarget) ℂ)).repr
       let Tcoord := U.trans Phi.symm
       let Tm := Tcoord.trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (FiniteProduct.Configuration β Jtargetᶜ))
-        (EuclideanSpace ℂ (FiniteProduct.Configuration β Jtarget)))
+        (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtargetᶜ))
+        (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtarget)))
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (h i) (interval L i.val (i.val + 2)))
         (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu : ℝ),
       let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
@@ -218,16 +218,16 @@ theorem exists_independent_long_middle_actual_dg_word_family :
       ∀ (L p r : ℕ), p ≤ r → r ≤ L → 4 * ell < r - p →
       let Jtarget := interval L p r
       let β := fun _ : Fin L ↦ Fin q
-      let tau := (FiniteProduct.splitEquiv β Jtarget).trans (Equiv.prodComm _ _)
+      let tau := (ManyBody.splitEquiv β Jtarget).trans (Equiv.prodComm _ _)
       let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-      let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration β Jtargetᶜ) ℂ).tensorProduct
-        (EuclideanSpace.basisFun (FiniteProduct.Configuration β Jtarget) ℂ)).repr
+      let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtargetᶜ) ℂ).tensorProduct
+        (EuclideanSpace.basisFun (ManyBody.RegionConfig β Jtarget) ℂ)).repr
       let Tcoord := U.trans Phi.symm
       let Tm := Tcoord.trans (TensorProduct.commIsometry ℂ
-        (EuclideanSpace ℂ (FiniteProduct.Configuration β Jtargetᶜ))
-        (EuclideanSpace ℂ (FiniteProduct.Configuration β Jtarget)))
+        (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtargetᶜ))
+        (EuclideanSpace ℂ (ManyBody.RegionConfig β Jtarget)))
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (h i) (interval L i.val (i.val + 2)))
         (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu : ℝ),
       let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
