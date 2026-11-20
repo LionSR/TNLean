@@ -150,8 +150,6 @@ theorem pairwise_disjoint_colourLayer
     simp only [Finset.mem_toList, Finset.mem_filter] at hX hY
     exact c.disjoint_of_overlapGraph hXY (hX.2.trans hY.2.symm)
 
-open ManyBody.LightCone
-
 /-- One layer of a colour moves the light cone by at most `R`. -/
 theorem retainedSet_colourLayer_subset
     (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1)))
