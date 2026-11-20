@@ -142,7 +142,7 @@ bound `sublinearCollarBound_real`. Recheck after the stack lands.
 ## Deviations from the note
 
 * Steps 1–2 use the range projections of the terms in place of `(1 - h_i/J)^{1/2}`
-  (`docs/paper-gaps/ff2d_sweep_range_projections.tex`, scope restriction of `eq:sweep` to
+  (`docs/paper-gaps/ffarealaw_sweep_range_projections.tex`, scope restriction of `eq:sweep` to
   projections). No hypothesis of `eq:model` is added and the constant `θ` is the note's.
 * No step of the note was found to be wrong. The steps formalized (`eq:sweep`, `eq:cone`, the
   choice of `t`, the polar and continuity steps, the two-family cancellation) hold as written.
