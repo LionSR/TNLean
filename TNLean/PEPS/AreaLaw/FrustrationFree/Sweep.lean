@@ -76,9 +76,10 @@ noncomputable def wordProjections (P : κ → Matrix (Config X) (Config X) ℂ) 
 omit [Fintype V] [DecidableEq V] [∀ v, Fintype (X v)] [∀ v, DecidableEq (X v)] in
 /-- A sum over the positions of a word without repetition that contains every letter is the sum
 over the letters. -/
-theorem sum_range_getElem?_elim {M : Type*} [Fintype κ] [DecidableEq κ] [AddCommMonoid M]
+theorem sum_range_getElem?_elim {M : Type*} [Fintype κ] [AddCommMonoid M]
     (g : κ → M) {w : List κ} (hw : w.Nodup) (hall : ∀ x, x ∈ w) :
     ∑ i ∈ Finset.range w.length, (w[i]?).elim 0 g = ∑ x, g x := by
+  classical
   rw [Finset.sum_range]
   have : ∀ i : Fin w.length, (w[i.1]?).elim 0 g = g w[i] := fun i ↦ by simp
   simp_rw [this]
@@ -142,7 +143,8 @@ noncomputable def termProj (X : AdmissibleSupport Λ R) :
   (hff.isHermitian X).supportProj
 
 /-- The sweep `D = ∏_X (1 - Π_X)`, the supports taken colour by colour. -/
-noncomputable def sweepOp (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1))) :
+noncomputable def sweepOp
+    (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1))) :
     Matrix (Configuration Λ q) (Configuration Λ q) ℂ :=
   sweepProd (fun X ↦ 1 - hff.termProj X) (sweepWord c)
 

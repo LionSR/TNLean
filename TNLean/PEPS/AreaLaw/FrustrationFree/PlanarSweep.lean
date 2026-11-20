@@ -115,12 +115,14 @@ theorem exists_overlapColouring :
   colorable_succ_of_forall_degree_le _ degree_overlapGraph_le
 
 /-- The supports of one colour. -/
-noncomputable def colourLayer (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1)))
+noncomputable def colourLayer
+    (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1)))
     (i : Fin (overlapDegreeBound R + 1)) : List (AdmissibleSupport Λ R) :=
   (Finset.univ.filter fun X ↦ c X = i).toList
 
 /-- The supports, colour by colour: the word of one sweep. -/
-noncomputable def sweepWord (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1))) :
+noncomputable def sweepWord
+    (c : (supportOverlapGraph Λ R).Coloring (Fin (overlapDegreeBound R + 1))) :
     List (AdmissibleSupport Λ R) :=
   (List.ofFn (colourLayer c)).flatten
 
@@ -157,7 +159,8 @@ theorem retainedSet_colourLayer_subset
     retainedSet (fun X : AdmissibleSupport Λ R ↦ X.1) U (colourLayer c i) ⊆
       graphNeighborhood Λ R U :=
   retainedSet_subset_of_pairwise_disjoint (subset_graphNeighborhood R U)
-    (pairwise_disjoint_colourLayer c i) fun X _ hXU ↦ subset_graphNeighborhood_of_isAdmissibleSupport X.2 hXU
+    (pairwise_disjoint_colourLayer c i) fun X _ hXU ↦
+      subset_graphNeighborhood_of_isAdmissibleSupport X.2 hXU
 
 /-- A word of `m` layers moves the light cone by at most `R m`. -/
 theorem retainedSet_flatten_subset
