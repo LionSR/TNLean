@@ -64,9 +64,9 @@ def IsSoftWordEnergyUpdate {L q N l k u v r : ℕ} (hq : 0 < q)
   let R := P - M + (center : ℂ) • 1 +
     cfc (Real.softTruncation 768 12) (M - (center : ℂ) • 1)
   let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
-  let y0 := ((Entropy.cutEquiv (fun _ : Fin L ↦ q) J) sigma0).2
+  let y0 := ((ManyBody.cutEquiv (fun _ ↦ Fin q) J) sigma0).2
   let native := fun x : J → Fin q ↦
-    (Entropy.cutEquiv (fun _ : Fin L ↦ q) J).symm (x, y0)
+    (ManyBody.cutEquiv (fun _ ↦ Fin q) J).symm (x, y0)
   let Kraw := R.submatrix native native
   let W : Submodule ℂ (EuclideanSpace ℂ (J → Fin q)) :=
     adjacentIntervalMerge L q l k r hlk hkr S1 S2
@@ -121,7 +121,7 @@ theorem exists_soft_word_node_energy_update
     (hleft : u - l ≤ 2 * ell) (hright : r - v ≤ 2 * ell)
     (hell : 21 ≤ ell) (hD : 2 ≤ D) (hcount : 50 * ell ^ 2 ≤ D) (hsample : 1 ≤ s)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (T : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q)))

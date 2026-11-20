@@ -79,28 +79,28 @@ private theorem band_changes (own : Fin L → Party L w) (A B C : Party L w) (a 
     (hC : ∀ x ∈ interval L (a - 8 * w) a, own x = C)
     (hA : ∀ x ∈ interval L a (a + w), own x = A)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1)
-    (hI0 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 6 * w) (a -
+    (hI0 : ManyBody.regionMutualInformation Ω (interval L (a - 6 * w) (a -
       w)) ((OneBand.aux₀ (Party := Party L w) C).birthEnv C) ≤ (L : ℝ) ^
       (-24 : ℤ))
-    (hI1 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 5 * w) (a - 2
+    (hI1 : ManyBody.regionMutualInformation Ω (interval L (a - 5 * w) (a - 2
       * w)) ((OneBand.aux₁ (Party := Party L w) B C a w).birthEnv B) ≤ (L : ℝ)
       ^ (-24 : ℤ))
-    (hI2 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 4 * w) (a - 3
+    (hI2 : ManyBody.regionMutualInformation Ω (interval L (a - 4 * w) (a - 3
       * w)) ((OneBand.aux₂ (Party := Party L w) A B C a w).birthEnv A) ≤
       (L : ℝ) ^ (-24 : ℤ))
-    (hI3 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hI3 : ManyBody.regionMutualInformation Ω
       (OneBand.exchangeTSet own A B C a w) (OneBand.exchangeESet own A B C a w) ≤
         (L : ℝ) ^ (-24 : ℤ))
-    (hI4 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 4 * w) a)
+    (hI4 : ManyBody.regionMutualInformation Ω (interval L (a - 4 * w) a)
       ((OneBand.main₅ (Party := Party L w) own A B C a w).birthEnv A) ≤
       (L : ℝ) ^ (-24 : ℤ))
-    (hI5 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 5 * w) (a +
+    (hI5 : ManyBody.regionMutualInformation Ω (interval L (a - 5 * w) (a +
       w)) ((OneBand.main₆ (Party := Party L w) own A B C a w).birthEnv B) ≤
       (L : ℝ) ^ (-24 : ℤ))
-    (hI6 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 3 * w) a)
+    (hI6 : ManyBody.regionMutualInformation Ω (interval L (a - 3 * w) a)
       ((OneBand.main₆ (Party := Party L w) own A B C a w).birthEnv B) ≤
       (L : ℝ) ^ (-24 : ℤ))
-    (hI7 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (a - 6 * w) (a - 3
+    (hI7 : ManyBody.regionMutualInformation Ω (interval L (a - 6 * w) (a - 3
       * w)) ((OneBand.main₈ (Party := Party L w) own A B C a w).birthEnv C) ≤
       (L : ℝ) ^ (-24 : ℤ))
     (post : List (Sheet (Fin L) (Party L w))) :
@@ -145,85 +145,85 @@ Source: Part II, `con:sweep`, lines 330–343, and `prop:sweep`, lines 365–378
 theorem local_stage_circuits_of_primitive_information
     (hw : 1 ≤ w) (k : Fin (stageCount L w))
     (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (hΩ : ‖Ω‖ = 1)
-    (hRem : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hRem : ManyBody.regionMutualInformation Ω
       (remainderBirthTarget L w k) ((stageFrame L w k.castSucc).birthEnv
         (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-24 : ℤ))
-    (hBlock : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hBlock : ManyBody.regionMutualInformation Ω
       (blockBirthTarget L w k) ((afterRemainderBirth L w k).birthEnv
         (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-24 : ℤ))
     (hBoundary : k.val = 0 →
-      FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+      ManyBody.regionMutualInformation Ω
         (leftBandTarget L w k) ((afterLeftTransfer L w k).birthEnv (Sum.inr k)) ≤
           (L : ℝ) ^ (-24 : ℤ))
-    (hLeft0 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval
+    (hLeft0 : ∀ hk : 0 < k.val, ManyBody.regionMutualInformation Ω (interval
       L ((k.val * (20 * w)) - 6 * w) ((k.val * (20 * w)) - w)) ((OneBand.aux₀ (Party := Party L w)
       (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w)))).birthEnv
       (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w)))) ≤ (L : ℝ) ^ (-24 : ℤ))
-    (hLeft1 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval
+    (hLeft1 : ∀ hk : 0 < k.val, ManyBody.regionMutualInformation Ω (interval
       L ((k.val * (20 * w)) - 5 * w) ((k.val * (20 * w)) - 2 * w)) ((OneBand.aux₁
       (Party := Party L w) (Sum.inr k) (Sum.inr (⟨k.val - 1, by omega⟩ : Fin
       (stageCount L w))) (k.val * (20 * w)) w).birthEnv (Sum.inr k)) ≤ (L : ℝ) ^ (-24 : ℤ))
-    (hLeft2 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval
+    (hLeft2 : ∀ hk : 0 < k.val, ManyBody.regionMutualInformation Ω (interval
       L ((k.val * (20 * w)) - 4 * w) ((k.val * (20 * w)) - 3 * w)) ((OneBand.aux₂
       (Party := Party L w) (Sum.inl k.castSucc) (Sum.inr k) (Sum.inr (⟨k.val -
       1, by omega⟩ : Fin (stageCount L w))) (k.val * (20 * w)) w).birthEnv (Sum.inl k.castSucc)) ≤
       (L : ℝ) ^ (-24 : ℤ))
-    (hLeft3 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hLeft3 : ∀ hk : 0 < k.val, ManyBody.regionMutualInformation Ω
       (OneBand.exchangeTSet (afterBlockBirth L w k).owner (Sum.inl k.castSucc) (Sum.inr k)
         (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w))) (k.val * (20 * w)) w)
       (OneBand.exchangeESet (afterBlockBirth L w k).owner (Sum.inl k.castSucc) (Sum.inr k)
         (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w))) (k.val * (20 * w)) w) ≤
       (L : ℝ) ^ (-24 : ℤ))
-    (hLeft4 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval
+    (hLeft4 : ∀ hk : 0 < k.val, ManyBody.regionMutualInformation Ω (interval
       L ((k.val * (20 * w)) - 4 * w) (k.val * (20 * w))) ((OneBand.main₅ (Party := Party L w)
       (afterBlockBirth L w k).owner (Sum.inl k.castSucc) (Sum.inr k)
       (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w))) (k.val * (20 * w)) w).birthEnv
       (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-24 : ℤ))
-    (hLeft5 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval
+    (hLeft5 : ∀ hk : 0 < k.val, ManyBody.regionMutualInformation Ω (interval
       L ((k.val * (20 * w)) - 5 * w) ((k.val * (20 * w)) + w)) ((OneBand.main₆ (Party := Party L w)
       (afterBlockBirth L w k).owner (Sum.inl k.castSucc) (Sum.inr k)
       (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w))) (k.val * (20 * w)) w).birthEnv
       (Sum.inr k)) ≤ (L : ℝ) ^ (-24 : ℤ))
-    (hLeft6 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval
+    (hLeft6 : ∀ hk : 0 < k.val, ManyBody.regionMutualInformation Ω (interval
       L ((k.val * (20 * w)) - 3 * w) (k.val * (20 * w))) ((OneBand.main₆ (Party := Party L w)
       (afterBlockBirth L w k).owner (Sum.inl k.castSucc) (Sum.inr k)
       (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w))) (k.val * (20 * w)) w).birthEnv
       (Sum.inr k)) ≤ (L : ℝ) ^ (-24 : ℤ))
-    (hLeft7 : ∀ hk : 0 < k.val, FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval
+    (hLeft7 : ∀ hk : 0 < k.val, ManyBody.regionMutualInformation Ω (interval
       L ((k.val * (20 * w)) - 6 * w) ((k.val * (20 * w)) - 3 * w)) ((OneBand.main₈
       (Party := Party L w) (afterBlockBirth L w k).owner (Sum.inl
       k.castSucc) (Sum.inr k) (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w))) (k.val * (20
       * w)) w).birthEnv (Sum.inr (⟨k.val - 1, by omega⟩ : Fin (stageCount L w)))) ≤ (L : ℝ) ^
       (-24 : ℤ))
-    (hRight0 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (((k.val + 1) *
+    (hRight0 : ManyBody.regionMutualInformation Ω (interval L (((k.val + 1) *
       (20 * w)) - 6 * w) (((k.val + 1) * (20 * w)) - w)) ((OneBand.aux₀ (Party := Party L w)
       (Sum.inr k)).birthEnv (Sum.inr k)) ≤ (L : ℝ) ^ (-24 : ℤ))
-    (hRight1 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (((k.val + 1) *
+    (hRight1 : ManyBody.regionMutualInformation Ω (interval L (((k.val + 1) *
       (20 * w)) - 5 * w) (((k.val + 1) * (20 * w)) - 2 * w)) ((OneBand.aux₁ (Party := Party L w)
       (Sum.inl k.succ) (Sum.inr k) ((k.val + 1) * (20 * w)) w).birthEnv
       (Sum.inl k.succ)) ≤ (L : ℝ) ^ (-24 : ℤ))
-    (hRight2 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (((k.val + 1) *
+    (hRight2 : ManyBody.regionMutualInformation Ω (interval L (((k.val + 1) *
       (20 * w)) - 4 * w) (((k.val + 1) * (20 * w)) - 3 * w)) ((OneBand.aux₂ (Party := Party L w)
       (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k) ((k.val + 1) * (20 *
       w)) w).birthEnv (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-24 : ℤ))
-    (hRight3 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    (hRight3 : ManyBody.regionMutualInformation Ω
       (OneBand.exchangeTSet (leftBandMain L w k).owner (Sum.inl k.castSucc) (Sum.inl k.succ)
         (Sum.inr k) ((k.val + 1) * (20 * w)) w)
       (OneBand.exchangeESet (leftBandMain L w k).owner (Sum.inl k.castSucc) (Sum.inl k.succ)
         (Sum.inr k) ((k.val + 1) * (20 * w)) w) ≤ (L : ℝ) ^ (-24 : ℤ))
-    (hRight4 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (((k.val + 1) *
+    (hRight4 : ManyBody.regionMutualInformation Ω (interval L (((k.val + 1) *
       (20 * w)) - 4 * w) ((k.val + 1) * (20 * w))) ((OneBand.main₅ (Party := Party L w)
       (leftBandMain L w k).owner (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k)
       ((k.val + 1) * (20 * w)) w).birthEnv (Sum.inl k.castSucc)) ≤ (L : ℝ) ^ (-24 : ℤ))
-    (hRight5 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (((k.val + 1) *
+    (hRight5 : ManyBody.regionMutualInformation Ω (interval L (((k.val + 1) *
       (20 * w)) - 5 * w) (((k.val + 1) * (20 * w)) + w)) ((OneBand.main₆ (Party := Party L w)
       (leftBandMain L w k).owner (Sum.inl k.castSucc) (Sum.inl k.succ)
       (Sum.inr k) ((k.val + 1) * (20 * w)) w).birthEnv (Sum.inl k.succ)) ≤ (L : ℝ) ^ (-24 : ℤ))
-    (hRight6 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (((k.val + 1) *
+    (hRight6 : ManyBody.regionMutualInformation Ω (interval L (((k.val + 1) *
       (20 * w)) - 3 * w) ((k.val + 1) * (20 * w))) ((OneBand.main₆ (Party := Party L w)
       (leftBandMain L w k).owner (Sum.inl k.castSucc) (Sum.inl k.succ) (Sum.inr k)
       ((k.val + 1) * (20 * w)) w).birthEnv (Sum.inl k.succ)) ≤ (L : ℝ) ^ (-24 : ℤ))
-    (hRight7 : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω (interval L (((k.val + 1) *
+    (hRight7 : ManyBody.regionMutualInformation Ω (interval L (((k.val + 1) *
       (20 * w)) - 6 * w) (((k.val + 1) * (20 * w)) - 3 * w)) ((OneBand.main₈ (Party := Party L w)
       (leftBandMain L w k).owner (Sum.inl k.castSucc) (Sum.inl k.succ)
       (Sum.inr k) ((k.val + 1) * (20 * w)) w).birthEnv (Sum.inr k)) ≤ (L : ℝ) ^ (-24 : ℤ))
@@ -322,7 +322,7 @@ theorem local_stage_circuits_of_primitive_information
     have hraw : OneBand.main₀
         (afterBlockBirth L w k).owner = afterBlockBirth L w k := rfl
     have ht : leftBandTarget L w k = interval L 0 w := by simp [leftBandTarget, hk]
-    have hI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+    have hI : ManyBody.regionMutualInformation Ω
         (interval L 0 w) (((OneBand.main₀
           (afterBlockBirth L w k).owner).changeOwner (interval L 0 w)
             (Sum.inr k)).birthEnv (Sum.inr k)) ≤ (L : ℝ) ^ (-24 : ℤ) := by

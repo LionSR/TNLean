@@ -71,13 +71,13 @@ private theorem blockCutEquiv_apply {S : Fin L → Prop} {T : Party L w → Prop
 private theorem mainConfigurationEquiv_glue (S : Finset (Fin L))
     (T : Finset (Party L w)) (h : ∀ x, x ∈ S ↔ mainOwner L w x ∈ T)
     (a : {x : Fin L // x ∈ S} → Fin q) (b : {x : Fin L // x ∉ S} → Fin q) :
-    mainConfigurationEquiv L w q ((Entropy.cutEquiv (fun _ : Fin L ↦ q) S).symm (a, b)) =
+    mainConfigurationEquiv L w q ((ManyBody.cutEquiv (fun _ ↦ Fin q) S).symm (a, b)) =
       (Equiv.piEquivPiSubtypeProd (· ∈ T) (fun p ↦ Fin (physicalDimension L w q p))).symm
         (blockCutEquiv h a, blockCutEquiv (fun x ↦ not_congr (h x)) b) := by
   classical
   funext p
   change blockEncoding L w q p
-    (fun x ↦ (Entropy.cutEquiv (fun _ : Fin L ↦ q) S).symm (a, b) x.val) = _
+    (fun x ↦ (ManyBody.cutEquiv (fun _ ↦ Fin q) S).symm (a, b) x.val) = _
   by_cases hp : p ∈ T
   · rw [show
       (Equiv.piEquivPiSubtypeProd (· ∈ T) (fun p ↦ Fin (physicalDimension L w q p))).symm
@@ -87,7 +87,7 @@ private theorem mainConfigurationEquiv_glue (S : Finset (Fin L))
     rw [blockCutEquiv_apply]
     apply congrArg (blockEncoding L w q p)
     funext x
-    exact Entropy.cutEquiv_symm_apply_mem (n := fun _ : Fin L ↦ q) a b
+    exact ManyBody.cutEquiv_symm_apply_mem (X := fun _ ↦ Fin q) a b
       ((h x.val).mpr (x.property.symm ▸ hp))
   · rw [show
       (Equiv.piEquivPiSubtypeProd (· ∈ T) (fun p ↦ Fin (physicalDimension L w q p))).symm
@@ -98,7 +98,7 @@ private theorem mainConfigurationEquiv_glue (S : Finset (Fin L))
     rw [blockCutEquiv_apply]
     apply congrArg (blockEncoding L w q p)
     funext x
-    exact Entropy.cutEquiv_symm_apply_not_mem (n := fun _ : Fin L ↦ q) a b
+    exact ManyBody.cutEquiv_symm_apply_not_mem (X := fun _ ↦ Fin q) a b
       ((not_congr (h x.val)).mpr (x.property.symm ▸ hp))
 
 private theorem cutMatrix_eq_flattening_submatrix
@@ -112,7 +112,7 @@ private theorem cutMatrix_eq_flattening_submatrix
   ext a b
   rw [cutMatrix_apply]
   change ψ (mainConfigurationEquiv L w q
-    ((Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm (a, b))) = _
+    ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm (a, b))) = _
   exact congrArg (fun y ↦ ψ y) (mainConfigurationEquiv_glue (leftBlock L k) T h a b)
 
 private theorem partyLevel_mainOwner_lt_iff (r : ℕ) (hr : r ≤ stageCount L w)

@@ -31,7 +31,7 @@ bounds; see `docs/paper-gaps/lvv13_constant_bond.tex`.
 Source: LVV13, arXiv:1307.5143v1, `algo53.tex`, lines 213--216 and 652--678.
 -/
 
-open ManyBody (interval)
+open ManyBody (ChainSupport interval)
 
 open Matrix Cslib MeasureTheory
 
@@ -54,11 +54,11 @@ theorem isViableMPS_errorReductionSet_of_admissible_sampled {i : ℕ} (hi : i �
     (I : Fin ℓ → Fin m → Fin L) {D : ℕ} {F : Finset (LeftBlockMatrix L q i)}
     (hdec : ∃ (ι : Type) (J : Finset ι) (A : ι → LeftBlockMatrix L q i)
       (B : ι → RightBlockMatrix L q i),
-      Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) (sampledProjector h E₀ I) =
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector h E₀ I) =
           ∑ t ∈ J, A t ⊗ₖ B t ∧ ∀ t ∈ J, A t ∈ F)
     (hcard : F.card ≤ ℓ * D)
     (hrank : ∀ A ∈ F, ∀ k, k < i → operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
         (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΓ : ‖Γ‖ = 1) {s b : ℕ}
     {S : Finset (LeftBlockVector L q i)} (hS : IsViableMPS Γ s b (1 / 2) S) {η : ℝ}
@@ -87,7 +87,7 @@ theorem isViableMPS_errorReductionSet_of_admissible_sampled {i : ℕ} (hi : i �
 applied to the selection of the oracle's nets and solver. -/
 theorem eval_sampledSweepStepProgram_of_valid (hv : IsValidOracle o) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
         (E₀ Δ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
@@ -95,10 +95,12 @@ theorem eval_sampledSweepStepProgram_of_valid (hv : IsValidOracle o) (hq : 2 ≤
       haveI : NeZero q := ⟨by omega⟩
       successiveStep hi (bondTrimmingRadius L (lvvReferenceBond q Δ L))
         (o (LinearAlgebraQuery.sampledFactors L (i + 1) h E₀ ℓ m D I)) id
-        ((ManyBody.ChainInteraction.ofBonds h hs).sizeTrimmingSelectionWith hq Δ
+        ((ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩).sizeTrimmingSelectionWith hq Δ
           (AreaLaw.extend (i + 1) S) (oracleNets o L (i + 1) ((Δ / 169) ^ 2 / (2 * L)))
           (oracleSolver o L (i + 1) b (AreaLaw.extend (i + 1) S)
-            (leftCutOperator (i + 1) ((ManyBody.ChainInteraction.ofBonds h hs).cutLeftPart (i + 1)))
+            (leftCutOperator (i + 1)
+              ((ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩).partialHamiltonian
+                (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 (i + 1))))
             ((Δ / 169) ^ 2 / (2 * L)))) := by
   simp only [sampledSweepStepProgram, FreeM.eval_bind, FreeM.eval_lift,
     eval_extensionProgram_of_valid hv, eval_sizeTrimmingProgram_of_valid hv,
@@ -108,7 +110,7 @@ theorem eval_sampledSweepStepProgram_of_valid (hv : IsValidOracle o) (hq : 2 ≤
 the explicit size and bond bounds of the honest step. -/
 theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
@@ -123,11 +125,11 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
   classical
   let : NeZero q := ⟨by omega⟩
   rw [eval_sampledSweepStepProgram_of_valid hv hq h hs E₀ Δ I b (q ^ (2 * κ)) hi S]
-  let chain := ManyBody.ChainInteraction.ofBonds h hs
+  let chain := ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩
   have hgapC : IsGapped chain.hamiltonian E₀ Δ := by
-    simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hgap
+    rwa [show chain.hamiltonian = ∑ j, h j from ManyBody.Interaction.hamiltonian_extend]
   have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
-    simpa only [chain, ManyBody.ChainInteraction.ofBonds_hamiltonian] using hspan
+    rwa [show chain.hamiltonian = ∑ j, h j from ManyBody.Interaction.hamiltonian_extend]
   have hext : IsViable Γ ((Δ / 169) ^ 2 / L)
       (AreaLaw.extend (i + 1) S : Set (LeftBlockVector L q (i + 1))) :=
     (hS.extend (by omega) hi).mono hδc
@@ -135,7 +137,9 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
   set T₀ := chain.sizeTrimmingSelectionWith hq Δ (AreaLaw.extend (i + 1) S)
     (oracleNets o L (i + 1) ((Δ / 169) ^ 2 / (2 * L)))
     (oracleSolver o L (i + 1) b (AreaLaw.extend (i + 1) S)
-      (leftCutOperator (i + 1) (chain.cutLeftPart (i + 1))) ((Δ / 169) ^ 2 / (2 * L))) with hT₀
+      (leftCutOperator (i + 1) (chain.partialHamiltonian
+        (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 (i + 1))))
+      ((Δ / 169) ^ 2 / (2 * L))) with hT₀
   have hnet := isAdmissibleNet_oracleNets hv (k := i + 1) hL chain hΔ
   have hsol := isAdmissibleSolver_oracleSolver hv chain hq Δ b (AreaLaw.extend (i + 1) S)
   have hT : IsViableMPS Γ (lvvSizeTrimmingCoefficient q Δ * L ^ lvvSizeTrimmingDegree q Δ) m'
@@ -145,11 +149,13 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
         (card_oracleNets_le hv hL hq hΔ)),
       fun v hv' ↦ isLeftOpenMPS_of_mem_bondTrimSet hi m' T₀ hv',
       chain.isViable_bondTrimSet_sizeTrimmingSelectionWith
-          (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
-          (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1)
-        (ManyBody.ChainInteraction.posSemidef_ofBonds_term h hs h0) hL hq hi hΔ
+          (ManyBody.Interaction.isHermitian_extend_term fun j ↦ (h0 j).isHermitian)
+          (ManyBody.Interaction.norm_extend_term_le zero_le_one fun j ↦
+            (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 j).nonneg).mpr (h1 j))
+        (ManyBody.Interaction.forall_extend_term (P := Matrix.PosSemidef)
+          Matrix.PosSemidef.zero h0) hL hq hi hΔ
         (AreaLaw.extend (i + 1) S) hnet hsol E₀ Γ hΩ hgapC hspanC hext⟩
-  have hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+  have hrank : ∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) (bondComplementWord h (I t))) ≤ q ^ (2 * κ) := fun t k ↦
     operatorSchmidtRank_cutOperator_bondComplementWord_le_all (by omega) h hs (I t)
       (hgood.2 t) k
@@ -174,7 +180,7 @@ theorem sampledSweepStepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L
 cut, with the uniform size and bond bounds at every positive cut. -/
 theorem sampledSweepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
@@ -205,7 +211,7 @@ theorem sampledSweepProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L) (h
 /-- **On good words the sampled program finds the ground state under every valid oracle.** -/
 theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 < L)
     (hq : 2 ≤ q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
@@ -259,13 +265,15 @@ theorem sampledGroundStateProgram_spec_of_valid (hv : IsValidOracle o) (hL : 0 <
         rw [← e.inner_map_map, e.apply_symm_apply]
       rw [← norm_inner_symm, this]
       exact hover
-    let chain := ManyBody.ChainInteraction.ofBonds h hs
-    have hchain : chain.hamiltonian = ∑ j, h j := ManyBody.ChainInteraction.ofBonds_hamiltonian h hs
+    let chain := ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩
+    have hchain : chain.hamiltonian = ∑ j, h j := ManyBody.Interaction.hamiltonian_extend
     have hspanC : groundSpace chain.hamiltonian E₀ = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
-        (ManyBody.ChainInteraction.isHermitian_ofBonds_term h hs h0)
-        (ManyBody.ChainInteraction.norm_ofBonds_term_le h hs h0 h1) hΩ hspanC hw'norm hover'
+        (ManyBody.Interaction.isHermitian_extend_term fun j ↦ (h0 j).isHermitian)
+        (ManyBody.Interaction.norm_extend_term_le zero_le_one fun j ↦
+          (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 j).nonneg).mpr (h1 j))
+        hΩ hspanC hw'norm hover'
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E₀ ≤ 8 * L * δ :=
       (sub_le_sub_right (hψmin _ hw'U hw'norm) E₀).trans henergy
@@ -285,7 +293,7 @@ valid oracle.** -/
 theorem measureReal_sampledGroundStateProgram_success_of_valid [NeZero L]
     (hv : IsValidOracle o) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})

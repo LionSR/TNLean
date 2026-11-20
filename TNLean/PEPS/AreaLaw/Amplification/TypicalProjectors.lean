@@ -70,9 +70,9 @@ Source: `09-amplification.tex`, lines 304–313. -/
 noncomputable def typicalProjection (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q)
     (Y : Finset (Site Λ)) (w : ℝ) :
     Matrix ({x : Site Λ // x ∈ Y} → Fin q) ({x : Site Λ // x ∈ Y} → Fin q) ℂ :=
-  (reducedState_isHermitian Λ q Ω Y).spectralSelection
-    (Entropy.typicalSet (reducedState_isHermitian Λ q Ω Y).eigenvalues
-      (regionalEntropy Λ q Ω Y) w)
+  (ManyBody.regionState_isHermitian Y Ω).spectralSelection
+    (Entropy.typicalSet (ManyBody.regionState_isHermitian Y Ω).eigenvalues
+      (ManyBody.regionEntropy Ω Y) w)
 
 /-- The probability that a selected spectral projection succeeds is the mass of the
 selected eigenvalues. -/
@@ -95,24 +95,24 @@ Source: `09-amplification.tex`, lines 304–313 and 319–321. -/
 theorem typicalProjection_failure_le_surprisalTail (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     (Y : Finset (Site Λ)) (w : ℝ) :
     IsStarProjection (typicalProjection Λ q Ω Y w) ∧
-      Commute (typicalProjection Λ q Ω Y w) (reducedState Λ q Ω Y) ∧
-      (∀ i ∈ Entropy.typicalSet (reducedState_isHermitian Λ q Ω Y).eigenvalues
-          (regionalEntropy Λ q Ω Y) w,
-        0 < (reducedState_isHermitian Λ q Ω Y).eigenvalues i ∧
-          Real.exp (-regionalEntropy Λ q Ω Y - w) ≤
-            (reducedState_isHermitian Λ q Ω Y).eigenvalues i ∧
-          (reducedState_isHermitian Λ q Ω Y).eigenvalues i ≤
-            Real.exp (-regionalEntropy Λ q Ω Y + w)) ∧
-      1 - (reducedState Λ q Ω Y * typicalProjection Λ q Ω Y w).trace.re ≤
-        Entropy.surprisalTail (reducedState_isHermitian Λ q Ω Y).eigenvalues
-          (regionalEntropy Λ q Ω Y) w := by
-  have hρ := reducedState_posSemidef Λ q Ω Y
-  refine ⟨(reducedState_isHermitian Λ q Ω Y).isStarProjection_spectralSelection _,
-    (reducedState_isHermitian Λ q Ω Y).commute_spectralSelection _,
+      Commute (typicalProjection Λ q Ω Y w) (ManyBody.regionState Ω Y) ∧
+      (∀ i ∈ Entropy.typicalSet (ManyBody.regionState_isHermitian Y Ω).eigenvalues
+          (ManyBody.regionEntropy Ω Y) w,
+        0 < (ManyBody.regionState_isHermitian Y Ω).eigenvalues i ∧
+          Real.exp (-ManyBody.regionEntropy Ω Y - w) ≤
+            (ManyBody.regionState_isHermitian Y Ω).eigenvalues i ∧
+          (ManyBody.regionState_isHermitian Y Ω).eigenvalues i ≤
+            Real.exp (-ManyBody.regionEntropy Ω Y + w)) ∧
+      1 - (ManyBody.regionState Ω Y * typicalProjection Λ q Ω Y w).trace.re ≤
+        Entropy.surprisalTail (ManyBody.regionState_isHermitian Y Ω).eigenvalues
+          (ManyBody.regionEntropy Ω Y) w := by
+  have hρ := ManyBody.regionState_posSemidef Y Ω
+  refine ⟨(ManyBody.regionState_isHermitian Y Ω).isStarProjection_spectralSelection _,
+    (ManyBody.regionState_isHermitian Y Ω).commute_spectralSelection _,
     fun i hi ↦ ⟨(Entropy.mem_typicalSet.mp hi).1, Entropy.exp_le_of_mem_typicalSet hi⟩, ?_⟩
   have hm := Entropy.one_sub_surprisalTail_le_typicalMass hρ.eigenvalues_nonneg
     (posSemidef_trace_one_eigenvalues_sum_one hρ (trace_reducedState Ω hΩ Y))
-    (regionalEntropy Λ q Ω Y) w
+    (ManyBody.regionEntropy Ω Y) w
   rw [typicalProjection, trace_mul_spectralSelection, Complex.ofReal_re]
   change 1 - Entropy.typicalMass _ _ _ ≤ _
   linarith
@@ -145,7 +145,7 @@ theorem typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ)
       (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ Y : Finset (Site Λ), ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
-        1 - (reducedState Λ q Ω Y *
+        1 - (ManyBody.regionState Ω Y *
             typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
           2 * Real.exp (Real.exp 1 / 2) *
             Real.exp (-(typicalFailureRate q R J Δ C₀ * (n : ℝ) ^ ((1 : ℝ) / 10))) := by
@@ -199,7 +199,7 @@ theorem exists_typicalProjection_failure_le_stretchedExp (hq : 1 ≤ q) (R : ℕ
         (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ Y : Finset (Site Λ), ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
-          1 - (reducedState Λ q Ω Y *
+          1 - (ManyBody.regionState Ω Y *
               typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
             C * Real.exp (-(c * (n : ℝ) ^ ((1 : ℝ) / 10))) :=
   ⟨_, _, by positivity, typicalFailureRate_pos hq R hJ hΔ hC₀,
@@ -230,7 +230,7 @@ theorem typicalProjection_failure_le_inv_pow_of_threshold_le (hq : 1 ≤ q) (R :
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (Y : Finset (Site Λ))
     (hY : ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n) :
-    1 - (reducedState Λ q Ω Y *
+    1 - (ManyBody.regionState Ω Y *
         typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
       (n : ℝ) ^ (-(2 * K : ℝ)) :=
   (typicalProjection_failure_le_stretchedExp hq R hJ hΔ hC₀ n
@@ -252,7 +252,7 @@ theorem exists_typicalProjection_failure_le_inv_pow (hq : 1 ≤ q) (R : ℕ)
         (E₀ : ℝ) (Ω : StateSpace Λ q), ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ Y : Finset (Site Λ), ((edgeBoundary Λ Y).card : ℝ) ≤ C₀ * n →
-          1 - (reducedState Λ q Ω Y *
+          1 - (ManyBody.regionState Ω Y *
               typicalProjection Λ q Ω Y ((n : ℝ) ^ ((3 : ℝ) / 5))).trace.re ≤
             (n : ℝ) ^ (-(2 * K : ℝ)) :=
   ⟨_, one_le_typicalProjectionThreshold q R J Δ C₀ K,
@@ -279,13 +279,13 @@ theorem typicalProjectors_three_cuts_of_threshold_le (hq : 1 ≤ q) (R : ℕ)
           ((edgeBoundary Λ S₀).card : ℝ) ≤ C₀ * n →
           ∀ Z ∈ ({X, Y, S₀} : Finset (Finset (Site Λ))),
             let w := (n : ℝ) ^ ((3 : ℝ) / 5)
-            let p := (reducedState_isHermitian Λ q Ω Z).eigenvalues
-            let S := regionalEntropy Λ q Ω Z
+            let p := (ManyBody.regionState_isHermitian Z Ω).eigenvalues
+            let S := ManyBody.regionEntropy Ω Z
             IsStarProjection (typicalProjection Λ q Ω Z w) ∧
-              Commute (typicalProjection Λ q Ω Z w) (reducedState Λ q Ω Z) ∧
+              Commute (typicalProjection Λ q Ω Z w) (ManyBody.regionState Ω Z) ∧
               (∀ i ∈ Entropy.typicalSet p S w,
                 0 < p i ∧ Real.exp (-S - w) ≤ p i ∧ p i ≤ Real.exp (-S + w)) ∧
-              1 - (reducedState Λ q Ω Z * typicalProjection Λ q Ω Z w).trace.re ≤
+              1 - (ManyBody.regionState Ω Z * typicalProjection Λ q Ω Z w).trace.re ≤
                 (n : ℝ) ^ (-(2 * K : ℝ)) := by
   classical
   intro n hn Λ h hh hhJ E₀ Ω hΩ hgap hspan X Y S₀ hX hY hS Z hZ
@@ -321,13 +321,13 @@ theorem exists_typicalProjectors_three_cuts (hq : 1 ≤ q) (R : ℕ)
           ((edgeBoundary Λ S₀).card : ℝ) ≤ C₀ * n →
           ∀ Z ∈ ({X, Y, S₀} : Finset (Finset (Site Λ))),
             let w := (n : ℝ) ^ ((3 : ℝ) / 5)
-            let p := (reducedState_isHermitian Λ q Ω Z).eigenvalues
-            let S := regionalEntropy Λ q Ω Z
+            let p := (ManyBody.regionState_isHermitian Z Ω).eigenvalues
+            let S := ManyBody.regionEntropy Ω Z
             IsStarProjection (typicalProjection Λ q Ω Z w) ∧
-              Commute (typicalProjection Λ q Ω Z w) (reducedState Λ q Ω Z) ∧
+              Commute (typicalProjection Λ q Ω Z w) (ManyBody.regionState Ω Z) ∧
               (∀ i ∈ Entropy.typicalSet p S w,
                 0 < p i ∧ Real.exp (-S - w) ≤ p i ∧ p i ≤ Real.exp (-S + w)) ∧
-              1 - (reducedState Λ q Ω Z * typicalProjection Λ q Ω Z w).trace.re ≤
+              1 - (ManyBody.regionState Ω Z * typicalProjection Λ q Ω Z w).trace.re ≤
                 (n : ℝ) ^ (-(2 * K : ℝ)) :=
   ⟨_, one_le_typicalProjectionThreshold q R J Δ C₀ K,
     typicalProjectors_three_cuts_of_threshold_le hq R hJ hΔ hC₀ K⟩

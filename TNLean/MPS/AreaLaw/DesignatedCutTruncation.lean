@@ -30,10 +30,10 @@ theorem exists_unit_mps_of_designated_prefix_mass
     (k0 Ds Dg : ℕ) (hDs : 1 ≤ Ds) (hDsg : Ds ≤ Dg)
     (delta : ℝ) (hdelta : 0 < delta) (hdelta1 : delta ≤ 1)
     (hspecial : k0 ∈ Finset.Ico 1 L →
-      1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (leftBlock L k0) ψ).kyFanNorm Ds ≤ delta / 32)
     (hother : ∀ k ∈ Finset.Ico 1 L, k ≠ k0 →
-      1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (leftBlock L k) ψ).kyFanNorm Dg ≤ delta / (32 * ((L : ℝ) + 1))) :
     ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
       IsOpenMPS L q Dg (fun x ↦ Φ x) ∧ (cutMatrix Φ k0).rank ≤ Ds ∧
@@ -42,7 +42,7 @@ theorem exists_unit_mps_of_designated_prefix_mass
   let D : ℕ → ℕ := fun k ↦ if k = k0 then Ds else Dg
   have hsmall : 0 ≤ delta / (32 * ((L : ℝ) + 1)) := by positivity
   have hpt (k : ℕ) (hk : k ∈ Finset.Ico 1 L) :
-      1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (leftBlock L k) ψ).kyFanNorm (D k) ≤
         delta / (32 * ((L : ℝ) + 1)) + (if k = k0 then delta / 32 else 0) := by
     by_cases heq : k = k0
@@ -64,13 +64,13 @@ theorem exists_unit_mps_of_designated_prefix_mass
         mul_le_mul_of_nonneg_right hcard hsmall
       _ = _ := by field_simp
   have hsum : (∑ k ∈ Finset.Ico 1 L,
-      (1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      (1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (leftBlock L k) ψ).kyFanNorm (D k))) ≤ delta / 8 := by
     refine (Finset.sum_le_sum hpt).trans ?_
     rw [Finset.sum_add_distrib]
     linarith only [hsingle, hconstant, hdelta]
   let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-    (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+    (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
       (leftBlock L k) ψ).leadingEigenprojection (D k)
   let Φ0 := sequentialTruncation P (L - 1) ψ
   let Φ := (‖Φ0‖ : ℂ)⁻¹ • Φ0

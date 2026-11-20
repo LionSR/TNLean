@@ -6,7 +6,10 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.TwoWindowPolynomialRank
 import TNLean.Circuit.SiteEmbedding
 import QICLean.Algebra.OperatorSchmidtSubmatrix
-import QICLean.Entropy.LocalLift
+import QICLean.Entropy.SupportedMarginalTails
+import QICLean.Entropy.FilterMoment
+import QICLean.ManyBody.Sites.RegionState
+import QICLean.ManyBody.Sites.Placement
 
 /-!
 # Polynomial rank at one cut
@@ -42,9 +45,9 @@ theorem operatorSchmidtRank_sheetSplit_eq_cutOperator
     {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ} (A : Finset V)
     (K : Matrix (V → Fin q) (V → Fin q) ℂ) :
     operatorSchmidtRank (K.reindex (sheetSplit q A) (sheetSplit q A)) =
-      operatorSchmidtRank (Entropy.cutOperator (n := fun _ ↦ q) A K) := by
-  exact operatorSchmidtRank_reindex_prodCongr (Entropy.cutOperator A K)
-    (Equiv.refl _) (FiniteProduct.complementEquiv (fun _ ↦ Fin q) A)
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) A K) := by
+  exact operatorSchmidtRank_reindex_prodCongr (ManyBody.cutOperator A K)
+    (Equiv.refl _) (ManyBody.complementEquiv (fun _ ↦ Fin q) A)
 
 private theorem one_eq_classical {n : Type*} (d : DecidableEq n) :
     @OfNat.ofNat (Matrix n n ℂ) 1 (@One.toOfNat1 _ (@Matrix.one n ℂ d _ _)) =
@@ -81,22 +84,22 @@ theorem operatorSchmidtRank_le_embedOp
     by_cases hi : i ∈ A
     · have hei : e i ∈ B := (hAB i).mpr hi
       simp only [Function.comp_apply, sheetSplit,
-        FiniteProduct.splitEquiv_symm_apply_of_mem _ _ _ _ _ hei,
-        FiniteProduct.splitEquiv_symm_apply_of_mem _ _ _ _ _ hi]
+        ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _ hei,
+        ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _ hi]
       exact heA.extend_apply x (fun j ↦ τ j) ⟨i, hi⟩
     · have hei : e i ∉ B := fun h ↦ hi ((hAB i).mp h)
       simp only [Function.comp_apply, sheetSplit,
-        FiniteProduct.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hei,
-        FiniteProduct.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hi]
+        ManyBody.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hei,
+        ManyBody.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hi]
       exact heC.extend_apply y (fun j ↦ τ j) ⟨i, Finset.mem_compl.mpr hi⟩
   have hout (x : A → Fin q) (y : ↥Aᶜ → Fin q) (j : W)
       (hj : ∀ i, e i ≠ j) : (sheetSplit q B).symm (f x, g y) j = τ j := by
     by_cases hB : j ∈ B
-    · rw [sheetSplit, FiniteProduct.splitEquiv_symm_apply_of_mem _ _ _ _ _ hB]
+    · rw [sheetSplit, ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _ hB]
       exact Function.extend_apply' (f := eA) x (fun j ↦ τ j) ⟨j, hB⟩ (by
         rintro ⟨i, hi⟩
         exact hj i (congrArg Subtype.val hi))
-    · rw [sheetSplit, FiniteProduct.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hB]
+    · rw [sheetSplit, ManyBody.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hB]
       exact Function.extend_apply' (f := eC) y (fun j ↦ τ j) ⟨j, Finset.mem_compl.mpr hB⟩ (by
         rintro ⟨i, hi⟩
         exact hj i (congrArg Subtype.val hi))

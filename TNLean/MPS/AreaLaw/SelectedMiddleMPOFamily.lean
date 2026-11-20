@@ -10,7 +10,10 @@ import TNLean.MPS.AreaLaw.SelectedCoefficientDecomposition
 import TNLean.MPS.AreaLaw.SelectedMiddleData
 import TNLean.MPS.AreaLaw.TraceCoreSlices
 import TNLean.Algebra.TwoMarkerMiddleFactors
-import QICLean.Entropy.LocalLift
+import QICLean.Entropy.SupportedMarginalTails
+import QICLean.Entropy.FilterMoment
+import QICLean.ManyBody.Sites.RegionState
+import QICLean.ManyBody.Sites.Placement
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.LinearAlgebra.Matrix.Reindex
 import Mathlib.Data.List.OfFn
@@ -107,30 +110,6 @@ private theorem twoMarkerMiddleSteps_spec
     rw [List.map_replicate, List.prod_replicate, hrun]
     rfl
 
-end TNLean.MPS.AreaLaw
-
-namespace Entropy
-
-/-- Every supported operator is an actual local lift, including when the
-full configuration space is empty. Supporting locality algebra for ALVV,
-arXiv:1602.08828v2, Proposition 5.7, lines 1324–1333. -/
-private theorem IsSupportedOn.exists_eq_localLift
-    {V : Type*} [Fintype V] [DecidableEq V] {n : V → ℕ}
-    {C : Finset V} {X : Matrix (SiteConfig n) (SiteConfig n) ℂ}
-    (hX : IsSupportedOn X C) :
-    ∃ XC : Matrix (RegionConfig n C) (RegionConfig n C) ℂ,
-      X = localLift C XC := by
-  classical
-  by_cases h : Nonempty (SiteConfig n)
-  · exact hX.exists_localLift (Classical.choice h)
-  · refine ⟨0, ?_⟩
-    ext σ τ
-    exact False.elim (h ⟨σ⟩)
-
-end Entropy
-
-namespace TNLean.MPS.AreaLaw
-
 /-- Supported collar factors have retained representatives chosen once for
 all degrees and existing middle indices. Their affine steps evaluate to the
 original ordered middle factor. The explicit matrix equality instance keeps
@@ -138,37 +117,42 @@ its word algebra fixed. ALVV, arXiv:1602.08828v2,
 Proposition 5.7, lines 1324–1333. -/
 private theorem exists_localLift_twoMarkerMiddleSteps
     {V : Type*} [Fintype V] [DecidableEq V] {n : V → ℕ}
-    [DecidableEq (Entropy.SiteConfig n)] {rU rV : ℕ}
+    [DecidableEq (∀ v, Fin (n v))] {rU rV : ℕ}
     (C : Finset V)
-    (H K : Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ) (c : ℂ)
-    (U : Fin rU → Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ)
-    (W : Fin rV → Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ)
-    (hK : Entropy.IsSupportedOn K C)
-    (hU : ∀ t, Entropy.IsSupportedOn (U t) C)
-    (hW : ∀ t, Entropy.IsSupportedOn (W t) C) :
-    ∃ (KC : Matrix (Entropy.RegionConfig n C) (Entropy.RegionConfig n C) ℂ)
-      (UC : Fin rU → Matrix (Entropy.RegionConfig n C) (Entropy.RegionConfig n C) ℂ)
-      (WC : Fin rV → Matrix (Entropy.RegionConfig n C) (Entropy.RegionConfig n C) ℂ),
-      K = Entropy.localLift C KC ∧
-      (∀ t, U t = Entropy.localLift C (UC t)) ∧
-      (∀ t, W t = Entropy.localLift C (WC t)) ∧
+    (H K : Matrix (∀ v, Fin (n v)) (∀ v, Fin (n v)) ℂ) (c : ℂ)
+    (U : Fin rU → Matrix (∀ v, Fin (n v)) (∀ v, Fin (n v)) ℂ)
+    (W : Fin rV → Matrix (∀ v, Fin (n v)) (∀ v, Fin (n v)) ℂ)
+    (hK : ManyBody.IsSupportedOn K C)
+    (hU : ∀ t, ManyBody.IsSupportedOn (U t) C)
+    (hW : ∀ t, ManyBody.IsSupportedOn (W t) C) :
+    ∃
+        (KC : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) C)
+        (ManyBody.RegionConfig (fun v ↦ Fin (n v)) C) ℂ)
+      (UC : Fin rU → Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) C)
+          (ManyBody.RegionConfig (fun v ↦ Fin (n v)) C) ℂ)
+      (WC : Fin rV → Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) C)
+          (ManyBody.RegionConfig (fun v ↦ Fin (n v)) C) ℂ),
+      K = ManyBody.place C KC ∧
+      (∀ t, U t = ManyBody.place C (UC t)) ∧
+      (∀ t, W t = ManyBody.place C (WC t)) ∧
       ∀ (k i j : ℕ) (p : TwoMarkerMiddleIndex k i j rU rV),
         let steps := twoMarkerMiddleSteps KC c UC WC p
         steps.length ≤ k ∧
-          (steps.map (fun x ↦ Entropy.localLift C x.1 + x.2 • H)).prod =
+          (steps.map (fun x ↦ ManyBody.place C x.1 + x.2 • H)).prod =
             twoMarkerMiddleFactor (c • H + K) U W p := by
   classical
-  obtain ⟨KC, hKC⟩ := hK.exists_eq_localLift
-  have hUret : ∀ t, ∃ X, U t = Entropy.localLift C X :=
-    fun t ↦ (hU t).exists_eq_localLift
-  have hWret : ∀ t, ∃ X, W t = Entropy.localLift C X :=
-    fun t ↦ (hW t).exists_eq_localLift
+  obtain ⟨KC, hKC⟩ := ManyBody.exists_eq_place_of_mem_supportedOperators hK
+  have hUret : ∀ t, ∃ X, U t = ManyBody.place C X :=
+    fun t ↦ ManyBody.exists_eq_place_of_mem_supportedOperators (hU t)
+  have hWret : ∀ t, ∃ X, W t = ManyBody.place C X :=
+    fun t ↦ ManyBody.exists_eq_place_of_mem_supportedOperators (hW t)
   choose UC hUC using hUret
   choose WC hWC using hWret
   refine ⟨KC, UC, WC, hKC, hUC, hWC, ?_⟩
   intro k i j p steps
-  let f : Matrix (Entropy.RegionConfig n C) (Entropy.RegionConfig n C) ℂ →
-      Matrix (Entropy.SiteConfig n) (Entropy.SiteConfig n) ℂ := Entropy.localLift C
+  let f : Matrix (ManyBody.RegionConfig (fun v ↦ Fin (n v)) C)
+      (ManyBody.RegionConfig (fun v ↦ Fin (n v)) C) ℂ →
+      Matrix (∀ v, Fin (n v)) (∀ v, Fin (n v)) ℂ := ManyBody.place C
   have hspec := twoMarkerMiddleSteps_spec f H KC c UC WC p
   have hfK : f KC = K := hKC.symm
   have hfU : f ∘ UC = U := funext fun t ↦ (hUC t).symm
@@ -272,9 +256,9 @@ private noncomputable def actualSelectedMiddleWordStatement
     ∀ (K : Matrix (E → Fin q) (E → Fin q) ℂ)
       (U : Fin rU → Matrix (E → Fin q) (E → Fin q) ℂ)
       (W : Fin rV → Matrix (E → Fin q) (E → Fin q) ℂ),
-      Entropy.IsSupportedOn K C →
-      (∀ t, Entropy.IsSupportedOn (U t) C) →
-      (∀ t, Entropy.IsSupportedOn (W t) C) →
+      ManyBody.IsSupportedOn K C →
+      (∀ t, ManyBody.IsSupportedOn (U t) C) →
+      (∀ t, ManyBody.IsSupportedOn (W t) C) →
       ∀ (k i j : ℕ) (pIndex : TwoMarkerMiddleIndex k i j rU rV),
         ∃ d : ℕ, d = (∑ h, (pIndex.1.2 h).val) + i + j ∧ d ≤ k ∧
           let n := (d + 1) *
@@ -367,11 +351,11 @@ private theorem exists_actual_selected_middle_word_mpo_family
       (MPOTensor.actualAffineRetainedConfig N Lnat q aNat) ℂ ↦
     (X ⊗ₖ (1 : Matrix (Fin Lnat → Fin q) (Fin Lnat → Fin q) ℂ)).submatrix
       (retainedIntervalEquiv aNat ha).symm (retainedIntervalEquiv aNat ha).symm
-  have htransport : ∀ X : Matrix (Entropy.RegionConfig (fun _ : E ↦ q) C)
-      (Entropy.RegionConfig (fun _ : E ↦ q) C) ℂ,
+  have htransport : ∀ X : Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) C)
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) C) ℂ,
       ∃ Xret : Matrix (MPOTensor.actualAffineRetainedConfig N Lnat q aNat)
           (MPOTensor.actualAffineRetainedConfig N Lnat q aNat) ℂ,
-        natPull (Entropy.localLift C X) = place Xret := by
+        natPull (ManyBody.place C X) = place Xret := by
     intro X
     exact exists_retainedMatrix_of_physical_localLift eE.toEquiv aNat ha C hC X
   choose g hg using htransport
@@ -381,7 +365,7 @@ private theorem exists_actual_selected_middle_word_mpo_family
   let stepsPhys := twoMarkerMiddleSteps KC zmid UC WC pIndex
   let stepsNat := stepsPhys.map (fun z ↦ (g z.1, z.2))
   have hstep := hsteps k i j pIndex
-  have hlength := (twoMarkerMiddleSteps_spec (Entropy.localLift C)
+  have hlength := (twoMarkerMiddleSteps_spec (ManyBody.place C)
     ME KC zmid UC WC pIndex).1
   have hlengthNat : stepsNat.length = (∑ h, (pIndex.1.2 h).val) + i + j := by
     simpa only [stepsNat, List.length_map] using hlength
@@ -392,17 +376,17 @@ private theorem exists_actual_selected_middle_word_mpo_family
     calc
       natPull (twoMarkerMiddleFactor (zmid • ME + K) U W pIndex) =
           natPull ((stepsPhys.map
-            (fun x ↦ Entropy.localLift C x.1 + x.2 • ME)).prod) :=
+            (fun x ↦ ManyBody.place C x.1 + x.2 • ME)).prod) :=
         congrArg natPull hstep.2.symm
       _ = ((stepsPhys.map
-            (fun x ↦ Entropy.localLift C x.1 + x.2 • ME)).map natPull).prod :=
+            (fun x ↦ ManyBody.place C x.1 + x.2 • ME)).map natPull).prod :=
         map_list_prod natPull _
       _ = (stepsNat.map (fun z ↦ place z.1 + z.2 • Hnat)).prod := by
         apply congrArg List.prod
         simp only [stepsNat, List.map_map]
         apply List.map_congr_left
         intro x _hx
-        change natPull (Entropy.localLift C x.1 + x.2 • ME) =
+        change natPull (ManyBody.place C x.1 + x.2 • ME) =
           place (g x.1) + x.2 • Hnat
         rw [map_add, map_smul, hg, hME]
   obtain ⟨t, V, hV, htrace, hsum⟩ :=
@@ -418,9 +402,9 @@ ALVV, arXiv:1602.08828v2, Proposition 5.7, lines 1311–1333. -/
 theorem exists_common_physical_twoMarkerCoefficient_mpo_family
     {L q ell a b B : ℕ}
     (WL WR : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, Entropy.IsSupportedOn (WL r)
+    (hleft : ∀ r, ManyBody.IsSupportedOn (WL r)
       (interval L (a + r.val) (a + r.val + 2)))
-    (hright : ∀ r, Entropy.IsSupportedOn (WR r)
+    (hright : ∀ r, ManyBody.IsSupportedOn (WR r)
       (interval L (b + r.val) (b + r.val + 2)))
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
     (p s : Fin (2 * ell))
@@ -461,8 +445,8 @@ theorem exists_common_physical_twoMarkerCoefficient_mpo_family
       ∃ Ar : Fin Nnat → MPOTensor q (B ^ (deg r).val),
         V r = MPOTensor.traceChainOperator Ar Cr) ∧
     ∀ (PL PR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
-      Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
+      ManyBody.IsSupportedOn PL (interval L 0 (a + 1)) →
+      ManyBody.IsSupportedOn PR (interval L (b + 2 * ell) L) →
       let F : ((Fin (2 * ell) ⊕ Fin (2 * ell)) ⊕ Fin 3) →
           Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
         Sum.elim (Sum.elim WL WR) ![PL, Pmid, PR]

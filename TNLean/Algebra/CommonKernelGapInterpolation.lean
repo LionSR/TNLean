@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.InnerProductSpace.PiL2
+import QICLean.ManyBody.Hamiltonian.KernelGap
 
 /-!
 # Gap comparison along an ordered interpolation
@@ -12,7 +13,9 @@ import Mathlib.Analysis.InnerProductSpace.PiL2
 For positive semidefinite finite matrices with the same kernel, adding a
 positive operator cannot reduce a lower quadratic-form bound on the
 orthogonal complement of that kernel. The result applies to interpolation
-between a bond-product interaction and a larger parent interaction.
+between a bond-product interaction and a larger parent interaction. The kernel
+equality is QICLean's `ManyBody.groundSpace_zero_eq_of_le`; the gap form of the
+statement is `ManyBody.IsGapped.of_le`.
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder
@@ -47,29 +50,10 @@ theorem gap_interpolation_of_le {n : Type*} [Fintype n] [DecidableEq n]
   have hkerEq :
       LinearMap.ker (Matrix.toEuclideanLin (A + t • (B - A))) =
         LinearMap.ker (Matrix.toEuclideanLin A) := by
-    apply Submodule.ext
-    intro x
-    simp only [LinearMap.mem_ker]
-    constructor
-    · intro hx
-      simp only [Matrix.toEuclideanLin, Matrix.toLpLin_apply,
-        WithLp.toLp_eq_zero] at hx ⊢
-      have hsum :
-          star x.ofLp ⬝ᵥ (A *ᵥ x.ofLp) +
-            star x.ofLp ⬝ᵥ ((t • (B - A)) *ᵥ x.ofLp) = 0 := by
-        simpa only [Matrix.add_mulVec, dotProduct_add, dotProduct_zero] using
-          congrArg (fun v => star x.ofLp ⬝ᵥ v) hx
-      have hA0 : star x.ofLp ⬝ᵥ (A *ᵥ x.ofLp) = 0 := by
-        apply le_antisymm _ (hA.dotProduct_mulVec_nonneg _)
-        rw [← hsum]
-        exact le_add_of_nonneg_right (hD.dotProduct_mulVec_nonneg _)
-      exact hA.dotProduct_mulVec_zero_iff.mp hA0
-    · intro hx
-      simp only [Matrix.toEuclideanLin, Matrix.toLpLin_apply,
-        WithLp.toLp_eq_zero] at hx ⊢
-      have hBx := hker x.ofLp hx
-      simp [Matrix.add_mulVec, Matrix.smul_mulVec, Matrix.sub_mulVec,
-        hx, hBx]
+    simp only [← ManyBody.groundSpace_zero]
+    refine ManyBody.groundSpace_zero_eq_of_le hA hAC fun x hx ↦ ?_
+    rw [ManyBody.mem_groundSpace_iff_mulVec, Complex.ofReal_zero, zero_smul] at hx ⊢
+    simp [Matrix.add_mulVec, Matrix.smul_mulVec, Matrix.sub_mulVec, hx, hker _ hx]
   refine ⟨hC, hkerEq, ?_⟩
   intro x hx
   have hxA : x ∈ (LinearMap.ker (Matrix.toEuclideanLin A))ᗮ := by

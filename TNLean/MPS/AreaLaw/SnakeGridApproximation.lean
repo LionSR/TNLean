@@ -49,7 +49,7 @@ isometry, so the vector error is the error on the original open square.
 Source: the tensor-factor relabelling in the square-grid MPS comparison of
 the polynomial-PEPS manuscript, Section 1. -/
 noncomputable def snakeGridStateEquiv (L q : ℕ) :
-    StateSpace (PEPS.AreaLaw.rectangularDomain L L) q ≃ₗᵢ[ℂ]
+    StateSpace (ManyBody.rectangularDomain L L) q ≃ₗᵢ[ℂ]
       EuclideanSpace ℂ (Fin (L * L) → Fin q) :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (Entropy.siteConfigurationEquiv (n := fun _ ↦ q) (n' := fun _ ↦ q)
@@ -58,7 +58,7 @@ noncomputable def snakeGridStateEquiv (L q : ℕ) :
 /-- A one-site square vector already has a bond-one open MPS representation.
 There are no internal cuts. -/
 theorem isOpenMPS_snakeGridStateEquiv_one (q : ℕ)
-    (Ω : StateSpace (PEPS.AreaLaw.rectangularDomain 1 1) q) :
+    (Ω : StateSpace (ManyBody.rectangularDomain 1 1) q) :
     IsOpenMPS (1 * 1) q 1 (fun x ↦ snakeGridStateEquiv 1 q Ω x) := by
   apply isOpenMPS_of_internal_cutMatrix_rank_le
   intro k hk hkL
@@ -69,10 +69,10 @@ the side length. No entropy or interaction-count estimate is assumed.
 Source: area-law `eq:initial-local-tail-parameter` and the square-grid
 cutwidth comparison in the polynomial-PEPS manuscript, Section 1. -/
 theorem cutLogBudget_snakeGridPrefix_le {q : ℕ} (hq : 1 ≤ q) (R L k : ℕ) :
-    cutLogBudget (PEPS.AreaLaw.rectangularDomain L L) q R (snakeGridPrefix L k) ≤
+    cutLogBudget (ManyBody.rectangularDomain L L) q R (snakeGridPrefix L k) ≤
       PEPS.AreaLaw.tailParameterConstant q R * ((L : ℝ) + 2) := by
   have hC := PEPS.AreaLaw.one_le_tailParameterConstant hq R
-  have hcard : ((edgeBoundary (PEPS.AreaLaw.rectangularDomain L L)
+  have hcard : ((edgeBoundary (ManyBody.rectangularDomain L L)
       (snakeGridPrefix L k)).card : ℝ) ≤ (L : ℝ) + 1 := by
     exact_mod_cast card_edgeBoundary_snakeGridPrefix_le L k
   exact (PEPS.AreaLaw.cutLogBudget_le_edgeBoundary hq R _).trans
@@ -87,12 +87,12 @@ Section 1, using `part2a_mps_information.tex`,
 theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaLaw)
     (q : ℕ) (hq : 1 ≤ q) (R : ℕ) (J Δ : ℝ) (hJ : 0 < J) (hΔ : 0 < Δ) :
     ∃ C : ℝ, 0 ≤ C ∧ ∀ L : ℕ, 2 ≤ L →
-      ∀ H : PlaneInteraction (PEPS.AreaLaw.rectangularDomain L L) q R,
+      ∀ H : PlaneInteraction (ManyBody.rectangularDomain L L) q R,
           (∀ X, (H.term X).IsHermitian) → (∀ X, ‖H.term X‖ ≤ J) →
-      ∀ E₀ : ℝ, ∀ Ω : StateSpace (PEPS.AreaLaw.rectangularDomain L L) q,
+      ∀ E₀ : ℝ, ∀ Ω : StateSpace (ManyBody.rectangularDomain L L) q,
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-        ∃ (D : ℕ) (Φ : StateSpace (PEPS.AreaLaw.rectangularDomain L L) q),
+        ∃ (D : ℕ) (Φ : StateSpace (ManyBody.rectangularDomain L L) q),
           ‖Φ‖ = 1 ∧ IsOpenMPS (L * L) q D (fun x ↦ snakeGridStateEquiv L q Φ x) ∧
           ‖Φ - Ω‖ ≤ 1 / (L : ℝ) ∧ (D : ℝ) ≤ Real.exp (C * L) := by
   classical
@@ -135,10 +135,10 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
   let ψ := snakeGridStateEquiv L q Ω
   have hψ : ‖ψ‖ = 1 := (snakeGridStateEquiv L q).norm_map Ω |>.trans hΩ
   let A := snakeGridPrefix L
-  let S : ℕ → ℝ := fun k ↦ regionalEntropy _ q Ω (A k)
-  let ρ := fun k ↦ reducedState _ q Ω (A k)
+  let S : ℕ → ℝ := fun k ↦ ManyBody.regionEntropy Ω (A k)
+  let ρ := fun k ↦ ManyBody.regionState Ω (A k)
   let e := (snakeGridEquiv L).symm
-  have hA (k : ℕ) (v : Site (PEPS.AreaLaw.rectangularDomain L L)) :
+  have hA (k : ℕ) (v : Site (ManyBody.rectangularDomain L L)) :
       v ∈ A k ↔ e v ∈ leftBlock (L * L) k := by simp [A, e]
   let f := fun k ↦ Entropy.regionConfigurationEquiv (n := fun _ ↦ q) (n' := fun _ ↦ q)
     (A k) (leftBlock (L * L) k) e (hA k) (fun _ ↦ Equiv.refl _)
@@ -146,12 +146,12 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
   let P : ∀ k, LeftBlockMatrix (L * L) q k :=
     fun k ↦ (Q k).submatrix (f k).symm (f k).symm
   have hQ (k : ℕ) : IsStarProjection (Q k) :=
-    (reducedState_isHermitian _ q Ω (A k)).isStarProjection_spectralProjectionGE _
+    (ManyBody.regionState_isHermitian (A k) Ω).isStarProjection_spectralProjectionGE _
   have hP (k : ℕ) : IsStarProjection (P k) :=
     (hQ k).map (Matrix.reindexStarAlgEquiv (f k))
-  have hρ (k : ℕ) : Entropy.regionState (leftBlock (L * L) k) ψ =
+  have hρ (k : ℕ) : ManyBody.regionState ψ (leftBlock (L * L) k) =
       (ρ k).submatrix (f k).symm (f k).symm := by
-    rw [show ρ k = Entropy.regionState (A k) Ω from reducedState_eq_regionState _ _]
+    rw [show ρ k = ManyBody.regionState Ω (A k) from rfl]
     exact Entropy.regionState_relabel _ _ e (hA k) _ Ω
   have hS (k : ℕ) : S k ≤ C₀ * ((L : ℝ) + 1) := by
     have h := harea _ H hH hHJ E₀ Ω hΩ hgap hspan (A k)
@@ -166,15 +166,15 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     exact mul_le_mul_of_nonneg_left (cutLogBudget_snakeGridPrefix_le hq R L k)
       (by positivity)
   have hmass (k : ℕ) :
-      (((1 - P k) * Entropy.regionState (leftBlock (L * L) k) ψ).trace.re) ≤
+      (((1 - P k) * ManyBody.regionState ψ (leftBlock (L * L) k)).trace.re) ≤
         2 * Real.exp (Real.exp 1 / 2) * Real.exp (-(w / (32 * s))) := by
-    have htrace : ((1 - P k) * Entropy.regionState (leftBlock (L * L) k) ψ).trace =
+    have htrace : ((1 - P k) * ManyBody.regionState ψ (leftBlock (L * L) k)).trace =
         ((1 - Q k) * ρ k).trace := by
       rw [hρ]
       exact trace_reindexed_complement_mul (f k) (Q k) (ρ k)
     rw [htrace]
     refine (Matrix.PosSemidef.trace_complement_spectralProjectionGE_le_surprisalTail
-      (reducedState_posSemidef _ q Ω (A k)) (S k) w).trans ?_
+      (ManyBody.regionState_posSemidef (A k) Ω) (S k) w).trans ?_
     refine (H.surprisalTail_reducedState_le hH hHJ hJ.le hΔ hΩ hgap hspan (A k) w |>.trans
       (min_le_right _ _)).trans ?_
     apply mul_le_mul_of_nonneg_left _ (by positivity)
@@ -182,7 +182,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     apply neg_le_neg
     have ht : 0 < Real.sqrt ((1 + J / Δ) * cutLogBudget _ q R (A k)) := by
       have hb' := Entropy.one_le_cutLogBudget
-        (Entropy.crossingTerms (fun X : AdmissibleSupport _ R ↦ X.1) (A k))
+        (ManyBody.crossingTerms (fun X : AdmissibleSupport _ R ↦ X.1) (A k))
         (Entropy.supportDim (fun _ ↦ q) ∘ fun X : AdmissibleSupport _ R ↦ X.1)
       change 1 ≤ cutLogBudget _ q R (A k) at hb'
       apply Real.sqrt_pos.mpr
@@ -206,7 +206,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
   have hsum : ‖ψ - Ψ‖ ≤ ε / 2 := by
     refine herr.trans ?_
     have hterm (k : ℕ) (_ : k ∈ Finset.Ico 1 (L * L)) :
-        Real.sqrt (((1 - P k) * Entropy.regionState (leftBlock (L * L) k) ψ).trace.re)
+        Real.sqrt (((1 - P k) * ManyBody.regionState ψ (leftBlock (L * L) k)).trace.re)
           ≤ ε / (2 * ((L * L : ℕ) : ℝ)) := by
       rw [← hone]
       exact Real.sqrt_le_sqrt (hmass k)
@@ -244,11 +244,10 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
       exact_mod_cast hrank k hk hkN
     refine hr.trans ?_
     have htrace : (ρ k).trace = 1 := by
-      rw [show ρ k = Entropy.regionState (A k) Ω from reducedState_eq_regionState _ _]
-      exact Entropy.trace_regionState_eq_one hΩ
+      exact ManyBody.trace_regionState_eq_one hΩ
     change (((Q k).submatrix (f k).symm (f k).symm).rank : ℝ) ≤ _
     rw [Matrix.rank_submatrix]
-    exact ((reducedState_posSemidef _ q Ω (A k)).rank_spectralProjectionGE_exp_le
+    exact ((ManyBody.regionState_posSemidef (A k) Ω).rank_spectralProjectionGE_exp_le
       htrace (S k) w).trans (Real.exp_le_exp.mpr (by linarith [hS k]))
   have hmpsχ : IsOpenMPS (L * L) q D (fun x ↦ χ x) := hmps.smul _
   have hDbound : (D : ℝ) ≤ Real.exp (C * L) := by

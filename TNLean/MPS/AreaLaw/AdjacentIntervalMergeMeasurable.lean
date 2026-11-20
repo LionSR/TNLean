@@ -36,7 +36,7 @@ theorem measurable_projectionMatrix_adjacentIntervalMerge
       (n := interval L p r → Fin q) (𝕜 := ℂ)).symm
       (adjacentIntervalMerge L q p k r hpk hkr (S1 x) (S2 x)).starProjection) := by
   exact Submodule.measurable_projectionMatrix_map_piLpCongrLeft
-    (FiniteProduct.configurationCongr (fun _ : Fin L ↦ Fin q)
+    (ManyBody.configurationCongr (fun _ : Fin L ↦ Fin q)
       (interval_union_interval hpk hkr))
     (fun x ↦ Entropy.regionTensorMerge q (interval L p k) (interval L k r)
       (disjoint_interval_interval p k r) (S1 x) (S2 x))

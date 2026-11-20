@@ -55,9 +55,9 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_planeInteractio
     let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
     let F := Matrix.reindex p p (TNLean.Lattice.sheetSwapOp q R)
     let K := Matrix.reindex p p (Matrix.doubledHamiltonian h.hamiltonian)
-    ∃ g : ManyBody.PlaneInteraction (AreaLaw.rectangularDomain L L) (q * q) 1,
+    ∃ g : ManyBody.PlaneInteraction (ManyBody.rectangularDomain L L) (q * q) 1,
       (∀ X, (g.term X).IsHermitian) ∧ (∀ X, ‖g.term X‖ ≤ 2 * J) ∧ g.term =
-          Function.extend (AreaLaw.rectangleAreaLawSupport L L)
+          Function.extend (ManyBody.rectangleSupport (width := L) (height := L))
         (fun i : SquareLatticeSiteOrEdge L L =>
           Matrix.reindex e e
             (F * Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianPart.term i)) * Fᴴ)) 0 ∧
@@ -123,46 +123,50 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_planeInteractio
             Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianPart.term i))) * Fᴴ := by
           simp only [B, Finset.mul_sum, Finset.sum_mul]
       _ = F * K * Fᴴ := by rw [hreindex]
-  refine ⟨{ term := Function.extend (AreaLaw.rectangleAreaLawSupport L L)
+  refine ⟨{ term := Function.extend (ManyBody.rectangleSupport (width := L) (height := L))
               (fun i : SquareLatticeSiteOrEdge L L => Matrix.reindex e e (B i)) 0
             mem := ?_ }, ?_, ?_, rfl, ?_⟩
   · intro X
-    by_cases hx : ∃ i, AreaLaw.rectangleAreaLawSupport L L i = X
+    by_cases hx : ∃ i, ManyBody.rectangleSupport i = X
     · obtain ⟨i, rfl⟩ := hx
-      rw [(AreaLaw.rectangleAreaLawSupport_injective L L).extend_apply]
-      have hs := QuantumCircuit.embedOp_mem_supportedOperators_image
-        (AreaLaw.rectangleSiteEquiv L L).injective (hBsupport i)
-      rw [AreaLaw.embedOp_rectangular_eq_reindex] at hs
-      simpa only [AreaLaw.rectangleAreaLawSupport, Finset.coe_image] using hs
+      rw [(ManyBody.rectangleSupport_injective L L).extend_apply]
+      have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators
+        (X := fun _ : SquareLatticeVertex L L ↦ Fin (q * q))
+        (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin (q * q))
+        (ManyBody.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin (q * q)))
+        (D' := (ManyBody.rectangleSupport i).val)
+        (fun v ↦ (ManyBody.mem_rectangleSupport_iff i v).symm) (hBsupport i)
+      rw [AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv] at hs
+      exact hs
     · rw [Function.extend_apply' _ _ _ hx]
       exact zero_mem _
   · intro X
     dsimp only
-    by_cases hx : ∃ i, AreaLaw.rectangleAreaLawSupport L L i = X
+    by_cases hx : ∃ i, ManyBody.rectangleSupport i = X
     · obtain ⟨i, rfl⟩ := hx
-      rw [(AreaLaw.rectangleAreaLawSupport_injective L L).extend_apply]
+      rw [(ManyBody.rectangleSupport_injective L L).extend_apply]
       exact (hBH i).submatrix e.symm
     · rw [Function.extend_apply' _ _ _ hx]
       exact Matrix.isHermitian_zero
   · intro X
     dsimp only
-    by_cases hx : ∃ i, AreaLaw.rectangleAreaLawSupport L L i = X
+    by_cases hx : ∃ i, ManyBody.rectangleSupport i = X
     · obtain ⟨i, rfl⟩ := hx
-      rw [(AreaLaw.rectangleAreaLawSupport_injective L L).extend_apply]
+      rw [(ManyBody.rectangleSupport_injective L L).extend_apply]
       exact (Matrix.l2_opNorm_reindex_equiv e (B i)).le.trans (hBn i)
     · rw [Function.extend_apply' _ _ _ hx]
       simpa only [Pi.zero_apply, norm_zero] using mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) hJ
   · let T := fun i : SquareLatticeSiteOrEdge L L => Matrix.reindex e e (B i)
     have hsum : (∑ i : SquareLatticeSiteOrEdge L L, T i) =
-        ∑ X : ManyBody.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1,
-          Function.extend (AreaLaw.rectangleAreaLawSupport L L) T 0 X := by
-      apply Finset.sum_of_injOn (AreaLaw.rectangleAreaLawSupport L L)
-        (AreaLaw.rectangleAreaLawSupport_injective L L).injOn (fun _ _ => Finset.mem_univ _)
+        ∑ X : ManyBody.AdmissibleSupport (ManyBody.rectangularDomain L L) 1,
+          Function.extend (ManyBody.rectangleSupport (width := L) (height := L)) T 0 X := by
+      apply Finset.sum_of_injOn (ManyBody.rectangleSupport (width := L) (height := L))
+        (ManyBody.rectangleSupport_injective L L).injOn (fun _ _ => Finset.mem_univ _)
       · intro X _ hX
         exact Function.extend_apply' _ _ _ (by simpa using hX)
       · intro i _
-        exact ((AreaLaw.rectangleAreaLawSupport_injective L L).extend_apply T 0 i).symm
-    change (∑ X, Function.extend (AreaLaw.rectangleAreaLawSupport L L) T 0 X) = _
+        exact ((ManyBody.rectangleSupport_injective L L).extend_apply T 0 i).symm
+    change (∑ X, Function.extend (ManyBody.rectangleSupport (width := L) (height := L)) T 0 X) = _
     rw [← hsum]
     change (∑ i : SquareLatticeSiteOrEdge L L, (Matrix.reindexAlgEquiv ℂ ℂ e) (B i)) = _
     rw [← map_sum (Matrix.reindexAlgEquiv ℂ ℂ e), key]

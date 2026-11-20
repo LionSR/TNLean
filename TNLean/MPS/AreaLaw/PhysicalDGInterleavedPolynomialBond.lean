@@ -52,7 +52,7 @@ theorem exists_physical_dg_interleaved_ritz_polynomial_approximation_with_consta
         (1 + Real.log (max q 50 : ℕ) + Real.log (1 / min gamma 1)) ^ 10 /
           (min gamma 1) ^ 2 ∧ ∀ (L : ℕ)
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu : ℝ),
       let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
@@ -209,7 +209,7 @@ theorem exists_physical_dg_interleaved_ritz_polynomial_approximation_with_degree
         (1 + Real.log (max q 50 : ℕ) + Real.log (1 / min gamma 1)) ^ 10 /
           (min gamma 1) ^ 2 ∧ ∀ (L : ℕ)
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu : ℝ),
       let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
@@ -241,7 +241,7 @@ theorem exists_physical_dg_interleaved_ritz_polynomial_approximation
     (q : ℕ) (gamma : ℝ) (hgamma : 0 < gamma) :
     ∃ C : ℝ, 0 < C ∧ ∃ k : ℕ, ∀ (L : ℕ)
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu : ℝ),
       let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i

@@ -29,7 +29,7 @@ not the printed quantitative bounds; see `docs/paper-gaps/lvv13_constant_bond.te
 <https://sirui-lu.com/QICLean/paper-gaps/lvv13_trimming_radius.pdf>.
 -/
 
-open ManyBody (interval ChainInteraction)
+open ManyBody (interval ChainInteraction ChainSupport)
 
 open Matrix Cslib
 open scoped ComplexOrder MatrixOrder
@@ -66,7 +66,9 @@ theorem cost_sizeTrimmingProgram_le_of_valid (hv : IsValidOracle o) (L k b : ℕ
           FreeM.cost o queryCost
             (if o (LinearAlgebraQuery.feasible L k b S m.val (c / (2 * L)) X) = true then do
               let u ← FreeM.lift (LinearAlgebraQuery.leadingVector L k b S
-                (leftCutOperator k (h.cutLeftPart k)) m.val (c / (2 * L)) X)
+                (leftCutOperator k (h.partialHamiltonian
+                  (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 k)))
+                m.val (c / (2 * L)) X)
               pure (leftColumnsOf u)
             else pure (∅ : Finset (LeftBlockVector L q k))) ≤
           2 * convexProgramCost L q b S.card m.val := by
@@ -124,7 +126,7 @@ theorem cost_errorReductionProgram_le_of_valid (L i r b : ℕ) (F : Finset (Left
 /-- One step of the sweep under a valid oracle costs at most the honest step budget. -/
 theorem cost_sweepStepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 0 < L)
     (hq : 2 ≤ q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) :
@@ -136,7 +138,7 @@ theorem cost_sweepStepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL :
   simp only [sweepStepProgram, FreeM.cost_bind, FreeM.eval_lift, eval_extensionProgram_of_valid hv,
     eval_sizeTrimmingProgram_of_valid hv, eval_bondTrimmingProgram_of_valid hv, FreeM.cost_lift,
     queryCost_gaussianFilterFactors, sweepStepCostBound]
-  set chain := ManyBody.ChainInteraction.ofNearestNeighborPositive h hs with hchain
+  set chain := ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩ with hchain
   set b := lvvSuccessiveBondBound q Delta L with hb
   set m := bondTrimmingRadius L (lvvReferenceBond q Delta L) with hm
   set c := lvvSuccessiveError Delta with hcdef
@@ -144,7 +146,8 @@ theorem cost_sweepStepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL :
   set S₁ := AreaLaw.extend (i + 1) S with hS₁
   set S₂ := chain.sizeTrimmingSelectionWith hq Delta S₁
     (oracleNets o L (i + 1) ((Delta / 169) ^ 2 / (2 * L)))
-    (oracleSolver o L (i + 1) b S₁ (leftCutOperator (i + 1) (chain.cutLeftPart (i + 1)))
+    (oracleSolver o L (i + 1) b S₁ (leftCutOperator (i + 1) (chain.partialHamiltonian
+        (Finset.univ.filter fun X : ChainSupport L 1 ↦ X.1 ⊆ interval L 0 (i + 1))))
       ((Delta / 169) ^ 2 / (2 * L))) with hS₂
   set S₃ := bondTrimSet hi m S₂ with hS₃
   set F := o (LinearAlgebraQuery.gaussianFilterFactors L (i + 1) (Nat.le_of_lt hq) h h0 c Delta)
@@ -173,7 +176,7 @@ theorem cost_sweepStepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL :
 /-- The sweep under a valid oracle costs at most `i` honest step budgets. -/
 theorem cost_sweepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (i : ℕ) (hi : i ≤ L) :
     FreeM.cost o queryCost (sweepProgram hq h hs h0 h1 Delta i) ≤
@@ -196,7 +199,7 @@ theorem cost_sweepProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 0 <
 /-- The ground-state program under a valid oracle costs at most the honest budget. -/
 theorem cost_groundStateProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL : 1 ≤ L)
     (hq : 2 ≤ q) (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) (R : ℕ) :
     FreeM.cost o queryCost (groundStateProgram hq h hs h0 h1 Delta R) ≤
@@ -238,7 +241,7 @@ theorem exists_groundStateProgram_cost_polynomial_of_valid (hq : 2 ≤ q) {Delta
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ (o : {ι : Type} → LinearAlgebraQuery q ι → ι), IsValidOracle o →
       ∀ (L R : ℕ), 1 ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+        (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
           (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1),
       FreeM.countQueries o (groundStateProgram hq h hs h0 h1 Delta R) ≤
         FreeM.cost o queryCost (groundStateProgram hq h hs h0 h1 Delta R) ∧

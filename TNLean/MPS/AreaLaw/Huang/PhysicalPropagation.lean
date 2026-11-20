@@ -41,14 +41,14 @@ the prescribed accuracy, with simultaneous cut-rank bounds. Huang, arXiv:1406.63
 Section 5.4, Lemma 19. -/
 theorem physicalChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
     (hnorm : ∀ i, ‖h i‖ ≤ 1) {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
     let K := physicalChainPropagator h hHerm T epsilon
     (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K t)) ≤
           q ^ (8 * r + 8) := by
   intro r K
   let w := 2 * r + 2
@@ -79,14 +79,14 @@ the prescribed accuracy, with simultaneous cut-rank bounds: the existence form o
 `physicalChainPropagator_spec`. Huang, arXiv:1406.6355v6, Section 5.4, Lemma 19. -/
 theorem exists_physical_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
     (hnorm : ∀ i, ‖h i‖ ≤ 1) {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
     ∃ K : ℝ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K t)) ≤
           q ^ (8 * r + 8) :=
   ⟨physicalChainPropagator h hHerm T epsilon,
     physicalChainPropagator_spec hq h hs hHerm hnorm hT hepsilon⟩
@@ -105,14 +105,14 @@ with Hermiticity and norm bounds derived internally. This is the physical normal
 in Huang, arXiv:1406.6355v6, Section 2 and Section 5.4, Lemma 19. -/
 theorem positiveChainPropagator_spec {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
     let K := positiveChainPropagator h h0 T epsilon
     (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K t)) ≤
           q ^ (8 * r + 8) :=
   physicalChainPropagator_spec hq h hs
     (fun i ↦ (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian)
@@ -123,14 +123,14 @@ existence form of `positiveChainPropagator_spec`. Huang, arXiv:1406.6355v6, Sect
 and Section 5.4, Lemma 19. -/
 theorem exists_positive_chain_propagator_approximation {L q : ℕ} (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     {T epsilon : ℝ} (hT : 0 ≤ T) (hepsilon : 0 < epsilon) :
     let r := chainPropagationRadius L T epsilon
     ∃ K : ℝ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       (∀ t : ℝ, |t| ≤ T → ‖hermitianUnitaryPath (∑ i, h i) (-t) - K t‖ ≤ epsilon) ∧
       ∀ (t : ℝ) (cut : ℕ), operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L cut) (K t)) ≤
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L cut) (K t)) ≤
           q ^ (8 * r + 8) :=
   ⟨positiveChainPropagator h h0 T epsilon,
     positiveChainPropagator_spec hq h hs h0 h1 hT hepsilon⟩

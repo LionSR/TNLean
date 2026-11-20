@@ -3,7 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.EntropyDimension
+import TNLean.Lattice.MarginalTails
+import QICLean.Entropy.RegionEntropy
+import QICLean.Entropy.RegionUnion
+import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.PEPS.AreaLaw.TwoFamilies
 import QICLean.Entropy.ConditionalTwoFamilies
 
@@ -43,12 +46,12 @@ theorem conditionalMutualInformation_le_sum
     (ψ : EuclideanSpace ℂ ((v : V) → β v)) (hψ : ‖ψ‖ = 1)
     (B C : Finset V) (hGB : Disjoint G B) (hGC : Disjoint G C) (hBC : Disjoint B C)
     (ε : Fin P.pieceCount → ℝ)
-    (h₀ : ∀ i, P.family i = 0 → FiniteProduct.mutualInformation β ψ (P.piece i)
+    (h₀ : ∀ i, P.family i = 0 → ManyBody.regionMutualInformation ψ (P.piece i)
       (C ∪ B ∪ P.earlierSameFamily i) ≤ ε i)
-    (h₁ : ∀ i, P.family i = 1 → FiniteProduct.mutualInformation β ψ (P.piece i)
+    (h₁ : ∀ i, P.family i = 1 → ManyBody.regionMutualInformation ψ (P.piece i)
       ((G ∪ B)ᶜ ∪ P.earlierSameFamily i) ≤ ε i) :
-    FiniteProduct.conditionalMutualInformation β ψ G C B ≤
-      2 * FiniteProduct.entropy β ψ P.residual + ∑ i, ε i := by
+    ManyBody.conditionalMutualInformation β ψ G C B ≤
+      2 * ManyBody.regionEntropy ψ P.residual + ∑ i, ε i := by
   classical
   have hcover : G = P.residual ∪ (P.familyIndices 0).biUnion P.piece ∪
       (P.familyIndices 1).biUnion P.piece := by
@@ -67,7 +70,7 @@ theorem conditionalMutualInformation_le_sum
       Disjoint (P.piece i) (P.piece j) := by
     intro i hi j hj
     exact P.disjoint i j (fun hij ↦ Finset.disjoint_left.mp hlabels (hij ▸ hi) hj)
-  have h := FiniteProduct.conditionalMutualInformation_le_two_family_sum β ψ hψ
+  have h := ManyBody.conditionalMutualInformation_le_two_family_sum β ψ hψ
     G B C P.residual P.piece (P.familyIndices 0) P.piece (P.familyIndices 1)
     hcover hGB hGC hBC (fun i _ ↦ P.residual_disjoint i)
     (fun i _ ↦ P.residual_disjoint i) (hfamily 0) (hfamily 1) hcross ε ε (by
@@ -81,7 +84,7 @@ theorem conditionalMutualInformation_le_sum
       have hi₁ := (Finset.mem_filter.mp hi).2
       have hpast := P.past_familyIndices i
       rw [hi₁] at hpast
-      rw [FiniteProduct.target_union_complement_eq_exterior G B C hGC hBC, hpast]
+      rw [ManyBody.target_union_complement_eq_exterior G B C hGC hBC, hpast]
       exact h₁ i hi₁)
   have hsum := Finset.sum_union hlabels (f := ε)
   rw [P.union_familyIndices] at hsum
@@ -100,15 +103,14 @@ theorem regionalEntropy_conditional_le_residual_add_sum
     (hGB : Disjoint G B) (hGC : Disjoint G C) (hBC : Disjoint B C)
     (ε : Fin P.pieceCount → ℝ)
     (h₀ : ∀ i, P.family i = 0 →
-      FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω (P.piece i)
+      ManyBody.regionMutualInformation Ω (P.piece i)
         (C ∪ B ∪ P.earlierSameFamily i) ≤ ε i)
     (h₁ : ∀ i, P.family i = 1 →
-      FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω (P.piece i)
+      ManyBody.regionMutualInformation Ω (P.piece i)
         ((G ∪ B)ᶜ ∪ P.earlierSameFamily i) ≤ ε i) :
-    regionalEntropy Λ q Ω (G ∪ B) + regionalEntropy Λ q Ω (C ∪ B) -
-        regionalEntropy Λ q Ω B - regionalEntropy Λ q Ω (G ∪ C ∪ B) ≤
-      2 * regionalEntropy Λ q Ω P.residual + ∑ i, ε i := by
-  simp only [regionalEntropy_eq_finiteProduct]
+    ManyBody.regionEntropy Ω (G ∪ B) + ManyBody.regionEntropy Ω (C ∪ B) -
+        ManyBody.regionEntropy Ω B - ManyBody.regionEntropy Ω (G ∪ C ∪ B) ≤
+      2 * ManyBody.regionEntropy Ω P.residual + ∑ i, ε i := by
   exact P.conditionalMutualInformation_le_sum _ Ω hΩ B C hGB hGC hBC ε h₀ h₁
 
 /-- **Counting form of the conditional information bound.** If every piece of an
@@ -123,17 +125,17 @@ theorem regionalEntropy_conditional_le_card_residual_add_pieceCount
     (G B C : Finset (Site Λ)) (P : Geometry.OrderedTwoFamilyPartition G)
     (hGB : Disjoint G B) (hGC : Disjoint G C) (hBC : Disjoint B C) (C₂ : ℝ)
     (h₀ : ∀ i, P.family i = 0 →
-      FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω (P.piece i)
+      ManyBody.regionMutualInformation Ω (P.piece i)
         (C ∪ B ∪ P.earlierSameFamily i) ≤ C₂)
     (h₁ : ∀ i, P.family i = 1 →
-      FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω (P.piece i)
+      ManyBody.regionMutualInformation Ω (P.piece i)
         ((G ∪ B)ᶜ ∪ P.earlierSameFamily i) ≤ C₂) :
-    regionalEntropy Λ q Ω (G ∪ B) + regionalEntropy Λ q Ω (C ∪ B) -
-        regionalEntropy Λ q Ω B - regionalEntropy Λ q Ω (G ∪ C ∪ B) ≤
+    ManyBody.regionEntropy Ω (G ∪ B) + ManyBody.regionEntropy Ω (C ∪ B) -
+        ManyBody.regionEntropy Ω B - ManyBody.regionEntropy Ω (G ∪ C ∪ B) ≤
       2 * (P.residual.card : ℝ) * Real.log q + P.pieceCount * C₂ := by
   have h := regionalEntropy_conditional_le_residual_add_sum Λ q Ω hΩ G B C P
     hGB hGC hBC (fun _ ↦ C₂) h₀ h₁
-  have hD := regionalEntropy_le_card_mul_log Λ q Ω hΩ P.residual
+  have hD := ManyBody.regionEntropy_le_card_mul_log hΩ P.residual
   simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul] at h
   linarith
 
@@ -145,8 +147,8 @@ theorem regionalEntropy_conditional_le_two_mul_card_mul_log
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     (G B C : Finset (Site Λ))
     (hGB : Disjoint G B) (hGC : Disjoint G C) (hBC : Disjoint B C) :
-    regionalEntropy Λ q Ω (G ∪ B) + regionalEntropy Λ q Ω (C ∪ B) -
-        regionalEntropy Λ q Ω B - regionalEntropy Λ q Ω (G ∪ C ∪ B) ≤
+    ManyBody.regionEntropy Ω (G ∪ B) + ManyBody.regionEntropy Ω (C ∪ B) -
+        ManyBody.regionEntropy Ω B - ManyBody.regionEntropy Ω (G ∪ C ∪ B) ≤
       2 * (G.card : ℝ) * Real.log q := by
   let P : Geometry.OrderedTwoFamilyPartition G :=
     { pieceCount := 0

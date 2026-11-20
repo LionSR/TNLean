@@ -49,7 +49,7 @@ Supporting ALVV, arXiv:1602.08828v2, `t:alg1`, lines 1777–1817. -/
 theorem exists_physical_dg_tree_ritz_approximation :
     ∃ C Ktree Kref : ℝ, 1 ≤ C ∧ 0 < Ktree ∧ 0 < Kref ∧ ∀ (L q : ℕ),
     ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
     0 < gamma →

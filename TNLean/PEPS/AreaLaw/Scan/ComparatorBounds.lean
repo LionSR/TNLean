@@ -117,29 +117,29 @@ open Classical in
 lines 154–161 and 332–381) for `pre_k` under the prefix data, with a remainder uniform in the
 tree and the isometric coordinates. -/
 theorem exists_rough_upper (Ω : EuclideanSpace ℂ ((v : ι) → β v)) (hΩ : ‖Ω‖ = 1)
-    [∀ v, Nonempty (β v)] (X : Finset ι) (E : Finset (FiniteProduct.Configuration β X))
+    [∀ v, Nonempty (β v)] (X : Finset ι) (E : Finset (ManyBody.RegionConfig β X))
     [NeZero E.card]
-    (hz : 0 < (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.spectralRestrictionMass
+    (hz : 0 < (ManyBody.regionState_posSemidef X Ω).isHermitian.spectralRestrictionMass
       E)
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)))
     (hmass :
-      let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (FiniteProduct.splitEquiv β X) Ω
-      let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+      let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.splitEquiv β X) Ω
+      let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
         compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
       ∀ᶠ k : ℕ in atTop,
         (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
           ‖WithLp.toLp 2
-            (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-              (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+            (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+              (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
               labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-              (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+              (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
                 (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2)
     {St : Type} [Finite St] {K : ℕ}
     (U Y V : St → Fin K → Finset ι) (hfam : IsStatusFamily X U Y V)
     (a : ℝ) (ha : 0 < a) (R : Finset (Finset ι)) (Bsh Bexc : ℝ)
     (hpre : IsPrefixData β Ω X U Y R Bsh Bexc) :
     let d := E.card
-    let z := ∑ i ∈ E, (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.eigenvalues i
+    let z := ∑ i ∈ E, (ManyBody.regionState_posSemidef X Ω).isHermitian.eigenvalues i
     ∃ ρ : ℕ → ℝ, Tendsto ρ atTop (𝓝 0) ∧ ∀ᶠ k : ℕ in atTop,
       ∀ (n : ℕ) (Z : Matrix (Config k (siteSpace β d)) (Fin n) ℂ),
         Zᴴ * Z = 1 →
@@ -151,7 +151,7 @@ theorem exists_rough_upper (Ω : EuclideanSpace ℂ ((v : ι) → β v)) (hΩ : 
           2 * Real.log d - Real.log z + 2 * (1 / 4) * (a * K) * (2 * Bsh / z + 2 * Bexc) +
             ρ k := by
   intro d z
-  have hu := FiniteProduct.eventually_suppliedReplicaPrevector_rough_upper (S := St) β Ω X E
+  have hu := ManyBody.eventually_suppliedReplicaPrevector_rough_upper (S := St) β Ω X E
     hΩ hz R.toList
     (List.pairwise_of_forall_mem_list fun B hB B' hB' ↦
       hpre.nested B (Finset.mem_toList.mp hB) B' (Finset.mem_toList.mp hB'))
@@ -200,22 +200,22 @@ open Classical in
 lines 171–188 and 383–418) for `pre_k` under the moment data, without prefix data, with a
 remainder uniform in the tree and the isometric coordinates. -/
 theorem exists_sharp_upper (Ω : EuclideanSpace ℂ ((v : ι) → β v)) (hΩ : ‖Ω‖ = 1)
-    [∀ v, Nonempty (β v)] (X : Finset ι) (E : Finset (FiniteProduct.Configuration β X))
+    [∀ v, Nonempty (β v)] (X : Finset ι) (E : Finset (ManyBody.RegionConfig β X))
     [NeZero E.card]
-    (hz : 0 < (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.spectralRestrictionMass
+    (hz : 0 < (ManyBody.regionState_posSemidef X Ω).isHermitian.spectralRestrictionMass
       E)
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)))
     (hmass :
-      let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (FiniteProduct.splitEquiv β X) Ω
-      let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+      let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.splitEquiv β X) Ω
+      let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
         compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
       ∀ᶠ k : ℕ in atTop,
         (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
           ‖WithLp.toLp 2
-            (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-              (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+            (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+              (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
               labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-              (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+              (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
                 (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2)
     {St : Type} [Fintype St] [DecidableEq St] {K : ℕ}
     (U Y V : St → Fin K → Finset ι) (hfam : IsStatusFamily X U Y V)
@@ -223,8 +223,8 @@ theorem exists_sharp_upper (Ω : EuclideanSpace ℂ ((v : ι) → β v)) (hΩ : 
     (hmom : IsMarginalMomentData β Ω X U Y V C₀ c₀ B)
     (a : ℝ) (ha : 0 < a) (har : 6 * a ≤ c₀ / Real.sqrt B) (ha1 : 6 * a ≤ 1) :
     let d := E.card
-    let z := ∑ i ∈ E, (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.eigenvalues i
-    let S := FiniteProduct.entropy β Ω
+    let z := ∑ i ∈ E, (ManyBody.regionState_posSemidef X Ω).isHermitian.eigenvalues i
+    let S := ManyBody.regionEntropy Ω
     let gpost := fun j l ↦ S (U j l) + S (U j l ∪ Y j l) - S (Y j l)
     ∃ ρ : ℕ → ℝ, Tendsto ρ atTop (𝓝 0) ∧ ∀ᶠ k : ℕ in atTop,
       ∀ (n : ℕ) (Z : Matrix (Config k (siteSpace β d)) (Fin n) ℂ),
@@ -238,7 +238,7 @@ theorem exists_sharp_upper (Ω : EuclideanSpace ℂ ((v : ι) → β v)) (hΩ : 
             2 * (1 / 4) * (a * K) * ((1 / (K : ℝ)) * ∑ l, ∑ j, T.weight j * gpost j l +
               C' * (a * B + |Real.log z| / a)) + ρ k := by
   intro d z S gpost
-  obtain ⟨c, hc, hlim, hu⟩ := FiniteProduct.eventually_suppliedReplicaPrevector_sharp_upper β Ω X E
+  obtain ⟨c, hc, hlim, hu⟩ := ManyBody.eventually_suppliedReplicaPrevector_sharp_upper β Ω X E
     hΩ hz (K := C₀ * B) (r := c₀ / Real.sqrt B) ha har ha1 ell hmass
   refine ⟨Real.bellOverlapRemainder d c K, hlim K, hu.mono fun k hk n Z hZ hZZ T ↦ ?_⟩
   have hY : ∀ j l, Y j l \ X = Y j l := fun j l ↦
@@ -316,7 +316,7 @@ theorem exists_sharp_lower [∀ v, Nonempty (β v)]
     (C₀ c₀ B C' : ℝ) (hC₀ : 0 ≤ C₀) (hC'4 : 4 ≤ C') (hC'0 : 25 * C₀ ≤ C')
     (hmom : IsMarginalMomentData β Ω X U Y V C₀ c₀ B)
     (a : ℝ) (ha : 0 < a) (har : 10 * a ≤ c₀ / Real.sqrt B) (ha1 : 10 * a ≤ 1) :
-    let S := FiniteProduct.entropy β Ω
+    let S := ManyBody.regionEntropy Ω
     let gpre := fun j l ↦ S (X ∪ U j l) + S (V j l) - S (Y j l)
     ∃ ρ : ℕ → ℝ, Tendsto ρ atTop (𝓝 0) ∧ ∀ k : ℕ, 0 < k →
       ∀ (n : ℕ) (Z : Matrix (Config k (siteSpace β d)) (Fin n) ℂ),
@@ -359,10 +359,10 @@ theorem exists_sharp_lower [∀ v, Nonempty (β v)]
   intro gmax w N v Edef
   have hΩ' : ‖WithLp.toLp 2 Ω.ofLp‖ = 1 := by simpa using hΩ
   have hmomQ : ∀ (j : T.labels.toFinset) (l : Fin K) (b : Fin 3) (u : ℝ), |u| ≤ c₀ / Real.sqrt B →
-      let Q := FiniteProduct.regionalPhysicalRegion (X ∪ U j.val l) (Y j.val l) b
-      Real.log (Entropy.surprisalMoment (FiniteProduct.reducedPure_posSemidef β
-        (WithLp.toLp 2 Ω.ofLp) Q).isHermitian.eigenvalues u) ≤
-          u * FiniteProduct.entropy β (WithLp.toLp 2 Ω.ofLp) Q + C₀ * B * u ^ 2 := by
+      let Q := ManyBody.regionalPhysicalRegion (X ∪ U j.val l) (Y j.val l) b
+      Real.log (Entropy.surprisalMoment (ManyBody.regionState_posSemidef
+        Q (WithLp.toLp 2 Ω.ofLp)).isHermitian.eigenvalues u) ≤
+          u * ManyBody.regionEntropy (WithLp.toLp 2 Ω.ofLp) Q + C₀ * B * u ^ 2 := by
     intro j l b u hu Q
     have hQ : Q = X ∪ U j.val l ∨ Q = V j.val l ∨ Q = Y j.val l ∨ Q = U j.val l ∨
         Q = U j.val l ∪ Y j.val l := by

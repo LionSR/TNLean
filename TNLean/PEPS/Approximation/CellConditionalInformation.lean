@@ -127,7 +127,7 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
         ∀ E : Finset (Site Λ), E ⊆ (G ∪ B)ᶜ →
           (∀ x ∈ closure (CellPartition.box (CellPartition.cellCorner o s m₀) s),
             ∀ y ∈ E, c * s ≤ dist x (integerPoint y.val)) →
-          FiniteProduct.conditionalMutualInformation (fun _ : Site Λ ↦ Fin q)
+          ManyBody.conditionalMutualInformation (fun _ : Site Λ ↦ Fin q)
             Ω G E B ≤ cellInformationConstant q c Ctpl N Ca Na *
               (1 + Real.log s) ^ cellInformationExponent c Ctpl N Ca Na := by
   have hβ : (Exponents.beta : ℝ) < 1 := beta_lt_one
@@ -170,7 +170,7 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
   have htile (i : Fin P.pieceCount) (F : Finset (Site Λ))
       (hF : ∀ x ∈ P.piece i, ∀ y ∈ F,
         scale i ^ β < dist (integerPoint x) (integerPoint y.val)) :
-      FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω (Q.piece i) F ≤ C₂ :=
+      ManyBody.regionMutualInformation Ω (Q.piece i) F ≤ C₂ :=
     hcoarse (scale i) ((le_max_left _ _).trans (hustar.trans (hscale i).1))
       Λ h hh hhJ E₀ Ω hΩ hgap hspan (P.piece i) (hbox i)
       (fun x hx y hy ↦ by simpa only [hdist, one_mul] using hdiam i x hx y hy)
@@ -188,7 +188,7 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
       mul_le_mul_of_nonneg_left (hscale i).2 hc.le,
       mul_pos hc (lt_of_lt_of_le zero_lt_one hs)]
   have h₀ (i : Fin P.pieceCount) (hi : P.family i = 0) :
-      FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω (Q.piece i)
+      ManyBody.regionMutualInformation Ω (Q.piece i)
         (E ∪ B ∪ Q.earlierSameFamily i) ≤ C₂ := by
     apply htile i
     intro x hx y hy
@@ -202,7 +202,7 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
         simpa only [Q, OrderedTwoFamilyPartition.earlierSameFamily_comap,
           Finset.mem_filter, Finset.mem_univ, true_and] using hy)
   have h₁ (i : Fin P.pieceCount) (hi : P.family i = 1) :
-      FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω (Q.piece i)
+      ManyBody.regionMutualInformation Ω (Q.piece i)
         ((G ∪ B)ᶜ ∪ Q.earlierSameFamily i) ≤ C₂ := by
     refine htile i _ (fun x hx y hy ↦ ?_)
     rcases Finset.mem_union.mp hy with hy | hy
@@ -216,10 +216,9 @@ theorem cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
     · exact hearlier i x hx y.val (by
         simpa only [Q, OrderedTwoFamilyPartition.earlierSameFamily_comap,
           Finset.mem_filter, Finset.mem_univ, true_and] using hy)
-  have hinfo : FiniteProduct.conditionalMutualInformation (fun _ : Site Λ ↦ Fin q)
+  have hinfo : ManyBody.conditionalMutualInformation (fun _ : Site Λ ↦ Fin q)
       Ω G E B ≤ 2 * (Q.residual.card : ℝ) * Real.log q + Q.pieceCount * C₂ := by
-    simpa only [regionalEntropy_eq_finiteProduct,
-      FiniteProduct.conditionalMutualInformation] using
+    simpa only [ManyBody.conditionalMutualInformation] using
       regionalEntropy_conditional_le_card_residual_add_pieceCount
         Λ q Ω hΩ G B E Q hGB hdisj.1 hdisj.2 C₂ h₀ h₁
   have hres : (Q.residual.card : ℝ) ≤ P.residual.card :=
@@ -270,7 +269,7 @@ theorem exists_cell_conditionalMutualInformation_le_of_sublinearCollarBound
           ∀ E : Finset (Site Λ), E ⊆ (G ∪ B)ᶜ →
             (∀ x ∈ closure (CellPartition.box (CellPartition.cellCorner o s m₀) s),
               ∀ y ∈ E, c * s ≤ dist x (integerPoint y.val)) →
-            FiniteProduct.conditionalMutualInformation (fun _ : Site Λ ↦ Fin q)
+            ManyBody.conditionalMutualInformation (fun _ : Site Λ ↦ Fin q)
               Ω G E B ≤ C₁ * (1 + Real.log s) ^ K := by
   obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol

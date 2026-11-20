@@ -35,10 +35,10 @@ Lemmas 4.1 and 4.2, lines 530--663. -/
 theorem exists_aklv_chebyshev_filter {L q a s : ℕ}
     (hq : 1 ≤ q) (hs : 0 < s) (hspace : a + s + 1 ≤ L)
     (H : Fin s → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hH : ∀ j, Entropy.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
+    (hH : ∀ j, ManyBody.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
     (HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hL : Entropy.IsSupportedOn HL (interval L 0 (a + 1)))
-    (hR : Entropy.IsSupportedOn HR (interval L (a + s) L))
+    (hL : ManyBody.IsSupportedOn HL (interval L 0 (a + 1)))
+    (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L))
     (hG : (HL + (∑ j, H j) + HR).IsHermitian) {E0 gap u : ℝ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΓ : ‖Γ‖ = 1)
     (hGΓ : (HL + (∑ j, H j) + HR) *ᵥ WithLp.ofLp Γ =
@@ -53,7 +53,7 @@ theorem exists_aklv_chebyshev_filter {L q a s : ℕ}
       toEuclideanLin K Γ = Γ ∧
       ‖K - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤
         2 * Real.exp (-2 * (ell : ℝ) * Real.sqrt (gap / (u - E0))) ∧
-      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
         (leftBlock L (a + s / 2)) K) ≤
           (q * (ell + 1)) ^ (16 * (ell / s + Nat.sqrt ell + 1)) ∧
       ∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 → ⟪Γ, ψ⟫_ℂ = 0 →

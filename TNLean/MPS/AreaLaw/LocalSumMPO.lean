@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.OperatorMPOFromCutRank
-import QICLean.Entropy.SupportedOperatorSchmidtRank
+import QICLean.ManyBody.Sites.OperatorSchmidtRank
 import QICLean.Entropy.FilterStationarity
 import QICLean.Algebra.OperatorSchmidtBounds
 
@@ -26,7 +26,7 @@ square of the local dimension. No Hermiticity or positivity is required. Support
 arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 1262–1268. -/
 theorem exists_local_sum_add_scalar_mpo {N q : ℕ} (hq : 1 ≤ q)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ}) (c : ℂ) :
     ∃ A : Fin (N + 1) → MPOTensor q (1 + N * q ^ 2),
       (∑ i, h i) + c • 1 = MPOTensor.traceChainOperator A 1 := by
@@ -34,18 +34,19 @@ theorem exists_local_sum_add_scalar_mpo {N q : ℕ} (hq : 1 ≤ q)
   apply MPOTensor.exists_traceChainOperator_of_operatorSchmidtRank_le (by omega) (by omega)
   intro k
   let X := leftBlock (N + 1) k
-  let φ := Matrix.reindexAlgEquiv ℂ ℂ (Entropy.cutEquiv (fun _ : Fin (N + 1) ↦ q) X)
+  let φ := Matrix.reindexAlgEquiv ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) X)
   have hterm (i : Fin N) : operatorSchmidtRank (φ (h i)) ≤ q ^ 2 := by
-    change operatorSchmidtRank (Entropy.cutOperator X (h i)) ≤ _
+    change operatorSchmidtRank (ManyBody.cutOperator X (h i)) ≤ _
     exact ((hs i).operatorSchmidtRank_cutOperator_le_pow_card hq).trans
       (Nat.pow_le_pow_right hq Finset.card_le_two)
   have hsum : operatorSchmidtRank (∑ i, φ (h i)) ≤ N * q ^ 2 := by
     exact (operatorSchmidtRank_sum_le Finset.univ _).trans
       ((Finset.sum_le_sum fun i _ ↦ hterm i).trans_eq (by simp))
   have hId : operatorSchmidtRank (φ (1 : Matrix _ _ ℂ)) ≤ 1 := by
-    change operatorSchmidtRank (Entropy.cutOperator X (1 : Matrix _ _ ℂ)) ≤ 1
-    exact Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one
-      (Entropy.isSupportedOn_one (n := fun _ : Fin (N + 1) ↦ q) ∅)
+    change operatorSchmidtRank (ManyBody.cutOperator X (1 : Matrix _ _ ℂ)) ≤ 1
+    exact ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one
+      (show ManyBody.IsSupportedOn (X := fun _ : Fin (N + 1) ↦ Fin q) 1 ∅ from
+        one_mem (ManyBody.supportedOperators (fun _ : Fin (N + 1) ↦ Fin q) ∅))
       (Or.inl (Finset.empty_subset _))
   change operatorSchmidtRank (φ ((∑ i, h i) + c • 1)) ≤ _
   rw [map_add, map_sum, map_smul]

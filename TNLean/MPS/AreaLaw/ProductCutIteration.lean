@@ -43,9 +43,9 @@ theorem IsOpenMPS.exists_rank_one_at_product_cuts {D : ℕ}
     (hψ : IsOpenMPS L q D (fun x ↦ ψ x)) (hnorm : ‖ψ‖ = 1)
     (S : Finset ℕ)
     (hξ : ∀ k ∈ S,
-      ∃ (a : EuclideanSpace ℂ (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k)))
+      ∃ (a : EuclideanSpace ℂ (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)))
         (b : EuclideanSpace ℂ ((i : {i : Fin L // i ∉ leftBlock L k}) → Fin q)),
-        Entropy.cutVector (leftBlock L k) ξ = euclideanTensorVector a b) :
+        ManyBody.cutVector (leftBlock L k) ξ = euclideanTensorVector a b) :
     ∃ χ : EuclideanSpace ℂ (Fin L → Fin q),
       IsOpenMPS L q D (fun x ↦ χ x) ∧ ‖χ‖ = 1 ∧
       ‖inner ℂ ξ ψ‖ ≤ ‖inner ℂ ξ χ‖ ∧
@@ -59,7 +59,7 @@ theorem IsOpenMPS.exists_rank_one_at_product_cuts {D : ℕ}
     obtain ⟨a, b, hab⟩ := hξ k (Finset.mem_insert_self k S)
     obtain ⟨χ, u, v, hχ, hnχ, hu, hv, hmatrix, hrχ, hov⟩ :=
       hφ.exists_product_overlap_ge hnφ k a b
-    have hcut : Entropy.cutVector (leftBlock L k) χ = euclideanTensorVector u v := by
+    have hcut : ManyBody.cutVector (leftBlock L k) χ = euclideanTensorVector u v := by
       ext ij
       exact congrArg (fun M ↦ M ij.1 ij.2) hmatrix
     refine ⟨χ, hχ, hnχ, hoφ.trans ?_, fun j ↦ (hrχ j).trans (hrφ j), ?_⟩

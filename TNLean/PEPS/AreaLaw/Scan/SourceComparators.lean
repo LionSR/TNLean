@@ -105,10 +105,10 @@ def ComparatorsStatement : Prop :=
     (Ω : EuclideanSpace ℂ ((v : ι) → β v)) (E₀ gap : ℝ),
     H.PosSemidef → ‖Ω‖ = 1 → IsGapped H E₀ gap →
     groundSpace H E₀ = Submodule.span ℂ {Ω} → 0 < gap →
-  ∀ (X : Finset ι) (E : Finset (FiniteProduct.Configuration β X)) (w : ℝ),
+  ∀ (X : Finset ι) (E : Finset (ManyBody.RegionConfig β X)) (w : ℝ),
     IsTypicalSchmidtSet β Ω X E w →
-    let p := (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.eigenvalues
-    let S := FiniteProduct.entropy β Ω
+    let p := (ManyBody.regionState_posSemidef X Ω).isHermitian.eigenvalues
+    let S := ManyBody.regionEntropy Ω
     let z := ∑ i ∈ E, p i
     let d := E.card
     let S' := ∑ i ∈ E, Real.negMulLog (p i / z)
@@ -126,8 +126,8 @@ def ComparatorsStatement : Prop :=
       (∀ U Y V : Finset ι, Disjoint X U → Disjoint X Y → Disjoint X V → Disjoint U Y →
         Disjoint U V → Disjoint Y V → X ∪ U ∪ Y ∪ V = Finset.univ →
         2 * S X + (S (X ∪ U) + S V - S Y) - (S U + S (U ∪ Y) - S Y) =
-          FiniteProduct.mutualInformation β Ω X V +
-            FiniteProduct.mutualInformation β Ω X (Y ∪ V)) ∧
+          ManyBody.regionMutualInformation Ω X V +
+            ManyBody.regionMutualInformation Ω X (Y ∪ V)) ∧
       ∀ (St : Type) [Fintype St] [DecidableEq St] (K : ℕ) (U Y V : St → Fin K → Finset ι),
         IsStatusFamily X U Y V →
         let gpre := fun j l ↦ S (X ∪ U j l) + S (V j l) - S (Y j l)
@@ -194,7 +194,7 @@ theorem comparatorsStatement : ComparatorsStatement := by
   intro ι _ _ β _ _ H Ω E₀ gap hHpos hΩ hgap hspan hgap_pos X E w htyp p S z d S' Hbar Psym LC LR
   have hE := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
   have hgapM := hgap.posSemidef_sub_smul_one hHpos.isHermitian hΩ hspan
-  have hz : 0 < (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.spectralRestrictionMass
+  have hz : 0 < (ManyBody.regionState_posSemidef X Ω).isHermitian.spectralRestrictionMass
       E := htyp.mass_pos
   have : NeZero d := ⟨htyp.nonempty.card_pos.ne'⟩
   have : NeZero E.card := ⟨htyp.nonempty.card_pos.ne'⟩
@@ -208,13 +208,13 @@ theorem comparatorsStatement : ComparatorsStatement := by
   obtain ⟨ell, hpre, hmass, hdim⟩ := exists_prevector_labels β H Ω E₀ hΩ hE X E hz
   rw [vonNeumannEntropy_compressedTypicalPureState_eq_sum β Ω X E hz] at hdim
   have hS' : 0 ≤ S' := Finset.sum_nonneg fun i hi ↦ Real.negMulLog_nonneg
-    (div_nonneg ((FiniteProduct.reducedPure_posSemidef β Ω X).eigenvalues_nonneg i) hz.le)
+    (div_nonneg ((ManyBody.regionState_posSemidef X Ω).eigenvalues_nonneg i) hz.le)
     ((div_le_one hz).mpr (Finset.single_le_sum (fun j _ ↦
-      (FiniteProduct.reducedPure_posSemidef β Ω X).eigenvalues_nonneg j) hi))
+      (ManyBody.regionState_posSemidef X Ω).eigenvalues_nonneg j) hi))
   refine ⟨ell, hpre, fun U Y V hXU hXY hXV hUY hUV hYV hc ↦
-    FiniteProduct.auxiliaryPair_entropyIdentity β Ω X U Y V hXU hXY hXV hUY hUV hYV hc, ?_⟩
+    ManyBody.auxiliaryPair_regionEntropyIdentity β Ω X U Y V hXU hXY hXV hUY hUV hYV hc, ?_⟩
   intro St _ _ K U Y V hfam gpre gpost
-  refine ⟨fun j l ↦ FiniteProduct.auxiliaryPair_pre_nonneg β Ω hΩ X (U j l) (Y j l) (V j l)
+  refine ⟨fun j l ↦ ManyBody.auxiliaryPair_pre_nonneg β Ω hΩ X (U j l) (Y j l) (V j l)
     (hfam.disjoint_XY j l) (hfam.disjoint_XV j l) (hfam.disjoint_UY j l)
     (hfam.disjoint_UV j l) (hfam.disjoint_YV j l) (hfam.cover j l), ?_⟩
   intro a ha ha₀ s t W avg

@@ -67,16 +67,16 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
     (hrows : ∀ j : ℕ, 1 ≤ j → j ≤ L →
       (ambientDilation T j \ ambientDilation T (j - 1)).card ≤ S.n)
     (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
-    (E : Finset (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q)
+    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q)
       (S.A.filter fun x ↦ x.val ∈ T)))
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Bsh : ℝ)
     (hsh : ∀ j : Fin (L + 1),
-      FiniteProduct.entropy (fun _ : Site Λ ↦ Fin q) Ωt
+      ManyBody.regionEntropy Ωt
         (positiveDepthPrefix S.A S.depth (j.val : ℤ)) ≤ Bsh) :
     let X := S.A.filter fun x ↦ x.val ∈ T
     let β := fun _ : Site Λ ↦ Fin q
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (FiniteProduct.splitEquiv β X) Ωt
+      (ManyBody.splitEquiv β X) Ωt
     let z := Matrix.IsHermitian.spectralRestrictionMass
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
     0 < z →
@@ -84,15 +84,15 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
     let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
     let pre : (k : ℕ) → Config k (fun v ↦ Fin (n v)) → ℂ := fun k ↦
       replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
-    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     (∀ᶠ k : ℕ in atTop,
       (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
         ‖WithLp.toLp 2
-          (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-            (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+          (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+            (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
             labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-            (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+            (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
               (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) →
     ∃ c : ℝ, 0 ≤ c ∧
       Tendsto (Real.bellOverlapRemainder d c S.K) atTop (𝓝 0) ∧
@@ -114,10 +114,10 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
     List.pairwise_ofFn.mpr (fun {i j} hij ↦ Or.inl
       (positiveDepthPrefix_mono S.A S.depth (by exact_mod_cast (Nat.le_of_lt hij))))
   have hzQ :
-      0 < (FiniteProduct.reducedPure_posSemidef β Ωt X).isHermitian.spectralRestrictionMass E :=
+      0 < (ManyBody.regionState_posSemidef X Ωt).isHermitian.spectralRestrictionMass E :=
     hz
   have hu :=
-    FiniteProduct.eventually_suppliedReplicaPrevector_rough_upper
+    ManyBody.eventually_suppliedReplicaPrevector_rough_upper
       (S := terminalFamily S.K S.m S.M (S.n * S.m)) β Ωt X E hΩt hzQ
   specialize hu regions
   have hdepthX : ∀ x ∈ X, S.depth x ≤ 0 := fun x hx ↦ by
@@ -179,9 +179,9 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
       simp [hE, Matrix.IsHermitian.spectralRestrictionMass] at hzQ)
   let : NeZero d := ⟨Nat.ne_of_gt hd⟩
   have hlogCard (B : Finset (Site Λ)) (hB : B.card ≤ 3 * S.n * S.D) :
-      1 + Real.log (Fintype.card (FiniteProduct.Configuration β B)) ≤
+      1 + Real.log (Fintype.card (ManyBody.RegionConfig β B)) ≤
         1 + 3 * (S.n : ℝ) * (S.D : ℝ) * Real.log (q : ℝ) := by
-    simpa only [β, FiniteProduct.Configuration, Fintype.card_fun,
+    simpa only [β, ManyBody.RegionConfig, Fintype.card_fun,
       Fintype.card_fin, Fintype.card_coe, Nat.cast_pow, Real.log_pow,
       Nat.cast_mul, Nat.cast_ofNat] using
       add_le_add (le_refl (1 : ℝ))
@@ -212,7 +212,7 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
   have hmatch : ∀ j g (Q : Finset (Site Λ)),
       Q = U j g ∨ Q = U j g ∪ Y j g →
       ∃ D ∈ regions, (D ⊆ Q ∨ Q ⊆ D) ∧
-        1 + Real.log (Fintype.card (FiniteProduct.Configuration β (D ∆ Q))) ≤
+        1 + Real.log (Fintype.card (ManyBody.RegionConfig β (D ∆ Q))) ≤
           1 + 3 * (S.n : ℝ) * (S.D : ℝ) * Real.log (q : ℝ) := fun j g Q hQ => by
     obtain ⟨Dnear, hDnear, Dfar, hDfar, hnear, hfar, hnearCard, hfarCard⟩ := hpref j g
     rcases hQ with rfl | rfl
@@ -220,7 +220,7 @@ theorem eventually_actualScan_suppliedPrevector_rough_upper
         hlogCard _ (by simpa only [U, symmDiff_comm] using hnearCard)⟩
     · exact ⟨Dfar, hDfar, Or.inr (by simpa only [hUYeq] using hfar),
         hlogCard _ (by simpa only [hUYeq, symmDiff_comm] using hfarCard)⟩
-  have hsh' : ∀ D ∈ regions, FiniteProduct.entropy β Ωt D ≤ Bsh :=
+  have hsh' : ∀ D ∈ regions, ManyBody.regionEntropy Ωt D ≤ Bsh :=
     List.forall_mem_ofFn_iff.mpr hsh
   obtain ⟨N, ZS, hZS, hZSZS⟩ :=
     (isStarProjection_symProj

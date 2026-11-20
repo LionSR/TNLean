@@ -221,11 +221,11 @@ theorem cutBudget_eq_cutLogBudget {κ : Type*} [Fintype κ] (q : ℕ) (G : Simpl
     (S₀ : Finset ι) (r₀ : ℕ) (a : κ → ι) (X : Finset ι) :
     cutBudget q G S₀ r₀ a X =
       Entropy.cutLogBudget
-        (Entropy.crossingTerms (fun i => designatedSupport G S₀ r₀ (a i)) X)
+        (ManyBody.crossingTerms (fun i => designatedSupport G S₀ r₀ (a i)) X)
         (Entropy.supportDim (fun _ : ι => q) ∘
           (fun i => designatedSupport G S₀ r₀ (a i))) := by
   classical
-  simp only [cutBudget, crossingLabels, Entropy.cutLogBudget, Entropy.crossingTerms,
+  simp only [cutBudget, crossingLabels, Entropy.cutLogBudget, ManyBody.crossingTerms,
     Function.comp_apply, Entropy.supportDim, Finset.prod_const, Nat.cast_pow]
 
 /-- The cut budget is invariant under exchanging the two sides of any cut. -/

@@ -43,10 +43,10 @@ theorem re_trace_abs_reducedPure_sub_le_sqrt_energy
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped H E₀ Δ)
     (hspan : groundSpace H E₀ = Submodule.span ℂ {Ω}) (hΔ : 0 < Δ)
     (hφ : ‖φ‖ = 1) (R : Finset V) :
-    (CFC.abs (reducedPure β φ R - reducedPure β Ω R)).trace.re ≤
+    (CFC.abs (ManyBody.regionState φ R - ManyBody.regionState Ω R)).trace.re ≤
       2 * Real.sqrt (((⟪φ, Matrix.toEuclideanLin H φ⟫_ℂ).re - E₀) / Δ) := by
   refine (div_le_iff₀' (show (0 : ℝ) < 2 from zero_lt_two)).mp
-    ((traceDistance_reducedPure_le β φ Ω hφ hΩ R).trans
+    ((ManyBody.traceDistance_regionState_le β φ Ω hφ hΩ R).trans
       ((Matrix.traceDistance_vecMulVec_eq hφ hΩ).le.trans
         (Real.sqrt_le_sqrt ((le_div_iff₀' hΔ).2 ?_))))
   simpa only [hφ, one_pow, mul_one, norm_inner_symm (𝕜 := ℂ) Ω φ] using
@@ -67,7 +67,7 @@ theorem re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy
     (hφ : ‖φ‖ = 1)
     (henergy : (⟪φ, Matrix.toEuclideanLin H φ⟫_ℂ).re - E₀ ≤ Δ / 1024)
     (R : Finset V) :
-    (CFC.abs (reducedPure β φ R - reducedPure β Ω R)).trace.re ≤ (1 / 16 : ℝ) := by
+    (CFC.abs (ManyBody.regionState φ R - ManyBody.regionState Ω R)).trace.re ≤ (1 / 16 : ℝ) := by
   refine (re_trace_abs_reducedPure_sub_le_sqrt_energy β hH hΩ hgap hspan hΔ hφ R).trans
     ((le_div_iff₀' (show (0 : ℝ) < 2 from zero_lt_two)).mp ?_)
   norm_num [Real.sqrt_le_iff, div_le_iff₀' hΔ]

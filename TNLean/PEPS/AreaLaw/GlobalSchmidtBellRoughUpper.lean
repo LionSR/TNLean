@@ -40,7 +40,7 @@ theorem eventually_suppliedGlobalSchmidtBellPrevector_rough_upper
     {J : Type*} [Finite J]
     (Ω : EuclideanSpace ℂ (ι → Fin q)) (hΩ : ‖Ω‖ = 1)
     (X : Finset ι)
-    (E : Finset (FiniteProduct.Configuration (fun _ : ι ↦ Fin q) X))
+    (E : Finset (ManyBody.RegionConfig (fun _ : ι ↦ Fin q) X))
     (regions : List (Finset ι))
     (hnested : regions.Pairwise fun D D' ↦ D ⊆ D' ∨ D' ⊆ D)
     (hdisjoint : ∀ D ∈ regions, Disjoint X D)
@@ -48,19 +48,19 @@ theorem eventually_suppliedGlobalSchmidtBellPrevector_rough_upper
     (K : ℕ) (hK : 8 ≤ K) :
     let β := fun _ : ι ↦ Fin q
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (FiniteProduct.splitEquiv β X) Ω
+      (ManyBody.splitEquiv β X) Ω
     let z := Matrix.IsHermitian.spectralRestrictionMass
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
     0 < z →
-    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     (∀ᶠ k : ℕ in atTop,
       (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
         ‖WithLp.toLp 2
-          (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-            (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+          (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+            (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
             labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-            (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+            (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
               (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) →
     let d := E.card
     let ι₀ := addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)
@@ -75,10 +75,10 @@ theorem eventually_suppliedGlobalSchmidtBellPrevector_rough_upper
         (∀ j j' g h, g < h → U j g ∪ Y j g ⊆ U j' h) →
         (∀ j g, Disjoint X (U j g ∪ Y j g)) →
         ∀ (T : MeanTree J) (Bsh Bexc : ℝ),
-        (∀ D ∈ regions, FiniteProduct.entropy β Ω D ≤ Bsh) →
+        (∀ D ∈ regions, ManyBody.regionEntropy Ω D ≤ Bsh) →
         (∀ j g (Q : Finset ι), Q = U j g ∨ Q = U j g ∪ Y j g →
           ∃ D ∈ regions, (D ⊆ Q ∨ Q ⊆ D) ∧
-            1 + Real.log (Fintype.card (FiniteProduct.Configuration β (D ∆ Q))) ≤ Bexc) →
+            1 + Real.log (Fintype.card (ManyBody.RegionConfig β (D ∆ Q))) ≤ Bexc) →
         let eₖ := globalReplicaCopiesEquiv β (Fin d) (Fin d) k
         let ξ := WithLp.toLp 2 (replicaPrevector Ω d k (ell k) ∘ eₖ)
         let W := replicaMetric ι₀ (2 / (K : ℝ)) k
@@ -96,10 +96,10 @@ theorem eventually_suppliedGlobalSchmidtBellPrevector_rough_upper
   classical
   intro β ΩX z hz ψ hmass
   have hzQ :
-      0 < (FiniteProduct.reducedPure_posSemidef β Ω X).isHermitian.spectralRestrictionMass E :=
+      0 < (ManyBody.regionState_posSemidef X Ω).isHermitian.spectralRestrictionMass E :=
     hz
   have hu :=
-    FiniteProduct.eventually_suppliedReplicaPrevector_rough_upper
+    ManyBody.eventually_suppliedReplicaPrevector_rough_upper
       (S := J) β Ω X E hΩ hzQ
   specialize hu regions
   specialize hu hnested hdisjoint ell (t := 2 / (K : ℝ))

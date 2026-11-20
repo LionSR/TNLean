@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.PhysicalDGSharpApproximation
 import TNLean.MPS.AreaLaw.NormalizedSequentialApproximation
 import QICLean.Analysis.LogRankRounding
-import QICLean.Analysis.ViableSubspaceEntropy
+import QICLean.Entropy.ViableSampling.ViableSubspaceEntropy
 import QICLean.Channel.MaximalOverlap
 
 /-!
@@ -47,7 +47,7 @@ theorem exists_physical_dg_normalized_isOpenMPS_approximation :
     ∃ K : ℝ, 0 < K ∧
       ∀ (L q : ℕ),
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (h i) (interval L i.val (i.val + 2)))
         (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
       0 < gamma →
@@ -123,7 +123,7 @@ theorem exists_physical_dg_normalized_isOpenMPS_approximation :
     nlinarith only [hlogB, hFP]
   · intro ψ hψG hψ
     have htail : ∀ k ∈ Finset.Ico 1 L,
-        1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+        1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
           (leftBlock L k) ψ).kyFanNorm (Module.finrank ℂ G * B) ≤
             delta / (8 * ((L : ℝ) + 1)) := by
       intro k hk

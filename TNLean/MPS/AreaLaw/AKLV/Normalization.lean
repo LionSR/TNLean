@@ -56,7 +56,7 @@ def aklvNormalizationHamiltonians {L q : ℕ} (a s : ℕ)
 private theorem aklv_normalization_bond_data {L q a s : ℕ}
     (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) :
     let p := aklvNormalizationEndpoints L a s
     let R := fun j ↦ interval L (p j).1 (p j).2
@@ -65,7 +65,7 @@ private theorem aklv_normalization_bond_data {L q a s : ℕ}
       a ≤ i.val ∧ i.val < a + s ∧
         i.val ∈ ({a, a + 1, a + 2, a + s - 3, a + s - 2, a + s - 1} : Finset ℕ))
     Pairwise (fun i j ↦ Disjoint (R i) (R j)) ∧
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (A j) (R j)) ∧
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (A j) (R j)) ∧
       J.card ≤ 6 ∧ (∑ i, h i) = (∑ j, A j) + ∑ i ∈ J, h i := by
   intro p R A J
   have hR : Pairwise fun i j ↦ Disjoint (R i) (R j) := by
@@ -77,7 +77,7 @@ private theorem aklv_normalization_bond_data {L q a s : ℕ}
     rw [mem_interval] at hvi hvj
     fin_cases i <;> fin_cases j <;> simp_all [p, aklvNormalizationEndpoints] <;> omega
   have hA (j : Fin 3) :
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (A j) (R j) := by
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (A j) (R j) := by
     exact isSupportedOn_sum_internal_bonds L q (p j).1 (p j).2 h hsupp
   have hJ : J.card ≤ 6 := by
     have hc := Finset.card_le_card_of_injOn Fin.val
@@ -112,7 +112,7 @@ before equation (5). No regional minimum, common vector, or energy budget is sup
 theorem exists_aklv_energy_normalization {L q a s : ℕ} (hq : 0 < q)
     (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     let A := aklvNormalizationHamiltonians a s h
@@ -169,16 +169,16 @@ of `H^(t)` after equation (5). -/
 theorem aklv_two_block_exterior_data {L q a s : ℕ}
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) :
     let A := aklvNormalizationHamiltonians a s h
     let C := aklvRegionalHamiltonians (a + 2) (a + s - 1) h
     C 0 = A 0 + h ⟨a, by omega⟩ ∧
       C 2 = h ⟨a + s - 1, by omega⟩ + A 2 ∧
       ∀ eL eR : ℝ,
-        Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (C 0 - (eL : ℂ) • 1) (interval L 0 (a + 2)) ∧
-        Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (C 2 - (eR : ℂ) • 1) (interval L (a + s - 1) L) := by
   intro A C
   let il : Fin (L - 1) := ⟨a, by omega⟩
@@ -214,12 +214,12 @@ theorem aklv_two_block_exterior_data {L q a s : ℕ}
       (∑ i ∈ Finset.univ.filter (fun i : Fin (L - 1) ↦
         a + s ≤ i.val ∧ i.val + 1 < L), h i)
     rw [hrset, Finset.sum_insert (by simp [ir]; omega)]
-  have hsupport (j : Fin 3) : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+  have hsupport (j : Fin 3) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (C j) (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
         ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.succ)) := by
     exact isSupportedOn_sum_internal_bonds L q _ _ h hsupp
   have hcenter (j : Fin 3) (e : ℝ) :
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (C j - (e : ℂ) • 1)
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (C j - (e : ℂ) • 1)
         (interval L ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.castSucc)
           ((![0, a + 2, a + s - 1, L] : Fin 4 → ℕ) j.succ)) := by
     change _ ∈ ManyBody.supportedOperators _ _
@@ -280,7 +280,7 @@ after equation (5). -/
 theorem exists_aklv_normalized_cut_residual {L q a s l r : ℕ} (hq : 0 < q)
     (hs : 1 ≤ s) (ha : a + s + 1 ≤ L) (hlr : l ≤ r) (hrL : r ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (hcut : ∀ e : Fin 3 → ℝ, (∀ j, (aklvNormalizationHamiltonians a s h j -
@@ -334,7 +334,7 @@ is asserted here. -/
 theorem exists_aklv_normalized_two_block_residual {L q a s : ℕ} (hq : 0 < q)
     (hs : 3 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     let A := aklvNormalizationHamiltonians a s h
@@ -368,7 +368,7 @@ Section 6.1, normalization and the two exterior truncations after equation (5). 
 theorem exists_aklv_normalized_reference_residual {L q a s : ℕ} (hq : 0 < q)
     (hs : 1 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     let A := aklvNormalizationHamiltonians a s h

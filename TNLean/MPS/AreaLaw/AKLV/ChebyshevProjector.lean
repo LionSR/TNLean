@@ -174,7 +174,7 @@ phase, to the original one. AKLV, Lemma 4.1 and Theorem 6.1.
 The operator-Schmidt estimate is a separate geometric assertion. -/
 theorem exists_normalized_chain_chebyshev_filter {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (hab : a.val < b.val) (x m y e g t : ℝ)
@@ -239,7 +239,7 @@ Positivity of the unit bonds and zero total ground energy express the
 frustration-free qualification. -/
 theorem exists_frustrationFree_chain_chebyshev_filter {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (hab : a.val < b.val)
@@ -397,7 +397,7 @@ certificates are derived from the original nearest-neighbour terms.
 Supporting AKLV, arXiv:1301.1162v1, Lemma 4.2. -/
 theorem normalized_chain_polynomial_rank {L q w : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (a b : Fin (L - 1)) (hab : a.val < b.val) (hw : 1 ≤ w)
     (hwindow : b.val + 1 = a.val + 2 * w)
@@ -459,7 +459,7 @@ theorem normalized_chain_polynomial_rank {L q w : ℕ}
 entropy cut coordinates used by the Chebyshev construction. -/
 theorem normalized_chain_real_polynomial_rank {L q w : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (a b : Fin (L - 1)) (hab : a.val < b.val) (hw : 1 ≤ w)
     (hwindow : b.val + 1 = a.val + 2 * w)
@@ -468,7 +468,7 @@ theorem normalized_chain_real_polynomial_rank {L q w : ℕ}
     let Ht := twoSidedEnergyTruncation (leftCutBlock h a x)
       (middleCutBlock h a b m + (h a + h b)) (rightCutBlock h b y) t
     let A := interval L 0 (a.val + w + 1)
-    Matrix.operatorSchmidtRank (Entropy.cutOperator (n := fun _ ↦ q) A
+    Matrix.operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) A
       (Polynomial.aeval Ht p)) ≤ (q * k) ^ (17 * (w + k / (2 * w))) := by
   intro Ht A
   have hmap : Polynomial.aeval Ht p =
@@ -491,7 +491,7 @@ two-window polynomial estimate. No favorable parameter schedule or
 positivity of the unsquared filter is asserted. -/
 theorem exists_normalized_chain_chebyshev_agsp {L q w : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (hab : a.val < b.val) (hw : 1 ≤ w)
@@ -523,7 +523,7 @@ theorem exists_normalized_chain_chebyshev_agsp {L q w : ℕ}
       (∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 → ⟪φ, ψ⟫_ℂ = 0 →
         ⟪φ, Matrix.toEuclideanLin K ψ⟫_ℂ = 0 ∧
           ‖Matrix.toEuclideanLin K ψ‖ ^ 2 ≤ δ) ∧
-      Matrix.operatorSchmidtRank (Entropy.cutOperator (n := fun _ ↦ q) A K) ≤ D ∧
+      Matrix.operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) A K) ≤ D ∧
       ∃ θ : ℝ, ‖Ω - Complex.exp (θ * Complex.I) • φ‖ ^ 2 ≤ Real.exp (-t / 16) := by
   intro H Ht u A D heig hgap
   obtain ⟨σ₀, _⟩ := Function.ne_iff.mp
@@ -545,7 +545,7 @@ clipping and polynomial. Refinement of AKLV, arXiv:1301.1162v1,
 Theorem 6.1 and Section 4. The original normalized energy may be positive. -/
 theorem exists_normalized_chain_chebyshev_agsp_of_inverse_gap_cutoff {L q w : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (hab : a.val < b.val) (hw : 1 ≤ w)
@@ -577,7 +577,7 @@ theorem exists_normalized_chain_chebyshev_agsp_of_inverse_gap_cutoff {L q w : �
       (∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 → ⟪φ, ψ⟫_ℂ = 0 →
         ⟪φ, Matrix.toEuclideanLin K ψ⟫_ℂ = 0 ∧
           ‖Matrix.toEuclideanLin K ψ‖ ^ 2 ≤ δ) ∧
-      Matrix.operatorSchmidtRank (Entropy.cutOperator (n := fun _ ↦ q) A K) ≤ D ∧
+      Matrix.operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) A K) ≤ D ∧
       ∃ θ : ℝ, ‖Ω - Complex.exp (θ * Complex.I) • φ‖ ^ 2 ≤ Real.exp (-t / 16) := by
   intro H Ht u A D heig hgap
   obtain ⟨σ₀, _⟩ := Function.ne_iff.mp
@@ -613,7 +613,7 @@ rank bound. AKLV, arXiv:1301.1162v1, Section 4.
 The shrinking factor is for squared norms of unit perpendicular vectors. -/
 theorem exists_frustrationFree_chain_chebyshev_agsp {L q w : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (hab : a.val < b.val) (hw : 1 ≤ w)
@@ -641,7 +641,7 @@ theorem exists_frustrationFree_chain_chebyshev_agsp {L q w : ℕ}
       (∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 → ⟪Ω, ψ⟫_ℂ = 0 →
         ⟪Ω, Matrix.toEuclideanLin K ψ⟫_ℂ = 0 ∧
           ‖Matrix.toEuclideanLin K ψ‖ ^ 2 ≤ δ) ∧
-      Matrix.operatorSchmidtRank (Entropy.cutOperator (n := fun _ ↦ q) A K) ≤ D := by
+      Matrix.operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) A K) ≤ D := by
   intro H Ht u A D heig hgap
   obtain ⟨σ₀, _⟩ := Function.ne_iff.mp
     ((WithLp.ofLp_eq_zero (x := Ω)).not.mpr (norm_ne_zero_iff.mp (by simp [hΩ])))

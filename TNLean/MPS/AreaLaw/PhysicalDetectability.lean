@@ -65,7 +65,7 @@ noncomputable def physicalDetectability
 
 private theorem commute_bonds_of_separated
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (i j : Fin (L - 1)) (hsep : i.val + 1 < j.val ∨ j.val + 1 < i.val) :
     Commute (h i) (h j) := by
@@ -106,7 +106,7 @@ private theorem exists_bond_of_orderedTerm_ne_zero
 open scoped Classical in
 private theorem orderedTerm_noncommutation_count
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) :
     ∀ i < 2 * (L - 1),
       ((Finset.range (2 * (L - 1))).filter
@@ -164,7 +164,7 @@ private theorem orderedTerm_isStarProjection
 
 private theorem parityTerm_commute
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (p i j : ℕ) :
     Commute (parityTerm h p i) (parityTerm h p j) := by
   by_cases hi : i < L - 1
@@ -251,7 +251,7 @@ projection hypothesis is needed for this algebraic identity. ALVV,
 arXiv:1602.08828v2, `def:FF-tH` and `thm:FF-tH`, lines 1467–1487 and 1543–1550. -/
 theorem physicalParityProduct_partition
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (s : Fin (L - 1) → Prop) [DecidablePred s] (p : ℕ) :
     physicalParityProduct h p =
@@ -279,7 +279,7 @@ commutation is derived from physical support. ALVV, arXiv:1602.08828v2,
 theorem physicalParityProduct_isStarProjection
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (p : ℕ) :
     IsStarProjection (physicalParityProduct h p) :=
   ContinuousLinearMap.isStarProjection_complementProd
@@ -312,7 +312,7 @@ energy. The vector need not be normalized. ALVV, arXiv:1602.08828v2,
 theorem sum_norm_sq_sub_physicalParityProduct_le
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (x : EuclideanSpace ℂ (Fin L → Fin q)) :
     ‖x - physicalParityProduct h 0 x‖ ^ 2 +
@@ -342,7 +342,7 @@ ALVV, arXiv:1602.08828v2, `lem:dl-converse`, lines 1528–1537. -/
 theorem one_sub_three_mul_le_norm_sq_physicalDetectability
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     {x : EuclideanSpace ℂ (Fin L → Fin q)} (hx : ‖x‖ = 1) :
     1 - 3 * (⟪x, Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
@@ -360,7 +360,7 @@ ALVV, arXiv:1602.08828v2, `lem:dl`, lines 1508–1519. -/
 theorem re_inner_physicalDetectability_le
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (x : EuclideanSpace ℂ (Fin L → Fin q)) :
     (⟪physicalDetectability h x,
       Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
@@ -414,7 +414,7 @@ This assertion does not assume that the kernel is one-dimensional. -/
 theorem inner_physicalDetectability_eq
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     {z : EuclideanSpace ℂ (Fin L → Fin q)}
     (hz : Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (∑ i, h i) z = 0)
@@ -433,7 +433,7 @@ lines 1508–1519 and 1562–1568. -/
 theorem norm_sq_physicalDetectability_le_of_gappedGroundState
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hp : ∀ i, IsStarProjection (h i))
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     {Gamma x : EuclideanSpace ℂ (Fin L → Fin q)} {gamma : ℝ}
     (hΩ : ‖Gamma‖ = 1) (hgap : IsGapped (∑ i, h i) 0 gamma)

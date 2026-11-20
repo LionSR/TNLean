@@ -59,7 +59,7 @@ revision adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
 def augmentedConfigurationEquiv (q d : ℕ) :
     ((s : Option (Option V)) →
       addedSiteSpace (addedSiteSpace (fun _ : V => Fin q) (Fin d)) (Fin d) s) ≃
-      SiteConfig (augmentedDimensions (V := V) q (fun _ => d)) :=
+      (∀ v, Fin ((augmentedDimensions (V := V) q (fun _ => d)) v)) :=
   (Equiv.piCongrLeft' _ augmentedSiteEquiv).trans
     (Equiv.piCongrRight fun s =>
       match s with
@@ -132,7 +132,7 @@ theorem copyMean_augmentOperator_eq_replicaHamiltonian_kronecker
   simp only [copyMean, siteOp_eq_finKronecker]
   change (k : ℂ)⁻¹ • Matrix.replicaHamiltonian (augmentOperator q (fun _ => d) H) k = _
   rw [augmentOperator]
-  let e : SiteConfig (augmentedDimensions (V := V) q (fun _ => d)) ≃
+  let e : (∀ v, Fin ((augmentedDimensions (V := V) q (fun _ => d)) v)) ≃
       (V → Fin q) × (Bool → Fin d) :=
     Equiv.sumPiEquivProdPi
       (fun v : V ⊕ Bool => Fin (augmentedDimensions q (fun _ => d) v))

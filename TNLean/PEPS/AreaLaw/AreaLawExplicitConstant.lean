@@ -113,7 +113,7 @@ theorem uniformAreaLaw_explicit_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (h
           (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
-          regionalEntropy Λ q Ω A ≤
+          ManyBody.regionEntropy Ω A ≤
             uniformAreaLawConstantAt q R J Δ B c₀ Cent eent Cen een *
               (edgeBoundary Λ A).card := by
   have hB₀ : 0 ≤ B :=
@@ -154,7 +154,7 @@ theorem uniformAreaLaw_explicit (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 
           (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
-          regionalEntropy Λ q Ω A ≤
+          ManyBody.regionEntropy Ω A ≤
             uniformAreaLawConstantExplicit q R J Δ c₀ Cent eent Cen een *
               (edgeBoundary Λ A).card :=
   uniformAreaLaw_explicit_of_le q R hq hJ hΔ hc₀ htr le_rfl
@@ -186,7 +186,7 @@ theorem uniformAreaLaw_closed (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 �
           (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
-          regionalEntropy Λ q Ω A ≤
+          ManyBody.regionEntropy Ω A ≤
             uniformAreaLawConstantClosed q R J Δ * (edgeBoundary Λ A).card :=
   uniformAreaLaw_explicit q R hq hJ hΔ TensorPower.ReplicaTransport.transportThreshold_pos
     Scan.CollarScan.finiteFamilyTransportBound_explicit
@@ -235,7 +235,7 @@ theorem uniformAreaLaw_closed_of_le (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ 
           (∀ X, ‖H.term X‖ ≤ J) → ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Site Λ),
-          regionalEntropy Λ q Ω A ≤
+          ManyBody.regionEntropy Ω A ≤
             uniformAreaLawConstantClosedAt q R J Δ B * (edgeBoundary Λ A).card :=
   uniformAreaLaw_explicit_of_le q R hq hJ hΔ TensorPower.ReplicaTransport.transportThreshold_pos
     Scan.CollarScan.finiteFamilyTransportBound_explicit hB

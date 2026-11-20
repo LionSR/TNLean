@@ -170,59 +170,59 @@ variable {V : Type*} [DecidableEq V] (β : V → Type*)
 
 /-- The first old-middle coordinate is restriction to the removed region. -/
 private theorem changingOldMiddleConfigEquiv_apply_fst (E J : Finset V)
-    (x : Configuration β E) (v : ↥(E \ J)) :
+    (x : ManyBody.RegionConfig β E) (v : ↥(E \ J)) :
     (changingOldMiddleConfigEquiv β E J x).1 v =
       x ⟨v.val, (Finset.mem_sdiff.mp v.property).1⟩ := by
-  simp [changingOldMiddleConfigEquiv, unionEquiv, configurationCongr_apply]
+  simp [changingOldMiddleConfigEquiv, ManyBody.unionEquiv, ManyBody.configurationCongr_apply]
 
 /-- The second old-middle coordinate is restriction to the common intersection. -/
 private theorem changingOldMiddleConfigEquiv_apply_snd (E J : Finset V)
-    (x : Configuration β E) (v : ↥(E ∩ J)) :
+    (x : ManyBody.RegionConfig β E) (v : ↥(E ∩ J)) :
     (changingOldMiddleConfigEquiv β E J x).2 v =
       x ⟨v.val, (Finset.mem_inter.mp v.property).1⟩ := by
-  simp [changingOldMiddleConfigEquiv, unionEquiv, configurationCongr_apply]
+  simp [changingOldMiddleConfigEquiv, ManyBody.unionEquiv, ManyBody.configurationCongr_apply]
 
 /-- Outside the new middle, inverse restriction uses the removed-region coordinate. -/
 private theorem changingOldMiddleConfigEquiv_symm_apply_of_notMem (E J : Finset V)
-    (xA : Configuration β (E \ J)) (xC : Configuration β (E ∩ J))
+    (xA : ManyBody.RegionConfig β (E \ J)) (xC : ManyBody.RegionConfig β (E ∩ J))
     (v : ↥E) (hv : v.val ∉ J) :
     (changingOldMiddleConfigEquiv β E J).symm (xA, xC) v =
       xA ⟨v.val, Finset.mem_sdiff.mpr ⟨v.property, hv⟩⟩ := by
   let a : ↥(E \ J) := ⟨v.val, Finset.mem_sdiff.mpr ⟨v.property, hv⟩⟩
   have h := congrArg
-    (fun z : Configuration β (E \ J) × Configuration β (E ∩ J) ↦ z.1 a)
+    (fun z : ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E ∩ J) ↦ z.1 a)
     ((changingOldMiddleConfigEquiv β E J).apply_symm_apply (xA, xC))
   rw [changingOldMiddleConfigEquiv_apply_fst] at h
   exact h
 
 /-- Inside the new middle, inverse restriction uses the common-intersection coordinate. -/
 private theorem changingOldMiddleConfigEquiv_symm_apply_of_mem (E J : Finset V)
-    (xA : Configuration β (E \ J)) (xC : Configuration β (E ∩ J))
+    (xA : ManyBody.RegionConfig β (E \ J)) (xC : ManyBody.RegionConfig β (E ∩ J))
     (v : ↥E) (hv : v.val ∈ J) :
     (changingOldMiddleConfigEquiv β E J).symm (xA, xC) v =
       xC ⟨v.val, Finset.mem_inter.mpr ⟨v.property, hv⟩⟩ := by
   let c : ↥(E ∩ J) := ⟨v.val, Finset.mem_inter.mpr ⟨v.property, hv⟩⟩
   have h := congrArg
-    (fun z : Configuration β (E \ J) × Configuration β (E ∩ J) ↦ z.2 c)
+    (fun z : ManyBody.RegionConfig β (E \ J) × ManyBody.RegionConfig β (E ∩ J) ↦ z.2 c)
     ((changingOldMiddleConfigEquiv β E J).apply_symm_apply (xA, xC))
   rw [changingOldMiddleConfigEquiv_apply_snd] at h
   exact h
 
 /-- The first new-middle coordinate is restriction to the newly retained region. -/
 private theorem changingNewMiddleConfigEquiv_apply_fst (E J : Finset V)
-    (x : Configuration β J) (v : ↥(J \ E)) :
+    (x : ManyBody.RegionConfig β J) (v : ↥(J \ E)) :
     (changingNewMiddleConfigEquiv β E J x).1 v =
       x ⟨v.val, (Finset.mem_sdiff.mp v.property).1⟩ := by
   simp [changingNewMiddleConfigEquiv, changingOldMiddleConfigEquiv,
-    Equiv.prodCongr, unionEquiv, configurationCongr_apply]
+    Equiv.prodCongr, ManyBody.unionEquiv, ManyBody.configurationCongr_apply]
 
 /-- The second new-middle coordinate uses the same literal intersection E∩J. -/
 private theorem changingNewMiddleConfigEquiv_apply_snd (E J : Finset V)
-    (x : Configuration β J) (v : ↥(E ∩ J)) :
+    (x : ManyBody.RegionConfig β J) (v : ↥(E ∩ J)) :
     (changingNewMiddleConfigEquiv β E J x).2 v =
       x ⟨v.val, (Finset.mem_inter.mp v.property).2⟩ := by
   simp [changingNewMiddleConfigEquiv, changingOldMiddleConfigEquiv,
-    Equiv.prodCongr, unionEquiv, configurationCongr_apply]
+    Equiv.prodCongr, ManyBody.unionEquiv, ManyBody.configurationCongr_apply]
 
 end FiniteProduct
 
@@ -303,11 +303,11 @@ theorem exists_intervalSlice_changingRegionalMiddleFactor
     {T q c d u v : ℕ} (hq : 0 < q)
     (hcd : c ≤ d) (hd : d ≤ T) (huv : u ≤ v) (hv : v ≤ T)
     (hover : max c u ≤ min d v)
-    (Vphys : Matrix (FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q) (interval T c d))
-      (FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q) (interval T c d)) ℂ)
-    (αr αc : FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q)
+    (Vphys : Matrix (ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q) (interval T c d))
+      (ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q) (interval T c d)) ℂ)
+    (αr αc : ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q)
       (interval T c d \ interval T u v))
-    (ηr ηc : FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q)
+    (ηr ηc : ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q)
       (interval T u v \ interval T c d)) :
     let old := FiniteProduct.changingOldMiddleConfigEquiv
       (fun _ : Fin T ↦ Fin q) (interval T c d) (interval T u v)
@@ -343,9 +343,9 @@ theorem exists_intervalSlice_changingRegionalMiddleFactor
     Matrix.operatorBlock (Vphys.reindex old old) αr αc).reindex new.symm new.symm
   let eE := intervalShiftOrderIso hcd hd
   let eJ := intervalShiftOrderIso huv hv
-  let toE : (Fin (d - c) → Fin q) → FiniteProduct.Configuration β E :=
+  let toE : (Fin (d - c) → Fin q) → ManyBody.RegionConfig β E :=
     fun σ z ↦ σ (eE.symm z)
-  let toJ : (Fin (v - u) → Fin q) → FiniteProduct.Configuration β J :=
+  let toJ : (Fin (v - u) → Fin q) → ManyBody.RegionConfig β J :=
     fun σ z ↦ σ (eJ.symm z)
   let Vnat := Vphys.submatrix toE toE
   let left := max u c
@@ -364,7 +364,7 @@ theorem exists_intervalSlice_changingRegionalMiddleFactor
       (⟨(eB j).val, (Finset.mem_sdiff.mp (eB j).property).1⟩ : ↥J) = eJ j.val := by
     apply Subtype.ext
     exact intervalDifferenceNaturalEquiv_apply_val (u := c) (v := d) huv hv j
-  have hmatch (η : FiniteProduct.Configuration β (J \ E))
+  have hmatch (η : ManyBody.RegionConfig β (J \ E))
       (σ : Fin (v - u) → Fin q) :
       (fun j : {j : Fin (v - u) // ¬(b ≤ j.val ∧ j.val < b + len)} ↦ σ j.val) =
           (fun j ↦ η (eB j)) ↔ (new (toJ σ)).1 = η := by
@@ -386,10 +386,10 @@ theorem exists_intervalSlice_changingRegionalMiddleFactor
       rw [hBsite j, eJ.symm_apply_apply] at hj
       exact hj
   let z0 : Fin q := ⟨0, hq⟩
-  let core0 : FiniteProduct.Configuration β (E ∩ J) := fun _ ↦ z0
-  let fixed (α : FiniteProduct.Configuration β (E \ J)) : Fin (d - c) → Fin q :=
+  let core0 : ManyBody.RegionConfig β (E ∩ J) := fun _ ↦ z0
+  let fixed (α : ManyBody.RegionConfig β (E \ J)) : Fin (d - c) → Fin q :=
     fun i ↦ old.symm (α, core0) (eE i)
-  have hfill (α : FiniteProduct.Configuration β (E \ J))
+  have hfill (α : ManyBody.RegionConfig β (E \ J))
       (σ : Fin (v - u) → Fin q) :
       toE (insertInterval a (fixed α)
         (fun r : Fin len ↦ σ ⟨b + r.val, by omega⟩)) =
@@ -464,15 +464,15 @@ private theorem isOpenMPS_changingRegionalMiddleFactor
     {T q c d u v D : ℕ} (hq : 0 < q)
     (hcd : c ≤ d) (hd : d ≤ T) (huv : u ≤ v) (hv : v ≤ T)
     (hover : max c u ≤ min d v)
-    (Vphys : Matrix (FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q) (interval T c d))
-      (FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q) (interval T c d)) ℂ)
+    (Vphys : Matrix (ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q) (interval T c d))
+      (ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q) (interval T c d)) ℂ)
     (hV : let eE := intervalShiftOrderIso hcd hd
       IsOpenMPS (d - c) (q * q) D (fun x ↦
         Vphys (fun z ↦ (finProdFinEquiv.symm (x (eE.symm z))).1)
           (fun z ↦ (finProdFinEquiv.symm (x (eE.symm z))).2)))
-    (αr αc : FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q)
+    (αr αc : ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q)
       (interval T c d \ interval T u v))
-    (ηr ηc : FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q)
+    (ηr ηc : ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q)
       (interval T u v \ interval T c d)) :
     let old := FiniteProduct.changingOldMiddleConfigEquiv
       (fun _ : Fin T ↦ Fin q) (interval T c d) (interval T u v)
@@ -493,9 +493,9 @@ private theorem isOpenMPS_changingRegionalMiddleFactor
     Matrix.operatorBlock (Vphys.reindex old old) αr αc).reindex new.symm new.symm
   let eE := intervalShiftOrderIso hcd hd
   let eJ := intervalShiftOrderIso huv hv
-  let toE : (Fin (d - c) → Fin q) → FiniteProduct.Configuration β E :=
+  let toE : (Fin (d - c) → Fin q) → ManyBody.RegionConfig β E :=
     fun σ z ↦ σ (eE.symm z)
-  let toJ : (Fin (v - u) → Fin q) → FiniteProduct.Configuration β J :=
+  let toJ : (Fin (v - u) → Fin q) → ManyBody.RegionConfig β J :=
     fun σ z ↦ σ (eJ.symm z)
   change IsOpenMPS (v - u) (q * q) (max 1 D) (fun x ↦
     Wphys (toJ (fun j ↦ (finProdFinEquiv.symm (x j)).1))
@@ -531,8 +531,8 @@ theorem changingRegionalMiddleFamily_mpo_and_global_decomposition
     {T q c d u v : ℕ} {ι : Type*} [Fintype ι]
     (hq : 0 < q) (hcd : c ≤ d) (hd : d ≤ T) (huv : u ≤ v) (hv : v ≤ T)
     (hover : max c u ≤ min d v)
-    (V : ι → Matrix (FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q) (interval T c d))
-      (FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q) (interval T c d)) ℂ)
+    (V : ι → Matrix (ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q) (interval T c d))
+      (ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q) (interval T c d)) ℂ)
     (D : ι → ℕ)
     (hV : ∀ t, let eE := intervalShiftOrderIso hcd hd
       IsOpenMPS (d - c) (q * q) (D t) (fun x ↦
@@ -543,41 +543,41 @@ theorem changingRegionalMiddleFamily_mpo_and_global_decomposition
     let J := interval T u v
     let A := E \ J
     let B := J \ E
-    let I := ι × (FiniteProduct.Configuration β A × FiniteProduct.Configuration β A) ×
-      (FiniteProduct.Configuration β B × FiniteProduct.Configuration β B)
+    let I := ι × (ManyBody.RegionConfig β A × ManyBody.RegionConfig β A) ×
+      (ManyBody.RegionConfig β B × ManyBody.RegionConfig β B)
     let W := FiniteProduct.changingRegionalMiddleFamily β E J V
     let eJ := intervalShiftOrderIso huv hv
     Fintype.card I = Fintype.card ι * q ^ (2 * A.card + 2 * B.card) ∧
       (∀ r : I, IsOpenMPS (v - u) (q * q) (max 1 (D r.1)) (fun x ↦
         W r (fun z ↦ (finProdFinEquiv.symm (x (eJ.symm z))).1)
           (fun z ↦ (finProdFinEquiv.symm (x (eJ.symm z))).2))) ∧
-      ∀ M : ι → Matrix (FiniteProduct.Configuration β Eᶜ)
-          (FiniteProduct.Configuration β Eᶜ) ℂ,
-        ∃ Mnew : I → Matrix (FiniteProduct.Configuration β Jᶜ)
-            (FiniteProduct.Configuration β Jᶜ) ℂ,
+      ∀ M : ι → Matrix (ManyBody.RegionConfig β Eᶜ)
+          (ManyBody.RegionConfig β Eᶜ) ℂ,
+        ∃ Mnew : I → Matrix (ManyBody.RegionConfig β Jᶜ)
+            (ManyBody.RegionConfig β Jᶜ) ℂ,
           (∑ t, M t ⊗ₖ V t).submatrix
-            ((FiniteProduct.splitEquiv β E).trans (Equiv.prodComm _ _))
-            ((FiniteProduct.splitEquiv β E).trans (Equiv.prodComm _ _)) =
+            ((ManyBody.splitEquiv β E).trans (Equiv.prodComm _ _))
+            ((ManyBody.splitEquiv β E).trans (Equiv.prodComm _ _)) =
           (∑ r, Mnew r ⊗ₖ W r).submatrix
-            ((FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _))
-            ((FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
+            ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
+            ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
   let β := fun _ : Fin T ↦ Fin q
   let E := interval T c d
   let J := interval T u v
   let A := E \ J
   let B := J \ E
-  let I := ι × (FiniteProduct.Configuration β A × FiniteProduct.Configuration β A) ×
-    (FiniteProduct.Configuration β B × FiniteProduct.Configuration β B)
+  let I := ι × (ManyBody.RegionConfig β A × ManyBody.RegionConfig β A) ×
+    (ManyBody.RegionConfig β B × ManyBody.RegionConfig β B)
   let W := FiniteProduct.changingRegionalMiddleFamily β E J V
   let eJ := intervalShiftOrderIso huv hv
   have hcard : Fintype.card I = Fintype.card ι * q ^ (2 * A.card + 2 * B.card) := by
     calc
       Fintype.card I = Fintype.card ι *
-          Fintype.card (FiniteProduct.Configuration β A) ^ 2 *
-          Fintype.card (FiniteProduct.Configuration β B) ^ 2 :=
+          Fintype.card (ManyBody.RegionConfig β A) ^ 2 *
+          Fintype.card (ManyBody.RegionConfig β B) ^ 2 :=
         Matrix.card_exchangedMiddleFamily_index
       _ = Fintype.card ι * q ^ (2 * A.card + 2 * B.card) := by
-        simp only [FiniteProduct.Configuration, β, Fintype.card_fun, Fintype.card_fin,
+        simp only [ManyBody.RegionConfig, β, Fintype.card_fun, Fintype.card_fin,
           Fintype.card_coe, ← pow_mul]
         rw [Nat.mul_assoc, ← pow_add]
         rw [show A.card * 2 + B.card * 2 = 2 * A.card + 2 * B.card by omega]

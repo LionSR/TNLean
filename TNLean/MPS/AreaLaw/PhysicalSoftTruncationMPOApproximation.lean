@@ -43,7 +43,7 @@ theorem exists_interval_physical_soft_closeness_and_mpo
     ∃ m : ℕ, m = ⌈12 + (2 / 3 : ℝ) * eta + (16 / 3 : ℝ) * Real.log (80 / rho)⌉₊ ∧ 0 < m ∧
       ∀ (N q p v : ℕ) (hq : 0 < q) (_hpr : p ≤ v) (_hrL : v ≤ (N + 1))
         (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ),
-        (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+        (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (h i) (interval (N + 1) i.val (i.val + 2))) →
         (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) →
         let : Nonempty (Fin (N + 1) → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
@@ -106,7 +106,7 @@ theorem exists_interval_physical_soft_closeness_and_mpo
     simp only [mem_interval, Finset.mem_insert, Finset.mem_singleton, Fin.ext_iff,
       Fin.val_castSucc, Fin.val_succ]
     omega
-  have hs' (i : Fin N) : Entropy.IsSupportedOn (h i) {i.castSucc, i.succ} := by
+  have hs' (i : Fin N) : ManyBody.IsSupportedOn (h i) {i.castSucc, i.succ} := by
     simpa only [hpair] using hs i
   have hh (i : Fin N) : (h i).IsHermitian := (IsSelfAdjoint.of_nonneg (h0 i)).isHermitian
   have hn (i : Fin N) : ‖h i‖ ≤ 1 :=

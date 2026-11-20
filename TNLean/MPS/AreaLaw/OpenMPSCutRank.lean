@@ -122,7 +122,7 @@ This is the bond splitting underlying SWVC07, arXiv:0705.0292v2, lines 234–264
 private theorem coeff_eq_sum_left_mul_right {L q D : ℕ} (A : OBCChainTensor q D L)
     (k : Fin (L + 1)) (a : (v : {v : Fin L // v ∈ leftBlock L k}) → Fin q)
     (b : (v : {v : Fin L // v ∉ leftBlock L k}) → Fin q) :
-    A.coeff ((Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm (a, b)) =
+    A.coeff ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm (a, b)) =
       ∑ z, leftContraction A k a z * rightContraction A k b z := by
   classical
   rw [OBCChainTensor.coeff, ← (bondPathEquiv (fun j ↦ Fin (A.bondDim j)) k).symm.sum_comp]
@@ -133,11 +133,11 @@ private theorem coeff_eq_sum_left_mul_right {L q D : ℕ} (A : OBCChainTensor q 
   rw [← Fintype.prod_subtype_mul_prod_subtype (fun i : Fin L ↦ i ∈ leftBlock L k)]
   congr 1
   · refine Finset.prod_congr (congrArg (@Finset.univ _) (Subsingleton.elim _ _)) fun i _ ↦ ?_
-    rw [Entropy.cutEquiv_symm_apply_mem (n := fun _ : Fin L ↦ q) a b i.2]
+    rw [ManyBody.cutEquiv_symm_apply_mem (X := fun _ ↦ Fin q) a b i.2]
     exact congrArg₂ (fun x y ↦ A.tensor i (a i) x y)
       (joinBondPath_of_le _ _ _ _ _ _ _) (joinBondPath_of_le _ _ _ _ _ _ _)
   · refine Finset.prod_congr rfl fun i _ ↦ ?_
-    rw [Entropy.cutEquiv_symm_apply_not_mem (n := fun _ : Fin L ↦ q) a b i.2]
+    rw [ManyBody.cutEquiv_symm_apply_not_mem (X := fun _ ↦ Fin q) a b i.2]
     exact congrArg₂ (fun x y ↦ A.tensor i (b i) x y)
       (joinBondPath_of_ge _ _ _ _ _ _ _) (joinBondPath_of_ge _ _ _ _ _ _ _)
 
@@ -220,14 +220,14 @@ theorem IsOpenMPS.snoc {n q b : ℕ} (hb : 0 < b) {w : (Fin n → Fin q) → ℂ
   have hlast : Fin.last n ∉ leftBlock (n + 1) j := by
     simp only [mem_leftBlock, Fin.val_last]
     omega
-  let ra : Entropy.RegionConfig (fun _ : Fin (n + 1) ↦ q) (leftBlock (n + 1) j) →
-      Entropy.RegionConfig (fun _ : Fin n ↦ q) (leftBlock n j) :=
+  let ra : (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock (n + 1) j)) →
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock n j)) :=
     fun a v ↦ a ⟨v.1.castSucc, by simpa only [mem_leftBlock, Fin.val_castSucc] using v.2⟩
   let rb : ((v : {v : Fin (n + 1) // v ∉ leftBlock (n + 1) j}) → Fin q) →
       ((v : {v : Fin n // v ∉ leftBlock n j}) → Fin q) :=
     fun b v ↦ b ⟨v.1.castSucc, by simpa only [mem_leftBlock, Fin.val_castSucc] using v.2⟩
-  let Lm : Matrix (Entropy.RegionConfig (fun _ : Fin (n + 1) ↦ q) (leftBlock (n + 1) j))
-      (Entropy.RegionConfig (fun _ : Fin n ↦ q) (leftBlock n j)) ℂ :=
+  let Lm : Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock (n + 1) j))
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock n j)) ℂ :=
     Matrix.of fun a a' ↦ if a' = ra a then 1 else 0
   let R : Matrix ((v : {v : Fin n // v ∉ leftBlock n j}) → Fin q)
       ((v : {v : Fin (n + 1) // v ∉ leftBlock (n + 1) j}) → Fin q) ℂ :=

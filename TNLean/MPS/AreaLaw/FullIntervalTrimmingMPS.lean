@@ -38,7 +38,7 @@ theorem isOpenMPS_of_mem_nativeFullIntervalSpace_of_trimming_rank_bound
   obtain ⟨x, hx, rfl⟩ := hv
   have hgenerators : ∀ (i : Fin n) (j : ℕ), j < L - 1 →
       Matrix.schmidtRank (WithLp.ofLp
-        (Entropy.cutVector (intervalTrimCut L 0 L j) (generators i))) ≤
+        (ManyBody.cutVector (intervalTrimCut L 0 L j) (generators i))) ≤
           1000000 * D ^ 2 * (L + 1) * count := by
     intro i j hj
     exact Real.viable_node_trimming_rank_bound hD (hranks j (by simpa using hj) i)

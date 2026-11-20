@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.CanonicalHalfSampledIntervalParent
 import TNLean.MPS.AreaLaw.IntervalGenerators
-import QICLean.Analysis.CanonicalHalfSamplingParentProperties
+import QICLean.Entropy.ViableSampling.CanonicalHalfSamplingParentProperties
 
 /-!
 # Unconditional recorded-rank bounds for the complete interval parent

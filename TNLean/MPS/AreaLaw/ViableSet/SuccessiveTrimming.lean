@@ -35,16 +35,16 @@ Source: LVV13, `algo53.tex`, the definition of trimming, lines 330–333. -/
 noncomputable def chainTrimmingProjection (ψ : EuclideanSpace ℂ (Fin L → Fin q))
     (k m : ℕ) : LeftBlockMatrix L q k :=
   Classical.choose (exists_isTrimmingProjection
-    (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ) m)
+    (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ) m)
 
 /-- The chosen projection is a Schmidt trimming projection.
 Source: LVV13, `algo53.tex`, the definition of trimming, lines 330–333. -/
 theorem isTrimmingProjection_chainTrimmingProjection
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k m : ℕ) :
-    IsTrimmingProjection (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ)
+    IsTrimmingProjection (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ)
       m (chainTrimmingProjection ψ k m) :=
   Classical.choose_spec (exists_isTrimmingProjection
-    (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ) m)
+    (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ) m)
 
 /-- Trim the bonds after the first `j` sites successively from left to right.
 Source: LVV13, `algo53.tex`, Claim `c:trim`, lines 549–559. -/

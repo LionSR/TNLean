@@ -58,15 +58,15 @@ theorem exists_global_schmidtBellPrevector_rough_lower
       (gap : ℂ) • (1 - vecMulVec Ω.ofLp (star Ω.ofLp))).PosSemidef)
     (hgap_pos : 0 < gap)
     (X : Finset ι)
-    (E : Finset (FiniteProduct.Configuration (fun _ : ι => Fin q) X)) :
+    (E : Finset (ManyBody.RegionConfig (fun _ : ι => Fin q) X)) :
     let β := fun _ : ι => Fin q
-    let split := FiniteProduct.splitEquiv β X
+    let split := ManyBody.splitEquiv β X
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split Ω
     0 < Matrix.IsHermitian.spectralRestrictionMass
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E →
     let d := E.card
     let ι₀ := addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)
-    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x =>
+    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x =>
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     let S' := vonNeumannEntropy
       (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
@@ -99,11 +99,11 @@ theorem exists_global_schmidtBellPrevector_rough_lower
       (∀ᶠ k : ℕ in atTop,
         (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
           ‖WithLp.toLp 2
-            (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-              (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+            (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+              (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
               PermutationRepresentation.labelProj
                 (TensorPower.copyPerm (Fin E.card) k) (ell k)) *ᵥ
-              (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+              (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
                 (Fin k → Fin E.card) => ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) ∧
       Asymptotics.IsLittleO atTop
         (fun k : ℕ => Real.log (ell k).dim - (k : ℝ) * S')

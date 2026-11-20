@@ -20,18 +20,6 @@ open scoped Matrix MatrixOrder ComplexOrder InnerProductSpace
 
 namespace Matrix
 
-/-- The matrix eigenvector equation in Euclidean-space coordinates. -/
-lemma IsHermitian.toEuclideanLin_eigenvectorBasis
-    {n : Type*} [Fintype n] [DecidableEq n]
-    {M : Matrix n n ℂ} (hM : M.IsHermitian) (i : n) :
-    Matrix.toEuclideanLin M (hM.eigenvectorBasis i) =
-      (hM.eigenvalues i : ℂ) • (hM.eigenvectorBasis i) := by
-  apply PiLp.ext
-  intro j
-  change (M *ᵥ (hM.eigenvectorBasis i).ofLp) j =
-    (((hM.eigenvalues i : ℂ) • hM.eigenvectorBasis i).ofLp) j
-  simpa using congrFun (hM.mulVec_eigenvectorBasis i) j
-
 /-- A spectral gap above zero bounds the quadratic form on the orthogonal
 complement of the kernel. -/
 theorem orthogonal_quadratic_gap_of_spectrum_separated
@@ -78,7 +66,7 @@ theorem spectrum_separated_of_orthogonal_quadratic_gap
   let v := hM.eigenvectorBasis i
   have hnorm : ‖v‖ = 1 := hM.eigenvectorBasis.orthonormal.norm_eq_one i
   have hlin : Matrix.toEuclideanLin M v = (hM.eigenvalues i : ℂ) • v :=
-    hM.toEuclideanLin_eigenvectorBasis i
+    hM.toEuclideanCLM_eigenvectorBasis i
   have hnonneg : 0 ≤ hM.eigenvalues i := hPos.eigenvalues_nonneg i
   constructor
   · simp [hnonneg]

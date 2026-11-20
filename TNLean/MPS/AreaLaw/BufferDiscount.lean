@@ -251,12 +251,12 @@ discount `two_mul_condEntropy_interval_le` is the case of all supports, with `N 
 theorem two_mul_condEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 0 ≤ J)
     (hΔ : 0 < Δ) {ι : Type*} [Fintype ι]
     (g : ι → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (σ : ι → ChainSupport L R)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (g i) (σ i).1)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (g i) (σ i).1)
     (hherm : ∀ i, (g i).IsHermitian) (hnorm : ∀ i, ‖g i‖ ≤ J) (N : ℕ) {B : ℝ} (hB1 : 1 ≤ B)
     (hcross : ∀ a b,
-      (Entropy.crossingTerms (fun i ↦ (σ i).1) (interval L a b)).card ≤ N)
+      (ManyBody.crossingTerms (fun i ↦ (σ i).1) (interval L a b)).card ≤ N)
     (hbudget : ∀ a b, Entropy.cutLogBudget
-      (Entropy.crossingTerms (fun i ↦ (σ i).1) (interval L a b))
+      (ManyBody.crossingTerms (fun i ↦ (σ i).1) (interval L a b))
         (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ fun i ↦ (σ i).1) ≤ B)
     (m : ℕ) (hm4 : 4 ≤ m)
     (hmE : min (32 * N * (q : ℝ) ^ (2 * (R + 1)) * J / Δ)
@@ -265,11 +265,11 @@ theorem two_mul_condEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 0 
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped (∑ i, g i) E₀ Δ)
     (hspan : groundSpace (∑ i, g i) E₀ = Submodule.span ℂ {Ω}) (l r : ℕ) :
-    2 * (Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
-          (interval L l r ∪ (interval L (l - m * R) (r + m * R) \ interval L l r)) Ω -
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
-          (interval L (l - m * R) (r + m * R) \ interval L l r) Ω) ≤
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +
+    2 * (ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+          Ω (interval L l r ∪ (interval L (l - m * R) (r + m * R) \ interval L l r)) -
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+          Ω (interval L (l - m * R) (r + m * R) \ interval L l r)) ≤
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L l r) +
         (4096 * Real.exp 1 * (J / Δ) * B / m + m * Real.log 2) := by
   classical
   have heig : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω :=
@@ -299,11 +299,11 @@ theorem two_mul_condEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 0 
     field_simp
   -- crossing budgets
   set S : ι → Finset (Fin L) := fun i ↦ (σ i).1
-  have hcross : ∀ j < m, ((Entropy.crossingTerms S (X ∪ T j)).card : ℝ) ≤ N := fun j hj ↦ by
+  have hcross : ∀ j < m, ((ManyBody.crossingTerms S (X ∪ T j)).card : ℝ) ≤ N := fun j hj ↦ by
     rw [hXT j hj]
     exact_mod_cast hcross _ _
   have hB : ∀ j < m,
-      Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+      Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
         (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S) ≤ K' := fun j hj ↦ by
     rw [hXT j hj]
     exact hbudget _ _
@@ -316,18 +316,18 @@ theorem two_mul_condEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 0 
     exact eq_of_splits_uniformShell (σ i).2.2 h1 h2
   have hEquad (hthr : 32 * N * (q : ℝ) ^ (2 * (R + 1)) * J / Δ ≤ m) :
       ∑ j ∈ Finset.range m, 4 * a j ^ 2 *
-      ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+      ∑ i ∈ ManyBody.crossingTerms S (X ∪ T j),
         (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤ Δ / 2 := by
     have hqJ : 0 ≤ (q : ℝ) ^ (2 * (R + 1)) * J := by positivity
     have hterm : ∀ j ∈ Finset.range m, 4 * a j ^ 2 *
-        ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+        ∑ i ∈ ManyBody.crossingTerms S (X ∪ T j),
           (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤
         16 * N * ((q : ℝ) ^ (2 * (R + 1)) * J) / (m : ℝ) ^ 2 := by
       intro j hj
       have hj := Finset.mem_range.mp hj
-      have hsum : ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+      have hsum : ∑ i ∈ ManyBody.crossingTerms S (X ∪ T j),
           (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤
-          (Entropy.crossingTerms S (X ∪ T j)).card * ((q : ℝ) ^ (2 * (R + 1)) * J) := by
+          (ManyBody.crossingTerms S (X ∪ T j)).card * ((q : ℝ) ^ (2 * (R + 1)) * J) := by
         rw [← nsmul_eq_mul]
         refine Finset.sum_le_card_nsmul _ _ _ fun i _ ↦ ?_
         have h2 := supportDim_le_real (R := R) hq (σ i)
@@ -337,9 +337,9 @@ theorem two_mul_condEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 0 
           _ = (q : ℝ) ^ (2 * (R + 1)) * J := by rw [← pow_mul, mul_comm (R + 1) 2]
       have hcard := hcross j hj
       have ha : a j ^ 2 = 4 / (m : ℝ) ^ 2 := by norm_num [a, div_pow]
-      calc 4 * a j ^ 2 * ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+      calc 4 * a j ^ 2 * ∑ i ∈ ManyBody.crossingTerms S (X ∪ T j),
             (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J
-          ≤ 4 * a j ^ 2 * ((Entropy.crossingTerms S (X ∪ T j)).card *
+          ≤ 4 * a j ^ 2 * ((ManyBody.crossingTerms S (X ∪ T j)).card *
               ((q : ℝ) ^ (2 * (R + 1)) * J)) := by gcongr
         _ ≤ 4 * a j ^ 2 * (N * ((q : ℝ) ^ (2 * (R + 1)) * J)) := by gcongr
         _ = 16 * N * ((q : ℝ) ^ (2 * (R + 1)) * J) / (m : ℝ) ^ 2 := by rw [ha]; ring
@@ -355,30 +355,30 @@ theorem two_mul_condEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 0 
   have hElog (hthr : 64 * Real.exp 1 * N *
       Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2 * J / Δ ≤ m) :
       ∑ j ∈ Finset.range m, 8 * Real.exp 1 * a j ^ 2 *
-        ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+        ∑ i ∈ ManyBody.crossingTerms S (X ∪ T j),
           Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ)) ^ 2 * J ≤
         Δ / 2 := by
     set ℓ : ℝ := Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1))
     have hℓJ : 0 ≤ ℓ ^ 2 * J := by positivity
     have hterm : ∀ j ∈ Finset.range m, 8 * Real.exp 1 * a j ^ 2 *
-        ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+        ∑ i ∈ ManyBody.crossingTerms S (X ∪ T j),
           Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ)) ^ 2 * J ≤
         32 * Real.exp 1 * N * (ℓ ^ 2 * J) / (m : ℝ) ^ 2 := by
       intro j hj
       have hj := Finset.mem_range.mp hj
-      have hsum : ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+      have hsum : ∑ i ∈ ManyBody.crossingTerms S (X ∪ T j),
           Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ)) ^ 2 * J ≤
-          (Entropy.crossingTerms S (X ∪ T j)).card * (ℓ ^ 2 * J) := by
+          (ManyBody.crossingTerms S (X ∪ T j)).card * (ℓ ^ 2 * J) := by
         rw [← nsmul_eq_mul]
         exact Finset.sum_le_card_nsmul _ _ _ fun i _ ↦
           mul_le_mul_of_nonneg_right (log_sq_supportDim_le hq (σ i)) hJ
       have hcard := hcross j hj
       have ha : a j ^ 2 = 4 / (m : ℝ) ^ 2 := by norm_num [a, div_pow]
       have he : 0 ≤ 8 * Real.exp 1 * a j ^ 2 := by positivity
-      calc 8 * Real.exp 1 * a j ^ 2 * ∑ i ∈ Entropy.crossingTerms S (X ∪ T j),
+      calc 8 * Real.exp 1 * a j ^ 2 * ∑ i ∈ ManyBody.crossingTerms S (X ∪ T j),
             Real.log (Real.exp 1 * (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ)) ^ 2 * J
           ≤ 8 * Real.exp 1 * a j ^ 2 *
-              ((Entropy.crossingTerms S (X ∪ T j)).card * (ℓ ^ 2 * J)) :=
+              ((ManyBody.crossingTerms S (X ∪ T j)).card * (ℓ ^ 2 * J)) :=
             mul_le_mul_of_nonneg_left hsum he
         _ ≤ 8 * Real.exp 1 * a j ^ 2 * (N * (ℓ ^ 2 * J)) := by gcongr
         _ = 32 * Real.exp 1 * N * (ℓ ^ 2 * J) / (m : ℝ) ^ 2 := by rw [ha]; ring
@@ -392,16 +392,16 @@ theorem two_mul_condEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 0 
     rw [div_le_div_iff₀ hmpos two_pos]
     nlinarith
   have hu : ∀ j < m, a j / (1 - a j) ≤ Entropy.tailRadius (J / Δ)
-      (Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+      (Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
         (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S)) := fun j hj ↦
     uniform_weight_ratio_le_tailRadius hm4 hmT hϑ (Entropy.one_le_cutLogBudget _ _) (hB j hj)
   have hTbuf : ∀ j < m, T j ⊆ Tbuf := fun _ hj ↦ uniformShell_subset_buffer hj
   -- the error terms
   have herr : ∑ j ∈ Finset.range m, 1024 * Real.exp 1 * (J / Δ) *
-      Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+      Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
         (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S) * a j ^ 2 ≤
       4096 * Real.exp 1 * (J / Δ) * K' / m :=
-    sum_uniform_shell_error_le (fun j ↦ Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+    sum_uniform_shell_error_le (fun j ↦ Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
       (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S)) hm4 hϑ hB
   have hlog : (m : ℝ) * Real.log (1 - Δ / 2 / Δ) = -(m * Real.log 2) := by
     have h12 : 1 - Δ / 2 / Δ = (2 : ℝ)⁻¹ := by field_simp; norm_num
@@ -438,10 +438,10 @@ theorem two_mul_condEntropy_interval_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 <
         {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (l r : ℕ) :
-    2 * (Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
-          (interval L l r ∪ chainBuffer L q R J Δ l r) Ω -
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (chainBuffer L q R J Δ l r) Ω) ≤
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +
+    2 * (ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+          Ω (interval L l r ∪ chainBuffer L q R J Δ l r) -
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (chainBuffer L q R J Δ l r)) ≤
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L l r) +
         chainDiscountConst q R J Δ :=
   two_mul_condEntropy_interval_le_of_family_budget hq hJ hΔ h.term id h.mem hh
     hhJ (chainCrossConst R) (one_le_chainBudgetConst q R)
@@ -469,7 +469,7 @@ private theorem two_mul_condEntropy_interval_le_of_energy_estimate
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) {L : ℕ} {ι : Type*} [Fintype ι]
     (g : ι → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (S : ι → Finset (Fin L))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (g i) (S i))
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (g i) (S i))
     (hherm : ∀ i, (g i).IsHermitian)
     (hnorm : ∀ i, ‖g i‖ ≤ J)
     (hdiam : ∀ i, ∀ x ∈ S i, ∀ y ∈ S i, y.val ≤ x.val + R)
@@ -479,12 +479,12 @@ private theorem two_mul_condEntropy_interval_le_of_energy_estimate
     (hmF : 4096 * Real.exp 1 * (1 + J / Δ) * B ≤ (m : ℝ))
     (hbudget : ∀ j < m,
       Entropy.cutLogBudget
-        (Entropy.crossingTerms S
+        (ManyBody.crossingTerms S
           (interval L (l - (j + 1) * R) (r + (j + 1) * R)))
         (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S) ≤ B)
     (hpoly :
       ∑ j ∈ Finset.range m, 2 * (2 / (m : ℝ)) ^ 2 *
-        ∑ i ∈ Entropy.crossingTerms S
+        ∑ i ∈ ManyBody.crossingTerms S
           (interval L (l - (j + 1) * R) (r + (j + 1) * R)),
           (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤ C_E / m)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
@@ -492,9 +492,9 @@ private theorem two_mul_condEntropy_interval_le_of_energy_estimate
     (hspan : groundSpace (∑ i, g i) E₀ = Submodule.span ℂ {Ω}) :
     let X := interval L l r
     let T := interval L (l - m * R) (r + m * R) \ X
-    2 * (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (X ∪ T) Ω -
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω) ≤
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω + 1 + 2 * C_E / Δ := by
+    2 * (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (X ∪ T) -
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω T) ≤
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω X + 1 + 2 * C_E / Δ := by
   classical
   have heig : toEuclideanLin (∑ i, g i) Ω = (E₀ : ℂ) • Ω :=
     ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Ω)
@@ -523,7 +523,7 @@ private theorem two_mul_condEntropy_interval_le_of_energy_estimate
     field_simp
   -- crossing budgets
   have hB : ∀ j < m,
-      Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+      Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
         (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S) ≤ K' := fun j hj ↦ by
     rw [hXT j hj]
     exact hbudget j hj
@@ -542,17 +542,17 @@ private theorem two_mul_condEntropy_interval_le_of_energy_estimate
   have hEΔ : C_E / (m : ℝ) < Δ :=
     (div_lt_one hΔ).mp (hquarter.trans_lt (by norm_num : (1 : ℝ) / 4 < 1))
   have hu : ∀ j < m, a j / (1 - a j) ≤ Entropy.tailRadius (J / Δ)
-      (Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+      (Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
         (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S)) := fun j hj ↦
     uniform_weight_ratio_le_tailRadius hm4 hmT hϑ (Entropy.one_le_cutLogBudget _ _) (hB j hj)
   have hTbuf : ∀ j < m, T j ⊆ Tbuf := fun _ hj ↦ uniformShell_subset_buffer hj
   -- the finite-dimensional discount
   have key :
-      2 * (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (X ∪ Tbuf) Ω -
-          Entropy.regionEntropy (n := fun _ : Fin L ↦ q) Tbuf Ω) ≤
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω +
+      2 * (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (X ∪ Tbuf) -
+          ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω Tbuf) ≤
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω X +
           ∑ j ∈ Finset.range m, 1024 * Real.exp 1 * (J / Δ) *
-            Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+            Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
               (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S) * a j ^ 2 -
           m * Real.log (1 - C_E / m / Δ) := by
     refine Entropy.two_mul_condEntropy_le_quadratic
@@ -565,13 +565,13 @@ private theorem two_mul_condEntropy_interval_le_of_energy_estimate
     rw [hXT j (Finset.mem_range.mp hj)]
   -- the error terms
   have herr : ∑ j ∈ Finset.range m, 1024 * Real.exp 1 * (J / Δ) *
-      Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+      Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
         (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S) * a j ^ 2 ≤
       4096 * Real.exp 1 * (J / Δ) * K' / m :=
-    sum_uniform_shell_error_le (fun j ↦ Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+    sum_uniform_shell_error_le (fun j ↦ Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
       (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S)) hm4 hϑ hB
   have herrone : ∑ j ∈ Finset.range m, 1024 * Real.exp 1 * (J / Δ) *
-      Entropy.cutLogBudget (Entropy.crossingTerms S (X ∪ T j))
+      Entropy.cutLogBudget (ManyBody.crossingTerms S (X ∪ T j))
         (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S) * a j ^ 2 ≤ 1 := by
     refine herr.trans ((div_le_one hmpos).mpr ?_)
     have hcoef : 0 ≤ 4096 * Real.exp 1 * K' :=
@@ -604,9 +604,9 @@ theorem two_mul_condEntropy_interval_le_polynomial
         (128 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))
         (4096 * Real.exp 1 * (1 + J / Δ) * chainBudgetConst q R)⌉₊
     let T := interval L (l - m * R) (r + m * R) \ interval L l r
-    2 * (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r ∪ T) Ω -
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω) ≤
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +
+    2 * (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L l r ∪ T) -
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω T) ≤
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L l r) +
         1 + 2 * C_E / Δ := by
   intro C_E m Tbuf
   classical
@@ -636,27 +636,27 @@ theorem two_mul_condEntropy_interval_le_polynomial
   set a : ℕ → ℝ := fun _ ↦ 2 / m
   set S : ChainSupport L R → Finset (Fin L) := fun X ↦ X.1
   have hcross : ∀ j < m,
-      ((Entropy.crossingTerms S (interval L (l - d j) (r + d j))).card : ℝ) ≤ N :=
+      ((ManyBody.crossingTerms S (interval L (l - d j) (r + d j))).card : ℝ) ≤ N :=
     fun j _ ↦ by
       exact_mod_cast card_crossingTerms_interval_le (L := L) (R := R) (l - d j) (r + d j)
   have hB : ∀ j < m,
-      Entropy.cutLogBudget (Entropy.crossingTerms S (interval L (l - d j) (r + d j)))
+      Entropy.cutLogBudget (ManyBody.crossingTerms S (interval L (l - d j) (r + d j)))
         (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ S) ≤ K' :=
     fun j _ ↦ cutLogBudget_interval_le hq (l - d j) (r + d j)
   have hCE0 : 0 ≤ C_E := by dsimp only [C_E, N]; positivity
   have hE : ∑ j ∈ Finset.range m, 2 * a j ^ 2 *
-      ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
+      ∑ i ∈ ManyBody.crossingTerms S (interval L (l - d j) (r + d j)),
         (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤ C_E / m := by
     have hqJ : 0 ≤ (q : ℝ) ^ (2 * (R + 1)) * J := by positivity
     have hterm : ∀ j ∈ Finset.range m, 2 * a j ^ 2 *
-        ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
+        ∑ i ∈ ManyBody.crossingTerms S (interval L (l - d j) (r + d j)),
           (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤
         8 * N * ((q : ℝ) ^ (2 * (R + 1)) * J) / (m : ℝ) ^ 2 := by
       intro j hj
       have hj := Finset.mem_range.mp hj
-      have hsum : ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
+      have hsum : ∑ i ∈ ManyBody.crossingTerms S (interval L (l - d j) (r + d j)),
           (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J ≤
-          (Entropy.crossingTerms S (interval L (l - d j) (r + d j))).card *
+          (ManyBody.crossingTerms S (interval L (l - d j) (r + d j))).card *
             ((q : ℝ) ^ (2 * (R + 1)) * J) := by
         rw [← nsmul_eq_mul]
         refine Finset.sum_le_card_nsmul _ _ _ fun i _ ↦ ?_
@@ -668,9 +668,9 @@ theorem two_mul_condEntropy_interval_le_polynomial
             rw [← pow_mul, mul_comm (R + 1) 2]
       have hcard := hcross j hj
       have ha : a j ^ 2 = 4 / (m : ℝ) ^ 2 := by norm_num [a, div_pow]
-      calc 2 * a j ^ 2 * ∑ i ∈ Entropy.crossingTerms S (interval L (l - d j) (r + d j)),
+      calc 2 * a j ^ 2 * ∑ i ∈ ManyBody.crossingTerms S (interval L (l - d j) (r + d j)),
             (Entropy.supportDim (fun _ : Fin L ↦ q) (S i) : ℝ) ^ 2 * J
-          ≤ 2 * a j ^ 2 * ((Entropy.crossingTerms S (interval L (l - d j) (r + d j))).card *
+          ≤ 2 * a j ^ 2 * ((ManyBody.crossingTerms S (interval L (l - d j) (r + d j))).card *
               ((q : ℝ) ^ (2 * (R + 1)) * J)) := by gcongr
         _ ≤ 2 * a j ^ 2 * (N * ((q : ℝ) ^ (2 * (R + 1)) * J)) := by gcongr
         _ = 8 * N * ((q : ℝ) ^ (2 * (R + 1)) * J) / (m : ℝ) ^ 2 := by rw [ha]; ring

@@ -36,7 +36,8 @@ noncomputable section
 
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace SquareInteraction)
+open ManyBody (IsGapped groundSpace SquareInteraction rectangleEmbedding rectangularDomain
+  rectangleSiteEquiv rectangleSiteEquiv_val)
 
 namespace TNLean.PEPS.Approximation
 
@@ -60,7 +61,7 @@ def SquareCellInformationBound (q : ℕ) (G : ∀ L : ℕ, StateSpace L q → Pr
       ∀ E : Finset (Vertex L), E ⊆ (Gc ∪ B)ᶜ →
         (∀ x ∈ closure (AngularGrid.cell o s m₀),
           ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
-        FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+        ManyBody.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
           Ω Gc E B ≤ C₁ * (1 + Real.log s) ^ K
 
 open Classical in
@@ -79,7 +80,7 @@ theorem cell_conditionalMutualInformation_le_square_of_rectangle {q L : ℕ}
           CellPartition.cellIndex (o - (1, 1)) s (integerPoint x.val) ∈ A))ᶜ →
       (∀ x ∈ closure (CellPartition.box (CellPartition.cellCorner (o - (1, 1)) s m₀) s),
         ∀ y ∈ E, c * s ≤ dist x (integerPoint y.val)) →
-      FiniteProduct.conditionalMutualInformation
+      ManyBody.conditionalMutualInformation
         (fun _ : Site (rectangularDomain L L) ↦ Fin q) (AreaLaw.rectangleAreaLawState Ω)
         (Finset.univ.filter (fun x : Site (rectangularDomain L L) ↦
           x.val ∈ CellPartition.cellSample (o - (1, 1)) s m₀)) E
@@ -92,7 +93,7 @@ theorem cell_conditionalMutualInformation_le_square_of_rectangle {q L : ℕ}
     ∀ E : Finset (Vertex L), E ⊆ (G ∪ B)ᶜ →
       (∀ x ∈ closure (AngularGrid.cell o s m₀),
         ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
-      FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+      ManyBody.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
         Ω G E B ≤ C₀ := by
   intro G B E hE hclear
   let σ := rectangleSiteEquiv L L
@@ -151,7 +152,7 @@ theorem cell_conditionalMutualInformation_le_square_of_rectangle {q L : ℕ}
   have hfinal := hbound (E.map σ.toEmbedding) hE' hclear'
   simpa only [AreaLaw.rectangleAreaLawState, show rectangleConfigurationEquiv L L q =
     σ.arrowCongr (Equiv.refl (Fin q)) from rfl,
-    FiniteProduct.conditionalMutualInformation, ← Finset.map_union,
+    ManyBody.conditionalMutualInformation, ← Finset.map_union,
     finiteProductEntropy_relabel] using hfinal
 
 open Classical in
@@ -183,15 +184,17 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt
         ∀ E : Finset (Vertex L), E ⊆ (G ∪ B)ᶜ →
           (∀ x ∈ closure (AngularGrid.cell o s m₀),
             ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
-          FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+          ManyBody.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
             Ω G E B ≤ cellInformationConstant q c Ctpl N Ca Na *
               (1 + Real.log s) ^ cellInformationExponent c Ctpl N Ca Na := by
   have hcell := cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt hcol hamp hc
   intro s hs o m₀ A hm₀ L h hh hhJ E₀ Ω hΩ hgap hspan
-  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hh hΩ hgap hspan
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toPlaneInteraction_hermitianPart hh hΩ hgap hspan
   exact cell_conditionalMutualInformation_le_square_of_rectangle Ω o m₀ A
-    (hcell s hs (o - (1, 1)) m₀ A hm₀ (rectangularDomain L L) h.toAreaLawHamiltonian
-      h.isHermitian_toAreaLawHamiltonian_term (h.norm_toAreaLawHamiltonian_term_le hhJ) E₀
+    (hcell s hs (o - (1, 1)) m₀ A hm₀ (rectangularDomain L L)
+      (ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart)
+      h.isHermitian_toPlaneInteraction_hermitianPart_term
+      (h.norm_toPlaneInteraction_hermitianPart_term_le hhJ) E₀
       (AreaLaw.rectangleAreaLawState Ω) hΩ' hgap' hspan')
 
 open Classical in
@@ -221,7 +224,7 @@ theorem cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_ex
         ∀ E : Finset (Vertex L), E ⊆ (G ∪ B)ᶜ →
           (∀ x ∈ closure (AngularGrid.cell o s m₀),
             ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
-          FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+          ManyBody.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
             Ω G E B ≤ cellInformationConstant q c Ctpl N (collarAmplificationConstant q 1 J Δ C)
               (collarAmplificationThreshold q 1 J Δ C) *
               (1 + Real.log s) ^ cellInformationExponent c Ctpl N
@@ -259,7 +262,7 @@ theorem exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBou
           ∀ E : Finset (Vertex L), E ⊆ (G ∪ B)ᶜ →
             (∀ x ∈ closure (AngularGrid.cell o s m₀),
               ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
-            FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+            ManyBody.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
               Ω G E B ≤ C₁ * (1 + Real.log s) ^ K := by
   obtain ⟨C, N, Ca, Na, hcol, hamp⟩ :=
     exists_sublinearCollarBoundAt_amplificationBoundAt hΔ hcol

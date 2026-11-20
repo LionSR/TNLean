@@ -29,7 +29,7 @@ lines 1373–1392. -/
 theorem exists_selected_regional_softTruncations_hermitian_mpo_of_accuracy
     {N q m v : ℕ} (hq : 1 ≤ q) (hm : 0 < m)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ})
     (hh : ∀ i, (h i).IsHermitian) (hnorm : ∀ i, ‖h i‖ ≤ 1)
     (I : Fin v → Finset (Fin N)) (p : Fin v → ℝ) (S : Finset (Fin v))

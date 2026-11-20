@@ -37,7 +37,7 @@ arXiv:1602.08828v2, `t:aisefficient` and `t:aisgaplessefficient`, lines 1373–1
 theorem exists_regional_softTruncations_hermitian_mpo_of_accuracy {N q m s : ℕ}
     (hq : 1 ≤ q) (hm : 0 < m)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ})
     (hh : ∀ i, (h i).IsHermitian) (hnorm : ∀ i, ‖h i‖ ≤ 1)
     (I : Fin s → Finset (Fin N)) (eps : Fin s → ℝ) (t xi z : ℝ)
@@ -83,7 +83,7 @@ theorem exists_regional_softTruncations_hermitian_mpo_of_accuracy {N q m s : ℕ
     (by omega) A (fun _ ↦ (1 : ℂ))
   simp only [one_smul] at hB
   let f := fun i : Fin N ↦ c • h i
-  have hf (i : Fin N) : Entropy.IsSupportedOn (f i) {i.castSucc, i.succ} := by
+  have hf (i : Fin N) : ManyBody.IsSupportedOn (f i) {i.castSucc, i.succ} := by
     change _ ∈ ManyBody.supportedOperators _ _
     exact (SMulMemClass.smul_mem c (hs i))
   obtain ⟨C, hC⟩ := exists_local_sum_add_scalar_mpo hq f hf (z : ℂ)

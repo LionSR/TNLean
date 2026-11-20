@@ -71,7 +71,7 @@ This is the step used in the recursion for AKLV Lemma `l:5`. -/
 theorem exists_aklv_dyadic_filtered_output {L q a s : ℕ}
     (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h j) (interval L j.val (j.val + 2)))
     (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
@@ -88,9 +88,9 @@ theorem exists_aklv_dyadic_filtered_output {L q a s : ℕ}
     (hxΩ : ‖x - Ω‖ ^ 2 ≤ aklvSequenceWeight i / 16) :
     ∃ y : EuclideanSpace ℂ (Fin L → Fin q),
       ‖y‖ = 1 ∧ ‖y - Ω‖ ^ 2 ≤ aklvSequenceWeight (i + 1) / 16 ∧
-      schmidtRank (WithLp.ofLp (Entropy.cutVector (leftBlock L (a + s / 2)) y)) ≤
+      schmidtRank (WithLp.ofLp (ManyBody.cutVector (leftBlock L (a + s / 2)) y)) ≤
         aklvSequenceFilterRank q g s (i + 1) *
-          schmidtRank (WithLp.ofLp (Entropy.cutVector (leftBlock L (a + s / 2)) x)) ∧
+          schmidtRank (WithLp.ofLp (ManyBody.cutVector (leftBlock L (a + s / 2)) x)) ∧
       IsAKLVSequenceStep a s h e g Ω i x y := by
   classical
   let t := aklvSequenceThreshold g (i + 1)

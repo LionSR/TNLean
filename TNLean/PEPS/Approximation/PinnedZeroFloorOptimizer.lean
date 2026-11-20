@@ -48,8 +48,8 @@ open Pinned.NestedFilter Pinned.NestedFilter.Energy
 /-- Exact once-counted cardinality, using the two existing count transports. -/
 theorem Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount {L : ℕ}
     (A : Finset (Vertex L)) :
-    (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
-      (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)).card =
+    (Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
+      (A.map (ManyBody.rectangleSiteEquiv L L).toEmbedding)).card =
       crossingCount A := by
   classical
   rw [card_edgeBoundary_rectangle, ← forwardSquareBoundary_card, Fintype.card_subtype]
@@ -62,26 +62,26 @@ theorem Pinned.NestedFilter.Energy.card_edgeBoundary_eq_crossingCount {L : ℕ}
 
 /-- The existing source/native bijection followed by graph-isomorphism transport. -/
 private def rectangleForwardEdgeEquiv (L : ℕ)
-    [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] :
+    [LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L))] :
     Edge (squareLatticeGraph L L) ≃
-      Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)) :=
-  (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
+      Edge (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L)) :=
+  (ManyBody.Edge.equiv (ManyBody.rectangleGraphIso L L))
 
 /-- The crossing predicate is insensitive to the endpoint swap caused by the
 chosen target order. No order compatibility of rectangleSiteEquiv is assumed. -/
 private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
-    [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
+    [LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L))]
     (A : Finset (Vertex L)) (e : Edge (squareLatticeGraph L L)) :
     s((rectangleForwardEdgeEquiv L e).1.1,
       (rectangleForwardEdgeEquiv L e).1.2) ∈
-        Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
-          (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding) ↔
+        Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
+          (A.map (ManyBody.rectangleSiteEquiv L L).toEmbedding) ↔
       Crosses A e := by
   classical
-  let σ := AreaLaw.rectangleSiteEquiv L L
+  let σ := ManyBody.rectangleSiteEquiv L L
   have hmem : ∀ v : Vertex L, σ v ∈ A.map σ.toEmbedding ↔ v ∈ A :=
     fun v => by simp [σ]
-  have hend := ManyBody.Edge.map_endpoints (AreaLaw.rectangleGraphIso L L)
+  have hend := ManyBody.Edge.map_endpoints (ManyBody.rectangleGraphIso L L)
     e
   change ((rectangleForwardEdgeEquiv L e).1.1 = σ e.val.1 ∧
       (rectangleForwardEdgeEquiv L e).1.2 = σ e.val.2) ∨
@@ -100,16 +100,16 @@ private theorem rectangleForwardEdge_crosses_iff {L : ℕ}
 
 /-- Every canonical edge inherits the original one-crossing condition. -/
 private theorem rectangle_singleCrossing {L m : ℕ}
-    [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))]
+    [LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L))]
     (X : Fin m → Finset (Vertex L))
     (hsingle : ∀ e : Edge (squareLatticeGraph L L), ∀ i j : Fin m,
       Crosses (X i) e → Crosses (X j) e → i = j) :
-    ∀ e : Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
+    ∀ e : Edge (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L)),
       ∀ i j : Fin m,
-        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
-          ((X i).map (AreaLaw.rectangleSiteEquiv L L).toEmbedding) →
-        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
-          ((X j).map (AreaLaw.rectangleSiteEquiv L L).toEmbedding) →
+        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
+          ((X i).map (ManyBody.rectangleSiteEquiv L L).toEmbedding) →
+        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
+          ((X j).map (ManyBody.rectangleSiteEquiv L L).toEmbedding) →
         i = j := by
   intro e i j hi hj
   obtain ⟨f, rfl⟩ := (rectangleForwardEdgeEquiv L).surjective e
@@ -123,8 +123,8 @@ private theorem canonicalCrossingBudget_eq_original {L q m : ℕ}
     (J : ℝ) (X : Fin m → Finset (Vertex L))
     (a : Fin m → ℝ) :
     (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 *
-      (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
-        ((X j).map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)).card =
+      (Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
+        ((X j).map (ManyBody.rectangleSiteEquiv L L).toEmbedding)).card =
     (q : ℝ) ^ 2 * J * ∑ j : Fin m,
       (crossingCount (X j) : ℝ) * a j ^ 2 := by
   simp_rw [card_edgeBoundary_eq_crossingCount]
@@ -168,7 +168,9 @@ private theorem fromCanonical_physical_estimates
         (Entropy.chainList (canonicalRegions X) K fun _ ↦ True)) (AreaLaw.rectangleAreaLawState Ω)
       let φ := ((‖ψ‖⁻¹ : ℝ) : ℂ) • ψ
       0 < ‖ψ‖ ∧ ‖φ‖ = 1 ∧
-        |(⟪φ, toEuclideanLin h.toAreaLawHamiltonian.hamiltonian φ⟫_ℂ).re - E₀| ≤ B ∧
+        |(⟪φ, toEuclideanLin
+            (ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart).hamiltonian
+              φ⟫_ℂ).re - E₀| ≤ B ∧
         Δ * (1 - ‖⟪AreaLaw.rectangleAreaLawState Ω, φ⟫_ℂ‖ ^ 2) ≤ B) :
     IsMaximizer Ω a (fromCanonical K hK) ∧
       0 < ‖output (fromCanonical K hK) Ω‖ ∧
@@ -180,7 +182,7 @@ private theorem fromCanonical_physical_estimates
   have hnorm := squareAreaLawState_normalizedOutput (fromCanonical K hK) Ω
   rw [canonicalMatrices_fromCanonical] at hout hnorm
   dsimp only at hnorm hresult
-  rw [← hnorm, ← hout, h.toAreaLawHamiltonian_hamiltonian hh,
+  rw [← hnorm, ← hout, h.hamiltonian_toPlaneInteraction_hermitianPart hh,
     ← squareAreaLawState_operator] at hresult
   simp only [AreaLaw.norm_rectangleAreaLawState, squareAreaLawState_inner] at hresult
   refine ⟨?_, hresult⟩
@@ -210,24 +212,24 @@ theorem _root_.ManyBody.SquareInteraction.exists_pinned_maximizer_energy_fidelit
       Δ * (1 - ‖⟪Ω, normalizedOutput F Ω⟫_ℂ‖ ^ 2) ≤
         (q : ℝ) ^ 2 * J * ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 := by
   classical
-  let : LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L)) :=
-    LinearOrder.lift' (AreaLaw.rectangleSiteEquiv L L).symm
-      (AreaLaw.rectangleSiteEquiv L L).symm.injective
+  let : LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L)) :=
+    LinearOrder.lift' (ManyBody.rectangleSiteEquiv L L).symm
+      (ManyBody.rectangleSiteEquiv L L).symm.injective
   have hD : ∀ i j : Fin m, i ≤ j → canonicalRegions X i ⊆ canonicalRegions X j := by
     intro i j hij
     simpa only [canonicalRegions_fin, Finset.map_subset_map] using hX hij
-  have hsep : ∀ e : Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L)),
+  have hsep : ∀ e : Edge (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L)),
       ∀ i j : Fin m,
-        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
+        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
           (canonicalRegions X i) →
-        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (AreaLaw.rectangularDomain L L)
+        s(e.1.1, e.1.2) ∈ Lattice.edgeBoundary (ManyBody.rectangularDomain L L)
           (canonicalRegions X j) → i = j := by
     simpa only [canonicalRegions_fin] using rectangle_singleCrossing X hsingle
   obtain ⟨K, hK, hmax, hresult⟩ :=
     h.exists_zero_floor_maximizer_energy_fidelity hh hhJ hΩ hgap hspan (canonicalRegions X) hD
       hsep a ha ha1
   have hbudget : (q : ℝ) ^ 2 * J * ∑ j : Fin m, a j ^ 2 *
-      (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) (canonicalRegions X j)).card =
+      (Lattice.edgeBoundary (ManyBody.rectangularDomain L L) (canonicalRegions X j)).card =
       (q : ℝ) ^ 2 * J * ∑ j : Fin m, (crossingCount (X j) : ℝ) * a j ^ 2 := by
     simpa only [canonicalRegions_fin] using canonicalCrossingBudget_eq_original (q := q) J X a
   dsimp only at hresult

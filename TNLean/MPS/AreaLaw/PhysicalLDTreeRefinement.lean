@@ -91,7 +91,7 @@ theorem exists_physical_ld_root_refinement (etaLD : ℝ) (hLD : 0 < etaLD) :
     ∃ C K : ℝ, 100 ≤ C ∧ 19 + etaLD ≤ C ∧ 0 < K ∧
       ∀ (L q m : ℕ) (w : ℝ) (hq : 2 ≤ q), q ≤ m → 0 < w →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2))) →
       ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=
@@ -200,13 +200,13 @@ theorem exists_physical_ld_root_refinement (etaLD : ℝ) (hLD : 0 < etaLD) :
       ring
     have hrank (k : Fin n) (j : ℕ) (hj : j < L - 1) :
         Matrix.schmidtRank (WithLp.ofLp
-          (Entropy.cutVector (intervalTrimCut L 0 L j) (vectors k))) ≤
+          (ManyBody.cutVector (intervalTrimCut L 0 L j) (vectors k))) ≤
           ⌈256 * (Dref : ℝ) ^ 2 * ((L : ℝ) + 1) * M / delta ^ 2⌉₊ := by
       have hbound := hranks j hj k
       rw [hxi2] at hbound
       have hc : (0 : ℝ) < 256 * (Dref : ℝ) ^ 2 * ((L : ℝ) + 1) := by positivity
       have hreal : (Matrix.schmidtRank (WithLp.ofLp
-          (Entropy.cutVector (intervalTrimCut L 0 L j) (vectors k))) : ℝ) ≤
+          (ManyBody.cutVector (intervalTrimCut L 0 L j) (vectors k))) : ℝ) ≤
           256 * (Dref : ℝ) ^ 2 * ((L : ℝ) + 1) * M / delta ^ 2 := by
         rw [le_div_iff₀ (by positivity)]
         have hmul := mul_le_mul_of_nonneg_left hbound hc.le
@@ -214,7 +214,7 @@ theorem exists_physical_ld_root_refinement (etaLD : ℝ) (hLD : 0 < etaLD) :
           _ = (256 * (Dref : ℝ) ^ 2 * ((L : ℝ) + 1)) *
               (delta ^ 2 / (256 * (Dref : ℝ) ^ 2 * ((L : ℝ) + 1)) *
                 (Matrix.schmidtRank (WithLp.ofLp
-                  (Entropy.cutVector (intervalTrimCut L 0 L j) (vectors k))) : ℝ)) := by
+                  (ManyBody.cutVector (intervalTrimCut L 0 L j) (vectors k))) : ℝ)) := by
             field_simp
           _ ≤ _ := hmul
       exact_mod_cast hreal.trans (Nat.le_ceil _)
@@ -345,7 +345,7 @@ theorem exists_physical_ld_tree_refined_approximation (etaLD : ℝ) (hLD : 0 < e
     ∃ Ct C K : ℝ, 100 ≤ Ct ∧ 100 ≤ C ∧ 0 < K ∧
       ∀ (L q m : ℕ) (w : ℝ) (hq : 2 ≤ q), q ≤ m → 0 < w →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ),
-      (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2))) →
       ∀ (h0 : ∀ i, 0 ≤ h i), (∀ i, h i ≤ 1) →
       let _ : Nonempty (Fin L → Fin q) :=

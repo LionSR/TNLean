@@ -35,9 +35,9 @@ theorem IsEfficientlyApproximableByMPS.exists_logarithmic_renyi_bound
     (happrox : IsEfficientlyApproximableByMPS ψ) (hψ : ∀ N, ‖ψ N‖ = 1)
     {α : ℝ} (hα : 1 < α) (a b : lengths → ℕ) (hab : ∀ N, a N ≤ b N) :
     ∃ K : ℝ, ∃ m : ℕ, ∀ N : lengths,
-      renyiEntropy (Entropy.regionState (n := fun _ : Fin N.val ↦ q)
-        (leftBlock N.val (b N) \ leftBlock N.val (a N)) (ψ N))
-        (Entropy.regionState_posSemidef _ _).isHermitian α ≤
+      renyiEntropy (ManyBody.regionState (X := fun _ ↦ Fin q)
+        (ψ N) (leftBlock N.val (b N) \ leftBlock N.val (a N)))
+        (ManyBody.regionState_posSemidef _ _).isHermitian α ≤
         K + (m : ℝ) * Real.log ((N.val : ℝ) + 1) := by
   obtain ⟨C, hC, m, happrox⟩ := happrox (1 / 2) (by norm_num)
   refine ⟨2 * |Real.log C| - α / (α - 1) * Real.log (1 - 1 / 2), 2 * m, fun N ↦ ?_⟩
@@ -66,9 +66,9 @@ theorem not_isEfficientlyApproximableByMPS_of_superlogarithmic_renyi
     (a b : lengths → ℕ) (hab : ∀ N, a N ≤ b N)
     (hgrowth : ∀ K : ℝ, ∀ m : ℕ, ∃ N : lengths,
       K + (m : ℝ) * Real.log ((N.val : ℝ) + 1) <
-        renyiEntropy (Entropy.regionState (n := fun _ : Fin N.val ↦ q)
-          (leftBlock N.val (b N) \ leftBlock N.val (a N)) (ψ N))
-          (Entropy.regionState_posSemidef _ _).isHermitian α) :
+        renyiEntropy (ManyBody.regionState (X := fun _ ↦ Fin q)
+          (ψ N) (leftBlock N.val (b N) \ leftBlock N.val (a N)))
+          (ManyBody.regionState_posSemidef _ _).isHermitian α) :
     ¬ IsEfficientlyApproximableByMPS ψ := by
   intro happrox
   obtain ⟨K, m, hbound⟩ := happrox.exists_logarithmic_renyi_bound hψ hα a b hab
@@ -102,9 +102,9 @@ theorem not_isEfficientlyApproximableByMPS_of_renyi_power_growth
       η * (N.val : ℝ) ≤ ((leftBlock N.val (b N) \ leftBlock N.val (a N)).card : ℝ))
     (hentropy : ∀ N : lengths, N₀ ≤ N.val →
       c * ((leftBlock N.val (b N) \ leftBlock N.val (a N)).card : ℝ) ^ κ ≤
-        renyiEntropy (Entropy.regionState (n := fun _ : Fin N.val ↦ q)
-          (leftBlock N.val (b N) \ leftBlock N.val (a N)) (ψ N))
-          (Entropy.regionState_posSemidef _ _).isHermitian α) :
+        renyiEntropy (ManyBody.regionState (X := fun _ ↦ Fin q)
+          (ψ N) (leftBlock N.val (b N) \ leftBlock N.val (a N)))
+          (ManyBody.regionState_posSemidef _ _).isHermitian α) :
     ¬ IsEfficientlyApproximableByMPS ψ := by
   apply not_isEfficientlyApproximableByMPS_of_superlogarithmic_renyi hψ hα a b hab
   intro K m

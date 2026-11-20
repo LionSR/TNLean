@@ -80,19 +80,19 @@ theorem template_source_entropy_bounds
         ∀ {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀),
           24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ A) →
           (∀ Q : IntRect, IsSafe Λ A D₀ Q →
-            regionalEntropy Λ q Ω (rectRegion A Q) ≤
+            ManyBody.regionEntropy Ω (rectRegion A Q) ≤
               Cbox * (Q.size : ℝ) ^ (1 + e)) →
-          (regionalEntropy Λ q Ω (A.filter fun x ↦ x.val ∈ T.points) ≤
+          (ManyBody.regionEntropy Ω (A.filter fun x ↦ x.val ∈ T.points) ≤
             templateSourceEntropyConstant q e Cbox * (n : ℝ) ^ (1 + e)) ∧
           (∀ L : ℕ, 1 ≤ L → L ≤ s₀ →
             (∀ j : ℕ, j ≤ L →
-              regionalEntropy Λ q Ω
+              ManyBody.regionEntropy Ω
                 (positiveDepthPrefix A (fun x ↦ ambientDepth T.points T.nonempty x.val)
                   (j : ℤ)) ≤
                 templateSourceEntropyConstant q e Cbox * ((n : ℝ) * (L : ℝ) ^ e + n)) ∧
             (∀ j : ℕ, 1 ≤ j → j ≤ L → ∀ Y : Finset (ℤ × ℤ),
               Y ⊆ ambientDilation T.points j \ ambientDilation T.points (j - 1) →
-              regionalEntropy Λ q Ω
+              ManyBody.regionEntropy Ω
                 (A.filter fun x ↦ x.val ∈
                   (ambientDilation T.points (j - 1) \ T.points) ∪ Y) ≤
                 templateSourceEntropyConstant q e Cbox * ((n : ℝ) * (L : ℝ) ^ e + n))) := by
@@ -113,7 +113,7 @@ theorem template_source_entropy_bounds
     (Nat.lt_pow_succ_log_self (by decide) s₀) e Cbox he hCbox hbox
   refine ⟨?_, ?_⟩
   · calc
-      regionalEntropy Λ q Ω (A.filter fun x ↦ x.val ∈ T.points) ≤
+      ManyBody.regionEntropy Ω (A.filter fun x ↦ x.val ∈ T.points) ≤
           Ccore * n * (s₀ : ℝ) ^ e := hcoreEntropy
       _ ≤ Ce * n * (s₀ : ℝ) ^ e := mul_le_mul_of_nonneg_right
           (mul_le_mul_of_nonneg_right hcore hn.le) (Real.rpow_nonneg (Nat.cast_nonneg _) _)
@@ -133,7 +133,7 @@ theorem template_source_entropy_bounds
       rw [positiveDepthPrefix_eq_filter_ambientDilation]
       simp only [Int.toNat_natCast]
       calc
-        regionalEntropy Λ q Ω
+        ManyBody.regionEntropy Ω
             (A.filter fun x ↦ x.val ∈ ambientDilation T.points j \ T.points) ≤
             Cshell * n * (L : ℝ) ^ e := hs
         _ ≤ Ce * n * (L : ℝ) ^ e := hmulShell
@@ -143,7 +143,7 @@ theorem template_source_entropy_bounds
       have hp := Template.regionalEntropy_prefix_le_of_safe_box Λ q D₀ hq Ω hΩ A T
         hC hsep hD j L (Nat.log 2 L) hj hjL hL hlo hhi Y hY e Cbox he hCbox hbox
       calc
-        regionalEntropy Λ q Ω
+        ManyBody.regionEntropy Ω
             (A.filter fun x ↦ x.val ∈
               (ambientDilation T.points (j - 1) \ T.points) ∪ Y) ≤
             Cshell * n * (L : ℝ) ^ e + n * Real.log q := hp
@@ -165,18 +165,18 @@ theorem exists_template_source_entropy_bounds
           ∀ {Ctpl : ℝ} {n s₀ : ℕ} (T : Template Ctpl n s₀),
             24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ A) →
             (∀ Q : IntRect, IsSafe Λ A D₀ Q →
-              regionalEntropy Λ q Ω (rectRegion A Q) ≤
+              ManyBody.regionEntropy Ω (rectRegion A Q) ≤
                 Cbox * (Q.size : ℝ) ^ (1 + e)) →
-            (regionalEntropy Λ q Ω (A.filter fun x ↦ x.val ∈ T.points) ≤
+            (ManyBody.regionEntropy Ω (A.filter fun x ↦ x.val ∈ T.points) ≤
               Ce * (n : ℝ) ^ (1 + e)) ∧
             (∀ L : ℕ, 1 ≤ L → L ≤ s₀ →
               (∀ j : ℕ, j ≤ L →
-                regionalEntropy Λ q Ω
+                ManyBody.regionEntropy Ω
                   (positiveDepthPrefix A (fun x ↦ ambientDepth T.points T.nonempty x.val)
                     (j : ℤ)) ≤ Ce * ((n : ℝ) * (L : ℝ) ^ e + n)) ∧
               (∀ j : ℕ, 1 ≤ j → j ≤ L → ∀ Y : Finset (ℤ × ℤ),
                 Y ⊆ ambientDilation T.points j \ ambientDilation T.points (j - 1) →
-                regionalEntropy Λ q Ω
+                ManyBody.regionEntropy Ω
                   (A.filter fun x ↦ x.val ∈
                     (ambientDilation T.points (j - 1) \ T.points) ∪ Y) ≤
                   Ce * ((n : ℝ) * (L : ℝ) ^ e + n))) :=
@@ -203,18 +203,18 @@ theorem template_final_source_entropy_bounds_of_boxEntropy
         24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ S.A) →
         S.depth = (fun x ↦ ambientDepth T.points T.nonempty x.val) →
         ∀ L : ℕ, 1 ≤ L → L ≤ s₀ →
-          (regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T.points) ≤
+          (ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T.points) ≤
             templateSourceEntropyConstant q (Exponents.boxError : ℝ) Cbox *
               (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ))) ∧
           (∀ j : ℕ, j ≤ L →
-            regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
               templateSourceEntropyConstant q (Exponents.boxError : ℝ) Cbox *
                 ((S.n : ℝ) * (L : ℝ) ^ (Exponents.boxError : ℝ) + S.n)) := by
   have hsource := template_source_entropy_bounds q hq (Exponents.boxError : ℝ) Cbox
     (by norm_num [Exponents.boxError]) hCbox
   intro Λ h hh hhJ E₀ Ω hΩ hgap hspan S Ctpl s₀ T hC hsep hdepth L hLpos hL
   have hrect : ∀ Q : IntRect, IsSafe Λ S.A D₀ Q →
-      regionalEntropy Λ q Ω (rectRegion S.A Q) ≤
+      ManyBody.regionEntropy Ω (rectRegion S.A Q) ≤
         Cbox * (Q.size : ℝ) ^ (1 + (Exponents.boxError : ℝ)) := by
     intro Q hsafe
     exact (regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan hsafe le_rfl).trans
@@ -245,10 +245,10 @@ theorem exists_template_final_source_entropy_bounds_of_boxEntropy
           24 ≤ Ctpl → T.IsSeparated D₀ (boundaryEndpoints Λ S.A) →
           S.depth = (fun x ↦ ambientDepth T.points T.nonempty x.val) →
           ∀ L : ℕ, 1 ≤ L → L ≤ s₀ →
-            (regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T.points) ≤
+            (ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T.points) ≤
               Ce * (S.n : ℝ) ^ (1 + (Exponents.boxError : ℝ))) ∧
             (∀ j : ℕ, j ≤ L →
-              regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+              ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
                 Ce * ((S.n : ℝ) * (L : ℝ) ^ (Exponents.boxError : ℝ) + S.n)) :=
   ⟨_, templateSourceEntropyConstant_nonneg _ _ _,
     template_final_source_entropy_bounds_of_boxEntropy q R D₀ hq hD hCbox hbox⟩

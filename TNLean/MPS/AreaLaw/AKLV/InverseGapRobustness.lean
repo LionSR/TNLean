@@ -194,7 +194,7 @@ from their disjoint supports; no tail, residual or new gap is assumed. -/
 theorem exists_robust_ground_twoSidedEnergyTruncation_of_inverse_gap_cutoff {L q : ℕ}
     (I : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (z e g t : ℝ)
@@ -248,7 +248,7 @@ of Section 6.1; commutations, decompositions and all analytic estimates
 are derived. Source: arXiv:1301.1162v1, Theorem 6.1 and Section 6.3. -/
 theorem normalized_chain_robustness_of_inverse_gap_cutoff {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (hab : a.val < b.val) (x m y e g t : ℝ)

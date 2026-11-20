@@ -52,7 +52,7 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (SquareLatticeVertex PlaneInteraction)
+open ManyBody (SquareLatticeVertex PlaneInteraction rectangularDomain rectangleSiteEquiv)
 
 open Matrix QuantumCircuit
 
@@ -163,12 +163,12 @@ theorem information_reset_of_card_le (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} 
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A C A₀ C₀ : Finset (Site Λ)) (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A) (hC₀ : C₀ ⊆ C)
-    (b : ℝ) (hb : 0 ≤ b) (hI : FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b)
+    (b : ℝ) (hb : 0 ≤ b) (hI : ManyBody.regionMutualInformation Ω A C ≤ b)
     (hAw : ∀ x ∈ A₀, ∀ y, y ∉ A →
       rangeResetWidth R J Δ p * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ))
     (hCw : ∀ x ∈ C₀, ∀ y, y ∉ C →
       rangeResetWidth R J Δ p * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) :
-    FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A₀ C₀ ≤ (L : ℝ) ^ (-p) := by
+    ManyBody.regionMutualInformation Ω A₀ C₀ ≤ (L : ℝ) ^ (-p) := by
   have hK : 0 < rangeResetRadius R J Δ (2 * p + 10) :=
     rangeResetRadius_pos R hJ hΔ (by linarith)
   have hCu : 0 < rangeResetUnitaryPrefactor R J Δ (2 * p + 10) :=
@@ -224,12 +224,12 @@ theorem information_reset_of_rangeResetThreshold_le (hq : 1 ≤ q) (hJ : 0 ≤ J
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A C A₀ C₀ : Finset (Site (rectangularDomain L L))) (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A)
     (hC₀ : C₀ ⊆ C) (b : ℝ) (hb : 0 ≤ b)
-    (hI : FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b)
+    (hI : ManyBody.regionMutualInformation Ω A C ≤ b)
     (hAw : ∀ x ∈ A₀, ∀ y, y ∉ A →
       rangeResetWidth R J Δ p * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ))
     (hCw : ∀ x ∈ C₀, ∀ y, y ∉ C →
       rangeResetWidth R J Δ p * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) :
-    FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A₀ C₀ ≤ (L : ℝ) ^ (-p) :=
+    ManyBody.regionMutualInformation Ω A₀ C₀ ≤ (L : ℝ) ^ (-p) :=
   h.information_reset_of_card_le hq hJ hΔ hp hL (card_rectangularDomain L).le hh hhJ E₀
       Ω hΩ hgap hspan
     A C A₀ C₀ hAC hA₀ hC₀ b hb hI hAw hCw
@@ -250,10 +250,10 @@ theorem information_reset (hq : 1 ≤ q) (hJ : 0 ≤ J) {Δ p : ℝ} (hΔ : 0 < 
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (A C A₀ C₀ : Finset (Site (rectangularDomain L L))), Disjoint A C → A₀ ⊆ A →
-        C₀ ⊆ C → ∀ b : ℝ, 0 ≤ b → FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A C ≤ b →
+        C₀ ⊆ C → ∀ b : ℝ, 0 ≤ b → ManyBody.regionMutualInformation Ω A C ≤ b →
         (∀ x ∈ A₀, ∀ y, y ∉ A → Cp * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) →
         (∀ x ∈ C₀, ∀ y, y ∉ C → Cp * (1 + b + Real.log L) < (supDist x.1 y.1 : ℝ)) →
-        FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A₀ C₀ ≤ (L : ℝ) ^ (-p) :=
+        ManyBody.regionMutualInformation Ω A₀ C₀ ≤ (L : ℝ) ^ (-p) :=
   ⟨rangeResetWidth R J Δ p, rangeResetThreshold q R J Δ p, rangeResetWidth_pos R hJ hΔ hp,
     fun _L hL h hh hhJ E₀ Ω hΩ hgap hspan A C A₀ C₀ hAC hA₀ hC₀ b hb hI hAw hCw ↦
       h.information_reset_of_rangeResetThreshold_le hq hJ hΔ hp hL hh hhJ E₀ Ω hΩ hgap

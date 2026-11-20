@@ -32,7 +32,7 @@ open scoped Matrix.Norms.L2Operator
 
 open TNLean.Lattice
 
-open ManyBody (IsGapped groundSpace SquareInteraction PlaneInteraction)
+open ManyBody (IsGapped groundSpace SquareInteraction PlaneInteraction rectangleEmbedding)
 
 namespace TNLean.PEPS.Approximation
 
@@ -123,7 +123,7 @@ theorem coarse_mutualInformation_le_closed {q R : ℕ} (hq : 1 ≤ q) {J Δ : �
           ∀ E : Finset (Site Λ),
             (∀ t ∈ T, ∀ y ∈ E,
               u ^ (Exponents.beta : ℝ) < (Scan.ambientSupDistance t y.val : ℝ)) →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X E ≤
+            ManyBody.regionMutualInformation Ω X E ≤
               coarseInformationConstantClosed q R J Δ := by
   have hcol := sublinearCollarBoundAt_closed (R := R) (D₀ := 2 * (R : ℝ) + 11) hq hJ hΔ
     (by linarith)
@@ -149,7 +149,7 @@ theorem coarse_mutualInformation_le {q R : ℕ} (hq : 1 ≤ q) {J Δ : ℝ}
           ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
           ∀ E : Finset (Site Λ),
             (∀ t ∈ T, ∀ y ∈ E, u ^ β < (Scan.ambientSupDistance t y.val : ℝ)) →
-            FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X E ≤ C := by
+            ManyBody.regionMutualInformation Ω X E ≤ C := by
   have hcol : SublinearCollarBound q R J Δ (2 * (R : ℝ) + 11) 24 :=
     sublinearCollarBound_real q R hq hJ hΔ (by linarith) (by norm_num)
   exact coarse_mutualInformation_le_of_sublinearCollarBound hΔ hcol N₀ A₀
@@ -174,7 +174,7 @@ theorem coarse_mutualInformation_le_square {q : ℕ} (hq : 1 ≤ q)
           ∀ E : Finset (Vertex L),
             (∀ t ∈ T, ∀ v ∈ E,
               u ^ β < (Scan.ambientSupDistance t (rectangleEmbedding v + c) : ℝ)) →
-            FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q) Ω X E ≤ C := by
+            ManyBody.regionMutualInformation Ω X E ≤ C := by
   have hcol : SublinearCollarBound q 1 J Δ 13 24 :=
     sublinearCollarBound_real q 1 hq hJ hΔ (by norm_num) (by norm_num)
   exact coarse_mutualInformation_le_square_of_sublinearCollarBound hΔ hcol N₀ A₀
@@ -200,7 +200,7 @@ theorem coarse_mutualInformation_le_translated_square {q : ℕ} (hq : 1 ≤ q)
             (∀ t ∈ T, ∀ v ∈ E, u ^ β <
               dist (Geometry.integerPoint t + d)
                 (Geometry.integerPoint (rectangleEmbedding v) + d)) →
-            FiniteProduct.mutualInformation (fun _ : Vertex L ↦ Fin q) Ω X E ≤ C := by
+            ManyBody.regionMutualInformation Ω X E ≤ C := by
   obtain ⟨β, hβ, C, u₀, hmain⟩ := coarse_mutualInformation_le_square hq hJ hΔ N₀ A₀
   refine ⟨β, hβ, C, u₀, fun u hu L h hh hhJ E₀ Ω hΩ hgap hspan d T hT hdiam X hX E hE ↦ ?_⟩
   have hdist (x y : ℤ × ℤ) :

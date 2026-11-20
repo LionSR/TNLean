@@ -88,9 +88,9 @@ theorem rootPath_augmented_compressed_bandProduct
     (hcomm : D.CrossBandCommute (nS q d) t k)
     (ZS : Matrix (Config k (ιS q d)) (Fin N) ℂ)
     (hZ : ZSᴴ * ZS = 1)
-    (hZZ : ZS * ZSᴴ = symProj (copyPerm (SiteConfig (nS q d)) k))
+    (hZZ : ZS * ZSᴴ = symProj (copyPerm (∀ v, Fin ((nS q d) v)) k))
     (preS : Config k (ιS q d) → ℂ)
-    (hsym : symProj (copyPerm (SiteConfig (nS q d)) k) *ᵥ preS = preS)
+    (hsym : symProj (copyPerm (∀ v, Fin ((nS q d) v)) k) *ᵥ preS = preS)
     (p : ℝ) :
     let e := augmentedReplicaConfigurationEquiv (V := V) q d k
     let ZO := ZS.submatrix e id

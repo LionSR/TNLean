@@ -85,16 +85,16 @@ theorem adaptivePatchSupply_of_closedSquare_cylinders
     (hle₂ : ∀ u, 0 ≤ u → ∀ j, r u j ≤ 2 * u)
     (hm : ∀ u, 0 ≤ u → u ≤ B₀ * Real.log L → (m u : ℝ) ≤ B₀ / 2 * Real.log L + 1)
     (hcyl : ∀ (z : ℝ × ℝ) (u : ℝ), 4 ≤ u → u ≤ B₀ * Real.log L →
-      letI : LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L)) :=
-        (Fintype.equivFin (Lattice.Site (AreaLaw.rectangularDomain L L))).linearOrder
+      letI : LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L)) :=
+        (Fintype.equivFin (Lattice.Site (ManyBody.rectangularDomain L L))).linearOrder
       ∃ (S : (j : Fin (m u)) → Submodule ℂ
-          ((AreaLaw.Geometry.closedSquareSample (AreaLaw.rectangularDomain L L) z (r u j) →
+          ((AreaLaw.Geometry.closedSquareSample (ManyBody.rectangularDomain L L) z (r u j) →
             Fin q) → ℂ))
         (v : EuclideanSpace ℂ
-          ((v : Lattice.Site (AreaLaw.rectangularDomain L L)) → Fin q)),
+          ((v : Lattice.Site (ManyBody.rectangularDomain L L)) → Fin q)),
         (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤ (L : ℝ) ^ R₀) ∧
         v.ofLp ∈ (⨆ j, dependentRegionCylinder (Out := fun _ ↦ Fin q)
-          (AreaLaw.Geometry.closedSquareSample (AreaLaw.rectangularDomain L L) z (r u j))
+          (AreaLaw.Geometry.closedSquareSample (ManyBody.rectangularDomain L L) z (r u j))
           (S j)) ∧
         ‖(AreaLaw.rectangleAreaLawState Ω) - v‖ ≤
             (L : ℝ) ^ (-p)) :
@@ -102,12 +102,12 @@ theorem adaptivePatchSupply_of_closedSquare_cylinders
   classical
   intro z u hu huL
   suffices hpatch : HasAdaptivePatch
-      (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
+      (fun x : Lattice.Site (ManyBody.rectangularDomain L L) ↦
         ((x.1.1 : ℝ), (x.1.2 : ℝ))) (AreaLaw.rectangleAreaLawState Ω)
       (adaptivePatchPrefactor q B₀) (R₀ + 1) p L (z - (1, 1)) u by
-    have ht := (hpatch.relabel (AreaLaw.rectangleSiteEquiv L L).symm).translate (1, 1)
+    have ht := (hpatch.relabel (ManyBody.rectangleSiteEquiv L L).symm).translate (1, 1)
     have hΩ : (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-        (Equiv.arrowCongr (AreaLaw.rectangleSiteEquiv L L).symm (Equiv.refl (Fin q))))
+        (Equiv.arrowCongr (ManyBody.rectangleSiteEquiv L L).symm (Equiv.refl (Fin q))))
         (AreaLaw.rectangleAreaLawState Ω) = Ω := by
       ext σ
       simp [AreaLaw.rectangleAreaLawState, AreaLaw.rectangleConfigurationEquiv,
@@ -115,31 +115,31 @@ theorem adaptivePatchSupply_of_closedSquare_cylinders
         Equiv.arrowCongr, Function.comp_def]
     simpa only [Equiv.symm_symm, integerCoordinates_add_one_eq_latticePos,
       sub_add_cancel, hΩ] using ht
-  let : LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L)) :=
-    (Fintype.equivFin (Lattice.Site (AreaLaw.rectangularDomain L L))).linearOrder
+  let : LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L)) :=
+    (Fintype.equivFin (Lattice.Site (ManyBody.rectangularDomain L L))).linearOrder
   by_cases hu4 : 4 ≤ u
   · let P (regions : Fin (m u) →
-        Finset (Lattice.Site (AreaLaw.rectangularDomain L L))) : Prop :=
+        Finset (Lattice.Site (ManyBody.rectangularDomain L L))) : Prop :=
       ∃ (S : (j : Fin (m u)) → Submodule ℂ ((regions j → Fin q) → ℂ))
         (v : EuclideanSpace ℂ
-          ((v : Lattice.Site (AreaLaw.rectangularDomain L L)) → Fin q)),
+          ((v : Lattice.Site (ManyBody.rectangularDomain L L)) → Fin q)),
         (∀ j, (Module.finrank ℂ (S j) : ℝ) ≤ (L : ℝ) ^ R₀) ∧
         v.ofLp ∈ (⨆ j, dependentRegionCylinder (Out := fun _ ↦ Fin q) (regions j) (S j)) ∧
         ‖(AreaLaw.rectangleAreaLawState Ω) - v‖ ≤ (L : ℝ) ^ (-p)
     have hc : P (fun j ↦ squareSample
-        (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
+        (fun x : Lattice.Site (ManyBody.rectangularDomain L L) ↦
           ((x.1.1 : ℝ), (x.1.2 : ℝ))) (z - (1, 1)) (r u j)) := by
       rw [show (fun j : Fin (m u) ↦ squareSample
-          (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
+          (fun x : Lattice.Site (ManyBody.rectangularDomain L L) ↦
             ((x.1.1 : ℝ), (x.1.2 : ℝ))) (z - (1, 1)) (r u j)) =
-          (fun j ↦ AreaLaw.Geometry.closedSquareSample (AreaLaw.rectangularDomain L L)
+          (fun j ↦ AreaLaw.Geometry.closedSquareSample (ManyBody.rectangularDomain L L)
             (z - (1, 1)) (r u j)) from
         funext (fun _ ↦ squareSample_integerCoordinates _ _ _)]
       exact hcyl (z - (1, 1)) u hu4 huL
     obtain ⟨S, v, hdim, hv, herr⟩ := hc
     obtain ⟨Q, _, hz, hs, _, hd, he⟩ :=
       exists_squarePatch_of_mem_iSup_dependentRegionCylinder
-        (fun x : Lattice.Site (AreaLaw.rectangularDomain L L) ↦
+        (fun x : Lattice.Site (ManyBody.rectangularDomain L L) ↦
           ((x.1.1 : ℝ), (x.1.2 : ℝ))) (z - (1, 1)) hu (r u)
         (fun i j hij ↦ hr u hij) (hle u) (hle₂ u hu.le)
         S ((AreaLaw.rectangleAreaLawState Ω)) v hv
@@ -155,7 +155,7 @@ theorem adaptivePatchSupply_of_closedSquare_cylinders
           (Real.rpow_nonneg (Nat.cast_nonneg L) _)))
   · obtain ⟨Q, hz, hs, hd, he⟩ :=
       exists_squarePatch_integerCoordinates_of_radius_le_four
-        (AreaLaw.rectangularDomain L L) hq (z - (1, 1)) hu
+        (ManyBody.rectangularDomain L L) hq (z - (1, 1)) hu
         (lt_of_not_ge hu4).le ((AreaLaw.rectangleAreaLawState Ω))
     refine ⟨Q, hz, hs, ?_, ?_⟩
     · exact (show ((∑ j, Q.dim j : ℕ) : ℝ) ≤ (q : ℝ) ^ 81 by exact_mod_cast hd).trans

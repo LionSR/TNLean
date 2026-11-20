@@ -57,7 +57,7 @@ private theorem exists_five_region_physical_truncation_residual
     (L q a b ell : ℕ) (hq : 0 < q) (hell : 21 ≤ ell)
     (hab : a + 2 * ell ≤ b + 1) (hbL : b + 2 * ell ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, a + 1, a + 2 * ell, b + 1, b + 2 * ell, L]
@@ -125,7 +125,7 @@ private theorem exists_five_region_physical_low_cluster
     (L q a b ell : ℕ) (hq : 0 < q) (hell : 21 ≤ ell)
     (hab : a + 2 * ell ≤ b + 1) (hbL : b + 2 * ell ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (mu g xi : ℝ) (hg : 0 < g) (hg1 : g ≤ 1)
@@ -306,7 +306,7 @@ theorem exists_five_region_dg_cluster_parameters :
       Real.log (D : ℝ) ≤ 22 * (A + 1) * cA / g * u ^ 3 ∧
       ∀ (L a b : ℕ), a + 2 * ell ≤ b + 1 → b + 2 * ell ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (h i) (interval L i.val (i.val + 2)))
         (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu : ℝ),
       let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i
@@ -406,7 +406,7 @@ theorem exists_five_region_physical_scaled_low_cluster
     (L q a b ell : ℕ) (hq : 0 < q) (hell : 21 ≤ ell)
     (hab : a + 2 * ell ≤ b + 1) (hbL : b + 2 * ell ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (mu g xi tau : ℝ) (hg : 0 < g) (hg1 : g ≤ 1)

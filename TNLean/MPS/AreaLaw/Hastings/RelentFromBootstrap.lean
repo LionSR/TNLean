@@ -68,18 +68,18 @@ theorem relent_of_projectorFactorization_of_le_entropy (hq : 2 ≤ q)
     (hfact : ∀ m : ℕ, c + m ≤ L → ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       IsFactorizationAt Ω c m (C₁ * Real.exp (-(m / ξ'))) OB OL OR)
     (hS : (l + ξ' * Real.log C₁) * Real.log q + bootstrapRemainder ξ' q ≤
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 c) Ω) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L (c - l) (c + l)) Ω ≤
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L (c - l) c) Ω +
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L c (c + l)) Ω -
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 c)) :
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) (c + l)) ≤
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) c) +
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L c (c + l)) -
         (1 - 2 * ((2 * C₁) * Real.exp (-(l / ξ')))) * (l / ξ') + Real.log (2 * C₁) +
         relentConst := by
   have hfactS : ∀ m : ℕ, c + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
       IsStarProjection OL ∧ IsStarProjection OR ∧ Commute OL OR ∧ ‖OB‖ ≤ 1 ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL SL ∧ SL ⊆ leftBlock L c ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR SR ∧ Disjoint SR (leftBlock L c) ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OB SB ∧ SB ⊆ interval L (c - m) (c + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L c ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L c) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ interval L (c - m) (c + m) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')) := by
     intro m hm
@@ -98,9 +98,9 @@ theorem relent_of_projectorFactorization_of_le_entropy (hq : 2 ≤ q)
   have hP : 0 < P := by linarith
   have hfact' : ∀ m : ℕ, c + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OB SB ∧ SB ⊆ leftBlock L (c + m) ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL SL ∧ SL ⊆ leftBlock L c ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR SR ∧ Disjoint SR (leftBlock L c) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ leftBlock L (c + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L c ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L c) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')) := by
     intro m hm

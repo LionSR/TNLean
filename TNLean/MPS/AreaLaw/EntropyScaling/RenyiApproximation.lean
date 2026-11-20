@@ -84,8 +84,8 @@ theorem exists_normalized_isOpenMPS_of_renyiEntropy_le {L q D : ℕ}
     {a δ : ℝ} (ha : 0 < a) (ha1 : a < 1) (hD : 0 < D)
     (hδ : 0 < δ) (hδ1 : δ ≤ 1)
     (hS : ∀ k ∈ Finset.Ico 1 L,
-      renyiEntropy (Entropy.regionState (leftBlock L k) ψ)
-        (Entropy.regionState_isHermitian (leftBlock L k) ψ) a ≤
+      renyiEntropy (ManyBody.regionState ψ (leftBlock L k))
+        (ManyBody.regionState_isHermitian (leftBlock L k) ψ) a ≤
       Real.log ((D : ℝ) / (1 - a)) + a / (1 - a) *
         Real.log (δ ^ 2 / (16 * ((L : ℝ) + 1)))) :
     ∃ χ : EuclideanSpace ℂ (Fin L → Fin q), ‖χ‖ = 1 ∧
@@ -95,11 +95,11 @@ theorem exists_normalized_isOpenMPS_of_renyiEntropy_le {L q D : ℕ}
   apply exists_normalized_isOpenMPS_of_sq_error hψ hmps hδ hδ1
   refine (norm_sequentialTruncation_leadingEigenprojection_sub_sq_le ψ hψ D).trans ?_
   have htail (k : ℕ) (hk : k ∈ Finset.Ico 1 L) :
-      1 - (Entropy.regionState_isHermitian (leftBlock L k) ψ).kyFanNorm D ≤
+      1 - (ManyBody.regionState_isHermitian (leftBlock L k) ψ).kyFanNorm D ≤
         δ ^ 2 / (16 * ((L : ℝ) + 1)) :=
     one_sub_kyFanNorm_le_of_renyiEntropy_le
-      (Entropy.regionState_posSemidef (leftBlock L k) ψ)
-      (Entropy.trace_regionState_eq_one hψ) ha ha1 hD (by positivity) (hS k hk)
+      (ManyBody.regionState_posSemidef (leftBlock L k) ψ)
+      (ManyBody.trace_regionState_eq_one hψ) ha ha1 hD (by positivity) (hS k hk)
   refine (Finset.sum_le_sum htail).trans ?_
   simp only [Finset.sum_const, Nat.card_Ico, nsmul_eq_mul]
   have hcard : ((L - 1 : ℕ) : ℝ) ≤ (L : ℝ) + 1 := by
@@ -112,14 +112,14 @@ theorem exists_normalized_isOpenMPS_of_renyiEntropy_le {L q D : ℕ}
 lines 271–276: a bound on every internal marginal rank gives an exact MPS. -/
 theorem isOpenMPS_of_regionState_rank_le {L q D : ℕ}
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1)
-    (hr : ∀ k ∈ Finset.Ico 1 L, (Entropy.regionState (leftBlock L k) ψ).rank ≤ D) :
+    (hr : ∀ k ∈ Finset.Ico 1 L, (ManyBody.regionState ψ (leftBlock L k)).rank ≤ D) :
     IsOpenMPS L q D (fun x ↦ ψ x) := by
   have ht (k : ℕ) (hk : k ∈ Finset.Ico 1 L) :
-      1 - (Entropy.regionState_isHermitian (leftBlock L k) ψ).kyFanNorm D = 0 := by
-    have he := (Entropy.regionState_isHermitian (leftBlock L k) ψ).sum_eigenvalues₀_filter_le D
+      1 - (ManyBody.regionState_isHermitian (leftBlock L k) ψ).kyFanNorm D = 0 := by
+    have he := (ManyBody.regionState_isHermitian (leftBlock L k) ψ).sum_eigenvalues₀_filter_le D
     have hz := Matrix.PosSemidef.eigenvalue_tail_eq_zero_of_rank_le
-      (Entropy.regionState_posSemidef (leftBlock L k) ψ) (hr k hk)
-    simpa [Entropy.trace_regionState_eq_one hψ] using he.symm.trans hz
+      (ManyBody.regionState_posSemidef (leftBlock L k) ψ) (hr k hk)
+    simpa [ManyBody.trace_regionState_eq_one hψ] using he.symm.trans hz
   have he := norm_sequentialTruncation_leadingEigenprojection_sub_sq_le ψ hψ D
   simp only [Finset.sum_eq_zero ht] at he
   have heq := sub_eq_zero.mp (norm_eq_zero.mp (sq_eq_zero_iff.mp (le_antisymm he (sq_nonneg _))))
@@ -164,8 +164,8 @@ theorem isEfficientlyApproximableByMPS_of_renyiEntropy_le
     (hψ : ∀ N, ‖ψ N‖ = 1) {a c c' : ℝ}
     (ha : 0 ≤ a) (ha1 : a < 1) (hc : 0 ≤ c)
     (hS : ∀ (N : lengths) (k : ℕ), k ∈ Finset.Ico 1 N.val →
-      renyiEntropy (Entropy.regionState (leftBlock N.val k) (ψ N))
-        (Entropy.regionState_isHermitian (leftBlock N.val k) (ψ N)) a ≤
+      renyiEntropy (ManyBody.regionState (ψ N) (leftBlock N.val k))
+        (ManyBody.regionState_isHermitian (leftBlock N.val k) (ψ N)) a ≤
         c * Real.log (N.val : ℝ) + c') :
     IsEfficientlyApproximableByMPS ψ := by
   intro δ hδ
@@ -175,8 +175,8 @@ theorem isEfficientlyApproximableByMPS_of_renyiEntropy_le
   refine ⟨K, by exact_mod_cast hK, m, ?_⟩
   intro N
   have hcut (k : ℕ) (hk : k ∈ Finset.Ico 1 N.val) :
-      renyiEntropy (Entropy.regionState (leftBlock N.val k) (ψ N))
-        (Entropy.regionState_isHermitian (leftBlock N.val k) (ψ N)) a ≤
+      renyiEntropy (ManyBody.regionState (ψ N) (leftBlock N.val k))
+        (ManyBody.regionState_isHermitian (leftBlock N.val k) (ψ N)) a ≤
       Real.log (((K * (N.val + 1) ^ m : ℕ) : ℝ) / (1 - a)) +
         a / (1 - a) * Real.log (ε ^ 2 / (16 * ((N.val : ℝ) + 1))) := by
     refine (hS N k hk).trans (le_trans ?_ (hbound N.val))
@@ -189,10 +189,10 @@ theorem isEfficientlyApproximableByMPS_of_renyiEntropy_le
   · refine ⟨K * (N.val + 1) ^ m, ψ N, by simp, ?_, by simpa using hδ.le⟩
     apply isOpenMPS_of_regionState_rank_le (ψ N) (hψ N)
     intro k hk
-    have hl : Real.log ((Entropy.regionState (leftBlock N.val k) (ψ N)).rank : ℝ) ≤
+    have hl : Real.log ((ManyBody.regionState (ψ N) (leftBlock N.val k)).rank : ℝ) ≤
         Real.log ((K * (N.val + 1) ^ m : ℕ) : ℝ) := by
       simpa [ha0, renyiEntropy] using hcut k hk
-    rcases Nat.eq_zero_or_pos (Entropy.regionState (leftBlock N.val k) (ψ N)).rank with hr | hr
+    rcases Nat.eq_zero_or_pos (ManyBody.regionState (ψ N) (leftBlock N.val k)).rank with hr | hr
     · simp [hr]
     · exact_mod_cast (Real.log_le_log_iff (by exact_mod_cast hr) (by exact_mod_cast hD)).mp hl
   · obtain ⟨φ, _hφ, hmps, herr⟩ := exists_normalized_isOpenMPS_of_renyiEntropy_le
@@ -226,7 +226,7 @@ private theorem isOpenMPS_bond_pow_succ {L q : ℕ} (ψ : EuclideanSpace ℂ (Fi
   gcongr
   · omega
   · omega
-  · simpa using Finset.card_le_univ (leftBlock L k)
+  · simp
 
 private theorem isEfficientlyApproximableByMPS_of_eventually
     {q : ℕ} {lengths : Set ℕ}
@@ -269,7 +269,7 @@ theorem exists_normalized_isOpenMPS_of_smoothRenyiEntropy_lt {L q D : ℕ}
     (hη : ∀ k ∈ Finset.Ico 1 L, 0 ≤ η k)
     (hbudget : (∑ k ∈ Finset.Ico 1 L, (T k + η k / 2)) ≤ (δ / 4) ^ 2)
     (hS : ∀ k ∈ Finset.Ico 1 L,
-      smoothRenyiEntropy (Entropy.regionState (leftBlock L k) ψ) a (η k) <
+      smoothRenyiEntropy (ManyBody.regionState ψ (leftBlock L k)) a (η k) <
         Real.log ((D : ℝ) / (1 - a)) + a / (1 - a) * Real.log (T k)) :
     ∃ χ : EuclideanSpace ℂ (Fin L → Fin q), ‖χ‖ = 1 ∧
       IsOpenMPS L q D (fun x ↦ χ x) ∧
@@ -280,8 +280,8 @@ theorem exists_normalized_isOpenMPS_of_smoothRenyiEntropy_lt {L q D : ℕ}
     ψ hψ T η ?_).trans hbudget
   intro k hk
   obtain ⟨σ, hσ, htr, hclose, hσS⟩ := exists_densityMatrix_renyiEntropy_lt
-    (Entropy.regionState_posSemidef (leftBlock L k) ψ)
-    (Entropy.trace_regionState_eq_one hψ) a (hη k hk) (hS k hk)
+    (ManyBody.regionState_posSemidef (leftBlock L k) ψ)
+    (ManyBody.trace_regionState_eq_one hψ) a (hη k hk) (hS k hk)
   refine ⟨σ, hσ, htr, hclose, ?_⟩
   by_cases ha0 : a = 0
   · have hl : Real.log (σ.rank : ℝ) ≤ Real.log (D : ℝ) := by
@@ -309,7 +309,7 @@ theorem isEfficientlyApproximableByMPS_of_smoothRenyiEntropy_le
     (hψ : ∀ N, ‖ψ N‖ = 1) {a c c' ε : ℝ}
     (ha : 0 ≤ a) (ha1 : a < 1) (hc : 0 ≤ c) (hε : 0 < ε)
     (hS : ∀ (N : lengths) (k : ℕ), k ∈ Finset.Ico 1 N.val →
-      smoothRenyiEntropy (Entropy.regionState (leftBlock N.val k) (ψ N)) a
+      smoothRenyiEntropy (ManyBody.regionState (ψ N) (leftBlock N.val k)) a
         ((N.val : ℝ) ^ (-(1 + ε))) ≤ c * Real.log (N.val : ℝ) + c') :
     IsEfficientlyApproximableByMPS ψ := by
   apply isEfficientlyApproximableByMPS_of_eventually ψ
@@ -328,7 +328,7 @@ theorem isEfficientlyApproximableByMPS_of_smoothRenyiEntropy_le
   have hlog : c * Real.log (N.val : ℝ) ≤ c * Real.log ((N.val : ℝ) + 1) :=
     mul_le_mul_of_nonneg_left (Real.log_le_log (by exact_mod_cast hNpos) (by linarith)) hc
   have hcut (k : ℕ) (hk : k ∈ Finset.Ico 1 N.val) :
-      smoothRenyiEntropy (Entropy.regionState (leftBlock N.val k) (ψ N)) a η <
+      smoothRenyiEntropy (ManyBody.regionState (ψ N) (leftBlock N.val k)) a η <
         Real.log ((D : ℝ) / (1 - a)) + a / (1 - a) * Real.log T :=
     (hS N k hk).trans_lt (lt_of_lt_of_le (by linarith) (hbound N.val))
   have hbudget : (∑ _k ∈ Finset.Ico 1 N.val, (T + η / 2)) ≤ (γ / 4) ^ 2 := by

@@ -110,14 +110,14 @@ variable {β : Type*} [Fintype β]
 Source: LVV13, `algo53.tex`, Claim `c:trim`, lines 549–559. -/
 noncomputable def leftColumnwiseSchmidtTrim (hi : i ≤ L) (m : ℕ)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) × β)) :
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) × β)) :
     EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) × β) :=
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) × β) :=
   WithLp.toLp 2 fun p ↦ leftSchmidtTrim hi m (WithLp.toLp 2 fun x ↦ u (x, p.2)) p.1
 
 private theorem leftColumnwiseSchmidtTrim_numbering (hi : i ≤ L) (m : ℕ)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) × β)) :
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) × β)) :
     (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
       ((leftConfigOfFinEquiv hi).prodCongr (Equiv.refl β)).symm)
       (leftColumnwiseSchmidtTrim hi m u) =
@@ -129,7 +129,7 @@ private theorem leftColumnwiseSchmidtTrim_numbering (hi : i ≤ L) (m : ℕ)
 Source: LVV13, `algo53.tex`, Claim `c:trim`, lines 549–559. -/
 theorem norm_leftColumnwiseSchmidtTrim_le (hi : i ≤ L) (m : ℕ)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) × β)) :
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) × β)) :
     ‖leftColumnwiseSchmidtTrim hi m u‖ ≤ ‖u‖ := by
   let E := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     ((leftConfigOfFinEquiv (q := q) hi).prodCongr (Equiv.refl β)).symm
@@ -142,7 +142,7 @@ Source: LVV13, `algo53.tex`, Claim `c:trim`, lines 549–559, with the corrected
 trimming radius. The reference-column rank bounds are in the numbered left coordinates. -/
 theorem norm_inner_sub_leftColumnwiseSchmidtTrim_le (hi : i ≤ L) (m : ℕ)
     (u v : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) × β)) (D : ℕ)
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) × β)) (D : ℕ)
     (hv : ∀ a k, 0 < k → k < i →
       (cutMatrix (WithLp.toLp 2 fun x ↦ v (leftConfigOfFin x, a)) k).rank ≤ D) :
     ‖⟪u - leftColumnwiseSchmidtTrim hi m u, v⟫_ℂ‖ ≤
@@ -161,7 +161,7 @@ Source: LVV13, `algo53.tex`, Claim `c:trim`, lines 549–559. -/
 theorem leftColumnwiseSchmidtTrim_column_mem (hi : i ≤ L) (m : ℕ)
     (S : Finset (LeftBlockVector L q i))
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) × β))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) × β))
     (hu : ∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ S) (a : β) :
     WithLp.toLp 2 (fun x ↦ leftColumnwiseSchmidtTrim hi m u (x, a)) ∈
       bondTrimSet hi m S := by
@@ -220,7 +220,7 @@ Source: LVV13, `algo53.tex`, Claim `c:trim`, lines 549–559. -/
 theorem leftColumnwiseSchmidtTrim_mem_leftSupportSubmodule (hi : i ≤ L) (m : ℕ)
     (S : Finset (LeftBlockVector L q i))
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) × β))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) × β))
     (W : Matrix (((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)) β ℂ)
     (hu : ∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ S) :
     (blockSplit L q i).symm (rightApply W (leftColumnwiseSchmidtTrim hi m u)) ∈
@@ -236,7 +236,7 @@ Source: LVV13, `algo53.tex`, Claim `c:trim`, lines 549–559. -/
 theorem norm_inner_sub_leftColumnwiseSchmidtTrim_rightApply_le [DecidableEq β]
     (hi : i ≤ L) (m : ℕ)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) × β))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) × β))
     (W : Matrix (((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)) β ℂ)
     (hW : Wᴴ * W = 1) (v : EuclideanSpace ℂ (Fin L → Fin q)) (D : ℕ)
     (hv : ∀ k, 0 < k → k < i → (cutMatrix v k).rank ≤ D) :
@@ -279,7 +279,7 @@ Source: `algo53.tex`, Claim `c:trim`, lines 549–559, with the quadratic radius
 theorem bondTrimSet_witness_with_reserve [DecidableEq β] (hi : i ≤ L)
     (S : Finset (LeftBlockVector L q i))
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) × β))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) × β))
     (W : Matrix (((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)) β ℂ)
     (hW : Wᴴ * W = 1) (hu : ‖u‖ = 1)
     (hcols : ∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ S)
@@ -362,7 +362,7 @@ with the quadratic radius correction. -/
 theorem isViableMPS_bondTrimSet_of_columns_with_reserve [DecidableEq β] (hi : i ≤ L)
     (S : Finset (LeftBlockVector L q i))
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) × β))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) × β))
     (W : Matrix (((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)) β ℂ)
     (hW : Wᴴ * W = 1) (hu : ‖u‖ = 1)
     (hcols : ∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ S)
@@ -387,7 +387,7 @@ Source: `algo53.tex`, Claim `c:trim`, lines 549–559, with the quadratic radius
 theorem isViableMPS_bondTrimSet_of_columns [DecidableEq β] (hi : i ≤ L)
     (S : Finset (LeftBlockVector L q i))
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L i) × β))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L i)) × β))
     (W : Matrix (((v : {v : Fin L // v ∉ leftBlock L i}) → Fin q)) β ℂ)
     (hW : Wᴴ * W = 1) (hu : ‖u‖ = 1)
     (hcols : ∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ S)

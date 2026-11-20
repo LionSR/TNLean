@@ -45,7 +45,7 @@ private theorem spectrum_separated_of_orthogonal_norm_gap
     let v := hM.isHermitian.eigenvectorBasis i
     have hNorm : ‖v‖ = 1 := hM.isHermitian.eigenvectorBasis.orthonormal.norm_eq_one i
     have hEigen : Matrix.toEuclideanLin M v = (hM.isHermitian.eigenvalues i : ℂ) • v :=
-      hM.isHermitian.toEuclideanLin_eigenvectorBasis i
+      hM.isHermitian.toEuclideanCLM_eigenvectorBasis i
     have hSym : (Matrix.toEuclideanLin M).IsSymmetric :=
       Matrix.isSymmetric_toEuclideanLin_iff.mpr hM.isHermitian
     have hOrth : v ∈ (LinearMap.ker (Matrix.toEuclideanLin M))ᗮ := by

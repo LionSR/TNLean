@@ -97,15 +97,17 @@ private theorem edge_oneSided {i k : ℕ} (hi : i + 1 ≠ k) :
   · exact Or.inr (edge_disjoint_left (by omega))
 
 private theorem rank_one_le (k : ℕ) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (interval L 0 k) 1) ≤ 1 :=
-  (Entropy.isSupportedOn_one (∅ : Finset (Fin L))).operatorSchmidtRank_cutOperator_le_one
+  (one_mem
+      (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q)
+      (∅ : Finset (Fin L)))).operatorSchmidtRank_cutOperator_le_one
     (Or.inl (Finset.empty_subset _))
 
 private theorem edge_rank_le_sq {i k : ℕ}
     {H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hH : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) H (interval L i (i + 2))) :
-    operatorSchmidtRank (Entropy.cutOperator (interval L 0 k) H) ≤ q ^ 2 := by
+    (hH : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) H (interval L i (i + 2))) :
+    operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k) H) ≤ q ^ 2 := by
   by_cases hi : i + 1 = k
   · have hcard : ((interval L i (i + 2)) ∩ interval L 0 k).card ≤ 1 := by
       apply Finset.card_le_one.mpr
@@ -122,35 +124,36 @@ private theorem edge_rank_le_sq {i k : ℕ}
 /-- A regional product is supported wherever all its selected bonds are supported.
 ALVV, Definition 5.10. -/
 theorem regionalProjectionMatrix_supported
-    {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (s : Finset ℕ) (m : ℕ) (D : Finset (Fin L))
     (hD : ∀ i < m, i ∈ s → interval L i (i + 2) ⊆ D) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (regionalProjectionMatrix h s m) D := by
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (regionalProjectionMatrix h s m) D := by
   change _ ∈ ManyBody.supportedOperators _ _
   classical
   induction m with
-  | zero => exact Entropy.isSupportedOn_one D
+  | zero => exact one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) D)
   | succ m ih =>
     rw [regionalProjectionMatrix]
     have hprefix := ih (fun i hi hs ↦ hD i (by omega) hs)
     by_cases hm : m ∈ s
     · simp only [hm, ↓reduceIte]
-      exact Entropy.IsSupportedOn.mul
+      exact ManyBody.IsSupportedOn.mul
         ((Subalgebra.toSubmodule
           (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).toSubalgebra).sub_mem
-          (Entropy.isSupportedOn_one D) ((hh m).mono (hD m (by omega) hm)))
-        hprefix (fun _ : Fin L ↦ (⟨0, Nat.lt_of_lt_of_le Nat.zero_lt_one hq⟩ : Fin q))
+          (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) D))
+              ((hh m).mono (hD m (by omega) hm)))
+        hprefix
     · simpa [hm] using hprefix
 
 /-- A parity product with no selected bond crossing the cut has rank at most one.
 The bound follows from supported-factor decompositions. -/
 theorem rank_regionalProjectionMatrix_le_one
     {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (s : Finset ℕ) (m k : ℕ)
     (hcross : ∀ i < m, i ∈ s → i + 1 ≠ k) :
-    operatorSchmidtRank (Entropy.cutOperator (interval L 0 k)
+    operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k)
       (regionalProjectionMatrix h s m)) ≤ 1 := by
   classical
   induction m with
@@ -160,10 +163,10 @@ theorem rank_regionalProjectionMatrix_le_one
     rw [regionalProjectionMatrix]
     by_cases hm : m ∈ s
     · simp only [hm, ↓reduceIte, Entropy.cutOperator_mul]
-      have hfactor := Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one
+      have hfactor := ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one
         ((Subalgebra.toSubmodule
           (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).toSubalgebra).sub_mem
-          (Entropy.isSupportedOn_one _) (hh m))
+          (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)) (hh m))
         (edge_oneSided (hcross m (by omega) hm))
       exact (operatorSchmidtRank_mul_le _ _).trans (by simpa using Nat.mul_le_mul hfactor hprefix)
     · simpa [hm] using hprefix
@@ -172,9 +175,9 @@ theorem rank_regionalProjectionMatrix_le_one
 at any cut. This supplies the crossing-parity contribution in ALVV, Theorem 5.14. -/
 theorem rank_regionalProjectionMatrix_le_sq
     {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (s : Finset ℕ) (m k : ℕ) :
-    operatorSchmidtRank (Entropy.cutOperator (interval L 0 k)
+    operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k)
       (regionalProjectionMatrix h s m)) ≤ q ^ 2 := by
   classical
   induction m with
@@ -189,13 +192,13 @@ theorem rank_regionalProjectionMatrix_le_sq
         have hfactor := edge_rank_le_sq (k := k) hq
           ((Subalgebra.toSubmodule
             (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).toSubalgebra).sub_mem
-            (Entropy.isSupportedOn_one _) (hh m))
+            (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)) (hh m))
         exact (operatorSchmidtRank_mul_le _ _).trans
           (by simpa using Nat.mul_le_mul hfactor hprefix)
-      · have hfactor := Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one
+      · have hfactor := ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one
           ((Subalgebra.toSubmodule
             (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).toSubalgebra).sub_mem
-            (Entropy.isSupportedOn_one _) (hh m))
+            (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)) (hh m))
           (edge_oneSided hk)
         exact (operatorSchmidtRank_mul_le _ _).trans
           (by simpa using Nat.mul_le_mul hfactor ih)
@@ -203,7 +206,7 @@ theorem rank_regionalProjectionMatrix_le_sq
 
 private noncomputable def cutRank
     (H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (k : ℕ) : ℕ :=
-  operatorSchmidtRank (Entropy.cutOperator (interval L 0 k) H)
+  operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k) H)
 
 private theorem cutRank_add_le
     (A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (k : ℕ) :
@@ -214,9 +217,9 @@ private theorem cutRank_sub_le
     (A B : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (k : ℕ) :
     cutRank (A - B) k ≤ cutRank A k + cutRank B k := by
   have hneg : cutRank (-B) k ≤ cutRank B k := by
-    simpa only [cutRank, Entropy.cutOperator, reindex_apply, Matrix.submatrix_neg, Pi.neg_apply,
+    simpa only [cutRank, ManyBody.cutOperator, reindex_apply, Matrix.submatrix_neg, Pi.neg_apply,
       neg_one_smul] using operatorSchmidtRank_smul_le (-1 : ℂ)
-      (Entropy.cutOperator (interval L 0 k) B)
+      (ManyBody.cutOperator (interval L 0 k) B)
   exact (cutRank_add_le A (-B) k).trans (Nat.add_le_add_left hneg _)
 
 private noncomputable def exteriorIndices (s t : Finset ℕ) (m : ℕ) : Finset ℕ :=
@@ -258,9 +261,9 @@ private theorem exterior_split
 
 private theorem leftExterior_supported
     {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (s t : Finset ℕ) (m k : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (leftExterior h s t m k) (interval L 0 k) := by
   change _ ∈ ManyBody.supportedOperators _ _
   exact sum_mem fun i hi ↦
@@ -268,9 +271,9 @@ private theorem leftExterior_supported
 
 private theorem rightExterior_supported
     {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (s t : Finset ℕ) (m k : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (rightExterior h s t m k) (interval L 0 k)ᶜ := by
   change _ ∈ ManyBody.supportedOperators _ _
   apply sum_mem
@@ -282,7 +285,7 @@ private theorem rightExterior_supported
 
 private theorem crossingExterior_rank_le
     {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (s t : Finset ℕ) (m k : ℕ) :
     cutRank (crossingExterior h s t m k) k ≤ q ^ 2 := by
   classical
@@ -291,10 +294,10 @@ private theorem crossingExterior_rank_le
     have hi := (Finset.mem_filter.mp hi).2
     have hj := (Finset.mem_filter.mp hj).2
     omega
-  change operatorSchmidtRank (Entropy.cutOperator (interval L 0 k) (∑ i ∈ C, h i)) ≤ _
-  simp only [Entropy.cutOperator, reindex_apply, Matrix.submatrix_sum]
+  change operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k) (∑ i ∈ C, h i)) ≤ _
+  simp only [ManyBody.cutOperator, reindex_apply, Matrix.submatrix_sum]
   calc
-    _ ≤ ∑ i ∈ C, operatorSchmidtRank (Entropy.cutOperator (interval L 0 k) (h i)) :=
+    _ ≤ ∑ i ∈ C, operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k) (h i)) :=
       operatorSchmidtRank_sum_le _ _
     _ ≤ ∑ _ ∈ C, q ^ 2 := Finset.sum_le_sum fun i _ ↦ edge_rank_le_sq hq (hh i)
     _ = C.card * q ^ 2 := by simp
@@ -332,7 +335,7 @@ private theorem disjoint_parityBonds (a b : ℕ) : Disjoint (evenBonds a b) (odd
 
 private theorem rank_parity_products_le
     {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b m k : ℕ) :
     cutRank (regionalProjectionMatrix h (evenBonds a b) m) k +
       cutRank (regionalProjectionMatrix h (oddBonds a b) m) k ≤ q ^ 2 + 1 := by
@@ -353,7 +356,7 @@ private theorem rank_parity_products_le
 
 private theorem rank_inside_le
     {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b m k : ℕ) (hin : a < k ∧ k ≤ b) :
     cutRank (regionalReplacementMatrix h (evenBonds a b) (oddBonds a b) m) k ≤
       q ^ 2 + 3 := by
@@ -362,14 +365,16 @@ private theorem rank_inside_le
   let t := oddBonds a b
   let X := leftExterior h s t m k + 1
   let Y := rightExterior h s t m k + 1
-  have hX : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) X (interval L 0 k) := by
+  have hX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X (interval L 0 k) := by
     change _ ∈ ManyBody.supportedOperators _ _
     exact add_mem
-      (leftExterior_supported hh s t m k) (Entropy.isSupportedOn_one _)
-  have hY : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) Y (interval L 0 k)ᶜ := by
+      (leftExterior_supported hh s t m k)
+          (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _))
+  have hY : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) Y (interval L 0 k)ᶜ := by
     change _ ∈ ManyBody.supportedOperators _ _
     exact add_mem
-      (rightExterior_supported hh s t m k) (Entropy.isSupportedOn_one _)
+      (rightExterior_supported hh s t m k)
+          (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _))
   have hrX : cutRank X k ≤ 1 :=
     hX.operatorSchmidtRank_cutOperator_le_one (Or.inl (Finset.Subset.refl _))
   have hrY : cutRank Y k ≤ 1 :=
@@ -392,7 +397,7 @@ private theorem rank_inside_le
 
 private theorem rank_outside_le
     {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b m k : ℕ) (hout : k ≤ a ∨ b < k) :
     cutRank (regionalReplacementMatrix h (evenBonds a b) (oddBonds a b) m) k ≤
       q ^ 2 + 2 := by
@@ -406,12 +411,12 @@ private theorem rank_outside_le
   have hc := crossingExterior_rank_le hq hh s t m k
   have hregions (D : Finset (Fin L))
       (hD : ∀ i ∈ Finset.Ico a b, interval L i (i + 2) ⊆ D) :
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) Ps D ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) Pt D := by
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) Ps D ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) Pt D := by
     constructor
-    · exact regionalProjectionMatrix_supported hq hh s m D
+    · exact regionalProjectionMatrix_supported hh s m D
         (fun i _ hi ↦ hD i (Finset.mem_filter.mp hi).1)
-    · exact regionalProjectionMatrix_supported hq hh t m D
+    · exact regionalProjectionMatrix_supported hh t m D
         (fun i _ hi ↦ hD i (Finset.mem_filter.mp hi).1)
   rcases hout with hleft | hright
   · obtain ⟨hPs, hPt⟩ := hregions (interval L 0 k)ᶜ (by
@@ -421,10 +426,12 @@ private theorem rank_outside_le
           have := (Finset.mem_Ico.mp hi).1
           omega)) hx hy)
     let Y := rightExterior h s t m k + 1 + 1 - Ps - Pt
-    have hY : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) Y (interval L 0 k)ᶜ := by
+    have hY : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) Y (interval L 0 k)ᶜ := by
       change _ ∈ ManyBody.supportedOperators _ _
       exact sub_mem
-        (sub_mem (add_mem (add_mem hr (Entropy.isSupportedOn_one _)) (Entropy.isSupportedOn_one _))
+        (sub_mem
+            (add_mem (add_mem hr (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)))
+            (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)))
           hPs) hPt
     have hrY : cutRank Y k ≤ 1 :=
       hY.operatorSchmidtRank_cutOperator_le_one (Or.inr disjoint_compl_left)
@@ -444,10 +451,12 @@ private theorem rank_outside_le
       intro i hi
       exact edge_subset_left (by have := (Finset.mem_Ico.mp hi).2; omega))
     let X := leftExterior h s t m k + 1 + 1 - Ps - Pt
-    have hX : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) X (interval L 0 k) := by
+    have hX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X (interval L 0 k) := by
       change _ ∈ ManyBody.supportedOperators _ _
       exact sub_mem
-        (sub_mem (add_mem (add_mem hl (Entropy.isSupportedOn_one _)) (Entropy.isSupportedOn_one _))
+        (sub_mem
+            (add_mem (add_mem hl (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)))
+            (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)))
           hPs) hPt
     have hrX : cutRank X k ≤ 1 :=
       hX.operatorSchmidtRank_cutOperator_le_one (Or.inl (Finset.Subset.refl _))
@@ -469,9 +478,9 @@ ALVV, Theorem 5.14(2), with the interior-region correction documented in the mod
 Only locality and positive local dimension are needed; the terms need not be projectors. -/
 private theorem rank_regionalReplacementMatrix_nat_le_sq_add_three
     {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b m k : ℕ) :
-    operatorSchmidtRank (Entropy.cutOperator (interval L 0 k)
+    operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k)
       (regionalReplacementMatrix h (evenBonds a b) (oddBonds a b) m)) ≤ q ^ 2 + 3 := by
   by_cases hin : a < k ∧ k ≤ b
   · exact rank_inside_le hq hh a b m k hin
@@ -479,7 +488,7 @@ private theorem rank_regionalReplacementMatrix_nat_le_sq_add_three
 
 private theorem rank_boundary_inside_le
     {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b m k : ℕ) (hin : a < k ∧ k ≤ b)
     (hboundary : a = 0 ∨ m ≤ b) :
     cutRank (regionalReplacementMatrix h (evenBonds a b) (oddBonds a b) m) k ≤
@@ -498,12 +507,13 @@ private theorem rank_boundary_inside_le
         rw [show s ∪ t = Finset.Ico a b from union_parityBonds a b] at hn
         simp only [Finset.mem_Ico] at hn
         omega
-      have hr : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      have hr : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (rightExterior h s t m k + 1 + 1) (interval L 0 k)ᶜ := by
         change _ ∈ ManyBody.supportedOperators _ _
         exact add_mem
-          (add_mem (rightExterior_supported hh s t m k) (Entropy.isSupportedOn_one _))
-          (Entropy.isSupportedOn_one _)
+          (add_mem (rightExterior_supported hh s t m k)
+              (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)))
+          (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _))
       simpa only [cutRank, W, hl, zero_add] using hr.operatorSchmidtRank_cutOperator_le_one
         (Or.inr disjoint_compl_left)
     · have hr : rightExterior h s t m k = 0 := by
@@ -514,12 +524,13 @@ private theorem rank_boundary_inside_le
         rw [show s ∪ t = Finset.Ico a b from union_parityBonds a b] at hn
         simp only [Finset.mem_Ico, Finset.mem_range] at hn him
         omega
-      have hl : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      have hl : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (leftExterior h s t m k + 1 + 1) (interval L 0 k) := by
         change _ ∈ ManyBody.supportedOperators _ _
         exact add_mem
-          (add_mem (leftExterior_supported hh s t m k) (Entropy.isSupportedOn_one _))
-          (Entropy.isSupportedOn_one _)
+          (add_mem (leftExterior_supported hh s t m k)
+              (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)))
+          (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _))
       simpa only [cutRank, W, hr, add_zero] using hl.operatorSchmidtRank_cutOperator_le_one
         (Or.inl (Finset.Subset.refl _))
   have hdecomp : regionalReplacementMatrix h s t m =
@@ -542,9 +553,9 @@ Here `m` is the number of bonds, so a suffix is expressed by `m ≤ b`.
 ALVV, Theorem 5.14(2), on the stated boundary-region scope. -/
 private theorem rank_regionalReplacementMatrix_nat_le_sq_add_two_of_boundary
     {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b m k : ℕ) (hboundary : a = 0 ∨ m ≤ b) :
-    operatorSchmidtRank (Entropy.cutOperator (interval L 0 k)
+    operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k)
       (regionalReplacementMatrix h (evenBonds a b) (oddBonds a b) m)) ≤ q ^ 2 + 2 := by
   by_cases hin : a < k ∧ k ≤ b
   · exact rank_boundary_inside_le hq hh a b m k hin hboundary
@@ -559,9 +570,9 @@ noncomputable def bondTermExtension {m : ℕ}
 /-- Extending by zero preserves the nearest-neighbor supports. -/
 theorem bondTermExtension_supported {m : ℕ}
     {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (i : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (bondTermExtension h i)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (bondTermExtension h i)
       (interval L i (i + 2)) := by
   classical
   unfold bondTermExtension
@@ -574,9 +585,9 @@ terms. No hypothesis is imposed on nonexistent bonds or on a supplied decomposit
 ALVV, Theorem 5.14(2), corrected for interior intervals. -/
 theorem rank_regionalReplacementMatrix_le_sq_add_three {m : ℕ}
     (h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (hq : 1 ≤ q)
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b k : ℕ) :
-    operatorSchmidtRank (Entropy.cutOperator (interval L 0 k)
+    operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k)
       (regionalReplacementMatrix (bondTermExtension h) (evenBonds a b) (oddBonds a b) m)) ≤
       q ^ 2 + 3 :=
   rank_regionalReplacementMatrix_nat_le_sq_add_three hq (bondTermExtension_supported hh)
@@ -586,9 +597,9 @@ theorem rank_regionalReplacementMatrix_le_sq_add_three {m : ℕ}
 ALVV, Theorem 5.14(2), with the boundary-region scope stated explicitly. -/
 theorem rank_regionalReplacementMatrix_le_sq_add_two_of_boundary {m : ℕ}
     (h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (hq : 1 ≤ q)
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b k : ℕ) (hboundary : a = 0 ∨ m ≤ b) :
-    operatorSchmidtRank (Entropy.cutOperator (interval L 0 k)
+    operatorSchmidtRank (ManyBody.cutOperator (interval L 0 k)
       (regionalReplacementMatrix (bondTermExtension h) (evenBonds a b) (oddBonds a b) m)) ≤
       q ^ 2 + 2 :=
   rank_regionalReplacementMatrix_nat_le_sq_add_two_of_boundary hq

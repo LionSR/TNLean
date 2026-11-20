@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.NormalizedVariableTruncation
-import QICLean.Analysis.ViableSubspaceEntropy
+import QICLean.Entropy.ViableSampling.ViableSubspaceEntropy
 import QICLean.Channel.MaximalOverlap
 
 /-!
@@ -44,17 +44,17 @@ theorem one_sub_regional_kyFanNorm_le_twice_error
     (ψ φ : EuclideanSpace ℂ (Fin L → Fin q)) (hφ : ‖φ‖ = 1)
     (delta : ℝ) (hdelta1 : delta ≤ 1) (D : ℕ) :
     let beta := fun _ : Fin L ↦ Fin q
-    let tau := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-    let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration beta Jᶜ) ℂ).tensorProduct
-      (EuclideanSpace.basisFun (FiniteProduct.Configuration beta J) ℂ)).repr
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
     let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ))
-      (EuclideanSpace ℂ (FiniteProduct.Configuration beta J)))
+      (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+      (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
     let e := Tm.trans (Submodule.euclideanTensorEquiv (J → Fin q) (↥(Jᶜ) → Fin q)).symm
     Matrix.schmidtRank (WithLp.ofLp (e φ)) ≤ D →
     1 - delta ≤ ‖⟪φ, ψ⟫_ℂ‖ →
-    1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) J ψ).kyFanNorm D ≤
+    1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) J ψ).kyFanNorm D ≤
       2 * delta := by
   intro beta tau U Phi Tm e hrank hoverlap
   have hφe : ‖e φ‖ = 1 := by simpa only [LinearIsometryEquiv.norm_map] using hφ
@@ -63,10 +63,10 @@ theorem one_sub_regional_kyFanNorm_le_twice_error
   have hmass := Matrix.normSq_inner_le_kyFanNorm (e ψ) (e φ) hφe D hrank
   rw [hinner] at hmass
   have hactual : Matrix.schmidtCoeffMatrix (WithLp.ofLp (e ψ)) *
-      (Matrix.schmidtCoeffMatrix (WithLp.ofLp (e ψ)))ᴴ = Entropy.regionState J ψ :=
+      (Matrix.schmidtCoeffMatrix (WithLp.ofLp (e ψ)))ᴴ = ManyBody.regionState ψ J :=
     (Submodule.actualRegionSplit_marginal_and_entropy (n := fun _ : Fin L ↦ q) J ψ).1
   have hmass' : ‖⟪φ, ψ⟫_ℂ‖ ^ 2 ≤
-      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) J ψ).kyFanNorm D := by
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q) J ψ).kyFanNorm D := by
     simpa only [hactual] using hmass
   have hsquare := pow_le_pow_left₀ (by linarith only [hdelta1] : 0 ≤ 1 - delta) hoverlap 2
   nlinarith only [hsquare, hmass', sq_nonneg delta]
@@ -79,7 +79,7 @@ theorem exists_unit_mps_of_uniform_prefix_mass
     {L q : ℕ} (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1)
     (D : ℕ) (delta : ℝ) (hdelta : 0 < delta) (hdelta1 : delta ≤ 1)
     (htail : ∀ k ∈ Finset.Ico 1 L,
-      1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (leftBlock L k) ψ).kyFanNorm D ≤ delta / (8 * ((L : ℝ) + 1))) :
     ∃ Φ : EuclideanSpace ℂ (Fin L → Fin q), ‖Φ‖ = 1 ∧
       IsOpenMPS L q D (fun x ↦ Φ x) ∧ 1 - delta ≤ ‖⟪Φ, ψ⟫_ℂ‖ ∧
@@ -89,7 +89,7 @@ theorem exists_unit_mps_of_uniform_prefix_mass
   have hcard : ((Finset.Ico 1 L).card : ℝ) ≤ (L : ℝ) + 1 := by
     exact_mod_cast (show (Finset.Ico 1 L).card ≤ L + 1 by rw [Nat.card_Ico]; omega)
   have hsum : (∑ k ∈ Finset.Ico 1 L,
-      (1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      (1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (leftBlock L k) ψ).kyFanNorm D)) ≤ delta / 8 := by
     calc
       _ ≤ (Finset.Ico 1 L).card • (delta / (8 * ((L : ℝ) + 1))) :=

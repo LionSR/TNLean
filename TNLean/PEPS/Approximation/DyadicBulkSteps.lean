@@ -67,7 +67,7 @@ private theorem mutualInformation_le_of_isAngularScale
     (hn : D * Real.log L ≤ n) (hnL : n ≤ A₀ * L)
     (hdiam : ∀ x ∈ T, ∀ y ∈ T, dist (pos x) (pos y) ≤ A₀ * n)
     (hsep : AngularSeparation (pos '' T) (pos '' E) n (D * Real.log L) a V) :
-    FiniteProduct.mutualInformation (fun _ : SquareLatticeVertex L L ↦ Fin q) Ω T E ≤
+    ManyBody.regionMutualInformation Ω T E ≤
       (L : ℝ) ^ (-60 : ℤ) := by
   simpa using hD L hL Ω hΩ pos c hpos V hV T E hTE n hn hnL hdiam hsep
 

@@ -125,21 +125,21 @@ noncomputable def threeRegionFamily (h : Fin m → Matrix (Fin L → Fin q) (Fin
 
 /-- A regional term is supported on any set containing the supports of its bonds. -/
 theorem regionTermMatrix_supported {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hq : 1 ≤ q)
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
     (x y m : ℕ) (D : Finset (Fin L))
     (hD : ∀ i, x ≤ i → i < y → interval L i (i + 2) ⊆ D) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (regionTermMatrix h x y m) D := by
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (regionTermMatrix h x y m) D := by
   change _ ∈ ManyBody.supportedOperators _ _
-  have hE := regionalProjectionMatrix_supported hq hh (evenBonds x y) m D fun i _ hi ↦ by
+  have hE := regionalProjectionMatrix_supported hh (evenBonds x y) m D fun i _ hi ↦ by
     obtain ⟨hi, -⟩ := Finset.mem_filter.mp hi
     exact hD i (Finset.mem_Ico.mp hi).1 (Finset.mem_Ico.mp hi).2
-  have hO := regionalProjectionMatrix_supported hq hh (oddBonds x y) m D fun i _ hi ↦ by
+  have hO := regionalProjectionMatrix_supported hh (oddBonds x y) m D fun i _ hi ↦ by
     obtain ⟨hi, -⟩ := Finset.mem_filter.mp hi
     exact hD i (Finset.mem_Ico.mp hi).1 (Finset.mem_Ico.mp hi).2
   change _ ∈ ManyBody.supportedOperators _ _
   exact add_mem
-    (sub_mem (Entropy.isSupportedOn_one D) hE) (sub_mem (Entropy.isSupportedOn_one D) hO)
+    (sub_mem (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) D)) hE)
+        (sub_mem (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) D)) hO)
 
 private theorem interval_edge_subset {x y i : ℕ} (hx : x ≤ i) (hy : i + 2 ≤ y ∨ L ≤ y) :
     interval L i (i + 2) ⊆ interval L x y := by
@@ -151,8 +151,7 @@ private theorem interval_edge_subset {x y i : ℕ} (hx : x ≤ i) (hy : i + 2 �
 /-- The supports of the three-region family, in the form required by the two-window rank
 bounds. ALVV, arXiv:1602.08828v2, `eq:H-mid-cut`, lines 813–821. -/
 theorem threeRegionFamily_supported {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hq : 1 ≤ q)
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
     (a b ℓ : ℕ) :
     (∀ r, threeRegionFamily h a b ℓ
         (Sum.inl (Sum.inl r)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q)
@@ -169,7 +168,7 @@ theorem threeRegionFamily_supported {h : Fin m → Matrix (Fin L → Fin q) (Fin
   have hext := bondTermExtension_supported hh
   refine ⟨fun r ↦ (hext _),
     fun r ↦ (hext _), ?_, ?_, ?_⟩ <;>
-  refine (regionTermMatrix_supported hq hext _ _ m _ fun i hx hy ↦ interval_edge_subset hx ?_) <;>
+  refine (regionTermMatrix_supported hext _ _ m _ fun i hx hy ↦ interval_edge_subset hx ?_) <;>
   omega
 
 /-- The matrix regional term is the operator regional term. -/
@@ -204,11 +203,11 @@ theorem toEuclideanCLM_threeRegion (h : Fin m → Matrix (Fin L → Fin q) (Fin 
 
 /-- Two bonds of the same parity commute. -/
 theorem commute_chainTerm_of_mod_two_eq
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {i j : ℕ} (hij : i % 2 = j % 2) :
     Commute (chainTerm h i) (chainTerm h j) :=
-  chainTerm_commute_of_not_adjacent hq hsupp i j (by omega) (by omega)
+  chainTerm_commute_of_not_adjacent hsupp i j (by omega) (by omega)
 
 /-- The even bonds of a region have even index. -/
 theorem mod_two_eq_zero_of_mem_evenBonds {x y i : ℕ} (hi : i ∈ evenBonds x y) : i % 2 = 0 :=
@@ -221,13 +220,13 @@ theorem mod_two_eq_one_of_mem_oddBonds {x y i : ℕ} (hi : i ∈ oddBonds x y) :
 
 /-- A regional product over bonds of one parity is an orthogonal projection. -/
 theorem isStarProjection_regionalProjection_chainTerm
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {s : Finset ℕ} {c : ℕ} (hs : ∀ i ∈ s, i % 2 = c) :
     IsStarProjection (regionalProjection (chainTerm h) s m) :=
   isStarProjection_regionalProjection (isStarProjection_chainTerm hh) s
-    (fun i hi j hj ↦ commute_chainTerm_of_mod_two_eq hq hsupp ((hs i hi).trans (hs j hj).symm)) m
+    (fun i hi j hj ↦ commute_chainTerm_of_mod_two_eq hsupp ((hs i hi).trans (hs j hj).symm)) m
 
 /-- The even bonds of the three regions. -/
 def evenRegionBonds (a b ℓ m : ℕ) : Finset ℕ :=
@@ -274,9 +273,9 @@ private theorem sum_restrictedTerm_windows {E : Type*} [NormedAddCommGroup E]
 /-- The three regional projectors of one parity dominate the collapsed projector of their
 union. -/
 private theorem re_inner_collapsed_le
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (c : ℕ) {s₁ s₂ s₃ : Finset ℕ}
     (h₁ : ∀ i ∈ s₁, i % 2 = c) (h₂ : ∀ i ∈ s₂, i % 2 = c) (h₃ : ∀ i ∈ s₃, i % 2 = c)
     (d₁₂ : Disjoint s₁ s₂) (d₁₃ : Disjoint s₁ s₃) (d₂₃ : Disjoint s₂ s₃)
@@ -287,7 +286,7 @@ private theorem re_inner_collapsed_le
           RCLike.re ⟪x, (1 - regionalProjection (chainTerm h) s₃ m) x⟫_ℂ := by
   have hc (t : Finset ℕ) (ht : ∀ i ∈ t, i % 2 = c) :
       ∀ i ∈ t, ∀ j ∈ t, Commute (chainTerm h i) (chainTerm h j) := fun i hi j hj ↦
-    commute_chainTerm_of_mod_two_eq hq hsupp ((ht i hi).trans (ht j hj).symm)
+    commute_chainTerm_of_mod_two_eq hsupp ((ht i hi).trans (ht j hj).symm)
   have hpar {t u : Finset ℕ} (ht : ∀ i ∈ t, i % 2 = c) (hu : ∀ i ∈ u, i % 2 = c) :
       ∀ i ∈ t ∪ u, i % 2 = c := by
     intro i hi
@@ -328,9 +327,9 @@ space of the original chain, the quadratic form of the replacement is at least
 `γ / (3 (γ + 4))`, the constant of the one-region theorem. ALVV, arXiv:1602.08828v2, proof of
 Theorem `t:aisff`, lines 1597–1599, from Theorem 5.14(3), lines 1541–1570. -/
 theorem threeRegion_gap
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) {γ : ℝ} (hγ : 0 < γ)
     (hgap : ∀ y ∈ (LinearMap.ker (chainOperator h).toLinearMap)ᗮ,
       γ * ‖y‖ ^ 2 ≤ Complex.re ⟪y, chainOperator h y⟫_ℂ)
@@ -348,16 +347,16 @@ theorem threeRegion_gap
     intro i hi
     simp only [oddRegionBonds, oddBonds, Finset.mem_union, Finset.mem_filter] at hi
     omega
-  have hunion := parityReplacement_gap hq hh hsupp hγ hgap heven hodd hx hxperp
+  have hunion := parityReplacement_gap hh hsupp hγ hgap heven hodd hx hxperp
   refine hunion.trans ?_
-  have hE := re_inner_collapsed_le hq hh hsupp 0
+  have hE := re_inner_collapsed_le hh hsupp 0
     (s₁ := evenBonds 0 a) (s₂ := evenBonds (a + 2 * ℓ) b) (s₃ := evenBonds (b + 2 * ℓ) m)
     (fun _ ↦ mod_two_eq_zero_of_mem_evenBonds) (fun _ ↦ mod_two_eq_zero_of_mem_evenBonds)
     (fun _ ↦ mod_two_eq_zero_of_mem_evenBonds)
     (disjoint_bonds (by omega) _ _ (evenBonds_subset _ _) (evenBonds_subset _ _))
     (disjoint_bonds (by omega) _ _ (evenBonds_subset _ _) (evenBonds_subset _ _))
     (disjoint_bonds (by omega) _ _ (evenBonds_subset _ _) (evenBonds_subset _ _)) x
-  have hO := re_inner_collapsed_le hq hh hsupp 1
+  have hO := re_inner_collapsed_le hh hsupp 1
     (s₁ := oddBonds 0 a) (s₂ := oddBonds (a + 2 * ℓ) b) (s₃ := oddBonds (b + 2 * ℓ) m)
     (fun _ ↦ mod_two_eq_one_of_mem_oddBonds) (fun _ ↦ mod_two_eq_one_of_mem_oddBonds)
     (fun _ ↦ mod_two_eq_one_of_mem_oddBonds)
@@ -374,9 +373,9 @@ theorem threeRegion_gap
 
 /-- Every member of the three-region family is a positive operator. -/
 theorem isPositive_toEuclideanCLM_threeRegionFamily
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b ℓ : ℕ) (α : (Fin (2 * ℓ) ⊕ Fin (2 * ℓ)) ⊕ Fin 3) :
     ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
       (threeRegionFamily h a b ℓ α)).IsPositive := by
@@ -384,7 +383,7 @@ theorem isPositive_toEuclideanCLM_threeRegionFamily
   have hlayer (s : Finset ℕ) (c : ℕ) (hs : ∀ i ∈ s, i % 2 = c) :
       (1 - regionalProjection (chainTerm h) s m).IsPositive :=
     IsPositive.of_isStarProjection
-      (isStarProjection_regionalProjection_chainTerm hq hh hsupp hs).one_sub
+      (isStarProjection_regionalProjection_chainTerm hh hsupp hs).one_sub
   have hreg (x y : ℕ) : ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
       (regionTermMatrix (bondTermExtension h) x y m)).IsPositive := by
     rw [toEuclideanCLM_regionTermMatrix]
@@ -397,23 +396,23 @@ theorem isPositive_toEuclideanCLM_threeRegionFamily
 
 /-- The three-region replacement is a positive operator. -/
 theorem isPositive_toEuclideanCLM_threeRegion
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b ℓ : ℕ) :
     ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
       (∑ α, threeRegionFamily h a b ℓ α)).IsPositive := by
   rw [map_sum]
   exact isPositive_sum _ fun α _ ↦
-    isPositive_toEuclideanCLM_threeRegionFamily hq hh hsupp a b ℓ α
+    isPositive_toEuclideanCLM_threeRegionFamily hh hsupp a b ℓ α
 
 /-- **Kernel of the three-region replacement.** A vector is annihilated by the replacement
 exactly when it is annihilated by every original term. ALVV, arXiv:1602.08828v2, proof of
 Theorem `t:aisff`, line 1599, from Theorem 5.14(1). No uniqueness is used. -/
 theorem threeRegion_apply_eq_zero_iff
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b ℓ : ℕ) (x : EuclideanSpace ℂ (Fin L → Fin q)) :
     (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
         (∑ α, threeRegionFamily h a b ℓ α) x = 0 ↔ ∀ i < m, chainTerm h i x = 0 := by
@@ -423,7 +422,7 @@ theorem threeRegion_apply_eq_zero_iff
   have hlayer (s : Finset ℕ) (hs : ∀ i ∈ s, ∀ j ∈ s, i % 2 = j % 2) :
       IsStarProjection (1 - regionalProjection (chainTerm h) s m) :=
     (isStarProjection_regionalProjection hproj s
-      (fun i hi j hj ↦ commute_chainTerm_of_mod_two_eq hq hsupp (hs i hi j hj)) m).one_sub
+      (fun i hi j hj ↦ commute_chainTerm_of_mod_two_eq hsupp (hs i hi j hj)) m).one_sub
   have heven (x y : ℕ) : ∀ i ∈ evenBonds x y, ∀ j ∈ evenBonds x y, i % 2 = j % 2 := by
     intro i hi j hj
     rw [(Finset.mem_filter.mp hi).2, (Finset.mem_filter.mp hj).2]
@@ -438,7 +437,7 @@ theorem threeRegion_apply_eq_zero_iff
           (1 - regionalProjection (chainTerm h) (oddBonds x y) m) :=
     toEuclideanCLM_regionTermMatrix _ x y m
   have hpos : ∀ α, (C (threeRegionFamily h a b ℓ α)).toLinearMap.IsPositive := fun α ↦
-    (isPositive_toEuclideanCLM_threeRegionFamily hq hh hsupp a b ℓ α).toLinearMap
+    (isPositive_toEuclideanCLM_threeRegionFamily hh hsupp a b ℓ α).toLinearMap
   have hsum := WeightedPositiveKernel.apply_sum_eq_zero_iff hpos x
   simp only [LinearMap.sum_apply, ContinuousLinearMap.coe_coe] at hsum
   have hsumx : C (∑ α, threeRegionFamily h a b ℓ α) x =
@@ -466,9 +465,9 @@ theorem threeRegion_apply_eq_zero_iff
       · rintro ⟨h1, h2⟩
         rw [_root_.add_apply, h1, h2, add_zero]
     rw [hsplit, sub_regionalProjection_apply_eq_zero_iff hproj _
-        (fun i hi j hj ↦ commute_chainTerm_of_mod_two_eq hq hsupp (heven _ _ i hi j hj)),
+        (fun i hi j hj ↦ commute_chainTerm_of_mod_two_eq hsupp (heven _ _ i hi j hj)),
       sub_regionalProjection_apply_eq_zero_iff hproj _
-        (fun i hi j hj ↦ commute_chainTerm_of_mod_two_eq hq hsupp (hodd _ _ i hi j hj))]
+        (fun i hi j hj ↦ commute_chainTerm_of_mod_two_eq hsupp (hodd _ _ i hi j hj))]
     constructor
     · rintro ⟨he, ho⟩ i hi hI
       by_cases hpar : i % 2 = 0
@@ -511,30 +510,30 @@ theorem threeRegion_apply_eq_zero_iff
 
 /-- The three-region replacement has the same kernel as the original chain. -/
 theorem ker_threeRegion
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b ℓ : ℕ) :
     LinearMap.ker ((Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q))
         (∑ α, threeRegionFamily h a b ℓ α)).toLinearMap =
       LinearMap.ker (chainOperator h).toLinearMap := by
   ext x
-  exact (threeRegion_apply_eq_zero_iff hq hh hsupp a b ℓ x).trans
+  exact (threeRegion_apply_eq_zero_iff hh hsupp a b ℓ x).trans
     (chainOperator_apply_eq_zero_iff hh x).symm
 
 /-- **Norm of the three-region replacement.** It is a sum of `4 ℓ + 6` projections. The proof of
 ALVV, arXiv:1602.08828v2, Theorem `t:aisff`, line 1599, asserts norm `O(1)`; the windows are not
 truncated, and the norm can equal `4 ℓ + 6`. -/
 theorem norm_threeRegion_le
-    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hq : 1 ≤ q)
+    {h : Fin m → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hh : ∀ i, IsStarProjection (h i))
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (a b ℓ : ℕ) :
     ‖∑ α, threeRegionFamily h a b ℓ α‖ ≤ 4 * ℓ + 6 := by
   have hproj := isStarProjection_chainTerm hh
-  have hE (x y : ℕ) := (isStarProjection_regionalProjection_chainTerm hq hh hsupp
+  have hE (x y : ℕ) := (isStarProjection_regionalProjection_chainTerm hh hsupp
     (s := evenBonds x y) fun _ hi ↦ mod_two_eq_zero_of_mem_evenBonds hi).one_sub.norm_le
-  have hO (x y : ℕ) := (isStarProjection_regionalProjection_chainTerm hq hh hsupp
+  have hO (x y : ℕ) := (isStarProjection_regionalProjection_chainTerm hh hsupp
     (s := oddBonds x y) fun _ hi ↦ mod_two_eq_one_of_mem_oddBonds hi).one_sub.norm_le
   have hreg (x y : ℕ) : ‖(1 - regionalProjection (chainTerm h) (evenBonds x y) m) +
       (1 - regionalProjection (chainTerm h) (oddBonds x y) m)‖ ≤ 2 :=
@@ -553,13 +552,13 @@ theorem norm_threeRegion_le
 
 private theorem operatorSchmidtRank_cutOperator_sub_le (B : Finset (Fin L))
     (X Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) :
-    operatorSchmidtRank (Entropy.cutOperator B (X - Y)) ≤
-      operatorSchmidtRank (Entropy.cutOperator B X) +
-        operatorSchmidtRank (Entropy.cutOperator B Y) := by
-  have hneg : operatorSchmidtRank (Entropy.cutOperator B (-Y)) ≤
-      operatorSchmidtRank (Entropy.cutOperator B Y) := by
-    simpa only [Entropy.cutOperator, reindex_apply, Matrix.submatrix_neg, Pi.neg_apply,
-      neg_one_smul] using operatorSchmidtRank_smul_le (-1 : ℂ) (Entropy.cutOperator B Y)
+    operatorSchmidtRank (ManyBody.cutOperator B (X - Y)) ≤
+      operatorSchmidtRank (ManyBody.cutOperator B X) +
+        operatorSchmidtRank (ManyBody.cutOperator B Y) := by
+  have hneg : operatorSchmidtRank (ManyBody.cutOperator B (-Y)) ≤
+      operatorSchmidtRank (ManyBody.cutOperator B Y) := by
+    simpa only [ManyBody.cutOperator, reindex_apply, Matrix.submatrix_neg, Pi.neg_apply,
+      neg_one_smul] using operatorSchmidtRank_smul_le (-1 : ℂ) (ManyBody.cutOperator B Y)
   rw [sub_eq_add_neg]
   exact (operatorSchmidtRank_add_le _ _).trans (Nat.add_le_add_left hneg _)
 
@@ -569,7 +568,7 @@ the other layer `1`, and the identity `1`. Supporting ALVV, arXiv:1602.08828v2, 
 `thm:FF-tH`(2), lines 1555–1562, and the proof of Theorem `t:aisff`, line 1606. -/
 theorem rank_regionTermMatrix_le {h : ℕ → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hq : 1 ≤ q)
-    (hh : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
+    (hh : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
     (x y m c : ℕ) :
     operatorSchmidtRank ((regionTermMatrix h x y m).reindex
       (TNLean.Lattice.sheetSplit q (interval L 0 c))
@@ -580,12 +579,13 @@ theorem rank_regionTermMatrix_le {h : ℕ → Matrix (Fin L → Fin q) (Fin L �
     unfold regionTermMatrix
     abel
   rw [hdecomp]
-  have hone : operatorSchmidtRank (Entropy.cutOperator (interval L 0 c)
+  have hone : operatorSchmidtRank (ManyBody.cutOperator (interval L 0 c)
       ((1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) + 1)) ≤ 1 :=
-    Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one
+    ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one
       ((Subalgebra.toSubmodule
           (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) ∅).toSubalgebra).add_mem
-        (Entropy.isSupportedOn_one (∅ : Finset (Fin L))) (Entropy.isSupportedOn_one _))
+        (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) (∅ : Finset (Fin L))))
+            (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)))
         (Or.inl (Finset.empty_subset _))
   have hsq (s : Finset ℕ) := rank_regionalProjectionMatrix_le_sq hq hh s m c
   refine (operatorSchmidtRank_cutOperator_sub_le _ _ _).trans ?_

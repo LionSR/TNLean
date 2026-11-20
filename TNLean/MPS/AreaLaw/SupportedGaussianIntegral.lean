@@ -121,9 +121,9 @@ theorem exists_supported_gaussian_integral_graphNeighborhood
       ‖ManyBody.heisenbergEvolution K' t W -
         ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t W)‖ ≤
           ‖W‖ * a * n ^ 2 * Real.exp (v * T - ℓ / 2) := by
-    have hloc := norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_two
-      G Y hDiam hCard hSphere Φ.term hHerm Φ.mem b₀ hBudget Q
-      hW ℓ t
+    have hloc :=
+      ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_two
+        G Φ hHerm R hDiam hCard hSphere b₀ hBudget Q hW ℓ t
     have hc : (Q.card : ℝ) ≤ n := by
       change (Q.card : ℝ) ≤ (Fintype.card ι : ℝ)
       exact_mod_cast Finset.card_le_univ Q
@@ -169,9 +169,9 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
       ∀ (L : ℕ) (h : ChainInteraction L q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J) (D : Finset (Fin L))
         (ℓ : ℝ), 0 ≤ ℓ →
-        let K := h.doubled.hamiltonian
+        let K := h.doubledFin.hamiltonian
         let K' := (h.swappedDoubled D).hamiltonian
-        let crossing := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
+        let crossing := ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
         let Z := crossing.biUnion (fun X ↦ X.1)
         let N := fun S : Finset (Fin L) ↦
           chainNeighborhood S ℓ
@@ -214,7 +214,8 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
     (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le)
         (h.isHermitian_swappedDoubled_term hh D) b₀
     (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D))
-        (ManyBody.Interaction.isHermitian_hamiltonian (h.isHermitian_doubled_term hh)) Z ℓ
+        (ManyBody.Interaction.isHermitian_hamiltonian (Φ := h.doubledFin) fun X ↦
+          (ManyBody.Interaction.isHermitian_doubled_term (hh X)).reindex _) Z ℓ
         d hd (fun s ↦ by
       rw [hΦ, biUnion_graphBall_pathGraph_eq_chainNeighborhood Z hℓ, Fintype.card_fin]
       exact h.norm_relativeGenerator_sub_regionExpectation_le hh hhJ D hq ℓ hℓ s)
@@ -233,9 +234,9 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
       ∀ (Λ : Finset ℤ) (h : DomainInteraction Λ q R) (_ : ∀ X, (h.term X).IsHermitian)
           (_ : ∀ X, ‖h.term X‖ ≤ J)
         (D : Finset (Fin Λ.card)) (m : ℕ),
-        let K := h.doubled.hamiltonian
+        let K := h.doubledFin.hamiltonian
         let K' := (h.swappedDoubled D).hamiltonian
-        let crossing := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
+        let crossing := ManyBody.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
         let Z := crossing.biUnion (fun X ↦ X.1)
         let N := fun S : Finset (Fin Λ.card) ↦
           S.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)
@@ -278,7 +279,8 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
     (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) Φ
     (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) (h.isHermitian_swappedDoubled_term hh D) b₀
     (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D))
-        (ManyBody.Interaction.isHermitian_hamiltonian (h.isHermitian_doubled_term hh)) Z (m : ℝ)
+        (ManyBody.Interaction.isHermitian_hamiltonian (Φ := h.doubledFin) fun X ↦
+          (ManyBody.Interaction.isHermitian_doubled_term (hh X)).reindex _) Z (m : ℝ)
         d hd (fun s ↦ by
       rw [hΦ, Nat.floor_natCast, Fintype.card_fin]
       exact h.norm_relativeGenerator_sub_regionExpectation_le hh hhJ D hq m s)

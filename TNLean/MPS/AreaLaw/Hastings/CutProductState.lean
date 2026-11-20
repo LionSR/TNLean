@@ -35,8 +35,8 @@ variable {L q : ℕ}
 
 /-- The pure state of `Ω` written in the coordinates of the cut after `c` sites. -/
 noncomputable abbrev cutPureState (L q c : ℕ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :=
-  vecMulVec (WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L c) Ω))
-    (star (WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L c) Ω)))
+  vecMulVec (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L c) Ω))
+    (star (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L c) Ω)))
 
 /-- The product `ρ_{<c} ⊗ ρ_{≥c}` of the marginal of `Ω` on the sites to the left of the cut
 after `c` sites and its marginal on the remaining sites, read back on the configurations of
@@ -44,15 +44,15 @@ the whole chain through the cut decomposition of a configuration.
 Hastings, arXiv:0705.2024v4, `law16.tex` lines 427–440: the state `ρ⁰_{1,j} ⊗ ρ⁰_{j+1,N}`. -/
 noncomputable def cutProductState (L q c : ℕ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :
     Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-  reindex (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L c)).symm
-    (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L c)).symm
+  reindex (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L c)).symm
+    (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L c)).symm
     (partialTraceRight (cutPureState L q c Ω) ⊗ₖ partialTraceLeft (cutPureState L q c Ω))
 
 /-- The product of the two marginals is positive semidefinite. -/
 theorem cutProductState_posSemidef (c : ℕ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :
     (cutProductState L q c Ω).PosSemidef := by
   have h := posSemidef_vecMulVec_self_star
-    (WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L c) Ω))
+    (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L c) Ω))
   exact (h.partialTraceRight.kronecker h.partialTraceLeft).submatrix _
 
 /-- The trace of a pure-state matrix is the squared norm of the vector. -/
@@ -65,8 +65,8 @@ theorem trace_vecMulVec_self_star {m : Type*} [Fintype m] (ψ : EuclideanSpace �
 theorem trace_cutPureState (c : ℕ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :
     (cutPureState L q c Ω).trace = (‖Ω‖ : ℂ) ^ 2 := by
   have hv : cutPureState L q c Ω = (vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))).submatrix
-      (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L c)).symm
-      (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L c)).symm := by
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L c)).symm
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L c)).symm := by
     ext a b; simp [vecMulVec_apply]
   rw [hv, trace_submatrix_equiv, trace_vecMulVec_self_star]
 
@@ -87,9 +87,9 @@ theorem exists_cutProductState_decomposition (c : ℕ) {Ω : EuclideanSpace ℂ 
       (∀ i, 0 ≤ w i) ∧ (∀ i, (cutMatrix (ψ i) c).rank ≤ 1) ∧ ∑ i, w i * ‖ψ i‖ ^ 2 = 1 ∧
       ∀ A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
         (cutProductState L q c Ω * A).trace = ∑ i, w i * ⟪ψ i, toEuclideanLin A (ψ i)⟫_ℂ := by
-  set e := Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L c)
+  set e := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L c)
   have h := posSemidef_vecMulVec_self_star
-    (WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L c) Ω))
+    (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L c) Ω))
   obtain ⟨m, u, hu⟩ := posSemidef_iff_eq_sum_vecMulVec.mp h.partialTraceRight
   obtain ⟨m', v, hv⟩ := posSemidef_iff_eq_sum_vecMulVec.mp h.partialTraceLeft
   let φ : Fin m × Fin m' → EuclideanSpace ℂ (Fin L → Fin q) := fun ab ↦

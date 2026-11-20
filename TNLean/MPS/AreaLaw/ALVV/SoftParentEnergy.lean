@@ -47,7 +47,7 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
     (hq : 0 < q) (hlu : l ≤ u) (huv : u ≤ v) (hvr : v ≤ r) (hrL : r ≤ L)
     (hleft : u - l ≤ 2 * ell) (hright : r - v ≤ 2 * ell)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     let _ : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
@@ -71,7 +71,7 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
         ∃ (eSoft : ℝ) (K : Matrix (J → Fin q) (J → Fin q) ℂ)
           (w : (Fin L → Fin q) → ℂ),
           K.PosSemidef ∧ ‖K‖ ≤ budget ∧
-          R = Entropy.localLift (n := fun _ : Fin L ↦ q) J K + (eSoft : ℂ) • 1 ∧
+          R = ManyBody.place (X := fun _ ↦ Fin q) J K + (eSoft : ℂ) • 1 ∧
           star w ⬝ᵥ w = 1 ∧ R *ᵥ w = (eSoft : ℂ) • w ∧
           (R - (eSoft : ℂ) • 1).PosSemidef ∧ ‖R - (eSoft : ℂ) • 1‖ ≤ budget ∧
           ∀ T : ℝ, 48 ≤ t → 48 ≤ T →
@@ -79,7 +79,7 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
             eSoft ≤ eP ∧ eP - eSoft ≤ rho ∧
               ∀ g ∈ G,
                 (inner ℂ (toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ)
-                  (Entropy.localLift (n := fun _ : Fin L ↦ q) J K) g) g).re ≤
+                  (ManyBody.place (X := fun _ ↦ Fin q) J K) g) g).re ≤
                     (2 + rho) * ‖g‖ ^ 2 := by
   classical
   intro config H hH G J P M
@@ -135,9 +135,9 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
     dsimp only [Csoft, B, R, eSoft]
     rw [Complex.ofReal_add, add_smul]
     abel
-  have hPs : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) P J :=
+  have hPs : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) P J :=
     isSupportedOn_sum_internal_bonds L q l r h hs
-  have hMs : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) M J := by
+  have hMs : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) M J := by
     apply (isSupportedOn_sum_internal_bonds L q u v h hs).mono
     intro i hi
     simp only [J, mem_interval] at hi ⊢
@@ -155,8 +155,8 @@ theorem exists_native_soft_parent_energy_bound {L q l u v r ell : ℕ}
       (SMulMemClass.smul_mem _ hIV)) hFV) (SMulMemClass.smul_mem _ hIV))
           (SMulMemClass.smul_mem _ hIV)
   obtain ⟨K, hK, hKnorm, hLift⟩ :=
-    Entropy.IsSupportedOn.exists_posSemidef_localLift_norm_le hCV hBlow budget hnorm
-  have hRnative : R = Entropy.localLift (n := fun _ : Fin L ↦ q) J K + (eSoft : ℂ) • 1 := by
+    ManyBody.IsSupportedOn.exists_posSemidef_localLift_norm_le hCV hBlow budget hnorm
+  have hRnative : R = ManyBody.place (X := fun _ ↦ Fin q) J K + (eSoft : ℂ) • 1 := by
     rw [← hLift, hCraw]
     abel
   have hRw : R *ᵥ w = (eSoft : ℂ) • w := by

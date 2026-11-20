@@ -96,7 +96,7 @@ lines 32–35. -/
 theorem birth_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     (hTH : Disjoint T F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     {L : ℝ}
-    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (F.birthEnv P) ≤
+    (hI : ManyBody.regionMutualInformation Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
     ∃ σ : SplittingData q T (F.birthEnv P),
       σ.error (F.disjoint_birthEnv hTP hTH) Ω ≤ L ^ (-30 : ℤ) ∧
@@ -141,7 +141,7 @@ Polynomial-PEPS manuscript, Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 407–
 theorem death_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
     (hTH : Disjoint T F.outerHoles) {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     {L : ℝ}
-    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (F.birthEnv P) ≤
+    (hI : ManyBody.regionMutualInformation Ω T (F.birthEnv P) ≤
       L ^ (-60 : ℤ)) :
     ∃ σ : SplittingData q T (F.birthEnv P),
       σ.error (F.disjoint_birthEnv hTP hTH) Ω ≤ L ^ (-30 : ℤ) ∧
@@ -233,7 +233,7 @@ Hence the exchange is a bounded change in the sense of Theorem 5.2.
 Polynomial-PEPS manuscript, Lemma 6.6 `lem:exchange`, `05-frames.tex`, lines 460–479; proof
 lines 481–561; bounded changes, lines 99–105. -/
 theorem exchange_bounded [NeZero q] {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
-    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω (X.tSet P) (X.eSet P) ≤
+    (hI : ManyBody.regionMutualInformation Ω (X.tSet P) (X.eSet P) ≤
       L ^ (-60 : ℤ)) :
     ∃ σ : SplittingData q (X.tSet P) (X.eSet P),
       σ.error (X.disjoint_tSet_eSet P) Ω ≤ L ^ (-30 : ℤ) ∧
@@ -303,7 +303,7 @@ theorem exchange_ofFrames_bounded [NeZero q] (F₁ F₂ : Frame pos q Party) (Y 
     (hout : ∀ h ∈ F₁.holes ++ F₂.holes, out h = true → Disjoint h.patch.outer Y)
     (hin : ∀ h ∈ F₁.holes ++ F₂.holes, out h = false → h.patch.outer ⊆ Y) (P : Party)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L : ℝ}
-    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω
+    (hI : ManyBody.regionMutualInformation Ω
       ((ofFrames F₁ F₂ Y out hout hin).tSet P) ((ofFrames F₁ F₂ Y out hout hin).eSet P) ≤
         L ^ (-60 : ℤ)) :
     ∃ (e₁ : TagSpace F₁.holes ≃ TagSpace (ofFrames F₁ F₂ Y out hout hin).frame₁.holes)

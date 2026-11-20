@@ -79,7 +79,7 @@ lines 80–94. Polynomial-PEPS manuscript, Lemma 6.5, `05-frames.tex`, lines 396
 `p = 30`. -/
 theorem birth_bounded (hTP : ∀ x ∈ T, S.owner x = P) {Ω : EuclideanSpace ℂ (ι → Fin q)}
     (hΩ : ‖Ω‖ = 1) {L p : ℝ} (hL : 0 ≤ L)
-    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (S.birthEnv P) ≤
+    (hI : ManyBody.regionMutualInformation Ω T (S.birthEnv P) ≤
       L ^ (-(2 * p))) :
     ∃ σ : SplittingData q T (S.birthEnv P),
       σ.error (S.disjoint_birthEnv hTP) Ω ≤ L ^ (-p) ∧
@@ -118,7 +118,7 @@ lines 91–93. Polynomial-PEPS manuscript, Lemma 6.5, `05-frames.tex`, lines 407
 439–446. -/
 theorem death_bounded (hTP : ∀ x ∈ T, S.owner x = P) {Ω : EuclideanSpace ℂ (ι → Fin q)}
     (hΩ : ‖Ω‖ = 1) {L p : ℝ} (hL : 0 ≤ L)
-    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω T (S.birthEnv P) ≤
+    (hI : ManyBody.regionMutualInformation Ω T (S.birthEnv P) ≤
       L ^ (-(2 * p))) :
     ∃ σ : SplittingData q T (S.birthEnv P),
       σ.error (S.disjoint_birthEnv hTP) Ω ≤ L ^ (-p) ∧
@@ -207,7 +207,7 @@ lines 125–158. Polynomial-PEPS manuscript, Lemma 6.6, `05-frames.tex`, lines 4
 with `p = 30`. -/
 theorem exchange_bounded {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1) {L p : ℝ}
     (hL : 0 ≤ L)
-    (hI : FiniteProduct.mutualInformation (fun _ : ι => Fin q) Ω (tSet S₁ S₂ Y P)
+    (hI : ManyBody.regionMutualInformation Ω (tSet S₁ S₂ Y P)
       (eSet S₁ S₂ Y P) ≤ L ^ (-(2 * p))) :
     ∃ σ : SplittingData q (tSet S₁ S₂ Y P) (eSet S₁ S₂ Y P),
       σ.error (disjoint_tSet_eSet S₁ S₂ Y P) Ω ≤ L ^ (-p) ∧

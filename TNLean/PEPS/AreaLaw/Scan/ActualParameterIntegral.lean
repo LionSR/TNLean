@@ -20,8 +20,6 @@ construct scanner leaf measures, the other scanner fields, or a physical common 
 
 open scoped BigOperators
 open TensorPower TensorPower.ReplicaTransport MeasureTheory
-open Entropy (SiteConfig)
-
 noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -39,7 +37,7 @@ theorem aestronglyMeasurable_actualChargeEntropyDefect
       (volume.restrict (Set.Ioo 0 1)) := by
   classical
   let D := S.actualChargeData hm hM k
-  let F (h : History S.K S.m S.M k) (θ : SiteConfig n → ℂ) :=
+  let F (h : History S.K S.m S.M k) (θ : (∀ v, Fin (n v)) → ℂ) :=
     ∑ i, D.splitEta E i ⟨h, none⟩ ((EuclideanSpace.equiv _ ℂ).symm θ)
   have hF (h : History S.K S.m S.M k) : Continuous (F h) :=
     continuous_finsetSum _ fun i _ => D.continuous_splitEta n E i _
@@ -58,7 +56,7 @@ theorem intervalIntegrable_actualChargeEntropyDefect
     IntervalIntegrable (S.actualChargeEntropyDefect hm hM k n E t r pre) volume 0 1 := by
   classical
   let D := S.actualChargeData hm hM k
-  let F (h : History S.K S.m S.M k) (θ : SiteConfig n → ℂ) :=
+  let F (h : History S.K S.m S.M k) (θ : (∀ v, Fin (n v)) → ℂ) :=
     ∑ i, D.splitEta E i ⟨h, none⟩ ((EuclideanSpace.equiv _ ℂ).symm θ)
   have hF (h : History S.K S.m S.M k) : Continuous (F h) :=
     continuous_finsetSum _ fun i _ => D.continuous_splitEta n E i _

@@ -53,7 +53,7 @@ theorem exists_native_soft_word_compressed_energy_estimate
     (hleft : u - l ≤ 2 * ell) (hright : r - v ≤ 2 * ell)
     (hell : 21 ≤ ell) (hD : 2 ≤ D) (hcount : 50 * ell ^ 2 ≤ D) (hsample : 1 ≤ s)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (T : Submodule ℂ (EuclideanSpace ℂ (Fin L → Fin q)))
@@ -84,9 +84,9 @@ theorem exists_native_soft_word_compressed_energy_estimate
     let M := ∑ i ∈ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v), h i
     let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
-    let y0 := ((Entropy.cutEquiv (fun _ : Fin L ↦ q) J) sigma0).2
+    let y0 := ((ManyBody.cutEquiv (fun _ ↦ Fin q) J) sigma0).2
     let native := fun x : J → Fin q ↦
-      (Entropy.cutEquiv (fun _ : Fin L ↦ q) J).symm (x, y0)
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) J).symm (x, y0)
     0 ≤ rho ∧ rho < 1 / 16 ∧
     ∃ (eP eM : ℝ) (xP xM : (Fin L → Fin q) → ℂ),
       star xP ⬝ᵥ xP = 1 ∧ P *ᵥ xP = (eP : ℂ) • xP ∧
@@ -98,7 +98,7 @@ theorem exists_native_soft_word_compressed_energy_estimate
           cfc (Real.softTruncation 768 12) (M - (p : ℂ) • 1)
         let Kraw := R.submatrix native native
         Kraw.IsHermitian ∧ ∃ (eSoft : ℝ) (w : (Fin L → Fin q) → ℂ),
-          R = Entropy.localLift (n := fun _ : Fin L ↦ q) J Kraw ∧
+          R = ManyBody.place (X := fun _ ↦ Fin q) J Kraw ∧
           star w ⬝ᵥ w = 1 ∧ R *ᵥ w = (eSoft : ℂ) • w ∧
           (Kraw - (eSoft : ℂ) • 1).PosSemidef ∧
           eSoft ≤ eP ∧ eP - eSoft ≤ rho ∧
@@ -162,23 +162,23 @@ theorem exists_native_soft_word_compressed_energy_estimate
       linarith only [hnorm.2]
     exact hCnorm.trans hbudget
   have hCeq : R - (eSoft : ℂ) • 1 =
-      Entropy.localLift (n := fun _ : Fin L ↦ q) J K := sub_eq_iff_eq_add.mpr hR
+      ManyBody.place (X := fun _ ↦ Fin q) J K := sub_eq_iff_eq_add.mpr hR
   have hGenergyC : ∀ g ∈ G,
       RCLike.re (inner ℂ (toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
         (R - (eSoft : ℂ) • 1) g) g) ≤ (2 + rho) * ‖g‖ ^ 2 := by
     intro g hg
     rw [hCeq]
     exact hGenergy g hg
-  have hRnative : R = Entropy.localLift (n := fun _ : Fin L ↦ q) J
+  have hRnative : R = ManyBody.place (X := fun _ ↦ Fin q) J
       (K + (eSoft : ℂ) • 1) := by
-    rw [Entropy.localLift_add, Entropy.localLift_smul, Entropy.localLift_one]
+    rw [ManyBody.place_add, ManyBody.place_smul, ManyBody.place_one]
     exact hR
   have hNative : Kraw = K + (eSoft : ℂ) • 1 := by
     ext x y
-    change Entropy.cutOperator J R (x, y0) (y, y0) = _
-    rw [hRnative, Entropy.cutOperator_localLift]
+    change ManyBody.cutOperator J R (x, y0) (y, y0) = _
+    rw [hRnative, ManyBody.cutOperator_place]
     simp
-  have hRawLift : R = Entropy.localLift (n := fun _ : Fin L ↦ q) J Kraw := by
+  have hRawLift : R = ManyBody.place (X := fun _ ↦ Fin q) J Kraw := by
     rw [hNative]
     exact hRnative
   have hRawLower : (Kraw - (eSoft : ℂ) • 1).PosSemidef := by
@@ -239,7 +239,7 @@ theorem exists_native_soft_word_compressed_energy_estimate
           EuclideanSpace ℂ (↥(Jᶜ) → Fin q)) (coords z) := by
     have hh := congrArg (fun f ↦ f (coords z)) hConj
     change coords (toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-      (Entropy.localLift (n := fun _ : Fin L ↦ q) J Kraw) (coords.symm (coords z))) = _ at hh
+      (ManyBody.place (X := fun _ ↦ Fin q) J Kraw) (coords.symm (coords z))) = _ at hh
     rw [coords.symm_apply_apply, ← hRawLift] at hh
     exact hh
   have hTensorEnergy : (inner ℂ

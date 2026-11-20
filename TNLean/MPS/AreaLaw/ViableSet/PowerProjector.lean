@@ -42,9 +42,6 @@ sites, so the spectral statements and the expansion take `0 < L`, the source's c
 
 ## Main definitions
 
-* `TNLean.MPS.AreaLaw.bondSupport`: the support `{i, i + 1}` of bond `i`.
-* `ManyBody.ChainInteraction.ofBonds`: a family of bond terms as a range-one chain
-  Hamiltonian, so that the viable-set results apply to it.
 * `TNLean.MPS.AreaLaw.paddedBond`, `TNLean.MPS.AreaLaw.bondComplement`,
   `TNLean.MPS.AreaLaw.bondComplementWord`: the bond terms padded by `H_{L-1} = 0`, the letters
   `P_i = 1 - H_i` and the words `P_I`.
@@ -79,95 +76,6 @@ open ManyBody (IsGapped groundSpace)
 namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}
-
-/-! ### Bond terms as a range-one chain Hamiltonian -/
-
-/-- The support `{i, i + 1}` of the bond `i` of the chain of `L` sites. -/
-def bondSupport (i : Fin (L - 1)) : ChainSupport L 1 :=
-  ⟨interval L i (i + 2), ⟨⟨i, by omega⟩, mem_interval.mpr ⟨le_rfl, by simp⟩⟩,
-    fun x hx y hy ↦ by
-      rw [mem_interval] at hx hy
-      omega⟩
-
-/-- Distinct bonds have distinct supports. -/
-theorem bondSupport_injective : Function.Injective (bondSupport (L := L)) := by
-  intro i j hij
-  have hi : (⟨i, by omega⟩ : Fin L) ∈ (bondSupport j).1 := by
-    rw [← hij]
-    exact mem_interval.mpr ⟨le_rfl, by simp⟩
-  have hj : (⟨j, by omega⟩ : Fin L) ∈ (bondSupport i).1 := by
-    rw [hij]
-    exact mem_interval.mpr ⟨le_rfl, by simp⟩
-  simp only [bondSupport, mem_interval] at hi hj
-  exact Fin.ext (by omega)
-
-/-- A sum of positive semidefinite bond terms selected by their support is positive
-semidefinite; these sums are the terms of `ManyBody.ChainInteraction.ofBonds`. -/
-private theorem posSemidef_sum_bondSupport_ite
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (h0 : ∀ i, (h i).PosSemidef) (X : ChainSupport L 1) :
-    (∑ i, if bondSupport i = X then h i else 0).PosSemidef :=
-  posSemidef_sum _ fun i _ ↦ by
-    split_ifs
-    exacts [h0 i, PosSemidef.zero]
-
-/-- A family of bond terms `H_i`, supported on `{i, i + 1}`, as a range-one chain interaction.
-The term at the support `{i, i + 1}` is `H_i`, and the single-site terms vanish. With
-`0 ≤ H_i ≤ 1` this is the Hamiltonian of Landau, Vazirani and Vidick, arXiv:1307.5143v1,
-`algo53.tex`, lines 209–211 and 283, of interaction norm at most one. -/
-noncomputable def _root_.ManyBody.ChainInteraction.ofBonds
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2))) :
-    ManyBody.ChainInteraction L q 1 where
-  term X := ∑ i, if bondSupport i = X then h i else 0
-  mem X := (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).sum_mem fun i _ ↦ by
-    split_ifs with hX
-    · rw [← hX]
-      exact hs i
-    · exact ⟨fun _ _ _ ↦ rfl, fun _ _ _ _ _ _ _ _ ↦ rfl⟩
-
-/-- The terms of positive semidefinite bonds are Hermitian. -/
-theorem _root_.ManyBody.ChainInteraction.isHermitian_ofBonds_term
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
-    (h0 : ∀ i, (h i).PosSemidef) (X : ChainSupport L 1) :
-    ((ManyBody.ChainInteraction.ofBonds h hs).term X).IsHermitian :=
-  (posSemidef_sum_bondSupport_ite h h0 X).isHermitian
-
-/-- The terms of bonds with `0 ≤ H_i ≤ 1` have norm at most one. -/
-theorem _root_.ManyBody.ChainInteraction.norm_ofBonds_term_le
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
-    (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1) (X : ChainSupport L 1) :
-    ‖(ManyBody.ChainInteraction.ofBonds h hs).term X‖ ≤ 1 := by
-  classical
-  let S := Finset.univ.filter fun i ↦ bondSupport i = X
-  have hcard : S.card ≤ 1 := Finset.card_le_one.mpr fun i hi j hj ↦
-    bondSupport_injective ((Finset.mem_filter.mp hi).2.trans (Finset.mem_filter.mp hj).2.symm)
-  change ‖∑ i, if bondSupport i = X then h i else 0‖ ≤ 1
-  rw [← Finset.sum_filter]
-  calc
-    ‖∑ i ∈ S, h i‖ ≤ ∑ _ ∈ S, (1 : ℝ) := norm_sum_le_of_le S fun i _ ↦
-        (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 i).nonneg).mpr (h1 i)
-    _ ≤ 1 := by simpa using (show (S.card : ℝ) ≤ 1 by exact_mod_cast hcard)
-
-/-- The Hamiltonian of `ManyBody.ChainInteraction.ofBonds` is the sum of the bond terms. -/
-theorem _root_.ManyBody.ChainInteraction.ofBonds_hamiltonian
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
- :
-    (ManyBody.ChainInteraction.ofBonds h hs).hamiltonian = ∑ i, h i := by
-  simp only [ManyBody.Interaction.hamiltonian, ManyBody.ChainInteraction.ofBonds]
-  rw [Finset.sum_comm]
-  simp
-
-/-- The terms of `ManyBody.ChainInteraction.ofBonds` are positive semidefinite. -/
-theorem _root_.ManyBody.ChainInteraction.posSemidef_ofBonds_term
-    (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
-    (h0 : ∀ i, (h i).PosSemidef) (X : ChainSupport L 1) :
-    ((ManyBody.ChainInteraction.ofBonds h hs).term X).PosSemidef :=
-  posSemidef_sum_bondSupport_ite h h0 X
 
 /-! ### The power projector -/
 
@@ -403,16 +311,16 @@ private def letterSupport (L : ℕ) (i : Fin L) : Finset (Fin L) :=
 /-- The letter `P_i` is supported on the sites of its bond. -/
 private theorem isSupportedOn_bondComplement
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
     (i : Fin L) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (bondComplement h i) (letterSupport L i) := by
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (bondComplement h i) (letterSupport L i) := by
   by_cases hi : i.val < L - 1
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_true, ite_true]
     change _ ∈ ManyBody.supportedOperators _ _
     exact sub_mem
-      (Entropy.isSupportedOn_one _) (hs ⟨i, hi⟩)
+      (one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)) (hs ⟨i, hi⟩)
   · simp only [bondComplement, paddedBond, letterSupport, hi, dite_false, ite_false, sub_zero]
-    exact Entropy.isSupportedOn_one _
+    exact one_mem (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _)
 
 /-- A letter meets both sides of the cut after the sites `0, …, b` exactly when it is the bond
 `b`, and then it has one site on the left. -/
@@ -475,10 +383,10 @@ sites `b` and `b + 1`, the cut crossed only by the bond `b`. Landau, Vazirani an
 arXiv:1307.5143v1, `algo53.tex`, lines 584–588. -/
 theorem operatorSchmidtRank_cutOperator_bondComplementWord_le
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i) (interval L i (i + 2)))
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i) (interval L i (i + 2)))
     (b : Fin (L - 1)) {m k : ℕ} (I : Fin m → Fin L)
     (hk : (Finset.univ.filter fun j ↦ (I j).val = b.val).card ≤ k) :
-    Matrix.operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    Matrix.operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L (b + 1)) (bondComplementWord h I)) ≤ q ^ (2 * k) := by
   classical
   have hword : bondComplementWord h I = ((List.ofFn I).map (bondComplement h)).prod := by

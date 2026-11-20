@@ -29,7 +29,7 @@ namespace TNLean.MPS.AreaLaw
 variable {L q : ℕ}
 
 local notation "T" => Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
-local notation "C" => fun k ↦ Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k)
+local notation "C" => fun k ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k)
 
 private noncomputable def outsidePiece
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (a b : ℕ)
@@ -39,11 +39,11 @@ private noncomputable def outsidePiece
 
 private theorem isSupportedOn_outsidePiece
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b : ℕ)
     (P : Fin (L - 1) → Prop) (S : Finset (Fin L))
     (hside : ∀ i, P i → interval L i.val (i.val + 2) ⊆ S) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (outsidePiece h a b P) S := by
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (outsidePiece h a b P) S := by
   change _ ∈ ManyBody.supportedOperators _ _
   classical
   unfold outsidePiece
@@ -93,9 +93,9 @@ private theorem outside_crossing_eq_term
 
 private theorem outside_left_supported
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b k : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (outsidePiece h a b (fun i ↦ i.val + 1 < k)) (leftBlock L k) := by
   apply isSupportedOn_outsidePiece h hs a b _ _
   intro i hi v hv
@@ -104,9 +104,9 @@ private theorem outside_left_supported
 
 private theorem outside_right_supported
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b k : ℕ) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (outsidePiece h a b (fun i ↦ k ≤ i.val)) (leftBlock L k)ᶜ := by
   apply isSupportedOn_outsidePiece h hs a b _ _
   intro i hi v hv
@@ -118,11 +118,11 @@ private theorem outside_right_supported
 false additive constant in ALVV `thm:FF-tH`; see the module note. -/
 private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b k : ℕ) :
     operatorSchmidtRank (C k (physicalFrustrationFreeTruncation h a b)) ≤ q ^ 2 + 3 := by
   classical
-  let cut := reindexAlgEquiv ℂ ℂ (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k))
+  let cut := reindexAlgEquiv ℂ ℂ (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k))
   let HL := outsidePiece h a b (fun i ↦ i.val + 1 < k)
   let HR := outsidePiece h a b (fun i ↦ k ≤ i.val)
   let HC := outsidePiece h a b (fun i ↦ i.val + 1 = k)
@@ -174,11 +174,11 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
         exact sub_mem (sub_mem (add_mem (add_mem hHR hV1) hV1)
           (hQright ha 0)) (hQright ha 1)
     have hXrank : operatorSchmidtRank (cut X) ≤ 1 :=
-      Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
+      ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
         hX
         (Or.inl (Finset.Subset.refl _))
     have hYrank : operatorSchmidtRank (cut Y) ≤ 1 :=
-      Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
+      ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
         hY
         (Or.inr hdisjoint)
     have hterm : operatorSchmidtRank (cut (h i)) ≤ q ^ 2 :=
@@ -198,11 +198,11 @@ private theorem physicalFrustrationFreeTruncation_rank_le_of_pos (hq : 1 ≤ q)
     let X := HL + 1 + 1
     have hX : X ∈ U := add_mem (add_mem hHL hU1) hU1
     have hXrank : operatorSchmidtRank (cut X) ≤ 1 :=
-      Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
+      ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
         hX
         (Or.inl (Finset.Subset.refl _))
     have hHRrank : operatorSchmidtRank (cut HR) ≤ 1 :=
-      Entropy.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
+      ManyBody.IsSupportedOn.operatorSchmidtRank_cutOperator_le_one (A := leftBlock L k)
         hHR
         (Or.inr hdisjoint)
     have hdecomp : cut (physicalFrustrationFreeTruncation h a b) =
@@ -229,7 +229,7 @@ This is the corrected rank assertion of ALVV `thm:FF-tH`, as recorded
 in `docs/paper-gaps/alvv16_frustration_free_truncation_rank.tex`. -/
 theorem operatorSchmidtRank_physicalFrustrationFreeTruncation_le
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) (a b k : ℕ) :
     operatorSchmidtRank (C k (physicalFrustrationFreeTruncation h a b)) ≤ q ^ 2 + 3 := by
   classical
@@ -246,7 +246,7 @@ theorem operatorSchmidtRank_physicalFrustrationFreeTruncation_le
       let : IsEmpty (Fin L → Fin 0) := ⟨fun σ ↦ Fin.elim0 (σ ⟨0, hLpos⟩)⟩
       exact Subsingleton.elim _ _
   rw [hzero]
-  have hz : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ 0)
+  have hz : ManyBody.IsSupportedOn (X := fun _ ↦ Fin 0)
       (0 : Matrix (Fin L → Fin 0) (Fin L → Fin 0) ℂ) ∅ := by
     change _ ∈ ManyBody.supportedOperators _ _
     exact (zero_mem _)

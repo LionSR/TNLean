@@ -28,31 +28,35 @@ singleton and nearest-neighbor supports in the integer rectangle.
 Source: polynomial-PEPS `eq:model` and `03-patches.tex`, lines 213–336. -/
 theorem _root_.ManyBody.SquareInteraction.exists_nearestNeighbor_terms {L q : ℕ} {J : ℝ}
     (h : SquareInteraction L q) (hh : h.hamiltonian.IsHermitian) (hhJ : ∀ i, ‖h.term i‖ ≤ J)
-    [LinearOrder (Lattice.Site (AreaLaw.rectangularDomain L L))] :
-    ∃ T : (Lattice.Site (AreaLaw.rectangularDomain L L) ⊕
-        Edge (ManyBody.planeDomainGraph (AreaLaw.rectangularDomain L L))) →
-        Matrix (Lattice.Configuration (AreaLaw.rectangularDomain L L) q)
-          (Lattice.Configuration (AreaLaw.rectangularDomain L L) q) ℂ,
-      (∀ i, Entropy.IsSupportedOn
-        (n := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
+    [LinearOrder (Lattice.Site (ManyBody.rectangularDomain L L))] :
+    ∃ T : (Lattice.Site (ManyBody.rectangularDomain L L) ⊕
+        Edge (ManyBody.planeDomainGraph (ManyBody.rectangularDomain L L))) →
+        Matrix (Lattice.Configuration (ManyBody.rectangularDomain L L) q)
+          (Lattice.Configuration (ManyBody.rectangularDomain L L) q) ℂ,
+      (∀ i, ManyBody.IsSupportedOn
+        (X := fun _ ↦ Fin q)
         (T i) (AreaLaw.nearestNeighborSupport i)) ∧
       (∀ i, (T i).IsHermitian) ∧ (∀ i, ‖T i‖ ≤ J) ∧
-      (∑ i, T i) = h.toAreaLawHamiltonian.hamiltonian := by
-  let e := Equiv.sumCongr (AreaLaw.rectangleSiteEquiv L L)
-    (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
+      (∑ i, T i) =
+        (ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart).hamiltonian := by
+  let e := Equiv.sumCongr (ManyBody.rectangleSiteEquiv L L)
+    (ManyBody.Edge.equiv (ManyBody.rectangleGraphIso L L))
   let cfg := AreaLaw.rectangleConfigurationEquiv L L q
   refine ⟨fun i ↦ Matrix.reindex cfg cfg (h.hermitianPart.term (e.symm i)), ?_, ?_, ?_, ?_⟩
   · intro i
-    have hs := QuantumCircuit.embedOp_mem_supportedOperators_image
-      (AreaLaw.rectangleSiteEquiv L L).injective
-      (h.hermitianPart.mem (e.symm i))
-    rw [AreaLaw.embedOp_rectangular_eq_reindex] at hs
-    have hi : (AreaLaw.rectangleAreaLawSupport L L (e.symm i)).val =
-        AreaLaw.nearestNeighborSupport i := by
+    have hi : (ManyBody.rectangleSupport (e.symm i)).val = AreaLaw.nearestNeighborSupport i := by
       simpa only [e, Equiv.apply_symm_apply] using
-        rectangleAreaLawSupport_val_eq_nearestNeighborSupport L (e.symm i)
+        rectangleSupport_val_eq_nearestNeighborSupport L (e.symm i)
+    have hs := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators
+      (X := fun _ : ManyBody.SquareLatticeVertex L L ↦ Fin q)
+      (X' := fun _ : ↥(ManyBody.rectangularDomain L L) ↦ Fin q)
+      (ManyBody.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin q))
+      (D' := (ManyBody.rectangleSupport (e.symm i)).val)
+      (fun v ↦ (ManyBody.mem_rectangleSupport_iff (e.symm i) v).symm)
+      (h.hermitianPart.mem (e.symm i))
+    rw [AreaLaw.siteConfigurationEquiv_rectangleSiteEquiv, hi] at hs
     change _ ∈ ManyBody.supportedOperators _ _
-    simpa only [← hi, cfg, AreaLaw.rectangleAreaLawSupport, Finset.coe_image] using hs
+    exact hs
   · exact fun i ↦ (h.isHermitian_hermitianPart_term (e.symm i)).reindex cfg
   · exact fun i ↦ (Matrix.l2_opNorm_reindex_equiv cfg (h.hermitianPart.term (e.symm i))).le.trans
       ((h.norm_hermitianPart_term_le (e.symm i)).trans (hhJ (e.symm i)))
@@ -63,6 +67,6 @@ theorem _root_.ManyBody.SquareInteraction.exists_nearestNeighbor_terms {L q : �
         (map_sum (Matrix.reindexAlgEquiv ℂ ℂ cfg) h.hermitianPart.term Finset.univ).symm
       _ = Matrix.reindex cfg cfg h.hamiltonian :=
         congrArg (Matrix.reindex cfg cfg) (h.hamiltonian_hermitianPart hh)
-      _ = _ := (h.toAreaLawHamiltonian_hamiltonian hh).symm
+      _ = _ := (h.hamiltonian_toPlaneInteraction_hermitianPart hh).symm
 
 end TNLean.PEPS.Approximation

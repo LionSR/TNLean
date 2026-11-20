@@ -47,7 +47,7 @@ theorem mem_leftSupportSubmodule_of_gluingCut_fixed
   have hcm : cutMatrix (WithLp.toLp 2 (y ∘ gluingCut L q k)) k = Y.submatrix e id := by
     ext p r
     rw [cutMatrix, Matrix.schmidtCoeffMatrix_apply]
-    change y (gluingCut L q k ((Entropy.cutEquiv (fun _ : Fin L ↦ q)
+    change y (gluingCut L q k ((ManyBody.cutEquiv (fun _ ↦ Fin q)
       (leftBlock L k)).symm (p, r))) = y (e p, r)
     rw [gluingCut, Entropy.threeCutEquiv_eq_trans]
     simp [e]

@@ -171,7 +171,13 @@ theorem reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators
   have hT :
       Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
         (A ⊗ₖ B) ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
-    simpa only [Finset.union_self] using reindex_kronecker_mem_supportedOperators hA hB
+    have h := ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators (Equiv.refl ι)
+      (X' := fun _ ↦ Fin (q * q)) (fun _ ↦ finProdFinEquiv) (fun _ ↦ Iff.rfl)
+      (ManyBody.reindex_kronecker_mem_supportedOperators hA hB)
+    rw [Finset.union_self] at h
+    convert h using 1
+    ext x y
+    simp [sitePairConfigurationEquiv, ManyBody.siteConfigurationEquiv]
   dsimp only
   simpa only [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_submatrix,
     Matrix.reindex_apply, Matrix.submatrix_mul_equiv,

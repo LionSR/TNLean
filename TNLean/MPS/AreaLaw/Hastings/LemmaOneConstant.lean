@@ -230,12 +230,18 @@ theorem exists_projectorFactorization_pow (R : ℕ) {κ : ℝ} (hκ : 6 < κ) :
   have hξ0 := lemmaOneLength_pos R (ΔE⁻¹ * J) 1
   have hgap' := hgap.smul (inv_pos.mpr hΔ)
   have hspan' := (ManyBody.groundSpace_smul (inv_ne_zero hΔ.ne') h.hamiltonian E₀).trans hspan
-  rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_hamiltonian _] at hgap'
-  rw [← h.smul_hamiltonian _] at hspan'
+  have hsmul : (ΔE⁻¹ • h).hamiltonian = ((ΔE⁻¹ : ℝ) : ℂ) • h.hamiltonian := by
+    rw [ManyBody.Interaction.hamiltonian_smul]
+    exact (Complex.coe_smul _ _).symm
+  rw [inv_mul_cancel₀ hΔ.ne', ← hsmul] at hgap'
+  rw [← hsmul] at hspan'
   obtain ⟨OB, OL, OR, hF⟩ := exists_isFactorizationAt_lemmaOneConst R hx one_pos
     (ξ' := κ * lemmaOneLength R (ΔE⁻¹ * J) 1) (by nlinarith)
-    (h.smul ΔE⁻¹) (h.isHermitian_smul_term hh ΔE⁻¹)
-      (h.norm_smul_term_le hhJ ΔE⁻¹ (inv_nonneg.mpr hΔ.le)) hΩ hgap' hspan' c l
+    (ΔE⁻¹ • h) (fun X ↦ ManyBody.Interaction.isHermitian_smul_term ΔE⁻¹ (hh X))
+      (fun X ↦ by
+        rw [ManyBody.Interaction.norm_smul_term, abs_of_nonneg (inv_nonneg.mpr hΔ.le)]
+        exact mul_le_mul_of_nonneg_left (hhJ X) (inv_nonneg.mpr hΔ.le))
+      hΩ hgap' hspan' c l
   rw [div_eq_inv_mul]
   exact ⟨OB, OL, OR, hF.mono (mul_le_mul_of_nonneg_right (hK hx) (exp_pos _).le)⟩
 
@@ -262,14 +268,20 @@ theorem exists_projectorFactorization_posSemidef_pow (R : ℕ) {κ : ℝ} (hκ :
   have hξ0 := lemmaOneLength_pos R (ΔE⁻¹ * J) 1
   have hgap' := hgap.smul (inv_pos.mpr hΔ)
   have hspan' := (ManyBody.groundSpace_smul (inv_ne_zero hΔ.ne') h.hamiltonian E₀).trans hspan
-  rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_hamiltonian _] at hgap'
-  rw [← h.smul_hamiltonian _] at hspan'
+  have hsmul : (ΔE⁻¹ • h).hamiltonian = ((ΔE⁻¹ : ℝ) : ℂ) • h.hamiltonian := by
+    rw [ManyBody.Interaction.hamiltonian_smul]
+    exact (Complex.coe_smul _ _).symm
+  rw [inv_mul_cancel₀ hΔ.ne', ← hsmul] at hgap'
+  rw [← hsmul] at hspan'
   obtain ⟨OB, OL, OR, hOB, hF⟩ := exists_posSemidef_isFactorizationAt_of_sqrt_decay hΩ hξ0
     (ξ' := κ * lemmaOneLength R (ΔE⁻¹ * J) 1) (by nlinarith)
     (le_max_of_le_right (exp_pos _).le) (lemmaOneBudgetB_nonneg one_pos (by positivity))
     (exists_isFactorizationAt_sqrt_decay R hx one_pos
-      (h.smul ΔE⁻¹) (h.isHermitian_smul_term hh ΔE⁻¹)
-          (h.norm_smul_term_le hhJ ΔE⁻¹ (inv_nonneg.mpr hΔ.le)) hΩ hgap' hspan' c l)
+      (ΔE⁻¹ • h) (fun X ↦ ManyBody.Interaction.isHermitian_smul_term ΔE⁻¹ (hh X))
+          (fun X ↦ by
+            rw [ManyBody.Interaction.norm_smul_term, abs_of_nonneg (inv_nonneg.mpr hΔ.le)]
+            exact mul_le_mul_of_nonneg_left (hhJ X) (inv_nonneg.mpr hΔ.le))
+          hΩ hgap' hspan' c l)
   rw [div_eq_inv_mul]
   refine ⟨OB, OL, OR, hOB, hF.mono (mul_le_mul_of_nonneg_right ?_ (exp_pos _).le)⟩
   -- `√C₁ ≤ C₁ + 1 ≤ (K + 1) ξ̂³`

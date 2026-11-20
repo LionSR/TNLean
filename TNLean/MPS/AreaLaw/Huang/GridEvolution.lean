@@ -72,7 +72,7 @@ variable {L q w : ℕ}
 Osborne, arXiv:quant-ph/0508031v2, Figure 2. -/
 theorem commute_chainGridBlockHamiltonian (hw : 0 < w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) :
     Pairwise fun j k : Fin (L / w + 1) ↦
       Commute (chainGridBlockHamiltonian hw h j) (chainGridBlockHamiltonian hw h k) := by
@@ -88,7 +88,7 @@ The support layout and each factor are constructed from the original interaction
 Osborne, arXiv:quant-ph/0508031v2, Figures 1--2 and equation (3). -/
 theorem hermitianUnitaryPath_chainGridRetained_eq_prod (hw : 0 < w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (t : ℝ) :
     hermitianUnitaryPath (chainGridRetainedHamiltonian hw h) t =
       (List.ofFn fun j ↦ hermitianUnitaryPath (chainGridBlockHamiltonian hw h j) t).prod :=
@@ -98,7 +98,7 @@ theorem hermitianUnitaryPath_chainGridRetained_eq_prod (hw : 0 < w)
 Osborne, arXiv:quant-ph/0508031v2, Figure 2. -/
 theorem chainGridBlockEvolution_mem_supported [NeZero q] (hw : 0 < w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (j : Fin (L / w + 1)) (t : ℝ) :
     hermitianUnitaryPath (chainGridBlockHamiltonian hw h j) t ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q) (chainGridBlock L w j.val : Finset (Fin L)) :=

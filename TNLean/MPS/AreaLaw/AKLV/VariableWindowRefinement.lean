@@ -39,14 +39,14 @@ theorem normalized_cut_schmidtRank_le {L q k : ℕ}
     (x : EuclideanSpace ℂ (Fin L → Fin q)) (c : ℂ) (hc : c ≠ 0)
     (hKx : toEuclideanLin K x ≠ 0) :
     let ψ := c • (‖toEuclideanLin K x‖⁻¹ : ℂ) • toEuclideanLin K x
-    schmidtRank (WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q)
+    schmidtRank (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q)
       (leftBlock L k) ψ)) ≤
-      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
         (leftBlock L k) K) *
-      schmidtRank (WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q)
+      schmidtRank (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q)
         (leftBlock L k) x)) := by
   change schmidtRank (c • (‖toEuclideanLin K x‖⁻¹ : ℂ) •
-    WithLp.ofLp (Entropy.cutVector (leftBlock L k) (toEuclideanLin K x))) ≤ _
+    WithLp.ofLp (ManyBody.cutVector (leftBlock L k) (toEuclideanLin K x))) ≤ _
   rw [schmidtRank_smul_eq_of_ne_zero c hc,
     schmidtRank_smul_eq_of_ne_zero _ (by
       exact_mod_cast inv_ne_zero (norm_ne_zero_iff.mpr hKx)),
@@ -61,7 +61,7 @@ arXiv:1301.1162v1, Lemma `l:5`, lines 1025--1052, and lines 1503--1517. -/
 theorem exists_aklv_variable_window_filtered_output {L q a s : ℕ}
     (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
@@ -92,14 +92,14 @@ theorem exists_aklv_variable_window_filtered_output {L q a s : ℕ}
             let delta : ℝ := (2 * Real.exp (-2 * (ell : ℝ) *
               Real.sqrt ((9 * g / 10) / (2 * t + s)))) ^ 2
             toEuclideanLin K φ = φ ∧
-            operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+            operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
               (leftBlock L (a + s / 2)) K) ≤ D ∧ toEuclideanLin K x ≠ 0 ∧
             ∃ c : ℂ, ‖c‖ = 1 ∧
               let ψ := c • (‖toEuclideanLin K x‖⁻¹ : ℂ) • toEuclideanLin K x
               ‖ψ‖ = 1 ∧
-              schmidtRank (WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q)
+              schmidtRank (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q)
                 (leftBlock L (a + s / 2)) ψ)) ≤
-                  D * schmidtRank (WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q)
+                  D * schmidtRank (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q)
                     (leftBlock L (a + s / 2)) x)) ∧
               ‖ψ - φ‖ ^ 2 ≤ 8 * delta * ‖x - φ‖ ^ 2 ∧
               ‖ψ - Ω‖ ^ 2 ≤ 16 * delta + Real.exp (-t / 16) / 50 := by

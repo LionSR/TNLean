@@ -31,8 +31,6 @@ at `openai/math@adc7f124`.
 
 open scoped BigOperators
 open TensorPower TensorPower.ReplicaTransport
-open Entropy (SiteConfig)
-
 noncomputable section
 
 open TNLean.Lattice
@@ -76,7 +74,7 @@ theorem good_sum_splitEta_le_choiceEntropySymbol_domainGraph
     (hmult : ∀ x, (Finset.univ.filter fun i => S.anchor i = x).card ≤ μ)
     (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
       ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
-    (hgood : S.IsGoodOldHistory h) (θ : SiteConfig n → ℂ) :
+    (hgood : S.IsGoodOldHistory h) (θ : (∀ v, Fin (n v)) → ℂ) :
     ((1 / (2 * (S.C₁ + 1))) / ((S.n : ℝ) * S.D)) *
         (∑ i, (S.actualChargeData hm0 hM k).splitEta E i ⟨h, none⟩
           ((EuclideanSpace.equiv _ ℂ).symm θ)) ≤
@@ -132,7 +130,7 @@ theorem actualChargeEntropyDefect_le_entropyGain_domainGraph
       (S.actualChargeData hm0 hM k).entropyGain n t r pre p := by
   classical
   let D := S.actualChargeData hm0 hM k
-  let F (h : History S.K S.m S.M k) (θ : SiteConfig n → ℂ) :=
+  let F (h : History S.K S.m S.M k) (θ : (∀ v, Fin (n v)) → ℂ) :=
     ∑ i, D.splitEta E i ⟨h, none⟩ ((EuclideanSpace.equiv _ ℂ).symm θ)
   let α : ℝ := (1 / (2 * (S.C₁ + 1))) / ((S.n : ℝ) * S.D)
   have hAdm : D.IsAdmissible := S.actualChargeData_isAdmissible hm0 hM k

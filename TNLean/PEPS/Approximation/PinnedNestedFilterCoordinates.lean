@@ -56,30 +56,27 @@ private theorem extendRegions_fin (X : Fin m → Finset (Vertex L)) (j : Fin m) 
 /-- The supplied finite regions in integer-square coordinates, extended by empty
 regions only to meet the existing natural-indexed ordered-chain API. -/
 def canonicalRegions (X : Fin m → Finset (Vertex L)) (k : ℕ) :
-    Finset (Lattice.Site (AreaLaw.rectangularDomain L L)) :=
-  (extendRegions X k).map (AreaLaw.rectangleSiteEquiv L L).toEmbedding
+    Finset (Lattice.Site (ManyBody.rectangularDomain L L)) :=
+  (extendRegions X k).map (ManyBody.rectangleSiteEquiv L L).toEmbedding
 
 /-- The extension has exactly the supplied regions at every family index. -/
 @[simp] theorem canonicalRegions_fin (X : Fin m → Finset (Vertex L)) (j : Fin m) :
-    canonicalRegions X j = (X j).map (AreaLaw.rectangleSiteEquiv L L).toEmbedding := by
+    canonicalRegions X j = (X j).map (ManyBody.rectangleSiteEquiv L L).toEmbedding := by
   rw [canonicalRegions, extendRegions_fin]
 
 /-- Regional configuration coordinates, using the existing dependent equivalence. -/
 def regionEquiv (X : Fin m → Finset (Vertex L)) (j : Fin m) :
-    RegionConfiguration q (X j) ≃ Entropy.RegionConfig
-      (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q) (canonicalRegions X j) :=
+    RegionConfiguration q (X j) ≃ (ManyBody.RegionConfig (fun _ ↦ Fin q) (canonicalRegions X j)) :=
   Entropy.regionConfigurationEquiv (n := fun _ : Vertex L ↦ q)
-    (n' := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
-    (X j) (canonicalRegions X j) (AreaLaw.rectangleSiteEquiv L L)
+    (n' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
+    (X j) (canonicalRegions X j) (ManyBody.rectangleSiteEquiv L L)
     (by intro v; simp) (fun _ ↦ Equiv.refl (Fin q))
 
 /-- All regional matrix families on the transported supplied regions. -/
 abbrev CanonicalFamily (q : ℕ) (X : Fin m → Finset (Vertex L)) :=
   (j : Fin m) → Matrix
-    (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
-      (canonicalRegions X j))
-    (Entropy.RegionConfig (fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
-      (canonicalRegions X j)) ℂ
+    (ManyBody.RegionConfig (fun _ ↦ Fin q) (canonicalRegions X j))
+    (ManyBody.RegionConfig (fun _ ↦ Fin q) (canonicalRegions X j)) ℂ
 
 /-- The regional matrices of a bundled family in canonical square coordinates. -/
 def canonicalMatrices (F : FilterFamily q m X) : CanonicalFamily q X :=
@@ -126,38 +123,38 @@ theorem admissible_fromCanonical (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
 theorem squareAreaLawState_eq_relabelVector (Ω : State L q) :
     AreaLaw.rectangleAreaLawState Ω = Entropy.relabelVector
       (n := fun _ : Vertex L ↦ q)
-      (n' := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
-      (AreaLaw.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin q)) Ω := by
+      (n' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
+      (ManyBody.rectangleSiteEquiv L L) (fun _ ↦ Equiv.refl (Fin q)) Ω := by
   ext σ
   rfl
 
 private def extendedMatrices (F : FilterFamily q m X) :
-    (j : Fin m) → Matrix (Entropy.RegionConfig (fun _ : Vertex L ↦ q) (extendRegions X j))
-      (Entropy.RegionConfig (fun _ : Vertex L ↦ q) (extendRegions X j)) ℂ :=
+    (j : Fin m) → Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) (extendRegions X j))
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) (extendRegions X j)) ℂ :=
   fun j x y ↦ (F j).matrix
     (fun v ↦ x ⟨v.1, (extendRegions_fin X j).symm ▸ v.2⟩)
     (fun v ↦ y ⟨v.1, (extendRegions_fin X j).symm ▸ v.2⟩)
 
 private theorem localLift_extendedMatrices (F : FilterFamily q m X) (j : Fin m) :
-    Entropy.localLift (extendRegions X j) (extendedMatrices F j) =
-      Entropy.localLift (X j) (F j).matrix := by
+    ManyBody.place (extendRegions X j) (extendedMatrices F j) =
+      ManyBody.place (X j) (F j).matrix := by
   ext x y
-  simp only [Entropy.localLift_apply, extendedMatrices, extendRegions_fin]
+  simp only [ManyBody.place_apply, extendedMatrices, extendRegions_fin]
 
 private theorem reindex_extendedMatrices (F : FilterFamily q m X) (j : Fin m)
     (hD : ∀ v, v ∈ extendRegions X j ↔
-      AreaLaw.rectangleSiteEquiv L L v ∈ canonicalRegions X j) :
+      ManyBody.rectangleSiteEquiv L L v ∈ canonicalRegions X j) :
     reindex
         (Entropy.regionConfigurationEquiv
           (n := fun _ : Vertex L ↦ q)
-          (n' := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
+          (n' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
           (extendRegions X j) (canonicalRegions X j)
-          (AreaLaw.rectangleSiteEquiv L L) hD (fun _ ↦ Equiv.refl (Fin q)))
+          (ManyBody.rectangleSiteEquiv L L) hD (fun _ ↦ Equiv.refl (Fin q)))
         (Entropy.regionConfigurationEquiv
           (n := fun _ : Vertex L ↦ q)
-          (n' := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
+          (n' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
           (extendRegions X j) (canonicalRegions X j)
-          (AreaLaw.rectangleSiteEquiv L L) hD (fun _ ↦ Equiv.refl (Fin q)))
+          (ManyBody.rectangleSiteEquiv L L) hD (fun _ ↦ Equiv.refl (Fin q)))
         (extendedMatrices F j) = canonicalMatrices F j := by
   ext x y
   rfl
@@ -180,13 +177,13 @@ theorem squareAreaLawState_output (F : FilterFamily q m X) (Ω : State L q) :
     squareAreaLawState_eq_relabelVector]
   have hD (k : ℕ) (v : Vertex L) :
       v ∈ extendRegions X k ↔
-        AreaLaw.rectangleSiteEquiv L L v ∈ canonicalRegions X k := by
+        ManyBody.rectangleSiteEquiv L L v ∈ canonicalRegions X k := by
     simp [canonicalRegions]
   simpa only [reindex_extendedMatrices] using
     Entropy.relabelVector_liftProd_chainList
       (n := fun _ : Vertex L ↦ q)
-      (n' := fun _ : Lattice.Site (AreaLaw.rectangularDomain L L) ↦ q)
-      (extendRegions X) (canonicalRegions X) (AreaLaw.rectangleSiteEquiv L L)
+      (n' := fun _ : Lattice.Site (ManyBody.rectangularDomain L L) ↦ q)
+      (extendRegions X) (canonicalRegions X) (ManyBody.rectangleSiteEquiv L L)
       hD (fun _ ↦ Equiv.refl (Fin q)) (extendedMatrices F) (fun _ ↦ True) Ω
 
 /-- Inverse-norm normalization commutes with the same exact output identification,

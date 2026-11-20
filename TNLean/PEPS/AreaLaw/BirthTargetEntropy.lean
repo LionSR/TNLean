@@ -52,16 +52,16 @@ theorem regionalEntropy_le_boundary_of_birth_information_estimates
     (n : Fin P.pieceCount → ℕ)
     (cD cI cS : ℝ) (hcI : 0 ≤ cI)
     (hMI : ∀ i,
-      FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω (Y i)
+      ManyBody.regionMutualInformation Ω (Y i)
         (Aᶜ ∪ P.earlierSameFamily i) ≤ cI * (n i : ℝ) ^ (-100 : ℝ))
     (hD : (P.residual.card : ℝ) ≤ cD * (edgeBoundary Λ A).card)
     (hS : (∑ i, (n i : ℝ) ^ (-100 : ℝ)) ≤ cS * (edgeBoundary Λ A).card) :
-    regionalEntropy Λ q Ω A ≤
+    ManyBody.regionEntropy Ω A ≤
       (cD * Real.log q + cI * cS / 2) * (edgeBoundary Λ A).card := by
   exact regionalEntropy_le_boundary_of_partition_estimates Λ q hq Ω hΩ A P
     (fun i ↦ cI * (n i : ℝ) ^ (-100 : ℝ))
     (fun i ↦
-      (FiniteProduct.mutualInformation_mono_left (fun _ : Site Λ ↦ Fin q) Ω
+      (ManyBody.regionMutualInformation_mono_left (fun _ : Site Λ ↦ Fin q) Ω
         (P.piece i) (Y i) (Aᶜ ∪ P.earlierSameFamily i) (hXY i)
         (Finset.disjoint_union_right.mpr
           ⟨disjoint_compl_right_iff.mpr (hYA i), hYpast i⟩)).trans (hMI i))

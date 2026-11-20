@@ -109,7 +109,7 @@ theorem exists_unique_ground_state_refined_ritz_approximation
     let width := 4 * ell
     ∀ (L : ℕ)
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1)
       (Γ : EuclideanSpace ℂ (Fin L → Fin q)),

@@ -141,12 +141,12 @@ theorem regionEntropy_prefix_le_of_factorization (h : ChainInteraction L q R)
     (hfact : ∀ c l : ℕ, c + l ≤ L → ∃ OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ,
       IsFactorizationAt Ω c l (C₁ * Real.exp (-(l / ξ'))) OB OL OR)
     (i : ℕ) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 i) Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 i) ≤
       areaLawBound ξ' C₁ q := by
   rcases lt_or_ge q 2 with hq | hq
   · -- For `q ≤ 1` every entropy vanishes, since `ln q = 0`.
     have hlog : Real.log q = 0 := by interval_cases q <;> simp
-    refine (regionEntropy_le_card_mul_log hΩ _).trans ?_
+    refine (ManyBody.regionEntropy_le_card_mul_log hΩ _).trans ?_
     simp [areaLawBound, hlog]
   set l₀ := areaLawWindowLength ξ' C₁ q with hl₀
   have hlog : 0 < Real.log q := Real.log_pos (by exact_mod_cast hq)

@@ -130,7 +130,7 @@ theorem stripColumn_le_add_range {L w R : ℕ} (X : AdmissibleSupport (stripDoma
 /-- A split support meets a band of at most `2Rw` sites on the inside of the two cuts. -/
 theorem crossingSupport_meets_stripBand {L w R a b : ℕ}
     (X : AdmissibleSupport (stripDomain L w) R)
-    (hX : X ∈ Entropy.crossingTerms (fun Y : AdmissibleSupport (stripDomain L w) R ↦ Y.1)
+    (hX : X ∈ ManyBody.crossingTerms (fun Y : AdmissibleSupport (stripDomain L w) R ↦ Y.1)
       (stripInterval L w a b)) :
     ∃ x ∈ stripInterval L w a (a + R) ∪ stripInterval L w (b - R) b, x ∈ X.1 := by
   classical
@@ -147,7 +147,7 @@ def stripCrossConst (R : ℕ) : ℕ := 2 * R * 2 ^ (2 * R * (R + 1))
 
 /-- At most `N_R w` distinct admissible supports cross any column interval. -/
 theorem card_crossingTerms_stripInterval_le (L w R a b : ℕ) :
-    (Entropy.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1)
+    (ManyBody.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1)
       (stripInterval L w a b)).card ≤ stripCrossConst R * w := by
   classical
   let band := stripInterval L w a (a + R) ∪ stripInterval L w (b - R) b
@@ -171,13 +171,13 @@ theorem card_crossingTerms_stripInterval_le (L w R a b : ℕ) :
 /-- The strip cut budget has linear width dependence and corrected support dimension. -/
 theorem cutLogBudget_stripInterval_le {q : ℕ} (hq : 1 ≤ q) (L w R a b : ℕ) :
     Entropy.cutLogBudget
-      (Entropy.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1)
+      (ManyBody.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1)
         (stripInterval L w a b))
       (Entropy.supportDim (fun _ : Site (stripDomain L w) ↦ q) ∘ fun X ↦ X.1) ≤
       1 + (stripCrossConst R * w : ℕ) *
         Real.log (Real.exp 1 * (q : ℝ) ^ (1 + 2 * R * (R + 1))) ^ 2 := by
   refine (TNLean.PEPS.AreaLaw.cutLogBudget_le_card hq _).trans ?_
-  have hc : ((Entropy.crossingTerms
+  have hc : ((ManyBody.crossingTerms
       (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1)
       (stripInterval L w a b)).card : ℝ) ≤ (stripCrossConst R * w : ℕ) := by
     exact_mod_cast card_crossingTerms_stripInterval_le L w R a b
@@ -223,12 +223,12 @@ theorem card_crossingTerms_stripPrefix_le {L w R c : ℕ}
     (A : Finset (Site (stripDomain L w)))
     (hleft : stripInterval L w 0 c ⊆ A)
     (hright : A ⊆ stripInterval L w 0 (c + 1)) :
-    (Entropy.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1) A).card ≤
+    (ManyBody.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1) A).card ≤
       ((R + 1) * 2 ^ (2 * R * (R + 1))) * w := by
   classical
   let band := stripInterval L w (c - R) (c + 1)
   have hmeet (X : AdmissibleSupport (stripDomain L w) R)
-      (hX : X ∈ Entropy.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1) A) :
+      (hX : X ∈ ManyBody.crossingTerms (fun X : AdmissibleSupport (stripDomain L w) R ↦ X.1) A) :
       ∃ x ∈ band, x ∈ X.1 := by
     simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
     obtain ⟨⟨x, hx, hxA⟩, y, hy, hyA⟩ := hX

@@ -37,9 +37,9 @@ theorem IntRect.partial_row_entropy_le
     (Q : IntRect) (j : ℕ) (hj : 1 ≤ j) (hjs : j ≤ Q.size)
     (Y : Finset (ℤ × ℤ))
     (hY : Y ⊆ (Q.dilate j).toFinset \ (Q.dilate (j - 1)).toFinset) :
-    |regionalEntropy Λ q Ω
+    |ManyBody.regionEntropy Ω
         (A.filter fun x ↦ x.1 ∈ ((Q.dilate (j - 1)).toFinset \ Q.toFinset) ∪ Y) -
-      regionalEntropy Λ q Ω
+      ManyBody.regionEntropy Ω
         (A.filter fun x ↦ x.1 ∈ (Q.dilate (j - 1)).toFinset \ Q.toFinset)| ≤
       12 * (Q.size : ℝ) * Real.log q := by
   have hlayer := card_dilate_sdiff_le Q (d := j) (k := 1) hj

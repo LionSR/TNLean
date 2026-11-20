@@ -104,7 +104,7 @@ private theorem schmidtCoeffMatrix_kronecker_mulVec_eq {m n : Type*} [Fintype m]
 (arXiv:1307.5143v1, algo53.tex, decomposition `e:decomp`, lines 584–588). -/
 theorem cutMatrix_toEuclideanLin_eq_sum {J : Finset ι} {A : ι → LeftBlockMatrix L q i}
     {B : ι → RightBlockMatrix L q i} {K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hK : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K =
+    (hK : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K =
       ∑ j ∈ J, A j ⊗ₖ B j)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) :
     cutMatrix (toEuclideanLin K ψ) i = ∑ j ∈ J, A j * cutMatrix ψ i * (B j)ᵀ := by
@@ -113,7 +113,7 @@ theorem cutMatrix_toEuclideanLin_eq_sum {J : Finset ι} {A : ι → LeftBlockMat
   simp only [schmidtCoeffMatrix_apply, Finset.sum_apply, Matrix.sum_apply]
   refine Finset.sum_congr rfl fun j _ ↦ ?_
   exact congrFun (congrFun (schmidtCoeffMatrix_kronecker_mulVec_eq (A j) (B j)
-    (WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L i) ψ))) a) b
+    (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L i) ψ))) a) b
 
 /-! ### The new set and its support -/
 
@@ -157,7 +157,7 @@ theorem toEuclideanLin_mem_span_errorReductionSet {J : Finset ι}
 theorem toEuclideanLin_mem_leftSupportSubmodule_errorReductionSet {J : Finset ι}
     {A : ι → LeftBlockMatrix L q i} {B : ι → RightBlockMatrix L q i}
     {K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
-    (hK : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K =
+    (hK : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K =
       ∑ j ∈ J, A j ⊗ₖ B j)
     {S : Finset (LeftBlockVector L q i)} {ψ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hψ : ψ ∈ leftSupportSubmodule (S : Set (LeftBlockVector L q i))) :
@@ -222,7 +222,7 @@ If `‖K - A₀‖ ≤ η < c`, then `S' = {A_j s}` is `(i, ε + 2 η / c)`-viab
 theorem isViable_errorReductionSet_of_witness {J : Finset ι} {A : ι → LeftBlockMatrix L q i}
     {B : ι → RightBlockMatrix L q i} {K A₀ : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΓ : ‖Γ‖ = 1)
-    (hK : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K =
+    (hK : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K =
       ∑ j ∈ J, A j ⊗ₖ B j)
     {S : Finset (LeftBlockVector L q i)} {v : EuclideanSpace ℂ (Fin L → Fin q)} (hv1 : ‖v‖ = 1)
     (hvS : v ∈ leftSupportSubmodule (S : Set (LeftBlockVector L q i))) {ε η c : ℝ}
@@ -279,7 +279,7 @@ theorem IsViable.errorReduction {J : Finset ι} {A : ι → LeftBlockMatrix L q 
     {B : ι → RightBlockMatrix L q i} {K A₀ : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {S : Finset (LeftBlockVector L q i)}
     (hS : IsViable Γ (1 / 2) (S : Set (LeftBlockVector L q i))) (hΓ : ‖Γ‖ = 1)
-    (hK : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K =
+    (hK : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K =
       ∑ j ∈ J, A j ⊗ₖ B j)
     (hA₀ : A₀.IsHermitian) (hfix : toEuclideanLin A₀ Γ = Γ) {δ η : ℝ} (hδ : 0 ≤ δ)
     (hcut : ∀ v : EuclideanSpace ℂ (Fin L → Fin q), ‖v‖ = 1 →
@@ -306,7 +306,7 @@ theorem IsViableMPS.errorReduction {J : Finset ι} {A : ι → LeftBlockMatrix L
     {B : ι → RightBlockMatrix L q i} {K A₀ : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {s b b' : ℕ} {S : Finset (LeftBlockVector L q i)}
     (hS : IsViableMPS Γ s b (1 / 2) S) (hΓ : ‖Γ‖ = 1)
-    (hK : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K =
+    (hK : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K =
       ∑ j ∈ J, A j ⊗ₖ B j)
     (hA₀ : A₀.IsHermitian) (hfix : toEuclideanLin A₀ Γ = Γ) {δ η : ℝ} (hδ : 0 ≤ δ)
     (hcut : ∀ v : EuclideanSpace ℂ (Fin L → Fin q), ‖v‖ = 1 →
@@ -331,7 +331,7 @@ theorem IsViable.errorReduction_of_norm_sub_groundProjection_le
     {K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {S : Finset (LeftBlockVector L q i)}
     (hS : IsViable Γ (1 / 2) (S : Set (LeftBlockVector L q i))) (hΓ : ‖Γ‖ = 1)
-    (hK : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K =
+    (hK : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K =
       ∑ j ∈ J, A j ⊗ₖ B j)
     {η : ℝ} (hKP : ‖K - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤ η)
     (hη : η < 1 / 2) :
@@ -357,7 +357,7 @@ private theorem isViableMPS_errorReductionSet_of_isViable
     {S : Finset (LeftBlockVector L q i)} (hi : i ≤ L)
     (hcard : S.card ≤ s) (hSmps : ∀ v ∈ S, IsLeftOpenMPS b v)
     (hA : ∀ j ∈ J, ∀ k : ℕ, 0 < k → k < i →
-      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
         ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
     (hviable : IsViable Γ δ (errorReductionSet J A S : Set (LeftBlockVector L q i))) :
     IsViableMPS Γ (J.card * s) (D * max 1 b) δ (errorReductionSet J A S) := by
@@ -379,10 +379,10 @@ theorem IsViableMPS.errorReduction_of_norm_sub_groundProjection_le
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {s b D : ℕ}
     {S : Finset (LeftBlockVector L q i)} (hi : i ≤ L)
     (hS : IsViableMPS Γ s b (1 / 2) S) (hΓ : ‖Γ‖ = 1)
-    (hK : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K =
+    (hK : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K =
       ∑ j ∈ J, A j ⊗ₖ B j)
     (hA : ∀ j ∈ J, ∀ k : ℕ, 0 < k → k < i →
-      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
         ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
     {η : ℝ} (hKP : ‖K - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤ η)
     (hη : η < 1 / 2) :
@@ -399,7 +399,7 @@ theorem IsViable.errorReduction_of_norm_sub_smul_groundProjection_le
     {K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {S : Finset (LeftBlockVector L q i)}
     (hS : IsViable Γ (1 / 2) (S : Set (LeftBlockVector L q i))) (hΓ : ‖Γ‖ = 1)
-    (hK : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K =
+    (hK : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K =
       ∑ j ∈ J, A j ⊗ₖ B j)
     {η c : ℝ} (hc : 0 < c)
     (hKP : ‖K - (c : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤ η)
@@ -442,10 +442,10 @@ theorem IsViableMPS.errorReduction_of_norm_sub_smul_groundProjection_le
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} {s b D : ℕ}
     {S : Finset (LeftBlockVector L q i)} (hi : i ≤ L)
     (hS : IsViableMPS Γ s b (1 / 2) S) (hΓ : ‖Γ‖ = 1)
-    (hK : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K =
+    (hK : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K =
       ∑ j ∈ J, A j ⊗ₖ B j)
     (hA : ∀ j ∈ J, ∀ k : ℕ, 0 < k → k < i →
-      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
         ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D)
     {η c : ℝ} (hc : 0 < c)
     (hKP : ‖K - (c : ℂ) • vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ ≤ η)

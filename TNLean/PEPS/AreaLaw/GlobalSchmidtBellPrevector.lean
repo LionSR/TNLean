@@ -43,13 +43,13 @@ theorem exists_global_schmidtBellPrevector
     (H : Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (Ω : EuclideanSpace ℂ (ι → Fin q)) (E₀ : ℝ)
     (hΩ : ‖Ω‖ = 1) (hE : H *ᵥ Ω.ofLp = (E₀ : ℂ) • Ω.ofLp)
-    (X : Finset ι) (E : Finset (FiniteProduct.Configuration (fun _ : ι => Fin q) X)) :
+    (X : Finset ι) (E : Finset (ManyBody.RegionConfig (fun _ : ι => Fin q) X)) :
     let β := fun _ : ι => Fin q
-    let split := FiniteProduct.splitEquiv β X
+    let split := ManyBody.splitEquiv β X
     let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split Ω
     0 < Matrix.IsHermitian.spectralRestrictionMass
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E →
-    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x =>
+    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x =>
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
       (∀ k : ℕ, 0 < k →
@@ -78,11 +78,11 @@ theorem exists_global_schmidtBellPrevector
       (∀ᶠ k : ℕ in Filter.atTop,
         (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
           ‖WithLp.toLp 2
-            (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-              (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+            (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+              (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
               PermutationRepresentation.labelProj
                 (TensorPower.copyPerm (Fin E.card) k) (ell k)) *ᵥ
-              (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+              (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
                 (Fin k → Fin E.card) => ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) ∧
       Asymptotics.IsLittleO Filter.atTop
         (fun k : ℕ => Real.log (ell k).dim - (k : ℝ) *
@@ -94,8 +94,8 @@ theorem exists_global_schmidtBellPrevector
   intro β split ΩX hz ψ
   have hψ : ‖WithLp.toLp 2 ψ‖ = 1 :=
     ((LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      ((Equiv.prodComm E (FiniteProduct.Configuration β Xᶜ)).trans
-        ((Equiv.refl (FiniteProduct.Configuration β Xᶜ)).prodCongr
+      ((Equiv.prodComm E (ManyBody.RegionConfig β Xᶜ)).trans
+        ((Equiv.refl (ManyBody.RegionConfig β Xᶜ)).prodCongr
           (Finset.equivFin E)))).norm_map
       (compressedTypicalPureState ΩX E)).trans
       (norm_compressedTypicalPureState ΩX E hz)

@@ -51,7 +51,7 @@ theorem _root_.ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_sep
             T = Finset.univ.biUnion (fun i ↦ interval L (a i) (z i))) →
           (∀ x ∈ T, ∀ y ∈ E,
             Dp * Real.log (L : ℝ) ≤ (Nat.dist x.val y.val : ℝ)) →
-          FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω T E ≤
+          ManyBody.regionMutualInformation Ω T E ≤
             (L : ℝ) ^ (-p) := by
   classical
   let c := max 0 (chainIntervalEntropyBound q R J Δ)
@@ -115,23 +115,22 @@ theorem _root_.ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_sep
     linarith only [htri, hxy, hsep, hdist x hx e he]
   have hJ : 0 ≤ J := h.norm_bound_nonneg hhJ ⟨0, hLn⟩
   have hI : ∀ a z : ℕ,
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a z) Ω ≤ c :=
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L a z) ≤ c :=
     fun a z ↦ (regionEntropy_interval_le hq hJ hΔ h hh hhJ hΩ hgap hspan a z).trans
         (le_max_right _ _)
-  have hD : Entropy.regionEntropy (n := fun _ : Fin L ↦ q) D Ω ≤ (k₀ : ℝ) * c := by
+  have hD : ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω D ≤ (k₀ : ℝ) * c := by
     obtain ⟨n, a, z, hn, hT⟩ := hT
     have hbound := regionEntropy_chainNeighborhood_biUnion_intervals_le hΩ hI
       (Finset.univ : Finset (Fin n)) a z (w + 1) (by linarith only [hw])
     dsimp only at hbound
-    change Entropy.regionEntropy (n := fun _ : Fin L ↦ q)
-      (N (w + 1) (Finset.univ.biUnion (fun i ↦ interval L (a i) (z i)))) Ω ≤
+    change ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+      Ω (N (w + 1) (Finset.univ.biUnion (fun i ↦ interval L (a i) (z i)))) ≤
         ((Finset.univ : Finset (Fin n)).card : ℝ) * c at hbound
     rw [← hT, Finset.card_univ, Fintype.card_fin] at hbound
     exact hbound.trans (mul_le_mul_of_nonneg_right (by exact_mod_cast hn) hc)
-  have hMI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω D C ≤ b := by
-    have hbound := FiniteProduct.mutualInformation_le_two_entropy
+  have hMI : ManyBody.regionMutualInformation Ω D C ≤ b := by
+    have hbound := ManyBody.regionMutualInformation_le_two_regionEntropy
       (fun _ : Fin L ↦ Fin q) Ω hΩ D C hDC
-    rw [← ManyBody.regionEntropy_eq_entropy] at hbound
     dsimp only [b]
     nlinarith only [hbound, hD, mul_nonneg hk₀r hc]
   exact hreset L ((le_max_left _ _).trans hL) h hh hhJ Ω E₀ hΩ hgap hspan

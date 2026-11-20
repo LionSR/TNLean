@@ -34,9 +34,9 @@ namespace TNLean.MPS.AreaLaw
 changed sites. AKLV, arXiv:1301.1162v1, Lemma 4.2, lines 651--654. -/
 theorem operatorSchmidtRank_cutOperator_le_pow_dist_mul {L q : ℕ} (hq : 1 ≤ q)
     (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (i j : ℕ) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L j) K) ≤
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L j) K) ≤
       q ^ (2 * Nat.dist i j) *
-        operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) K) := by
+        operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) K) := by
   have hleft (k : ℕ) : leftBlock L k = interval L 0 k := by
     ext v
     simp only [mem_leftBlock, mem_interval, Nat.zero_le, true_and]
@@ -53,15 +53,15 @@ operator. AKLV, arXiv:1301.1162v1, Lemma 4.2, lines 651--662. -/
 theorem operatorSchmidtRank_aklv_window_one_marker_target_le {L q a s : ℕ}
     (hq : 1 ≤ q) (hspace : a + s + 1 ≤ L)
     (H : Fin s → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hH : ∀ j, Entropy.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
+    (hH : ∀ j, ManyBody.IsSupportedOn (H j) (interval L (a + j.val) (a + j.val + 2)))
     (HL HR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hL : Entropy.IsSupportedOn HL (interval L 0 (a + 1)))
-    (hR : Entropy.IsSupportedOn HR (interval L (a + s) L)) (u : Fin s) (t k target : ℕ) :
+    (hL : ManyBody.IsSupportedOn HL (interval L 0 (a + 1)))
+    (hR : ManyBody.IsSupportedOn HR (interval L (a + s) L)) (u : Fin s) (t k target : ℕ) :
     let I := {j : Fin s ⊕ Fin 2 // j ≠ Sum.inl u}
     let E := @Finset.piAntidiag I ℕ (Classical.decEq I) _ _ _ Finset.univ t
     let ordinary := fun j : I ↦ aklvWindowFamily H HL HR j.val
     ∀ weight : E → ℂ, operatorSchmidtRank
-      (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L target)
+      (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L target)
         (∑ α : E, weight α •
           WordMultiplicity.oneMarkerCoefficient ordinary (H u) t k α.val)) ≤
       (t + s).choose s * (t + 2 * k + 1).choose (2 * k + 1) *

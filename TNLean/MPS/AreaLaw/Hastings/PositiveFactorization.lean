@@ -4,7 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Analysis.PositiveFactorRepair
-import QICLean.Entropy.LocalLift
+import QICLean.Entropy.SupportedMarginalTails
+import QICLean.Entropy.FilterMoment
+import QICLean.ManyBody.Sites.RegionState
+import QICLean.ManyBody.Sites.Placement
 import QICLean.Entropy.SupportedOperatorAlgebra
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.OpenMPS
@@ -59,9 +62,9 @@ Hastings, arXiv:0705.2024v4, lines 246–267. -/
 def IsFactorizationAt (Ω : EuclideanSpace ℂ (Fin L → Fin q)) (c l : ℕ) (ε : ℝ)
     (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) : Prop :=
   IsStarProjection OL ∧ IsStarProjection OR ∧ Commute OL OR ∧ ‖OB‖ ≤ 1 ∧
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OB (interval L (c - l) (c + l)) ∧
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL (leftBlock L c) ∧
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR (leftBlock L c)ᶜ ∧
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB (interval L (c - l) (c + l)) ∧
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL (leftBlock L c) ∧
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR (leftBlock L c)ᶜ ∧
     ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤ ε
 
 /-- A factorization with error `ε` is one with every larger error. -/
@@ -111,7 +114,7 @@ theorem IsFactorizationAt.conjTranspose_mul_self {Ω : EuclideanSpace ℂ (Fin L
   obtain ⟨hpos, hnorm, herr⟩ :=
     posSemidef_conjTranspose_mul_self_mul_mul_sub_le hB1 hP hL hR hLR hBLR
   have hε0 : 0 ≤ ε := (norm_nonneg _).trans hBLR
-  have hsupp : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (OBᴴ * OB)
+  have hsupp : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (OBᴴ * OB)
       (interval L (c - l) (c + l)) := by
     change _ ∈ ManyBody.supportedOperators _ _
     exact (mul_mem (star_mem hBs) hBs : star OB * OB ∈
@@ -162,9 +165,9 @@ theorem exists_factorization_of_isFactorizationAt {Ω : EuclideanSpace ℂ (Fin 
     {j m : ℕ} {ε : ℝ} {OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ}
     (hF : IsFactorizationAt Ω j m ε OB OL OR) :
     ∃ (SB SL SR : Finset (Fin L)),
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL SL ∧ SL ⊆ leftBlock L j ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L j ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤ ε := by
   obtain ⟨-, -, -, -, hBs, hLs, hRs, hBLR⟩ := hF
   refine ⟨_, _, _, hBs, fun i hi ↦ ?_, hLs, subset_rfl, hRs, disjoint_compl_left, hBLR⟩

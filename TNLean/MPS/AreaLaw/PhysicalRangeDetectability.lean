@@ -33,7 +33,7 @@ ALVV, arXiv:1602.08828v2, Section 6.1, lines 1457–1460, and `lem:dl`. -/
 theorem norm_sq_physicalDetectability_supportProj_le
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hh : ∀ i, (h i).PosSemidef) (hn : ∀ i, ‖h i‖ ≤ 1)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     {gamma : ℝ} (hgamma : 0 < gamma)
     (hgap : ∀ e ∈ spectrum ℝ (∑ i, h i), e = 0 ∨ gamma ≤ e)
@@ -46,7 +46,7 @@ theorem norm_sq_physicalDetectability_supportProj_le
   let P := fun i ↦ (hh i).supportProj
   have hp (i : Fin (L - 1)) : IsStarProjection (P i) :=
     (hh i).isHermitian.isStarProjection_supportProj
-  have hps (i : Fin (L - 1)) : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+  have hps (i : Fin (L - 1)) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (P i) (interval L i.val (i.val + 2)) :=
     (QuantumCircuit.supportProj_mem_supportedOperators _ (hh i).isHermitian
         ((hs i)))

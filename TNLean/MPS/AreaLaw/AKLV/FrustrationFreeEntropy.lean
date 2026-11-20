@@ -53,14 +53,14 @@ theorem exists_aklv_frustrationFree_physical_entropy_bound :
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
       2 ≤ q →
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
       (∑ j, h j) *ᵥ WithLp.ofLp Ω = 0 →
       ((∑ j, h j) - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
       0 < g → g ≤ 1 → ∀ k : ℕ, k ≤ L →
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω ≤
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k) ≤
         C / g * (1 + log (q : ℝ) + log (1 / g)) ^ 3 := by
   obtain ⟨A, hA, _hA21, hscalar⟩ := exists_aklv_frustrationFree_scalar_parameters
   let W := 8192 * (A + 1) * (1 + log 8192) ^ 2
@@ -104,7 +104,7 @@ theorem exists_aklv_frustrationFree_physical_entropy_bound :
     obtain ⟨p, _hdegree, _hp0, hfix, _herror, _hshortRank, hrank, hperp⟩ := hfilter ell
     let B := aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h (fun _ ↦ 0) t Finset.univ
     let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval B p
-    have hrankD : operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    have hrankD : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
         (leftBlock L (a + s / 2)) K) ≤ D := by
       change _ ≤ (q * (ell + 1)) ^ (32 * (2 * s + 1))
       simpa only [hdiv, hsqrt, two_mul] using hrank
@@ -158,14 +158,14 @@ theorem exists_aklv_frustrationFree_entropy_bound_of_mem_spectrum :
     ∃ C : ℝ, 0 < C ∧ ∀ (L q : ℕ)
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h j) (interval L j.val (j.val + 2))) →
       (∀ j, 0 ≤ h j) → (∀ j, h j ≤ 1) → ‖Ω‖ = 1 →
       (∑ j, h j) *ᵥ WithLp.ofLp Ω = 0 →
       ((∑ j, h j) - (g : ℂ) •
         (1 - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω)))).PosSemidef →
       0 < g → g ∈ spectrum ℝ (∑ j, h j) → ∀ k : ℕ, k ≤ L →
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω ≤
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (leftBlock L k) ≤
         C / g * (1 + log (q : ℝ) + log (1 / g)) ^ 3 := by
   obtain ⟨C, hC, hbound⟩ := exists_aklv_frustrationFree_physical_entropy_bound
   refine ⟨C, hC, fun L q h g Ω hsupp h0 h1 hΩ hzero hgap hg hexcited k hk ↦ ?_⟩

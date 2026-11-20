@@ -61,7 +61,6 @@ import TNLean.PEPS.AreaLaw.PhysicalSafeBox
 import TNLean.PEPS.AreaLaw.PositiveConstraints
 import TNLean.PEPS.AreaLaw.QuasilocalRoots
 import TNLean.PEPS.AreaLaw.RectangularBoundary
-import TNLean.PEPS.AreaLaw.RectangularDomain
 import TNLean.PEPS.AreaLaw.RectangularHamiltonian
 import TNLean.PEPS.AreaLaw.RectangularSpecialization
 import TNLean.PEPS.AreaLaw.RegionOperatorLocalization

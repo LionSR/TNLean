@@ -39,7 +39,7 @@ namespace TNLean.MPS.AreaLaw.ALVV
 open Classical in
 private theorem three_region_data {L q l r : ℕ} (hlr : l ≤ r) (hrL : r ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     let k : Fin 4 → ℕ := ![0, l, r, L]
@@ -50,7 +50,7 @@ private theorem three_region_data {L q l r : ℕ} (hlr : l ≤ r) (hrL : r ≤ L
     let J := Finset.univ.filter (fun i : Fin (L - 1) ↦ i.val + 1 ∈ ({l, r} : Finset ℕ))
     let Y := ∑ i ∈ J, h i
     Monotone k ∧ (Pairwise fun i j ↦ Disjoint (R i) (R j)) ∧
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (A j) (R j)) ∧
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (A j) (R j)) ∧
       (∀ j, (A j).PosSemidef ∧ A j ≤ ((I j).card : ℝ) • 1) ∧
       Y.PosSemidef ∧ Y ≤ (J.card : ℝ) • 1 ∧ J.card ≤ 2 ∧
       (∑ i, h i) = (∑ j, A j) + Y := by
@@ -145,7 +145,7 @@ Empty regions and coincident or endpoint cuts are included. -/
 theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     ∃ (e : Fin 3 → ℝ) (x z : (Fin L → Fin q) → ℂ) (E : ℝ),
@@ -186,7 +186,7 @@ theorem exists_single_region_hard_truncation_residuals {L q l r : ℕ}
     (fun i : Fin (L - 1) ↦ k j.castSucc ≤ i.val ∧ i.val + 1 < k j.succ)
   obtain ⟨hk, hR, hsA, hA, hY, hYC, hJ, hsum⟩ :
       Monotone k ∧ (Pairwise fun i j ↦ Disjoint (R i) (R j)) ∧
-        (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (A j) (R j)) ∧
+        (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (A j) (R j)) ∧
         (∀ j, (A j).PosSemidef ∧ A j ≤ ((I j).card : ℝ) • 1) ∧
         Y.PosSemidef ∧ Y ≤ (J.card : ℝ) • 1 ∧ J.card ≤ 2 ∧
         (∑ i, h i) = (∑ j, A j) + Y :=

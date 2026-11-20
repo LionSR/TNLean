@@ -48,11 +48,11 @@ theorem weakRectangle_source_entropy_bounds
       D₀ * L + L ≤ D₀ * Q.size →
       ∀ e : ℝ, b ≤ e →
       (∀ Q' : IntRect, IsSafe Λ A D₀ Q' →
-        regionalEntropy Λ q Ω (rectRegion A Q') ≤ Cbox * (Q'.size : ℝ) ^ (1 + e)) →
-      regionalEntropy Λ q Ω (rectRegion A Q) ≤
+        ManyBody.regionEntropy Ω (rectRegion A Q') ≤ Cbox * (Q'.size : ℝ) ^ (1 + e)) →
+      ManyBody.regionEntropy Ω (rectRegion A Q) ≤
           weakRectangleSourceEntropyCoefficient b Cbox * (n : ℝ) ^ (1 + e) ∧
         ∀ j : ℕ, j ≤ L →
-          regionalEntropy Λ q Ω
+          ManyBody.regionEntropy Ω
             (positiveDepthPrefix A (fun x ↦ ambientDepth Q.toFinset hQ x.val) (j : ℤ)) ≤
               weakRectangleSourceEntropyCoefficient b Cbox * ((n : ℝ) * (L : ℝ) ^ e + n) := by
   let Cshell := 24 + 64 / ((2 : ℝ) ^ b - 1)
@@ -108,10 +108,10 @@ theorem exists_weakRectangle_source_entropy_bounds
         D₀ * L + L ≤ D₀ * Q.size →
         ∀ e : ℝ, b ≤ e →
         (∀ Q' : IntRect, IsSafe Λ A D₀ Q' →
-          regionalEntropy Λ q Ω (rectRegion A Q') ≤ Cbox * (Q'.size : ℝ) ^ (1 + e)) →
-        regionalEntropy Λ q Ω (rectRegion A Q) ≤ Ce * (n : ℝ) ^ (1 + e) ∧
+          ManyBody.regionEntropy Ω (rectRegion A Q') ≤ Cbox * (Q'.size : ℝ) ^ (1 + e)) →
+        ManyBody.regionEntropy Ω (rectRegion A Q) ≤ Ce * (n : ℝ) ^ (1 + e) ∧
           ∀ j : ℕ, j ≤ L →
-            regionalEntropy Λ q Ω
+            ManyBody.regionEntropy Ω
               (positiveDepthPrefix A (fun x ↦ ambientDepth Q.toFinset hQ x.val) (j : ℤ)) ≤
                 Ce * ((n : ℝ) * (L : ℝ) ^ e + n) :=
   ⟨_, weakRectangleSourceEntropyCoefficient_nonneg hb hCbox,

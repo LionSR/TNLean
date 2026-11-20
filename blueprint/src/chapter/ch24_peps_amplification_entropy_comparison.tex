@@ -23,7 +23,7 @@ Ancillary systems are included by enlarging $V$.
 \begin{lemma}[Trace distance of pure states]
     \label{lem:al_amp_pure_trace_distance}
     \lean{Matrix.traceDistance_vecMulVec_le_norm_sub,
-        FiniteProduct.traceDistance_reducedPure_le}
+        ManyBody.traceDistance_regionState_le}
     \leanok
     For unit vectors $\psi,\varphi$ in a finite-dimensional Hilbert space,
     \begin{align*}
@@ -62,7 +62,7 @@ Ancillary systems are included by enlarging $V$.
 
 \begin{lemma}[Continuity against a product reduction]
     \label{lem:al_amp_continuity_product}
-    \lean{FiniteProduct.mutualInformation_le_of_norm_sub_le}
+    \lean{ManyBody.regionMutualInformation_le_of_norm_sub_le}
     \leanok
     \uses{lem:al_amp_pure_trace_distance}
     Let $\psi,\eta\in\mathcal H$ be unit vectors and let $X,J\subseteq V$ be

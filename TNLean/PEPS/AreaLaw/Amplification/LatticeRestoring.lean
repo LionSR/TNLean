@@ -239,7 +239,7 @@ namespace TNLean.PEPS.AreaLaw
 /-- Configurations of a region of a finite domain, with `q` levels at each site.
 Source: area-law Section 1, the regional tensor factors. -/
 abbrev RegionalConfiguration {Λ : Finset (ℤ × ℤ)} (q : ℕ) (A : Finset (Site Λ)) :=
-  FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) A
+  ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q) A
 
 /-- Shortcut instance, which keeps instance terms on products of regional
 configurations small. -/
@@ -258,8 +258,8 @@ variable {Λ : Finset (ℤ × ℤ)} {q : ℕ}
 def restoringSplit (q : ℕ) (X Y : Finset (Site Λ)) (hXY : Disjoint X Y) :
     Configuration Λ q ≃ (RegionalConfiguration q X × RegionalConfiguration q Y) ×
       RegionalConfiguration q (X ∪ Y)ᶜ :=
-  (FiniteProduct.splitEquiv (fun _ : Site Λ ↦ Fin q) (X ∪ Y)).trans
-    ((FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).prodCongr (Equiv.refl _))
+  (ManyBody.splitEquiv (fun _ : Site Λ ↦ Fin q) (X ∪ Y)).trans
+    ((ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).prodCongr (Equiv.refl _))
 
 /-- The vector `Ω` in the coordinates `((X, Y), Z')`, with the factor `X` written in the
 full eigenbasis `{|x⟩}` of `ρ_X`. Source: `09-amplification.tex`, lines 324–329. -/
@@ -267,7 +267,7 @@ noncomputable def restoringVector (Ω : StateSpace Λ q) (X Y : Finset (Site Λ)
     (hXY : Disjoint X Y) :
     EuclideanSpace ℂ ((RegionalConfiguration q X × RegionalConfiguration q Y) ×
       RegionalConfiguration q (X ∪ Y)ᶜ) :=
-  WithLp.toLp 2 (((((reducedState_isHermitian Λ q Ω X).eigenvectorUnitary :
+  WithLp.toLp 2 (((((ManyBody.regionState_isHermitian X Ω).eigenvectorUnitary :
       Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)ᴴ ⊗ₖ
       (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ)) ⊗ₖ
       (1 : Matrix (RegionalConfiguration q (X ∪ Y)ᶜ)
@@ -281,14 +281,14 @@ noncomputable def restoringCutProjection (Ω : StateSpace Λ q) (X Y : Finset (S
     (hXY : Disjoint X Y) (w : ℝ) :
     Matrix (RegionalConfiguration q X × RegionalConfiguration q Y)
       (RegionalConfiguration q X × RegionalConfiguration q Y) ℂ :=
-  Entropy.restoringBasisCoordinates (reducedState_isHermitian Λ q Ω X).eigenvectorUnitary
+  Entropy.restoringBasisCoordinates (ManyBody.regionState_isHermitian X Ω).eigenvectorUnitary
     ((typicalProjection Λ q Ω (X ∪ Y) w).submatrix
-      (FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
-      (FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm)
+      (ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
+      (ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm)
 
 /-- The eigenbasis change on `X`, extended by the identity on `Y`, is unitary. -/
 private theorem eigen_kronecker_unitary (Ω : StateSpace Λ q) (X Y : Finset (Site Λ)) :
-    let U := ((reducedState_isHermitian Λ q Ω X).eigenvectorUnitary :
+    let U := ((ManyBody.regionState_isHermitian X Ω).eigenvectorUnitary :
       Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)
     (Uᴴ ⊗ₖ (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ))ᴴ =
         U ⊗ₖ (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ) ∧
@@ -306,17 +306,17 @@ the eigenbasis of `ρ_X`. -/
 theorem restoringReducedDensity_restoringVector (Ω : StateSpace Λ q)
     (X Y : Finset (Site Λ)) (hXY : Disjoint X Y) :
     Entropy.restoringReducedDensity (restoringVector Ω X Y hXY) =
-      (((reducedState_isHermitian Λ q Ω X).eigenvectorUnitary :
+      (((ManyBody.regionState_isHermitian X Ω).eigenvectorUnitary :
           Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)ᴴ ⊗ₖ
           (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ)) *
-        (reducedState Λ q Ω (X ∪ Y)).submatrix
-          (FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
-          (FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm *
-        (((reducedState_isHermitian Λ q Ω X).eigenvectorUnitary :
+        (ManyBody.regionState Ω (X ∪ Y)).submatrix
+          (ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
+          (ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm *
+        (((ManyBody.regionState_isHermitian X Ω).eigenvectorUnitary :
           Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ) ⊗ₖ
           (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ)) := by
   obtain ⟨hW, -, -⟩ := eigen_kronecker_unitary Ω X Y
-  set W := (((reducedState_isHermitian Λ q Ω X).eigenvectorUnitary :
+  set W := (((ManyBody.regionState_isHermitian X Ω).eigenvectorUnitary :
     Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)ᴴ ⊗ₖ
     (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ))
   set φ : (RegionalConfiguration q X × RegionalConfiguration q Y) ×
@@ -332,13 +332,12 @@ theorem restoringReducedDensity_restoringVector (Ω : StateSpace Λ q)
       star_star]
     rfl
   have hφ : partialTraceRight (vecMulVec φ (star φ)) =
-      (reducedState Λ q Ω (X ∪ Y)).submatrix
-        (FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
-        (FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm := by
+      (ManyBody.regionState Ω (X ∪ Y)).submatrix
+        (ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
+        (ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm := by
     ext a b
-    rw [reducedState_eq_finiteProduct]
     simp only [partialTraceRight_apply, vecMulVec_apply, Pi.star_apply, submatrix_apply,
-      FiniteProduct.reducedPure, FiniteProduct.reducedMatrix_apply, φ]
+      ManyBody.regionState, ManyBody.regionMatrix_apply, φ]
     rfl
   rw [Entropy.restoringReducedDensity, hvec, partialTraceRight_kronecker_one_mul_mul, hφ, hW]
 
@@ -347,15 +346,14 @@ on the diagonal. Source: `09-amplification.tex`, lines 324–329. -/
 theorem partialTraceRight_restoringReducedDensity_restoringVector (Ω : StateSpace Λ q)
     (X Y : Finset (Site Λ)) (hXY : Disjoint X Y) :
     partialTraceRight (Entropy.restoringReducedDensity (restoringVector Ω X Y hXY)) =
-      diagonal fun x ↦ ((reducedState_isHermitian Λ q Ω X).eigenvalues x : ℂ) := by
-  have hX : partialTraceRight ((reducedState Λ q Ω (X ∪ Y)).submatrix
-      (FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
-      (FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm) =
-      reducedState Λ q Ω X := by
-    rw [reducedState_eq_finiteProduct, reducedState_eq_finiteProduct]
-    exact FiniteProduct.partialTraceRight_reducedMatrix_union _ _ X Y hXY
+      diagonal fun x ↦ ((ManyBody.regionState_isHermitian X Ω).eigenvalues x : ℂ) := by
+  have hX : partialTraceRight ((ManyBody.regionState Ω (X ∪ Y)).submatrix
+      (ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
+      (ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm) =
+      ManyBody.regionState Ω X := by
+    exact ManyBody.partialTraceRight_regionMatrix_union _ _ X Y hXY
   rw [restoringReducedDensity_restoringVector, partialTraceRight_kronecker_one_mul_mul, hX]
-  have h := (reducedState_isHermitian Λ q Ω X).conjStarAlgAut_star_eigenvectorUnitary
+  have h := (ManyBody.regionState_isHermitian X Ω).conjStarAlgAut_star_eigenvectorUnitary
   rw [Unitary.conjStarAlgAut_apply, Unitary.coe_star, star_star, star_eq_conjTranspose] at h
   exact h
 
@@ -363,11 +361,10 @@ theorem partialTraceRight_restoringReducedDensity_restoringVector (Ω : StateSpa
 theorem partialTraceLeft_restoringReducedDensity_restoringVector (Ω : StateSpace Λ q)
     (X Y : Finset (Site Λ)) (hXY : Disjoint X Y) :
     partialTraceLeft (Entropy.restoringReducedDensity (restoringVector Ω X Y hXY)) =
-      reducedState Λ q Ω Y := by
+      ManyBody.regionState Ω Y := by
   obtain ⟨-, -, h2⟩ := eigen_kronecker_unitary Ω X Y
-  rw [restoringReducedDensity_restoringVector, partialTraceLeft_kronecker_one_conj h2,
-    reducedState_eq_finiteProduct, reducedState_eq_finiteProduct]
-  exact FiniteProduct.partialTraceLeft_reducedMatrix_union _ _ X Y hXY
+  rw [restoringReducedDensity_restoringVector, partialTraceLeft_kronecker_one_conj h2]
+  exact ManyBody.partialTraceLeft_regionMatrix_union _ _ X Y hXY
 
 /-- The restoring vector of a unit vector is a unit vector. -/
 theorem norm_restoringVector (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
@@ -419,16 +416,16 @@ restoring vector by at most `√δ` when `1 - tr(ρ_X P_X) ≤ δ`.
 Source: `09-amplification.tex`, lines 409–415. -/
 theorem norm_selectedProjection_restoringVector_sub_le (Ω : StateSpace Λ q)
     (hΩ : ‖Ω‖ = 1) (X Y : Finset (Site Λ)) (hXY : Disjoint X Y) (w δ : ℝ)
-    (hδ : 1 - (reducedState Λ q Ω X * typicalProjection Λ q Ω X w).trace.re ≤ δ) :
+    (hδ : 1 - (ManyBody.regionState Ω X * typicalProjection Λ q Ω X w).trace.re ≤ δ) :
     ‖WithLp.toLp 2 (((Entropy.restoringSelectedProjection
-        (Entropy.typicalSet (reducedState_isHermitian Λ q Ω X).eigenvalues
-          (regionalEntropy Λ q Ω X) w) ⊗ₖ
+        (Entropy.typicalSet (ManyBody.regionState_isHermitian X Ω).eigenvalues
+          (ManyBody.regionEntropy Ω X) w) ⊗ₖ
         (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ)) ⊗ₖ
         (1 : Matrix (RegionalConfiguration q (X ∪ Y)ᶜ)
           (RegionalConfiguration q (X ∪ Y)ᶜ) ℂ)) *ᵥ
           (restoringVector Ω X Y hXY).ofLp) - restoringVector Ω X Y hXY‖ ≤ √δ := by
-  set E := Entropy.typicalSet (reducedState_isHermitian Λ q Ω X).eigenvalues
-    (regionalEntropy Λ q Ω X) w
+  set E := Entropy.typicalSet (ManyBody.regionState_isHermitian X Ω).eigenvalues
+    (ManyBody.regionEntropy Ω X) w
   have hP : IsStarProjection (Entropy.restoringSelectedProjection E) :=
     ⟨Entropy.restoringSelectedProjection_mul_self E,
       Entropy.restoringSelectedProjection_isHermitian E⟩
@@ -447,7 +444,7 @@ theorem norm_selectedProjection_restoringVector_sub_le (Ω : StateSpace Λ q)
 Source: `09-amplification.tex`, lines 409–415. -/
 theorem norm_typicalProjection_restoringVector_sub_le (Ω : StateSpace Λ q)
     (hΩ : ‖Ω‖ = 1) (X Y : Finset (Site Λ)) (hXY : Disjoint X Y) (w δ : ℝ)
-    (hδ : 1 - (reducedState Λ q Ω Y * typicalProjection Λ q Ω Y w).trace.re ≤ δ) :
+    (hδ : 1 - (ManyBody.regionState Ω Y * typicalProjection Λ q Ω Y w).trace.re ≤ δ) :
     ‖WithLp.toLp 2 ((((1 : Matrix (RegionalConfiguration q X)
           (RegionalConfiguration q X) ℂ) ⊗ₖ typicalProjection Λ q Ω Y w) ⊗ₖ
         (1 : Matrix (RegionalConfiguration q (X ∪ Y)ᶜ)
@@ -464,13 +461,13 @@ eigenbasis of `ρ_X`. -/
 theorem restoringCutProjection_eq (Ω : StateSpace Λ q) (X Y : Finset (Site Λ))
     (hXY : Disjoint X Y) (w : ℝ) :
     restoringCutProjection Ω X Y hXY w =
-      (((reducedState_isHermitian Λ q Ω X).eigenvectorUnitary :
+      (((ManyBody.regionState_isHermitian X Ω).eigenvectorUnitary :
           Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)ᴴ ⊗ₖ
           (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ)) *
         (typicalProjection Λ q Ω (X ∪ Y) w).submatrix
-          (FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
-          (FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm *
-        (((reducedState_isHermitian Λ q Ω X).eigenvectorUnitary :
+          (ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
+          (ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm *
+        (((ManyBody.regionState_isHermitian X Ω).eigenvectorUnitary :
           Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ) ⊗ₖ
           (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ)) := rfl
 
@@ -484,12 +481,12 @@ theorem restoringCutProjection_isStarProjection_commute (Ω : StateSpace Λ q)
         (restoringCutProjection Ω X Y hXY w) := by
   obtain ⟨hW, hWW, -⟩ := eigen_kronecker_unitary Ω X Y
   obtain ⟨hP, hc, -, -⟩ := typicalProjection_failure_le_surprisalTail Ω hΩ (X ∪ Y) w
-  set e := (FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
-  set W := (((reducedState_isHermitian Λ q Ω X).eigenvectorUnitary :
+  set e := (ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
+  set W := (((ManyBody.regionState_isHermitian X Ω).eigenvectorUnitary :
     Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)ᴴ ⊗ₖ
     (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ))
   set P' := (typicalProjection Λ q Ω (X ∪ Y) w).submatrix e e
-  set ρ' := (reducedState Λ q Ω (X ∪ Y)).submatrix e e
+  set ρ' := (ManyBody.regionState Ω (X ∪ Y)).submatrix e e
   have hQ : restoringCutProjection Ω X Y hXY w = W * P' * Wᴴ := by
     rw [restoringCutProjection_eq, hW]
   have hρ : Entropy.restoringReducedDensity (restoringVector Ω X Y hXY) = W * ρ' * Wᴴ := by
@@ -524,7 +521,7 @@ moves the restoring vector by at most `√δ` when `1 - tr(ρ_{S₀} Q_{S₀}) �
 Source: `09-amplification.tex`, lines 409–415. -/
 theorem norm_restoringCutProjection_restoringVector_sub_le (Ω : StateSpace Λ q)
     (hΩ : ‖Ω‖ = 1) (X Y : Finset (Site Λ)) (hXY : Disjoint X Y) (w δ : ℝ)
-    (hδ : 1 - (reducedState Λ q Ω (X ∪ Y) * typicalProjection Λ q Ω (X ∪ Y) w).trace.re ≤
+    (hδ : 1 - (ManyBody.regionState Ω (X ∪ Y) * typicalProjection Λ q Ω (X ∪ Y) w).trace.re ≤
       δ) :
     ‖WithLp.toLp 2 ((restoringCutProjection Ω X Y hXY w ⊗ₖ
         (1 : Matrix (RegionalConfiguration q (X ∪ Y)ᶜ)
@@ -533,16 +530,16 @@ theorem norm_restoringCutProjection_restoringVector_sub_le (Ω : StateSpace Λ q
   obtain ⟨hW, hWW, -⟩ := eigen_kronecker_unitary Ω X Y
   refine norm_kronecker_one_restoringVector_sub_le Ω hΩ X Y hXY
     (restoringCutProjection_isStarProjection_commute Ω hΩ X Y hXY w).1 ?_ hδ
-  set e := (FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
-  set W := (((reducedState_isHermitian Λ q Ω X).eigenvectorUnitary :
+  set e := (ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
+  set W := (((ManyBody.regionState_isHermitian X Ω).eigenvectorUnitary :
     Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)ᴴ ⊗ₖ
     (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ))
   rw [restoringReducedDensity_restoringVector, restoringCutProjection_eq, ← hW]
   change _ = (W * _ * Wᴴ * (W * _ * Wᴴ)).trace
   have hWW' : Wᴴ * W = 1 := by rw [hW]; exact hWW
-  rw [show W * (reducedState Λ q Ω (X ∪ Y)).submatrix e e * Wᴴ *
+  rw [show W * (ManyBody.regionState Ω (X ∪ Y)).submatrix e e * Wᴴ *
       (W * (typicalProjection Λ q Ω (X ∪ Y) w).submatrix e e * Wᴴ) =
-      W * ((reducedState Λ q Ω (X ∪ Y)).submatrix e e * (Wᴴ * W) *
+      W * ((ManyBody.regionState Ω (X ∪ Y)).submatrix e e * (Wᴴ * W) *
         (typicalProjection Λ q Ω (X ∪ Y) w).submatrix e e) * Wᴴ by
         simp only [Matrix.mul_assoc],
     hWW', Matrix.mul_one, trace_mul_cycle, hWW', Matrix.one_mul, submatrix_mul_equiv,
@@ -553,9 +550,9 @@ theorem norm_restoringCutProjection_restoringVector_sub_le (Ω : StateSpace Λ q
 No normalization is needed. Source: `09-amplification.tex`, lines 395–397. -/
 theorem mutualInformation_compl_eq (Ω : StateSpace Λ q) (X Y : Finset (Site Λ))
     (hXY : Disjoint X Y) :
-    FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X (X ∪ Y)ᶜ =
-      regionalEntropy Λ q Ω X + regionalEntropy Λ q Ω (X ∪ Y) -
-        regionalEntropy Λ q Ω Y := by
+    ManyBody.regionMutualInformation Ω X (X ∪ Y)ᶜ =
+      ManyBody.regionEntropy Ω X + ManyBody.regionEntropy Ω (X ∪ Y) -
+        ManyBody.regionEntropy Ω Y := by
   have hY : X ∪ (X ∪ Y)ᶜ = Yᶜ := by
     ext v
     simp only [Finset.mem_union, Finset.mem_compl, not_or]
@@ -567,9 +564,8 @@ theorem mutualInformation_compl_eq (Ω : StateSpace Λ q) (X Y : Finset (Site Λ
       by_cases hvX : v ∈ X
       · exact Or.inl hvX
       · exact Or.inr ⟨hvX, hv⟩
-  rw [FiniteProduct.mutualInformation, hY, FiniteProduct.entropy_compl,
-    FiniteProduct.entropy_compl, regionalEntropy_eq_finiteProduct,
-    regionalEntropy_eq_finiteProduct, regionalEntropy_eq_finiteProduct]
+  rw [ManyBody.regionMutualInformation, hY, ManyBody.regionEntropy_compl,
+    ManyBody.regionEntropy_compl]
 
 /-- **The typical spectral inequalities of `eq:amplification-operator-norm`.** In the
 coordinates of the restoring vector, `Q ≤ e^{S(S₀)+w} ρ_{S₀}` and
@@ -577,38 +573,38 @@ coordinates of the restoring vector, `Q ≤ e^{S(S₀)+w} ρ_{S₀}` and
 theorem restoringCutProjection_le_and_typicalProjection_le (Ω : StateSpace Λ q)
     (X Y : Finset (Site Λ)) (hXY : Disjoint X Y) (w : ℝ) :
     restoringCutProjection Ω X Y hXY w ≤
-        Real.exp (regionalEntropy Λ q Ω (X ∪ Y) + w) •
+        Real.exp (ManyBody.regionEntropy Ω (X ∪ Y) + w) •
           Entropy.restoringReducedDensity (restoringVector Ω X Y hXY) ∧
       typicalProjection Λ q Ω Y w *
           partialTraceLeft (Entropy.restoringReducedDensity (restoringVector Ω X Y hXY)) *
           typicalProjection Λ q Ω Y w ≤
-        Real.exp (-regionalEntropy Λ q Ω Y + w) • typicalProjection Λ q Ω Y w := by
+        Real.exp (-ManyBody.regionEntropy Ω Y + w) • typicalProjection Λ q Ω Y w := by
   obtain ⟨hW, -, -⟩ := eigen_kronecker_unitary Ω X Y
-  set e := (FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
-  set W := (((reducedState_isHermitian Λ q Ω X).eigenvectorUnitary :
+  set e := (ManyBody.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
+  set W := (((ManyBody.regionState_isHermitian X Ω).eigenvectorUnitary :
     Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)ᴴ ⊗ₖ
     (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ))
   constructor
   · have hle := Matrix.PosSemidef.spectralSelection_le_smul
-      (reducedState_posSemidef Λ q Ω (X ∪ Y))
-      (E := Entropy.typicalSet (reducedState_isHermitian Λ q Ω (X ∪ Y)).eigenvalues
-        (regionalEntropy Λ q Ω (X ∪ Y)) w)
+      (ManyBody.regionState_posSemidef (X ∪ Y) Ω)
+      (E := Entropy.typicalSet (ManyBody.regionState_isHermitian (X ∪ Y) Ω).eigenvalues
+        (ManyBody.regionEntropy Ω (X ∪ Y)) w)
       (Real.exp_pos _).le fun i hi ↦ by
         have h := (Entropy.exp_le_of_mem_typicalSet hi).1
-        calc (1 : ℝ) = Real.exp (regionalEntropy Λ q Ω (X ∪ Y) + w) *
-              Real.exp (-regionalEntropy Λ q Ω (X ∪ Y) - w) := by
+        calc (1 : ℝ) = Real.exp (ManyBody.regionEntropy Ω (X ∪ Y) + w) *
+              Real.exp (-ManyBody.regionEntropy Ω (X ∪ Y) - w) := by
               rw [← Real.exp_add]; ring_nf; exact Real.exp_zero.symm
           _ ≤ _ := mul_le_mul_of_nonneg_left h (Real.exp_pos _).le
     rw [Matrix.le_iff] at hle ⊢
     rw [restoringCutProjection_eq, restoringReducedDensity_restoringVector, ← hW]
-    change (Real.exp (regionalEntropy Λ q Ω (X ∪ Y) + w) • (W * _ * Wᴴ) -
+    change (Real.exp (ManyBody.regionEntropy Ω (X ∪ Y) + w) • (W * _ * Wᴴ) -
       W * _ * Wᴴ).PosSemidef
     rw [← Matrix.smul_mul, ← Matrix.mul_smul, ← Matrix.sub_mul, ← Matrix.mul_sub]
     convert (hle.submatrix e).mul_mul_conjTranspose_same W using 2
     congr 1
   · rw [partialTraceLeft_restoringReducedDensity_restoringVector]
     exact Matrix.IsHermitian.spectralSelection_mul_mul_le_smul
-      (reducedState_isHermitian Λ q Ω Y) fun i hi ↦
+      (ManyBody.regionState_isHermitian Y Ω) fun i hi ↦
         (Entropy.exp_le_of_mem_typicalSet hi).2
 
 /-- **The restoring operator of the amplification proposition on the lattice.** Let `Ω`
@@ -629,19 +625,19 @@ selected eigenvalue indices of `P_X`, `T = T_Y`, `Q` for the cut projection and 
 Source: `09-amplification.tex`, lines 324–447. -/
 theorem restoringOperator_estimates (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
     (X Y : Finset (Site Λ)) (hXY : Disjoint X Y) (w δ : ℝ)
-    (hδX : 1 - (reducedState Λ q Ω X * typicalProjection Λ q Ω X w).trace.re ≤ δ)
-    (hδY : 1 - (reducedState Λ q Ω Y * typicalProjection Λ q Ω Y w).trace.re ≤ δ)
-    (hδS : 1 - (reducedState Λ q Ω (X ∪ Y) * typicalProjection Λ q Ω (X ∪ Y) w).trace.re ≤
+    (hδX : 1 - (ManyBody.regionState Ω X * typicalProjection Λ q Ω X w).trace.re ≤ δ)
+    (hδY : 1 - (ManyBody.regionState Ω Y * typicalProjection Λ q Ω Y w).trace.re ≤ δ)
+    (hδS : 1 - (ManyBody.regionState Ω (X ∪ Y) * typicalProjection Λ q Ω (X ∪ Y) w).trace.re ≤
       δ)
     (sBlank xBlank eBlank : RegionalConfiguration q X → ℂ)
     (hs : ‖WithLp.toLp 2 sBlank‖ = 1) (hx : ‖WithLp.toLp 2 xBlank‖ = 1)
     (he : ‖WithLp.toLp 2 eBlank‖ = 1) :
-    let p := (reducedState_isHermitian Λ q Ω X).eigenvalues
-    let E := Entropy.typicalSet p (regionalEntropy Λ q Ω X) w
+    let p := (ManyBody.regionState_isHermitian X Ω).eigenvalues
+    let E := Entropy.typicalSet p (ManyBody.regionEntropy Ω X) w
     let T := typicalProjection Λ q Ω Y w
     let Q := restoringCutProjection Ω X Y hXY w
     let ψ := restoringVector Ω X Y hXY
-    let I := FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X (X ∪ Y)ᶜ
+    let I := ManyBody.regionMutualInformation Ω X (X ∪ Y)ᶜ
     ‖ψ‖ = 1 ∧
       ‖Entropy.restoringOperator E p sBlank xBlank Q T‖ ≤ Real.exp ((I + 3 * w) / 2) ∧
       ‖Entropy.columnOperator E p sBlank eBlank Q T‖ ≤ Real.exp ((I + 3 * w) / 2) ∧
@@ -656,17 +652,17 @@ theorem restoringOperator_estimates (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
   intro p E T Q ψ I
   have hψ : ‖ψ‖ = 1 := norm_restoringVector Ω hΩ X Y hXY
   have hp : ∀ x ∈ E, 0 < p x := fun x hx ↦ (Entropy.mem_typicalSet.mp hx).1
-  have hpX : ∀ x ∈ E, (p x)⁻¹ ≤ Real.exp (regionalEntropy Λ q Ω X + w) := by
+  have hpX : ∀ x ∈ E, (p x)⁻¹ ≤ Real.exp (ManyBody.regionEntropy Ω X + w) := by
     intro x hx
     have h := inv_anti₀ (Real.exp_pos _) (Entropy.exp_le_of_mem_typicalSet hx).1
-    rwa [show -regionalEntropy Λ q Ω X - w = -(regionalEntropy Λ q Ω X + w) by ring,
+    rwa [show -ManyBody.regionEntropy Ω X - w = -(ManyBody.regionEntropy Ω X + w) by ring,
       Real.exp_neg, inv_inv] at h
   obtain ⟨hQ, hρQ⟩ := restoringCutProjection_isStarProjection_commute Ω hΩ X Y hXY w
   have hT : IsStarProjection T := (typicalProjection_failure_le_surprisalTail Ω hΩ Y w).1
   obtain ⟨hQρ, hρY⟩ := restoringCutProjection_le_and_typicalProjection_le Ω X Y hXY w
   obtain ⟨hR, hB⟩ := Entropy.restoringOperators_norm_le_exp E p hp sBlank xBlank eBlank
-    hs hx he hQ hT (regionalEntropy Λ q Ω X) (regionalEntropy Λ q Ω (X ∪ Y))
-    (regionalEntropy Λ q Ω Y) w I (mutualInformation_compl_eq Ω X Y hXY) hpX hQρ hρY
+    hs hx he hQ hT (ManyBody.regionEntropy Ω X) (ManyBody.regionEntropy Ω (X ∪ Y))
+    (ManyBody.regionEntropy Ω Y) w I (mutualInformation_compl_eq Ω X Y hXY) hpX hQρ hρY
   refine ⟨hψ, hR, hB, ?_, fun L ↦ ?_⟩
   · exact Entropy.restoringGroundComponent_norm_le_one E p hp sBlank xBlank hs hx ψ hψ hQ
       hρQ hT (partialTraceRight_restoringReducedDensity_restoringVector Ω X Y hXY)
@@ -708,12 +704,12 @@ theorem exists_restoringOperator_estimates (hq : 1 ≤ q) (R : ℕ) {J : ℝ}
             ‖WithLp.toLp 2 sBlank‖ = 1 → ‖WithLp.toLp 2 xBlank‖ = 1 →
             ‖WithLp.toLp 2 eBlank‖ = 1 →
             let w := (n : ℝ) ^ ((3 : ℝ) / 5)
-            let p := (reducedState_isHermitian Λ q Ω X).eigenvalues
-            let E := Entropy.typicalSet p (regionalEntropy Λ q Ω X) w
+            let p := (ManyBody.regionState_isHermitian X Ω).eigenvalues
+            let E := Entropy.typicalSet p (ManyBody.regionEntropy Ω X) w
             let T := typicalProjection Λ q Ω Y w
             let Q := restoringCutProjection Ω X Y hXY w
             let ψ := restoringVector Ω X Y hXY
-            let I := FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X
+            let I := ManyBody.regionMutualInformation Ω X
               (X ∪ Y)ᶜ
             ‖ψ‖ = 1 ∧
               ‖Entropy.restoringOperator E p sBlank xBlank Q T‖ ≤

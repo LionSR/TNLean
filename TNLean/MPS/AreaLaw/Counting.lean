@@ -59,14 +59,14 @@ theorem card_filter_subset_le_pow_of_card_le {W : Finset (Fin L)} {n : ℕ}
 /-- **Split supports of an interval.** At most `N_R` supports of range `R` are split by any
 interval of the chain. TNLean note, `eq:count`. -/
 theorem card_crossingTerms_interval_le (a b : ℕ) :
-    (Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) (interval L a b)).card ≤
+    (ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) (interval L a b)).card ≤
       chainCrossConst R := by
   classical
-  have hcover : Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) (interval L a b) ⊆
+  have hcover : ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) (interval L a b) ⊆
       (Finset.univ.filter fun X : ChainSupport L R ↦ X.1 ⊆ interval L (a - R) (a + R)) ∪
         Finset.univ.filter fun X : ChainSupport L R ↦ X.1 ⊆ interval L (b - R) (b + R) := by
     intro X hX
-    simp only [Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
+    simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
     simp only [Finset.mem_union, Finset.mem_filter, Finset.mem_univ, true_and]
     exact X.2.subset_window_of_splits hX
   have hW : ∀ c : ℕ, (interval L (c - R) (c + R)).card ≤ 2 * R := fun c ↦
@@ -178,7 +178,7 @@ theorem log_sq_supportDim_le (hq : 1 ≤ q) (X : ChainSupport L R) :
 marginal tail bound at an interval cut is at most `B_R`. -/
 theorem cutLogBudget_interval_le (hq : 1 ≤ q) (a b : ℕ) :
     cutLogBudget L q R (interval L a b) ≤ chainBudgetConst q R := by
-  set Cr := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) (interval L a b)
+  set Cr := ManyBody.crossingTerms (fun X : ChainSupport L R ↦ X.1) (interval L a b)
   have hl : 0 ≤ Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) := by
     apply Real.log_nonneg
     have : (1 : ℝ) ≤ (q : ℝ) ^ (R + 1) := one_le_pow₀ (by exact_mod_cast hq)

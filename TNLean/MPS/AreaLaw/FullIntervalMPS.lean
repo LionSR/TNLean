@@ -41,7 +41,7 @@ arXiv:1307.5143v1, `def:viable`, lines 240–244. -/
 private theorem rank_cutMatrix_full_region {L q : ℕ} {J : Finset (Fin L)}
     (hJ : J = leftBlock L L) (u : EuclideanSpace ℂ (J → Fin q)) (k : ℕ) :
     (cutMatrix (WithLp.toLp 2 (fun x : Fin L → Fin q ↦ u (fun v ↦ x v.val))) k).rank =
-      Matrix.schmidtRank (WithLp.ofLp (Entropy.cutVector
+      Matrix.schmidtRank (WithLp.ofLp (ManyBody.cutVector
         (Finset.univ.filter fun v : J ↦ v.val.val < k) u)) := by
   subst J
   have hconfig (x : Fin L → Fin q) : leftConfigOfFin (L := L) x =
@@ -59,7 +59,7 @@ lines 660–697, and its final full-chain merge, lines 1777–1817. -/
 theorem rank_cutMatrix_fullIntervalRead {L q : ℕ}
     (u : EuclideanSpace ℂ (interval L 0 L → Fin q)) (k : ℕ) (hk : 0 < k) :
     (cutMatrix (WithLp.toLp 2 (fullIntervalRead L q u)) k).rank =
-      Matrix.schmidtRank (WithLp.ofLp (Entropy.cutVector
+      Matrix.schmidtRank (WithLp.ofLp (ManyBody.cutVector
         (intervalTrimCut L 0 L (k - 1)) u)) := by
   have hJ : interval L 0 L = leftBlock L L := by
     rw [interval_zero_eq_univ (L := L) le_rfl]
@@ -85,7 +85,7 @@ arXiv:1602.08828v2, `lem:trimming`, lines 660–697. -/
 theorem isOpenMPS_fullIntervalRead_of_rank_le {L q D : ℕ}
     (u : EuclideanSpace ℂ (interval L 0 L → Fin q))
     (hrank : ∀ j : ℕ, j < L - 1 → Matrix.schmidtRank (WithLp.ofLp
-      (Entropy.cutVector (intervalTrimCut L 0 L j) u)) ≤ D) :
+      (ManyBody.cutVector (intervalTrimCut L 0 L j) u)) ≤ D) :
     IsOpenMPS L q D (fullIntervalRead L q u) := by
   apply (isOpenMPS_iff_internal_cutMatrix_rank_le
     (WithLp.toLp 2 (fullIntervalRead L q u))).mpr
@@ -101,7 +101,7 @@ arXiv:1602.08828v2, the final merge analysis, lines 1777–1817. -/
 theorem isOpenMPS_fullIntervalRead_of_mem_span {L q n D : ℕ}
     (u : Fin n → EuclideanSpace ℂ (interval L 0 L → Fin q))
     (hrank : ∀ (i : Fin n) (j : ℕ), j < L - 1 → Matrix.schmidtRank (WithLp.ofLp
-      (Entropy.cutVector (intervalTrimCut L 0 L j) (u i))) ≤ D)
+      (ManyBody.cutVector (intervalTrimCut L 0 L j) (u i))) ≤ D)
     {v : EuclideanSpace ℂ (interval L 0 L → Fin q)}
     (hv : v ∈ Submodule.span ℂ (Set.range u)) :
     IsOpenMPS L q (n * D) (fullIntervalRead L q v) := by

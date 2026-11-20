@@ -217,7 +217,7 @@ private theorem internal_formula (K : ℕ) (j : Fin K) :
 
 /-- Actual nearest-neighbor supports are derived for all terms, including both endpoints. -/
 theorem bondTerm_supported (K : ℕ) (i : Fin (K + 1)) :
-    Entropy.IsSupportedOn (n := fun _ : Fin (K + 2) ↦ 2) (bondTerm K i)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin 2) (bondTerm K i)
       (interval (K + 2) i.val (i.val + 2)) := by
   change _ ∈ ManyBody.supportedOperators _ _
   refine Fin.cases ?_ (fun j ↦ ?_) i

@@ -158,8 +158,8 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
           (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
           ((2 * X.L n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-        regionalEntropy Λ q Ω (S.target T) ≤ κ.Ce * (n : ℝ) ^ (1 + X.e) →
-        (∀ j ≤ X.L n, regionalEntropy Λ q Ω (S.shell T j) ≤
+        ManyBody.regionEntropy Ω (S.target T) ≤ κ.Ce * (n : ℝ) ^ (1 + X.e) →
+        (∀ j ≤ X.L n, ManyBody.regionEntropy Ω (S.shell T j) ≤
           κ.Ce * (n * (X.L n : ℝ) ^ X.e + n)) →
         let B : Finset (Site Λ) → ℝ :=
           fun Y ↦ cutBudget q S.graph (S.truncationSet (X.L n)) S.r₀ S.anchor Y
@@ -169,23 +169,23 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
           (∀ (Y : Finset (Site Λ)) (u : ℝ),
             |u| ≤ Entropy.tailRadius (2 / κ.g) (B Y) →
             Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt Y).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt Y + 512 * Real.exp 1 * (2 / κ.g) * B Y * u ^ 2) ∧
+              (ManyBody.regionState_isHermitian Y Ωt).eigenvalues u) ≤
+              u * ManyBody.regionEntropy Ωt Y + 512 * Real.exp 1 * (2 / κ.g) * B Y * u ^ 2) ∧
           ∃ Tr : ScanTruncation X κ n,
             Tr.E0 = e ∧ Tr.gap = κ.g / 2 ∧
-            Tr.SX = regionalEntropy Λ q Ω (S.target T) ∧
-            Tr.SXt = regionalEntropy Λ q Ωt (S.target T) ∧
-            Tr.SQ = (fun j ↦ regionalEntropy Λ q Ω (S.shell T j)) ∧
-            Tr.SQt = (fun j ↦ regionalEntropy Λ q Ωt (S.shell T j)) ∧
+            Tr.SX = ManyBody.regionEntropy Ω (S.target T) ∧
+            Tr.SXt = ManyBody.regionEntropy Ωt (S.target T) ∧
+            Tr.SQ = (fun j ↦ ManyBody.regionEntropy Ω (S.shell T j)) ∧
+            Tr.SQt = (fun j ↦ ManyBody.regionEntropy Ωt (S.shell T j)) ∧
             Tr.traceDist = Matrix.traceDistance
               (Matrix.vecMulVec (WithLp.ofLp Ωt) (star (WithLp.ofLp Ωt)))
               (Matrix.vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))) ∧
-            Tr.z = (reducedState_isHermitian Λ q Ωt (S.target T)).spectralRestrictionMass
-              (Entropy.typicalSet (reducedState_isHermitian Λ q Ωt (S.target T)).eigenvalues
-                (regionalEntropy Λ q Ωt (S.target T)) Tr.width) ∧
+            Tr.z = (ManyBody.regionState_isHermitian (S.target T) Ωt).spectralRestrictionMass
+              (Entropy.typicalSet (ManyBody.regionState_isHermitian (S.target T) Ωt).eigenvalues
+                (ManyBody.regionEntropy Ωt (S.target T)) Tr.width) ∧
             Tr.dstar = (Entropy.typicalSet
-              (reducedState_isHermitian Λ q Ωt (S.target T)).eigenvalues
-                (regionalEntropy Λ q Ωt (S.target T)) Tr.width).card ∧
+              (ManyBody.regionState_isHermitian (S.target T) Ωt).eigenvalues
+                (ManyBody.regionEntropy Ωt (S.target T)) Tr.width).card ∧
             ∀ (k : ℕ) (hist : History S.K S.m S.M k) (band : Fin S.K),
               (k ≤ S.n * S.m →
                 ∀ Q ∈ statusMarginalRegions S.depth (S.state hist band), B Q ≤ Tr.Bmarg) ∧
@@ -246,8 +246,8 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
       _ = _ := by ring
   have hBXpos : 0 < B Xs := lt_of_lt_of_le zero_lt_one
     (one_le_cutBudget q S.graph (S.truncationSet (X.L S.n)) S.r₀ S.anchor Xs)
-  have htypical : Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt Xs).eigenvalues
-      (regionalEntropy Λ q Ωt Xs) ((S.n : ℝ) ^ ((3 : ℝ) / 5)) ≤ (S.n : ℝ) ^ (-100 : ℝ) :=
+  have htypical : Entropy.surprisalTail (ManyBody.regionState_isHermitian Xs Ωt).eigenvalues
+      (ManyBody.regionEntropy Ωt Xs) ((S.n : ℝ) ^ ((3 : ℝ) / 5)) ≤ (S.n : ℝ) ^ (-100 : ℝ) :=
     (htail Xs _).trans ((min_le_right _ _).trans (hscalar S.n hnN (B Xs) hBXpos hBX))
   have hδ : (S.n : ℝ) ^ (-100 : ℝ) < 1 :=
     Real.rpow_lt_one_of_one_lt_of_neg (by exact_mod_cast (show 1 < S.n by omega))
@@ -262,7 +262,7 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
     rw [← hκg]
     exact mul_le_mul_of_nonneg_right hCg (Real.rpow_nonneg (Nat.cast_nonneg _) _)
   have hcont (Y : Finset (Site Λ)) (hY : Y ⊆ S.truncationSet (X.L S.n)) :
-      |regionalEntropy Λ q Ωt Y - regionalEntropy Λ q Ω Y| ≤
+      |ManyBody.regionEntropy Ωt Y - ManyBody.regionEntropy Ω Y| ≤
         κ.C * √t * (1 + κ.C * S.n ^ 2 * Real.log κ.q) := by
     have hYc : (Y.card : ℝ) ≤ κ.C * S.n ^ 2 :=
       (by exact_mod_cast Finset.card_le_card hY : (Y.card : ℝ) ≤ _).trans
@@ -273,18 +273,18 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
   refine ⟨e, Ωt, by rw [hκg]; exact htrgs, by rw [hκg]; exact hmom, ?_⟩
   obtain ⟨-, hstatus⟩ := hstat Λ T hT S hgraph hdepth hanchor (X.L S.n) hn2 hSr hr' hDpos' hDm'
     hKL' hrows hclear
-  let Etyp := Entropy.typicalSet (reducedState_isHermitian Λ q Ωt Xs).eigenvalues
-    (regionalEntropy Λ q Ωt Xs) ((S.n : ℝ) ^ ((3 : ℝ) / 5))
+  let Etyp := Entropy.typicalSet (ManyBody.regionState_isHermitian Xs Ωt).eigenvalues
+    (ManyBody.regionEntropy Ωt Xs) ((S.n : ℝ) ^ ((3 : ℝ) / 5))
   refine ⟨{
       E0 := e
       gap := κ.g / 2
       E0_nonneg := he0
       E0_le := he.trans (min_le_left _ _)
       half_g_le_gap := le_rfl
-      SX := regionalEntropy Λ q Ω Xs
-      SXt := regionalEntropy Λ q Ωt Xs
-      SQ := fun j ↦ regionalEntropy Λ q Ω (S.shell T j)
-      SQt := fun j ↦ regionalEntropy Λ q Ωt (S.shell T j)
+      SX := ManyBody.regionEntropy Ω Xs
+      SXt := ManyBody.regionEntropy Ωt Xs
+      SQ := fun j ↦ ManyBody.regionEntropy Ω (S.shell T j)
+      SQt := fun j ↦ ManyBody.regionEntropy Ωt (S.shell T j)
       entropy_input_X := hinX
       entropy_input_Q := hinQ
       traceDist := t
@@ -293,7 +293,7 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
       continuity_X := hcont Xs hXsub
       continuity_Q := fun j hj ↦ hcont _ (S.shell_subset_truncationSet hT hdepth hj)
       dstar := Etyp.card
-      z := (reducedState_isHermitian Λ q Ωt Xs).spectralRestrictionMass Etyp
+      z := (ManyBody.regionState_isHermitian Xs Ωt).spectralRestrictionMass Etyp
       width := (S.n : ℝ) ^ ((3 : ℝ) / 5)
       width_eq := rfl
       dstar_pos := by exact_mod_cast hEne.card_pos

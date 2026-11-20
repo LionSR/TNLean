@@ -86,7 +86,7 @@ theorem _root_.ManyBody.ChainInteraction.exists_trimmed_witness_of_isViable
   have hE := h.re_inner_le_of_overlap_div_of_range_one hh hhJ hΩ hspan hL hψ hΓψ
   let D := constantCutBond q 1 1 Δ c
   obtain ⟨PΓ, hPΓ⟩ := exists_isTrimmingProjection
-    (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Γ) D
+    (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) Γ) D
   let u := ‖chainTrim Γ k PΓ‖⁻¹ • chainTrim Γ k PΓ
   have hB := h.one_sub_le_re_inner_chainTrim hh hhJ (by omega : 1 ≤ q) (by norm_num)
     hΔ hΩ hgap hspan hc0 k hPΓ

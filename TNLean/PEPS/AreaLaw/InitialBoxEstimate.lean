@@ -6,7 +6,10 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.InitialBuffer
 import TNLean.PEPS.AreaLaw.RotatedChainRule
 import TNLean.PEPS.AreaLaw.SafeBoxChildren
-import TNLean.Lattice.EntropyDimension
+import TNLean.Lattice.MarginalTails
+import QICLean.Entropy.RegionEntropy
+import QICLean.Entropy.RegionUnion
+import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.PEPS.AreaLaw.TwoFamilies
 import QICLean.Analysis.ScaleRecurrence
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -74,7 +77,7 @@ def boxEntropyValues (q R : ℕ) (J Δ : ℝ) (D₀ r : ℕ) : Set ℝ :=
       (_ : ∀ X, ‖h.term X‖ ≤ J) (E₀ : ℝ) (Ω : StateSpace Λ q)
     (A : Finset (Site Λ)) (Q : IntRect), ‖Ω‖ = 1 ∧ IsGapped h.hamiltonian E₀ Δ ∧
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} ∧
-      IsSafe Λ A D₀ Q ∧ Q.size ≤ r ∧ s = regionalEntropy Λ q Ω (rectRegion A Q)}
+      IsSafe Λ A D₀ Q ∧ Q.size ≤ r ∧ s = ManyBody.regionEntropy Ω (rectRegion A Q)}
 
 /-- **The safe-box entropy** `F_box(r)`: the supremum of `S_Ω(A ∩ Q)` over all admissible
 Hamiltonians with gapped ground vectors, cuts, and safe rectangles of size at most `r`, at
@@ -100,7 +103,7 @@ theorem card_rectRegion_le {Λ : Finset (ℤ × ℤ)} (A : Finset (Site Λ)) (Q 
 theorem le_of_mem_boxEntropyValues (hq : 1 ≤ q) {r : ℕ} {s : ℝ}
     (hs : s ∈ boxEntropyValues q R J Δ D₀ r) : s ≤ (r : ℝ) ^ 2 * Real.log q := by
   obtain ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hspan, -, hQ, rfl⟩ := hs
-  refine (regionalEntropy_le_card_mul_log Λ q Ω hΩ _).trans ?_
+  refine (ManyBody.regionEntropy_le_card_mul_log hΩ _).trans ?_
   have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   have : ((rectRegion A Q).card : ℝ) ≤ (r : ℝ) ^ 2 := by
     exact_mod_cast (card_rectRegion_le A Q).trans (Nat.pow_le_pow_left hQ 2)
@@ -132,7 +135,7 @@ theorem regionalEntropy_le_boxEntropy (hq : 1 ≤ q) {Λ : Finset (ℤ × ℤ)}
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
         {A : Finset (Site Λ)} {Q : IntRect}
     (hsafe : IsSafe Λ A D₀ Q) {r : ℕ} (hQ : Q.size ≤ r) :
-    regionalEntropy Λ q Ω (rectRegion A Q) ≤ boxEntropy q R J Δ D₀ r :=
+    ManyBody.regionEntropy Ω (rectRegion A Q) ≤ boxEntropy q R J Δ D₀ r :=
   le_csSup (bddAbove_boxEntropyValues hq r)
       ⟨Λ, h, hh, hhJ, E₀, Ω, A, Q, hΩ, hgap, hspan, hsafe, hQ, rfl⟩
 
@@ -212,17 +215,17 @@ theorem regionalEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {C
       ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
       ∀ r : ℕ, 1 ≤ r → ∀ Q₀ : IntRect, Q₀.size ≤ r →
         (Q₀.dilate (Cpad * r)).toFinset ⊆ Q.toFinset →
-        regionalEntropy Λ q Ω (rectRegion A Q₀ ∪
+        ManyBody.regionEntropy Ω (rectRegion A Q₀ ∪
             (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀)) -
-          regionalEntropy Λ q Ω (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀) ≤
-        regionalEntropy Λ q Ω (rectRegion A Q₀) / 2 + Cbuf * r)
+          ManyBody.regionEntropy Ω (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀) ≤
+        ManyBody.regionEntropy Ω (rectRegion A Q₀) / 2 + Cbuf * r)
     {Λ : Finset (ℤ × ℤ)} (h : PlaneInteraction Λ q R) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ J) {E₀ : ℝ} {Ω : StateSpace Λ q}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
         {A : Finset (Site Λ)} {Q : IntRect}
     (hsafe : IsSafe Λ A D₀ Q) {M r : ℕ} (hr : 1 ≤ r) (hQ : Q.size ≤ M * r) :
-    regionalEntropy Λ q Ω (rectRegion A Q) ≤
+    ManyBody.regionEntropy Ω (rectRegion A Q) ≤
       ((1 - 1 / (2 * ((2 * Cpad + 1) ^ 2 : ℕ))) * M ^ 2 +
         1 / (2 * ((2 * Cpad + 1) ^ 2 : ℕ)) * (2 * (2 * Cpad + 1) * M)) *
           boxEntropy q R J Δ D₀ r + Cbuf * M ^ 2 * r := by
@@ -284,8 +287,8 @@ theorem regionalEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {C
     apply hxi
     simp only [Xs, ch, mem_rectRegion]
     exact ⟨hxA, by rw [e1, e2]; exact hab⟩
-  have hbuf' : ∀ i ∈ good, regionalEntropy Λ q Ω (Xs i ∪ T i) - regionalEntropy Λ q Ω (T i) ≤
-      regionalEntropy Λ q Ω (Xs i) / 2 + Cbuf * r := by
+  have hbuf' : ∀ i ∈ good, ManyBody.regionEntropy Ω (Xs i ∪ T i) - ManyBody.regionEntropy Ω (T i) ≤
+      ManyBody.regionEntropy Ω (Xs i) / 2 + Cbuf * r := by
     intro i hi
     simp only [good, Finset.mem_filter, Finset.mem_univ, true_and] at hi
     exact hbuf Λ h hh hhJ E₀ Ω hΩ hgap hspan A Q hsafe r hr (ch i) (IntRect.size_child_le _ _ hr)
@@ -294,10 +297,10 @@ theorem regionalEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {C
     (Cbuf * r) hT hbuf'
   rw [hunion] at key
   -- bounds on the children
-  have hXF : ∀ i, regionalEntropy Λ q Ω (Xs i) ≤ F := fun i ↦
+  have hXF : ∀ i, ManyBody.regionEntropy Ω (Xs i) ≤ F := fun i ↦
     regionalEntropy_le_boxEntropy hq h hh hhJ hΩ hgap hspan (hchsafe i)
         (IntRect.size_child_le _ _ hr)
-  have hX0 : ∀ i, 0 ≤ regionalEntropy Λ q Ω (Xs i) := fun i ↦
+  have hX0 : ∀ i, 0 ≤ ManyBody.regionEntropy Ω (Xs i) := fun i ↦
     regionalEntropy_nonneg Λ q Ω hΩ _
   have hcard : (Finset.univ : Finset ι).card ≤ M ^ 2 := by
     rw [Finset.card_univ, Fintype.card_prod, Fintype.card_fin, Fintype.card_fin, sq]
@@ -330,17 +333,17 @@ theorem regionalEntropy_rectRegion_le_of_children (hq : 1 ≤ q) {Cpad : ℕ} {C
   have hp0 : 0 ≤ p := by positivity
   have hp1 : p ≤ 1 := by
     simp only [p]; rw [div_le_one (by positivity)]; linarith
-  have hsplit : ∑ i, regionalEntropy Λ q Ω (Xs i) -
-      (∑ i ∈ good, regionalEntropy Λ q Ω (Xs i)) / (2 * N) =
-      (1 - p) * ∑ i ∈ good, regionalEntropy Λ q Ω (Xs i) +
-        ∑ i ∈ Finset.univ \ good, regionalEntropy Λ q Ω (Xs i) := by
+  have hsplit : ∑ i, ManyBody.regionEntropy Ω (Xs i) -
+      (∑ i ∈ good, ManyBody.regionEntropy Ω (Xs i)) / (2 * N) =
+      (1 - p) * ∑ i ∈ good, ManyBody.regionEntropy Ω (Xs i) +
+        ∑ i ∈ Finset.univ \ good, ManyBody.regionEntropy Ω (Xs i) := by
     rw [← Finset.sum_sdiff (Finset.subset_univ good)]
     simp only [p]
     field_simp
     ring
-  have hg : ∑ i ∈ good, regionalEntropy Λ q Ω (Xs i) ≤ good.card * F := by
+  have hg : ∑ i ∈ good, ManyBody.regionEntropy Ω (Xs i) ≤ good.card * F := by
     rw [← nsmul_eq_mul]; exact Finset.sum_le_card_nsmul _ _ _ fun i _ ↦ hXF i
-  have hb : ∑ i ∈ Finset.univ \ good, regionalEntropy Λ q Ω (Xs i) ≤
+  have hb : ∑ i ∈ Finset.univ \ good, ManyBody.regionEntropy Ω (Xs i) ≤
       (Finset.univ \ good).card * F := by
     rw [← nsmul_eq_mul]; exact Finset.sum_le_card_nsmul _ _ _ fun i _ ↦ hXF i
   have hgb : (good.card : ℝ) + (Finset.univ \ good).card ≤ M ^ 2 := by
@@ -383,10 +386,10 @@ theorem boxEntropy_le_of_scale (hq : 1 ≤ q) {Cpad : ℕ} {Cbuf : ℝ} (hCbuf :
       ∀ (A : Finset (Site Λ)) (Q : IntRect), IsSafe Λ A D₀ Q →
       ∀ r : ℕ, 1 ≤ r → ∀ Q₀ : IntRect, Q₀.size ≤ r →
         (Q₀.dilate (Cpad * r)).toFinset ⊆ Q.toFinset →
-        regionalEntropy Λ q Ω (rectRegion A Q₀ ∪
+        ManyBody.regionEntropy Ω (rectRegion A Q₀ ∪
             (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀)) -
-          regionalEntropy Λ q Ω (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀) ≤
-        regionalEntropy Λ q Ω (rectRegion A Q₀) / 2 + Cbuf * r)
+          ManyBody.regionEntropy Ω (rectRegion A (Q₀.dilate (Cpad * r)) \ rectRegion A Q₀) ≤
+        ManyBody.regionEntropy Ω (rectRegion A Q₀) / 2 + Cbuf * r)
     (M : ℕ) {r : ℕ} (hr : 1 ≤ r) :
     boxEntropy q R J Δ D₀ (M * r) ≤
       ((1 - 1 / (2 * ((2 * Cpad + 1) ^ 2 : ℕ))) * M ^ 2 +

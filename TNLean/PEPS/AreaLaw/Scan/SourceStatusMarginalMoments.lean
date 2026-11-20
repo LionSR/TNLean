@@ -96,14 +96,14 @@ theorem exists_source_statusMarginal_moment_bounds
                 ∀ Q ∈ statusMarginalRegions S.depth (S.state hist band),
                   ∀ u : ℝ, |u| ≤ c₀ / Real.sqrt B →
                     Real.log (Entropy.surprisalMoment
-                      (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-                      u * regionalEntropy Λ q Ωt Q + C₀ * B * u ^ 2) ∧
+                      (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+                      u * ManyBody.regionEntropy Ωt Q + C₀ * B * u ^ 2) ∧
               (k + 1 ≤ S.n * S.m →
                 ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist band),
                   ∀ u : ℝ, |u| ≤ c₀ / Real.sqrt B →
                     Real.log (Entropy.surprisalMoment
-                      (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-                      u * regionalEntropy Λ q Ωt Q + C₀ * B * u ^ 2) := by
+                      (ManyBody.regionState_isHermitian Q Ωt).eigenvalues u) ≤
+                      u * ManyBody.regionEntropy Ωt Q + C₀ * B * u ^ 2) := by
   classical
   obtain ⟨Ctr, hCtr, hstatus⟩ := exists_truncated_statusMarginal_moment_bounds R hJ hΔ
     (show 0 ≤ Ct + 1 by linarith)

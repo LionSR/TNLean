@@ -25,7 +25,7 @@ restoring operator `R₀` and the truncated product `L'` act on `S`, the unitary
   `eq:amplification-unitary-error`, acting on `S`.
 
 The entropy comparison for a unitary acting away from both regions,
-`FiniteProduct.mutualInformation_le_inv_pow_of_supported_unitary`, does not depend on the
+`ManyBody.regionMutualInformation_le_inv_pow_of_supported_unitary`, does not depend on the
 geometry of the sites and is stated in `TNLean.Lattice.SupportedUnitaryEntropy`.
 
 ## References
@@ -66,7 +66,7 @@ theorem exists_supported_unitary_of_good_realization (S : Finset ι)
     ∃ U : Matrix (ι → Fin q) (ι → Fin q) ℂ, U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S ∧
       Uᴴ * U = 1 ∧ ‖WithLp.toLp 2 (U *ᵥ φ) - WithLp.toLp 2 η‖ ≤
         a + √(2 * a + 6 * ε + 9 * ε ^ 2) := by
-  set e := FiniteProduct.splitEquiv (fun _ : ι => Fin q) S with he
+  set e := ManyBody.splitEquiv (fun _ : ι => Fin q) S with he
   obtain ⟨R', hR'⟩ := TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators hR₀
   obtain ⟨L'', hL''⟩ := TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators hL
   -- Transport of vectors and matrices to the coordinates `S × Sᶜ`.

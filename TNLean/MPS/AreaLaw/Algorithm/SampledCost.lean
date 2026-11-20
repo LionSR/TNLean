@@ -68,7 +68,7 @@ theorem sampledStepCostBound_mono (q : ℕ) (Δ : ℝ) (L : ℕ) {ℓ ℓ' D D' 
 sampled factors number at most `ℓ D`. -/
 theorem cost_sampledSweepStepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2))) (E₀ : ℝ)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2))) (E₀ : ℝ)
         {Δ : ℝ} (hΔ : 0 < Δ)
     {ℓ m : ℕ} (I : Fin ℓ → Fin m → Fin L) (b D : ℕ) {i : ℕ} (hi : i + 1 ≤ L)
     (S : Finset (LeftBlockVector L q i)) (hF : (sampledFactors h E₀ I (i + 1)).card ≤ ℓ * D) :
@@ -78,7 +78,7 @@ theorem cost_sampledSweepStepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
   simp only [sampledSweepStepProgram, FreeM.cost_bind, FreeM.eval_lift, eval_extensionProgram,
     eval_sizeTrimmingProgram, eval_bondTrimmingProgram, honestOracle_sampledFactors,
     FreeM.cost_lift, queryCost_sampledFactors, sampledStepCostBound]
-  set chain := ManyBody.ChainInteraction.ofBonds h hs with hchain
+  set chain := ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩ with hchain
   set m' := bondTrimmingRadius L (lvvReferenceBond q Δ L) with hm'
   set c : ℝ := (Δ / 169) ^ 2 with hc
   set D' := constantCutBond q 1 1 Δ c with hD'
@@ -110,7 +110,7 @@ noncomputable def sampledSizeBudget (q : ℕ) (Δ : ℝ) (L ℓ D : ℕ) : ℕ :
 budget, with the rank bound `q^{2κ}` declared at least as large as the rank of the words. -/
 theorem cost_sampledSweepProgram_le (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
@@ -162,7 +162,7 @@ theorem sampledGroundStateCostBound_mono (q : ℕ) (Δ : ℝ) (L : ℕ) {ℓ ℓ
 bound `q^{2κ}` declared. -/
 theorem cost_sampledGroundStateProgram_le (hL : 0 < L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
     (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) {E₀ Δ : ℝ} (hΔ : 0 < Δ)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ j, h j) E₀ Δ)
     (hspan : groundSpace (∑ j, h j) E₀ = Submodule.span ℂ {Γ})
@@ -286,7 +286,7 @@ theorem exists_sampledGroundStateProgram_cost_polynomial (hq : 2 ≤ q) {Δ B η
     (hΔ : 0 < Δ) (hη : 0 < η) (C p : ℕ) :
     ∃ P d : ℕ, 1 ≤ P ∧ ∀ (L : ℕ) [NeZero L]
       (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j) (interval L j (j + 2)))
+      (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j) (interval L j (j + 2)))
       (h0 : ∀ j, (h j).PosSemidef) (h1 : ∀ j, h j ≤ 1) (E₀ : ℝ)
       (Γ : EuclideanSpace ℂ (Fin L → Fin q)),
       ‖Γ‖ = 1 → IsGapped (∑ j, h j) E₀ Δ →

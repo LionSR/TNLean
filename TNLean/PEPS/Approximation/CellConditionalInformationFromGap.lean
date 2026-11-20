@@ -90,7 +90,7 @@ theorem cell_conditionalMutualInformation_le_closed
         ∀ E : Finset (Site Λ), E ⊆ (G ∪ B)ᶜ →
           (∀ x ∈ closure (CellPartition.box (CellPartition.cellCorner o s m₀) s),
             ∀ y ∈ E, c * s ≤ dist x (AreaLaw.Geometry.integerPoint y.val)) →
-          FiniteProduct.conditionalMutualInformation (fun _ : Site Λ ↦ Fin q)
+          ManyBody.conditionalMutualInformation (fun _ : Site Λ ↦ Fin q)
             Ω G E B ≤ cellInformationConstantClosed q R J Δ c *
               (1 + Real.log s) ^ cellInformationExponentClosed q R J Δ c :=
   cell_conditionalMutualInformation_le_of_sublinearCollarBoundAt
@@ -118,7 +118,7 @@ theorem cell_conditionalMutualInformation_le_square_closed
         ∀ E : Finset (Vertex L), E ⊆ (G ∪ B)ᶜ →
           (∀ x ∈ closure (AngularGrid.cell o s m₀),
             ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
-          FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+          ManyBody.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
             Ω G E B ≤ cellInformationConstantClosed q 1 J Δ c *
               (1 + Real.log s) ^ cellInformationExponentClosed q 1 J Δ c :=
   cell_conditionalMutualInformation_le_square_of_sublinearCollarBoundAt_explicit hΔ
@@ -149,7 +149,7 @@ theorem exists_cell_conditionalMutualInformation_le_square
           ∀ E : Finset (Vertex L), E ⊆ (G ∪ B)ᶜ →
             (∀ x ∈ closure (AngularGrid.cell o s m₀),
               ∀ y ∈ E, c * s ≤ dist x (sitePosition L y)) →
-            FiniteProduct.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
+            ManyBody.conditionalMutualInformation (fun _ : Vertex L ↦ Fin q)
               Ω G E B ≤ C₁ * (1 + Real.log s) ^ K := by
   have hcol : AreaLaw.SublinearCollarBound q 1 J Δ 13 24 :=
     AreaLaw.sublinearCollarBound_real q 1 hq hJ hΔ (by norm_num) (by norm_num)

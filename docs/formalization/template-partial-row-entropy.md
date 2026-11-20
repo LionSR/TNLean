@@ -16,8 +16,8 @@ from the actual `Template`, with `Ctpl ≥ 24` and `1 ≤ j ≤ s₀`.
 
 The two local auxiliary bounds use the actual normalized physical vector and
 canonical regional entropy. They specialize existing accepted QIC finite-product
-subadditivity, complementary entropy and log-rank results. The dimension bound is `regionalEntropy_le_card_mul_log` from
-`EntropyDimension`.
+subadditivity, complementary entropy and log-rank results. The dimension bound is QICLean's
+`ManyBody.regionEntropy_le_card_mul_log`.
 No entropy assumptions, extra Hamiltonian assumptions, or new density definitions
 are introduced. Normalization handles the empty tensor product, and `q ≥ 1`
 makes multiplication by `log q` monotone. The dimension helper even allows q=0

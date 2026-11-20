@@ -60,8 +60,8 @@ vector `w` of rank at most `D` across the cut, with
 `gluingCut L q k`, whose left factor is in the range of `P_V`. -/
 theorem exists_trimmed_witness_chain {k : ℕ}
     {H HL HR K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ} (hsplit : H = HL + HR + K)
-    (hHL : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k))
-    (hHR : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HR (leftBlock L k)ᶜ)
+    (hHL : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k))
+    (hHR : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HR (leftBlock L k)ᶜ)
     (hK0 : K.PosSemidef) (hK1 : (1 - K).PosSemidef) {E₀ δ : ℝ}
     (hH0 : (H - (E₀ : ℂ) • 1).PosSemidef) {ψ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hψ : ‖ψ‖ = 1) (hE : (⟪ψ, toEuclideanLin H ψ⟫_ℂ).re ≤ E₀ + δ) {D : ℕ}
@@ -84,32 +84,32 @@ theorem exists_trimmed_witness_chain {k : ℕ}
   · exfalso
     have h0 : ψ = 0 := Subsingleton.elim _ _
     simp [h0] at hψ
-  set e := Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)
-  set ψc := Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) ψ
-  set uc := Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) u
+  set e := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)
+  set ψc := ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) ψ
+  set uc := ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) u
   -- The Hamiltonian in the cut coordinates.
   have hL := hHL.cutOperator_eq_kronecker_one (B := leftBlock L k) subset_rfl (e σ).2
   have hR := hHR.cutOperator_eq_one_kronecker (B := leftBlock L k) disjoint_compl_left (e σ).1
   obtain ⟨A, A', hHc⟩ : ∃ (A : LeftBlockMatrix L q k)
       (A' : Matrix (CutRight L q k) (CutRight L q k) ℂ),
-      Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) H =
+      ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) H =
         A ⊗ₖ (1 : Matrix (CutRight L q k) (CutRight L q k) ℂ) +
           (1 : LeftBlockMatrix L q k) ⊗ₖ A' +
-          Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) K :=
-    ⟨fun x x' ↦ Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) HL
+          ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K :=
+    ⟨fun x x' ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) HL
         (x, (e σ).2) (x', (e σ).2),
-      fun y y' ↦ Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) HR
+      fun y y' ↦ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) HR
         ((e σ).1, y) ((e σ).1, y'),
       by rw [hsplit, cutOperator_add, cutOperator_add, ← hL, ← hR]⟩
-  have hK1c : (1 - Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) K).PosSemidef := by
-    have : (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k)
+  have hK1c : (1 - ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K).PosSemidef := by
+    have : (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k)
         (1 - K)).PosSemidef := hK1.submatrix _
-    have h1 : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) (1 - K) =
-        1 - Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) K := by
+    have h1 : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) (1 - K) =
+        1 - ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K := by
       ext a b
       simp [one_apply]
     rwa [h1] at this
-  have hHc0 : (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) H -
+  have hHc0 : (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) H -
       (E₀ : ℂ) • 1).PosSemidef := by
     rw [← cutOperator_sub_smul_one]
     exact hH0.submatrix _
@@ -127,7 +127,7 @@ theorem exists_trimmed_witness_chain {k : ℕ}
       hucD hη' hη2 hPVc
   -- Back to the chain.
   set w : EuclideanSpace ℂ (Fin L → Fin q) := WithLp.toLp 2 (WithLp.ofLp wc ∘ e)
-  have hwcw : Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) w = wc := by
+  have hwcw : ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k) w = wc := by
     ext x
     simp [w, e]
   have hcm : cutMatrix w k = schmidtCoeffMatrix (WithLp.ofLp wc) := by

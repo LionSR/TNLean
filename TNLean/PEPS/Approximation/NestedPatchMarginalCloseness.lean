@@ -55,7 +55,7 @@ theorem nestedPatch_minimizer_marginal_closeness
       ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
       groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
       ∀ (center : ℝ × ℝ) (u b : ℝ), 4 ≤ u → 0 < b →
-        let Λ := AreaLaw.rectangularDomain L L
+        let Λ := ManyBody.rectangularDomain L L
         letI : LinearOrder (Lattice.Site Λ) :=
           (Fintype.equivFin (Lattice.Site Λ)).linearOrder
         let m := AreaLaw.Geometry.nestedPatchCount u
@@ -74,8 +74,8 @@ theorem nestedPatch_minimizer_marginal_closeness
             (CFC.abs
               (normalizedRegularizedPatchMarginal
                 (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ωᵤ x R -
-                Entropy.regionState (n := fun _ : Lattice.Site Λ ↦ q) R
-                  (AreaLaw.rectangleAreaLawState Ω))).trace.re ≤ (1 / 16 : ℝ) := by
+                ManyBody.regionState (X := fun _ ↦ Fin q) (AreaLaw.rectangleAreaLawState Ω)
+                  R)).trace.re ≤ (1 / 16 : ℝ) := by
   intro L h hh hhJ E₀ Ω hΩ hgap hspan center u b hu hb Λ m regions a Ωᵤ x hx hmin R
   let : LinearOrder (Lattice.Site Λ) := (Fintype.equivFin (Lattice.Site Λ)).linearOrder
   have henergy := (h.nestedPatch_minimizer_energy_le hh hhJ hJ hΔ Ω hΩ hgap hspan center u κ b
@@ -84,10 +84,11 @@ theorem nestedPatch_minimizer_marginal_closeness
     (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a
     (fun _ ↦ div_nonneg hκ.le (Nat.cast_nonneg m)) hb Ωᵤ
     ((AreaLaw.norm_rectangleAreaLawState Ω).trans hΩ) hx
-  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toAreaLawHamiltonian hh hΩ hgap hspan
+  obtain ⟨hΩ', hgap', hspan'⟩ := h.isGapped_toPlaneInteraction_hermitianPart hh hΩ hgap hspan
   have hgap := FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy
     (fun _ : Lattice.Site Λ ↦ Fin q)
-        (ManyBody.Interaction.isHermitian_hamiltonian h.isHermitian_toAreaLawHamiltonian_term) hΩ'
+        (ManyBody.Interaction.isHermitian_hamiltonian
+          h.isHermitian_toPlaneInteraction_hermitianPart_term) hΩ'
         hgap' hspan' hΔ
     (hnorm) henergy R
   have hρ := reindex_reducedPure_eq_regionState
@@ -117,7 +118,7 @@ theorem exists_uniform_nestedPatch_minimizer_marginal_closeness
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ (center : ℝ × ℝ) (u b : ℝ), 4 ≤ u → 0 < b →
-          let Λ := AreaLaw.rectangularDomain L L
+          let Λ := ManyBody.rectangularDomain L L
           letI : LinearOrder (Lattice.Site Λ) :=
             (Fintype.equivFin (Lattice.Site Λ)).linearOrder
           let m := AreaLaw.Geometry.nestedPatchCount u
@@ -136,8 +137,8 @@ theorem exists_uniform_nestedPatch_minimizer_marginal_closeness
               (CFC.abs
                 (normalizedRegularizedPatchMarginal
                   (Out := fun _ : Lattice.Site Λ ↦ Fin q) regions a b Ωᵤ x R -
-                  Entropy.regionState (n := fun _ : Lattice.Site Λ ↦ q) R
-                    (AreaLaw.rectangleAreaLawState Ω))).trace.re ≤ (1 / 16 : ℝ) := by
+                  ManyBody.regionState (X := fun _ ↦ Fin q) (AreaLaw.rectangleAreaLawState Ω)
+                    R)).trace.re ≤ (1 / 16 : ℝ) := by
   rcases (show (0 : ℝ) ≤ 36 * (q : ℝ) ^ 2 * J by positivity).eq_or_lt with hC | hC
   · exact ⟨1 / 2, by norm_num, le_rfl, nestedPatch_minimizer_marginal_closeness q hJ hΔ
       (by norm_num) le_rfl (by rw [← hC, zero_mul]; positivity)⟩

@@ -51,7 +51,7 @@ theorem sampledProjector_eq_sum_smul
 noncomputable def sampledLeftFactor
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (i : ℕ) (t : Fin ℓ)
-    (j : Fin (operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    (j : Fin (operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L i) (bondComplementWord h (I t))))) : LeftBlockMatrix L q i :=
   sampledScale L E₀ ℓ m • cutLeftFactor (bondComplementWord h (I t)) j
 
@@ -67,15 +67,15 @@ of its words. -/
 theorem cutOperator_sampledProjector_eq_sum
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (i : ℕ) :
-    Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i) (sampledProjector h E₀ I) =
-      ∑ p : (t : Fin ℓ) × Fin (operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i) (sampledProjector h E₀ I) =
+      ∑ p : (t : Fin ℓ) × Fin (operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
         (leftBlock L i) (bondComplementWord h (I t)))),
         sampledLeftFactor h E₀ I i p.1 p.2 ⊗ₖ
           cutRightFactor (bondComplementWord h (I p.1)) p.2 := by
   rw [Fintype.sum_sigma]
-  have hlin : Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i)
+  have hlin : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
       (sampledProjector h E₀ I) = ∑ t, sampledScale L E₀ ℓ m •
-        Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i)
+        ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
           (bondComplementWord h (I t)) := by
     rw [sampledProjector_eq_sum_smul]
     ext a b
@@ -93,7 +93,7 @@ cut. -/
 theorem card_sampledFactors_le
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) (i : ℕ) {D : ℕ}
-    (hrank : ∀ t, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    (hrank : ∀ t, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L i) (bondComplementWord h (I t))) ≤ D) :
     (sampledFactors h E₀ I i).card ≤ ℓ * D := by
   classical
@@ -112,10 +112,10 @@ every word has rank at most `D` at every cut. -/
 theorem operatorSchmidtRank_of_mem_sampledFactors {i : ℕ} (hi : i ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) {D : ℕ}
-    (hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    (hrank : ∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) (bondComplementWord h (I t))) ≤ D)
     {A : LeftBlockMatrix L q i} (hA : A ∈ sampledFactors h E₀ I i) (k : ℕ) (hki : k < i) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
       (A.submatrix leftConfigOfFin leftConfigOfFin)) ≤ D := by
   classical
   simp only [sampledFactors, Finset.mem_biUnion, Finset.mem_univ, true_and,
@@ -123,17 +123,17 @@ theorem operatorSchmidtRank_of_mem_sampledFactors {i : ℕ} (hi : i ≤ L)
   obtain ⟨t, j, -, rfl⟩ := hA
   have hbase := operatorSchmidtRank_cutLeftFactor_le hi (bondComplementWord h (I t)) (hrank t)
     j k hki
-  have hsmul : Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+  have hsmul : ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
       ((sampledLeftFactor h E₀ I i t j).submatrix leftConfigOfFin leftConfigOfFin) =
-      sampledScale L E₀ ℓ m • Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+      sampledScale L E₀ ℓ m • ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
         ((cutLeftFactor (bondComplementWord h (I t)) j).submatrix leftConfigOfFin
           leftConfigOfFin) := by
     ext a b
     simp [sampledLeftFactor]
   rw [hsmul]
-  have hcoe : sampledScale L E₀ ℓ m • Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+  have hcoe : sampledScale L E₀ ℓ m • ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
       ((cutLeftFactor (bondComplementWord h (I t)) j).submatrix leftConfigOfFin leftConfigOfFin) =
-      ((sampledScale L E₀ ℓ m : ℝ) : ℂ) • Entropy.cutOperator (n := fun _ : Fin i ↦ q)
+      ((sampledScale L E₀ ℓ m : ℝ) : ℂ) • ManyBody.cutOperator (X := fun _ ↦ Fin q)
         (leftBlock i k) ((cutLeftFactor (bondComplementWord h (I t)) j).submatrix leftConfigOfFin
           leftConfigOfFin) := by
     ext a b
@@ -148,7 +148,7 @@ theorem errorReductionSet_sampledFactors
     (I : Fin ℓ → Fin m → Fin L) {i : ℕ} (S : Finset (LeftBlockVector L q i)) :
     errorReductionSet (sampledFactors h E₀ I i) id S =
       errorReductionSet (Finset.univ : Finset ((t : Fin ℓ) × Fin (operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i)
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
           (bondComplementWord h (I t))))))
         (fun p ↦ sampledLeftFactor h E₀ I i p.1 p.2) S := by
   classical
@@ -170,7 +170,7 @@ every cut, and the sampled projector is within `η < 1/2` of the ground projecti
 theorem isViableMPS_errorReductionSet_sampledFactors {i : ℕ} (hi : i ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (E₀ : ℝ) {ℓ m : ℕ}
     (I : Fin ℓ → Fin m → Fin L) {D : ℕ}
-    (hrank : ∀ t k, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+    (hrank : ∀ t k, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L k) (bondComplementWord h (I t))) ≤ D)
     {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΓ : ‖Γ‖ = 1) {s b : ℕ}
     {S : Finset (LeftBlockVector L q i)} (hS : IsViableMPS Γ s b (1 / 2) S) {η : ℝ}
@@ -191,7 +191,7 @@ theorem isViableMPS_errorReductionSet_sampledFactors {i : ℕ} (hi : i ≤ L)
   refine ⟨hout.1.trans (Nat.mul_le_mul_right s ?_), hout.2.1, hout.2.2⟩
   calc
     (Finset.univ : Finset ((t : Fin ℓ) × Fin _)).card
-        = ∑ t : Fin ℓ, operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+        = ∑ t : Fin ℓ, operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
             (leftBlock L i) (bondComplementWord h (I t))) := by
           rw [Finset.card_univ, Fintype.card_sigma]
           simp only [Fintype.card_fin]

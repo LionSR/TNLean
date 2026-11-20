@@ -31,7 +31,8 @@ section "Full consecutive windows".
 
 open scoped Matrix.Norms.L2Operator
 
-open ManyBody (ChainSupport DomainSupport IsDomainSupport interval sitePos ChainInteraction
+open ManyBody (ChainSupport DomainSupport DomainSupport.toChainSupport
+  DomainSupport.toChainSupport_injective IsDomainSupport interval sitePos ChainInteraction
   DomainInteraction)
 
 open TNLean.Lattice
@@ -147,7 +148,7 @@ theorem regionEntropy_le_log_cube_mul_card_boundaryEdges (hq : 1 ≤ q)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Fin L)) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A ≤
       chainLogCubeConst R * (1 + J / Δ) *
         Real.log (q : ℝ) ^ 3 * (boundaryEdges L A).card := by
   by_cases hq2 : 2 ≤ q
@@ -280,10 +281,9 @@ theorem _root_.ManyBody.ChainInteraction.regionEntropy_eq_zero_of_range_zero
     (hΔ : 0 < Δ) (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω})
     (A : Finset (Fin L)) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω = 0 := by
-  refine (ManyBody.regionEntropy_eq_entropy _ _).trans
-    (ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint (Φ := h) hh hΔ hΩ hgap
-      hspan (B := A) ?_)
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A = 0 := by
+  refine ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint (Φ := h) hh hΔ hΩ hgap
+    hspan (B := A) ?_
   intro X
   have hcard := X.property.card_le
   grind [Finset.card_le_one_iff, Finset.disjoint_left]
@@ -304,7 +304,7 @@ theorem chainAreaLaw_of_consecutive_terms_polynomial_range :
             ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
             groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset (Fin L),
-              Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
+              ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A ≤
                 Cabs * (1 + J / Δ) * (R : ℝ) * Real.log ((q : ℝ) ^ R) ^ 3 *
                   (boundaryEdges L A).card := by
   obtain ⟨hC, hK, hscalar⟩ := consecutive_window_coefficient_le_range_log_cube
@@ -332,23 +332,26 @@ theorem chainAreaLaw_of_consecutive_terms_polynomial_range :
 
 /-- Full physical windows remain full windows after increasing relabelling.
 Source: the one-dimensional note, part1_arealaw.tex, lines 64–93 and 706–748. -/
-private theorem _root_.ManyBody.DomainInteraction.toChain_consecutive_terms
+private theorem _root_.ManyBody.DomainInteraction.extend_consecutive_terms
     {Λ : Finset ℤ} {q R : ℕ} (h : DomainInteraction Λ q R)
     (hwindow : ∀ X : DomainSupport Λ R, h.term X ≠ 0 →
       ∃ a : ℤ, X.1.image (sitePos Λ) = Finset.Ico a (a + (R : ℤ) + 1)) :
-    ∀ Y : ChainSupport Λ.card R, (h.toChain).term Y ≠ 0 →
+    ∀ Y : ChainSupport Λ.card R, (h.extend DomainSupport.toChainSupport
+        DomainSupport.toChainSupport_injective (fun Z ↦ Z.1) fun _ ↦ subset_rfl).term Y ≠ 0 →
       ∃ a : ℕ, a + R + 1 ≤ Λ.card ∧ Y.1 = interval Λ.card a (a + R + 1) := by
   classical
   intro Y hY
-  change (if hdom : IsDomainSupport Λ R Y.1 then h.term ⟨Y.1, hdom⟩ else 0) ≠ 0 at hY
-  split_ifs at hY with hdom
-  · obtain ⟨a, ha⟩ := hwindow ⟨Y.1, hdom⟩ hY
+  by_cases hk : ∃ X : DomainSupport Λ R, DomainSupport.toChainSupport X = Y
+  · obtain ⟨X, rfl⟩ := hk
+    change Function.extend DomainSupport.toChainSupport h.term 0 X.toChainSupport ≠ 0 at hY
+    rw [DomainSupport.toChainSupport_injective.extend_apply] at hY
+    obtain ⟨a, ha⟩ := hwindow X hY
     have hc := congrArg Finset.card ha
     rw [Finset.card_image_of_injective _ (sitePos Λ).injective, Int.card_Ico] at hc
     have hlen : a + (R : ℤ) + 1 - a = ((R + 1 : ℕ) : ℤ) := by omega
     rw [hlen, Int.toNat_natCast] at hc
-    exact Y.2.exists_eq_interval_of_card_eq hc
-  · exact (hY rfl).elim
+    exact (DomainSupport.toChainSupport X).2.exists_eq_interval_of_card_eq hc
+  · exact (hY (ManyBody.Interaction.extend_term_eq_zero (not_exists.mp hk))).elim
 
 /-- The absolute polynomial-range bound on a finite subset of the integers.
 Only nonzero interactions are required to be full contained windows in the original sites.
@@ -367,8 +370,8 @@ theorem domainAreaLaw_of_consecutive_terms_polynomial_range :
             ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
             groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
             ∀ A : Finset ℤ,
-              Entropy.regionEntropy (n := fun _ : Fin Λ.card ↦ q)
-                (domainRegion Λ A) Ω ≤
+              ManyBody.regionEntropy (X := fun _ ↦ Fin q)
+                Ω (domainRegion Λ A) ≤
                 Cabs * (1 + J / Δ) * (R : ℝ) * Real.log ((q : ℝ) ^ R) ^ 3 *
                   (domainBoundaryEdges Λ A).card := by
   obtain ⟨Cabs, hCabs, hCeq, hchain⟩ :=
@@ -376,10 +379,15 @@ theorem domainAreaLaw_of_consecutive_terms_polynomial_range :
   refine ⟨Cabs, hCabs, hCeq, ?_⟩
   intro q R J Δ hq hJ hΔ Λ h hh hhJ hwindow E₀ Ω hΩ hgap hspan A
   obtain ⟨A', hS, hB⟩ := h.exists_regionEntropy_eq_card_boundaryEdges_eq hh hΔ hΩ hgap hspan A
-  rw [← h.toChain_hamiltonian] at hgap hspan
-  have hbound := hchain q R J Δ hq hJ hΔ Λ.card (h.toChain) (h.isHermitian_toChain_term hh)
-    (h.norm_toChain_term_le hhJ hJ)
-    (h.toChain_consecutive_terms hwindow) E₀ Ω hΩ hgap hspan A'
+  let hc : ChainInteraction Λ.card q R :=
+    h.extend DomainSupport.toChainSupport DomainSupport.toChainSupport_injective (fun Y ↦ Y.1)
+      fun _ ↦ subset_rfl
+  have hext : hc.hamiltonian = h.hamiltonian := ManyBody.Interaction.hamiltonian_extend
+  rw [← hext] at hgap hspan
+  have hbound := hchain q R J Δ hq hJ hΔ Λ.card hc
+    (ManyBody.Interaction.isHermitian_extend_term hh)
+    (ManyBody.Interaction.norm_extend_term_le hJ hhJ)
+    (h.extend_consecutive_terms hwindow) E₀ Ω hΩ hgap hspan A'
   simpa only [hS, hB] using hbound
 
 end TNLean.MPS.AreaLaw

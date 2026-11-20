@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Entropy.FiniteProduct
+import QICLean.Entropy.RegionEntropy
 import QICLean.Analysis.EntropyDecomposition
 import QICLean.Entropy.SumSitesProduct
 
@@ -29,7 +29,7 @@ of `A`.
 * `FiniteProduct.relabelSites`: a vector moved along a bijection of the sites.
 
 The product vector `f ⊗ g` on the sites `A ⊕ B` and its entropies are QICLean's
-`FiniteProduct.sumSitesProduct`, `FiniteProduct.entropy_sumSitesProduct` and the two
+`ManyBody.sumSitesProduct`, `ManyBody.regionEntropy_sumSitesProduct` and the two
 mutual-information statements, in `QICLean/Entropy/SumSitesProduct.lean`.
 
 ## Main statements
@@ -65,63 +65,64 @@ noncomputable def relabelSites (σ : V ≃ W) (ψ : EuclideanSpace ℂ (W → F)
 
 /-- Configurations of a region, moved along a bijection of the sites. -/
 def regionRelabel (σ : V ≃ W) (S : Finset V) :
-    Configuration (fun _ : V => F) S ≃ Configuration (fun _ : W => F) (S.map σ.toEmbedding) :=
+    ManyBody.RegionConfig (fun _ : V => F) S ≃ ManyBody.RegionConfig (fun _ : W => F)
+        (S.map σ.toEmbedding) :=
   Equiv.arrowCongr (σ.subtypeEquiv fun v => by simp) (Equiv.refl F)
 
 /-- Configurations of the complement of a region, moved along a bijection of the sites. -/
 def complRelabel (σ : V ≃ W) (S : Finset V) :
-    Configuration (fun _ : V => F) Sᶜ ≃
-      Configuration (fun _ : W => F) (S.map σ.toEmbedding)ᶜ :=
+    ManyBody.RegionConfig (fun _ : V => F) Sᶜ ≃
+      ManyBody.RegionConfig (fun _ : W => F) (S.map σ.toEmbedding)ᶜ :=
   Equiv.arrowCongr (σ.subtypeEquiv fun v => by simp) (Equiv.refl F)
 
 omit [Fintype F] [DecidableEq F] in
 theorem splitEquiv_symm_comp_relabel (σ : V ≃ W) (S : Finset V)
-    (a : Configuration (fun _ : V => F) S) (d : Configuration (fun _ : V => F) Sᶜ) :
-    (splitEquiv (fun _ : V => F) S).symm (a, d) ∘ σ.symm =
-      (splitEquiv (fun _ : W => F) (S.map σ.toEmbedding)).symm
+    (a : ManyBody.RegionConfig (fun _ : V => F) S) (d : ManyBody.RegionConfig (fun _ : V => F) Sᶜ) :
+    (ManyBody.splitEquiv (fun _ : V => F) S).symm (a, d) ∘ σ.symm =
+      (ManyBody.splitEquiv (fun _ : W => F) (S.map σ.toEmbedding)).symm
         (regionRelabel σ S a, complRelabel σ S d) := by
   funext w
   by_cases hw : w ∈ S.map σ.toEmbedding
   · have hv : σ.symm w ∈ S := Finset.mem_map_equiv.mp hw
-    rw [Function.comp_apply, splitEquiv_symm_apply_of_mem _ _ _ _ _ hv,
-      splitEquiv_symm_apply_of_mem _ _ _ _ _ hw]
+    rw [Function.comp_apply, ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _ hv,
+      ManyBody.splitEquiv_symm_apply_of_mem _ _ _ _ _ hw]
     rfl
   · have hv : σ.symm w ∉ S := fun h => hw (Finset.mem_map_equiv.mpr h)
-    rw [Function.comp_apply, splitEquiv_symm_apply_of_notMem _ _ _ _ _ hv,
-      splitEquiv_symm_apply_of_notMem _ _ _ _ _ hw]
+    rw [Function.comp_apply, ManyBody.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hv,
+      ManyBody.splitEquiv_symm_apply_of_notMem _ _ _ _ _ hw]
     rfl
 
 omit [DecidableEq F] in
 /-- The reduced state of a relabelled vector is the reduced state of the original vector
 on the image region. -/
 theorem reducedPure_relabelSites (σ : V ≃ W) (ψ : EuclideanSpace ℂ (W → F)) (S : Finset V) :
-    reducedPure (fun _ : V => F) (relabelSites σ ψ) S =
-      (reducedPure (fun _ : W => F) ψ (S.map σ.toEmbedding)).submatrix
+    ManyBody.regionState (relabelSites σ ψ) S =
+      (ManyBody.regionState ψ (S.map σ.toEmbedding)).submatrix
         (regionRelabel σ S) (regionRelabel σ S) := by
   ext a b
-  simp only [reducedPure, reducedMatrix_apply, submatrix_apply, vecMulVec_apply,
+  simp only [ManyBody.regionState, ManyBody.regionMatrix_apply, submatrix_apply, vecMulVec_apply,
     Pi.star_apply, relabelSites]
   simp_rw [splitEquiv_symm_comp_relabel]
-  exact (complRelabel σ S).sum_comp (fun d => ψ ((splitEquiv (fun _ : W => F)
+  exact (complRelabel σ S).sum_comp (fun d => ψ ((ManyBody.splitEquiv (fun _ : W => F)
     (S.map σ.toEmbedding)).symm (regionRelabel σ S a, d)) *
-      star (ψ ((splitEquiv (fun _ : W => F) (S.map σ.toEmbedding)).symm
+      star (ψ ((ManyBody.splitEquiv (fun _ : W => F) (S.map σ.toEmbedding)).symm
         (regionRelabel σ S b, d))))
 
 /-- **Relabelling sites moves regional entropies.** -/
 theorem entropy_relabelSites (σ : V ≃ W) (ψ : EuclideanSpace ℂ (W → F)) (S : Finset V) :
-    entropy (fun _ : V => F) (relabelSites σ ψ) S =
-      entropy (fun _ : W => F) ψ (S.map σ.toEmbedding) := by
-  unfold entropy
+    ManyBody.regionEntropy (relabelSites σ ψ) S =
+      ManyBody.regionEntropy ψ (S.map σ.toEmbedding) := by
+  unfold ManyBody.regionEntropy
   rw [vonNeumannEntropy_congr (reducedPure_relabelSites σ ψ S) _
-    (((reducedPure_posSemidef _ ψ _).submatrix _).isHermitian)]
+    (((ManyBody.regionState_posSemidef _ ψ).submatrix _).isHermitian)]
   exact vonNeumannEntropy_submatrix_equiv _ _ _
 
 /-- **Relabelling sites moves mutual information.** -/
 theorem mutualInformation_relabelSites (σ : V ≃ W) (ψ : EuclideanSpace ℂ (W → F))
     (R T : Finset V) :
-    mutualInformation (fun _ : V => F) (relabelSites σ ψ) R T =
-      mutualInformation (fun _ : W => F) ψ (R.map σ.toEmbedding) (T.map σ.toEmbedding) := by
-  simp only [mutualInformation, entropy_relabelSites, Finset.map_union]
+    ManyBody.regionMutualInformation (relabelSites σ ψ) R T =
+      ManyBody.regionMutualInformation ψ (R.map σ.toEmbedding) (T.map σ.toEmbedding) := by
+  simp only [ManyBody.regionMutualInformation, entropy_relabelSites, Finset.map_union]
 
 end Relabel
 

@@ -117,7 +117,7 @@ vector before the polynomial degree. -/
 theorem exists_aklv_logarithmic_clipped_chebyshev_filter {L q a s : ℕ}
     (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
@@ -144,7 +144,7 @@ theorem exists_aklv_logarithmic_clipped_chebyshev_filter {L q a s : ℕ}
             toEuclideanLin K φ = φ ∧
             ‖K - vecMulVec (WithLp.ofLp φ) (star (WithLp.ofLp φ))‖ ≤
               2 * Real.exp (-2 * (ell : ℝ) * Real.sqrt ((9 * g / 10) / (2 * t + s))) ∧
-            operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+            operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
               (leftBlock L (a + s / 2)) K) ≤
                 (q * (ell + 1)) ^ (32 * (ell / s + Nat.sqrt ell + 1)) ∧
             ∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 → ⟪φ, ψ⟫_ℂ = 0 →
@@ -191,7 +191,7 @@ theorem exists_aklv_logarithmic_clipped_chebyshev_filter {L q a s : ℕ}
   let H := fun j : Fin (s - 2) ↦ h ⟨a + 1 + j.val, by omega⟩
   obtain ⟨HL, HR, hL, hR, hmiddle, hdecomp, hcenter⟩ :=
     aklv_clipped_hamiltonian_decomposition (by omega) ha h hsupp e t
-  have hR' : Entropy.IsSupportedOn HR (interval L (a + 1 + (s - 2)) L) := by
+  have hR' : ManyBody.IsSupportedOn HR (interval L (a + 1 + (s - 2)) L) := by
     convert hR using 1
     congr 1
     omega
@@ -232,7 +232,7 @@ The ground vector and energy shifts are chosen before the polynomial degree. -/
 theorem exists_aklv_clipped_chebyshev_filter {L q a s : ℕ}
     (hs : 6 ≤ s) (ha : a + s + 1 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q))
@@ -259,7 +259,7 @@ theorem exists_aklv_clipped_chebyshev_filter {L q a s : ℕ}
             toEuclideanLin K φ = φ ∧
             ‖K - vecMulVec (WithLp.ofLp φ) (star (WithLp.ofLp φ))‖ ≤
               2 * Real.exp (-2 * (ell : ℝ) * Real.sqrt ((9 * g / 10) / (2 * t + s))) ∧
-            operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+            operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
               (leftBlock L (a + s / 2)) K) ≤
                 (q * (ell + 1)) ^ (32 * (ell / s + Nat.sqrt ell + 1)) ∧
             ∀ ψ : EuclideanSpace ℂ (Fin L → Fin q), ‖ψ‖ = 1 → ⟪φ, ψ⟫_ℂ = 0 →

@@ -137,15 +137,15 @@ theorem uniform_boxEntropy_improvement_explicit
     rectangleBootstrapScanner_geometry_of_threshold_le F hCtr.le A Q R C₁ hD₀ hQNg hsafe
   have hnS : Ns ≤ S.n := hQNs.trans hsn
   have hphysical : ∀ Q' : IntRect, IsSafe Λ A D₀ Q' →
-      regionalEntropy Λ q Ω (rectRegion A Q') ≤ Cbox * (Q'.size : ℝ) ^ (1 + e) :=
+      ManyBody.regionEntropy Ω (rectRegion A Q') ≤ Cbox * (Q'.size : ℝ) ^ (1 + e) :=
     fun Q' hsafe' ↦ regionalEntropy_le_of_boxEntropy_power hq (by linarith)
       hbox h hh hhJ hΩ hgap hspan A Q' hsafe'
   obtain ⟨htarget, hprefix⟩ := hentropy Λ q D₀ Ω hΩ A Q hT hsafe
     S.n (F.L S.n) hsn hLpos hL hbudget e he.le hphysical
-  have htarget' : regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ Q.toFinset) ≤
+  have htarget' : ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ Q.toFinset) ≤
       Ce * (S.n : ℝ) ^ (1 + e) := htarget
   have hprefix' : ∀ j : ℕ, j ≤ F.L S.n →
-      regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+      ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
         Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ e + S.n) := hprefix
   have hresult := hsource e he hee₀ Λ Q.toFinset hT h hh hhJ S E₀ Ω hΩ hgap hspan hgraph hanchor hnS
     rfl rfl rfl rfl rfl (by simpa only [one_mul] using hcard)
@@ -159,7 +159,7 @@ theorem uniform_boxEntropy_improvement_explicit
     norm_num at hb ⊢
     exact hb
   calc
-    regionalEntropy Λ q Ω (rectRegion A Q) ≤
+    ManyBody.regionEntropy Ω (rectRegion A Q) ≤
         Cout * (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * e) := hresult
     _ = Cout * ((24 : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * e) *
         (Q.size : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * e)) := by

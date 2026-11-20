@@ -50,7 +50,7 @@ whose terms have supports of diameter at most `R` and norms at most `J`.
 Source: polynomial-PEPS `eq:model` and `eq:global-gap` (`00-introduction.tex`, lines 36–49),
 read with interactions of range `R` as in area-law Theorem 1.1. -/
 def IsRangeSquareGroundState (q R : ℕ) (J Δ : ℝ) (L : ℕ) (Ω : StateSpace L q) : Prop :=
-  ∃ (H : PlaneInteraction (AreaLaw.rectangularDomain L L) q R) (_ : ∀ X, (H.term X).IsHermitian)
+  ∃ (H : PlaneInteraction (ManyBody.rectangularDomain L L) q R) (_ : ∀ X, (H.term X).IsHermitian)
       (_ : ∀ X, ‖H.term X‖ ≤ J) (E₀ : ℝ),
     (‖AreaLaw.rectangleAreaLawState Ω‖ = 1 ∧ IsGapped H.hamiltonian E₀ Δ ∧
       groundSpace H.hamiltonian E₀ = Submodule.span ℂ {AreaLaw.rectangleAreaLawState Ω})
@@ -71,8 +71,10 @@ theorem IsSquareGroundState.isRangeSquareGroundState {q : ℕ} {J Δ : ℝ}
     {L : ℕ} {Ω : StateSpace L q} (hΩ : IsSquareGroundState q J Δ L Ω) :
     IsRangeSquareGroundState q 1 J Δ L Ω := by
   obtain ⟨h, hh, hhJ, E₀, hΩ, hgap, hspan⟩ := hΩ
-  exact ⟨h.toAreaLawHamiltonian, h.isHermitian_toAreaLawHamiltonian_term,
-    h.norm_toAreaLawHamiltonian_term_le hhJ, E₀, h.isGapped_toAreaLawHamiltonian hh hΩ hgap hspan⟩
+  exact ⟨ManyBody.RectangleInteraction.toPlaneInteraction h.hermitianPart,
+    h.isHermitian_toPlaneInteraction_hermitianPart_term,
+    h.norm_toPlaneInteraction_hermitianPart_term_le hhJ, E₀,
+    h.isGapped_toPlaneInteraction_hermitianPart hh hΩ hgap hspan⟩
 
 /-- The square-grid area law passes to a smaller family of states at the same constant.
 Source: polynomial-PEPS Proposition 2.1 (`01-preliminaries.tex`, lines 39–52). -/
@@ -96,14 +98,14 @@ theorem squareEntropyAreaLawAt_range_of_areaLawBound {q R : ℕ} {J Δ C : ℝ} 
         ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
         groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
         ∀ A : Finset (Lattice.Site Λ),
-          Lattice.regionalEntropy Λ q Ω A ≤ C * (Lattice.edgeBoundary Λ A).card) :
+          ManyBody.regionEntropy Ω A ≤ C * (Lattice.edgeBoundary Λ A).card) :
     SquareEntropyAreaLawAt q (IsRangeSquareGroundState q R J Δ) C := by
   refine ⟨hC, fun L Ω ⟨H, hH, hHJ, E₀, hΩ, hgap, hspan⟩ A ↦ ?_⟩
-  have := hbound (AreaLaw.rectangularDomain L L) H hH hHJ E₀
+  have := hbound (ManyBody.rectangularDomain L L) H hH hHJ E₀
       (AreaLaw.rectangleAreaLawState Ω) hΩ hgap hspan
-    (A.map (AreaLaw.rectangleSiteEquiv L L).toEmbedding)
-  rw [Lattice.regionalEntropy_eq_finiteProduct, card_edgeBoundary_rectangle] at this
-  exact (finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω A).symm.trans_le
+    (A.map (ManyBody.rectangleSiteEquiv L L).toEmbedding)
+  rw [card_edgeBoundary_rectangle] at this
+  exact (finiteProductEntropy_relabel (ManyBody.rectangleSiteEquiv L L) q Ω A).symm.trans_le
     this
 
 end TNLean.PEPS.Approximation

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ALVV.SoftParentEnergy
-import QICLean.Analysis.CanonicalHalfSamplingParent
+import QICLean.Entropy.ViableSampling.CanonicalHalfSamplingParent
 import QICLean.Analysis.RegionalEnergyCalibration
 import QICLean.Analysis.ViableProjectionNonzero
 import QICLean.Analysis.CompressionEnergyInterval
@@ -48,7 +48,7 @@ theorem exists_native_soft_terminal_compressed_energy_estimate
     (hq : 0 < q) (hlu : l ≤ u) (huv : u ≤ v) (hvr : v ≤ r) (hrL : r ≤ L)
     (hleft : u - l ≤ 2 * ell) (hright : r - v ≤ 2 * ell)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     let _ : Nonempty (Fin L → Fin q) := ⟨fun _ ↦ ⟨0, hq⟩⟩
@@ -58,21 +58,21 @@ theorem exists_native_soft_terminal_compressed_energy_estimate
     let G := Submodule.spectralSpanLE hH.eigenvectorBasis hH.eigenvalues (minEigenvalue hH)
     let J := interval L l r
     let beta := fun _ : Fin L ↦ Fin q
-    let split := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let split := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ split
-    let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration beta Jᶜ) ℂ).tensorProduct
-      (EuclideanSpace.basisFun (FiniteProduct.Configuration beta J) ℂ)).repr
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
     let coords := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ))
-      (EuclideanSpace ℂ (FiniteProduct.Configuration beta J)))
+      (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+      (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
     let P := ∑ i ∈ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ l ≤ i.val ∧ i.val + 1 < r), h i
     let M := ∑ i ∈ Finset.univ.filter
       (fun i : Fin (L - 1) ↦ u ≤ i.val ∧ i.val + 1 < v), h i
     let sigma0 : Fin L → Fin q := fun _ ↦ ⟨0, hq⟩
-    let y0 := ((Entropy.cutEquiv (fun _ : Fin L ↦ q) J) sigma0).2
+    let y0 := ((ManyBody.cutEquiv (fun _ ↦ Fin q) J) sigma0).2
     let native := fun x : J → Fin q ↦
-      (Entropy.cutEquiv (fun _ : Fin L ↦ q) J).symm (x, y0)
+      (ManyBody.cutEquiv (fun _ ↦ Fin q) J).symm (x, y0)
     ∃ (eP eM : ℝ) (xP xM : (Fin L → Fin q) → ℂ),
       star xP ⬝ᵥ xP = 1 ∧ P *ᵥ xP = (eP : ℂ) • xP ∧
       (P - (eP : ℂ) • 1).PosSemidef ∧
@@ -89,7 +89,7 @@ theorem exists_native_soft_terminal_compressed_energy_estimate
           cfc (Real.softTruncation t m) (M - (p : ℂ) • 1)
         let Rnat := R.submatrix native native
         Rnat.IsHermitian ∧ ∃ (eSoft : ℝ) (w : (Fin L → Fin q) → ℂ),
-          R = Entropy.localLift (n := fun _ : Fin L ↦ q) J Rnat ∧
+          R = ManyBody.place (X := fun _ ↦ Fin q) J Rnat ∧
           star w ⬝ᵥ w = 1 ∧ R *ᵥ w = (eSoft : ℂ) • w ∧
           (Rnat - (eSoft : ℂ) • 1).PosSemidef ∧
           ‖R - (eSoft : ℂ) • 1‖ ≤ budget ∧
@@ -134,23 +134,23 @@ theorem exists_native_soft_terminal_compressed_energy_estimate
     hsoft p t m hpl hpu (by linarith only [ht]) hm
   obtain ⟨hSoftLE, hShift, hGenergy⟩ := hresidual Tcut ht hTcut
   have hCeq : R - (eSoft : ℂ) • 1 =
-      Entropy.localLift (n := fun _ : Fin L ↦ q) J K := sub_eq_iff_eq_add.mpr hR
+      ManyBody.place (X := fun _ ↦ Fin q) J K := sub_eq_iff_eq_add.mpr hR
   have hGenergyC : ∀ g ∈ G,
       RCLike.re (inner ℂ (toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q)
         (R - (eSoft : ℂ) • 1) g) g) ≤ (2 + rho) * ‖g‖ ^ 2 := by
     intro g hg
     rw [hCeq]
     exact hGenergy g hg
-  have hRnative : R = Entropy.localLift (n := fun _ : Fin L ↦ q) J
+  have hRnative : R = ManyBody.place (X := fun _ ↦ Fin q) J
       (K + (eSoft : ℂ) • 1) := by
-    rw [Entropy.localLift_add, Entropy.localLift_smul, Entropy.localLift_one]
+    rw [ManyBody.place_add, ManyBody.place_smul, ManyBody.place_one]
     exact hR
   have hNative : Rnat = K + (eSoft : ℂ) • 1 := by
     ext x y
-    change Entropy.cutOperator J R (x, y0) (y, y0) = _
-    rw [hRnative, Entropy.cutOperator_localLift]
+    change ManyBody.cutOperator J R (x, y0) (y, y0) = _
+    rw [hRnative, ManyBody.cutOperator_place]
     simp
-  have hRawLift : R = Entropy.localLift (n := fun _ : Fin L ↦ q) J Rnat := by
+  have hRawLift : R = ManyBody.place (X := fun _ ↦ Fin q) J Rnat := by
     rw [hNative]
     exact hRnative
   have hRawLower : (Rnat - (eSoft : ℂ) • 1).PosSemidef := by

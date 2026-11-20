@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import QICLean.Entropy.ClusterExpansion.NearestNeighbor
+import QICLean.ManyBody.Hamiltonian.ClusterExpansion.NearestNeighbor
 import TNLean.MPS.AreaLaw.OpenMPS
 
 /-!
@@ -31,9 +31,9 @@ Supporting ALVV, arXiv:1602.08828v2, `thm:cluster`, lines 1298–1303 and 1971�
 theorem operatorSchmidtRank_cluster_truncation_all_cuts_le {N q r : ℕ}
     (hq : 1 ≤ q) (hr : 0 < r)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ}) (β : ℝ) (k : ℕ) :
-    operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin (N + 1) ↦ q)
+    operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock (N + 1) k) (truncatedExp (pathGraph N) (fun C ↦ r ≤ C.card) h β)) ≤
         r ^ 2 * q ^ r := by
   classical
@@ -71,7 +71,7 @@ theorem operatorSchmidtRank_cluster_truncation_all_cuts_le {N q r : ℕ}
             ManyBody.ClusterExpansion.operatorSchmidtRank_truncatedExp_nearestNeighbor_le_count
               (r := 1) hq (⟨h, hs⟩ : ManyBody.Interaction (fun _ ↦ Fin q) (ManyBody.chainBond N))
               p β
-          have hb' : operatorSchmidtRank (Entropy.cutOperator
+          have hb' : operatorSchmidtRank (ManyBody.cutOperator
               {v ∈ (univ : Finset (Fin (N + 1))) | v.val ≤ p.val}
                 (truncatedExp (pathGraph N) (fun C ↦ 1 ≤ C.card) h β)) ≤ 1 := by
             simpa using hb

@@ -46,7 +46,7 @@ theorem exists_physical_dg_canonical_ritz_polynomial_approximation_with_energy :
     ∃ C : ℝ, 0 < C ∧ ∃ k : ℕ,
     ∀ (L : ℕ),
     ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu : ℝ),
     let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i, h i

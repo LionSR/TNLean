@@ -49,7 +49,7 @@ def rightCutBlock {L q : ℕ}
 two-site supports. Auxiliary to the source normalization of AKLV. -/
 private theorem commute_separated_bond_sums {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (S T : Finset (Fin (L - 1)))
     (hsep : ∀ i ∈ S, ∀ j ∈ T, i.val + 1 < j.val) :
@@ -77,7 +77,7 @@ private theorem commute_sub_smul_one {n : Type*} [Fintype n] [DecidableEq n]
 nearest-neighbour supports and the two removed bonds. AKLV, Section 6.3. -/
 theorem normalizedCutBlock_commutations {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (a b : Fin (L - 1)) (hab : a.val < b.val) (x m y : ℝ) :
     Commute (leftCutBlock h a x) (middleCutBlock h a b m) ∧
@@ -195,7 +195,7 @@ of Section 6.1; commutations, decompositions and all analytic estimates
 are derived. Source: arXiv:1301.1162v1, Theorem 6.1 and Section 6.3. -/
 theorem normalized_chain_robustness {L q : ℕ}
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (a b : Fin (L - 1)) (hab : a.val < b.val) (x m y e g t : ℝ)

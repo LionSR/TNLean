@@ -40,7 +40,7 @@ rank bounds for deterministic error reduction. LVV13, Claim `c:errorreduction`,
 lines 580–592, with the documented witness-normalization correction. -/
 theorem exists_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i (i + 2))) (h0 : ∀ i, (h i).PosSemidef) (h1 : ∀ i, h i ≤ 1)
     {E₀ Δ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Γ‖ = 1) (hgap : IsGapped (∑ i, h i) E₀ Δ)
@@ -54,10 +54,10 @@ theorem exists_sampled_errorReduction {L q : ℕ} [NeZero L] (hq : 1 ≤ q)
       ‖sampledProjector h E₀ I - vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))‖ < δ / 4 ∧
       ∀ i : ℕ, i ≤ L → ∃ (N : ℕ) (A : Fin N → LeftBlockMatrix L q i)
         (B : Fin N → RightBlockMatrix L q i),
-        N ≤ ℓ * D ∧ Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L i)
+        N ≤ ℓ * D ∧ ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L i)
           (sampledProjector h E₀ I) = ∑ j, A j ⊗ₖ B j ∧
         (∀ j k, 0 < k → k < i → operatorSchmidtRank
-          (Entropy.cutOperator (n := fun _ : Fin i ↦ q) (leftBlock i k)
+          (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock i k)
             ((A j).submatrix leftConfigOfFin leftConfigOfFin)) ≤ D) ∧
         ∀ (s b : ℕ) (S : Finset (LeftBlockVector L q i)), IsViableMPS Γ s b (1 / 2) S →
           IsViableMPS Γ (ℓ * D * s) (D * max 1 b) δ

@@ -66,9 +66,9 @@ arXiv:1602.08828v2, Proposition 5.7, lines 1311–1333. -/
 private theorem exists_common_physical_closing_nodes_family_fin
     {alpha : Type*} [Fintype alpha] {L q ell a b B k : ℕ}
     (WL WR : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, Entropy.IsSupportedOn (WL r)
+    (hleft : ∀ r, ManyBody.IsSupportedOn (WL r)
       (interval L (a + r.val) (a + r.val + 2)))
-    (hright : ∀ r, Entropy.IsSupportedOn (WR r)
+    (hright : ∀ r, ManyBody.IsSupportedOn (WR r)
       (interval L (b + r.val) (b + r.val + 2)))
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
     (hell : 1 ≤ ell) (hq : 2 ≤ q) (hk : 1 ≤ k)
@@ -84,7 +84,7 @@ private theorem exists_common_physical_closing_nodes_family_fin
       (show a + ell ≤ b + ell + 1 by omega) (show b + ell + 1 ≤ L by omega)
     let D := (q * k) ^ (18 * ell + 2 * (k / ell))
     let beta := fun _ : Fin L ↦ Fin q
-    let tau := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
     let H := fun PL PR r ↦ ∑ i, Sum.elim (Sum.elim WL WR) ![PL, Pmid r, PR] i
     ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),
       N ≤ Fintype.card alpha * D ^ 2 ∧
@@ -92,11 +92,11 @@ private theorem exists_common_physical_closing_nodes_family_fin
         ((max 1 B) ^ (2 * k)) (fun w ↦ W i
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).1)
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2))) ∧
-      ∀ PL PR, Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
-        Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
+      ∀ PL PR, ManyBody.IsSupportedOn PL (interval L 0 (a + 1)) →
+        ManyBody.IsSupportedOn PR (interval L (b + 2 * ell) L) →
         ∀ Q : Polynomial ℂ, Q.natDegree ≤ k → ∀ c : alpha → ℂ,
-        ∃ M : Fin N → Matrix (FiniteProduct.Configuration beta Jᶜ)
-            (FiniteProduct.Configuration beta Jᶜ) ℂ,
+        ∃ M : Fin N → Matrix (ManyBody.RegionConfig beta Jᶜ)
+            (ManyBody.RegionConfig beta Jᶜ) ℂ,
           (∑ r, c r • Polynomial.aeval (H PL PR r) Q) =
             (∑ i, M i ⊗ₖ W i).submatrix tau tau := by
   classical
@@ -106,7 +106,7 @@ private theorem exists_common_physical_closing_nodes_family_fin
     WL WR hleft hright hab hb hell hq hk Acore (C r)
   choose n Wnode hn hbond _hTrace hnodePoly using hnodes
   obtain ⟨N, W, hN, hmember, hflatten⟩ :=
-    exists_flattened_kronecker_family (mu := FiniteProduct.Configuration beta Jᶜ) n Wnode
+    exists_flattened_kronecker_family (mu := ManyBody.RegionConfig beta Jᶜ) n Wnode
   have hcount : N ≤ Fintype.card alpha * D ^ 2 := by
     calc
       N = ∑ r, n r := hN
@@ -123,8 +123,8 @@ private theorem exists_common_physical_closing_nodes_family_fin
   refine ⟨N, W, hcount, hW, ?_⟩
   intro PL PR hPL hPR Q hQ c
   have hnode (r : alpha) :
-      ∃ M : Fin (n r) → Matrix (FiniteProduct.Configuration beta Jᶜ)
-          (FiniteProduct.Configuration beta Jᶜ) ℂ,
+      ∃ M : Fin (n r) → Matrix (ManyBody.RegionConfig beta Jᶜ)
+          (ManyBody.RegionConfig beta Jᶜ) ℂ,
         Polynomial.aeval (H PL PR r) Q =
           (∑ i, M i ⊗ₖ Wnode r i).submatrix tau tau :=
     hnodePoly r PL PR hPL hPR Q hQ
@@ -151,9 +151,9 @@ conclusion is asserted. -/
 theorem exists_common_physical_polynomial_closing_family_fin
     {L q ell a b B k m : ℕ}
     (WL WR : Fin (2 * ell) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hleft : ∀ r, Entropy.IsSupportedOn (WL r)
+    (hleft : ∀ r, ManyBody.IsSupportedOn (WL r)
       (interval L (a + r.val) (a + r.val + 2)))
-    (hright : ∀ r, Entropy.IsSupportedOn (WR r)
+    (hright : ∀ r, ManyBody.IsSupportedOn (WR r)
       (interval L (b + r.val) (b + r.val + 2)))
     (hab : a + 2 * ell ≤ b) (hb : b + 2 * ell ≤ L - 1)
     (hell : 1 ≤ ell) (hq : 2 ≤ q) (hk : 1 ≤ k)
@@ -170,34 +170,34 @@ theorem exists_common_physical_polynomial_closing_family_fin
       (show a + ell ≤ b + ell + 1 by omega) (show b + ell + 1 ≤ L by omega)
     let D := (q * k) ^ (18 * ell + 2 * (k / ell))
     let beta := fun _ : Fin L ↦ Fin q
-    let tau := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+    let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
     let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-    let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration beta Jᶜ) ℂ).tensorProduct
-      (EuclideanSpace.basisFun (FiniteProduct.Configuration beta J) ℂ)).repr
+    let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+      (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
     let T := U.trans Phi.symm
     let Tm := T.trans (TensorProduct.commIsometry ℂ
-      (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ))
-      (EuclideanSpace ℂ (FiniteProduct.Configuration beta J)))
+      (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+      (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
     ∃ (N : ℕ) (W : Fin N → Matrix (J → Fin q) (J → Fin q) ℂ),
       N ≤ (m * k + 1) * D ^ 2 ∧
       (∀ i, IsOpenMPS ((b + ell + 1) - (a + ell)) (q * q)
         ((max 1 B) ^ (2 * k)) (fun w ↦ W i
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).1)
           (fun v ↦ ((finProdFinEquiv (m := q) (n := q)).symm (w (eJ.symm v))).2))) ∧
-      ∀ (z : ℂ) PL PR, Entropy.IsSupportedOn PL (interval L 0 (a + 1)) →
-        Entropy.IsSupportedOn PR (interval L (b + 2 * ell) L) →
+      ∀ (z : ℂ) PL PR, ManyBody.IsSupportedOn PL (interval L 0 (a + 1)) →
+        ManyBody.IsSupportedOn PR (interval L (b + 2 * ell) L) →
         let H := ∑ i, Sum.elim (Sum.elim WL WR) ![PL, Pmid z, PR] i
         ∀ Q : Polynomial ℂ, Q.natDegree ≤ k →
-        ∃ M : Fin N → Matrix (FiniteProduct.Configuration beta Jᶜ)
-            (FiniteProduct.Configuration beta Jᶜ) ℂ,
+        ∃ M : Fin N → Matrix (ManyBody.RegionConfig beta Jᶜ)
+            (ManyBody.RegionConfig beta Jᶜ) ℂ,
           Polynomial.aeval H Q = (∑ i, M i ⊗ₖ W i).submatrix tau tau ∧
           Tm.toContinuousLinearEquiv.toContinuousLinearMap ∘L
               Matrix.toEuclideanCLM (𝕜 := ℂ) (n := Fin L → Fin q) (Polynomial.aeval H Q) ∘L
               Tm.symm.toContinuousLinearEquiv.toContinuousLinearMap =
             ∑ i, TensorProduct.mapL
-              (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := FiniteProduct.Configuration beta J) (W i))
+              (Matrix.toEuclideanCLM (𝕜 := ℂ) (n := ManyBody.RegionConfig beta J) (W i))
               (Matrix.toEuclideanCLM (𝕜 := ℂ)
-                (n := FiniteProduct.Configuration beta Jᶜ) (M i)) := by
+                (n := ManyBody.RegionConfig beta Jᶜ) (M i)) := by
   classical
   intro Ksites eK Cpoly Pmid J eJ D beta tau U Phi T Tm
   have hnodes := exists_common_physical_closing_nodes_family_fin

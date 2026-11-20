@@ -8,7 +8,10 @@ import TNLean.MPS.AreaLaw.TraceCoreSlices
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SupportedMatrixElements
-import QICLean.Entropy.LocalLift
+import QICLean.Entropy.SupportedMarginalTails
+import QICLean.Entropy.FilterMoment
+import QICLean.ManyBody.Sites.RegionState
+import QICLean.ManyBody.Sites.Placement
 import QICLean.Entropy.RegionUnion
 import QICLean.Entropy.FilterOutputCovariance
 import Mathlib.Data.List.OfFn
@@ -307,15 +310,15 @@ private theorem localLift_retainedInterval {T L q : ℕ}
     let f := fun (η : {v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)} → Fin q)
       (v : C) ↦ η ⟨v.val, by simpa only
         [C, Finset.mem_filter, Finset.mem_univ, true_and] using v.property⟩
-    ∀ K : Matrix (Entropy.RegionConfig (fun _ : Fin T ↦ q) C)
-      (Entropy.RegionConfig (fun _ : Fin T ↦ q) C) ℂ,
-      Entropy.localLift C K =
+    ∀ K : Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) C)
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) C) ℂ,
+      ManyBody.place C K =
         ((K.submatrix f f) ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)).submatrix
           (retainedIntervalEquiv a ha).symm (retainedIntervalEquiv a ha).symm := by
   classical
   intro C f K
   ext σ τ
-  rw [Entropy.localLift_apply]
+  rw [ManyBody.place_apply]
   simp only [Matrix.submatrix_apply, Matrix.kroneckerMap_apply, Matrix.one_apply]
   have hiff : (∀ v ∉ C, σ v = τ v) ↔
       (fun r : Fin L ↦ σ ⟨a + r.val, by omega⟩) =
@@ -373,18 +376,18 @@ private theorem localLift_physical_submatrix_eq_natural
     (hC : ∀ r : Fin T,
       r ∈ Finset.univ.filter (fun v : Fin T ↦ ¬(a ≤ v.val ∧ v.val < a + L)) ↔
         e r ∈ Cphys)
-    (Kphys : Matrix (Entropy.RegionConfig (fun _ : Vphys ↦ q) Cphys)
-      (Entropy.RegionConfig (fun _ : Vphys ↦ q) Cphys) ℂ) :
+    (Kphys : Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) Cphys)
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) Cphys) ℂ) :
     let Cnat := Finset.univ.filter (fun v : Fin T ↦ ¬(a ≤ v.val ∧ v.val < a + L))
     let hDphys : ∀ v : Vphys, v ∈ Cphys ↔ e.symm v ∈ Cnat := fun v ↦ by
       simpa only [Equiv.apply_symm_apply] using (hC (e.symm v)).symm
     let r := Entropy.regionConfigurationEquiv
       (n := fun _ : Vphys ↦ q) (n' := fun _ : Fin T ↦ q)
       Cphys Cnat e.symm hDphys (fun _ ↦ Equiv.refl (Fin q))
-    (Entropy.localLift Cphys Kphys).submatrix
+    (ManyBody.place Cphys Kphys).submatrix
         (fun σ : Fin T → Fin q ↦ σ ∘ e.symm)
         (fun σ : Fin T → Fin q ↦ σ ∘ e.symm) =
-      Entropy.localLift Cnat (Matrix.reindex r r Kphys) := by
+      ManyBody.place Cnat (Matrix.reindex r r Kphys) := by
   intro Cnat hDphys r
   have h := Entropy.localLift_relabel
     (n := fun _ : Vphys ↦ q) (n' := fun _ : Fin T ↦ q)
@@ -403,11 +406,11 @@ theorem exists_retainedMatrix_of_physical_localLift
     (hC : ∀ r : Fin T,
       r ∈ Finset.univ.filter (fun v : Fin T ↦ ¬(a ≤ v.val ∧ v.val < a + L)) ↔
         e r ∈ Cphys)
-    (Kphys : Matrix (Entropy.RegionConfig (fun _ : Vphys ↦ q) Cphys)
-      (Entropy.RegionConfig (fun _ : Vphys ↦ q) Cphys) ℂ) :
+    (Kphys : Matrix (ManyBody.RegionConfig (fun _ ↦ Fin q) Cphys)
+      (ManyBody.RegionConfig (fun _ ↦ Fin q) Cphys) ℂ) :
     ∃ Kret : Matrix ({v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)} → Fin q)
       ({v : Fin T // ¬(a ≤ v.val ∧ v.val < a + L)} → Fin q) ℂ,
-      (Entropy.localLift Cphys Kphys).submatrix
+      (ManyBody.place Cphys Kphys).submatrix
           (fun σ : Fin T → Fin q ↦ σ ∘ e.symm)
           (fun σ : Fin T → Fin q ↦ σ ∘ e.symm) =
         (Kret ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)).submatrix
@@ -480,7 +483,7 @@ Theorem `t:ais`, lines 1010–1024; no efficient bond or running time is asserte
 theorem exists_traceChainOperator_of_supported_interval
     {L q c d : ℕ} (hcd : c ≤ d) (hd : d ≤ L)
     (A : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hA : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) A (interval L c d)) :
+    (hA : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A (interval L c d)) :
     ∃ (B : ℕ) (Acore : Fin (d - c) → MPOTensor q B)
       (C0 : Matrix (Fin B) (Fin B) ℂ),
       A = QuantumCircuit.embedOp (Subtype.val : interval L c d → Fin L)

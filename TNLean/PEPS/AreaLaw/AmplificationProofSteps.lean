@@ -231,7 +231,7 @@ theorem mutualInformation_le_of_ancilla_unitary {Ω : StateSpace Λ q} (hΩ : �
         (Entropy.restoringRestored p (restoringVector Ω X Y hXY)).ofLp) ∘ ancillaSplit q X)‖ ≤
       C₁ * (n : ℝ) ^ (-(K : ℝ) / 2))
     (hdim : (X.card : ℝ) * Real.log q ≤ C₂ * (n : ℝ) ^ 2) :
-    ∀ X' ⊆ X, FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω X' J ≤
+    ∀ X' ⊆ X, ManyBody.regionMutualInformation Ω X' J ≤
       8 * √C₁ * (1 + C₂) * ((n : ℝ) ^ M)⁻¹ := by
   intro X' hX'
   set sp := ancillaSplit q X with hspdef
@@ -262,11 +262,11 @@ theorem mutualInformation_le_of_ancilla_unitary {Ω : StateSpace Λ q} (hΩ : �
     rw [hΩ, one_mul] at h
     rw [← h, ← hη, hηform]
     rfl
-  have hprod : FiniteProduct.mutualInformation (fun _ : AncillaSites Λ X => Fin q)
+  have hprod : ManyBody.regionMutualInformation
       (WithLp.toLp 2 (η ∘ sp)) copyAll physJ = 0 := by
     rw [hηform]
     exact mutualInformation_ancillaProduct_copy_eq_zero hΩ hχ _ _
-  have hdim' : Real.log (Fintype.card (FiniteProduct.Configuration
+  have hdim' : Real.log (Fintype.card (ManyBody.RegionConfig
       (fun _ : AncillaSites Λ X => Fin q) copyAll)) ≤ C₂ * (n : ℝ) ^ 2 := by
     have hc : copyAll.card = X.card := by
       rw [hcopyAll, ancillaCopyRegion, Finset.card_disjSum, Finset.card_disjSum,
@@ -275,7 +275,7 @@ theorem mutualInformation_le_of_ancilla_unitary {Ω : StateSpace Λ q} (hΩ : �
     rw [Fintype.card_pi, Finset.prod_const, Fintype.card_fin, Finset.card_univ,
       Fintype.card_coe, hc, Nat.cast_pow, Real.log_pow]
     exact hdim
-  have hfinal := FiniteProduct.mutualInformation_le_inv_pow_of_supported_unitary _
+  have hfinal := ManyBody.regionMutualInformation_le_inv_pow_of_supported_unitary _
     (φ := WithLp.toLp 2 (φ ∘ sp))
     (η := WithLp.toLp 2 (η ∘ sp)) (by rw [hTn]; exact hφ) (by rw [hTn]; exact hη)
     (disjoint_ancillaCopyRegion_ancillaPhysicalRegion _ _)

@@ -88,13 +88,13 @@ theorem IsViable.mono_error
 right index. -/
 noncomputable def assembleLeftColumns (w : Fin m → LeftBlockVector L q k) :
     EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m) :=
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m) :=
   WithLp.toLp 2 fun p ↦ w p.2 p.1
 
 /-- Uniform column error `θ` gives joint Euclidean error at most `√m θ`. -/
 theorem norm_sub_assembleLeftColumns_le
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m))
     (w : Fin m → LeftBlockVector L q k) {θ : ℝ} (hθ : 0 ≤ θ)
     (hclose : ∀ a,
       ‖WithLp.toLp 2 (fun x ↦ u (x, a)) - w a‖ ≤ θ) :
@@ -137,10 +137,10 @@ theorem norm_rightApply_eq_of_isometry
 noncomputable def physicalRightApply
     (W : Matrix (CutRight L q k) (Fin m) ℂ)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m)) :
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m)) :
     EuclideanSpace ℂ (Fin L → Fin q) :=
   WithLp.toLp 2 fun z ↦ rightApply W u
-    (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z)
+    (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z)
 
 /-- Applying the right isometry after joining the two left regions is the physical
 three-cut reconstruction used in the LVV leading-vector theorem. -/
@@ -159,13 +159,13 @@ extension. -/
 theorem cutVector_physicalRightApply
     (W : Matrix (CutRight L q k) (Fin m) ℂ)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m)) :
-    Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k)
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m)) :
+    ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L k)
       (physicalRightApply W u) = rightApply W u := by
   ext p
   change rightApply W u
-    (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)
-      ((Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm p)) =
+    (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)
+      ((ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm p)) =
         rightApply W u p
   rw [Equiv.apply_symm_apply]
 
@@ -173,7 +173,7 @@ theorem cutVector_physicalRightApply
 theorem norm_physicalRightApply_eq_of_isometry
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m)) :
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m)) :
     ‖physicalRightApply W u‖ = ‖u‖ := by
   rw [← Entropy.norm_cutVector (leftBlock L k), cutVector_physicalRightApply,
     norm_rightApply_eq_of_isometry W hW]
@@ -182,12 +182,12 @@ theorem norm_physicalRightApply_eq_of_isometry
 theorem norm_physicalRightApply_sub_eq_of_isometry
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (u v : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m)) :
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m)) :
     ‖physicalRightApply W u - physicalRightApply W v‖ = ‖u - v‖ := by
   rw [show physicalRightApply W u - physicalRightApply W v =
       physicalRightApply W (u - v) by
     ext z
-    let p := Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k) z
+    let p := ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k) z
     change (∑ j, u (p.1, j) * W p.2 j) - (∑ j, v (p.1, j) * W p.2 j) =
       ∑ j, (u (p.1, j) - v (p.1, j)) * W p.2 j
     rw [← Finset.sum_sub_distrib]
@@ -204,7 +204,7 @@ theorem isViable_of_close_leftColumns
     {T : Set (LeftBlockVector L q k)}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m))
     (hunit : ‖physicalRightApply W u‖ = 1)
     (hoverlap : 1 - δ ≤ ‖⟪physicalRightApply W u, Γ⟫_ℂ‖)
     (w : Fin m → LeftBlockVector L q k)
@@ -233,7 +233,7 @@ theorem isViable_of_close_subnormalized_leftColumns
     {T : Set (LeftBlockVector L q k)}
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m))
     (hnorm : c ≤ ‖u‖)
     (hoverlap : 1 - δ ≤
       ‖⟪((‖u‖⁻¹ : ℝ) : ℂ) • physicalRightApply W u, Γ⟫_ℂ‖)
@@ -275,7 +275,7 @@ theorem isViable_of_approximating_leftFamily
     (hcover : ∀ v ∈ S, ∃ w ∈ T, ‖v - w‖ ≤ θ)
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m))
     (hcols : ∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ S)
     (hnorm : c ≤ ‖u‖)
     (hoverlap : 1 - δ ≤
@@ -297,7 +297,7 @@ theorem isViable_half_of_approximating_trimmed_leftFamily
     (hcover : ∀ v ∈ S, ∃ w ∈ T, ‖v - w‖ ≤ θ)
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m))
     (hcols : ∀ a, WithLp.toLp 2 (fun x ↦ u (x, a)) ∈ S)
     (hnorm : 37 / 48 ≤ ‖u‖)
     (hoverlap : 7 / 12 ≤
@@ -324,7 +324,7 @@ theorem isViable_spanColumnFamily_of_close
     (c : Fin n → Fin m → S → ℂ) (j : Fin n)
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m))
     (hunit : ‖physicalRightApply W u‖ = 1)
     (hoverlap : 1 - δ ≤ ‖⟪physicalRightApply W u, Γ⟫_ℂ‖)
     (hclose : ∀ a,
@@ -396,7 +396,7 @@ theorem isViable_spanColumnFamily_of_close_linearCombination
     (hz : ∀ j, ‖z j‖ ≤ 1)
     (W : Matrix (CutRight L q k) (Fin m) ℂ) (hW : Wᴴ * W = 1)
     (u : EuclideanSpace ℂ
-      (Entropy.RegionConfig (fun _ : Fin L ↦ q) (leftBlock L k) × Fin m))
+      ((ManyBody.RegionConfig (fun _ ↦ Fin q) (leftBlock L k)) × Fin m))
     (hunit : ‖physicalRightApply W u‖ = 1)
     (hoverlap : 1 - δ ≤ ‖⟪physicalRightApply W u, Γ⟫_ℂ‖)
     (v : Fin n → Fin m → LeftBlockVector L q k)

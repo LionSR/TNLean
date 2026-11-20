@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.RectangularDomain
+import TNLean.Lattice.FiniteDomain
+import QICLean.ManyBody.Sites.Lattice.Rectangle
+import TNLean.PEPS.NormalBlocking
 import Mathlib.Logic.Equiv.Fin.Basic
 import Mathlib.Data.Fin.Rev
 
@@ -27,9 +29,9 @@ The result includes empty grids, one-site grids, and prefixes beyond the last si
 
 open ManyBody (squareLatticeGraph)
 
-open TNLean.Lattice TNLean.PEPS TNLean.PEPS.AreaLaw
+open TNLean.Lattice TNLean.PEPS
 
-open ManyBody (planeDomainGraph)
+open ManyBody (planeDomainGraph rectangularDomain rectangleSiteEquiv rectangleGraphIso)
 
 namespace TNLean.MPS.AreaLaw
 

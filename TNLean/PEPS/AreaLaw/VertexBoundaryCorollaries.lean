@@ -40,8 +40,8 @@ The edge-boundary inequality is an explicit hypothesis. -/
 theorem regionalEntropy_le_four_mul_innerBoundary_card
     {Λ : Finset (ℤ × ℤ)} {q : ℕ} {Ω : StateSpace Λ q} {A : Finset (Site Λ)}
     {C : ℝ} (hC : 0 ≤ C)
-    (harea : regionalEntropy Λ q Ω A ≤ C * (edgeBoundary Λ A).card) :
-    regionalEntropy Λ q Ω A ≤ 4 * C * (innerBoundary Λ A).card := by
+    (harea : ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary Λ A).card) :
+    ManyBody.regionEntropy Ω A ≤ 4 * C * (innerBoundary Λ A).card := by
   have hcard : ((edgeBoundary Λ A).card : ℝ) ≤ 4 * (innerBoundary Λ A).card :=
     by exact_mod_cast edgeBoundary_card_le_four_mul_innerBoundary_card Λ A
   calc
@@ -55,8 +55,8 @@ The edge-boundary inequality is an explicit hypothesis. -/
 theorem regionalEntropy_le_two_mul_endpointBoundary_card
     {Λ : Finset (ℤ × ℤ)} {q : ℕ} {Ω : StateSpace Λ q} {A : Finset (Site Λ)}
     {C : ℝ} (hC : 0 ≤ C)
-    (harea : regionalEntropy Λ q Ω A ≤ C * (edgeBoundary Λ A).card) :
-    regionalEntropy Λ q Ω A ≤ 2 * C * (endpointBoundary Λ A).card := by
+    (harea : ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary Λ A).card) :
+    ManyBody.regionEntropy Ω A ≤ 2 * C * (endpointBoundary Λ A).card := by
   have hcard : ((edgeBoundary Λ A).card : ℝ) ≤ 2 * (endpointBoundary Λ A).card :=
     by exact_mod_cast edgeBoundary_card_le_two_mul_endpointBoundary_card Λ A
   calc
@@ -76,8 +76,8 @@ theorem UniformAreaLaw.vertex_boundary_bounds (h : UniformAreaLaw) :
             ‖Ω‖ = 1 → IsGapped H.hamiltonian E₀ Δ →
             groundSpace H.hamiltonian E₀ = Submodule.span ℂ {Ω} →
               ∀ A : Finset (Site Λ),
-                regionalEntropy Λ q Ω A ≤ 4 * C * (innerBoundary Λ A).card ∧
-                regionalEntropy Λ q Ω A ≤ 2 * C * (endpointBoundary Λ A).card := by
+                ManyBody.regionEntropy Ω A ≤ 4 * C * (innerBoundary Λ A).card ∧
+                ManyBody.regionEntropy Ω A ≤ 2 * C * (endpointBoundary Λ A).card := by
   intro q hq R J Δ hJ hΔ
   obtain ⟨C, hC, harea⟩ := h q hq R J Δ hJ hΔ
   exact ⟨C, hC, fun Λ H hH hHJ E₀ Ω hΩ hgap hspan A ↦

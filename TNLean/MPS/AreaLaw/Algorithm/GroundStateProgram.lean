@@ -31,7 +31,7 @@ open ManyBody (interval)
 open Matrix Cslib
 
 open ManyBody (IsGapped groundSpace)
-open scoped InnerProductSpace ComplexOrder MatrixOrder
+open scoped InnerProductSpace ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.MPS.AreaLaw
 
@@ -44,7 +44,7 @@ open LinearAlgebraQuery
 on the original chain. LVV13, `algo53.tex`, lines 652--678. -/
 noncomputable def groundStateProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     (Delta : ℝ) (R : ℕ) : LVVProgram q (EuclideanSpace ℂ (Fin L → Fin q)) :=
   let N := L + 2 * R ^ 2
@@ -63,7 +63,7 @@ noncomputable def groundStateProgram {L : ℕ} (hq : 2 ≤ q)
 family of the padded sweep, read on the original chain. -/
 theorem eval_groundStateProgram {L : ℕ} (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     (Delta : ℝ) (R : ℕ) :
     let N := L + 2 * R ^ 2
@@ -104,7 +104,7 @@ the cardinality budget times the bond budget of the sweep on the padded chain. L
 `algo53.tex`, lines 213--216 and 652--678. -/
 theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h j)
+    (hs : ∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h j)
       (interval L j.val (j.val + 2))) (h0 : ∀ j, 0 ≤ h j) (h1 : ∀ j, h j ≤ 1)
     {Delta : ℝ} (hDelta : 0 < Delta) {R : ℕ} (hR : 1 ≤ R)
     (E : ℝ) (Γ : EuclideanSpace ℂ (Fin L → Fin q))
@@ -167,14 +167,15 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
       (Matrix.nonneg_iff_posSemidef.mp (Finset.sum_nonneg fun j _ ↦ h0 j)).isHermitian hΩ hspan
     have hover : 1 - δ ≤ ‖⟪Γ, e.symm w⟫_ℂ‖ :=
       one_sub_le_norm_inner_of_norm_sub_sq_le hw'norm hΩ herror
-    let chain := ManyBody.ChainInteraction.ofNearestNeighborPositive h hs
-    have hchain : chain.hamiltonian = ∑ j, h j :=
-      ManyBody.ChainInteraction.ofNearestNeighborPositive_hamiltonian h hs
+    let chain := ManyBody.BondInteraction.toChainInteraction ⟨h, hs⟩
+    have hchain : chain.hamiltonian = ∑ j, h j := ManyBody.Interaction.hamiltonian_extend
     have hspanC : groundSpace chain.hamiltonian E = Submodule.span ℂ {Γ} := by
       rw [hchain]; assumption
     have henergy := chain.re_inner_sub_le_of_overlap_of_range_one
-        (ManyBody.ChainInteraction.isHermitian_ofNearestNeighborPositive_term h hs h0)
-        (ManyBody.ChainInteraction.norm_ofNearestNeighborPositive_term_le h hs h0 h1) hΩ
+        (ManyBody.Interaction.isHermitian_extend_term fun j ↦
+          (IsSelfAdjoint.of_nonneg (h0 j)).isHermitian)
+        (ManyBody.Interaction.norm_extend_term_le zero_le_one fun j ↦
+          (CStarAlgebra.norm_le_one_iff_of_nonneg _ (h0 j)).mpr (h1 j)) hΩ
         hspanC hw'norm hover
     rw [hchain] at henergy
     have hψenergy : (⟪ψ, toEuclideanLin (∑ j, h j) ψ⟫_ℂ).re - E ≤ 8 * L * δ :=

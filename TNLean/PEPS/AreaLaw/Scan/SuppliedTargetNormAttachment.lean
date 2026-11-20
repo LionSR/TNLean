@@ -78,15 +78,15 @@ theorem exists_suppliedTarget_actualCharge_norm_bounds
               groundSpace (∑ i, S.truncatedEnergyTerm h Ω J Δ L i) e = Submodule.span ℂ {Ωt} →
               let X := S.A.filter fun x ↦ x.val ∈ T
               let β := fun _ : Site Λ ↦ Fin q
-              ∀ (E : Finset (FiniteProduct.Configuration β X)) (hd : 0 < E.card),
+              ∀ (E : Finset (ManyBody.RegionConfig β X)) (hd : 0 < E.card),
               letI : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
               let d := E.card
               let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-                (FiniteProduct.splitEquiv β X) Ωt
+                (ManyBody.splitEquiv β X) Ωt
               let z := Matrix.IsHermitian.spectralRestrictionMass
                 (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
               0 < z →
-              let ψ : FiniteProduct.Configuration β Xᶜ × Fin d → ℂ := fun x ↦
+              let ψ : ManyBody.RegionConfig β Xᶜ × Fin d → ℂ := fun x ↦
                 compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
               let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ
                 (star ψ))) (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -98,10 +98,10 @@ theorem exists_suppliedTarget_actualCharge_norm_bounds
               (∀ᶠ k : ℕ in atTop,
                 (2 * (((k + 1) ^ (d ^ 2) : ℕ) : ℝ))⁻¹ ≤
                   ‖WithLp.toLp 2
-                    (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-                      (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+                    (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+                      (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
                       labelProj (copyPerm (Fin d) k) (ell k)) *ᵥ
-                      (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+                      (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
                         (Fin k → Fin d) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) →
               Asymptotics.IsLittleO atTop
                 (fun k : ℕ ↦ Real.log (ell k).dim - (k : ℝ) * Sent)
@@ -113,13 +113,13 @@ theorem exists_suppliedTarget_actualCharge_norm_bounds
               let σ := terminalPartition S (S.n * S.m)
               let Q := fun j band ↦ receiving (σ j band) false
               let Y := fun j band ↦ middle (σ j band)
-              let gpre := fun j band ↦ FiniteProduct.entropy β Ωt (Q j band) +
-                FiniteProduct.entropy β Ωt (Q j band ∪ Y j band)ᶜ -
-                  FiniteProduct.entropy β Ωt (Y j band)
+              let gpre := fun j band ↦ ManyBody.regionEntropy Ωt (Q j band) +
+                ManyBody.regionEntropy Ωt (Q j band ∪ Y j band)ᶜ -
+                  ManyBody.regionEntropy Ωt (Y j band)
               let gpost := fun j band ↦
-                regionalEntropy Λ q Ωt (positiveNear S.depth (σ j band)) +
-                  regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j band)) -
-                    regionalEntropy Λ q Ωt (middle (σ j band))
+                ManyBody.regionEntropy Ωt (positiveNear S.depth (σ j band)) +
+                  ManyBody.regionEntropy Ωt (positiveNearMiddle S.depth (σ j band)) -
+                    ManyBody.regionEntropy Ωt (middle (σ j band))
               let gaps := (Finset.univ :
                 Finset (terminalFamily S.K S.m S.M (S.n * S.m) × Fin S.K)).image
                   (fun j ↦ gpre j.1 j.2)

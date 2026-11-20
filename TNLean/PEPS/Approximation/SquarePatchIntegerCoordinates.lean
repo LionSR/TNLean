@@ -4,7 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.AdaptivePatchSupply
-import TNLean.PEPS.AreaLaw.RectangularDomain
+import QICLean.ManyBody.Sites.Lattice.Rectangle
+import TNLean.PEPS.NormalBlocking
 import TNLean.PEPS.AreaLaw.Geometry.ClosedSquare
 
 /-!
@@ -45,10 +46,10 @@ physical lattice positions of the polynomial-PEPS manuscript.
 Source: polynomial-PEPS manuscript, `00-introduction.tex`, lines 21–25. -/
 theorem integerCoordinates_add_one_eq_latticePos (L : ℕ) :
     (fun v : SquareLatticeVertex L L ↦
-      (((AreaLaw.rectangleSiteEquiv L L v).1.1 : ℝ),
-        ((AreaLaw.rectangleSiteEquiv L L v).1.2 : ℝ)) + (1, 1)) =
+      (((ManyBody.rectangleSiteEquiv L L v).1.1 : ℝ),
+        ((ManyBody.rectangleSiteEquiv L L v).1.2 : ℝ)) + (1, 1)) =
       latticePos L := by
   funext v
-  simp [latticePos, AreaLaw.rectangleEmbedding]
+  simp [latticePos, ManyBody.rectangleEmbedding]
 
 end TNLean.PEPS.Approximation

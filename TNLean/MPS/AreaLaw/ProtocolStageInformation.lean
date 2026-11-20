@@ -101,15 +101,15 @@ theorem birth_death_information_of_logarithmic_separation
       ∀ (w : ℕ), 1 ≤ w →
         D₂₄ * Real.log (L : ℝ) ≤ (w : ℝ) →
       ∀ k : Fin (stageCount L w),
-        (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+        (ManyBody.regionMutualInformation Ω
           (remainderBirthTarget L w k)
           ((stageFrame L w k.castSucc).birthEnv (.inl k.castSucc)) ≤
             (L : ℝ) ^ (-24 : ℤ)) ∧
-        (FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+        (ManyBody.regionMutualInformation Ω
           (blockBirthTarget L w k)
           ((afterRemainderBirth L w k).birthEnv (.inl k.castSucc)) ≤
             (L : ℝ) ^ (-24 : ℤ)) ∧
-        (k.val = 0 → FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+        (k.val = 0 → ManyBody.regionMutualInformation Ω
           (leftBandTarget L w k)
           ((afterLeftTransfer L w k).birthEnv (.inr k)) ≤
             (L : ℝ) ^ (-24 : ℤ)) := by
@@ -122,7 +122,7 @@ theorem birth_death_information_of_logarithmic_separation
   obtain ⟨hd₁, hd₂, hd₃⟩ := birth_death_separation hw k
   have hinterval (b c : ℕ) (E : Finset (Fin L))
       (hd : ∀ x ∈ interval L b c, ∀ y ∈ E, w ≤ Nat.dist x.val y.val) :
-      FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω
+      ManyBody.regionMutualInformation Ω
         (interval L b c) E ≤ (L : ℝ) ^ (-24 : ℤ) := by
     have hT : ∃ (n : ℕ) (a z : Fin n → ℕ), n ≤ 1 ∧
         interval L b c = Finset.univ.biUnion (fun i ↦ interval L (a i) (z i)) :=

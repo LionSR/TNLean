@@ -336,7 +336,7 @@ containing a site and `v_R = 1 + 2 R (R + 1)`. Missing sites of the domain only 
 count. Source: `02-initial.tex`, lines 276–293, `eq:initial-contour-budget`. -/
 theorem card_crossingTerms_rectRegion_le (hsafe : IsSafe Λ A D₀ Q) (hR : R < D₀) {Q₀ : IntRect}
     {d : ℕ} (hd : R + 1 ≤ d) (hQ : (Q₀.dilate d).toFinset ⊆ Q.toFinset) :
-    (Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1)
+    (ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1)
         (rectRegion A (Q₀.dilate d))).card ≤
       8 * (R + 1) * 2 ^ ((1 + 2 * R * (R + 1)) - 1) * (Q₀.size + d) := by
   classical
@@ -344,10 +344,10 @@ theorem card_crossingTerms_rectRegion_le (hsafe : IsSafe Λ A D₀ Q) (hR : R < 
   set sites : Finset (Site Λ) := Finset.univ.filter fun v ↦ v.1 ∈ layer
   set μ := 2 ^ ((1 + 2 * R * (R + 1)) - 1)
   -- every split support has a site in the layer
-  have hcover : ∀ X ∈ Entropy.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1)
+  have hcover : ∀ X ∈ ManyBody.crossingTerms (fun X : AdmissibleSupport Λ R ↦ X.1)
       (rectRegion A (Q₀.dilate d)), ∃ v ∈ sites, v ∈ X.1 := by
     intro X hX
-    simp only [Entropy.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
+    simp only [ManyBody.crossingTerms, Finset.mem_filter, Finset.mem_univ, true_and] at hX
     obtain ⟨-, ⟨v, hvS, hv⟩, ⟨w, hwS, hw⟩⟩ := exists_of_splits_rectRegion hsafe hR hQ X.2 hX
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, sites, layer, Finset.mem_sdiff]
     refine ⟨v, ⟨hv, fun hv' ↦ hw ?_⟩, hvS⟩

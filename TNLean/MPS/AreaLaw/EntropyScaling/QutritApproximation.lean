@@ -48,7 +48,7 @@ private theorem middleMatrix_reindex (N : ℕ)
       schmidtCoeffMatrix (WithLp.ofLp
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (qutritHalves N) φ)) := by
   ext a b
-  change φ ((Entropy.cutEquiv (fun _ : Fin (N + N) ↦ 3) (leftBlock (N + N) N)).symm
+  change φ ((ManyBody.cutEquiv (fun _ ↦ Fin 3) (leftBlock (N + N) N)).symm
     ((qutritLeftConfigurationEquiv N).symm a, (qutritRightConfigurationEquiv N).symm b)) =
       φ ((qutritHalves N).symm (a, b))
   apply congrArg φ

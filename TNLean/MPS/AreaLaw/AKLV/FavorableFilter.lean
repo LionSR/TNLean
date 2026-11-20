@@ -45,7 +45,7 @@ theorem exists_aklv_physical_favorable_filter :
       ∀ (L q a : ℕ)
         (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
         (mu g : ℝ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)),
-      (∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2))) →
       (∀ i, 0 ≤ h i) → (∀ i, h i ≤ 1) → ‖Ω‖ = 1 →
       (∑ i, h i) *ᵥ WithLp.ofLp Ω = (mu : ℂ) • WithLp.ofLp Ω →
@@ -77,7 +77,7 @@ theorem exists_aklv_physical_favorable_filter :
         p.natDegree = ell ∧ p.eval E = 1 ∧
         let K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Polynomial.aeval B p
         toEuclideanLin K φ = φ ∧
-        operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+        operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
           (leftBlock L (a + s / 2)) K) ≤ D ∧
         ‖K - vecMulVec (WithLp.ofLp φ) (star (WithLp.ofLp φ))‖ ≤
           2 * Real.exp (-2 * (ell : ℝ) * Real.sqrt ((9 * g / 10) / R)) ∧
@@ -108,7 +108,7 @@ theorem exists_aklv_physical_favorable_filter :
   obtain ⟨hBpos, hBnorm, E, φ, hE, hφ, heigen, hprojector, hclose, hpoly⟩ :=
     hfilter t0 le_rfl
   obtain ⟨p, hdegree, hpE, hfix, herr, hrank, hperp⟩ := hpoly ell
-  have hrankD : operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q)
+  have hrankD : operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q)
       (leftBlock L (a + s / 2))
       (Polynomial.aeval
         (aklvTwoBlockHamiltonian (a + 2) (a + s - 1) h e t0 Finset.univ) p)) ≤ D := by

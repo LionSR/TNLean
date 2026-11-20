@@ -79,9 +79,9 @@ Auxiliary to ALVV's regional hard truncation, `def:hard-trunc`, lines 873–886.
 This is only a support statement and requires no local dimension hypothesis. -/
 theorem isSupportedOn_sum_internal_bonds (L q lo hi : ℕ)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (∑ i ∈ (Finset.univ : Finset (Fin (L - 1))).filter
         (fun j ↦ lo ≤ j.val ∧ j.val + 1 < hi), h i) (interval L lo hi) := by
   change _ ∈ ManyBody.supportedOperators _ _
@@ -123,7 +123,7 @@ and Theorem `t:ais`, lines 1010–1024. -/
 theorem pairwise_commute_sum_internal_consecutive_regions
     {L q m : ℕ} (k : Fin (m + 1) → ℕ) (hk : Monotone k)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2))) :
     Pairwise fun i j : Fin m ↦
       Commute
@@ -240,7 +240,7 @@ theorem five_region_original_bond_data
     (L q k1 k2 k3 k4 : ℕ) (h12 : k1 ≤ k2) (h23 : k2 ≤ k3)
     (h34 : k3 ≤ k4) (h4L : k4 ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1) :
     let k : Fin 6 → ℕ := ![0, k1, k2, k3, k4, L]
@@ -253,7 +253,7 @@ theorem five_region_original_bond_data
       (fun i ↦ i.val + 1 ∈ ({k1, k2, k3, k4} : Finset ℕ))
     let Y : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ J, h i
     Monotone k ∧ (Pairwise fun i j ↦ Disjoint (R i) (R j)) ∧
-      (∀ j, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (A j) (R j)) ∧
+      (∀ j, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (A j) (R j)) ∧
       (∀ j, (A j).PosSemidef ∧
         A j ≤ ((I j).card : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)) ∧
       Y.PosSemidef ∧
@@ -278,7 +278,7 @@ theorem five_region_original_bond_data
     · exact hRordered i j hij'
     · exact (hRordered j i hji).symm
   have hAs (j : Fin 5) :
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (A j) (R j) :=
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (A j) (R j) :=
     isSupportedOn_sum_internal_bonds L q (k j.castSucc) (k j.succ) h hs
   have hA (j : Fin 5) : (A j).PosSemidef ∧
       A j ≤ ((I j).card : ℝ) •

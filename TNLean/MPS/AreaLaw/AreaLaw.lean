@@ -100,16 +100,17 @@ theorem regionEntropy_interval_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ)
         {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (a b : ℕ) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L a b) Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L a b) ≤
       chainIntervalEntropyBound q R J Δ := by
   have hdisc := two_mul_condEntropy_interval_le hq hJ hΔ h hh hhJ hΩ hgap hspan a b
-  have hAL := regionEntropy_le_union_add hΩ (disjoint_interval_chainBuffer L q R J Δ a b)
-  have hT := regionEntropy_le_card_mul_log hΩ (chainBuffer L q R J Δ a b)
+  have hAL := ManyBody.regionEntropy_le_union_add _ hΩ
+    (disjoint_interval_chainBuffer L q R J Δ a b)
+  have hT := ManyBody.regionEntropy_le_card_mul_log hΩ (chainBuffer L q R J Δ a b)
   have hcard : (((chainBuffer L q R J Δ a b).card : ℕ) : ℝ) ≤
       2 * (chainShellCount q R J Δ * R) := by
     exact_mod_cast card_chainBuffer_le L q R J Δ a b
   have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
-  have hTbound : Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (chainBuffer L q R J Δ a b) Ω ≤
+  have hTbound : ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (chainBuffer L q R J Δ a b) ≤
       2 * (chainShellCount q R J Δ * R) * Real.log q :=
     hT.trans (mul_le_mul_of_nonneg_right hcard hlog)
   unfold chainIntervalEntropyBound
@@ -210,7 +211,7 @@ theorem regionEntropy_le_mul_card_boundaryEdges (hq : 1 ≤ q) (hJ : 0 ≤ J) (h
         {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped h.hamiltonian E₀ Δ)
     (hspan : groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω}) (A : Finset (Fin L)) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A ≤
       chainIntervalEntropyBound q R J Δ * (boundaryEdges L A).card :=
   regionEntropy_le_mul_card_boundaryEdges_of_intervals hΩ
     (chainIntervalEntropyBound_nonneg hq hJ hΔ)
@@ -227,7 +228,7 @@ theorem chainAreaLaw (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
           ∀ E₀ : ℝ, ∀ Ω : EuclideanSpace ℂ (Fin L → Fin q),
         ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
         groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} → ∀ A : Finset (Fin L),
-          Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤ C * (boundaryEdges L A).card := by
+          ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A ≤ C * (boundaryEdges L A).card := by
   have hle := chainIntervalEntropyBound_le (q := q) (R := R) hq hJ hΔ
   have h0 := chainIntervalEntropyBound_nonneg (q := q) (R := R) hq hJ hΔ
   refine ⟨chainAreaLawConst q R * (1 + J / Δ), h0.trans hle, rfl, ?_⟩
@@ -247,17 +248,17 @@ Source: the note, Theorem A for intervals, Section 5, with the energy estimate o
 private theorem regionEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 0 ≤ J)
     (hΔ : 0 < Δ) {ι : Type*} [Fintype ι]
     (g : ι → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) (σ : ι → ChainSupport L R)
-    (hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (g i) (σ i).1)
+    (hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (g i) (σ i).1)
     (hherm : ∀ i, (g i).IsHermitian) (hnorm : ∀ i, ‖g i‖ ≤ J) (N : ℕ) {B : ℝ} (hB : 1 ≤ B)
     (hcross : ∀ a b,
-      (Entropy.crossingTerms (fun i ↦ (σ i).1) (interval L a b)).card ≤ N)
+      (ManyBody.crossingTerms (fun i ↦ (σ i).1) (interval L a b)).card ≤ N)
     (hbudget : ∀ a b, Entropy.cutLogBudget
-      (Entropy.crossingTerms (fun i ↦ (σ i).1) (interval L a b))
+      (ManyBody.crossingTerms (fun i ↦ (σ i).1) (interval L a b))
         (Entropy.supportDim (fun _ : Fin L ↦ q) ∘ fun i ↦ (σ i).1) ≤ B)
     {E₀ : ℝ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
     (hΩ : ‖Ω‖ = 1) (hgap : IsGapped (∑ i, g i) E₀ Δ)
     (hspan : groundSpace (∑ i, g i) E₀ = Submodule.span ℂ {Ω}) (l r : ℕ) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L l r) ≤
       ((8 * R * Real.log q + Real.log 2) *
           (5 + min (32 * N * (q : ℝ) ^ (2 * (R + 1)))
             (64 * Real.exp 1 * N * Real.log (Real.exp 1 * (q : ℝ) ^ (R + 1)) ^ 2) +
@@ -282,15 +283,15 @@ private theorem regionEntropy_interval_le_of_family_budget (hq : 1 ≤ q) (hJ : 
   have hdisc := two_mul_condEntropy_interval_le_of_family_budget hq hJ hΔ g σ hsupp hherm
     hnorm N hB hcross hbudget m hm4 hmE hmT hΩ hgap hspan l r
   set T := interval L (l - m * R) (r + m * R) \ interval L l r
-  have hAL := regionEntropy_le_union_add hΩ (show Disjoint (interval L l r) T from
+  have hAL := ManyBody.regionEntropy_le_union_add _ hΩ (show Disjoint (interval L l r) T from
     Finset.disjoint_sdiff)
-  have hT := regionEntropy_le_card_mul_log hΩ T
+  have hT := ManyBody.regionEntropy_le_card_mul_log hΩ T
   have hcard : ((T.card : ℕ) : ℝ) ≤ 2 * (m * R) := by
     exact_mod_cast card_interval_enlargement_sdiff_le L l r (m * R)
   have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
-  have hTbound : Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω ≤
+  have hTbound : ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω T ≤
       2 * (m * R) * Real.log q := hT.trans (mul_le_mul_of_nonneg_right hcard hlog)
-  have hint : Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω ≤
+  have hint : ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L l r) ≤
       8 * (m : ℝ) * R * Real.log q +
         (4096 * Real.exp 1 * (J / Δ) * B / m + m * Real.log 2) := by
     linarith
@@ -357,7 +358,7 @@ theorem chainAreaLaw_of_consecutive_terms
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
           ∀ A : Finset (Fin L),
-            Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω ≤
+            ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A ≤
               C * (boundaryEdges L A).card := by
   classical
   have hC : 0 ≤ windowAreaLawConst q R * (1 + J / Δ) :=
@@ -390,18 +391,18 @@ theorem regionEntropy_interval_le_polynomial
       ⌈max (max (max 4 (4 * C_E / Δ))
         (128 * Real.sqrt ((1 + J / Δ) * chainBudgetConst q R)))
         (4096 * Real.exp 1 * (1 + J / Δ) * chainBudgetConst q R)⌉₊
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L l r) ≤
       8 * (m : ℝ) * R * Real.log q + 1 + 2 * C_E / Δ := by
   intro C_E m
   let T := interval L (l - m * R) (r + m * R) \ interval L l r
   have hdisc := two_mul_condEntropy_interval_le_polynomial hq hJ hΔ h hh hhJ hΩ hgap hspan l r
-  change 2 * (Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r ∪ T) Ω -
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) T Ω) ≤
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L l r) Ω +
+  change 2 * (ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L l r ∪ T) -
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω T) ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L l r) +
       1 + 2 * C_E / Δ at hdisc
-  have hAL := regionEntropy_le_union_add hΩ (Finset.disjoint_sdiff :
+  have hAL := ManyBody.regionEntropy_le_union_add _ hΩ (Finset.disjoint_sdiff :
     Disjoint (interval L l r) T)
-  have hT := regionEntropy_le_card_mul_log hΩ T
+  have hT := ManyBody.regionEntropy_le_card_mul_log hΩ T
   have hcard : (T.card : ℝ) ≤ 2 * ((m : ℝ) * R) := by
     exact_mod_cast card_interval_enlargement_sdiff_le L l r (m * R)
   have hlog : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)

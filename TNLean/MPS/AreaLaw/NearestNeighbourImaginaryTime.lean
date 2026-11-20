@@ -114,13 +114,13 @@ Supporting AKL14, arXiv:1406.3898, low70.tex, lines 817–877. -/
 private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
     (s : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i ∈ s, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i ∈ s, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ s, 0 ≤ h i) (h1 : ∀ i ∈ s, h i ≤ 1)
     (X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hX : Entropy.IsSupportedOn (n := fun _ ↦ q) X
+    (hX : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) X
       (interval L (c - m) (c + 2 + m))) :
-    Entropy.IsSupportedOn (n := fun _ ↦ q)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       ((∑ i ∈ s, h i) * X - X * (∑ i ∈ s, h i))
       (interval L (c - (m + 1)) (c + 2 + (m + 1))) ∧
     ‖(∑ i ∈ s, h i) * X - X * (∑ i ∈ s, h i)‖ ≤
@@ -144,7 +144,7 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
           (by simpa only [Finset.coe_subset] using bond_subset_enlarged_interval_succ hd)
           (hs i hi)
       exact sub_mem (mul_mem hhJ hXJ) (mul_mem hXJ hhJ)
-  have hsupport : Entropy.IsSupportedOn (n := fun _ ↦ q)
+  have hsupport : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       ((∑ i ∈ s, h i) * X - X * (∑ i ∈ s, h i)) J := by
     change _ ∈ ManyBody.supportedOperators _ _
     have hsum : _ ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) J := sum_mem hterm
@@ -194,15 +194,15 @@ arXiv:1406.3898, low70.tex, lines 804–877; no imaginary-time sum is asserted. 
 private theorem iterated_nearest_neighbour_commutator_support_norm {L q c : ℕ}
     (s : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i ∈ s, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i ∈ s, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ s, 0 ≤ h i) (h1 : ∀ i ∈ s, h i ≤ 1)
     (O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hO : Entropy.IsSupportedOn (n := fun _ ↦ q) O (interval L c (c + 2))) (m : ℕ) :
+    (hO : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) O (interval L c (c + 2))) (m : ℕ) :
     let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ s, h i
     let ad : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ →
         Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := fun X ↦ H * X - X * H
-    Entropy.IsSupportedOn (n := fun _ ↦ q) (ad^[m] O)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (ad^[m] O)
       (interval L (c - m) (c + 2 + m)) ∧
       ‖ad^[m] O‖ ≤ (4 : ℝ) ^ m * (m.factorial : ℝ) * ‖O‖ := by
   intro H ad
@@ -238,11 +238,11 @@ property of a clipped Hamiltonian is required. -/
 theorem norm_exp_conjugation_nearest_neighbour_shift_le_two {L q c : ℕ}
     (I : Finset (Fin (L - 1)))
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i ∈ I, Entropy.IsSupportedOn (n := fun _ ↦ q) (h i)
+    (hs : ∀ i ∈ I, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2)))
     (h0 : ∀ i ∈ I, 0 ≤ h i) (h1 : ∀ i ∈ I, h i ≤ 1)
     (O : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hO : Entropy.IsSupportedOn (n := fun _ ↦ q) O (interval L c (c + 2)))
+    (hO : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) O (interval L c (c + 2)))
     (z : ℂ) (t : ℝ) (ht0 : 0 ≤ t) (ht : t ≤ 1 / 8) :
     let H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := ∑ i ∈ I, h i
     ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * O *

@@ -90,10 +90,10 @@ theorem exists_sourceTarget_selected_actualCharge_source_density
           (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
           (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
             ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-          regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+          ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
             Ce * (S.n : ℝ) ^ (1 + F.e) →
           (∀ j : ℕ, j ≤ F.L S.n →
-            regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+            ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
               Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ F.e + S.n)) →
           2 * S.r₀ ≤ S.D ∧ 1 ≤ S.D ∧ 4 * S.D ≤ S.m ∧
           ∃ (hm : 0 < S.m) (hM : 0 < S.M),
@@ -118,23 +118,23 @@ theorem exists_sourceTarget_selected_actualCharge_source_density
                 (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp)) ≤ Real.sqrt (2 * ε / g) ∧
             cutBudget q S.graph (S.truncationSet L) S.r₀ S.anchor X ≤
               Ctarget * (S.n : ℝ) * Real.log (S.n : ℝ) ^ 12 ∧
-            Entropy.surprisalTail (reducedState_isHermitian Λ q Ωt X).eigenvalues
-              (regionalEntropy Λ q Ωt X) w ≤ δtail ∧
-            let E := Entropy.typicalSet (reducedState_isHermitian Λ q Ωt X).eigenvalues
-              (regionalEntropy Λ q Ωt X) w
-            let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+            Entropy.surprisalTail (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+              (ManyBody.regionEntropy Ωt X) w ≤ δtail ∧
+            let E := Entropy.typicalSet (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+              (ManyBody.regionEntropy Ωt X) w
+            let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
             (0 < 1 - δtail ∧ 1 - δtail ≤ z ∧ 0 < z ∧ z ≤ 1 ∧ E.Nonempty ∧
-              ∀ i ∈ E, 0 < (reducedState_isHermitian Λ q Ωt X).eigenvalues i ∧
-                Real.exp (-regionalEntropy Λ q Ωt X - w) ≤
-                  (reducedState_isHermitian Λ q Ωt X).eigenvalues i ∧
-                (reducedState_isHermitian Λ q Ωt X).eigenvalues i ≤
-                  Real.exp (-regionalEntropy Λ q Ωt X + w)) ∧
+              ∀ i ∈ E, 0 < (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ∧
+                Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤
+                  (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ∧
+                (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ≤
+                  Real.exp (-ManyBody.regionEntropy Ωt X + w)) ∧
             ∃ hd : 0 < E.card,
             letI : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
             let d := E.card
             let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-              (FiniteProduct.splitEquiv β X) Ωt
-            let ψ : FiniteProduct.Configuration β Xᶜ × Fin d → ℂ := fun x ↦
+              (ManyBody.splitEquiv β X) Ωt
+            let ψ : ManyBody.RegionConfig β Xᶜ × Fin d → ℂ := fun x ↦
               compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -150,10 +150,10 @@ theorem exists_sourceTarget_selected_actualCharge_source_density
               (∀ᶠ k : ℕ in atTop,
                 (2 * (((k + 1) ^ (d ^ 2) : ℕ) : ℝ))⁻¹ ≤
                   ‖WithLp.toLp 2
-                    (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-                      (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+                    (((1 : Matrix (Fin k → ManyBody.RegionConfig β Xᶜ)
+                      (Fin k → ManyBody.RegionConfig β Xᶜ) ℂ) ⊗ₖ
                       labelProj (copyPerm (Fin d) k) (ell k)) *ᵥ
-                      (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+                      (fun x : (Fin k → ManyBody.RegionConfig β Xᶜ) ×
                         (Fin k → Fin d) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) ∧
               Asymptotics.IsLittleO atTop
                 (fun k : ℕ ↦ Real.log (ell k).dim - (k : ℝ) * Sent)
@@ -250,11 +250,11 @@ theorem exists_sourceTarget_selected_actualCharge_source_density
   have hΩt : ‖Ωt‖ = 1 := htrgs.1
   have hcont := (haux S.n (by omega)).2.2 Λ Ω Ωt hΩ hΩt X
     ((Nat.cast_le.mpr (Finset.card_le_card hX)).trans hcard) htrace
-  have hSt : regionalEntropy Λ q Ωt X ≤
+  have hSt : ManyBody.regionEntropy Ωt X ≤
       Ce * (S.n : ℝ) ^ (1 + F.e) + (S.n : ℝ) ^ (-247 : ℝ) := by
-    linarith only [le_abs_self (regionalEntropy Λ q Ωt X - regionalEntropy Λ q Ω X),
+    linarith only [le_abs_self (ManyBody.regionEntropy Ωt X - ManyBody.regionEntropy Ω X),
       hcont, htargetEntropy]
-  have hlogd : |Real.log (d : ℝ) - regionalEntropy Λ q Ωt X| ≤ w - Real.log z :=
+  have hlogd : |Real.log (d : ℝ) - ManyBody.regionEntropy Ωt X| ≤ w - Real.log z :=
     (abs_log_card_and_selectedSchmidtEntropy_sub_le Ωt hΩt X E w hwindow.2.2.1
       (fun i hi ↦ (hwindow.2.2.2.2.2 i hi).2)).1
   have hscaleN := hscale S.n (by omega)

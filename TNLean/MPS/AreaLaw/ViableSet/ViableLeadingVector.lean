@@ -69,8 +69,8 @@ theorem _root_.ManyBody.ChainInteraction.exists_boundary_minimizer_leading_vecto
       (W : Matrix (CutRight L q k) (Fin m) ℂ)
       (x : (CutLeft L q k × CutSite L q k) × Fin m → ℂ),
       h.hamiltonian = HL + B ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) HL (leftBlock L k) ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) B (leftBlock L (k - 1))ᶜ ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) HL (leftBlock L k) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) B (leftBlock L (k - 1))ᶜ ∧
       ‖B‖ ≤ 2 * L ∧ ‖w‖ = 1 ∧ w ∈ leftSupportSubmodule S ∧
       (cutMatrix w k).rank ≤ D ∧
       (⟪w, toEuclideanLin h.hamiltonian w⟫_ℂ).re ≤ E₀ + 6 * √c ∧

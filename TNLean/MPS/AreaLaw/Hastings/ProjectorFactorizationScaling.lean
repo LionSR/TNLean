@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.Hastings.ProjectorFactorization
 import QICLean.Entropy.SupportedOperatorAlgebra
 import QICLean.ManyBody.Hamiltonian.GroundSpace
+import QICLean.ManyBody.Dynamics.InteractionOperations
 
 /-!
 # Lemma 1 of Hastings' area law in units of the gap
@@ -22,7 +23,9 @@ on `J` and `ΔE` only through `J/ΔE`, as the source's `ξ = max(2v/ΔE, ξ_C)` 
 Explicitly, with `v₀ = chainLRVelocity R J = 1 + c_R J` for `J ≥ 0`, the rescaled length is
 `16 (1 + c_R J/ΔE)` (`lemmaOneLength_div`). It is at most `2 max(2v/ΔE, 16)` with `v = 8 c_R J`.
 The length `lemmaOneLength R J ΔE = 8 max(2v₀/ΔE, 1)` of the unscaled statement is not
-homogeneous in `(J, ΔE)`, because of the constant term of `v₀`.
+homogeneous in `(J, ΔE)`, because of the constant term of `v₀`. The rescaled Hamiltonian is
+that of the real multiple `ΔE⁻¹ • h` of the interaction (`ManyBody.Interaction.hamiltonian_smul`),
+and its gap and ground space rescale by `ManyBody.IsGapped.smul` and `ManyBody.groundSpace_smul`.
 
 **Scope restriction (quantitative bounds):** this changes only the length; the remaining
 restrictions of `exists_projectorFactorization` are unchanged. Documented in
@@ -30,9 +33,6 @@ restrictions of `exists_projectorFactorization` are unchanged. Documented in
 
 ## Main results
 
-* `ManyBody.ChainInteraction.smul`: rescaling a chain Hamiltonian by a nonnegative real number; the
-gap
-  and ground space rescale by `ManyBody.IsGapped.smul` and `ManyBody.groundSpace_smul`.
 * `lemmaOneLength_div`: `lemmaOneLength R (J/ΔE) 1 = 16 (1 + (v₀ − 1)/ΔE)`.
 * `exists_projectorFactorization_div`: Lemma 1 with the length `lemmaOneLength R (J/ΔE) 1`.
 -/
@@ -47,31 +47,6 @@ namespace TNLean.MPS.AreaLaw
 open Hastings
 
 variable {L q R : ℕ} {J : ℝ}
-
-/-- **Rescaling a chain interaction.** The terms `c h_X` form a chain interaction of the
-same range. -/
-noncomputable def _root_.ManyBody.ChainInteraction.smul (h : ManyBody.ChainInteraction L q R)
-    (c : ℝ) : ManyBody.ChainInteraction L q R where
-  term X := (c : ℂ) • h.term X
-  mem X := (ManyBody.supportedOperators (fun _ : Fin L ↦ Fin q) _).smul_mem (h.mem X) _
-
-/-- Real multiples of Hermitian terms are Hermitian. -/
-theorem _root_.ManyBody.ChainInteraction.isHermitian_smul_term
-    (h : ManyBody.ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian) (c : ℝ)
-    (X : ManyBody.ChainSupport L R) : ((h.smul c).term X).IsHermitian :=
-  (hh X).smul (by simp [IsSelfAdjoint, Complex.conj_ofReal])
-
-/-- For `c ≥ 0`, the rescaled terms have norm at most `c J`. -/
-theorem _root_.ManyBody.ChainInteraction.norm_smul_term_le
-    (h : ManyBody.ChainInteraction L q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (c : ℝ) (hc : 0 ≤ c)
-    (X : ManyBody.ChainSupport L R) : ‖(h.smul c).term X‖ ≤ c * J := by
-  change ‖(c : ℂ) • h.term X‖ ≤ c * J
-  rw [norm_smul, Complex.norm_real, Real.norm_of_nonneg hc]
-  exact mul_le_mul_of_nonneg_left (hhJ X) hc
-
-theorem _root_.ManyBody.ChainInteraction.smul_hamiltonian (h : ManyBody.ChainInteraction L q R)
-    (c : ℝ) : (h.smul c).hamiltonian = (c : ℂ) • h.hamiltonian := by
-  simp only [ManyBody.Interaction.hamiltonian, ManyBody.ChainInteraction.smul, Finset.smul_sum]
 
 
 /-- **The length of Lemma 1 in units of the gap.** For `J ≥ 0` and `ΔE > 0`,
@@ -114,9 +89,15 @@ theorem exists_projectorFactorization_div (R : ℕ) {J ΔE : ℝ} (hJ : 0 ≤ J)
   refine ⟨C₁, hC₁, fun h hh hhJ E₀ Ω hΩ hgap hspan c l ↦ ?_⟩
   have hgap' := hgap.smul (inv_pos.mpr hΔ)
   have hspan' := (ManyBody.groundSpace_smul (inv_ne_zero hΔ.ne') h.hamiltonian E₀).trans hspan
-  rw [inv_mul_cancel₀ hΔ.ne', ← h.smul_hamiltonian _] at hgap'
-  rw [← h.smul_hamiltonian _] at hspan'
-  exact hF (h.smul ΔE⁻¹) (h.isHermitian_smul_term hh ΔE⁻¹)
-      (h.norm_smul_term_le hhJ ΔE⁻¹ (inv_nonneg.mpr hΔ.le)) hΩ hgap' hspan' c l
+  have hsmul : (ΔE⁻¹ • h).hamiltonian = ((ΔE⁻¹ : ℝ) : ℂ) • h.hamiltonian := by
+    rw [ManyBody.Interaction.hamiltonian_smul]
+    exact (Complex.coe_smul _ _).symm
+  rw [inv_mul_cancel₀ hΔ.ne', ← hsmul] at hgap'
+  rw [← hsmul] at hspan'
+  exact hF (ΔE⁻¹ • h) (fun X ↦ ManyBody.Interaction.isHermitian_smul_term ΔE⁻¹ (hh X))
+      (fun X ↦ by
+        rw [ManyBody.Interaction.norm_smul_term, abs_of_nonneg (inv_nonneg.mpr hΔ.le)]
+        exact mul_le_mul_of_nonneg_left (hhJ X) (inv_nonneg.mpr hΔ.le))
+      hΩ hgap' hspan' c l
 
 end TNLean.MPS.AreaLaw

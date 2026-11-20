@@ -56,33 +56,33 @@ open SpectralFilter
 private theorem restored_entropy_le_of_selected_rough_comparisons
     {Λ : Finset (ℤ × ℤ)} {q : ℕ} (Ω Ωt : StateSpace Λ q) (hΩt : ‖Ωt‖ = 1)
     (X : Finset (Site Λ))
-    (E : Finset (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) X))
+    (E : Finset (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q) X))
     (w τ a Edef Bsh Bexc cont : ℝ)
-    (hz : 0 < (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E)
+    (hz : 0 < (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E)
     (hE : ∀ i ∈ E,
-      Real.exp (-regionalEntropy Λ q Ωt X - w) ≤
-        (reducedState_isHermitian Λ q Ωt X).eigenvalues i ∧
-      (reducedState_isHermitian Λ q Ωt X).eigenvalues i ≤
-        Real.exp (-regionalEntropy Λ q Ωt X + w))
+      Real.exp (-ManyBody.regionEntropy Ωt X - w) ≤
+        (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ∧
+      (ManyBody.regionState_isHermitian X Ωt).eigenvalues i ≤
+        Real.exp (-ManyBody.regionEntropy Ωt X + w))
     (hτ : 0 < τ) (hτhalf : τ < 1 / 2) (ha : 0 < a) (hEdef : 0 ≤ Edef)
     (hsmall : 6 * (τ + Edef / τ) ≤ 1)
     (rU rL rE : ℕ → ℝ)
     (hrU : Tendsto rU atTop (𝓝 0)) (hrL : Tendsto rL atTop (𝓝 0))
     (hrE : Tendsto rE atTop (𝓝 0))
-    (hcont : |regionalEntropy Λ q Ωt X - regionalEntropy Λ q Ω X| ≤ cont) :
+    (hcont : |ManyBody.regionEntropy Ωt X - ManyBody.regionEntropy Ω X| ≤ cont) :
     let β := fun _ : Site Λ ↦ Fin q
-    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (FiniteProduct.splitEquiv β X) Ωt
-    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.splitEquiv β X) Ωt
+    let ψ : ManyBody.RegionConfig β Xᶜ × Fin E.card → ℂ := fun x ↦
       compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
     let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
       (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
-    let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+    let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
     (∀ᶠ k : ℕ in atTop, ∃ v δ : ℝ,
       δ ≤ Edef + rE k ∧
       v ≤ 2 * Real.log (E.card : ℝ) - Real.log z + 4 * Bsh / z + 4 * Bexc + rU k ∧
       4 * Sent - 6 * (τ * Real.log (E.card : ℝ) + Real.binEntropy τ / a) -
         3 * (δ / τ) * max 0 (2 * Sent) - rL k ≤ v) →
-    regionalEntropy Λ q Ω X ≤
+    ManyBody.regionEntropy Ω X ≤
       7 * (w - Real.log z) - Real.log z + 4 * Bsh / z + 4 * Bexc +
         6 * Real.binEntropy τ / a + cont := by
   classical
@@ -175,12 +175,12 @@ theorem sourceBootstrap_entropy_improvement_explicit
         (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
           ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+        ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           Ce * (S.n : ℝ) ^ (1 + η) →
         (∀ j : ℕ, j ≤ F.L S.n →
-          regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+          ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
             Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ η + S.n)) →
-        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+        ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           bootstrapRestoredBudgetCoefficient q Ce *
             (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * η) := by
   intro he₀pos F
@@ -253,14 +253,14 @@ theorem sourceBootstrap_entropy_improvement_explicit
   let w := (S.n : ℝ) ^ (3 / 5 : ℝ)
   let Bsh := Ce * ((S.n : ℝ) * (L : ℝ) ^ η + S.n) + (S.n : ℝ) ^ (-247 : ℝ)
   obtain ⟨hK, hKL, hcard, hX, eigen, Ωt, htrgs, he0, he, htrace, _, _, hwdata⟩ := hdata
-  let E := Entropy.typicalSet (reducedState_isHermitian Λ q Ωt X).eigenvalues
-    (regionalEntropy Λ q Ωt X) w
-  let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
+  let E := Entropy.typicalSet (ManyBody.regionState_isHermitian X Ωt).eigenvalues
+    (ManyBody.regionEntropy Ωt X) w
+  let z := (ManyBody.regionState_isHermitian X Ωt).spectralRestrictionMass E
   obtain ⟨hwindow, hd, hpdata⟩ := hwdata
   let : NeZero E.card := NeZero.of_pos hd
   let d := E.card
-  let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (FiniteProduct.splitEquiv β X) Ωt
-  let ψ : FiniteProduct.Configuration β Xᶜ × Fin d → ℂ := fun x ↦
+  let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (ManyBody.splitEquiv β X) Ωt
+  let ψ : ManyBody.RegionConfig β Xᶜ × Fin d → ℂ := fun x ↦
     compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
   let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
     (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
@@ -281,10 +281,10 @@ theorem sourceBootstrap_entropy_improvement_explicit
   have hXcard : (X.card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 :=
     (Nat.cast_le.mpr (Finset.card_le_card hX)).trans hcard
   have hcont := htarget S.n hnT Λ Ω Ωt hΩ hΩt X hXcard htrace
-  have hSt : regionalEntropy Λ q Ωt X ≤
+  have hSt : ManyBody.regionEntropy Ωt X ≤
       Ce * (S.n : ℝ) ^ (1 + η) + (S.n : ℝ) ^ (-247 : ℝ) := by
     linarith [(abs_le.mp hcont).2]
-  have hlogd : |Real.log (d : ℝ) - regionalEntropy Λ q Ωt X| ≤ w - Real.log z :=
+  have hlogd : |Real.log (d : ℝ) - ManyBody.regionEntropy Ωt X| ≤ w - Real.log z :=
     (abs_log_card_and_selectedSchmidtEntropy_sub_le Ωt hΩt X E w hwindow.2.2.1
       (fun i hi ↦ (hwindow.2.2.2.2.2 i hi).2)).1
   have hℓ1 : 1 ≤ logdim := by
@@ -338,7 +338,7 @@ theorem sourceBootstrap_entropy_improvement_explicit
         density k s p ≤ delta ∧ keep k s p := by
     have hclosure := hdensity S.n hnD
     simp only [← hmScale, ← hDScale, ← hKScale] at hclosure
-    apply hclosure η hκη (regionalEntropy Λ q Ωt X) (Real.log (d : ℝ)) z Bsh
+    apply hclosure η hκη (ManyBody.regionEntropy Ωt X) (Real.log (d : ℝ)) z Bsh
       (Cent * logdim ^ eent) hwindow.2.2.1 hwindow.2.1 hSt hlogd le_rfl hG
       (roughEndpointRemainder d cR S.K (Ci + (2 * S.n * S.m : ℕ) * Cb)) hlimR
     have hselected := hpoints epsilon (2 * epsilon) hε (by linarith) hε2
@@ -393,14 +393,14 @@ theorem sourceBootstrap_entropy_improvement_explicit
     hτ hτhalf ha (by positivity) hsmallLoss
     (Real.bellOverlapRemainder d cU S.K) (roughLowerRemainder S.K cL Cf ell Sent)
     (fun k ↦ rem k / (g / 2)) hlimU hlimL hrE hcont hselectedP
-  change regionalEntropy Λ q Ω X ≤
+  change ManyBody.regionEntropy Ω X ≤
     7 * (w - Real.log z) - Real.log z + 4 * Bsh / z +
       4 * (1 + 3 * (S.n : ℝ) * S.D * Real.log q) +
         6 * Real.binEntropy τ / a + (S.n : ℝ) ^ (-247 : ℝ) at hrestored
   have hbudgetN := hbudget S.n hnB
   dsimp only at hbudgetN
   rw [← hKExplicit, ← hDExplicit, ← hLExplicit] at hbudgetN
-  exact hbudgetN η hη hηe₀ (regionalEntropy Λ q Ω X) z τ hwindow.2.2.1 hwindow.2.1
+  exact hbudgetN η hη hηe₀ (ManyBody.regionEntropy Ω X) z τ hwindow.2.2.1 hwindow.2.1
     hτ.le (hτhalf.le.trans (by norm_num)) hrestored
 
 open Classical in
@@ -441,12 +441,12 @@ theorem exists_sourceBootstrap_entropy_improvement_of_finiteFamilyTransportBound
         (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
           ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+        ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           Ce * (S.n : ℝ) ^ (1 + η) →
         (∀ j : ℕ, j ≤ F.L S.n →
-          regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+          ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
             Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ η + S.n)) →
-        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+        ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           bootstrapRestoredBudgetCoefficient q Ce *
             (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * η) := by
   intro he₀pos F
@@ -490,12 +490,12 @@ theorem exists_sourceBootstrap_entropy_improvement_of_threshold_le
         (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
           ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+        ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           Ce * (S.n : ℝ) ^ (1 + η) →
         (∀ j : ℕ, j ≤ F.L S.n →
-          regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+          ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
             Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ η + S.n)) →
-        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+        ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           bootstrapRestoredBudgetCoefficient q Ce *
             (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * η) := by
   intro he₀pos F
@@ -535,12 +535,12 @@ theorem exists_sourceBootstrap_entropy_improvement
         (∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ multiplicity) →
         (∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
           ((2 * F.L S.n + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z) →
-        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+        ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           Ce * (S.n : ℝ) ^ (1 + η) →
         (∀ j : ℕ, j ≤ F.L S.n →
-          regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
+          ManyBody.regionEntropy Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
             Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ η + S.n)) →
-        regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
+        ManyBody.regionEntropy Ω (S.A.filter fun x ↦ x.val ∈ T) ≤
           Cout * (S.n : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * η) := by
   intro he₀pos F
   obtain ⟨Ctr, ct, Cent, eent, Cen, een, hCtr, hct, hall⟩ :=

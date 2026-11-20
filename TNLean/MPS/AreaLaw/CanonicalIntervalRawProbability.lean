@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.CanonicalIntervalRawHistory
-import QICLean.Analysis.CanonicalHalfSamplingParentProbability
+import QICLean.Entropy.ViableSampling.CanonicalHalfSamplingParentProbability
 import QICLean.Entropy.RegionalViability
 
 /-!

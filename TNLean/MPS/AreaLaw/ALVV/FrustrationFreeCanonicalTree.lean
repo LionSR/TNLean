@@ -69,7 +69,7 @@ the markers of this module; the running time is not formalized. -/
 theorem exists_unique_ground_state_canonical_tree_ritz_approximation :
     ∃ A : ℝ, 1 ≤ A ∧ ∀ (L q : ℕ), 2 ≤ q → 1 ≤ L →
     ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-      (_hsupp : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+      (_hsupp : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (h i) (interval L i.val (i.val + 2)))
       (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (gamma : ℝ), 0 < gamma →
     ∀ Γ : EuclideanSpace ℂ (Fin L → Fin q),

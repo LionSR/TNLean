@@ -31,7 +31,7 @@ corrected label route to ALVV, arXiv:1602.08828v2, `lem:exp-approx-eff`, lines 1
 theorem exists_softTruncation_mpo_of_cluster_order {N q r m : ℕ}
     (hq : 1 ≤ q) (hr : 0 < r)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) {i.castSucc, i.succ})
     (hh : ∀ i, (h i).IsHermitian) (hnorm : ∀ i, ‖h i‖ ≤ 1)
     (eps t : ℝ) (hlo : (eps : ℂ) • 1 ≤ ∑ i, h i) (ht : 0 < t)

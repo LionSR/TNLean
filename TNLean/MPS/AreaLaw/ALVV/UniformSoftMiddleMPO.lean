@@ -61,7 +61,7 @@ interactions. Supporting ALVV, arXiv:1602.08828v2, `def:soft-trunc`,
 theorem exists_uniform_native_soft_middle_mpo {N q l r m : ℕ}
     (hq : 0 < q) (hlr : l ≤ r) (hrL : r ≤ N + 1) (hm : 0 < m)
     (h : Fin N → Matrix (Fin (N + 1) → Fin q) (Fin (N + 1) → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval (N + 1) i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (e t xi : ℝ)
@@ -95,7 +95,7 @@ theorem exists_uniform_native_soft_middle_mpo {N q l r m : ℕ}
   classical
   intro A sigma0 insert eJ W base order bond
   let g := intervalBondRestriction (L := N + 1) l r h
-  have hgs (i : Fin N) : Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+  have hgs (i : Fin N) : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (g i) {i.castSucc, i.succ} := by
     apply (intervalBondRestriction_supported (L := N + 1) (q := q) l r h hs i).mono
     intro j hj
@@ -129,7 +129,7 @@ theorem exists_uniform_native_soft_middle_mpo {N q l r m : ℕ}
   have hheat (a : Fin (m + 1)) : (heat a).IsHermitian :=
     (hU.smul (IsSelfAdjoint.all ((a.val : ℝ) / t))).neg.isSelfAdjoint.exp.isHermitian
   have hheatSupport (a : Fin (m + 1)) :
-      Entropy.IsSupportedOn (n := fun _ : Fin (N + 1) ↦ q)
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
         (heat a) (interval (N + 1) l r) := by
     change _ ∈ ManyBody.supportedOperators _ _
     let V := ManyBody.supportedOperators (fun _ ↦ Fin q)

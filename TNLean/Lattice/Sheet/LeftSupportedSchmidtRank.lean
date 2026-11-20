@@ -69,7 +69,7 @@ theorem exists_threeSplit_eq_kronecker_one_rank_le
         rw [threeSplit_symm_apply_of_notMem hTE t e u₀ hvU,
           threeSplit_symm_apply_of_notMem hTE t₀ e u₀ hvU]
     have hcut (t : T → Fin q) (e : E → Fin q) :
-        Entropy.cutEquiv (fun _ : ι ↦ q) T
+        ManyBody.cutEquiv (fun _ ↦ Fin q) T
             ((threeSplit q T E hTE).symm ((t, e), u₀)) = (t, γ e) := by
       apply Prod.ext
       · funext v
@@ -79,9 +79,9 @@ theorem exists_threeSplit_eq_kronecker_one_rank_le
         change (threeSplit q T E hTE).symm ((t, e), u₀) v = γ e v
         exact houtside t e v
     have hglue (t : T → Fin q) (e : E → Fin q) :
-        (Entropy.cutEquiv (fun _ : ι ↦ q) T).symm (t, γ e) =
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) T).symm (t, γ e) =
           (threeSplit q T E hTE).symm ((t, e), u₀) := by
-      apply (Entropy.cutEquiv (fun _ : ι ↦ q) T).injective
+      apply (ManyBody.cutEquiv (fun _ ↦ Fin q) T).injective
       rw [Equiv.apply_symm_apply, hcut]
     have hslice (t t' : T → Fin q) (e e' : E → Fin q) :
         A ((threeSplit q T E hTE).symm ((t, e), u₀))
@@ -93,7 +93,7 @@ theorem exists_threeSplit_eq_kronecker_one_rank_le
         B (t, e) (t', e') *
           (1 : Matrix (↥(T ∪ E)ᶜ → Fin q) (↥(T ∪ E)ᶜ → Fin q) ℂ) u₀ u₀ at hentry
       simpa only [Matrix.one_apply_eq, mul_one] using hentry
-    have hsupp : Entropy.IsSupportedOn (n := fun _ : ι ↦ q) A D :=
+    have hsupp : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) A D :=
       hA
     obtain ⟨M, L, R, hM, hdec, _⟩ :=
       hsupp.hasProductDecomposition_inner (B := T) σ₀ (c₀ := ‖A‖) le_rfl
@@ -101,19 +101,19 @@ theorem exists_threeSplit_eq_kronecker_one_rank_le
       refine ⟨L, fun s ↦ (R s).submatrix γ γ, ?_⟩
       ext ⟨t, e⟩ ⟨t', e'⟩
       have hentry := congrFun (congrFun hdec (t, γ e)) (t', γ e')
-      change A ((Entropy.cutEquiv (fun _ : ι ↦ q) T).symm (t, γ e))
-          ((Entropy.cutEquiv (fun _ : ι ↦ q) T).symm (t', γ e')) = _ at hentry
+      change A ((ManyBody.cutEquiv (fun _ ↦ Fin q) T).symm (t, γ e))
+          ((ManyBody.cutEquiv (fun _ ↦ Fin q) T).symm (t', γ e')) = _ at hentry
       rw [hglue t e, hglue t' e', hslice t t' e e'] at hentry
       simpa only [Matrix.sum_apply, Matrix.kronecker_apply,
         Matrix.submatrix_apply] using hentry
-    have hcard : Fintype.card (Entropy.InnerConfig (fun _ : ι ↦ q) T D) =
+    have hcard : Fintype.card (ManyBody.InnerConfig (fun _ : ι ↦ q) T D) =
         q ^ (D ∩ T).card := by
-      rw [Entropy.card_innerConfig]
+      rw [ManyBody.card_innerConfig]
       simp only [Finset.prod_const]
     refine ⟨B, hB,
       (operatorSchmidtRank_le_of_hasOperatorSchmidtDecomposition hBdec).trans ?_⟩
     calc
-      M ≤ Fintype.card (Entropy.InnerConfig (fun _ : ι ↦ q) T D) ^ 2 := hM
+      M ≤ Fintype.card (ManyBody.InnerConfig (fun _ : ι ↦ q) T D) ^ 2 := hM
       _ = q ^ (2 * (D ∩ T).card) := by
         rw [hcard, ← pow_mul, Nat.mul_comm (D ∩ T).card 2]
   · let : IsEmpty (ι → Fin q) := ⟨fun σ ↦ hconfig ⟨σ⟩⟩

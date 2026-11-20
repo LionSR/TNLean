@@ -5,8 +5,8 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.LowEnergyCoordinates
 import QICLean.Analysis.ViableSubspaceBootstrap
-import QICLean.Analysis.ViableSubspaceEntropy
-import QICLean.Entropy.FiniteProduct
+import QICLean.Entropy.ViableSampling.ViableSubspaceEntropy
+import QICLean.Entropy.RegionEntropy
 import QICLean.Entropy.SupportedMarginalTails
 import QICLean.ManyBody.Sites.Lattice.Chain
 import TNLean.MPS.AreaLaw.DGEntropyParameters
@@ -51,7 +51,7 @@ theorem exists_physical_dg_interval_entropy_bound :
     ∃ Cbound : ℝ, 0 < Cbound ∧
       ∀ (L q p r : ℕ), p ≤ r → r ≤ L →
       ∀ (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-        (_hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+        (_hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
           (h i) (interval L i.val (i.val + 2)))
         (h0 : ∀ i, 0 ≤ h i) (_h1 : ∀ i, h i ≤ 1) (mu nu gamma : ℝ),
       0 < gamma →
@@ -64,7 +64,7 @@ theorem exists_physical_dg_interval_entropy_bound :
       let g := min gamma 1
       let J := interval L p r
       ∀ (ψ : EuclideanSpace ℂ (Fin L → Fin q)), ψ ∈ G → ‖ψ‖ = 1 →
-      Entropy.regionEntropy J ψ ≤ Real.log (Module.finrank ℂ G : ℝ) +
+      ManyBody.regionEntropy ψ J ≤ Real.log (Module.finrank ℂ G : ℝ) +
         Cbound / g * (1 + Real.log (q : ℝ) + Real.log (1 / g)) ^ 3 := by
   classical
   obtain ⟨A, hA, _hA21, hphysical⟩ :=
@@ -84,13 +84,13 @@ theorem exists_physical_dg_interval_entropy_bound :
   intro L q p r hpr hrL h hs h0 h1 mu nu gamma hgamma H hH
     hmu hnu hmunu hgap G g J ψ hψG hψ
   let beta := fun _ : Fin L ↦ Fin q
-  let tau := (FiniteProduct.splitEquiv beta J).trans (Equiv.prodComm _ _)
+  let tau := (ManyBody.splitEquiv beta J).trans (Equiv.prodComm _ _)
   let U := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ tau
-  let Phi := ((EuclideanSpace.basisFun (FiniteProduct.Configuration beta Jᶜ) ℂ).tensorProduct
-    (EuclideanSpace.basisFun (FiniteProduct.Configuration beta J) ℂ)).repr
+  let Phi := ((EuclideanSpace.basisFun (ManyBody.RegionConfig beta Jᶜ) ℂ).tensorProduct
+    (EuclideanSpace.basisFun (ManyBody.RegionConfig beta J) ℂ)).repr
   let Tm := (U.trans Phi.symm).trans (TensorProduct.commIsometry ℂ
-    (EuclideanSpace ℂ (FiniteProduct.Configuration beta Jᶜ))
-    (EuclideanSpace ℂ (FiniteProduct.Configuration beta J)))
+    (EuclideanSpace ℂ (ManyBody.RegionConfig beta Jᶜ))
+    (EuclideanSpace ℂ (ManyBody.RegionConfig beta J)))
   let w := (Submodule.euclideanTensorEquiv (J → Fin q) (↥(Jᶜ) → Fin q)).symm (Tm ψ)
   let Cψ := Matrix.schmidtCoeffMatrix (WithLp.ofLp w)
   let hρ := Matrix.posSemidef_self_mul_conjTranspose Cψ
@@ -178,7 +178,7 @@ theorem exists_physical_dg_interval_entropy_bound :
     (vonNeumannEntropy (Cψ * Cψᴴ) hρ.isHermitian) (Module.finrank ℂ G)
     hg hg1 hu hrawEntropy
   have hactual : vonNeumannEntropy (Cψ * Cψᴴ) hρ.isHermitian =
-      Entropy.regionEntropy J ψ :=
+      ManyBody.regionEntropy ψ J :=
     (Submodule.actualRegionSplit_marginal_and_entropy (n := fun _ : Fin L ↦ q) J ψ).2
   rw [← hactual]
   exact hcanonical

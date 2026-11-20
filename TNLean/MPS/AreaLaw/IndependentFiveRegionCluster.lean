@@ -50,7 +50,7 @@ theorem exists_five_region_independent_scaled_low_cluster
     (L q a b ell : ℕ) (t : ℝ) (hq : 0 < q) (hell : 1 ≤ ell) (ht : 21 ≤ t)
     (hab : a + 2 * ell ≤ b + 1) (hbL : b + 2 * ell ≤ L)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q)
       (h i) (interval L i.val (i.val + 2)))
     (h0 : ∀ i, 0 ≤ h i) (h1 : ∀ i, h i ≤ 1)
     (mu g xi tau : ℝ) (hg : 0 < g) (hg1 : g ≤ 1)

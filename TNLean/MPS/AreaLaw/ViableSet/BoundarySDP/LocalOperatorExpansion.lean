@@ -71,7 +71,7 @@ theorem supported_apply_eq_twoSiteConfig
     {ι : Type*} [DecidableEq ι] {q : ℕ}
     {p r : ι} (hpr : p ≠ r) (σ₀ : ι → Fin q)
     {X : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hX : Entropy.IsSupportedOn X {p, r}) (σ τ : ι → Fin q)
+    (hX : ManyBody.IsSupportedOn X {p, r}) (σ τ : ι → Fin q)
     (hout : ∀ j, j ≠ p → j ≠ r → σ j = τ j) :
     X σ τ = X (twoSiteConfig σ₀ p r (σ p) (σ r))
       (twoSiteConfig σ₀ p r (τ p) (τ r)) := by
@@ -95,7 +95,7 @@ theorem supported_eq_sum_twoSiteMatrixUnitFactors
     {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
     {p r : ι} (hpr : p ≠ r) (σ₀ : ι → Fin q)
     {X : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hX : Entropy.IsSupportedOn X {p, r}) :
+    (hX : ManyBody.IsSupportedOn X {p, r}) :
     X = ∑ a : Fin q, ∑ b : Fin q, ∑ c : Fin q, ∑ d : Fin q,
       X (twoSiteConfig σ₀ p r a c) (twoSiteConfig σ₀ p r b d) •
         Matrix.rectKronecker (twoSiteMatrixUnitFactors p r a b c d) := by

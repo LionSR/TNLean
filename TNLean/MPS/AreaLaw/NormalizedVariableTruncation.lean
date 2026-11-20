@@ -37,10 +37,10 @@ theorem normalized_sequentialTruncation_of_prefix_mass
     {L q : ℕ} (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (hψ : ‖ψ‖ = 1)
     (D : ℕ → ℕ) (delta : ℝ) (hdelta : 0 < delta) (hdelta1 : delta ≤ 1)
     (htail : (∑ k ∈ Finset.Ico 1 L,
-      (1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      (1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (leftBlock L k) ψ).kyFanNorm (D k))) ≤ delta / 8) :
     let P : ∀ k : ℕ, LeftBlockMatrix L q k := fun k ↦
-      (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
         (leftBlock L k) ψ).leadingEigenprojection (D k)
     let Φ0 := sequentialTruncation P (L - 1) ψ
     0 < ‖Φ0‖ ∧
@@ -50,24 +50,24 @@ theorem normalized_sequentialTruncation_of_prefix_mass
       1 - delta < ‖⟪Φ, ψ⟫_ℂ‖ ∧ ‖Φ - ψ‖ ^ 2 ≤ delta / 2 := by
   classical
   intro P Φ0
-  have hspec (k : ℕ) := (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+  have hspec (k : ℕ) := (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
     (leftBlock L k) ψ).leadingEigenprojection_spec (D k)
   have hP (k : ℕ) : IsStarProjection (P k) :=
     ⟨(hspec k).2.1, Matrix.isHermitian_iff_isSelfAdjoint.mp (hspec k).1⟩
   have hrank0 := (sequentialTruncation_prefix_rank_error P ψ hP).1
   have hmass (k : ℕ) :
-      ‖Matrix.toEuclideanLin (Entropy.localLift (leftBlock L k) (1 - P k)) ψ‖ ^ 2 =
-        1 - (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+      ‖Matrix.toEuclideanLin (ManyBody.place (leftBlock L k) (1 - P k)) ψ‖ ^ 2 =
+        1 - (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
           (leftBlock L k) ψ).kyFanNorm (D k) := by
     rw [Entropy.norm_sq_toEuclideanLin_localLift_eq_trace (hP k).one_sub]
     refine (hspec k).2.2.2.2.2.trans ?_
-    rw [Entropy.trace_regionState_eq_one hψ, Complex.one_re]
+    rw [ManyBody.trace_regionState_eq_one hψ, Complex.one_re]
   have herr : ‖Φ0 - ψ‖ ^ 2 ≤ delta / 8 := by
     have heq : (∑ i ∈ Finset.range (L - 1),
-        ‖Matrix.toEuclideanLin (Entropy.localLift (leftBlock L (L - 1 - i))
+        ‖Matrix.toEuclideanLin (ManyBody.place (leftBlock L (L - 1 - i))
           (1 - P (L - 1 - i))) ψ‖ ^ 2) =
         ∑ k ∈ Finset.Ico 1 L, (1 -
-          (Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q)
+          (ManyBody.regionState_isHermitian (X := fun _ ↦ Fin q)
             (leftBlock L k) ψ).kyFanNorm (D k)) := by
       rw [Finset.sum_Ico_eq_sum_range]
       conv_lhs => rw [← Finset.sum_range_reflect]

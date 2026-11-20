@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.IntervalCollectiveTrimming
-import QICLean.Analysis.CanonicalHalfSamplingParent
-import QICLean.Analysis.StoppedHalfSamplingSeed
+import QICLean.Entropy.ViableSampling.CanonicalHalfSamplingParent
+import QICLean.Entropy.ViableSampling.StoppedHalfSamplingSeed
 
 /-!
 # The complete stopped half-sampling parent on an actual interval

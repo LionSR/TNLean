@@ -30,7 +30,7 @@ theorem rank_cutMatrix_toEuclideanLin_le_operatorSchmidtRank_mul {L q : ℕ}
     (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (ψ : EuclideanSpace ℂ (Fin L → Fin q)) (k : ℕ) :
     (cutMatrix (toEuclideanLin K ψ) k).rank ≤
-      operatorSchmidtRank (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) K) *
+      operatorSchmidtRank (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K) *
         (cutMatrix ψ k).rank := by
   rw [cutMatrix_toEuclideanLin]
   exact Matrix.schmidtRank_mulVec_le _ _
@@ -44,7 +44,7 @@ theorem IsOpenMPS.toEuclideanLin {L q b D : ℕ}
     (K : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hK : ∀ k : ℕ, 0 < k → k < L →
       operatorSchmidtRank
-        (Entropy.cutOperator (n := fun _ : Fin L ↦ q) (leftBlock L k) K) ≤ D) :
+        (ManyBody.cutOperator (X := fun _ ↦ Fin q) (leftBlock L k) K) ≤ D) :
     IsOpenMPS L q (D * b) (fun x ↦ toEuclideanLin K ψ x) := by
   apply isOpenMPS_of_internal_cutMatrix_rank_le
   intro k hk0 hkL

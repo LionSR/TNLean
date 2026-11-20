@@ -73,16 +73,16 @@ rectangular and vertex-boundary implication in
 
 \begin{lemma}[Identification with range-one domain interactions]
     \label{thm:rectangular_domain_hamiltonian}
-    \lean{TNLean.PEPS.AreaLaw.rectangleAreaLawSupport,
-        TNLean.PEPS.AreaLaw.rectangleAreaLawSupport_injective,
+    \lean{ManyBody.rectangleSupport,
+        ManyBody.rectangleSupport_injective,
         TNLean.PEPS.AreaLaw.rectangleAreaLawState,
         TNLean.PEPS.AreaLaw.norm_rectangleAreaLawState,
-        TNLean.PEPS.AreaLaw.embedOp_rectangular_eq_reindex,
-        ManyBody.RectangleInteraction.toAreaLawHamiltonian,
-        ManyBody.RectangleInteraction.isHermitian_toAreaLawHamiltonian_term,
-        ManyBody.RectangleInteraction.norm_toAreaLawHamiltonian_term_le,
-        ManyBody.RectangleInteraction.toAreaLawHamiltonian_hamiltonian,
-        ManyBody.RectangleInteraction.isGapped_toAreaLawHamiltonian}
+        ManyBody.RectangleInteraction.toPlaneInteraction,
+        ManyBody.RectangleInteraction.hamiltonian_toPlaneInteraction,
+        ManyBody.RectangleInteraction.isHermitian_toPlaneInteraction_hermitianPart_term,
+        ManyBody.RectangleInteraction.norm_toPlaneInteraction_hermitianPart_term_le,
+        ManyBody.RectangleInteraction.hamiltonian_toPlaneInteraction_hermitianPart,
+        ManyBody.RectangleInteraction.isGapped_toPlaneInteraction_hermitianPart}
     \leanok
     \uses{thm:square_interaction_support_injective}
     Let $U$ identify the native configuration basis with the basis of the

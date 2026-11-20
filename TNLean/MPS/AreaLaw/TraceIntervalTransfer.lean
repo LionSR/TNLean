@@ -41,15 +41,15 @@ theorem exists_traceChainOperator_changingRegionalMiddleFactor
     {T q c d u v D : ℕ} (hq : 0 < q)
     (hcd : c ≤ d) (hd : d ≤ T) (huv : u ≤ v) (hv : v ≤ T)
     (hover : max c u ≤ min d v)
-    (Vphys : Matrix (FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q) (interval T c d))
-      (FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q) (interval T c d)) ℂ)
+    (Vphys : Matrix (ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q) (interval T c d))
+      (ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q) (interval T c d)) ℂ)
     (hV : let eE := intervalShiftOrderIso hcd hd
       ∃ C : Matrix (Fin D) (Fin D) ℂ, ∃ A : Fin (d - c) → MPOTensor q D,
         Vphys.submatrix (fun σ z ↦ σ (eE.symm z))
           (fun σ z ↦ σ (eE.symm z)) = MPOTensor.traceChainOperator A C)
-    (αr αc : FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q)
+    (αr αc : ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q)
       (interval T c d \ interval T u v))
-    (ηr ηc : FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q)
+    (ηr ηc : ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q)
       (interval T u v \ interval T c d)) :
     let old := FiniteProduct.changingOldMiddleConfigEquiv
       (fun _ : Fin T ↦ Fin q) (interval T c d) (interval T u v)
@@ -80,8 +80,8 @@ theorem changingRegionalMiddleFamily_trace_and_global_decomposition
     {T q c d u v : ℕ} {ι : Type*} [Fintype ι]
     (hq : 0 < q) (hcd : c ≤ d) (hd : d ≤ T) (huv : u ≤ v) (hv : v ≤ T)
     (hover : max c u ≤ min d v)
-    (V : ι → Matrix (FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q) (interval T c d))
-      (FiniteProduct.Configuration (fun _ : Fin T ↦ Fin q) (interval T c d)) ℂ)
+    (V : ι → Matrix (ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q) (interval T c d))
+      (ManyBody.RegionConfig (fun _ : Fin T ↦ Fin q) (interval T c d)) ℂ)
     (D : ι → ℕ)
     (hV : ∀ t, let eE := intervalShiftOrderIso hcd hd
       ∃ C : Matrix (Fin (D t)) (Fin (D t)) ℂ,
@@ -93,8 +93,8 @@ theorem changingRegionalMiddleFamily_trace_and_global_decomposition
     let J := interval T u v
     let A := E \ J
     let B := J \ E
-    let I := ι × (FiniteProduct.Configuration β A × FiniteProduct.Configuration β A) ×
-      (FiniteProduct.Configuration β B × FiniteProduct.Configuration β B)
+    let I := ι × (ManyBody.RegionConfig β A × ManyBody.RegionConfig β A) ×
+      (ManyBody.RegionConfig β B × ManyBody.RegionConfig β B)
     let W := FiniteProduct.changingRegionalMiddleFamily β E J V
     let eJ := intervalShiftOrderIso huv hv
     Fintype.card I = Fintype.card ι * q ^ (2 * A.card + 2 * B.card) ∧
@@ -102,33 +102,33 @@ theorem changingRegionalMiddleFamily_trace_and_global_decomposition
         ∃ Anew : Fin (v - u) → MPOTensor q (D r.1),
           (W r).submatrix (fun σ z ↦ σ (eJ.symm z))
             (fun σ z ↦ σ (eJ.symm z)) = MPOTensor.traceChainOperator Anew Cnew) ∧
-      ∀ M : ι → Matrix (FiniteProduct.Configuration β Eᶜ)
-          (FiniteProduct.Configuration β Eᶜ) ℂ,
-        ∃ Mnew : I → Matrix (FiniteProduct.Configuration β Jᶜ)
-            (FiniteProduct.Configuration β Jᶜ) ℂ,
+      ∀ M : ι → Matrix (ManyBody.RegionConfig β Eᶜ)
+          (ManyBody.RegionConfig β Eᶜ) ℂ,
+        ∃ Mnew : I → Matrix (ManyBody.RegionConfig β Jᶜ)
+            (ManyBody.RegionConfig β Jᶜ) ℂ,
           (∑ t, M t ⊗ₖ V t).submatrix
-            ((FiniteProduct.splitEquiv β E).trans (Equiv.prodComm _ _))
-            ((FiniteProduct.splitEquiv β E).trans (Equiv.prodComm _ _)) =
+            ((ManyBody.splitEquiv β E).trans (Equiv.prodComm _ _))
+            ((ManyBody.splitEquiv β E).trans (Equiv.prodComm _ _)) =
           (∑ r, Mnew r ⊗ₖ W r).submatrix
-            ((FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _))
-            ((FiniteProduct.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
+            ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _))
+            ((ManyBody.splitEquiv β J).trans (Equiv.prodComm _ _)) := by
   let β := fun _ : Fin T ↦ Fin q
   let E := interval T c d
   let J := interval T u v
   let A := E \ J
   let B := J \ E
-  let I := ι × (FiniteProduct.Configuration β A × FiniteProduct.Configuration β A) ×
-    (FiniteProduct.Configuration β B × FiniteProduct.Configuration β B)
+  let I := ι × (ManyBody.RegionConfig β A × ManyBody.RegionConfig β A) ×
+    (ManyBody.RegionConfig β B × ManyBody.RegionConfig β B)
   let W := FiniteProduct.changingRegionalMiddleFamily β E J V
   let eJ := intervalShiftOrderIso huv hv
   have hcard : Fintype.card I = Fintype.card ι * q ^ (2 * A.card + 2 * B.card) := by
     calc
       Fintype.card I = Fintype.card ι *
-          Fintype.card (FiniteProduct.Configuration β A) ^ 2 *
-          Fintype.card (FiniteProduct.Configuration β B) ^ 2 :=
+          Fintype.card (ManyBody.RegionConfig β A) ^ 2 *
+          Fintype.card (ManyBody.RegionConfig β B) ^ 2 :=
         Matrix.card_exchangedMiddleFamily_index
       _ = Fintype.card ι * q ^ (2 * A.card + 2 * B.card) := by
-        simp only [FiniteProduct.Configuration, β, Fintype.card_fun, Fintype.card_fin,
+        simp only [ManyBody.RegionConfig, β, Fintype.card_fun, Fintype.card_fin,
           Fintype.card_coe, ← pow_mul]
         rw [Nat.mul_assoc, ← pow_add]
         rw [show A.card * 2 + B.card * 2 = 2 * A.card + 2 * B.card by omega]

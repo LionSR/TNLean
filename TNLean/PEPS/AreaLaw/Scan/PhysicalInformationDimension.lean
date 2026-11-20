@@ -33,19 +33,19 @@ theorem log_exp_configuration_card_le_of_card
     (X : Finset (Site Λ)) {Cvol : ℝ}
     (hcard : (X.card : ℝ) ≤ Cvol * (n : ℝ) ^ 2) :
     Real.log (Real.exp 1 *
-      Fintype.card (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) X)) ≤
+      Fintype.card (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q) X)) ≤
         1 + (Cvol * Real.log q) * (n : ℝ) ^ 2 := by
   have hqpos : (0 : ℝ) < q := by exact_mod_cast (show 0 < q by omega)
   have hdimpos : (0 : ℝ) <
-      Fintype.card (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) X) := by
-    simp only [FiniteProduct.Configuration, Fintype.card_fun, Fintype.card_fin,
+      Fintype.card (ManyBody.RegionConfig (fun _ : Site Λ ↦ Fin q) X) := by
+    simp only [ManyBody.RegionConfig, Fintype.card_fun, Fintype.card_fin,
       Fintype.card_coe, Nat.cast_pow]
     positivity
   rw [Real.log_mul (Real.exp_pos 1).ne' hdimpos.ne', Real.log_exp]
   have hlogq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
   have hbound := _root_.add_le_add (le_refl (1 : ℝ))
     (mul_le_mul_of_nonneg_right hcard hlogq)
-  simpa only [FiniteProduct.Configuration, Fintype.card_fun, Fintype.card_fin,
+  simpa only [ManyBody.RegionConfig, Fintype.card_fun, Fintype.card_fin,
     Fintype.card_coe, Nat.cast_pow, Real.log_pow, mul_right_comm] using hbound
 
 end TNLean.PEPS.AreaLaw.Scan

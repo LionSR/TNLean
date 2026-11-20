@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Algebra.CompactGapBounds
-import TNLean.Algebra.KernelGapPerturbation
+import QICLean.Analysis.KernelGapPerturbation
 import TNLean.Algebra.OrthogonalKernelGap
 
 /-!

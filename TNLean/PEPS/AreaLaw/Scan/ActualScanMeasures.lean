@@ -46,18 +46,18 @@ variable {V I : Type} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]
 
 /-- The actual fill round, with interpolation scale `a/2` and the literal unit sphere.
 The supplied family is shared by its old and new states. -/
-def actualFillScanRound : ScanRound I (CoherentSphere (SiteConfig n)) :=
+def actualFillScanRound : ScanRound I (CoherentSphere (∀ v, Fin (n v))) :=
   transportScanRound (S.actualFillData hm hM s) n E S.IsGoodOldHistory (a / 2) pre
 
 /-- The actual charge round, with interpolation scale `a/2` and the literal unit sphere.
 The supplied family is shared by its old and new states. -/
-def actualChargeScanRound : ScanRound I (CoherentSphere (SiteConfig n)) :=
+def actualChargeScanRound : ScanRound I (CoherentSphere (∀ v, Fin (n v))) :=
   transportScanRound (S.actualChargeData hm hM s) n E S.IsGoodOldHistory (a / 2) pre
 
 /-- The actual fill old sphere integral equals the existing literal state integral. -/
 theorem integral_actualFillScanRound_old (ha : 0 ≤ a) (k : ℕ) (p : ℝ)
     (h : History S.K S.m S.M s)
-    {f : (SiteConfig n → ℂ) → ℝ} (hf : Continuous f) :
+    {f : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hf : Continuous f) :
     (∫ θ, f (fun x => θ.1 x) ∂(S.actualFillScanRound hm hM s n E a pre).μOld k p h) =
       (S.actualFillData hm hM s).oldFourierCoherentIntegral n (a / 2) k (pre k) p h f :=
   integral_transportScanRound_old (S.actualFillData hm hM s) n E S.IsGoodOldHistory (a / 2) pre
@@ -67,7 +67,7 @@ theorem integral_actualFillScanRound_old (ha : 0 ≤ a) (k : ℕ) (p : ℝ)
 /-- The actual fill new sphere integral equals the existing literal state integral. -/
 theorem integral_actualFillScanRound_new (ha : 0 ≤ a) (k : ℕ) (p : ℝ)
     (h : History S.K S.m S.M s) (c : Unit)
-    {f : (SiteConfig n → ℂ) → ℝ} (hf : Continuous f) :
+    {f : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hf : Continuous f) :
     (∫ θ, f (fun x => θ.1 x) ∂(S.actualFillScanRound hm hM s n E a pre).μNew k p h c) =
       ∫ u, Transport.fourierWeight u * realCoherentIntegral k (TransportData.base n)
         ((S.actualFillData hm hM s).state n (a / 2) k (pre k) p ⟨h, some c⟩ u) f :=
@@ -107,7 +107,7 @@ theorem actualFillScanRound_energySum (ha : 0 ≤ a) (k : ℕ)
 /-- The actual charge old sphere integral equals the existing literal state integral. -/
 theorem integral_actualChargeScanRound_old (ha : 0 ≤ a) (k : ℕ) (p : ℝ)
     (h : History S.K S.m S.M s)
-    {f : (SiteConfig n → ℂ) → ℝ} (hf : Continuous f) :
+    {f : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hf : Continuous f) :
     (∫ θ, f (fun x => θ.1 x) ∂(S.actualChargeScanRound hm hM s n E a pre).μOld k p h) =
       (S.actualChargeData hm hM s).oldFourierCoherentIntegral n (a / 2) k (pre k) p h f :=
   integral_transportScanRound_old (S.actualChargeData hm hM s) n E S.IsGoodOldHistory (a / 2) pre
@@ -117,7 +117,7 @@ theorem integral_actualChargeScanRound_old (ha : 0 ≤ a) (k : ℕ) (p : ℝ)
 /-- The actual charge new sphere integral equals the existing literal state integral. -/
 theorem integral_actualChargeScanRound_new (ha : 0 ≤ a) (k : ℕ) (p : ℝ)
     (h : History S.K S.m S.M s) (c : ChargeChoices S.K S.M)
-    {f : (SiteConfig n → ℂ) → ℝ} (hf : Continuous f) :
+    {f : ((∀ v, Fin (n v)) → ℂ) → ℝ} (hf : Continuous f) :
     (∫ θ, f (fun x => θ.1 x) ∂(S.actualChargeScanRound hm hM s n E a pre).μNew k p h c) =
       ∫ u, Transport.fourierWeight u * realCoherentIntegral k (TransportData.base n)
         ((S.actualChargeData hm hM s).state n (a / 2) k (pre k) p ⟨h, some c⟩ u) f :=

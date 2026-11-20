@@ -18,7 +18,7 @@ Source: Osborne, arXiv:quant-ph/0508031v2, equations (6)--(12), and Huang,
 arXiv:1406.6355v6, Section 5.4, Lemma 19.
 -/
 
-open ManyBody (ChainSupport card_interval_le interval mem_interval)
+open ManyBody (ChainSupport bondSupport card_interval_le interval mem_interval)
 
 open Matrix QuantumCircuit
 open scoped BigOperators Matrix.Norms.L2Operator
@@ -26,14 +26,6 @@ open scoped BigOperators Matrix.Norms.L2Operator
 namespace TNLean.MPS.AreaLaw
 
 variable {L q w : ℕ}
-
-/-- The designated range-one support of an original nearest-neighbor interaction.
-Osborne, arXiv:quant-ph/0508031v2, the Hamiltonian preceding equation (2). -/
-def nearestNeighborChainSupport (i : Fin (L - 1)) : ChainSupport L 1 :=
-  ⟨interval L i.val (i.val + 2),
-    ⟨⟨⟨i.val, lt_of_lt_of_le i.isLt (Nat.sub_le L 1)⟩,
-      mem_interval.mpr (show i.val ≤ i.val ∧ i.val < i.val + 2 by omega)⟩,
-      fun x hx y hy ↦ by rw [mem_interval] at hx hy; omega⟩⟩
 
 /-- The retained original interaction, with precisely the grid-boundary terms set to zero.
 Osborne, Figure 2. -/
@@ -50,14 +42,14 @@ theorem sum_chainGridRetainedTerm (hw : 0 < w)
   rw [chainGridRetainedHamiltonian_eq_sum_filter]
   simp only [chainGridRetainedTerm, Finset.sum_filter, ite_not]
 
-/-- The original one-dimensional nearest-neighbor incidence count is at most two.
-Osborne, the nearest-neighbor Hamiltonian preceding equation (2). -/
-theorem card_nearestNeighborChainSupport_containing_le_two (x : Fin L) :
+/-- The original one-dimensional nearest-neighbor incidence count is at most two: a site
+lies on at most two bonds. Osborne, the nearest-neighbor Hamiltonian preceding equation (2). -/
+theorem card_filter_mem_bondSupport_le_two (x : Fin L) :
     (Finset.univ.filter
-      (fun i : Fin (L - 1) ↦ x ∈ (nearestNeighborChainSupport i).val)).card ≤ 2 := by
+      (fun i : Fin (L - 1) ↦ x ∈ (bondSupport i).val)).card ≤ 2 := by
   classical
   apply (Finset.card_le_card_of_injOn (fun i : Fin (L - 1) ↦ i.val)
-    (s := Finset.univ.filter fun i ↦ x ∈ (nearestNeighborChainSupport i).val)
+    (s := Finset.univ.filter fun i ↦ x ∈ (bondSupport i).val)
     (t := {x.val - 1, x.val}) ?_ Fin.val_injective.injOn).trans Finset.card_le_two
   intro i hi
   have hx := (Finset.mem_filter.mp hi).2
@@ -69,10 +61,10 @@ theorem card_nearestNeighborChainSupport_containing_le_two (x : Fin L) :
 
 private theorem retained_support (hw : 0 < w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (i : Fin (L - 1)) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (chainGridRetainedTerm hw h i)
-      (nearestNeighborChainSupport i).val := by
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (chainGridRetainedTerm hw h i)
+      (bondSupport i).val := by
   change _ ∈ ManyBody.supportedOperators _ _
   classical
   unfold chainGridRetainedTerm
@@ -104,22 +96,22 @@ the original norm bounds. Osborne, equations (6)--(12). -/
 theorem chainGridRetained_site_budget (hw : 0 < w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
     (hnorm : ∀ i, ‖h i‖ ≤ 1) (x : Fin L) :
-    (∑ i ∈ Finset.univ.filter (fun i ↦ x ∈ (nearestNeighborChainSupport i).val),
+    (∑ i ∈ Finset.univ.filter (fun i ↦ x ∈ (bondSupport i).val),
       ‖chainGridRetainedTerm hw h i‖) ≤ 2 := by
   calc
-    _ ≤ ∑ i ∈ Finset.univ.filter (fun i ↦ x ∈ (nearestNeighborChainSupport i).val), (1 : ℝ) :=
+    _ ≤ ∑ i ∈ Finset.univ.filter (fun i ↦ x ∈ (bondSupport i).val), (1 : ℝ) :=
       Finset.sum_le_sum fun i _ ↦ retained_norm_le_one hw h hnorm i
     _ = ((Finset.univ.filter
-        (fun i : Fin (L - 1) ↦ x ∈ (nearestNeighborChainSupport i).val)).card : ℝ) := by simp
-    _ ≤ 2 := by exact_mod_cast card_nearestNeighborChainSupport_containing_le_two x
+        (fun i : Fin (L - 1) ↦ x ∈ (bondSupport i).val)).card : ℝ) := by simp
+    _ ≤ 2 := by exact_mod_cast card_filter_mem_bondSupport_le_two x
 
 /-- An omitted term is supported on its actual adjacent pair.
 Osborne, Figure 1 and equation (3). -/
 theorem chainGridBoundaryTerm_supported (hw : 0 < w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (k : Fin ((L - 1) / w)) :
-    Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (chainGridBoundaryTerm hw h k)
+    ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (chainGridBoundaryTerm hw h k)
       (chainCutPair L (chainGridCut w k.val)) := by
   change _ ∈ ManyBody.supportedOperators _ _
   have hneg := neg_mem (show _ ∈ ManyBody.supportedOperators _ _ from
@@ -151,7 +143,7 @@ Osborne, arXiv:quant-ph/0508031v2, equations (6)--(12), and Huang, Lemma 19. -/
 theorem norm_chainGridBoundaryTerm_sub_regionExpectation_le
     (hw : 0 < w)
     (h : Fin (L - 1) → Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
-    (hs : ∀ i, Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (h i)
+    (hs : ∀ i, ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (h i)
       (interval L i.val (i.val + 2))) (hHerm : ∀ i, (h i).IsHermitian)
     (hnorm : ∀ i, ‖h i‖ ≤ 1) (k : Fin ((L - 1) / w)) (r : ℕ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (chainGridRetainedHamiltonian hw h) t (chainGridBoundaryTerm hw h
@@ -178,7 +170,7 @@ theorem norm_chainGridBoundaryTerm_sub_regionExpectation_le
       _ ≤ C * 4 * 1 := by gcongr
       _ = chainGridLRPrefactor := by unfold C chainGridLRPrefactor; ring
   have hLR := norm_heisenberg_sub_regionExpectation_chainNeighborhood_le
-    nearestNeighborChainSupport (chainGridRetainedTerm hw h) (retained_hermitian hw h hHerm)
+    bondSupport (chainGridRetainedTerm hw h) (retained_hermitian hw h hHerm)
     (retained_support hw h hs) 2 (chainGridRetained_site_budget hw h hnorm) S
     (chainGridBoundaryTerm_supported hw h hs k) (r : ℝ) (Nat.cast_nonneg r) t
   rw [sum_chainGridRetainedTerm,

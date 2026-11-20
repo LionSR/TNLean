@@ -56,27 +56,28 @@ theorem SquareEntropyAreaLawAt.closedSquareSample_entropy_le
     (hA : SquareEntropyAreaLawAt q G C_A) :
     ∀ (L : ℕ) (Ω : StateSpace L q), G L Ω →
       ∀ (z : ℝ × ℝ) (u r : ℝ), 0 ≤ r → r ≤ 2 * u →
-        Entropy.regionEntropy
-          (AreaLaw.Geometry.closedSquareSample (AreaLaw.rectangularDomain L L) z r)
-          (AreaLaw.rectangleAreaLawState Ω) ≤ max 1 (16 * C_A) * (1 + u) := by
+        ManyBody.regionEntropy
+          (AreaLaw.rectangleAreaLawState Ω)
+          (AreaLaw.Geometry.closedSquareSample (ManyBody.rectangularDomain L L) z r) ≤ max 1
+              (16 * C_A) * (1 + u) := by
   intro L Ω hΩ z u r hr hru
   obtain ⟨hCA, hA⟩ := hA
-  let D := AreaLaw.Geometry.closedSquareSample (AreaLaw.rectangularDomain L L) z r
+  let D := AreaLaw.Geometry.closedSquareSample (ManyBody.rectangularDomain L L) z r
   have hcut := hA L Ω hΩ
-    (D.map (AreaLaw.rectangleSiteEquiv L L).symm.toEmbedding)
-  rw [← finiteProductEntropy_relabel (AreaLaw.rectangleSiteEquiv L L) q Ω,
+    (D.map (ManyBody.rectangleSiteEquiv L L).symm.toEmbedding)
+  rw [← finiteProductEntropy_relabel (ManyBody.rectangleSiteEquiv L L) q Ω,
     ← card_edgeBoundary_rectangle] at hcut
   simp only [Finset.map_map, Function.Embedding.mk_trans_mk, Equiv.self_comp_symm,
     Function.Embedding.mk_id, Finset.map_refl] at hcut
-  have hbound : Entropy.regionEntropy D (AreaLaw.rectangleAreaLawState Ω) ≤
-      C_A * (Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) D).card := by
-    simpa only [Entropy.regionEntropy, ManyBody.regionEntropy_eq_entropy,
+  have hbound : ManyBody.regionEntropy (AreaLaw.rectangleAreaLawState Ω) D ≤
+      C_A * (Lattice.edgeBoundary (ManyBody.rectangularDomain L L) D).card := by
+    simpa only [ManyBody.regionEntropy,
       AreaLaw.rectangleAreaLawState, AreaLaw.rectangleConfigurationEquiv] using hcut
   have hu : 0 ≤ u := by linarith
-  have hedge : ((Lattice.edgeBoundary (AreaLaw.rectangularDomain L L) D).card : ℝ) ≤
+  have hedge : ((Lattice.edgeBoundary (ManyBody.rectangularDomain L L) D).card : ℝ) ≤
       16 * u + 4 := by
     linarith [AreaLaw.Geometry.card_edgeBoundary_closedSquareSample_le
-      (AreaLaw.rectangularDomain L L) z hr]
+      (ManyBody.rectangularDomain L L) z hr]
   refine (hbound.trans (mul_le_mul_of_nonneg_left hedge hCA)).trans ?_
   nlinarith [mul_le_mul_of_nonneg_right (le_max_right (1 : ℝ) (16 * C_A))
     (show 0 ≤ 1 + u by positivity)]
@@ -94,9 +95,10 @@ theorem SquareEntropyAreaLawAt.nestedPatch_entropy_le
     ∀ (L : ℕ) (Ω : StateSpace L q), G L Ω →
       ∀ (z : ℝ × ℝ) (u : ℝ), 0 ≤ u →
         ∀ j : Fin (AreaLaw.Geometry.nestedPatchCount u),
-          Entropy.regionEntropy
-            (AreaLaw.Geometry.nestedPatch (AreaLaw.rectangularDomain L L) z u j.val)
-            (AreaLaw.rectangleAreaLawState Ω) ≤ max 1 (16 * C_A) * (1 + u) := fun L Ω hΩ z u hu j ↦
+          ManyBody.regionEntropy
+            (AreaLaw.rectangleAreaLawState Ω)
+            (AreaLaw.Geometry.nestedPatch (ManyBody.rectangularDomain L L) z u j.val) ≤ max 1
+                (16 * C_A) * (1 + u) := fun L Ω hΩ z u hu j ↦
   hA.closedSquareSample_entropy_le L Ω hΩ z u _
     (hu.trans (AreaLaw.Geometry.le_nestedPatchRadius u j.val))
     (AreaLaw.Geometry.nestedPatchRadius_le_two_mul hu j.isLt)
@@ -115,9 +117,10 @@ theorem SquareEntropyAreaLaw.exists_nestedPatch_entropy_le
       ∀ (L : ℕ) (Ω : StateSpace L q), IsSquareGroundState q J Δ L Ω →
         ∀ (z : ℝ × ℝ) (u : ℝ), 0 ≤ u →
           ∀ j : Fin (AreaLaw.Geometry.nestedPatchCount u),
-            Entropy.regionEntropy
-              (AreaLaw.Geometry.nestedPatch (AreaLaw.rectangularDomain L L) z u j.val)
-              (AreaLaw.rectangleAreaLawState Ω) ≤ C_S * (1 + u) := by
+            ManyBody.regionEntropy
+              (AreaLaw.rectangleAreaLawState Ω)
+              (AreaLaw.Geometry.nestedPatch (ManyBody.rectangularDomain L L) z u j.val) ≤ C_S *
+                  (1 + u) := by
   obtain ⟨C_A, hA⟩ := harea.exists_squareEntropyAreaLawAt hq hJ hΔ
   exact ⟨max 1 (16 * C_A), le_max_left _ _, hA.nestedPatch_entropy_le⟩
 

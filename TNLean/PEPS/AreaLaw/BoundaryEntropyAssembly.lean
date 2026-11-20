@@ -3,7 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.EntropyDimension
+import TNLean.Lattice.MarginalTails
+import QICLean.Entropy.RegionEntropy
+import QICLean.Entropy.RegionUnion
+import TNLean.Lattice.RegionEntropyInequalities
 import TNLean.PEPS.AreaLaw.TwoFamilies
 
 /-!
@@ -40,15 +43,15 @@ theorem regionalEntropy_le_boundary_of_partition_estimates
     (Λ : Finset (ℤ × ℤ)) (q : ℕ) (hq : 1 ≤ q)
     (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
     (P : Geometry.OrderedTwoFamilyPartition A) (ε : Fin P.pieceCount → ℝ)
-    (hε : ∀ i, FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω (P.piece i)
+    (hε : ∀ i, ManyBody.regionMutualInformation Ω (P.piece i)
       (Aᶜ ∪ P.earlierSameFamily i) ≤ ε i)
     (cD cE : ℝ)
     (hD : (P.residual.card : ℝ) ≤ cD * (edgeBoundary Λ A).card)
     (hE : (∑ i, ε i) ≤ cE * (edgeBoundary Λ A).card) :
-    regionalEntropy Λ q Ω A ≤
+    ManyBody.regionEntropy Ω A ≤
       (cD * Real.log q + cE / 2) * (edgeBoundary Λ A).card := by
   have h := regionalEntropy_le_residual_add_half_sum Λ q Ω hΩ A P ε hε
-  have hdim := regionalEntropy_le_card_mul_log Λ q Ω hΩ P.residual
+  have hdim := ManyBody.regionEntropy_le_card_mul_log hΩ P.residual
   have hlog : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   have hD' := mul_le_mul_of_nonneg_right hD hlog
   have hE' := mul_le_mul_of_nonneg_left hE (by norm_num : (0 : ℝ) ≤ 1 / 2)

@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.RegionalEntropy
+import TNLean.Lattice.StateSpace
+import QICLean.ManyBody.Sites.RegionState
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!
@@ -11,7 +12,7 @@ import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 The constant is chosen before the finite domain, interaction family, ground
 vector, and cut. Regional entropy is the von Neumann entropy of the partial
-trace from `TNLean.Lattice.RegionalEntropy`. The target is a proposition; this
+trace, `ManyBody.regionEntropy`. The target is a proposition; this
 module does not assert that the area law has been proved.
 
 ## Main definitions
@@ -46,6 +47,6 @@ def UniformAreaLaw : Prop :=
         ∀ E₀ : ℝ, ∀ Ω : StateSpace Λ q,
           ‖Ω‖ = 1 → IsGapped h.hamiltonian E₀ Δ →
           groundSpace h.hamiltonian E₀ = Submodule.span ℂ {Ω} →
-            ∀ A : Finset (Site Λ), regionalEntropy Λ q Ω A ≤ C * (edgeBoundary Λ A).card
+            ∀ A : Finset (Site Λ), ManyBody.regionEntropy Ω A ≤ C * (edgeBoundary Λ A).card
 
 end TNLean.PEPS.AreaLaw

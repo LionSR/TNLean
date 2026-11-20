@@ -74,17 +74,17 @@ theorem relent_of_projectorFactorization
     (hfact : ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
       IsStarProjection OL ∧ IsStarProjection OR ∧ Commute OL OR ∧ ‖OB‖ ≤ 1 ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL SL ∧ SL ⊆ leftBlock L c ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR SR ∧ Disjoint SR (leftBlock L c) ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OB SB ∧ SB ⊆ interval L (c - l) (c + l) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L c ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L c) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ interval L (c - l) (c + l) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(l / ξ')))
     (hP : (cutProductState L q c Ω *
         vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))).trace.re ≤
       2 * (C₁ * Real.exp (-(l / ξ')))) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L (c - l) (c + l)) Ω ≤
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L (c - l) c) Ω +
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L c (c + l)) Ω -
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) (c + l)) ≤
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) c) +
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L c (c + l)) -
         (1 - 2 * ((2 * C₁) * Real.exp (-(l / ξ')))) * (l / ξ') + Real.log (2 * C₁) +
         relentConst := by
   obtain ⟨OB, OL, OR, SB, SL, SR, hOL, hOR, hcomm, hOB1, hSL, hSLc, hSR, hSRc, hSB, hSBi,
@@ -95,24 +95,22 @@ theorem relent_of_projectorFactorization
     simp only [A, B, mem_interval] at hi hj; omega
   have hU : A ∪ B = interval L (c - l) (c + l) := by
     ext i; simp only [A, B, Finset.mem_union, mem_interval]; omega
-  have hΔ : 0 ≤ Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω +
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) B Ω -
-      Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L (c - l) (c + l)) Ω := by
+  have hΔ : 0 ≤ ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A +
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω B -
+      ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) (c + l)) := by
     rw [← hU]
-    linarith [TNLean.Lattice.regionEntropy_union_le hΩ hAB]
+    linarith [ManyBody.regionEntropy_union_le _ Ω hΩ _ _ hAB]
   have hC₀ : 0 < C₁ := by linarith
   suffices h : (1 - 2 * (2 * C₁ * Real.exp (-(l / ξ')))) * (l / ξ') - Real.log (2 * C₁) -
-      relentConst ≤ Entropy.regionEntropy (n := fun _ : Fin L ↦ q) A Ω +
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) B Ω -
-        Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L (c - l) (c + l)) Ω by
+      relentConst ≤ ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω A +
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω B -
+        ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L (c - l) (c + l)) by
     linarith
   refine le_of_lindbladUhlmann hξ (Nat.cast_nonneg l) (by linarith) hΔ fun hsmall ↦ ?_
   set ε := C₁ * Real.exp (-(l / ξ')) with hεdef
   have hεeq : 2 * C₁ * Real.exp (-(l / ξ')) = 2 * ε := by rw [hεdef]; ring
   rw [hεeq] at hsmall ⊢
   have hε0 : 0 < ε := mul_pos hC₀ (Real.exp_pos _)
-  obtain ⟨σ₀, _⟩ := Function.ne_iff.mp
-    ((WithLp.ofLp_eq_zero (x := Ω)).not.mpr (norm_ne_zero_iff.mp (by simp [hΩ])))
   -- the projection `Z = O_L O_R` and the effect `E = O_Bᴴ O_B`
   have hZ : IsStarProjection (OL * OR) :=
     ⟨hOL.isIdempotentElem.mul_of_commute hcomm hOR.isIdempotentElem, by
@@ -126,14 +124,14 @@ theorem relent_of_projectorFactorization
     nlinarith [norm_nonneg OB]
   have hE1 : (1 - OBᴴ * OB).PosSemidef :=
     Matrix.le_iff.mp ((CStarAlgebra.norm_le_one_iff_of_nonneg _ hE.nonneg).mp hEn)
-  have hSBh : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OBᴴ SB :=
+  have hSBh : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OBᴴ SB :=
     ⟨fun σ τ ⟨v, hv, hne⟩ ↦ by
       rw [conjTranspose_apply, hSB.1 τ σ ⟨v, hv, hne.symm⟩, star_zero],
       fun σ τ σ' τ' h1 h2 h3 h4 ↦ by
         rw [conjTranspose_apply, conjTranspose_apply,
           hSB.2 τ σ τ' σ' h2 h1 (fun v hv ↦ (h3 v hv).symm) (fun v hv ↦ (h4 v hv).symm)]⟩
-  have hEsupp : Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) (OBᴴ * OB) (A ∪ B) :=
-    (hSBh.mul hSB σ₀).mono (hU ▸ hSBi)
+  have hEsupp : ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) (OBᴴ * OB) (A ∪ B) :=
+    (hSBh.mul hSB).mono (hU ▸ hSBi)
   -- the expectation of `E` in `Ω`
   have ha : (1 - 2 * ε) ^ 2 ≤ (⟪Ω, toEuclideanLin (OBᴴ * OB) Ω⟫_ℂ).re :=
     sq_one_sub_two_mul_le_re_inner_conjTranspose_mul hΩ hZ hOB1 (by linarith) hprodZ

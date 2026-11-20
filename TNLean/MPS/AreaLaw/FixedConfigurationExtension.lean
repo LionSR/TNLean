@@ -68,48 +68,48 @@ theorem IsOpenMPS.extend_interval_by_configuration {T L q D : ℕ}
     ext x y
     have hmatch :
         (fun w : {w : Fin T // ¬(a ≤ w.val ∧ w.val < a + L)} ↦
-          (Entropy.cutEquiv (fun _ : Fin T ↦ q) (leftBlock T j)).symm (x, y) w.val) = η
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock T j)).symm (x, y) w.val) = η
         ↔ P x ∧ Q y := by
       constructor
       · intro h
         constructor
         · intro w hw
           have he := congrFun h w
-          rw [Entropy.cutEquiv_symm_apply_mem (n := fun _ : Fin T ↦ q) x y hw] at he
+          rw [ManyBody.cutEquiv_symm_apply_mem (X := fun _ ↦ Fin q) x y hw] at he
           exact he
         · intro w hw
           have he := congrFun h w
-          rw [Entropy.cutEquiv_symm_apply_not_mem (n := fun _ : Fin T ↦ q) x y hw] at he
+          rw [ManyBody.cutEquiv_symm_apply_not_mem (X := fun _ ↦ Fin q) x y hw] at he
           exact he
       · rintro ⟨hp, hq⟩
         funext w
         by_cases hw : w.val ∈ leftBlock T j
-        · rw [Entropy.cutEquiv_symm_apply_mem (n := fun _ : Fin T ↦ q) x y hw]
+        · rw [ManyBody.cutEquiv_symm_apply_mem (X := fun _ ↦ Fin q) x y hw]
           exact hp w hw
-        · rw [Entropy.cutEquiv_symm_apply_not_mem (n := fun _ : Fin T ↦ q) x y hw]
+        · rw [ManyBody.cutEquiv_symm_apply_not_mem (X := fun _ ↦ Fin q) x y hw]
           exact hq w hw
     have hcore :
         (fun r : Fin L ↦
-          (Entropy.cutEquiv (fun _ : Fin T ↦ q) (leftBlock T j)).symm (x, y)
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock T j)).symm (x, y)
             ⟨a + r.val, by omega⟩) =
-          (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L k)).symm (f x, g y) := by
+          (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L k)).symm (f x, g y) := by
       funext r
       by_cases hr : r ∈ leftBlock L k
       · have hv : (⟨a + r.val, by omega⟩ : Fin T) ∈ leftBlock T j :=
           mem_leftBlock.mpr ((hcut r).mp (mem_leftBlock.mp hr))
-        rw [Entropy.cutEquiv_symm_apply_mem (n := fun _ : Fin T ↦ q) x y hv,
-          Entropy.cutEquiv_symm_apply_mem (n := fun _ : Fin L ↦ q) (f x) (g y) hr]
+        rw [ManyBody.cutEquiv_symm_apply_mem (X := fun _ ↦ Fin q) x y hv,
+          ManyBody.cutEquiv_symm_apply_mem (X := fun _ ↦ Fin q) (f x) (g y) hr]
       · have hv : (⟨a + r.val, by omega⟩ : Fin T) ∉ leftBlock T j := by
           intro hv
           exact hr (mem_leftBlock.mpr ((hcut r).mpr (mem_leftBlock.mp hv)))
-        rw [Entropy.cutEquiv_symm_apply_not_mem (n := fun _ : Fin T ↦ q) x y hv,
-          Entropy.cutEquiv_symm_apply_not_mem (n := fun _ : Fin L ↦ q) (f x) (g y) hr]
+        rw [ManyBody.cutEquiv_symm_apply_not_mem (X := fun _ ↦ Fin q) x y hv,
+          ManyBody.cutEquiv_symm_apply_not_mem (X := fun _ ↦ Fin q) (f x) (g y) hr]
     rw [Matrix.mul_diagonal, Matrix.diagonal_mul, cutMatrix_apply]
     change (if
       (fun w : {w : Fin T // ¬(a ≤ w.val ∧ w.val < a + L)} ↦
-        (Entropy.cutEquiv (fun _ : Fin T ↦ q) (leftBlock T j)).symm (x, y) w.val) = η
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock T j)).symm (x, y) w.val) = η
       then ψ (fun r : Fin L ↦
-        (Entropy.cutEquiv (fun _ : Fin T ↦ q) (leftBlock T j)).symm (x, y)
+        (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock T j)).symm (x, y)
           ⟨a + r.val, by omega⟩) else 0) =
         (if P x then 1 else 0) * (cutMatrix ψ k) (f x) (g y) * (if Q y then 1 else 0)
     simp only [hmatch, hcore, cutMatrix_apply]

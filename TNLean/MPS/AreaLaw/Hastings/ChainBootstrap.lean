@@ -42,23 +42,24 @@ variable {L q : ℕ}
 /-- In cut coordinates the inner product of two chain vectors is the dot product of their
 reindexed coefficient vectors. -/
 theorem star_cutVector_dotProduct (j : ℕ) (x y : EuclideanSpace ℂ (Fin L → Fin q)) :
-    star (WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L j) x)) ⬝ᵥ
-        WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L j) y) =
+    star (WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) x)) ⬝ᵥ
+        WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) y) =
       ⟪x, y⟫_ℂ := by
   rw [EuclideanSpace.inner_eq_star_dotProduct]
   simp only [dotProduct]
-  rw [← Equiv.sum_comp (Entropy.cutEquiv (fun _ : Fin L ↦ q) (leftBlock L j)).symm]
+  rw [← Equiv.sum_comp (ManyBody.cutEquiv (fun _ ↦ Fin q) (leftBlock L j)).symm]
   exact Finset.sum_congr rfl fun _ _ ↦ mul_comm _ _
 
 /-- The entropy of the first `j` sites is the entropy of `C Cᴴ`, where `C` is the cut matrix
 across the cut after `j` sites. -/
 theorem regionEntropy_interval_eq (j : ℕ) (Ω : EuclideanSpace ℂ (Fin L → Fin q)) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 j) Ω =
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) =
       _root_.vonNeumannEntropy (cutMatrix Ω j * (cutMatrix Ω j)ᴴ)
         (posSemidef_self_mul_conjTranspose (cutMatrix Ω j)).isHermitian := by
   rw [← leftBlock_eq_interval]
-  unfold Entropy.regionEntropy ManyBody.regionEntropy ManyBody.regionState ManyBody.cutVector
-  exact vonNeumannEntropy_congr (partialTraceRight_vecMulVec_eq _) _ _
+  unfold ManyBody.regionEntropy
+  exact vonNeumannEntropy_congr ((ManyBody.regionState_eq_partialTraceRight_cutVector _ _).trans
+    (partialTraceRight_vecMulVec_eq _)) _ _
 
 /-- If `j + s` exceeds the length of the chain, the cut matrix after `j` sites has rank at most
 `q^{2s}`: it has at most `q^{L - j}` columns. -/
@@ -83,9 +84,9 @@ theorem exists_mixture_rank_cutMatrix_le_overlap_of_factorization (hq : 1 ≤ q)
     {Ω : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Ω‖ = 1) (j : ℕ) {ξ' C₁ : ℝ}
     (hfact : ∀ m : ℕ, j + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL SL ∧ SL ⊆ leftBlock L j ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L j ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')))
     {k r : ℕ} (hk : 1 ≤ k) (w : Fin r → ℝ) (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q))
@@ -159,21 +160,21 @@ theorem entropy_le_of_overlap_schmidtRank_mixture_of_factorization (hq : 2 ≤ q
     (hC₁ : 1 ≤ C₁)
     (hfact : ∀ m : ℕ, j + m ≤ L → ∃ (OB OL OR : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)
       (SB SL SR : Finset (Fin L)),
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OL SL ∧ SL ⊆ leftBlock L j ∧
-      Entropy.IsSupportedOn (n := fun _ : Fin L ↦ q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OB SB ∧ SB ⊆ leftBlock L (j + m) ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OL SL ∧ SL ⊆ leftBlock L j ∧
+      ManyBody.IsSupportedOn (X := fun _ ↦ Fin q) OR SR ∧ Disjoint SR (leftBlock L j) ∧
       ‖OB * OL * OR - vecMulVec (WithLp.ofLp Ω) (star (WithLp.ofLp Ω))‖ ≤
         C₁ * Real.exp (-(m / ξ')))
     {k r : ℕ} (hk : 1 ≤ k) (w : Fin r → ℝ) (ψ : Fin r → EuclideanSpace ℂ (Fin L → Fin q))
     (hw : ∀ i, 0 ≤ w i) (hrank : ∀ i, (cutMatrix (ψ i) j).rank ≤ k)
     (hnorm : ∑ i, w i * ‖ψ i‖ ^ 2 = 1) {P : ℝ} (hP : 0 < P)
     (hPdef : ∑ i, w i * ‖⟪ψ i, Ω⟫_ℂ‖ ^ 2 = P) :
-    Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (interval L 0 j) Ω ≤
+    ManyBody.regionEntropy (X := fun _ ↦ Fin q) Ω (interval L 0 j) ≤
       Real.log k + ξ' * Real.log (2 * C₁ ^ 2 / P) * Real.log q + bootstrapRemainder ξ' q := by
   classical
   have hq1 : 1 ≤ q := by omega
   set cv : EuclideanSpace ℂ (Fin L → Fin q) → _ := fun x ↦
-    WithLp.ofLp (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L j) x) with hcv
+    WithLp.ofLp (ManyBody.cutVector (X := fun _ ↦ Fin q) (leftBlock L j) x) with hcv
   have hdot : ∀ x y, star (cv x) ⬝ᵥ cv y = ⟪x, y⟫_ℂ := fun x y ↦ star_cutVector_dotProduct j x y
   have hnormsq : ∀ x : EuclideanSpace ℂ (Fin L → Fin q), (star (cv x) ⬝ᵥ cv x).re = ‖x‖ ^ 2 := by
     intro x
