@@ -2161,14 +2161,14 @@ in `MPS/Preparation/` uses it.
   `IsLocalChannelProtocol.channelCircuitMap_comp` (appending a local channel
   circuit of `n` layers adds `n` to the depth), and
   `IsLocalChannelProtocol.exists_dual` (light cone of radius `T` of the
-  Heisenberg dual). Grouping `k` consecutive sites is stated in QICLean for
-  its protocol predicate `QuantumCircuit.IsProtocol`: with
-  `QuantumCircuit.Geometry.ringBlocking`, `QuantumCircuit.IsProtocol.block`
-  gives depth at most `2T` for even block counts and `3T` in general, with
-  exact equality on all operators, for nonempty input bases; it carries no
-  bound on the regrouped local dimensions. `QuantumCircuit.IsConversion.block_trans`
-  composes an unblocked conversion followed by a blocked conversion with
-  bound `2T+U` or `3T+U`.
+  Heisenberg dual). Grouping `k` consecutive sites is QICLean's
+  `QuantumCircuit.IsProtocol.block` with `QuantumCircuit.Geometry.ringBlocking`:
+  for positive block count and nonempty input bases it gives depth at most
+  `2T` for even block counts and `3T` in general, with exact equality on all
+  operators. No dimension bound is carried through the blocking.
+  `QuantumCircuit.IsConversion.block_trans` composes an unblocked conversion
+  followed by a blocked conversion with bound `2T+U` or `3T+U`; the
+  two-block bound is `2T`.
 - **Caveat:** the depth `T` counts the two-site layers exactly; onsite channels
   are free. Onsite channels may enlarge the dimension, and a layer on the
   enlarged sites still costs one depth unit. No uniform intermediate-dimension

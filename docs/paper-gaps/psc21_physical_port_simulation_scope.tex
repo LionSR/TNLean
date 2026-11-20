@@ -70,11 +70,12 @@ physical depth at most
     2k & =2\lceil\log_d B\rceil,
 \end{align}
 independently of $N$ and the number of selected bonds. Products of $L$
-such certified layers have depth at most $2kL$.\footnote{In QICLean the
-    routing of one layer is part of \leanid{QuantumCircuit.Layer.exists_portRing}
-    in \path{QICLean/Circuit/Compile/Port}, stated for a unitary dilation of
-    the routed layer; the channel form of this paragraph is not stated
-    separately.}
+such certified layers have depth at most $2kL$.\footnote{Formal declarations:
+    \leanid{QuantumCircuit.Layer.exists_portRing} and
+    \leanid{QuantumCircuit.IsBoundedProtocol.exists_portRing} in QICLean's
+    \path{QICLean/Circuit/Compile/Port} and
+    \path{QICLean/Circuit/Compile/PortProtocol}, on the ring with physical
+    ports \leanid{QuantumCircuit.Geometry.portRing}.}
 For $B=1$, the data register has zero qudits and the bound is zero.
 
 \section{Why the communication cost is uniform}
@@ -271,11 +272,14 @@ $\eta=\phi^\dagger C$ every coefficient is $C_{s,e}=\phi_s\eta_e$. Taking
 the trace of~(\ref{eq:scope_pure_output_marginal}) gives
 $\langle\eta,\eta\rangle=\operatorname{tr}P=\langle\phi,\phi\rangle=1$.
 The unitary, spatial ownership, physical ports and intersite-depth bound
-are those of~(\ref{eq:scope_deferred_dilation}).\footnote{Formal theorem:
-    \leanid{QuantumCircuit.Circuit.exists_unit_product_approx} at $\varepsilon=0$,
-    in QICLean's \path{QICLean/Circuit/Compile/DilationOutput}, for any unitary
-    dilation with environments prepared in a basis vector. The statement about
-    the environment-column operators below is not formalized.}
+are those of~(\ref{eq:scope_deferred_dilation}).\footnote{Formal theorems:
+    \leanid{QuantumCircuit.Circuit.exists_unit_product_approx} at
+    $\varepsilon=0$, applied to the same-depth unitary dilation
+    \leanid{QuantumCircuit.IsProtocol.isUnitaryDilation} of a protocol on
+    \leanid{QuantumCircuit.Geometry.portRing}, in QICLean's
+    \path{QICLean/Circuit/Compile/DilationOutput} and
+    \path{QICLean/Circuit/Compile/Dilation}. The branch statement below is
+    not formalized.}
 The environment may remain internally entangled and need not reset to zero.
 The environment-column operators also realize the channel, and each
 branch sends the input vector to its environment amplitude times the target
@@ -283,8 +287,9 @@ vector. Their amplitudes are normalized, so every branch of nonzero probability
 has the same pure system state. This does not supply a source QCcc control
 order or a fixed number of blocks.
 
-This exact pure-output result supplies no general approximation estimate or
-source QCcc block/control decomposition.
+The same projection gives the approximate estimate of the section on
+approximate pure outputs below. Neither result supplies a source QCcc
+block/control decomposition.
 
 
 \section{Pure native input and output on their original ports}
@@ -309,11 +314,12 @@ normalized environment are derived, not supplied as additional premises.
 The designated memory is zero in the final vector, while the
 additional environment need not reset or factor over sites. The dimension
 bound must be fixed independently of the chain length in a
-family.\footnote{This original-port form is not formalized. Applying
-    \leanid{QuantumCircuit.Circuit.exists_unit_product_approx} at $\varepsilon=0$
-    to the dilation of \leanid{QuantumCircuit.IsBoundedProtocol.exists_portRing}
-    gives the same identity with the data code in place of $V_{\rm port}$; it is
-    not stated as a separate declaration.}
+family.\footnote{No single formal theorem states this identity. Its
+    ingredients are \leanid{QuantumCircuit.IsBoundedProtocol.exists_portRing},
+    \leanid{QuantumCircuit.IsProtocol.isUnitaryDilation} and
+    \leanid{QuantumCircuit.Circuit.exists_unit_product_approx} in QICLean's
+    \path{QICLean/Circuit/Compile}; their composition with the port
+    isometry is not stated.}
 It does not settle the adaptive block count, measurement/control order,
 approximate pure-output estimates or unrestricted enlarged-site comparison.
 
@@ -339,12 +345,13 @@ forces $\varepsilon\ge1$ and is included.
 
 The generic finite-dimensional estimate is
 \leanid{Matrix.exists_unit_product_approx_of_pure_marginal} in QICLean's
-\path{QICLean/Channel/PureMarginalApproximation}, and its form for a unitary
-dilation is \leanid{QuantumCircuit.Circuit.exists_unit_product_approx} in
-\path{QICLean/Circuit/Compile/DilationOutput}. Applied to the dilation of
-\leanid{QuantumCircuit.IsBoundedProtocol.exists_portRing}, it gives the estimate
-with the data code in place of $V_{\rm port}$; the original-port form is not
-formalized. The estimate supplies neither environment
+\path{QICLean/Channel/PureMarginalApproximation}, and its reading on a
+unitary dilation is \leanid{QuantumCircuit.Circuit.exists_unit_product_approx}
+in QICLean's \path{QICLean/Circuit/Compile/DilationOutput}. The
+specialization to the bounded compiler and the port isometry is obtained by
+composing it with \leanid{QuantumCircuit.IsBoundedProtocol.exists_portRing}
+and \leanid{QuantumCircuit.IsProtocol.isUnitaryDilation}; no single formal
+theorem states it. The estimate supplies neither environment
 reset nor source adaptive measurement/control or block-count conditions.
 
 \section{Remaining comparison and source conditions}

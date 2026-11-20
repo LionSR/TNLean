@@ -80,19 +80,19 @@ chain~\cite[\texttt{main.tex}, line 289]{Piroli2021LOCC}.
 Blocking itself is a relabelling of the computational basis. It is a
 unitary channel and is formalized as a step of depth zero. A blocked
 conversion first blocks $k$ sites and then runs a local channel protocol of
-depth at most $T$ on the chain of blocks.\footnote{Formal declarations:
-    the blocking is \leanid{ManyBody.blockConfigEquiv} in QICLean's
-    \path{QICLean/ManyBody/Sites/Block}, and the blocked conversion is
-    \leanid{QuantumCircuit.IsConversion} applied to the blocked input.}
+depth at most $T$ on the chain of blocks.\footnote{Formal declarations: the
+    relabelling \leanid{ManyBody.blockConfigEquiv} and the light cone
+    \leanid{QuantumCircuit.IsProtocol.traceAdjointMap_comp_block_mem_supportedOperators_ringBall}
+    in QICLean's \path{QICLean/ManyBody/Sites/Block} and
+    \path{QICLean/Circuit/Model/Conversion}; the blocked conversion is a
+    conversion of the relabelled matrix and has no separate predicate.}
 The blocking factor $k$ is part of the relation: blocking the whole chain
 into one site and applying a replacement channel there would convert every
 density matrix into every other one at depth zero. As in the source, the
 blocking factor is positive. Locality is transported by
 rescaling: the dual of such a conversion maps an operator acting on a set
 $X$ of blocks to an operator acting within distance $kT$ of the sites of
-$X$ in the original chain.\footnote{Formal declaration:
-    \leanid{QuantumCircuit.IsProtocol.traceAdjointMap_comp_block_mem_supportedOperators_ringBall}
-    in QICLean's \path{QICLean/Circuit/Model/Conversion}.}
+$X$ in the original chain.
 
 As in the enlarged-site model above, one layer of two-site channels on the
 blocked chain costs one depth unit. The source's compilation of a blocked
@@ -103,13 +103,14 @@ conversion is asserted.
 \section{Regrouping an existing local channel protocol}
 For $M,k,d\ge1$ there is an internal comparison in the enlarged-site model: a depth-$T$
 protocol on $Mk$ sites can be regrouped into $M$ sites with exactly the
-conjugated channel on every input operator.\footnote{Formal declarations:
-    \leanid{QuantumCircuit.IsProtocol.block} with the blocking
+conjugated channel on every input operator.\footnote{Formal
+    declarations: \leanid{QuantumCircuit.IsProtocol.block} with
     \leanid{QuantumCircuit.Geometry.ringBlocking} in QICLean's
-    \path{QICLean/Circuit/Compile/Block} and \path{QICLean/Circuit/Geometry/Ring}.}
-The formal statement records no bound on the regrouped local dimensions: the
-bound $B^k$ that follows from a bound $B$ on every intermediate local
-dimension is not formalized.
+    \path{QICLean/Circuit/Compile/Block} and
+    \path{QICLean/Circuit/Geometry/Ring}.}
+No bound on the regrouped local dimensions is carried; if every
+intermediate local dimension is at most $B$, the regrouped ones are at most
+$B^k$, but no statement records this.
 
 The resulting depth is at most $2T$ for even $M$ and $3T$ in general.
 The original gates whose left sites belong to one block are composed into

@@ -10229,6 +10229,19 @@ there is no need for a new tactic.
   rectangular block multiplication identity at its generic matrix owner in
   QICLean, and retain the actual MPU source-specific wrappers here.
 
+### Pure output Gram projection — library zero criterion (2026-10-29)
+
+- **Seen:** `Circuit/Channel/PhysicalPortPureOutput.lean`; moved to QICLean, where
+  the exact case is `QuantumCircuit.Circuit.exists_unit_product_approx` at `ε = 0`
+  in `QICLean/Circuit/Compile/DilationOutput.lean`.
+- **Pattern:** A pure marginal gives C*C†=P with P²=P; derive that every
+  actual output column is fixed by P before extracting its environment factor.
+- **Reuse:** Mathlib's `Matrix.mul_self_mul_conjTranspose_eq_zero` turns
+  (1-P)*(C*C†)=0 directly into (1-P)*C=0. Existing vector outer-product and
+  partial-trace identities give the factorization and its normalization.
+- **Decision:** Use the positive Gram zero criterion rather than add a parallel
+  purification structure or assume system/environment decoupling.
+
 ### Prescribed coordinates of a commuting-factor product — promoted (2026-10-29)
 
 - **Seen:** the two actual adjacent support-factor presentations and the
@@ -11763,6 +11776,19 @@ removed after the dependency audit exposed it.
   separately stacked branches; consolidate into a shared lemma before a third
   proof copy, without duplicating a generic channel contractivity theory.
 
+
+### Pure output under an explicit product code — retired (2026-10-29)
+
+- **Seen:** the local `hPure` facts in `Circuit/Channel/BoundedPortPureOutput.lean`
+  and `Circuit/Channel/BoundedPortApproximateOutput.lean`. Both modules were
+  deleted when the port chain moved to QICLean, so no occurrence remains.
+- **Pattern:** identify the actual initialized pure projector with the projector
+  of its encoded vector using `Matrix.mul_vecMulVec`, `Matrix.vecMulVec_mul`
+  and `Matrix.star_mulVec`; normalize the target through the code isometry.
+- **Decision:** two occurrences across two files are below the rule of three.
+  Reuse the existing matrix identities and `Matrix.initializedBasisMatrix_isIsometry`.
+  Before adding a third copy, expose the pure-initialization identity at the
+  existing product-code owner. No verified parent module is refactored here.
 
 ### Rescaling an existing favorable parameter theorem — existing lemma (2026-10-29)
 

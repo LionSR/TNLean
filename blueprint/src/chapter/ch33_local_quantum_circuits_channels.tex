@@ -215,8 +215,8 @@ change the local dimension act on single sites.
 \begin{definition}[Blocked local channel conversion]
     \label{def:qc_blocked_local_channel_conversion}
     \uses{def:qc_local_channel_conversion}
-    \lean{ManyBody.blockPreimage, ManyBody.blockSystem,
-        ManyBody.blockConfigEquiv, QuantumCircuit.IsConversion}
+    \lean{ManyBody.blockSystem, ManyBody.blockConfigEquiv,
+        ManyBody.reindex_blockConfigEquiv_symm_prodOp}
     \leanok
     Following~\cite{Piroli2021LOCC}, grouping $k\ge1$ consecutive sites $jk,\dots,jk+k-1$ of an $Mk$-site ring of local dimension $d$ into block $j\in\Z_M$ of dimension $d^k$ defines the $*$-isomorphism
     \begin{align}
@@ -230,40 +230,56 @@ change the local dimension act on single sites.
     \label{lem:qc_blocking_supports}
     \uses{def:qc_blocked_local_channel_conversion}
     \lean{ManyBody.reindex_blockConfigEquiv_place,
-        ManyBody.reindex_blockConfigEquiv_symm_prodOp,
         ManyBody.exists_eq_place_of_mem_supportedOperators,
-        ManyBody.place_mem_supportedOperators,
-        ManyBody.trace_prodOp,
         ManyBody.preimage_ringBall_subset}
     \leanok
-    Let $\pi_k\colon\Z_{Mk}\to\Z_M$ map $jk+t\mapsto j$ ($0\le t<k$). Then $Z\in\mathcal A_{\pi_k^{-1}(Y)}\implies\beta_k(Z)\in\mathcal A_Y$, $W\in\mathcal A_X\implies\beta_k^{-1}(W)\in\mathcal A_{\pi_k^{-1}(X)}$, $\beta_k$ maps product operators to the products over the blocks of the blockwise products, the trace of a product operator is the product of the traces, and $\pi_k^{-1}(\mathcal L_r(X))\subseteq\mathcal L_{kr}(\pi_k^{-1}(X))$.
+    Let $\pi_k\colon\Z_{Mk}\to\Z_M$ map $jk+t\mapsto j$ ($0\le t<k$). An operator $K$ placed on a
+    set $Y$ of blocks is, under $\beta_k^{-1}$, the same operator placed on the sites
+    $\pi_k^{-1}(Y)$. Hence $Z\in\mathcal A_{\pi_k^{-1}(Y)}\iff\beta_k(Z)\in\mathcal A_Y$, and
+    $\pi_k^{-1}(\mathcal L_r(X))\subseteq\mathcal L_{kr}(\pi_k^{-1}(X))$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Every operator supported on a region is placed on it, and blocking commutes with placement, an operator placed on a set of blocks being the operator placed on the preimage of that set. On product generators, $\beta_k$ groups factors blockwise. Finally, $(j+m)k+t=(jk+t)+km\pmod{Mk}$ with $|km|\le kr$ for $|m|\le r$.
+    A configuration of the blocks of $Y$ is a configuration of the sites of $\pi_k^{-1}(Y)$, so
+    placing $K$ on $Y$ and relabelling the basis gives $K$ placed on $\pi_k^{-1}(Y)$. Every
+    operator supported on a region is a placed operator on that region, and every placed operator
+    is supported there. Finally, $(j+m)k+t=(jk+t)+km\pmod{Mk}$ with $|km|\le kr$ for $|m|\le r$.
 \end{proof}
 
 \begin{lemma}[Light cone and correlations after blocking]
     \label{lem:qc_blocked_conversion_light_cone}
     \uses{def:qc_blocked_local_channel_conversion, lem:qc_blocking_supports,
-        lem:qc_protocol_light_cone, lem:qc_local_channel_conversion_correlations}
+        lem:qc_protocol_light_cone, lem:qc_local_channel_conversion_correlations,
+        lem:qc_local_channel_conversion_properties,
+        lem:qc_local_channel_conversion_trans}
     \lean{QuantumCircuit.IsProtocol.traceAdjointMap_comp_block_mem_supportedOperators_ringBall,
         QuantumCircuit.IsProtocol.traceAdjointMap_comp_block_mul,
         QuantumCircuit.Geometry.iterate_neighbourhood_ring,
-        QuantumCircuit.IsConversion.trace_mul_mul_eq_of_isRingSeparated}
+        ManyBody.trace_prodOp}
     \leanok
-    Let $\Psi$ be a depth-$T$ local channel protocol on the blocked ring. Then $(\Psi\circ\beta_k)^\dagger$ maps $\mathcal A_X$ ($X\subseteq\Z_M$) into $\mathcal A_{\mathcal L_{kT}(\pi_k^{-1}(X))}$ and is multiplicative on block sets $X,Y$ with $\mathcal L_T(X)\cap\mathcal L_T(Y)=\varnothing$. If $\sigma$ is converted in depth $T$ after blocking from $\rho=\bigotimes_{i=0}^{Mk-1}\sigma_i$ ($\Tr\sigma_i=1$), then $Z\in\mathcal A_X$, $Z'\in\mathcal A_{X'}$ with $d_{\rm ring}(X,X')>2T$ satisfy $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$.
+    Let $\Psi$ be a local channel protocol of depth $T$ on the blocked ring $\Z_M$. The dual of
+    $\Psi\circ\beta_k$ maps $\mathcal A_X$ ($X\subseteq\Z_M$) into
+    $\mathcal A_{\mathcal L_{kT}(\pi_k^{-1}(X))}$ and is multiplicative on block sets $X,Y$ with
+    $\mathcal L_T(X)\cap\mathcal L_T(Y)=\varnothing$; on the ring, the $T$-fold neighbourhood of a
+    set is its ball of radius $T$. For $\rho=\bigotimes_{i=0}^{Mk-1}\sigma_i$ with
+    $\Tr\sigma_i=1$, the blocked matrix $\beta_k(\rho)$ is a product over the blocks of factors of
+    unit trace, so Lemma~\ref{lem:qc_local_channel_conversion_correlations} applies to it on the
+    blocked ring: if $\sigma$ is converted in depth $T$ after blocking from $\rho$ and
+    $Z\in\mathcal A_X$, $Z'\in\mathcal A_{X'}$ with $d_{\rm ring}(X,X')>2T$, then
+    $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Apply Lemma~\ref{lem:qc_protocol_light_cone} on the blocked ring and pull the supports back along $\beta_k$ with Lemma~\ref{lem:qc_blocking_supports}. For the correlations, $\beta_k(\rho)=\bigotimes_j(\sigma_{jk}\otimes\cdots\otimes\sigma_{jk+k-1})$ is a product of unit-trace factors on the blocked ring, so Lemma~\ref{lem:qc_local_channel_conversion_correlations} applies there.
+    Combine Lemma~\ref{lem:qc_protocol_light_cone} on the blocked ring with the support
+    preservation of $\beta_k$ from Lemma~\ref{lem:qc_blocking_supports}. The trace of a tensor
+    product is the product of the traces, and $\beta_k$ groups the factors of $\rho$ blockwise by
+    Definition~\ref{def:qc_blocked_local_channel_conversion}.
 \end{proof}
 
 \begin{lemma}[Matching schedules after grouping sites]
     \label{lem:qc_regrouped_matching_schedule}
     \uses{def:qc_blocked_local_channel_conversion}
-    \lean{QuantumCircuit.Geometry.Blocking,
-        QuantumCircuit.Geometry.ringBlocking}
+    \lean{QuantumCircuit.Geometry.ringBlocking}
     \leanok
     Let $M,k\ge1$. Every original bond $\{i,i+1\}$ lies in the union of blocks
     $\pi_k(i)$ and $\pi_k(i)+1$. Color the block bond $j\to j+1$ by $j\bmod2$,
@@ -279,29 +295,32 @@ change the local dimension act on single sites.
 
 \begin{definition}[Regrouped channels]
     \label{def:qc_regrouped_channel}
-    \uses{def:qc_blocked_local_channel_conversion}
+    \uses{def:qc_blocked_local_channel_conversion, def:qc_local_channel_circuit}
     \lean{QuantumCircuit.Layer.exists_coarsen}
     \leanok
     Write $\beta_{k,d}$ for blocking $k$ sites of local dimension $d$.
     For a linear map $\Psi$ from $Mk$ sites of dimension $d$ to $Mk$ sites of
     dimension $e$, set $\widetilde\Psi=\beta_{k,e}\circ\Psi\circ\beta_{k,d}^{-1}$.
     Then $\widetilde\Psi\circ\beta_{k,d}=\beta_{k,e}\circ\Psi$ on every operator.
-    An onsite channel regroups into the onsite channel whose
-    map at block $j$ is the tensor product of its $k$ original site maps, with the
-    corresponding basis relabelling.
+    Let $L$ be a channel layer each of whose bonds lies, after grouping, in a
+    bond of blocks, distinct covering bonds being disjoint. Then $\widetilde L$ is
+    a channel layer on the blocks with the covering bonds, trace preserving when
+    $L$ is. Its map on a covering bond is the product of the maps of $L$ on the
+    bonds it covers and of the onsite maps at the remaining sites of its blocks;
+    at a block met by no covering bond it is the tensor product of the $k$
+    original onsite maps, with the corresponding basis relabelling.
 \end{definition}
 
-\begin{lemma}[Depth bounds for regrouped protocols]
+\begin{lemma}[Depth and dimension bounds for regrouped protocols]
     \label{lem:qc_regrouped_protocol}
     \uses{def:qc_regrouped_channel, lem:qc_regrouped_matching_schedule,
         def:qc_local_channel_conversion}
-    \lean{QuantumCircuit.Layer.exists_coarsen,
-        QuantumCircuit.IsProtocol.block}
+    \lean{QuantumCircuit.IsProtocol.block}
     \leanok
     Let $M,k\ge1$ and $d\ge1$. A depth-$T$ local channel protocol on $Mk$ sites
     has a regrouped protocol of depth at most $C(M)T$, where $C(M)=2$ for even
-    $M$ and $C(M)=3$ for odd $M$. Onsite operations cost zero depth. For $M=2$ the bound is
-    $2T$, including both orientations of the periodic bond.
+    $M$ and $C(M)=3$ for odd $M$. Onsite operations cost zero depth. For $M=2$
+    the bound is $2T$, including both orientations of the periodic bond.
     These are enlarged-site channel costs; the fixed physical-port comparison in
     the source is separate~\cite[Appendix E]{Piroli2021LOCC}.
 \end{lemma}
@@ -315,6 +334,7 @@ change the local dimension act on single sites.
     Lemma~\ref{lem:qc_regrouped_matching_schedule}. Original matching channels
     commute, so regrouping their products preserves the entire channel.
     Induct on protocol composition, regrouping each onsite map blockwise.
+    The depths add.
 \end{proof}
 
 \begin{corollary}[An unblocked conversion followed by a blocked conversion]
