@@ -78,8 +78,8 @@ choice functions `J`.
 Approximate conversions in trace norm and mutual asymptotic conversion in polylogarithmic
 depth are QICLean's `QuantumCircuit.IsApproxConversion` and
 `QuantumCircuit.IsAsymptoticConversion` at the ring geometry. Blocking
-a fixed number of sites into one, which changes the number of sites, is treated in
-`TNLean.Circuit.Channel.SiteBlocking`.
+a fixed number of sites into one, which changes the number of sites, is QICLean's
+`QuantumCircuit.IsConversion.block_trans` with `Geometry.ringBlocking`.
 Finite adaptive channels on arbitrary inputs and their composition are treated separately
 in `TNLean.Circuit.Measurement.AdaptiveConversion`. That model still lacks a fixed-number
 source `QCcc` block decomposition and a uniform physical gate-cost comparison.
