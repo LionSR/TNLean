@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.Lattice.RegionalEntropyBridge
-import TNLean.Lattice.ZeroEntropy
+import QICLean.Entropy.ZeroEntropy
 import TNLean.Lattice.RegionEntropyInequalities
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
@@ -154,9 +154,9 @@ theorem regionalEntropy_eq_zero_of_forall_subset_or_disjoint (h : PlaneInteracti
     (hsplit : ∀ X : AdmissibleSupport Λ R, X.1 ⊆ A ∨ Disjoint X.1 A) :
     regionalEntropy Λ q Ω A = 0 := by
   rw [regionalEntropy_eq_regionEntropy]
-  exact regionEntropy_eq_zero_of_forall_subset_or_disjoint
-    (fun X ↦ (h.mem X))
-    hh hΔ hΩ hgap hspan A hsplit
+  exact (ManyBody.regionEntropy_eq_entropy _ _).trans
+    (ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint (Φ := h) hh hΔ hΩ hgap
+      hspan (B := A) hsplit)
 
 /-- **A cut with no crossing edge** (area-law preprint, Lemma 2.2,
 `lem:zero-boundary`, `01-preliminaries.tex` lines 123–134). Under the
@@ -193,7 +193,7 @@ theorem regionalEntropy_eq_zero_of_range_eq_zero (h : PlaneInteraction Λ q 0)
 theorem trace_reducedState (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ)) :
     (reducedState Λ q Ω A).trace = 1 := by
   rw [reducedState_eq_regionState]
-  exact Entropy.trace_regionState_eq_one hΩ
+  exact ((ManyBody.trace_regionState _ _).trans (by simp [hΩ]))
 
 /-- A regional entropy vanishes when the regional configuration space has at
 most one element. -/

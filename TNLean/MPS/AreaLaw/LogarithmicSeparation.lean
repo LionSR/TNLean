@@ -131,7 +131,7 @@ theorem _root_.ManyBody.ChainInteraction.mutualInformation_le_of_logarithmic_sep
   have hMI : FiniteProduct.mutualInformation (fun _ : Fin L ↦ Fin q) Ω D C ≤ b := by
     have hbound := FiniteProduct.mutualInformation_le_two_entropy
       (fun _ : Fin L ↦ Fin q) Ω hΩ D C hDC
-    rw [← Entropy.regionEntropy_eq_entropy] at hbound
+    rw [← ManyBody.regionEntropy_eq_entropy] at hbound
     dsimp only [b]
     nlinarith only [hbound, hD, mul_nonneg hk₀r hc]
   exact hreset L ((le_max_left _ _).trans hL) h hh hhJ Ω E₀ hΩ hgap hspan

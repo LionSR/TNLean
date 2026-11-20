@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Lattice.DisjointRegionalGround
+import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 
 /-!
 # Ground energies when two disjoint regions are joined
@@ -48,7 +48,8 @@ theorem exists_disjoint_regional_energy_merge {L q : ℕ}
     simpa only [Algebra.algebraMap_eq_smul_one] using
       (CStarAlgebra.norm_le_iff_le_algebraMap D (by positivity) hD.nonneg).mp (Nat.le_ceil ‖D‖)
   obtain ⟨e, x, hx, hxe, he, hclip⟩ :=
-    exists_disjoint_regional_clipping_structure hq ![S, T] ![A, B] ![⌈‖A‖⌉₊, ⌈‖B‖⌉₊]
+    (haveI : NeZero q := ⟨hq.ne'⟩
+      ManyBody.exists_disjoint_regional_clipping_structure (X := fun _ ↦ Fin q)) ![S, T] ![A, B] ![⌈‖A‖⌉₊, ⌈‖B‖⌉₊]
       (by intro i j hij; fin_cases i <;> fin_cases j <;> simp_all [disjoint_comm])
       (by intro i; fin_cases i <;> simpa using (by assumption))
       (by intro i; fin_cases i <;> simpa using (by assumption))

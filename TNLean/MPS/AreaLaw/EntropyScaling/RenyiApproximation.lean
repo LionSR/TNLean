@@ -99,7 +99,7 @@ theorem exists_normalized_isOpenMPS_of_renyiEntropy_le {L q D : ℕ}
         δ ^ 2 / (16 * ((L : ℝ) + 1)) :=
     one_sub_kyFanNorm_le_of_renyiEntropy_le
       (Entropy.regionState_posSemidef (leftBlock L k) ψ)
-      (Entropy.trace_regionState_eq_one hψ) ha ha1 hD (by positivity) (hS k hk)
+      ((ManyBody.trace_regionState _ _).trans (by simp [hψ])) ha ha1 hD (by positivity) (hS k hk)
   refine (Finset.sum_le_sum htail).trans ?_
   simp only [Finset.sum_const, Nat.card_Ico, nsmul_eq_mul]
   have hcard : ((L - 1 : ℕ) : ℝ) ≤ (L : ℝ) + 1 := by
@@ -119,7 +119,7 @@ theorem isOpenMPS_of_regionState_rank_le {L q D : ℕ}
     have he := (Entropy.regionState_isHermitian (leftBlock L k) ψ).sum_eigenvalues₀_filter_le D
     have hz := Matrix.PosSemidef.eigenvalue_tail_eq_zero_of_rank_le
       (Entropy.regionState_posSemidef (leftBlock L k) ψ) (hr k hk)
-    simpa [Entropy.trace_regionState_eq_one hψ] using he.symm.trans hz
+    simpa [((ManyBody.trace_regionState _ _).trans (by simp [hψ]))] using he.symm.trans hz
   have he := norm_sequentialTruncation_leadingEigenprojection_sub_sq_le ψ hψ D
   simp only [Finset.sum_eq_zero ht] at he
   have heq := sub_eq_zero.mp (norm_eq_zero.mp (sq_eq_zero_iff.mp (le_antisymm he (sq_nonneg _))))
@@ -281,7 +281,7 @@ theorem exists_normalized_isOpenMPS_of_smoothRenyiEntropy_lt {L q D : ℕ}
   intro k hk
   obtain ⟨σ, hσ, htr, hclose, hσS⟩ := exists_densityMatrix_renyiEntropy_lt
     (Entropy.regionState_posSemidef (leftBlock L k) ψ)
-    (Entropy.trace_regionState_eq_one hψ) a (hη k hk) (hS k hk)
+    ((ManyBody.trace_regionState _ _).trans (by simp [hψ])) a (hη k hk) (hS k hk)
   refine ⟨σ, hσ, htr, hclose, ?_⟩
   by_cases ha0 : a = 0
   · have hl : Real.log (σ.rank : ℝ) ≤ Real.log (D : ℝ) := by

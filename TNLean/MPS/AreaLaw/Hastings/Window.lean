@@ -77,7 +77,7 @@ theorem regionEntropy_nonneg {V : Type*} [Fintype V] [DecidableEq V] {q : ℕ}
     {Ω : EuclideanSpace ℂ (V → Fin q)} (hΩ : ‖Ω‖ = 1) (A : Finset V) :
     0 ≤ Entropy.regionEntropy (n := fun _ : V ↦ q) A Ω :=
   vonNeumannEntropy_nonneg_of_posSemidef_trace_one (Entropy.regionState_posSemidef A Ω)
-    (Entropy.trace_regionState_eq_one hΩ)
+    ((ManyBody.trace_regionState _ _).trans (by simp [hΩ]))
 
 variable {q : ℕ} {Ω : EuclideanSpace ℂ (Fin L → Fin q)}
 

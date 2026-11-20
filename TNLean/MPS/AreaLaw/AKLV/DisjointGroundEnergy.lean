@@ -3,7 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.KroneckerLeastEigenvalue
+import QICLean.Algebra.HermitianHelpers
+import QICLean.Algebra.KroneckerFactorPositivity
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SupportedMatrixElements
 import QICLean.Entropy.RegionUnion
@@ -47,8 +48,8 @@ theorem exists_common_ground_shifts_of_disjoint_support
   have hN : N.IsHermitian := hY.submatrix (fun b ↦ e.symm (a₀, b))
   let : Nonempty A := ⟨a₀⟩
   let : Nonempty B := ⟨b₀⟩
-  obtain ⟨x, u, hu, hunitu, hMlow⟩ := hM.exists_unit_eigenvector_le
-  obtain ⟨y, v, hv, hunitv, hNlow⟩ := hN.exists_unit_eigenvector_le
+  obtain ⟨x, u, hu, hunitu, hMlow⟩ := exists_unit_eigenvector_minEigenvalue hM
+  obtain ⟨y, v, hv, hunitv, hNlow⟩ := exists_unit_eigenvector_minEigenvalue hN
   have hXcut : X.submatrix e.symm e.symm = M ⊗ₖ (1 : Matrix B B ℂ) :=
     hsX.cutOperator_eq_kronecker_one (B := S) subset_rfl b₀
   have hYcut : Y.submatrix e.symm e.symm = (1 : Matrix A A ℂ) ⊗ₖ N :=

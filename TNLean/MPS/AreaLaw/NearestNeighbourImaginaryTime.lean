@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ExpConjugation
-import TNLean.Lattice.BoundedDegreeImaginaryTime
+import QICLean.Analysis.ExpConjugation
+import QICLean.ManyBody.Dynamics.BoundedDegreeImaginaryTime
 import QICLean.ManyBody.Sites.Lattice.Chain
 import Mathlib.Data.Fintype.Card
 import Mathlib.Data.Finset.Disjoint
@@ -165,10 +165,28 @@ private theorem nearest_neighbour_commutator_step {L q c m : ℕ}
       _ ≤ 4 * (m + 1) := by omega
   have hcardReal : (active.card : ℝ) ≤ (4 : ℝ) * ((m : ℝ) + 1) := by
     exact_mod_cast hcard
-  exact (norm_commutator_sum_le_active_card s h
-    (fun i ↦ interval L i.val (i.val + 2)) X
-    (interval L (c - m) (c + 2 + m)) hs hX h0 h1).trans
-      (mul_le_mul_of_nonneg_right hcardReal (norm_nonneg X))
+  classical
+  let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q) (fun i : Fin (L - 1) ↦
+      interval L i.val (i.val + 2)) :=
+    ⟨fun i ↦ if i ∈ s then h i else 0, fun i ↦ by
+      by_cases hi : i ∈ s
+      · simpa only [hi, if_true] using hs i hi
+      · simpa only [hi, if_false] using zero_mem _⟩
+  have hsumΦ : ∑ i ∈ s, Φ.term i = ∑ i ∈ s, h i :=
+    Finset.sum_congr rfl fun i hi ↦ if_pos hi
+  have hbound := ManyBody.Interaction.norm_commutator_sum_le_card Φ s
+    (fun i ↦ by
+      by_cases hi : i ∈ s
+      · simpa only [Φ, hi, if_true] using h0 i hi
+      · simp only [Φ, hi, if_false, le_refl])
+    (fun i ↦ by
+      by_cases hi : i ∈ s
+      · simpa only [Φ, hi, if_true] using h1 i hi
+      · simpa only [Φ, hi, if_false] using (zero_le_one : (0 : Matrix (Fin L → Fin q)
+          (Fin L → Fin q) ℂ) ≤ 1))
+    (S := interval L (c - m) (c + 2 + m)) hX
+  rw [hsumΦ] at hbound
+  exact hbound.trans (mul_le_mul_of_nonneg_right hcardReal (norm_nonneg X))
 
 /-- The actual iterated commutators of an original nearest-neighbour regional
 sum remain local and have factorial norm growth. Auxiliary to AKL14,
@@ -230,8 +248,9 @@ theorem norm_exp_conjugation_nearest_neighbour_shift_le_two {L q c : ℕ}
     ‖NormedSpace.exp ((t : ℂ) • (H - z • 1)) * O *
       NormedSpace.exp (-((t : ℂ) • (H - z • 1)))‖ ≤ 2 * ‖O‖ := by
   intro H
-  apply Matrix.norm_exp_conjugation_le_two (H - z • 1) O t ht0 ht
+  apply Matrix.norm_exp_conjugation_le_two_of_growth (H - z • 1) O 4 t ht0 (by linarith)
   intro m
+  rw [FunLike.coe_pow_eq_iterate]
   have had :
       (fun X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ ↦
         (H - z • 1) * X - X * (H - z • 1)) =
@@ -239,7 +258,11 @@ theorem norm_exp_conjugation_nearest_neighbour_shift_le_two {L q c : ℕ}
     funext X
     simp only [sub_mul, mul_sub, smul_mul_assoc, mul_smul_comm, one_mul, mul_one]
     abel
-  rw [had]
+  have hcoe : ⇑(GaussianFilter.commutatorCLM (H - z • 1)) =
+      fun X : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ ↦ (H - z • 1) * X - X * (H - z • 1) := by
+    funext X
+    rfl
+  rw [hcoe, had]
   exact (iterated_nearest_neighbour_commutator_support_norm I h hs h0 h1 O hO m).2
 
 end TNLean.MPS.AreaLaw

@@ -82,7 +82,7 @@ theorem regionEntropy_biUnion_neighborhood_intervals_le
   have hn (X : Finset (Fin L)) :
       0 ≤ Entropy.regionEntropy (n := fun _ : Fin L ↦ q) X Ω :=
     vonNeumannEntropy_nonneg_of_posSemidef_trace_one
-      (Entropy.regionState_posSemidef X Ω) (Entropy.trace_regionState_eq_one hΩ)
+      (Entropy.regionState_posSemidef X Ω) ((ManyBody.trace_regionState _ _).trans (by simp [hΩ]))
   have hsub (X Y : Finset (Fin L)) :
       Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (X ∪ Y) Ω ≤
         Entropy.regionEntropy X Ω + Entropy.regionEntropy Y Ω := by

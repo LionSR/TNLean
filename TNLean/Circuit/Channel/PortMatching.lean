@@ -25,16 +25,6 @@ namespace QuantumCircuit
 
 variable {d N : ℕ}
 
-/-- A SWAP of two sites of the open chain of `N` sites is a product of at most `2N` gates on
-neighbouring sites. -/
-theorem isPairProduct_permOp_swap (i j : Fin N) :
-    IsPairProduct d N (2 * N) (permOp (Equiv.swap i j)) := by
-  by_cases h : i = j
-  · rw [h, Equiv.swap_self, ← Equiv.Perm.one_def, permOp_one]
-    exact IsPairProduct.one _
-  · rw [permOp_swap_eq_embedOp h]
-    exact isPairProduct_embedOp_pairSites h (permOp_mem_unitary _)
-
 namespace PortMatching
 
 variable [NeZero N]

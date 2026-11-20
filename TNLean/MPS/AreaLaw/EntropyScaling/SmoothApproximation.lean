@@ -44,8 +44,8 @@ theorem norm_sequentialTruncation_leadingEigenprojection_sub_sq_le_of_smoothing
       obtain ⟨σ, hσ, htr, hη, hT⟩ := hσ k hk
       have h := Matrix.IsHermitian.trace_sub_kyFanNorm_le_add_traceDistance
         (Entropy.regionState_isHermitian (leftBlock L k) ψ) hσ.isHermitian
-          ((Entropy.trace_regionState_eq_one hψ).trans htr.symm) D
-      rw [Entropy.trace_regionState_eq_one hψ, htr, Complex.one_re,
+          (((ManyBody.trace_regionState _ _).trans (by simp [hψ])).trans htr.symm) D
+      rw [ManyBody.trace_regionState, hψ, one_pow, Complex.ofReal_one, htr, Complex.one_re,
         traceDistance_eq_rectangularTraceNorm
           (Entropy.regionState_isHermitian (leftBlock L k) ψ) hσ.isHermitian] at h
       linarith))

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.AreaLaw
-import TNLean.Lattice.ZeroEntropy
+import QICLean.Entropy.ZeroEntropy
 import QICLean.ManyBody.Sites.Lattice.Line
 import Mathlib.Combinatorics.SimpleGraph.Metric
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -274,8 +274,9 @@ theorem _root_.ManyBody.DomainInteraction.exists_regionEntropy_eq_card_boundaryE
     intro p hp
     obtain ⟨hpb, hpe⟩ := Finset.mem_filter.mp hp
     have hp1 := (mem_boundaryEdges.mp hpb).1
-    refine ⟨hp1, regionEntropy_eq_zero_of_forall_subset_or_disjoint (h := h.term)
-      (D := fun X ↦ X.1) h.mem hh hΔ hΩ hgap hspan _ fun X ↦ ?_⟩
+    refine ⟨hp1, (ManyBody.regionEntropy_eq_entropy _ _).trans
+      (ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint (Φ := h) hh hΔ hΩ hgap
+        hspan (B := interval Λ.card 0 (p + 1)) fun X ↦ ?_)⟩
     exact X.2.subset_or_disjoint_of_gap hp1 fun he ↦ hpe ⟨hp1, he⟩
   obtain ⟨A', hS, hB⟩ :=
     exists_regionEntropy_eq_boundaryEdges_eq_symmDiff hΩ G hG (domainRegion Λ A)

@@ -285,4 +285,14 @@ theorem isPairProduct_of_mem_supportedOperators_pair (hd : 0 < d) {i j : Fin n} 
   exact isPairProduct_embedOp_pairSites hij
     (mem_unitary_of_embedOp_mem_unitary (pairSites_injective hij) hd hZu)
 
+/-- A SWAP of two sites of the open chain of `n` sites is a product of at most `2n` gates on
+neighbouring sites. -/
+theorem isPairProduct_permOp_swap (i j : Fin n) :
+    IsPairProduct d n (2 * n) (permOp (Equiv.swap i j)) := by
+  by_cases h : i = j
+  · rw [h, Equiv.swap_self, ← Equiv.Perm.one_def, permOp_one]
+    exact IsPairProduct.one _
+  · rw [permOp_swap_eq_embedOp h]
+    exact isPairProduct_embedOp_pairSites h (permOp_mem_unitary _)
+
 end QuantumCircuit

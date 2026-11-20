@@ -58,8 +58,8 @@ permitted within one block
 \begin{definition}[Finite adaptive local protocol]
     \label{def:qc_adaptive_protocol}
     \uses{def:qc_onsite_feedforward, def:qc_local_channel_circuit}
-    \lean{QuantumCircuit.IsAdaptiveChannelProtocol,
-        QuantumCircuit.IsAdaptiveChannelConversion}
+    \lean{QuantumCircuit.IsAdaptiveProtocol,
+        QuantumCircuit.IsAdaptiveConversion}
     \leanok
     A finite adaptive local protocol is a tree formed from onsite channels,
     nearest-neighbor channel layers, and onsite instruments with a
@@ -74,16 +74,16 @@ permitted within one block
 \begin{lemma}[Channels, composition, and deterministic inclusion]
     \label{thm:qc_adaptive_protocol_properties}
     \uses{def:qc_adaptive_protocol}
-    \lean{QuantumCircuit.IsAdaptiveChannelProtocol.isKrausCPTP,
+    \lean{QuantumCircuit.IsAdaptiveProtocol.isKrausCPTP,
         QuantumCircuit.IsAdaptiveChannelProtocol.onsite_comp,
-        QuantumCircuit.IsAdaptiveChannelProtocol.comp,
+        QuantumCircuit.IsAdaptiveProtocol.comp,
         QuantumCircuit.IsAdaptiveChannelProtocol.channelLayer,
-        QuantumCircuit.IsLocalChannelProtocol.adaptive,
-        QuantumCircuit.IsAdaptiveChannelConversion.refl,
-        QuantumCircuit.IsAdaptiveChannelConversion.mono,
-        QuantumCircuit.IsAdaptiveChannelConversion.trans,
-        QuantumCircuit.IsAdaptiveChannelConversion.density,
-        QuantumCircuit.IsLocalChannelConversion.adaptive}
+        QuantumCircuit.IsProtocol.adaptive,
+        QuantumCircuit.IsAdaptiveConversion.refl,
+        QuantumCircuit.IsAdaptiveConversion.mono,
+        QuantumCircuit.IsAdaptiveConversion.trans,
+        QuantumCircuit.IsAdaptiveConversion.density,
+        QuantumCircuit.IsConversion.adaptive}
     \leanok
     Every finite adaptive protocol is trace preserving and completely
     positive. Two protocols with depth bounds $T_1,T_2$ compose with depth
