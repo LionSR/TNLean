@@ -256,15 +256,15 @@ theorem TwoSiteStandardFormData.blockTensor_eq_printedOpenGateContraction {d D k
     {W : MPOTensor (d * d) D}
     {u v : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ}
     (S : TwoSiteStandardFormData W u v)
-    (I J : Fin (MPSTensor.blockPhysDim (d * d) (k + 1))) :
+    (I J : Fin (Kraus.blockPhysDim (d * d) (k + 1))) :
     blockTensor W (k + 1) I J = printedOpenGateContraction S
-      (fun p ↦ finProdFinEquiv.symm (MPSTensor.decodeBlock (d * d) (k + 1) I p))
-      (fun p ↦ finProdFinEquiv.symm (MPSTensor.decodeBlock (d * d) (k + 1) J p)) := by
-  change evalWord W (List.ofFn (MPSTensor.decodeBlock (d * d) (k + 1) I))
-    (List.ofFn (MPSTensor.decodeBlock (d * d) (k + 1) J)) = _
+      (fun p ↦ finProdFinEquiv.symm (Kraus.decodeBlock (d * d) (k + 1) I p))
+      (fun p ↦ finProdFinEquiv.symm (Kraus.decodeBlock (d * d) (k + 1) J p)) := by
+  change evalWord W (List.ofFn (Kraus.decodeBlock (d * d) (k + 1) I))
+    (List.ofFn (Kraus.decodeBlock (d * d) (k + 1) J)) = _
   simpa only [Equiv.apply_symm_apply] using S.evalWord_eq_printedOpenGateContraction
-    (fun p ↦ finProdFinEquiv.symm (MPSTensor.decodeBlock (d * d) (k + 1) I p))
-    (fun p ↦ finProdFinEquiv.symm (MPSTensor.decodeBlock (d * d) (k + 1) J p))
+    (fun p ↦ finProdFinEquiv.symm (Kraus.decodeBlock (d * d) (k + 1) I p))
+    (fun p ↦ finProdFinEquiv.symm (Kraus.decodeBlock (d * d) (k + 1) J p))
 
 private noncomputable abbrev spinPairEquiv (d k : ℕ) :
     (Fin k → Fin d × Fin d) ≃ (Fin (2 * k) → Fin d) :=

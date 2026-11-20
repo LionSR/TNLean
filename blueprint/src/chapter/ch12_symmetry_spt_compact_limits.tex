@@ -1323,10 +1323,13 @@ argument below.
     scalar normalizations may differ.
 \end{lemma}
 \begin{proof}\leanok
-    Equal singleton spans differ by an invertible scalar, including when
-    both vectors vanish. The scalar and its complex conjugate cancel in
-    the ratio defining the normalized expectation. Apply this identity
-    to the three expectations defining the connected correlator.
+    For a nonzero vector $\psi$, the normalized expectation is
+    $\langle\psi,A\psi\rangle/\|\psi\|^2$, the ratio used in
+    \cite[``Centering an observable at an unnormalized vector'']{QICLean2026Blueprint}.
+    Equal singleton spans differ by an invertible scalar. For nonzero
+    vectors the scalar and its complex conjugate cancel in this ratio;
+    if both vectors vanish the expectations coincide directly. Apply
+    the identity to the three expectations defining the connected correlator.
 \end{proof}
 
 \begin{lemma}[Physical clustering for the actual two-window correlator]
