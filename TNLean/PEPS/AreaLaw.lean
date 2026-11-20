@@ -31,6 +31,7 @@ import TNLean.PEPS.AreaLaw.EdgeCrossingBudget
 import TNLean.PEPS.AreaLaw.FiniteSetTruncation
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationSchmidtBellPrevector
+import TNLean.PEPS.AreaLaw.FrustrationFree
 import TNLean.PEPS.AreaLaw.GapMarginalCloseness
 import TNLean.PEPS.AreaLaw.Geometry
 import TNLean.PEPS.AreaLaw.GlobalSchmidtBellPrevector
