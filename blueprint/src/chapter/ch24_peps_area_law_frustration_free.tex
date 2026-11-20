@@ -59,3 +59,60 @@ localization errors of the amplification stage.
     acts on $D$ exactly when it commutes with every operator acting on the
     complement of $D$, and functions of $A$ inherit this commutation.
 \end{proof}
+
+\section{The model and the statement}
+\label{sec:ff_area_law_model}
+
+\begin{definition}[Frustration-free gapped Hamiltonians]
+    \label{def:ff_area_law_model}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped}
+    \leanok
+    \uses{def:area_law_domain,def:area_law_hamiltonian}
+    Let $\Lambda\subset\mathbb Z^2$ be finite with local dimension $q$, and let
+    $H=\sum_Xh_X$ have one term for each support $X$ of induced graph
+    diameter at most $R$. For $J,\Delta$ and a vector $\Omega$, the
+    Hamiltonian is frustration-free and gapped when
+    \[
+        0\le h_X\le J,\qquad h_X\Omega=0,\qquad\|\Omega\|=1,\qquad
+        H\ge\Delta\bigl(I-|\Omega\rangle\langle\Omega|\bigr).
+    \]
+    This is the model of \cite[eq.~(model)]{TNLean2026FrustrationFreeNote}.
+\end{definition}
+
+\begin{lemma}[The model is gapped]
+    \label{thm:ff_area_law_model_gapped}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isHermitian, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.hamiltonian_mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isGapped_and_groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isGapped, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_term_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.smul_sub_le_sum_supportProj}
+    \leanok
+    \uses{def:ff_area_law_model,thm:ff_area_law_range_projection}
+    In the model of Definition~\ref{def:ff_area_law_model} with $\Delta>0$,
+    every term is Hermitian with $\|h_X\|\le J$, $H\Omega=0$, every other
+    eigenvalue of $H$ is at least $\Delta$, and the ground space is the line
+    through $\Omega$. If $J>0$, the range projections $\Pi_X$ of the terms
+    satisfy $\sum_X\Pi_X\ge(\Delta/J)(I-|\Omega\rangle\langle\Omega|)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Summing $h_X\Omega=0$ gives $H\Omega=0$, and the gap inequality then
+    identifies the ground space and the gap. A positive operator below $J$
+    has norm at most $J$. Finally $H\le J\sum_X\Pi_X$ termwise by
+    Lemma~\ref{thm:ff_area_law_range_projection}.
+\end{proof}
+
+\begin{theorem}[The frustration-free area law]
+    \label{thm:ff_area_law}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.FrustrationFreeAreaLaw, TNLean.PEPS.AreaLaw.UniformAreaLaw.frustrationFreeAreaLaw, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAreaLaw_of_uniformAreaLaw}
+    \leanok
+    \uses{def:ff_area_law_model,thm:ff_area_law_model_gapped,thm:openai_uniform_area_law}
+    For $q\ge1$, $R\ge0$ and $J,\Delta>0$ there is a constant
+    $C=C(q,R,J,\Delta)$ such that every instance of
+    Definition~\ref{def:ff_area_law_model} on every finite domain satisfies
+    $S_\Omega(A)\le C|\partial_\Lambda A|$ for every set of sites $A$. This is
+    \cite[eq.~(goal)]{TNLean2026FrustrationFreeNote}.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Lemma~\ref{thm:ff_area_law_model_gapped} every instance satisfies the
+    hypotheses of the general area law \cite[Theorem~1.1]{OpenAI2026AreaLaw}
+    at energy zero. This proof passes through the general amplification stage;
+    the shorter proof of the note is assembled in the following sections.
+\end{proof}
