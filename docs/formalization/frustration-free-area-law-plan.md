@@ -126,11 +126,21 @@ planned after Step 4.
 
 | Step | Statements | State |
 |---|---|---|
-| 0 | model, statement, corollary of the general theorem | planned |
-| 1 | sweep contraction, range projections | planned |
-| 2 | colouring, light cone | planned |
-| 3 | amplification | planned |
-| 4 | assembly | planned |
+| 0 | model, statement, corollary of the general theorem | proved, #10936 |
+| 1 | sweep contraction, range projections | proved, #10935 |
+| 2 | colouring, light cone, sweep of an instance | proved, #10937 |
+| 3 | amplification `ffAmplificationBound` | proved, #10938 |
+| 4 | instance-wise assembly, `frustrationFreeAreaLaw` | proved, #10938 |
+| — | scanner on the raw terms, `eq:identity` | deferred |
 
-Deviations from the note found while formalizing are recorded in `docs/paper-gaps/` and
-listed here.
+`frustrationFreeAreaLaw` uses only the axioms `propext`, `Classical.choice`, `Quot.sound`, and
+its proof does not depend on `amplificationBound` or `amplificationBound_of_locality`; it still
+depends on the general collar bound `sublinearCollarBound_real`.
+
+## Deviations from the note
+
+* Steps 1–2 use the range projections of the terms in place of `(1 - h_i/J)^{1/2}`
+  (`docs/paper-gaps/ff2d_sweep_range_projections.tex`, scope restriction of `eq:sweep` to
+  projections). No hypothesis of `eq:model` is added and the constant `θ` is the note's.
+* No step of the note was found to be wrong. The steps formalized (`eq:sweep`, `eq:cone`, the
+  choice of `t`, the polar and continuity steps, the two-family cancellation) hold as written.
