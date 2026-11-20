@@ -10,10 +10,10 @@ bounded distance. This replaces the time-filtered constraints and the
 localization errors of the amplification stage.
 
 \section{Contraction of one sweep}
-\label{sec:ff_area_law_sweep}
+\label{sec:frustration_free_area_law_sweep}
 
 \begin{lemma}[One sweep of projections]
-    \label{thm:ff_area_law_sweep_contraction}
+    \label{thm:frustration_free_area_law_sweep_contraction}
     \lean{ContinuousLinearMap.complementProd_apply_of_forall_apply_eq_zero, ContinuousLinearMap.inner_complementProd_of_forall_apply_eq_zero, ContinuousLinearMap.norm_sq_complementProd_le_of_gap, ContinuousLinearMap.norm_pow_complementProd_le_of_gap}
     \leanok
     Let $\Pi_1,\dots,\Pi_m$ be orthogonal projections on a Hilbert space, each
@@ -31,7 +31,7 @@ localization errors of the amplification stage.
     This is the contraction \cite[eq.~(sweep)]{TNLean2026FrustrationFreeNote}
     for filters that are projections; the note states it for positive
     contractions $k_i$ with the factors $(I-k_i)^{1/2}$. The restriction is
-    recorded in \cite{gap:ffarealaw_sweep_range_projections}.
+    recorded in \cite{gap:frustrationfree_sweep_range_projections}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -44,7 +44,7 @@ localization errors of the amplification stage.
 \end{proof}
 
 \begin{lemma}[Range projections of positive local terms]
-    \label{thm:ff_area_law_range_projection}
+    \label{thm:frustration_free_area_law_range_projection}
     \lean{Matrix.PosSemidef.le_smul_supportProj, TNLean.PEPS.AreaLaw.FrustrationFree.supportProj_mem_supportedOperators}
     \leanok
     For a positive semidefinite matrix $A$, let $\Pi_A$ be the orthogonal
@@ -61,10 +61,10 @@ localization errors of the amplification stage.
 \end{proof}
 
 \section{The model and the statement}
-\label{sec:ff_area_law_model}
+\label{sec:frustration_free_area_law_model}
 
 \begin{definition}[Frustration-free gapped Hamiltonians]
-    \label{def:ff_area_law_model}
+    \label{def:frustration_free_area_law_model}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped}
     \leanok
     \uses{def:area_law_domain,def:area_law_hamiltonian}
@@ -80,11 +80,11 @@ localization errors of the amplification stage.
 \end{definition}
 
 \begin{lemma}[The model is gapped]
-    \label{thm:ff_area_law_model_gapped}
+    \label{thm:frustration_free_area_law_model_gapped}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isHermitian, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.hamiltonian_mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isGapped_and_groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isGapped, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.groundSpace_eq, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_term_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.smul_sub_le_sum_supportProj}
     \leanok
-    \uses{def:ff_area_law_model,thm:ff_area_law_range_projection}
-    In the model of Definition~\ref{def:ff_area_law_model}, every term is
+    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_range_projection}
+    In the model of Definition~\ref{def:frustration_free_area_law_model}, every term is
     Hermitian and $H\Omega=0$. If $\Delta>0$, every other eigenvalue of $H$ is
     at least $\Delta$ and the ground space is the line through $\Omega$. If
     $J\ge0$, then $\|h_X\|\le J$. If $J>0$, the range projections $\Pi_X$ of
@@ -96,23 +96,23 @@ localization errors of the amplification stage.
     Summing $h_X\Omega=0$ gives $H\Omega=0$, and the gap inequality then
     identifies the ground space and the gap. A positive operator below $J$
     has norm at most $J$. Finally $H\le J\sum_X\Pi_X$ termwise by
-    Lemma~\ref{thm:ff_area_law_range_projection}.
+    Lemma~\ref{thm:frustration_free_area_law_range_projection}.
 \end{proof}
 
 \begin{theorem}[The frustration-free area law]
-    \label{thm:ff_area_law}
+    \label{thm:frustration_free_area_law}
     \lean{TNLean.PEPS.AreaLaw.FrustrationFree.FrustrationFreeAreaLaw, TNLean.PEPS.AreaLaw.UniformAreaLaw.frustrationFreeAreaLaw, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAreaLaw_of_uniformAreaLaw}
     \leanok
-    \uses{def:ff_area_law_model,thm:ff_area_law_model_gapped,thm:openai_uniform_area_law}
+    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_model_gapped,thm:openai_uniform_area_law}
     For $q\ge1$, $R\ge0$ and $J,\Delta>0$ there is a constant
     $C=C(q,R,J,\Delta)$ such that every instance of
-    Definition~\ref{def:ff_area_law_model} on every finite domain satisfies
+    Definition~\ref{def:frustration_free_area_law_model} on every finite domain satisfies
     $S_\Omega(A)\le C|\partial_\Lambda A|$ for every set of sites $A$. This is
     \cite[eq.~(goal)]{TNLean2026FrustrationFreeNote}.
 \end{theorem}
 
 \begin{proof}\leanok
-    By Lemma~\ref{thm:ff_area_law_model_gapped} every instance satisfies the
+    By Lemma~\ref{thm:frustration_free_area_law_model_gapped} every instance satisfies the
     hypotheses of the general area law \cite[Theorem~1.1]{OpenAI2026AreaLaw}
     at energy zero. This proof passes through the general amplification stage;
     the shorter proof of the note is assembled in the following sections.

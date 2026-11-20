@@ -888,11 +888,11 @@
     },
     "ch:peps_area_law_frustration_free": {
       "theorems": [
-        "thm:ff_area_law"
+        "thm:frustration_free_area_law"
       ],
       "corollaries": [],
       "notes": {
-        "thm:ff_area_law": "The frustration-free area law, the goal the chapter exists to prove (reading note, eq. (goal))"
+        "thm:frustration_free_area_law": "The frustration-free area law, the goal the chapter exists to prove (reading note, eq. (goal))"
       }
     },
     "ch:peps_approximation": {
