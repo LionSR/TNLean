@@ -22,6 +22,13 @@ QICLean's.
 * `edgeBoundary`: the unordered edges crossing a cut, each counted once.
 * `ambientDilation`: the integer sup-norm dilation of an ambient finite set.
 
+## Main statements
+
+* `mem_graphNeighborhood`, `graphNeighborhood_mono`,
+  `graphNeighborhood_graphNeighborhood_subset`: walks of bounded length and their composition.
+* `subset_graphNeighborhood_of_isAdmissibleSupport`: a support of diameter at most `R` meeting
+  `S` lies in `N_R(S)`.
+
 ## References
 
 * OpenAI, *A two-dimensional area law from a global spectral gap*,
@@ -117,5 +124,48 @@ theorem exists_edgeBoundary_of_walk {Λ : Finset (ℤ × ℤ)} {A : Finset (Site
 /-- Zero ambient dilation changes no lattice points. -/
 @[simp] theorem ambientDilation_zero (T : Finset (ℤ × ℤ)) : ambientDilation T 0 = T := by
   simp [ambientDilation]
+
+section GraphNeighborhood
+
+variable {Λ : Finset (ℤ × ℤ)}
+
+
+/-- Membership in `N_r(S)`: a walk of length at most `r` from a point of `S`. -/
+theorem mem_graphNeighborhood {r : ℕ} {S : Finset (Site Λ)} {y : Site Λ} :
+    y ∈ graphNeighborhood Λ r S ↔
+      ∃ x ∈ S, ∃ p : (ManyBody.planeDomainGraph Λ).Walk x y, p.length ≤ r := by
+  simp [graphNeighborhood]
+
+/-- `S ⊆ N_r(S)`. -/
+theorem subset_graphNeighborhood (r : ℕ) (S : Finset (Site Λ)) : S ⊆ graphNeighborhood Λ r S :=
+  fun x hx ↦ by
+    simp only [graphNeighborhood, Finset.mem_filter, Finset.mem_univ, true_and]
+    exact ⟨x, hx, SimpleGraph.Walk.nil, Nat.zero_le _⟩
+
+/-- `N_r` is monotone in the region. -/
+theorem graphNeighborhood_mono (r : ℕ) {S S' : Finset (Site Λ)} (h : S ⊆ S') :
+    graphNeighborhood Λ r S ⊆ graphNeighborhood Λ r S' := fun y hy ↦ by
+  simp only [graphNeighborhood, Finset.mem_filter, Finset.mem_univ, true_and] at hy ⊢
+  obtain ⟨x, hx, p, hp⟩ := hy
+  exact ⟨x, h hx, p, hp⟩
+
+/-- `N_a(N_b(S)) ⊆ N_{b+a}(S)`. -/
+theorem graphNeighborhood_graphNeighborhood_subset (a b : ℕ) (S : Finset (Site Λ)) :
+    graphNeighborhood Λ a (graphNeighborhood Λ b S) ⊆ graphNeighborhood Λ (b + a) S :=
+  fun y hy ↦ by
+    obtain ⟨z, hz, q, hq⟩ := mem_graphNeighborhood.mp hy
+    obtain ⟨x, hx, p, hp⟩ := mem_graphNeighborhood.mp hz
+    refine mem_graphNeighborhood.mpr ?_
+    exact ⟨x, hx, p.append q, by rw [SimpleGraph.Walk.length_append]; omega⟩
+
+/-- A support of graph diameter at most `R` meeting `S` lies in `N_R(S)`. -/
+theorem subset_graphNeighborhood_of_isAdmissibleSupport {R : ℕ} {X : Finset (Site Λ)}
+    (hX : ManyBody.IsAdmissibleSupport Λ R X) {S : Finset (Site Λ)} (hXS : ¬Disjoint X S) :
+    X ⊆ graphNeighborhood Λ R S := fun y hy ↦ by
+  obtain ⟨x, hxX, hxS⟩ := Finset.not_disjoint_iff.mp hXS
+  simp only [graphNeighborhood, Finset.mem_filter, Finset.mem_univ, true_and]
+  exact ⟨x, hxS, hX.2 x hxX y hy⟩
+
+end GraphNeighborhood
 
 end TNLean.Lattice

@@ -40,44 +40,6 @@ frustration-free area-law note.
 
 open ManyBody SimpleGraph TNLean.Lattice
 
-namespace TNLean.Lattice
-
-variable {Λ : Finset (ℤ × ℤ)}
-
-theorem mem_graphNeighborhood {r : ℕ} {S : Finset (Site Λ)} {y : Site Λ} :
-    y ∈ graphNeighborhood Λ r S ↔
-      ∃ x ∈ S, ∃ p : (ManyBody.planeDomainGraph Λ).Walk x y, p.length ≤ r := by
-  simp [graphNeighborhood]
-
-theorem subset_graphNeighborhood (r : ℕ) (S : Finset (Site Λ)) : S ⊆ graphNeighborhood Λ r S :=
-  fun x hx ↦ by
-    simp only [graphNeighborhood, Finset.mem_filter, Finset.mem_univ, true_and]
-    exact ⟨x, hx, SimpleGraph.Walk.nil, Nat.zero_le _⟩
-
-theorem graphNeighborhood_mono (r : ℕ) {S S' : Finset (Site Λ)} (h : S ⊆ S') :
-    graphNeighborhood Λ r S ⊆ graphNeighborhood Λ r S' := fun y hy ↦ by
-  simp only [graphNeighborhood, Finset.mem_filter, Finset.mem_univ, true_and] at hy ⊢
-  obtain ⟨x, hx, p, hp⟩ := hy
-  exact ⟨x, h hx, p, hp⟩
-
-theorem graphNeighborhood_graphNeighborhood_subset (a b : ℕ) (S : Finset (Site Λ)) :
-    graphNeighborhood Λ a (graphNeighborhood Λ b S) ⊆ graphNeighborhood Λ (b + a) S :=
-  fun y hy ↦ by
-    obtain ⟨z, hz, q, hq⟩ := mem_graphNeighborhood.mp hy
-    obtain ⟨x, hx, p, hp⟩ := mem_graphNeighborhood.mp hz
-    refine mem_graphNeighborhood.mpr ?_
-    exact ⟨x, hx, p.append q, by rw [SimpleGraph.Walk.length_append]; omega⟩
-
-/-- A support of graph diameter at most `R` meeting `S` lies in `N_R(S)`. -/
-theorem subset_graphNeighborhood_of_isAdmissibleSupport {R : ℕ} {X : Finset (Site Λ)}
-    (hX : IsAdmissibleSupport Λ R X) {S : Finset (Site Λ)} (hXS : ¬Disjoint X S) :
-    X ⊆ graphNeighborhood Λ R S := fun y hy ↦ by
-  obtain ⟨x, hxX, hxS⟩ := Finset.not_disjoint_iff.mp hXS
-  simp only [graphNeighborhood, Finset.mem_filter, Finset.mem_univ, true_and]
-  exact ⟨x, hxS, hX.2 x hxX y hy⟩
-
-end TNLean.Lattice
-
 namespace TNLean.PEPS.AreaLaw.FrustrationFree
 
 variable {Λ : Finset (ℤ × ℤ)} {R : ℕ}
