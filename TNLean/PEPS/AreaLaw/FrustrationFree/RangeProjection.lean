@@ -23,7 +23,8 @@ acts on the support of its term, and `Π_{h_i} ≥ h_i / J`, so the gap
 ## Main statements
 
 * `Matrix.PosSemidef.le_smul_supportProj`: `A ≤ J Π_A` when `0 ≤ A ≤ J`.
-* `TNLean.PEPS.AreaLaw.FrustrationFree.supportProj_mem_supportedOperators`: `Π_A` acts on the support of `A`.
+* `TNLean.PEPS.AreaLaw.FrustrationFree.supportProj_mem_supportedOperators`: `Π_A` acts on the
+  support of `A`.
 
 ## References
 
