@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.TraceNormContractivity
 import QICLean.Analysis.TraceNormVariational
+import QICLean.Channel.KrausCPTP
 
 /-!
 # Trace norm on chain configurations

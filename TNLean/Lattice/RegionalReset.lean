@@ -10,7 +10,7 @@ import QICLean.Entropy.FiniteProductSplitting
 import QICLean.Entropy.ProductMarginals
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import TNLean.Circuit.RegionalSwap
-import TNLean.Lattice.SupportedPolarUnitary
+import QICLean.ManyBody.Sites.SupportedUnitary
 
 /-!
 # The two-sided filter and the polar step of the information reset
@@ -485,9 +485,9 @@ theorem exists_supported_unitary_of_two_sided (S : Finset ι)
       U ∈ unitaryGroup (ι → Fin q) ℂ ∧ U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S ∧
       ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 φ‖ ≤ 2 * C * ε := by
   have hz0 : 0 < z := (Real.exp_pos _).trans_le hz
-  obtain ⟨U, hU, hUsupp, hcorr⟩ := exists_supported_unitary_polar_correction S
+  obtain ⟨U, hU, hUsupp, hcorr⟩ := ManyBody.exists_supported_unitary_polar_correction (S := S)
     (SMulMemClass.smul_mem ((z : ℂ)⁻¹) hMsupp)
-  refine ⟨U, hU, hUsupp, (hcorr ψ φ).trans ?_⟩
+  refine ⟨U, hU, hUsupp, (hcorr (WithLp.toLp 2 ψ) (WithLp.toLp 2 φ)).trans ?_⟩
   have hzinv : (z : ℂ)⁻¹ = ((z⁻¹ : ℝ) : ℂ) := by push_cast; rfl
   have hstar : star ((z : ℂ)⁻¹) = (z : ℂ)⁻¹ := by
     rw [hzinv, Complex.star_def, Complex.conj_ofReal]
@@ -497,7 +497,10 @@ theorem exists_supported_unitary_of_two_sided (S : Finset ι)
     rw [← Real.norm_of_nonneg (inv_nonneg.mpr hz0.le), ← Complex.norm_real, ← hzinv,
       ← norm_smul, smul_sub, smul_smul, inv_mul_cancel₀ (by exact_mod_cast hz0.ne'),
       one_smul, WithLp.toLp_smul]
-  rw [conjTranspose_smul, hstar, smul_mulVec, smul_mulVec, hscale, hscale]
+  rw [conjTranspose_smul, hstar]
+  change ‖WithLp.toLp 2 (((z : ℂ)⁻¹ • M) *ᵥ ψ) - WithLp.toLp 2 φ‖ +
+      ‖WithLp.toLp 2 (((z : ℂ)⁻¹ • Mᴴ) *ᵥ φ) - WithLp.toLp 2 ψ‖ ≤ 2 * C * ε
+  rw [smul_mulVec, smul_mulVec, hscale, hscale]
   have hzb : z⁻¹ ≤ Real.exp (2 * b) := by
     have h₁ := inv_anti₀ (Real.exp_pos (-2 * b)) hz
     rwa [← Real.exp_neg, show -(-2 * b) = 2 * b by ring] at h₁

@@ -156,7 +156,7 @@ noncomputable def typicalWidthConstant (q R : ℕ) (J Δ M : ℝ) : ℝ :=
 Source: `02-initial.tex`, lines 207–212. -/
 theorem concentrationWidth_le (hq : 1 ≤ q) (R : ℕ) (hJ : 0 ≤ J) {Δ : ℝ} (hΔ : 0 < Δ)
     (A : Finset (Site Λ)) (n : ℕ) {M : ℝ} (hM : 0 ≤ M) :
-    concentrationWidth Λ q R J Δ A n M ≤
+    Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M ≤
       typicalWidthConstant q R J Δ M * Real.sqrt (1 + (edgeBoundary Λ A).card) *
         Real.log (n + 2) := by
   have hϑ : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
@@ -180,7 +180,7 @@ theorem concentrationWidth_le (hq : 1 ≤ q) (R : ℕ) (hJ : 0 ≤ J) {Δ : ℝ}
   have hfactor_nonneg : 0 ≤ M * Real.log ((n : ℝ) + 2) + Real.exp 1 / 2 + Real.log 2 := by
     have := mul_nonneg hM (hlog2.le.trans hL)
     linarith
-  calc concentrationWidth Λ q R J Δ A n M
+  calc Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M
       = 32 * Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A) *
           (M * Real.log ((n : ℝ) + 2) + Real.exp 1 / 2 + Real.log 2) := rfl
     _ ≤ 32 * (Real.sqrt ((1 + J / Δ) * tailParameterConstant q R) *

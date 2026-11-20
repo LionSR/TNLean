@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.PermutationMatrixUnitary
 import TNLean.Lattice.RegionalReset
 import TNLean.Lattice.ReplicaSwap
-import TNLean.Lattice.SupportedUnitaryEntropy
+import QICLean.Entropy.MutualInformationPerturbation
 
 /-!
 # Entropy comparison after a regional replica swap
@@ -95,7 +95,7 @@ theorem mutualInformation_cores_le_of_reset_unitary
     · simp at hv'
   have hprod := mutualInformation_relabelSites_replicaSwap_eq_zero hΩ hR₀
     hC₀
-  have hent := TNLean.Lattice.mutualInformation_le_of_supported_unitary
+  have hent := FiniteProduct.mutualInformation_le_of_supported_unitary _
     hΨn hΦn hXJ hSsum hU's hU'u hprod
   rw [FiniteProduct.mutualInformation_sumSitesProduct_inl hΩ hΩ] at hent
   have hcard : Fintype.card (FiniteProduct.Configuration

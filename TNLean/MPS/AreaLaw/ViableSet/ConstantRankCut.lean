@@ -200,7 +200,7 @@ theorem _root_.ManyBody.ChainInteraction.one_sub_le_re_inner_chainTrim {R : ℕ}
   have hKF := hρ.trace_mul_re_le_kyFanNorm_of_isHermitian_idem hPh hPi hrankB
   have htr : (leftMarginal
       (Entropy.cutVector (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω)).trace.re = 1 := by
-    rw [← regionState_leftBlock_eq_leftMarginal, ManyBody.trace_regionState, hΩ, one_pow, Complex.ofReal_one,
+    rw [← regionState_leftBlock_eq_leftMarginal, Entropy.trace_regionState_eq_one hΩ,
       Complex.one_re]
   rw [regionState_leftBlock_eq_leftMarginal, Matrix.sub_mul, Matrix.one_mul, trace_sub,
     Complex.sub_re, htr] at hmassδ

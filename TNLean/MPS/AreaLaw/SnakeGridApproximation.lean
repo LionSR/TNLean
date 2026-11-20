@@ -245,7 +245,7 @@ theorem exists_snakeGridMPS_of_uniformAreaLaw (harea : PEPS.AreaLaw.UniformAreaL
     refine hr.trans ?_
     have htrace : (ρ k).trace = 1 := by
       rw [show ρ k = Entropy.regionState (A k) Ω from reducedState_eq_regionState _ _]
-      exact ((ManyBody.trace_regionState _ _).trans (by simp [hΩ]))
+      exact Entropy.trace_regionState_eq_one hΩ
     change (((Q k).submatrix (f k).symm (f k).symm).rank : ℝ) ≤ _
     rw [Matrix.rank_submatrix]
     exact ((reducedState_posSemidef _ q Ω (A k)).rank_spectralProjectionGE_exp_le

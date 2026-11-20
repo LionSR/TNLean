@@ -61,7 +61,7 @@ theorem normalized_sequentialTruncation_of_prefix_mass
           (leftBlock L k) ψ).kyFanNorm (D k) := by
     rw [Entropy.norm_sq_toEuclideanLin_localLift_eq_trace (hP k).one_sub]
     refine (hspec k).2.2.2.2.2.trans ?_
-    rw [ManyBody.trace_regionState, hψ, one_pow, Complex.ofReal_one, Complex.one_re]
+    rw [Entropy.trace_regionState_eq_one hψ, Complex.one_re]
   have herr : ‖Φ0 - ψ‖ ^ 2 ≤ delta / 8 := by
     have heq : (∑ i ∈ Finset.range (L - 1),
         ‖Matrix.toEuclideanLin (Entropy.localLift (leftBlock L (L - 1 - i))

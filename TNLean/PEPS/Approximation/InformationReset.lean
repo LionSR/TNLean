@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.ResetUnitary
 import TNLean.Lattice.ReplicaSwap
-import TNLean.Lattice.SupportedUnitaryEntropy
+import QICLean.Entropy.MutualInformationPerturbation
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.PEPS.AreaLaw.BufferedRectangles
 import TNLean.Lattice.Sheet.SwapCorrection
@@ -230,7 +230,7 @@ theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V
     · simp at hv'
   have hprod := mutualInformation_relabelSites_replicaSwap_eq_zero (q := q) hΩ hA₀
     (Finset.disjoint_of_subset_left hC₀ hAC.symm)
-  have hent := mutualInformation_le_of_supported_unitary hΨn hΦn hXJ hS hU's hU'u hprod
+  have hent := FiniteProduct.mutualInformation_le_of_supported_unitary _ hΨn hΦn hXJ hS hU's hU'u hprod
   rw [hΨdef, FiniteProduct.mutualInformation_sumSitesProduct_inl hΩ hΩ] at hent
   refine hent.trans ?_
   have hcard : Fintype.card (FiniteProduct.Configuration (fun _ : V ⊕ V ↦ Fin q)

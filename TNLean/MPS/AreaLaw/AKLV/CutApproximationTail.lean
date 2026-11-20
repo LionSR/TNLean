@@ -52,7 +52,7 @@ theorem one_sub_kyFanNorm_le_of_unit_cut_rank_approximation {L q D k : ℕ}
     linarith
   · have htrace : (Entropy.regionState (n := fun _ : Fin L ↦ q)
         (leftBlock L k) Ω).trace.re = 1 := by
-      rw [ManyBody.trace_regionState, hΩ, one_pow, Complex.ofReal_one, Complex.one_re]
+      rw [Entropy.trace_regionState_eq_one hΩ, Complex.one_re]
     have hmass := (Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q)
       (leftBlock L k) Ω).kyFanNorm_mono (Nat.le_of_not_gt hD)
     rw [Matrix.IsHermitian.kyFanNorm_card_eq_trace_re, htrace] at hmass

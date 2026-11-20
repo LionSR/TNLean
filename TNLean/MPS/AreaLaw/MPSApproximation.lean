@@ -185,7 +185,7 @@ theorem _root_.ManyBody.ChainInteraction.spectralProjectionGE_leftBlock_bounds
   dsimp only
   have hρ := Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω
   refine ⟨hρ.isHermitian.isStarProjection_spectralProjectionGE _,
-    hρ.rank_spectralProjectionGE_exp_le ((ManyBody.trace_regionState _ _).trans (by simp [hΩ])) _ _, ?_⟩
+    hρ.rank_spectralProjectionGE_exp_le (Entropy.trace_regionState_eq_one hΩ) _ _, ?_⟩
   let C := chainIntervalEntropyBound q R J Δ
   let S := Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω
   let v := C + w - S

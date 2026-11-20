@@ -39,7 +39,7 @@ theorem aklv_regionEntropy_le_short_side {L q k : ℕ}
   classical
   let ρ := Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω
   have hρ := Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω
-  have htrace : ρ.trace = 1 := ((ManyBody.trace_regionState _ _).trans (by simp [hΩ]))
+  have htrace : ρ.trace = 1 := Entropy.trace_regionState_eq_one hΩ
   have hrank : ρ.rank ≤ q ^ min k (L - k) := by
     rw [show ρ = cutMatrix Ω k * (cutMatrix Ω k)ᴴ from regionState_leftBlock_eq Ω k]
     exact (rank_mul_le_left _ _).trans (aklv_rank_cutMatrix_le_pow_min hk Ω)
@@ -98,7 +98,7 @@ theorem exists_aklv_physical_entropy_bound :
     let ρ := Entropy.regionState (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω
     let H := Entropy.regionState_isHermitian (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω
     have hρ := Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω
-    have htrace : ρ.trace = 1 := ((ManyBody.trace_regionState _ _).trans (by simp [hΩ]))
+    have htrace : ρ.trace = 1 := Entropy.trace_regionState_eq_one hΩ
     have htail (i : ℕ) : 1 - H.kyFanNorm (aklvSequenceRankBound q g s i) ≤
         aklvSequenceWeight i / 16 := by
       obtain ⟨hunit, herror, hrank⟩ := hstates i
@@ -112,12 +112,12 @@ theorem exists_aklv_physical_entropy_bound :
         hρ.descEigenvalue_nonneg b.val
     have hsum : ∑ b, H.eigenvalues₀ b = 1 := by
       have h := H.sum_eigenvalues₀_filter_le 0
-      rw [ManyBody.trace_regionState, hΩ, one_pow, Complex.ofReal_one, Complex.one_re] at h
+      rw [Entropy.trace_regionState_eq_one hΩ, Complex.one_re] at h
       simpa only [Nat.zero_le, Finset.filter_true, Matrix.IsHermitian.kyFanNorm_zero,
         sub_zero] using h
     have hent := probabilityEntropy_le_aklvSequenceRankBound hq hg hg1 hs hgapS hT
       (fun b ↦ H.eigenvalues₀ b) hp hsum (fun i _ ↦ by
-        rw [H.sum_eigenvalues₀_filter_le, ManyBody.trace_regionState, hΩ, one_pow, Complex.ofReal_one, Complex.one_re]
+        rw [H.sum_eigenvalues₀_filter_le, Entropy.trace_regionState_eq_one hΩ, Complex.one_re]
         exact htail i)
     have hbound : Entropy.regionEntropy (n := fun _ : Fin L ↦ q) (leftBlock L k) Ω ≤
         300000 * log (aklvSequenceRankBound q g s 0 : ℝ) := by

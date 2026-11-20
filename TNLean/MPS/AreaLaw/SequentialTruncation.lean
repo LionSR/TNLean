@@ -454,7 +454,7 @@ theorem isOpenMPS_sequentialTruncation_leadingEigenprojection
   rw [norm_sub_rev]
   refine herror.trans_eq (Finset.sum_congr rfl fun k _ ↦ congrArg Real.sqrt ?_)
   refine (hspec k).2.2.2.2.2.trans ?_
-  rw [ManyBody.trace_regionState, hψ, one_pow, Complex.ofReal_one, Complex.one_re]
+  rw [Entropy.trace_regionState_eq_one hψ, Complex.one_re]
 
 /-- **Squared error of truncation onto the leading eigenvectors.** For a unit vector `ψ`,
 truncating every internal cut onto the `D` leading eigenvectors of its left marginal gives a
@@ -484,7 +484,7 @@ theorem norm_sequentialTruncation_leadingEigenprojection_sub_sq_le
           ψ).kyFanNorm D := by
     rw [Entropy.norm_sq_toEuclideanLin_localLift_eq_trace (hP k).one_sub]
     refine (hspec k).2.2.2.2.2.trans ?_
-    rw [ManyBody.trace_regionState, hψ, one_pow, Complex.ofReal_one, Complex.one_re]
+    rw [Entropy.trace_regionState_eq_one hψ, Complex.one_re]
   rw [norm_sub_rev]
   refine (norm_sub_sequentialTruncation_sq_le P hP ψ (L - 1)).trans_eq ?_
   rw [Finset.sum_Ico_eq_sum_range]
@@ -519,7 +519,7 @@ theorem exists_sequentialTruncation (ψ : EuclideanSpace ℂ (Fin L → Fin q))
     · exact le_trans (by exact_mod_cast rank_cutMatrix_le_one_of_le hLk _) (le_max_left _ _)
     exact le_trans (le_trans (by exact_mod_cast hrank k hk0 hkL)
       ((Entropy.regionState_posSemidef _ _).rank_spectralProjectionGE_exp_le
-        ((ManyBody.trace_regionState _ _).trans (by simp [hψ])) _ _)) (le_max_right _ _)
+        (Entropy.trace_regionState_eq_one hψ) _ _)) (le_max_right _ _)
   · refine herror.trans (Finset.sum_le_sum fun k _ ↦ Real.sqrt_le_sqrt ?_)
     exact (Entropy.regionState_posSemidef _
       _).trace_complement_spectralProjectionGE_le_surprisalTail _ _

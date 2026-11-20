@@ -8,6 +8,7 @@ import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SupportedMatrixElements
 import QICLean.Entropy.RegionUnion
 import QICLean.Entropy.SupportedMarginalTails
+import QICLean.Entropy.TypicalMarginalMass
 import QICLean.Analysis.TypicalSet
 import QICLean.Algebra.TraceReindex
 import QICLean.ManyBody.Hamiltonian.GroundSpace
@@ -30,7 +31,7 @@ cut.
 * `ManyBody.PlaneInteraction.surprisalTail_reducedState_le`:
   `eq:initial-tail-probability` for the regional state.
 * `ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedState`: the
-  typical marginal spectrum at the concentration width `concentrationWidth`.
+  typical marginal spectrum at QICLean's concentration width `Entropy.concentrationWidth`.
 
 ## References
 
@@ -114,13 +115,6 @@ theorem _root_.ManyBody.PlaneInteraction.surprisalTail_reducedState_le (h : Plan
         (partialTraceRight_cutVector Ω A)
     (reducedState_isHermitian Λ q Ω A) w
 
-/-- The concentration width `32 √((1 + J/Δ) ℬ_A) (M log (n + 2) + e/2 + log 2)` at which
-the marginal tail of Lemma 3.1 drops to `(n + 2)^{-M}`, for `M ≥ 0`. -/
-noncomputable def concentrationWidth (Λ : Finset (ℤ × ℤ)) (q R : ℕ) (J Δ : ℝ)
-    (A : Finset (Site Λ)) (n : ℕ) (M : ℝ) : ℝ :=
-  32 * Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A) *
-    (M * Real.log (n + 2) + Real.exp 1 / 2 + Real.log 2)
-
 /-- **Typical marginal spectrum.** The positive eigenvalues of the regional state whose
 surprisal lies within the concentration width of `S_Ω(A)` carry mass at least
 `1 - (n + 2)^{-M}`.
@@ -134,7 +128,7 @@ theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedStat
     (A : Finset (Site Λ)) (n : ℕ) (M : ℝ) :
     1 - ((n : ℝ) + 2) ^ (-M) ≤
       Entropy.typicalMass (reducedState_isHermitian Λ q Ω A).eigenvalues
-        (regionalEntropy Λ q Ω A) (concentrationWidth Λ q R J Δ A n M) := by
+        (regionalEntropy Λ q Ω A) (Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M) := by
   have hpsd := ((Matrix.posSemidef_vecMulVec_self_star (fun x ↦ Ω x)).submatrix
     (configurationSplit Λ q A).symm).partialTraceRight
   have hp : ∀ i, 0 ≤ (reducedState_isHermitian Λ q Ω A).eigenvalues i :=
@@ -155,19 +149,19 @@ theorem _root_.ManyBody.PlaneInteraction.one_sub_rpow_le_typicalMass_reducedStat
     rw [h2]
     exact Finset.sum_congr rfl fun i _ ↦ by simp
   have htail := h.surprisalTail_reducedState_le hh hhJ hJ hΔ hΩ hgap hspan A
-    (concentrationWidth Λ q R J Δ A n M)
+    (Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M)
   have hmass := Entropy.one_sub_surprisalTail_le_typicalMass hp hs (regionalEntropy Λ q Ω A)
-    (concentrationWidth Λ q R J Δ A n M)
+    (Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M)
   set Rr := Real.sqrt ((1 + J / Δ) * cutLogBudget Λ q R A)
   have hB : 1 ≤ cutLogBudget Λ q R A := Entropy.one_le_cutLogBudget _ _
   have hR : 0 < Rr := Real.sqrt_pos.mpr (by
     have : 0 ≤ J / Δ := div_nonneg hJ hΔ.le
     positivity)
   have hexp : 2 * Real.exp (Real.exp 1 / 2) *
-      Real.exp (-(concentrationWidth Λ q R J Δ A n M / (32 * Rr))) = ((n : ℝ) + 2) ^ (-M) := by
-    have hw : concentrationWidth Λ q R J Δ A n M / (32 * Rr) =
+      Real.exp (-(Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M / (32 * Rr))) = ((n : ℝ) + 2) ^ (-M) := by
+    have hw : Entropy.concentrationWidth (J / Δ) (cutLogBudget Λ q R A) n M / (32 * Rr) =
         M * Real.log (n + 2) + Real.exp 1 / 2 + Real.log 2 := by
-      unfold concentrationWidth
+      unfold Entropy.concentrationWidth
       change 32 * Rr * _ / (32 * Rr) = _
       field_simp
     rw [hw, Real.rpow_def_of_pos (by positivity)]

@@ -10,7 +10,7 @@ import TNLean.Lattice.PhysicalBufferCoordinates
 import TNLean.Lattice.RegionalReset
 import TNLean.Lattice.RegionalResetEntropy
 import TNLean.Lattice.ReplicaSwap
-import TNLean.Lattice.SupportedUnitaryEntropy
+import QICLean.Entropy.MutualInformationPerturbation
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

@@ -9,7 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Lattice
 
 import TNLean.Lattice.Compression
-import TNLean.Lattice.EntropyComparison
 import TNLean.Lattice.EntropyDimension
 import TNLean.Lattice.FiniteDomain
 import TNLean.Lattice.MarginalTails
@@ -25,7 +24,4 @@ import TNLean.Lattice.ReplicaSwap
 import TNLean.Lattice.Sheet
 import TNLean.Lattice.SiteRelabelEntropy
 import TNLean.Lattice.StateSpace
-import TNLean.Lattice.SupportedPolarUnitary
-import TNLean.Lattice.SupportedUnitaryEntropy
 import TNLean.Lattice.TreeBasisCounterexample
-import TNLean.Lattice.ZeroEntropy

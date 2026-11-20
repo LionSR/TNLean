@@ -209,6 +209,6 @@ theorem one_sub_kyFanNorm_le_of_factorization_of_entropy (hq : 1 ≤ q)
   exact one_sub_kyFanNorm_le_of_factorization hq hΩ j hfact hk1
     (one_half_le_kyFanNorm_of_exp_two_mul_vonNeumannEntropy_le
       (Entropy.regionState_posSemidef (n := fun _ : Fin L ↦ q) (leftBlock L j) Ω)
-      ((ManyBody.trace_regionState _ _).trans (by simp [hΩ])) hk) m n hn
+      (Entropy.trace_regionState_eq_one hΩ) hk) m n hn
 
 end TNLean.MPS.AreaLaw.Hastings

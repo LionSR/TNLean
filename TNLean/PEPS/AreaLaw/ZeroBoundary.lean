@@ -22,7 +22,7 @@ component and in particular inside `A` or inside `Aᶜ`. In the split
 coordinates the Hamiltonian is therefore `H_A ⊗ 1 + 1 ⊗ H_{Aᶜ}`, and the
 gapped ground vector is a product vector across the cut, whose reduced state has
 zero entropy. This last step holds on any finite set of sites and is the shared
-lemma `TNLean.Lattice.regionEntropy_eq_zero_of_forall_subset_or_disjoint`, read
+lemma `ManyBody.Interaction.entropy_eq_zero_of_forall_subset_or_disjoint`, read
 on the domain through `regionalEntropy_eq_regionEntropy`.
 
 The same argument covers the degenerate cases of Section 2: range `R = 0`
@@ -193,7 +193,7 @@ theorem regionalEntropy_eq_zero_of_range_eq_zero (h : PlaneInteraction Λ q 0)
 theorem trace_reducedState (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ)) :
     (reducedState Λ q Ω A).trace = 1 := by
   rw [reducedState_eq_regionState]
-  exact ((ManyBody.trace_regionState _ _).trans (by simp [hΩ]))
+  exact Entropy.trace_regionState_eq_one hΩ
 
 /-- A regional entropy vanishes when the regional configuration space has at
 most one element. -/
