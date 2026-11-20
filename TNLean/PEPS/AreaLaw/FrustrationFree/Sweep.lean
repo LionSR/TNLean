@@ -44,7 +44,7 @@ The note writes the factors as `(1 - h_X/J)^{1/2}`; the range projections are us
   "Contraction in one sweep" and "Exact localization on the perturbed vector".
 -/
 
-open Matrix ManyBody ManyBody.LightCone TNLean.Lattice
+open Matrix ManyBody TNLean.Lattice
 open scoped InnerProductSpace ComplexOrder MatrixOrder Kronecker
 
 namespace ContinuousLinearMap
@@ -61,7 +61,7 @@ theorem complementProd_congr {h h' : ℕ → E →L[𝕜] E} {n : ℕ} (hh : ∀
 
 end ContinuousLinearMap
 
-namespace ManyBody.LightCone
+namespace TNLean.PEPS.AreaLaw.FrustrationFree
 
 variable {V : Type*} [Fintype V] [DecidableEq V] {X : V → Type*} [∀ v, Fintype (X v)]
   [∀ v, DecidableEq (X v)] {κ : Type*}
@@ -104,7 +104,7 @@ theorem toEuclideanCLM_sweepProd (P : κ → Matrix (Config X) (Config X) ℂ) (
           simp [wordProjections, List.getElem?_append_left hi], ← ih]
     simp [sweepProd, wordProjections, map_mul, map_sub]
 
-end ManyBody.LightCone
+end TNLean.PEPS.AreaLaw.FrustrationFree
 
 namespace TNLean.PEPS.AreaLaw.FrustrationFree
 
@@ -290,13 +290,16 @@ theorem exists_sweepOp_pow_lightCone
     (c : SupportColouring Λ R) (t : ℕ)
     {α : Type*} [Fintype α] [DecidableEq α] {U : Finset (Site Λ)}
     {B : Matrix (Configuration Λ q × α) (Configuration Λ q × α) ℂ}
-    (hB : BlocksSupportedOn (X := fun _ : Site Λ ↦ Fin q) B U) (ξ : α → ℂ) :
+    (hB : ∀ a b, B.submatrix (fun σ ↦ (σ, a)) (fun τ ↦ (τ, b)) ∈
+      supportedOperators (fun _ : Site Λ ↦ Fin q) U) (ξ : α → ℂ) :
     ∃ L : Matrix (Configuration Λ q) (Configuration Λ q) ℂ,
       L ∈ supportedOperators (fun _ : Site Λ ↦ Fin q)
           (graphNeighborhood Λ (R * (overlapDegreeBound R + 1) * t) U) ∧
         L *ᵥ WithLp.ofLp Ω = WithLp.ofLp Ω ∧ Lᴴ *ᵥ WithLp.ofLp Ω = WithLp.ofLp Ω ∧
-        ((hff.sweepOp c ^ t) ⊗ₖ (1 : Matrix α α ℂ)) *ᵥ (B *ᵥ prodVec (WithLp.ofLp Ω) ξ) =
-          (L ⊗ₖ (1 : Matrix α α ℂ)) *ᵥ (B *ᵥ prodVec (WithLp.ofLp Ω) ξ) := by
+        ((hff.sweepOp c ^ t) ⊗ₖ (1 : Matrix α α ℂ)) *ᵥ
+            (B *ᵥ (fun p : Configuration Λ q × α ↦ WithLp.ofLp Ω p.1 * ξ p.2)) =
+          (L ⊗ₖ (1 : Matrix α α ℂ)) *ᵥ
+            (B *ᵥ (fun p : Configuration Λ q × α ↦ WithLp.ofLp Ω p.1 * ξ p.2)) := by
   set l := (List.replicate t (sweepWord c)).flatten
   refine ⟨retainedProd (fun X ↦ 1 - hff.termProj X) (fun X : AdmissibleSupport Λ R ↦ X.1) U l,
     supportedOperators_mono (retainedSet_sweepWord_pow_subset c U t)

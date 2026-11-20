@@ -23,19 +23,21 @@ area-law note. When the word consists of layers of factors with pairwise disjoin
 layer enlarges the region at most to the set of regions meeting it
 (`retainedSet_subset_of_pairwise_disjoint`).
 
+All declarations are in the namespace `TNLean.PEPS.AreaLaw.FrustrationFree`.
+
 ## Main definitions
 
-* `ManyBody.LightCone.sweepProd`: the product of the factors of a word, the first acting first.
-* `ManyBody.LightCone.retainedProd`, `ManyBody.LightCone.retainedSet`: the kept factors and the
+* `sweepProd`: the product of the factors of a word, the first acting first.
+* `retainedProd`, `retainedSet`: the kept factors and the
   final region.
 
 ## Main statements
 
-* `ManyBody.LightCone.kronecker_one_mulVec_sweep_eq_retained`: the light-cone identity.
-* `ManyBody.LightCone.retainedProd_mem_supportedOperators`, `retainedProd_mulVec_eq_self`,
+* `kronecker_one_mulVec_sweep_eq_retained`: the light-cone identity.
+* `retainedProd_mem_supportedOperators`, `retainedProd_mulVec_eq_self`,
   `conjTranspose_retainedProd_mulVec_eq_self`: the kept product acts on the final region and
   fixes `Ω`, and so does its adjoint.
-* `ManyBody.LightCone.retainedSet_subset_of_pairwise_disjoint`: one layer of disjoint factors.
+* `retainedSet_subset_of_pairwise_disjoint`: one layer of disjoint factors.
 
 ## References
 
@@ -47,29 +49,20 @@ layer enlarges the region at most to the set of regions meeting it
 open Matrix
 open scoped Kronecker
 
-namespace ManyBody.LightCone
+namespace TNLean.PEPS.AreaLaw.FrustrationFree
+
+open ManyBody
 
 variable {V : Type*} [Fintype V] [DecidableEq V] {X : V → Type*} [∀ v, Fintype (X v)]
   [∀ v, DecidableEq (X v)] {α : Type*} [Fintype α] [DecidableEq α]
 
-/-- The block `σ, τ ↦ B (σ, a) (τ, b)` of an operator on the sites and a register. -/
-def block (B : Matrix (Config X × α) (Config X × α) ℂ) (a b : α) :
-    Matrix (Config X) (Config X) ℂ :=
-  B.submatrix (fun σ ↦ (σ, a)) (fun τ ↦ (τ, b))
-
-/-- Every block of `B` acts on `U`. -/
-def BlocksSupportedOn (B : Matrix (Config X × α) (Config X × α) ℂ) (U : Finset V) : Prop :=
-  ∀ a b, block B a b ∈ supportedOperators X U
-
-/-- The product vector `Ω ⊗ ξ`. -/
-def prodVec (Ω : Config X → ℂ) (ξ : α → ℂ) : Config X × α → ℂ := fun p ↦ Ω p.1 * ξ p.2
-
 omit [∀ v, DecidableEq (X v)] [DecidableEq α] in
 /-- The coordinates of `B (Ω ⊗ ξ)` through the blocks of `B`. -/
-theorem mulVec_prodVec_apply (B : Matrix (Config X × α) (Config X × α) ℂ) (Ω : Config X → ℂ)
+theorem mulVec_prod_apply (B : Matrix (Config X × α) (Config X × α) ℂ) (Ω : Config X → ℂ)
     (ξ : α → ℂ) (σ : Config X) (a : α) :
-    (B *ᵥ prodVec Ω ξ) (σ, a) = ∑ b, ξ b * (block B a b *ᵥ Ω) σ := by
-  simp only [mulVec, dotProduct, Fintype.sum_prod_type, prodVec, block, submatrix_apply]
+    (B *ᵥ (fun p : Config X × α ↦ Ω p.1 * ξ p.2)) (σ, a) =
+      ∑ b, ξ b * (B.submatrix (fun σ ↦ (σ, a)) (fun τ ↦ (τ, b)) *ᵥ Ω) σ := by
+  simp only [mulVec, dotProduct, Fintype.sum_prod_type, submatrix_apply]
   rw [Finset.sum_comm]
   refine Finset.sum_congr rfl fun b _ ↦ ?_
   rw [Finset.mul_sum]
@@ -87,11 +80,12 @@ theorem kronecker_one_mulVec_apply (G : Matrix (Config X) (Config X) ℂ)
 
 omit [∀ v, DecidableEq (X v)] in
 /-- The blocks of `(G ⊗ 1) B` are `G` times the blocks of `B`. -/
-theorem block_kronecker_one_mul (G : Matrix (Config X) (Config X) ℂ)
+theorem submatrix_kronecker_one_mul (G : Matrix (Config X) (Config X) ℂ)
     (B : Matrix (Config X × α) (Config X × α) ℂ) (a b : α) :
-    block ((G ⊗ₖ (1 : Matrix α α ℂ)) * B) a b = G * block B a b := by
+    ((G ⊗ₖ (1 : Matrix α α ℂ)) * B).submatrix (fun σ ↦ (σ, a)) (fun τ ↦ (τ, b)) =
+      G * B.submatrix (fun σ ↦ (σ, a)) (fun τ ↦ (τ, b)) := by
   ext σ τ
-  simp only [block, submatrix_apply, mul_apply, Fintype.sum_prod_type, kroneckerMap_apply,
+  simp only [submatrix_apply, mul_apply, Fintype.sum_prod_type, kroneckerMap_apply,
     one_apply]
   refine Finset.sum_congr rfl fun ρ _ ↦ ?_
   rw [Finset.sum_eq_single a (fun c _ hc ↦ by simp [Ne.symm hc]) (by simp)]
@@ -101,17 +95,21 @@ theorem block_kronecker_one_mul (G : Matrix (Config X) (Config X) ℂ)
 `docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`, "Exact localization on the
 perturbed vector": "Its factors missing `S₀` commute past `B₀` and fix `Ω`". -/
 theorem kronecker_one_mulVec_eq_self {B : Matrix (Config X × α) (Config X × α) ℂ}
-    {U D : Finset V} (hB : BlocksSupportedOn B U) {G : Matrix (Config X) (Config X) ℂ}
+    {U D : Finset V}
+    (hB : ∀ a b, B.submatrix (fun σ ↦ (σ, a)) (fun τ ↦ (τ, b)) ∈ supportedOperators X U)
+    {G : Matrix (Config X) (Config X) ℂ}
     (hG : G ∈ supportedOperators X D) (hDU : Disjoint D U) {Ω : Config X → ℂ}
     (hGΩ : G *ᵥ Ω = Ω) (ξ : α → ℂ) :
-    (G ⊗ₖ (1 : Matrix α α ℂ)) *ᵥ (B *ᵥ prodVec Ω ξ) = B *ᵥ prodVec Ω ξ := by
+    (G ⊗ₖ (1 : Matrix α α ℂ)) *ᵥ (B *ᵥ (fun p : Config X × α ↦ Ω p.1 * ξ p.2)) =
+      B *ᵥ (fun p : Config X × α ↦ Ω p.1 * ξ p.2) := by
   ext ⟨σ, a⟩
   rw [kronecker_one_mulVec_apply]
-  have hw : (fun τ ↦ (B *ᵥ prodVec Ω ξ) (τ, a)) = ∑ b, ξ b • (block B a b *ᵥ Ω) := by
+  have hw : (fun τ ↦ (B *ᵥ (fun p : Config X × α ↦ Ω p.1 * ξ p.2)) (τ, a)) =
+      ∑ b, ξ b • (B.submatrix (fun σ ↦ (σ, a)) (fun τ ↦ (τ, b)) *ᵥ Ω) := by
     ext τ
-    rw [mulVec_prodVec_apply, Finset.sum_apply]
+    rw [mulVec_prod_apply, Finset.sum_apply]
     rfl
-  rw [hw, mulVec_sum, mulVec_prodVec_apply, Finset.sum_apply]
+  rw [hw, mulVec_sum, mulVec_prod_apply, Finset.sum_apply]
   refine Finset.sum_congr rfl fun b _ ↦ ?_
   rw [mulVec_smul, mulVec_mulVec,
     (commute_of_mem_supportedOperators_of_disjoint hG (hB a b) hDU).eq, ← mulVec_mulVec, hGΩ]
@@ -212,9 +210,11 @@ factors of a word and the product of its kept factors agree on `B (Ω ⊗ ξ)`. 
 perturbed vector". -/
 theorem kronecker_one_mulVec_sweep_eq_retained (hf : ∀ k, f k ∈ supportedOperators X (T k))
     {Ω : Config X → ℂ} (hΩ : ∀ k, f k *ᵥ Ω = Ω) (ξ : α → ℂ) (l : List κ) :
-    ∀ (U : Finset V) (B : Matrix (Config X × α) (Config X × α) ℂ), BlocksSupportedOn B U →
-      (sweepProd f l ⊗ₖ (1 : Matrix α α ℂ)) *ᵥ (B *ᵥ prodVec Ω ξ) =
-        (retainedProd f T U l ⊗ₖ (1 : Matrix α α ℂ)) *ᵥ (B *ᵥ prodVec Ω ξ) := by
+    ∀ (U : Finset V) (B : Matrix (Config X × α) (Config X × α) ℂ),
+      (∀ a b, B.submatrix (fun σ ↦ (σ, a)) (fun τ ↦ (τ, b)) ∈ supportedOperators X U) →
+      (sweepProd f l ⊗ₖ (1 : Matrix α α ℂ)) *ᵥ (B *ᵥ (fun p : Config X × α ↦ Ω p.1 * ξ p.2)) =
+        (retainedProd f T U l ⊗ₖ (1 : Matrix α α ℂ)) *ᵥ
+          (B *ᵥ (fun p : Config X × α ↦ Ω p.1 * ξ p.2)) := by
   induction l with
   | nil => intro U B _; rfl
   | cons k l ih =>
@@ -227,8 +227,9 @@ theorem kronecker_one_mulVec_sweep_eq_retained (hf : ∀ k, f k ∈ supportedOpe
     rw [hsplit, ← mulVec_mulVec]
     split_ifs with hk
     · rw [kronecker_one_mulVec_eq_self hB (hf k) hk (hΩ k), ih U B hB]
-    · have hB' : BlocksSupportedOn ((f k ⊗ₖ (1 : Matrix α α ℂ)) * B) (T k ∪ U) := fun a b ↦ by
-        rw [block_kronecker_one_mul]
+    · have hB' : ∀ a b, ((f k ⊗ₖ (1 : Matrix α α ℂ)) * B).submatrix (fun σ ↦ (σ, a))
+          (fun τ ↦ (τ, b)) ∈ supportedOperators X (T k ∪ U) := fun a b ↦ by
+        rw [submatrix_kronecker_one_mul]
         exact mul_mem (supportedOperators_mono Finset.subset_union_left (hf k))
           (supportedOperators_mono Finset.subset_union_right (hB a b))
       have h := ih _ _ hB'
@@ -269,4 +270,4 @@ theorem retainedSet_subset_of_pairwise_disjoint {U G : Finset V}
       exact Finset.disjoint_union_right.mpr ⟨(hl.1 k' hk').symm.mono_right Finset.sdiff_subset,
         hdis k' (List.mem_cons_of_mem _ hk')⟩
 
-end ManyBody.LightCone
+end TNLean.PEPS.AreaLaw.FrustrationFree
