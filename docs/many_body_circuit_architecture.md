@@ -147,9 +147,10 @@ Taking basis *types* at the sites is the change with the widest effect. A site
 with a qudit and an ancilla has basis `Fin d × Fin a`, a block of `k` sites has
 basis `Fin k → Fin d`, a site holding several wires has the configurations of
 its wires, and none of them is re-encoded as `Fin` of a product. The registers,
-ports, encodings and blockings of `Circuit/Channel` exist largely to carry
-that re-encoding. `SiteConfig n` in QICLean and `ι → Fin d` in TNLean are the
-cases `X v = Fin (n v)` and `X v = Fin d`, by definition.
+ports, encodings and blockings of `Circuit/Channel`, now deleted in favour of
+QICLean's `Circuit/Compile`, existed largely to carry that re-encoding.
+`SiteConfig n` in QICLean and `ι → Fin d` in TNLean are the cases
+`X v = Fin (n v)` and `X v = Fin d`, by definition.
 
 The specific theorems stay specific. An area law on the chain is a statement
 about `Fin L`; the lemmas it uses about supports, filters and truncations are
@@ -326,9 +327,6 @@ QICLean–TNLean boundary.
 | `IsPairProduct`, `IsWindowProduct` | unitary matrix | at most `K` gates | open chain `Fin n` |
 | `BondChannelLayer`, `channelCircuitMap` | map on matrices | exactly `T` | any bond family |
 | `OnsiteChannel`, `IsLocalChannelProtocol` | map, dimension-changing | exactly `T` | ring only |
-| `IsDimensionBoundedLocalChannelProtocol` | the same, bounded dimensions | exactly `T` | ring only |
-| `FixedRegisterOperation` words | map, fixed alphabet | sum over the word | ring only |
-| `IsPhysicalPortUnitary`, `IsPhysicalPortProtocol` | unitary; map | at most `T` (`mono` constructor) | ring ports, wires `Fin W` |
 | `MeasurementProtocol` | set of output vectors | at most `T` | ring only |
 | `MeasurementRound` lists | Kraus family by outcome | sum of round depths | ring only |
 | `IsAdaptiveChannelProtocol` | map with outcome branches | at most `T`; layers prepended | ring only |
@@ -440,10 +438,10 @@ pointing down the list:
 | Directory | Content | Present modules |
 |---|---|---|
 | `Gate` | unitary words on a finite basis: two-level and Givens words, controlled elements, permutations, dilations, amplification | `Gates/TwoLevel`, `Givens`, ring part of `Controlled`; `PartialIsometryDilation`, `ExactSubspaceAmplification`, `UniformPostselection`, `UniformSuccessAttenuation`, `ExactAmplificationBudget` |
-| `Geometry` | cells on a set of sites: ring, open chain, graph edges, wires of a site; neighbourhoods and light cones | `Geometry`, `RingSeparation`, `Channel/PhysicalPort` (the layout) |
+| `Geometry` | cells on a set of sites: ring, open chain, graph edges, wires of a site; neighbourhoods and light cones | `Geometry`, `RingSeparation`; the port layout is QICLean's `Geometry.portRing` |
 | `Core` | `Layer`, `Circuit`, Kraus family and map, depth and gate count, identity, composition, trace preservation, light cone | replaces `LocalCircuit`, `Composition`, `Channel/Layer`, `Channel/Conversion` |
-| `Model` | the restrictions: unitary, channel, bounded dimension, fixed register, measurement and adaptive, ports, gate count with clean workspace | `PairProduct`, `WindowProduct`, `CleanUnitaryImplementation`, `Measurement/Rounds`, `Channel/DimensionBoundedConversion`, ... |
-| `Compile` | theorems between two models: universality, routing, register encoding, compilation to ports, dilation, removal of measurements | `Gates/TwoSiteUniversality`, `Quantitative*`, `Channel/Port*`, `Channel/PhysicalPort*`, `Channel/Regrouped*` |
+| `Model` | the restrictions: unitary, channel, bounded dimension, fixed register, measurement and adaptive, ports, gate count with clean workspace | `PairProduct`, `WindowProduct`, `CleanUnitaryImplementation`, `Measurement/Rounds`, ...; bounded dimension is QICLean's `IsBoundedProtocol` |
+| `Compile` | theorems between two models: universality, routing, register encoding, compilation to ports, dilation, removal of measurements | `Gates/TwoSiteUniversality`, `Quantitative*`; the port, routing, dilation and blocking modules of `Channel` are deleted in favour of QICLean's `Compile/{Block, Encoding, Port, PortProtocol, Dilation, DilationOutput}` |
 | `Protocol` | named constructions: teleportation, long-range and register gates, GHZ preparation, zero-register reflections | `Teleportation`, `Measurement/GHZ`, `WeightedGHZ`, `ZeroRegister*`, `SelectedZeroRegister*` |
 | `Party` | the reusable party calculus | part of `Lattice/PartyCircuit` |
 
@@ -644,11 +642,19 @@ Wave 3, two tracks that share no file:
   predicates are QICLean's `QICLean/Circuit/Model/Approximate`. The
   ring-geometry group is now 6 modules and 1,746 lines.
 
+  The QICLean bump to `45f8e865` deletes 33 modules of `Circuit/Channel`:
+  the blocking group, `Channel/DimensionBoundedConversion` and the ports and
+  routing group, in favour of QICLean's `QICLean/Circuit/Compile/{Block,
+  Encoding, Port, PortProtocol, Dilation, DilationOutput}`. `Circuit/Channel`
+  keeps `Conversion`, `Layer`, `ApproximateConversion` and `Feedforward`; the
+  ring-geometry group is 5 modules.
+
   The directory was not smaller after pin move 5 for two reasons. The ring
   geometry (`ringBall`, ring separation, the ring as a circuit geometry) was
   not yet on QICLean `main`, so the ring-geometry group could not be
-  restated. The channel modules that carry the system type are still used by
-  13 port, blocking and adaptive-round modules, which wait for 3C.3.
+  restated. The channel modules that carry the system type were then still
+  used by 13 port, blocking and adaptive-round modules; the port and blocking
+  modules have since been deleted.
 
 Wave 4, sweeps:
 
