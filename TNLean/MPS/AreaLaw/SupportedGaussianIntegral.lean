@@ -50,7 +50,8 @@ namespace TNLean.MPS.AreaLaw
 
 section Graph
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q R : ℕ} {κ : Type*} [Fintype κ]
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {α : Type*} [Fintype α] [DecidableEq α]
+  {R : ℕ} {κ : Type*} [Fintype κ]
   {Y : κ → Finset ι}
 
 /-- A single supported unitary path yields the localized truncated Gaussian integrals for
@@ -62,12 +63,12 @@ the Hermitian `K` is localized on the radius-`⌊ℓ⌋` neighborhood of `Z` wit
 theorem exists_supported_gaussian_integral_graphNeighborhood
     (G : SimpleGraph ι)
     (hSphere : ∀ x : ι, ∀ d : ℕ, (Finset.univ.filter fun y ↦ G.edist x y = d).card ≤ 2)
-    (Φ : ManyBody.Interaction (fun _ : ι ↦ Fin q) Y)
+    (Φ : ManyBody.Interaction (fun _ : ι ↦ α) Y)
     (hDiam : ∀ k, ∀ x ∈ Y k, ∀ z ∈ Y k, G.edist x z ≤ R)
     (hCard : ∀ k, (Y k).card ≤ R + 1)
     (hHerm : ∀ k, (Φ.term k).IsHermitian) (b₀ : ℝ)
     (hBudget : ∀ x : ι, ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ Y k), ‖Φ.term k‖ ≤ b₀)
-    {K : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hK : K.IsHermitian) (Z : Finset ι) (ℓ d : ℝ)
+    {K : Matrix (ι → α) (ι → α) ℂ} (hK : K.IsHermitian) (Z : Finset ι) (ℓ d : ℝ)
     (hd : 0 ≤ d)
     (hgen : ∀ s : ℝ,
       ‖ManyBody.heisenbergEvolution Φ.hamiltonian s (Φ.hamiltonian - K) -
@@ -81,21 +82,21 @@ theorem exists_supported_gaussian_integral_graphNeighborhood
     let a : ℝ := 2 * (2 + 4 * |b₀| * Real.exp (2 * R)) * Real.exp 1 /
       (1 - Real.exp (-(1 / 2)))
     let v : ℝ := 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1
-    ∃ U : ℝ → Matrix (ι → Fin q) (ι → Fin q) ℂ,
+    ∃ U : ℝ → Matrix (ι → α) (ι → α) ℂ,
       U 0 = 1 ∧
       (∀ t, HasDerivAt U
         ((Complex.I • ManyBody.regionExpectation (N Z)
           (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
-      (∀ t, U t ∈ Matrix.unitaryGroup (ι → Fin q) ℂ) ∧
-      (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) (N Z : Finset ι)) ∧
-      ∀ (Q : Finset ι) (W : Matrix (ι → Fin q) (ι → Fin q) ℂ),
-        W ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) Q →
+      (∀ t, U t ∈ Matrix.unitaryGroup (ι → α) ℂ) ∧
+      (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ α) (N Z : Finset ι)) ∧
+      ∀ (Q : Finset ι) (W : Matrix (ι → α) (ι → α) ℂ),
+        W ∈ ManyBody.supportedOperators (fun _ ↦ α) Q →
         ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
           let B := N (Q ∪ Z)
           let M := ∫ t : ℝ in Set.Icc (-T) T,
             ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
               ∂gaussianReal 0 η
-          M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) B ∧
+          M ∈ ManyBody.supportedOperators (fun _ ↦ α) B ∧
           ‖M‖ ≤ ‖W‖ ∧
           ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K W‖ ≤
             ‖W‖ * (a + d) * n ^ 2 * (1 + T) * Real.exp (v * T - ℓ / 2) := by
@@ -175,22 +176,22 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
         let Z := crossing.biUnion (fun X ↦ X.1)
         let N := fun S : Finset (Fin L) ↦
           chainNeighborhood S ℓ
-        ∃ U : ℝ → Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ,
+        ∃ U : ℝ → Matrix (Fin L → Fin q × Fin q) (Fin L → Fin q × Fin q) ℂ,
           U 0 = 1 ∧
           (∀ t, HasDerivAt U
             ((Complex.I • ManyBody.regionExpectation (N Z)
               (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
-          (∀ t, U t ∈ Matrix.unitaryGroup (Fin L → Fin (q * q)) ℂ) ∧
-          (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (N Z : Finset (Fin L))) ∧
+          (∀ t, U t ∈ Matrix.unitaryGroup (Fin L → Fin q × Fin q) ℂ) ∧
+          (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) (N Z : Finset (Fin L))) ∧
           ∀ (Q : Finset (Fin L))
-            (W : Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ),
-            W ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q →
+            (W : Matrix (Fin L → Fin q × Fin q) (Fin L → Fin q × Fin q) ℂ),
+            W ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) Q →
             ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
               let B := N (Q ∪ Z)
               let M := ∫ t : ℝ in Set.Icc (-T) T,
                 ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
                   ∂gaussianReal 0 η
-              M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
+              M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) B ∧
               ‖M‖ ≤ ‖W‖ ∧
               ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K W‖ ≤
                 ‖W‖ * C * (L : ℝ) ^ 2 * (1 + T) *
@@ -206,14 +207,15 @@ theorem exists_supported_gaussian_integral (R : ℕ) (J : ℝ) :
   refine ⟨a + d, 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1, by positivity, by positivity, ?_⟩
   intro q hq L h hh hhJ D ℓ hℓ K K' crossing Z N
   let g := h.swappedDoubled D
-  let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin (q * q)) (fun X : ChainSupport L R ↦ X.1) :=
+  let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q × Fin q) (fun X : ChainSupport L R ↦ X.1) :=
     ⟨g.term, g.mem⟩
   have hΦ : Φ.hamiltonian = g.hamiltonian := rfl
   have hgen := exists_supported_gaussian_integral_graphNeighborhood
     (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
     (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le)
         (h.isHermitian_swappedDoubled_term hh D) b₀
-    (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D))
+    (ManyBody.ChainInteraction.sum_norm_terms_containing_le g
+      (h.norm_swappedDoubled_term_le hhJ D))
         (ManyBody.Interaction.isHermitian_hamiltonian (h.isHermitian_doubled_term hh)) Z ℓ
         d hd (fun s ↦ by
       rw [hΦ, biUnion_graphBall_pathGraph_eq_chainNeighborhood Z hℓ, Fintype.card_fin]
@@ -239,23 +241,23 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
         let Z := crossing.biUnion (fun X ↦ X.1)
         let N := fun S : Finset (Fin Λ.card) ↦
           S.biUnion (fun x ↦ ManyBody.graphBall (lineDomainGraph Λ) x m)
-        ∃ U : ℝ → Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ,
+        ∃ U : ℝ → Matrix (Fin Λ.card → Fin q × Fin q) (Fin Λ.card → Fin q × Fin q) ℂ,
           U 0 = 1 ∧
           (∀ t, HasDerivAt U
             ((Complex.I • ManyBody.regionExpectation (N Z)
               (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
-          (∀ t, U t ∈ Matrix.unitaryGroup (Fin Λ.card → Fin (q * q)) ℂ) ∧
-          (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
+          (∀ t, U t ∈ Matrix.unitaryGroup (Fin Λ.card → Fin q × Fin q) ℂ) ∧
+          (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q)
               (N Z : Finset (Fin Λ.card))) ∧
           ∀ (Q : Finset (Fin Λ.card))
-            (W : Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ),
-            W ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q →
+            (W : Matrix (Fin Λ.card → Fin q × Fin q) (Fin Λ.card → Fin q × Fin q) ℂ),
+            W ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) Q →
             ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
               let B := N (Q ∪ Z)
               let M := ∫ t : ℝ in Set.Icc (-T) T,
                 ManyBody.regionExpectation (N Q) (ManyBody.heisenbergEvolution K' t W) * U t
                   ∂gaussianReal 0 η
-              M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
+              M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) B ∧
               ‖M‖ ≤ ‖W‖ ∧
               ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K W‖ ≤
                 ‖W‖ * C * (Λ.card : ℝ) ^ 2 * (1 + T) *
@@ -271,13 +273,14 @@ theorem exists_supported_gaussian_integral_domain (R : ℕ) (J : ℝ) :
   refine ⟨a + d, 2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1, by positivity, by positivity, ?_⟩
   intro q hq Λ h hh hhJ D m K K' crossing Z N
   let g := h.swappedDoubled D
-  let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin (q * q))
+  let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin q × Fin q)
       (fun X : DomainSupport Λ R ↦ X.1) := ⟨g.term, g.mem⟩
   have hΦ : Φ.hamiltonian = g.hamiltonian := rfl
   have hgen := exists_supported_gaussian_integral_graphNeighborhood
     (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) Φ
     (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) (h.isHermitian_swappedDoubled_term hh D) b₀
-    (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D))
+    (ManyBody.DomainInteraction.sum_norm_terms_containing_le g
+      (h.norm_swappedDoubled_term_le hhJ D))
         (ManyBody.Interaction.isHermitian_hamiltonian (h.isHermitian_doubled_term hh)) Z (m : ℝ)
         d hd (fun s ↦ by
       rw [hΦ, Nat.floor_natCast, Fintype.card_fin]

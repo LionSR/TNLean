@@ -10,10 +10,9 @@ import Mathlib.Logic.Equiv.Prod
 /-!
 # Tensoring physical sites
 
-The two configuration functions are paired at each original site, using the
-canonical finite-product encoding. Tensoring two supported operators then
-gives an operator on the union of their original supports, with local
-dimension equal to the product of the two original local dimensions.
+The two configuration functions are paired at each original site. Tensoring two supported
+operators then gives an operator on the union of their original supports, whose local basis
+at a site is the product of the two original local bases.
 
 ## References
 
@@ -27,14 +26,13 @@ open scoped Kronecker
 
 namespace QuantumCircuit
 
-/-- Pair the two configuration values at every original site, encoding a pair
-by `finProdFinEquiv`.
+/-- Pair the two configuration values at every original site: the paired site carries the
+pair of the two values.
 
 Source: polynomial-PEPS, `02-information.tex`, lines 416–424. -/
 def sitePairConfigurationEquiv (ι : Type*) (d e : ℕ) :
-    ((ι → Fin d) × (ι → Fin e)) ≃ (ι → Fin (d * e)) :=
-  (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin d) (fun _ ↦ Fin e)).symm.trans
-    (Equiv.arrowCongr (Equiv.refl ι) finProdFinEquiv)
+    ((ι → Fin d) × (ι → Fin e)) ≃ (ι → Fin d × Fin e) :=
+  (Equiv.arrowProdEquivProdArrow ι (fun _ ↦ Fin d) (fun _ ↦ Fin e)).symm
 
 /-- Tensoring two physical operators and pairing their local coordinates
 preserves the union of their original supports. Empty site sets and zero
@@ -48,23 +46,24 @@ theorem reindex_kronecker_mem_supportedOperators
     (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin d) S)
     (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ Fin e) T) :
     Matrix.reindex (sitePairConfigurationEquiv ι d e) (sitePairConfigurationEquiv ι d e)
-      (A ⊗ₖ B) ∈ ManyBody.supportedOperators (fun _ ↦ Fin (d * e)) (S ∪ T) := by
+      (A ⊗ₖ B) ∈ ManyBody.supportedOperators (fun _ ↦ Fin d × Fin e) (S ∪ T) := by
   induction hA using ManyBody.supportedOperators_induction with
   | prod m hm =>
     induction hB using ManyBody.supportedOperators_induction with
     | prod n hn =>
       have heq : Matrix.reindex (sitePairConfigurationEquiv ι d e)
           (sitePairConfigurationEquiv ι d e)
-          (Matrix.rectKronecker m ⊗ₖ Matrix.rectKronecker n) =
-          Matrix.rectKronecker fun i ↦ Matrix.reindex finProdFinEquiv finProdFinEquiv
-              (m i ⊗ₖ n i) := by
+          (ManyBody.prodOp (X := fun _ : ι ↦ Fin d) m ⊗ₖ
+            ManyBody.prodOp (X := fun _ : ι ↦ Fin e) n) =
+          ManyBody.prodOp (X := fun _ : ι ↦ Fin d × Fin e) fun i ↦ m i ⊗ₖ n i := by
         ext x y
+        simp only [Matrix.reindex_apply, Matrix.submatrix_apply,
+          ManyBody.prodOp_apply, Matrix.kroneckerMap_apply]
         exact Finset.prod_mul_distrib.symm
-      rw [prodOp_eq_rectKronecker, prodOp_eq_rectKronecker, heq]
-      refine rectKronecker_mem_supportedOperators fun i hi ↦ ?_
+      rw [heq]
+      refine ManyBody.prodOp_mem_supportedOperators fun i hi ↦ ?_
       simp only [hm i (fun h ↦ hi (Finset.mem_union_left _ h)),
-        hn i (fun h ↦ hi (Finset.mem_union_right _ h)),
-        Matrix.one_kronecker_one, Matrix.reindex_apply, Matrix.submatrix_one_equiv]
+        hn i (fun h ↦ hi (Finset.mem_union_right _ h)), Matrix.one_kronecker_one]
     | add B C _ _ hB hC =>
       convert add_mem hB hC using 1
       ext x y

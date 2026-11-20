@@ -76,10 +76,9 @@ noncomputable def rectangleGraphIso (width height : ℕ) :
 
 /-- Configuration coordinates transported from the native rectangle to its
 integer domain. Source: area-law Corollary 1.2 and polynomial-PEPS Section 1. -/
-noncomputable def rectangleConfigurationEquiv (width height q : ℕ) :
-    (SquareLatticeVertex width height → Fin q) ≃
-      Configuration (rectangularDomain width height) q :=
-  Equiv.arrowCongr (rectangleSiteEquiv width height) (Equiv.refl (Fin q))
+noncomputable def rectangleConfigurationEquiv (width height : ℕ) (α : Type*) :
+    (SquareLatticeVertex width height → α) ≃ (Site (rectangularDomain width height) → α) :=
+  Equiv.arrowCongr (rectangleSiteEquiv width height) (Equiv.refl α)
 
 /-- A native nearest-neighbor interaction has the same range-one support in
 the induced integer domain. Source: area-law Corollary 1.2. -/

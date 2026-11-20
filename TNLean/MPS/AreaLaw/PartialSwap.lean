@@ -57,7 +57,8 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_term_difference_spec
       (if b then (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) ⊗ₖ h.term X
         else h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
     let K := F * T * Fᴴ - T
-    Entropy.IsSupportedOn (n := fun _ ↦ q * q) K X.1 ∧ K.IsHermitian ∧ ‖K‖ ≤ 2 * J := by
+    K ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) X.1 ∧ K.IsHermitian ∧
+      ‖K‖ ≤ 2 * J := by
   classical
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (sheetSwapOp q D)
@@ -71,12 +72,13 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_term_difference_spec
       (hUVherm : (U ⊗ₖ V).IsHermitian) (hUVnorm : ‖U ⊗ₖ V‖ ≤ J) :
       let T := Matrix.reindex e e (U ⊗ₖ V)
       let K := F * T * Fᴴ - T
-      Entropy.IsSupportedOn (n := fun _ ↦ q * q) K X.1 ∧ K.IsHermitian ∧ ‖K‖ ≤ 2 * J := by
+      K ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) X.1 ∧ K.IsHermitian ∧
+      ‖K‖ ≤ 2 * J := by
     have hT : Matrix.reindex e e (U ⊗ₖ V) ∈
-        ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) X.1 := by
+        ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) X.1 := by
       simpa only [Finset.union_self] using reindex_kronecker_mem_supportedOperators hU hV
     refine ⟨(Subalgebra.toSubmodule
-        (ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) X.1).toSubalgebra).sub_mem
+        (ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) X.1).toSubalgebra).sub_mem
         (reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators D X.1 hU hV) hT, ?_, ?_⟩
     · have hTherm := hUVherm.reindex e
       exact (Matrix.isHermitian_mul_mul_conjTranspose F hTherm).sub hTherm
@@ -130,8 +132,8 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_difference_eq_sum_crossing
         (add_comm _ _)
   have hsum : h.doubled.hamiltonian = ∑ X, ∑ b : Bool, T X b :=
     Finset.sum_congr rfl (fun X _ ↦ hpair X)
-  let δ : Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ →ₗ[ℂ]
-      Matrix (Fin L → Fin (q * q)) (Fin L → Fin (q * q)) ℂ :=
+  let δ : Matrix (Fin L → Fin q × Fin q) (Fin L → Fin q × Fin q) ℂ →ₗ[ℂ]
+      Matrix (Fin L → Fin q × Fin q) (Fin L → Fin q × Fin q) ℂ :=
     LinearMap.mulLeftRight ℂ (F, Fᴴ) - LinearMap.id
   have hcancel (X : ChainSupport L R) (hX : X ∉ C) : δ (∑ b : Bool, T X b) = 0 := by
     have hnot : ¬ ((∃ v ∈ X.1, v ∈ D) ∧ ∃ v ∈ X.1, v ∉ D) := by
@@ -181,7 +183,7 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_boundary_spec
     let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
     let Z := C.biUnion (fun X ↦ X.1)
     let K := F * h.doubled.hamiltonian * Fᴴ - h.doubled.hamiltonian
-    Entropy.IsSupportedOn (n := fun _ ↦ q * q) K Z ∧
+    K ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) Z ∧
       (∀ x ∈ Z, ∃ p ∈ boundaryEdges L D, Nat.dist x.val p ≤ R) ∧
       ‖K‖ ≤ 2 * J * (chainCrossConst R : ℝ) * ((boundaryEdges L D).card : ℝ) := by
   classical
@@ -190,7 +192,7 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_boundary_spec
   let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
   let Z := C.biUnion (fun X ↦ X.1)
   let K := F * h.doubled.hamiltonian * Fᴴ - h.doubled.hamiltonian
-  change Entropy.IsSupportedOn (n := fun _ ↦ q * q) K Z ∧
+  change K ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) Z ∧
     (∀ x ∈ Z, ∃ p ∈ boundaryEdges L D, Nat.dist x.val p ≤ R) ∧
       ‖K‖ ≤ 2 * J * (chainCrossConst R : ℝ) * ((boundaryEdges L D).card : ℝ)
   have hzone : ∀ x ∈ Z, ∃ p ∈ boundaryEdges L D, Nat.dist x.val p ≤ R := by
@@ -209,8 +211,7 @@ theorem _root_.ManyBody.ChainInteraction.partialSwap_boundary_spec
       else h.term X ⊗ₖ (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ))
   obtain ⟨hsum, hcount⟩ := h.partialSwap_difference_eq_sum_crossing D
   change K = ∑ X ∈ C, ∑ b : Bool, (F * T X b * Fᴴ - T X b) at hsum
-  have hsupp : Entropy.IsSupportedOn (n := fun _ ↦ q * q) K Z := by
-    change _ ∈ ManyBody.supportedOperators _ _
+  have hsupp : K ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) Z := by
     rw [hsum]
     apply sum_mem
     intro X hXC

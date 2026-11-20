@@ -138,15 +138,15 @@ private theorem canonicalCrossingBudget_eq_original {L q m : ℕ}
 private theorem squareAreaLawState_inner {L q : ℕ} (φ ψ : StateSpace L q) :
     ⟪AreaLaw.rectangleAreaLawState φ, AreaLaw.rectangleAreaLawState ψ⟫_ℂ = ⟪φ, ψ⟫_ℂ :=
   (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (AreaLaw.rectangleConfigurationEquiv L L q)).inner_map_map φ ψ
+    (AreaLaw.rectangleConfigurationEquiv L L (Fin q))).inner_map_map φ ψ
 
 private theorem squareAreaLawState_operator {L q : ℕ}
     (H : Matrix (Configuration L q) (Configuration L q) ℂ) (ψ : StateSpace L q) :
     AreaLaw.rectangleAreaLawState (toEuclideanLin H ψ) =
-      toEuclideanLin (reindex (AreaLaw.rectangleConfigurationEquiv L L q)
-        (AreaLaw.rectangleConfigurationEquiv L L q) H) (AreaLaw.rectangleAreaLawState ψ) := by
+      toEuclideanLin (reindex (AreaLaw.rectangleConfigurationEquiv L L (Fin q))
+        (AreaLaw.rectangleConfigurationEquiv L L (Fin q)) H) (AreaLaw.rectangleAreaLawState ψ) := by
   ext σ
-  exact (congrFun (reindex_mulVec (AreaLaw.rectangleConfigurationEquiv L L q)
+  exact (congrFun (reindex_mulVec (AreaLaw.rectangleConfigurationEquiv L L (Fin q))
     H (WithLp.ofLp ψ)) σ).symm
 
 /-- Transport supplied canonical conclusions for the explicitly pulled-back

@@ -14,7 +14,7 @@ import QICLean.Analysis.TraceMulBound
 # Two copies of a finite-range chain Hamiltonian
 
 Pairing the two local configuration values at every original site turns
-`H ⊗ 1 + 1 ⊗ H` into a chain Hamiltonian with local dimension `q * q`.
+`H ⊗ 1 + 1 ⊗ H` into an interaction on the chain whose sites carry pairs of values.
 Each interaction keeps its original support and has norm at most `2 * J`.
 No positivity of the local dimension or nonemptiness of the chain is required.
 
@@ -40,7 +40,8 @@ variable {L q R : ℕ} {J : ℝ}
 /-- The two-copy interaction, with the copies paired at each original site.
 Source: TNLean one-dimensional note, `part2a_mps_information.tex`, lines 355–360. -/
 noncomputable def _root_.ManyBody.ChainInteraction.doubled (h : ManyBody.ChainInteraction L q R) :
-    ManyBody.ChainInteraction L (q * q) R where
+    ManyBody.Interaction (fun _ : Fin L ↦ Fin q × Fin q)
+      (fun X : ManyBody.ChainSupport L R ↦ X.1) where
   term X := Matrix.reindex (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)
     (QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q)
       (h.term X ⊗ₖ 1 + 1 ⊗ₖ h.term X)

@@ -52,10 +52,11 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_planeInteractio
         (hhJ : ∀ i, ‖h.term i‖ ≤ J) (hJ : 0 ≤ J)
     (R : Finset (SquareLatticeVertex L L)) :
     let p := QuantumCircuit.sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
-    let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+    let e := AreaLaw.rectangleConfigurationEquiv L L (Fin q × Fin q)
     let F := Matrix.reindex p p (TNLean.Lattice.sheetSwapOp q R)
     let K := Matrix.reindex p p (Matrix.doubledHamiltonian h.hamiltonian)
-    ∃ g : ManyBody.PlaneInteraction (AreaLaw.rectangularDomain L L) (q * q) 1,
+    ∃ g : ManyBody.Interaction (fun _ : Site (AreaLaw.rectangularDomain L L) ↦ Fin q × Fin q)
+        (fun X : ManyBody.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1 ↦ X.1),
       (∀ X, (g.term X).IsHermitian) ∧ (∀ X, ‖g.term X‖ ≤ 2 * J) ∧ g.term =
           Function.extend (AreaLaw.rectangleAreaLawSupport L L)
         (fun i : SquareLatticeSiteOrEdge L L =>
@@ -67,7 +68,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_planeInteractio
   let B (i : SquareLatticeSiteOrEdge L L) :=
     F * Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianPart.term i)) * Fᴴ
   have hBsupport (i : SquareLatticeSiteOrEdge L L) : B i ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
+      ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q)
           (squareLatticeSiteOrEdgeSupport i : Finset (Vertex L)) :=
     TNLean.Lattice.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators R
       (squareLatticeSiteOrEdgeSupport i)
@@ -130,10 +131,8 @@ theorem _root_.ManyBody.SquareInteraction.exists_swapped_doubled_planeInteractio
     by_cases hx : ∃ i, AreaLaw.rectangleAreaLawSupport L L i = X
     · obtain ⟨i, rfl⟩ := hx
       rw [(AreaLaw.rectangleAreaLawSupport_injective L L).extend_apply]
-      have hs := QuantumCircuit.embedOp_mem_supportedOperators_image
-        (AreaLaw.rectangleSiteEquiv L L).injective (hBsupport i)
-      rw [AreaLaw.embedOp_rectangular_eq_reindex] at hs
-      simpa only [AreaLaw.rectangleAreaLawSupport, Finset.coe_image] using hs
+      simpa only [AreaLaw.rectangleAreaLawSupport] using
+        AreaLaw.reindex_rectangleConfigurationEquiv_mem_supportedOperators (hBsupport i)
     · rw [Function.extend_apply' _ _ _ hx]
       exact zero_mem _
   · intro X

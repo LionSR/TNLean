@@ -40,7 +40,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_nearestNeighbor_terms {L q : �
       (∑ i, T i) = h.toAreaLawHamiltonian.hamiltonian := by
   let e := Equiv.sumCongr (AreaLaw.rectangleSiteEquiv L L)
     (ManyBody.Edge.equiv (AreaLaw.rectangleGraphIso L L))
-  let cfg := AreaLaw.rectangleConfigurationEquiv L L q
+  let cfg := AreaLaw.rectangleConfigurationEquiv L L (Fin q)
   refine ⟨fun i ↦ Matrix.reindex cfg cfg (h.hermitianPart.term (e.symm i)), ?_, ?_, ?_, ?_⟩
   · intro i
     have hs := QuantumCircuit.embedOp_mem_supportedOperators_image

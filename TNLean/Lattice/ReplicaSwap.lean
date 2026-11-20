@@ -6,21 +6,21 @@ Authors: TNLean contributors
 import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.Circuit.RegionalSwap
 import TNLean.Lattice.SiteRelabelEntropy
+import QICLean.ManyBody.Sites.ReplicaSwap
 
 /-!
 # Two replicas as paired sites, and the exchange of replicas on a region
 
 Two replicas of a finite set `ι` of sites are the sites `ι ⊕ ι`, and their configurations are
-the paired configurations of local dimension `q * q`. An operator on paired sites acts on both
-replicas of the same sites. The regional swap `F_R` of the two replicas reads the doubled vector
-`Ω ⊗ Ω` through the exchange of the replicas on `R`, so in `F_R (Ω ⊗ Ω)` a core inside `R` and
-a core disjoint from `R` come from different replicas and have no mutual information. Nothing
-here depends on a geometry of the sites.
+the paired configurations, whose sites carry pairs of values. An operator on paired sites acts
+on both replicas of the same sites. The regional swap `F_R` of the two replicas reads the
+doubled vector `Ω ⊗ Ω` through the exchange of the replicas on `R`, so in `F_R (Ω ⊗ Ω)` a core
+inside `R` and a core disjoint from `R` come from different replicas and have no mutual
+information. Nothing here depends on a geometry of the sites.
 
 ## Main statements
 
-* `QuantumCircuit.reindex_sumArrow_sitePair_embedOp`,
-  `QuantumCircuit.reindex_sumArrow_sitePair_mem_supportedOperators`: an operator on paired
+* `QuantumCircuit.reindex_sumArrow_sitePair_mem_supportedOperators`: an operator on paired
   sites acts on both replicas of the same sites.
 * `TNLean.Lattice.sheetSwapOp_mulVec_comp_sumArrow`: the exchanged vector relabels the
   replicas.
@@ -44,68 +44,24 @@ namespace QuantumCircuit
 variable {κ ι : Type*} [Fintype κ] [Fintype ι] [DecidableEq ι]
 
 /-- The configurations of two replicas of the sites `ι`, as paired configurations. -/
-def sumArrowSitePair (ι : Type*) (q : ℕ) : (ι ⊕ ι → Fin q) ≃ (ι → Fin (q * q)) :=
+def sumArrowSitePair (ι : Type*) (q : ℕ) : (ι ⊕ ι → Fin q) ≃ (ι → Fin q × Fin q) :=
   (Equiv.sumArrowEquivProdArrow ι ι (Fin q)).trans (sitePairConfigurationEquiv ι q q)
 
 omit [Fintype ι] [DecidableEq ι] in
 theorem sumArrowSitePair_apply (q : ℕ) (x : ι ⊕ ι → Fin q) (i : ι) :
-    sumArrowSitePair ι q x i = finProdFinEquiv (x (Sum.inl i), x (Sum.inr i)) :=
+    sumArrowSitePair ι q x i = (x (Sum.inl i), x (Sum.inr i)) :=
   rfl
-
-/-- An operator placed on paired sites along `e` is the operator placed on both replicas
-along `e ⊕ e`. -/
-theorem reindex_sumArrow_sitePair_embedOp (q : ℕ) (e : κ → ι)
-    (X : Matrix (κ → Fin (q * q)) (κ → Fin (q * q)) ℂ) :
-    reindex (sumArrowSitePair ι q).symm (sumArrowSitePair ι q).symm (embedOp e X) =
-      embedOp (Sum.map e e)
-        (reindex (sumArrowSitePair κ q).symm (sumArrowSitePair κ q).symm X) := by
-  ext x y
-  simp only [reindex_apply, submatrix_apply, Equiv.symm_symm, embedOp_apply]
-  have hcomp (z : ι ⊕ ι → Fin q) :
-      sumArrowSitePair ι q z ∘ e = sumArrowSitePair κ q (z ∘ Sum.map e e) := rfl
-  have hagree : AgreeOff e (sumArrowSitePair ι q x) (sumArrowSitePair ι q y) ↔
-      AgreeOff (Sum.map e e) x y := by
-    constructor
-    · intro h i hi
-      rcases i with i | i
-      · have h' := congrArg finProdFinEquiv.symm
-          (h i fun j hj ↦ hi (Sum.inl j) (by simp [hj]))
-        simpa [sumArrowSitePair_apply] using congrArg Prod.fst h'
-      · have h' := congrArg finProdFinEquiv.symm
-          (h i fun j hj ↦ hi (Sum.inr j) (by simp [hj]))
-        simpa [sumArrowSitePair_apply] using congrArg Prod.snd h'
-    · intro h i hi
-      rw [sumArrowSitePair_apply, sumArrowSitePair_apply,
-        h (Sum.inl i) (fun j hj ↦ by
-          rcases j with j | j
-          · exact hi j (Sum.inl_injective hj)
-          · simp at hj),
-        h (Sum.inr i) (fun j hj ↦ by
-          rcases j with j | j
-          · simp at hj
-          · exact hi j (Sum.inr_injective hj))]
-  simp only [hagree, hcomp]
 
 /-- **An operator on paired sites acts on both replicas of the same sites.**
 Source: `02-information.tex`, lines 416–424 and 597–609. -/
 theorem reindex_sumArrow_sitePair_mem_supportedOperators (q : ℕ) {S : Finset ι}
-    {A : Matrix (ι → Fin (q * q)) (ι → Fin (q * q)) ℂ}
-    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S) :
+    {A : Matrix (ι → Fin q × Fin q) (ι → Fin q × Fin q) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) S) :
     reindex (sumArrowSitePair ι q).symm (sumArrowSitePair ι q).symm A ∈
       ManyBody.supportedOperators (fun _ ↦ Fin q) (S.disjSum S : Finset (ι ⊕ ι)) := by
-  classical
-  obtain ⟨A', hA'⟩ := TNLean.Lattice.exists_kronecker_one_of_mem_supportedOperators hA
-  have hAeq : A = embedOp (fun x : S ↦ x.val) A' := by
-    rw [embedOp_val_eq_kronecker_one_submatrix, ← hA']
-    simp
-  rw [hAeq, reindex_sumArrow_sitePair_embedOp q Subtype.val]
-  have hrange : Finset.univ.image (Sum.map (fun x : S ↦ x.val) (fun x : S ↦ x.val)) =
-      (S.disjSum S : Finset (ι ⊕ ι)) := by
-    ext z
-    rcases z with z | z <;> simp
-  rw [← hrange]
-  exact embedOp_mem_supportedOperators (Sum.map_injective.mpr
-    ⟨Subtype.val_injective, Subtype.val_injective⟩) _
+  have he : sumArrowSitePair ι q = ManyBody.replicaPairEquiv ι (Fin q) := rfl
+  rw [← ManyBody.reindex_replicaPairEquiv_mem_supportedOperators_iff, ← he]
+  simpa using hA
 
 /-- Placing along a bijection of sites is the transport of configurations. -/
 theorem embedOp_equiv_eq_reindex {q : ℕ} (σ : κ ≃ ι)

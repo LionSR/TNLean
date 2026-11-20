@@ -155,7 +155,7 @@ graph distance across holes in a disconnected domain.
 The matrix-entry condition for support is the carrier of the
 supported-operator algebra `ManyBody.supportedOperators` of QICLean. The paired two-copy construction
 `ManyBody.ChainInteraction.doubled` keeps the same physical supports and
-has local dimension q² and term bound 2J. The equality
+carries at every site the pair of the two values, with term bound 2J. The equality
 `ManyBody.ChainInteraction.doubled_hamiltonian` identifies its sum exactly
 with H⊗1+1⊗H in paired coordinates.
 
@@ -223,7 +223,7 @@ zero local dimension and zero range.
 
 The model `ManyBody.ChainInteraction.swappedDoubled` conjugates every
 doubled interaction by the actual paired swap. It retains the same supports
-and range, local dimension q² and term bound 2J; its operator identity is
+and range, the paired sites and term bound 2J; its operator identity is
 `ManyBody.ChainInteraction.swappedDoubled_hamiltonian`.
 The theorem
 `ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped`

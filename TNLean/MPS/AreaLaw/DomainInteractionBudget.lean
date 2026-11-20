@@ -49,20 +49,24 @@ lemma _root_.ManyBody.DomainInteraction.norm_bound_nonneg (h : DomainInteraction
 /-- The original domain interactions satisfy the chain per-site norm budget.
 No sign or nonempty-domain hypothesis is added.
 Source: TNLean note, part2a_mps_information.tex, lines 260–265. -/
-lemma _root_.ManyBody.DomainInteraction.sum_norm_terms_containing_le (h : DomainInteraction Λ q R)
-    (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-    (x : Fin Λ.card) :
+lemma _root_.ManyBody.DomainInteraction.sum_norm_terms_containing_le
+    {α : Type*} [Fintype α] [DecidableEq α]
+    (h : ManyBody.Interaction (fun _ : Fin Λ.card ↦ α) (fun X : DomainSupport Λ R ↦ X.1))
+    (hhJ : ∀ X, ‖h.term X‖ ≤ J) (x : Fin Λ.card) :
     (∑ X ∈ Finset.univ.filter (fun X : DomainSupport Λ R ↦ x ∈ X.1),
       ‖h.term X‖) ≤ ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J := by
-  refine (Finset.sum_le_sum_of_injOn
-    (g := fun Y : ChainSupport Λ.card R ↦ ‖(h.toChain).term Y‖)
-    DomainSupport.toChainSupport DomainSupport.toChainSupport_injective.injOn
-    ?_ ?_ (fun _ _ _ ↦ norm_nonneg _)).trans
-      ((h.toChain).sum_norm_terms_containing_le
-        (h.norm_toChain_term_le hhJ (h.norm_bound_nonneg hhJ x)) x)
-  · exact fun Y hY ↦ (Finset.mem_image.mp hY).elim fun X hX ↦
-      hX.2 ▸ Finset.mem_filter.mpr ⟨Finset.mem_univ _, (Finset.mem_filter.mp hX.1).2⟩
-  · exact fun X _ ↦ le_of_eq (congrArg norm (h.toChain_term X).symm)
+  classical
+  have hJ : 0 ≤ J := (norm_nonneg _).trans (hhJ ⟨{x}, IsDomainSupport.singleton x⟩)
+  have hcard : (Finset.univ.filter fun X : DomainSupport Λ R ↦ x ∈ X.1).card ≤
+      2 ^ (2 * R + 1) :=
+    (Finset.card_le_card_of_injOn DomainSupport.toChainSupport
+      (fun X hX ↦ by simpa [DomainSupport.toChainSupport] using hX)
+      DomainSupport.toChainSupport_injective.injOn).trans (card_supports_containing_le x)
+  have hsum := Finset.sum_le_card_nsmul
+    (Finset.univ.filter fun X : DomainSupport Λ R ↦ x ∈ X.1)
+    (fun X ↦ ‖h.term X‖) J (fun X _ ↦ hhJ X)
+  rw [nsmul_eq_mul] at hsum
+  exact hsum.trans (mul_le_mul_of_nonneg_right (by exact_mod_cast hcard) hJ)
 
 /-- The original domain crossing supports inject into the chain crossing supports.
 The chain boundary is used only as an upper counting bound.

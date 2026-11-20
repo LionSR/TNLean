@@ -199,7 +199,7 @@ theorem squareAreaLawState_normalizedOutput (F : FilterFamily q m X) (Ω : State
   dsimp only
   rw [← squareAreaLawState_output, AreaLaw.norm_rectangleAreaLawState]
   exact (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (AreaLaw.rectangleConfigurationEquiv L L q)).map_smul _ _
+    (AreaLaw.rectangleConfigurationEquiv L L (Fin q))).map_smul _ _
 
 private theorem norm_canonical_output (F : FilterFamily q m X) (Ω : State L q) :
     ‖toEuclideanLin (Entropy.liftProd

@@ -116,7 +116,8 @@ theorem latticePositiveConstraints_of_locality {p : ℕ} (hp : 1 ≤ p) (R : ℕ
     (1 + 2 * R * (R + 1)) (((2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) : ℝ) * J) 2 2 hΔ htail
     (q := q) (ι := Site Λ) (κ := AdmissibleSupport Λ R) (planeDomainGraph Λ) (fun X => X.1) a ha
     h.term hh h.mem (fun X => X.2.edist_le) (fun X => X.2.card_le)
-    (h.sum_norm_term_containing_le hhJ hJ) (card_domainGraph_sphere_le Λ) hhJ E₀ Ω hΩ hHΩ hgap
+    (ManyBody.PlaneInteraction.sum_norm_term_containing_le h hhJ hJ)
+    (card_domainGraph_sphere_le Λ) hhJ E₀ Ω hΩ hHΩ hgap
   exact ⟨positiveNormalization_pos p _ J, hk, hsum, hgapk, hgapk.trans hsum, htail, hcomp⟩
 
 /-- The prefactor `C₃` of the tail of the positive constraints on a lattice domain: the
@@ -398,7 +399,7 @@ theorem latticeFiniteSetTruncation_of_locality (R : ℕ) {J Δ C₀ C₃ c₃ : 
     hc₃ htail (q := q) (ι := Site Λ) (κ := AdmissibleSupport Λ R) (planeDomainGraph Λ)
     (fun X => X.1) a ha
     h.term hh h.mem (fun X => X.2.edist_le) (fun X => X.2.card_le)
-    (h.sum_norm_term_containing_le hhJ hJ) (card_domainGraph_sphere_le Λ)
+    (ManyBody.PlaneInteraction.sum_norm_term_containing_le h hhJ hJ) (card_domainGraph_sphere_le Λ)
         card_graphBall_domainGraph_le
     (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) hhJ E₀ Ω hΩ hHΩ hgap n hn S₀
     hS₀

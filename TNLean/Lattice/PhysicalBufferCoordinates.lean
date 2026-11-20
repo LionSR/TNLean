@@ -50,33 +50,25 @@ theorem reindex_physicalBuffer_eq_place
   intro Q P s g p pQ e W
   ext x y
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
-    Matrix.one_apply, QuantumCircuit.place_eq_embedOp, QuantumCircuit.embedOp_apply]
-  have hcondition : (e.symm x).1 = (e.symm y).1 ↔
-      QuantumCircuit.AgreeOff (Subtype.val : Q → ι) x y := by
+    Matrix.one_apply, ManyBody.place_apply]
+  have hcondition : (e.symm x).1 = (e.symm y).1 ↔ ∀ v ∉ Q, x v = y v := by
     simp only [P, e, g, s, Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.trans_apply,
       Equiv.doubledRegroup, Equiv.bipartiteRegroup, Equiv.prodCongr_apply, Prod.map,
       FiniteProduct.splitTwoRegionsEquiv, FiniteProduct.unionEquiv,
       Equiv.coe_fn_mk, FiniteProduct.splitEquiv_apply_fst, Equiv.refl_apply, Prod.mk.injEq,
       Equiv.apply_eq_iff_eq]
+    have hQ (i : ι) : i ∉ Q ↔ i ∈ R ∪ C := by simp only [Q, Finset.mem_compl, not_not]
     constructor
     · intro h i hi
-      have hiRC : i ∈ R ∪ C :=
-        not_not.mp (fun hn ↦ hi ⟨i, Finset.mem_compl.mpr hn⟩ rfl)
-      exact finProdFinEquiv.symm.injective <|
-        (Finset.mem_union.mp hiRC).elim
-          (fun hiR ↦ Prod.ext (congrFun h.1.1 ⟨i, hiR⟩) (congrFun h.2.1 ⟨i, hiR⟩))
-          (fun hiC ↦ Prod.ext (congrFun h.1.2 ⟨i, hiC⟩) (congrFun h.2.2 ⟨i, hiC⟩))
+      exact (Finset.mem_union.mp ((hQ i).mp hi)).elim
+        (fun hiR ↦ Prod.ext (congrFun h.1.1 ⟨i, hiR⟩) (congrFun h.2.1 ⟨i, hiR⟩))
+        (fun hiC ↦ Prod.ext (congrFun h.1.2 ⟨i, hiC⟩) (congrFun h.2.2 ⟨i, hiC⟩))
     · intro h
-      have hxy (i : ι) (hi : i ∈ R ∪ C) : x i = y i :=
-        h i (fun j hij ↦ (Finset.mem_compl.mp (hij ▸ j.property)) hi)
-      exact ⟨⟨funext fun v ↦ congrArg (fun z : Fin (q * q) ↦ (finProdFinEquiv.symm z).1)
-          (hxy v (Finset.mem_union_left C v.property)),
-        funext fun v ↦ congrArg (fun z : Fin (q * q) ↦ (finProdFinEquiv.symm z).1)
-          (hxy v (Finset.mem_union_right R v.property))⟩,
-        ⟨funext fun v ↦ congrArg (fun z : Fin (q * q) ↦ (finProdFinEquiv.symm z).2)
-          (hxy v (Finset.mem_union_left C v.property)),
-        funext fun v ↦ congrArg (fun z : Fin (q * q) ↦ (finProdFinEquiv.symm z).2)
-          (hxy v (Finset.mem_union_right R v.property))⟩⟩
+      have hxy (i : ι) (hi : i ∈ R ∪ C) : x i = y i := h i ((hQ i).mpr hi)
+      exact ⟨⟨funext fun v ↦ congrArg Prod.fst (hxy v (Finset.mem_union_left C v.property)),
+        funext fun v ↦ congrArg Prod.fst (hxy v (Finset.mem_union_right R v.property))⟩,
+        ⟨funext fun v ↦ congrArg Prod.snd (hxy v (Finset.mem_union_left C v.property)),
+        funext fun v ↦ congrArg Prod.snd (hxy v (Finset.mem_union_right R v.property))⟩⟩
   simp only [hcondition, ite_mul, one_mul, zero_mul]
   rfl
 

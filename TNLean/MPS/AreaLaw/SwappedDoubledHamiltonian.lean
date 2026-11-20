@@ -42,7 +42,8 @@ namespace TNLean.MPS.AreaLaw
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
 noncomputable def _root_.ManyBody.ChainInteraction.swappedDoubled
     {L q R : ℕ} (h : ManyBody.ChainInteraction L q R) (D : Finset (Fin L)) :
-    ManyBody.ChainInteraction L (q * q) R where
+    ManyBody.Interaction (fun _ : Fin L ↦ Fin q × Fin q)
+      (fun X : ManyBody.ChainSupport L R ↦ X.1) where
   term X :=
     let e := sitePairConfigurationEquiv (Fin L) q q
     let F := Matrix.reindex e e (sheetSwapOp q D)
@@ -96,9 +97,9 @@ theorem _root_.ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped
     let e := QuantumCircuit.sitePairConfigurationEquiv (Fin L) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
     let ψ₀ := Matrix.doubledVector (WithLp.ofLp Ω)
-    let Ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) :=
+    let Ψ : EuclideanSpace ℂ (Fin L → Fin q × Fin q) :=
       WithLp.toLp 2 (ψ₀ ∘ e.symm)
-    let Φ : EuclideanSpace ℂ (Fin L → Fin (q * q)) :=
+    let Φ : EuclideanSpace ℂ (Fin L → Fin q × Fin q) :=
       WithLp.toLp 2 (F *ᵥ WithLp.ofLp Ψ)
     (‖Ψ‖ = 1 ∧ IsGapped h.doubled.hamiltonian (2 * E₀) Δ ∧
       groundSpace h.doubled.hamiltonian (2 * E₀) = Submodule.span ℂ {Ψ}) ∧
@@ -108,8 +109,8 @@ theorem _root_.ManyBody.ChainInteraction.doubled_swappedDoubled_isGapped
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (sheetSwapOp q D)
   let ψ₀ := Matrix.doubledVector (WithLp.ofLp Ω)
-  let Ψ : EuclideanSpace ℂ (Fin L → Fin (q * q)) := WithLp.toLp 2 (ψ₀ ∘ e.symm)
-  let Φ : EuclideanSpace ℂ (Fin L → Fin (q * q)) :=
+  let Ψ : EuclideanSpace ℂ (Fin L → Fin q × Fin q) := WithLp.toLp 2 (ψ₀ ∘ e.symm)
+  let Φ : EuclideanSpace ℂ (Fin L → Fin q × Fin q) :=
     WithLp.toLp 2 (F *ᵥ WithLp.ofLp Ψ)
   change (‖Ψ‖ = 1 ∧ IsGapped h.doubled.hamiltonian (2 * E₀) Δ ∧
     groundSpace h.doubled.hamiltonian (2 * E₀) = Submodule.span ℂ {Ψ}) ∧

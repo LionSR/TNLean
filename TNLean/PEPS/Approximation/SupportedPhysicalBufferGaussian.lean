@@ -68,8 +68,8 @@ theorem squareLocalizationVelocity_eq (J : ℝ) :
 /-- **The supported Gaussian approximation of the physical buffer, with explicit
 constants.** The error of the supported integral is at most
 `‖W‖ C L² (1 + 8 J L² T) e^{v T - l/2}` with `C = squareLocalizationPrefactor` and
-`v = squareLocalizationVelocity J`, the constants of the doubled square Hamiltonian at local
-dimension `q²`, range one and term-norm bound `2J`.
+`v = squareLocalizationVelocity J`, the constants of the doubled square Hamiltonian, whose sites
+carry pairs of values, at range one and term-norm bound `2J`.
 Source: polynomial-PEPS, Section 2, `eq:info-local-two-sided`, lines 513–562, with the
 constants of `eq:info-lr` (lines 486–496). -/
 theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
@@ -84,7 +84,7 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
       let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
       let Λ := AreaLaw.rectangularDomain L L
       let a := AreaLaw.rectangleSiteEquiv L L
-      let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+      let e := AreaLaw.rectangleConfigurationEquiv L L (Fin q × Fin q)
       let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.hamiltonian)
       let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
       let K' := F * K * Fᴴ
@@ -97,19 +97,19 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
           ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W)
         ∀ l : ℕ,
           let B := Lattice.graphNeighborhood Λ l (Q.image a ∪ Z.image a)
-          ∃ U : ℝ → Matrix (Lattice.Configuration Λ (q * q))
-              (Lattice.Configuration Λ (q * q)) ℂ,
+          ∃ U : ℝ → Matrix (Lattice.Site Λ → Fin q × Fin q)
+              (Lattice.Site Λ → Fin q × Fin q) ℂ,
             U 0 = 1 ∧
             (∀ t, HasDerivAt U
               ((Complex.I • ManyBody.regionExpectation B
                 (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
-            (∀ t, U t ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ) ∧
-            (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B) ∧
+            (∀ t, U t ∈ unitaryGroup (Lattice.Site Λ → Fin q × Fin q) ℂ) ∧
+            (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) B) ∧
             ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
               let M := ∫ t : ℝ in Set.Icc (-T) T,
                 ManyBody.regionExpectation B (ManyBody.heisenbergEvolution K' t V) * U t
                   ∂gaussianReal 0 η
-              M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
+              M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) B ∧
               ‖M‖ ≤ ‖W‖ ∧
               ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K V‖ ≤
                 ‖W‖ * squareLocalizationPrefactor * (L : ℝ) ^ 2 *
@@ -128,21 +128,21 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
       (show h.hamiltonian.IsHermitian from hh).eq]
   have hV₀ : reindex (g.symm.trans p) (g.symm.trans p)
       ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) ∈
-        ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q :=
+        ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) Q :=
     (TNLean.Lattice.reindex_physicalBuffer_eq_place q R C₀ hRC W).symm ▸
-      ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _)
+      ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin q × Fin q)
         (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
-  have hV : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
+  have hV : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q)
       (Q.image a : Finset (Lattice.Site Λ)) := by
-    simpa only [a, V, AreaLaw.embedOp_rectangular_eq_reindex, Finset.coe_image,
-      Matrix.reindex_apply, Matrix.submatrix_submatrix] using!
-      embedOp_mem_supportedOperators_image a.injective hV₀
-  have hD : gH.hamiltonian - K ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (Z.image a : Finset (Lattice.Site Λ)) := by
-    simpa only [hK', a, K', F, K, AreaLaw.embedOp_rectangular_eq_reindex, Finset.coe_image,
-      Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_sub,
-      Pi.sub_apply, Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using!
-      embedOp_mem_supportedOperators_image a.injective (h.swapped_doubled_boundary_bound hhJ R).1
+    simpa only [a, V, Matrix.reindex_apply, Matrix.submatrix_submatrix] using!
+      AreaLaw.reindex_rectangleConfigurationEquiv_mem_supportedOperators hV₀
+  have hD : gH.hamiltonian - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q)
+      (Z.image a : Finset (Lattice.Site Λ)) := by
+    simpa only [hK', a, K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_sub, Pi.sub_apply, Matrix.submatrix_mul_equiv,
+      Matrix.submatrix_submatrix] using!
+      AreaLaw.reindex_rectangleConfigurationEquiv_mem_supportedOperators
+        (h.swapped_doubled_boundary_bound hhJ R).1
   have hDn : ‖K' - K‖ ≤ 8 * J * (L : ℝ) ^ 2 := by
     simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
       Matrix.submatrix_sub, Pi.sub_apply, Matrix.submatrix_mul_equiv,
@@ -155,8 +155,9 @@ theorem _root_.ManyBody.SquareInteraction.supported_buffer_gaussian_integral
     simpa only [Λ, Lattice.Site, SquareLatticeVertex, Fintype.card_coe,
       Fintype.card_prod, Fintype.card_fin, Nat.cast_mul, pow_two] using
       congrArg (fun n : ℕ ↦ (n : ℝ)) (Fintype.card_congr a).symm
+  have : Nonempty (Fin q) := ⟨⟨0, hq⟩⟩
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
-    AreaLaw.supported_gaussian_integral (q * q) (Nat.mul_le_mul hq hq) 1
+    AreaLaw.supported_gaussian_integral (Fin q × Fin q) 1
       (by linarith : (0 : ℝ) ≤ 2 * J) Λ gH hgH hgHJ K V (hDK.reindex (p.trans e))
       (Q.image a) (Z.image a) hV hD l
   rw [hK'] at hU hM
@@ -192,7 +193,7 @@ theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integ
         let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
         let Λ := AreaLaw.rectangularDomain L L
         let a := AreaLaw.rectangleSiteEquiv L L
-        let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+        let e := AreaLaw.rectangleConfigurationEquiv L L (Fin q × Fin q)
         let K := reindex (p.trans e) (p.trans e) (doubledHamiltonian h.hamiltonian)
         let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
         let K' := F * K * Fᴴ
@@ -205,19 +206,19 @@ theorem _root_.ManyBody.SquareInteraction.exists_supported_buffer_gaussian_integ
             ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W)
           ∀ l : ℕ,
             let B := Lattice.graphNeighborhood Λ l (Q.image a ∪ Z.image a)
-            ∃ U : ℝ → Matrix (Lattice.Configuration Λ (q * q))
-                (Lattice.Configuration Λ (q * q)) ℂ,
+            ∃ U : ℝ → Matrix (Lattice.Site Λ → Fin q × Fin q)
+                (Lattice.Site Λ → Fin q × Fin q) ℂ,
               U 0 = 1 ∧
               (∀ t, HasDerivAt U
                 ((Complex.I • ManyBody.regionExpectation B
                   (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
-              (∀ t, U t ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ) ∧
-              (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B) ∧
+              (∀ t, U t ∈ unitaryGroup (Lattice.Site Λ → Fin q × Fin q) ℂ) ∧
+              (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) B) ∧
               ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
                 let M := ∫ t : ℝ in Set.Icc (-T) T,
                   ManyBody.regionExpectation B (ManyBody.heisenbergEvolution K' t V) * U t
                     ∂gaussianReal 0 η
-                M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
+                M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) B ∧
                 ‖M‖ ≤ ‖W‖ ∧
                 ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K V‖ ≤
                   ‖W‖ * C * (L : ℝ) ^ 2 * (1 + 8 * J * (L : ℝ) ^ 2 * T) *

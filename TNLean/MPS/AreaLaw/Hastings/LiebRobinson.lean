@@ -57,7 +57,8 @@ theorem _root_.ManyBody.ChainInteraction.norm_heisenberg_commutator_le_numeric
     (SimpleGraph.pathGraph L) Φ
     hh R (fun Z x hx y hy ↦ ChainSupport.edist_le Z x hx y hy)
     (R + 1) (fun Z ↦ Z.2.card_le)
-    (((2 ^ (2 * R + 1) : ℕ) : ℝ) * J) (h.sum_norm_terms_containing_le hhJ) X hA Y hB 1
+    (((2 ^ (2 * R + 1) : ℕ) : ℝ) * J)
+    (ManyBody.ChainInteraction.sum_norm_terms_containing_le h hhJ) X hA Y hB 1
         (by norm_num) d
     (fun x hx y hy ↦ by
       simpa only [SimpleGraph.pathGraph_edist, ENat.natCast_le_natCast] using hd x hx y hy) t

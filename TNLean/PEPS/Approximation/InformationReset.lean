@@ -174,12 +174,12 @@ theorem mutualInformation_cores_le_of_sites_reset_unitary {V : Type*} [Fintype V
     [DecidableEq V] {q : ℕ} (hq : 1 ≤ q) {Ω : EuclideanSpace ℂ (V → Fin q)} (hΩ : ‖Ω‖ = 1)
     {A C A₀ C₀ : Finset V} (hAC : Disjoint A C) (hA₀ : A₀ ⊆ A) (hC₀ : C₀ ⊆ C)
     (B : Finset V) (hnot : ∀ v ∈ A₀ ∪ C₀, v ∉ B)
-    {U : Matrix (V → Fin (q * q)) (V → Fin (q * q)) ℂ}
-    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B)
+    {U : Matrix (V → Fin q × Fin q) (V → Fin q × Fin q) ℂ}
+    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) B)
     {δ : ℝ} :
     let p := sitePairConfigurationEquiv V q q
     let F := reindex p p (sheetSwapOp q A)
-    let ψ : (V → Fin (q * q)) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
+    let ψ : (V → Fin q × Fin q) → ℂ := fun c ↦ Ω (p.symm c).1 * Ω (p.symm c).2
     ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ δ →
     FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω A₀ C₀ ≤
       8 * √δ * Real.log (Real.exp 1 * ((q : ℝ) ^ A₀.card)) := by
@@ -257,28 +257,31 @@ theorem mutualInformation_cores_le_of_reset_unitary {L q : ℕ} (hq : 1 ≤ q)
     (hRC : Disjoint R C)
     (hR₀ : R₀ ⊆ R) (hC₀ : C₀ ⊆ C) (B : Finset (Site (rectangularDomain L L)))
     (hnot : ∀ v ∈ R₀ ∪ C₀, rectangleSiteEquiv L L v ∉ B)
-    {U : Matrix (Lattice.Configuration (rectangularDomain L L) (q * q))
-      (Lattice.Configuration (rectangularDomain L L) (q * q)) ℂ}
-    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B)
+    {U : Matrix (Lattice.Site (rectangularDomain L L) → Fin q × Fin q)
+      (Lattice.Site (rectangularDomain L L) → Fin q × Fin q) ℂ}
+    (hUu : U ∈ unitaryGroup _ ℂ) (hUs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) B)
     {δ : ℝ} :
     let pe := (sitePairConfigurationEquiv (SquareLatticeVertex L L) q q).trans
-      (rectangleConfigurationEquiv L L (q * q))
+      (rectangleConfigurationEquiv L L (Fin q × Fin q))
     let F := reindex pe pe (TNLean.Lattice.sheetSwapOp q R)
-    let ψ : Lattice.Configuration (rectangularDomain L L) (q * q) → ℂ := fun c ↦
+    let ψ : (Lattice.Site (rectangularDomain L L) → Fin q × Fin q) → ℂ := fun c ↦
       Ω (pe.symm c).1 * Ω (pe.symm c).2
     ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ δ →
     FiniteProduct.mutualInformation (fun _ ↦ Fin q) Ω R₀ C₀ ≤
       8 * √δ * Real.log (Real.exp 1 * ((q : ℝ) ^ R₀.card)) := by
   intro pe F ψ hUerr
   set a := rectangleSiteEquiv L L
-  set e := rectangleConfigurationEquiv L L (q * q)
+  set e := rectangleConfigurationEquiv L L (Fin q × Fin q)
   set S := B.image a.symm
-  have hU₀s : reindex e.symm e.symm U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
-    have h₀ : reindex e.symm e.symm U = embedOp a.symm U := by
-      rw [embedOp_equiv_eq_reindex]
-      rfl
-    rw [h₀]
-    exact embedOp_mem_supportedOperators_image a.symm.injective hUs
+  have hU₀s : reindex e.symm e.symm U ∈
+      ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) S := by
+    have he : ManyBody.siteConfigurationEquiv (X := fun _ ↦ Fin q × Fin q)
+        (X' := fun _ ↦ Fin q × Fin q) a.symm (fun _ ↦ Equiv.refl _) = e.symm :=
+      Equiv.symm_bijective.injective <| Equiv.ext fun σ ↦ funext fun v ↦
+        ManyBody.siteConfigurationEquiv_symm_apply _ _ σ v
+    rw [← he]
+    exact ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators _ _
+      (fun _ ↦ a.symm.injective.mem_finset_image.symm) hUs
   have hnot' : ∀ v ∈ R₀ ∪ C₀, v ∉ S := by
     intro v hv hvS
     obtain ⟨u, hu, huv⟩ := Finset.mem_image.mp hvS

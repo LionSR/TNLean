@@ -17,8 +17,8 @@ Let `h` be a Hamiltonian of interaction range `R` and term bound `J` on a finite
 and let `A` be a set of sites. Double `h` on two replicas, pair the two coordinates at every
 site, and conjugate by the swap `F_A` of the replicas on `A`. This file shows:
 
-* the result is again a Hamiltonian of range `R` on `Λ`, now with local dimension `q²` and term
-  bound `2J`, with the same supports (`ManyBody.PlaneInteraction.swappedDoubled`);
+* the result is again a Hamiltonian of range `R` on `Λ`, now with pairs of values at every site
+  and term bound `2J`, with the same supports (`ManyBody.PlaneInteraction.swappedDoubled`);
 * it differs from the doubled Hamiltonian only through the terms whose support crosses `A`
   (`ManyBody.PlaneInteraction.sheetSwapOp_conj_doubled_hamiltonian_sub_eq_sum_crossing`), the
   crossing
@@ -96,10 +96,11 @@ theorem doubledHamiltonian_isHermitian {n : Type*} [DecidableEq n]
 
 /-- **The partially swapped doubled interaction at range `R`.** Its term at a support `X` is
 the doubled term of `h` at `X`, in paired-site coordinates, conjugated by the swap of the two
-replicas on `A`. It is an interaction of range `R` with local dimension `q²`.
+replicas on `A`. It is an interaction of range `R` whose sites carry pairs of values.
 Source: polynomial-PEPS `02-information.tex`, lines 416–424, at range `R`. -/
 def swappedDoubled (h : ManyBody.PlaneInteraction Λ q R) (A : Finset (Site Λ)) :
-    ManyBody.PlaneInteraction Λ (q * q) R where
+    ManyBody.Interaction (fun _ : Site Λ ↦ Fin q × Fin q) (fun X : AdmissibleSupport Λ R ↦ X.1)
+    where
   term X :=
     Matrix.reindex (sitePairConfigurationEquiv (Site Λ) q q)
         (sitePairConfigurationEquiv (Site Λ) q q) (sheetSwapOp q A) *
@@ -210,7 +211,7 @@ theorem swapped_doubled_boundary_bound (h : PlaneInteraction Λ q R)
     let p := sitePairConfigurationEquiv (Site Λ) q q
     let K := Matrix.reindex p p (doubledHamiltonian h.hamiltonian)
     let F := Matrix.reindex p p (sheetSwapOp q A)
-    F * K * Fᴴ - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
+    F * K * Fᴴ - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q)
         (ManyBody.crossingSites Λ R A : Finset (Site Λ)) ∧
       ‖F * K * Fᴴ - K‖ ≤ swapBoundaryCoefficient R * J * (Λ.card : ℝ) := by
   classical
@@ -235,14 +236,14 @@ theorem swapped_doubled_boundary_bound (h : PlaneInteraction Λ q R)
       {M : Matrix (Configuration Λ q) (Configuration Λ q) ℂ}
       (hM : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S) :
       Matrix.reindex p p (doubledHamiltonian M) ∈
-        ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
+        ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) S := by
     simpa only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply,
       Matrix.submatrix_mul_equiv,
       sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
         (R := ∅) hM (Or.inr (by simp))] using!
       reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators ∅ S hM
   have hsupport : F * K * Fᴴ - K ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin (q * q))
+      ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q)
         (ManyBody.crossingSites Λ R A : Finset (Site Λ)) :=
     hsum.symm ▸ sum_mem
       fun X hX ↦ ManyBody.supportedOperators_mono
@@ -304,18 +305,18 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
         ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W)
       ∀ l : ℕ,
         let B := graphNeighborhood Λ l (Q ∪ Z)
-        ∃ U : ℝ → Matrix (Configuration Λ (q * q)) (Configuration Λ (q * q)) ℂ,
+        ∃ U : ℝ → Matrix (Site Λ → Fin q × Fin q) (Site Λ → Fin q × Fin q) ℂ,
           U 0 = 1 ∧
           (∀ t, HasDerivAt U
             ((Complex.I • ManyBody.regionExpectation B
               (ManyBody.heisenbergEvolution K' t (K' - K))) * U t) t) ∧
-          (∀ t, U t ∈ unitaryGroup (Configuration Λ (q * q)) ℂ) ∧
-          (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B) ∧
+          (∀ t, U t ∈ unitaryGroup (Site Λ → Fin q × Fin q) ℂ) ∧
+          (∀ t, U t ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) B) ∧
           ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
             let M := ∫ t : ℝ in Set.Icc (-T) T,
               ManyBody.regionExpectation B (ManyBody.heisenbergEvolution K' t V) * U t
                 ∂gaussianReal 0 η
-            M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
+            M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) B ∧
             ‖M‖ ≤ ‖W‖ ∧
             ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K V‖ ≤
               ‖W‖ * (2 * TNLean.PEPS.AreaLaw.graphBallLocalizationPrefactor R) * (Λ.card : ℝ) *
@@ -331,19 +332,20 @@ theorem supported_buffer_gaussian_integral (hq : 1 ≤ q) (hJ : 0 ≤ J)
   have hK' : gH.hamiltonian = K' := h.swappedDoubled_hamiltonian A
   have hDK : K.IsHermitian :=
     (doubledHamiltonian_isHermitian (ManyBody.Interaction.isHermitian_hamiltonian hh)).reindex p
-  have hV : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q := by
-    have hlift := ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _)
+  have hV : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) Q := by
+    have hlift := ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin q × Fin q)
       (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
     rw [← reindex_physicalBuffer_eq_place q A C hAC W] at hlift
     exact hlift
   obtain ⟨hDs, hDn⟩ := h.swapped_doubled_boundary_bound hhJ hJ A
-  have hD : gH.hamiltonian - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Z := by
+  have hD : gH.hamiltonian - K ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) Z := by
     rw [hK']; exact hDs
   have hVn : ‖V‖ ≤ ‖W‖ :=
     (Matrix.l2_opNorm_reindex_equiv (g.symm.trans p) _).trans_le
       (Matrix.l2_opNorm_one_kronecker_le W)
+  have : Nonempty (Fin q) := ⟨⟨0, hq⟩⟩
   obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
-    TNLean.PEPS.AreaLaw.supported_gaussian_integral (q * q) (Nat.mul_le_mul hq hq) R
+    TNLean.PEPS.AreaLaw.supported_gaussian_integral (Fin q × Fin q) R
       (by linarith : (0 : ℝ) ≤ 2 * J) Λ gH (h.isHermitian_swappedDoubled_term hh A)
           (h.norm_swappedDoubled_term_le hhJ A) K V hDK Q Z hV hD l
   rw [hK'] at hU hM

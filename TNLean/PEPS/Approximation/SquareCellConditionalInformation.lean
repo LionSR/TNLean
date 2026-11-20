@@ -149,7 +149,7 @@ theorem cell_conditionalMutualInformation_le_square_of_rectangle {q L : ℕ}
     have hcv := hclear (x + (1, 1)) (hcl hx) v hv
     simpa only [Equiv.toEmbedding_apply, ← hpos, dist_add_right] using hcv
   have hfinal := hbound (E.map σ.toEmbedding) hE' hclear'
-  simpa only [AreaLaw.rectangleAreaLawState, show rectangleConfigurationEquiv L L q =
+  simpa only [AreaLaw.rectangleAreaLawState, show rectangleConfigurationEquiv L L (Fin q) =
     σ.arrowCongr (Equiv.refl (Fin q)) from rfl,
     FiniteProduct.conditionalMutualInformation, ← Finset.map_union,
     finiteProductEntropy_relabel] using hfinal

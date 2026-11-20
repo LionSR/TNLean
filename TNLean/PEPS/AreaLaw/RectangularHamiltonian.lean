@@ -12,6 +12,7 @@ import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.ManyBody.Hamiltonian.HermitianPart
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 import QICLean.Algebra.L2OpNormReindex
+import QICLean.ManyBody.Sites.Relabel
 import Mathlib.Analysis.Complex.Basic
 
 /-!
@@ -87,28 +88,46 @@ Source: area-law Corollary 1.2, finite tensor factors. -/
 def rectangleAreaLawState {width height q : ℕ} (Ω : RectangleStateSpace width height q) :
     StateSpace (rectangularDomain width height) q :=
   LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (rectangleConfigurationEquiv width height q) Ω
+    (rectangleConfigurationEquiv width height (Fin q)) Ω
 
 /-- The physical coordinate identification preserves the norm.
 Source: area-law Corollary 1.2. -/
 theorem norm_rectangleAreaLawState {width height q : ℕ} (Ω : RectangleStateSpace width height q) :
     ‖rectangleAreaLawState Ω‖ = ‖Ω‖ :=
   (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-    (rectangleConfigurationEquiv width height q)).norm_map Ω
+    (rectangleConfigurationEquiv width height (Fin q))).norm_map Ω
 
 /-- Embedding an operator along the rectangle site identification is the same as
 reindexing its configuration coordinates. Source: area-law Corollary 1.2. -/
 theorem embedOp_rectangular_eq_reindex {width height q : ℕ}
     (A : Matrix (RectangleConfiguration width height q) (RectangleConfiguration width height q) ℂ) :
     QuantumCircuit.embedOp (rectangleSiteEquiv width height) A =
-      Matrix.reindex (rectangleConfigurationEquiv width height q)
-        (rectangleConfigurationEquiv width height q) A := by
+      Matrix.reindex (rectangleConfigurationEquiv width height (Fin q))
+        (rectangleConfigurationEquiv width height (Fin q)) A := by
   ext x y
   rw [QuantumCircuit.embedOp_apply, ite_eq_left]
   · rfl
   · intro v hv
     exact False.elim (hv ((rectangleSiteEquiv width height).symm v)
       ((rectangleSiteEquiv width height).apply_symm_apply v))
+
+/-- Reindexing along the rectangle site identification carries an operator supported on `S`
+to one supported on the image of `S`, for any local basis. Source: area-law Corollary 1.2. -/
+theorem reindex_rectangleConfigurationEquiv_mem_supportedOperators {width height : ℕ}
+    {α : Type*} [Fintype α] [DecidableEq α] {S : Finset (SquareLatticeVertex width height)}
+    {A : Matrix (SquareLatticeVertex width height → α) (SquareLatticeVertex width height → α) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ α) S) :
+    Matrix.reindex (rectangleConfigurationEquiv width height α)
+        (rectangleConfigurationEquiv width height α) A ∈
+      ManyBody.supportedOperators (fun _ ↦ α) (S.image (rectangleSiteEquiv width height)) := by
+  have he : ManyBody.siteConfigurationEquiv (X := fun _ ↦ α) (X' := fun _ ↦ α)
+      (rectangleSiteEquiv width height) (fun _ ↦ Equiv.refl _) =
+        rectangleConfigurationEquiv width height α :=
+    Equiv.symm_bijective.injective <| Equiv.ext fun σ ↦ funext fun v ↦
+      ManyBody.siteConfigurationEquiv_symm_apply _ _ σ v
+  rw [← he]
+  exact ManyBody.reindex_siteConfigurationEquiv_mem_supportedOperators _ _
+    (fun _ ↦ (rectangleSiteEquiv width height).injective.mem_finset_image.symm) hA
 
 end TNLean.PEPS.AreaLaw
 
@@ -124,8 +143,8 @@ Source: area-law Corollary 1.2 and polynomial-PEPS `eq:model`. -/
 def toAreaLawHamiltonian (Φ : RectangleInteraction width height q) :
     ManyBody.PlaneInteraction (rectangularDomain width height) q 1 where
   term := Function.extend (rectangleAreaLawSupport width height)
-    (fun i ↦ Matrix.reindex (rectangleConfigurationEquiv width height q)
-      (rectangleConfigurationEquiv width height q) (Φ.hermitianPart.term i)) 0
+    (fun i ↦ Matrix.reindex (rectangleConfigurationEquiv width height (Fin q))
+      (rectangleConfigurationEquiv width height (Fin q)) (Φ.hermitianPart.term i)) 0
   mem X := by
     classical
     by_cases hx : ∃ i, rectangleAreaLawSupport width height i = X
@@ -146,8 +165,8 @@ theorem isHermitian_toAreaLawHamiltonian_term (Φ : RectangleInteraction width h
     (Φ.toAreaLawHamiltonian.term X).IsHermitian := by
   classical
   change (Function.extend (rectangleAreaLawSupport width height)
-    (fun i ↦ Matrix.reindex (rectangleConfigurationEquiv width height q)
-      (rectangleConfigurationEquiv width height q) (Φ.hermitianPart.term i)) 0 X).IsHermitian
+    (fun i ↦ Matrix.reindex (rectangleConfigurationEquiv width height (Fin q))
+      (rectangleConfigurationEquiv width height (Fin q)) (Φ.hermitianPart.term i)) 0 X).IsHermitian
   by_cases hx : ∃ i, rectangleAreaLawSupport width height i = X
   · obtain ⟨i, rfl⟩ := hx
     rw [(rectangleAreaLawSupport_injective width height).extend_apply]
@@ -162,7 +181,7 @@ theorem norm_toAreaLawHamiltonian_term_le (Φ : RectangleInteraction width heigh
     (hΦ : ∀ i, ‖Φ.term i‖ ≤ J) (X : ManyBody.AdmissibleSupport (rectangularDomain width height) 1) :
     ‖Φ.toAreaLawHamiltonian.term X‖ ≤ J := by
   classical
-  let e := rectangleConfigurationEquiv width height q
+  let e := rectangleConfigurationEquiv width height (Fin q)
   change ‖Function.extend (rectangleAreaLawSupport width height)
     (fun i ↦ Matrix.reindex e e (Φ.hermitianPart.term i)) 0 X‖ ≤ J
   by_cases hx : ∃ i, rectangleAreaLawSupport width height i = X
@@ -180,10 +199,10 @@ sum. Source: area-law Corollary 1.2 and polynomial-PEPS `eq:model`. -/
 theorem toAreaLawHamiltonian_hamiltonian (Φ : RectangleInteraction width height q)
     (hH : Φ.hamiltonian.IsHermitian) :
     Φ.toAreaLawHamiltonian.hamiltonian =
-      Matrix.reindex (rectangleConfigurationEquiv width height q)
-        (rectangleConfigurationEquiv width height q) Φ.hamiltonian := by
+      Matrix.reindex (rectangleConfigurationEquiv width height (Fin q))
+        (rectangleConfigurationEquiv width height (Fin q)) Φ.hamiltonian := by
   classical
-  let e := rectangleConfigurationEquiv width height q
+  let e := rectangleConfigurationEquiv width height (Fin q)
   let T := fun i : SquareLatticeSiteOrEdge width height =>
     Matrix.reindex e e (Φ.hermitianPart.term i)
   let f := Function.extend (rectangleAreaLawSupport width height) T 0

@@ -443,7 +443,7 @@ theorem coarse_mutualInformation_le_square_of_sublinearCollarBound {q : ℕ}
       rintro _ ⟨t, ht, rfl⟩ _ ⟨v, hv, rfl⟩
       rw [Equiv.toEmbedding_apply, rectangleSiteEquiv_val, hdist]
       exact hE t ht v hv)
-  rwa [AreaLaw.rectangleAreaLawState, show AreaLaw.rectangleConfigurationEquiv L L q =
+  rwa [AreaLaw.rectangleAreaLawState, show AreaLaw.rectangleConfigurationEquiv L L (Fin q) =
     σ.arrowCongr (Equiv.refl (Fin q)) from rfl,
     finiteProductMutualInformation_relabel] at h
 

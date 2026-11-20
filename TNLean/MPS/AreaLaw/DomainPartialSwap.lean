@@ -40,7 +40,8 @@ private theorem norm_bound_nonneg_of_support (h : ManyBody.DomainInteraction Λ 
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–360. This definition
 preserves the actual domain supports and asserts no ground-state or reset conclusion. -/
 noncomputable def _root_.ManyBody.DomainInteraction.doubled (h : ManyBody.DomainInteraction Λ q R) :
-    ManyBody.DomainInteraction Λ (q * q) R where
+    ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin q × Fin q)
+      (fun X : DomainSupport Λ R ↦ X.1) where
   term X := Matrix.reindex (sitePairConfigurationEquiv (Fin Λ.card) q q)
     (sitePairConfigurationEquiv (Fin Λ.card) q q)
       (h.term X ⊗ₖ 1 + 1 ⊗ₖ h.term X)
@@ -83,7 +84,8 @@ lemma _root_.ManyBody.DomainInteraction.doubled_hamiltonian (h : DomainInteracti
 Source: TNLean note, `part2a_mps_information.tex`, lines 355–363. -/
 noncomputable def _root_.ManyBody.DomainInteraction.swappedDoubled
     (h : ManyBody.DomainInteraction Λ q R) (D : Finset (Fin Λ.card)) :
-    ManyBody.DomainInteraction Λ (q * q) R where
+    ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin q × Fin q)
+      (fun X : DomainSupport Λ R ↦ X.1) where
   term X :=
     let e := sitePairConfigurationEquiv (Fin Λ.card) q q
     let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
@@ -134,7 +136,8 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_term_difference_spec
       (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
         else h.term X ⊗ₖ (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ))
     let K := F * T * Fᴴ - T
-    Entropy.IsSupportedOn (n := fun _ ↦ q * q) K X.1 ∧ K.IsHermitian ∧ ‖K‖ ≤ 2 * J := by
+    K ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) X.1 ∧ K.IsHermitian ∧
+      ‖K‖ ≤ 2 * J := by
   have hs :=
     (h.toChain).partialSwap_term_difference_spec (h.isHermitian_toChain_term hh)
         (h.norm_toChain_term_le hhJ (norm_bound_nonneg_of_support h hhJ X))
@@ -163,8 +166,8 @@ theorem _root_.ManyBody.DomainInteraction.partialSwap_difference_eq_sum_crossing
     (if b then (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ) ⊗ₖ h.term X
       else h.term X ⊗ₖ (1 : Matrix (Fin Λ.card → Fin q) (Fin Λ.card → Fin q) ℂ))
   let C := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
-  let δ : Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ →ₗ[ℂ]
-      Matrix (Fin Λ.card → Fin (q * q)) (Fin Λ.card → Fin (q * q)) ℂ :=
+  let δ : Matrix (Fin Λ.card → Fin q × Fin q) (Fin Λ.card → Fin q × Fin q) ℂ →ₗ[ℂ]
+      Matrix (Fin Λ.card → Fin q × Fin q) (Fin Λ.card → Fin q × Fin q) ℂ :=
     LinearMap.mulLeftRight ℂ (F, Fᴴ) - LinearMap.id
   have hcancel (X : DomainSupport Λ R) (hX : X ∉ C) : δ (h.doubled.term X) = 0 := by
     have hside : X.1 ⊆ D ∨ Disjoint X.1 D := by

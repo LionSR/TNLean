@@ -84,15 +84,15 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
           let K := Matrix.reindex e e (doubledHamiltonian H)
           let K' := F * K * Fᴴ
           ∀ (N : ℕ → Finset (ι) → Finset (ι)) (Z : Finset (ι)),
-          (∀ ℓ : ℕ, ∃ path : ℝ → Matrix (ι → Fin (q * q)) (ι → Fin (q * q)) ℂ,
+          (∀ ℓ : ℕ, ∃ path : ℝ → Matrix (ι → Fin q × Fin q) (ι → Fin q × Fin q) ℂ,
             ∀ (Q : Finset (ι))
-              (W : Matrix (ι → Fin (q * q)) (ι → Fin (q * q)) ℂ),
-              W ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q →
+              (W : Matrix (ι → Fin q × Fin q) (ι → Fin q × Fin q) ℂ),
+              W ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) Q →
               ∀ (η : ℝ≥0) (T : ℝ), 0 ≤ T →
                 let M := ∫ t : ℝ in Set.Icc (-T) T,
                   ManyBody.regionExpectation (N ℓ Q) (ManyBody.heisenbergEvolution K' t W) *
                     path t ∂gaussianReal 0 η
-                M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) (N ℓ (Q ∪ Z) : Finset (ι)) ∧
+                M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) (N ℓ (Q ∪ Z) : Finset (ι)) ∧
                 ‖M - GaussianFilter.gaussianIntertwinerTruncated η T K' K W‖ ≤
                   ‖W‖ * Cint * (Fintype.card ι : ℝ) ^ 2 * (1 + T) * Real.exp (v * T - ℓ / 2)) →
           (∀ ℓ : ℕ, (ℓ : ℝ) + R ≤ w → Disjoint (N ℓ ((D ∪ C)ᶜ ∪ Z)) (R₀ ∪ C₀)) →
@@ -186,8 +186,8 @@ theorem information_reset_of_supported_localization (q : ℕ) (hq : 1 ≤ q)
     hfilter q D C hDC e H E₀ Ω b hH hΩ hgap hspan hb hI
   let V := Matrix.reindex (g.symm.trans e) (g.symm.trans e)
     ((1 : Matrix (Pconf × Pconf) (Pconf × Pconf) ℂ) ⊗ₖ W)
-  have hVsupp : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) Q := by
-    have hs := ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin _)
+  have hVsupp : V ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) Q := by
+    have hs := ManyBody.place_mem_supportedOperators (X := fun _ ↦ Fin q × Fin q)
       (Matrix.reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
     rw [← reindex_physicalBuffer_eq_place q D C hDC W] at hs
     exact hs

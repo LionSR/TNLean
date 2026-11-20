@@ -13,10 +13,10 @@ import QICLean.Analysis.DoubledSystemGap
 # Support of the regional swap and of swapped doubled interactions
 
 Pairing the two local coordinates at each site identifies the two-copy space with a single
-configuration space of local dimension `q * q`. In these coordinates the regional swap `F_R`
-acts only on `R`. Conjugating a doubled interaction by `F_R` leaves it unchanged when its
-support lies inside or outside `R`, depends only on the swap inside its support, and keeps its
-support. Empty regions, empty site types and zero local dimension are included, and no
+configuration space whose sites carry pairs of local values. In these coordinates the regional
+swap `F_R` acts only on `R`. Conjugating a doubled interaction by `F_R` leaves it unchanged
+when its support lies inside or outside `R`, depends only on the swap inside its support, and
+keeps its support. Empty regions, empty site types and zero local dimension are included, and no
 Hermiticity hypothesis is needed.
 
 ## Main results
@@ -53,20 +53,33 @@ theorem reindex_sheetSwapOp_mem_supportedOperators
     {ι : Type*} [Fintype ι] [DecidableEq ι] (q : ℕ) (R : Finset ι) :
     Matrix.reindex (sitePairConfigurationEquiv ι q q)
         (sitePairConfigurationEquiv ι q q) (sheetSwapOp q R) ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) R := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) R := by
   classical
-  rw [Matrix.reindex_apply, sheetSwapOp, Matrix.toMatrix_toPEquiv_submatrix]
-  apply IsLocalPerm.permMatrix_mem_supportedOperators
-  constructor
-  case right =>
-    intro x y hxy i hi
-    simp [sitePairConfigurationEquiv, sheetSwap, hxy i hi]
-  case left =>
-    intro x i hi
-    change i ∉ R at hi
-    suffices finProdFinEquiv ((x i).divNat, (x i).modNat) = x i by
-      simpa [sitePairConfigurationEquiv, sheetSwap, hi] using this
-    exact finProdFinEquiv.apply_symm_apply (x i)
+  let m : ι → Matrix (Fin q × Fin q) (Fin q × Fin q) ℂ := fun i ↦
+    Matrix.of fun a b ↦ if (if i ∈ R then a.swap else a) = b then 1 else 0
+  have heq : Matrix.reindex (sitePairConfigurationEquiv ι q q)
+      (sitePairConfigurationEquiv ι q q) (sheetSwapOp q R) = ManyBody.prodOp m := by
+    ext x y
+    simp only [Matrix.reindex_apply, Matrix.submatrix_apply, ManyBody.prodOp_apply, m,
+      Matrix.of_apply, sheetSwapOp, PEquiv.toMatrix_apply, Equiv.toPEquiv_apply,
+      Option.mem_def, Option.some.injEq]
+    rw [Finset.prod_boole]
+    simp only [Finset.mem_univ, true_implies]
+    refine if_congr ?_ rfl rfl
+    simp only [sitePairConfigurationEquiv, sheetSwap, Equiv.coe_fn_mk, Prod.ext_iff,
+      funext_iff, Equiv.arrowProdEquivProdArrow]
+    refine ⟨fun h i ↦ ?_, fun h ↦ ⟨fun i ↦ ?_, fun i ↦ ?_⟩⟩
+    · have h₁ := h.1 i
+      have h₂ := h.2 i
+      by_cases hi : i ∈ R <;> simp_all
+    · have := h i
+      by_cases hi : i ∈ R <;> simp_all
+    · have := h i
+      by_cases hi : i ∈ R <;> simp_all
+  rw [heq]
+  refine ManyBody.prodOp_mem_supportedOperators fun i hi ↦ ?_
+  ext a b
+  simp [m, hi, Matrix.one_apply]
 
 /-- A doubled interaction supported entirely on one side of a regional boundary
 is unchanged by conjugation with the actual sheet swap.
@@ -160,17 +173,17 @@ theorem reindex_sheetSwapOp_conj_kronecker_mem_supportedOperators
     let p := sitePairConfigurationEquiv ι q q
     let F := Matrix.reindex p p (sheetSwapOp q D)
     F * Matrix.reindex p p (A ⊗ₖ B) * Fᴴ ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) S := by
   classical
   have hF :
       Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
-        (sheetSwapOp q (D ∩ S)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S :=
+        (sheetSwapOp q (D ∩ S)) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) S :=
     ManyBody.supportedOperators_mono
       Finset.inter_subset_right
       (reindex_sheetSwapOp_mem_supportedOperators q (D ∩ S))
   have hT :
       Matrix.reindex (sitePairConfigurationEquiv ι q q) (sitePairConfigurationEquiv ι q q)
-        (A ⊗ₖ B) ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
+        (A ⊗ₖ B) ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) S := by
     simpa only [Finset.union_self] using reindex_kronecker_mem_supportedOperators hA hB
   dsimp only
   simpa only [Matrix.star_eq_conjTranspose, Matrix.conjTranspose_submatrix,
@@ -191,7 +204,7 @@ theorem reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
     let p := sitePairConfigurationEquiv ι q q
     let F := Matrix.reindex p p (sheetSwapOp q R)
     F * Matrix.reindex p p (doubledHamiltonian A) * Fᴴ ∈
-      ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S := by
+      ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) S := by
   simpa only [doubledHamiltonian, Matrix.reindex_apply, Matrix.submatrix_add,
     Pi.add_apply, Matrix.mul_add, Matrix.add_mul] using
     add_mem

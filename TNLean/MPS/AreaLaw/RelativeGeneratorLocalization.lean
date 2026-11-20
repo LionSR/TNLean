@@ -53,10 +53,10 @@ namespace TNLean.MPS.AreaLaw
 
 section Graph
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q R : ℕ} [NeZero q] {κ : Type*} [Fintype κ]
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {α : Type*} [Fintype α] [DecidableEq α]
+  {R : ℕ} {κ : Type*} [Fintype κ]
   {T : κ → Finset ι}
 
-omit [NeZero q] in
 /-- Localization of the Heisenberg evolution of a finite sum of local perturbations, on a
 finite graph whose spheres have at most two sites. Each perturbation `P c`, `c ∈ C`, is
 supported on a set `U c ⊆ Z` of at most `R + 1` sites and has norm at most `ε`; the
@@ -67,15 +67,15 @@ localization of TNLean note, `part2a_mps_information.tex`, lines 380–400. -/
 theorem norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
     (G : SimpleGraph ι)
     (hSphere : ∀ x : ι, ∀ d : ℕ, (Finset.univ.filter fun y ↦ G.edist x y = d).card ≤ 2)
-    (Φ : ManyBody.Interaction (fun _ : ι ↦ Fin q) T)
+    (Φ : ManyBody.Interaction (fun _ : ι ↦ α) T)
     (hDiam : ∀ k, ∀ x ∈ T k, ∀ z ∈ T k, G.edist x z ≤ R)
     (hCard : ∀ k, (T k).card ≤ R + 1)
     (hHerm : ∀ k, (Φ.term k).IsHermitian) (b₀ : ℝ)
     (hBudget : ∀ x : ι, ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ T k), ‖Φ.term k‖ ≤ b₀)
     {γ : Type*} (C : Finset γ) (U : γ → Finset ι) (Z : Finset ι)
     (hUZ : ∀ c ∈ C, U c ⊆ Z) (hU : ∀ c ∈ C, (U c).card ≤ R + 1)
-    (P : γ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
-    (hP : ∀ c ∈ C, Entropy.IsSupportedOn (n := fun _ ↦ q) (P c) (U c))
+    (P : γ → Matrix (ι → α) (ι → α) ℂ)
+    (hP : ∀ c ∈ C, P c ∈ ManyBody.supportedOperators (fun _ ↦ α) (U c))
     (ε : ℝ) (hPε : ∀ c ∈ C, ‖P c‖ ≤ ε) (ℓ t : ℝ) :
     let B := Z.biUnion fun x ↦ ManyBody.graphBall G x ⌊ℓ⌋₊
     let E := ManyBody.heisenbergEvolution Φ.hamiltonian t (∑ c ∈ C, P c)
@@ -114,7 +114,7 @@ theorem norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
   let δ := (LinearMap.id - ManyBody.regionExpectationLM B).comp
     (LinearMap.mulLeftRight ℂ (NormedSpace.exp (t • (Complex.I • Φ.hamiltonian)),
       NormedSpace.exp ((-t) • (Complex.I • Φ.hamiltonian))))
-  have hδ (A : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
+  have hδ (A : Matrix (ι → α) (ι → α) ℂ) :
       δ A = ManyBody.heisenbergEvolution Φ.hamiltonian t A -
         ManyBody.regionExpectation B (ManyBody.heisenbergEvolution Φ.hamiltonian t A) :=
     rfl
@@ -134,7 +134,7 @@ in the chain length. Source: TNLean note, `part2a_mps_information.tex`, lines 38
 theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpectation_le
     {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hh : ∀ X, (h.term X).IsHermitian)
         (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-    (D : Finset (Fin L)) (hq : 1 ≤ q) (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
+    (D : Finset (Fin L)) (_hq : 1 ≤ q) (ℓ : ℝ) (hℓ : 0 ≤ ℓ) (t : ℝ) :
     let K := h.doubled.hamiltonian
     let K' := (h.swappedDoubled D).hamiltonian
     let C := Entropy.crossingTerms (fun X : ChainSupport L R ↦ X.1) D
@@ -150,9 +150,8 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpect
         (L : ℝ) * Real.exp (v * |t| - ℓ / 2) := by
   classical
   intro K K' C Z B G b₀ a v
-  have : NeZero (q * q) := ⟨Nat.pos_iff_ne_zero.mp (Nat.mul_pos hq hq)⟩
   let g := h.swappedDoubled D
-  let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin (q * q)) (fun X : ChainSupport L R ↦ X.1) :=
+  let Φ : ManyBody.Interaction (fun _ : Fin L ↦ Fin q × Fin q) (fun X : ChainSupport L R ↦ X.1) :=
     ⟨g.term, g.mem⟩
   let e := sitePairConfigurationEquiv (Fin L) q q
   let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
@@ -169,7 +168,8 @@ theorem _root_.ManyBody.ChainInteraction.norm_relativeGenerator_sub_regionExpect
     (SimpleGraph.pathGraph L) (SimpleGraph.pathGraph_card_sphere_le_two L) Φ
     (fun X ↦ ChainSupport.edist_le X) (fun X ↦ X.2.card_le)
         (h.isHermitian_swappedDoubled_term hh D) b₀
-    (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ)
+    (ManyBody.ChainInteraction.sum_norm_terms_containing_le g
+      (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ)
         (fun p ↦ p.1.1) Z
     (fun p hp ↦ Finset.subset_biUnion_of_mem (fun X ↦ X.1) (Finset.mem_product.mp hp).1)
     (fun p _ ↦ p.1.2.card_le) A (fun p _ ↦ (h.partialSwap_term_difference_spec hh hhJ D p.1 p.2).1)
@@ -201,7 +201,7 @@ part0_preamble.tex, lines 191–215. No spectral gap or reset conclusion is asse
 theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpectation_le
     {Λ : Finset ℤ} {q R : ℕ} {J : ℝ} (h : DomainInteraction Λ q R)
         (hh : ∀ X, (h.term X).IsHermitian) (hhJ : ∀ X, ‖h.term X‖ ≤ J)
-    (D : Finset (Fin Λ.card)) (hq : 1 ≤ q) (m : ℕ) (t : ℝ) :
+    (D : Finset (Fin Λ.card)) (_hq : 1 ≤ q) (m : ℕ) (t : ℝ) :
     let K := h.doubled.hamiltonian
     let K' := (h.swappedDoubled D).hamiltonian
     let C := Entropy.crossingTerms (fun X : DomainSupport Λ R ↦ X.1) D
@@ -217,9 +217,8 @@ theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpec
         (Λ.card : ℝ) * Real.exp (v * |t| - (m : ℝ) / 2) := by
   classical
   intro K K' C Z B G b₀ a v
-  have : NeZero (q * q) := ⟨Nat.pos_iff_ne_zero.mp (Nat.mul_pos hq hq)⟩
   let g := h.swappedDoubled D
-  let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin (q * q))
+  let Φ : ManyBody.Interaction (fun _ : Fin Λ.card ↦ Fin q × Fin q)
       (fun X : DomainSupport Λ R ↦ X.1) := ⟨g.term, g.mem⟩
   let e := sitePairConfigurationEquiv (Fin Λ.card) q q
   let F := Matrix.reindex e e (TNLean.Lattice.sheetSwapOp q D)
@@ -234,7 +233,8 @@ theorem _root_.ManyBody.DomainInteraction.norm_relativeGenerator_sub_regionExpec
   have hgen := norm_heisenberg_sum_sub_regionExpectation_graphNeighborhood_le
     (lineDomainGraph Λ) (domainGraph_card_sphere_le_two Λ) Φ
     (fun X ↦ X.2.2) (fun X ↦ X.2.isChainSupport.card_le) (h.isHermitian_swappedDoubled_term hh D) b₀
-    (g.sum_norm_terms_containing_le (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ)
+    (ManyBody.DomainInteraction.sum_norm_terms_containing_le g
+      (h.norm_swappedDoubled_term_le hhJ D)) (C ×ˢ Finset.univ)
         (fun p ↦ p.1.1) Z
     (fun p hp ↦ Finset.subset_biUnion_of_mem (fun X ↦ X.1) (Finset.mem_product.mp hp).1)
     (fun p _ ↦ p.1.2.isChainSupport.card_le) A

@@ -19,7 +19,7 @@ related to the per-site hypothesis before Lemma `lem:LR`
 (`part2a_mps_information.tex`, lines 260–265).
 -/
 
-open ManyBody (ChainSupport card_interval_le interval mem_interval ChainInteraction)
+open ManyBody (ChainSupport card_interval_le interval mem_interval)
 
 open scoped Matrix.Norms.L2Operator
 
@@ -49,11 +49,13 @@ an upper bound independent of the chain length and the local dimension.
 Source: TNLean one-dimensional note, `eq:ham`, and the per-site hypothesis
 before Lemma `lem:LR` (`part2a_mps_information.tex`, lines 260–265). -/
 lemma _root_.ManyBody.ChainInteraction.sum_norm_terms_containing_le
-    {L q R : ℕ} {J : ℝ} (h : ChainInteraction L q R) (hhJ : ∀ X, ‖h.term X‖ ≤ J) (x : Fin L) :
+    {L R : ℕ} {α : Type*} [Fintype α] [DecidableEq α] {J : ℝ}
+    (h : ManyBody.Interaction (fun _ : Fin L ↦ α) (fun X : ChainSupport L R ↦ X.1))
+    (hhJ : ∀ X, ‖h.term X‖ ≤ J) (x : Fin L) :
     (∑ X ∈ Finset.univ.filter (fun X : ChainSupport L R ↦ x ∈ X.1),
       ‖h.term X‖) ≤ ((2 ^ (2 * R + 1) : ℕ) : ℝ) * J := by
   classical
-  have hJ : 0 ≤ J := h.norm_bound_nonneg hhJ x
+  have hJ : 0 ≤ J := (norm_nonneg _).trans (hhJ ⟨{x}, by simp [ManyBody.IsChainSupport]⟩)
   have hcard := card_supports_containing_le (R := R) x
   have hsum := Finset.sum_le_card_nsmul
     (Finset.univ.filter fun X : ChainSupport L R ↦ x ∈ X.1)

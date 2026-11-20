@@ -33,9 +33,9 @@ theorem mutualInformation_cores_le_of_reset_unitary
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ = 1)
     (D R₀ C₀ : Finset ι) (hR₀ : R₀ ⊆ D) (hC₀ : Disjoint C₀ D)
     (S : Finset ι) (hS : Disjoint S (R₀ ∪ C₀))
-    (U : Matrix (ι → Fin (q * q)) (ι → Fin (q * q)) ℂ)
+    (U : Matrix (ι → Fin q × Fin q) (ι → Fin q × Fin q) ℂ)
     (hUu : U ∈ Matrix.unitaryGroup _ ℂ)
-    (hUs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) S) (δ : ℝ) :
+    (hUs : U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) S) (δ : ℝ) :
     let e := QuantumCircuit.sitePairConfigurationEquiv ι q q
     let ψ := fun c ↦ Ω (e.symm c).1 * Ω (e.symm c).2
     let F := Matrix.reindex e e (sheetSwapOp q D)

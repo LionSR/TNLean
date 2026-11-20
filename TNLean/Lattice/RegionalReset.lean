@@ -402,7 +402,7 @@ theorem exists_regional_physicalBuffer_filter {Δ r : ℝ} (hΔ : 0 < Δ) (hr : 
 
 section PolarStep
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {α : Type*} [Fintype α] [DecidableEq α]
 
 /-- **The polar step of the information reset.** Let `M` act on `S`, and let a real
 `z ≥ exp (-2 b)` satisfy `‖M ψ - z φ‖, ‖Mᴴ φ - z ψ‖ ≤ C exp (-10 b) ε`. Then a unitary `U`
@@ -411,15 +411,15 @@ residuals are at most `C exp (-8 b) ε` because `z⁻¹ ≤ exp (2 b)`.
 Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-errors` and
 `eq:info-reset-unitary`. -/
 theorem exists_supported_unitary_of_two_sided (S : Finset ι)
-    {M : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hMsupp : M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S)
-    {ψ φ : (ι → Fin q) → ℂ} {z b C ε : ℝ} (hb : 0 ≤ b) (hz : Real.exp (-2 * b) ≤ z)
+    {M : Matrix (ι → α) (ι → α) ℂ}
+    (hMsupp : M ∈ ManyBody.supportedOperators (fun _ ↦ α) S)
+    {ψ φ : (ι → α) → ℂ} {z b C ε : ℝ} (hb : 0 ≤ b) (hz : Real.exp (-2 * b) ≤ z)
     (hfwd : ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 φ‖ ≤ C * Real.exp (-10 * b) * ε)
     (hrev : ‖WithLp.toLp 2 (Mᴴ *ᵥ φ) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
       C * Real.exp (-10 * b) * ε)
     (hC : 0 ≤ C) (hε : 0 ≤ ε) :
-    ∃ U : Matrix (ι → Fin q) (ι → Fin q) ℂ,
-      U ∈ unitaryGroup (ι → Fin q) ℂ ∧ U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q) S ∧
+    ∃ U : Matrix (ι → α) (ι → α) ℂ,
+      U ∈ unitaryGroup (ι → α) ℂ ∧ U ∈ ManyBody.supportedOperators (fun _ ↦ α) S ∧
       ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 φ‖ ≤ 2 * C * ε := by
   have hz0 : 0 < z := (Real.exp_pos _).trans_le hz
   obtain ⟨U, hU, hUsupp, hcorr⟩ := ManyBody.exists_supported_unitary_polar_correction (S := S)
@@ -428,7 +428,7 @@ theorem exists_supported_unitary_of_two_sided (S : Finset ι)
   have hzinv : (z : ℂ)⁻¹ = ((z⁻¹ : ℝ) : ℂ) := by push_cast; rfl
   have hstar : star ((z : ℂ)⁻¹) = (z : ℂ)⁻¹ := by
     rw [hzinv, Complex.star_def, Complex.conj_ofReal]
-  have hscale (x y : (ι → Fin q) → ℂ) :
+  have hscale (x y : (ι → α) → ℂ) :
       ‖WithLp.toLp 2 ((z : ℂ)⁻¹ • x) - WithLp.toLp 2 y‖ =
         z⁻¹ * ‖WithLp.toLp 2 x - (z : ℂ) • WithLp.toLp 2 y‖ := by
     rw [← Real.norm_of_nonneg (inv_nonneg.mpr hz0.le), ← Complex.norm_real, ← hzinv,

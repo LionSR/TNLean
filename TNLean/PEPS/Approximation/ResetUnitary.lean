@@ -150,9 +150,9 @@ theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq :
       let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
       let Λ := AreaLaw.rectangularDomain L L
       let a := AreaLaw.rectangleSiteEquiv L L
-      let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+      let e := AreaLaw.rectangleConfigurationEquiv L L (Fin q × Fin q)
       let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
-      let ψ : Lattice.Configuration Λ (q * q) → ℂ := fun c ↦
+      let ψ : (Lattice.Site Λ → Fin q × Fin q) → ℂ := fun c ↦
         Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
       let boundary : Finset (Edge (squareLatticeGraph L L)) :=
         Finset.univ.filter (IsRegionBoundaryEdge R)
@@ -161,10 +161,10 @@ theorem _root_.ManyBody.SquareInteraction.reset_localized_filter (q : ℕ) (hq :
       let B := Lattice.graphNeighborhood Λ ⌈resetRadius J Δ r * (1 + b + Real.log L)⌉₊
         (Q.image a ∪ Z.image a)
       ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-      ∃ (z : ℝ) (M : Matrix (Lattice.Configuration Λ (q * q))
-          (Lattice.Configuration Λ (q * q)) ℂ),
+      ∃ (z : ℝ) (M : Matrix (Lattice.Site Λ → Fin q × Fin q)
+          (Lattice.Site Λ → Fin q × Fin q) ℂ),
         Real.exp (-2 * b) ≤ z ∧
-        M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧ ‖M‖ ≤ 1 ∧
+        M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) B ∧ ‖M‖ ≤ 1 ∧
         ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
           resetFilterPrefactor J Δ r * Real.exp (-10 * b) * (L : ℝ) ^ (-r) ∧
         ‖WithLp.toLp 2 (Mᴴ *ᵥ (F *ᵥ ψ)) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
@@ -252,9 +252,9 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_localized_filter (q : ℕ
         let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
         let Λ := AreaLaw.rectangularDomain L L
         let a := AreaLaw.rectangleSiteEquiv L L
-        let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+        let e := AreaLaw.rectangleConfigurationEquiv L L (Fin q × Fin q)
         let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
-        let ψ : Lattice.Configuration Λ (q * q) → ℂ := fun c ↦
+        let ψ : (Lattice.Site Λ → Fin q × Fin q) → ℂ := fun c ↦
           Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
         let boundary : Finset (Edge (squareLatticeGraph L L)) :=
           Finset.univ.filter (IsRegionBoundaryEdge R)
@@ -263,10 +263,10 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_localized_filter (q : ℕ
         let B := Lattice.graphNeighborhood Λ ⌈K * (1 + b + Real.log L)⌉₊
           (Q.image a ∪ Z.image a)
         ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-        ∃ (z : ℝ) (M : Matrix (Lattice.Configuration Λ (q * q))
-            (Lattice.Configuration Λ (q * q)) ℂ),
+        ∃ (z : ℝ) (M : Matrix (Lattice.Site Λ → Fin q × Fin q)
+            (Lattice.Site Λ → Fin q × Fin q) ℂ),
           Real.exp (-2 * b) ≤ z ∧
-          M ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧ ‖M‖ ≤ 1 ∧
+          M ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) B ∧ ‖M‖ ≤ 1 ∧
           ‖WithLp.toLp 2 (M *ᵥ ψ) - (z : ℂ) • WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
             C * Real.exp (-10 * b) * (L : ℝ) ^ (-r) ∧
           ‖WithLp.toLp 2 (Mᴴ *ᵥ (F *ᵥ ψ)) - (z : ℂ) • WithLp.toLp 2 ψ‖ ≤
@@ -292,9 +292,9 @@ theorem _root_.ManyBody.SquareInteraction.reset_unitary (q : ℕ) (hq : 1 ≤ q)
       let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
       let Λ := AreaLaw.rectangularDomain L L
       let a := AreaLaw.rectangleSiteEquiv L L
-      let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+      let e := AreaLaw.rectangleConfigurationEquiv L L (Fin q × Fin q)
       let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
-      let ψ : Lattice.Configuration Λ (q * q) → ℂ := fun c ↦
+      let ψ : (Lattice.Site Λ → Fin q × Fin q) → ℂ := fun c ↦
         Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
       let boundary : Finset (Edge (squareLatticeGraph L L)) :=
         Finset.univ.filter (IsRegionBoundaryEdge R)
@@ -303,9 +303,9 @@ theorem _root_.ManyBody.SquareInteraction.reset_unitary (q : ℕ) (hq : 1 ≤ q)
       let B := Lattice.graphNeighborhood Λ ⌈resetRadius J Δ r * (1 + b + Real.log L)⌉₊
         (Q.image a ∪ Z.image a)
       ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-      ∃ U : Matrix (Lattice.Configuration Λ (q * q)) (Lattice.Configuration Λ (q * q)) ℂ,
-        U ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ ∧
-        U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
+      ∃ U : Matrix (Lattice.Site Λ → Fin q × Fin q) (Lattice.Site Λ → Fin q × Fin q) ℂ,
+        U ∈ unitaryGroup (Lattice.Site Λ → Fin q × Fin q) ℂ ∧
+        U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) B ∧
         ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤
             resetUnitaryPrefactor J Δ r * (L : ℝ) ^ (-r) := by
   intro L hL h hh hhJ E₀ Ω hΩ hgap hspan R C₀ hRC b hb hI Q p Λ a e F ψ boundary Z B
@@ -340,9 +340,9 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_unitary (q : ℕ) (hq : 1
         let p := sitePairConfigurationEquiv (SquareLatticeVertex L L) q q
         let Λ := AreaLaw.rectangularDomain L L
         let a := AreaLaw.rectangleSiteEquiv L L
-        let e := AreaLaw.rectangleConfigurationEquiv L L (q * q)
+        let e := AreaLaw.rectangleConfigurationEquiv L L (Fin q × Fin q)
         let F := reindex (p.trans e) (p.trans e) (TNLean.Lattice.sheetSwapOp q R)
-        let ψ : Lattice.Configuration Λ (q * q) → ℂ := fun c ↦
+        let ψ : (Lattice.Site Λ → Fin q × Fin q) → ℂ := fun c ↦
           Ω ((p.trans e).symm c).1 * Ω ((p.trans e).symm c).2
         let boundary : Finset (Edge (squareLatticeGraph L L)) :=
           Finset.univ.filter (IsRegionBoundaryEdge R)
@@ -351,9 +351,9 @@ theorem _root_.ManyBody.SquareInteraction.exists_reset_unitary (q : ℕ) (hq : 1
         let B := Lattice.graphNeighborhood Λ ⌈K * (1 + b + Real.log L)⌉₊
           (Q.image a ∪ Z.image a)
         ‖WithLp.toLp 2 ψ‖ = 1 ∧ ‖WithLp.toLp 2 (F *ᵥ ψ)‖ = 1 ∧
-        ∃ U : Matrix (Lattice.Configuration Λ (q * q)) (Lattice.Configuration Λ (q * q)) ℂ,
-          U ∈ unitaryGroup (Lattice.Configuration Λ (q * q)) ℂ ∧
-          U ∈ ManyBody.supportedOperators (fun _ ↦ Fin (q * q)) B ∧
+        ∃ U : Matrix (Lattice.Site Λ → Fin q × Fin q) (Lattice.Site Λ → Fin q × Fin q) ℂ,
+          U ∈ unitaryGroup (Lattice.Site Λ → Fin q × Fin q) ℂ ∧
+          U ∈ ManyBody.supportedOperators (fun _ ↦ Fin q × Fin q) B ∧
           ‖WithLp.toLp 2 (U *ᵥ ψ) - WithLp.toLp 2 (F *ᵥ ψ)‖ ≤ C * (L : ℝ) ^ (-r) :=
   ⟨resetUnitaryPrefactor J Δ r, resetRadius J Δ r, resetUnitaryPrefactor_pos hJ hΔ hr,
     resetRadius_pos hJ hΔ hr, ManyBody.SquareInteraction.reset_unitary q hq J hJ hΔ hr⟩

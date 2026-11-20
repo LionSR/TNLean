@@ -58,7 +58,8 @@ namespace TNLean.MPS.AreaLaw
 
 section Graph
 
-variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q R : ℕ} {κ : Type*} [Fintype κ]
+variable {ι : Type*} [Fintype ι] [DecidableEq ι] {α : Type*} [Fintype α] [DecidableEq α]
+  {R : ℕ} {κ : Type*} [Fintype κ]
 
 /-- The commutator estimate of Lemma `lem:LR` on a general finite graph, with decay in the
 graph distance `δ` from the initial support and the convention `exp(-∞/2) = 0`.
@@ -69,14 +70,14 @@ theorem norm_heisenberg_commutator_le_graphDistance_inf
     (G : SimpleGraph ι) (T : κ → Finset ι)
     (hDiam : ∀ k, ∀ x ∈ T k, ∀ z ∈ T k, G.edist x z ≤ R)
     (hCard : ∀ k, (T k).card ≤ R + 1)
-    (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
+    (h : κ → Matrix (ι → α) (ι → α) ℂ)
     (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, Entropy.IsSupportedOn (n := fun _ ↦ q) (h k) (T k))
+    (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ α) (T k))
     (b₀ : ℝ)
     (hBudget : ∀ x : ι, ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ T k), ‖h k‖ ≤ b₀)
-    (S : Finset ι) {A B : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S) (y : ι)
-    (hB : Entropy.IsSupportedOn (n := fun _ ↦ q) B {y}) (t : ℝ) :
+    (S : Finset ι) {A B : Matrix (ι → α) (ι → α) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ α) S) (y : ι)
+    (hB : B ∈ ManyBody.supportedOperators (fun _ ↦ α) {y}) (t : ℝ) :
     let δ : ℕ∞ := S.inf (fun x ↦ G.edist x y)
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A * B -
         B * ManyBody.heisenbergEvolution (∑ k, h k) t A‖ ≤
@@ -84,7 +85,7 @@ theorem norm_heisenberg_commutator_le_graphDistance_inf
         Real.exp ((2 * (R + 1) * |b₀| * Real.exp (2 * R) + 1) * |t|) *
         (if δ = ⊤ then 0 else Real.exp (-((δ.toNat : ℝ) / 2))) := by
   classical
-  let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin q) T := ⟨h, hSupport⟩
+  let Φ : ManyBody.Interaction (fun _ : ι ↦ α) T := ⟨h, hSupport⟩
   have hΦ : Φ.hamiltonian = ∑ k, h k := rfl
   dsimp only
   set δ := S.inf (fun x ↦ G.edist x y)
@@ -118,13 +119,13 @@ theorem norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_
     (hDiam : ∀ k, ∀ x ∈ T k, ∀ z ∈ T k, G.edist x z ≤ R)
     (hCard : ∀ k, (T k).card ≤ R + 1)
     (hSphere : ∀ x : ι, ∀ d : ℕ, (Finset.univ.filter fun y ↦ G.edist x y = d).card ≤ 2)
-    (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
+    (h : κ → Matrix (ι → α) (ι → α) ℂ)
     (hHerm : ∀ k, (h k).IsHermitian)
-    (hSupport : ∀ k, Entropy.IsSupportedOn (n := fun _ ↦ q) (h k) (T k))
+    (hSupport : ∀ k, h k ∈ ManyBody.supportedOperators (fun _ ↦ α) (T k))
     (b₀ : ℝ)
     (hBudget : ∀ x : ι, ∑ k ∈ Finset.univ.filter (fun k ↦ x ∈ T k), ‖h k‖ ≤ b₀)
-    (S : Finset ι) {A : Matrix (ι → Fin q) (ι → Fin q) ℂ}
-    (hA : Entropy.IsSupportedOn (n := fun _ ↦ q) A S)
+    (S : Finset ι) {A : Matrix (ι → α) (ι → α) ℂ}
+    (hA : A ∈ ManyBody.supportedOperators (fun _ ↦ α) S)
     (ℓ : ℝ) (t : ℝ) :
     ‖ManyBody.heisenbergEvolution (∑ k, h k) t A -
         ManyBody.regionExpectation
@@ -139,7 +140,7 @@ theorem norm_heisenberg_sub_regionExpectation_graphNeighborhood_le_of_sphere_le_
     intro x d
     simp only [pow_zero, mul_one]
     exact_mod_cast hSphere x d
-  let Φ : ManyBody.Interaction (fun _ : ι ↦ Fin q) T := ⟨h, hSupport⟩
+  let Φ : ManyBody.Interaction (fun _ : ι ↦ α) T := ⟨h, hSupport⟩
   have hGraph := ManyBody.norm_heisenberg_sub_regionExpectation_graphNeighborhood_le
     G Φ hHerm R hDiam (R + 1) hCard
     b₀ hBudget 2 0 hGrowth S hA ⌊ℓ⌋₊ t
