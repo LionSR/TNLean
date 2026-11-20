@@ -233,11 +233,17 @@ change the local dimension act on single sites.
         ManyBody.exists_eq_place_of_mem_supportedOperators,
         ManyBody.preimage_ringBall_subset}
     \leanok
-    Let $\pi_k\colon\Z_{Mk}\to\Z_M$ map $jk+t\mapsto j$ ($0\le t<k$). An operator $K$ placed on a set $Y$ of blocks is, under $\beta_k^{-1}$, the same operator placed on the sites $\pi_k^{-1}(Y)$. Hence $Z\in\mathcal A_{\pi_k^{-1}(Y)}\iff\beta_k(Z)\in\mathcal A_Y$, and $\pi_k^{-1}(\mathcal L_r(X))\subseteq\mathcal L_{kr}(\pi_k^{-1}(X))$.
+    Let $\pi_k\colon\Z_{Mk}\to\Z_M$ map $jk+t\mapsto j$ ($0\le t<k$). An operator $K$ placed on a
+    set $Y$ of blocks is, under $\beta_k^{-1}$, the same operator placed on the sites
+    $\pi_k^{-1}(Y)$. Hence $Z\in\mathcal A_{\pi_k^{-1}(Y)}\iff\beta_k(Z)\in\mathcal A_Y$, and
+    $\pi_k^{-1}(\mathcal L_r(X))\subseteq\mathcal L_{kr}(\pi_k^{-1}(X))$.
 \end{lemma}
 \begin{proof}
     \leanok
-    A configuration of the blocks of $Y$ is a configuration of the sites of $\pi_k^{-1}(Y)$, so placing $K$ on $Y$ and relabelling the basis gives $K$ placed on $\pi_k^{-1}(Y)$. Every operator supported on a region is a placed operator on that region, and every placed operator is supported there. Finally, $(j+m)k+t=(jk+t)+km\pmod{Mk}$ with $|km|\le kr$ for $|m|\le r$.
+    A configuration of the blocks of $Y$ is a configuration of the sites of $\pi_k^{-1}(Y)$, so
+    placing $K$ on $Y$ and relabelling the basis gives $K$ placed on $\pi_k^{-1}(Y)$. Every
+    operator supported on a region is a placed operator on that region, and every placed operator
+    is supported there. Finally, $(j+m)k+t=(jk+t)+km\pmod{Mk}$ with $|km|\le kr$ for $|m|\le r$.
 \end{proof}
 
 \begin{lemma}[Light cone and correlations after blocking]
@@ -251,11 +257,23 @@ change the local dimension act on single sites.
         QuantumCircuit.Geometry.iterate_neighbourhood_ring,
         ManyBody.trace_prodOp}
     \leanok
-    Let $\Psi$ be a local channel protocol of depth $T$ on the blocked ring $\Z_M$. The dual of $\Psi\circ\beta_k$ maps $\mathcal A_X$ ($X\subseteq\Z_M$) into $\mathcal A_{\mathcal L_{kT}(\pi_k^{-1}(X))}$ and is multiplicative on block sets $X,Y$ with $\mathcal L_T(X)\cap\mathcal L_T(Y)=\varnothing$; on the ring, the $T$-fold neighbourhood of a set is its ball of radius $T$. For $\rho=\bigotimes_{i=0}^{Mk-1}\sigma_i$ with $\Tr\sigma_i=1$, the blocked matrix $\beta_k(\rho)$ is a product over the blocks of factors of unit trace, so Lemma~\ref{lem:qc_local_channel_conversion_correlations} applies to it on the blocked ring: if $\sigma$ is converted in depth $T$ after blocking from $\rho$ and $Z\in\mathcal A_X$, $Z'\in\mathcal A_{X'}$ with $d_{\rm ring}(X,X')>2T$, then $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$.
+    Let $\Psi$ be a local channel protocol of depth $T$ on the blocked ring $\Z_M$. The dual of
+    $\Psi\circ\beta_k$ maps $\mathcal A_X$ ($X\subseteq\Z_M$) into
+    $\mathcal A_{\mathcal L_{kT}(\pi_k^{-1}(X))}$ and is multiplicative on block sets $X,Y$ with
+    $\mathcal L_T(X)\cap\mathcal L_T(Y)=\varnothing$; on the ring, the $T$-fold neighbourhood of a
+    set is its ball of radius $T$. For $\rho=\bigotimes_{i=0}^{Mk-1}\sigma_i$ with
+    $\Tr\sigma_i=1$, the blocked matrix $\beta_k(\rho)$ is a product over the blocks of factors of
+    unit trace, so Lemma~\ref{lem:qc_local_channel_conversion_correlations} applies to it on the
+    blocked ring: if $\sigma$ is converted in depth $T$ after blocking from $\rho$ and
+    $Z\in\mathcal A_X$, $Z'\in\mathcal A_{X'}$ with $d_{\rm ring}(X,X')>2T$, then
+    $\Tr(\sigma ZZ')=\Tr(\sigma Z)\Tr(\sigma Z')$.
 \end{lemma}
 \begin{proof}
     \leanok
-    Combine Lemma~\ref{lem:qc_protocol_light_cone} on the blocked ring with the support preservation of $\beta_k$ from Lemma~\ref{lem:qc_blocking_supports}. The trace of a tensor product is the product of the traces, and $\beta_k$ groups the factors of $\rho$ blockwise by Definition~\ref{def:qc_blocked_local_channel_conversion}.
+    Combine Lemma~\ref{lem:qc_protocol_light_cone} on the blocked ring with the support
+    preservation of $\beta_k$ from Lemma~\ref{lem:qc_blocking_supports}. The trace of a tensor
+    product is the product of the traces, and $\beta_k$ groups the factors of $\rho$ blockwise by
+    Definition~\ref{def:qc_blocked_local_channel_conversion}.
 \end{proof}
 
 \begin{lemma}[Matching schedules after grouping sites]

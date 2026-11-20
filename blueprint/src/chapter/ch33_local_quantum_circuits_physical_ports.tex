@@ -170,12 +170,29 @@ It does not identify the unrestricted local-channel model with the source's phas
     \lean{QuantumCircuit.Layer.exists_portRing,
         QuantumCircuit.IsBoundedProtocol.exists_portRing}
     \leanok
-    Fix $d\ge1$ and $k\ge0$, and consider a ring of $N\ge2$ sites with $2k+1$ qudits of dimension $d$ at every site: the physical port, $k$ data qudits and $k$ scratch qudits. Let $\mathcal E_{\rm data}$ place a register of $k$ digits at every site into its data qudits. Every layer $L$ of CPTP pair channels on a matching of the ring of registers of $k$ digits has a physical-port protocol $\Gamma_L$ of depth at most $2k$ with $\Gamma_L\circ\mathcal E_{\rm data}=\mathcal E_{\rm data}\circ L$. Consequently, if $\Psi$ is a native protocol of depth $T$ whose local dimensions along the protocol are at most $B\le d^k$, and its input and output bases are encoded into registers by $\mathcal E_{\rm in}$ and $\mathcal E_{\rm out}$, there is a physical-port protocol $\Gamma$ of depth at most $2kT$ with $\Gamma\circ\mathcal E_{\rm data}\circ\mathcal E_{\rm in}=\mathcal E_{\rm data}\circ\mathcal E_{\rm out}\circ\Psi$; for $d\ge2$ one may take $k=\lceil\log_d B\rceil$.
+    Fix $d\ge1$ and $k\ge0$, and consider a ring of $N\ge2$ sites with $2k+1$ qudits of dimension
+    $d$ at every site: the physical port, $k$ data qudits and $k$ scratch qudits. Let
+    $\mathcal E_{\rm data}$ place a register of $k$ digits at every site into its data qudits.
+    Every layer $L$ of CPTP pair channels on a matching of the ring of registers of $k$ digits has
+    a physical-port protocol $\Gamma_L$ of depth at most $2k$ with
+    $\Gamma_L\circ\mathcal E_{\rm data}=\mathcal E_{\rm data}\circ L$. Consequently, if $\Psi$ is
+    a native protocol of depth $T$ whose local dimensions along the protocol are at most
+    $B\le d^k$, and its input and output bases are encoded into registers by $\mathcal E_{\rm in}$
+    and $\mathcal E_{\rm out}$, there is a physical-port protocol $\Gamma$ of depth at most $2kT$
+    with
+    $\Gamma\circ\mathcal E_{\rm data}\circ\mathcal E_{\rm in}=
+    \mathcal E_{\rm data}\circ\mathcal E_{\rm out}\circ\Psi$;
+    for $d\ge2$ one may take $k=\lceil\log_d B\rceil$.
 \end{lemma}
 \begin{proof}
     \uses{lem:qc_register_code_completion, lem:qc_port_data_scratch, thm:qc_port_shared_channel_routing}
     \leanok
-    By Lemma~\ref{lem:qc_port_data_scratch}, the depth-$k$ routing $R_M$ colocates the registers of $i$ and $i+1$ inside $s^{-1}(i+1)$ for all $i\in M$ simultaneously, so Lemma~\ref{thm:qc_port_shared_channel_routing} gives depth at most $2k$ for one layer. For the protocol, encode the bases of every intermediate step into registers by Lemma~\ref{lem:qc_register_code_completion}, so that each encoded layer acts on the code as the original layer; the $T$ layers then compose to depth at most $2kT$.
+    By Lemma~\ref{lem:qc_port_data_scratch}, the depth-$k$ routing $R_M$ colocates the registers
+    of $i$ and $i+1$ inside $s^{-1}(i+1)$ for all $i\in M$ simultaneously, so
+    Lemma~\ref{thm:qc_port_shared_channel_routing} gives depth at most $2k$ for one layer. For the
+    protocol, encode the bases of every intermediate step into registers by
+    Lemma~\ref{lem:qc_register_code_completion}, so that each encoded layer acts on the code as
+    the original layer; the $T$ layers then compose to depth at most $2kT$.
 \end{proof}
 
 \begin{lemma}[Product onsite coding on arbitrary chain inputs]
