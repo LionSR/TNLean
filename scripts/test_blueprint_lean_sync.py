@@ -85,6 +85,30 @@ end Example
         assert "Example.after" in decls
 
 
+def test_decl_names_with_question_and_bang_are_captured() -> None:
+    # Lean identifiers may contain `?` and `!` (as in `getElem?`); the scanner
+    # must capture the full name rather than truncating at the punctuation.
+    with TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        lean_root = root / "TNLean"
+        lean_root.mkdir()
+        source = lean_root / "Example.lean"
+        source.write_text(
+            """namespace Example
+
+theorem sum_range_getElem?_elim : True := by trivial
+
+def getD! : Nat := 0
+
+end Example
+"""
+        )
+        decls = {decl.fqn: decl for decl in collect_file_lean_decls(source, lean_root)}
+        assert "Example.sum_range_getElem?_elim" in decls
+        assert "Example.sum_range_getElem" not in decls
+        assert "Example.getD!" in decls
+
+
 def test_root_prefixed_decls_escape_namespace() -> None:
     with TemporaryDirectory() as tmp:
         root = Path(tmp)
@@ -418,6 +442,7 @@ def test_fetch_preserves_destination_appearing_during_verification() -> None:
 if __name__ == "__main__":
     test_split_tex_lean_decls_handles_continuations_and_top_level_commas()
     test_structure_fields_are_declarations()
+    test_decl_names_with_question_and_bang_are_captured()
     test_duplicate_lean_tags_are_reported_once_per_declaration()
     test_root_prefixed_decls_escape_namespace()
     test_sync_resolves_mathlib_and_qiclean_without_local_wrappers()
@@ -428,4 +453,4 @@ if __name__ == "__main__":
     test_exact_fetch_stages_without_branch_fallback()
     test_dependency_rejects_unsupported_layouts()
     test_fetch_preserves_destination_appearing_during_verification()
-    print("Blueprint declaration scanner tests passed (12 tests).")
+    print("Blueprint declaration scanner tests passed (13 tests).")
