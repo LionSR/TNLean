@@ -9,8 +9,6 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.Circuit.Channel
 
 import TNLean.Circuit.Channel.ApproximateConversion
-import TNLean.Circuit.Channel.BoundedPortApproximateOutput
-import TNLean.Circuit.Channel.BoundedPortPureOutput
 import TNLean.Circuit.Channel.Conversion
 import TNLean.Circuit.Channel.DataInitialization
 import TNLean.Circuit.Channel.DimensionBoundedConversion
@@ -30,7 +28,6 @@ import TNLean.Circuit.Channel.PhysicalPortEmbedding
 import TNLean.Circuit.Channel.PhysicalPortEnvironmentComposition
 import TNLean.Circuit.Channel.PhysicalPortIO
 import TNLean.Circuit.Channel.PhysicalPortLocalDilation
-import TNLean.Circuit.Channel.PhysicalPortPureOutput
 import TNLean.Circuit.Channel.PhysicalPortUnitaryCompilation
 import TNLean.Circuit.Channel.PhysicalProtocolCompilation
 import TNLean.Circuit.Channel.PhysicalRegisterEncoding
@@ -38,10 +35,7 @@ import TNLean.Circuit.Channel.PortChannelRouting
 import TNLean.Circuit.Channel.PortMatching
 import TNLean.Circuit.Channel.PortRegisters
 import TNLean.Circuit.Channel.PortRouting
-import TNLean.Circuit.Channel.PortSimulation
 import TNLean.Circuit.Channel.RegisterChannelLift
 import TNLean.Circuit.Channel.RegisterEncoding
 import TNLean.Circuit.Channel.RegisterEnvironment
-import TNLean.Circuit.Channel.RegroupedProtocol
-import TNLean.Circuit.Channel.SiteBlocking
 import TNLean.Circuit.Channel.WholeSiteChannels

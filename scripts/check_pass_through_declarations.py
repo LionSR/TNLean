@@ -263,8 +263,6 @@ PASS_THROUGH: frozenset[str] = frozenset(
     {
         "MPSPreparation.permOp_conjTranspose",
         "MPSTensor.HasNNCPHGroundSpaces.hasParentHamiltonianGroundSpaceSpanning",
-        "QuantumCircuit.IsBlockedLocalChannelConversion.mono",
-        "QuantumCircuit.IsBlockedLocalChannelConversion.trans",
         "TNLean.Algebra.RestrictedFusionGauge.fusionGauge_one",
         "TNLean.Algebra.RestrictedScalarGauge.gauge_one",
         "TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass.comap",

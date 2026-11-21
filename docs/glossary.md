@@ -971,7 +971,7 @@ out.
 #### `TNLean.PEPS.normalizedRegularizedPatchMarginal`
 
 - **Defined in:** `TNLean/PEPS/AreaLaw/RegularizedPatchMarginal.lean`.
-- **Meaning:** `FiniteProduct.reducedPure` of the same normalized final filtered
+- **Meaning:** `ManyBody.regionState` of the same normalized final filtered
   vector for every region, after the explicit univ-subtype/global configuration
   isometry. These are canonical reduced states, not freely supplied densities.
 - **Source:** the September 24, 2026 manuscript,
@@ -1741,7 +1741,7 @@ in `MPS/Preparation/` uses it.
   copy; circuits on `d`-level sites use `ManyBody.supportedOperators (fun _ ↦ Fin d) S`.
 - **Meaning:** the operators acting on the sites of `D`, that is `M^{⊗ D} ⊗ 1`.
   Its carrier is the matrix-entry condition `ManyBody.IsSupportedOn`
-  (`Entropy.IsSupportedOn` for dimensions `n : V → ℕ`), and
+  (`ManyBody.IsSupportedOn` for a family of basis types), and
   `ManyBody.supportedOperators_toSubmodule_eq_span` identifies it with the span of
   the product operators `⊗ᵥ mᵥ` with `mᵥ = 1` off `D`.
 - **Source:** arXiv:2307.01696, Supplemental Material, proof of Theorem 1 (the
@@ -2161,17 +2161,14 @@ in `MPS/Preparation/` uses it.
   `IsLocalChannelProtocol.channelCircuitMap_comp` (appending a local channel
   circuit of `n` layers adds `n` to the depth), and
   `IsLocalChannelProtocol.exists_dual` (light cone of radius `T` of the
-  Heisenberg dual). Grouping `k` consecutive sites is constructed in
-  `Circuit/Channel/RegroupedProtocol.lean`:
-  for positive block count, block size, and input local dimension,
-  `IsLocalChannelProtocol.exists_regrouped` gives depth at most `2T` for
-  even block counts and `3T` in general, with exact equality on all operators
-  and arbitrary external references. The dimension-bounded version raises
-  the budget from `B` to `B^k`. `IsLocalChannelConversion.then_blocked`
-  composes an unblocked conversion followed by a blocked conversion with
-  bound `2T+U` or `3T+U`. One block admits depth zero; the generic two-block
-  bound is `2T`. The six-site seam matching projects to a triangle after
-  grouping pairs, obstructing its direct partition into two block matchings.
+  Heisenberg dual). Grouping `k` consecutive sites is QICLean's
+  `QuantumCircuit.IsProtocol.block` with `QuantumCircuit.Geometry.ringBlocking`:
+  for positive block count and nonempty input bases it gives depth at most
+  `2T` for even block counts and `3T` in general, with exact equality on all
+  operators. No dimension bound is carried through the blocking.
+  `QuantumCircuit.IsConversion.block_trans` composes an unblocked conversion
+  followed by a blocked conversion with bound `2T+U` or `3T+U`; the
+  two-block bound is `2T`.
 - **Caveat:** the depth `T` counts the two-site layers exactly; onsite channels
   are free. Onsite channels may enlarge the dimension, and a layer on the
   enlarged sites still costs one depth unit. No uniform intermediate-dimension
@@ -3214,19 +3211,21 @@ involve no boundary.
   arXiv:2103.13367, Supplement pp. 7–8, with the scope recorded in
   `docs/paper-gaps/psc21_physical_port_simulation_scope.tex`.
 - **Sanctioned bridges:** `.isKrausCPTP`, `.of_register_routing`,
-  `.of_routed_family`, `.list_prod_uniform`,
-  `PortRegisters.matchingChannel_isPhysicalPortProtocol`,
-  `exists_bounded_matching_simulation`, `PortRegisters.dataChannelLift_word`,
+  `.of_routed_family`, `PortRegisters.dataChannelLift_word`,
   `IsDimensionBoundedLocalChannelProtocol.exists_physicalPortSimulation`,
   `.exists_appended_unitary_dilation`, and
   `.exists_appended_unitary_dilation_reference`. These construct an
   actual same-depth unitary on a port-preserving extension, with fresh local
   product-zero environments initialized once and discarded only at the end.
-  When the channel output of a pure input is pure,
-  `.exists_appended_unitary_dilation_pure_output` derives a normalized
-  environment vector and a system/environment product output, and
-  `.exists_environmentKraus_pure_output` identifies the environment-basis
-  branches, their normalized amplitudes and their common pure system output.
+  The matching simulation and its protocol bound are QICLean's
+  `QuantumCircuit.Layer.exists_portRing` and
+  `QuantumCircuit.IsBoundedProtocol.exists_portRing`, stated for
+  `QuantumCircuit.IsProtocol (QuantumCircuit.Geometry.portRing N (2 * k + 1))`.
+  When the channel output of a pure input is pure or close to pure,
+  `QuantumCircuit.Circuit.exists_unit_product_approx`, applied to the
+  dilation `QuantumCircuit.IsProtocol.isUnitaryDilation`, derives a
+  normalized environment vector and a system/environment product output
+  within `√(2ε)`.
 - **Caveat:** source pure-state conditions and the fixed number of composed
   `QCcc` blocks with their internal measurement/control rules remain separate.
   The appended environments need not reset, and their total number is only
@@ -3430,6 +3429,8 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `ManyBody.LowEnergyExample.IsGround` | Example-specific: a configuration of the `m + 3`-site spin-1/2 chain of Hastings' Appendix B example with spin `1` up, every spin `i ≥ 2` down and spin `0` free; `energy_eq_groundEnergy_iff` and `hamiltonian_mulVec_eq_iff` identify these with the ground space of `H = −S^z_1 + ∑_{i≥2} S^z_i` | Hastings, arXiv:cond-mat/0508554v3, lines 1655–1676, with the corrected sum (<https://sirui-lu.com/QICLean/paper-gaps/hastings05_low_energy_example.pdf>); not a general lattice predicate, and no bridge to `ManyBody.IsGapped` is stated. |
 | `TNLean.PEPS.AreaLaw.relabelState` | The same physical vector in configuration coordinates transported by a site bijection | Area-law Section 2; Euclidean norm is preserved, reductions are covariant and regional entropy is invariant when the bijection preserves the cut. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw` | A uniform boundary entropy bound over every finite induced domain and cut | Area-law Theorem 1.1; proved, with the source's hypotheses, as `TNLean.PEPS.AreaLaw.uniformAreaLaw`. |
+| `TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped` | The frustration-free model on a planar domain: every term of a `ManyBody.PlaneInteraction` satisfies `0 ≤ h_X ≤ J`, `Ω` is a unit vector, and `H` is gapped at energy zero (`IsGapped H 0 Δ`) with ground space `span {Ω}`. Each `h_X Ω = 0` follows (`mulVec_eq_zero`), so the interaction is `ManyBody.Interaction.IsFrustrationFree` (`isFrustrationFree`); for `0 < Δ` the model is equivalent to `0 ≤ h_X ≤ J`, `h_X Ω = 0`, `‖Ω‖ = 1`, `Δ (1 − \|Ω⟩⟨Ω\|) ≤ H` (`iff_model`). The terms are Hermitian and `H Ω = 0` (`isHermitian`, `hamiltonian_mulVec_eq_zero`); with `0 ≤ J`, `‖h_X‖ ≤ J` (`norm_term_le`); so with `0 < J, Δ` it is a special case of the hypotheses of `UniformAreaLaw`; the converse fails, since a gapped instance need not have positive terms annihilating `Ω` | Frustration-free area-law note (`docs/audits/2026-11-18_finite_range_frustration_free_area_law.tex`), `eq:model`; the positivity `0 ≤ h_X` and the annihilation are what the gap and the sweep consequences use. |
+| `TNLean.PEPS.AreaLaw.FrustrationFree.FrustrationFreeAreaLaw` | The uniform boundary entropy bound of `UniformAreaLaw` restricted to instances of `IsFrustrationFreeGapped`, with the constant chosen before the domain, the Hamiltonian and the cut | Frustration-free note, `eq:goal`. `UniformAreaLaw.frustrationFreeAreaLaw` derives it from `UniformAreaLaw`; it is proved by that route (`frustrationFreeAreaLaw_of_uniformAreaLaw`). The note's sweep route, which avoids the general amplification, is pending (`frustrationFreeAreaLaw`, #10938). |
 | `TNLean.PEPS.AreaLaw.innerBoundary` | Sites in the cut adjacent to its complement within the induced domain | Area-law Corollary 1.2; every cut has at most four crossing edges per inner-boundary site. |
 | `TNLean.PEPS.AreaLaw.endpointBoundary` | Both endpoints of every crossing edge, with repetitions removed | Area-law Corollary 1.2; the number of crossing edges is at most twice the number of boundary endpoints. |
 | `TNLean.PEPS.AreaLaw.UniformAreaLaw.vertex_boundary_bounds` | Inner-boundary and endpoint entropy bounds with constants four and two times the edge-boundary constant | Area-law Corollary 1.2; proved conditionally on `UniformAreaLaw`, with the same uniform quantifiers. The unconditional form is `TNLean.PEPS.AreaLaw.uniformAreaLaw_vertex_boundary_bounds`. |
@@ -3706,16 +3707,16 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ## Two-family regional entropy
 
-- `FiniteProduct.entropy` (QICLean): canonical von Neumann entropy of the actual
+- `ManyBody.regionEntropy` (QICLean): canonical von Neumann entropy of the actual
   regional reduced pure-state matrix, for arbitrary finite dependent local bases.
-- `FiniteProduct.entropy_le_remainder_add_half_sum` (QICLean): exact normalized
+- `ManyBody.regionEntropy_le_remainder_add_half_sum` (QICLean): exact normalized
   pure-state two-family cancellation, with coefficient `1/2` and the entire
   exterior-plus-earlier-same-family mutual-information assumptions.
 - `TNLean.PEPS.AreaLaw.regionalEntropy_le_residual_add_half_sum`: the finite-domain
   specialization using the existing `OrderedTwoFamilyPartition` and regional
   entropy. It assumes no Hamiltonian, gap, geometry, nonempty family, or separate
   nonnegative error bound. Source: OpenAI (September 24, 2026), area-law Lemma 11.1.
-- `FiniteProduct.conditionalMutualInformation` (QICLean): the physical regional
+- `ManyBody.conditionalMutualInformation` (QICLean): the physical regional
   entropy combination. Generic difference, finite-chain and pure-duality
   identities are available; canonical tripartite identification, exceptional-site
   dimension bounds and the full PEPS conditional-cell theorem remain separate.

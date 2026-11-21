@@ -93,7 +93,7 @@ Module `FrustrationFree/LightCone.lean`.
 
 Module `FrustrationFree/Amplification.lean`.
 
-9. `ffAmplificationBound`: the conclusion of `AmplificationBound q R J Δ` for every instance
+9. `frustrationFreeAmplificationBound`: the conclusion of `AmplificationBound q R J Δ` for every instance
    of `eq:model`, with the radius bound `r ≤ C n^{1-ε}` (stronger than
    `r ≤ C n^{(1-ε)/α}`). Proof as in the note: the typical projections and restoring estimates
    `eq:restore` (`exists_typicalProjectors_three_cuts`, `restoringOperator_estimates`), the
@@ -129,7 +129,7 @@ planned after Step 4.
 | 0 | model, statement, corollary of the general theorem | in review, #10936 |
 | 1 | sweep contraction, range projections | in review, #10935 |
 | 2 | colouring, light cone, sweep of an instance | in review, #10937 |
-| 3 | amplification `ffAmplificationBound` | in review, #10938 |
+| 3 | amplification `frustrationFreeAmplificationBound` | in review, #10938 |
 | 4 | instance-wise assembly, `frustrationFreeAreaLaw` | in review, #10938 |
 | — | scanner on the raw terms, `eq:identity` | deferred |
 
@@ -142,7 +142,7 @@ bound `sublinearCollarBound_real`. Recheck after the stack lands.
 ## Deviations from the note
 
 * Steps 1–2 use the range projections of the terms in place of `(1 - h_i/J)^{1/2}`
-  (`docs/paper-gaps/ffarealaw_sweep_range_projections.tex`, scope restriction of `eq:sweep` to
+  (`docs/paper-gaps/frustrationfree_sweep_range_projections.tex`, scope restriction of `eq:sweep` to
   projections). No hypothesis of `eq:model` is added and the constant `θ` is the note's.
 * No step of the note was found to be wrong. The steps formalized (`eq:sweep`, `eq:cone`, the
   choice of `t`, the polar and continuity steps, the two-family cancellation) hold as written.

@@ -10,10 +10,10 @@ bounded distance. This replaces the time-filtered constraints and the
 localization errors of the amplification stage.
 
 \section{Contraction of one sweep}
-\label{sec:ff_area_law_sweep}
+\label{sec:frustration_free_area_law_sweep}
 
 \begin{lemma}[One sweep of projections]
-    \label{thm:ff_area_law_sweep_contraction}
+    \label{thm:frustration_free_area_law_sweep_contraction}
     \lean{ContinuousLinearMap.complementProd_apply_of_forall_apply_eq_zero, ContinuousLinearMap.inner_complementProd_of_forall_apply_eq_zero, ContinuousLinearMap.norm_sq_complementProd_le_of_gap, ContinuousLinearMap.norm_pow_complementProd_le_of_gap}
     \leanok
     Let $\Pi_1,\dots,\Pi_m$ be orthogonal projections on a Hilbert space, each
@@ -31,7 +31,7 @@ localization errors of the amplification stage.
     This is the contraction \cite[eq.~(sweep)]{TNLean2026FrustrationFreeNote}
     for filters that are projections; the note states it for positive
     contractions $k_i$ with the factors $(I-k_i)^{1/2}$. The restriction is
-    recorded in \cite{gap:ffarealaw_sweep_range_projections}.
+    recorded in \cite{gap:frustrationfree_sweep_range_projections}.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -44,7 +44,7 @@ localization errors of the amplification stage.
 \end{proof}
 
 \begin{lemma}[Range projections of positive local terms]
-    \label{thm:ff_area_law_range_projection}
+    \label{thm:frustration_free_area_law_range_projection}
     \lean{Matrix.PosSemidef.le_smul_supportProj, TNLean.PEPS.AreaLaw.FrustrationFree.supportProj_mem_supportedOperators}
     \leanok
     For a positive semidefinite matrix $A$, let $\Pi_A$ be the orthogonal
@@ -58,4 +58,72 @@ localization errors of the amplification stage.
     and $x\le Jf(x)$ on the spectrum of $A$, which lies in $[0,J]$. An operator
     acts on $D$ exactly when it commutes with every operator acting on the
     complement of $D$, and functions of $A$ inherit this commutation.
+\end{proof}
+
+\section{The model and the statement}
+\label{sec:frustration_free_area_law_model}
+
+\begin{definition}[Frustration-free gapped Hamiltonians]
+    \label{def:frustration_free_area_law_model}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped}
+    \leanok
+    \uses{def:area_law_domain,def:area_law_hamiltonian}
+    Let $\Lambda\subset\mathbb Z^2$ be finite with local dimension $q$, and let
+    $H=\sum_Xh_X$ have one term for each support $X$ of induced graph
+    diameter at most $R$. For $J,\Delta$ and a vector $\Omega$, the
+    Hamiltonian is frustration-free and gapped when $0\le h_X\le J$ for every
+    $X$, $\|\Omega\|=1$, and $H$ has ground space $\mathbb C\Omega$ at energy
+    $0$ with every other eigenvalue at least $\Delta$. For $\Delta>0$ these are
+    the conditions
+    \[
+        0\le h_X\le J,\qquad h_X\Omega=0,\qquad\|\Omega\|=1,\qquad
+        H\ge\Delta\bigl(I-|\Omega\rangle\langle\Omega|\bigr)
+    \]
+    of \cite[eq.~(model)]{TNLean2026FrustrationFreeNote}.
+\end{definition}
+
+\begin{lemma}[The model is gapped]
+    \label{thm:frustration_free_area_law_model_gapped}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isHermitian, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.hamiltonian_mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.mulVec_eq_zero, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.isFrustrationFree, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.gap, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.iff_model, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.norm_term_le, TNLean.PEPS.AreaLaw.FrustrationFree.IsFrustrationFreeGapped.smul_sub_le_sum_supportProj}
+    \leanok
+    \uses{def:frustration_free_area_law_model,thm:frustration_free_area_law_range_projection}
+    In the model of Definition~\ref{def:frustration_free_area_law_model}, every
+    term is Hermitian, $H\Omega=0$ and $h_X\Omega=0$ for every $X$, so $\Omega$
+    is a common ground vector of the terms at energy zero. If $\Delta>0$, then
+    $H\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, and the model is equivalent
+    to the four conditions displayed in
+    Definition~\ref{def:frustration_free_area_law_model}. If $J\ge0$, then
+    $\|h_X\|\le J$. If $J,\Delta>0$, the range projections $\Pi_X$ of the terms
+    satisfy $\sum_X\Pi_X\ge(\Delta/J)(I-|\Omega\rangle\langle\Omega|)$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Since $\Omega$ spans the ground space at energy zero, $H\Omega=0$. Each
+    $h_X$ is positive and $\sum_X\langle\Omega,h_X\Omega\rangle=0$, so every
+    $h_X\Omega=0$. For $\Delta>0$, an operator with ground space
+    $\mathbb C\Omega$ at energy zero and the rest of its spectrum at least
+    $\Delta$ satisfies $H\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, and
+    conversely. A positive operator below $J$ has norm at most $J$. Finally
+    $H\le J\sum_X\Pi_X$ termwise by
+    Lemma~\ref{thm:frustration_free_area_law_range_projection}.
+\end{proof}
+
+\begin{theorem}[The frustration-free area law]
+    \label{thm:frustration_free_area_law}
+    \lean{TNLean.PEPS.AreaLaw.FrustrationFree.FrustrationFreeAreaLaw, TNLean.PEPS.AreaLaw.UniformAreaLaw.frustrationFreeAreaLaw, TNLean.PEPS.AreaLaw.FrustrationFree.frustrationFreeAreaLaw_of_uniformAreaLaw}
+    \leanok
+    \uses{def:frustration_free_area_law_model}
+    For $q\ge1$, $R\ge0$ and $J,\Delta>0$ there is a constant
+    $C=C(q,R,J,\Delta)$ such that every instance of
+    Definition~\ref{def:frustration_free_area_law_model} on every finite domain satisfies
+    $S_\Omega(A)\le C|\partial_\Lambda A|$ for every set of sites $A$. This is
+    \cite[eq.~(goal)]{TNLean2026FrustrationFreeNote}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:frustration_free_area_law_model_gapped,thm:openai_uniform_area_law}
+    By Lemma~\ref{thm:frustration_free_area_law_model_gapped} every instance satisfies the
+    hypotheses of the general area law \cite[Theorem~1.1]{OpenAI2026AreaLaw}
+    at energy zero. This proof passes through the general amplification stage;
+    the shorter proof of the note is assembled in the following sections.
 \end{proof}
