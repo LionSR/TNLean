@@ -121,47 +121,48 @@ theorem continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_
   simpa only [groundSpaceES_toTensorFromBlocks_eq_iSup _ _ (hμ _) L] using
     continuous_iSup_groundSpaceES_starProjection_of_injective_family A hA L hInj
 
-/-- The canonical parent interaction of a weighted block sum varies continuously at a common
-simultaneous injectivity length.
+/-- The matrix of the canonical parent interaction of a weighted block sum varies continuously at
+a common simultaneous injectivity length.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
-theorem continuous_parentInteractionES_toTensorFromBlocks_family
+theorem continuous_toMatrix'_parentInteraction_toTensorFromBlocks_family
     {X : Type*} [TopologicalSpace X]
     (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hA : ∀ j, Continuous fun x => A x j)
     (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0) (L : ℕ)
     (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
-    Continuous fun x => LinearMap.toContinuousLinearMap
-      (parentInteractionES (toTensorFromBlocks (d := d) (μ := μ x) (A x)) L) :=
-  continuous_parentInteractionES_family_of_groundProjection _ L
+    Continuous fun x =>
+      LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks (μ x) (A x)) L) :=
+  continuous_toMatrix'_parentInteraction_family_of_groundProjection _ L
     (continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family
       A hA μ hμ L hInj)
 
-/-- The open-chain parent Hamiltonian of a weighted block sum is continuous at fixed range and
-volume.
+/-- The Hamiltonian of the parent interaction on the open chain of a weighted block sum is
+continuous at fixed range and volume.
 Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
-theorem continuous_openParentHamiltonianES_toTensorFromBlocks_family
+theorem continuous_hamiltonian_parentChainInteraction_toTensorFromBlocks_family
+    {X : Type*} [TopologicalSpace X]
+    (A : X → (j : Fin r) → MPSTensor d (dim j))
+    (hA : ∀ j, Continuous fun x => A x j)
+    (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0) {L N : ℕ}
+    (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
+    Continuous fun x =>
+      (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) L N).hamiltonian :=
+  continuous_hamiltonian_parentChainInteraction_family_of_groundProjection _
+    (continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family
+      A hA μ hμ L hInj)
+
+/-- The Hamiltonian of the parent interaction on the ring of a weighted block sum is continuous at
+fixed range and volume.
+Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
+theorem continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_family
     {X : Type*} [TopologicalSpace X]
     (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hA : ∀ j, Continuous fun x => A x j)
     (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0) {L N : ℕ}
     (hLN : L ≤ N) (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
-    Continuous fun x => LinearMap.toContinuousLinearMap
-      (openParentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ x) (A x)) L N) :=
-  continuous_openParentHamiltonianES_family_of_groundProjection _ hLN
-    (continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family
-      A hA μ hμ L hInj)
-
-/-- The periodic parent Hamiltonian of a weighted block sum is continuous at fixed range and volume.
-Source: arXiv:1010.3732, Appendix A, lines 2499–2503 and 2575–2578. -/
-theorem continuous_parentHamiltonianES_toTensorFromBlocks_family
-    {X : Type*} [TopologicalSpace X]
-    (A : X → (j : Fin r) → MPSTensor d (dim j))
-    (hA : ∀ j, Continuous fun x => A x j)
-    (μ : X → Fin r → ℂ) (hμ : ∀ x j, μ x j ≠ 0) {L N : ℕ}
-    (hLN : L ≤ N) (hInj : ∀ x, Function.Injective (blockGroundSpaceMapES (A x) L)) :
-    Continuous fun x => LinearMap.toContinuousLinearMap
-      (parentHamiltonianES (toTensorFromBlocks (d := d) (μ := μ x) (A x)) L N) :=
-  continuous_parentHamiltonianES_family_of_groundProjection _ hLN
+    Continuous fun x =>
+      (parentRingInteraction (toTensorFromBlocks (μ x) (A x)) hLN).hamiltonian :=
+  continuous_hamiltonian_parentRingInteraction_family_of_groundProjection _ hLN
     (continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family
       A hA μ hμ L hInj)
 
