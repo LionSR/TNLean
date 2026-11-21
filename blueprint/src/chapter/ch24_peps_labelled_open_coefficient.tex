@@ -128,6 +128,60 @@
     vertex in a nonempty region has an incidence with no label, making the
     sum (\ref{eq:peps_open_coefficient}) empty.
 \end{proof}
+% This is conditional on a generated homotopy, not a completeness or avoidance theorem.
+\begin{lemma}[Supported open deformation with a joint boundary]
+    \label{lem:peps_supported_open_deformation}
+    \lean{TNLean.PEPS.TorusDualHomotopy.exists_internalFluxGauge,
+        TNLean.PEPS.TorusDualHomotopy.openCoefficient_eq,
+        TNLean.PEPS.TorusDualHomotopy.correlatedBoundary_eq}
+    \leanok
+    \uses{def:peps_labelled_open_coefficient,def:peps_dual_flux_homotopy,
+        def:peps_dual_flux_matrices}
+    Let $R,Y\subseteq X$ on a labelled torus of positive periods, and
+    suppose that every bond incident to $R$ has both endpoints in $Y$.
+    Let $p\sim_R q$ be a generated homotopy of dual paths, and let the
+    site tensors be virtually $G$-invariant on $R$. No rectangularity or
+    connectedness is required of $Y$. For the inserted matrices $O^p,O^q$
+    and any physical configuration on $Y$, the open coefficients satisfy
+    $c_q(\theta)=c_p(\theta)$ for every boundary assignment $\theta$.
+    For every joint boundary tensor $B$,
+    \begin{align}
+        \sum_\theta B(\theta)c_q(\theta)
+        =\sum_\theta B(\theta)c_p(\theta).
+        \label{eq:peps_supported_open_boundary}
+    \end{align}
+    The virtual alphabet and the region may be empty.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{thm:peps_dual_flux_deformation,thm:peps_dual_flux_gauge_absorption,
+        thm:peps_dual_collar_geometry,thm:peps_torus_operator_string_deformation}
+    The homotopy derives $k:X\to G$ with $k=1$ outside $R$ and
+    $O^q_e=U_{k(h(e))}O^p_eU_{k(t(e))^{-1}}$. Every noninternal bond has
+    both endpoints outside $R$, so its two endpoint gauges are identity.
+    Consequently the same equation holds for $O^{q,\rm int},O^{p,\rm int}$.
+    If the virtual alphabet is nonempty, choose a label $v_0$ and apply
+    delta completion. At every vertex with $k(v)\ne1$, the internal-star
+    hypothesis gives $v\in Y$, so
+    \begin{align}
+        \Delta^{\rm nat}_v(\cdot)=A_v(\cdot)(\sigma_v).
+        \label{eq:peps_supported_open_completed_tensor}
+    \end{align}
+    This tensor is $k(v)$-invariant by
+    Lemma~\ref{thm:peps_torus_operator_string_deformation}.
+    Gauge absorption therefore gives
+    \begin{align}
+        c_q(\theta)
+        =\Psi(\Delta^{\rm nat},O^{q,\rm int})
+        =\Psi(\Delta^{\rm nat},O^{p,\rm int})
+        =c_p(\theta).
+        \label{eq:peps_supported_open_delta}
+    \end{align}
+    If the virtual alphabet is empty, all bond matrices are equal as
+    functions on the empty set, so the two open sums are identical,
+    including for an empty region. Summing the coefficient equality
+    against $B$ gives (\ref{eq:peps_supported_open_boundary}).
+\end{proof}
+
 \begin{lemma}[Collared open deformation with a correlated boundary]
     \label{thm:peps_dual_collar_open}
     \lean{TNLean.PEPS.torusDualFluxBondMatrices,
@@ -155,29 +209,12 @@
     (without assuming factorization or $V\neq\emptyset$).
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:peps_dual_flux_gauge_absorption,
-        thm:peps_torus_operator_string_deformation}
-    Lemma~\ref{thm:peps_dual_rectangle} gives $\bar p\sim_R\bar q$ and a
-    potential $k$ with $k=1$ off $R$ satisfying
-    (\ref{eq:peps_dual_label_gauge}). This yields
-    (\ref{eq:peps_collar_internal_gauge}) on bonds internal to $Y$, while on
-    noninternal bonds Lemma~\ref{thm:peps_dual_collar_geometry} gives
-    $h(e),t(e)\notin R$, so $k(h(e))=k(t(e))=1$ and both sides of
-    (\ref{eq:peps_collar_internal_gauge}) equal $I$. If $V\neq\emptyset$,
-    fix $v_0\in V$; at any $v$ with $k(v)\neq1$ we have $v\in R$, so
-    $\Delta^{\rm nat}_v=A_v(\sigma_v)$ is $k(v)$-invariant by
-    Lemma~\ref{thm:peps_torus_operator_string_deformation}. Writing $\Psi$
-    for the closed native contraction,
-    Lemmas~\ref{thm:peps_dual_flux_gauge_absorption}
-    and~\ref{thm:peps_dual_collar_geometry} give
-    \begin{align}
-        c^{\rm nat}_q(\theta)
-        =\Psi\bigl(\Delta^{\rm nat},O^{q,\rm int}\bigr)
-        =\Psi\bigl(\Delta^{\rm nat},O^{p,\rm int}\bigr)
-        =c^{\rm nat}_p(\theta),
-        \notag
-    \end{align}
-    and summing against $B(\theta)$ gives the boundary claim. If
-    $V=\emptyset$, both coefficients vanish by
-    Lemma~\ref{thm:peps_dual_collar_geometry} since $\kappa(0,0)\in Y$.
+    \uses{lem:peps_supported_open_deformation,thm:peps_dual_rectangle,
+        thm:peps_dual_collar_geometry}
+    Lemma~\ref{thm:peps_dual_rectangle} gives $\bar p\sim_R\bar q$.
+    By Lemma~\ref{thm:peps_dual_collar_geometry}, each bond incident to $R$
+    is internal to $Y$. Applying
+    Lemma~\ref{lem:peps_supported_open_deformation} to these sets gives
+    (\ref{eq:peps_collar_internal_gauge}) and both coefficient and boundary
+    equalities.
 \end{proof}
