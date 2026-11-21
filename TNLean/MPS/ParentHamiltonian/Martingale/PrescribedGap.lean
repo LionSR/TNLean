@@ -144,8 +144,8 @@ theorem eventually_toTensorFromBlocks_parentHamiltonianES_gap_ge_one_sub
       (LinearMap.ker (openParentHamiltonianES B (2 * p) (p * M)))ᗮ,
       (1 - η / 2) * ‖u‖ ≤ ‖openParentHamiltonianES B (2 * p) (p * M) u‖ := by
     intro u hu
-    have hGap := openParentHamiltonianES_norm_gap_of_grouped_c3 B hp0 hM hε.le hεlt
-      (grouped_martingaleDifference_norm_le_of_projector_defect B hp0 hM
+    have hGap := openParentHamiltonianES_norm_gap_of_grouped_c3 B (M := M) hp0 hε.le hεlt
+      (grouped_martingaleDifference_norm_le_of_projector_defect B hp0
         (fun n hn ↦ hKernel (2 * p) n (by omega) hn) hε.le
         (fun K ↦ hDefect K p hp0))
     exact (mul_le_mul_of_nonneg_right hcoef (norm_nonneg u)).trans (hGap u hu)

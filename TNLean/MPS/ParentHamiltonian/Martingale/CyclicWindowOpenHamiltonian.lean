@@ -350,25 +350,6 @@ theorem localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv
   rw [hrestrict,
     extractWindow_join_cyclicActiveBlock hWN s q hqR σ τ]
 
-private def cyclicBlockStartEquiv {R m : ℕ} (hR : 1 ≤ R) :
-    Fin m ≃ NonwrappingStart R (m + R - 1) where
-  toFun q := by
-    have hq := q.isLt
-    let j : Fin (m + R - 1) := ⟨q.val, by omega⟩
-    refine ⟨j, ?_⟩
-    change q.val + R ≤ m + R - 1
-    omega
-  invFun i := ⟨i.1.val, by
-    have hi := i.2
-    omega⟩
-  left_inv q := by
-    apply Fin.ext
-    rfl
-  right_inv i := by
-    apply Subtype.ext
-    apply Fin.ext
-    rfl
-
 /-- A Knabe block of \(m\) consecutive range-\(R\) periodic terms is the
 fiberwise open parent Hamiltonian on exactly \(m + R - 1\) active sites.
 
@@ -394,34 +375,20 @@ theorem cyclicWindowSum_zmodLocalTermES_conj_cyclicActiveBlock
   apply LinearMap.ext
   intro x
   simp only [ProjectionGeometry.cyclicWindowSum, openParentHamiltonianES,
-    LinearMap.comp_apply, LinearMap.sum_apply, map_sum,
-    ContinuousLinearMap.rightFiberwiseMap_sum]
-  calc
-    (∑ q : Fin m,
-        U (zmodLocalTermES A R (s + (q.val : ZMod N)) (U.symm x))) =
-      ∑ q : Fin m,
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - (m + R - 1)))
-          (LinearMap.toContinuousLinearMap
-            (localTermES A R (cyclicBlockStartEquiv hR q).1)) x := by
-        apply Finset.sum_congr rfl
-        intro q _
-        have hstart : (ZMod.finEquiv N).symm (s + (q.val : ZMod N)) =
-            cyclicForwardSite i q.val := by
-          simpa [i] using finEquiv_symm_add_eq_cyclicForwardSite s q.val
-        change U (localTermES A R ((ZMod.finEquiv N).symm
-            (s + (q.val : ZMod N))) (U.symm x)) = _
-        rw [hstart]
-        exact LinearMap.congr_fun
-          (localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv A
-            (by omega) i (cyclicBlockStartEquiv hR q).1
-            (cyclicBlockStartEquiv hR q).2) x
-    _ = ∑ q : NonwrappingStart R (m + R - 1),
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - (m + R - 1)))
-          (LinearMap.toContinuousLinearMap (localTermES A R q.1)) x := by
-      exact Fintype.sum_equiv (cyclicBlockStartEquiv hR) _ _ fun _ ↦ rfl
-    _ = (∑ q : NonwrappingStart R (m + R - 1),
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - (m + R - 1)))
-          (LinearMap.toContinuousLinearMap (localTermES A R q.1))) x := by
-      simp
+    ManyBody.Interaction.hamiltonian, LinearMap.comp_apply, LinearMap.sum_apply, map_sum,
+    ContinuousLinearMap.rightFiberwiseMap_sum, ContinuousLinearMap.toLinearMap_sum]
+  refine Fin.sum_eq_sum_of_val_eq _ _ (fun k ha hb ↦ ?_) (fun i hi ↦ absurd i.isLt (by omega))
+    (fun i hi ↦ absurd i.isLt (by omega))
+  have hstart : (ZMod.finEquiv N).symm (s + (k : ZMod N)) = cyclicForwardSite i k := by
+    simpa [i] using finEquiv_symm_add_eq_cyclicForwardSite s k
+  change U (localTermES A R ((ZMod.finEquiv N).symm (s + (k : ZMod N))) (U.symm x)) = _
+  rw [hstart]
+  have hk : (⟨k, by omega⟩ : Fin (m + R - 1)).val + R ≤ m + R - 1 := by
+    change k + R ≤ m + R - 1
+    omega
+  rw [← localTermES_eq_toEuclideanLin_parentChainInteraction_term A ⟨k, by omega⟩ hk]
+  exact LinearMap.congr_fun
+    (localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv A (by omega) i ⟨k, by omega⟩ hk)
+    x
 
 end MPSTensor

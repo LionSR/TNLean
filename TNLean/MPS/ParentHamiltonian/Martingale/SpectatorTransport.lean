@@ -23,16 +23,12 @@ resulting conjugacies prepare the fixed-final-volume form of condition C3.
 * Nachtergaele, arXiv:cond-mat/9410110, condition C3, lines 1083--1094.
 * Nachtergaele, arXiv:cond-mat/9410110, proof of Theorem 2.1(i), lines 1178--1259.
 
-The right-spectator conjugacy of a single local term is also stated, in the last section, for
-the terms of the parent interaction on the open chain (`parentChainInteraction`).
-
-**Transitional (#10948).** `localTermES_conj_rightSpectatorConfigLinearIsometryEquiv` is kept,
-unchanged, for unconverted users and is deleted when its last user is converted. The prefix and
-suffix Hamiltonians (`openPrefixParentHamiltonianES`, `openSuffixParentHamiltonianES`) and the
-declarations about them are converted with those Hamiltonians in a later package.
+The single-term conjugacy is stated for the terms of the parent interaction on the open chain
+(`parentChainInteraction`), and the prefix and interval Hamiltonians are the Hamiltonians of its
+restrictions to the windows inside a prefix or an interval.
 -/
 
-open scoped BigOperators ComplexOrder
+open scoped BigOperators ComplexOrder Matrix
 
 namespace MPSTensor
 
@@ -97,42 +93,42 @@ namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- A nonwrapping local interaction on the first \(n\) sites acts independently
-on every configuration of the final \(r\) right-spectator sites. -/
-theorem localTermES_conj_rightSpectatorConfigLinearIsometryEquiv
-    (A : MPSTensor d D) {n r L : ℕ} (i : Fin n) (hi : i.val + L ≤ n) :
+/-- A term of the parent interaction on the open chain of the first \(n\) sites acts
+independently on every configuration of the final \(r\) right-spectator sites: under the
+spectator split, the term starting at `j` on \(n + r\) sites is the fiberwise extension of the
+term starting at `j` on \(n\) sites. -/
+theorem toEuclideanLin_parentChainInteraction_term_conj_rightSpectatorConfigLinearIsometryEquiv
+    (A : MPSTensor d D) {n r L : ℕ} (j : Fin (n + 1 - L)) :
     (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
-        ((localTermES A L (Fin.castAdd r i)).comp
+        ((Matrix.toEuclideanLin ((parentChainInteraction A L (n + r)).term
+            ⟨j.val, by omega⟩)).comp
           (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
       (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-        (LinearMap.toContinuousLinearMap (localTermES A L i))).toLinearMap := by
+        (LinearMap.toContinuousLinearMap
+          (Matrix.toEuclideanLin ((parentChainInteraction A L n).term j)))).toLinearMap := by
+  have hj : j.val + L ≤ n := by omega
+  have hj' : j.val + L ≤ n + r := by omega
   apply LinearMap.ext
   intro x
   apply PiLp.ext
   rintro ⟨σ, s⟩
-  simp only [LinearMap.comp_apply]
-  change localTermES A L (Fin.castAdd r i)
-      ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)
-        (Fin.appendEquiv n r (σ, s)) =
-    localTermES A L i (ContinuousLinearMap.rightFiber x s) σ
-  rw [localTermES_apply A L (Fin.castAdd r i) (by omega),
-    localTermES_apply A L i (by omega)]
+  change (Matrix.toEuclideanLin ((parentChainInteraction A L (n + r)).term ⟨j.val, by omega⟩)
+      ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)) (Fin.appendEquiv n r (σ, s)) =
+    Matrix.toEuclideanLin ((parentChainInteraction A L n).term j)
+      (ContinuousLinearMap.rightFiber x s) σ
+  rw [Matrix.toLpLin_apply, Matrix.toLpLin_apply, PiLp.toLp_apply, PiLp.toLp_apply,
+    ManyBody.Interaction.translates_term, ManyBody.Interaction.translates_term,
+    placeAlong_chainWindow_mulVec_apply hj', placeAlong_chainWindow_mulVec_apply hj]
   have hcfg (ω : Cfg d L) :
-      rightSpectatorConfigEquiv d n r
-          (cyclicCfg (Fin.pos (Fin.castAdd r i)) L (Fin.castAdd r i) ω
-            (Fin.appendEquiv n r (σ, s))) =
-        (cyclicCfg (Fin.pos i) L i ω σ, s) := by
-    have hival : (Fin.castAdd r i).val = i.val := rfl
-    rw [cyclicCfg_eq_contiguousCfg (Fin.pos (Fin.castAdd r i)) (by omega) (by omega),
-      cyclicCfg_eq_contiguousCfg (Fin.pos i) (by omega) hi]
+      rightSpectatorConfigEquiv d n r (contiguousCfg j.val L ω (Fin.appendEquiv n r (σ, s))) =
+        (contiguousCfg j.val L ω σ, s) := by
     apply Prod.ext
     · funext k
       simp only [rightSpectatorConfigEquiv]
       simp [contiguousCfg, Fin.appendEquiv]
     · funext k
       simp only [rightSpectatorConfigEquiv]
-      change contiguousCfg (Fin.castAdd r i).val L ω (Fin.append σ s)
-          (Fin.natAdd n k) = s k
+      change contiguousCfg j.val L ω (Fin.append σ s) (Fin.natAdd n k) = s k
       simp only [contiguousCfg]
       split
       · rename_i hwindow
@@ -140,206 +136,89 @@ theorem localTermES_conj_rightSpectatorConfigLinearIsometryEquiv
         exfalso
         omega
       · exact Fin.append_right σ s k
-  have hrestrict :
-      cyclicRestrictES (d := d) (Fin.pos (Fin.castAdd r i)) L (Fin.castAdd r i)
-          (Fin.appendEquiv n r (σ, s))
-          ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x) =
-        cyclicRestrictES (d := d) (Fin.pos i) L i σ
-          (ContinuousLinearMap.rightFiber x s) := by
-    apply PiLp.ext
-    intro ω
-    simp only [cyclicRestrictES, LinearMap.coe_withLpMap]
+  have hres : contiguousRestrictₗ j.val L hj' (Fin.appendEquiv n r (σ, s))
+      (WithLp.ofLp ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)) =
+      contiguousRestrictₗ j.val L hj σ (WithLp.ofLp (ContinuousLinearMap.rightFiber x s)) := by
+    funext ω
     change ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)
-        (cyclicCfg (Fin.pos (Fin.castAdd r i)) L (Fin.castAdd r i) ω
-          (Fin.appendEquiv n r (σ, s))) =
-      ContinuousLinearMap.rightFiber x s (cyclicCfg (Fin.pos i) L i ω σ)
-    rw [rightSpectatorConfigLinearIsometryEquiv_symm_apply_apply]
-    exact congrArg x (hcfg ω)
-  have hextract :
-      extractWindow L (Fin.castAdd r i) (Fin.appendEquiv n r (σ, s)) =
-        extractWindow L i σ := by
-    funext j
-    have hival : (Fin.castAdd r i).val = i.val := rfl
-    have hjL := j.isLt
-    have hltSmall : i.val + j.val < n := by omega
-    have hltBig : (Fin.castAdd r i).val + j.val < n + r := by omega
-    have hbig :
-        (⟨((Fin.castAdd r i).val + j.val) % (n + r),
-          Nat.mod_lt _ (by omega)⟩ : Fin (n + r)) =
-          Fin.castAdd r (⟨i.val + j.val, hltSmall⟩ : Fin n) := by
-      apply Fin.ext
-      change ((Fin.castAdd r i).val + j.val) % (n + r) = i.val + j.val
-      rw [Nat.mod_eq_of_lt hltBig, hival]
-    have hsmall :
-        (⟨(i.val + j.val) % n, Nat.mod_lt _ (Fin.pos i)⟩ : Fin n) =
-          ⟨i.val + j.val, hltSmall⟩ := by
-      apply Fin.ext
-      change (i.val + j.val) % n = i.val + j.val
-      rw [Nat.mod_eq_of_lt hltSmall]
-    change Fin.append σ s
-        ⟨((Fin.castAdd r i).val + j.val) % (n + r), Nat.mod_lt _ (by omega)⟩ =
-      σ ⟨(i.val + j.val) % n, Nat.mod_lt _ (Fin.pos i)⟩
-    rw [hbig, Fin.append_left, hsmall]
-  rw [hrestrict, hextract]
+        (contiguousCfg j.val L ω (Fin.appendEquiv n r (σ, s))) =
+      x (contiguousCfg j.val L ω σ, s)
+    rw [rightSpectatorConfigLinearIsometryEquiv_symm_apply_apply, hcfg]
+  have hwin : (fun u ↦ Fin.appendEquiv n r (σ, s) (ManyBody.chainWindow j.val hj' u)) =
+      fun u ↦ σ (ManyBody.chainWindow j.val hj u) := by
+    funext u
+    have hu : ManyBody.chainWindow (N := n + r) j.val hj' u =
+        Fin.castAdd r (ManyBody.chainWindow j.val hj u) := Fin.ext (by simp)
+    rw [hu]
+    exact Fin.append_left σ s _
+  rw [hres, hwin]
 
-private def openPrefixStartRightSpectatorEquiv {L n r p : ℕ}
-    (hL : 0 < L) (hp : p ≤ n) :
-    OpenPrefixStart L (n + r) p ≃ OpenPrefixStart L n p where
-  toFun i := by
-    have hip := i.2
-    have hin : i.1.1.val < n := by omega
-    exact ⟨⟨⟨i.1.1.val, hin⟩, by
-      change i.1.1.val + L ≤ n
-      omega⟩, hip⟩
-  invFun i := by
-    refine ⟨⟨Fin.castAdd r i.1.1, ?_⟩, ?_⟩
-    · change i.1.1.val + L ≤ n + r
-      have hin := i.1.2
-      omega
-    · change i.1.1.val + L ≤ p
-      exact i.2
-  left_inv i := by
-    apply Subtype.ext
-    apply Subtype.ext
-    apply Fin.ext
-    rfl
-  right_inv i := by
-    apply Subtype.ext
-    apply Subtype.ext
-    apply Fin.ext
-    rfl
+/-- Under the spectator split, the Hamiltonian of the parent interaction on \(n+r\) sites
+restricted to a set of windows inside the first \(n\) sites is the fiberwise extension of the
+Hamiltonian of the interaction on \(n\) sites restricted to the same windows. -/
+theorem toEuclideanLin_hamiltonian_restrict_parentChainInteraction_conj_rightSpectator
+    (A : MPSTensor d D) {L n r : ℕ} (q : ℕ → Prop) [DecidablePred q]
+    (hq : ∀ k, q k → k + L ≤ n) :
+    (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
+        ((Matrix.toEuclideanLin ((parentChainInteraction A L (n + r)).restrict
+            fun i ↦ q i.val).hamiltonian).comp
+          (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
+      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
+        (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin
+          ((parentChainInteraction A L n).restrict fun i ↦ q i.val).hamiltonian))).toLinearMap := by
+  apply LinearMap.ext
+  intro x
+  simp only [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.comp_apply, LinearMap.sum_apply,
+    ContinuousLinearMap.rightFiberwiseMap_sum, ContinuousLinearMap.toLinearMap_sum]
+  refine Fin.sum_eq_sum_of_val_eq _ _ (fun k ha hb ↦ ?_) (fun i hi ↦ ?_) (fun i hi ↦ ?_)
+  · by_cases hk : q k
+    · rw [ManyBody.Interaction.restrict_term, ManyBody.Interaction.restrict_term, ite_eq_left hk,
+        ite_eq_left hk]
+      exact LinearMap.congr_fun
+        (toEuclideanLin_parentChainInteraction_term_conj_rightSpectatorConfigLinearIsometryEquiv
+          A ⟨k, hb⟩) x
+    · rw [ManyBody.Interaction.restrict_term, ManyBody.Interaction.restrict_term, ite_eq_right hk,
+        ite_eq_right hk]
+      simp
+  · rw [ManyBody.Interaction.restrict_term, ite_eq_right fun h ↦ by have := hq _ h; omega]
+    simp
+  · exact absurd i.isLt (by omega)
 
 /-- Conjugating a fixed-ambient prefix Hamiltonian by the canonical
 right-spectator isometry gives the fiberwise extension of the same prefix
 Hamiltonian in the smaller ambient volume. -/
 theorem openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-    (A : MPSTensor d D) {L n r p : ℕ} (hL : 0 < L) (hp : p ≤ n) :
+    (A : MPSTensor d D) {L n r p : ℕ} (hp : p ≤ n) :
     (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
         ((openPrefixParentHamiltonianES A L (n + r) p).comp
           (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
       (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
         (LinearMap.toContinuousLinearMap
-          (openPrefixParentHamiltonianES A L n p))).toLinearMap := by
-  classical
-  apply LinearMap.ext
-  intro x
-  simp only [openPrefixParentHamiltonianES, LinearMap.comp_apply,
-    LinearMap.sum_apply, map_sum]
-  rw [ContinuousLinearMap.rightFiberwiseMap_sum]
-  calc
-    (∑ i : OpenPrefixStart L (n + r) p,
-        (rightSpectatorConfigLinearIsometryEquiv d n r)
-          (localTermES A L i.1.1
-            ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x))) =
-      ∑ i : OpenPrefixStart L n p,
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-          (LinearMap.toContinuousLinearMap (localTermES A L i.1.1)) x := by
-        apply Fintype.sum_equiv (openPrefixStartRightSpectatorEquiv hL hp)
-        intro i
-        exact LinearMap.congr_fun
-          (localTermES_conj_rightSpectatorConfigLinearIsometryEquiv A
-            (openPrefixStartRightSpectatorEquiv hL hp i).1.1
-            (openPrefixStartRightSpectatorEquiv hL hp i).1.2) x
-    _ = (∑ i : OpenPrefixStart L n p,
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-          (LinearMap.toContinuousLinearMap (localTermES A L i.1.1))) x := by
-      apply PiLp.ext
-      intro q
-      simp
-
-private abbrev OpenSuffixStart (L l N p : ℕ) :=
-  {i : NonwrappingStart L N // p - l ≤ i.1.val ∧ i.1.val + L ≤ p}
-
-private def openSuffixStartRightSpectatorEquiv {L l n r p : ℕ}
-    (hL : 0 < L) (hp : p ≤ n) :
-    OpenSuffixStart L l (n + r) p ≃ OpenSuffixStart L l n p where
-  toFun i := by
-    have hip := i.2.2
-    have hin : i.1.1.val < n := by omega
-    exact ⟨⟨⟨i.1.1.val, hin⟩, by
-      change i.1.1.val + L ≤ n
-      omega⟩, i.2⟩
-  invFun i := by
-    refine ⟨⟨Fin.castAdd r i.1.1, ?_⟩, ?_⟩
-    · change i.1.1.val + L ≤ n + r
-      have hin := i.1.2
-      omega
-    · change p - l ≤ i.1.1.val ∧ i.1.1.val + L ≤ p
-      exact i.2
-  left_inv i := by
-    apply Subtype.ext
-    apply Subtype.ext
-    apply Fin.ext
-    rfl
-  right_inv i := by
-    apply Subtype.ext
-    apply Subtype.ext
-    apply Fin.ext
-    rfl
+          (openPrefixParentHamiltonianES A L n p))).toLinearMap :=
+  toEuclideanLin_hamiltonian_restrict_parentChainInteraction_conj_rightSpectator A
+    (fun k ↦ k + L ≤ p) fun k hk ↦ by omega
 
 /-- Conjugating a fixed-ambient suffix-interval Hamiltonian by the canonical
 right-spectator isometry gives the fiberwise extension of the same interval
 Hamiltonian in the smaller ambient volume. -/
 theorem openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-    (A : MPSTensor d D) {L l n r p : ℕ} (hL : 0 < L) (hp : p ≤ n) :
+    (A : MPSTensor d D) {L l n r p : ℕ} (hp : p ≤ n) :
     (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
         ((openSuffixParentHamiltonianES A L l (n + r) p).comp
           (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
       (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
         (LinearMap.toContinuousLinearMap
-          (openSuffixParentHamiltonianES A L l n p))).toLinearMap := by
-  classical
-  have hsumBig : openSuffixParentHamiltonianES A L l (n + r) p =
-      ∑ i : OpenSuffixStart L l (n + r) p, localTermES A L i.1.1 := by
-    rw [openSuffixParentHamiltonianES]
-    exact Finset.sum_subtype _ (fun i => by simp) _
-  have hsumSmall : openSuffixParentHamiltonianES A L l n p =
-      ∑ i : OpenSuffixStart L l n p, localTermES A L i.1.1 := by
-    rw [openSuffixParentHamiltonianES]
-    exact Finset.sum_subtype _ (fun i => by simp) _
-  rw [hsumBig, hsumSmall]
-  apply LinearMap.ext
-  intro x
-  simp only [LinearMap.comp_apply, LinearMap.sum_apply, map_sum]
-  rw [ContinuousLinearMap.rightFiberwiseMap_sum]
-  calc
-    (∑ i : OpenSuffixStart L l (n + r) p,
-        (rightSpectatorConfigLinearIsometryEquiv d n r)
-          (localTermES A L i.1.1
-            ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x))) =
-      ∑ i : OpenSuffixStart L l n p,
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-          (LinearMap.toContinuousLinearMap (localTermES A L i.1.1)) x := by
-        apply Fintype.sum_equiv (openSuffixStartRightSpectatorEquiv hL hp)
-        intro i
-        exact LinearMap.congr_fun
-          (localTermES_conj_rightSpectatorConfigLinearIsometryEquiv A
-            (openSuffixStartRightSpectatorEquiv hL hp i).1.1
-            (openSuffixStartRightSpectatorEquiv hL hp i).1.2) x
-    _ = (∑ i : OpenSuffixStart L l n p,
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-          (LinearMap.toContinuousLinearMap (localTermES A L i.1.1))) x := by
-      apply PiLp.ext
-      intro q
-      simp
-
-private def openPrefixStartSelfEquiv (L n : ℕ) :
-    OpenPrefixStart L n n ≃ NonwrappingStart L n where
-  toFun i := i.1
-  invFun i := ⟨i, i.2⟩
-  left_inv _i := rfl
-  right_inv _i := rfl
+          (openSuffixParentHamiltonianES A L l n p))).toLinearMap :=
+  toEuclideanLin_hamiltonian_restrict_parentChainInteraction_conj_rightSpectator A
+    (fun k ↦ p - l ≤ k ∧ k + L ≤ p) fun k hk ↦ by omega
 
 /-- When the prefix is the entire ambient volume, the fixed-ambient prefix
 Hamiltonian is the ordinary nonwrapping open parent Hamiltonian. -/
 theorem openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES
     (A : MPSTensor d D) (L n : ℕ) :
     openPrefixParentHamiltonianES A L n n = openParentHamiltonianES A L n := by
-  classical
-  rw [openPrefixParentHamiltonianES, openParentHamiltonianES]
-  apply Fintype.sum_equiv (openPrefixStartSelfEquiv L n)
-  intro i
-  rfl
+  rw [openPrefixParentHamiltonianES, ManyBody.Interaction.hamiltonian_restrict,
+    Finset.filter_true_of_mem fun i _ ↦ by omega, ManyBody.Interaction.partialHamiltonian_univ]
 
 /-- Under the one-site right-spectator splitting, a fiber is restriction to a
 fixed final physical index. -/
@@ -366,7 +245,7 @@ theorem ker_openPrefixParentHamiltonianES_eq_openChainLeftGroundSpaceES
   rw [mem_openChainLeftGroundSpaceES_iff]
   have hconj :=
     openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-      A (L := L₀ + 1) (n := n) (r := 1) (p := n) (by omega) le_rfl
+      A (L := L₀ + 1) (n := n) (r := 1) (p := n) le_rfl
   have happly := LinearMap.congr_fun hconj
     (rightSpectatorConfigLinearIsometryEquiv d n 1 v)
   change rightSpectatorConfigLinearIsometryEquiv d n 1
@@ -426,23 +305,22 @@ theorem ker_openPrefixParentHamiltonianES_eq_openChainLeftGroundSpaceES
       rightFiber_rightSpectatorConfigLinearIsometryEquiv_one]
     exact hv (s 0)
 
-/-- The suffix interval equal to the full final window contains one local
+/-- The suffix interval equal to the full final window contains one term of the parent
 interaction, beginning after the prefix of length \(K\). -/
-theorem openSuffixParentHamiltonianES_full_window_eq_localTermES
-    (A : MPSTensor d D) {K L : ℕ} (hL : 0 < L) :
+theorem openSuffixParentHamiltonianES_full_window_eq_term (A : MPSTensor d D) {K L : ℕ} :
     openSuffixParentHamiltonianES A L L (K + L) (K + L) =
-      localTermES A L (⟨K, by omega⟩ : Fin (K + L)) := by
-  simpa only [Nat.add_sub_cancel] using
-    openSuffixParentHamiltonianES_eq_localTermES A hL (Nat.le_add_left L K) le_rfl
+      Matrix.toEuclideanLin ((parentChainInteraction A L (K + L)).term ⟨K, by omega⟩) := by
+  rw [openSuffixParentHamiltonianES,
+    hamiltonian_restrict_parentChainInteraction_eq_term A (Nat.le_add_left L K) le_rfl]
+  simp only [Nat.add_sub_cancel]
 
-private theorem cyclicCfg_tail_window
-    {d K L : ℕ} (hL : 0 < L) (τ : Cfg d (K + L)) (ω : Cfg d L) :
-    cyclicCfg (by omega : 0 < K + L) L
-        (⟨K, by omega⟩ : Fin (K + L)) ω τ =
-      Fin.append (fun k : Fin K => τ (Fin.castAdd L k)) ω := by
-  rw [cyclicCfg_eq_contiguousCfg (by omega) (by omega) (by
-    change K + L ≤ K + L
-    exact le_rfl)]
+private theorem contiguousRestrictₗ_tail_window {K L : ℕ} (τ : Cfg d (K + L))
+    (ψ : NSiteSpace d (K + L)) :
+    contiguousRestrictₗ K L le_rfl τ ψ =
+      tailRestrictₗ (fun k : Fin K => τ (Fin.castAdd L k)) ψ := by
+  funext ω
+  change ψ (contiguousCfg K L ω τ) = ψ (Fin.append (fun k : Fin K => τ (Fin.castAdd L k)) ω)
+  congr 1
   funext q
   by_cases hq : K ≤ q.val
   · have hsub : q.val - K < L := by omega
@@ -459,23 +337,10 @@ private theorem cyclicCfg_tail_window
     have hqeq : q = Fin.castAdd L k := by
       apply Fin.ext
       rfl
-    simp only [contiguousCfg, hq, q.isLt]
+    simp only [contiguousCfg, hq]
     exact (congrArg τ hqeq).trans
       ((Fin.append_left (fun k : Fin K => τ (Fin.castAdd L k)) ω k).symm.trans
         (congrArg (Fin.append (fun k : Fin K => τ (Fin.castAdd L k)) ω) hqeq.symm))
-
-private theorem cyclicRestrictES_tail_window
-    {d K L : ℕ} (hL : 0 < L) (τ : Cfg d (K + L))
-    (v : EuclideanSpace ℂ (Cfg d (K + L))) :
-    WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
-        (cyclicRestrictES (d := d) (by omega) L
-          (⟨K, by omega⟩ : Fin (K + L)) τ v) =
-      tailRestrictₗ (fun k : Fin K => τ (Fin.castAdd L k))
-        (WithLp.linearEquiv 2 ℂ (NSiteSpace d (K + L)) v) := by
-  funext ω
-  change v (cyclicCfg (by omega) L (⟨K, by omega⟩ : Fin (K + L)) ω τ) =
-    v (Fin.append (fun k : Fin K => τ (Fin.castAdd L k)) ω)
-  rw [cyclicCfg_tail_window hL]
 
 /-- The kernel of a full suffix-window Hamiltonian is the corresponding tail
 open-chain ground space. -/
@@ -484,7 +349,7 @@ theorem ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES
     LinearMap.ker (openSuffixParentHamiltonianES A L L (K + L) (K + L)) =
       openChainTailGroundSpaceES A K L := by
   classical
-  rw [openSuffixParentHamiltonianES_full_window_eq_localTermES A hL]
+  rw [openSuffixParentHamiltonianES_full_window_eq_term A]
   ext v
   cases isEmpty_or_nonempty (Fin d) with
   | inl hd =>
@@ -496,20 +361,19 @@ theorem ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES
       simp
   | inr hd =>
       let _ : Nonempty (Fin d) := hd
-      rw [LinearMap.mem_ker, mem_openChainTailGroundSpaceES_iff,
-        localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES
-          A (show L ≤ K + L by omega) (⟨K, by omega⟩ : Fin (K + L)) v]
+      rw [LinearMap.mem_ker, mem_openChainTailGroundSpaceES_iff, Matrix.toLpLin_apply,
+        WithLp.toLp_eq_zero, parentChainInteraction_term_mulVec_eq_zero_iff]
       constructor
       · intro hv u
         let τ : Cfg d (K + L) := Fin.append u (fun _ => Classical.choice hd)
         have hτ := hv τ
-        rw [mem_groundSpaceES_iff] at hτ
         have hpref : (fun k : Fin K => τ (Fin.castAdd L k)) = u := by
           funext k
           exact Fin.append_left u (fun _ => Classical.choice hd) k
-        simpa only [cyclicRestrictES_tail_window hL, hpref] using hτ
+        rw [contiguousRestrictₗ_tail_window, hpref] at hτ
+        exact hτ
       · intro hv τ
-        rw [mem_groundSpaceES_iff, cyclicRestrictES_tail_window hL]
+        rw [contiguousRestrictₗ_tail_window]
         exact hv (fun k : Fin K => τ (Fin.castAdd L k))
 
 /-- For a block-injective tensor, the kernel of the prefix Hamiltonian that
@@ -577,7 +441,7 @@ theorem openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEqui
   let H := openPrefixParentHamiltonianES A (L₀ + 1) (n + 1) n
   have hHamiltonian :=
     openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-      A (L := L₀ + 1) (n := n + 1) (r := r) (p := n) (by omega) (by omega)
+      A (L := L₀ + 1) (n := n + 1) (r := r) (p := n) (by omega)
   have hproj := ker_starProjection_conj_of_rightFiberwiseMap G H hHamiltonian
   rw [ker_openPrefixParentHamiltonianES_eq_openChainLeftGroundSpaceES
     hInj hL₀ hL₀n] at hproj
@@ -597,7 +461,7 @@ theorem openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometr
   let H := openPrefixParentHamiltonianES A (L₀ + 1) n n
   have hHamiltonian :=
     openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-      A (L := L₀ + 1) (n := n) (r := r) (p := n) (by omega) le_rfl
+      A (L := L₀ + 1) (n := n) (r := r) (p := n) le_rfl
   have hproj := ker_starProjection_conj_of_rightFiberwiseMap G H hHamiltonian
   rw [show LinearMap.ker H = groundSpaceES A n from
     ker_openPrefixParentHamiltonianES_self_eq_groundSpaceES hInj hL₀ hL₀n] at hproj
@@ -623,7 +487,7 @@ theorem openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEq
   have hHamiltonian :=
     openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
       A (L := l + 1) (l := l + 1) (n := K + (l + 1)) (r := r)
-        (p := K + l + 1) (by omega) (by omega)
+        (p := K + l + 1) (by omega)
   have hproj := ker_starProjection_conj_of_rightFiberwiseMap G H hHamiltonian
   rw [show LinearMap.ker H = openChainTailGroundSpaceES A K (l + 1) by
     simpa only [H, Nat.add_assoc] using
@@ -631,73 +495,5 @@ theorem openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEq
         A (K := K) (L := l + 1) (by omega))] at hproj
   simpa only [openIntervalGroundProjectionES, openChainTailGroundProjectionES,
     G, hKl] using hproj
-
-/-! ### Terms of the parent interaction on the open chain with right spectators -/
-
-section ChainInteraction
-
-open scoped Matrix
-
-/-- A term of the parent interaction on the open chain of the first \(n\) sites acts
-independently on every configuration of the final \(r\) right-spectator sites: under the
-spectator split, the term starting at `j` on \(n + r\) sites is the fiberwise extension of the
-term starting at `j` on \(n\) sites. -/
-theorem toEuclideanLin_parentChainInteraction_term_conj_rightSpectatorConfigLinearIsometryEquiv
-    (A : MPSTensor d D) {n r L : ℕ} (j : Fin (n + 1 - L)) :
-    (rightSpectatorConfigLinearIsometryEquiv d n r).toLinearEquiv.toLinearMap.comp
-        ((Matrix.toEuclideanLin ((parentChainInteraction A L (n + r)).term
-            ⟨j.val, by omega⟩)).comp
-          (rightSpectatorConfigLinearIsometryEquiv d n r).symm.toLinearEquiv.toLinearMap) =
-      (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d r)
-        (LinearMap.toContinuousLinearMap
-          (Matrix.toEuclideanLin ((parentChainInteraction A L n).term j)))).toLinearMap := by
-  have hj : j.val + L ≤ n := by omega
-  have hj' : j.val + L ≤ n + r := by omega
-  apply LinearMap.ext
-  intro x
-  apply PiLp.ext
-  rintro ⟨σ, s⟩
-  change (Matrix.toEuclideanLin ((parentChainInteraction A L (n + r)).term ⟨j.val, by omega⟩)
-      ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)) (Fin.appendEquiv n r (σ, s)) =
-    Matrix.toEuclideanLin ((parentChainInteraction A L n).term j)
-      (ContinuousLinearMap.rightFiber x s) σ
-  rw [Matrix.toLpLin_apply, Matrix.toLpLin_apply, PiLp.toLp_apply, PiLp.toLp_apply,
-    ManyBody.Interaction.translates_term, ManyBody.Interaction.translates_term,
-    placeAlong_chainWindow_mulVec_apply hj', placeAlong_chainWindow_mulVec_apply hj]
-  have hcfg (ω : Cfg d L) :
-      rightSpectatorConfigEquiv d n r (contiguousCfg j.val L ω (Fin.appendEquiv n r (σ, s))) =
-        (contiguousCfg j.val L ω σ, s) := by
-    apply Prod.ext
-    · funext k
-      simp only [rightSpectatorConfigEquiv]
-      simp [contiguousCfg, Fin.appendEquiv]
-    · funext k
-      simp only [rightSpectatorConfigEquiv]
-      change contiguousCfg j.val L ω (Fin.append σ s) (Fin.natAdd n k) = s k
-      simp only [contiguousCfg]
-      split
-      · rename_i hwindow
-        have hkval : (Fin.natAdd n k).val = n + k.val := rfl
-        exfalso
-        omega
-      · exact Fin.append_right σ s k
-  have hres : contiguousRestrictₗ j.val L hj' (Fin.appendEquiv n r (σ, s))
-      (WithLp.ofLp ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)) =
-      contiguousRestrictₗ j.val L hj σ (WithLp.ofLp (ContinuousLinearMap.rightFiber x s)) := by
-    funext ω
-    change ((rightSpectatorConfigLinearIsometryEquiv d n r).symm x)
-        (contiguousCfg j.val L ω (Fin.appendEquiv n r (σ, s))) =
-      x (contiguousCfg j.val L ω σ, s)
-    rw [rightSpectatorConfigLinearIsometryEquiv_symm_apply_apply, hcfg]
-  have hwin : (fun u ↦ Fin.appendEquiv n r (σ, s) (ManyBody.chainWindow j.val hj' u)) =
-      fun u ↦ σ (ManyBody.chainWindow j.val hj u) := by
-    funext u
-    have hu : ManyBody.chainWindow (N := n + r) j.val hj' u =
-        Fin.castAdd r (ManyBody.chainWindow j.val hj u) := Fin.ext (by simp)
-    rw [hu]
-    exact Fin.append_left σ s _
-  rw [hres, hwin]
-
-end ChainInteraction
 
 end MPSTensor

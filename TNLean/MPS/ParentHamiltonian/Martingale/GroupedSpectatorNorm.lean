@@ -27,7 +27,7 @@ both prefix endpoints lie within that volume. This is the fixed-volume
 extension of Nachtergaele's condition C3-prime, arXiv:cond-mat/9410110,
 lines 1095--1104. -/
 theorem norm_suffixGroundProjection_comp_prefixDifference_le_active
-    (A : MPSTensor d D) {R l n r p : ℕ} (hR : 0 < R) (hp : p ≤ n) :
+    (A : MPSTensor d D) {R l n r p : ℕ} (hp : p ≤ n) :
     ‖LinearMap.toContinuousLinearMap
       (((LinearMap.ker
         (openSuffixParentHamiltonianES A R l (n + r) n)).starProjection.toLinearMap).comp
@@ -44,7 +44,7 @@ theorem norm_suffixGroundProjection_comp_prefixDifference_le_active
           (LinearMap.ker (openPrefixParentHamiltonianES A R n q)).starProjection).toLinearMap :=
     ker_starProjection_conj_of_rightFiberwiseMap _ _
       (openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-        A (r := r) hR hq)
+        A (r := r) hq)
   have hQ :
       U.toLinearEquiv.conj (LinearMap.ker
           (openSuffixParentHamiltonianES A R l (n + r) n)).starProjection.toLinearMap =
@@ -52,7 +52,7 @@ theorem norm_suffixGroundProjection_comp_prefixDifference_le_active
           (LinearMap.ker (openSuffixParentHamiltonianES A R l n n)).starProjection).toLinearMap :=
     ker_starProjection_conj_of_rightFiberwiseMap _ _
       (openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-        A (l := l) (n := n) (r := r) hR le_rfl)
+        A (l := l) (n := n) (r := r) le_rfl)
   have hprod : U.toLinearEquiv.conj
       (((LinearMap.ker
         (openSuffixParentHamiltonianES A R l (n + r) n)).starProjection.toLinearMap).comp

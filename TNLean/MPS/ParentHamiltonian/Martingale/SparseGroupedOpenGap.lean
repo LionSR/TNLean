@@ -61,7 +61,7 @@ noncomputable def sparseGroupedOpenParentHamiltonianES (A : MPSTensor d D)
 in the number of sampled windows. Source: Nachtergaele,
 arXiv:cond-mat/9410110, condition C3-prime, lines 1095--1107. -/
 theorem grouped_martingaleDifference_norm_le_of_projector_defect_of_le
-    (A : MPSTensor d D) {p N M : ℕ} (hp : 0 < p) (hM : 2 ≤ M) (hMN : p * M ≤ N)
+    (A : MPSTensor d D) {p N M : ℕ} (hp : 0 < p) (hMN : p * M ≤ N)
     (hKernel : ∀ n, 2 * p ≤ n →
       LinearMap.ker (openParentHamiltonianES A (2 * p) n) = groundSpaceES A n)
     {ε : ℝ} (hε : 0 ≤ ε)
@@ -73,15 +73,15 @@ theorem grouped_martingaleDifference_norm_le_of_projector_defect_of_le
       ‖LinearMap.toContinuousLinearMap
         ((groupedIntervalGroundProjectionES A p N n).comp
           ((groupedNestedGroundProjectionsES A p N).martingaleDifference n))‖ ≤ ε := by
-  apply grouped_martingaleDifference_norm_le_of_two_le A hp (by nlinarith) hε
+  apply grouped_martingaleDifference_norm_le_of_two_le A hp hε
   intro n hn2 hnM
   have hlocal := grouped_martingaleDifference_norm_le_of_projector_defect A hp
-    (M := n + 1) (by omega) hKernel hε hDefect n (by simp)
+    (M := n + 1) hKernel hε hDefect n (by simp)
   have hend : p * (n + 1) ≤ N :=
     (Nat.mul_le_mul_left p (by omega : n + 1 ≤ M)).trans hMN
   have hspec := norm_suffixGroundProjection_comp_prefixDifference_le_active A
     (R := 2 * p) (l := 2 * p) (n := p * (n + 1))
-    (r := N - p * (n + 1)) (p := p * n) (by omega) (by nlinarith)
+    (r := N - p * (n + 1)) (p := p * n) (by nlinarith)
   simp only [groupedIntervalGroundProjectionES,
     FrustrationFree.NestedGroundProjections.martingaleDifference,
     groupedNestedGroundProjectionsES] at hlocal ⊢
@@ -104,7 +104,7 @@ on the orthogonal complement of the prefix ground space. The C1 sum is now
 exactly the sparse interaction, so its comparison constant is one.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 2.1(ii), lines 1131--1136. -/
 theorem sparseGroupedOpenParentHamiltonianES_energy_bound_of_grouped_c3
-    (A : MPSTensor d D) {p N M : ℕ} (hp : 0 < p) (hM : 2 ≤ M) (hMN : p * M ≤ N)
+    (A : MPSTensor d D) {p N M : ℕ} (hp : 0 < p) (hMN : p * M ≤ N)
     {ε : ℝ} (hε : 0 ≤ ε) (hεlt : ε < 1 / Real.sqrt 2)
     (hC3 : ∀ n ∈ Finset.range M,
       ‖LinearMap.toContinuousLinearMap
@@ -127,7 +127,7 @@ theorem sparseGroupedOpenParentHamiltonianES_energy_bound_of_grouped_c3
       (γ := (1 : ℝ)) (d := (1 : ℝ)) (ε := ε)
       (by norm_num) (by norm_num) hε (by simpa using hεlt)
       (fun _ _ => Submodule.isSymmetricProjection_starProjection _)
-      (fun _ _ _ hout => grouped_martingaleDifference_commute A hp (by nlinarith) hout)
+      (fun _ _ _ hout => grouped_martingaleDifference_commute A hp hout)
       (fun x => by
         refine ⟨Finset.sum_nonneg fun n _ =>
           (openSuffixParentHamiltonianES_isPositive A (2 * p) (2 * p) N (p * (n + 1))).2 x,
@@ -161,7 +161,7 @@ theorem sparseGroupedOpenParentHamiltonianES_isPositive
 with the sharp grouped martingale coefficient. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 2.1(ii), lines 1131--1136. -/
 theorem sparseGroupedOpenParentHamiltonianES_projection_bound_of_grouped_c3
-    (A : MPSTensor d D) {p N M : ℕ} (hp : 0 < p) (hM : 2 ≤ M) (hMN : p * M ≤ N)
+    (A : MPSTensor d D) {p N M : ℕ} (hp : 0 < p) (hMN : p * M ≤ N)
     {ε : ℝ} (hε : 0 ≤ ε) (hεlt : ε < 1 / Real.sqrt 2)
     (hC3 : ∀ n ∈ Finset.range M,
       ‖LinearMap.toContinuousLinearMap
@@ -187,7 +187,7 @@ theorem sparseGroupedOpenParentHamiltonianES_projection_bound_of_grouped_c3
     rw [Nat.sub_add_cancel (by omega : 1 ≤ 2 * p), Nat.sub_add_cancel hpos] at hv'
     exact LinearMap.mem_ker.mp hv'
   · exact sparseGroupedOpenParentHamiltonianES_energy_bound_of_grouped_c3
-      A hp hM hMN hε hεlt hC3
+      A hp hMN hε hεlt hC3
 
 /-- A positive residual interval permits one additional terminal interaction
 without repeating any sampled local term. Their sum is bounded by the full
@@ -280,7 +280,7 @@ theorem sparseGroupedOpenParentHamiltonianES_add_terminal_le
     congr 1
     exact Fin.sum_univ_eq_sum_range
       (fun n => openSuffixParentHamiltonianES A (2 * p) (2 * p) N (p * (n + 1))) M
-  rw [← hsum, openParentHamiltonianES]
+  rw [← hsum, openParentHamiltonianES_eq_sum_localTermES A (by omega)]
   have himage :
       (∑ i ∈ Finset.univ.image I, localTermES A (2 * p) i.1) =
         ∑ n : Fin M, localTermES A (2 * p) (I n).1 := Finset.sum_image hI.injOn

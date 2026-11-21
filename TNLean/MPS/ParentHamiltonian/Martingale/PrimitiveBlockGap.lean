@@ -65,10 +65,10 @@ theorem exists_ge_openParentHamiltonianES_toTensorFromBlocks_gap_of_hasComplemen
   intro M hM
   exact
     openParentHamiltonianES_norm_gap_of_grouped_c3
-      (toTensorFromBlocks (d := d) (μ := μ) A) (p := p) (by omega) hM
+      (toTensorFromBlocks (d := d) (μ := μ) A) (p := p) (by omega)
       (by norm_num) hεlt
       (grouped_martingaleDifference_norm_le_of_projector_defect
-        (toTensorFromBlocks (d := d) (μ := μ) A) (by omega) hM
+        (toTensorFromBlocks (d := d) (μ := μ) A) (by omega)
         (fun n hn ↦ hKernel (2 * p) n (by omega) hn) (by norm_num)
         (fun K ↦ hDefect K p (by omega)))
 

@@ -32,23 +32,16 @@ variable {d D : ℕ}
 /-- A prefix contains only interaction terms of the full open chain. -/
 theorem openPrefixParentHamiltonianES_le_openParentHamiltonianES
     (A : MPSTensor d D) (R N n : ℕ) :
-    openPrefixParentHamiltonianES A R N n ≤ openParentHamiltonianES A R N := by
-  classical
-  rw [openPrefixParentHamiltonianES, openParentHamiltonianES]
-  rw [← Finset.sum_subtype
-    (Finset.univ.filter fun i : NonwrappingStart R N => i.1.val + R ≤ n)
-    (fun _ => by simp) (fun i => localTermES A R i.1)]
-  exact Finset.sum_le_sum_of_subset_of_nonneg (Finset.filter_subset _ _)
-    (fun i _ _ => LinearMap.nonneg_iff_isPositive.mpr (localTermES_isPositive A R i.1))
+    openPrefixParentHamiltonianES A R N n ≤ openParentHamiltonianES A R N :=
+  Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr (ManyBody.Interaction.hamiltonian_restrict_le
+    (fun i ↦ Matrix.nonneg_iff_posSemidef.mpr (posSemidef_parentChainInteraction_term A R N i)) _)
 
 /-- An interval Hamiltonian contains only interaction terms of the full open chain. -/
 theorem openSuffixParentHamiltonianES_le_openParentHamiltonianES
     (A : MPSTensor d D) (R W N n : ℕ) :
-    openSuffixParentHamiltonianES A R W N n ≤ openParentHamiltonianES A R N := by
-  classical
-  rw [openSuffixParentHamiltonianES, openParentHamiltonianES]
-  exact Finset.sum_le_sum_of_subset_of_nonneg (Finset.filter_subset _ _)
-    (fun i _ _ => LinearMap.nonneg_iff_isPositive.mpr (localTermES_isPositive A R i.1))
+    openSuffixParentHamiltonianES A R W N n ≤ openParentHamiltonianES A R N :=
+  Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr (ManyBody.Interaction.hamiltonian_restrict_le
+    (fun i ↦ Matrix.nonneg_iff_posSemidef.mpr (posSemidef_parentChainInteraction_term A R N i)) _)
 
 /-- Gaps for a prefix and a terminal interval give a full-chain gap if the
 product of their ground projections differs from the full-chain ground

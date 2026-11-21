@@ -100,66 +100,34 @@ theorem exists_pos_openParentHamiltonianES_gap_of_aligned_cover_defect
     A R (K * m + M * m + r) (K * m + M * m) (M * m + r) (lt_min hγ hη).le
   · intro v hv
     exact (mul_le_mul_of_nonneg_right (min_le_left γ η) (norm_nonneg v)).trans
-      (openPrefixParentHamiltonianES_norm_gap_of_local_gap A hR hγ (hLeft K hK) v hv)
+      (openPrefixParentHamiltonianES_norm_gap_of_local_gap A hγ (hLeft K hK) v hv)
   · intro v hv
     exact (mul_le_mul_of_nonneg_right (min_le_right γ η) (norm_nonneg v)).trans
       (openSuffixParentHamiltonianES_norm_gap_of_local_gap A hR (by omega)
         (by omega) le_rfl hη (hRight r hr) v hv)
   · rw [hKernel _ (by omega),
-      ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES A hR
+      ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES A
         (hKernel _ (by omega)),
       ker_openSuffixParentHamiltonianES_eq_range_reassocTailBoundaryMapES A hR
         (by omega) (hKernel _ (by omega))]
     exact hDefect K hK r hr
-/-- Vanishing of an interval parent sum forces every contained local projection to
-vanish.
-Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6,
-Lemma commutation (ii), and equations (3.12)--(3.16). -/
-theorem localTermES_eq_zero_of_openSuffixParentHamiltonianES_eq_zero
-    (A : MPSTensor d D) (R W N n : ℕ) {v : EuclideanSpace ℂ (Cfg d N)}
-    (hv : openSuffixParentHamiltonianES A R W N n v = 0)
-    (i : NonwrappingStart R N)
-    (hi : n - W ≤ i.1.val ∧ i.1.val + R ≤ n) : localTermES A R i.1 v = 0 := by
-  classical
-  let I := {j : NonwrappingStart R N // n - W ≤ j.1.val ∧ j.1.val + R ≤ n}
-  have hsum : (∑ j : I, localTermES A R j.1.1) v = 0 := by
-    rw [openSuffixParentHamiltonianES] at hv
-    rw [Finset.sum_subtype (p := fun j : NonwrappingStart R N =>
-      n - W ≤ j.1.val ∧ j.1.val + R ≤ n)
-      (Finset.univ.filter fun j : NonwrappingStart R N =>
-        n - W ≤ j.1.val ∧ j.1.val + R ≤ n) (fun _ => by simp)
-      (fun j => localTermES A R j.1)] at hv
-    exact hv
-  exact ProjectionGeometry.apply_eq_zero_of_sum_apply_eq_zero
-    (fun j : I => localTermES A R j.1.1)
-    (fun j => localTermES_isSymmetricProjection A R j.1.1) hsum ⟨i, hi⟩
 /-- Two covering intervals have exactly the full open-chain kernel in common, provided
 every local interaction window is contained in one of them.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 Lemma commutation (ii), and equations (3.12)--(3.16). -/
 theorem ker_openPrefix_inf_ker_openSuffix_eq_ker_openParentHamiltonianES
-    (A : MPSTensor d D) {R N n W : ℕ} (hn : n ≤ N)
+    (A : MPSTensor d D) {R N n W : ℕ}
     (hcover : N + R ≤ n + W + 1) :
     LinearMap.ker (openPrefixParentHamiltonianES A R N n) ⊓
       LinearMap.ker (openSuffixParentHamiltonianES A R W N N) =
       LinearMap.ker (openParentHamiltonianES A R N) := by
-  classical
-  apply le_antisymm
-  · rintro v ⟨hleft, hright⟩
-    rw [LinearMap.mem_ker, openParentHamiltonianES, LinearMap.sum_apply]
-    apply Finset.sum_eq_zero
-    intro i _
-    by_cases hi : i.1.val + R ≤ n
-    · exact localTermES_eq_zero_of_openPrefixParentHamiltonianES_eq_zero
-        A R N n (LinearMap.mem_ker.mp hleft) ⟨i, hi⟩
-    · exact localTermES_eq_zero_of_openSuffixParentHamiltonianES_eq_zero
-        A R W N N (LinearMap.mem_ker.mp hright) i ⟨by omega, i.2⟩
-  · refine le_inf (ker_openParentHamiltonianES_le_ker_openPrefix A hn) ?_
-    intro v hv
-    rw [LinearMap.mem_ker, openSuffixParentHamiltonianES, LinearMap.sum_apply]
-    exact Finset.sum_eq_zero fun i _ =>
-      localTermES_eq_zero_of_openParentHamiltonianES_eq_zero A R N
-        (LinearMap.mem_ker.mp hv) i
+  have hpos := posSemidef_parentChainInteraction_term A R N
+  ext v
+  rw [Submodule.mem_inf, ManyBody.Interaction.mem_ker_toEuclideanLin_hamiltonian_restrict_iff hpos,
+    ManyBody.Interaction.mem_ker_toEuclideanLin_hamiltonian_restrict_iff hpos,
+    ManyBody.Interaction.mem_ker_toEuclideanLin_hamiltonian_iff hpos]
+  exact ⟨fun ⟨hl, hr⟩ i ↦ if hi : i.val + R ≤ n then hl i hi else hr i (by omega),
+    fun h ↦ ⟨fun i _ ↦ h i, fun i _ ↦ h i⟩⟩
 /-- The sum of two interval Hamiltonians is at most twice the full open Hamiltonian.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 6,
 Lemma commutation (ii), and equations (3.12)--(3.16). -/
@@ -199,11 +167,11 @@ theorem leftBoundary_inf_reassocTail_range_eq_groundSpaceES_of_open_kernel
       LinearMap.ker (openParentHamiltonianES A R N) = groundSpaceES A N) :
     (leftBoundaryMapES A (K + L) r).range ⊓
       (reassocTailBoundaryMapES A K L r).range = groundSpaceES A (K + L + r) := by
-  rw [← ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES A hR
+  rw [← ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES A
       (hKernel (K + L) (by omega)),
     ← ker_openSuffixParentHamiltonianES_eq_range_reassocTailBoundaryMapES A hR
       (by omega) (hKernel (L + r) (by omega)),
-    ker_openPrefix_inf_ker_openSuffix_eq_ker_openParentHamiltonianES A (by omega)
+    ker_openPrefix_inf_ker_openSuffix_eq_ker_openParentHamiltonianES A
       (by omega), hKernel _ (by omega)]
 /-- A periodic tensor with exact canonical open kernels has a common gap
 at every sufficiently large original length if the stated residual cover

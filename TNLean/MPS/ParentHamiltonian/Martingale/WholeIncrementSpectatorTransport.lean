@@ -52,7 +52,7 @@ theorem mem_range_leftBoundaryMapES_iff_rightFiber
 /-- An identification of the active open-chain kernel with the local ground
 space identifies the larger-volume prefix kernel with its right extension. -/
 theorem ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES
-    (A : MPSTensor d D) {R n r : ℕ} (hR : 0 < R)
+    (A : MPSTensor d D) {R n r : ℕ}
     (hker : LinearMap.ker (openParentHamiltonianES A R n) = groundSpaceES A n) :
     LinearMap.ker (openPrefixParentHamiltonianES A R (n + r) n) =
       (leftBoundaryMapES A n r).range := by
@@ -66,7 +66,7 @@ theorem ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES
       LinearIsometryEquiv.coe_toLinearEquiv, LinearIsometryEquiv.symm_apply_apply] using
       LinearMap.congr_fun
         (openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-          A (n := n) (r := r) (p := n) hR le_rfl)
+          A (n := n) (r := r) (p := n) le_rfl)
         (rightSpectatorConfigLinearIsometryEquiv d n r v)
   rw [mem_range_leftBoundaryMapES_iff_rightFiber, LinearMap.mem_ker,
     ← (rightSpectatorConfigLinearIsometryEquiv d n r).map_eq_zero_iff, hconj]
@@ -129,7 +129,7 @@ theorem norm_suffixProjection_comp_prefixDifference_eq_projector_defect
       ← reassocTailBoundaryMapES_comp_tailVirtualMapES A K L Q]
     exact LinearMap.range_comp_le_range _ _
   simp only [openPrefixGroundProjectionES,
-    ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES A hR hleft,
+    ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES A hleft,
     openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES, hfull,
     ← range_reassocTailBoundaryMapES_eq_ker_openSuffixParentHamiltonianES A hR]
   exact norm_projection_difference _ _ _ hWV

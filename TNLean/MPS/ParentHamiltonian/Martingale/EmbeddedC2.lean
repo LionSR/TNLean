@@ -24,118 +24,132 @@ The statements remain generic in \(L\). Setting \(L = l + 1\) and
   Theorem 2.1(i), lines 1119--1130; proof lines 1240--1248.
 -/
 
-open scoped InnerProductSpace
+open scoped InnerProductSpace MatrixOrder ComplexOrder
 
 namespace MPSTensor
 
 variable {d D : ℕ}
 
-/-- A suffix whose length equals the interaction length contains exactly the
-local term starting at \(n-L\). -/
+/-- The interval of length \(L\) ending at \(n\) contains exactly the window of the term
+starting at \(n-L\): the restriction of the parent interaction to the windows inside it has that
+term as its Hamiltonian. -/
+theorem hamiltonian_restrict_parentChainInteraction_eq_term (A : MPSTensor d D)
+    {L N n : ℕ} (hLn : L ≤ n) (hnN : n ≤ N) :
+    ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian =
+      (parentChainInteraction A L N).term ⟨n - L, by omega⟩ := by
+  have hfilter :
+      (Finset.univ.filter fun i : Fin (N + 1 - L) ↦ n - L ≤ i.val ∧ i.val + L ≤ n) =
+        {⟨n - L, by omega⟩} := by
+    ext j
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_singleton, Fin.ext_iff]
+    omega
+  rw [ManyBody.Interaction.hamiltonian_restrict, ManyBody.Interaction.partialHamiltonian, hfilter,
+    Finset.sum_singleton]
+
+/-- The single-window suffix Hamiltonian as a Euclidean-space local term; kept for the files not
+yet restated (#10948). -/
 theorem openSuffixParentHamiltonianES_eq_localTermES (A : MPSTensor d D)
     {L N n : ℕ} (hL : 0 < L) (hLn : L ≤ n) (hnN : n ≤ N) :
     openSuffixParentHamiltonianES A L L N n =
       localTermES A L (⟨n - L, by omega⟩ : Fin N) := by
-  have hn : 0 < n := lt_of_lt_of_le hL hLn
-  have hstart : n - L < N := lt_of_lt_of_le (Nat.sub_lt hn hL) hnN
-  let i : NonwrappingStart L N :=
-    ⟨⟨n - L, hstart⟩, by simpa [Nat.sub_add_cancel hLn] using hnN⟩
-  have hfilter :
-      Finset.univ.filter (fun j : NonwrappingStart L N =>
-        n - L ≤ j.1.val ∧ j.1.val + L ≤ n) = {i} := by
-    ext j
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_singleton]
-    constructor
-    · rintro ⟨hjLower, hjUpper⟩
-      apply Subtype.ext
-      apply Fin.ext
-      exact le_antisymm (Nat.le_sub_of_add_le hjUpper) hjLower
-    · intro hji
-      subst j
-      exact ⟨le_rfl, Nat.sub_add_cancel hLn ▸ le_rfl⟩
-  rw [openSuffixParentHamiltonianES, hfilter, Finset.sum_singleton]
+  rw [openSuffixParentHamiltonianES, hamiltonian_restrict_parentChainInteraction_eq_term A hLn hnN]
+  exact (localTermES_eq_toEuclideanLin_parentChainInteraction_term A ⟨n - L, by omega⟩
+    (by change n - L + L ≤ N; omega)).symm
 
-/-- The fixed-window suffix Hamiltonian is a symmetric projection. -/
-theorem openSuffixParentHamiltonianES_isSymmetricProjection
-    (A : MPSTensor d D) {L N n : ℕ} (hL : 0 < L) (hLn : L ≤ n)
-    (hnN : n ≤ N) :
-    (openSuffixParentHamiltonianES A L L N n).IsSymmetricProjection := by
-  rw [openSuffixParentHamiltonianES_eq_localTermES A hL hLn hnN]
-  exact localTermES_isSymmetricProjection A L _
+/-- The Hamiltonian of the single window inside an interval of length \(L\) is an orthogonal
+projection. -/
+theorem isStarProjection_hamiltonian_restrict_parentChainInteraction (A : MPSTensor d D)
+    {L N n : ℕ} (hLn : L ≤ n) (hnN : n ≤ N) :
+    IsStarProjection ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian := by
+  rw [hamiltonian_restrict_parentChainInteraction_eq_term A hLn hnN]
+  exact isStarProjection_parentChainInteraction_term A L N _
 
-/-- The fixed-window suffix Hamiltonian is the orthogonal projection onto the
+/-- The operator of the single-window Hamiltonian is the orthogonal projection onto the
 orthogonal complement of its kernel. -/
-theorem openSuffixParentHamiltonianES_eq_orthogonal_starProjection_ker
-    (A : MPSTensor d D) {L N n : ℕ} (hL : 0 < L) (hLn : L ≤ n)
-    (hnN : n ≤ N) :
-    openSuffixParentHamiltonianES A L L N n =
-      (LinearMap.ker (openSuffixParentHamiltonianES A L L N n))ᗮ.starProjection.toLinearMap := by
-  let H := openSuffixParentHamiltonianES A L L N n
-  have hH : H.IsSymmetricProjection :=
-    openSuffixParentHamiltonianES_isSymmetricProjection A hL hLn hnN
-  apply hH.ext (Submodule.isSymmetricProjection_starProjection (LinearMap.ker H)ᗮ)
-  rw [Submodule.range_starProjection]
-  rw [← hH.isSymmetric.orthogonal_range, Submodule.orthogonal_orthogonal]
+theorem toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_starProjection
+    (A : MPSTensor d D) {L N n : ℕ} (hLn : L ≤ n) (hnN : n ≤ N) :
+    Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian =
+      (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+        fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian))ᗮ.starProjection.toLinearMap
+        := by
+  have hH := Matrix.isSymmetricProjection_toEuclideanLin_iff.mpr
+    (isStarProjection_hamiltonian_restrict_parentChainInteraction A hLn hnN)
+  apply hH.ext (Submodule.isSymmetricProjection_starProjection _)
+  rw [Submodule.range_starProjection, ← hH.isSymmetric.orthogonal_range,
+    Submodule.orthogonal_orthogonal]
 
-/-- Literal fixed-window identity \(H=I-G\), where \(G\) is the orthogonal
-projection onto the kernel of \(H\). -/
-theorem openSuffixParentHamiltonianES_eq_id_sub_starProjection_ker
-    (A : MPSTensor d D) {L N n : ℕ} (hL : 0 < L) (hLn : L ≤ n)
-    (hnN : n ≤ N) :
-    openSuffixParentHamiltonianES A L L N n =
-      LinearMap.id -
-        (LinearMap.ker (openSuffixParentHamiltonianES A L L N n)).starProjection.toLinearMap := by
-  let H := openSuffixParentHamiltonianES A L L N n
+/-- The single-window identity \(H=I-G\), where \(G\) is the orthogonal projection onto the
+kernel of \(H\). -/
+theorem toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_id_sub_starProjection
+    (A : MPSTensor d D) {L N n : ℕ} (hLn : L ≤ n) (hnN : n ≤ N) :
+    Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian =
+      LinearMap.id - (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian)).starProjection.toLinearMap := by
   calc
-    H = (LinearMap.ker H)ᗮ.starProjection.toLinearMap :=
-      openSuffixParentHamiltonianES_eq_orthogonal_starProjection_ker A hL hLn hnN
-    _ = (1 - (LinearMap.ker H).starProjection).toLinearMap := by
+    _ = (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian))ᗮ.starProjection.toLinearMap :=
+      toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_starProjection A hLn hnN
+    _ = (1 - (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian)).starProjection).toLinearMap := by
       rw [Submodule.starProjection_orthogonal']
-    _ = LinearMap.id - (LinearMap.ker H).starProjection.toLinearMap := rfl
+    _ = _ := rfl
 
-/-- Nachtergaele's condition C2 in Loewner order, with \(\gamma_L=1\). -/
-theorem openSuffixParentHamiltonianES_C2 (A : MPSTensor d D)
-    {L N n : ℕ} (hL : 0 < L) (hLn : L ≤ n) (hnN : n ≤ N) :
-    LinearMap.id -
-        (LinearMap.ker (openSuffixParentHamiltonianES A L L N n)).starProjection.toLinearMap ≤
-      openSuffixParentHamiltonianES A L L N n :=
-  (openSuffixParentHamiltonianES_eq_id_sub_starProjection_ker
-    A hL hLn hnN).symm.le
+/-- Nachtergaele's condition C2 in Loewner order, with \(\gamma_L=1\). Nachtergaele,
+arXiv:cond-mat/9410110, condition C2, lines 1043--1058. -/
+theorem parentChainInteraction_C2 (A : MPSTensor d D) {L N n : ℕ} (hLn : L ≤ n)
+    (hnN : n ≤ N) :
+    LinearMap.id - (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian)).starProjection.toLinearMap ≤
+      Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian :=
+  (toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_id_sub_starProjection
+    A hLn hnN).symm.le
 
-/-- Quadratic-form version of condition C2 with \(\gamma_L=1\). -/
-theorem openSuffixParentHamiltonianES_C2_quadratic_form (A : MPSTensor d D)
-    {L N n : ℕ} (hL : 0 < L) (hLn : L ≤ n) (hnN : n ≤ N)
-    (v : EuclideanSpace ℂ (Cfg d N)) :
-    ((⟪((LinearMap.id : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ]
-          EuclideanSpace ℂ (Cfg d N)) -
-          (LinearMap.ker (openSuffixParentHamiltonianES A L L N n)).starProjection.toLinearMap) v,
-        v⟫_ℂ).re) ≤
-      (⟪openSuffixParentHamiltonianES A L L N n v, v⟫_ℂ).re := by
+/-- Quadratic-form version of condition C2 with \(\gamma_L=1\). Nachtergaele,
+arXiv:cond-mat/9410110, condition C2, lines 1043--1058. -/
+theorem parentChainInteraction_C2_quadratic_form (A : MPSTensor d D) {L N n : ℕ} (hLn : L ≤ n)
+    (hnN : n ≤ N) (v : EuclideanSpace ℂ (Cfg d N)) :
+    (⟪((LinearMap.id : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N)) -
+        (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian)).starProjection.toLinearMap) v,
+        v⟫_ℂ).re ≤
+      (⟪Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian v, v⟫_ℂ).re := by
   have hvEq := LinearMap.congr_fun
-    (openSuffixParentHamiltonianES_eq_id_sub_starProjection_ker A hL hLn hnN) v
+    (toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_id_sub_starProjection
+      A hLn hnN) v
   exact (congrArg (fun w => (⟪w, v⟫_ℂ).re) hvEq.symm).le
 
-/-- On the orthogonal complement of its kernel, the fixed-window suffix
-Hamiltonian preserves the norm exactly. -/
-theorem openSuffixParentHamiltonianES_norm_eq_of_mem_orthogonal_ker
-    (A : MPSTensor d D) {L N n : ℕ} (hL : 0 < L) (hLn : L ≤ n)
-    (hnN : n ≤ N) (v : EuclideanSpace ℂ (Cfg d N))
-    (hv : v ∈ (LinearMap.ker (openSuffixParentHamiltonianES A L L N n))ᗮ) :
-    ‖openSuffixParentHamiltonianES A L L N n v‖ = ‖v‖ := by
-  rw [openSuffixParentHamiltonianES_eq_orthogonal_starProjection_ker A hL hLn hnN]
-  apply Submodule.norm_starProjection_apply
-  exact hv
-
-/-- The fixed-window suffix Hamiltonian has unit gap on the orthogonal
-complement of its kernel. Under \(L=l+1\) and with endpoint \(m=n+1\), this is
-\(\gamma_{l+1}=1\) in Nachtergaele's Theorem 2.1(i). -/
-theorem openSuffixParentHamiltonianES_unit_gap (A : MPSTensor d D)
-    {L N n : ℕ} (hL : 0 < L) (hLn : L ≤ n) (hnN : n ≤ N)
+/-- On the orthogonal complement of its kernel, the single-window Hamiltonian preserves the
+norm. -/
+theorem norm_toEuclideanLin_hamiltonian_restrict_parentChainInteraction_of_mem_orthogonal_ker
+    (A : MPSTensor d D) {L N n : ℕ} (hLn : L ≤ n) (hnN : n ≤ N)
     (v : EuclideanSpace ℂ (Cfg d N))
-    (hv : v ∈ (LinearMap.ker (openSuffixParentHamiltonianES A L L N n))ᗮ) :
-    (1 : ℝ) * ‖v‖ ≤ ‖openSuffixParentHamiltonianES A L L N n v‖ := by
-  simpa only [one_mul] using
-    (openSuffixParentHamiltonianES_norm_eq_of_mem_orthogonal_ker
-      A hL hLn hnN v hv).symm.le
+    (hv : v ∈ (LinearMap.ker (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian))ᗮ) :
+    ‖Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+      fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian v‖ = ‖v‖ := by
+  rw [toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_starProjection A hLn hnN]
+  exact Submodule.norm_starProjection_apply _ hv
+
+/-- The single-window Hamiltonian has unit gap: every eigenvalue is `0` or at least `1`. Under
+\(L=l+1\) and with endpoint \(m=n+1\), this is \(\gamma_{l+1}=1\) in Nachtergaele,
+arXiv:cond-mat/9410110, Theorem 2.1(i), lines 1119--1130. -/
+theorem unit_gap_hamiltonian_restrict_parentChainInteraction (A : MPSTensor d D) {L N n : ℕ}
+    (hLn : L ≤ n) (hnN : n ≤ N) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue
+      (Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+        fun i ↦ n - L ≤ i.val ∧ i.val + L ≤ n).hamiltonian) μ →
+      μ = 0 ∨ (1 : ℂ) ≤ μ := by
+  have h := (ManyBody.forall_hasEigenvalue_iff_norm (Δ := 1)
+    (posSemidef_hamiltonian_restrict_parentChainInteraction A L N _)).mpr fun v hv ↦ by
+      rw [one_mul,
+        norm_toEuclideanLin_hamiltonian_restrict_parentChainInteraction_of_mem_orthogonal_ker
+          A hLn hnN v hv]
+  simpa only [Complex.ofReal_one] using h
 
 end MPSTensor

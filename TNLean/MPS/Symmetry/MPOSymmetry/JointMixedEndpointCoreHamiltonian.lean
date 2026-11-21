@@ -177,8 +177,9 @@ theorem jointEndpointNormalizedBulkTerm_one_eq_zero
     jointEndpointNormalizedBulkTerm A E F 1 = 0 := by
   let : IsEmpty (NonwrappingStart 2 1) := ⟨fun i ↦ by have h := i.2; omega⟩
   ext v κ
-  rw [jointEndpointNormalizedBulkTerm, place_apply]
-  simp [openParentHamiltonianES]
+  rw [jointEndpointNormalizedBulkTerm, place_apply,
+    openParentHamiltonianES_eq_sum_localTermES _ (by norm_num : 0 < 2)]
+  simp
 
 /-- The first operator on an ordered-pair core uses the original left block. -/
 def jointEndpointCoreFirstTerm

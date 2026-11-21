@@ -90,12 +90,14 @@ theorem sum_zmodOpenLocalTermES_eq_openParentHamiltonianES
   let f : Fin N → EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
     fun i => if i.val + R ≤ N then localTermES A R i else 0
   have hsum : openParentHamiltonianES A R N = ∑ i : Fin N, f i := by
-    rw [openParentHamiltonianES]
-    change (∑ i : {i : Fin N // i.val + R ≤ N}, localTermES A R i.1) = _
-    calc
-      _ = ∑ i ∈ Finset.univ.filter (fun i : Fin N => i.val + R ≤ N),
-          localTermES A R i := (Finset.sum_subtype _ (fun i => by simp) _).symm
-      _ = _ := by rw [Finset.sum_filter]
+    rw [openParentHamiltonianES, ManyBody.Interaction.hamiltonian, map_sum]
+    refine Fin.sum_eq_sum_of_val_eq _ _ (fun k ha hb ↦ ?_) (fun i hi ↦ absurd i.isLt (by omega))
+      (fun i hi ↦ ite_eq_right (by omega))
+    have hk : (⟨k, hb⟩ : Fin N).val + R ≤ N := by
+      change k + R ≤ N
+      omega
+    simp only [f, hk, ↓reduceIte]
+    exact (localTermES_eq_toEuclideanLin_parentChainInteraction_term A ⟨k, hb⟩ hk).symm
   rw [hsum, Fin.sum_castLE_extend_zero f hNP]
   cases P with
   | zero => exact (NeZero.ne 0 rfl).elim

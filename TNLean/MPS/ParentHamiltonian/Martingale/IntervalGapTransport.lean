@@ -90,13 +90,13 @@ variable {d D : ℕ}
 This is the fixed-ambient interpretation of the local gap in Nachtergaele,
 arXiv:cond-mat/9410110, condition C2, lines 1045--1056. -/
 theorem openPrefixParentHamiltonianES_norm_gap_of_local_gap
-    (A : MPSTensor d D) {R n q : ℕ} (hR : 0 < R) {κ : ℝ} (hκ : 0 < κ)
+    (A : MPSTensor d D) {R n q : ℕ} {κ : ℝ} (hκ : 0 < κ)
     (hGap : ∀ v ∈ (LinearMap.ker (openParentHamiltonianES A R n))ᗮ,
       κ * ‖v‖ ≤ ‖openParentHamiltonianES A R n v‖) :
     ∀ v ∈ (LinearMap.ker (openPrefixParentHamiltonianES A R (n + q) n))ᗮ,
       κ * ‖v‖ ≤ ‖openPrefixParentHamiltonianES A R (n + q) n v‖ := by
   have hConj := openPrefixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv
-    A (n := n) (r := q) (p := n) hR le_rfl
+    A (L := R) (n := n) (r := q) (p := n) le_rfl
   exact norm_gap_of_fiberwise_conj (rightSpectatorConfigLinearIsometryEquiv d n q)
     (openPrefixParentHamiltonianES A R (n + q) n) (openParentHamiltonianES A R n)
     hκ (openParentHamiltonianES_isPositive A R n)

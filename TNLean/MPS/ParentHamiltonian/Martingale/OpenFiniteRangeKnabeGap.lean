@@ -42,7 +42,7 @@ private theorem cyclicWindowSum_zmodOpenLocalTermES_eq_interval
   have hstart : ∀ q ∈ Q, (s + (q.val : ZMod P)).val + R ≤ N := by
     intro q hq
     exact (Finset.mem_filter.mp hq).2
-  rw [ProjectionGeometry.cyclicWindowSum, openSuffixParentHamiltonianES]
+  rw [ProjectionGeometry.cyclicWindowSum, openSuffixParentHamiltonianES_eq_sum_localTermES A hR]
   calc
     (∑ q : Fin m, zmodOpenLocalTermES (N := N) A R hR (s + (q.val : ZMod P))) =
         ∑ q ∈ Q, zmodOpenLocalTermES (N := N) A R hR (s + (q.val : ZMod P)) := by

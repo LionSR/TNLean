@@ -62,11 +62,11 @@ theorem openParentHamiltonianES_gap_of_sparse_grouped_and_terminal
   have hκone : κ ≤ 1 := by dsimp [κ]; nlinarith [mul_nonneg hε (le_trans zero_le_one hsqrt)]
   have hc : ε < 1 := by nlinarith [mul_le_mul_of_nonneg_left hsqrt hε]
   have hSparse := sparseGroupedOpenParentHamiltonianES_projection_bound_of_grouped_c3
-    A hp hM hMN hε hεlt
-    (grouped_martingaleDifference_norm_le_of_projector_defect_of_le A hp hM hMN
+    A hp hMN hε hεlt
+    (grouped_martingaleDifference_norm_le_of_projector_defect_of_le A hp hMN
       hKernel hε (fun K => hDefect p le_rfl K p hp))
   have hTV : T = Vᗮ.starProjection.toLinearMap :=
-    openSuffixParentHamiltonianES_eq_orthogonal_starProjection_ker A (by omega) hRN le_rfl
+    toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_starProjection A hRN le_rfl
   have hTbound : (κ : ℂ) • T ≤ T := by
     simpa only [one_smul] using smul_le_smul_of_nonneg_right
       (show (κ : ℂ) ≤ 1 by exact_mod_cast hκone)
@@ -106,7 +106,7 @@ theorem openParentHamiltonianES_gap_of_sparse_grouped_and_terminal
         (LinearMap.ker (openSuffixParentHamiltonianES A (2 * p) (2 * p) N N)).starProjection‖ ≤ ε
     rw [hN, ← hKL]
     rw [hKernel _ (by omega),
-      ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES A (by omega)
+      ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES A
         (hKernel _ (by simpa only [hKL] using hpM)), hSuffix]
     exact hDefect L hLp K q hq
 
@@ -183,8 +183,8 @@ theorem eventually_toTensorFromBlocks_openParentHamiltonianES_gap_ge_one_sub
   by_cases hqzero : N % p = 0
   · rw [hqzero, Nat.add_zero]
     intro v hv
-    have hGap := openParentHamiltonianES_norm_gap_of_grouped_c3 B hp0 hM hε.le hεlt
-      (grouped_martingaleDifference_norm_le_of_projector_defect B hp0 hM hK hε.le
+    have hGap := openParentHamiltonianES_norm_gap_of_grouped_c3 B (M := N / p) hp0 hε.le hεlt
+      (grouped_martingaleDifference_norm_le_of_projector_defect B hp0 hK hε.le
         (fun K => hD p le_rfl K p hp0))
     exact (mul_le_mul_of_nonneg_right (by linarith : 1 - η ≤
       (1 - ε * Real.sqrt 2) ^ 2) (norm_nonneg v)).trans (hGap v hv)

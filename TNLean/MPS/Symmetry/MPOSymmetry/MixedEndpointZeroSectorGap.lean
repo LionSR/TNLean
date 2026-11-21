@@ -96,8 +96,7 @@ theorem openInteractionHamiltonianES_zeroSector_eq_openParentHamiltonianES
         (mixedEndpointParentInteraction A₀ emptyEndpointTensor 0).toLinearMap M =
       openParentHamiltonianES A₀ 2 M := by
   rw [mixedEndpointParentInteraction_zeroSector_eq_parentInteractionES]
-  simp only [openInteractionHamiltonianES, openParentHamiltonianES,
-    periodicLocalInteractionES_parentInteractionES A₀ (by norm_num : 0 < 2)]
+  exact openInteractionHamiltonianES_parentInteractionES A₀ (by norm_num : 0 < 2) M
 
 /-- Every physical configuration is active in the zero second-sector family.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/

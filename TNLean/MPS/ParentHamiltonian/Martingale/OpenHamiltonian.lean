@@ -24,16 +24,117 @@ Nachtergaele's C1--C3 martingale theorem.
 * Nachtergaele, arXiv:cond-mat/9410110, equations (3.12)--(3.16).
 * Cirac--Perez-Garcia--Schuch--Verstraete, arXiv:2011.12127, Section IV.C.
 
-**Transitional (#10948).** The facts are stated twice: for the Euclidean-space operator
-`openParentHamiltonianES` (the declarations before the last section, kept until their last users
-are converted, then deleted with that definition) and, in the last section, for the Hamiltonian
-of `parentChainInteraction`. `NonwrappingStart`, `sum_nonwrappingWindowTerms_le`,
-`groundSpaceES_finrank_eq_of_isNBlkInjective` and the suffix Hamiltonian
-`openSuffixParentHamiltonianES` with `openParentHamiltonianES_C1` (a later package) are not part
-of the transitional block.
+**Transitional (#10948).** `openParentHamiltonianES` and `openSuffixParentHamiltonianES` are now
+abbreviations of the operators of the Hamiltonian of `parentChainInteraction` and of its
+restriction to the windows inside an interval; they and the declarations of the last section are
+kept for the files not yet restated and are deleted with their last users.
 -/
 
 open scoped BigOperators ComplexOrder
+
+/-- Two sums over initial segments of the natural numbers agree when the summands agree at the
+common positions and vanish at the positions beyond the other segment. -/
+theorem Fin.sum_eq_sum_of_val_eq {M : Type*} [AddCommMonoid M] {a b : ℕ} (f : Fin a → M)
+    (g : Fin b → M) (hfg : ∀ (k : ℕ) (ha : k < a) (hb : k < b), f ⟨k, ha⟩ = g ⟨k, hb⟩)
+    (hf : ∀ i : Fin a, b ≤ i.val → f i = 0) (hg : ∀ i : Fin b, a ≤ i.val → g i = 0) :
+    ∑ i, f i = ∑ i, g i := by
+  have key (c : ℕ) (u : Fin c → M) :
+      ∑ i, u i = ∑ k ∈ Finset.range c, if h : k < c then u ⟨k, h⟩ else 0 := by
+    rw [Finset.sum_range]
+    exact Fintype.sum_congr _ _ fun i ↦ by rw [dite_eq_left i.isLt]
+  have hsub (c e : ℕ) (u : Fin c → M) (hu : ∀ i : Fin c, e ≤ i.val → u i = 0) :
+      ∑ k ∈ Finset.range c, (if h : k < c then u ⟨k, h⟩ else 0) =
+        ∑ k ∈ Finset.range (min c e), if h : k < c then u ⟨k, h⟩ else 0 := by
+    refine (Finset.sum_subset (fun k hk ↦ ?_) fun k hk hk' ↦ ?_).symm
+    · rw [Finset.mem_range] at hk ⊢
+      omega
+    · rw [Finset.mem_range] at hk hk'
+      rw [dite_eq_left hk]
+      exact hu _ (by simp only; omega)
+  rw [key, key, hsub a b f hf, hsub b a g hg, min_comm b a]
+  refine Finset.sum_congr rfl fun k hk ↦ ?_
+  rw [Finset.mem_range] at hk
+  rw [dite_eq_left (by omega), dite_eq_left (by omega)]
+  exact hfg k _ _
+
+namespace ManyBody.Interaction
+
+open scoped MatrixOrder Matrix
+
+section Restrict
+
+variable {V : Type*} [Fintype V] [DecidableEq V] {X : V → Type*} [∀ v, Fintype (X v)]
+  [∀ v, DecidableEq (X v)] {ι : Type*} [Fintype ι] {S : ι → Finset V} {Φ : Interaction X S}
+
+/-- For positive semidefinite terms, the Hamiltonian of the restriction of an interaction to the
+indices with a property annihilates a vector exactly when every term with the property does. -/
+theorem mem_ker_toEuclideanLin_hamiltonian_restrict_iff (hΦ : ∀ i, (Φ.term i).PosSemidef)
+    (p : ι → Prop) [DecidablePred p] {v : EuclideanSpace ℂ (Config X)} :
+    v ∈ LinearMap.ker (Matrix.toEuclideanLin (Φ.restrict p).hamiltonian) ↔
+      ∀ i, p i → Matrix.toEuclideanLin (Φ.term i) v = 0 := by
+  rw [LinearMap.mem_ker, Matrix.toLpLin_apply, WithLp.toLp_eq_zero,
+    hamiltonian_mulVec_eq_zero_iff fun i ↦ forall_restrict_term Matrix.PosSemidef.zero (hΦ i)]
+  refine forall_congr' fun i ↦ ?_
+  by_cases hi : p i
+  · simp [hi, Matrix.toLpLin_apply]
+  · simp [hi]
+
+/-- For positive semidefinite terms, the Hamiltonian of an interaction annihilates a vector
+exactly when the operator of every term does. -/
+theorem mem_ker_toEuclideanLin_hamiltonian_iff (hΦ : ∀ i, (Φ.term i).PosSemidef)
+    {v : EuclideanSpace ℂ (Config X)} :
+    v ∈ LinearMap.ker (Matrix.toEuclideanLin Φ.hamiltonian) ↔
+      ∀ i, Matrix.toEuclideanLin (Φ.term i) v = 0 := by
+  simp only [LinearMap.mem_ker, Matrix.toLpLin_apply, WithLp.toLp_eq_zero,
+    hamiltonian_mulVec_eq_zero_iff hΦ]
+
+/-- The Hamiltonians of two restrictions of an interaction commute when every term of the first
+commutes with every term of the second. -/
+theorem commute_hamiltonian_restrict (p q : ι → Prop) [DecidablePred p] [DecidablePred q]
+    (h : ∀ i j, p i → q j → Commute (Φ.term i) (Φ.term j)) :
+    Commute (Φ.restrict p).hamiltonian (Φ.restrict q).hamiltonian :=
+  Commute.sum_left _ _ _ fun i _ ↦ Commute.sum_right _ _ _ fun j _ ↦ by
+    by_cases hi : p i
+    · by_cases hj : q j
+      · simpa [hi, hj] using h i j hi hj
+      · simp [hj]
+    · simp [hi]
+
+/-- For nonnegative terms, the Hamiltonian of a restriction of an interaction is below the
+Hamiltonian. -/
+theorem hamiltonian_restrict_le (hΦ : ∀ i, 0 ≤ Φ.term i) (p : ι → Prop) [DecidablePred p] :
+    (Φ.restrict p).hamiltonian ≤ Φ.hamiltonian :=
+  Finset.sum_le_sum fun i _ ↦ by
+    rw [restrict_term]
+    split_ifs
+    exacts [le_rfl, hΦ i]
+
+end Restrict
+
+/-- **The counting bound of condition C1.** On the open chain, each window of `R` sites lies in
+at most `W - R + 1` of the intervals `[n - W, n)`, `W ≤ n ≤ N`; summing the Hamiltonians of the
+restrictions of the translates of a positive semidefinite matrix to the windows inside these
+intervals gives at most `W - R + 1` times the Hamiltonian. Nachtergaele, arXiv:cond-mat/9410110,
+condition C1, lines 1030--1041. -/
+theorem sum_hamiltonian_restrict_chainTranslates_le {α : Type*} [Fintype α] [DecidableEq α]
+    {R W : ℕ} (hRW : R ≤ W) {h : Matrix (Fin R → α) (Fin R → α) ℂ} (hh : 0 ≤ h) (N : ℕ) :
+    ∑ n ∈ Finset.Icc W N, ((chainTranslates R N h).restrict
+        fun i ↦ n - W ≤ i.val ∧ i.val + R ≤ n).hamiltonian ≤
+      ((W - R + 1 : ℕ) : ℂ) • (chainTranslates R N h).hamiltonian := by
+  simp only [hamiltonian, restrict_term]
+  rw [Finset.sum_comm, Finset.smul_sum]
+  refine Finset.sum_le_sum fun i _ ↦ ?_
+  rw [← Finset.sum_filter, Finset.sum_const, Nat.cast_smul_eq_nsmul]
+  refine nsmul_le_nsmul_left (translates_term_nonneg _ hh i) ?_
+  calc _ ≤ (Finset.Icc (i.val + R) (i.val + W)).card :=
+        Finset.card_le_card fun n hn ↦ by
+          simp only [Finset.mem_filter, Finset.mem_Icc] at hn ⊢
+          omega
+    _ = W - R + 1 := by
+        rw [Nat.card_Icc]
+        omega
+
+end ManyBody.Interaction
 
 namespace MPSTensor
 
@@ -46,258 +147,6 @@ This is the index set in Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). 
 abbrev NonwrappingStart (L N : ℕ) :=
   {i : Fin N // i.val + L ≤ N}
 
-/-- The open-chain parent Hamiltonian, obtained by summing the canonical local
-terms over all nonwrapping length-`L` windows.
-
-For \(L = l + 1\), its starts are \(0, \ldots, N - l - 1\), as in Nachtergaele,
-arXiv:cond-mat/9410110, equation (3.12). -/
-noncomputable def openParentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
-    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  ∑ i : NonwrappingStart L N, localTermES A L i.1
-
-/-- At volume \(N = L > 0\), the compatible open parent Hamiltonian is the
-canonical local projector on the full chain.
-
-This is the fixed-window operator underlying \(γ_{l+1} = 1\) in Nachtergaele,
-arXiv:cond-mat/9410110, Theorem 2.1(i). -/
-theorem openParentHamiltonianES_self_eq_parentInteractionES (A : MPSTensor d D)
-    {L : ℕ} (hL : 0 < L) :
-    openParentHamiltonianES A L L = parentInteractionES A L := by
-  let i : NonwrappingStart L L := ⟨⟨0, hL⟩, by simp⟩
-  let : Subsingleton (NonwrappingStart L L) :=
-    ⟨fun j k => by
-      apply Subtype.ext
-      apply Fin.ext
-      have hj := j.2
-      have hk := k.2
-      omega⟩
-  rw [openParentHamiltonianES, Fintype.sum_subsingleton _ i]
-  ext v σ
-  rw [localTermES_apply A L i.1 (le_refl L) v σ]
-  have hrestrict : cyclicRestrictES (d := d) hL L i.1 σ v = v := by
-    ext ω
-    change v (cyclicCfg hL L (⟨0, hL⟩ : Fin L) ω σ) = v ω
-    rw [show cyclicCfg hL L (⟨0, hL⟩ : Fin L) ω σ = ω by
-      funext k
-      simp [cyclicCfg, Nat.mod_eq_of_lt k.isLt]]
-  rw [hrestrict]
-  rw [show extractWindow L i.1 σ = σ by
-    funext k
-    simp [i, extractWindow, Nat.mod_eq_of_lt k.isLt]]
-
-/-- The full-window compatible open parent Hamiltonian preserves the norm on
-the orthogonal complement of its kernel. -/
-theorem openParentHamiltonianES_self_norm_eq_of_mem_orthogonal_ker
-    (A : MPSTensor d D) {L : ℕ} (hL : 0 < L)
-    (v : EuclideanSpace ℂ (Cfg d L))
-    (hv : v ∈ (LinearMap.ker (openParentHamiltonianES A L L))ᗮ) :
-    ‖openParentHamiltonianES A L L v‖ = ‖v‖ := by
-  rw [openParentHamiltonianES_self_eq_parentInteractionES A hL] at hv ⊢
-  change ‖(groundSpaceES A L)ᗮ.starProjection v‖ = ‖v‖
-  apply Submodule.norm_starProjection_apply
-  have hker : LinearMap.ker (parentInteractionES A L) = groundSpaceES A L := by
-    ext w
-    rw [LinearMap.mem_ker, parentInteractionES_apply_eq_zero_iff]
-  rwa [hker] at hv
-
-/-- The compatible open parent Hamiltonian has unit norm gap at the first
-full-window volume.
-
-This is \(γ_{l+1} = 1\) in Nachtergaele, arXiv:cond-mat/9410110,
-Theorem 2.1(i), for \(L = l + 1\).
-
-**Scope restriction (single-window volume):** This proves only the volume
-\(N=L\). It does not establish the general-volume C1--C3 martingale gap; see
-`docs/paper-gaps/cpgsv21_martingale_overlap.tex`. -/
-theorem openParentHamiltonianES_self_unit_gap (A : MPSTensor d D)
-    {L : ℕ} (hL : 0 < L) (v : EuclideanSpace ℂ (Cfg d L))
-    (hv : v ∈ (LinearMap.ker (openParentHamiltonianES A L L))ᗮ) :
-    (1 : ℝ) * ‖v‖ ≤ ‖openParentHamiltonianES A L L v‖ := by
-  simpa only [one_mul] using
-    (openParentHamiltonianES_self_norm_eq_of_mem_orthogonal_ker A hL v hv).symm.le
-
-/-- The open-chain parent Hamiltonian is positive because every summand is an
-orthogonal projection. -/
-theorem openParentHamiltonianES_isPositive (A : MPSTensor d D) (L N : ℕ) :
-    (openParentHamiltonianES A L N).IsPositive := by
-  rw [openParentHamiltonianES]
-  exact LinearMap.isPositive_sum _ fun i _ => localTermES_isPositive A L i.1
-
-/-- The parent Hamiltonian on the last \(l\) sites of the prefix of length \(n\),
-embedded in an \(N\)-site open chain.
-
-Its summands have starts \(i\) satisfying \(n-l≤i\) and \(i+L≤n\). Thus their
-length-\(L\) windows lie in the nonwrapping interval \([n-l,n)\). This is
-\(H_{\Lambda_n\setminus\Lambda_{n-l}}\) for \(\Lambda_n=[0,n)\) in
-Nachtergaele, arXiv:cond-mat/9410110, condition C1 (lines 1030--1041). -/
-noncomputable def openSuffixParentHamiltonianES (A : MPSTensor d D)
-    (L l N n : ℕ) :
-    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
-  ∑ i ∈ Finset.univ.filter fun i : NonwrappingStart L N =>
-    n - l ≤ i.1.val ∧ i.1.val + L ≤ n,
-    localTermES A L i.1
-
-/-- Each nonwrapping range-\(R\) term lies in at most \(W-R+1\) complete
-length-\(W\) windows. Summing positive terms therefore gives the corresponding
-operator bound. This is the counting argument for Nachtergaele,
-arXiv:cond-mat/9410110, condition C1. -/
-theorem sum_nonwrappingWindowTerms_le {R W N : ℕ} (hRW : R ≤ W)
-    {ι : Type*} [Fintype ι]
-    (f : NonwrappingStart R N → EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι)
-    (hf : ∀ i, 0 ≤ f i) :
-    (∑ n ∈ Finset.Icc W N,
-      ∑ i ∈ Finset.univ.filter (fun i : NonwrappingStart R N =>
-        n - W ≤ i.1.val ∧ i.1.val + R ≤ n), f i) ≤
-      ((W - R + 1 : ℕ) : ℂ) • ∑ i, f i := by
-  classical
-  let windows := fun i : NonwrappingStart R N =>
-    (Finset.Icc W N).filter fun n => n - W ≤ i.1.val ∧ i.1.val + R ≤ n
-  have hwindows_card (i : NonwrappingStart R N) :
-      (windows i).card ≤ W - R + 1 := by
-    calc
-      (windows i).card ≤ (Finset.Icc (i.1.val + R) (i.1.val + W)).card := by
-        apply Finset.card_le_card
-        intro n hn
-        simp only [windows, Finset.mem_filter, Finset.mem_Icc] at hn
-        simp only [Finset.mem_Icc]
-        omega
-      _ = W - R + 1 := by
-        rw [Nat.card_Icc]
-        omega
-  rw [Finset.sum_comm'
-    (s := Finset.Icc W N)
-    (t := fun n => Finset.univ.filter fun i : NonwrappingStart R N =>
-      n - W ≤ i.1.val ∧ i.1.val + R ≤ n)
-    (t' := Finset.univ) (s' := windows) (fun n i => by simp [windows]),
-    Finset.smul_sum]
-  apply Finset.sum_le_sum
-  intro i _
-  simp only [Finset.sum_const, Nat.cast_smul_eq_nsmul]
-  exact nsmul_le_nsmul_left (hf i) (hwindows_card i)
-/-- Nachtergaele's condition C1 for the compatible nonwrapping open parent
-Hamiltonian.
-
-For the prefixes \(\Lambda_n=[0,n)\), each range-\(L\) local term belongs to at
-most \(l-L+1\) of the suffix intervals
-\(\Lambda_n\setminus\Lambda_{n-l}\), \(l≤n≤N\). Therefore
-\[
-0\leq\sum_{n=l}^N H_{\Lambda_n\setminus\Lambda_{n-l}}
-  \leq (l-L+1)H_{\Lambda_N}.
-\]
-The source gives \(d_l=pl-r+1\) for \(\Lambda_n=[1,pn]\). The indexing of
-`openParentHamiltonianES` has \(p=1\) and \(r=L\), so its actual counting
-constant is \(d_l=l-L+1\).
-
-This is condition C1 in Nachtergaele, arXiv:cond-mat/9410110, lines 1030--1041. -/
-theorem openParentHamiltonianES_C1 (A : MPSTensor d D) {L l N : ℕ}
-    (hLl : L ≤ l) :
-    0 ≤ ∑ n ∈ Finset.Icc l N, openSuffixParentHamiltonianES A L l N n ∧
-      ∑ n ∈ Finset.Icc l N, openSuffixParentHamiltonianES A L l N n ≤
-        ((l - L + 1 : ℕ) : ℂ) • openParentHamiltonianES A L N := by
-  constructor
-  · rw [LinearMap.nonneg_iff_isPositive]
-    refine LinearMap.isPositive_sum _ fun n _ => ?_
-    rw [openSuffixParentHamiltonianES]
-    exact LinearMap.isPositive_sum _ fun i _ => localTermES_isPositive A L i.1
-  · exact sum_nonwrappingWindowTerms_le hLl
-      (fun i => localTermES A L i.1)
-      (fun i => LinearMap.nonneg_iff_isPositive.mpr (localTermES_isPositive A L i.1))
-
-/-- If the open-chain Hamiltonian annihilates a vector, then every individual
-nonwrapping local term annihilates it.
-
-This is the elementary frustration-free extraction used before the C1--C3
-estimate in Nachtergaele, arXiv:cond-mat/9410110, equations (3.12)--(3.16). -/
-theorem localTermES_eq_zero_of_openParentHamiltonianES_eq_zero
-    (A : MPSTensor d D) (L N : ℕ) {v : EuclideanSpace ℂ (Cfg d N)}
-    (hv : openParentHamiltonianES A L N v = 0) (i : NonwrappingStart L N) :
-    localTermES A L i.1 v = 0 := by
-  rw [openParentHamiltonianES] at hv
-  exact ProjectionGeometry.apply_eq_zero_of_sum_apply_eq_zero
-    (fun i : NonwrappingStart L N => localTermES A L i.1)
-    (fun i => localTermES_isSymmetricProjection A L i.1) hv i
-
-/-- A kernel vector of the open-chain Hamiltonian restricts into the local
-ground space on every nonwrapping window of length \(L\).
-
-This is the frustration-free extraction of Nachtergaele,
-arXiv:cond-mat/9410110, equation (3.12), read in `NSiteSpace` coordinates. -/
-theorem cyclicRestrictₗ_mem_groundSpace_of_mem_ker_openParentHamiltonianES
-    (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N)
-    {v : EuclideanSpace ℂ (Cfg d N)}
-    (hv : v ∈ LinearMap.ker (openParentHamiltonianES A L N))
-    (i : Fin N) (hi : i.val + L ≤ N) (τ : Fin N → Fin d) :
-    cyclicRestrictₗ (Fin.pos i) L i τ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N) v) ∈
-      groundSpace A L := by
-  have hlocal : localTermES A L i v = 0 :=
-    localTermES_eq_zero_of_openParentHamiltonianES_eq_zero A L N
-      (LinearMap.mem_ker.mp hv) ⟨i, hi⟩
-  have hrestrictES :=
-    cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero A hLN i hlocal τ
-  simpa [cyclicRestrictES] using (mem_groundSpaceES_iff A L _).1 hrestrictES
-
-/-- The open MPS boundary-condition space is contained in the kernel of the
-open-chain parent Hamiltonian.
-
-Every nonwrapping restriction of an open-boundary MPS vector is again an
-open-boundary MPS vector on the smaller interval.  This is the frustration-free
-direction of Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
-theorem groundSpaceES_le_ker_openParentHamiltonianES
-    (A : MPSTensor d D) (L N : ℕ) :
-    groundSpaceES A N ≤ LinearMap.ker (openParentHamiltonianES A L N) := by
-  intro v hv
-  rw [LinearMap.mem_ker, openParentHamiltonianES, LinearMap.sum_apply]
-  refine Finset.sum_eq_zero fun i _ => ?_
-  rw [localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A
-    (by omega : L ≤ N) i.1 v]
-  intro τ
-  rw [mem_groundSpaceES_iff]
-  let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
-  let eL := WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
-  have hvNS : eN v ∈ groundSpace A N := (mem_groundSpaceES_iff A N v).1 hv
-  rw [groundSpace, LinearMap.mem_range] at hvNS
-  obtain ⟨X, hX⟩ := hvNS
-  have hrestrict :
-      contiguousRestrictₗ i.1.val L i.2 τ (eN v) ∈ groundSpace A L := by
-    rw [← hX]
-    exact contiguousRestrictₗ_groundSpaceMap_mem_groundSpace i.2 τ X
-  rw [← cyclicRestrictₗ_eq_contiguousRestrictₗ (Fin.pos i.1) (by omega) i.2] at hrestrict
-  simpa [cyclicRestrictES, eN, eL] using hrestrict
-
-/-- Under block injectivity, the kernel of the open-chain parent Hamiltonian is
-contained in the open MPS boundary-condition space.
-
-The zero-energy condition supplies every nonwrapping length-\(L₀ + 1\) local
-constraint.  The open-chain intersection theorem then grows these constraints
-to the full interval.  This is the ground-space step in the C1--C3 argument of
-Nachtergaele, arXiv:cond-mat/9410110, equations (3.12)--(3.16). -/
-theorem ker_openParentHamiltonianES_le_groundSpaceES_of_isNBlkInjective
-    {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
-    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
-    LinearMap.ker (openParentHamiltonianES A (L₀ + 1) N) ≤ groundSpaceES A N := by
-  intro v hv
-  rw [mem_groundSpaceES_iff]
-  apply contiguous_mem_groundSpace_of_isNBlkInjective hInj hL₀ hL₀N
-  intro s hs τ
-  have hrestrict := cyclicRestrictₗ_mem_groundSpace_of_mem_ker_openParentHamiltonianES
-    A hL₀N hv ⟨s, by omega⟩ hs τ
-  rwa [cyclicRestrictₗ_eq_contiguousRestrictₗ _ hL₀N hs] at hrestrict
-
-/-- For a block-injective tensor, the kernel of the canonical nonwrapping open
-parent Hamiltonian is exactly the open MPS boundary-condition space.
-
-Unlike the periodic ground space, this space generally has boundary-matrix
-degeneracy.  This is the finite-volume kernel identification used in
-Nachtergaele, arXiv:cond-mat/9410110, equations (3.12)--(3.16). -/
-theorem ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
-    {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
-    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
-    LinearMap.ker (openParentHamiltonianES A (L₀ + 1) N) = groundSpaceES A N :=
-  le_antisymm
-    (ker_openParentHamiltonianES_le_groundSpaceES_of_isNBlkInjective
-      hInj hL₀ hL₀N)
-    (groundSpaceES_le_ker_openParentHamiltonianES A (L₀ + 1) N)
-
 /-! ### Dimension of the open-boundary ground space -/
 
 /-- The canonical \(\ell^2\) realization of the local ground space has dimension
@@ -308,36 +157,6 @@ theorem groundSpaceES_finrank_eq_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ
   rw [groundSpaceES, LinearEquiv.finrank_map_eq]
   exact groundSpace_finrank_eq_of_isNBlkInjective hInj
 
-/-- Project result: **boundary degeneracy of the open-chain parent Hamiltonian.**
-For a tensor block-injective at length \(L₀ > 0\), the kernel of the
-length-\((L₀ + 1)\) open parent Hamiltonian on \(N \ge L₀ + 1\) sites has
-dimension exactly \(D^2\).
-
-Primary sources. Nachtergaele, arXiv:cond-mat/9410110,
-`References/cond-mat_9410110/main.tex` lines 1505--1510, summarizing
-Fannes--Nachtergaele--Werner (lines 1484--1486), states that the local support
-spaces \(\mathcal G_{[M,N]}\) of a pure generalized valence-bond-solid state with
-auxiliary algebra \(M_k\) have dimension \(k^2\) on long intervals, and lines
-1545--1558 (equations (3.12)--(3.13)) that the kernel of the open-interval
-Hamiltonian is \(\mathcal G_{[M,N]}\). Pérez-García--Verstraete--Wolf--Cirac,
-arXiv:quant-ph/0608197, `Papers/quant-ph_0608197/MPSarchive.tex` lines
-1211--1233, proves the growth step on an open chain: every ground state of the
-nearest-neighbour projector Hamiltonian has the form
-\(\operatorname{tr}(Y B^{i_j} \cdots B^{i_{j+2}})\) on growing windows.
-
-arXiv:2011.12127, line 1174, states that the open-boundary ground-state
-degeneracy is at least the square of the dimension of the irreducible
-projective representation carried by the boundary vectors. That dimension is
-at most \(D\), and this theorem gives the exact count \(D^2\) for every
-block-injective tensor; it is a sharper statement than the review's lower
-bound, not the review's statement itself. -/
-theorem finrank_ker_openParentHamiltonianES_of_isNBlkInjective
-    {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
-    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
-    Module.finrank ℂ (LinearMap.ker (openParentHamiltonianES A (L₀ + 1) N)) = D ^ 2 := by
-  rw [ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective hInj hL₀ hL₀N]
-  exact groundSpaceES_finrank_eq_of_isNBlkInjective (isNBlkInjective_of_le hL₀ hInj (by omega))
-
 /-! ### The open-chain parent Hamiltonian as the Hamiltonian of `parentChainInteraction`
 
 The same facts for the Hamiltonian of the parent interaction on the open chain
@@ -346,7 +165,7 @@ vectors take its operator `Matrix.toEuclideanLin`. -/
 
 section ChainInteraction
 
-open scoped Matrix
+open scoped Matrix MatrixOrder
 
 private theorem contiguousCfg_chainWindow {L N a : ℕ} (h : a + L ≤ N) (ω : Cfg d L)
     (σ : Cfg d N) (u : Fin L) : contiguousCfg a L ω σ (ManyBody.chainWindow a h u) = ω u := by
@@ -419,10 +238,40 @@ theorem parentChainInteraction_term_mulVec_eq_zero_iff (A : MPSTensor d D) {L N 
       (toMatrix'_parentInteraction_mulVec_eq_zero_iff A _).mpr (hψ σ)]
     rfl
 
-private theorem posSemidef_parentChainInteraction_term (A : MPSTensor d D) (L N : ℕ)
+/-- Every term of the parent interaction on the open chain is positive semidefinite. -/
+theorem posSemidef_parentChainInteraction_term (A : MPSTensor d D) (L N : ℕ)
     (i : Fin (N + 1 - L)) : ((parentChainInteraction A L N).term i).PosSemidef :=
   Matrix.nonneg_iff_posSemidef.mp (ManyBody.Interaction.translates_term_nonneg _
     (Matrix.nonneg_iff_posSemidef.mpr (posSemidef_toMatrix'_parentInteraction A L)) i)
+
+/-- Every term of the parent interaction on the open chain is an orthogonal projection. -/
+theorem isStarProjection_parentChainInteraction_term (A : MPSTensor d D) (L N : ℕ)
+    (i : Fin (N + 1 - L)) : IsStarProjection ((parentChainInteraction A L N).term i) := by
+  have hP := isStarProjection_toMatrix'_parentInteraction A L
+  rw [ManyBody.Interaction.translates_term]
+  refine ⟨?_, ?_⟩
+  · rw [IsIdempotentElem, ← ManyBody.placeAlong_mul, hP.isIdempotentElem.eq]
+  · rw [IsSelfAdjoint, Matrix.star_eq_conjTranspose, ← ManyBody.placeAlong_conjTranspose,
+      ← Matrix.star_eq_conjTranspose, hP.isSelfAdjoint.star_eq]
+
+/-- Two terms of the parent interaction on the open chain whose windows are ordered and do not
+meet commute. -/
+theorem commute_parentChainInteraction_term_of_add_le (A : MPSTensor d D) {L N : ℕ}
+    {i j : Fin (N + 1 - L)} (hij : i.val + L ≤ j.val) :
+    Commute ((parentChainInteraction A L N).term i) ((parentChainInteraction A L N).term j) := by
+  refine ManyBody.commute_placeAlong_of_disjoint (X := fun _ ↦ Fin d) _
+    (Finset.disjoint_left.mpr fun k hki hkj ↦ ?_) _ _
+  rw [ManyBody.map_chainWindow, ManyBody.mem_interval] at hki hkj
+  omega
+
+/-- The Hamiltonian of a restriction of the parent interaction on the open chain to a set of
+windows is positive semidefinite. -/
+theorem posSemidef_hamiltonian_restrict_parentChainInteraction (A : MPSTensor d D) (L N : ℕ)
+    (p : Fin (N + 1 - L) → Prop) [DecidablePred p] :
+    ((parentChainInteraction A L N).restrict p).hamiltonian.PosSemidef :=
+  ManyBody.Interaction.posSemidef_hamiltonian fun i ↦
+    ManyBody.Interaction.forall_restrict_term Matrix.PosSemidef.zero
+      (posSemidef_parentChainInteraction_term A L N i)
 
 /-- The Hamiltonian of the parent interaction on the open chain is positive semidefinite. -/
 theorem posSemidef_hamiltonian_parentChainInteraction (A : MPSTensor d D) (L N : ℕ) :
@@ -500,8 +349,7 @@ theorem ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjecti
 
 /-- Project result: **boundary degeneracy of the open-chain parent Hamiltonian.** For a tensor
 block-injective at length \(L_0 > 0\), the kernel of the Hamiltonian of the length-\((L_0+1)\)
-parent interaction on \(N \ge L_0 + 1\) sites has dimension exactly \(D^2\). The sources are
-those of `finrank_ker_openParentHamiltonianES_of_isNBlkInjective`: Nachtergaele,
+parent interaction on \(N \ge L_0 + 1\) sites has dimension exactly \(D^2\). Sources: Nachtergaele,
 arXiv:cond-mat/9410110, lines 1484--1486, 1505--1510, 1545--1558; Pérez-García--Verstraete--
 Wolf--Cirac, arXiv:quant-ph/0608197, lines 1211--1233; arXiv:2011.12127, line 1174 (a lower
 bound; the theorem is sharper than the review's statement). -/
@@ -556,6 +404,206 @@ theorem unit_gap_hamiltonian_parentChainInteraction_self (A : MPSTensor d D) (L 
       rw [one_mul,
         norm_toEuclideanLin_hamiltonian_parentChainInteraction_self_of_mem_orthogonal_ker A L v hv]
   simpa only [Complex.ofReal_one] using h
+
+/-- **Condition C1.** For the prefixes \(\Lambda_n=[0,n)\) of the open chain, each term of the
+range-\(L\) parent interaction lies in at most \(l-L+1\) of the intervals
+\(\Lambda_n\setminus\Lambda_{n-l}\), \(l\le n\le N\); the Hamiltonian of such an interval is the
+Hamiltonian of the interaction restricted to the windows inside it. Therefore
+\[
+0\leq\sum_{n=l}^N H_{\Lambda_n\setminus\Lambda_{n-l}}\leq (l-L+1)H_{\Lambda_N}.
+\]
+The source gives \(d_l=pl-r+1\) for \(\Lambda_n=[1,pn]\); here \(p=1\) and \(r=L\). Nachtergaele,
+arXiv:cond-mat/9410110, condition C1, lines 1030--1041. -/
+theorem parentChainInteraction_C1 (A : MPSTensor d D) {L l : ℕ} (hLl : L ≤ l) (N : ℕ) :
+    0 ≤ ∑ n ∈ Finset.Icc l N, ((parentChainInteraction A L N).restrict
+        fun i ↦ n - l ≤ i.val ∧ i.val + L ≤ n).hamiltonian ∧
+      ∑ n ∈ Finset.Icc l N, ((parentChainInteraction A L N).restrict
+        fun i ↦ n - l ≤ i.val ∧ i.val + L ≤ n).hamiltonian ≤
+        ((l - L + 1 : ℕ) : ℂ) • (parentChainInteraction A L N).hamiltonian :=
+  ⟨Finset.sum_nonneg fun _ _ ↦ Matrix.nonneg_iff_posSemidef.mpr
+      (ManyBody.Interaction.posSemidef_hamiltonian fun i ↦
+        ManyBody.Interaction.forall_restrict_term Matrix.PosSemidef.zero
+          (posSemidef_parentChainInteraction_term A L N i)),
+    ManyBody.Interaction.sum_hamiltonian_restrict_chainTranslates_le hLl
+      (Matrix.nonneg_iff_posSemidef.mpr (posSemidef_toMatrix'_parentInteraction A L)) N⟩
+
+/-! ### Transitional forms (#10948)
+
+The Euclidean-space names of the same operators, for the files not yet restated. -/
+
+/-- The operator of the Hamiltonian of the parent interaction on the open chain. Nachtergaele,
+arXiv:cond-mat/9410110, equation (3.12). -/
+noncomputable abbrev openParentHamiltonianES (A : MPSTensor d D) (L N : ℕ) :
+    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
+  Matrix.toEuclideanLin (parentChainInteraction A L N).hamiltonian
+
+/-- The operator of the Hamiltonian of the parent interaction restricted to the windows inside
+\([n-l,n)\): \(H_{\Lambda_n\setminus\Lambda_{n-l}}\) for \(\Lambda_n=[0,n)\) in Nachtergaele,
+arXiv:cond-mat/9410110, condition C1 (lines 1030--1041). -/
+noncomputable abbrev openSuffixParentHamiltonianES (A : MPSTensor d D) (L l N n : ℕ) :
+    EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d N) :=
+  Matrix.toEuclideanLin ((parentChainInteraction A L N).restrict
+    fun i ↦ n - l ≤ i.val ∧ i.val + L ≤ n).hamiltonian
+
+/-- Each nonwrapping range-\(R\) term lies in at most \(W-R+1\) complete
+length-\(W\) windows. Summing positive terms therefore gives the corresponding
+operator bound. This is the counting argument for Nachtergaele,
+arXiv:cond-mat/9410110, condition C1. -/
+theorem sum_nonwrappingWindowTerms_le {R W N : ℕ} (hRW : R ≤ W)
+    {ι : Type*} [Fintype ι]
+    (f : NonwrappingStart R N → EuclideanSpace ℂ ι →ₗ[ℂ] EuclideanSpace ℂ ι)
+    (hf : ∀ i, 0 ≤ f i) :
+    (∑ n ∈ Finset.Icc W N,
+      ∑ i ∈ Finset.univ.filter (fun i : NonwrappingStart R N =>
+        n - W ≤ i.1.val ∧ i.1.val + R ≤ n), f i) ≤
+      ((W - R + 1 : ℕ) : ℂ) • ∑ i, f i := by
+  classical
+  let windows := fun i : NonwrappingStart R N =>
+    (Finset.Icc W N).filter fun n => n - W ≤ i.1.val ∧ i.1.val + R ≤ n
+  have hwindows_card (i : NonwrappingStart R N) :
+      (windows i).card ≤ W - R + 1 := by
+    calc
+      (windows i).card ≤ (Finset.Icc (i.1.val + R) (i.1.val + W)).card := by
+        apply Finset.card_le_card
+        intro n hn
+        simp only [windows, Finset.mem_filter, Finset.mem_Icc] at hn
+        simp only [Finset.mem_Icc]
+        omega
+      _ = W - R + 1 := by
+        rw [Nat.card_Icc]
+        omega
+  rw [Finset.sum_comm'
+    (s := Finset.Icc W N)
+    (t := fun n => Finset.univ.filter fun i : NonwrappingStart R N =>
+      n - W ≤ i.1.val ∧ i.1.val + R ≤ n)
+    (t' := Finset.univ) (s' := windows) (fun n i => by simp [windows]),
+    Finset.smul_sum]
+  apply Finset.sum_le_sum
+  intro i _
+  simp only [Finset.sum_const, Nat.cast_smul_eq_nsmul]
+  exact nsmul_le_nsmul_left (hf i) (hwindows_card i)
+
+/-- At a start whose window does not cross the right endpoint, the Euclidean-space local term
+is the operator of the term of the parent interaction on the open chain. -/
+theorem localTermES_eq_toEuclideanLin_parentChainInteraction_term (A : MPSTensor d D)
+    {L N : ℕ} (i : Fin N) (hi : i.val + L ≤ N) :
+    localTermES A L i =
+      Matrix.toEuclideanLin ((parentChainInteraction A L N).term ⟨i.val, by omega⟩) := by
+  have hLN : L ≤ N := by omega
+  have h₁ := localTermES_isSymmetricProjection A L i
+  have h₂ := Matrix.isSymmetricProjection_toEuclideanLin_iff.mpr
+    (isStarProjection_parentChainInteraction_term A L N ⟨i.val, by omega⟩)
+  refine h₁.ext h₂ ?_
+  rw [← Submodule.orthogonal_orthogonal (LinearMap.range (localTermES A L i)),
+    h₁.isSymmetric.orthogonal_range, ← Submodule.orthogonal_orthogonal (LinearMap.range
+      (Matrix.toEuclideanLin ((parentChainInteraction A L N).term ⟨i.val, by omega⟩))),
+    h₂.isSymmetric.orthogonal_range]
+  congr 1
+  ext v
+  rw [LinearMap.mem_ker, LinearMap.mem_ker,
+    localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A hLN i v,
+    Matrix.toLpLin_apply, WithLp.toLp_eq_zero, parentChainInteraction_term_mulVec_eq_zero_iff]
+  refine forall_congr' fun τ ↦ ?_
+  rw [mem_groundSpaceES_iff, ← cyclicRestrictₗ_eq_contiguousRestrictₗ (Fin.pos i) hLN hi]
+  rfl
+
+/-- For a positive range, the operator of the open-chain parent Hamiltonian is the sum of the
+Euclidean-space local terms over the starts whose windows do not cross the right endpoint. -/
+theorem openParentHamiltonianES_eq_sum_localTermES (A : MPSTensor d D) {L : ℕ} (hL : 0 < L)
+    (N : ℕ) :
+    openParentHamiltonianES A L N = ∑ i : NonwrappingStart L N, localTermES A L i.1 := by
+  classical
+  rw [openParentHamiltonianES, ManyBody.Interaction.hamiltonian, map_sum]
+  trans ∑ i : Fin N, if i.val + L ≤ N then localTermES A L i else 0
+  · refine Fin.sum_eq_sum_of_val_eq _ _ (fun k ha hb ↦ ?_)
+      (fun i hi ↦ absurd i.isLt (by omega)) (fun i hi ↦ ite_eq_right (by omega))
+    have hk : (⟨k, hb⟩ : Fin N).val + L ≤ N := by
+      change k + L ≤ N
+      omega
+    simp only [hk, ↓reduceIte]
+    exact (localTermES_eq_toEuclideanLin_parentChainInteraction_term A ⟨k, hb⟩ hk).symm
+  · rw [← Finset.sum_filter]
+    exact Finset.sum_subtype _ (fun i => by simp) _
+
+/-- For a positive range, the operator of an interval Hamiltonian is the sum of the
+Euclidean-space local terms over the starts whose windows lie in the interval. -/
+theorem openSuffixParentHamiltonianES_eq_sum_localTermES (A : MPSTensor d D) {L : ℕ}
+    (hL : 0 < L) (l N n : ℕ) :
+    openSuffixParentHamiltonianES A L l N n =
+      ∑ i ∈ Finset.univ.filter fun i : NonwrappingStart L N =>
+        n - l ≤ i.1.val ∧ i.1.val + L ≤ n, localTermES A L i.1 := by
+  classical
+  rw [openSuffixParentHamiltonianES, ManyBody.Interaction.hamiltonian, map_sum]
+  trans ∑ i : Fin N, if i.val + L ≤ N ∧ n - l ≤ i.val ∧ i.val + L ≤ n then localTermES A L i
+    else 0
+  · refine Fin.sum_eq_sum_of_val_eq _ _ (fun k ha hb ↦ ?_)
+      (fun i hi ↦ absurd i.isLt (by omega)) (fun i hi ↦ ite_eq_right (by omega))
+    have hk : (⟨k, hb⟩ : Fin N).val + L ≤ N := by
+      change k + L ≤ N
+      omega
+    rw [ManyBody.Interaction.restrict_term]
+    by_cases hq : n - l ≤ k ∧ k + L ≤ n
+    · rw [ite_eq_left hq, ite_eq_left ⟨hk, hq⟩]
+      exact (localTermES_eq_toEuclideanLin_parentChainInteraction_term A ⟨k, hb⟩ hk).symm
+    · rw [ite_eq_right hq, ite_eq_right fun h ↦ hq h.2, map_zero]
+  · rw [Finset.sum_filter, ← Finset.sum_subtype (Finset.univ.filter fun i : Fin N ↦ i.val + L ≤ N)
+      (fun i ↦ by simp) (fun i ↦ if n - l ≤ i.val ∧ i.val + L ≤ n then localTermES A L i else 0),
+      Finset.sum_filter]
+    exact Finset.sum_congr rfl fun i _ ↦ by
+      by_cases h1 : i.val + L ≤ N <;> by_cases h2 : n - l ≤ i.val ∧ i.val + L ≤ n <;> simp [h1, h2]
+
+theorem openParentHamiltonianES_self_eq_parentInteractionES (A : MPSTensor d D)
+    {L : ℕ} (_hL : 0 < L) :
+    openParentHamiltonianES A L L = parentInteractionES A L := by
+  rw [openParentHamiltonianES, hamiltonian_parentChainInteraction_self,
+    toEuclideanLin_toMatrix'_parentInteraction]
+  rfl
+
+theorem openParentHamiltonianES_isPositive (A : MPSTensor d D) (L N : ℕ) :
+    (openParentHamiltonianES A L N).IsPositive :=
+  Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_parentChainInteraction A L N)
+
+theorem openParentHamiltonianES_C1 (A : MPSTensor d D) {L l N : ℕ}
+    (hLl : L ≤ l) :
+    0 ≤ ∑ n ∈ Finset.Icc l N, openSuffixParentHamiltonianES A L l N n ∧
+      ∑ n ∈ Finset.Icc l N, openSuffixParentHamiltonianES A L l N n ≤
+        ((l - L + 1 : ℕ) : ℂ) • openParentHamiltonianES A L N := by
+  have h := parentChainInteraction_C1 A hLl N
+  constructor
+  · simpa only [map_sum, map_zero] using Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr h.1
+  · simpa only [map_sum, map_smul] using Matrix.toEuclideanLin_le_toEuclideanLin_iff.mpr h.2
+
+theorem localTermES_eq_zero_of_openParentHamiltonianES_eq_zero
+    (A : MPSTensor d D) (L N : ℕ) {v : EuclideanSpace ℂ (Cfg d N)}
+    (hv : openParentHamiltonianES A L N v = 0) (i : NonwrappingStart L N) :
+    localTermES A L i.1 v = 0 := by
+  have hLN : L ≤ N := by have := i.2; omega
+  rw [localTermES_eq_zero_iff_forall_cyclicRestrictES_mem_groundSpaceES A hLN i.1 v]
+  intro τ
+  rw [mem_groundSpaceES_iff]
+  simpa [cyclicRestrictES] using
+    cyclicRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hLN
+      (LinearMap.mem_ker.mpr hv) i.1 i.2 τ
+
+theorem cyclicRestrictₗ_mem_groundSpace_of_mem_ker_openParentHamiltonianES
+    (A : MPSTensor d D) {L N : ℕ} (hLN : L ≤ N)
+    {v : EuclideanSpace ℂ (Cfg d N)}
+    (hv : v ∈ LinearMap.ker (openParentHamiltonianES A L N))
+    (i : Fin N) (hi : i.val + L ≤ N) (τ : Fin N → Fin d) :
+    cyclicRestrictₗ (Fin.pos i) L i τ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N) v) ∈
+      groundSpace A L :=
+  cyclicRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hLN hv i hi τ
+
+theorem groundSpaceES_le_ker_openParentHamiltonianES
+    (A : MPSTensor d D) (L N : ℕ) :
+    groundSpaceES A N ≤ LinearMap.ker (openParentHamiltonianES A L N) :=
+  groundSpaceES_le_ker_hamiltonian_parentChainInteraction A L N
+
+theorem ker_openParentHamiltonianES_eq_groundSpaceES_of_isNBlkInjective
+    {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
+    (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
+    LinearMap.ker (openParentHamiltonianES A (L₀ + 1) N) = groundSpaceES A N :=
+  ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective hInj hL₀ hL₀N
 
 end ChainInteraction
 

@@ -91,40 +91,44 @@ theorem openSuffixParentHamiltonianES_conj_cyclicActiveBlock
   dsimp only
   let s : Fin N := ⟨n - W, by omega⟩
   let U := cyclicActiveBlockConfigLinearIsometryEquiv d W (by omega : W ≤ N) s
-  let e := nonwrappingSuffixStartEquiv hR hRW hWn hnN
-  have hsum : openSuffixParentHamiltonianES A R W N n =
-      ∑ i : {i : NonwrappingStart R N // n - W ≤ i.1.val ∧ i.1.val + R ≤ n},
-        localTermES A R i.1.1 := by
-    rw [openSuffixParentHamiltonianES]
-    exact Finset.sum_subtype _ (fun i => by simp) _
-  rw [hsum]
   apply LinearMap.ext
   intro x
-  simp only [openParentHamiltonianES, LinearMap.comp_apply, LinearMap.sum_apply, map_sum,
-    ContinuousLinearMap.rightFiberwiseMap_sum]
-  calc
-    (∑ i : {i : NonwrappingStart R N // n - W ≤ i.1.val ∧ i.1.val + R ≤ n},
-        U (localTermES A R i.1.1 (U.symm x))) =
-      ∑ q : NonwrappingStart R W,
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-          (LinearMap.toContinuousLinearMap (localTermES A R q.1)) x := by
-        apply Fintype.sum_equiv e.symm
-        intro i
-        have hstart : i.1.1 = cyclicForwardSite s (e.symm i).1.val := by
-          apply Fin.ext
-          have hi := i.2
-          simp only [cyclicForwardSite, Fin.val_mk, s]
-          rw [Nat.mod_eq_of_lt (by omega : n - W + (e.symm i).1.val < N)]
-          change i.1.1.val = n - W + (i.1.1.val - (n - W))
-          omega
-        rw [hstart]
-        exact LinearMap.congr_fun
-          (localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv A
-            (by omega : W ≤ N) s (e.symm i).1 (e.symm i).2) x
-    _ = (∑ q : NonwrappingStart R W,
-        ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
-          (LinearMap.toContinuousLinearMap (localTermES A R q.1))) x := by
-      simp
+  rw [openSuffixParentHamiltonianES, ManyBody.Interaction.hamiltonian_restrict,
+    ManyBody.Interaction.partialHamiltonian]
+  simp only [openParentHamiltonianES, ManyBody.Interaction.hamiltonian, LinearMap.comp_apply,
+    LinearMap.sum_apply, map_sum, ContinuousLinearMap.rightFiberwiseMap_sum,
+    ContinuousLinearMap.toLinearMap_sum]
+  symm
+  refine Finset.sum_bij
+    (fun (q : Fin (W + 1 - R)) _ ↦ (⟨n - W + q.val, by omega⟩ : Fin (N + 1 - R)))
+    (fun q _ ↦ ?_) (fun q₁ _ q₂ _ h ↦ ?_) (fun i hi ↦ ?_) (fun q _ ↦ ?_)
+  · simp only [Finset.mem_filter, Finset.mem_univ, true_and]
+    omega
+  · have := congrArg Fin.val h
+    simp only at this
+    exact Fin.ext (by omega)
+  · rw [Finset.mem_filter] at hi
+    exact ⟨⟨i.val - (n - W), by omega⟩, Finset.mem_univ _, Fin.ext (by simp only; omega)⟩
+  · have hq : (⟨q.val, by omega⟩ : Fin W).val + R ≤ W := by
+      change q.val + R ≤ W
+      omega
+    have hstart : (⟨n - W + q.val, by omega⟩ : Fin N) = cyclicForwardSite s q.val := by
+      apply Fin.ext
+      simp only [cyclicForwardSite, Fin.val_mk, s]
+      rw [Nat.mod_eq_of_lt (by omega)]
+    have h1 := localTermES_eq_toEuclideanLin_parentChainInteraction_term A
+      (⟨q.val, by omega⟩ : Fin W) hq
+    have h2 := localTermES_eq_toEuclideanLin_parentChainInteraction_term A
+      (⟨n - W + q.val, by omega⟩ : Fin N) (by change n - W + q.val + R ≤ N; omega)
+    change (ContinuousLinearMap.rightFiberwiseMap (S := Cfg d (N - W))
+        (LinearMap.toContinuousLinearMap (Matrix.toEuclideanLin
+          ((parentChainInteraction A R W).term ⟨q.val, by omega⟩)))) x =
+      U (Matrix.toEuclideanLin ((parentChainInteraction A R N).term ⟨n - W + q.val, by omega⟩)
+        (U.symm x))
+    rw [← h1, ← h2, hstart]
+    exact (LinearMap.congr_fun
+      (localTermES_conj_cyclicActiveBlockConfigLinearIsometryEquiv A (by omega : W ≤ N) s
+        ⟨q.val, by omega⟩ hq) x).symm
 
 /-- A comparison between the long parent projection and the short-range
 Hamiltonian on one interval holds on every nonwrapping interval of that
@@ -160,38 +164,25 @@ theorem openSuffixParentHamiltonianES_comparison_of_local
 /-- Summing all complete suffix windows of length \(W\) counts every range-\(W\)
 open-chain parent term exactly once. -/
 theorem sum_openSuffixParentHamiltonianES_full_window
-    (A : MPSTensor d D) {W N : ℕ} (hW : 0 < W) :
+    (A : MPSTensor d D) (W N : ℕ) :
     ∑ n ∈ Finset.Icc W N, openSuffixParentHamiltonianES A W W N n =
       openParentHamiltonianES A W N := by
-  classical
-  rw [openParentHamiltonianES]
-  apply Finset.sum_bij (fun n hn =>
-    (⟨⟨n - W, by
-      have hnBounds := Finset.mem_Icc.mp hn
-      omega⟩, by
-      have hnBounds := Finset.mem_Icc.mp hn
-      change n - W + W ≤ N
-      omega⟩ : NonwrappingStart W N))
-  · intro n hn
-    exact Finset.mem_univ _
-  · intro n₁ hn₁ n₂ hn₂ h
-    have hval := congrArg (fun i : NonwrappingStart W N => i.1.val) h
+  rw [openParentHamiltonianES, ManyBody.Interaction.hamiltonian, map_sum]
+  refine Finset.sum_bij (fun n hn ↦ (⟨n - W, by
+      have := Finset.mem_Icc.mp hn
+      omega⟩ : Fin (N + 1 - W))) (fun n hn ↦ Finset.mem_univ _) (fun n₁ hn₁ n₂ hn₂ h ↦ ?_)
+    (fun i _ ↦ ⟨i.val + W, ?_, ?_⟩) (fun n hn ↦ ?_)
+  · have hval := congrArg Fin.val h
     simp only at hval
     have hn₁ := Finset.mem_Icc.mp hn₁
     have hn₂ := Finset.mem_Icc.mp hn₂
     omega
-  · intro i _
-    refine ⟨i.1.val + W, ?_, ?_⟩
-    · simp only [Finset.mem_Icc]
-      have hi := i.2
-      omega
-    · apply Subtype.ext
-      apply Fin.ext
-      simp only
-      omega
-  · intro n hn
-    have hn := Finset.mem_Icc.mp hn
-    exact openSuffixParentHamiltonianES_eq_localTermES A hW hn.1 hn.2
+  · simp only [Finset.mem_Icc]
+    omega
+  · exact Fin.ext (by simp)
+  · have hn := Finset.mem_Icc.mp hn
+    rw [openSuffixParentHamiltonianES,
+      hamiltonian_restrict_parentChainInteraction_eq_term A hn.1 hn.2]
 
 /-- A positive comparison on one window bounds the longer-range open-chain
 Hamiltonian by the shorter-range one at every volume. Each short-range term
@@ -207,7 +198,7 @@ theorem openParentHamiltonianES_comparison_of_local
     (κ : ℂ) • openParentHamiltonianES A W N =
         (κ : ℂ) • ∑ n ∈ Finset.Icc W N,
           openSuffixParentHamiltonianES A W W N n := by
-          rw [sum_openSuffixParentHamiltonianES_full_window A (by omega : 0 < W)]
+          rw [sum_openSuffixParentHamiltonianES_full_window A W N]
     _ = ∑ n ∈ Finset.Icc W N,
           (κ : ℂ) • openSuffixParentHamiltonianES A W W N n := by
           rw [Finset.smul_sum]
@@ -336,8 +327,7 @@ theorem openParentHamiltonianES_eq_of_groundSpace_eq
     openParentHamiltonianES A L N = openParentHamiltonianES B L N := by
   have hParent : parentInteraction A L = parentInteraction B L :=
     parentInteraction_eq_of_groundSpace_eq h
-  unfold openParentHamiltonianES localTermES localTerm parentRingInteraction
-  simp only [hParent]
+  simp only [openParentHamiltonianES, parentChainInteraction, hParent]
 
 /-- A one-site injective tensor has a positive open-chain gap at its canonical
 two-site parent interaction, uniformly in the interval length once that length

@@ -49,8 +49,7 @@ theorem CPSVCanonicalFormData.openParentHamiltonianES_eq_representatives
     openParentHamiltonianES A R N = openParentHamiltonianES
       (toTensorFromBlocks (d := d) (fun _ ↦ 1)
         (fun j ↦ data.blocks (data.representativeIndex j))) R N := by
-  simp only [openParentHamiltonianES, localTermES, localTerm, parentRingInteraction,
-    parentInteraction,
+  simp only [openParentHamiltonianES, parentChainInteraction, parentInteraction,
     groundSpaceES, data.groundSpace_eq_toTensorFromBlocks_representatives hR]
 
 variable [NeZero d]

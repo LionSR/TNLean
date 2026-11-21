@@ -64,7 +64,7 @@ private theorem open_gap_at_all_large_lengths (A : MPSTensor d D) {p : ℕ} (hp 
       (2 * p) (p * (N / p) + N % p) (p * (N / p)) (2 * p + N % p)
       (lt_min hγ hη).le ?_ ?_ ?_
     · exact fun v hv ↦ (mul_le_mul_of_nonneg_right (min_le_left γ η) (norm_nonneg v)).trans
-        (openPrefixParentHamiltonianES_norm_gap_of_local_gap A (by omega) hγ
+        (openPrefixParentHamiltonianES_norm_gap_of_local_gap A hγ
           (hLong (N / p) (by omega)) v hv)
     · exact fun v hv ↦ (mul_le_mul_of_nonneg_right (min_le_right γ η) (norm_nonneg v)).trans
         (openSuffixParentHamiltonianES_norm_gap_of_local_gap A
@@ -73,7 +73,7 @@ private theorem open_gap_at_all_large_lengths (A : MPSTensor d D) {p : ℕ} (hp 
     · have hlen : p * (N / p) - 2 * p + 2 * p = p * (N / p) := by omega
       rw [← hlen]
       rw [hKernel _ (by omega),
-        ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES A (by omega)
+        ker_openPrefixParentHamiltonianES_eq_range_leftBoundaryMapES A
           (hKernel _ (by omega)),
         ker_openSuffixParentHamiltonianES_eq_range_reassocTailBoundaryMapES A
           (by omega) (by omega) (hKernel _ (by omega))]

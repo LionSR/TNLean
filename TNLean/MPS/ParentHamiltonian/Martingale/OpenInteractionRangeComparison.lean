@@ -235,7 +235,7 @@ theorem openInteractionHamiltonianES_comparison_of_local
     (κ : ℂ) • openParentHamiltonianES A W N =
         (κ : ℂ) • ∑ n ∈ Finset.Icc W N,
           openSuffixParentHamiltonianES A W W N n := by
-          rw [sum_openSuffixParentHamiltonianES_full_window A (by omega : 0 < W)]
+          rw [sum_openSuffixParentHamiltonianES_full_window A W N]
     _ = ∑ n ∈ Finset.Icc W N,
           (κ : ℂ) • openSuffixParentHamiltonianES A W W N n := by
           rw [Finset.smul_sum]

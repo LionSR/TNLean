@@ -30,7 +30,7 @@ range-\(2p\) parent Hamiltonian. The open-chain kernel identities are required
 only from the interaction length onwards. This is Nachtergaele's condition
 C3-prime with increment and overlap both equal to \(p\). -/
 theorem grouped_martingaleDifference_norm_le_of_projector_defect
-    (A : MPSTensor d D) {p M : ℕ} (hp : 0 < p) (hM : 2 ≤ M)
+    (A : MPSTensor d D) {p M : ℕ} (hp : 0 < p)
     (hKernel : ∀ n, 2 * p ≤ n →
       LinearMap.ker (openParentHamiltonianES A (2 * p) n) = groundSpaceES A n)
     {ε : ℝ} (hε : 0 ≤ ε)
@@ -42,7 +42,7 @@ theorem grouped_martingaleDifference_norm_le_of_projector_defect
       ‖LinearMap.toContinuousLinearMap
         ((groupedIntervalGroundProjectionES A p (p * M) n).comp
           ((groupedNestedGroundProjectionsES A p (p * M)).martingaleDifference n))‖ ≤ ε := by
-  apply grouped_martingaleDifference_norm_le_of_two_le A hp (by nlinarith) hε
+  apply grouped_martingaleDifference_norm_le_of_two_le A hp hε
   intro n hn2 hnM
   have hK : p * (n - 1) + p = p * n := by
     simpa only [Nat.mul_add, Nat.mul_one] using
@@ -67,7 +67,7 @@ theorem grouped_martingaleDifference_norm_le_of_projector_defect
         F (p * n + p) (p * n) (p * n + p) :=
     norm_suffixGroundProjection_comp_prefixDifference_le_active A
       (R := 2 * p) (l := 2 * p) (n := p * n + p)
-      (r := p * M - (p * n + p)) (p := p * n) (by omega) (by omega)
+      (r := p * M - (p * n + p)) (p := p * n) (by omega)
   have hbound : F (p * M) (p * n) (p * n + p) ≤ ε := by
     simpa only [Nat.add_sub_of_le (show p * n + p ≤ p * M by
       simpa only [Nat.mul_succ] using Nat.mul_le_mul_left p hnM)] using

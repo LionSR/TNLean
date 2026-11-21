@@ -52,12 +52,9 @@ hypotheses. -/
 theorem openSuffixParentHamiltonianES_eq_zero_of_lt
     (A : MPSTensor d D) {L N n : ℕ} (hnL : n < L) :
     openSuffixParentHamiltonianES A L L N n = 0 := by
-  rw [openSuffixParentHamiltonianES]
-  apply Finset.sum_eq_zero
-  intro i hi
-  rw [Finset.mem_filter] at hi
-  exfalso
-  omega
+  rw [openSuffixParentHamiltonianES, ManyBody.Interaction.hamiltonian_restrict,
+    Finset.filter_false_of_mem fun i _ ↦ by omega, ManyBody.Interaction.partialHamiltonian_empty,
+    map_zero]
 
 /-- Shifting the full filtration range by one gives the C1 suffix sum.  Terms
 before the first complete length-\(L\) window are zero. -/
@@ -147,14 +144,15 @@ theorem openSuffixParentHamiltonianES_C2_full_range_norm_sq
     have hnN' : n + 1 ≤ N := by omega
     let H := openSuffixParentHamiltonianES A (l + 1) (l + 1) N (n + 1)
     have hH : H.IsSymmetricProjection :=
-      openSuffixParentHamiltonianES_isSymmetricProjection A (by omega) hln hnN'
+      Matrix.isSymmetricProjection_toEuclideanLin_iff.mpr
+        (isStarProjection_hamiltonian_restrict_parentChainInteraction A hln hnN')
     have hEq :
         H = (LinearMap.id : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ]
           EuclideanSpace ℂ (Cfg d N)) -
           openIntervalGroundProjectionES A (l + 1) l N n := by
       simpa only [H, openIntervalGroundProjectionES] using
-        openSuffixParentHamiltonianES_eq_id_sub_starProjection_ker
-          A (by omega) hln hnN'
+        toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_id_sub_starProjection
+          A hln hnN'
     rw [← hEq]
     have hIdem : H (H x) = H x := by
       have h := congrArg (fun T : EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ]
@@ -201,7 +199,7 @@ theorem openParentHamiltonianES_norm_gap_of_fixedAmbient_c3
           (Q n).comp (G.martingaleDifference m) := by
     intro n hn m hout
     exact fixedAmbient_martingaleDifference_commute_openIntervalGroundProjectionES
-      A hlN hout
+      A hout
   have hground : LinearMap.range (G.projection N) = LinearMap.ker H := by
     change LinearMap.range (openPrefixGroundProjectionES A (l + 1) N N) =
       LinearMap.ker (openParentHamiltonianES A (l + 1) N)

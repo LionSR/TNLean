@@ -25,8 +25,7 @@ they do not themselves give a gap uniform in the deformation parameter.
 `continuous_localTermES_family_of_groundProjection`,
 `continuous_openParentHamiltonianES_family_of_groundProjection`,
 `continuous_parentHamiltonianES_family_of_groundProjection`,
-`continuous_parentInteractionES_family`, `continuous_openParentHamiltonianES_family`,
-`continuous_parentHamiltonianES_family`) are kept
+`continuous_parentInteractionES_family`, `continuous_parentHamiltonianES_family`) are kept
 until their users are converted. The last section states continuity of the matrices: the local
 parent interaction, the terms and Hamiltonian of the parent interaction on the ring, and the
 Hamiltonian of the parent interaction on the open chain.
@@ -151,28 +150,6 @@ theorem continuous_localTermES_family_of_groundProjection
   simp [localTermESSummand]
 
 /-- Continuity of the local ground-space projection implies continuity of the
-open parent Hamiltonian at fixed volume. -/
-theorem continuous_openParentHamiltonianES_family_of_groundProjection
-    {X : Type*} [TopologicalSpace X] {d D : ℕ}
-    (A : X → MPSTensor d D) {L N : ℕ}
-    (hLN : L ≤ N)
-    (hProj : Continuous fun x => (groundSpaceES (A x) L).starProjection) :
-    Continuous fun x =>
-      LinearMap.toContinuousLinearMap (openParentHamiltonianES (A x) L N) := by
-  have hTerms : ∀ i : NonwrappingStart L N,
-      Continuous fun x => LinearMap.toContinuousLinearMap (localTermES (A x) L i.1) :=
-    fun i => continuous_localTermES_family_of_groundProjection A hLN hProj i.1
-  have hSum : Continuous fun x =>
-      ∑ i : NonwrappingStart L N,
-        LinearMap.toContinuousLinearMap (localTermES (A x) L i.1) :=
-    continuous_finsetSum _ fun i _ => hTerms i
-  convert hSum using 1
-  funext x
-  apply ContinuousLinearMap.ext
-  intro v
-  simp [openParentHamiltonianES]
-
-/-- Continuity of the local ground-space projection implies continuity of the
 periodic parent Hamiltonian at fixed volume. -/
 theorem continuous_parentHamiltonianES_family_of_groundProjection
     {X : Type*} [TopologicalSpace X] {d D : ℕ}
@@ -202,17 +179,6 @@ theorem continuous_parentInteractionES_family
     (hInj : ∀ x, Kraus.IsNBlkInjective (A x) L) :
     Continuous fun x => LinearMap.toContinuousLinearMap (parentInteractionES (A x) L) :=
   continuous_parentInteractionES_family_of_groundProjection A L
-    (continuous_groundSpaceES_starProjection_family A hA L hInj)
-
-/-- The open parent Hamiltonian at fixed volume varies continuously along a
-tensor family injective at the interaction range. -/
-theorem continuous_openParentHamiltonianES_family
-    {X : Type*} [TopologicalSpace X] {d D : ℕ}
-    (A : X → MPSTensor d D) (hA : Continuous A) {L N : ℕ}
-    (hLN : L ≤ N) (hInj : ∀ x, Kraus.IsNBlkInjective (A x) L) :
-    Continuous fun x =>
-      LinearMap.toContinuousLinearMap (openParentHamiltonianES (A x) L N) :=
-  continuous_openParentHamiltonianES_family_of_groundProjection A hLN
     (continuous_groundSpaceES_starProjection_family A hA L hInj)
 
 /-- The periodic parent Hamiltonian at fixed volume varies continuously along
@@ -325,6 +291,32 @@ theorem continuous_hamiltonian_parentRingInteraction_family
     (hLN : L ≤ N) (hInj : ∀ x, Kraus.IsNBlkInjective (A x) L) :
     Continuous fun x => (parentRingInteraction (A x) hLN).hamiltonian :=
   continuous_hamiltonian_parentRingInteraction_family_of_groundProjection A hLN
+    (continuous_groundSpaceES_starProjection_family A hA L hInj)
+
+/-- Continuity of the local ground-space projection implies continuity of the operator of the
+open parent Hamiltonian at fixed volume. Kept for the files not yet restated (#10948). -/
+theorem continuous_openParentHamiltonianES_family_of_groundProjection
+    {X : Type*} [TopologicalSpace X] {d D : ℕ}
+    (A : X → MPSTensor d D) {L N : ℕ}
+    (_hLN : L ≤ N)
+    (hProj : Continuous fun x => (groundSpaceES (A x) L).starProjection) :
+    Continuous fun x =>
+      LinearMap.toContinuousLinearMap (openParentHamiltonianES (A x) L N) := by
+  let e := (Matrix.toEuclideanCLM : Matrix (Cfg d N) (Cfg d N) ℂ ≃⋆ₐ[ℂ] _)
+  have he : Continuous e := e.toAlgEquiv.toLinearMap.continuous_of_finiteDimensional
+  exact he.comp
+    (continuous_hamiltonian_parentChainInteraction_family_of_groundProjection (N := N) A hProj)
+
+/-- The operator of the open parent Hamiltonian at fixed volume varies continuously along a
+tensor family injective at the interaction range. Kept for the files not yet restated
+(#10948). -/
+theorem continuous_openParentHamiltonianES_family
+    {X : Type*} [TopologicalSpace X] {d D : ℕ}
+    (A : X → MPSTensor d D) (hA : Continuous A) {L N : ℕ}
+    (hLN : L ≤ N) (hInj : ∀ x, Kraus.IsNBlkInjective (A x) L) :
+    Continuous fun x =>
+      LinearMap.toContinuousLinearMap (openParentHamiltonianES (A x) L N) :=
+  continuous_openParentHamiltonianES_family_of_groundProjection A hLN
     (continuous_groundSpaceES_starProjection_family A hA L hInj)
 
 end MPSTensor

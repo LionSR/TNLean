@@ -300,8 +300,7 @@
 
 \begin{lemma}[Nested fixed-volume prefix ground projections]%
     \label{thm:fixed-volume-prefix-ground-projections-nested}
-    \lean{MPSTensor.localTermES_eq_zero_of_openPrefixParentHamiltonianES_eq_zero,
-        MPSTensor.ker_openPrefixParentHamiltonianES_antitone,
+    \lean{MPSTensor.ker_openPrefixParentHamiltonianES_antitone,
         MPSTensor.fixedAmbientNestedGroundProjectionsES}
     \leanok
     \uses{def:fixed-volume-prefix-ground-projections,
@@ -500,7 +499,7 @@
 
 \begin{lemma}[Nonwrapping interactions with right spectators]
     \label{thm:local-term-right-spectator-conjugacy}
-    \lean{MPSTensor.localTermES_conj_rightSpectatorConfigLinearIsometryEquiv}
+    \lean{MPSTensor.toEuclideanLin_parentChainInteraction_term_conj_rightSpectatorConfigLinearIsometryEquiv}
     \leanok
     \uses{lem:right-spectator-extension}
     Let $i+L\leq n$.  Under the standard identification
@@ -552,7 +551,7 @@
     \label{thm:fixed-volume-c3-projector-conjugacy}
     \lean{MPSTensor.openPrefixParentHamiltonianES_self_eq_openParentHamiltonianES,
         MPSTensor.ker_openPrefixParentHamiltonianES_eq_openChainLeftGroundSpaceES,
-        MPSTensor.openSuffixParentHamiltonianES_full_window_eq_localTermES,
+        MPSTensor.openSuffixParentHamiltonianES_full_window_eq_term,
         MPSTensor.ker_openSuffixParentHamiltonianES_eq_openChainTailGroundSpaceES,
         MPSTensor.ker_openPrefixParentHamiltonianES_self_eq_groundSpaceES,
         MPSTensor.openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv,
@@ -1962,8 +1961,8 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Unit gap at the full-window volume]
     \label{thm:open_parent_hamiltonian_full_window_unit_gap}
-    \lean{MPSTensor.openParentHamiltonianES_self_norm_eq_of_mem_orthogonal_ker,
-        MPSTensor.openParentHamiltonianES_self_unit_gap}
+    \lean{MPSTensor.norm_toEuclideanLin_hamiltonian_parentChainInteraction_self_of_mem_orthogonal_ker,
+        MPSTensor.unit_gap_hamiltonian_parentChainInteraction_self}
     \leanok
     \uses{thm:open_parent_hamiltonian_full_window}
     If $L>0$ and
@@ -2159,13 +2158,13 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \begin{lemma}[Embedded fixed-window condition C2]
     \label{thm:open_suffix_parent_hamiltonian_es_c2}
     \lean{MPSTensor.openSuffixParentHamiltonianES_eq_localTermES,
-        MPSTensor.openSuffixParentHamiltonianES_isSymmetricProjection,
-        MPSTensor.openSuffixParentHamiltonianES_eq_orthogonal_starProjection_ker,
-        MPSTensor.openSuffixParentHamiltonianES_eq_id_sub_starProjection_ker,
-        MPSTensor.openSuffixParentHamiltonianES_C2,
-        MPSTensor.openSuffixParentHamiltonianES_C2_quadratic_form,
-        MPSTensor.openSuffixParentHamiltonianES_norm_eq_of_mem_orthogonal_ker,
-        MPSTensor.openSuffixParentHamiltonianES_unit_gap}
+        MPSTensor.isStarProjection_hamiltonian_restrict_parentChainInteraction,
+        MPSTensor.toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_starProjection,
+        MPSTensor.toEuclideanLin_hamiltonian_restrict_parentChainInteraction_eq_id_sub_starProjection,
+        MPSTensor.parentChainInteraction_C2,
+        MPSTensor.parentChainInteraction_C2_quadratic_form,
+        MPSTensor.norm_toEuclideanLin_hamiltonian_restrict_parentChainInteraction_of_mem_orthogonal_ker,
+        MPSTensor.unit_gap_hamiltonian_restrict_parentChainInteraction}
     \leanok
     \uses{def:open_suffix_parent_hamiltonian_es,
         thm:open_parent_hamiltonian_es_c1,
@@ -2425,7 +2424,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Compatible zero energy has open-boundary form]
     \label{thm:open_hamiltonian_kernel_le_ground_space}
-    \lean{MPSTensor.ker_openParentHamiltonianES_le_groundSpaceES_of_isNBlkInjective}
+    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_le_groundSpaceES_of_isNBlkInjective}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective}
     Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. If $A$ is
@@ -2504,7 +2503,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Dimension of the open-chain ground space]
     \label{thm:open_parent_hamiltonian_kernel_finrank}
-    \lean{MPSTensor.groundSpaceES_finrank_eq_of_isNBlkInjective, MPSTensor.finrank_ker_openParentHamiltonianES_of_isNBlkInjective}
+    \lean{MPSTensor.groundSpaceES_finrank_eq_of_isNBlkInjective, MPSTensor.finrank_ker_hamiltonian_parentChainInteraction_of_isNBlkInjective}
     \leanok
     \uses{def:open_parent_hamiltonian_es, def:ground_space_es, def:l_blk_injective}
     If $A$ is $L$-block-injective, then $\dim G_{L}^{\mathrm{ES}}(A)=D^{2}$.

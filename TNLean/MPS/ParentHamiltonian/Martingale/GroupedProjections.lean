@@ -48,7 +48,7 @@ noncomputable def groupedIntervalGroundProjectionES (A : MPSTensor d D)
 commutes with the local ground projection. This is the locality step in
 Nachtergaele's proof of Theorem 2.1(ii). -/
 theorem grouped_martingaleDifference_commute (A : MPSTensor d D)
-    {p N m n : ℕ} (hp : 0 < p) (hPN : 2 * p ≤ N)
+    {p N m n : ℕ} (hp : 0 < p)
     (hout : m < n - 1 ∨ n < m) :
     ((groupedNestedGroundProjectionsES A p N).martingaleDifference m).comp
         (groupedIntervalGroundProjectionES A p N n) =
@@ -65,9 +65,9 @@ theorem grouped_martingaleDifference_commute (A : MPSTensor d D)
   · have hsep := Nat.mul_le_mul_left p (show m + 2 ≤ n by omega)
     simp only [Nat.mul_add, Nat.mul_one, Nat.mul_two] at hsep ⊢
     rw [openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_le
-        A hPN (by omega),
+        A (by omega),
       openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_le
-        A hPN (by omega)]
+        A (by omega)]
   · have hsep := Nat.mul_le_mul_left p (show n + 1 ≤ m by omega)
     simp only [Nat.mul_add, Nat.mul_one] at hsep ⊢
     rw [openPrefixGroundProjectionES_commute_openIntervalGroundProjectionES_of_lt
