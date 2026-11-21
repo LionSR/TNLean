@@ -1889,10 +1889,10 @@ and the regrouping of physical registers into bonds.
         MPSTensor.matrixUnitBondVector_sum_normSq,
         MPSTensor.groundSpaceMap_sptFixedPointTensor_two_apply,
         MPSTensor.twoSiteBondInteraction_groundSpaceMap_sptFixedPointTensor,
-        MPSTensor.twoSiteBondInteraction_le_parentInteractionES_sptFixedPointTensor,
+        MPSTensor.twoSiteBondInteraction_le_parentInteraction_sptFixedPointTensor,
         MPSTensor.one_sub_twoSiteBondInteraction_mulVec_sptFixedPointTensor,
         MPSTensor.twoSiteBondInteraction_apply_eq_zero_iff_sptFixedPointTensor,
-        MPSTensor.twoSiteBondInteraction_eq_parentInteractionES_sptFixedPointTensor}
+        MPSTensor.twoSiteBondInteraction_eq_parentInteraction_sptFixedPointTensor}
     \leanok
     \uses{thm:spt_two_site_bond_interaction, def:spt_fixed_point_tensor}
     Let $D>0$, let $A^{(a,b)}=D^{-1/2}|a\rangle\langle b|$ be the SPT
@@ -1951,7 +1951,6 @@ and the regrouping of physical registers into bonds.
     \label{thm:spt_weighted_matrix_unit_parent_comparison}
     \lean{MPSTensor.groundSpaceMap_weightedMatrixUnitInterpolation_two_apply,
         MPSTensor.twoSiteBondInteraction_groundSpaceMap_weightedMatrixUnitInterpolation,
-        MPSTensor.twoSiteBondInteraction_le_parentInteractionES_weightedMatrixUnitInterpolation,
         MPSTensor.twoSiteBondInteraction_le_parentInteraction_weightedMatrixUnitInterpolation,
         MPSTensor.incomingBondUnitaryLin_normalizedBondInterpolation_state,
         MPSTensor.hamiltonian_translationInvariant_normalizedBondInteraction_groundSpace,
@@ -2038,10 +2037,9 @@ and the regrouping of physical registers into bonds.
 
 \begin{lemma}[Canonical parents under physical isometries]
     \label{thm:spt_physical_embedding_parent}
-    \lean{MPSTensor.parentInteractionES_rotatePhysical_isometry,
-        MPSTensor.parentInteractionES_rotatePhysical_isometry_decomposition,
+    \lean{MPSTensor.toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry,
         MPSTensor.parentInteraction_matrix_rotatePhysical_isometry,
-        MPSTensor.parentInteractionES_rotatePhysical_isometry_apply_of_adjoint_eq_zero}
+        MPSTensor.toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry_apply_of_adjoint_eq_zero}
     \leanok
     \uses{thm:spt_physical_embedding_boundary,
         thm:spt_isometric_image_projection, def:parent_interaction}

@@ -63,11 +63,11 @@ theorem groundSpaceES_rotatePhysical_rectangular {d m D : ℕ}
 /-- The canonical parent of a physically embedded tensor is the complement
 of the isometric image of its boundary-space projection.
 Source context: arXiv:1010.3732, Section II.F.2, equation eq:1d-sym:jointsym. -/
-theorem parentInteractionES_rotatePhysical_isometry {d m D : ℕ}
+theorem toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry {d m D : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     (A : MPSTensor d D) (L : ℕ) :
     let T := Matrix.toEuclideanLin (Matrix.rectKronecker fun _ : Fin L => E)
-    parentInteractionES (rotatePhysical E A) L =
+    Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction (rotatePhysical E A) L)) =
       1 - T ∘ₗ (groundSpaceES A L).starProjection.toLinearMap ∘ₗ T.adjoint := by
   let T := Matrix.toEuclideanLin (Matrix.rectKronecker fun _ : Fin L => E)
   have hT : T.adjoint ∘ₗ T = LinearMap.id := by
@@ -90,27 +90,12 @@ theorem parentInteractionES_rotatePhysical_isometry {d m D : ℕ}
       (groundSpaceES_rotatePhysical_rectangular E A L).symm
   simp only [hmap] at hproj
   simp only [I, LinearMap.isometryOfInner_toLinearMap] at hproj
-  rw [parentInteractionES, Submodule.starProjection_orthogonal,
+  rw [toEuclideanLin_toMatrix'_parentInteraction, Submodule.starProjection_orthogonal,
     ContinuousLinearMap.toLinearMap_sub, ContinuousLinearMap.coe_id, hproj]
   rfl
 
-/-- The embedded canonical parent consists of the transported parent and
-the projection onto unused physical states. Source context:
-arXiv:1010.3732, Section II.F.2, equation eq:1d-sym:jointsym. -/
-theorem parentInteractionES_rotatePhysical_isometry_decomposition {d m D : ℕ}
-    (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
-    (A : MPSTensor d D) (L : ℕ) :
-    let T := Matrix.toEuclideanLin (Matrix.rectKronecker fun _ : Fin L => E)
-    parentInteractionES (rotatePhysical E A) L =
-      T ∘ₗ parentInteractionES A L ∘ₗ T.adjoint + (1 - T ∘ₗ T.adjoint) := by
-  rw [parentInteractionES_rotatePhysical_isometry E hE]
-  simp only [parentInteractionES, Submodule.starProjection_orthogonal,
-    ContinuousLinearMap.toLinearMap_sub, ContinuousLinearMap.coe_id,
-    LinearMap.comp_sub, LinearMap.sub_comp, LinearMap.id_comp]
-  abel
-
-/-- Matrix form of the canonical-parent decomposition under an isometric
-physical embedding. Source context: arXiv:1010.3732, Section II.F.2,
+/-- **The embedded canonical parent** consists of the transported parent and the projection
+onto unused physical states. Source context: arXiv:1010.3732, Section II.F.2,
 equation eq:1d-sym:jointsym. -/
 theorem parentInteraction_matrix_rotatePhysical_isometry {d m D : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
@@ -118,22 +103,28 @@ theorem parentInteraction_matrix_rotatePhysical_isometry {d m D : ℕ}
     let T := Matrix.rectKronecker fun _ : Fin L => E
     LinearMap.toMatrix' (parentInteraction (rotatePhysical E A) L) =
       T * LinearMap.toMatrix' (parentInteraction A L) * Tᴴ + (1 - T * Tᴴ) := by
+  intro T
   apply Matrix.toEuclideanLin.injective
-  simpa only [parentInteractionES_eq_toEuclideanLin_parentMatrix,
-    ← Matrix.toEuclideanLin_conjTranspose_eq_adjoint, map_add, map_sub,
-    Matrix.toEuclideanLin, Matrix.toLpLin_mul_same, Matrix.toLpLin_one,
-    Module.End.one_eq_id, LinearMap.comp_assoc] using
-    parentInteractionES_rotatePhysical_isometry_decomposition E hE A L
+  rw [toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry E hE A L]
+  have hP := toEuclideanLin_toMatrix'_parentInteraction A L
+  simp only [T, ← Matrix.toEuclideanLin_conjTranspose_eq_adjoint, Matrix.toEuclideanLin,
+    map_add, map_sub, Matrix.toLpLin_mul_same, Matrix.toLpLin_one] at hP ⊢
+  rw [hP, Submodule.starProjection_orthogonal]
+  simp only [ContinuousLinearMap.toLinearMap_sub, ContinuousLinearMap.coe_id,
+    LinearMap.comp_sub, LinearMap.sub_comp, LinearMap.comp_id, LinearMap.comp_assoc,
+    Module.End.one_eq_id]
+  abel
 
 /-- The canonical parent acts as the identity on states orthogonal to
 the embedded physical space. Source context: arXiv:1010.3732,
 Section II.F.2, equation eq:1d-sym:jointsym. -/
-theorem parentInteractionES_rotatePhysical_isometry_apply_of_adjoint_eq_zero
+theorem toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry_apply_of_adjoint_eq_zero
     {d m D : ℕ} (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     (A : MPSTensor d D) (L : ℕ) (v : EuclideanSpace ℂ (Cfg m L))
     (hv : (Matrix.toEuclideanLin (Matrix.rectKronecker fun _ : Fin L => E)).adjoint v = 0) :
-    parentInteractionES (rotatePhysical E A) L v = v := by
-  rw [parentInteractionES_rotatePhysical_isometry E hE]
+    Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction (rotatePhysical E A) L)) v =
+      v := by
+  rw [toEuclideanLin_toMatrix'_parentInteraction_rotatePhysical_isometry E hE]
   simp only [LinearMap.sub_apply, Module.End.one_apply, LinearMap.comp_apply,
     hv, map_zero, sub_zero]
 

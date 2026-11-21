@@ -70,41 +70,6 @@ theorem twoSiteBondInteraction_groundSpaceMap_weightedMatrixUnitInterpolation
     (normalizedBondInterpolationVector_sum_normSq h₀ h₁ γ)
     (fun a d => normalizedBondInterpolationMatrix D₀ D₁ γ a a * X d a)
 
-/-- The bond interaction is bounded above by the canonical two-site parent
-of the weighted matrix-unit tensor. No injectivity of the endpoint tensor
-is required. Source: arXiv:1010.3732, Section II.F.2,
-`eq:sym:omega-gamma`, canonical parent comparison. -/
-theorem twoSiteBondInteraction_le_parentInteractionES_weightedMatrixUnitInterpolation
-    {D₀ D₁ : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁) (γ : ℝ) :
-    Matrix.toEuclideanLin
-      (twoSiteBondInteraction
-        (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
-          (bondPenalty (normalizedBondInterpolationVector D₀ D₁ γ)))) ≤
-      parentInteractionES (weightedMatrixUnitInterpolation D₀ D₁ γ) 2 :=
-  twoSiteBondInteraction_le_parentInteractionES_of_groundSpaceMap
-    (weightedMatrixUnitInterpolation D₀ D₁ γ)
-    (normalizedBondInterpolationVector D₀ D₁ γ)
-    (normalizedBondInterpolationVector_sum_normSq h₀ h₁ γ)
-    (twoSiteBondInteraction_groundSpaceMap_weightedMatrixUnitInterpolation h₀ h₁ γ)
-
-/-- Matrix form of the bond-penalty comparison with a canonical parent.
-The annihilation of boundary vectors is the local hypothesis. Source
-context: arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/
-theorem twoSiteBondInteraction_le_parentInteraction_of_groundSpaceMap
-    {D E : ℕ} (A : MPSTensor (D * D) E) (η : Fin (D * D) → ℂ)
-    (hη : ∑ p, Complex.normSq (η p) = 1)
-    (hkill : ∀ X : Matrix (Fin E) (Fin E) ℂ,
-      (twoSiteBondInteraction
-        (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
-          (bondPenalty η))).mulVec (groundSpaceMap A 2 X) = 0) :
-    twoSiteBondInteraction
-      (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm (bondPenalty η)) ≤
-      LinearMap.toMatrix' (parentInteraction A 2) := by
-  rw [Matrix.le_iff, ← Matrix.isPositive_toEuclideanLin_iff, map_sub,
-    ← parentInteractionES_eq_toEuclideanLin_parentMatrix]
-  exact LinearMap.le_def.mp
-    (twoSiteBondInteraction_le_parentInteractionES_of_groundSpaceMap A η hη hkill)
-
 /-- Matrix form of the canonical-parent comparison for the weighted
 interpolation. Source: arXiv:1010.3732, Section II.F.2,
 `eq:sym:omega-gamma`, canonical parent comparison. -/
@@ -170,16 +135,8 @@ theorem ker_hamiltonian_translationInvariant_normalizedBondInteraction_le_parent
     show mpv (N := N) (weightedMatrixUnitInterpolation D₀ D₁ γ) = mpv B from funext hmpv]
   apply Submodule.span_le.mpr
   rintro x (rfl : x = WithLp.toLp 2 (mpv B))
-  have hH : parentHamiltonianES B 2 N = Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN
-        (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian :=
-    parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow B hN
-  change Matrix.toEuclideanLin (Interaction.translationInvariant hN
-    (LinearMap.toMatrix' (parentInteraction B 2))).hamiltonian
-    (WithLp.toLp 2 (mpv B)) = 0
-  rw [← hH]
-  change WithLp.toLp 2 (parentHamiltonian B 2 N (mpv B)) = 0
-  rw [parentHamiltonian_annihilates _ 2 N hN, WithLp.toLp_zero]
+  change WithLp.toLp 2 (Matrix.toLin' (parentRingInteraction B hN).hamiltonian (mpv B)) = 0
+  rw [← parentHamiltonian_of_le B hN, parentHamiltonian_annihilates _ 2 N hN, WithLp.toLp_zero]
 
 /-- Every periodic zero mode of the bond interaction is a zero mode of
 its canonical parent. Source: arXiv:1010.3732, Section II.F.2,

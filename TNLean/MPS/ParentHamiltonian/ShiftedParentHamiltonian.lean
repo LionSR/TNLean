@@ -38,12 +38,18 @@ theorem isPositive_conj_of_add_eq_smul_parentHamiltonian
       (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap).IsPositive := by
   have h' : (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ
       (H + c • LinearMap.id) ∘ₗ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap =
-      s • parentHamiltonianES A L N := by
+      s • ((WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.toLinearMap ∘ₗ
+        parentHamiltonian A L N ∘ₗ (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).toLinearMap) := by
     rw [h]
     ext v
-    simp [parentHamiltonianES]
+    simp
   rw [h']
-  exact (parentHamiltonianES_isPositive A L N).smul_of_nonneg hs
+  refine LinearMap.IsPositive.smul_of_nonneg ?_ hs
+  by_cases hLN : L ≤ N
+  · rw [parentHamiltonian_of_le A hLN]
+    exact Matrix.isPositive_toEuclideanLin_iff.mpr
+      (posSemidef_hamiltonian_parentRingInteraction A hLN)
+  · simp [parentHamiltonian, hLN]
 
 /-- If \(H+c=s\,H_{\mathrm{parent}}\) with \(s\ge0\), then every eigenvalue \(\mu\) of
 \(H\) satisfies \(-c\le\mu\) in the complex order. -/

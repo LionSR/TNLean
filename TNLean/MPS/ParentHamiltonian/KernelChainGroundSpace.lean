@@ -36,25 +36,16 @@ theorem ker_parentHamiltonian_le_chainGroundSpace
   rw [chainGroundSpace, dite_eq_left ⟨hN, hLN⟩]
   simp only [Submodule.mem_iInf, Submodule.mem_comap]
   intro i τ
-  let eN := WithLp.linearEquiv 2 ℂ (NSiteSpace d N)
-  have hES : parentHamiltonianES A L N (eN.symm ψ) = 0 := by
-    rw [LinearMap.mem_ker] at hψ
-    simpa [parentHamiltonianES, eN] using congrArg eN.symm hψ
+  have hH : (parentRingInteraction A hLN).hamiltonian.mulVec ψ = 0 := by
+    rwa [LinearMap.mem_ker, parentHamiltonian_of_le A hLN, Matrix.toLin'_apply] at hψ
   have hlocal :
-      localTermES A L i (eN.symm ψ) = 0 := by
-    rw [parentHamiltonianES_eq_sum_localTermES A L N] at hES
-    exact ProjectionGeometry.apply_eq_zero_of_sum_apply_eq_zero
-      (fun i : Fin N => localTermES A L i)
-      (fun i : Fin N => localTermES_isSymmetricProjection A L i) hES i
-  have hrestrictES :
-      cyclicRestrictES (d := d) hN L i τ (eN.symm ψ) ∈ groundSpaceES A L :=
-    cyclicRestrictES_mem_groundSpaceES_of_localTermES_eq_zero A hLN i hlocal τ
-  let eL := WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
-  have hrestrictNS :
-      eL (cyclicRestrictES (d := d) hN L i τ (eN.symm ψ)) ∈ groundSpace A L :=
-    (mem_groundSpaceES_iff A L
-      (cyclicRestrictES (d := d) hN L i τ (eN.symm ψ))).1 hrestrictES
-  simpa [cyclicRestrictES, eN, eL] using hrestrictNS
+      Matrix.toEuclideanLin ((parentRingInteraction A hLN).term i) (WithLp.toLp 2 ψ) = 0 := by
+    rw [Matrix.toLpLin_apply, WithLp.ofLp_toLp,
+      (ManyBody.Interaction.hamiltonian_mulVec_eq_zero_iff
+        (posSemidef_parentRingInteraction_term A hLN)).mp hH i, WithLp.toLp_zero]
+  have hrestrictNS := (mem_groundSpaceES_iff A L _).1
+    (cyclicRestrictES_mem_groundSpaceES_of_parentRingInteraction_term_eq_zero A hLN i hlocal τ)
+  simpa [cyclicRestrictES] using hrestrictNS
 
 /-- The periodic chain ground space is contained in the kernel of the finite
 periodic parent Hamiltonian.
