@@ -22,6 +22,13 @@ MPS space at its interaction range is assumed.
 
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2,
 lines 933--947, condition C1, and Section 6, lines 2593--2675.
+
+The transfer is stated, in the last section, for the open-chain translates of a local matrix
+(`ManyBody.Interaction.chainTranslates`) and the parent interaction on the open chain.
+
+**Transitional (#10948).** The theorem
+`exists_openInteractionHamiltonianES_gap_of_canonical_gaps_of_eventual_kernel` is kept, unchanged,
+for unconverted users and is deleted when its last user is converted.
 -/
 
 open Filter
@@ -74,5 +81,65 @@ theorem exists_openInteractionHamiltonianES_gap_of_canonical_gaps_of_eventual_ke
     A h hh hR hBounds.1 hN hκ hδ hLocal
     (hN₀ N (hBounds.2.1.trans hN)) (hCanonicalKernel N hN) ?_
   simpa only [hCanonicalKernel N hN] using hCanonicalGap N
+
+/-! ### The Hamiltonians of the interactions
+
+The same transfer for the open-chain translates of a positive semidefinite local matrix `h`
+(`ManyBody.Interaction.chainTranslates`), with the canonical gaps stated for the Hamiltonians of
+the parent interaction on the open chain (`parentChainInteraction`); statements about vectors take
+the operators `Matrix.toEuclideanLin` of the Hamiltonians. -/
+
+section Interaction
+
+open ManyBody.Interaction (chainTranslates posSemidef_hamiltonian_chainTranslates)
+
+/-- Uniform canonical gaps at all sufficiently large ranges transfer to the open-chain translates
+of any positive semidefinite local matrix whose open kernels eventually equal the same MPS
+boundary spaces. The conclusion holds at every volume above the actual kernel; neither a local
+parent-kernel identity nor an injectivity hypothesis is required. Source: Nachtergaele,
+arXiv:cond-mat/9410110, Theorem 1.2, lines 933--947, condition C1, lines 1030--1041, and
+Section 6, lines 2593--2675. This is a generic finite-window criterion; canonical gaps are
+explicit inputs. -/
+theorem exists_toEuclideanLin_hamiltonian_chainTranslates_gap_of_canonical_gaps_of_eventual_kernel
+    (A : MPSTensor d D) {R₀ : ℕ} (_hR₀ : 0 < R₀)
+    (hCanonical : ∀ W, R₀ ≤ W →
+      (∀ N, W ≤ N → LinearMap.ker (Matrix.toEuclideanLin
+        (parentChainInteraction A W N).hamiltonian) = groundSpaceES A N) ∧
+      ∃ δ : ℝ, 0 < δ ∧ ∀ N,
+        ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian))ᗮ,
+          δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian v‖)
+    {R : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
+    (hKernel : ∀ᶠ N : ℕ in atTop,
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
+        groundSpaceES A N) :
+    ∃ γ : ℝ, 0 < γ ∧ ∀ N,
+      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian))ᗮ,
+        γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian v‖ := by
+  obtain ⟨N₀, hN₀⟩ := Filter.eventually_atTop.1 hKernel
+  let W := max R (max N₀ R₀)
+  have hBounds : R ≤ W ∧ N₀ ≤ W ∧ R₀ ≤ W := by omega
+  obtain ⟨hCanonicalKernel, δ, hδ, hCanonicalGap⟩ := hCanonical W hBounds.2.2
+  obtain ⟨κ, hκ, hLocal⟩ :=
+    LinearMap.IsPositive.exists_pos_smul_orthogonal_ker_projection_le
+      (Matrix.isPositive_toEuclideanLin_iff.mpr (posSemidef_hamiltonian_chainTranslates hh W))
+  rw [hN₀ W hBounds.2.1, ← toEuclideanLin_toMatrix'_parentInteraction, ← map_smul,
+    Matrix.toEuclideanLin_le_toEuclideanLin_iff] at hLocal
+  refine Nat.exists_pos_forall_of_eventually
+    (P := fun N γ =>
+      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian))ᗮ,
+        γ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian v‖)
+    (fun N γ η hle hgap v hv =>
+      (mul_le_mul_of_nonneg_right hle (norm_nonneg v)).trans (hgap v hv))
+    (fun N => LinearMap.exists_pos_mul_norm_le_of_mem_orthogonal_ker _)
+    (M := W) (δ := κ * δ / (W - R + 1 : ℕ))
+    (div_pos (mul_pos hκ hδ) (Nat.cast_pos.mpr (by omega))) ?_
+  intro N hN
+  rw [hN₀ N (hBounds.2.1.trans hN)]
+  refine toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
+    A h hh hBounds.1 hκ hδ hLocal
+    (hN₀ N (hBounds.2.1.trans hN)) (hCanonicalKernel N hN) ?_
+  simpa only [hCanonicalKernel N hN] using hCanonicalGap N
+
+end Interaction
 
 end MPSTensor
