@@ -289,6 +289,44 @@ absorbs blocks whose states differ only by a weight or a phase power, which is
 the merging behind the source's assumption that the block states are pairwise
 different \cite[lines~1329--1330]{PerezGarcia2007MPSReps}.
 
+\section{Primitive sectors at an arbitrary specified length}
+
+For every positive length $N$, put $p=\gcd(N,D!)$ and $M=N/p$. The
+positive-weight periodic decomposition of a tensor $A$ gives original blocks
+with periods $m_k\le D$. Blocks with $m_k\nmid N$ have zero vector at $N$.
+Every other period divides both $N$ and $D!$, hence divides $p$. Prescribed
+blocking therefore splits every surviving block into sectors of period
+$m_k/\gcd(m_k,p)=1$. Their positive dimensions sum to the dimension of the
+original block. Collecting the sectors gives
+\begin{align}
+    V^{(M)}(A^{[p]}) & =\sum_j c_jV^{(M)}(B_j),
+    \label{eq:rmp_w_state_ti_bound_finite_primitive} \\
+    \sum_jD_j & \le D,
+    \qquad 0<p\le D!,\quad p\mid N.
+    \notag
+\end{align}
+Each $c_j$ is nonzero, each $B_j$ is left-canonical and primitive, and the
+general Wielandt bound gives a common injectivity length $(D^2+1)^2$ in the
+blocked alphabet. If the original vector is $cW_N$, then
+\begin{align}
+    \sum_j c_jV^{(M)}(B_j)_\sigma & =cW_{Mp}(\widetilde\sigma)
+    \label{eq:rmp_w_state_ti_bound_finite_primitive_w}
+\end{align}
+for the flattened blocked configuration $\widetilde\sigma$. This equality is
+derived from the original W vector; a blocked W identity and primitive blocks
+are not supplied as assumptions. The construction includes arbitrary powers
+of small primes.
+
+The factorial bound on $p$ does not give the review's polynomial estimate.
+Phase-equivalent sectors still need to be grouped, zero sums of coefficients
+removed, and the cut-rank argument applied to the resulting separated family.
+The logarithmic Wielandt estimate remains missing. These are separate from
+the derived primitive-sector decomposition.
+% Exact-head hosted elaboration of the new finite-length construction is pending.
+The corresponding declarations are
+\leanid{MPSTensor.exists_primitive_blocks_at_gcd_factorial} and
+\leanid{MPSTensor.exists_primitive_blocks_of_mpv_eq_smul_wIndicator}.
+
 \section{W blocking and prime-divisor bounds}
 
 For $k>0$ the local encoding

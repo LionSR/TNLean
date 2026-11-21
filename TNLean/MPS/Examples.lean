@@ -86,6 +86,7 @@ import TNLean.MPS.Examples.WStateBlocking
 import TNLean.MPS.Examples.WStateCanonicalBound
 import TNLean.MPS.Examples.WStatePeriodic
 import TNLean.MPS.Examples.WStatePrimeLengthBound
+import TNLean.MPS.Examples.WStatePrimitiveBlocks
 import TNLean.MPS.Examples.Z3Anomalous
 import TNLean.MPS.Examples.ZMod2
 import TNLean.MPS.Examples.ZeroCorrelationExamples
