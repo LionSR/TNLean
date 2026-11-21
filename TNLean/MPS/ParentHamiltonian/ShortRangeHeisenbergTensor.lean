@@ -27,6 +27,11 @@ lines 2183--2187. The distinction between a range shorter than the simultaneous
 injectivity length plus one and the sufficient ranges is essential here.
 The example and the resulting failure of the unrestricted assertion are
 documented in `docs/paper-gaps/cpgsv21_short_range_parent_gap.tex`.
+
+**Transitional (#10948).** `parentInteractionES_shortRangeHeisenbergTensor_two_apply`, the singlet
+formula for the Euclidean-space operator, is kept until its users are converted; the formula for
+the operator of the matrix of the canonical parent interaction is
+`toEuclideanLin_toMatrix'_parentInteraction_shortRangeHeisenbergTensor_two_apply`.
 -/
 
 open scoped BigOperators Matrix InnerProductSpace
@@ -192,6 +197,22 @@ theorem parentInteractionES_shortRangeHeisenbergTensor_two_apply
     (v : EuclideanSpace ℂ (Cfg 2 2)) (σ : Cfg 2 2) :
     parentInteractionES shortRangeHeisenbergTensor 2 v σ =
       (v σ - v (σ ∘ Fin.rev)) / 2 := by
+  change ((groundSpaceES shortRangeHeisenbergTensor 2)ᗮ.starProjection v) σ = _
+  rw [Submodule.starProjection_orthogonal_val,
+    groundSpaceES_shortRangeHeisenbergTensor_two_starProjection]
+  change v σ - (v σ + v (σ ∘ Fin.rev)) / 2 = _
+  ring
+
+/-- The matrix of the canonical two-site parent interaction acts as the singlet projector
+\((1-\mathrm{Swap})/2\). The swap exchanges the two physical sites.
+Source for the parent-interaction definition: arXiv:2011.12127,
+lines 1996--1999. -/
+theorem toEuclideanLin_toMatrix'_parentInteraction_shortRangeHeisenbergTensor_two_apply
+    (v : EuclideanSpace ℂ (Cfg 2 2)) (σ : Cfg 2 2) :
+    Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction shortRangeHeisenbergTensor 2))
+        v σ =
+      (v σ - v (σ ∘ Fin.rev)) / 2 := by
+  rw [toEuclideanLin_toMatrix'_parentInteraction]
   change ((groundSpaceES shortRangeHeisenbergTensor 2)ᗮ.starProjection v) σ = _
   rw [Submodule.starProjection_orthogonal_val,
     groundSpaceES_shortRangeHeisenbergTensor_two_starProjection]
