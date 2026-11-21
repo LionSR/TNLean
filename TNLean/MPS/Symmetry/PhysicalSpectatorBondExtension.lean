@@ -17,7 +17,7 @@ penalty in the common physical space of arXiv:1010.3732, Section II.F.2,
 equation eq:1d-sym:jointsym, in coordinates where neighboring terms commute.
 -/
 
-open scoped Matrix Kronecker
+open scoped Matrix Kronecker ComplexOrder
 
 open ManyBody
 
@@ -88,18 +88,18 @@ theorem physicalSpectatorBondInteraction_translate_commute {N : ℕ} [NeZero N]
         (physicalSpectatorBondInteraction K d₀ d₁ B)) := by
   exact sectorBondInteraction_translate_commute _ _ _ _ hN i j
 
-/-- The enlarged independent-bond Hamiltonian has no spectral values
-between zero and one, uniformly in the chain length and in the dimensions
-of the additional physical sectors. Source context: arXiv:1010.3732,
-Sections II.D.2 and II.F.2, equation eq:1d-sym:jointsym. -/
-theorem physicalSpectatorBondInteraction_spectrum_gap_one {N : ℕ}
+/-- Every eigenvalue of the enlarged independent-bond Hamiltonian is `0` or
+at least `1`, uniformly in the chain length and in the dimensions of the
+additional physical sectors. Source context: arXiv:1010.3732, Sections II.D.2
+and II.F.2, equation eq:1d-sym:jointsym. -/
+theorem physicalSpectatorBondInteraction_eigenvalue_gap_one {N : ℕ}
     (K d₀ d₁ : ℕ) (B : Matrix (Fin K × Fin K) (Fin K × Fin K) ℂ)
     (hB : IsStarProjection B) (hN : 2 ≤ N) :
-    ∀ z ∈ spectrum ℂ
-      (Interaction.translationInvariant hN
-        (physicalSpectatorBondInteraction K d₀ d₁ B)).hamiltonian,
-      0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
-  exact sectorBondInteraction_spectrum_gap_one _ _ _ _
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (Interaction.translationInvariant hN
+          (physicalSpectatorBondInteraction K d₀ d₁ B)).hamiltonian) μ →
+      μ = 0 ∨ (1 : ℂ) ≤ μ := by
+  exact sectorBondInteraction_eigenvalue_gap_one _ _ _ _
     (Matrix.physicalSpectatorEdgeInteraction_isStarProjection K d₀ d₁ B hB) hN
 
 end MPSTensor

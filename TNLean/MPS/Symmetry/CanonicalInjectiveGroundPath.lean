@@ -66,10 +66,19 @@ noncomputable def exactMPSGroundPath_of_canonicalInjective
     exact fun hz => hσ (congrFun hz σ)
   ground_line γ hγ N hN := by
     rw [hP γ hγ]
-    have hSpec := hamiltonian_translationInvariant_parent_spectrum_gap (A γ) (hInj γ hγ) hN
+    have hGap := isGapped_hamiltonian_translationInvariant_parent (A γ) (hInj γ hγ) hN
       (δ := 0) (fun v _ => by
         simpa only [zero_mul] using norm_nonneg (parentHamiltonianES (A γ) 2 N v))
-    refine ⟨0, hSpec.1, fun z hz => (hSpec.2 z hz).1, ?_⟩
+    have hmem (μ : ℂ) : μ ∈ spectrum ℂ (ManyBody.Interaction.translationInvariant hN
+        (LinearMap.toMatrix' (parentInteraction (A γ) 2))).hamiltonian ↔
+        Module.End.HasEigenvalue (Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant
+          hN (LinearMap.toMatrix' (parentInteraction (A γ) 2))).hamiltonian) μ := by
+      rw [← Matrix.spectrum_toLpLin (p := 2), Module.End.hasEigenvalue_iff_mem_spectrum]
+    refine ⟨0, (hmem 0).mpr (Module.End.hasEigenvalue_iff.mpr (by
+      simpa only [ManyBody.groundSpace, Complex.ofReal_zero] using hGap.1)), fun z hz => ?_, ?_⟩
+    · rcases hGap.2 z ((hmem z).mp hz) with h | h
+      · simp [h]
+      · simpa using (Complex.le_def.mp h).1
     simpa only [Complex.ofReal_zero, zero_smul, sub_zero] using
       hamiltonian_translationInvariant_parent_groundSpace_eq_span_mpv (A γ) (hInj γ hγ) hN
 

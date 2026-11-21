@@ -240,48 +240,30 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
 
 \begin{lemma}[Gap preservation with a unit unused-space penalty]
     \label{thm:mpo_isometry_positive_gap}
-    \lean{MPSTensor.isometricInteractionExtension_quadratic_gap,
-        MPSTensor.isometricInteractionExtension_norm_gap,
-        MPSTensor.isometricInteractionExtension_spectrum_gap}
+    \lean{MPSTensor.isometricInteractionExtension_eigenvalue_gap}
     \leanok
     \uses{def:spt_isometric_interaction_extension}
-    Suppose $E^\dagger E=I$, $h\geq0$, and $N\geq2$.
-    A quadratic-form bound $\delta\|x\|^2\leq
-        \operatorname{Re}\langle H_Nx,x\rangle$ on $(\ker H_N)^\perp$
-    gives
-    \begin{align}
-        \min\{\delta,1\}\|v\|^2
-        \leq\operatorname{Re}\langle H'_Nv,v\rangle
-        \quad (v\perp\ker H'_N).
-        \label{eq:mpo_isometry_quadratic_gap}
-    \end{align}
-    If $\delta\geq0$, a norm gap $\delta\|x\|\leq\|H_Nx\|$
-    on $(\ker H_N)^\perp$ gives
-    $\min\{\delta,1\}\|v\|\leq\|H'_Nv\|$ on $(\ker H'_N)^\perp$.
-    Finally, spectral separation
-    $\operatorname{spec}H_N\subseteq\{0\}\cup[\delta,\infty)$ gives
-    \begin{align}
-        \operatorname{spec}H'_N
-        \subseteq[0,\infty)\cap
-        \bigl(\{0\}\cup[\min\{\delta,1\},\infty)\bigr).
-        \label{eq:mpo_isometry_spectral_gap}
-    \end{align}
-    The quadratic-form and spectral assertions allow arbitrary real
-    $\delta$. None of these assertions requires $0$ to be an eigenvalue.
+    Suppose $E^\dagger E=I$, $h\geq0$, and $N\geq2$, and let $\delta$ be
+    a real number. If every eigenvalue of $H_N$ is $0$ or at least
+    $\delta$, then every eigenvalue of $H'_N$ is $0$ or at least
+    $\min\{\delta,1\}$. Neither assertion requires $0$ to be an
+    eigenvalue.
 \end{lemma}
 \begin{proof}\leanok
     \uses{thm:spt_isometric_interaction_zero_modes,
         thm:spt_periodic_hamiltonian_order,thm:mpo_isometry_inactive_bound,
-        thm:mpo_isometry_abstract_quadratic,thm:mpo_isometry_abstract_norm}
-    Positivity of $h$ and $h'$ makes both periodic sums positive.
-    Combining $H'_NW_N=W_NH_N$ with
-    (\ref{eq:mpo_isometry_inactive_energy}) and applying the abstract
-    quadratic-form or norm theorem with $U=W_N$ and $c=1$ gives the first two bounds.
-    For the spectral assertion, finite-dimensional spectral separation
-    first gives the quadratic-form bound on $(\ker H_N)^\perp$;
-    (\ref{eq:mpo_isometry_quadratic_gap}) transfers this bound to $H'_N$,
-    and the converse spectral implication for the positive operator $H'_N$
-    yields the spectral inclusion.
+        thm:mpo_isometry_abstract_quadratic}
+    Positivity of $h$ and $h'$ makes both periodic sums positive. For a
+    positive matrix, the eigenvalue condition with constant $\delta$ is
+    equivalent to the quadratic-form bound
+    $\delta\|x\|^2\leq\operatorname{Re}\langle H_Nx,x\rangle$ on
+    $(\ker H_N)^\perp$, by expanding $x$ in an eigenbasis. Combining
+    $H'_NW_N=W_NH_N$ with (\ref{eq:mpo_isometry_inactive_energy}) and
+    applying the abstract quadratic-form theorem with $U=W_N$ and $c=1$
+    gives
+    $\min\{\delta,1\}\|v\|^2\leq\operatorname{Re}\langle H'_Nv,v\rangle$
+    for $v\perp\ker H'_N$, which is the eigenvalue condition for $H'_N$
+    with constant $\min\{\delta,1\}$.
 \end{proof}
 
 In particular, a positive bound $\delta$ uniform in $N\geq2$ remains
@@ -601,8 +583,11 @@ original bond-$D_p$ tensors.
     $\delta\|x\|\leq\|H_{\gamma,N}x\|$ on the
     kernel complement. The coordinate identity transfers precisely
     this bound to the matrix Hamiltonian. Each $h_\gamma$ is positive,
-    so Lemma~\ref{thm:mpo_isometry_positive_gap} applies to the fixed
-    inclusion $J$ and gives (\ref{eq:mpo_arbitrary_uniform_gap}) with
+    so this norm bound says that every eigenvalue of $H_{\gamma,N}$ is $0$
+    or at least $\delta$, and Lemma~\ref{thm:mpo_isometry_positive_gap}
+    applies to the fixed inclusion $J$. Read back in norm form for the
+    positive matrix $\widetilde H_{\gamma,N}$, it gives
+    (\ref{eq:mpo_arbitrary_uniform_gap}) with
     $\varepsilon=\min\{\delta,1\}>0$. Both constants are obtained
     from the endpoint tensors; a support-path gap is not an assumption.
 \end{proof}

@@ -204,17 +204,13 @@ theorem commonPhysicalNormalizedBondInteraction_zero_mem_spectrum
     (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N) :
     (0 : ℂ) ∈ spectrum ℂ (Interaction.translationInvariant hN
       (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian := by
-  have hdet : Matrix.det
-      (Interaction.translationInvariant hN (normalizedBondInteraction D₀ D₁ γ)).hamiltonian =
-        0 := by
-    simpa only [spectrum.mem_iff, map_zero, zero_sub, IsUnit.neg_iff,
-      Matrix.isUnit_iff_isUnit_det, isUnit_iff_ne_zero, not_not] using
-      (hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one h₀ h₁ γ hN).1
-  obtain ⟨ψ, hψ, hz⟩ := Matrix.exists_mulVec_eq_zero_iff.mpr hdet
+  obtain ⟨ψ, hψ, hψ0⟩ := Submodule.exists_mem_ne_zero_of_ne_bot
+    (isGapped_hamiltonian_translationInvariant_normalizedBondInteraction h₀ h₁ γ hN).1
+  rw [mem_groundSpace_iff_mulVec, Complex.ofReal_zero, zero_smul] at hψ
   exact isometricInteractionExtension_zero_mem_spectrum _
     (commonFixedPointInclusion_isometry _ d₀ d₁) _
     (normalizedBondInteraction_isStarProjection h₀ h₁ γ).isSelfAdjoint.isHermitian
-    hN ψ hψ hz
+    hN ψ.ofLp (fun h ↦ hψ0 (WithLp.ofLp_injective 2 h)) hψ
 
 /-- The local bond comparison with a canonical parent persists in the
 common physical space. Source: arXiv:1010.3732, Section II.F.2,
@@ -247,17 +243,25 @@ theorem commonPhysicalNormalizedBondInteraction_translate_commute
 
 /-- The enlarged normalized bond Hamiltonians retain the uniform gap of
 one above zero. Source: arXiv:1010.3732, Section II.F.2, eq:sym:omega-gamma. -/
-theorem commonPhysicalNormalizedBondInteraction_spectrum_gap_one
+theorem isGapped_commonPhysicalNormalizedBondInteraction
     {D₀ D₁ N : ℕ} (h₀ : 0 < D₀) (h₁ : 0 < D₁)
     (d₀ d₁ : ℕ) (γ : ℝ) (hN : 2 ≤ N) :
-    ∀ z ∈ spectrum ℂ (Interaction.translationInvariant hN
-      (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian,
-      0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
-  simpa only [physicalSpectatorBondInteraction_eq_isometricInteractionExtension,
-    commonPhysicalNormalizedBondInteraction, normalizedBondInteraction] using
-    physicalSpectatorBondInteraction_spectrum_gap_one (D₀ + D₁) d₀ d₁ _
-      (bondPenalty_reindex_isStarProjection _
-        (normalizedBondInterpolationVector_sum_normSq h₀ h₁ γ)) hN
+    IsGapped (Interaction.translationInvariant hN
+      (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian 0 1 := by
+  refine ⟨?_, ?_⟩
+  · have hspec : (0 : ℂ) ∈ spectrum ℂ (Matrix.toEuclideanLin
+        (Interaction.translationInvariant hN
+          (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian) := by
+      rw [Matrix.spectrum_toLpLin]
+      exact commonPhysicalNormalizedBondInteraction_zero_mem_spectrum h₀ h₁ d₀ d₁ γ hN
+    simpa only [ManyBody.groundSpace, Complex.ofReal_zero] using
+      Module.End.hasEigenvalue_iff.mp (Module.End.HasEigenvalue.of_mem_spectrum hspec)
+  · simpa only [physicalSpectatorBondInteraction_eq_isometricInteractionExtension,
+      commonPhysicalNormalizedBondInteraction, normalizedBondInteraction, Complex.ofReal_zero,
+      zero_add, Complex.ofReal_one] using
+      physicalSpectatorBondInteraction_eigenvalue_gap_one (D₀ + D₁) d₀ d₁ _
+        (bondPenalty_reindex_isStarProjection _
+          (normalizedBondInterpolationVector_sum_normSq h₀ h₁ γ)) hN
 
 /-- The enlarged periodic Hamiltonian has precisely the transported
 weighted matrix-unit MPS ground line. Source: arXiv:1010.3732,
@@ -449,14 +453,9 @@ noncomputable def commonPhysicalNormalizedBondGappedPath
   norm_le_one γ _ :=
     (commonPhysicalNormalizedBondInteraction_isStarProjection hD₀ hD₁ d₀ d₁ γ).norm_le _
   continuous := (continuous_commonPhysicalNormalizedBondInteraction hD₀ hD₁ d₀ d₁).continuousOn
-  gap := by
-    refine ⟨1, zero_lt_one, ?_⟩
-    intro γ _ N hN
-    refine ⟨0, commonPhysicalNormalizedBondInteraction_zero_mem_spectrum
-      hD₀ hD₁ d₀ d₁ γ hN, ?_⟩
-    simpa only [zero_add] using
-      commonPhysicalNormalizedBondInteraction_spectrum_gap_one hD₀ hD₁ d₀ d₁ γ hN
-  symmetric γ _ g N hN :=
+  gap := ⟨1, zero_lt_one, fun γ _ _ hN ↦
+    ⟨0, isGapped_commonPhysicalNormalizedBondInteraction hD₀ hD₁ d₀ d₁ γ hN⟩⟩
+  symmetric γ _ g _ hN :=
     commonPhysicalNormalizedBondInteraction_commute_onSite ρ₀ ρ₁ h₀ h₁ U₀ U₁ g γ hN
 
 /-- For a fixed normalized bond, its ordered canonical-parent comparison
@@ -499,29 +498,21 @@ noncomputable def commonPhysicalBondCanonicalParentComparisonPath
     (Matrix.nonneg_iff_posSemidef.mp hC.nonneg)
     (commonPhysicalNormalizedBondInteraction_le_parent d₀ d₁ γ B horder)
     (hA.norm_le _) (parentInteraction_toMatrix'_norm_le_one C 2)
-    ?_ ?_ ⟨1, zero_lt_one, fun N hN z hz =>
-      (commonPhysicalNormalizedBondInteraction_spectrum_gap_one hD₀ hD₁ d₀ d₁ γ hN z hz).2⟩
+    ?_ ⟨1, zero_lt_one, fun N hN ↦
+      isGapped_commonPhysicalNormalizedBondInteraction hD₀ hD₁ d₀ d₁ γ hN⟩
     (fun N hN g =>
       commonPhysicalNormalizedBondInteraction_commute_onSite ρ₀ ρ₁ h₀ h₁ U₀ U₁ g γ hN)
     (fun N hN g =>
       commonPhysicalParentInteraction_commute_onSite ρ₀ ρ₁ h₀ h₁ U₀ U₁ B g (hCov g) hN)
-  · intro N hN x hx
-    have hxES : WithLp.toLp 2 x ∈ LinearMap.ker
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) := by
-      change WithLp.toLp 2 ((Interaction.translationInvariant hN A).hamiltonian.mulVec x) = 0
-      rw [hx, WithLp.toLp_zero]
-    have hparent := commonPhysicalNormalizedBondInteraction_ker_le_parent
-      hD₀ hD₁ d₀ d₁ γ hN B (hker N hN) hxES
-    simpa only [LinearMap.mem_ker, Matrix.toEuclideanLin, Matrix.toLpLin_apply,
-      WithLp.ofLp_toLp, WithLp.toLp_eq_zero] using hparent
-  · intro N hN
-    have hspec : (0 : ℂ) ∈ spectrum ℂ
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) := by
-      rw [Matrix.spectrum_toLpLin]
-      exact commonPhysicalNormalizedBondInteraction_zero_mem_spectrum hD₀ hD₁ d₀ d₁ γ hN
-    obtain ⟨x, hx⟩ :=
-      (Module.End.HasEigenvalue.of_mem_spectrum hspec).exists_hasEigenvector
-    exact ⟨x, hx.2, by simpa only [zero_smul] using hx.apply_eq_smul⟩
+  intro N hN x hx
+  have hxES : WithLp.toLp 2 x ∈ LinearMap.ker
+      (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) := by
+    change WithLp.toLp 2 ((Interaction.translationInvariant hN A).hamiltonian.mulVec x) = 0
+    rw [hx, WithLp.toLp_zero]
+  have hparent := commonPhysicalNormalizedBondInteraction_ker_le_parent
+    hD₀ hD₁ d₀ d₁ γ hN B (hker N hN) hxES
+  simpa only [LinearMap.mem_ker, Matrix.toEuclideanLin, Matrix.toLpLin_apply,
+    WithLp.ofLp_toLp, WithLp.toLp_eq_zero] using hparent
 
 /-- The first enlarged bond endpoint is joined to the canonical parent of
 the first fixed-point tensor in the active summand. Source: arXiv:1010.3732,

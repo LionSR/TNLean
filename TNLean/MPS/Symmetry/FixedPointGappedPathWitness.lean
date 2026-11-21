@@ -70,20 +70,11 @@ noncomputable def normalizedBondFixedPointGappedPath
   continuous :=
     (continuous_normalizedBondInteraction hD₀ hD₁).continuousOn
   gap := by
-    refine ⟨1, by norm_num, ?_⟩
-    intro γ hγ N hN
+    refine ⟨1, by norm_num, fun γ _ N hN ↦ ⟨0, ?_⟩⟩
     have hNZ : NeZero N := ⟨by omega⟩
-    refine ⟨0, ?_, ?_⟩
-    · unfold normalizedBondInteraction
-      rw [@hamiltonian_translationInvariant_twoSiteBondPenalty (D₀ + D₁) N hNZ]
-      exact (normalizedPhysicalBondInterpolation_parent_spectrum_gap_one
-        hD₀ hD₁ γ (by omega)).1
-    · intro z hz
-      unfold normalizedBondInteraction at hz
-      rw [@hamiltonian_translationInvariant_twoSiteBondPenalty (D₀ + D₁) N hNZ] at hz
-      have h := (normalizedPhysicalBondInterpolation_parent_spectrum_gap_one
-        hD₀ hD₁ γ (by omega)).2 z hz
-      simpa using h
+    unfold normalizedBondInteraction
+    rw [@hamiltonian_translationInvariant_twoSiteBondPenalty (D₀ + D₁) N hNZ]
+    exact isGapped_normalizedPhysicalBondInterpolation_parent hD₀ hD₁ γ (by omega)
   symmetric γ hγ g N hN := by
     have hNZ : NeZero N := ⟨by omega⟩
     unfold normalizedBondInteraction

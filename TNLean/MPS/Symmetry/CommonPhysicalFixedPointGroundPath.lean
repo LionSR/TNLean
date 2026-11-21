@@ -14,7 +14,7 @@ summand at the endpoints and the full direct sum in the open interval.
 Source: arXiv:1010.3732, Section II.F.2, equation `eq:sym:omega-gamma`.
 -/
 
-open scoped Matrix
+open scoped Matrix MatrixOrder ComplexOrder
 
 namespace MPSTensor
 
@@ -164,8 +164,16 @@ noncomputable def exactMPSGroundPath_commonPhysicalNormalizedBondInteraction
     simp only [hP γ]
     refine ⟨0, commonPhysicalNormalizedBondInteraction_zero_mem_spectrum
       hD₀ hD₁ d₀ d₁ γ hN, ?_, ?_⟩
-    · exact fun z hz => (commonPhysicalNormalizedBondInteraction_spectrum_gap_one
-        hD₀ hD₁ d₀ d₁ γ hN z hz).1
+    · intro z hz
+      have hpos : (ManyBody.Interaction.translationInvariant hN
+          (commonPhysicalNormalizedBondInteraction D₀ D₁ d₀ d₁ γ)).hamiltonian.PosSemidef :=
+        ManyBody.Interaction.posSemidef_hamiltonian fun _ ↦
+        ManyBody.posSemidef_placeAlong (X := fun _ ↦ Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁)) _
+          (Matrix.nonneg_iff_posSemidef.mp
+            (commonPhysicalNormalizedBondInteraction_isStarProjection hD₀ hD₁ d₀ d₁ γ).nonneg)
+      have hznonneg : (0 : ℂ) ≤ z :=
+        (Matrix.posSemidef_iff_isHermitian_and_spectrum_nonneg.mp hpos).2 hz
+      simpa only [RCLike.re_eq_complex_re] using (RCLike.nonneg_iff.mp hznonneg).1
     · simpa only [Complex.ofReal_zero,
         zero_smul, sub_zero, WithLp.coe_symm_linearEquiv] using
         commonPhysicalNormalizedBondInteraction_groundSpace_eq_span_mpv hD₀ hD₁ d₀ d₁ γ hN

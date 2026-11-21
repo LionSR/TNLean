@@ -17,13 +17,13 @@ A one-site Hilbert space may contain unused sectors in addition to the
 left and right virtual registers of a matrix product state. A neighboring
 interaction still consists of commuting projections if it acts only on
 the outgoing right register and incoming left register in each pair of
-sectors. Consequently its periodic Hamiltonian has no eigenvalues in
-\((0,1)\), independently of the chain length.
+sectors. Consequently every eigenvalue of its periodic Hamiltonian is `0`
+or at least `1`, independently of the chain length.
 
 This is the commuting-projection argument needed when the common physical
 space in Schuch–Pérez-García–Cirac, arXiv:1010.3732, Section II.F.2,
 equation eq:1d-sym:jointsym, also retains unused physical states. The zero
-spectral value requires a separate ground-state identification.
+eigenvalue requires a separate ground-state identification.
 -/
 
 open scoped Matrix MatrixOrder ComplexOrder InnerProductSpace Kronecker
@@ -64,18 +64,19 @@ theorem hamiltonian_translationInvariant_quadratic_gap_of_commuting_projection
   simpa only [one_mul, P, ← map_sum, Interaction.hamiltonian, Interaction.translates_term,
     bondMatrixEquiv_symm_eq_toEuclideanLin] using h
 
-/-- The spectrum of a periodic sum of commuting projection-valued local
-terms is contained in \(\{0\}\cup[1,\infty)\). Source context:
+/-- Every eigenvalue of a periodic sum of commuting projection-valued local
+terms is `0` or at least `1`. No ground state is asserted. Source context:
 arXiv:1010.3732, Sections II.D.2 and II.F.2. -/
-theorem hamiltonian_translationInvariant_spectrum_gap_one_of_commuting_projection
+theorem hamiltonian_translationInvariant_eigenvalue_gap_one_of_commuting_projection
     {d N : ℕ} (A : MPOTensor.ChainOperator d 2)
     (hA : IsStarProjection A) (hN : 2 ≤ N)
     (hcomm : ∀ i j : Fin N,
       Commute (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) A)
         (placeAlong (X := fun _ ↦ Fin d) (ringWindow hN j) A)) :
-    ∀ z ∈ spectrum ℂ (Interaction.translationInvariant hN A).hamiltonian,
-      0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) :=
-  spectrum_separated_of_quadratic_gap _
+    ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) μ →
+      μ = 0 ∨ (1 : ℂ) ≤ μ :=
+  forall_hasEigenvalue_of_quadratic_gap _
     (Interaction.posSemidef_hamiltonian fun _ ↦
       posSemidef_placeAlong (X := fun _ ↦ Fin d) _ (Matrix.nonneg_iff_posSemidef.mp hA.nonneg))
     (hamiltonian_translationInvariant_quadratic_gap_of_commuting_projection A hA hN hcomm)
@@ -153,21 +154,21 @@ theorem sectorBondInteraction_isStarProjection {K d : ℕ}
   exact Matrix.isStarProjection_reindex _ _
     (Matrix.isStarProjection_reindex (Matrix.etaPairSpatialBlockEquiv e) _ hDiag)
 
-/-- Every periodic Hamiltonian of a projection-valued sector bond
-interaction has spectrum in \(\{0\}\cup[1,\infty)\), uniformly in
-its sector dimensions and chain length. This includes identity penalties
-on unused sectors. Source context: arXiv:1010.3732, Sections II.D.2 and
-II.F.2; Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)–(3). -/
-theorem sectorBondInteraction_spectrum_gap_one {K d N : ℕ}
+/-- Every eigenvalue of every periodic Hamiltonian of a projection-valued
+sector bond interaction is `0` or at least `1`, uniformly in its sector
+dimensions and chain length. This includes identity penalties on unused
+sectors. Source context: arXiv:1010.3732, Sections II.D.2 and II.F.2;
+Beigi, J. Phys. A 45 (2012) 025306, Section III, equations (2)–(3). -/
+theorem sectorBondInteraction_eigenvalue_gap_one {K d N : ℕ}
     (dl dr : Fin K → ℕ) (e : Matrix.EtaSiteIndex K dl dr ≃ Fin d)
     (η : (q h : Fin K) →
       Matrix (Matrix.EtaEdgeIndex dl dr q h) (Matrix.EtaEdgeIndex dl dr q h) ℂ)
     (hη : ∀ q h, IsStarProjection (η q h)) (hN : 2 ≤ N) :
-    ∀ z ∈ spectrum ℂ
-      (Interaction.translationInvariant hN (sectorBondInteraction dl dr e η)).hamiltonian,
-      0 ≤ z.re ∧ (z.re = 0 ∨ 1 ≤ z.re) := by
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (Interaction.translationInvariant hN (sectorBondInteraction dl dr e η)).hamiltonian) μ →
+      μ = 0 ∨ (1 : ℂ) ≤ μ := by
   let : NeZero N := ⟨by omega⟩
-  exact hamiltonian_translationInvariant_spectrum_gap_one_of_commuting_projection _
+  exact hamiltonian_translationInvariant_eigenvalue_gap_one_of_commuting_projection _
     (sectorBondInteraction_isStarProjection dl dr e η hη) hN
     (sectorBondInteraction_translate_commute dl dr e η hN)
 

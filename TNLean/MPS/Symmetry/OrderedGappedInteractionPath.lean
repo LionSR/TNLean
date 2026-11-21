@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.CommonKernelSpectralGap
+import QICLean.ManyBody.Hamiltonian.KernelGap
 import TNLean.MPS.Symmetry.GappedInteractionPath
 import Mathlib.Analysis.Matrix.Order
 import Mathlib.Analysis.Normed.Module.Convex
@@ -12,9 +12,10 @@ import Mathlib.Analysis.Normed.Module.Convex
 # A gapped path from ordered interactions with common ground spaces
 
 Suppose two positive two-site interactions satisfy an operator inequality.
-If their periodic Hamiltonians have the same zero modes and the smaller
-Hamiltonian has a uniform gap above zero, affine interpolation preserves
-that gap. Endpoint symmetry is also preserved throughout the path.
+If the zero modes of the smaller periodic Hamiltonian are zero modes of the
+larger one and the smaller Hamiltonian is uniformly gapped above zero, affine
+interpolation preserves that gap (`ManyBody.IsGapped.of_le`). Endpoint
+symmetry is also preserved throughout the path.
 
 The ordered affine comparison is a lemma proved here; it is not stated in
 the cited source. It is applied to compare independent-bond interactions
@@ -39,10 +40,11 @@ open ManyBody
 namespace MPSTensor
 
 /-- Ordered positive interactions with common periodic zero modes are
-connected by affine interpolation with the original uniform spectral gap.
-The zero modes and gap are hypotheses of this comparison. The comparison is
-proved here and is not stated in the source; it is applied in the isometric
-fixed-point construction of arXiv:1010.3732, Section II.F.2. -/
+connected by affine interpolation with the original uniform gap above zero.
+The zero modes and gap (`IsGapped` at energy `0`) are hypotheses of this
+comparison. The comparison is proved here and is not stated in the source;
+it is applied in the isometric fixed-point construction of arXiv:1010.3732,
+Section II.F.2. -/
 noncomputable def orderedGappedInteractionPath
     {G : Type} [Group G] {d : ℕ}
     (U : G →* Matrix.unitaryGroup (Fin d) ℂ)
@@ -52,11 +54,8 @@ noncomputable def orderedGappedInteractionPath
     (hker : ∀ (N : ℕ) (hN : 2 ≤ N) (x : Cfg d N → ℂ),
       (Interaction.translationInvariant hN A).hamiltonian.mulVec x = 0 →
         (Interaction.translationInvariant hN B).hamiltonian.mulVec x = 0)
-    (hzero : ∀ (N : ℕ) (hN : 2 ≤ N), ∃ x : EuclideanSpace ℂ (Cfg d N),
-      x ≠ 0 ∧ Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian x = 0)
     (hgap : ∃ δ : ℝ, 0 < δ ∧ ∀ (N : ℕ) (hN : 2 ≤ N),
-      ∀ z ∈ spectrum ℂ (Interaction.translationInvariant hN A).hamiltonian,
-        z.re = 0 ∨ δ ≤ z.re)
+      IsGapped (Interaction.translationInvariant hN A).hamiltonian 0 δ)
     (hSymA : ∀ (N : ℕ) (hN : 2 ≤ N) (g : G),
       Commute (Interaction.translationInvariant hN A).hamiltonian
         (Matrix.finKronecker fun _ : Fin N => (U g : Matrix (Fin d) (Fin d) ℂ)))
@@ -102,9 +101,8 @@ noncomputable def orderedGappedInteractionPath
           (sub_nonneg.mpr hγ.2) hγ.1 (by ring)
       _ ≤ 1 := by nlinarith [mul_le_mul_of_nonneg_left hAnorm (sub_nonneg.mpr hγ.2),
         mul_le_mul_of_nonneg_left hBnorm hγ.1]
-  · obtain ⟨δ, hδ, hSpec⟩ := hgap
-    refine ⟨δ, hδ, ?_⟩
-    intro γ hγ N hN
+  · obtain ⟨δ, hδ, hGap⟩ := hgap
+    refine ⟨δ, hδ, fun γ hγ N hN ↦ ⟨0, ?_⟩⟩
     have hHA : (Interaction.translationInvariant hN A).hamiltonian.PosSemidef :=
       Interaction.posSemidef_hamiltonian fun i ↦
         posSemidef_placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) hA
@@ -113,14 +111,12 @@ noncomputable def orderedGappedInteractionPath
       simp only [Interaction.hamiltonian]
       exact Finset.sum_le_sum fun i _ ↦
         placeAlong_le_placeAlong (X := fun _ ↦ Fin d) (ringWindow hN i) hAB
-    have h := Matrix.spectrum_gap_interpolation_of_le_of_nontrivial_kernel
-      (Interaction.translationInvariant hN A).hamiltonian
-      (Interaction.translationInvariant hN B).hamiltonian
-      hHA hHAB (hker N hN) δ γ hγ.1
-      (Matrix.orthogonal_quadratic_gap_of_spectrum_separated _ hHA.isHermitian
-        (hSpec N hN)) (hzero N hN)
-    rw [← hHam] at h
-    exact ⟨0, h.1, by simpa using h.2⟩
+    rw [hHam]
+    refine (hGap N hN).of_le hHA ?_ fun x hx ↦ ?_
+    · rw [Matrix.le_iff, add_sub_cancel_left]
+      exact (Matrix.le_iff.mp hHAB).smul hγ.1
+    · rw [mem_groundSpace_iff_mulVec, Complex.ofReal_zero, zero_smul] at hx ⊢
+      simp [Matrix.add_mulVec, Matrix.smul_mulVec, Matrix.sub_mulVec, hx, hker N hN _ hx]
   · intro γ hγ g N hN
     rw [hHam]
     exact (hSymA N hN g).add_left (((hSymB N hN g).sub_left (hSymA N hN g)).smul_left γ)

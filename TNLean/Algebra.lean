@@ -27,8 +27,6 @@ import TNLean.Algebra.CocycleCommPhase
 import TNLean.Algebra.CocycleRestriction
 import TNLean.Algebra.CommonBufferLength
 import TNLean.Algebra.CommonFixedSubmodule
-import TNLean.Algebra.CommonKernelGapInterpolation
-import TNLean.Algebra.CommonKernelSpectralGap
 import TNLean.Algebra.CommutingStarSubalgebraProduct
 import TNLean.Algebra.ComplexOfInt
 import TNLean.Algebra.ComplexOfRing

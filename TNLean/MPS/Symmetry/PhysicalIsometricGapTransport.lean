@@ -85,22 +85,6 @@ theorem isometricInteractionExtension_posSemidef {d m : ℕ}
     (IsStarProjection.zero _)).nonneg.trans
       (isometricInteractionExtension_mono E (Matrix.nonneg_iff_posSemidef.mpr hA))
 
-private theorem normSq_sum_eq {ι : Type*} [Fintype ι]
-    (v : EuclideanSpace ℂ ι) :
-    (∑ i, Complex.normSq (v i)) = ‖v‖ ^ 2 := by
-  simp_rw [Complex.normSq_eq_norm_sq]
-  exact (EuclideanSpace.norm_sq_eq v).symm
-
-private theorem re_dotProduct_eq_re_inner {ι : Type*} [Fintype ι] [DecidableEq ι]
-    (M : Matrix ι ι ℂ) (v : EuclideanSpace ℂ ι) :
-    (star v.ofLp ⬝ᵥ (M *ᵥ v.ofLp)).re =
-      (⟪Matrix.toEuclideanLin M v, v⟫_ℂ).re := by
-  rw [← RCLike.re_eq_complex_re, inner_re_symm, RCLike.re_eq_complex_re,
-    EuclideanSpace.inner_eq_star_dotProduct]
-  change (star v.ofLp ⬝ᵥ (M *ᵥ v.ofLp)).re =
-    ((M *ᵥ v.ofLp) ⬝ᵥ star v.ofLp).re
-  rw [dotProduct_comm]
-
 /-- Every vector perpendicular to the included chain has energy at least
 its squared norm under the extended Hamiltonian. Only local positivity is
 needed; the actual local terms may fail to commute. -/
@@ -120,14 +104,14 @@ theorem isometricInteractionExtension_inactive_energy_lower_bound {d m N : ℕ}
   have hP : P.PosSemidef := Interaction.posSemidef_hamiltonian fun _ ↦
     posSemidef_placeAlong (X := fun _ ↦ Fin m) _
       (Matrix.nonneg_iff_posSemidef.mp hProjection.nonneg)
-  have hSpec := hamiltonian_translationInvariant_spectrum_gap_one_of_commuting_projection _
+  have hSpec := hamiltonian_translationInvariant_eigenvalue_gap_one_of_commuting_projection _
     hProjection hN (isometricInteractionExtension_zero_translate_commute E hN)
   have hvP : v ∈ (LinearMap.ker (Matrix.toEuclideanLin P))ᗮ := by
     rwa [isometricInteractionExtension_zero_ker_eq_range E hE hN]
-  have hGap := Matrix.orthogonal_quadratic_gap_of_spectrum_separated P hP.isHermitian
-    (fun z hz => (hSpec z hz).2) v hvP
+  have hGap := (forall_hasEigenvalue_iff_re_inner (Δ := 1) hP).mp
+    (by simpa only [Complex.ofReal_one] using hSpec) v hvP
   have hEnergy : ‖v‖ ^ 2 ≤ (⟪Matrix.toEuclideanLin P v, v⟫_ℂ).re := by
-    simpa only [one_mul, normSq_sum_eq, re_dotProduct_eq_re_inner] using hGap
+    rwa [one_mul, ← RCLike.re_eq_complex_re, inner_re_symm, RCLike.re_eq_complex_re] at hGap
   have hOrder : P ≤ H := by
     simp only [P, H, Interaction.hamiltonian, Interaction.translates_term]
     exact Finset.sum_le_sum fun _ _ ↦ placeAlong_le_placeAlong _
@@ -220,80 +204,34 @@ theorem isometricInteractionExtension_ker_eq_span_of_posSemidef {d m N : ℕ}
   rw [isometricInteractionExtension_ker_eq_map_of_posSemidef E hE hA hN,
     hground, Submodule.map_span, Set.image_singleton]
 
-/-- A lower quadratic-form gap transfers through a physical inclusion with
-the minimum of the original gap and the unit unused-state penalty. -/
-theorem isometricInteractionExtension_quadratic_gap {d m N : ℕ}
+/-- **Gap transfer through a physical inclusion.** If every eigenvalue of the original periodic
+Hamiltonian is `0` or at least `δ`, then every eigenvalue of the enlarged one is `0` or at least
+\(\min(\delta,1)\), without commutativity. This does not assert a zero mode when the original
+Hamiltonian has trivial kernel, and no sign of `δ` is assumed. -/
+theorem isometricInteractionExtension_eigenvalue_gap {d m N : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
     {A : MPOTensor.ChainOperator d 2} (hA : A.PosSemidef) (hN : 2 ≤ N) {δ : ℝ}
-    (hGap : ∀ x ∈ (LinearMap.ker
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian))ᗮ,
-      δ * ‖x‖ ^ 2 ≤
-        (⟪Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian x,
-          x⟫_ℂ).re) :
-    ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian))ᗮ,
-      min δ 1 * ‖v‖ ^ 2 ≤ (⟪Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian v,
-          v⟫_ℂ).re := by
-  exact (physicalChainLinearIsometry E hE N).re_inner_ge_of_intertwines
-    (Matrix.isSymmetric_toEuclideanLin_iff.mpr
-      (Interaction.posSemidef_hamiltonian fun _ ↦ posSemidef_placeAlong (X := fun _ ↦ Fin m) _
-        (isometricInteractionExtension_posSemidef E hE hA)).isHermitian)
-    (physicalChainLinearIsometry_intertwines E hE hA.isHermitian hN)
-    hGap (physicalChainLinearIsometry_inactive_bound E hE hA hN)
-
-/-- A norm gap on the original periodic kernel complement gives the gap
-\(\min(\delta,1)\) on the full enlarged chain, without commutativity. -/
-theorem isometricInteractionExtension_norm_gap {d m N : ℕ}
-    (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
-    {A : MPOTensor.ChainOperator d 2} (hA : A.PosSemidef) (hN : 2 ≤ N)
-    {δ : ℝ} (hδ : 0 ≤ δ)
-    (hGap : ∀ x ∈ (LinearMap.ker
-        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian))ᗮ,
-      δ * ‖x‖ ≤
-        ‖Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian x‖) :
-    ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
-      (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian))ᗮ,
-      min δ 1 * ‖v‖ ≤ ‖Matrix.toEuclideanLin
-        (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian
-          v‖ := by
-  exact (physicalChainLinearIsometry E hE N).norm_gap_of_intertwines
-    (Matrix.isPositive_toEuclideanLin_iff.mpr
-      (Interaction.posSemidef_hamiltonian fun _ ↦ posSemidef_placeAlong (X := fun _ ↦ Fin m) _
-        (isometricInteractionExtension_posSemidef E hE hA)))
-    (Matrix.isPositive_toEuclideanLin_iff.mpr
-      (Interaction.posSemidef_hamiltonian fun _ ↦
-        posSemidef_placeAlong (X := fun _ ↦ Fin d) _ hA))
-    (physicalChainLinearIsometry_intertwines E hE hA.isHermitian hN)
-    hδ hGap (physicalChainLinearIsometry_inactive_bound E hE hA hN)
-
-/-- A spectral gap above zero transfers through an isometric physical
-inclusion with the bound \(\min(\delta,1)\). This does not assert a zero
-mode when the original Hamiltonian has trivial kernel. -/
-theorem isometricInteractionExtension_spectrum_gap {d m N : ℕ}
-    (E : Matrix (Fin m) (Fin d) ℂ) (hE : Eᴴ * E = 1)
-    {A : MPOTensor.ChainOperator d 2} (hA : A.PosSemidef) (hN : 2 ≤ N) {δ : ℝ}
-    (hGap : ∀ z ∈ spectrum ℂ (Interaction.translationInvariant hN A).hamiltonian,
-      z.re = 0 ∨ δ ≤ z.re) :
-    ∀ z ∈ spectrum ℂ
-      (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian,
-      0 ≤ z.re ∧ (z.re = 0 ∨ min δ 1 ≤ z.re) := by
-  have hQuad : ∀ x ∈ (LinearMap.ker
-      (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian))ᗮ,
-      δ * ‖x‖ ^ 2 ≤
-        (⟪Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian x,
-          x⟫_ℂ).re := by
-    intro x hx
-    simpa only [normSq_sum_eq, re_dotProduct_eq_re_inner] using
-      Matrix.orthogonal_quadratic_gap_of_spectrum_separated _
-        (Interaction.posSemidef_hamiltonian fun _ ↦
-          posSemidef_placeAlong (X := fun _ ↦ Fin d) _ hA).isHermitian
-        hGap x hx
-  apply Matrix.spectrum_separated_of_orthogonal_quadratic_gap _
-    (Interaction.posSemidef_hamiltonian fun _ ↦ posSemidef_placeAlong (X := fun _ ↦ Fin m) _
-      (isometricInteractionExtension_posSemidef E hE hA))
+    (hGap : ∀ μ : ℂ, Module.End.HasEigenvalue
+        (Matrix.toEuclideanLin (Interaction.translationInvariant hN A).hamiltonian) μ →
+      μ = 0 ∨ (δ : ℂ) ≤ μ) :
+    ∀ μ : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
+        (Interaction.translationInvariant hN (isometricInteractionExtension E A)).hamiltonian) μ →
+      μ = 0 ∨ ((min δ 1 : ℝ) : ℂ) ≤ μ := by
+  have hPA : (Interaction.translationInvariant hN A).hamiltonian.PosSemidef :=
+    Interaction.posSemidef_hamiltonian fun _ ↦ posSemidef_placeAlong (X := fun _ ↦ Fin d) _ hA
+  have hPE : (Interaction.translationInvariant hN
+      (isometricInteractionExtension E A)).hamiltonian.PosSemidef :=
+    Interaction.posSemidef_hamiltonian fun _ ↦ posSemidef_placeAlong (X := fun _ ↦ Fin m) _
+      (isometricInteractionExtension_posSemidef E hE hA)
+  rw [forall_hasEigenvalue_iff_re_inner hPA] at hGap
+  rw [forall_hasEigenvalue_iff_re_inner hPE]
   intro v hv
-  simpa only [normSq_sum_eq, re_dotProduct_eq_re_inner] using
-    isometricInteractionExtension_quadratic_gap E hE hA hN hQuad v hv
+  rw [← RCLike.re_eq_complex_re, inner_re_symm, RCLike.re_eq_complex_re]
+  refine (physicalChainLinearIsometry E hE N).re_inner_ge_of_intertwines
+    (Matrix.isSymmetric_toEuclideanLin_iff.mpr hPE.isHermitian)
+    (physicalChainLinearIsometry_intertwines E hE hA.isHermitian hN)
+    (fun x hx ↦ ?_) (physicalChainLinearIsometry_inactive_bound E hE hA hN) v hv
+  rw [← RCLike.re_eq_complex_re, inner_re_symm, RCLike.re_eq_complex_re]
+  exact hGap x hx
 
 end MPSTensor

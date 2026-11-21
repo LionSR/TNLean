@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.CommonKernelSpectralGap
+import QICLean.ManyBody.Hamiltonian.KernelGap
 import TNLean.MPS.Symmetry.InteractionHamiltonianSymmetry
 import TNLean.MPS.Symmetry.ParentHamiltonianSymmetry
 import TNLean.MPS.ParentHamiltonian.CompactParentGap
@@ -26,36 +26,6 @@ open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 
 namespace MPSTensor
 
-/-- A norm gap for a positive matrix bounds its nonzero spectral values. -/
-private theorem spectrum_separated_of_orthogonal_norm_gap
-    {n : Type*} [Fintype n] [DecidableEq n]
-    (M : Matrix n n ℂ) (hM : M.PosSemidef) {δ : ℝ}
-    (hGap : ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin M))ᗮ,
-      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin M v‖) :
-    ∀ z ∈ spectrum ℂ M, 0 ≤ z.re ∧ (z.re = 0 ∨ δ ≤ z.re) := by
-  intro z hz
-  rw [hM.isHermitian.spectrum_eq_image_range] at hz
-  obtain ⟨r, ⟨i, rfl⟩, rfl⟩ := hz
-  have hNonneg := hM.eigenvalues_nonneg i
-  refine ⟨by simpa using hNonneg, ?_⟩
-  by_cases hzero : hM.isHermitian.eigenvalues i = 0
-  · left
-    simpa using hzero
-  · right
-    let v := hM.isHermitian.eigenvectorBasis i
-    have hNorm : ‖v‖ = 1 := hM.isHermitian.eigenvectorBasis.orthonormal.norm_eq_one i
-    have hEigen : Matrix.toEuclideanLin M v = (hM.isHermitian.eigenvalues i : ℂ) • v :=
-      hM.isHermitian.toEuclideanCLM_eigenvectorBasis i
-    have hSym : (Matrix.toEuclideanLin M).IsSymmetric :=
-      Matrix.isSymmetric_toEuclideanLin_iff.mpr hM.isHermitian
-    have hOrth : v ∈ (LinearMap.ker (Matrix.toEuclideanLin M))ᗮ := by
-      rw [LinearMap.orthogonal_ker, hSym.adjoint_eq]
-      refine ⟨(hM.isHermitian.eigenvalues i : ℂ)⁻¹ • v, ?_⟩
-      rw [map_smul, hEigen, smul_smul, inv_mul_cancel₀, one_smul]
-      exact_mod_cast hzero
-    have h := hGap v hOrth
-    simpa [hNorm, hEigen, norm_smul, Complex.norm_real, abs_of_nonneg hNonneg] using h
-
 /-- Canonical parent matrices vary continuously along an injective family.
 Source: arXiv:1010.3732, Section II.C and Appendix A, continuity of local
 parent interactions. -/
@@ -74,29 +44,24 @@ theorem continuous_parentInteraction_matrix_family
   simpa only [parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix,
     Function.comp_def, b, LinearMap.coe_toContinuousLinearMap] using hMat.comp hT
 
-/-- For an injective tensor, a canonical parent norm gap is a spectral gap
-above the zero ground energy. Source: arXiv:1010.3732, Section II.C and
-Appendix A, spectral interpretation of the parent gap. -/
-theorem hamiltonian_translationInvariant_parent_spectrum_gap
+/-- For an injective tensor, a canonical parent norm gap is a gap above the zero ground energy.
+Source: arXiv:1010.3732, Section II.C and Appendix A, spectral interpretation of the parent
+gap. -/
+theorem isGapped_hamiltonian_translationInvariant_parent
     {d D N : ℕ} [NeZero D] (A : MPSTensor d D) (hInj : Kraus.IsInjective A)
     (hN : 2 ≤ N) {δ : ℝ}
     (hGap : ∀ v ∈ (LinearMap.ker (parentHamiltonianES A 2 N))ᗮ,
       δ * ‖v‖ ≤ ‖parentHamiltonianES A 2 N v‖) :
-    let H := (ManyBody.Interaction.translationInvariant hN
-      (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian
-    (0 : ℂ) ∈ spectrum ℂ H ∧
-      ∀ z ∈ spectrum ℂ H, 0 ≤ z.re ∧ (z.re = 0 ∨ δ ≤ z.re) := by
+    ManyBody.IsGapped (ManyBody.Interaction.translationInvariant hN
+      (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian 0 δ := by
   let H := (ManyBody.Interaction.translationInvariant hN
     (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian
   have hH : parentHamiltonianES A 2 N = Matrix.toEuclideanLin H :=
     parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow A hN
-  constructor
-  · change (0 : ℂ) ∈ spectrum ℂ H
-    rw [← Matrix.spectrum_toLpLin (p := 2)]
-    apply Module.End.hasEigenvalue_iff_mem_spectrum.mp
-    rw [Module.End.hasEigenvalue_iff, Module.End.eigenspace_zero]
-    change LinearMap.ker (Matrix.toEuclideanLin H) ≠ ⊥
-    rw [← hH, ker_parentHamiltonianES_two_eq_range_periodicMpvLineMap
+  have hPos : H.PosSemidef := Matrix.isPositive_toEuclideanLin_iff.mp
+    (hH ▸ parentHamiltonianES_isPositive A 2 N)
+  refine (ManyBody.isGapped_zero_iff_norm hPos).mpr ⟨?_, ?_⟩
+  · rw [ManyBody.groundSpace_zero, ← hH, ker_parentHamiltonianES_two_eq_range_periodicMpvLineMap
       A hInj hN]
     intro hbot
     have hv : periodicMpvLineMap A N 1 ∈ (periodicMpvLineMap A N).range :=
@@ -106,13 +71,8 @@ theorem hamiltonian_translationInvariant_parent_spectrum_gap
       simpa using hv
     exact one_ne_zero (periodicMpvLineMap_injective_of_isInjective A
       hInj hN heq)
-  · have hPos : H.PosSemidef := Matrix.isPositive_toEuclideanLin_iff.mp
-      (hH ▸ parentHamiltonianES_isPositive A 2 N)
-    have hNormGap : ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin H))ᗮ,
-        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin H v‖ := by
-      rw [← hH]
-      exact hGap
-    simpa only [zero_add] using spectrum_separated_of_orthogonal_norm_gap H hPos hNormGap
+  · rw [← hH]
+    exact hGap
 
 /-- A continuous one-site injective tensor path with fixed unitary on-site
 symmetry determines a symmetric uniformly gapped path of its canonical
@@ -147,10 +107,9 @@ noncomputable def canonicalInjectiveGappedPath
       exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths B
         (continuousOn_iff_continuous_domRestrict.mp hA)
         (fun γ => hInj γ γ.property) isCompact_univ
-    refine ⟨δ, hδ, fun γ hγ N hN => ⟨0, ?_⟩⟩
-    simpa only [Complex.ofReal_zero, zero_add] using
-      hamiltonian_translationInvariant_parent_spectrum_gap (A γ) (hInj γ hγ) hN
-        (hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN)
+    exact ⟨δ, hδ, fun γ hγ N hN => ⟨0,
+      isGapped_hamiltonian_translationInvariant_parent (A γ) (hInj γ hγ) hN
+        (hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN)⟩⟩
   symmetric γ hγ g N hN := by
     rw [← onSiteTensorPow_eq_finKronecker]
     have hSym := hamiltonian_translationInvariant_commute_onSiteTensorPow (U g)

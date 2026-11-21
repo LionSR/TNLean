@@ -210,12 +210,25 @@ theorem exists_uniform_arbitraryPhysicalMixed_periodic_path_gap
     (isInjective_polarPosTensor h₀) (isInjective_polarPosTensor h₁)
   refine ⟨min δ 1, lt_min hδ zero_lt_one, min_le_right _ _, ?_⟩
   intro γ N hN
-  apply isometricInteractionExtension_norm_gap _
-    (commonFixedPointInclusion_isometry _ d₀ d₁)
-    (mixedEndpointInteractionMatrix_posSemidef _ _ γ) hN hδ.le
-  rw [← periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian,
-    toEuclideanLin_mixedEndpointInteractionMatrix]
-  exact hgap γ N hN
+  let h := mixedEndpointInteractionMatrix (polarPosTensor A₀) (polarPosTensor A₁) γ
+  have hA : h.PosSemidef := mixedEndpointInteractionMatrix_posSemidef _ _ γ
+  have hHA : (Interaction.translationInvariant hN h).hamiltonian.PosSemidef :=
+    Interaction.posSemidef_hamiltonian fun _ ↦
+      posSemidef_placeAlong (X := fun _ ↦ Fin ((D₀ + D₁) * (D₀ + D₁))) _ hA
+  have hHE : (Interaction.translationInvariant hN
+      (arbitraryPhysicalMixedInteraction A₀ A₁ γ)).hamiltonian.PosSemidef :=
+    Interaction.posSemidef_hamiltonian fun _ ↦
+      posSemidef_placeAlong (X := fun _ ↦ Fin ((((D₀ + D₁) * (D₀ + D₁)) + d₀) + d₁)) _
+        (arbitraryPhysicalMixedInteraction_posSemidef A₀ A₁ γ)
+  have hnorm : ∀ x ∈ (LinearMap.ker
+      (Matrix.toEuclideanLin (Interaction.translationInvariant hN h).hamiltonian))ᗮ,
+      δ * ‖x‖ ≤ ‖Matrix.toEuclideanLin (Interaction.translationInvariant hN h).hamiltonian x‖ := by
+    rw [← periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian,
+      toEuclideanLin_mixedEndpointInteractionMatrix]
+    exact hgap γ N hN
+  exact (forall_hasEigenvalue_iff_norm hHE).mp
+    (isometricInteractionExtension_eigenvalue_gap _ (commonFixedPointInclusion_isometry _ d₀ d₁)
+      hA hN ((forall_hasEigenvalue_iff_norm hHA).mpr hnorm))
 
 end MPOSymmetry
 end MPSTensor

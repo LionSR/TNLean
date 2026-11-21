@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.CommonPhysicalFixedPointGroundPath
 import TNLean.MPS.Symmetry.ExactMPSGroundPathComposition
-import TNLean.Algebra.CommonKernelGapInterpolation
+import QICLean.ManyBody.Hamiltonian.KernelGap
 
 /-!
 # Exact MPS ground states along the canonical fixed-point path
@@ -54,12 +54,6 @@ theorem hamiltonian_translationInvariant_affine_ker_eq_of_order {d N : ℕ}
       simp [hx]
     simpa only [LinearMap.mem_ker, Matrix.toEuclideanLin, Matrix.toLpLin_apply,
       WithLp.ofLp_toLp, WithLp.toLp_eq_zero] using hker hxES
-  have h := Matrix.gap_interpolation_of_le
-    (Interaction.translationInvariant hN A).hamiltonian
-    (Interaction.translationInvariant hN B).hamiltonian
-    hHA hAB' hker' 0 t ht
-    (fun x _ => by simpa only [zero_mul, RCLike.re_eq_complex_re] using
-      (RCLike.nonneg_iff.mp (hHA.dotProduct_mulVec_nonneg x.ofLp)).1)
   have hsum : (Interaction.translationInvariant hN (A + t • (B - A))).hamiltonian =
       (Interaction.translationInvariant hN A).hamiltonian +
         t • ((Interaction.translationInvariant hN B).hamiltonian -
@@ -67,8 +61,12 @@ theorem hamiltonian_translationInvariant_affine_ker_eq_of_order {d N : ℕ}
     simp only [Interaction.hamiltonian, Interaction.translates_term,
       RCLike.real_smul_eq_coe_smul (K := ℂ), placeAlong_add, placeAlong_smul, placeAlong_sub,
       Finset.sum_add_distrib, Finset.sum_sub_distrib, Finset.smul_sum, smul_sub]
-  rw [hsum]
-  exact h.2.1
+  rw [hsum, ← groundSpace_zero, ← groundSpace_zero]
+  refine groundSpace_zero_eq_of_le hHA ?_ fun x hx ↦ ?_
+  · rw [Matrix.le_iff, add_sub_cancel_left]
+    exact (Matrix.le_iff.mp hAB').smul ht
+  · rw [mem_groundSpace_iff_mulVec, Complex.ofReal_zero, zero_smul] at hx ⊢
+    simp [Matrix.add_mulVec, Matrix.smul_mulVec, Matrix.sub_mulVec, hx, hker' _ hx]
 
 /-- A constant MPS representative realizes an ordered affine comparison
 whose kernel is the prescribed zero-energy MPS line. Source context:

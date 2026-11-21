@@ -153,7 +153,7 @@ of the virtual projective representation.
 \begin{lemma}[Canonical interactions along a symmetric injective path]
     \label{thm:spt_canonical_injective_gapped_path}
     \lean{MPSTensor.continuous_parentInteraction_matrix_family,
-        MPSTensor.hamiltonian_translationInvariant_parent_spectrum_gap,
+        MPSTensor.isGapped_hamiltonian_translationInvariant_parent,
         MPSTensor.canonicalInjectiveGappedPath}
     \leanok
     \uses{def:spt_common_space_gapped_path}
@@ -391,13 +391,13 @@ of the virtual projective representation.
         MPSTensor.bondMatrixEquiv_symm_isSymmetricProjection,
         MPSTensor.sectorBondInteraction_isStarProjection,
         MPSTensor.sectorBondInteraction_translate_commute,
-        MPSTensor.sectorBondInteraction_spectrum_gap_one,
+        MPSTensor.sectorBondInteraction_eigenvalue_gap_one,
         Matrix.physicalSpectatorEdgeInteraction_isStarProjection,
         MPSTensor.physicalSpectatorBondInteraction_isStarProjection,
         MPSTensor.physicalSpectatorBondInteraction_translate_commute,
-        MPSTensor.physicalSpectatorBondInteraction_spectrum_gap_one,
+        MPSTensor.physicalSpectatorBondInteraction_eigenvalue_gap_one,
         MPSTensor.hamiltonian_translationInvariant_quadratic_gap_of_commuting_projection,
-        MPSTensor.hamiltonian_translationInvariant_spectrum_gap_one_of_commuting_projection}
+        MPSTensor.hamiltonian_translationInvariant_eigenvalue_gap_one_of_commuting_projection}
     \leanok
     \uses{def:spt_sector_bond_interaction}
     If every $\eta_{q,h}$ is an orthogonal projection, so is the
@@ -1659,7 +1659,7 @@ and the regrouping of physical registers into bonds.
     \label{lem:spt_independent_bond_gap}
     \lean{MPSTensor.bondPenalty_norm_le_one,
         MPSTensor.bondProductParentHamiltonian_posSemidef,
-        MPSTensor.bondProductParentHamiltonian_spectrum_gap_one,
+        MPSTensor.isGapped_bondProductParentHamiltonian,
         MPSTensor.normalizedBondInterpolation_parent_uniform_gap}
     \leanok
     \uses{thm:spt_bond_product_parent_gap, thm:spt_bond_parent_continuity}
@@ -1754,8 +1754,8 @@ and the regrouping of physical registers into bonds.
 \begin{lemma}[Spectral gap of the physical bond parent Hamiltonian]
     \label{thm:spt_physical_bond_parent_spectrum}
     \lean{MPSTensor.physicalBondProductParentHamiltonian_posSemidef,
-        MPSTensor.physicalBondProductParentHamiltonian_spectrum_gap_one,
-        MPSTensor.normalizedPhysicalBondInterpolation_parent_spectrum_gap_one}
+        MPSTensor.isGapped_physicalBondProductParentHamiltonian,
+        MPSTensor.isGapped_normalizedPhysicalBondInterpolation_parent}
     \leanok
     \uses{thm:spt_physical_bond_parent_gap}
     For every unit bond vector, and in particular for
@@ -1990,7 +1990,7 @@ and the regrouping of physical registers into bonds.
 
 \begin{definition}[Symmetric paths between weighted canonical parents]
     \label{def:spt_weighted_canonical_parent_path}
-    \lean{MPSTensor.hamiltonian_translationInvariant_normalizedBondInteraction_spectrum_gap_one,
+    \lean{MPSTensor.isGapped_hamiltonian_translationInvariant_normalizedBondInteraction,
         MPSTensor.weightedMatrixUnitParentComparisonPath,
         MPSTensor.weightedCanonicalFixedPointGappedPath}
     \leanok

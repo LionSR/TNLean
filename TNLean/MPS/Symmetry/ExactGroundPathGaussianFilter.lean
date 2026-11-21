@@ -64,28 +64,28 @@ theorem ExactMPSGroundPath.exists_uniform_ground_line_spectral_gap
   refine ⟨Δ, hΔ, ?_⟩
   intro γ hγ N hN
   obtain ⟨E, hEspec, hEmin, hline⟩ := Q.ground_line γ hγ N hN
-  obtain ⟨E', hE'spec, hE'gap⟩ := hgap γ hγ N hN
-  have hEE : E' = E := le_antisymm
-    (by simpa using (hE'gap _ hEspec).1)
-    (by simpa using hEmin _ hE'spec)
-  subst E'
+  obtain ⟨E', hE'⟩ := hgap γ hγ N hN
   let H := (Interaction.translationInvariant hN (P.interaction γ)).hamiltonian
+  have hmem (μ : ℂ) : μ ∈ spectrum ℂ H ↔ Module.End.HasEigenvalue (Matrix.toEuclideanLin H) μ := by
+    rw [← Matrix.spectrum_toLpLin (p := 2), Module.End.hasEigenvalue_iff_mem_spectrum]
+  have hEE : E' = E := by
+    refine le_antisymm ?_ ?_
+    · rcases hE'.2 E ((hmem E).mp hEspec) with h | h
+      · exact (Complex.ofReal_inj.mp h).ge
+      · linarith [Complex.real_le_real.mp h]
+    · simpa using hEmin _ ((hmem E').mpr (Module.End.hasEigenvalue_iff.mpr hE'.1))
+  subst E'
   have hH : H.IsHermitian := Interaction.isHermitian_hamiltonian
     (Interaction.isHermitian_translates_term _ (P.hermitian γ hγ))
-  refine ⟨E, hH, ?_, ?_⟩
-  · have hker : ManyBody.groundSpace H E =
-        LinearMap.ker (Matrix.toEuclideanLin (H - (E : ℂ) • 1)) := by
-      ext x
-      rw [ManyBody.mem_groundSpace_iff]
-      simp only [LinearMap.mem_ker, map_sub, map_smul, LinearMap.sub_apply,
-        LinearMap.smul_apply, Matrix.toLpLin_one, LinearMap.id_apply, sub_eq_zero]
-    rw [hker]
-    exact hline
-  · intro k
-    have hk : (hH.eigenvalues k : ℂ) ∈ spectrum ℂ H := by
-      rw [hH.spectrum_eq_image_range]
-      exact ⟨hH.eigenvalues k, ⟨k, rfl⟩, rfl⟩
-    simpa using (hE'gap _ hk).2
+  refine ⟨E, hH, ?_, ((isGapped_iff_eigenvalues hH).mp hE').2⟩
+  have hker : ManyBody.groundSpace H E =
+      LinearMap.ker (Matrix.toEuclideanLin (H - (E : ℂ) • 1)) := by
+    ext x
+    rw [ManyBody.mem_groundSpace_iff]
+    simp only [LinearMap.mem_ker, map_sub, map_smul, LinearMap.sub_apply,
+      LinearMap.smul_apply, Matrix.toLpLin_one, LinearMap.id_apply, sub_eq_zero]
+  rw [hker]
+  exact hline
 
 /-- The physical gap of an exact MPS path implies Gaussian suppression of
 excited ground-vector components and of centered observables, with the same

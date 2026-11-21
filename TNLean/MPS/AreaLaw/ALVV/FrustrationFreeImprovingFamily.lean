@@ -12,7 +12,7 @@ import QICLean.Analysis.ViableSubspaceCoordinates
 import QICLean.Analysis.WeightedProjection
 import QICLean.ManyBody.Hamiltonian.Models
 import QICLean.Algebra.OperatorSchmidtPartition
-import TNLean.Algebra.CommonKernelSpectralGap
+import QICLean.ManyBody.Hamiltonian.KernelGap
 import QICLean.ManyBody.Sites.Twirl
 import TNLean.MPS.AreaLaw.ALVV.FrustrationFreeThreeRegion
 import TNLean.MPS.AreaLaw.PhysicalIntervalTransport
