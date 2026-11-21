@@ -8,7 +8,7 @@ import TNLean.MPS.MPDO.BNTMultiplicityNormalization
 import TNLean.MPS.MPDO.CPSVBlocking
 import TNLean.MPS.MPDO.RFPPositiveFusionDecomposition
 import TNLean.MPS.MPDO.VerticalBlockedOperatorRepresentations
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # The two-site multiplicity spectrum from the BNT algebra clause

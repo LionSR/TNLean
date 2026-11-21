@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Data.Matrix.PEquiv
-import TNLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.MPDO.TwistedDimer

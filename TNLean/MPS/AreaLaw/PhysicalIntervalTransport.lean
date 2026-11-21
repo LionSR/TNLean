@@ -6,8 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.RetainedCoreFamilies
 import TNLean.MPS.AreaLaw.TraceCoreSlices
 import QICLean.ManyBody.Sites.Lattice.Chain
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.SupportedMatrixElements
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.ManyBody.Sites.ProductVector
 import QICLean.Entropy.SupportedMarginalTails
 import QICLean.Entropy.FilterMoment
 import QICLean.ManyBody.Sites.RegionState

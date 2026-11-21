@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.MatrixSqrt
 import QICLean.Channel.Primitive
-import TNLean.Algebra.MatrixCyclicPathSum
+import QICLean.Algebra.MatrixCyclicPathSum
 import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.RFP.Defs
 

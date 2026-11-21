@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.UnitaryGeneralLinearInverse
+import QICLean.Algebra.IsometricFrameEmbedding
 import TNLean.MPS.Symmetry.GlobalVirtualGauge
 import TNLean.MPS.Symmetry.VaryingSupportPhaseInvariance
 
@@ -29,7 +29,7 @@ set_option linter.mathlibStandardSet true
 
 open scoped Matrix
 
-open scoped TNLean.Algebra.ScalarCohomology
+open scoped ScalarCohomology
 
 namespace Matrix
 

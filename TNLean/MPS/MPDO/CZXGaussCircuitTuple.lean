@@ -4,11 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Basic.Complex.Basic
-import TNLean.Algebra.BinaryCharacterSum
-import TNLean.Algebra.GeneralizeDecide
-import TNLean.Algebra.HypercubePhasePotential
-import TNLean.Algebra.MonomialGaussOperator
-import TNLean.Algebra.ZMod2Representation
+import QICLean.Algebra.BinaryCharacterSum
+import QICLean.Algebra.GeneralizeDecide
+import QICLean.Algebra.HypercubePhasePotential
+import QICLean.Representation.GaussOperator
+import QICLean.Representation.ZMod2Representation
 
 /-!
 # The displayed CZX circuit tuple and its local Gauss operator
@@ -380,7 +380,7 @@ theorem eExponent_barFlip (x : Fin 4 → ZMod 2) : eExponent (barFlip x) = fExpo
 operator of the circuit tuple. -/
 def localPerm :
     Equiv.Perm ((Fin 2 → Fin 4) × (Multiplicative (ZMod 2) × Multiplicative (ZMod 2))) :=
-  matterBarFlip.prodCongr (TNLean.Algebra.gaussLegAction gen)
+  matterBarFlip.prodCongr (GaussLaw.gaussLegAction gen)
 
 /-- The phase $i^{q(s)}$ of the local Gauss operator of the circuit tuple. -/
 def localPhase (s : (Fin 2 → Fin 4) × (Multiplicative (ZMod 2) × Multiplicative (ZMod 2))) :
@@ -398,7 +398,7 @@ circuit tuple into the local Gauss operator gives the monomial operator
 $G\ket{s}=i^{q(s)}\ket{\sigma(s)}$ with $\sigma(s)=(\overline x,a+1,a'+1)$ and
 the phase table defined by `phaseExponent`. -/
 theorem gaussOperator_circuitTuple_gen :
-    TNLean.Algebra.gaussOperator circuitTuple gen = monomial localPerm localPhase := by
+    GaussLaw.gaussOperator circuitTuple gen = monomial localPerm localPhase := by
   let σ : Multiplicative (ZMod 2) → Multiplicative (ZMod 2) → Equiv.Perm (Fin 2 → Fin 4) :=
     fun a _ ↦ if Multiplicative.toAdd a = 0 then 1 else matterBarFlip
   let φ : Multiplicative (ZMod 2) → Multiplicative (ZMod 2) → (Fin 2 → Fin 4) → ℂ :=
@@ -408,8 +408,8 @@ theorem gaussOperator_circuitTuple_gen :
   have hR : ∀ a b, (circuitTuple a b : Matrix (Fin 2 → Fin 4) (Fin 2 → Fin 4) ℂ) =
       monomial (σ a b) (φ a b) := by
     intro a b
-    rcases MPSTensor.zmod2_cases a with rfl | rfl <;>
-      rcases MPSTensor.zmod2_cases b with rfl | rfl
+    rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
+      rcases Multiplicative.zmod2_cases b with rfl | rfl
     · simp [σ, φ, monomial_one]
     · simp [σ, φ, monomial_one]
     · simp only [circuitTuple_gen_one, w_eq, matterMatrix_monomial, σ, φ, toAdd_ofAdd,
@@ -418,18 +418,18 @@ theorem gaussOperator_circuitTuple_gen :
     · simp only [circuitTuple_gen_gen, tildeLambda_eq, matterMatrix_monomial, σ, φ, toAdd_ofAdd,
         one_ne_zero, ↓reduceIte]
       rfl
-  rw [TNLean.Algebra.gaussOperator_eq_monomial circuitTuple σ φ hR gen]
+  rw [GaussLaw.gaussOperator_eq_monomial circuitTuple σ φ hR gen]
   congr 1
   · ext ⟨i, a, b⟩ : 1
-    rcases MPSTensor.zmod2_cases a with rfl | rfl
+    rcases Multiplicative.zmod2_cases a with rfl | rfl
     · simp [σ, localPerm, gen_inv, matterBarFlip_symm]
     · simp [σ, localPerm]
       rfl
   · funext ⟨i, a, b⟩
-    simp only [TNLean.Algebra.gaussMonomialPhase, localPhase, σ, φ,
-      TNLean.Algebra.gaussLegAction_apply]
-    rcases MPSTensor.zmod2_cases a with rfl | rfl <;>
-      rcases MPSTensor.zmod2_cases b with rfl | rfl
+    simp only [GaussLaw.gaussMonomialPhase, localPhase, σ, φ,
+      GaussLaw.gaussLegAction_apply]
+    rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
+      rcases Multiplicative.zmod2_cases b with rfl | rfl
     · simp [gen_inv, matterBarFlip_symm, fExponent_barFlip, phaseExponent_zero_zero,
         iPow_add, iPow_two_mul_cast, ZMod.neg_one_pow_val_add, Complex.star_def,
         show ((1 : ZMod 2)).val = 1 from rfl]

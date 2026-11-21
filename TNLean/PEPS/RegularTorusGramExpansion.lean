@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusOperatorString
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.LinearAlgebra.Matrix.Permutation
 

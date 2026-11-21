@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.PowerProjector
-import TNLean.Algebra.MatrixL2Contraction
+import QICLean.Analysis.MatrixL2Contraction
 import QICLean.Probability.MatrixBernstein
 import Mathlib.MeasureTheory.Integral.Pi
 import Mathlib.Probability.UniformOn

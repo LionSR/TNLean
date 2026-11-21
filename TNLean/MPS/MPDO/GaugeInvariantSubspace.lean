@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.CommonFixedSubmodule
-import TNLean.Algebra.UnitaryCompletionClass
+import QICLean.Algebra.CommonFixedSubmodule
+import QICLean.Representation.UnitaryCompletionClass
 import TNLean.MPS.MPDO.GaussProjectorPlacement
 
 /-!
@@ -220,14 +220,14 @@ def gaussWindowOperator
     Matrix (Fin 2 → Fin (Fintype.card (Fin d × G)))
       (Fin 2 → Fin (Fintype.card (Fin d × G))) ℂ :=
   Matrix.reindexAlgEquiv ℂ ℂ (gaussLocalCoordinateEquiv d G)
-    (TNLean.Algebra.gaussOperator R g)
+    (GaussLaw.gaussOperator R g)
 
 theorem gaussWindowOperator_apply
     (R : G → G → Matrix.unitaryGroup (Fin 2 → Fin d) ℂ) (g : G)
     (u y : (Fin 2 → Fin d) × (G × G)) :
     gaussWindowOperator d G R g (gaussLocalCoordinateEquiv d G u)
         (gaussLocalCoordinateEquiv d G y) =
-      TNLean.Algebra.gaussOperator R g u y := by
+      GaussLaw.gaussOperator R g u y := by
   simp only [gaussWindowOperator, Matrix.coe_reindexAlgEquiv,
     Matrix.reindex_apply, Matrix.submatrix_apply, Equiv.symm_apply_apply]
 
@@ -259,7 +259,7 @@ lies in the defect subspace of the two labels adjacent to that window. This is
 the local support hypothesis on the matter defect states of FBC25
 (arXiv:2502.20257, lines 4325--4335). -/
 def HasDefectSupport (hN : 2 ≤ N)
-    (Dd : TNLean.Algebra.DefectMaps G (Fin 2 → Fin d))
+    (Dd : GaussLaw.DefectMaps G (Fin 2 → Fin d))
     (Ψ : (Fin N → G) → (Fin N → Fin d) → ℂ) : Prop :=
   ∀ (α : Fin N → G) (j : Fin N) (x : Fin N → Fin d),
     (fun m ↦ Ψ α (MPSTensor.replaceWindow 2 hN j x m)) ∈
@@ -273,7 +273,7 @@ state of the moved label configuration. This is the exact defect-fusion
 covariance underlying the modified Gauss laws of FBC25
 (arXiv:2502.20257, lines 4325--4335). -/
 def HasPrescribedDefectCovariance (hN : 2 ≤ N)
-    (Dd : TNLean.Algebra.DefectMaps G (Fin 2 → Fin d))
+    (Dd : GaussLaw.DefectMaps G (Fin 2 → Fin d))
     (Ψ : (Fin N → G) → (Fin N → Fin d) → ℂ) : Prop :=
   ∀ (α : Fin N → G) (j : Fin N) (g : G),
     ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.ringWindow hN j)
@@ -314,7 +314,7 @@ This is the invariance of the gauged state under the modified Gauss laws of
 FBC25 (arXiv:2502.20257, lines 4325--4335). The proof uses the exact covariance
 of the prescribed defect maps before any adjoint is applied. -/
 theorem placedGaussOperator_mulVec_gaugedVector (hN : 2 ≤ N)
-    {Dd : TNLean.Algebra.DefectMaps G (Fin 2 → Fin d)}
+    {Dd : GaussLaw.DefectMaps G (Fin 2 → Fin d)}
     {R : G → G → Matrix.unitaryGroup (Fin 2 → Fin d) ℂ}
     (hR : Dd.IsCompletion R) {Ψ : (Fin N → G) → (Fin N → Fin d) → ℂ}
     (hsupp : HasDefectSupport d G hN Dd Ψ)
@@ -367,9 +367,9 @@ theorem placedGaussOperator_mulVec_gaugedVector (hN : 2 ≤ N)
     rw [Equiv.symm_apply_eq] at h
     rw [h, hxdef, hadef, hbdef, hαdef, gaugedMatter_extractWindow,
       gaugedLabel_extractWindow]
-  have hmove : TNLean.Algebra.gaussLegAction g ((a * g, g⁻¹ * b) : G × G) =
+  have hmove : GaussLaw.gaussLegAction g ((a * g, g⁻¹ * b) : G × G) =
       (a, b) := by
-    rw [TNLean.Algebra.gaussLegAction_apply]
+    rw [GaussLaw.gaussLegAction_apply]
     simp
   have hterm : ∀ (m : Fin 2 → Fin d) (pq : G × G),
       gaussWindowOperator d G R g (MPSTensor.extractWindow 2 j σ)
@@ -387,13 +387,13 @@ theorem placedGaussOperator_mulVec_gaugedVector (hN : 2 ≤ N)
     by_cases hpq : pq = (a * g, g⁻¹ * b)
     · subst hpq
       have hentry :
-          TNLean.Algebra.gaussOperator R g
+          GaussLaw.gaussOperator R g
               (MPSTensor.extractWindow 2 j x, (a, b))
               (m, ((a * g, g⁻¹ * b) : G × G)) =
             (Matrix.unitaryFactorizationComparison R (a * g) (g⁻¹ * b) a b :
               Matrix (Fin 2 → Fin d) (Fin 2 → Fin d) ℂ)
               (MPSTensor.extractWindow 2 j x) m := by
-        rw [← hmove, TNLean.Algebra.gaussOperator_apply_target]
+        rw [← hmove, GaussLaw.gaussOperator_apply_target]
         have hleft : a * g * g⁻¹ = a := by group
         have hright : g * (g⁻¹ * b) = b := by group
         rw [hleft, hright]
@@ -413,12 +413,12 @@ theorem placedGaussOperator_mulVec_gaugedVector (hN : 2 ≤ N)
       rw [gaugedVector_apply, hmatter, hlabel]
     · have hne : ((MPSTensor.extractWindow 2 j x, (a, b)) :
           (Fin 2 → Fin d) × (G × G)).2 ≠
-          TNLean.Algebra.gaussLegAction g
+          GaussLaw.gaussLegAction g
             ((m, pq) : (Fin 2 → Fin d) × (G × G)).2 := by
         intro hEq
         exact hpq
-          (((TNLean.Algebra.gaussLegAction g).injective (hmove.trans hEq)).symm)
-      rw [TNLean.Algebra.gaussOperator_apply_of_ne R g _ _ hne]
+          (((GaussLaw.gaussLegAction g).injective (hmove.trans hEq)).symm)
+      rw [GaussLaw.gaussOperator_apply_of_ne R g _ _ hne]
       simp [hpq]
   rw [placedGaussOperator, ManyBody.placeAlong_mulVec_apply_of (ManyBody.ringWindow hN j) _ _ σ
       (MPSTensor.replaceWindow 2 hN j σ) (MPSTensor.replaceWindow_ringWindow hN j σ)
@@ -453,14 +453,14 @@ theorem placedGaussProjector_eq_average (hN : 2 ≤ N) (j : Fin N)
       (Fintype.card G : ℂ)⁻¹ • ∑ g : G, gaussWindowOperator d G R g := by
     ext u v
     simp [gaussWindowProjector, gaussWindowOperator, Matrix.reindex_apply,
-      TNLean.Algebra.gaussProjector_eq_average]
+      GaussLaw.gaussProjector_eq_average]
   rw [placedGaussProjector, hwindow, ManyBody.placeAlong_smul, ManyBody.placeAlong_sum]
   rfl
 
 /-- The gauged vector is fixed by every placed Gauss projector of every
 completion. -/
 theorem placedGaussProjector_mulVec_gaugedVector (hN : 2 ≤ N)
-    {Dd : TNLean.Algebra.DefectMaps G (Fin 2 → Fin d)}
+    {Dd : GaussLaw.DefectMaps G (Fin 2 → Fin d)}
     {R : G → G → Matrix.unitaryGroup (Fin 2 → Fin d) ℂ}
     (hR : Dd.IsCompletion R) {Ψ : (Fin N → G) → (Fin N → Fin d) → ℂ}
     (hsupp : HasDefectSupport d G hN Dd Ψ)
@@ -491,7 +491,7 @@ variable {d G}
 /-- The gauged vector lies in the gauge-invariant subspace of every
 completion. -/
 theorem gaugedVector_mem_gaugeInvariantSubspace (hN : 2 ≤ N)
-    {Dd : TNLean.Algebra.DefectMaps G (Fin 2 → Fin d)}
+    {Dd : GaussLaw.DefectMaps G (Fin 2 → Fin d)}
     {R : G → G → Matrix.unitaryGroup (Fin 2 → Fin d) ℂ}
     (hR : Dd.IsCompletion R) {Ψ : (Fin N → G) → (Fin N → Fin d) → ℂ}
     (hsupp : HasDefectSupport d G hN Dd Ψ)
@@ -505,7 +505,7 @@ theorem gaugedVector_mem_gaugeInvariantSubspace (hN : 2 ≤ N)
 completion to have dimension at least one. No upper bound and no bound
 independent of the completion follows from this. -/
 theorem one_le_finrank_gaugeInvariantSubspace (hN : 2 ≤ N)
-    {Dd : TNLean.Algebra.DefectMaps G (Fin 2 → Fin d)}
+    {Dd : GaussLaw.DefectMaps G (Fin 2 → Fin d)}
     {R : G → G → Matrix.unitaryGroup (Fin 2 → Fin d) ℂ}
     (hR : Dd.IsCompletion R) {Ψ : (Fin N → G) → (Fin N → Fin d) → ℂ}
     (hsupp : HasDefectSupport d G hN Dd Ψ)

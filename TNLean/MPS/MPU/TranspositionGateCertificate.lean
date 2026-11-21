@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.TimeReversalGateCertificate
-import TNLean.Algebra.UnitPhaseScalar
+import QICLean.Algebra.UnitPhaseScalar
 import TNLean.MPS.MPU.ConjugationSymmetry
 
 /-!

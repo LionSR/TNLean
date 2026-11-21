@@ -7,7 +7,7 @@ import TNLean.PEPS.TorusTwoByTwoBlocking
 import TNLean.PEPS.RegularTorusGramExpansion
 import TNLean.PEPS.TorusGClosure
 import TNLean.PEPS.RegularTorusSite
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Exact two-by-two blocking of regular torus closures

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.QCA.IntervalCoordinates
-import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.PlaceAlong
 
 /-!

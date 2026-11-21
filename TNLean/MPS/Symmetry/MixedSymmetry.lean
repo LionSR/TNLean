@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.SymmetryParity
-import TNLean.Algebra.ListProduct
+import QICLean.Algebra.Cohomology.SymmetryParity
+import QICLean.Algebra.OrderedProduct
 import TNLean.MPS.Core.CyclicTrace
 
 /-!
@@ -28,7 +28,7 @@ variable {d D : ℕ}
 
 /-- Apply an on-site physical matrix together with time reversal and reflection.
 The associated ordered contraction reverses sites when the reflection parity
-is odd, by `TNLean.Algebra.symmetryLetter_list_prod`.
+is odd, by `SymmetryParity.symmetryLetter_list_prod`.
 Algebraic form of the physical tensor action in arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, lines 1088–1090 and 1116–1120. -/
 noncomputable def mixedTensorAction (A : MPSTensor d D)

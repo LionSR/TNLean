@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ProjectiveRepresentation
+import QICLean.Algebra.Cohomology.ProjectiveRepresentation
 import TNLean.MPS.Core.ReductionBlocking
 import TNLean.MPS.Core.ReductionExistence
 import TNLean.MPS.MPU.GroupRepresentation
@@ -295,7 +295,7 @@ to a scalar"; what is stated here is that a reciprocal rescaling of a family
 of selected reductions is again such a family, not that every family arises
 this way. -/
 noncomputable def smul (R : F.ReductionFamily)
-    (β : TNLean.Algebra.ScalarCocycle G) : F.ReductionFamily where
+    (β : ScalarCocycle G) : F.ReductionFamily where
   V g h := (β (g, h) : ℂ)⁻¹ • R.V g h
   W g h := (β (g, h) : ℂ) • R.W g h
   isReduction g h := (R.isReduction g h).reciprocal_smul (β (g, h)).ne_zero
@@ -305,7 +305,7 @@ noncomputable def smul (R : F.ReductionFamily)
 meet inside the central segment $W_{g,h}A_{g,h}^{\mathbf c}V_{g,h}$ and
 cancel. -/
 theorem hasExteriorBufferLength_smul (R : F.ReductionFamily)
-    (β : TNLean.Algebra.ScalarCocycle G) (m : ℕ) :
+    (β : ScalarCocycle G) (m : ℕ) :
     (R.smul β).HasExteriorBufferLength m ↔ R.HasExteriorBufferLength m := by
   unfold HasExteriorBufferLength
   refine forall_congr' fun g ↦ forall_congr' fun h ↦ ?_
@@ -315,7 +315,7 @@ theorem hasExteriorBufferLength_smul (R : F.ReductionFamily)
 /-- The reciprocal scalar rescaling commutes with physical blocking: blocking
 acts on the tensors only, and the rescaling acts on the reduction matrices
 only. -/
-theorem block_smul (R : F.ReductionFamily) (β : TNLean.Algebra.ScalarCocycle G)
+theorem block_smul (R : F.ReductionFamily) (β : ScalarCocycle G)
     (L : ℕ) : (R.smul β).block L = (R.block L).smul β := rfl
 
 end GroupFamily.ReductionFamily

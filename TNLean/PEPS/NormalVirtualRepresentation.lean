@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Projective
 import TNLean.PEPS.NormalPhysicalSymmetry
-import TNLean.Algebra.ProjectiveRepresentation
+import QICLean.Algebra.Cohomology.ProjectiveRepresentation
 
 /-!
 # Projective bond representations of a normal tensor network

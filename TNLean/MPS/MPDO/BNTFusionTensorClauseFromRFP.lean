@@ -9,7 +9,7 @@ import TNLean.MPS.MPDO.BNTAssociativity
 import TNLean.MPS.MPDO.BNTFusionTensorClause
 import TNLean.MPS.MPDO.BNTMultiplicityNormalization
 import TNLean.MPS.MPDO.RFPPositiveFusionDecomposition
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # The BNT fusion clause from the MPDO renormalization fixed-point condition

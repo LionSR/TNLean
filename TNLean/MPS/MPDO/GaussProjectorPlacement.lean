@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.GaussProjector
+import QICLean.Representation.GaussOperator
 import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
 
 /-!
@@ -66,7 +66,7 @@ def gaussWindowProjector
     Matrix (Fin 2 → Fin (Fintype.card (Fin d × G)))
       (Fin 2 → Fin (Fintype.card (Fin d × G))) ℂ :=
   Matrix.reindexAlgEquiv ℂ ℂ (gaussLocalCoordinateEquiv d G)
-    (TNLean.Algebra.gaussProjector R)
+    (GaussLaw.gaussProjector R)
 
 /-- Reindexing the local Gauss projector into chain-window coordinates
 preserves its star-projection property. -/
@@ -75,15 +75,15 @@ theorem isStarProjection_gaussWindowProjector
     IsStarProjection (gaussWindowProjector d G R) := by
   rw [isStarProjection_iff']
   have h := (isStarProjection_iff').mp
-    (TNLean.Algebra.isStarProjection_gaussProjector R)
+    (GaussLaw.isStarProjection_gaussProjector R)
   constructor
   · rw [gaussWindowProjector, ← map_mul, h.1]
   · change
       (Matrix.reindex (gaussLocalCoordinateEquiv d G)
         (gaussLocalCoordinateEquiv d G)
-        (TNLean.Algebra.gaussProjector R)).conjTranspose =
+        (GaussLaw.gaussProjector R)).conjTranspose =
       Matrix.reindex (gaussLocalCoordinateEquiv d G)
-        (gaussLocalCoordinateEquiv d G) (TNLean.Algebra.gaussProjector R)
+        (gaussLocalCoordinateEquiv d G) (GaussLaw.gaussProjector R)
     rw [Matrix.conjTranspose_reindex]
     simpa [Matrix.star_eq_conjTranspose] using congrArg
       (Matrix.reindex (gaussLocalCoordinateEquiv d G)

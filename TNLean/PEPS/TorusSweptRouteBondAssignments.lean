@@ -7,9 +7,9 @@ import TNLean.PEPS.TorusDirectedBondUpdate
 import TNLean.PEPS.TorusSweptPhysicalEndpointRoute
 import TNLean.PEPS.TorusSweptStringDeformation
 import TNLean.PEPS.TorusPlaquetteFluxMeasurement
-import TNLean.Algebra.ZModSmallDifference
+import QICLean.Algebra.ZModIntCast
 import TNLean.PEPS.RegularConnectorHolonomy
-import TNLean.Algebra.ConjClassesConjugation
+import QICLean.Algebra.MonoidAux
 import Mathlib.GroupTheory.Commutator.Basic
 /-!
 # Literal ordered-bond assignments along the twelve-step endpoint route

@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.ResidualWindowCoordinates
 import TNLean.MPS.ParentHamiltonian.BlockGroundSpaceOverlap
 import TNLean.MPS.ParentHamiltonian.GroundSpaceSectorCompressionDecay
-import TNLean.Algebra.EuclideanFiberwiseProjection
+import QICLean.Analysis.EuclideanFiberwiseMap
 
 /-!
 # Sector projection sums for the aligned left residual window

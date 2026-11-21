@@ -59,9 +59,9 @@ with the on-site symmetry at every chain length. Source: arXiv:1010.3732,
 Section II.F.2, `eq:1d-sym:jointsym`. -/
 theorem normalizedPhysicalBondInterpolation_parent_commute_onSite
     {G : Type} [Group G] {D₀ D₁ N : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈
       Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈

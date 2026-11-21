@@ -248,7 +248,7 @@ monomial operator $G^\star\ket{s}=i^{q^\star(s)}\ket{\sigma(s)}$ with the same
 permutation part $\sigma(s)=(\overline x,a+1,a'+1)$ as the first displayed
 tuple. -/
 theorem gaussOperator_circuitTupleStar_gen :
-    TNLean.Algebra.gaussOperator circuitTupleStar gen = monomial localPerm localPhaseStar := by
+    GaussLaw.gaussOperator circuitTupleStar gen = monomial localPerm localPhaseStar := by
   let σ : Multiplicative (ZMod 2) → Multiplicative (ZMod 2) → Equiv.Perm (Fin 2 → Fin 4) :=
     fun a _ ↦ if Multiplicative.toAdd a = 0 then 1 else matterBarFlip
   let φ : Multiplicative (ZMod 2) → Multiplicative (ZMod 2) → (Fin 2 → Fin 4) → ℂ :=
@@ -258,8 +258,8 @@ theorem gaussOperator_circuitTupleStar_gen :
   have hR : ∀ a b, (circuitTupleStar a b : Matrix (Fin 2 → Fin 4) (Fin 2 → Fin 4) ℂ) =
       monomial (σ a b) (φ a b) := by
     intro a b
-    rcases MPSTensor.zmod2_cases a with rfl | rfl <;>
-      rcases MPSTensor.zmod2_cases b with rfl | rfl
+    rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
+      rcases Multiplicative.zmod2_cases b with rfl | rfl
     · simp [σ, φ, monomial_one]
     · simp [σ, φ, monomial_one]
     · simp only [circuitTupleStar_gen_one, w_eq, matterMatrix_monomial, σ, φ, toAdd_ofAdd,
@@ -268,18 +268,18 @@ theorem gaussOperator_circuitTupleStar_gen :
     · simp only [circuitTupleStar_gen_gen, tildeLambdaStar_eq, matterMatrix_monomial, σ, φ,
         toAdd_ofAdd, one_ne_zero, ↓reduceIte]
       rfl
-  rw [TNLean.Algebra.gaussOperator_eq_monomial circuitTupleStar σ φ hR gen]
+  rw [GaussLaw.gaussOperator_eq_monomial circuitTupleStar σ φ hR gen]
   congr 1
   · ext ⟨i, a, b⟩ : 1
-    rcases MPSTensor.zmod2_cases a with rfl | rfl
+    rcases Multiplicative.zmod2_cases a with rfl | rfl
     · simp [σ, localPerm, gen_inv, matterBarFlip_symm]
     · simp [σ, localPerm]
       rfl
   · funext ⟨i, a, b⟩
-    simp only [TNLean.Algebra.gaussMonomialPhase, localPhaseStar, σ, φ,
-      TNLean.Algebra.gaussLegAction_apply]
-    rcases MPSTensor.zmod2_cases a with rfl | rfl <;>
-      rcases MPSTensor.zmod2_cases b with rfl | rfl
+    simp only [GaussLaw.gaussMonomialPhase, localPhaseStar, σ, φ,
+      GaussLaw.gaussLegAction_apply]
+    rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
+      rcases Multiplicative.zmod2_cases b with rfl | rfl
     · simp [gen_inv, matterBarFlip_symm, fExponent_barFlip, phaseExponentStar_zero_zero,
         iPow_add, iPow_two_mul_cast, ZMod.neg_one_pow_val_add,
         show ((1 : ZMod 2)).val = 1 from rfl]
@@ -403,7 +403,7 @@ have trivial holonomy on the fiber over $(p,b)$ exactly when $c_j(p,b)=0$ for
 every bond `j`. -/
 theorem isTrivialHolonomy_fiberPhaseStar_iff (hN : 3 ≤ N)
     (pb : (Fin N → ZMod 2) × (Fin N → ZMod 2)) :
-    TNLean.Algebra.IsTrivialHolonomy fiberPhaseStar pb ↔ ∀ j : Fin N, starFiberLabel j pb = 0 := by
+    Hypercube.IsTrivialHolonomy fiberPhaseStar pb ↔ ∀ j : Fin N, starFiberLabel j pb = 0 := by
   have h2 : 2 ≤ N := by omega
   constructor
   · intro h j
@@ -411,7 +411,7 @@ theorem isTrivialHolonomy_fiberPhaseStar_iff (hN : 3 ≤ N)
     have hhol := fiberPhaseStar_holonomy hN j pb 0
     rw [hhol, mul_comm, mul_eq_right₀ (mul_ne_zero (fiberPhaseStar_ne_zero _ _)
       (fiberPhaseStar_ne_zero _ _))] at hk
-    rcases TNLean.Algebra.zmod_two_eq_zero_or_one (starFiberLabel j pb) with h0 | h1
+    rcases Hypercube.zmod_two_eq_zero_or_one (starFiberLabel j pb) with h0 | h1
     · exact h0
     · rw [h1, show ((1 : ZMod 2)).val = 1 from rfl] at hk
       exfalso
@@ -441,15 +441,15 @@ def placedGaussOperatorStar (N : ℕ) (hN : 2 ≤ N) (j : Fin N) :
   ManyBody.placeAlong (X := fun _ ↦ Fin (Fintype.card (Fin 4 × Multiplicative (ZMod 2))))
     (ManyBody.ringWindow hN j)
     (Matrix.reindexAlgEquiv ℂ ℂ windowCoordinates
-      (TNLean.Algebra.gaussOperator circuitTupleStar gen))
+      (GaussLaw.gaussOperator circuitTupleStar gen))
 
 /-- For $\mathbb Z_2$ the local Gauss projector of the second displayed tuple is
 $P^\star=(\mathrm{id}+G^\star)/2$. -/
 theorem gaussProjector_circuitTupleStar :
-    TNLean.Algebra.gaussProjector circuitTupleStar =
-      (2 : ℂ)⁻¹ • (1 + TNLean.Algebra.gaussOperator circuitTupleStar gen) := by
-  rw [TNLean.Algebra.gaussProjector_eq_average, sum_multiplicative_zmod_two,
-    TNLean.Algebra.gaussOperator_one, show Fintype.card (Multiplicative (ZMod 2)) = 2 by decide]
+    GaussLaw.gaussProjector circuitTupleStar =
+      (2 : ℂ)⁻¹ • (1 + GaussLaw.gaussOperator circuitTupleStar gen) := by
+  rw [GaussLaw.gaussProjector_eq_average, sum_multiplicative_zmod_two,
+    GaussLaw.gaussOperator_one, show Fintype.card (Multiplicative (ZMod 2)) = 2 by decide]
   push_cast
   rfl
 
@@ -499,7 +499,7 @@ $\gamma\mapsto\gamma+e_j$ and the phase $i^{q^\star_j}$. -/
 theorem placedGaussOperatorStar_eq_reindex (N : ℕ) [NeZero N] (hN : 2 ≤ N) (j : Fin N) :
     placedGaussOperatorStar N hN j =
       reindex (fiberCoordinates N) (fiberCoordinates N)
-        (monomial (TNLean.Algebra.fiberFlip j) (fiberPhaseStar j)) := by
+        (monomial (Hypercube.fiberFlip j) (fiberPhaseStar j)) := by
   rw [placedGaussOperatorStar_eq_monomial, reindex_monomial]
   congr 1
   · ext t : 1
@@ -510,7 +510,7 @@ theorem placedGaussOperatorStar_eq_reindex (N : ℕ) [NeZero N] (hN : 2 ≤ N) (
     generalize hx : (fiberEquiv N).symm (chainDecode N t) = x
     rw [Equiv.symm_apply_eq] at hx
     obtain ⟨pb, γ⟩ := x
-    rw [hx, TNLean.Algebra.fiberFlip_apply, chainFlip_fiberEquiv hN]
+    rw [hx, Hypercube.fiberFlip_apply, chainFlip_fiberEquiv hN]
   · funext t
     rw [localPhaseStar_window hN, Function.comp_apply, fiberPhaseStar, fiberCoordinates,
       Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.apply_symm_apply]
@@ -536,14 +536,14 @@ theorem finrank_commonFixedSubmodule_placedGaussProjector_circuitTupleStar (N : 
   rw [commonFixedSubmodule_placedGaussProjector_circuitTupleStar N h2]
   have hop : (fun j : Fin N ↦ toLin' (placedGaussOperatorStar N h2 j)) =
       fun j ↦ toLin' (reindex (fiberCoordinates N) (fiberCoordinates N)
-        (monomial (TNLean.Algebra.fiberFlip j) (fiberPhaseStar j))) :=
+        (monomial (Hypercube.fiberFlip j) (fiberPhaseStar j))) :=
     funext fun j ↦ by rw [placedGaussOperatorStar_eq_reindex N h2 j]
-  rw [hop, TNLean.Algebra.finrank_commonFixedSubmodule_reindex (fiberCoordinates N)
-    (fun j ↦ monomial (TNLean.Algebra.fiberFlip j) (fiberPhaseStar j)),
-    TNLean.Algebra.finrank_commonFixedSubmodule_monomial_fiberFlip fiberPhaseStar
+  rw [hop, Matrix.finrank_commonFixedSubmodule_reindex (fiberCoordinates N)
+    (fun j ↦ monomial (Hypercube.fiberFlip j) (fiberPhaseStar j)),
+    Hypercube.finrank_commonFixedSubmodule_monomial_fiberFlip fiberPhaseStar
       (fun j s ↦ by
         obtain ⟨pb, γ⟩ := s
-        rw [TNLean.Algebra.fiberFlip_apply]
+        rw [Hypercube.fiberFlip_apply]
         exact fiberPhaseStar_mul_fiberPhaseStar_flip h2 j pb γ)]
   exact Nat.card_congr (Equiv.subtypeEquivRight fun pb ↦ isTrivialHolonomy_fiberPhaseStar_iff hN pb)
 

@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.SemiRegularGroupAlgebra
-import TNLean.Algebra.SemiRegularEquiv
-import TNLean.Algebra.RepresentationTensorProduct
+import QICLean.Representation.Character.SemiRegularGroupAlgebra
+import QICLean.Representation.Character.SemiRegular
+import QICLean.Representation.Character.TensorProduct
 
 /-!
 # Nonzero tensor factors of semi-regular representations

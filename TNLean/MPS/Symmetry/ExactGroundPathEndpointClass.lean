@@ -17,7 +17,7 @@ at the two endpoints need not be identified in advance.
 Source: arXiv:1010.3732, Section II.F.2, lines 929–993, and Appendix C.
 -/
 
-open scoped Matrix TNLean.Algebra.ScalarCohomology
+open scoped Matrix ScalarCohomology
 open TNLean.Algebra
 
 namespace MPSTensor

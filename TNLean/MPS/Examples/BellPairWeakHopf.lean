@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Algebra.Star.TensorProduct
 import Mathlib.LinearAlgebra.Basis.Bilinear
 import Mathlib.LinearAlgebra.Matrix.StdBasis
-import TNLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.Symmetry.WeakHopfParentAverage
 
 /-!

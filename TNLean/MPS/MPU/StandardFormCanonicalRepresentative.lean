@@ -7,7 +7,7 @@ import TNLean.MPS.MPU.StandardFormFromGates
 import TNLean.MPS.MPU.StandardFormInterpolation
 import TNLean.MPS.MPU.CanonicalFormAncillaBlocking
 import TNLean.MPS.CanonicalForm.ProjectorClosureSpectral
-import TNLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.MatrixSingleSpan
 import QICLean.Channel.SchmidtRank
 
 /-!

@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.FinStepOrbit
-import TNLean.Algebra.OrthogonalResolution
+import QICLean.Algebra.FinStepOrbit
+import QICLean.Algebra.OrthogonalProjection
 import TNLean.MPS.CanonicalForm.CyclicSectors.CommutingProj
 import TNLean.MPS.Core.CanonicalNormalization
 import TNLean.MPS.Periodic.SectorLift

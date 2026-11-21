@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularTwistedRegionProjectorCoordinates
 import TNLean.PEPS.RegularCycleControlledSupport
-import TNLean.Algebra.ConjClassesConjugation
+import QICLean.Algebra.MonoidAux
 import Mathlib.Algebra.Group.ConjFinite
 import Mathlib.LinearAlgebra.Matrix.PosDef
 

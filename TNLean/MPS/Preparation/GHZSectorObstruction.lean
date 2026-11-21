@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.ComplexSqrt
 import QICLean.Circuit.Model.UnitaryRing
-import TNLean.Circuit.ExpectationBounds
+import QICLean.Analysis.UnitaryExpectation
 import TNLean.Circuit.WeightedGHZ
 import TNLean.MPS.Preparation.StateApproximationError
 

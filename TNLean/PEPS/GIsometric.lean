@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.UnitaryGroup
-import TNLean.Algebra.UnitaryMulVecInner
+import QICLean.Algebra.UnitaryMulVecInner
 import TNLean.PEPS.GInjectiveConcatenation
 import TNLean.PEPS.GInjectiveMPS
 

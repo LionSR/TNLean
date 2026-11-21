@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Examples.ZMod2
-import TNLean.Algebra.CocycleCohomology
+import QICLean.Algebra.Cohomology.CocycleCohomology
 import QICLean.Algebra.ComplexSqrt
 
 /-!
@@ -39,7 +39,7 @@ and proves its key properties.
 * RMP review (arXiv:2011.12127) Section III.A
 -/
 
-open scoped Matrix BigOperators TNLean.Algebra.ScalarCohomology
+open scoped Matrix BigOperators ScalarCohomology
 open Matrix Finset MPSTensor
 
 noncomputable section

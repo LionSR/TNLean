@@ -29,7 +29,7 @@ set_option linter.mathlibStandardSet true
 open scoped Matrix Matrix.Norms.L2Operator ComplexOrder
 open Filter Topology
 
-open scoped TNLean.Algebra.ScalarCohomology
+open scoped ScalarCohomology
 
 namespace MPSTensor
 

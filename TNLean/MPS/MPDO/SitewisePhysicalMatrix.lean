@@ -5,10 +5,10 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixIsometryEntries
 import QICLean.Channel.SingleKrausPositivity
-import TNLean.Algebra.ListProduct
+import QICLean.Algebra.OrderedProduct
 import TNLean.MPS.MPDO.FirstSite
 import TNLean.MPS.MPDO.PhysicalSectorCoordinateTransport
-import TNLean.Algebra.MatrixTensorPower
+import QICLean.Algebra.MatrixTensorPower
 
 /-!
 # Sitewise physical matrices on periodic MPOs

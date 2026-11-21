@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.SelectedCoefficientDecomposition
-import TNLean.Algebra.MatrixFactorExchange
+import QICLean.Algebra.MatrixFactorExchange
 import QICLean.ManyBody.Sites.RegionMatrix
 import TNLean.Lattice.Sheet.Splitting
 import Mathlib.Data.Fintype.EquivFin

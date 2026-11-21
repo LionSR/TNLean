@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalBlocking
 import TNLean.MPS.MPU.SourceFactors
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Source-cut ranks under physical blocking

@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ScalarThreeCocycleCyclicExamples
-import TNLean.Algebra.ScalarThreeCocycleCyclicTwoExamples
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicExamples
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicTwo
 import TNLean.MPS.Chain.BinaryPhase
 import TNLean.MPS.MPU.GroupCocycleMPO
 
@@ -61,7 +61,7 @@ open scoped BigOperators Matrix
 
 namespace MPOTensor.GroupCocycle
 
-open TNLean.Algebra TNLean.Algebra.ScalarThreeCochain
+open TNLean.Algebra ScalarThreeCochain
 
 /-! ### The group `ℤ₂` -/
 

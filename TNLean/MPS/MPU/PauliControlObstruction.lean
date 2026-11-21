@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.SpinCover.Basic
 import Mathlib.Data.Matrix.Block
-import TNLean.Algebra.GeneralizeDecide
+import QICLean.Algebra.GeneralizeDecide
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.FinCases
 import Mathlib.Analysis.InnerProductSpace.Basic

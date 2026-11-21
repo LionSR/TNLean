@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.SingletMatrix
+import QICLean.Algebra.SingletMatrix
 import TNLean.MPS.Core.PhysicalRotation
 import TNLean.MPS.Core.ScaledNormality
 import TNLean.MPS.Examples.AKLTParentHamiltonian
@@ -75,7 +75,7 @@ for `|+⟩ = -i(|-1⟩+|+1⟩)/√2`. Documented in
   states in antiferromagnets*, Phys. Rev. Lett. 59, 799 (1987)
 -/
 
-open scoped Matrix BigOperators TNLean.Algebra.ScalarCohomology
+open scoped Matrix BigOperators ScalarCohomology
 open Matrix Finset
 
 noncomputable section

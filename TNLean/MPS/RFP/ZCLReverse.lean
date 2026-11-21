@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import QICLean.Channel.FixedPoint.StationarySupport
 import TNLean.MPS.RFP.BNTDirectSumBasis
 import TNLean.MPS.RFP.PhysicalObservableRealization
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Converse from zero correlation length to a renormalization fixed point

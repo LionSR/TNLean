@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.KleinCocycleCompleteness
-import TNLean.Algebra.LSymbol
-import TNLean.Algebra.ScalarThreeCocycleGroupCohomology
+import QICLean.Algebra.Cohomology.KleinCocycleCompleteness
+import QICLean.Algebra.Cohomology.LSymbol
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleGroupCohomology
 import TNLean.MPS.Examples.CZX.CZXAnomalyClass
 import TNLean.MPS.Examples.KleinSymmetry
 import TNLean.MPS.MPDO.BondOneOperator

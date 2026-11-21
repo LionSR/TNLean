@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProductCutIteration
-import TNLean.Algebra.CyclicInsertion
+import QICLean.Analysis.CyclicInsertion
 
 /-!
 # Products of consecutive copies on a chain

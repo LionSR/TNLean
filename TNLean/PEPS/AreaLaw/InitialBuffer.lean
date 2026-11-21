@@ -10,7 +10,7 @@ import QICLean.Entropy.RegionUnion
 import TNLean.Lattice.RegionEntropyInequalities
 import QICLean.Entropy.BufferDiscount
 import QICLean.Analysis.HarmonicWeights
-import TNLean.Algebra.TailRadiusWeights
+import QICLean.Entropy.TailRadiusWeights
 import QICLean.ManyBody.Hamiltonian.GroundSpace
 
 /-!

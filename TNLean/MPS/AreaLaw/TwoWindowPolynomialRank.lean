@@ -15,14 +15,13 @@ import Mathlib.Data.List.OfFn
 import Mathlib.Basic.Complex.Basic
 import TNLean.MPS.AreaLaw.TwoWindowOperatorForms
 import QICLean.Algebra.WeightedFrequencySchmidtRank
-import TNLean.Algebra.FrequencyCounts
+import QICLean.Algebra.TwoWindowCounts
 import TNLean.MPS.AreaLaw.IntervalSymmDiff
 import QICLean.Algebra.LowFrequencyWordPartition
 import QICLean.Algebra.OperatorSchmidtBounds
 import QICLean.Algebra.OperatorSchmidtProducts
 import Mathlib.Algebra.Polynomial.AlgebraMap
 import QICLean.Algebra.OperatorSchmidt
-import TNLean.Algebra.TwoWindowRankBounds
 import TNLean.Algebra.TwoWindowPolynomialRecovery
 
 /-!

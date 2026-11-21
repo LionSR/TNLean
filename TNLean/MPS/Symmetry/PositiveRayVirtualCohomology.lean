@@ -20,7 +20,7 @@ injective gauge-phase uniqueness removes their apparent ambiguity.
 Source: arXiv:1010.3732, Sections II.C.2 and II.F.2, and Appendix C.
 -/
 
-open scoped Matrix TNLean.Algebra.ScalarCohomology
+open scoped Matrix ScalarCohomology
 open TNLean.Algebra
 
 namespace MPSTensor

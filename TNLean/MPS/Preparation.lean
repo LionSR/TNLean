@@ -49,9 +49,9 @@ import TNLean.MPS.Preparation.ExactFixedPointPolar
 import TNLean.MPS.Preparation.ExactSectorEncoder
 import TNLean.MPS.Preparation.ExplicitPreparationScale
 import TNLean.MPS.Preparation.FiniteRingCorrelationLimit
-import TNLean.MPS.Preparation.FiniteRingGaussianFilter
-import TNLean.MPS.Preparation.FiniteRingLiebRobinson
-import TNLean.MPS.Preparation.FiniteRingNegativeFrequencyLocality
+import QICLean.ManyBody.Hamiltonian.RingGaussianFilter
+import QICLean.ManyBody.Dynamics.RingPropagation
+import QICLean.ManyBody.Sites.Lattice.RingDistance
 import TNLean.MPS.Preparation.FixedPointPairState
 import TNLean.MPS.Preparation.FixedPointPairs
 import TNLean.MPS.Preparation.GHZSectorObstruction

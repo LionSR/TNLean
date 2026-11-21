@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Data.Fin.VecNotation
 import Mathlib.Tactic.FinCases
-import TNLean.Algebra.TwoWindowSum
+import QICLean.Algebra.TwoWindowSum
 
 /-!
 # Two windows and the complementary bond sums

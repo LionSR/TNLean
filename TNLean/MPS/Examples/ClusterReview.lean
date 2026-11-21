@@ -8,8 +8,8 @@ import TNLean.MPS.Core.CyclicTrace
 import TNLean.MPS.Core.PhysicalIndexMixing
 import TNLean.MPS.ParentHamiltonian.GroundSpace
 import TNLean.MPS.RFP.Defs
-import TNLean.Algebra.MatrixCyclicPathSum
-import TNLean.Algebra.ProjectiveRepresentation
+import QICLean.Algebra.MatrixCyclicPathSum
+import QICLean.Algebra.Cohomology.ProjectiveRepresentation
 
 /-!
 # Cluster state: the review tensor and the controlled-`Z` construction

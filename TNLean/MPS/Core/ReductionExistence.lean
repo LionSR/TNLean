@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.JordanChevalley
-import TNLean.Algebra.RankOneFactorization
-import TNLean.Algebra.SemisimpleTracePowers
+import QICLean.Algebra.RankOneFactorization
+import QICLean.Algebra.SemisimpleTracePowers
 import TNLean.MPS.Core.BlockingInfrastructure
 import TNLean.MPS.Core.Reduction
 import TNLean.MPS.Core.ReductionCrossMatrix

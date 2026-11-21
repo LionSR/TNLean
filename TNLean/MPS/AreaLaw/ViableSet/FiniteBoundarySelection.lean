@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ViableSet.GluingCoordinates
 import TNLean.MPS.AreaLaw.ViableSet.LeftColumns
-import TNLean.Algebra.MatrixProjectionReindex
+import QICLean.Algebra.MatrixStarProjection
 import QICLean.Algebra.MatrixRankKronecker
 import QICLean.Algebra.PositiveSemidefiniteNormalization
 import QICLean.Algebra.ProjectionRangeIsometry

@@ -43,7 +43,7 @@ such paths; see
 `docs/paper-gaps/spc11_spt_classification_continuous_realization.tex`.
 -/
 
-open scoped Matrix BigOperators TNLean.Algebra.ScalarCohomology
+open scoped Matrix BigOperators ScalarCohomology
 open TNLean.Algebra
 open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 

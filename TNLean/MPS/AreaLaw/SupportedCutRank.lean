@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.CutMatrixGrowth
 import QICLean.Entropy.GapSurprisal
 import QICLean.Channel.UhlmannIsometry
-import TNLean.Algebra.ToEuclideanLinApply
+import QICLean.Algebra.MatrixToEuclidean
 
 /-!
 # Cut rank under supported operators

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.RegularBoundary
-import TNLean.Algebra.RepresentationTensorProduct
+import QICLean.Representation.Character.TensorProduct
 import QICLean.Algebra.ComplexSqrt
 import Mathlib.LinearAlgebra.Matrix.ToLin
 import Mathlib.LinearAlgebra.Matrix.Rank

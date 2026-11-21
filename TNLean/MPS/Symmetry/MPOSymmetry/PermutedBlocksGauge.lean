@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.StabilizerBlockIndependenceCircle
-import TNLean.Algebra.StabilizerCocycleReconstruction
+import QICLean.Algebra.Cohomology.StabilizerBlockIndependenceCircle
+import QICLean.Algebra.Cohomology.StabilizerCocycleReconstruction
 import TNLean.MPS.Symmetry.MPOSymmetry.AssociatorCohomology
 import TNLean.MPS.Symmetry.MPOSymmetry.PermutedBlocks
 
@@ -63,7 +63,7 @@ correction is recorded in `docs/paper-gaps/fbc25_stabilizer_transition_index_typ
 open scoped Matrix Kronecker
 open TNLean.Algebra
 
-open scoped TNLean.Algebra.ScalarCohomology
+open scoped ScalarCohomology
 
 namespace MPOTensor
 
@@ -376,7 +376,7 @@ map `H²(G, U(1)) → H²(H, U(1))`.
 
 The class is the class of the unit phase of `ψ`, which is `ψ` itself. The representative-level
 form of the criterion is
-`TNLean.Algebra.StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_exists_extension`.
+`StabilizerRepresentatives.inducedLSymbol_isBlockIndependent_iff_exists_extension`.
 The stabilizer need not be normal. -/
 theorem isBlockIndependent_lSymbol_iff_circle [Finite G] (hF : F.IsNormalRepresentation)
     (hA : ∀ x, Kraus.IsNormal (A x)) (hD : ∀ x, 0 < D x)

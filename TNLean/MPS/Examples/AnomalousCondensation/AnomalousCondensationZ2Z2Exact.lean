@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.GeneralizeDecide
+import QICLean.Algebra.GeneralizeDecide
 import TNLean.MPS.Examples.AnomalousCondensation.AnomalousCondensationZ2Z2Instance
 import TNLean.MPS.MPDO.DiagonalDressing
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
@@ -67,7 +67,7 @@ open scoped BigOperators Matrix
 
 namespace Z2Z2Condensation
 
-open MPOTensor MPOTensor.GroupCocycle TNLean.Algebra.ScalarThreeCochain
+open MPOTensor MPOTensor.GroupCocycle ScalarThreeCochain
 
 /-- The diagonal of the on-site dressing `(Z^{(2)})^{g₁}` on one two-qubit site: the sign
 `(−1)^{g₁ a₂}` at the site label `a`, whose second qubit is `a₂ = a.val % 2`. -/

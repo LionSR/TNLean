@@ -7,8 +7,8 @@ import TNLean.MPS.AreaLaw.Huang.GridEvolution
 import TNLean.MPS.AreaLaw.Huang.GridLocalization
 import TNLean.MPS.AreaLaw.Huang.BlockProductBonds
 import QICLean.ManyBody.Dynamics.DisjointRelativeEvolution
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.SupportedMatrixElements
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.ManyBody.Sites.ProductVector
 import QICLean.Entropy.RegionUnion
 import QICLean.ManyBody.Dynamics.GraphLocalization
 

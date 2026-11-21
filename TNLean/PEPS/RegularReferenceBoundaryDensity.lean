@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.FixedBoundaryFactorDensity
-import TNLean.Algebra.FlatDensityRenyiEntropy
+import QICLean.Entropy.FlatDensityEntropy
 import TNLean.PEPS.RegularControlledBoundaryFactor
 
 /-!

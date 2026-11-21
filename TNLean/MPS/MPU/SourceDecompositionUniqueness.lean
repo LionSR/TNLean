@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.MatrixUnitaryBetween
-import TNLean.Algebra.FinSumPermutation
-import TNLean.Algebra.UnitaryKroneckerComparison
+import QICLean.Algebra.FinSumPermutation
+import QICLean.Algebra.UnitaryKronecker
 import TNLean.MPS.MPU.SourceCuts
 
 /-!

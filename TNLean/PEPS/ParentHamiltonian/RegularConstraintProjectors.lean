@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.ParentHamiltonian.RegularOverlappingConstraints
-import TNLean.Algebra.FiniteGroupUnitaryAverage
+import QICLean.Representation.FiniteGroupUnitaryAverage
 
 /-!
 # Orthogonal projectors for the regular regional constraints
@@ -48,7 +48,7 @@ theorem regularGlobalVertexAverage_isStarProjection (v : V) :
         Equiv.Perm.permMatrix_mem_unitaryGroup _⟩
       map_one' := by apply Subtype.ext; simp
       map_mul' := by intro g h; apply Subtype.ext; simp }
-  exact TNLean.Algebra.isStarProjection_inv_card_smul_sum ρ
+  exact Matrix.isStarProjection_inv_card_smul_sum ρ
 
 /-- Every ambient regional flatness matrix is an orthogonal projector. -/
 theorem regularGlobalRegionFlatProjector_isStarProjection (R : Finset V) :

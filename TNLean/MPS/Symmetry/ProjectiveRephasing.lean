@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.CocycleCohomology
-import TNLean.Algebra.CircleCohomology
+import QICLean.Algebra.Cohomology.CocycleCohomology
+import QICLean.Algebra.Cohomology.CircleCohomology
 import Mathlib.LinearAlgebra.UnitaryGroup
 
 /-!
@@ -17,7 +17,7 @@ system. The following results establish this algebraic step for the concrete
 matrix-valued projective representations used in TNLean.
 -/
 
-open scoped Matrix TNLean.Algebra.ScalarCohomology
+open scoped Matrix ScalarCohomology
 
 namespace TNLean.Algebra
 

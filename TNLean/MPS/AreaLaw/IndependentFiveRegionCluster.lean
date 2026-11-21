@@ -7,7 +7,7 @@ import QICLean.Analysis.EuclideanEigenvectorBasis
 import QICLean.Analysis.GroundEnergyBounds
 import QICLean.Analysis.LowEnergyCluster
 import QICLean.Analysis.LowEnergyPerturbation
-import TNLean.Algebra.ExpMulSubMonotone
+import QICLean.Analysis.ExplicitThresholds
 import TNLean.MPS.AreaLaw.IndependentFiveRegionResidual
 
 /-!

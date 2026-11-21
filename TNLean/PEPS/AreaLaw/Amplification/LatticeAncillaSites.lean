@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Amplification.LatticeAncillaTransport
 import TNLean.Lattice.SiteRelabelEntropy
-import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.ManyBody.Sites.PlaceAlong
 
 /-!

@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.LSymbolDomainWall
-import TNLean.Algebra.ScalarThreeCocycleCyclicDomainWall
+import QICLean.Algebra.Cohomology.LSymbolDomainWall
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicDomainWall
 import TNLean.MPS.Symmetry.MPOSymmetry.DomainWall
 
 /-!
@@ -19,7 +19,7 @@ every group element permutes them: `g` carries `e_{yz}` to `e_{gy,gz}` with a ph
   `∏_{k<n} B^g_{g^k(gx), g^k x} = ∏_{k<n} L^{gx}_{g,g^k} / L^x_{g,g^k} = (∏_{k<n} ω(g,g^k,g))⁻¹`,
   which is `∏_{i=1}^{n} ω⁻¹(g,g^i,g)` of the source. The middle product includes the factor
   `k = 0`, `L^{gx}_{g,1} / L^x_{g,1}`, which is one for the source's normalized L-symbols; the
-  source's range `1 ≤ k < n` is `TNLean.Algebra.LSymbol.prod_Ico_div_eq_inv_cyclicInvariant`.
+  source's range `1 ≤ k < n` is `LSymbol.prod_Ico_div_eq_inv_cyclicInvariant`.
   The interchange phase depends only on `ω`, so it is independent of the action tensors, the
   domain walls and the ground state `x`.
 * **The unbroken subgroup acts projectively** (lines 2028--2036). For `h₁, h₂` fixing both
@@ -48,7 +48,7 @@ regions; documented in `docs/paper-gaps/gs24_domain_wall_nondegenerate.tex`.
   `Intequiv`.
 * `MPOTensor.GroupFamily.BlockActionData.IsDomainWallFamily.mul_eq_of_fixed`: the projective
   action of the subgroup fixing the two blocks (Mathlib's `fixingSubgroup`), with the two-cocycle
-  of `TNLean.Algebra.LSymbol.ratioCocycle_isMulCocycle₂` (`TNLean/Algebra/LSymbolDomainWall.lean`).
+  of `LSymbol.ratioCocycle_isMulCocycle₂` (`TNLean/Algebra/LSymbolDomainWall.lean`).
 
 ## References
 - [arXiv:2405.00439](https://arxiv.org/abs/2405.00439) -- Garre-Rubio, Schuch,
@@ -172,7 +172,7 @@ theorem prod_eq_inv_cyclicInvariant (hB : ad.IsDomainWallFamily e B)
 /-- **The interchange phase is the domain-wall phase of the anomaly** (arXiv:2405.00439,
 `Intequiv`, `Papers/2405.00439/MPU-DW.tex` lines 2013--2023): for `g` of finite order,
 `∏_{k<o(g)} B^g_{g^k(gx), g^k x} = ∏_{i=1}^{o(g)} ω⁻¹(g,g^i,g)`, the phase
-`TNLean.Algebra.ScalarThreeCochain.domainWallPhase` of the anomaly three-cochain. -/
+`ScalarThreeCochain.domainWallPhase` of the anomaly three-cochain. -/
 theorem prod_eq_domainWallPhase (hB : ad.IsDomainWallFamily e B)
     (hF : F.IsNormalRepresentation) (hA : ∀ x, Kraus.IsNormal (A x)) (hD : ∀ x, 0 < D x)
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) (g : G) (x : X) :
@@ -184,7 +184,7 @@ theorem prod_eq_domainWallPhase (hB : ad.IsDomainWallFamily e B)
 /-- **The subgroup fixing two blocks acts projectively on the domain walls between them**
 (arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 2028--2036): for `a, b` fixing `y` and
 `z`, `B^a_{y,z} B^b_{y,z} = α(a, b) B^{ab}_{y,z}` with the two-cocycle
-`α(a, b) = L^y_{a,b} / L^z_{a,b}` of `TNLean.Algebra.LSymbol.ratioCocycle_isMulCocycle₂`. The source
+`α(a, b) = L^y_{a,b} / L^z_{a,b}` of `LSymbol.ratioCocycle_isMulCocycle₂`. The source
 states this on the subgroup fixing every block, which is contained in the subgroup here; see
 `docs/paper-gaps/gs24_unbroken_subgroup_stabilizer.tex` for the stabilizer reading. -/
 theorem mul_eq_of_fixed (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus.IsNormal (A x))

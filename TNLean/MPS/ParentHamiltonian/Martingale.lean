@@ -23,11 +23,10 @@ import TNLean.MPS.ParentHamiltonian.Martingale.CanonicalGapToInteractionGap
 import TNLean.MPS.ParentHamiltonian.Martingale.CanonicalOpenGap
 import TNLean.MPS.ParentHamiltonian.Martingale.CompactOpenIntervalGap
 import TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian
-import TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorGapEquivalence
-import TNLean.MPS.ParentHamiltonian.Martingale.DependentSpectatorProjections
+import QICLean.Analysis.EuclideanSigmaFiberwiseMap
 import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
 import TNLean.MPS.ParentHamiltonian.Martingale.EventualKernelOpenGap
-import TNLean.MPS.ParentHamiltonian.Martingale.FiberwiseQuadraticFormGap
+import QICLean.Analysis.EuclideanFiberwiseGap
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteIntervalGapComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteRangeKnabeGap
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbient
@@ -73,10 +72,8 @@ import TNLean.MPS.ParentHamiltonian.Martingale.Reduction
 import TNLean.MPS.ParentHamiltonian.Martingale.ResidueCoverGapCriterion
 import TNLean.MPS.ParentHamiltonian.Martingale.ResidueCoverGapLimit
 import TNLean.MPS.ParentHamiltonian.Martingale.SparseGroupedOpenGap
-import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorGapEquivalence
-import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorMaps
-import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorOrder
-import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorPhysicalEmbedding
+import QICLean.Analysis.EuclideanFiberwiseMap
+import QICLean.Analysis.EuclideanExtendByZero
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorTransport
 import TNLean.MPS.ParentHamiltonian.Martingale.Transport
 import TNLean.MPS.ParentHamiltonian.Martingale.WholeIncrementSpectatorTransport

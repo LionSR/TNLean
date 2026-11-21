@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ScalarThreeCocycleGroupCohomology
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleGroupCohomology
 import TNLean.MPS.Symmetry.MPOSymmetry.Associator
 
 /-!
@@ -35,7 +35,7 @@ namespace GroupFamily
 
 open TNLean.Algebra
 
-open scoped TNLean.Algebra.ScalarCohomology
+open scoped ScalarCohomology
 
 variable {d : ℕ} {G : Type} [Group G] {F : GroupFamily G d}
 

@@ -198,15 +198,15 @@ $\tilde\lambda_{a,b}v(a,b,x)=v(e,ab,x)$ of the modified-fusion lemma of FBC25
 theorem circuitTuple_mulVec_defectVector (a b : Multiplicative (ZMod 2)) (x : ZMod 2) :
     (circuitTuple a b : Matrix (Fin 2 → Fin 4) (Fin 2 → Fin 4) ℂ) *ᵥ defectVector a b x =
       defectVector 1 (a * b) x := by
-  rcases MPSTensor.zmod2_cases a with rfl | rfl
+  rcases Multiplicative.zmod2_cases a with rfl | rfl
   · exact circuitTuple_one_mulVec_defectVector b x
-  · rcases MPSTensor.zmod2_cases b with rfl | rfl
+  · rcases Multiplicative.zmod2_cases b with rfl | rfl
     · rw [mul_one]
-      rcases TNLean.Algebra.zmod_two_eq_zero_or_one x with rfl | rfl
+      rcases Hypercube.zmod_two_eq_zero_or_one x with rfl | rfl
       · exact circuitTuple_gen_one_mulVec_defectVector_zero
       · exact circuitTuple_gen_one_mulVec_defectVector_one
     · rw [gen_mul_gen]
-      rcases TNLean.Algebra.zmod_two_eq_zero_or_one x with rfl | rfl
+      rcases Hypercube.zmod_two_eq_zero_or_one x with rfl | rfl
       · exact circuitTuple_gen_gen_mulVec_defectVector_zero
       · exact circuitTuple_gen_gen_mulVec_defectVector_one
 
@@ -335,14 +335,14 @@ tuple. -/
 theorem circuitTupleStar_mulVec_defectVector (a b : Multiplicative (ZMod 2)) (x : ZMod 2) :
     (circuitTupleStar a b : Matrix (Fin 2 → Fin 4) (Fin 2 → Fin 4) ℂ) *ᵥ defectVector a b x =
       defectVector 1 (a * b) x := by
-  rcases MPSTensor.zmod2_cases a with rfl | rfl
+  rcases Multiplicative.zmod2_cases a with rfl | rfl
   · rw [circuitTupleStar_one, one_mul]
     simp
-  · rcases MPSTensor.zmod2_cases b with rfl | rfl
+  · rcases Multiplicative.zmod2_cases b with rfl | rfl
     · rw [circuitTupleStar_gen_one, ← circuitTuple_gen_one]
       exact circuitTuple_mulVec_defectVector gen 1 x
     · rw [gen_mul_gen]
-      rcases TNLean.Algebra.zmod_two_eq_zero_or_one x with rfl | rfl
+      rcases Hypercube.zmod_two_eq_zero_or_one x with rfl | rfl
       · exact circuitTupleStar_gen_gen_mulVec_defectVector_zero
       · exact circuitTupleStar_gen_gen_mulVec_defectVector_one
 

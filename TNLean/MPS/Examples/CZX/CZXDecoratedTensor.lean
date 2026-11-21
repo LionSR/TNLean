@@ -215,7 +215,7 @@ Source: arXiv:2203.12563, line 2224. -/
 theorem mpo_czxDecoratedTensor_eq_groupCocycle :
     MPOTensor.mpo czxDecoratedTensor N =
       MPOTensor.mpo (MPOTensor.GroupCocycle.tensor MPOTensor.GroupCocycle.bitEquiv
-        (TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle 1)
+        (ScalarThreeCochain.cyclicTwoCocycle 1)
         (Multiplicative.ofAdd 1 : Multiplicative (ZMod 2))) N := by
   rw [MPOTensor.GroupCocycle.mpo_tensor_cyclicTwo, mpo_czxDecoratedTensor]
   rfl
@@ -227,18 +227,18 @@ two) and lines 1128–1136 (the CZX symmetry is a `ℤ_2` symmetry). -/
 theorem mpo_czxDecoratedTensor_mul_self :
     MPOTensor.mpo czxDecoratedTensor N * MPOTensor.mpo czxDecoratedTensor N = 1 := by
   rw [mpo_czxDecoratedTensor_eq_groupCocycle, MPOTensor.GroupCocycle.mpo_tensor_mul _
-    (TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_isCocycle 1),
+    (ScalarThreeCochain.cyclicTwoCocycle_isCocycle 1),
     show (Multiplicative.ofAdd 1 * Multiplicative.ofAdd 1 : Multiplicative (ZMod 2)) = 1 by
       decide,
     MPOTensor.GroupCocycle.mpo_tensor_one _
-      (TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_isNormalized 1)]
+      (ScalarThreeCochain.cyclicTwoCocycle_isNormalized 1)]
 
 /-- The periodic operator of the decorated tensor is unitary at every positive length. -/
 theorem mpo_czxDecoratedTensor_mem_unitaryGroup :
     MPOTensor.mpo czxDecoratedTensor N ∈ Matrix.unitaryGroup (Fin N → Fin 2) ℂ := by
   rw [mpo_czxDecoratedTensor_eq_groupCocycle]
   exact MPOTensor.GroupCocycle.mpo_tensor_mem_unitaryGroup _
-    (TNLean.Algebra.ScalarThreeCochain.cyclicTwoCocycle_norm 1) _
+    (ScalarThreeCochain.cyclicTwoCocycle_norm 1) _
 
 omit [NeZero N] in
 /-- **The decorated CZX tensor is a matrix product unitary** on every periodic chain of

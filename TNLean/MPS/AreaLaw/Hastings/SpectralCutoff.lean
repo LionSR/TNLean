@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Representation.RegionPowerSymbol
-import TNLean.Algebra.ToEuclideanLinApply
+import QICLean.Algebra.MatrixToEuclidean
 import QICLean.Entropy.FilterPower
 
 /-!

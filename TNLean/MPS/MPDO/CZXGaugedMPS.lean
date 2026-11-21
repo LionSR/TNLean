@@ -30,7 +30,7 @@ the unmodified fusion operators `λ^R_{e,e} = λ^R_{e,g} = 𝟙`, `λ^R_{g,e} = 
   least three sites.
 
 The local representation property of the modified operators is
-`TNLean.Algebra.gaussOperator_mul` for every tuple of unitaries.
+`GaussLaw.gaussOperator_mul` for every tuple of unitaries.
 
 The periodic vector of the gauged tensor is a product of nearest-neighbour factors, because the
 incoming bond of every letter is forced by the letter
@@ -140,7 +140,7 @@ private theorem gaugeLabelMatrix_mul_blockedGHZTensor_apply (u : Fin 4 × Multip
       GaussianInt.toComplex (gaugedBondWeightZ u r) else 0 := by
   obtain ⟨m, a⟩ := u
   rw [blockedGHZTensor_apply, Matrix.mul_diagonal]
-  rcases MPSTensor.zmod2_cases a with rfl | rfl <;>
+  rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
     fin_cases m <;> fin_cases l <;> fin_cases r <;>
     simp +decide [gaugeLabelMatrix, gaugedBondWeightZ, toComplex_neg_i]
 
@@ -249,7 +249,7 @@ private theorem localPerm_gaugedSite_window (x y : Fin 4 × Multiplicative (ZMod
   rw [Equiv.trans_apply, Equiv.trans_apply, windowCoordinates_symm_gaugedSite]
   funext k
   fin_cases k <;> simp [windowCoordinates, gaugedSite, localPerm, gaussWindowImage,
-    TNLean.Algebra.gaussLegAction_apply]
+    GaussLaw.gaussLegAction_apply]
 
 private theorem localPhase_gaugedSite_window (x y : Fin 4 × Multiplicative (ZMod 2)) :
     localPhase (windowCoordinates.symm ![gaugedSite.symm x, gaugedSite.symm y]) =
@@ -355,8 +355,8 @@ private def unmodifiedPhase (a b : Multiplicative (ZMod 2)) : (Fin 2 → Fin 4) 
 private theorem unmodifiedCircuitTuple_eq_monomial (a b : Multiplicative (ZMod 2)) :
     (unmodifiedCircuitTuple a b : Matrix (Fin 2 → Fin 4) (Fin 2 → Fin 4) ℂ) =
       monomial (unmodifiedPerm a b) (unmodifiedPhase a b) := by
-  rcases MPSTensor.zmod2_cases a with rfl | rfl <;>
-    rcases MPSTensor.zmod2_cases b with rfl | rfl
+  rcases Multiplicative.zmod2_cases a with rfl | rfl <;>
+    rcases Multiplicative.zmod2_cases b with rfl | rfl
   · simp [unmodifiedCircuitTuple, unmodifiedPerm, unmodifiedPhase, monomial_one]
   · simp [unmodifiedCircuitTuple, unmodifiedPerm, unmodifiedPhase, monomial_one]
   · simp only [unmodifiedCircuitTuple, unmodifiedPerm, unmodifiedPhase, w_eq,
@@ -379,7 +379,7 @@ theorem unmodifiedPlacedGaussOperator_mulVec_gaugedMPS_ne (N : ℕ) (hN : 2 ≤ 
       gaugedMPS N ≠ gaugedMPS N := by
   have : NeZero N := ⟨by omega⟩
   rw [MPOTensor.placedGaussOperator, gaussWindowOperator,
-    TNLean.Algebra.gaussOperator_eq_monomial _ _ _ unmodifiedCircuitTuple_eq_monomial,
+    GaussLaw.gaussOperator_eq_monomial _ _ _ unmodifiedCircuitTuple_eq_monomial,
     Matrix.coe_reindexAlgEquiv, reindex_monomial, placeAlong_ringWindow_monomial, Ne,
     monomial_mulVec_eq_self_iff]
   intro h
@@ -389,13 +389,13 @@ theorem unmodifiedPlacedGaussOperator_mulVec_gaugedMPS_ne (N : ℕ) (hN : 2 ≤ 
   have hwin : (gaussLocalCoordinateEquiv 4 (Multiplicative (ZMod 2))).symm ![c, c] =
       (![0, 0], (1, 1)) := windowCoordinates_symm_gaugedSite (0, 1) (0, 1)
   have himg : ((gaussLocalCoordinateEquiv 4 (Multiplicative (ZMod 2))).symm.trans
-      ((TNLean.Algebra.gaussMonomialPerm unmodifiedPerm gen).trans
+      ((GaussLaw.gaussMonomialPerm unmodifiedPerm gen).trans
         (gaussLocalCoordinateEquiv 4 (Multiplicative (ZMod 2))))) ![c, c] =
       ![gaugedSite.symm (3, gen), gaugedSite.symm (0, gen)] := by
     rw [Equiv.trans_apply, Equiv.trans_apply, hwin]
     funext k
     fin_cases k <;>
-      simp +decide [gaugedSite, unmodifiedPerm, TNLean.Algebra.gaussLegAction_apply]
+      simp +decide [gaugedSite, unmodifiedPerm, GaussLaw.gaussLegAction_apply]
   rw [himg, Function.comp_apply, hwin] at hs
   obtain ⟨R, h1, h2⟩ := gaugedMPS_replaceWindow hN j (fun _ ↦ c)
     ![gaugedSite.symm (3, gen), gaugedSite.symm (0, gen)] (by simp +decide [c, gaugedLeftBond])
@@ -406,9 +406,9 @@ theorem unmodifiedPlacedGaussOperator_mulVec_gaugedMPS_ne (N : ℕ) (hN : 2 ≤ 
     rw [h2] at hone
     simpa +decide [c, gaugedBondFactorZ, gaugedBondWeightZ, gaugedLeftBond] using hone
   rw [h1, h2, hR] at hs
-  have hphase : TNLean.Algebra.gaussMonomialPhase unmodifiedPerm unmodifiedPhase gen
+  have hphase : GaussLaw.gaussMonomialPhase unmodifiedPerm unmodifiedPhase gen
       (![0, 0], (1, 1)) = I := by
-    simp +decide [TNLean.Algebra.gaussMonomialPhase, unmodifiedPerm, unmodifiedPhase, hExponent]
+    simp +decide [GaussLaw.gaussMonomialPhase, unmodifiedPerm, unmodifiedPhase, hExponent]
   rw [hphase] at hs
   have hlhs : GaussianInt.toComplex
       (gaugedBondFactorZ (gaugedSite (gaugedSite.symm (3, gen)))

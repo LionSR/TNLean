@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.InverseCompatibleTruncation
 import TNLean.MPS.MPU.InverseCompatibleWordAdjoint
-import TNLean.Algebra.UnitaryEntrywiseConjugation
+import QICLean.Algebra.UnitaryEntrywiseConjugation
 
 /-!
 # Unitarity and phase cancellation of the raw inverse-compatible words

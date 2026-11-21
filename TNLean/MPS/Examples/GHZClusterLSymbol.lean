@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.CocycleCommPhase
-import TNLean.Algebra.LSymbolActionMatrix
-import TNLean.Algebra.StabilizerBlockIndependence
+import QICLean.Algebra.Cohomology.CocycleCommPhase
+import QICLean.Algebra.Cohomology.LSymbol
+import QICLean.Algebra.Cohomology.StabilizerBlockIndependence
 import TNLean.MPS.Examples.GHZClusterAction
 
 /-!
@@ -41,7 +41,7 @@ L-symbols are not block independent (line 4490). The modified fusion operators a
 state-level gauging that follow in the source are not treated here.
 
 **Scope restriction (scalar L-symbols):** block independence is the scalar condition
-`TNLean.Algebra.LSymbol.IsBlockIndependent` on the L-symbol computed from the action tensors, with
+`LSymbol.IsBlockIndependent` on the L-symbol computed from the action tensors, with
 `ℂˣ` coefficients, as in `TNLean.Algebra.StabilizerBlockIndependence`; see
 `docs/paper-gaps/fbc25_mpu_action_stabilizer_source_audit.tex`.
 
@@ -65,7 +65,7 @@ state-level gauging that follow in the source are not treated here.
 * `MPSTensor.z4z2LSymbol_not_isBlockIndependent`: block independence fails.
 -/
 
-open scoped Matrix TNLean.Algebra.ScalarCohomology
+open scoped Matrix ScalarCohomology
 open Matrix TNLean.Algebra
 
 namespace MPSTensor

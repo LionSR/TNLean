@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Overlap.Basic
-import TNLean.Circuit.EmbeddedProduct
+import QICLean.ManyBody.Sites.PlacedConfiguration
 import QICLean.Circuit.Model.CleanWorkspace
 import Mathlib.Data.Fin.Tuple.Embedding
 import Mathlib.Logic.Equiv.Set

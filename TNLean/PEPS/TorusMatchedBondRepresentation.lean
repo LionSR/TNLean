@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.GInjectiveTorusProjector
-import TNLean.Algebra.RepresentationDelta
+import QICLean.Representation.Character.Delta
 
 /-!
 # Matching representations on the eight bonds of the four-block torus

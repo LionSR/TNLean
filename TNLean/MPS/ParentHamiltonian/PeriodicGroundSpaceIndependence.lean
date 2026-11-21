@@ -9,7 +9,7 @@ import TNLean.MPS.ParentHamiltonian.ResidualBoundaryGramInverse
 import TNLean.MPS.ParentHamiltonian.GaugePhaseSeparationTransport
 import TNLean.MPS.ParentHamiltonian.GroundSpaceIndependence
 import TNLean.MPS.ParentHamiltonian.SectorBoundedLifts
-import TNLean.Algebra.SupportedRangeProjector
+import QICLean.Analysis.SupportedRangeProjector
 import Mathlib.LinearAlgebra.Matrix.Bilinear
 
 /-!

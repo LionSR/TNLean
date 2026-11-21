@@ -9,8 +9,8 @@ import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum
 import QICLean.Analysis.GroundEnergyBounds
 import QICLean.ManyBody.Hamiltonian.Models
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.SupportedMatrixElements
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.ManyBody.Sites.ProductVector
 import QICLean.Entropy.RegionUnion
 import QICLean.Entropy.ZeroEntropy
 import QICLean.ManyBody.Sites.Lattice.Chain

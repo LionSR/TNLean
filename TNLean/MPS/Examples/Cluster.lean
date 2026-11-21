@@ -9,8 +9,8 @@ import TNLean.MPS.Symmetry.StringOrder
 import TNLean.MPS.Examples.GHZ
 import TNLean.MPS.Examples.ZMod2
 import QICLean.Algebra.ComplexSqrt
-import TNLean.Algebra.CocycleCohomology
-import TNLean.Algebra.MatrixScalarIdentity
+import QICLean.Algebra.Cohomology.CocycleCohomology
+import QICLean.Algebra.MatrixScalarIdentity
 
 /-!
 # Cluster state as a Matrix Product State
@@ -56,7 +56,7 @@ is injective and which lies in a non-trivial symmetry-protected topological
   string order and local symmetry for finitely correlated states
 -/
 
-open scoped Matrix BigOperators TNLean.Algebra.ScalarCohomology
+open scoped Matrix BigOperators ScalarCohomology
 open Matrix Finset MPSTensor
 open Kraus (blockPhysDim blockPhysDim_eq_pow decodeBlock blockTensor
   isNBlkInjective_iff_blockTensor_isInjective)

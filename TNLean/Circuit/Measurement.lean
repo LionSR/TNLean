@@ -8,4 +8,4 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Circuit.Measurement
 
-import TNLean.Circuit.Measurement.Asymptotic
+import QICLean.Circuit.Model.AsymptoticPreparation

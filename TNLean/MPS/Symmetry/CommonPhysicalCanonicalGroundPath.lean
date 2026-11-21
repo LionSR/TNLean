@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.CommonPhysicalFixedPointGroundPath
 import TNLean.MPS.Symmetry.ExactMPSGroundPathComposition
-import TNLean.Algebra.CommonKernelGapInterpolation
+import QICLean.ManyBody.Hamiltonian.KernelGap
 
 /-!
 # Exact MPS ground states along the canonical fixed-point path
@@ -130,9 +130,9 @@ constant weighted MPS ground line of its initial bond interaction.
 Source: arXiv:1010.3732, Section II.F.2, the parent-interaction comparison. -/
 noncomputable def commonPhysicalBondCanonicalParentComparisonExactMPSGroundPath
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ R : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
@@ -171,9 +171,9 @@ weighted tensor as its exact ground-state representative. Source:
 arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/
 noncomputable def commonPhysicalLeftParentComparisonExactMPSGroundPath
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
@@ -197,9 +197,9 @@ weighted tensor as its exact ground-state representative. Source:
 arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/
 noncomputable def commonPhysicalRightParentComparisonExactMPSGroundPath
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
@@ -259,9 +259,9 @@ realization with the common ambient bond dimension. Source:
 arXiv:1010.3732, Section II.F.2, `eq:sym:omega-gamma`. -/
 noncomputable def commonPhysicalCanonicalFixedPointExactMPSGroundPath
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
@@ -284,9 +284,9 @@ included weighted endpoint tensor. Source: arXiv:1010.3732,
 Section II.F.2, `eq:sym:omega-gamma`. -/
 theorem commonPhysicalCanonicalFixedPointExactMPSGroundPath_tensor_zero
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
@@ -314,9 +314,9 @@ included weighted endpoint tensor. Source: arXiv:1010.3732,
 Section II.F.2, `eq:sym:omega-gamma`. -/
 theorem commonPhysicalCanonicalFixedPointExactMPSGroundPath_tensor_one
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)

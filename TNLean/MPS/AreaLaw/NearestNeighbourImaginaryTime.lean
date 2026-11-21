@@ -12,8 +12,8 @@ import Mathlib.Data.Finset.Disjoint
 import Mathlib.Data.Nat.Factorial.Basic
 import Mathlib.Logic.Function.Iterate
 import Mathlib.Tactic.Positivity
-import TNLean.Circuit.SiteEmbedding
-import TNLean.Circuit.SupportedMatrixElements
+import QICLean.ManyBody.Sites.PlacedConfiguration
+import QICLean.ManyBody.Sites.ProductVector
 import QICLean.Entropy.RegionUnion
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import Mathlib.Analysis.Matrix.Order

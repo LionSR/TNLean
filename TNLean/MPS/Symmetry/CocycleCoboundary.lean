@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.VirtualRepresentation
-import TNLean.Algebra.CocycleCohomology
+import QICLean.Algebra.Cohomology.CocycleCohomology
 
 /-!
 # Gauge independence of the cocycle class
@@ -27,7 +27,7 @@ symmetric tensor, independent of the gauge parametrisation.
   spin systems*, Phys. Rev. B 83, 035107 (2011)
 -/
 
-open scoped Matrix TNLean.Algebra.ScalarCohomology
+open scoped Matrix ScalarCohomology
 
 /-! ### Gauge independence of the cocycle class -/
 
@@ -62,9 +62,9 @@ theorem cohomologousTo_of_isInjective
       (ρ₂.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
         (((ρ₂.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :
     groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₂ hD)) =
+      (ScalarCocycle.isMulCocycle₂_of_projRep ρ₂ hD)) =
     groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ hD)) := by
+      (ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ hD)) := by
   apply (H2π_eq_iff_isMulCoboundary₂_div _ _).mpr
   apply (isMulCoboundary₂_div_iff _ _).mpr
   -- For each g, the two gauge matrices differ by a scalar.

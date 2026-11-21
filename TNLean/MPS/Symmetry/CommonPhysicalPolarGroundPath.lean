@@ -303,9 +303,9 @@ weighted fixed-point endpoint. Source: arXiv:1010.3732, Sections II.C and
 II.F.2, equation eq:sym:omega-gamma. -/
 noncomputable def commonPhysicalLeftPolarExactMPSGroundPath
     {G : Type} [Group G] {d₀ d₁ D₀ D₁ : ℕ} [NeZero D₀]
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ)
@@ -326,9 +326,9 @@ weighted fixed-point endpoint. Source: arXiv:1010.3732, Sections II.C and
 II.F.2, equation eq:sym:omega-gamma. -/
 noncomputable def commonPhysicalRightPolarExactMPSGroundPath
     {G : Type} [Group G] {d₀ d₁ D₀ D₁ : ℕ} [NeZero D₁]
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ)
@@ -347,9 +347,9 @@ noncomputable def commonPhysicalRightPolarExactMPSGroundPath
 Source: arXiv:1010.3732, Section II.F.2, equation eq:sym:omega-gamma. -/
 theorem commonPhysicalLeftPolarExactMPSGroundPath_tensor_zero
     {G : Type} [Group G] {d₀ d₁ D₀ D₁ : ℕ} [NeZero D₀]
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ)
@@ -370,9 +370,9 @@ as the actual physically included tensor. Source: arXiv:1010.3732,
 Sections II.C and II.F.2, equation eq:sym:omega-gamma. -/
 theorem commonPhysicalLeftPolarExactMPSGroundPath_samePositiveMpvRay_one
     {G : Type} [Group G] {d₀ d₁ D₀ D₁ : ℕ} [NeZero D₀]
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ)
@@ -417,9 +417,9 @@ theorem commonPhysicalLeftPolarExactMPSGroundPath_samePositiveMpvRay_one
 Source: arXiv:1010.3732, Section II.F.2, equation eq:sym:omega-gamma. -/
 theorem commonPhysicalRightPolarExactMPSGroundPath_tensor_zero
     {G : Type} [Group G] {d₀ d₁ D₀ D₁ : ℕ} [NeZero D₁]
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ)
@@ -440,9 +440,9 @@ as the actual physically included tensor. Source: arXiv:1010.3732,
 Sections II.C and II.F.2, equation eq:sym:omega-gamma. -/
 theorem commonPhysicalRightPolarExactMPSGroundPath_samePositiveMpvRay_one
     {G : Type} [Group G] {d₀ d₁ D₀ D₁ : ℕ} [NeZero D₁]
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ)

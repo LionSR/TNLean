@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 import Mathlib.Tactic.Linarith
-import TNLean.Algebra.ExplicitThresholds
+import QICLean.Analysis.ExplicitThresholds
 
 /-!
 # Uniform reset-width estimates

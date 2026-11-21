@@ -32,7 +32,7 @@ between this MPS argument and arbitrary Hamiltonian paths is recorded in
 
 namespace MPSTensor
 
-open scoped TNLean.Algebra.ScalarCohomology
+open scoped ScalarCohomology
 open scoped Matrix
 open TNLean.Algebra
 
@@ -73,7 +73,7 @@ independent exact MPS ground-state path remains a separate question. -/
 theorem invertible_projectivePath_factor_endpoints_cohomologous
     {G : Type} [Group G] {D : ℕ} (hD : 0 < D)
     (V : unitInterval → G → Matrix (Fin D) (Fin D) ℂ)
-    (ω : unitInterval → TNLean.Algebra.ScalarCocycle G)
+    (ω : unitInterval → ScalarCocycle G)
     (hV : ∀ g, Continuous fun t => V t g)
     (hdet : ∀ t g, (V t g).det ≠ 0)
     (hmul : ∀ t g h, V t g * V t h = (ω t (g, h) : ℂ) • V t (g * h)) :

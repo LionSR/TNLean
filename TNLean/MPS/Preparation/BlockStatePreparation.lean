@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.FinsetEnumeration
+import QICLean.Algebra.FinsetEnumeration
 import TNLean.MPS.Preparation.BlockIsometryState
 import TNLean.MPS.Preparation.PairLayer
 import TNLean.MPS.Preparation.SequentialFactorization
@@ -11,7 +11,7 @@ import QICLean.Circuit.Compile.ChainUniversality
 import QICLean.Circuit.Model.UnitaryPlacement
 import QICLean.Circuit.Model.UnitaryRegion
 import QICLean.Circuit.Model.UnitaryRing
-import TNLean.Circuit.EmbeddedProduct
+import QICLean.ManyBody.Sites.PlacedConfiguration
 
 /-!
 # Preparing arbitrary block-isometry states in depth `O(L)`

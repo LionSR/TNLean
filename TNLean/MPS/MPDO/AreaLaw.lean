@@ -6,8 +6,7 @@ Authors: TNLean contributors
 import Mathlib.Data.List.Rotate
 import Mathlib.Logic.Equiv.Fin.Rotate
 import QICLean.Analysis.EntropyDecomposition
-import TNLean.Algebra.FinCyclicInduction
-import TNLean.Algebra.NatInterval
+import QICLean.Algebra.IndexInduction
 import TNLean.MPS.MPDO.Defs
 
 /-!

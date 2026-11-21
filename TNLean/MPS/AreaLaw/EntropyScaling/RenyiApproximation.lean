@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.EntropyScaling.EfficientApproximation
 import TNLean.MPS.AreaLaw.MPSApproximation
-import TNLean.Algebra.FlatDensityRenyiEntropy
+import QICLean.Entropy.FlatDensityEntropy
 import QICLean.Entropy.RenyiTail
 import QICLean.Entropy.Renyi.Smooth
 import TNLean.MPS.AreaLaw.EntropyScaling.SmoothApproximation

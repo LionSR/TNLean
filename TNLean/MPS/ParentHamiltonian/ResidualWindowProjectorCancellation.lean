@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.ResidualWindowMixedGramDecay
 import TNLean.MPS.ParentHamiltonian.ResidualWindowRightSectorSum
-import TNLean.Algebra.SupportedRangeProjectorNorm
+import QICLean.Analysis.SupportedRangeProjector
 
 /-!
 # Supported cancellation for residual window projections

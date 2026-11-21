@@ -19,7 +19,7 @@ Construction of the supplied ambient data from a gapped physical path remains
 open; see `docs/paper-gaps/spc11_spt_interpolation_upper_range.tex`.
 -/
 
-open scoped Matrix ComplexOrder Topology TNLean.Algebra.ScalarCohomology
+open scoped Matrix ComplexOrder Topology ScalarCohomology
 
 namespace TNLean.Algebra
 

@@ -13,7 +13,7 @@ import QICLean.Analysis.EnergyTruncation
 import QICLean.Analysis.GroundEnergyBounds
 import QICLean.Analysis.LowEnergyCluster
 import QICLean.Analysis.LowEnergyPerturbation
-import TNLean.Algebra.ExpMulSubMonotone
+import QICLean.Analysis.ExplicitThresholds
 import QICLean.ManyBody.Hamiltonian.DisjointRegionalGround
 import TNLean.MPS.AreaLaw.FiveRegionHamiltonian
 import TNLean.MPS.AreaLaw.IndependentFiveRegionCluster

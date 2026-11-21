@@ -8,7 +8,7 @@ import TNLean.MPS.Symmetry.VaryingBondPhysicalCharacter
 import TNLean.MPS.Symmetry.PolarVirtualCohomology
 import TNLean.MPS.Symmetry.ExactMPSPhaseGaugeInvariance
 import TNLean.MPS.Symmetry.UnitalSupportedPathInvariance
-import TNLean.Algebra.UnitaryGeneralLinearInverse
+import QICLean.Algebra.IsometricFrameEmbedding
 
 /-!
 # Virtual classes of exact ground-state paths under a transfer bound
@@ -29,7 +29,7 @@ set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
 
-open scoped Matrix Matrix.Norms.Frobenius Topology TNLean.Algebra.ScalarCohomology
+open scoped Matrix Matrix.Norms.Frobenius Topology ScalarCohomology
 open Filter TNLean.Algebra
 
 namespace MPSTensor

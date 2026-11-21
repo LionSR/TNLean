@@ -8,4 +8,4 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.Circuit.Gates
 
-import TNLean.Circuit.Gates.Permutation
+import QICLean.ManyBody.Sites.ConfigurationMap

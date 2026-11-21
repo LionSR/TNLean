@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.BondProductPhysicalParentHamiltonian
-import TNLean.Algebra.CommonKernelSpectralGap
+import QICLean.ManyBody.Hamiltonian.KernelGap
 import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.Matrix.Order
 

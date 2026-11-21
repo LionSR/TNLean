@@ -9,7 +9,7 @@ import TNLean.MPS.Symmetry.SPTFixedPoint
 import TNLean.MPS.Symmetry.BondInterpolation
 import TNLean.MPS.Symmetry.BondRegrouping
 import TNLean.MPS.Symmetry.BondInterpolationSymmetry
-import TNLean.Algebra.MatrixCyclicPathSum
+import QICLean.Algebra.MatrixCyclicPathSum
 
 /-!
 # Weighted matrix-unit tensor for the bond interpolation
@@ -70,8 +70,8 @@ the fixed-point tensor: the physical action `U(g) = W_gᵀ ⊗ W_g⁻¹` becomes
 conjugation by `W_g = ρ(g⁻¹)`. Source: arXiv:2011.12127, §III.A
 (`Papers/2011.12127/TN-Review-main.tex` line 1157), without the normalization. -/
 private theorem twistedTensor_matrixUnit {G : Type} [Group G] {D : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ : TNLean.Algebra.ProjectiveRepresentation (D := D) ω) (g : G)
+    {ω : ScalarCocycle G}
+    (ρ : ProjectiveRepresentation (D := D) ω) (g : G)
     (i : Fin (D * D)) :
     twistedTensor (fun p : Fin (D * D) => Matrix.single (sptPair p).1 (sptPair p).2 (1 : ℂ))
         (sptFixedPointAction ρ 1) g i =
@@ -97,9 +97,9 @@ physical action induced by the common-factor virtual direct sum.
 Schuch–Pérez-García–Cirac, arXiv:1010.3732, Section II.F.2,
 equations `eq:sym:omega-gamma` and `eq:1d-sym:jointsym`. -/
 theorem twistedTensor_weightedMatrixUnitInterpolation
-    {G : Type} [Group G] {D₀ D₁ : ℕ} {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {G : Type} [Group G] {D₀ D₁ : ℕ} {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (g : G) (γ : ℝ) (p : Fin ((D₀ + D₁) * (D₀ + D₁))) :
     twistedTensor (weightedMatrixUnitInterpolation D₀ D₁ γ)
       (sptFixedPointAction (ρ₀.directSum ρ₁) 1) g p =
@@ -133,9 +133,9 @@ The on-site action is independent of `γ`.
 Schuch–Pérez-García–Cirac, arXiv:1010.3732, Section II.F.2,
 equations `eq:sym:omega-gamma` and `eq:1d-sym:jointsym`. -/
 theorem weightedMatrixUnitInterpolation_isOnSiteSymmetric
-    {G : Type} [Group G] {D₀ D₁ : ℕ} {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {G : Type} [Group G] {D₀ D₁ : ℕ} {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (γ : ℝ) :
     IsOnSiteSymmetric (weightedMatrixUnitInterpolation D₀ D₁ γ)
       (sptFixedPointAction (ρ₀.directSum ρ₁) 1) := fun g =>

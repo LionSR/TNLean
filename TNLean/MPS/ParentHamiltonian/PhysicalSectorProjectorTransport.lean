@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.PhysicalSectorKernelSupport
-import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorPhysicalEmbedding
+import QICLean.Analysis.EuclideanExtendByZero
 
 /-!
 # Actual parent projectors on disjoint physical sectors

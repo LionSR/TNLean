@@ -5,9 +5,9 @@ Authors: TNLean contributors
 -/
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 import QICLean.Algebra.ComplexSqrt
-import TNLean.Algebra.MatrixSingleSpan
-import TNLean.Algebra.TwistedRegularProjective
-import TNLean.Algebra.UnitaryGeneralLinearInverse
+import QICLean.Algebra.MatrixSingleSpan
+import QICLean.Algebra.Cohomology.TwistedRegularProjective
+import QICLean.Algebra.IsometricFrameEmbedding
 import TNLean.MPS.RFP.Defs
 import TNLean.MPS.Symmetry.Character
 import TNLean.MPS.Symmetry.CocycleCoboundary
@@ -101,7 +101,7 @@ noncomputable section
 namespace MPSTensor
 
 open TNLean.Algebra
-open scoped TNLean.Algebra.ScalarCohomology
+open scoped ScalarCohomology
 
 variable {D : ℕ}
 
@@ -362,9 +362,9 @@ theorem cohomologousTo_of_sptFixedPointTensor [NeZero D]
       φ g • ((ρ'.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * sptFixedPointTensor D i *
         (((ρ'.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) :
     groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ' (NeZero.pos D))) =
+      (ScalarCocycle.isMulCocycle₂_of_projRep ρ' (NeZero.pos D))) =
     groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-      (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ (NeZero.pos D))) := by
+      (ScalarCocycle.isMulCocycle₂_of_projRep ρ (NeZero.pos D))) := by
   refine cohomologousTo_of_isInjective _ sptFixedPointTensor_isInjective
     (sptFixedPointAction ρ 1) (Nat.pos_of_ne_zero (NeZero.ne D))
     (ρ₁ := ρ) (ρ₂ := ρ')
@@ -388,9 +388,9 @@ theorem exists_virtualRep_sptFixedPointTensor [NeZero D]
         φ g • ((ρ'.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * sptFixedPointTensor D i *
           (((ρ'.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) ∧
       groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ' (NeZero.pos D))) =
+        (ScalarCocycle.isMulCocycle₂_of_projRep ρ' (NeZero.pos D))) =
       groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ (NeZero.pos D))) :=
+        (ScalarCocycle.isMulCocycle₂_of_projRep ρ (NeZero.pos D))) :=
   ⟨ω, ρ, twistedTensor_sptFixedPointTensor ρ φ, rfl⟩
 
 /-- **A unitary virtual action and unit-modulus character give a unitary physical action.**
@@ -422,7 +422,7 @@ theorem sptFixedPointAction_mem_unitaryGroup (ρ : ProjectiveRepresentation (D :
 2-cocycle `ω` of a finite group has a unitary projective representation on `ℂ^G` whose
 factor system is cohomologous to `ω`, namely the twisted regular representation of the
 inverse of its pointwise phase
-(`TNLean.Algebra.ScalarCocycle.regularProjectiveForClass`).  With this representation the
+(`ScalarCocycle.regularProjectiveForClass`).  With this representation the
 fixed-point tensor of bond dimension `|G|` is symmetric under a unitary physical action,
 and every virtual projective representation of that symmetry has a factor system
 cohomologous to `ω`.  The tensor is injective by `sptFixedPointTensor_isInjective`.
@@ -434,7 +434,7 @@ theorem exists_unitary_sptFixedPoint_of_isCocycle [Fintype G] (hω : groupCohomo
     (φ : G →* ℂ) :
     ∃ (η : ScalarCocycle G) (ρ : ProjectiveRepresentation (D := Fintype.card G) η),
       groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ Fintype.card_pos)) =
+        (ScalarCocycle.isMulCocycle₂_of_projRep ρ Fintype.card_pos)) =
         groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω) ∧
       (∀ g, (ρ.X g : Matrix (Fin (Fintype.card G)) (Fin (Fintype.card G)) ℂ) ∈
         Matrix.unitaryGroup (Fin (Fintype.card G)) ℂ) ∧
@@ -450,7 +450,7 @@ theorem exists_unitary_sptFixedPoint_of_isCocycle [Fintype G] (hω : groupCohomo
             (((ρ'.X (g⁻¹))⁻¹ : GL (Fin (Fintype.card G)) ℂ) :
               Matrix (Fin (Fintype.card G)) (Fin (Fintype.card G)) ℂ))) →
         groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-          (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ' Fintype.card_pos)) =
+          (ScalarCocycle.isMulCocycle₂_of_projRep ρ' Fintype.card_pos)) =
           groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω) := by
   classical
   have : NeZero (Fintype.card G) := ⟨Fintype.card_ne_zero⟩

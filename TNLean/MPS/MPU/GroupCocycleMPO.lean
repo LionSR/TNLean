@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.MonomialMatrix
-import TNLean.Algebra.ScalarThreeCocycle
+import QICLean.Algebra.MonomialMatrix
+import QICLean.Algebra.Cohomology.ScalarThreeCocycle
 import TNLean.MPS.MPDO.OperatorCyclicSum
 import TNLean.MPS.MPU.GroupRepresentation
 

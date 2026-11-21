@@ -338,9 +338,9 @@ in the actual three-summand physical representation. Source:
 arXiv:1010.3732, Section II.F.2, eq:1d-sym:jointsym. -/
 theorem commonPhysicalParentInteraction_commute_onSite
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ R N : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ)
@@ -377,9 +377,9 @@ two-site physical representation. Source: arXiv:1010.3732,
 Section II.F.2, eq:1d-sym:jointsym. -/
 theorem commonPhysicalNormalizedBondInteraction_commute_onSiteTensorPow
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ)
@@ -402,9 +402,9 @@ on-site symmetry. Source: arXiv:1010.3732, Section II.F.2,
 eq:1d-sym:jointsym. -/
 theorem commonPhysicalNormalizedBondInteraction_commute_onSite
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ N : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ)
@@ -429,9 +429,9 @@ complements. Source: arXiv:1010.3732, Section II.F.2,
 eq:sym:omega-gamma and eq:1d-sym:jointsym. -/
 noncomputable def commonPhysicalNormalizedBondGappedPath
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
@@ -466,9 +466,9 @@ extension. Source: arXiv:1010.3732, Section II.F.2,
 eq:sym:omega-gamma and eq:1d-sym:jointsym. -/
 noncomputable def commonPhysicalBondCanonicalParentComparisonPath
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ R : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
@@ -528,9 +528,9 @@ the first fixed-point tensor in the active summand. Source: arXiv:1010.3732,
 Section II.F.2, eq:sym:omega-gamma and eq:1d-sym:jointsym. -/
 noncomputable def commonPhysicalLeftParentComparisonPath
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
@@ -556,9 +556,9 @@ the second fixed-point tensor in the same active summand. Source:
 arXiv:1010.3732, Section II.F.2, eq:sym:omega-gamma and eq:1d-sym:jointsym. -/
 noncomputable def commonPhysicalRightParentComparisonPath
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
@@ -585,9 +585,9 @@ gapped path. Both original physical complements are retained. Source:
 arXiv:1010.3732, Section II.F.2, eq:sym:omega-gamma and eq:1d-sym:jointsym. -/
 noncomputable def commonPhysicalCanonicalFixedPointGappedPath
     {G : Type} [Group G] {D₀ D₁ d₀ d₁ : ℕ}
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (hD₀ : 0 < D₀) (hD₁ : 0 < D₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)

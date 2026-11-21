@@ -5,10 +5,10 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusProjectorExpansion
 import TNLean.PEPS.RegularTorusCompatibility
-import TNLean.Algebra.CharacterProjectorTwirl
+import QICLean.Representation.Character.Twirl
 import Mathlib.Data.Matrix.Basis
 import Mathlib.LinearAlgebra.Finsupp.LinearCombination
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Extraction of the two closure operators from a torus projector state

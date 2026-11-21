@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ScalarThreeCocycleCyclicInvariant
+import QICLean.Algebra.Cohomology.ScalarThreeCocycleCyclicInvariant
 import TNLean.MPS.MPDO.BoundarySourceMixedPentagon
 
 /-!
@@ -236,7 +236,7 @@ its nonvanishing L entries make the F entries nonzero. Source: GLM23,
 theorem exists_lSymbol_isCompatible_of_group [Nonempty X]
     (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor) (hχ : ∀ a, 0 < χ a)
     (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor)) :
-    ∃ (L : TNLean.Algebra.LSymbol G X) (ω : TNLean.Algebra.ScalarThreeCochain G),
+    ∃ (L : LSymbol G X) (ω : ScalarThreeCochain G),
       (∀ x g h, (L x g h : ℂ) = groupLScalar eG eX hN hM WF VA WA x g h) ∧
       (∀ g h k, (ω g h k : ℂ) = groupFScalar eG hN VF WF g h k) ∧
       L.IsCompatible ω := by
@@ -267,13 +267,13 @@ theorem isTrivialGaugeClass_of_group_of_forall_smul_eq
     (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor) (hχ : ∀ a, 0 < χ a)
     (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
     (x : X) (hfix : ∀ g : G, g • x = x) :
-    ∃ ω : TNLean.Algebra.ScalarThreeCochain G,
+    ∃ ω : ScalarThreeCochain G,
       (∀ g h k, (ω g h k : ℂ) = groupFScalar eG hN VF WF g h k) ∧
-      TNLean.Algebra.ScalarThreeCochain.IsTrivialGaugeClass ω := by
+      ScalarThreeCochain.IsTrivialGaugeClass ω := by
   have : Nonempty X := ⟨x⟩
   obtain ⟨L, ω, -, hω, hLω⟩ := exists_lSymbol_isCompatible_of_group eG eX hN hM VF WF VA WA
     O A hF hA hInjA hD hneA hInjO hχ hneO
-  exact ⟨ω, hω, TNLean.Algebra.LSymbol.isTrivialGaugeClass_of_isCompatible_of_forall_smul_eq
+  exact ⟨ω, hω, LSymbol.isTrivialGaugeClass_of_isCompatible_of_forall_smul_eq
     hLω x hfix⟩
 
 end MPOTensor

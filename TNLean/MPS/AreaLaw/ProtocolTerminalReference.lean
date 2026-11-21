@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.AreaLaw.ProtocolInitialization
-import TNLean.Algebra.CyclicInsertion
+import QICLean.Analysis.CyclicInsertion
 import QICLean.Analysis.ProductReferenceDensityError
 import Mathlib.Data.List.ProdSigma
 import Mathlib.Data.List.Nodup

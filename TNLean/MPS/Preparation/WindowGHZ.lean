@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.IsometryUnitaryExtension
+import QICLean.Circuit.Gate.UnitaryExtension
 import QICLean.Algebra.PermutationMatrixUnitary
 import TNLean.MPS.Preparation.ConfigurationLayers
-import TNLean.Circuit.Gates.Permutation
+import QICLean.ManyBody.Sites.ConfigurationMap
 import QICLean.Circuit.Model.Measurement
 import QICLean.Circuit.Protocol.Teleportation.Hop
 import QICLean.Circuit.Compile.ChainUniversality

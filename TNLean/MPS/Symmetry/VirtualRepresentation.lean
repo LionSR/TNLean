@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.Defs
 import TNLean.MPS.Symmetry.GaugeUniqueness
-import TNLean.Algebra.ProjectiveRepresentation
+import QICLean.Algebra.Cohomology.ProjectiveRepresentation
 
 /-!
 # Virtual representation theorem for injective MPS

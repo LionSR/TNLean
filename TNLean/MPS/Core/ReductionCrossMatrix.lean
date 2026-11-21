@@ -3,12 +3,12 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.ListProduct
+import QICLean.Algebra.OrderedProduct
 import TNLean.MPS.Chain.OneSidedInverse
 import TNLean.MPS.Core.Blocking
 import TNLean.MPS.Core.TracePairing
 import Mathlib.LinearAlgebra.Matrix.Kronecker
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # The mixed-bond cross matrix in the MPS reduction proof

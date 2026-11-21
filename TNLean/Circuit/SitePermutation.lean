@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Algebra.PermutationMatrixUnitary
-import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlacedConfiguration
 
 /-!
 # Permutations of configurations and of sites

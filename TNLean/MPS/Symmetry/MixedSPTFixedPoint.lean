@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.SPTFixedPoint
 import TNLean.MPS.Symmetry.MixedSymmetry
-import TNLean.Algebra.ConjugateRegularRepresentation
+import QICLean.Algebra.Cohomology.ConjugateRegularRepresentation
 
 /-!
 # Dimer SPT fixed points with time reversal and reflection

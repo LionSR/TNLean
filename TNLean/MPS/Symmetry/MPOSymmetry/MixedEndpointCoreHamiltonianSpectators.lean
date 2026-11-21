@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointActiveEdgeNormalization
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointCoreEdgeSpectators
-import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorGapEquivalence
+import QICLean.Analysis.EuclideanFiberwiseGap
 
 /-!
 # The normalized open chain as one common core with exterior spectators

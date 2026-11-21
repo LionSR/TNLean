@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.RegularChargeDetectorMatrix
 import TNLean.PEPS.RegularSiteGram
 import Mathlib.Logic.Equiv.Prod
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Actual shared-leg charge coordinates

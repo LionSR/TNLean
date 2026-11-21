@@ -7,7 +7,7 @@ import TNLean.MPS.MPDO.Boundary
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.ParentHamiltonian.Basic
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # Finite cuts of boundary-weighted matrix product operators

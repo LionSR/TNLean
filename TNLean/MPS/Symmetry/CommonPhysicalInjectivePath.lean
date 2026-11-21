@@ -27,7 +27,7 @@ trivial scalar character. These restrictions are documented in
 `docs/paper-gaps/rmp_spt_fixed_point_trivial_character.tex`.
 -/
 
-open scoped Matrix TNLean.Algebra.ScalarCohomology
+open scoped Matrix ScalarCohomology
 
 namespace MPSTensor
 
@@ -39,9 +39,9 @@ Source: arXiv:1010.3732, Sections II.C and II.F.2,
 equation eq:1d-sym:jointsym. -/
 noncomputable def commonPhysicalInjectiveGappedPath
     {G : Type} [Group G] {d₀ d₁ D₀ D₁ : ℕ} [NeZero D₀] [NeZero D₁]
-    {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ)
@@ -70,9 +70,9 @@ the adjoint covariance of the original tensor.
 Source: arXiv:1010.3732, Section II.F.2, lines 886--921. -/
 theorem rotatePhysical_covariance_of_circle_rephase
     {G : Type} [Group G] {d D : ℕ}
-    {ω η : TNLean.Algebra.ScalarCocycle G}
-    (ρ : TNLean.Algebra.ProjectiveRepresentation (D := D) ω)
-    (σ : TNLean.Algebra.ProjectiveRepresentation (D := D) η)
+    {ω η : ScalarCocycle G}
+    (ρ : ProjectiveRepresentation (D := D) ω)
+    (σ : ProjectiveRepresentation (D := D) η)
     (φ : G → Circle)
     (hX : ∀ g, σ.X g = Matrix.GeneralLinearGroup.scalar (Fin D)
       (Circle.toUnits (φ g)) * ρ.X g)
@@ -100,9 +100,9 @@ adjoint covariances.
 Source: arXiv:1010.3732, Section II.F.2, lines 886--929. -/
 theorem exists_commonPhysicalInjectiveGappedPath_of_cohomologous
     {G : Type} [Group G] {d₀ d₁ D₀ D₁ : ℕ} [NeZero D₀] [NeZero D₁]
-    {ω₀ ω₁ : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω₀)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω₁)
+    {ω₀ ω₁ : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω₀)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω₁)
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (U₀ : G →* Matrix.unitaryGroup (Fin d₀) ℂ)
@@ -116,9 +116,9 @@ theorem exists_commonPhysicalInjectiveGappedPath_of_cohomologous
       fun i => (sptGauge ρ₁ g : Matrix (Fin D₁) (Fin D₁) ℂ) * A₁ i *
         (sptGauge ρ₁ g : Matrix (Fin D₁) (Fin D₁) ℂ)ᴴ)
     (hCoh : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D₁))) =
+        (ScalarCocycle.isMulCocycle₂_of_projRep ρ₁ (NeZero.pos D₁))) =
       groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
-        (TNLean.Algebra.ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D₀)))) :
+        (ScalarCocycle.isMulCocycle₂_of_projRep ρ₀ (NeZero.pos D₀)))) :
     ∃ V : G →* Matrix.unitaryGroup
         (Fin (((D₀ + D₁) * (D₀ + D₁) + d₀) + d₁)) ℂ,
       Nonempty (SymmetricGappedInteractionPath V

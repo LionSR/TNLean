@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusProjectorExpansion
-import TNLean.Algebra.RepresentationTheta
-import TNLean.Algebra.MonoidHomCommutingWeight
+import QICLean.Representation.Character.Theta
+import QICLean.Algebra.MonoidAux
 
 /-!
 # Moving fourth-root site weights onto the actual torus bonds

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Core.ObservableTransfer
-import TNLean.Algebra.ListOfFn
+import QICLean.Algebra.OrderedProduct
 import QICLean.Kraus.Transfer
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 

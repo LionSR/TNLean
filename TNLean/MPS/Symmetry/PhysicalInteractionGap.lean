@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Symmetry.BondProductSpectralGap
-import TNLean.Algebra.MatrixProjectionReindex
+import QICLean.Algebra.MatrixStarProjection
 import TNLean.MPS.Symmetry.GappedInteractionPath
 import Mathlib.Analysis.Matrix.Order
 import TNLean.MPS.MPDO.CommutingBondEtaCyclicCore

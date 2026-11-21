@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.MatrixCoordinateInclusion
+import QICLean.Algebra.MatrixCoordinateInclusion
 import TNLean.MPS.Core.IsometricBondCompression
 import TNLean.MPS.Symmetry.WeightedMatrixUnitInterpolation
 import TNLean.MPS.Symmetry.SPTFixedPointEmbedding
@@ -205,9 +205,9 @@ theorem mpv_embeddedSptFixedPointRight {D₀ D₁ N : ℕ} (hN : 0 < N)
 symmetry, with its original virtual representation. Source:
 arXiv:1010.3732, Section II.F.2, `eq:1d-sym:jointsym`. -/
 theorem twistedTensor_embeddedSptFixedPointLeft
-    {G : Type} [Group G] {D₀ D₁ : ℕ} {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {G : Type} [Group G] {D₀ D₁ : ℕ} {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (g : G) (p : Fin ((D₀ + D₁) * (D₀ + D₁))) :
     twistedTensor (embeddedSptFixedPointLeft D₀ D₁)
       (sptFixedPointAction (ρ₀.directSum ρ₁) 1) g p =
@@ -226,9 +226,9 @@ theorem twistedTensor_embeddedSptFixedPointLeft
 symmetry, with its original virtual representation. Source:
 arXiv:1010.3732, Section II.F.2, `eq:1d-sym:jointsym`. -/
 theorem twistedTensor_embeddedSptFixedPointRight
-    {G : Type} [Group G] {D₀ D₁ : ℕ} {ω : TNLean.Algebra.ScalarCocycle G}
-    (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω)
-    (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω)
+    {G : Type} [Group G] {D₀ D₁ : ℕ} {ω : ScalarCocycle G}
+    (ρ₀ : ProjectiveRepresentation (D := D₀) ω)
+    (ρ₁ : ProjectiveRepresentation (D := D₁) ω)
     (g : G) (p : Fin ((D₀ + D₁) * (D₀ + D₁))) :
     twistedTensor (embeddedSptFixedPointRight D₀ D₁)
       (sptFixedPointAction (ρ₀.directSum ρ₁) 1) g p =

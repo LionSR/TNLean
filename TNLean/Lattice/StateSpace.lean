@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Lattice.FiniteDomain
-import TNLean.Circuit.SiteEmbedding
+import QICLean.ManyBody.Sites.PlacedConfiguration
 import Mathlib.Analysis.CStarAlgebra.Matrix
 import QICLean.ManyBody.Hamiltonian.Models
 

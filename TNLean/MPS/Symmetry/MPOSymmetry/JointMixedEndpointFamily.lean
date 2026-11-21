@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.SharedInfra.JointOneSiteSpan
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointInterpolation
 import Mathlib.LinearAlgebra.Pi
-import TNLean.Algebra.MatrixCoordinateInclusion
+import QICLean.Algebra.MatrixCoordinateInclusion
 
 /-!
 # The actual mixed block family with shared physical alphabets

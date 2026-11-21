@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.Lattice.PartyCircuit.SourcePreparation
 import QICLean.Analysis.SourceContraction
 import Mathlib.Logic.Equiv.Prod
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-! # Finite contraction of source columns
 

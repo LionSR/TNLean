@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.AreaLaw.IntervalMPOTransfer
 import TNLean.MPS.AreaLaw.RetainedCoreFamilies
 import TNLean.MPS.MPDO.TraceChainOperator
-import TNLean.Algebra.MatrixFactorExchange
+import QICLean.Algebra.MatrixFactorExchange
 
 /-!
 # Trace presentations under a change of interval

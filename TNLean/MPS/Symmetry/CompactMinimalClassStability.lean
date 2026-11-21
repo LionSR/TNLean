@@ -41,7 +41,7 @@ set_option linter.mathlibStandardSet true
 open scoped Matrix Matrix.Norms.Frobenius ComplexOrder Topology
 open Filter TNLean.Algebra
 
-open scoped TNLean.Algebra.ScalarCohomology
+open scoped ScalarCohomology
 
 namespace MPSTensor
 

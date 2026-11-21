@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.SourceVIsometry
-import TNLean.Algebra.FinSumPermutation
+import QICLean.Algebra.FinSumPermutation
 
 /-!
 # The complete network for the paper source gate u
