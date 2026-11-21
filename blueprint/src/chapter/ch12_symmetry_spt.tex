@@ -119,7 +119,7 @@ of the virtual projective representation.
 \begin{lemma}[Uniform parent gap along an injective polar deformation]
     \label{thm:spt_polar_deformation_gap}
     \lean{MPSTensor.exists_uniform_parentHamiltonianES_gap_polarDeformation,
-        MPSTensor.parentInteractionES_polarDeformation_commute_onSiteTensorPow}
+        MPSTensor.commute_toMatrix'_parentInteraction_polarDeformation_onSiteTensorPow}
     \leanok
 
     Let $A$ be one-site injective with $D>0$, and let $H_{N,2}(A_\gamma)$
@@ -1381,7 +1381,6 @@ and the regrouping of physical registers into bonds.
     \label{thm:spt_parent_hamiltonian_symmetry}
     \lean{MPSTensor.onSiteTensorPow_conjTranspose_mul_self,
         MPSTensor.groundSpaceES_invariant_of_gauge_covariance,
-        MPSTensor.parentInteractionES_commute_onSiteTensorPow,
         MPSTensor.onSiteTensorPow_reindex_windowComplement,
         MPSTensor.placeAlong_ringWindow_commute_onSiteTensorPow,
         MPSTensor.parentInteractionES_eq_toEuclideanLin_parentMatrix,

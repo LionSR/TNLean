@@ -51,15 +51,15 @@ theorem exists_uniform_parentHamiltonianES_gap_polarDeformation
 /-- Canonical parent interactions commute with the same on-site symmetry
 throughout an injective polar deformation in unitary virtual gauge.
 Source: arXiv:1010.3732, Section II.C, “Isometric form and symmetries”. -/
-theorem parentInteractionES_polarDeformation_commute_onSiteTensorPow
+theorem commute_toMatrix'_parentInteraction_polarDeformation_onSiteTensorPow
     {d D : ℕ} {A : MPSTensor d D} (hA : Kraus.IsInjective A)
     (U : Matrix (Fin d) (Fin d) ℂ) (X : Matrix (Fin D) (Fin D) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hX : X ∈ Matrix.unitaryGroup (Fin D) ℂ)
     (hCov : rotatePhysical U A = fun i => X * A i * Xᴴ) (γ : ℝ) (L : ℕ) :
-    Commute (parentInteractionES (polarDeformation A γ) L)
-      (Matrix.toEuclideanLin (onSiteTensorPow L U)) := by
-  exact parentInteractionES_commute_onSiteTensorPow _ U hU
+    Commute (LinearMap.toMatrix' (parentInteraction (polarDeformation A γ) L))
+      (onSiteTensorPow L U) :=
+  parentInteraction_matrix_commute_onSiteTensorPow _ U hU
     (gaugeEquiv_polarDeformation_of_unitary_covariance hA U X hU hX hCov γ) L
 
 end MPSTensor

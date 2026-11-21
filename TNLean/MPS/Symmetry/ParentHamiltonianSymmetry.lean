@@ -17,11 +17,9 @@ therefore commutes with the canonical parent projection.
 
 Source: arXiv:1010.3732, Section II.F.2 and Appendix A.
 
-**Transitional (#10948).** `parentInteractionES_commute_onSiteTensorPow` states the commutation
-for the Euclidean-space operator of the canonical parent projection; it is kept until its last
-user is converted. The matrix form is `parentInteraction_matrix_commute_onSiteTensorPow`, and
-the last section states the commutation for the terms and the Hamiltonian of the parent
-interaction on the ring (`parentRingInteraction`).
+The commutation is stated for the matrix of the canonical parent projection
+(`parentInteraction_matrix_commute_onSiteTensorPow`) and, in the last section, for the terms and
+the Hamiltonian of the parent interaction on the ring (`parentRingInteraction`).
 -/
 
 open scoped Matrix Kronecker
@@ -51,56 +49,6 @@ theorem groundSpaceES_invariant_of_gauge_covariance {d D : ℕ}
   rw [← groundSpaceES_rotatePhysical]
   unfold groundSpaceES
   rw [← hCov.groundSpace_eq L]
-
-/-- Under unitary physical covariance up to virtual gauge, the canonical
-finite-window parent projection commutes with the physical tensor power.
-Source: arXiv:1010.3732, Section II.F.2 and Appendix A. -/
-theorem parentInteractionES_commute_onSiteTensorPow {d D : ℕ}
-    (A : MPSTensor d D) (U : Matrix (Fin d) (Fin d) ℂ)
-    (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
-    (hCov : GaugeEquiv A (rotatePhysical U A)) (L : ℕ) :
-    Commute (parentInteractionES A L)
-      (Matrix.toEuclideanLin (onSiteTensorPow L U)) := by
-  let T := Matrix.toEuclideanLin (onSiteTensorPow L U)
-  let G := groundSpaceES A L
-  have hadj : T.adjoint ∘ₗ T = 1 := by
-    apply LinearMap.ext
-    intro v
-    change T.adjoint (T v) = v
-    dsimp only [T]
-    rw [← Matrix.toEuclideanLin_conjTranspose_eq_adjoint]
-    rw [onSiteTensorPow_conjTranspose,
-      toEuclideanLin_onSiteTensorPow_mul_apply]
-    have hU' : Uᴴ * U = 1 := (Matrix.mem_unitaryGroup_iff').mp hU
-    rw [hU', onSiteTensorPow_one]
-    simp [Matrix.toEuclideanLin, Matrix.toLpLin_one]
-  have hinner (x y : EuclideanSpace ℂ (Cfg d L)) :
-      inner ℂ (T x) (T y) = inner ℂ x y := by
-    have hy : T.adjoint (T y) = y := by
-      simpa only [LinearMap.comp_apply, Module.End.one_apply] using
-        congrArg (fun f ↦ f y) hadj
-    calc
-      inner ℂ (T x) (T y) = inner ℂ x (T.adjoint (T y)) :=
-        (LinearMap.adjoint_inner_right T x (T y)).symm
-      _ = inner ℂ x y := by rw [hy]
-  let I := T.isometryOfInner hinner
-  have hG : G.map I.toLinearMap = G := by
-    simpa only [I, LinearMap.isometryOfInner_toLinearMap] using
-      groundSpaceES_invariant_of_gauge_covariance A U hCov L
-  let : G.HasOrthogonalProjection := groundSpaceES_hasOrthogonalProjection A L
-  let : (G.map I.toLinearMap).HasOrthogonalProjection := by rw [hG]; infer_instance
-  have hproj (v : EuclideanSpace ℂ (Cfg d L)) :
-      T (G.starProjection v) = G.starProjection (T v) := by
-    have h := I.map_starProjection G v
-    have h' : I (G.starProjection v) = G.starProjection (I v) := by
-      simpa only [hG] using h
-    exact h'
-  apply LinearMap.ext
-  intro v
-  change (Gᗮ).starProjection (T v) = T ((Gᗮ).starProjection v)
-  rw [Submodule.starProjection_orthogonal]
-  simp only [sub_apply, ContinuousLinearMap.id_apply]
-  rw [map_sub, hproj]
 
 /-- In cyclic-window coordinates, the on-site tensor power factors into
 its action on the window and its action on the complementary sites.
