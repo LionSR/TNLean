@@ -154,77 +154,11 @@ theorem norm_inner_powerProjector_le (hL : 0 < L)
     {ψ : EuclideanSpace ℂ (Fin L → Fin q)} (hψ : ‖ψ‖ = 1) (horth : ⟪Γ, ψ⟫_ℂ = 0) :
     ‖⟪ψ, toEuclideanLin (powerProjector Φ.hamiltonian L E₀ m) ψ⟫_ℂ‖ ≤
       ((1 - (E₀ + Δ) / L) / (1 - E₀ / L)) ^ m := by
-  have hΓ := hΩ
-  have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
-  have hgap := hgap.posSemidef_sub_smul_one
-    (show Φ.hamiltonian.IsHermitian from Matrix.isHermitian_sum _ fun i _ ↦ (h0 i).isHermitian)
-    hΩ hspan
-  set H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
-  set N : ℝ := (L : ℝ)
-  set P : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ :=
-    vecMulVec (WithLp.ofLp Γ) (star (WithLp.ofLp Γ))
-  have hH : H.IsHermitian := (posSemidef_sum Finset.univ fun i _ ↦ h0 i).isHermitian
-  have hHu : H ≤ ((L - 1 : ℕ) : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) := by
-    simpa only [H, ManyBody.Interaction.hamiltonian, Finset.card_univ, Fintype.card_fin,
-      Nat.cast_smul_eq_nsmul] using
-      Finset.sum_le_card_nsmul Finset.univ Φ.term 1 fun i _ ↦ h1 i
-  have hcardN : ((L - 1 : ℕ) : ℝ) < N := by
-    simp only [N, Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr hL.ne'), Nat.cast_one]
-    linarith
-  -- The excited vector `ψ` gives `ε₀ + Δ ≤ L - 1`.
-  have hexc : E₀ + Δ ≤ ((L - 1 : ℕ) : ℝ) := by
-    have hlow := PosSemidef.gap_le hgap ψ
-    rw [hψ, horth, norm_zero] at hlow
-    have hup := (isPositive_toEuclideanLin_iff.mpr
-      (Matrix.le_iff.mp hHu)).re_inner_nonneg_right ψ
-    rw [map_sub, LinearMap.sub_apply, inner_sub_right, map_sub] at hup
-    have hc : RCLike.re ⟪ψ, toEuclideanLin (((L - 1 : ℕ) : ℝ) •
-        (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)) ψ⟫_ℂ = ((L - 1 : ℕ) : ℝ) := by
-      rw [← Complex.coe_smul, map_smul, LinearMap.smul_apply, toEuclideanLin_one_apply,
-        inner_smul_right, inner_self_eq_norm_sq_to_K, hψ]
-      simp
-    rw [hc] at hup
-    norm_num at hlow
-    change Δ ≤ RCLike.re ⟪ψ, toEuclideanLin H ψ⟫_ℂ - E₀ at hlow
-    linarith
-  have hbound : ∀ t ∈ spectrum ℝ H, t ≤ ((L - 1 : ℕ) : ℝ) :=
-    (le_algebraMap_iff_spectrum_le hH.isSelfAdjoint).mp (by
-      simpa only [Algebra.algebraMap_eq_smul_one] using hHu)
-  have hspectrum : ∀ t ∈ spectrum ℝ H, t = E₀ ∨ t ∈ Set.Icc (E₀ + Δ) N := by
-    intro t ht
-    obtain ⟨k, rfl⟩ := hH.spectrum_real_eq_range_eigenvalues ▸ ht
-    exact (GaussianFilter.eigenvector_ground_or_gap hH hΓ hHΓ hgap hΔ k).elim
-      (fun hg ↦ Or.inl hg.1)
-      (fun he ↦ Or.inr ⟨by linarith [he.1], (hbound _ ht).trans hcardN.le⟩)
-  have h01 : E₀ < E₀ + Δ := lt_add_of_pos_right E₀ hΔ
-  have h1N : E₀ + Δ ≤ N := hexc.trans hcardN.le
-  obtain ⟨-, -, -, -, -, -, -, herror, -, -⟩ :=
-    hH.power_approximates_isolated_energy_projection h01 h1N hspectrum m
-  rw [hH.complement_spectralProjectionGE_eq_rankOne hΓ hHΓ hgap hΔ] at herror
-  have hN : 0 < N := Nat.cast_pos.mpr hL
-  have hd : 0 < N - E₀ := by linarith
-  have hbase : (1 - E₀ / N)⁻¹ • (1 - N⁻¹ • H) =
-      (N - E₀)⁻¹ • (N • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) - H) := by
-    have hden : 1 - E₀ / N = (N - E₀) / N := one_sub_div hN.ne'
-    rw [hden, inv_div]
-    simp [smul_sub, smul_smul, div_eq_mul_inv, mul_comm, hN.ne']
-  have hratio : (1 - (E₀ + Δ) / N) / (1 - E₀ / N) = (N - (E₀ + Δ)) / (N - E₀) := by
-    rw [one_sub_div hN.ne', one_sub_div hN.ne', div_div_div_cancel_right₀ hN.ne']
-  have hA : powerProjector H L E₀ m =
-      ((N - E₀)⁻¹ • (N • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) - H)) ^ m := by
-    rw [← hbase]
-    rfl
-  rw [hA, hratio]
-  set K := ((N - E₀)⁻¹ • (N • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) - H)) ^ m
-  have hPψ : toEuclideanLin P ψ = 0 := by
-    simp [P, toEuclideanLin_vecMulVec_star_self_apply, horth]
-  have hn : ‖toEuclideanLin (K - P) ψ‖ ≤ ‖K - P‖ * ‖ψ‖ :=
-    (toEuclideanCLM (n := Fin L → Fin q) (𝕜 := ℂ) (K - P)).le_opNorm ψ
-  have hn' : ‖toEuclideanLin K ψ‖ ≤ ‖K - P‖ := by
-    simpa only [map_sub, LinearMap.sub_apply, hPψ, sub_zero, hψ, mul_one] using hn
-  have hinner : ‖⟪ψ, toEuclideanLin K ψ⟫_ℂ‖ ≤ ‖toEuclideanLin K ψ‖ := by
-    simpa only [hψ, one_mul] using norm_inner_le_norm ψ (toEuclideanLin K ψ)
-  exact hinner.trans (hn'.trans herror)
+  have h := (norm_power_filter_apply_le_ratio_of_lower_gap Φ.term h0 h1 hΩ
+    (ManyBody.mulVec_eq_of_groundSpace_eq_span hspan)
+    (hgap.posSemidef_sub_smul_one (posSemidef_sum _ fun i _ ↦ h0 i).isHermitian hΩ hspan)
+    hΔ m hψ horth).2
+  rwa [Fintype.card_fin, Nat.sub_add_cancel hL] at h
 
 /-- **The logarithmic choice of `m`.** If `m ≥ ((n - ε₀)/Δ) log (1/η)` for some `η > 0`, then
 `‖A - |Γ⟩⟨Γ|‖ ≤ η`. Landau, Vazirani and Vidick, arXiv:1307.5143v1, `algo53.tex`, lines 602–603,

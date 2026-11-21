@@ -157,31 +157,11 @@ lemma groundEnergy_nonneg_and_le [NeZero L]
     {E₀ : ℝ} {Γ : EuclideanSpace ℂ (Fin L → Fin q)} (hΩ : ‖Γ‖ = 1)
     (hspan : groundSpace Φ.hamiltonian E₀ = Submodule.span ℂ {Γ}) :
     0 ≤ E₀ ∧ E₀ + 1 ≤ L := by
-  have hΓ := hΩ
-  have hHΓ := ManyBody.mulVec_eq_of_groundSpace_eq_span hspan
-  set H : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ := Φ.hamiltonian
-  have hH : H.PosSemidef := posSemidef_sum Finset.univ fun i _ ↦ h0 i
-  have hHu : H ≤ ((L - 1 : ℕ) : ℝ) • (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ) := by
-    simpa only [H, ManyBody.Interaction.hamiltonian, Finset.card_univ, Fintype.card_fin,
-      Nat.cast_smul_eq_nsmul] using
-      Finset.sum_le_card_nsmul Finset.univ Φ.term 1 fun i _ ↦ h1 i
-  have hE : RCLike.re ⟪Γ, toEuclideanLin H Γ⟫_ℂ = E₀ := by
-    have : toEuclideanLin H Γ = (E₀ : ℂ) • Γ :=
-      ManyBody.mem_groundSpace_iff.mp (hspan ▸ Submodule.mem_span_singleton_self Γ)
-    rw [this, inner_smul_right, inner_self_eq_norm_sq_to_K, hΓ]
-    simp
-  have hlow := (isPositive_toEuclideanLin_iff.mpr hH).re_inner_nonneg_right Γ
-  have hup := (isPositive_toEuclideanLin_iff.mpr (Matrix.le_iff.mp hHu)).re_inner_nonneg_right Γ
-  rw [map_sub, LinearMap.sub_apply, inner_sub_right, map_sub] at hup
-  have hc : RCLike.re ⟪Γ, toEuclideanLin (((L - 1 : ℕ) : ℝ) •
-      (1 : Matrix (Fin L → Fin q) (Fin L → Fin q) ℂ)) Γ⟫_ℂ = ((L - 1 : ℕ) : ℝ) := by
-    rw [← Complex.coe_smul, map_smul, LinearMap.smul_apply, toEuclideanLin_one_apply,
-      inner_smul_right, inner_self_eq_norm_sq_to_K, hΓ]
-    simp
-  rw [hc] at hup
-  have hL : 1 ≤ L := Nat.one_le_iff_ne_zero.mpr (NeZero.ne L)
-  rw [Nat.cast_sub hL, Nat.cast_one] at hup
-  constructor <;> linarith
+  obtain ⟨hE0, hE1⟩ := eigenvalue_nonneg_and_le_card_of_posSemidef_terms Φ.term h0 h1 hΩ
+    (ManyBody.mulVec_eq_of_groundSpace_eq_span hspan)
+  rw [Fintype.card_fin, Nat.cast_sub (Nat.one_le_iff_ne_zero.mpr (NeZero.ne L))] at hE1
+  push_cast at hE1
+  exact ⟨hE0, by linarith⟩
 
 /-- A letter `P_i = 1 - H_i` is a contraction, since `0 ≤ P_i ≤ 1`. Landau, Vazirani and Vidick,
 arXiv:1307.5143v1, `algo53.tex`, lines 606 and 641. -/

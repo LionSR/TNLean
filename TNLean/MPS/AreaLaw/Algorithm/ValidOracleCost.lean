@@ -209,22 +209,28 @@ theorem cost_groundStateProgram_le_of_valid (hv : IsValidOracle o) {L : ℕ} (hL
   set z : Fin q := ⟨0, by omega⟩ with hz
   set e := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (leftConfigOfFinEquiv (q := q) hi) with he
   set S := FreeM.eval o (sweepProgram hq
-    ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) (min Delta 1) L) with hS
+    Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z)
+    (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
+      fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
+    (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
+      fun _ ↦ ManyBody.siteBasisPenalty_le_one z) (min Delta 1) L) with hS
   set B := sweepStepCostBound q (min Delta 1) N (max 1 (lvvSuccessiveCardBound q (min Delta 1) N))
     with hB
   have hsweep := cost_sweepProgram_le_of_valid hv (by omega) hq
-    ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
-    (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) hg L hi
+    Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z)
+    (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
+      fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
+    (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
+      fun _ ↦ ManyBody.siteBasisPenalty_le_one z) hg L hi
   have hcard : (S.image fun w ↦ e.symm w).card ≤
       max 1 (lvvSuccessiveCardBound q (min Delta 1) N) := by
     refine Finset.card_image_le.trans ?_
     refine (sweepProgram_spec_of_valid hv hq
-      ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
-      (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
-      (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) hg L hi).1.trans ?_
+      Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z)
+      (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
+        fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
+      (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
+        fun _ ↦ ManyBody.siteBasisPenalty_le_one z) hg L hi).1.trans ?_
     split_ifs <;> simp
   have hmin := energyMinimizerCost_mono hi q (lvvSuccessiveBondBound q (min Delta 1) N) hcard
   exact Nat.add_le_add (hsweep.trans (Nat.mul_le_mul_right B hi)) hmin

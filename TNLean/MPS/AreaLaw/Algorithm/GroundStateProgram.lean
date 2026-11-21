@@ -50,9 +50,11 @@ noncomputable def groundStateProgram {L : ℕ} (hq : 2 ≤ q)
   let hi : L ≤ N := Nat.le_add_right _ _
   let z : Fin q := ⟨0, by omega⟩
   open Classical in do
-    let S ← sweepProgram hq ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
-      (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
-      (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) (min Delta 1) L
+    let S ← sweepProgram hq Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z)
+      (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
+        fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
+      (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
+        fun _ ↦ ManyBody.siteBasisPenalty_le_one z) (min Delta 1) L
     FreeM.lift (LinearAlgebraQuery.energyMinimizer L (lvvSuccessiveBondBound q (min Delta 1) N)
       Φ.hamiltonian
       (S.image fun w ↦
@@ -70,9 +72,11 @@ theorem eval_groundStateProgram {L : ℕ} (hq : 2 ≤ q)
     FreeM.eval honestOracle (groundStateProgram hq Φ h0 h1 Delta R) =
       open Classical in
       energyMinimizer Φ.hamiltonian
-        ((lvvSweep hq ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
-          (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1)
-          (fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2) (min Delta 1) L).image
+        ((lvvSweep hq Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z)
+          (ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
+            fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg)
+          (ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
+            fun _ ↦ ManyBody.siteBasisPenalty_le_one z) (min Delta 1) L).image
           fun w ↦
             (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
               (leftConfigOfFinEquiv (q := q) hi)).symm w) := by
@@ -118,9 +122,11 @@ theorem groundStateProgram_spec {L : ℕ} (hL : 1 ≤ L) (hq : 2 ≤ q)
   let z : Fin q := ⟨0, by omega⟩
   let e := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (leftConfigOfFinEquiv (q := q) hi)
   let Ψ : ManyBody.BondInteraction N q :=
-    ⟨paddedInteraction hi z Φ, paddedInteraction_supported hi z Φ⟩
-  let h0' := fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).1
-  let h1' := fun j ↦ (paddedInteraction_nonneg_le_one hi z Φ h0 h1 j).2
+    Φ.padded hi (fun _ ↦ ManyBody.siteBasisPenalty z)
+  let h0' := ManyBody.BondInteraction.padded_term_nonneg (hi := hi) h0
+    fun _ ↦ (ManyBody.siteBasisPenalty_posSemidef z).nonneg
+  let h1' := ManyBody.BondInteraction.padded_term_le_one (hi := hi) h1
+    fun _ ↦ ManyBody.siteBasisPenalty_le_one z
   set S := lvvSweep hq Ψ h0' h1' (min Delta 1) L with hSdef
   have hψ : ψ = energyMinimizer Φ.hamiltonian (S.image fun w ↦ e.symm w) :=
     eval_groundStateProgram hq Φ h0 h1 Delta R
