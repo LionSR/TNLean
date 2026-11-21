@@ -26,53 +26,29 @@ open scoped Matrix MatrixOrder ComplexOrder Matrix.Norms.L2Operator
 
 namespace MPSTensor
 
-/-- Canonical parent matrices vary continuously along an injective family.
-Source: arXiv:1010.3732, Section II.C and Appendix A, continuity of local
-parent interactions. -/
-theorem continuous_parentInteraction_matrix_family
-    {X : Type*} [TopologicalSpace X] {d D : ℕ}
-    (A : X → MPSTensor d D) (hA : Continuous A) (L : ℕ)
-    (hInj : ∀ x, Kraus.IsNBlkInjective (A x) L) :
-    Continuous fun x => LinearMap.toMatrix' (parentInteraction (A x) L) := by
-  let b := (EuclideanSpace.basisFun (Cfg d L) ℂ).toBasis
-  have hT := continuous_parentInteractionES_family A hA L hInj
-  have hMat : Continuous fun T :
-      EuclideanSpace ℂ (Cfg d L) →L[ℂ] EuclideanSpace ℂ (Cfg d L) =>
-      LinearMap.toMatrix b b T.toLinearMap :=
-    ((LinearMap.toMatrix b b).toLinearMap.comp
-      (ContinuousLinearMap.coeLM ℂ)).continuous_of_finiteDimensional
-  simpa only [parentInteraction_toMatrix'_eq_parentInteractionES_toMatrix,
-    Function.comp_def, b, LinearMap.coe_toContinuousLinearMap] using hMat.comp hT
-
 /-- For an injective tensor, a canonical parent norm gap is a gap above the zero ground energy.
 Source: arXiv:1010.3732, Section II.C and Appendix A, spectral interpretation of the parent
 gap. -/
 theorem isGapped_hamiltonian_translationInvariant_parent
     {d D N : ℕ} [NeZero D] (A : MPSTensor d D) (hInj : Kraus.IsInjective A)
     (hN : 2 ≤ N) {δ : ℝ}
-    (hGap : ∀ v ∈ (LinearMap.ker (parentHamiltonianES A 2 N))ᗮ,
-      δ * ‖v‖ ≤ ‖parentHamiltonianES A 2 N v‖) :
+    (hGap : ∀ v ∈ (LinearMap.ker
+        (Matrix.toEuclideanLin (parentRingInteraction A hN).hamiltonian))ᗮ,
+      δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin (parentRingInteraction A hN).hamiltonian v‖) :
     ManyBody.IsGapped (ManyBody.Interaction.translationInvariant hN
       (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian 0 δ := by
-  let H := (ManyBody.Interaction.translationInvariant hN
-    (LinearMap.toMatrix' (parentInteraction A 2))).hamiltonian
-  have hH : parentHamiltonianES A 2 N = Matrix.toEuclideanLin H :=
-    parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow A hN
-  have hPos : H.PosSemidef := Matrix.isPositive_toEuclideanLin_iff.mp
-    (hH ▸ parentHamiltonianES_isPositive A 2 N)
-  refine (ManyBody.isGapped_zero_iff_norm hPos).mpr ⟨?_, ?_⟩
-  · rw [ManyBody.groundSpace_zero, ← hH, ker_parentHamiltonianES_two_eq_range_periodicMpvLineMap
-      A hInj hN]
-    intro hbot
-    have hv : periodicMpvLineMap A N 1 ∈ (periodicMpvLineMap A N).range :=
-      ⟨1, rfl⟩
-    rw [hbot] at hv
-    have heq : periodicMpvLineMap A N 1 = periodicMpvLineMap A N 0 := by
-      simpa using hv
-    exact one_ne_zero (periodicMpvLineMap_injective_of_isInjective A
-      hInj hN heq)
-  · rw [← hH]
-    exact hGap
+  refine (ManyBody.isGapped_zero_iff_norm
+    (posSemidef_hamiltonian_parentRingInteraction A hN)).mpr ⟨?_, hGap⟩
+  rw [ManyBody.groundSpace_zero,
+    ker_hamiltonian_parentRingInteraction_two_eq_range_periodicMpvLineMap A hInj hN]
+  intro hbot
+  have hv : periodicMpvLineMap A N 1 ∈ (periodicMpvLineMap A N).range :=
+    ⟨1, rfl⟩
+  rw [hbot] at hv
+  have heq : periodicMpvLineMap A N 1 = periodicMpvLineMap A N 0 := by
+    simpa using hv
+  exact one_ne_zero (periodicMpvLineMap_injective_of_isInjective A
+    hInj hN heq)
 
 /-- A continuous one-site injective tensor path with fixed unitary on-site
 symmetry determines a symmetric uniformly gapped path of its canonical
@@ -95,7 +71,7 @@ noncomputable def canonicalInjectiveGappedPath
   norm_le_one γ _ := parentInteraction_toMatrix'_norm_le_one (A γ) 2
   continuous := by
     apply continuousOn_iff_continuous_domRestrict.mpr
-    apply continuous_parentInteraction_matrix_family
+    apply continuous_toMatrix'_parentInteraction_family
       (fun γ : Set.Icc (0 : ℝ) 1 => A γ)
       (continuousOn_iff_continuous_domRestrict.mp hA) 2
     intro γ
@@ -107,9 +83,13 @@ noncomputable def canonicalInjectiveGappedPath
       exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths B
         (continuousOn_iff_continuous_domRestrict.mp hA)
         (fun γ => hInj γ γ.property) isCompact_univ
-    exact ⟨δ, hδ, fun γ hγ N hN => ⟨0,
-      isGapped_hamiltonian_translationInvariant_parent (A γ) (hInj γ hγ) hN
-        (hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN)⟩⟩
+    refine ⟨δ, hδ, fun γ hγ N hN => ⟨0,
+      isGapped_hamiltonian_translationInvariant_parent (A γ) (hInj γ hγ) hN ?_⟩⟩
+    have hH : parentHamiltonianES (A γ) 2 N =
+        Matrix.toEuclideanLin (parentRingInteraction (A γ) hN).hamiltonian :=
+      parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow (A γ) hN
+    rw [← hH]
+    exact hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN
   symmetric γ hγ g N hN := by
     rw [← onSiteTensorPow_eq_finKronecker]
     have hSym := hamiltonian_translationInvariant_commute_onSiteTensorPow (U g)

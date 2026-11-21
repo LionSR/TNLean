@@ -34,11 +34,13 @@ namespace MPSTensor
 /-- The canonical parent Hamiltonians along the polar deformation of a
 one-site injective tensor have a gap uniform in the parameter and the chain
 length. Source: arXiv:1010.3732, Section II.C and Appendix A. -/
-theorem exists_uniform_parentHamiltonianES_gap_polarDeformation
+theorem exists_uniform_hamiltonian_parentRingInteraction_gap_polarDeformation
     {d D : ℕ} [NeZero D] {A : MPSTensor d D} (hA : Kraus.IsInjective A) :
-    ∃ δ : ℝ, 0 < δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ N : ℕ, 2 ≤ N →
-      ∀ v ∈ (LinearMap.ker (parentHamiltonianES (polarDeformation A γ) 2 N))ᗮ,
-        δ * ‖v‖ ≤ ‖parentHamiltonianES (polarDeformation A γ) 2 N v‖ := by
+    ∃ δ : ℝ, 0 < δ ∧ ∀ γ ∈ Set.Icc (0 : ℝ) 1, ∀ N : ℕ, ∀ hN : 2 ≤ N,
+      ∀ v ∈ (LinearMap.ker (Matrix.toEuclideanLin
+          (parentRingInteraction (polarDeformation A γ) hN).hamiltonian))ᗮ,
+        δ * ‖v‖ ≤ ‖Matrix.toEuclideanLin
+          (parentRingInteraction (polarDeformation A γ) hN).hamiltonian v‖ := by
   let B : Set.Icc (0 : ℝ) 1 → MPSTensor d D := fun γ => polarDeformation A γ
   have hB : Continuous B := (continuous_polarDeformation A).comp continuous_subtype_val
   have hInj (γ : Set.Icc (0 : ℝ) 1) : Kraus.IsInjective (B γ) :=
@@ -46,7 +48,12 @@ theorem exists_uniform_parentHamiltonianES_gap_polarDeformation
   obtain ⟨δ, hδ, hGap⟩ :=
     exists_uniform_parentHamiltonianES_gap_of_compact_isInjective_all_lengths
       B hB hInj isCompact_univ
-  exact ⟨δ, hδ, fun γ hγ N hN => hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN⟩
+  refine ⟨δ, hδ, fun γ hγ N hN => ?_⟩
+  have hH : parentHamiltonianES (polarDeformation A γ) 2 N =
+      Matrix.toEuclideanLin (parentRingInteraction (polarDeformation A γ) hN).hamiltonian :=
+    parentHamiltonianES_eq_toEuclideanLin_sum_placeAlong_ringWindow _ hN
+  rw [← hH]
+  exact hGap ⟨γ, hγ⟩ (Set.mem_univ _) N hN
 
 /-- Canonical parent interactions commute with the same on-site symmetry
 throughout an injective polar deformation in unitary virtual gauge.
