@@ -33,6 +33,12 @@ counting statements for arbitrary positive interactions, requiring no local
 MPS-kernel condition. The blocking and comparison results assume positive
 physical dimension; the definition and local positivity certificate do not.
 No normality, primitivity, or translation-invariance hypothesis is imposed.
+
+**Transitional (#10948).**
+`eventually_ker_openInteractionHamiltonianES_blockedInteractionMatrix_eq_groundSpaceES`, stated
+for the Euclidean-space operator `openInteractionHamiltonianES`, is kept until its last users are
+converted. The last section states it for the operators of the Hamiltonians of
+`ManyBody.Interaction.chainTranslates`.
 -/
 
 open scoped ComplexOrder MatrixOrder
@@ -270,10 +276,9 @@ configuration isometry. Source: Nachtergaele, arXiv:cond-mat/9410110,
 Theorem 1.2 and Section 3, equations (3.12)--(3.14). -/
 theorem eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace
     {D : ℕ} (A : MPSTensor d D) (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hh : h.PosSemidef) (hR : 0 < R)
-    (hcover : R + L ≤ K * L + 1)
+    (hh : h.PosSemidef) (hcover : R + L ≤ K * L + 1)
     (hker : ∀ᶠ n in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) n) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R n h).hamiltonian) =
         groundSpaceES A n) :
     ∀ᶠ N in Filter.atTop, LinearMap.ker (Matrix.toEuclideanLin
       (Matrix.reindex (blockedConfigEquiv d N L) (blockedConfigEquiv d N L)
@@ -283,13 +288,8 @@ theorem eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace
   obtain ⟨M, hM⟩ := Filter.eventually_atTop.1 hker
   filter_upwards [Filter.eventually_ge_atTop (max K M)] with N hN
   have hKN : K ≤ N := (le_max_left K M).trans hN
-  have hRN : R ≤ N * L := by
-    have hL := NeZero.pos L
-    have hscaled := Nat.mul_le_mul_right L hKN
-    omega
   rw [ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_reindex
     h hh hKN hcover,
-    ← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN,
     hM (N * L) ((le_max_right K M).trans (hN.trans (Nat.le_mul_of_pos_right N (NeZero.pos L))))]
   exact (groundSpaceES_blockTensor_map A L N).symm
 
@@ -297,20 +297,14 @@ theorem eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace
 the original open kernel. Source: the regrouping and positive comparison
 mechanism of Nachtergaele, arXiv:cond-mat/9410110,
 Section 3, equations (3.12)--(3.14). -/
-theorem ker_openInteractionHamiltonianES_blockedInteractionMatrix_map
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef) (hR : 0 < R)
-    (hK : 0 < K) (hKN : K ≤ N) (hcover : R + L ≤ K * L + 1) :
-    (LinearMap.ker (openInteractionHamiltonianES
-      (Matrix.toEuclideanLin (blockedInteractionMatrix h L K)) N)).map
+theorem ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_map
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
+    (hKN : K ≤ N) (hcover : R + L ≤ K * L + 1) :
+    (LinearMap.ker (Matrix.toEuclideanLin
+      (chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian)).map
       (blockedConfigLinearIsometryEquiv d N L).toLinearEquiv.toLinearMap =
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) (N * L)) := by
-  have hRN : R ≤ N * L := by
-    have hL := NeZero.pos L
-    have hscaled := Nat.mul_le_mul_right L hKN
-    omega
-  rw [openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates _ hK hKN,
-    openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN]
-  exact (Matrix.ker_toEuclideanLin_reindex_map (blockedConfigEquiv d N L) _).trans
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R (N * L) h).hamiltonian) :=
+  (Matrix.ker_toEuclideanLin_reindex_map (blockedConfigEquiv d N L) _).trans
     (ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_reindex
       h hh hKN hcover)
 
@@ -329,13 +323,43 @@ theorem eventually_ker_openInteractionHamiltonianES_blockedInteractionMatrix_eq_
       LinearMap.ker (openInteractionHamiltonianES
         (Matrix.toEuclideanLin (blockedInteractionMatrix h L K)) N) =
           groundSpaceES (blockTensor A L) N := by
+  have hker' : ∀ᶠ n in Filter.atTop,
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R n h).hamiltonian) =
+        groundSpaceES A n := by
+    filter_upwards [hker, Filter.eventually_ge_atTop R] with n hn hRn
+    rwa [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRn]
   filter_upwards [eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace
-    A h hh hR hcover hker, Filter.eventually_ge_atTop K] with N hN hKN
+    A h hh hcover hker', Filter.eventually_ge_atTop K] with N hN hKN
   apply Submodule.map_injective_of_injective
     (blockedConfigLinearIsometryEquiv d N L).injective
   rw [openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates _ hK hKN,
     blockedConfigLinearIsometryEquiv, Matrix.ker_toEuclideanLin_reindex_map]
   exact hN
 
+/-! ### The open-chain Hamiltonians
+
+The eventual kernel transport stated for the operators of the Hamiltonians of the open-chain
+translates `ManyBody.Interaction.chainTranslates`. -/
+
+/-- An eventual exact MPS kernel for the original interaction gives the
+exact blocked-tensor kernel for the coarse interaction at all sufficiently
+large blocked volumes. Source: Nachtergaele, arXiv:cond-mat/9410110,
+Theorem 1.2 and Section 3, equations (3.12)--(3.14). -/
+theorem eventually_ker_hamiltonian_chainTranslates_blockedInteractionMatrix_eq_groundSpaceES
+    {D : ℕ} (A : MPSTensor d D) (h : Matrix (Cfg d R) (Cfg d R) ℂ)
+    (hh : h.PosSemidef) (hcover : R + L ≤ K * L + 1)
+    (hker : ∀ᶠ n in Filter.atTop,
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R n h).hamiltonian) =
+        groundSpaceES A n) :
+    ∀ᶠ N in Filter.atTop,
+      LinearMap.ker (Matrix.toEuclideanLin
+        (chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian) =
+          groundSpaceES (blockTensor A L) N := by
+  filter_upwards [eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace
+    A h hh hcover hker] with N hN
+  apply Submodule.map_injective_of_injective
+    (blockedConfigLinearIsometryEquiv d N L).injective
+  rw [blockedConfigLinearIsometryEquiv, Matrix.ker_toEuclideanLin_reindex_map]
+  exact hN
 
 end MPSTensor

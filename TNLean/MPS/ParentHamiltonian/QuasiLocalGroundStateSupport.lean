@@ -148,10 +148,9 @@ requires no parent-kernel condition at the interaction range and no simultaneous
 injectivity bound on that range. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Theorem 1.2, lines 933--947, and Section 3. -/
 theorem eventually_quasiLocalState_symmetric_groundSpaceProjection_eq_one_of_eventual_kernel
-    (A : MPSTensor d D) {R : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
-    (hR : 0 < R) (hh : h.PosSemidef)
+    (A : MPSTensor d D) {R : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES A N)
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) (hφ : φ ∈ quasiLocalStateSpace d)
     (hzero : ∀ a : ℤ, φ (quasiLocalIntervalObservable d a R h) = 0) :
@@ -160,18 +159,11 @@ theorem eventually_quasiLocalState_symmetric_groundSpaceProjection_eq_one_of_eve
         (groundSpaceProjectionMatrix A (2 * n + 1))) = 1 := by
   have hlim : Filter.Tendsto (fun n : ℕ => 2 * n + 1) Filter.atTop Filter.atTop :=
     Filter.tendsto_atTop_mono (fun n => by dsimp only [id]; omega) Filter.tendsto_id
-  filter_upwards [hlim.eventually hker, Filter.eventually_ge_atTop R] with n hkerN hn
-  refine quasiLocalState_groundSpaceProjection_eq_one_of_interval_eq_zero
-    A φ hφ (-(n : ℤ)) ((chainTranslates R (2 * n + 1) h).hamiltonian) ?_ ?_ ?_
-  · apply Matrix.isPositive_toEuclideanLin_iff.mp
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
-      h hR (by omega)]
-    exact openInteractionHamiltonianES_isPositive
-      (Matrix.isPositive_toEuclideanLin_iff.mpr hh) _
-  · rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
-      h hR (by omega)]
-    exact hkerN
-  · exact apply_quasiLocalIntervalObservable_hamiltonian_chainTranslates_eq_zero
-      φ.toLinearMap h hzero (-(n : ℤ)) (2 * n + 1)
+  filter_upwards [hlim.eventually hker] with n hkerN
+  exact quasiLocalState_groundSpaceProjection_eq_one_of_interval_eq_zero
+    A φ hφ (-(n : ℤ)) ((chainTranslates R (2 * n + 1) h).hamiltonian)
+    (ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh _) hkerN
+    (apply_quasiLocalIntervalObservable_hamiltonian_chainTranslates_eq_zero
+      φ.toLinearMap h hzero (-(n : ℤ)) (2 * n + 1))
 
 end MPSTensor

@@ -79,9 +79,14 @@ theorem exists_pos_pure_ground_state_commutator_limit_gap_of_eventual_kernel
       μ A hμ ρ hP hρ hDistinct hR h hh hker
   refine ⟨γ, hγ, hfinite, ?_⟩
   intro φ hφ hPure a k X hk hcenter ι f ℓ r hℓ hr
+  have hker' : ∀ᶠ N : ℕ in atTop,
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
+        groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N := by
+    filter_upwards [hker, eventually_ge_atTop R] with N hN hRN
+    rwa [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN]
   obtain ⟨j, rfl⟩ :=
     (isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel
-      μ A hμ ρ hP hρ hDistinct h hR hh hker φ).mp ⟨hφ, hPure⟩
+      μ A hμ ρ hP hρ hDistinct h hh hker' φ).mp ⟨hφ, hPure⟩
   exact hsector j a X hk hcenter hℓ hr
 
 /-- Simultaneous word span in the original block family gives one positive
@@ -121,9 +126,14 @@ theorem exists_pos_pure_ground_state_commutator_limit_gap_of_wordTupleSpanTop
                 ((chainTranslates R ((ℓ n + k) + r n) h).hamiltonian)))) f (𝓝 e) ∧
           (γ : ℂ) * φ (star (quasiLocalIntervalObservable d a k X) *
             quasiLocalIntervalObservable d a k X) ≤ e := by
+  have hker' : ∀ᶠ N : ℕ in atTop,
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
+        groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N := by
+    filter_upwards [hker, eventually_ge_atTop R] with N hN hRN
+    rwa [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN]
   obtain ⟨B, ρ, hP, hρ, hSpanB, _, hJoint, _⟩ :=
     exists_normalized_parentGroundStateFace_classification_of_eventually_open_kernel
-      μ A hμ hS hSpan h hR hh hker
+      μ A hμ hS hSpan h hh hker'
   have hkerB : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
         groundSpaceES (toTensorFromBlocks (μ := μ) B) N :=

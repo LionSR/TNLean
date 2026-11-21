@@ -33,61 +33,46 @@ the full open-boundary MPS ground projection. No injectivity is required.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12), its
 frustration-free restriction direction. -/
 theorem placeAlong_chainWindow_groundSpaceProjection_mul
-    (A : MPSTensor d D) {k N b : ℕ} (hk : 0 < k) (hb : b + k ≤ N) :
+    (A : MPSTensor d D) {k N b : ℕ} (hb : b + k ≤ N) :
     placeAlong (X := fun _ ↦ Fin d) (chainWindow b hb) (groundSpaceProjectionMatrix A k) *
       groundSpaceProjectionMatrix A N = groundSpaceProjectionMatrix A N := by
-  let i : Fin N := ⟨b, by omega⟩
-  have hkill : (localTermES A k i).toContinuousLinearMap.comp
-      (groundSpaceES A N).starProjection = 0 := by
-    apply ContinuousLinearMap.ext
-    intro v
-    exact localTermES_eq_zero_of_openParentHamiltonianES_eq_zero A k N
-      (LinearMap.mem_ker.mp (groundSpaceES_le_ker_openParentHamiltonianES A k N
-        ((groundSpaceES A N).starProjection_apply_mem v))) ⟨i, hb⟩
-  have hc : Matrix.toEuclideanLin (1 - groundSpaceProjectionMatrix A k) =
-      parentInteractionES A k := by
+  have hP : 1 - groundSpaceProjectionMatrix A k = LinearMap.toMatrix' (parentInteraction A k) := by
+    apply Matrix.toEuclideanLin.injective
+    rw [toEuclideanLin_toMatrix'_parentInteraction]
     change (Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ)
       (1 - groundSpaceProjectionMatrix A k)).toLinearMap = _
-    rw [map_sub, map_one, groundSpaceProjectionMatrix, StarAlgEquiv.apply_symm_apply]
-    rw [parentInteractionES, Submodule.starProjection_orthogonal]
+    rw [map_sub, map_one, groundSpaceProjectionMatrix, StarAlgEquiv.apply_symm_apply,
+      Submodule.starProjection_orthogonal]
     rfl
-  have hlocal := periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow
-    (show k ≤ N by omega) i (1 - groundSpaceProjectionMatrix A k)
-  rw [hc, periodicLocalInteractionES_parentInteractionES A hk] at hlocal
-  have hw : chainWindow b hb = ManyBody.ringWindow (show k ≤ N by omega) i := by
-    ext j
-    have hj : b + j.val < N := by omega
-    simp only [ManyBody.val_chainWindow, ManyBody.ringWindow_apply, Fin.val_add,
-      Fin.val_castLE, i, Nat.mod_eq_of_lt hj]
-  have hwindow : Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
-      (placeAlong (X := fun _ ↦ Fin d) (chainWindow b hb)
-        (1 - groundSpaceProjectionMatrix A k)) =
-        (localTermES A k i).toContinuousLinearMap := by
-    rw [hw]
-    exact ContinuousLinearMap.coe_injective (by
-      simpa only [Matrix.coe_toEuclideanCLM_eq_toEuclideanLin,
-        LinearMap.coe_toContinuousLinearMap] using hlocal.symm)
-  rw [ManyBody.placeAlong_sub, ManyBody.placeAlong_one, map_sub, map_one] at hwindow
-  apply (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)).injective
-  change Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
-      (placeAlong (X := fun _ ↦ Fin d) (chainWindow b hb) (groundSpaceProjectionMatrix A k) *
-        groundSpaceProjectionMatrix A N) =
-    Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) (groundSpaceProjectionMatrix A N)
-  simp only [map_mul, groundSpaceProjectionMatrix, StarAlgEquiv.apply_symm_apply]
-  change (localTermES A k i).toContinuousLinearMap *
-    (groundSpaceES A N).starProjection = 0 at hkill
-  rw [← hwindow, sub_mul, one_mul] at hkill
-  exact (sub_eq_zero.mp hkill).symm
+  have hkill : (parentChainInteraction A k N).term ⟨b, by omega⟩ *
+      groundSpaceProjectionMatrix A N = 0 := by
+    apply Matrix.toEuclideanLin.injective
+    rw [Matrix.toEuclideanLin_mul, map_zero]
+    ext1 v
+    have hmem : Matrix.toEuclideanLin (groundSpaceProjectionMatrix A N) v ∈ groundSpaceES A N := by
+      change (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ) (groundSpaceProjectionMatrix A N)) v ∈ _
+      rw [groundSpaceProjectionMatrix, StarAlgEquiv.apply_symm_apply]
+      exact (groundSpaceES A N).starProjection_apply_mem v
+    have hv := groundSpaceES_le_ker_hamiltonian_parentChainInteraction A k N hmem
+    rw [LinearMap.comp_apply, LinearMap.zero_apply]
+    generalize Matrix.toEuclideanLin (groundSpaceProjectionMatrix A N) v = w at hv ⊢
+    rw [Matrix.toLpLin_apply, WithLp.toLp_eq_zero]
+    exact (parentChainInteraction_term_mulVec_eq_zero_iff A _ _).mpr fun τ ↦
+      contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hv
+        b hb τ
+  rw [ManyBody.Interaction.translates_term, ← hP, ManyBody.placeAlong_sub,
+    ManyBody.placeAlong_one, Matrix.sub_mul, Matrix.one_mul, sub_eq_zero] at hkill
+  exact hkill.symm
 variable [NeZero d]
 
-/-- Support in an MPS interval implies support in every contained nonempty
+/-- Support in an MPS interval implies support in every contained
 interval. Positivity supplies the support-compression identity.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 3, finite-interval
 support spaces and equation (3.12). -/
 theorem quasiLocalState_groundSpaceProjection_eq_one_of_contained_interval
     (A : MPSTensor d D) (φ : QuasiLocalAlgebra d →L[ℂ] ℂ)
     (hφ : φ ∈ quasiLocalStateSpace d) (a : ℤ) {k N b : ℕ}
-    (hk : 0 < k) (hb : b + k ≤ N)
+    (hb : b + k ≤ N)
     (hSupport : φ (quasiLocalIntervalObservable d a N
       (groundSpaceProjectionMatrix A N)) = 1) :
     φ (quasiLocalIntervalObservable d (a + (b : ℤ)) k
@@ -101,7 +86,7 @@ theorem quasiLocalState_groundSpaceProjection_eq_one_of_contained_interval
     (isStarProjection_groundSpaceProjectionMatrix A N).isSelfAdjoint.star_eq
     (isStarProjection_groundSpaceProjectionMatrix A N).isIdempotentElem hf
   have hpqp : p * q * p = p := by
-    rw [mul_assoc, placeAlong_chainWindow_groundSpaceProjection_mul A hk hb,
+    rw [mul_assoc, placeAlong_chainWindow_groundSpaceProjection_mul A hb,
       (isStarProjection_groundSpaceProjectionMatrix A N).isIdempotentElem]
   rw [hpqp] at hcomp
   simpa only [f, p, q, intervalStateFunctional_apply,
@@ -128,7 +113,7 @@ theorem quasiLocalState_groundSpaceProjection_eq_one_iff_aligned
       Int.toNat_of_nonneg (Int.emod_nonneg a (by exact_mod_cast (Nat.ne_of_gt hL)))
     have hpos : 0 < b + N := by omega
     have hSupport := quasiLocalState_groundSpaceProjection_eq_one_of_contained_interval
-      A φ hφ ((a / (L : ℤ)) * (L : ℤ)) hN (Nat.le_mul_of_pos_right (b + N) hL)
+      A φ hφ ((a / (L : ℤ)) * (L : ℤ)) (Nat.le_mul_of_pos_right (b + N) hL)
       (h (a / (L : ℤ)) (b + N) hpos)
     simpa only [hb, Int.ediv_mul_add_emod] using hSupport
 end MPSTensor

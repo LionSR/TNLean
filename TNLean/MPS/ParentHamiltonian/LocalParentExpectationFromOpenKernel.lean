@@ -62,25 +62,24 @@ theorem quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
     Finset.card_range, nsmul_eq_mul] at hzero ⊢
   exact (mul_eq_zero.mp hzero).resolve_left (Nat.cast_ne_zero.mpr (by omega))
 
-/-- An eventual equality between the open-chain kernel and the joint MPS space
-implies zero local interaction expectation in each constructed sector state.
+/-- An eventual equality between the kernel of the open-chain Hamiltonian of an interaction and
+the joint MPS space implies zero local interaction expectation in each constructed sector state.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorem 1.2, the eventual
 finite-volume kernel condition. -/
-theorem quasiLocalExpectation_interval_eq_zero_of_eventually_open_kernel
+theorem quasiLocalExpectation_interval_eq_zero_of_eventually_ker_hamiltonian_chainTranslates
     {b : ℕ} {dim : Fin b → ℕ}
     (μ : Fin b → ℂ) (A : ∀ α, MPSTensor d (dim α)) (hμ : ∀ α, μ α ≠ 0)
     (α : Fin b) (hTP : ∑ i, (A α i)ᴴ * A α i = 1)
     {ρ : Matrix (Fin (dim α)) (Fin (dim α)) ℂ} (hρ : ρ.PosSemidef)
     (hfix : Kraus.transferMap (A α) ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
-    {R : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R)
+    {R : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hker : ∀ᶠ N in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
-        groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N) (a : ℤ) :
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
+        groundSpaceES (toTensorFromBlocks μ A) N) (a : ℤ) :
     quasiLocalExpectation (A α) hTP hρ hfix htr
       (quasiLocalIntervalObservable d a R h) = 0 := by
   obtain ⟨N, hN, hRN⟩ := (hker.and (Filter.eventually_ge_atTop R)).exists
-  apply quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
-    μ A hμ α hTP hρ hfix htr h hRN (a := a)
-  rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN, hN]
+  exact quasiLocalExpectation_interval_eq_zero_of_open_groundSpaceES_le_ker
+    μ A hμ α hTP hρ hfix htr h hRN hN.ge a
 
 end MPSTensor

@@ -31,6 +31,8 @@ docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 
 open scoped Topology ComplexOrder BigOperators
 open SpinChain
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d b R : ℕ} [NeZero d] {D : Fin b → ℕ} [∀ j, NeZero (D j)]
 /-- Primitive normalization of an original simultaneously spanning family
@@ -41,9 +43,9 @@ arXiv:cond-mat/9410110, Theorems 1.1--1.2, lines 854--947. -/
 theorem exists_normalized_parentGroundStateFace_classification_of_eventually_open_kernel
     (μ : Fin b → ℂ) (A : ∀ j, MPSTensor d (D j)) (hμ : ∀ j, μ j ≠ 0)
     {S : ℕ} (hS : 0 < S) (hSpan : WordTupleSpanTop A S)
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (μ := μ) A) N) :
     ∃ (B : ∀ j, MPSTensor d (D j))
       (ρ : ∀ j, Matrix (Fin (D j)) (Fin (D j)) ℂ)
@@ -68,7 +70,7 @@ theorem exists_normalized_parentGroundStateFace_classification_of_eventually_ope
       (groundSpace_toTensorFromBlocks_eq_of_block_groundSpace_eq
         μ μ A B hμ hμ (fun j => hGS j N))
   have hkerB : ∀ᶠ N : ℕ in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (μ := μ) B) N :=
     hker.mono fun N hN => hN.trans (hJoint N)
   have hDistinct : ∀ i j, i ≠ j → ∀ e : D j = D i,
@@ -77,7 +79,7 @@ theorem exists_normalized_parentGroundStateFace_classification_of_eventually_ope
       not_gaugePhaseEquiv_of_wordTupleSpanTop B hSpanB i j hij e
   exact ⟨B, ρ, hP, hρ, hSpanB, hGS, hJoint,
     fun φ => mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kernel
-      μ B hμ ρ hP hρ hDistinct h hR hh hkerB φ,
+      μ B hμ ρ hP hρ hDistinct h hh hkerB φ,
     fun φ => isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel
-      μ B hμ ρ hP hρ hDistinct h hR hh hkerB φ⟩
+      μ B hμ ρ hP hρ hDistinct h hh hkerB φ⟩
 end MPSTensor

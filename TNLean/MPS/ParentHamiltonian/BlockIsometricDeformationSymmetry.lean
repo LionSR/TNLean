@@ -688,20 +688,20 @@ section ParentHamiltonians
 variable {G : Type*} [Monoid G]
 
 /-- A symmetry up to a phase of a block-diagonal tensor in trace-preserving
-canonical normalization persists in the canonical two-site parent projection
+canonical normalization persists in the matrix of the canonical two-site parent projection
 along the constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, for several normal blocks. -/
-theorem parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetricUpToPhase
+theorem toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase
     [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) (γ : unitInterval) :
-    Commute (parentInteractionES
-      (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2)
-      (Matrix.toEuclideanLin (onSiteTensorPow 2 (U g))) :=
-  parentInteractionES_isometricDeformationBlocks_commute A (U g) (hU g)
+    Commute (LinearMap.toMatrix' (parentInteraction
+      (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2))
+      (onSiteTensorPow 2 (U g)) :=
+  toMatrix'_parentInteraction_isometricDeformation_commute A (U g) (hU g)
     (commute_leftPolarPhysicalFactor_of_isOnSiteSymmetricUpToPhase
       A hA hTP U hU hSymm g)
     (groundSpaceES_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase A hA U hU hSymm g 2) γ
@@ -728,41 +728,39 @@ theorem isometricDeformationInteractionES_commute_of_isOnSiteSymmetricUpToPhase
 canonical normalization persists in the periodic canonical parent Hamiltonian
 along the constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, for several normal blocks. -/
-theorem isometricDeformation_parentHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase
+theorem
+    hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase
     [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
     (g : G) (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
-    Commute (parentHamiltonianES
-      (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N)
-      (Matrix.toEuclideanLin (onSiteTensorPow N (U g))) := by
-  simpa only [periodicInteractionHamiltonianES_parentInteractionES _
-    (show 0 < (2 : ℕ) by decide)] using
-    periodicInteractionHamiltonianES_commute_onSiteTensorPow _ (U g) hN
-      (parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetricUpToPhase
-        A hA hTP U hU hSymm g γ)
+    Commute (parentRingInteraction
+      (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) hN).hamiltonian
+      (onSiteTensorPow N (U g)) :=
+  Commute.sum_left _ _ _ fun i _ ↦ placeAlong_ringWindow_commute_onSiteTensorPow (U g) 2 hN i _
+    (toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase
+      A hA hTP U hU hSymm g γ)
 
 /-- A symmetry up to a phase of a block-diagonal tensor in trace-preserving
 canonical normalization persists in the open canonical parent Hamiltonian
 along the constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, for several normal blocks. -/
-theorem isometricDeformation_openParentHamiltonianES_commute_of_isOnSiteSymmetricUpToPhase
+theorem
+    hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase
     [∀ k, NeZero (dim k)] (A : (k : Fin r) → MPSTensor d (dim k))
     (hA : WordTupleSpanTop A 1) (hTP : ∀ k, ∑ i, (A k i)ᴴ * A k i = 1)
     (U : G →* Matrix (Fin d) (Fin d) ℂ)
     (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hSymm : IsOnSiteSymmetricUpToPhase (toTensorFromBlocks (fun _ : Fin r => (1 : ℂ)) A) U)
-    (g : G) (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
-    Commute (openParentHamiltonianES
-      (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N)
-      (Matrix.toEuclideanLin (onSiteTensorPow N (U g))) := by
-  simpa only [openInteractionHamiltonianES_parentInteractionES _
-    (show 0 < (2 : ℕ) by decide)] using
-    openInteractionHamiltonianES_commute_onSiteTensorPow _ (U g) hN
-      (parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetricUpToPhase
-        A hA hTP U hU hSymm g γ)
+    (g : G) (γ : unitInterval) (N : ℕ) :
+    Commute (parentChainInteraction
+      (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N).hamiltonian
+      (onSiteTensorPow N (U g)) :=
+  hamiltonian_chainTranslates_commute_onSiteTensorPow _ (U g) N
+    (toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase
+      A hA hTP U hU hSymm g γ)
 
 /-- A symmetry up to a phase of a block-diagonal tensor in trace-preserving
 canonical normalization persists in the periodic sum of inverse-conjugated

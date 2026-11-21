@@ -51,7 +51,7 @@ theorem quasiLocalExpectation_localCommutatorObservable_nonneg_of_eventual_kerne
     (hfix : Kraus.transferMap (A α) ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
     {R k : ℕ} (hR : 0 < R) (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N)
     (a : ℤ) (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
     0 ≤ quasiLocalExpectation (A α) hTP hρ hfix htr
@@ -60,16 +60,11 @@ theorem quasiLocalExpectation_localCommutatorObservable_nonneg_of_eventual_kerne
   obtain ⟨N₀, hN₀⟩ := eventually_atTop.1 hker
   let n := N₀ + R
   let N := (n + k) + n
-  have hRN : R ≤ N := by dsimp [n, N]; omega
-  have hH : ((chainTranslates R N h).hamiltonian).PosSemidef := by
-    apply Matrix.isPositive_toEuclideanLin_iff.mp
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN]
-    exact openInteractionHamiltonianES_isPositive
-      (Matrix.isPositive_toEuclideanLin_iff.mpr hh) N
+  have hH : ((chainTranslates R N h).hamiltonian).PosSemidef :=
+    ManyBody.Interaction.posSemidef_hamiltonian_chainTranslates hh N
   have hsupport : groundSpaceES (A α) N ≤
       LinearMap.ker (Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)) := by
-    rw [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates h hR hRN,
-      hN₀ N (by dsimp [N, n]; omega)]
+    rw [hN₀ N (by dsimp [N, n]; omega)]
     exact groundSpaceES_block_le_toTensorFromBlocks μ A hμ α N
   have hnonneg := observableInsertionExpectation_adjoint_commutator_nonneg
     (A α) hρ ((chainTranslates R N h).hamiltonian) (bulkObservable X n n) hH hsupport
@@ -216,10 +211,16 @@ theorem exists_pos_multiblock_quasiLocalCommutator_limit_gap_of_eventual_kernel
         (hP α).fixedPoint_psd (hP α).fixedPoint_is_fixed (hP α).trace_ne_zero).2.2
           (quasiLocalIntervalObservable d a k X)
       have hsquareIm := (Complex.nonneg_iff.mp hsquare).2
+      have hker' : ∀ᶠ N : ℕ in atTop,
+          LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
+            groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N := by
+        filter_upwards [hker, eventually_ge_atTop R] with N hN hRN
+        rwa [← openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates
+          h hR hRN]
       have henergy :=
         quasiLocalExpectation_localCommutatorObservable_nonneg_of_eventual_kernel
         μ A hμ α (hP α).norm (hP α).fixedPoint_psd (hP α).fixedPoint_is_fixed
-        (hP α).trace_ne_zero hR h hh hker a X
+        (hP α).trace_ne_zero hR h hh hker' a X
       have henergyIm := (Complex.nonneg_iff.mp henergy).2
       simp only [Complex.mul_im, Complex.ofReal_re, Complex.ofReal_im,
         ← hsquareIm, ← henergyIm, mul_zero, zero_mul, add_zero]

@@ -36,6 +36,8 @@ separate; see docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.t
 open scoped Matrix MatrixOrder ComplexOrder BigOperators
 open SpinChain
 open Kraus (blockPhysDim)
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d D L : ℕ} [NeZero d] [NeZero L]
 
@@ -116,7 +118,7 @@ theorem exists_common_translation_period_of_pure_parentGroundStates_of_periodic_
     (m : Fin r → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j))
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks μ A) N) :
     ∃ L : ℕ, 0 < L ∧ ∀ φ : QuasiLocalAlgebra d →L[ℂ] ℂ,
       φ ∈ parentGroundStateFace h → IsPureQuasiLocalState d φ →

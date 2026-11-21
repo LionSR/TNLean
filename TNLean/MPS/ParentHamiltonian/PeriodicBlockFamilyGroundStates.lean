@@ -38,6 +38,8 @@ docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
 open SpinChain
 open Kraus (blockPhysDim blockTensor)
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d r R : ℕ} [NeZero d] {dim : Fin r → ℕ}
 
@@ -56,7 +58,7 @@ theorem exists_parentGroundStateFace_classification_of_periodic_family
     (m : Fin r → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j))
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks μ A) N) :
     ∃ (L : ℕ) (hL : 0 < L),
       let _ : NeZero L := ⟨Nat.ne_of_gt hL⟩

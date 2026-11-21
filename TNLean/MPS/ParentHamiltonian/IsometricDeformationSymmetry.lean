@@ -37,6 +37,17 @@ a phase. Symmetry up to a phase is derived for one or several blocks in the prin
 normalization in `TNLean.MPS.ParentHamiltonian.BlockIsometricDeformationSymmetry`;
 see docs/paper-gaps/spc11_isometric_symmetry_unitary_virtual.tex
 (https://sirui-lu.com/TNLean/paper-gaps/spc11_isometric_symmetry_unitary_virtual.pdf).
+
+**Transitional (#10948).** `parentInteractionES_commute_onSiteTensorPow_of_invariant`,
+`periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow`,
+`periodicLocalInteractionES_commute_onSiteTensorPow`,
+`periodicInteractionHamiltonianES_commute_onSiteTensorPow`,
+and `openInteractionHamiltonianES_commute_onSiteTensorPow`, stated for the Euclidean-space
+operators, are kept until their last users are converted. The statements about the deformed
+interaction `isometricDeformationInteractionES` and its open and periodic sums are converted
+with that interaction in a later package. The last section states the facts for the matrix of
+the parent interaction and for the Hamiltonians of the interactions on the ring and on the open
+chain.
 -/
 
 open scoped Matrix Kronecker BigOperators ComplexOrder
@@ -292,23 +303,6 @@ theorem groundSpaceES_invariant_isometricDeformationBlocks
       (commute_positivePhysicalDeformation U _ hComm γ) L
       (groundSpaceES_invariant_leftPolarBlocks A U hComm L hInv)
 
-/-- The canonical two-site parent projections along the constructed deformation retain a
-supplied symmetry of the original two-site space.
-Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
-supplied explicitly where required. -/
-theorem parentInteractionES_isometricDeformationBlocks_commute
-    (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
-    (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
-    (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : (groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2).map
-      (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2) (γ : unitInterval) :
-    Commute (parentInteractionES
-      (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2)
-      (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) := by
-  exact parentInteractionES_commute_onSiteTensorPow_of_invariant _ U hU 2
-    (groundSpaceES_invariant_isometricDeformationBlocks A U hComm 2 hInv γ)
-
 /-- The source inverse-conjugated positive interactions along the constructed deformation retain
 a supplied symmetry of the original two-site space.
 Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
@@ -329,44 +323,6 @@ theorem isometricDeformationInteractionES_commute
     (parentInteractionES_commute_onSiteTensorPow_of_invariant _ U hU 2
       (groundSpaceES_invariant_leftPolarBlocks A U hComm 2 hInv))
 
-/-- The canonical periodic parents along the constructed deformation retain a supplied symmetry
-of the original two-site space on every ring of length at least two.
-Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
-supplied explicitly where required. -/
-theorem isometricDeformation_parentHamiltonianES_commute
-    (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
-    (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
-    (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : (groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2).map
-      (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2)
-    (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
-    Commute (parentHamiltonianES
-      (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N)
-      (Matrix.toEuclideanLin (onSiteTensorPow N U)) := by
-  simpa only [periodicInteractionHamiltonianES_parentInteractionES _
-    (show 0 < (2 : ℕ) by decide)] using
-    periodicInteractionHamiltonianES_commute_onSiteTensorPow _ U hN
-      (parentInteractionES_isometricDeformationBlocks_commute A U hU hComm hInv γ)
-/-- The canonical open parents along the constructed deformation retain a supplied symmetry of
-the original two-site space on every chain of length at least two.
-Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
-supplied explicitly where required. -/
-theorem isometricDeformation_openParentHamiltonianES_commute
-    (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
-    (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
-    (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : (groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2).map
-      (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2)
-    (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
-    Commute (openParentHamiltonianES
-      (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N)
-      (Matrix.toEuclideanLin (onSiteTensorPow N U)) := by
-  simpa only [openInteractionHamiltonianES_parentInteractionES _
-    (show 0 < (2 : ℕ) by decide)] using
-    openInteractionHamiltonianES_commute_onSiteTensorPow _ U hN
-      (parentInteractionES_isometricDeformationBlocks_commute A U hU hComm hInv γ)
 /-- The periodic sums of the source positive interactions along the constructed deformation
 retain a supplied symmetry on every ring of length at least two.
 Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
@@ -423,23 +379,6 @@ theorem groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric
 
 variable [NeZero D]
 
-/-- Exact state symmetry of a normalized injective tensor persists in the canonical two-site
-parent projection along its constructed polar deformation.
-Source: arXiv:1010.3732, lines 645--676, in the already-blocked
-single injective case in the unital canonical orientation. -/
-theorem parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetric
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hNorm : Kraus.transferMap A 1 = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
-    (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval) :
-    Commute (parentInteractionES
-      (toTensorFromBlocks (fun _ : Fin 1 => 1)
-        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) 2)
-      (Matrix.toEuclideanLin (onSiteTensorPow 2 (U g))) := by
-  exact parentInteractionES_isometricDeformationBlocks_commute _ (U g) (hU g)
-    (commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric A hA hNorm U hU hSymm g)
-    (groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric A hA U hSymm g 2) γ
-
 /-- Exact state symmetry of a normalized injective tensor persists in the inverse-conjugated
 positive interaction along its constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, in the already-blocked
@@ -454,46 +393,6 @@ theorem isometricDeformationInteractionES_commute_of_isOnSiteSymmetric
   exact isometricDeformationInteractionES_commute _ (U g) (hU g)
     (commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric A hA hNorm U hU hSymm g)
     (groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric A hA U hSymm g 2) γ
-
-/-- Exact state symmetry of a normalized injective tensor persists in the periodic canonical
-parent Hamiltonian along its constructed polar deformation.
-Source: arXiv:1010.3732, lines 645--676, in the already-blocked
-single injective case in the unital canonical orientation. -/
-theorem isometricDeformation_parentHamiltonianES_commute_of_isOnSiteSymmetric
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hNorm : Kraus.transferMap A 1 = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
-    (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval)
-    {N : ℕ} (hN : 2 ≤ N) :
-    Commute (parentHamiltonianES
-      (toTensorFromBlocks (fun _ : Fin 1 => 1)
-        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) 2 N)
-      (Matrix.toEuclideanLin (onSiteTensorPow N (U g))) := by
-  simpa only [periodicInteractionHamiltonianES_parentInteractionES _
-    (show 0 < (2 : ℕ) by decide)] using
-    periodicInteractionHamiltonianES_commute_onSiteTensorPow _ (U g) hN
-      (parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetric
-        A hA hNorm U hU hSymm g γ)
-
-/-- Exact state symmetry of a normalized injective tensor persists in the open canonical
-parent Hamiltonian along its constructed polar deformation.
-Source: arXiv:1010.3732, lines 645--676, in the already-blocked
-single injective case in the unital canonical orientation. -/
-theorem isometricDeformation_openParentHamiltonianES_commute_of_isOnSiteSymmetric
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hNorm : Kraus.transferMap A 1 = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
-    (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval)
-    {N : ℕ} (hN : 2 ≤ N) :
-    Commute (openParentHamiltonianES
-      (toTensorFromBlocks (fun _ : Fin 1 => 1)
-        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) 2 N)
-      (Matrix.toEuclideanLin (onSiteTensorPow N (U g))) := by
-  simpa only [openInteractionHamiltonianES_parentInteractionES _
-    (show 0 < (2 : ℕ) by decide)] using
-    openInteractionHamiltonianES_commute_onSiteTensorPow _ (U g) hN
-      (parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetric
-        A hA hNorm U hU hSymm g γ)
 
 /-- Exact state symmetry of a normalized injective tensor persists in the periodic sum of
 inverse-conjugated positive interactions along its constructed polar deformation.
@@ -527,24 +426,6 @@ theorem isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSym
   exact openInteractionHamiltonianES_commute_onSiteTensorPow _ (U g) hN
     (isometricDeformationInteractionES_commute_of_isOnSiteSymmetric A hA hNorm U hU hSymm g γ)
 
-
-/-- Exact state symmetry of an injective trace-preserving tensor persists in the canonical two-site
-parent projection along its constructed polar deformation.
-Source: arXiv:1010.3732, lines 645--676, in the already-blocked
-single injective case with the printed trace-preserving normalization. -/
-theorem parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetric_of_isTP
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hTP : ∑ i, (A i)ᴴ * A i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
-    (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval) :
-    Commute (parentInteractionES
-      (toTensorFromBlocks (fun _ : Fin 1 => 1)
-        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) 2)
-      (Matrix.toEuclideanLin (onSiteTensorPow 2 (U g))) := by
-  exact parentInteractionES_isometricDeformationBlocks_commute _ (U g) (hU g)
-    (commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric_of_isTP A hA hTP U hU hSymm g)
-    (groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric A hA U hSymm g 2) γ
-
 /-- Exact state symmetry of an injective trace-preserving tensor persists in the inverse-conjugated
 positive interaction along its constructed polar deformation.
 Source: arXiv:1010.3732, lines 645--676, in the already-blocked
@@ -559,46 +440,6 @@ theorem isometricDeformationInteractionES_commute_of_isOnSiteSymmetric_of_isTP
   exact isometricDeformationInteractionES_commute _ (U g) (hU g)
     (commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric_of_isTP A hA hTP U hU hSymm g)
     (groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric A hA U hSymm g 2) γ
-
-/-- Exact state symmetry of an injective trace-preserving tensor persists in the periodic canonical
-parent Hamiltonian along its constructed polar deformation.
-Source: arXiv:1010.3732, lines 645--676, in the already-blocked
-single injective case with the printed trace-preserving normalization. -/
-theorem isometricDeformation_parentHamiltonianES_commute_of_isOnSiteSymmetric_of_isTP
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hTP : ∑ i, (A i)ᴴ * A i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
-    (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval)
-    {N : ℕ} (hN : 2 ≤ N) :
-    Commute (parentHamiltonianES
-      (toTensorFromBlocks (fun _ : Fin 1 => 1)
-        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) 2 N)
-      (Matrix.toEuclideanLin (onSiteTensorPow N (U g))) := by
-  simpa only [periodicInteractionHamiltonianES_parentInteractionES _
-    (show 0 < (2 : ℕ) by decide)] using
-    periodicInteractionHamiltonianES_commute_onSiteTensorPow _ (U g) hN
-      (parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetric_of_isTP
-        A hA hTP U hU hSymm g γ)
-
-/-- Exact state symmetry of an injective trace-preserving tensor persists in the open canonical
-parent Hamiltonian along its constructed polar deformation.
-Source: arXiv:1010.3732, lines 645--676, in the already-blocked
-single injective case with the printed trace-preserving normalization. -/
-theorem isometricDeformation_openParentHamiltonianES_commute_of_isOnSiteSymmetric_of_isTP
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hTP : ∑ i, (A i)ᴴ * A i = 1)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ)
-    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
-    (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval)
-    {N : ℕ} (hN : 2 ≤ N) :
-    Commute (openParentHamiltonianES
-      (toTensorFromBlocks (fun _ : Fin 1 => 1)
-        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) 2 N)
-      (Matrix.toEuclideanLin (onSiteTensorPow N (U g))) := by
-  simpa only [openInteractionHamiltonianES_parentInteractionES _
-    (show 0 < (2 : ℕ) by decide)] using
-    openInteractionHamiltonianES_commute_onSiteTensorPow _ (U g) hN
-      (parentInteractionES_isometricDeformationBlocks_commute_of_isOnSiteSymmetric_of_isTP
-        A hA hTP U hU hSymm g γ)
 
 /-- Exact state symmetry of an injective trace-preserving tensor persists in the periodic sum of
 inverse-conjugated positive interactions along its constructed polar deformation.
@@ -632,5 +473,260 @@ theorem isometricDeformation_openInteractionHamiltonianES_commute_of_isOnSiteSym
   exact openInteractionHamiltonianES_commute_onSiteTensorPow _ (U g) hN
     (isometricDeformationInteractionES_commute_of_isOnSiteSymmetric_of_isTP A hA hTP U hU hSymm g γ)
 
+end MPSTensor
+
+/-! ### The interaction Hamiltonians
+
+The symmetry facts for the matrix of the canonical parent interaction and for the Hamiltonians
+of the translates of a local matrix on the ring (`ManyBody.Interaction.translationInvariant`)
+and on the open chain (`ManyBody.Interaction.chainTranslates`), in particular of the parent
+interactions `parentRingInteraction` and `parentChainInteraction`. -/
+
+namespace MPSTensor
+
+open scoped Matrix
+
+variable {d D : ℕ}
+
+/-- A unitary on-site action preserving the supplied local ground space commutes with the matrix
+of its canonical parent projection.
+Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
+supplied explicitly where required. -/
+theorem toMatrix'_parentInteraction_commute_onSiteTensorPow_of_invariant
+    (A : MPSTensor d D) (U : Matrix (Fin d) (Fin d) ℂ)
+    (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ) (L : ℕ)
+    (hInv : (groundSpaceES A L).map (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
+      groundSpaceES A L) :
+    Commute (LinearMap.toMatrix' (parentInteraction A L)) (onSiteTensorPow L U) := by
+  refine Commute.of_map (Matrix.toLpLinAlgEquiv 2).injective ?_
+  change Commute (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A L)))
+    (Matrix.toEuclideanLin (onSiteTensorPow L U))
+  rw [toEuclideanLin_toMatrix'_parentInteraction]
+  let T := Matrix.toEuclideanLin (onSiteTensorPow L U)
+  let G := groundSpaceES A L
+  have hadj : T.adjoint ∘ₗ T = 1 := by
+    apply LinearMap.ext
+    intro v
+    change T.adjoint (T v) = v
+    dsimp only [T]
+    have hU' : Uᴴ * U = 1 := (Matrix.mem_unitaryGroup_iff').mp hU
+    rw [← Matrix.toEuclideanLin_conjTranspose_eq_adjoint, onSiteTensorPow_conjTranspose,
+      toEuclideanLin_onSiteTensorPow_mul_apply, hU', onSiteTensorPow_one]
+    simp [Matrix.toEuclideanLin, Matrix.toLpLin_one]
+  have hinner (x y : EuclideanSpace ℂ (Cfg d L)) : inner ℂ (T x) (T y) = inner ℂ x y := by
+    rw [← LinearMap.adjoint_inner_right, ← LinearMap.comp_apply, hadj, Module.End.one_apply]
+  let I := T.isometryOfInner hinner
+  have hG : G.map I.toLinearMap = G := by
+    simpa only [I, LinearMap.isometryOfInner_toLinearMap] using hInv
+  let : G.HasOrthogonalProjection := groundSpaceES_hasOrthogonalProjection A L
+  let : (G.map I.toLinearMap).HasOrthogonalProjection := by rw [hG]; infer_instance
+  have hproj (v : EuclideanSpace ℂ (Cfg d L)) :
+      T (G.starProjection v) = G.starProjection (T v) := by
+    have h := I.map_starProjection G v
+    have h' : I (G.starProjection v) = G.starProjection (I v) := by
+      simpa only [hG] using h
+    exact h'
+  apply LinearMap.ext
+  intro v
+  change (Gᗮ).starProjection (T v) = T ((Gᗮ).starProjection v)
+  rw [Submodule.starProjection_orthogonal]
+  simp only [sub_apply, ContinuousLinearMap.id_apply]
+  rw [map_sub, hproj]
+
+private theorem placeAlong_chainWindow_commute_onSiteTensorPow {R N : ℕ}
+    (U : Matrix (Fin d) (Fin d) ℂ) (a : ℕ) (ha : a + R ≤ N)
+    (K : Matrix (Cfg d R) (Cfg d R) ℂ) (hK : Commute K (onSiteTensorPow R U)) :
+    Commute (ManyBody.placeAlong (X := fun _ ↦ Fin d) (ManyBody.chainWindow a ha) K)
+      (onSiteTensorPow N U) := by
+  rcases Nat.eq_zero_or_pos N with rfl | hN
+  · refine (commute_iff_eq _ _).2 (Matrix.ext fun σ τ ↦ ?_)
+    obtain rfl : σ = default := Subsingleton.elim _ _
+    obtain rfl : τ = default := Subsingleton.elim _ _
+    simp only [Matrix.mul_apply, Fintype.sum_unique, mul_comm]
+  by_cases haN : a < N
+  · have hw : ManyBody.chainWindow a ha = ManyBody.ringWindow (by omega) ⟨a, haN⟩ :=
+      Function.Embedding.ext fun j ↦ Fin.ext (by
+        have hj : a + j.val < N := by have := j.isLt; omega
+        simp only [ManyBody.val_chainWindow, ManyBody.ringWindow_apply, Fin.val_add,
+          Fin.val_castLE, Nat.mod_eq_of_lt hj])
+    rw [hw]
+    exact placeAlong_ringWindow_commute_onSiteTensorPow U R _ _ K hK
+  · obtain rfl : R = 0 := by omega
+    have hw : ManyBody.chainWindow a ha = ManyBody.ringWindow (by omega) ⟨0, hN⟩ :=
+      Function.Embedding.ext fun j ↦ j.elim0
+    rw [hw]
+    exact placeAlong_ringWindow_commute_onSiteTensorPow U 0 _ _ K hK
+
+/-- The Hamiltonian of the translates on the open chain of a local matrix commuting with the
+on-site action commutes with the global on-site action.
+Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
+supplied explicitly where required. -/
+theorem hamiltonian_chainTranslates_commute_onSiteTensorPow {R : ℕ}
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (U : Matrix (Fin d) (Fin d) ℂ) (N : ℕ)
+    (hComm : Commute h (onSiteTensorPow R U)) :
+    Commute (ManyBody.Interaction.chainTranslates R N h).hamiltonian (onSiteTensorPow N U) :=
+  Commute.sum_left _ _ _ fun i _ ↦
+    placeAlong_chainWindow_commute_onSiteTensorPow U i.val (by omega) h hComm
+
+variable {r : ℕ} {dim : Fin r → ℕ}
+
+/-- The matrices of the canonical two-site parent projections along the constructed deformation
+retain a supplied symmetry of the original two-site space.
+Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
+supplied explicitly where required. -/
+theorem toMatrix'_parentInteraction_isometricDeformation_commute
+    (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
+    (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (hComm : Commute U (leftPolarPhysicalFactor A))
+    (hInv : (groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2).map
+      (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
+        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2) (γ : unitInterval) :
+    Commute (LinearMap.toMatrix' (parentInteraction
+      (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2))
+      (onSiteTensorPow 2 U) :=
+  toMatrix'_parentInteraction_commute_onSiteTensorPow_of_invariant _ U hU 2
+    (groundSpaceES_invariant_isometricDeformationBlocks A U hComm 2 hInv γ)
+
+/-- The canonical periodic parents along the constructed deformation retain a supplied symmetry
+of the original two-site space on every ring of length at least two.
+Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
+supplied explicitly where required. -/
+theorem hamiltonian_parentRingInteraction_isometricDeformation_commute
+    (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
+    (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (hComm : Commute U (leftPolarPhysicalFactor A))
+    (hInv : (groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2).map
+      (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
+        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2)
+    (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
+    Commute (parentRingInteraction
+      (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) hN).hamiltonian
+      (onSiteTensorPow N U) :=
+  Commute.sum_left _ _ _ fun i _ ↦ placeAlong_ringWindow_commute_onSiteTensorPow U 2 hN i _
+    (toMatrix'_parentInteraction_isometricDeformation_commute A U hU hComm hInv γ)
+
+/-- The canonical open parents along the constructed deformation retain a supplied symmetry of
+the original two-site space on every chain.
+Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
+supplied explicitly where required. -/
+theorem hamiltonian_parentChainInteraction_isometricDeformation_commute
+    (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
+    (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (hComm : Commute U (leftPolarPhysicalFactor A))
+    (hInv : (groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2).map
+      (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
+        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2)
+    (γ : unitInterval) (N : ℕ) :
+    Commute (parentChainInteraction
+      (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N).hamiltonian
+      (onSiteTensorPow N U) :=
+  hamiltonian_chainTranslates_commute_onSiteTensorPow _ U N
+    (toMatrix'_parentInteraction_isometricDeformation_commute A U hU hComm hInv γ)
+
+variable {G : Type*} [Monoid G] [NeZero D]
+
+/-- Exact state symmetry of a normalized injective tensor persists in the matrix of the
+canonical two-site parent projection along its constructed polar deformation.
+Source: arXiv:1010.3732, lines 645--676, in the already-blocked
+single injective case in the unital canonical orientation. -/
+theorem toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric
+    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hNorm : Kraus.transferMap A 1 = 1)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval) :
+    Commute (LinearMap.toMatrix' (parentInteraction
+      (toTensorFromBlocks (fun _ : Fin 1 => 1)
+        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) 2))
+      (onSiteTensorPow 2 (U g)) :=
+  toMatrix'_parentInteraction_isometricDeformation_commute _ (U g) (hU g)
+    (commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric A hA hNorm U hU hSymm g)
+    (groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric A hA U hSymm g 2) γ
+
+/-- Exact state symmetry of a normalized injective tensor persists in the periodic canonical
+parent Hamiltonian along its constructed polar deformation.
+Source: arXiv:1010.3732, lines 645--676, in the already-blocked
+single injective case in the unital canonical orientation. -/
+theorem hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetric
+    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hNorm : Kraus.transferMap A 1 = 1)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval)
+    {N : ℕ} (hN : 2 ≤ N) :
+    Commute (parentRingInteraction
+      (toTensorFromBlocks (fun _ : Fin 1 => 1)
+        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) hN).hamiltonian
+      (onSiteTensorPow N (U g)) :=
+  Commute.sum_left _ _ _ fun i _ ↦ placeAlong_ringWindow_commute_onSiteTensorPow (U g) 2 hN i _
+    (toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric
+      A hA hNorm U hU hSymm g γ)
+
+/-- Exact state symmetry of a normalized injective tensor persists in the open canonical
+parent Hamiltonian along its constructed polar deformation.
+Source: arXiv:1010.3732, lines 645--676, in the already-blocked
+single injective case in the unital canonical orientation. -/
+theorem hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetric
+    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hNorm : Kraus.transferMap A 1 = 1)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval) (N : ℕ) :
+    Commute (parentChainInteraction
+      (toTensorFromBlocks (fun _ : Fin 1 => 1)
+        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) 2 N).hamiltonian
+      (onSiteTensorPow N (U g)) :=
+  hamiltonian_chainTranslates_commute_onSiteTensorPow _ (U g) N
+    (toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric
+      A hA hNorm U hU hSymm g γ)
+
+/-- Exact state symmetry of an injective trace-preserving tensor persists in the matrix of the
+canonical two-site parent projection along its constructed polar deformation.
+Source: arXiv:1010.3732, lines 645--676, in the already-blocked
+single injective case with the printed trace-preserving normalization. -/
+theorem toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP
+    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hTP : ∑ i, (A i)ᴴ * A i = 1)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval) :
+    Commute (LinearMap.toMatrix' (parentInteraction
+      (toTensorFromBlocks (fun _ : Fin 1 => 1)
+        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) 2))
+      (onSiteTensorPow 2 (U g)) :=
+  toMatrix'_parentInteraction_isometricDeformation_commute _ (U g) (hU g)
+    (commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric_of_isTP A hA hTP U hU hSymm g)
+    (groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric A hA U hSymm g 2) γ
+
+/-- Exact state symmetry of an injective trace-preserving tensor persists in the periodic
+canonical parent Hamiltonian along its constructed polar deformation.
+Source: arXiv:1010.3732, lines 645--676, in the already-blocked
+single injective case with the printed trace-preserving normalization. -/
+theorem hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP
+    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hTP : ∑ i, (A i)ᴴ * A i = 1)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval)
+    {N : ℕ} (hN : 2 ≤ N) :
+    Commute (parentRingInteraction
+      (toTensorFromBlocks (fun _ : Fin 1 => 1)
+        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) hN).hamiltonian
+      (onSiteTensorPow N (U g)) :=
+  Commute.sum_left _ _ _ fun i _ ↦ placeAlong_ringWindow_commute_onSiteTensorPow (U g) 2 hN i _
+    (toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP
+      A hA hTP U hU hSymm g γ)
+
+/-- Exact state symmetry of an injective trace-preserving tensor persists in the open canonical
+parent Hamiltonian along its constructed polar deformation.
+Source: arXiv:1010.3732, lines 645--676, in the already-blocked
+single injective case with the printed trace-preserving normalization. -/
+theorem hamiltonian_parentChainInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP
+    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hTP : ∑ i, (A i)ᴴ * A i = 1)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ)
+    (hU : ∀ g, U g ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (hSymm : IsOnSiteSymmetric A U) (g : G) (γ : unitInterval) (N : ℕ) :
+    Commute (parentChainInteraction
+      (toTensorFromBlocks (fun _ : Fin 1 => 1)
+        (isometricDeformationBlocks (fun _ : Fin 1 => A) γ)) 2 N).hamiltonian
+      (onSiteTensorPow N (U g)) :=
+  hamiltonian_chainTranslates_commute_onSiteTensorPow _ (U g) N
+    (toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric_of_isTP
+      A hA hTP U hU hSymm g γ)
 
 end MPSTensor

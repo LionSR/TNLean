@@ -23,6 +23,13 @@ These are finite-dimensional locality identities underlying the passage to
 infinite-volume local expectations in Nachtergaele, arXiv:cond-mat/9410110,
 lines 2649--2675. They do not assert the infinite-volume spectral-gap theorem.
 The interaction is arbitrary; positivity and self-adjointness are not needed.
+
+**Transitional (#10948).**
+`openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates` and
+`toEuclideanCLM_hamiltonian_chainTranslates_parentInteraction` compare the Euclidean-space
+operators `openInteractionHamiltonianES` and `openParentHamiltonianES` with the Hamiltonians of
+`ManyBody.Interaction.chainTranslates`; they are kept until their last users are converted and
+are then deleted with those operators.
 -/
 
 open scoped Matrix BigOperators

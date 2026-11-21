@@ -41,74 +41,68 @@ private noncomputable def prefixGroundProjection (A : MPSTensor d D₁) {L N : �
       ((Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ)).symm
         (groundSpaceES A L).starProjection))
 
-private theorem prefixGroundProjection_eq_id_sub_localTerm
-    (A : MPSTensor d D₁) {L N : ℕ} (hL : 0 < L) (hLN : L ≤ N) :
+private theorem prefixGroundProjection_eq_id_sub_term
+    (A : MPSTensor d D₁) {L N : ℕ} (hLN : L ≤ N) :
     prefixGroundProjection A hLN = ContinuousLinearMap.id ℂ (EuclideanSpace ℂ (Cfg d N)) -
-      (localTermES A L (⟨0, by omega⟩ : Fin N)).toContinuousLinearMap := by
+      Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
+        ((parentChainInteraction A L N).term ⟨0, by omega⟩) := by
   let p := (Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ)).symm
     (groundSpaceES A L).starProjection
-  have hc : Matrix.toEuclideanLin (1 - p) = parentInteractionES A L := by
+  have hc : 1 - p = LinearMap.toMatrix' (parentInteraction A L) := by
+    apply Matrix.toEuclideanLin.injective
+    rw [toEuclideanLin_toMatrix'_parentInteraction]
     change (Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ) (1 - p)).toLinearMap = _
-    rw [map_sub, map_one, StarAlgEquiv.apply_symm_apply]
-    rw [parentInteractionES, Submodule.starProjection_orthogonal]
+    rw [map_sub, map_one, StarAlgEquiv.apply_symm_apply, Submodule.starProjection_orthogonal]
     rfl
-  have hlocal := periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow
-    hLN (⟨0, by omega⟩ : Fin N) (1 - p)
-  rw [hc, periodicLocalInteractionES_parentInteractionES A hL] at hlocal
-  have h0 : 0 + L ≤ N := by omega
-  have hw : chainWindow 0 h0 = ManyBody.ringWindow hLN (⟨0, by omega⟩ : Fin N) := by
-    ext j
-    have hj : j.val < N := by omega
-    simp only [ManyBody.val_chainWindow, ManyBody.ringWindow_apply, Fin.val_add,
-      Fin.val_castLE, Fin.val_mk, zero_add, Nat.mod_eq_of_lt hj]
-  have hwindow : localTermES A L (⟨0, by omega⟩ : Fin N) =
-      Matrix.toEuclideanLin (placeAlong (X := fun _ ↦ Fin d) (chainWindow 0 h0) (1 - p)) := by
-    rw [hw]
-    exact hlocal
-  rw [hwindow]
+  rw [ManyBody.Interaction.translates_term, ← hc]
   change Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
-      (placeAlong (X := fun _ ↦ Fin d) (chainWindow 0 h0) p) =
+      (placeAlong (X := fun _ ↦ Fin d) (chainWindow 0 (by omega)) p) =
     1 - Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
-      (placeAlong (X := fun _ ↦ Fin d) (chainWindow 0 h0) (1 - p))
+      (placeAlong (X := fun _ ↦ Fin d) (chainWindow 0 (by omega)) (1 - p))
   rw [ManyBody.placeAlong_sub, ManyBody.placeAlong_one, map_sub, map_one, sub_sub_cancel]
 
 private theorem prefixGroundProjection_comp_groundSpaceProjection
-    (A : MPSTensor d D₁) {L N : ℕ} (hL : 0 < L) (hLN : L ≤ N) :
+    (A : MPSTensor d D₁) {L N : ℕ} (hLN : L ≤ N) :
     (prefixGroundProjection A hLN).comp (groundSpaceES A N).starProjection =
       (groundSpaceES A N).starProjection := by
-  rw [prefixGroundProjection_eq_id_sub_localTerm A hL hLN]
+  rw [prefixGroundProjection_eq_id_sub_term A hLN]
   apply ContinuousLinearMap.ext
   intro v
-  have hv := (groundSpaceES_le_ker_openParentHamiltonianES A L N)
+  have hv := groundSpaceES_le_ker_hamiltonian_parentChainInteraction A L N
     ((groundSpaceES A N).starProjection_apply_mem v)
-  have hkill := localTermES_eq_zero_of_openParentHamiltonianES_eq_zero A L N hv
-    (⟨(⟨0, by omega⟩ : Fin N), by change 0 + L ≤ N; omega⟩ : NonwrappingStart L N)
+  have hkill : Matrix.toEuclideanLin ((parentChainInteraction A L N).term ⟨0, by omega⟩)
+      ((groundSpaceES A N).starProjection v) = 0 := by
+    rw [Matrix.toLpLin_apply, WithLp.toLp_eq_zero]
+    exact (parentChainInteraction_term_mulVec_eq_zero_iff A _ _).mpr fun τ ↦
+      contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hv
+        0 (by omega) τ
   change (groundSpaceES A N).starProjection v -
-    localTermES A L (⟨0, by omega⟩ : Fin N) ((groundSpaceES A N).starProjection v) = _
+    Matrix.toEuclideanLin ((parentChainInteraction A L N).term ⟨0, by omega⟩)
+      ((groundSpaceES A N).starProjection v) = _
   rw [hkill, sub_zero]
 
 private theorem groundSpaceProjection_comp_prefixGroundProjection
-    (A : MPSTensor d D₁) {L N : ℕ} (hL : 0 < L) (hLN : L ≤ N) :
+    (A : MPSTensor d D₁) {L N : ℕ} (hLN : L ≤ N) :
     (groundSpaceES A N).starProjection.comp (prefixGroundProjection A hLN) =
       (groundSpaceES A N).starProjection := by
+  have hp : ((Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ)).symm
+      (groundSpaceES A L).starProjection).IsHermitian :=
+    (isSelfAdjoint_starProjection (groundSpaceES A L)).map
+      (Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ)).symm
   have hQ : (prefixGroundProjection A hLN).adjoint = prefixGroundProjection A hLN := by
-    rw [prefixGroundProjection_eq_id_sub_localTerm A hL hLN, map_sub,
-      ContinuousLinearMap.adjoint_id]
-    rw [LinearMap.IsSymmetric.clm_adjoint_eq
-      (A := (localTermES A L (⟨0, by omega⟩ : Fin N)).toContinuousLinearMap)
-      (localTermES_isSymmetricProjection A L (⟨0, by omega⟩ : Fin N)).isSymmetric]
+    rw [prefixGroundProjection, ← ContinuousLinearMap.star_eq_adjoint, ← map_star,
+      Matrix.star_eq_conjTranspose, (ManyBody.isHermitian_placeAlong _ hp).eq]
   have h := congrArg ContinuousLinearMap.adjoint
-    (prefixGroundProjection_comp_groundSpaceProjection A hL hLN)
+    (prefixGroundProjection_comp_groundSpaceProjection A hLN)
   simpa only [ContinuousLinearMap.adjoint_comp, hQ,
     LinearMap.IsSymmetric.clm_adjoint_eq
       (A := (groundSpaceES A N).starProjection)
       (Submodule.isSymmetricProjection_starProjection (groundSpaceES A N)).isSymmetric] using h
 
-
 /-- The prefix ground projection, extended by the identity, fixes the full-chain
 ground projection on both sides. No injectivity hypothesis is needed. -/
 theorem placeAlong_chainWindow_groundSpaceProjection_comp_groundSpaceProjection
-    (A : MPSTensor d D₁) {L N : ℕ} (hL : 0 < L) (hLN : L ≤ N) :
+    (A : MPSTensor d D₁) {L N : ℕ} (hLN : L ≤ N) :
     (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
       (placeAlong (X := fun _ ↦ Fin d) (chainWindow 0 (by omega))
         ((Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ)).symm
@@ -119,12 +113,11 @@ theorem placeAlong_chainWindow_groundSpaceProjection_comp_groundSpaceProjection
         (placeAlong (X := fun _ ↦ Fin d) (chainWindow 0 (by omega))
           ((Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ)).symm
             (groundSpaceES A L).starProjection))) = (groundSpaceES A N).starProjection :=
-  ⟨prefixGroundProjection_comp_groundSpaceProjection A hL hLN,
-    groundSpaceProjection_comp_prefixGroundProjection A hL hLN⟩
+  ⟨prefixGroundProjection_comp_groundSpaceProjection A hLN,
+    groundSpaceProjection_comp_prefixGroundProjection A hLN⟩
 
 private theorem norm_prefixGroundProjection_comp_le
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {L N : ℕ}
-    (hL : 0 < L) (hLN : L ≤ N) :
+    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {L N : ℕ} (hLN : L ≤ N) :
     ‖(prefixGroundProjection A hLN).comp (prefixGroundProjection B hLN)‖ ≤
       ‖(groundSpaceES A L).starProjection.comp (groundSpaceES B L).starProjection‖ := by
   let pA := (Matrix.toEuclideanCLM (n := Cfg d L) (𝕜 := ℂ)).symm
@@ -163,12 +156,12 @@ private theorem prefixGroundProjection_commute_bulkObservable
   simpa only [map_mul, ContinuousLinearMap.mul_def, prefixGroundProjection,
     bulkObservable_eq_placeAlong_chainWindow] using hmap
 
-/-- A local observable beyond a nonempty prefix has cross compression bounded
+/-- A local observable beyond a prefix has cross compression bounded
 by the overlap of the prefix ground projections times its operator norm.
 This finite-volume locality estimate requires no normalization or primitivity. -/
 theorem norm_groundSpaceES_bulkObservable_cross_compression_le
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) {ℓ k r : ℕ}
-    (hℓ : 0 < ℓ) (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
+    (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
     ‖(groundSpaceES A ((ℓ + k) + r)).starProjection.comp
       ((Matrix.toEuclideanCLM (n := Cfg d ((ℓ + k) + r)) (𝕜 := ℂ)
         (bulkObservable X ℓ r)).comp (groundSpaceES B ((ℓ + k) + r)).starProjection)‖ ≤
@@ -181,8 +174,8 @@ theorem norm_groundSpaceES_bulkObservable_cross_compression_le
   let QB := prefixGroundProjection B hℓN
   let Y := Matrix.toEuclideanCLM (n := Cfg d ((ℓ + k) + r)) (𝕜 := ℂ)
     (bulkObservable X ℓ r)
-  have hA : PA * QA = PA := groundSpaceProjection_comp_prefixGroundProjection A hℓ hℓN
-  have hB : QB * PB = PB := prefixGroundProjection_comp_groundSpaceProjection B hℓ hℓN
+  have hA : PA * QA = PA := groundSpaceProjection_comp_prefixGroundProjection A hℓN
+  have hB : QB * PB = PB := prefixGroundProjection_comp_groundSpaceProjection B hℓN
   have hcomm : QB * Y = Y * QB := prefixGroundProjection_commute_bulkObservable B X
   have heq : PA * Y * PB = PA * (QA * QB) * Y * PB := by
     rw [← mul_assoc PA QA QB, mul_assoc (PA * QA) QB Y, hA, hcomm,
@@ -193,7 +186,7 @@ theorem norm_groundSpaceES_bulkObservable_cross_compression_le
   have hPB : ‖PB‖ ≤ 1 := (groundSpaceES B ((ℓ + k) + r)).starProjection_norm_le
   have hPair : ‖QA * QB‖ ≤
       ‖(groundSpaceES A ℓ).starProjection.comp (groundSpaceES B ℓ).starProjection‖ :=
-    norm_prefixGroundProjection_comp_le A B hℓ hℓN
+    norm_prefixGroundProjection_comp_le A B hℓN
   have hY : ‖Y‖ ≤ ‖Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X‖ :=
     norm_toEuclideanCLM_bulkObservable_le X ℓ r
   change ‖PA * (Y * PB)‖ ≤ _
@@ -255,8 +248,7 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.bulkObservable_cross_groundSp
       ((hA.groundSpaceES_starProjection_comp_tendsto_zero_of_inequivalent
         hB hρ hσ hDistinct).comp hℓ).mul_const
           ‖Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ) X‖
-  refine squeeze_zero' (Eventually.of_forall fun _ => norm_nonneg _) ?_ hUpper
-  filter_upwards [hℓ.eventually (eventually_ge_atTop (1 : ℕ))] with n hn
-  exact norm_groundSpaceES_bulkObservable_cross_compression_le A B (by omega) X
+  exact squeeze_zero (fun _ => norm_nonneg _)
+    (fun _ => norm_groundSpaceES_bulkObservable_cross_compression_le A B X) hUpper
 
 end MPSTensor

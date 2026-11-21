@@ -30,6 +30,8 @@ lines 854--947, and the support analysis in Section 3.
 -/
 open scoped Matrix MatrixOrder Matrix.Norms.L2Operator ComplexOrder Topology BigOperators
 open SpinChain
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d b R : ℕ} [NeZero d] {D : Fin b → ℕ} [∀ j, NeZero (D j)]
 
@@ -44,9 +46,9 @@ theorem mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kern
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (μ := μ) A) N)
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) :
     φ ∈ parentGroundStateFace h ↔
@@ -58,14 +60,14 @@ theorem mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kern
     exact exists_convex_combination_quasiLocalExpectation_of_eventually_groundSpace_support
       μ A hμ ρ hP hρ hDistinct φ hφ.1
       (eventually_quasiLocalState_symmetric_groundSpaceProjection_eq_one_of_eventual_kernel
-        (toTensorFromBlocks (μ := μ) A) h hR hh hker φ hφ.1 hφ.2)
+        (toTensorFromBlocks (μ := μ) A) h hh hker φ hφ.1 hφ.2)
   · rintro ⟨w, hw, hsum, rfl⟩
     exact (convex_parentGroundStateFace h).sum_mem (fun j _ => hw j) hsum
       (fun j _ => ⟨quasiLocalExpectation_isState (A j) (hP j).norm
         (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed (hP j).trace_ne_zero,
-        quasiLocalExpectation_interval_eq_zero_of_eventually_open_kernel μ A hμ j
-          (hP j).norm (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed
-          (hP j).trace_ne_zero h hR hker⟩)
+        quasiLocalExpectation_interval_eq_zero_of_eventually_ker_hamiltonian_chainTranslates
+          μ A hμ j (hP j).norm (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed
+          (hP j).trace_ne_zero h hker⟩)
 /-- The pure locally zero-energy states are precisely the constructed primitive
 sector states. Purity means extremality among all normalized positive states.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Theorems 1.1--1.2,
@@ -76,9 +78,9 @@ theorem isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (A j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ h : D j = D i,
       ¬ GaugePhaseEquiv (h ▸ A j) (A i))
-    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (μ := μ) A) N)
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) :
     (φ ∈ parentGroundStateFace h ∧ IsPureQuasiLocalState d φ) ↔
@@ -88,7 +90,7 @@ theorem isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel
   · rintro ⟨hφ, hPure⟩
     obtain ⟨w, hw, hsum, hdecomp⟩ :=
       (mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kernel
-        μ A hμ ρ hP hρ hDistinct h hR hh hker φ).mp hφ
+        μ A hμ ρ hP hρ hDistinct h hh hker φ).mp hφ
     exact exists_eq_of_isPureQuasiLocalState_of_finite_decomposition φ hPure
       (fun j => quasiLocalExpectation (A j) (hP j).norm (hP j).fixedPoint_psd
         (hP j).fixedPoint_is_fixed (hP j).trace_ne_zero)
@@ -97,9 +99,9 @@ theorem isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel
   · rintro ⟨j, rfl⟩
     exact ⟨⟨quasiLocalExpectation_isState (A j) (hP j).norm
       (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed (hP j).trace_ne_zero,
-      quasiLocalExpectation_interval_eq_zero_of_eventually_open_kernel μ A hμ j
-        (hP j).norm (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed
-        (hP j).trace_ne_zero h hR hker⟩,
+      quasiLocalExpectation_interval_eq_zero_of_eventually_ker_hamiltonian_chainTranslates
+        μ A hμ j (hP j).norm (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed
+        (hP j).trace_ne_zero h hker⟩,
       (hP j).isPureQuasiLocalState_quasiLocalExpectation (hρ j)⟩
 
 end MPSTensor

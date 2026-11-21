@@ -18,6 +18,11 @@ hypothesis is needed. The single-window identity is
 `periodicLocalInteractionES_eq_toEuclideanLin_placeAlong_ringWindow`. This
 extends the canonical-parent identities to the continuously extended local
 interactions of arXiv:2203.12563, Section 5.
+
+**Transitional (#10948).** `periodicInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian`
+compares the Euclidean-space operator `periodicInteractionHamiltonianES` with the Hamiltonian of
+`ManyBody.Interaction.translationInvariant`; it is kept until its last users are converted and is
+then deleted with that operator.
 -/
 
 open scoped BigOperators Matrix

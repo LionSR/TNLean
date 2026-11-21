@@ -37,6 +37,8 @@ is PGVWC07, arXiv:quant-ph/0608197, Theorem 12, lines 1430--1454.
 
 open Filter SpinChain
 open scoped Matrix ComplexOrder BigOperators Topology
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d b : ℕ} {D : Fin b → ℕ} [NeZero d] [∀ i, NeZero (D i)]
 /-- A finite inequivalent primitive family admits a positive canonical
@@ -52,20 +54,14 @@ theorem exists_positive_parent_interaction_of_hasComplementaryFixedPointGap
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) :
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N := by
   obtain ⟨R, hR, hKernel⟩ :=
-    exists_ker_openParentHamiltonianES_toTensorFromBlocks_eq_groundSpaceES
+    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
       μ A hμ ρ hP hρ hDistinct
-  let T := toTensorFromBlocks (d := d) (μ := μ) A
-  let h := canonicalParentInteractionMatrix T R
-  have hmatrix : Matrix.toEuclideanLin h = parentInteractionES T R :=
-    toEuclideanLin_canonicalParentInteractionMatrix T R
-  refine ⟨R, hR, h, ?_, ?_⟩
-  · exact canonicalParentInteractionMatrix_posSemidef T R
-  · intro N hN
-    rw [hmatrix, openInteractionHamiltonianES_parentInteractionES T hR]
-    exact hKernel R N le_rfl hN
+  exact ⟨R, hR,
+    LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks (d := d) (μ := μ) A) R),
+    posSemidef_toMatrix'_parentInteraction _ R, fun N hN => hKernel R N le_rfl hN⟩
 
 /-- One positive interaction realizes both the exact joint open kernels
 at all volumes at least its derived range and the entire convex face of
@@ -82,10 +78,10 @@ theorem exists_positive_parent_interaction_groundStateFace_of_hasComplementaryFi
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N : ℕ, R ≤ N →
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N) ∧
       (∀ᶠ N : ℕ in atTop,
-        LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
           groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N) ∧
       let ω := fun j => quasiLocalExpectation (A j) (hP j).norm
         (hP j).fixedPoint_psd (hP j).fixedPoint_is_fixed (hP j).trace_ne_zero
@@ -97,13 +93,13 @@ theorem exists_positive_parent_interaction_groundStateFace_of_hasComplementaryFi
   obtain ⟨R, hR, h, hh, hKernel⟩ :=
     exists_positive_parent_interaction_of_hasComplementaryFixedPointGap μ A hμ ρ hP hρ hDistinct
   have hEventual : ∀ᶠ N : ℕ in atTop,
-      LinearMap.ker (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) =
+      LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
         groundSpaceES (toTensorFromBlocks (d := d) (μ := μ) A) N :=
     (eventually_ge_atTop R).mono fun N hN => hKernel N hN
   refine ⟨R, hR, h, hh, hKernel, hEventual, ?_, ?_⟩
   · exact fun φ => mem_parentGroundStateFace_iff_convex_combination_of_eventually_open_kernel
-      μ A hμ ρ hP hρ hDistinct h hR hh hEventual φ
+      μ A hμ ρ hP hρ hDistinct h hh hEventual φ
   · exact fun φ => isPure_mem_parentGroundStateFace_iff_sector_of_eventually_open_kernel
-      μ A hμ ρ hP hρ hDistinct h hR hh hEventual φ
+      μ A hμ ρ hP hρ hDistinct h hh hEventual φ
 
 end MPSTensor

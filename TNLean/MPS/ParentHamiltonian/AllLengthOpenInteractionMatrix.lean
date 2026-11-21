@@ -14,6 +14,12 @@ both sums vanish. The equality therefore transports norm gaps above the
 actual kernels without an additional lower bound on the volume.
 
 Source: Nachtergaele, arXiv:cond-mat/9410110, equation (3.12).
+
+**Transitional (#10948).** `openInteractionHamiltonianES_eq_zero_of_length_lt` and
+`openInteractionHamiltonianES_eq_toEuclideanLin_hamiltonian_chainTranslates_all` compare the
+Euclidean-space operator `openInteractionHamiltonianES` with the Hamiltonian of
+`ManyBody.Interaction.chainTranslates`; they are kept until their last users are converted and
+are then deleted with that operator.
 -/
 
 open scoped Matrix BigOperators

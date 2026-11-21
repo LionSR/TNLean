@@ -796,7 +796,7 @@
     \label{thm:blocked_interaction_comparison}
     \lean{MPSTensor.hamiltonian_chainTranslates_blockedInteractionMatrix_comparison,
         MPSTensor.ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_reindex,
-        MPSTensor.ker_openInteractionHamiltonianES_blockedInteractionMatrix_map}
+        MPSTensor.ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_map}
     \leanok
     Let $d,L,R,K>0$, $h\geq0$, $N\geq K$, and $R+L\leq KL+1$.
     Then
@@ -4741,7 +4741,7 @@
 \begin{lemma}[Canonical interaction for faithful stationary generators]
     \label{thm:faithful_generators_canonical_interaction}
     \lean{MPSTensor.exists_ker_openParentHamiltonianES_of_leftCanonical_of_posDef_fixedPoint,
-        MPSTensor.exists_positive_parent_interaction_of_leftCanonical_of_posDef_fixedPoint}
+        MPSTensor.exists_posSemidef_ker_hamiltonian_chainTranslates_of_leftCanonical_of_posDef_fixedPoint}
     \leanok
     Let $A$ have positive bond dimension, satisfy $\sum_iA_i^*A_i=I$,
     and have a faithful stationary matrix $\rho>0$.

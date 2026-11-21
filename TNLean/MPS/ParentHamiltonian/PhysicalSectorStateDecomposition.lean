@@ -17,6 +17,12 @@ component-state supplier is assumed.
 This supplies physical-sector assembly for the finite-prefix investigation of
 SPWC10, arXiv:0909.5347, Theorem 5, lines 850--880. It does not identify the
 component Hamiltonian kernels or assert a full source counterexample.
+
+**Transitional (#10948).** `physical_sum_state_decomposition_of_projectorHamiltonian_eq_zero`,
+stated for the Euclidean-space operator `periodicInteractionHamiltonianES`, is kept until its last
+user is converted. The last section states it for the Hamiltonian of the translation-invariant
+interaction (`ManyBody.Interaction.translationInvariant`) of the matrix of the complementary
+projection.
 -/
 
 namespace MPSTensor
@@ -133,5 +139,35 @@ theorem physical_sum_state_decomposition_of_projectorHamiltonian_eq_zero
   apply physical_sum_state_decomposition (by omega) ψ
   intro σ i j hi hj
   exact coeff_eq_zero_of_physical_sum_projectorHamiltonian S T hR hRM ψ hzero σ i j hi hj
+
+/-! ### The translation-invariant interaction of the complementary projection -/
+
+/-- Every vector annihilated by the operator of the Hamiltonian of the translation-invariant
+interaction of the two-sector complementary projection splits into the extensions of its actual
+sector coefficient restrictions. Mixed coefficients are derived from the Hamiltonian equation
+rather than supplied.
+Source: physical-sector assembly for SPWC10, Theorem 5, lines 850--880. -/
+theorem physical_sum_state_decomposition_of_translationInvariant_projector_eq_zero
+    {R : ℕ} (S : Submodule ℂ (MPVSpace a R)) (T : Submodule ℂ (MPVSpace b R))
+    (hR : 2 ≤ R) (hRM : R ≤ M) (ψ : MPVSpace (a + b) M)
+    (hzero : Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant hRM
+      (Matrix.toEuclideanLin.symm
+        ((S.map
+            (Function.Embedding.piCongrRight
+              (fun _ : Fin R ↦ Fin.castAddEmb b)).euclideanExtendByZero.toLinearMap ⊔
+          T.map
+            (Function.Embedding.piCongrRight
+              (fun _ : Fin R ↦ Fin.natAddEmb a)).euclideanExtendByZero.toLinearMap)ᗮ
+          |>.starProjection.toLinearMap))).hamiltonian ψ = 0) :
+    ψ = Function.Embedding.euclideanExtendByZero
+          (Function.Embedding.piCongrRight (fun _ : Fin M ↦ Fin.castAddEmb b))
+          (WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.castAdd b (w i))) +
+      Function.Embedding.euclideanExtendByZero
+          (Function.Embedding.piCongrRight (fun _ : Fin M ↦ Fin.natAddEmb a))
+          (WithLp.toLp 2 fun w ↦ ψ (fun i ↦ Fin.natAdd a (w i))) := by
+  apply physical_sum_state_decomposition (by omega) ψ
+  intro σ i j hi hj
+  exact coeff_eq_zero_of_physical_sum_translationInvariant_projector S T hR hRM ψ hzero σ i j
+    hi hj
 
 end MPSTensor

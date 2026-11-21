@@ -32,6 +32,8 @@ lines 1394--1483.
 open SpinChain Filter
 open scoped Matrix MatrixOrder ComplexOrder Topology BigOperators
 open Kraus (blockPhysDim blockTensor)
+open ManyBody.Interaction (chainTranslates)
+
 namespace MPSTensor
 variable {d D R : ℕ}
 
@@ -45,7 +47,7 @@ theorem quasiLocalExpectation_mem_parentGroundStateFace_of_eventual_open_kernel
     (hFix : Kraus.map A ρ = ρ) (htr : Matrix.trace ρ ≠ 0)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N in atTop, LinearMap.ker
-      (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) = groundSpaceES A N) :
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES A N) :
     quasiLocalExpectation A hA hρ hFix htr ∈ parentGroundStateFace h := by
   apply (mem_parentGroundStateFace_iff_groundSpace_support_of_eventual_kernel
     A h hR hh hKernel _).mpr
@@ -65,7 +67,7 @@ theorem exists_parentGroundStateFace_classification_of_leftCanonical_of_posDef_f
     (hFix : Kraus.map A ρ = ρ)
     (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hR : 0 < R) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N in atTop, LinearMap.ker
-      (openInteractionHamiltonianES (Matrix.toEuclideanLin h) N) = groundSpaceES A N) :
+      (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES A N) :
     let _ : NeZero d := ⟨hA.physDim_ne_zero⟩
     quasiLocalExpectation A hA hρ.posSemidef hFix (ne_of_gt hρ.trace_pos) ∈
       parentGroundStateFace h ∧

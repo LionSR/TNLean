@@ -32,6 +32,14 @@ docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Section 4, Proposition
 forintersection, Lemma existenceinteraction, Theorems 1.1--1.2, and
 Section 6, lines 2649--2675.
+
+**Transitional (#10948).** `exists_ker_openParentHamiltonianES_of_periodic_family` and
+`exists_positive_parent_interaction_of_periodic_family`, stated for the Euclidean-space operators
+`openParentHamiltonianES` and `openInteractionHamiltonianES`, are kept until their last users are
+converted; the last section states them for the Hamiltonians of `parentChainInteraction` and of
+`ManyBody.Interaction.chainTranslates`.
+`exists_positive_parent_interaction_quasiLocalCommutator_gap_of_periodic_family` rests on the
+quasi-local gap of a periodic family, which is converted with the finite-volume gaps it uses.
 -/
 
 open SpinChain Filter
@@ -118,5 +126,49 @@ theorem exists_positive_parent_interaction_quasiLocalCommutator_gap_of_periodic_
   obtain ⟨γ, hγ, hGap⟩ := exists_pos_quasiLocalCommutator_limit_gap_of_periodic_family
     μ A hμ m hPeriodic h hR hh hEventual
   exact ⟨R, hR, h, hh, hKernel, γ, hγ, hGap⟩
+
+/-! ### The open-chain interaction Hamiltonians -/
+
+/-- A finite weighted family of normalized periodic tensors has, for every sufficiently large
+interaction range and every volume at least that range, the joint boundary space as the kernel
+of the Hamiltonian of the parent interaction on the open chain. Source: Nachtergaele,
+arXiv:cond-mat/9410110, Section 4, Proposition forintersection, and Lemma existenceinteraction.
+Equivalent sectors are selected internally with equality at every length. -/
+theorem exists_ker_hamiltonian_parentChainInteraction_of_periodic_family
+    (μ : Fin b → ℂ) (A : ∀ j, MPSTensor d (D j)) (hμ : ∀ j, μ j ≠ 0)
+    (m : Fin b → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j)) :
+    ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
+      LinearMap.ker (Matrix.toEuclideanLin
+        (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
+        groundSpaceES (toTensorFromBlocks μ A) N := by
+  obtain ⟨g, sel, hsel, hD, hP, hDistinct, hCover, hJoint⟩ :=
+    exists_periodic_sector_representatives μ A hμ hPeriodic
+  let B := fun j => A (sel j)
+  have hIndep := eventually_groundSpaceES_iSupIndep_of_isPeriodic B
+    (fun j => m (sel j)) hP hDistinct.forall_ne_transport
+  obtain ⟨R₀, hR₀, hKernel⟩ :=
+    exists_ker_hamiltonian_parentChainInteraction_of_periodic_family_independence
+      (fun _ => 1) B (fun _ => one_ne_zero) (fun j => m (sel j)) hP
+      (hIndep.mono fun n hn => (groundSpace_iSupIndep_iff_groundSpaceES_iSupIndep B n).mpr hn)
+  refine ⟨R₀, hR₀, fun R N hR hRN => ?_⟩
+  rw [hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq (hJoint R) N, hJoint N]
+  exact hKernel R N hR hRN
+
+/-- A finite weighted family of normalized periodic tensors admits a positive semidefinite
+local matrix, the matrix of the canonical parent interaction, whose open-chain translates have
+the joint boundary spaces as kernels. Source: Nachtergaele,
+arXiv:cond-mat/9410110, Section 4 and Lemma existenceinteraction. Equivalent
+sectors are removed internally without changing any finite ground space. -/
+theorem exists_posSemidef_ker_hamiltonian_chainTranslates_of_periodic_family
+    (μ : Fin b → ℂ) (A : ∀ j, MPSTensor d (D j)) (hμ : ∀ j, μ j ≠ 0)
+    (m : Fin b → ℕ) (hPeriodic : ∀ j, IsPeriodic (m j) (A j)) :
+    ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
+      h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
+        LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
+          groundSpaceES (toTensorFromBlocks μ A) N := by
+  obtain ⟨R, hR, hKernel⟩ :=
+    exists_ker_hamiltonian_parentChainInteraction_of_periodic_family μ A hμ m hPeriodic
+  exact ⟨R, hR, LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks μ A) R),
+    posSemidef_toMatrix'_parentInteraction _ R, fun N hN => hKernel R N le_rfl hN⟩
 
 end MPSTensor
